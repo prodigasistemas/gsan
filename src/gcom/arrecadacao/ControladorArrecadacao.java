@@ -4762,16 +4762,18 @@ public class ControladorArrecadacao implements SessionBean {
 	 * 
 	 * Autor: Raphael Rossiter Data: 02/05/2007
 	 */
+	@SuppressWarnings("rawtypes")
 	protected PagamentoHelperCodigoBarras processarPagamentosCodigoBarrasDocumentoCobrancaTipo5(
 			RegistroHelperCodigoBarras registroHelperCodigoBarras,
 			SistemaParametro sistemaParametro, Date dataPagamento,
 			Integer anoMesPagamento, BigDecimal valorPagamento,
-			Integer idFormaArrecadacao, Usuario usuarioLogado) throws ControladorException {
+ Integer idFormaArrecadacao,
+			Usuario usuarioLogado) throws ControladorException {
 
 		PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
 		pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.DOCUMENTO_COBRANCA);
 		pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
-		
+
 		String descricaoOcorrencia = "OK";
 
 		String indicadorAceitacaoRegistro = "1";
@@ -4779,7 +4781,7 @@ public class ControladorArrecadacao implements SessionBean {
 		Collection colecaoPagamentos = new ArrayList();
 
 		Collection colecaoDevolucoes = new ArrayList();
-		
+
 		Collection colecaoDebitosACobrarJurosParcelamento = new ArrayList();
 
 		boolean idLocalidadeInvalida = false;
@@ -4789,31 +4791,22 @@ public class ControladorArrecadacao implements SessionBean {
 		Integer matriculaImovel = null;
 
 		// Valida o id da localidade
-		idLocalidadeInvalida = Util
-				.validarValorNaoNumerico(registroHelperCodigoBarras
-						.getRegistroHelperCodigoBarrasTipoPagamento()
-						.getIdPagamento1());
+		idLocalidadeInvalida = Util.validarValorNaoNumerico(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento1());
 
 		if (idLocalidadeInvalida) {
 			descricaoOcorrencia = "CÓDIGO DA LOCALIDADE NÃO NUMÉRICA";
 		}
 		// valida a matricula do imóvel
-		matriculaImovelInvalida = Util
-				.validarValorNaoNumerico(registroHelperCodigoBarras
-						.getRegistroHelperCodigoBarrasTipoPagamento()
-						.getIdPagamento2());
+		matriculaImovelInvalida = Util.validarValorNaoNumerico(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2());
 		if (matriculaImovelInvalida) {
 			descricaoOcorrencia = "MÁTRICULA DO IMÓVEL INVÁLIDA";
 		} else {
 			// verifica se existe a matricula do imóvel na
 			// base
-			matriculaImovel = new Integer(registroHelperCodigoBarras
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento2());
+			matriculaImovel = new Integer(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2());
 			idImovelNaBase = null;
 			try {
-				idImovelNaBase = repositorioImovel
-						.recuperarMatriculaImovel(new Integer(matriculaImovel));
+				idImovelNaBase = repositorioImovel.recuperarMatriculaImovel(new Integer(matriculaImovel));
 			} catch (ErroRepositorioException e) {
 				throw new ControladorException("erro.sistema", e);
 			}
@@ -4824,16 +4817,17 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 
 		// valida o namo mes de referencia da conta
-		boolean tipoDocumentoInvalido = Util
-				.validarValorNaoNumerico(registroHelperCodigoBarras
-						.getRegistroHelperCodigoBarrasTipoPagamento()
-						.getIdPagamento4());
+		boolean tipoDocumentoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento4());
 
 		if (tipoDocumentoInvalido) {
 			descricaoOcorrencia = "TIPO DO DOCUMENTO NÃO NUMÉRICO";
 		}
+
+		/*
+		 * TODO Validacao da diferenca do valor do pagamento e documento
+		 */
+
 		if (descricaoOcorrencia.equals("OK")) {
-			// inicializa o id da localidade
 			Integer idLocalidade = null;
 
 			// inicializa a coleção de cobranca documento item
@@ -4841,26 +4835,19 @@ public class ControladorArrecadacao implements SessionBean {
 			// inicializa a coleção de cobranca documento item
 			Object[] parmsDocumentoCobranca = null;
 
-			int numeroSequencialDocumento = Integer
-					.parseInt(registroHelperCodigoBarras
-							.getRegistroHelperCodigoBarrasTipoPagamento()
-							.getIdPagamento3());
+			int numeroSequencialDocumento = Integer.parseInt(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento3());
 
 			try {
 
-				cobrancaDocumentoItens = repositorioCobranca
-						.pesquisarCobrancaDocumentoItem(idImovelNaBase,
-								numeroSequencialDocumento);
-				parmsDocumentoCobranca = repositorioCobranca
-						.pesquisarParmsCobrancaDocumento(idImovelNaBase,
-								numeroSequencialDocumento);
+				cobrancaDocumentoItens = repositorioCobranca.pesquisarCobrancaDocumentoItem(idImovelNaBase, numeroSequencialDocumento);
+				parmsDocumentoCobranca = repositorioCobranca.pesquisarParmsCobrancaDocumento(idImovelNaBase, numeroSequencialDocumento);
 			} catch (ErroRepositorioException e) {
 				throw new ControladorException("erro.sistema", e);
 			}
 
 			// caso exista documento de cobrança
 			if (parmsDocumentoCobranca != null) {
-				
+
 				Integer idCobrancaDocumento = null;
 				BigDecimal valorAcrescimo = new BigDecimal("0.00");
 				BigDecimal valorDesconto = new BigDecimal("0.00");
@@ -4882,39 +4869,37 @@ public class ControladorArrecadacao implements SessionBean {
 				if (parmsDocumentoCobranca[4] != null) {
 					valorTaxa = ((BigDecimal) parmsDocumentoCobranca[4]);
 				}
-				
+
 				pagamentoHelperCodigoBarras.setIdDocumento(idCobrancaDocumento);
 				/*
-                 * Alterado por Raphael Rossiter em 10/01/2008 - Analistas: Eduardo e Aryed
-                 * OBJ: Gerar os pagamentos associados com a localidade do document de cobrança e NÃO com
-                 * a localidade do imóvel.
-                 */
+				 * Alterado por Raphael Rossiter em 10/01/2008 - Analistas:
+				 * Eduardo e Aryed OBJ: Gerar os pagamentos associados com a
+				 * localidade do document de cobrança e NÃO com a localidade do
+				 * imóvel.
+				 */
 				if (parmsDocumentoCobranca[5] != null) {
 
 					idLocalidade = ((Integer) parmsDocumentoCobranca[5]);
-				}
-				else{
-					
-					try {
-                        idLocalidade = repositorioLocalidade
-                        .pesquisarIdLocalidade(idImovelNaBase);
+				} else {
 
-                    } catch (ErroRepositorioException e) {
-                        throw new ControladorException("erro.sistema", e);
-                    }
-                    
+					try {
+						idLocalidade = repositorioLocalidade.pesquisarIdLocalidade(idImovelNaBase);
+
+					} catch (ErroRepositorioException e) {
+						throw new ControladorException("erro.sistema", e);
+					}
+
 				}
 				if (parmsDocumentoCobranca[6] != null) {
 					idDocumentoTipo = ((Integer) parmsDocumentoCobranca[6]);
 				}
-				
+
 				// caso o valor de acrescimo for maior que zero
 				if (valorAcrescimo.compareTo(new BigDecimal("0.00")) == 1) {
 					// [SB0008 - Alterar vencimento dos itens do
 					// documento de cobrança]
 
-					alterarVencimentoItensDocumentoCobranca(
-							idCobrancaDocumento, dataEmissao);
+					alterarVencimentoItensDocumentoCobranca(idCobrancaDocumento, dataEmissao);
 
 				}
 				// caso o valor de acrescimos seja maior que o valor
@@ -4934,10 +4919,8 @@ public class ControladorArrecadacao implements SessionBean {
 					// por
 					// Impontualidade]
 
-					Pagamento pagamento = processarRecebimentoAcrescimosImpontualidade(
-							idCobrancaDocumento, dataPagamento, valorAcrescimo,
-							idImovelNaBase, idLocalidade, getSistemaParametro(),
-							idFormaArrecadacao, idDocumentoTipo);
+					Pagamento pagamento = processarRecebimentoAcrescimosImpontualidade(idCobrancaDocumento, dataPagamento, valorAcrescimo, idImovelNaBase,
+							idLocalidade, getSistemaParametro(), idFormaArrecadacao, idDocumentoTipo);
 
 					colecaoPagamentos.add(pagamento);
 
@@ -4947,10 +4930,8 @@ public class ControladorArrecadacao implements SessionBean {
 				if (valorDesconto.compareTo(new BigDecimal("0.00")) == 1) {
 					// [SB0006 - Processar Desconto concedido no
 					// documento de cobrança]
-					Devolucao devolucao = processarDescontoConcedidoDocumentoCobranca(
-							idCobrancaDocumento, dataPagamento, valorDesconto,
-							idImovelNaBase, idLocalidade, getSistemaParametro(),
-							idFormaArrecadacao, idDocumentoTipo);
+					Devolucao devolucao = processarDescontoConcedidoDocumentoCobranca(idCobrancaDocumento, dataPagamento, valorDesconto, idImovelNaBase,
+							idLocalidade, getSistemaParametro(), idFormaArrecadacao, idDocumentoTipo);
 
 					colecaoDevolucoes.add(devolucao);
 
@@ -4961,10 +4942,8 @@ public class ControladorArrecadacao implements SessionBean {
 				if (valorTaxa.compareTo(new BigDecimal("0.00")) == 1) {
 					// [SB0006 - Processar Desconto concedido no
 					// documento de cobrança]
-					Pagamento pagamento = processarTaxaDocumentoCobranca(
-							idCobrancaDocumento, dataPagamento, valorTaxa,
-							idImovelNaBase, idLocalidade, getSistemaParametro(),
-							idFormaArrecadacao, idDocumentoTipo);
+					Pagamento pagamento = processarTaxaDocumentoCobranca(idCobrancaDocumento, dataPagamento, valorTaxa, idImovelNaBase, idLocalidade,
+							getSistemaParametro(), idFormaArrecadacao, idDocumentoTipo);
 
 					colecaoPagamentos.add(pagamento);
 
@@ -4972,199 +4951,206 @@ public class ControladorArrecadacao implements SessionBean {
 
 				// verifica se a coleção é diferente de nula
 				if (cobrancaDocumentoItens != null && !cobrancaDocumentoItens.isEmpty()) {
-					
+
 					Iterator cobrancaDocumentoItensIterator = cobrancaDocumentoItens.iterator();
 
 					while (cobrancaDocumentoItensIterator.hasNext()) {
 
 						Object[] arrayCobrancaDocumentoItem = (Object[]) cobrancaDocumentoItensIterator.next();
-						
+
 						CobrancaDocumentoItem cobrancaDocumentoItem = new CobrancaDocumentoItem();
-						
-						//VALOR DO ITEM COBRADO
+
+						// VALOR DO ITEM COBRADO
 						cobrancaDocumentoItem.setValorItemCobrado((BigDecimal) arrayCobrancaDocumentoItem[3]);
-						
-						//NUMERO DE PARCELAS ANTECIPADAS
+
+						// NUMERO DE PARCELAS ANTECIPADAS
 						cobrancaDocumentoItem.setNumeroParcelasAntecipadas((Integer) arrayCobrancaDocumentoItem[18]);
-						
+
 						/*
 						 * Colocado por Raphael Rossiter em 31/10/2007 OBJ:
 						 * Apenas gerar os pagamentos referentes aos itens que
 						 * NAO tenham CreditoARealizar
 						 */
 						if (arrayCobrancaDocumentoItem[13] == null) {
-							
+
 							ContaGeral contaGeral = null;
 							Conta conta = null;
-							
-							//CONTA
+
+							// CONTA
 							if (arrayCobrancaDocumentoItem[0] != null) {
-								
+
 								conta = new Conta();
 								conta.setId((Integer) arrayCobrancaDocumentoItem[0]);
-								
-								//REFERENCIA DA CONTA
+
+								// REFERENCIA DA CONTA
 								if (arrayCobrancaDocumentoItem[4] != null) {
 									conta.setReferencia((Integer) arrayCobrancaDocumentoItem[4]);
-								}
-								else{
+								} else {
 									conta.setReferencia(0);
 								}
-								
+
 								contaGeral = new ContaGeral();
 								contaGeral.setConta(conta);
 								contaGeral.setId(conta.getId());
-								
-								cobrancaDocumentoItem.setContaGeral(contaGeral);
-							} 
-							
-							//CONTA HISTORICO
-							else if (arrayCobrancaDocumentoItem[10] != null){
-								
-								conta = new Conta();
-								conta.setId((Integer) arrayCobrancaDocumentoItem[10]);
-								
-								//REFERENCIA DA CONTA
-								if (arrayCobrancaDocumentoItem[5] != null) {
-									conta.setReferencia((Integer) arrayCobrancaDocumentoItem[5]);
-								}
-								else{
-									conta.setReferencia(0);
-								}
-								
-								contaGeral = new ContaGeral();
-								contaGeral.setConta(conta);
-								contaGeral.setId(conta.getId());
-								
+
 								cobrancaDocumentoItem.setContaGeral(contaGeral);
 							}
-							
-							
+
+							// CONTA HISTORICO
+							else if (arrayCobrancaDocumentoItem[10] != null) {
+
+								conta = new Conta();
+								conta.setId((Integer) arrayCobrancaDocumentoItem[10]);
+
+								// REFERENCIA DA CONTA
+								if (arrayCobrancaDocumentoItem[5] != null) {
+									conta.setReferencia((Integer) arrayCobrancaDocumentoItem[5]);
+								} else {
+									conta.setReferencia(0);
+								}
+
+								contaGeral = new ContaGeral();
+								contaGeral.setConta(conta);
+								contaGeral.setId(conta.getId());
+
+								cobrancaDocumentoItem.setContaGeral(contaGeral);
+							}
+
 							GuiaPagamentoGeral guiaPagamentoGeral = null;
 							GuiaPagamento guiaPagamento = null;
-							
-							//GUIA DE PAGAMENTO
+
+							// GUIA DE PAGAMENTO
 							if (arrayCobrancaDocumentoItem[1] != null) {
-								
+
 								guiaPagamentoGeral = new GuiaPagamentoGeral();
 								guiaPagamento = new GuiaPagamento();
-								
+
 								guiaPagamento.setId((Integer) arrayCobrancaDocumentoItem[1]);
 								guiaPagamentoGeral.setGuiaPagamento(guiaPagamento);
 								guiaPagamentoGeral.setId(guiaPagamento.getId());
-								
+
 								cobrancaDocumentoItem.setGuiaPagamentoGeral(guiaPagamentoGeral);
 							}
-							
-							//GUIA DE PAGAMENTO HISTORICO
-							else if (arrayCobrancaDocumentoItem[11] != null){
-								
+
+							// GUIA DE PAGAMENTO HISTORICO
+							else if (arrayCobrancaDocumentoItem[11] != null) {
+
 								guiaPagamentoGeral = new GuiaPagamentoGeral();
 								guiaPagamento = new GuiaPagamento();
-								
+
 								guiaPagamento.setId((Integer) arrayCobrancaDocumentoItem[11]);
 								guiaPagamentoGeral.setGuiaPagamento(guiaPagamento);
 								guiaPagamentoGeral.setId(guiaPagamento.getId());
-								
+
 								cobrancaDocumentoItem.setGuiaPagamentoGeral(guiaPagamentoGeral);
 							}
-							
-							
+
 							DebitoACobrarGeral debitoACobrarGeral = null;
 							DebitoACobrar debitoACobrar = null;
-							
-							//DEBITO A COBRAR
+
+							// DEBITO A COBRAR
 							if (arrayCobrancaDocumentoItem[2] != null) {
-								
+
 								debitoACobrarGeral = new DebitoACobrarGeral();
 								debitoACobrar = new DebitoACobrar();
-								
+
 								debitoACobrar.setId((Integer) arrayCobrancaDocumentoItem[2]);
 								debitoACobrar.setNumeroPrestacaoDebito((Short) arrayCobrancaDocumentoItem[16]);
 								debitoACobrar.setNumeroPrestacaoCobradas((Short) arrayCobrancaDocumentoItem[17]);
-								
+
 								debitoACobrarGeral.setDebitoACobrar(debitoACobrar);
 								debitoACobrarGeral.setId(debitoACobrar.getId());
-								
+
 								cobrancaDocumentoItem.setDebitoACobrarGeral(debitoACobrarGeral);
-								
-								// [SB0012]- Verifica Pagamento de Débito a Cobrar de Parcelamento
-								this.verificaPagamentoDebitoACobrarParcelamento(cobrancaDocumentoItem.getDebitoACobrarGeral()
-								.getDebitoACobrar().getId(), cobrancaDocumentoItem.getNumeroParcelasAntecipadas());
+
+								// [SB0012]- Verifica Pagamento de Débito a
+								// Cobrar de Parcelamento
+								this.verificaPagamentoDebitoACobrarParcelamento(cobrancaDocumentoItem.getDebitoACobrarGeral().getDebitoACobrar().getId(),
+										cobrancaDocumentoItem.getNumeroParcelasAntecipadas());
 							}
-							
-							//DEBITO A COBRAR HISTORICO
-							else if (arrayCobrancaDocumentoItem[12] != null){
-								
+
+							// DEBITO A COBRAR HISTORICO
+							else if (arrayCobrancaDocumentoItem[12] != null) {
+
 								debitoACobrarGeral = new DebitoACobrarGeral();
 								debitoACobrar = new DebitoACobrar();
-								
+
 								debitoACobrar.setId((Integer) arrayCobrancaDocumentoItem[12]);
-								
+
 								debitoACobrarGeral.setDebitoACobrar(debitoACobrar);
 								debitoACobrarGeral.setId(debitoACobrar.getId());
-								
+
 								cobrancaDocumentoItem.setDebitoACobrarGeral(debitoACobrarGeral);
 							}
-							
-							//CRÉDITO A REALIZAR (UTILIZADO PARA PAGAMENTO ANTECIPADO)
-							
-							//IDENTIFICANDO O TIPO DE DEBITO QUE SERA ASSOCIADO AO PAGAMENTO
+
+							// CRÉDITO A REALIZAR (UTILIZADO PARA PAGAMENTO
+							// ANTECIPADO)
+
+							// IDENTIFICANDO O TIPO DE DEBITO QUE SERA ASSOCIADO
+							// AO PAGAMENTO
 							Integer idDebitoTipo = null;
-							
+
 							if (cobrancaDocumentoItem.getContaGeral() == null) {
-								
-								//CASO SEJA PARA GUIA DE PAGAMENTO
+
+								// CASO SEJA PARA GUIA DE PAGAMENTO
 								if (cobrancaDocumentoItem.getGuiaPagamentoGeral() != null) {
-									
-									//GUIA DE PAGAMENTO
+
+									// GUIA DE PAGAMENTO
 									if (arrayCobrancaDocumentoItem[6] != null) {
 										idDebitoTipo = (Integer) arrayCobrancaDocumentoItem[6];
-									} 
-									//GUIA DE PAGAMENTO HISTORICO
-									else if (arrayCobrancaDocumentoItem[7] != null){
-										 idDebitoTipo = (Integer) arrayCobrancaDocumentoItem[7];
+									}
+									// GUIA DE PAGAMENTO HISTORICO
+									else if (arrayCobrancaDocumentoItem[7] != null) {
+										idDebitoTipo = (Integer) arrayCobrancaDocumentoItem[7];
 									}
 								}
-								
-								//CASO SEJA PARA DEBITO A COBRAR
+
+								// CASO SEJA PARA DEBITO A COBRAR
 								if (cobrancaDocumentoItem.getDebitoACobrarGeral() != null) {
-									
-									//DEBITO A COBRAR
+
+									// DEBITO A COBRAR
 									if (arrayCobrancaDocumentoItem[8] != null) {
 										idDebitoTipo = (Integer) arrayCobrancaDocumentoItem[8];
 
-									} 
-									//DEBITO A COBRAR HISTORICO
+									}
+									// DEBITO A COBRAR HISTORICO
 									else if (arrayCobrancaDocumentoItem[9] != null) {
 										idDebitoTipo = (Integer) arrayCobrancaDocumentoItem[9];
 									}
 								}
 							}
-							
-							//[SB0019] – Gerar Débitos/Créditos Parcelas Antecipadas
+
+							// [SB0019] – Gerar Débitos/Créditos Parcelas
+							// Antecipadas
 							DebitoACobrar debitoACobrarAntecipacao = null;
-							if (cobrancaDocumentoItem.getNumeroParcelasAntecipadas() != null){
-								
-								debitoACobrarAntecipacao = (DebitoACobrar) 
-								this.gerarDebitoCreditoParcelasAntecipadas(idImovelNaBase, cobrancaDocumentoItem, usuarioLogado);
-								
+							if (cobrancaDocumentoItem.getNumeroParcelasAntecipadas() != null) {
+
+								debitoACobrarAntecipacao = (DebitoACobrar) this.gerarDebitoCreditoParcelasAntecipadas(idImovelNaBase, cobrancaDocumentoItem,
+										usuarioLogado);
+
 								/*
-								* Caso o débito a cobrar com parcelas antecipadas tenha juros de parcelamento (FNTP_ID = “Juros de Parcelamento” da
-								* tabela DEBITO_A_COBRAR com PARC_ID = PARC_ID do débito com parcelas antecipadas). O sistema deverá
-								* atualizar a quantidade de parcela bônus do débito a cobrar de juros (DBAC_NNPARCELABONUS =
-								* DBAC_NNPARCELABONUS + quantidade de parcelas antecipadas e DBAC_TMULTIMAALTERACAO = Data e Hora Correntes)
-								*/
-								DebitoACobrar debitoACobrarJurosParcelamento = this.pesquisarDebitoACobrarJurosParcelamento(
-								debitoACobrarAntecipacao.getParcelamento().getId());
+								 * Caso o débito a cobrar com parcelas
+								 * antecipadas tenha juros de parcelamento
+								 * (FNTP_ID = “Juros de Parcelamento” da tabela
+								 * DEBITO_A_COBRAR com PARC_ID = PARC_ID do
+								 * débito com parcelas antecipadas). O sistema
+								 * deverá atualizar a quantidade de parcela
+								 * bônus do débito a cobrar de juros
+								 * (DBAC_NNPARCELABONUS = DBAC_NNPARCELABONUS +
+								 * quantidade de parcelas antecipadas e
+								 * DBAC_TMULTIMAALTERACAO = Data e Hora
+								 * Correntes)
+								 */
+								DebitoACobrar debitoACobrarJurosParcelamento = this.pesquisarDebitoACobrarJurosParcelamento(debitoACobrarAntecipacao
+										.getParcelamento().getId());
 
-								if (debitoACobrarJurosParcelamento != null){
+								if (debitoACobrarJurosParcelamento != null) {
 
-									if (!colecaoDebitosACobrarJurosParcelamento.contains(debitoACobrarJurosParcelamento)){
+									if (!colecaoDebitosACobrarJurosParcelamento.contains(debitoACobrarJurosParcelamento)) {
 
 										Short numeroParcelaBonus = debitoACobrarAntecipacao.getNumeroPrestacaoDebito();
 
-										if (debitoACobrarJurosParcelamento.getNumeroParcelaBonus() != null){
+										if (debitoACobrarJurosParcelamento.getNumeroParcelaBonus() != null) {
 
 											numeroParcelaBonus = Short.valueOf(String.valueOf(debitoACobrarJurosParcelamento.getNumeroParcelaBonus()
 													.shortValue() + debitoACobrarAntecipacao.getNumeroPrestacaoDebito()));
@@ -5175,47 +5161,46 @@ public class ControladorArrecadacao implements SessionBean {
 									}
 								}
 							}
-							
-							
-							//GERANDO O PAGAMENTO
+
+							// GERANDO O PAGAMENTO
 							Pagamento pagamento = new Pagamento();
-							
-							//REFERENCIA DO PAGAMENTO
-							if (cobrancaDocumentoItem.getContaGeral() != null &&
-								cobrancaDocumentoItem.getContaGeral().getConta().getReferencia() != 0) {
-								
+
+							// REFERENCIA DO PAGAMENTO
+							if (cobrancaDocumentoItem.getContaGeral() != null && cobrancaDocumentoItem.getContaGeral().getConta().getReferencia() != 0) {
+
 								pagamento.setAnoMesReferenciaPagamento(cobrancaDocumentoItem.getContaGeral().getConta().getReferencia());
-							} 
-							else {
+							} else {
 								pagamento.setAnoMesReferenciaPagamento(null);
 							}
 
 							/*
-							 * Caso o ano mes da data de debito seja maior que o ano mes de arrecadação da
-							 * tabela sistema parametro então seta o ano mes da data de debito
+							 * Caso o ano mes da data de debito seja maior que o
+							 * ano mes de arrecadação da tabela sistema
+							 * parametro então seta o ano mes da data de debito
 							 */
 							if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
-								
+
 								pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
-							} 
-							//Caso contrario seta o o ano mes arrecadação da tabela sistema parametro
+							}
+							// Caso contrario seta o o ano mes arrecadação da
+							// tabela sistema parametro
 							else {
-								
+
 								pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 							}
-							
-							//VALOR DO PAGAMENTO
+
+							// VALOR DO PAGAMENTO
 							pagamento.setValorPagamento(cobrancaDocumentoItem.getValorItemCobrado());
-							
-							//DATA DO PAGAMENTO
+
+							// DATA DO PAGAMENTO
 							pagamento.setDataPagamento(dataPagamento);
-							
-							//SITUAÇÃO ATUAL
+
+							// SITUAÇÃO ATUAL
 							pagamento.setPagamentoSituacaoAtual(null);
-							
-							//SITUAÇÃO ANTERIOR
+
+							// SITUAÇÃO ANTERIOR
 							pagamento.setPagamentoSituacaoAnterior(null);
-							
+
 							if (idDebitoTipo != null) {
 								DebitoTipo debitoTipo = new DebitoTipo();
 								debitoTipo.setId(idDebitoTipo);
@@ -5224,159 +5209,163 @@ public class ControladorArrecadacao implements SessionBean {
 								pagamento.setDebitoTipo(null);
 							}
 
-							//VERIFICA SE O PAGAMENTO SERÁ RELACIONADO COM UMA CONTA
+							// VERIFICA SE O PAGAMENTO SERÁ RELACIONADO COM UMA
+							// CONTA
 							if (cobrancaDocumentoItem.getContaGeral() != null) {
-									
+
 								/*
-								 * Colocado por Raphael Rossiter em 26/11/2008 - CRC264
-								 * OBJ: Inserir o pagamento com a localidade da própria conta e não
-								 * com a localidade do documento de cobrança
+								 * Colocado por Raphael Rossiter em 26/11/2008 -
+								 * CRC264 OBJ: Inserir o pagamento com a
+								 * localidade da própria conta e não com a
+								 * localidade do documento de cobrança
 								 */
 								Integer idLocalidadeConta = null;
-								
+
 								try {
-									idLocalidadeConta = repositorioLocalidade
-									.pesquisarIdLocalidadePorConta(cobrancaDocumentoItem.getContaGeral().getConta().getId());
+									idLocalidadeConta = repositorioLocalidade.pesquisarIdLocalidadePorConta(cobrancaDocumentoItem.getContaGeral().getConta()
+											.getId());
 
-					            } catch (ErroRepositorioException e) {
-					            	throw new ControladorException("erro.sistema", e);
-					            }
-					            
-					            if (idLocalidadeConta != null){
-					            	pagamento.setContaGeral(cobrancaDocumentoItem.getContaGeral());
-					            }
-					            else{
-					            	try {
-										idLocalidadeConta = repositorioLocalidade
-										.pesquisarIdLocalidadePorContaHistorico(cobrancaDocumentoItem.getContaGeral().getConta().getId());
+								} catch (ErroRepositorioException e) {
+									throw new ControladorException("erro.sistema", e);
+								}
 
-						            } catch (ErroRepositorioException e) {
-						            	throw new ControladorException("erro.sistema", e);
-						            }
-					            }
-					            
-					            idLocalidade = idLocalidadeConta;
-								 
+								if (idLocalidadeConta != null) {
+									pagamento.setContaGeral(cobrancaDocumentoItem.getContaGeral());
+								} else {
+									try {
+										idLocalidadeConta = repositorioLocalidade.pesquisarIdLocalidadePorContaHistorico(cobrancaDocumentoItem.getContaGeral()
+												.getConta().getId());
+
+									} catch (ErroRepositorioException e) {
+										throw new ControladorException("erro.sistema", e);
+									}
+								}
+
+								idLocalidade = idLocalidadeConta;
+
 								DocumentoTipo documentoTipo = new DocumentoTipo();
 								documentoTipo.setId(DocumentoTipo.CONTA);
 								pagamento.setDocumentoTipo(documentoTipo);
-							} 
-							else {
-								
+							} else {
+
 								pagamento.setContaGeral(null);
 							}
-							
-							//VERIFICA SE O PAGAMENTO SERÁ RELACIONADO COM UMA GUIA DE PAGAMENTO
+
+							// VERIFICA SE O PAGAMENTO SERÁ RELACIONADO COM UMA
+							// GUIA DE PAGAMENTO
 							if (cobrancaDocumentoItem.getGuiaPagamentoGeral() != null) {
-								
-								
-									
+
 								/*
-								 * Colocado por Raphael Rossiter em 26/11/2008 - CRC264
-								 * OBJ: Inserir o pagamento com a localidade da própria guia e não
-								 * com a localidade do documento de cobrança
+								 * Colocado por Raphael Rossiter em 26/11/2008 -
+								 * CRC264 OBJ: Inserir o pagamento com a
+								 * localidade da própria guia e não com a
+								 * localidade do documento de cobrança
 								 */
 								Integer idLocalidadeGuiaPagamento = null;
-								
+
 								try {
-									idLocalidadeGuiaPagamento = repositorioLocalidade
-									.pesquisarIdLocalidadePorGuiaPagamento(cobrancaDocumentoItem.getGuiaPagamentoGeral().getGuiaPagamento().getId());
+									idLocalidadeGuiaPagamento = repositorioLocalidade.pesquisarIdLocalidadePorGuiaPagamento(cobrancaDocumentoItem
+											.getGuiaPagamentoGeral().getGuiaPagamento().getId());
 
-					            } catch (ErroRepositorioException e) {
-					            	throw new ControladorException("erro.sistema", e);
-					            }
-					            
-					            if (idLocalidadeGuiaPagamento != null){
-					            	pagamento.setGuiaPagamento(cobrancaDocumentoItem.getGuiaPagamentoGeral());
-					            }
-					            else{
-					            	try {
-					            		idLocalidadeGuiaPagamento = repositorioLocalidade
-										.pesquisarIdLocalidadePorGuiaPagamentoHistorico(cobrancaDocumentoItem.getGuiaPagamentoGeral().getGuiaPagamento().getId());
+								} catch (ErroRepositorioException e) {
+									throw new ControladorException("erro.sistema", e);
+								}
 
-						            } catch (ErroRepositorioException e) {
-						            	throw new ControladorException("erro.sistema", e);
-						            }
-					            }
-					            
-					            idLocalidade = idLocalidadeGuiaPagamento;
-								
+								if (idLocalidadeGuiaPagamento != null) {
+									pagamento.setGuiaPagamento(cobrancaDocumentoItem.getGuiaPagamentoGeral());
+								} else {
+									try {
+										idLocalidadeGuiaPagamento = repositorioLocalidade.pesquisarIdLocalidadePorGuiaPagamentoHistorico(cobrancaDocumentoItem
+												.getGuiaPagamentoGeral().getGuiaPagamento().getId());
+
+									} catch (ErroRepositorioException e) {
+										throw new ControladorException("erro.sistema", e);
+									}
+								}
+
+								idLocalidade = idLocalidadeGuiaPagamento;
+
 								DocumentoTipo documentoTipo = new DocumentoTipo();
-								
+
 								/*
-								 * verificar se o tipo de debito eh 'entrada de parcelamento', e preencher o documentotipo
+								 * verificar se o tipo de debito eh 'entrada de
+								 * parcelamento', e preencher o documentotipo
 								 * com o 'entrada de parcelamento'
 								 */
-								
-								// Alterado por Rômulo Aurélio, Analista Rosana/Aryed
-								// quando o tipo de debito for Entrada de Guia é pra inserir 
+
+								// Alterado por Rômulo Aurélio, Analista
+								// Rosana/Aryed
+								// quando o tipo de debito for Entrada de Guia é
+								// pra inserir
 								// o tipo de documento como guia de Parcelamento
-								documentoTipo.setId(DocumentoTipo.GUIA_PAGAMENTO);	
-								
-								
+								documentoTipo.setId(DocumentoTipo.GUIA_PAGAMENTO);
+
 								documentoTipo.setDescricaoDocumentoTipo(ConstantesSistema.TIPO_PAGAMENTO_DOCUMENTO_COBRANCA);
 								pagamento.setDocumentoTipo(documentoTipo);
 
-							} 
-							else {
-								
+							} else {
+
 								pagamento.setGuiaPagamento(null);
 							}
 
-							//VERIFICA SE O PAGAMENTO SERÁ RELACIONADO COM UM DEBITO A COBRAR
+							// VERIFICA SE O PAGAMENTO SERÁ RELACIONADO COM UM
+							// DEBITO A COBRAR
 							if (cobrancaDocumentoItem.getDebitoACobrarGeral() != null) {
-								
+
 								try {
-										
-									if (debitoACobrarAntecipacao != null){
-										
+
+									if (debitoACobrarAntecipacao != null) {
+
 										debitoACobrarGeral.setDebitoACobrar(debitoACobrarAntecipacao);
 										debitoACobrarGeral.setId(debitoACobrarAntecipacao.getId());
-										
+
 										pagamento.setDebitoACobrarGeral(debitoACobrarGeral);
-										
+
 										/*
-										 * Colocado por Raphael Rossiter em 26/11/2008 - CRC264
-										 * OBJ: Inserir o pagamento com a localidade do próprio debito a cobrar e não
-										 * com a localidade do documento de cobrança
+										 * Colocado por Raphael Rossiter em
+										 * 26/11/2008 - CRC264 OBJ: Inserir o
+										 * pagamento com a localidade do próprio
+										 * debito a cobrar e não com a
+										 * localidade do documento de cobrança
 										 */
-										idLocalidade = repositorioLocalidade
-							            .pesquisarIdLocalidadePorDebitoACobrar(debitoACobrarGeral.getDebitoACobrar().getId());
-									}
-									else if (cobrancaDocumentoItem.getDebitoACobrarGeral().getDebitoACobrar().getNumeroPrestacaoCobradas() !=
-										cobrancaDocumentoItem.getDebitoACobrarGeral().getDebitoACobrar().getNumeroPrestacaoDebito()) {
-											
+										idLocalidade = repositorioLocalidade.pesquisarIdLocalidadePorDebitoACobrar(debitoACobrarGeral.getDebitoACobrar()
+												.getId());
+									} else if (cobrancaDocumentoItem.getDebitoACobrarGeral().getDebitoACobrar().getNumeroPrestacaoCobradas() != cobrancaDocumentoItem
+											.getDebitoACobrarGeral().getDebitoACobrar().getNumeroPrestacaoDebito()) {
+
 										/*
-										 * Colocado por Raphael Rossiter em 26/11/2008 - CRC264
-										 * OBJ: Inserir o pagamento com a localidade do próprio debito a cobrar e não
-										 * com a localidade do documento de cobrança
+										 * Colocado por Raphael Rossiter em
+										 * 26/11/2008 - CRC264 OBJ: Inserir o
+										 * pagamento com a localidade do próprio
+										 * debito a cobrar e não com a
+										 * localidade do documento de cobrança
 										 */
 										Integer idLocalidadeDebitoACobrar = null;
-										
+
 										try {
-											idLocalidadeDebitoACobrar = repositorioLocalidade
-								            .pesquisarIdLocalidadePorDebitoACobrar(cobrancaDocumentoItem.getDebitoACobrarGeral().getDebitoACobrar().getId());
+											idLocalidadeDebitoACobrar = repositorioLocalidade.pesquisarIdLocalidadePorDebitoACobrar(cobrancaDocumentoItem
+													.getDebitoACobrarGeral().getDebitoACobrar().getId());
 
-							            } catch (ErroRepositorioException e) {
-							            	throw new ControladorException("erro.sistema", e);
-							            }
-							            
-							            if (idLocalidadeDebitoACobrar != null){
-							            	pagamento.setDebitoACobrarGeral(cobrancaDocumentoItem.getDebitoACobrarGeral());
-							            }
-							            else{
-							            	try {
-							            		idLocalidadeDebitoACobrar = repositorioLocalidade
-												.pesquisarIdLocalidadePorDebitoACobrarHistorico(cobrancaDocumentoItem.getDebitoACobrarGeral().getDebitoACobrar().getId());
+										} catch (ErroRepositorioException e) {
+											throw new ControladorException("erro.sistema", e);
+										}
 
-								            } catch (ErroRepositorioException e) {
-								            	throw new ControladorException("erro.sistema", e);
-								            }
-							            }
-							            
-							            idLocalidade = idLocalidadeDebitoACobrar;
+										if (idLocalidadeDebitoACobrar != null) {
+											pagamento.setDebitoACobrarGeral(cobrancaDocumentoItem.getDebitoACobrarGeral());
+										} else {
+											try {
+												idLocalidadeDebitoACobrar = repositorioLocalidade
+														.pesquisarIdLocalidadePorDebitoACobrarHistorico(cobrancaDocumentoItem.getDebitoACobrarGeral()
+																.getDebitoACobrar().getId());
+
+											} catch (ErroRepositorioException e) {
+												throw new ControladorException("erro.sistema", e);
+											}
+										}
+
+										idLocalidade = idLocalidadeDebitoACobrar;
 									}
-										
+
 								} catch (ErroRepositorioException e) {
 									throw new ControladorException("erro.sistema", e);
 								}
@@ -5385,13 +5374,12 @@ public class ControladorArrecadacao implements SessionBean {
 								documentoTipo.setId(DocumentoTipo.DEBITO_A_COBRAR);
 								pagamento.setDocumentoTipo(documentoTipo);
 
-							} 
-							else {
-								
+							} else {
+
 								pagamento.setDebitoACobrarGeral(null);
 							}
 
-							//LOCALIDADE
+							// LOCALIDADE
 							if (idLocalidade != null) {
 								Localidade localidade = new Localidade();
 								localidade.setId(idLocalidade);
@@ -5401,10 +5389,10 @@ public class ControladorArrecadacao implements SessionBean {
 
 							}
 
-							//AVISO BANCARIO
+							// AVISO BANCARIO
 							pagamento.setAvisoBancario(null);
 
-							//IMOVEL
+							// IMOVEL
 							if (idImovelNaBase != null) {
 								Imovel imovel = new Imovel();
 								imovel.setId(idImovelNaBase);
@@ -5420,44 +5408,44 @@ public class ControladorArrecadacao implements SessionBean {
 							pagamento.setArrecadacaoForma(arrecadacaoForma);
 							pagamento.setCliente(null);
 							pagamento.setUltimaAlteracao(new Date());
-							
+
 							pagamento.setFatura(null);
-							
+
 							CobrancaDocumento cobrancaDocumento = new CobrancaDocumento();
 							cobrancaDocumento.setId(idCobrancaDocumento);
-							pagamento.setCobrancaDocumento(cobrancaDocumento);							
-							
+							pagamento.setCobrancaDocumento(cobrancaDocumento);
+
 							// documento tipo do documento de cobranca
-							if(idDocumentoTipo != null){
+							if (idDocumentoTipo != null) {
 								DocumentoTipo documentoAgregador = new DocumentoTipo();
 								documentoAgregador.setId(idDocumentoTipo);
 								pagamento.setDocumentoTipoAgregador(documentoAgregador);
 							}
-							
+
 							pagamento.setDataProcessamento(new Date());
-							
+
 							if (pagamento.getDocumentoTipo() != null) {
 								colecaoPagamentos.add(pagamento);
 							}
-						} 
-						else {
+						} else {
 
 							CreditoARealizarGeral creditoARealizarGeral = new CreditoARealizarGeral();
 							creditoARealizarGeral.setId((Integer) arrayCobrancaDocumentoItem[13]);
-							
+
 							cobrancaDocumentoItem.setCreditoARealizarGeral(creditoARealizarGeral);
-							
-							//[SB0019] – Gerar Débitos/Créditos Parcelas Antecipadas
+
+							// [SB0019] – Gerar Débitos/Créditos Parcelas
+							// Antecipadas
 							CreditoARealizar creditoARealizarAntecipacao = null;
-							if (cobrancaDocumentoItem.getNumeroParcelasAntecipadas() != null){
-								
-								creditoARealizarAntecipacao = (CreditoARealizar) this.gerarDebitoCreditoParcelasAntecipadas(idImovelNaBase, 
-								cobrancaDocumentoItem, usuarioLogado);
-								
+							if (cobrancaDocumentoItem.getNumeroParcelasAntecipadas() != null) {
+
+								creditoARealizarAntecipacao = (CreditoARealizar) this.gerarDebitoCreditoParcelasAntecipadas(idImovelNaBase,
+										cobrancaDocumentoItem, usuarioLogado);
+
 								creditoARealizarGeral.setId(creditoARealizarAntecipacao.getId());
 								creditoARealizarGeral.setCreditoARealizar(creditoARealizarAntecipacao);
 							}
-							
+
 							// Para os itens que tenham CreditoARealizar gerar
 							// suas respectivas devoluções
 
@@ -5477,11 +5465,10 @@ public class ControladorArrecadacao implements SessionBean {
 							Integer anoMesDataDevolucao = Util.getAnoMesComoInteger(devolucao.getDataDevolucao());
 
 							if (anoMesDataDevolucao > getSistemaParametro().getAnoMesArrecadacao()) {
-								
+
 								devolucao.setAnoMesReferenciaArrecadacao(anoMesDataDevolucao);
-							} 
-							else {
-								
+							} else {
+
 								devolucao.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 							}
 
@@ -5492,16 +5479,14 @@ public class ControladorArrecadacao implements SessionBean {
 							// COBRANCA_DOCUMENTO
 							if (arrayCobrancaDocumentoItem[14] != null) {
 								Localidade localidade = new Localidade();
-								localidade
-										.setId((Integer) arrayCobrancaDocumentoItem[14]);
+								localidade.setId((Integer) arrayCobrancaDocumentoItem[14]);
 								devolucao.setLocalidade(localidade);
 							}
 
 							// Imovel = Imovel da tabela COBRANCA_DOCUMENTO
 							if (arrayCobrancaDocumentoItem[15] != null) {
 								Imovel imovel = new Imovel();
-								imovel
-										.setId((Integer) arrayCobrancaDocumentoItem[15]);
+								imovel.setId((Integer) arrayCobrancaDocumentoItem[15]);
 								devolucao.setImovel(imovel);
 							}
 
@@ -5520,34 +5505,37 @@ public class ControladorArrecadacao implements SessionBean {
 
 							CobrancaDocumento cobrancaDocumento = new CobrancaDocumento();
 							cobrancaDocumento.setId(idCobrancaDocumento);
-							devolucao.setCobrancaDocumento(cobrancaDocumento);							
-							
+							devolucao.setCobrancaDocumento(cobrancaDocumento);
+
 							// documento tipo do documento de cobranca
-							if(idDocumentoTipo != null){
+							if (idDocumentoTipo != null) {
 								DocumentoTipo documentoAgregador = new DocumentoTipo();
 								documentoAgregador.setId(idDocumentoTipo);
 								devolucao.setDocumentoTipoAgregador(documentoAgregador);
 							}
-							
+
 							// ADICIONANDO A DEVOLUCAO GERADA NA COLECAO DE
 							// RETORNO
 							colecaoDevolucoes.add(devolucao);
 						}
 					}
-					
+
 					/*
-					 * Caso o débito a cobrar com parcelas antecipadas tenha juros de parcelamento (FNTP_ID = “Juros de Parcelamento” da 
-					 * tabela DEBITO_A_COBRAR com PARC_ID = PARC_ID do débito com parcelas antecipadas). O sistema deverá 
-					 * atualizar a quantidade de parcela bônus do débito a cobrar de juros (DBAC_NNPARCELABONUS = 
-					 * DBAC_NNPARCELABONUS + quantidade de parcelas antecipadas e DBAC_TMULTIMAALTERACAO = Data e Hora Correntes)
+					 * Caso o débito a cobrar com parcelas antecipadas tenha
+					 * juros de parcelamento (FNTP_ID = “Juros de Parcelamento”
+					 * da tabela DEBITO_A_COBRAR com PARC_ID = PARC_ID do débito
+					 * com parcelas antecipadas). O sistema deverá atualizar a
+					 * quantidade de parcela bônus do débito a cobrar de juros
+					 * (DBAC_NNPARCELABONUS = DBAC_NNPARCELABONUS + quantidade
+					 * de parcelas antecipadas e DBAC_TMULTIMAALTERACAO = Data e
+					 * Hora Correntes)
 					 */
-					if (colecaoDebitosACobrarJurosParcelamento != null &&
-						!colecaoDebitosACobrarJurosParcelamento.isEmpty()){
-						
+					if (colecaoDebitosACobrarJurosParcelamento != null && !colecaoDebitosACobrarJurosParcelamento.isEmpty()) {
+
 						Iterator itDebitosACobrarJurosParcelamento = colecaoDebitosACobrarJurosParcelamento.iterator();
-						
-						while(itDebitosACobrarJurosParcelamento.hasNext()){
-							
+
+						while (itDebitosACobrarJurosParcelamento.hasNext()) {
+
 							this.atualizarNumeroParcelasBonus((DebitoACobrar) itDebitosACobrarJurosParcelamento.next());
 						}
 					}
@@ -5568,8 +5556,7 @@ public class ControladorArrecadacao implements SessionBean {
 		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
 		pagamentoHelperCodigoBarras.setColecaoDevolucao(colecaoDevolucoes);
 		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
-		pagamentoHelperCodigoBarras
-				.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
+		pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 
 		return pagamentoHelperCodigoBarras;
 
