@@ -44699,7 +44699,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @author Vivianne Sousa
 	 * @created 22/12/2009
 	 */
-	public Collection pesquisarFatura(Integer idCliente,
+	public Collection pesquisarFaturas(Integer idCliente,
 			Integer anoMesReferencia, Integer numeroSequencial,
 			BigDecimal valordebito) throws ErroRepositorioException {
 
@@ -44733,7 +44733,39 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
+	public Fatura pesquisarFatura(Integer idCliente,
+			Integer anoMesReferencia, Integer numeroSequencial,
+			BigDecimal valordebito) throws ErroRepositorioException {
 
+		Session session = HibernateUtil.getSession();
+
+		Fatura retorno = null;
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("SELECT fatura FROM Fatura fatura ")
+					.append("INNER JOIN fatura.cliente cliente ")
+					.append("WHERE cliente.id = :idCliente AND ")
+					.append("fatura.anoMesReferencia = :anoMesReferencia AND ")
+					.append("fatura.sequencial = :numeroSequencial AND ")
+					.append("fatura.debito = :valordebito");
+
+			retorno = (Fatura) session.createQuery(consulta.toString()).setInteger("idCliente",
+					idCliente.intValue()).setInteger("anoMesReferencia",
+					anoMesReferencia.intValue()).setInteger("numeroSequencial",
+					numeroSequencial.intValue()).setBigDecimal("valordebito",
+					valordebito).uniqueResult();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 	
 	/**
 	 * Recupera as contas dos imóveis selecionados que tenham o mês ano de

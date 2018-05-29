@@ -15699,7 +15699,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 			}
 			
-			sql = sql + " ORDER BY arrecadadorMovimento.armv_nnnsa";
+			sql = sql + " ORDER BY arrecadadorMovimento.armv_nnnsa desc";
 			
 			if (dataInicio != null && dataFim != null) {
 				retorno = session.createSQLQuery(sql).addScalar("codBanco",

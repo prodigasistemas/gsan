@@ -679,26 +679,25 @@ public class ControladorArrecadacao implements SessionBean {
 			descricaoOcorrencia = "TIPO DO DOCUMENTO NÃO NUMÉRICO";
 		}
 
+		Object[] dadosItem = null;
+
+		Integer idPrestacao = Integer
+				.parseInt(registroHelperCodigoBarras
+						.getRegistroHelperCodigoBarrasTipoPagamento()
+						.getIdPagamento3());
+
+		try {
+			dadosItem = repositorioCobranca.obterDadosDocumentoCobrancaItemContratoParcelamento(idPrestacao);
+			
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+		
+		if (dadosItem != null && dadosItem[0] != null && new BigDecimal(String.valueOf(dadosItem[0])).compareTo(valorPagamento) != 0) {
+			descricaoOcorrencia = "VALOR DO DOCUMENTO DIFERENTE DO VALOR DO PAGAMENTO";
+		}
+
 		if (descricaoOcorrencia.equals("OK")) {
-			// 1.5.	Caso contrário, verifica o documento de cobrança 
-
-			// inicializa a coleção de cobranca documento item
-			Object[] dadosItem = null;
-
-			Integer idPrestacao = Integer
-					.parseInt(registroHelperCodigoBarras
-							.getRegistroHelperCodigoBarrasTipoPagamento()
-							.getIdPagamento3());
-
-			try {
-
-				dadosItem = repositorioCobranca
-						.obterDadosDocumentoCobrancaItemContratoParcelamento(idPrestacao);
-				
-			} catch (ErroRepositorioException e) {
-				throw new ControladorException("erro.sistema", e);
-			}
-
 			// caso exista documento de cobrança
 			// verifica se a coleção é diferente de nula
 			if (dadosItem != null) {
@@ -2928,13 +2927,13 @@ public class ControladorArrecadacao implements SessionBean {
 			String tituloMensagem = envioEmailError.getTituloMensagem() + " " + stringBuilderTxt.substring(73, 79).trim();
 			String emailReceptor = envioEmailError.getEmailReceptor();
 
-			try {
-
-				ServicosEmail.enviarMensagem(emailRemetente, emailReceptor, tituloMensagem, ConstantesAplicacao.get(mensagem));
-
-			} catch (ErroEmailException e1) {
-
-			}
+//			try {
+//
+//				ServicosEmail.enviarMensagem(emailRemetente, emailReceptor, tituloMensagem, ConstantesAplicacao.get(mensagem));
+//
+//			} catch (ErroEmailException e1) {
+//
+//			}
 
 			e.printStackTrace();
 			if (!(e instanceof SendFailedException)) {
@@ -4767,7 +4766,7 @@ public class ControladorArrecadacao implements SessionBean {
 			RegistroHelperCodigoBarras registroHelperCodigoBarras,
 			SistemaParametro sistemaParametro, Date dataPagamento,
 			Integer anoMesPagamento, BigDecimal valorPagamento,
- Integer idFormaArrecadacao,
+			Integer idFormaArrecadacao,
 			Usuario usuarioLogado) throws ControladorException {
 
 		PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
@@ -4775,13 +4774,10 @@ public class ControladorArrecadacao implements SessionBean {
 		pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
 
 		String descricaoOcorrencia = "OK";
-
 		String indicadorAceitacaoRegistro = "1";
 
 		Collection colecaoPagamentos = new ArrayList();
-
 		Collection colecaoDevolucoes = new ArrayList();
-
 		Collection colecaoDebitosACobrarJurosParcelamento = new ArrayList();
 
 		boolean idLocalidadeInvalida = false;
@@ -4789,6 +4785,8 @@ public class ControladorArrecadacao implements SessionBean {
 
 		Integer idImovelNaBase = null;
 		Integer matriculaImovel = null;
+
+		Object[] parmsDocumentoCobranca = null;
 
 		// Valida o id da localidade
 		idLocalidadeInvalida = Util.validarValorNaoNumerico(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento1());
@@ -4801,10 +4799,7 @@ public class ControladorArrecadacao implements SessionBean {
 		if (matriculaImovelInvalida) {
 			descricaoOcorrencia = "MÁTRICULA DO IMÓVEL INVÁLIDA";
 		} else {
-			// verifica se existe a matricula do imóvel na
-			// base
 			matriculaImovel = new Integer(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2());
-			idImovelNaBase = null;
 			try {
 				idImovelNaBase = repositorioImovel.recuperarMatriculaImovel(new Integer(matriculaImovel));
 			} catch (ErroRepositorioException e) {
@@ -4823,9 +4818,18 @@ public class ControladorArrecadacao implements SessionBean {
 			descricaoOcorrencia = "TIPO DO DOCUMENTO NÃO NUMÉRICO";
 		}
 
-		/*
-		 * TODO Validacao da diferenca do valor do pagamento e documento
-		 */
+		int numeroSequencialDocumento = Integer.parseInt(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento3());
+		if (idImovelNaBase != null) {
+			try {
+				parmsDocumentoCobranca = repositorioCobranca.pesquisarParmsCobrancaDocumento(idImovelNaBase, numeroSequencialDocumento);
+			} catch (ErroRepositorioException e) {
+				throw new ControladorException("erro.pagamento.doc.cobranca", e);
+			}
+			
+			if (parmsDocumentoCobranca != null && new BigDecimal(String.valueOf(parmsDocumentoCobranca[7])).compareTo(valorPagamento) != 0) {
+				descricaoOcorrencia = "VALOR DO PAGAMENTO DIFERENTE DO VALOR DO DOCUMENTO";
+			}
+		}
 
 		if (descricaoOcorrencia.equals("OK")) {
 			Integer idLocalidade = null;
@@ -4833,14 +4837,9 @@ public class ControladorArrecadacao implements SessionBean {
 			// inicializa a coleção de cobranca documento item
 			Collection cobrancaDocumentoItens = null;
 			// inicializa a coleção de cobranca documento item
-			Object[] parmsDocumentoCobranca = null;
-
-			int numeroSequencialDocumento = Integer.parseInt(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento3());
 
 			try {
-
 				cobrancaDocumentoItens = repositorioCobranca.pesquisarCobrancaDocumentoItem(idImovelNaBase, numeroSequencialDocumento);
-				parmsDocumentoCobranca = repositorioCobranca.pesquisarParmsCobrancaDocumento(idImovelNaBase, numeroSequencialDocumento);
 			} catch (ErroRepositorioException e) {
 				throw new ControladorException("erro.sistema", e);
 			}
@@ -6174,8 +6173,7 @@ public class ControladorArrecadacao implements SessionBean {
 					.getIdPagamento2());
 
 			try {
-				idClienteNaBase = repositorioCliente
-						.verificarExistenciaCliente(new Integer(idCliente));
+				idClienteNaBase = repositorioCliente.verificarExistenciaCliente(new Integer(idCliente));
 			} catch (ErroRepositorioException e) {
 				throw new ControladorException("erro.sistema", e);
 			}
@@ -6194,14 +6192,25 @@ public class ControladorArrecadacao implements SessionBean {
 		if (anoMesReferencia) {
 			descricaoOcorrencia = "ANO/MÊS DE REFERÊNCIA DA CONTA INVÁLIDA";
 		}
+		
+		Integer numeroSequencial = new Integer(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento6());
+		
+		Fatura fatura = null;
+		try {
+			fatura = repositorioFaturamento.pesquisarFatura(idClienteNaBase, anoMes, numeroSequencial, valorPagamento);
+		} catch (ErroRepositorioException e1) {
+			throw new ControladorException("erro.pagamento.fatura", e1);
+		}
+		
+		if (fatura != null && fatura.getDebito().compareTo(valorPagamento) != 0) {
+			descricaoOcorrencia = "VALOR DA FATURA DIFERENTE DO VALOR DO PAGAMENTO";
+		}
+				
 		if (descricaoOcorrencia.equals("OK")) {
 
 			// inicializa a coleção de fatura item
 			Collection faturaItens = null;
 
-			Integer numeroSequencial = new Integer(registroHelperCodigoBarras
-					.getRegistroHelperCodigoBarrasTipoPagamento()
-					.getIdPagamento6());
 			
 			
 			try {
@@ -6331,7 +6340,7 @@ public class ControladorArrecadacao implements SessionBean {
 					pagamento.setCliente(null);
 					pagamento.setUltimaAlteracao(new Date());
 
-					Fatura fatura = new Fatura();
+					fatura = new Fatura();
 					fatura.setId(idFatura);
 					pagamento.setFatura(fatura);
 					
@@ -7408,6 +7417,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @return PagamentoHelperCodigoBarras
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	protected PagamentoHelperCodigoBarras processarPagamentosCodigoBarrasPorTipoPagamento(
 			RegistroHelperCodigoBarras registroHelperCodigoBarras, Date dataPagamento, Integer anoMesPagamento,
 			BigDecimal valorPagamento, Integer idFormaArrecadacao, SistemaParametro sistemaParametro, Usuario usuarioLogado) 
@@ -7422,8 +7432,6 @@ public class ControladorArrecadacao implements SessionBean {
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
-
-			//===============================================================================================================================
 		}
 			
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_CONTA.toString())){
@@ -7431,8 +7439,6 @@ public class ControladorArrecadacao implements SessionBean {
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
-
-			//===============================================================================================================================
 		}
 		
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO.toString())){
@@ -7440,8 +7446,6 @@ public class ControladorArrecadacao implements SessionBean {
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
-
-			//===============================================================================================================================
 		}
 		
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_DOCUMENTO_COBRANCA.toString())){
@@ -7449,9 +7453,6 @@ public class ControladorArrecadacao implements SessionBean {
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao, usuarioLogado);
-			
-
-			//===============================================================================================================================
 		}
 		
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO_CLIENTE.toString())){
@@ -7459,9 +7460,6 @@ public class ControladorArrecadacao implements SessionBean {
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
-			
-	
-			//===============================================================================================================================
 		}
 		
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_FATURA_CLIENTE_RESPONSAVEL.toString())){
@@ -7469,8 +7467,6 @@ public class ControladorArrecadacao implements SessionBean {
 					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
-			
-			//===============================================================================================================================
 		}
 		
 		else if (tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_DOCUMENTO_COBRANCA_NOVO.toString())){
@@ -7490,10 +7486,8 @@ public class ControladorArrecadacao implements SessionBean {
 			}
 			pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.DOCUMENTO_COBRANCA);
 			pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
-			//===============================================================================================================================			
-		}
-		
-		else if(tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO_COM_IDENTIFICACAO_CLIENTE.toString())){
+			
+		} else if(tipoPagamento.equals(ConstantesSistema.CODIGO_TIPO_PAGAMENTO_GUIA_PAGAMENTO_COM_IDENTIFICACAO_CLIENTE.toString())){
 			pagamentoHelperCodigoBarras = this
 				.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoCliente(
 					registroHelperCodigoBarras, getSistemaParametro(),
@@ -7502,19 +7496,13 @@ public class ControladorArrecadacao implements SessionBean {
 
 			pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.GUIA_PAGAMENTO);
 			pagamentoHelperCodigoBarras.setValorDocumento(valorPagamento);
-			
-			//===============================================================================================================================			
 		}else{
-			
-			// atribui o valor 2(NÃO) ao indicador aceitacao registro
 			Collection colecaoPagamentos = new ArrayList();
 			pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
 			
 			pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
 			pagamentoHelperCodigoBarras.setDescricaoOcorrencia("CÓDIGO DE BARRAS COM TIPO DE PAGAMENTO INVÁLIDO");
 			pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro("2");
-			
-			//===============================================================================================================================
 		}
 
 		return pagamentoHelperCodigoBarras;
@@ -42773,8 +42761,7 @@ public class ControladorArrecadacao implements SessionBean {
 		
 		if (descricaoOcorrencia.equals("OK")) {
 			
-			// inicializa a coleção de fatura item
-			Collection fatura = null;
+			Fatura fatura = null;
 
 			Integer numeroSequencial = new Integer(registroHelperCodigoBarras
 					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento6());
@@ -42790,7 +42777,7 @@ public class ControladorArrecadacao implements SessionBean {
 			}
 
 			// verifica se a coleção é diferente de nula
-			if (fatura == null || fatura.isEmpty()) {
+			if (fatura == null) {
 				
 				descricaoOcorrencia = "FATURA DO CLIENTE RESPONSÁVEL INEXISTENTE";
 				indicadorAceitacaoRegistro = "2";

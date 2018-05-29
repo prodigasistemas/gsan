@@ -2175,8 +2175,7 @@ public interface IRepositorioFaturamento {
 
 	public Integer countTxtContasProjetosEspeciais(String anoMes, Integer idCliente) throws ErroRepositorioException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarFatura(Integer idCliente,
+	public Fatura pesquisarFatura(Integer idCliente,
 			Integer anoMesReferencia, Integer numeroSequencial,
 			BigDecimal valordebito) throws ErroRepositorioException;
 
