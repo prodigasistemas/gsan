@@ -1,9 +1,9 @@
 package gcom.gui.faturamento;
 
-import gcom.arrecadacao.ContratoDemanda;
+import gcom.cadastro.imovel.Contrato;
+import gcom.cadastro.imovel.FiltroContrato;
 import gcom.cadastro.imovel.Imovel;
 import gcom.fachada.Fachada;
-import gcom.faturamento.FiltroContratoDemanda;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.Util;
@@ -61,7 +61,7 @@ public class FiltrarContratoDemandaAction extends GcomAction {
 				.getDataFimContrato();
 
 		// Cria o filtro
-		FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
+		FiltroContrato filtroContratoDemanda = new FiltroContrato();
 
 		boolean peloMenosUmParametroInformado = false;
 
@@ -72,11 +72,11 @@ public class FiltrarContratoDemandaAction extends GcomAction {
 				&& !numeroContrato.trim().equalsIgnoreCase("")) {
 			peloMenosUmParametroInformado = true;
 			filtroContratoDemanda.adicionarParametro(new ParametroSimples(
-					FiltroContratoDemanda.MUMEROCONTRATO, numeroContrato));
+					FiltroContrato.MUMEROCONTRATO, numeroContrato));
 			
 			// [FS0003] - Verificar existência do contrato de demanda
 			Collection colecaoContratoDemanda = fachada.pesquisar(
-					filtroContratoDemanda, ContratoDemanda.class.getName());
+					filtroContratoDemanda, Contrato.class.getName());
 			
 			if (colecaoContratoDemanda == null || colecaoContratoDemanda.isEmpty()) {
 				throw new ActionServletException(
@@ -97,7 +97,7 @@ public class FiltrarContratoDemandaAction extends GcomAction {
 			} else {
 				peloMenosUmParametroInformado = true;
 				filtroContratoDemanda.adicionarParametro(new ParametroSimples(
-						FiltroContratoDemanda.IMOVEL, idImovel));
+						FiltroContrato.IMOVEL, idImovel));
 			}
 
 		}
@@ -109,7 +109,7 @@ public class FiltrarContratoDemandaAction extends GcomAction {
 			Date dataInicioFormatada = Util.converteStringParaDate(dataInicioContrato);
 			
 			filtroContratoDemanda.adicionarParametro(new MaiorQue(
-					FiltroContratoDemanda.DATACONTRATOINICIO,
+					FiltroContrato.DATACONTRATOINICIO,
 					dataInicioFormatada));
 		}
 
@@ -120,7 +120,7 @@ public class FiltrarContratoDemandaAction extends GcomAction {
 			Date dataFimFormatada = Util.converteStringParaDate(dataFimContrato);
 			
 			filtroContratoDemanda.adicionarParametro(new MenorQue(
-					FiltroContratoDemanda.DATACONTRATOINICIO, dataFimFormatada));
+					FiltroContrato.DATACONTRATOINICIO, dataFimFormatada));
 		}
 
 		// Erro caso o usuário mandou filtrar sem nenhum parâmetro

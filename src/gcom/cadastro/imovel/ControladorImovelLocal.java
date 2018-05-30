@@ -36,6 +36,7 @@ import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.cadastro.GerarRelatorioImoveisDoacoesHelper;
+import gcom.relatorio.cadastro.dto.ContratoAdesaoimovelDTO;
 import gcom.relatorio.micromedicao.FiltrarAnaliseExcecoesLeiturasHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
@@ -749,5 +750,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 
 	public ImovelCobrancaSituacao obterImovelCobrancaSituacao(Integer idImovelSituacaoCobranca) throws ControladorException;
 	
+	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) throws ControladorException; 
+
 	public void incluirImovelCobranca(Integer idCobrancaSituacao, Integer idCobrancaSituacaoTipo, Integer idImovel, Usuario usuario) throws ControladorException;
 }

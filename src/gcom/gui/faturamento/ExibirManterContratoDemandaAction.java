@@ -1,7 +1,7 @@
 package gcom.gui.faturamento;
 
-import gcom.arrecadacao.ContratoDemanda;
-import gcom.faturamento.FiltroContratoDemanda;
+import gcom.cadastro.imovel.Contrato;
+import gcom.cadastro.imovel.FiltroContrato;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 
@@ -53,7 +53,7 @@ public class ExibirManterContratoDemandaAction extends GcomAction {
 
 		// Recupera o filtro passado pelo FiltrarResolucaoDiretoriaAction para
 		// ser efetuada pesquisa
-		FiltroContratoDemanda filtroContratoDemanda = (FiltroContratoDemanda) sessao
+		FiltroContrato filtroContratoDemanda = (FiltroContrato) sessao
 				.getAttribute("filtroContratoDemanda");
 		filtroContratoDemanda.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial");
 		filtroContratoDemanda.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
@@ -64,7 +64,7 @@ public class ExibirManterContratoDemandaAction extends GcomAction {
 		Collection colecaoContratoDemanda = new ArrayList();
 		if(filtroContratoDemanda != null && !filtroContratoDemanda.equals("")){
 			Map resultado = controlarPaginacao(httpServletRequest, retorno,
-					filtroContratoDemanda, ContratoDemanda.class.getName());
+					filtroContratoDemanda, Contrato.class.getName());
 			colecaoContratoDemanda = (Collection) resultado
 				.get("colecaoRetorno");
 			retorno = (ActionForward) resultado.get("destinoActionForward");
@@ -94,7 +94,7 @@ public class ExibirManterContratoDemandaAction extends GcomAction {
 				if (sessao.getAttribute("atualizar") != null) {
 					retorno = actionMapping
 							.findForward("exibirAtualizarContratoDemanda");
-					ContratoDemanda contratoDemanda = (ContratoDemanda) colecaoContratoDemanda
+					Contrato contratoDemanda = (Contrato) colecaoContratoDemanda
 							.iterator().next();
 					sessao.setAttribute("contratoDemanda",
 							contratoDemanda);
