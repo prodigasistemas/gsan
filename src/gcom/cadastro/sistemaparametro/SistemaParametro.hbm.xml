@@ -628,13 +628,8 @@
 			column="parm_dsleinormamedicaoloja" type="java.lang.String"
 			length="30" />
 
-		<property
-		name="ipServidorModuloOperacional"
-		type="java.lang.String"
-		column="parm_ipservidormodulooperacional"
-		not-null="false"
-		length="30"
-	    />
+		<property name="ipServidorModuloOperacional" type="java.lang.String"
+			column="parm_ipservidormodulooperacional" not-null="false" length="30" />
 
 		<property name="arquivoLeiIndividualizacao" type="binary"
 			column="parm_arleinormamedicaoloja" length="-1" />
@@ -675,6 +670,9 @@
 			
 		<property name="indicadorGeracaoBoletoBB"
 			column="parm_icgeracaoboletobb" type="java.lang.Short" length="1" />
+		
+		<property name="descricaoAplicativoAtendimento" type="java.lang.String" column="parm_descaplicativoatendimento"  length="15" not-null="false" />
+		<property name="telefoneAplicativoAtendimento"  type="java.lang.String" column="parm_foneaplicativoatendimento" length="9"  not-null="false" />
 
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to Logradouro -->

@@ -31770,7 +31770,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
            .append("(SELECT sum(devl_vldevolucao) FROM arrecadacao.devolucao d WHERE d.avbc_id = a.avbc_id) as valor_devolucao ")
            .append(from)
            .append("INNER JOIN arrecadacao.pagamento p ON a.avbc_id = p.avbc_id ")
-           .append("WHERE p.pgmt_dtpagamento >= current_date - 10 ")
+           .append("WHERE p.pgmt_dtpagamento >= '2017-11-25' ")
            .append(groupBy)
 		   
 		   .append(") as resumo ")

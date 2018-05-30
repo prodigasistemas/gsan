@@ -606,6 +606,8 @@ public interface IRepositorioFaturamento {
 			EmitirContaHelper emitirContaHelper, Integer idFaturamentoGrupo,
 			Integer idGerenciaRegional, Integer idLocalidade,
 			Integer idSetorComercial) throws ErroRepositorioException;
+	
+	public Object[] pesquisarContaMensagemFixa() throws ErroRepositorioException;
 
 	public Object[] pesquisarParmsQualidadeAgua(EmitirContaHelper emitirContaHelper) throws ErroRepositorioException;
 
