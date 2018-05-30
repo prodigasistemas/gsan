@@ -1675,15 +1675,9 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 									RaEncerramentoComando.class.getName());
 	
 							if (colRaEncerramentoComando != null && !colRaEncerramentoComando.isEmpty()) {
-								RaEncerramentoComando raEncerramentoComando = null;
-	
-								laco: for (RaEncerramentoComando ra : colRaEncerramentoComando) {
-									raEncerramentoComando = ra;
-									break laco;
-								}
 	
 								executarComandoEncerramentoRA.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsLocalidadesRA);
-								executarComandoEncerramentoRA.addParametro("raEncerramentoComando", raEncerramentoComando);
+								executarComandoEncerramentoRA.addParametro("raEncerramentoComandos", colRaEncerramentoComando);
 	
 							} else {
 								throw new ControladorException("atencao.comando.encerramento.ra.vazio.para.executar");

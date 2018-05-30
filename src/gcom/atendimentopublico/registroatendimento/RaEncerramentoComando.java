@@ -155,7 +155,7 @@ public class RaEncerramentoComando implements Serializable {
     }
 
     public Integer getQuantidadeRasEncerradas() {
-        return this.quantidadeRasEncerradas;
+        return this.quantidadeRasEncerradas != null ? this.quantidadeRasEncerradas : 0;
     }
 
     public void setQuantidadeRasEncerradas(Integer quantidadeRasEncerradas) {

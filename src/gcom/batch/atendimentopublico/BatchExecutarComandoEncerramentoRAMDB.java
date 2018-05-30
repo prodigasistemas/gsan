@@ -1,5 +1,7 @@
 package gcom.batch.atendimentopublico;
 
+import java.util.Collection;
+
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.RaEncerramentoComando;
@@ -37,6 +39,7 @@ public class BatchExecutarComandoEncerramentoRAMDB implements MessageDrivenBean,
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	public void onMessage(Message message) {
 		if (message instanceof ObjectMessage) {
 
@@ -44,7 +47,7 @@ public class BatchExecutarComandoEncerramentoRAMDB implements MessageDrivenBean,
 			try {
 				
 				this.getControladorRegistroAtendimento().executarComandoEncerramentoRA(
-					(RaEncerramentoComando) ((Object[]) objectMessage.getObject())[0],
+					(Collection<RaEncerramentoComando>) ((Object[]) objectMessage.getObject())[0],
 					(Integer) ((Object[]) objectMessage.getObject())[1],
 					(Integer) ((Object[]) objectMessage.getObject())[2]);
 
@@ -59,11 +62,6 @@ public class BatchExecutarComandoEncerramentoRAMDB implements MessageDrivenBean,
 
 	}
 	
-	
-	/**
-	 * Retorna o valor de controladorRegistroAtendimento
-	 * 
-	 */
 	private ControladorRegistroAtendimentoLocal getControladorRegistroAtendimento() {
 		ControladorRegistroAtendimentoLocalHome localHome = null;
 		ControladorRegistroAtendimentoLocal local = null;
@@ -86,11 +84,6 @@ public class BatchExecutarComandoEncerramentoRAMDB implements MessageDrivenBean,
 		}
 	}
 
-	/**
-	 * Default create method
-	 * 
-	 * @throws CreateException
-	 */
 	public void ejbCreate() {
 
 	}

@@ -31,11 +31,12 @@ public class TarefaBatchExecutarComandoEncerramentoRA extends TarefaBatch {
 		super(null, 0);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object executar() throws TarefaException {
 
 		Collection colecaoIdsLoclaidadeRA = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
 
-		RaEncerramentoComando raEncerramentoComando = (RaEncerramentoComando) getParametro("raEncerramentoComando");
+		Collection<RaEncerramentoComando> raEncerramentoComandos = (Collection<RaEncerramentoComando>) getParametro("raEncerramentoComandos");
 		
 		Iterator iterator = colecaoIdsLoclaidadeRA.iterator();
 
@@ -45,7 +46,7 @@ public class TarefaBatchExecutarComandoEncerramentoRA extends TarefaBatch {
 
 			enviarMensagemControladorBatch(
 					ConstantesJNDI.BATCH_EXECUTAR_COMANDO_ENCERRAMENTO_RA_MDB,
-					new Object[]{raEncerramentoComando,
+					new Object[]{raEncerramentoComandos,
 							this.getIdFuncionalidadeIniciada(), idLocalidade});
 
 		}

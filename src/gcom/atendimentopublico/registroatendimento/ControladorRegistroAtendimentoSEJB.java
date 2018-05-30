@@ -12899,7 +12899,10 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 		Collection<Object[]> colecaoDadosRA = null;
 		
 		try {
-			
+			System.out.println("Localidade " + idLocalidade);
+			if (idLocalidade.intValue() == 23 ) {
+				System.out.println("Encerrando RA da localidade 23 ");
+			}
 			Collection<Integer> idsEspecificacoes = repositorioRegistroAtendimento.pesquisarIdsEspecificacoesRAEncerramentoComando(raEncerramentoComando.getId());
 			
 			UnidadeOrganizacional unidadeAtual = raEncerramentoComando.getUnidadeOrganizacionalAtual();
@@ -12942,60 +12945,58 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 	 * @param idLocalidade
 	 * @throws ControladorException
 	 */
-	public void executarComandoEncerramentoRA(RaEncerramentoComando raEncerramentoComando, int idFuncionalidadeIniciada, Integer idLocalidade) throws ControladorException {
+	public void executarComandoEncerramentoRA(Collection<RaEncerramentoComando> comandos, int idFuncionalidadeIniciada, Integer idLocalidade) throws ControladorException {
 		
 		int idUnidadeIniciada = 0;
 		
-		// -------------------------
-		//
-		// Registrar o início do processamento da Unidade de
-		// Processamento
-		// do Batch
-		//
-		// -------------------------
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.LOCALIDADE, idLocalidade);
-		
-		try {
-			//[SB0001] - Selecionar Registro de Atendimento
-			Collection<RegistroAtendimento> colecaoRegistrosAtendimento = this.selecionarRegistroAtendimento(raEncerramentoComando, idLocalidade);
+
+		for (RaEncerramentoComando comando : comandos) {
 			
-			int qtdeOsEncerradas = 0;
-			
-			if (colecaoRegistrosAtendimento != null	&& !colecaoRegistrosAtendimento.isEmpty()) {
+			try {
+				Collection<RegistroAtendimento> colecaoRegistrosAtendimento = this.selecionarRegistroAtendimento(comando, idLocalidade);
 				
-				for (RegistroAtendimento ra : colecaoRegistrosAtendimento) {
-					// Encerra a RA e retorna a quantidade de OS associadas a ele
-					qtdeOsEncerradas = qtdeOsEncerradas + this.encerrarRAComando(raEncerramentoComando, ra);
+				int qtdeOsEncerradas = 0;
+				
+				if (colecaoRegistrosAtendimento != null	&& !colecaoRegistrosAtendimento.isEmpty()) {
+					System.out.println("[INÍCIO] qtdeOsEncerradas: " + qtdeOsEncerradas);
+					for (RegistroAtendimento ra : colecaoRegistrosAtendimento) {
+						// Encerra a RA e retorna a quantidade de OS associadas a ele
+						System.out.println(" --> qtdeOsEncerradas: " + qtdeOsEncerradas);
+						qtdeOsEncerradas = qtdeOsEncerradas + this.encerrarRAComando(comando, ra);
+						System.out.println("------>  qtdeOsEncerradas: " + qtdeOsEncerradas);
+					}
 				}
+				
+				
+				FiltroRaEncerramentoComando filtroRaEncerramentoComando = new FiltroRaEncerramentoComando();
+				filtroRaEncerramentoComando.adicionarParametro(new ParametroSimples(FiltroRaEncerramentoComando.ID,comando.getId()));
+				Collection<RaEncerramentoComando> colRaEncerramentoComando = getControladorUtil().pesquisar(filtroRaEncerramentoComando, RaEncerramentoComando.class.getName());
+				
+				RaEncerramentoComando raEncerramentoComandoNaBase =(RaEncerramentoComando) Util.retonarObjetoDeColecao(colRaEncerramentoComando); 
+				if(raEncerramentoComandoNaBase.getQuantidadeRasEncerradas() != null){
+					comando.setQuantidadeRasEncerradas(comando.getQuantidadeRasEncerradas() + colecaoRegistrosAtendimento.size() + raEncerramentoComandoNaBase.getQuantidadeRasEncerradas());
+				}else{
+					comando.setQuantidadeRasEncerradas(comando.getQuantidadeRasEncerradas() + colecaoRegistrosAtendimento.size());
+				}
+				
+				if(raEncerramentoComandoNaBase.getQuantidadeOsEncerradas() != null){
+					comando.setQuantidadeOsEncerradas(comando.getQuantidadeRasEncerradas() + qtdeOsEncerradas + raEncerramentoComandoNaBase.getQuantidadeOsEncerradas()) ;
+				}else{
+					comando.setQuantidadeOsEncerradas(comando.getQuantidadeRasEncerradas() + qtdeOsEncerradas) ;
+				}
+				
+				comando.setTempoRealizacao(new Date());
+				
+				getControladorUtil().atualizar(comando);
+				
+				getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
+				
+			} catch (Exception e) {
+				getControladorBatch().encerrarUnidadeProcessamentoBatch(e,idUnidadeIniciada, true);
+				sessionContext.setRollbackOnly();
+				throw new EJBException(e);
 			}
-			
-			FiltroRaEncerramentoComando filtroRaEncerramentoComando = new FiltroRaEncerramentoComando();
-			filtroRaEncerramentoComando.adicionarParametro(new ParametroSimples(FiltroRaEncerramentoComando.ID,raEncerramentoComando.getId()));
-			Collection<RaEncerramentoComando> colRaEncerramentoComando = getControladorUtil().pesquisar(filtroRaEncerramentoComando, RaEncerramentoComando.class.getName());
-			
-			RaEncerramentoComando raEncerramentoComandoNaBase =(RaEncerramentoComando) Util.retonarObjetoDeColecao(colRaEncerramentoComando); 
-			if(raEncerramentoComandoNaBase.getQuantidadeRasEncerradas() != null){
-				raEncerramentoComando.setQuantidadeRasEncerradas(colecaoRegistrosAtendimento.size() + raEncerramentoComandoNaBase.getQuantidadeRasEncerradas());
-			}else{
-				raEncerramentoComando.setQuantidadeRasEncerradas(colecaoRegistrosAtendimento.size());
-			}
-			
-			if(raEncerramentoComandoNaBase.getQuantidadeOsEncerradas() != null){
-				raEncerramentoComando.setQuantidadeOsEncerradas(qtdeOsEncerradas + raEncerramentoComandoNaBase.getQuantidadeOsEncerradas()) ;
-			}else{
-				raEncerramentoComando.setQuantidadeOsEncerradas(qtdeOsEncerradas) ;
-			}
-			
-			raEncerramentoComando.setTempoRealizacao(new Date());
-			
-			getControladorUtil().atualizar(raEncerramentoComando);
-			
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
-			
-		} catch (Exception e) {
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,idUnidadeIniciada, true);
-			sessionContext.setRollbackOnly();
-			throw new EJBException(e);
 		}
 	}
 	
