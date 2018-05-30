@@ -40129,4 +40129,12 @@ public class Fachada {
 		this.enviarMensagemControladorBatch(MetodosBatch.INFORMAR_CONTAS_COBRANCA_EMPRESA, ConstantesJNDI.QUEUE_CONTROLADOR_COBRANCA_MDB, new Object[] { helper });
 		return null;
 	}
+	
+	public Object[] pesquisarDadosHidrometroTipoLigacaoAgua(Imovel imovel) throws ControladorException {
+		try {
+			return getControladorMicromedicao().pesquisarDadosHidrometroTipoLigacaoAgua(imovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }

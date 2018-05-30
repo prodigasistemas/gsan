@@ -1263,4 +1263,6 @@ public interface IControladorFaturamento {
 	public void inserirDebitoCobradoCategoria(DebitoCobrado debitoCobrado, Collection colecaoCategoriaOuSubcategoria) throws ControladorException;
 
 	public Short obterDiaVencimentoConta(Integer idImovel) throws ControladorException;
+	
+	public Object[] pesquisarParmsContaMensagem(EmitirContaHelper helper, Integer idGrupo, Integer idGerencia, Integer idLocalidade, Integer idSetor) throws ControladorException;
 }

@@ -1,7 +1,7 @@
 package gcom.api;
 
-import gcom.api.relatorio.ReportFormat;
 import gcom.api.relatorio.ReportDTO;
+import gcom.api.relatorio.ReportFormat;
 import gcom.api.relatorio.ReportItemDTO;
 import gcom.fachada.Fachada;
 import gcom.seguranca.SegurancaParametro;
@@ -16,8 +16,7 @@ public class GsanRelatorio {
 
 	private ReportDTO dto;
 
-	@SuppressWarnings("rawtypes")
-	public GsanRelatorio(String titulo, String nome, Class classe, ReportFormat formato) {
+	public GsanRelatorio(String titulo, String nome, Class<?> classe, ReportFormat formato) {
 		this.dto = new ReportDTO(titulo, nome, classe);
 		this.dto.setFormato(formato);
 	}
@@ -30,7 +29,7 @@ public class GsanRelatorio {
 		GsanApi api = new GsanApi(url);
 		try {
 			api.invoke(dto);
-			api.download(url, dto.getName(), response);
+			api.download(dto.getName(), response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

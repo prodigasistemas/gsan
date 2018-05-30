@@ -35766,7 +35766,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Valor da pretação
 						String valorCreditoString = Util
 								.formatarMoedaReal(valorCredito);
-						valor = valorCreditoString;
+						valor = "-" + valorCreditoString;
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 						contaLinhasDescricaoServicosTarifasTotalHelper
@@ -35806,7 +35806,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// valor acumulado do tipo do débito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
-									valor = valorAcumulado;
+									valor = "-" +  valorAcumulado;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 									contaLinhasDescricaoServicosTarifasTotalHelper
@@ -35850,7 +35850,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										// valor acumulado do tipo do débito
 										String valorAcumulado = Util
 												.formatarMoedaReal(valorTotalCredito);
-										valor = valorAcumulado;
+										valor = "-" +  valorAcumulado;
 
 										contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 										contaLinhasDescricaoServicosTarifasTotalHelper
@@ -35891,7 +35891,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											// valor acumulado do tipo do débito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalCredito);
-											valor = valorAcumulado;
+											valor = "-" +  valorAcumulado;
 
 											contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 											contaLinhasDescricaoServicosTarifasTotalHelper
@@ -35925,7 +35925,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											// valor acumulado do tipo do débito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalCredito);
-											valor = valorAcumulado;
+											valor = "-" +  valorAcumulado;
 
 											contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 											contaLinhasDescricaoServicosTarifasTotalHelper
@@ -35982,7 +35982,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// valor acumulado do tipo do débito
 							String valorAcumulado = Util
 									.formatarMoedaReal(valorTotalCredito);
-							valor = valorAcumulado;
+							valor = "-" +  valorAcumulado;
 
 							contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 							contaLinhasDescricaoServicosTarifasTotalHelper
@@ -36026,7 +36026,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// valor acumulado do tipo do débito
 								String valorAcumulado = Util
 										.formatarMoedaReal(valorTotalCredito);
-								valor = valorAcumulado;
+								valor = "-" +  valorAcumulado;
 
 								contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 								contaLinhasDescricaoServicosTarifasTotalHelper
@@ -36063,7 +36063,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// valor acumulado do tipo do débito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
-									valor = valorAcumulado;
+									valor = "-" +  valorAcumulado;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 									contaLinhasDescricaoServicosTarifasTotalHelper
@@ -36094,7 +36094,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// valor acumulado do tipo do débito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
-									valor = valorAcumulado;
+									valor = "-" +  valorAcumulado;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 									contaLinhasDescricaoServicosTarifasTotalHelper
@@ -66199,12 +66199,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0352] - Emitir Contas e Cartas
-	 * 
-	 * @author Sávio Luiz
-	 * @date 29/12/2009
 	 */
-	public String[] obterMensagemAnormalidadeConsumo(
-			EmitirContaHelper emitirContaHelper) throws ControladorException {
+	public String[] obterMensagemAnormalidadeConsumo(EmitirContaHelper emitirContaHelper) throws ControladorException {
 
 		String[] mensagemConta = null;
 
@@ -66215,24 +66211,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		imovel.setId(emitirContaHelper.getIdImovel());
 		try {
 			// Pesquisa o consumo histórico para a ligação de água
-			Collection consumoHistoricoMesAnterior = repositorioMicromedicao
-					.pesquisarConsumoHistoricoConsumoAnormalidade(imovel,
-							ligacaoTipo, amReferencia);
+			Collection consumoHistoricoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, amReferencia);
 
 			// caso não exista
-			if (consumoHistoricoMesAnterior == null
-					|| consumoHistoricoMesAnterior.isEmpty()) {
+			if (consumoHistoricoMesAnterior == null || consumoHistoricoMesAnterior.isEmpty()) {
 				ligacaoTipo.setId(LigacaoTipo.LIGACAO_ESGOTO);
 				// Pesquisa o consumo histórico para ligação de esgoto
-				consumoHistoricoMesAnterior = repositorioMicromedicao
-						.pesquisarConsumoHistoricoConsumoAnormalidade(imovel,
-								ligacaoTipo, amReferencia);
+				consumoHistoricoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, amReferencia);
 			}
 			// caso exista consumo historico e anormalidade de consumo
-			if (consumoHistoricoMesAnterior != null
-					&& !consumoHistoricoMesAnterior.isEmpty()) {
-				Object[] dadosConsumo = (Object[]) Util
-						.retonarObjetoDeColecao(consumoHistoricoMesAnterior);
+			if (consumoHistoricoMesAnterior != null && !consumoHistoricoMesAnterior.isEmpty()) {
+				Object[] dadosConsumo = (Object[]) Util.retonarObjetoDeColecao(consumoHistoricoMesAnterior);
 				if (dadosConsumo != null) {
 					Integer idAnormalidadeConsumo = null;
 					if (dadosConsumo[1] != null) {
@@ -66241,28 +66230,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// verifica se a anormalidade de consumo é Baixo Consumo,
 					// Alto Consumo ou Estou de Consumo
 					if (idAnormalidadeConsumo != null
-							&& (idAnormalidadeConsumo
-									.equals(ConsumoAnormalidade.BAIXO_CONSUMO)
-									|| idAnormalidadeConsumo
-											.equals(ConsumoAnormalidade.ALTO_CONSUMO) || idAnormalidadeConsumo
-										.equals(ConsumoAnormalidade.ESTOURO_CONSUMO))) {
+							&& (idAnormalidadeConsumo.equals(ConsumoAnormalidade.BAIXO_CONSUMO) || idAnormalidadeConsumo.equals(ConsumoAnormalidade.ALTO_CONSUMO) || idAnormalidadeConsumo
+									.equals(ConsumoAnormalidade.ESTOURO_CONSUMO))) {
 
 						// Obtém a quantidade de economias por categoria
-						Collection colecaoCategoria = getControladorImovel()
-								.obterQuantidadeEconomiasCategoria(imovel);
+						Collection colecaoCategoria = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
 
 						Integer idCategoriaComMaisEconomias = null;
 						int maiorQuantidadeEconomia = 0;
-						Iterator colecaoCategoriaIterator = colecaoCategoria
-								.iterator();
+						Iterator colecaoCategoriaIterator = colecaoCategoria.iterator();
 						while (colecaoCategoriaIterator.hasNext()) {
 
-							Categoria categoria = (Categoria) colecaoCategoriaIterator
-									.next();
+							Categoria categoria = (Categoria) colecaoCategoriaIterator.next();
 
-							int qtdEconomias = categoria
-									.getQuantidadeEconomiasCategoria()
-									.intValue();
+							int qtdEconomias = categoria.getQuantidadeEconomiasCategoria().intValue();
 
 							// Obtém a maior quantidade de economias e a vezes
 							// média de estouro
@@ -66273,29 +66254,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 						}
 
-						Integer idImovelPerfil = emitirContaHelper
-								.getIdImovelPerfil();
+						Integer idImovelPerfil = emitirContaHelper.getIdImovelPerfil();
 						// verifica se existe consumo anormalidade ação para a
 						// anormalidade de consumo, a principal categoria e o
 						// perfil
-						ConsumoAnormalidadeAcao consumoAnormalidadeAcao = this
-								.getControladorMicromedicao()
-								.verificaAcaoASerTomada(idAnormalidadeConsumo,
-										idCategoriaComMaisEconomias,
-										idImovelPerfil);
+						ConsumoAnormalidadeAcao consumoAnormalidadeAcao = this.getControladorMicromedicao().verificaAcaoASerTomada(idAnormalidadeConsumo, idCategoriaComMaisEconomias, idImovelPerfil);
 						if (consumoAnormalidadeAcao != null) {
 							String mensagemContaAnormalidade = "";
 
 							// Obtém o ano e mês de referência de faturamento
-							int anoMesReferenciaAnterior = Util
-									.subtrairData(amReferencia);
+							int anoMesReferenciaAnterior = Util.subtrairData(amReferencia);
 
 							// Pesquisa o consumo histórico
-							consumoHistoricoMesAnterior = repositorioMicromedicao
-									.pesquisarConsumoHistoricoConsumoAnormalidade(
-											imovel, ligacaoTipo,
-											anoMesReferenciaAnterior,
-											idAnormalidadeConsumo);
+							consumoHistoricoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, anoMesReferenciaAnterior, idAnormalidadeConsumo);
 
 							// 3.1.1. Caso não tenha ocorrido estouro,auto ou
 							// baixo consumo no mês anterior
@@ -66309,11 +66280,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// faturamento menos um mês),
 							// então verifica a ação a ser tomada no primeiro
 							// mês (LACS_IDMES1):
-							if (consumoHistoricoMesAnterior == null
-									|| consumoHistoricoMesAnterior.isEmpty()) {
+							if (consumoHistoricoMesAnterior == null || consumoHistoricoMesAnterior.isEmpty()) {
 
-								mensagemContaAnormalidade = consumoAnormalidadeAcao
-										.getDescricaoContaMensagemMes1();
+								mensagemContaAnormalidade = consumoAnormalidadeAcao.getDescricaoContaMensagemMes1();
 
 							} else {
 
@@ -66331,41 +66300,28 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// CSHI_AMFATURAMENTO igual ao ano /mês de
 								// faturamento menos dois meses)
 
-								Collection consumoHistoricoSegundoMesAnterior = repositorioMicromedicao
-										.pesquisarConsumoHistoricoConsumoAnormalidade(
-												imovel,
-												ligacaoTipo,
-												Util.subtrairData(anoMesReferenciaAnterior),
-												idAnormalidadeConsumo);
+								Collection consumoHistoricoSegundoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, Util.subtrairData(anoMesReferenciaAnterior),
+										idAnormalidadeConsumo);
 
-								if (consumoHistoricoSegundoMesAnterior == null
-										|| consumoHistoricoSegundoMesAnterior
-												.isEmpty()) {
-									mensagemContaAnormalidade = consumoAnormalidadeAcao
-											.getDescricaoContaMensagemMes2();
+								if (consumoHistoricoSegundoMesAnterior == null || consumoHistoricoSegundoMesAnterior.isEmpty()) {
+									mensagemContaAnormalidade = consumoAnormalidadeAcao.getDescricaoContaMensagemMes2();
 
 								} else {
-									mensagemContaAnormalidade = consumoAnormalidadeAcao
-											.getDescricaoContaMensagemMes3();
+									mensagemContaAnormalidade = consumoAnormalidadeAcao.getDescricaoContaMensagemMes3();
 								}
 
 							}
 
-							if (mensagemContaAnormalidade != null
-									&& !mensagemContaAnormalidade.equals("")) {
+							if (mensagemContaAnormalidade != null && !mensagemContaAnormalidade.equals("")) {
 								mensagemConta = new String[3];
-								int tamanho = mensagemContaAnormalidade
-										.length();
+								int tamanho = mensagemContaAnormalidade.length();
 								if (tamanho < 60) {
-									mensagemConta[0] = mensagemContaAnormalidade
-											.substring(0, tamanho);
+									mensagemConta[0] = mensagemContaAnormalidade.substring(0, tamanho);
 									mensagemConta[1] = "";
 									mensagemConta[2] = "";
 								} else {
-									mensagemConta[0] = mensagemContaAnormalidade
-											.substring(0, 60);
-									mensagemConta[1] = mensagemContaAnormalidade
-											.substring(60, tamanho);
+									mensagemConta[0] = mensagemContaAnormalidade.substring(0, 60);
+									mensagemConta[1] = mensagemContaAnormalidade.substring(60, tamanho);
 									mensagemConta[2] = "";
 								}
 
