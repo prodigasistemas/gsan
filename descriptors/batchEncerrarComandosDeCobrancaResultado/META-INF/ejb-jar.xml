@@ -3,10 +3,10 @@
 <ejb-jar>
 	<enterprise-beans>
 		<message-driven>
-			<display-name>BatchEncerrarComandosDeCobrancaPorEmpresaMDB</display-name>
-			<ejb-name>BatchEncerrarComandosDeCobrancaPorEmpresaMDB</ejb-name>
+			<display-name>BatchEncerrarComandosDeCobrancaResultadoMDB</display-name>
+			<ejb-name>BatchEncerrarComandosDeCobrancaResultadoMDB</ejb-name>
 			<ejb-class>
-				gcom.batch.cobranca.cobrancaporresultado.BatchEncerrarComandosDeCobrancaPorEmpresaMDB
+				gcom.batch.cobranca.cobrancaporresultado.BatchEncerrarComandosDeCobrancaResultadoMDB
 			</ejb-class>
 			<transaction-type>Container</transaction-type>
 			<message-driven-destination>
@@ -17,7 +17,7 @@
 	<assembly-descriptor>
 		<container-transaction>
 			<method>
-				<ejb-name>BatchEncerrarComandosDeCobrancaPorEmpresaMDB</ejb-name>
+				<ejb-name>BatchEncerrarComandosDeCobrancaResultadoMDB</ejb-name>
 				<method-name>*</method-name>
 			</method>
 			<trans-attribute>NotSupported</trans-attribute>

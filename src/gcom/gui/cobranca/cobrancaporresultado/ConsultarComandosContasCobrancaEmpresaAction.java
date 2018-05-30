@@ -82,7 +82,7 @@ public class ConsultarComandosContasCobrancaEmpresaAction extends ExibidorProces
 			parametros.put("idCobrancaSituacao", comando.getCobrancaSituacao().getId());
 			
 			fachada.inserirProcessoIniciadoParametrosLivres(parametros, 
-	          		Processo.ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA, usuarioLogado);
+	          		Processo.ENCERRAR_COMANDO_DE_COBRANCA_RESULTADO, usuarioLogado);
 		} else {
 		
 			if (comando.getDataEncerramento() != null) {
@@ -109,7 +109,7 @@ public class ConsultarComandosContasCobrancaEmpresaAction extends ExibidorProces
 			parametros.put("idCobrancaSituacao", comando.getCobrancaSituacao().getId());
 			
 			fachada.inserirProcessoIniciadoParametrosLivres(parametros, 
-	          		Processo.ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA, usuarioLogado);
+	          		Processo.ENCERRAR_COMANDO_DE_COBRANCA_RESULTADO, usuarioLogado);
 			
 		}
 			

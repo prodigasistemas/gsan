@@ -23,18 +23,16 @@ import org.apache.struts.action.ActionMapping;
 
 public class ExibirGerarArquivoTextoContasCobrancaEmpresaAction extends GcomAction {
 
-	private GerarArquivoTextoContasCobrancaEmpresaActionForm form;
-	private HttpSession sessao;
-	private HttpServletRequest request;
+	//private HttpSession sessao;
+	//private HttpServletRequest request;
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		ActionForward retorno = mapping.findForward("exibirGerarArquivoTextoContasCobrancaEmpresaAction");
 
-		this.form = (GerarArquivoTextoContasCobrancaEmpresaActionForm) actionForm;
-		this.sessao = request.getSession(false);
-		this.request = request;
+		GerarArquivoTextoContasCobrancaEmpresaActionForm form = (GerarArquivoTextoContasCobrancaEmpresaActionForm) actionForm;
+		HttpSession sessao = request.getSession(false);
 
-		verificarEmpresa();
+		verificarEmpresa(sessao, request, form);
 
 		if (request.getParameter("limpar") != null) {
 			sessao.removeAttribute("colecaoGerarArquivoTextoContasCobrancaEmpresaHelper");
@@ -46,17 +44,23 @@ public class ExibirGerarArquivoTextoContasCobrancaEmpresaAction extends GcomActi
 				pagina = "0";
 			}
 
-			retorno = pesquisarComandosContas(request, pagina, retorno);
+			retorno = pesquisarComandosContas(sessao, request, pagina, retorno, form);
 		}
 
 		return retorno;
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Collection pesquisarEmpresa() {
-		if (empresaInformada()) {
+	private Collection pesquisarEmpresa(HttpSession sessao, GerarArquivoTextoContasCobrancaEmpresaActionForm form) {
+		if (empresaInformada(sessao, form)) {
 			Filtro filtro = new FiltroEmpresa();
-			filtro.adicionarParametro(new ParametroSimples(FiltroEmpresa.ID, form.getIdEmpresa()));
+			
+			if (form.getIdEmpresa() != null) {
+				filtro.adicionarParametro(new ParametroSimples(FiltroEmpresa.ID, form.getIdEmpresa()));
+				sessao.setAttribute("idEmpresaCobrancaConta", form.getIdEmpresa());
+			} else {
+				filtro.adicionarParametro(new ParametroSimples(FiltroEmpresa.ID, sessao.getAttribute("idEmpresaCobrancaConta")));
+			}
 			return getFachada().pesquisar(filtro, Empresa.class.getName());
 		} else {
 			return null;
@@ -64,14 +68,14 @@ public class ExibirGerarArquivoTextoContasCobrancaEmpresaAction extends GcomActi
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void verificarEmpresa() {
-		Collection colecao = pesquisarEmpresa();
+	private void verificarEmpresa(HttpSession session, HttpServletRequest request, GerarArquivoTextoContasCobrancaEmpresaActionForm form) {
+		Collection colecao = pesquisarEmpresa(session, form);
 		if (!Util.isVazioOrNulo(colecao)) {
 			Empresa empresa = (Empresa) Util.retonarObjetoDeColecao(colecao);
 			form.setIdEmpresa(empresa.getId().toString());
 			form.setNomeEmpresa(empresa.getDescricao());
 			request.setAttribute("nomeCampo", "idEmpresa");
-		} else if (empresaInformada()) {
+		} else if (empresaInformada(session, form)) {
 			form.setIdEmpresa("");
 			form.setNomeEmpresa("EMPRESA INEXISTENTE");
 			request.setAttribute("empresaInexistente", true);
@@ -80,8 +84,8 @@ public class ExibirGerarArquivoTextoContasCobrancaEmpresaAction extends GcomActi
 	}
 
 	@SuppressWarnings("unchecked")
-	private ActionForward pesquisarComandosContas(HttpServletRequest request, String pagina, ActionForward retorno) {
-		if (Util.isVazioOrNulo(pesquisarEmpresa())) {
+	private ActionForward pesquisarComandosContas(HttpSession sessao, HttpServletRequest request, String pagina, ActionForward retorno, GerarArquivoTextoContasCobrancaEmpresaActionForm form) {
+		if (Util.isVazioOrNulo(pesquisarEmpresa(sessao, form))) {
 			throw new ActionServletException("atencao.empresa.inexistente");
 		}
 
@@ -110,6 +114,7 @@ public class ExibirGerarArquivoTextoContasCobrancaEmpresaAction extends GcomActi
 			sessao.setAttribute("dataInicial", comandoInicial);
 			sessao.setAttribute("dataFinal", comandoFinal);
 			sessao.setAttribute("comandos", comandos);
+			
 		} else {
 			throw new ActionServletException("atencao.nenhum_comando_selecionado_geracao_arquivo");
 		}
@@ -117,7 +122,7 @@ public class ExibirGerarArquivoTextoContasCobrancaEmpresaAction extends GcomActi
 		return retorno2;
 	}
 
-	private boolean empresaInformada() {
-		return form.getIdEmpresa() != null && !form.getIdEmpresa().trim().equals("");
+	private boolean empresaInformada(HttpSession sessao, GerarArquivoTextoContasCobrancaEmpresaActionForm form) {
+		return form.getIdEmpresa() != null && !form.getIdEmpresa().trim().equals("") || sessao.getAttribute("idEmpresaCobrancaConta") != null ;
 	}
 }

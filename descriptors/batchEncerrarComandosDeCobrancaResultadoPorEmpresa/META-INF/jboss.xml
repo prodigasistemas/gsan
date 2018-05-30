@@ -4,10 +4,10 @@
 	<enterprise-beans>
 		<message-driven>
 			<ejb-name>
-				BatchEncerrarComandosDeCobrancaPorEmpresaMDB
+				BatchEncerrarComandosDeCobrancaResultadoPorEmpresaMDB
 			</ejb-name>
 			<destination-jndi-name>
-				BatchEncerrarComandosDeCobrancaPorEmpresaMDB
+				BatchEncerrarComandosDeCobrancaResultadoPorEmpresaMDB
 			</destination-jndi-name>
 		</message-driven>
 	</enterprise-beans>

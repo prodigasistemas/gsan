@@ -62,7 +62,8 @@ import gcom.batch.cobranca.TarefaBatchInserirResumoAcoesCobrancaCronograma;
 import gcom.batch.cobranca.TarefaBatchInserirResumoAcoesCobrancaEventual;
 import gcom.batch.cobranca.TarefaBatchProcessarEncerramentoOSAcaoCobranca;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchAtualizarPagamentosContasCobranca;
-import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchEncerrarComandosDeCobrancaPorEmpresa;
+import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchEncerrarComandosDeCobrancaResultado;
+import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchGerarNegociacaoContasCobrancaEmpresa;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchProcessarArquivoTxtEncerramentoOSCobranca;
@@ -2541,16 +2542,16 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	
 							break;
 							
-						case Funcionalidade.ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA:
-							TarefaBatchEncerrarComandosDeCobrancaPorEmpresa dadosEncerrarComandos = new TarefaBatchEncerrarComandosDeCobrancaPorEmpresa(
+						case Funcionalidade.ENCERRAR_COMANDO_DE_COBRANCA_POR_RESULTADO_POR_EMPRESA:
+							TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa dadosEncerrarComandos = new TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa(
 									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-							List<ComandoEmpresaCobrancaConta> comandosVencidos = getControladorCobrancaPorResultado().obterComandosVencidos();
-
+							Collection<Empresa> empresas = obterEmpresasCobranca();
+							
 							dadosEncerrarComandos.addParametro("usuario", processoIniciado.getUsuario());
 							dadosEncerrarComandos.addParametro("idCobrancaSituacao", CobrancaSituacao.COBRANCA_EMPRESA_TERCEIRIZADA);
-							dadosEncerrarComandos.addParametro("comandos", comandosVencidos);
-							dadosEncerrarComandos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, comandosVencidos);
+							dadosEncerrarComandos.addParametro("empresas", empresas);
+							dadosEncerrarComandos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, empresas);
 
 							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosEncerrarComandos));
 
@@ -4913,8 +4914,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 						break;
 
-					case Funcionalidade.ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA:
-						TarefaBatchEncerrarComandosDeCobrancaPorEmpresa dadosEncerrarComandos = new TarefaBatchEncerrarComandosDeCobrancaPorEmpresa(
+					case Funcionalidade.ENCERRAR_COMANDO_DE_COBRANCA_POR_RESULTADO:
+						TarefaBatchEncerrarComandosDeCobrancaResultado dadosEncerrarComandos = new TarefaBatchEncerrarComandosDeCobrancaResultado(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
 						ComandoEmpresaCobrancaConta comando = (ComandoEmpresaCobrancaConta) parametros.get("comando");

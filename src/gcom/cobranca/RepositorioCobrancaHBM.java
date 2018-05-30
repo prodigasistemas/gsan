@@ -6,6 +6,7 @@ import gcom.arrecadacao.aviso.AvisoDeducoes;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
+import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
@@ -25776,7 +25777,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 			consulta = " SELECT cecc.CECC_QTDCONTASINICIAL AS qtdContasInicial, " 
-					+ "   cecc.CECC_QTDCONTASINICIAL AS qtdContasFinal, "
+					+ "   cecc.cecc_qtdcontasfinal AS qtdContasFinal, "
 					+ "   cecc.CECC_QTDDIASVENCIMENTO AS qtdDiasVencidos "
 					+ " FROM cobranca.cmd_empr_cobr_conta cecc "
 					+ " WHERE cecc.cecc_id = :idComando ";
@@ -26148,10 +26149,13 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		Session session = HibernateUtil.getSession();
 
 		List<CobrancaDocumento> retorno = new ArrayList<CobrancaDocumento>();
-		
+
 		StringBuilder consulta = new StringBuilder();
 
 		try {
+			
+			this.aumentarMemoriaPostgres(session);
+			
 			consulta.append(" select distinct documento.* ") 
 					.append(" from cobranca.cobranca_documento_item item  ")
 					.append(" inner join cobranca.cobranca_documento documento on documento.cbdo_id = item.cbdo_id ")
@@ -26175,6 +26179,16 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+	}
+	
+	private void aumentarMemoriaPostgres(Session session) throws ErroRepositorioException {
+		Connection con = session.connection();
+		try {
+			con.createStatement().executeUpdate("set local work_mem='100MB';");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro ao aumntar memoria da consulta");
+		} 
 	}
 	
 	public List<GuiaPagamentoGeral> obterGuiasCobrancaEmpresa(Integer idEmpresa) throws ErroRepositorioException {
@@ -26497,14 +26511,30 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					.append(" inner join contaGeral.conta conta ")
 					.append(" where item.parcelamento.id = :idParcelamento ");
 	
-		Object[] referencias = (Object[]) session.createQuery(consulta.toString())
-					.setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();
+			Object[] referencias = (Object[]) session.createQuery(consulta.toString())
+						.setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();
 	
-		retorno = new Integer[2];
-		
-		retorno[0] = (Integer)referencias[0];
-		retorno[1] = (Integer)referencias[1];
-		
+			retorno = new Integer[2];
+
+			if (referencias[0] != null && referencias[1] != null) {
+				retorno[0] = (Integer)referencias[0];
+				retorno[1] = (Integer)referencias[1];
+			} else {
+				consulta = new StringBuilder();
+				
+				consulta.append("select min(contaHistorico.anoMesReferenciaConta) as menorReferencia, max(contaHistorico.anoMesReferenciaConta) as maiorReferencia")
+				.append(" from ParcelamentoItem item ")
+				.append(" inner join item.contaGeral contaGeral ")
+				.append(" inner join contaGeral.contaHistorico contaHistorico ")
+				.append(" where item.parcelamento.id = :idParcelamento ");
+				
+				referencias = (Object[]) session.createQuery(consulta.toString())
+						.setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();
+				
+				retorno[0] = (Integer)referencias[0];
+				retorno[1] = (Integer)referencias[1];
+			}
+
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

@@ -1,6 +1,6 @@
 package gcom.batch.cobranca.cobrancaporresultado;
 
-import gcom.cobranca.ComandoEmpresaCobrancaConta;
+import gcom.cadastro.empresa.Empresa;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaException;
@@ -8,7 +8,6 @@ import gcom.util.ConstantesJNDI;
 import gcom.util.agendadortarefas.AgendadorTarefas;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * [UC1168] Encerrar Comandos de Cobrança por Empresa
@@ -17,37 +16,34 @@ import java.util.List;
  * @author Mariana Victor
  * @created 09/05/2011
  */
-public class TarefaBatchEncerrarComandosDeCobrancaPorEmpresa extends TarefaBatch {
+public class TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa extends TarefaBatch {
 	
 	private static final long serialVersionUID = 1L;
 
-	public TarefaBatchEncerrarComandosDeCobrancaPorEmpresa(Usuario usuario,
+	public TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa(Usuario usuario,
 			int idFuncionalidadeIniciada) {
 
 		super(usuario, idFuncionalidadeIniciada);
 	}
 
 	@Deprecated
-	public TarefaBatchEncerrarComandosDeCobrancaPorEmpresa() {
+	public TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa() {
 		super(null, 0);
 	}
 
 	@SuppressWarnings("unchecked")
 	public Object executar() throws TarefaException {
 
-		List<ComandoEmpresaCobrancaConta> comandos = (List<ComandoEmpresaCobrancaConta>) getParametro("comandos");
+		Collection<Empresa> empresas = (Collection<Empresa>) getParametro("empresas");
 		Usuario usuario = (Usuario) getParametro("usuario");
 		Integer idCobrancaSituacao = (Integer) getParametro("idCobrancaSituacao");
 		
-		for (ComandoEmpresaCobrancaConta comando : comandos) {
-			
-			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA,
-					new Object[] {
-					this.getIdFuncionalidadeIniciada(),
-					usuario,
-					comando,
-					idCobrancaSituacao});
-		}
+		enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENCERRAR_COMANDO_DE_COBRANCA_RESULTADO_POR_EMPRESA,
+				new Object[] {
+				this.getIdFuncionalidadeIniciada(),
+				usuario,
+				empresas,
+				idCobrancaSituacao});
 
 		return null;
 	}
@@ -67,7 +63,7 @@ public class TarefaBatchEncerrarComandosDeCobrancaPorEmpresa extends TarefaBatch
 
 	@Override
 	public void agendarTarefaBatch() {
-		AgendadorTarefas.agendarTarefa("EncerrarComandosDeCobrancaPorEmpresaBatch", this);
+		AgendadorTarefas.agendarTarefa("EncerrarComandosDeCobrancaResultadoPorEmpresaBatch", this);
 	}
 
 }

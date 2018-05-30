@@ -25360,10 +25360,9 @@ public class ControladorArrecadacao implements SessionBean {
 
 					if (guiaPagamento != null) {
 						guiaPagamento.setDebitoTipo(debitoTipoGuia);
+						guiaGeral.setGuiaPagamento(guiaPagamento);
+						pagamento.setGuiaPagamento(guiaGeral);
 					}
-
-					guiaGeral.setGuiaPagamento(guiaPagamento);
-					pagamento.setGuiaPagamento(guiaGeral);
 
 					DebitoTipo debitoTipoPagamento = null;
 
@@ -43564,7 +43563,7 @@ public class ControladorArrecadacao implements SessionBean {
 				pagamento.setArrecadadorMovimentoItem(null);
 				pagamento.setArrecadacaoForma(new ArrecadacaoForma(idFormaArrecadacao));
 				pagamento.setCliente(cliente);
-				pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
+				pagamento.setGuiaPagamento(guiaPagamento != null? guiaPagamento.getGuiaPagamentoGeral() : null);
 				pagamento.setUltimaAlteracao(new Date());
 				pagamento.setFatura(null);
 				pagamento.setCobrancaDocumento(null);

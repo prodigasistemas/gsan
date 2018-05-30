@@ -513,6 +513,7 @@
 
 			</table>
 
-			<%@ include file="/jsp/util/rodape.jsp"%> </html:form>
+			<%@ include file="/jsp/util/rodape.jsp"%> 
+</html:form>
 </body>
 </html:html>

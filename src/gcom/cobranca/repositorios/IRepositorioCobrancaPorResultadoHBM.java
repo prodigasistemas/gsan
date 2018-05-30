@@ -49,5 +49,5 @@ public interface IRepositorioCobrancaPorResultadoHBM {
 	
 	public Collection<Object[]> pesquisarImovelOrdemServicoParaEncerrarComando(int quantidadeInicio, Integer idComando) throws ErroRepositorioException;
 	
-	public List<ComandoEmpresaCobrancaConta> obterComandosVencidos() throws ErroRepositorioException;
+	public List<ComandoEmpresaCobrancaConta> obterComandosVencidosPorEmpresa(Integer idEmpresa) throws ErroRepositorioException;
 }
