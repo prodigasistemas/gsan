@@ -39,14 +39,16 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		CancelarParcelamentoHelper retorno = null;
 		
 		try {
-			String where = "WHERE p.parc_id = :idParcelamento AND dac.dbtp_id != :jurosParcelamento ";
-			String groupBy = "GROUP BY p.parc_id, p.imov_id ";
+			String where = "WHERE p.parc_id = :idParcelamento AND dac.dbtp_id NOT IN (:jurosParcelamento, :multa, :jurosMora, :atualizacaoMonetaria) ";
 			StringBuilder consulta = new StringBuilder();
-			consulta.append(montarRaizConsulta(where, groupBy));
+			consulta.append(montarRaizConsulta(where, true));
 			
 			Query query = criarQuery(session, consulta.toString());
 			Object[] dados = (Object[]) query.setInteger("idParcelamento", idParcelamento)
 											 .setInteger("jurosParcelamento", DebitoTipo.JUROS_SOBRE_PARCELAMENTO)
+											 .setInteger("multa", DebitoTipo.MULTA_IMPONTUALIDADE)
+											 .setInteger("jurosMora", DebitoTipo.JUROS_MORA)
+											 .setInteger("atualizacaoMonetaria", DebitoTipo.ATUALIZACAO_MONETARIA)
 											 .uniqueResult();
 			
 			if (dados != null && dados.length > 0){
@@ -54,7 +56,7 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 				Imovel imovel = pesquisarImovelPorId((Integer) dados[1]);
 				retorno = new CancelarParcelamentoHelper(parcelamento, imovel, dados);
 			}
-		} catch (HibernateException e) {
+		} catch (ErroRepositorioException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -77,9 +79,9 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 				 .append("      AND NOT EXISTS (SELECT cnta_id from arrecadacao.pagamento pg WHERE pg.cnta_id = c.cnta_id) ")
 				 .append("      AND (i.imov_nnreparcelamento IS NULL OR i.imov_nnreparcelamento <= 0) ");
 			
-			String groupBy = "GROUP BY p.parc_id, p.imov_id HAVING count(distinct c.cnta_id) >= :qtdContas ";
+//			String groupBy = "GROUP BY p.parc_id, p.imov_id HAVING count(distinct c.cnta_id) >= :qtdContas ";
 			
-			String consulta = montarRaizConsulta(where.toString(), groupBy);
+			String consulta = montarRaizConsulta(where.toString(), false);
 			
 			Query query = criarQuery(session, consulta.toString());
 			List<Object[]> lista = query.setDate("dataAtual", new Date())
@@ -104,41 +106,43 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		return helper;
 	}
 	
-	private String montarRaizConsulta(String where, String groupBy) {
+	private String montarRaizConsulta(String where, boolean botaoCancelar) {
 		StringBuilder select = new StringBuilder();
 		select.append("SELECT distinct p.parc_id as idParcelamento, ")
-			  .append("       p.imov_id as idImovel, ")
-			  .append("       p.parc_vlconta as valorContas, ")
-			  .append("       p.parc_vlentrada as valorEntrada, ")
-			  .append("       p.parc_vljurosmora + p.parc_vlmulta + p.parc_vlatualizacaomonetaria as valorAcrescimos, ")
-			  .append("       p.parc_vldescontoacrescimos as valorDescontoAcrescimos, ")
-			  .append("       p.parc_vldescontofaixa as valorDescontoFaixa, ")
-			  .append("       p.parc_nnprestacoes as numeroPrestacoes, ");
-			 // .append("       dac.dbac_nnprestacaocobradas as numeroPrestacoesCobradas ")
-			 // .append("FROM cobranca.parcelamento p ");
+			  .append("p.imov_id as idImovel, ")
+			  .append("p.parc_vlconta as valorContas, ")
+			  .append("p.parc_vlentrada as valorEntrada, ")
+			  .append("p.parc_vljurosmora + p.parc_vlmulta + p.parc_vlatualizacaomonetaria as valorAcrescimos, ")
+			  .append("p.parc_vldescontoacrescimos as valorDescontoAcrescimos, ")
+			  .append("p.parc_vldescontofaixa as valorDescontoFaixa, ")
+			  .append("p.parc_nnprestacoes as numeroPrestacoes, ");
 		
 		StringBuilder join = new StringBuilder();
-		join.append("INNER JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id  ")
-			.append("INNER JOIN faturamento.conta c on c.cnta_id = dc.cnta_id ");
+		
+		if (botaoCancelar) {
+			join.append("LEFT JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id  ")
+				.append("LEFT JOIN faturamento.conta c on c.cnta_id = dc.cnta_id ");
+		} else {
+			join.append("INNER JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id  ")
+				.append("INNER JOIN faturamento.conta c on c.cnta_id = dc.cnta_id ");
+		}
 		
 		StringBuilder consulta = new StringBuilder();
 		consulta.append(select)
-			.append("       dac.dbac_nnprestacaocobradas as numeroPrestacoesCobradas ")
-			  .append("FROM cobranca.parcelamento p ")
+				.append("dac.dbac_nnprestacaocobradas as numeroPrestacoesCobradas ")
+				.append("FROM cobranca.parcelamento p ")
 				.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.parc_id = p.parc_id  ")
 		        .append(join)
 		        .append(where)
 		        .append(montarComplementoGuia())
-		        //.append(groupBy)
 		        .append(" UNION ALL ")
 		        .append(select)
-		        .append("       dac.dahi_nnprestacaocobradas as numeroPrestacoesCobradas ")
-			  .append("FROM cobranca.parcelamento p ")
+		        .append("dac.dahi_nnprestacaocobradas as numeroPrestacoesCobradas ")
+		        .append("FROM cobranca.parcelamento p ")
 		        .append("INNER JOIN faturamento.deb_a_cobrar_hist dac on dac.parc_id = p.parc_id  ")
 		        .append(join)
 		        .append(where)
 		        .append(montarComplementoGuia());
-		        //.append(groupBy);
 		
 		return consulta.toString();
 	}
@@ -262,7 +266,39 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		}
 		
 		return retorno;
+	}
+	
+	public boolean isParcelamentoEmDebito(Integer idParcelamento) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		boolean retorno = false;
 		
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT count(p) AS qtd ")
+			   .append("FROM cobranca.parcelamento p ")
+			   .append("INNER JOIN faturamento.deb_a_cobrar_hist dac on dac.parc_id = p.parc_id ")
+			   .append("INNER JOIN faturamento.debito_cobrado dc on dc.dbac_id = dac.dbac_id ")
+			   .append("INNER JOIN faturamento.conta c on c.cnta_id = dc.cnta_id ")
+			   .append("WHERE p.parc_id = :idParcelamento ")
+			   .append("AND dac.dbtp_id = :debitoTipo ")
+			   .append("AND not exists (SELECT * FROM arrecadacao.pagamento pag WHERE pag.cnta_id = c.cnta_id) ")
+			   .append("AND not exists (SELECT * FROM arrecadacao.pagamento_historico pag WHERE pag.cnta_id = c.cnta_id)");
+			
+			int qtd = (Integer) session.createSQLQuery(sql.toString())
+					.addScalar("qtd", Hibernate.INTEGER)
+					.setInteger("idParcelamento", idParcelamento)
+					.setInteger("debitoTipo", DebitoTipo.PARCELAMENTO_CONTAS)
+					.uniqueResult();
+			
+			if (qtd > 0)
+				retorno = true;
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
 	}
 }
-

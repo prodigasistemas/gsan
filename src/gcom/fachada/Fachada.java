@@ -40131,6 +40131,14 @@ public class Fachada {
 		return null;
 	}
 	
+	public boolean isEntradaParcelamentoPaga(Parcelamento parcelamento) {
+		try {
+			return getControladorCobranca().isEntradaParcelamentoPaga(parcelamento);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 	public Object[] pesquisarDadosHidrometroTipoLigacaoAgua(Imovel imovel) throws ControladorException {
 		try {
 			return getControladorMicromedicao().pesquisarDadosHidrometroTipoLigacaoAgua(imovel);
@@ -40147,6 +40155,14 @@ public class Fachada {
 		}
 	}
 	
+	public boolean isParcelamentoEmDebito(Integer idParcelamento) {
+		try {
+			return getControladorParcelamento().isParcelamentoEmDebito(idParcelamento);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) {
 		try {
 			return getControladorImovel().obterContratoAdesao(idImovel);
@@ -40154,5 +40170,4 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
-	
 }

@@ -15,4 +15,6 @@ public interface IRepositorioParcelamentoHBM {
 	public DebitoACobrar pesquisarDebitoACobrar(Integer idParcelamento, Integer idDebitoTipo) throws ErroRepositorioException;
 
 	public List<Object[]> pesquisarDebitoACobrarCurtoELongoPrazo(Integer idParcelamento) throws ErroRepositorioException;
+
+	public boolean isParcelamentoEmDebito(Integer idParcelamento) throws ErroRepositorioException;
 }
