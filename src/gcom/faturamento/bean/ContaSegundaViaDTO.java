@@ -265,8 +265,8 @@ public class ContaSegundaViaDTO {
 
 	private void setConsumoMedia() {
 		if (existeConsumoFaturado() && existeConsumoDias()) {
-			BigDecimal consumo = new BigDecimal(consumoFaturado);
-			BigDecimal dias = new BigDecimal(consumoDias);
+			BigDecimal consumo = new BigDecimal(consumoFaturado.trim());
+			BigDecimal dias = new BigDecimal(consumoDias.trim());
 			BigDecimal media = consumo.divide(dias, 2, BigDecimal.ROUND_HALF_UP);
 
 			this.consumoMedia = Util.converterDecimalParaString(media);
