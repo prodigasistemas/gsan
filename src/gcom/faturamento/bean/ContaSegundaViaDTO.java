@@ -176,7 +176,7 @@ public class ContaSegundaViaDTO {
 		this.mensagemQuitacao = helper.getMensagemQuitacao().equals("") ? null : helper.getMensagemQuitacao();
 
 		this.setServicos(helper);
-		this.valorTotal = Util.formatarMoedaReal(new BigDecimal(helper.getValorTotalConta()));
+		this.valorTotal = helper.getValorContaString();
 
 		this.agenciaNome = helper.getAgenciaReguladora();
 		this.agenciaTelefone = helper.getTelefoneAgenciaReguladora();
