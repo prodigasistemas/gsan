@@ -176,7 +176,7 @@ public class ContaSegundaViaDTO {
 		this.mensagemQuitacao = helper.getMensagemQuitacao().equals("") ? null : helper.getMensagemQuitacao();
 
 		this.setServicos(helper);
-		this.valorTotal = Util.formatarMoedaReal(new BigDecimal(helper.getValorTotalConta()));
+		this.valorTotal = helper.getValorContaString();
 
 		this.agenciaNome = helper.getAgenciaReguladora();
 		this.agenciaTelefone = helper.getTelefoneAgenciaReguladora();
@@ -265,8 +265,8 @@ public class ContaSegundaViaDTO {
 
 	private void setConsumoMedia() {
 		if (existeConsumoFaturado() && existeConsumoDias()) {
-			BigDecimal consumo = new BigDecimal(consumoFaturado);
-			BigDecimal dias = new BigDecimal(consumoDias);
+			BigDecimal consumo = new BigDecimal(consumoFaturado.trim());
+			BigDecimal dias = new BigDecimal(consumoDias.trim());
 			BigDecimal media = consumo.divide(dias, 2, BigDecimal.ROUND_HALF_UP);
 
 			this.consumoMedia = Util.converterDecimalParaString(media);

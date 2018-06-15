@@ -21,16 +21,22 @@
 <script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
 <script language="JavaScript">
 
-function voltar(){
-	window.location.href="exibirConsultarListaParcelamentoDebitoAction.do?menu=sim";
-}
- 
-
-function cancelarParcelamento(codigoParcelamento, codigoImovel, motivo) {
-	if (confirm('Confirmar cancelamento do parcelamento do imóvel ' + codigoImovel + '?')) {
-		window.location.href='cancelarParcelamentoAction.do?codigoParcelamento='+codigoParcelamento+'&codigoImovel='+codigoImovel+'&motivo='+motivo;
+	function voltar(){
+		window.location.href="exibirConsultarListaParcelamentoDebitoAction.do?menu=sim";
 	}
-}
+	 
+	
+	function desfazer(codigoParcelamento, codigoImovel, motivo) {
+		if (confirm('Confirma ação para Desfazer o parcelamento do imóvel ' + codigoImovel + '?')) {
+			window.location.href='exibirDesfazerParcelamentoDebitoAction.do?codigoParcelamento='+codigoParcelamento+'&motivo='+motivo;
+		}
+	}
+
+	function cancelar(codigoParcelamento, codigoImovel, motivo) {
+		if (confirm('Confirma ação para Cancelar o parcelamento do imóvel ' + codigoImovel + '?')) {
+			window.location.href='cancelarParcelamentoAction.do?codigoParcelamento='+codigoParcelamento+'&codigoImovel='+codigoImovel+'&motivo='+motivo;
+		}
+	}
 
 </script>
 
@@ -717,97 +723,86 @@ function cancelarParcelamento(codigoParcelamento, codigoImovel, motivo) {
 					<td colspan="3">
 					<table border="0" width="100%">
 						<tr>
-							<td width="18%"><logic:present name="collectionParcelamentoMotivoDesfazer"><Strong>Motivo Desfazer: </Strong></logic:present>&nbsp;</td>
-							<td align="left">
-								<logic:present name="collectionParcelamentoMotivoDesfazer">
-									<strong><html:select property="parcelamentoMotivoDesfazer">
-										<html:options collection="collectionParcelamentoMotivoDesfazer"
-										labelProperty="descricaoParcelamentoMotivoDesfazer" property="id" />
-									</html:select></strong>
-								</logic:present>
-								<logic:notPresent name="collectionParcelamentoMotivoDesfazer">
-									&nbsp;
-								</logic:notPresent>
-							</td>
-							<td align="right">
-								<logic:present name="collectionParcelamentoMotivoDesfazer">
-								<logic:iterate name="colecaoParcelamento" id="parcelamento">
-								    
-								    <logic:present name="habilitarBotaoDesfazer" scope="request">
-									    <gsan:controleAcessoBotao name="desfazer" value="Desfazer Parcelamento" onclick="javascript:window.location.href = 'exibirDesfazerParcelamentoDebitoAction.do?codigoParcelamento=${parcelamento.id}&motivo='+parcelamentoMotivoDesfazer.value" url="exibirDesfazerParcelamentoDebitoAction.do"/>
-									</logic:present>
-									
-								</logic:iterate>
-								</logic:present>
-								<input type="button" name="ButtonReset" class="bottonRightCol" value="Voltar" onClick="javascript:window.location.href='exibirConsultarListaParcelamentoDebitoAction.do?codigoImovel=${parcelamento.imovel.id}'">
-							</td>
-						</tr>
-						
-						
-						<tr>
 							<td colspan="3" align="right">
-									<input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Termo" onClick="toggleBox('demodiv',1);">
-									
-									<logic:present name="buttonCartaoCredito" scope="session">
-										<input type="button" name="" value="Consultar Dados Cartão Crédito" class="bottonRightCol" 
-											onclick="abrirPopup('consultarDadosParcelamentoCartaoCreditoAction.do?carregamentoInicial=ok',210,775);"/>			
-					
-									</logic:present>
-									<logic:empty name="idsContaEP">
-										<logic:present name="btImprimirGuiaPagamentoEntrada">
-											
-											<logic:equal name="geracaoBoletoBB" value="1" scope="request">
-												<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
-													onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'"
-													style="width:170px"/>											
-											</logic:equal>
-											<logic:notEqual name="geracaoBoletoBB" value="1" scope="request">
-												<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
-													onclick="window.location.href='<html:rewrite page="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento.do"/>'"
-													style="width:170px" />
-											</logic:notEqual>
-										</logic:present>
-									</logic:empty>
-									<logic:notEmpty name="idsContaEP">
-										<input type="button" name="" value="Imprimir Contas EP" class="bottonRightCol" 
-											onclick="window.location.href='<html:rewrite page="/gerarRelatorio2ViaContaAction.do?cobrarTaxaEmissaoConta=N"/>'"
-											style="width:150px"/>
-									</logic:notEmpty>
+								<input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Termo" onClick="toggleBox('demodiv',1);">
+								
+								<logic:present name="buttonCartaoCredito" scope="session">
+									<input type="button" name="" value="Consultar Dados Cartão Crédito" class="bottonRightCol" 
+										onclick="abrirPopup('consultarDadosParcelamentoCartaoCreditoAction.do?carregamentoInicial=ok',210,775);"/>			
+				
+								</logic:present>
+								<logic:empty name="idsContaEP">
+									<logic:equal name="entradaPaga" value="false">
+										
+										<logic:equal name="geracaoBoletoBB" value="1" scope="request">
+											<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
+												onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'"
+												style="width:180px"/>											
+										</logic:equal>
+										<logic:notEqual name="geracaoBoletoBB" value="1" scope="request">
+											<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
+												onclick="window.location.href='<html:rewrite page="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento.do"/>'"
+												style="width:180px" />
+										</logic:notEqual>
+									</logic:equal>
+								</logic:empty>
+								<logic:notEmpty name="idsContaEP">
+									<input type="button" name="" value="Imprimir Contas EP" class="bottonRightCol" 
+										onclick="window.location.href='<html:rewrite page="/gerarRelatorio2ViaContaAction.do?cobrarTaxaEmissaoConta=N"/>'"
+										style="width:150px"/>
+								</logic:notEmpty>
 									
 							</td>
 						</tr>
 						
-						<logic:equal name="permiteCancelar" value="true">
+						<logic:equal name="permiteDesfazer" value="true">
+							<logic:present name="collectionParcelamentoMotivoDesfazer">
 							<tr><td colspan="3"><hr></td></tr>
 							
 							<tr>
-								<logic:present name="colecaoMotivoCancelamento">
-									<td width="30%" align="right"><strong>Motivo do Cancelamento: </strong></td>
-									
+								<td width="30%" align="right"><strong>Motivo para Desfazer: </strong></td>
+								
+								<td width="45%" align="right">
+									<html:select property="parcelamentoMotivoDesfazer" style="width: 280px;">
+										<html:options collection="collectionParcelamentoMotivoDesfazer" labelProperty="descricaoParcelamentoMotivoDesfazer" property="id" />
+									</html:select>
+								</td>
+								
+								<td width="25%" align="right">
+									<input type="button" value="Desfazer Parcelamento" onclick="desfazer(${parcelamento.id},${parcelamento.imovel.id},parcelamentoMotivoDesfazer.value);" class="bottonRightCol">
+								</td>
+							</tr>
+							</logic:present>
+						</logic:equal>
+						
+						<logic:equal name="permiteCancelar" value="true">
+							<logic:present name="colecaoMotivoCancelamento">
+								<tr><td colspan="3"><hr></td></tr>
+								
+								<tr>
+									<td width="30%" align="right"><strong>Motivo para Cancelar: </strong></td>
+										
 									<td width="45%" align="right">
 										<html:select property="parcelamentoMotivoCancelamento" style="width: 280px;">
 											<html:options collection="colecaoMotivoCancelamento" labelProperty="descricao" property="id"/>
 										</html:select>
 									</td>
-								</logic:present>
-								
-								<td width="25%" align="right">
-									<input type="button" name="CancelarParcelamento" class="bottonRightCol" value="Cancelar Parcelamento" 
-										onclick="cancelarParcelamento(${parcelamento.id},${parcelamento.imovel.id},parcelamentoMotivoCancelamento.value);">
-								</td>
-								
-							</tr>
+									
+									<td width="25%" align="right">
+										<input type="button" value="Cancelar Parcelamento" onclick="cancelar(${parcelamento.id},${parcelamento.imovel.id},parcelamentoMotivoCancelamento.value);" class="bottonRightCol">
+									</td>
+								</tr>
+							</logic:present>
 						</logic:equal>
 						
+						<tr><td colspan="3"><hr></td></tr>
+						<tr>
+							<td colspan="3">
+								<input type="button" name="ButtonReset" class="bottonRightCol" value="Voltar" onClick="javascript:window.location.href='exibirConsultarListaParcelamentoDebitoAction.do?codigoImovel=${parcelamento.imovel.id}'">
+							</td>
+						</tr>
 					</table>
 					</td>
-				</tr>
-				<tr>
-					<td colspan="3" height="10"></td>
-				</tr>
-				<tr>
-					<td colspan="3" align="left"><strong><font color="#FF0000">*</font></strong>
-					Campos obrigat&oacute;rios</td>
 				</tr>
 			</table>
 			<p>&nbsp;</p>
