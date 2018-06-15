@@ -3,7 +3,7 @@ package gcom.gui.relatorio.faturamento.conta;
 import gcom.api.GsanApi;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.faturamento.bean.ContaSegundaViaDTO;
+import gcom.faturamento.bean.ContaSegundaViaHelper;
 import gcom.faturamento.bo.ContaSegundaViaBO;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaHistorico;
@@ -180,14 +180,14 @@ public class GerarRelatorio2ViaContaAction extends ExibidorProcessamentoTarefaRe
 
 		try {
 			ContaSegundaViaBO bo = new ContaSegundaViaBO(idContaHistorico, idsConta, cobrarTaxaEmissao, getContaSemCodigoBarras(request, sessao));
-			ContaSegundaViaDTO dto = bo.criar(imovel, (Usuario) sessao.getAttribute("usuarioLogado"), situacaoConta);
+			ContaSegundaViaHelper helper = bo.criar(imovel, (Usuario) sessao.getAttribute("usuarioLogado"), situacaoConta);
 
-			if (dto != null) {
+			if (helper != null) {
 				String url = getFachada().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_SEGUNDA_VIA.toString());
 
 				GsanApi api = new GsanApi(url);
-				api.invoke(dto);
-				api.download(dto.getNomeArquivo(), response);
+				api.invoke(helper);
+				api.download(helper.getNomeArquivo(), response);
 			} else {
 				throw new ActionServletException("atencao.conta_segunda_via_sem_dados");
 			}

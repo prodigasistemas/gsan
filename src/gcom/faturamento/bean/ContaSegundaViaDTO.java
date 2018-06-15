@@ -9,8 +9,6 @@ import java.util.List;
 
 public class ContaSegundaViaDTO {
 
-	private String nomeArquivo;
-
 	private Integer codigoDebitoAutomatico;
 
 	private Integer matricula;
@@ -121,7 +119,6 @@ public class ContaSegundaViaDTO {
 	public ContaSegundaViaDTO(EmitirContaHelper helper, SistemaParametro parametros, String clienteResponsavel, String economias, String hidrometro, String usuario, String situacaoConta) {
 		super();
 
-		this.setNomeArquivo(helper);
 		this.setDadosEmpresa(parametros);
 
 		this.codigoDebitoAutomatico = helper.getCodigoDebitoAutomatico();
@@ -234,10 +231,6 @@ public class ContaSegundaViaDTO {
 		return helper.getConsumoFaturamento() != null && !helper.getConsumoFaturamento().equals("");
 	}
 
-	private void setNomeArquivo(EmitirContaHelper helper) {
-		this.nomeArquivo = "CONTA_" + helper.getIdImovel() + "_" + Util.formatarAnoMesParaMesAno(helper.getAmReferencia()).replace('/', '-') + ".pdf";
-	}
-
 	private void setCpfCnpj(EmitirContaHelper helper) {
 		if (helper.getCpf() != null && !helper.getCpf().equals("")) {
 			this.cpfCnpj = Util.formatarCpf(helper.getCpf());
@@ -281,10 +274,6 @@ public class ContaSegundaViaDTO {
 
 	private boolean existeConsumoDias() {
 		return consumoDias != null && !consumoDias.trim().equals("") && !consumoDias.trim().equals("0");
-	}
-
-	public String getNomeArquivo() {
-		return nomeArquivo;
 	}
 
 	public Integer getCodigoDebitoAutomatico() {

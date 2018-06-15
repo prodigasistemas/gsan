@@ -12,6 +12,7 @@ import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.RepositorioFaturamentoHBM;
 import gcom.faturamento.bean.ContaSegundaViaDTO;
+import gcom.faturamento.bean.ContaSegundaViaHelper;
 import gcom.faturamento.bean.EmitirContaHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesJNDI;
@@ -29,6 +30,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.ejb.CreateException;
 
@@ -38,31 +40,56 @@ public class ContaSegundaViaBO {
 	private ControladorFaturamentoLocal controlador;
 	private IRepositorioFaturamento repositorio;
 
-	private EmitirContaHelper helper;
+	private Collection<EmitirContaHelper> contas;
+	private EmitirContaHelper contaHelper;
 
 	public ContaSegundaViaBO(Integer idContaHistorico, Collection<?> idsConta, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) {
 		super();
 
-		this.fachada = Fachada.getInstancia();
-		this.setControlador();
-		this.repositorio = RepositorioFaturamentoHBM.getInstancia();
-		this.criarHelper(idContaHistorico, idsConta, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
+		fachada = Fachada.getInstancia();
+		repositorio = RepositorioFaturamentoHBM.getInstancia();
+		controlador = getControlador();
+		contas = pesquisarContas(idContaHistorico, idsConta, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
 	}
 
-	public ContaSegundaViaDTO criar(Imovel imovel, Usuario usuario, String situacaoConta) {
-		return new ContaSegundaViaDTO(helper, 
-				fachada.pesquisarParametrosDoSistema(), 
-				getNomeResponsavel(), 
-				getEconomias(), 
-				getHidrometro(imovel), 
-				getEmissao(usuario),
-				situacaoConta);
+	public ContaSegundaViaHelper criar(Imovel imovel, Usuario usuario, String situacaoConta) {
+		ContaSegundaViaHelper helper = null;
+		
+		if (contas != null && !contas.isEmpty()) {
+			List<ContaSegundaViaDTO> listaDTO = new ArrayList<ContaSegundaViaDTO>();
+			SistemaParametro parametros = fachada.pesquisarParametrosDoSistema();
+			
+			for (EmitirContaHelper conta : contas) {
+				contaHelper = conta;
+				
+				try {
+					setMensagens();
+					
+					ContaSegundaViaDTO dto = new ContaSegundaViaDTO(
+							contaHelper, 
+							parametros, 
+							getNomeResponsavel(), 
+							getEconomias(), 
+							getHidrometro(imovel), 
+							getEmissao(usuario), 
+							situacaoConta);
+					
+					listaDTO.add(dto);
+				} catch (ControladorException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			helper = new ContaSegundaViaHelper(listaDTO);
+		}
+
+		return helper;
 	}
 
-	private void setControlador() {
+	private ControladorFaturamentoLocal getControlador() {
 		try {
 			ControladorFaturamentoLocalHome localHome = (ControladorFaturamentoLocalHome) ServiceLocator.getInstancia().getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			controlador = localHome.create();
+			return localHome.create();
 		} catch (CreateException e) {
 			throw new SistemaException(e);
 		} catch (ServiceLocatorException e) {
@@ -73,9 +100,9 @@ public class ContaSegundaViaBO {
 	@SuppressWarnings("rawtypes")
 	private String getNomeResponsavel() {
 		String nome = null;
-		if (helper.getIdClienteResponsavel() != null && !helper.getIdClienteResponsavel().trim().equals("")) {
+		if (contaHelper.getIdClienteResponsavel() != null && !contaHelper.getIdClienteResponsavel().trim().equals("")) {
 			FiltroCliente filtro = new FiltroCliente();
-			filtro.adicionarParametro(new ParametroSimples(FiltroCliente.ID, helper.getIdClienteResponsavel()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroCliente.ID, contaHelper.getIdClienteResponsavel()));
 			Collection colecao = fachada.pesquisarCliente(filtro);
 
 			if (!colecao.isEmpty()) {
@@ -110,7 +137,7 @@ public class ContaSegundaViaBO {
 	@SuppressWarnings("rawtypes")
 	private String getEconomias() {
 		String economias = "";
-		Collection categorias = fachada.obterQuantidadeEconomiasCategoria(new Imovel(helper.getIdImovel()));
+		Collection categorias = fachada.obterQuantidadeEconomiasCategoria(new Imovel(contaHelper.getIdImovel()));
 		for (Iterator iterator = categorias.iterator(); iterator.hasNext();) {
 			Categoria categoria = (Categoria) iterator.next();
 
@@ -131,42 +158,30 @@ public class ContaSegundaViaBO {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void criarHelper(Integer idContaHistorico, Collection idsConta, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) {
-		Collection<EmitirContaHelper> colecao = new ArrayList<EmitirContaHelper>();
+	private Collection<EmitirContaHelper> pesquisarContas(Integer idContaHistorico, Collection idsConta, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) {
 		if (idContaHistorico == null) {
-			colecao = fachada.emitir2ViaContas(idsConta, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
+			return fachada.emitir2ViaContas(idsConta, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
 		} else {
-			colecao = fachada.emitir2ViaContasHistorico(idsConta, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
-		}
-
-		if (!colecao.isEmpty()) {
-			helper = colecao.iterator().next();
-
-			try {
-				setMensagens();
-			} catch (ControladorException e) {
-				e.printStackTrace();
-			}
-
+			return fachada.emitir2ViaContasHistorico(idsConta, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
 		}
 	}
 
 	private void setMensagens() throws ControladorException {
 		try {
-			helper.setMensagensFixas(repositorio.pesquisarContaMensagemFixa());
+			contaHelper.setMensagensFixas(repositorio.pesquisarContaMensagemFixa());
 
 			Object[] mensagens = obterMensagens();
-			helper.setPrimeiraParte((String) mensagens[0]);
-			helper.setSegundaParte((String) mensagens[1]);
-			helper.setTerceiraParte((String) mensagens[2]);
+			contaHelper.setPrimeiraParte((String) mensagens[0]);
+			contaHelper.setSegundaParte((String) mensagens[1]);
+			contaHelper.setTerceiraParte((String) mensagens[2]);
 
-			String[] mensagensAnormalidade = controlador.obterMensagemAnormalidadeConsumo(helper);
+			String[] mensagensAnormalidade = controlador.obterMensagemAnormalidadeConsumo(contaHelper);
 			if (mensagensAnormalidade != null)
-				helper.setMensagemAnormalidade(mensagensAnormalidade[0] + mensagensAnormalidade[1]);
+				contaHelper.setMensagemAnormalidade(mensagensAnormalidade[0] + mensagensAnormalidade[1]);
 
-			helper.setMensagemDebitos(obterMensagemDebitos());
+			contaHelper.setMensagemDebitos(obterMensagemDebitos());
 
-			helper.setMensagemQuitacao(controlador.obterMsgQuitacaoDebitos(new Imovel(helper.getIdImovel()), helper.getAmReferencia()));
+			contaHelper.setMensagemQuitacao(controlador.obterMsgQuitacaoDebitos(new Imovel(contaHelper.getIdImovel()), contaHelper.getAmReferencia()));
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		} catch (ControladorException e) {
@@ -176,19 +191,19 @@ public class ContaSegundaViaBO {
 
 	private Object[] obterMensagens() throws ControladorException {
 		try {
-			Object[] mensagens = repositorio.pesquisarParmsContaMensagem(helper, null, helper.getIdGerenciaRegional(), helper.getIdLocalidade(), helper.getIdSetorComercial());
+			Object[] mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), contaHelper.getIdLocalidade(), contaHelper.getIdSetorComercial());
 
 			if (mensagens == null)
-				mensagens = repositorio.pesquisarParmsContaMensagem(helper, null, helper.getIdGerenciaRegional(), helper.getIdLocalidade(), null);
+				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), contaHelper.getIdLocalidade(), null);
 
 			if (mensagens == null)
-				mensagens = repositorio.pesquisarParmsContaMensagem(helper, null, helper.getIdGerenciaRegional(), null, null);
+				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), null, null);
 
 			if (mensagens == null)
-				mensagens = repositorio.pesquisarParmsContaMensagem(helper, helper.getIdFaturamentoGrupo(), null, null, null);
+				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, contaHelper.getIdFaturamentoGrupo(), null, null, null);
 
 			if (mensagens == null)
-				mensagens = repositorio.pesquisarParmsContaMensagem(helper, null, null, null, null);
+				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, null, null, null);
 
 			if (mensagens == null) {
 				mensagens = new Object[3];
@@ -208,7 +223,7 @@ public class ContaSegundaViaBO {
 		
 		Date dataVencimentoFinal = getDataVencimentoFinal(parametros);
 
-		ObterDebitoImovelOuClienteHelper debitoImovelClienteHelper = fachada.obterDebitoImovelOuCliente(1, helper.getIdImovel().toString(), null, null, 
+		ObterDebitoImovelOuClienteHelper debitoImovelClienteHelper = fachada.obterDebitoImovelOuCliente(1, contaHelper.getIdImovel().toString(), null, null, 
 				"190001", Util.subtrairMesDoAnoMes(parametros.getAnoMesFaturamento(), 1) + "", 
 				Util.converteStringParaDate("01/01/1900"), dataVencimentoFinal, 1, 2, 2, 2, 2, 1, 2, null);
 
