@@ -215,6 +215,7 @@ public class ControladorParcelamento extends ControladorComum {
 	private void gerarDebitos(CancelarParcelamentoHelper helper, Conta conta, Usuario usuario) throws ControladorException {
 		atualizarDebitoACobrar(helper.getSaldoDevedorContas(), helper.getParcelamento().getId(), conta, DebitoTipo.PARCELAMENTO_CONTAS);
 		atualizarDebitoACobrar(helper.getSaldoDevedorAcrescimos(), helper.getParcelamento().getId(), conta, DebitoTipo.PARCELAMENTO_ACRESCIMOS_IMPONTUALIDADE);
+		atualizarDebitoACobrar(helper.getSaldoDevedorGuias(), helper.getParcelamento().getId(), conta, DebitoTipo.PARCELAMENTO_GUIAS_PAGAMENTO);
 		
 		inserirDebitoACobrar(helper.getTotalCancelamentoDescontos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_ACRESCIMOS, usuario, false);
 		inserirDebitoACobrar(helper.getTotalCancelamentoDescontoFaixa(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_FAIXA, usuario, false);

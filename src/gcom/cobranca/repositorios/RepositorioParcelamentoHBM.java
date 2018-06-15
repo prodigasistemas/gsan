@@ -129,7 +129,8 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		
 		StringBuilder consulta = new StringBuilder();
 		consulta.append(select)
-				.append("dac.dbac_nnprestacaocobradas as numeroPrestacoesCobradas ")
+				.append("       dac.dbac_nnprestacaocobradas as numeroPrestacoesCobradas, ")
+				.append("       coalesce(p.parc_vlguiapapagamento,0) as valorGuias ")
 				.append("FROM cobranca.parcelamento p ")
 				.append("INNER JOIN faturamento.debito_a_cobrar dac on dac.parc_id = p.parc_id  ")
 		        .append(join)
@@ -137,8 +138,9 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 		        .append(montarComplementoGuia())
 		        .append(" UNION ALL ")
 		        .append(select)
-		        .append("dac.dahi_nnprestacaocobradas as numeroPrestacoesCobradas ")
-		        .append("FROM cobranca.parcelamento p ")
+		        .append("       dac.dahi_nnprestacaocobradas as numeroPrestacoesCobradas, ")
+		        .append("       coalesce(p.parc_vlguiapapagamento,0) as valorGuias ")
+			  .append("FROM cobranca.parcelamento p ")
 		        .append("INNER JOIN faturamento.deb_a_cobrar_hist dac on dac.parc_id = p.parc_id  ")
 		        .append(join)
 		        .append(where)
@@ -194,7 +196,8 @@ public class RepositorioParcelamentoHBM implements IRepositorioParcelamentoHBM {
 					  .addScalar("valorDescontoAcrescimos", Hibernate.BIG_DECIMAL)
 					  .addScalar("valorDescontoFaixa", Hibernate.BIG_DECIMAL)
 					  .addScalar("numeroPrestacoes", Hibernate.SHORT)
-					  .addScalar("numeroPrestacoesCobradas", Hibernate.SHORT);
+					  .addScalar("numeroPrestacoesCobradas", Hibernate.SHORT)
+					  .addScalar("valorGuias", Hibernate.BIG_DECIMAL);
 	}
 	
 	private String montarComplementoGuia() {
