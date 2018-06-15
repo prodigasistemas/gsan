@@ -1,11 +1,12 @@
 package gcom.gui.faturamento;
 
-import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.ContratoMotivoCancelamento;
+import gcom.cadastro.imovel.Contrato;
+import gcom.cadastro.imovel.ContratoTipo;
+import gcom.cadastro.imovel.FiltroContrato;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.fachada.Fachada;
-import gcom.faturamento.FiltroContratoDemanda;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -45,8 +46,7 @@ public class AtualizarContratoDemandaAction extends GcomAction {
 		Usuario usuarioLogado = (Usuario) sessao
 				.getAttribute(Usuario.USUARIO_LOGADO);
 
-		ContratoDemanda contratoDemanda = (ContratoDemanda) sessao
-				.getAttribute("contratoDemandaAtualizar");
+		Contrato contratoDemanda = (Contrato) sessao.getAttribute("contratoDemandaAtualizar");
 		
 		String dataInicioContrato = atualizarContratoDemandaActionForm.getDataInicioContrato();
 		String dataFimContrato = atualizarContratoDemandaActionForm.getDataFimContrato();
@@ -102,15 +102,13 @@ public class AtualizarContratoDemandaAction extends GcomAction {
 		}
 		
 		if (contratoDemanda.getDataContratoEncerrado() == null && contratoDemanda.getContratoMotivoCancelamento() == null) {
-			FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
-			filtroContratoDemanda.adicionarParametro(
-					new ParametroSimples(FiltroContratoDemanda.IMOVEL, idImovel));
-			filtroContratoDemanda.adicionarParametro(
-					new ParametroNulo(FiltroContratoDemanda.DATACONTRATOENCERRAMENTO));
-			filtroContratoDemanda.adicionarParametro(
-					new ParametroSimplesDiferenteDe(FiltroContratoDemanda.ID, contratoDemanda.getId()));
-			Collection colecaoContratoDemanda = fachada.pesquisar(
-					filtroContratoDemanda, ContratoDemanda.class.getName());
+			FiltroContrato filtroContratoDemanda = new FiltroContrato();
+			filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.IMOVEL, idImovel));
+			filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.CONTRATO_TIPO, ContratoTipo.DEMANDA));
+			filtroContratoDemanda.adicionarParametro(new ParametroNulo(FiltroContrato.DATACONTRATOENCERRAMENTO));
+			filtroContratoDemanda.adicionarParametro(new ParametroSimplesDiferenteDe(FiltroContrato.ID, contratoDemanda.getId()));
+			
+			Collection colecaoContratoDemanda = fachada.pesquisar(filtroContratoDemanda, Contrato.class.getName());
 			
 			if (colecaoContratoDemanda != null & !colecaoContratoDemanda.isEmpty()) {
 				throw new ActionServletException("atencao.contrato.demanda.encerrado", null, idImovel);

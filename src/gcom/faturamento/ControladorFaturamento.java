@@ -148,7 +148,6 @@ import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.leitura.FiltroLeituraAnormalidade;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.leitura.LeituraSituacao;
-import gcom.micromedicao.leitura.LeituraTipo;
 import gcom.micromedicao.medicao.FiltroMedicaoHistorico;
 import gcom.micromedicao.medicao.FiltroMedicaoTipo;
 import gcom.micromedicao.medicao.MedicaoHistorico;
@@ -15781,6 +15780,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
 			
 			return grupo.getDiaVencimento();
+		}
+	}
+	
+	public Object[] pesquisarParmsContaMensagem(EmitirContaHelper helper, Integer idGrupo, Integer idGerencia, Integer idLocalidade, Integer idSetor) throws ControladorException {
+		try {
+			return repositorioFaturamento.pesquisarParmsContaMensagem(helper, idGrupo, idGerencia, idLocalidade, idSetor);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
 		}
 	}
 }

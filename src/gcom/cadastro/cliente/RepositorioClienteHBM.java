@@ -1886,4 +1886,33 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 		}
 		return retorno;
 	}
+	public Cliente obterUsuarioImovelPorData(Integer idImovel, Integer idClienteRelacaoTipo, Date data) throws ErroRepositorioException {
+
+
+		Session session = HibernateUtil.getSession();
+		Cliente retorno = new Cliente();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("SELECT cliente FROM ClienteImovel clienteImovel ")
+					.append("INNER JOIN clienteImovel.cliente cliente ")
+					.append("WHERE clienteImovel.imovel.id = :idImovel ")
+					.append("AND  clienteImovel.dataFimRelacao <= :data ")
+					.append("AND  clienteImovel.dataInicioRelacao >= :data ")
+					.append("AND  clienteImovel.clienteRelacaoTipo.id = :clienteRelacaoTipo ");
+
+			retorno = (Cliente) session.createQuery(consulta.toString())
+							.setInteger("idImovel", idImovel)
+							.setDate("data", data)
+							.setInteger("clienteRelacaoTipo", idClienteRelacaoTipo).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	
+	}
 }

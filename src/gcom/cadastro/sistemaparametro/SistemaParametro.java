@@ -499,6 +499,9 @@ public class SistemaParametro extends ObjetoTransacao {
 	private BigDecimal valorAliquotaImposto;
 	
 	private Short indicadorGeracaoBoletoBB;
+	
+	private String descricaoAplicativoAtendimento;
+	private String telefoneAplicativoAtendimento;
 
 	public Short getNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo() {
 		return numeroDiasEncerrarOsFiscalizacaoDecursoPrazo;
@@ -2562,5 +2565,21 @@ public class SistemaParametro extends ObjetoTransacao {
 
 	public void setIndicadorGeracaoBoletoBB(Short indicadorGeracaoBoletoBB) {
 		this.indicadorGeracaoBoletoBB = indicadorGeracaoBoletoBB;
+	}
+
+	public String getDescricaoAplicativoAtendimento() {
+		return descricaoAplicativoAtendimento;
+	}
+
+	public void setDescricaoAplicativoAtendimento(String descricaoAplicativoAtendimento) {
+		this.descricaoAplicativoAtendimento = descricaoAplicativoAtendimento;
+	}
+
+	public String getTelefoneAplicativoAtendimento() {
+		return telefoneAplicativoAtendimento;
+	}
+
+	public void setTelefoneAplicativoAtendimento(String telefoneAplicativoAtendimento) {
+		this.telefoneAplicativoAtendimento = telefoneAplicativoAtendimento;
 	}
 }

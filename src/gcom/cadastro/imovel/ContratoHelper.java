@@ -1,20 +1,18 @@
-package gcom.arrecadacao.bean;
-
-import gcom.arrecadacao.ContratoDemanda;
+package gcom.cadastro.imovel;
 
 import java.io.Serializable;
 
-public class ContratoDemandaHelper implements Serializable {
+public class ContratoHelper implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private ContratoDemanda contratoDemanda;
+	private Contrato contrato;
 	
 	private String valorTarifa;
 	
 	private String consumoContratado;
 
-	public ContratoDemandaHelper() {
+	public ContratoHelper() {
 		super();
 	}
 
@@ -26,12 +24,12 @@ public class ContratoDemandaHelper implements Serializable {
 		this.consumoContratado = consumoContratado;
 	}
 
-	public ContratoDemanda getContratoDemanda() {
-		return contratoDemanda;
+	public Contrato getContrato() {
+		return contrato;
 	}
 
-	public void setContratoDemanda(ContratoDemanda contratoDemanda) {
-		this.contratoDemanda = contratoDemanda;
+	public void setContrato(Contrato contrato) {
+		this.contrato = contrato;
 	}
 
 	public String getValorTarifa() {

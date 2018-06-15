@@ -18,6 +18,7 @@ import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.CategoriaTipo;
+import gcom.cadastro.imovel.ContratoTipo;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.ImovelPerfil;
@@ -11064,21 +11065,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * Método que retorna uma array de object do conta mensagem ordenado pelo
-	 * tipo de crédito
-	 * 
-	 * 
+	 * Método que retorna uma array de object do conta mensagem ordenado pelo tipo de crédito
 	 * [UC0348] Emitir Contas
-	 * 
 	 * [SB0016] Obter Mensagem da Conta em 3 Partes
-	 * 
-	 * @author Sávio Luiz
-	 * @date 19/05/2006
-	 * 
-	 * 
-	 * @param idConta
-	 * @return
-	 * @throws ErroRepositorioException
 	 */
 	public Object[] pesquisarParmsContaMensagem(
 			EmitirContaHelper emitirContaHelper, Integer idFaturamentoGrupo,
@@ -11086,12 +11075,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Integer idSetorComercial) throws ErroRepositorioException {
 
 		Object[] retorno = null;
-
 		Session session = HibernateUtil.getSession();
-		String consulta;
 
 		try {
-			consulta = "select contaMensagem.descricaoContaMensagem01,"// 0
+			String consulta = "select contaMensagem.descricaoContaMensagem01,"// 0
 					+ "contaMensagem.descricaoContaMensagem02," // 1
 					+ "contaMensagem.descricaoContaMensagem03 "// 2
 					+ "from ContaMensagem contaMensagem "
@@ -11100,42 +11087,75 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "left join contaMensagem.setorComercial setorComercial "
 					+ "left join contaMensagem.faturamentoGrupo faturamentoGrupo "
 					+ "where contaMensagem.anoMesRreferenciaFaturamento = :amReferenciaConta ";
+			
 			if (idFaturamentoGrupo != null) {
 				consulta += " AND faturamentoGrupo.id =" + idFaturamentoGrupo;
 			} else {
 				consulta += " AND faturamentoGrupo.id is null";
 			}
+			
 			if (idGerenciaRegional != null) {
 				consulta += " AND gerenciaRegional.id =" + idGerenciaRegional;
 			} else {
 				consulta += " AND gerenciaRegional.id is null";
 			}
+			
 			if (idLocalidade != null) {
 				consulta += " AND localidade.id =" + idLocalidade;
 			} else {
 				consulta += " AND localidade.id is null";
 			}
+			
 			if (idSetorComercial != null) {
 				consulta += " AND setorComercial.id =" + idSetorComercial;
 			} else {
 				consulta += " AND setorComercial.id is null";
 			}
 
-			retorno = (Object[]) session.createQuery(consulta).setInteger(
-					"amReferenciaConta", emitirContaHelper.getAmReferencia())
-					.setMaxResults(1).uniqueResult();
+			retorno = (Object[]) session.createQuery(consulta)
+					.setInteger("amReferenciaConta", emitirContaHelper.getAmReferencia())
+					.setMaxResults(1)
+					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 
+	public Object[] pesquisarContaMensagemFixa() throws ErroRepositorioException {
+		Object[] retorno = null;
+		Session session = HibernateUtil.getSession();
+
+		try {
+			String consulta = "select contaMensagem.descricaoContaMensagem01,"
+					+ "contaMensagem.descricaoContaMensagem02,"
+					+ "contaMensagem.descricaoContaMensagem03 "
+					+ "from ContaMensagem contaMensagem "
+					+ "left join contaMensagem.gerenciaRegional gerenciaRegional "
+					+ "left join contaMensagem.localidade localidade "
+					+ "left join contaMensagem.setorComercial setorComercial "
+					+ "left join contaMensagem.faturamentoGrupo faturamentoGrupo "
+					+ "where contaMensagem.anoMesRreferenciaFaturamento is null "
+					+ "AND faturamentoGrupo.id is null "
+					+ "AND gerenciaRegional.id is null "
+					+ "AND localidade.id is null "
+					+ "AND setorComercial.id is null ";
+
+			retorno = (Object[]) session.createQuery(consulta).setMaxResults(1).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
 	/**
 	 * Método que retorna uma array de object de qualidade de agua
 	 * 
@@ -13668,10 +13688,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		String consulta;
 
 		try {
-			consulta = "SELECT "
-					+ " new "
-					+ EmitirContaHelper.class.getName()
-					+ " ( "
+			consulta = "SELECT new " + EmitirContaHelper.class.getName() + "("
 					+ "cnt.id, "
 					+ "cli.nome, "
 					+ "cli.cpf, "
@@ -13709,9 +13726,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "imovel.nomeImovel, "
 					+ "imovel.codigoDebitoAutomatico, " 
 					+ "faturamentoGrupo.anoMesReferencia, "
-					+ " cnt.valorRateioAgua, " 
-					+ " cnt.valorRateioEsgoto ) "
-					+ "from ClienteConta cliCnt "
+					+ "cnt.valorRateioAgua, " 
+					+ "cnt.valorRateioEsgoto) "
+					+ "FROM ClienteConta cliCnt "
 					+ "RIGHT JOIN cliCnt.conta cnt "
 					+ "LEFT JOIN cliCnt.clienteRelacaoTipo crt "
 					+ "LEFT JOIN cliCnt.cliente cli "
@@ -13729,26 +13746,17 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "LEFT JOIN cnt.imovel imovel "
 					+ "LEFT JOIN imovel.imovelContaEnvio imovelContaEnvio "
 					+ "WHERE  cnt.id = :idConta "
-//					+ "AND crt.id = :usuario "
-					
-					/*
-					 * Felipe Santos
-					 * 
-					 * Imprimir segunda via de conta com o cliente responsável pela conta
-					 */
 					+ "and clct_icnomeconta = :indicadorNomeConta "
-			
-					+ "ORDER BY cnt.referencia,emp.id,loc.id,cnt.codigoSetorComercial,"
-					+ "cnt.quadra,cnt.lote,cnt.subLote";
+					+ "ORDER BY cnt.referencia, emp.id, loc.id, cnt.codigoSetorComercial, cnt.quadra,cnt.lote,cnt.subLote";
 
-			retorno = session.createQuery(consulta).setInteger("idConta", idConta.intValue())
-						.setInteger("indicadorNomeConta", ConstantesSistema.SIM).list();
+			retorno = session.createQuery(consulta)
+					.setInteger("idConta", idConta.intValue())
+					.setInteger("indicadorNomeConta", ConstantesSistema.SIM)
+					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -50397,15 +50405,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = " SELECT imov.imov_id AS idImovel "
 					+ " FROM cadastro.imovel imov "
 					+ " INNER JOIN faturamento.consumo_tarifa cstf ON cstf.cstf_id = imov.cstf_id "
-					+ " INNER JOIN arrecadacao.contrato_demanda ctdm ON ctdm.imov_id = imov.imov_id "
-					+ " AND ctdm.ctdm_nncontrato IS NOT NULL "
+					+ " INNER JOIN cadastro.contrato cntt ON cntt.imov_id = imov.imov_id "
+					+ " AND cntt.cntt_nncontrato IS NOT NULL AND cntt.cttp_id = :idContratoDemanda "
 					+ " WHERE imov.cstf_id = :idConsumoTarifa AND imov.imov_id <> :idImovel "
 					+ " GROUP BY imov.imov_id ";
 
-			retorno = (Collection<Integer>) session.createSQLQuery(consulta).addScalar(
-					"idImovel", Hibernate.INTEGER).setInteger("idConsumoTarifa",
-						idConsumoTarifa).setInteger("idImovel",
-								idImovel).list();
+			retorno = (Collection<Integer>) session.createSQLQuery(consulta)
+									.addScalar("idImovel", Hibernate.INTEGER)
+									.setInteger("idConsumoTarifa",idConsumoTarifa)
+									.setInteger("idImovel",idImovel)
+									.setInteger("idContratoDemanda", ContratoTipo.DEMANDA).list();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada

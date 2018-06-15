@@ -4,6 +4,7 @@ import gcom.cadastro.cliente.bean.PesquisarClienteResponsavelSuperiorHelper;
 import gcom.util.ErroRepositorioException;
 
 import java.util.Collection;
+import java.util.Date;
 
 public interface IRepositorioCliente {
 
@@ -136,5 +137,7 @@ public interface IRepositorioCliente {
 	public Cliente pesquisarDadosClienteParaNegativacao(Integer idCliente, String cnpjEmpresa) throws ErroRepositorioException;
 	
 	public String obterNomeClienteConta(Integer idImovel) throws ErroRepositorioException;
+
+	public Cliente obterUsuarioImovelPorData(Integer idImovel, Integer idClienteRelacaoTipo, Date data) throws ErroRepositorioException;
 	
 }

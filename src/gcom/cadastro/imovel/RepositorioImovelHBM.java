@@ -1014,7 +1014,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					+ "group by c.id, c.descricao, c.consumoEstouro, c.vezesMediaEstouro, "
 					+ "isb.comp_id.imovel.id, c.consumoAlto, c.mediaBaixoConsumo, c.vezesMediaAltoConsumo, "
 					+ "c.porcentagemMediaBaixoConsumo,c.descricaoAbreviada,c.numeroConsumoMaximoEc, " 
-					+ "c.indicadorCobrancaAcrescimos, c.fatorEconomias, c.categoriaTipo.id, c.categoriaTipo.descricao ";
+					+ "c.indicadorCobrancaAcrescimos, c.fatorEconomias, c.categoriaTipo.id, c.categoriaTipo.descricao "
+					+ "order by c.id ";
 
 			retorno = session.createQuery(consulta).setInteger("imovelId", imovel.intValue()).list();
 
