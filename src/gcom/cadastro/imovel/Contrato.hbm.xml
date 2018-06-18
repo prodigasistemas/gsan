@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.imovel.Contrato" table="cadastro.contrato">
+		<id name="id" type="java.lang.Integer" column="cntt_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_contrato</param>
+			</generator>
+		</id>
+		<property name="dataContratoInicio" type="java.sql.Date" column="cntt_dtcontratoinicio" not-null="true" length="4"/>
+		<property name="dataContratoFim" type="java.sql.Date" column="cntt_dtcontratofim" not-null="false" length="4"/>
+		<property name="numeroContrato" type="java.lang.String" column="cntt_nncontrato" not-null="true" length="10"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cntt_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="dataContratoEncerrado" type="java.sql.Date" column="cntt_dtcontratoencerramento" not-null="false" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		
+		<many-to-one name="contratoMotivoCancelamento" class="gcom.arrecadacao.ContratoMotivoCancelamento" not-null="false">
+			<column name="ctcn_id"/>
+		</many-to-one>
+		
+		<many-to-one name="contratoTipo" class="gcom.cadastro.imovel.ContratoTipo" not-null="false">
+    	  <column name="cttp_id"/>
+    	</many-to-one>
+    
+	</class>
+</hibernate-mapping>

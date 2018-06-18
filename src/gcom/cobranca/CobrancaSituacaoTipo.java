@@ -10,30 +10,17 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class CobrancaSituacaoTipo extends ObjetoTransacao implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
 	private Integer id;
-
-    /** nullable persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
     private Short indicadorInformarDataFinal;
-    
     private Short indicadorEmitirDocumentoCobranca;
     
-    
-    //Indicador usado para a empresa Terceirizada da CAEMA
     public final static Integer COBRANCA_EMPRESA_TERCEIRIZADA = new Integer(1);
     public final static Integer PARALISAR_ACOES_DE_COBRANÇA = new Integer(5);
     public final static Integer PARALISAR_ARRASTO = new Integer(6);
@@ -43,24 +30,19 @@ public class CobrancaSituacaoTipo extends ObjetoTransacao implements Serializabl
     public final static Integer PARALISAR_ORDENS_DE_SUPRESSAO_TOTAL_E_PARCIAL = new Integer(10);
     public final static Integer SUSPENDER_PAGAMENTO_DA_CONTA = new Integer(11);
 
-    public Short getIndicadorInformarDataFinal() {
-		return indicadorInformarDataFinal;
-	}
+    public CobrancaSituacaoTipo() {
+    }
 
-	public void setIndicadorInformarDataFinal(Short indicadorInformarDataFinal) {
-		this.indicadorInformarDataFinal = indicadorInformarDataFinal;
-	}
-
-	/** full constructor */
+    public CobrancaSituacaoTipo(Integer id) {
+    	this.id = id;
+    }
+    
     public CobrancaSituacaoTipo(String descricao, Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;
         this.indicadorUso = indicadorUso;
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
-    public CobrancaSituacaoTipo() {
-    }
 
     public Integer getId() {
         return this.id;
@@ -93,6 +75,14 @@ public class CobrancaSituacaoTipo extends ObjetoTransacao implements Serializabl
     public void setUltimaAlteracao(Date ultimaAlteracao) {
         this.ultimaAlteracao = ultimaAlteracao;
     }
+    
+    public Short getIndicadorInformarDataFinal() {
+		return indicadorInformarDataFinal;
+	}
+
+	public void setIndicadorInformarDataFinal(Short indicadorInformarDataFinal) {
+		this.indicadorInformarDataFinal = indicadorInformarDataFinal;
+	}
     
     public Short getIndicadorEmitirDocumentoCobranca() {
 		return indicadorEmitirDocumentoCobranca;

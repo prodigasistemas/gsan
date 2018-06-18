@@ -45,6 +45,9 @@ import gcom.micromedicao.FiltroLeituraSituacao;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.consumo.ComunicadoAltoConsumo;
 import gcom.micromedicao.consumo.ConsumoAnormalidade;
+import gcom.micromedicao.consumo.ConsumoHistorico;
+import gcom.micromedicao.consumo.ConsumoTipo;
+import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -553,7 +556,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 								} else {
 									
-									if (isAltoConsumo(emitirContaHelper) && !isImovelEmsituacaoEspecialFaturamento(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia())) {
+									if (isEmitirComunicadoAltoConsumo(emitirContaHelper)) {
 										contasTxtAltoConsumo.append(contaTxt.toString());
 										contasTxtAltoConsumo.append(System.getProperty("line.separator"));
 										
@@ -638,6 +641,23 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 	}
 
+	private boolean isEmitirComunicadoAltoConsumo(EmitirContaHelper helper) throws ControladorException {
+		return isAltoConsumo(helper) 
+				&& !isImovelEmsituacaoEspecialFaturamento(helper.getIdImovel(), helper.getAmReferencia())
+				&& isImovelLeituraConfirmada(helper)
+				&& isImovelAnalisado(helper);
+	}
+	
+	private boolean isImovelLeituraConfirmada(EmitirContaHelper helper) throws ControladorException {
+		ConsumoHistorico historico = getControladorMicromedicao().obterConsumoHistorico(new Imovel(helper.getIdImovel()), new LigacaoTipo(LigacaoTipo.LIGACAO_AGUA), helper.getAmReferencia());
+		return historico.getConsumoTipo().getId().intValue() != ConsumoTipo.MEDIA_HIDROMETRO;
+	}
+	
+	private boolean isImovelAnalisado(EmitirContaHelper helper) throws ControladorException {
+		MedicaoHistorico medicao = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAgua(helper.getIdImovel(), helper.getAmReferencia());
+		return medicao != null && medicao.isAnalisado();
+	}
+	
 	private boolean isAltoConsumo(EmitirContaHelper helper) {
 		return helper.getIdConsumoAnormalidade() != null 
 				&& (helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ALTO_CONSUMO.intValue()
@@ -1505,6 +1525,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return consumoMesAnterior;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private void alterarVencimentoContasFaturarGrupo(Integer contaTipo, Integer idEmpresa, Integer numeroIndice, FaturamentoGrupo faturamentoGrupo) {
 		Collection<Conta> colecaoContasNovoVencimento = new ArrayList<Conta>();
 		try {
@@ -2609,7 +2630,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return debitosACobrarInserir;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Collection<DebitoACobrar> gerarAcrescimosConta(Short indicadorGeracaoMulta, Short indicadorGeracaoJuros, Short indicadorGeracaoAtualizacao,
 			Imovel imovel, boolean indicadorEncerrandoArrecadacao) throws ErroRepositorioException, ControladorException {
 		
@@ -2626,7 +2647,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 		
 		if (!Util.isVazioOrNulo(colecaoContaImovel)) { 
-			@SuppressWarnings("unchecked")
 			Map<Integer, Boolean> mapIndicadorExistePagamentoConta = this.pesquisarIndicadorPagamentoConta(colecaoContaImovel,	referenciaArrecadacao);
 			
 			Short numeroPrestacaoDebito = 1;
@@ -2759,6 +2779,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private Collection obterContasParaGerarAcrescimos(Integer referenciaArrecadacao, Imovel imovel, boolean indicadorEncerrandoArrecadacao) {
 		Date dataAnoMesReferenciaUltimoDia = Util.gerarDataApartirAnoMesRefencia(referenciaArrecadacao);
 
@@ -2845,6 +2866,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return cobrar;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Imovel buildImovelAcrescimoImpontualidade(Iterator imovelPorRotaIterator) {
 		Object[] arrayImoveisPorRota = (Object[]) imovelPorRotaIterator.next();
 
@@ -3071,7 +3093,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			emitirContaHelper.setValorConta(valorConta);
 			emitirContaHelper = preencherDadosPagamento2Via(idContaEP, emitirContaHelper, valorConta);
 			emitirContaHelper = preencherInfoCodigoBarras2Via(emitirContaHelper, valorConta);
-			emitirContaHelper = preencherMensagensConta2Via(emitirContaHelper, sistemaParametro);
 			emitirContaHelper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(emitirContaHelper, 1)));
 			emitirContaHelper = preencherDadosQualidadeAgua2Via(emitirContaHelper);
 			emitirContaHelper = preencherRepresentacaoNumericaCodBarras2Via(emitirContaHelper, valorConta);
@@ -3195,29 +3216,28 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return emitirContaHelper;
 	}
 
-	private EmitirContaHelper preencherDadosClienteResponsavel2Via(EmitirContaHelper emitirContaHelper) throws ControladorException {
-		String idClienteResponsavel = "";
-		String enderecoClienteResponsavel = "";
-		Integer idImovelContaEnvio = emitirContaHelper.getIdImovelContaEnvio();
+	private EmitirContaHelper preencherDadosClienteResponsavel2Via(EmitirContaHelper helper) throws ControladorException {
+		String idResponsavel = "";
+		String enderecoResponsavel = "";
+		Integer idImovelContaEnvio = helper.getIdImovelContaEnvio();
 		
 		if (idImovelContaEnvio != null
-				&& (idImovelContaEnvio
-						.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL) || idImovelContaEnvio
-						.equals(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL))) {
+				&& (idImovelContaEnvio.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL) 
+						|| idImovelContaEnvio.equals(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL))) {
 
-			Integer idClienteResponsavelInteger = null;
-			idClienteResponsavelInteger = pesquisarIdClienteResponsavelConta(emitirContaHelper.getIdConta(), false);
+			Integer id = pesquisarIdClienteResponsavelConta(helper.getIdConta(), false);
 
-			if (idClienteResponsavelInteger != null && !idClienteResponsavelInteger.equals("")) {
-				idClienteResponsavel = idClienteResponsavelInteger.toString();
-				enderecoClienteResponsavel = getControladorEndereco().pesquisarEnderecoClienteAbreviado(idClienteResponsavelInteger);
+			if (id != null && !id.equals("")) {
+				idResponsavel = id.toString();
+				enderecoResponsavel = getControladorEndereco().pesquisarEnderecoClienteAbreviado(id);
 			}
 
 		}
-		emitirContaHelper.setIdClienteResponsavel(idClienteResponsavel);
-		emitirContaHelper.setEnderecoClienteResponsavel(enderecoClienteResponsavel);
 		
-		return emitirContaHelper;
+		helper.setIdClienteResponsavel(idResponsavel);
+		helper.setEnderecoClienteResponsavel(enderecoResponsavel);
+		
+		return helper;
 	}
 
 	private EmitirContaHelper preencherInscricaoImovel2Via(EmitirContaHelper emitirContaHelper) {
@@ -3254,14 +3274,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		BigDecimal valorConta = conta.getValorTotal();
 		return valorConta;
-	}
-
-	private EmitirContaHelper preencherMensagensConta2Via(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro) throws ControladorException {
-		String[] parmsPartesConta = obterMensagemConta3Partes(emitirContaHelper, sistemaParametro);
-		emitirContaHelper.setPrimeiraParte(parmsPartesConta[0]);
-		emitirContaHelper.setSegundaParte(parmsPartesConta[1]);
-		emitirContaHelper.setTerceiraParte(parmsPartesConta[2]);
-		return emitirContaHelper;
 	}
 
 	private EmitirContaHelper preencherRepresentacaoNumericaCodBarras2Via(EmitirContaHelper emitirContaHelper, BigDecimal valorConta) throws ControladorException {
@@ -3415,11 +3427,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				&& ((debitoImovelClienteHelper.getColecaoGuiasPagamentoValores() != null && !debitoImovelClienteHelper.getColecaoGuiasPagamentoValores().isEmpty()) 
 					|| (debitoImovelClienteHelper.getColecaoContasValores() != null && !debitoImovelClienteHelper.getColecaoContasValores().isEmpty()))) {
 			String dataVencimentoFinalString = Util.formatarData(dataFinalDate);
-			linhasImpostosRetidos[0] = "SR. USUÁRIO: EM  " + dataVencimentoFinalString
-					+ ",    REGISTRAMOS QUE V.SA. ESTAVA EM DÉBITO COM A "
-					+ sistemaParametro.getNomeAbreviadoEmpresa().toUpperCase() + ".";
-			linhasImpostosRetidos[1] = "COMPAREÇA A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO.EVITE O CORTE.";
-			linhasImpostosRetidos[2] = "CASO O SEU DÉBITO TENHA SIDO PAGO APÓS A DATA INDICADA,DESCONSIDERE ESTE AVISO.";
+			linhasImpostosRetidos[0] = "SR(A). CLIENTE, EM  " + dataVencimentoFinalString + ", REGISTRAMOS QUE V.SA. ESTAVA EM DÉBITO COM A " + sistemaParametro.getNomeAbreviadoEmpresa().toUpperCase() + ".";
+			linhasImpostosRetidos[1] = "COMPAREÇA A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO. EVITE O CORTE.";
+			linhasImpostosRetidos[2] = "CASO O SEU DÉBITO TENHA SIDO PAGO APÓS A DATA INDICADA, DESCONSIDERE ESTE AVISO.";
 			isImovelEmDebito = true;
 		} else {
 			linhasImpostosRetidos[0] = "A COSANPA AGRADECE SUA PONTUALIDADE.";
@@ -3431,88 +3441,77 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return linhasImpostosRetidos;
 	}
 
-	public String[] obterMensagemConta3Partes(EmitirContaHelper emitirConta, SistemaParametro sistemaParametro) throws ControladorException {
-
-		String[] linhasImpostosRetidos = new String[3];
-		linhasImpostosRetidos = obterMensagemAnormalidadeConsumo(emitirConta);
+	public String[] obterMensagemConta3Partes(EmitirContaHelper helper, SistemaParametro sistemaParametro) throws ControladorException {
+		String[] mensagens = new String[3];
+		mensagens = obterMensagemAnormalidadeConsumo(helper);
 
 		Imovel imovel = new Imovel();
-		imovel.setId(emitirConta.getIdImovel());
+		imovel.setId(helper.getIdImovel());
 
-		String msgQuitacaoAnualDebitos = this.obterMsgQuitacaoDebitos(imovel, Integer.valueOf(emitirConta.getAmReferencia()));
+		String msgQuitacaoAnualDebitos = this.obterMsgQuitacaoDebitos(imovel, Integer.valueOf(helper.getAmReferencia()));
 
-		if (msgQuitacaoAnualDebitos != null
-				&& !msgQuitacaoAnualDebitos.equals("")) {
-			linhasImpostosRetidos = new String[3];
+		if (msgQuitacaoAnualDebitos != null && !msgQuitacaoAnualDebitos.equals("")) {
+			mensagens = new String[3];
 
-			linhasImpostosRetidos[0] = msgQuitacaoAnualDebitos.substring(0, 100);
-			linhasImpostosRetidos[1] = msgQuitacaoAnualDebitos.substring(100,msgQuitacaoAnualDebitos.length());
-			linhasImpostosRetidos[2] = "";
-		} else if (linhasImpostosRetidos == null || linhasImpostosRetidos.equals("")) {
-			linhasImpostosRetidos = new String[3];
+			mensagens[0] = msgQuitacaoAnualDebitos.substring(0, 100);
+			mensagens[1] = msgQuitacaoAnualDebitos.substring(100, msgQuitacaoAnualDebitos.length());
+			mensagens[2] = "";
+		} else if (mensagens == null || mensagens.equals("")) {
+			mensagens = new String[3];
 			Object[] mensagensConta = null;
 
 			boolean existeMensagem = false;
 			try {
-				//Pesquisa mensagens por gerencia regional, localidade e setor comercial
-				mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirConta, null,
-						emitirConta.getIdGerenciaRegional(), emitirConta.getIdLocalidade(), emitirConta.getIdSetorComercial());
+				mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null, helper.getIdGerenciaRegional(), helper.getIdLocalidade(), helper.getIdSetorComercial());
 				if (mensagensConta != null) {
-					linhasImpostosRetidos = obterMensagensImpostosRetidos(mensagensConta);
+					mensagens = montarMensagensConta2Via(mensagensConta);
 					existeMensagem = true;
 				}
 
 				if (!existeMensagem) {
-					//Pesquisa mensagens por gerencia regional e localidade
-					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirConta,
-									null, emitirConta.getIdGerenciaRegional(), emitirConta.getIdLocalidade(), null);
+					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null, helper.getIdGerenciaRegional(), helper.getIdLocalidade(), null);
 					if (mensagensConta != null) {
-						linhasImpostosRetidos = obterMensagensImpostosRetidos(mensagensConta);
+						mensagens = montarMensagensConta2Via(mensagensConta);
 						existeMensagem = true;
 					}
 				}
 				if (!existeMensagem) {
-					//Pesquisa mensagens por gerencia regional
-					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirConta,
-									null, emitirConta.getIdGerenciaRegional(), null, null);
+					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null, helper.getIdGerenciaRegional(), null, null);
 
 					if (mensagensConta != null) {
-						linhasImpostosRetidos = obterMensagensImpostosRetidos(mensagensConta);
+						mensagens = montarMensagensConta2Via(mensagensConta);
 						existeMensagem = true;
 					}
 				}
 				if (!existeMensagem) {
-					//Pesquisa mensagens por grupo de faturamento
-					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirConta,
-							emitirConta.getIdFaturamentoGrupo(), null, null, null);
+					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, helper.getIdFaturamentoGrupo(), null, null, null);
 
 					if (mensagensConta != null) {
-						linhasImpostosRetidos = obterMensagensImpostosRetidos(mensagensConta);
+						mensagens = montarMensagensConta2Via(mensagensConta);
 						existeMensagem = true;
 					}
 				}
 				if (!existeMensagem) {
-					//Pesquisa mensagens sem parametro
-					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirConta,null, null, null, null);
+					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null, null, null, null);
 					if (mensagensConta != null) {
-						linhasImpostosRetidos = obterMensagensImpostosRetidos(mensagensConta);
+						mensagens = montarMensagensConta2Via(mensagensConta);
 						existeMensagem = true;
 					}
 				}
 				if (!existeMensagem) {
-					linhasImpostosRetidos[0] = "";
-					linhasImpostosRetidos[1] = "";
-					linhasImpostosRetidos[2] = "";
+					mensagens[0] = "";
+					mensagens[1] = "";
+					mensagens[2] = "";
 				}
 			} catch (ErroRepositorioException e) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("erro.sistema", e);
 			}
 		}
-		return linhasImpostosRetidos;
+		return mensagens;
 	}
 	
-	private String[] obterMensagensImpostosRetidos(Object[] mensagensImpostosRetidos) {
+	private String[] montarMensagensConta2Via(Object[] mensagensImpostosRetidos) {
 		String[] linhasImpostosRetidos = new String[3];
 		
 		if (mensagensImpostosRetidos[0] != null) {
@@ -3535,6 +3534,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return linhasImpostosRetidos;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void gerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ControladorException {
 		Collection colecaoQtde = new ArrayList();
 		Collection<ContaImpressaoTermicaQtde> colecaoContas = new ArrayList();
@@ -3562,6 +3562,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<DebitoACobrarCategoria> inserirDebitosACobrarCategoriaBatch(Collection<DebitoACobrar> debitos) throws ControladorException {
 
 		Collection<DebitoACobrarCategoria> colecaoDebitosACobrarCategorias = new ArrayList();

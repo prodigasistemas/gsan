@@ -1809,17 +1809,6 @@ public interface IRepositorioCobranca {
 	/**
 	 * [UC1167] Consultar Comandos de Cobrança por Empresa
 	 * 
-	 * Pesquisa os dados dos comandos
-	 * 
-	 * @author: Mariana Victor
-	 * @date: 04/05/2011
-	 */
-	public Collection pesquisarDadosConsultarComandosContasCobrancaEmpresaResumido(Integer idEmpresa, Date cicloInicial, Date cicloFinal, int numeroIndice, int quantidadeRegistros)
-			throws ErroRepositorioException;
-
-	/**
-	 * [UC1167] Consultar Comandos de Cobrança por Empresa
-	 * 
 	 * Pesquisa os dados de um comando para exibir no popup
 	 * 
 	 * @author: Mariana Victor
@@ -1863,19 +1852,6 @@ public interface IRepositorioCobranca {
 	 * @return void
 	 */
 	public void atualizarIndicadorGeracaoTxt(Collection idsComandos) throws ErroRepositorioException;
-
-	/**
-	 * [UC1168] Encerrar Comandos de Cobrança por Empresa
-	 *
-	 * Pesquisa os ids dos imóveis e das ordens de serviços geradas para um
-	 * determinado comando
-	 *
-	 * @author Mariana Victor
-	 * @created 09/05/2011
-	 * @throws ErroRepositorioException
-	 * 
-	 */
-	public Collection<Object[]> pesquisarImovelOrdemServicoParaEncerrarComando(int quantidadeInicio, Integer idComando) throws ErroRepositorioException;
 
 	public void atualizarDataEncerramentoComando(Integer idComando) throws ErroRepositorioException;
 

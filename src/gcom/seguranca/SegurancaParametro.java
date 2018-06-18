@@ -14,7 +14,9 @@ public class SegurancaParametro implements Serializable {
 		CAMINHO_ARQUIVOS,
 		IP_NOVO_BATCH,
 		URL_GSAN_RELATORIOS,
-		URL_SEGURANCA;
+		URL_SEGURANCA,
+		URL_SEGUNDA_VIA,
+		URL_CONTRATO_ADESAO;
 	}
 
 	public Integer getId() {

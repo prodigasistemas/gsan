@@ -1,6 +1,6 @@
 	package gcom.faturamento;
 
-import gcom.arrecadacao.ContratoDemanda;
+import gcom.api.relatorio.ReportItemDTO;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.FiltroDevolucao;
 import gcom.arrecadacao.IRepositorioArrecadacao;
@@ -58,8 +58,10 @@ import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.geografico.Bairro;
 import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.Contrato;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
+import gcom.cadastro.imovel.FiltroContrato;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelCobrancaSituacao;
 import gcom.cadastro.imovel.FiltroSubCategoria;
@@ -258,7 +260,6 @@ import gcom.micromedicao.leitura.LeituraTipo;
 import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
-import gcom.relatorio.cliente.ReportItemDTO;
 import gcom.relatorio.faturamento.ConsumoTarifaRelatorioHelper;
 import gcom.relatorio.faturamento.FaturamentoLigacoesMedicaoIndividualizadaRelatorioHelper;
 import gcom.relatorio.faturamento.RelatorioAnaliticoFaturamentoHelper;
@@ -1332,12 +1333,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 								imovel = (Imovel) iteratorColecaoImoveis.next();
 
-								if ((imovel.getId().intValue() == 7107323)
-										|| (imovel.getId().intValue() == 7732821)
-										|| (imovel.getId().intValue() == 7732813)
-										|| (imovel.getId().intValue() == 7732414)) {
-									break;
-								}
 								// FATURAMENTO ATUAL
 								// --------------------------------------------------------------------------------
 								this.faturarImovel(
@@ -35772,7 +35767,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Valor da pretação
 						String valorCreditoString = Util
 								.formatarMoedaReal(valorCredito);
-						valor = valorCreditoString;
+						valor = "-" + valorCreditoString;
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 						contaLinhasDescricaoServicosTarifasTotalHelper
@@ -35812,7 +35807,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// valor acumulado do tipo do débito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
-									valor = valorAcumulado;
+									valor = "-" +  valorAcumulado;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 									contaLinhasDescricaoServicosTarifasTotalHelper
@@ -35856,7 +35851,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										// valor acumulado do tipo do débito
 										String valorAcumulado = Util
 												.formatarMoedaReal(valorTotalCredito);
-										valor = valorAcumulado;
+										valor = "-" +  valorAcumulado;
 
 										contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 										contaLinhasDescricaoServicosTarifasTotalHelper
@@ -35897,7 +35892,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											// valor acumulado do tipo do débito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalCredito);
-											valor = valorAcumulado;
+											valor = "-" +  valorAcumulado;
 
 											contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 											contaLinhasDescricaoServicosTarifasTotalHelper
@@ -35931,7 +35926,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											// valor acumulado do tipo do débito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalCredito);
-											valor = valorAcumulado;
+											valor = "-" +  valorAcumulado;
 
 											contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 											contaLinhasDescricaoServicosTarifasTotalHelper
@@ -35988,7 +35983,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// valor acumulado do tipo do débito
 							String valorAcumulado = Util
 									.formatarMoedaReal(valorTotalCredito);
-							valor = valorAcumulado;
+							valor = "-" +  valorAcumulado;
 
 							contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 							contaLinhasDescricaoServicosTarifasTotalHelper
@@ -36032,7 +36027,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// valor acumulado do tipo do débito
 								String valorAcumulado = Util
 										.formatarMoedaReal(valorTotalCredito);
-								valor = valorAcumulado;
+								valor = "-" +  valorAcumulado;
 
 								contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 								contaLinhasDescricaoServicosTarifasTotalHelper
@@ -36069,7 +36064,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// valor acumulado do tipo do débito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
-									valor = valorAcumulado;
+									valor = "-" +  valorAcumulado;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 									contaLinhasDescricaoServicosTarifasTotalHelper
@@ -36100,7 +36095,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// valor acumulado do tipo do débito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
-									valor = valorAcumulado;
+									valor = "-" +  valorAcumulado;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 									contaLinhasDescricaoServicosTarifasTotalHelper
@@ -38344,48 +38339,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @author Eduardo Bianchi
 	 * @date 26/01/2007
 	 * 
-	 * @param Distrito
-	 *            Operaciona Descrição do parâmetro
+	 * @param Distrito Operaciona Descrição do parâmetro
 	 */
-	public Integer inserirContratoDemanda(ContratoDemanda contratoDemanda,
-			Usuario usuarioLogado) throws ControladorException {
+	public Integer inserirContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) throws ControladorException {
 
-		FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
-		filtroContratoDemanda.adicionarParametro(new ParametroSimples(
-				FiltroContratoDemanda.MUMEROCONTRATO, contratoDemanda
-						.getNumeroContrato()));
+		FiltroContrato filtroContratoDemanda = new FiltroContrato();
+		filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.MUMEROCONTRATO, contratoDemanda.getNumeroContrato()));
+		filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.CONTRATO_TIPO, contratoDemanda.getContratoTipo().getId()));
 
-		Collection colecaoContratoDemanda = getControladorUtil().pesquisar(
-				filtroContratoDemanda, ContratoDemanda.class.getName());
+		Collection colecaoContratoDemanda = getControladorUtil().pesquisar(filtroContratoDemanda, Contrato.class.getName());
 
 		Integer idContratoDemanda = null;
 
 		if (colecaoContratoDemanda.isEmpty()) {
-			idContratoDemanda = (Integer) getControladorUtil().inserir(
-					contratoDemanda);
+			idContratoDemanda = (Integer) getControladorUtil().inserir(contratoDemanda);
 		} else {
 			throw new ControladorException("atencao.contrato_demanda_existente");
 		}
-
-		// // ------------ REGISTRAR TRANSAÇÃO----------------------------
-		//
-		// RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-		// Operacao.OPERACAO_DISTRITO_OPERACIONAL_INSERIR,
-		// new UsuarioAcaoUsuarioHelper(usuarioLogado,
-		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		//
-		// Operacao operacao = new Operacao();
-		// operacao.setId(Operacao.OPERACAO_DISTRITO_OPERACIONAL_INSERIR);
-		//
-		// OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-		// operacaoEfetuada.setOperacao(operacao);
-		//
-		// distritoOperacional.setOperacaoEfetuada(operacaoEfetuada);
-		// distritoOperacional.adicionarUsuario(usuarioLogado,
-		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-		// registradorOperacao.registrarOperacao(distritoOperacional);
-		//
-		// // ------------ REGISTRAR TRANSAÇÃO----------------------------
 
 		return idContratoDemanda;
 	}
@@ -38403,57 +38373,43 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @date 28/06/2007
 	 * 
 	 */
-	public void atualizarContratoDemanda(ContratoDemanda contratoDemanda,
-			Usuario usuarioLogado) throws ControladorException {
+	public void atualizarContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) throws ControladorException {
 
 		// [FS0003] - Atualização realizada por outro usuário
-		FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
-		filtroContratoDemanda.adicionarParametro(new ParametroSimples(
-				FiltroContratoDemanda.ID, contratoDemanda.getId()));
+		FiltroContrato filtroContratoDemanda = new FiltroContrato();
+		filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.ID, contratoDemanda.getId()));
 
-		Collection colecaoContratoDemandaBase = getControladorUtil().pesquisar(
-				filtroContratoDemanda, ContratoDemanda.class.getName());
+		Collection colecaoContratoDemandaBase = getControladorUtil().pesquisar(filtroContratoDemanda, Contrato.class.getName());
 
-		if (colecaoContratoDemandaBase == null
-				|| colecaoContratoDemandaBase.isEmpty()) {
+		if (colecaoContratoDemandaBase == null || colecaoContratoDemandaBase.isEmpty()) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("atencao.atualizacao.timestamp");
 		}
 
-		ContratoDemanda contratoDemandaBase = (ContratoDemanda) colecaoContratoDemandaBase
-				.iterator().next();
+		Contrato contratoDemandaBase = (Contrato) colecaoContratoDemandaBase.iterator().next();
 
-		if (contratoDemandaBase.getUltimaAlteracao().after(
-				contratoDemanda.getUltimaAlteracao())) {
+		if (contratoDemandaBase.getUltimaAlteracao().after(contratoDemanda.getUltimaAlteracao())) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("atencao.atualizacao.timestamp");
 		}
 
 		// [FS0007] - Verificar existência do contrato de demanda
-		if (!contratoDemanda.getNumeroContrato().equals(
-				contratoDemandaBase.getNumeroContrato())) {
+		if (!contratoDemanda.getNumeroContrato().equals(contratoDemandaBase.getNumeroContrato())) {
 			filtroContratoDemanda.limparListaParametros();
-			filtroContratoDemanda.adicionarParametro(new ParametroSimples(
-					FiltroContratoDemanda.MUMEROCONTRATO, contratoDemanda
-							.getNumeroContrato()));
+			filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.MUMEROCONTRATO, contratoDemanda.getNumeroContrato()));
 
-			Collection colecaoContratoDemanda = getControladorUtil().pesquisar(
-					filtroContratoDemanda, ContratoDemanda.class.getName());
+			Collection colecaoContratoDemanda = getControladorUtil().pesquisar(filtroContratoDemanda, Contrato.class.getName());
 
-			if (colecaoContratoDemanda != null
-					&& !colecaoContratoDemanda.isEmpty()) {
-				throw new ControladorException(
-						"atencao.contrato_demanda.ja_existente");
+			if (colecaoContratoDemanda != null && !colecaoContratoDemanda.isEmpty()) {
+				throw new ControladorException("atencao.contrato_demanda.ja_existente");
 			}
 		}
 
 		contratoDemanda.setUltimaAlteracao(new Date());
 
 		// ------------ REGISTRAR TRANSAÇÃO----------------------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_CONTRATO_DEMANDA_ATUALIZAR,
-				new UsuarioAcaoUsuarioHelper(usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTRATO_DEMANDA_ATUALIZAR, new UsuarioAcaoUsuarioHelper(
+				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 		Operacao operacao = new Operacao();
 		operacao.setId(Operacao.OPERACAO_CONTRATO_DEMANDA_ATUALIZAR);
@@ -38462,8 +38418,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		operacaoEfetuada.setOperacao(operacao);
 
 		contratoDemanda.setOperacaoEfetuada(operacaoEfetuada);
-		contratoDemanda.adicionarUsuario(usuarioLogado,
-				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+		contratoDemanda.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(contratoDemanda);
 		// ------------ REGISTRAR TRANSAÇÃO----------------------------
 
@@ -50259,14 +50214,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @param idsContratosDemanda
 	 * @throws ControladorException
 	 */
-	public void removerContratosDemanda(String[] idsContratosDemanda,
-			Usuario usuarioLogado) throws ControladorException {
+	public void removerContratosDemanda(String[] idsContratosDemanda, Usuario usuarioLogado) throws ControladorException {
 
 		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_CONTRATO_DEMANDA_REMOVER,
-				new UsuarioAcaoUsuarioHelper(usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTRATO_DEMANDA_REMOVER, new UsuarioAcaoUsuarioHelper(
+				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 		Operacao operacao = new Operacao();
 		operacao.setId(Operacao.OPERACAO_CONTRATO_DEMANDA_REMOVER);
@@ -50281,25 +50233,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				// Cria o filtro de equipe para verificar se a equipe ja foi
 				// removida
-				FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
+				FiltroContrato filtroContratoDemanda = new FiltroContrato();
 
-				filtroContratoDemanda.adicionarParametro(new ParametroSimples(
-						FiltroContratoDemanda.ID, idContratoDemanda));
+				filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.ID, idContratoDemanda));
 
-				Collection colecaoContratoDemanda = getControladorUtil()
-						.pesquisar(filtroContratoDemanda,
-								ContratoDemanda.class.getSimpleName());
+				Collection colecaoContratoDemanda = getControladorUtil().pesquisar(filtroContratoDemanda, Contrato.class.getSimpleName());
 
-				if (colecaoContratoDemanda != null
-						&& !colecaoContratoDemanda.isEmpty()) {
+				if (colecaoContratoDemanda != null && !colecaoContratoDemanda.isEmpty()) {
 
-					ContratoDemanda contratoDemanda = (ContratoDemanda) Util
-							.retonarObjetoDeColecao(colecaoContratoDemanda);
+					Contrato contratoDemanda = (Contrato) Util.retonarObjetoDeColecao(colecaoContratoDemanda);
 
 					// ------------ REGISTRAR TRANSAÇÃO ----------------
 					contratoDemanda.setOperacaoEfetuada(operacaoEfetuada);
-					contratoDemanda.adicionarUsuario(usuarioLogado,
-							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+					contratoDemanda.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 					registradorOperacao.registrarOperacao(contratoDemanda);
 					// ------------ REGISTRAR TRANSAÇÃO ----------------
 
@@ -50307,8 +50253,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				} else {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.registro_remocao_nao_existente");
+					throw new ControladorException("atencao.registro_remocao_nao_existente");
 				}
 
 			}
@@ -66205,12 +66150,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0352] - Emitir Contas e Cartas
-	 * 
-	 * @author Sávio Luiz
-	 * @date 29/12/2009
 	 */
-	public String[] obterMensagemAnormalidadeConsumo(
-			EmitirContaHelper emitirContaHelper) throws ControladorException {
+	public String[] obterMensagemAnormalidadeConsumo(EmitirContaHelper emitirContaHelper) throws ControladorException {
 
 		String[] mensagemConta = null;
 
@@ -66221,24 +66162,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		imovel.setId(emitirContaHelper.getIdImovel());
 		try {
 			// Pesquisa o consumo histórico para a ligação de água
-			Collection consumoHistoricoMesAnterior = repositorioMicromedicao
-					.pesquisarConsumoHistoricoConsumoAnormalidade(imovel,
-							ligacaoTipo, amReferencia);
+			Collection consumoHistoricoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, amReferencia);
 
 			// caso não exista
-			if (consumoHistoricoMesAnterior == null
-					|| consumoHistoricoMesAnterior.isEmpty()) {
+			if (consumoHistoricoMesAnterior == null || consumoHistoricoMesAnterior.isEmpty()) {
 				ligacaoTipo.setId(LigacaoTipo.LIGACAO_ESGOTO);
 				// Pesquisa o consumo histórico para ligação de esgoto
-				consumoHistoricoMesAnterior = repositorioMicromedicao
-						.pesquisarConsumoHistoricoConsumoAnormalidade(imovel,
-								ligacaoTipo, amReferencia);
+				consumoHistoricoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, amReferencia);
 			}
 			// caso exista consumo historico e anormalidade de consumo
-			if (consumoHistoricoMesAnterior != null
-					&& !consumoHistoricoMesAnterior.isEmpty()) {
-				Object[] dadosConsumo = (Object[]) Util
-						.retonarObjetoDeColecao(consumoHistoricoMesAnterior);
+			if (consumoHistoricoMesAnterior != null && !consumoHistoricoMesAnterior.isEmpty()) {
+				Object[] dadosConsumo = (Object[]) Util.retonarObjetoDeColecao(consumoHistoricoMesAnterior);
 				if (dadosConsumo != null) {
 					Integer idAnormalidadeConsumo = null;
 					if (dadosConsumo[1] != null) {
@@ -66247,28 +66181,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// verifica se a anormalidade de consumo é Baixo Consumo,
 					// Alto Consumo ou Estou de Consumo
 					if (idAnormalidadeConsumo != null
-							&& (idAnormalidadeConsumo
-									.equals(ConsumoAnormalidade.BAIXO_CONSUMO)
-									|| idAnormalidadeConsumo
-											.equals(ConsumoAnormalidade.ALTO_CONSUMO) || idAnormalidadeConsumo
-										.equals(ConsumoAnormalidade.ESTOURO_CONSUMO))) {
+							&& (idAnormalidadeConsumo.equals(ConsumoAnormalidade.BAIXO_CONSUMO) || idAnormalidadeConsumo.equals(ConsumoAnormalidade.ALTO_CONSUMO) || idAnormalidadeConsumo
+									.equals(ConsumoAnormalidade.ESTOURO_CONSUMO))) {
 
 						// Obtém a quantidade de economias por categoria
-						Collection colecaoCategoria = getControladorImovel()
-								.obterQuantidadeEconomiasCategoria(imovel);
+						Collection colecaoCategoria = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
 
 						Integer idCategoriaComMaisEconomias = null;
 						int maiorQuantidadeEconomia = 0;
-						Iterator colecaoCategoriaIterator = colecaoCategoria
-								.iterator();
+						Iterator colecaoCategoriaIterator = colecaoCategoria.iterator();
 						while (colecaoCategoriaIterator.hasNext()) {
 
-							Categoria categoria = (Categoria) colecaoCategoriaIterator
-									.next();
+							Categoria categoria = (Categoria) colecaoCategoriaIterator.next();
 
-							int qtdEconomias = categoria
-									.getQuantidadeEconomiasCategoria()
-									.intValue();
+							int qtdEconomias = categoria.getQuantidadeEconomiasCategoria().intValue();
 
 							// Obtém a maior quantidade de economias e a vezes
 							// média de estouro
@@ -66279,29 +66205,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 						}
 
-						Integer idImovelPerfil = emitirContaHelper
-								.getIdImovelPerfil();
+						Integer idImovelPerfil = emitirContaHelper.getIdImovelPerfil();
 						// verifica se existe consumo anormalidade ação para a
 						// anormalidade de consumo, a principal categoria e o
 						// perfil
-						ConsumoAnormalidadeAcao consumoAnormalidadeAcao = this
-								.getControladorMicromedicao()
-								.verificaAcaoASerTomada(idAnormalidadeConsumo,
-										idCategoriaComMaisEconomias,
-										idImovelPerfil);
+						ConsumoAnormalidadeAcao consumoAnormalidadeAcao = this.getControladorMicromedicao().verificaAcaoASerTomada(idAnormalidadeConsumo, idCategoriaComMaisEconomias, idImovelPerfil);
 						if (consumoAnormalidadeAcao != null) {
 							String mensagemContaAnormalidade = "";
 
 							// Obtém o ano e mês de referência de faturamento
-							int anoMesReferenciaAnterior = Util
-									.subtrairData(amReferencia);
+							int anoMesReferenciaAnterior = Util.subtrairData(amReferencia);
 
 							// Pesquisa o consumo histórico
-							consumoHistoricoMesAnterior = repositorioMicromedicao
-									.pesquisarConsumoHistoricoConsumoAnormalidade(
-											imovel, ligacaoTipo,
-											anoMesReferenciaAnterior,
-											idAnormalidadeConsumo);
+							consumoHistoricoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, anoMesReferenciaAnterior, idAnormalidadeConsumo);
 
 							// 3.1.1. Caso não tenha ocorrido estouro,auto ou
 							// baixo consumo no mês anterior
@@ -66315,11 +66231,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// faturamento menos um mês),
 							// então verifica a ação a ser tomada no primeiro
 							// mês (LACS_IDMES1):
-							if (consumoHistoricoMesAnterior == null
-									|| consumoHistoricoMesAnterior.isEmpty()) {
+							if (consumoHistoricoMesAnterior == null || consumoHistoricoMesAnterior.isEmpty()) {
 
-								mensagemContaAnormalidade = consumoAnormalidadeAcao
-										.getDescricaoContaMensagemMes1();
+								mensagemContaAnormalidade = consumoAnormalidadeAcao.getDescricaoContaMensagemMes1();
 
 							} else {
 
@@ -66337,41 +66251,28 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// CSHI_AMFATURAMENTO igual ao ano /mês de
 								// faturamento menos dois meses)
 
-								Collection consumoHistoricoSegundoMesAnterior = repositorioMicromedicao
-										.pesquisarConsumoHistoricoConsumoAnormalidade(
-												imovel,
-												ligacaoTipo,
-												Util.subtrairData(anoMesReferenciaAnterior),
-												idAnormalidadeConsumo);
+								Collection consumoHistoricoSegundoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, Util.subtrairData(anoMesReferenciaAnterior),
+										idAnormalidadeConsumo);
 
-								if (consumoHistoricoSegundoMesAnterior == null
-										|| consumoHistoricoSegundoMesAnterior
-												.isEmpty()) {
-									mensagemContaAnormalidade = consumoAnormalidadeAcao
-											.getDescricaoContaMensagemMes2();
+								if (consumoHistoricoSegundoMesAnterior == null || consumoHistoricoSegundoMesAnterior.isEmpty()) {
+									mensagemContaAnormalidade = consumoAnormalidadeAcao.getDescricaoContaMensagemMes2();
 
 								} else {
-									mensagemContaAnormalidade = consumoAnormalidadeAcao
-											.getDescricaoContaMensagemMes3();
+									mensagemContaAnormalidade = consumoAnormalidadeAcao.getDescricaoContaMensagemMes3();
 								}
 
 							}
 
-							if (mensagemContaAnormalidade != null
-									&& !mensagemContaAnormalidade.equals("")) {
+							if (mensagemContaAnormalidade != null && !mensagemContaAnormalidade.equals("")) {
 								mensagemConta = new String[3];
-								int tamanho = mensagemContaAnormalidade
-										.length();
+								int tamanho = mensagemContaAnormalidade.length();
 								if (tamanho < 60) {
-									mensagemConta[0] = mensagemContaAnormalidade
-											.substring(0, tamanho);
+									mensagemConta[0] = mensagemContaAnormalidade.substring(0, tamanho);
 									mensagemConta[1] = "";
 									mensagemConta[2] = "";
 								} else {
-									mensagemConta[0] = mensagemContaAnormalidade
-											.substring(0, 60);
-									mensagemConta[1] = mensagemContaAnormalidade
-											.substring(60, tamanho);
+									mensagemConta[0] = mensagemContaAnormalidade.substring(0, 60);
+									mensagemConta[1] = mensagemContaAnormalidade.substring(60, tamanho);
 									mensagemConta[2] = "";
 								}
 

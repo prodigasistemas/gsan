@@ -1,9 +1,11 @@
 package gcom.cobranca.controladores;
 
+import gcom.cadastro.empresa.Empresa;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
 import gcom.cobranca.ComandoEmpresaCobrancaContaHelper;
 import gcom.cobranca.GerarExtensaoComandoContasCobrancaEmpresaHelper;
 import gcom.cobranca.RelatorioPagamentosContasCobrancaEmpresaHelper;
+import gcom.cobranca.cobrancaporresultado.ConsultarComandosContasCobrancaEmpresaHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 
@@ -50,4 +52,12 @@ public interface IControladorCobrancaPorResultado {
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterComandosParaIniciar(Integer[] comandos) throws ControladorException;
-}
+	
+	public Collection<ConsultarComandosContasCobrancaEmpresaHelper> pesquisarConsultarComandosContasCobrancaEmpresa(Integer idEmpresa, Date comandoInicial,
+			Date comandoFinal, int pagina) throws ControladorException;
+	
+	public void encerrarComandosCobrancaResultado(Integer idFuncionalidadeIniciada, Usuario usuarioLogado, List<ComandoEmpresaCobrancaConta> comandos,
+			Integer idCobrancaSituacao) throws ControladorException;
+	
+	public void encerrarComandosCobrancaResultadoPorEmpresa(Integer idFuncionalidadeIniciada, Usuario usuarioLogado, Collection<Empresa> empresas,
+			Integer idCobrancaSituacao) throws ControladorException;}

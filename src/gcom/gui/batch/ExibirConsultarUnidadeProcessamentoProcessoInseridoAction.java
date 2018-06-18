@@ -9,6 +9,7 @@ import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.localidade.UnidadeNegocio;
+import gcom.cobranca.ComandoEmpresaCobrancaConta;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
@@ -151,7 +152,11 @@ public class ExibirConsultarUnidadeProcessamentoProcessoInseridoAction extends
 						}else if (objetoUnidadeProcessamento instanceof Quadra) {
 							Quadra quadra = (Quadra) objetoUnidadeProcessamento;
 							colecaoIdUnidades.add(quadra.getId());
-						}					}
+						}else if (objetoUnidadeProcessamento instanceof ComandoEmpresaCobrancaConta) {
+							ComandoEmpresaCobrancaConta comando = (ComandoEmpresaCobrancaConta) objetoUnidadeProcessamento;
+							colecaoIdUnidades.add(comando.getId());
+						}
+					}
 
 					colecaoIdUnidades.removeAll(colecaoIdUnidadeFinalizadas);
 				}

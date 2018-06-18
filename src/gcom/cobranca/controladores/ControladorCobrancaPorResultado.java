@@ -2,6 +2,7 @@ package gcom.cobranca.controladores;
 
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
+import gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento;
 import gcom.batch.Processo;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.EnvioEmail;
@@ -53,6 +54,7 @@ import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaB
 import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaHelper;
 import gcom.cobranca.cobrancaporresultado.ArquivoTextoPagamentoContasCobrancaEmpresaHelper;
 import gcom.cobranca.cobrancaporresultado.ArquivoTextoParagentosCobancaEmpresaBuilder;
+import gcom.cobranca.cobrancaporresultado.ConsultarComandosContasCobrancaEmpresaHelper;
 import gcom.cobranca.cobrancaporresultado.NegociacaoCobrancaEmpresa;
 import gcom.cobranca.cobrancaporresultado.NegociacaoContaCobrancaEmpresa;
 import gcom.cobranca.parcelamento.Parcelamento;
@@ -819,6 +821,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			try {
 				SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
 				
+				atualizarSituacaoCobrancaImovel(idImovel);
 				atualizarImovelCobrancaSituacao(idImovel, new Date());
 				atualizarCobrancaSituacaoHistorico(idImovel, parametros.getAnoMesFaturamento(), "TODAS AS CONTAS FORAM PAGAS", new Date(), null);
 			} catch (ControladorException e) {
@@ -842,6 +845,22 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			getControladorUtil().atualizar(situacao);
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	private void atualizarSituacaoCobrancaImovel(Integer idImovel) throws ControladorException {
+		Filtro filtro = new FiltroImovel();
+		filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
+		
+		Collection<Imovel> colecao = getControladorUtil().pesquisar(filtro, Imovel.class.getName());
+		if (colecao != null && !colecao.isEmpty()) {
+			Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(colecao);
+			imovel.setCobrancaSituacao(null);
+			imovel.setCobrancaSituacaoTipo(null);
+			imovel.setUltimaAlteracao(new Date());
+			getControladorUtil().atualizar(imovel);
+		}
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	private void atualizarCobrancaSituacaoHistorico(Integer idImovel, Integer anoMesRetirada, String observacaoRetirada, Date dataFim, Usuario usuario) throws ControladorException {
@@ -1101,6 +1120,8 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				}
 				
 				if (pagamento.getValorDesconto() != null) {
+					//pagamentoEmpresa.setValorDesconto(this.calcularValorDesconto(pagamento, valorConta));
+					System.out.println("Pagamento: " + pagamento.getId() + ": desconto original: " + pagamento.getValorDesconto() + " | desconto proporcional: " + this.calcularValorDesconto(pagamento, valorConta));
 					pagamentoEmpresa.setValorDesconto(pagamento.getValorDesconto());
 				}
 				
@@ -1112,6 +1133,14 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			throw new EJBException(ex);
 		}
 		return pagamentosEmpresa;
+	}
+	
+	private BigDecimal calcularValorDesconto(Pagamento pagamento, BigDecimal valorConta) {
+		BigDecimal desconto = new BigDecimal(0);
+		
+		if (pagamento.getValorDesconto() != null)
+			desconto = (valorConta.multiply(pagamento.getValorDesconto())).divide(pagamento.getValorPagamento());
+		return desconto;
 	}
 	
 	private Short obterPagamentoTipoDoPagamento(DebitoTipo debitoTipo) {
@@ -1808,5 +1837,165 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		} catch (ControladorException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
+	}
+	
+	/**
+	 * [UC1167] Consultar Comandos de Cobrança por Empresa
+	 * 
+	 * Pesquisa os dados dos comandos
+	 * 
+	 * @author: Mariana Victor
+	 * @date: 04/05/2011
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Collection<ConsultarComandosContasCobrancaEmpresaHelper> pesquisarConsultarComandosContasCobrancaEmpresa(Integer idEmpresa,
+			Date cicloInicial, Date cicloFinal, int pagina) throws ControladorException {
+
+		Collection<ConsultarComandosContasCobrancaEmpresaHelper> colecaoConsultarComandosContasCobrancaEmpresaHelper = null;
+
+		try {
+
+			final int quantidadeRegistros = 10;
+
+			colecaoConsultarComandosContasCobrancaEmpresaHelper = (Collection) repositorio
+					.pesquisarDadosConsultarComandosContasCobrancaEmpresaResumido(idEmpresa, cicloInicial, cicloFinal, pagina,
+							quantidadeRegistros);
+
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+
+		return colecaoConsultarComandosContasCobrancaEmpresaHelper;
+	}
+	
+	public void encerrarComandosCobrancaResultadoPorEmpresa(Integer idFuncionalidadeIniciada, Usuario usuarioLogado,
+			Collection<Empresa> empresas, Integer idCobrancaSituacao) throws ControladorException {
+		
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+					UnidadeProcessamento.EMPRESA, ((Empresa) Util.retonarObjetoDeColecao(empresas)).getId());
+
+		try {
+			
+			logger.info("***************************************");
+			logger.info("ENCERRAR COMANDOS POR EMPRESA");
+			logger.info("***************************************");
+			
+			Iterator<Empresa> itEmpresas = empresas.iterator();
+			
+			while (itEmpresas.hasNext()) {
+				Empresa empresa = itEmpresas.next();
+				
+				List<ComandoEmpresaCobrancaConta> comandos = obterComandosVencidosPorEmpresa(empresa.getId());
+				
+				for (ComandoEmpresaCobrancaConta comando : comandos) {
+					encerrarComandoCobranca(idFuncionalidadeIniciada, usuarioLogado, idCobrancaSituacao, comando);
+				}
+			}
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			logger.info("******* FIM **********");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new EJBException(ex);
+		}
+	
+	}
+			
+	
+	public void encerrarComandosCobrancaResultado(Integer idFuncionalidadeIniciada, Usuario usuarioLogado,
+			List<ComandoEmpresaCobrancaConta> comandos, Integer idCobrancaSituacao) throws ControladorException {
+
+		int idUnidadeIniciada = 0;
+		
+		if (!comandos.isEmpty()) {
+			getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+					UnidadeProcessamento.ROTA, ((ComandoEmpresaCobrancaConta) Util.retonarObjetoDeColecao(comandos)).getId());
+		}
+
+		try {
+			
+			for (ComandoEmpresaCobrancaConta comando : comandos) {
+				idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+						UnidadeProcessamento.COMANDO_EMPRESA_COBRANCA_CONTA, comando.getId());
+				
+				encerrarComandoCobranca(idFuncionalidadeIniciada, usuarioLogado, idCobrancaSituacao, comando);
+			}
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			System.out.println("******* FIM **********");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new EJBException(ex);
+		}
+	}
+
+	private void encerrarComandoCobranca(Integer idFuncionalidadeIniciada, Usuario usuarioLogado, Integer idCobrancaSituacao, ComandoEmpresaCobrancaConta comando)
+			throws ControladorException, ErroRepositorioException {
+		
+		boolean flagFimPesquisa = false;
+		final int quantidadeImoveis = 1000;
+		int quantidadeInicio = 0;
+		
+		while (!flagFimPesquisa) {
+			Collection dadosEmpresaCobConta = this.repositorio.pesquisarImovelOrdemServicoParaEncerrarComando(quantidadeInicio, comando.getId());
+			
+			if (dadosEmpresaCobConta != null && !dadosEmpresaCobConta.isEmpty()) {
+				
+				Iterator iterDadosEmpresaCobConta = dadosEmpresaCobConta.iterator();
+				
+				if (dadosEmpresaCobConta.size() < quantidadeImoveis) {
+					flagFimPesquisa = true;
+				} else {
+					quantidadeInicio = quantidadeInicio + 1000;
+				}
+				
+				System.out.println("***************************************");
+				System.out.println("QUANTIDADE: " + dadosEmpresaCobConta.size());
+				System.out.println("***************************************");
+				
+				while (iterDadosEmpresaCobConta.hasNext()) {
+					Object[] dados = (Object[]) iterDadosEmpresaCobConta.next();
+					
+					if (dados != null) {
+						
+						if (dados[0] != null) {
+							Integer idImovel = (Integer) dados[0];
+							
+							this.getControladorImovel().retirarCobrancaImovelCobrancaPorEmpresa(idImovel, idCobrancaSituacao,  usuarioLogado);
+						}
+						
+						if (dados[1] != null) {
+							Integer idOrdemServico = (Integer) dados[1];
+							
+							Short idMotivoEncerramento = AtendimentoMotivoEncerramento.CANCELADO_POR_DERCURSO_DE_PRAZO;
+							
+							Date dataAtual = new Date();
+							
+							// encerrar a ordem de serviço, com o motivo correspodente a decurso de prazo
+							this.getControladorOrdemServico().encerrarOSSemExecucao(idOrdemServico, dataAtual, usuarioLogado,
+									idMotivoEncerramento.toString(), dataAtual, null, null, null, null, null, null);
+						}
+					}
+				}
+			} else {
+				flagFimPesquisa = true;
+			}
+		}
+		
+		this.repositorioCobranca.atualizarDataEncerramentoComando(comando.getId());
+		//return idUnidadeIniciada;
+	}
+	
+	public List<ComandoEmpresaCobrancaConta> obterComandosVencidosPorEmpresa(Integer idEmpresa) throws ControladorException {
+		List<ComandoEmpresaCobrancaConta> retorno = new ArrayList<ComandoEmpresaCobrancaConta>();
+
+		try {
+			retorno = repositorio.obterComandosVencidosPorEmpresa(idEmpresa);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		return retorno;
 	}
 }

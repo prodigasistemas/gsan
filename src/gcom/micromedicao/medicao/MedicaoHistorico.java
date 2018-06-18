@@ -600,4 +600,8 @@ public class MedicaoHistorico extends ObjetoTransacao {
 		return labels;		
 	}
 	
+	public boolean isAnalisado() {
+		return (INDICADOR_ANALISADO_SIM.equals(indicadorAnalisado) || INDICADOR_ANALISADO_ATUALIZADO.equals(indicadorAnalisado));
+	}
+	
 }

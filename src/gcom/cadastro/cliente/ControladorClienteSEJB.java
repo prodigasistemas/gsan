@@ -1151,6 +1151,20 @@ public class ControladorClienteSEJB extends ControladorComum {
 		return colecaoRetorno;
 
 	}
+	
+	public String obterEnderecoCorrespondencia(Integer idCliente) throws ControladorException {
+		StringBuilder enderecoFormatado = new StringBuilder();
+		String[] endereco = getControladorEndereco().pesquisarEnderecoClienteDividido(idCliente);
+		
+		enderecoFormatado.append(endereco[0]).append(", ") 						// 0 - Endereço (Tipo + Titulo + Logradouro)
+						 .append("n ").append(endereco[5]).append(", ") 		// 5 - numero
+						 .append("Bairro ").append(endereco[3]).append(", ")	// 3 - bairro
+						 .append("cidade ").append(endereco[1]) 				// 1 - municipio
+						 .append("-").append(endereco[2]).append(", ")			// 2 - unidade federeção
+						 .append("CEP ").append(endereco[4]).append(".");		// 4 - CEP
+
+		return enderecoFormatado.toString();
+	}
 
 	/**
 	 * Pesquisa o nome do cliente a partir do imóvel Autor: Sávio Luiz Data:
@@ -2527,6 +2541,14 @@ public class ControladorClienteSEJB extends ControladorComum {
 	public String obterNomeClienteConta(Integer idImovel) throws ControladorException {
 		try {
 			return repositorioCliente.obterNomeClienteConta(idImovel);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public Cliente obterUsuarioImovelPorData(Integer idImovel, Integer idClienteTipo, Date data) throws ControladorException{
+		try {
+			return repositorioCliente.obterUsuarioImovelPorData(idImovel, idClienteTipo, data);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}

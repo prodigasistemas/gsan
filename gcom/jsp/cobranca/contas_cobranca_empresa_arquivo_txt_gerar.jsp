@@ -39,10 +39,13 @@
 	function limparEmpresaTecla() {
 		var form = document.forms[0];
 		form.nomeEmpresa.value = "";	
-		form.action = 'exibirGerarArquivoTextoContasCobrancaEmpresaAction.do?limpar=sim';
-    	submeterFormPadrao(form);
 	}
 	
+	function limparComandos() {
+		var form = document.forms[0];
+		form.action = 'exibirGerarArquivoTextoContasCobrancaEmpresaAction.do?limpar=sim';
+		submeterFormPadrao(form);
+	}
 	
 	
 	function pesquisarEmpresa() {
@@ -196,7 +199,8 @@
 					<td width="20%"><strong>Empresa:<font color="#FF0000">*</font></strong></td>
 					<td><html:text maxlength="9" property="idEmpresa" size="9"
 						tabindex="14" 
-						onkeypress="validaEnterComMensagem(event, 'exibirGerarArquivoTextoContasCobrancaEmpresaAction.do', 'idEmpresa', 'Empresa');" />
+						onkeypress="validaEnterComMensagem(event, 'exibirGerarArquivoTextoContasCobrancaEmpresaAction.do', 'idEmpresa', 'Empresa');limparEmpresaTecla();" 
+						onchange="limparComandos();"/>
 					<a href="javascript:pesquisarEmpresa();"><img
 						src="<bean:message key='caminho.imagens'/>pesquisa.gif" width="23"
 						height="21" alt="Pesquisar" border="0"></a> <logic:present

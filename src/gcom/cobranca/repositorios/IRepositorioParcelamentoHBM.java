@@ -13,4 +13,8 @@ public interface IRepositorioParcelamentoHBM {
 	public CancelarParcelamentoHelper pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ErroRepositorioException;
 
 	public DebitoACobrar pesquisarDebitoACobrar(Integer idParcelamento, Integer idDebitoTipo) throws ErroRepositorioException;
+
+	public List<Object[]> pesquisarDebitoACobrarCurtoELongoPrazo(Integer idParcelamento) throws ErroRepositorioException;
+
+	public boolean isParcelamentoEmDebito(Integer idParcelamento) throws ErroRepositorioException;
 }

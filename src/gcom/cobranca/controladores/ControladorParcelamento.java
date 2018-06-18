@@ -3,6 +3,8 @@ package gcom.cobranca.controladores;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaForma;
+import gcom.cobranca.IRepositorioCobranca;
+import gcom.cobranca.RepositorioCobrancaHBM;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
 import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.parcelamento.Parcelamento;
@@ -46,15 +48,18 @@ public class ControladorParcelamento extends ControladorComum {
 	private SistemaParametro sistemaParametro;
 
 	protected IRepositorioParcelamentoHBM repositorio;
+	protected IRepositorioCobranca repositorioCobranca;
 
 	public void ejbCreate() throws CreateException {
 		repositorio = RepositorioParcelamentoHBM.getInstancia();
+		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
 	}
 	
 	public CancelarParcelamentoHelper pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ControladorException {
 		try {
 			return repositorio.pesquisarParcelamentoParaCancelar(idParcelamento);
 		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
@@ -109,11 +114,23 @@ public class ControladorParcelamento extends ControladorComum {
 			Collection<DebitoACobrar> colecao = super.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.getName());
 
 			DebitoACobrar debito = (DebitoACobrar) Util.retonarObjetoDeColecao(colecao);
-			debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
-			debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
-			debito.setUltimaAlteracao(new Date());
 			
-			getControladorUtil().atualizar(debito);
+			if (debito != null) {
+				Integer anoMesFaturamento = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento();
+				
+				if (debito.getAnoMesReferenciaContabil() >= anoMesFaturamento) {
+					debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
+					debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				} else {
+					debito.setDebitoCreditoSituacaoAnterior(null);
+					debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				}
+				
+				debito.setAnoMesReferenciaContabil(Util.getAnoMesComoInteger(new Date()));
+				debito.setUltimaAlteracao(new Date());
+				
+				getControladorUtil().atualizar(debito);
+			}
 		} catch (ControladorException e) {
 			e.printStackTrace();
 		}
@@ -125,10 +142,19 @@ public class ControladorParcelamento extends ControladorComum {
 			Filtro filtro = new FiltroCreditoARealizar();
 			filtro.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.PARCELAMENTO_ID, idParcelamento));
 			Collection<CreditoARealizar> colecao = super.getControladorUtil().pesquisar(filtro, CreditoARealizar.class.getName());
-
+			Integer anoMesFaturamento = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento();
+			
 			for (CreditoARealizar credito : colecao) {
-				credito.setDebitoCreditoSituacaoAnterior(credito.getDebitoCreditoSituacaoAtual());
-				credito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				
+				if (credito.getAnoMesReferenciaContabil() >= anoMesFaturamento) {
+					credito.setDebitoCreditoSituacaoAnterior(credito.getDebitoCreditoSituacaoAtual());
+					credito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				} else {
+					credito.setDebitoCreditoSituacaoAnterior(null);
+					credito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				}
+				
+				credito.setAnoMesReferenciaContabil(Util.getAnoMesComoInteger(new Date()));
 				credito.setUltimaAlteracao(new Date());
 
 				getControladorUtil().atualizar(credito);
@@ -189,9 +215,11 @@ public class ControladorParcelamento extends ControladorComum {
 	private void gerarDebitos(CancelarParcelamentoHelper helper, Conta conta, Usuario usuario) throws ControladorException {
 		atualizarDebitoACobrar(helper.getSaldoDevedorContas(), helper.getParcelamento().getId(), conta, DebitoTipo.PARCELAMENTO_CONTAS);
 		atualizarDebitoACobrar(helper.getSaldoDevedorAcrescimos(), helper.getParcelamento().getId(), conta, DebitoTipo.PARCELAMENTO_ACRESCIMOS_IMPONTUALIDADE);
+		atualizarDebitoACobrar(helper.getSaldoDevedorGuias(), helper.getParcelamento().getId(), conta, DebitoTipo.PARCELAMENTO_GUIAS_PAGAMENTO);
 		
 		inserirDebitoACobrar(helper.getTotalCancelamentoDescontos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_ACRESCIMOS, usuario, false);
 		inserirDebitoACobrar(helper.getTotalCancelamentoDescontoFaixa(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_FAIXA, usuario, false);
+		inserirDebitoACobrarCurtoELongoPrazo(helper, conta, usuario);
 		gerarNovosAcrescimos(helper, conta, usuario);
 	}
 
@@ -199,11 +227,13 @@ public class ControladorParcelamento extends ControladorComum {
 	private void atualizarDebitoACobrar(BigDecimal valor, Integer idParcelamento, Conta conta, Integer idDebitoTipo) throws ControladorException {
 		try {
 			DebitoACobrar debitoACobrar = repositorio.pesquisarDebitoACobrar(idParcelamento, idDebitoTipo);
-			inserirDebitoCobrado(conta, debitoACobrar, valor);
-			
-			debitoACobrar.setNumeroPrestacaoCobradas(debitoACobrar.getNumeroPrestacaoDebito());
-			debitoACobrar.setUltimaAlteracao(new Date());
-			getControladorUtil().atualizar(debitoACobrar);
+			if (debitoACobrar != null) {
+				inserirDebitoCobrado(conta, debitoACobrar, valor);
+				
+				debitoACobrar.setNumeroPrestacaoCobradas(debitoACobrar.getNumeroPrestacaoDebito());
+				debitoACobrar.setUltimaAlteracao(new Date());
+				getControladorUtil().atualizar(debitoACobrar);
+			}
 		} catch (Exception e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("Erro ao atualizar Debito a Cobrar", e);
@@ -269,7 +299,7 @@ public class ControladorParcelamento extends ControladorComum {
 					helper.getParcelamento().getAnoMesReferenciaFaturamento(),
 					helper.getParcelamento().getParcelamento(), 
 					new Date(), 
-					helper.getSaldoDevedorTotal(), 
+					conta.getValorDebitos(), 
 					BigDecimal.ZERO, 
 					conta.getIndicadorCobrancaMulta(), 
 					sistemaParametro.getAnoMesArrecadacao().toString(),
@@ -307,5 +337,31 @@ public class ControladorParcelamento extends ControladorComum {
 		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoTipo.ID, tipoDebito));
 		Collection<DebitoTipo> colecao = this.getControladorUtil().pesquisar(filtro, DebitoTipo.class.getName());
 		return (DebitoTipo) Util.retonarObjetoDeColecao(colecao);
+	}
+	
+	public void inserirDebitoACobrarCurtoELongoPrazo(CancelarParcelamentoHelper helper, Conta conta, Usuario usuario)  throws ControladorException {
+		try {
+			List<Object[]> valoresCurtoELongoPrazo = repositorio.pesquisarDebitoACobrarCurtoELongoPrazo(helper.getParcelamento().getId());
+			
+			for (Object[] valores : valoresCurtoELongoPrazo) {
+				BigDecimal valorRestante = (BigDecimal) valores[1];
+				valorRestante.setScale(2, BigDecimal.ROUND_DOWN);
+				
+				atualizarDebitoACobrar(valorRestante, helper.getParcelamento().getId(), conta, ((Integer) valores[0]));
+				atualizarValorDebitosConta(conta, valorRestante);
+			}
+		} catch (Exception e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("Erro ao inserir novo Debito a Cobrar", e);
+		}
+	}
+	
+	public boolean isParcelamentoEmDebito(Integer idParcelamento) throws ControladorException {
+		try {
+			return repositorio.isParcelamentoEmDebito(idParcelamento);
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
 	}
 }

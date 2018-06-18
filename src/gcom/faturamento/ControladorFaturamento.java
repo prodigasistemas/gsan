@@ -148,7 +148,6 @@ import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.leitura.FiltroLeituraAnormalidade;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.leitura.LeituraSituacao;
-import gcom.micromedicao.leitura.LeituraTipo;
 import gcom.micromedicao.medicao.FiltroMedicaoHistorico;
 import gcom.micromedicao.medicao.FiltroMedicaoTipo;
 import gcom.micromedicao.medicao.MedicaoHistorico;
@@ -6161,119 +6160,237 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	private BigDecimal atualizarCreditoResidual(Imovel imovel, Integer idConta,
 			Integer anoMesFaturamento, BigDecimal valorTotalContaSemCredito)
 			throws ControladorException {
-		// Acumula o valor do crédito
 		BigDecimal valorTotalCreditos = BigDecimal.ZERO;
 		
-		try{
+		try {
+			Collection colecaoCreditoRealizado = repositorioFaturamento.pesquisarCreditosRealizados(idConta);
+		//	System.out.println("Atualizar valor residual. Id imóvel: " + imovel != null ? imovel.getId():"");
 			
-		Collection colecaoCreditoRealizado = repositorioFaturamento.pesquisarCreditosRealizados(idConta);
-		
-	//	System.out.println("Atualizar valor residual. Id imóvel: " + imovel != null ? imovel.getId():"");
-		
-		/**
-		 * Autor: Adriana Muniz
-		 * Data: 20/07/2011
-		 * 
-		 * Alteração para atender créditos com uma prestação
-		 * */
-		List<Integer> idCreditosARealizarVerificados = new ArrayList<Integer>();
-		
-		/*
-		 * Caso a coleção de creditos a realizar não esteja vazia 
-		 */
-		if (colecaoCreditoRealizado != null && !colecaoCreditoRealizado.isEmpty()) {
-
-			Iterator iteratorColecaoCreditosRealizados = colecaoCreditoRealizado
-			.iterator();
+			/**
+			 * Autor: Adriana Muniz
+			 * Data: 20/07/2011
+			 * 
+			 * Alteração para atender créditos com uma prestação
+			 * */
+			List<Integer> idCreditosARealizarVerificados = new ArrayList<Integer>();
 			
-			boolean deletaCreditoRealizado = false;
-			
-			CreditoRealizado creditoRealizado = null;
-			
-			BigDecimal valorTotalACobrar = valorTotalContaSemCredito;
-			
-			while (iteratorColecaoCreditosRealizados.hasNext()){
-				creditoRealizado = (CreditoRealizado) iteratorColecaoCreditosRealizados
-				.next();
+			if (colecaoCreditoRealizado != null && !colecaoCreditoRealizado.isEmpty()) {
+				Iterator iteratorColecaoCreditosRealizados = colecaoCreditoRealizado.iterator();
+				boolean deletaCreditoRealizado = false;
+				CreditoRealizado creditoRealizado = null;
+				BigDecimal valorTotalACobrar = valorTotalContaSemCredito;
 				
-				BigDecimal valorCreditoRealizado = creditoRealizado.getValorCredito().
-				                  multiply(new BigDecimal(creditoRealizado.getNumeroPrestacao()+""));
-				
-				// Pesquisa os créditos a realizar do imóvel
-				Collection colecaoCreditosARealizar = this
-						.obterCreditoARealizarDadosCreditoRealizadoAntigo(imovel.getId(),
-						creditoRealizado.getCreditoTipo().getId(),
-						valorCreditoRealizado,
-						DebitoCreditoSituacao.NORMAL, anoMesFaturamento, 
-						creditoRealizado.getAnoMesReferenciaCredito(), 
-						creditoRealizado.getAnoMesCobrancaCredito());
-				
-				
-				/*
-				 * Caso a coleção de creditos a realizar não esteja vazia 
-				 */
-				if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
+				while (iteratorColecaoCreditosRealizados.hasNext()){
+					creditoRealizado = (CreditoRealizado) iteratorColecaoCreditosRealizados.next();
 					
-					Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar
-					.iterator();
-
-					CreditoARealizar creditoARealizar = null;
-
-					/*
-					 * Para cada crédito a realizar selecionado e até que o valor
-					 * total a cobrar seja igual a zero.
-					 * 
-					 * LAÇO PARA GERAR OS CREDITOS REALIZADOS
-					 */
-						while (iteratorColecaoCreditosARealizar.hasNext()) {
-
-							creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar
-									.next();
-
-							if (!idCreditosARealizarVerificados.contains(creditoARealizar.getId())) {
-								idCreditosARealizarVerificados.add(creditoARealizar.getId());
-
-								if (!deletaCreditoRealizado || idCreditosARealizarVerificados.contains(creditoARealizar.getId())) {
-
-									BigDecimal valorCorrespondenteParcelaMes = ConstantesSistema.VALOR_ZERO;
-									BigDecimal valorCredito = ConstantesSistema.VALOR_ZERO;
-									BigDecimal valorConta = ConstantesSistema.VALOR_ZERO;
-
-									/**
-									 * 
-									 * Data: 01/07/2011
-									 * autor: Adriana Muniz
-									 * 
-									 * Alteração para atender casos de créditos com apenas uma prestação e
-									 * que são consumidos conforme o valor da conta a ate ser concedido totalmente
-									 * */
-
-									if (creditoARealizar.getNumeroPrestacaoCredito() == 1) {
-										BigDecimal valorResidual = ConstantesSistema.VALOR_ZERO;
-										
-										if (valorTotalCreditos.compareTo(valorTotalContaSemCredito) == -1) {
+					Collection colecaoCreditosARealizar = this
+							.obterCreditoARealizarDadosCreditoRealizadoAntigo(imovel.getId(),
+							DebitoCreditoSituacao.NORMAL, anoMesFaturamento, 
+							creditoRealizado);
+	
+					if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
+						
+						Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar.iterator();
+						CreditoARealizar creditoARealizar = null;
+	
+							while (iteratorColecaoCreditosARealizar.hasNext()) {
+								creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
+	
+								if (!idCreditosARealizarVerificados.contains(creditoARealizar.getId())) {
+									idCreditosARealizarVerificados.add(creditoARealizar.getId());
+	
+									if (!deletaCreditoRealizado || idCreditosARealizarVerificados.contains(creditoARealizar.getId())) {
+										BigDecimal valorCorrespondenteParcelaMes = ConstantesSistema.VALOR_ZERO;
+										BigDecimal valorCredito = ConstantesSistema.VALOR_ZERO;
+										BigDecimal valorConta = ConstantesSistema.VALOR_ZERO;
+	
+										/**
+										 * 
+										 * Data: 01/07/2011
+										 * autor: Adriana Muniz
+										 * 
+										 * Alteração para atender casos de créditos com apenas uma prestação e
+										 * que são consumidos conforme o valor da conta a ate ser concedido totalmente
+										 * */
+										if (creditoARealizar.getNumeroPrestacaoCredito() == 1) {
+											BigDecimal valorResidual = ConstantesSistema.VALOR_ZERO;
 											
-											if (creditoARealizar.getValorResidualMesAnterior().compareTo(ConstantesSistema.VALOR_ZERO) == 0) {
-												valorConta = valorTotalACobrar;
-												valorTotalACobrar = valorTotalACobrar.subtract(creditoARealizar.getValorCredito());
-												valorResidual = creditoARealizar.getValorCredito();
+											if (valorTotalCreditos.compareTo(valorTotalContaSemCredito) == -1) {
+												
+												if (creditoARealizar.getValorResidualMesAnterior().compareTo(ConstantesSistema.VALOR_ZERO) == 0) {
+													valorConta = valorTotalACobrar;
+													valorTotalACobrar = valorTotalACobrar.subtract(creditoARealizar.getValorCredito());
+													valorResidual = creditoARealizar.getValorCredito();
+												} else {
+													valorConta = valorTotalACobrar;
+													valorTotalACobrar = valorTotalACobrar.subtract(creditoARealizar.getValorResidualMesAnterior());
+													valorResidual = creditoARealizar.getValorResidualMesAnterior();
+												}
+												BigDecimal valorCreditoConcedido = ConstantesSistema.VALOR_ZERO;
+												// valorCredito = creditoARealizar.getValorCredito();
+	
+												if (valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
+	
+													creditoARealizar.setValorResidualMesAnterior(valorTotalACobrar
+																	.multiply(new BigDecimal(
+																			"-1")));
+	
+													valorCreditoConcedido = valorResidual.subtract(creditoARealizar
+																	.getValorResidualMesAnterior());
+	
+													/**
+													 * @author Adriana Muniz e Wellington Rocha
+													 * @date 30/08/2012
+													 * Atualização da data da ultima alteração do credito realizado
+													 * e atualização do credito realizado categoria
+													 */
+													// atualiza o credito realizado
+													creditoRealizado.setValorCredito(valorCreditoConcedido);
+													creditoRealizado.setUltimaAlteracao(new Date());
+													getControladorUtil().atualizar(creditoRealizado);
+													
+													//atualiza o credito realizado categoria
+													this.atualizarCreditoRealizadoCategoria(creditoARealizar,creditoRealizado);
+	
+													// atualiza o credito a realizar
+													repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
+	
+													// Acumula o valor do crédito
+													valorTotalCreditos = valorTotalCreditos.add(valorCreditoConcedido);
+	
+													if (valorTotalCreditos.compareTo(valorTotalContaSemCredito) == 0) {
+														valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+											
+													}
+												} else {
+													BigDecimal valorConcedido = valorConta.subtract(valorTotalACobrar);
+													
+													if(valorConcedido.compareTo(ConstantesSistema.VALOR_ZERO) == -1)
+														valorConcedido = valorConcedido.multiply(new BigDecimal("-1"));
+	
+													if(valorConcedido.compareTo(valorConta) == -1)
+														creditoARealizar.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+													else {
+														if(valorResidual.compareTo(ConstantesSistema.VALOR_ZERO) == 0)
+															creditoARealizar.setValorResidualMesAnterior(
+																	creditoARealizar.getValorCredito().subtract(valorConcedido));
+														else
+															creditoARealizar.setValorResidualMesAnterior(
+																	valorResidual.subtract(valorConcedido));
+																
+													}
+													
+													logger.info(" 1 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
+															+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+															+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+															+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+													
+													repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
+													// Acumula o valor do crédito
+													valorTotalCreditos = valorTotalCreditos.add(valorConcedido);
+													
+													/**
+													 * @author Adriana Muniz e Wellington Rocha
+													 * @date 30/08/2012
+													 * Atualização da data da ultima alteração do credito realizado
+													 * e atualização do credito realizado categoria
+													 */
+													// atualiza o credito realizado
+													creditoRealizado.setValorCredito(valorConcedido);
+													creditoRealizado.setUltimaAlteracao(new Date());
+													getControladorUtil().atualizar(creditoRealizado);
+													
+													//atualiza o credito realizado categoria
+													this.atualizarCreditoRealizadoCategoria(creditoARealizar,creditoRealizado);
+													
+													//Acrescentado no dia 26/08/2011
+													if (valorTotalCreditos.compareTo(valorTotalContaSemCredito) == 0) {
+														valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+														
+													}
+												}
+	
 											} else {
-												valorConta = valorTotalACobrar;
-												valorTotalACobrar = valorTotalACobrar.subtract(creditoARealizar.getValorResidualMesAnterior());
-												valorResidual = creditoARealizar.getValorResidualMesAnterior();
+												creditoARealizar.setValorResidualMesAnterior(creditoARealizar.getValorCredito());
+												logger.info(" 2 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
+														+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+														+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+														+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+												
+												// atualiza o credito a realizar
+												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 											}
-											BigDecimal valorCreditoConcedido = ConstantesSistema.VALOR_ZERO;
-											// valorCredito = creditoARealizar.getValorCredito();
-
-											if (valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
-
-												creditoARealizar.setValorResidualMesAnterior(valorTotalACobrar
+										} else {
+	
+											int numeroPrestacoesRealizadas = creditoARealizar.getNumeroPrestacaoRealizada()
+													.intValue() - 1;
+	
+											Short numeroParcelaBonus = 0;
+											if (creditoARealizar.getNumeroParcelaBonus() != null) {
+												numeroParcelaBonus = creditoARealizar.getNumeroParcelaBonus();
+											}
+	
+											if (numeroPrestacoesRealizadas < (creditoARealizar.getNumeroPrestacaoCredito()
+													.intValue() - numeroParcelaBonus.intValue())) {
+	
+												valorCorrespondenteParcelaMes = creditoARealizar.getValorCredito()
+														.divide(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito()),
+																2,BigDecimal.ROUND_HALF_UP);
+	
+												if (numeroPrestacoesRealizadas == ((creditoARealizar
+														.getNumeroPrestacaoCredito()
+														.intValue() - numeroParcelaBonus
+														.intValue()) - 1)) {
+	
+	
+													BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes
+															.multiply(
+																	new BigDecimal(
+																			creditoARealizar
+																					.getNumeroPrestacaoCredito()))
+															.setScale(2);
+	
+													BigDecimal parte11 = valorCorrespondenteParcelaMes
+															.add(creditoARealizar
+																	.getValorCredito());
+	
+													BigDecimal parte22 = parte11
+															.subtract(valorMesVezesPrestacaoCredito);
+	
+													valorCorrespondenteParcelaMes = parte22;
+												}
+	
+											}
+	
+											valorCredito = valorCorrespondenteParcelaMes
+													.add(creditoARealizar
+															.getValorResidualMesAnterior());
+	
+											valorTotalACobrar = valorTotalACobrar
+													.subtract(valorCredito);
+	
+											if (valorTotalACobrar
+													.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
+	
+												creditoARealizar
+														.setValorResidualMesAnterior(valorTotalACobrar
 																.multiply(new BigDecimal(
 																		"-1")));
-
-												valorCreditoConcedido = valorResidual.subtract(creditoARealizar
+	
+												valorCredito = valorCredito
+														.subtract(creditoARealizar
 																.getValorResidualMesAnterior());
-
+	
+												valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+											
+												logger.info(" 3 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "SEM IMÓVEL...") 
+														+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+														+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+														+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+												
+												// atualiza o credito a realizar
+												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
+												
 												/**
 												 * @author Adriana Muniz e Wellington Rocha
 												 * @date 30/08/2012
@@ -6281,233 +6398,76 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												 * e atualização do credito realizado categoria
 												 */
 												// atualiza o credito realizado
-												creditoRealizado.setValorCredito(valorCreditoConcedido);
+												creditoRealizado.setValorCredito(valorCredito);
 												creditoRealizado.setUltimaAlteracao(new Date());
 												getControladorUtil().atualizar(creditoRealizado);
 												
 												//atualiza o credito realizado categoria
 												this.atualizarCreditoRealizadoCategoria(creditoARealizar,creditoRealizado);
-
-												// atualiza o credito a realizar
-												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
-
-												// Acumula o valor do crédito
-												valorTotalCreditos = valorTotalCreditos.add(valorCreditoConcedido);
-
-												if (valorTotalCreditos.compareTo(valorTotalContaSemCredito) == 0) {
-													valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
-										
-												}
+												
 											} else {
-												BigDecimal valorConcedido = valorConta.subtract(valorTotalACobrar);
+												creditoARealizar
+														.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
 												
-												if(valorConcedido.compareTo(ConstantesSistema.VALOR_ZERO) == -1)
-													valorConcedido = valorConcedido.multiply(new BigDecimal("-1"));
-
-												if(valorConcedido.compareTo(valorConta) == -1)
-													creditoARealizar.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
-												else {
-													if(valorResidual.compareTo(ConstantesSistema.VALOR_ZERO) == 0)
-														creditoARealizar.setValorResidualMesAnterior(
-																creditoARealizar.getValorCredito().subtract(valorConcedido));
-													else
-														creditoARealizar.setValorResidualMesAnterior(
-																valorResidual.subtract(valorConcedido));
-															
-												}
-												
-												logger.info(" 1 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
+												logger.info(" 4 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
 														+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
 														+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
 														+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
 												
 												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
-												// Acumula o valor do crédito
-												valorTotalCreditos = valorTotalCreditos.add(valorConcedido);
-												
-												/**
-												 * @author Adriana Muniz e Wellington Rocha
-												 * @date 30/08/2012
-												 * Atualização da data da ultima alteração do credito realizado
-												 * e atualização do credito realizado categoria
-												 */
-												// atualiza o credito realizado
-												creditoRealizado.setValorCredito(valorConcedido);
-												creditoRealizado.setUltimaAlteracao(new Date());
-												getControladorUtil().atualizar(creditoRealizado);
-												
-												//atualiza o credito realizado categoria
-												this.atualizarCreditoRealizadoCategoria(creditoARealizar,creditoRealizado);
-												
-												//Acrescentado no dia 26/08/2011
-												if (valorTotalCreditos.compareTo(valorTotalContaSemCredito) == 0) {
-													valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
-													
-												}
 											}
-
-										} else {
-											creditoARealizar.setValorResidualMesAnterior(creditoARealizar.getValorCredito());
-											logger.info(" 2 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
-													+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
-													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
-													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
-											
-											// atualiza o credito a realizar
-											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
+											valorTotalCreditos = valorTotalCreditos.add(valorCredito);
 										}
+	
 									} else {
-
-										int numeroPrestacoesRealizadas = creditoARealizar.getNumeroPrestacaoRealizada()
-												.intValue() - 1;
-
-										Short numeroParcelaBonus = 0;
-										if (creditoARealizar.getNumeroParcelaBonus() != null) {
-											numeroParcelaBonus = creditoARealizar.getNumeroParcelaBonus();
+										// atualiza o credito a realizar
+	
+										/**
+										 * 
+										 * Para não subtrair a prestação do crédito, caso o credito seja apenas de uma parcela
+										 * */
+										if (creditoARealizar.getNumeroPrestacaoCredito() != 1) {
+										// Atualiza o nº de prestações realizadas
+										creditoARealizar
+												.setNumeroPrestacaoRealizada(new Short(
+														(creditoARealizar
+																.getNumeroPrestacaoRealizada()
+																.intValue() - 1)
+																+ ""));
 										}
-
-										if (numeroPrestacoesRealizadas < (creditoARealizar.getNumeroPrestacaoCredito()
-												.intValue() - numeroParcelaBonus.intValue())) {
-
-											valorCorrespondenteParcelaMes = creditoARealizar.getValorCredito()
-													.divide(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito()),
-															2,BigDecimal.ROUND_HALF_UP);
-
-											if (numeroPrestacoesRealizadas == ((creditoARealizar
-													.getNumeroPrestacaoCredito()
-													.intValue() - numeroParcelaBonus
-													.intValue()) - 1)) {
-
-
-												BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes
-														.multiply(
-																new BigDecimal(
-																		creditoARealizar
-																				.getNumeroPrestacaoCredito()))
-														.setScale(2);
-
-												BigDecimal parte11 = valorCorrespondenteParcelaMes
-														.add(creditoARealizar
-																.getValorCredito());
-
-												BigDecimal parte22 = parte11
-														.subtract(valorMesVezesPrestacaoCredito);
-
-												valorCorrespondenteParcelaMes = parte22;
-											}
-
-										}
-
-										valorCredito = valorCorrespondenteParcelaMes
-												.add(creditoARealizar
-														.getValorResidualMesAnterior());
-
-										valorTotalACobrar = valorTotalACobrar
-												.subtract(valorCredito);
-
-										if (valorTotalACobrar
-												.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
-
-											creditoARealizar
-													.setValorResidualMesAnterior(valorTotalACobrar
-															.multiply(new BigDecimal(
-																	"-1")));
-
-											valorCredito = valorCredito
-													.subtract(creditoARealizar
-															.getValorResidualMesAnterior());
-
-											valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+										// anoMes da prestação será o anaMes de
+										// referência da conta
+										creditoARealizar
+												.setAnoMesReferenciaPrestacao(null);
 										
-											logger.info(" 3 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "SEM IMÓVEL...") 
-													+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
-													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
-													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
-											
-											// atualiza o credito a realizar
-											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
-											
-											/**
-											 * @author Adriana Muniz e Wellington Rocha
-											 * @date 30/08/2012
-											 * Atualização da data da ultima alteração do credito realizado
-											 * e atualização do credito realizado categoria
-											 */
-											// atualiza o credito realizado
-											creditoRealizado.setValorCredito(valorCredito);
-											creditoRealizado.setUltimaAlteracao(new Date());
-											getControladorUtil().atualizar(creditoRealizado);
-											
-											//atualiza o credito realizado categoria
-											this.atualizarCreditoRealizadoCategoria(creditoARealizar,creditoRealizado);
-											
-										} else {
-											creditoARealizar
-													.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
-											
-											logger.info(" 4 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
-													+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
-													+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
-													+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
-											
-											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
-										}
-
-										// Acumula o valor do crédito
-										valorTotalCreditos = valorTotalCreditos
-												.add(valorCredito);
-									
+										logger.info(" 5 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
+												+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
+												+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
+												+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
+										
+										repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 									}
-
-								} else {
-									// atualiza o credito a realizar
-
-									/**
-									 * 
-									 * Para não subtrair a prestação do crédito, caso o credito seja apenas de uma parcela
-									 * */
-									if (creditoARealizar.getNumeroPrestacaoCredito() != 1) {
-									// Atualiza o nº de prestações realizadas
-									creditoARealizar
-											.setNumeroPrestacaoRealizada(new Short(
-													(creditoARealizar
-															.getNumeroPrestacaoRealizada()
-															.intValue() - 1)
-															+ ""));
-									}
-									// anoMes da prestação será o anaMes de
-									// referência da conta
-									creditoARealizar
-											.setAnoMesReferenciaPrestacao(null);
 									
-									logger.info(" 5 - Credito a Realizar: Imovel (atualizarCreditoResidual): " + (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL") 
-											+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
-											+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
-											+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
-									
-									repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
-								}
+								}// fim laço que verifica se o credito a realizar já foi analisado
 								
-							}// fim laço que verifica se o credito a realizar já foi analisado
+							}// fim laço de credito a realizar
+					}
 							
-						}// fim laço de credito a realizar
-				}
-						
-				if (deletaCreditoRealizado) {
-				 // deleta o credito realizado categoria
-				 repositorioFaturamento.deletarCreditoRealizadoCategoria(creditoRealizado.getId());
-
-				 // deleta o credito realizado
-				 getControladorBatch().removerObjetoParaBatchSemTransacao(creditoRealizado);
-				}
-
-				if (valorTotalACobrar
-						.compareTo(ConstantesSistema.VALOR_ZERO) == 0) {
-					deletaCreditoRealizado = true;
+					if (deletaCreditoRealizado) {
+					 // deleta o credito realizado categoria
+					 repositorioFaturamento.deletarCreditoRealizadoCategoria(creditoRealizado.getId());
+	
+					 // deleta o credito realizado
+					 getControladorBatch().removerObjetoParaBatchSemTransacao(creditoRealizado);
+					}
+	
+					if (valorTotalACobrar
+							.compareTo(ConstantesSistema.VALOR_ZERO) == 0) {
+						deletaCreditoRealizado = true;
+					}
 				}
 			}
-		}
-		
+			
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
@@ -6516,33 +6476,29 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return valorTotalCreditos;
 	}
 	
-	public Collection obterCreditoARealizarDadosCreditoRealizadoAntigo(Integer imovelId,
-            Integer idCreditoTipo, BigDecimal valorCredito,Integer debitoCreditoSituacaoAtualId,
-            Integer anoMesFaturamento, Integer amReferenciaCredito, Integer amCobrancaCredito)
-            throws ControladorException {
+	public Collection obterCreditoARealizarDadosCreditoRealizadoAntigo(Integer imovelId, Integer debitoCreditoSituacaoAtualId, Integer anoMesFaturamento,
+			CreditoRealizado creditoRealizado) throws ControladorException {
 
-        // lista de credito a realizar
         Collection creditosARealizar = null;
         Collection colecaoCreditosARealizar = null;
-        // Pesquisa créditos a cobrar
         try {
+			BigDecimal valorCredito = creditoRealizado.getValorCredito().multiply(new BigDecimal(String.valueOf(creditoRealizado.getNumeroPrestacao())));
+        	Integer idCreditoARealizar = creditoRealizado.obterIdCreditoARealizar();
             colecaoCreditosARealizar = repositorioFaturamento
                     .pesquisarCreditoARealizarPeloCreditoRealizadoAntigo(imovelId,
-                            idCreditoTipo,valorCredito,debitoCreditoSituacaoAtualId,
-                            anoMesFaturamento);
+                            creditoRealizado.getCreditoTipo().getId(),valorCredito,debitoCreditoSituacaoAtualId,
+                            anoMesFaturamento, idCreditoARealizar);
 
         } catch (ErroRepositorioException ex) {
             sessionContext.setRollbackOnly();
             throw new ControladorException("erro.sistema", ex);
         }
 
-        // Verifica se existe débitos a realizar
         if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
-
             creditosARealizar = new ArrayList();
-
             Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar.iterator();
             CreditoARealizar creditoARealizar = null;
+            
             while (iteratorColecaoCreditosARealizar.hasNext()) {
 
                 Object[] arrayCreditosACobrar = (Object[]) iteratorColecaoCreditosARealizar.next();
@@ -6557,102 +6513,81 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
                 //selecionar o crédito a partir da referência do credito e da cobrança
                 Integer referenciaCredito = (Integer)arrayCreditosACobrar[13];
                 Integer cobrancacredito = (Integer)arrayCreditosACobrar[14];
-                if(referenciaCredito.equals(amReferenciaCredito) &&
-                		cobrancacredito.equals(amCobrancaCredito)) {
+                if(referenciaCredito.equals(creditoRealizado.getAnoMesReferenciaCredito()) &&
+                		cobrancacredito.equals(creditoRealizado.getAnoMesCobrancaCredito())) {
 
                 	creditoARealizar = new CreditoARealizar();
-                	// id do Credito a Realizar - Item 0
                 	if (arrayCreditosACobrar[0] != null) {
                 		creditoARealizar.setId((Integer) arrayCreditosACobrar[0]);
                 	}
 
-                	// numero de prestacoes realizadas - item 1
                 	if (arrayCreditosACobrar[1] != null) {
                 		creditoARealizar.setNumeroPrestacaoRealizada((Short) arrayCreditosACobrar[1]);
                 	}
 
-                	// numero de prestacoes credito - item 2
                 	if (arrayCreditosACobrar[2] != null) {
                 		creditoARealizar.setNumeroPrestacaoCredito((Short) arrayCreditosACobrar[2]);
-
                 	}
 
-                	// valor de credito - item 3
                 	if (arrayCreditosACobrar[3] != null) {
                 		creditoARealizar.setValorCredito((BigDecimal) arrayCreditosACobrar[3]);
-
                 	}
 
-                	// valor residual mes anterior - item 4
                 	if (arrayCreditosACobrar[4] != null) {
                 		creditoARealizar.setValorResidualMesAnterior((BigDecimal) arrayCreditosACobrar[4]);
                 	}
 
-                	// credito tipo - item 5
                 	if (arrayCreditosACobrar[5] != null) {
                 		CreditoTipo creditoTipo = new CreditoTipo();
                 		creditoTipo.setId((Integer) arrayCreditosACobrar[5]);
                 		creditoARealizar.setCreditoTipo(creditoTipo);
-
                 	}
 
-                	// lancamento item contabil - item 6
                 	if (arrayCreditosACobrar[6] != null) {
                 		LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
                 		lancamentoItemContabil.setId((Integer) arrayCreditosACobrar[6]);
                 		creditoARealizar.setLancamentoItemContabil(lancamentoItemContabil);
                 	}
 
-                	// lancamento - item 7
                 	if (arrayCreditosACobrar[7] != null) {
                 		Localidade localidade = new Localidade();
                 		localidade.setId((Integer) arrayCreditosACobrar[7]);
                 		creditoARealizar.setLocalidade(localidade);
                 	}
 
-                	// quadra - item 8
                 	if (arrayCreditosACobrar[8] != null) {
                 		Quadra quadra = new Quadra();
                 		quadra.setId((Integer) arrayCreditosACobrar[8]);
                 		creditoARealizar.setQuadra(quadra);
                 	}
 
-                	// codigo setor comercial - item 9
                 	if (arrayCreditosACobrar[9] != null) {
                 		creditoARealizar.setCodigoSetorComercial((Integer) arrayCreditosACobrar[9]);
                 	}
 
-                	// numero quadra - item 10
                 	if (arrayCreditosACobrar[10] != null) {
                 		creditoARealizar.setNumeroQuadra((Integer) arrayCreditosACobrar[10]);
                 	}
 
-                	// numero lote - item 11
                 	if (arrayCreditosACobrar[11] != null) {
                 		creditoARealizar.setNumeroLote((Short) arrayCreditosACobrar[11]);
                 	}
 
-                	// numero sublote - item 12
                 	if (arrayCreditosACobrar[12] != null) {
                 		creditoARealizar.setNumeroSubLote((Short) arrayCreditosACobrar[12]);
                 	}
 
-                	// ano mes referencia credito - item 13
                 	if (arrayCreditosACobrar[13] != null) {
                 		creditoARealizar.setAnoMesReferenciaCredito((Integer) arrayCreditosACobrar[13]);
                 	}
 
-                	// ano mes cobranca credito - item 14
                 	if (arrayCreditosACobrar[14] != null) {
                 		creditoARealizar.setAnoMesCobrancaCredito((Integer) arrayCreditosACobrar[14]);
                 	}
 
-                	// CreditoOrigem - item 15
                 	if (arrayCreditosACobrar[15] != null) {
-
                 		CreditoOrigem creditoOrigem = new CreditoOrigem();
                 		creditoOrigem.setId((Integer) arrayCreditosACobrar[15]);
-
                 		creditoARealizar.setCreditoOrigem(creditoOrigem);
                 	}
 
@@ -6664,14 +6599,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
                 	if (arrayCreditosACobrar[16] != null) {
                 		creditoARealizar.setNumeroParcelaBonus((Short) arrayCreditosACobrar[16]);
                 	}
-
                 	creditosARealizar.add(creditoARealizar);
                 }
             }
         }
-
         return creditosARealizar;
-
     }
 
 	/**
@@ -15848,6 +15780,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
 			
 			return grupo.getDiaVencimento();
+		}
+	}
+	
+	public Object[] pesquisarParmsContaMensagem(EmitirContaHelper helper, Integer idGrupo, Integer idGerencia, Integer idLocalidade, Integer idSetor) throws ControladorException {
+		try {
+			return repositorioFaturamento.pesquisarParmsContaMensagem(helper, idGrupo, idGerencia, idLocalidade, idSetor);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
 		}
 	}
 }

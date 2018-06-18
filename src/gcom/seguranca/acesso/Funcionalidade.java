@@ -165,7 +165,7 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	public static final int INSERIR_CONTRATO_PARCELAMENTO_POR_CLIENTE = 1460;
 	public static final int GERAR_TXT_IMPRESSAO_CONTAS_FORMATO_BRAILLE = 1470;
 	public static final int MANTER_CONTRATO_PARCELAMENTO_POR_CLIENTE = 1471;
-	public static final int ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA = 1474;
+	public static final int ENCERRAR_COMANDO_DE_COBRANCA_POR_RESULTADO_POR_EMPRESA = 1474;
 	public static final int MOVIMENTAR_ORDENS_DE_SERVICO_DE_COBRANCA_POR_RESULTADO = 1476;
 	public static final int ATUALIZAR_CONTRATO_PARCELAMENTO_POR_CLIENTE = 1493;
 	public static final int RECEPCIONAR_ARQUIVO_TXT_ENCERRAMENTO_OS_COBRANCA = 1495;
@@ -201,6 +201,8 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	public static final int GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS = 16042;
 	
 	public static final int DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA = 16044;
+	
+	public static final int ENCERRAR_COMANDO_DE_COBRANCA_POR_RESULTADO = 16045;
 	
 	private Integer id;
 

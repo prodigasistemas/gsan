@@ -7,7 +7,6 @@ import gcom.arrecadacao.ArrecadadorContrato;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
 import gcom.arrecadacao.ArrecadadorMovimento;
 import gcom.arrecadacao.ArrecadadorMovimentoItem;
-import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.Devolucao;
@@ -201,6 +200,7 @@ import gcom.cadastro.geografico.ControladorGeograficoLocalHome;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.Contrato;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.EntidadeBeneficente;
@@ -521,6 +521,7 @@ import gcom.relatorio.cadastro.GerarRelatorioAtualizacaoCadastralViaInternetHelp
 import gcom.relatorio.cadastro.GerarRelatorioImoveisDoacoesHelper;
 import gcom.relatorio.cadastro.RelatorioAcessoSPCBean;
 import gcom.relatorio.cadastro.RelatorioBoletimCadastroIndividualBean;
+import gcom.relatorio.cadastro.dto.ContratoAdesaoimovelDTO;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisAlteracaoInscricaoViaBatchHelper;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisAtivosNaoMedidosHelper;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisConsumoMedioHelper;
@@ -18592,7 +18593,7 @@ public class Fachada {
 	 * 
 	 * @param
 	 */
-	public Integer inserirContratoDemanda(ContratoDemanda contratoDemanda, Usuario usuarioLogado) {
+	public Integer inserirContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) {
 		try {
 			return this.getControladorFaturamento().inserirContratoDemanda(contratoDemanda, usuarioLogado);
 		} catch (ControladorException ex) {
@@ -18613,7 +18614,7 @@ public class Fachada {
 	 * @date 28/06/2007
 	 * 
 	 */
-	public void atualizarContratoDemanda(ContratoDemanda contratoDemanda, Usuario usuarioLogado) {
+	public void atualizarContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) {
 		try {
 			this.getControladorFaturamento().atualizarContratoDemanda(contratoDemanda, usuarioLogado);
 		} catch (ControladorException ex) {
@@ -36744,7 +36745,7 @@ public class Fachada {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosConsultarComandosContasCobrancaEmpresa(Integer idEmpresa, Date cicloInicial, Date cicloFinal, int pagina) {
 		try {
-			return this.getControladorCobranca().pesquisarConsultarComandosContasCobrancaEmpresa(idEmpresa, cicloInicial, cicloFinal, pagina);
+			return this.getControladorCobrancaPorResultado().pesquisarConsultarComandosContasCobrancaEmpresa(idEmpresa, cicloInicial, cicloFinal, pagina);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -40128,5 +40129,45 @@ public class Fachada {
 	public Collection gerarComandoCobrancaEmpresa(ComandoEmpresaCobrancaContaHelper helper) {
 		this.enviarMensagemControladorBatch(MetodosBatch.INFORMAR_CONTAS_COBRANCA_EMPRESA, ConstantesJNDI.QUEUE_CONTROLADOR_COBRANCA_MDB, new Object[] { helper });
 		return null;
+	}
+	
+	public boolean isEntradaParcelamentoPaga(Parcelamento parcelamento) {
+		try {
+			return getControladorCobranca().isEntradaParcelamentoPaga(parcelamento);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Object[] pesquisarDadosHidrometroTipoLigacaoAgua(Imovel imovel) throws ControladorException {
+		try {
+			return getControladorMicromedicao().pesquisarDadosHidrometroTipoLigacaoAgua(imovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+
+	public String obterEnderecoCorrespondenciaCliente(Integer idCliente) {
+		try {
+			return getControladorCliente().obterEnderecoCorrespondencia(idCliente);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public boolean isParcelamentoEmDebito(Integer idParcelamento) {
+		try {
+			return getControladorParcelamento().isParcelamentoEmDebito(idParcelamento);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) {
+		try {
+			return getControladorImovel().obterContratoAdesao(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
 	}
 }

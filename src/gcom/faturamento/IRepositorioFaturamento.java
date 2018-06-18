@@ -606,6 +606,8 @@ public interface IRepositorioFaturamento {
 			EmitirContaHelper emitirContaHelper, Integer idFaturamentoGrupo,
 			Integer idGerenciaRegional, Integer idLocalidade,
 			Integer idSetorComercial) throws ErroRepositorioException;
+	
+	public Object[] pesquisarContaMensagemFixa() throws ErroRepositorioException;
 
 	public Object[] pesquisarParmsQualidadeAgua(EmitirContaHelper emitirContaHelper) throws ErroRepositorioException;
 
@@ -2956,7 +2958,8 @@ public interface IRepositorioFaturamento {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCreditoARealizarPeloCreditoRealizadoAntigo(
 			Integer imovelId, Integer idCreditoTipo, BigDecimal valorCredito,
-			Integer debitoCreditoSituacaoAtualId, Integer anoMesFaturamento)
+			Integer debitoCreditoSituacaoAtualId, Integer anoMesFaturamento,
+			Integer idCreditoARealizar)
 			throws ErroRepositorioException;
 	
 	@SuppressWarnings("rawtypes")

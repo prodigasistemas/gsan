@@ -18,10 +18,12 @@ public class CancelarParcelamentoHelper {
 
 	private BigDecimal valorAcrescimos;
 
+	private BigDecimal valorGuias;
+	
 	private BigDecimal valorDescontoAcrescimos;
 
 	private BigDecimal valorDescontoFaixa;
-
+	
 	private short numeroPrestacoes;
 
 	private short numeroPrestacoesCobradas;
@@ -43,6 +45,7 @@ public class CancelarParcelamentoHelper {
 		this.valorDescontoFaixa = dados[6] == null ? BigDecimal.ZERO : (BigDecimal) dados[6];
 		this.numeroPrestacoes = (Short) dados[7];
 		this.numeroPrestacoesCobradas = (Short) dados[8];
+		this.valorGuias = (BigDecimal) dados[9];
 	}
 
 	public Parcelamento getParcelamento() {
@@ -101,6 +104,14 @@ public class CancelarParcelamentoHelper {
 		return valorDescontoFaixa.divide(new BigDecimal(numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
 	}
 
+	public short getNumeroPrestacoes() {
+		return numeroPrestacoes;
+	}
+
+	public short getNumeroPrestacoesCobradas() {
+		return numeroPrestacoesCobradas;
+	}
+	
 	public ParcelamentoMotivoCancelamento getMotivo() {
 		return motivo;
 	}
@@ -108,4 +119,17 @@ public class CancelarParcelamentoHelper {
 	public void setMotivo(ParcelamentoMotivoCancelamento motivo) {
 		this.motivo = motivo;
 	}
+	
+	public BigDecimal getSaldoDevedorGuias() {
+		return valorGuias.subtract(getTotalGuiasCobradas());
+	}
+	
+	public BigDecimal getTotalGuiasCobradas() {
+		return getParcelaGuias().multiply(BigDecimal.valueOf(numeroPrestacoesCobradas)).setScale(2, BigDecimal.ROUND_DOWN);
+	}
+	
+	public BigDecimal getParcelaGuias() {
+		return valorGuias.divide(new BigDecimal(numeroPrestacoes), 2, BigDecimal.ROUND_DOWN);
+	}
+
 }

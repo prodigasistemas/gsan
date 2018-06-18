@@ -42,4 +42,12 @@ public interface IRepositorioCobrancaPorResultadoHBM {
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterComandosParaIniciar(Integer[] comandos) throws ErroRepositorioException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarDadosConsultarComandosContasCobrancaEmpresaResumido(Integer idEmpresa, Date cicloInicial, Date cicloFinal, int numeroIndice, int quantidadeRegistros)
+			throws ErroRepositorioException;
+	
+	public Collection<Object[]> pesquisarImovelOrdemServicoParaEncerrarComando(int quantidadeInicio, Integer idComando) throws ErroRepositorioException;
+	
+	public List<ComandoEmpresaCobrancaConta> obterComandosVencidosPorEmpresa(Integer idEmpresa) throws ErroRepositorioException;
 }

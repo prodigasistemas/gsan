@@ -1,12 +1,8 @@
 package gcom.batch;
 
-import gcom.arrecadacao.ControladorArrecadacaoLocal;
-import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoCategoria;
-import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocal;
-import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocalHome;
 import gcom.atendimentopublico.registroatendimento.FiltroRaEncerramentoComando;
 import gcom.atendimentopublico.registroatendimento.RaEncerramentoComando;
 import gcom.atualizacaocadastral.TarefaBatchAtualizacaoCadastral;
@@ -66,7 +62,8 @@ import gcom.batch.cobranca.TarefaBatchInserirResumoAcoesCobrancaCronograma;
 import gcom.batch.cobranca.TarefaBatchInserirResumoAcoesCobrancaEventual;
 import gcom.batch.cobranca.TarefaBatchProcessarEncerramentoOSAcaoCobranca;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchAtualizarPagamentosContasCobranca;
-import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchEncerrarComandosDeCobrancaPorEmpresa;
+import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchEncerrarComandosDeCobrancaResultado;
+import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchGerarNegociacaoContasCobrancaEmpresa;
 import gcom.batch.cobranca.cobrancaporresultado.TarefaBatchProcessarArquivoTxtEncerramentoOSCobranca;
@@ -158,8 +155,6 @@ import gcom.batch.micromedicao.TarefaBatchGerarArquivoTextoParaLeiturista;
 import gcom.batch.micromedicao.TarefaBatchGerarDadosParaLeitura;
 import gcom.batch.micromedicao.TarefaBatchGerarMovimentoHidrometro;
 import gcom.batch.micromedicao.TarefaBatchGerarRAOSAnormalidadeConsumo;
-import gcom.cadastro.ControladorCadastroLocal;
-import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.EsferaPoder;
@@ -168,8 +163,6 @@ import gcom.cadastro.empresa.EmpresaCobranca;
 import gcom.cadastro.empresa.FiltroEmpresa;
 import gcom.cadastro.empresa.FiltroEmpresaCobranca;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
-import gcom.cadastro.localidade.ControladorLocalidadeLocal;
-import gcom.cadastro.localidade.ControladorLocalidadeLocalHome;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
@@ -180,10 +173,9 @@ import gcom.cobranca.CobrancaAcao;
 import gcom.cobranca.CobrancaAcaoAtividadeComando;
 import gcom.cobranca.CobrancaAcaoAtividadeCronograma;
 import gcom.cobranca.CobrancaAtividade;
+import gcom.cobranca.CobrancaSituacao;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
 import gcom.cobranca.ComandoEmpresaCobrancaContaExtensao;
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.FiltroCobrancaAcaoAtividadeComando;
 import gcom.cobranca.FiltroComandoEmpresaCobrancaConta;
 import gcom.cobranca.FiltroComandoEmpresaCobrancaContaExtensao;
@@ -195,8 +187,6 @@ import gcom.cobranca.RelatorioPagamentosContasCobrancaEmpresaHelper;
 import gcom.cobranca.TarefaBatchGerarArquivoTextoOSContasPagasParceladas;
 import gcom.cobranca.TarefaBatchGerarMovimentoExtensaoContasCobrancaPorEmpresa;
 import gcom.fachada.Fachada;
-import gcom.faturamento.ControladorFaturamentoLocal;
-import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoAtividadeCronograma;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.FiltroFaturamentoAtividadeCronograma;
@@ -212,19 +202,11 @@ import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarCategoria;
 import gcom.faturamento.debito.DebitoCobrado;
 import gcom.faturamento.debito.DebitoCobradoCategoria;
-import gcom.financeiro.ControladorFinanceiroLocal;
-import gcom.financeiro.ControladorFinanceiroLocalHome;
 import gcom.gerencial.atendimentopublico.registroatendimento.TarefaBatchGerarResumoRegistroAtendimento;
 import gcom.gerencial.atendimentopublico.registroatendimento.TarefaBatchGerarResumoRegistroAtendimentoPorAno;
 import gcom.gerencial.faturamento.ControladorGerencialFaturamentoLocal;
 import gcom.gerencial.faturamento.ControladorGerencialFaturamentoLocalHome;
-import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocal;
-import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocalHome;
 import gcom.gerencial.micromedicao.TarefaBatchGerarResumoHidrometro;
-import gcom.integracao.ControladorIntegracaoLocal;
-import gcom.integracao.ControladorIntegracaoLocalHome;
-import gcom.micromedicao.ControladorMicromedicaoLocal;
-import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.FiltroRota;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.MovimentoHidrometroHelper;
@@ -239,16 +221,12 @@ import gcom.seguranca.FiltroSegurancaParametro;
 import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.Funcionalidade;
 import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.spcserasa.ControladorSpcSerasaLocal;
-import gcom.spcserasa.ControladorSpcSerasaLocalHome;
 import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaRelatorio;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
 import gcom.util.IoUtil;
 import gcom.util.ServiceLocator;
@@ -273,6 +251,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.CreateException;
@@ -1794,7 +1773,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 					            Collection<Integer> colecaoIdsLocalidadesAtualizarPagamentos = getControladorLocalidade().pesquisarTodosIdsLocalidade();
 
 					            atualizarPagamentosContasCobranca.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,colecaoIdsLocalidadesAtualizarPagamentos);
-					            atualizarPagamentosContasCobranca.addParametro("anoMesArrecadacaoSistemaParametro", anoMesArrecadacaoSistemaParametro);
+					            atualizarPagamentosContasCobranca.addParametro("anoMesArrecadacao", anoMesArrecadacaoSistemaParametro);
 
 					            funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(atualizarPagamentosContasCobranca));
 
@@ -2562,6 +2541,24 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 							getControladorUtil().atualizar(funcionalidadeIniciada);
 	
 							break;
+							
+						case Funcionalidade.ENCERRAR_COMANDO_DE_COBRANCA_POR_RESULTADO_POR_EMPRESA:
+							TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa dadosEncerrarComandos = new TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa(
+									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+							Collection<Empresa> empresas = obterEmpresasCobranca();
+							
+							dadosEncerrarComandos.addParametro("usuario", processoIniciado.getUsuario());
+							dadosEncerrarComandos.addParametro("idCobrancaSituacao", CobrancaSituacao.COBRANCA_EMPRESA_TERCEIRIZADA);
+							dadosEncerrarComandos.addParametro("empresas", empresas);
+							dadosEncerrarComandos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, empresas);
+
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosEncerrarComandos));
+
+							getControladorUtil().atualizar(funcionalidadeIniciada);
+
+							break;
+
 							
 						default:
 					}
@@ -4663,6 +4660,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 		Integer codigoProcessoIniciadoGerado = null;
 
 		try {
+			
 			ProcessoIniciado processoIniciado = inserirProcessoIniciadoParametrosLivres(idProcesso, usuario);
 
 			ProcessoSituacao processoSituacao = new ProcessoSituacao();
@@ -4916,23 +4914,20 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 						break;
 
-					case Funcionalidade.ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA:
-						TarefaBatchEncerrarComandosDeCobrancaPorEmpresa dadosEncerrarComandos = new TarefaBatchEncerrarComandosDeCobrancaPorEmpresa(
+					case Funcionalidade.ENCERRAR_COMANDO_DE_COBRANCA_POR_RESULTADO:
+						TarefaBatchEncerrarComandosDeCobrancaResultado dadosEncerrarComandos = new TarefaBatchEncerrarComandosDeCobrancaResultado(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-						String idEmpresa = (String) parametros.get("idEmpresa");
-						Integer idRegistroComando = (Integer) parametros.get("idRegistro");
+						ComandoEmpresaCobrancaConta comando = (ComandoEmpresaCobrancaConta) parametros.get("comando");
 						Integer idCobrancaSituacao = (Integer) parametros.get("idCobrancaSituacao");
 
-						dadosEncerrarComandos.addParametro("idEmpresa", idEmpresa);
+						Collection<ComandoEmpresaCobrancaConta> comandos = new ArrayList();
+						comandos.add(comando);
+
 						dadosEncerrarComandos.addParametro("usuario", usuario);
-						dadosEncerrarComandos.addParametro("idRegistro", idRegistroComando);
+						dadosEncerrarComandos.addParametro("comandos", comandos);
 						dadosEncerrarComandos.addParametro("idCobrancaSituacao", idCobrancaSituacao);
-
-						Collection colecao = new ArrayList();
-						colecao.add(idRegistroComando);
-
-						dadosEncerrarComandos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecao);
+						dadosEncerrarComandos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, obterIdsComandos(comandos));
 
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosEncerrarComandos));
 
@@ -4986,6 +4981,16 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 			throw e;
 		}
 		return codigoProcessoIniciadoGerado;
+	}
+	
+	private List<Integer> obterIdsComandos(Collection<ComandoEmpresaCobrancaConta> comandos) {
+		List<Integer> ids = new ArrayList<Integer>();
+		
+		for (ComandoEmpresaCobrancaConta comando: comandos) {
+			ids.add(comando.getId());
+		}
+		
+		return ids;
 	}
 
 	/**
@@ -6054,7 +6059,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 
 		FiltroProcesso filtroProcesso = new FiltroProcesso();
 		filtroProcesso.adicionarParametro(new ParametroSimples(FiltroProcesso.ID, processoId));
-
+		filtroProcesso.adicionarCaminhoParaCarregamentoEntidade(FiltroProcesso.PROCESSO_TIPO);
+		
 		Collection colecaoProcesso = Fachada.getInstancia().pesquisar(filtroProcesso, Processo.class.getName());
 
 		Processo processo = (Processo) Util.retonarObjetoDeColecao(colecaoProcesso);

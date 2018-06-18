@@ -256,7 +256,8 @@ public class ConstantesJNDI {
 	public static String BATCH_GERAR_CARTA_TARIFA_SOCIAL = "";
 	public static String BATCH_RETIRAR_IMOVEL_TARIFA_SOCIAL = "";
 	public static String BATCH_GERAR_TXT_IMPRESSAO_CONTAS_BRAILLE = "";
-	public static String BATCH_ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA = "";
+	public static String BATCH_ENCERRAR_COMANDO_DE_COBRANCA_RESULTADO = "";
+	public static String BATCH_ENCERRAR_COMANDO_DE_COBRANCA_RESULTADO_POR_EMPRESA = "";
 	public static String BATCH_GERAR_TXT_OS_INSPECAO_ANORMALIDADE = "";
 	public static String BATCH_PROCESSAR_ARQUIVO_TXT_ENCERRAMENTO_OS_COBRANCA = "";
 	public static String BATCH_GERAR_ARQUIVO_TXT_OS_CONTAS_PAGAS_PARCELADAS = "";
@@ -558,7 +559,8 @@ public class ConstantesJNDI {
 			BATCH_GERAR_CARTA_TARIFA_SOCIAL = propriedades.getProperty("QueueBatchGerarCartaTarifaSocialMDB");
 			BATCH_RETIRAR_IMOVEL_TARIFA_SOCIAL = propriedades.getProperty("QueueBatchRetirarImovelTarifaSocialMDB");
 			BATCH_GERAR_TXT_IMPRESSAO_CONTAS_BRAILLE = propriedades.getProperty("QueueBatchGerarTxtImpressaoContasBrailleMDB");
-			BATCH_ENCERRAR_COMANDO_DE_COBRANCA_POR_EMPRESA = propriedades.getProperty("QueueBatchEncerrarComandosDeCobrancaPorEmpresaMDB");
+			BATCH_ENCERRAR_COMANDO_DE_COBRANCA_RESULTADO = propriedades.getProperty("QueueBatchEncerrarComandosDeCobrancaResultadoMDB");
+			BATCH_ENCERRAR_COMANDO_DE_COBRANCA_RESULTADO_POR_EMPRESA = propriedades.getProperty("QueueBatchEncerrarComandosDeCobrancaResultadoPorEmpresaMDB");
 			BATCH_GERAR_TXT_OS_INSPECAO_ANORMALIDADE = propriedades.getProperty("QueueBatchGerarTxtOsInspecaoAnormalidadeMDB");
 			BATCH_PROCESSAR_ARQUIVO_TXT_ENCERRAMENTO_OS_COBRANCA = propriedades.getProperty("QueueBatchProcessarArquivoTxtEncerramentoOSCobrancaMDB");
 			BATCH_GERAR_ARQUIVO_TXT_OS_CONTAS_PAGAS_PARCELADAS = propriedades.getProperty("QueueBatchGerarArquivoTextoOSContasPagasParceladasMDB");

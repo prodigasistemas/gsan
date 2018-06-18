@@ -38,11 +38,11 @@ já formatado ver ExibirResultadoConsultaResumoAnormalidadeAction.java  -->
 				<logic:iterate name="colecaoGerenciaRegionalResultado" id="gerenciaRegional" type="GerenciaRegional">
 			        <logic:empty name="gerenciaRegional" property="nomeAbreviado">
 			        <html:option value="<%=""+ gerenciaRegional.getId()%>">
-					 <%=gerenciaRegional.getNome()%></html:option>
+					 <%=gerenciaRegional.getNomeCliente()%></html:option>
 			        </logic:empty>
 			        <logic:notEmpty name="gerenciaRegional" property="nomeAbreviado">
 				 	 <html:option value="<%=""+ gerenciaRegional.getId()%>">
-					 <%= gerenciaRegional.getNomeAbreviado() + " - " + gerenciaRegional.getNome()%></html:option>
+					 <%=gerenciaRegional.getNomeAbreviado() + " - " + gerenciaRegional.getNomeCliente()%></html:option>
 				    </logic:notEmpty>	
 				</logic:iterate>
 				</html:select></td>
@@ -54,11 +54,11 @@ já formatado ver ExibirResultadoConsultaResumoAnormalidadeAction.java  -->
 				<logic:iterate name="colecaoUnidadeNegocioResultado" id="unidadeNegocio" type="UnidadeNegocio">
 			        <logic:empty name="unidadeNegocio" property="nomeAbreviado">
 			        <html:option value="<%=""+ unidadeNegocio.getId()%>">
-					 <%=unidadeNegocio.getNome()%></html:option>
+					 <%=unidadeNegocio.getNomeCliente()%></html:option>
 			        </logic:empty>
 			        <logic:notEmpty name="unidadeNegocio" property="nomeAbreviado">
 				 	 <html:option value="<%=""+ unidadeNegocio.getId()%>">
-					 <%= unidadeNegocio.getNomeAbreviado() + " - " + unidadeNegocio.getNome()%></html:option>
+					 <%=unidadeNegocio.getNomeAbreviado() + " - " + unidadeNegocio.getNomeCliente()%></html:option>
 				    </logic:notEmpty>	
 				</logic:iterate>
 				</html:select></td>

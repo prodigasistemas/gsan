@@ -1,7 +1,9 @@
 package gcom.gui.cadastro.imovel;
 
-import gcom.arrecadacao.ContratoDemanda;
-import gcom.arrecadacao.bean.ContratoDemandaHelper;
+import gcom.cadastro.imovel.Contrato;
+import gcom.cadastro.imovel.ContratoHelper;
+import gcom.cadastro.imovel.ContratoTipo;
+import gcom.cadastro.imovel.FiltroContrato;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelCadastroOcorrencia;
 import gcom.cadastro.imovel.FiltroImovelEloAnormalidade;
@@ -13,15 +15,16 @@ import gcom.cadastro.imovel.ImovelEloAnormalidade;
 import gcom.cadastro.imovel.ImovelImagem;
 import gcom.cadastro.imovel.ImovelRamoAtividade;
 import gcom.fachada.Fachada;
-import gcom.faturamento.FiltroContratoDemanda;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
-import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -217,7 +220,7 @@ public class ExibirConsultarImovelDadosComplementaresAction extends GcomAction {
 
     	setarColecaoDadosNegativadorMovimentoRegSessao(consultarImovelActionForm,sessao);
 
-    	setarColecaoContratoDemandaHelper(imovel,sessao);
+    	setarColecaoContratoHelper(imovel,sessao);
     	
     	setarColecaoMatriculasAssociadas(imovel,sessao);
     	
@@ -316,7 +319,7 @@ public class ExibirConsultarImovelDadosComplementaresAction extends GcomAction {
 		sessao.removeAttribute("colecaoImovelCadastroOcorrencia");
 		sessao.removeAttribute("colecaoImovelEloAnormalidade");
 		sessao.removeAttribute("colecaoImovelRamosAtividade");
-		sessao.removeAttribute("contratoDemandaHelper");
+		sessao.removeAttribute("contratosHelper");
 		sessao.removeAttribute("colecaoMatriculasAssociadas");
 		sessao.removeAttribute("colecaoDadosImovelCobrancaSituacao");
 		sessao.removeAttribute("colecaoDadosNegativadorMovimentoReg");
@@ -486,32 +489,40 @@ public class ExibirConsultarImovelDadosComplementaresAction extends GcomAction {
 	 *@since 06/01/2011
 	 *@author Mariana Victor
 	 */
-	private void setarColecaoContratoDemandaHelper(Imovel imovel,HttpSession sessao) {
-		ContratoDemandaHelper contratoDemandaHelper = null;
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void setarColecaoContratoHelper(Imovel imovel,HttpSession sessao) {
+		List<ContratoHelper> contratosHelper = new ArrayList<ContratoHelper>();
 		
-		FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
-		filtroContratoDemanda.adicionarParametro(
-				new ParametroSimples(FiltroContratoDemanda.IMOVEL, imovel.getId()));
-		filtroContratoDemanda.adicionarParametro(
-				new ParametroNulo(FiltroContratoDemanda.DATACONTRATOENCERRAMENTO));
-		Collection colecaoContratoDemanda = this.getFachada().pesquisar(
-				filtroContratoDemanda, ContratoDemanda.class.getName());
+		FiltroContrato filtroContrato = new FiltroContrato();
+		filtroContrato.adicionarParametro(new ParametroSimples(FiltroContrato.IMOVEL, imovel.getId()));
+		//filtroContrato.adicionarParametro(new ParametroNulo(FiltroContrato.DATACONTRATOENCERRAMENTO));
+		filtroContrato.adicionarCaminhoParaCarregamentoEntidade("contratoTipo");
+		Collection colecaoContrato = this.getFachada().pesquisar(filtroContrato, Contrato.class.getName());
 		
-		if (colecaoContratoDemanda != null && !colecaoContratoDemanda.isEmpty()) {
-			Object[] consumoContratado = this.getFachada().consultarConsumoCadastrado(imovel.getId());
-			if (consumoContratado != null) {
-				contratoDemandaHelper = new ContratoDemandaHelper();
-				contratoDemandaHelper.setContratoDemanda((ContratoDemanda) Util.retonarObjetoDeColecao(colecaoContratoDemanda));
-				contratoDemandaHelper.setConsumoContratado(consumoContratado[0].toString());
-				contratoDemandaHelper.setValorTarifa(Util.formatarBigDecimalParaStringComVirgula(
-						(BigDecimal) consumoContratado[1]));
+
+		Iterator<Contrato> itContratos = colecaoContrato.iterator();
+		
+		while (itContratos.hasNext()) {
+			ContratoHelper contratoHelper = null;
+
+			if (colecaoContrato != null && !colecaoContrato.isEmpty()) {
+				contratoHelper = new ContratoHelper();
+				contratoHelper.setContrato((Contrato) itContratos.next());
+				
+				Object[] consumoContratado = this.getFachada().consultarConsumoCadastrado(imovel.getId());
+				if (contratoHelper.getContrato().getContratoTipo().getId().intValue() == ContratoTipo.DEMANDA && consumoContratado != null) {
+					contratoHelper.setConsumoContratado(consumoContratado[0].toString());
+					contratoHelper.setValorTarifa(Util.formatarBigDecimalParaStringComVirgula((BigDecimal) consumoContratado[1]));
+				}
+				
+				contratosHelper.add(contratoHelper);
 			}
 		}
 		
-		if (contratoDemandaHelper != null) {
-			sessao.setAttribute("contratoDemandaHelper", contratoDemandaHelper);
+		if (!contratosHelper.isEmpty()) {
+			sessao.setAttribute("contratosHelper", contratosHelper);
 		} else {
-			sessao.removeAttribute("contratoDemandaHelper");
+			sessao.removeAttribute("contratosHelper");
 		}
 	}
 	
@@ -520,6 +531,7 @@ public class ExibirConsultarImovelDadosComplementaresAction extends GcomAction {
 	 *@since 06/01/2011
 	 *@author Mariana Victor
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void setarColecaoMatriculasAssociadas(Imovel imovel, HttpSession sessao) {
 		FiltroImovel filtroImovel = new FiltroImovel();
 		filtroImovel.adicionarParametro(
@@ -541,7 +553,6 @@ public class ExibirConsultarImovelDadosComplementaresAction extends GcomAction {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void pesquisarImovelImagens(Imovel imovel, HttpSession sessao) {
 		FiltroImovelImagem filtro = new FiltroImovelImagem();
 		filtro.adicionarParametro(new ParametroSimples(FiltroImovelImagem.IMOVEL_ID, imovel.getId()));

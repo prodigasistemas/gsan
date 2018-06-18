@@ -23993,7 +23993,9 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append(" pgp.parc_vldebitoatualizado as valorParcelamentoGuia, ")
 					.append(" gp.gpag_vldebito as valorGuia, ")
 					.append(" dtgp.dbtp_id as debitoTipoGuia, ")
-					.append(" dac.dbac_id as idDebito, ")
+					.append(" case when dac.dbac_id is not null then dac.dbac_id ")
+					.append("      when dbac.dbac_id is not null then dbac.dbac_id  ")
+					.append(" end as idDebito, ")
 					.append(" pdac.parc_id as idParcelamentoDebito, ")
 					.append(" pdac.parc_vldebitoatualizado as valorParcelamentoDebito, ")
 					.append(" dac.dahi_vldebito as valorDebito, ")
@@ -24007,7 +24009,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append(" dac.dahi_nnprestacaodebito as numPrestacaoDebito, ")
 					.append(" dac.dahi_nnprestacaocobradas as numPrestacoesCobradas, ")
 					.append(" dac.dahi_nnparcelabonus as numParcelaBonus, ")
-					.append(" round(((pg.pgmt_vlpagamento * devol_total) / valor_total),2)  as valorDesconto ")
+					.append(" round(((pg.pgmt_vlpagamento * devol_total) / valor_total),2)  as valorDesconto, ")
+					.append(" dac.dbac_id as idDebitoHistorico ")
 					.append(" FROM arrecadacao.pagamento pg ")
 					.append(" INNER JOIN arrecadacao.aviso_bancario ab on ab.avbc_id = pg.avbc_id ")
 					.append(" LEFT JOIN valor v on pg.cbdo_id = v.cbdo_id ")
@@ -24016,7 +24019,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append(" LEFT JOIN cobranca.parcelamento pgp on pgp.parc_id = gp.parc_id ")
 					.append(" LEFT JOIN faturamento.debito_tipo dtgp on dtgp.dbtp_id = gp.dbtp_id ")
 					.append(" LEFT JOIN faturamento.deb_a_cobrar_hist dac on dac.dbac_id = pg.dbac_id ")
-					.append(" LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id ")
+					.append(" LEFT JOIN faturamento.debito_a_cobrar dbac on dac.dbac_id = pg.dbac_id ")
+					.append(" LEFT JOIN cobranca.parcelamento pdac on pdac.parc_id = dac.parc_id or pdac.parc_id = dbac.parc_id ")
 					.append(" where pg.loca_id = :idLocalidade ")
 					.append(" and pg.pgst_idatual = :pagamentoClassificado ")
 					.append(" and pg.pgmt_amreferenciaarrecadacao = :referencia")
@@ -24070,13 +24074,11 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 							pagamento.setContaGeral(conta);
 						}
 						if (dadosPagamento[3] != null) {
-							GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral();
-							guiaGeral.setId((Integer)dadosPagamento[3]);
+							GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral((Integer)dadosPagamento[3]);
 							
 							GuiaPagamento guia = new GuiaPagamento();
 							guia.setId((Integer)dadosPagamento[3]);
-							guia.setGuiaPagamentoGeral(guiaGeral);
-
+							
 							if(dadosPagamento[4] != null){
 								Parcelamento parcelamento = new Parcelamento();
 								parcelamento.setId((Integer) dadosPagamento[4]);
@@ -24096,8 +24098,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 								debitoTipo.setId((Integer) dadosPagamento[7]);
 								guia.setDebitoTipo(debitoTipo);
 							}
-							guiaGeral.setGuiaPagamento(guia);
 							
+							guiaGeral.setGuiaPagamento(guia);
 							pagamento.setGuiaPagamento(guiaGeral);
 							
 						}
@@ -31499,7 +31501,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 			
 			pagamentos = session.createQuery(consulta)
-				.setParameterList("idsPagamentos", idsPagamentos).setMaxResults(1500).list();
+				.setParameterList("idsPagamentos", idsPagamentos).list();
 			
 			for (Pagamento pagamento: pagamentos) {
 				if (pagamento.getContaGeral() != null) {

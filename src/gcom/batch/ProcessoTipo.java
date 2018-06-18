@@ -3,6 +3,7 @@ package gcom.batch;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
@@ -11,37 +12,26 @@ public class ProcessoTipo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static final int MENSAL = 3;
-	
 	public static final int EVENTUAL = 4;
-
 	public static final int FATURAMENTO_COMANDADO = 1;
-
 	public static final int COBRANCA_COMANDADO = 2;
-	
 	public static final int RELATORIO = 5;
-    
     public static final int SEMANAL = 6;
-    
     public static final int DIARIO = 7;
 
-	/** identifier field */
 	private Integer id;
-
-	/** persistent field */
 	private String descricao;
-
-	/** persistent field */
 	private short indicadorUso;
-
-	/** persistent field */
 	private Date ultimaAlteracao;
-
-	/** persistent field */
+	@SuppressWarnings("rawtypes")
 	private Set processos;
 
-	/** full constructor */
-	public ProcessoTipo(Integer id, String descricao, short indicadorUso,
-			Date ultimaAlteracao, Set processos) {
+	public ProcessoTipo(Integer id) {
+		this.id = id;
+	}
+			
+	@SuppressWarnings("rawtypes")
+	public ProcessoTipo(Integer id, String descricao, short indicadorUso, Date ultimaAlteracao, Set processos) {
 		this.id = id;
 		this.descricao = descricao;
 		this.indicadorUso = indicadorUso;
@@ -49,7 +39,6 @@ public class ProcessoTipo implements Serializable {
 		this.processos = processos;
 	}
 
-	/** default constructor */
 	public ProcessoTipo() {
 	}
 
@@ -77,10 +66,12 @@ public class ProcessoTipo implements Serializable {
 		this.indicadorUso = indicadorUso;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getProcessos() {
 		return processos;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setProcessos(Set processos) {
 		this.processos = processos;
 	}

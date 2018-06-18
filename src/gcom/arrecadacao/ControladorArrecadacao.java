@@ -4428,10 +4428,10 @@ public class ControladorArrecadacao implements SessionBean {
 				
 				GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral(idGuiaPagamento);
 				
-				GuiaPagamento guiaPagamento = new GuiaPagamento();
-				guiaPagamento.setId(idGuiaPagamento);
-				guiaPagamento.setGuiaPagamentoGeral(guiaGeral);
-				pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
+				GuiaPagamento guiaPagamento = new GuiaPagamento(idGuiaPagamento);
+
+				guiaGeral.setGuiaPagamento(guiaPagamento);
+				pagamento.setGuiaPagamento(guiaGeral);
 
 			} else {
 				pagamento.setGuiaPagamento(null);
@@ -4682,8 +4682,8 @@ public class ControladorArrecadacao implements SessionBean {
 				
 				GuiaPagamento guiaPagamento = new GuiaPagamento();
 				guiaPagamento.setId(idGuiaPagamento);
-				guiaPagamento.setGuiaPagamentoGeral(guiaGeral);
 				
+				guiaGeral.setGuiaPagamento(guiaPagamento);
 				pagamento.setGuiaPagamento(guiaGeral);
 
 			} else {
@@ -7683,18 +7683,23 @@ public class ControladorArrecadacao implements SessionBean {
 			throws ControladorException {
 
 		GuiaPagamento guiaPagamento = new GuiaPagamento();
+		GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral();
+		
 		guiaPagamento.setValorDebito(valorDebito);
 		Imovel imovel = null;
 		if (idImovel != null) {
 			imovel = new Imovel();
 			imovel.setId(idImovel);
 		}
+		
 		guiaPagamento.setImovel(imovel);
 		guiaPagamento.setDataVencimento(dataPagamento);
 
 		Integer idGuiaPagamento = getControladorFaturamento().inserirGuiaPagamentoCodigoBarras(guiaPagamento,DebitoTipo.ACRESCIMOS_POR_IMPONTUALIDADE);
+		guiaGeral.setId(idGuiaPagamento);
 		guiaPagamento.setId(idGuiaPagamento);
-		guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral(idGuiaPagamento));
+
+		guiaGeral.setGuiaPagamento(guiaPagamento);
 		
 		Pagamento pagamento = new Pagamento();
 		pagamento.setAnoMesReferenciaPagamento(null);
@@ -7715,7 +7720,7 @@ public class ControladorArrecadacao implements SessionBean {
 		debitoTipo.setId(DebitoTipo.ACRESCIMOS_POR_IMPONTUALIDADE);
 		pagamento.setDebitoTipo(debitoTipo);
 		pagamento.setContaGeral(null);
-		pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
+		pagamento.setGuiaPagamento(guiaGeral);
 		pagamento.setDebitoACobrarGeral(null);
 
 		DocumentoTipo documentoTipo = new DocumentoTipo(DocumentoTipo.GUIA_PAGAMENTO);
@@ -7818,6 +7823,7 @@ public class ControladorArrecadacao implements SessionBean {
 		
 		Set<Integer> chaves = mapLocalidadeValor.keySet();
 		for(Integer chave: chaves) {
+			GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral();
 			GuiaPagamento guiaPagamento = new GuiaPagamento();
 			guiaPagamento.setValorDebito(mapLocalidadeValor.get(chave));
 
@@ -7826,8 +7832,8 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			Integer idGuiaPagamento = getControladorFaturamento().inserirGuiaPagamentoCodigoBarrasPorCliente(guiaPagamento, DebitoTipo.ACRESCIMOS_POR_IMPONTUALIDADE, idLocalidade);
 			guiaPagamento.setId(idGuiaPagamento);
-			guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral(idGuiaPagamento));
 			
+			guiaGeral.setGuiaPagamento(guiaPagamento);
 			Integer anoMesPagamento = Util.formataAnoMes(dataPagamento);
 
 			// cria o objeto pagamento para setar os
@@ -7858,7 +7864,7 @@ public class ControladorArrecadacao implements SessionBean {
 			pagamento.setDebitoTipo(debitoTipo);
 			pagamento.setContaGeral(null);
 
-			pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
+			pagamento.setGuiaPagamento(guiaGeral);
 
 			pagamento.setDebitoACobrarGeral(null);
 
@@ -8064,7 +8070,9 @@ public class ControladorArrecadacao implements SessionBean {
 			SistemaParametro sistemaParametro, Integer idFormaArrecadacao, Integer idDocumentoTipo)
 			throws ControladorException {
 
+		GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral();
 		GuiaPagamento guiaPagamento = new GuiaPagamento();
+		
 		guiaPagamento.setValorDebito(valorTaxa);
 		Imovel imovel = null;
 		if (idImovel != null) {
@@ -8078,6 +8086,8 @@ public class ControladorArrecadacao implements SessionBean {
 		guiaPagamento.setId(idGuiaPagamento);
 		guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral(idGuiaPagamento));
 		
+		guiaGeral.setId(idGuiaPagamento);
+		guiaGeral.setGuiaPagamento(guiaPagamento);
 		Pagamento pagamento = new Pagamento();
 		pagamento.setAnoMesReferenciaPagamento(null);
 
@@ -13494,6 +13504,7 @@ public class ControladorArrecadacao implements SessionBean {
 							Iterator iteratorColecaoPagamentosGuiaPagamento = colecaoPagamentosGuiaPagamentoPreenchidaRefContabilMaiorIgualRefFaturamento
 									.iterator();
 
+							GuiaPagamentoGeral guiaGeral = null;
 							GuiaPagamento guiaPagamento = null;
 							Integer idGuiaPagamento = null;
 							BigDecimal valorPagamento = null;
@@ -13505,8 +13516,9 @@ public class ControladorArrecadacao implements SessionBean {
 
 								if (pagamentoArray[1] != null) {
 									idGuiaPagamento = (Integer) pagamentoArray[1];
+									guiaGeral = new GuiaPagamentoGeral(idGuiaPagamento);
 									guiaPagamento = new GuiaPagamento(idGuiaPagamento);
-									guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral(idGuiaPagamento));
+									guiaGeral.setGuiaPagamento(guiaPagamento);
 								} else {
 									idGuiaPagamento = null;
 								}
@@ -13519,7 +13531,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 								pagamento = new Pagamento();
 								pagamento.setId((Integer) pagamentoArray[0]);
-								pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
+								pagamento.setGuiaPagamento(guiaGeral);
 								pagamento.setValorExcedente(valorPagamento);
 								colecaoGuiaPagamentoAtualizarSituacaoEValorExcedentePagamento.add(pagamento);
 							}
@@ -25309,12 +25321,13 @@ public class ControladorArrecadacao implements SessionBean {
 						pagamento.setId((Integer) dadosPagamento[0]);
 					}
 
+					GuiaPagamentoGeral guiaGeral = null;
 					GuiaPagamento guiaPagamento = null;
 
 					// Id da Guia de Pagamento
 					if (dadosPagamento[1] != null) {
+						guiaGeral = new GuiaPagamentoGeral((Integer) dadosPagamento[1]);
 						guiaPagamento = new GuiaPagamento((Integer) dadosPagamento[1]);
-						guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral((Integer) dadosPagamento[1]));
 					}
 
 					if (dadosPagamento[2] != null) {
@@ -25347,9 +25360,9 @@ public class ControladorArrecadacao implements SessionBean {
 
 					if (guiaPagamento != null) {
 						guiaPagamento.setDebitoTipo(debitoTipoGuia);
+						guiaGeral.setGuiaPagamento(guiaPagamento);
+						pagamento.setGuiaPagamento(guiaGeral);
 					}
-
-					pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
 
 					DebitoTipo debitoTipoPagamento = null;
 
@@ -29715,13 +29728,13 @@ public class ControladorArrecadacao implements SessionBean {
 						pagamentoHistorico.setId((Integer) dadosPagamento[0]);
 					}
 
-					GuiaPagamentoHistorico guiaPagamento = null;
+					GuiaPagamentoGeral guiaGeral = new GuiaPagamentoGeral();
+					GuiaPagamentoHistorico guiaPagamento = new GuiaPagamentoHistorico();
 
 					// Id da Guia de Pagamento
 					if (dadosPagamento[1] != null) {
-						guiaPagamento = new GuiaPagamentoHistorico();
+						guiaGeral.setId((Integer) dadosPagamento[1]);
 						guiaPagamento.setId((Integer) dadosPagamento[1]);
-						guiaPagamento.setGuiaPagamentoGeral(new GuiaPagamentoGeral((Integer) dadosPagamento[1]));
 					}
 
 					// Id do Cliente
@@ -29733,20 +29746,17 @@ public class ControladorArrecadacao implements SessionBean {
 
 					// Valor da Guia de Pagamento
 					if (dadosPagamento[3] != null) {
-						guiaPagamento
-								.setValorDebito((BigDecimal) dadosPagamento[3]);
+						guiaPagamento.setValorDebito((BigDecimal) dadosPagamento[3]);
 					}
 
 					// Data do Pagamento
 					if (dadosPagamento[4] != null) {
-						pagamentoHistorico
-								.setDataPagamento((Date) dadosPagamento[4]);
+						pagamentoHistorico.setDataPagamento((Date) dadosPagamento[4]);
 					}
 
 					// Ano Mês do Pagamento
 					if (dadosPagamento[5] != null) {
-						pagamentoHistorico
-								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[5]);
+						pagamentoHistorico.setAnoMesReferenciaPagamento((Integer) dadosPagamento[5]);
 					}
 
 					DebitoTipo debitoTipoGuia = null;
@@ -29766,7 +29776,8 @@ public class ControladorArrecadacao implements SessionBean {
 						guiaPagamento.setDebitoTipo(debitoTipoGuia);
 					}
 
-					pagamentoHistorico.setGuiaPagamentoGeral(guiaPagamento.getGuiaPagamentoGeral());
+					guiaGeral.setGuiaPagamentoHistorico(guiaPagamento);
+					pagamentoHistorico.setGuiaPagamentoGeral(guiaGeral);
 
 					DebitoTipo debitoTipoPagamento = null;
 
@@ -43552,7 +43563,7 @@ public class ControladorArrecadacao implements SessionBean {
 				pagamento.setArrecadadorMovimentoItem(null);
 				pagamento.setArrecadacaoForma(new ArrecadacaoForma(idFormaArrecadacao));
 				pagamento.setCliente(cliente);
-				pagamento.setGuiaPagamento(guiaPagamento.getGuiaPagamentoGeral());
+				pagamento.setGuiaPagamento(guiaPagamento != null? guiaPagamento.getGuiaPagamentoGeral() : null);
 				pagamento.setUltimaAlteracao(new Date());
 				pagamento.setFatura(null);
 				pagamento.setCobrancaDocumento(null);
