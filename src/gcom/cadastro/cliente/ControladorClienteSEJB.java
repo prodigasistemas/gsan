@@ -961,6 +961,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 			// 0 - Nome do Cliente
 			if (objetoCliente[0] != null) {
 				cliente.setNome((String) objetoCliente[0]);
+				cliente.setId((Integer) objetoCliente[20]);
 			}
 
 			// 1 - Nome do Cliente Abreviado
