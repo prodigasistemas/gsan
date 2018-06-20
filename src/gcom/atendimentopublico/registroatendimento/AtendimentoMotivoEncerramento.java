@@ -8,34 +8,26 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
-public class AtendimentoMotivoEncerramento extends ObjetoTransacao{
+public class AtendimentoMotivoEncerramento extends ObjetoTransacao {
 
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
 	private Integer id;
 
-	/** nullable persistent field */
 	private String descricao;
 
-	/** nullable persistent field */
 	private String descricaoAbreviada;
 
-	/** persistent field */
 	private short indicadorUso;
 
-	/** persistent field */
 	private Date ultimaAlteracao;
 
-	/** persistent field */
 	private short indicadorExecucao;
 
-	/** persistent field */
 	private short indicadorDuplicidade;
-	
+
 	private Integer qtdeDiasAditivoPrazo;
-	
+
 	private Short indicadorExibirFormOrdemSeletiva;
 
 	public final static Short INDICADOR_DUPLICIDADE_ATIVO = new Short("1");
@@ -45,27 +37,23 @@ public class AtendimentoMotivoEncerramento extends ObjetoTransacao{
 	public final static short INDICADOR_EXECUCAO_SIM = 1;
 
 	public final static short INDICADOR_EXECUCAO_NAO = 2;
-	
-	public final static short CANCELADO_POR_DERCURSO_DE_PRAZO = 32;
-	
-	public final static short SUSPENSA_PAG_PARC_CANC_DO_DEBITO = 68; 
-	
-	public final static Integer CONCLUSAO_SERVICO = 2;
-	
-	public final static Integer DEBITO_PAGO = 3;
-    
-    public final static Integer TARIFA_SOCIAL_ALTERADA = 53;
-    public final static Integer TARIFA_SOCIAL_EXCLUIDA = 54;
-    public final static Integer TARIFA_SOCIAL_IMPLANTADA = 15;
-    public final static Integer ATUALIZAR_EXCLUIR_RECADASTRAR_TARIFA_SOCIAL = 55;
 
-    public final static short DESISTENCIA_DO_USUARIO = 4;
-    
-	/** full constructor */
-	public AtendimentoMotivoEncerramento(String descricao,
-			String descricaoAbreviada, short indicadorUso,
-			Date ultimaAlteracao, short indicadorExecucao,
-			short indicadorDuplicidade) {
+	public final static short CANCELADO_POR_DERCURSO_DE_PRAZO = 32;
+
+	public final static short SUSPENSA_PAG_PARC_CANC_DO_DEBITO = 68;
+
+	public final static Integer CONCLUSAO_SERVICO = 2;
+
+	public final static Integer DEBITO_PAGO = 3;
+
+	public final static Integer TARIFA_SOCIAL_ALTERADA = 53;
+	public final static Integer TARIFA_SOCIAL_EXCLUIDA = 54;
+	public final static Integer TARIFA_SOCIAL_IMPLANTADA = 15;
+	public final static Integer ATUALIZAR_EXCLUIR_RECADASTRAR_TARIFA_SOCIAL = 55;
+
+	public final static short DESISTENCIA_DO_USUARIO = 4;
+
+	public AtendimentoMotivoEncerramento(String descricao, String descricaoAbreviada, short indicadorUso, Date ultimaAlteracao, short indicadorExecucao, short indicadorDuplicidade) {
 		this.descricao = descricao;
 		this.descricaoAbreviada = descricaoAbreviada;
 		this.indicadorUso = indicadorUso;
@@ -74,13 +62,14 @@ public class AtendimentoMotivoEncerramento extends ObjetoTransacao{
 		this.indicadorDuplicidade = indicadorDuplicidade;
 	}
 
-	/** default constructor */
 	public AtendimentoMotivoEncerramento() {
 	}
+	
+	public AtendimentoMotivoEncerramento(Integer id) {
+		this.id = id;
+	} 
 
-	/** minimal constructor */
-	public AtendimentoMotivoEncerramento(short indicadorUso,
-			Date ultimaAlteracao, short indicadorExecucao) {
+	public AtendimentoMotivoEncerramento(short indicadorUso, Date ultimaAlteracao, short indicadorExecucao) {
 		this.indicadorUso = indicadorUso;
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.indicadorExecucao = indicadorExecucao;
@@ -150,7 +139,7 @@ public class AtendimentoMotivoEncerramento extends ObjetoTransacao{
 		String[] retorno = new String[1];
 		retorno[0] = "id";
 		return retorno;
-	}    
+	}
 
 	public Filtro retornaFiltro() {
 		FiltroAtendimentoMotivoEncerramento filtro = new FiltroAtendimentoMotivoEncerramento();
@@ -158,7 +147,7 @@ public class AtendimentoMotivoEncerramento extends ObjetoTransacao{
 		filtro.adicionarParametro(new ParametroSimples(FiltroAtendimentoMotivoEncerramento.ID, this.getId()));
 		return filtro;
 	}
-	
+
 	@Override
 	public String getDescricaoParaRegistroTransacao() {
 		return getDescricao();
@@ -176,10 +165,7 @@ public class AtendimentoMotivoEncerramento extends ObjetoTransacao{
 		return indicadorExibirFormOrdemSeletiva;
 	}
 
-	public void setIndicadorExibirFormOrdemSeletiva(
-			Short indicadorExibirFormOrdemSeletiva) {
+	public void setIndicadorExibirFormOrdemSeletiva(Short indicadorExibirFormOrdemSeletiva) {
 		this.indicadorExibirFormOrdemSeletiva = indicadorExibirFormOrdemSeletiva;
 	}
-	
-	
 }
