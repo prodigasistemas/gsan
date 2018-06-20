@@ -1,10 +1,10 @@
 package gcom.gui.faturamento;
 
-import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.ContratoMotivoCancelamento;
+import gcom.cadastro.imovel.Contrato;
+import gcom.cadastro.imovel.FiltroContrato;
 import gcom.cadastro.imovel.Imovel;
 import gcom.fachada.Fachada;
-import gcom.faturamento.FiltroContratoDemanda;
 import gcom.faturamento.FiltroContratoMotivoCancelamento;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
@@ -95,17 +95,17 @@ public class ExibirAtualizarContratoDemandaAction extends GcomAction {
 		if (sessao.getAttribute("contratoDemandaAtualizar") == null
 				|| httpServletRequest.getParameter("desfazer") != null) {
 
-			ContratoDemanda contratoDemanda = null;
+			Contrato contratoDemanda = null;
 
 			if (httpServletRequest.getParameter("desfazer") != null) {
 
-				String idContratoDemanda = ((ContratoDemanda) sessao
+				String idContratoDemanda = ((Contrato) sessao
 						.getAttribute("contratoDemandaAtualizar")).getId()
 						.toString();
 
-				FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
+				FiltroContrato filtroContratoDemanda = new FiltroContrato();
 				filtroContratoDemanda.adicionarParametro(new ParametroSimples(
-						FiltroContratoDemanda.ID, idContratoDemanda));
+						FiltroContrato.ID, idContratoDemanda));
 
 				filtroContratoDemanda
 						.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial");
@@ -115,7 +115,7 @@ public class ExibirAtualizarContratoDemandaAction extends GcomAction {
 						.adicionarCaminhoParaCarregamentoEntidade("contratoMotivoCancelamento");
 
 				Collection colecaoContratoDemanda = fachada.pesquisar(
-						filtroContratoDemanda, ContratoDemanda.class.getName());
+						filtroContratoDemanda, Contrato.class.getName());
 
 				if (colecaoContratoDemanda == null
 						|| colecaoContratoDemanda.isEmpty()) {
@@ -123,7 +123,7 @@ public class ExibirAtualizarContratoDemandaAction extends GcomAction {
 							"atencao.atualizacao.timestamp");
 				}
 
-				contratoDemanda = (ContratoDemanda) Util
+				contratoDemanda = (Contrato) Util
 						.retonarObjetoDeColecao(colecaoContratoDemanda);
 
 				sessao
@@ -134,7 +134,7 @@ public class ExibirAtualizarContratoDemandaAction extends GcomAction {
 
 				if (sessao.getAttribute("contratoDemanda") != null) {
 
-					contratoDemanda = (ContratoDemanda) sessao
+					contratoDemanda = (Contrato) sessao
 							.getAttribute("contratoDemanda");
 
 					sessao.setAttribute("contratoDemandaAtualizar",
@@ -155,10 +155,10 @@ public class ExibirAtualizarContratoDemandaAction extends GcomAction {
 						sessao.removeAttribute("inserir");
 					}
 
-					FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
+					FiltroContrato filtroContratoDemanda = new FiltroContrato();
 					filtroContratoDemanda
 							.adicionarParametro(new ParametroSimples(
-									FiltroContratoDemanda.ID, idContratoDemanda));
+									FiltroContrato.ID, idContratoDemanda));
 
 					filtroContratoDemanda
 							.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial");
@@ -168,7 +168,7 @@ public class ExibirAtualizarContratoDemandaAction extends GcomAction {
 							.adicionarCaminhoParaCarregamentoEntidade("contratoMotivoCancelamento");
 
 					Collection colecaoContratoDemanda = fachada.pesquisar(
-							filtroContratoDemanda, ContratoDemanda.class
+							filtroContratoDemanda, Contrato.class
 									.getName());
 
 					if (colecaoContratoDemanda == null
@@ -177,7 +177,7 @@ public class ExibirAtualizarContratoDemandaAction extends GcomAction {
 								"atencao.atualizacao.timestamp");
 					}
 
-					contratoDemanda = (ContratoDemanda) Util
+					contratoDemanda = (Contrato) Util
 							.retonarObjetoDeColecao(colecaoContratoDemanda);
 
 					sessao.setAttribute("contratoDemandaAtualizar",

@@ -10,7 +10,6 @@ import gcom.arrecadacao.ArrecadadorContratoTarifa;
 import gcom.arrecadacao.ArrecadadorMovimento;
 import gcom.arrecadacao.ArrecadadorMovimentoItem;
 import gcom.arrecadacao.BoletoInfo;
-import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.ContratoMotivoCancelamento;
 import gcom.arrecadacao.DadosDocumentosNaoIdentificados;
 import gcom.arrecadacao.DadosPagamentosNaoClassificados;
@@ -262,6 +261,9 @@ import gcom.cadastro.imovel.AreaConstruidaFaixa;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.CategoriaTipo;
+import gcom.cadastro.imovel.Contrato;
+import gcom.cadastro.imovel.ContratoAdesao;
+import gcom.cadastro.imovel.ContratoTipo;
 import gcom.cadastro.imovel.Despejo;
 import gcom.cadastro.imovel.EloAnormalidade;
 import gcom.cadastro.imovel.EntidadeBeneficente;
@@ -1094,7 +1096,10 @@ public class HibernateUtil {
 					.addClass(ClienteEnderecoRetorno.class)
 					.addClass(ClienteImovelRetorno.class)
 					.addClass(LojaAtendimento.class)
-
+					.addClass(ContratoTipo.class)
+					.addClass(Contrato.class)
+					.addClass(ContratoAdesao.class)
+					
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cobranca //
 					// *************************************//
@@ -1438,7 +1443,7 @@ public class HibernateUtil {
 					.addClass(ArrecadacaoForma.class).addClass(CobrancaAcao.class).addClass(RotaAcaoCriterio.class)
 					.addClass(CobrancaAcaoAtividadeComando.class).addClass(CobrancaCriterioLinha.class).addClass(CobrancaCriterio.class)
 					.addClass(CobrancaAtividadeComandoRota.class).addClass(CobrancaAtividade.class).addClass(CobrancaAcaoCronograma.class)
-					.addClass(CobrancaAcaoAtividadeCronograma.class).addClass(Modulo.class).addClass(ContratoDemanda.class)
+					.addClass(CobrancaAcaoAtividadeCronograma.class).addClass(Modulo.class)
 					.addClass(ContratoMotivoCancelamento.class).addClass(CobrancaGrupoCronogramaMes.class).addClass(CobrancaDocumentoItem.class)
 					.addClass(CobrancaDocumentoItemHistorico.class).addClass(CobrancaDocumento.class).addClass(CobrancaDocumentoHistorico.class)
 					.addClass(ImovelSituacaoTipo.class).addClass(ImovelSituacao.class).addClass(ContaBancaria.class).addClass(ArrecadacaoDadosDiarios.class)

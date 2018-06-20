@@ -48,9 +48,9 @@ public class GsanApi {
 		}
 	}
 
-	public void download(final String url, final String name, HttpServletResponse response) {
+	public void download(final String nome, HttpServletResponse response) {
 		try {
-			File file = salvar(url, name);
+			File file = salvar(nome);
 
 			response.setContentType(ReportFormat.PDF.getContentType());
 			response.addHeader("Content-Disposition", "attachment; filename=" + file.getName());
@@ -86,9 +86,9 @@ public class GsanApi {
 		return webResource.type("application/json").post(ClientResponse.class, json);
 	}
 
-	private File salvar(final String url, final String name) throws IOException {
-		BufferedInputStream in = new BufferedInputStream(new URL(url + name).openStream());
-		FileOutputStream out = new FileOutputStream(name);
+	private File salvar(final String nome) throws IOException {
+		BufferedInputStream in = new BufferedInputStream(new URL(url + nome).openStream());
+		FileOutputStream out = new FileOutputStream(nome);
 
 		final byte data[] = new byte[1024];
 		int count;
@@ -99,6 +99,6 @@ public class GsanApi {
 		in.close();
 		out.close();
 
-		return new File(name);
+		return new File(nome);
 	}
 }

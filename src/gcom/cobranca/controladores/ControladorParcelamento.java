@@ -3,6 +3,8 @@ package gcom.cobranca.controladores;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaForma;
+import gcom.cobranca.IRepositorioCobranca;
+import gcom.cobranca.RepositorioCobrancaHBM;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
 import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.parcelamento.Parcelamento;
@@ -46,15 +48,18 @@ public class ControladorParcelamento extends ControladorComum {
 	private SistemaParametro sistemaParametro;
 
 	protected IRepositorioParcelamentoHBM repositorio;
+	protected IRepositorioCobranca repositorioCobranca;
 
 	public void ejbCreate() throws CreateException {
 		repositorio = RepositorioParcelamentoHBM.getInstancia();
+		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
 	}
 	
 	public CancelarParcelamentoHelper pesquisarParcelamentoParaCancelar(Integer idParcelamento) throws ControladorException {
 		try {
 			return repositorio.pesquisarParcelamentoParaCancelar(idParcelamento);
 		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
@@ -109,20 +114,23 @@ public class ControladorParcelamento extends ControladorComum {
 			Collection<DebitoACobrar> colecao = super.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.getName());
 
 			DebitoACobrar debito = (DebitoACobrar) Util.retonarObjetoDeColecao(colecao);
-			Integer anoMesFaturamento = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento();
 			
-			if (debito.getAnoMesReferenciaContabil() >= anoMesFaturamento) {
-				debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
-				debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
-			} else {
-				debito.setDebitoCreditoSituacaoAnterior(null);
-				debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+			if (debito != null) {
+				Integer anoMesFaturamento = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento();
+				
+				if (debito.getAnoMesReferenciaContabil() >= anoMesFaturamento) {
+					debito.setDebitoCreditoSituacaoAnterior(debito.getDebitoCreditoSituacaoAtual());
+					debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				} else {
+					debito.setDebitoCreditoSituacaoAnterior(null);
+					debito.setDebitoCreditoSituacaoAtual(getSituacaoCancelada());
+				}
+				
+				debito.setAnoMesReferenciaContabil(Util.getAnoMesComoInteger(new Date()));
+				debito.setUltimaAlteracao(new Date());
+				
+				getControladorUtil().atualizar(debito);
 			}
-			
-			debito.setAnoMesReferenciaContabil(Util.getAnoMesComoInteger(new Date()));
-			debito.setUltimaAlteracao(new Date());
-			
-			getControladorUtil().atualizar(debito);
 		} catch (ControladorException e) {
 			e.printStackTrace();
 		}
@@ -207,6 +215,7 @@ public class ControladorParcelamento extends ControladorComum {
 	private void gerarDebitos(CancelarParcelamentoHelper helper, Conta conta, Usuario usuario) throws ControladorException {
 		atualizarDebitoACobrar(helper.getSaldoDevedorContas(), helper.getParcelamento().getId(), conta, DebitoTipo.PARCELAMENTO_CONTAS);
 		atualizarDebitoACobrar(helper.getSaldoDevedorAcrescimos(), helper.getParcelamento().getId(), conta, DebitoTipo.PARCELAMENTO_ACRESCIMOS_IMPONTUALIDADE);
+		atualizarDebitoACobrar(helper.getSaldoDevedorGuias(), helper.getParcelamento().getId(), conta, DebitoTipo.PARCELAMENTO_GUIAS_PAGAMENTO);
 		
 		inserirDebitoACobrar(helper.getTotalCancelamentoDescontos(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_ACRESCIMOS, usuario, false);
 		inserirDebitoACobrar(helper.getTotalCancelamentoDescontoFaixa(), helper, conta, DebitoTipo.CANCELAMENTO_PARCELAMENTO_DESCONTO_FAIXA, usuario, false);
@@ -347,4 +356,12 @@ public class ControladorParcelamento extends ControladorComum {
 		}
 	}
 	
+	public boolean isParcelamentoEmDebito(Integer idParcelamento) throws ControladorException {
+		try {
+			return repositorio.isParcelamentoEmDebito(idParcelamento);
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 }

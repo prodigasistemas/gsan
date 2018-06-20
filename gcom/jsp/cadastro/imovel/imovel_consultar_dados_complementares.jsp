@@ -7,6 +7,7 @@
 <%@ page import="gcom.cobranca.CobrancaSituacaoHistorico"%>
 <%@ page import="gcom.faturamento.FaturamentoSituacaoHistorico"%>
 <%@ page import="gcom.cadastro.imovel.ImovelRamoAtividade"%>
+<%@ page import="gcom.cadastro.imovel.ContratoHelper" isELIgnored="false"%>
 <%@ page import="gcom.util.Util"%>
 <%@ page import="java.util.Collection" isELIgnored="false"%>
 <html:html>
@@ -86,6 +87,19 @@
 			} else {
 				abrirPopup('exibirPesquisarImovelAction.do', 400, 800)
 			}
+		}
+
+		function gerarContratoAdesao(){
+		   	var form = document.forms[0];
+
+		   	if (form.idImovelDadosComplementares.value != null && form.matriculaImovelDadosComplementares.value != null && 
+					form.matriculaImovelDadosComplementares.value != "" && form.matriculaImovelDadosComplementares.value != "IMÓVEL INEXISTENTE") {
+			   	form.action = 'gerarRelatorioContratoAdesaoImovelAction.do?matricula='+form.matriculaImovelDadosComplementares.value;
+				form.submit();
+			} else {
+				alert("Para gerar um contrato de adesão, é necessário pesquisar um imóvel.")
+			}
+			
 		}
 
 		</script>
@@ -1360,89 +1374,93 @@
 					   <strong>Dados do Contrato</strong>
 					</td>
 			  </tr>
-			  <tr bordercolor="#000000" bgcolor="#90c7fc">
-							<td align="center" bgcolor="#90c7fc" width="20%">
-							<div class="style9"><font style="font-size: 9px;" color="#000000"
-								face="Verdana, Arial, Helvetica, sans-serif"><strong>Número do Contrato</strong></font></div>
-							</td>
-							<td align="center" bgcolor="#90c7fc" width="20%">
-								<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, 
-												Helvetica, sans-serif">
-												<strong>Data Início</strong>
-								</font>
-							</td>
-							<td align="center" bgcolor="#90c7fc" width="20%">
-								<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, 
-												Helvetica, sans-serif">
-												<strong>Data término</strong>
-								</font>
-							</td>
-							<td align="center" bgcolor="#90c7fc" width="20%">
-								<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, 
-												Helvetica, sans-serif">
-												<strong>Valor da Tarifa</strong>
-								</font>
-							</td>
-							<td align="center" bgcolor="#90c7fc" width="20%">
-								<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, 
-												Helvetica, sans-serif">
-												<strong>Consumo Contratado</strong>
-								</font>
-							</td>
+			  	<tr bordercolor="#000000" bgcolor="#90c7fc">
+					<td align="center" bgcolor="#90c7fc" width="20%">
+						<div class="style9">
+							<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+								<strong>Número do Contrato</strong>
+							</font>
+						</div>
+					</td>
+					
+					<td align="center" bgcolor="#90c7fc" width="20%">
+						<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+							<strong>Tipo Contrato</strong>
+						</font>
+					</td>
+					
+					<td align="center" bgcolor="#90c7fc" width="20%">
+						<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+							<strong>Data Início</strong>
+						</font>
+					</td>
+							
+					<td align="center" bgcolor="#90c7fc" width="20%">
+						<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+							<strong>Data término</strong>
+						</font>
+					</td>
+					<td align="center" bgcolor="#90c7fc" width="20%">
+						<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+							<strong>Valor da Tarifa</strong>
+						</font>
+					</td>
+					<td align="center" bgcolor="#90c7fc" width="20%">
+						<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+							<strong>Consumo Contratado</strong>
+						</font>
+					</td>
 				</tr>
+				
 				<tr>
-							<td colspan="6">
-							<div style="width: 100%; height: 100%; overflow: auto;">
-							<table width="100%" align="left" bgcolor="#99CCFF">
-								<!--corpo da segunda tabela-->
-								<logic:notEmpty name="contratoDemandaHelper" scope="session">
-										<tr bgcolor="#FFFFFF">
-											<td align="center" width="20%">
-												<div class="style9">
-													<font style="font-size: 9px;"
-														color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
-	
-																											
-														<bean:write name="contratoDemandaHelper"
-																	property="contratoDemanda.numeroContrato" />												
-														
-													 </font>
-												</div>
-											</td>
-											<td align="center" width="20%">
-												<font style="font-size: 9px;"
-													color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
-													<bean:write name="contratoDemandaHelper"
-															property="contratoDemanda.dataContratoInicio" formatKey="date.format"/>													
-												</font>
-											</td>
-											<td align="center" width="20%">
-												<font style="font-size: 9px;"
-													color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
-													<bean:write name="contratoDemandaHelper"
-															property="contratoDemanda.dataContratoFim" formatKey="date.format"/>													
-												</font>
-											</td>
-											<td align="center" width="20%">
-												<font style="font-size: 9px;"
-													color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
-													<bean:write name="contratoDemandaHelper"
-															property="valorTarifa" />													
-												</font>
-											</td>
-											<td align="center" width="20%">
-												<font style="font-size: 9px;"
-													color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
-													<bean:write name="contratoDemandaHelper"
-															property="consumoContratado" />													
-												</font>
-											</td>
-								    	</tr>
-								</logic:notEmpty>
-							</table>
-							</div>
-							</td>
-						</tr>
+					<td colspan="6">
+					<div style="width: 100%; height: 100%; overflow: auto;">
+						<table width="100%" align="left" bgcolor="#99CCFF">
+							<!--corpo da segunda tabela-->
+							<logic:notEmpty name="contratosHelper" scope="session">
+							<logic:iterate name="contratosHelper" id="contratoHelper" type="ContratoHelper">
+							
+								<tr bgcolor="#FFFFFF">
+									
+									<td align="center" width="20%">
+										<div class="style9">
+											<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+												<bean:write name="contratoHelper" property="contrato.numeroContrato" />												
+											 </font>
+										</div>
+									</td>
+									<td align="center" width="20%">
+										<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+											<bean:write name="contratoHelper" property="contrato.contratoTipo.descricao" formatKey="date.format"/>													
+										</font>
+									</td>
+									<td align="center" width="20%">
+										<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+											<bean:write name="contratoHelper" property="contrato.dataContratoInicio" formatKey="date.format"/>													
+										</font>
+									</td>
+									<td align="center" width="20%">
+										<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+											<bean:write name="contratoHelper" property="contrato.dataContratoFim" formatKey="date.format"/>													
+										</font>
+									</td>
+									<td align="center" width="20%">
+										<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+											<bean:write name="contratoHelper" property="valorTarifa" />													
+										</font>
+									</td>
+									<td align="center" width="20%">
+										<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+											<bean:write name="contratoHelper" property="consumoContratado" />													
+										</font>
+									</td>
+						    	</tr>
+						    </logic:iterate>
+							</logic:notEmpty>
+						</table>
+					</div>
+					</td>
+				</tr>
 				
 			</table>	
 			<p>&nbsp;</p>
@@ -1497,7 +1515,12 @@
 							  </div>
 						</td>
 					</tr>
-
+					
+					<tr>
+						<td>
+							<input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Contrato Adesão" onClick="gerarContratoAdesao();">
+						</td>
+					</tr>
 					<tr>
 						<td colspan="2">
 							<div align="right">

@@ -1,12 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/WEB-INF/strujava.lang.String error = (java.lang.String) pageContext.getAttribute("error");c"%>
 <%@ taglib uri="/WEB-INF/struts-template.tld" prefix="template"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ taglib uri="/WEB-INF/gsanLib.tld" prefix="gsan"%>
 
-<%@page import="gcom.arrecadacao.ContratoDemanda"%>
+<%@page import="gcom.cadastro.imovel.Contrato"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
@@ -63,9 +63,7 @@ function verficarSelecao(objeto){
 	onsubmit="return CheckboxNaoVazio(document.ManutencaoRegistroActionForm.idRegistrosRemocao) && confirm('Confirma remoção?')">
 
 	<%@ include file="/jsp/util/cabecalho.jsp"%>
-	<%@ include file="/jsp/util/menu.jsp"%>
-
-	<table width="770" border="0" cellspacing="5" cellpadding="0">
+	<%@ inclujava.lang.Object grupo = (java.lang.Object) pageContext.getAttribute("grupo");pacing="5" cellpadding="0">
 		<tr>
 			<td width="150" valign="top" class="leftcoltext">
 			<div align="center">
@@ -151,15 +149,14 @@ function verficarSelecao(objeto){
 							</td>
 						</tr>
 						<%--Esquema de paginação--%>
-						<pg:pager isOffset="true" index="half-full" maxIndexPages="10"
-							export="currentPageNumber=pageNumber;pageOffset"
-							maxPageItems="10" items="${sessionScope.totalRegistros}">
+						java.lang.Integer pageOffset = (java.lang.Integer) pageContext.getAttribute("pageOffset");
 							<pg:param name="pg" />
 							<pg:param name="q" />
 							<logic:present name="colecaoContratoDemanda">
-								<%int cont = 0;%>
-								<logic:iterate name="colecaoContratoDemanda"
-									id="contratoDemanda" type="ContratoDemanda">
+								<%
+									int cont = 0;
+								%>
+								Contrato contratoDemanda = (Contrato) pageContext.getAttribute("contratoDemanda");
 									<pg:item>
 										<%cont = cont + 1;
 			if (cont % 2 == 0) {%>

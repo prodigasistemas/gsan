@@ -16,7 +16,6 @@ public class CancelarParcelamentoAction extends GcomAction {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		String codigoParcelamento = request.getParameter("codigoParcelamento");
-		String codigoImovel = request.getParameter("codigoImovel");
 		String motivo = request.getParameter("motivo");
 
 		CancelarParcelamentoHelper helper = getFachada().pesquisarParcelamentoParaCancelar(Integer.valueOf(codigoParcelamento));
@@ -29,7 +28,8 @@ public class CancelarParcelamentoAction extends GcomAction {
 		}
 		
 		montarPaginaSucesso(request, "Parcelamento de Débitos cancelado com sucesso.", 
-				"Voltar", "exibirConsultarParcelamentoDebitoAction.do?codigoImovel=" + codigoImovel + "&codigoParcelamento=" + codigoParcelamento);
+				"Realizar outra manutenção de Parcelamento de Débitos", 
+				"exibirConsultarListaParcelamentoDebitoAction.do?menu=sim");
 		
 		return mapping.findForward("telaSucesso");
 	}

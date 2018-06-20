@@ -157,18 +157,23 @@ public class EmitirContaHelper implements Serializable {
 	private Integer somaConsumosImoveisMicro;
 	private Integer consumoMacro;
 	private BigDecimal valorTotalASerrateado;
-	
+
 	private boolean informarImpostos;
-	
+
 	private String descricaoImpostosEAliquotas;
 	private BigDecimal percentualImpostosEAliquotas;
 	private BigDecimal valorBaseCalculoImpostos;
 	private BigDecimal valorImpostosEAliquotas;
-	
+
 	private String agenciaReguladora;
 	private String telefoneAgenciaReguladora;
 	private String emailAgenciaReguladora;
-	
+
+	private Object[] mensagensFixas;
+	private String mensagemAnormalidade;
+	private String mensagemDebitos;
+	private String mensagemQuitacao;
+
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
 	}
@@ -356,12 +361,11 @@ public class EmitirContaHelper implements Serializable {
 	}
 
 	// utilizado no Emitir Segunda Via de Conta Compesa
-	public EmitirContaHelper(Integer idConta, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta,
-			Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos,
-			BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao,
-			Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade,
-			String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel, Integer codDebitoAutomatico,
-			Integer anoMesFaturamentoGrupo, BigDecimal valorRateioAgua, BigDecimal valorRateioEsgoto) {
+	public EmitirContaHelper(Integer idConta, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta, Short loteConta,
+			Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta,
+			Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil,
+			Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio,
+			BigDecimal percentualEsgotoConta, String nomeImovel, Integer codDebitoAutomatico, Integer anoMesFaturamentoGrupo, BigDecimal valorRateioAgua, BigDecimal valorRateioEsgoto) {
 
 		this.idConta = idConta;
 		this.nomeCliente = nomeCliente;
@@ -403,12 +407,11 @@ public class EmitirContaHelper implements Serializable {
 	}
 
 	// utilizado no Emitir Segunda Via de Conta Tipo 2 (CAER e CAERN)
-	public EmitirContaHelper(Integer idConta, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta,
-			Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos,
-			BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao,
-			Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade,
-			String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, BigDecimal percentualEsgotoConta, Short codigoRota, Integer numeroSequencialRota, String numeroHidrometro,
-			Integer debitoCreditoSituacaoAtualConta, String nomeImovel) {
+	public EmitirContaHelper(Integer idConta, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta, Short loteConta,
+			Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta,
+			Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil,
+			Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao,
+			BigDecimal percentualEsgotoConta, Short codigoRota, Integer numeroSequencialRota, String numeroHidrometro, Integer debitoCreditoSituacaoAtualConta, String nomeImovel) {
 		this.idConta = idConta;
 		this.nomeCliente = nomeCliente;
 		this.dataVencimentoConta = dataVencimentoConta;
@@ -449,11 +452,10 @@ public class EmitirContaHelper implements Serializable {
 
 	// utilizado no Emitir Segunda Via de Conta Tipo 2 (CAER e CAERN)
 	public EmitirContaHelper(Integer idConta, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
-			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
-			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional,
-			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa,
-			String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, BigDecimal percentualEsgotoConta, Short codigoRota, Integer numeroSequencialRota,
-			String numeroHidrometro, Integer debitoCreditoSituacaoAtualConta, String nomeImovel) {
+			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos,
+			BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao,
+			Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade, String descricaoLigacaoAguaSituacao,
+			String descricaoLigacaoEsgotoSituacao, BigDecimal percentualEsgotoConta, Short codigoRota, Integer numeroSequencialRota, String numeroHidrometro, Integer debitoCreditoSituacaoAtualConta, String nomeImovel) {
 
 		this.idConta = idConta;
 		this.nomeCliente = nomeCliente;
@@ -495,11 +497,11 @@ public class EmitirContaHelper implements Serializable {
 		this.nomeImovel = nomeImovel;
 	}
 
-	public EmitirContaHelper(Integer idConta, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta,
-			Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos,
-			BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao,
-			Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade,
-			String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, BigDecimal percentualEsgotoConta) {
+	public EmitirContaHelper(Integer idConta, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta, Short loteConta,
+			Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta,
+			Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil,
+			Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao,
+			BigDecimal percentualEsgotoConta) {
 		this.idConta = idConta;
 		this.nomeCliente = nomeCliente;
 		this.dataVencimentoConta = dataVencimentoConta;
@@ -535,10 +537,10 @@ public class EmitirContaHelper implements Serializable {
 
 	// utilizado no Emitir Segunda Via de Conta Compesa
 	public EmitirContaHelper(Integer idConta, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
-			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
-			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional,
-			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa,
-			String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel) {
+			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos,
+			BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao,
+			Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade, String descricaoLigacaoAguaSituacao,
+			String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel) {
 
 		this.idConta = idConta;
 		this.nomeCliente = nomeCliente;
@@ -580,11 +582,11 @@ public class EmitirContaHelper implements Serializable {
 
 	// utilizado no Emitir Segunda Via de Conta Compesa
 	public EmitirContaHelper(Integer idConta, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
-			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
-			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional,
-			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa,
-			String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel,
-			Integer codDebitoAutomatico, int referencia, BigDecimal valorRateioAgua, BigDecimal valorRateioEsgoto) {
+			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos,
+			BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao,
+			Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade, String descricaoLigacaoAguaSituacao,
+			String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel, Integer codDebitoAutomatico, int referencia, BigDecimal valorRateioAgua,
+			BigDecimal valorRateioEsgoto) {
 
 		this.idConta = idConta;
 		this.nomeCliente = nomeCliente;
@@ -629,11 +631,10 @@ public class EmitirContaHelper implements Serializable {
 
 	// utilizado no Emitir Segunda Via de Conta Compesa
 	public EmitirContaHelper(Integer idConta, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
-			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
-			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional,
-			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa,
-			String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel,
-			Integer codDebitoAutomatico, Integer anoMesFaturamentoGrupo) {
+			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos,
+			BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao,
+			Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade, String descricaoLigacaoAguaSituacao,
+			String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel, Integer codDebitoAutomatico, Integer anoMesFaturamentoGrupo) {
 		this.anoMesFaturamentoGrupo = anoMesFaturamentoGrupo;
 		this.idConta = idConta;
 		this.nomeCliente = nomeCliente;
@@ -673,12 +674,11 @@ public class EmitirContaHelper implements Serializable {
 		this.codigoDebitoAutomatico = codDebitoAutomatico;
 	}
 
-	public EmitirContaHelper(Integer idContaHistorico, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
-			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
-			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional,
-			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa,
-			String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel,
-			Integer codDebitoAutomatico, Integer anoMesFaturamentoGrupo) {
+	public EmitirContaHelper(Integer idContaHistorico, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta,
+			Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos, BigDecimal valorImpostos,
+			Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao,
+			Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao,
+			Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel, Integer codDebitoAutomatico, Integer anoMesFaturamentoGrupo) {
 		this.anoMesFaturamentoGrupo = anoMesFaturamentoGrupo;
 		this.idConta = idContaHistorico;
 		this.nomeCliente = nomeCliente;
@@ -716,12 +716,12 @@ public class EmitirContaHelper implements Serializable {
 		this.codigoDebitoAutomatico = codDebitoAutomatico;
 	}
 
-	public EmitirContaHelper(Integer idContaHistorico, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
-			Integer idQuadraConta, Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos,
-			BigDecimal valorCreditos, BigDecimal valorImpostos, Date dataValidadeConta, BigDecimal valorRateioAgua, BigDecimal valorRateioEsgoto, Integer idImovel, Integer idLocalidade,
-			Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial,
-			Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade, String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio,
-			BigDecimal percentualEsgotoConta, String nomeImovel, Integer codDebitoAutomatico, Integer anoMesFaturamentoGrupo) {
+	public EmitirContaHelper(Integer idContaHistorico, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta,
+			Short loteConta, Short subLoteConta, Integer consumoAgua, Integer consumoEsgoto, BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal debitos, BigDecimal valorCreditos, BigDecimal valorImpostos,
+			Date dataValidadeConta, BigDecimal valorRateioAgua, BigDecimal valorRateioEsgoto, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional,
+			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade,
+			String descricaoLigacaoAguaSituacao, String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel, Integer codDebitoAutomatico,
+			Integer anoMesFaturamentoGrupo) {
 		this.anoMesFaturamentoGrupo = anoMesFaturamentoGrupo;
 		this.idConta = idContaHistorico;
 		this.nomeCliente = nomeCliente;
@@ -1885,5 +1885,37 @@ public class EmitirContaHelper implements Serializable {
 
 	public void setIdConsumoAnormalidade(Integer idConsumoAnormalidade) {
 		this.idConsumoAnormalidade = idConsumoAnormalidade;
+	}
+
+	public Object[] getMensagensFixas() {
+		return mensagensFixas;
+	}
+
+	public void setMensagensFixas(Object[] mensagensFixas) {
+		this.mensagensFixas = mensagensFixas;
+	}
+
+	public String getMensagemAnormalidade() {
+		return mensagemAnormalidade;
+	}
+
+	public void setMensagemAnormalidade(String mensagemAnormalidade) {
+		this.mensagemAnormalidade = mensagemAnormalidade;
+	}
+
+	public String getMensagemDebitos() {
+		return mensagemDebitos;
+	}
+
+	public void setMensagemDebitos(String mensagemDebitos) {
+		this.mensagemDebitos = mensagemDebitos;
+	}
+
+	public String getMensagemQuitacao() {
+		return mensagemQuitacao;
+	}
+
+	public void setMensagemQuitacao(String mensagemQuitacao) {
+		this.mensagemQuitacao = mensagemQuitacao;
 	}
 }

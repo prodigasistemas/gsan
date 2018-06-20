@@ -7808,6 +7808,7 @@ public class ControladorArrecadacao implements SessionBean {
 			Integer idGuiaPagamento = getControladorFaturamento().inserirGuiaPagamentoCodigoBarrasPorCliente(guiaPagamento, DebitoTipo.ACRESCIMOS_POR_IMPONTUALIDADE, idLocalidade);
 			guiaPagamento.setId(idGuiaPagamento);
 			
+			guiaGeral.setId(idGuiaPagamento);
 			guiaGeral.setGuiaPagamento(guiaPagamento);
 			Integer anoMesPagamento = Util.formataAnoMes(dataPagamento);
 
@@ -7830,7 +7831,7 @@ public class ControladorArrecadacao implements SessionBean {
 						.getAnoMesArrecadacao());
 			}
 
-			pagamento.setValorPagamento(valorDebito);
+			pagamento.setValorPagamento(mapLocalidadeValor.get(chave));
 			pagamento.setDataPagamento(dataPagamento);
 			pagamento.setPagamentoSituacaoAtual(null);
 			pagamento.setPagamentoSituacaoAnterior(null);
@@ -7856,7 +7857,7 @@ public class ControladorArrecadacao implements SessionBean {
 			ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
 			arrecadacaoForma.setId(idFormaArrecadacao);
 			pagamento.setArrecadacaoForma(arrecadacaoForma);
-			pagamento.setCliente(null);
+			pagamento.setCliente(cliente);
 			pagamento.setUltimaAlteracao(new Date());
 
 			pagamento.setFatura(null);

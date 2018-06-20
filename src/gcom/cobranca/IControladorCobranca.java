@@ -1076,4 +1076,6 @@ public interface IControladorCobranca {
 	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) throws ControladorException;
 	
 	public void desfazerParcelamentosPorEntradaNaoPagaSemAnoMesReferencia(int idFuncionalidadeIniciada) throws ControladorException;
+	
+	public boolean isEntradaParcelamentoPaga(Parcelamento parcelamento) throws ControladorException;
 }
