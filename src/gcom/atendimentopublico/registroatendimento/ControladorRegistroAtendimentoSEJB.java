@@ -10670,20 +10670,9 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 	
 	/**
 	 * Pesquisar registro de atendimento para o imóvel 
-	 *
-	 * @author Raphael Rossiter
-	 * @date 21/07/2008
-	 *
-	 * @param idImovel
-	 * @return Collection
-	 * @throws ControladorException
 	 */
 	public Collection pesquisarRegistroAtendimento(Integer idImovel)
 	throws ControladorException {
-		
-		 //= null;
-		
-		// filtro Registro Atendimento
 		FiltroRegistroAtendimento filtroRegistroAtendimento = new FiltroRegistroAtendimento();
 		
 		filtroRegistroAtendimento
@@ -10733,26 +10722,6 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			
 			registroAtendimento = (RegistroAtendimento) 
 			iteratorColecaoRegistroAtendimento.next();
-			
-			// Alterado no dia 20/11/2006, pode determinação de Aryed e
-			// Newton
-			/*
-			 * if (registroAtendimento.getAtendimentoMotivoEncerramento() !=
-			 * null) { sessionContext.setRollbackOnly(); throw new
-			 * ControladorException(mensagemErro, null, idImovel
-			 * .toString()); }
-			 */
-			
-			// Alterado no dia 20/11/2006, pode determinação de Aryed e
-			// Newton
-			// verifica se existe atendimento motivo para o encerramento
-			/*
-			 * if (registroAtendimento.getAtendimentoMotivoEncerramento()
-			 * .getIndicadorExecucao() != 1) {
-			 * sessionContext.setRollbackOnly(); throw new
-			 * ControladorException(mensagemErro, null, idImovel
-			 * .toString()); }
-			 */
 			
 			FiltroEspecificacaoTipoValidacao filtroEspecificacaoTipoValidacao = new FiltroEspecificacaoTipoValidacao();
 			

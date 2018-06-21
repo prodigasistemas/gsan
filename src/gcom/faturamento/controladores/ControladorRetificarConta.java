@@ -6,8 +6,11 @@ import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
+import gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento;
+import gcom.atendimentopublico.registroatendimento.AtendimentoRelacaoTipo;
 import gcom.atendimentopublico.registroatendimento.EspecificacaoTipoValidacao;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.IClienteConta;
@@ -382,6 +385,7 @@ public class ControladorRetificarConta extends ControladorComum {
 		contaAtual.setPercentualColeta(percentualColeta);
 		contaAtual.incrementaNumeroRetificacoes();
 
+		RegistroAtendimento raParaRetificacao = null;
 		try {
 			Collection colecaoContaCategoria = getControladorFaturamento().montarColecaoContaCategoria(colecaoCategoria, contaAtual);
 
@@ -401,12 +405,11 @@ public class ControladorRetificarConta extends ControladorComum {
 			repositorioFaturamento.removerClientesConta(contaAtual.getId());
 			repositorioFaturamento.removerImpostosDeduzidosConta(contaAtual.getId());
 
-			boolean temPermissaoRetificarContaSemRA = this.getControladorPermissaoEspecial().verificarPermissaoRetificarContaSemRA(usuarioLogado);
-
+			raParaRetificacao = getControladorRegistroAtendimento().verificarExistenciaRegistroAtendimento(
+					new Integer(imovel.getId()), "atencao.conta_existencia_registro_atendimento", EspecificacaoTipoValidacao.ALTERACAO_CONTA);
+			
+			boolean temPermissaoRetificarContaSemRA = getControladorPermissaoEspecial().verificarPermissaoRetificarContaSemRA(usuarioLogado);
 			if (!temPermissaoRetificarContaSemRA) {
-				RegistroAtendimento raParaRetificacao = this.getControladorRegistroAtendimento().verificarExistenciaRegistroAtendimento(
-						new Integer(imovel.getId()), "atencao.conta_existencia_registro_atendimento", EspecificacaoTipoValidacao.ALTERACAO_CONTA);
-
 				repositorioFaturamento.atualizarContaCanceladaOuRetificada(contaAtual, raParaRetificacao);
 			}
 		} catch (ErroRepositorioException ex) {
@@ -431,12 +434,34 @@ public class ControladorRetificarConta extends ControladorComum {
 		getControladorFaturamento().inserirClienteImovel(imovel, contaAtual);
 		getControladorFaturamento().inserirImpostosDeduzidosConta(impostosDeduzidosConta, contaAtual);
 
-		this.atualizarFaturaItemContaRetificada(contaAtual.getId(), contaAtual);
+		atualizarFaturaItemContaRetificada(contaAtual.getId(), contaAtual);
 
 		getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirConta(contaAtual);
 
+		if (raParaRetificacao != null) 
+			encerrarRA(usuarioLogado, raParaRetificacao);
+		
 		idContaGerada = contaAtual.getId();
 		return idContaGerada;
+	}
+
+	private void encerrarRA(Usuario usuario, RegistroAtendimento ra) throws ControladorException {
+		ra.setDataEncerramento(new Date());
+		ra.setParecerEncerramento("ENCERRAMENTO AUTOMÁTICO POR RETIFICAÇÃO DE CONTA.");
+		ra.setCodigoSituacao(RegistroAtendimento.SITUACAO_ENCERRADO);
+		ra.setAtendimentoMotivoEncerramento(new AtendimentoMotivoEncerramento(AtendimentoMotivoEncerramento.CONCLUSAO_SERVICO));
+		ra.setUltimaAlteracao(new Date());
+		
+		getControladorUtil().atualizar(ra);
+		
+		RegistroAtendimentoUnidade raUnidade = new RegistroAtendimentoUnidade(
+				new Date(),
+				usuario, 
+				ra, 
+				usuario.getUnidadeOrganizacional(), 
+				new AtendimentoRelacaoTipo(AtendimentoRelacaoTipo.ENCERRAR));
+		
+		getControladorUtil().inserir(raUnidade);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -468,14 +493,13 @@ public class ControladorRetificarConta extends ControladorComum {
 		contaAtual.setUsuario(usuarioLogado);
 		contaAtual.setUltimaAlteracao(new Date());
 
+		RegistroAtendimento raParaRetificacao = null;
 		try {
-
-			boolean temPermissaoRetificarContaSemRA = this.getControladorPermissaoEspecial().verificarPermissaoRetificarContaSemRA(usuarioLogado);
-
+			raParaRetificacao = getControladorRegistroAtendimento().verificarExistenciaRegistroAtendimento(
+					new Integer(imovel.getId()), "atencao.conta_existencia_registro_atendimento", EspecificacaoTipoValidacao.ALTERACAO_CONTA);
+			
+			boolean temPermissaoRetificarContaSemRA = getControladorPermissaoEspecial().verificarPermissaoRetificarContaSemRA(usuarioLogado);
 			if (!temPermissaoRetificarContaSemRA) {
-				RegistroAtendimento raParaRetificacao = this.getControladorRegistroAtendimento().verificarExistenciaRegistroAtendimento(
-						new Integer(imovel.getId()), "atencao.conta_existencia_registro_atendimento", EspecificacaoTipoValidacao.ALTERACAO_CONTA);
-
 				repositorioFaturamento.atualizarContaCanceladaOuRetificada(contaAtual, raParaRetificacao);
 			}
 
@@ -666,6 +690,10 @@ public class ControladorRetificarConta extends ControladorComum {
 		this.atualizarFaturaItemContaRetificada(contaAtual.getId(), contaInserir);
 
 		getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirConta(contaInserir);
+		
+		if (raParaRetificacao != null) 
+			encerrarRA(usuarioLogado, raParaRetificacao);
+		
 		return idContaGerada;
 	}
 
