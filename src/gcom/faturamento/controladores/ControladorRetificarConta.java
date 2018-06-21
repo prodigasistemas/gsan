@@ -437,31 +437,32 @@ public class ControladorRetificarConta extends ControladorComum {
 		atualizarFaturaItemContaRetificada(contaAtual.getId(), contaAtual);
 
 		getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirConta(contaAtual);
-
-		if (raParaRetificacao != null) 
-			encerrarRA(usuarioLogado, raParaRetificacao);
 		
-		idContaGerada = contaAtual.getId();
-		return idContaGerada;
+		return contaAtual.getId();
 	}
 
-	private void encerrarRA(Usuario usuario, RegistroAtendimento ra) throws ControladorException {
-		ra.setDataEncerramento(new Date());
-		ra.setParecerEncerramento("ENCERRAMENTO AUTOM햀ICO POR RETIFICA플O DE CONTA.");
-		ra.setCodigoSituacao(RegistroAtendimento.SITUACAO_ENCERRADO);
-		ra.setAtendimentoMotivoEncerramento(new AtendimentoMotivoEncerramento(AtendimentoMotivoEncerramento.CONCLUSAO_SERVICO));
-		ra.setUltimaAlteracao(new Date());
+	public void encerrarRA(Integer idImovel, Usuario usuario) throws ControladorException {
+		RegistroAtendimento ra = getControladorRegistroAtendimento().verificarExistenciaRegistroAtendimentoSemLevantarExcecao(
+				idImovel, EspecificacaoTipoValidacao.ALTERACAO_CONTA);
 		
-		getControladorUtil().atualizar(ra);
-		
-		RegistroAtendimentoUnidade raUnidade = new RegistroAtendimentoUnidade(
-				new Date(),
-				usuario, 
-				ra, 
-				usuario.getUnidadeOrganizacional(), 
-				new AtendimentoRelacaoTipo(AtendimentoRelacaoTipo.ENCERRAR));
-		
-		getControladorUtil().inserir(raUnidade);
+		if (ra != null) {
+			ra.setDataEncerramento(new Date());
+			ra.setParecerEncerramento("ENCERRAMENTO AUTOM햀ICO POR RETIFICA플O DE CONTA.");
+			ra.setCodigoSituacao(RegistroAtendimento.SITUACAO_ENCERRADO);
+			ra.setAtendimentoMotivoEncerramento(new AtendimentoMotivoEncerramento(AtendimentoMotivoEncerramento.CONCLUSAO_SERVICO));
+			ra.setUltimaAlteracao(new Date());
+			
+			getControladorUtil().atualizar(ra);
+			
+			RegistroAtendimentoUnidade raUnidade = new RegistroAtendimentoUnidade(
+					new Date(),
+					usuario, 
+					ra, 
+					usuario.getUnidadeOrganizacional(), 
+					new AtendimentoRelacaoTipo(AtendimentoRelacaoTipo.ENCERRAR));
+			
+			getControladorUtil().inserir(raUnidade);
+		}
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -690,9 +691,6 @@ public class ControladorRetificarConta extends ControladorComum {
 		this.atualizarFaturaItemContaRetificada(contaAtual.getId(), contaInserir);
 
 		getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirConta(contaInserir);
-		
-		if (raParaRetificacao != null) 
-			encerrarRA(usuarioLogado, raParaRetificacao);
 		
 		return idContaGerada;
 	}
