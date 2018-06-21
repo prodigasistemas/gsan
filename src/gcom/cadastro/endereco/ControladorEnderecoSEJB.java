@@ -6044,5 +6044,13 @@ public class ControladorEnderecoSEJB implements SessionBean {
 		return parmsEndereco;
 
 	}
+	
+	public Collection pesquisarEnderecoFormatadoCliente(Integer idCliente) throws ControladorException {
+		try {
+			return repositorioEndereco.pesquisarEnderecoFormatadoCliente(idCliente);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 
 }

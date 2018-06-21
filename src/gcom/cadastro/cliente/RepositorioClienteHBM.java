@@ -403,8 +403,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 					+ // 17
 					" clienteResponsavel.nome, "
 					+ // 18
-					" clienteTipo.id "
+					" clienteTipo.id, "
 					+ // 19
+					" cliente.id "
+					+ // 20
 					"from Cliente cliente " + "left join cliente.clienteTipo clienteTipo " + "left join cliente.orgaoExpedidorRg orgaoExpedidorRg "
 					+ "left join cliente.unidadeFederacao unidadeFederacao " + "left join cliente.profissao profissao "
 					+ "left join cliente.pessoaSexo pessoaSexo " + "left join cliente.ramoAtividade ramoAtividade "
@@ -1885,5 +1887,34 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+	}
+	public Cliente obterUsuarioImovelPorData(Integer idImovel, Integer idClienteRelacaoTipo, Date data) throws ErroRepositorioException {
+
+
+		Session session = HibernateUtil.getSession();
+		Cliente retorno = new Cliente();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("SELECT cliente FROM ClienteImovel clienteImovel ")
+					.append("INNER JOIN clienteImovel.cliente cliente ")
+					.append("WHERE clienteImovel.imovel.id = :idImovel ")
+					.append("AND  clienteImovel.dataFimRelacao <= :data ")
+					.append("AND  clienteImovel.dataInicioRelacao >= :data ")
+					.append("AND  clienteImovel.clienteRelacaoTipo.id = :clienteRelacaoTipo ");
+
+			retorno = (Cliente) session.createQuery(consulta.toString())
+							.setInteger("idImovel", idImovel)
+							.setDate("data", data)
+							.setInteger("clienteRelacaoTipo", idClienteRelacaoTipo).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	
 	}
 }

@@ -1,11 +1,12 @@
 package gcom.gui.faturamento.conta;
 
-import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento;
 import gcom.arrecadacao.debitoautomatico.FiltroDebitoAutomaticoMovimento;
+import gcom.cadastro.imovel.Contrato;
+import gcom.cadastro.imovel.ContratoTipo;
+import gcom.cadastro.imovel.FiltroContrato;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.fachada.Fachada;
-import gcom.faturamento.FiltroContratoDemanda;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaHistorico;
@@ -299,13 +300,11 @@ public class ExibirConsultarContaAction extends GcomAction {
 		}
 		
 		// Adicionado por Mariana Victor 06/01/2011
-		FiltroContratoDemanda filtroContratoDemanda = new FiltroContratoDemanda();
-		filtroContratoDemanda.adicionarParametro(
-				new ParametroSimples(FiltroContratoDemanda.IMOVEL, idImovel));
-		filtroContratoDemanda.adicionarParametro(
-				new ParametroNulo(FiltroContratoDemanda.DATACONTRATOENCERRAMENTO));
-		Collection colecaoContratoDemanda = fachada.pesquisar(
-				filtroContratoDemanda, ContratoDemanda.class.getName());
+		FiltroContrato filtroContratoDemanda = new FiltroContrato();
+		filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.IMOVEL, idImovel));
+		filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.CONTRATO_TIPO, ContratoTipo.DEMANDA));
+		filtroContratoDemanda.adicionarParametro(new ParametroNulo(FiltroContrato.DATACONTRATOENCERRAMENTO));
+		Collection colecaoContratoDemanda = fachada.pesquisar(filtroContratoDemanda, Contrato.class.getName());
 		
 		if (colecaoContratoDemanda != null && !colecaoContratoDemanda.isEmpty()) {
 			Object[] consumoContratado = fachada.consultarConsumoCadastrado(idImovel);

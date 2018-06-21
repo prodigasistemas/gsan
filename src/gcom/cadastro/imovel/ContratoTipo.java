@@ -1,26 +1,33 @@
-package gcom.arrecadacao;
+package gcom.cadastro.imovel;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+public class ContratoTipo implements Serializable{
 
-public class ContratoMotivoCancelamento implements Serializable {
+	private static final long serialVersionUID = 6084476809685621201L;
 
-	private static final long serialVersionUID = 1L;
-
-    private Integer id;
-    private String descricaoMotivoCancelContrato;
+	private Integer id;
+    private String descricao;
     private Short indicadorUso;
     private Date ultimaAlteracao;
 
-    public ContratoMotivoCancelamento(String descricaoMotivoCancelContrato, Short indicadorUso, Date ultimaAlteracao) {
-        this.descricaoMotivoCancelContrato = descricaoMotivoCancelContrato;
+    public final static Integer DEMANDA = new Integer(1);
+    public final static Integer ADESAO = new Integer(2);
+
+    public ContratoTipo(String descricao, Short indicadorUso, Date ultimaAlteracao) {
+        this.descricao = descricao;
         this.indicadorUso = indicadorUso;
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    public ContratoMotivoCancelamento() {
+    public ContratoTipo() {
+    }
+    
+    public ContratoTipo(Integer id) {
+    	this.id = id;
     }
 
     public Integer getId() {
@@ -31,12 +38,12 @@ public class ContratoMotivoCancelamento implements Serializable {
         this.id = id;
     }
 
-    public String getDescricaoMotivoCancelContrato() {
-        return this.descricaoMotivoCancelContrato;
+    public String getDescricao() {
+        return this.descricao;
     }
 
-    public void setDescricaoMotivoCancelContrato(String descricaoMotivoCancelContrato) {
-        this.descricaoMotivoCancelContrato = descricaoMotivoCancelContrato;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public Short getIndicadorUso() {
