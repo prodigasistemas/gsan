@@ -385,7 +385,6 @@ public class ControladorRetificarConta extends ControladorComum {
 		contaAtual.setPercentualColeta(percentualColeta);
 		contaAtual.incrementaNumeroRetificacoes();
 
-		RegistroAtendimento raParaRetificacao = null;
 		try {
 			Collection colecaoContaCategoria = getControladorFaturamento().montarColecaoContaCategoria(colecaoCategoria, contaAtual);
 
@@ -405,11 +404,11 @@ public class ControladorRetificarConta extends ControladorComum {
 			repositorioFaturamento.removerClientesConta(contaAtual.getId());
 			repositorioFaturamento.removerImpostosDeduzidosConta(contaAtual.getId());
 
-			raParaRetificacao = getControladorRegistroAtendimento().verificarExistenciaRegistroAtendimento(
-					new Integer(imovel.getId()), "atencao.conta_existencia_registro_atendimento", EspecificacaoTipoValidacao.ALTERACAO_CONTA);
-			
 			boolean temPermissaoRetificarContaSemRA = getControladorPermissaoEspecial().verificarPermissaoRetificarContaSemRA(usuarioLogado);
 			if (!temPermissaoRetificarContaSemRA) {
+				RegistroAtendimento raParaRetificacao = getControladorRegistroAtendimento().verificarExistenciaRegistroAtendimento(
+						new Integer(imovel.getId()), "atencao.conta_existencia_registro_atendimento", EspecificacaoTipoValidacao.ALTERACAO_CONTA);
+				
 				repositorioFaturamento.atualizarContaCanceladaOuRetificada(contaAtual, raParaRetificacao);
 			}
 		} catch (ErroRepositorioException ex) {
@@ -494,13 +493,12 @@ public class ControladorRetificarConta extends ControladorComum {
 		contaAtual.setUsuario(usuarioLogado);
 		contaAtual.setUltimaAlteracao(new Date());
 
-		RegistroAtendimento raParaRetificacao = null;
 		try {
-			raParaRetificacao = getControladorRegistroAtendimento().verificarExistenciaRegistroAtendimento(
-					new Integer(imovel.getId()), "atencao.conta_existencia_registro_atendimento", EspecificacaoTipoValidacao.ALTERACAO_CONTA);
-			
 			boolean temPermissaoRetificarContaSemRA = getControladorPermissaoEspecial().verificarPermissaoRetificarContaSemRA(usuarioLogado);
 			if (!temPermissaoRetificarContaSemRA) {
+				RegistroAtendimento raParaRetificacao = getControladorRegistroAtendimento().verificarExistenciaRegistroAtendimento(
+						new Integer(imovel.getId()), "atencao.conta_existencia_registro_atendimento", EspecificacaoTipoValidacao.ALTERACAO_CONTA);
+				
 				repositorioFaturamento.atualizarContaCanceladaOuRetificada(contaAtual, raParaRetificacao);
 			}
 
