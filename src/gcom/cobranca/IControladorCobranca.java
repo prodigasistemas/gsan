@@ -1078,4 +1078,6 @@ public interface IControladorCobranca {
 	public void desfazerParcelamentosPorEntradaNaoPagaSemAnoMesReferencia(int idFuncionalidadeIniciada) throws ControladorException;
 	
 	public boolean isEntradaParcelamentoPaga(Parcelamento parcelamento) throws ControladorException;
+	
+	public CobrancaDocumento obterUltimoDocumentoCobrancaConta(Conta conta) throws ControladorException;
 }

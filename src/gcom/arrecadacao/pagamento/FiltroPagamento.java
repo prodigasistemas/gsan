@@ -34,6 +34,8 @@ public class FiltroPagamento extends Filtro {
     
     public final static String AVISO_BANCARIO = "avisoBancario";
     
+    public final static String COBRANCA_DOCUMENTO = "cobrancaDocumento";
+    
     public final static String ANO_MES_REFERENCIA_ARRECADACAO = "anoMesReferenciaArrecadacao";
     
     public final static String ANO_MES_REFERENCIA_PAGAMENTO = "anoMesReferenciaPagamento";

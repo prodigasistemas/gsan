@@ -61973,4 +61973,25 @@ public class ControladorCobranca extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
+	
+	public CobrancaDocumento obterUltimoDocumentoCobrancaConta(Conta conta) throws ControladorException {
+		CobrancaDocumento documento = null;
+		try {
+			FiltroCobrancaDocumentoItem filtro = new FiltroCobrancaDocumentoItem();
+			
+			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumentoItem.CONTA_GERAL_ID, conta.getId()));
+			filtro.adicionarCaminhoParaCarregamentoEntidade("cobrancaDocumento");
+			filtro.setCampoOrderBy("cobrancaDocumento.emissao");
+			
+			Collection<CobrancaDocumentoItem> itens = getControladorUtil().pesquisar(filtro, CobrancaDocumentoItem.class.getName());
+			
+			if (itens != null && !itens.isEmpty()) {
+				CobrancaDocumentoItem item = itens.iterator().next(); 
+				documento = item.getCobrancaDocumento();
+			}
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+		return documento;
+	}
 }

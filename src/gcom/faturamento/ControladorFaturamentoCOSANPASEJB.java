@@ -1,6 +1,7 @@
 package gcom.faturamento;
 
 import gcom.arrecadacao.ArrecadacaoForma;
+import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.batch.UnidadeProcessamento;
@@ -23,6 +24,9 @@ import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.QuadraFace;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.cobranca.CobrancaDocumento;
+import gcom.cobranca.CobrancaDocumentoItem;
+import gcom.cobranca.FiltroCobrancaDocumentoItem;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
@@ -2111,11 +2115,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									pagamentoContasMenorData = (Date) arrayPagamentoContasMenorData[1];
 								}
 
-								if (idArrecadacaoForma == null
-										|| (idArrecadacaoForma != null && !idArrecadacaoForma.equals(ArrecadacaoForma.DEBITO_AUTOMATICO))) {
+								if (!isDebitoAutomatico(idArrecadacaoForma)) {
 
+									CobrancaDocumento documentoCobranca = null;
+											
 									boolean indicadorExistePagamentoClassificadoConta;
 									if (mapIndicadorExistePagamentoConta.containsKey(idConta)) {
+										documentoCobranca = obterDocumentoCobrancaPagamento(idConta);
 										indicadorExistePagamentoClassificadoConta = true;
 									} else {
 										indicadorExistePagamentoClassificadoConta = false;
@@ -2130,8 +2136,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 											.subtract(conta.getValorCreditos());
 
 									BigDecimal valorMultasCobradas = repositorioFaturamento.pesquisarValorMultasCobradas(idConta);
-
-									Date vencimentoConta = calculaVencimentoConta(conta, indicadorExistePagamentoClassificadoConta);
+									
+									Date vencimentoConta = calculaVencimentoConta(conta, indicadorExistePagamentoClassificadoConta, documentoCobranca);
 									
 									calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
 											.calcularAcrescimoPorImpontualidade(
@@ -2149,10 +2155,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 									if (indicadorGeracaoMulta.equals(ConstantesSistema.SIM)
 											&& calcularAcrescimoPorImpontualidade.getValorMulta().compareTo(BigDecimal.ZERO) == 1
-											&& indicadorExistePagamentoClassificadoConta) {
+											&& indicadorExistePagamentoClassificadoConta
+											&& !isMultaJaCobrada(idConta, indicadorExistePagamentoClassificadoConta, documentoCobranca)) {
 
-										debitoTipo = new DebitoTipo();
-										debitoTipo.setId(DebitoTipo.MULTA_IMPONTUALIDADE);
+										debitoTipo = new DebitoTipo(DebitoTipo.MULTA_IMPONTUALIDADE);
 
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
@@ -2176,8 +2182,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 											&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(BigDecimal.ZERO) == 1
 											&& indicadorExistePagamentoClassificadoConta) {
 
-										debitoTipo = new DebitoTipo();
-										debitoTipo.setId(DebitoTipo.JUROS_MORA);
+										debitoTipo = new DebitoTipo(DebitoTipo.JUROS_MORA);
 
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
@@ -2201,8 +2206,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 											&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) == 1
 											&& indicadorExistePagamentoClassificadoConta) {
 
-										debitoTipo = new DebitoTipo();
-										debitoTipo.setId(DebitoTipo.ATUALIZACAO_MONETARIA);
+										debitoTipo = new DebitoTipo(DebitoTipo.ATUALIZACAO_MONETARIA);
 
 										DebitoACobrar debitoACobrar = this
 												.gerarDebitoACobrarParaConta(
@@ -2406,6 +2410,29 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			throw new EJBException(e);
 		}
 
+	}
+	
+	private boolean isMultaJaCobrada(Integer idConta, boolean indicadorExistePagamentoClassificadoConta, CobrancaDocumento documentoCobranca) throws ControladorException {
+		boolean multaCobrada = false;
+		
+		if (indicadorExistePagamentoClassificadoConta) {
+			FiltroCobrancaDocumentoItem filtroItem = new FiltroCobrancaDocumentoItem();
+			
+			filtroItem.adicionarParametro(new ParametroSimples(FiltroPagamento.CONTA, idConta));
+			
+			Collection colecaoItem = getControladorUtil().pesquisar(filtroItem,CobrancaDocumentoItem.class.getSimpleName());
+			
+			if (!colecaoItem.isEmpty()) {
+				CobrancaDocumentoItem item = (CobrancaDocumentoItem) Util.retonarObjetoDeColecao(colecaoItem);
+				if (item.getValorAcrescimos() != null) multaCobrada = true;
+			} 
+		}
+
+		return multaCobrada;	
+	}
+
+	private boolean isDebitoAutomatico(Integer idArrecadacaoForma) {
+		return idArrecadacaoForma == null || (idArrecadacaoForma != null && idArrecadacaoForma.equals(ArrecadacaoForma.DEBITO_AUTOMATICO));
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -2670,7 +2697,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 						pagamentoContasMenorData = (Date) arrayPagamentoContasMenorData[1];
 					}
 					
-					if (idArrecadacaoForma == null || (idArrecadacaoForma != null && !idArrecadacaoForma.equals(ArrecadacaoForma.DEBITO_AUTOMATICO))) {
+					if (!isDebitoAutomatico(idArrecadacaoForma)) {
 						
 						boolean existePagamentoClassificadoConta;
 						if (mapIndicadorExistePagamentoConta.containsKey(conta.getId())) {
@@ -2681,7 +2708,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 						
 						BigDecimal valorMultasCobradas = repositorioFaturamento.pesquisarValorMultasCobradas(conta.getId());
 						
-						Date vencimentoConta = calculaVencimentoConta(conta, existePagamentoClassificadoConta);
+						Date vencimentoConta = calculaVencimentoConta(conta, existePagamentoClassificadoConta, null);
 						
 						CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
 								.calcularAcrescimoPorImpontualidade(
@@ -2766,17 +2793,42 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return colecaoDebitoACobrarInserir;
 	}
 	
-	private Date calculaVencimentoConta(Conta conta, boolean pagamentoClassificadoConta) throws ControladorException {
+	private Date calculaVencimentoConta(Conta conta, boolean pagamentoClassificadoConta, CobrancaDocumento documento) throws ControladorException {
 		Date vencimento = conta.getDataVencimentoConta();
 		
-		Fatura fatura = pesquisarFaturaDeConta(conta.getId());
-		
-		if (fatura != null && pagamentoClassificadoConta ) {
-			vencimento = fatura.getVencimento();
+		if (pagamentoClassificadoConta) {
+			Fatura fatura = pesquisarFaturaDeConta(conta.getId());
+			
+			if (fatura != null ) {
+				vencimento = fatura.getVencimento();
+			}
+			
+			if (documento != null) {
+				vencimento = documento.getEmissao();
+			}
+			if (conta.getImovel().getId().intValue() == 5832373) {
+				System.out.println("Vencimento documento: " + documento.getEmissao());
+			}
 		}
 		
 		return vencimento;
 		
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private CobrancaDocumento obterDocumentoCobrancaPagamento(Integer idConta) throws ControladorException {
+		FiltroPagamento filtroPagamento = new FiltroPagamento();
+		filtroPagamento.adicionarParametro(new ParametroSimples(FiltroPagamento.CONTA, idConta));
+		filtroPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroPagamento.COBRANCA_DOCUMENTO);
+		
+		Collection colecaoPagamento = getControladorUtil().pesquisar(filtroPagamento,Pagamento.class.getSimpleName());
+		
+		if (!colecaoPagamento.isEmpty()) {
+			Pagamento pagamento = (Pagamento) Util.retonarObjetoDeColecao(colecaoPagamento);
+			return pagamento.getCobrancaDocumento();
+		} else {
+			return null;
+		}
 	}
 	
 	@SuppressWarnings("rawtypes")
