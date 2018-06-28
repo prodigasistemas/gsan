@@ -44,12 +44,12 @@
 	<field name="getEndereco" class="java.lang.String"/>
 	<field name="getEnderecoCorrespondencia" class="java.lang.String"/>
 
-	<variable name="valor" class="java.math.BigDecimal" resetType="Group" resetGroup="imovel" calculation="Sum">
+	<variable name="valor" class="java.math.BigDecimal" resetType="Group" resetGroup="documento" calculation="Sum">
 		<variableExpression><![CDATA[$F{getValor}]]></variableExpression>
 	</variable>
 
-		<group  name="imovel" isStartNewPage="true" >
-			<groupExpression><![CDATA[$F{getIdImovel}]]></groupExpression>
+		<group  name="documento" isStartNewPage="true" >
+			<groupExpression><![CDATA[$F{getIdDocumentoCobranca}]]></groupExpression>
 			<groupHeader>
 			<band height="0"  isSplitAllowed="false" >
 			</band>
@@ -186,7 +186,7 @@
 					</textElement>
 				<text><![CDATA[Valor]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" pattern="¤ #,##0.00" isBlankWhenNull="false" evaluationTime="Group" evaluationGroup="imovel"  hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="¤ #,##0.00" isBlankWhenNull="false" evaluationTime="Group" evaluationGroup="documento"  hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="259"
 						y="31"
@@ -291,7 +291,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="74"
+						y="73"
 						width="109"
 						height="0"
 						key="line-9"/>
@@ -994,7 +994,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 						key="line-23"/>
 					<graphicElement stretchType="NoStretch" pen="Thin"/>
 				</line>
-				<textField isStretchWithOverflow="false" pattern="¤ #,##0.00" isBlankWhenNull="false" evaluationTime="Group" evaluationGroup="imovel"  hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="¤ #,##0.00" isBlankWhenNull="false" evaluationTime="Group" evaluationGroup="documento"  hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="283"
 						y="102"
