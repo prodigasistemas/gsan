@@ -2,6 +2,7 @@ package gcom.faturamento.controladores;
 
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.cadastro.imovel.Imovel;
 import gcom.faturamento.bean.CalcularValoresAguaEsgotoHelper;
 import gcom.faturamento.conta.Conta;
@@ -59,4 +60,6 @@ public interface IControladorRetificarConta {
 	public Collection retificarContasPagasSemDebitoCredito(Collection colecaoContasRetificar, Usuario usuarioLogado) throws ControladorException;
 	
 	public Conta pesquisarContaRetificacao(Integer idConta) throws ControladorException;
+	
+	public void encerrarRA(Integer idImovel, Usuario usuario) throws ControladorException;
 }

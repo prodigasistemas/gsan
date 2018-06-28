@@ -40170,4 +40170,12 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public void encerrarRA(Integer idImovel, Usuario usuario) {
+		try {
+			getControladorRetificarConta().encerrarRA(idImovel, usuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }

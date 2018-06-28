@@ -603,8 +603,8 @@ public class RetificarContaAction extends GcomAction {
 		
 		Integer consumoMedidoProporcional = obterConsumoMedidoProporcional(leituraAtual, leituraAnterior, retificarContaActionForm, 
 				colecaoCategoriaOUSubcategoriaInicial, idConsumoTarifa, usuarioLogado);
-        idConta =  
-        	this.getFachada().retificarConta(new Integer(mesAnoContaJSP), 
+		
+        idConta = getFachada().retificarConta(new Integer(mesAnoContaJSP), 
         		contaAtual,
         		contaAtual.getImovel(), 
         		colecaoDebitoCobrado, 
@@ -625,6 +625,8 @@ public class RetificarContaAction extends GcomAction {
         		leituraAnterior,leituraAtual,true,
         		retornoUrlBotaoVoltar,leituraAnteriorPoco,
         		leituraAtualPoco,volumePoco,percentualColeta, consumoMedidoProporcional);
+        
+		getFachada().encerrarRA(contaAtual.getImovel().getId(), usuarioLogado);
 				
 		montarPaginaSucesso(httpServletRequest, 
 				"Conta " + Util.formatarAnoMesParaMesAno(new Integer(mesAnoContaJSP).intValue()) + 
