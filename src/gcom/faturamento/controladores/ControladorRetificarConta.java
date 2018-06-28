@@ -444,7 +444,9 @@ public class ControladorRetificarConta extends ControladorComum {
 		RegistroAtendimento ra = getControladorRegistroAtendimento().verificarExistenciaRegistroAtendimentoSemLevantarExcecao(
 				idImovel, EspecificacaoTipoValidacao.ALTERACAO_CONTA);
 		
-		if (ra != null) {
+		Integer os = getControladorRegistroAtendimento().verificarOrdemServicoParaRA(ra.getId());
+		
+		if (ra != null && os == null) {
 			ra.setDataEncerramento(new Date());
 			ra.setParecerEncerramento("ENCERRAMENTO AUTOMÁTICO POR RETIFICAÇÃO DE CONTA.");
 			ra.setCodigoSituacao(RegistroAtendimento.SITUACAO_ENCERRADO);
