@@ -5,7 +5,9 @@
 	<global-forwards />
 
 	<action-mappings>
-		<action type="gcom.gui.treinamentos.ExibirTreinamentosAction"
+		<action
+		    name="ExibirCanaisAtendimentoActionForm" 
+		    type="gcom.gui.treinamentos.ExibirTreinamentosAction"
 			validate="false"
 			scope="session"
 			path="/treinamentos">
