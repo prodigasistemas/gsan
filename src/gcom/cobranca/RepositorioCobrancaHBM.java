@@ -2616,7 +2616,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "debitoACobrar.numeroPrestacaoDebito, " // 16
 					+ "debitoACobrar.numeroPrestacaoCobradas, " // 17
 					+ "cdi.numeroParcelasAntecipadas, " // 18
-					+ "cdi.id " // 19
+					+ "cdi.id, " // 19
+					+ "debitoACobrar.parcelamento.id " // 20
 					+ "FROM CobrancaDocumentoItem cdi " + "LEFT JOIN cdi.cobrancaDocumento cd " + "LEFT JOIN cd.imovel imovel "
 					+ "LEFT JOIN cd.documentoTipo documentoTipo " + "LEFT JOIN cdi.contaGeral.conta conta "
 					+ "LEFT JOIN cdi.contaGeral.contaHistorico contaHistorico "

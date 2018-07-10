@@ -91,7 +91,7 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 
 	private void cancelarParcelamento(CancelarParcelamentoHelper helper, Usuario usuario) throws ControladorException {
-		cancelarDebitoACobrar(helper.getParcelamento().getId());
+		cancelarJurosParcelamento(helper.getParcelamento().getId());
 		cancelarCreditoARealizar(helper.getParcelamento().getId());
 		
 		Parcelamento parcelamento = helper.getParcelamento();
@@ -106,11 +106,12 @@ public class ControladorParcelamento extends ControladorComum {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void cancelarDebitoACobrar(Integer idParcelamento) {
+	public void cancelarJurosParcelamento(Integer idParcelamento) throws ControladorException { 
 		try {
 			Filtro filtro = new FiltroDebitoACobrar();
 			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.PARCELAMENTO_ID, idParcelamento));
 			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.DEBITO_TIPO_ID, DebitoTipo.JUROS_SOBRE_PARCELAMENTO));
+			filtro.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL_ID, DebitoCreditoSituacao.NORMAL));
 			Collection<DebitoACobrar> colecao = super.getControladorUtil().pesquisar(filtro, DebitoACobrar.class.getName());
 
 			DebitoACobrar debito = (DebitoACobrar) Util.retonarObjetoDeColecao(colecao);

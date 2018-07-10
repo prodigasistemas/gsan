@@ -227,6 +227,11 @@ public class Parcelamento extends ObjetoTransacao {
 		this.indicadorConfirmacaoParcelamento = indicadorConfirmacaoParcelamento;
 	}
 
+	public Parcelamento(Integer id) {
+		super();
+		this.id = id;
+	}
+
 	public Integer getId() {
 		return this.id;
 	}
