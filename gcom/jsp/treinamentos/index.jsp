@@ -48,7 +48,7 @@
 			</div>
 			
 			<div class="pagina-conteudo">
-				<h3>Faturamento</h3>
+				<h3>Cadastro</h3>
 	
 				<p><a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa" aria-hidden="true"></i> Mudanca de Titularidade</a></p>
 					<div class="collapse" id="collapseExample">
