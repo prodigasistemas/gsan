@@ -33,13 +33,15 @@
 </head>
 
 <body>
-	<%@ include file="/jsp/portal/cabecalho.jsp"%>
+<%@ include file="/jsp/portal/cabecalho.jsp"%>
 	
-		<div class="page-wrap">
+	<div class="page-wrap">
 		<div class="container pagina">
 			<div class="container container-breadcrumb">
 				<ul class="breadcrumb">
-					<li class="breadcrumb-item"><a href="portal.do">Treinamentos</a></li>
+					<li class="breadcrumb-item">
+						<a href="efetuarLogoffAction.do">Voltar ao Menu Principal</a>
+					</li>
 				</ul>
 			</div>
 			
@@ -61,12 +63,8 @@
 
 			</div>
 
-	
 			<div class="pagina-conteudo">
-				 <h3>Financeiro</h3>
-	
-				<p></p> 
-	
+				 <h3>Financeiro</h3>	
 			</div>
 
 </body>
