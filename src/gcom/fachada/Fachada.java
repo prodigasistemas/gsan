@@ -545,6 +545,7 @@ import gcom.relatorio.cadastro.micromedicao.RelatorioImoveisComLeiturasQuantitat
 import gcom.relatorio.cadastro.micromedicao.RelatorioImoveisComLeiturasRelacaoBean;
 import gcom.relatorio.cadastro.micromedicao.RelatorioImoveisComLeiturasTipo7Bean;
 import gcom.relatorio.cadastro.micromedicao.RelatorioResumoLigacoesCapacidadeHidrometroHelper;
+import gcom.relatorio.cobranca.AvisoCorteDTO;
 import gcom.relatorio.cobranca.FiltrarRelatorioBoletimMedicaoCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAcompanhamentoAcoesCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAnalisePerdasCreditosBean;
@@ -40174,6 +40175,14 @@ public class Fachada {
 	public void encerrarRA(Integer idImovel, Usuario usuario) {
 		try {
 			getControladorRetificarConta().encerrarRA(idImovel, usuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public List<AvisoCorteDTO> gerarAvisoCorteEnderecoAlternativo(Integer idAcaoCronograma, Integer idAcaoComando) {
+		try {
+			return getControladorCobranca().gerarAvisoCorteEnderecoAlternativo(idAcaoCronograma, idAcaoComando);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

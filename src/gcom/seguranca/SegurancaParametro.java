@@ -16,7 +16,8 @@ public class SegurancaParametro implements Serializable {
 		URL_GSAN_RELATORIOS,
 		URL_SEGURANCA,
 		URL_SEGUNDA_VIA,
-		URL_CONTRATO_ADESAO;
+		URL_CONTRATO_ADESAO,
+		URL_AVISO_CORTE;
 	}
 
 	public Integer getId() {
