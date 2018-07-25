@@ -1767,7 +1767,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 					            Collection<Integer> colecaoIdsLocalidadesAtualizarPagamentos = getControladorLocalidade().pesquisarTodosIdsLocalidade();
 
 					            atualizarPagamentosContasCobranca.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,colecaoIdsLocalidadesAtualizarPagamentos);
-					            atualizarPagamentosContasCobranca.addParametro("anoMesArrecadacao", anoMesArrecadacaoSistemaParametro);
+					            atualizarPagamentosContasCobranca.addParametro("anoMesArrecadacaoSistemaParametro", anoMesArrecadacaoSistemaParametro);
 
 					            funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(atualizarPagamentosContasCobranca));
 
