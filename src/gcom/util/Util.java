@@ -163,6 +163,7 @@ public class Util {
 		return retorno;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static Object[] retonarObjetoDeColecaoArray(Collection colecao) {
 		Object[] retorno = null;
 
@@ -2049,6 +2050,7 @@ public class Util {
 	 * 
 	 * @return boolean (true - eh dia util, false - nao dia util)
 	 */
+	@SuppressWarnings("rawtypes")
 	public static boolean ehDiaUtil(Date dataAnalisada, Collection<NacionalFeriado> colecaoNacionalFeriado, Collection<MunicipioFeriado> colecaoMunicipioFeriado) {
 
 		boolean ehDiaUtil = true;
@@ -2120,6 +2122,7 @@ public class Util {
 	 * 
 	 * @return Ultimo Dia do Mes util
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static int obterUltimoDiaUtilMes(int mes, int ano, Collection colecaoDatasFeriados) {
 		int ultimoDiaUtil = 0;
 
@@ -3296,6 +3299,7 @@ public class Util {
 	 * @author Rafael Francisco Pinto
 	 * @return Collection com os valores separado da String
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Collection separarCamposString(String separador, String campos) {
 
 		Collection retorno = new LinkedList();
@@ -3919,6 +3923,7 @@ public class Util {
 	 * Data: 12/04/2007
 	 * 
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Collection<Categoria> montarColecaoCategoria(Collection colecaoSubcategorias) {
 
 		Collection<Categoria> colecaoRetorno = null;
@@ -4012,6 +4017,7 @@ public class Util {
 		return dt;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static String separarStringPorLetraMaiuscula(String target) {
 
 		StringBuilder builder = new StringBuilder(target);
@@ -4418,6 +4424,7 @@ public class Util {
 	 * Author: Vivianne Sousa Data: 21/11/2008 Adiciona nº de dias uteis para
 	 * uma data
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Date adicionarNumeroDiasUteisDeUmaData(Date data, int numeroDias, Collection colecaoFeriadosNacionais, Collection colecaoFeriadosMunicipais) {
 
 		int cont = 0;
@@ -5624,6 +5631,7 @@ public class Util {
 	 *            linhas
 	 * @return Vetor de linhas do arquivo texto.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Vector carregaLinhas(InputStream arquivo, int maxLinhas) throws IOException {
 		Vector vetor = new Vector();
 		vetor.removeAllElements();
@@ -6150,4 +6158,15 @@ public class Util {
             return false;
         }
     }
+    
+    public static List<Integer> sortear(List<Integer> listaIds, double percentual) {
+		List<Integer> sorteados = new ArrayList<Integer>();
+		
+		double qtdPercentual = Math.round((listaIds.size() * percentual)/100); 
+		
+		for (int i = 0; i < qtdPercentual; i++) {
+			sorteados.add(listaIds.get(i));
+		}
+		return sorteados;
+	}
 }

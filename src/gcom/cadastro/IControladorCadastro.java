@@ -274,8 +274,7 @@ public interface IControladorCadastro {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarLocalidades() throws ControladorException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao) throws ControladorException;
+	public List<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) throws ControladorException;
 
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
 			Integer idArquivoTxt) throws ControladorException;
@@ -513,4 +512,6 @@ public interface IControladorCadastro {
 	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) throws Exception;
 	
 	public boolean verificarExistenciaEmpresa(Integer idEmpresa) throws ControladorException;
+	
+	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto) throws ControladorException;
 }

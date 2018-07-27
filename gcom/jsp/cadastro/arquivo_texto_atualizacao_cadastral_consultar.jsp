@@ -1,3 +1,5 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-template.tld" prefix="template"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
@@ -6,36 +8,32 @@
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>
 <%@ taglib uri="/WEB-INF/fmt.tld" prefix="fmt"%>
 
-
-
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html>
 
 <head>
 
 <%@ include file="/jsp/util/titulo.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet"
-	href="<bean:message key="caminho.css"/>EstilosCompesa.css"
-	type="text/css">
 
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
-<html:javascript staticJavascript="false"
-	formName="ConsultarArquivoTextoAtualizacaoCadastralActionForm"
-	dynamicJavascript="true" />
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>util.js"></script>
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>Calendario.js"></script>
+<link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
+
+<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
+<html:javascript staticJavascript="false" formName="ConsultarArquivoTextoAtualizacaoCadastralActionForm" dynamicJavascript="true" />
+<script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
+<script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
+
 <style>
-.styleFontePequena{font-size:9px;
-                   color: #000000;
-				   font:Verdana, Arial, Helvetica, sans-serif}
-.styleFontePeqNegrito{font-size:11px;
-                   color: #000000;
-				   font-weight: bold}
+.styleFontePequena {
+	font-size: 9px;
+    color: #000000;
+	font: Verdana, Arial, Helvetica, sans-serif
+}
+				   
+.styleFontePeqNegrito {
+	font-size: 11px;
+    color: #000000;
+	font-weight: bold;
+}
 </style>
 
 <script language="JavaScript">
@@ -134,6 +132,15 @@
 		
 		if(CheckboxNaoVazio(document.forms[0].idsRegistros)){
 			form.action = 'retornarZipArquivoTxtAtualizacaoCadastralAction.do';
+			form.submit();
+		}
+	}
+
+    function gerarZipRevisao(){
+		var form = document.forms[0];
+		
+		if(CheckboxNaoVazio(document.forms[0].idsRegistros)){
+			form.action = 'retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do';
 			form.submit();
 		}
 	}
@@ -344,41 +351,55 @@
 				</tr>
 				
 				<tr>
-					<td><input name="Button" type="button" class="bottonRightCol"
-						value="Desfazer" align="left"
-						onclick="window.location.href='<html:rewrite page="/exibirConsultarArquivoTextoAtualizacaoCadastralAction.do?menu=sim"/>'">
-					<input type="button" name="ButtonCancelar" class="bottonRightCol"
-						value="Cancelar"
-						onClick="javascript:window.location.href='/gsan/telaPrincipal.do'"></td>
-					<td align="right"><%--<INPUT type="button" class="bottonRightCol" value="Inserir" tabindex="13" style="width: 70px;" onclick="validarForm(document.forms[0]);">--%>
-
-					 <gsan:controleAcessoBotao name="Botao" value="Selecionar"
-						onclick="validaForm(document.forms[0]);"
-						url="consultarArquivoTextoAtualizacaoCadastralAction.do" tabindex="13" /></td>
-				</tr>
-
-				<td>
-					<font color="#000000" style="font-size: 10px"
-						face="Verdana, Arial, Helvetica, sans-serif">
-							<strong>Arquivos Texto para Atualização Cadastral:</strong>
-					</font>
-				</td>
-
-				<tr>
-					<td colspan="1" height="23"> 
-					 <gsan:controleAcessoBotao name="Button" value="Compactar Arquivos"
-						onclick="javascript:gerarZip();"
-						url="retornarZipArquivoTxtAtualizacaoCadastralAction.do" tabindex="13" />
+					<td width="150"><strong>Exibição:</strong></td>
+					<td>
+    					<strong><html:radio property="exibicao" value="" />Todos</strong>
+					    <strong><html:radio property="exibicao" value="1" />A Revisar</strong> 
 					</td>
 				</tr>
+				
+				<tr>
+					<td>
+						<input type="button" name="Button" class="bottonRightCol" value="Desfazer" align="left" onclick="window.location.href='<html:rewrite page="/exibirConsultarArquivoTextoAtualizacaoCadastralAction.do?menu=sim"/>'">
+						<input type="button" name="ButtonCancelar" class="bottonRightCol" value="Cancelar" onClick="javascript:window.location.href='/gsan/telaPrincipal.do'">
+					</td>
+					
+					<td align="right">
+						<gsan:controleAcessoBotao name="Botao" value="Selecionar" onclick="validaForm(document.forms[0]);" url="consultarArquivoTextoAtualizacaoCadastralAction.do" tabindex="13" />
+					</td>
+				</tr>
+				
+				<tr></tr>
+				
+				<tr>
+					<td colspan="1"> 
+						<gsan:controleAcessoBotao name="Button" value="Compactar Arquivos" onclick="javascript:gerarZip();" url="retornarZipArquivoTxtAtualizacaoCadastralAction.do" tabindex="13" />
+					</td>
+				</tr>
+				
+				<logic:present name="colecaoArquivoTextoAtualizacaoCadastral">
+					<logic:notEmpty name="colecaoArquivoTextoAtualizacaoCadastral">
+<%-- 						<logic:equal name="exibicao" value="1"> --%>
+							<tr><td><p>&nbsp;</p></td></tr>
+							
+							<tr>
+								<td width="175"><strong>Percentual de Imóveis Aleatórios:</strong></td>
+								<td>
+									<html:text property="percentualAleatorios" size="4" maxlength="2" onkeyup="javascript:verificaNumeroInteiro(this);"/> 
+									<gsan:controleAcessoBotao name="Button" value="Gerar Rotas para Revisão" onclick="javascript:gerarZipRevisao();" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="14" />
+								</td>
+							</tr>
+<%-- 						</logic:equal> --%>
+					</logic:notEmpty>
+				</logic:present>
+				
+				<tr><td><p>&nbsp;</p></td></tr>
 
 				<tr>
-					<!--<td colspan="4" bgcolor="#3399FF"> -->
 					<td colspan="5" bgcolor="#000000" height="2" valign="baseline"></td>
 				</tr>
 
-				<table width="100%" align="center" bgcolor="#90c7fc" border="0"
-					cellpadding="0" cellspacing="0">
+				<table width="100%" align="center" bgcolor="#90c7fc" border="0" cellpadding="0" cellspacing="0">
 					<tr bgcolor="#cbe5fe" >
 						<td width="100%" align="center">
 						 <table width="100%" bgcolor="#99CCFF" border="0">
@@ -418,7 +439,6 @@
 									<%int cont = 0;%>
 									<logic:iterate name="colecaoArquivoTextoAtualizacaoCadastral"
 										id="arquivoTextoAtualizacaoCadastral">
-										<!-- <pg:item>  -->
 										<%cont = cont + 1;
 										if (cont % 2 == 0) {%>
 										<tr bgcolor="#cbe5fe" class="styleFontePequena">
@@ -492,7 +512,6 @@
 			</table>
 			<p>&nbsp;</p>
 		</tr>
-		<!-- Rodapé -->
 		<%@ include file="/jsp/util/rodape.jsp"%>
 	</table>
 	<p>&nbsp;</p>
