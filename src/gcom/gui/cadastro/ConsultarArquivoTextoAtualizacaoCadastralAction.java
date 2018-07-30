@@ -1,11 +1,11 @@
 package gcom.gui.cadastro;
 
-import gcom.fachada.Fachada;
+import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
-import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.ConstantesSistema;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,56 +15,34 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Consultar Arquivo Texto da Atualização Cadastral
- * 
- * @author Ana Maria 
- * @date 02/03/2009
- */
 public class ConsultarArquivoTextoAtualizacaoCadastralAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
-
-		ActionForward retorno = actionMapping
-				.findForward("consultarArquivoTextoAtualizacaoCadastral");
-
-		HttpSession sessao = httpServletRequest.getSession(false);
-		
-		Fachada fachada = Fachada.getInstancia();
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		HttpSession sessao = request.getSession(false);
 
 		ConsultarArquivoTextoAtualizacaoCadastralActionForm form = (ConsultarArquivoTextoAtualizacaoCadastralActionForm) actionForm;
-		
-		String empresaID = form.getIdEmpresa();
-		String idLocalidade = form.getIdLocalidade();
-		String codigoSetorComercial = form.getCodigoSetorComercial();
-		String idSituacaoTransmissao = form.getIdSituacaoTransmissao();
-		String leiturista = form.getLeituristaID();
-
-		Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
 
 		sessao.removeAttribute("permissao");
-		if (usuarioLogado.getEmpresa().getIndicadorEmpresaPrincipal().equals(
-				new Short("1"))) {
+		if (getUsuarioLogado(request).getEmpresa().getIndicadorEmpresaPrincipal().equals(ConstantesSistema.SIM)) {
 			sessao.setAttribute("permissao", "1");
 		} else {
 			sessao.setAttribute("permissao", "2");
 		}
 
-		Collection colecaoArquivoTextoAtualizacaoCadastral = fachada.pesquisarArquivoTextoAtualizacaoCadastro(
-				empresaID, idLocalidade, codigoSetorComercial, leiturista, idSituacaoTransmissao);
-		
-		if (colecaoArquivoTextoAtualizacaoCadastral == null || colecaoArquivoTextoAtualizacaoCadastral.isEmpty()) {
-			throw new ActionServletException(
-					"atencao.nenhum_arquivo_txt_atualizacao_cadastral");
+		List<ArquivoTextoAtualizacaoCadastral> lista = getFachada().pesquisarArquivoTextoAtualizacaoCadastro(
+				form.getIdEmpresa(),
+				form.getIdLocalidade(), 
+				form.getCodigoSetorComercial(), 
+				form.getLeituristaID(), 
+				form.getIdSituacaoTransmissao(),
+				form.getExibicao());
 
+		if (lista == null || lista.isEmpty()) {
+			throw new ActionServletException("atencao.nenhum_arquivo_txt_atualizacao_cadastral");
 		}
 
-		sessao.setAttribute("colecaoArquivoTextoAtualizacaoCadastral",colecaoArquivoTextoAtualizacaoCadastral);
+		sessao.setAttribute("colecaoArquivoTextoAtualizacaoCadastral", lista);
 
-		return retorno;
+		return mapping.findForward("consultarArquivoTextoAtualizacaoCadastral");
 	}
-
-
 }

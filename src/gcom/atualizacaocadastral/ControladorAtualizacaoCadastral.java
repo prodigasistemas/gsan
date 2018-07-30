@@ -1,21 +1,5 @@
 package gcom.atualizacaocadastral;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
-
-import org.apache.log4j.Logger;
-
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiltroOrdemServico;
@@ -76,6 +60,23 @@ import gcom.util.MergeProperties;
 import gcom.util.RepositorioUtilHBM;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+
+import org.apache.log4j.Logger;
 
 public class ControladorAtualizacaoCadastral extends ControladorComum implements IControladorAtualizacaoCadastral {
 
@@ -1338,5 +1339,41 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         } catch (Exception e) {
             throw new ControladorException("Erro ao recuperar os tipos de ocupantes", e);
         }
+	}
+
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao) throws ControladorException {
+		try {
+			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
+			for (Integer idArquivo : idsArquivos) {
+				List<Integer> imoveisARevisar = repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, SituacaoAtualizacaoCadastral.A_REVISAR);
+				List<Integer> sorteados = this.sortearImoveis(idArquivo, percentualFiscalizacao);
+				
+				if (imoveisARevisar != null && !imoveisARevisar.isEmpty()) {
+					
+					sorteados.addAll(imoveisARevisar);
+					
+					ArquivoTextoAtualizacaoCadastral arquivo = getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(sorteados, idArquivo);
+					arquivos.add(arquivo);
+				}
+			}
+			
+			return arquivos;
+		} catch (Exception e) {
+			throw new ControladorException("Erro ao regerar Arquivo de Atualização Cadastral", e);
+		}
+	}
+	
+	private List<Integer> sortearImoveis(Integer idArquivo, double percentual) throws ControladorException {
+		List<Integer> sorteados = new ArrayList<Integer>();
+		try {
+			List<Integer> imoveis = repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, SituacaoAtualizacaoCadastral.TRANSMITIDO);
+			
+			Collections.shuffle(imoveis);
+			sorteados = Util.sortear(imoveis, percentual);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao sortear imóveis para regerar Arquivo de Atualização Cadastral", e);
+		}
+		
+		return sorteados;
 	}
 }

@@ -153,10 +153,9 @@ public interface IRepositorioCadastro {
     public void excluirFeriadosMunicipais( String anoDestino ) throws ErroRepositorioException;
 
  	@SuppressWarnings("rawtypes")
-    public Collection pesquisarLocalidades() throws ErroRepositorioException ;
+    public Collection pesquisarLocalidades() throws ErroRepositorioException;
 
- 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao)throws ErroRepositorioException;
+ 	public List<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) throws ErroRepositorioException;
 
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(Integer idArquivoTxt)
 		throws ErroRepositorioException;

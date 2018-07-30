@@ -1,40 +1,5 @@
 package gcom.cadastro;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-
-import org.jboss.logging.Logger;
-
-import br.com.danhil.BarCode.Interleaved2of5;
-import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.FiltroArrecadador;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
@@ -272,6 +237,42 @@ import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import org.jboss.logging.Logger;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 
 public class ControladorCadastro extends ControladorComum {
 
@@ -6809,18 +6810,9 @@ public class ControladorCadastro extends ControladorComum {
 
 	/**
 	 * Gerar Arquivo Texto para Atualização Cadastral
-	 * 
-	 * @param colecaoImovelFiltrado
-	 * 
-	 * @author Ana Maria
-	 * @date 17/09/2008
-	 * @exception ControladorException
 	 */
-	private StringBuilder gerarArquivoTxt(Collection colecaoImovelFiltrado,
-			Integer idArquivoTexto, Leiturista leiturista, Rota rota) throws ControladorException {
-
+	private StringBuilder gerarArquivoTxt(Collection colecaoImovelFiltrado, Integer idArquivoTexto, Leiturista leiturista, Rota rota) throws ControladorException {
 		try {
-
 			StringBuilder arquivoTexto = new StringBuilder();
 			Iterator imovelFiltradoIterator = colecaoImovelFiltrado.iterator();
 
@@ -6848,10 +6840,9 @@ public class ControladorCadastro extends ControladorComum {
 					qtdRegistro = qtdRegistro + colecaoImovelRamoAtividade.size();
 				}
 
-				
-		        ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(idImovel);;
-		        Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);;
-				
+				ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(idImovel);
+				Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
+
 				// REGISTRO_TIPO_04 (Dados Serviços)
 				arquivoTexto.append(new GeradorRegistroServicos(imovelAtualizacaoCadastral, imovel).build());
 				qtdRegistro = qtdRegistro + 1;
@@ -6859,15 +6850,12 @@ public class ControladorCadastro extends ControladorComum {
 				// REGISTRO_TIPO_05 (Dados Medidor)
 				arquivoTexto.append(new GeradorRegistroHidromedro(imovelAtualizacaoCadastral, imovel).build());
 				qtdRegistro = qtdRegistro + 1;
-				
-				//Registro_Tipo_06 (Localização)
+
+				// Registro_Tipo_06 (Localização)
 				arquivoTexto.append(new GeradorRegistroLocalizacao(idImovel).build());
 				qtdRegistro = qtdRegistro + 1;
 
-				// Seta o imóvel com situação "em campo"
-				getControladorImovel().atualizarImovelAtualizacaoCadastralSituacaoAtualizacaoCadastral(
-								idImovel, SituacaoAtualizacaoCadastral.EM_CAMPO, null);
-				
+				getControladorImovel().atualizarImovelAtualizacaoCadastralSituacaoAtualizacaoCadastral(idImovel, SituacaoAtualizacaoCadastral.EM_CAMPO, null);
 				getControladorImovel().atualizarIdArquivoTextoImovelAtualizacaoCadastral(idArquivoTexto, idImovel);
 			}
 
@@ -6884,6 +6872,65 @@ public class ControladorCadastro extends ControladorComum {
 			return arquivoTextoFinal;
 
 		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto) throws ControladorException {
+		try {
+			StringBuilder builder = new StringBuilder();
+			int qtdRegistro = 0;
+			
+			ArquivoTextoAtualizacaoCadastral arquivo = pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTexto);
+			
+			for (Integer idImovel : idsImoveis) {
+				builder.append(this.gerarArquivoTextoRegistroTipoCliente(repositorioClienteImovel.pesquisarClienteImovelAtualizacaoCadastral(idImovel), idImovel));
+				qtdRegistro += 1;
+
+				builder.append(this.gerarArquivoTextoRegistroTipoImovel(idImovel));
+				qtdRegistro += 1;
+
+				Collection<ImovelRamoAtividade> colecaoImovelRamoAtividade = getControladorImovel().pesquisarRamoAtividadeDoImovel(idImovel);
+				if (!Util.isVazioOrNulo(colecaoImovelRamoAtividade)) {
+					builder.append(this.gerarArquivoTextoRegistroTipoRamoAtividadeImovel(colecaoImovelRamoAtividade, idImovel));
+					qtdRegistro += colecaoImovelRamoAtividade.size();
+				}
+
+				ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(idImovel);
+				Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
+
+				builder.append(new GeradorRegistroServicos(imovelAtualizacaoCadastral, imovel).build());
+				qtdRegistro += 1;
+
+				builder.append(new GeradorRegistroHidromedro(imovelAtualizacaoCadastral, imovel).build());
+				qtdRegistro += 1;
+
+				builder.append(new GeradorRegistroLocalizacao(idImovel).build());
+				qtdRegistro += 1;
+			}
+			
+			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota());
+			builder.append((StringBuilder) trailler[0]);
+
+			StringBuilder arquivoTexto = new StringBuilder();
+			arquivoTexto.append((Integer) trailler[1]);
+			arquivoTexto.append(System.getProperty("line.separator"));
+			arquivoTexto.append(builder);
+			
+			byte[] bytes = IoUtil.transformarObjetoParaBytes(arquivoTexto);
+			arquivo.setArquivoTexto(bytes);
+			File file = new File(arquivo.getDescricaoArquivo() + ".txt");
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath())));
+			out.write(arquivoTexto.toString());
+			out.flush();
+			out.close();
+
+			return arquivo;
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		} catch (FileNotFoundException e) {
+			throw new ControladorException("erro.sistema", e);
+		} catch (IOException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
@@ -7982,39 +8029,24 @@ public class ControladorCadastro extends ControladorComum {
 	 * 
 	 * @author Wellington Rocha
 	 */
-	public StringBuilder gerarArquivoTextoRegistroTipoGeral(
-			Rota rota) throws ControladorException {
-
-		StringBuilder arquivoTextoRegistroTipoGeral = new StringBuilder();
-
-		SistemaParametro parametrosSistema = getControladorUtil()
-				.pesquisarParametrosDoSistema();
+	public StringBuilder gerarArquivoTextoRegistroTipoGeral(Rota rota) throws ControladorException {
+		StringBuilder arquivoTexto = new StringBuilder();
+		SistemaParametro parametrosSistema = getControladorUtil().pesquisarParametrosDoSistema();
 
 		// TIPO DO REGISTRO
-		arquivoTextoRegistroTipoGeral.append("07");
-
+		arquivoTexto.append("07");
 		// CODIGO EMPRESA FEBRABAN
-		arquivoTextoRegistroTipoGeral.append(Util.adicionarZerosEsquedaNumero(
-				4, parametrosSistema.getCodigoEmpresaFebraban().toString()));
-
+		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(4, parametrosSistema.getCodigoEmpresaFebraban().toString()));
 		// ANO MES FATURAMENTO CORRENTE
-		arquivoTextoRegistroTipoGeral.append(parametrosSistema
-				.getAnoMesFaturamento());
-
+		arquivoTexto.append(parametrosSistema.getAnoMesFaturamento());
 		// 0800 DA EMPRESA
-		arquivoTextoRegistroTipoGeral.append(Util.completaString(
-				parametrosSistema.getNumero0800Empresa(), 12));
-
+		arquivoTexto.append(Util.completaString(parametrosSistema.getNumero0800Empresa(), 12));
 		// CNPJ DA EMPRESA
-		arquivoTextoRegistroTipoGeral.append(Util.adicionarZerosEsquedaNumero(
-				14, parametrosSistema.getCnpjEmpresa()));
-
-		// INSCRIÇÃO ESTADUAL EMPRESA
-		arquivoTextoRegistroTipoGeral.append(Util.adicionarZerosEsquedaNumero(
-				20, parametrosSistema.getInscricaoEstadual()));
-
+		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(14, parametrosSistema.getCnpjEmpresa()));
+		// INSCRICAO ESTADUAL EMPRESA
+		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(20, parametrosSistema.getInscricaoEstadual()));
 		// LOGIN LEITURISTA
-		arquivoTextoRegistroTipoGeral.append(Util.completaString("gcom", 11));
+		arquivoTexto.append(Util.completaString("gcom", 11));
 
 		// SENHA LEITURISTA
 		String senhaGerada = "senha";
@@ -8024,54 +8056,35 @@ public class ControladorCadastro extends ControladorComum {
 		} catch (ErroCriptografiaException e1) {
 			throw new ControladorException("erro.criptografia.senha");
 		}
+		arquivoTexto.append(Util.completaString(senhaCriptografada, 40));
 
-		arquivoTextoRegistroTipoGeral.append(Util.completaString(
-				senhaCriptografada, 40));
-
-		// Indicador Transmissão OFFLINE
-		arquivoTextoRegistroTipoGeral.append(" ");
+		// Indicador Transmissao OFFLINE
+		arquivoTexto.append(" ");
 
 		// Versao Celular
 		if (parametrosSistema.getVersaoCelular() != null) {
-			arquivoTextoRegistroTipoGeral.append(Util
-					.adicionarZerosEsquedaNumero(10, parametrosSistema
-							.getVersaoCelular()));
+			arquivoTexto.append(Util.adicionarZerosEsquedaNumero(10, parametrosSistema.getVersaoCelular()));
 		} else {
-			arquivoTextoRegistroTipoGeral.append(Util.completaString("", 10));
+			arquivoTexto.append(Util.completaString("", 10));
 		}
 
 		// Data Inicio
-		arquivoTextoRegistroTipoGeral.append(Util.completaString("", 8));
-
+		arquivoTexto.append(Util.completaString("", 8));
 		// Data Fim
-		arquivoTextoRegistroTipoGeral.append(Util.completaString("", 8));
-
+		arquivoTexto.append(Util.completaString("", 8));
 		// Rota
-		arquivoTextoRegistroTipoGeral.append(Util.adicionarZerosEsquedaNumero(
-				4, rota.getId().toString()));
-
-		SetorComercial setor = rota.getSetorComercial();
-		Localidade localidade = setor.getLocalidade();
+		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(4, rota.getId().toString()));
 		// Localidade
-		arquivoTextoRegistroTipoGeral.append(Util.adicionarZerosEsquedaNumero(
-				3, localidade.getId().toString()));
-
+		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(3, rota.getSetorComercial().getLocalidade().getId().toString()));
 		// Setor
-		arquivoTextoRegistroTipoGeral.append(Util.adicionarZerosEsquedaNumero(
-				3, setor.getCodigo() + ""));
-
+		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(3, rota.getSetorComercial().getCodigo() + ""));
 		// rotaCodigo
-		arquivoTextoRegistroTipoGeral.append(Util.adicionarZerosEsquedaNumero(
-				2, rota.getCodigo() + ""));
-
+		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + ""));
 		// FaturamentoGrupo
-		arquivoTextoRegistroTipoGeral.append(Util.adicionarZerosEsquedaNumero(
-				3, rota.getFaturamentoGrupo().getId() + ""));
+		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(3, rota.getFaturamentoGrupo().getId() + ""));
+		arquivoTexto.append(System.getProperty("line.separator"));
 
-		arquivoTextoRegistroTipoGeral.append(System
-				.getProperty("line.separator"));
-
-		return arquivoTextoRegistroTipoGeral;
+		return arquivoTexto;
 	}
 
 	public StringBuilder gerarArquivoTextoRegistroTipoAnormalidades(
@@ -8572,38 +8585,26 @@ public class ControladorCadastro extends ControladorComum {
 
 	/**
 	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 04/03/2009
-	 * 
-	 * @return Collection
-	 * @throws ControladorException
 	 */
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade,
-			String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao) throws ControladorException {
+	public List<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, 
+			String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) throws ControladorException {
 
 		try {
-			Collection colecao = new ArrayList();
+			List<ArquivoTextoAtualizacaoCadastral> retorno = new ArrayList();
 			
-			Collection<ArquivoTextoAtualizacaoCadastral> colecaoArquivoTexto = 
-				this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(idEmpresa, idLocalidade, 
-						codigoSetorComercial, idAgenteComercial, idSituacaoTransmissao);
+			List<ArquivoTextoAtualizacaoCadastral> colecao = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
+					idEmpresa, idLocalidade, codigoSetorComercial, idAgenteComercial, idSituacaoTransmissao, exibicao);
 			
-			if (colecaoArquivoTexto != null && !colecaoArquivoTexto.isEmpty()) {
-				for (ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral : colecaoArquivoTexto) {
-					Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
-							SituacaoAtualizacaoCadastral.TRANSMITIDO, arquivoTextoAtualizacaoCadastral.getId());
-					
-					quantidadeImoveisTransmitidos += repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
-							SituacaoAtualizacaoCadastral.APROVADO, arquivoTextoAtualizacaoCadastral.getId());
-					
-					arquivoTextoAtualizacaoCadastral.setQuantidadeImoveisTransmitidos(quantidadeImoveisTransmitidos);
-					
-					colecao.add(arquivoTextoAtualizacaoCadastral);
-				}
+			for (ArquivoTextoAtualizacaoCadastral arquivo : colecao) {
+				Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO, arquivo.getId());
+				quantidadeImoveisTransmitidos += repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.APROVADO, arquivo.getId());
+				
+				arquivo.setQuantidadeImoveisTransmitidos(quantidadeImoveisTransmitidos);
+				
+				retorno.add(arquivo);
 			}
 			
-			return colecao;
+			return retorno;
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}

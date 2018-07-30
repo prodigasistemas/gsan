@@ -28166,9 +28166,9 @@ public class Fachada {
 		}
 	}
 
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao) {
+	public List<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) {
 		try {
-			return this.getControladorCadastro().pesquisarArquivoTextoAtualizacaoCadastro(idEmpresa, idLocalidade, codigoSetorComercial, idAgenteComercial, idSituacaoTransmissao);
+			return this.getControladorCadastro().pesquisarArquivoTextoAtualizacaoCadastro(idEmpresa, idLocalidade, codigoSetorComercial, idAgenteComercial, idSituacaoTransmissao, exibicao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -40183,6 +40183,14 @@ public class Fachada {
 	public List<AvisoCorteDTO> gerarAvisoCorteEnderecoAlternativo(Integer idAcaoCronograma, Integer idAcaoComando) {
 		try {
 			return getControladorCobranca().gerarAvisoCorteEnderecoAlternativo(idAcaoCronograma, idAcaoComando);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao) {
+		try {
+			return getControladorAtualizacaoCadastral().regerarArquivosAtualizacaoCadastral(idsArquivos, percentualFiscalizacao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
