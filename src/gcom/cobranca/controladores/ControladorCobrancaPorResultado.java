@@ -839,10 +839,12 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		
 		Collection<ImovelCobrancaSituacao> colecao = getControladorUtil().pesquisar(filtro, ImovelCobrancaSituacao.class.getName());
 		if (colecao != null && !colecao.isEmpty()) {
-			ImovelCobrancaSituacao situacao = (ImovelCobrancaSituacao) Util.retonarObjetoDeColecao(colecao);
-			situacao.setDataRetiradaCobranca(new Date());
-			situacao.setUltimaAlteracao(new Date());
-			getControladorUtil().atualizar(situacao);
+			for (ImovelCobrancaSituacao imovelCobranca : colecao) {
+				imovelCobranca.setDataRetiradaCobranca(new Date());
+				imovelCobranca.setUltimaAlteracao(new Date());
+				getControladorUtil().atualizar(imovelCobranca);
+				
+			}
 		}
 	}
 	
@@ -871,13 +873,14 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		
 		Collection<CobrancaSituacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, CobrancaSituacaoHistorico.class.getName());
 		if (colecao != null && !colecao.isEmpty()) {
-			CobrancaSituacaoHistorico situacao = (CobrancaSituacaoHistorico) Util.retonarObjetoDeColecao(colecao);
-			situacao.setAnoMesCobrancaRetirada(Util.formataAnoMes(new Date()));
-			situacao.setObservacaoRetira(observacaoRetirada);
-			situacao.setUsuarioRetira(usuario);
-			situacao.setDataFimSituacao(new Date());
-			situacao.setUltimaAlteracao(new Date());
-			getControladorUtil().atualizar(situacao);
+			for (CobrancaSituacaoHistorico historico : colecao) {
+				historico.setAnoMesCobrancaRetirada(Util.formataAnoMes(new Date()));
+				historico.setObservacaoRetira(observacaoRetirada);
+				historico.setUsuarioRetira(usuario);
+				historico.setDataFimSituacao(new Date());
+				historico.setUltimaAlteracao(new Date());
+				getControladorUtil().atualizar(historico);
+			}
 		}
 	}
 	
