@@ -971,9 +971,11 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	}
 	
 	private boolean isContaPrazoCobranca(Pagamento pagamento, ComandoEmpresaCobrancaConta comando) {
-		if (pagamento.getDataPagamento().before(comando.getDataFimCiclo()))
-			return true;
-		else return false;
+		if (comando.getDataExecucao() != null && comando.getDataFimCiclo() != null) {
+			if (pagamento.getDataPagamento().before(comando.getDataFimCiclo()))
+				return true;
+			else return false;
+		} else return false;
 	}
 
 	private Collection<EmpresaCobrancaContaPagamentos> gerarPagamentosCobrandaDeDebitos(Pagamento pagamento) throws ControladorException {
