@@ -5903,6 +5903,9 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 		}
 
+		if (idClienteNaBase != null) {
+			
+		}
 		// valida o namo mes de referencia da conta
 		anoMes = Util.formatarMesAnoParaAnoMes(Integer
 				.parseInt(registroHelperCodigoBarras
@@ -5916,23 +5919,22 @@ public class ControladorArrecadacao extends ControladorComum {
 		Integer numeroSequencial = new Integer(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento6());
 		
 		Fatura fatura = null;
-		try {
-			fatura = repositorioFaturamento.pesquisarFatura(idClienteNaBase, anoMes, numeroSequencial, valorPagamento);
-		} catch (ErroRepositorioException e1) {
-			throw new ControladorException("erro.pagamento.fatura", e1);
+		
+		if (idClienteNaBase != null) {
+			try {
+				fatura = repositorioFaturamento.pesquisarFatura(idClienteNaBase, anoMes, numeroSequencial, valorPagamento);
+			} catch (ErroRepositorioException e1) {
+				throw new ControladorException("erro.pagamento.fatura", e1);
+			}
+			
+			if (fatura != null && fatura.getDebito().compareTo(valorPagamento) != 0) {
+				descricaoOcorrencia = "VALOR DA FATURA DIFERENTE DO VALOR DO PAGAMENTO";
+			}
 		}
 		
-		if (fatura != null && fatura.getDebito().compareTo(valorPagamento) != 0) {
-			descricaoOcorrencia = "VALOR DA FATURA DIFERENTE DO VALOR DO PAGAMENTO";
-		}
-				
 		if (descricaoOcorrencia.equals("OK")) {
-
-			// inicializa a coleção de fatura item
 			Collection faturaItens = null;
 
-			
-			
 			try {
 				faturaItens = repositorioFaturamento.pesquisarFaturaItem(
 						idClienteNaBase, anoMes, numeroSequencial,
@@ -6076,8 +6078,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 			}
 		} else {
-			// atribui o valor 2(NÃO) ao indicador aceitacao
-			// registro
+			// atribui o valor 2(NÃO) ao indicador aceitacao registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
