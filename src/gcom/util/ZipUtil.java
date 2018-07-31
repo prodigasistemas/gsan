@@ -12,6 +12,9 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Esta classe reúne funções que manipulam um arquivo zip no sistema
  * 
@@ -272,4 +275,32 @@ public class ZipUtil {
 		}
 	}
 
+	public static void adicionarEmZip(ZipOutputStream zip, String nome, byte[] bytes) throws IOException, ClassNotFoundException {
+		File temp = new File(nome + ".txt");
+
+		FileOutputStream outputStream = new FileOutputStream(temp);
+		outputStream.write(((StringBuilder) IoUtil.transformarBytesParaObjeto(bytes)).toString().getBytes());
+		outputStream.close();
+
+		ZipUtil.adicionarArquivo(zip, temp);
+
+		temp.delete();
+
+		zip.closeEntry();
+	}
+	
+	public static void download(HttpServletResponse response, ZipOutputStream zip, String nomeArquivoZIP, File arquivoZIP) throws IOException {
+		zip.flush();
+		zip.close();
+
+		response.setContentType("application/zip");
+		response.addHeader("Content-Disposition", "attachment; filename=" + nomeArquivoZIP + ".zip");
+
+		ServletOutputStream sos = response.getOutputStream();
+		sos.write(IoUtil.getBytesFromFile(arquivoZIP));
+		sos.flush();
+		sos.close();
+
+		arquivoZIP.delete();
+	}
 }

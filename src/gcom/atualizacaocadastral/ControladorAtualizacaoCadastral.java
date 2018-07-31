@@ -1349,11 +1349,26 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				List<Integer> sorteados = this.sortearImoveis(idArquivo, percentualFiscalizacao);
 				
 				if (imoveisARevisar != null && !imoveisARevisar.isEmpty()) {
-					
 					sorteados.addAll(imoveisARevisar);
 					
-					ArquivoTextoAtualizacaoCadastral arquivo = getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(sorteados, idArquivo);
-					arquivos.add(arquivo);
+					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(sorteados, idArquivo));
+				}
+			}
+			
+			return arquivos;
+		} catch (Exception e) {
+			throw new ControladorException("Erro ao regerar Arquivo de Atualização Cadastral", e);
+		}
+	}
+	
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos) throws ControladorException {
+		try {
+			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
+			for (Integer idArquivo : idsArquivos) {
+				List<Integer> imoveisEmCampo = repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, SituacaoAtualizacaoCadastral.EM_CAMPO);
+				
+				if (imoveisEmCampo != null && !imoveisEmCampo.isEmpty()) {
+					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveisEmCampo, idArquivo));
 				}
 			}
 			

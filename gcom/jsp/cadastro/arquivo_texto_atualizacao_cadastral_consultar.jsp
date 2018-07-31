@@ -127,20 +127,11 @@
   	    return retorno;
     }
     
-    function gerarZip(){
+    function gerarZip(url){
 		var form = document.forms[0];
 		
 		if(CheckboxNaoVazio(document.forms[0].idsRegistros)){
-			form.action = 'retornarZipArquivoTxtAtualizacaoCadastralAction.do';
-			form.submit();
-		}
-	}
-
-    function gerarZipRevisao(){
-		var form = document.forms[0];
-		
-		if(CheckboxNaoVazio(document.forms[0].idsRegistros)){
-			form.action = 'retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do';
+			form.action = url;
 			form.submit();
 		}
 	}
@@ -371,25 +362,28 @@
 				
 				<tr></tr>
 				
-				<tr>
-					<td colspan="1"> 
-						<gsan:controleAcessoBotao name="Button" value="Compactar Arquivos" onclick="javascript:gerarZip();" url="retornarZipArquivoTxtAtualizacaoCadastralAction.do" tabindex="13" />
-					</td>
-				</tr>
-				
 				<logic:present name="colecaoArquivoTextoAtualizacaoCadastral">
 					<logic:notEmpty name="colecaoArquivoTextoAtualizacaoCadastral">
-<%-- 						<logic:equal name="exibicao" value="1"> --%>
-							<tr><td><p>&nbsp;</p></td></tr>
+						<tr>
+							<td colspan="1"> 
+								<gsan:controleAcessoBotao name="Button" value="Compactar Arquivos" onclick="javascript:gerarZip('retornarZipArquivoTxtAtualizacaoCadastralAction.do');" url="retornarZipArquivoTxtAtualizacaoCadastralAction.do" tabindex="13" />
+							</td>
 							
-							<tr>
-								<td width="175"><strong>Percentual de Imóveis Aleatórios:</strong></td>
-								<td>
-									<html:text property="percentualAleatorios" size="4" maxlength="2" onkeyup="javascript:verificaNumeroInteiro(this);"/> 
-									<gsan:controleAcessoBotao name="Button" value="Gerar Rotas para Revisão" onclick="javascript:gerarZipRevisao();" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="14" />
-								</td>
-							</tr>
-<%-- 						</logic:equal> --%>
+							<td colspan="1"> 
+								<gsan:controleAcessoBotao name="Button" value="Gerar Rotas Imóveis Não Transmitidos" onclick="javascript:gerarZip('retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do" tabindex="13" />
+							</td>
+						</tr>
+				
+						<tr><td><p>&nbsp;</p></td></tr>
+						
+						<tr>
+							<td width="175"><strong>Percentual de Imóveis Aleatórios:</strong></td>
+							<td>
+								<html:text property="percentualAleatorios" size="4" maxlength="2" onkeyup="javascript:verificaNumeroInteiro(this);"/> 
+								<gsan:controleAcessoBotao name="Button" value="Gerar Rotas para Revisão" onclick="javascript:gerarZip('retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="14" />
+							</td>
+						</tr>
+							
 					</logic:notEmpty>
 				</logic:present>
 				

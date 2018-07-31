@@ -40195,4 +40195,12 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos) {
+		try {
+			return getControladorAtualizacaoCadastral().regerarArquivosAtualizacaoCadastral(idsArquivos);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }
