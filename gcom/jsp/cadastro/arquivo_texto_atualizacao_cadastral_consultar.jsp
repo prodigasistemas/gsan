@@ -474,11 +474,11 @@
 											<td width="15%">
 											<div align="center"><c:choose>
 												<c:when
-													test='${arquivoTextoAtualizacaoCadastral.leiturista.cliente!=null}'>
-														${arquivoTextoAtualizacaoCadastral.leiturista.cliente.nome}
+													test='${arquivoTextoAtualizacaoCadastral.leiturista.funcionario!=null}'>
+														${arquivoTextoAtualizacaoCadastral.leiturista.funcionario.nome}
 													</c:when>
 												<c:otherwise>
-														${arquivoTextoAtualizacaoCadastral.leiturista.funcionario.nome}
+														${arquivoTextoAtualizacaoCadastral.leiturista.cliente.nome}
 													</c:otherwise>
 											</c:choose></div>
 											</td>
