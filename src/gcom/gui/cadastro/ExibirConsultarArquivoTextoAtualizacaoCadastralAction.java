@@ -75,7 +75,8 @@ public class ExibirConsultarArquivoTextoAtualizacaoCadastralAction extends GcomA
 			filtro.adicionarParametro(new ParametroSimples(FiltroLeiturista.INDICADOR_USO, ConstantesSistema.SIM));
 			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.CLIENTE);
 			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.FUNCIONARIO);
-
+			filtro.setCampoOrderBy(FiltroLeiturista.FUNCIONARIO_NOME, FiltroLeiturista.CLIENTE_NOME);
+			
 			Collection colecao = getFachada().pesquisar(filtro, Leiturista.class.getName());
 
 			if (colecao != null && !colecao.isEmpty()) {
