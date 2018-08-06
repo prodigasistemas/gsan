@@ -639,15 +639,15 @@ face: Verdana, Arial, Helvetica, sans-serif;
 												<td width="15%" align="center"><logic:notEmpty
 													name="pagamento" property="guiaPagamento">
 													<a
-														href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamento.getGuiaPagamento().getId() %>')">${pagamento.guiaPagamento.debitoTipo.descricao}</a>&nbsp;
+														href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamento.getGuiaPagamento().getGuiaPagamento().getId() %>')">${pagamento.guiaPagamento.guiaPagamento.debitoTipo.descricao}</a>&nbsp;
 														</logic:notEmpty><logic:empty name="pagamento"
 													property="guiaPagamento">${pagamento.debitoTipo.descricao} </logic:empty></td>
 												<td width="15%" align="right"><logic:notEmpty
 													name="pagamento" property="guiaPagamento">
 													<logic:notEmpty name="pagamento"
-														property="guiaPagamento.valorDebito">
+														property="guiaPagamento.guiaPagamento.valorDebito">
 														<bean:write name="pagamento"
-															property="guiaPagamento.valorDebito"
+															property="guiaPagamento.guiaPagamento.valorDebito"
 															formatKey="money.format" />&nbsp;
 													</logic:notEmpty>
 												</logic:notEmpty></td>
