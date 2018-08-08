@@ -1311,9 +1311,27 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					if (dados[7] != null && !dados[7].equals("")) {
 						String campoAtual = getDescricaoCampoAtualizacaoCadastral((String) dados[7], (String) dados[12]);
 						if (campoAtual != null) {
-							helper.setColunaValorAtual(campoAtual); 
+							helper.setColunaValorTransmitido(campoAtual); 
 						} else {
-							helper.setColunaValorAtual((String) dados[7]); 
+							helper.setColunaValorTransmitido((String) dados[7]); 
+						}
+					}
+					
+					if (dados[16] != null && !dados[16].equals("")) {
+						String campoAtual = getDescricaoCampoAtualizacaoCadastral((String) dados[16], (String) dados[12]);
+						if (campoAtual != null) {
+							helper.setColunaValorRevisado(campoAtual); 
+						} else {
+							helper.setColunaValorRevisado((String) dados[16]); 
+						}
+					}
+					
+					if (dados[17] != null && !dados[17].equals("")) {
+						String campoAtual = getDescricaoCampoAtualizacaoCadastral((String) dados[17], (String) dados[12]);
+						if (campoAtual != null) {
+							helper.setColunaValorFiscalizado(campoAtual); 
+						} else {
+							helper.setColunaValorFiscalizado((String) dados[17]); 
 						}
 					}
 					helper.setNomeColuna((String) dados[12]);
@@ -1498,9 +1516,13 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					valorCampo = trocaValorColuna(descricoes, nomeColuna, valorCampo);
 					coluna.setValorAnterior(valorCampo);
 
-					valorCampo = coluna.getValorAtual();
+					valorCampo = coluna.getValorTransmitido();
 					valorCampo = trocaValorColuna(descricoes, nomeColuna, valorCampo);
-					coluna.setValorAtual(valorCampo);
+					coluna.setValorTransmitido(valorCampo);
+					
+					valorCampo = coluna.getValorFiscalizado();
+					valorCampo = trocaValorColuna(descricoes, nomeColuna, valorCampo);
+					coluna.setValorFiscalizado(valorCampo);
 				}
 			}
 			

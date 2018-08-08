@@ -16,7 +16,7 @@ public class AdicionaAlteracaoHidrometro extends RelatorioConsultaAtualizacaoCad
 			for (ColunaAtualizacaoCadastral coluna : imovel.getColunasAtualizacao()) {
 				if (coluna.getNomeColuna().contains(TabelaColuna.NOME_COLUNA_HIDROMETRO)){
 					AlteracaoImovelRelatorioAtualizacaoCadastral alteracao = 
-							new AlteracaoImovelRelatorioAtualizacaoCadastral("Alteração de Hidrômetro", coluna.getValorAnterior(), coluna.getValorAtual());
+							new AlteracaoImovelRelatorioAtualizacaoCadastral("Alteração de Hidrômetro", coluna.getValorAnterior(), coluna.getValorTransmitido());
 					relatorio.addAlteracao(alteracao);
 					break;
 				}

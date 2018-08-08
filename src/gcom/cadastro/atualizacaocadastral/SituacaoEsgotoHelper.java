@@ -8,7 +8,7 @@ public class SituacaoEsgotoHelper extends DadosTabelaAtualizacaoCadastralHelper{
 
 	public SituacaoEsgotoHelper(String situacao) {
 		super.setColunaValorAnterior(situacao);
-		super.setColunaValorAtual(situacao);
+		//super.setColunaValorAtual(situacao);
 		super.setDescricaoTabela("Imovel");
 		super.setDescricaoColuna("Situacao Ligacao Esgoto");
 		super.setNomeColuna(TabelaColuna.NOME_COLUNA_ESGOTO);

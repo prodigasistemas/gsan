@@ -243,7 +243,8 @@
 											<td width="150"><strong>Tabela</strong></td>
 											<td width="150"><strong>Campo</strong></td>
     										<td width="200" align="center"><strong>Anterior</strong></td>
-    										<td width="200" align="center"><strong>Atual</strong></td>
+    										<td width="200" align="center"><strong>Transmitido</strong></td>
+    										<td width="200" align="center"><strong>Fiscalizado</strong></td>
 											<td width="200" align="center" ><strong>Data/Hora Valida&ccedil;&atilde;o</strong></td>
 											<td width="100" align="center"><strong>Usu&aacute;rio</strong></td>
 											<td width="50"><strong><a href="javascript:facilitador(this);">Todos</a></strong></td>
@@ -279,7 +280,10 @@
     											<bean:write name="item" property="colunaValorAnterior" />
     										</td>
     										<td width="200">
-    											<bean:write name="item" property="colunaValorAtual" />
+    											<bean:write name="item" property="colunaValorTransmitido" />
+    										</td>
+    										<td width="200">
+    											<bean:write name="item" property="colunaValorFiscalizado" />
     										</td>
     										<td width="200">
     											<bean:write name="item" property="dataValidacao" />

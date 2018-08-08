@@ -18,7 +18,9 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	
 	private Integer idTabelaColunaAtualizacaoCadastral;
 	private String colunaValorAnterior;
-	private String colunaValorAtual = "";
+	private String colunaValorTransmitido = "";
+	private String colunaValorRevisado = "";
+	private String colunaValorFiscalizado = "";
 	private Short indicadorAutorizado;
 	private Date ultimaAtualizacao;
 	
@@ -41,11 +43,23 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	public void setColunaValorAnterior(String colunaValorAnterior) {
 		this.colunaValorAnterior = colunaValorAnterior;
 	}
-	public String getColunaValorAtual() {
-		return colunaValorAtual;
+	public String getColunaValorTransmitido() {
+		return colunaValorTransmitido;
 	}
-	public void setColunaValorAtual(String colunaValorAtual) {
-		this.colunaValorAtual = colunaValorAtual;
+	public void setColunaValorTransmitido(String colunaValorTransmitido) {
+		this.colunaValorTransmitido = colunaValorTransmitido;
+	}
+	public String getColunaValorRevisado() {
+		return colunaValorRevisado;
+	}
+	public void setColunaValorRevisado(String colunaValorRevisado) {
+		this.colunaValorRevisado = colunaValorRevisado;
+	}
+	public String getColunaValorFiscalizado() {
+		return colunaValorFiscalizado;
+	}
+	public void setColunaValorFiscalizado(String colunaValorFiscalizado) {
+		this.colunaValorFiscalizado = colunaValorFiscalizado;
 	}
 	public String getDescricaoAlteracaoTipo() {
 		return descricaoAlteracaoTipo;
@@ -158,6 +172,7 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	}
 	public String toString() {
 		return "DadosTabelaAtualizacaoCadastralHelper [descricaoTabela=" + descricaoTabela + ", descricaoColuna=" + descricaoColuna + ", colunaValorAnterior="
-				+ colunaValorAnterior + ", colunaValorAtual=" + colunaValorAtual + ", dataValidacao=" + dataValidacao + ", nomeUsuario=" + nomeUsuario + "]";
+				+ colunaValorAnterior + ", colunaValorTransmitido=" + colunaValorTransmitido + ", dataValidacao=" + dataValidacao + ", nomeUsuario=" + nomeUsuario  
+				+ ", colunaValorRevisado=" + colunaValorRevisado + ", colunaValorFiscalizado=" + colunaValorFiscalizado+ "]";
 	}
 }

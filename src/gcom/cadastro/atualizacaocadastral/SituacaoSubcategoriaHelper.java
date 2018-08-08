@@ -8,7 +8,7 @@ public class SituacaoSubcategoriaHelper extends DadosTabelaAtualizacaoCadastralH
 
 	public SituacaoSubcategoriaHelper(String situacao, String subcategoria) {
 		super.setColunaValorAnterior(situacao);
-		super.setColunaValorAtual(situacao);
+		//super.setColunaValorAtual(situacao);
 		super.setDescricaoTabela("Subcategoria " + subcategoria);
 		super.setDescricaoColuna("Quantidade de economias");
 		super.setComplemento(subcategoria);

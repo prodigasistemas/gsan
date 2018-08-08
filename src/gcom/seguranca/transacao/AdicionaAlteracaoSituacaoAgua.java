@@ -16,7 +16,7 @@ public class AdicionaAlteracaoSituacaoAgua extends RelatorioConsultaAtualizacaoC
 			for (ColunaAtualizacaoCadastral coluna : imovel.getColunasAtualizacao()) {
 				if (coluna.getNomeColuna().contains(TabelaColuna.NOME_COLUNA_AGUA)){
 					AlteracaoImovelRelatorioAtualizacaoCadastral alteracao = 
-							new AlteracaoImovelRelatorioAtualizacaoCadastral("Alteração de Situação de Água", coluna.getValorAnterior(), coluna.getValorAtual());
+							new AlteracaoImovelRelatorioAtualizacaoCadastral("Alteração de Situação de Água", coluna.getValorAnterior(), coluna.getValorTransmitido());
 					relatorio.addAlteracao(alteracao);
 					break;
 				}

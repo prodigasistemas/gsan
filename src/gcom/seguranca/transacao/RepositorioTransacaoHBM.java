@@ -575,10 +575,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append(" , isac.scat_id as idSubcategoria")
 				.append(" , isac.isac_qteconomia as qtdEconomias")
 				.append(" , tcac.tcac_cnvaloranterior as valorAnterior ")
-				.append(" , tcac.tcac_cnvaloratual as valorAtual ")
+				.append(" , tcac.tcac_cnvalortransmitido as valorTransmitido ")
 				.append(" , tatc.tatc_complemento as complemento ")
 				.append(" , ctrl.siac_id as idSituacao ")
 				.append(" , siac_dssituacao as descricaoSituacao ")
+				.append(" , tcac.tcac_cnvalorrevisado as valorRevisado ")
+				.append(" , tcac.tcac_cnvalorfiscalizado as valorFiscalizado ")
 				.append(" from seguranca.tab_atlz_cadastral tatc ")
 				.append(" inner join seguranca.operacao_efetuada opef on opef.opef_id = tatc.opef_id")
 				.append(" inner join seguranca.tab_col_atlz_cadastral tcac on  tatc.tatc_id = tcac.tatc_id")
@@ -649,10 +651,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					.addScalar("idSubcategoria", Hibernate.INTEGER)
 					.addScalar("qtdEconomias", Hibernate.INTEGER)
 					.addScalar("valorAnterior", Hibernate.STRING)
-					.addScalar("valorAtual", Hibernate.STRING)
+					.addScalar("valorTransmitido", Hibernate.STRING)
 					.addScalar("complemento", Hibernate.STRING)
 					.addScalar("idSituacao", Hibernate.INTEGER)
-					.addScalar("descricaoSituacao", Hibernate.STRING);
+					.addScalar("descricaoSituacao", Hibernate.STRING)
+					.addScalar("valorRevisado", Hibernate.STRING)
+					.addScalar("valorFiscalizado", Hibernate.STRING);
 
 			Integer exibirCampos = Integer.valueOf(filtroHelper.getExibirCampos());
 			
@@ -710,8 +714,10 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				ColunaAtualizacaoCadastral coluna = new ColunaAtualizacaoCadastral();
 				coluna.setNomeColuna((String) element[7]);
 				coluna.setValorAnterior((String) element[11]);
-				coluna.setValorAtual((String) element[12]);
+				coluna.setValorTransmitido((String) element[12]);
 				coluna.setComplemento((String) element[13]);
+				coluna.setValorRevisado((String) element[16]);
+				coluna.setValorFiscalizado((String) element[17]);
 				helper.addColunaAtualizacao(coluna);
 				
 				CategoriaAtualizacaoCadastral categoria = new CategoriaAtualizacaoCadastral((Integer) element[8], (Integer) element[9], (Integer) element[10]);
@@ -744,7 +750,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			.append("   col.descricaoColuna,") // 4
 			.append("   tcol.id,") // 5
 			.append("   tcol.colunaValorAnterior,")// 6
-			.append("   tcol.colunaValorAtual,")// 7
+			.append("   tcol.colunaValorTransmitido,")// 7
 			.append("   tcol.indicadorAutorizado,") // 8
 			.append("   tcol.ultimaAlteracao,") // 9
 			.append("   atp.id,")// 10
@@ -752,7 +758,9 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			.append("   col.coluna, ")//12
 			.append("   tcol.dataValidacao, ")//13
 			.append("   tac.complemento, ")//14
-			.append("   usu.nomeUsuario ")//15
+			.append("   usu.nomeUsuario, ")//15
+			.append("   tcol.colunaValorRevisado,")// 16
+			.append("   tcol.colunaValorFiscalizado ")// 17
 			.append(" from gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol")
 			.append(" inner join tcol.tabelaColuna col ")
 			.append(" inner join tcol.tabelaAtualizacaoCadastral tac ")
@@ -766,6 +774,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			 	.setInteger("idImovel", idImovel)
 			 	.list();
 		} catch (HibernateException e) {
+			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);

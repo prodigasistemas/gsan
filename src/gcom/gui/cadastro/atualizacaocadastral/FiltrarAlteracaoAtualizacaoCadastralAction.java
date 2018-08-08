@@ -48,8 +48,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> helper = fachada.pesquisarMovimentoAtualizacaoCadastral(filtro);
 		
 		filtro.setTotalImoveis(helper.size());
-//		filtro.setNomeLocalidadeInicial(form.getNomeLocalidadeInicial());
-//		filtro.setNomeLocalidadeFinal(form.getIdLocalidadeFinal());
         
         if( helper.isEmpty()){
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado", "exibirFiltrarAlteracaoAtualizacaoCadastralAction.do", null, new String[] {});
