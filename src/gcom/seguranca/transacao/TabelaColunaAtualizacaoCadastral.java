@@ -5,43 +5,27 @@ import gcom.seguranca.acesso.usuario.Usuario;
 
 import java.util.Date;
 
-
-/** @author Hibernate CodeGenerator */
 public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String colunaValorAnterior;
-
-    /** nullable persistent field */
-    private String colunaValorAtual;
-
-    /** nullable persistent field */
-    
+    private String colunaValorTransmitido;
+    private String colunaValorRevisado;
+    private String colunaValorFiscalizado;
     private Short indicadorAutorizado;
-    
-    /** nullable persistent field */
     private Date dataValidacao;
-    
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** persistent field */
     private TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral;
-    
     private TabelaColuna tabelaColuna;
-    
 	private Usuario usuario;
     
-    public TabelaColunaAtualizacaoCadastral(Integer id, String colunaValorAnterior, String colunaValorAtual, Short indicadorAutorizado, 
+    public TabelaColunaAtualizacaoCadastral(Integer id, String colunaValorAnterior, String colunaValorTransmitido, Short indicadorAutorizado, 
     		Date dataValidacao, Date ultimaAlteracao, TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, TabelaColuna tabelaColuna) {
 
 		this.id = id;
 		this.colunaValorAnterior = colunaValorAnterior;
-		this.colunaValorAtual = colunaValorAtual;
+		this.colunaValorTransmitido = colunaValorTransmitido;
 		this.indicadorAutorizado = indicadorAutorizado;
 		this.dataValidacao = dataValidacao;
 		this.ultimaAlteracao = ultimaAlteracao;
@@ -49,7 +33,6 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 		this.tabelaColuna = tabelaColuna;
 	}
 
-	/** default constructor */
     public TabelaColunaAtualizacaoCadastral() {
     }
 
@@ -69,12 +52,28 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 		this.colunaValorAnterior = colunaValorAnterior;
 	}
 
-	public String getColunaValorAtual() {
-		return colunaValorAtual;
+	public String getColunaValorTransmitido() {
+		return colunaValorTransmitido;
 	}
 
-	public void setColunaValorAtual(String colunaValorAtual) {
-		this.colunaValorAtual = colunaValorAtual;
+	public void setColunaValorTransmitido(String colunaValorTransmitido) {
+		this.colunaValorTransmitido = colunaValorTransmitido;
+	}
+
+	public String getColunaValorRevisado() {
+		return colunaValorRevisado;
+	}
+
+	public void setColunaValorRevisado(String colunaValorRevisado) {
+		this.colunaValorRevisado = colunaValorRevisado;
+	}
+
+	public String getColunaValorFiscalizado() {
+		return colunaValorFiscalizado;
+	}
+
+	public void setColunaValorFiscalizado(String colunaValorFiscalizado) {
+		this.colunaValorFiscalizado = colunaValorFiscalizado;
 	}
 
 	public Date getDataValidacao() {

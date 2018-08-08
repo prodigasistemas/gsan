@@ -39,6 +39,8 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	private SituacaoTransmissaoLeitura situacaoTransmissaoLeitura;
 
 	private Integer quantidadeImoveisTransmitidos;
+	
+	private String tipoRetorno;
 
 	public ArquivoTextoAtualizacaoCadastral(Integer id, String descricaoArquivo, Integer codigoSetorComercial, Integer numeroQuadraInicial, Integer numeroQuadraFinal, Rota rota, Integer quantidadeImovel,
 			byte[] arquivoTexto, Date ultimaAlteracao, Localidade localidade, Leiturista leiturista, SituacaoTransmissaoLeitura situacaoTransmissaoLeitura, Integer quantidadeImoveisTransmitidos) {
@@ -163,5 +165,25 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	}
 
 	public ArquivoTextoAtualizacaoCadastral() {
+	}
+
+	public String getTipoRetorno() {
+		return tipoRetorno;
+	}
+
+	public void setTipoRetorno(String tipoRetorno) {
+		this.tipoRetorno = tipoRetorno;
+	}
+	
+	public boolean isArquivoRetornoTransmissao() {
+		return tipoRetorno.equals(null);
+	}
+	
+	public boolean isArquivoRetornoRevisao() {
+		return tipoRetorno.equals("R");
+	}
+	
+	public boolean isArquivoRetornoFiscalizacao() {
+		return tipoRetorno.equals("F");
 	}
 }

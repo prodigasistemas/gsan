@@ -121,6 +121,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 						throw new ActionServletException(t.getMessage(), ((BaseRuntimeException) t).getParametros());
 					}
 				}
+				e.printStackTrace();
 				logger.error("Erro ao carregar arquivo de atualizacao.");
 				throw new ActionServletException("atencao.erro_arquivo_carregado");
 			}
@@ -213,7 +214,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 			ZipInputStream zipInputStream, ZipEntry zipEntry)
 			throws FileNotFoundException, IOException {
 
-		File arquivoRetorno = new File(zipEntry.getName());
+		File arquivoRetorno = new File(System.getProperty("jboss.server.home.dir") + "/retorno/" + zipEntry.getName());
 
 		FileOutputStream fileOutputStream = new FileOutputStream(arquivoRetorno);
 

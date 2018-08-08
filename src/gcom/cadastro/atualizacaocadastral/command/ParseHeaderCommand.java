@@ -3,6 +3,7 @@ package gcom.cadastro.atualizacaocadastral.command;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
@@ -27,6 +28,7 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 		String anoMesReferencia = parser.obterDadoParser(6);
 		String idRota = parser.obterDadoParser(4);
 		String versaoCelular = parser.obterDadoParser(10);
+		String tipoRetorno = parser.obterDadoParser(1);
 		
 		ArquivoTextoAtualizacaoCadastral arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
 				localidade + "_" + setor + "_" + rota);
@@ -35,7 +37,10 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 			throw new ArquivoAtualizacaoInexistenteException();
 		}
 		
+		arquivoTexto.setTipoRetorno(tipoRetorno);
+		
 		atualizacao.setArquivoTexto(arquivoTexto);
 		atualizacao.setIdRota(Integer.valueOf(idRota));
 	}
+	
 }
