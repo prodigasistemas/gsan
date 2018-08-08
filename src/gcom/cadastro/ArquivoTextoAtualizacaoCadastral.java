@@ -176,7 +176,7 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	}
 	
 	public boolean isArquivoRetornoTransmissao() {
-		return tipoRetorno.equals(null);
+		return tipoRetorno.equals(null) || tipoRetorno.equals(" ");
 	}
 	
 	public boolean isArquivoRetornoRevisao() {

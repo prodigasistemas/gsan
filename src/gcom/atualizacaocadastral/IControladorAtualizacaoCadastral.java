@@ -9,6 +9,10 @@ import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaBean;
 import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.seguranca.transacao.Tabela;
+import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
+import gcom.seguranca.transacao.TabelaColuna;
+import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
@@ -60,4 +64,8 @@ public interface IControladorAtualizacaoCadastral {
 	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao) throws ControladorException;
 	
 	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos) throws ControladorException;
+	
+	public TabelaColunaAtualizacaoCadastral pesquisarTabelaColunaPorImovel(TabelaColuna coluna, Integer idImovel) throws ControladorException;
+	
+	public TabelaAtualizacaoCadastral pesquisarTabelaPorImovel(Tabela tabela, Integer idImovel) throws ControladorException;
 }

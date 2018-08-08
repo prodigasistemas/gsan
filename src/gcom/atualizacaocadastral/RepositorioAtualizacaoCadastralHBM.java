@@ -10,6 +10,10 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.seguranca.transacao.AlteracaoTipo;
+import gcom.seguranca.transacao.Tabela;
+import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
+import gcom.seguranca.transacao.TabelaColuna;
+import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
@@ -1252,4 +1256,57 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         
         return retorno;
 	}
+	
+	public TabelaAtualizacaoCadastral obterTabela(Tabela tabela, Integer idImovel) throws ErroRepositorioException {
+		TabelaAtualizacaoCadastral retorno = null;
+        Session session = HibernateUtil.getSession();
+        
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append("select tabelaAtualizacaoCadastral from TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
+            		.append("inner join tabelaAtualizacaoCadastral.tabela tabela ")
+            		.append("where tabela.id = :idTabela ")
+            		.append("and tabelaAtualizacaoCadastral.codigoImovel = :idImovel ");
+        	
+            retorno = (TabelaAtualizacaoCadastral) session.createQuery(consulta.toString())
+            		.setInteger("idTabela", tabela.getId())
+            		.setInteger("idImovel", idImovel).uniqueResult();
+            
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        
+        return retorno;
+	}
+	
+	public TabelaColunaAtualizacaoCadastral obterTabelaColuna(TabelaColuna coluna, Integer idImovel) throws ErroRepositorioException {
+		TabelaColunaAtualizacaoCadastral retorno = null;
+        Session session = HibernateUtil.getSession();
+        
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append("select colunaAtualizacao from TabelaColunaAtualizacaoCadastral colunaAtualizacao ")
+            		.append("inner join colunaAtualizacao.tabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
+            		.append("inner join tabelaAtualizacaoCadastral.tabela tabela ")
+            		.append("inner join colunaAtualizacao.tabelaColuna coluna ")
+            		.append("where tabela.id = :idTabela ")
+            		.append("and coluna.coluna like :nomeColuna ")
+            		.append("and tabelaAtualizacaoCadastral.codigoImovel = :idImovel ");
+        	
+            retorno = (TabelaColunaAtualizacaoCadastral) session.createQuery(consulta.toString())
+            		.setInteger("idTabela", coluna.getTabela().getId())
+            		.setString("nomeColuna", coluna.getDescricaoColuna())
+            		.setInteger("idImovel", idImovel).uniqueResult();
+            
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        
+        return retorno;
+	}
+	
 }

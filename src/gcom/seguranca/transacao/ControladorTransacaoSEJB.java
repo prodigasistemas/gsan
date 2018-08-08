@@ -986,20 +986,18 @@ public class ControladorTransacaoSEJB implements SessionBean {
 
 		
 		if (tabelaAtualizacaoCadastral != null) {
-			tabelaAtualizacaoCadastral.setUltimaAlteracao(new Date(System
-					.currentTimeMillis()));
+			tabelaAtualizacaoCadastral.setUltimaAlteracao(new Date(System.currentTimeMillis()));
 			tabelaAtualizacaoCadastral.setOperacaoEfetuada(operacaoEfetuada);
-			getControladorUtil().inserir(tabelaAtualizacaoCadastral);
+			
+			if (tabelaAtualizacaoCadastral.isRegistroInclusao())
+				getControladorUtil().inserir(tabelaAtualizacaoCadastral);
+			else
+				getControladorUtil().atualizar(tabelaAtualizacaoCadastral);
 
 			FiltroOperacaoTabela filtroOperacaoTabela = new FiltroOperacaoTabela();
-			filtroOperacaoTabela.adicionarParametro(new ParametroSimples(
-					FiltroOperacaoTabela.TABELA_ID, tabelaAtualizacaoCadastral
-							.getTabela().getId()));
-			filtroOperacaoTabela.adicionarParametro(new ParametroSimples(
-					FiltroOperacaoTabela.OPERACAO_ID, operacaoEfetuada
-							.getOperacao().getId()));
-			Collection coll = getControladorUtil().pesquisar(
-					filtroOperacaoTabela, OperacaoTabela.class.getSimpleName());
+			filtroOperacaoTabela.adicionarParametro(new ParametroSimples(FiltroOperacaoTabela.TABELA_ID, tabelaAtualizacaoCadastral .getTabela().getId()));
+			filtroOperacaoTabela.adicionarParametro(new ParametroSimples(FiltroOperacaoTabela.OPERACAO_ID, operacaoEfetuada .getOperacao().getId()));
+			Collection coll = getControladorUtil().pesquisar(filtroOperacaoTabela, OperacaoTabela.class.getSimpleName());
 			if (coll == null || coll.isEmpty()) {
 
 				OperacaoTabelaPK pk = new OperacaoTabelaPK();
@@ -1013,12 +1011,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				getControladorUtil().inserir(operacaoTabela);
 			}
 
-			if (colecaoTabelaColunaAtualizacaoCadastral != null
-					&& !colecaoTabelaColunaAtualizacaoCadastral.isEmpty()) {
+			if (colecaoTabelaColunaAtualizacaoCadastral != null && !colecaoTabelaColunaAtualizacaoCadastral.isEmpty()) {
 				Iterator it = colecaoTabelaColunaAtualizacaoCadastral.iterator();
 				while (it.hasNext()) {
-					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral= (TabelaColunaAtualizacaoCadastral) it
-							.next();
+					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral= (TabelaColunaAtualizacaoCadastral) it.next();
 					
 					// Pesquisando o objeto de TabelaColuna
 					TabelaColuna tabelaColuna = tabelaColunaAtualizacaoCadastral.getTabelaColuna();
@@ -1035,10 +1031,13 @@ public class ControladorTransacaoSEJB implements SessionBean {
 						tabelaColunaAtualizacaoCadastral.setTabelaColuna(tabelaColuna);
 					}
 						
-					tabelaColunaAtualizacaoCadastral
-							.setTabelaAtualizacaoCadastral(tabelaAtualizacaoCadastral);
+					tabelaColunaAtualizacaoCadastral.setTabelaAtualizacaoCadastral(tabelaAtualizacaoCadastral);
 					tabelaColunaAtualizacaoCadastral.setUltimaAlteracao(new Date());
-					getControladorUtil().inserir(tabelaColunaAtualizacaoCadastral);
+					
+					if (tabelaColunaAtualizacaoCadastral.isRegistroInclusao())
+						getControladorUtil().inserir(tabelaColunaAtualizacaoCadastral);
+					else 
+						getControladorUtil().atualizar(tabelaColunaAtualizacaoCadastral);
 				}
 			}
 		}

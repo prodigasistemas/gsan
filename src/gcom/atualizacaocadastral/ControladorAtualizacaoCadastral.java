@@ -49,6 +49,7 @@ import gcom.seguranca.IRepositorioSeguranca;
 import gcom.seguranca.RepositorioSegurancaHBM;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.transacao.AlteracaoTipo;
+import gcom.seguranca.transacao.Tabela;
 import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaColuna;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
@@ -1390,5 +1391,21 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 		
 		return sorteados;
+	}
+	
+	public TabelaColunaAtualizacaoCadastral pesquisarTabelaColunaPorImovel(TabelaColuna coluna, Integer idImovel) throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.obterTabelaColuna(coluna, idImovel);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao pesquisar tabela coluna atualizacao cadastral.", e);
+		}
+	}
+	
+	public TabelaAtualizacaoCadastral pesquisarTabelaPorImovel(Tabela tabela, Integer idImovel) throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.obterTabela(tabela, idImovel);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao pesquisar tabela coluna atualizacao cadastral.", e);
+		}
 	}
 }

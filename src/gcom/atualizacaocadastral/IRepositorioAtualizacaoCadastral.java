@@ -8,6 +8,10 @@ import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
+import gcom.seguranca.transacao.Tabela;
+import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
+import gcom.seguranca.transacao.TabelaColuna;
+import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ErroRepositorioException;
 
 import java.util.Collection;
@@ -107,4 +111,8 @@ public interface IRepositorioAtualizacaoCadastral {
     public Collection<IImovelTipoOcupanteQuantidade> obterImovelQuantidadesOcupantesParaAtualizar(Integer idImovel) throws ErroRepositorioException;
     
 	public List<Integer> obterImoveisPorSituacao(Integer idArquivo, Integer idSituacao) throws ErroRepositorioException;
+	
+	public TabelaColunaAtualizacaoCadastral obterTabelaColuna(TabelaColuna coluna, Integer idImovel) throws ErroRepositorioException;
+	
+	public TabelaAtualizacaoCadastral obterTabela(Tabela tabela, Integer idImovel) throws ErroRepositorioException;
 }

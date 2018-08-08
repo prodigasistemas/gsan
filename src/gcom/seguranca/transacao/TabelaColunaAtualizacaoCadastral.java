@@ -19,6 +19,7 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
     private TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral;
     private TabelaColuna tabelaColuna;
 	private Usuario usuario;
+	private boolean registroInclusao;
     
     public TabelaColunaAtualizacaoCadastral(Integer id, String colunaValorAnterior, String colunaValorTransmitido, Short indicadorAutorizado, 
     		Date dataValidacao, Date ultimaAlteracao, TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, TabelaColuna tabelaColuna) {
@@ -129,5 +130,13 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 		String[] retorno = new String[1];
 		retorno[0] = "id";
 		return retorno;
+	}
+
+	public boolean isRegistroInclusao() {
+		return registroInclusao;
+	}
+
+	public void setRegistroInclusao(boolean registroInclusao) {
+		this.registroInclusao = registroInclusao;
 	}
 }

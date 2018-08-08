@@ -41,6 +41,8 @@ public class TabelaAtualizacaoCadastral {
     private TabelaAtualizacaoCadastralSituacao tabelaAtualizacaoCadastralSituacao;
     
     private String complemento;
+    
+    private boolean registroInclusao;
 
 	public TabelaAtualizacaoCadastral(Integer id, Long idRegistroAlterado, Short indicadorPrincipal, Date ultimaAlteracao, Tabela tabela, OperacaoEfetuada operacaoEfetuada, Leiturista leiturista, AlteracaoTipo alteracaoTipo, ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral, Short indicadorAutorizado, Integer codigoImovel, Long codigoCliente, String complemento) {
 		this.id = id;
@@ -204,4 +206,13 @@ public class TabelaAtualizacaoCadastral {
 	public void setComplemento(String complemento) {
 		this.complemento = complemento;
 	}
+
+	public boolean isRegistroInclusao() {
+		return registroInclusao;
+	}
+
+	public void setRegistroInclusao(boolean registroInclusao) {
+		this.registroInclusao = registroInclusao;
+	}
+	
 }
