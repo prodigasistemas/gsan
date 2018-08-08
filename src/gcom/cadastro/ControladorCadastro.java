@@ -8647,19 +8647,11 @@ public class ControladorCadastro extends ControladorComum {
 	/**
 	 * 
 	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 05/03/2009
-	 * 
-	 * @return void
-	 * @throws ControladorException
 	 */
-	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt)
-			throws ControladorException {
-
+	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt) throws ControladorException {
 		try {
-			this.repositorioCadastro.atualizarArquivoTextoAtualizacaoCadstral(
-					idArquivoTxt, SituacaoTransmissaoLeitura.EM_CAMPO);
+			repositorioCadastro.atualizarArquivoTextoAtualizacaoCadstral(idArquivoTxt, SituacaoTransmissaoLeitura.EM_CAMPO);
+			getControladorAtualizacaoCadastral().atualizarImovelParaSituacaoEmCampoPorArquivo(idArquivoTxt);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}

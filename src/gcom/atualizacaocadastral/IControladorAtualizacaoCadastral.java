@@ -60,4 +60,6 @@ public interface IControladorAtualizacaoCadastral {
 	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao) throws ControladorException;
 	
 	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos) throws ControladorException;
+	
+	public void atualizarImovelParaSituacaoEmCampoPorArquivo(Integer idArquivo) throws ControladorException;
 }

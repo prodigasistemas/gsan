@@ -26,9 +26,10 @@ public class RetornarArquivoTxtAtualizacaoCadastralAction extends GcomAction {
 		String idArquivoTxt = request.getParameter("idRegistroAtualizacao");
 
 		ArquivoTextoAtualizacaoCadastral arquivoTexto = getFachada().pesquisarArquivoTextoAtualizacaoCadastro(Integer.parseInt(idArquivoTxt));
+		
+		int situacao = arquivoTexto.getSituacaoTransmissaoLeitura().getId().intValue();
 
-		if (!arquivoTexto.getSituacaoTransmissaoLeitura().getId().equals(SituacaoTransmissaoLeitura.DISPONIVEL) 
-				&& !arquivoTexto.getSituacaoTransmissaoLeitura().getId().equals(SituacaoTransmissaoLeitura.TRANSMITIDO)) {
+		if (situacao != SituacaoTransmissaoLeitura.DISPONIVEL.intValue() && situacao != SituacaoTransmissaoLeitura.TRANSMITIDO.intValue()) {
 
 			try {
 				File temporario = File.createTempFile("temporario", ".txt");
@@ -65,8 +66,9 @@ public class RetornarArquivoTxtAtualizacaoCadastralAction extends GcomAction {
 
 				temporario.delete();
 
-				getFachada().atualizarArquivoTextoAtualizacaoCadstral(arquivoTexto.getId());
-
+				if (situacao == SituacaoTransmissaoLeitura.LIBERADO.intValue())
+					getFachada().atualizarArquivoTextoAtualizacaoCadstral(arquivoTexto.getId());
+				
 			} catch (IOException e) {
 				reportarErros(request, "erro.sistema");
 

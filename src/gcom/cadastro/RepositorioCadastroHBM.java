@@ -4591,7 +4591,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				consulta += " and situacao.id = " + idSituacaoTransmissao;
 			}
 			
-			if (exibicao.equals(ArquivoTextoAtualizacaoCadastral.EXIBIR_A_REVISAR)) {
+			if (exibicao.equals(ArquivoTextoAtualizacaoCadastral.EXIBIR_EM_REVISAO)) {
 				consulta += " and txac.id IN (SELECT distinct imovel.idArquivoTexto FROM ImovelAtualizacaoCadastral imovel WHERE imovel.idSituacaoAtualizacaoCadastral = " + SituacaoAtualizacaoCadastral.A_REVISAR + ")";
 			}
 

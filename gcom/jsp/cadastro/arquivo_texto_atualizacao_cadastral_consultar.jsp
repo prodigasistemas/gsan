@@ -333,7 +333,7 @@
 
 				<tr>
 					<td width="150"><strong>Situação Transmissão:</strong></td>
-					<td><!--<strong><html:radio property="idSituacaoTransmissao" value="1" />Disponível</strong>-->
+					<td>
 					    <strong><html:radio property="idSituacaoTransmissao" value="2" />Liberado</strong> 
 					    <strong><html:radio property="idSituacaoTransmissao" value="3" />Em Campo</strong> 
 					    <strong><html:radio property="idSituacaoTransmissao" value="4" />Finalizado</strong>
@@ -345,7 +345,7 @@
 					<td width="150"><strong>Exibição:</strong></td>
 					<td>
     					<strong><html:radio property="exibicao" value="" />Todos</strong>
-					    <strong><html:radio property="exibicao" value="1" />A Revisar</strong> 
+					    <strong><html:radio property="exibicao" value="1" />Rotas com Imóveis em Revisão</strong> 
 					</td>
 				</tr>
 				
