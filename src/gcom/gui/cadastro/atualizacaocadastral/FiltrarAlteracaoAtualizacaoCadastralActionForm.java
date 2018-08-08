@@ -31,7 +31,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	
 	private String idRegistrosAutorizados;
 	
-	private String exibirCampos = SituacaoAtualizacaoCadastral.TRANSMITIDO.toString(); 
+	private String exibirCampos = SituacaoAtualizacaoCadastral.PRE_APROVADO.toString(); 
 	
 	private String[] colunaImoveisSelecionados;
 	

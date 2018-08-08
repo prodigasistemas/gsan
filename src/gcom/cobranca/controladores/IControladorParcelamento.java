@@ -13,5 +13,7 @@ public interface IControladorParcelamento {
 
 	public CancelarParcelamentoHelper pesquisarParcelamentoParaCancelar(Integer idParcelamento);
 
+	public void cancelarJurosParcelamento(Integer idParcelamento) throws ControladorException;
+
 	public boolean isParcelamentoEmDebito(Integer idParcelamento) throws ControladorException;
 }

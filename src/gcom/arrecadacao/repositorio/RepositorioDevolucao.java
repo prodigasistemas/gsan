@@ -43,7 +43,7 @@ public class RepositorioDevolucao {
         }
 		
 		try {
-		    resultado = (Collection<Devolucao>) session.createQuery("select devolucao from Devolucao as devolucao inner join devolucao.creditoRealizar crar "
+		    resultado = (Collection<Devolucao>) session.createQuery("select devolucao from Devolucao as devolucao inner join devolucao.creditoARealizarGeral crar "
 		            + "where crar.id in (:ids)")
 		            .setParameterList("ids", ids)
 		            .list();

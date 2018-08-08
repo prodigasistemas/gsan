@@ -757,7 +757,9 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 	
 	private boolean isCreditoDeParcelamento(CreditoARealizar creditoARealizar) {
 		return ( creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO
-				|| creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA)
+				|| creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA
+				|| creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO
+				|| creditoARealizar.getCreditoOrigem().getId().intValue() == CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO)
 			&& creditoARealizar.getParcelamento() != null;
 	}
 }

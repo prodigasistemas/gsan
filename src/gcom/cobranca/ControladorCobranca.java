@@ -283,6 +283,8 @@ import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.RelatorioDataSource;
+import gcom.relatorio.cobranca.AvisoCorteContaDTO;
+import gcom.relatorio.cobranca.AvisoCorteDTO;
 import gcom.relatorio.cobranca.CurvaAbcDebitosHelper;
 import gcom.relatorio.cobranca.FiltrarRelatorioBoletimMedicaoCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAcompanhamentoAcoesCobrancaHelper;
@@ -32972,7 +32974,7 @@ public class ControladorCobranca extends ControladorComum {
 
 		return retorno;
 	}
-
+	
 	/**
 	 * [UC0394] - Gerar Débitos a Cobrar de Doações
 	 * 
@@ -61972,5 +61974,110 @@ public class ControladorCobranca extends ControladorComum {
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
+	}
+	
+	public List<AvisoCorteDTO> gerarAvisoCorteEnderecoAlternativo(Integer idAcaoCronograma, Integer idAcaoComando) throws ControladorException {
+		List<AvisoCorteDTO> avisos = new ArrayList<AvisoCorteDTO>();
+
+		try {
+			Collection<CobrancaDocumento> documentos = repositorioCobranca.pesquisarCobrancaDocumentoParaRelatorio(idAcaoCronograma, idAcaoComando);
+
+			for (CobrancaDocumento documento : documentos) {
+				AvisoCorteDTO aviso = montarAvisoCorte(documento);
+
+				Integer idClienteResponsavel = repositorioClienteImovel.retornaIdClienteResponsavelIndicadorEnvioConta(documento.getImovel().getId());
+				if (idClienteResponsavel != null) {
+					aviso = montarEnderecoCorrespondenciaAvisoCorte(aviso, idClienteResponsavel);
+				} else {
+					continue;
+				}
+
+				aviso = setCodigoBarrasAvisoCorte(aviso, documento);
+				aviso.setContas(montarContasAvisoCorte(documento.getId()));
+				avisos.add(aviso);
+			}
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+
+		return avisos;
+	}
+
+	private AvisoCorteDTO montarAvisoCorte(CobrancaDocumento documento) throws ControladorException {
+		AvisoCorteDTO aviso = new AvisoCorteDTO();
+		aviso.setImovel(documento.getImovel().getId());
+		aviso.setCliente(getControladorImovel().consultarClienteUsuarioImovel(documento.getImovel().getId()));
+		aviso.setInscricao(getControladorImovel().pesquisarInscricaoImovel(documento.getImovel().getId()));
+		aviso.setCodigoRota(documento.getImovel().getQuadra().getRota().getCodigo());
+		aviso.setSequencialRota(documento.getImovel().getNumeroSequencialRota());
+		aviso.setIdDocumentoCobranca(documento.getId());
+		aviso.setValorTotal(Util.formatarMoedaReal(documento.getValorDocumento()));
+		aviso.setEndereco(getControladorEndereco().pesquisarEndereco(documento.getImovel().getId()));
+		return aviso;
+	}
+
+	private AvisoCorteDTO montarEnderecoCorrespondenciaAvisoCorte(AvisoCorteDTO aviso, Integer idClienteResponsavel) throws ControladorException {
+		aviso.setEnderecoCorrespondencia(getControladorEndereco().pesquisarEnderecoClienteAbreviado(idClienteResponsavel));
+		
+		String[] enderecoCorrespondenciaFormatado = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDivididoCosanpa(idClienteResponsavel);
+		aviso.setComplementoCorrespondencia(enderecoCorrespondenciaFormatado[0]);
+		aviso.setCidadeEstadoCorrespondencia(enderecoCorrespondenciaFormatado[1] + " - " + enderecoCorrespondenciaFormatado[2]);
+		aviso.setBairroCorrespondencia(enderecoCorrespondenciaFormatado[3]);
+		aviso.setCepCorrespondencia(Util.formatarCEP(enderecoCorrespondenciaFormatado[4]));
+		
+		return aviso;
+	}
+
+	private List<AvisoCorteContaDTO> montarContasAvisoCorte(Integer idDocumento) throws ErroRepositorioException {
+		List<AvisoCorteContaDTO> contasDTO = new ArrayList<AvisoCorteContaDTO>();
+		
+		List<Conta> contas = (List<Conta>) repositorioCobranca.pesquisarCobrancaDocumentoItem(idDocumento);
+		
+		int count = 0;
+		BigDecimal valor = new BigDecimal(0);
+		
+		for (Conta conta : contas) {
+			count++;
+
+			if ((contas.size() - count) > 35) {
+				valor = valor.add(conta.getValorTotal());
+			} else {
+				AvisoCorteContaDTO contaDTO = new AvisoCorteContaDTO();
+
+				if ((contas.size() - count) == 35) {
+					valor = valor.add(conta.getValorTotal());
+					contaDTO.setReferencia("ATÉ " + conta.getReferenciaFormatada());
+					contaDTO.setValor(Util.formatarMoedaReal(valor));
+				} else {
+					contaDTO.setReferencia(conta.getReferenciaFormatada());
+					contaDTO.setVencimento(Util.formatarData(conta.getDataVencimentoConta()));
+					contaDTO.setValor(Util.formatarMoedaReal(conta.getValorTotal()));
+				}
+				
+				contasDTO.add(contaDTO);
+			}
+		}
+		
+		return contasDTO;
+	}
+
+	private AvisoCorteDTO setCodigoBarrasAvisoCorte(AvisoCorteDTO aviso, CobrancaDocumento documento) throws ControladorException {
+		String representacaoNumericaCodigoBarras = getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(5, documento.getValorDocumento(), documento.getLocalidade().getId(),
+				documento.getImovel().getId(), null, null, null, null, String.valueOf(documento.getNumeroSequenciaDocumento()), documento.getDocumentoTipo().getId(), null, null, null);
+
+		String codigoBarras = representacaoNumericaCodigoBarras.substring(0, 11)
+				+ representacaoNumericaCodigoBarras.substring(12, 23) 
+				+ representacaoNumericaCodigoBarras.substring(24, 35)
+				+ representacaoNumericaCodigoBarras.substring(36, 47);
+		
+		String codigoBarrasFormatado = representacaoNumericaCodigoBarras.substring(0, 11) + "-" + representacaoNumericaCodigoBarras.substring(11, 12) + " " 
+				+ representacaoNumericaCodigoBarras.substring(12, 23) + "-" + representacaoNumericaCodigoBarras.substring(23, 24) + " " 
+				+ representacaoNumericaCodigoBarras.substring(24, 35) + "-" + representacaoNumericaCodigoBarras.substring(35, 36) + " " 
+				+ representacaoNumericaCodigoBarras.substring(36, 47) + "-" + representacaoNumericaCodigoBarras.substring(47, 48);
+
+		aviso.setCodigoBarras(codigoBarras);
+		aviso.setCodigoBarrasFormatado(codigoBarrasFormatado);
+		
+		return aviso;
 	}
 }

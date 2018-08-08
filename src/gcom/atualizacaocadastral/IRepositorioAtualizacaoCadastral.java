@@ -1,9 +1,5 @@
 package gcom.atualizacaocadastral;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
@@ -13,6 +9,10 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.util.ErroRepositorioException;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public interface IRepositorioAtualizacaoCadastral {
 
@@ -93,9 +93,11 @@ public interface IRepositorioAtualizacaoCadastral {
 	public Integer obterquantidadeImoveisComAlteracaoFaturamentoArquivo(Integer idArquivoAtualizacaoCadastral, String colunaALterada) throws ErroRepositorioException;
 	
 	public Integer obterquantidadeImoveisComAnormalidadeArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ErroRepositorioException;
-	
+
+    @SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosImoveisPorRotaAtualizacaoCadastral(String localidade, String setorComercial, String rota) throws ErroRepositorioException;
 	
 	public Collection<ImovelSubcategoriaRetorno> pesquisarSubcategoriasImovelRetorno(Integer idImovel) throws ErroRepositorioException;
@@ -103,4 +105,6 @@ public interface IRepositorioAtualizacaoCadastral {
     public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> pesquisarOcupantesAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
     
     public Collection<IImovelTipoOcupanteQuantidade> obterImovelQuantidadesOcupantesParaAtualizar(Integer idImovel) throws ErroRepositorioException;
+    
+	public List<Integer> obterImoveisPorSituacao(Integer idArquivo, Integer idSituacao) throws ErroRepositorioException;
 }

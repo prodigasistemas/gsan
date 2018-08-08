@@ -928,7 +928,8 @@
 				/WEB-INF/portal/struts-config-CertidaoNegativaImovel.xml,
 				/WEB-INF/portal/struts-config-CertidaoNegativaCliente.xml,
 				/WEB-INF/cobranca/cobrancaporresultado/struts-config-RetirarSituacaoCobranca.xml,
-				/WEB-INF/relatorio/cadastro/struts-config-GerarRelatorioContratoAdesaoImovel.xml
+				/WEB-INF/relatorio/cadastro/struts-config-GerarRelatorioContratoAdesaoImovel.xml,
+				/WEB-INF/treinamentos/struts-config-ExibirTreinamentos.xml
 
 			</param-value>
 		</init-param>
