@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 /**
@@ -790,4 +791,27 @@ public class IoUtil {
 		return contadorRegistros01;
 	}
 	
+	public static Properties carregaPropriedades(String nomeArquivo) {
+        Properties propriedades = new Properties();
+        InputStream stream;
+
+        try {
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+
+            stream = classLoader.getResourceAsStream(nomeArquivo);
+            if (stream == null) {
+                stream = ConstantesAplicacao.class.getClassLoader().getResourceAsStream(nomeArquivo);
+            }
+            if (stream == null) {
+                stream = ConstantesAplicacao.class.getResourceAsStream(nomeArquivo);
+            }
+
+            propriedades.load(stream);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return propriedades;
+    }
 }

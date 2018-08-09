@@ -1151,13 +1151,16 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 		try {
 		
 		
-		String hql = " select tcac "
-		    + " from TabelaColunaAtualizacaoCadastral tcac "
-		    + " inner join fetch  tcac.tabelaAtualizacaoCadastral tac " 
-		    + " where tcac.id ="+idAtualizacaoCadastral;
+		StringBuilder hql = new StringBuilder();
 		
-		tabelaColunaAtualizacaoCadastral = (TabelaColunaAtualizacaoCadastral)session.createQuery(hql).setMaxResults(1).uniqueResult();
-
+		hql.append(" select tcac ")
+		    .append( " from TabelaColunaAtualizacaoCadastral tcac ")
+		    .append(" inner join fetch  tcac.tabelaAtualizacaoCadastral tac ") 
+		    .append(" inner join fetch  tac.tabela ")
+		    .append(" inner join fetch  tcac.tabelaColuna ")
+		    .append(" where tcac.id =").append(idAtualizacaoCadastral);
+		
+		tabelaColunaAtualizacaoCadastral = (TabelaColunaAtualizacaoCadastral)session.createQuery(hql.toString()).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

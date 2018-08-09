@@ -4592,7 +4592,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			}
 			
 			if (exibicao.equals(ArquivoTextoAtualizacaoCadastral.EXIBIR_A_REVISAR)) {
-				consulta += " and txac.id IN (SELECT distinct imovel.idArquivoTexto FROM ImovelAtualizacaoCadastral imovel WHERE imovel.idSituacaoAtualizacaoCadastral = " + SituacaoAtualizacaoCadastral.A_REVISAR + ")";
+				consulta += " and txac.id IN (SELECT distinct imovel.idArquivoTexto FROM ImovelAtualizacaoCadastral imovel WHERE imovel.idSituacaoAtualizacaoCadastral = " + SituacaoAtualizacaoCadastral.EM_REVISAO + ")";
 			}
 
 			consulta += " order by localidade.id, setorComercial.codigo, rota.codigo, txac.descricaoArquivo ";

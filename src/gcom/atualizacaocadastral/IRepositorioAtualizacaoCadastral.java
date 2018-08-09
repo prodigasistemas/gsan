@@ -115,4 +115,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public TabelaColunaAtualizacaoCadastral obterTabelaColuna(TabelaColuna coluna, Integer idImovel) throws ErroRepositorioException;
 	
 	public TabelaAtualizacaoCadastral obterTabela(Tabela tabela, Integer idImovel) throws ErroRepositorioException;
+	
+	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) throws ErroRepositorioException;
 }

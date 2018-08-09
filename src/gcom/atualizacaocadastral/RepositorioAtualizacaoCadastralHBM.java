@@ -17,12 +17,18 @@ import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
+import gcom.util.IoUtil;
+import gcom.util.Util;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -1308,5 +1314,85 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         
         return retorno;
 	}
+
+	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) throws ErroRepositorioException {
+        Session session = HibernateUtil.getSession();
+        
+        try {
+        	String update = this.montarUpdate(tabelaColunaAtualizacaoCadastral);
+        	
+    		PreparedStatement st = null;
+
+    		try {	
+    			Connection jdbcCon = session.connection();
+    			
+				st = jdbcCon.prepareStatement(update);
+    				
+				st.executeUpdate();
+    			} catch (SQLException e) {
+    				throw new ErroRepositorioException(e, "Erro no Hibernate");
+    			} finally {
+    				if (null != st)
+    					try {
+    						st.close();
+    					} catch (SQLException e) {
+    						throw new ErroRepositorioException(e, "Erro no Hibernate");
+    					}
+    				HibernateUtil.closeSession(session);
+    			}
+
+        } catch (HibernateException e) {
+        	e.printStackTrace();
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+	}
+	
+	private String montarUpdate(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) {
+		Properties props = IoUtil.carregaPropriedades("tabela_retorno.properties");
+		String update = new String();
+		
+		String tabelaDestino = props.getProperty(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getTabela().getNomeTabela());
+		
+		if (tabelaDestino.equals("atualizacaocadastral.imovel_retorno"))
+			update = montarUpdateImovel(tabelaDestino, props, tabelaColunaAtualizacaoCadastral);
+		else if (tabelaDestino.equals("atualizacaocadastral.cliente_retorno"))
+			update = montarUpdateCliente(tabelaDestino, props, tabelaColunaAtualizacaoCadastral);
+		
+		return update;
+	}
+	
+	private String  oberColunaCpfCnpjAtualizacao(String valor) {
+		return valor.length() == 11 ? "clir_nncpf" : "clir_nncnpj"; 
+	}
+	
+	private String montarUpdateCliente(String tabelaDestino, Properties props, TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) {
+		StringBuilder update = new StringBuilder();
+
+		String colunaDestino = oberColunaCpfCnpjAtualizacao(tabelaColunaAtualizacaoCadastral.getColunaValorFiscalizado());;
+		
+		update.append("update ").append(tabelaDestino)
+			  .append(" set ").append(colunaDestino).append(" = '").append(tabelaColunaAtualizacaoCadastral.getColunaValorFiscalizado()).append("'")
+			  .append(" where clir_id in ( select clir_id from atualizacaocadastral.cliente_imovel_retorno ")
+									.append(" where imov_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoImovel())
+									.append(" and clie_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoCliente()).append(")");		;
+
+		return update.toString();
+	}
+	
+	private String montarUpdateImovel(String tabelaDestino, Properties props, TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) {
+		StringBuilder update = new StringBuilder();
+
+		String colunaDestino = props.getProperty(tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna());
+		
+		update.append("update ").append(tabelaDestino)
+			  .append(" set ").append(colunaDestino).append(" = ").append(tabelaColunaAtualizacaoCadastral.getColunaValorFiscalizado())
+			  .append(" where ").append(" imov_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoImovel());
+
+		return update.toString();
+	}
+	
 	
 }

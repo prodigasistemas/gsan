@@ -1346,7 +1346,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		try {
 			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
 			for (Integer idArquivo : idsArquivos) {
-				List<Integer> imoveisARevisar = repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, SituacaoAtualizacaoCadastral.A_REVISAR);
+				List<Integer> imoveisARevisar = repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, SituacaoAtualizacaoCadastral.EM_REVISAO);
 				List<Integer> sorteados = this.sortearImoveis(idArquivo, percentualFiscalizacao);
 				
 				if (imoveisARevisar != null && !imoveisARevisar.isEmpty()) {
@@ -1404,6 +1404,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	public TabelaAtualizacaoCadastral pesquisarTabelaPorImovel(Tabela tabela, Integer idImovel) throws ControladorException {
 		try {
 			return repositorioAtualizacaoCadastral.obterTabela(tabela, idImovel);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao pesquisar tabela coluna atualizacao cadastral.", e);
+		}
+	}
+	
+	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) throws ControladorException {
+		try {
+			repositorioAtualizacaoCadastral.atualizarImovelRetorno(tabelaColunaAtualizacaoCadastral);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("Erro ao pesquisar tabela coluna atualizacao cadastral.", e);
 		}

@@ -68,4 +68,6 @@ public interface IControladorAtualizacaoCadastral {
 	public TabelaColunaAtualizacaoCadastral pesquisarTabelaColunaPorImovel(TabelaColuna coluna, Integer idImovel) throws ControladorException;
 	
 	public TabelaAtualizacaoCadastral pesquisarTabelaPorImovel(Tabela tabela, Integer idImovel) throws ControladorException;
+	
+	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) throws ControladorException;
 }
