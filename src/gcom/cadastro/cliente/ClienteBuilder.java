@@ -5,6 +5,7 @@ import gcom.cadastro.geografico.FiltroUnidadeFederacao;
 import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.fachada.Fachada;
 import gcom.util.Util;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
 import java.util.Collection;
@@ -19,6 +20,8 @@ public abstract class ClienteBuilder {
 	public final static String USUARIO = "Usuario";
 	public final static String PROPRIETARIO = "Proprietario";
 	public final static String RESPONSAVEL = "Responsavel";
+	
+	public abstract IClienteAtualizacaoCadastral buildCliente(Short clienteRelacaoTipo);
 
 	public ClienteBuilder(AtualizacaoCadastralImovel atualizacaoCadastralImovel) {
 		this.atualizacaoCadastralImovel = atualizacaoCadastralImovel;
@@ -52,7 +55,7 @@ public abstract class ClienteBuilder {
 		}
 
 		Integer idCliente = new Integer(atualizacaoCadastralImovel.getLinhaCliente("matricula" + tipoCliente));
-
+		
 		campo = atualizacaoCadastralImovel.getLinhaCliente("tipoPessoa" + tipoCliente);
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)) {
 			clienteTxt.setIdClienteTipo(getIdClienteTipo(new Short(campo), idCliente));
@@ -69,12 +72,13 @@ public abstract class ClienteBuilder {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private UnidadeFederacao getUnidadeFederecao(String uf) {
 		UnidadeFederacao retorno = null;
 
-		FiltroUnidadeFederacao filtroUF = new FiltroUnidadeFederacao();
-		filtroUF.adicionarParametro(new ParametroSimples(FiltroUnidadeFederacao.SIGLA, uf));
-		Collection pesquisa = Fachada.getInstancia().pesquisar(filtroUF, UnidadeFederacao.class.getName());
+		Filtro filtro = new FiltroUnidadeFederacao();
+		filtro.adicionarParametro(new ParametroSimples(FiltroUnidadeFederacao.SIGLA, uf));
+		Collection pesquisa = Fachada.getInstancia().pesquisar(filtro, UnidadeFederacao.class.getName());
 		if (pesquisa != null && !pesquisa.isEmpty()) {
 			retorno = (UnidadeFederacao) Util.retonarObjetoDeColecao(pesquisa);
 		}
@@ -82,55 +86,44 @@ public abstract class ClienteBuilder {
 		return retorno;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Integer getIdClienteTipo(Short tipoPessoa, Integer idCliente) {
-		Integer retorno = null;
-
-		FiltroCliente filtroCliente = new FiltroCliente();
+		Filtro filtroCliente = new FiltroCliente();
 		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, idCliente));
 		filtroCliente.adicionarCaminhoParaCarregamentoEntidade(FiltroCliente.CLIENTE_TIPO);
 
-		Collection pesquisaCliente = Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName());
-		
+		Collection pesquisa = Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName());
 		Cliente cliente = null;
-		if (pesquisaCliente != null && !pesquisaCliente.isEmpty()) {
-			cliente = (Cliente) Util.retonarObjetoDeColecao(pesquisaCliente);
-		}
-
-		if (cliente != null) {
+		if (pesquisa != null && !pesquisa.isEmpty()) {
+			cliente = (Cliente) Util.retonarObjetoDeColecao(pesquisa);
+			
 			Short indicadorFisicoJuridico = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica();
-
-			if (indicadorFisicoJuridico.equals(tipoPessoa)) {
-				retorno = cliente.getClienteTipo().getId();
-			} else {
-				retorno = pesquisarClienteTipo(tipoPessoa);
-			}
-		} else {
-			retorno = pesquisarClienteTipo(tipoPessoa);
+			
+			if (indicadorFisicoJuridico.equals(tipoPessoa))
+				return cliente.getClienteTipo().getId();
 		}
 
-		return retorno;
+		return pesquisarClienteTipo(tipoPessoa);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Integer pesquisarClienteTipo(Short tipoPessoa) {
-		FiltroClienteTipo filtroClienteTipo = new FiltroClienteTipo();
-
+		Filtro filtro = new FiltroClienteTipo();
 		if (tipoPessoa.shortValue() == ClienteTipo.INDICADOR_PESSOA_JURIDICA.shortValue()) {
-			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.INDICADOR_PESSOA_FISICA_JURIDICA, ClienteTipo.INDICADOR_PESSOA_JURIDICA));
-			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.DESCRICAO, "NAO INFORMADO"));
+			filtro.adicionarParametro(new ParametroSimples(FiltroClienteTipo.INDICADOR_PESSOA_FISICA_JURIDICA, ClienteTipo.INDICADOR_PESSOA_JURIDICA));
+			filtro.adicionarParametro(new ParametroSimples(FiltroClienteTipo.DESCRICAO, "NAO INFORMADO"));
 		} else {
-			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.INDICADOR_PESSOA_FISICA_JURIDICA, ClienteTipo.INDICADOR_PESSOA_FISICA));
-			filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.DESCRICAO, "PARTICULARES"));
+			filtro.adicionarParametro(new ParametroSimples(FiltroClienteTipo.INDICADOR_PESSOA_FISICA_JURIDICA, ClienteTipo.INDICADOR_PESSOA_FISICA));
+			filtro.adicionarParametro(new ParametroSimples(FiltroClienteTipo.DESCRICAO, "PARTICULARES"));
 		}
 
 		ClienteTipo clienteTipo = null;
 		
-		Collection pesquisaClienteTipo = Fachada.getInstancia().pesquisar(filtroClienteTipo, ClienteTipo.class.getName());
-		if (pesquisaClienteTipo != null && !pesquisaClienteTipo.isEmpty()) {
-			clienteTipo = (ClienteTipo) Util.retonarObjetoDeColecao(pesquisaClienteTipo);
+		Collection pesquisa = Fachada.getInstancia().pesquisar(filtro, ClienteTipo.class.getName());
+		if (pesquisa != null && !pesquisa.isEmpty()) {
+			clienteTipo = (ClienteTipo) Util.retonarObjetoDeColecao(pesquisa);
 		}
 		
 		return clienteTipo.getId();
 	}
-
-	public abstract IClienteAtualizacaoCadastral buildCliente(Short clienteRelacaoTipo);
 }

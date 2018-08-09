@@ -1,13 +1,5 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import gcom.atualizacaocadastral.ClienteEnderecoRetorno;
 import gcom.atualizacaocadastral.ClienteFoneRetorno;
 import gcom.atualizacaocadastral.ClienteImovelRetorno;
@@ -44,7 +36,14 @@ import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
-import gcom.util.Util;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCommand {
 	
@@ -87,13 +86,10 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	
 	public void salvarObjetosRetorno() throws Exception {
 		salvarImovelRetorno();
-		
 		salvarClienteUsuario();
 		salvarClienteProprietario();
 		salvarClienteResponsavel();
-		
 		salvarImagens();
-		
 	}
 
 	private void salvarImovelRetorno() throws Exception {
@@ -178,13 +174,13 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 
 	private void salvarClienteProprietario() throws Exception {
 		IClienteAtualizacaoCadastral clienteTxt;
-		
-		if(atualizacaoCadastralImovel.getLinhaCliente("usuarioProprietario").equals(USUARIO_IGUAL_PROPRIETARIO)){
+
+		if (atualizacaoCadastralImovel.getLinhaCliente("usuarioProprietario").equals(USUARIO_IGUAL_PROPRIETARIO)) {
 			clienteTxt = new ClienteUsuarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.PROPRIETARIO);
-		}else{
+		} else {
 			clienteTxt = new ClienteProprietarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.PROPRIETARIO);
 		}
-		
+
 		if (StringUtils.isNotEmpty(atualizacaoCadastralImovel.getLinhaCliente("nomeProprietario"))) {
 			salvarCliente(matriculaProprietario, clienteTxt, ClienteRelacaoTipo.PROPRIETARIO, ClienteBuilder.PROPRIETARIO);
 		}
@@ -192,15 +188,21 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 
 	private void salvarClienteResponsavel() throws Exception {
 		IClienteAtualizacaoCadastral clienteTxt;
-		
-		if(atualizacaoCadastralImovel.getLinhaCliente("tipoResponsavel").equals(RESPONSAVEL_IGUAL_USUARIO)){
+		String tipoResponsavel = atualizacaoCadastralImovel.getLinhaCliente("tipoResponsavel");
+		String usuarioProprietario = atualizacaoCadastralImovel.getLinhaCliente("usuarioProprietario");
+
+		if (tipoResponsavel.equals(RESPONSAVEL_IGUAL_USUARIO)) {
 			clienteTxt = new ClienteUsuarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.RESPONSAVEL);
-		}else if(atualizacaoCadastralImovel.getLinhaCliente("tipoResponsavel").equals(RESPONSAVEL_IGUAL_PROPRIETARIO)){
-			clienteTxt = new ClienteProprietarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.RESPONSAVEL);
-		}else{
+		} else if (tipoResponsavel.equals(RESPONSAVEL_IGUAL_PROPRIETARIO)) {
+			if (usuarioProprietario.equals(USUARIO_IGUAL_PROPRIETARIO)) {
+				clienteTxt = new ClienteUsuarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.RESPONSAVEL);
+			} else {
+				clienteTxt = new ClienteProprietarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.RESPONSAVEL);
+			}
+		} else {
 			clienteTxt = new ClienteResponsavelBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.RESPONSAVEL);
 		}
-		
+
 		if (StringUtils.isNotEmpty(atualizacaoCadastralImovel.getLinhaCliente("nomeResponsavel"))) {
 			salvarCliente(matriculaResponsavel, clienteTxt, ClienteRelacaoTipo.RESPONSAVEL, ClienteBuilder.RESPONSAVEL);
 		}
