@@ -7584,7 +7584,7 @@ public class ControladorCadastro extends ControladorComum {
 	}
 
 	/**
-	 * Gerar Arquivo Texto para Atualização Cadastral
+	 * Gerar Arquivo Texto para Atualizacao Cadastral
 	 * 
 	 * Registro Tipo 02 - Dados do(s) cliente(s)
 	 * 
@@ -7622,7 +7622,7 @@ public class ControladorCadastro extends ControladorComum {
 			}
 		}
 
-		// Descrição Gerencia Regional
+		// Descricao Gerencia Regional
 		arquivoTextoRegistroTipoCliente.append(Util.completaString(descricaoGerenciaRegional, 25));
 
 		Iterator colecaoClienteImovelIterator = colecaoClienteImovel.iterator();
@@ -7648,7 +7648,7 @@ public class ControladorCadastro extends ControladorComum {
 			}
 		}
 
-		// Tipo de Endereço Cliente Proprietário
+		// Tipo de Endereco Cliente Proprietario
 		if (clienteProprietario != null) {
 			if (clienteProprietario.getIdEnderecoTipo() != null) {
 				arquivoTextoRegistroTipoCliente.append(clienteProprietario
@@ -7660,7 +7660,7 @@ public class ControladorCadastro extends ControladorComum {
 			arquivoTextoRegistroTipoCliente.append(" ");
 		}
 
-		// Tipo de Endereço do Cliente Responsável
+		// Tipo de Endereco do Cliente Responsavel
 		if (clienteResponsavel != null) {
 			if (clienteResponsavel.getIdEnderecoTipo() != null) {
 				arquivoTextoRegistroTipoCliente.append(clienteResponsavel
@@ -7672,7 +7672,7 @@ public class ControladorCadastro extends ControladorComum {
 			arquivoTextoRegistroTipoCliente.append(" ");
 		}
 
-		// Cliente Proprietário = ClienteUsuário (1-Sim / 2-Não)
+		// Cliente Proprietario = ClienteUsuario (1-Sim / 2-Nao)
 		if (clienteProprietario != null) {
 			if (clienteUsuario != null
 					&& clienteProprietario.getIdCliente().equals(
@@ -7685,7 +7685,7 @@ public class ControladorCadastro extends ControladorComum {
 			arquivoTextoRegistroTipoCliente.append("1");
 		}
 
-		// Tipo Responsável (0-Usuário / 1-Proprietário / 2-Outro)
+		// Tipo Responsavel (0-Usuario / 1-Proprietario / 2-Outro)
 		if (clienteResponsavel != null) {
 			if (clienteUsuario != null
 					&& clienteResponsavel.getIdCliente().equals(
@@ -7702,12 +7702,12 @@ public class ControladorCadastro extends ControladorComum {
 			arquivoTextoRegistroTipoCliente.append("0");
 		}
 
-		// Dados Cliente Usuário
+		// Dados Cliente Usuario
 		if (clienteUsuario != null) {
 			arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteUsuario.getIdCliente()));
 			arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getNome(), 50));
 
-			// Pessoa Física/Jurídica (1-Física/2-Jurídica)
+			// Pessoa 1-Fi�sica/2-Juri�dica
 			if (clienteUsuario.getIdClienteTipo() != null) {
 				ClienteTipo clienteTipo = getControladorCliente()
 						.pesquisarClienteTipo(clienteUsuario.getIdClienteTipo());
@@ -7740,7 +7740,7 @@ public class ControladorCadastro extends ControladorComum {
 				arquivoTextoRegistroTipoCliente.append(" ");
 			}
 
-			// Telefone Usuário
+			// Telefone Usuario
             Collection colecaoClienteFone = getControladorCliente().pesquisarClienteFoneAtualizacaoCadastral(clienteUsuario.getIdCliente(), idImovel, null,
                     clienteUsuario.getIdClienteRelacaoTipo(), null);
 
@@ -7775,7 +7775,7 @@ public class ControladorCadastro extends ControladorComum {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
             }
 
-			// Celular Usuário
+			// Celular Usuario
             if (celular != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getDdd(), 2));
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 8));
@@ -7783,20 +7783,20 @@ public class ControladorCadastro extends ControladorComum {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
             }
 
-			// E-mail usuário
+			// E-mail usuario
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getEmail(), 30));
 		} else {
 			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 136));
 		}
 
-		// Dados Cliente Proprietário
+		// Dados Cliente Proprietario
         if (clienteProprietario != null) {
             arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteProprietario.getIdCliente()));
 
-            // Nome do Cliente Proprietário
+            // Nome do Cliente Proprietario
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNome(), 50));
 
-            // Pessoa Física/Jurídica (1-Física/2-Jurídica)
+            // Pessoa 1-Fi�sica / 2-Juri�dica
             if (clienteProprietario.getIdClienteTipo() != null) {
                 ClienteTipo clienteTipo = getControladorCliente().pesquisarClienteTipo(clienteProprietario.getIdClienteTipo());
                 if (!clienteTipo.getIndicadorPessoaFisicaJuridica().equals("")) {
@@ -7821,7 +7821,7 @@ public class ControladorCadastro extends ControladorComum {
             // RG Cliente
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getRg(), 9));
 
-            // UF Cliente Proprietário
+            // UF Cliente Proprietario
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getDsUFSiglaOrgaoExpedidorRg(), 2));
 
             // Sexo do Cliente (1-Masculino/2-Feminino)
@@ -7831,7 +7831,7 @@ public class ControladorCadastro extends ControladorComum {
                 arquivoTextoRegistroTipoCliente.append(" ");
             }
 
-            // Telefone Proprietário
+            // Telefone Proprietario
             Collection colecaoClienteFone = getControladorCliente().pesquisarClienteFoneAtualizacaoCadastral(clienteProprietario.getIdCliente(), idImovel, null,
                     clienteProprietario.getIdClienteRelacaoTipo(), null);
 
@@ -7866,7 +7866,7 @@ public class ControladorCadastro extends ControladorComum {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
             }
 
-            // Celular Proprietário
+            // Celular Proprietario
             if (celular != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getDdd(), 2));
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 8));
@@ -7874,24 +7874,24 @@ public class ControladorCadastro extends ControladorComum {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
             }
 
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getEmail(), 30));
-            arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(2, clienteProprietario.getIdLogradouroTipo()));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getDescricaoLogradouro(), 40));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNumeroImovel(), 5));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getComplementoEndereco(), 25));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNomeBairro(), 20));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getCodigoCep().toString(), 8));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNomeMunicipio(), 15));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getEmail() != null ? clienteProprietario.getEmail() : "", 30));
+            arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(2, clienteProprietario.getIdLogradouroTipo() != null ? clienteProprietario.getIdLogradouroTipo() : 0));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getDescricaoLogradouro() != null ? clienteProprietario.getDescricaoLogradouro() : "", 40));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNumeroImovel() != null ? clienteProprietario.getNumeroImovel() : "", 5));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getComplementoEndereco() != null ? clienteProprietario.getComplementoEndereco() : "", 25));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNomeBairro() != null ? clienteProprietario.getNomeBairro() : "", 20));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getCodigoCep() != null ? clienteProprietario.getCodigoCep().toString() : "", 8));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNomeMunicipio() != null ? clienteProprietario.getNomeMunicipio() : "", 15));
         } else {
 			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 251));
 		}
 
-		// Dados Cliente Responsável
+		// Dados Cliente Responsavel
         if (clienteResponsavel != null) {
             arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteResponsavel.getIdCliente()));
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNome(), 50));
 
-            // Pessoa Física/Jurídica (1-Física/2-Jurídica)
+            // Pessoa 1-Fisica / 2-Juridica
             if (clienteResponsavel.getIdClienteTipo() != null) {
                 ClienteTipo clienteTipo = getControladorCliente().pesquisarClienteTipo(clienteResponsavel.getIdClienteTipo());
                 if (!clienteTipo.getIndicadorPessoaFisicaJuridica().equals("")) {
@@ -7921,7 +7921,7 @@ public class ControladorCadastro extends ControladorComum {
                 arquivoTextoRegistroTipoCliente.append(" ");
             }
 
-            // Telefone Responsável
+            // Telefone Responsavel
             Collection colecaoClienteFone = getControladorCliente().pesquisarClienteFoneAtualizacaoCadastral(clienteResponsavel.getIdCliente(), idImovel, null,
                     clienteResponsavel.getIdClienteRelacaoTipo(), null);
 
@@ -7956,7 +7956,7 @@ public class ControladorCadastro extends ControladorComum {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
             }
 
-            // Celular Responsável
+            // Celular Responsavel
             if (celular != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getDdd(), 2));
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 8));
@@ -7964,14 +7964,14 @@ public class ControladorCadastro extends ControladorComum {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
             }
 
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getEmail(), 30));
-            arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(2, clienteResponsavel.getIdLogradouroTipo()));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getDescricaoLogradouro(), 40));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNumeroImovel(), 5));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getComplementoEndereco(), 25));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNomeBairro(), 20));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getCodigoCep().toString(), 8));
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNomeMunicipio(), 15));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getEmail() != null ? clienteResponsavel.getEmail() : "", 30));
+            arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(2, clienteResponsavel.getIdLogradouroTipo() != null ? clienteResponsavel.getIdLogradouroTipo() : 0));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getDescricaoLogradouro() != null ? clienteResponsavel.getDescricaoLogradouro() : "", 40));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNumeroImovel() != null ? clienteResponsavel.getNumeroImovel() : "", 5));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getComplementoEndereco() != null ? clienteResponsavel.getComplementoEndereco() : "", 25));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNomeBairro() != null ? clienteResponsavel.getNomeBairro() : "", 20));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getCodigoCep() != null ? clienteResponsavel.getCodigoCep().toString() : "", 8));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNomeMunicipio() != null ? clienteResponsavel.getNomeMunicipio() : "", 15));
         } else {
 			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 251));
 		}
@@ -8649,19 +8649,11 @@ public class ControladorCadastro extends ControladorComum {
 	/**
 	 * 
 	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 05/03/2009
-	 * 
-	 * @return void
-	 * @throws ControladorException
 	 */
-	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt)
-			throws ControladorException {
-
+	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt) throws ControladorException {
 		try {
-			this.repositorioCadastro.atualizarArquivoTextoAtualizacaoCadstral(
-					idArquivoTxt, SituacaoTransmissaoLeitura.EM_CAMPO);
+			repositorioCadastro.atualizarArquivoTextoAtualizacaoCadstral(idArquivoTxt, SituacaoTransmissaoLeitura.EM_CAMPO);
+			getControladorAtualizacaoCadastral().atualizarImovelParaSituacaoEmCampoPorArquivo(idArquivoTxt);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}

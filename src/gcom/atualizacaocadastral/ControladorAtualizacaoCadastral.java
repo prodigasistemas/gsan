@@ -559,7 +559,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return clientesFone;
 	}
 	
-	private void atualizarImovelControle(Integer idImovel) throws Exception{
+	private void atualizarImovelControle(Integer idImovel) throws Exception {
 		ImovelControleAtualizacaoCadastral controle = repositorioAtualizacaoCadastral.pesquisarImovelControleAtualizacao(idImovel);
 		if (controle != null){
 			controle.setImovelRetorno(null);
@@ -1414,6 +1414,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			repositorioAtualizacaoCadastral.atualizarImovelRetorno(tabelaColunaAtualizacaoCadastral);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("Erro ao pesquisar tabela coluna atualizacao cadastral.", e);
+		}
+	}
+	
+	public void atualizarImovelParaSituacaoEmCampoPorArquivo(Integer idArquivo) throws ControladorException {
+		try {
+			repositorioAtualizacaoCadastral.atualizarImovelParaSituacaoEmCampoPorArquivo(idArquivo);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro atualizar situacao de imovel controle atualizacao cadastral por arquivo", e);
 		}
 	}
 }

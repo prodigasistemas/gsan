@@ -6169,4 +6169,8 @@ public class Util {
 		}
 		return sorteados;
 	}
+    
+    public static Integer setValorInteiro(String valor) {
+		return valor.trim().equals("") || valor.trim().equals("0") ? null : Integer.parseInt(valor.trim());
+	}
 }

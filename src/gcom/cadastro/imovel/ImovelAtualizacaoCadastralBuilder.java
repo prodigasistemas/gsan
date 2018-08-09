@@ -1,7 +1,5 @@
 package gcom.cadastro.imovel;
 
-import java.math.BigDecimal;
-
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.endereco.FiltroLogradouroTipo;
@@ -10,36 +8,38 @@ import gcom.fachada.Fachada;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
+import java.math.BigDecimal;
+
 public class ImovelAtualizacaoCadastralBuilder {
 
 	private int matricula;
 	private ImovelAtualizacaoCadastral imovelAtualizacaoCadastral;
 
 	private AtualizacaoCadastralImovel atualizacaoCadastralImovel;
-	
+
 	private AtualizacaoCadastral atualizacaoCadastral;
-	
+
 	private int tipoOperacao;
-	
-	public ImovelAtualizacaoCadastralBuilder(int matricula,AtualizacaoCadastral atualizacaoCadastral,  AtualizacaoCadastralImovel atualizacaoCadastralImovel, int tipoOperacao){
+
+	public ImovelAtualizacaoCadastralBuilder(int matricula, AtualizacaoCadastral atualizacaoCadastral, AtualizacaoCadastralImovel atualizacaoCadastralImovel, int tipoOperacao) {
 		this.matricula = matricula;
 		this.imovelAtualizacaoCadastral = new ImovelAtualizacaoCadastral();
 		this.atualizacaoCadastralImovel = atualizacaoCadastralImovel;
 		this.atualizacaoCadastral = atualizacaoCadastral;
 		this.tipoOperacao = tipoOperacao;
-		
+
 		buildImovel();
 	}
 
 	public ImovelAtualizacaoCadastral getImovelAtualizacaoCadastral() {
 		return imovelAtualizacaoCadastral;
 	}
-	
-	public void buildImovel(){
+
+	public void buildImovel() {
 		// Linha 2
 		imovelAtualizacaoCadastral.setIdImovel(matricula);
 		imovelAtualizacaoCadastral.setTipoOperacao(tipoOperacao);
-		
+
 		String inscricao = atualizacaoCadastralImovel.getLinhaImovel("inscricao");
 		imovelAtualizacaoCadastral.setIdLocalidade(Integer.parseInt(inscricao.substring(0, 3)));
 		imovelAtualizacaoCadastral.setCodigoSetorComercial(Integer.parseInt(inscricao.substring(3, 6)));
@@ -47,12 +47,12 @@ public class ImovelAtualizacaoCadastralBuilder {
 		imovelAtualizacaoCadastral.setLote(Short.parseShort(inscricao.substring(10, 14)));
 		imovelAtualizacaoCadastral.setSubLote(Short.parseShort(inscricao.substring(14, 17)));
 		imovelAtualizacaoCadastral.setIdRota(atualizacaoCadastral.getIdRota());
-		
+
 		imovelAtualizacaoCadastral.setCodigoMunicipio(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("codigoMunicipio")));
 
 		imovelAtualizacaoCadastral.setNumeroIptu(atualizacaoCadastralImovel.getLinhaImovel("numeroIPTU"));
 		String contratoEnergia = atualizacaoCadastralImovel.getLinhaImovel("numeroCelpa");
-		
+
 		if (contratoEnergia.equals("")) {
 			imovelAtualizacaoCadastral.setNumeroContratoEnergia(null);
 		} else {
@@ -62,10 +62,10 @@ public class ImovelAtualizacaoCadastralBuilder {
 				imovelAtualizacaoCadastral.setNumeroContratoEnergia(null);
 			}
 		}
-		
-		imovelAtualizacaoCadastral.setNumeroPontosUtilizacao(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")) == 0 ? null : Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")));
-		imovelAtualizacaoCadastral.setNumeroMorador(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroOcupantes")) == 0 ? null : Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroOcupantes")));
-		
+
+		imovelAtualizacaoCadastral.setNumeroPontosUtilizacao(Util.setValorInteiro(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")).shortValue());
+		imovelAtualizacaoCadastral.setNumeroMorador(Util.setValorInteiro(atualizacaoCadastralImovel.getLinhaImovel("numeroOcupantes")).shortValue());
+
 		imovelAtualizacaoCadastral.setIdLogradouroTipo(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("idTipoLogradouroImovel")));
 		imovelAtualizacaoCadastral.setDsLogradouroTipo(getDescricaoLogradouro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("idTipoLogradouroImovel"))));
 		imovelAtualizacaoCadastral.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaImovel("logradouroImovel"));
@@ -75,72 +75,72 @@ public class ImovelAtualizacaoCadastralBuilder {
 		imovelAtualizacaoCadastral.setCodigoCep(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("cep")));
 		imovelAtualizacaoCadastral.setNomeMunicipio(atualizacaoCadastralImovel.getLinhaImovel("municipio"));
 		imovelAtualizacaoCadastral.setIdLogradouro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("codigoLogradouro")));
-		imovelAtualizacaoCadastral.setIdFonteAbastecimento(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")));
-		
-		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("classeSocial"))){
-		    imovelAtualizacaoCadastral.setClasseSocial(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("classeSocial")));
-		}
-		
-		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("quantidadeAnimaisDomesticos"))){
-		    imovelAtualizacaoCadastral.setQuantidadeAnimaisDomesticos(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("quantidadeAnimaisDomesticos")));
-		}
-		
-		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("areaConstruida"))){
-		    imovelAtualizacaoCadastral.setAreaConstruida(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("areaConstruida")));
-		}
-		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volPiscina"))){
-		    imovelAtualizacaoCadastral.setVolumePiscina(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volPiscina")));
+		imovelAtualizacaoCadastral.setIdFonteAbastecimento(Util.setValorInteiro(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")));
+
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("classeSocial"))) {
+			imovelAtualizacaoCadastral.setClasseSocial(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("classeSocial")));
 		}
 
-		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCisterna"))){
-		    imovelAtualizacaoCadastral.setVolumeCisterna(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCisterna")));
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("quantidadeAnimaisDomesticos"))) {
+			imovelAtualizacaoCadastral.setQuantidadeAnimaisDomesticos(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("quantidadeAnimaisDomesticos")));
 		}
-		
-		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCxDagua"))){
-		    imovelAtualizacaoCadastral.setVolumeCaixaDagua(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCxDagua")));
+
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("areaConstruida"))) {
+			imovelAtualizacaoCadastral.setAreaConstruida(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("areaConstruida")));
 		}
-		
-		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("tipoUso"))){
-		    imovelAtualizacaoCadastral.setTipoUso(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("tipoUso")));
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volPiscina"))) {
+			imovelAtualizacaoCadastral.setVolumePiscina(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volPiscina")));
 		}
-		
-		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("acessoHidrometro"))){
-		    imovelAtualizacaoCadastral.setAcessoHidrometro(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("acessoHidrometro")));
+
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCisterna"))) {
+			imovelAtualizacaoCadastral.setVolumeCisterna(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCisterna")));
 		}
-		
-		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasSocial"))){
-		    imovelAtualizacaoCadastral.setQuantidadeEconomiasSocial(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasSocial")));
+
+		if (Util.isBigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCxDagua"))) {
+			imovelAtualizacaoCadastral.setVolumeCaixaDagua(new BigDecimal(atualizacaoCadastralImovel.getLinhaImovel("volCxDagua")));
 		}
-		
-		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasOutra"))){
-		    imovelAtualizacaoCadastral.setQuantidadeEconomiasOutra(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasOutra")));
+
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("tipoUso"))) {
+			imovelAtualizacaoCadastral.setTipoUso(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("tipoUso")));
 		}
-		
-		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("percentualAbastecimento"))){
- 			imovelAtualizacaoCadastral.setPercentualAbastecimento(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("percentualAbastecimento")));
- 		}		
-		
+
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("acessoHidrometro"))) {
+			imovelAtualizacaoCadastral.setAcessoHidrometro(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("acessoHidrometro")));
+		}
+
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasSocial"))) {
+			imovelAtualizacaoCadastral.setQuantidadeEconomiasSocial(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasSocial")));
+		}
+
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasOutra"))) {
+			imovelAtualizacaoCadastral.setQuantidadeEconomiasOutra(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("quantidadeEconomiasOutra")));
+		}
+
+		if (Util.isPositivo(atualizacaoCadastralImovel.getLinhaImovel("percentualAbastecimento"))) {
+			imovelAtualizacaoCadastral.setPercentualAbastecimento(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("percentualAbastecimento")));
+		}
+
 		// Linha 4
-		imovelAtualizacaoCadastral.setIdLigacaoAguaSituacao(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")));
-		imovelAtualizacaoCadastral.setIdLigacaoEsgotoSituacao(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoEsgotoSituacao")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoEsgotoSituacao")));
-		imovelAtualizacaoCadastral.setIdLocalInstalacaoRamal(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("localInstalacaoRamal")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("localInstalacaoRamal")));
+		imovelAtualizacaoCadastral.setIdLigacaoAguaSituacao(Util.setValorInteiro(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")));
+		imovelAtualizacaoCadastral.setIdLigacaoEsgotoSituacao(Util.setValorInteiro(atualizacaoCadastralImovel.getLinhaServicos("ligacaoEsgotoSituacao")));
+		imovelAtualizacaoCadastral.setIdLocalInstalacaoRamal(Util.setValorInteiro(atualizacaoCadastralImovel.getLinhaServicos("localInstalacaoRamal")));
 
 		// Linha 5
 		if (atualizacaoCadastralImovel.isExisteMedidor()) {
 			imovelAtualizacaoCadastral.setNumeroHidrometro(atualizacaoCadastralImovel.getLinhaMedidor("numeroHidrometro"));
-			imovelAtualizacaoCadastral.setIdMarcaHidrometro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("marcaHidrometro")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("marcaHidrometro")));
-			imovelAtualizacaoCadastral.setIdCapacidadeHidrometro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("capacidadeHidrometro")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("capacidadeHidrometro")));
-			imovelAtualizacaoCadastral.setIdProtecaoHidrometro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("tipoCaixaProtecaoHidrometro")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("tipoCaixaProtecaoHidrometro")));
+			imovelAtualizacaoCadastral.setIdMarcaHidrometro(Util.setValorInteiro(atualizacaoCadastralImovel.getLinhaMedidor("marcaHidrometro")));
+			imovelAtualizacaoCadastral.setIdCapacidadeHidrometro(Util.setValorInteiro(atualizacaoCadastralImovel.getLinhaMedidor("capacidadeHidrometro")));
+			imovelAtualizacaoCadastral.setIdProtecaoHidrometro(Util.setValorInteiro(atualizacaoCadastralImovel.getLinhaMedidor("tipoCaixaProtecaoHidrometro")));
 		}
 
 		// Linha 6
-		imovelAtualizacaoCadastral.setIdCadastroOcorrencia(Integer.parseInt(atualizacaoCadastralImovel.getLinhaAnormalidade("codigoAnormalidade")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaAnormalidade("codigoAnormalidade")));
+		imovelAtualizacaoCadastral.setIdCadastroOcorrencia(Util.setValorInteiro(atualizacaoCadastralImovel.getLinhaAnormalidade("codigoAnormalidade")));
 		imovelAtualizacaoCadastral.setDescricaoOutrasInformacoes(atualizacaoCadastralImovel.getLinhaAnormalidade("comentario").trim());
 		imovelAtualizacaoCadastral.setCoordenadaX(atualizacaoCadastralImovel.getLinhaAnormalidade("latitude"));
 		imovelAtualizacaoCadastral.setCoordenadaY(atualizacaoCadastralImovel.getLinhaAnormalidade("longitude"));
 		imovelAtualizacaoCadastral.setTipoEntrevistado(atualizacaoCadastralImovel.getLinhaAnormalidade("tipoEntrevistado"));
 	}
-	
+
 	public String getDescricaoLogradouro(int idTipoLogradouro) {
 		FiltroLogradouroTipo filtro = new FiltroLogradouroTipo();
 		filtro.adicionarParametro(new ParametroSimples(FiltroLogradouroTipo.ID, idTipoLogradouro));

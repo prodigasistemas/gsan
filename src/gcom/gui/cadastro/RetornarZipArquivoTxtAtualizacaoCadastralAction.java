@@ -39,12 +39,15 @@ public class RetornarZipArquivoTxtAtualizacaoCadastralAction extends GcomAction 
 				ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(arquivoZIP));
 
 				for (ArquivoTextoAtualizacaoCadastral arquivoTexto : colecaoArquivoTexto) {
-					if (!arquivoTexto.getSituacaoTransmissaoLeitura().getId().equals(SituacaoTransmissaoLeitura.DISPONIVEL)
-							&& !arquivoTexto.getSituacaoTransmissaoLeitura().getId().equals(SituacaoTransmissaoLeitura.TRANSMITIDO)) {
+					int situacao = arquivoTexto.getSituacaoTransmissaoLeitura().getId().intValue();
+					
+					if (situacao != SituacaoTransmissaoLeitura.DISPONIVEL.intValue() && situacao != SituacaoTransmissaoLeitura.TRANSMITIDO.intValue()) {
 
 						ZipUtil.adicionarEmZip(zip, arquivoTexto.getDescricaoArquivo(), arquivoTexto.getArquivoTexto());
-
-						getFachada().atualizarArquivoTextoAtualizacaoCadstral(arquivoTexto.getId());
+						
+						if (situacao == SituacaoTransmissaoLeitura.LIBERADO.intValue())
+							getFachada().atualizarArquivoTextoAtualizacaoCadstral(arquivoTexto.getId());
+						
 					} else {
 						throw new ActionServletException("atencao.nao_baixar_arquivo_txt_atualizacao_cadastral");
 					}

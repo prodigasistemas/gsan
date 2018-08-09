@@ -667,12 +667,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					List<Integer> listaSituacao = new ArrayList<Integer>();
 					
 					if (exibirCampos == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE) {
-						listaSituacao.add(SituacaoAtualizacaoCadastral.TRANSMITIDO);
+						listaSituacao.add(SituacaoAtualizacaoCadastral.PRE_APROVADO);
 						query.setParameterList("listaSituacao", listaSituacao);
 					} else {
 						listaSituacao.add(exibirCampos);
 						
-						if (exibirCampos.equals(SituacaoAtualizacaoCadastral.TRANSMITIDO)) {
+						if (exibirCampos.equals(SituacaoAtualizacaoCadastral.PRE_APROVADO)) {
 							listaSituacao.add(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO);
 						}
 						

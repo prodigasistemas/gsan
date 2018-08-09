@@ -91,7 +91,7 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 	private void carregarComboLeiturista(FiltrarAlteracaoAtualizacaoCadastralActionForm form, Fachada fachada, HttpSession sessao) {
 		Collection colecaoLeiturista = new ArrayList();
 		if (form.getIdEmpresa() != null && !form.getIdEmpresa().equals("-1") && !form.getIdEmpresa().equals("")) {
-			FiltroLeiturista filtroLeiturista = new FiltroLeiturista(FiltroLeiturista.ID);
+			FiltroLeiturista filtroLeiturista = new FiltroLeiturista(FiltroLeiturista.FUNCIONARIO_NOME);
 			filtroLeiturista.adicionarParametro(new ParametroSimples(FiltroLeiturista.EMPRESA_ID, form.getIdEmpresa()));
 			filtroLeiturista.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.CLIENTE);
 			filtroLeiturista.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.FUNCIONARIO);

@@ -102,7 +102,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	
-    public Collection<IImovelTipoOcupanteQuantidade> obterImovelQuantidadesOcupantesParaAtualizar(Integer idImovel) throws ErroRepositorioException { 
+    @SuppressWarnings("unchecked")
+	public Collection<IImovelTipoOcupanteQuantidade> obterImovelQuantidadesOcupantesParaAtualizar(Integer idImovel) throws ErroRepositorioException { 
         Collection<IImovelTipoOcupanteQuantidade> retorno = null;
         Session session = HibernateUtil.getSession();
 
@@ -947,6 +948,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ErroRepositorioException {
 		
 		Collection retorno = null;
@@ -1046,6 +1048,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosImoveisPorRotaAtualizacaoCadastral(String idLocalidade, String cdSetorComercial, String cdRota)
 			throws ErroRepositorioException {
 		
@@ -1395,4 +1398,38 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	
+	public void atualizarImovelParaSituacaoEmCampoPorArquivo(Integer idArquivo) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE ImovelControleAtualizacaoCadastral controle ")
+			.append("SET controle.situacaoAtualizacaoCadastral.id = :situacaoNova ")
+			.append("WHERE controle.imovel.id IN (SELECT imovel.id FROM ImovelAtualizacaoCadastral imovel WHERE imovel.idArquivoTexto = :idArquivo) ")
+			.append("AND controle.situacaoAtualizacaoCadastral.id = :situacaoAtual ");
+			
+			session.createQuery(sql.toString())
+			.setInteger("idArquivo", idArquivo)
+			.setInteger("situacaoNova", SituacaoAtualizacaoCadastral.EM_CAMPO)
+			.setInteger("situacaoAtual", SituacaoAtualizacaoCadastral.DISPONIVEL)
+			.executeUpdate();
+			
+			sql = new StringBuilder();
+			sql.append("UPDATE ImovelAtualizacaoCadastral imovel ")
+			.append("SET imovel.idSituacaoAtualizacaoCadastral = :situacaoNova ")
+			.append("WHERE imovel.idArquivoTexto = :idArquivo ")
+			.append("AND imovel.idSituacaoAtualizacaoCadastral = :situacaoAtual ");
+			
+			session.createQuery(sql.toString())
+			.setInteger("idArquivo", idArquivo)
+			.setInteger("situacaoNova", SituacaoAtualizacaoCadastral.EM_CAMPO)
+			.setInteger("situacaoAtual", SituacaoAtualizacaoCadastral.DISPONIVEL)
+			.executeUpdate();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro atualizar situacao de imovel controle atualizacao cadastral por arquivo");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 }
