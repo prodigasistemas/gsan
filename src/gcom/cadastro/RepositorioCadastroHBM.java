@@ -5799,21 +5799,21 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	public Integer pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
-			Integer situacao, Integer idArquivoTexto) throws ErroRepositorioException {
-
-		Integer retorno = null;
+	public Integer pesquisarQuantidadeImoveisTransmitidosAtualizacaoCadastral(Integer idArquivoTexto) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		String consulta = "";
+		Integer qtd = null;
 
 		try {
-			consulta = "SELECT count(distinct imov_id) as cont"
-				+ " FROM cadastro.imovel_atlz_cadastral imovel"
-				+ " WHERE siac_id = " + situacao
-				+ " AND txac_id = " + idArquivoTexto;
+			String sql = "SELECT count(distinct imov_id) AS cont "
+					   + "FROM cadastro.imovel_atlz_cadastral imovel "
+					   + "WHERE siac_id >= :situacao "
+					   + "AND txac_id = :idArquivoTexto";
 
-			retorno = (Integer) session.createSQLQuery(consulta)
-					.addScalar("cont", Hibernate.INTEGER).uniqueResult();
+			qtd = (Integer) session.createSQLQuery(sql)
+					.addScalar("cont", Hibernate.INTEGER)
+					.setInteger("situacao", SituacaoAtualizacaoCadastral.TRANSMITIDO)
+					.setInteger("idArquivoTexto", idArquivoTexto)
+					.uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -5821,7 +5821,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			HibernateUtil.closeSession(session);
 		}
 
-		return retorno;
+		return qtd;
 	}
 	
 	public Collection<Integer> pesquisarIdsImoveisAtualizacaoCadastral(
