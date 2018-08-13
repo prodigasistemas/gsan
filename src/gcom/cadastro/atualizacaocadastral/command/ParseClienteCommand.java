@@ -239,16 +239,20 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 	
 	private void verificarImovel(AtualizacaoCadastral atualizacao, AtualizacaoCadastralImovel imovelAtual) throws Exception {
-		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(
-				atualizacao.getImovelAtual().getMatricula());
-		
-		if (imovelControleAtualizacaoCadastral != null
-				&& (imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId().intValue() == SituacaoAtualizacaoCadastral.APROVADO.intValue()
-						|| imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId().intValue() == SituacaoAtualizacaoCadastral.ATUALIZADO.intValue())){
-			atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'APROVADO' ou 'ATUALIZADO'");
-			atualizacao.getImovelAtual().setImovelAprovado(true);
+		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
+
+		if (imovelControleAtualizacaoCadastral != null) {
+			int situacao = imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId().intValue();
+
+			if (situacao == SituacaoAtualizacaoCadastral.PRE_APROVADO.intValue() 
+					|| situacao == SituacaoAtualizacaoCadastral.APROVADO.intValue() 
+					|| situacao == SituacaoAtualizacaoCadastral.ATUALIZADO.intValue()) {
+
+				atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'PRE APROVADO', 'APROVADO' ou 'ATUALIZADO'");
+				atualizacao.getImovelAtual().setImovelAprovado(true);
+			}
 		} else {
-			if(atualizacao.getImovelAtual().getMatricula() > 0) {
+			if (atualizacao.getImovelAtual().getMatricula() > 0) {
 				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
 			}
 		}
