@@ -4,15 +4,21 @@ import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaClienteCommand;
+import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
+import gcom.util.Util;
 import gcom.util.exception.MatriculaProprietarioException;
 import gcom.util.exception.MatriculaResponsavelException;
 import gcom.util.exception.MatriculaUsuarioException;
+import gcom.util.filtro.Filtro;
+import gcom.util.filtro.ParametroSimples;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -91,7 +97,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			linha.put("ufRgUsuario", ufRgUsuario);
 
 			String sexoUsuario = parser.obterDadoParser(1).trim();
-			linha.put("sexoUsuario", sexoUsuario);
+			linha.put("sexoUsuario", getSexoTipo(matriculaUsuario, sexoUsuario));
 
 			String telefoneUsuario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("telefoneUsuario", telefoneUsuario);
@@ -127,7 +133,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			linha.put("ufRgProprietario", ufRgProprietario);
 
 			String sexoProprietario = parser.obterDadoParser(1).trim();
-			linha.put("sexoProprietario", sexoProprietario);
+			linha.put("sexoProprietario", getSexoTipo(matriculaProprietario, sexoProprietario));
 
 			String telefoneProprietario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("telefoneProprietario", telefoneProprietario);
@@ -188,7 +194,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			linha.put("ufRgResponsavel", ufRgResponsavel);
 
 			String sexoResponsavel = parser.obterDadoParser(1).trim();
-			linha.put("sexoResponsavel", sexoResponsavel);
+			linha.put("sexoResponsavel", getSexoTipo(matriculaResponsavel, sexoResponsavel));
 
 			String telefoneResponsavel = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("telefoneResponsavel", telefoneResponsavel);
@@ -256,5 +262,24 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
 			}
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private String getSexoTipo(int matricula, String sexoTipo) throws Exception {
+		if (sexoTipo.trim().equals("")) {
+			Filtro filtro = new FiltroCliente();
+			filtro.adicionarParametro(new ParametroSimples(FiltroCliente.ID, matricula));
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCliente.SEXO);
+
+			Cliente cliente = (Cliente) Util.retonarObjetoDeColecao((List<Cliente>) controladorUtil.pesquisar(filtro, Cliente.class.getName()));
+
+			if (cliente != null && cliente.getPessoaSexo() != null) {
+				sexoTipo = cliente.getPessoaSexo().getId().toString();
+			} else {
+				sexoTipo = "1";
+			}
+		}
+
+		return sexoTipo;
 	}
 }
