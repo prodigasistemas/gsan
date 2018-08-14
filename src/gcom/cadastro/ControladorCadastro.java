@@ -7083,8 +7083,7 @@ public class ControladorCadastro extends ControladorComum {
 
 			this.excluirImagemImoveisComErro(atualizacao);
 			
-			Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
-					SituacaoAtualizacaoCadastral.TRANSMITIDO, atualizacao.getArquivoTexto().getId());
+			Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisTransmitidosAtualizacaoCadastral(atualizacao.getArquivoTexto().getId());
 			
 			if (quantidadeImoveisTransmitidos.compareTo(atualizacao.getArquivoTexto().getQuantidadeImovel()) == 0) {
 				repositorioCadastro.atualizarArquivoTextoAtualizacaoCadstral(atualizacao.getArquivoTexto().getId(),
@@ -8592,47 +8591,36 @@ public class ControladorCadastro extends ControladorComum {
 			String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) throws ControladorException {
 
 		try {
-			List<ArquivoTextoAtualizacaoCadastral> retorno = new ArrayList();
+			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList();
 			
 			List<ArquivoTextoAtualizacaoCadastral> colecao = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
 					idEmpresa, idLocalidade, codigoSetorComercial, idAgenteComercial, idSituacaoTransmissao, exibicao);
 			
 			for (ArquivoTextoAtualizacaoCadastral arquivo : colecao) {
-				Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO, arquivo.getId());
-				quantidadeImoveisTransmitidos += repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.APROVADO, arquivo.getId());
-				
+				Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisTransmitidosAtualizacaoCadastral(arquivo.getId());
 				arquivo.setQuantidadeImoveisTransmitidos(quantidadeImoveisTransmitidos);
-				
-				retorno.add(arquivo);
+				arquivos.add(arquivo);
 			}
 			
-			return retorno;
+			return arquivos;
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
 
-	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
-			Integer idArquivoTxt) throws ControladorException {
-
-		ArquivoTextoAtualizacaoCadastral retorno = null;
+	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(Integer idArquivoTxt) throws ControladorException {
+		ArquivoTextoAtualizacaoCadastral arquivo = null;
 
 		try {
-			retorno = this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTxt);
+			arquivo = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTxt);
 			
-			Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
-					SituacaoAtualizacaoCadastral.TRANSMITIDO, retorno.getId());
-			
-			quantidadeImoveisTransmitidos += repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
-					SituacaoAtualizacaoCadastral.APROVADO, retorno.getId());
-			
-			retorno.setQuantidadeImoveisTransmitidos(quantidadeImoveisTransmitidos);
-			
+			Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisTransmitidosAtualizacaoCadastral(arquivo.getId());
+			arquivo.setQuantidadeImoveisTransmitidos(quantidadeImoveisTransmitidos);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
 
-		return retorno;
+		return arquivo;
 	}
 	
 	public Collection<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(

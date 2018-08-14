@@ -222,8 +222,7 @@ public interface IRepositorioCadastro {
 	
 	public Integer pesquisarImovelAtualizacaoCadastralComIndicadorExclusaoCount() throws ErroRepositorioException;
 	
-	public Integer pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
-			Integer situacao, Integer idArquivoTexto) throws ErroRepositorioException;
+	public Integer pesquisarQuantidadeImoveisTransmitidosAtualizacaoCadastral(Integer idArquivoTexto) throws ErroRepositorioException;
 	
 	public Collection<Integer> pesquisarIdsImoveisAtualizacaoCadastral(Integer idEmpresaLeiturista, 
 			Integer idRota) throws ErroRepositorioException;
