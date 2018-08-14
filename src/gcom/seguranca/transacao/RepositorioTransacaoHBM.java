@@ -1,5 +1,6 @@
 package gcom.seguranca.transacao;
 
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.LinkedHashSetAlteracaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.CategoriaAtualizacaoCadastral;
@@ -674,6 +675,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 						
 						if (exibirCampos.equals(SituacaoAtualizacaoCadastral.PRE_APROVADO)) {
 							listaSituacao.add(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO);
+							listaSituacao.add(SituacaoAtualizacaoCadastral.FISCALIZADO);
 						}
 						
 						query.setParameterList("listaSituacao", listaSituacao);
@@ -760,7 +762,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			.append("   tac.complemento, ")//14
 			.append("   usu.nomeUsuario, ")//15
 			.append("   tcol.colunaValorRevisado,")// 16
-			.append("   tcol.colunaValorFiscalizado ")// 17
+			.append("   tcol.colunaValorFiscalizado, ")// 17
+			.append("   tcol.indicadorFiscalizado ")// 18
 			.append(" from gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol")
 			.append(" inner join tcol.tabelaColuna col ")
 			.append(" inner join tcol.tabelaAtualizacaoCadastral tac ")
@@ -790,12 +793,13 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 	 * @param indicador
 	 * @throws ErroRepositorioException
 	 */
-	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idAtualizacaoCadastral,	Short indicador, Usuario usuario) throws ErroRepositorioException {
+	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idAtualizacaoCadastral,	Short indicador, 
+			Usuario usuario, ImovelControleAtualizacaoCadastral imovelControle) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		
 		StringBuilder query = new StringBuilder();
 		query.append("UPDATE gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol ")
-			.append("SET tcol.indicadorAutorizado = :indicador, ")
+			.append("SET ").append(obterIndicadorAutorizacao(imovelControle.getSituacaoAtualizacaoCadastral())).append(" = :indicador, ")
 			.append(" tcol.ultimaAlteracao = :dataAtual ");
 		
 		if(indicador.equals(ConstantesSistema.SIM)){
@@ -824,8 +828,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 		}
 	}
 	
-	
-	
+	private String obterIndicadorAutorizacao(SituacaoAtualizacaoCadastral situacao) {
+		if (situacao.getId().equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO))
+			return "tcol.indicadorFiscalizado";
+			else
+			return "tcol.indicadorAutorizado";
+	}
 	/**
 	 * @author Ana Maria
 	 * @date 16/06/2009

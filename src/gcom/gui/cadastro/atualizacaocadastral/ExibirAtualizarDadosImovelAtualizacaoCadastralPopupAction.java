@@ -115,17 +115,19 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 
 			ImovelControleAtualizacaoCadastral controle = fachada.pesquisarImovelControleAtualizacao(Integer.valueOf(idImovel));
 
-			boolean fiscalizado = false;
+			boolean emFiscalizaacao = false;
 
 			if (controle != null) {
 				if (controle.getSituacaoAtualizacaoCadastral().getId().equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)) {
-					fiscalizado = true;
+					emFiscalizaacao = true;
 				}
 
 				form.setSituacao(controle.getSituacaoAtualizacaoCadastral().getDescricao());
 			}
 
-			sessao.setAttribute("fiscalizado", fiscalizado);
+			sessao.setAttribute("emFiscalizacao", emFiscalizaacao);
+			sessao.setAttribute("exibirBotaoConcluirFiscalizacao", exibirBotaoConcluirFiscalizacao(emFiscalizaacao));
+			sessao.setAttribute("exibirBotaoFiscalizar", exibirBotaoFiscalizar(controle));
 		} catch (Exception e) {
 			throw new ActionServletException("erro.exibir.dados.atualizacao", e, "Dados do Imovel e Cliente");
 		}
@@ -133,6 +135,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		return retorno;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Imovel pesquisarImovel(Fachada fachada, String idImovel) {
 		FiltroImovel filtro = new FiltroImovel();
 		filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
@@ -147,6 +150,18 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 	
 	public boolean temPermissaoAprovarImovel(Integer idUsuario, String idImovel) {
 		return fachada.verificarPermissaoAprovarImovel(idUsuario, new Integer(idImovel));
+	}
+	
+	private boolean possuiArquivoFiscalizacao() {
+		return true;
+	}
+	
+	private boolean exibirBotaoConcluirFiscalizacao(boolean fiscalizado) {
+		return fiscalizado && possuiArquivoFiscalizacao();
+	}
+	
+	private boolean exibirBotaoFiscalizar(ImovelControleAtualizacaoCadastral controle) {
+		return controle != null && controle.isPreAprovado();
 	}
 	
 }

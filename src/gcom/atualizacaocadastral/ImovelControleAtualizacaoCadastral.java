@@ -73,5 +73,20 @@ public class ImovelControleAtualizacaoCadastral {
 	public void setCadastroOcorrencia(CadastroOcorrencia cadastroOcorrencia) {
 		this.cadastroOcorrencia = cadastroOcorrencia;
 	}
+
+	public boolean isEmFiscalizacao() {
+		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO);
+	}
 	
+	public boolean isFiscalizado() {
+		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.FISCALIZADO);
+	}
+	
+	public boolean isPreAprovado() {
+		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.PRE_APROVADO);
+	}
+	
+	public boolean isProntoParaAprovacao() {
+		return this.isPreAprovado() || this.isFiscalizado();
+	}
 }

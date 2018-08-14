@@ -39807,14 +39807,14 @@ public class Fachada {
 		return this.getControladorCadastro().retornaIpServidorRelatorios();
 	}
 
-	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) {
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) {
 		try {
-			return this.getControladorImovel().pesquisarImovelControleAtualizacaoCadastral(idImovel);
+			return this.getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(idImovel);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
-
+	
 	public void fiscalizarImovel(Integer idImovel) {
 		try {
 			this.getControladorAtualizacaoCadastral().fiscalizarImovel(idImovel);
@@ -39827,14 +39827,6 @@ public class Fachada {
 	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) {
 		try {
 			return this.getControladorAtualizacaoCadastral().pesquisarDadosFichaFiscalizacaoCadastral(listaIdImoveis);
-		} catch (ControladorException e) {
-			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
-		}
-	}
-
-	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) {
-		try {
-			return this.getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(idImovel);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
@@ -40199,6 +40191,14 @@ public class Fachada {
 	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos) {
 		try {
 			return getControladorAtualizacaoCadastral().regerarArquivosAtualizacaoCadastral(idsArquivos);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public void atualizarSituacaoImovelControle(Integer idImovelControle, Integer idNovaSituacao) {
+		try {
+			getControladorAtualizacaoCadastral().atualizarSituacaoImovelControle(idImovelControle, idNovaSituacao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

@@ -16,12 +16,11 @@ import gcom.atendimentopublico.ligacaoesgoto.FiltroLigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiltroSupressaoMotivo;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
-import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
-import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.FiltroSolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.MeioSolicitacao;
 import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.atualizacaocadastral.IRepositorioAtualizacaoCadastral;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.RepositorioAtualizacaoCadastralHBM;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.RepositorioCadastroHBM;
@@ -33,8 +32,6 @@ import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
-import gcom.cadastro.cliente.ControladorClienteLocal;
-import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.FiltroClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteTipo;
 import gcom.cadastro.cliente.FiltroFoneTipo;
@@ -48,8 +45,6 @@ import gcom.cadastro.endereco.EnderecoTipo;
 import gcom.cadastro.endereco.FiltroEnderecoReferencia;
 import gcom.cadastro.endereco.FiltroEnderecoTipo;
 import gcom.cadastro.imovel.CadastroOcorrencia;
-import gcom.cadastro.imovel.ControladorImovelLocal;
-import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.FiltroCadastroOcorrencia;
 import gcom.cadastro.imovel.FiltroFonteAbastecimento;
 import gcom.cadastro.imovel.FonteAbastecimento;
@@ -82,24 +77,14 @@ import gcom.seguranca.acesso.usuario.FiltroUsuarioAlteracao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.seguranca.acesso.usuario.UsuarioAlteracao;
-import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
-import gcom.util.IoUtil;
-import gcom.util.ServiceLocator;
-import gcom.util.ServiceLocatorException;
-import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -114,7 +99,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.ejb.CreateException;
@@ -1226,14 +1210,15 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 					helper.setIndicadorAutorizado((Short) dados[8]); 
 					helper.setUltimaAtualizacao((Date) dados[9]); 
 					helper.setIdAlteracaoTipo((Integer) dados[10]); 
-					helper.setDescricaoAlteracaoTipo((String) dados[11]); 
+					helper.setDescricaoAlteracaoTipo((String) dados[11]);
+					helper.setIndicadorFiscalizado((Short) dados[18]);
 					if (dados[13] != null) {
 						helper.setDataValidacao((Date) dados[13]);
 					}
 					if (dados[15] != null) {
 						helper.setNomeUsuario((String) dados[15]);
 					}
-
+					
 					List<DadosTabelaAtualizacaoCadastralHelper> alteracoes = retorno.get(helper.getNomeColuna());
 					if (alteracoes == null){
 						alteracoes = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
@@ -1450,9 +1435,10 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 			for (int i = 0; i < idsAtualizacaoCadastral.length; i++) {
 				
 				Integer idAtualizacaoCadastral = new Integer(idsAtualizacaoCadastral[i]);
+				ImovelControleAtualizacaoCadastral imovelControle = getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(idImovel);
 				
 				this.repositorioTransacao.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
-						idAtualizacaoCadastral, indicador, usuarioLogado);
+						idAtualizacaoCadastral, indicador, usuarioLogado, imovelControle);
 				
 				if(tipoAlteracaoCadastral == null) {
 					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = 

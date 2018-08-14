@@ -16077,17 +16077,6 @@ public class ControladorImovelSEJB extends ControladorComum {
 		this.getControladorUtil().atualizar(imovelAtualizacaoCadastral);
 	}
 
-	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(
-			Integer idImovel) throws ControladorException {
-		try {
-			return this.repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(idImovel);
-		} catch (ErroRepositorioException ex) {
-			ex.printStackTrace();
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
-		}
-	}
-	
 	public ImovelCobrancaSituacao obterImovelCobrancaSituacao(Integer idImovelSituacaoCobranca) throws ControladorException {
 		try {
 			return repositorioImovel.obterImovelCobrancaSituacao(idImovelSituacaoCobranca);

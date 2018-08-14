@@ -111,7 +111,6 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 			registradorOperacao.registrarOperacao((ObjetoTransacao) objetoAtualizacaoCadastralTxt);
 
 			Collection<TabelaColunaAtualizacaoCadastral> colecaoInserirTabelaColunaAtualizacaoCadastral = new ArrayList<TabelaColunaAtualizacaoCadastral>();
-			Collection<TabelaColunaAtualizacaoCadastral> colecaoAtualizarTabelaColunaAtualizacaoCadastral = new ArrayList<TabelaColunaAtualizacaoCadastral>();
 
 			if (colunasAlteradas != null && !colunasAlteradas.isEmpty()) {
 				TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral = pesquisarTabelaParaAtualizar(objetoAtualizacaoCadastralTxt, matriculaImovel);
@@ -232,10 +231,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 					
 					tabelaColunaAtualizacaoCadastral.setTabelaColuna(tabelaLinhaColunaAlteracao.getTabelaColuna());
 					
-//					if (tabelaColunaAtualizacaoCadastral.isRegistroInclusao())
-						colecaoInserirTabelaColunaAtualizacaoCadastral.add(tabelaColunaAtualizacaoCadastral);
-//					else
-//						colecaoAtualizarTabelaColunaAtualizacaoCadastral.add(tabelaColunaAtualizacaoCadastral);
+					colecaoInserirTabelaColunaAtualizacaoCadastral.add(tabelaColunaAtualizacaoCadastral);
 
 				}
 
@@ -244,7 +240,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 						((ObjetoTransacao) objetoAtualizacaoCadastralTxt).getOperacaoEfetuada(), tabelaAtualizacaoCadastral,
 						colecaoInserirTabelaColunaAtualizacaoCadastral);
 
-				if (idImovel != null) {
+				if (idImovel != null && arquivoTexto.isArquivoRetornoTransmissao()) {
 					atualizarSituacaoImovelAtualizacaoCadastral(idImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
 				}
 			}

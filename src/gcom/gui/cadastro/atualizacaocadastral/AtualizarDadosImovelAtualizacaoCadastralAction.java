@@ -1,6 +1,7 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
@@ -29,19 +30,30 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		
 		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
 		
-		CadastroOcorrencia cadastroOcorrencia = this.pesquisarCadastroOcorrencia(Integer.parseInt(form.getIdImovel()));
+		ImovelControleAtualizacaoCadastral imovelControle = fachada.pesquisarImovelControleAtualizacao(new Integer(form.getIdImovel()));
+		
+		CadastroOcorrencia cadastroOcorrencia = imovelControle.getCadastroOcorrencia();
 		
 		if (cadastroOcorrencia != null) {
 			if (cadastroOcorrencia.getIndicadorValidacao().equals(ConstantesSistema.SIM)) {
 				
-				if (!form.getIdRegistrosAutorizados().equals("")) {
-					String registrosAutorizados = form.getIdRegistrosAutorizados();
+				String registrosSelecionados = null;
+				
+				if (imovelControle.isEmFiscalizacao()) {
+					registrosSelecionados = form.getIdRegistrosFiscalizados();
+				} else {
+					registrosSelecionados = form.getIdRegistrosAutorizados();
+				}
+				
+				if (!registrosSelecionados.equals("")) {
 					
-					String[] listaIdRegistrosSim = registrosAutorizados.split(",");
+					String[] listaIdRegistrosSim = registrosSelecionados.split(",");
 					
 					if (listaIdRegistrosSim != null && !listaIdRegistrosSim.equals("")) {
 						fachada.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer.valueOf(form.getIdImovel()),
 								listaIdRegistrosSim, ConstantesSistema.SIM, usuario);
+						
+						this.atualizarSituacaoImovel(imovelControle);
 					}
 				}
 				
@@ -55,10 +67,12 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		
         return retorno;
     }
-
-	private CadastroOcorrencia pesquisarCadastroOcorrencia(Integer idImovel) {
-		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = fachada.pesquisarImovelControleAtualizacaoCadastral(idImovel);
-		
-		return imovelControleAtualizacaoCadastral.getCadastroOcorrencia();
+	
+	private void atualizarSituacaoImovel(ImovelControleAtualizacaoCadastral imovelControle) {
+		if (imovelControle.isEmFiscalizacao()) {
+			fachada.atualizarSituacaoImovelControle(imovelControle.getImovel().getId(), SituacaoAtualizacaoCadastral.FISCALIZADO);
+		} else if (imovelControle.isPreAprovado() || imovelControle.isFiscalizado()) {
+			fachada.atualizarSituacaoImovelControle(imovelControle.getImovel().getId(), SituacaoAtualizacaoCadastral.APROVADO);
+		}
 	}
 }

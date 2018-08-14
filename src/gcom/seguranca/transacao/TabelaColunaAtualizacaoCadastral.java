@@ -2,6 +2,7 @@ package gcom.seguranca.transacao;
 
 import gcom.interceptor.ObjetoGcom;
 import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.ConstantesSistema;
 
 import java.util.Date;
 
@@ -20,6 +21,7 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
     private TabelaColuna tabelaColuna;
 	private Usuario usuario;
 	private boolean registroInclusao;
+	private Short indicadorFiscalizado;
     
     public TabelaColunaAtualizacaoCadastral(Integer id, String colunaValorAnterior, String colunaValorTransmitido, Short indicadorAutorizado, 
     		Date dataValidacao, Date ultimaAlteracao, TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, TabelaColuna tabelaColuna) {
@@ -138,5 +140,27 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 
 	public void setRegistroInclusao(boolean registroInclusao) {
 		this.registroInclusao = registroInclusao;
+	}
+
+	public Short getIndicadorFiscalizado() {
+		return indicadorFiscalizado;
+	}
+
+	public void setIndicadorFiscalizado(Short indicadorFiscalizado) {
+		this.indicadorFiscalizado = indicadorFiscalizado;
+	}
+
+	public String getValorAtualizarRetorno() {
+		if (this.indicadorFiscalizado != null && this.indicadorFiscalizado.equals(ConstantesSistema.SIM))
+			return this.colunaValorFiscalizado;
+		else 
+			return this.colunaValorTransmitido;
+	}
+	
+	public void setValorAtualizarRetorno(String valor) {
+		if (this.indicadorFiscalizado != null && this.indicadorFiscalizado.equals(ConstantesSistema.SIM))
+			this.colunaValorFiscalizado = valor;
+		else 
+			this.colunaValorTransmitido = valor;
 	}
 }

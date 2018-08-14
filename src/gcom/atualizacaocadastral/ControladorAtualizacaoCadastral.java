@@ -1424,4 +1424,10 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			throw new ControladorException("Erro atualizar situacao de imovel controle atualizacao cadastral por arquivo", e);
 		}
 	}
+	
+	public void atualizarSituacaoImovelControle(Integer idImovelControle, Integer idNovaSituacao) throws ControladorException {
+		ImovelControleAtualizacaoCadastral imovelControle = pesquisarImovelControleAtualizacao(idImovelControle);
+		imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(idNovaSituacao));
+		getControladorUtil().atualizar(imovelControle);
+	}
 }

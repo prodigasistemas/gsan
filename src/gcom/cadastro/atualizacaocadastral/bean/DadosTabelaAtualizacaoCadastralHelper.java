@@ -1,5 +1,7 @@
 package gcom.cadastro.atualizacaocadastral.bean;
 
+import gcom.util.ConstantesSistema;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -36,6 +38,8 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	private transient Short posicao = 9;
 	
 	private Boolean habilitaAlteracao = true;
+	
+	private Short indicadorFiscalizado;
 	
 	public String getColunaValorAnterior() {
 		return colunaValorAnterior;
@@ -165,14 +169,35 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	}
 	
 	public Boolean getHabilitaAlteracao() {
-		return !informativo && dataValidacao == null;
+		return indicadorAutorizado == null || 
+				(indicadorAutorizado != null && possuiValorAlterado() && 
+					(indicadorAutorizado.equals(ConstantesSistema.NAO) && !informativo && dataValidacao == null) 
+					|| (indicadorFiscalizado.equals(ConstantesSistema.SIM) && !informativo && dataValidacao != null) );
 	}
 	public void setHabilitaAlteracao(Boolean habilitaAlteracao) {
 		this.habilitaAlteracao = habilitaAlteracao;
+	}
+	
+	public Short getIndicadorFiscalizado() {
+		return indicadorFiscalizado;
+	}
+	public void setIndicadorFiscalizado(Short indicadorFiscalizado) {
+		this.indicadorFiscalizado = indicadorFiscalizado;
 	}
 	public String toString() {
 		return "DadosTabelaAtualizacaoCadastralHelper [descricaoTabela=" + descricaoTabela + ", descricaoColuna=" + descricaoColuna + ", colunaValorAnterior="
 				+ colunaValorAnterior + ", colunaValorTransmitido=" + colunaValorTransmitido + ", dataValidacao=" + dataValidacao + ", nomeUsuario=" + nomeUsuario  
 				+ ", colunaValorRevisado=" + colunaValorRevisado + ", colunaValorFiscalizado=" + colunaValorFiscalizado+ "]";
+	}
+	
+	public String getValorAtualizarRetorno() {
+		if (this.indicadorFiscalizado != null && this.indicadorFiscalizado.equals(ConstantesSistema.SIM))
+			return this.colunaValorFiscalizado;
+		else 
+			return this.colunaValorTransmitido;
+	}
+	
+	private boolean possuiValorAlterado() {
+		return colunaValorTransmitido != null || colunaValorFiscalizado != null ;
 	}
 }

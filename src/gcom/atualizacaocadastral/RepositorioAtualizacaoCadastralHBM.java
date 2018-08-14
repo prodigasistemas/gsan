@@ -120,23 +120,42 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         return retorno;
     }
     
+//	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ErroRepositorioException {
+//		Session session = HibernateUtil.getSession();
+//		ImovelControleAtualizacaoCadastral retorno = null;
+//		try{
+//			String consulta = " SELECT e FROM ImovelControleAtualizacaoCadastral e "
+//							+ " LEFT JOIN FETCH e.situacaoAtualizacaoCadastral s "
+//							+ " WHERE e.imovel.id = :idImovel ";
+//			retorno = (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
+//					.setInteger("idImovel", idImovel)
+//					.uniqueResult();
+//		}catch (HibernateException e) {
+//			throw new ErroRepositorioException(e, "Erro ao pesquisar imovel controle atualizacao cadastral");
+//		} finally {
+//			HibernateUtil.closeSession(session);
+//		}
+//		
+//		return retorno;
+//	}
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		ImovelControleAtualizacaoCadastral retorno = null;
-		try{
-			String consulta = " SELECT e FROM ImovelControleAtualizacaoCadastral e "
-							+ " LEFT JOIN FETCH e.situacaoAtualizacaoCadastral s "
-							+ " WHERE e.imovel.id = :idImovel ";
-			retorno = (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
-					.setInteger("idImovel", idImovel)
-					.uniqueResult();
+		try {
+
+			String consulta = "SELECT icac "
+					+ "FROM ImovelControleAtualizacaoCadastral icac "
+					+ "LEFT JOIN FETCH icac.imovel imovel "
+					+ "LEFT JOIN FETCH icac.situacaoAtualizacaoCadastral situacao "
+					+ "LEFT JOIN FETCH icac.cadastroOcorrencia cadastroOcorrencia "
+					+ "WHERE icac.imovel.id = :idImovel ";
+
+			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
+					.setInteger("idImovel", idImovel).uniqueResult();
 		}catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao pesquisar imovel controle atualizacao cadastral");
+			throw new ErroRepositorioException(e, "Erro ao pesquisar controle de atualizacao cadastral");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-		
-		return retorno;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -1323,7 +1342,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         
         try {
         	String update = this.montarUpdate(tabelaColunaAtualizacaoCadastral);
-        	
+        	System.out.println(update);
     		PreparedStatement st = null;
 
     		try {	
@@ -1390,13 +1409,15 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 		String colunaDestino = props.getProperty(tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna());
 		
+		if (colunaDestino.equals("imre_vol_cx_dagua") || colunaDestino.equals("imre_vol_cisterna"))
+			tabelaColunaAtualizacaoCadastral.setValorAtualizarRetorno(tabelaColunaAtualizacaoCadastral.getValorAtualizarRetorno().replace(",","."));
+		
 		update.append("update ").append(tabelaDestino)
-			  .append(" set ").append(colunaDestino).append(" = ").append(tabelaColunaAtualizacaoCadastral.getColunaValorFiscalizado())
+			  .append(" set ").append(colunaDestino).append(" = ").append(tabelaColunaAtualizacaoCadastral.getValorAtualizarRetorno())
 			  .append(" where ").append(" imov_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoImovel());
 
 		return update.toString();
 	}
-	
 	
 	public void atualizarImovelParaSituacaoEmCampoPorArquivo(Integer idArquivo) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();

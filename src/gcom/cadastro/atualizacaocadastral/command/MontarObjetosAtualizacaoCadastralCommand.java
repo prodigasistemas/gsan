@@ -89,8 +89,8 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		salvarClienteUsuario();
 		salvarClienteProprietario();
 		salvarClienteResponsavel();
-		
-		atualizarSituacaoControleImovelAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO);
+
+		atualizarSituacaoControleImovelAtualizacaoCadastral();
 	}
 
 	private void salvarImovel() throws Exception {
@@ -310,15 +310,17 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		return clienteFone;
 	}
 	
-	private void atualizarSituacaoControleImovelAtualizacaoCadastral(Integer situacao) throws Exception {
-		ImovelControleAtualizacaoCadastral controle = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(matriculaImovel);
+	private void atualizarSituacaoControleImovelAtualizacaoCadastral() throws Exception {
+		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.pesquisarImovelControleAtualizacao(matriculaImovel);
 		
 		if (controle == null){
 			controle = new ImovelControleAtualizacaoCadastral();
 			controle.setImovel(new Imovel(matriculaImovel));
 		}
 		
-		controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(situacao));
+		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTransmissao())
+			controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO));
+		
 		controle.setDataRetorno(new Date());
 		controle.setCadastroOcorrencia(new CadastroOcorrencia(atualizacaoCadastralImovel.getCadastroOcorrencia().getId()));
 		Integer idImovelControle = (Integer) controladorUtil.inserirOuAtualizar(controle);

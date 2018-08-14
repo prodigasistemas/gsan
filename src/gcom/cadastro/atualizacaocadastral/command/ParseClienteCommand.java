@@ -239,7 +239,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 	
 	private void verificarImovel(AtualizacaoCadastral atualizacao, AtualizacaoCadastralImovel imovelAtual) throws Exception {
-		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(
+		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = controladorAtualizacaoCadastral.pesquisarImovelControleAtualizacao(
 				atualizacao.getImovelAtual().getMatricula());
 		
 		if (imovelControleAtualizacaoCadastral != null
