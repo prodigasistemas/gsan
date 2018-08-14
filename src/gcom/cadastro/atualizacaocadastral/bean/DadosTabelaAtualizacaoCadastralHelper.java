@@ -23,6 +23,7 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	private String colunaValorTransmitido = "";
 	private String colunaValorRevisado = "";
 	private String colunaValorFiscalizado = "";
+	private String colunaValorPreAprovado = "";
 	private Short indicadorAutorizado;
 	private Date ultimaAtualizacao;
 	
@@ -64,6 +65,12 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	}
 	public void setColunaValorFiscalizado(String colunaValorFiscalizado) {
 		this.colunaValorFiscalizado = colunaValorFiscalizado;
+	}
+	public String getColunaValorPreAprovado() {
+		return colunaValorPreAprovado;
+	}
+	public void setColunaValorPreAprovado(String colunaValorPreAprovado) {
+		this.colunaValorPreAprovado = colunaValorPreAprovado;
 	}
 	public String getDescricaoAlteracaoTipo() {
 		return descricaoAlteracaoTipo;
@@ -172,7 +179,8 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 		return indicadorAutorizado == null || 
 				(indicadorAutorizado != null && possuiValorAlterado() && 
 					(indicadorAutorizado.equals(ConstantesSistema.NAO) && !informativo && dataValidacao == null) 
-					|| (indicadorFiscalizado.equals(ConstantesSistema.SIM) && !informativo && dataValidacao != null) );
+					|| (indicadorFiscalizado != null && (indicadorFiscalizado.equals(ConstantesSistema.SIM) && !informativo && dataValidacao != null)
+					|| indicadorFiscalizado == null ));
 	}
 	public void setHabilitaAlteracao(Boolean habilitaAlteracao) {
 		this.habilitaAlteracao = habilitaAlteracao;
@@ -187,17 +195,17 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	public String toString() {
 		return "DadosTabelaAtualizacaoCadastralHelper [descricaoTabela=" + descricaoTabela + ", descricaoColuna=" + descricaoColuna + ", colunaValorAnterior="
 				+ colunaValorAnterior + ", colunaValorTransmitido=" + colunaValorTransmitido + ", dataValidacao=" + dataValidacao + ", nomeUsuario=" + nomeUsuario  
-				+ ", colunaValorRevisado=" + colunaValorRevisado + ", colunaValorFiscalizado=" + colunaValorFiscalizado+ "]";
+				+ ", colunaValorRevisado=" + colunaValorRevisado + ", colunaValorFiscalizado=" + colunaValorFiscalizado+ ", colunaValorPreAprovado=" + colunaValorPreAprovado+ "]";
 	}
 	
 	public String getValorAtualizarRetorno() {
 		if (this.indicadorFiscalizado != null && this.indicadorFiscalizado.equals(ConstantesSistema.SIM))
 			return this.colunaValorFiscalizado;
 		else 
-			return this.colunaValorTransmitido;
+			return this.colunaValorPreAprovado;
 	}
 	
 	private boolean possuiValorAlterado() {
-		return colunaValorTransmitido != null || colunaValorFiscalizado != null ;
+		return colunaValorPreAprovado != null || colunaValorFiscalizado != null ;
 	}
 }

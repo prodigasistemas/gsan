@@ -1413,6 +1413,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		try {
 			repositorioAtualizacaoCadastral.atualizarImovelRetorno(tabelaColunaAtualizacaoCadastral);
 		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
 			throw new ControladorException("Erro ao pesquisar tabela coluna atualizacao cadastral.", e);
 		}
 	}
@@ -1429,5 +1430,25 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		ImovelControleAtualizacaoCadastral imovelControle = pesquisarImovelControleAtualizacao(idImovelControle);
 		imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(idNovaSituacao));
 		getControladorUtil().atualizar(imovelControle);
+	}
+	
+	public boolean possuiInformacoesFiscalizacao(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.possuiInformacoesFiscalizacao(imovelControle);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro atualizar pesquisar se o imóvel possui informações de fiscalização", e);
+		}
+	}
+	
+	public void atualizarRetornoPreAprovado(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException {
+		try {
+			Collection<TabelaColunaAtualizacaoCadastral> colunasAlteradas = repositorioAtualizacaoCadastral.obterColunasPreAprovadas(imovelControle);
+			
+			for (TabelaColunaAtualizacaoCadastral tabelaColuna : colunasAlteradas) {
+				this.atualizarImovelRetorno(tabelaColuna);
+			}
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro atualizar retorno da atualizacao cadastral", e);
+		}
 	}
 }

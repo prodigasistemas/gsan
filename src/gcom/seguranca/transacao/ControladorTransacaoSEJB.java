@@ -1206,6 +1206,15 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 							helper.setColunaValorFiscalizado((String) dados[17]); 
 						}
 					}
+					
+					if (dados[19] != null && !dados[19].equals("")) {
+						String campoAtual = getDescricaoCampoAtualizacaoCadastral((String) dados[19], (String) dados[12]);
+						if (campoAtual != null) {
+							helper.setColunaValorPreAprovado(campoAtual); 
+						} else {
+							helper.setColunaValorPreAprovado((String) dados[19]); 
+						}
+					}
 					helper.setNomeColuna((String) dados[12]);
 					helper.setIndicadorAutorizado((Short) dados[8]); 
 					helper.setUltimaAtualizacao((Date) dados[9]); 

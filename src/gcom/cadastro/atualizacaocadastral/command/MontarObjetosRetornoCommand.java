@@ -87,11 +87,15 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	}
 	
 	public void salvarObjetosRetorno() throws Exception {
-		salvarImovelRetorno();
-		salvarClienteUsuario();
-		salvarClienteProprietario();
-		salvarClienteResponsavel();
-		salvarImagens();
+		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTransmissao()) {
+			salvarImovelRetorno();
+			salvarClienteUsuario();
+			salvarClienteProprietario();
+			salvarClienteResponsavel();
+			salvarImagens();
+		} else {
+			atualizarRetorno();
+		}
 	}
 
 	private void salvarImovelRetorno() throws Exception {
@@ -342,10 +346,21 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	}
 	
 	private void atualizarImovelControle() throws ControladorException {
-		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getImovelControle().getId());
+		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
 		controle.setImovelRetorno(new ImovelRetorno(idImovelRetorno));
 		
 		controladorUtil.atualizar(controle);
 	}
 	
+	private boolean existeRetorno() throws ControladorException {
+		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
+		
+		return controle != null;
+	}
+
+	private void atualizarRetorno() throws ControladorException {
+		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
+		
+		controladorAtualizacaoCadastral.atualizarRetornoPreAprovado(controle);
+	}
 }

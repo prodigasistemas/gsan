@@ -14,6 +14,7 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 
 	public static final String EXIBIR_EM_REVISAO = "1";
 	
+	public static final String TIPO_RETORNO_TRANSMISSAO = " ";
 	public static final String TIPO_RETORNO_REVISAO = "R";
 	public static final String TIPO_RETORNO_FISCALIZACAO = "F";
 
@@ -179,14 +180,15 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	}
 	
 	public boolean isArquivoRetornoTransmissao() {
-		return tipoRetorno.equals(null) || tipoRetorno.equals(" ");
+		return tipoRetorno.equals(null) || tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_RETORNO_TRANSMISSAO);
 	}
 	
 	public boolean isArquivoRetornoRevisao() {
-		return tipoRetorno.equals("R");
+		return !tipoRetorno.equals(null) && tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_RETORNO_REVISAO);
 	}
 	
 	public boolean isArquivoRetornoFiscalizacao() {
-		return tipoRetorno.equals("F");
+		return !tipoRetorno.equals(null) && tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_RETORNO_FISCALIZACAO);
 	}
+	
 }

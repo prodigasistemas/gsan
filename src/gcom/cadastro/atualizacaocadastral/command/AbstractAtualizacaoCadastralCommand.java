@@ -161,6 +161,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 					tabelaAtualizacaoCadastral.setCodigoCliente(idPorTempo);
 					tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
 					tabelaAtualizacaoCadastral.setIdRegistroAlterado(idPorTempo);
+					
 				} else if (objetoAtualizacaoCadastralBase instanceof ImovelSubcategoriaAtualizacaoCadastral) {
 					ImovelSubcategoriaAtualizacaoCadastral txt = (ImovelSubcategoriaAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 
@@ -169,6 +170,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 					tabelaAtualizacaoCadastral.setComplemento(txt.getDescricaoCategoria() + " - " + txt.getDescricaoSubcategoria());
 					tabela.setId(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL);
 					tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("2"));
+					
 				} else if (objetoAtualizacaoCadastralBase instanceof ImovelRamoAtividadeAtualizacaoCadastral) {
 					ImovelRamoAtividadeAtualizacaoCadastral txt = (ImovelRamoAtividadeAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 
@@ -195,16 +197,16 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 				Iterator colunasAlteradasIter = colunasAlteradas.iterator();
 				while (colunasAlteradasIter.hasNext()) {
 					
-					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral;
 					TabelaLinhaColunaAlteracao tabelaLinhaColunaAlteracao = (TabelaLinhaColunaAlteracao) colunasAlteradasIter.next();
+
+					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = this.pesquisarColunaParaAtualizar(tabela, tabelaLinhaColunaAlteracao.getTabelaColuna(), matriculaImovel);
 					
-					if (arquivoTexto.isArquivoRetornoTransmissao()) {
+					if (arquivoTexto.isArquivoRetornoTransmissao() ) {
 						tabelaColunaAtualizacaoCadastral = new TabelaColunaAtualizacaoCadastral();
 						tabelaColunaAtualizacaoCadastral.setRegistroInclusao(true);
 						tabelaColunaAtualizacaoCadastral.setColunaValorAnterior(tabelaLinhaColunaAlteracao.getConteudoColunaAnterior());
 						tabelaColunaAtualizacaoCadastral.setColunaValorTransmitido(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());
 					} else {
-						tabelaColunaAtualizacaoCadastral = this.pesquisarColunaParaAtualizar(tabela, tabelaLinhaColunaAlteracao.getTabelaColuna(), matriculaImovel);
 
 						if (arquivoTexto.isArquivoRetornoRevisao())
 							tabelaColunaAtualizacaoCadastral.setColunaValorRevisado(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());

@@ -17,6 +17,10 @@ public abstract class ValidadorCommand {
 		this.linha = linha;
 	}
 	
+	public ValidadorCommand(AtualizacaoCadastralImovel cadastroImovel){
+		this.cadastroImovel = cadastroImovel;
+	}
+	
 	public abstract void execute() throws Exception;
 	
 	protected boolean campoNumericoInvalido(String campo) {

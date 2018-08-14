@@ -18,7 +18,6 @@ import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 import gcom.util.IoUtil;
-import gcom.util.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -553,7 +552,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			String consulta = "select imovelControle "
 							+ " from ImovelControleAtualizacaoCadastral imovelControle "
 							+ " left join imovelControle.imovelRetorno imovelRetorno "
-							+ " where imovelControle.id = :idImovelControle";
+							+ " where imovelControle.imovel.id = :idImovelControle";
 			
 			imovelControle = (ImovelControleAtualizacaoCadastral)session.createQuery(consulta)
 								.setInteger("idImovelControle", idImovelControle).uniqueResult();
@@ -1348,10 +1347,13 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
     		try {	
     			Connection jdbcCon = session.connection();
     			
-				st = jdbcCon.prepareStatement(update);
+    			if (update != null) {
+    				st = jdbcCon.prepareStatement(update);
     				
-				st.executeUpdate();
+    				st.executeUpdate();
+    			}
     			} catch (SQLException e) {
+    				e.printStackTrace();
     				throw new ErroRepositorioException(e, "Erro no Hibernate");
     			} finally {
     				if (null != st)
@@ -1376,14 +1378,28 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		Properties props = IoUtil.carregaPropriedades("tabela_retorno.properties");
 		String update = new String();
 		
+		System.out.println("Origem: " + tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getTabela().getNomeTabela());
 		String tabelaDestino = props.getProperty(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getTabela().getNomeTabela());
+		System.out.println("Destino: " + tabelaDestino);
 		
-		if (tabelaDestino.equals("atualizacaocadastral.imovel_retorno"))
+		if (isTabelaImovel(tabelaDestino))
 			update = montarUpdateImovel(tabelaDestino, props, tabelaColunaAtualizacaoCadastral);
-		else if (tabelaDestino.equals("atualizacaocadastral.cliente_retorno"))
+		else if (isTabelaCliente(tabelaDestino))
 			update = montarUpdateCliente(tabelaDestino, props, tabelaColunaAtualizacaoCadastral);
 		
 		return update;
+	}
+	
+	private boolean isTabelaImovel(String nomeTabela) {
+		return nomeTabela.equals("atualizacaocadastral.imovel_retorno") 
+				|| nomeTabela.equals("atualizacaocadastral.imovel_ramo_atividade_retorno")
+				|| nomeTabela.equals("atualizacaocadastral.imovel_subcategoria_retorno")
+				|| nomeTabela.equals("atualizacaocadastral.imovel_tipo_ocupante_quantidade_retorno");
+	}
+	
+	private boolean isTabelaCliente(String nomeTabela) {
+		return nomeTabela.equals("atualizacaocadastral.cliente_retorno") 
+				|| nomeTabela.equals("atualizacaocadastral.cliente_fone_retorno");
 	}
 	
 	private String  oberColunaCpfCnpjAtualizacao(String valor) {
@@ -1392,30 +1408,55 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	
 	private String montarUpdateCliente(String tabelaDestino, Properties props, TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) {
 		StringBuilder update = new StringBuilder();
-
-		String colunaDestino = oberColunaCpfCnpjAtualizacao(tabelaColunaAtualizacaoCadastral.getColunaValorFiscalizado());;
-		
-		update.append("update ").append(tabelaDestino)
-			  .append(" set ").append(colunaDestino).append(" = '").append(tabelaColunaAtualizacaoCadastral.getColunaValorFiscalizado()).append("'")
-			  .append(" where clir_id in ( select clir_id from atualizacaocadastral.cliente_imovel_retorno ")
-									.append(" where imov_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoImovel())
-									.append(" and clie_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoCliente()).append(")");		;
+		String colunaDestino = "";
+			
+			if (tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_nncpfcnpj")) {
+				colunaDestino = oberColunaCpfCnpjAtualizacao(tabelaColunaAtualizacaoCadastral.obterValorParaAtualizar("preaprovado"));
+			} else {
+				colunaDestino = props.getProperty(tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna()); 
+			}
+			
+			update.append("update ").append(tabelaDestino)
+			.append(" set ").append(colunaDestino).append(" = '").append(tabelaColunaAtualizacaoCadastral.obterValorParaAtualizar("preaprovado")).append("'")
+			.append(" where clir_id in ( select clir_id from atualizacaocadastral.cliente_imovel_retorno ")
+			.append(" where imov_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoImovel())
+			.append(" and clie_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoCliente()).append(")");		;
 
 		return update.toString();
 	}
 	
 	private String montarUpdateImovel(String tabelaDestino, Properties props, TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) {
 		StringBuilder update = new StringBuilder();
+		String colunaDestino = "";
 
-		String colunaDestino = props.getProperty(tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna());
+	
+		System.out.println("Origem imóvel: " + tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna());
+		if (!tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("ftab_id")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("cocr_id")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("rlin_id")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_vol_cx_dagua")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_vol_cisterna")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_vol_piscina")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_nnareaconstruida")) {
+			colunaDestino = props.getProperty(tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna());
 		
-		if (colunaDestino.equals("imre_vol_cx_dagua") || colunaDestino.equals("imre_vol_cisterna"))
+		System.out.println("Destino imóvel: " + colunaDestino);
+		if (colunaDestino.equals("imre_vol_cx_dagua") || colunaDestino.equals("imre_vol_cisterna") || colunaDestino.equals("imre_volumepiscina") || colunaDestino.equals("imre_areaconstruida") )
 			tabelaColunaAtualizacaoCadastral.setValorAtualizarRetorno(tabelaColunaAtualizacaoCadastral.getValorAtualizarRetorno().replace(",","."));
 		
+		
+		String valor = "";
+		
+		if (colunaDestino.equals("imac_tipoentrevistado") )
+			valor = "\'" + tabelaColunaAtualizacaoCadastral.obterValorParaAtualizar("preaprovado") + "\'";
+		else
+			 valor = tabelaColunaAtualizacaoCadastral.obterValorParaAtualizar("preaprovado");
+		
 		update.append("update ").append(tabelaDestino)
-			  .append(" set ").append(colunaDestino).append(" = ").append(tabelaColunaAtualizacaoCadastral.getValorAtualizarRetorno())
+			  .append(" set ").append(colunaDestino).append(" = ").append(valor)
 			  .append(" where ").append(" imov_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoImovel());
 
+		}
 		return update.toString();
 	}
 	
@@ -1452,5 +1493,52 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+	}
+	
+	public boolean possuiInformacoesFiscalizacao(ImovelControleAtualizacaoCadastral imovelControle) throws ErroRepositorioException {
+
+        Session session = HibernateUtil.getSession();
+        Integer qtd = new Integer(0);
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append("select count(*) from TabelaColunaAtualizacaoCadastral colunaAtualizacao ")
+            		.append("inner join colunaAtualizacao.tabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
+            		.append("where tabelaAtualizacaoCadastral.codigoImovel = :idImovel ")
+            		.append("and  colunaAtualizacao.colunaValorFiscalizado is not null");
+        	
+            qtd = (Integer) session.createQuery(consulta.toString())
+            		.setInteger("idImovel", imovelControle.getImovel().getId()).uniqueResult();
+            
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return qtd > 0;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<TabelaColunaAtualizacaoCadastral> obterColunasPreAprovadas(ImovelControleAtualizacaoCadastral imovelControle) throws ErroRepositorioException {
+		List<TabelaColunaAtualizacaoCadastral> retorno = null;
+        Session session = HibernateUtil.getSession();
+        Integer qtd = new Integer(0);
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append("select colunaAtualizacao from TabelaColunaAtualizacaoCadastral colunaAtualizacao ")
+            		.append("inner join fetch colunaAtualizacao.tabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
+            		.append("inner join fetch tabelaAtualizacaoCadastral.tabela tabela ")
+            		.append("inner join fetch colunaAtualizacao.tabelaColuna coluna ")
+            		.append("where tabelaAtualizacaoCadastral.codigoImovel = :idImovel ")
+            		.append("and  colunaAtualizacao.colunaValorPreAprovado is not null");
+        	
+            retorno = (List<TabelaColunaAtualizacaoCadastral>) session.createQuery(consulta.toString())
+            		.setInteger("idImovel", imovelControle.getImovel().getId()).list();
+            
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return retorno;
 	}
 }

@@ -11,6 +11,7 @@ import gcom.cadastro.atualizacaocadastral.validador.ValidadorLogradouroCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorNomesClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorRamoAtividadeCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorSexoCommand;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorSituacaoImovelCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoEnderecoCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoLogradouroCommand;
@@ -59,6 +60,8 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 		imovelAtual = atualizacao.getImovelAtual();
 		
 		CadastroOcorrencia cadastroOcorrencia = imovelAtual.getCadastroOcorrencia();
+		
+		new ValidadorSituacaoImovelCommand(imovelAtual, controladorAtualizacaoCadastral).execute();
 		
 		if (cadastroOcorrencia != null 
 				&& cadastroOcorrencia.getIndicadorValidacao().equals(ConstantesSistema.SIM)) {

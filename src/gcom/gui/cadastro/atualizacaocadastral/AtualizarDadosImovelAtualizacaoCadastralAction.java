@@ -37,27 +37,32 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		if (cadastroOcorrencia != null) {
 			if (cadastroOcorrencia.getIndicadorValidacao().equals(ConstantesSistema.SIM)) {
 				
-				String registrosSelecionados = null;
-				
-				if (imovelControle.isEmFiscalizacao()) {
-					registrosSelecionados = form.getIdRegistrosFiscalizados();
-				} else {
-					registrosSelecionados = form.getIdRegistrosAutorizados();
-				}
-				
-				if (!registrosSelecionados.equals("")) {
+				if (isImovelFiscalizado(imovelControle)) {
 					
-					String[] listaIdRegistrosSim = registrosSelecionados.split(",");
+					String registrosSelecionados = null;
 					
-					if (listaIdRegistrosSim != null && !listaIdRegistrosSim.equals("")) {
-						fachada.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer.valueOf(form.getIdImovel()),
-								listaIdRegistrosSim, ConstantesSistema.SIM, usuario);
-						
-						this.atualizarSituacaoImovel(imovelControle);
+					if (imovelControle.isEmFiscalizacao()) {
+						registrosSelecionados = form.getIdRegistrosFiscalizados();
+					} else {
+						registrosSelecionados = form.getIdRegistrosAutorizados();
 					}
+					
+					if (!registrosSelecionados.equals("")) {
+						
+						String[] listaIdRegistrosSim = registrosSelecionados.split(",");
+						
+						if (listaIdRegistrosSim != null && !listaIdRegistrosSim.equals("")) {
+							fachada.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer.valueOf(form.getIdImovel()),
+									listaIdRegistrosSim, ConstantesSistema.SIM, usuario);
+							
+							this.atualizarSituacaoImovel(imovelControle);
+						}
+					}
+					
+					httpServletRequest.setAttribute("reload", true);
+				} else {
+					throw new ActionServletException("atencao.imovel_nao_fiscalizado", "");
 				}
-				
-				httpServletRequest.setAttribute("reload", true);
 			} else {
 				throw new ActionServletException("atencao.cadastro_ocorrencia_invalido", cadastroOcorrencia.getDescricao());
 			}
@@ -74,5 +79,15 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		} else if (imovelControle.isPreAprovado() || imovelControle.isFiscalizado()) {
 			fachada.atualizarSituacaoImovelControle(imovelControle.getImovel().getId(), SituacaoAtualizacaoCadastral.APROVADO);
 		}
+	}
+	
+	private boolean isImovelFiscalizado(ImovelControleAtualizacaoCadastral imovelControle) {
+		boolean imovelFiscalizado = true;
+		
+		if (imovelControle.isEmFiscalizacao() && !fachada.possuiInformacoesFiscalizacao(imovelControle)) {
+			imovelFiscalizado = false;
+		} 
+		
+		return imovelFiscalizado;
 	}
 }

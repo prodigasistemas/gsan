@@ -40203,4 +40203,12 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public boolean possuiInformacoesFiscalizacao(ImovelControleAtualizacaoCadastral imovelControle) {
+		try {
+			return getControladorAtualizacaoCadastral().possuiInformacoesFiscalizacao(imovelControle);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }

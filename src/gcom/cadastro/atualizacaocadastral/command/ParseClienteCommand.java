@@ -257,6 +257,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 				atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'PRE APROVADO', 'APROVADO' ou 'ATUALIZADO'");
 				atualizacao.getImovelAtual().setImovelAprovado(true);
 			}
+			
 		} else {
 			if (atualizacao.getImovelAtual().getMatricula() > 0 && atualizacao.getArquivoTexto().isArquivoRetornoTransmissao()) {
 				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
@@ -281,5 +282,9 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		}
 
 		return sexoTipo;
+	}
+	
+	private void validarSituacaoImovel(AtualizacaoCadastral atualizacao, ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral) {
+		
 	}
 }

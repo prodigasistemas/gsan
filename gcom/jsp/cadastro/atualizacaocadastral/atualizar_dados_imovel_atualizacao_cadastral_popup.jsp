@@ -273,7 +273,7 @@
 											<td width="150"><strong>Tabela</strong></td>
 											<td width="150"><strong>Campo</strong></td>
     										<td width="200" align="center"><strong>Anterior</strong></td>
-    										<td width="200" align="center"><strong>Transmitido</strong></td>
+    										<td width="200" align="center"><strong>Pré-Aprovado</strong></td>
     										<logic:equal name="emFiscalizacao" value="true" scope="session">
 	    										<td width="200" align="center"><strong>Fiscalizado</strong></td>
     										</logic:equal>
@@ -312,9 +312,7 @@
     											<bean:write name="item" property="colunaValorAnterior" />
     										</td>
     										<td width="200">
-    											<logic:equal name="emFiscalizacao" value="false" scope="session">
    													<bean:write name="item" property="valorAtualizarRetorno" />
-    											</logic:equal>
     										</td>
     										<logic:equal name="emFiscalizacao" value="true" scope="session">
 	    										<td width="200">

@@ -14,6 +14,7 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
     private String colunaValorTransmitido;
     private String colunaValorRevisado;
     private String colunaValorFiscalizado;
+    private String colunaValorPreAprovado;
     private Short indicadorAutorizado;
     private Date dataValidacao;
     private Date ultimaAlteracao;
@@ -77,6 +78,14 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 
 	public void setColunaValorFiscalizado(String colunaValorFiscalizado) {
 		this.colunaValorFiscalizado = colunaValorFiscalizado;
+	}
+	
+	public String getColunaValorPreAprovado() {
+		return colunaValorPreAprovado;
+	}
+
+	public void setColunaValorPreAprovado(String colunaValorPreAprovado) {
+		this.colunaValorPreAprovado = colunaValorPreAprovado;
 	}
 
 	public Date getDataValidacao() {
@@ -154,13 +163,20 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 		if (this.indicadorFiscalizado != null && this.indicadorFiscalizado.equals(ConstantesSistema.SIM))
 			return this.colunaValorFiscalizado;
 		else 
-			return this.colunaValorTransmitido;
+			return this.colunaValorPreAprovado;
 	}
 	
 	public void setValorAtualizarRetorno(String valor) {
 		if (this.indicadorFiscalizado != null && this.indicadorFiscalizado.equals(ConstantesSistema.SIM))
 			this.colunaValorFiscalizado = valor;
 		else 
-			this.colunaValorTransmitido = valor;
+			this.colunaValorPreAprovado = valor;
+	}
+	
+	public String obterValorParaAtualizar(String campo) {
+		if (campo.equals("preaprovado"))
+			return this.colunaValorPreAprovado;
+		else
+			return this.colunaValorFiscalizado;
 	}
 }

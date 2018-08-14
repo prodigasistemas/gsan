@@ -73,5 +73,9 @@ public interface IControladorAtualizacaoCadastral {
 
 	public void atualizarImovelParaSituacaoEmCampoPorArquivo(Integer idArquivo) throws ControladorException;
 	
-	public void atualizarSituacaoImovelControle(Integer idImovelControle, Integer idNovaSituacao) throws ControladorException; 
+	public void atualizarSituacaoImovelControle(Integer idImovelControle, Integer idNovaSituacao) throws ControladorException;
+	
+	public boolean possuiInformacoesFiscalizacao(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException;
+	
+	public void atualizarRetornoPreAprovado(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException;
 }

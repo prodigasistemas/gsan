@@ -763,7 +763,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			.append("   usu.nomeUsuario, ")//15
 			.append("   tcol.colunaValorRevisado,")// 16
 			.append("   tcol.colunaValorFiscalizado, ")// 17
-			.append("   tcol.indicadorFiscalizado ")// 18
+			.append("   tcol.indicadorFiscalizado, ")// 18
+			.append("   tcol.colunaValorPreAprovado ")// 19
 			.append(" from gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol")
 			.append(" inner join tcol.tabelaColuna col ")
 			.append(" inner join tcol.tabelaAtualizacaoCadastral tac ")
