@@ -53,7 +53,7 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 						
 						if (listaIdRegistrosSim != null && !listaIdRegistrosSim.equals("")) {
 							fachada.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer.valueOf(form.getIdImovel()),
-									listaIdRegistrosSim, ConstantesSistema.SIM, usuario);
+									listaIdRegistrosSim, ConstantesSistema.SIM, usuario, obterCampoParaAtualizar(imovelControle));
 							
 							this.atualizarSituacaoImovel(imovelControle);
 						}
@@ -89,5 +89,15 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		} 
 		
 		return imovelFiscalizado;
+	}
+	
+	private String obterCampoParaAtualizar(ImovelControleAtualizacaoCadastral imovelControle) {
+		String campo = ""; 
+		if (imovelControle.isPreAprovado())
+			campo = "preaprovado";
+		
+		if (imovelControle.isFiscalizado())
+			campo = "fiscalizado";
+		return campo;
 	}
 }

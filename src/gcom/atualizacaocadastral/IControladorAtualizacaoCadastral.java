@@ -69,7 +69,7 @@ public interface IControladorAtualizacaoCadastral {
 	
 	public TabelaAtualizacaoCadastral pesquisarTabelaPorImovel(Tabela tabela, Integer idImovel) throws ControladorException;
 	
-	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) throws ControladorException;
+	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) throws ControladorException;
 
 	public void atualizarImovelParaSituacaoEmCampoPorArquivo(Integer idArquivo) throws ControladorException;
 	

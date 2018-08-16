@@ -28618,9 +28618,9 @@ public class Fachada {
 		return this.getControladorTransacao().consultarDadosTabelaColunaAtualizacaoCadastral(idRegistroAlterado, idArquivo, idImovel, idCliente, idTipoAlteracao);
 	}
 
-	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral, Short indicador, Usuario usuarioLogado) {
+	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral, Short indicador, Usuario usuarioLogado, String campo) {
 		try {
-			this.getControladorTransacao().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idImovel, idsAtualizacaoCadastral, indicador, usuarioLogado);
+			this.getControladorTransacao().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idImovel, idsAtualizacaoCadastral, indicador, usuarioLogado, campo);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

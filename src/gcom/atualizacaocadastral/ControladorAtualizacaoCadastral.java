@@ -1409,9 +1409,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) throws ControladorException {
+	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) throws ControladorException {
 		try {
-			repositorioAtualizacaoCadastral.atualizarImovelRetorno(tabelaColunaAtualizacaoCadastral);
+			repositorioAtualizacaoCadastral.atualizarImovelRetorno(tabelaColunaAtualizacaoCadastral, campo);
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 			throw new ControladorException("Erro ao pesquisar tabela coluna atualizacao cadastral.", e);
@@ -1445,7 +1445,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			Collection<TabelaColunaAtualizacaoCadastral> colunasAlteradas = repositorioAtualizacaoCadastral.obterColunasPreAprovadas(imovelControle);
 			
 			for (TabelaColunaAtualizacaoCadastral tabelaColuna : colunasAlteradas) {
-				this.atualizarImovelRetorno(tabelaColuna);
+				this.atualizarImovelRetorno(tabelaColuna, TabelaColunaAtualizacaoCadastral.VALOR_CAMPO_PRE_APROVADO);
 			}
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("Erro atualizar retorno da atualizacao cadastral", e);

@@ -116,7 +116,7 @@ public interface IRepositorioAtualizacaoCadastral {
 	
 	public TabelaAtualizacaoCadastral obterTabela(Tabela tabela, Integer idImovel) throws ErroRepositorioException;
 	
-	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) throws ErroRepositorioException;
+	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) throws ErroRepositorioException;
 
 	public void atualizarImovelParaSituacaoEmCampoPorArquivo(Integer idArquivo) throws ErroRepositorioException;
 	

@@ -8,6 +8,9 @@ import java.util.Date;
 
 public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 	private static final long serialVersionUID = 1L;
+	
+	public static String VALOR_CAMPO_PRE_APROVADO = "preaprovado";
+	public static String VALOR_CAMPO_FISCALIZADO = "fiscalizado";
 
     private Integer id;
     private String colunaValorAnterior;

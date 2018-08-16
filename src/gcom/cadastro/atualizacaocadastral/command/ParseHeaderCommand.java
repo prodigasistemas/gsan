@@ -28,7 +28,7 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 		String idRota = parser.obterDadoParser(4);
 		String versaoCelular = parser.obterDadoParser(10);
 		
-		String tipoRetorno = parser.obterDadoParser(1);
+		String tipoRetorno = parser.obterDadoCabecalhoParser(1);
 		
 		ArquivoTextoAtualizacaoCadastral arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
 				localidade + "_" + setor + "_" + rota);

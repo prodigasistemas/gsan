@@ -1436,7 +1436,7 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 	
 	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
 			Integer idImovel, String[] idsAtualizacaoCadastral,
-			Short indicador, Usuario usuarioLogado) throws ControladorException {
+			Short indicador, Usuario usuarioLogado, String campo) throws ControladorException {
 		
 		try {
 			Integer tipoAlteracaoCadastral = null;
@@ -1452,7 +1452,7 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 				if(tipoAlteracaoCadastral == null) {
 					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = 
 						this.repositorioTransacao.pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
-					getControladorAtualizacaoCadastral().atualizarImovelRetorno(tabelaColunaAtualizacaoCadastral);
+					getControladorAtualizacaoCadastral().atualizarImovelRetorno(tabelaColunaAtualizacaoCadastral, campo);
 					
 					tipoAlteracaoCadastral = tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getAlteracaoTipo().getId();
 				}

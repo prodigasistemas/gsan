@@ -78,7 +78,8 @@ public interface ControladorTransacaoLocal extends javax.ejb.EJBLocalObject {
 	public void processaRegistroOperacaoObjetohelper(UsuarioAcaoUsuarioHelper usuario, Integer idTipoAlteracao, 
 												     ObjetoTransacao objetoHelper, OperacaoEfetuada operacaoEfetuada, Integer idTabela);
 	
-	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral, Short indicador, Usuario usuarioLogado) throws ControladorException;
+	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral, 
+			Short indicador, Usuario usuarioLogado, String campo) throws ControladorException;
 	
 	public void atualizarIndicadorAutorizacaoTabelaAtualizacaoCadastral(
 			Integer idArgumento, Short indicador)throws ControladorException;
