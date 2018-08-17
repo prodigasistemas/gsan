@@ -116,10 +116,12 @@ public class TabelaLinhaColunaAlteracao implements Serializable {
 			}
 
 			if (retorno != null && retorno.length() > 50) {
-				if (tabelaColuna != null && tabelaColuna.getColuna() != null && !tabelaColuna.getColuna().equals("imac_dsoutrasinformacoes"))
-					retorno = retorno.substring(0, 49);
-				else
-					retorno = retorno.substring(0, 199);
+				if (tabelaColuna != null && tabelaColuna.getColuna() != null) {
+					if (tabelaColuna.getColuna().equals("imac_dsoutrasinformacoes"))
+						retorno = retorno.substring(0, retorno.length());
+					else
+						retorno = retorno.substring(0, 49);
+				}
 			}
 		}
 		return retorno;
