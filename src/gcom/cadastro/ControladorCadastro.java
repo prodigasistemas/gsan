@@ -7726,7 +7726,7 @@ public class ControladorCadastro extends ControladorComum {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString("", 14));
 			}
 
-			arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getRg(), 9));
+			arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getRg(), 13));
 
 			arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getDsUFSiglaOrgaoExpedidorRg(), 2));
 
@@ -7816,7 +7816,7 @@ public class ControladorCadastro extends ControladorComum {
             }
 
             // RG Cliente
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getRg(), 9));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getRg(), 13));
 
             // UF Cliente Proprietario
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getDsUFSiglaOrgaoExpedidorRg(), 2));
@@ -7909,7 +7909,7 @@ public class ControladorCadastro extends ControladorComum {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString("", 14));
             }
 
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getRg(), 9));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getRg(), 13));
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getDsUFSiglaOrgaoExpedidorRg(), 2));
 
             if (clienteResponsavel.getPessoaSexo() != null && clienteResponsavel.getPessoaSexo().getId() != null) {

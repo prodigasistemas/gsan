@@ -90,7 +90,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			String cnpjCpfUsuario = parser.obterDadoParser(14).trim();
 			linha.put("cnpjCpfUsuario", cnpjCpfUsuario);
 
-			String rgUsuario = parser.obterDadoParser(9).trim();
+			String rgUsuario = parser.obterDadoParser(13).trim();
 			linha.put("rgUsuario", rgUsuario);
 
 			String ufRgUsuario = parser.obterDadoParser(2).trim();
@@ -126,7 +126,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			String cnpjCpfProprietario = parser.obterDadoParser(14).trim();
 			linha.put("cnpjCpfProprietario", cnpjCpfProprietario);
 
-			String rgProprietario = parser.obterDadoParser(9).trim();
+			String rgProprietario = parser.obterDadoParser(13).trim();
 			linha.put("rgProprietario", rgProprietario);
 
 			String ufRgProprietario = parser.obterDadoParser(2).trim();
@@ -187,7 +187,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			String cnpjCpfResponsavel = parser.obterDadoParser(14).trim();
 			linha.put("cnpjCpfResponsavel", cnpjCpfResponsavel);
 
-			String rgResponsavel = parser.obterDadoParser(9).trim();
+			String rgResponsavel = parser.obterDadoParser(13).trim();
 			linha.put("rgResponsavel", rgResponsavel);
 
 			String ufRgResponsavel = parser.obterDadoParser(2).trim();
