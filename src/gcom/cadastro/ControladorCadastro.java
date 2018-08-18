@@ -6720,7 +6720,7 @@ public class ControladorCadastro extends ControladorComum {
 				System.out.println("Nenhum imovel encontrado. ARQUIVO NAO GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
-				if (helper.getQuantidadeMaxima() > 0) {
+				if (helper != null && helper.getQuantidadeMaxima() > 0) {
 					List<List<Integer>> partes = Util.quebrarListaEmPartes(idsImoveis, helper.getQuantidadeMaxima());
 					
 					for (List<Integer> parte : partes) {
