@@ -6173,4 +6173,16 @@ public class Util {
     public static Integer setValorInteiro(String valor) {
 		return valor.trim().equals("") || valor.trim().equals("0") ? null : Integer.parseInt(valor.trim());
 	}
+    
+    public static <T> List<List<T>> quebrarListaEmPartes(List<T> lista, final int L) {
+	    List<List<T>> partes = new ArrayList<List<T>>();
+	    final int N = lista.size();
+	    for (int i = 0; i < N; i += L) {
+	        partes.add(new ArrayList<T>(
+	            lista.subList(i, Math.min(N, i + L)))
+	        );
+	    }
+	    
+	    return partes;
+	}
 }
