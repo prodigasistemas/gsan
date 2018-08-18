@@ -6789,7 +6789,8 @@ public class ControladorCadastro extends ControladorComum {
 
 		Collection colecao = getControladorUtil().pesquisar(filtro, ArquivoTextoAtualizacaoCadastral.class.getName());
 		if (colecao != null && !colecao.isEmpty()) {
-			descricao += "-pt" + colecao.size() + 1;
+			int ordem = colecao.size() + 1;
+			descricao += "-pt" + ordem;
 		}
 		
 		return descricao;
