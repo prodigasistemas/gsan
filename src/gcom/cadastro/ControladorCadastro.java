@@ -6720,11 +6720,11 @@ public class ControladorCadastro extends ControladorComum {
 				System.out.println("Nenhum imovel encontrado. ARQUIVO NAO GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
-				if (helper != null && helper.getQuantidadeMaxima() > 0) {
+				if (helper.getQuantidadeMaxima() != null && helper.getQuantidadeMaxima() > 0) {
 					List<List<Integer>> partes = Util.quebrarListaEmPartes(idsImoveis, helper.getQuantidadeMaxima());
 					
 					for (List<Integer> parte : partes) {
-						montarArquivoTextoAtualizacaoCadastral(idRota, leiturista, idsImoveis);
+						montarArquivoTextoAtualizacaoCadastral(idRota, leiturista, parte);
 					}
 				} else {
 					montarArquivoTextoAtualizacaoCadastral(idRota, leiturista, idsImoveis);
@@ -6753,19 +6753,20 @@ public class ControladorCadastro extends ControladorComum {
 		arquivo.setLeiturista(leiturista);
 		arquivo.setQuantidadeImovel(idsImoveis.size());
 		arquivo.setUltimaAlteracao(new Date());
+		arquivo.setArquivoTexto(IoUtil.transformarObjetoParaBytes(new StringBuilder()));
 
 		Integer idArquivoTexto = (Integer) getControladorUtil().inserir(arquivo);
 		StringBuilder arquivoTexto = gerarArquivoTxt(idsImoveis, idArquivoTexto, leiturista, rota);
 
-//				File txt = new File(descricaoArquivoTxt + ".txt");
-//				File compactado = new File(descricaoArquivoTxt + ".zip");
-//				ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(compactado));
-//				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(txt.getAbsolutePath())));
-//				out.write(arquivoTexto.toString());
-//				out.flush();
-//				out.close();
-//				ZipUtil.adicionarArquivo(zos, txt);
-//				zos.close();
+//		File txt = new File(descricao + ".txt");
+//		File compactado = new File(descricao + ".zip");
+//		ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(compactado));
+//		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(txt.getAbsolutePath())));
+//		out.write(arquivoTexto.toString());
+//		out.flush();
+//		out.close();
+//		ZipUtil.adicionarArquivo(zos, txt);
+//		zos.close();
 
 		arquivo.setArquivoTexto(IoUtil.transformarObjetoParaBytes(arquivoTexto));
 		getControladorUtil().atualizar(arquivo);
