@@ -48,15 +48,13 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		AtualizacaoCadastralImovel imovelAtual = atualizacao.getImovelAtual();
 		
 		new ValidadorTamanhoLinhaClienteCommand(parser, imovelAtual, linha).execute();;
+		String matriculaImovelCliente = parser.obterDadoParser(9).trim();
+		atualizacao.getImovelAtual().setMatricula(Integer.valueOf(matriculaImovelCliente));
 		
 		if(!imovelAtual.isErroLayout()) {
-
-			String matriculaImovelCliente = parser.obterDadoParser(9).trim();
-			linha.put("matriculaImovelCliente", matriculaImovelCliente);
-
-			atualizacao.getImovelAtual().setMatricula(Integer.valueOf(matriculaImovelCliente));
-
 			logger.info("Carregando Imovel: " + Integer.parseInt(matriculaImovelCliente));
+
+			linha.put("matriculaImovelCliente", matriculaImovelCliente);
 			
 			String gerencia = parser.obterDadoParser(25).trim();
 			linha.put("gerencia", gerencia);

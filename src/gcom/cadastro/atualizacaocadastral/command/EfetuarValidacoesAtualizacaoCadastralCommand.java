@@ -69,7 +69,8 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 			validarLinhaMedidor();
 		}
 		
-		new ValidadorCepImovelCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();		
+		if (!imovelAtual.isErroLayout())
+			new ValidadorCepImovelCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();		
 	}
 
 	private void validarLinhaMedidor() {

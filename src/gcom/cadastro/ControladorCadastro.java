@@ -6758,16 +6758,6 @@ public class ControladorCadastro extends ControladorComum {
 		Integer idArquivoTexto = (Integer) getControladorUtil().inserir(arquivo);
 		StringBuilder arquivoTexto = gerarArquivoTxt(idsImoveis, idArquivoTexto, leiturista, rota);
 
-//		File txt = new File(descricao + ".txt");
-//		File compactado = new File(descricao + ".zip");
-//		ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(compactado));
-//		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(txt.getAbsolutePath())));
-//		out.write(arquivoTexto.toString());
-//		out.flush();
-//		out.close();
-//		ZipUtil.adicionarArquivo(zos, txt);
-//		zos.close();
-
 		arquivo.setArquivoTexto(IoUtil.transformarObjetoParaBytes(arquivoTexto));
 		getControladorUtil().atualizar(arquivo);
 	}
