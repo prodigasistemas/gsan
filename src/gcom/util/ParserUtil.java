@@ -22,7 +22,7 @@ public class ParserUtil {
 	}
 	
 	public String obterDadoCabecalhoParser(int tamanho) {
-		if (fonte.length() == 34)
+		if (fonte.length() == 32)
 			return obterDadoParser(tamanho);
 		else
 			return " ";
