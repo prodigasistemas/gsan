@@ -14,9 +14,9 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 
 	public static final String EXIBIR_EM_REVISAO = "1";
 	
-	public static final String TIPO_RETORNO_TRANSMISSAO = " ";
-	public static final String TIPO_RETORNO_REVISAO = "R";
-	public static final String TIPO_RETORNO_FISCALIZACAO = "F";
+	public static final String TIPO_ARQUIVO_TRANSMISSAO = " ";
+	public static final String TIPO_ARQUIVO_REVISAO = "R";
+	public static final String TIPO_ARQUIVO_FISCALIZACAO = "F";
 
 	private Integer id;
 
@@ -180,15 +180,15 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	}
 	
 	public boolean isArquivoRetornoTransmissao() {
-		return tipoRetorno.equals(null) || tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_RETORNO_TRANSMISSAO);
+		return tipoRetorno.equals(null) || tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO);
 	}
 	
 	public boolean isArquivoRetornoRevisao() {
-		return !tipoRetorno.equals(null) && tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_RETORNO_REVISAO);
+		return !tipoRetorno.equals(null) && tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISAO);
 	}
 	
 	public boolean isArquivoRetornoFiscalizacao() {
-		return !tipoRetorno.equals(null) && tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_RETORNO_FISCALIZACAO);
+		return !tipoRetorno.equals(null) && tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_FISCALIZACAO);
 	}
 	
 }

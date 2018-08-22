@@ -1342,7 +1342,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         }
 	}
 
-	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao) throws ControladorException {
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao, String tipoArquivo) throws ControladorException {
 		try {
 			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
 			for (Integer idArquivo : idsArquivos) {
@@ -1352,7 +1352,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				if (imoveisARevisar != null && !imoveisARevisar.isEmpty()) {
 					sorteados.addAll(imoveisARevisar);
 					
-					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(sorteados, idArquivo));
+					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(sorteados, idArquivo, tipoArquivo));
 				}
 			}
 			
@@ -1362,14 +1362,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos) throws ControladorException {
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo) throws ControladorException {
 		try {
 			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
 			for (Integer idArquivo : idsArquivos) {
 				List<Integer> imoveisEmCampo = repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, SituacaoAtualizacaoCadastral.EM_CAMPO);
 				
 				if (imoveisEmCampo != null && !imoveisEmCampo.isEmpty()) {
-					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveisEmCampo, idArquivo));
+					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveisEmCampo, idArquivo, tipoArquivo));
 				}
 			}
 			

@@ -1272,7 +1272,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         
         StringBuilder consulta = new StringBuilder();
         try {
-        	System.out.println(tabela.getId() + " - " + idImovel);
         	consulta.append("select tabelaAtualizacaoCadastral from TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
             		.append("inner join tabelaAtualizacaoCadastral.tabela tabela ")
             		.append("where tabela.id = :idTabela ")
@@ -1394,14 +1393,22 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		StringBuilder update = new StringBuilder();
 		String colunaDestino = "";
 			
+		if (isColunaParaAtualizar(tabelaColunaAtualizacaoCadastral)) {
+			
 			if (tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_nncpfcnpj")) {
 				colunaDestino = oberColunaCpfCnpjAtualizacao(tabelaColunaAtualizacaoCadastral.obterValorParaAtualizar(campo));
 			} else {
 				colunaDestino = props.getProperty(tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna()); 
 			}
 			
-			if (tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_dscomplementoendereco"))
-				colunaDestino = "cler_dscomplementoendereco";
+			if (tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("crtp_id") 
+					|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("psex_id") 
+					|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("unfe_id")
+					|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("cltp_id") 
+					|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clie_id"))
+				colunaDestino = tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna();
+			
+			tabelaDestino = obterTabelaAtualizacaoCliente(tabelaDestino, tabelaColunaAtualizacaoCadastral);
 			
 			System.out.println("Origem: " + tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna() );
 			update.append("update ").append(tabelaDestino)
@@ -1409,20 +1416,47 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			.append(" where clir_id in ( select clir_id from atualizacaocadastral.cliente_imovel_retorno ")
 			.append(" where imov_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoImovel())
 			.append(" and clie_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoCliente()).append(")");		;
+		}
 
 		return update.toString();
+	}
+
+	private boolean isColunaParaAtualizar(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) {
+		return !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_dsufsiglaoerg")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_dslogradourotipo")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("ratv_id")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("cocr_id");
+	}
+
+	private String obterTabelaAtualizacaoCliente(String tabelaDestino, TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) {
+		if (tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_dscomplementoendereco")
+				|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_nnimovel")
+				|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_nmmunicipio")
+				|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_nmbairro")
+				|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_dslogradouro")
+				|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_cdcep")
+				|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("lgtp_id"))
+			tabelaDestino = "atualizacaocadastral.cliente_endereco_retorno";
+		else if (tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("crtp_id"))
+			tabelaDestino = "atualizacaocadastral.cliente_imovel_retorno";
+		else if (tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clfr_cdddd")
+				|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clfr_nnfone")
+				|| tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("fnet_id"))
+			tabelaDestino = "atualizacaocadastral.cliente_fone_retorno";
+		return tabelaDestino;
 	}
 	
 	private String montarUpdateImovel(String tabelaDestino, Properties props, TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) {
 		StringBuilder update = new StringBuilder();
 		String colunaDestino = "";
 
-		if (!tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("cocr_id")) {
+		if (isColunaParaAtualizar(tabelaColunaAtualizacaoCadastral)) {
 			colunaDestino = props.getProperty(tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna());
 		
 		String valor = "";
 		
-		if (colunaDestino.equals("imac_tipoentrevistado") || colunaDestino.equals("imac_dsoutrasinformacoes"))
+		if (colunaDestino.equals("imac_tipoentrevistado") || colunaDestino.equals("imac_dsoutrasinformacoes")
+				|| colunaDestino.equals("imac_nnhidrometro"))
 			valor = "\'" + tabelaColunaAtualizacaoCadastral.obterValorParaAtualizar(campo) + "\'";
 		else if (colunaDestino.equals("imre_vol_cx_dagua") || colunaDestino.equals("imre_vol_cisterna") || colunaDestino.equals("imre_volumepiscina") || colunaDestino.equals("imre_areaconstruida"))
 			valor = tabelaColunaAtualizacaoCadastral.obterValorParaAtualizar(campo).replace(",",".");
@@ -1430,7 +1464,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			 valor = tabelaColunaAtualizacaoCadastral.obterValorParaAtualizar(campo);
 		
 		update.append("update ").append(tabelaDestino)
-			  .append(" set ").append(colunaDestino).append(" = ").append(valor)
+			  .append(" set ").append(colunaDestino).append(" = ").append(valor.equals("") ? "null" : valor)
 			  .append(" where ").append(" imov_id = ").append(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoImovel());
 
 		}

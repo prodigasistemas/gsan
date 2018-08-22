@@ -52,6 +52,7 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 	}
 	
 	private boolean imovelValidoFiscalizacao(ImovelControleAtualizacaoCadastral imovelControle) {
+		System.out.println("--> " + imovelControle.getId());
 		return (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoFiscalizacao()
 				&& imovelControle.getSituacaoAtualizacaoCadastral().getId()
 						.equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO));
