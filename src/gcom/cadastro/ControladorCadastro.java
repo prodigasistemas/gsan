@@ -234,6 +234,7 @@ import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
 import gcom.util.email.ServicosEmail;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
@@ -6707,98 +6708,28 @@ public class ControladorCadastro extends ControladorComum {
 			Integer idRota) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
-		
-		Collection<Integer> idsImoveis = null;
-		Leiturista leiturista = null;
 
 		try {
-			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
-					idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, idRota);
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, idRota);
 
-			ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral = new ArquivoTextoAtualizacaoCadastral();
+			Leiturista leiturista = getLeituristaAtualizacaoCadastral(Integer.parseInt(helper.getLeiturista()));
 
-			SistemaParametro parametroSistema = getControladorUtil().pesquisarParametrosDoSistema();
-			String anoMesReferencia = parametroSistema.getAnoMesFaturamento().toString();
-
-			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura = new SituacaoTransmissaoLeitura();
-			situacaoTransmissaoLeitura.setId(SituacaoTransmissaoLeitura.LIBERADO);
-			arquivoTextoAtualizacaoCadastral.setSituacaoTransmissaoLeitura(situacaoTransmissaoLeitura);
-
-			leiturista = this.getLeituristaAtualizacaoCadastral(Integer.parseInt(helper.getLeiturista()));
-
-			idsImoveis = repositorioCadastro.pesquisarIdsImoveisAtualizacaoCadastral(
-					leiturista.getEmpresa().getId(), idRota);
-
+			List<Integer> idsImoveis = (List<Integer>) repositorioCadastro.pesquisarIdsImoveisAtualizacaoCadastral(leiturista.getEmpresa().getId(), idRota);
+			
 			if (idsImoveis == null || idsImoveis.isEmpty()) {
 				System.out.println("Nenhum imovel encontrado. ARQUIVO NAO GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
-				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
-				SetorComercial setor = rota.getSetorComercial();
-				Localidade localidade = setor.getLocalidade();
-
-				arquivoTextoAtualizacaoCadastral.setLocalidade(localidade);
-				arquivoTextoAtualizacaoCadastral.setCodigoSetorComercial(new Integer(setor.getCodigo()));
-				arquivoTextoAtualizacaoCadastral.setRota(rota);
-
-				String descricaoArquivoTxt = Util.adicionarZerosEsquedaNumero(3, localidade.getId() + "")
-						+ "_"
-						+ Util.adicionarZerosEsquedaNumero(3, setor.getCodigo() + "")
-						+ "_"
-						+ Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + "");
-				
-				FiltroArquivoTextoAtualizacaoCadastral filtro = new FiltroArquivoTextoAtualizacaoCadastral();
-				filtro.adicionarParametro(new ParametroSimples(FiltroArquivoTextoAtualizacaoCadastral.LOCALIDADE_ID, localidade.getId()));
-				filtro.adicionarParametro(new ParametroSimples(FiltroArquivoTextoAtualizacaoCadastral.SETOR_COMERCIAL_CODIGO, setor.getCodigo()));
-				filtro.adicionarParametro(new ParametroSimples(FiltroArquivoTextoAtualizacaoCadastral.ROTA_ID, rota.getId()));
-				
-				Collection colecaoArquivo = getControladorUtil().pesquisar(filtro, ArquivoTextoAtualizacaoCadastral.class.getName());
-				
-				if (colecaoArquivo != null && !colecaoArquivo.isEmpty()) {
-					int ordem = colecaoArquivo.size() + 1;
-					descricaoArquivoTxt += "-parte" + ordem;
+				if (helper.getQuantidadeMaxima() != null && helper.getQuantidadeMaxima() > 0) {
+					List<List<Integer>> partes = Util.quebrarListaEmPartes(idsImoveis, helper.getQuantidadeMaxima());
+					
+					for (List<Integer> parte : partes) {
+						montarArquivoTextoAtualizacaoCadastral(idRota, leiturista, parte);
+					}
+				} else {
+					montarArquivoTextoAtualizacaoCadastral(idRota, leiturista, idsImoveis);
 				}
 				
-				arquivoTextoAtualizacaoCadastral.setDescricaoArquivo(descricaoArquivoTxt);
-				
-				// Leiturista
-				arquivoTextoAtualizacaoCadastral.setLeiturista(leiturista);
-
-				arquivoTextoAtualizacaoCadastral.setQuantidadeImovel(idsImoveis.size());
-
-				// Arquivo texto
-				StringBuilder arquivoTexto = new StringBuilder();
-
-				byte[] arquivoTextoByte = null;
-
-				arquivoTextoByte = IoUtil.transformarObjetoParaBytes(arquivoTexto);
-				arquivoTextoAtualizacaoCadastral.setArquivoTexto(arquivoTextoByte);
-
-				arquivoTextoAtualizacaoCadastral.setUltimaAlteracao(new Date());
-
-				Integer idArquivoTexto = (Integer) getControladorUtil().inserir(arquivoTextoAtualizacaoCadastral);
-				arquivoTexto = this.gerarArquivoTxt(idsImoveis, idArquivoTexto, leiturista, rota, ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO);
-
-				// -------------------------------------------------------------------------
-				ZipOutputStream zos = null;
-				BufferedWriter out = null;
-				File leituraTipo = new File(descricaoArquivoTxt + ".txt");
-				File compactado = new File(descricaoArquivoTxt + ".zip");
-				zos = new ZipOutputStream(new FileOutputStream(compactado));
-				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
-						leituraTipo.getAbsolutePath())));
-				out.write(arquivoTexto.toString());
-				out.flush();
-				out.close();
-				ZipUtil.adicionarArquivo(zos, leituraTipo);
-				zos.close();
-				// -------------------------------------------------------------------------
-
-				arquivoTextoByte = IoUtil.transformarObjetoParaBytes(arquivoTexto);
-				arquivoTextoAtualizacaoCadastral.setArquivoTexto(arquivoTextoByte);
-
-				getControladorUtil().atualizar(arquivoTextoAtualizacaoCadastral);
-
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			}
 		} catch (Exception ex) {
@@ -6806,6 +6737,53 @@ public class ControladorCadastro extends ControladorComum {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			throw new EJBException(ex);
 		}
+	}
+
+	private void montarArquivoTextoAtualizacaoCadastral(Integer idRota, Leiturista leiturista, List<Integer> idsImoveis) throws ControladorException, IOException {
+		Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
+		SetorComercial setor = rota.getSetorComercial();
+		Localidade localidade = setor.getLocalidade();
+
+		ArquivoTextoAtualizacaoCadastral arquivo = new ArquivoTextoAtualizacaoCadastral();
+		arquivo.setSituacaoTransmissaoLeitura(new SituacaoTransmissaoLeitura(SituacaoTransmissaoLeitura.LIBERADO));
+		arquivo.setLocalidade(localidade);
+		arquivo.setCodigoSetorComercial(new Integer(setor.getCodigo()));
+		arquivo.setRota(rota);
+		arquivo.setDescricaoArquivo(getDescricaoArquivo(rota, setor, localidade));
+		arquivo.setLeiturista(leiturista);
+		arquivo.setQuantidadeImovel(idsImoveis.size());
+		arquivo.setUltimaAlteracao(new Date());
+		arquivo.setArquivoTexto(IoUtil.transformarObjetoParaBytes(new StringBuilder()));
+
+		Integer idArquivoTexto = (Integer) getControladorUtil().inserir(arquivo);
+		StringBuilder arquivoTexto = gerarArquivoTxt(idsImoveis, idArquivoTexto, leiturista, rota, ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO);
+
+		arquivo.setArquivoTexto(IoUtil.transformarObjetoParaBytes(arquivoTexto));
+		getControladorUtil().atualizar(arquivo);
+	}
+
+	private String getDescricaoArquivo(Rota rota, SetorComercial setor, Localidade localidade) throws ControladorException {
+		String descricao = Util.adicionarZerosEsquedaNumero(3, localidade.getId() + "") 
+				+ "_" + Util.adicionarZerosEsquedaNumero(3, setor.getCodigo() + "") 
+				+ "_" + Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + "");
+		
+		descricao = adicionarParteDescricaoArquivo(rota, setor, localidade, descricao);
+		return descricao;
+	}
+
+	private String adicionarParteDescricaoArquivo(Rota rota, SetorComercial setor, Localidade localidade, String descricao) throws ControladorException {
+		Filtro filtro = new FiltroArquivoTextoAtualizacaoCadastral();
+		filtro.adicionarParametro(new ParametroSimples(FiltroArquivoTextoAtualizacaoCadastral.LOCALIDADE_ID, localidade.getId()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroArquivoTextoAtualizacaoCadastral.SETOR_COMERCIAL_CODIGO, setor.getCodigo()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroArquivoTextoAtualizacaoCadastral.ROTA_ID, rota.getId()));
+
+		Collection colecao = getControladorUtil().pesquisar(filtro, ArquivoTextoAtualizacaoCadastral.class.getName());
+		if (colecao != null && !colecao.isEmpty()) {
+			int ordem = colecao.size() + 1;
+			descricao += "-pt" + ordem;
+		}
+		
+		return descricao;
 	}
 
 	/**
@@ -7719,7 +7697,7 @@ public class ControladorCadastro extends ControladorComum {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString("", 14));
 			}
 
-			arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getRg(), 9));
+			arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getRg(), 13));
 
 			arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getDsUFSiglaOrgaoExpedidorRg(), 2));
 
@@ -7809,7 +7787,7 @@ public class ControladorCadastro extends ControladorComum {
             }
 
             // RG Cliente
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getRg(), 9));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getRg(), 13));
 
             // UF Cliente Proprietario
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getDsUFSiglaOrgaoExpedidorRg(), 2));
@@ -7902,7 +7880,7 @@ public class ControladorCadastro extends ControladorComum {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString("", 14));
             }
 
-            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getRg(), 9));
+            arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getRg(), 13));
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getDsUFSiglaOrgaoExpedidorRg(), 2));
 
             if (clienteResponsavel.getPessoaSexo() != null && clienteResponsavel.getPessoaSexo().getId() != null) {
