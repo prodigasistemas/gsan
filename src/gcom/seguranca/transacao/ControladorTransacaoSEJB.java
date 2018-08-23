@@ -118,9 +118,9 @@ import javax.ejb.SessionContext;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Definição da lógica de negócio do Session Bean de ControladorCliente
- * 
- * @author Sávio Luiz
+ * Definiï¿½ï¿½o da lï¿½gica de negï¿½cio do Session Bean de ControladorCliente
+ *
+ * @author Sï¿½vio Luiz
  * @created 25 de Abril de 2005
  */
 public class ControladorTransacaoSEJB implements SessionBean {
@@ -135,10 +135,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	SessionContext sessionContext;
 
 	/**
-	 * < <Descrição do método>>
-	 * 
+	 * < <Descriï¿½ï¿½o do mï¿½todo>>
+	 *
 	 * @exception CreateException
-	 *                Descrição da exceção
+	 *                Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 */
 	public void ejbCreate() throws CreateException {
 
@@ -146,30 +146,30 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		repositorioCadastro             = RepositorioCadastroHBM.getInstancia();
 		repositorioAtualizacaoCadastral = RepositorioAtualizacaoCadastralHBM.getInstancia();
 		repositorioSeguranca            = RepositorioSegurancaHBM.getInstancia();
-		
+
 	}
 
 	/**
-	 * < <Descrição do método>>
+	 * < <Descriï¿½ï¿½o do mï¿½todo>>
 	 */
 	public void ejbRemove() {
 	}
 
 	/**
-	 * < <Descrição do método>>
+	 * < <Descriï¿½ï¿½o do mï¿½todo>>
 	 */
 	public void ejbActivate() {
 	}
 
 	/**
-	 * < <Descrição do método>>
+	 * < <Descriï¿½ï¿½o do mï¿½todo>>
 	 */
 	public void ejbPassivate() {
 	}
 
 	/**
 	 * Seta o valor de sessionContext
-	 * 
+	 *
 	 * @param sessionContext
 	 *            O novo valor de sessionContext
 	 */
@@ -179,7 +179,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 
 	/**
 	 * Retorna o valor de controladorUtil
-	 * 
+	 *
 	 * @return O valor de controladorUtil
 	 */
 	private ControladorUtilLocal getControladorUtil() {
@@ -187,7 +187,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		ControladorUtilLocalHome localHome = null;
 		ControladorUtilLocal local = null;
 
-		// pega a instância do ServiceLocator.
+		// pega a instï¿½ncia do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -196,7 +196,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 
 			localHome = (ControladorUtilLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// guarda a referencia de um objeto capaz de fazer chamadas ï¿½
 			// objetos remotamente
 			local = localHome.create();
 
@@ -207,10 +207,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			throw new SistemaException(e);
 		}
 	}
-	
+
 	/**
 	 * Retorna o valor de controladorCliente
-	 * 
+	 *
 	 * @return O valor de controladorImovel
 	 */
 	protected ControladorClienteLocal getControladorCliente() {
@@ -218,7 +218,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		ControladorClienteLocalHome localHome = null;
 		ControladorClienteLocal local = null;
 
-		// pega a instância do ServiceLocator.
+		// pega a instï¿½ncia do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -227,7 +227,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 
 			localHome = (ControladorClienteLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// guarda a referencia de um objeto capaz de fazer chamadas ï¿½
 			// objetos remotamente
 			local = localHome.create();
 
@@ -238,17 +238,17 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			throw new SistemaException(e);
 		}
 	}
-	
+
 	/**
 	 * Retorna o valor de controladorImovel
-	 * 
+	 *
 	 * @return O valor de controladorImovel
 	 */
 	private ControladorImovelLocal getControladorImovel() {
 		ControladorImovelLocalHome localHome = null;
 		ControladorImovelLocal local = null;
 
-		// pega a instância do ServiceLocator.
+		// pega a instï¿½ncia do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -268,10 +268,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			throw new SistemaException(e);
 		}
 	}
-	
+
 	/**
 	 * Retorna o valor de controladorRegistroAtendimento
-	 * 
+	 *
 	 */
 	private ControladorRegistroAtendimentoLocal getControladorRegistroAtendimento() {
 		ControladorRegistroAtendimentoLocalHome localHome = null;
@@ -296,9 +296,9 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	}
 
 	/**
-	 * Método que consulta os usuario alteracao de uma determinada operacao com
+	 * Mï¿½todo que consulta os usuario alteracao de uma determinada operacao com
 	 * as restricoes passadas
-	 * 
+	 *
 	 * @param idOperacao
 	 * @param idUsuario
 	 * @param dataInicial
@@ -308,10 +308,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	 * @param idTabela
 	 * @param idTabelaColuna
 	 * @param id1
-	 * 
+	 *
 	 * @return
 	 * @throws ControladorException
-	 * 
+	 *
 	 * @author thiago toscano
 	 * @date 17/02/2006
 	 */
@@ -389,9 +389,9 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	}
 
 	/**
-	 * Método que consulta os usuario alteracao de uma determinada operacao com
+	 * Mï¿½todo que consulta os usuario alteracao de uma determinada operacao com
 	 * as restricoes passadas
-	 * 
+	 *
 	 * @param idOperacao
 	 * @param idUsuario
 	 * @param dataInicial
@@ -401,10 +401,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	 * @param idTabela
 	 * @param idTabelaColuna
 	 * @param id1
-	 * 
+	 *
 	 * @return
 	 * @throws ControladorException
-	 * 
+	 *
 	 * @author Romulo Aurelio
 	 * @date 11/05/2007
 	 */
@@ -481,26 +481,26 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		}
 
 	}
-	
+
 	private Collection<OperacaoEfetuada> ordenarTransacoes(Collection<OperacaoEfetuada> operacoesEfetuadas) {
 		Collection<OperacaoEfetuada> operacoesOrdenadas = new ArrayList<OperacaoEfetuada>();
 
 		List<OperacaoEfetuada> operacoes = new ArrayList<OperacaoEfetuada>();
 		operacoes.addAll(operacoesEfetuadas);
-		
+
 		Comparator<OperacaoEfetuada> descescente = Collections.reverseOrder(new ComparatorOperacaoEfetuada());
-		
+
 		Collections.sort(operacoes, descescente);
-		
+
 		operacoesOrdenadas.addAll(operacoes);
-		
-		return operacoesOrdenadas; 
+
+		return operacoesOrdenadas;
 	}
 
 	/**
-	 * Método que consulta os usuario alteracao de uma determinada operacao com
+	 * Mï¿½todo que consulta os usuario alteracao de uma determinada operacao com
 	 * as restricoes passadas
-	 * 
+	 *
 	 * @param idOperacao
 	 * @param idUsuario
 	 * @param dataInicial
@@ -510,10 +510,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	 * @param idTabela
 	 * @param idTabelaColuna
 	 * @param id1
-	 * 
+	 *
 	 * @return
 	 * @throws ControladorException
-	 * 
+	 *
 	 * @author Romulo Aurelio
 	 * @date 11/05/2007
 	 */
@@ -591,8 +591,8 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	}
 
 	/**
-	 * Método que registra uma operacao ao sistema
-	 * 
+	 * Mï¿½todo que registra uma operacao ao sistema
+	 *
 	 * @param operacaoEfetuada
 	 * @param tabelaLinhaAlteracao
 	 * @param tabelaLinhaColunaAlteracoes
@@ -617,7 +617,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			operacaoEfetuada.setOperacao(operacao);
 		}
 
-		// caso nao tenha id é pq nao foi adicionado
+		// caso nao tenha id ï¿½ pq nao foi adicionado
 		if (operacaoEfetuada.getId() == null) {
 			operacaoEfetuada.setUltimaAlteracao(new Date(System
 					.currentTimeMillis()));
@@ -642,19 +642,19 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					getControladorUtil().inserir(usuarioAteracao);
 				}
 			}
-			
+
 			// Inserir tabela linha alteracao principal -> usada para conseguir recuperar dados do objeto principal
-			
+
 		} else if (operacaoEfetuada.getDadosAdicionais() != null){
 			getControladorUtil().atualizar(operacaoEfetuada);
 		}
 
-		
+
 		if (tabelaLinhaAlteracao != null) {
-			
+
 			tabelaLinhaAlteracao.setUltimaAlteracao(new Date(System.currentTimeMillis()));
 			tabelaLinhaAlteracao.setOperacaoEfetuada(operacaoEfetuada);
-			
+
 			getControladorUtil().inserir(tabelaLinhaAlteracao);
 
 			FiltroOperacaoTabela filtroOperacaoTabela = new FiltroOperacaoTabela();
@@ -665,10 +665,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			filtroOperacaoTabela.adicionarParametro(new ParametroSimples(
 					FiltroOperacaoTabela.OPERACAO_ID, operacaoEfetuada
 							.getOperacao().getId()));
-			
+
 			Collection coll = getControladorUtil().pesquisar(
 					filtroOperacaoTabela, OperacaoTabela.class.getSimpleName());
-			
+
 			if (coll == null || coll.isEmpty()) {
 
 				OperacaoTabelaPK pk = new OperacaoTabelaPK();
@@ -697,10 +697,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			}
 		}
 	}
-	
+
 	/**
-	 * Método que registra uma operacao ao sistema sem utilizacao do Interceptador Hibernate
-	 * 
+	 * Mï¿½todo que registra uma operacao ao sistema sem utilizacao do Interceptador Hibernate
+	 *
 	 * @param operacaoEfetuada
 	 * @param tabelaLinhaAlteracao
 	 * @param tabelaLinhaColunaAlteracoes
@@ -719,8 +719,8 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		if (operacaoEfetuada == null) {
 			operacaoEfetuada = new OperacaoEfetuada();
 		}
-		
-		// caso nao tenha id é pq nao foi adicionado
+
+		// caso nao tenha id ï¿½ pq nao foi adicionado
 		if (operacaoEfetuada.getId() == null) {
 			operacaoEfetuada.setUltimaAlteracao(new Date(System
 					.currentTimeMillis()));
@@ -728,7 +728,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			operacaoEfetuada.setId(idOperacaoEfetuada);
 
 			if (usuarioAcaoUsuarioHelper != null) {
-				
+
 					UsuarioAlteracao usuarioAteracao = new UsuarioAlteracao();
 					usuarioAteracao.setOperacaoEfetuada(operacaoEfetuada);
 					usuarioAteracao.setUltimaAlteracao(new Date(System
@@ -741,9 +741,9 @@ public class ControladorTransacaoSEJB implements SessionBean {
 							.getUsuario().getEmpresa());
 					getControladorUtil().inserir(usuarioAteracao);
 			}
-		} 
+		}
 
-		
+
 		if (tabelaLinhaAlteracao != null) {
 			tabelaLinhaAlteracao.setUltimaAlteracao(new Date(System
 					.currentTimeMillis()));
@@ -782,11 +782,11 @@ public class ControladorTransacaoSEJB implements SessionBean {
 							.setTabelaLinhaAlteracao(tabelaLinhaAlteracao);
 					tabelaLinhaColunaAlteracao.setUltimaAlteracao(new Date(
 							System.currentTimeMillis()));
-					if (tabelaLinhaAlteracao.getAlteracaoTipo().getId() == AlteracaoTipo.INCLUSAO && 
+					if (tabelaLinhaAlteracao.getAlteracaoTipo().getId() == AlteracaoTipo.INCLUSAO &&
 							tabelaLinhaColunaAlteracao.getConteudoColunaAtual() != null){
 						getControladorUtil().inserir(tabelaLinhaColunaAlteracao);
-						
-					}else if (tabelaLinhaAlteracao.getAlteracaoTipo().getId() == AlteracaoTipo.EXCLUSAO && 
+
+					}else if (tabelaLinhaAlteracao.getAlteracaoTipo().getId() == AlteracaoTipo.EXCLUSAO &&
 							tabelaLinhaColunaAlteracao.getConteudoColunaAnterior() != null){
 							getControladorUtil().inserir(tabelaLinhaColunaAlteracao);
 					}
@@ -794,7 +794,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			}
 		}
 	}
-	
+
 	/**
 	 * Metodo utilizado para efetuar o registro de transacao de um objeto helper
 	 * @author Anderson Italo
@@ -811,23 +811,23 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public void processaRegistroOperacaoObjetohelper(UsuarioAcaoUsuarioHelper usuario, Integer idTipoAlteracao, 
+	public void processaRegistroOperacaoObjetohelper(UsuarioAcaoUsuarioHelper usuario, Integer idTipoAlteracao,
 												     ObjetoTransacao objetoHelper, OperacaoEfetuada operacaoEfetuada, Integer idTabela) {
-		
+
 		AlteracaoTipo alteracaoTipo = new AlteracaoTipo();
 		alteracaoTipo.setId(idTipoAlteracao);
-		
+
 		Tabela tabela = new Tabela();
 		tabela.setId(idTabela);
-		
+
 		TabelaLinhaAlteracao tabelaLinhaAuteracao = new TabelaLinhaAlteracao();
 		tabelaLinhaAuteracao.setAlteracaoTipo(alteracaoTipo);
 		tabelaLinhaAuteracao.setTabela(tabela);
-		
-		
+
+
 	    Collection<TabelaLinhaColunaAlteracao> colecaoTabelaLinhaColunaAlteracao = null;
 		try {
-			colecaoTabelaLinhaColunaAlteracao = pesquisarTabelaLinhaColunaAlteracoes(objetoHelper, 
+			colecaoTabelaLinhaColunaAlteracao = pesquisarTabelaLinhaColunaAlteracoes(objetoHelper,
 														tabelaLinhaAuteracao, objetoHelper.retornarAtributosSelecionadosRegistro(), alteracaoTipo.getId());
 		} catch (SecurityException e1) {
 			e1.printStackTrace();
@@ -840,7 +840,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		} catch (InvocationTargetException e1) {
 			e1.printStackTrace();
 		}
-	    
+
 	    if (colecaoTabelaLinhaColunaAlteracao != null && !colecaoTabelaLinhaColunaAlteracao.isEmpty()){
 	    	try {
 				inserirOperacaoEfetuadaBurlandoInterceptador(usuario, operacaoEfetuada, tabelaLinhaAuteracao, colecaoTabelaLinhaColunaAlteracao);
@@ -849,7 +849,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			}
 	    }
 	}
-	
+
 	/**
 	 * @author Anderson Italo
 	 * @date 08/06/2009
@@ -865,29 +865,29 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	private Collection pesquisarTabelaLinhaColunaAlteracoes(ObjetoTransacao objetoHelper, 
+	private Collection pesquisarTabelaLinhaColunaAlteracoes(ObjetoTransacao objetoHelper,
 			TabelaLinhaAlteracao tabelaLinhaAlteracao, String [] colecaoNomesAtributos, Integer idAlteracaoTipo) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException{
 			Collection<TabelaLinhaColunaAlteracao> colecaoRetorno = new ArrayList<TabelaLinhaColunaAlteracao>();
 		String nomeMetodo="";
 		Method metodo = null;
-		
+
 		for (int i = 0; i < colecaoNomesAtributos.length; i++) {
 			nomeMetodo = "get";
 			Object[] args = {colecaoNomesAtributos[i]};
 			Class[] tipos = {String.class};
 			int idTabelaColuna = 0;
-			
+
 			Object retornoMetodo = null;
-			
+
 		    metodo = objetoHelper.getClass().getMethod(nomeMetodo, tipos);
-		
+
 		    retornoMetodo = metodo.invoke(objetoHelper, args);
-			
-			
+
+
 			if (retornoMetodo!= null){
 				try {
 					Annotation annotations[] = objetoHelper.getClass().getDeclaredField(colecaoNomesAtributos[i]).getAnnotations();
-					
+
 					for (int j = 0; j < annotations.length; j++) {
 						if (annotations[j] instanceof ControleAlteracao){
 							ControleAlteracao controleAlteracao = (ControleAlteracao) annotations[j];
@@ -899,12 +899,12 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				} catch (NoSuchFieldException e) {
 					e.printStackTrace();
 				}
-				
+
 				TabelaColuna tabelaColuna = new TabelaColuna();
 				tabelaColuna.setId(idTabelaColuna);
-				
+
 				TabelaLinhaColunaAlteracao tabelaLinhaColunaAlteracao = new TabelaLinhaColunaAlteracao();
-				
+
 				if (retornoMetodo instanceof ObjetoTransacao){
 				    if (AlteracaoTipo.INCLUSAO == idAlteracaoTipo.intValue()){
 				    	tabelaLinhaColunaAlteracao.setConteudoColunaAtual(Interceptador.consultarDescricao(retornoMetodo));
@@ -912,22 +912,22 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				    	tabelaLinhaColunaAlteracao.setConteudoColunaAnterior(Interceptador.consultarDescricao(retornoMetodo));
 				    }
 				}
-				
-			    
+
+
 			    tabelaLinhaColunaAlteracao.setIndicadorAtualizada(new Integer(1).shortValue());
 			    tabelaLinhaColunaAlteracao.setTabelaColuna(tabelaColuna);
 			    tabelaLinhaColunaAlteracao.setTabelaLinhaAlteracao(tabelaLinhaAlteracao);
-			    
+
 			    colecaoRetorno.add(tabelaLinhaColunaAlteracao);
 			}
-		   
+
 		}
-		
+
 		return colecaoRetorno;
 	}
 
 	/**
-	 * 
+	 *
 	 * Registrar Transacao - Inserir operacao efetuada
 	 * @author anamaria
 	 * @date 12/05/2009
@@ -949,8 +949,8 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		if (operacaoEfetuada == null) {
 			operacaoEfetuada = new OperacaoEfetuada();
 		}
-		
-		// caso nao tenha id é pq nao foi adicionado
+
+		// caso nao tenha id ï¿½ pq nao foi adicionado
 		if (operacaoEfetuada.getId() == null) {
 			operacaoEfetuada.setUltimaAlteracao(new Date(System
 					.currentTimeMillis()));
@@ -977,19 +977,23 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					getControladorUtil().inserir(usuarioAteracao);
 				}
 			}
-			
+
 			// Inserir tabela linha alteracao principal -> usada para conseguir recuperar dados do objeto principal
-			
+
 		} else if (operacaoEfetuada.getDadosAdicionais() != null){
 			getControladorUtil().atualizar(operacaoEfetuada);
 		}
 
-		
+
 		if (tabelaAtualizacaoCadastral != null) {
 			tabelaAtualizacaoCadastral.setUltimaAlteracao(new Date(System
 					.currentTimeMillis()));
 			tabelaAtualizacaoCadastral.setOperacaoEfetuada(operacaoEfetuada);
-			getControladorUtil().inserir(tabelaAtualizacaoCadastral);
+
+			if (tabelaAtualizacaoCadastral.isRegistroInclusao())
+					getControladorUtil().inserir(tabelaAtualizacaoCadastral);
+			else
+					getControladorUtil().atualizar(tabelaAtualizacaoCadastral);
 
 			FiltroOperacaoTabela filtroOperacaoTabela = new FiltroOperacaoTabela();
 			filtroOperacaoTabela.adicionarParametro(new ParametroSimples(
@@ -1019,7 +1023,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				while (it.hasNext()) {
 					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral= (TabelaColunaAtualizacaoCadastral) it
 							.next();
-					
+
 					// Pesquisando o objeto de TabelaColuna
 					TabelaColuna tabelaColuna = tabelaColunaAtualizacaoCadastral.getTabelaColuna();
 					if (tabelaColuna != null && tabelaColuna.getColuna() != null) {
@@ -1028,22 +1032,25 @@ public class ControladorTransacaoSEJB implements SessionBean {
 								.getTabela().getId()));
 						filtroTabelaColuna.adicionarParametro(new ParametroSimples(FiltroTabelaColuna.COLUNA, tabelaColuna.getColuna()));
 						Collection collTabelaColuna = this.getControladorUtil().pesquisar(filtroTabelaColuna, TabelaColuna.class.getSimpleName());
-						
+
 						if (collTabelaColuna != null && !collTabelaColuna.isEmpty()) {
 							tabelaColuna = (TabelaColuna) collTabelaColuna.iterator().next();
 						}
 						tabelaColunaAtualizacaoCadastral.setTabelaColuna(tabelaColuna);
 					}
-						
+
 					tabelaColunaAtualizacaoCadastral
 							.setTabelaAtualizacaoCadastral(tabelaAtualizacaoCadastral);
 					tabelaColunaAtualizacaoCadastral.setUltimaAlteracao(new Date());
-					getControladorUtil().inserir(tabelaColunaAtualizacaoCadastral);
+					if (tabelaColunaAtualizacaoCadastral.isRegistroInclusao())
+							getControladorUtil().inserir(tabelaColunaAtualizacaoCadastral);
+					else
+							getControladorUtil().atualizar(tabelaColunaAtualizacaoCadastral);
 				}
 			}
 		}
 	}
-	
+
 	public Integer pesquisarUsuarioAlteracaoDasOperacoesEfetuadasHqlCount(
 			Integer idUsuarioAcao,String[] idOperacoes, String idUsuario,
 			Date dataInicial, Date dataFinal, Date horaInicial, Date horaFinal,
@@ -1065,50 +1072,50 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	}
 
 	/**
-	 * Registrar 
+	 * Registrar
 	 * @param objetoTransacao
 	 * @throws ControladorException
 	 */
-	public void registrarTransacao(ObjetoTransacao objetoTransacao) 
+	public void registrarTransacao(ObjetoTransacao objetoTransacao)
 		throws ControladorException {
 
 		if (objetoTransacao.retornarAtributosSelecionadosRegistro() == null){
 			sessionContext.setRollbackOnly();
-			// Este método só deve ser chamado caso tenha sido definida 
-			// a coleção de atributos selecionados para o registro da transacao
-			throw new ControladorException("erro.sistema");			
+			// Este mï¿½todo sï¿½ deve ser chamado caso tenha sido definida
+			// a coleï¿½ï¿½o de atributos selecionados para o registro da transacao
+			throw new ControladorException("erro.sistema");
 		}
-		
+
 		Interceptador.getInstancia().verificarObjetoAlterado(objetoTransacao,
 				objetoTransacao.retornarAtributosSelecionadosRegistro());
 	}
-	
+
 
 	/**
 	 * Registrar transacao para um conjunto de atributos especificos
-	 * 
+	 *
 	 * @param objetoTransacao
 	 * @throws ControladorException
 	 * @author Francisco do Nascimento
 	 * @date 11/08/09
 	 */
-	public void registrarTransacao(ObjetoTransacao objetoTransacao, String[] atributos) 
+	public void registrarTransacao(ObjetoTransacao objetoTransacao, String[] atributos)
 		throws ControladorException {
 
 		if (atributos == null){
 			sessionContext.setRollbackOnly();
-			// Este método só deve ser chamado caso tenha sido definida 
-			// a coleção de atributos selecionados para o registro da transacao
-			throw new ControladorException("erro.sistema");			
+			// Este mï¿½todo sï¿½ deve ser chamado caso tenha sido definida
+			// a coleï¿½ï¿½o de atributos selecionados para o registro da transacao
+			throw new ControladorException("erro.sistema");
 		}
-		
+
 		Interceptador.getInstancia().verificarObjetoAlterado(objetoTransacao,
-				atributos);	
+				atributos);
 	}
-	
+
 	public HashMap consultarResumoInformacoesOperacaoEfetuada(OperacaoEfetuada operacaoEfetuada, int idItemAnalisado){
 
-		
+
 		FiltroOperacao filtroOperacao = new FiltroOperacao();
 		filtroOperacao.adicionarCaminhoParaCarregamentoEntidade(
 				FiltroOperacao.ARGUMENTO_PESQUISA);
@@ -1116,40 +1123,40 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				FiltroOperacao.ARGUMENTO_PESQUISA_TABELA);
 		filtroOperacao.adicionarParametro(new ParametroSimples(FiltroOperacao.ID,
 				operacaoEfetuada.getOperacao().getId()));
-		
+
 		Collection coll = Fachada.getInstancia().pesquisar(filtroOperacao,
 				Operacao.class.getSimpleName());
-		
+
 		Operacao operacao = (Operacao) coll.iterator().next();
-		// Consultando dados para o preenchimento das informações do item
+		// Consultando dados para o preenchimento das informaï¿½ï¿½es do item
 		HashMap<String, Object> dados = new HashMap<String,Object>();
 
 		try {
-		
-			// Tabela principal da operacao efetuada é considerada ser a tabela do argumento de pesquisa
+
+			// Tabela principal da operacao efetuada ï¿½ considerada ser a tabela do argumento de pesquisa
 			if (operacao.getArgumentoPesquisa() != null){
 				String nomeTabela = operacao.getArgumentoPesquisa().getTabela().getNomeTabela();
 				String nomeClasse = HibernateUtil.getClassName(nomeTabela);
 				Object instancia = Class.forName(nomeClasse).newInstance();
 
-				if (instancia instanceof ObjetoTransacao){ 
+				if (instancia instanceof ObjetoTransacao){
 					ObjetoTransacao objTran = (ObjetoTransacao) instancia;
 					objTran.set("id",Integer.class, idItemAnalisado);
 					Filtro filtro = objTran.retornaFiltro();
-					
+
 					Collection objs = getControladorUtil().pesquisar(filtro, nomeClasse);
-					
+
 					if(objs.iterator().hasNext()){
 						objTran = (ObjetoTransacao) objs.iterator().next();
-						
+
 						String[] atributos = objTran.retornarAtributosInformacoesOperacaoEfetuada();
 						String[] labels = objTran.retornarLabelsInformacoesOperacaoEfetuada();
-						
+
 						for (int i = 0; i < atributos.length; i++) {
 							dados.put(labels[i], objTran.get(atributos[i]));
-						}					
+						}
 					}
-				}			
+				}
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -1159,18 +1166,18 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			e.printStackTrace();
 		} catch (ControladorException e) {
 			e.printStackTrace();
-		}	
+		}
 		return dados;
 	}
-	
-	public void ordenarTabelaLinhaColunaAlteracao(Collection linhas, int idOperacao) 
+
+	public void ordenarTabelaLinhaColunaAlteracao(Collection linhas, int idOperacao)
 		throws ControladorException	{
-		
+
 		int[] idTCs = new int[linhas.size()];
 		int i = 0;
 		for (Iterator iter = linhas.iterator(); iter.hasNext();) {
 			TabelaLinhaColunaAlteracao tlca = (TabelaLinhaColunaAlteracao) iter.next();
-			idTCs[i++] = tlca.getTabelaColuna().getId();			
+			idTCs[i++] = tlca.getTabelaColuna().getId();
 		}
 		Collection ordem = null;
 		try{
@@ -1179,38 +1186,38 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 		final Map mapOrdem = new HashMap();
-		Iterator iterOrdem = ordem.iterator(); 
+		Iterator iterOrdem = ordem.iterator();
 		while (iterOrdem.hasNext()) {
 			OperacaoOrdemExibicao opOrdem = (OperacaoOrdemExibicao) iterOrdem.next();
 			mapOrdem.put(opOrdem.getTabelaColuna().getId(), opOrdem.getNumeroOrdem()); // idTabcoluna e ordem
 		}
-		
+
 		// Ordenador pelo Id da tabela para agrupar os itens atualizados
 		class ComparadorTLCA implements Comparator {
-						
+
 		    public int compare(Object obj1, Object obj2){
 		    	TabelaLinhaColunaAlteracao tlca1 = (TabelaLinhaColunaAlteracao) obj1;
 		    	TabelaLinhaColunaAlteracao tlca2 = (TabelaLinhaColunaAlteracao) obj2;
 		    	if (obj1 instanceof TabelaLinhaColunaAlteracao && obj2 instanceof TabelaLinhaColunaAlteracao){
-		    		
+
 		    		int idTab1 = tlca1.getTabelaLinhaAlteracao().getId();
 		    		int idTab2 = tlca2.getTabelaLinhaAlteracao().getId();
-		    		
+
 		    		int dif = idTab2 - idTab1;
 		    		if (dif == 0){
 			            Object ordem =  mapOrdem.get(tlca1.getTabelaColuna().getId());
 			            int i1 = 999;
 			            if (ordem != null){
 			            	i1 = ((Integer) ordem).intValue();
-			            }		    			
+			            }
 			            ordem =  mapOrdem.get(tlca2.getTabelaColuna().getId());
 			            int i2 = 999;
 			            if (ordem != null){
 			            	i2 = ((Integer) ordem).intValue();
 			            }
-			            
+
 			            dif = i1 - i2;
 		    		}
 
@@ -1220,15 +1227,15 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		    	}
 		    }
 		}
-		
+
 		Collections.sort((List)linhas, new ComparadorTLCA());
 
 	}
 
 	/**
-	 * Pesquisa a quantidade de registros na tabela de Operação Efetuada
+	 * Pesquisa a quantidade de registros na tabela de Operaï¿½ï¿½o Efetuada
 	 * para os argumentos passados.
-	 * 		
+	 *
 	 * @author Yara Taciane
 	 * @date 15/07/2008
 	 *
@@ -1250,9 +1257,9 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	}
 
 	/**
-	 * 
+	 *
 	 * Pesquisa os registros na TabelaLinhaColunaAlteracao para o argumento passado.
-	 * 
+	 *
 	 * @author Yara Taciane
 	 * @date 15/07/2008
 	 *
@@ -1271,7 +1278,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		}
 		return retorno;
 	}
-	
+
 	public Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> consultarDadosTabelaColunaAtualizacaoCadastral(Long idRegistroAlterado, Integer idArquivo,
 			Integer idImovel, Long idCliente, Integer idTipoAlteracao) throws Exception {
 
@@ -1291,16 +1298,16 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					dados = (Object[]) obj;
 					helper = new DadosTabelaAtualizacaoCadastralHelper();
 
-					helper.setIdTabelaAtualizacaoCadastral((Integer) dados[0]); 
-					helper.setIdTabela((Integer) dados[1]); 
-					helper.setDescricaoTabela((String) dados[2]); 
+					helper.setIdTabelaAtualizacaoCadastral((Integer) dados[0]);
+					helper.setIdTabela((Integer) dados[1]);
+					helper.setDescricaoTabela((String) dados[2]);
 					if (dados[14] != null) {
 						helper.setDescricaoTabela(helper.getDescricaoTabela() + " " + String.valueOf(dados[14]));
 						helper.setComplemento(String.valueOf(dados[14]));
 					}
-					helper.setIdTabelaColuna((Integer) dados[3]); 
-					helper.setDescricaoColuna((String) dados[4]); 
-					helper.setIdTabelaColunaAtualizacaoCadastral((Integer) dados[5]); 
+					helper.setIdTabelaColuna((Integer) dados[3]);
+					helper.setDescricaoColuna((String) dados[4]);
+					helper.setIdTabelaColunaAtualizacaoCadastral((Integer) dados[5]);
 					if (dados[6] != null && !dados[6].equals("")) {
 						String campoAnterior = getDescricaoCampoAtualizacaoCadastral((String) dados[6], (String) dados[12]);
 						if (campoAnterior != null) {
@@ -1312,16 +1319,16 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					if (dados[7] != null && !dados[7].equals("")) {
 						String campoAtual = getDescricaoCampoAtualizacaoCadastral((String) dados[7], (String) dados[12]);
 						if (campoAtual != null) {
-							helper.setColunaValorAtual(campoAtual); 
+							helper.setColunaValorAtual(campoAtual);
 						} else {
-							helper.setColunaValorAtual((String) dados[7]); 
+							helper.setColunaValorAtual((String) dados[7]);
 						}
 					}
 					helper.setNomeColuna((String) dados[12]);
-					helper.setIndicadorAutorizado((Short) dados[8]); 
-					helper.setUltimaAtualizacao((Date) dados[9]); 
-					helper.setIdAlteracaoTipo((Integer) dados[10]); 
-					helper.setDescricaoAlteracaoTipo((String) dados[11]); 
+					helper.setIndicadorAutorizado((Short) dados[8]);
+					helper.setUltimaAtualizacao((Date) dados[9]);
+					helper.setIdAlteracaoTipo((Integer) dados[10]);
+					helper.setDescricaoAlteracaoTipo((String) dados[11]);
 					if (dados[13] != null) {
 						helper.setDataValidacao((Date) dados[13]);
 					}
@@ -1341,7 +1348,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 
 		return retorno;
 	}
-	
+
 	private String getDescricaoCampoAtualizacaoCadastral(String campo, String coluna)
 		throws ControladorException {
 		String  retorno = null;
@@ -1361,86 +1368,86 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = ligacaoEsgotoSituacao.getDescricao();
-				}				
+				}
 			}else if(coluna.equals("ftab_id")){
 				FiltroFonteAbastecimento filtroFonteAbastecimento = new FiltroFonteAbastecimento();
 				filtroFonteAbastecimento.adicionarParametro(new ParametroSimples(FiltroFonteAbastecimento.ID, campo));
 				Collection pesquisa = getControladorUtil().pesquisar(filtroFonteAbastecimento, FonteAbastecimento.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					FonteAbastecimento fonteAbastecimento = (FonteAbastecimento) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = fonteAbastecimento.getDescricao();				
-				}					
+					retorno = fonteAbastecimento.getDescricao();
+				}
 			}else if(coluna.equals("crtp_id")){
 				FiltroClienteRelacaoTipo filtroClienteRelacaoTipo = new FiltroClienteRelacaoTipo();
 				filtroClienteRelacaoTipo.adicionarParametro(new ParametroSimples(FiltroClienteRelacaoTipo.CLIENTE_RELACAO_TIPO_ID, campo));
 				Collection pesquisa = getControladorUtil().pesquisar(filtroClienteRelacaoTipo, ClienteRelacaoTipo.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					ClienteRelacaoTipo clienteRelacaoTipo = (ClienteRelacaoTipo) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = clienteRelacaoTipo.getDescricao();				
-				}					
+					retorno = clienteRelacaoTipo.getDescricao();
+				}
 			}else if(coluna.equals("cltp_id")){
 				FiltroClienteTipo filtroClienteTipo = new FiltroClienteTipo();
 				filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.ID, campo));
 				Collection pesquisa = getControladorUtil().pesquisar(filtroClienteTipo, ClienteTipo.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					ClienteTipo clienteTipo = (ClienteTipo) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = clienteTipo.getDescricao();				
-				}					
+					retorno = clienteTipo.getDescricao();
+				}
 			}else if(coluna.equals("prof_id")){
 				FiltroProfissao filtroProfissao = new FiltroProfissao();
 				filtroProfissao.adicionarParametro(new ParametroSimples(FiltroProfissao.ID, campo));
 				Collection pesquisa = getControladorUtil().pesquisar(filtroProfissao, Profissao.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					Profissao profissao = (Profissao) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = profissao.getDescricao();				
-				}					
+					retorno = profissao.getDescricao();
+				}
 			}else if(coluna.equals("ratv_id")){
 				FiltroRamoAtividade filtroRamoAtividade = new FiltroRamoAtividade();
 				filtroRamoAtividade.adicionarParametro(new ParametroSimples(FiltroRamoAtividade.ID, campo));
 				Collection pesquisa = getControladorUtil().pesquisar(filtroRamoAtividade, RamoAtividade.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					RamoAtividade ramoAtividade = (RamoAtividade) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = ramoAtividade.getDescricao();				
-				}					
+					retorno = ramoAtividade.getDescricao();
+				}
 			}else if(coluna.equals("edtp_id")){
 				FiltroEnderecoTipo filtroEnderecoTipo = new FiltroEnderecoTipo();
 				filtroEnderecoTipo.adicionarParametro(new ParametroSimples(FiltroEnderecoTipo.ID, campo));
 				Collection pesquisa = getControladorUtil().pesquisar(filtroEnderecoTipo, EnderecoTipo.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					EnderecoTipo enderecoTipo = (EnderecoTipo) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = enderecoTipo.getDescricao();				
-				}					
+					retorno = enderecoTipo.getDescricao();
+				}
 			}else if(coluna.equals("edrf_id")){
 				FiltroEnderecoReferencia filtroEnderecoReferencia = new FiltroEnderecoReferencia();
 				filtroEnderecoReferencia.adicionarParametro(new ParametroSimples(FiltroEnderecoReferencia.ID, campo));
 				Collection pesquisa = getControladorUtil().pesquisar(filtroEnderecoReferencia, EnderecoReferencia.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					EnderecoReferencia enderecoReferencia = (EnderecoReferencia) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = enderecoReferencia.getDescricao();				
-				}					
+					retorno = enderecoReferencia.getDescricao();
+				}
 			}else if(coluna.equals("fnet_id")){
 				FiltroFoneTipo filtroFoneTipo = new FiltroFoneTipo();
 				filtroFoneTipo.adicionarParametro(new ParametroSimples(FiltroFoneTipo.ID, campo));
 				Collection pesquisa = getControladorUtil().pesquisar(filtroFoneTipo, FoneTipo.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					FoneTipo foneTipo = (FoneTipo) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = foneTipo.getDescricao();				
-				}					
+					retorno = foneTipo.getDescricao();
+				}
 			}else if(coluna.equals("cocr_id")){
 				FiltroCadastroOcorrencia filtroCadastroOcorrencia = new FiltroCadastroOcorrencia();
 				filtroCadastroOcorrencia.adicionarParametro(new ParametroSimples(FiltroCadastroOcorrencia.ID, campo));
 				Collection pesquisa = getControladorUtil().pesquisar(filtroCadastroOcorrencia, CadastroOcorrencia.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					CadastroOcorrencia cadastroOcorrencia = (CadastroOcorrencia) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = cadastroOcorrencia.getDescricao();				
-				}					
+					retorno = cadastroOcorrencia.getDescricao();
+				}
 			} else if (coluna.equals("hicp_id")) {
 				FiltroHidrometroCapacidade filtroHidrometroCapacidade = new FiltroHidrometroCapacidade();
 				filtroHidrometroCapacidade.adicionarParametro(new ParametroSimples(FiltroHidrometroCapacidade.ID, campo));
 				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroCapacidade, HidrometroCapacidade.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					HidrometroCapacidade hidrometroCapacidade = (HidrometroCapacidade) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = hidrometroCapacidade.getDescricao();				
+					retorno = hidrometroCapacidade.getDescricao();
 				}
 			} else if (coluna.equals("himc_id")) {
 				FiltroHidrometroMarca filtroHidrometroMarca = new FiltroHidrometroMarca();
@@ -1448,7 +1455,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroMarca, HidrometroMarca.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					HidrometroMarca hidrometroMarca = (HidrometroMarca) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = hidrometroMarca.getDescricao();				
+					retorno = hidrometroMarca.getDescricao();
 				}
 			} else if (coluna.equals("hili_id")) {
 				FiltroHidrometroLocalInstalacao filtroHidrometroLocalInstalacao = new FiltroHidrometroLocalInstalacao();
@@ -1456,7 +1463,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroLocalInstalacao, HidrometroLocalInstalacao.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					HidrometroLocalInstalacao hidrometroLocalInstalacao = (HidrometroLocalInstalacao) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = hidrometroLocalInstalacao.getDescricao();				
+					retorno = hidrometroLocalInstalacao.getDescricao();
 				}
 			} else if (coluna.equals("hipr_id")) {
 				FiltroHidrometroProtecao filtroHidrometroProtecao = new FiltroHidrometroProtecao();
@@ -1464,7 +1471,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroProtecao, HidrometroProtecao.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					HidrometroProtecao hidrometroProtecao = (HidrometroProtecao) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = hidrometroProtecao.getDescricao();				
+					retorno = hidrometroProtecao.getDescricao();
 				}
 			} else if (coluna.equals("rlin_id")) {
 				FiltroRamalLocalInstalacao filtroRamalLocalInstalacao = new FiltroRamalLocalInstalacao();
@@ -1472,7 +1479,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				Collection pesquisa = getControladorUtil().pesquisar(filtroRamalLocalInstalacao, RamalLocalInstalacao.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					RamalLocalInstalacao ramalLocalInstalacao = (RamalLocalInstalacao) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = ramalLocalInstalacao.getDescricao();				
+					retorno = ramalLocalInstalacao.getDescricao();
 				}
 			}
 		}
@@ -1482,17 +1489,17 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper helper)throws ControladorException {
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> retorno = null;
-		
+
 		try {
 			retorno = repositorioTransacao.pesquisarMovimentoAtualizacaoCadastral(helper);
-			
+
 			Map<String, String> descricoes = new HashMap<String, String>();
-			
+
 			String nomeColuna = "";
 			String valorCampo = "";
 			for (ConsultarMovimentoAtualizacaoCadastralHelper item : retorno) {
 				List<ColunaAtualizacaoCadastral> colunas = item.getColunasAtualizacao();
-				
+
 				for (ColunaAtualizacaoCadastral coluna : colunas) {
 					nomeColuna = coluna.getNomeColuna();
 					valorCampo = coluna.getValorAnterior();
@@ -1504,7 +1511,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					coluna.setValorAtual(valorCampo);
 				}
 			}
-			
+
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -1520,41 +1527,41 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				valorCampo = descricoes.get(nomeColuna + valorCampo);
 			} else {
 				String descricao = getDescricaoCampoAtualizacaoCadastral(valorCampo, nomeColuna);
-				
+
 				if (descricao != null) {
 					valorCampo = descricao;
 					descricoes.put(nomeColuna + valorCampo, valorCampo);
 				}
 			}
 		}
-		
+
 		return valorCampo;
 	}
-	
+
 	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
 			Integer idImovel, String[] idsAtualizacaoCadastral,
 			Short indicador, Usuario usuarioLogado) throws ControladorException {
-		
+
 		try {
 			Integer tipoAlteracaoCadastral = null;
-			
+
 			for (int i = 0; i < idsAtualizacaoCadastral.length; i++) {
-				
+
 				Integer idAtualizacaoCadastral = new Integer(idsAtualizacaoCadastral[i]);
-				
+
 				this.repositorioTransacao.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
 						idAtualizacaoCadastral, indicador, usuarioLogado);
-				
+
 				if(tipoAlteracaoCadastral == null) {
-					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = 
+					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral =
 						this.repositorioTransacao.pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
-					
+
 					tipoAlteracaoCadastral = tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getAlteracaoTipo().getId();
 				}
 			}
-			
+
 			boolean existePendencia = repositorioTransacao.existeAlteracaoNaoAprovadaParaImovel(idImovel);
-			
+
 			if (!existePendencia){
 				repositorioCadastro.liberarCadastroImovel(idImovel);
 				repositorioAtualizacaoCadastral.liberarCadastroImovel(idImovel);
@@ -1563,34 +1570,34 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
-		}		
+		}
 	}
-	
+
 	public void atualizarIndicadorAutorizacaoTabelaAtualizacaoCadastral(
 			Integer idArgumento, Short indicador)throws ControladorException {
 		try {
 			this.repositorioTransacao.atualizarIndicadorAutorizacaoTabelaAtualizacaoCadastral(idArgumento, indicador);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
-		}		
+		}
 	}
-	
+
 	public void pesquisarRegistroAutorizadoTabelaAtualizacaoCadastral(
 			String idEmpresa, String idArquivo, String idLeiturista) throws ControladorException {
-		
+
 		try {
 			List listaRegistros = repositorioTransacao.pesquisarRegistroAutorizadoTabelaAtualizacaoCadastral(idEmpresa, idArquivo, idLeiturista);
-			
+
 			if (listaRegistros.size() > 0) {
 				Object obj = null;
 				Object[] dados = null;
-				
+
 				for (int i = 0; i < listaRegistros.size(); i++) {
 					obj = listaRegistros.get(i);
 					if (obj instanceof Object[]) {
 						dados = (Object[]) obj;
 						if(dados[1].equals(Tabela.IMOVEL_ATUALIZACAO_CADASTRAL)){
-							 
+
 						}else if(dados[1].equals(Tabela.CLIENTE_ATUALIZACAO_CADASTRAL)){
 							List listaColuna = repositorioTransacao.pesquisarRegistroAutorizadoTabelaColunaAtualizacaoCadastral((Integer) dados[2]);
 							if(listaColuna.size() > 0){
@@ -1599,7 +1606,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 								while (listaColunaIter.hasNext()) {
 									Object[] coluna = (Object[]) listaColunaIter.next();
 									if(coluna[0].equals("clac_nnimovel")){
-										
+
 									}
 								}
 							}
@@ -1610,10 +1617,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 								Iterator listaColunaIter = listaColuna.iterator();
 								while (listaColunaIter.hasNext()) {
 									Object[] coluna = (Object[]) listaColunaIter.next();
-									
+
 									if(dados[3].equals(AlteracaoTipo.ALTERACAO)){
-										
-										
+
+
 									}else if(dados[3].equals(AlteracaoTipo.INCLUSAO)){
 										Cliente cliente = new Cliente();
 										cliente.setId((Integer)dados[0]);
@@ -1621,38 +1628,38 @@ public class ControladorTransacaoSEJB implements SessionBean {
 										if(coluna[0].equals("fnet_id")){
 											FoneTipo foneTipo = new FoneTipo();
 											foneTipo.setId((Integer)coluna[1]);
-											clienteFone.setFoneTipo(foneTipo);	
+											clienteFone.setFoneTipo(foneTipo);
 										}
 										if(coluna[0].equals("cfac_cdddd")){
 											FoneTipo foneTipo = new FoneTipo();
 											foneTipo.setId((Integer)coluna[1]);
-											clienteFone.setFoneTipo(foneTipo);	
+											clienteFone.setFoneTipo(foneTipo);
 										}
 										if(coluna[0].equals("cfac_nnfone")){
 											FoneTipo foneTipo = new FoneTipo();
 											foneTipo.setId((Integer)coluna[1]);
-											clienteFone.setFoneTipo(foneTipo);	
+											clienteFone.setFoneTipo(foneTipo);
 										}
 										if(coluna[0].equals("cfac_nnfoneramal")){
 											FoneTipo foneTipo = new FoneTipo();
 											foneTipo.setId((Integer)coluna[1]);
-											clienteFone.setFoneTipo(foneTipo);	
+											clienteFone.setFoneTipo(foneTipo);
 										}
-									}									
+									}
 								}
 							}
-							
+
 						}else if(dados[1].equals(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL)){
-							
+
 						}
 					}
 				}
 			}
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
-		}		
+		}
 	}
-	
+
 	/**
 	 * @author Genival barbosa
 	 * @date 27/07/2009
@@ -1668,11 +1675,11 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			this.repositorioTransacao.atualizarIndicadorAutorizacaoAtualizacaoCadastral(idAtualizacaoCadastral, indicador);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
-		}		
+		}
 	}
-	
+
 	/**
-	 * CRC2103 - [FS0026] - Verificar existencia de operacao inserir/manter cliente pendente de atualizacao do imovel. 
+	 * CRC2103 - [FS0026] - Verificar existencia de operacao inserir/manter cliente pendente de atualizacao do imovel.
 	 *
 	 * @author Ivan Sergio
 	 * @date 24/07/2009
@@ -1687,7 +1694,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			Integer idUsuario) throws ControladorException {
 
 		Integer idGrupoAtributo = null;
-		
+
 		try {
 			if (colecaoClientes != null && !colecaoClientes.isEmpty()) {
 				Iterator iColecaoCliente = colecaoClientes.iterator();
@@ -1696,7 +1703,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					Integer idOperacaoEfetuada = (Integer) repositorioTransacao.verificarOperacaoPendente(
 							clienteImovel.getCliente().getId(),
 							idUsuario);
-					
+
 					if (idOperacaoEfetuada != null) {
 						if (clienteImovel.getClienteRelacaoTipo().getId().equals(new Integer(ClienteRelacaoTipo.PROPRIETARIO))) {
 							idGrupoAtributo = AtributoGrupo.ATRIBUTOS_DO_PROPRIETARIO;
@@ -1705,7 +1712,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 						}else {
 							idGrupoAtributo = null;
 						}
-								
+
 						repositorioTransacao.atualizarOperacaoEfetuadaPendente(idOperacaoEfetuada, idGrupoAtributo);
 						repositorioTransacao.atualizarTabelaLinhaAlteracaoPendente(idOperacaoEfetuada, idImovel);
 					}
@@ -1715,7 +1722,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
-	
+
 	/**
 	 * @author Ana Maria
 	 * @date 17/12/2009
@@ -1724,8 +1731,8 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	 * @param codigoCliente
 	 * @throws ErroRepositorioException
 	 */
-	
-	public void atualizarClienteRelacaoTipoAtualizacaoCadastral(Integer codigoImovel, Integer codigoCliente) 
+
+	public void atualizarClienteRelacaoTipoAtualizacaoCadastral(Integer codigoImovel, Integer codigoCliente)
 		throws ControladorException {
 		try{
 			this.repositorioTransacao.atualizarClienteRelacaoTipoAtualizacaoCadastral(codigoImovel, codigoCliente);
@@ -1733,13 +1740,13 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
-	
+
 	/**
-	 * [[UC1165] - Confirmar Alterações Cadastrais
-	 * 
-	 * @author Sávio Luiz
+	 * [[UC1165] - Confirmar Alteraï¿½ï¿½es Cadastrais
+	 *
+	 * @author Sï¿½vio Luiz
 	 * @date 24/05/2011
-	 * 
+	 *
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
@@ -1747,23 +1754,23 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			Integer situacaoLigacaoAnterior,Integer situacaoLigacaoAtual,
 			Usuario usuarioLogado) throws ControladorException{
 		boolean alterouSituacaoLigacao = false;
-		
-		//caso a situação anterior seja igual Ligado
+
+		//caso a situaï¿½ï¿½o anterior seja igual Ligado
 		if(situacaoLigacaoAnterior.equals(LigacaoAguaSituacao.LIGADO)){
-			//caso a situação atual seja igual a Potencial ou Factivel
+			//caso a situaï¿½ï¿½o atual seja igual a Potencial ou Factivel
 			if(situacaoLigacaoAtual.equals(LigacaoAguaSituacao.FACTIVEL)){
 				alterouSituacaoLigacao = true;
 			}else{
-				//pesquisa a ligação de água
+				//pesquisa a ligaï¿½ï¿½o de ï¿½gua
 				FiltroLigacaoAgua filtroLigacaoAgua = new FiltroLigacaoAgua();
 				filtroLigacaoAgua.adicionarParametro(new ParametroSimples(FiltroLigacaoAgua.ID, imovel.getId()));
 				Collection colecaoLigacaoAgua = getControladorUtil().pesquisar(filtroLigacaoAgua, LigacaoAgua.class.getName());
 				LigacaoAgua ligacaoAgua = (LigacaoAgua) Util.retonarObjetoDeColecao(colecaoLigacaoAgua);
-				//caso a ligação de água seja diferente de nulo
+				//caso a ligaï¿½ï¿½o de ï¿½gua seja diferente de nulo
 				if(ligacaoAgua != null){
-					// se a situação da ligação atual for igual a cortado
+					// se a situaï¿½ï¿½o da ligaï¿½ï¿½o atual for igual a cortado
 					if(situacaoLigacaoAtual.equals(LigacaoAguaSituacao.CORTADO)){
-						//atualiza os dados de corte da ligação de água
+						//atualiza os dados de corte da ligaï¿½ï¿½o de ï¿½gua
 						ligacaoAgua.setDataCorte(new Date());
 						FiltroMotivoCorte filtroMotivoCorte = new FiltroMotivoCorte();
 						filtroMotivoCorte.adicionarParametro(new ParametroSimples(FiltroMotivoCorte.ID, MotivoCorte.ATUALIZACAO_CADASTRAL));
@@ -1779,10 +1786,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 						getControladorUtil().atualizar(ligacaoAgua);
 						alterouSituacaoLigacao = true;
 					}
-					
-					// se a situação da ligação atual for igual a cortado
+
+					// se a situaï¿½ï¿½o da ligaï¿½ï¿½o atual for igual a cortado
 					if(situacaoLigacaoAtual.equals(LigacaoAguaSituacao.SUPRIMIDO)){
-						//atualiza os dados de corte da ligação de água
+						//atualiza os dados de corte da ligaï¿½ï¿½o de ï¿½gua
 						ligacaoAgua.setDataSupressao(new Date());
 						FiltroSupressaoMotivo filtroSupressaoMotivo = new FiltroSupressaoMotivo();
 						filtroSupressaoMotivo.adicionarParametro(new ParametroSimples(FiltroSupressaoMotivo.ID, SupressaoMotivo.ATUALIZACAO_CADASTRAL));
@@ -1801,32 +1808,32 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				}
 			}
 		}
-		
-		//caso a situação anterior seja igual Cortado
+
+		//caso a situaï¿½ï¿½o anterior seja igual Cortado
 		if(situacaoLigacaoAnterior.equals(LigacaoAguaSituacao.CORTADO)){
-			//caso a situação atual seja igual a Potencial ou Factivel
+			//caso a situaï¿½ï¿½o atual seja igual a Potencial ou Factivel
 			if(situacaoLigacaoAtual.equals(LigacaoAguaSituacao.FACTIVEL)){
 				alterouSituacaoLigacao = true;
 			}else{
-				//pesquisa a ligação de água
+				//pesquisa a ligaï¿½ï¿½o de ï¿½gua
 				FiltroLigacaoAgua filtroLigacaoAgua = new FiltroLigacaoAgua();
 				filtroLigacaoAgua.adicionarParametro(new ParametroSimples(FiltroLigacaoAgua.ID, imovel.getId()));
 				Collection colecaoLigacaoAgua = getControladorUtil().pesquisar(filtroLigacaoAgua, LigacaoAgua.class.getName());
 				LigacaoAgua ligacaoAgua = (LigacaoAgua) Util.retonarObjetoDeColecao(colecaoLigacaoAgua);
-				//caso a ligação de água seja diferente de nulo
+				//caso a ligaï¿½ï¿½o de ï¿½gua seja diferente de nulo
 				if(ligacaoAgua != null){
-					// se a situação da ligação atual for igual a Ligado
+					// se a situaï¿½ï¿½o da ligaï¿½ï¿½o atual for igual a Ligado
 					if(situacaoLigacaoAtual.equals(LigacaoAguaSituacao.LIGADO)){
-						//atualiza os dados de corte da ligação de água
+						//atualiza os dados de corte da ligaï¿½ï¿½o de ï¿½gua
 						ligacaoAgua.setDataReligacao(new Date());
 						ligacaoAgua.setUltimaAlteracao(new Date());
 						getControladorUtil().atualizar(ligacaoAgua);
 						alterouSituacaoLigacao = true;
 					}
-					
-					// se a situação da ligação atual for igual a cortado
+
+					// se a situaï¿½ï¿½o da ligaï¿½ï¿½o atual for igual a cortado
 					if(situacaoLigacaoAtual.equals(LigacaoAguaSituacao.SUPRIMIDO)){
-						//atualiza os dados de corte da ligação de água
+						//atualiza os dados de corte da ligaï¿½ï¿½o de ï¿½gua
 						ligacaoAgua.setDataSupressao(new Date());
 						FiltroSupressaoMotivo filtroSupressaoMotivo = new FiltroSupressaoMotivo();
 						filtroSupressaoMotivo.adicionarParametro(new ParametroSimples(FiltroSupressaoMotivo.ID, SupressaoMotivo.ATUALIZACAO_CADASTRAL));
@@ -1845,32 +1852,32 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				}
 			}
 		}
-		
-		//caso a situação anterior seja igual Ligado
+
+		//caso a situaï¿½ï¿½o anterior seja igual Ligado
 		if(situacaoLigacaoAnterior.equals(LigacaoAguaSituacao.SUPRIMIDO)){
-			//caso a situação atual seja igual a Potencial ou Factivel
+			//caso a situaï¿½ï¿½o atual seja igual a Potencial ou Factivel
 			if(situacaoLigacaoAtual.equals(LigacaoAguaSituacao.FACTIVEL)){
 				alterouSituacaoLigacao = true;
 			}else{
-				//pesquisa a ligação de água
+				//pesquisa a ligaï¿½ï¿½o de ï¿½gua
 				FiltroLigacaoAgua filtroLigacaoAgua = new FiltroLigacaoAgua();
 				filtroLigacaoAgua.adicionarParametro(new ParametroSimples(FiltroLigacaoAgua.ID, imovel.getId()));
 				Collection colecaoLigacaoAgua = getControladorUtil().pesquisar(filtroLigacaoAgua, LigacaoAgua.class.getName());
 				LigacaoAgua ligacaoAgua = (LigacaoAgua) Util.retonarObjetoDeColecao(colecaoLigacaoAgua);
-				//caso a ligação de água seja diferente de nulo
+				//caso a ligaï¿½ï¿½o de ï¿½gua seja diferente de nulo
 				if(ligacaoAgua != null){
-					// se a situação da ligação atual for igual a Ligado
+					// se a situaï¿½ï¿½o da ligaï¿½ï¿½o atual for igual a Ligado
 					if(situacaoLigacaoAtual.equals(LigacaoAguaSituacao.LIGADO)){
-						//atualiza os dados de corte da ligação de água
+						//atualiza os dados de corte da ligaï¿½ï¿½o de ï¿½gua
 						ligacaoAgua.setDataRestabelecimentoAgua(new Date());
 						ligacaoAgua.setUltimaAlteracao(new Date());
 						getControladorUtil().atualizar(ligacaoAgua);
 						alterouSituacaoLigacao = true;
 					}
-					
-					// se a situação da ligação atual for igual a cortado
+
+					// se a situaï¿½ï¿½o da ligaï¿½ï¿½o atual for igual a cortado
 					if(situacaoLigacaoAtual.equals(LigacaoAguaSituacao.CORTADO)){
-						//atualiza os dados de corte da ligação de água
+						//atualiza os dados de corte da ligaï¿½ï¿½o de ï¿½gua
 						ligacaoAgua.setDataCorte(new Date());
 						FiltroMotivoCorte filtroMotivoCorte = new FiltroMotivoCorte();
 						filtroMotivoCorte.adicionarParametro(new ParametroSimples(FiltroMotivoCorte.ID, MotivoCorte.ATUALIZACAO_CADASTRAL));
@@ -1889,15 +1896,15 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				}
 			}
 		}
-		
+
 		if(alterouSituacaoLigacao){
-			//atualiza a situação da ligação de água do imóvel
+			//atualiza a situaï¿½ï¿½o da ligaï¿½ï¿½o de ï¿½gua do imï¿½vel
 			FiltroLigacaoAguaSituacao filtroLigacaoAguaSituacao = new FiltroLigacaoAguaSituacao();
 			filtroLigacaoAguaSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoAguaSituacao.ID, situacaoLigacaoAtual));
 			Collection colecaoLigacaoAguaSituacao = getControladorUtil().pesquisar(filtroLigacaoAguaSituacao, LigacaoAguaSituacao.class.getName());
 			LigacaoAguaSituacao ligacaoAguaSituacao = (LigacaoAguaSituacao) Util.retonarObjetoDeColecao(colecaoLigacaoAguaSituacao);
 			imovel.setLigacaoAguaSituacao(ligacaoAguaSituacao);
-			//cria o registro de atendimento para a situação da ligação alterada
+			//cria o registro de atendimento para a situaï¿½ï¿½o da ligaï¿½ï¿½o alterada
 			FiltroSolicitacaoTipoEspecificacao filtroSolicitacaoTipoEspecificacao = new FiltroSolicitacaoTipoEspecificacao();
 			filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.CODIGO_CONSTANTE, SolicitacaoTipoEspecificacao.CODIGO_CONSTANTE_ATUALIZACAO_CADASTRAL));
 			Collection colecaoSolicitacaoTipoEspecificacao = getControladorUtil().pesquisar(filtroSolicitacaoTipoEspecificacao, SolicitacaoTipoEspecificacao.class.getName());
@@ -1905,21 +1912,21 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				SolicitacaoTipoEspecificacao SolicitacaoTipoEspecificacao = (SolicitacaoTipoEspecificacao) Util.retonarObjetoDeColecao(colecaoSolicitacaoTipoEspecificacao);
 				getControladorRegistroAtendimento().inserirRASituacaoLigacaoImovel(MeioSolicitacao.ATUALIZACAO_CADASTRAL_CELULAR,
 						SolicitacaoTipoEspecificacao.getId(), imovel.getId(), usuarioLogado.getUnidadeOrganizacional().getId(), usuarioLogado.getId(), idCliente);
-			}	
+			}
 		}else{
 			sessionContext.setRollbackOnly();
-			throw new ControladorException("atencao.senha.invalida", null,"Alteração da Situção da Ligação de Água não permitida");
+			throw new ControladorException("atencao.senha.invalida", null,"Alteraï¿½ï¿½o da Situï¿½ï¿½o da Ligaï¿½ï¿½o de ï¿½gua nï¿½o permitida");
 		}
-		
-		return alterouSituacaoLigacao;	
+
+		return alterouSituacaoLigacao;
 	}
-	
+
 	/**
-	 * [[UC1165] - Confirmar Alterações Cadastrais
-	 * 
-	 * @author Sávio Luiz
+	 * [[UC1165] - Confirmar Alteraï¿½ï¿½es Cadastrais
+	 *
+	 * @author Sï¿½vio Luiz
 	 * @date 24/05/2011
-	 * 
+	 *
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
@@ -1927,18 +1934,18 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			Integer situacaoLigacaoAnterior,Integer situacaoLigacaoAtual,
 			Usuario usuarioLogado) throws ControladorException{
 		boolean alterouSituacaoLigacao = false;
-		
-		//caso a situação anterior seja igual Ligado
+
+		//caso a situaï¿½ï¿½o anterior seja igual Ligado
 		if(situacaoLigacaoAnterior.equals(LigacaoEsgotoSituacao.LIGADO)){
-			//caso a situação atual seja igual a Potencial ou Factivel
+			//caso a situaï¿½ï¿½o atual seja igual a Potencial ou Factivel
 			if(situacaoLigacaoAtual.equals(LigacaoEsgotoSituacao.FACTIVEL)){
-				//atualiza a situação da ligação de água do imóvel
+				//atualiza a situaï¿½ï¿½o da ligaï¿½ï¿½o de ï¿½gua do imï¿½vel
 				FiltroLigacaoEsgotoSituacao filtroLigacaoEsgotoSituacao = new FiltroLigacaoEsgotoSituacao();
 				filtroLigacaoEsgotoSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgotoSituacao.ID, situacaoLigacaoAtual));
 				Collection colecaoLigacaoEsgotoSituacao = getControladorUtil().pesquisar(filtroLigacaoEsgotoSituacao, LigacaoEsgotoSituacao.class.getName());
 				LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) Util.retonarObjetoDeColecao(colecaoLigacaoEsgotoSituacao);
 				imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
-				//cria o registro de atendimento para a situação da ligação alterada
+				//cria o registro de atendimento para a situaï¿½ï¿½o da ligaï¿½ï¿½o alterada
 				FiltroSolicitacaoTipoEspecificacao filtroSolicitacaoTipoEspecificacao = new FiltroSolicitacaoTipoEspecificacao();
 				filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.CODIGO_CONSTANTE, SolicitacaoTipoEspecificacao.CODIGO_CONSTANTE_ATUALIZACAO_CADASTRAL));
 				Collection colecaoSolicitacaoTipoEspecificacao = getControladorUtil().pesquisar(filtroSolicitacaoTipoEspecificacao, SolicitacaoTipoEspecificacao.class.getName());
@@ -1949,14 +1956,14 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				}
 				alterouSituacaoLigacao = true;
 			}
-			
+
 		}
-		
+
 		if(!alterouSituacaoLigacao){
 			sessionContext.setRollbackOnly();
-			throw new ControladorException("atencao.senha.invalida", null,"Alteração da Situção da Ligação de Água não permitida");
+			throw new ControladorException("atencao.senha.invalida", null,"Alteraï¿½ï¿½o da Situï¿½ï¿½o da Ligaï¿½ï¿½o de ï¿½gua nï¿½o permitida");
 		}
-		
-		return alterouSituacaoLigacao;	
+
+		return alterouSituacaoLigacao;
 	}
 }

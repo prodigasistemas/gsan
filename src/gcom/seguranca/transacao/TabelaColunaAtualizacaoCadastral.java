@@ -20,23 +20,25 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
     private String colunaValorAtual;
 
     /** nullable persistent field */
-    
+
     private Short indicadorAutorizado;
-    
+
     /** nullable persistent field */
     private Date dataValidacao;
-    
+
     /** nullable persistent field */
     private Date ultimaAlteracao;
 
     /** persistent field */
     private TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral;
-    
+
     private TabelaColuna tabelaColuna;
-    
-	private Usuario usuario;
-    
-    public TabelaColunaAtualizacaoCadastral(Integer id, String colunaValorAnterior, String colunaValorAtual, Short indicadorAutorizado, 
+
+		private Usuario usuario;
+
+		private boolean registroInclusao;
+
+    public TabelaColunaAtualizacaoCadastral(Integer id, String colunaValorAnterior, String colunaValorAtual, Short indicadorAutorizado,
     		Date dataValidacao, Date ultimaAlteracao, TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, TabelaColuna tabelaColuna) {
 
 		this.id = id;
@@ -60,7 +62,7 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
     public void setId(Integer id) {
         this.id = id;
     }
-	
+
 	public String getColunaValorAnterior() {
 		return colunaValorAnterior;
 	}
@@ -117,13 +119,21 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
-	
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public boolean isRegistroInclusao() {
+		return this.registroInclusao;
+	}
+
+	public void setRegistroInclusao(boolean registroInclusao) {
+		this.registroInclusao = registroInclusao;
 	}
 
 	public String[] retornaCamposChavePrimaria(){
