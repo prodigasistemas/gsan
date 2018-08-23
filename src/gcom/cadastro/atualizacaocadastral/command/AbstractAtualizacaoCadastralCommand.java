@@ -202,8 +202,6 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = this.pesquisarColunaParaAtualizar(tabela, tabelaLinhaColunaAlteracao.getTabelaColuna(), matriculaImovel);
 					
 					if (arquivoTexto.isArquivoRetornoTransmissao() ) {
-						tabelaColunaAtualizacaoCadastral = new TabelaColunaAtualizacaoCadastral();
-						tabelaColunaAtualizacaoCadastral.setRegistroInclusao(true);
 						tabelaColunaAtualizacaoCadastral.setColunaValorAnterior(tabelaLinhaColunaAlteracao.getConteudoColunaAnterior());
 						tabelaColunaAtualizacaoCadastral.setColunaValorTransmitido(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());
 					} else {

@@ -6838,7 +6838,7 @@ public class ControladorCadastro extends ControladorComum {
 			}
 
 			// Trailer
-			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, rota);
+			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, rota, ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO);
 			arquivoTexto.append((StringBuilder) arquivoTrailerEQuantidadeTotalDeLinhas[0]);
 
 			StringBuilder arquivoTextoFinal = new StringBuilder();
@@ -6854,7 +6854,7 @@ public class ControladorCadastro extends ControladorComum {
 		}
 	}
 	
-	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto) throws ControladorException {
+	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto, String tipoArquivo) throws ControladorException {
 		try {
 			StringBuilder builder = new StringBuilder();
 			int qtdRegistro = 0;
@@ -6887,7 +6887,7 @@ public class ControladorCadastro extends ControladorComum {
 				qtdRegistro += 1;
 			}
 			
-			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota());
+			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota(), tipoArquivo);
 			builder.append((StringBuilder) trailler[0]);
 
 			StringBuilder arquivoTexto = new StringBuilder();
@@ -8007,7 +8007,7 @@ public class ControladorCadastro extends ControladorComum {
 	 * 
 	 * @author Wellington Rocha
 	 */
-	public StringBuilder gerarArquivoTextoRegistroTipoGeral(Rota rota) throws ControladorException {
+	public StringBuilder gerarArquivoTextoRegistroTipoGeral(Rota rota, String tipoArquivo) throws ControladorException {
 		StringBuilder arquivoTexto = new StringBuilder();
 		SistemaParametro parametrosSistema = getControladorUtil().pesquisarParametrosDoSistema();
 
@@ -8036,30 +8036,23 @@ public class ControladorCadastro extends ControladorComum {
 		}
 		arquivoTexto.append(Util.completaString(senhaCriptografada, 40));
 
-		// Indicador Transmissao OFFLINE
 		arquivoTexto.append(" ");
 
-		// Versao Celular
 		if (parametrosSistema.getVersaoCelular() != null) {
 			arquivoTexto.append(Util.adicionarZerosEsquedaNumero(10, parametrosSistema.getVersaoCelular()));
 		} else {
 			arquivoTexto.append(Util.completaString("", 10));
 		}
 
-		// Data Inicio
 		arquivoTexto.append(Util.completaString("", 8));
-		// Data Fim
 		arquivoTexto.append(Util.completaString("", 8));
-		// Rota
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(4, rota.getId().toString()));
-		// Localidade
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(3, rota.getSetorComercial().getLocalidade().getId().toString()));
-		// Setor
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(3, rota.getSetorComercial().getCodigo() + ""));
-		// rotaCodigo
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + ""));
-		// FaturamentoGrupo
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(3, rota.getFaturamentoGrupo().getId() + ""));
+		arquivoTexto.append(tipoArquivo);
+		
 		arquivoTexto.append(System.getProperty("line.separator"));
 
 		return arquivoTexto;
@@ -8262,11 +8255,11 @@ public class ControladorCadastro extends ControladorComum {
 	 * @param imovel
 	 * @throws ControladorException
 	 */
-    public Object[] gerarArquivoTextoRegistroTipoTrailer(Integer qtdRegistro, Rota rota) throws ControladorException {
+    public Object[] gerarArquivoTextoRegistroTipoTrailer(Integer qtdRegistro, Rota rota, String tipoArquivo) throws ControladorException {
         Object[] retorno = new Object[2];
         StringBuilder arquivoTextoRegistroTipoTrailer = new StringBuilder();
 
-        arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoGeral(rota));
+        arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoGeral(rota, tipoArquivo));
         qtdRegistro = qtdRegistro + 1;
 
         Collection<CadastroOcorrencia> ocorrenciasCadastroCollection = this.pesquisarOcorrenciasCadastro();
