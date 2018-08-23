@@ -6756,7 +6756,7 @@ public class ControladorCadastro extends ControladorComum {
 		arquivo.setArquivoTexto(IoUtil.transformarObjetoParaBytes(new StringBuilder()));
 
 		Integer idArquivoTexto = (Integer) getControladorUtil().inserir(arquivo);
-		StringBuilder arquivoTexto = gerarArquivoTxt(idsImoveis, idArquivoTexto, leiturista, rota, ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO);
+		StringBuilder arquivoTexto = gerarArquivoTxt(idsImoveis, idArquivoTexto, leiturista, rota);
 
 		arquivo.setArquivoTexto(IoUtil.transformarObjetoParaBytes(arquivoTexto));
 		getControladorUtil().atualizar(arquivo);
@@ -6789,7 +6789,7 @@ public class ControladorCadastro extends ControladorComum {
 	/**
 	 * Gerar Arquivo Texto para Atualização Cadastral
 	 */
-	private StringBuilder gerarArquivoTxt(Collection colecaoImovelFiltrado, Integer idArquivoTexto, Leiturista leiturista, Rota rota, String tipoArquivo) throws ControladorException {
+	private StringBuilder gerarArquivoTxt(Collection colecaoImovelFiltrado, Integer idArquivoTexto, Leiturista leiturista, Rota rota) throws ControladorException {
 		try {
 			StringBuilder arquivoTexto = new StringBuilder();
 			Iterator imovelFiltradoIterator = colecaoImovelFiltrado.iterator();
@@ -6838,7 +6838,7 @@ public class ControladorCadastro extends ControladorComum {
 			}
 
 			// Trailer
-			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, rota, tipoArquivo);
+			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, rota);
 			arquivoTexto.append((StringBuilder) arquivoTrailerEQuantidadeTotalDeLinhas[0]);
 
 			StringBuilder arquivoTextoFinal = new StringBuilder();
@@ -6854,7 +6854,7 @@ public class ControladorCadastro extends ControladorComum {
 		}
 	}
 	
-	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto, String tipoArquivo) throws ControladorException {
+	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto) throws ControladorException {
 		try {
 			StringBuilder builder = new StringBuilder();
 			int qtdRegistro = 0;
@@ -6887,7 +6887,7 @@ public class ControladorCadastro extends ControladorComum {
 				qtdRegistro += 1;
 			}
 			
-			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota(), tipoArquivo);
+			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota());
 			builder.append((StringBuilder) trailler[0]);
 
 			StringBuilder arquivoTexto = new StringBuilder();
@@ -7111,15 +7111,23 @@ public class ControladorCadastro extends ControladorComum {
 	 * @throws ControladorException
 	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoHeader(
-			Integer idArquivoTexto, String tipoArquivo) throws ControladorException {
+			Integer idArquivoTexto) throws ControladorException {
 
 		StringBuilder arquivoTextoRegistroTipoHeader = new StringBuilder();
 
+		// TIPO DO REGISTRO
 		arquivoTextoRegistroTipoHeader.append("00");
-		arquivoTextoRegistroTipoHeader.append(Util.formatarDataSemBarraDDMMAAAA(new Date()));
-		arquivoTextoRegistroTipoHeader.append(Util.adicionarZerosEsquedaNumero(9, idArquivoTexto.toString()));
-		arquivoTextoRegistroTipoHeader.append(tipoArquivo);
-		arquivoTextoRegistroTipoHeader.append(System.getProperty("line.separator"));
+
+		// DATA DA GERAÇÃO
+		arquivoTextoRegistroTipoHeader.append(Util
+				.formatarDataSemBarraDDMMAAAA(new Date()));
+
+		// ID DO ARQUIVO TEXTO ATUALIZACAO CADASTRAL
+		arquivoTextoRegistroTipoHeader.append(Util.adicionarZerosEsquedaNumero(
+				9, idArquivoTexto.toString()));
+
+		arquivoTextoRegistroTipoHeader.append(System
+				.getProperty("line.separator"));
 
 		return arquivoTextoRegistroTipoHeader;
 	}
@@ -7999,7 +8007,7 @@ public class ControladorCadastro extends ControladorComum {
 	 * 
 	 * @author Wellington Rocha
 	 */
-	public StringBuilder gerarArquivoTextoRegistroTipoGeral(Rota rota, String tipoArquivo) throws ControladorException {
+	public StringBuilder gerarArquivoTextoRegistroTipoGeral(Rota rota) throws ControladorException {
 		StringBuilder arquivoTexto = new StringBuilder();
 		SistemaParametro parametrosSistema = getControladorUtil().pesquisarParametrosDoSistema();
 
@@ -8052,10 +8060,8 @@ public class ControladorCadastro extends ControladorComum {
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + ""));
 		// FaturamentoGrupo
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(3, rota.getFaturamentoGrupo().getId() + ""));
-		// Tipo de arquivo
-		arquivoTexto.append(tipoArquivo);
-
 		arquivoTexto.append(System.getProperty("line.separator"));
+
 		return arquivoTexto;
 	}
 
@@ -8256,11 +8262,11 @@ public class ControladorCadastro extends ControladorComum {
 	 * @param imovel
 	 * @throws ControladorException
 	 */
-    public Object[] gerarArquivoTextoRegistroTipoTrailer(Integer qtdRegistro, Rota rota, String tipoArquivo) throws ControladorException {
+    public Object[] gerarArquivoTextoRegistroTipoTrailer(Integer qtdRegistro, Rota rota) throws ControladorException {
         Object[] retorno = new Object[2];
         StringBuilder arquivoTextoRegistroTipoTrailer = new StringBuilder();
 
-        arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoGeral(rota, tipoArquivo));
+        arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoGeral(rota));
         qtdRegistro = qtdRegistro + 1;
 
         Collection<CadastroOcorrencia> ocorrenciasCadastroCollection = this.pesquisarOcorrenciasCadastro();
