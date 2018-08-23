@@ -42,7 +42,7 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 		
 		int idRamoAtividade = Integer.parseInt(linha.get("ramoAtividade"));
 		
-		if (idRamoAtividade > 0) {
+		if (idRamoAtividade >= 0) {
 			DadoAtualizacaoRamoAtividade ramo = new DadoAtualizacaoRamoAtividade();
 			ramo.setId(idRamoAtividade);
 			imovel.addDadoRamoAtividade(ramo);

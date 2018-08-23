@@ -3,6 +3,7 @@ package gcom.cadastro.atualizacaocadastral.validador;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.atualizacaocadastral.command.DadoAtualizacaoRamoAtividade;
+import gcom.cadastro.atualizacaocadastral.command.TipoEconomia;
 
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,8 @@ public class ValidadorRamoAtividadeCommand extends ValidadorCommand {
 					return;
 				}
 			}
+		} else if (cadastroImovel.getDadosImovel().contemTipoEconomia(TipoEconomia.COMERCIAL, TipoEconomia.PUBLICO, TipoEconomia.INDUSTRIAL)) {
+			cadastroImovel.addMensagemErro("Imóvel do tipo comercial, público ou industrial deve possuir ramo de atividade");
 		}
 	}
 }
