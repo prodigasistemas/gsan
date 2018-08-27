@@ -50,7 +50,7 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
     public void setId(Integer id) {
         this.id = id;
     }
-	
+
 	public String getColunaValorAnterior() {
 		return colunaValorAnterior;
 	}
@@ -131,7 +131,7 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
-	
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -140,18 +140,18 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 		this.usuario = usuario;
 	}
 
-	public String[] retornaCamposChavePrimaria(){
-		String[] retorno = new String[1];
-		retorno[0] = "id";
-		return retorno;
-	}
-
 	public boolean isRegistroInclusao() {
-		return registroInclusao;
+		return this.registroInclusao;
 	}
 
 	public void setRegistroInclusao(boolean registroInclusao) {
 		this.registroInclusao = registroInclusao;
+	}
+
+	public String[] retornaCamposChavePrimaria(){
+		String[] retorno = new String[1];
+		retorno[0] = "id";
+		return retorno;
 	}
 
 	public Short getIndicadorFiscalizado() {

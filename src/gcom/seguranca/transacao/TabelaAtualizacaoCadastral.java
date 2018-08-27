@@ -13,31 +13,31 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 /** @author Hibernate CodeGenerator */
 public class TabelaAtualizacaoCadastral {
 	private Integer id;
-	
+
 	private Long idRegistroAlterado;
-	
+
 	private Short indicadorPrincipal;
-	
+
     private Date ultimaAlteracao;
-	
+
 	private Tabela tabela;
-	
+
 	private OperacaoEfetuada operacaoEfetuada;
-	
+
 	private Leiturista leiturista;
-	
+
 	private AlteracaoTipo alteracaoTipo;
-	
+
 	private ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral;
-	
+
     private Short indicadorAutorizado;
-    
+
     private Integer codigoImovel;
-    
+
     private Long codigoCliente;
-    
+
     private Date dataProcessamento;
-    
+
     private TabelaAtualizacaoCadastralSituacao tabelaAtualizacaoCadastralSituacao;
     
     private String complemento;
@@ -64,7 +64,7 @@ public class TabelaAtualizacaoCadastral {
     public TabelaAtualizacaoCadastral() {
     }
 
- 
+
 	public boolean equals(Object other) {
 		if ((this == other))
 			return true;
@@ -78,7 +78,7 @@ public class TabelaAtualizacaoCadastral {
 	public int hashCode() {
 		return new HashCodeBuilder().append(getId()).toHashCode();
 	}
-	
+
 	 public String[] retornaCamposChavePrimaria(){
 			String[] retorno = new String[1];
 			retorno[0] = "id";
@@ -165,7 +165,7 @@ public class TabelaAtualizacaoCadastral {
 	public void setIndicadorAutorizado(Short indicadorAutorizado) {
 		this.indicadorAutorizado = indicadorAutorizado;
 	}
-	
+
 	public Long getCodigoCliente() {
 		return codigoCliente;
 	}
@@ -208,11 +208,10 @@ public class TabelaAtualizacaoCadastral {
 	}
 
 	public boolean isRegistroInclusao() {
-		return registroInclusao;
+		return this.registroInclusao;
 	}
 
 	public void setRegistroInclusao(boolean registroInclusao) {
 		this.registroInclusao = registroInclusao;
 	}
-	
 }

@@ -1,5 +1,10 @@
 package gcom.atualizacaocadastral;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
@@ -15,11 +20,6 @@ import gcom.seguranca.transacao.TabelaColuna;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
-
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 public interface IControladorAtualizacaoCadastral {
 

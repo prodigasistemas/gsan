@@ -89,4 +89,9 @@ public class ImovelControleAtualizacaoCadastral {
 	public boolean isProntoParaAprovacao() {
 		return this.isPreAprovado() || this.isFiscalizado();
 	}
+	
+	public boolean isImovelNovoOuNaSituacao(Integer idSituacao) {
+		return this.situacaoAtualizacaoCadastral == null || this.situacaoAtualizacaoCadastral.getId().equals(idSituacao);
+		
+	}
 }

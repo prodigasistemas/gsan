@@ -347,9 +347,11 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	
 	private void atualizarImovelControle() throws ControladorException {
 		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
-		controle.setImovelRetorno(new ImovelRetorno(idImovelRetorno));
 		
-		controladorUtil.atualizar(controle);
+		if (controle != null) {
+			controle.setImovelRetorno(new ImovelRetorno(idImovelRetorno));
+			controladorUtil.atualizar(controle);
+		}
 	}
 	
 	private boolean existeRetorno() throws ControladorException {

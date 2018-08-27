@@ -38,23 +38,20 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está em fiscalização.");
 		}
 	}
-	
 	private boolean imovelValidoTransmissao(ImovelControleAtualizacaoCadastral imovelControle) {
-		return (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoTransmissao()
-				&& imovelControle.getSituacaoAtualizacaoCadastral().getId()
-						.equals(SituacaoAtualizacaoCadastral.TRANSMITIDO));
+		return cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoTransmissao()
+				&& (imovelControle == null || 
+					( imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.TRANSMITIDO)
+					|| imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.EM_CAMPO)));
 	}
 	
 	private boolean imovelValidoRevisao(ImovelControleAtualizacaoCadastral imovelControle) {
-		return (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoRevisao()
-				&& imovelControle.getSituacaoAtualizacaoCadastral().getId()
-						.equals(SituacaoAtualizacaoCadastral.EM_REVISAO));
+		return cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoRevisao()
+				&& (imovelControle == null || imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.EM_REVISAO));
 	}
 	
 	private boolean imovelValidoFiscalizacao(ImovelControleAtualizacaoCadastral imovelControle) {
-		System.out.println("--> " + imovelControle.getId());
-		return (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoFiscalizacao()
-				&& imovelControle.getSituacaoAtualizacaoCadastral().getId()
-						.equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO));
+		return cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoFiscalizacao()
+				&& (imovelControle == null || imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO));
 	}
 }

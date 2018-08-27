@@ -1,5 +1,13 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Iterator;
+
+import org.apache.commons.lang.StringUtils;
+import org.jboss.logging.Logger;
+
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
@@ -40,16 +48,8 @@ import gcom.util.ParserUtil;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Iterator;
-
-import org.apache.commons.lang.StringUtils;
-import org.jboss.logging.Logger;
-
 public abstract class AbstractAtualizacaoCadastralCommand {
-	
+
 	private static Logger logger = Logger.getLogger(AbstractAtualizacaoCadastralCommand.class);
 
 	protected ParserUtil parser;
@@ -60,10 +60,10 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 	protected ControladorEnderecoLocal controladorEndereco;
 	protected ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral;
 	protected ControladorClienteLocal controladorCliente;
-	
+
 	public AbstractAtualizacaoCadastralCommand(){
 	}
-	
+
 	public AbstractAtualizacaoCadastralCommand(ParserUtil parser){
 		this.parser = parser;
 	}
@@ -95,7 +95,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 			Object objetoAtualizacaoCadastralBase, Object objetoAtualizacaoCadastralTxt,
 			int matriculaImovel, int tipoOperacao) throws ControladorException {
 		Collection<TabelaLinhaColunaAlteracao> colunasAlteradas = null;
-		
+
 		ArquivoTextoAtualizacaoCadastral arquivoTexto = atualizacaoCadastral.getArquivoTexto();
 		Interceptador interceptador = Interceptador.getInstancia();
 
@@ -118,7 +118,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 				alteracaoTipo.setId(tipoOperacao);
 				tabelaAtualizacaoCadastral.setAlteracaoTipo(alteracaoTipo);
 				Tabela tabela = new Tabela();
-				
+
 				Long idPorTempo = Calendar.getInstance().getTimeInMillis();
 
 				if (objetoAtualizacaoCadastralBase instanceof ClienteAtualizacaoCadastral) {
@@ -128,10 +128,10 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 					if (base.getIdCliente() != null){
 						idPorTempo = (long) base.getIdCliente();
 					}
-					
+
 					tabelaAtualizacaoCadastral.setIdRegistroAlterado(idPorTempo);
 					tabelaAtualizacaoCadastral.setCodigoCliente(idPorTempo);
-					
+
 					tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
 					tabela.setId(Tabela.CLIENTE_ATUALIZACAO_CADASTRAL);
 					tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("2"));
@@ -154,7 +154,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 
 					tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("2"));
 					tabela.setId(Tabela.CLIENTE_FONE_ATUALIZACAO_CADASTRAL);
-					
+
 					if (txt.getIdCliente() != null){
 						idPorTempo = (long) txt.getIdCliente();
 					}
@@ -213,7 +213,6 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 							tabelaColunaAtualizacaoCadastral.setColunaValorFiscalizado(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());
 					}
 						
-						
 					tabelaColunaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_NAO_ACEITO);
 					tabelaColunaAtualizacaoCadastral.setTabelaAtualizacaoCadastral(tabelaAtualizacaoCadastral);
 					
@@ -221,7 +220,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 					filtroColuna.adicionarParametro(new ParametroSimples(FiltroTabelaColuna.COLUNA, tabelaLinhaColunaAlteracao.getTabelaColuna().getColuna()));
 					filtroColuna.adicionarParametro(new ParametroSimples(FiltroTabelaColuna.TABELA, tabela));
 					Collection<TabelaColuna> tabelas = Fachada.getInstancia().pesquisar(filtroColuna, TabelaColuna.class.getName());
-					
+
 					if (tabelas.isEmpty()){
 						throw new Exception("Nao ha registro em tabela_coluna para " + tabelaLinhaColunaAlteracao.getTabelaColuna().getColuna());
 					}
@@ -298,25 +297,24 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 		return tabela;
 	}
 	
-
 	private void atualizarSituacaoImovelAtualizacaoCadastral(Integer idImovel, Integer situacao) throws ControladorException {
 		FiltroImovelAtualizacaoCadastral filtroImovel = new FiltroImovelAtualizacaoCadastral();
 		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovelAtualizacaoCadastral.ID, idImovel));
 
 		@SuppressWarnings("unchecked")
 		ImovelAtualizacaoCadastral imovel = (ImovelAtualizacaoCadastral) Util.retonarObjetoDeColecao(controladorUtil.pesquisar(filtroImovel, ImovelAtualizacaoCadastral.class.getName()));
-		
+
 		if (imovel != null){
 			imovel.setIdSituacaoAtualizacaoCadastral(situacao);
 			controladorUtil.atualizar(imovel);
 		}
 	}
-	
+
 	protected Integer getTipoOperacaoCliente(Integer matricula, Integer matriculaImovel, String cpfCliente, Short clienteRelacaoTipo, IRepositorioClienteImovel repositorioClienteImovel) throws Exception {
 		if (matricula == null || matricula == 0){
 			return AlteracaoTipo.INCLUSAO;
 		}
-		      
+
 		Cliente cliente = repositorioClienteImovel.pesquisarClienteImovelTipo(matricula, matriculaImovel, clienteRelacaoTipo.intValue());
 		if (cliente != null){
 			if (StringUtils.equals(cliente.getCnpj(), cpfCliente) || StringUtils.equals(cliente.getCpf(), cpfCliente)){

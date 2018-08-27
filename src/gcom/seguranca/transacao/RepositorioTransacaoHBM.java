@@ -772,7 +772,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			.append(" inner join tac.tabela tab ")
 			.append(" inner join tac.alteracaoTipo atp ")
 			.append(" where tac.codigoImovel = :idImovel ");
-			builder.append(" order by tcol.id");
+			builder.append(" order by tac.id, tcol.id ");
 			 
 			 retorno = session.createQuery(builder.toString())
 			 	.setInteger("idImovel", idImovel)
