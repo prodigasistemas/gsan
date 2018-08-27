@@ -10,7 +10,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
-/** @author Hibernate CodeGenerator */
 public class TabelaAtualizacaoCadastral {
 	private Integer id;
 
@@ -39,7 +38,7 @@ public class TabelaAtualizacaoCadastral {
     private Date dataProcessamento;
 
     private TabelaAtualizacaoCadastralSituacao tabelaAtualizacaoCadastralSituacao;
-    
+
     private String complemento;
     
     private boolean registroInclusao;

@@ -29,8 +29,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import javax.ws.rs.HEAD;
-
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -752,7 +750,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 						.setInteger("idImovel", idImovel)
 						.setInteger("idCliente",idCliente)
 						.setInteger("idClienteRelacaoTipo", idClienteRelacaoTipo).setMaxResults(1).uniqueResult();
-			
 			return retorno >0;
 
 		} catch (HibernateException e) {
@@ -872,7 +869,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
 					+ " and imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO
 					+ " and arquivo.id = :idArquivo " ;
-			
 			retorno = (Integer) session.createQuery(consulta).setInteger("idArquivo",  idArquivoAtualizacaoCadastral).setMaxResults(1).uniqueResult();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis aprovados para tela de an�lise.");
@@ -1267,30 +1263,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         return retorno;
 	}
 	
-	public TabelaAtualizacaoCadastral obterTabela(Tabela tabela, Integer idImovel) throws ErroRepositorioException {
-		TabelaAtualizacaoCadastral retorno = null;
-        Session session = HibernateUtil.getSession();
-        
-        StringBuilder consulta = new StringBuilder();
-        try {
-        	consulta.append("select tabelaAtualizacaoCadastral from TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
-            		.append("inner join tabelaAtualizacaoCadastral.tabela tabela ")
-            		.append("where tabela.id = :idTabela ")
-            		.append("and tabelaAtualizacaoCadastral.codigoImovel = :idImovel ");
-        	
-            retorno = (TabelaAtualizacaoCadastral) session.createQuery(consulta.toString())
-            		.setInteger("idTabela", tabela.getId())
-            		.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
-            
-        } catch (HibernateException e) {
-            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
-        } finally {
-            HibernateUtil.closeSession(session);
-        }
-        
-        return retorno;
-	}
-	
 	public TabelaColunaAtualizacaoCadastral obterTabelaColuna(TabelaColuna coluna, Integer idImovel) throws ErroRepositorioException {
 		TabelaColunaAtualizacaoCadastral retorno = null;
         Session session = HibernateUtil.getSession();
@@ -1577,6 +1549,29 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
             retorno = (List<TabelaColunaAtualizacaoCadastral>) session.createQuery(consulta.toString())
             		.setInteger("idImovel", imovelControle.getImovel().getId()).list();
             
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return retorno;
+	}
+
+	public TabelaAtualizacaoCadastral obterTabela(Tabela tabela, Integer idImovel) throws ErroRepositorioException {
+		TabelaAtualizacaoCadastral retorno = null;
+        Session session = HibernateUtil.getSession();
+
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append("select tabelaAtualizacaoCadastral from TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
+            		.append("inner join tabelaAtualizacaoCadastral.tabela tabela ")
+            		.append("where tabela.id = :idTabela ")
+            		.append("and tabelaAtualizacaoCadastral.codigoImovel = :idImovel ");
+
+            retorno = (TabelaAtualizacaoCadastral) session.createQuery(consulta.toString())
+            		.setInteger("idTabela", tabela.getId())
+            		.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
+
         } catch (HibernateException e) {
             throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
         } finally {

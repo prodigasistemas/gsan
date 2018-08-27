@@ -868,7 +868,6 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 				Iterator it = colecaoTabelaColunaAtualizacaoCadastral.iterator();
 				while (it.hasNext()) {
 					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral= (TabelaColunaAtualizacaoCadastral) it.next();
-					
 					// Pesquisando o objeto de TabelaColuna
 					TabelaColuna tabelaColuna = tabelaColunaAtualizacaoCadastral.getTabelaColuna();
 					if (tabelaColuna != null && tabelaColuna.getColuna() != null) {
@@ -1431,6 +1430,7 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 				
 				TabelaColunaAtualizacaoCadastral tabelaColuna = this.repositorioTransacao.pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
 				getControladorAtualizacaoCadastral().atualizarImovelRetorno(tabelaColuna, campo);
+
 			}
 
 			boolean existePendencia = repositorioTransacao.existeAlteracaoNaoAprovadaParaImovel(idImovel);

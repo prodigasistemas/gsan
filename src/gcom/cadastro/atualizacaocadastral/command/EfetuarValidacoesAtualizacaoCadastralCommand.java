@@ -82,16 +82,6 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 
 	private void validarLinhaRamoAtividade() {
 		new ValidadorRamoAtividadeCommand(imovelAtual, imovelAtual.getLinhaRamoAtividade(), repositorioCadastro);
-		
-		if (imovelAtual.getDadosImovel().contemTipoEconomia(
-				TipoEconomia.COMERCIAL,
-				TipoEconomia.PUBLICO,
-				TipoEconomia.INDUSTRIAL)) {
-			
-			if (imovelAtual.getDadosRamoAtividade().isEmpty()) {
-				imovelAtual.addMensagemErro("Imóvel do tipo comercial, público ou industrial deve possuir ramo de atividade");
-			}
-		}
 	}
 
 	private void validarLinhaImovel() throws Exception {

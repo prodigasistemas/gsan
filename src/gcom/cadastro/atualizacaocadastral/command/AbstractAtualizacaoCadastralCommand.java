@@ -247,56 +247,55 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 			logger.error("Erro ao persistir alteracao na coluna.", e);
 		}
 	}
-	
+
 	private TabelaAtualizacaoCadastral pesquisarTabelaParaAtualizar(Object objeto, Integer matriculaImovel) throws ControladorException {
-		Tabela tabela = obterTabelaAtualizacaoCadastral(objeto);
-		
-		TabelaAtualizacaoCadastral tabelaAtualizacao = controladorAtualizacaoCadastral.pesquisarTabelaPorImovel(tabela, matriculaImovel);
-		
-		if (tabelaAtualizacao ==  null) {
-			tabelaAtualizacao = new TabelaAtualizacaoCadastral();
-			tabelaAtualizacao.setCodigoImovel(matriculaImovel);
-			tabelaAtualizacao.setRegistroInclusao(true);
-		} else {
-			tabelaAtualizacao.setRegistroInclusao(false);
-		}
-		return tabelaAtualizacao;
+			Tabela tabela = obterTabelaAtualizacaoCadastral(objeto);
+
+			TabelaAtualizacaoCadastral tabelaAtualizacao = controladorAtualizacaoCadastral.pesquisarTabelaPorImovel(tabela, matriculaImovel);
+
+			if (tabelaAtualizacao ==  null) {
+					tabelaAtualizacao = new TabelaAtualizacaoCadastral();
+					tabelaAtualizacao.setCodigoImovel(matriculaImovel);
+					tabelaAtualizacao.setRegistroInclusao(true);
+			} else {
+					tabelaAtualizacao.setRegistroInclusao(false);
+			}
+			return tabelaAtualizacao;
 	}
-	
+
+	private Tabela obterTabelaAtualizacaoCadastral(Object objetoAtualizacaoCadastralBase) {
+			Tabela tabela = new Tabela();
+
+			if (objetoAtualizacaoCadastralBase instanceof ClienteAtualizacaoCadastral) {
+					tabela.setId(Tabela.CLIENTE_ATUALIZACAO_CADASTRAL);
+
+			} else if (objetoAtualizacaoCadastralBase instanceof ImovelAtualizacaoCadastral) {
+					tabela.setId(Tabela.IMOVEL_ATUALIZACAO_CADASTRAL);
+			} else if (objetoAtualizacaoCadastralBase instanceof ClienteFoneAtualizacaoCadastral) {
+					tabela.setId(Tabela.CLIENTE_FONE_ATUALIZACAO_CADASTRAL);
+			} else if (objetoAtualizacaoCadastralBase instanceof ImovelSubcategoriaAtualizacaoCadastral) {
+					tabela.setId(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL);
+			} else if (objetoAtualizacaoCadastralBase instanceof ImovelRamoAtividadeAtualizacaoCadastral) {
+					tabela.setId(Tabela.IMOVEL_RAMO_ATIVIDADE_ATUALIZACAO_CADASTRAL);
+			}  else if (objetoAtualizacaoCadastralBase instanceof ImovelTipoOcupanteQuantidadeAtualizacaoCadastral) {
+				tabela.setId(Tabela.IMOVEL_QUANTIDADE_TIPO_OCUPANTE_ATUALIZACAO_CADASTRAL);
+			}
+			return tabela;
+		}
+
 	private TabelaColunaAtualizacaoCadastral pesquisarColunaParaAtualizar(Tabela tabela, TabelaColuna coluna, Integer idImovel) throws ControladorException {
 		coluna.setTabela(tabela);
 		TabelaColunaAtualizacaoCadastral tabelaColuna = controladorAtualizacaoCadastral.pesquisarTabelaColunaPorImovel(coluna, idImovel);
-		
+
 		if (tabelaColuna ==  null) {
-			tabelaColuna = new TabelaColunaAtualizacaoCadastral();
-			tabelaColuna.setRegistroInclusao(true);
+				tabelaColuna = new TabelaColunaAtualizacaoCadastral();
+				tabelaColuna.setRegistroInclusao(true);
 		} else {
-			tabelaColuna.setRegistroInclusao(false);
+				tabelaColuna.setRegistroInclusao(false);
 		}
 		return tabelaColuna;
 	}
-	
-	private Tabela obterTabelaAtualizacaoCadastral(Object objetoAtualizacaoCadastralBase) {
-		Tabela tabela = new Tabela();
-		
-		if (objetoAtualizacaoCadastralBase instanceof ClienteAtualizacaoCadastral) {
-			tabela.setId(Tabela.CLIENTE_ATUALIZACAO_CADASTRAL);
 
-		} else if (objetoAtualizacaoCadastralBase instanceof ImovelAtualizacaoCadastral) {
-			tabela.setId(Tabela.IMOVEL_ATUALIZACAO_CADASTRAL);
-		} else if (objetoAtualizacaoCadastralBase instanceof ClienteFoneAtualizacaoCadastral) {
-			tabela.setId(Tabela.CLIENTE_FONE_ATUALIZACAO_CADASTRAL);
-		} else if (objetoAtualizacaoCadastralBase instanceof ImovelSubcategoriaAtualizacaoCadastral) {
-			tabela.setId(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL);
-		} else if (objetoAtualizacaoCadastralBase instanceof ImovelRamoAtividadeAtualizacaoCadastral) {
-			tabela.setId(Tabela.IMOVEL_RAMO_ATIVIDADE_ATUALIZACAO_CADASTRAL);
-		}  else if (objetoAtualizacaoCadastralBase instanceof ImovelTipoOcupanteQuantidadeAtualizacaoCadastral) {
-            tabela.setId(Tabela.IMOVEL_QUANTIDADE_TIPO_OCUPANTE_ATUALIZACAO_CADASTRAL);
-        }
-		
-		return tabela;
-	}
-	
 	private void atualizarSituacaoImovelAtualizacaoCadastral(Integer idImovel, Integer situacao) throws ControladorException {
 		FiltroImovelAtualizacaoCadastral filtroImovel = new FiltroImovelAtualizacaoCadastral();
 		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovelAtualizacaoCadastral.ID, idImovel));
