@@ -17,7 +17,9 @@ public class ImovelControleAtualizacaoCadastral {
 	private SituacaoAtualizacaoCadastral situacaoAtualizacaoCadastral;
 	private ImovelRetorno imovelRetorno;
 	private CadastroOcorrencia cadastroOcorrencia;
-	
+	private Integer lote;
+	private Date dataGeracaoLote;
+	private Date dataAprovacaoLote;
 	public Integer getId() {
 		return id;
 	}
@@ -74,6 +76,24 @@ public class ImovelControleAtualizacaoCadastral {
 		this.cadastroOcorrencia = cadastroOcorrencia;
 	}
 
+	public Integer getLote() {
+		return lote;
+	}
+	public void setLote(Integer lote) {
+		this.lote = lote;
+	}
+	public Date getDataGeracaoLote() {
+		return dataGeracaoLote;
+	}
+	public void setDataGeracaoLote(Date dataGeracaoLote) {
+		this.dataGeracaoLote = dataGeracaoLote;
+	}
+	public Date getDataAprovacaoLote() {
+		return dataAprovacaoLote;
+	}
+	public void setDataAprovacaoLote(Date dataAprovacaoLote) {
+		this.dataAprovacaoLote = dataAprovacaoLote;
+	}
 	public boolean isEmFiscalizacao() {
 		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO);
 	}

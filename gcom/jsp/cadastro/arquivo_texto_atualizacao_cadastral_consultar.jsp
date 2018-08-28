@@ -362,8 +362,12 @@
 				
 				<tr></tr>
 				
+				
 				<logic:present name="colecaoArquivoTextoAtualizacaoCadastral">
 					<logic:notEmpty name="colecaoArquivoTextoAtualizacaoCadastral">
+						<tr>
+							<td colspan="5" bgcolor="#000000" height="1" valign="baseline"></td>
+						</tr>
 						<tr>
 							<td colspan="1"> 
 								<strong>Tipo de arquivo para baixar:</strong>
@@ -381,10 +385,27 @@
 						<tr><td><p>&nbsp;</p></td></tr>
 						
 						<tr>
-							<td width="175"><strong>Percentual de Imóveis Aleatórios:</strong></td>
-							<td>
-								<html:text property="percentualAleatorios" size="4" maxlength="2" onkeyup="javascript:verificaNumeroInteiro(this);"/> 
-								<gsan:controleAcessoBotao name="Button" value="Gerar Rotas para Revisão" onclick="javascript:gerarZip('retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
+							<td colspan="1">
+								<strong>Percentual de Imóveis Aleatórios:</strong>
+							</td>
+							<td colspan="1">
+								<html:text property="percentualAleatorios" size="4" maxlength="2" onkeyup="javascript:verificaNumeroInteiro(this);"/>
+							</td> 
+						</tr>
+						
+						<tr>
+							<td colspan="1">
+								<strong>Lote:</strong>
+							</td>
+							<td colspan="1">
+								<html:text property="lote" size="4" maxlength="2" onkeyup="javascript:verificaNumeroInteiro(this);"/>
+							</td> 
+						</tr>
+						
+						<tr>
+							<td colspan="2">
+								<gsan:controleAcessoBotao name="Button" value="Rotas para Revisão" onclick="javascript:gerarZip('retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
+								<gsan:controleAcessoBotao name="Button" value="Rotas para Fiscalização" onclick="javascript:gerarZip('retornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
 							</td>
 						</tr>
 							
@@ -394,7 +415,7 @@
 				<tr><td><p>&nbsp;</p></td></tr>
 
 				<tr>
-					<td colspan="5" bgcolor="#000000" height="2" valign="baseline"></td>
+					<td colspan="5" bgcolor="#000000" height="1" valign="baseline"></td>
 				</tr>
 
 				<table width="100%" align="center" bgcolor="#90c7fc" border="0" cellpadding="0" cellspacing="0">

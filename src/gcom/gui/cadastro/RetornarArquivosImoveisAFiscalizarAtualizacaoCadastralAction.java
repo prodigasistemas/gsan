@@ -21,7 +21,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-public class RetornarArquivosImoveisARevisarAtualizacaoCadastralAction extends GcomAction {
+public class RetornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction extends GcomAction {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		ConsultarArquivoTextoAtualizacaoCadastralActionForm form = (ConsultarArquivoTextoAtualizacaoCadastralActionForm) actionForm;
@@ -31,7 +31,11 @@ public class RetornarArquivosImoveisARevisarAtualizacaoCadastralAction extends G
 			percentualAleatorios = Integer.parseInt(form.getPercentualAleatorios()); 
 		}
 		
-		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().gerarArquivosRevisaoAtualizacaoCadastral(getIdsArquivos(form), percentualAleatorios);
+		int lote = 0;
+		if (!form.getLote().equals("") && !form.getLote().equals("0")) {
+			lote = Integer.parseInt(form.getLote()); 
+		}
+		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().gerarArquivosFiscalizacaoAtualizacaoCadastral(getIdsArquivos(form), percentualAleatorios, lote);
 
 		if (listaArquivoTexto != null && !listaArquivoTexto.isEmpty()) {
 			try {

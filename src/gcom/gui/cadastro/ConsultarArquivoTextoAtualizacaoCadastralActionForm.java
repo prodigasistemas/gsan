@@ -30,6 +30,8 @@ public class ConsultarArquivoTextoAtualizacaoCadastralActionForm extends ActionF
 	private String[] idsRegistros;
 
 	private String percentualAleatorios;
+	
+	private String lote;
 
 	@Override
 	public void reset(ActionMapping mapping, ServletRequest request) {
@@ -40,6 +42,7 @@ public class ConsultarArquivoTextoAtualizacaoCadastralActionForm extends ActionF
 		this.idSituacaoTransmissao = "";
 		this.exibicao = "1";
 		this.percentualAleatorios = "0";
+		this.lote = "0";
 	}
 
 	public String getIdLocalidade() {
@@ -128,5 +131,13 @@ public class ConsultarArquivoTextoAtualizacaoCadastralActionForm extends ActionF
 
 	public void setPercentualAleatorios(String percentualAleatorios) {
 		this.percentualAleatorios = percentualAleatorios;
+	}
+
+	public String getLote() {
+		return lote;
+	}
+
+	public void setLote(String lote) {
+		this.lote = lote;
 	}
 }

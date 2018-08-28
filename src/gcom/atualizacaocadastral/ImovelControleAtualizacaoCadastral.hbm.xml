@@ -15,6 +15,10 @@
 		<property name="dataRetorno" type="java.sql.Timestamp" column="icac_tmretorno" length="8"/>
 		<property name="dataAprovacao" type="java.sql.Timestamp" column="icac_tmaprovacao" length="8"/>
 		<property name="dataProcessamento" type="java.sql.Timestamp" column="icac_tmprocessamento" length="8"/>
+		<property name="lote" type="java.lang.Integer" column="icac_lote" length="5"/>
+		<property name="dataGeracaoLote" type="java.sql.Timestamp" column="icac_tmgeracaolote" length="8"/>
+		<property name="dataAprovacaoLote" type="java.sql.Timestamp" column="icac_tmaprovacaolote" length="8"/>
+		
 		<many-to-one name="situacaoAtualizacaoCadastral" class="gcom.cadastro.SituacaoAtualizacaoCadastral" not-null="true">
 			<column name="siac_id"/>
 		</many-to-one>

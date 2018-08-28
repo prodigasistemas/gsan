@@ -1630,4 +1630,33 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
         return retorno;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> obterImoveisPorSituacaoELote(Integer idArquivo, Integer idSituacao, Integer lote) throws ErroRepositorioException{
+		List<Integer> retorno = null;
+        Session session = HibernateUtil.getSession();
+
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append("select ic.imovel.id from ImovelControleAtualizacaoCadastral ic ")
+            		.append("inner join ic.situacaoAtualizacaoCadastral situacao ")
+            		.append("where situacao.id = :situacao ")
+            		.append("and ic.lote = :lote ")
+            		.append("and ic.imovel.id in (select idImovel from ImovelAtualizacaoCadastral where idArquivoTexto = :idArquivo ) ");
+
+
+            retorno = (List<Integer>) session.createQuery(consulta.toString())
+            		.setInteger("situacao", idSituacao)
+            		.setInteger("idArquivo", idArquivo)
+            		.setInteger("lote", lote)
+            		.list();
+
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+        return retorno;
+	}
 }
