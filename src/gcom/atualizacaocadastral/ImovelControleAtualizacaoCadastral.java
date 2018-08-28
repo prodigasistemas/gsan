@@ -105,6 +105,10 @@ public class ImovelControleAtualizacaoCadastral {
 	public boolean isPreAprovado() {
 		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.PRE_APROVADO);
 	}
+
+	public boolean isTransmitido() {
+        return SituacaoAtualizacaoCadastral.TRANSMITIDO.equals(this.situacaoAtualizacaoCadastral.getId());
+    }
 	
 	public boolean isProntoParaAprovacao() {
 		return this.isPreAprovado() || this.isFiscalizado();

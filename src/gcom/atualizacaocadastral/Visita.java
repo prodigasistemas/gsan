@@ -62,7 +62,7 @@ public class Visita extends ObjetoTransacao {
     @Override
     public Filtro retornaFiltro() {
         FiltroTabelaAuxiliar filtroTabelaAuxiliar = new FiltroTabelaAuxiliar();
-        filtroTabelaAuxiliar.adicionarParametro(new ParametroSimples(FiltroTabelaAuxiliar.ID,this.getId()));
+        filtroTabelaAuxiliar.adicionarParametro(new ParametroSimples(FiltroTabelaAuxiliar.ID, this.getId()));
         
         return filtroTabelaAuxiliar;
     }
