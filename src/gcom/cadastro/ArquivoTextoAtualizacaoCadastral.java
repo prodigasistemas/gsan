@@ -17,6 +17,7 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	public static final String TIPO_ARQUIVO_TRANSMISSAO = " ";
 	public static final String TIPO_ARQUIVO_REVISAO = "R";
 	public static final String TIPO_ARQUIVO_FISCALIZACAO = "F";
+	public static final String TIPO_ARQUIVO_REVISITA = "V";
 
 	private Integer id;
 
@@ -191,4 +192,7 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 		return !tipoRetorno.equals(null) && tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_FISCALIZACAO);
 	}
 	
+	public boolean isArquivoRetornoRevisita() {
+		return tipoRetorno.equals(null) || tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA);
+	}
 }

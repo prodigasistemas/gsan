@@ -47,6 +47,11 @@
 			path="/retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction">
 		</action>
 				
+		<action name="ConsultarArquivoTextoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.RetornarArquivosImoveisARevisitarAtualizacaoCadastralAction"
+			path="/retornarArquivosImoveisARevisitarAtualizacaoCadastralAction">
+		</action>
+		
 		<action name="ExibirAnaliseSituacaoArquivoAtualizacaoCadastralForm"
 			type="gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction"
 			validate="true" scope="session"

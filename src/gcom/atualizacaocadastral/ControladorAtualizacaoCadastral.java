@@ -1366,7 +1366,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		try {
 			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
 			for (Integer idArquivo : idsArquivos) {
-				List<Integer> imoveisEmCampo = repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, SituacaoAtualizacaoCadastral.EM_CAMPO);
+				List<Integer> imoveisEmCampo = obterImoveisParaRegerarArquivo(idArquivo, tipoArquivo);
 
 				if (imoveisEmCampo != null && !imoveisEmCampo.isEmpty()) {
 					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveisEmCampo, idArquivo, tipoArquivo));
@@ -1374,6 +1374,17 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			}
 
 			return arquivos;
+		} catch (Exception e) {
+			throw new ControladorException("Erro ao regerar Arquivo de Atualiza��o Cadastral", e);
+		}
+	}
+	
+	public List<Integer> obterImoveisParaRegerarArquivo(Integer idArquivo, String tipoArquivo) throws ControladorException {
+		try {
+			if (tipoArquivo.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA)) 
+				return repositorioAtualizacaoCadastral.obterImoveisARevisitar(idArquivo);
+			else
+				return repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, SituacaoAtualizacaoCadastral.EM_CAMPO);
 		} catch (Exception e) {
 			throw new ControladorException("Erro ao regerar Arquivo de Atualiza��o Cadastral", e);
 		}

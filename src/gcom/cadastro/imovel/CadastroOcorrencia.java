@@ -12,28 +12,18 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 @ControleAlteracao()
 
-/** @author Hibernate CodeGenerator */
 public class CadastroOcorrencia extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
     private Short indicadorValidacao;
-    
-    private String descricaoComId; 
+    private String descricaoComId;
+    private Short indicadorVisita;
 
-    /** full constructor */
     public CadastroOcorrencia(String descricao, Short indicadorUso,
             Date ultimaAlteracao) {
         this.descricao = descricao;
@@ -89,6 +79,14 @@ public class CadastroOcorrencia extends ObjetoTransacao {
 		this.indicadorValidacao = indicadorValidacao;
 	}
 
+	public Short getIndicadorVisita() {
+		return indicadorVisita;
+	}
+
+	public void setIndicadorVisita(Short indicadorVisita) {
+		this.indicadorVisita = indicadorVisita;
+	}
+
 	public String toString() {
         return new ToStringBuilder(this).append("id", getId()).toString();
     }
@@ -98,16 +96,6 @@ public class CadastroOcorrencia extends ObjetoTransacao {
 		return retorno;
 	}
     
-    /**
-	 * <Breve descrição sobre o caso de uso>
-	 *
-	 * <Identificador e nome do caso de uso>
-	 *
-	 * @author Pedro Alexandre
-	 * @date 19/09/2007
-	 *
-	 * @return
-	 */
 	public String getDescricaoComId() {
 		
 		if(this.getId().compareTo(10) == -1){

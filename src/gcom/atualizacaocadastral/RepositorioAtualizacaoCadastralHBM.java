@@ -1600,4 +1600,34 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         
         return retorno;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> obterImoveisARevisitar(Integer idArquivo) throws ErroRepositorioException{
+		List<Integer> retorno = null;
+        Session session = HibernateUtil.getSession();
+
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append("select ic.imovel.id from ImovelControleAtualizacaoCadastral ic ")
+            		.append("inner join ic.situacaoAtualizacaoCadastral situacao ")
+            		.append("inner join ic.cadastroOcorrencia ocorrencia ")
+            		.append("where situacao.id = :situacao ")
+            		.append("and ocorrencia.indicadorVisita = :indicadorVisita ")
+            		.append("and ic.imovel.id in (select idImovel from ImovelAtualizacaoCadastral where idArquivoTexto = :idArquivo ) ");
+
+
+            retorno = (List<Integer>) session.createQuery(consulta.toString())
+            		.setInteger("situacao", SituacaoAtualizacaoCadastral.TRANSMITIDO)
+            		.setInteger("idArquivo", idArquivo)
+            		.setInteger("indicadorVisita", ConstantesSistema.SIM)
+            		.list();
+
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+        return retorno;
+	}
 }

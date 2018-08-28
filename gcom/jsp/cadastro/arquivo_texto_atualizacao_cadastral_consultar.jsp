@@ -366,11 +366,20 @@
 					<logic:notEmpty name="colecaoArquivoTextoAtualizacaoCadastral">
 						<tr>
 							<td colspan="1"> 
-								<gsan:controleAcessoBotao name="Button" value="Compactar Arquivos" onclick="javascript:gerarZip('retornarZipArquivoTxtAtualizacaoCadastralAction.do');" url="retornarZipArquivoTxtAtualizacaoCadastralAction.do" tabindex="13" />
+								<strong>Tipo de arquivo para baixar:</strong>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="1"> 
+								<gsan:controleAcessoBotao name="Button" value="Compactado" onclick="javascript:gerarZip('retornarZipArquivoTxtAtualizacaoCadastralAction.do');" url="retornarZipArquivoTxtAtualizacaoCadastralAction.do" tabindex="13" />
 							</td>
 							
 							<td colspan="1"> 
-								<gsan:controleAcessoBotao name="Button" value="Gerar Rotas Imóveis Não Transmitidos" onclick="javascript:gerarZip('retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do" tabindex="13" />
+								<gsan:controleAcessoBotao name="Button" value="Imóveis Não Transmitidos" onclick="javascript:gerarZip('retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do" tabindex="13" />
+							</td>
+							
+							<td colspan="1"> 
+								<gsan:controleAcessoBotao name="Button" value="Imóveis A Revisitar" onclick="javascript:gerarZip('retornarArquivosImoveisARevisitarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisitarAtualizacaoCadastralAction.do" tabindex="14" />
 							</td>
 						</tr>
 				
@@ -380,7 +389,7 @@
 							<td width="175"><strong>Percentual de Imóveis Aleatórios:</strong></td>
 							<td>
 								<html:text property="percentualAleatorios" size="4" maxlength="2" onkeyup="javascript:verificaNumeroInteiro(this);"/> 
-								<gsan:controleAcessoBotao name="Button" value="Gerar Rotas para Revisão" onclick="javascript:gerarZip('retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="14" />
+								<gsan:controleAcessoBotao name="Button" value="Gerar Rotas para Revisão" onclick="javascript:gerarZip('retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
 							</td>
 						</tr>
 							

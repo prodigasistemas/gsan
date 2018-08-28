@@ -123,4 +123,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public boolean possuiInformacoesFiscalizacao(ImovelControleAtualizacaoCadastral imovelControle) throws ErroRepositorioException;
 	
 	public List<TabelaColunaAtualizacaoCadastral> obterColunasPreAprovadas(ImovelControleAtualizacaoCadastral imovelControle) throws ErroRepositorioException;
+	
+	public List<Integer> obterImoveisARevisitar(Integer idArquivo) throws ErroRepositorioException;
 }
