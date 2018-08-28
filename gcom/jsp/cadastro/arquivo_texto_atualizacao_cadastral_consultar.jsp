@@ -370,17 +370,12 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="1"> 
+							<td colspan="3"> 
 								<gsan:controleAcessoBotao name="Button" value="Compactado" onclick="javascript:gerarZip('retornarZipArquivoTxtAtualizacaoCadastralAction.do');" url="retornarZipArquivoTxtAtualizacaoCadastralAction.do" tabindex="13" />
-							</td>
-							
-							<td colspan="1"> 
 								<gsan:controleAcessoBotao name="Button" value="Imóveis Não Transmitidos" onclick="javascript:gerarZip('retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do" tabindex="13" />
-							</td>
-							
-							<td colspan="1"> 
 								<gsan:controleAcessoBotao name="Button" value="Imóveis A Revisitar" onclick="javascript:gerarZip('retornarArquivosImoveisARevisitarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisitarAtualizacaoCadastralAction.do" tabindex="14" />
 							</td>
+							
 						</tr>
 				
 						<tr><td><p>&nbsp;</p></td></tr>
