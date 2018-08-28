@@ -281,8 +281,4 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 		return sexoTipo;
 	}
-	
-	private void validarSituacaoImovel(AtualizacaoCadastral atualizacao, ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral) {
-		
-	}
 }
