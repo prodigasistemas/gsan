@@ -39,7 +39,8 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 		}
 	}
 	private boolean imovelValidoTransmissao(ImovelControleAtualizacaoCadastral imovelControle) {
-		return cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoTransmissao()
+		return ( cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoTransmissao()
+				|| cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoRevisita())
 				&& (imovelControle == null || 
 					( imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.TRANSMITIDO)
 					|| imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.EM_CAMPO)));
