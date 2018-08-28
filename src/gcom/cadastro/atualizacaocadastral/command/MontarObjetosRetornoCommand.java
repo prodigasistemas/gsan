@@ -11,6 +11,7 @@ import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
 import gcom.atualizacaocadastral.ImovelTipoOcupanteQuantidadeRetorno;
+import gcom.atualizacaocadastral.Visita;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
@@ -48,7 +49,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCommand {
-	
+
 	private AtualizacaoCadastral atualizacaoCadastral;
 	private AtualizacaoCadastralImovel atualizacaoCadastralImovel;
 	private int matriculaImovel;
@@ -57,35 +58,35 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	private int matriculaProprietario;
 	private int tipoOperacao;
 	private Integer idImovelRetorno;
-	
+
 	private IRepositorioClienteImovel repositorioClienteImovel;
-	
+
 	private final String USUARIO_IGUAL_PROPRIETARIO = "1";
 	private final String RESPONSAVEL_IGUAL_USUARIO = "0";
 	private final String RESPONSAVEL_IGUAL_PROPRIETARIO = "1";
-	
+
 
 	public MontarObjetosRetornoCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil,
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco, 
+			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco,
 			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral, ControladorClienteLocal controladorCliente, IRepositorioClienteImovel repositorioClienteImovel) {
 		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorEndereco, controladorAtualizacaoCadastral, controladorCliente);
-		
+
 		this.repositorioClienteImovel = repositorioClienteImovel;
 	}
 
 	public void execute(AtualizacaoCadastral atualizacaoCadastral) throws Exception {
 		this.atualizacaoCadastral = atualizacaoCadastral;
-		this.atualizacaoCadastralImovel = atualizacaoCadastral.getImovelAtual(); 
+		this.atualizacaoCadastralImovel = atualizacaoCadastral.getImovelAtual();
 		this.matriculaImovel = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("matricula"));
 		this.matriculaUsuario = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaUsuario"));
 		this.matriculaResponsavel = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaResponsavel"));
 		this.matriculaProprietario = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaProprietario"));
 		this.tipoOperacao = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOperacao"));
-		
+
 		salvarObjetosRetorno();
 		atualizarImovelControle();
 	}
-	
+
 	public void salvarObjetosRetorno() throws Exception {
 		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTransmissao()) {
 			salvarImovelRetorno();
@@ -98,20 +99,25 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		}
 	}
 
+	private void inserirVisitaParaImovelControle(ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral) throws ControladorException {
+	    Visita visita = new Visita(imovelControleAtualizacaoCadastral);
+	    controladorUtil.inserir(visita);
+	}
+
 	private void salvarImovelRetorno() throws Exception {
 		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(matriculaImovel, atualizacaoCadastral, atualizacaoCadastralImovel, tipoOperacao);
 		ImovelAtualizacaoCadastral imovelTxt = builder.getImovelAtualizacaoCadastral();
-		
+
 		salvarImovelRetorno(imovelTxt);
 		salvarRamoAtividadeRetorno();
 		salvarImovelSubcategoriaRetorno();
 		salvarImovelQuantidadesOcupantes();
 	}
-	
+
 	private void salvarRamoAtividadeRetorno() throws Exception {
 		for (DadoAtualizacaoRamoAtividade ramo: atualizacaoCadastralImovel.getDadosRamoAtividade()){
 			boolean existeRamoAtividadeAtualizacao = repositorioCadastro.existeImovelRamoAtividadeAtualizacaoCadastral(matriculaImovel, ramo.getId());
-			
+
 			if (!existeRamoAtividadeAtualizacao) {
 				ImovelRamoAtividadeRetorno imovelRamoAtividadeRetorno = new ImovelRamoAtividadeRetorno();
 				imovelRamoAtividadeRetorno.setImovel(new Imovel(matriculaImovel));
@@ -125,10 +131,10 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 
 	private void salvarImovelSubcategoriaRetorno() throws ControladorException {
 		List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = getImovelSubcategorias();
-		
+
 		for (ImovelSubcategoriaAtualizacaoCadastral subcategoria : subcategorias) {
 			salvarImovelSubcategoriaRetorno(subcategoria, idImovelRetorno);
-		}		
+		}
 	}
 
 	private List<ImovelSubcategoriaAtualizacaoCadastral> getImovelSubcategorias() {
@@ -142,17 +148,17 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 
 	private List<ImovelSubcategoriaAtualizacaoCadastral> buildImovelSubcategorias(TipoEconomia tipoEconomia) {
 		List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = new ArrayList<ImovelSubcategoriaAtualizacaoCadastral>();
-		
+
 		String descricaoSubcategoria = String.valueOf(tipoEconomia.getCodigo());
-		
+
 		String codigoSubcategoria = "";
-		
+
 		for (int j = 1; j < 5; j++) {
 			codigoSubcategoria = descricaoSubcategoria + j;
 			short qtdEconomias = Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("subcategoria" + codigoSubcategoria));
 			if(qtdEconomias != 0){
 				ImovelSubcategoriaAtualizacaoCadastral subcategoria = new ImovelSubcategoriaAtualizacaoCadastral();
-				
+
 				subcategoria.setImovel(new Imovel(matriculaImovel));
 				subcategoria.setQuantidadeEconomias(qtdEconomias);
 				subcategoria.setDescricaoSubcategoria(codigoSubcategoria);
@@ -161,21 +167,21 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 				TipoSubcategoria tipoSubcategoria = TipoSubcategoria.getByCodigo(codigoSubcategoria);
 				subcategoria.setCategoria(new Categoria(tipoSubcategoria.getIdCategoria()));
 				subcategoria.setSubcategoria(new Subcategoria(tipoSubcategoria.getIdSubcategoria()));
-				
+
 				subcategorias.add(subcategoria);
 			}
 		}
-		
+
 		return subcategorias;
 	}
-	
+
 
 	private void salvarClienteUsuario() throws Exception {
 		IClienteAtualizacaoCadastral clienteTxt = new ClienteUsuarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.USUARIO);
-		
+
 		if (matriculaUsuario != 0 || StringUtils.isNotEmpty(atualizacaoCadastralImovel.getLinhaCliente("nomeUsuario"))) {
 			salvarCliente(matriculaUsuario, clienteTxt, ClienteRelacaoTipo.USUARIO, ClienteBuilder.USUARIO);
-		}		
+		}
 	}
 
 	private void salvarClienteProprietario() throws Exception {
@@ -213,30 +219,30 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 			salvarCliente(matriculaResponsavel, clienteTxt, ClienteRelacaoTipo.RESPONSAVEL, ClienteBuilder.RESPONSAVEL);
 		}
 	}
-	
+
 	private void salvarCliente(int matricula, IClienteAtualizacaoCadastral clienteTxt, Short clienteRelacaoTipo, String tipoCliente) throws Exception{
 		Integer tipoOperacaoCliente = getTipoOperacaoCliente(matricula, matriculaImovel, clienteTxt.getCpf(), clienteRelacaoTipo, repositorioClienteImovel);
 		clienteTxt.setTipoOperacao(tipoOperacaoCliente);
-		
+
 		String telefone = atualizacaoCadastralImovel.getLinhaCliente("telefone" + tipoCliente);
 		String celular = atualizacaoCadastralImovel.getLinhaCliente("celular" + tipoCliente);
-		
+
 		salvarClienteRetorno(matricula, clienteRelacaoTipo, clienteTxt, telefone, celular);
 	}
 
 	private void salvarClienteRetorno(int matricula, Short clienteRelacaoTipo, IClienteAtualizacaoCadastral clienteTxt, String telefone, String celular) throws ControladorException {
 		Integer idclienteRetorno = salvarClienteRetorno(clienteTxt);
 		salvarClienteImovelRetorno(clienteTxt, matriculaImovel, idclienteRetorno);
-		
+
 		salvarClienteFoneRetorno(telefone, clienteRelacaoTipo, FoneTipo.RESIDENCIAL, matricula, idclienteRetorno);
 		salvarClienteFoneRetorno(celular, clienteRelacaoTipo, FoneTipo.CELULAR, matricula, idclienteRetorno);
 		salvarClienteEnderecoRetorno(matricula, clienteTxt, idclienteRetorno);
 	}
-	
+
 	private void salvarClienteFoneRetorno(String tipoClientFone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente, Integer idClienteRetorno) throws ControladorException {
 		if (!tipoClientFone.trim().equals("")) {
 			ClienteFoneAtualizacaoCadastral clienteFone = getClienteFoneAtualizacaoCadastral(tipoClientFone, foneTipo, matriculaCliente);
-			
+
 			ClienteFoneRetorno clienteFoneRetorno = new ClienteFoneRetorno(clienteFone);
 			clienteFoneRetorno.setUltimaAlteracao(new Date());
 			clienteFoneRetorno.setIdClienteRetorno(idClienteRetorno);
@@ -257,7 +263,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		clienteFone.setIdCliente(matriculaCliente);
 		return clienteFone;
 	}
-	
+
 	private void salvarClienteEnderecoRetorno(Integer matriculaCliente, IClienteAtualizacaoCadastral clienteAtualizacaoCadastral, Integer idClienteRetorno) throws ControladorException {
 		ClienteEnderecoRetorno clienteEnderecoRetorno = new ClienteEnderecoRetorno(matriculaCliente, clienteAtualizacaoCadastral);
 		clienteEnderecoRetorno.setUltimaAlteracao(new Date());
@@ -270,7 +276,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		imovelRetorno.setUltimaAlteracao(new Date());
 		idImovelRetorno = (Integer) controladorUtil.inserir(imovelRetorno);
 	}
-	
+
 	private void salvarImovelSubcategoriaRetorno(ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaTxt, Integer idImovelRetorno) throws ControladorException {
 		ImovelSubcategoriaRetorno imovelSubcategoriaRetorno = new ImovelSubcategoriaRetorno();
 		imovelSubcategoriaRetorno.setImovel(imovelSubcategoriaTxt.getImovel());
@@ -280,10 +286,10 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		imovelSubcategoriaRetorno.setIdImovelRetorno(idImovelRetorno);
 		controladorUtil.inserir(imovelSubcategoriaRetorno);
 	}
-	
+
     private void salvarImovelQuantidadesOcupantes() throws ControladorException {
         Collection<ImovelTipoOcupante> todosTipos = controladorUtil.listar(ImovelTipoOcupante.class);
-        
+
         for (ImovelTipoOcupante tipo : todosTipos) {
             ImovelTipoOcupanteQuantidadeRetorno retorno = new ImovelTipoOcupanteQuantidadeRetorno();
             retorno.setIdImovelRetorno(idImovelRetorno);
@@ -291,18 +297,18 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
             retorno.setTipoOcupante(tipo);
             Integer qtd = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOcupante" + tipo.getDescricaoSemCaracteresEspeciais()));
             retorno.setQuantidade(qtd);
-            
+
             controladorUtil.inserir(retorno);
         }
     }
-	
+
 	private Integer salvarClienteRetorno(IClienteAtualizacaoCadastral clienteTxt) throws ControladorException {
 		ClienteRetorno clienteRetorno = new ClienteRetorno(clienteTxt);
 		clienteRetorno.setUltimaAlteracao(new Date());
 		return (Integer)controladorUtil.inserir(clienteRetorno);
-		
+
 	}
-	
+
 	private void salvarClienteImovelRetorno(IClienteAtualizacaoCadastral clienteTxt, int matriculaImovel, Integer idClienteRetorno) throws ControladorException {
 		ClienteImovelRetorno clienteImovelRetorno = new ClienteImovelRetorno(clienteTxt, matriculaImovel);
 		clienteImovelRetorno.setUltimaAlteracao(new Date());
@@ -310,13 +316,13 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		clienteImovelRetorno.setIdImovelRetorno(idImovelRetorno);
 		controladorUtil.inserir(clienteImovelRetorno);
 	}
-	
+
 	private void salvarImagens() throws Exception {
 		for (String nomeImagem : atualizacaoCadastral.getImagens()) {
 
 			String caminhoJboss = System.getProperty("jboss.server.home.dir");
 			String pasta = "/images/" + atualizacaoCadastral.getArquivoTexto().getDescricaoArquivo();
-			
+
 			if (nomeImagem.contains(Integer.toString(atualizacaoCadastralImovel.getMatricula()))) {
 				inserirImagemImovel(atualizacaoCadastralImovel.getMatricula(), nomeImagem, caminhoJboss, pasta);
 			}
@@ -324,17 +330,17 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	}
 
 	private void inserirImagemImovel(Integer matricula, String nomeImagem, String caminhoJboss, String pasta) {
-		
+
 		try {
 			File imagem = new File(caminhoJboss + pasta, nomeImagem);
-			
+
 			ImagemRetorno imagemRetorno = new ImagemRetorno();
 			imagemRetorno.setIdImovelRetorno(idImovelRetorno);
-			
+
 			if (matricula > 0) {
 				imagemRetorno.setIdImovel(matricula);
 			}
-			
+
 			imagemRetorno.setNomeImagem(imagem.getName());
 			imagemRetorno.setPathImagem(pasta + "/" + nomeImagem);
 			imagemRetorno.setUltimaAlteracao(new Date());
@@ -344,25 +350,26 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void atualizarImovelControle() throws ControladorException {
 		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
-		
+
 		if (controle != null) {
+		    inserirVisitaParaImovelControle(controle);
 			controle.setImovelRetorno(new ImovelRetorno(idImovelRetorno));
 			controladorUtil.atualizar(controle);
 		}
 	}
-	
+
 	private boolean existeRetorno() throws ControladorException {
 		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
-		
+
 		return controle != null;
 	}
 
 	private void atualizarRetorno() throws ControladorException {
 		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
-		
+
 		controladorAtualizacaoCadastral.atualizarRetornoPreAprovado(controle);
 	}
 }

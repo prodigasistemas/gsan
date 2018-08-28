@@ -178,6 +178,7 @@ import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
 import gcom.atualizacaocadastral.ImovelTipoOcupanteQuantidadeRetorno;
+import gcom.atualizacaocadastral.Visita;
 import gcom.batch.FuncionalidadeIniciada;
 import gcom.batch.FuncionalidadeSituacao;
 import gcom.batch.Processo;
@@ -1099,6 +1100,7 @@ public class HibernateUtil {
 					.addClass(ContratoTipo.class)
 					.addClass(Contrato.class)
 					.addClass(ContratoAdesao.class)
+					.addClass(Visita.class)
 					
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cobranca //

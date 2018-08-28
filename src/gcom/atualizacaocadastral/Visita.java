@@ -16,6 +16,14 @@ public class Visita extends ObjetoTransacao {
     private CadastroOcorrencia cadastroOcorrencia;
     private Date ultimaAlteracao;
 
+    public Visita() {}
+
+    public Visita(ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral) {
+        this.imovelControleAtualizacaoCadastral = imovelControleAtualizacaoCadastral;
+        this.cadastroOcorrencia = imovelControleAtualizacaoCadastral.getCadastroOcorrencia();
+        setUltimaAlteracao(new Date());
+    }
+
     public Integer getId() {
         return id;
     }
