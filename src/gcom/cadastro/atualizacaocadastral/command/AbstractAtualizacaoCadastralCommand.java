@@ -125,8 +125,8 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 					IClienteAtualizacaoCadastral base = (IClienteAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
 					ClienteAtualizacaoCadastral txt = (ClienteAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 
-					if (base.getIdCliente() != null){
-						idPorTempo = (long) base.getIdCliente();
+					if (txt.getIdCliente() != null){
+						idPorTempo = (long) txt.getIdCliente();
 					}
 
 					tabelaAtualizacaoCadastral.setIdRegistroAlterado(idPorTempo);

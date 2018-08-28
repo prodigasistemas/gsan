@@ -22,7 +22,8 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 
 		ImovelControleAtualizacaoCadastral imovelControle = controlador.obterImovelControle(cadastroImovel.getMatricula());
 		
-		if (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoTransmissao() 
+		if (( cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoTransmissao()
+				|| cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoRevisita())
 				&& !imovelValidoTransmissao(imovelControle)) {
 			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está transmitido.");
 		}
