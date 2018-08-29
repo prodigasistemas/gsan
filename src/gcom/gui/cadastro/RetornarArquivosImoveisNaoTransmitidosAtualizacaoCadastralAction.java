@@ -65,6 +65,6 @@ public class RetornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction ex
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String data = formatter.format(new Date());
 
-		return "ROTAS_RECADASTRAMENTO_NAO_TRANSMITIDOS" + data;
+		return "ROTAS_RECADASTRAMENTO_NAO_TRANSMITIDOS_" + data;
 	}
 }
