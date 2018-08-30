@@ -97,25 +97,28 @@ public class ImovelControleAtualizacaoCadastral {
 	public boolean isEmFiscalizacao() {
 		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO);
 	}
-	
+
 	public boolean isFiscalizado() {
 		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.FISCALIZADO);
 	}
-	
+
 	public boolean isPreAprovado() {
 		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.PRE_APROVADO);
 	}
 
 	public boolean isTransmitido() {
-        return SituacaoAtualizacaoCadastral.TRANSMITIDO.equals(this.situacaoAtualizacaoCadastral.getId());
-    }
-	
+		return SituacaoAtualizacaoCadastral.TRANSMITIDO.equals(this.situacaoAtualizacaoCadastral.getId());
+	}
+
+	public boolean isRevisita() {
+		return SituacaoAtualizacaoCadastral.REVISITA.equals(this.situacaoAtualizacaoCadastral.getId());
+	}
+
 	public boolean isProntoParaAprovacao() {
 		return this.isPreAprovado() || this.isFiscalizado();
 	}
-	
+
 	public boolean isImovelNovoOuNaSituacao(Integer idSituacao) {
 		return this.situacaoAtualizacaoCadastral == null || this.situacaoAtualizacaoCadastral.getId().equals(idSituacao);
-		
 	}
 }

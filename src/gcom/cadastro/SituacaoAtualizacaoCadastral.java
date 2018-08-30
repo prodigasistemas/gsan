@@ -7,9 +7,9 @@ import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class SituacaoAtualizacaoCadastral extends ObjetoGcom {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final Integer DISPONIVEL = 0;
 	public static final Integer BLOQUEADO = 1;
 	public static final Integer EM_CAMPO = 2;
@@ -21,6 +21,7 @@ public class SituacaoAtualizacaoCadastral extends ObjetoGcom {
 	public static final Integer EM_REVISAO = 8;
 	public static final Integer REVISADO = 9;
 	public static final Integer FISCALIZADO = 10;
+	public static final Integer REVISITA = 11;
 
     private Integer id;
 
@@ -29,14 +30,14 @@ public class SituacaoAtualizacaoCadastral extends ObjetoGcom {
     private Short indicadorUso;
 
     private Date ultimaAlteracao;
-    
+
     public SituacaoAtualizacaoCadastral(Integer id, String descricao, Short indicadorUso, Date ultimaAlteracao) {
         this.id = id;
         this.descricao = descricao;
         this.indicadorUso = indicadorUso;
         this.ultimaAlteracao = ultimaAlteracao;
     }
-    
+
     public SituacaoAtualizacaoCadastral(Integer id) {
     	this.id = id;
     }
