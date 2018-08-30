@@ -395,7 +395,7 @@
 						
 						<tr>
 							<td colspan="1">
-								<strong>Lote:</strong>
+								<strong>Lote de Fiscalização:</strong>
 							</td>
 							<td colspan="1">
 								<html:text property="lote" size="4" maxlength="2" onkeyup="javascript:verificaNumeroInteiro(this);"/>

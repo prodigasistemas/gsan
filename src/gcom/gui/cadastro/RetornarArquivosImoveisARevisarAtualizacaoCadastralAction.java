@@ -1,6 +1,7 @@
 package gcom.gui.cadastro;
 
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
+import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.tarefa.TarefaException;
 import gcom.util.ZipUtil;
@@ -52,6 +53,8 @@ public class RetornarArquivosImoveisARevisarAtualizacaoCadastralAction extends G
 				e.printStackTrace();
 				throw new TarefaException("Erro ao gerar o arquivo txt", e);
 			}
+		} else {
+			throw new ActionServletException("atencao.arquivo_revisao_atualizacao_cadastral_vazio");
 		}
 
 		return null;
