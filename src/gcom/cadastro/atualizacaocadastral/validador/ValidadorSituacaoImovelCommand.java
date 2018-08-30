@@ -18,32 +18,28 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 
 	@Override
 	public void execute() throws Exception {
-
 		ImovelControleAtualizacaoCadastral imovelControle = controlador.obterImovelControle(cadastroImovel.getMatricula());
 		
-		if (( cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoTransmissao()
-				|| cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoRevisita())
-				&& !imovelValidoTransmissao(imovelControle)) {
-			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está transmitido.");
+		if (!imovelValidoTransmissao(imovelControle)) {
+			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está EM CAMPO, TRANSMITIDO OU EM REVISITA.");
 		}
 		
-		
-		if (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoRevisao() 
-				&& !imovelValidoRevisao(imovelControle)) {
+		if (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoRevisao() && !imovelValidoRevisao(imovelControle)) {
 			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está em revisão.");
 		}
 		
-		if (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoFiscalizacao() 
-				&& !imovelValidoFiscalizacao(imovelControle)) {
+		if (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoFiscalizacao() && !imovelValidoFiscalizacao(imovelControle)) {
 			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está em fiscalização.");
 		}
 	}
+	
 	private boolean imovelValidoTransmissao(ImovelControleAtualizacaoCadastral imovelControle) {
-		return ( cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoTransmissao()
+		return (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoTransmissao() 
 				|| cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoRevisita())
-				&& (imovelControle == null || 
-					( imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.TRANSMITIDO)
-					|| imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.EM_CAMPO)));
+				&& (imovelControle == null 
+					|| (imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.TRANSMITIDO) 
+					|| imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.EM_CAMPO)
+					|| imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.REVISITA)));
 	}
 	
 	private boolean imovelValidoRevisao(ImovelControleAtualizacaoCadastral imovelControle) {
