@@ -70,6 +70,6 @@ public class RetornarArquivosImoveisARevisitarAtualizacaoCadastralAction extends
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String data = formatter.format(new Date());
 
-		return "ROTAS_RECADASTRAMENTO_REVISAO_" + data;
+		return "ROTAS_RECADASTRAMENTO_REVISITA_" + data;
 	}
 }
