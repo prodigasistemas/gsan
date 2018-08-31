@@ -11,6 +11,7 @@ import gcom.util.tabelaauxiliar.FiltroTabelaAuxiliar;
 public class Visita extends ObjetoTransacao {
     
     private static final long serialVersionUID = 3619726654733392236L;
+    public static final Integer QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO = 2;
     private Integer id;
     private ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral;
     private CadastroOcorrencia cadastroOcorrencia;
