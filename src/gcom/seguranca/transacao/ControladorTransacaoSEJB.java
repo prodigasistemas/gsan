@@ -1222,137 +1222,172 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 		return retorno;
 	}
 
-	private String getDescricaoCampoAtualizacaoCadastral(String campo, String coluna)
-		throws ControladorException {
-		String  retorno = null;
-		if(coluna != null && !coluna.equals("") && StringUtils.isNotEmpty(campo)){
-			if(coluna.equals("last_id")){
-				FiltroLigacaoAguaSituacao filtroLigacaoAguaSituacao = new FiltroLigacaoAguaSituacao();
-				filtroLigacaoAguaSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoAguaSituacao.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroLigacaoAguaSituacao, LigacaoAguaSituacao.class.getName());
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private String getDescricaoCampoAtualizacaoCadastral(String campo, String coluna) throws ControladorException {
+		String retorno = null;
+		if (coluna != null && !coluna.equals("") && StringUtils.isNotEmpty(campo)) {
+			if (coluna.equals("last_id")) {
+				Filtro filtro = new FiltroLigacaoAguaSituacao();
+				filtro.adicionarParametro(new ParametroSimples(FiltroLigacaoAguaSituacao.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, LigacaoAguaSituacao.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					LigacaoAguaSituacao ligacaoAguaSituacao = (LigacaoAguaSituacao) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = ligacaoAguaSituacao.getDescricao();
 				}
-			}else if(coluna.equals("lest_id")){
-				FiltroLigacaoEsgotoSituacao filtroLigacaoEsgotoSituacao = new FiltroLigacaoEsgotoSituacao();
-				filtroLigacaoEsgotoSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgotoSituacao.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroLigacaoEsgotoSituacao, LigacaoEsgotoSituacao.class.getName());
+			} else if (coluna.equals("lest_id")) {
+				Filtro filtro = new FiltroLigacaoEsgotoSituacao();
+				filtro.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgotoSituacao.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, LigacaoEsgotoSituacao.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = ligacaoEsgotoSituacao.getDescricao();
 				}
-			}else if(coluna.equals("ftab_id")){
-				FiltroFonteAbastecimento filtroFonteAbastecimento = new FiltroFonteAbastecimento();
-				filtroFonteAbastecimento.adicionarParametro(new ParametroSimples(FiltroFonteAbastecimento.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroFonteAbastecimento, FonteAbastecimento.class.getName());
+			} else if (coluna.equals("ftab_id")) {
+				Filtro filtro = new FiltroFonteAbastecimento();
+				filtro.adicionarParametro(new ParametroSimples(FiltroFonteAbastecimento.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, FonteAbastecimento.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					FonteAbastecimento fonteAbastecimento = (FonteAbastecimento) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = fonteAbastecimento.getDescricao();
 				}
-			}else if(coluna.equals("crtp_id")){
-				FiltroClienteRelacaoTipo filtroClienteRelacaoTipo = new FiltroClienteRelacaoTipo();
-				filtroClienteRelacaoTipo.adicionarParametro(new ParametroSimples(FiltroClienteRelacaoTipo.CLIENTE_RELACAO_TIPO_ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroClienteRelacaoTipo, ClienteRelacaoTipo.class.getName());
+			} else if (coluna.equals("crtp_id")) {
+				Filtro filtro = new FiltroClienteRelacaoTipo();
+				filtro.adicionarParametro(new ParametroSimples(FiltroClienteRelacaoTipo.CLIENTE_RELACAO_TIPO_ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, ClienteRelacaoTipo.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					ClienteRelacaoTipo clienteRelacaoTipo = (ClienteRelacaoTipo) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = clienteRelacaoTipo.getDescricao();
 				}
-			}else if(coluna.equals("cltp_id")){
-				FiltroClienteTipo filtroClienteTipo = new FiltroClienteTipo();
-				filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroClienteTipo, ClienteTipo.class.getName());
+			} else if (coluna.equals("cltp_id")) {
+				Filtro filtro = new FiltroClienteTipo();
+				filtro.adicionarParametro(new ParametroSimples(FiltroClienteTipo.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, ClienteTipo.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					ClienteTipo clienteTipo = (ClienteTipo) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = clienteTipo.getDescricao();
 				}
-			}else if(coluna.equals("prof_id")){
-				FiltroProfissao filtroProfissao = new FiltroProfissao();
-				filtroProfissao.adicionarParametro(new ParametroSimples(FiltroProfissao.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroProfissao, Profissao.class.getName());
+			} else if (coluna.equals("prof_id")) {
+				Filtro filtro = new FiltroProfissao();
+				filtro.adicionarParametro(new ParametroSimples(FiltroProfissao.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, Profissao.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					Profissao profissao = (Profissao) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = profissao.getDescricao();
 				}
-			}else if(coluna.equals("ratv_id")){
-				FiltroRamoAtividade filtroRamoAtividade = new FiltroRamoAtividade();
-				filtroRamoAtividade.adicionarParametro(new ParametroSimples(FiltroRamoAtividade.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroRamoAtividade, RamoAtividade.class.getName());
+			} else if (coluna.equals("ratv_id")) {
+				Filtro filtro = new FiltroRamoAtividade();
+				filtro.adicionarParametro(new ParametroSimples(FiltroRamoAtividade.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, RamoAtividade.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					RamoAtividade ramoAtividade = (RamoAtividade) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = ramoAtividade.getDescricao();
 				}
-			}else if(coluna.equals("edtp_id")){
-				FiltroEnderecoTipo filtroEnderecoTipo = new FiltroEnderecoTipo();
-				filtroEnderecoTipo.adicionarParametro(new ParametroSimples(FiltroEnderecoTipo.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroEnderecoTipo, EnderecoTipo.class.getName());
+			} else if (coluna.equals("edtp_id")) {
+				Filtro filtro = new FiltroEnderecoTipo();
+				filtro.adicionarParametro(new ParametroSimples(FiltroEnderecoTipo.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, EnderecoTipo.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					EnderecoTipo enderecoTipo = (EnderecoTipo) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = enderecoTipo.getDescricao();
 				}
-			}else if(coluna.equals("edrf_id")){
-				FiltroEnderecoReferencia filtroEnderecoReferencia = new FiltroEnderecoReferencia();
-				filtroEnderecoReferencia.adicionarParametro(new ParametroSimples(FiltroEnderecoReferencia.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroEnderecoReferencia, EnderecoReferencia.class.getName());
+			} else if (coluna.equals("edrf_id")) {
+				Filtro filtro = new FiltroEnderecoReferencia();
+				filtro.adicionarParametro(new ParametroSimples(FiltroEnderecoReferencia.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, EnderecoReferencia.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					EnderecoReferencia enderecoReferencia = (EnderecoReferencia) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = enderecoReferencia.getDescricao();
 				}
-			}else if(coluna.equals("fnet_id")){
-				FiltroFoneTipo filtroFoneTipo = new FiltroFoneTipo();
-				filtroFoneTipo.adicionarParametro(new ParametroSimples(FiltroFoneTipo.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroFoneTipo, FoneTipo.class.getName());
+			} else if (coluna.equals("fnet_id")) {
+				Filtro filtro = new FiltroFoneTipo();
+				filtro.adicionarParametro(new ParametroSimples(FiltroFoneTipo.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, FoneTipo.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					FoneTipo foneTipo = (FoneTipo) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = foneTipo.getDescricao();
 				}
-			}else if(coluna.equals("cocr_id")){
-				FiltroCadastroOcorrencia filtroCadastroOcorrencia = new FiltroCadastroOcorrencia();
-				filtroCadastroOcorrencia.adicionarParametro(new ParametroSimples(FiltroCadastroOcorrencia.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroCadastroOcorrencia, CadastroOcorrencia.class.getName());
+			} else if (coluna.equals("cocr_id")) {
+				Filtro filtro = new FiltroCadastroOcorrencia();
+				filtro.adicionarParametro(new ParametroSimples(FiltroCadastroOcorrencia.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, CadastroOcorrencia.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					CadastroOcorrencia cadastroOcorrencia = (CadastroOcorrencia) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = cadastroOcorrencia.getDescricao();
 				}
 			} else if (coluna.equals("hicp_id")) {
-				FiltroHidrometroCapacidade filtroHidrometroCapacidade = new FiltroHidrometroCapacidade();
-				filtroHidrometroCapacidade.adicionarParametro(new ParametroSimples(FiltroHidrometroCapacidade.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroCapacidade, HidrometroCapacidade.class.getName());
+				Filtro filtro = new FiltroHidrometroCapacidade();
+				filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroCapacidade.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, HidrometroCapacidade.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					HidrometroCapacidade hidrometroCapacidade = (HidrometroCapacidade) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = hidrometroCapacidade.getDescricao();
 				}
 			} else if (coluna.equals("himc_id")) {
-				FiltroHidrometroMarca filtroHidrometroMarca = new FiltroHidrometroMarca();
-				filtroHidrometroMarca.adicionarParametro(new ParametroSimples(FiltroHidrometroMarca.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroMarca, HidrometroMarca.class.getName());
+				Filtro filtro = new FiltroHidrometroMarca();
+				filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroMarca.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, HidrometroMarca.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					HidrometroMarca hidrometroMarca = (HidrometroMarca) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = hidrometroMarca.getDescricao();
 				}
 			} else if (coluna.equals("hili_id")) {
-				FiltroHidrometroLocalInstalacao filtroHidrometroLocalInstalacao = new FiltroHidrometroLocalInstalacao();
-				filtroHidrometroLocalInstalacao.adicionarParametro(new ParametroSimples(FiltroHidrometroLocalInstalacao.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroLocalInstalacao, HidrometroLocalInstalacao.class.getName());
+				Filtro filtro = new FiltroHidrometroLocalInstalacao();
+				filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroLocalInstalacao.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, HidrometroLocalInstalacao.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					HidrometroLocalInstalacao hidrometroLocalInstalacao = (HidrometroLocalInstalacao) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = hidrometroLocalInstalacao.getDescricao();
 				}
 			} else if (coluna.equals("hipr_id")) {
-				FiltroHidrometroProtecao filtroHidrometroProtecao = new FiltroHidrometroProtecao();
-				filtroHidrometroProtecao.adicionarParametro(new ParametroSimples(FiltroHidrometroProtecao.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroProtecao, HidrometroProtecao.class.getName());
+				Filtro filtro = new FiltroHidrometroProtecao();
+				filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroProtecao.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, HidrometroProtecao.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					HidrometroProtecao hidrometroProtecao = (HidrometroProtecao) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = hidrometroProtecao.getDescricao();
 				}
 			} else if (coluna.equals("rlin_id")) {
-				FiltroRamalLocalInstalacao filtroRamalLocalInstalacao = new FiltroRamalLocalInstalacao();
-				filtroRamalLocalInstalacao.adicionarParametro(new ParametroSimples(FiltroRamalLocalInstalacao.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroRamalLocalInstalacao, RamalLocalInstalacao.class.getName());
+				Filtro filtro = new FiltroRamalLocalInstalacao();
+				filtro.adicionarParametro(new ParametroSimples(FiltroRamalLocalInstalacao.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtro, RamalLocalInstalacao.class.getName());
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					RamalLocalInstalacao ramalLocalInstalacao = (RamalLocalInstalacao) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = ramalLocalInstalacao.getDescricao();
+				}
+			} else if (coluna.equals("imac_tipo_uso")) {
+				short tipoUso = Short.valueOf(campo);
+				
+				switch (tipoUso) {
+				case 1:
+					retorno = "DORMITORIO";
+					break;
+				case 2:
+					retorno = "MORADA";
+					break;
+				case 3:
+					retorno = "VERANEIO";
+					break;
+				case 4:
+					retorno = "OUTROS";
+					break;
+				default:
+					break;
+				}
+			} else if (coluna.equals("imac_acesso_hidrometro")) {
+				short tipoUso = Short.valueOf(campo);
+				
+				switch (tipoUso) {
+				case 1:
+					retorno = "BOM";
+					break;
+				case 2:
+					retorno = "RUIM";
+					break;
+				case 3:
+					retorno = "SEM";
+					break;
+				default:
+					break;
 				}
 			}
 		}
