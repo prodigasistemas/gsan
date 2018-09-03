@@ -127,4 +127,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public List<TabelaColunaAtualizacaoCadastral> obterColunasPreAprovadas(ImovelControleAtualizacaoCadastral imovelControle) throws ErroRepositorioException;
 	
 	public List<Integer> obterImoveisARevisitar(Integer idArquivo) throws ErroRepositorioException;
+
+	public List<Visita> pesquisarVisitasPorImovelControle(ImovelControleAtualizacaoCadastral imovelControle) throws ErroRepositorioException;
 }

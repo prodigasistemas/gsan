@@ -31,11 +31,11 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 		}
 		
 		if (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoFiscalizacao() && !imovelValidoFiscalizacao(imovelControle)) {
-			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está em fiscalizaï¿½ï¿½o.");
+			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está em fiscalização.");
 		}
 
 		if (imovelEstaNaTerceiraRevisita(imovelControle, quantidadeDeVisitas))
-			cadastroImovel.addMensagemErro(String.format("Imóvel não pode ter mais %d, sem pré-agendamento", Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO));
+			cadastroImovel.addMensagemErro(String.format("Imóvel não pode ter mais de %d visitas sem pré-agendamento", Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO));
 	}
 	
 	private boolean imovelValidoTransmissao(ImovelControleAtualizacaoCadastral imovelControle) {

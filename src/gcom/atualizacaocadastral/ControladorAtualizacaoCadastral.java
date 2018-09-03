@@ -34,6 +34,7 @@ import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.IImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelEconomia;
 import gcom.cadastro.imovel.ImovelImagem;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelRamoAtividade;
@@ -177,6 +178,15 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle) throws ControladorException {
 		return  repositorioAtualizacaoCadastral.obterImovelControle(idImovelControle);
+	}
+
+	public Integer obterQuantidadeDeVisitasPorImovelControle(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.pesquisarVisitasPorImovelControle(imovelControle).size();
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao pesquisar visitas por ImovelControle.", e);
+			throw new ControladorException("Erro ao pesquisar visitas por ImovelControle.", e);
+		}
 	}
 
 	/************************************************************

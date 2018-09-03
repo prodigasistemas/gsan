@@ -1659,4 +1659,24 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
         return retorno;
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Visita> pesquisarVisitasPorImovelControle(ImovelControleAtualizacaoCadastral imovelControle) 
+		throws ErroRepositorioException {
+			List<Visita> visitas = new ArrayList<Visita>();
+			if (imovelControle == null || imovelControle.getId() == null)
+				return visitas;
+
+			Session session = HibernateUtil.getSession();	
+			try {
+				visitas = (List<Visita>) session.createQuery("from Visita v where v.imovelControleAtualizacaoCadastral.id = :idImovelControle")
+					.setInteger("idImovelControle", imovelControle.getId()).list();
+	
+			} catch (HibernateException e) {
+				throw new ErroRepositorioException(e, "Erro ao pesquisar visitas do imovel controle: " + imovelControle.getId());
+			} finally {
+				HibernateUtil.closeSession(session);
+			}
+			return visitas;
+	}
 }
