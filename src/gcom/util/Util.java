@@ -6106,7 +6106,7 @@ public class Util {
 
 	public static boolean nomeInvalido(String nome){
 		nome = nome.trim();
-		String regexNome = "[a-zA-Z\\s &/]*";
+		String regexNome = "[a-zA-Z0-9\\s &/]*";
 		if (StringUtils.isNotEmpty(nome) && nome.matches(regexNome)){
 			return false;
 		}
