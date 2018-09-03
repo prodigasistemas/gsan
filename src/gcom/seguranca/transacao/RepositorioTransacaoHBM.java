@@ -596,8 +596,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append(" left join cadastro.imovel_atlz_cadastral im on im.imov_id = tatc_cdimovel")
 				.append(" left join cadastro.imovel_subcatg_atlz_cad isac on isac.imov_id = tatc.tatc_cdimovel")
 				.append(" left join cadastro.cadastro_ocorrencia cocr on cocr.cocr_id = ctrl.cocr_id")
-				.append(" where 1 = 1 ")
-				.append("and ctrl.siac_id not in (3, 8, 9)");
+				.append(" where 1 = 1")
+				.append(" and ctrl.siac_id not in (3, 8, 9, 11)");
 
 			if (StringUtils.isNotEmpty(filtroHelper.getIdLocalidadeInicial())) {
 				sql.append(" and txac.loca_id between " + filtroHelper.getIdLocalidadeInicial() + " and " + filtroHelper.getIdLocalidadeFinal());
@@ -617,6 +617,10 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 
 			if (StringUtils.isNotEmpty(filtroHelper.getIdLeiturista()) && StringUtils.isNumeric(filtroHelper.getIdLeiturista()) && Integer.valueOf(filtroHelper.getIdLeiturista()) > 0) {
 				sql.append(" and leit.leit_id = " + filtroHelper.getIdLeiturista());
+			}
+			
+			if (StringUtils.isNotEmpty(filtroHelper.getPeriodoInicial())) {
+				sql.append(" and ctrl.icac_tmpreaprovacao between '" + filtroHelper.getPeriodoInicial() + "' and '" + filtroHelper.getPeriodoFinal() + "'");
 			}
 
 			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) 
@@ -641,7 +645,6 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 
 			SQLQuery query = session.createSQLQuery(sql.toString())
 					.addScalar("idImovel", Hibernate.INTEGER)
-					
 					.addScalar("tipoAlteracao", Hibernate.INTEGER)
 					.addScalar("nomeFuncionario", Hibernate.STRING)
 					.addScalar("icAutorizado", Hibernate.INTEGER)

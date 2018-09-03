@@ -16,9 +16,10 @@
 <script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js" ></script>
 
 <script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
-<html:javascript staticJavascript="false"  formName="FiltrarAlteracaoAtualizacaoCadastralActionForm" />
+<html:javascript staticJavascript="false" dynamicJavascript="true" formName="FiltrarAlteracaoAtualizacaoCadastralActionForm" />
 
 <script language="JavaScript">
+
     function recuperarDadosPopup(codigoRegistro, descricaoRegistro, tipoConsulta) {
         var form = document.forms[0];
         if (tipoConsulta == 'localidadeOrigem') {
@@ -47,44 +48,59 @@
             document.getElementsByName('nomeSetorComercialFinal')[0].style.color = '#000000';
         }
     }
-	
-	function validarForm(form){
-	    if(form.idEmpresa.value == '-1'){
-	    	alert('Informe a Empresa');
-	    }else{
-	    	form.action = "/gsan/filtrarAlteracaoAtualizacaoCadastralAction.do";
-			submeterFormPadrao(form);	
+
+	function validarForm(form) {
+		var periodoInicial = trim(form.periodoInicial.value);
+		var periodoFinal = trim(form.periodoFinal.value);
+		
+	    if (form.idEmpresa.value == '-1') {
+	    	alert('Informe a Empresa.');
+	    } else if (periodoInicial == null || periodoInicial == '') {
+    		alert('Informe o Período Inicial de Pré Aprovação.');
+    		return false;
+    	} else  if (periodoFinal == null || periodoFinal == '') {
+    		alert('Informe o Período Final de Pré Aprovação.');
+       		return false;
+    	} else {
+        	if (validateFiltrarAlteracaoAtualizacaoCadastralActionForm(form)) {
+		    	form.action = "/gsan/filtrarAlteracaoAtualizacaoCadastralAction.do";
+				submeterFormPadrao(form);	
+            }
 	    }
 	}
 	
-	function listarLeiturista(){
+	function listarLeiturista() {
 		 var form = document.forms[0];
 		 form.action = 'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do';
 	  	 form.submit();
-	
 	}
 	
-   function limparLeiturista(){
+   function limparLeiturista() {
 		var form = document.forms[0];
 	    form.idArquivo.value = '';
 	    form.descricaoArquivo.value = '';
    }
 
-   function duplicarLocalidade(){
+   function replicarLocalidade() {
 		var form = document.forms[0];
 		form.idLocalidadeFinal.value = form.idLocalidadeInicial.value;
 		form.nomeLocalidadeFinal.value = form.nomeLocalidadeInicial.value;
 	}
 
-   function duplicarSetorComercial(){
+   function replicarSetorComercial() {
 		var form = document.forms[0];
 		form.cdSetorComercialFinal.value = form.cdSetorComercialInicial.value;
 		form.nomeSetorComercialFinal.value = form.nomeSetorComercialInicial.value;
 	}
 
-   function duplicarRota(){
+   function replicarRota() {
 		var form = document.forms[0];
 		form.cdRotaFinal.value = form.cdRotaInicial.value;
+	}
+
+   function replicarPeriodo() {
+		var form = document.forms[0];
+		form.periodoFinal.value = form.periodoInicial.value;
 	}
 </script>
 
@@ -180,6 +196,28 @@
 				labelProperty="descricao" property="id" />
 		</html:select></td>
 	 </tr>
+	 
+	 <tr>
+		<td><strong>Período de Pré Aprovação:<font color="#FF0000">*</font></strong></td>
+
+		<td colspan="6">
+		
+			<span class="style2">
+			
+				<strong>
+					<html:text property="periodoInicial" size="11" maxlength="10" tabindex="3" onkeyup="mascaraData(this, event);replicarPeriodo();" />
+					<a href="javascript:abrirCalendarioReplicando('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'periodoInicial','periodoFinal');">
+						<img border="0" src="<bean:message key='caminho.imagens'/>calendario.gif" width="16" height="15" border="0" alt="Exibir Calendário" tabindex="4" />
+					</a> a 
+					<html:text property="periodoFinal" size="11" maxlength="10" tabindex="3" onkeyup="mascaraData(this, event)" /> 
+					<a href="javascript:abrirCalendario('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'periodoFinal');">
+						<img border="0" src="<bean:message key='caminho.imagens'/>calendario.gif" width="16" height="15" border="0" alt="Exibir Calendário" tabindex="4" />
+					</a> 
+				</strong>(dd/mm/aaaa)
+				<strong></strong> 
+			</span>
+		</td>
+	</tr>
 
     <tr>
       <td colspan="2"><hr></td>
@@ -198,7 +236,7 @@
         onkeypress="somente_numero(this);form.target='';
         validaEnter(event,
         'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filterClass=FiltroLocalidade&fieldLocalidade=LocalidadeInicial', 'idLocalidadeInicial');"
-        onkeyup="javascript:somente_numero(this);duplicarLocalidade();" onblur="javascript:duplicarLocalidade();"/>
+        onkeyup="javascript:somente_numero(this);replicarLocalidade();" onblur="javascript:replicarLocalidade();"/>
          
         <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial', 'cdSetorComercialInicial', 'nomeSetorComercialInicial', 'idLocalidadeFinal', 'nomeLocalidadeFinal', 'cdSetorComercialFinal', 'nomeSetorComercialFinal', 'cdRotaInicial', 'cdRotaFinal'); 
            abrirPopup('exibirPesquisarLocalidadeAction.do?tipo=origem', 400, 800);"> 
@@ -216,10 +254,10 @@
     
     <tr>
       <td width="170"><strong>Setor Comercial :</strong></td>
-      <td><html:text maxlength="3" property="cdSetorComercialInicial" size="5" onkeyup="javascript:somente_numero(this);duplicarLocalidade();"
+      <td><html:text maxlength="3" property="cdSetorComercialInicial" size="5" onkeyup="javascript:somente_numero(this);replicarLocalidade();"
            onkeypress="validaEnterDependencia(event, 
            'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filterClass=FiltroSetorComercial&fieldLocalidade=LocalidadeInicial&fieldSetorComercial=SetorComercialInicial', 
-           this, document.forms[0].idLocalidadeInicial.value, 'Localidade Final.');" onblur="javascript:duplicarSetorComercial();" tabindex="6" />
+           this, document.forms[0].idLocalidadeInicial.value, 'Localidade Final.');" onblur="javascript:replicarSetorComercial();" tabindex="6" />
            <a href="javascript:abrirPopupDependencia('exibirPesquisarSetorComercialAction.do?idLocalidade='+document.forms[0].idLocalidadeInicial.value+'&tipo=setorComercialOrigem',document.forms[0].idLocalidadeInicial.value,'Localidade Inicial', 400, 800);">
            <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif" title="Pesquisar" />
            </a>
@@ -235,7 +273,7 @@
     <tr>
       <td width="170"><strong>Rota :</strong></td>
       <td><html:text maxlength="3" property="cdRotaInicial" size="5" tabindex="7"
-      			onkeyup="javascript:somente_numero(this);duplicarRota();" onblur="javascript:duplicarRota();"/>
+      			onkeyup="javascript:somente_numero(this);replicarRota();" onblur="javascript:replicarRota();"/>
       </td>
     </tr>
 
