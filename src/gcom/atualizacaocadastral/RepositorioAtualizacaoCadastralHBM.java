@@ -1659,4 +1659,22 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
         return retorno;
 	}
+	
+	public void atualizarSituacaoConjuntoImovelControle(Integer situacao, List<Integer> ids) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+        try {
+        	StringBuilder sql = new StringBuilder();
+        	sql.append("UPDATE ImovelControleAtualizacaoCadastral controle ")
+               .append("SET controle.situacaoAtualizacaoCadastral.id = :situacao ")
+               .append("WHERE controle.imovel.id IN (:ids) ");
+
+            session.createQuery(sql.toString()).setInteger("situacao", situacao).setParameterList("ids", ids).executeUpdate();
+
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao atualizar situacao de um conjunto de imovel controle.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+	}
 }
