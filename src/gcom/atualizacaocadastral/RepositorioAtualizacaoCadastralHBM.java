@@ -1451,7 +1451,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			if (tipoDado.contains("character"))
 				return String.format("\'%s\'", valor);
 			else if (tipoDado.equals("numeric"))
-				return valor.replace(",",".");
+				return valor.replace(".","").replace(",",".");
 			return valor;
 		}
 
