@@ -22,13 +22,13 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 		Integer quantidadeDeVisitas = controlador.obterQuantidadeDeVisitasPorImovelControle(imovelControle);
 		
 		if (!imovelValidoTransmissao(imovelControle))
-			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está em campo, transmitido ou em revisita.");
+			cadastroImovel.addMensagemErro("Imóvel não está em campo, transmitido ou em revisita.");
 
 		if (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoRevisao() && !imovelValidoRevisao(imovelControle))
-			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está em revisão.");
+			cadastroImovel.addMensagemErro("Imóvel não está em revisão.");
 
 		if (cadastroImovel.getAtualizacaoArquivo().getArquivoTexto().isArquivoRetornoFiscalizacao() && !imovelValidoFiscalizacao(imovelControle))
-			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está em fiscalização.");
+			cadastroImovel.addMensagemErro("Imóvel não está em fiscalização.");
 
 		if (imovelSuperouOLimiteDeVisitas(quantidadeDeVisitas))
 			cadastroImovel.addMensagemErro(String.format("Imóvel não pode ter mais de %d visitas", Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO));
