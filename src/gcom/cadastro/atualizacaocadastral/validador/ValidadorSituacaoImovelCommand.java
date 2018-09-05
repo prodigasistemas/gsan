@@ -34,8 +34,8 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 			cadastroImovel.addMensagemErro("Tipo de retorno inválido. Imóvel não está em fiscalização.");
 		}
 
-		if (imovelEstaNaTerceiraRevisita(imovelControle, quantidadeDeVisitas))
-			cadastroImovel.addMensagemErro(String.format("Imóvel não pode ter mais de %d visitas sem pré-agendamento", Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO));
+		if (imovelSuperouOLimiteDeVisitas(quantidadeDeVisitas))
+			cadastroImovel.addMensagemErro(String.format("Imóvel não pode ter mais de %d visitas", Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO));
 	}
 	
 	private boolean imovelValidoTransmissao(ImovelControleAtualizacaoCadastral imovelControle) {
@@ -57,7 +57,7 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 				&& (imovelControle == null || imovelControle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO));
 	}
 
-	private boolean imovelEstaNaTerceiraRevisita(ImovelControleAtualizacaoCadastral imovelControle, Integer quantidadeDeVisitas) {
-		return imovelControle.isRevisita() && quantidadeDeVisitas >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO;
+	private boolean imovelSuperouOLimiteDeVisitas(Integer quantidadeDeVisitas) {
+		return quantidadeDeVisitas >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO;
 	}
 }
