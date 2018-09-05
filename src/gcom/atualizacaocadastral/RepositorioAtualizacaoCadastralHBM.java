@@ -1678,6 +1678,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 				HibernateUtil.closeSession(session);
 			}
 			return visitas;
+	}
 	
 	public void atualizarSituacaoConjuntoImovelControle(Integer situacao, List<Integer> ids) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
