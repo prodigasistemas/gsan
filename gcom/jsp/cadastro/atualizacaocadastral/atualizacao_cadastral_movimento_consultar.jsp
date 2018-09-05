@@ -136,57 +136,84 @@
 		</tr>
 	</table>
 	<p>&nbsp;</p>
-	<table>
- 	<tr>
-		<td width="20%"><strong>Empresa:</strong></td>
-		<td width="80%"><html:text tabindex="10" maxlength="40" property="nomeEmpresa" size="40" disabled="true"/> 
-	</td>
- 	</tr>
- 	<tr>
-		<td colspan="3"><hr></td>
-	</tr>
- 	<tr>
-	<tr>
-		<td colspan="3"><strong>Dados da inscrição inicial:</strong></td>
-	</tr>
- 	<tr>
-		<td width="20%">Localidade Inicial:</td>
-		<td width="80%">
-		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.nomeLocalidadeInicial}" property="nomeLocalidadeInicial" size="20" disabled="true"/>
-		</td> 
-	</tr>
-	<tr>
-		<td width="20%">Setor Comercial Inicial:</td>
-		<td width="80%">
-		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdSetorComercialInicial}" property="cdSetorComercialInicial" size="5" disabled="true"/>
-	</tr>
-	<tr>
-		<td width="20%">Rota Inicial:</td>
-		<td width="80%">
-		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdRotaInicial}" property="cdRotaInicial" size="5" disabled="true"/>
- 	</tr>
- 	<tr>
-		<td colspan="3"><hr></td>
-	</tr>
- 	<tr>
-	<tr>
-		<td colspan="3"><strong>Dados da inscrição final:</strong></td>
-	</tr>
-	<tr>
-		<td width="20%">Localidade Final:</td>
-		<td width="80%">
-		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.nomeLocalidadeFinal}" property="nomeLocalidadeFinal" size="20" disabled="true"/>
-	<tr>
-		<td width="20%">Setor Comercial Final:</td>
-		<td width="80%">
-		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdSetorComercialFinal}" property="cdSetorComercialFinal" size="5" disabled="true"/>
-	</tr>
-	<tr>	
-		<td width="20%">Rota Final:</td>
-		<td width="80%">
-		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdRotaFinal}" property="cdRotaFinal" size="5" disabled="true"/>
-    </tr>
+	
+	<table width="100%" border="0">
+		<tr>
+			<td width="150"><strong>Empresa:</strong></td>
+			<td colspan="2" align="left">
+				<html:text tabindex="10" maxlength="40" property="nomeEmpresa" size="40" disabled="true" />
+			</td>
+		</tr>
+		
+		<tr>
+			<td width="150"><strong>Agente Cadastral:</strong></td>
+			<td colspan="2" align="left">
+				<html:text tabindex="10" maxlength="40" property="nomeLeiturista" size="40" disabled="true" />
+			</td>
+		</tr>
+	 
+	 	<tr>
+			<td width="150"><strong>Período de Pré Aprovação:</strong></td>
+
+			<td colspan="2">
+				<html:text property="periodoInicial" size="11" maxlength="10" tabindex="3" disabled="true" /> a 
+				<html:text property="periodoFinal" size="11" maxlength="10" tabindex="3" disabled="true" /> 
+			</td>
+		</tr>
+		
+		<tr>
+			<td colspan="3"><hr></td>
+		</tr>
+		
+		<tr>
+			<td width="150"><strong>Dados da Inscrição Inicial:</strong></td>
+		</tr>
+	 	<tr>
+			<td width="150">Localidade Inicial:</td>
+			<td>
+				<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.nomeLocalidadeInicial}" property="nomeLocalidadeInicial" size="20" disabled="true"/>
+			</td> 
+		</tr>
+		<tr>
+			<td width="150">Setor Comercial Inicial:</td>
+			<td>
+				<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdSetorComercialInicial}" property="cdSetorComercialInicial" size="5" disabled="true"/>
+			</td>
+		</tr>
+		<tr>
+			<td width="150">Rota Inicial:</td>
+			<td>
+				<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdRotaInicial}" property="cdRotaInicial" size="5" disabled="true"/>
+			</td>
+	 	</tr>
+	 	<tr>
+			<td colspan="3"><hr></td>
+		</tr>
+		
+		<tr>
+			<td colspan="3"><strong>Dados da Inscrição Final:</strong></td>
+		</tr>
+		<tr>
+			<td width="150">Localidade Final:</td>
+			<td>
+			<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.nomeLocalidadeFinal}" property="nomeLocalidadeFinal" size="20" disabled="true"/>
+		<tr>
+			<td width="150">Setor Comercial Final:</td>
+			<td>
+				<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdSetorComercialFinal}" property="cdSetorComercialFinal" size="5" disabled="true"/>
+			</td>
+		</tr>
+		<tr>	
+			<td width="150">Rota Final:</td>
+			<td>
+				<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdRotaFinal}" property="cdRotaFinal" size="5" disabled="true"/>
+			</td>
+	    </tr>
+	    <tr>
+			<td colspan="3"><hr></td>
+		</tr>
 	</table>
+	
 	<p>&nbsp;</p>
 	<table>		
 	 <tr>

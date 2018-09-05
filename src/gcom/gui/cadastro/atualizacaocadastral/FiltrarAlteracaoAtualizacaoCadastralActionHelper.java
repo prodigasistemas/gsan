@@ -10,6 +10,10 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	private String idEmpresa;
 
 	private String idLeiturista;
+	
+	private String periodoInicial;
+	
+	private String periodoFinal;
 
 	private String exibirCampos;
 
@@ -49,6 +53,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper(FiltrarAlteracaoAtualizacaoCadastralActionForm form) {
 		this.idEmpresa = form.getIdEmpresa();
 		this.idLeiturista = form.getIdLeiturista();
+		this.periodoInicial = form.getPeriodoInicial();
+		this.periodoFinal = form.getPeriodoFinal();
 		this.exibirCampos = form.getExibirCampos();
 		this.colunaImoveisSelecionados = form.getColunaImoveisSelecionados();
 		this.idLocalidadeInicial = form.getIdLocalidadeInicial();
@@ -99,6 +105,22 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	public void setIdLeiturista(String idLeiturista) {
 		this.idLeiturista = idLeiturista;
+	}
+
+	public String getPeriodoInicial() {
+		return periodoInicial;
+	}
+
+	public void setPeriodoInicial(String periodoInicial) {
+		this.periodoInicial = periodoInicial;
+	}
+
+	public String getPeriodoFinal() {
+		return periodoFinal;
+	}
+
+	public void setPeriodoFinal(String periodoFinal) {
+		this.periodoFinal = periodoFinal;
 	}
 
 	public String getExibirCampos() {

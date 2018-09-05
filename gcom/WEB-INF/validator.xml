@@ -15619,12 +15619,27 @@
 		</form>
 		
 		<form name="FiltrarAlteracaoAtualizacaoCadastralActionForm">
-			
-			<field property="idEmpresa"
-				depends="long, required">
+
+			<field property="idEmpresa" depends="long, required">
 				<arg0 key="Funcionário Responsável" resource="false" />
 			</field>
+		
+			<field property="periodoInicial" depends="date">
+				<arg0 key="Data Inicial de Pré Aprovação" resource="false" />
+				<var>
+					<var-name>datePattern</var-name>
+					<var-value>dd/MM/yyyy</var-value>
+				</var>
+			</field>
 			
+			<field property="periodoFinal" depends="date">
+				<arg0 key="Data Final de Pré Aprovação" resource="false" />
+				<var>
+					<var-name>datePattern</var-name>
+					<var-value>dd/MM/yyyy</var-value>
+				</var>
+			</field>
+	
 		</form>
 		
 		<!-- @@ Relatorio Impostos Por Cliente Responsavel  -->

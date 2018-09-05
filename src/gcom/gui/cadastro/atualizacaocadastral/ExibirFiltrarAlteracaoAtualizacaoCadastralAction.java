@@ -41,27 +41,25 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 
 	private static Logger logger = Logger.getLogger(ExibirFiltrarAlteracaoAtualizacaoCadastralAction.class);
 	
-	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		FiltrarAlteracaoAtualizacaoCadastralActionForm form = (FiltrarAlteracaoAtualizacaoCadastralActionForm) actionForm;
-		Fachada fachada = Fachada.getInstancia();
 
 		try {
-			if (StringUtils.isNotEmpty(httpServletRequest.getParameter("filterClass"))){
-				preencherCampoDescricao(form, httpServletRequest);
+			if (StringUtils.isNotEmpty(request.getParameter("filterClass"))){
+				preencherCampoDescricao(form, request);
 			}
 
-			HttpSession sessao = httpServletRequest.getSession(false);
+			HttpSession sessao = request.getSession(false);
 
-			carregarComboEmpresas(fachada, sessao);
-			carregarComboLeiturista(form, fachada, sessao);
-			carregarColunaImoveis(sessao, httpServletRequest, form);
-
+			carregarComboEmpresas(sessao);
+			carregarComboLeiturista(form, sessao);
+			carregarColunaImoveis(sessao, request, form);
+			
 		} catch (Exception e) {
 			logger.error("Erro ao filtrar Cadastro", e);
 		}
 
-		return actionMapping.findForward("exibirFiltrarAlteracaoAtualizacaoCadastral");
+		return mapping.findForward("exibirFiltrarAlteracaoAtualizacaoCadastral");
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -88,62 +86,57 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void carregarComboLeiturista(FiltrarAlteracaoAtualizacaoCadastralActionForm form, Fachada fachada, HttpSession sessao) {
-		Collection colecaoLeiturista = new ArrayList();
+	private void carregarComboLeiturista(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpSession sessao) {
+		Collection colecao = new ArrayList();
 		if (form.getIdEmpresa() != null && !form.getIdEmpresa().equals("-1") && !form.getIdEmpresa().equals("")) {
-			FiltroLeiturista filtroLeiturista = new FiltroLeiturista(FiltroLeiturista.FUNCIONARIO_NOME);
-			filtroLeiturista.adicionarParametro(new ParametroSimples(FiltroLeiturista.EMPRESA_ID, form.getIdEmpresa()));
-			filtroLeiturista.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.CLIENTE);
-			filtroLeiturista.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.FUNCIONARIO);
+			Filtro filtro = new FiltroLeiturista(FiltroLeiturista.FUNCIONARIO_NOME);
+			filtro.adicionarParametro(new ParametroSimples(FiltroLeiturista.EMPRESA_ID, form.getIdEmpresa()));
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.CLIENTE);
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.FUNCIONARIO);
 
-			Collection colecao = fachada.pesquisar(filtroLeiturista, Leiturista.class.getName());
+			Collection pesquisa = getFachada().pesquisar(filtro, Leiturista.class.getName());
 
-			if (colecao != null && !colecao.isEmpty()) {
-				Iterator it = colecao.iterator();
+			if (pesquisa != null && !pesquisa.isEmpty()) {
+				Iterator it = pesquisa.iterator();
 				while (it.hasNext()) {
 					Leiturista leiturista = (Leiturista) it.next();
 					DadosLeiturista dadosLeiturista = new DadosLeiturista(leiturista);
-					
-					colecaoLeiturista.add(dadosLeiturista);
+					colecao.add(dadosLeiturista);
 				}
 			}
-
 		}
 
-		sessao.setAttribute("colecaoLeiturista", colecaoLeiturista);
+		sessao.setAttribute("colecaoLeiturista", colecao);
 	}
 
 	@SuppressWarnings("unchecked")
-	private void carregarComboEmpresas(Fachada fachada, HttpSession sessao) {
+	private void carregarComboEmpresas(HttpSession sessao) {
 		if (sessao.getAttribute("colecaoEmpresa") == null) {
-			Collection<Empresa> colecaoEmpresa = null;
+			Filtro filtro = new FiltroEmpresa();
+			filtro.adicionarParametro(new ParametroSimples(FiltroEmpresa.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.setCampoOrderBy(FiltroEmpresa.DESCRICAO);
 
-			FiltroEmpresa filtroEmpresa = new FiltroEmpresa();
-			filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			filtroEmpresa.setCampoOrderBy(FiltroEmpresa.DESCRICAO);
+			Collection<Empresa> colecao = getFachada().pesquisar(filtro, Empresa.class.getName());
 
-			colecaoEmpresa = fachada.pesquisar(filtroEmpresa, Empresa.class.getName());
-
-			if ((colecaoEmpresa == null) || (colecaoEmpresa.size() == 0)) {
+			if ((colecao == null) || (colecao.size() == 0)) {
 				throw new ActionServletException("atencao.entidade_sem_dados_para_selecao", null, Empresa.class.getName());
 			} else {
-				sessao.setAttribute("colecaoEmpresa", colecaoEmpresa);
+				sessao.setAttribute("colecaoEmpresa", colecao);
 			}
 		}
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void carregarColunaImoveis(HttpSession sessao, HttpServletRequest httpServletRequest, FiltrarAlteracaoAtualizacaoCadastralActionForm form) {
-		
+	private void carregarColunaImoveis(HttpSession sessao, HttpServletRequest request, FiltrarAlteracaoAtualizacaoCadastralActionForm form) {
 		Collection colecaoColunaImoveisSelecionados = carregarImoveisSelecionados(form, sessao);
 
-		FiltroTabelaColuna filtroTabelaColuna = new FiltroTabelaColuna();
+		Filtro filtro = new FiltroTabelaColuna();
 
-		filtroTabelaColuna.adicionarParametro(new ParametroSimples(FiltroTabelaColuna.INDICADOR_ATUALIZACAO_CADASRAL, ConstantesSistema.SIM));
-		filtroTabelaColuna.setConsultaSemLimites(true);
-		filtroTabelaColuna.setCampoOrderBy(FiltroTabelaColuna.DESCRICAO_COLUNA);
+		filtro.adicionarParametro(new ParametroSimples(FiltroTabelaColuna.INDICADOR_ATUALIZACAO_CADASRAL, ConstantesSistema.SIM));
+		filtro.setConsultaSemLimites(true);
+		filtro.setCampoOrderBy(FiltroTabelaColuna.DESCRICAO_COLUNA);
 
-		Collection colecaoColunaImoveis = Fachada.getInstancia().pesquisar(filtroTabelaColuna, TabelaColuna.class.getName());
+		Collection colecaoColunaImoveis = Fachada.getInstancia().pesquisar(filtro, TabelaColuna.class.getName());
 
 		if (colecaoColunaImoveisSelecionados == null) {
 			sessao.setAttribute("colecaoColunaImoveis", colecaoColunaImoveis);
@@ -169,20 +162,20 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		}
 	}
 
-	private void preencherCampoDescricao(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpServletRequest httpServletRequest)
+	private void preencherCampoDescricao(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpServletRequest request)
 			throws Exception {
 		
-		String filterClass = "gcom.cadastro.localidade."+ httpServletRequest.getParameter("filterClass");
+		String filterClass = "gcom.cadastro.localidade."+ request.getParameter("filterClass");
 		
 		FilterClassParameters filter = null;
 		String fieldName = null;
-		String fieldLocalidade = httpServletRequest.getParameter("fieldLocalidade");
+		String fieldLocalidade = request.getParameter("fieldLocalidade");
 		if (filterClass.contains("FiltroLocalidade")){
 			fieldName = fieldLocalidade;
 			filter = buildFiltroLocalidade(form, filterClass, fieldLocalidade);			
 		}else if (filterClass.contains("FiltroSetorComercial")){
-			fieldName = httpServletRequest.getParameter("fieldSetorComercial");
-			filter = buildFiltroSetorComercial(form, httpServletRequest, filterClass, fieldName, fieldLocalidade);
+			fieldName = request.getParameter("fieldSetorComercial");
+			filter = buildFiltroSetorComercial(form, request, filterClass, fieldName, fieldLocalidade);
 		}
 		
 		DescriptorEntity entidade = pesquisarEntidade(filter);
@@ -190,27 +183,25 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		Method setNome = FiltrarAlteracaoAtualizacaoCadastralActionForm.class.getMethod("setNome" + fieldName, String.class);
 		if (entidade == null) {
 			setNome.invoke(form, filter.getInvalidMessage());
-			httpServletRequest.setAttribute("cor" + filter.getFieldName(), "#FF0000");
+			request.setAttribute("cor" + filter.getFieldName(), "#FF0000");
 		} else {
 			setNome.invoke(form, entidade.getDescricao());
-			httpServletRequest.setAttribute("cor" + filter.getFieldName(), "#000000");
+			request.setAttribute("cor" + filter.getFieldName(), "#000000");
 		}
 	}
 
-	private FilterClassParameters buildFiltroSetorComercial(FiltrarAlteracaoAtualizacaoCadastralActionForm form,
-			HttpServletRequest httpServletRequest, String filterClass, String fieldName, String fieldLocalidade) throws Exception {
+	private FilterClassParameters buildFiltroSetorComercial(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpServletRequest request, String filterClass, String fieldName, String fieldLocalidade) throws Exception {
 		Filtro filtro = (Filtro) Class.forName(filterClass).newInstance();
 		FilterClassParameters filter;
 		filter = new FilterClassParameters(filtro, new SetorComercial(), "Setor comercial inexistente", fieldName);
 		filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, (String) recuperaValorCampo(form, "Cd"+ fieldName)));
 		filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
 		filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, new Integer(recuperaValorCampo(form, "Id"+ fieldLocalidade))));
-		httpServletRequest.setAttribute("cor" + fieldLocalidade, "#000000");
+		request.setAttribute("cor" + fieldLocalidade, "#000000");
 		return filter;
 	}
 
-	private FilterClassParameters buildFiltroLocalidade(FiltrarAlteracaoAtualizacaoCadastralActionForm form, String filterClass, String fieldLocalidade)
-			throws Exception {
+	private FilterClassParameters buildFiltroLocalidade(FiltrarAlteracaoAtualizacaoCadastralActionForm form, String filterClass, String fieldLocalidade) throws Exception {
 		Filtro filtro = (Filtro) Class.forName(filterClass).newInstance();
 		FilterClassParameters filter;
 		filter = new FilterClassParameters(filtro, new Localidade(), "Localidade inexistente", fieldLocalidade);
@@ -219,13 +210,13 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		return filter;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private DescriptorEntity pesquisarEntidade(FilterClassParameters parameters) {
-		Collection colecaoPesquisa = Fachada.getInstancia().pesquisar(parameters.getFilter(), parameters.getEntity().getClass().getName());
-
-		if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
+		Collection pesquisa = Fachada.getInstancia().pesquisar(parameters.getFilter(), parameters.getEntity().getClass().getName());
+		if (pesquisa == null || pesquisa.isEmpty()) {
 			return null;
 		} else {
-			return (DescriptorEntity) Util.retonarObjetoDeColecao(colecaoPesquisa);
+			return (DescriptorEntity) Util.retonarObjetoDeColecao(pesquisa);
 		}
 	}
 	

@@ -1451,7 +1451,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			if (tipoDado.contains("character"))
 				return String.format("\'%s\'", valor);
 			else if (tipoDado.equals("numeric"))
-				return valor.replace(",",".");
+				return valor.replace(".","").replace(",",".");
 			return valor;
 		}
 
@@ -1678,5 +1678,22 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 				HibernateUtil.closeSession(session);
 			}
 			return visitas;
+	
+	public void atualizarSituacaoConjuntoImovelControle(Integer situacao, List<Integer> ids) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+        try {
+        	StringBuilder sql = new StringBuilder();
+        	sql.append("UPDATE ImovelControleAtualizacaoCadastral controle ")
+               .append("SET controle.situacaoAtualizacaoCadastral.id = :situacao ")
+               .append("WHERE controle.imovel.id IN (:ids) ");
+
+            session.createQuery(sql.toString()).setInteger("situacao", situacao).setParameterList("ids", ids).executeUpdate();
+
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao atualizar situacao de um conjunto de imovel controle.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
 	}
 }

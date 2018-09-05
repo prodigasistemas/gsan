@@ -107,12 +107,6 @@ import javax.ejb.SessionContext;
 
 import org.apache.commons.lang.StringUtils;
 
-/**
- * Defini��o da l�gica de neg�cio do Session Bean de ControladorCliente
- *
- * @author S�vio Luiz
- * @created 25 de Abril de 2005
- */
 public class ControladorTransacaoSEJB extends ControladorComum implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
@@ -124,12 +118,6 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 
 	SessionContext sessionContext;
 
-	/**
-	 * < <Descri��o do m�todo>>
-	 *
-	 * @exception CreateException
-	 *                Descri��o da exce��o
-	 */
 	public void ejbCreate() throws CreateException {
 
 		repositorioTransacao            = RepositorioTransacaoHBM.getInstancia();
@@ -139,30 +127,15 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 
 	}
 
-	/**
-	 * < <Descri��o do m�todo>>
-	 */
 	public void ejbRemove() {
 	}
 
-	/**
-	 * < <Descri��o do m�todo>>
-	 */
 	public void ejbActivate() {
 	}
 
-	/**
-	 * < <Descri��o do m�todo>>
-	 */
 	public void ejbPassivate() {
 	}
 
-	/**
-	 * Seta o valor de sessionContext
-	 *
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
 	}
@@ -188,13 +161,6 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 					.pesquisarUsuarioAlteracaoDasOperacoesEfetuadas(
 							idUsuarioAcao, idOperacao, idUsuario, dataInicial,
 							dataFinal, horaInicial, horaFinal, argumentos, id1, unidadeNegocio);
-
-			/*
-			 * Collection coll =
-			 * repositorioTransacao.pesquisarUsuarioAlteracaoDasOperacoesEfetuadasHql(idUsuarioAcao,
-			 * idOperacao, idUsuario, dataInicial, dataFinal, horaInicial,
-			 * horaFinal, idTabela, idTabelaColuna,id1, numeroPagina);
-			 */
 
 			// para todas as operacoes efetuadas carregar a lista de
 			// usuariosAlteracao

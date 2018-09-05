@@ -1,9 +1,5 @@
 package gcom.atualizacaocadastral;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
@@ -17,6 +13,10 @@ import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaColuna;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ErroRepositorioException;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public interface IRepositorioAtualizacaoCadastral {
 
@@ -129,4 +129,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public List<Integer> obterImoveisARevisitar(Integer idArquivo) throws ErroRepositorioException;
 
 	public List<Visita> pesquisarVisitasPorImovelControle(ImovelControleAtualizacaoCadastral imovelControle) throws ErroRepositorioException;
+	
+	public void atualizarSituacaoConjuntoImovelControle(Integer situacao, List<Integer> ids) throws ErroRepositorioException;
 }
