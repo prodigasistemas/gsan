@@ -34,7 +34,6 @@ import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.IImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
-import gcom.cadastro.imovel.ImovelEconomia;
 import gcom.cadastro.imovel.ImovelImagem;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelRamoAtividade;
@@ -1356,10 +1355,10 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		try {
 			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
 			for (Integer idArquivo : idsArquivos) {
-				List<Integer> imoveisEmCampo = obterImoveisParaRegerarArquivo(idArquivo, tipoArquivo);
+				List<Integer> imoveis = obterImoveisParaRegerarArquivo(idArquivo, tipoArquivo);
 
-				if (imoveisEmCampo != null && !imoveisEmCampo.isEmpty()) {
-					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveisEmCampo, idArquivo, tipoArquivo));
+				if (imoveis != null && !imoveis.isEmpty()) {
+					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveis, idArquivo, tipoArquivo));
 				}
 			}
 
@@ -1428,13 +1427,28 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	
 	public List<Integer> obterImoveisParaRegerarArquivo(Integer idArquivo, String tipoArquivo) throws ControladorException {
 		try {
-			if (tipoArquivo.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA)) 
-				return repositorioAtualizacaoCadastral.obterImoveisARevisitar(idArquivo);
-			else
+			if (tipoArquivo.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA)) {
+				return obterImoveisParaRevisita(idArquivo);
+			} else {
 				return repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, SituacaoAtualizacaoCadastral.EM_CAMPO);
+			}
 		} catch (Exception e) {
 			throw new ControladorException("erro.gerar.arquivo.atualizacao.cadastral", e);
 		}
+	}
+
+	private List<Integer> obterImoveisParaRevisita(Integer idArquivo) throws ErroRepositorioException, ControladorException {
+		List<Integer> imoveisParaRevisita = repositorioAtualizacaoCadastral.obterImoveisARevisitar(idArquivo);
+		List<ImovelControleAtualizacaoCadastral> controles = repositorioAtualizacaoCadastral.obterImoveisControlePorImovel(imoveisParaRevisita);
+		
+		for (ImovelControleAtualizacaoCadastral controle : controles) {
+			Integer quantidadeVisitas = this.obterQuantidadeDeVisitasPorImovelControle(controle);
+			
+			if (quantidadeVisitas >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO)
+				imoveisParaRevisita.remove(controle.getImovel().getId());
+		}
+		
+		return imoveisParaRevisita;
 	}
 
 	private List<Integer> sortearImoveis(Integer idArquivo, Integer situacao, double percentual, Integer lote) throws ControladorException {

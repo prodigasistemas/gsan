@@ -1611,13 +1611,13 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         	consulta.append("select ic.imovel.id from ImovelControleAtualizacaoCadastral ic ")
             		.append("inner join ic.situacaoAtualizacaoCadastral situacao ")
             		.append("inner join ic.cadastroOcorrencia ocorrencia ")
-            		.append("where situacao.id = :situacao ")
+            		.append("where situacao.id in (:situacoes) ")
             		.append("and ocorrencia.indicadorVisita = :indicadorVisita ")
             		.append("and ic.imovel.id in (select idImovel from ImovelAtualizacaoCadastral where idArquivoTexto = :idArquivo ) ");
 
 
             retorno = (List<Integer>) session.createQuery(consulta.toString())
-            		.setInteger("situacao", SituacaoAtualizacaoCadastral.TRANSMITIDO)
+            		.setParameterList("situacoes", new Integer[] {SituacaoAtualizacaoCadastral.TRANSMITIDO,  SituacaoAtualizacaoCadastral.REVISITA})
             		.setInteger("idArquivo", idArquivo)
             		.setInteger("indicadorVisita", ConstantesSistema.SIM)
             		.list();
@@ -1661,23 +1661,24 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Visita> pesquisarVisitasPorImovelControle(ImovelControleAtualizacaoCadastral imovelControle) 
-		throws ErroRepositorioException {
-			List<Visita> visitas = new ArrayList<Visita>();
-			if (imovelControle == null || imovelControle.getId() == null)
-				return visitas;
-
-			Session session = HibernateUtil.getSession();	
-			try {
-				visitas = (List<Visita>) session.createQuery("from Visita v where v.imovelControleAtualizacaoCadastral.id = :idImovelControle")
-					.setInteger("idImovelControle", imovelControle.getId()).list();
-	
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro ao pesquisar visitas do imovel controle: " + imovelControle.getId());
-			} finally {
-				HibernateUtil.closeSession(session);
-			}
+	public List<Visita> pesquisarVisitasPorImovelControle(ImovelControleAtualizacaoCadastral imovelControle) throws ErroRepositorioException {
+		List<Visita> visitas = new ArrayList<Visita>();
+		
+		if (imovelControle == null || imovelControle.getId() == null)
 			return visitas;
+
+		Session session = HibernateUtil.getSession();
+		try {
+			visitas = (List<Visita>) session.createQuery("from Visita v where v.imovelControleAtualizacaoCadastral.id = :idImovelControle")
+											.setInteger("idImovelControle", imovelControle.getId())
+											.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar visitas do imovel controle: " + imovelControle.getId());
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return visitas;
 	}
 	
 	public void atualizarSituacaoConjuntoImovelControle(Integer situacao, List<Integer> ids) throws ErroRepositorioException {
@@ -1696,5 +1697,23 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         } finally {
             HibernateUtil.closeSession(session);
         }
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ImovelControleAtualizacaoCadastral> obterImoveisControlePorImovel(List<Integer> ids) throws ErroRepositorioException {
+		List<ImovelControleAtualizacaoCadastral> retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			String sql = "SELECT imovelControle FROM ImovelControleAtualizacaoCadastral imovelControle WHERE imovelControle.imovel.id IN (:ids)";
+			retorno = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(sql).setParameterList("ids", ids).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imovel controle por ids.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
 	}
 }
