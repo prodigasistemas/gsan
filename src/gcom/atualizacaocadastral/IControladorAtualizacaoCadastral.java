@@ -65,7 +65,7 @@ public interface IControladorAtualizacaoCadastral {
 
 	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosRevisaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualAleatorios) throws ControladorException;
 	
-	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo) throws ControladorException;
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo, Date dataUltimaTransmissao) throws ControladorException;
 	
 	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosFiscalizacaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualAleatorios, Integer lote) throws ControladorException;
 	

@@ -1351,11 +1351,11 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         }
 	}
 
-	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo) throws ControladorException {
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo, Date dataUltimaTransmissao) throws ControladorException {
 		try {
 			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
 			for (Integer idArquivo : idsArquivos) {
-				List<Integer> imoveis = obterImoveisParaRegerarArquivo(idArquivo, tipoArquivo);
+				List<Integer> imoveis = obterImoveisParaRegerarArquivo(idArquivo, tipoArquivo, dataUltimaTransmissao);
 
 				if (imoveis != null && !imoveis.isEmpty()) {
 					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveis, idArquivo, tipoArquivo));
@@ -1425,10 +1425,10 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	public List<Integer> obterImoveisParaRegerarArquivo(Integer idArquivo, String tipoArquivo) throws ControladorException {
+	public List<Integer> obterImoveisParaRegerarArquivo(Integer idArquivo, String tipoArquivo, Date dataUltimaTransmissao) throws ControladorException {
 		try {
 			if (tipoArquivo.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA)) {
-				return obterImoveisParaRevisita(idArquivo);
+				return obterImoveisParaRevisita(idArquivo, dataUltimaTransmissao);
 			} else {
 				return repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, SituacaoAtualizacaoCadastral.EM_CAMPO);
 			}
@@ -1437,8 +1437,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 
-	private List<Integer> obterImoveisParaRevisita(Integer idArquivo) throws ErroRepositorioException, ControladorException {
-		List<Integer> imoveisParaRevisita = repositorioAtualizacaoCadastral.obterImoveisARevisitar(idArquivo);
+	private List<Integer> obterImoveisParaRevisita(Integer idArquivo, Date dataUltimaTransmissao) throws ErroRepositorioException, ControladorException {
+		List<Integer> imoveisParaRevisita = repositorioAtualizacaoCadastral.obterImoveisARevisitar(idArquivo, dataUltimaTransmissao);
 		List<ImovelControleAtualizacaoCadastral> controles = repositorioAtualizacaoCadastral.obterImoveisControlePorImovel(imoveisParaRevisita);
 		
 		for (ImovelControleAtualizacaoCadastral controle : controles) {

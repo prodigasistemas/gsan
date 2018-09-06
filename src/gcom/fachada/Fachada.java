@@ -40196,9 +40196,9 @@ public class Fachada {
 		}
 	}
 	
-	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo) {
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo, Date dataUltimaTransmissao) {
 		try {
-			return getControladorAtualizacaoCadastral().regerarArquivosAtualizacaoCadastral(idsArquivos, tipoArquivo);
+			return getControladorAtualizacaoCadastral().regerarArquivosAtualizacaoCadastral(idsArquivos, tipoArquivo, dataUltimaTransmissao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

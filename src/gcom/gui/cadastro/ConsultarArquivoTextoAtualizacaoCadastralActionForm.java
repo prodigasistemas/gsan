@@ -30,8 +30,10 @@ public class ConsultarArquivoTextoAtualizacaoCadastralActionForm extends ActionF
 	private String[] idsRegistros;
 
 	private String percentualAleatorios;
-	
+
 	private String lote;
+
+	private String dataUltimaTransmissao;
 
 	@Override
 	public void reset(ActionMapping mapping, ServletRequest request) {
@@ -139,5 +141,13 @@ public class ConsultarArquivoTextoAtualizacaoCadastralActionForm extends ActionF
 
 	public void setLote(String lote) {
 		this.lote = lote;
+	}
+
+	public String getDataUltimaTransmissao() {
+		return dataUltimaTransmissao;
+	}
+
+	public void setDataUltimaTransmissao(String dataUltimaTransmissao) {
+		this.dataUltimaTransmissao = dataUltimaTransmissao;
 	}
 }

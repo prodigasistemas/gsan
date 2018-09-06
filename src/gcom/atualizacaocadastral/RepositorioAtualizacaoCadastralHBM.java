@@ -1602,7 +1602,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Integer> obterImoveisARevisitar(Integer idArquivo) throws ErroRepositorioException{
+	public List<Integer> obterImoveisARevisitar(Integer idArquivo, Date dataUltimaTransmissao) throws ErroRepositorioException{
 		List<Integer> retorno = null;
         Session session = HibernateUtil.getSession();
 
@@ -1613,12 +1613,13 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
             		.append("inner join ic.cadastroOcorrencia ocorrencia ")
             		.append("where situacao.id in (:situacoes) ")
             		.append("and ocorrencia.indicadorVisita = :indicadorVisita ")
-            		.append("and ic.imovel.id in (select idImovel from ImovelAtualizacaoCadastral where idArquivoTexto = :idArquivo ) ");
-
+            		.append("and ic.imovel.id in (select idImovel from ImovelAtualizacaoCadastral where idArquivoTexto = :idArquivo ) ")
+            		.append("and ic.dataRetorno < :dataUltimaTransmissao ");
 
             retorno = (List<Integer>) session.createQuery(consulta.toString())
             		.setParameterList("situacoes", new Integer[] {SituacaoAtualizacaoCadastral.TRANSMITIDO,  SituacaoAtualizacaoCadastral.REVISITA})
             		.setInteger("idArquivo", idArquivo)
+            		.setDate("dataUltimaTransmissao", dataUltimaTransmissao)
             		.setInteger("indicadorVisita", ConstantesSistema.SIM)
             		.list();
 

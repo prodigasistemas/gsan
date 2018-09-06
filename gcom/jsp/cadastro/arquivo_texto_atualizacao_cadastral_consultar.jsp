@@ -127,12 +127,28 @@
   	    return retorno;
     }
     
-    function gerarZip(url){
+    function gerarZip(url) {
 		var form = document.forms[0];
 		
 		if(CheckboxNaoVazio(document.forms[0].idsRegistros)){
 			form.action = url;
 			form.submit();
+		}
+	}
+
+    function gerarZipRevisita(url) {
+		var form = document.forms[0];
+
+		var dataUltimaTransmissao = trim(form.dataUltimaTransmissao.value);
+		
+		if(CheckboxNaoVazio(document.forms[0].idsRegistros)) {
+			 if (dataUltimaTransmissao == null || dataUltimaTransmissao == '') {
+				alert('Informe a Data da Última Transmissão.');
+				return false;
+			} else {
+				form.action = url;
+				form.submit();
+			}
 		}
 	}
 
@@ -366,24 +382,42 @@
 				<logic:present name="colecaoArquivoTextoAtualizacaoCadastral">
 					<logic:notEmpty name="colecaoArquivoTextoAtualizacaoCadastral">
 						<tr>
-							<td colspan="5" bgcolor="#000000" height="1" valign="baseline"></td>
-						</tr>
+					      <td colspan="3"><hr></td>
+					    </tr>
 						<tr>
 							<td colspan="1"> 
 								<strong>Tipo de arquivo para baixar:</strong>
 							</td>
 						</tr>
 						<tr>
-							<td colspan="3"> 
+							<td colspan="2"> 
 								<gsan:controleAcessoBotao name="Button" value="Compactado" onclick="javascript:gerarZip('retornarZipArquivoTxtAtualizacaoCadastralAction.do');" url="retornarZipArquivoTxtAtualizacaoCadastralAction.do" tabindex="13" />
 								<gsan:controleAcessoBotao name="Button" value="Imóveis Não Transmitidos" onclick="javascript:gerarZip('retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do" tabindex="13" />
-								<gsan:controleAcessoBotao name="Button" value="Imóveis para Revisita" onclick="javascript:gerarZip('retornarArquivosImoveisARevisitarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisitarAtualizacaoCadastralAction.do" tabindex="14" />
 							</td>
 							
 						</tr>
 				
 						<tr><td><p>&nbsp;</p></td></tr>
 						
+						<tr>
+					      <td colspan="3"><hr></td>
+					    </tr>
+						
+						<tr>
+							<td colspan="4">
+								<strong>Data da Última Transmissão:</strong>
+								<html:text property="dataUltimaTransmissao" size="10" maxlength="10" onkeypress="return isCampoNumerico(event);" onkeyup="mascaraData(this, event);" />
+								<a href="javascript:abrirCalendario('ConsultarArquivoTextoAtualizacaoCadastralActionForm', 'dataUltimaTransmissao');">
+									<img border="0" src="<bean:message key='caminho.imagens'/>calendario.gif" width="16" height="15" border="0" alt="Exibir Calendário" />
+								</a>
+								<gsan:controleAcessoBotao name="Button" value="Rota(s) para Revisita" onclick="javascript:gerarZipRevisita('retornarArquivosImoveisARevisitarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisitarAtualizacaoCadastralAction.do" tabindex="14" />
+							</td>
+						</tr>
+						
+						<tr>
+					      <td colspan="3"><hr></td>
+					    </tr>
+					    
 						<tr>
 							<td colspan="1">
 								<strong>Percentual de Imóveis Aleatórios:</strong>
@@ -404,8 +438,8 @@
 						
 						<tr>
 							<td colspan="2">
-								<gsan:controleAcessoBotao name="Button" value="Rotas para Revisão" onclick="javascript:gerarZip('retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
-								<gsan:controleAcessoBotao name="Button" value="Rotas para Fiscalização" onclick="javascript:gerarZip('retornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
+								<gsan:controleAcessoBotao name="Button" value="Rota(s) para Revisão" onclick="javascript:gerarZip('retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
+								<gsan:controleAcessoBotao name="Button" value="Rota(s) para Fiscalização" onclick="javascript:gerarZip('retornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
 							</td>
 						</tr>
 							

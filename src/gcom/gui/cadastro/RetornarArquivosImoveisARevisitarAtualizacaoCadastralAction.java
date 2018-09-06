@@ -4,6 +4,7 @@ import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.tarefa.TarefaException;
+import gcom.util.Util;
 import gcom.util.ZipUtil;
 
 import java.io.File;
@@ -25,12 +26,13 @@ import org.apache.struts.action.ActionMapping;
 public class RetornarArquivosImoveisARevisitarAtualizacaoCadastralAction extends GcomAction {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
-		
-
 		ConsultarArquivoTextoAtualizacaoCadastralActionForm form = (ConsultarArquivoTextoAtualizacaoCadastralActionForm) actionForm;
 
-		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().regerarArquivosAtualizacaoCadastral(getIdsArquivos(form), ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA);
-
+		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().regerarArquivosAtualizacaoCadastral(
+				getIdsArquivos(form), 
+				ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA,
+				Util.converteStringParaDate(form.getDataUltimaTransmissao()));
+		
 		if (listaArquivoTexto != null && !listaArquivoTexto.isEmpty()) {
 			try {
 				String nomeArquivoZIP = getNomeArquivo(form.getIdLocalidade());
