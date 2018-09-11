@@ -69,7 +69,7 @@ public interface IControladorAtualizacaoCadastral {
 	
 	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosFiscalizacaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualAleatorios, Integer lote) throws ControladorException;
 	
-	public TabelaColunaAtualizacaoCadastral pesquisarTabelaColunaPorImovel(TabelaColuna coluna, Integer idImovel) throws ControladorException;
+	public TabelaColunaAtualizacaoCadastral pesquisarTabelaColunaPorImovel(TabelaColuna coluna, Integer idImovel, String complemento) throws ControladorException;
 	
 	public TabelaAtualizacaoCadastral pesquisarTabelaPorImovel(Tabela tabela, Integer idImovel) throws ControladorException;
 	

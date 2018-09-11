@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -1263,24 +1264,32 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         return retorno;
 	}
 	
-	public TabelaColunaAtualizacaoCadastral obterTabelaColuna(TabelaColuna coluna, Integer idImovel) throws ErroRepositorioException {
+	public TabelaColunaAtualizacaoCadastral obterTabelaColuna(TabelaColuna coluna, Integer idImovel, String complemento) throws ErroRepositorioException {
 		TabelaColunaAtualizacaoCadastral retorno = null;
         Session session = HibernateUtil.getSession();
         
-        StringBuilder consulta = new StringBuilder();
+        StringBuilder sql = new StringBuilder();
         try {
-        	consulta.append("select colunaAtualizacao from TabelaColunaAtualizacaoCadastral colunaAtualizacao ")
-            		.append("inner join colunaAtualizacao.tabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
-            		.append("inner join tabelaAtualizacaoCadastral.tabela tabela ")
-            		.append("inner join colunaAtualizacao.tabelaColuna coluna ")
-            		.append("where tabela.id = :idTabela ")
-            		.append("and coluna.coluna like :nomeColuna ")
-            		.append("and tabelaAtualizacaoCadastral.codigoImovel = :idImovel ");
+        	sql.append("select colunaAtualizacao from TabelaColunaAtualizacaoCadastral colunaAtualizacao ")
+               .append("inner join colunaAtualizacao.tabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
+               .append("inner join tabelaAtualizacaoCadastral.tabela tabela ")
+               .append("inner join colunaAtualizacao.tabelaColuna coluna ")
+               .append("where tabela.id = :idTabela ")
+               .append("and coluna.coluna like :nomeColuna ")
+               .append("and tabelaAtualizacaoCadastral.codigoImovel = :idImovel ");
         	
-            retorno = (TabelaColunaAtualizacaoCadastral) session.createQuery(consulta.toString())
+        	if (StringUtils.isNotEmpty(complemento))
+        		sql.append("and tabelaAtualizacaoCadastral.complemento = :complemento ");
+        	
+            Query query = session.createQuery(sql.toString())
             		.setInteger("idTabela", coluna.getTabela().getId())
             		.setString("nomeColuna", coluna.getDescricaoColuna())
-            		.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
+            		.setInteger("idImovel", idImovel);
+            
+            if (StringUtils.isNotEmpty(complemento))
+            	query.setString("complemento", complemento);
+            
+            retorno = (TabelaColunaAtualizacaoCadastral) query.setMaxResults(1).uniqueResult();
             
         } catch (HibernateException e) {
             throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");

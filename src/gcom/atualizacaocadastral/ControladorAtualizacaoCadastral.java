@@ -1469,9 +1469,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return sorteados;
 	}
 	
-	public TabelaColunaAtualizacaoCadastral pesquisarTabelaColunaPorImovel(TabelaColuna coluna, Integer idImovel) throws ControladorException {
+	public TabelaColunaAtualizacaoCadastral pesquisarTabelaColunaPorImovel(TabelaColuna coluna, Integer idImovel, String complemento) throws ControladorException {
 		try {
-			return repositorioAtualizacaoCadastral.obterTabelaColuna(coluna, idImovel);
+			return repositorioAtualizacaoCadastral.obterTabelaColuna(coluna, idImovel, complemento);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.pesquisar.tabela.coluna.atualizacao.cadastral", e);
 		}
