@@ -212,6 +212,9 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 						
 					tabelaColunaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_NAO_ACEITO);
 					
+					if (tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral() != null)
+						tabelaAtualizacaoCadastral.setId(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getId());
+					
 					tabelaColunaAtualizacaoCadastral.setTabelaAtualizacaoCadastral(tabelaAtualizacaoCadastral);
 					
 					FiltroTabelaColuna filtroColuna = new FiltroTabelaColuna();

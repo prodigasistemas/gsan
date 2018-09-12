@@ -1271,7 +1271,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         StringBuilder sql = new StringBuilder();
         try {
         	sql.append("select colunaAtualizacao from TabelaColunaAtualizacaoCadastral colunaAtualizacao ")
-               .append("inner join colunaAtualizacao.tabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
+               .append("inner join fetch colunaAtualizacao.tabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
                .append("inner join tabelaAtualizacaoCadastral.tabela tabela ")
                .append("inner join colunaAtualizacao.tabelaColuna coluna ")
                .append("where tabela.id = :idTabela ")
