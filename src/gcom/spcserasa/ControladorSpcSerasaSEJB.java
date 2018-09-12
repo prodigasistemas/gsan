@@ -7536,49 +7536,22 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				try {
 					NegativadorContrato negativadorContrato = this.repositorioSpcSerasa.consultarNegativadorContratoVigente(negativador.getId());
 
-					String numeroSequencialEnvioBase = negativadorContrato.getNumeroSequencialEnvio() + "";
+					int numeroSequencialEnvioBase = negativadorContrato.getNumeroSequencialEnvio();
+					int numeroSequencialArquivo = Integer.parseInt(getConteudo(120, 6, registro.toCharArray()));
 
-					String quantidadeZeros = "";
-
-					int tamanho = 6 - numeroSequencialEnvioBase.length();
-
-					for (int i = 0; i < tamanho; i++) {
-						quantidadeZeros = quantidadeZeros + "0";
-					}
-
-					numeroSequencialEnvioBase = quantidadeZeros + numeroSequencialEnvioBase;
-
-					// H.09
-					String numeroSequencialArquivo = getConteudo(120, 6, registro.toCharArray());
-
-					if (Util.converterStringParaInteger(numeroSequencialArquivo) > Util.converterStringParaInteger(numeroSequencialEnvioBase)) {
+					if (numeroSequencialArquivo > numeroSequencialEnvioBase) {
 						throw new ControladorException("atencao.movimento_fora_sequencia");
 					}
 
 					if (negativadorContrato.getIndicadorControleNsaRetorno().equals(ConstantesSistema.SIM)) {
-						String numeroSequencialRetornoBase = (negativadorContrato.getNumeroSequencialRetorno() + 1) + "";
+						int numeroSequencialRetornoBase = negativadorContrato.getNumeroSequencialRetorno() + 1;
 
-						String quantidadeZerosRetorno = "";
-
-						int tamanhoretorno = 8 - numeroSequencialRetornoBase.length();
-
-						for (int i = 0; i < tamanhoretorno; i++) {
-							quantidadeZerosRetorno = quantidadeZerosRetorno + "0";
-						}
-
-						numeroSequencialRetornoBase = quantidadeZerosRetorno + numeroSequencialRetornoBase;
-						
-						System.out.println("numeroSequencialArquivo     = " + numeroSequencialArquivo);
-						System.out.println("numeroSequencialRetornoBase = " + numeroSequencialRetornoBase);
-						System.out.println("numeroSequencialCotnrato    = " + negativadorContrato.getNumeroSequencialRetorno());
-
-						if (Util.converterStringParaInteger(numeroSequencialArquivo).compareTo(Util.converterStringParaInteger(numeroSequencialRetornoBase)) != 0) {
+						if (numeroSequencialArquivo != numeroSequencialRetornoBase) {
 							throw new ControladorException("atencao.movimento_fora_sequencia");
 						}
 					}
 
-					negativadorMovimento = repositorioSpcSerasa.getNegativadorMovimento(negativador,
-							Util.converterStringParaInteger(numeroSequencialArquivo));
+					negativadorMovimento = repositorioSpcSerasa.getNegativadorMovimento(negativador, numeroSequencialArquivo);
 					if (negativadorMovimento != null && negativadorMovimento.getDataRetorno() != null) {
 						throw new ControladorException("atencao.movimento_retorno_ja_processado");
 					}
