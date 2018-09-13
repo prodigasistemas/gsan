@@ -12,9 +12,7 @@ import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
 import gcom.atualizacaocadastral.ImovelTipoOcupanteQuantidadeRetorno;
 import gcom.atualizacaocadastral.Visita;
-import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
-import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteBuilder;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteProprietarioBuilder;
@@ -99,9 +97,12 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		}
 	}
 
-	private void inserirVisitaParaImovelControle(ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral) throws ControladorException {
-	    Visita visita = new Visita(imovelControleAtualizacaoCadastral);
-	    controladorUtil.inserir(visita);
+	private void inserirVisitaParaImovelControle(ImovelControleAtualizacaoCadastral controle) throws ControladorException {
+		Visita visita = new Visita(controle, 
+				atualizacaoCadastralImovel.getLinhaAnormalidade("latitude"), 
+				atualizacaoCadastralImovel.getLinhaAnormalidade("longitude"));
+		
+		controladorUtil.inserir(visita);
 	}
 
 	private void salvarImovelRetorno() throws Exception {
@@ -287,7 +288,8 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		controladorUtil.inserir(imovelSubcategoriaRetorno);
 	}
 
-    private void salvarImovelQuantidadesOcupantes() throws ControladorException {
+    @SuppressWarnings("unchecked")
+	private void salvarImovelQuantidadesOcupantes() throws ControladorException {
         Collection<ImovelTipoOcupante> todosTipos = controladorUtil.listar(ImovelTipoOcupante.class);
 
         for (ImovelTipoOcupante tipo : todosTipos) {
@@ -360,12 +362,6 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 			controle.setImovelRetorno(new ImovelRetorno(idImovelRetorno));
 			controladorUtil.atualizar(controle);
 		}
-	}
-
-	private boolean existeRetorno() throws ControladorException {
-		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
-
-		return controle != null;
 	}
 
 	private void atualizarRetorno() throws ControladorException {

@@ -1527,4 +1527,13 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			throw new ControladorException("Erro atualizar retorno da atualizacao cadastral", e);
 		}
 	}
+
+	public List<Visita> obterVisitasPorImovelControleECoordenadas(ImovelControleAtualizacaoCadastral imovelControle, String latitude, String longitude)
+		throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.pesquisarVisitasPorImovelControleELatitudeELongitude(imovelControle, latitude, longitude);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro buscar visitas do imovel com latitude e longitude", e);
+		}
+	}
 }

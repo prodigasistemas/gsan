@@ -1708,6 +1708,24 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
             HibernateUtil.closeSession(session);
         }
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Visita> pesquisarVisitasPorImovelControleELatitudeELongitude(ImovelControleAtualizacaoCadastral imovelControle, String latitude, String longitude) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String sql = "from Visita v where v.imovelControleAtualizacaoCadastral.id = :idImovelControle and v.coordenadaX = :latitude and v.coordenadaY =  :longitude";
+			
+			return session.createQuery(sql).setInteger("idImovelControle", imovelControle.getId())
+										   .setString("latitude", latitude)
+										   .setString("longitude", longitude)
+										   .list();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao atualizar situacao de um conjunto de imovel controle.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 	
 	@SuppressWarnings("unchecked")
 	public List<ImovelControleAtualizacaoCadastral> obterImoveisControlePorImovel(List<Integer> ids) throws ErroRepositorioException {

@@ -16,12 +16,22 @@ public class Visita extends ObjetoTransacao {
     private ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral;
     private CadastroOcorrencia cadastroOcorrencia;
     private Date ultimaAlteracao;
+    private String coordenadaX;
+    private String coordenadaY;
 
     public Visita() {}
 
     public Visita(ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral) {
         this.imovelControleAtualizacaoCadastral = imovelControleAtualizacaoCadastral;
         this.cadastroOcorrencia = imovelControleAtualizacaoCadastral.getCadastroOcorrencia();
+        setUltimaAlteracao(new Date());
+    }
+
+    public Visita(ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral, String coordenadaX, String coordenadaY) {
+        this.imovelControleAtualizacaoCadastral = imovelControleAtualizacaoCadastral;
+        this.cadastroOcorrencia = imovelControleAtualizacaoCadastral.getCadastroOcorrencia();
+        setCoordenadaX(coordenadaX);
+        setCoordenadaY(coordenadaY);
         setUltimaAlteracao(new Date());
     }
 
@@ -58,6 +68,34 @@ public class Visita extends ObjetoTransacao {
     @Override
     public void setUltimaAlteracao(Date ultimaAlteracao) {
         this.ultimaAlteracao = ultimaAlteracao;
+    }
+
+    /**
+     * @return the coordenadaX
+     */
+    public String getCoordenadaX() {
+        return coordenadaX;
+    }
+
+    /**
+     * @param coordenadaX the coordenadaX to set
+     */
+    public void setCoordenadaX(String coordenadaX) {
+        this.coordenadaX = coordenadaX;
+    }
+
+    /**
+     * @return the coordeandaY
+     */
+    public String getCoordenadaY() {
+        return coordenadaY;
+    }
+
+    /**
+     * @param coordenadaY the coordenadaY to set
+     */
+    public void setCoordenadaY(String coordenadaY) {
+        this.coordenadaY = coordenadaY;
     }
 
     @Override

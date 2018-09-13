@@ -5,6 +5,7 @@ import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorCPFsClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorCepClienteProprietarioResponsavel;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorCepImovelCommand;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorCoordenadasCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorEconomiasCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorHidrometroCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorLogradouroCommand;
@@ -47,6 +48,7 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral,
 			ControladorClienteLocal controladorCliente,
 			IRepositorioClienteImovel repositorioClienteImovel) {
+		
 		super(parser, repositorioCadastro, controladorUtil, controladorTransacao,
 				repositorioImovel, controladorEndereco,
 				controladorAtualizacaoCadastral, controladorCliente);
@@ -56,24 +58,22 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 
 	@Override
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
-		
 		imovelAtual = atualizacao.getImovelAtual();
-		
-		CadastroOcorrencia cadastroOcorrencia = imovelAtual.getCadastroOcorrencia();
-		
+
+		CadastroOcorrencia ocorrencia = imovelAtual.getCadastroOcorrencia();
+
 		new ValidadorSituacaoImovelCommand(imovelAtual, controladorAtualizacaoCadastral).execute();
-		
-		if (cadastroOcorrencia != null 
-				&& cadastroOcorrencia.getIndicadorValidacao().equals(ConstantesSistema.SIM)) {
-			
+		new ValidadorCoordenadasCommand(imovelAtual, controladorAtualizacaoCadastral).execute();
+
+		if (ocorrencia != null && ocorrencia.getIndicadorValidacao().equals(ConstantesSistema.SIM)) {
 			validarLinhaCliente();
 			validarLinhaImovel();
 			validarLinhaRamoAtividade();
 			validarLinhaMedidor();
 		}
-		
+
 		if (!imovelAtual.isErroLayout())
-			new ValidadorCepImovelCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();		
+			new ValidadorCepImovelCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();
 	}
 
 	private void validarLinhaMedidor() {

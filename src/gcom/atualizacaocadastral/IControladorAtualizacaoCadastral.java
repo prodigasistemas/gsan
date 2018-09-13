@@ -83,4 +83,6 @@ public interface IControladorAtualizacaoCadastral {
 	
 	public void atualizarRetornoPreAprovado(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException;
 
+	public List<Visita> obterVisitasPorImovelControleECoordenadas(ImovelControleAtualizacaoCadastral imovelControle, String latitude, String longitude) throws ControladorException;
+
 }
