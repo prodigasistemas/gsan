@@ -248,10 +248,20 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 		}
 	}
 
+	private String getComplemento(Object objeto) {
+		String complemento = null;
+		if (objeto instanceof ImovelSubcategoriaAtualizacaoCadastral) {
+			ImovelSubcategoriaAtualizacaoCadastral subcategoria = (ImovelSubcategoriaAtualizacaoCadastral) objeto;
+			complemento = subcategoria.getDescricaoCategoria() + " - " + subcategoria.getDescricaoSubcategoria();
+		}
+			
+		return complemento;
+	}
+
 	private TabelaAtualizacaoCadastral pesquisarTabelaParaAtualizar(Object objeto, Integer matriculaImovel) throws ControladorException {
 		Tabela tabela = obterTabelaAtualizacaoCadastral(objeto);
 
-		TabelaAtualizacaoCadastral tabelaAtualizacao = controladorAtualizacaoCadastral.pesquisarTabelaPorImovel(tabela, matriculaImovel);
+		TabelaAtualizacaoCadastral tabelaAtualizacao = controladorAtualizacaoCadastral.pesquisarTabelaPorImovel(tabela, matriculaImovel, getComplemento(objeto));
 
 		if (tabelaAtualizacao == null) {
 			tabelaAtualizacao = new TabelaAtualizacaoCadastral();

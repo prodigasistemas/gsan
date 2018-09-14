@@ -1477,9 +1477,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	public TabelaAtualizacaoCadastral pesquisarTabelaPorImovel(Tabela tabela, Integer idImovel) throws ControladorException {
+	public TabelaAtualizacaoCadastral pesquisarTabelaPorImovel(Tabela tabela, Integer idImovel, String complemento) throws ControladorException {
 		try {
-			return repositorioAtualizacaoCadastral.obterTabela(tabela, idImovel);
+			return repositorioAtualizacaoCadastral.obterTabela(tabela, idImovel, complemento);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.pesquisar.tabela.coluna.atualizacao.cadastral", e);
 		}

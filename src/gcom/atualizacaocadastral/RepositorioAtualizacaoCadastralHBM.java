@@ -1566,7 +1566,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         return retorno;
 	}
 
-	public TabelaAtualizacaoCadastral obterTabela(Tabela tabela, Integer idImovel) throws ErroRepositorioException {
+	public TabelaAtualizacaoCadastral obterTabela(Tabela tabela, Integer idImovel, String complemento) throws ErroRepositorioException {
 		TabelaAtualizacaoCadastral retorno = null;
         Session session = HibernateUtil.getSession();
 
@@ -1576,10 +1576,18 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
             		.append("inner join tabelaAtualizacaoCadastral.tabela tabela ")
             		.append("where tabela.id = :idTabela ")
             		.append("and tabelaAtualizacaoCadastral.codigoImovel = :idImovel ");
+        	
+        	if (StringUtils.isNotEmpty(complemento))
+        		consulta.append("and tabelaAtualizacaoCadastral.complemento = :complemento ");
 
-            retorno = (TabelaAtualizacaoCadastral) session.createQuery(consulta.toString())
+            Query query = session.createQuery(consulta.toString())
             		.setInteger("idTabela", tabela.getId())
-            		.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
+            		.setInteger("idImovel", idImovel);
+            
+            if (StringUtils.isNotEmpty(complemento))
+            	query.setString("complemento", complemento);
+            
+            retorno = (TabelaAtualizacaoCadastral) query.setMaxResults(1).uniqueResult();
 
         } catch (HibernateException e) {
             throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
