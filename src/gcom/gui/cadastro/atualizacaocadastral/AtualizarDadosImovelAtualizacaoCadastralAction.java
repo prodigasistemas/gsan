@@ -89,7 +89,7 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 	}
 	
 	private boolean permiteAprovarOuConcluirFiscalizacao(ImovelControleAtualizacaoCadastral controle, short indicadorValidacao) {
-		return (controle.isPreAprovado() && retornoValidado(indicadorValidacao)) || controle.isEmFiscalizacao();
+		return (controle.isPreAprovado() && retornoValidado(indicadorValidacao)) || controle.isEmFiscalizacao() || controle.isFiscalizado();
 	}
 	
 	private boolean retornoValidado(short indicadorValidacao) {
