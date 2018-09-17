@@ -3,7 +3,6 @@ package gcom.gui.cobranca;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.FiltroIndicesAcrescimosImpontualidade;
 import gcom.cobranca.IndicesAcrescimosImpontualidade;
-import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
@@ -20,246 +19,132 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Pre- processamento para informar indices de acrescimos por impontualidade.
- * 
- * @author Sávio Luiz
- * @date 26/09/2007
- */
-public class ExibirInformarIndiceAcrescimosImpontualidadeAction extends
-		GcomAction {
+public class ExibirInformarIndiceAcrescimosImpontualidadeAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
-
-		// Seta o retorno
-		ActionForward retorno = actionMapping
-				.findForward("inserirAcaoCobranca");
-
-		Fachada fachada = Fachada.getInstancia();
-
-		IndiceAcrescimosImpontualidadeForm indiceAcrescimosImpontualidadeForm = (IndiceAcrescimosImpontualidadeForm) actionForm;
-		if (httpServletRequest.getParameter("menu") != null
-				&& !httpServletRequest.getParameter("menu").equals("")) {
-			indiceAcrescimosImpontualidadeForm.setMesAnoReferencia("");
-			indiceAcrescimosImpontualidadeForm.setPercentualMulta("");
-			indiceAcrescimosImpontualidadeForm.setPercentualJurosMora("");
-			indiceAcrescimosImpontualidadeForm
-					.setPercentualAtualizacaoMonetaria("");
-			indiceAcrescimosImpontualidadeForm.setFatorCorrecao("");
-			indiceAcrescimosImpontualidadeForm.setCamposDesabilitados("");
-			indiceAcrescimosImpontualidadeForm.setIndicadorJurosMensal(ConstantesSistema.SIM.toString());
-			indiceAcrescimosImpontualidadeForm.setIndicadorMultaMensal(ConstantesSistema.SIM.toString());
-			indiceAcrescimosImpontualidadeForm.setPercentualLimiteJuros("");
-			indiceAcrescimosImpontualidadeForm.setPercentualLimiteMulta("");
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		IndiceAcrescimosImpontualidadeForm form = (IndiceAcrescimosImpontualidadeForm) actionForm;
+		if (request.getParameter("menu") != null && !request.getParameter("menu").equals("")) {
+			form.setMesAnoReferencia("");
+			form.setPercentualMulta("");
+			form.setPercentualJurosMora("");
+			form.setPercentualAtualizacaoMonetaria("");
+			form.setFatorCorrecao("");
+			form.setCamposDesabilitados("");
+			form.setIndicadorJurosMensal(ConstantesSistema.SIM.toString());
+			form.setIndicadorMultaMensal(ConstantesSistema.SIM.toString());
+			form.setPercentualLimiteJuros("");
+			form.setPercentualLimiteMulta("");
 		}
 
-		if (httpServletRequest.getParameter("calcular") != null
-				&& httpServletRequest.getParameter("calcular").equals("sim")) {
-
-			calcularFatorAtualizacaoMonetaria(
-					indiceAcrescimosImpontualidadeForm, httpServletRequest,
-					fachada);
-
+		if (request.getParameter("calcular") != null && request.getParameter("calcular").equals("sim")) {
+			calcularFatorAtualizacaoMonetaria(form, request);
 		} else {
-
-			// pesquisa os dados do enter
-			pesquisarEnter(indiceAcrescimosImpontualidadeForm,
-					httpServletRequest, fachada);
+			pesquisarEnter(form, request);
 		}
 
-		return retorno;
+		return mapping.findForward("inserirAcaoCobranca");
 	}
 
-	private void pesquisarEnter(
-			IndiceAcrescimosImpontualidadeForm indiceAcrescimosImpontualidadeForm,
-			HttpServletRequest httpServletRequest, Fachada fachada) {
-
-		// pesquisa enter de critério de cobrança
-		if (indiceAcrescimosImpontualidadeForm.getMesAnoReferencia() != null
-				&& !indiceAcrescimosImpontualidadeForm.getMesAnoReferencia()
-						.equals("")) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void pesquisarEnter(IndiceAcrescimosImpontualidadeForm form, HttpServletRequest request) {
+		if (form.getMesAnoReferencia() != null && !form.getMesAnoReferencia().equals("")) {
 
 			FiltroIndicesAcrescimosImpontualidade filtroIndicesAcrescimosImpontualidade = new FiltroIndicesAcrescimosImpontualidade();
 			Integer anoMesReferencia = null;
 			try {
-				anoMesReferencia = Util
-						.formatarMesAnoComBarraParaAnoMes(indiceAcrescimosImpontualidadeForm
-								.getMesAnoReferencia());
+				anoMesReferencia = Util.formatarMesAnoComBarraParaAnoMes(form.getMesAnoReferencia());
 
 				// [FS0002] - Validar mês e ano de referência
-				Integer anoMesReferenciaMaximo = fachada
-						.pesquisarMaximoAnoMesIndicesAcerscimosImpontualidade();
+				Integer anoMesReferenciaMaximo = getFachada().pesquisarMaximoAnoMesIndicesAcerscimosImpontualidade();
 				Integer anoMesReferenciaMaisUm = null;
-				if(anoMesReferenciaMaximo != null){
-				 anoMesReferenciaMaisUm = Util.somaMesAnoMesReferencia(
-						anoMesReferenciaMaximo, 1);
+				if (anoMesReferenciaMaximo != null) {
+					anoMesReferenciaMaisUm = Util.somaMesAnoMesReferencia(anoMesReferenciaMaximo, 1);
 				}
 				if (anoMesReferenciaMaisUm != null && anoMesReferencia > anoMesReferenciaMaisUm) {
-					throw new ActionServletException(
-							"atencao.mes_ano_referencia_maior", null, ""
-									+ anoMesReferenciaMaisUm);
+					throw new ActionServletException("atencao.mes_ano_referencia_maior", null, "" + anoMesReferenciaMaisUm);
 				}
-				filtroIndicesAcrescimosImpontualidade
-						.adicionarParametro(new ParametroSimples(
-								FiltroIndicesAcrescimosImpontualidade.ANO_MES_REFERENCIA,
-								anoMesReferencia));
+				filtroIndicesAcrescimosImpontualidade.adicionarParametro(new ParametroSimples(FiltroIndicesAcrescimosImpontualidade.ANO_MES_REFERENCIA, anoMesReferencia));
 			} catch (NumberFormatException ex) {
-				throw new ActionServletException(
-						"atencao.campo_texto.numero_obrigatorio", null,
-						"Mes/Ano Referência");
+				throw new ActionServletException("atencao.campo_texto.numero_obrigatorio", null, "Mes/Ano Referência");
 			}
 
-			Collection colecaoIndicesAcrescimosImpontualidade = fachada
-					.pesquisar(filtroIndicesAcrescimosImpontualidade,
-							IndicesAcrescimosImpontualidade.class.getName());
+			Collection pesquisa = getFachada().pesquisar(filtroIndicesAcrescimosImpontualidade, IndicesAcrescimosImpontualidade.class.getName());
 
-			if (colecaoIndicesAcrescimosImpontualidade != null
-					&& !colecaoIndicesAcrescimosImpontualidade.isEmpty()) {
-				IndicesAcrescimosImpontualidade indicesAcrescimosImpontualidade = (IndicesAcrescimosImpontualidade) Util
-						.retonarObjetoDeColecao(colecaoIndicesAcrescimosImpontualidade);
-				indiceAcrescimosImpontualidadeForm.setPercentualMulta(indicesAcrescimosImpontualidade
-								.getPercentualMulta() + "");
-				indiceAcrescimosImpontualidadeForm.setPercentualJurosMora(indicesAcrescimosImpontualidade
-								.getPercentualJurosMora() + "");
-				indiceAcrescimosImpontualidadeForm.setFatorCorrecao(indicesAcrescimosImpontualidade
-						.getFatorAtualizacaoMonetaria() + "");
-				indiceAcrescimosImpontualidadeForm
-						.setPercentualAtualizacaoMonetaria("");
-				httpServletRequest.setAttribute("nomeCampo",
-						"percentualAtualizacaoMonetaria");
-				indiceAcrescimosImpontualidadeForm.setPercentualLimiteJuros(Util
-						.formatarMoedaReal(indicesAcrescimosImpontualidade
-								.getPercentualLimiteJuros()));
-				indiceAcrescimosImpontualidadeForm.setPercentualLimiteMulta(Util
-						.formatarMoedaReal(indicesAcrescimosImpontualidade
-								.getPercentualLimiteMulta()));
-				indiceAcrescimosImpontualidadeForm.setIndicadorJurosMensal(indicesAcrescimosImpontualidade
-								.getIndicadorJurosMensal().toString());
-				indiceAcrescimosImpontualidadeForm.setIndicadorMultaMensal(indicesAcrescimosImpontualidade
-						.getIndicadorMultaMensal().toString());
+			if (pesquisa != null && !pesquisa.isEmpty()) {
+				IndicesAcrescimosImpontualidade indicesAcrescimosImpontualidade = (IndicesAcrescimosImpontualidade) Util.retonarObjetoDeColecao(pesquisa);
+				form.setPercentualMulta(indicesAcrescimosImpontualidade.getPercentualMulta() + "");
+				form.setPercentualJurosMora(indicesAcrescimosImpontualidade.getPercentualJurosMora() + "");
+				form.setFatorCorrecao(indicesAcrescimosImpontualidade.getFatorAtualizacaoMonetaria() + "");
+				form.setPercentualAtualizacaoMonetaria("");
+				request.setAttribute("nomeCampo", "percentualAtualizacaoMonetaria");
+				form.setPercentualLimiteJuros(Util.formatarMoedaReal(indicesAcrescimosImpontualidade.getPercentualLimiteJuros()));
+				form.setPercentualLimiteMulta(Util.formatarMoedaReal(indicesAcrescimosImpontualidade.getPercentualLimiteMulta()));
+				form.setIndicadorJurosMensal(indicesAcrescimosImpontualidade.getIndicadorJurosMensal().toString());
+				form.setIndicadorMultaMensal(indicesAcrescimosImpontualidade.getIndicadorMultaMensal().toString());
 
-				SistemaParametro sistemaParametro = fachada
-						.pesquisarParametrosDoSistema();
+				SistemaParametro sistemaParametro = getFachada().pesquisarParametrosDoSistema();
 
-				// caso o ano mes de referencia for menor ou igual ao ano mes de
-				// arrecadação não deixa alterar os dados
 				if (anoMesReferencia <= sistemaParametro.getAnoMesArrecadacao()) {
-					indiceAcrescimosImpontualidadeForm
-							.setCamposDesabilitados("sim");
+					form.setCamposDesabilitados("sim");
 				}
 			} else {
-				httpServletRequest.setAttribute("nomeCampo", "percentualMulta");
+				request.setAttribute("nomeCampo", "percentualMulta");
 			}
-
 		}
-
 	}
 
-	private void calcularFatorAtualizacaoMonetaria(
-			IndiceAcrescimosImpontualidadeForm indiceAcrescimosImpontualidadeForm,
-			HttpServletRequest httpServletRequest, Fachada fachada) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void calcularFatorAtualizacaoMonetaria(IndiceAcrescimosImpontualidadeForm form, HttpServletRequest request) {
+		if (form.getMesAnoReferencia() != null && !form.getMesAnoReferencia().equals("")) {
 
-		// pesquisa enter de critério de cobrança
-		if (indiceAcrescimosImpontualidadeForm.getMesAnoReferencia() != null
-				&& !indiceAcrescimosImpontualidadeForm.getMesAnoReferencia()
-						.equals("")) {
-
-			if (indiceAcrescimosImpontualidadeForm
-					.getPercentualAtualizacaoMonetaria() != null) {
-				BigDecimal percentualAtualizacaoMonetaria = Util
-						.formatarMoedaRealparaBigDecimal(indiceAcrescimosImpontualidadeForm
-								.getPercentualAtualizacaoMonetaria());
-				if (percentualAtualizacaoMonetaria.compareTo(new BigDecimal(
-						"0.00")) == 0
-						|| percentualAtualizacaoMonetaria
-								.compareTo(new BigDecimal("100.00")) > 0) {
-					throw new ActionServletException(
-							"atencao.percentual_invalido", null,
-							"Fator Atualização Monetária");
+			if (form.getPercentualAtualizacaoMonetaria() != null) {
+				BigDecimal percentual = Util.formatarMoedaRealparaBigDecimal(form.getPercentualAtualizacaoMonetaria());
+				
+				if (percentual.compareTo(new BigDecimal("0.00")) < 0 || percentual.compareTo(new BigDecimal("100.00")) > 0) {
+//				if (percentual.compareTo(new BigDecimal("0.00")) == 0 || percentual.compareTo(new BigDecimal("100.00")) > 0) {
+					throw new ActionServletException("atencao.percentual_invalido", null, "Fator Atualização Monetária");
 				}
 			}
 
-			FiltroIndicesAcrescimosImpontualidade filtroIndicesAcrescimosImpontualidade = new FiltroIndicesAcrescimosImpontualidade();
+			FiltroIndicesAcrescimosImpontualidade filtro = new FiltroIndicesAcrescimosImpontualidade();
 			Integer anoMesReferencia = null;
 			try {
-				anoMesReferencia = Util
-						.formatarMesAnoComBarraParaAnoMes(indiceAcrescimosImpontualidadeForm
-								.getMesAnoReferencia());
-
-				Integer anoMesReferenciaMenosUm = Util
-						.subtraiAteSeisMesesAnoMesReferencia(anoMesReferencia,
-								1);
-
-				filtroIndicesAcrescimosImpontualidade
-						.adicionarParametro(new ParametroSimples(
-								FiltroIndicesAcrescimosImpontualidade.ANO_MES_REFERENCIA,
-								anoMesReferenciaMenosUm));
+				anoMesReferencia = Util.formatarMesAnoComBarraParaAnoMes(form.getMesAnoReferencia());
+				Integer anoMesReferenciaMenosUm = Util.subtraiAteSeisMesesAnoMesReferencia(anoMesReferencia, 1);
+				filtro.adicionarParametro(new ParametroSimples(FiltroIndicesAcrescimosImpontualidade.ANO_MES_REFERENCIA, anoMesReferenciaMenosUm));
 			} catch (NumberFormatException ex) {
-				throw new ActionServletException(
-						"atencao.campo_texto.numero_obrigatorio", null,
-						"Mes/Ano Referência");
+				throw new ActionServletException("atencao.campo_texto.numero_obrigatorio", null, "Mes/Ano Referência");
 			}
 
-			Collection colecaoIndicesAcrescimosImpontualidadeAnterior = fachada
-					.pesquisar(filtroIndicesAcrescimosImpontualidade,
-							IndicesAcrescimosImpontualidade.class.getName());
+			Collection colecaoAnterior = getFachada().pesquisar(filtro, IndicesAcrescimosImpontualidade.class.getName());
 
-			if (colecaoIndicesAcrescimosImpontualidadeAnterior != null
-					&& !colecaoIndicesAcrescimosImpontualidadeAnterior
-							.isEmpty()) {
-				IndicesAcrescimosImpontualidade indicesAcrescimosImpontualidade = (IndicesAcrescimosImpontualidade) Util
-						.retonarObjetoDeColecao(colecaoIndicesAcrescimosImpontualidadeAnterior);
+			if (colecaoAnterior != null && !colecaoAnterior.isEmpty()) {
+				IndicesAcrescimosImpontualidade indices = (IndicesAcrescimosImpontualidade) Util.retonarObjetoDeColecao(colecaoAnterior);
 
-				if (indiceAcrescimosImpontualidadeForm
-						.getPercentualAtualizacaoMonetaria() != null
-						&& !indiceAcrescimosImpontualidadeForm
-								.getPercentualAtualizacaoMonetaria().equals("")) {
+				if (form.getPercentualAtualizacaoMonetaria() != null && !form.getPercentualAtualizacaoMonetaria().equals("")) {
 
-					BigDecimal percentualAtualizacaoMonetaria = Util
-							.formatarMoedaRealparaBigDecimal(indiceAcrescimosImpontualidadeForm
-									.getPercentualAtualizacaoMonetaria());
-
-					BigDecimal fatorAtualizacao = indicesAcrescimosImpontualidade
-							.getFatorAtualizacaoMonetaria().multiply(
-									percentualAtualizacaoMonetaria);
-
-					BigDecimal valorPrecentual = fatorAtualizacao
-							.divide(new BigDecimal("100"));
-
-					valorPrecentual = valorPrecentual
-							.add(indicesAcrescimosImpontualidade
-									.getFatorAtualizacaoMonetaria());
-
-					valorPrecentual = valorPrecentual.setScale(4,
-							BigDecimal.ROUND_HALF_UP);
+					BigDecimal percentualAtualizacaoMonetaria = Util.formatarMoedaRealparaBigDecimal(form.getPercentualAtualizacaoMonetaria());
+					BigDecimal fatorAtualizacao = indices.getFatorAtualizacaoMonetaria().multiply(percentualAtualizacaoMonetaria);
+					BigDecimal valorPrecentual = fatorAtualizacao.divide(new BigDecimal("100"));
+					valorPrecentual = valorPrecentual.add(indices.getFatorAtualizacaoMonetaria());
+					valorPrecentual = valorPrecentual.setScale(4, BigDecimal.ROUND_HALF_UP);
 
 					String valorPercentualString = "" + valorPrecentual;
 
-					valorPercentualString = valorPercentualString.replace(".",
-							",");
+					valorPercentualString = valorPercentualString.replace(".", ",");
 
-					indiceAcrescimosImpontualidadeForm
-							.setFatorCorrecao(valorPercentualString);
-					httpServletRequest.setAttribute("nomeCampo",
-							"percentualLimiteJuros");
+					form.setFatorCorrecao(valorPercentualString);
+					request.setAttribute("nomeCampo", "percentualLimiteJuros");
 				} else {
-					throw new ActionServletException(
-							"atencao.campo_texto.numero_obrigatorio", null,
-							"Percentual Fator Atualização Monetária");
+					throw new ActionServletException("atencao.campo_texto.numero_obrigatorio", null, "Percentual Fator Atualização Monetária");
 				}
 
-			}else{
-				indiceAcrescimosImpontualidadeForm
-				.setFatorCorrecao(indiceAcrescimosImpontualidadeForm
-						.getPercentualAtualizacaoMonetaria());
-				httpServletRequest.setAttribute("nomeCampo",
-				"percentualLimiteJuros");
+			} else {
+				form.setFatorCorrecao(form.getPercentualAtualizacaoMonetaria());
+				request.setAttribute("nomeCampo", "percentualLimiteJuros");
 			}
 		} else {
-			httpServletRequest.setAttribute("nomeCampo",
-					"percentualAtualizacaoMonetaria");
+			request.setAttribute("nomeCampo", "percentualAtualizacaoMonetaria");
 		}
 
 	}
