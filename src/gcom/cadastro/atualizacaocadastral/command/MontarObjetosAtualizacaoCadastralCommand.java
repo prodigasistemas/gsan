@@ -312,24 +312,25 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	
 	private void atualizarSituacaoControleImovelAtualizacaoCadastral() throws Exception {
 		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.pesquisarImovelControleAtualizacao(matriculaImovel);
-		
-		if (controle == null){
+
+		if (controle == null) {
 			controle = new ImovelControleAtualizacaoCadastral();
 			controle.setImovel(new Imovel(matriculaImovel));
+			controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO));
 		}
-		
+
 		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTransmissao())
 			controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO));
-		
+
 		controle.setDataRetorno(new Date());
 		controle.setCadastroOcorrencia(new CadastroOcorrencia(atualizacaoCadastralImovel.getCadastroOcorrencia().getId()));
 		Integer idImovelControle = (Integer) controladorUtil.inserirOuAtualizar(controle);
-		
+
 		if (controle != null) {
 			idImovelControle = controle.getId();
 		}
 		controle = controladorAtualizacaoCadastral.obterImovelControle(idImovelControle);
-		
+
 		atualizacaoCadastralImovel.setImovelControle(controle);
 	}
 }

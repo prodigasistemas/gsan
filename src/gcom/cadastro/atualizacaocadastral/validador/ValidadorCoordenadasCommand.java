@@ -40,11 +40,15 @@ public class ValidadorCoordenadasCommand extends ValidadorCommand {
 
 	private boolean coordenadasRepetidas() throws ControladorException {
 		ImovelControleAtualizacaoCadastral controle = controlador.obterImovelControle(cadastroImovel.getMatricula());
-
-		List<Visita> visitas = controlador.obterVisitasPorImovelControleECoordenadas(controle, 
-				cadastroImovel.getLinhaAnormalidade("latitude"), 
-				cadastroImovel.getLinhaAnormalidade("longitude"));
-
-		return visitas != null && !visitas.isEmpty();
+		
+		if (controle == null) {
+			return false;
+		} else {
+			List<Visita> visitas = controlador.obterVisitasPorImovelControleECoordenadas(controle, 
+					cadastroImovel.getLinhaAnormalidade("latitude"), 
+					cadastroImovel.getLinhaAnormalidade("longitude"));
+			
+			return visitas != null && !visitas.isEmpty();
+		}
 	}
 }
