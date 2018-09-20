@@ -35,17 +35,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 			throw new ActionServletException("atencao.filtro.nenhum_parametro_informado");
 		}
 		
-		if (form.getIdLeiturista() != null && !form.getIdLeiturista().trim().equals("")) {
-			form.setNomeLeiturista(this.pesquisarNomeLeiturista(form.getIdLeiturista()));
-		}
-		
-		if(form.getNomeLocalidadeInicial().trim().equalsIgnoreCase("") && !form.getIdLocalidadeInicial().trim().equalsIgnoreCase("")) {
-			form.setNomeLocalidadeInicial(this.pesquisarNomeLocalidade(form.getIdLocalidadeInicial()));
-		}
-		
-		if(form.getNomeLocalidadeFinal().trim().equalsIgnoreCase("") && !form.getIdLocalidadeFinal().trim().equalsIgnoreCase("")) {
-			form.setNomeLocalidadeFinal(this.pesquisarNomeLocalidade(form.getIdLocalidadeFinal()));
-		}
+		setForm(form);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper(form);
 		
@@ -60,6 +50,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
         sessao.setAttribute("colecaoConsultarMovimentoAtualizacaoCadastralHelper",helper);
         sessao.setAttribute("filtroMovimentoAtualizacaoCadastral", filtro);
         sessao.setAttribute("aprovacaoEmLote", filtro.isAprovacaoEmLote());
+        sessao.setAttribute("loteInformado", filtro.isLoteInformado());
         
         if ((filtro.isAlteracaoHidrometro() != null && filtro.isAlteracaoHidrometro()) 
         	|| (filtro.isAlteracaoSituacaoAgua() != null && filtro.isAlteracaoSituacaoAgua())
@@ -71,39 +62,53 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 
 		return retorno;
 	}
+
+	private void setForm(FiltrarAlteracaoAtualizacaoCadastralActionForm form) {
+		form.setNomeLeiturista(this.pesquisarNomeLeiturista(form.getIdLeiturista()));
+		form.setNomeLocalidadeInicial(this.pesquisarNomeLocalidade(form.getIdLocalidadeInicial()));
+		form.setNomeLocalidadeFinal(this.pesquisarNomeLocalidade(form.getIdLocalidadeFinal()));
+	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private String pesquisarNomeLeiturista(String idLeiturista) {
-		Filtro filtro = new FiltroLeiturista();
-		filtro.adicionarParametro(new ParametroSimples(FiltroLeiturista.ID, idLeiturista));
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.FUNCIONARIO);
-
-		Collection pesquisa = getFachada().pesquisar(filtro, Leiturista.class.getName());
-
-		String nome = "";
-		if (pesquisa != null && !pesquisa.isEmpty()) {
-			Leiturista leiturista = (Leiturista) Util.retonarObjetoDeColecao(pesquisa);
-
-			if (leiturista.getFuncionario() != null) {
-				nome = leiturista.getFuncionario().getNome();
+		if (idLeiturista != null && !idLeiturista.trim().equals("")) {
+			Filtro filtro = new FiltroLeiturista();
+			filtro.adicionarParametro(new ParametroSimples(FiltroLeiturista.ID, idLeiturista));
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.FUNCIONARIO);
+			
+			Collection pesquisa = getFachada().pesquisar(filtro, Leiturista.class.getName());
+			
+			String nome = "";
+			if (pesquisa != null && !pesquisa.isEmpty()) {
+				Leiturista leiturista = (Leiturista) Util.retonarObjetoDeColecao(pesquisa);
+				
+				if (leiturista.getFuncionario() != null) {
+					nome = leiturista.getFuncionario().getNome();
+				}
 			}
+			
+			return nome.trim();
+		} else {
+			return null;
 		}
-
-		return nome.trim();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private String pesquisarNomeLocalidade(String idLocalidade) {
-		Filtro filtro = new FiltroLocalidade(FiltroLocalidade.DESCRICAO);
-		filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, idLocalidade));
-		
-		Collection pesquisa = getFachada().pesquisar(filtro, Localidade.class.getName());
-		
-		String nomeLocalidade = "";
-		if (pesquisa != null && !pesquisa.isEmpty()) {
-			nomeLocalidade = (((List<Localidade>) pesquisa).get(0)).getDescricao();
+		if(idLocalidade.trim().equalsIgnoreCase("") && !idLocalidade.trim().equalsIgnoreCase("")) {
+			Filtro filtro = new FiltroLocalidade(FiltroLocalidade.DESCRICAO);
+			filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, idLocalidade));
+			
+			Collection pesquisa = getFachada().pesquisar(filtro, Localidade.class.getName());
+			
+			String nomeLocalidade = "";
+			if (pesquisa != null && !pesquisa.isEmpty()) {
+				nomeLocalidade = (((List<Localidade>) pesquisa).get(0)).getDescricao();
+			}
+			
+			return nomeLocalidade.trim();
+		} else {
+			return null;
 		}
-		
-		return nomeLocalidade.trim();
 	}
 }

@@ -597,7 +597,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append(" left join cadastro.imovel_subcatg_atlz_cad isac on isac.imov_id = tatc.tatc_cdimovel")
 				.append(" left join cadastro.cadastro_ocorrencia cocr on cocr.cocr_id = ctrl.cocr_id")
 				.append(" where 1 = 1")
-				.append(" and ctrl.siac_id not in (3, 8, 9, 11)");
+				.append(" and ctrl.siac_id in (4,5,6,7,10)");
 
 			if (StringUtils.isNotEmpty(filtroHelper.getIdLocalidadeInicial())) {
 				sql.append(" and txac.loca_id between " + filtroHelper.getIdLocalidadeInicial() + " and " + filtroHelper.getIdLocalidadeFinal());
@@ -621,6 +621,10 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			
 			if (StringUtils.isNotEmpty(filtroHelper.getPeriodoInicial())) {
 				sql.append(" and ctrl.icac_tmpreaprovacao between '" + filtroHelper.getPeriodoInicial() + "' and '" + filtroHelper.getPeriodoFinal() + "'");
+			}
+			
+			if (StringUtils.isNotEmpty(filtroHelper.getLote())) {
+				sql.append(" and ctrl.icac_lote = '" + filtroHelper.getLote() + "'");
 			}
 
 			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) 

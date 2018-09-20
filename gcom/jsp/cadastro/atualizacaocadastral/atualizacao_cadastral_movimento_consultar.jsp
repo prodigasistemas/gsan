@@ -66,7 +66,7 @@
 		window.close();
 	}
 	
-	function aprovarEmLote(){
+	function aprovarSelecao(){
 	  	var form = document.forms[0];
 	  	form.action = "/gsan/aprovarImoveisEmLoteAction.do";
 	  	form.submit();
@@ -141,14 +141,14 @@
 		<tr>
 			<td width="150"><strong>Empresa:</strong></td>
 			<td colspan="2" align="left">
-				<html:text tabindex="10" maxlength="40" property="nomeEmpresa" size="40" disabled="true" />
+				<html:text property="nomeEmpresa" size="40" disabled="true" />
 			</td>
 		</tr>
 		
 		<tr>
 			<td width="150"><strong>Agente Cadastral:</strong></td>
 			<td colspan="2" align="left">
-				<html:text tabindex="10" maxlength="40" property="nomeLeiturista" size="40" disabled="true" />
+				<html:text property="nomeLeiturista" size="40" disabled="true" />
 			</td>
 		</tr>
 	 
@@ -156,8 +156,19 @@
 			<td width="150"><strong>Período de Pré Aprovação:</strong></td>
 
 			<td colspan="2">
-				<html:text property="periodoInicial" size="11" maxlength="10" tabindex="3" disabled="true" /> a 
-				<html:text property="periodoFinal" size="11" maxlength="10" tabindex="3" disabled="true" /> 
+				<html:text property="periodoInicial" size="11" disabled="true" /> a 
+				<html:text property="periodoFinal" size="11" disabled="true" /> 
+			</td>
+		</tr>
+		
+		<tr>
+			<td colspan="3"><hr></td>
+		</tr>
+		
+		<tr>
+			<td width="150"><strong>Lote de Fiscalização:</strong></td>
+			<td colspan="2" align="left">
+				<html:text property="lote" size="5" disabled="true" />
 			</td>
 		</tr>
 		
@@ -171,19 +182,19 @@
 	 	<tr>
 			<td width="150">Localidade Inicial:</td>
 			<td>
-				<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.nomeLocalidadeInicial}" property="nomeLocalidadeInicial" size="20" disabled="true"/>
+				<html:text value="${filtroMovimentoAtualizacaoCadastral.nomeLocalidadeInicial}" property="nomeLocalidadeInicial" size="20" disabled="true"/>
 			</td> 
 		</tr>
 		<tr>
 			<td width="150">Setor Comercial Inicial:</td>
 			<td>
-				<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdSetorComercialInicial}" property="cdSetorComercialInicial" size="5" disabled="true"/>
+				<html:text value="${filtroMovimentoAtualizacaoCadastral.cdSetorComercialInicial}" property="cdSetorComercialInicial" size="5" disabled="true"/>
 			</td>
 		</tr>
 		<tr>
 			<td width="150">Rota Inicial:</td>
 			<td>
-				<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdRotaInicial}" property="cdRotaInicial" size="5" disabled="true"/>
+				<html:text value="${filtroMovimentoAtualizacaoCadastral.cdRotaInicial}" property="cdRotaInicial" size="5" disabled="true"/>
 			</td>
 	 	</tr>
 	 	<tr>
@@ -196,17 +207,17 @@
 		<tr>
 			<td width="150">Localidade Final:</td>
 			<td>
-			<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.nomeLocalidadeFinal}" property="nomeLocalidadeFinal" size="20" disabled="true"/>
+			<html:text value="${filtroMovimentoAtualizacaoCadastral.nomeLocalidadeFinal}" property="nomeLocalidadeFinal" size="20" disabled="true"/>
 		<tr>
 			<td width="150">Setor Comercial Final:</td>
 			<td>
-				<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdSetorComercialFinal}" property="cdSetorComercialFinal" size="5" disabled="true"/>
+				<html:text value="${filtroMovimentoAtualizacaoCadastral.cdSetorComercialFinal}" property="cdSetorComercialFinal" size="5" disabled="true"/>
 			</td>
 		</tr>
 		<tr>	
 			<td width="150">Rota Final:</td>
 			<td>
-				<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdRotaFinal}" property="cdRotaFinal" size="5" disabled="true"/>
+				<html:text value="${filtroMovimentoAtualizacaoCadastral.cdRotaFinal}" property="cdRotaFinal" size="5" disabled="true"/>
 			</td>
 	    </tr>
 	    <tr>
@@ -330,10 +341,16 @@
 				
 			  	<logic:equal name="aprovacaoEmLote" value="true" scope="session">
 					<td align="right" width="50%">					
-						<input type="button" name="Button" class="bottonRightCol"
-							value="Aprovar em Lote" onclick="aprovarEmLote();">	
+						<input type="button" name="Button" class="bottonRightCol" value="Aprovar em Lote" onclick="aprovarSelecao();">	
 					</td>
 				</logic:equal>
+				
+				<logic:equal name="loteInformado" value="true" scope="session">
+					<td align="right" width="50%">					
+						<input type="button" name="Button" class="bottonRightCol" value="Aprovar o Lote" onclick="aprovarSelecao();">	
+					</td>
+				</logic:equal>
+				
 		  </tr>
 		</table>
 	   </td>

@@ -45,9 +45,8 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		FiltrarAlteracaoAtualizacaoCadastralActionForm form = (FiltrarAlteracaoAtualizacaoCadastralActionForm) actionForm;
 
 		try {
-			if (StringUtils.isNotEmpty(request.getParameter("filterClass"))){
+			if (StringUtils.isNotEmpty(request.getParameter("filterClass")))
 				preencherCampoDescricao(form, request);
-			}
 
 			HttpSession sessao = request.getSession(false);
 
@@ -64,25 +63,26 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Collection carregarImoveisSelecionados(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpSession sessao) {
-		Collection colecaoColunaImoveisSelecionados = null;
+		Collection colecao = null;
+		
 		if (form.getColunaImoveisSelecionados() != null) {
-
 			String[] aux = form.getColunaImoveisSelecionados();
 
-			colecaoColunaImoveisSelecionados = Arrays.asList(aux);
+			colecao = Arrays.asList(aux);
 
-			FiltroTabelaColuna filtroTabelaColuna = new FiltroTabelaColuna();
-			filtroTabelaColuna.adicionarParametro(new ParametroSimplesIn(FiltroTabelaColuna.ID, colecaoColunaImoveisSelecionados));
-			filtroTabelaColuna.setCampoOrderBy(FiltroTabelaColuna.DESCRICAO_COLUNA);
+			Filtro filtro = new FiltroTabelaColuna();
+			filtro.adicionarParametro(new ParametroSimplesIn(FiltroTabelaColuna.ID, colecao));
+			filtro.setCampoOrderBy(FiltroTabelaColuna.DESCRICAO_COLUNA);
 
-			colecaoColunaImoveisSelecionados = Fachada.getInstancia().pesquisar(filtroTabelaColuna, TabelaColuna.class.getName());
+			colecao = Fachada.getInstancia().pesquisar(filtro, TabelaColuna.class.getName());
 
-			if (colecaoColunaImoveisSelecionados != null && !colecaoColunaImoveisSelecionados.isEmpty()) {
-				sessao.setAttribute("colecaoColunaImoveisSelecionados", colecaoColunaImoveisSelecionados);
-				sessao.setAttribute("existeColecaoColunaImoveisSelecionados", colecaoColunaImoveisSelecionados);
+			if (colecao != null && !colecao.isEmpty()) {
+				sessao.setAttribute("colecaoColunaImoveisSelecionados", colecao);
+				sessao.setAttribute("existeColecaoColunaImoveisSelecionados", colecao);
 			}
 		}
-		return colecaoColunaImoveisSelecionados;
+		
+		return colecao;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

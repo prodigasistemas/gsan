@@ -64,6 +64,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private String alteracaoCategoria = "-1";
 
 	private String ocorrenciaCadastro = "-1";
+	
+	private String lote;
 
 	public FiltrarAlteracaoAtualizacaoCadastralActionForm() {
 	}
@@ -268,48 +270,49 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.ocorrenciaCadastro = ocorrenciaCadastro;
 	}
 
+	public String getLote() {
+		return lote;
+	}
+
+	public void setLote(String lote) {
+		this.lote = lote;
+	}
+
 	public boolean existeParametroInformado() {
 		boolean peloMenosUmParametroInformado = false;
 
-		if (this.getIdEmpresa() != null && !this.getIdEmpresa().trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+		if (this.getIdEmpresa() != null && !this.getIdEmpresa().trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getIdLeiturista() != null && !this.getIdLeiturista().equals("")) {
+		if (isParametroInformado(getIdLeiturista()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getIdLocalidadeInicial() != null && !this.getIdLocalidadeInicial().equals("")) {
+		if (isParametroInformado(getIdLocalidadeInicial()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getCdSetorComercialInicial() != null && !this.getCdSetorComercialInicial().equals("")) {
+		if (isParametroInformado(getCdSetorComercialInicial()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getCdRotaInicial() != null && !this.getCdRotaInicial().equals("")) {
+		if (isParametroInformado(getCdRotaInicial()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getIdLocalidadeFinal() != null && !this.getIdLocalidadeFinal().equals("")) {
+		if (isParametroInformado(getIdLocalidadeFinal()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getCdSetorComercialFinal() != null && !this.getCdSetorComercialFinal().equals("")) {
+		if (isParametroInformado(getCdSetorComercialFinal()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getCdRotaFinal() != null && !this.getCdRotaFinal().equals("")) {
+		if (isParametroInformado(getCdRotaFinal()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getExibirCampos() != null && !this.getExibirCampos().equals("")) {
+		if (isParametroInformado(getExibirCampos()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getColunaImoveisSelecionados() != null && !this.getColunaImoveisSelecionados().equals("")) {
+		if (this.getColunaImoveisSelecionados() != null && !this.getColunaImoveisSelecionados().equals(""))
 			peloMenosUmParametroInformado = true;
-		}
+		
+		if (isParametroInformado(getLote()))
+			peloMenosUmParametroInformado = true;
 
 		return peloMenosUmParametroInformado;
 	}
@@ -321,5 +324,9 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 				+ idLocalidadeInicial + ", idLocalidadeFinal=" + idLocalidadeFinal + ", nomeLocalidadeInicial=" + nomeLocalidadeInicial + ", nomeLocalidadeFinal=" + nomeLocalidadeFinal + ", cdSetorComercialInicial="
 				+ cdSetorComercialInicial + ", cdSetorComercialFinal=" + cdSetorComercialFinal + ", nomeSetorComercialInicial=" + nomeSetorComercialInicial + ", nomeSetorComercialFinal=" + nomeSetorComercialFinal
 				+ ", cdRotaInicial=" + cdRotaInicial + ", cdRotaFinal=" + cdRotaFinal + "]";
+	}
+	
+	private boolean isParametroInformado(String parametro) {
+		return parametro != null && !parametro.trim().equals("");
 	}
 }

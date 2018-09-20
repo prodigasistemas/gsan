@@ -47,6 +47,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	private String ocorrenciaCadastro;
 	
+	private String lote;
+	
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper() {
 	}
 
@@ -72,6 +74,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.alteracaoCategoria = consisteAlteracao(form.getAlteracaoCategoria(), this.exibirCampos);
 		
 		this.ocorrenciaCadastro = form.getOcorrenciaCadastro();
+		
+		this.lote = form.getLote();
 	}
 
 	private Boolean consisteAlteracao(String campo, String exibirCampos) {
@@ -233,6 +237,10 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	public boolean isAprovacaoEmLote() {
 		return this.exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString()) ? true : false;
 	}
+	
+	public boolean isLoteInformado() {
+		return this.lote != null && !this.lote.trim().equals("") && Integer.parseInt(this.lote.trim()) > 0;
+	}
 
 	public int getTotalImoveis() {
 		return totalImoveis;
@@ -264,5 +272,13 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	public void setOcorrenciaCadastro(String ocorrenciaCadastro) {
 		this.ocorrenciaCadastro = ocorrenciaCadastro;
+	}
+
+	public String getLote() {
+		return lote;
+	}
+
+	public void setLote(String lote) {
+		this.lote = lote;
 	}
 }

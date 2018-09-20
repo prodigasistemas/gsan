@@ -218,9 +218,20 @@
 			</span>
 		</td>
 	</tr>
+	
+    <tr>
+		<td colspan="2"><hr></td>
+    </tr>
+	
+	<tr>
+		<td><strong>Lote de Fiscalização:</strong></td>
+		<td>
+			<html:text property="lote" maxlength="5" size="5" onkeypress="somente_numero(this);" onkeyup="javascript:somente_numero(this);"/>
+		</td>
+	</tr>
 
     <tr>
-      <td colspan="2"><hr></td>
+      	<td colspan="2"><hr></td>
     </tr>
 
 	<tr>
