@@ -596,8 +596,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append(" left join cadastro.imovel_atlz_cadastral im on im.imov_id = tatc_cdimovel")
 				.append(" left join cadastro.imovel_subcatg_atlz_cad isac on isac.imov_id = tatc.tatc_cdimovel")
 				.append(" left join cadastro.cadastro_ocorrencia cocr on cocr.cocr_id = ctrl.cocr_id")
-				.append(" where 1 = 1")
-				.append(" and ctrl.siac_id in (4,5,6,7,10)");
+				.append(" where 1 = 1");
 
 			if (StringUtils.isNotEmpty(filtroHelper.getIdLocalidadeInicial())) {
 				sql.append(" and txac.loca_id between " + filtroHelper.getIdLocalidadeInicial() + " and " + filtroHelper.getIdLocalidadeFinal());
@@ -627,14 +626,9 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				sql.append(" and ctrl.icac_lote = '" + filtroHelper.getLote() + "'");
 			}
 
-			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) 
-					&& Integer.valueOf(filtroHelper.getExibirCampos()) !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
+			Integer exibirCampos = Integer.valueOf(filtroHelper.getExibirCampos());
+			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) && exibirCampos !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
 				sql.append(" and ctrl.siac_id in (:listaSituacao) ");
-				if (filtroHelper.getExibirCampos().equals(SituacaoAtualizacaoCadastral.EM_CAMPO.toString())) {
-					sql.append(" and tcac.tcac_dtvalidacao is null ");
-				} else if (filtroHelper.getExibirCampos().equals(SituacaoAtualizacaoCadastral.APROVADO.toString())) {
-					sql.append(" and tcac.tcac_dtvalidacao is not null ");
-				}
 			} else {
 				sql.append(" and ctrl.siac_id not in (:listaSituacao) ");
 			}
@@ -667,17 +661,16 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					.addScalar("valorRevisado", Hibernate.STRING)
 					.addScalar("valorFiscalizado", Hibernate.STRING);
 
-			Integer exibirCampos = Integer.valueOf(filtroHelper.getExibirCampos());
-			
 			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos())) {
 				
-				
+				List<Integer> listaSituacao = new ArrayList<Integer>();
+
 				if (exibirCampos !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
-					List<Integer> listaSituacao = new ArrayList<Integer>();
 					
 					if (exibirCampos == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE) {
 						listaSituacao.add(SituacaoAtualizacaoCadastral.PRE_APROVADO);
 						query.setParameterList("listaSituacao", listaSituacao);
+						
 					} else {
 						listaSituacao.add(exibirCampos);
 						

@@ -847,7 +847,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 						.setParameterList("listaImoveis", getIdsImovelRetorno(listaImoveis))   .executeUpdate();
 
 		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao aprovar im�veis.");
+			throw new ErroRepositorioException(e, "Erro ao aprovar imoveis.");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
