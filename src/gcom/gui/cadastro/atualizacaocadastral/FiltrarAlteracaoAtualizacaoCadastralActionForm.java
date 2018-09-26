@@ -66,6 +66,10 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private String ocorrenciaCadastro = "-1";
 	
 	private String lote;
+	
+	private String matricula;
+	
+	private String inscricao;
 
 	public FiltrarAlteracaoAtualizacaoCadastralActionForm() {
 	}
@@ -278,6 +282,22 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.lote = lote;
 	}
 
+	public String getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
+	}
+
+	public String getInscricao() {
+		return inscricao;
+	}
+
+	public void setInscricao(String inscricao) {
+		this.inscricao = inscricao;
+	}
+
 	public boolean existeParametroInformado() {
 		boolean peloMenosUmParametroInformado = false;
 
@@ -312,6 +332,9 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 			peloMenosUmParametroInformado = true;
 		
 		if (isParametroInformado(getLote()))
+			peloMenosUmParametroInformado = true;
+		
+		if (isParametroInformado(getMatricula()))
 			peloMenosUmParametroInformado = true;
 
 		return peloMenosUmParametroInformado;

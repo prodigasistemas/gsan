@@ -2,6 +2,8 @@ package gcom.gui.cadastro.atualizacaocadastral;
 
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.empresa.FiltroEmpresa;
+import gcom.cadastro.imovel.FiltroImovel;
+import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
@@ -45,6 +47,9 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		FiltrarAlteracaoAtualizacaoCadastralActionForm form = (FiltrarAlteracaoAtualizacaoCadastralActionForm) actionForm;
 
 		try {
+			if (StringUtils.isNotEmpty(request.getParameter("filtroMatricula")))
+				preencherInscricaoImovel(form, request);
+			
 			if (StringUtils.isNotEmpty(request.getParameter("filterClass")))
 				preencherCampoDescricao(form, request);
 
@@ -162,22 +167,44 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		}
 	}
 
-	private void preencherCampoDescricao(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpServletRequest request)
-			throws Exception {
-		
-		String filterClass = "gcom.cadastro.localidade."+ request.getParameter("filterClass");
-		
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void preencherInscricaoImovel(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpServletRequest request) {
+		FiltroImovel filtro = new FiltroImovel();
+		filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, form.getMatricula()));
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.SETOR_COMERCIAL);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.QUADRA);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.QUADRA_ROTA);
+		Collection pesquisa = Fachada.getInstancia().pesquisar(filtro, Imovel.class.getName());
+
+		Imovel imovel = null;
+		if (pesquisa != null && !pesquisa.isEmpty()) {
+			imovel = (Imovel) Util.retonarObjetoDeColecao(pesquisa);
+		}
+
+		if (imovel == null) {
+			form.setInscricao("Matrícula não encontrada");
+			request.setAttribute("corInscricao", "#FF0000");
+		} else {
+			form.setInscricao(imovel.getInscricaoFormatada());
+			request.setAttribute("corInscricao", "#000000");
+		}
+	}
+	
+	private void preencherCampoDescricao(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpServletRequest request) throws Exception {
+		String filterClass = "gcom.cadastro.localidade." + request.getParameter("filterClass");
+
 		FilterClassParameters filter = null;
 		String fieldName = null;
-		String fieldLocalidade = request.getParameter("fieldLocalidade");
-		if (filterClass.contains("FiltroLocalidade")){
-			fieldName = fieldLocalidade;
-			filter = buildFiltroLocalidade(form, filterClass, fieldLocalidade);			
-		}else if (filterClass.contains("FiltroSetorComercial")){
+		
+		if (filterClass.contains("FiltroLocalidade")) {
+			fieldName = request.getParameter("fieldLocalidade");
+			filter = buildFiltroLocalidade(form, filterClass, fieldName);
+		} else if (filterClass.contains("FiltroSetorComercial")) {
+			String fieldLocalidade = request.getParameter("fieldLocalidade");
 			fieldName = request.getParameter("fieldSetorComercial");
 			filter = buildFiltroSetorComercial(form, request, filterClass, fieldName, fieldLocalidade);
 		}
-		
+
 		DescriptorEntity entidade = pesquisarEntidade(filter);
 
 		Method setNome = FiltrarAlteracaoAtualizacaoCadastralActionForm.class.getMethod("setNome" + fieldName, String.class);

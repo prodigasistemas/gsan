@@ -625,6 +625,10 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			if (StringUtils.isNotEmpty(filtroHelper.getLote())) {
 				sql.append(" and ctrl.icac_lote = '" + filtroHelper.getLote() + "'");
 			}
+			
+			if (StringUtils.isNotEmpty(filtroHelper.getMatricula())) {
+				sql.append(" and ctrl.imov_id = " + filtroHelper.getMatricula());
+			}
 
 			Integer exibirCampos = Integer.valueOf(filtroHelper.getExibirCampos());
 			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) && exibirCampos !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
