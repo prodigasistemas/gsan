@@ -1306,7 +1306,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         if (campo.equals("fiscalizado") || campo.equals("preaprovado")) {
         	try {
         		String update = this.montarUpdate(tabelaColunaAtualizacaoCadastral, campo);
-        		System.out.println(update);
         		PreparedStatement st = null;
         		
         		try {	
@@ -1414,7 +1413,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_dslogradourotipo")
 				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("ratv_id")
 				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("cocr_id")
-				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_nnlote");
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_nnlote")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_dslogradourotipo");
 	}
 
 	private String obterTabelaAtualizacaoCliente(String tabelaDestino, TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) {
