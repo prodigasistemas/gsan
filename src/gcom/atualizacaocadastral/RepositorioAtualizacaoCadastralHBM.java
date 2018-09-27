@@ -1345,10 +1345,12 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		
 		String tabelaDestino = props.getProperty(tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getTabela().getNomeTabela());
 		
-		if (isTabelaImovel(tabelaDestino))
-			update = montarUpdateImovel(tabelaDestino, props, tabelaColunaAtualizacaoCadastral, campo);
-		else if (isTabelaCliente(tabelaDestino))
-			update = montarUpdateCliente(tabelaDestino, props, tabelaColunaAtualizacaoCadastral, campo);
+		if (isColunaParaAtualizar(tabelaColunaAtualizacaoCadastral)) {
+			if (isTabelaImovel(tabelaDestino))
+				update = montarUpdateImovel(tabelaDestino, props, tabelaColunaAtualizacaoCadastral, campo);
+			else if (isTabelaCliente(tabelaDestino))
+				update = montarUpdateCliente(tabelaDestino, props, tabelaColunaAtualizacaoCadastral, campo);
+		}
 		
 		return update;
 	}
@@ -1372,21 +1374,17 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	
 	private String montarUpdateCliente(String tabelaDestino, Properties props, TabelaColunaAtualizacaoCadastral tabelaColuna, String campo) {
 		StringBuilder update = new StringBuilder();
-		String colunaDestino = "";
-			
-		if (isColunaParaAtualizar(tabelaColuna)) {
-			
-			colunaDestino = obterColunaDestinoCliente(props, tabelaColuna, campo);
-			tabelaDestino = obterTabelaAtualizacaoCliente(tabelaDestino, tabelaColuna);
-			
-			String valor = obterValorParaAtualizarRetorno(colunaDestino, tabelaColuna.obterValorParaAtualizar(campo));
+		
+		String colunaDestino = obterColunaDestinoCliente(props, tabelaColuna, campo);
+		tabelaDestino = obterTabelaAtualizacaoCliente(tabelaDestino, tabelaColuna);
+		
+		String valor = obterValorParaAtualizarRetorno(colunaDestino, tabelaColuna.obterValorParaAtualizar(campo));
 
-			if (valor != null && !isChaveEstrangeira(colunaDestino))
-				update.append("update ").append(tabelaDestino).append(" set ").append(colunaDestino).append(" = ").append(valor)
-					  .append(" where clir_id in ( select clir_id from atualizacaocadastral.cliente_imovel_retorno ")
-									.append(" where imov_id = ").append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel())
-									.append(" and clie_id =   ").append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoCliente()).append(")");
-		}
+		if (valor != null && !isChaveEstrangeira(colunaDestino))
+			update.append("update ").append(tabelaDestino).append(" set ").append(colunaDestino).append(" = ").append(valor)
+				  .append(" where clir_id in ( select clir_id from atualizacaocadastral.cliente_imovel_retorno ")
+								.append(" where imov_id = ").append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel())
+								.append(" and clie_id =   ").append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoCliente()).append(")");
 
 		return update.toString();
 	}
@@ -1437,17 +1435,14 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	
 	private String montarUpdateImovel(String tabelaDestino, Properties props, TabelaColunaAtualizacaoCadastral tabelaColuna, String campo) {
 		StringBuilder update = new StringBuilder();
-		String colunaDestino = "";
 
-		if (isColunaParaAtualizar(tabelaColuna)) {
-			colunaDestino = props.getProperty(tabelaColuna.getTabelaColuna().getColuna());
-		
+		String colunaDestino = props.getProperty(tabelaColuna.getTabelaColuna().getColuna());
 		String valor = obterValorParaAtualizarRetorno(colunaDestino, tabelaColuna.obterValorParaAtualizar(campo));
 		
 		update.append("update ").append(tabelaDestino)
 			  .append(" set ").append(colunaDestino).append(" = ").append(valor)
 			  .append(" where imov_id = ").append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel());
-		}
+		
 		return update.toString();
 	}
 	
