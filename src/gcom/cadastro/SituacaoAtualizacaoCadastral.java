@@ -22,6 +22,7 @@ public class SituacaoAtualizacaoCadastral extends ObjetoGcom {
 	public static final Integer REVISADO = 9;
 	public static final Integer FISCALIZADO = 10;
 	public static final Integer REVISITA = 11;
+	public static final Integer EM_CORRECAO = 12;
 
     private Integer id;
 
