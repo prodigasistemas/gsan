@@ -1,6 +1,5 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
-import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.util.ConstantesSistema;
 
 import java.util.Arrays;
@@ -10,10 +9,9 @@ import org.apache.struts.action.ActionForm;
 public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
 
-	public static Integer FILTRO_APROVACAO_EM_LOTE = -2;
-	public static Integer FILTRO_TODOS = -1;
-	public static String FILTRO_APROVADOS = "1";
-	public static String FILTRO_PENDENTES = "2";
+	public static int FILTRO_PENDENTES = -1;
+	public static int FILTRO_PARA_APROVACAO_EM_LOTE = -2;
+	public static int FILTRO_TODOS = -3;
 
 	private String idEmpresa;
 
@@ -31,7 +29,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	private String idRegistrosAutorizados;
 
-	private String exibirCampos = SituacaoAtualizacaoCadastral.PRE_APROVADO.toString();
+	private String situacao;
 
 	private String[] colunaImoveisSelecionados;
 
@@ -144,14 +142,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	public void setColunaImoveisSelecionados(String[] colunaImoveisSelecionados) {
 		this.colunaImoveisSelecionados = colunaImoveisSelecionados;
-	}
-
-	public String getExibirCampos() {
-		return exibirCampos;
-	}
-
-	public void setExibirCampos(String exibirCampos) {
-		this.exibirCampos = exibirCampos;
 	}
 
 	public String getIdLocalidadeInicial() {
@@ -298,6 +288,14 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.inscricao = inscricao;
 	}
 
+	public String getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(String situacao) {
+		this.situacao = situacao;
+	}
+
 	public boolean existeParametroInformado() {
 		boolean peloMenosUmParametroInformado = false;
 
@@ -325,7 +323,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		if (isParametroInformado(getCdRotaFinal()))
 			peloMenosUmParametroInformado = true;
 
-		if (isParametroInformado(getExibirCampos()))
+		if (isParametroInformado(getSituacao()))
 			peloMenosUmParametroInformado = true;
 
 		if (this.getColunaImoveisSelecionados() != null && !this.getColunaImoveisSelecionados().equals(""))
@@ -341,12 +339,27 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	}
 
 	public String toString() {
-		return "FiltrarAlteracaoAtualizacaoCadastralActionForm [idEmpresa=" + idEmpresa + ", nomeEmpresa=" + nomeEmpresa + ", idLeiturista=" + idLeiturista + ", nomeLeiturista=" + nomeLeiturista
-				+ ", periodoRealizacaoInicial=" + periodoInicial + ", periodoRealizacaoFinal=" + periodoFinal + ", idRegistrosNaoAutorizados=" + idRegistrosNaoAutorizados
-				+ ", idRegistrosAutorizados=" + idRegistrosAutorizados + ", exibirCampos=" + exibirCampos + ", colunaImoveisSelecionados=" + Arrays.toString(colunaImoveisSelecionados) + ", idLocalidadeInicial="
-				+ idLocalidadeInicial + ", idLocalidadeFinal=" + idLocalidadeFinal + ", nomeLocalidadeInicial=" + nomeLocalidadeInicial + ", nomeLocalidadeFinal=" + nomeLocalidadeFinal + ", cdSetorComercialInicial="
-				+ cdSetorComercialInicial + ", cdSetorComercialFinal=" + cdSetorComercialFinal + ", nomeSetorComercialInicial=" + nomeSetorComercialInicial + ", nomeSetorComercialFinal=" + nomeSetorComercialFinal
-				+ ", cdRotaInicial=" + cdRotaInicial + ", cdRotaFinal=" + cdRotaFinal + "]";
+		return "FiltrarAlteracaoAtualizacaoCadastralActionForm ["
+				+ "idEmpresa=" + idEmpresa + ","
+				+ "nomeEmpresa=" + nomeEmpresa + ","
+				+ "idLeiturista=" + idLeiturista + ","
+				+ "nomeLeiturista=" + nomeLeiturista + ","
+				+ "periodoRealizacaoInicial=" + periodoInicial + ","
+				+ "periodoRealizacaoFinal=" + periodoFinal + ","
+				+ "idRegistrosNaoAutorizados=" + idRegistrosNaoAutorizados + ","
+				+ "idRegistrosAutorizados=" + idRegistrosAutorizados + ","
+				+ "exibirCampos=" + situacao + ","
+				+ "colunaImoveisSelecionados=" + Arrays.toString(colunaImoveisSelecionados) + ","
+				+ "idLocalidadeInicial=" + idLocalidadeInicial + ","
+				+ "idLocalidadeFinal=" + idLocalidadeFinal + ","
+				+ "nomeLocalidadeInicial=" + nomeLocalidadeInicial + ","
+				+ "nomeLocalidadeFinal=" + nomeLocalidadeFinal + ","
+				+ "cdSetorComercialInicial=" + cdSetorComercialInicial + ","
+				+ "cdSetorComercialFinal=" + cdSetorComercialFinal + ","
+				+ "nomeSetorComercialInicial=" + nomeSetorComercialInicial + ","
+				+ "nomeSetorComercialFinal=" + nomeSetorComercialFinal + ","
+				+ "cdRotaInicial=" + cdRotaInicial + ","
+				+ "cdRotaFinal=" + cdRotaFinal + "]";
 	}
 	
 	private boolean isParametroInformado(String parametro) {

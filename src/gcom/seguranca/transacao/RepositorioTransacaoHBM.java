@@ -555,11 +555,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 		return retorno;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper)
 			throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
-		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> consultarMovimentoAtualizacaoCadastralHelper = new LinkedList<ConsultarMovimentoAtualizacaoCadastralHelper>();
+		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> colecaoHelper = new LinkedList<ConsultarMovimentoAtualizacaoCadastralHelper>();
 
 		try {
 			StringBuilder sql = new StringBuilder();
@@ -629,14 +630,13 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				sql.append(" and ctrl.imov_id = " + filtroHelper.getMatricula());
 			}
 
-			Integer exibirCampos = Integer.valueOf(filtroHelper.getExibirCampos());
-			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) && exibirCampos !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
+			if (filtroHelper.getSituacao() !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
 				sql.append(" and ctrl.siac_id in (:listaSituacao) ");
 			} else {
 				sql.append(" and ctrl.siac_id not in (:listaSituacao) ");
 			}
 			
-			if (filtroHelper.isAprovacaoEmLote()) {
+			if (filtroHelper.paraAprovacaoEmLote()) {
 				sql.append(" and cocr.cocr_icvalidacao = " + ConstantesSistema.SIM);
 			} else if (Integer.valueOf(filtroHelper.getOcorrenciaCadastro()) > 0) {
 				sql.append(" and cocr.cocr_icvalidacao = " + filtroHelper.getOcorrenciaCadastro());
@@ -664,33 +664,10 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					.addScalar("valorRevisado", Hibernate.STRING)
 					.addScalar("valorFiscalizado", Hibernate.STRING);
 
-			List<Integer> listaSituacao = new ArrayList<Integer>();
-			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos())) {
-
-				if (exibirCampos !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
-					
-					if (exibirCampos == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE) {
-						listaSituacao.add(SituacaoAtualizacaoCadastral.PRE_APROVADO);
-						query.setParameterList("listaSituacao", listaSituacao);
-						
-					} else {
-						listaSituacao.add(exibirCampos);
-						
-						if (exibirCampos.equals(SituacaoAtualizacaoCadastral.PRE_APROVADO)) {
-							listaSituacao.add(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO);
-							listaSituacao.add(SituacaoAtualizacaoCadastral.FISCALIZADO);
-						}
-						
-						query.setParameterList("listaSituacao", listaSituacao);
-					}
-				
-				} else {
-					listaSituacao.add(SituacaoAtualizacaoCadastral.ATUALIZADO);
-					listaSituacao.add(SituacaoAtualizacaoCadastral.EM_CORRECAO);
-					query.setParameterList("listaSituacao", listaSituacao);
-				}
-				
-			}
+			List<Integer> listaSituacao = montarListaSituacaoMovimentoAtualizacaoCadastral(filtroHelper);
+			
+			if (!listaSituacao.isEmpty())
+				query.setParameterList("listaSituacao", listaSituacao);
 			
 			Collection retornoConsulta = query.list();
 			
@@ -731,16 +708,50 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				helper.addCategoria(categoria);
 			}
 			
-			consultarMovimentoAtualizacaoCadastralHelper = new RepositorioTransacaoUtil().imoveisFiltrados(map.values(), filtroHelper);
+			colecaoHelper = new RepositorioTransacaoUtil().imoveisFiltrados(map.values(), filtroHelper);
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 
-		return consultarMovimentoAtualizacaoCadastralHelper;
+		return colecaoHelper;
+	}
+
+	private List<Integer> montarListaSituacaoMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper) {
+		List<Integer> lista = new ArrayList<Integer>();
+		int situacao = filtroHelper.getSituacao();
+
+		if (situacao != FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
+			
+			switch (situacao) {
+			case -1:
+				lista.add(SituacaoAtualizacaoCadastral.PRE_APROVADO);
+				lista.add(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO);
+				lista.add(SituacaoAtualizacaoCadastral.FISCALIZADO);
+				
+				break;
+				
+			case -2:
+				lista.add(SituacaoAtualizacaoCadastral.PRE_APROVADO);
+				
+				break;
+				
+			default:
+				lista.add(situacao);
+				
+				break;
+			}
+
+		} else {
+			lista.add(SituacaoAtualizacaoCadastral.ATUALIZADO);
+			lista.add(SituacaoAtualizacaoCadastral.EM_CORRECAO);
+		}
+		
+		return lista;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public List consultarDadosTabelaColunaAtualizacaoCadastral(
 			Long idRegistroAlterado,
 			Integer idArquivo, Integer idImovel, Long idCliente,Integer idTipoAlteracao) throws ErroRepositorioException {

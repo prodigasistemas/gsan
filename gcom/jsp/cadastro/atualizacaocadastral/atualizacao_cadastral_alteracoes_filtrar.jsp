@@ -3,18 +3,20 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
 <html:html>
 <head>
 
 <%@ include file="/jsp/util/titulo.jsp"%>
+
+<%@ page import="gcom.cadastro.SituacaoAtualizacaoCadastral"%>
+
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
 
 <script language="JavaScript" src="<bean:message key="caminho.js"/>util.js" ></script>
 <script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js" ></script>
-
 <script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
 <html:javascript staticJavascript="false" dynamicJavascript="true" formName="FiltrarAlteracaoAtualizacaoCadastralActionForm" />
 
@@ -369,18 +371,25 @@
       <td colspan="2"><hr></td>
     </tr>
     
-    <tr>
-      <td width="170"><strong>Exibir im&oacute;veis:</strong></td>
-      <td>
-        <strong> 
-          <html:radio property="exibirCampos" value="7" /> Pendentes de Aprova&ccedil;&atilde;o 
-          <html:radio property="exibirCampos" value="4" /> Aprovados
-          <html:radio property="exibirCampos" value="-2" /> Aprovar em lote
-          <html:radio property="exibirCampos" value="-1" /> Todos
-        </strong>
+     <tr>
+		<td width="170"><strong>Situação dos Imóveis:<font color="#FF0000">*</font></strong></td>
+		<td colspan="2" align="left">
+			<html:select property="situacao" tabindex="2">
+				<html:option value="-1">Pendentes</html:option>
+				<html:option value="3">Transmitidos</html:option>
+				<html:option value="8">Em Revisão</html:option>
+				<html:option value="9">Revisados</html:option>
+				<html:option value="11">Em Revisita</html:option>
+				<html:option value="7">Pré Aprovados</html:option>
+				<html:option value="5">Em Fiscalização</html:option>
+				<html:option value="10">Fiscalizados</html:option>
+				<html:option value="4">Aprovados</html:option>
+				<html:option value="-2">Para Aprovação em Lote</html:option>
+				<html:option value="-3">Todos</html:option>
+			</html:select>
       </td>
     </tr>
-
+    
     <tr>
       <td colspan="2"><hr></td>
     </tr>

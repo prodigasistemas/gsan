@@ -1,5 +1,7 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -15,7 +17,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	
 	private String periodoFinal;
 
-	private String exibirCampos;
+	private int situacao;
 
 	private String[] colunaImoveisSelecionados;
 
@@ -59,7 +61,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.idLeiturista = form.getIdLeiturista();
 		this.periodoInicial = form.getPeriodoInicial();
 		this.periodoFinal = form.getPeriodoFinal();
-		this.exibirCampos = form.getExibirCampos();
+		this.situacao = Integer.valueOf(form.getSituacao());
 		this.colunaImoveisSelecionados = form.getColunaImoveisSelecionados();
 		this.idLocalidadeInicial = form.getIdLocalidadeInicial();
 		this.nomeLocalidadeInicial = form.getNomeLocalidadeInicial();
@@ -70,10 +72,10 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.cdSetorComercialFinal = form.getCdSetorComercialFinal();
 		this.cdRotaFinal = form.getCdRotaFinal();
 
-		this.alteracaoHidrometro = consisteAlteracao(form.getAlteracaoHidrometro(), this.exibirCampos);
-		this.alteracaoSituacaoAgua = consisteAlteracao(form.getAlteracaoSituacaoAgua(), this.exibirCampos);
-		this.alteracaoSituacaoEsgoto = consisteAlteracao(form.getAlteracaoSituacaoEsgoto(), this.exibirCampos);
-		this.alteracaoCategoria = consisteAlteracao(form.getAlteracaoCategoria(), this.exibirCampos);
+		this.alteracaoHidrometro = consisteAlteracao(form.getAlteracaoHidrometro());
+		this.alteracaoSituacaoAgua = consisteAlteracao(form.getAlteracaoSituacaoAgua());
+		this.alteracaoSituacaoEsgoto = consisteAlteracao(form.getAlteracaoSituacaoEsgoto());
+		this.alteracaoCategoria = consisteAlteracao(form.getAlteracaoCategoria());
 		
 		this.ocorrenciaCadastro = form.getOcorrenciaCadastro();
 		
@@ -81,10 +83,10 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.matricula = form.getMatricula();
 	}
 
-	private Boolean consisteAlteracao(String campo, String exibirCampos) {
+	private Boolean consisteAlteracao(String campo) {
 		Boolean aplicaFiltro = null;
 
-		if (exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString())) {
+		if (this.situacao == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PARA_APROVACAO_EM_LOTE) {
 			aplicaFiltro = true;
 		} else if (StringUtils.isNotEmpty(campo)) {
 			Integer altera = Integer.parseInt(campo);
@@ -130,12 +132,12 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.periodoFinal = periodoFinal;
 	}
 
-	public String getExibirCampos() {
-		return exibirCampos;
+	public int getSituacao() {
+		return situacao;
 	}
 
-	public void setExibirCampos(String exibirCampos) {
-		this.exibirCampos = exibirCampos;
+	public void setExibirCampos(int exibirCampos) {
+		this.situacao = exibirCampos;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -237,12 +239,12 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.alteracaoCategoria = alteracaoCategoria;
 	}
 
-	public boolean isAprovacaoEmLote() {
-		return this.exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString()) ? true : false;
+	public boolean paraAprovacaoEmLote() {
+		return this.situacao == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PARA_APROVACAO_EM_LOTE ? true : false;
 	}
 	
-	public boolean isLoteInformado() {
-		return this.lote != null && !this.lote.trim().equals("") && Integer.parseInt(this.lote.trim()) > 0;
+	public boolean loteInformado() {
+		return this.lote != null && !this.lote.trim().equals("") && Integer.parseInt(this.lote.trim()) > 0 && permiteAprovarLote();
 	}
 
 	public int getTotalImoveis() {
@@ -291,5 +293,12 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
+	}
+	
+	private boolean permiteAprovarLote() {
+		return this.situacao == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES ||
+			   this.situacao == SituacaoAtualizacaoCadastral.PRE_APROVADO ||
+			   this.situacao == SituacaoAtualizacaoCadastral.EM_FISCALIZACAO ||
+			   this.situacao == SituacaoAtualizacaoCadastral.FISCALIZADO;
 	}
 }
