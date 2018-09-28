@@ -49,6 +49,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	
 	private String lote;
 	
+	private String matricula;
+	
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper() {
 	}
 
@@ -76,6 +78,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.ocorrenciaCadastro = form.getOcorrenciaCadastro();
 		
 		this.lote = form.getLote();
+		this.matricula = form.getMatricula();
 	}
 
 	private Boolean consisteAlteracao(String campo, String exibirCampos) {
@@ -280,5 +283,13 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	public void setLote(String lote) {
 		this.lote = lote;
+	}
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
 }

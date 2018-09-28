@@ -180,21 +180,20 @@
 	  <tr>
 		<td width="170"><strong>Empresa:<font color="#FF0000">*</font></strong></td>
 		<td colspan="2" align="left">
-			<html:select property="idEmpresa" tabindex="3" onchange="javascript:listarLeiturista()">
+			<html:select property="idEmpresa" tabindex="1" onchange="javascript:listarLeiturista()" >
 				<html:option value="-1">&nbsp;</html:option>
-				<html:options collection="colecaoEmpresa"
-					labelProperty="descricao" property="id" />
+				<html:options collection="colecaoEmpresa" labelProperty="descricao" property="id" />
 			</html:select>
 		</td>
 	  </tr>
 	  <tr>
 		<td width="170"><strong>Agente Cadastral:</strong></td>
-		<td colspan="2" align="left"><html:select property="idLeiturista"
-			tabindex="4">
-			<html:option value="-1">&nbsp;</html:option>
-			<html:options collection="colecaoLeiturista"
-				labelProperty="descricao" property="id" />
-		</html:select></td>
+		<td colspan="2" align="left">
+			<html:select property="idLeiturista" tabindex="2">
+				<html:option value="-1">&nbsp;</html:option>
+				<html:options collection="colecaoLeiturista" labelProperty="descricao" property="id" />
+			</html:select>
+		</td>
 	 </tr>
 	 
 	 <tr>
@@ -207,11 +206,11 @@
 				<strong>
 					<html:text property="periodoInicial" size="11" maxlength="10" tabindex="3" onkeyup="mascaraData(this, event);replicarPeriodo();" />
 					<a href="javascript:abrirCalendarioReplicando('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'periodoInicial','periodoFinal');">
-						<img border="0" src="<bean:message key='caminho.imagens'/>calendario.gif" width="16" height="15" border="0" alt="Exibir Calendário" tabindex="4" />
+						<img border="0" src="<bean:message key='caminho.imagens'/>calendario.gif" width="16" height="15" border="0" alt="Exibir Calendário" />
 					</a> a 
-					<html:text property="periodoFinal" size="11" maxlength="10" tabindex="3" onkeyup="mascaraData(this, event)" /> 
+					<html:text property="periodoFinal" size="11" maxlength="10" tabindex="4" onkeyup="mascaraData(this, event)" /> 
 					<a href="javascript:abrirCalendario('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'periodoFinal');">
-						<img border="0" src="<bean:message key='caminho.imagens'/>calendario.gif" width="16" height="15" border="0" alt="Exibir Calendário" tabindex="4" />
+						<img border="0" src="<bean:message key='caminho.imagens'/>calendario.gif" width="16" height="15" border="0" alt="Exibir Calendário" />
 					</a> 
 				</strong>(dd/mm/aaaa)
 				<strong></strong> 
@@ -226,41 +225,61 @@
 	<tr>
 		<td><strong>Lote de Fiscalização:</strong></td>
 		<td>
-			<html:text property="lote" maxlength="5" size="5" onkeypress="somente_numero(this);" onkeyup="javascript:somente_numero(this);"/>
+			<html:text property="lote" maxlength="5" size="5" onkeypress="somente_numero(this);" onkeyup="javascript:somente_numero(this);" tabindex="5" />
 		</td>
 	</tr>
 
     <tr>
       	<td colspan="2"><hr></td>
     </tr>
-
+    
+    <tr>
+      	<td width="170"><strong>Matrícula:</strong></td>
+      	<td>
+			<html:text property="matricula" maxlength="9"  size="9" tabindex="5"
+				   	   onkeypress="somente_numero(this);form.target=''; validaEnter(event, 'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filtroMatricula=SIM', 'matricula');"
+				   	   onkeyup="javascript:somente_numero(this);" />
+         
+	        <a href="javascript:limparCampos('matricula', 'inscricao'); abrirPopup('exibirPesquisarImovelAction.do?tipo=origem', 400, 800);" > 
+	        	<img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"/> 
+	        </a>
+         
+        	<html:text property="inscricao" size="31" readonly="true" style="background-color: #EFEFEF; border: 0; color: ${requestScope.corInscricao}" />
+          
+	        <a href="javascript:limparCampos('matricula', 'inscricao');">
+	            <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
+	        </a>
+      	</td>          
+    </tr>
+    
+    <tr>
+      	<td colspan="2"><hr></td>
+    </tr>
+	
 	<tr>
 	  <td colspan="2">
-	    <strong>Informe os dados da inscri&ccedil;&atilde;o inicial:</strong>
+	  	<strong>Informe os dados da inscri&ccedil;&atilde;o inicial:</strong>
 	  </td>
 	</tr>
 
     <tr>
-      <td width="170"><strong>Localidade:</strong>
-      </td>
-      <td><html:text tabindex="5" maxlength="3" property="idLocalidadeInicial" size="5"
-        onkeypress="somente_numero(this);form.target='';
-        validaEnter(event,
-        'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filterClass=FiltroLocalidade&fieldLocalidade=LocalidadeInicial', 'idLocalidadeInicial');"
-        onkeyup="javascript:somente_numero(this);replicarLocalidade();" onblur="javascript:replicarLocalidade();"/>
+      	<td width="170"><strong>Localidade:</strong></td>
+      	<td>
+			<html:text tabindex="5" maxlength="3" property="idLocalidadeInicial" size="5"
+				   	   onkeypress="somente_numero(this);form.target=''; validaEnter(event, 'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filterClass=FiltroLocalidade&fieldLocalidade=LocalidadeInicial', 'idLocalidadeInicial');"
+				   	   onkeyup="javascript:somente_numero(this);replicarLocalidade();" 
+				   	   onblur="javascript:replicarLocalidade();"/>
          
-        <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial', 'cdSetorComercialInicial', 'nomeSetorComercialInicial', 'idLocalidadeFinal', 'nomeLocalidadeFinal', 'cdSetorComercialFinal', 'nomeSetorComercialFinal', 'cdRotaInicial', 'cdRotaFinal'); 
-           abrirPopup('exibirPesquisarLocalidadeAction.do?tipo=origem', 400, 800);"> 
-          <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"/> 
-        </a>
+	        <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial', 'cdSetorComercialInicial', 'nomeSetorComercialInicial', 'idLocalidadeFinal', 'nomeLocalidadeFinal', 'cdSetorComercialFinal', 'nomeSetorComercialFinal', 'cdRotaInicial', 'cdRotaFinal'); abrirPopup('exibirPesquisarLocalidadeAction.do?tipo=origem', 400, 800);" > 
+	        	<img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"/> 
+	        </a>
          
-        <html:text property="nomeLocalidadeInicial" size="35" readonly="true"
-            style="background-color: #EFEFEF; border: 0; color: ${requestScope.corLocalidadeInicial}" />
+        	<html:text property="nomeLocalidadeInicial" size="35" readonly="true" style="background-color: #EFEFEF; border: 0; color: ${requestScope.corLocalidadeInicial}" />
           
-        <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial', 'cdSetorComercialInicial', 'nomeSetorComercialInicial', 'idLocalidadeFinal', 'nomeLocalidadeFinal', 'cdSetorComercialFinal', 'nomeSetorComercialFinal', 'cdRotaInicial', 'cdRotaFinal');">
-            <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
-        </a>
-      </td>          
+	        <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial', 'cdSetorComercialInicial', 'nomeSetorComercialInicial', 'idLocalidadeFinal', 'nomeLocalidadeFinal', 'cdSetorComercialFinal', 'nomeSetorComercialFinal', 'cdRotaInicial', 'cdRotaFinal');">
+	            <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
+	        </a>
+      	</td>          
     </tr>
     
     <tr>

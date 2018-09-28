@@ -24,10 +24,10 @@ import org.apache.struts.action.ActionMapping;
 
 public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		ActionForward retorno = actionMapping.findForward("filtrarAlteracaoAtualizacaoCadastral");
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		ActionForward retorno = mapping.findForward("filtrarAlteracaoAtualizacaoCadastral");
 		
-		HttpSession sessao = httpServletRequest.getSession(false);
+		HttpSession sessao = request.getSession(false);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionForm form = (FiltrarAlteracaoAtualizacaoCadastralActionForm) actionForm;
         

@@ -35,7 +35,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -625,6 +624,10 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			if (StringUtils.isNotEmpty(filtroHelper.getLote())) {
 				sql.append(" and ctrl.icac_lote = '" + filtroHelper.getLote() + "'");
 			}
+			
+			if (StringUtils.isNotEmpty(filtroHelper.getMatricula())) {
+				sql.append(" and ctrl.imov_id = " + filtroHelper.getMatricula());
+			}
 
 			Integer exibirCampos = Integer.valueOf(filtroHelper.getExibirCampos());
 			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) && exibirCampos !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
@@ -661,9 +664,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					.addScalar("valorRevisado", Hibernate.STRING)
 					.addScalar("valorFiscalizado", Hibernate.STRING);
 
+			List<Integer> listaSituacao = new ArrayList<Integer>();
 			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos())) {
-				
-				List<Integer> listaSituacao = new ArrayList<Integer>();
 
 				if (exibirCampos !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
 					
@@ -683,7 +685,9 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					}
 				
 				} else {
-					query.setParameterList("listaSituacao", Arrays.asList(SituacaoAtualizacaoCadastral.ATUALIZADO));
+					listaSituacao.add(SituacaoAtualizacaoCadastral.ATUALIZADO);
+					listaSituacao.add(SituacaoAtualizacaoCadastral.EM_CORRECAO);
+					query.setParameterList("listaSituacao", listaSituacao);
 				}
 				
 			}
