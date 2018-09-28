@@ -246,14 +246,17 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = controladorAtualizacaoCadastral.pesquisarImovelControleAtualizacao(atualizacao.getImovelAtual().getMatricula());
 
 		if (imovelControleAtualizacaoCadastral != null) {
-			int situacao = imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId().intValue();
 
-			if (situacao == SituacaoAtualizacaoCadastral.PRE_APROVADO.intValue() 
-					|| situacao == SituacaoAtualizacaoCadastral.APROVADO.intValue() 
-					|| situacao == SituacaoAtualizacaoCadastral.ATUALIZADO.intValue()) {
+			if (imovelControleAtualizacaoCadastral.isPreAprovado() 
+					|| imovelControleAtualizacaoCadastral.isAprovado() 
+					|| imovelControleAtualizacaoCadastral.isAtualizado()) {
 
 				atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'PRE APROVADO', 'APROVADO' ou 'ATUALIZADO'");
 				atualizacao.getImovelAtual().setImovelAprovado(true);
+			}
+			
+			if (atualizacao.getArquivoTexto().isArquivoRetornoTransmissao()) {
+				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
 			}
 			
 		} else {
