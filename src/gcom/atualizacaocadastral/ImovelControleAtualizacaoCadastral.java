@@ -136,6 +136,14 @@ public class ImovelControleAtualizacaoCadastral {
 		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.PRE_APROVADO);
 	}
 
+	public boolean isAprovado() {
+		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.APROVADO);
+	}
+	
+	public boolean isAtualizado() {
+		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.ATUALIZADO);
+	}
+	
 	public boolean isTransmitido() {
 		return SituacaoAtualizacaoCadastral.TRANSMITIDO.equals(this.situacaoAtualizacaoCadastral.getId());
 	}
