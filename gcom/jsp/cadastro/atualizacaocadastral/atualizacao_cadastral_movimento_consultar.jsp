@@ -328,8 +328,7 @@
 	     <table border="0" width="100%">
 		   <tr>
 				<td align="left" width="50%">					
-					<input type="button" name="Button" class="bottonRightCol"
-						value="Voltar" onclick="window.location.href='/gsan/exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?menu=sim';">	
+					<input type="button" name="Button" class="bottonRightCol" value="Voltar" onclick="javascript:history.back();">	
 				</td>
 				
 				<logic:equal name="relatorio" value="true" scope="session">

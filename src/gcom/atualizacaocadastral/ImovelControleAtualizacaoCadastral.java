@@ -28,6 +28,15 @@ public class ImovelControleAtualizacaoCadastral {
 	private Date dataGeracaoLote;
 	private Date dataAprovacaoLote;
 
+	public ImovelControleAtualizacaoCadastral() {
+		super();
+	}
+
+	public ImovelControleAtualizacaoCadastral(Integer id) {
+		super();
+		this.id = id;
+	}
+
 	public Integer getId() {
 		return id;
 	}

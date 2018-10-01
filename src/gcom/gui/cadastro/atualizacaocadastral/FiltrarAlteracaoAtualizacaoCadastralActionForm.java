@@ -68,6 +68,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private String matricula;
 	
 	private String inscricao;
+	
+	private String quantidadeVisitas = "-1";
 
 	public FiltrarAlteracaoAtualizacaoCadastralActionForm() {
 	}
@@ -294,6 +296,14 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	public void setSituacao(String situacao) {
 		this.situacao = situacao;
+	}
+
+	public String getQuantidadeVisitas() {
+		return quantidadeVisitas;
+	}
+
+	public void setQuantidadeVisitas(String quantidadeVisitas) {
+		this.quantidadeVisitas = quantidadeVisitas;
 	}
 
 	public boolean existeParametroInformado() {

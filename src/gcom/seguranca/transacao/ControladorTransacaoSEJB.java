@@ -1360,18 +1360,30 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 		return retorno;
 	}
 
-	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper helper)throws ControladorException {
+	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) throws ControladorException {
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> retorno = null;
 
 		try {
-			retorno = repositorioTransacao.pesquisarMovimentoAtualizacaoCadastral(helper);
+			retorno = repositorioTransacao.pesquisarMovimentoAtualizacaoCadastral(filtro);
 
 			Map<String, String> descricoes = new HashMap<String, String>();
 
 			String nomeColuna = "";
 			String valorCampo = "";
-			for (ConsultarMovimentoAtualizacaoCadastralHelper item : retorno) {
+			
+			for (Iterator<ConsultarMovimentoAtualizacaoCadastralHelper> iterator = retorno.iterator(); iterator.hasNext();) {
+				ConsultarMovimentoAtualizacaoCadastralHelper item = (ConsultarMovimentoAtualizacaoCadastralHelper) iterator.next();
+				
+				if (filtro.getQuantidadeVisitas() >= 0) {
+					int quantidadeVisitas = getControladorAtualizacaoCadastral().obterQuantidadeDeVisitasPorImovelControle(item.getControle());
+					
+					if (quantidadeVisitas != filtro.getQuantidadeVisitas()) {
+						iterator.remove();
+						continue;
+					}
+				}
+
 				List<ColunaAtualizacaoCadastral> colunas = item.getColunasAtualizacao();
 
 				for (ColunaAtualizacaoCadastral coluna : colunas) {
@@ -1383,7 +1395,7 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 					valorCampo = coluna.getValorTransmitido();
 					valorCampo = trocaValorColuna(descricoes, nomeColuna, valorCampo);
 					coluna.setValorTransmitido(valorCampo);
-					
+
 					valorCampo = coluna.getValorFiscalizado();
 					valorCampo = trocaValorColuna(descricoes, nomeColuna, valorCampo);
 					coluna.setValorFiscalizado(valorCampo);
@@ -1804,22 +1816,19 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean atualizaSituacaoLigacaoEsgotoImovel(Imovel imovel,Integer idCliente,
 			Integer situacaoLigacaoAnterior,Integer situacaoLigacaoAtual,
 			Usuario usuarioLogado) throws ControladorException{
 		boolean alterouSituacaoLigacao = false;
 
-		//caso a situa��o anterior seja igual Ligado
 		if(situacaoLigacaoAnterior.equals(LigacaoEsgotoSituacao.LIGADO)){
-			//caso a situa��o atual seja igual a Potencial ou Factivel
 			if(situacaoLigacaoAtual.equals(LigacaoEsgotoSituacao.FACTIVEL)){
-				//atualiza a situa��o da liga��o de �gua do im�vel
 				FiltroLigacaoEsgotoSituacao filtroLigacaoEsgotoSituacao = new FiltroLigacaoEsgotoSituacao();
 				filtroLigacaoEsgotoSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoEsgotoSituacao.ID, situacaoLigacaoAtual));
 				Collection colecaoLigacaoEsgotoSituacao = getControladorUtil().pesquisar(filtroLigacaoEsgotoSituacao, LigacaoEsgotoSituacao.class.getName());
 				LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) Util.retonarObjetoDeColecao(colecaoLigacaoEsgotoSituacao);
 				imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
-				//cria o registro de atendimento para a situa��o da liga��o alterada
 				FiltroSolicitacaoTipoEspecificacao filtroSolicitacaoTipoEspecificacao = new FiltroSolicitacaoTipoEspecificacao();
 				filtroSolicitacaoTipoEspecificacao.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.CODIGO_CONSTANTE, SolicitacaoTipoEspecificacao.CODIGO_CONSTANTE_ATUALIZACAO_CADASTRAL));
 				Collection colecaoSolicitacaoTipoEspecificacao = getControladorUtil().pesquisar(filtroSolicitacaoTipoEspecificacao, SolicitacaoTipoEspecificacao.class.getName());

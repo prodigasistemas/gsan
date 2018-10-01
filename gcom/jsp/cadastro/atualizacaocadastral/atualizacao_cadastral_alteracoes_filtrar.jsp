@@ -395,6 +395,22 @@
     </tr>
 
 	<tr>
+      <td width="170"><strong>Quantidade de Visitas:</strong></td>
+      <td>
+		<strong> 
+			<html:radio property="quantidadeVisitas" value="0" /> 0  
+			<html:radio property="quantidadeVisitas" value="1" /> 1 
+			<html:radio property="quantidadeVisitas" value="2" /> 2
+			<html:radio property="quantidadeVisitas" value="3" /> 3
+			<html:radio property="quantidadeVisitas" value="-1" /> Todos
+		</strong>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><hr></td>
+    </tr>
+
+	<tr>
       <td width="170"><strong>Sem Ocorr&ecirc;ncia de Cadastro (Permite Aprova&ccedil;&atilde;o):</strong></td>
       <td>
         <strong> 

@@ -53,6 +53,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	
 	private String matricula;
 	
+	private int quantidadeVisitas;
+	
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper() {
 	}
 
@@ -81,6 +83,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		
 		this.lote = form.getLote();
 		this.matricula = form.getMatricula();
+		this.quantidadeVisitas = Integer.valueOf(form.getQuantidadeVisitas());
 	}
 
 	private Boolean consisteAlteracao(String campo) {
@@ -295,6 +298,14 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.matricula = matricula;
 	}
 	
+	public int getQuantidadeVisitas() {
+		return quantidadeVisitas;
+	}
+
+	public void setQuantidadeVisitas(int quantidadeVisitas) {
+		this.quantidadeVisitas = quantidadeVisitas;
+	}
+
 	private boolean permiteAprovarLote() {
 		return this.situacao == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES ||
 			   this.situacao == SituacaoAtualizacaoCadastral.PRE_APROVADO ||
