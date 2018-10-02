@@ -15,7 +15,7 @@ public class ValidadorAtualizacaoCadastral extends ValidadorAtualizacaoCadastral
 	
 	boolean executa() {
 		
-		if (filtro.getSituacao() == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PARA_APROVACAO_EM_LOTE) {
+		if (filtro.getSituacaoImoveis() == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PARA_APROVACAO_EM_LOTE) {
 			return validaAprovacaoEmLote();
 		} else {
 			return validaNormal();

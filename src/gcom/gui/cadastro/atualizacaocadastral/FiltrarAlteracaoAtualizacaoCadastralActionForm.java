@@ -29,7 +29,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	private String idRegistrosAutorizados;
 
-	private String situacao;
+	private String situacaoImoveis;
 
 	private String[] colunaImoveisSelecionados;
 
@@ -290,12 +290,12 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.inscricao = inscricao;
 	}
 
-	public String getSituacao() {
-		return situacao;
+	public String getSituacaoImoveis() {
+		return situacaoImoveis;
 	}
 
-	public void setSituacao(String situacao) {
-		this.situacao = situacao;
+	public void setSituacaoImoveis(String situacaoImoveis) {
+		this.situacaoImoveis = situacaoImoveis;
 	}
 
 	public String getQuantidadeVisitas() {
@@ -333,7 +333,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		if (isParametroInformado(getCdRotaFinal()))
 			peloMenosUmParametroInformado = true;
 
-		if (isParametroInformado(getSituacao()))
+		if (isParametroInformado(getSituacaoImoveis()))
 			peloMenosUmParametroInformado = true;
 
 		if (this.getColunaImoveisSelecionados() != null && !this.getColunaImoveisSelecionados().equals(""))
@@ -358,7 +358,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 				+ "periodoRealizacaoFinal=" + periodoFinal + ","
 				+ "idRegistrosNaoAutorizados=" + idRegistrosNaoAutorizados + ","
 				+ "idRegistrosAutorizados=" + idRegistrosAutorizados + ","
-				+ "exibirCampos=" + situacao + ","
+				+ "exibirCampos=" + situacaoImoveis + ","
 				+ "colunaImoveisSelecionados=" + Arrays.toString(colunaImoveisSelecionados) + ","
 				+ "idLocalidadeInicial=" + idLocalidadeInicial + ","
 				+ "idLocalidadeFinal=" + idLocalidadeFinal + ","

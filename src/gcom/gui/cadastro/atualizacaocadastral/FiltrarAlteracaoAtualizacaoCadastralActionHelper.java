@@ -17,7 +17,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	
 	private String periodoFinal;
 
-	private int situacao;
+	private int situacaoImoveis;
 
 	private String[] colunaImoveisSelecionados;
 
@@ -63,7 +63,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.idLeiturista = form.getIdLeiturista();
 		this.periodoInicial = form.getPeriodoInicial();
 		this.periodoFinal = form.getPeriodoFinal();
-		this.situacao = Integer.valueOf(form.getSituacao());
+		this.situacaoImoveis = Integer.valueOf(form.getSituacaoImoveis());
 		this.colunaImoveisSelecionados = form.getColunaImoveisSelecionados();
 		this.idLocalidadeInicial = form.getIdLocalidadeInicial();
 		this.nomeLocalidadeInicial = form.getNomeLocalidadeInicial();
@@ -89,7 +89,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	private Boolean consisteAlteracao(String campo) {
 		Boolean aplicaFiltro = null;
 
-		if (this.situacao == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PARA_APROVACAO_EM_LOTE) {
+		if (this.situacaoImoveis == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PARA_APROVACAO_EM_LOTE) {
 			aplicaFiltro = true;
 		} else if (StringUtils.isNotEmpty(campo)) {
 			Integer altera = Integer.parseInt(campo);
@@ -135,12 +135,12 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.periodoFinal = periodoFinal;
 	}
 
-	public int getSituacao() {
-		return situacao;
+	public int getSituacaoImoveis() {
+		return situacaoImoveis;
 	}
 
-	public void setExibirCampos(int exibirCampos) {
-		this.situacao = exibirCampos;
+	public void setSituacaoImoveis(int situacaoImoveis) {
+		this.situacaoImoveis = situacaoImoveis;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -243,7 +243,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	}
 
 	public boolean paraAprovacaoEmLote() {
-		return this.situacao == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PARA_APROVACAO_EM_LOTE ? true : false;
+		return this.situacaoImoveis == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PARA_APROVACAO_EM_LOTE ? true : false;
 	}
 	
 	public boolean loteInformado() {
@@ -307,9 +307,9 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	}
 
 	private boolean permiteAprovarLote() {
-		return this.situacao == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES ||
-			   this.situacao == SituacaoAtualizacaoCadastral.PRE_APROVADO ||
-			   this.situacao == SituacaoAtualizacaoCadastral.EM_FISCALIZACAO ||
-			   this.situacao == SituacaoAtualizacaoCadastral.FISCALIZADO;
+		return this.situacaoImoveis == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES ||
+			   this.situacaoImoveis == SituacaoAtualizacaoCadastral.PRE_APROVADO ||
+			   this.situacaoImoveis == SituacaoAtualizacaoCadastral.EM_FISCALIZACAO ||
+			   this.situacaoImoveis == SituacaoAtualizacaoCadastral.FISCALIZADO;
 	}
 }

@@ -634,7 +634,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				sql.append(" AND ctrl.imov_id = " + filtro.getMatricula());
 			}
 
-			if (filtro.getSituacao() !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
+			if (filtro.getSituacaoImoveis() !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
 				sql.append(" AND ctrl.siac_id in (:listaSituacao) ");
 			} else {
 				sql.append(" AND ctrl.siac_id not in (:listaSituacao) ");
@@ -726,7 +726,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 
 	private List<Integer> montarListaSituacaoMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) {
 		List<Integer> lista = new ArrayList<Integer>();
-		int situacao = filtro.getSituacao();
+		int situacao = filtro.getSituacaoImoveis();
 
 		if (situacao != FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
 			

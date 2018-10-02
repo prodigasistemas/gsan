@@ -374,18 +374,18 @@
      <tr>
 		<td width="170"><strong>Situação dos Imóveis:<font color="#FF0000">*</font></strong></td>
 		<td colspan="2" align="left">
-			<html:select property="situacao" tabindex="2">
-				<html:option value="-1">Pendentes</html:option>
-				<html:option value="3">Transmitidos</html:option>
-				<html:option value="8">Em Revisão</html:option>
-				<html:option value="9">Revisados</html:option>
-				<html:option value="11">Em Revisita</html:option>
-				<html:option value="7">Pré Aprovados</html:option>
-				<html:option value="5">Em Fiscalização</html:option>
-				<html:option value="10">Fiscalizados</html:option>
-				<html:option value="4">Aprovados</html:option>
-				<html:option value="-2">Para Aprovação em Lote</html:option>
-				<html:option value="-3">Todos</html:option>
+			<html:select property="situacaoImoveis" tabindex="2">
+				<html:option value="-1">PENDENTES</html:option>
+				<html:option value="3">TRANSMITIDOS</html:option>
+				<html:option value="8">EM REVISÃO</html:option>
+				<html:option value="9">REVISADOS</html:option>
+				<html:option value="11">EM REVISITA</html:option>
+				<html:option value="7">PRÉ APROVADOS</html:option>
+				<html:option value="5">EM FISCALIZAÇÃO</html:option>
+				<html:option value="10">FISCALIZADOS</html:option>
+				<html:option value="4">APROVADOS</html:option>
+				<html:option value="-2">PARA APROVAÇÃO EM LOTE</html:option>
+				<html:option value="-3">TODOS</html:option>
 			</html:select>
       </td>
     </tr>
