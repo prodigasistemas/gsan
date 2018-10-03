@@ -642,8 +642,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			
 			if (filtro.paraAprovacaoEmLote()) {
 				sql.append(" AND cocr.cocr_icvalidacao = " + ConstantesSistema.SIM);
-			} else if (Integer.valueOf(filtro.getOcorrenciaCadastro()) > 0) {
-				sql.append(" AND cocr.cocr_icvalidacao = " + filtro.getOcorrenciaCadastro());
+			} else if (filtro.getOcorrenciaCadastro() > 0) {
+				if (filtro.getOcorrenciaCadastroSelecionada() == -1) {
+					sql.append(" AND cocr.cocr_icvalidacao = " + filtro.getOcorrenciaCadastro());
+				} else {
+					sql.append(" AND cocr.cocr_id = " + filtro.getOcorrenciaCadastroSelecionada());
+				}
 			}
 			
 			sql.append(" ORDER BY tatc.tatc_cdimovel");

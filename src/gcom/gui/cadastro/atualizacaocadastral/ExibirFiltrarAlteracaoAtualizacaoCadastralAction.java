@@ -2,6 +2,8 @@ package gcom.gui.cadastro.atualizacaocadastral;
 
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.empresa.FiltroEmpresa;
+import gcom.cadastro.imovel.CadastroOcorrencia;
+import gcom.cadastro.imovel.FiltroCadastroOcorrencia;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.FiltroLocalidade;
@@ -14,18 +16,14 @@ import gcom.gui.GcomAction;
 import gcom.gui.micromedicao.DadosLeiturista;
 import gcom.micromedicao.FiltroLeiturista;
 import gcom.micromedicao.Leiturista;
-import gcom.seguranca.transacao.FiltroTabelaColuna;
-import gcom.seguranca.transacao.TabelaColuna;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.DescriptorEntity;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
-import gcom.util.filtro.ParametroSimplesIn;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -43,21 +41,23 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 
 	private static Logger logger = Logger.getLogger(ExibirFiltrarAlteracaoAtualizacaoCadastralAction.class);
 	
+	private FiltrarAlteracaoAtualizacaoCadastralActionForm form;
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
-		FiltrarAlteracaoAtualizacaoCadastralActionForm form = (FiltrarAlteracaoAtualizacaoCadastralActionForm) actionForm;
+		this.form = (FiltrarAlteracaoAtualizacaoCadastralActionForm) actionForm;
 
 		try {
 			if (StringUtils.isNotEmpty(request.getParameter("filtroMatricula")))
-				preencherInscricaoImovel(form, request);
+				preencherInscricaoImovel(request);
 			
 			if (StringUtils.isNotEmpty(request.getParameter("filterClass")))
-				preencherCampoDescricao(form, request);
+				preencherCampoDescricao(request);
 
 			HttpSession sessao = request.getSession(false);
 
 			carregarComboEmpresas(sessao);
-			carregarComboLeiturista(form, sessao);
-			carregarColunaImoveis(sessao, request, form);
+			carregarComboLeiturista(sessao);
+			carregarComboOcorrencias(sessao);
 			
 		} catch (Exception e) {
 			logger.error("Erro ao filtrar Cadastro", e);
@@ -66,32 +66,8 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		return mapping.findForward("exibirFiltrarAlteracaoAtualizacaoCadastral");
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private Collection carregarImoveisSelecionados(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpSession sessao) {
-		Collection colecao = null;
-		
-		if (form.getColunaImoveisSelecionados() != null) {
-			String[] aux = form.getColunaImoveisSelecionados();
-
-			colecao = Arrays.asList(aux);
-
-			Filtro filtro = new FiltroTabelaColuna();
-			filtro.adicionarParametro(new ParametroSimplesIn(FiltroTabelaColuna.ID, colecao));
-			filtro.setCampoOrderBy(FiltroTabelaColuna.DESCRICAO_COLUNA);
-
-			colecao = Fachada.getInstancia().pesquisar(filtro, TabelaColuna.class.getName());
-
-			if (colecao != null && !colecao.isEmpty()) {
-				sessao.setAttribute("colecaoColunaImoveisSelecionados", colecao);
-				sessao.setAttribute("existeColecaoColunaImoveisSelecionados", colecao);
-			}
-		}
-		
-		return colecao;
-	}
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void carregarComboLeiturista(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpSession sessao) {
+	private void carregarComboLeiturista(HttpSession sessao) {
 		Collection colecao = new ArrayList();
 		if (form.getIdEmpresa() != null && !form.getIdEmpresa().equals("-1") && !form.getIdEmpresa().equals("")) {
 			Filtro filtro = new FiltroLeiturista(FiltroLeiturista.FUNCIONARIO_NOME);
@@ -131,44 +107,8 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void carregarColunaImoveis(HttpSession sessao, HttpServletRequest request, FiltrarAlteracaoAtualizacaoCadastralActionForm form) {
-		Collection colecaoColunaImoveisSelecionados = carregarImoveisSelecionados(form, sessao);
-
-		Filtro filtro = new FiltroTabelaColuna();
-
-		filtro.adicionarParametro(new ParametroSimples(FiltroTabelaColuna.INDICADOR_ATUALIZACAO_CADASRAL, ConstantesSistema.SIM));
-		filtro.setConsultaSemLimites(true);
-		filtro.setCampoOrderBy(FiltroTabelaColuna.DESCRICAO_COLUNA);
-
-		Collection colecaoColunaImoveis = Fachada.getInstancia().pesquisar(filtro, TabelaColuna.class.getName());
-
-		if (colecaoColunaImoveisSelecionados == null) {
-			sessao.setAttribute("colecaoColunaImoveis", colecaoColunaImoveis);
-		} else {
-			removerImoveisSelecionados(colecaoColunaImoveisSelecionados, colecaoColunaImoveis);
-			sessao.setAttribute("colecaoColunaImoveis", colecaoColunaImoveis);
-		}
-	}
-
-	@SuppressWarnings("rawtypes")
-	private void removerImoveisSelecionados(Collection colecaoColunaImoveisSelecionados, Collection colecaoColunaImoveis) {
-		for (Iterator iteratorColunaImoveis = colecaoColunaImoveis.iterator(); iteratorColunaImoveis.hasNext();) {
-
-			TabelaColuna colunaImoveis = (TabelaColuna) iteratorColunaImoveis.next();
-			for (Iterator iteratorColunaImoveisSelecionados = colecaoColunaImoveisSelecionados.iterator(); iteratorColunaImoveisSelecionados.hasNext();) {
-
-				TabelaColuna colunaImoveisSelecionado = (TabelaColuna) iteratorColunaImoveisSelecionados.next();
-
-				if (colunaImoveis.getId().compareTo(colunaImoveisSelecionado.getId()) == 0) {
-					iteratorColunaImoveis.remove();
-				}
-			}
-		}
-	}
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void preencherInscricaoImovel(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpServletRequest request) {
+	private void preencherInscricaoImovel(HttpServletRequest request) {
 		FiltroImovel filtro = new FiltroImovel();
 		filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, form.getMatricula()));
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.SETOR_COMERCIAL);
@@ -190,7 +130,7 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		}
 	}
 	
-	private void preencherCampoDescricao(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpServletRequest request) throws Exception {
+	private void preencherCampoDescricao(HttpServletRequest request) throws Exception {
 		String filterClass = "gcom.cadastro.localidade." + request.getParameter("filterClass");
 
 		FilterClassParameters filter = null;
@@ -198,41 +138,41 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		
 		if (filterClass.contains("FiltroLocalidade")) {
 			fieldName = request.getParameter("fieldLocalidade");
-			filter = buildFiltroLocalidade(form, filterClass, fieldName);
+			filter = buildFiltroLocalidade(filterClass, fieldName);
 		} else if (filterClass.contains("FiltroSetorComercial")) {
 			String fieldLocalidade = request.getParameter("fieldLocalidade");
 			fieldName = request.getParameter("fieldSetorComercial");
-			filter = buildFiltroSetorComercial(form, request, filterClass, fieldName, fieldLocalidade);
+			filter = buildFiltroSetorComercial(request, filterClass, fieldName, fieldLocalidade);
 		}
 
 		DescriptorEntity entidade = pesquisarEntidade(filter);
 
 		Method setNome = FiltrarAlteracaoAtualizacaoCadastralActionForm.class.getMethod("setNome" + fieldName, String.class);
 		if (entidade == null) {
-			setNome.invoke(form, filter.getInvalidMessage());
+			setNome.invoke(filter.getInvalidMessage());
 			request.setAttribute("cor" + filter.getFieldName(), "#FF0000");
 		} else {
-			setNome.invoke(form, entidade.getDescricao());
+			setNome.invoke(entidade.getDescricao());
 			request.setAttribute("cor" + filter.getFieldName(), "#000000");
 		}
 	}
 
-	private FilterClassParameters buildFiltroSetorComercial(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpServletRequest request, String filterClass, String fieldName, String fieldLocalidade) throws Exception {
+	private FilterClassParameters buildFiltroSetorComercial(HttpServletRequest request, String filterClass, String fieldName, String fieldLocalidade) throws Exception {
 		Filtro filtro = (Filtro) Class.forName(filterClass).newInstance();
 		FilterClassParameters filter;
 		filter = new FilterClassParameters(filtro, new SetorComercial(), "Setor comercial inexistente", fieldName);
-		filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, (String) recuperaValorCampo(form, "Cd"+ fieldName)));
+		filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, (String) recuperaValorCampo("Cd"+ fieldName)));
 		filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
-		filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, new Integer(recuperaValorCampo(form, "Id"+ fieldLocalidade))));
+		filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, new Integer(recuperaValorCampo("Id"+ fieldLocalidade))));
 		request.setAttribute("cor" + fieldLocalidade, "#000000");
 		return filter;
 	}
 
-	private FilterClassParameters buildFiltroLocalidade(FiltrarAlteracaoAtualizacaoCadastralActionForm form, String filterClass, String fieldLocalidade) throws Exception {
+	private FilterClassParameters buildFiltroLocalidade(String filterClass, String fieldLocalidade) throws Exception {
 		Filtro filtro = (Filtro) Class.forName(filterClass).newInstance();
 		FilterClassParameters filter;
 		filter = new FilterClassParameters(filtro, new Localidade(), "Localidade inexistente", fieldLocalidade);
-		filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, recuperaValorCampo(form, "Id" + fieldLocalidade)));
+		filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, recuperaValorCampo("Id" + fieldLocalidade)));
 		filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
 		return filter;
 	}
@@ -247,9 +187,24 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		}
 	}
 	
-	private String recuperaValorCampo(FiltrarAlteracaoAtualizacaoCadastralActionForm form, String fieldName) throws Exception{
+	private String recuperaValorCampo(String fieldName) throws Exception{
 		Method getMethod = FiltrarAlteracaoAtualizacaoCadastralActionForm.class.getMethod("get" + fieldName);
 		return (String) getMethod.invoke(form);
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+	private void carregarComboOcorrencias(HttpSession sessao) {
+		if (StringUtils.isNotEmpty(form.getOcorrenciaCadastro()) && !form.getOcorrenciaCadastro().equals("-1")) {
+
+			Filtro filtro = new FiltroCadastroOcorrencia(FiltroCadastroOcorrencia.ID);
+			filtro.adicionarParametro(new ParametroSimples(FiltroCadastroOcorrencia.INDICADOR_VALIDACAO, form.getOcorrenciaCadastro()));
+
+			Collection<CadastroOcorrencia> colecao = getFachada().pesquisar(filtro, CadastroOcorrencia.class.getName());
+			sessao.setAttribute("colecaoCadastroOcorrencia", colecao);
+			form.setOcorrenciaCadastroSelecionada("-1");
+		} else {
+			sessao.setAttribute("colecaoCadastroOcorrencia", null);
+		}
+	} 
 }

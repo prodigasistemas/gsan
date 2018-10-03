@@ -2,11 +2,10 @@ package gcom.gui.cadastro.atualizacaocadastral;
 
 import gcom.util.ConstantesSistema;
 
-import java.util.Arrays;
-
 import org.apache.struts.action.ActionForm;
 
 public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
+	
 	private static final long serialVersionUID = 1L;
 
 	public static int FILTRO_PENDENTES = -1;
@@ -30,8 +29,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private String idRegistrosAutorizados;
 
 	private String situacaoImoveis;
-
-	private String[] colunaImoveisSelecionados;
 
 	private String idLocalidadeInicial;
 
@@ -62,6 +59,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private String alteracaoCategoria = "-1";
 
 	private String ocorrenciaCadastro = "-1";
+	
+	private String ocorrenciaCadastroSelecionada;
 	
 	private String lote;
 	
@@ -136,14 +135,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	public void setNomeEmpresa(String nomeEmpresa) {
 		this.nomeEmpresa = nomeEmpresa;
-	}
-
-	public String[] getColunaImoveisSelecionados() {
-		return colunaImoveisSelecionados;
-	}
-
-	public void setColunaImoveisSelecionados(String[] colunaImoveisSelecionados) {
-		this.colunaImoveisSelecionados = colunaImoveisSelecionados;
 	}
 
 	public String getIdLocalidadeInicial() {
@@ -266,6 +257,14 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.ocorrenciaCadastro = ocorrenciaCadastro;
 	}
 
+	public String getOcorrenciaCadastroSelecionada() {
+		return ocorrenciaCadastroSelecionada;
+	}
+
+	public void setOcorrenciaCadastroSelecionada(String ocorrenciaCadastroSelecionada) {
+		this.ocorrenciaCadastroSelecionada = ocorrenciaCadastroSelecionada;
+	}
+
 	public String getLote() {
 		return lote;
 	}
@@ -336,9 +335,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		if (isParametroInformado(getSituacaoImoveis()))
 			peloMenosUmParametroInformado = true;
 
-		if (this.getColunaImoveisSelecionados() != null && !this.getColunaImoveisSelecionados().equals(""))
-			peloMenosUmParametroInformado = true;
-		
 		if (isParametroInformado(getLote()))
 			peloMenosUmParametroInformado = true;
 		
@@ -359,7 +355,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 				+ "idRegistrosNaoAutorizados=" + idRegistrosNaoAutorizados + ","
 				+ "idRegistrosAutorizados=" + idRegistrosAutorizados + ","
 				+ "exibirCampos=" + situacaoImoveis + ","
-				+ "colunaImoveisSelecionados=" + Arrays.toString(colunaImoveisSelecionados) + ","
 				+ "idLocalidadeInicial=" + idLocalidadeInicial + ","
 				+ "idLocalidadeFinal=" + idLocalidadeFinal + ","
 				+ "nomeLocalidadeInicial=" + nomeLocalidadeInicial + ","

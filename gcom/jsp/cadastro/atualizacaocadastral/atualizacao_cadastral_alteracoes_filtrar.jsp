@@ -71,7 +71,7 @@
 	    }
 	}
 	
-	function listarLeiturista() {
+	function recarregar() {
 		 var form = document.forms[0];
 		 form.action = 'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do';
 	  	 form.submit();
@@ -182,7 +182,7 @@
 	  <tr>
 		<td width="170"><strong>Empresa:<font color="#FF0000">*</font></strong></td>
 		<td colspan="2" align="left">
-			<html:select property="idEmpresa" tabindex="1" onchange="javascript:listarLeiturista()" >
+			<html:select property="idEmpresa" tabindex="1" onchange="javascript:recarregar()" >
 				<html:option value="-1">&nbsp;</html:option>
 				<html:options collection="colecaoEmpresa" labelProperty="descricao" property="id" />
 			</html:select>
@@ -373,8 +373,8 @@
     
      <tr>
 		<td width="170"><strong>Situação dos Imóveis:<font color="#FF0000">*</font></strong></td>
-		<td colspan="2" align="left">
-			<html:select property="situacaoImoveis" tabindex="2">
+		<td>
+			<html:select property="situacaoImoveis">
 				<html:option value="-1">PENDENTES</html:option>
 				<html:option value="3">TRANSMITIDOS</html:option>
 				<html:option value="8">EM REVISÃO</html:option>
@@ -398,7 +398,6 @@
       <td width="170"><strong>Quantidade de Visitas:</strong></td>
       <td>
 		<strong> 
-			<html:radio property="quantidadeVisitas" value="0" /> 0  
 			<html:radio property="quantidadeVisitas" value="1" /> 1 
 			<html:radio property="quantidadeVisitas" value="2" /> 2
 			<html:radio property="quantidadeVisitas" value="3" /> 3
@@ -411,15 +410,27 @@
     </tr>
 
 	<tr>
-      <td width="170"><strong>Sem Ocorr&ecirc;ncia de Cadastro (Permite Aprova&ccedil;&atilde;o):</strong></td>
+      <td width="170"><strong>Ocorr&ecirc;ncia de Cadastro:</strong></td>
       <td>
         <strong> 
-          <html:radio property="ocorrenciaCadastro" value="1" /> Sim  
-          <html:radio property="ocorrenciaCadastro" value="2" /> N&atilde;o 
-          <html:radio property="ocorrenciaCadastro" value="-1" /> Todos
+          <html:radio property="ocorrenciaCadastro" value="1"  onclick="javascript: recarregar();" /> N&atilde;o 
+          <html:radio property="ocorrenciaCadastro" value="2"  onclick="javascript: recarregar();" /> Sim  
+          <html:radio property="ocorrenciaCadastro" value="-1" onclick="javascript: recarregar()" /> Todos
         </strong>
       </td>
     </tr>
+    
+    <logic:present name="colecaoCadastroOcorrencia" >
+	    <tr>
+	      <td width="170"></td>
+	      <td>
+	      	<html:select property="ocorrenciaCadastroSelecionada">
+				<html:option value="-1">TODAS</html:option>
+				<html:options collection="colecaoCadastroOcorrencia" labelProperty="descricao" property="id" />
+			</html:select>
+	      </td>
+	    </tr>
+    </logic:present>
 
 	<tr>
       <td colspan="2"><hr></td>
