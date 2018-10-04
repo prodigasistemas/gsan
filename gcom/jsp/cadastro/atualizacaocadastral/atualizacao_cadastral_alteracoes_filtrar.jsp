@@ -447,16 +447,16 @@
       </td>
     </tr>
     
-<!--     <tr> -->
-<!--       <td width="170"><strong>Com CPF Transmitido:</strong></td> -->
-<!--       <td> -->
-<!--         <strong>  -->
-<%--           <html:radio property="cpfCnpjTransmitido" value="1" /> Sim   --%>
-<%--           <html:radio property="cpfCnpjTransmitido" value="2" /> N&atilde;o  --%>
-<%--           <html:radio property="cpfCnpjTransmitido" value="-1" /> Todos --%>
-<!--         </strong> -->
-<!--       </td> -->
-<!--     </tr> -->
+    <tr>
+      <td width="170"><strong>Com CPF Transmitido:</strong></td>
+      <td>
+        <strong> 
+          <html:radio property="cpfCnpjTransmitido" value="1" /> Sim  
+          <html:radio property="cpfCnpjTransmitido" value="2" /> N&atilde;o 
+          <html:radio property="cpfCnpjTransmitido" value="-1" /> Todos
+        </strong>
+      </td>
+    </tr>
 
 	<tr>
       <td colspan="2"><hr></td>

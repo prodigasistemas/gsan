@@ -1749,22 +1749,52 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	@SuppressWarnings("unchecked")
-	public boolean possuiClienteComCpfOuCnpj(Integer idImovel) throws ErroRepositorioException {
+	public boolean possuiClienteComCpfOuCnpjCadastrado(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 
 		try {
 			String sql = "SELECT clie_id FROM cadastro.cliente_atlz_cadastral WHERE imov_id = :idImovel AND clac_nncpfcnpj IS NOT NULL";
-			List<Integer> ids = (List<Integer>) session.createSQLQuery(sql)
+			List<Integer> retorno = (List<Integer>) session.createSQLQuery(sql)
 					.addScalar("clie_id", Hibernate.INTEGER)
 					.setInteger("idImovel", idImovel).list();
 
-			if (ids != null && !ids.isEmpty())
+			if (retorno != null && !retorno.isEmpty())
 				return true;
 			else
 				return false;
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao verificar se cliente possui cpf ou cnpj por imovel.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public boolean possuiClienteComCpfOuCnpjTransmitido(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT tcac_cnvalortransmitido ")
+			   .append("FROM seguranca.tab_atlz_cadastral tatc ")
+			   .append("INNER JOIN seguranca.tab_col_atlz_cadastral tcac ON tcac.tatc_id = tatc.tatc_id ")
+			   .append("INNER JOIN seguranca.tabela_coluna tbco ON tbco.tbco_id = tcac.tbco_id ")
+			   .append("WHERE tatc_cdimovel = :idImovel ") 
+			   .append("AND tbco_nmcoluna = 'clac_nncpfcnpj' ")
+			   .append("AND tcac_cnvalortransmitido is not null AND tcac_cnvalortransmitido <> '' ");
+			
+			List<Integer> retorno = (List<Integer>) session.createSQLQuery(sql.toString())
+					.addScalar("tcac_cnvalortransmitido", Hibernate.STRING)
+					.setInteger("idImovel", idImovel).list();
+
+			if (retorno != null && !retorno.isEmpty())
+				return true;
+			else
+				return false;
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao verificar se Cliente teve CPF ou CNPJ transmitido.");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}

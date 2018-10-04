@@ -1548,12 +1548,18 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	
 	public boolean isImovelParaRemover(ConsultarMovimentoAtualizacaoCadastralHelper item, FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) throws ControladorException {
 		
-		if (isQuantidadeDeVisitasDiferente(item.getControle(), filtro.getQuantidadeVisitas()) ||
-			isRemoverImovelFiltroCpfCnpjCadastrado(item.getIdImovel(), filtro.getCpfCnpjCadastrado()))
+		try {
+			if (isQuantidadeDeVisitasDiferente(item.getControle(), filtro.getQuantidadeVisitas()) ||
+				isRemoverImovelFiltroCpfCnpj(filtro.getCpfCnpjCadastrado(), repositorioAtualizacaoCadastral.possuiClienteComCpfOuCnpjCadastrado(item.getIdImovel())) ||
+				isRemoverImovelFiltroCpfCnpj(filtro.getCpfCnpjTransmitido(), repositorioAtualizacaoCadastral.possuiClienteComCpfOuCnpjTransmitido(item.getIdImovel())))
+				
+				return true;
+			else
+				return false;
 			
-			return true;
-		else
-			return false;	
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao verificar imovel para remover", e);
+		}	
 	}
 	
 	private boolean isQuantidadeDeVisitasDiferente(ImovelControleAtualizacaoCadastral controle, int filtroQuantidadeVisitas) throws ControladorException {
@@ -1570,22 +1576,17 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return diferente;
 	}
 
-	private boolean isRemoverImovelFiltroCpfCnpjCadastrado(Integer idImovel, short filtroCpfCnpjCadastrado) throws ControladorException {
-		try {
-			if (filtroCpfCnpjCadastrado != -1) {
-				boolean cpfCnpjCadastrado = filtroCpfCnpjCadastrado == ConstantesSistema.SIM;
-				boolean possuiClienteComCpfOuCnpj = repositorioAtualizacaoCadastral.possuiClienteComCpfOuCnpj(idImovel);
-				
-				if ((cpfCnpjCadastrado && possuiClienteComCpfOuCnpj) || (!cpfCnpjCadastrado && !possuiClienteComCpfOuCnpj))
-					return false;
-				else
-					return true;
-			} else {
-				return false;
-			}
+	private boolean isRemoverImovelFiltroCpfCnpj(int filtro, boolean possui) throws ControladorException {
+		if (filtro != -1) {
+			boolean sim = filtro == ConstantesSistema.SIM;
 			
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("Erro ao verificar se Cliente possui CPF ou CNPJ.", e);
+			if ((sim && possui) || (!sim && !possui))
+				return false;
+			else
+				return true;
+		} else {
+			return false;
 		}
 	}
+
 }
