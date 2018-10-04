@@ -135,4 +135,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public List<Visita> pesquisarVisitasPorImovelControleELatitudeELongitude(ImovelControleAtualizacaoCadastral imovelControle, String latitude, String longitude) throws ErroRepositorioException;
 
 	public List<ImovelControleAtualizacaoCadastral> obterImoveisControlePorImovel(List<Integer> ids) throws ErroRepositorioException;
+	
+	public boolean possuiClienteComCpfOuCnpj(Integer idImovel) throws ErroRepositorioException;
 }

@@ -11,6 +11,7 @@ import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaBean;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -84,5 +85,6 @@ public interface IControladorAtualizacaoCadastral {
 	public void atualizarRetornoPreAprovado(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException;
 
 	public List<Visita> obterVisitasPorImovelControleECoordenadas(ImovelControleAtualizacaoCadastral imovelControle, String latitude, String longitude) throws ControladorException;
-
+	
+	public boolean isImovelParaRemover(ConsultarMovimentoAtualizacaoCadastralHelper item, FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) throws ControladorException;
 }

@@ -69,6 +69,10 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private String inscricao;
 	
 	private String quantidadeVisitas = "-1";
+	
+	private String cpfCnpjCadastrado = "-1";
+	
+	private String cpfCnpjTransmitido = "-1";
 
 	public FiltrarAlteracaoAtualizacaoCadastralActionForm() {
 	}
@@ -303,6 +307,22 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	public void setQuantidadeVisitas(String quantidadeVisitas) {
 		this.quantidadeVisitas = quantidadeVisitas;
+	}
+
+	public String getCpfCnpjCadastrado() {
+		return cpfCnpjCadastrado;
+	}
+
+	public void setCpfCnpjCadastrado(String cpfCnpjCadastrado) {
+		this.cpfCnpjCadastrado = cpfCnpjCadastrado;
+	}
+
+	public String getCpfCnpjTransmitido() {
+		return cpfCnpjTransmitido;
+	}
+
+	public void setCpfCnpjTransmitido(String cpfCnpjTransmitido) {
+		this.cpfCnpjTransmitido = cpfCnpjTransmitido;
 	}
 
 	public boolean existeParametroInformado() {

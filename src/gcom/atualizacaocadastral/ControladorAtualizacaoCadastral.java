@@ -43,6 +43,7 @@ import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaBean;
 import gcom.seguranca.IRepositorioSeguranca;
@@ -53,6 +54,7 @@ import gcom.seguranca.transacao.Tabela;
 import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaColuna;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
+import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
@@ -321,6 +323,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return arquivoDestino;
 	}
 
+	@SuppressWarnings("unchecked")
 	private String retornarPastaDestinoImovelImagem(ImagemRetorno imagemRetorno) {
 		Imovel imovel = null;
 
@@ -907,6 +910,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void deletarRAsPendente(List<Integer> listaRAs) {
 		try {
 
@@ -989,6 +993,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<OrdemServicoUnidade> getOrdemServicoUnidade(Integer numeroOS) throws Exception {
 		FiltroOrdemServicoUnidade filtroOrdemServicoUnidade = new FiltroOrdemServicoUnidade();
 		filtroOrdemServicoUnidade.adicionarParametro(new ParametroSimples(FiltroOrdemServicoUnidade.ORDEM_SERVICO_ID, numeroOS));
@@ -1006,6 +1011,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 
 
+	@SuppressWarnings("unchecked")
 	public Collection<RegistroAtendimento> getRegistroAtendimento(Integer idRA) {
 		try {
 			FiltroRegistroAtendimento filtroRegistroAtendimento = new FiltroRegistroAtendimento();
@@ -1026,6 +1032,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<RegistroAtendimentoUnidade> getRAUnidade(Integer numeroRA) {
 		try {
 			FiltroRegistroAtendimentoUnidade filtroRegistroAtendimentoUnidade = new FiltroRegistroAtendimentoUnidade();
@@ -1146,7 +1153,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Collection<RelatorioFichaFiscalizacaoCadastralHelper> pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ControladorException {
 
 		Collection<RelatorioFichaFiscalizacaoCadastralHelper> retorno = new ArrayList<RelatorioFichaFiscalizacaoCadastralHelper>();
@@ -1213,6 +1220,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection<RelatorioRelacaoImoveisRotaBean> pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(String idLocalidade, String cdSetorComercial, String cdRota)
 			throws ControladorException {
 
@@ -1270,6 +1278,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private String getCategoriasImovelRelatorioPorRota(Integer idImovel) throws ControladorException {
 		String categorias = "";
 
@@ -1291,6 +1300,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return categorias;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private String getCategoriasImovelRetornoRelatorioPorRota(Integer idImovelRetorno) {
 		String categorias = "";
 
@@ -1528,12 +1538,54 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 
-	public List<Visita> obterVisitasPorImovelControleECoordenadas(ImovelControleAtualizacaoCadastral imovelControle, String latitude, String longitude)
-		throws ControladorException {
+	public List<Visita> obterVisitasPorImovelControleECoordenadas(ImovelControleAtualizacaoCadastral imovelControle, String latitude, String longitude) throws ControladorException {
 		try {
 			return repositorioAtualizacaoCadastral.pesquisarVisitasPorImovelControleELatitudeELongitude(imovelControle, latitude, longitude);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("Erro buscar visitas do imovel com latitude e longitude", e);
+		}
+	}
+	
+	public boolean isImovelParaRemover(ConsultarMovimentoAtualizacaoCadastralHelper item, FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) throws ControladorException {
+		
+		if (isQuantidadeDeVisitasDiferente(item.getControle(), filtro.getQuantidadeVisitas()) ||
+			isRemoverImovelFiltroCpfCnpjCadastrado(item.getIdImovel(), filtro.getCpfCnpjCadastrado()))
+			
+			return true;
+		else
+			return false;	
+	}
+	
+	private boolean isQuantidadeDeVisitasDiferente(ImovelControleAtualizacaoCadastral controle, int filtroQuantidadeVisitas) throws ControladorException {
+		boolean diferente = false;
+
+		if (filtroQuantidadeVisitas >= 0) {
+			int visitas = getControladorAtualizacaoCadastral().obterQuantidadeDeVisitasPorImovelControle(controle);
+
+			if (visitas != filtroQuantidadeVisitas) {
+				diferente = true;
+			}
+		}
+
+		return diferente;
+	}
+
+	private boolean isRemoverImovelFiltroCpfCnpjCadastrado(Integer idImovel, short filtroCpfCnpjCadastrado) throws ControladorException {
+		try {
+			if (filtroCpfCnpjCadastrado != -1) {
+				boolean cpfCnpjCadastrado = filtroCpfCnpjCadastrado == ConstantesSistema.SIM;
+				boolean possuiClienteComCpfOuCnpj = repositorioAtualizacaoCadastral.possuiClienteComCpfOuCnpj(idImovel);
+				
+				if ((cpfCnpjCadastrado && possuiClienteComCpfOuCnpj) || (!cpfCnpjCadastrado && !possuiClienteComCpfOuCnpj))
+					return false;
+				else
+					return true;
+			} else {
+				return false;
+			}
+			
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao verificar se Cliente possui CPF ou CNPJ.", e);
 		}
 	}
 }

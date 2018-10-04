@@ -602,52 +602,42 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append("LEFT JOIN cadastro.cadastro_ocorrencia cocr on cocr.cocr_id = ctrl.cocr_id ")
 				.append("WHERE 1 = 1 ");
 
-			if (StringUtils.isNotEmpty(filtro.getIdLocalidadeInicial())) {
+			if (StringUtils.isNotEmpty(filtro.getIdLocalidadeInicial()))
 				sql.append(" AND txac.loca_id between " + filtro.getIdLocalidadeInicial() + " AND " + filtro.getIdLocalidadeFinal());
-			}
 			
-			if (StringUtils.isNotEmpty(filtro.getCdSetorComercialInicial())) {
+			if (StringUtils.isNotEmpty(filtro.getCdSetorComercialInicial()))
 				sql.append(" AND txac.txac_cdsetorcomercial between " + filtro.getCdSetorComercialInicial() + " AND " + filtro.getCdSetorComercialFinal());
-			}
 			
-			if (StringUtils.isNotEmpty(filtro.getCdRotaInicial())) {
+			if (StringUtils.isNotEmpty(filtro.getCdRotaInicial()))
 				sql.append(" AND rota.rota_cdrota between " + filtro.getCdRotaInicial() + " AND " + filtro.getCdRotaFinal());
-			}
 
-			if (StringUtils.isNotEmpty(filtro.getIdEmpresa())) {
+			if (StringUtils.isNotEmpty(filtro.getIdEmpresa()))
 				sql.append(" AND leit.empr_id = " + filtro.getIdEmpresa());
-			}
 
-			if (StringUtils.isNotEmpty(filtro.getIdLeiturista()) && StringUtils.isNumeric(filtro.getIdLeiturista()) && Integer.valueOf(filtro.getIdLeiturista()) > 0) {
+			if (StringUtils.isNotEmpty(filtro.getIdLeiturista()) && StringUtils.isNumeric(filtro.getIdLeiturista()) && Integer.valueOf(filtro.getIdLeiturista()) > 0)
 				sql.append(" AND leit.leit_id = " + filtro.getIdLeiturista());
-			}
 			
-			if (StringUtils.isNotEmpty(filtro.getPeriodoInicial())) {
+			if (StringUtils.isNotEmpty(filtro.getPeriodoInicial()))
 				sql.append(" AND ctrl.icac_tmpreaprovacao between '" + filtro.getPeriodoInicial() + "' AND '" + filtro.getPeriodoFinal() + "'");
-			}
 			
-			if (StringUtils.isNotEmpty(filtro.getLote())) {
+			if (StringUtils.isNotEmpty(filtro.getLote()))
 				sql.append(" AND ctrl.icac_lote = '" + filtro.getLote() + "'");
-			}
 			
-			if (StringUtils.isNotEmpty(filtro.getMatricula())) {
+			if (StringUtils.isNotEmpty(filtro.getMatricula()))
 				sql.append(" AND ctrl.imov_id = " + filtro.getMatricula());
-			}
 
-			if (filtro.getSituacaoImoveis() !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
+			if (filtro.getSituacaoImoveis() !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS)
 				sql.append(" AND ctrl.siac_id in (:listaSituacao) ");
-			} else {
+			else
 				sql.append(" AND ctrl.siac_id not in (:listaSituacao) ");
-			}
 			
 			if (filtro.paraAprovacaoEmLote()) {
 				sql.append(" AND cocr.cocr_icvalidacao = " + ConstantesSistema.SIM);
 			} else if (filtro.getOcorrenciaCadastro() > 0) {
-				if (filtro.getOcorrenciaCadastroSelecionada() == -1) {
+				if (filtro.getOcorrenciaCadastroSelecionada() == -1)
 					sql.append(" AND cocr.cocr_icvalidacao = " + filtro.getOcorrenciaCadastro());
-				} else {
+				else
 					sql.append(" AND cocr.cocr_id = " + filtro.getOcorrenciaCadastroSelecionada());
-				}
 			}
 			
 			sql.append(" ORDER BY tatc.tatc_cdimovel");

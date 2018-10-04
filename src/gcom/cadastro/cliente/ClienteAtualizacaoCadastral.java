@@ -16,128 +16,129 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements IClienteAtualizacaoCadastral {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final int ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL = 1502;
-	
-    private Integer id;
 
-    private Integer idCliente;
-    
-    private Integer idImovel;
+	private Integer id;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String nome;
-	
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    public Integer idClienteRelacaoTipo;
+	private Integer idCliente;
 
-    private Integer idClienteTipo;
+	private Integer idImovel;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String cpf;
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private String nome;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String cnpj;
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	public Integer idClienteRelacaoTipo;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String rg;
-	
+	private Integer idClienteTipo;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private String cpf;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private String cnpj;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private String rg;
+
 	private String dsAbreviadaOrgaoExpedidorRg;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
 	private String dsUFSiglaOrgaoExpedidorRg;
 
-    private Date dataEmissaoRg;
-	
-    private Date dataNascimento;
+	private Date dataEmissaoRg;
 
-    private Integer idProfissao;
-	
-    private Integer idRamoAtividade;
+	private Date dataNascimento;
 
-    private Integer idPessoaSexo;
+	private Integer idProfissao;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String email;
-	
-    private String nomeMae;
+	private Integer idRamoAtividade;
 
-    private Short indicadorUso;
+	private Integer idPessoaSexo;
 
-    private Date ultimaAlteracao;
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private String email;
 
-    private Integer idEnderecoTipo;
-	
-    private Integer idLogradouroTipo;
+	private String nomeMae;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String dsLogradouroTipo;
-	
-    private Integer idLogradouroTitulo;
-    
-    private String dsLogradouroTitulo;
-	
-    private Integer idLogradouro;
+	private Short indicadorUso;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String descricaoLogradouro;
+	private Date ultimaAlteracao;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Integer codigoCep;
+	private Integer idEnderecoTipo;
 
-    private Integer idBairro;
+	private Integer idLogradouroTipo;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String nomeBairro;
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private String dsLogradouroTipo;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String numeroImovel;
+	private Integer idLogradouroTitulo;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String complementoEndereco;
-	
-    private Integer idEnderecoReferencia;
+	private String dsLogradouroTitulo;
 
-    private Integer cnae;
-    
+	private Integer idLogradouro;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private String descricaoLogradouro;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private Integer codigoCep;
+
+	private Integer idBairro;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private String nomeBairro;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private String numeroImovel;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private String complementoEndereco;
+
+	private Integer idEnderecoReferencia;
+
+	private Integer cnae;
+
 	private Integer idMunicipio;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
 	private String nomeMunicipio;
-	
+
 	private Integer idUinidadeFederacao;
-	
+
 	private String dsUFSiglaMunicipio;
-	
+
 	private Short indicadorNomeConta;
-	
+
 	private Integer tipoOperacao;
-	
+
 	private ClienteTipo clienteTipo;
-	
+
 	private UnidadeFederacao unidadeFederacao;
 
 	private PessoaSexo pessoaSexo;
-	
+
 	private Imovel imovel;
-	
-	private Cliente cliente;
-	
+
 	private ClienteRelacaoTipo clienteRelacaoTipo;
 
-	public ClienteAtualizacaoCadastral(){
+	public ClienteAtualizacaoCadastral() {
 		clienteTipo = new ClienteTipo();
 		unidadeFederacao = new UnidadeFederacao();
 		pessoaSexo = new PessoaSexo();
 	}
 
-	public ClienteAtualizacaoCadastral(Integer id, Integer idCliente, Integer idImovel, String nomeCliente, Integer idClienteRelacaoTipo, Integer idClienteTipo, String cpfCnpj, String rg, String dsAbreviadaOrgaoExpedidorRg, String dsUFSiglaOrgaoExpedidorRg, Date dataEmissaoRg, Date dataNascimento, Integer idProfissao, Integer idRamoAtividade, Integer idPessoaSexo, String email, String nomeMae, Short indicadorUso, Date ultimaAlteracao, Integer idEnderecoTipo, Integer idLogradouroTipo, String dsLogradouroTipo, Integer idLogradouroTitulo, String dsLogradouroTitulo, Integer idLogradouro, String descricaoLogradouro, Integer codigoCep, Integer idBairro, String nomeBairro, String numeroImovel, String complementoEndereco, Integer idEnderecoReferencia, Integer cnae, Integer idMunicipio, String nomeMunicipio, Integer idUinidadeFederacao, String dsUFSiglaMunicipio) {
+	public ClienteAtualizacaoCadastral(Integer id, Integer idCliente, Integer idImovel, String nomeCliente, Integer idClienteRelacaoTipo, Integer idClienteTipo, String cpfCnpj, String rg,
+			String dsAbreviadaOrgaoExpedidorRg, String dsUFSiglaOrgaoExpedidorRg, Date dataEmissaoRg, Date dataNascimento, Integer idProfissao, Integer idRamoAtividade, Integer idPessoaSexo, String email,
+			String nomeMae, Short indicadorUso, Date ultimaAlteracao, Integer idEnderecoTipo, Integer idLogradouroTipo, String dsLogradouroTipo, Integer idLogradouroTitulo, String dsLogradouroTitulo,
+			Integer idLogradouro, String descricaoLogradouro, Integer codigoCep, Integer idBairro, String nomeBairro, String numeroImovel, String complementoEndereco, Integer idEnderecoReferencia, Integer cnae,
+			Integer idMunicipio, String nomeMunicipio, Integer idUinidadeFederacao, String dsUFSiglaMunicipio) {
 		this.id = id;
 		this.idCliente = idCliente;
 		this.idImovel = idImovel;
@@ -178,14 +179,14 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	}
 
 	public Integer getIdCliente() {
-        return this.idCliente;
-    }
+		return this.idCliente;
+	}
 
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
-    }
+	public void setIdCliente(Integer idCliente) {
+		this.idCliente = idCliente;
+	}
 
-    public Integer getIdImovel() {
+	public Integer getIdImovel() {
 		return idImovel;
 	}
 
@@ -194,118 +195,118 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	}
 
 	public String getNome() {
-        return this.nome;
-    }
+		return this.nome;
+	}
 
-    public void setNome(String nomeCliente) {
-        this.nome = nomeCliente;
-    }
+	public void setNome(String nomeCliente) {
+		this.nome = nomeCliente;
+	}
 
 	public String getRg() {
-        return this.rg;
-    }
+		return this.rg;
+	}
 
-    public void setRg(String rg) {
-        this.rg = rg;
-    }
+	public void setRg(String rg) {
+		this.rg = rg;
+	}
 
-    public Date getDataEmissaoRg() {
-        return this.dataEmissaoRg;
-    }
+	public Date getDataEmissaoRg() {
+		return this.dataEmissaoRg;
+	}
 
-    public void setDataEmissaoRg(Date dataEmissaoRg) {
-        this.dataEmissaoRg = dataEmissaoRg;
-    }
+	public void setDataEmissaoRg(Date dataEmissaoRg) {
+		this.dataEmissaoRg = dataEmissaoRg;
+	}
 
 	public Date getDataNascimento() {
-        return this.dataNascimento;
-    }
+		return this.dataNascimento;
+	}
 
-    public void setDataNascimento(Date dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
 
-    public Integer getIdProfissao() {
-        return this.idProfissao;
-    }
+	public Integer getIdProfissao() {
+		return this.idProfissao;
+	}
 
-    public void setIdProfissao(Integer idProfissao) {
-        this.idProfissao = idProfissao;
-    }
+	public void setIdProfissao(Integer idProfissao) {
+		this.idProfissao = idProfissao;
+	}
 
-    public Integer getIdPessoaSexo() {
-        return this.idPessoaSexo;
-    }
+	public Integer getIdPessoaSexo() {
+		return this.idPessoaSexo;
+	}
 
-    public void setIdPessoaSexo(Integer idPessoaSexo) {
-        this.idPessoaSexo = idPessoaSexo;
-    }
+	public void setIdPessoaSexo(Integer idPessoaSexo) {
+		this.idPessoaSexo = idPessoaSexo;
+	}
 
-    public String getCpf() {
-        return this.cpf;
-    }
+	public String getCpf() {
+		return this.cpf;
+	}
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
 
-    public String getEmail() {
-        return this.email;
-    }
+	public String getEmail() {
+		return this.email;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public Short getIndicadorUso() {
-        return this.indicadorUso;
-    }
+	public Short getIndicadorUso() {
+		return this.indicadorUso;
+	}
 
-    public void setIndicadorUso(Short indicadorUso) {
-        this.indicadorUso = indicadorUso;
-    }
+	public void setIndicadorUso(Short indicadorUso) {
+		this.indicadorUso = indicadorUso;
+	}
 
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 
-    public String getNomeMae() {
-        return this.nomeMae;
-    }
+	public String getNomeMae() {
+		return this.nomeMae;
+	}
 
-    public void setNomeMae(String nomeMae) {
-        this.nomeMae = nomeMae;
-    }
+	public void setNomeMae(String nomeMae) {
+		this.nomeMae = nomeMae;
+	}
 
-    public Integer getIdEnderecoTipo() {
-        return this.idEnderecoTipo;
-    }
+	public Integer getIdEnderecoTipo() {
+		return this.idEnderecoTipo;
+	}
 
-    public void setIdEnderecoTipo(Integer idEnderecoTipo) {
-        this.idEnderecoTipo = idEnderecoTipo;
-    }
+	public void setIdEnderecoTipo(Integer idEnderecoTipo) {
+		this.idEnderecoTipo = idEnderecoTipo;
+	}
 
-    public Integer getIdLogradouro() {
-        return this.idLogradouro;
-    }
+	public Integer getIdLogradouro() {
+		return this.idLogradouro;
+	}
 
-    public void setIdLogradouro(Integer idLogradouro) {
-        this.idLogradouro = idLogradouro;
-    }
+	public void setIdLogradouro(Integer idLogradouro) {
+		this.idLogradouro = idLogradouro;
+	}
 
-    public String getDescricaoLogradouro() {
-        return this.descricaoLogradouro;
-    }
+	public String getDescricaoLogradouro() {
+		return this.descricaoLogradouro;
+	}
 
-    public void setDescricaoLogradouro(String descricaoLogradouro) {
-        this.descricaoLogradouro = descricaoLogradouro;
-    }
+	public void setDescricaoLogradouro(String descricaoLogradouro) {
+		this.descricaoLogradouro = descricaoLogradouro;
+	}
 
-    public Integer getCodigoCep() {
+	public Integer getCodigoCep() {
 		return codigoCep;
 	}
 
@@ -314,60 +315,60 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	}
 
 	public Integer getIdBairro() {
-        return this.idBairro;
-    }
+		return this.idBairro;
+	}
 
-    public void setIdBairro(Integer idBairro) {
-        this.idBairro = idBairro;
-    }
+	public void setIdBairro(Integer idBairro) {
+		this.idBairro = idBairro;
+	}
 
-    public String getNomeBairro() {
-        return this.nomeBairro;
-    }
+	public String getNomeBairro() {
+		return this.nomeBairro;
+	}
 
-    public void setNomeBairro(String nomeBairro) {
-        this.nomeBairro = nomeBairro;
-    }
+	public void setNomeBairro(String nomeBairro) {
+		this.nomeBairro = nomeBairro;
+	}
 
-    public Integer getIdEnderecoReferencia() {
-        return this.idEnderecoReferencia;
-    }
+	public Integer getIdEnderecoReferencia() {
+		return this.idEnderecoReferencia;
+	}
 
-    public void setIdEnderecoReferencia(Integer idEnderecoReferencia) {
-        this.idEnderecoReferencia = idEnderecoReferencia;
-    }
+	public void setIdEnderecoReferencia(Integer idEnderecoReferencia) {
+		this.idEnderecoReferencia = idEnderecoReferencia;
+	}
 
-    public String getNumeroImovel() {
-        return this.numeroImovel;
-    }
+	public String getNumeroImovel() {
+		return this.numeroImovel;
+	}
 
-    public void setNumeroImovel(String numeroImovel) {
-        this.numeroImovel = numeroImovel;
-    }
+	public void setNumeroImovel(String numeroImovel) {
+		this.numeroImovel = numeroImovel;
+	}
 
-    public String getComplementoEndereco() {
-        return this.complementoEndereco;
-    }
+	public String getComplementoEndereco() {
+		return this.complementoEndereco;
+	}
 
-    public void setComplementoEndereco(String complementoEndereco) {
-        this.complementoEndereco = complementoEndereco;
-    }
+	public void setComplementoEndereco(String complementoEndereco) {
+		this.complementoEndereco = complementoEndereco;
+	}
 
-    public Integer getCnae() {
-        return this.cnae;
-    }
+	public Integer getCnae() {
+		return this.cnae;
+	}
 
-    public void setCnae(Integer cnae) {
-        this.cnae = cnae;
-    }
+	public void setCnae(Integer cnae) {
+		this.cnae = cnae;
+	}
 
-    public Integer getIdClienteRelacaoTipo() {
-        return this.idClienteRelacaoTipo;
-    }
+	public Integer getIdClienteRelacaoTipo() {
+		return this.idClienteRelacaoTipo;
+	}
 
-    public void setIdClienteRelacaoTipo(Integer idClienteRelacaoTipo) {
-        this.idClienteRelacaoTipo = idClienteRelacaoTipo;
-    }
+	public void setIdClienteRelacaoTipo(Integer idClienteRelacaoTipo) {
+		this.idClienteRelacaoTipo = idClienteRelacaoTipo;
+	}
 
 	public String getDsLogradouroTipo() {
 		return dsLogradouroTipo;
@@ -402,10 +403,8 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	}
 
 	public String toString() {
-        return new ToStringBuilder(this)
-            .append("idCliente", getIdCliente())
-            .toString();
-    }
+		return new ToStringBuilder(this).append("idCliente", getIdCliente()).toString();
+	}
 
 	@Override
 	public Filtro retornaFiltro() {
@@ -483,7 +482,7 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	public void setIdRamoAtividade(Integer idRamoAtividade) {
 		this.idRamoAtividade = idRamoAtividade;
 	}
-	
+
 	public ClienteTipo getClienteTipo() {
 		return clienteTipo;
 	}
@@ -499,21 +498,18 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
 	}
-	
+
 	public UnidadeFederacao getUnidadeFederacao() {
 		return unidadeFederacao;
 	}
-
 
 	public void setUnidadeFederacao(UnidadeFederacao unidadeFederacao) {
 		this.unidadeFederacao = unidadeFederacao;
 	}
 
-
 	public PessoaSexo getPessoaSexo() {
 		return pessoaSexo;
 	}
-
 
 	public void setPessoaSexo(PessoaSexo pessoaSexo) {
 		this.pessoaSexo = pessoaSexo;
@@ -526,7 +522,7 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	public void setIdClienteTipo(Integer idClienteTipo) {
 		this.idClienteTipo = idClienteTipo;
 	}
-	
+
 	public String getNumero() {
 		return numeroImovel;
 	}
@@ -550,31 +546,31 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	public void setEnderecoTipo(EnderecoTipo enderecoTipo) {
 		this.idEnderecoTipo = enderecoTipo.getId();
 	}
-	
-	public Cliente getCliente(){
+
+	public Cliente getCliente() {
 		return new Cliente(idCliente);
 	}
 
-	public void setCliente(Cliente cliente){
+	public void setCliente(Cliente cliente) {
 		this.idCliente = cliente.getId();
 	}
 
 	public Imovel getImovel() {
 		return imovel;
 	}
-	
+
 	public void setImovel(Imovel imovel) {
 		this.imovel = imovel;
 	}
-	
+
 	public ClienteRelacaoTipo getClienteRelacaoTipo() {
 		return clienteRelacaoTipo;
 	}
-	
+
 	public void setClienteRelacaoTipo(ClienteRelacaoTipo clienteRelacaoTipo) {
 		this.clienteRelacaoTipo = clienteRelacaoTipo;
 	}
-	
+
 	public Short getIndicadorNomeConta() {
 		return indicadorNomeConta;
 	}
@@ -592,44 +588,42 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	}
 
 	public LogradouroCep getLogradouroCep() {
-		
 		return null;
 	}
 
 	public void setLogradouroCep(LogradouroCep logradouroCep) {
-		
-		
 	}
 
 	public LogradouroBairro getLogradouroBairro() {
-		
 		return null;
 	}
 
 	public void setLogradouroBairro(LogradouroBairro logradouroBairro) {
-		
-		
 	}
 
 	public Logradouro getPerimetroInicial() {
-		
 		return null;
 	}
 
 	public void getPerimetroInicial(Logradouro perimetroInicial) {
-		
-		
 	}
 
 	public Logradouro getPerimetroFinal() {
-		
 		return null;
 	}
 
 	public void setPerimetroFinal(Logradouro perimetroFinal) {
-		
-		
+	}
+
+	public boolean existeCpfOuCnpj() {
+		return existeCpf() || existeCnpj();
 	}
 	
+	private boolean existeCpf() {
+		return cpf != null && !cpf.trim().equals("");
+	}
 	
+	private boolean existeCnpj() {
+		return cnpj != null && !cnpj.trim().equals("");
+	}
 }

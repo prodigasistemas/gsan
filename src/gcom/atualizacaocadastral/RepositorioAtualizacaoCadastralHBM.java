@@ -1747,4 +1747,26 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}
 		return retorno;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public boolean possuiClienteComCpfOuCnpj(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+		try {
+			String sql = "SELECT clie_id FROM cadastro.cliente_atlz_cadastral WHERE imov_id = :idImovel AND clac_nncpfcnpj IS NOT NULL";
+			List<Integer> ids = (List<Integer>) session.createSQLQuery(sql)
+					.addScalar("clie_id", Hibernate.INTEGER)
+					.setInteger("idImovel", idImovel).list();
+
+			if (ids != null && !ids.isEmpty())
+				return true;
+			else
+				return false;
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao verificar se cliente possui cpf ou cnpj por imovel.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 }

@@ -52,6 +52,10 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	
 	private int quantidadeVisitas;
 	
+	private short cpfCnpjCadastrado;
+	
+	private short cpfCnpjTransmitido;
+	
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper() {
 	}
 
@@ -76,11 +80,14 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.alteracaoCategoria = consisteAlteracao(form.getAlteracaoCategoria());
 		
 		this.ocorrenciaCadastro = Integer.valueOf(form.getOcorrenciaCadastro());
-		this.ocorrenciaCadastroSelecionada = Integer.valueOf(form.getOcorrenciaCadastroSelecionada());
+		this.ocorrenciaCadastroSelecionada = form.getOcorrenciaCadastroSelecionada() != null ? Integer.valueOf(form.getOcorrenciaCadastroSelecionada()) : 0;
 		
 		this.lote = form.getLote();
 		this.matricula = form.getMatricula();
 		this.quantidadeVisitas = Integer.valueOf(form.getQuantidadeVisitas());
+		
+		this.cpfCnpjCadastrado = Short.valueOf(form.getCpfCnpjCadastrado());
+		this.cpfCnpjTransmitido = Short.valueOf(form.getCpfCnpjTransmitido());
 	}
 
 	private Boolean consisteAlteracao(String campo) {
@@ -202,6 +209,14 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	public int getQuantidadeVisitas() {
 		return quantidadeVisitas;
+	}
+
+	public short getCpfCnpjCadastrado() {
+		return cpfCnpjCadastrado;
+	}
+
+	public short getCpfCnpjTransmitido() {
+		return cpfCnpjTransmitido;
 	}
 
 	private boolean permiteAprovarLote() {

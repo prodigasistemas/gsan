@@ -1375,13 +1375,8 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 			for (Iterator<ConsultarMovimentoAtualizacaoCadastralHelper> iterator = retorno.iterator(); iterator.hasNext();) {
 				ConsultarMovimentoAtualizacaoCadastralHelper item = (ConsultarMovimentoAtualizacaoCadastralHelper) iterator.next();
 				
-				if (filtro.getQuantidadeVisitas() >= 0) {
-					int quantidadeVisitas = getControladorAtualizacaoCadastral().obterQuantidadeDeVisitasPorImovelControle(item.getControle());
-					
-					if (quantidadeVisitas != filtro.getQuantidadeVisitas()) {
-						iterator.remove();
-						continue;
-					}
+				if (getControladorAtualizacaoCadastral().isImovelParaRemover(item, filtro)) {
+					iterator.remove();
 				}
 
 				List<ColunaAtualizacaoCadastral> colunas = item.getColunasAtualizacao();
