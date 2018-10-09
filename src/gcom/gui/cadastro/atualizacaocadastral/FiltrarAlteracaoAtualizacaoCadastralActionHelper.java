@@ -223,6 +223,22 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		return cpfCnpjTransmitido;
 	}
 
+	public void setAlteracaoHidrometro(Boolean alteracaoHidrometro) {
+		this.alteracaoHidrometro = alteracaoHidrometro;
+	}
+
+	public void setAlteracaoSituacaoAgua(Boolean alteracaoSituacaoAgua) {
+		this.alteracaoSituacaoAgua = alteracaoSituacaoAgua;
+	}
+
+	public void setAlteracaoSituacaoEsgoto(Boolean alteracaoSituacaoEsgoto) {
+		this.alteracaoSituacaoEsgoto = alteracaoSituacaoEsgoto;
+	}
+
+	public void setAlteracaoCategoria(Boolean alteracaoCategoria) {
+		this.alteracaoCategoria = alteracaoCategoria;
+	}
+
 	private boolean permiteAprovarLote() {
 		return this.situacaoImoveis == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES ||
 			   this.situacaoImoveis == SituacaoAtualizacaoCadastral.PRE_APROVADO ||
