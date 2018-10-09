@@ -31,7 +31,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 				
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
@@ -56,7 +56,7 @@ public class TesteDadosAtualizacaoCadastral {
 		imovel.addColunaAtualizacao(coluna);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoHidrometro(false);
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
@@ -83,7 +83,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoHidrometro(true);
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
@@ -106,7 +106,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
@@ -127,7 +127,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoSituacaoAgua(false);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
@@ -154,7 +154,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoSituacaoAgua(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
@@ -177,7 +177,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoSituacaoAgua(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
@@ -200,7 +200,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
 		assertEquals(1984420, array.iterator().next().getIdImovel().intValue());
@@ -221,7 +221,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoSituacaoEsgoto(false);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
@@ -248,7 +248,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoSituacaoEsgoto(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
@@ -272,7 +272,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoCategoria(null);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
@@ -293,7 +293,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoCategoria(false);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
@@ -318,7 +318,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoCategoria(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
@@ -343,7 +343,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoCategoria(false);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
@@ -364,7 +364,7 @@ public class TesteDadosAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtroHelper.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtroHelper.setAlteracaoCategoria(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);

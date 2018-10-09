@@ -127,6 +127,10 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		return situacaoImoveis;
 	}
 
+	public void setSituacaoImoveis(int situacaoImoveis) {
+		this.situacaoImoveis = situacaoImoveis;
+	}
+
 	public String getIdLocalidadeInicial() {
 		return idLocalidadeInicial;
 	}
