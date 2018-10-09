@@ -1,5 +1,6 @@
 package gcom.atualizacaocadastral;
 
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiltroOrdemServico;
@@ -82,7 +83,7 @@ import javax.ejb.CreateException;
 import org.apache.log4j.Logger;
 
 public class ControladorAtualizacaoCadastral extends ControladorComum implements IControladorAtualizacaoCadastral {
-
+		
 	private static final long serialVersionUID = -3792912776769033056L;
 
 	private static Logger logger = Logger.getLogger(ControladorAtualizacaoCadastral.class);
@@ -649,7 +650,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	}
 
 
-	private void apagarImagemRetorno(Integer idImovel) throws Exception {
+	public void apagarImagemRetorno(Integer idImovel) throws Exception {
 		repositorioAtualizacaoCadastral.apagarImagemRetornoPorIdImovel(idImovel);
 	}
 
@@ -1545,6 +1546,33 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			throw new ControladorException("Erro buscar visitas do imovel com latitude e longitude", e);
 		}
 	}
+
+	public void inserirImagemRetorno(Integer matricula, String nomeImagem, String pasta, Integer idImovelRetorno) throws ControladorException {
+		String caminhoJboss = System.getProperty("jboss.server.home.dir");
+				
+		File imagem = new File(caminhoJboss + pasta, nomeImagem);
+
+		ImagemRetorno imagemRetorno = new ImagemRetorno();
+		imagemRetorno.setIdImovelRetorno(idImovelRetorno);
+
+		if (matricula > 0) {
+			imagemRetorno.setIdImovel(matricula);
+		}
+
+		imagemRetorno.setNomeImagem(imagem.getName());
+		imagemRetorno.setPathImagem(pasta + "/" + nomeImagem);
+		imagemRetorno.setUltimaAlteracao(new Date());
+
+		getControladorUtil().inserir(imagemRetorno);
+	}
+	
+	public Integer obterIdImovelRetorno(Integer idImovel) throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.obterIdImovelRetorno(idImovel);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao obter id do imovel", e);
+		}
+	}
 	
 	public boolean isImovelParaRemover(ConsultarMovimentoAtualizacaoCadastralHelper item, FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) throws ControladorException {
 		
@@ -1588,5 +1616,4 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			return false;
 		}
 	}
-
 }

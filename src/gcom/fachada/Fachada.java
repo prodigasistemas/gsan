@@ -40219,4 +40219,28 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public void inserirImagemRetorno(Integer matricula, String nomeImagem, String pasta, Integer idImovelRetorno) throws Exception {
+		try {
+			getControladorAtualizacaoCadastral().inserirImagemRetorno(matricula, nomeImagem, pasta, idImovelRetorno);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Integer obterIdImovelRetorno(Integer idImovel) throws Exception {
+		try {
+			return getControladorAtualizacaoCadastral().obterIdImovelRetorno(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+  
+	public void apagarImagemRetorno(Integer idImovel) {
+		try {
+			getControladorAtualizacaoCadastral().apagarImagemRetorno(idImovel);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
 }

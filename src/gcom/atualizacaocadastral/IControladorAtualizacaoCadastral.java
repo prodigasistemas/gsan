@@ -86,5 +86,11 @@ public interface IControladorAtualizacaoCadastral {
 
 	public List<Visita> obterVisitasPorImovelControleECoordenadas(ImovelControleAtualizacaoCadastral imovelControle, String latitude, String longitude) throws ControladorException;
 	
+	public void inserirImagemRetorno(Integer matricula, String nomeImagem, String pasta, Integer idImovelRetorno) throws ControladorException;
+	
+	public Integer obterIdImovelRetorno(Integer idImovel) throws ControladorException;
+
 	public boolean isImovelParaRemover(ConsultarMovimentoAtualizacaoCadastralHelper item, FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) throws ControladorException;
+	
+	public void apagarImagemRetorno(Integer idImovel) throws Exception;
 }

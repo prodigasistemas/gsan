@@ -1,11 +1,18 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
 import gcom.atualizacaocadastral.ClienteEnderecoRetorno;
 import gcom.atualizacaocadastral.ClienteFoneRetorno;
 import gcom.atualizacaocadastral.ClienteImovelRetorno;
 import gcom.atualizacaocadastral.ClienteRetorno;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
-import gcom.atualizacaocadastral.ImagemRetorno;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
@@ -37,14 +44,6 @@ import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
 
 public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCommand {
 
@@ -92,11 +91,21 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 			salvarClienteProprietario();
 			salvarClienteResponsavel();
 			salvarImagens();
-		} else {
+			} else {
 			atualizarRetorno();
 		}
 	}
 
+	private void salvarImagens() throws Exception {
+		for (String nomeImagem : atualizacaoCadastral.getImagens()) {
+			String pasta = "/images/" + atualizacaoCadastral.getArquivoTexto().getDescricaoArquivo();
+
+			if (nomeImagem.contains(Integer.toString(atualizacaoCadastralImovel.getMatricula()))) {
+				controladorAtualizacaoCadastral.inserirImagemRetorno(atualizacaoCadastralImovel.getMatricula(), nomeImagem, pasta, idImovelRetorno);
+			}
+		}
+	}
+	
 	private void inserirVisitaParaImovelControle(ImovelControleAtualizacaoCadastral controle) throws ControladorException {
 		Visita visita = new Visita(controle, 
 				atualizacaoCadastralImovel.getLinhaAnormalidade("latitude"), 
@@ -317,40 +326,6 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		clienteImovelRetorno.setIdClienteRetorno(idClienteRetorno);
 		clienteImovelRetorno.setIdImovelRetorno(idImovelRetorno);
 		controladorUtil.inserir(clienteImovelRetorno);
-	}
-
-	private void salvarImagens() throws Exception {
-		for (String nomeImagem : atualizacaoCadastral.getImagens()) {
-
-			String caminhoJboss = System.getProperty("jboss.server.home.dir");
-			String pasta = "/images/" + atualizacaoCadastral.getArquivoTexto().getDescricaoArquivo();
-
-			if (nomeImagem.contains(Integer.toString(atualizacaoCadastralImovel.getMatricula()))) {
-				inserirImagemImovel(atualizacaoCadastralImovel.getMatricula(), nomeImagem, caminhoJboss, pasta);
-			}
-		}
-	}
-
-	private void inserirImagemImovel(Integer matricula, String nomeImagem, String caminhoJboss, String pasta) {
-
-		try {
-			File imagem = new File(caminhoJboss + pasta, nomeImagem);
-
-			ImagemRetorno imagemRetorno = new ImagemRetorno();
-			imagemRetorno.setIdImovelRetorno(idImovelRetorno);
-
-			if (matricula > 0) {
-				imagemRetorno.setIdImovel(matricula);
-			}
-
-			imagemRetorno.setNomeImagem(imagem.getName());
-			imagemRetorno.setPathImagem(pasta + "/" + nomeImagem);
-			imagemRetorno.setUltimaAlteracao(new Date());
-
-			controladorUtil.inserir(imagemRetorno);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void atualizarImovelControle() throws ControladorException {
