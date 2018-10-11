@@ -30,6 +30,7 @@ import gcom.cadastro.sistemaparametro.SistemaAlteracaoHistorico;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cadastro.sistemaparametro.bean.DadosEnvioEmailHelper;
 import gcom.cadastro.tarifasocial.TarifaSocialComandoCarta;
+import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.cobranca.CobrancaAcao;
 import gcom.cobranca.CobrancaAcaoAtividadeComando;
 import gcom.cobranca.CobrancaAcaoAtividadeCronograma;
@@ -514,5 +515,6 @@ public interface IControladorCadastro {
 	public boolean verificarExistenciaEmpresa(Integer idEmpresa) throws ControladorException;
 	
 	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto, String tipoArquivo) throws ControladorException;
-	
+
+	public UnidadeOrganizacional obterUnidadePorLocalidade(Integer idImovel) throws ControladorException;
 }

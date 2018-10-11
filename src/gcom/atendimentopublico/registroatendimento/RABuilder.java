@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
 
 public class RABuilder {
 	
-	public static Integer UNIDADE_ATENDIMENTO_UNAM = new Integer(17);
+	public static Integer UNIDADE_PRESIDENCIA = new Integer(1);
 	
 	public static Integer SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL = new Integer(25);
 	public static Integer SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL = new Integer(1227);
@@ -46,7 +46,7 @@ public class RABuilder {
 					.dataAtendimento(Util.formatarData(dataAtual))
 					.dataPrevista(Util.formatarData(dataAtual))
 					.horaAtendimento(Util.formatarHoraSemSegundos(dataAtual))
-					.idUnidadeAtendimento(UNIDADE_ATENDIMENTO_UNAM)
+					.idUnidadeAtendimento(UNIDADE_PRESIDENCIA)
 					.idMeioSolicitacao(MeioSolicitacao.INTERNO)
 					.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
 					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
@@ -68,7 +68,7 @@ public class RABuilder {
 					.dataAtendimento(Util.formatarData(dataAtual))
 					.dataPrevista(Util.formatarData(dataAtual))
 					.horaAtendimento(Util.formatarHoraSemSegundos(dataAtual))
-					.idUnidadeAtendimento(UNIDADE_ATENDIMENTO_UNAM)
+					.idUnidadeAtendimento(UNIDADE_PRESIDENCIA)
 					.idMeioSolicitacao(MeioSolicitacao.INTERNO)
 					.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
 					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
@@ -92,7 +92,7 @@ public class RABuilder {
 				.dataAtendimento(Util.formatarData(dataAtual))
 				.dataPrevista(Util.formatarData(dataAtual))
 				.horaAtendimento(Util.formatarHoraSemSegundos(dataAtual))
-				.idUnidadeAtendimento(UNIDADE_ATENDIMENTO_UNAM)
+				.idUnidadeAtendimento(UNIDADE_PRESIDENCIA)
 				.idMeioSolicitacao(MeioSolicitacao.INTERNO)
 				.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
 				.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
@@ -238,14 +238,14 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RALocalOcorrenciaHelper buildRALocalOcorrenciaAtualizacaoCadastral(IImovel imovel, Integer idSetorComercial, Integer alteracaoTipo){
+	public static RALocalOcorrenciaHelper buildRALocalOcorrenciaAtualizacaoCadastral(IImovel imovel, Integer idSetorComercial, Integer alteracaoTipo, UnidadeOrganizacional unidade){
 		RALocalOcorrenciaHelper raLocalOcorrenciaHelper = new RALocalOcorrenciaHelper();
 		
 		raLocalOcorrenciaHelper.colecaoEndereco(null)
 								.idLocalidade(imovel.getIdLocalidade())
 								.idSetorComercial(idSetorComercial)
 								.idQuadra(imovel.getNumeroQuadra())
-								.idUnidadeDestino(UNIDADE_ATENDIMENTO_UNAM)
+								.idUnidadeDestino(unidade.getId())
 								.parecerUnidadeDestino("");
 		
 		if (alteracaoTipo == AlteracaoTipo.ALTERACAO) {

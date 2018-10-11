@@ -4,7 +4,6 @@ import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
-import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
@@ -26,6 +25,7 @@ import gcom.cadastro.imovel.bean.InserirImovelHelper;
 import gcom.cadastro.tarifasocial.TarifaSocialCarta;
 import gcom.cadastro.tarifasocial.TarifaSocialComandoCarta;
 import gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia;
+import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.cobranca.CobrancaSituacao;
 import gcom.cobranca.bean.SituacaoEspecialCobrancaHelper;
 import gcom.faturamento.FaturamentoGrupo;
@@ -751,4 +751,5 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) throws ControladorException; 
 
 	public void incluirImovelCobranca(Integer idCobrancaSituacao, Integer idCobrancaSituacaoTipo, Integer idImovel, Usuario usuario) throws ControladorException;
+	
 }

@@ -14441,4 +14441,13 @@ public class ControladorCadastro extends ControladorComum {
 		return retorno;
 
 	}
+	
+	public UnidadeOrganizacional obterUnidadePorLocalidade(Integer idLocalidade) throws ControladorException {
+		
+		FiltroUnidadeOrganizacional filtro = new FiltroUnidadeOrganizacional();
+		filtro.adicionarParametro(new ParametroSimples(FiltroUnidadeOrganizacional.ID_LOCALIDADE, idLocalidade));
+		filtro.adicionarParametro(new ParametroSimples(FiltroUnidadeOrganizacional.INDICADOR_USO, ConstantesSistema.SIM));
+		
+		return (UnidadeOrganizacional) getControladorUtil().pesquisar(filtro, UnidadeOrganizacional.class.getName()).iterator().next();
+	}
 }
