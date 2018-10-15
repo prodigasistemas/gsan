@@ -2,7 +2,6 @@ package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaClienteCommand;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.FiltroCliente;
@@ -28,7 +27,6 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	
 	private static Logger logger = Logger.getLogger(ParseClienteCommand.class);
 	
-	private IRepositorioImovel repositorioImovel;
 	private IControladorAtualizacaoCadastral controladorAtualizacaoCadastral;
 	
 	public ParseClienteCommand(ParserUtil parser,

@@ -1748,6 +1748,24 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 	
+	public Integer obterIdImovelRetorno(Integer idImovel) throws ErroRepositorioException {
+		Integer idImovelRetorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			String consulta = "select i.id from ImovelRetorno i where i.idImovel = :idImovel";
+			idImovelRetorno = (Integer) session.createQuery(consulta).setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao obter id do imovel retorno.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return idImovelRetorno;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public boolean possuiClienteComCpfOuCnpjCadastrado(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();

@@ -9,7 +9,6 @@ import gcom.cadastro.atualizacaocadastral.validador.ValidadorCoordenadasCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorEconomiasCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorHidrometroCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorLogradouroCommand;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorNomesClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorRamoAtividadeCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorSexoCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorSituacaoImovelCommand;
@@ -93,7 +92,6 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 
 	private void validarLinhaCliente() throws Exception {
 		new ValidadorSexoCommand(imovelAtual, imovelAtual.getLinhaCliente()).execute();
-		new ValidadorNomesClientesCommand(imovelAtual, imovelAtual.getLinhaCliente()).execute();
 		new ValidadorCPFsClientesCommand(imovelAtual, imovelAtual.getLinhaCliente(), repositorioClienteImovel).execute();
 		new ValidadorCepClienteProprietarioResponsavel(imovelAtual, imovelAtual.getLinhaCliente()).execute();
 		new ValidadorTipoPessoaCommand(imovelAtual, imovelAtual.getLinhaCliente(), repositorioClienteImovel).execute();

@@ -19,7 +19,7 @@ public class AtualizacaoCadastral {
 	
 	private Integer idRota = new Integer(0);
 	
-	private int totalImoveis = 0;
+	private int totalImoveis = 0;	
 	
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
 		return arquivoTexto;
@@ -89,4 +89,5 @@ public class AtualizacaoCadastral {
 	public void setIdRota(Integer idRota) {
 		this.idRota = idRota;
 	}
+	
 }

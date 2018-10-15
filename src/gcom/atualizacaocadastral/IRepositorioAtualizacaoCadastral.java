@@ -136,6 +136,8 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public List<ImovelControleAtualizacaoCadastral> obterImoveisControlePorImovel(List<Integer> ids) throws ErroRepositorioException;
 	
+	public Integer obterIdImovelRetorno(Integer idImovel) throws ErroRepositorioException;
+
 	public boolean possuiClienteComCpfOuCnpjCadastrado(Integer idImovel) throws ErroRepositorioException;
 	
 	public boolean possuiClienteComCpfOuCnpjTransmitido(Integer idImovel) throws ErroRepositorioException;
