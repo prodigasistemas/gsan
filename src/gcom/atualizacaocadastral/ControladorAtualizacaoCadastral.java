@@ -68,6 +68,7 @@ import gcom.util.filtro.ParametroSimples;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
@@ -296,9 +297,17 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			destinoChannel = new FileOutputStream(arquivoDestino).getChannel();
 
 			origemChannel.transferTo(0, origemChannel.size(), destinoChannel);
+			
+			atualizarImagemRetorno(imagemRetorno, ConstantesSistema.SIM);
 		}
 		catch (IOException e){
-		    throw new ControladorException("Erro ao copiar imagens do retorno", e);
+			
+			atualizarImagemRetorno(imagemRetorno, ConstantesSistema.NAO);
+			if (e.getClass().equals(FileNotFoundException.class)) {
+				logger.info("Arquivo "+ arquivoOrigem.getName() + " não encontrado. ");
+			} else {
+				throw new ControladorException("Erro ao copiar imagens do retorno", e);
+			}
 		}
 		finally {
 		    try {
@@ -311,6 +320,15 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 
 		return arquivoDestino;
+	}
+	
+	private void atualizarImagemRetorno(ImagemRetorno imagem, Short indicadorAtualizado) throws ControladorException{
+		try {
+			imagem.setIndicadorImagemAtualizada(indicadorAtualizado);
+			getControladorUtil().atualizar(imagem);
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao atualizar indicador atualizado na imagem de retorno.", e);
+		}
 	}
 
 	private File criarArquivoDestinoImovelImagem(ImagemRetorno imagemRetorno) {
