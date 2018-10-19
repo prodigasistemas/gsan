@@ -180,6 +180,9 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 		if (campo.equals("preaprovado"))
 			return this.colunaValorPreAprovado;
 		else
-			return this.colunaValorFiscalizado;
-	}
+			if (this.indicadorFiscalizado != null)
+				return this.colunaValorFiscalizado;
+			else
+				return this.colunaValorPreAprovado;
+	}		
 }

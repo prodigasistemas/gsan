@@ -141,4 +141,11 @@ public interface IRepositorioAtualizacaoCadastral {
 	public boolean possuiClienteComCpfOuCnpjCadastrado(Integer idImovel) throws ErroRepositorioException;
 	
 	public boolean possuiClienteComCpfOuCnpjTransmitido(Integer idImovel) throws ErroRepositorioException;
+	
+	public boolean existeSubcategoriaRetorno(Integer idImovel, Integer idSubcategoria) throws ErroRepositorioException;
+	
+	public void atualizarSubcategoriarAoFiscalizar(Integer idImovel) throws ErroRepositorioException;
+	
+	public void atualizarSubcategoriarAoPreAprovar(Integer idImovel) throws ErroRepositorioException;
+	
 }

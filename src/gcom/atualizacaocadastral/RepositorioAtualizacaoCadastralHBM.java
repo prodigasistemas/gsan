@@ -9,6 +9,7 @@ import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
+import gcom.cadastro.imovel.Subcategoria;
 import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.seguranca.transacao.Tabela;
 import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
@@ -1339,7 +1340,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 	}
 	
-	private String montarUpdate(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) {
+	private String montarUpdate(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) throws ErroRepositorioException {
 		Properties props = IoUtil.carregaPropriedades("tabela_retorno.properties");
 		String update = new String();
 		
@@ -1350,15 +1351,20 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 				update = montarUpdateImovel(tabelaDestino, props, tabelaColunaAtualizacaoCadastral, campo);
 			else if (isTabelaCliente(tabelaDestino))
 				update = montarUpdateCliente(tabelaDestino, props, tabelaColunaAtualizacaoCadastral, campo);
+			else if (isTabelaSubcategoria(tabelaDestino))
+				update = montarUpdateSubcategoria(tabelaDestino, props, tabelaColunaAtualizacaoCadastral, campo);
 		}
 		
 		return update;
 	}
 	
+	private boolean isTabelaSubcategoria(String nomeTabela) {
+		return nomeTabela.equals("atualizacaocadastral.imovel_subcategoria_retorno");
+	}
+	
 	private boolean isTabelaImovel(String nomeTabela) {
 		return nomeTabela.equals("atualizacaocadastral.imovel_retorno") 
 				|| nomeTabela.equals("atualizacaocadastral.imovel_ramo_atividade_retorno")
-				|| nomeTabela.equals("atualizacaocadastral.imovel_subcategoria_retorno")
 				|| nomeTabela.equals("atualizacaocadastral.imovel_tipo_ocupante_quantidade_retorno");
 	}
 	
@@ -1444,6 +1450,64 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			  .append(" where imov_id = ").append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel());
 		
 		return update.toString();
+	}
+	
+	private String montarUpdateSubcategoria(String tabelaDestino, Properties props, TabelaColunaAtualizacaoCadastral tabelaColuna, String campo) throws ErroRepositorioException {
+		StringBuilder sql = new StringBuilder();
+
+		Integer valor = new Integer(tabelaColuna.obterValorParaAtualizar(campo));
+		
+		if (existeSubcategoriaRetorno(tabelaColuna) ) {
+			if (valor > 0) {
+				sql.append("update atualizacaocadastral.imovel_subcategoria_retorno ").append(" set isre_qteconomia = ").append(valor);
+			} else {
+				sql.append("delete from atualizacaocadastral.imovel_subcategoria_retorno ");
+			}
+			sql.append(" where imov_id = ").append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel())
+			.append(" and scat_id = ").append(Subcategoria.obterIdSubcategoria(tabelaColuna.getTabelaAtualizacaoCadastral().getComplemento()));
+		} else if (valor > 0) {
+			ImovelRetorno retorno = (ImovelRetorno) pesquisarImovelRetorno(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel());
+			
+			sql.append("insert into atualizacaocadastral.imovel_subcategoria_retorno values ")
+				.append("(nextval(\'atualizacaocadastral.sequence_imovel_subcategoria_retorno\'), ")
+				.append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel()).append(", ")
+				.append(Subcategoria.obterIdSubcategoria(tabelaColuna.getTabelaAtualizacaoCadastral().getComplemento())).append(", ")
+				.append(valor).append(", ")
+				.append(retorno.getId()).append(", ")
+				.append("now())");
+		}
+		
+		return sql.toString();
+	}
+	
+	private boolean existeSubcategoriaRetorno(TabelaColunaAtualizacaoCadastral tabelaColuna) throws ErroRepositorioException {
+		return existeSubcategoriaRetorno(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel(), 
+				Subcategoria.obterIdSubcategoria(tabelaColuna.getTabelaAtualizacaoCadastral().getComplemento()));
+	}
+	
+	public boolean existeSubcategoriaRetorno(Integer idImovel, Integer idSubcategoria) throws ErroRepositorioException {
+		ImovelSubcategoriaRetorno retorno = null;
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+		try {
+
+			consulta.append("from ImovelSubcategoriaRetorno imovelSubcategoria ")
+					.append(" inner join fetch imovelSubcategoria.subcategoria subcategoria ")
+					.append(" inner join fetch subcategoria.categoria categoria ")
+					.append(" where imovelSubcategoria.imovel.id = :idImovel ")
+					.append(" and imovelSubcategoria.subcategoria.id = :subcategoria ");
+
+			retorno = (ImovelSubcategoriaRetorno) session.createQuery(consulta.toString())
+						.setInteger("idImovel", idImovel)
+						.setInteger("subcategoria", idSubcategoria).setMaxResults(1).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imovel subcategoria.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno != null;
 	}
 	
 	private String obterValorParaAtualizarRetorno(String nomeColuna, String valor) {
@@ -1816,5 +1880,104 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+	}
+	
+	public void atualizarSubcategoriarAoFiscalizar(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+		try {
+			
+			List<Integer> idsColunas = this.obterIdsColunasParaAtualizarDadosFiscalizacao(idImovel);
+			if (idsColunas != null && !idsColunas.isEmpty()) {
+				StringBuilder sql = new StringBuilder();
+				sql.append(" update TabelaColunaAtualizacaoCadastral  coluna ")
+				.append(" set coluna.colunaValorFiscalizado = coluna.colunaValorAnterior ")
+				.append(" where coluna.id in (:colunas) ");
+				
+				session.createQuery(sql.toString()).setParameterList("colunas", idsColunas).executeUpdate();
+			}
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao atualizar subcategorias - fiscalizacao.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+	}
+	
+	public void atualizarSubcategoriarAoPreAprovar(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+		try {
+			
+			List<Integer> idsColunas = this.obterIdsColunasParaAtualizarDadosPreaprovados(idImovel);
+			
+			if (idsColunas != null && !idsColunas.isEmpty()) {
+				StringBuilder sql = new StringBuilder();
+				sql.append(" update TabelaColunaAtualizacaoCadastral  coluna ")
+				.append(" set coluna.colunaValorPreAprovado = coluna.colunaValorAnterior ")
+				.append(" where coluna.id in (:colunas) ");
+				
+				session.createQuery(sql.toString()).setParameterList("colunas", idsColunas).executeUpdate();
+			}
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao atualizar subcategorias - fiscalizacao.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> obterIdsColunasParaAtualizarDadosFiscalizacao(Integer idImovel) throws ErroRepositorioException {
+		List<Integer> retorno = null;
+        Session session = HibernateUtil.getSession();
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append(queryTabelaColuna(consulta))
+            		.append("and   colunaAtualizacao.colunaValorFiscalizado is null ")
+            		.append(" and tabelaAtualizacaoCadastral.tabela.id = :idTabelaSubcategoria ");
+        	
+            retorno = (List<Integer>) session.createQuery(consulta.toString())
+            			.setInteger("idImovel",idImovel)
+            			.setInteger("idTabelaSubcategoria",Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL).list();
+            
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return retorno;
+	}
+	
+	public List<Integer> obterIdsColunasParaAtualizarDadosPreaprovados(Integer idImovel) throws ErroRepositorioException {
+		List<Integer> retorno = null;
+        Session session = HibernateUtil.getSession();
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append(queryTabelaColuna(consulta))
+            		.append(" and   colunaAtualizacao.colunaValorPreAprovado is null ")
+            		.append(" and tabela.id = :idTabelaSubcategoria ");
+        	
+            retorno = (List<Integer>) session.createQuery(consulta.toString())
+            				.setInteger("idImovel",idImovel)
+            				.setInteger("idTabelaSubcategoria",Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL).list();
+            
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return retorno;
+	}
+
+	private StringBuilder queryTabelaColuna(StringBuilder consulta) {
+		StringBuilder sql = new StringBuilder();
+		return sql.append("select colunaAtualizacao.id from TabelaColunaAtualizacaoCadastral colunaAtualizacao ")
+				.append("inner join fetch colunaAtualizacao.tabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
+				.append("inner join fetch tabelaAtualizacaoCadastral.tabela tabela ")
+				.append("inner join fetch colunaAtualizacao.tabelaColuna coluna ")
+				.append("where tabelaAtualizacaoCadastral.codigoImovel = :idImovel ");
 	}
 }

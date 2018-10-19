@@ -91,7 +91,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 			salvarClienteProprietario();
 			salvarClienteResponsavel();
 			salvarImagens();
-			} else {
+		} else {
 			atualizarRetorno();
 		}
 	}
@@ -342,6 +342,23 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	private void atualizarRetorno() throws ControladorException {
 		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
 		idImovelRetorno = controle.getImovelRetorno() == null ? null : controle.getImovelRetorno().getId();
+		
+		atualizarImovelSubcategoriaRetorno();
+		
+		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoFiscalizacao())
+			controladorAtualizacaoCadastral.atualizarSubcategoriaAoFiscalizar(atualizacaoCadastralImovel.getMatricula());
+		
 		controladorAtualizacaoCadastral.atualizarRetornoPreAprovado(controle);
+	}
+	
+	private void atualizarImovelSubcategoriaRetorno() throws ControladorException{
+			List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = getImovelSubcategorias();
+			for (ImovelSubcategoriaAtualizacaoCadastral subcategoria : subcategorias) {
+				boolean existeSubcategoria = controladorAtualizacaoCadastral.existeSubcategoriaRetorno(subcategoria.getImovel().getId(), subcategoria.getSubcategoria().getId());
+				
+				if (!existeSubcategoria) {
+					salvarImovelSubcategoriaRetorno(subcategoria, idImovelRetorno);
+				}
+			}
 	}
 }

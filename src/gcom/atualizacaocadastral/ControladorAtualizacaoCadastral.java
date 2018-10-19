@@ -1645,4 +1645,29 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			return false;
 		}
 	}
+	
+	public boolean existeSubcategoriaRetorno(Integer idImovel, Integer idSubcategoria)  throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.existeSubcategoriaRetorno(idImovel, idSubcategoria);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao verificar se já existe a subcategoria do imóvel retorno: " + idImovel, e);
+		}
+	}
+	
+	public void atualizarSubcategoriaAoFiscalizar(Integer idImovel)  throws ControladorException {
+		try {
+			repositorioAtualizacaoCadastral.atualizarSubcategoriarAoFiscalizar(idImovel);
+			repositorioAtualizacaoCadastral.atualizarSubcategoriarAoPreAprovar(idImovel);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao atualizar subcategorias - fiscalização do imóvel: " + idImovel, e);
+		}
+	}
+	
+	public void atualizarSubcategoriarAoPreAprovar(Integer idImovel) throws ControladorException {
+		try {
+			repositorioAtualizacaoCadastral.atualizarSubcategoriarAoFiscalizar(idImovel);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao atualizar subcategorias - preaprovacao do imóvel: " + idImovel, e);
+		}
+	}
 }

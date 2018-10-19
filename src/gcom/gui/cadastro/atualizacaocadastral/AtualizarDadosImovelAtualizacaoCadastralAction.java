@@ -83,7 +83,7 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		if (imovelControle.isPreAprovado())
 			campo = "preaprovado";
 
-		if (imovelControle.isFiscalizado())
+		if (imovelControle.isEmFiscalizacao() || imovelControle.isFiscalizado())
 			campo = "fiscalizado";
 		return campo;
 	}

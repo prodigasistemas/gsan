@@ -93,4 +93,10 @@ public interface IControladorAtualizacaoCadastral {
 	public boolean isImovelParaRemover(ConsultarMovimentoAtualizacaoCadastralHelper item, FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) throws ControladorException;
 	
 	public void apagarImagemRetorno(Integer idImovel) throws Exception;
+	
+	public boolean existeSubcategoriaRetorno(Integer idImovel, Integer idSubcategoria)  throws ControladorException;
+	
+	public void atualizarSubcategoriaAoFiscalizar(Integer idImovel)  throws ControladorException;
+	
+	public void atualizarSubcategoriarAoPreAprovar(Integer idImovel) throws ControladorException;
 }
