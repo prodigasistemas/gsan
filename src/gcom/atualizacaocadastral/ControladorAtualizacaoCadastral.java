@@ -1479,13 +1479,16 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 	private List<Integer> obterImoveisParaRevisita(Integer idArquivo, Date dataUltimaTransmissao) throws ErroRepositorioException, ControladorException {
 		List<Integer> imoveisParaRevisita = repositorioAtualizacaoCadastral.obterImoveisARevisitar(idArquivo, dataUltimaTransmissao);
-		List<ImovelControleAtualizacaoCadastral> controles = repositorioAtualizacaoCadastral.obterImoveisControlePorImovel(imoveisParaRevisita);
 		
-		for (ImovelControleAtualizacaoCadastral controle : controles) {
-			Integer quantidadeVisitas = this.obterQuantidadeDeVisitasPorImovelControle(controle);
+		if (!imoveisParaRevisita.isEmpty()) {
+			List<ImovelControleAtualizacaoCadastral> controles = repositorioAtualizacaoCadastral.obterImoveisControlePorImovel(imoveisParaRevisita);
 			
-			if (quantidadeVisitas >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO)
-				imoveisParaRevisita.remove(controle.getImovel().getId());
+			for (ImovelControleAtualizacaoCadastral controle : controles) {
+				Integer quantidadeVisitas = this.obterQuantidadeDeVisitasPorImovelControle(controle);
+				
+				if (quantidadeVisitas >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO)
+					imoveisParaRevisita.remove(controle.getImovel().getId());
+			}
 		}
 		
 		return imoveisParaRevisita;
@@ -1591,6 +1594,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		imagemRetorno.setNomeImagem(imagem.getName());
 		imagemRetorno.setPathImagem(pasta + "/" + nomeImagem);
 		imagemRetorno.setUltimaAlteracao(new Date());
+		imagemRetorno.setIndicadorImagemAtualizada(ConstantesSistema.NAO);
 
 		getControladorUtil().inserir(imagemRetorno);
 	}
