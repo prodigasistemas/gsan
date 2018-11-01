@@ -1455,28 +1455,30 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	private String montarUpdateSubcategoria(String tabelaDestino, Properties props, TabelaColunaAtualizacaoCadastral tabelaColuna, String campo) throws ErroRepositorioException {
 		StringBuilder sql = new StringBuilder();
 
-		Integer valor = new Integer(tabelaColuna.obterValorParaAtualizar(campo));
+		String valor = tabelaColuna.obterValorParaAtualizar(campo);
+		
+		Integer qtdEconomia = (valor == null ? 0 : new Integer(valor) );
 		
 		if (existeSubcategoriaRetorno(tabelaColuna) ) {
-			if (valor > 0) {
-				sql.append("update atualizacaocadastral.imovel_subcategoria_retorno ").append(" set isre_qteconomia = ").append(valor);
+			if (qtdEconomia > 0) {
+				sql.append("update atualizacaocadastral.imovel_subcategoria_retorno ").append(" set isre_qteconomia = ").append(qtdEconomia);
 			} else {
 				sql.append("delete from atualizacaocadastral.imovel_subcategoria_retorno ");
 			}
 			sql.append(" where imov_id = ").append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel())
 			.append(" and scat_id = ").append(Subcategoria.obterIdSubcategoria(tabelaColuna.getTabelaAtualizacaoCadastral().getComplemento()));
-		} else if (valor > 0) {
+		} else if (qtdEconomia > 0) {
 			ImovelRetorno retorno = (ImovelRetorno) pesquisarImovelRetorno(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel());
 			
 			sql.append("insert into atualizacaocadastral.imovel_subcategoria_retorno values ")
-				.append("(nextval(\'atualizacaocadastral.sequence_imovel_subcategoria_retorno\'), ")
-				.append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel()).append(", ")
-				.append(Subcategoria.obterIdSubcategoria(tabelaColuna.getTabelaAtualizacaoCadastral().getComplemento())).append(", ")
-				.append(valor).append(", ")
-				.append(retorno.getId()).append(", ")
-				.append("now())");
+			.append("(nextval(\'atualizacaocadastral.sequence_imovel_subcategoria_retorno\'), ")
+			.append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel()).append(", ")
+			.append(Subcategoria.obterIdSubcategoria(tabelaColuna.getTabelaAtualizacaoCadastral().getComplemento())).append(", ")
+			.append(qtdEconomia).append(", ")
+			.append(retorno.getId()).append(", ")
+			.append("now())");
 		}
-		
+			
 		return sql.toString();
 	}
 	
