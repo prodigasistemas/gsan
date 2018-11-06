@@ -3883,7 +3883,6 @@ public class ControladorCobranca extends ControladorComum {
 		Collection contas = null;
 		Short indicadorAcrescimosCliente = null;
 
-		logger.info("[" + idImovel + "] indicadorDebito: " + indicadorDebito);
 		if (indicadorDebito == 1) {
 			// contas do imovel
 			try {
@@ -3894,7 +3893,6 @@ public class ControladorCobranca extends ControladorComum {
 						anoMesFinalVencimentoDebito, indicadorDividaAtiva, false);
 				
 				indicadorAcrescimosCliente = this.obterIndicadorAcrescimosClienteResponsavel(idImovel);
-				logger.info("[" + idImovel + "] indicadorAcrescimosCliente: " + indicadorAcrescimosCliente);
 			} catch (ErroRepositorioException ex) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("erro.sistema", ex);
@@ -3910,7 +3908,6 @@ public class ControladorCobranca extends ControladorComum {
 						anoMesFinalVencimentoDebito, indicadorDividaAtiva);
 
 				indicadorAcrescimosCliente = this.obterIndicadorAcrescimosCliente(idCliente);
-				logger.info("[" + idImovel + "] indicadorAcrescimosCliente: " + indicadorAcrescimosCliente);
 			} catch (ErroRepositorioException ex) {
 				throw new ControladorException("erro.sistema", ex);
 			}
@@ -3927,7 +3924,6 @@ public class ControladorCobranca extends ControladorComum {
 					if (idCliente != null) {
 
 						indicadorAcrescimosCliente = this.obterIndicadorAcrescimosCliente(idCliente);
-						logger.info("[" + idImovel + "] indicadorAcrescimosCliente: " + indicadorAcrescimosCliente);
 					}
 				}
 			} catch (ErroRepositorioException ex) {
@@ -3946,7 +3942,6 @@ public class ControladorCobranca extends ControladorComum {
 							anoMesFinalVencimentoDebito, indicadorDividaAtiva);
 
 					indicadorAcrescimosCliente = this.obterIndicadorAcrescimosCliente(idCliente);
-					logger.info("[" + idImovel + "] indicadorAcrescimosCliente: " + indicadorAcrescimosCliente);
 				}
 			} catch (ErroRepositorioException ex) {
 				sessionContext.setRollbackOnly();
@@ -4121,7 +4116,6 @@ public class ControladorCobranca extends ControladorComum {
 
 				if (categoriaPrincipal.getIndicadorCobrancaAcrescimos().equals(ConstantesSistema.NAO)) {
 					indicadorCobrancaAcrescimos = false;
-					logger.info("[" + idImovel + "] 1 - indicadorCobrancaAcrescimos: " + indicadorCobrancaAcrescimos);
 				}
 
 				/**
@@ -4145,11 +4139,8 @@ public class ControladorCobranca extends ControladorComum {
 				if (indicadorAcrescimosClienteResponsavel != null && indicadorAcrescimosClienteResponsavel.equals(ConstantesSistema.NAO)) {
 
 					indicadorCobrancaAcrescimos = false;
-					logger.info("[" + idImovel + "] 2 - indicadorCobrancaAcrescimos: " + indicadorCobrancaAcrescimos);
 				}
 
-				logger.info("[" + idImovel + "] indicadorCalcularAcrescimoImpontualidade: " + indicadorCalcularAcrescimoImpontualidade);
-				
 				// Calcular o Acrescimo por Impontualidade
 				if (indicadorCalcularAcrescimoImpontualidade == 1 && indicadorCobrancaAcrescimos) {
 
@@ -4167,8 +4158,6 @@ public class ControladorCobranca extends ControladorComum {
 							conta.getIndicadorCobrancaMulta(), anoMesArrecadacao, conta.getId(),
 							ConstantesSistema.INDICADOR_ARRECADACAO_DESATIVO);
 
-					logger.info("[" + idImovel + "] calcularAcrescimoPorImpontualidade != null ?? " + (calcularAcrescimoPorImpontualidade != null));
-					
 					// set os Valores
 					if (calcularAcrescimoPorImpontualidade != null) {
 
