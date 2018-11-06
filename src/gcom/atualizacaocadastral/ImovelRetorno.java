@@ -482,7 +482,7 @@ public class ImovelRetorno implements IImovel{
     }
 
     public BigDecimal getAreaConstruida() {
-		return areaConstruida;
+    	return areaConstruida != null && areaConstruida.compareTo(BigDecimal.ZERO) <= 0 ? null : areaConstruida;
 	}
 
 	public void setAreaConstruida(BigDecimal areaConstruida) {
@@ -490,7 +490,7 @@ public class ImovelRetorno implements IImovel{
 	}
 
 	public BigDecimal getVolumePiscina() {
-		return volumePiscina;
+		return volumePiscina != null && volumePiscina.compareTo(BigDecimal.ZERO) <= 0 ? null : volumePiscina;
 	}
 
 	public void setVolumePiscina(BigDecimal volumePiscina) {
@@ -498,7 +498,7 @@ public class ImovelRetorno implements IImovel{
 	}
 
 	public BigDecimal getVolumeCisterna() {
-        return volumeCisterna;
+        return volumeCisterna != null && volumeCisterna.compareTo(BigDecimal.ZERO) <= 0 ? null : volumeCisterna;
     }
 
     public void setVolumeCisterna(BigDecimal volumeCisterna) {
@@ -506,7 +506,7 @@ public class ImovelRetorno implements IImovel{
     }
 
     public BigDecimal getVolumeCaixaDagua() {
-        return volumeCaixaDagua;
+    	return volumeCaixaDagua != null && volumeCaixaDagua.compareTo(BigDecimal.ZERO) <= 0 ? null : volumeCaixaDagua;
     }
 
     public void setVolumeCaixaDagua(BigDecimal volumeCaixaDagua) {
