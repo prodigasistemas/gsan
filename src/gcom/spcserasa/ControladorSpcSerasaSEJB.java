@@ -7546,6 +7546,8 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 					if (negativadorContrato.getIndicadorControleNsaRetorno().equals(ConstantesSistema.SIM)) {
 						int numeroSequencialRetornoBase = negativadorContrato.getNumeroSequencialRetorno() + 1;
 
+						System.out.println("numeroSequencialRetornoBase: " + numeroSequencialRetornoBase);
+						System.out.println("numeroSequencialArquivo: " + numeroSequencialArquivo);
 						if (numeroSequencialArquivo != numeroSequencialRetornoBase) {
 							throw new ControladorException("atencao.movimento_fora_sequencia");
 						}
