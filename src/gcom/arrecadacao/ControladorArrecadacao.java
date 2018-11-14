@@ -38208,7 +38208,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					pagamento.setDocumentoTipoAgregador(documentoAgregador);
 
 					colecaoPagamentos.add(pagamento);
-
+					
+					indicadorAceitacaoRegistro = "1";
 				} else {
 					indicadorAceitacaoRegistro = "2";
 				}
@@ -38275,6 +38276,8 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo8Novo(registroHelperCodigoBarras, registroTipo7, idFormaArrecadacao);
 					}
 					
+					indicadorAceitacaoRegistro = "1";
+
 					pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.DOCUMENTO_COBRANCA);
 					pagamentoHelperCodigoBarras.setIdDocumento(registroTipo7.getIdDocumentoEmitido());
 					pagamentoHelperCodigoBarras.setValorDocumento(registroTipo7.getValorRecebidoFormatado());
@@ -38293,6 +38296,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				// [FS0002 - Validar documento de cobrança]
 				if (cobrancaDocumentoItem == null) {
+					indicadorAceitacaoRegistro = "2";
 					descricaoOcorrencia = "DOCUMENTO ITEM INEXISTENTE";
 				}
 
@@ -38318,6 +38322,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							registroTipo7.getDataLiquidacaoFormatado(), Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado()),
 							registroTipo7.getValorRecebidoFormatado(), ArrecadacaoForma.FICHA_COMPENSACAO, usuarioLogado);
 					
+					indicadorAceitacaoRegistro = "1";
 					pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.DOCUMENTO_COBRANCA);
 					pagamentoHelperCodigoBarras.setIdDocumento(registroTipo7.getIdDocumentoEmitido());
 					pagamentoHelperCodigoBarras.setValorDocumento(registroTipo7.getValorRecebidoFormatado());
@@ -38370,7 +38375,9 @@ public class ControladorArrecadacao extends ControladorComum {
 								registroTipo7.getDataLiquidacaoFormatado(), Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado()),
 								registroTipo7.getValorRecebidoFormatado(), idFormaArrecadacao);
 					}
-
+					indicadorAceitacaoRegistro = "1";
+					
+					
 					pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.GUIA_PAGAMENTO);
 					pagamentoHelperCodigoBarras.setIdDocumento(registroTipo7.getIdDocumentoEmitido());
 					pagamentoHelperCodigoBarras.setValorDocumento(registroTipo7.getValorRecebidoFormatado());
@@ -38382,6 +38389,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 				pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 			}
+			pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 		}
 
 		return pagamentoHelperCodigoBarras;
