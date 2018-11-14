@@ -195,4 +195,19 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	public boolean isArquivoRetornoRevisita() {
 		return tipoRetorno.equals(null) || tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA);
 	}
+	
+	public String getDescricaoTipoRetorno() {
+		String descricao = "";
+		if (!tipoRetorno.equals(null)) 
+			if (tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA))
+					descricao = "Revisita";
+			else if (tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_FISCALIZACAO))
+					descricao = "Fiscalização";
+			else if (tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISAO))
+				descricao = "Revisão";
+			else if (tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO))
+				descricao = "Transmissão";
+			
+		return descricao;
+	}
 }

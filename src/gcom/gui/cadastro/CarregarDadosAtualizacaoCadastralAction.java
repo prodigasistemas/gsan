@@ -155,6 +155,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 			form.setNomeArquivo(arquivo.getFileName());
 			form.setTotalImoveis(atualizacao.getTotalImoveis() + "");
 			form.setTotalImoveisComErro(atualizacao.getTotalImoveisComErro() + "");
+			form.setTipoArquivo(atualizacao.getArquivoTexto().getDescricaoTipoRetorno());
 
 			retorno = mapping.findForward("CarregarDadosAtualizacaoCadastralAction");
 		}

@@ -19,6 +19,8 @@ public class CarregarDadosAtualizacaoCadastralActionForm extends ActionForm {
 	private String totalImoveis;
 	
 	private String totalImoveisComErro;
+	
+	private String tipoArquivo;
 
 	public FormFile getArquivo() {
 		return arquivo;
@@ -59,5 +61,13 @@ public class CarregarDadosAtualizacaoCadastralActionForm extends ActionForm {
 
 	public void setTotalImoveisComErro(String totalImoveisComErro) {
 		this.totalImoveisComErro = totalImoveisComErro;
+	}
+
+	public String getTipoArquivo() {
+		return tipoArquivo;
+	}
+
+	public void setTipoArquivo(String tipoArquivo) {
+		this.tipoArquivo = tipoArquivo;
 	}
 }

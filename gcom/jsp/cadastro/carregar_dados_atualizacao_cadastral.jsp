@@ -163,6 +163,14 @@
 							style="background-color: #EFEFEF; border: 0; color: #000000;" />
 					</td>
 				</tr>
+				
+				<tr>
+					<td widht="30%">Tipo de arquivo:</td>
+					<td widht="70%" align="left">
+						<html:text property="tipoArquivo" size="20" maxlength="20" 
+							readonly="true" style="background-color: #EFEFEF; border: 0; color: #000000;" />
+					</td>
+				</tr>
 
 				<tr>
 					<td widht="30%">Qtd. Total de Im&oacute;veis:</td>
