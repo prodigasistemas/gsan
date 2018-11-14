@@ -775,8 +775,8 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		Map<String, EmpresaCobrancaContaPagamentos> mapPagamentos = new HashMap<String, EmpresaCobrancaContaPagamentos>();
 		try {
 			Collection<EmpresaCobrancaContaPagamentos> pagamentos = obterPagamentosEmpresa(idLocalidade, anoMesArrecadacao);
-
 			for (EmpresaCobrancaContaPagamentos pagamento : pagamentos) {
+				System.out.println("Imovel:" + pagamento.getIdImovel());
 				if (!isPagamentoDuplicado(pagamento, mapPagamentos)) {
 					getControladorUtil().inserir(pagamento);
 					atualizarSituacaoCobranca(pagamento.getIdImovel(), pagamento.getEmpresaCobrancaConta().getComandoEmpresaCobrancaConta().getId());
@@ -820,7 +820,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		if (repositorio.isContasPagas(idImovel, idComando)) {
 			try {
 				SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
-				
+				System.out.println("Atualizando Imovel:" + idImovel);
 				atualizarSituacaoCobrancaImovel(idImovel);
 				atualizarImovelCobrancaSituacao(idImovel, new Date());
 				atualizarCobrancaSituacaoHistorico(idImovel, parametros.getAnoMesFaturamento(), "TODAS AS CONTAS FORAM PAGAS", new Date(), null);
@@ -838,10 +838,12 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		filtro.adicionarParametro(new ParametroNulo(FiltroImovelCobrancaSituacao.DATA_RETIRADA_COBRANCA));
 		
 		Collection<ImovelCobrancaSituacao> colecao = getControladorUtil().pesquisar(filtro, ImovelCobrancaSituacao.class.getName());
+		System.out.println("atualizarImovelCobrancaSituacao :" + idImovel + " [" + colecao.size() + "]");
 		if (colecao != null && !colecao.isEmpty()) {
 			for (ImovelCobrancaSituacao imovelCobranca : colecao) {
 				imovelCobranca.setDataRetiradaCobranca(new Date());
 				imovelCobranca.setUltimaAlteracao(new Date());
+				System.out.println("atualizando imovel cobranca OK");
 				getControladorUtil().atualizar(imovelCobranca);
 				
 			}
@@ -854,11 +856,13 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
 		
 		Collection<Imovel> colecao = getControladorUtil().pesquisar(filtro, Imovel.class.getName());
+		System.out.println("atualizarSituacaoCobrancaImovel :" + idImovel + " [" + colecao.size() + "]");
 		if (colecao != null && !colecao.isEmpty()) {
 			Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(colecao);
 			imovel.setCobrancaSituacao(null);
 			imovel.setCobrancaSituacaoTipo(null);
 			imovel.setUltimaAlteracao(new Date());
+			System.out.println(" atualizando situacao OK");
 			getControladorUtil().atualizar(imovel);
 		}
 	}
@@ -872,6 +876,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		filtro.adicionarParametro(new ParametroNulo(FiltroCobrancaSituacaoHistorico.ANO_MES_COBRANCA_RETIRADA));
 		
 		Collection<CobrancaSituacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, CobrancaSituacaoHistorico.class.getName());
+		System.out.println("atualizarCobrancaSituacaoHistorico :" + idImovel + " [" + colecao.size() + "]");
 		if (colecao != null && !colecao.isEmpty()) {
 			for (CobrancaSituacaoHistorico historico : colecao) {
 				historico.setAnoMesCobrancaRetirada(Util.formataAnoMes(new Date()));
@@ -879,6 +884,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				historico.setUsuarioRetira(usuario);
 				historico.setDataFimSituacao(new Date());
 				historico.setUltimaAlteracao(new Date());
+				System.out.println("atualizando Cobranca Situacao Historico OK");
 				getControladorUtil().atualizar(historico);
 			}
 		}
