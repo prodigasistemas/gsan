@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarLoteAtualizacaoCadastralForm"
+	   			type="gcom.gui.cadastro.atualizacaocadastral.GerarLoteAtualizacaoCadastralForm" />
+ </form-beans>
+  <!--******************* PÁGINAS GLOBAIS *******************-->
+ <global-forwards />
+ <action-mappings>
+ 
+ 	<!--INICIO FILTRAR ATUALIZACAO CADASTRAL-->
+ 	
+		<action name="GerarLoteAtualizacaoCadastralForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ExibirFiltrarGerarLoteAtualizacaoCadastralAction"
+			path="/exibirFiltrarGerarLoteAtualizacaoCadastralAction"
+			scope="session" >
+			<forward name="exibirFiltrarGerarLoteAtualizacaoCadastralAction"
+				path="/jsp/cadastro/atualizacaocadastral/gerar_lote_atualizacao_cadastral.jsp" />
+		</action>
+		<action name="GerarLoteAtualizacaoCadastralForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.FiltrarGerarLoteAtualizacaoCadastralAction"
+			path="/filtrarGerarLoteAtualizacaoCadastralAction"	>
+			
+			<forward name="filtrarGerarLoteAtualizacaoCadastralAction"
+					path="/exibiFiltrarGerarLoteAtualizacaoCadastralAction.do" />		
+		</action>
+		
+		<action name="GerarLoteAtualizacaoCadastralForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ExibirConsultarMovimentoAtualizacaoCadastralAction"
+			validate="true" 
+			path="/exibirConsultarMovimentoAtualizacaoCadastralAction">
+			
+			<forward name="exibirConsultarMovimentoAtualizacaoCadastral" 
+				path="/jsp/cadastro/atualizacaocadastral/atualizacao_cadastral_movimento_consultar.jsp" />
+		</action>
+		<action name="GerarLoteAtualizacaoCadastralForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.AtualizarDadosCadastraisViaMovimentoAction"
+			path="/atualizarDadosCadastraisViaMovimentoAction"	>
+			
+			<forward name="atualizarDadosCadastraisViaMovimentoAction"
+					path="/atualizarDadosCadastraisViaMovimentoAction.do" />		
+		</action>
+		
+		<action name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction"
+			validate="true" 
+			path="/exibirAtualizarDadosImovelAtualizacaoCadastralPopupAction">
+			
+			<forward name="exibirAtualizarDadosImovelAtualizacaoCadastralPopup" 
+				path="/jsp/cadastro/atualizacaocadastral/atualizar_dados_imovel_atualizacao_cadastral_popup.jsp" />
+		</action>
+		
+		<action name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.AtualizarDadosImovelAtualizacaoCadastralAction"
+			validate="true" 
+			path="/atualizarDadosImovelAtualizacaoCadastralAction"	>	
+		
+			<forward name="filtrarAlteracaoAtualizacaoCadastral"
+					path="/filtrarAlteracaoAtualizacaoCadastralAction.do" />		
+		</action>
+		
+		<action name="GerarLoteAtualizacaoCadastralForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.AtualizarImoveisEmLoteAction"
+			path="/aprovarImoveisEmLoteAction"	>
+			
+			<forward name="aprovarImoveisEmLoteAction"
+					path="/aprovarImoveisEmLoteAction.do" />		
+		</action>
+
+		<action name="GerarLoteAtualizacaoCadastralForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ImprimirConsultaAtualizacaoCadastralAction"
+			path="/imprimirConsultaAtualizacaoCadastralAction"	>
+		</action>
+		
+		<action name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.FiscalizarImovelAtualizacaoCadastralAction"
+			validate="true" 
+			path="/fiscalizarImovelAtualizacaoCadastralAction">	
+		
+			<forward name="filtrarAlteracaoAtualizacaoCadastral"
+					path="/filtrarAlteracaoAtualizacaoCadastralAction.do" />		
+		</action>
+		
+		<action name="GerarLoteAtualizacaoCadastralForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ImprimirFichaFiscalizacaoCadastralAction"
+			path="/imprimirFichaFiscalizacaoCadastralAction"	>
+		</action>
+		
+		<action 
+			type="gcom.gui.cadastro.atualizacaocadastral.ExibirImagemRetornoAtualizacaoCadastralAction"
+			path="/exibirImagemRetornoAtualizacaoCadastralAction"
+			validate="false"
+			scope="session" >
+			<forward name="/exibirImagemRetornoAtualizacaoCadastralAction"
+				path="/jsp/cadastro/atualizacaocadastral/exibir_imagem_retorno.jsp" />
+		</action>
+		
+	<!--FIM FILTRAR ATUALIZACAO CADASTRAL-->
+
+</action-mappings>
+ <message-resources null="false"
+  parameter="gcom.properties.application" />
+</struts-config>
