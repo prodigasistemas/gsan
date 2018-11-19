@@ -40243,4 +40243,28 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex);
 		}
 	}
+	
+	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(String idLocalidade, String dataInicio, String dataFim, String idLeiturista, boolean incluirImoveisNovos) {
+        try {
+            return getControladorAtualizacaoCadastral().obterIdsImovelControleGeracaoLote(new Integer(idLocalidade), dataInicio, dataFim, new Integer(idLeiturista), incluirImoveisNovos);
+        } catch (Exception ex) {
+            throw new FachadaException(ex.getMessage(), ex);
+        }
+    }
+
+	public void gerarLote(List<ImovelControleAtualizacaoCadastral> imoveisControle, String lote)  {
+        try {
+            getControladorAtualizacaoCadastral().gerarLote(imoveisControle, new Integer(lote));
+        } catch (Exception ex) {
+            throw new FachadaException(ex.getMessage(), ex);
+        }
+    }
+	
+	public Integer obterProximoLote() {
+		try {
+            return getControladorAtualizacaoCadastral().obterProximoLote();
+        } catch (Exception ex) {
+            throw new FachadaException(ex.getMessage(), ex);
+        }
+	}
 }

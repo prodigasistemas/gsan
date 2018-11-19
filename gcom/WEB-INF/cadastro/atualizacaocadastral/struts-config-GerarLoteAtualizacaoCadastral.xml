@@ -23,17 +23,18 @@
 			path="/filtrarGerarLoteAtualizacaoCadastralAction"	>
 			
 			<forward name="filtrarGerarLoteAtualizacaoCadastralAction"
-					path="/exibiFiltrarGerarLoteAtualizacaoCadastralAction.do" />		
+					path="/exibirFiltrarGerarLoteAtualizacaoCadastralAction.do" />		
 		</action>
 		
 		<action name="GerarLoteAtualizacaoCadastralForm"
-			type="gcom.gui.cadastro.atualizacaocadastral.ExibirConsultarMovimentoAtualizacaoCadastralAction"
+			type="gcom.gui.cadastro.atualizacaocadastral.GerarLoteAtualizacaoCadastralAction"
 			validate="true" 
-			path="/exibirConsultarMovimentoAtualizacaoCadastralAction">
+			path="/gerarLoteAtualizacaoCadastral">
 			
-			<forward name="exibirConsultarMovimentoAtualizacaoCadastral" 
-				path="/jsp/cadastro/atualizacaocadastral/atualizacao_cadastral_movimento_consultar.jsp" />
+			<forward name="gerarLoteAtualizacaoCadastral" 
+				path="/exibirFiltrarGerarLoteAtualizacaoCadastralAction.do" />
 		</action>
+		
 		<action name="GerarLoteAtualizacaoCadastralForm"
 			type="gcom.gui.cadastro.atualizacaocadastral.AtualizarDadosCadastraisViaMovimentoAction"
 			path="/atualizarDadosCadastraisViaMovimentoAction"	>

@@ -1,8 +1,9 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
-import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.Localidade;
+import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.micromedicao.Leiturista;
@@ -25,7 +26,7 @@ import org.apache.struts.action.ActionMapping;
 public class FiltrarGerarLoteAtualizacaoCadastralAction extends GcomAction {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
-		ActionForward retorno = mapping.findForward("filtrarGerarLoteAtualizacaoCadastral");
+		ActionForward retorno = mapping.findForward("filtrarGerarLoteAtualizacaoCadastralAction");
 		
 		HttpSession sessao = request.getSession(false);
 		
@@ -35,39 +36,26 @@ public class FiltrarGerarLoteAtualizacaoCadastralAction extends GcomAction {
 			throw new ActionServletException("atencao.filtro.nenhum_parametro_informado");
 		}
 		
-		setForm(form);
-		
-		//FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper(form);
-		
-		//Collection<ConsultarMovimentoAtualizacaoCadastralHelper> helper = getFachada().pesquisarMovimentoAtualizacaoCadastral(filtro);
-		
-		//filtro.setTotalImoveis(helper.size());
-        
-      //  if( helper.isEmpty()){
-		//	throw new ActionServletException("atencao.pesquisa.nenhumresultado", "exibirFiltrarAlteracaoAtualizacaoCadastralAction.do", null, new String[] {});
-      //  }
-        
-//        sessao.setAttribute("colecaoConsultarMovimentoAtualizacaoCadastralHelper",helper);
-//        sessao.setAttribute("filtroMovimentoAtualizacaoCadastral", filtro);
-//        sessao.setAttribute("aprovacaoEmLote", filtro.paraAprovacaoEmLote());
-//        sessao.setAttribute("loteInformado", filtro.loteInformado());
-//        
-//        if ((filtro.isAlteracaoHidrometro() != null && filtro.isAlteracaoHidrometro()) 
-//        	|| (filtro.isAlteracaoSituacaoAgua() != null && filtro.isAlteracaoSituacaoAgua())
-//        	|| (filtro.isAlteracaoSituacaoEsgoto() != null && filtro.isAlteracaoSituacaoEsgoto())
-//        	|| (filtro.isAlteracaoCategoria() != null && filtro.isAlteracaoCategoria())) {
-//        	
-//        	sessao.setAttribute("relatorio", true);
-//        }
+		List<ImovelControleAtualizacaoCadastral> imoveis = getFachada().obterIdsImovelControleGeracaoLote(
+                form.getIdLocalidadeInicial(), form.getPeriodoInicial(), form.getPeriodoFinal(), form.getIdLeiturista(), form.isIncluirImoveisNovos());
+    
+		if( imoveis.isEmpty()){
+			throw new ActionServletException("atencao.pesquisa.nenhumresultado", "exibirFiltrarGerarLoteAtualizacaoCadastralAction.do", null, new String[] {});
+		}
+    
+    
+    	setForm(form, imoveis);
+    	sessao.setAttribute("colecaoImoveisLoteAtualizacaoCadastral",imoveis);
 
 		return retorno;
 	}
 
-	private void setForm(GerarLoteAtualizacaoCadastralForm form) {
-		form.setNomeLeiturista(this.pesquisarNomeLeiturista(form.getIdLeiturista()));
-		form.setNomeLocalidadeInicial(this.pesquisarNomeLocalidade(form.getIdLocalidadeInicial()));
-		form.setNomeLocalidadeFinal(this.pesquisarNomeLocalidade(form.getIdLocalidadeFinal()));
-	}
+	private void setForm(GerarLoteAtualizacaoCadastralForm form, List<ImovelControleAtualizacaoCadastral> imoveis) {
+        form.setNomeLeiturista(this.pesquisarNomeLeiturista(form.getIdLeiturista()));
+        form.setNomeLocalidadeInicial(this.pesquisarNomeLocalidade(form.getIdLocalidadeInicial()));
+        form.setQtdImoveisLote(imoveis.size() + "");
+        form.setLote(Fachada.getInstancia().obterProximoLote().toString());
+    }
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private String pesquisarNomeLeiturista(String idLeiturista) {

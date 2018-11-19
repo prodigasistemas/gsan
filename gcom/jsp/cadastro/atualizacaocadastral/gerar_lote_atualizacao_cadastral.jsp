@@ -54,8 +54,8 @@
 	function validarForm(form) {
 		var periodoInicial = trim(form.periodoInicial.value);
 		var periodoFinal = trim(form.periodoFinal.value);
-		alert('oie');
-	    if (form.idEmpresa.value == '-1') {
+
+		if (form.idEmpresa.value == '-1') {
 	    	alert('Informe a Empresa.');
 	    } else if (periodoInicial == null || periodoInicial == '') {
     		alert('Informe o Período Inicial de Pré Aprovação.');
@@ -68,7 +68,11 @@
 			submeterFormPadrao(form);	
 	    }
 	}
-	
+
+	function gerarLote(form) {
+        form.action = "gerarLoteAtualizacaoCadastral.do";
+        submeterFormPadrao(form);   
+    }
 	function recarregar() {
 		 var form = document.forms[0];
 		 form.action = 'exibirFiltrarGerarLoteAtualizacaoCadastralAction.do';
@@ -238,38 +242,33 @@
       	</td>          
     </tr>
     
-    <tr>
-      <td width="170"><strong>Setor Comercial :</strong></td>
-      <td><html:text maxlength="3" property="cdSetorComercialInicial" size="5" onkeyup="javascript:somente_numero(this);replicarLocalidade();"
-           onkeypress="validaEnterDependencia(event, 
-           'exibirFiltrarGerarLoteAtualizacaoCadastralAction.do?filterClass=FiltroSetorComercial&fieldLocalidade=LocalidadeInicial&fieldSetorComercial=SetorComercialInicial', 
-           this, document.forms[0].idLocalidadeInicial.value, 'Localidade Final.');" onblur="javascript:replicarSetorComercial();" tabindex="6" />
-           <a href="javascript:abrirPopupDependencia('exibirPesquisarSetorComercialAction.do?idLocalidade='+document.forms[0].idLocalidadeInicial.value+'&tipo=setorComercialOrigem',document.forms[0].idLocalidadeInicial.value,'Localidade Inicial', 400, 800);">
-           <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif" title="Pesquisar" />
-           </a>
-          <html:text property="nomeSetorComercialInicial" size="35" readonly="true"
-            style="background-color: #EFEFEF; border: 0; color: ${requestScope.corSetorComercialInicial}" />
-          
-          <a href="javascript:limparCampos('cdSetorComercialInicial', 'nomeSetorComercialInicial', 'cdSetorComercialFinal', 'nomeSetorComercialFinal', 'cdRotaInicial', 'cdRotaFinal');">
-              <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
-          </a>
-      </td>
-    </tr>
-    
 	<tr>
       <td width="170"><strong>Incluir imóveis novos:</strong></td>
       <td>
 		<strong> 
-			<html:radio property="quantidadeVisitas" value="1" /> 1 
-			<html:radio property="quantidadeVisitas" value="2" /> 2
-			<html:radio property="quantidadeVisitas" value="3" /> 3
-			<html:radio property="quantidadeVisitas" value="-1" /> Todos
+			<html:radio property="quantidadeVisitas" value="1" /> Sim 
+			<html:radio property="quantidadeVisitas" value="2" /> Não
 		</strong>
       </td>
     </tr>
     <tr>
       <td colspan="2"><hr></td>
     </tr>
+    
+    <logic:present name="colecaoImoveisLoteAtualizacaoCadastral" >
+    	<tr>
+            <td><strong>Quantidade de imóveis no lote: :</strong></td>
+            <td>
+                <html:text property="qtdImoveisLote" maxlength="5" size="5" disabled="true" />
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Lote de Fiscalização:</strong></td>
+            <td>
+                <html:text property="lote" maxlength="5" size="5" onkeypress="somente_numero(this);" onkeyup="javascript:somente_numero(this);" tabindex="5" />
+            </td>
+        </tr>
+    </logic:present>
 
     <tr>
 		<td colspan="3">&nbsp;</td>
@@ -286,7 +285,10 @@
 					onclick="window.location.href='/gsan/exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?menu=sim';"> 			
 			</td>
 					
-			<td align="right" width="50%">					
+			<td align="right" width="50%">	
+				<logic:present name="colecaoImoveisLoteAtualizacaoCadastral" >
+					<input name="Button322222" type="button" class="bottonRightCol" value="Gerar Lote" onClick="javascript:gerarLote(document.forms[0]);" />
+				</logic:present>				
 			 <input name="Button322222" type="button"
 				class="bottonRightCol" value="Filtrar"
 				onClick="javascript:validarForm(document.forms[0]);" />

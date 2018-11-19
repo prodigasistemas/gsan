@@ -148,4 +148,10 @@ public interface IRepositorioAtualizacaoCadastral {
 	
 	public void atualizarSubcategoriarAoPreAprovar(Integer idImovel) throws ErroRepositorioException;
 	
+	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ErroRepositorioException;
+
+    public boolean isLoteExistente(Integer lote) throws ErroRepositorioException;
+    
+    public Integer obterProximoLote() throws ErroRepositorioException;
+	
 }

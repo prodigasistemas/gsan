@@ -1674,4 +1674,42 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			throw new ControladorException("Erro ao atualizar subcategorias - preaprovacao do imóvel: " + idImovel, e);
 		}
 	}
+	
+    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ControladorException {
+        try {
+            return repositorioAtualizacaoCadastral.obterIdsImovelControleGeracaoLote(idLocalidade, dataInicio, dataFim, idLeiturista, incluirImoveisNovos);
+        } catch (ErroRepositorioException e) {
+            throw new ControladorException("erro.lote.atualizacaocadastral.pesquisar.imoveis", e);
+        }
+    }
+    
+    public void gerarLote(List<ImovelControleAtualizacaoCadastral> imoveisControle, Integer lote) throws ControladorException {
+        
+        try {
+            boolean existeLote = repositorioAtualizacaoCadastral.isLoteExistente(lote);
+            
+            if (existeLote) {
+                throw new ControladorException("erro.lote.atualizacaocadastral.existente");
+            } else {
+                for (ImovelControleAtualizacaoCadastral controle : imoveisControle) {
+                    controle.setLote(lote);
+                    controle.setDataGeracaoLote(new Date());
+                    
+                    getControladorUtil().atualizar(controle);
+                }
+            }
+
+        } catch (ErroRepositorioException e) {
+            throw new ControladorException("erro.lote.atualizacaocadastral", e);
+        }
+        
+    }
+    
+    public Integer obterProximoLote() throws ControladorException {
+        try {
+            return repositorioAtualizacaoCadastral.obterProximoLote();
+        } catch (ErroRepositorioException e) {
+            throw new ControladorException("erro.lote.atualizacaocadastral", e);
+        }
+    }
 }

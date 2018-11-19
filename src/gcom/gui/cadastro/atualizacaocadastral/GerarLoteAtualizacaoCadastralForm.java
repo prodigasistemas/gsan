@@ -24,12 +24,6 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 
 	private String periodoFinal;
 
-	private String idRegistrosNaoAutorizados;
-
-	private String idRegistrosAutorizados;
-
-	private String situacaoImoveis;
-
 	private String idLocalidadeInicial;
 
 	private String idLocalidadeFinal;
@@ -68,29 +62,12 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 	
 	private String inscricao;
 	
-	private String quantidadeVisitas = "-1";
+	private String quantidadeVisitas = "1";
 	
-	private String cpfCnpjCadastrado = "-1";
+	private String qtdImoveisLote;
 	
-	private String cpfCnpjTransmitido = "-1";
 
 	public GerarLoteAtualizacaoCadastralForm() {
-	}
-
-	public String getIdRegistrosAutorizados() {
-		return idRegistrosAutorizados;
-	}
-
-	public void setIdRegistrosAutorizados(String idRegistrosAutorizados) {
-		this.idRegistrosAutorizados = idRegistrosAutorizados;
-	}
-
-	public String getIdRegistrosNaoAutorizados() {
-		return idRegistrosNaoAutorizados;
-	}
-
-	public void setIdRegistrosNaoAutorizados(String idRegistrosNaoAutorizados) {
-		this.idRegistrosNaoAutorizados = idRegistrosNaoAutorizados;
 	}
 
 	public String getPeriodoInicial() {
@@ -293,14 +270,6 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 		this.inscricao = inscricao;
 	}
 
-	public String getSituacaoImoveis() {
-		return situacaoImoveis;
-	}
-
-	public void setSituacaoImoveis(String situacaoImoveis) {
-		this.situacaoImoveis = situacaoImoveis;
-	}
-
 	public String getQuantidadeVisitas() {
 		return quantidadeVisitas;
 	}
@@ -308,21 +277,12 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 	public void setQuantidadeVisitas(String quantidadeVisitas) {
 		this.quantidadeVisitas = quantidadeVisitas;
 	}
-
-	public String getCpfCnpjCadastrado() {
-		return cpfCnpjCadastrado;
+	public String getQtdImoveisLote() {
+		return qtdImoveisLote;
 	}
 
-	public void setCpfCnpjCadastrado(String cpfCnpjCadastrado) {
-		this.cpfCnpjCadastrado = cpfCnpjCadastrado;
-	}
-
-	public String getCpfCnpjTransmitido() {
-		return cpfCnpjTransmitido;
-	}
-
-	public void setCpfCnpjTransmitido(String cpfCnpjTransmitido) {
-		this.cpfCnpjTransmitido = cpfCnpjTransmitido;
+	public void setQtdImoveisLote(String qtdImoveisLote) {
+		this.qtdImoveisLote = qtdImoveisLote;
 	}
 
 	public boolean existeParametroInformado() {
@@ -352,9 +312,6 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 		if (isParametroInformado(getCdRotaFinal()))
 			peloMenosUmParametroInformado = true;
 
-		if (isParametroInformado(getSituacaoImoveis()))
-			peloMenosUmParametroInformado = true;
-
 		if (isParametroInformado(getLote()))
 			peloMenosUmParametroInformado = true;
 		
@@ -372,9 +329,6 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 				+ "nomeLeiturista=" + nomeLeiturista + ","
 				+ "periodoRealizacaoInicial=" + periodoInicial + ","
 				+ "periodoRealizacaoFinal=" + periodoFinal + ","
-				+ "idRegistrosNaoAutorizados=" + idRegistrosNaoAutorizados + ","
-				+ "idRegistrosAutorizados=" + idRegistrosAutorizados + ","
-				+ "exibirCampos=" + situacaoImoveis + ","
 				+ "idLocalidadeInicial=" + idLocalidadeInicial + ","
 				+ "idLocalidadeFinal=" + idLocalidadeFinal + ","
 				+ "nomeLocalidadeInicial=" + nomeLocalidadeInicial + ","
@@ -389,5 +343,9 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 	
 	private boolean isParametroInformado(String parametro) {
 		return parametro != null && !parametro.trim().equals("");
+	}
+	
+	public boolean isIncluirImoveisNovos() {
+		return this.quantidadeVisitas.equals(ConstantesSistema.SIM.toString()) ? true : false;
 	}
 }

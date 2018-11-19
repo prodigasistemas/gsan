@@ -1982,4 +1982,98 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 				.append("inner join fetch colunaAtualizacao.tabelaColuna coluna ")
 				.append("where tabelaAtualizacaoCadastral.codigoImovel = :idImovel ");
 	}
+	
+    @SuppressWarnings("unchecked")
+    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ErroRepositorioException {
+        List<ImovelControleAtualizacaoCadastral> retorno = null;
+        Session session = HibernateUtil.getSession();
+        StringBuilder consulta = new StringBuilder();
+        try {
+            consulta.append(" select controle from ArquivoTextoAtualizacaoCadastral arquivo,  ")
+                    .append(" ImovelAtualizacaoCadastral imovelAtualizacao, ImovelControleAtualizacaoCadastral controle ")  
+                    .append(" inner join arquivo.leiturista leiturista ")
+                    .append(" inner join controle.situacaoAtualizacaoCadastral situacao ")
+                    .append(" inner join controle.situacaoAtualizacaoCadastral situacao ")
+                    .append(" where arquivo.id = imovelAtualizacao.idArquivoTexto ")
+                    .append(" and controle.imovel.id = imovelAtualizacao.idImovel ")
+                    .append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
+                    .append(" and imovelAtualizacao.idLocalidade = :idLocalidade ")
+                    .append(" and controle.dataPreAprovacao between '" + dataInicio + "' and '" + dataFim + "'")
+                    .append(" and controle.lote is null ");
+            
+            if (idLeiturista != null && idLeiturista.intValue() > 0) {
+                consulta.append(" and leiturista.id = " + idLeiturista);
+            }
+            retorno = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consulta.toString())
+                                .setInteger("emFiscalizacao",SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)
+                                .setInteger("preAprovado",SituacaoAtualizacaoCadastral.PRE_APROVADO)
+                                .setInteger("idLocalidade",idLocalidade).list();
+            
+            if (incluirImoveisNovos) {
+                
+                consulta = new StringBuilder();
+                
+                consulta.append(" select controle from ImovelControleAtualizacaoCadastral controle, ImovelRetorno retorno  ")
+                        .append(" inner join controle.situacaoAtualizacaoCadastral situacao ")
+                        .append(" inner join controle.situacaoAtualizacaoCadastral situacao ")
+                        .append(" where controle.imovelRetorno.id = retorno.id ")
+                        .append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
+                        .append(" and retorno.idLocalidade = :idLocalidade ")
+                        .append(" and controle.dataPreAprovacao between '" + dataInicio + "' and '" + dataFim + "'")
+                        .append(" and controle.lote is null ");
+                
+                List<ImovelControleAtualizacaoCadastral> imoveisNovos = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consulta.toString())
+                            .setInteger("emFiscalizacao",SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)
+                            .setInteger("preAprovado",SituacaoAtualizacaoCadastral.PRE_APROVADO)
+                            .setInteger("idLocalidade",idLocalidade).list();
+                
+                if (imoveisNovos != null && !imoveisNovos.isEmpty()) {
+                    retorno.addAll(imoveisNovos);
+                }
+            }
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return retorno;
+    }
+    
+    public boolean isLoteExistente(Integer lote) throws ErroRepositorioException {
+        boolean retorno = false;
+        Session session = HibernateUtil.getSession();
+        StringBuilder consulta = new StringBuilder();
+        try {
+            consulta.append(" select count(*) from ImovelControleAtualizacaoCadastral controle  ")
+                    .append(" where controle.lote = :lote");
+            
+            Integer qtd = (Integer) session.createQuery(consulta.toString()).setInteger("lote",lote).setMaxResults(1).uniqueResult();
+            
+            if (qtd >0)
+                retorno = true;
+            
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao verificar se o lote já existe.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return retorno;
+    }
+    
+    public Integer obterProximoLote() throws ErroRepositorioException {
+        Integer retorno = 0;
+        Session session = HibernateUtil.getSession();
+        StringBuilder consulta = new StringBuilder();
+        try {
+            consulta.append(" select max(controle.lote) from ImovelControleAtualizacaoCadastral controle ");
+            
+            retorno = (Integer) session.createQuery(consulta.toString()).setMaxResults(1).uniqueResult() + 1;
+            
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao verificar se o lote já existe.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return retorno;
+    }
 }
