@@ -2019,12 +2019,14 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
                         .append(" where controle.imovelRetorno.id = retorno.id ")
                         .append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
                         .append(" and retorno.idLocalidade = :idLocalidade ")
+                        .append(" and retorno.tipoOperacao = :inclusao ")
                         .append(" and controle.dataPreAprovacao between '" + dataInicio + "' and '" + dataFim + "'")
                         .append(" and controle.lote is null ");
                 
                 List<ImovelControleAtualizacaoCadastral> imoveisNovos = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consulta.toString())
                             .setInteger("emFiscalizacao",SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)
                             .setInteger("preAprovado",SituacaoAtualizacaoCadastral.PRE_APROVADO)
+                            .setInteger("inclusao", AlteracaoTipo.INCLUSAO)
                             .setInteger("idLocalidade",idLocalidade).list();
                 
                 if (imoveisNovos != null && !imoveisNovos.isEmpty()) {
