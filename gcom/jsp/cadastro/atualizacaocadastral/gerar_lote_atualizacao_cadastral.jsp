@@ -63,7 +63,10 @@
     	} else  if (periodoFinal == null || periodoFinal == '') {
     		alert('Informe o Período Final de Pré Aprovação.');
        		return false;
-    	} else {
+    	} else if (form.idLocalidadeInicial.value == null || form.idLocalidadeInicial.value == '') {
+            alert('Informe a localidade.');
+            return false;
+        } else {
 	    	form.action = "/gsan/filtrarGerarLoteAtualizacaoCadastralAction.do";
 			submeterFormPadrao(form);	
 	    }
