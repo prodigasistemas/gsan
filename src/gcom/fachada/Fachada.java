@@ -40267,4 +40267,12 @@ public class Fachada {
             throw new FachadaException(ex.getMessage(), ex);
         }
 	}
+	
+	public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados) {
+		try {
+			return getControladorAtualizacaoCadastral().isDefinicaoSubcategoriaValida(idImovel, registrosSelecionados);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
 }

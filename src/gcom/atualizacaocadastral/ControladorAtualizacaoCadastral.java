@@ -668,7 +668,6 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return repositorioAtualizacaoCadastral.pesquisarSubCategoriasAtualizacaoCadastral(idImovel);
 	}
 
-
 	public void apagarImagemRetorno(Integer idImovel) throws Exception {
 		repositorioAtualizacaoCadastral.apagarImagemRetornoPorIdImovel(idImovel);
 	}
@@ -688,12 +687,27 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 					atualizarImovelRamoAtividadeAtualizacaoCadastral(imovelRetorno);
 					atualizarImovelQuantidadesOcupantes(imovelRetorno);
 					atualizarImovelProcessado(idImovelRetorno);
+					
+					atualizarImagensImoveisAprovados();
 				}
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao atualizar imovel retorno " + idImovelRetorno, e);
 			logger.error("Erro ao atualizar imovel retorno. " + e.getMessage() , e);
 			throw new ControladorException("Erro ao atualizar imovel retorno  " + idImovelRetorno, e);
+		}
+	}
+	
+	private void atualizarImagensImoveisAprovados() throws ControladorException {
+		
+		try {
+			List<Integer> imoveis = null;
+			
+			for (Integer idImovel: imoveis) {
+					inserirImovelImagens(idImovel);
+			}
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao atualizar imagens de imoveis aprovados.", e);
 		}
 	}
 
@@ -1711,5 +1725,46 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         } catch (ErroRepositorioException e) {
             throw new ControladorException("erro.lote.atualizacaocadastral", e);
         }
+    }
+    
+    public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados) throws ControladorException {
+    	for (int i = 0; i < registrosSelecionados.length; i++) {
+
+			Integer idAtualizacaoCadastral = new Integer(registrosSelecionados[i]);
+			
+			TabelaColunaAtualizacaoCadastral tabelaColuna = getControladorTransacao().pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
+
+			if (tabelaColuna.isTipoColuna(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL.intValue()) 
+					&& !tabelaColuna.getColunaValorPreAprovado().equals(ConstantesSistema.ZERO.toString()) )
+				return true;
+		}
+    	
+    	if (existeSubcategoriaSemAlteracao(new Integer(idImovel)))
+    		return true;
+    	return false;
+    }
+    
+    private boolean existeSubcategoriaSemAlteracao(Integer idImovel) throws ControladorException{
+    	boolean retorno = false;
+    	
+    	TabelaColuna coluna = new TabelaColuna();
+    	
+    	coluna.setTabela(new Tabela(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL));
+    	coluna.setDescricaoColuna(TabelaColuna.NOME_COLUNA_ID_SUBCATEGORIA);
+    	
+    	try {
+    		Collection<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = this.pesquisarSubCategoriasAtualizacaoCadastral(idImovel);
+			
+			for (ImovelSubcategoriaAtualizacaoCadastral original : subcategorias) {
+				System.out.println("."+original.getComplemento()+".");
+				TabelaColunaAtualizacaoCadastral tabelaColuna = this.pesquisarTabelaColunaPorImovel(coluna, idImovel, original.getComplemento());
+				
+				if (tabelaColuna == null)
+					retorno = true;
+			}
+		} catch (ErroRepositorioException e) {
+            throw new ControladorException("erro.verificar.subcategorias.originais", e);
+		}
+    	return retorno;
     }
 }

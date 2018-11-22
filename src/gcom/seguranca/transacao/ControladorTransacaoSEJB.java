@@ -1844,4 +1844,12 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 
 		return alterouSituacaoLigacao;
 	}
+	
+	public TabelaColunaAtualizacaoCadastral pesquisarTabelaColunaAtualizacaoCadastral(Integer idAtualizacaoCadastral) throws ControladorException {
+		try {
+			return this.repositorioTransacao.pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 }

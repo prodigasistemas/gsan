@@ -184,5 +184,11 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 				return this.colunaValorFiscalizado;
 			else
 				return this.colunaValorPreAprovado;
-	}		
+	}
+	
+	public boolean isTipoColuna(Integer tipo) {
+		return tabelaAtualizacaoCadastral != null 
+				&& this.tabelaAtualizacaoCadastral.getTabela() != null
+				&& this.tabelaAtualizacaoCadastral.getTabela().getId().intValue() == tipo.intValue();
+	}
 }

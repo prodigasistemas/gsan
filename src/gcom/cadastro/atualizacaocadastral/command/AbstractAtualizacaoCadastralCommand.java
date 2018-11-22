@@ -203,13 +203,15 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 						tabelaColunaAtualizacaoCadastral.setColunaValorAnterior(tabelaLinhaColunaAlteracao.getConteudoColunaAnterior());
 						tabelaColunaAtualizacaoCadastral.setColunaValorTransmitido(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());
 					} else {
- 						if (arquivoTexto.isArquivoRetornoRevisao())
+ 						if (arquivoTexto.isArquivoRetornoRevisao()) {
  							tabelaColunaAtualizacaoCadastral.setColunaValorAnterior(tabelaLinhaColunaAlteracao.getConteudoColunaAnterior());
 							tabelaColunaAtualizacaoCadastral.setColunaValorRevisado(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());
+ 						}
 						
-						if (arquivoTexto.isArquivoRetornoFiscalizacao())
+						if (arquivoTexto.isArquivoRetornoFiscalizacao()) {
 							tabelaColunaAtualizacaoCadastral.setColunaValorAnterior(tabelaLinhaColunaAlteracao.getConteudoColunaAnterior());
 							tabelaColunaAtualizacaoCadastral.setColunaValorFiscalizado(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());
+						}
 					}
 						
 					tabelaColunaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_NAO_ACEITO);

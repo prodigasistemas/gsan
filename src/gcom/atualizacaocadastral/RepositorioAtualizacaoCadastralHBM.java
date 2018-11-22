@@ -568,6 +568,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			consulta.append("select sub ")
 				.append(" from ImovelSubcategoriaAtualizacaoCadastral sub ")
+				.append(" left join fetch sub.categoria categoria ")
+				.append(" left join fetch sub.subcategoria subcategoria ")
 				.append(" where sub.imovel.id = :idImovel");
 
 			retorno = session.createQuery(consulta.toString())

@@ -65,4 +65,6 @@ public interface ControladorTransacaoLocal extends javax.ejb.EJBLocalObject {
 	public void verificarAtualizarOperacaoPendente(Integer idImovel, Collection colecaoClientes, Integer idUsuario) throws ControladorException;
 
 	public void atualizarClienteRelacaoTipoAtualizacaoCadastral(Integer codigoImovel, Integer codigoCliente) throws ControladorException;
+	
+	public TabelaColunaAtualizacaoCadastral pesquisarTabelaColunaAtualizacaoCadastral(Integer idAtualizacaoCadastral) throws ControladorException;
 }

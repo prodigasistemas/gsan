@@ -84,6 +84,9 @@ public class TabelaColuna extends ObjetoGcom {
 	public static final String NOME_COLUNA_AGUA = "last_id";
 	
 	public static final String NOME_COLUNA_NUMERO_HUDROMETRO = "imac_nnhidrometro";
+	
+	public static final String NOME_COLUNA_ID_SUBCATEGORIA = "isac_qteconomia";
+	
 
 	public TabelaColuna(String coluna, String descricaoColuna,
 			Date ultimaAlteracao, gcom.seguranca.transacao.Tabela tabela,
