@@ -2080,4 +2080,37 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         }
         return retorno;
     }
+    
+    @SuppressWarnings("unchecked")
+	public List<Integer> obterImagensImoveisAprovador() throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+		
+		List <Integer> retorno = null;
+		String consulta = null;
+
+		try {
+
+			consulta = " select imovelControle.imovel.id "
+					+ " from  ImovelControleAtualizacaoCadastral imovelControle"
+					+ " where imovelControle.situacaoAtualizacaoCadastral.id = :SituacaoImovel "
+					+ " and imovelControle.dataGeracao like :DataGeracao "
+					+ " and imovelControle.imovel.id not in ( "
+						+ "	select imagem.idImovel"
+						+ " from ImovelImagem imagem"
+						+ " where imagem.ultimaAlteracao like :DataGeracao)";
+
+			retorno = (List<Integer>) session.createQuery(consulta).
+					setInteger("SituacaoImovel",  SituacaoAtualizacaoCadastral.ATUALIZADO).
+					setString("DataGeracao", "2018%").list();
+			
+			
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao verificar se o lote já existe.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return retorno;
+    }
+
 }

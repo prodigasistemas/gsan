@@ -154,4 +154,6 @@ public interface IRepositorioAtualizacaoCadastral {
     
     public Integer obterProximoLote() throws ErroRepositorioException;
 	
+	public List<Integer> obterImagensImoveisAprovador() throws ErroRepositorioException;
+
 }

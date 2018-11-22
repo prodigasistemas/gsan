@@ -701,12 +701,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	private void atualizarImagensImoveisAprovados() throws ControladorException {
 		
 		try {
-			List<Integer> imoveis = null;
+			List<Integer> imoveis = repositorioAtualizacaoCadastral.obterImagensImoveisAprovador();
 			
 			for (Integer idImovel: imoveis) {
 					inserirImovelImagens(idImovel);
 			}
 		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao atualizar imagens de imoveis aprovados.", e);
+		} catch (ErroRepositorioException e) {
 			throw new ControladorException("Erro ao atualizar imagens de imoveis aprovados.", e);
 		}
 	}
