@@ -22,6 +22,7 @@
 		<property name="lote" 					type="java.lang.Integer" 	column="icac_lote" 				length="5"/>
 		<property name="dataGeracaoLote" 		type="java.sql.Timestamp" 	column="icac_tmgeracaolote" 	length="8"/>
 		<property name="dataAprovacaoLote" 		type="java.sql.Timestamp" 	column="icac_tmaprovacaolote" 	length="8"/>
+		<property name="dataReprovacaoLote" 	type="java.sql.Timestamp" 	column="icac_tmreprovacaolote" 	length="8"/>
 		
 		<many-to-one name="situacaoAtualizacaoCadastral" class="gcom.cadastro.SituacaoAtualizacaoCadastral" not-null="true">
 			<column name="siac_id"/>

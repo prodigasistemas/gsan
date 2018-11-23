@@ -156,4 +156,7 @@ public interface IRepositorioAtualizacaoCadastral {
 	
 	public List<Integer> obterImagensImoveisAprovador() throws ErroRepositorioException;
 
+	public void reprovarImoveis(List<Integer> imoveisParaReprovar) throws ErroRepositorioException;
+
+
 }

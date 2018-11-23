@@ -40275,4 +40275,12 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex);
 		}
 	}
+	
+	public Integer reprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) {
+		try {
+			return this.getControladorAtualizacaoCadastral().reprovarImoveisEmLote(usuarioLogado, listaImoveis);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
 }

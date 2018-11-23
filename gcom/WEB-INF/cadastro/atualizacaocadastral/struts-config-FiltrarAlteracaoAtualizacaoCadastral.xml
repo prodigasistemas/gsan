@@ -98,6 +98,14 @@
 				path="/jsp/cadastro/atualizacaocadastral/exibir_imagem_retorno.jsp" />
 		</action>
 		
+		 <action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ReprovarLoteImoveisAction"
+			path="/reprovarImoveisLoteAction" >
+			
+			<forward name="reprovarImoveisLoteAction"
+					path="/reprovarImoveiLoteAction.do" />		
+		</action>
+		
 	<!--FIM FILTRAR ATUALIZACAO CADASTRAL-->
 
 </action-mappings>
