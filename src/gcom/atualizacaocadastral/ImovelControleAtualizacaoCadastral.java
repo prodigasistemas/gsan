@@ -27,6 +27,7 @@ public class ImovelControleAtualizacaoCadastral {
 	private Integer lote;
 	private Date dataGeracaoLote;
 	private Date dataAprovacaoLote;
+	private Date dataReprovacaoLote;
 
 	public ImovelControleAtualizacaoCadastral() {
 		super();
@@ -175,5 +176,13 @@ public class ImovelControleAtualizacaoCadastral {
 
 	public void setDataPreAprovacao(Date dataPreAprovacao) {
 		this.dataPreAprovacao = dataPreAprovacao;
+	}
+	
+	public Date getDataReprovacaoLote() {
+		return dataReprovacaoLote;
+	}
+
+	public void setDataReprovacaoLote(Date dataReprovacaoLote) {
+		this.dataReprovacaoLote = dataReprovacaoLote;
 	}
 }

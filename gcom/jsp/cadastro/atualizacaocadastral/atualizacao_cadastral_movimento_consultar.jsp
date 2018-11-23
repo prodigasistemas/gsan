@@ -71,6 +71,12 @@
 	  	form.action = "/gsan/aprovarImoveisEmLoteAction.do";
 	  	form.submit();
 	}
+	
+	function reprovarLote(){
+	  	var form = document.forms[0];
+	  	form.action = "/gsan/reprovarImoveisLoteAction.do";
+	  	form.submit();
+	}
  
 </script>
 </head>
@@ -347,6 +353,12 @@
 				<logic:equal name="loteInformado" value="true" scope="session">
 					<td align="right" width="50%">					
 						<input type="button" name="Button" class="bottonRightCol" value="Aprovar o Lote" onclick="aprovarSelecao();">	
+					</td>
+				</logic:equal>				
+				
+				<logic:equal name="loteInformado" value="true" scope="session">
+					<td align="center" width="50%">					
+						<input type="button" name="Button" class="bottonRightCol" value="Reprovar Lote" onclick="reprovarLote();">	
 					</td>
 				</logic:equal>
 				

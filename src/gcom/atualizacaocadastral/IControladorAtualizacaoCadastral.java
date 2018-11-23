@@ -107,4 +107,7 @@ public interface IControladorAtualizacaoCadastral {
     public Integer obterProximoLote() throws ControladorException;
     
     public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados) throws ControladorException;
+    
+ 	public void reprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ControladorException;
+
 }

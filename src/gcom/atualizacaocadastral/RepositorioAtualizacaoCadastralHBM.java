@@ -514,6 +514,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			String consulta = "select imovelControle "
 							+ " from ImovelControleAtualizacaoCadastral imovelControle "
 							+ " inner join imovelControle.imovelRetorno imovelRetorno "
+							
 							+ " where imovelRetorno.id in (:listaImoveisRetorno)";
 
 			imovelControle = (ImovelControleAtualizacaoCadastral)session.createQuery(consulta)
@@ -535,6 +536,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			String consulta = "select imovelControle "
 							+ " from ImovelControleAtualizacaoCadastral imovelControle "
 							+ " left join imovelControle.imovelRetorno imovelRetorno "
+							+ " left join fetch imovelControle.cadastroOcorrencia cadastroOcorrencia "
 							+ " where imovelControle.imovel.id = :idImovelControle";
 			
 			imovelControle = (ImovelControleAtualizacaoCadastral)session.createQuery(consulta)
@@ -2113,4 +2115,29 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         return retorno;
     }
 
+	public void reprovarImoveis(List<Integer> imoveisParaReprovar) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+
+		try {
+
+			Date dataReprovacaoLote = new Date();
+
+			consulta = "update ImovelControleAtualizacaoCadastral controle "
+					+ " set controle.situacaoAtualizacaoCadastral.id = :situacaoAtual,"
+					+ " controle.dataReprovacaoLote = :dataReprovacaoLote "
+					+ " where controle.imovelRetorno.id in (:imoveisParaReprovar) ";
+
+			session.createQuery(consulta)
+			.setInteger("situacaoAtual", SituacaoAtualizacaoCadastral.EM_CAMPO)
+			.setDate("dataReprovacaoLote", dataReprovacaoLote)
+			.setParameterList("imoveisParaReprovar", imoveisParaReprovar)   
+			.executeUpdate();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao reprovar imoveis.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 }
