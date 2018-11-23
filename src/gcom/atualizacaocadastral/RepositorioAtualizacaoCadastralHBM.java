@@ -537,7 +537,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 							+ " from ImovelControleAtualizacaoCadastral imovelControle "
 							+ " left join imovelControle.imovelRetorno imovelRetorno "
 							+ " left join fetch imovelControle.cadastroOcorrencia cadastroOcorrencia "
-							+ " where imovelControle.imovel.id = :idImovelControle";
+							+ " where imovelControle.id = :idImovelControle";
 			
 			imovelControle = (ImovelControleAtualizacaoCadastral)session.createQuery(consulta)
 								.setInteger("idImovelControle", idImovelControle).setMaxResults(1).uniqueResult();
@@ -1957,6 +1957,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         return retorno;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Integer> obterIdsColunasParaAtualizarDadosPreaprovados(Integer idImovel) throws ErroRepositorioException {
 		List<Integer> retorno = null;
         Session session = HibernateUtil.getSession();
@@ -2116,23 +2117,23 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
     }
 
 	public void reprovarImoveis(List<Integer> imoveisParaReprovar) throws ErroRepositorioException {
+		
 		Session session = HibernateUtil.getSession();
-		String consulta = "";
+		StringBuilder consulta = new StringBuilder();
 
 		try {
 
-			Date dataReprovacaoLote = new Date();
+			consulta.append("update ImovelControleAtualizacaoCadastral controle ")
+						.append(" set controle.situacaoAtualizacaoCadastral.id = :situacaoAtual,")
+						.append(" controle.dataReprovacaoLote = :dataReprovacaoLote ")
+						.append(" where controle.id in (:imoveisParaReprovar) ");
 
-			consulta = "update ImovelControleAtualizacaoCadastral controle "
-					+ " set controle.situacaoAtualizacaoCadastral.id = :situacaoAtual,"
-					+ " controle.dataReprovacaoLote = :dataReprovacaoLote "
-					+ " where controle.imovelRetorno.id in (:imoveisParaReprovar) ";
 
-			session.createQuery(consulta)
-			.setInteger("situacaoAtual", SituacaoAtualizacaoCadastral.EM_CAMPO)
-			.setDate("dataReprovacaoLote", dataReprovacaoLote)
-			.setParameterList("imoveisParaReprovar", imoveisParaReprovar)   
-			.executeUpdate();
+			session.createQuery(consulta.toString())
+						.setInteger("situacaoAtual", SituacaoAtualizacaoCadastral.EM_CAMPO)
+						.setDate("dataReprovacaoLote", new Date())
+						.setParameterList("imoveisParaReprovar", imoveisParaReprovar)   
+						.executeUpdate();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao reprovar imoveis.");

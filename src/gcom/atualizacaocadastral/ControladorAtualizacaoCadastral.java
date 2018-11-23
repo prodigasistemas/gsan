@@ -1772,20 +1772,22 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     	return retorno;
     }
     
-    public void reprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ControladorException {
-		List<Integer> imoveisParaReprovar = new ArrayList<Integer>();
+    public Integer reprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ControladorException {
+    	
+    	List<Integer> imoveisParaReprovar = new ArrayList<Integer>();
 		
 		for (ConsultarMovimentoAtualizacaoCadastralHelper helper : listaImoveis){
 			
 			ImovelControleAtualizacaoCadastral controle = obterImovelControle(helper.getControle().getId());
 			
 			Integer quantidadeVisitas = this.obterQuantidadeDeVisitasPorImovelControle(controle);
-				if (quantidadeVisitas < Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO && controle.getCadastroOcorrencia().getIndicadorValidacao() == ConstantesSistema.NAO)
-					imoveisParaReprovar.add(controle.getId());					
+			if (quantidadeVisitas < Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO && controle.getCadastroOcorrencia().permiteReprovarLote())
+				imoveisParaReprovar.add(controle.getId());					
 		}
 		if (!imoveisParaReprovar.isEmpty()) 
 			this.reprovarImoveis(imoveisParaReprovar, usuarioLogado);
-
+			
+		return imoveisParaReprovar.size();
 	}
 	
 	private void reprovarImoveis(List<Integer> imoveisParaReprovar, Usuario usuarioLogado) throws ControladorException {

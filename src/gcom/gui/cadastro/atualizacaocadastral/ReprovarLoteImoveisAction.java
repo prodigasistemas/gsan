@@ -23,15 +23,17 @@ public class ReprovarLoteImoveisAction extends GcomAction {
 		HttpSession sessao = request.getSession(false);
 		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
 		
+		Integer reprovados  = new Integer(0);
+		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> imoveis = (Collection<ConsultarMovimentoAtualizacaoCadastralHelper>) sessao.getAttribute("colecaoConsultarMovimentoAtualizacaoCadastralHelper");
 
 		try {
-			getFachada().reprovarImoveisEmLote(usuario, imoveis);
+			reprovados = getFachada().reprovarImoveisEmLote(usuario, imoveis);
 		} catch (FachadaException e) {
 			throw new ActionServletException("erro.aprovacao.lote", "exibirFiltrarAlteracaoAtualizacaoCadastralAction.do", null, new String[] {});
 		}
 
-		montarPaginaSucesso(request, imoveis.size() + " imveis foram Reprovados com sucesso.", 
+		montarPaginaSucesso(request, reprovados + " imveis do lote foram reprovados com sucesso.", 
 				"Consultar Movimento", 
 				"exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?menu=sim");
 		

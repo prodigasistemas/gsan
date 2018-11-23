@@ -2,6 +2,7 @@ package gcom.cadastro.imovel;
 
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.util.ConstantesSistema;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.tabelaauxiliar.FiltroTabelaAuxiliar;
@@ -135,4 +136,9 @@ public class CadastroOcorrencia extends ObjetoTransacao {
 	public void initializeLazy() {
 		retornaCamposChavePrimaria();
 	}
+	
+	public boolean permiteReprovarLote() {
+		return indicadorValidacao.equals(ConstantesSistema.NAO);
+	}
+
 }

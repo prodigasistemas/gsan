@@ -40276,9 +40276,9 @@ public class Fachada {
 		}
 	}
 	
-	public void reprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) {
+	public Integer reprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) {
 		try {
-			this.getControladorAtualizacaoCadastral().reprovarImoveisEmLote(usuarioLogado, listaImoveis);
+			return this.getControladorAtualizacaoCadastral().reprovarImoveisEmLote(usuarioLogado, listaImoveis);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
