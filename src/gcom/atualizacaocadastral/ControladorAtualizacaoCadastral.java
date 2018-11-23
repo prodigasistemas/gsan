@@ -113,6 +113,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 			usuario = getControladorBatch().obterUsuarioQueDisparouProcesso(idFuncionalidade);
 
+			atualizarImagensImoveisAprovados();
+			
 			processarClientes();
 			processarImoveis();
 
@@ -353,6 +355,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.LOCALIDADE);
 			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.SETOR_COMERCIAL);
 			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.QUADRA);
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.QUADRA_ROTA);
+			
 			imovel = (Imovel) Util.retonarObjetoDeColecao(getControladorUtil().pesquisar(filtro, Imovel.class.getName()));
 		} catch (ControladorException e) {
 			e.printStackTrace();
@@ -360,7 +364,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 		String pasta = Util.completaStringComZeroAEsquerda(imovel.getLocalidade().getId()+"", 3) + "_"
 				+ Util.completaStringComZeroAEsquerda(imovel.getSetorComercial().getCodigo()+"", 3) + "_"
-				+ Util.completaStringComZeroAEsquerda(imovel.getQuadra().getNumeroQuadra()+"", 4);
+				+ Util.completaStringComZeroAEsquerda(imovel.getQuadra().getRota().getCodigo()+"", 2);
 
 		String caminhoJboss = System.getProperty("jboss.server.home.dir");
 
@@ -687,8 +691,6 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 					atualizarImovelRamoAtividadeAtualizacaoCadastral(imovelRetorno);
 					atualizarImovelQuantidadesOcupantes(imovelRetorno);
 					atualizarImovelProcessado(idImovelRetorno);
-					
-					atualizarImagensImoveisAprovados();
 				}
 			}
 		} catch (Exception e) {
