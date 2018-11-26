@@ -38,7 +38,7 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 					if (!registrosSelecionados.equals("")) {
 						String[] listaIdRegistrosSim = registrosSelecionados.split(",");
 
-						if (isDefinicaoSubcategoriaValida(form.getIdImovel(), listaIdRegistrosSim)) {
+						if (isDefinicaoSubcategoriaValida(controle, form.getIdImovel(), listaIdRegistrosSim)) {
 							if (listaIdRegistrosSim != null && !listaIdRegistrosSim.equals("")) {
 								getFachada().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer.valueOf(form.getIdImovel()), listaIdRegistrosSim, ConstantesSistema.SIM,
 										(Usuario) request.getSession(false).getAttribute("usuarioLogado"), obterCampoParaAtualizar(controle));
@@ -48,6 +48,8 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 						} else {
 							throw new ActionServletException("erro.imovel.sem.subcategorias", "");
 						}
+					} else if (controle.isEmFiscalizacao()) {
+						this.atualizarSituacaoImovel(controle);
 					}
 
 					request.setAttribute("reload", true);
@@ -100,7 +102,7 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		return indicadorValidacao == ConstantesSistema.SIM.shortValue();
 	}
 	
-	private boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados) {
+	private boolean isDefinicaoSubcategoriaValida(ImovelControleAtualizacaoCadastral controle, String idImovel,String[] registrosSelecionados) {
 		return getFachada().isDefinicaoSubcategoriaValida(idImovel, registrosSelecionados);
 	}
 }

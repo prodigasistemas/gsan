@@ -1304,6 +1304,37 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         
         return retorno;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<TabelaColunaAtualizacaoCadastral> obterTabelaColunas(TabelaColuna coluna, Integer idImovel) throws ErroRepositorioException {
+		List<TabelaColunaAtualizacaoCadastral> retorno = null;
+        Session session = HibernateUtil.getSession();
+        
+        StringBuilder sql = new StringBuilder();
+        try {
+        	sql.append("select colunaAtualizacao from TabelaColunaAtualizacaoCadastral colunaAtualizacao ")
+               .append("inner join fetch colunaAtualizacao.tabelaAtualizacaoCadastral tabelaAtualizacaoCadastral ")
+               .append("inner join tabelaAtualizacaoCadastral.tabela tabela ")
+               .append("inner join colunaAtualizacao.tabelaColuna coluna ")
+               .append("where tabela.id = :idTabela ")
+               .append("and coluna.coluna like :nomeColuna ")
+               .append("and tabelaAtualizacaoCadastral.codigoImovel = :idImovel ");
+        	
+            Query query = session.createQuery(sql.toString())
+            		.setInteger("idTabela", coluna.getTabela().getId())
+            		.setString("nomeColuna", coluna.getDescricaoColuna())
+            		.setInteger("idImovel", idImovel);
+            
+            retorno = (List<TabelaColunaAtualizacaoCadastral>) query.list();
+            
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        
+        return retorno;
+	}
 
 	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) throws ErroRepositorioException {
         Session session = HibernateUtil.getSession();

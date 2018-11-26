@@ -158,5 +158,5 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public void reprovarImoveis(List<Integer> imoveisParaReprovar) throws ErroRepositorioException;
 
-
+	public List<TabelaColunaAtualizacaoCadastral> obterTabelaColunas(TabelaColuna coluna, Integer idImovel) throws ErroRepositorioException;
 }
