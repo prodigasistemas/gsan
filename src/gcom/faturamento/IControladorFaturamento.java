@@ -1265,4 +1265,6 @@ public interface IControladorFaturamento {
 	public Short obterDiaVencimentoConta(Integer idImovel) throws ControladorException;
 	
 	public Object[] pesquisarParmsContaMensagem(EmitirContaHelper helper, Integer idGrupo, Integer idGerencia, Integer idLocalidade, Integer idSetor) throws ControladorException;
+	
+	public boolean isAlgumaContaEmProcessoJudicial (Integer idImovel, Date data);
 }

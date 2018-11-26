@@ -15790,4 +15790,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
+	
+	public boolean isAlgumaContaEmProcessoJudicial (Integer idImovel, Date data) {
+		return false;
+	}
 }

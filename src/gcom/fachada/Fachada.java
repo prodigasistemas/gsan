@@ -40271,8 +40271,8 @@ public class Fachada {
 	public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados) {
 		try {
 			return getControladorAtualizacaoCadastral().isDefinicaoSubcategoriaValida(idImovel, registrosSelecionados);
-		} catch (Exception ex) {
-			throw new FachadaException(ex.getMessage(), ex);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 	
@@ -40281,6 +40281,22 @@ public class Fachada {
 			return this.getControladorAtualizacaoCadastral().reprovarImoveisEmLote(usuarioLogado, listaImoveis);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public boolean isImovelEmCobrancaJudicial(Integer idImovel) {
+		try {
+			return this.getControladorCobranca().isImovelEmCobrancaJudicial(idImovel);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public boolean isContaImovelEmCobrancaJudicial(Integer idImovel, Date data) {
+		try {
+			return this.getControladorFaturamento().isAlgumaContaEmProcessoJudicial(idImovel, data);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
 		}
 	}
 }

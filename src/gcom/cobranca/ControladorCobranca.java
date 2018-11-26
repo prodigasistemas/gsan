@@ -62069,4 +62069,60 @@ public class ControladorCobranca extends ControladorComum {
 		
 		return aviso;
 	}
+	
+public boolean isImovelEmCobrancaJudicial(Integer idImovel) throws ControladorException {
+		
+		CobrancaSituacaoHistorico historico = existeCobrancaSituacaoHistoricoImovel(idImovel, CobrancaSituacaoTipo.PARALISAR_ACOES_DE_COBRANÇA, CobrancaSituacaoMotivo.EM_PROCESSO_JUDICIAL);
+		
+		if (historico != null)
+			return true;
+		else {
+			ImovelCobrancaSituacao situacao = existeCobrancaSituacaoImovel(idImovel, CobrancaSituacao.EM_COBRANCA_JUDICIAL);
+			
+			if (situacao != null)
+				return true;
+		}
+		
+		return false;
+			
+	}
+	
+	private CobrancaSituacaoHistorico existeCobrancaSituacaoHistoricoImovel(Integer idImovel, Integer idCobrancaSituacaoTipo, Integer idMotivo) throws ControladorException {
+		try {
+			Filtro filtro = new FiltroCobrancaSituacaoHistorico();
+			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.IMOVEL_ID, idImovel));
+			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.COBRANCA_TIPO_ID, idCobrancaSituacaoTipo));
+			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.COBRANCA_SITUACAO_MOTIVO_ID, idMotivo));
+			filtro.adicionarParametro(new ParametroNulo(FiltroCobrancaSituacaoHistorico.ANO_MES_COBRANCA_RETIRADA));
+			
+			Collection<CobrancaSituacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, CobrancaSituacaoHistorico.class.getName());
+
+			if (colecao != null && !colecao.isEmpty())
+				return (CobrancaSituacaoHistorico)Util.retonarObjetoDeColecao(colecao);
+			else 
+				return null;
+			
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.pesquisar.imovel.cobranca.judicial", e);
+		}
+	}
+	
+	private ImovelCobrancaSituacao existeCobrancaSituacaoImovel(Integer idImovel, Integer idCobrancaSituacao) throws ControladorException {
+		try {
+			Filtro filtro = new FiltroImovelCobrancaSituacao();
+			filtro.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID, idImovel));
+			filtro.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.ID_COBRANCA_SITUACAO, idCobrancaSituacao));
+			filtro.adicionarParametro(new ParametroNulo(FiltroImovelCobrancaSituacao.DATA_RETIRADA_COBRANCA));
+			
+			Collection<ImovelCobrancaSituacao> colecao = getControladorUtil().pesquisar(filtro, ImovelCobrancaSituacao.class.getName());
+		
+			if (colecao != null && !colecao.isEmpty())
+				return (ImovelCobrancaSituacao)Util.retonarObjetoDeColecao(colecao);
+			else 
+				return null;
+			
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.pesquisar.imovel.cobranca.judicial", e);
+		}
+	}
 }

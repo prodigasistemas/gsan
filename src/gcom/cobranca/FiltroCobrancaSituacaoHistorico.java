@@ -26,4 +26,6 @@ public class FiltroCobrancaSituacaoHistorico extends Filtro {
 	public final static String ANO_MES_COBRANCA_RETIRADA = "anoMesCobrancaRetirada";
 	
 	public final static String COBRANCA_SITUACAO_MOTIVO = "cobrancaSituacaoMotivo";
+	
+	public final static String COBRANCA_SITUACAO_MOTIVO_ID = "cobrancaSituacaoMotivo.id";
 }

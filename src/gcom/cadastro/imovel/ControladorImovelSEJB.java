@@ -21,7 +21,6 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
-import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
@@ -73,8 +72,6 @@ import gcom.cadastro.tarifasocial.FiltroTarifaSocialDadoEconomia;
 import gcom.cadastro.tarifasocial.TarifaSocialCarta;
 import gcom.cadastro.tarifasocial.TarifaSocialComandoCarta;
 import gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia;
-import gcom.cadastro.unidade.FiltroUnidadeOrganizacional;
-import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.cobranca.CobrancaDocumentoItem;
 import gcom.cobranca.CobrancaSituacao;
 import gcom.cobranca.CobrancaSituacaoHistorico;
@@ -16233,5 +16230,5 @@ public class ControladorImovelSEJB extends ControladorComum {
 		}
 
 	}
-	
+
 }
