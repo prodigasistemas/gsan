@@ -16123,7 +16123,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 	
 	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) throws ControladorException {
 		ContratoAdesaoimovelDTO dto = null;
-		ContratoAdesao contratoDemanda = obterContratoDemandaAtivo(idImovel);
+		ContratoAdesao contratoDemanda = obterContratoAtivo(idImovel, ContratoTipo.ADESAO);
 		Cliente cliente = getControladorImovel().consultarClienteUsuarioImovel(new Imovel(idImovel));
 		if (contratoDemanda != null) {
 			
@@ -16141,13 +16141,13 @@ public class ControladorImovelSEJB extends ControladorComum {
 		return dto;
 	}
 	
-	private ContratoAdesao obterContratoDemandaAtivo(Integer idImovel) throws ControladorException {
+	private ContratoAdesao obterContratoAtivo(Integer idImovel, Integer tipoContrato) throws ControladorException {
 		FiltroContratoAdesao filtro = new FiltroContratoAdesao();
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoAdesao.CONTRATO);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoAdesao.CLIENTE);
 
 		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.IMOVEL, idImovel));
-		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.CONTRATO_TIPO, ContratoTipo.DEMANDA));
+		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.CONTRATO_TIPO, tipoContrato));
 		filtro.adicionarParametro(new ParametroNulo(FiltroContratoAdesao.DATACONTRATOENCERRAMENTO));
 		Collection colecaoContratoDemanda = getControladorUtil().pesquisar(filtro, ContratoAdesao.class.getName());
 		
@@ -16167,7 +16167,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 	}
 	
 	private void finalizarContatoDemanda(Integer idImovel, Cliente cliente) throws ControladorException {
-		ContratoAdesao contratoDemanda = this.obterContratoDemandaAtivo(idImovel);
+		ContratoAdesao contratoDemanda = this.obterContratoAtivo(idImovel, ContratoTipo.DEMANDA);
 		
 		Contrato contrato = contratoDemanda.getContrato();
 		
