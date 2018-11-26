@@ -2,6 +2,7 @@ package gcom.cadastro.imovel;
 
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 
 import java.util.Date;
@@ -51,5 +52,9 @@ public class ContratoAdesao extends ObjetoTransacao {
 		String[] retorno = new String[1];
 		retorno[0] = "id";
 		return retorno;
+	}
+	
+	public String gerarNumeroContrato() {
+		return clienteImovel.getCliente().getId() + Util.formatarDataAAAAMMDD(new Date());
 	}
 }

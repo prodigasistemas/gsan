@@ -16180,23 +16180,22 @@ public class ControladorImovelSEJB extends ControladorComum {
 	
 	private void gerarContatoAdesao(Integer idImovel, Cliente cliente) throws ControladorException {
 		Contrato contrato = new Contrato();
+		ContratoAdesao contratoAdesao = new ContratoAdesao();
+		
+		contratoAdesao.setUltimaAlteracao(new Date());
+		contratoAdesao.setClienteImovel(obterClienteImovel(idImovel, cliente.getId(), ClienteRelacaoTipo.USUARIO.intValue()));
 		
 		contrato.setImovel(new Imovel(idImovel));
 		contrato.setContratoTipo(new ContratoTipo(ContratoTipo.ADESAO));
 		contrato.setDataContratoInicio(new Date());
-		contrato.setNumeroContrato(contrato.gerarNumeroContrato(ContratoTipo.ADESAO));
+		contrato.setNumeroContrato(contratoAdesao.gerarNumeroContrato());
 		contrato.setUltimaAlteracao(new Date());
 		
 		Integer idContrato = (Integer) getControladorUtil().inserir(contrato);
 		contrato.setId(idContrato);
 		
-		ContratoAdesao contratoDemanda = new ContratoAdesao();
-		
-		contratoDemanda.setUltimaAlteracao(new Date());
-		contratoDemanda.setClienteImovel(obterClienteImovel(idImovel, cliente.getId(), ClienteRelacaoTipo.USUARIO.intValue()));
-		contratoDemanda.setContrato(contrato);
-		
-		getControladorUtil().inserir(contratoDemanda);
+		contratoAdesao.setContrato(contrato);
+		getControladorUtil().inserir(contratoAdesao);
 		
 	}
 	

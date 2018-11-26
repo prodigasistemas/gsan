@@ -137,7 +137,13 @@ public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 
 		// caso a data de inicio da relação seja anterior que a data atual
 		if (dataInicioRelacao.after(dataCorrente)) {
-			throw new ActionServletException("atencao.data_inicio_relacao_cliente_imovel");
+			
+//			if (fachada.verificarPermissaoEspecialAtiva(PermissaoEspecial.MUDANCA_TITULARIDADE_RETROATIVA, usuarioLogado)) {
+//				
+//			} else {
+//				throw new ActionServletException("atencao.data_inicio_relacao_cliente_imovel");
+//			}
+				
 		}
 
 		if (dataInicioRelacao == null) {

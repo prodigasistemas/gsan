@@ -1763,6 +1763,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     	
     	if (existeSubcategoriaPreAprovada(new Integer(idImovel)))
     		return true;
+    	else if (existeSubcategoriaSemAlteracao(new Integer(idImovel)))
+    		return true;
+    	
     	return false;
     }
 	
