@@ -16129,13 +16129,13 @@ public class ControladorImovelSEJB extends ControladorComum {
 			
 			if (contratoDemanda.getClienteImovel().getCliente().getId().intValue() != cliente.getId().intValue()) {
 				finalizarContatoDemanda(idImovel, cliente);
-				gerarContatoDemanda(idImovel, cliente);
+				gerarContatoAdesao(idImovel, cliente);
 				cliente = cliente;
 			}  else {
 				cliente = contratoDemanda.getClienteImovel().getCliente();
 			}
 		} else {
-			gerarContatoDemanda(idImovel, cliente);
+			gerarContatoAdesao(idImovel, cliente);
 		}
 		dto = obterContratoAdesaoImovelDTO(idImovel, cliente);
 		return dto;
@@ -16162,7 +16162,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 		String data = Util.formatarDataComTracoAAAAMMDD(new Date());
 		String nomeRelatorio = "contrato_adesao_"+ idImovel + data + ".pdf";
 		
-		String endereco = getControladorCliente().obterEnderecoCorrespondencia(cliente.getId());
+		String endereco = getControladorEndereco().obterEnderecoCorrespondenciaImovel(idImovel);
 		return new ContratoAdesaoimovelDTO(nomeRelatorio, cliente.getNome(), idImovel.toString(), "Belem", endereco, Util.formatarDataComBarraDDMMAAAA(new Date()));
 	}
 	
@@ -16178,13 +16178,13 @@ public class ControladorImovelSEJB extends ControladorComum {
 		getControladorUtil().atualizar(contrato);
 	}
 	
-	private void gerarContatoDemanda(Integer idImovel, Cliente cliente) throws ControladorException {
+	private void gerarContatoAdesao(Integer idImovel, Cliente cliente) throws ControladorException {
 		Contrato contrato = new Contrato();
 		
 		contrato.setImovel(new Imovel(idImovel));
-		contrato.setContratoTipo(new ContratoTipo(ContratoTipo.DEMANDA));
+		contrato.setContratoTipo(new ContratoTipo(ContratoTipo.ADESAO));
 		contrato.setDataContratoInicio(new Date());
-		contrato.setNumeroContrato(contrato.gerarNumeroContrato(ContratoTipo.DEMANDA));
+		contrato.setNumeroContrato(contrato.gerarNumeroContrato(ContratoTipo.ADESAO));
 		contrato.setUltimaAlteracao(new Date());
 		
 		Integer idContrato = (Integer) getControladorUtil().inserir(contrato);

@@ -6052,5 +6052,18 @@ public class ControladorEnderecoSEJB implements SessionBean {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	public String obterEnderecoCorrespondenciaImovel(Integer idImovel) throws ControladorException {
+		StringBuilder enderecoFormatado = new StringBuilder();
+		String[] endereco = this.pesquisarEnderecoImovelDividido(idImovel);
+		
+		enderecoFormatado.append(endereco[0]).append(", ") 						// 0 - Endereço (Tipo + Titulo + Logradouro)
+						 .append("n ").append(endereco[5]).append(", ") 		// 5 - numero
+						 .append("Bairro ").append(endereco[3]).append(", ")	// 3 - bairro
+						 .append("cidade ").append(endereco[1]) 				// 1 - municipio
+						 .append("-").append(endereco[2]).append(", ")			// 2 - unidade federeção
+						 .append("CEP ").append(endereco[4]).append(".");		// 4 - CEP
+		return enderecoFormatado.toString();
+	}
 
 }
