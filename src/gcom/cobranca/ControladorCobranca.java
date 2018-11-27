@@ -62070,7 +62070,7 @@ public class ControladorCobranca extends ControladorComum {
 		return aviso;
 	}
 	
-public boolean isImovelEmCobrancaJudicial(Integer idImovel) throws ControladorException {
+	public boolean isImovelEmCobrancaJudicial(Integer idImovel) throws ControladorException {
 		
 		CobrancaSituacaoHistorico historico = existeCobrancaSituacaoHistoricoImovel(idImovel, CobrancaSituacaoTipo.PARALISAR_ACOES_DE_COBRANÇA, CobrancaSituacaoMotivo.EM_PROCESSO_JUDICIAL);
 		
@@ -62082,9 +62082,7 @@ public boolean isImovelEmCobrancaJudicial(Integer idImovel) throws ControladorEx
 			if (situacao != null)
 				return true;
 		}
-		
 		return false;
-			
 	}
 	
 	private CobrancaSituacaoHistorico existeCobrancaSituacaoHistoricoImovel(Integer idImovel, Integer idCobrancaSituacaoTipo, Integer idMotivo) throws ControladorException {

@@ -16230,5 +16230,5 @@ public class ControladorImovelSEJB extends ControladorComum {
 		}
 
 	}
-
+	
 }

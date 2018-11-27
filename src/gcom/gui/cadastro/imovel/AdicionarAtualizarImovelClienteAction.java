@@ -136,8 +136,19 @@ public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 		dataCorrente = data.getTime();
 
 		// caso a data de inicio da relação seja anterior que a data atual
-		if (dataInicioRelacao.after(dataCorrente)) {
-			throw new ActionServletException("atencao.data_inicio_relacao_cliente_imovel");
+		if (dataInicioRelacao.before(dataCorrente)) {
+			
+			if (fachada.verificarPermissaoEspecialAtiva(PermissaoEspecial.MUDANCA_TITULARIDADE_RETROATIVA, usuarioLogado)) {
+				System.out.println("PERMISSÃO ESPECIAL OK");
+				System.out.println("COBRANCA JUDICIAL: " + Fachada.getInstancia().isImovelEmCobrancaJudicial(imovel.getId()));
+				
+				if (Fachada.getInstancia().isImovelEmCobrancaJudicial(imovel.getId())) {
+					throw new ActionServletException("IMOVEL EM COBRANCA JUDICIAL.");
+				}
+			} else {
+				throw new ActionServletException("atencao.data_inicio_relacao_cliente_imovel");
+			}
+			
 		}
 
 		if (dataInicioRelacao == null) {
