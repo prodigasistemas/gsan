@@ -1,5 +1,6 @@
 package gcom.gui.cadastro.imovel;
 
+import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
@@ -143,7 +144,9 @@ public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 				System.out.println("COBRANCA JUDICIAL: " + Fachada.getInstancia().isImovelEmCobrancaJudicial(imovel.getId()));
 				
 				if (Fachada.getInstancia().isImovelEmCobrancaJudicial(imovel.getId())) {
-					throw new ActionServletException("IMOVEL EM COBRANCA JUDICIAL.");
+					throw new ActionServletException("mudanca.titularidade.retroativa.imovel.cobranca.judicial");
+				} else if (!Fachada.getInstancia().existeRAAbertaPorSoliticacao(imovel.getId(),SolicitacaoTipoEspecificacao.MUDANCA_TITULARIDADE_CONTA)) {
+					throw new ActionServletException("mudanca.titularidade.retroativa.imovel.sem_ra");
 				}
 			} else {
 				throw new ActionServletException("atencao.data_inicio_relacao_cliente_imovel");

@@ -40299,4 +40299,12 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e);
 		}
 	}
+	
+	public boolean existeRAAbertaPorSoliticacao(Integer idImovel, Integer idSolicitacao) {
+		try {
+			return this.getControladorRegistroAtendimento().existeRAAbertaPorSoliticacao(idImovel, idSolicitacao);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
 }
