@@ -40307,4 +40307,8 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e);
 		}
 	}
+	
+	public void mudarTitularidaRetroativa(Integer idImovel, Integer idNovoCliente, Date data) {
+		
+	}
 }

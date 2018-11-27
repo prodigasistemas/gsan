@@ -9180,13 +9180,15 @@ public class RepositorioRegistroAtendimentoHBM implements
 		try {
 			consulta.append(" SELECT COUNT(*) FROM RegistroAtendimento rgat ")
 					.append(" INNER JOIN rgat.imovel imov ")
+					.append(" INNER JOIN rgat.solicitacaoTipoEspecificacao solicitacao ")
 					.append(" WHERE imov.id = :idImovel ")
-					.append(" AND rgat.solicitacaoTipoEspecificacao.id = :idSolicitacao ")
+					.append(" AND solicitacao.id = :idSolicitacao ")
 					.append(" AND rgat.dataEncerramento is null ");
 
 			Integer qtd = (Integer) session.createQuery(consulta.toString())
 							.setInteger("idImovel", idImovel)
-							.setInteger("idSolicitacao", idImovel).setMaxResults(1).uniqueResult();
+							.setInteger("idSolicitacao", idSolicitacao)
+							.setMaxResults(1).uniqueResult();
 
 			if (qtd != null && qtd.intValue() > 0)
 				retorno =  true;

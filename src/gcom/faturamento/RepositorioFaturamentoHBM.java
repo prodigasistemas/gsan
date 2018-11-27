@@ -131,6 +131,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
+import org.jboss.proxy.ClientContainer;
 
 public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
@@ -60099,6 +60100,31 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					   .addScalar("telefone", Hibernate.STRING)
 					   .addScalar("email", Hibernate.STRING)
 					   .setInteger("idMunicipio", idMunicipio).uniqueResult();
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public List<ClienteConta> pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(Integer idImovel, Date dataEmissao) throws ErroRepositorioException {
+		List<ClienteConta> retorno = new ArrayList<ClienteConta>();
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append(" select clienteConta from ClienteConta clienteConta ")
+					.append(" inner join clienteConta.conta conta ")
+					.append(" inner join conta.imovel imovel ")
+					.append(" where imovel.id = :idImovel ")
+					.append(" and conta.dataEmissao >= :dataEmissao ");
+
+			retorno = (List<ClienteConta>) session.createQuery(consulta.toString())
+					   .setInteger("idImovel", idImovel)
+					   .setDate("dataEmissao", dataEmissao).list();
 			
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

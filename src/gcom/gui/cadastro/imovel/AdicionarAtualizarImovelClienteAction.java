@@ -140,13 +140,13 @@ public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 		if (dataInicioRelacao.before(dataCorrente)) {
 			
 			if (fachada.verificarPermissaoEspecialAtiva(PermissaoEspecial.MUDANCA_TITULARIDADE_RETROATIVA, usuarioLogado)) {
-				System.out.println("PERMISSÃO ESPECIAL OK");
-				System.out.println("COBRANCA JUDICIAL: " + Fachada.getInstancia().isImovelEmCobrancaJudicial(imovel.getId()));
 				
 				if (Fachada.getInstancia().isImovelEmCobrancaJudicial(imovel.getId())) {
 					throw new ActionServletException("mudanca.titularidade.retroativa.imovel.cobranca.judicial");
 				} else if (!Fachada.getInstancia().existeRAAbertaPorSoliticacao(imovel.getId(),SolicitacaoTipoEspecificacao.MUDANCA_TITULARIDADE_CONTA)) {
 					throw new ActionServletException("mudanca.titularidade.retroativa.imovel.sem_ra");
+				} else {
+					Fachada.getInstancia().mudarTitularidaRetroativa(imovel.getId(), cliente.getId(), dataInicioRelacao);
 				}
 			} else {
 				throw new ActionServletException("atencao.data_inicio_relacao_cliente_imovel");
