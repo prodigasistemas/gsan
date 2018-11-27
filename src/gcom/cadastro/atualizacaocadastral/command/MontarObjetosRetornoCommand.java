@@ -340,7 +340,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	}
 
 	private void atualizarRetorno() throws ControladorException {
-		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getImovelControle().getId());
+		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
 		idImovelRetorno = controle.getImovelRetorno() == null ? null : controle.getImovelRetorno().getId();
 		
 		atualizarImovelSubcategoriaRetorno();

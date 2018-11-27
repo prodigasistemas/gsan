@@ -527,7 +527,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return imovelControle;
 	}
 
-	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle) {
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovel) {
 		ImovelControleAtualizacaoCadastral imovelControle = null;
 
 		Session session = HibernateUtil.getSession();
@@ -537,10 +537,10 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 							+ " from ImovelControleAtualizacaoCadastral imovelControle "
 							+ " left join imovelControle.imovelRetorno imovelRetorno "
 							+ " left join fetch imovelControle.cadastroOcorrencia cadastroOcorrencia "
-							+ " where imovelControle.id = :idImovelControle";
+							+ " where imovelControle.imovel.id = :idImovel ";
 			
 			imovelControle = (ImovelControleAtualizacaoCadastral)session.createQuery(consulta)
-								.setInteger("idImovelControle", idImovelControle).setMaxResults(1).uniqueResult();
+								.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
 			
 		} catch (HibernateException e) {
 		} finally {

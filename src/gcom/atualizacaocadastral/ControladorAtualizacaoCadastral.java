@@ -182,8 +182,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return  repositorioAtualizacaoCadastral.obterImovelControlePorImovelRetorno(idImovelRetorno);
 	}
 
-	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle) throws ControladorException {
-		return  repositorioAtualizacaoCadastral.obterImovelControle(idImovelControle);
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovel) throws ControladorException {
+		return  repositorioAtualizacaoCadastral.obterImovelControle(idImovel);
 	}
 
 	public Integer obterQuantidadeDeVisitasPorImovelControle(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException {
@@ -1837,7 +1837,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		
 		for (ConsultarMovimentoAtualizacaoCadastralHelper helper : listaImoveis){
 			
-			ImovelControleAtualizacaoCadastral controle = obterImovelControle(helper.getControle().getId());
+			ImovelControleAtualizacaoCadastral controle = obterImovelControle(helper.getIdImovel());
 			
 			Integer quantidadeVisitas = this.obterQuantidadeDeVisitasPorImovelControle(controle);
 			if (quantidadeVisitas < Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO && controle.getCadastroOcorrencia().permiteReprovarLote())

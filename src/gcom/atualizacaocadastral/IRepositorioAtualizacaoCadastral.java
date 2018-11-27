@@ -66,7 +66,7 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public ImovelControleAtualizacaoCadastral obterImovelControlePorImovelRetorno(Integer idImovelRetorno);
 
-	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle);
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovel);
 
 	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
 
