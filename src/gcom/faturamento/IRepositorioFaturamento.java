@@ -6,6 +6,7 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ordemservico.ServicoCobrancaValor;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
@@ -3057,4 +3058,6 @@ public interface IRepositorioFaturamento {
 	public Integer pesquisarEsferaPoderImovelConta(Integer idConta) throws ErroRepositorioException;
 	
 	public Object[] pesquisarContatosAgenciaReguladora(Integer idMunicipio) throws ErroRepositorioException;
+	
+	public List<IClienteConta> pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(Integer idImovel, Date dataEmissao) throws ErroRepositorioException;
 }

@@ -411,6 +411,22 @@ public class Util {
 		return calendario.getTime();
 	}
 	
+	public static Date formatarStringParaDate(String diaAnoMes) {
+		String[] arrayDia = diaAnoMes.split("-");
+			
+		String dia = arrayDia[0]; 
+		String mes = arrayDia[1]; 
+		String ano = arrayDia[2]; 
+
+		Calendar calendario = GregorianCalendar.getInstance();
+
+		calendario.set(Calendar.DAY_OF_MONTH, new Integer(dia));
+		calendario.set(Calendar.MONTH, new Integer(mes) - 1);
+		calendario.set(Calendar.YEAR, new Integer(ano));
+		
+		return calendario.getTime();
+	}
+	
 	public static String formatarYYYYMMDDTracoParaDDMMAAAABarra(String diaAnoMes) {
 		String[] arrayDia = diaAnoMes.split("-");
 			

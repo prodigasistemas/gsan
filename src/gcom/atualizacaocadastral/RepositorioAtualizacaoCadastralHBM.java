@@ -2034,7 +2034,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
                     .append(" and controle.imovel.id = imovelAtualizacao.idImovel ")
                     .append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
                     .append(" and imovelAtualizacao.idLocalidade = :idLocalidade ")
-                    .append(" and controle.dataPreAprovacao between '" + dataInicio + "' and '" + dataFim + "'")
+                    .append(" and controle.dataPreAprovacao >= '" + dataInicio + "' and controle.dataPreAprovacao <= '" + dataFim + "'")
                     .append(" and controle.lote is null ");
             
             if (idLeiturista != null && idLeiturista.intValue() > 0) {

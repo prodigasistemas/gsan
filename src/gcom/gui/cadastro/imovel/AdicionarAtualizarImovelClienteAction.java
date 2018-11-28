@@ -31,28 +31,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.DynaValidatorForm;
 
-/**
- * Action responsável por adicionar na coleção a relação entre o cliente imovel,
- * o cliente e a data de inicio da relação
- * 
- * @author Sávio Luiz
- * @created 16 de Maio de 2004
- */
 public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param actionMapping
-	 *            Descrição do parâmetro
-	 * @param actionForm
-	 *            Descrição do parâmetro
-	 * @param httpServletRequest
-	 *            Descrição do parâmetro
-	 * @param httpServletResponse
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
+	HttpSession sessao = null;
+	Fachada fachada = null;
+	
 	@SuppressWarnings("rawtypes")
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -60,13 +43,13 @@ public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 		ActionForward retorno = actionMapping.findForward("adicionarAtualizarImovelCliente");
 
 		// obtendo uma instancia da sessao
-		HttpSession sessao = httpServletRequest.getSession(false);
+		sessao = httpServletRequest.getSession(false);
 
 		Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
 
 		DynaValidatorForm inserirImovelActionForm = (DynaValidatorForm) actionForm;
 
-		Fachada fachada = Fachada.getInstancia();
+		fachada = Fachada.getInstancia();
 
 		Collection imovelClientesNovos = null;
 
@@ -136,27 +119,19 @@ public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 		data.set(Calendar.MINUTE, 0);
 		dataCorrente = data.getTime();
 
-		// caso a data de inicio da relação seja anterior que a data atual
-		if (dataInicioRelacao.before(dataCorrente)) {
+		if (dataInicioRelacao == null) {
 			
-			if (fachada.verificarPermissaoEspecialAtiva(PermissaoEspecial.MUDANCA_TITULARIDADE_RETROATIVA, usuarioLogado)) {
-				
-				if (Fachada.getInstancia().isImovelEmCobrancaJudicial(imovel.getId())) {
-					throw new ActionServletException("mudanca.titularidade.retroativa.imovel.cobranca.judicial");
-				} else if (!Fachada.getInstancia().existeRAAbertaPorSoliticacao(imovel.getId(),SolicitacaoTipoEspecificacao.MUDANCA_TITULARIDADE_CONTA)) {
-					throw new ActionServletException("mudanca.titularidade.retroativa.imovel.sem_ra");
-				} else {
-					Fachada.getInstancia().mudarTitularidaRetroativa(imovel.getId(), cliente.getId(), dataInicioRelacao);
-				}
+			dataInicioRelacao = new Date();
+			
+		} else if (dataInicioRelacao.before(dataCorrente)) {
+			
+			if (clienteRelacaoTipo.getId().intValue() == ClienteRelacaoTipo.USUARIO) {
+				validarMudancaDeTitularidadeRetroativa(usuarioLogado, imovel, dataInicioRelacao);
 			} else {
 				throw new ActionServletException("atencao.data_inicio_relacao_cliente_imovel");
 			}
+		}
 			
-		}
-
-		if (dataInicioRelacao == null) {
-			dataInicioRelacao = new Date();
-		}
 
 		// inicializa o cliente imovel
 		ClienteImovel clienteImovel = new ClienteImovel(dataInicioRelacao, null, null, cliente, clienteRelacaoTipo);
@@ -200,6 +175,7 @@ public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 					imovelClientesNovos.add(clienteImovel);
 
 				} else {
+					sessao.removeAttribute("dataInicioRelacaoUsuario");
 					throw new ActionServletException("atencao.ja_cadastradado.cliente_imovel_usuario");
 				}
 			} else if (clienteImovel.isClienteResponsavel()) {
@@ -230,6 +206,25 @@ public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 		}
 
 		return retorno;
+	}
+
+	private void validarMudancaDeTitularidadeRetroativa(Usuario usuarioLogado, Imovel imovel, Date dataInicioRelacao) {
+		
+		if (Fachada.getInstancia().verificarPermissaoEspecialAtiva(PermissaoEspecial.MUDANCA_TITULARIDADE_RETROATIVA, usuarioLogado)) {
+			
+			if (Fachada.getInstancia().isImovelEmCobrancaJudicial(imovel.getId())) {
+				throw new ActionServletException("mudanca.titularidade.retroativa.imovel.cobranca.judicial");
+			}else if (Fachada.getInstancia().isContaImovelEmCobrancaJudicial(imovel.getId(), dataInicioRelacao)) {
+				throw new ActionServletException("mudanca.titularidade.retroativa.conta.cobranca.judicial");
+			} else if (!Fachada.getInstancia().existeRAAbertaPorSoliticacao(imovel.getId(),SolicitacaoTipoEspecificacao.MUDANCA_TITULARIDADE_CONTA)) {
+				throw new ActionServletException("mudanca.titularidade.retroativa.imovel.sem_ra");
+			} else {
+				sessao.setAttribute("dataInicioRelacaoUsuario", dataInicioRelacao);
+			}
+		
+		} else {
+			throw new ActionServletException("erro.permissao.especial.mudanca.titularidade.retroativa");
+		}
 	}
 
 }

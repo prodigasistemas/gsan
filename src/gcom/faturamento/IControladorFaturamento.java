@@ -9,6 +9,7 @@ import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.atendimentopublico.ordemservico.ServicoCobrancaValor;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Contrato;
@@ -1267,4 +1268,6 @@ public interface IControladorFaturamento {
 	public Object[] pesquisarParmsContaMensagem(EmitirContaHelper helper, Integer idGrupo, Integer idGerencia, Integer idLocalidade, Integer idSetor) throws ControladorException;
 	
 	public boolean isAlgumaContaEmProcessoJudicial (Integer idImovel, Date data);
+	
+	public List<IClienteConta> pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(Integer idImovel, Date dataEmissao) throws ControladorException;
 }

@@ -297,7 +297,6 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 			origemChannel = new FileInputStream(arquivoOrigem).getChannel();
 			destinoChannel = new FileOutputStream(arquivoDestino).getChannel();
-
 			origemChannel.transferTo(0, origemChannel.size(), destinoChannel);
 			
 			atualizarImagemRetorno(imagemRetorno, ConstantesSistema.SIM);

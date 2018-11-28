@@ -60109,8 +60109,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
-	public List<ClienteConta> pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(Integer idImovel, Date dataEmissao) throws ErroRepositorioException {
-		List<ClienteConta> retorno = new ArrayList<ClienteConta>();
+	public List<IClienteConta> pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(Integer idImovel, Date dataEmissao) throws ErroRepositorioException {
+		List<IClienteConta> clientes = new ArrayList<IClienteConta>();
 		Session session = HibernateUtil.getSession();
 		
 		try {
@@ -60122,16 +60122,31 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.append(" where imovel.id = :idImovel ")
 					.append(" and conta.dataEmissao >= :dataEmissao ");
 
-			retorno = (List<ClienteConta>) session.createQuery(consulta.toString())
+			clientes = (List<IClienteConta>) session.createQuery(consulta.toString())
 					   .setInteger("idImovel", idImovel)
 					   .setDate("dataEmissao", dataEmissao).list();
+
+			consulta = new StringBuilder();
 			
+			consulta.append(" select clienteConta from ClienteContaHistorico clienteConta ")
+			.append(" inner join clienteConta.contaHistorico conta ")
+			.append(" inner join conta.imovel imovel ")
+			.append(" where imovel.id = :idImovel ")
+			.append(" and conta.dataEmissao >= :dataEmissao ");
+
+			List<IClienteConta> clientesHistorico = (List<IClienteConta>) session.createQuery(consulta.toString())
+			   .setInteger("idImovel", idImovel)
+			   .setDate("dataEmissao", dataEmissao).list();
+
+			if (clientesHistorico != null && !clientesHistorico.isEmpty())
+				clientes.addAll(clientesHistorico);
+	
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-		return retorno;
+		return clientes;
 	}
 			
 }

@@ -23,6 +23,7 @@ import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteImovelEconomia;
@@ -30,6 +31,7 @@ import gcom.cadastro.cliente.ClienteImovelFimRelacaoMotivo;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.bean.ClienteImovelEconomiaHelper;
 import gcom.cadastro.endereco.Cep;
@@ -1029,6 +1031,8 @@ public class ControladorImovelSEJB extends ControladorComum {
 				
 				if (clienteImovel.isClienteResponsavel()){
 					clienteResponsavel = true;
+				} else if (clienteImovel.isClienteUsuario() && inserirImovelHelper.getDataInicioRelacaoUsuario() != null) {
+					this.mudarTitularidadeRetroativa(clienteImovel, inserirImovelHelper.getDataInicioRelacaoUsuario());
 				}
 				
 				boolean existe = this.verificarExistenciaClienteImovel(colecaoClienteImovel, clienteImovel);
@@ -1071,12 +1075,16 @@ public class ControladorImovelSEJB extends ControladorComum {
 				boolean existe = this.verificarExistenciaClienteImovel(colecaoClienteImovel, clienteImovel);
 					if (existe) {
 						registradorOperacao.registrarOperacao(clienteImovel);
-						clienteImovel.setDataFimRelacao(new Date());
+						if (clienteImovel.isClienteUsuario() && inserirImovelHelper.getDataInicioRelacaoUsuario() != null)
+							clienteImovel.setDataFimRelacao(inserirImovelHelper.getDataInicioRelacaoUsuario());
+						else 
+							clienteImovel.setDataFimRelacao(new Date());
+						
 						getControladorUtil().atualizar(clienteImovel);
 						
-						if (clienteImovel.getClienteRelacaoTipo().getId().intValue() == ClienteRelacaoTipo.RESPONSAVEL.intValue()
-							|| clienteImovel.getClienteRelacaoTipo().getId().intValue() == ClienteRelacaoTipo.USUARIO.intValue())
-						excluirDebitoAutomaticoClienteImovel(clienteImovel, inserirImovelHelper);
+						if (clienteImovel.isClienteResponsavel() || clienteImovel.isClienteUsuario())
+							excluirDebitoAutomaticoClienteImovel(clienteImovel, inserirImovelHelper);
+						
 					}
 			}
 		}
@@ -16229,6 +16237,24 @@ public class ControladorImovelSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
+	}
+	
+	public void mudarTitularidadeRetroativa(ClienteImovel clienteImovel, Date dataEmissao) throws ControladorException {
+		try {
+			List<IClienteConta> clienteContas = getControladorFaturamento().pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(clienteImovel.getImovel().getId(), dataEmissao);
+			
+			if (clienteContas != null) {
+				for (IClienteConta clienteConta : clienteContas) {
+					clienteConta.setCliente(new Cliente(clienteImovel.getCliente().getId()));
+					clienteConta.setUltimaAlteracao(new Date());
+					
+					getControladorUtil().atualizar(clienteConta);
+				}
+			}
+			
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.mudanca.titularidade.retroativa", e);
+		}
 	}
 	
 }
