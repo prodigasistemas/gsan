@@ -235,7 +235,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 	private void inserirImovelImagens(Integer idImovel) throws ControladorException {
 		Collection<ImagemRetorno> colecaoImagemRetorno = this.pesquisarImagensRetornoPorIdImovel(idImovel);
-
+		logger.info("Imovel: " + idImovel + ", qtd imagens: " + colecaoImagemRetorno.size());
 		int ordemImagem = 0;
 
 		for (ImagemRetorno imagemRetorno : colecaoImagemRetorno) {
@@ -285,14 +285,19 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	private File copiarImagensRetorno(ImagemRetorno imagemRetorno) throws ControladorException {
 		String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		File arquivoOrigem = new File(caminhoJboss, imagemRetorno.getPathImagem());
+		logger.info("   Imagem: " + imagemRetorno.getPathImagem());
+		logger.info("   arquivoOrigem: " + arquivoOrigem);
 		File arquivoDestino = this.criarArquivoDestinoImovelImagem(imagemRetorno);
 
+		logger.info("   arquivoDestino: " + arquivoDestino);
 		FileChannel origemChannel = null;
 		FileChannel destinoChannel = null;
 
 		try {
+			logger.info("   arquivoOrigem.exists? " + arquivoOrigem.exists());
 			if (!arquivoOrigem.exists()) {
 				arquivoOrigem = new File(caminhoJboss, "images/" + arquivoOrigem.getName());
+				logger.info("   arquivoOrigem " + arquivoOrigem);
 			}
 
 			origemChannel = new FileInputStream(arquivoOrigem).getChannel();
@@ -303,7 +308,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			atualizarImagemRetorno(imagemRetorno, ConstantesSistema.SIM);
 		}
 		catch (IOException e){
-			
+			e.printStackTrace();
 			atualizarImagemRetorno(imagemRetorno, ConstantesSistema.NAO);
 			if (e.getClass().equals(FileNotFoundException.class)) {
 				logger.info("Arquivo "+ arquivoOrigem.getName() + " não encontrado. ");
@@ -335,13 +340,17 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 	private File criarArquivoDestinoImovelImagem(ImagemRetorno imagemRetorno) {
 		String pastaDestino = retornarPastaDestinoImovelImagem(imagemRetorno);
-
+		logger.info("      pastaDestino: " + pastaDestino);
+		
 		File arquivoDestino = new File(pastaDestino, imagemRetorno.getNomeImagem());
-
+		logger.info("      arquivoDestino: " + arquivoDestino);
+		
 		File caminhoDestino = arquivoDestino.getParentFile().getAbsoluteFile();
+		
+		logger.info("      caminhoDestino.exists? " + caminhoDestino.exists());
 		if (!caminhoDestino.exists())
 			caminhoDestino.mkdir();
-
+		logger.info("      caminhoDestino.exists? " + caminhoDestino.exists());
 		return arquivoDestino;
 	}
 
