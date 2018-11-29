@@ -1432,6 +1432,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 	private String obterColunaDestinoCliente(Properties props, TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) {
 		String colunaDestino;
+		System.out.println(tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna());
 		if (tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_nncpfcnpj")) {
 			colunaDestino = oberColunaCpfCnpjAtualizacao(tabelaColunaAtualizacaoCadastral.obterValorParaAtualizar(campo));
 		} else {
@@ -1453,7 +1454,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("ratv_id")
 				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("cocr_id")
 				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_nnlote")
-				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_dslogradourotipo");
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_dslogradourotipo")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("cfac_nnfoneramal");
 	}
 
 	private String obterTabelaAtualizacaoCliente(String tabelaDestino, TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) {
@@ -1548,7 +1550,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	private String obterValorParaAtualizarRetorno(String nomeColuna, String valor) {
-		
 		String tipoDado = this.obterTipoDadoColuna(nomeColuna.trim());
 		if (tipoDado == null) return valor;
 
