@@ -62090,8 +62090,9 @@ public class ControladorCobranca extends ControladorComum {
 			Filtro filtro = new FiltroCobrancaSituacaoHistorico();
 			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.IMOVEL_ID, idImovel));
 			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.COBRANCA_TIPO_ID, idCobrancaSituacaoTipo));
-			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.COBRANCA_SITUACAO_MOTIVO_ID, idMotivo));
 			filtro.adicionarParametro(new ParametroNulo(FiltroCobrancaSituacaoHistorico.ANO_MES_COBRANCA_RETIRADA));
+			if (idMotivo != null)
+				filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.COBRANCA_SITUACAO_MOTIVO_ID, idMotivo));
 			
 			Collection<CobrancaSituacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, CobrancaSituacaoHistorico.class.getName());
 
@@ -62123,4 +62124,5 @@ public class ControladorCobranca extends ControladorComum {
 			throw new ControladorException("erro.pesquisar.imovel.cobranca.judicial", e);
 		}
 	}
+	
 }

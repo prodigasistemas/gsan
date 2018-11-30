@@ -40308,7 +40308,19 @@ public class Fachada {
 		}
 	}
 	
-	public void mudarTitularidaRetroativa(Integer idImovel, Integer idNovoCliente, Date data) {
-		
+	public boolean isDataMudancaTitularidaRetroativaPermitida(Integer idImovel, Date data) {
+		try {
+			return getControladorImovel().isDataMudancaTitularidaRetroativaPermitida(idImovel, data);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public boolean isImovelNegativado(Integer idImovel) {
+		try {
+			return getControladorSpcSerasa().isImovelNegativado(idImovel);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
 	}
 }

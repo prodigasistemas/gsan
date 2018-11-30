@@ -14,6 +14,7 @@ import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.filtro.ParametroSimples;
+import gcom.util.Util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -120,10 +121,8 @@ public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 		dataCorrente = data.getTime();
 
 		if (dataInicioRelacao == null) {
-			
 			dataInicioRelacao = new Date();
-			
-		} else if (dataInicioRelacao.before(dataCorrente)) {
+		} else if (Util.formatarDataSemHora(dataInicioRelacao).before(Util.formatarDataSemHora(dataCorrente))) {
 			
 			if (clienteRelacaoTipo.getId().intValue() == ClienteRelacaoTipo.USUARIO) {
 				validarMudancaDeTitularidadeRetroativa(usuarioLogado, imovel, dataInicioRelacao);
@@ -211,19 +210,21 @@ public class AdicionarAtualizarImovelClienteAction extends GcomAction {
 	private void validarMudancaDeTitularidadeRetroativa(Usuario usuarioLogado, Imovel imovel, Date dataInicioRelacao) {
 		
 		if (Fachada.getInstancia().verificarPermissaoEspecialAtiva(PermissaoEspecial.MUDANCA_TITULARIDADE_RETROATIVA, usuarioLogado)) {
-			
 			if (Fachada.getInstancia().isImovelEmCobrancaJudicial(imovel.getId())) {
-				throw new ActionServletException("mudanca.titularidade.retroativa.imovel.cobranca.judicial");
+				throw new ActionServletException("atencao.mudanca.titularidade.retroativa.imovel.cobranca.judicial");
 			}else if (Fachada.getInstancia().isContaImovelEmCobrancaJudicial(imovel.getId(), dataInicioRelacao)) {
-				throw new ActionServletException("mudanca.titularidade.retroativa.conta.cobranca.judicial");
+				throw new ActionServletException("atencao.mudanca.titularidade.retroativa.conta.cobranca.judicial");
 			} else if (!Fachada.getInstancia().existeRAAbertaPorSoliticacao(imovel.getId(),SolicitacaoTipoEspecificacao.MUDANCA_TITULARIDADE_CONTA)) {
-				throw new ActionServletException("mudanca.titularidade.retroativa.imovel.sem_ra");
+				throw new ActionServletException("atencao.mudanca.titularidade.retroativa.imovel.sem_ra");
+			} else if (!Fachada.getInstancia().isDataMudancaTitularidaRetroativaPermitida(imovel.getId(), dataInicioRelacao)) {
+				throw new ActionServletException("atencao.data.mudanca.titularidade.retroativa.nao.permitida");
+			} else if (Fachada.getInstancia().isImovelNegativado(imovel.getId())) {
+				throw new ActionServletException("atencao.mudanca.titularidade.retroativa.nao.permitida.imovel.negativado");
 			} else {
 				sessao.setAttribute("dataInicioRelacaoUsuario", dataInicioRelacao);
 			}
-		
 		} else {
-			throw new ActionServletException("erro.permissao.especial.mudanca.titularidade.retroativa");
+			throw new ActionServletException("atencao.permissao.especial.mudanca.titularidade.retroativa");
 		}
 	}
 

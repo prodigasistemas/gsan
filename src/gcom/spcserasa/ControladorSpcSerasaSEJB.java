@@ -146,6 +146,7 @@ import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
 import gcom.util.email.ServicosEmail;
+import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
 import java.io.BufferedReader;
@@ -13805,6 +13806,25 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			sessionContext.setRollbackOnly();
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public boolean isImovelNegativado(Integer idImovel) throws ControladorException {
+
+		try {
+			FiltroNegativacaoImoveis filtro = new FiltroNegativacaoImoveis();
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID, idImovel));
+			filtro.adicionarParametro(new ParametroNulo(FiltroNegativacaoImoveis.DATA_EXCLUSAO));
+
+			Collection<NegativacaoImoveis> colecao = getControladorUtil().pesquisar(filtro, NegativacaoImoveis.class.getName());
+			
+			if (colecao != null && !colecao.isEmpty())
+				return true;
+			else 
+				return false; 
+
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.verificar.imovel.negativado", e);
 		}
 	}
 }

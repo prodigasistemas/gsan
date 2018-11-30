@@ -21,9 +21,9 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
+import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteImovelEconomia;
@@ -16257,4 +16257,33 @@ public class ControladorImovelSEJB extends ControladorComum {
 		}
 	}
 	
+	public boolean isDataMudancaTitularidaRetroativaPermitida(Integer idImovel, Date novaData) throws ControladorException {
+		
+		Date dataInicioRelacaoUsuario = this.obterDataInicioRelacaoAtual(idImovel, ClienteRelacaoTipo.USUARIO);
+		
+		int diferencaDias = Util.obterQuantidadeDiasEntreDuasDatas(dataInicioRelacaoUsuario, novaData);
+		if (diferencaDias < 30)
+			return false;
+		else
+			return true;
+	}
+
+	private Date obterDataInicioRelacaoAtual(Integer idImovel, Short idClienteRelacaoTipo) throws ControladorException {
+		try {
+			FiltroClienteImovel filtro = new FiltroClienteImovel();
+			filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, idImovel));
+			filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, idClienteRelacaoTipo));
+			filtro.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+			
+			Collection colecao = getControladorUtil().pesquisar(filtro, ClienteImovel.class.getName());
+			
+			if (colecao != null && !colecao.isEmpty())
+				return ((ClienteImovel)Util.retonarObjetoDeColecao(colecao)).getDataInicioRelacao();
+			else 
+				return null;
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.pesquisar.data.usuario.atual", e);
+		}
+		
+	}
 }
