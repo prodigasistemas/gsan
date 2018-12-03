@@ -60,7 +60,8 @@
         <property name="quantidadeEconomiasSocial"   type="java.lang.Integer"    column="imov_qtd_economias_social"          not-null="false"/>
         <property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imov_qtd_economias_outra"           not-null="false"/>
         <property name="percentualAbastecimento"     type="java.lang.Short"      column="imov_percentual_abastecimento"      not-null="false"/>
-		
+		<property name="observacaoCategoria" 		 type="java.lang.String"     column="imov_dsobservacaotegoria" 			 not-null="false"/>
+        
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to ImovelContaEnvio -->
 		<many-to-one name="imovelContaEnvio" class="gcom.cadastro.imovel.ImovelContaEnvio" not-null="true">

@@ -113,6 +113,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	private String dsUFSiglaMunicipio;
 	private CobrancaSituacaoTipo cobrancaSituacaoTipo;
 	private transient boolean validarSeImovelEmCampo;
+	private String observacaoCategoria;
 
 	
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
@@ -2549,5 +2550,13 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 			rota = this.quadra.getRota();
 		}
 		return rota;
+	}
+	
+	public String getObservacaoCategoria() {
+			return observacaoCategoria;
+	}
+
+	public String setObservacaoCategoria(String observacaoCategoria) {
+		return this.observacaoCategoria = observacaoCategoria;
 	}
 }

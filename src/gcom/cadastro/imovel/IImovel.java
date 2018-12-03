@@ -211,5 +211,9 @@ public interface IImovel {
 
     public Short getPercentualAbastecimento();
 
-	public void setPercentualAbastecimento(Short percentualAbastecimento);    
+	public void setPercentualAbastecimento(Short percentualAbastecimento); 
+	
+    public String getObservacaoCategoria();
+
+	public String setObservacaoCategoria(String observacaoCategoria); 
 }
