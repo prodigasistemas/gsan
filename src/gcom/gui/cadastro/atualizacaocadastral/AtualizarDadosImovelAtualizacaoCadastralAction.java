@@ -46,7 +46,7 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 								this.atualizarSituacaoImovel(controle);
 							}
 						} else {
-							throw new ActionServletException("erro.imovel.sem.subcategorias", "");
+							throw new ActionServletException("atencao.imovel.sem.subcategorias", "");
 						}
 					} else if (controle.isEmFiscalizacao()) {
 						this.atualizarSituacaoImovel(controle);

@@ -1758,24 +1758,27 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     		return isDefinicaoSubcategoriaValidaImovelEmFIscalizacao(idImovel, registrosSelecionados);
     }
     
-	public boolean isDefinicaoSubcategoriaValidaImovelEmFIscalizacao(String idImovel,String[] registrosSelecionados) throws ControladorException {
-    	for (int i = 0; i < registrosSelecionados.length; i++) {
+    public boolean isDefinicaoSubcategoriaValidaImovelEmFIscalizacao(String idImovel,String[] registrosSelecionados) throws ControladorException {
+        for (int i = 0; i < registrosSelecionados.length; i++) {
 
-			Integer idAtualizacaoCadastral = new Integer(registrosSelecionados[i]);
-			
-			TabelaColunaAtualizacaoCadastral tabelaColuna = getControladorTransacao().pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
+            Integer idAtualizacaoCadastral = new Integer(registrosSelecionados[i]);
+            
+            TabelaColunaAtualizacaoCadastral tabelaColuna = getControladorTransacao().pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
 
-			if (tabelaColuna.isTipoColuna(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL.intValue()) 
-					&& !tabelaColuna.getColunaValorPreAprovado().equals(ConstantesSistema.ZERO.toString()) )
-				return true;
-		}
-    	
-    	if (existeSubcategoriaPreAprovada(new Integer(idImovel)))
-    		return true;
-    	else if (existeSubcategoriaSemAlteracao(new Integer(idImovel)))
-    		return true;
-    	
-    	return false;
+            if (tabelaColuna.isTipoColuna(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL.intValue())) {
+                if (tabelaColuna.possuiValorFiscalizado())
+                    return true;
+                else
+                    return false;
+            }
+        }
+        
+        if (existeSubcategoriaPreAprovada(new Integer(idImovel)))
+            return true;
+        else if (existeSubcategoriaSemAlteracao(new Integer(idImovel)))
+            return true;
+        
+        return false;
     }
 	
 	public boolean isDefinicaoSubcategoriaValidaImovelPreAprovado(String idImovel,String[] registrosSelecionados) throws ControladorException {
@@ -1786,12 +1789,13 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			TabelaColunaAtualizacaoCadastral tabelaColuna = getControladorTransacao().pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
 
 			if (tabelaColuna.isTipoColuna(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL.intValue()) 
-					&& !tabelaColuna.getColunaValorPreAprovado().equals(ConstantesSistema.ZERO.toString()) )
+					&& !tabelaColuna.possuiValorPreAprovado())
 				return true;
 		}
     	
     	if (existeSubcategoriaSemAlteracao(new Integer(idImovel)))
     		return true;
+    	
     	return false;
     }
     

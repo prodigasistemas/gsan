@@ -191,4 +191,12 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 				&& this.tabelaAtualizacaoCadastral.getTabela() != null
 				&& this.tabelaAtualizacaoCadastral.getTabela().getId().intValue() == tipo.intValue();
 	}
+	
+	public boolean possuiValorFiscalizado() {
+        return this.colunaValorFiscalizado != null && !this.colunaValorFiscalizado.equals(ConstantesSistema.ZERO.toString());
+    }
+	
+	public boolean possuiValorPreAprovado() {
+        return this.colunaValorPreAprovado != null && !this.colunaValorPreAprovado.equals(ConstantesSistema.ZERO.toString());
+    }
 }
