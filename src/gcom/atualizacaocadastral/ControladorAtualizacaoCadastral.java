@@ -182,8 +182,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return  repositorioAtualizacaoCadastral.obterImovelControlePorImovelRetorno(idImovelRetorno);
 	}
 
-	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle) throws ControladorException {
-		return  repositorioAtualizacaoCadastral.obterImovelControle(idImovelControle);
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovel) throws ControladorException {
+		return  repositorioAtualizacaoCadastral.obterImovelControle(idImovel);
 	}
 
 	public Integer obterQuantidadeDeVisitasPorImovelControle(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException {
@@ -235,7 +235,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 	private void inserirImovelImagens(Integer idImovel) throws ControladorException {
 		Collection<ImagemRetorno> colecaoImagemRetorno = this.pesquisarImagensRetornoPorIdImovel(idImovel);
-
+		logger.info("Imovel: " + idImovel + ", qtd imagens: " + colecaoImagemRetorno.size());
 		int ordemImagem = 0;
 
 		for (ImagemRetorno imagemRetorno : colecaoImagemRetorno) {
@@ -285,14 +285,19 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	private File copiarImagensRetorno(ImagemRetorno imagemRetorno) throws ControladorException {
 		String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		File arquivoOrigem = new File(caminhoJboss, imagemRetorno.getPathImagem());
+		logger.info("   Imagem: " + imagemRetorno.getPathImagem());
+		logger.info("   arquivoOrigem: " + arquivoOrigem);
 		File arquivoDestino = this.criarArquivoDestinoImovelImagem(imagemRetorno);
 
+		logger.info("   arquivoDestino: " + arquivoDestino);
 		FileChannel origemChannel = null;
 		FileChannel destinoChannel = null;
 
 		try {
+			logger.info("   arquivoOrigem.exists? " + arquivoOrigem.exists());
 			if (!arquivoOrigem.exists()) {
 				arquivoOrigem = new File(caminhoJboss, "images/" + arquivoOrigem.getName());
+				logger.info("   arquivoOrigem " + arquivoOrigem);
 			}
 
 			origemChannel = new FileInputStream(arquivoOrigem).getChannel();
@@ -302,7 +307,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			atualizarImagemRetorno(imagemRetorno, ConstantesSistema.SIM);
 		}
 		catch (IOException e){
-			
+			e.printStackTrace();
 			atualizarImagemRetorno(imagemRetorno, ConstantesSistema.NAO);
 			if (e.getClass().equals(FileNotFoundException.class)) {
 				logger.info("Arquivo "+ arquivoOrigem.getName() + " não encontrado. ");
@@ -334,13 +339,17 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 	private File criarArquivoDestinoImovelImagem(ImagemRetorno imagemRetorno) {
 		String pastaDestino = retornarPastaDestinoImovelImagem(imagemRetorno);
-
+		logger.info("      pastaDestino: " + pastaDestino);
+		
 		File arquivoDestino = new File(pastaDestino, imagemRetorno.getNomeImagem());
-
+		logger.info("      arquivoDestino: " + arquivoDestino);
+		
 		File caminhoDestino = arquivoDestino.getParentFile().getAbsoluteFile();
+		
+		logger.info("      caminhoDestino.exists? " + caminhoDestino.exists());
 		if (!caminhoDestino.exists())
 			caminhoDestino.mkdir();
-
+		logger.info("      caminhoDestino.exists? " + caminhoDestino.exists());
 		return arquivoDestino;
 	}
 
@@ -1700,9 +1709,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ControladorException {
+    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, Integer codigoSetor, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ControladorException {
         try {
-            return repositorioAtualizacaoCadastral.obterIdsImovelControleGeracaoLote(idLocalidade, dataInicio, dataFim, idLeiturista, incluirImoveisNovos);
+            return repositorioAtualizacaoCadastral.obterIdsImovelControleGeracaoLote(idLocalidade, codigoSetor, dataInicio, dataFim, idLeiturista, incluirImoveisNovos);
         } catch (ErroRepositorioException e) {
             throw new ControladorException("erro.lote.atualizacaocadastral.pesquisar.imoveis", e);
         }
@@ -1748,21 +1757,27 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     		return isDefinicaoSubcategoriaValidaImovelEmFIscalizacao(idImovel, registrosSelecionados);
     }
     
-	public boolean isDefinicaoSubcategoriaValidaImovelEmFIscalizacao(String idImovel,String[] registrosSelecionados) throws ControladorException {
-    	for (int i = 0; i < registrosSelecionados.length; i++) {
+    public boolean isDefinicaoSubcategoriaValidaImovelEmFIscalizacao(String idImovel,String[] registrosSelecionados) throws ControladorException {
+        for (int i = 0; i < registrosSelecionados.length; i++) {
 
-			Integer idAtualizacaoCadastral = new Integer(registrosSelecionados[i]);
-			
-			TabelaColunaAtualizacaoCadastral tabelaColuna = getControladorTransacao().pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
+            Integer idAtualizacaoCadastral = new Integer(registrosSelecionados[i]);
+            
+            TabelaColunaAtualizacaoCadastral tabelaColuna = getControladorTransacao().pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
 
-			if (tabelaColuna.isTipoColuna(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL.intValue()) 
-					&& !tabelaColuna.getColunaValorPreAprovado().equals(ConstantesSistema.ZERO.toString()) )
-				return true;
-		}
-    	
-    	if (existeSubcategoriaPreAprovada(new Integer(idImovel)))
-    		return true;
-    	return false;
+            if (tabelaColuna.isTipoColuna(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL.intValue())) {
+                if (tabelaColuna.possuiValorFiscalizado())
+                    return true;
+                else
+                    return false;
+            }
+        }
+        
+        if (existeSubcategoriaPreAprovada(new Integer(idImovel)))
+            return true;
+        else if (existeSubcategoriaSemAlteracao(new Integer(idImovel)))
+            return true;
+        
+        return false;
     }
 	
 	public boolean isDefinicaoSubcategoriaValidaImovelPreAprovado(String idImovel,String[] registrosSelecionados) throws ControladorException {
@@ -1773,12 +1788,13 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			TabelaColunaAtualizacaoCadastral tabelaColuna = getControladorTransacao().pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
 
 			if (tabelaColuna.isTipoColuna(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL.intValue()) 
-					&& !tabelaColuna.getColunaValorPreAprovado().equals(ConstantesSistema.ZERO.toString()) )
+					&& !tabelaColuna.possuiValorPreAprovado())
 				return true;
 		}
     	
     	if (existeSubcategoriaSemAlteracao(new Integer(idImovel)))
     		return true;
+    	
     	return false;
     }
     
@@ -1833,7 +1849,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		
 		for (ConsultarMovimentoAtualizacaoCadastralHelper helper : listaImoveis){
 			
-			ImovelControleAtualizacaoCadastral controle = obterImovelControle(helper.getControle().getId());
+			ImovelControleAtualizacaoCadastral controle = obterImovelControle(helper.getIdImovel());
 			
 			Integer quantidadeVisitas = this.obterQuantidadeDeVisitasPorImovelControle(controle);
 			if (quantidadeVisitas < Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO && controle.getCadastroOcorrencia().permiteReprovarLote())

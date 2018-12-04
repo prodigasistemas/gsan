@@ -11,7 +11,7 @@ public class ContratoAdesaoimovelDTO {
 	private String matricula;
 	private String numeroContrato;
 	private String nomeCidade;
-	private String endereco;
+	private String enderecoContratoAdesao;
 	private String dataGeracao;
 	
 	public ContratoAdesaoimovelDTO() {}
@@ -24,7 +24,7 @@ public class ContratoAdesaoimovelDTO {
 		this.matricula = matricula;
 		this.numeroContrato = getNumeroContrato();
 		this.nomeCidade = nomeCidade;
-		this.endereco = endereco;
+		this.enderecoContratoAdesao = endereco;
 		this.dataGeracao = dataGeracao;
 	}
 
@@ -44,8 +44,8 @@ public class ContratoAdesaoimovelDTO {
 		return nomeCidade;
 	}
 
-	public String getEndereco() {
-		return endereco;
+	public String getEnderecoContratoAdesao() {
+		return enderecoContratoAdesao;
 	}
 	
 	public String getDataGeracao() {

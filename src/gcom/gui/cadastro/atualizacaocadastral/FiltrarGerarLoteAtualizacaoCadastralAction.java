@@ -37,7 +37,7 @@ public class FiltrarGerarLoteAtualizacaoCadastralAction extends GcomAction {
 		}
 		
 		List<ImovelControleAtualizacaoCadastral> imoveis = getFachada().obterIdsImovelControleGeracaoLote(
-                form.getIdLocalidadeInicial(), form.getPeriodoInicial(), form.getPeriodoFinal(), form.getIdLeiturista(), form.isIncluirImoveisNovos());
+                form.getIdLocalidadeInicial(), form.getCdSetorComercialInicial(), form.getPeriodoInicial(), form.getPeriodoFinal(), form.getIdLeiturista(), form.isIncluirImoveisNovos());
     
 		if( imoveis.isEmpty()){
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado", "exibirFiltrarGerarLoteAtualizacaoCadastralAction.do", null, new String[] {});

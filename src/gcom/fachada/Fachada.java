@@ -40244,9 +40244,9 @@ public class Fachada {
 		}
 	}
 	
-	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(String idLocalidade, String dataInicio, String dataFim, String idLeiturista, boolean incluirImoveisNovos) {
+	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(String idLocalidade, String codigoSetor, String dataInicio, String dataFim, String idLeiturista, boolean incluirImoveisNovos) {
         try {
-            return getControladorAtualizacaoCadastral().obterIdsImovelControleGeracaoLote(new Integer(idLocalidade), dataInicio, dataFim, new Integer(idLeiturista), incluirImoveisNovos);
+            return getControladorAtualizacaoCadastral().obterIdsImovelControleGeracaoLote(new Integer(idLocalidade), new Integer(codigoSetor), dataInicio, dataFim, new Integer(idLeiturista), incluirImoveisNovos);
         } catch (Exception ex) {
             throw new FachadaException(ex.getMessage(), ex);
         }

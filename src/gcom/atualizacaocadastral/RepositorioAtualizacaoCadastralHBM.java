@@ -527,7 +527,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return imovelControle;
 	}
 
-	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle) {
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovel) {
 		ImovelControleAtualizacaoCadastral imovelControle = null;
 
 		Session session = HibernateUtil.getSession();
@@ -537,10 +537,10 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 							+ " from ImovelControleAtualizacaoCadastral imovelControle "
 							+ " left join imovelControle.imovelRetorno imovelRetorno "
 							+ " left join fetch imovelControle.cadastroOcorrencia cadastroOcorrencia "
-							+ " where imovelControle.id = :idImovelControle";
+							+ " where imovelControle.imovel.id = :idImovel ";
 			
 			imovelControle = (ImovelControleAtualizacaoCadastral)session.createQuery(consulta)
-								.setInteger("idImovelControle", idImovelControle).setMaxResults(1).uniqueResult();
+								.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
 			
 		} catch (HibernateException e) {
 		} finally {
@@ -1432,6 +1432,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 	private String obterColunaDestinoCliente(Properties props, TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) {
 		String colunaDestino;
+		System.out.println(tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna());
 		if (tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("clac_nncpfcnpj")) {
 			colunaDestino = oberColunaCpfCnpjAtualizacao(tabelaColunaAtualizacaoCadastral.obterValorParaAtualizar(campo));
 		} else {
@@ -1453,7 +1454,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("ratv_id")
 				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("cocr_id")
 				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_nnlote")
-				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_dslogradourotipo");
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("imac_dslogradourotipo")
+				&& !tabelaColunaAtualizacaoCadastral.getTabelaColuna().getColuna().equals("cfac_nnfoneramal");
 	}
 
 	private String obterTabelaAtualizacaoCliente(String tabelaDestino, TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral) {
@@ -1548,7 +1550,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	private String obterValorParaAtualizarRetorno(String nomeColuna, String valor) {
-		
 		String tipoDado = this.obterTipoDadoColuna(nomeColuna.trim());
 		if (tipoDado == null) return valor;
 
@@ -2020,7 +2021,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
     @SuppressWarnings("unchecked")
-    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ErroRepositorioException {
+    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, Integer codigoSetor, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ErroRepositorioException {
         List<ImovelControleAtualizacaoCadastral> retorno = null;
         Session session = HibernateUtil.getSession();
         StringBuilder consulta = new StringBuilder();
@@ -2034,7 +2035,9 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
                     .append(" and controle.imovel.id = imovelAtualizacao.idImovel ")
                     .append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
                     .append(" and imovelAtualizacao.idLocalidade = :idLocalidade ")
-                    .append(" and controle.dataPreAprovacao >= '" + dataInicio + "' and controle.dataPreAprovacao <= '" + dataFim + "'")
+                    .append(" and imovelAtualizacao.codigoSetorComercial = :codigoSetor ")
+                    .append(" and controle.dataPreAprovacao >= '" + dataInicio + "'")
+                    .append(" and controle.dataPreAprovacao <= '" + dataFim + "'")
                     .append(" and controle.lote is null ");
             
             if (idLeiturista != null && idLeiturista.intValue() > 0) {
@@ -2043,7 +2046,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
             retorno = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consulta.toString())
                                 .setInteger("emFiscalizacao",SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)
                                 .setInteger("preAprovado",SituacaoAtualizacaoCadastral.PRE_APROVADO)
-                                .setInteger("idLocalidade",idLocalidade).list();
+                                .setInteger("idLocalidade",idLocalidade)
+                                .setInteger("codigoSetor",codigoSetor).list();
             
             if (incluirImoveisNovos) {
                 
@@ -2056,7 +2060,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
                         .append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
                         .append(" and retorno.idLocalidade = :idLocalidade ")
                         .append(" and retorno.tipoOperacao = :inclusao ")
-                        .append(" and controle.dataPreAprovacao between '" + dataInicio + "' and '" + dataFim + "'")
+                        .append(" and controle.dataPreAprovacao <= '" + dataInicio + "'")
+                        .append(" and controle.dataPreAprovacao >= '" + dataFim + "'")
                         .append(" and controle.lote is null ");
                 
                 List<ImovelControleAtualizacaoCadastral> imoveisNovos = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consulta.toString())

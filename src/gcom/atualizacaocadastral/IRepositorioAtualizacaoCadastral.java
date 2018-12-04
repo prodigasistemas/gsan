@@ -66,7 +66,7 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public ImovelControleAtualizacaoCadastral obterImovelControlePorImovelRetorno(Integer idImovelRetorno);
 
-	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle);
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovel);
 
 	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
 
@@ -148,7 +148,7 @@ public interface IRepositorioAtualizacaoCadastral {
 	
 	public void atualizarSubcategoriarAoPreAprovar(Integer idImovel) throws ErroRepositorioException;
 	
-	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ErroRepositorioException;
+	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, Integer codigoSetor, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ErroRepositorioException;
 
     public boolean isLoteExistente(Integer lote) throws ErroRepositorioException;
     

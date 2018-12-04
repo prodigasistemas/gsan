@@ -3,7 +3,9 @@ package gcom.gui.cadastro.atualizacaocadastral;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.empresa.FiltroEmpresa;
 import gcom.cadastro.localidade.FiltroLocalidade;
+import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
+import gcom.cadastro.localidade.SetorComercial;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.gui.micromedicao.DadosLeiturista;
@@ -42,6 +44,7 @@ public class ExibirFiltrarGerarLoteAtualizacaoCadastralAction extends GcomAction
 			carregarComboEmpresas(sessao);
 			carregarComboLeiturista(sessao);
 			form.setNomeLocalidadeInicial(this.pesquisarNomeLocalidade(form.getIdLocalidadeInicial()));
+			form.setNomeSetorComercialInicial(this.pesquisarNomeSetor(form));
 			
 		} catch (Exception e) {
 			logger.error("Erro ao filtrar Cadastro", e);
@@ -102,6 +105,28 @@ public class ExibirFiltrarGerarLoteAtualizacaoCadastralAction extends GcomAction
             String nomeLocalidade = "";
             if (pesquisa != null && !pesquisa.isEmpty()) {
                 nomeLocalidade = (((List<Localidade>) pesquisa).get(0)).getDescricao();
+            }
+            
+            return nomeLocalidade.trim();
+        } else {
+            return null;
+        }
+    }
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private String pesquisarNomeSetor(GerarLoteAtualizacaoCadastralForm form) {
+		String idSetor = form.getCdSetorComercialInicial();
+		
+        if(idSetor != null && !idSetor.trim().equalsIgnoreCase("") && !idSetor.trim().equalsIgnoreCase("")) {
+            Filtro filtro = new FiltroSetorComercial(FiltroSetorComercial.DESCRICAO);
+            filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, form.getCdSetorComercialInicial()));
+            filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, form.getIdLocalidadeInicial()));
+            
+            Collection pesquisa = getFachada().pesquisar(filtro, SetorComercial.class.getName());
+            
+            String nomeLocalidade = "";
+            if (pesquisa != null && !pesquisa.isEmpty()) {
+                nomeLocalidade = (((List<SetorComercial>) pesquisa).get(0)).getDescricao();
             }
             
             return nomeLocalidade.trim();

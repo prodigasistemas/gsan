@@ -16128,31 +16128,31 @@ public class ControladorImovelSEJB extends ControladorComum {
 	
 	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) throws ControladorException {
 		ContratoAdesaoimovelDTO dto = null;
-		ContratoAdesao contratoDemanda = obterContratoDemandaAtivo(idImovel);
+		ContratoAdesao contratoDemanda = obterContratoAtivo(idImovel, ContratoTipo.ADESAO);
 		Cliente cliente = getControladorImovel().consultarClienteUsuarioImovel(new Imovel(idImovel));
 		if (contratoDemanda != null) {
 			
 			if (contratoDemanda.getClienteImovel().getCliente().getId().intValue() != cliente.getId().intValue()) {
 				finalizarContatoDemanda(idImovel, cliente);
-				gerarContatoDemanda(idImovel, cliente);
+				gerarContatoAdesao(idImovel, cliente);
 				cliente = cliente;
 			}  else {
 				cliente = contratoDemanda.getClienteImovel().getCliente();
 			}
 		} else {
-			gerarContatoDemanda(idImovel, cliente);
+			gerarContatoAdesao(idImovel, cliente);
 		}
 		dto = obterContratoAdesaoImovelDTO(idImovel, cliente);
 		return dto;
 	}
 	
-	private ContratoAdesao obterContratoDemandaAtivo(Integer idImovel) throws ControladorException {
+	private ContratoAdesao obterContratoAtivo(Integer idImovel, Integer tipoContrato) throws ControladorException {
 		FiltroContratoAdesao filtro = new FiltroContratoAdesao();
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoAdesao.CONTRATO);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoAdesao.CLIENTE);
 
 		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.IMOVEL, idImovel));
-		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.CONTRATO_TIPO, ContratoTipo.DEMANDA));
+		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.CONTRATO_TIPO, tipoContrato));
 		filtro.adicionarParametro(new ParametroNulo(FiltroContratoAdesao.DATACONTRATOENCERRAMENTO));
 		Collection colecaoContratoDemanda = getControladorUtil().pesquisar(filtro, ContratoAdesao.class.getName());
 		
@@ -16167,12 +16167,12 @@ public class ControladorImovelSEJB extends ControladorComum {
 		String data = Util.formatarDataComTracoAAAAMMDD(new Date());
 		String nomeRelatorio = "contrato_adesao_"+ idImovel + data + ".pdf";
 		
-		String endereco = getControladorCliente().obterEnderecoCorrespondencia(cliente.getId());
+		String endereco = getControladorEndereco().obterEnderecoCorrespondenciaImovel(idImovel);
 		return new ContratoAdesaoimovelDTO(nomeRelatorio, cliente.getNome(), idImovel.toString(), "Belem", endereco, Util.formatarDataComBarraDDMMAAAA(new Date()));
 	}
 	
 	private void finalizarContatoDemanda(Integer idImovel, Cliente cliente) throws ControladorException {
-		ContratoAdesao contratoDemanda = this.obterContratoDemandaAtivo(idImovel);
+		ContratoAdesao contratoDemanda = this.obterContratoAtivo(idImovel, ContratoTipo.DEMANDA);
 		
 		Contrato contrato = contratoDemanda.getContrato();
 		
@@ -16183,25 +16183,24 @@ public class ControladorImovelSEJB extends ControladorComum {
 		getControladorUtil().atualizar(contrato);
 	}
 	
-	private void gerarContatoDemanda(Integer idImovel, Cliente cliente) throws ControladorException {
+	private void gerarContatoAdesao(Integer idImovel, Cliente cliente) throws ControladorException {
 		Contrato contrato = new Contrato();
+		ContratoAdesao contratoAdesao = new ContratoAdesao();
+		
+		contratoAdesao.setUltimaAlteracao(new Date());
+		contratoAdesao.setClienteImovel(obterClienteImovel(idImovel, cliente.getId(), ClienteRelacaoTipo.USUARIO.intValue()));
 		
 		contrato.setImovel(new Imovel(idImovel));
-		contrato.setContratoTipo(new ContratoTipo(ContratoTipo.DEMANDA));
+		contrato.setContratoTipo(new ContratoTipo(ContratoTipo.ADESAO));
 		contrato.setDataContratoInicio(new Date());
-		contrato.setNumeroContrato(contrato.gerarNumeroContrato(ContratoTipo.DEMANDA));
+		contrato.setNumeroContrato(contratoAdesao.gerarNumeroContrato());
 		contrato.setUltimaAlteracao(new Date());
 		
 		Integer idContrato = (Integer) getControladorUtil().inserir(contrato);
 		contrato.setId(idContrato);
 		
-		ContratoAdesao contratoDemanda = new ContratoAdesao();
-		
-		contratoDemanda.setUltimaAlteracao(new Date());
-		contratoDemanda.setClienteImovel(obterClienteImovel(idImovel, cliente.getId(), ClienteRelacaoTipo.USUARIO.intValue()));
-		contratoDemanda.setContrato(contrato);
-		
-		getControladorUtil().inserir(contratoDemanda);
+		contratoAdesao.setContrato(contrato);
+		getControladorUtil().inserir(contratoAdesao);
 		
 	}
 	

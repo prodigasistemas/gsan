@@ -131,7 +131,7 @@ public class Contrato extends ObjetoTransacao {
 	} 
 	
 	public String gerarNumeroContrato(Integer idContratoTipo) {
-		if (idContratoTipo.intValue() == ContratoTipo.DEMANDA)
+		if (idContratoTipo.intValue() == ContratoTipo.ADESAO)
 			return imovel.getId() + Util.formatarDataAAAAMMDD(new Date());
 		else
 			return id.toString();

@@ -329,7 +329,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		if (controle != null) {
 			idImovelControle = controle.getId();
 		}
-		controle = controladorAtualizacaoCadastral.obterImovelControle(idImovelControle);
+		controle = controladorAtualizacaoCadastral.obterImovelControle(matriculaImovel);
 
 		atualizacaoCadastralImovel.setImovelControle(controle);
 	}
