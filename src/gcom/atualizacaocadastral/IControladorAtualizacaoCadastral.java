@@ -100,7 +100,7 @@ public interface IControladorAtualizacaoCadastral {
 	
 	public void atualizarSubcategoriarAoPreAprovar(Integer idImovel) throws ControladorException;
 	
-	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ControladorException;
+	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, Integer codigoSetor, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ControladorException;
     
     public void gerarLote(List<ImovelControleAtualizacaoCadastral> imoveisControle, Integer lote) throws ControladorException;
     

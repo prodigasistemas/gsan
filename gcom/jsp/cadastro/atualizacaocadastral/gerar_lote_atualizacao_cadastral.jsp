@@ -66,7 +66,10 @@
     	} else if (form.idLocalidadeInicial.value == null || form.idLocalidadeInicial.value == '') {
             alert('Informe a localidade.');
             return false;
-        } else {
+        } else if (form.cdSetorComercialInicial.value == null || form.cdSetorComercialInicial.value == '') {
+            alert('Informe o setor.');
+            return false;
+        }else {
 	    	form.action = "/gsan/filtrarGerarLoteAtualizacaoCadastralAction.do";
 			submeterFormPadrao(form);	
 	    }
@@ -226,12 +229,11 @@
 	</tr>
 	
     <tr>
-      	<td width="170"><strong>Localidade:</strong></td>
+      	<td width="170"><strong>Localidade:</strong><font color="#FF0000">*</font></td>
       	<td>
 			<html:text tabindex="5" maxlength="3" property="idLocalidadeInicial" size="5"
 				   	   onkeypress="somente_numero(this);form.target=''; validaEnter(event, 'exibirFiltrarGerarLoteAtualizacaoCadastralAction.do?filterClass=FiltroLocalidade&fieldLocalidade=LocalidadeInicial', 'idLocalidadeInicial');"
-				   	   onkeyup="javascript:somente_numero(this);replicarLocalidade();" 
-				   	   onblur="javascript:replicarLocalidade();"/>
+				   	   onkeyup="javascript:somente_numero(this);"/>
          
 	        <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial', 'cdSetorComercialInicial', 'nomeSetorComercialInicial', 'idLocalidadeFinal', 'nomeLocalidadeFinal', 'cdSetorComercialFinal', 'nomeSetorComercialFinal', 'cdRotaInicial', 'cdRotaFinal'); abrirPopup('exibirPesquisarLocalidadeAction.do?tipo=origem', 400, 800);" > 
 	        	<img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"/> 
@@ -244,6 +246,25 @@
 	        </a>
       	</td>          
     </tr>
+    
+     <tr>
+      <td width="170"><strong>Setor Comercial :</strong><font color="#FF0000">*</font></td>
+      <td><html:text maxlength="3" property="cdSetorComercialInicial" size="5" onkeyup="javascript:somente_numero(this);"
+           onkeypress="validaEnterDependencia(event, 
+           'exibirFiltrarGerarLoteAtualizacaoCadastralAction.do?filterClass=FiltroSetorComercial&fieldLocalidade=LocalidadeInicial&fieldSetorComercial=SetorComercialInicial', 
+           this, document.forms[0].idLocalidadeInicial.value, 'Localidade Final.');" tabindex="6" />
+           <a href="javascript:abrirPopupDependencia('exibirPesquisarSetorComercialAction.do?idLocalidade='+document.forms[0].idLocalidadeInicial.value+'&tipo=setorComercialOrigem',document.forms[0].idLocalidadeInicial.value,'Localidade Inicial', 400, 800);">
+           <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif" title="Pesquisar" />
+           </a>
+          <html:text property="nomeSetorComercialInicial" size="35" readonly="true"
+            style="background-color: #EFEFEF; border: 0; color: ${requestScope.corSetorComercialInicial}" />
+          
+          <a href="javascript:limparCampos('cdSetorComercialInicial', 'nomeSetorComercialInicial', 'cdSetorComercialFinal', 'nomeSetorComercialFinal', 'cdRotaInicial', 'cdRotaFinal');">
+              <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
+          </a>
+      </td>
+    </tr>
+    
     
 	<tr>
       <td width="170"><strong>Incluir imóveis novos:</strong></td>

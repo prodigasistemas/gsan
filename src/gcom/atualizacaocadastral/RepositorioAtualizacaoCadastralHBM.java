@@ -2021,7 +2021,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
     @SuppressWarnings("unchecked")
-    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ErroRepositorioException {
+    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, Integer codigoSetor, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ErroRepositorioException {
         List<ImovelControleAtualizacaoCadastral> retorno = null;
         Session session = HibernateUtil.getSession();
         StringBuilder consulta = new StringBuilder();
@@ -2035,7 +2035,9 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
                     .append(" and controle.imovel.id = imovelAtualizacao.idImovel ")
                     .append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
                     .append(" and imovelAtualizacao.idLocalidade = :idLocalidade ")
-                    .append(" and controle.dataPreAprovacao between '" + dataInicio + "' and '" + dataFim + "'")
+                    .append(" and imovelAtualizacao.codigoSetorComercial = :codigoSetor ")
+                    .append(" and controle.dataPreAprovacao <= '" + dataInicio + "'")
+                    .append(" and controle.dataPreAprovacao >= '" + dataFim + "'")
                     .append(" and controle.lote is null ");
             
             if (idLeiturista != null && idLeiturista.intValue() > 0) {
@@ -2044,7 +2046,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
             retorno = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consulta.toString())
                                 .setInteger("emFiscalizacao",SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)
                                 .setInteger("preAprovado",SituacaoAtualizacaoCadastral.PRE_APROVADO)
-                                .setInteger("idLocalidade",idLocalidade).list();
+                                .setInteger("idLocalidade",idLocalidade)
+                                .setInteger("codigoSetor",codigoSetor).list();
             
             if (incluirImoveisNovos) {
                 
@@ -2057,7 +2060,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
                         .append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
                         .append(" and retorno.idLocalidade = :idLocalidade ")
                         .append(" and retorno.tipoOperacao = :inclusao ")
-                        .append(" and controle.dataPreAprovacao between '" + dataInicio + "' and '" + dataFim + "'")
+                        .append(" and controle.dataPreAprovacao <= '" + dataInicio + "'")
+                        .append(" and controle.dataPreAprovacao >= '" + dataFim + "'")
                         .append(" and controle.lote is null ");
                 
                 List<ImovelControleAtualizacaoCadastral> imoveisNovos = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consulta.toString())

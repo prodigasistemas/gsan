@@ -1710,9 +1710,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ControladorException {
+    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, Integer codigoSetor, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ControladorException {
         try {
-            return repositorioAtualizacaoCadastral.obterIdsImovelControleGeracaoLote(idLocalidade, dataInicio, dataFim, idLeiturista, incluirImoveisNovos);
+            return repositorioAtualizacaoCadastral.obterIdsImovelControleGeracaoLote(idLocalidade, codigoSetor, dataInicio, dataFim, idLeiturista, incluirImoveisNovos);
         } catch (ErroRepositorioException e) {
             throw new ControladorException("erro.lote.atualizacaocadastral.pesquisar.imoveis", e);
         }
