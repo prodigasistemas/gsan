@@ -9,6 +9,7 @@ public class ValidadorTamanhoLinhaImovelCommand extends ValidadorCommand {
 
 	private ParserUtil parser;
 	
+	
 	public ValidadorTamanhoLinhaImovelCommand(ParserUtil parser,
 			AtualizacaoCadastralImovel cadastroImovel,
 			Map<String, String> linha) {
@@ -16,10 +17,11 @@ public class ValidadorTamanhoLinhaImovelCommand extends ValidadorCommand {
 		this.parser = parser;
 		
 	}
-	
+
 	@Override
 	public void execute() {
-		if (parser.getFonte().length() > 545){
+		if ((parser.getFonte().length() != 445 && parser.getFonte().length() > 545 ) || 
+			(parser.getFonte().length() != 545 && parser.getFonte().length() < 445)) {
 			cadastroImovel.addMensagemErroLayout("Linha Tipo 02 (Imóvel) não compatível com o Layout");
 		}
 	}
