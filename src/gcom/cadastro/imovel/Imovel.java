@@ -2552,11 +2552,11 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 		return rota;
 	}
 	
+	public void setObservacaoCategoria (String observacaoCategoria) {
+		this.observacaoCategoria = observacaoCategoria;
+	}
+	
 	public String getObservacaoCategoria() {
 			return observacaoCategoria;
-	}
-
-	public String setObservacaoCategoria(String observacaoCategoria) {
-		return this.observacaoCategoria = observacaoCategoria;
 	}
 }

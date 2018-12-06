@@ -134,6 +134,7 @@ public class ImovelRetorno implements IImovel{
 		this.quantidadeEconomiasSocial    = imovelAtualizacaoCadastral.getQuantidadeEconomiasSocial();
 		this.quantidadeEconomiasOutra     = imovelAtualizacaoCadastral.getQuantidadeEconomiasOutra();
 		this.percentualAbastecimento      = imovelAtualizacaoCadastral.getPercentualAbastecimento();
+		this.observacaoCategoria     	  = imovelAtualizacaoCadastral.getObservacaoCategoria();
 	}
 
 	public Integer getId() {
@@ -555,11 +556,10 @@ public class ImovelRetorno implements IImovel{
 		this.percentualAbastecimento = percentualAbastecimento;
 	}
 
+	public void setObservacaoCategoria (String observacaoCategoria) {
+		this.observacaoCategoria = observacaoCategoria;
+	}
 	public String getObservacaoCategoria() {
 		return observacaoCategoria;
-	}
-
-	public void setObservacaoCategoria(String observacaoCategoria) {
-		this.observacaoCategoria = observacaoCategoria;
 	}
 }

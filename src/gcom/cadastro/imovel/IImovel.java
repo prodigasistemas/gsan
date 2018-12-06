@@ -215,5 +215,5 @@ public interface IImovel {
 	
     public String getObservacaoCategoria();
 
-	public String setObservacaoCategoria(String observacaoCategoria); 
+	public void setObservacaoCategoria(String observacaoCategoria); 
 }
