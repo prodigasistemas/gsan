@@ -3,6 +3,7 @@ package gcom.atualizacaocadastral;
 import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.Subcategoria;
+import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 
 import java.util.Date;
 
@@ -10,9 +11,9 @@ public class ImovelSubcategoriaRetorno implements IImovelSubcategoria {
 	
 	private Integer id;
 
-	private gcom.cadastro.imovel.Imovel imovel;
+	private Imovel imovel;
 
-    private gcom.cadastro.imovel.Subcategoria subcategoria;
+    private Subcategoria subcategoria;
 	
 	private short quantidadeEconomias;
 	
@@ -22,7 +23,7 @@ public class ImovelSubcategoriaRetorno implements IImovelSubcategoria {
 	
 	public ImovelSubcategoriaRetorno() {
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}

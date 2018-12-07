@@ -834,7 +834,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 
-	public void aprovarImoveis(Collection<IImovel> listaImoveis) throws ErroRepositorioException {
+	public void aprovarImovel(Integer idImovelRetorno) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		String consulta = "";
 
@@ -844,12 +844,12 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			consulta = "update ImovelControleAtualizacaoCadastral controle "
 						+ " set controle.situacaoAtualizacaoCadastral.id = :situacaoAprovado ,"
 						+ " controle.dataAprovacao = :dataAprovacao "
-						+ " where controle.imovelRetorno.id in (:listaImoveis) ";
+						+ " where controle.imovelRetorno.id = :idImovel ";
 
 			session.createQuery(consulta)
 						.setInteger("situacaoAprovado", SituacaoAtualizacaoCadastral.APROVADO)
 						.setDate("dataAprovacao", dataAprovacao)
-						.setParameterList("listaImoveis", getIdsImovelRetorno(listaImoveis))   .executeUpdate();
+						.setInteger("idImovel", idImovelRetorno).executeUpdate();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao aprovar imoveis.");
@@ -1519,7 +1519,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return sql.toString();
 	}
 	
-	private boolean existeSubcategoriaRetorno(TabelaColunaAtualizacaoCadastral tabelaColuna) throws ErroRepositorioException {
+	public boolean existeSubcategoriaRetorno(TabelaColunaAtualizacaoCadastral tabelaColuna) throws ErroRepositorioException {
 		return existeSubcategoriaRetorno(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel(), 
 				Subcategoria.obterIdSubcategoria(tabelaColuna.getTabelaAtualizacaoCadastral().getComplemento()));
 	}

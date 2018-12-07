@@ -90,7 +90,7 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public Collection<IClienteImovel> obterClientesParaExcluirRelacao() throws ErroRepositorioException;
 
-	public void aprovarImoveis(Collection<IImovel> listaImoveis) throws ErroRepositorioException;
+	public void aprovarImovel(Integer idImovelRetorno) throws ErroRepositorioException;
 
 	public Integer obterquantidadeImoveisAprovadosArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
 
@@ -159,4 +159,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public void reprovarImoveis(List<Integer> imoveisParaReprovar) throws ErroRepositorioException;
 
 	public List<TabelaColunaAtualizacaoCadastral> obterTabelaColunas(TabelaColuna coluna, Integer idImovel) throws ErroRepositorioException;
+	
+	public boolean existeSubcategoriaRetorno(TabelaColunaAtualizacaoCadastral tabelaColuna) throws ErroRepositorioException;
 }

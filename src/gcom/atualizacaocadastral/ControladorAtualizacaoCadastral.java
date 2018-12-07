@@ -43,6 +43,7 @@ import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
+import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
@@ -530,7 +531,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return ids;
 
 	}
-
+	
 	private Collection<Integer> obterIdsRamosAtividadesImovel(Integer idImovel) throws ControladorException{
 		Collection<Integer> ids = new ArrayList<Integer>();
 		Collection<ImovelRamoAtividade> ramosAtividade = getControladorImovel().pesquisarRamoAtividadeDoImovel(idImovel);
@@ -1137,24 +1138,63 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 	private void aprovarImoveis(Collection<IImovel> imoveisParaAprovar, Usuario usuarioLogado) throws ControladorException {
 		try {
-			repositorioAtualizacaoCadastral.aprovarImoveis(imoveisParaAprovar);
 
 			for(IImovel imovel : imoveisParaAprovar) {
 				Collection<TabelaAtualizacaoCadastral> colecaoTabelaAtualizacaoCadastral = repositorioSeguranca.pesquisaTabelaAtualizacaoCadastralPorImovel(imovel.getIdImovel());
 				for(TabelaAtualizacaoCadastral tabela : colecaoTabelaAtualizacaoCadastral) {
 					Collection<TabelaColunaAtualizacaoCadastral> colecaoTabelaColuna = repositorioSeguranca.pesquisaTabelaColunaAtualizacaoCadastral(tabela.getId());
 					for(TabelaColunaAtualizacaoCadastral tabelaColuna : colecaoTabelaColuna ) {
+						this.validarSubcategoria(imovel.getIdImovel(), tabelaColuna);
+						
 						tabelaColuna.setUsuario(usuarioLogado);
 						getControladorUtil().atualizar(tabelaColuna);
 					}
 				}
+				repositorioAtualizacaoCadastral.aprovarImovel(imovel.getId());
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao aprovar imoveis em lote. " + e);
 			throw new ControladorException("Erro ao aprovar imoveis em lote.", e);
 		}
 	}
+	
+	private void validarSubcategoria(Integer idImovelRetorno, TabelaColunaAtualizacaoCadastral tabelaColuna) {
+		try {
+			
+			if (!existeSubcategoriaRetorno(idImovelRetorno))
+				if (tabelaColuna.isTipoColuna(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL.intValue()) && tabelaColuna.possuiValorPreAprovado()) {
+					ImovelSubcategoriaRetorno subcategoria = criarImovelSubcategoriaRetorno(tabelaColuna, idImovelRetorno, tabelaColuna.getColunaValorPreAprovado());
+					getControladorUtil().inserir(subcategoria);
+				}
 
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private ImovelSubcategoriaRetorno criarImovelSubcategoriaRetorno(TabelaColunaAtualizacaoCadastral tabelaColuna, Integer idImovelRetorno, String qtdEconomias) {
+		ImovelSubcategoriaRetorno imovelSubcategoriaRetorno = new ImovelSubcategoriaRetorno();
+		
+		imovelSubcategoriaRetorno.setImovel(new Imovel(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel()));
+		imovelSubcategoriaRetorno.setSubcategoria(new Subcategoria(Subcategoria.obterIdSubcategoria(tabelaColuna.getTabelaAtualizacaoCadastral().getComplemento())));
+		imovelSubcategoriaRetorno.setQuantidadeEconomias(Short.valueOf(qtdEconomias));
+		imovelSubcategoriaRetorno.setUltimaAlteracao(new Date());
+		imovelSubcategoriaRetorno.setIdImovelRetorno(idImovelRetorno);
+		
+		return imovelSubcategoriaRetorno;
+	}
+	
+	private boolean existeSubcategoriaRetorno(Integer idImovel) throws ControladorException {
+		List<ImovelSubcategoriaRetorno> subcategorias;
+		try {
+			subcategorias = repositorioAtualizacaoCadastral.pesquisarImovelSubcategoriaRetornoPorIdImovel(idImovel);
+			return subcategorias != null && !subcategorias.isEmpty();
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	private Collection<IImovel> converterListaEmImovelRetorno(Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ErroRepositorioException {
 		Collection<IImovel> listaImoveisRetorno = new ArrayList<IImovel>();
 
@@ -1788,7 +1828,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			TabelaColunaAtualizacaoCadastral tabelaColuna = getControladorTransacao().pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
 
 			if (tabelaColuna.isTipoColuna(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL.intValue()) 
-					&& !tabelaColuna.possuiValorPreAprovado())
+					&& tabelaColuna.possuiValorPreAprovado())
 				return true;
 		}
     	

@@ -199,4 +199,8 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 	public boolean possuiValorPreAprovado() {
         return this.colunaValorPreAprovado != null && !this.colunaValorPreAprovado.equals(ConstantesSistema.ZERO.toString());
     }
+	
+	public boolean possuiValorAnterior() {
+        return this.colunaValorAnterior != null && !this.colunaValorAnterior.equals(ConstantesSistema.ZERO.toString());
+    }
 }
