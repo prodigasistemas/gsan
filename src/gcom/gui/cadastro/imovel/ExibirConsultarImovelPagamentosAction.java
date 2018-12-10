@@ -2,10 +2,10 @@ package gcom.gui.cadastro.imovel;
 
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.aviso.AvisoBancario;
-import gcom.arrecadacao.pagamento.FiltroPagamentoSituacao;
+import gcom.arrecadacao.pagamento.FiltroGuiaPagamentoHistorico;
+import gcom.arrecadacao.pagamento.GuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
-import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.DocumentoTipo;
@@ -51,7 +51,8 @@ public class ExibirConsultarImovelPagamentosAction extends GcomAction {
      *            Descrição do parâmetro
      * @return Descrição do retorno
      */
-    public ActionForward execute(ActionMapping actionMapping,
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public ActionForward execute(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -186,28 +187,6 @@ public class ExibirConsultarImovelPagamentosAction extends GcomAction {
 							null, null, null,null, null,null, null,null, null,null, null,null, null);
 					
 					
-					//Não há Pagamentos para o imóvel de matrícula {0}.
-					/*if (colecaoImoveisPagamentos == null || colecaoImoveisPagamentos.isEmpty()) {
-			        	httpServletRequest.setAttribute(
-			                    "idImovelPagamentosNaoEncontrado", null);
-
-			        	sessao.removeAttribute("imovelPagamentos");
-			        	sessao.removeAttribute("colecaoPagamentosImovelConta");
-			        	sessao.removeAttribute("colecaoPagamentosImovelGuiaPagamento");
-			        	sessao.removeAttribute("colecaoPagamentosImovelDebitoACobrar");
-			        	sessao.removeAttribute("idImovelPrincipalAba");
-			        	consultarImovelActionForm.setIdImovelPagamentos(null);
-			        	consultarImovelActionForm.setMatriculaImovelPagamentos(null);
-			        	consultarImovelActionForm.setSituacaoAguaPagamentos(null);
-			        	consultarImovelActionForm.setSituacaoEsgotoPagamentos(null);
-						
-						
-						
-							throw new ActionServletException(
-									"atencao.nao.pagamentos.imovel", null, ""
-									+ idImovelPagamentos.trim());
-					}*/
-					
 					// Imóvel
 					Collection<Pagamento> colecaoPagamentosImovelConta = new ArrayList();
 					Collection<Pagamento> colecaoPagamentosImovelGuiaPagamento = new ArrayList();
@@ -230,20 +209,11 @@ public class ExibirConsultarImovelPagamentosAction extends GcomAction {
 						while (colecaoPagamentoIterator.hasNext()) {
 							Pagamento pagamento = ((Pagamento) colecaoPagamentoIterator.next());
 
-							/*
-							 * Alterado por Raphael Rossiter em 15/01/2007 - Analistas: Aryed e Eduardo
-							 * OBJ: Mostrar todos os pagamentos da tabela de Pagamento
-							 */ 
-							if (pagamento.getDocumentoTipo().getId().equals(
-									DocumentoTipo.DEBITO_A_COBRAR)) {
+							if (pagamento.getDocumentoTipo().getId().equals(DocumentoTipo.DEBITO_A_COBRAR)) {
 								colecaoPagamentosImovelDebitoACobrar.add(pagamento);
-							} else if (pagamento.getDocumentoTipo().getId().equals(
-									DocumentoTipo.GUIA_PAGAMENTO)) {
+							} else if (pagamento.getDocumentoTipo().getId().equals(DocumentoTipo.GUIA_PAGAMENTO)) {
 								colecaoPagamentosImovelGuiaPagamento.add(pagamento);
-							}
-							else{
-								//Caso o pagamento possua uma conta que já foi para historico, 
-								//Pesquisa a conta na tabela de conta historico
+							} else{
 								if (pagamento.getContaGeral() != null && pagamento.getContaGeral().getIndicadorHistorico() == ContaGeral.INDICADOR_HISTORICO) {
 									colecaoPagamentosImovelContaHistorico.add(pagamento);
 								} else {
@@ -254,137 +224,94 @@ public class ExibirConsultarImovelPagamentosAction extends GcomAction {
 						}
 
 						// Organizar a coleção de Conta
-						if (colecaoPagamentosImovelConta != null
-								&& !colecaoPagamentosImovelConta.isEmpty()) {
-							Collections.sort((List) colecaoPagamentosImovelConta,
-									new Comparator() {
+						if (colecaoPagamentosImovelConta != null && !colecaoPagamentosImovelConta.isEmpty()) {
+							Collections.sort((List) colecaoPagamentosImovelConta,new Comparator() {
 										public int compare(Object a, Object b) {
-											Integer anoMesReferencia1 = ((Pagamento) a)
-													.getAnoMesReferencia();
-											Integer anoMesReferencia2 = ((Pagamento) b)
-													.getAnoMesReferencia();
+											Integer anoMesReferencia1 = ((Pagamento) a).getAnoMesReferencia();
+											Integer anoMesReferencia2 = ((Pagamento) b).getAnoMesReferencia();
 
-											return anoMesReferencia1
-													.compareTo(anoMesReferencia2);
+											return anoMesReferencia1.compareTo(anoMesReferencia2);
 
 										}
 								});
 							
 							
-							sessao.setAttribute("colecaoPagamentosImovelConta",
-									colecaoPagamentosImovelConta);
+							sessao.setAttribute("colecaoPagamentosImovelConta", colecaoPagamentosImovelConta);
 							
 							qtdePagContas = colecaoPagamentosImovelConta.size();
-						}
-						else{
-							
+						} else{
 							sessao.removeAttribute("colecaoPagamentosImovelConta");
 						}
 						
 						//Organizar a coleção de Conta Historico
-						if (colecaoPagamentosImovelContaHistorico != null
-								&& !colecaoPagamentosImovelContaHistorico.isEmpty()) {
-							Collections.sort((List) colecaoPagamentosImovelContaHistorico,
-									new Comparator() {
+						if (colecaoPagamentosImovelContaHistorico != null && !colecaoPagamentosImovelContaHistorico.isEmpty()) {
+							Collections.sort((List) colecaoPagamentosImovelContaHistorico, new Comparator() {
 										public int compare(Object a, Object b) {
-											Integer anoMesReferencia1 = ((Pagamento) a)
-													.getAnoMesReferencia();
-											Integer anoMesReferencia2 = ((Pagamento) b)
-													.getAnoMesReferencia();
+											Integer anoMesReferencia1 = ((Pagamento) a).getAnoMesReferencia();
+											Integer anoMesReferencia2 = ((Pagamento) b).getAnoMesReferencia();
 
-											return anoMesReferencia1
-													.compareTo(anoMesReferencia2);
-
+											return anoMesReferencia1.compareTo(anoMesReferencia2);
 										}
 								});
 							
-							
-							sessao.setAttribute("colecaoPagamentosImovelContaHistorico",
-									colecaoPagamentosImovelContaHistorico);
+							sessao.setAttribute("colecaoPagamentosImovelContaHistorico", colecaoPagamentosImovelContaHistorico);
 							
 							qtdePagContasHistorico = colecaoPagamentosImovelContaHistorico.size();
-						}
-						else{
-							
+						} else{
 							sessao.removeAttribute("colecaoPagamentosImovelContaHistorico");
 						}
 
 						// Organizar a coleção de Guia de Pagamento 
-						if (colecaoPagamentosImovelGuiaPagamento != null
-								&& !colecaoPagamentosImovelGuiaPagamento.isEmpty()) {
-							Collections.sort((List) colecaoPagamentosImovelGuiaPagamento,
-									new Comparator() {
+						if (colecaoPagamentosImovelGuiaPagamento != null && !colecaoPagamentosImovelGuiaPagamento.isEmpty()) {
+							Collections.sort((List) colecaoPagamentosImovelGuiaPagamento, new Comparator() {
 										public int compare(Object a, Object b) {
-											String tipoDebito1 = ((Pagamento) a)
-													.getDebitoTipo() == null ? ""
-													: ((Pagamento) a).getDebitoTipo()
-															.getDescricao();
-											String tipoDebito2 = ((Pagamento) b)
-													.getDebitoTipo() == null ? ""
-													: ((Pagamento) b).getDebitoTipo()
-															.getDescricao();
+											String tipoDebito1 = ((Pagamento) a).getDebitoTipo() == null ? ""
+													: ((Pagamento) a).getDebitoTipo().getDescricao();
+											String tipoDebito2 = ((Pagamento) b).getDebitoTipo() == null ? ""
+													: ((Pagamento) b).getDebitoTipo().getDescricao();
 
 											return tipoDebito1.compareTo(tipoDebito2);
-
 										}
 									});
 							
-							
-							sessao.setAttribute("colecaoPagamentosImovelGuiaPagamento",
-									colecaoPagamentosImovelGuiaPagamento);
+							sessao.setAttribute("colecaoPagamentosImovelGuiaPagamento", this.ogranizarPagamentosGuias(colecaoPagamentosImovelGuiaPagamento));
 							
 							qtdePagGuiaPagamento = colecaoPagamentosImovelGuiaPagamento.size();
-						}
-						else{
-							
+						} else{
 							sessao.removeAttribute("colecaoPagamentosImovelGuiaPagamento");
 						}
 						
 						// Organizar a coleção de Guia de Pagamento 
-						if (colecaoPagamentosImovelDebitoACobrar != null
-								&& !colecaoPagamentosImovelDebitoACobrar.isEmpty()) {
+						if (colecaoPagamentosImovelDebitoACobrar != null && !colecaoPagamentosImovelDebitoACobrar.isEmpty()) {
 
 							// Organizar a coleção
-							Collections.sort((List) colecaoPagamentosImovelDebitoACobrar,
-									new Comparator() {
+							Collections.sort((List) colecaoPagamentosImovelDebitoACobrar, new Comparator() {
 										public int compare(Object a, Object b) {
-											Integer anoMesReferencia1 = ((Pagamento) a)
-													.getAnoMesReferencia();
-											Integer anoMesReferencia2 = ((Pagamento) b)
-													.getAnoMesReferencia();
+											Integer anoMesReferencia1 = ((Pagamento) a).getAnoMesReferencia();
+											Integer anoMesReferencia2 = ((Pagamento) b).getAnoMesReferencia();
 
-											return anoMesReferencia1
-													.compareTo(anoMesReferencia2);
-
+											return anoMesReferencia1.compareTo(anoMesReferencia2);
 										}
 									});
 							
 							
-							sessao.setAttribute("colecaoPagamentosImovelDebitoACobrar",
-									colecaoPagamentosImovelDebitoACobrar);
+							sessao.setAttribute("colecaoPagamentosImovelDebitoACobrar", colecaoPagamentosImovelDebitoACobrar);
 							
 							qtdePagDebitoACobrar =  colecaoPagamentosImovelDebitoACobrar.size();
-						}
-						else{
-							
+						} else{
 							sessao.removeAttribute("colecaoPagamentosImovelDebitoACobrar");
 						}
 						
-					}
-					else{
-						
+					} else{
 						sessao.removeAttribute("colecaoPagamentosImovelConta");
 		            	sessao.removeAttribute("colecaoPagamentosImovelGuiaPagamento");
 		            	sessao.removeAttribute("colecaoPagamentosImovelDebitoACobrar");
 					}
 					
-					
 					// Imóvel - Pagamento Historico
 					Collection<PagamentoHistorico> colecaoPagamentosHistoricoImovelConta = new ArrayList();
 					Collection<PagamentoHistorico> colecaoPagamentosHistoricoImovelGuiaPagamento = new ArrayList();
 					Collection<PagamentoHistorico> colecaoPagamentosHistoricoImovelDebitoACobrar = new ArrayList();
-					
-					
 					
 					// Consultar Pagamentos do Imóvel
 					if (colecaoImoveisPagamentosHistorico != null && !colecaoImoveisPagamentosHistorico.isEmpty()) {
@@ -590,4 +517,26 @@ public class ExibirConsultarImovelPagamentosAction extends GcomAction {
         return retorno;
     }
 
+    private Collection<Pagamento> ogranizarPagamentosGuias(Collection<Pagamento> pagamentos) {
+    	Collection<Pagamento> pagamentosFinal = new ArrayList<Pagamento>();
+    	
+    	Iterator<Pagamento> iteratorPagamentos = pagamentos.iterator();
+    	
+    	while(iteratorPagamentos.hasNext()) {
+    		Pagamento pagamento = (Pagamento) iteratorPagamentos.next();
+    		
+    		if (pagamento.getGuiaPagamento().getGuiaPagamento() == null && pagamento.isDuplicidade()) {
+				FiltroGuiaPagamentoHistorico filtro = new FiltroGuiaPagamentoHistorico();
+				filtro.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.ID, pagamento.getGuiaPagamento().getId()));
+				filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamentoHistorico.GUIA_PAGAMENTO_GERAL);
+				
+				GuiaPagamentoHistorico guia = (GuiaPagamentoHistorico) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtro, GuiaPagamentoHistorico.class.getName()));
+				
+				pagamento.getGuiaPagamento().setGuiaPagamentoHistorico(guia);
+			}
+    		pagamentosFinal.add(pagamento);
+    	}
+    	
+    	return pagamentosFinal;
+    }
 }

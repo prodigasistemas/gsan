@@ -749,8 +749,16 @@ face: Verdana, Arial, Helvetica, sans-serif;
 												</td>
 												<td width="11%" align="right" >
 													<logic:notEmpty name="pagamento" property="guiaPagamento">
-														<logic:notEmpty name="pagamento" property="guiaPagamento.guiaPagamento.valorDebito">
-															<bean:write name="pagamento" property="guiaPagamento.guiaPagamento.valorDebito" formatKey="money.format" />&nbsp;
+														<logic:notEmpty name="pagamento" property="guiaPagamento.guiaPagamento">
+															<logic:notEmpty name="pagamento" property="guiaPagamento.guiaPagamento.valorDebito">
+																<bean:write name="pagamento" property="guiaPagamento.guiaPagamento.valorDebito" formatKey="money.format" />&nbsp;
+															</logic:notEmpty>
+														</logic:notEmpty>
+														
+														<logic:notEmpty name="pagamento" property="guiaPagamento.guiaPagamentoHistorico">
+															<logic:notEmpty name="pagamento" property="guiaPagamento.guiaPagamentoHistorico.valorDebito">
+																<bean:write name="pagamento" property="guiaPagamento.guiaPagamentoHistorico.valorDebito" formatKey="money.format" />&nbsp;
+															</logic:notEmpty>
 														</logic:notEmpty>
 													</logic:notEmpty>
 												</td> 

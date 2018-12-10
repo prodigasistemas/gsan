@@ -544,4 +544,8 @@ public class Pagamento extends ObjetoTransacao {
 	public void setValorDesconto(BigDecimal valorDesconto) {
 		this.valorDesconto = valorDesconto;
 	}
+	
+	public boolean isDuplicidade() {
+		return this.pagamentoSituacaoAtual.getId().intValue() == PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE.intValue();
+	}
 }
