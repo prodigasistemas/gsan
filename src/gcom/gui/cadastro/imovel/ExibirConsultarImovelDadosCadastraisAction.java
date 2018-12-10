@@ -356,6 +356,11 @@ public class ExibirConsultarImovelDadosCadastraisAction extends GcomAction {
 			consultarImovelActionForm.setTipoCoberturaDadosCadastrais("");
 		}
 		
+		if(imovel.getObservacaoCategoria() != null){
+			consultarImovelActionForm.setObservacaoCategoriaDadosCadastrais(imovel.getObservacaoCategoria().toString());	
+		} else {
+			consultarImovelActionForm.setObservacaoCategoriaDadosCadastrais("");
+		}
 		try{
 			Municipio municipio = imovel.getLocalidade().getMunicipio();
 			if(municipio != null){

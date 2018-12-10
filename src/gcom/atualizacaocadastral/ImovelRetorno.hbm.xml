@@ -45,6 +45,8 @@
         <property name="quantidadeEconomiasSocial"   type="java.lang.Integer"    column="imre_qtd_economias_social"          not-null="false"/>
         <property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imre_qtd_economias_outra"           not-null="false"/>
         <property name="percentualAbastecimento"     type="java.lang.Short"      column="imre_percentual_abastecimento"      not-null="false"/>
+        <property name="observacaoCategoria" 		 type="java.lang.String"     column="imre_dsobservacaotegoria" 			 not-null="false"/>
+        
 		
 
 		<many-to-one name="fonteAbastecimento" class="gcom.cadastro.imovel.FonteAbastecimento">
