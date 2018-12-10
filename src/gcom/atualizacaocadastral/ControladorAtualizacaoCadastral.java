@@ -1807,8 +1807,6 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
             if (tabelaColuna.isTipoColuna(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL.intValue())) {
                 if (tabelaColuna.possuiValorFiscalizado())
                     return true;
-                else
-                    return false;
             }
         }
         
