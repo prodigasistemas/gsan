@@ -120,7 +120,7 @@ public class ImovelAtualizacaoCadastralBuilder {
 			imovelAtualizacaoCadastral.setPercentualAbastecimento(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("percentualAbastecimento")));
 		}
 		
-		imovelAtualizacaoCadastral.setObservacaoCategoria(atualizacaoCadastralImovel.getLinhaImovel("observacaoCategoria"));
+			imovelAtualizacaoCadastral.setObservacaoCategoria(atualizacaoCadastralImovel.getLinhaImovel("observacaoCategoria"));
 
 		// Linha 4
 		imovelAtualizacaoCadastral.setIdLigacaoAguaSituacao(Util.setValorInteiro(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")));
