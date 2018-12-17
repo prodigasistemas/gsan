@@ -30,6 +30,7 @@ import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.FiltroImovel;
+import gcom.cadastro.imovel.FiltroImovelImagem;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.IImovelTipoOcupanteQuantidade;
@@ -45,6 +46,7 @@ import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
+import gcom.fachada.Fachada;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
@@ -219,6 +221,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		LigacaoAguaSituacao situacaoAgua = imovel.getLigacaoAguaSituacao();
 		LigacaoEsgotoSituacao situacaoEsgoto = imovel.getLigacaoEsgotoSituacao();
 
+		String coordenadaX = imovel.getCoordenadaX();
+		String coordenadaY = imovel.getCoordenadaY();
 		MergeProperties.mergeProperties(imovel, imovelRetorno);
 
 		imovel.setId(imovelRetorno.getIdImovel());
@@ -227,6 +231,11 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		imovel.setLigacaoEsgotoSituacao(situacaoEsgoto);
 		imovel.setUsuarioParaHistorico(usuario);
 
+		if (imovel.isCoordenadasZeradas()) {
+			imovel.setCoordenadaX(coordenadaX);
+			imovel.setCoordenadaY(coordenadaY);
+		}
+		
 		getControladorAtualizacaoCadastro().atualizar(imovel);
 
 		logger.info(String.format("Imovel atualizado pelo processo de atualizacao cadastral: %s", imovel.getId()));
@@ -236,7 +245,6 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 	private void inserirImovelImagens(Integer idImovel) throws ControladorException {
 		Collection<ImagemRetorno> colecaoImagemRetorno = this.pesquisarImagensRetornoPorIdImovel(idImovel);
-		logger.info("Imovel: " + idImovel + ", qtd imagens: " + colecaoImagemRetorno.size());
 		int ordemImagem = 0;
 
 		for (ImagemRetorno imagemRetorno : colecaoImagemRetorno) {
@@ -286,19 +294,15 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	private File copiarImagensRetorno(ImagemRetorno imagemRetorno) throws ControladorException {
 		String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		File arquivoOrigem = new File(caminhoJboss, imagemRetorno.getPathImagem());
-		logger.info("   Imagem: " + imagemRetorno.getPathImagem());
-		logger.info("   arquivoOrigem: " + arquivoOrigem);
+
 		File arquivoDestino = this.criarArquivoDestinoImovelImagem(imagemRetorno);
 
-		logger.info("   arquivoDestino: " + arquivoDestino);
 		FileChannel origemChannel = null;
 		FileChannel destinoChannel = null;
 
 		try {
-			logger.info("   arquivoOrigem.exists? " + arquivoOrigem.exists());
 			if (!arquivoOrigem.exists()) {
 				arquivoOrigem = new File(caminhoJboss, "images/" + arquivoOrigem.getName());
-				logger.info("   arquivoOrigem " + arquivoOrigem);
 			}
 
 			origemChannel = new FileInputStream(arquivoOrigem).getChannel();
@@ -311,7 +315,6 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			e.printStackTrace();
 			atualizarImagemRetorno(imagemRetorno, ConstantesSistema.NAO);
 			if (e.getClass().equals(FileNotFoundException.class)) {
-				logger.info("Arquivo "+ arquivoOrigem.getName() + " não encontrado. ");
 			} else {
 				throw new ControladorException("Erro ao copiar imagens do retorno", e);
 			}
@@ -339,28 +342,25 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	}
 
 	private File criarArquivoDestinoImovelImagem(ImagemRetorno imagemRetorno) {
-		String pastaDestino = retornarPastaDestinoImovelImagem(imagemRetorno);
-		logger.info("      pastaDestino: " + pastaDestino);
+		String pastaDestino = retornarPastaDestinoImovelImagem(imagemRetorno.getIdImovel());
 		
 		File arquivoDestino = new File(pastaDestino, imagemRetorno.getNomeImagem());
-		logger.info("      arquivoDestino: " + arquivoDestino);
 		
 		File caminhoDestino = arquivoDestino.getParentFile().getAbsoluteFile();
 		
-		logger.info("      caminhoDestino.exists? " + caminhoDestino.exists());
 		if (!caminhoDestino.exists())
 			caminhoDestino.mkdir();
-		logger.info("      caminhoDestino.exists? " + caminhoDestino.exists());
+
 		return arquivoDestino;
 	}
 
 	@SuppressWarnings("unchecked")
-	private String retornarPastaDestinoImovelImagem(ImagemRetorno imagemRetorno) {
+	private String retornarPastaDestinoImovelImagem(Integer idImovel) {
 		Imovel imovel = null;
 
 		try {
 			FiltroImovel filtro = new FiltroImovel();
-			filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imagemRetorno.getIdImovel()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
 			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.LOCALIDADE);
 			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.SETOR_COMERCIAL);
 			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.QUADRA);
@@ -379,7 +379,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 		return caminhoJboss + "/imovel_imagem/" + pasta;
 	}
-
+	
 	private void atualizarImovelSubcategoriaAtualizacaoCadastral(IImovel imovelRetorno) throws Exception {
 		imovelRetorno.setId(imovelRetorno.getIdImovel());
 
@@ -1788,7 +1788,6 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     }
     
     public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados) throws ControladorException {
-    	
     	ImovelControleAtualizacaoCadastral controle = this.pesquisarImovelControleAtualizacao(new Integer(idImovel));
     	
     	if (controle.isPreAprovado())
@@ -1906,6 +1905,28 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		} catch (Exception e) {
 			logger.error("Erro ao reprovar imoveis em lote. " + e);
 			throw new ControladorException("Erro ao aprovar imoveis em lote.", e);
+		}
+	}
+	
+	public void copiarImagensRestantes() {
+		@SuppressWarnings("rawtypes")
+		Collection imagens = Fachada.getInstancia().pesquisar(new FiltroImovelImagem(), ImovelImagem.class.getName());
+		
+		try {
+			@SuppressWarnings("unchecked")
+			Iterator<ImovelImagem> itImagens = imagens.iterator();
+			
+			while (itImagens.hasNext()) {
+				ImovelImagem imagem = itImagens.next();
+				
+				String caminhoJboss = System.getProperty("jboss.server.home.dir");
+				File arquivo = new File(caminhoJboss, imagem.getCaminhoImagem());
+				
+				if (!arquivo.exists()) 
+					getControladorUtil().remover(imagem);
+			}
+		} catch (ControladorException e) {
+			e.printStackTrace();
 		}
 	}
 }

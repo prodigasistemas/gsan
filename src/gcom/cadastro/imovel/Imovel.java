@@ -2559,4 +2559,9 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public String getObservacaoCategoria() {
 			return observacaoCategoria;
 	}
+	
+	public boolean isCoordenadasZeradas() {
+		return ((this.getCoordenadaX() != null && (this.getCoordenadaX().equals("0.0") || this.getCoordenadaX().equals("0")))
+				|| (this.getCoordenadaY() != null && (this.getCoordenadaY().equals("0.0") || this.getCoordenadaY().equals("0"))));
+	}
 }
