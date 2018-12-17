@@ -48,9 +48,9 @@ public class RepositorioSegurancaHBM implements IRepositorioSeguranca {
 		try {
 			String consulta = " SELECT tabelaColuna "
 					+ " FROM TabelaColunaAtualizacaoCadastral tabelaColuna "
-					+ " INNER JOIN fetch tabelaColuna.tabelaAtualizacaoCadastral tabela "
-					+ " INNER JOIN fetch tabela.tabela tabela "
-					+ " WHERE tabela.id = :idTabelaAtualizacaoCadastral ";
+					+ " INNER JOIN fetch tabelaColuna.tabelaAtualizacaoCadastral tabelaAtualizacao "
+					+ " INNER JOIN fetch tabelaAtualizacao.tabela tabela "
+					+ " WHERE tabelaAtualizacao.id = :idTabelaAtualizacaoCadastral ";
 			return (List<TabelaColunaAtualizacaoCadastral>) session.createQuery(consulta)
 					.setInteger("idTabelaAtualizacaoCadastral", idTabelaAtualizacaoCadastral).list();
 		}catch(HibernateException e) {
