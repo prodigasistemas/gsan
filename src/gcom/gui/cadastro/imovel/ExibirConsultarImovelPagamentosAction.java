@@ -525,7 +525,7 @@ public class ExibirConsultarImovelPagamentosAction extends GcomAction {
     	while(iteratorPagamentos.hasNext()) {
     		Pagamento pagamento = (Pagamento) iteratorPagamentos.next();
     		
-    		if (pagamento.getGuiaPagamento().getGuiaPagamento() == null && pagamento.isDuplicidade()) {
+    		if (pagamento.isPagamentoGuia() && pagamento.getGuiaPagamento().getGuiaPagamento() == null && pagamento.isDuplicidade()) {
 				FiltroGuiaPagamentoHistorico filtro = new FiltroGuiaPagamentoHistorico();
 				filtro.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.ID, pagamento.getGuiaPagamento().getId()));
 				filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroGuiaPagamentoHistorico.GUIA_PAGAMENTO_GERAL);
