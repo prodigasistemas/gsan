@@ -38134,7 +38134,9 @@ public class ControladorCobranca extends ControladorComum {
 				debitoCreditoParcelamentoHelper = new DebitoCreditoParcelamentoHelper();
 
 				debitoCreditoParcelamentoHelper = apresentarDebitoCreditoImovelExtratoDebito(parcelamento);
-				colecaoDebitoCreditoParcelamentoHelper.add(debitoCreditoParcelamentoHelper);
+				
+				if (!debitoCreditoParcelamentoHelper.getValorTotal().equals(BigDecimal.ZERO))
+					colecaoDebitoCreditoParcelamentoHelper.add(debitoCreditoParcelamentoHelper);
 			}
 
 			imovelDebitoCredito.setColecaoDebitoCreditoParcelamentoHelper(colecaoDebitoCreditoParcelamentoHelper);
