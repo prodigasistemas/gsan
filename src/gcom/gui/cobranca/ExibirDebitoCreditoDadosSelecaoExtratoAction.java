@@ -85,7 +85,7 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 		String idImovel = form.getIdImovel();
 		if (request.getParameter("reloadPage") == null) {
 
-			sessao.removeAttribute("colecaoConta");
+			sessao.removeAttribute("colecaoContaExtrato");
 			sessao.removeAttribute("colecaoContaNormais");
 			sessao.removeAttribute("colecaoContaPreteritos");
 			sessao.removeAttribute("colecaoDebitoACobrar");
@@ -167,7 +167,7 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 					colecaoConta.addAll(helper.getColecaoContasValoresImovel());
 					colecaoConta.addAll(helper.getColecaoContasValoresPreteritos());
 
-					sessao.setAttribute("colecaoConta", colecaoConta);
+					sessao.setAttribute("colecaoContaExtrato", colecaoConta);
 					sessao.setAttribute("colecaoContaNormais", helper.getColecaoContasValoresImovel());
 					sessao.setAttribute("colecaoContaPreteritos", helper.getColecaoContasValoresPreteritos());
 					sessao.setAttribute("colecaoDebitoACobrar", helper.getColecaoDebitoACobrar());
@@ -262,7 +262,7 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 			retorno = new Object[6];
 			colecaoContas = new ArrayList();
 
-			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoConta");
+			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoContaExtrato");
 			Iterator itColecaoContasSessao = colecaoContasSessao.iterator();
 			ContaValoresHelper contaValoresHelper = null;
 

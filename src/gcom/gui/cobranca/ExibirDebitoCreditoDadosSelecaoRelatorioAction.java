@@ -69,7 +69,7 @@ public class ExibirDebitoCreditoDadosSelecaoRelatorioAction extends GcomAction {
 		String idImovel = form.getIdImovel();
 		if (httpServletRequest.getParameter("reloadPage") == null) {
 
-			sessao.removeAttribute("colecaoConta");
+			sessao.removeAttribute("colecaoContaExtrato");
 			sessao.removeAttribute("colecaoContaClienteAtual");
 			sessao.removeAttribute("colecaoContaPreteritos");
 			sessao.removeAttribute("colecaoDebitoACobrar");
@@ -228,7 +228,7 @@ public class ExibirDebitoCreditoDadosSelecaoRelatorioAction extends GcomAction {
 			retorno = new Object[6];
 			colecaoContas = new ArrayList();
 
-			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoConta");
+			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoContaExtrato");
 			Iterator itColecaoContasSessao = colecaoContasSessao.iterator();
 			ContaValoresHelper contaValoresHelper = null;
 
