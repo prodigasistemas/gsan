@@ -941,7 +941,7 @@
 			</groupFooter>
 		</group>
 		<group  name="servicos" >
-			<groupExpression><![CDATA[]]></groupExpression>
+			<groupExpression><![CDATA[null]]></groupExpression>
 			<groupHeader>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
@@ -1609,8 +1609,8 @@
 				</textField>
 				<staticText>
 					<reportElement
-						x="4"
-						y="48"
+						x="5"
+						y="50"
 						width="220"
 						height="14"
 						key="staticText-44"/>
@@ -1622,7 +1622,7 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="267"
+						x="266"
 						y="51"
 						width="86"
 						height="11"
