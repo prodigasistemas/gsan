@@ -90,7 +90,7 @@ public class RepositorioSegurancaHBM implements IRepositorioSeguranca {
 
 			return (Integer) (session.createSQLQuery(sql.toString())
 									.addScalar("usuarioLogado", Hibernate.INTEGER)
-									.setInteger("idImovel", idImovel).uniqueResult());
+									.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult());
 		}catch(HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
