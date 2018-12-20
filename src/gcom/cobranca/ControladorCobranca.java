@@ -24243,18 +24243,11 @@ public class ControladorCobranca extends ControladorComum {
 					colecaoDebitosACobrar,
 					valorAcrescimosImpontualidade,
 					valorDesconto,
-					null, // anoMesReferenciaDebito
-					// é
-					// nulo
-					// para o parcelamento
+					null, // anoMesReferenciaDebito é nulo para o parcelamento
 					documentoEmissaoForma,
 					documentoTipo,
-					null, // cobrancaAcaoAtividadeComando
-					// é nulo
-					// para o
-					// parcelamento
-					null, // cobrancaAcaoAtividadeCronograma é nulo para o
-					// parcelamento
+					null, // cobrancaAcaoAtividadeComando é nulo para o parcelamento
+					null, // cobrancaAcaoAtividadeCronograma é nulo para o parcelamento
 					null, // Empresa é nulo para o parcelamento
 					null, // CobrancaCriterio é nulo para o parcelamento
 					null, // CobrancaAcao é nulo para o parcelamento

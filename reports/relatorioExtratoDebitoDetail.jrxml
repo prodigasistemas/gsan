@@ -48,7 +48,7 @@
 				<printWhenExpression><![CDATA[new Boolean($F{existeContas}.equals("1"))]]></printWhenExpression>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="0"
+						x="1"
 						y="1"
 						width="527"
 						height="16"

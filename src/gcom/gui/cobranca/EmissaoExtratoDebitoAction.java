@@ -102,7 +102,7 @@ public class EmissaoExtratoDebitoAction extends GcomAction {
 		String idsGuias = httpServletRequest.getParameter("guiaPagamento");
 		String idsParcelamentos = httpServletRequest.getParameter("parcelamento");
 		
-		Object[] contas = this.obterContasSelecionadas(idsContas, sessao);
+		Object[] contas = this.obterContasSelecionadas(idsContas, sessao, form.getIdImovel());
 		Object[] debitos = this.obterDebitosSelecionados(idsDebitos, sessao);
         Object[] creditos = this.obterCreditosSelecionadas(idsCreditos, sessao);
         Object[] guias = this.obterGuiasSelecionadas(idsGuias, sessao);		
@@ -407,7 +407,7 @@ public class EmissaoExtratoDebitoAction extends GcomAction {
 	}
 	
 	
-	private Object[] obterContasSelecionadas(String idsContas, HttpSession sessao){
+	private Object[] obterContasSelecionadas(String idsContas, HttpSession sessao, String idImovel){
 		
 		Object[] retorno = null;
 		Collection<ContaValoresHelper> colecaoContas = null;
@@ -421,7 +421,7 @@ public class EmissaoExtratoDebitoAction extends GcomAction {
 			retorno = new Object[6];
 			colecaoContas = new ArrayList();
 			
-			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoConta");
+			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoContaExtrato");
 			Iterator itColecaoContasSessao = colecaoContasSessao.iterator();
 			ContaValoresHelper contaValoresHelper = null;
 			
@@ -434,6 +434,11 @@ public class EmissaoExtratoDebitoAction extends GcomAction {
 				for(int x=0; x<idsContasArray.length; x++){
 					
 					if (contaValoresHelper.getConta().getId().equals(new Integer(idsContasArray[x]))){
+						
+						if (!contaValoresHelper.getConta().getImovel().getId().toString().equals(idImovel)) {
+							logger.info("Conta " + contaValoresHelper.getConta().getId() + " não pertence ao imóvel " + idImovel);
+						}
+						
 						colecaoContas.add(contaValoresHelper);
 						valorTotalConta = valorTotalConta.add(contaValoresHelper.getValorTotalConta());
 						valorTotalAcrescimoImpontualidade = valorTotalAcrescimoImpontualidade.add(
