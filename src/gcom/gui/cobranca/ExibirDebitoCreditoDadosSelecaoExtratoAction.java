@@ -21,6 +21,7 @@ import gcom.fachada.Fachada;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.gui.GcomAction;
+import gcom.gui.relatorio.cobranca.parcelamento.GerarRelatorioExtratoDebitoAction;
 import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
@@ -38,12 +39,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 
+	private static Logger logger = Logger.getLogger(ExibirDebitoCreditoDadosSelecaoExtratoAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 
 		ActionForward retorno = mapping.findForward("debitoCreditoDadosSelecaoExtrato");
@@ -248,7 +252,7 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private Object[] obterContasSelecionadas(String idsContas, HttpSession sessao) {
+	private Object[] obterContasSelecionadas(String idsContas, HttpSession sessao, String idImovel) {
 
 		Object[] retorno = null;
 		Collection<ContaValoresHelper> colecaoContas = null;
@@ -275,6 +279,10 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 				for (int x = 0; x < idsContasArray.length; x++) {
 
 					if (contaValoresHelper.getConta().getId().equals(new Integer(idsContasArray[x]))) {
+						
+						if (contaValoresHelper.getConta().getImovel().getId().equals(idImovel)) {
+							logger.info("Conta " + contaValoresHelper.getConta().getId() + " não pertence ao imóvel " + idImovel);
+						}
 						colecaoContas.add(contaValoresHelper);
 						valorTotalConta = valorTotalConta.add(contaValoresHelper.getValorTotalConta());
 						valorTotalAcrescimoImpontualidade = valorTotalAcrescimoImpontualidade.add(contaValoresHelper.getValorTotalContaValoresParcelamento());
@@ -536,7 +544,7 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 		String idsGuias = httpServletRequest.getParameter("guiaPagamento");
 		String idsParcelamentos = httpServletRequest.getParameter("parcelamento");
 
-		Object[] contas = this.obterContasSelecionadas(idsContas, sessao);
+		Object[] contas = this.obterContasSelecionadas(idsContas, sessao, form.getIdImovel());
 		Object[] debitos = this.obterDebitosSelecionados(idsDebitos, sessao);
 		Object[] creditos = this.obterCreditosSelecionadas(idsCreditos, sessao);
 		Object[] guias = this.obterGuiasSelecionadas(idsGuias, sessao);
