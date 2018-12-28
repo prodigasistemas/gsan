@@ -2,12 +2,14 @@ package gcom.atendimentopublico.registroatendimento;
 
 import gcom.atendimentopublico.ligacaoagua.RamalLocalInstalacao;
 import gcom.atualizacaocadastral.ICliente;
+import gcom.atualizacaocadastral.IClienteEndereco;
 import gcom.atualizacaocadastral.IClienteImovel;
 import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.cadastro.ContaBraile;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
@@ -22,8 +24,10 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
+
 
 public class RABuilder {
 	
@@ -58,8 +62,8 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastral(IImovel imovelRetorno, ICliente clienteRetorno, 
-											IClienteImovel clienteImovelRetorno, Integer alteracaoTipo, String protocoloAtendimento, Integer idUsuarioAutorizacao) {
+	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastral(IImovel imovelRetorno, ICliente clienteRetorno, IClienteImovel clienteImovelRetorno, 
+			Integer alteracaoTipo, String protocoloAtendimento, Integer idUsuarioAutorizacao, Collection<IClienteFone> telefones, Collection<IClienteEndereco> enderecos) {
 		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
 		
 		Date dataAtual = new Date();
@@ -72,7 +76,29 @@ public class RABuilder {
 					.idMeioSolicitacao(MeioSolicitacao.INTERNO)
 					.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
 					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
-					.observacao(getObservacaoCliente(clienteRetorno, imovelRetorno, clienteImovelRetorno, alteracaoTipo))
+					.observacao(getObservacaoCliente(clienteRetorno, imovelRetorno, clienteImovelRetorno, alteracaoTipo, telefones, enderecos))
+					.indicadorRaAtualizacaoCadastral(true)
+					.idUsuarioLogado(idUsuarioAutorizacao)
+					.protocoloAtendimento(protocoloAtendimento);
+		
+		return raDadosGerais;
+	}
+	
+	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastralExclusaoCLiente(IImovel imovelRetorno, ICliente clienteRetorno, IClienteImovel clienteImovelRetorno, 
+			Integer alteracaoTipo, String protocoloAtendimento, Integer idUsuarioAutorizacao) {
+		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
+		
+		Date dataAtual = new Date();
+		
+		raDadosGerais.indicadorAtendimentoOnline(new Short("1"))
+					.dataAtendimento(Util.formatarData(dataAtual))
+					.dataPrevista(Util.formatarData(dataAtual))
+					.horaAtendimento(Util.formatarHoraSemSegundos(dataAtual))
+					.idUnidadeAtendimento(UNIDADE_PRESIDENCIA)
+					.idMeioSolicitacao(MeioSolicitacao.INTERNO)
+					.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
+					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
+					.observacao(getObservacaoCliente(clienteRetorno, imovelRetorno, clienteImovelRetorno, alteracaoTipo, null, null))
 					.indicadorRaAtualizacaoCadastral(true)
 					.idUsuarioLogado(idUsuarioAutorizacao)
 					.protocoloAtendimento(protocoloAtendimento);
@@ -539,11 +565,11 @@ public class RABuilder {
 	private static String getObservacaoImovelNovo(IImovel imovelRetorno,  HashMap<ClienteRelacaoTipo, ICliente> mapClienteImovel, Integer alteracaoTipo) {
 		StringBuilder observacao = new StringBuilder();
 		
-		observacao.append("INCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ");
+		observacao.append("INCLUSAO DE IMOVEL - RECADASTRAMENTO. ");
 		observacao.append(getDescricaoEnderecoImovel(imovelRetorno));
 		observacao.append(getObservacaoCliente(imovelRetorno, mapClienteImovel));
 		observacao.append(getDadosImovel(imovelRetorno));
-
+		observacao.append("[IMOVEL RETORNO: " + imovelRetorno.getId() + "]");
 		return observacao.toString();
 	}
 	
@@ -561,10 +587,8 @@ public class RABuilder {
 	private static String getDadosImovel(IImovel imovelRetorno) {
 		StringBuilder observacao = new StringBuilder();
 		
-		observacao.append("Quadra: ");
-		observacao.append(imovelRetorno.getNumeroQuadra() + ". ");
-		observacao.append("Setor Comercial: ");
-		observacao.append(imovelRetorno.getCodigoSetorComercial() + ". ");
+		observacao.append("Quadra: ").append(imovelRetorno.getNumeroQuadra() + ". ");
+		observacao.append("Setor Comercial: ").append(imovelRetorno.getCodigoSetorComercial() + ". ");
 		
 		RamalLocalInstalacao ramalLocalInstalacao = ((ImovelRetorno) imovelRetorno).getRamalLocalInstalacao();
 		if (ramalLocalInstalacao != null) {
@@ -575,7 +599,8 @@ public class RABuilder {
 		return observacao.toString();
 	}
 	
-	private static String getObservacaoCliente(ICliente clienteRetorno, IImovel imovelRetorno, IClienteImovel clienteImovelRetorno, Integer alteracaoTipo) {
+	private static String getObservacaoCliente(ICliente clienteRetorno, IImovel imovelRetorno, IClienteImovel clienteImovelRetorno, 
+			Integer alteracaoTipo, Collection<IClienteFone> telefones, Collection<IClienteEndereco> enderecos) {
 		StringBuilder observacao = new StringBuilder();
 		
 		if (alteracaoTipo.equals(AlteracaoTipo.ALTERACAO)) {
@@ -590,7 +615,7 @@ public class RABuilder {
 			observacao.append("FIM DA RELAÇÃO DO CLIENTE - RECADASTRAMENTO. ");
 		}
 		
-		observacao.append(getDescricaoInformacoesCliente(clienteRetorno)); 
+		observacao.append(getDescricaoInformacoesCliente(clienteRetorno, telefones, enderecos)); 
 		observacao.append(getInformacoesClienteImovel(clienteImovelRetorno.getClienteRelacaoTipo(), imovelRetorno));
 		
 		return observacao.toString();
@@ -599,11 +624,11 @@ public class RABuilder {
 	private static String getObservacaoCliente(IImovel imovelRetorno, HashMap<ClienteRelacaoTipo, ICliente> mapClientesImovel) {
 		StringBuilder observacao = new StringBuilder();
 		
-		observacao.append("CLIENTES: ");
+		observacao.append(" CLIENTES: ");
 		
 		for (ClienteRelacaoTipo clienteRelacaoTipo : mapClientesImovel.keySet()) {
 			ICliente cliente = mapClientesImovel.get(clienteRelacaoTipo);
-			observacao.append(getDescricaoInformacoesCliente(cliente)); 
+			observacao.append(getDescricaoInformacoesCliente(cliente, null, null)); 
 			observacao.append(getInformacoesClienteImovel(clienteRelacaoTipo, imovelRetorno));
 		}
 		
@@ -614,33 +639,25 @@ public class RABuilder {
 	private static String getDescricaoEnderecoImovel(IImovel imovelRetorno) {
 		StringBuilder descricaoEndereco = new StringBuilder();
 		
-		descricaoEndereco.append("Endereco: ");
-		descricaoEndereco.append(imovelRetorno.getDescricaoLogradouro());
-		descricaoEndereco.append(", ");
-		descricaoEndereco.append("n ");
-		descricaoEndereco.append(imovelRetorno.getNumeroImovel());
-		descricaoEndereco.append(", ");
-		descricaoEndereco.append(imovelRetorno.getComplementoEndereco());
-		descricaoEndereco.append(", ");
-		descricaoEndereco.append(imovelRetorno.getNomeBairro());
-		descricaoEndereco.append(", ");
+		descricaoEndereco.append("End: ").append(imovelRetorno.getDescricaoLogradouro()).append(", ");
+		descricaoEndereco.append("n ").append(imovelRetorno.getNumeroImovel()).append(", ");
+		descricaoEndereco.append(imovelRetorno.getComplementoEndereco()).append(", ");
+		descricaoEndereco.append(imovelRetorno.getNomeBairro()).append(", ");
 		descricaoEndereco.append(imovelRetorno.getNomeMunicipio());
 		descricaoEndereco.append(", ");
-		descricaoEndereco.append("CEP: ");
-		descricaoEndereco.append(imovelRetorno.getCodigoCep());
-		descricaoEndereco.append(".");
+		descricaoEndereco.append("CEP: ").append(imovelRetorno.getCodigoCep()).append(".");
 		
 		return descricaoEndereco.toString().replaceAll("\\s,", "");
 	}
 	
-	private static String getDescricaoInformacoesCliente(ICliente clienteRetorno) {
+	private static String getDescricaoInformacoesCliente(ICliente clienteRetorno, Collection<IClienteFone> telefones, Collection<IClienteEndereco>enderecos) {
 		StringBuilder descricaoEndereco = new StringBuilder();
 		
-		descricaoEndereco.append("Nome:");
-		descricaoEndereco.append(clienteRetorno.getNome());
-		descricaoEndereco.append(", ");
+		descricaoEndereco.append("Nome: ").append(clienteRetorno.getNome()).append(". ");
 		descricaoEndereco.append(getCpfCnpjPorTipoPessoa(clienteRetorno));
-		descricaoEndereco.append(".");
+		descricaoEndereco.append(getEmailCliente(clienteRetorno));
+		descricaoEndereco.append(getTelefonesCliente(telefones));
+		descricaoEndereco.append(getEnderecosCliente(enderecos));
 		
 		return descricaoEndereco.toString().replaceAll("\\s,", "");
 	}
@@ -648,22 +665,14 @@ public class RABuilder {
 	private static StringBuilder getInformacoesClienteImovel(ClienteRelacaoTipo clienteRelacaoTipo, IImovel imovelRetorno) {
 		StringBuilder informacoes = new StringBuilder();
 		
-		informacoes.append("Tipo de relação do cliente:");
-		informacoes.append(clienteRelacaoTipo.getDescricao());
-		informacoes.append(". ");
+		informacoes.append("Tipo de relacao: ").append(clienteRelacaoTipo.getDescricao()).append(". ");
 		
 		if (imovelRetorno.getTipoOperacao() != null) {
 			if (imovelRetorno.getTipoOperacao().equals(AlteracaoTipo.ALTERACAO)){
-				informacoes.append("Matrícula do imóvel:");
-				informacoes.append(imovelRetorno.getIdImovel());
-				informacoes.append(".");
-			} else if (imovelRetorno.getTipoOperacao().equals(AlteracaoTipo.INCLUSAO)) {
-				informacoes.append("Imóvel Novo.");
-			}
+				informacoes.append("Imovel: ").append(imovelRetorno.getIdImovel()).append(".");
+			} 
 		} else if (imovelRetorno.getIdImovel() != null){
-			informacoes.append("Matrícula do imóvel:");
-			informacoes.append(imovelRetorno.getIdImovel());
-			informacoes.append(".");
+			informacoes.append("Imovel: ").append(imovelRetorno.getIdImovel()).append(".");
 		}
 		
 		return informacoes;
@@ -671,18 +680,71 @@ public class RABuilder {
 	
 	private static StringBuilder getCpfCnpjPorTipoPessoa(ICliente clienteRetorno) {
 		StringBuilder informacoesTipoPessoa = new StringBuilder();
+		
 		if (clienteRetorno.getClienteTipo().getId().equals(ClienteTipo.INDICADOR_PESSOA_FISICA)) {
-			informacoesTipoPessoa.append("CPF:");
-			informacoesTipoPessoa.append(clienteRetorno.getCpf());
-			informacoesTipoPessoa.append(", ");
-			informacoesTipoPessoa.append("RG:");
-			informacoesTipoPessoa.append(clienteRetorno.getRg());
+			if (clienteRetorno.getCpf() != null) 
+				informacoesTipoPessoa.append("CPF: ").append(clienteRetorno.getCpf()).append(". ");
+			
+			if (clienteRetorno.getRg() != null) 
+				informacoesTipoPessoa.append("RG: ").append(clienteRetorno.getRg()).append(". ");
+			
 		} else if (clienteRetorno.getClienteTipo().getId().equals(ClienteTipo.INDICADOR_PESSOA_JURIDICA)) {
-			informacoesTipoPessoa.append("CNPJ:");
-			informacoesTipoPessoa.append(clienteRetorno.getCnpj());
+			if (clienteRetorno.getCnpj() != null) 
+				informacoesTipoPessoa.append("CNPJ: ").append(clienteRetorno.getCnpj()).append(". ");
 		}
 		
 		return informacoesTipoPessoa;
+	}
+	
+	private static StringBuilder getEmailCliente(ICliente clienteRetorno) {
+		StringBuilder informacoesTipoPessoa = new StringBuilder();
+		
+		if (clienteRetorno.getEmail() != null ) {
+			informacoesTipoPessoa.append("Email:").append(clienteRetorno.getEmail()).append(". ");
+		} 
+		
+		return informacoesTipoPessoa;
+	}
+	
+	private static StringBuilder getTelefonesCliente(Collection<IClienteFone> telefones) {
+		StringBuilder fone = new StringBuilder();
+		
+		if (telefones != null) {
+			Iterator<IClienteFone> itTelefones = telefones.iterator();
+			
+			while (itTelefones.hasNext()) {
+				IClienteFone telefone = itTelefones.next();
+				
+				if (telefone.getTelefone() != null) {
+					if (telefone.getFoneTipo() != null && telefone.getFoneTipo().getDescricao() != null)
+						fone.append("Tel ").append(telefone.getFoneTipo().getDescricao()).append(": ");
+					
+					if (telefone.getDdd() != null)
+						fone.append("(").append(telefone.getDdd()).append(")");
+					
+					if (telefone.getTelefone() != null)
+						fone.append(telefone.getTelefone()).append(". ");
+				}
+			}
+		}
+		
+		return fone;
+	}
+	
+	private static StringBuilder getEnderecosCliente(Collection<IClienteEndereco> enderecos) {
+		StringBuilder end = new StringBuilder();
+		
+		if (enderecos != null) {
+			Iterator<IClienteEndereco> itEndereco = enderecos.iterator();
+			
+			while (itEndereco.hasNext()) {
+				IClienteEndereco endereco = itEndereco.next();
+				
+				end.append("End: ").append(endereco.getEnderecoCompleto()).append(". ");
+			}
+		}
+		
+		return end;
 	}
 	
 }

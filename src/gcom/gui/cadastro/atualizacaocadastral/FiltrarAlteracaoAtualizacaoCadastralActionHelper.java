@@ -56,6 +56,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	
 	private short cpfCnpjTransmitido;
 	
+	private Integer idImovelRetorno;
+	
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper() {
 	}
 
@@ -237,6 +239,14 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	public void setAlteracaoCategoria(Boolean alteracaoCategoria) {
 		this.alteracaoCategoria = alteracaoCategoria;
+	}
+	
+	public Integer getIdImovelRetorno() {
+		return idImovelRetorno;
+	}
+
+	public void setIdImovelRetorno(Integer idImovelRetorno) {
+		this.idImovelRetorno = idImovelRetorno;
 	}
 
 	private boolean permiteAprovarLote() {

@@ -162,4 +162,34 @@ public class ClienteEnderecoRetorno implements IClienteEndereco {
 
 	public void setPerimetroFinal(Logradouro perimetroFinal) {
 	}
+	
+	public String getEnderecoCompleto() {
+		StringBuilder endereco = new StringBuilder();
+		
+		if (this.enderecoTipo != null && this.enderecoTipo.getDescricao() != null)
+			endereco.append(this.enderecoTipo.getDescricao()).append(": ");
+		
+		if (this.logradouroTipo != null && this.logradouroTipo.getDescricao() != null)
+			endereco.append(this.logradouroTipo.getDescricao()).append(" ");
+		
+		if (this.descricaoLogradouro != null)
+			endereco.append(this.descricaoLogradouro).append(" ");
+		
+		if (this.complemento != null)
+			endereco.append(this.complemento).append(" ");
+			
+		if (this.numero != null)
+			endereco.append("n ").append(this.numero).append(" - ");
+		
+		if (this.nomeBairro != null)
+			endereco.append(this.nomeBairro).append(", ");
+		
+		if (this.nomeMunicipio != null)
+			endereco.append(this.nomeMunicipio).append(" - ");
+		
+		if (this.codigoCep != null)
+			endereco.append(this.codigoCep).append(".");
+		
+		return endereco.toString();
+	}
 }

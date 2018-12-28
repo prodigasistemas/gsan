@@ -1123,4 +1123,14 @@ public class RegistroAtendimento extends ObjetoTransacao {
 		return endereco;
 	}
 	
+	public String obterNumeroImovelRetorno() {
+		if (this.observacao.contains("IMOVEL RETORNO:")) {
+			int inicio = observacao.indexOf("[");
+			int fim = observacao.indexOf("]");
+			
+			return observacao.substring(inicio + 17 , fim);
+		} else
+			return null;
+	}
+	
 }

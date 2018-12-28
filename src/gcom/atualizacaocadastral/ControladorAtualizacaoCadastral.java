@@ -74,6 +74,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -893,7 +894,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		try {
 			ICliente clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
 			IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getImovel().getId());
-
+			Collection<IClienteFone> telefones  = repositorioAtualizacaoCadastral.pesquisarClienteFoneRetorno(clienteImovelRetorno.getId());
+			Collection<IClienteEndereco> enderecos  = repositorioAtualizacaoCadastral.pesquisarClienteEnderecoRetorno(clienteImovelRetorno.getId());
+			
 			Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 
 			String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
@@ -902,7 +905,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 			UnidadeOrganizacional unidade = getControladorCadastro().obterUnidadePorLocalidade(imovelRetorno.getIdLocalidade());
 			
-			RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento, idUsuarioAprovacao);
+			RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, 
+					AlteracaoTipo.INCLUSAO, protocoloAtendimento, idUsuarioAprovacao, telefones, enderecos);
+			
 			RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, AlteracaoTipo.INCLUSAO, unidade);
 			RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral();
 
@@ -934,12 +939,15 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		try {
 			Collection<ClienteImovelRetorno> clientesImovelInclusao = this.obterClientesParaIncluir();
 
+		
 			for (ClienteImovelRetorno clienteImovelRetorno : clientesImovelInclusao) {
 
 				if (!isImovelEmCampo(clienteImovelRetorno.getImovel().getId())) {
 					ICliente clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
 					IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getImovel().getId());
-
+					Collection<IClienteFone> telefones  = repositorioAtualizacaoCadastral.pesquisarClienteFoneRetorno(clienteImovelRetorno.getIdClienteRetorno());
+					Collection<IClienteEndereco> enderecos  = repositorioAtualizacaoCadastral.pesquisarClienteEnderecoRetorno(clienteImovelRetorno.getIdClienteRetorno());
+					
 					Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 
 					String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
@@ -948,7 +956,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 					UnidadeOrganizacional unidade = getControladorCadastro().obterUnidadePorLocalidade(imovelRetorno.getIdLocalidade());
 					
-					RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento, idUsuarioAprovacao);
+					RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, 
+							protocoloAtendimento, idUsuarioAprovacao, telefones, enderecos);
+					
 					RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, AlteracaoTipo.INCLUSAO, unidade);
 					RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral();
 
@@ -1124,7 +1134,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 				UnidadeOrganizacional unidade = getControladorCadastro().obterUnidadePorLocalidade(imovel.getIdLocalidade());
 				
-				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovel, cliente, clienteImovel, AlteracaoTipo.EXCLUSAO, protocoloAtendimento, idUsuarioAprovacao);
+				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastralExclusaoCLiente(imovel, cliente, clienteImovel, AlteracaoTipo.EXCLUSAO, protocoloAtendimento, idUsuarioAprovacao);
 				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovel, idSetorComercial, AlteracaoTipo.EXCLUSAO, unidade);
 				RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral();
 
@@ -1250,13 +1260,18 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Collection<RelatorioFichaFiscalizacaoCadastralHelper> pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ControladorException {
+	public Collection<RelatorioFichaFiscalizacaoCadastralHelper> pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis, boolean dadosOriginais) throws ControladorException {
 
 		Collection<RelatorioFichaFiscalizacaoCadastralHelper> retorno = new ArrayList<RelatorioFichaFiscalizacaoCadastralHelper>();
 
 		try {
-			Collection colecaoDadosFicha = repositorioAtualizacaoCadastral.pesquisarDadosFichaFiscalizacaoCadastral(listaIdImoveis);
-
+			Collection colecaoDadosFicha = null; 
+			
+			if (dadosOriginais)
+				colecaoDadosFicha = repositorioAtualizacaoCadastral.pesquisarDadosOriginaisFichaFiscalizacaoCadastral(listaIdImoveis);
+			else
+				colecaoDadosFicha = repositorioAtualizacaoCadastral.pesquisarDadosRetornoFichaFiscalizacaoCadastral(listaIdImoveis);
+			
 			if (colecaoDadosFicha != null && !colecaoDadosFicha.isEmpty()) {
 				Iterator iterator = colecaoDadosFicha.iterator();
 
@@ -1264,12 +1279,12 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 					RelatorioFichaFiscalizacaoCadastralHelper helper = new RelatorioFichaFiscalizacaoCadastralHelper();
 					Object[] objeto = (Object[]) iterator.next();
 
-					helper.setIdImovel((Integer) objeto[0]);
+					helper.setIdImovel(dadosOriginais? (Integer) objeto[0]: null);
 					helper.setNomeLocalidade((String) objeto[1]);
 					helper.setCodigoSetor((Integer) objeto[2]);
 					helper.setNumeroQuadra((Integer) objeto[3]);
-					helper.setNumeroLote((Integer) objeto[4]);
-					helper.setNumeroSublote((Integer) objeto[5]);
+					helper.setNumeroLote(dadosOriginais? (Integer) objeto[4]: null);
+					helper.setNumeroSublote(dadosOriginais? (Integer) objeto[5]: null);
 					helper.setDescricaoLogradouroImovel((String) objeto[6]);
 					helper.setIdLogradouroImovel((Integer) objeto[7]);
 					helper.setNumeroImovel((String) objeto[8]);
@@ -1280,7 +1295,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 					helper.setNumeroFace((Integer) objeto[13]);
 					helper.setNomeMunicipioImovel((String) objeto[14]);
 					helper.setIdMunicipioImovel((Integer) objeto[15]);
-					helper.setIdCliente((Integer) objeto[16]);
+					helper.setIdCliente(dadosOriginais? (Integer) objeto[16] : null);
 					helper.setNomeCliente((String) objeto[17]);
 					helper.setCpfCnpj((String) objeto[18]);
 					helper.setRg((String) objeto[19]);
@@ -1297,6 +1312,23 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 					helper.setDdd((String) objeto[30]);
 					helper.setTelefone((String) objeto[31]);
 					helper.setCelular((String) objeto[32]);
+					
+					if (!dadosOriginais) {
+						helper.setContratoEnergia((String) objeto[33]);
+						helper.setFonteAbastecimento((Integer) objeto[34]);
+						helper.setLigacaoAguaSituacao((Integer) objeto[35]);
+						helper.setLigacaoEsgotoSituacao((Integer) objeto[36]);
+						helper.setNumeroHidrometro((String) objeto[37]);
+						helper.setHidrometroCapacidade((String) objeto[38]);
+						helper.setHidrometroProtecao((Integer) objeto[39]);
+						helper.setHidrometroMarca((String) objeto[40]);
+						helper.setOutrasInformacoes((String) objeto[41]);
+						helper.setAreaConstruida((BigDecimal) objeto[42]);
+						helper.setPontosUtilizacao((Integer) objeto[43]);
+						helper.setMoradores((Integer) objeto[44]);
+						
+						helper.setSubcategorias(repositorioAtualizacaoCadastral.pesquisarDadosSubcategoriaRetornoFichaFiscalizacaoCadastral((Integer) objeto[0]));
+					}
 
 					retorno.add(helper);
 				}
@@ -1927,6 +1959,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			}
 		} catch (ControladorException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public ImovelRetorno pesquisarImovelRetornoPorIdRetorno(Integer idImovelRetorno) throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.pesquisarImovelRetornoPorIdRetorno(idImovelRetorno);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao pesquisar imovel retortno.", e);
 		}
 	}
 }

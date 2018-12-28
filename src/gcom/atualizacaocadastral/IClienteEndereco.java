@@ -69,5 +69,7 @@ public interface IClienteEndereco {
 	public abstract Logradouro getPerimetroFinal();
 
 	public abstract void setPerimetroFinal(Logradouro perimetroFinal);
+	
+	public String getEnderecoCompleto();
 
 }

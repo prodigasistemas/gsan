@@ -626,4 +626,9 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	private boolean existeCnpj() {
 		return cnpj != null && !cnpj.trim().equals("");
 	}
+
+	@Override
+	public String getEnderecoCompleto() {
+		return null;
+	}
 }

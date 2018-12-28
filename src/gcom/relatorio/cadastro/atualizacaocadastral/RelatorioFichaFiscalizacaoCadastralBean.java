@@ -1,7 +1,11 @@
 package gcom.relatorio.cadastro.atualizacaocadastral;
 
+import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
 import gcom.relatorio.RelatorioBean;
 import gcom.util.Util;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public class RelatorioFichaFiscalizacaoCadastralBean implements RelatorioBean {
 
@@ -71,6 +75,39 @@ public class RelatorioFichaFiscalizacaoCadastralBean implements RelatorioBean {
 	
 	private String celular;
 	
+	private String contratoEnergia;
+	private Integer fonteAbastecimento;
+	private Integer ligacaoAguaSituacao;
+	private Integer ligacaoEsgotoSituacao;
+	private String numeroHidrometro;
+	private String hidrometroCapacidade;
+	private Integer hidrometroProtecao;
+	private String hidrometroMarca;
+	private String outrasInformacoes;
+	private BigDecimal areaConstruida;
+	private Integer pontosUtilizacao;
+	private Integer moradores;
+	
+	private short economiasR1;
+	private short economiasR2;
+	private short economiasR3;
+	private short economiasR4;
+	
+	private short economiasC1;
+	private short economiasC2;
+	private short economiasC3;
+	private short economiasC4;
+	
+	private short economiasI1;
+	private short economiasI2;
+	private short economiasI3;
+	private short economiasI4;
+	
+	private short economiasP1;
+	private short economiasP2;
+	private short economiasP3;
+	private short economiasP4;
+	
 	public RelatorioFichaFiscalizacaoCadastralBean(RelatorioFichaFiscalizacaoCadastralHelper helper) {
 		this.idImovel = helper.getIdImovel();
 		this.nomeLocalidade = helper.getNomeLocalidade();
@@ -114,6 +151,21 @@ public class RelatorioFichaFiscalizacaoCadastralBean implements RelatorioBean {
 		this.ddd = helper.getDdd();
 		this.telefone = Util.formatarTelefone(helper.getTelefone());
 		this.celular = Util.formatarTelefone(helper.getCelular());
+		
+		this.contratoEnergia = helper.getContratoEnergia();
+		this.fonteAbastecimento = helper.getFonteAbastecimento();
+		this.ligacaoAguaSituacao = helper.getLigacaoAguaSituacao();
+		this.ligacaoEsgotoSituacao = helper.getLigacaoEsgotoSituacao();
+		this.numeroHidrometro = helper.getNumeroHidrometro();
+		this.hidrometroCapacidade = helper.getHidrometroCapacidade();
+		this.hidrometroProtecao = helper.getHidrometroProtecao();
+		this.hidrometroMarca = helper.getHidrometroMarca();
+		this.outrasInformacoes = helper.getOutrasInformacoes();
+		this.areaConstruida = helper.getAreaConstruida();
+		this.pontosUtilizacao = helper.getPontosUtilizacao();
+		this.moradores = helper.getMoradores();
+		
+		this.preencherSubcategorias(helper.getSubcategorias());
 	}
 
 	public Integer getIdImovel() {
@@ -378,5 +430,279 @@ public class RelatorioFichaFiscalizacaoCadastralBean implements RelatorioBean {
 
 	public void setCelular(String celular) {
 		this.celular = celular;
+	}
+
+	public String getContratoEnergia() {
+		return contratoEnergia;
+	}
+
+	public void setContratoEnergia(String contratoEnergia) {
+		this.contratoEnergia = contratoEnergia;
+	}
+
+	public Integer getFonteAbastecimento() {
+		return fonteAbastecimento;
+	}
+
+	public void setFonteAbastecimento(Integer fonteAbastecimento) {
+		this.fonteAbastecimento = fonteAbastecimento;
+	}
+
+	public Integer getLigacaoAguaSituacao() {
+		return ligacaoAguaSituacao;
+	}
+
+	public void setLigacaoAguaSituacao(Integer ligacaoAguaSituacao) {
+		this.ligacaoAguaSituacao = ligacaoAguaSituacao;
+	}
+
+	public Integer getLigacaoEsgotoSituacao() {
+		return ligacaoEsgotoSituacao;
+	}
+
+	public void setLigacaoEsgotoSituacao(Integer ligacaoEsgotoSituacao) {
+		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
+	}
+
+	public String getNumeroHidrometro() {
+		return numeroHidrometro;
+	}
+
+	public void setNumeroHidrometro(String numeroHidrometro) {
+		this.numeroHidrometro = numeroHidrometro;
+	}
+
+	public String getHidrometroCapacidade() {
+		return hidrometroCapacidade;
+	}
+
+	public void setHidrometroCapacidade(String hidrometroCapacidade) {
+		this.hidrometroCapacidade = hidrometroCapacidade;
+	}
+
+	public Integer getHidrometroProtecao() {
+		return hidrometroProtecao;
+	}
+
+	public void setHidrometroProtecao(Integer hidrometroProtecao) {
+		this.hidrometroProtecao = hidrometroProtecao;
+	}
+
+	public String getHidrometroMarca() {
+		return hidrometroMarca;
+	}
+
+	public void setHidrometroMarca(String hidrometroMarca) {
+		this.hidrometroMarca = hidrometroMarca;
+	}
+
+	public String getOutrasInformacoes() {
+		return outrasInformacoes;
+	}
+
+	public void setOutrasInformacoes(String outrasInformacoes) {
+		this.outrasInformacoes = outrasInformacoes;
+	}
+
+	public BigDecimal getAreaConstruida() {
+		return areaConstruida;
+	}
+
+	public void setAreaConstruida(BigDecimal areaConstruida) {
+		this.areaConstruida = areaConstruida;
+	}
+
+	public Integer getPontosUtilizacao() {
+		return pontosUtilizacao;
+	}
+
+	public void setPontosUtilizacao(Integer pontosUtilizacao) {
+		this.pontosUtilizacao = pontosUtilizacao;
+	}
+
+	public Integer getMoradores() {
+		return moradores;
+	}
+
+	public void setMoradores(Integer moradores) {
+		this.moradores = moradores;
+	}
+	
+	public String getDescricaoAreaConstruida() {
+		if (this.areaConstruida != null)
+			return Util.formatarBigDecimalParaStringComVirgula(this.areaConstruida);
+		else
+			return "";
+	}
+	
+	public short getEconomiasR1() {
+		return economiasR1;
+	}
+
+	public void setEconomiasR1(short economiasR1) {
+		this.economiasR1 = economiasR1;
+	}
+
+	public short getEconomiasR2() {
+		return economiasR2;
+	}
+
+	public void setEconomiasR2(short economiasR2) {
+		this.economiasR2 = economiasR2;
+	}
+
+	public short getEconomiasR3() {
+		return economiasR3;
+	}
+
+	public void setEconomiasR3(short economiasR3) {
+		this.economiasR3 = economiasR3;
+	}
+
+	public short getEconomiasR4() {
+		return economiasR4;
+	}
+
+	public void setEconomiasR4(short economiasR4) {
+		this.economiasR4 = economiasR4;
+	}
+
+	public short getEconomiasC1() {
+		return economiasC1;
+	}
+
+	public void setEconomiasC1(short economiasC1) {
+		this.economiasC1 = economiasC1;
+	}
+
+	public short getEconomiasC2() {
+		return economiasC2;
+	}
+
+	public void setEconomiasC2(short economiasC2) {
+		this.economiasC2 = economiasC2;
+	}
+
+	public short getEconomiasC3() {
+		return economiasC3;
+	}
+
+	public void setEconomiasC3(short economiasC3) {
+		this.economiasC3 = economiasC3;
+	}
+
+	public short getEconomiasC4() {
+		return economiasC4;
+	}
+
+	public void setEconomiasC4(short economiasC4) {
+		this.economiasC4 = economiasC4;
+	}
+
+	public short getEconomiasI1() {
+		return economiasI1;
+	}
+
+	public void setEconomiasI1(short economiasI1) {
+		this.economiasI1 = economiasI1;
+	}
+
+	public short getEconomiasI2() {
+		return economiasI2;
+	}
+
+	public void setEconomiasI2(short economiasI2) {
+		this.economiasI2 = economiasI2;
+	}
+
+	public short getEconomiasI3() {
+		return economiasI3;
+	}
+
+	public void setEconomiasI3(short economiasI3) {
+		this.economiasI3 = economiasI3;
+	}
+
+	public short getEconomiasI4() {
+		return economiasI4;
+	}
+
+	public void setEconomiasI4(short economiasI4) {
+		this.economiasI4 = economiasI4;
+	}
+	
+	public short getEconomiasP1() {
+		return economiasP1;
+	}
+
+	public void setEconomiasP1(short economiasP1) {
+		this.economiasP1 = economiasP1;
+	}
+
+	public short getEconomiasP2() {
+		return economiasP2;
+	}
+
+	public void setEconomiasP2(short economiasP2) {
+		this.economiasP2 = economiasP2;
+	}
+
+	public short getEconomiasP3() {
+		return economiasP3;
+	}
+
+	public void setEconomiasP3(short economiasP3) {
+		this.economiasP3 = economiasP3;
+	}
+
+	public short getEconomiasP4() {
+		return economiasP4;
+	}
+
+	public void setEconomiasP4(short economiasP4) {
+		this.economiasP4 = economiasP4;
+	}
+
+	public void preencherSubcategorias(List<ImovelSubcategoriaRetorno> subcategorias) {
+		
+		if (subcategorias != null) {
+			for (ImovelSubcategoriaRetorno subcategoria : subcategorias) {
+				if (subcategoria.getSubcategoria().isR1()) this.economiasR1 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isR2()) this.economiasR2 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isR3()) this.economiasR3 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isR4()) this.economiasR4 = subcategoria.getQuantidadeEconomias();
+				
+				else if (subcategoria.getSubcategoria().isC1()) this.economiasC1 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isC2()) this.economiasC2 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isC3()) this.economiasC3 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isC4()) this.economiasC4 = subcategoria.getQuantidadeEconomias();
+				
+				else if (subcategoria.getSubcategoria().isI1()) this.economiasI1 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isI2()) this.economiasI2 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isI3()) this.economiasI3 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isI4()) this.economiasI4 = subcategoria.getQuantidadeEconomias();
+				
+				else if (subcategoria.getSubcategoria().isP1()) this.economiasP1 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isP2()) this.economiasP2 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isP3()) this.economiasP3 = subcategoria.getQuantidadeEconomias();
+				else if (subcategoria.getSubcategoria().isP4()) this.economiasP4 = subcategoria.getQuantidadeEconomias();
+			}
+		}
+	}
+	
+	public boolean getIsResidencial() {
+		return (this.economiasR1 > 0 || this.economiasR2 > 0 || this.economiasR3 > 0 || this.economiasR4 > 0);
+	}
+	
+	public boolean getIsComercial() {
+		return (this.economiasC1 > 0 || this.economiasC2 > 0 || this.economiasC3 > 0 || this.economiasC4 > 0);
+	}
+	
+	public boolean getIsPublico() {
+		return (this.economiasP1 > 0 || this.economiasP2 > 0 || this.economiasP3 > 0 || this.economiasP4 > 0);
+	}
+	
+	public boolean getIsIndustrial() {
+		return (this.economiasI1 > 0 || this.economiasI2 > 0 || this.economiasI3 > 0 || this.economiasI4 > 0);
 	}
 }

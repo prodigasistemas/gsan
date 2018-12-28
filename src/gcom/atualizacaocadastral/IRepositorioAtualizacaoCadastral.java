@@ -99,7 +99,10 @@ public interface IRepositorioAtualizacaoCadastral {
 	public Integer obterquantidadeImoveisComAnormalidadeArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ErroRepositorioException;
+	public Collection pesquisarDadosOriginaisFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ErroRepositorioException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarDadosRetornoFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosImoveisPorRotaAtualizacaoCadastral(String localidade, String setorComercial, String rota) throws ErroRepositorioException;
@@ -161,4 +164,8 @@ public interface IRepositorioAtualizacaoCadastral {
 	public List<TabelaColunaAtualizacaoCadastral> obterTabelaColunas(TabelaColuna coluna, Integer idImovel) throws ErroRepositorioException;
 	
 	public boolean existeSubcategoriaRetorno(TabelaColunaAtualizacaoCadastral tabelaColuna) throws ErroRepositorioException;
+	
+	public ImovelRetorno pesquisarImovelRetornoPorIdRetorno(Integer idImovelRetorno) throws ErroRepositorioException;
+	
+	public List<ImovelSubcategoriaRetorno> pesquisarDadosSubcategoriaRetornoFichaFiscalizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
 }

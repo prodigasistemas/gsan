@@ -315,4 +315,68 @@ public class Subcategoria extends ObjetoTransacao {
 		else if (descricao.equals(DESCRICAO_P3)) return PUBLICA_P3;
 		else return PUBLICA_P4;
 	}
+	
+	public boolean isR1() {
+		return this.id.intValue() == RESIDENCIAL_R1;
+	}
+	
+	public boolean isR2() {
+		return this.id.intValue() == RESIDENCIAL_R2;
+	}
+	
+	public boolean isR3() {
+		return this.id.intValue() == RESIDENCIAL_R3;
+	}
+	
+	public boolean isR4() {
+		return this.id.intValue() == RESIDENCIAL_R4;
+	}
+	
+	public boolean isC1() {
+		return this.id.intValue() == COMERCIAL_C1;
+	}
+	
+	public boolean isC2() {
+		return this.id.intValue() == COMERCIAL_C2;
+	}
+	
+	public boolean isC3() {
+		return this.id.intValue() == COMERCIAL_C3;
+	}
+	
+	public boolean isC4() {
+		return this.id.intValue() == COMERCIAL_C4;
+	}
+	
+	public boolean isI1() {
+		return this.id.intValue() == INDUSTRIAL_I1;
+	}
+	
+	public boolean isI2() {
+		return this.id.intValue() == INDUSTRIAL_I2;
+	}
+	
+	public boolean isI3() {
+		return this.id.intValue() == INDUSTRIAL_I3;
+	}
+	
+	public boolean isI4() {
+		return this.id.intValue() == INDUSTRIAL_I4;
+	}
+	
+	public boolean isP1() {
+		return this.id.intValue() == PUBLICA_P1;
+	}
+	
+	public boolean isP2() {
+		return this.id.intValue() == PUBLICA_P2;
+	}
+	
+	public boolean isP3() {
+		return this.id.intValue() == PUBLICA_P3;
+	}
+	
+	public boolean isP4() {
+		return this.id.intValue() == PUBLICA_P4;
+	}
 }

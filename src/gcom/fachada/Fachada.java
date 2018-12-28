@@ -150,6 +150,7 @@ import gcom.atendimentopublico.registroatendimento.bean.VerificarRAFaltaAguaHelp
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.ProcessoIniciado;
@@ -39824,14 +39825,14 @@ public class Fachada {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) {
+	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis, boolean dadosOriginais) {
 		try {
-			return this.getControladorAtualizacaoCadastral().pesquisarDadosFichaFiscalizacaoCadastral(listaIdImoveis);
+			return this.getControladorAtualizacaoCadastral().pesquisarDadosFichaFiscalizacaoCadastral(listaIdImoveis, dadosOriginais);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
-
+	
 	public void validarImovelEmCampo(Integer idImovel) {
 		try {
 			this.getControladorMicromedicao().validarImovelEmCampo(idImovel);
@@ -40319,6 +40320,14 @@ public class Fachada {
 	public boolean isImovelNegativado(Integer idImovel) {
 		try {
 			return getControladorSpcSerasa().isImovelNegativado(idImovel);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public ImovelRetorno pesquisarImovelRetornoPorIdRetorno(Integer idImovelRetorno) {
+		try {
+			return getControladorAtualizacaoCadastral().pesquisarImovelRetornoPorIdRetorno(idImovelRetorno);
 		} catch (Exception e) {
 			throw new FachadaException(e.getMessage(), e);
 		}

@@ -179,6 +179,8 @@ public class ExibirConsultarRegistroAtendimentoAction extends GcomAction {
 		
 		RegistroAtendimento registroAtendimento = obterDadosRegistroAtendimentoHelper.getRegistroAtendimento();
 
+		this.validarRAAtualizacaoCadastral(registroAtendimento, sessao);
+		
 		// Dados Gerais do Registro de Atendimento
 		form.setNumeroRAPesquisado("" + registroAtendimento.getId());
 
@@ -980,5 +982,12 @@ public class ExibirConsultarRegistroAtendimentoAction extends GcomAction {
 		form.setMotivoNaoCobranca(null);
 		
 		return form;
+	}
+	
+	private void validarRAAtualizacaoCadastral(RegistroAtendimento ra, HttpSession sessao) {
+		if (ra.obterNumeroImovelRetorno() != null)
+			sessao.setAttribute("permiteImprimirFIC", true);
+		else
+			sessao.setAttribute("permiteImprimirFIC", false);
 	}
 }

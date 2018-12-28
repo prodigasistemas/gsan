@@ -640,6 +640,9 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					sql.append(" AND cocr.cocr_id = " + filtro.getOcorrenciaCadastroSelecionada());
 			}
 			
+			if (filtro.getIdImovelRetorno() !=  null)
+				sql.append(" AND ctrl.imre_id = " + filtro.getIdImovelRetorno());
+			
 			sql.append(" ORDER BY tatc.tatc_cdimovel");
 			
 			SQLQuery query = session.createSQLQuery(sql.toString())

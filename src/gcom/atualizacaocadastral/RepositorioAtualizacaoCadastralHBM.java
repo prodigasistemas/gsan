@@ -662,6 +662,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			String consulta = "select clienteFoneRetorno "
 					+ " from ClienteFoneRetorno clienteFoneRetorno "
+					+ " inner join fetch clienteFoneRetorno.foneTipo foneTipo"
 					+ " where clienteFoneRetorno.idClienteRetorno = :idClienteRetorno ";
 
 			retorno = (Collection<IClienteFone>)session.createQuery(consulta).setInteger("idClienteRetorno", idClienteRetorno).list();
@@ -680,6 +681,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			String consulta = "select clienteEnderecoRetorno "
 					+ " from ClienteEnderecoRetorno clienteEnderecoRetorno "
+					+ " left join fetch clienteEnderecoRetorno.enderecoTipo enderecoTipo "
+					+ " left join fetch clienteEnderecoRetorno.logradouroTipo logradouroTipo "
 					+ " where clienteEnderecoRetorno.idClienteRetorno = :idClienteRetorno ";
 
 			retorno = (Collection<IClienteEndereco>)session.createQuery(consulta).setInteger("idClienteRetorno", idClienteRetorno).list();
@@ -952,7 +955,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ErroRepositorioException {
+	public Collection pesquisarDadosOriginaisFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ErroRepositorioException {
 
 		Collection retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -2176,5 +2179,172 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+	}
+	
+	public ImovelRetorno pesquisarImovelRetornoPorIdRetorno(Integer idImovelRetorno) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		ImovelRetorno retorno = null;
+		try {
+			String consulta = "select imovelRetorno "
+					+ " from ImovelRetorno imovelRetorno "
+					+ " where imovelRetorno.id = :idImovelRetorno ";
+			
+			retorno = (ImovelRetorno)session.createQuery(consulta).setInteger("idImovelRetorno", idImovelRetorno).setMaxResults(1).uniqueResult();
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro ao pesquisar imovel retorno");
+		}finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarDadosRetornoFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ErroRepositorioException {
+
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+			consulta = "SELECT distinct imac.imov_id as idImovel, "
+				+ "loca.loca_nmlocalidade as nomeLocalidade, "
+				+ "imac.imre_cdsetorcomercial as codigoSetor, "
+				+ "imac.imre_nnquadra as numeroQuadra, "
+				+ "0 as numeroLote, "
+				+ "0 as numeroSublote, "
+				+ "imac.imac_dslogradouro as descricaoLogradouroImovel, "
+				+ "imac.logr_id as idLogradouroImovel, "
+				+ "imac.imac_nnimovel as numeroImovel, "
+				+ "imac.imac_dscomplementoendereco as complementoEnderecoImovel, "
+				+ "imac.imac_nmbairro as bairroImovel, "
+				+ "imac.imac_cdcep as cepImovel, "
+				+ "rota.rota_cdrota as codigoRota, "
+				+ "face.qdfa_nnfacequadra as numeroFace, "
+				+ "imac.imac_nmmunicipio as nomeMunicipioImovel, "
+				+ "imac.muni_id as idMunicipioImovel, "
+			    + "clac.clie_id as idCliente, "
+			    + "clac.clac_nmcliente as nomeCliente, "
+			    + "clac.clac_nncpfcnpj as cpfCnpj, "
+			    + "clac.clac_nnrg as rg, "
+			    + "clac.clac_dsufsiglaoerg as uf, "
+			    + "clac.psex_id as sexo, "
+			    + "clac.clac_dslogradouro as descricaoLogradouroCliente, "
+			    + "clac.clac_nnimovel as numeroImovelCliente, "
+			    + "clac.edtp_id as enderecoTipoCliente, "
+			    + "clac.clac_nmmunicipio as nomeMunicipioCliente, "
+			    + "clac.clac_dscomplementoendereco as complementoEnderecoCliente, "
+			    + "clac.clac_nmbairro as bairroCliente, "
+			    + "clac.clac_cdcep as cepCliente, "
+			    + "clac.clac_dsemail as emailCliente, "
+			    + "cfac_cdddd as ddd, "
+			    + "CASE WHEN fnet_id IN (1,2,4) THEN cfac.cfac_nnfone END as telefone, "
+			    + "CASE WHEN fnet_id = 3 THEN cfac.cfac_nnfone END as celular, "
+			    + "imac.imac_nnmedidorenergia as contratoEnergia, "
+			    + " imac.ftab_id as fonteAbastecimento, "
+			    + " imac.last_id as ligacaoAguaSituacao, "
+			    + " imac.lest_id as ligacaoEsgotoSituacao, "
+			    + " imac.imac_nnhidrometro as numeroHidrometro, "
+			    + " capacidade.hicp_dshidrometrocapacidade as hidrometroCapacidade, "
+			    + " imac.hipr_id as hidrometroProtecao, "
+			    + " marca.himc_dshidrometromarca as hidrometroMarca, "
+			    + " imac.imac_dsoutrasinformacoes as outrasInformacoes, "
+			    + " imac.imre_areaconstruida as areaConstruida, "
+			    + " imac.imac_nnpontosutilizacao as pontosUtilizacao, "
+			    + " imac.imac_nnmorador as moradores "
+			    + "FROM atualizacaocadastral.imovel_retorno imac "
+			    + "INNER JOIN atualizacaocadastral.imovel_controle_atlz_cad icac ON icac.imov_id = imac.imov_id "
+			    + "INNER JOIN cadastro.imovel imov ON imov.imov_id = imac.imov_id "
+			    + "INNER JOIN cadastro.quadra qdra ON qdra.qdra_id = imov.qdra_id "
+			    + "INNER JOIN cadastro.quadra_face face ON face.qdra_id = qdra.qdra_id "
+			    + "INNER JOIN micromedicao.rota rota ON rota.rota_id = qdra.rota_id "
+			    + "INNER JOIN cadastro.localidade loca ON loca.loca_id = imac.loca_id "
+			    + "INNER JOIN cadastro.cliente_atlz_cadastral clac ON clac.imov_id = imac.imov_id "
+			    + "LEFT JOIN cadastro.cliente_fone_atlz_cad cfac ON cfac.clac_id = clac.clac_id "
+			    + " LEFT JOIN micromedicao.hidrometro_capacidade capacidade on capacidade.hicp_id = imac.hicp_id "
+			    + " LEFT JOIN micromedicao.hidrometro_marca marca on marca.himc_id = imac.himc_id "
+			    + "WHERE icac.siac_id = :situacao "
+			    + "AND imac.imov_id IN (:listaIdImoveis)";
+
+			retorno = (Collection) session.createSQLQuery(consulta)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("nomeLocalidade", Hibernate.STRING)
+					.addScalar("codigoSetor", Hibernate.INTEGER)
+					.addScalar("numeroQuadra", Hibernate.INTEGER)
+					.addScalar("numeroLote", Hibernate.INTEGER)
+					.addScalar("numeroSublote", Hibernate.INTEGER)
+					.addScalar("descricaoLogradouroImovel", Hibernate.STRING)
+					.addScalar("idLogradouroImovel", Hibernate.INTEGER)
+					.addScalar("numeroImovel", Hibernate.STRING)
+					.addScalar("complementoEnderecoImovel", Hibernate.STRING)
+					.addScalar("bairroImovel", Hibernate.STRING)
+					.addScalar("cepImovel", Hibernate.INTEGER)
+					.addScalar("codigoRota", Hibernate.INTEGER)
+					.addScalar("numeroFace", Hibernate.INTEGER)
+					.addScalar("nomeMunicipioImovel", Hibernate.STRING)
+					.addScalar("idMunicipioImovel", Hibernate.INTEGER)
+					.addScalar("idCliente", Hibernate.INTEGER)
+					.addScalar("nomeCliente", Hibernate.STRING)
+					.addScalar("cpfCnpj", Hibernate.STRING)
+					.addScalar("rg", Hibernate.STRING)
+					.addScalar("uf", Hibernate.STRING)
+					.addScalar("sexo", Hibernate.INTEGER)
+					.addScalar("descricaoLogradouroCliente", Hibernate.STRING)
+					.addScalar("numeroImovelCliente", Hibernate.STRING)
+					.addScalar("enderecoTipoCliente", Hibernate.INTEGER)
+					.addScalar("nomeMunicipioCliente", Hibernate.STRING)
+					.addScalar("complementoEnderecoCliente", Hibernate.STRING)
+					.addScalar("bairroCliente", Hibernate.STRING)
+					.addScalar("cepCliente", Hibernate.INTEGER)
+					.addScalar("emailCliente", Hibernate.STRING)
+					.addScalar("ddd", Hibernate.STRING)
+					.addScalar("telefone", Hibernate.STRING)
+					.addScalar("celular", Hibernate.STRING)
+					.addScalar("contratoEnergia", Hibernate.STRING)
+					.addScalar("fonteAbastecimento", Hibernate.INTEGER)
+					.addScalar("ligacaoAguaSituacao", Hibernate.INTEGER)
+					.addScalar("ligacaoEsgotoSituacao", Hibernate.INTEGER)
+					.addScalar("numeroHidrometro", Hibernate.STRING)
+					.addScalar("hidrometroCapacidade", Hibernate.STRING)
+					.addScalar("hidrometroProtecao", Hibernate.INTEGER)
+					.addScalar("hidrometroMarca", Hibernate.STRING)
+					.addScalar("outrasInformacoes", Hibernate.STRING)
+					.addScalar("areaConstruida", Hibernate.BIG_DECIMAL)
+					.addScalar("pontosUtilizacao", Hibernate.INTEGER)	
+					.addScalar("moradores", Hibernate.INTEGER)
+					.setInteger("situacao", SituacaoAtualizacaoCadastral.ATUALIZADO)
+					.setParameterList("listaIdImoveis", listaIdImoveis)
+					.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imovel para ficha de cadastro.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ImovelSubcategoriaRetorno> pesquisarDadosSubcategoriaRetornoFichaFiscalizacaoCadastral(Integer idImovel) throws ErroRepositorioException {
+
+		List<ImovelSubcategoriaRetorno> retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("SELECT subcategoria from ImovelSubcategoriaRetorno subcategoria ")
+			    	.append(" inner join subcategoria.imovel imovel ")
+			    	.append(" where imovel.id = :idImovel ");
+
+			retorno = (List<ImovelSubcategoriaRetorno>) session.createQuery(consulta.toString())
+					.setInteger("idImovel", idImovel).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar subcategorias de imovel para ficha de cadastro.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
 	}
 }
