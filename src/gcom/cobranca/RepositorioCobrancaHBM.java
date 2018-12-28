@@ -2941,12 +2941,10 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			// alguns pagamentos não estavam guardando o id da guia,
 			// para esses casos recupera o pagamento do imovel correspondente a
 			// entrada de parcelamento
-			consulta = " select pgmt_id as idPagamento " + " from arrecadacao.pagamento " + " where  gpag_id = :idGuiaPagamento "
-					+ " or (imov_id = :idImovel and dbtp_id = :entradaParcelamento )";
+			consulta = " select pgmt_id as idPagamento " + " from arrecadacao.pagamento " + " where  gpag_id = :idGuiaPagamento ";
 
 			retorno = session.createSQLQuery(consulta).addScalar("idPagamento", Hibernate.INTEGER)
-					.setInteger("idGuiaPagamento", new Integer(igGuiaPagamento))
-					.setInteger("entradaParcelamento", DebitoTipo.ENTRADA_PARCELAMENTO).setInteger("idImovel", idImovel).list();
+					.setInteger("idGuiaPagamento", new Integer(igGuiaPagamento)).list();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
