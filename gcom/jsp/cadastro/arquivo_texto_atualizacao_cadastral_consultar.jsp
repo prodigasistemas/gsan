@@ -432,7 +432,7 @@
 								<strong>Lote de Fiscalização:</strong>
 							</td>
 							<td colspan="1">
-								<html:text property="lote" size="4" maxlength="2" onkeyup="javascript:verificaNumeroInteiro(this);"/>
+								<html:text property="lote" size="4" maxlength="5" onkeyup="javascript:verificaNumeroInteiro(this);"/>
 							</td> 
 						</tr>
 						
