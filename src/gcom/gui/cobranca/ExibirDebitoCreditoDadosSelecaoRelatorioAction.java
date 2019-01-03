@@ -149,7 +149,7 @@ public class ExibirDebitoCreditoDadosSelecaoRelatorioAction extends GcomAction {
 					colecaoConta.addAll(helper.getColecaoContasValoresPreteritos());
 
 					// CONTA
-					sessao.setAttribute("colecaoConta", colecaoConta);
+					sessao.setAttribute("colecaoContaExtrato", colecaoConta);
 					
 					// CONTA
 					sessao.setAttribute("colecaoContaClienteAtual", helper.getColecaoContasValoresImovel());
