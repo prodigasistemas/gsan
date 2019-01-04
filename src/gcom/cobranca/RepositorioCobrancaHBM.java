@@ -24659,7 +24659,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @throws ErroRepositorioException
 	 * @date 29/03/2011
 	 */
-	public boolean pesquisarDebitoCobradoParcelamento(Integer codigoParcelamento) throws ErroRepositorioException {
+	public boolean parecelamentoPossuiDebitoJaCobrado(Integer codigoParcelamento) throws ErroRepositorioException {
 		boolean retorno = false;
 		Session session = HibernateUtil.getSession();
 
@@ -26606,7 +26606,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 	      retorno = session.createQuery(consulta).setInteger("parcelamentoSituacao", new Integer(parcelamentoSituacao))
 	          .setInteger("normal", DebitoCreditoSituacao.NORMAL)
-	          .setFirstResult(numeroIncial)
+	         // .setFirstResult(numeroIncial)
 	          .setMaxResults(numeroFinal)
 	          .list();
 

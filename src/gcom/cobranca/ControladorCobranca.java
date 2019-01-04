@@ -6330,7 +6330,7 @@ public class ControladorCobranca extends ControladorComum {
 	 */
 	public void removerDebitoACobrarDoParcelamento(Integer codigoImovel, Integer codigoParcelamento) throws ControladorException {
 		try {
-			if (repositorioCobranca.pesquisarDebitoCobradoParcelamento(codigoParcelamento)) {
+			if (repositorioCobranca.parecelamentoPossuiDebitoJaCobrado(codigoParcelamento)) {
 				throw new ControladorException("atencao.parcelamento_ja_cobrado_em_conta");
 			}
 			repositorioCobranca.removerDebitoACobrarDoParcelamento(codigoImovel, codigoParcelamento);
@@ -6355,7 +6355,7 @@ public class ControladorCobranca extends ControladorComum {
 	public void removerDebitoACobrarCategoriaDoParcelamento(Integer codigoParcelamento, Integer idDebito) throws ControladorException {
 		try {
 
-			if (repositorioCobranca.pesquisarDebitoCobradoParcelamento(codigoParcelamento)) {
+			if (repositorioCobranca.parecelamentoPossuiDebitoJaCobrado(codigoParcelamento)) {
 				throw new ControladorException("atencao.parcelamento_ja_cobrado_em_conta");
 			}
 
@@ -61814,17 +61814,13 @@ public class ControladorCobranca extends ControladorComum {
 
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
 
-		// cria uma coleção de parcelamentos de débitos efetuados no mês
-		// corrente
-		Collection parcelamentosMes = null;
-		// cria uma coleção de guias de pagamento correspondente a entrada do
-		// parcelamento
+		// cria uma coleção de parcelamentos de débitos efetuados no mês corrente
+		Collection parcelamentos = null;
+		// cria uma coleção de guias de pagamento correspondente a entrada do parcelamento
 		Collection guiaPagamento = null;
-		// cria uma coleção de pagamentos para a guia de pagamento
-		// correspondente a entrada do parcelamento
+		// cria uma coleção de pagamentos para a guia de pagamento correspondente a entrada do parcelamento
 		Collection pagamento = null;
-		// cria uma coleção de pagamentos para a guia de pagamento
-		// correspondente a entrada do parcelamento
+		// cria uma coleção de pagamentos para a guia de pagamento correspondente a entrada do parcelamento
 		Collection pagamentoConta = null;
 
 		try {
@@ -61840,33 +61836,23 @@ public class ControladorCobranca extends ControladorComum {
 			boolean flagTerminou = false;
 
 			while (!flagTerminou) {
-				// recupera todos os parcelamentos no mes atual e que esteja com
-				// a
-				// situacao normal
-				parcelamentosMes = repositorioCobranca.pesquisarParcelamentosSituacaoNormal(ParcelamentoSituacao.NORMAL.toString(), numeroInicial, 500);
+				parcelamentos = repositorioCobranca.pesquisarParcelamentosSituacaoNormal(ParcelamentoSituacao.NORMAL.toString(), numeroInicial, 500);
 
-				if (parcelamentosMes.size() < 500) {
+				if (parcelamentos.size() < 500) {
 					flagTerminou = true;
 				}
 
-				if (!Util.isVazioOrNulo(parcelamentosMes)) {
+				if (!Util.isVazioOrNulo(parcelamentos)) {
 
-					Iterator parcelamentosMesIterator = parcelamentosMes.iterator();
+					Iterator parcelamentosMesIterator = parcelamentos.iterator();
 
 					while (parcelamentosMesIterator.hasNext()) {
 
-						// Obtém os dados do crédito realizado
 						Object[] dadosParcelamento = (Object[]) parcelamentosMesIterator.next();
-						Integer numeroParcelamentosMes = (Integer) dadosParcelamento[0];
+						Integer idParcelamento = (Integer) dadosParcelamento[0];
 						Integer idImovel = (Integer) dadosParcelamento[2];
 
-						// recupera todos os parcelamentos no mes atual e que
-						// esteja com a situacao normal
-
-						System.out.println(" **** PESQUISAR GUIA POR PARCELAMENTO **** ");
-						System.out.println(" ------------------------------------------ ");
-
-						guiaPagamento = repositorioCobranca.pesquisarGuiaPagamentoDoParcelamento(numeroParcelamentosMes.toString());
+						guiaPagamento = repositorioCobranca.pesquisarGuiaPagamentoDoParcelamento(idParcelamento.toString());
 
 						if (guiaPagamento != null && !guiaPagamento.isEmpty()) {
 
@@ -61876,7 +61862,7 @@ public class ControladorCobranca extends ControladorComum {
 
 								Object[] dadosGuiaPagamento = (Object[]) guiaPagamentoIterator.next();
 
-								Integer numeroGuiaPagamento = (Integer) dadosGuiaPagamento[0];
+								Integer idGuiaPagamento = (Integer) dadosGuiaPagamento[0];
 
 								Date dataVencimentoGuia = Util.getData((Date) dadosGuiaPagamento[1]);
 								Integer diasParaPagamentoGuia = Integer.parseInt(this.getCobrancaParametro(CobrancaParametro.NOME_PARAMETRO_COBRANCA.QUANTIDADE_DIAS_VENCIMENTO_GUIA.toString()));
@@ -61884,32 +61870,17 @@ public class ControladorCobranca extends ControladorComum {
 
 								if ((dataLimitePagamentoGuia).compareTo(new Date()) <= 0) {
 
-									// retorno da pesquisa
+									pagamento = repositorioCobranca.pesquisarPagamentoParaGuiaPagamentoDoParcelamento(idGuiaPagamento.toString(), idImovel);
 
-									// recupera todos os parcelamentos no mes
-									// atual e que esteja com a situacao normal
-
-									System.out.println(" **** PESQUISAR PAGAMENTO DA GUIA **** ");
-									System.out.println(" ------------------------------------------ ");
-
-									pagamento = repositorioCobranca.pesquisarPagamentoParaGuiaPagamentoDoParcelamento(numeroGuiaPagamento.toString(), idImovel);
-
-									if (pagamento == null || pagamento.isEmpty()) {
-
-										System.out.println("");
-										System.out.println("");
-
-										System.out.println(" ---------------------------------------------- ");
-										System.out.println(" **** DESFAZER " + numeroParcelamentosMes + " **** ");
-										System.out.println(" ---------------------------------------------- ");
-										System.out.println("");
-										System.out.println("");
-
+									if ( (pagamento == null || pagamento.isEmpty()) && !repositorioCobranca.parecelamentoPossuiDebitoJaCobrado(idParcelamento) ) {
+										
 										Usuario usuarioBatch = this.getControladorUsuario().pesquisarUsuarioRotinaBatch();
 										if (usuarioBatch == null) {
 											throw new ControladorException("atencao.usuario_rotina_batch_nao_cadastrado");
 										} else {
-											this.desfazerParcelamentosDebito(ParcelamentoMotivoDesfazer.ENTRADA_NAO_PAGA.toString(), numeroParcelamentosMes, usuarioBatch);
+											
+											logger.info(" **** DESFAZER " + idParcelamento + " **** ");
+											this.desfazerParcelamentosDebito(ParcelamentoMotivoDesfazer.ENTRADA_NAO_PAGA.toString(), idParcelamento, usuarioBatch);
 										}
 
 									}
