@@ -100,8 +100,7 @@ public class ExibirInformarIndiceAcrescimosImpontualidadeAction extends GcomActi
 			if (form.getPercentualAtualizacaoMonetaria() != null) {
 				BigDecimal percentual = Util.formatarMoedaRealparaBigDecimal(form.getPercentualAtualizacaoMonetaria());
 				
-				if (percentual.compareTo(new BigDecimal("0.00")) < 0 || percentual.compareTo(new BigDecimal("100.00")) > 0) {
-//				if (percentual.compareTo(new BigDecimal("0.00")) == 0 || percentual.compareTo(new BigDecimal("100.00")) > 0) {
+				if (percentual.compareTo(new BigDecimal("100.00")) > 0) {
 					throw new ActionServletException("atencao.percentual_invalido", null, "Fator Atualização Monetária");
 				}
 			}
