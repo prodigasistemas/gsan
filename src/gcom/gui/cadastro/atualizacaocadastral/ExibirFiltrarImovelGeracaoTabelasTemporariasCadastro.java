@@ -217,7 +217,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 		
 		Collection<DadosLeiturista> colecaoLeiturista = new ArrayList<DadosLeiturista>();
 		
-		FiltroLeiturista filtroLeiturista = new FiltroLeiturista(FiltroLeiturista.ID);
+		FiltroLeiturista filtroLeiturista = new FiltroLeiturista(FiltroLeiturista.FUNCIONARIO_NOME);
 		
 		if (idEmpresa > 0) {
 			filtroLeiturista.adicionarParametro(new ParametroSimples(FiltroLeiturista.EMPRESA_ID, idEmpresa));

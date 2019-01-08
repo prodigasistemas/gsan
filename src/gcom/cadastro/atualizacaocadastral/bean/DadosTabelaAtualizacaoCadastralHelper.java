@@ -1,5 +1,7 @@
 package gcom.cadastro.atualizacaocadastral.bean;
 
+import gcom.util.ConstantesSistema;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,7 +20,10 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	
 	private Integer idTabelaColunaAtualizacaoCadastral;
 	private String colunaValorAnterior;
-	private String colunaValorAtual = "";
+	private String colunaValorTransmitido = "";
+	private String colunaValorRevisado = "";
+	private String colunaValorFiscalizado = "";
+	private String colunaValorPreAprovado = "";
 	private Short indicadorAutorizado;
 	private Date ultimaAtualizacao;
 	
@@ -35,17 +40,37 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	
 	private Boolean habilitaAlteracao = true;
 	
+	private Short indicadorFiscalizado;
+	
 	public String getColunaValorAnterior() {
 		return colunaValorAnterior;
 	}
 	public void setColunaValorAnterior(String colunaValorAnterior) {
 		this.colunaValorAnterior = colunaValorAnterior;
 	}
-	public String getColunaValorAtual() {
-		return colunaValorAtual;
+	public String getColunaValorTransmitido() {
+		return colunaValorTransmitido;
 	}
-	public void setColunaValorAtual(String colunaValorAtual) {
-		this.colunaValorAtual = colunaValorAtual;
+	public void setColunaValorTransmitido(String colunaValorTransmitido) {
+		this.colunaValorTransmitido = colunaValorTransmitido;
+	}
+	public String getColunaValorRevisado() {
+		return colunaValorRevisado;
+	}
+	public void setColunaValorRevisado(String colunaValorRevisado) {
+		this.colunaValorRevisado = colunaValorRevisado;
+	}
+	public String getColunaValorFiscalizado() {
+		return colunaValorFiscalizado;
+	}
+	public void setColunaValorFiscalizado(String colunaValorFiscalizado) {
+		this.colunaValorFiscalizado = colunaValorFiscalizado;
+	}
+	public String getColunaValorPreAprovado() {
+		return colunaValorPreAprovado;
+	}
+	public void setColunaValorPreAprovado(String colunaValorPreAprovado) {
+		this.colunaValorPreAprovado = colunaValorPreAprovado;
 	}
 	public String getDescricaoAlteracaoTipo() {
 		return descricaoAlteracaoTipo;
@@ -151,13 +176,36 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	}
 	
 	public Boolean getHabilitaAlteracao() {
-		return !informativo && dataValidacao == null;
+		return indicadorAutorizado == null || 
+				(indicadorAutorizado != null && possuiValorAlterado() && 
+					(indicadorAutorizado.equals(ConstantesSistema.NAO) && !informativo && dataValidacao == null) 
+					|| (indicadorFiscalizado != null && (indicadorFiscalizado.equals(ConstantesSistema.SIM) && !informativo && dataValidacao != null)
+					|| indicadorFiscalizado == null ));
 	}
 	public void setHabilitaAlteracao(Boolean habilitaAlteracao) {
 		this.habilitaAlteracao = habilitaAlteracao;
 	}
+	
+	public Short getIndicadorFiscalizado() {
+		return indicadorFiscalizado;
+	}
+	public void setIndicadorFiscalizado(Short indicadorFiscalizado) {
+		this.indicadorFiscalizado = indicadorFiscalizado;
+	}
 	public String toString() {
 		return "DadosTabelaAtualizacaoCadastralHelper [descricaoTabela=" + descricaoTabela + ", descricaoColuna=" + descricaoColuna + ", colunaValorAnterior="
-				+ colunaValorAnterior + ", colunaValorAtual=" + colunaValorAtual + ", dataValidacao=" + dataValidacao + ", nomeUsuario=" + nomeUsuario + "]";
+				+ colunaValorAnterior + ", colunaValorTransmitido=" + colunaValorTransmitido + ", dataValidacao=" + dataValidacao + ", nomeUsuario=" + nomeUsuario  
+				+ ", colunaValorRevisado=" + colunaValorRevisado + ", colunaValorFiscalizado=" + colunaValorFiscalizado+ ", colunaValorPreAprovado=" + colunaValorPreAprovado+ "]";
+	}
+	
+	public String getValorAtualizarRetorno() {
+		if (this.indicadorFiscalizado != null && this.indicadorFiscalizado.equals(ConstantesSistema.SIM))
+			return this.colunaValorFiscalizado;
+		else 
+			return this.colunaValorPreAprovado;
+	}
+	
+	private boolean possuiValorAlterado() {
+		return colunaValorPreAprovado != null || colunaValorFiscalizado != null ;
 	}
 }

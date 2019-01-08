@@ -16119,4 +16119,13 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			throw new EJBException(e);
 		}
 	}
+	
+	public boolean existeRAAbertaPorSoliticacao(Integer idImovel, Integer idSolicitacao) throws ControladorException {
+		try {
+			return repositorioRegistroAtendimento.existeRAAbertaPorSoliticacao(idImovel, idSolicitacao);
+		} catch (Exception e) {
+			sessionContext.setRollbackOnly();
+			throw new EJBException(e);
+		}
+	}
 }

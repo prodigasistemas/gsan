@@ -1147,4 +1147,6 @@ public interface ControladorRegistroAtendimentoLocal extends javax.ejb.EJBLocalO
 
 	public List<RAPorUnidadePorUsuarioHelper> filtrarRelatorioRegistroAtendimentoPorUnidadePorUsuario(
 			FiltrarRelatorioRegistroAtendimentoPorUnidadePorUsuarioHelper filtro) throws ControladorException;
+	
+	public boolean existeRAAbertaPorSoliticacao(Integer idImovel, Integer idSolicitacao) throws ControladorException;
 }

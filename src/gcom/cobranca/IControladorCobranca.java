@@ -59,6 +59,7 @@ import gcom.micromedicao.Rota;
 import gcom.micromedicao.bean.ConsumoHistoricoCondominio;
 import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.ConsumoTipo;
+import gcom.relatorio.cobranca.AvisoCorteDTO;
 import gcom.relatorio.cobranca.FiltrarRelatorioBoletimMedicaoCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAcompanhamentoAcoesCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAnalisePerdasCreditosBean;
@@ -1080,4 +1081,8 @@ public interface IControladorCobranca {
 	public boolean isEntradaParcelamentoPaga(Parcelamento parcelamento) throws ControladorException;
 	
 	public CobrancaDocumento obterUltimoDocumentoCobrancaConta(Conta conta) throws ControladorException;
+
+	public List<AvisoCorteDTO> gerarAvisoCorteEnderecoAlternativo(Integer idAcaoCronograma, Integer idAcaoComando) throws ControladorException;
+	
+	public boolean isImovelEmCobrancaJudicial(Integer idImovel) throws ControladorException;
 }

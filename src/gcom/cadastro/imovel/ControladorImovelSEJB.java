@@ -21,7 +21,7 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
-import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
@@ -31,6 +31,7 @@ import gcom.cadastro.cliente.ClienteImovelFimRelacaoMotivo;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.bean.ClienteImovelEconomiaHelper;
 import gcom.cadastro.endereco.Cep;
@@ -1030,6 +1031,8 @@ public class ControladorImovelSEJB extends ControladorComum {
 				
 				if (clienteImovel.isClienteResponsavel()){
 					clienteResponsavel = true;
+				} else if (clienteImovel.isClienteUsuario() && inserirImovelHelper.getDataInicioRelacaoUsuario() != null) {
+					this.mudarTitularidadeRetroativa(clienteImovel, inserirImovelHelper.getDataInicioRelacaoUsuario());
 				}
 				
 				boolean existe = this.verificarExistenciaClienteImovel(colecaoClienteImovel, clienteImovel);
@@ -1072,12 +1075,16 @@ public class ControladorImovelSEJB extends ControladorComum {
 				boolean existe = this.verificarExistenciaClienteImovel(colecaoClienteImovel, clienteImovel);
 					if (existe) {
 						registradorOperacao.registrarOperacao(clienteImovel);
-						clienteImovel.setDataFimRelacao(new Date());
+						if (clienteImovel.isClienteUsuario() && inserirImovelHelper.getDataInicioRelacaoUsuario() != null)
+							clienteImovel.setDataFimRelacao(inserirImovelHelper.getDataInicioRelacaoUsuario());
+						else 
+							clienteImovel.setDataFimRelacao(new Date());
+						
 						getControladorUtil().atualizar(clienteImovel);
 						
-						if (clienteImovel.getClienteRelacaoTipo().getId().intValue() == ClienteRelacaoTipo.RESPONSAVEL.intValue()
-							|| clienteImovel.getClienteRelacaoTipo().getId().intValue() == ClienteRelacaoTipo.USUARIO.intValue())
-						excluirDebitoAutomaticoClienteImovel(clienteImovel, inserirImovelHelper);
+						if (clienteImovel.isClienteResponsavel() || clienteImovel.isClienteUsuario())
+							excluirDebitoAutomaticoClienteImovel(clienteImovel, inserirImovelHelper);
+						
 					}
 			}
 		}
@@ -16077,17 +16084,6 @@ public class ControladorImovelSEJB extends ControladorComum {
 		this.getControladorUtil().atualizar(imovelAtualizacaoCadastral);
 	}
 
-	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(
-			Integer idImovel) throws ControladorException {
-		try {
-			return this.repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(idImovel);
-		} catch (ErroRepositorioException ex) {
-			ex.printStackTrace();
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
-		}
-	}
-	
 	public ImovelCobrancaSituacao obterImovelCobrancaSituacao(Integer idImovelSituacaoCobranca) throws ControladorException {
 		try {
 			return repositorioImovel.obterImovelCobrancaSituacao(idImovelSituacaoCobranca);
@@ -16132,31 +16128,31 @@ public class ControladorImovelSEJB extends ControladorComum {
 	
 	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) throws ControladorException {
 		ContratoAdesaoimovelDTO dto = null;
-		ContratoAdesao contratoDemanda = obterContratoDemandaAtivo(idImovel);
+		ContratoAdesao contratoDemanda = obterContratoAtivo(idImovel, ContratoTipo.ADESAO);
 		Cliente cliente = getControladorImovel().consultarClienteUsuarioImovel(new Imovel(idImovel));
 		if (contratoDemanda != null) {
 			
 			if (contratoDemanda.getClienteImovel().getCliente().getId().intValue() != cliente.getId().intValue()) {
 				finalizarContatoDemanda(idImovel, cliente);
-				gerarContatoDemanda(idImovel, cliente);
+				gerarContatoAdesao(idImovel, cliente);
 				cliente = cliente;
 			}  else {
 				cliente = contratoDemanda.getClienteImovel().getCliente();
 			}
 		} else {
-			gerarContatoDemanda(idImovel, cliente);
+			gerarContatoAdesao(idImovel, cliente);
 		}
 		dto = obterContratoAdesaoImovelDTO(idImovel, cliente);
 		return dto;
 	}
 	
-	private ContratoAdesao obterContratoDemandaAtivo(Integer idImovel) throws ControladorException {
+	private ContratoAdesao obterContratoAtivo(Integer idImovel, Integer tipoContrato) throws ControladorException {
 		FiltroContratoAdesao filtro = new FiltroContratoAdesao();
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoAdesao.CONTRATO);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoAdesao.CLIENTE);
 
 		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.IMOVEL, idImovel));
-		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.CONTRATO_TIPO, ContratoTipo.DEMANDA));
+		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.CONTRATO_TIPO, tipoContrato));
 		filtro.adicionarParametro(new ParametroNulo(FiltroContratoAdesao.DATACONTRATOENCERRAMENTO));
 		Collection colecaoContratoDemanda = getControladorUtil().pesquisar(filtro, ContratoAdesao.class.getName());
 		
@@ -16171,12 +16167,12 @@ public class ControladorImovelSEJB extends ControladorComum {
 		String data = Util.formatarDataComTracoAAAAMMDD(new Date());
 		String nomeRelatorio = "contrato_adesao_"+ idImovel + data + ".pdf";
 		
-		String endereco = getControladorCliente().obterEnderecoCorrespondencia(cliente.getId());
+		String endereco = getControladorEndereco().obterEnderecoCorrespondenciaImovel(idImovel);
 		return new ContratoAdesaoimovelDTO(nomeRelatorio, cliente.getNome(), idImovel.toString(), "Belem", endereco, Util.formatarDataComBarraDDMMAAAA(new Date()));
 	}
 	
 	private void finalizarContatoDemanda(Integer idImovel, Cliente cliente) throws ControladorException {
-		ContratoAdesao contratoDemanda = this.obterContratoDemandaAtivo(idImovel);
+		ContratoAdesao contratoDemanda = this.obterContratoAtivo(idImovel, ContratoTipo.DEMANDA);
 		
 		Contrato contrato = contratoDemanda.getContrato();
 		
@@ -16187,25 +16183,24 @@ public class ControladorImovelSEJB extends ControladorComum {
 		getControladorUtil().atualizar(contrato);
 	}
 	
-	private void gerarContatoDemanda(Integer idImovel, Cliente cliente) throws ControladorException {
+	private void gerarContatoAdesao(Integer idImovel, Cliente cliente) throws ControladorException {
 		Contrato contrato = new Contrato();
+		ContratoAdesao contratoAdesao = new ContratoAdesao();
+		
+		contratoAdesao.setUltimaAlteracao(new Date());
+		contratoAdesao.setClienteImovel(obterClienteImovel(idImovel, cliente.getId(), ClienteRelacaoTipo.USUARIO.intValue()));
 		
 		contrato.setImovel(new Imovel(idImovel));
-		contrato.setContratoTipo(new ContratoTipo(ContratoTipo.DEMANDA));
+		contrato.setContratoTipo(new ContratoTipo(ContratoTipo.ADESAO));
 		contrato.setDataContratoInicio(new Date());
-		contrato.setNumeroContrato(contrato.gerarNumeroContrato(ContratoTipo.DEMANDA));
+		contrato.setNumeroContrato(contratoAdesao.gerarNumeroContrato());
 		contrato.setUltimaAlteracao(new Date());
 		
 		Integer idContrato = (Integer) getControladorUtil().inserir(contrato);
 		contrato.setId(idContrato);
 		
-		ContratoAdesao contratoDemanda = new ContratoAdesao();
-		
-		contratoDemanda.setUltimaAlteracao(new Date());
-		contratoDemanda.setClienteImovel(obterClienteImovel(idImovel, cliente.getId(), ClienteRelacaoTipo.USUARIO.intValue()));
-		contratoDemanda.setContrato(contrato);
-		
-		getControladorUtil().inserir(contratoDemanda);
+		contratoAdesao.setContrato(contrato);
+		getControladorUtil().inserir(contratoAdesao);
 		
 	}
 	
@@ -16241,5 +16236,53 @@ public class ControladorImovelSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
+	}
+	
+	public void mudarTitularidadeRetroativa(ClienteImovel clienteImovel, Date dataEmissao) throws ControladorException {
+		try {
+			List<IClienteConta> clienteContas = getControladorFaturamento().pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(clienteImovel.getImovel().getId(), dataEmissao);
+			
+			if (clienteContas != null) {
+				for (IClienteConta clienteConta : clienteContas) {
+					clienteConta.setCliente(new Cliente(clienteImovel.getCliente().getId()));
+					clienteConta.setUltimaAlteracao(new Date());
+					
+					getControladorUtil().atualizar(clienteConta);
+				}
+			}
+			
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.mudanca.titularidade.retroativa", e);
+		}
+	}
+	
+	public boolean isDataMudancaTitularidaRetroativaPermitida(Integer idImovel, Date novaData) throws ControladorException {
+		
+		Date dataInicioRelacaoUsuario = this.obterDataInicioRelacaoAtual(idImovel, ClienteRelacaoTipo.USUARIO);
+		
+		int diferencaDias = Util.obterQuantidadeDiasEntreDuasDatas(dataInicioRelacaoUsuario, novaData);
+		if (diferencaDias < 30)
+			return false;
+		else
+			return true;
+	}
+
+	private Date obterDataInicioRelacaoAtual(Integer idImovel, Short idClienteRelacaoTipo) throws ControladorException {
+		try {
+			FiltroClienteImovel filtro = new FiltroClienteImovel();
+			filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, idImovel));
+			filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, idClienteRelacaoTipo));
+			filtro.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+			
+			Collection colecao = getControladorUtil().pesquisar(filtro, ClienteImovel.class.getName());
+			
+			if (colecao != null && !colecao.isEmpty())
+				return ((ClienteImovel)Util.retonarObjetoDeColecao(colecao)).getDataInicioRelacao();
+			else 
+				return null;
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.pesquisar.data.usuario.atual", e);
+		}
+		
 	}
 }

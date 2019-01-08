@@ -16,10 +16,13 @@ public class RelatorioFichaFiscalizacaoCadastralBO {
 
 	private Usuario usuario;
 	private Collection<ConsultarMovimentoAtualizacaoCadastralHelper> helper;
+	public boolean dadosOriginais;
 	
-	public RelatorioFichaFiscalizacaoCadastralBO(HttpServletRequest httpServletRequest) {
+	@SuppressWarnings("unchecked")
+	public RelatorioFichaFiscalizacaoCadastralBO(HttpServletRequest httpServletRequest, Boolean dadosOriginais) {
 		HttpSession sessao = httpServletRequest.getSession(false);
 		
+		this.dadosOriginais = dadosOriginais;
 		this.usuario = (Usuario) sessao.getAttribute("usuarioLogado");
 		this.helper = (Collection<ConsultarMovimentoAtualizacaoCadastralHelper>) sessao.getAttribute(
 				"colecaoConsultarMovimentoAtualizacaoCadastralHelper");
@@ -42,7 +45,7 @@ public class RelatorioFichaFiscalizacaoCadastralBO {
 			listaIdImoveis.add(imovel.getIdImovel());
 		}
 		
-		Collection colecaoDadosFicha = Fachada.getInstancia().pesquisarDadosFichaFiscalizacaoCadastral(listaIdImoveis);
+		Collection colecaoDadosFicha = Fachada.getInstancia().pesquisarDadosFichaFiscalizacaoCadastral(listaIdImoveis, this.dadosOriginais);
 		
 		if(colecaoDadosFicha.isEmpty()){
 			throw new ActionServletException("atencao.relatorio.vazio");
@@ -50,4 +53,9 @@ public class RelatorioFichaFiscalizacaoCadastralBO {
 		
 		return colecaoDadosFicha;
 	}
+
+	public void setDadosOriginais(boolean isOriginal) {
+		this.dadosOriginais = isOriginal;
+	}
+	
 }

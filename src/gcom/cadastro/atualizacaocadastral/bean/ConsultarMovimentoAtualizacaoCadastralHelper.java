@@ -1,5 +1,7 @@
 package gcom.cadastro.atualizacaocadastral.bean;
 
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +41,8 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper implements Serializabl
 	private Integer idSituacao;
 	
 	private String descricaoSituacao;
+	
+	private ImovelControleAtualizacaoCadastral controle;
 	
 	public ConsultarMovimentoAtualizacaoCadastralHelper(Integer icAutorizado, Integer idImovel, String nomeFuncionario, Date dataRealizacao, Integer idArquivo, String inscricao, Integer idSituacao, String descricaoSituacao) {
 		this.icAutorizado = icAutorizado;
@@ -171,6 +175,14 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper implements Serializabl
 
 	public void setDescricaoSituacao(String descricaoSituacao) {
 		this.descricaoSituacao = descricaoSituacao;
+	}
+
+	public ImovelControleAtualizacaoCadastral getControle() {
+		return controle;
+	}
+
+	public void setControle(ImovelControleAtualizacaoCadastral controle) {
+		this.controle = controle;
 	}
 
 	@Override

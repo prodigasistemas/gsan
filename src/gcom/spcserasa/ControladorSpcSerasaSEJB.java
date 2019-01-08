@@ -146,6 +146,7 @@ import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
 import gcom.util.email.ServicosEmail;
+import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
 import java.io.BufferedReader;
@@ -7536,45 +7537,24 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				try {
 					NegativadorContrato negativadorContrato = this.repositorioSpcSerasa.consultarNegativadorContratoVigente(negativador.getId());
 
-					String numeroSequencialEnvioBase = negativadorContrato.getNumeroSequencialEnvio() + "";
+					int numeroSequencialEnvioBase = negativadorContrato.getNumeroSequencialEnvio();
+					int numeroSequencialArquivo = Integer.parseInt(getConteudo(120, 6, registro.toCharArray()));
 
-					String quantidadeZeros = "";
-
-					int tamanho = 6 - numeroSequencialEnvioBase.length();
-
-					for (int i = 0; i < tamanho; i++) {
-						quantidadeZeros = quantidadeZeros + "0";
-					}
-
-					numeroSequencialEnvioBase = quantidadeZeros + numeroSequencialEnvioBase;
-
-					// H.09
-					String numeroSequencialArquivo = getConteudo(120, 6, registro.toCharArray());
-
-					if (Util.converterStringParaInteger(numeroSequencialArquivo) > Util.converterStringParaInteger(numeroSequencialEnvioBase)) {
+					if (numeroSequencialArquivo > numeroSequencialEnvioBase) {
 						throw new ControladorException("atencao.movimento_fora_sequencia");
 					}
 
 					if (negativadorContrato.getIndicadorControleNsaRetorno().equals(ConstantesSistema.SIM)) {
-						String numeroSequencialRetornoBase = (negativadorContrato.getNumeroSequencialRetorno() + 1) + "";
+						int numeroSequencialRetornoBase = negativadorContrato.getNumeroSequencialRetorno() + 1;
 
-						String quantidadeZerosRetorno = "";
-
-						int tamanhoretorno = 8 - numeroSequencialRetornoBase.length();
-
-						for (int i = 0; i < tamanhoretorno; i++) {
-							quantidadeZerosRetorno = quantidadeZerosRetorno + "0";
-						}
-
-						numeroSequencialRetornoBase = quantidadeZerosRetorno + numeroSequencialRetornoBase;
-
-						if (Util.converterStringParaInteger(numeroSequencialArquivo).compareTo(Util.converterStringParaInteger(numeroSequencialRetornoBase)) != 0) {
+						System.out.println("numeroSequencialRetornoBase: " + numeroSequencialRetornoBase);
+						System.out.println("numeroSequencialArquivo: " + numeroSequencialArquivo);
+						if (numeroSequencialArquivo != numeroSequencialRetornoBase) {
 							throw new ControladorException("atencao.movimento_fora_sequencia");
 						}
 					}
 
-					negativadorMovimento = repositorioSpcSerasa.getNegativadorMovimento(negativador,
-							Util.converterStringParaInteger(numeroSequencialArquivo));
+					negativadorMovimento = repositorioSpcSerasa.getNegativadorMovimento(negativador, numeroSequencialArquivo);
 					if (negativadorMovimento != null && negativadorMovimento.getDataRetorno() != null) {
 						throw new ControladorException("atencao.movimento_retorno_ja_processado");
 					}
@@ -13826,6 +13806,25 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			sessionContext.setRollbackOnly();
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public boolean isImovelNegativado(Integer idImovel) throws ControladorException {
+
+		try {
+			FiltroNegativacaoImoveis filtro = new FiltroNegativacaoImoveis();
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID, idImovel));
+			filtro.adicionarParametro(new ParametroNulo(FiltroNegativacaoImoveis.DATA_EXCLUSAO));
+
+			Collection<NegativacaoImoveis> colecao = getControladorUtil().pesquisar(filtro, NegativacaoImoveis.class.getName());
+			
+			if (colecao != null && !colecao.isEmpty())
+				return true;
+			else 
+				return false; 
+
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.verificar.imovel.negativado", e);
 		}
 	}
 }

@@ -36,6 +36,26 @@
 			type="gcom.gui.cadastro.RetornarZipArquivoTxtAtualizacaoCadastralAction"
 			path="/retornarZipArquivoTxtAtualizacaoCadastralAction">
 		</action>	
+
+		<action name="ConsultarArquivoTextoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.RetornarArquivosImoveisARevisarAtualizacaoCadastralAction"
+			path="/retornarArquivosImoveisARevisarAtualizacaoCadastralAction">
+		</action>
+		
+		<action name="ConsultarArquivoTextoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.RetornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction"
+			path="/retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction">
+		</action>
+				
+		<action name="ConsultarArquivoTextoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.RetornarArquivosImoveisARevisitarAtualizacaoCadastralAction"
+			path="/retornarArquivosImoveisARevisitarAtualizacaoCadastralAction">
+		</action>
+		
+		<action name="ConsultarArquivoTextoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.RetornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction"
+			path="/retornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction">
+		</action>
 		
 		<action name="ExibirAnaliseSituacaoArquivoAtualizacaoCadastralForm"
 			type="gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction"

@@ -16,7 +16,7 @@ public class AdicionaAlteracaoSituacaoEsgoto extends RelatorioConsultaAtualizaca
 			for (ColunaAtualizacaoCadastral coluna : imovel.getColunasAtualizacao()) {
 				if (coluna.getNomeColuna().contains(TabelaColuna.NOME_COLUNA_ESGOTO)){
 					AlteracaoImovelRelatorioAtualizacaoCadastral alteracao = 
-							new AlteracaoImovelRelatorioAtualizacaoCadastral("Alteração de Situação de Esgoto", coluna.getValorAnterior(), coluna.getValorAtual());
+							new AlteracaoImovelRelatorioAtualizacaoCadastral("Alteração de Situação de Esgoto", coluna.getValorAnterior(), coluna.getValorTransmitido());
 					relatorio.addAlteracao(alteracao);
 					break;
 				}

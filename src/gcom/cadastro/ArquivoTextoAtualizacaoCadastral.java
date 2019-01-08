@@ -12,197 +12,151 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-    private Integer id;
-    
-    private String descricaoArquivo;
+	public static final String EXIBIR_EM_REVISAO = "1";
+	
+	public static final String TIPO_ARQUIVO_TRANSMISSAO = " ";
+	public static final String TIPO_ARQUIVO_REVISAO = "R";
+	public static final String TIPO_ARQUIVO_FISCALIZACAO = "F";
+	public static final String TIPO_ARQUIVO_REVISITA = "V";
 
-    private Integer codigoSetorComercial;
+	private Integer id;
 
-    private Integer numeroQuadraInicial;
+	private String descricaoArquivo;
 
-    private Integer numeroQuadraFinal;
-    
-    private Rota rota;
+	private Integer codigoSetorComercial;
 
-    private Integer quantidadeImovel;
+	private Integer numeroQuadraInicial;
 
-    private byte[] arquivoTexto;
+	private Integer numeroQuadraFinal;
 
-    private Date ultimaAlteracao;
+	private Rota rota;
 
-    private Localidade localidade;
+	private Integer quantidadeImovel;
 
-    private gcom.micromedicao.Leiturista leiturista;
+	private byte[] arquivoTexto;
 
-    private SituacaoTransmissaoLeitura situacaoTransmissaoLeitura;
-    
-    private Integer quantidadeImoveisTransmitidos;
+	private Date ultimaAlteracao;
 
-	/**
-	 * @return Retorna o campo arquivoTexto.
-	 */
+	private Localidade localidade;
+
+	private gcom.micromedicao.Leiturista leiturista;
+
+	private SituacaoTransmissaoLeitura situacaoTransmissaoLeitura;
+
+	private Integer quantidadeImoveisTransmitidos;
+	
+	private String tipoRetorno;
+
+	public ArquivoTextoAtualizacaoCadastral(Integer id, String descricaoArquivo, Integer codigoSetorComercial, Integer numeroQuadraInicial, Integer numeroQuadraFinal, Rota rota, Integer quantidadeImovel,
+			byte[] arquivoTexto, Date ultimaAlteracao, Localidade localidade, Leiturista leiturista, SituacaoTransmissaoLeitura situacaoTransmissaoLeitura, Integer quantidadeImoveisTransmitidos) {
+		
+		this.id = id;
+		this.descricaoArquivo = descricaoArquivo;
+		this.codigoSetorComercial = codigoSetorComercial;
+		this.numeroQuadraInicial = numeroQuadraInicial;
+		this.numeroQuadraFinal = numeroQuadraFinal;
+		this.rota = rota;
+		this.quantidadeImovel = quantidadeImovel;
+		this.arquivoTexto = arquivoTexto;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.localidade = localidade;
+		this.leiturista = leiturista;
+		this.situacaoTransmissaoLeitura = situacaoTransmissaoLeitura;
+		this.quantidadeImoveisTransmitidos = quantidadeImoveisTransmitidos;
+	}
+	
 	public byte[] getArquivoTexto() {
 		return arquivoTexto;
 	}
 
-	/**
-	 * @param arquivoTexto O arquivoTexto a ser setado.
-	 */
 	public void setArquivoTexto(byte[] arquivoTexto) {
 		this.arquivoTexto = arquivoTexto;
 	}
 
-	/**
-	 * @return Retorna o campo codigoRota.
-	 */
 	public Rota getRota() {
 		return rota;
 	}
 
-	/**
-	 * @param codigoRota O codigoRota a ser setado.
-	 */
 	public void setRota(Rota rota) {
 		this.rota = rota;
 	}
 
-	/**
-	 * @return Retorna o campo codigoSetorComercial.
-	 */
 	public Integer getCodigoSetorComercial() {
 		return codigoSetorComercial;
 	}
 
-	/**
-	 * @param codigoSetorComercial O codigoSetorComercial a ser setado.
-	 */
 	public void setCodigoSetorComercial(Integer codigoSetorComercial) {
 		this.codigoSetorComercial = codigoSetorComercial;
 	}
 
-	/**
-	 * @return Retorna o campo descricaoArquivo.
-	 */
 	public String getDescricaoArquivo() {
 		return descricaoArquivo;
 	}
 
-	/**
-	 * @param descricaoArquivo O descricaoArquivo a ser setado.
-	 */
 	public void setDescricaoArquivo(String descricaoArquivo) {
 		this.descricaoArquivo = descricaoArquivo;
 	}
 
-	/**
-	 * @return Retorna o campo id.
-	 */
 	public Integer getId() {
 		return id;
 	}
 
-	/**
-	 * @param id O id a ser setado.
-	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return Retorna o campo leiturista.
-	 */
 	public gcom.micromedicao.Leiturista getLeiturista() {
 		return leiturista;
 	}
 
-	/**
-	 * @param leiturista O leiturista a ser setado.
-	 */
 	public void setLeiturista(gcom.micromedicao.Leiturista leiturista) {
 		this.leiturista = leiturista;
 	}
 
-	/**
-	 * @return Retorna o campo localidade.
-	 */
 	public Localidade getLocalidade() {
 		return localidade;
 	}
 
-	/**
-	 * @param localidade O localidade a ser setado.
-	 */
 	public void setLocalidade(Localidade localidade) {
 		this.localidade = localidade;
 	}
 
-	/**
-	 * @return Retorna o campo numeroQuadraFinal.
-	 */
 	public Integer getNumeroQuadraFinal() {
 		return numeroQuadraFinal;
 	}
 
-	/**
-	 * @param numeroQuadraFinal O numeroQuadraFinal a ser setado.
-	 */
 	public void setNumeroQuadraFinal(Integer numeroQuadraFinal) {
 		this.numeroQuadraFinal = numeroQuadraFinal;
 	}
 
-	/**
-	 * @return Retorna o campo numeroQuadraInicial.
-	 */
 	public Integer getNumeroQuadraInicial() {
 		return numeroQuadraInicial;
 	}
 
-	/**
-	 * @param numeroQuadraInicial O numeroQuadraInicial a ser setado.
-	 */
 	public void setNumeroQuadraInicial(Integer numeroQuadraInicial) {
 		this.numeroQuadraInicial = numeroQuadraInicial;
 	}
 
-	/**
-	 * @return Retorna o campo quantidadeImovel.
-	 */
 	public Integer getQuantidadeImovel() {
 		return quantidadeImovel;
 	}
 
-	/**
-	 * @param quantidadeImovel O quantidadeImovel a ser setado.
-	 */
 	public void setQuantidadeImovel(Integer quantidadeImovel) {
 		this.quantidadeImovel = quantidadeImovel;
 	}
 
-	/**
-	 * @return Retorna o campo situacaoTransmissaoLeitura.
-	 */
 	public SituacaoTransmissaoLeitura getSituacaoTransmissaoLeitura() {
 		return situacaoTransmissaoLeitura;
 	}
 
-	/**
-	 * @param situacaoTransmissaoLeitura O situacaoTransmissaoLeitura a ser setado.
-	 */
-	public void setSituacaoTransmissaoLeitura(
-			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura) {
+	public void setSituacaoTransmissaoLeitura(SituacaoTransmissaoLeitura situacaoTransmissaoLeitura) {
 		this.situacaoTransmissaoLeitura = situacaoTransmissaoLeitura;
 	}
 
-	/**
-	 * @return Retorna o campo ultimaAlteracao.
-	 */
 	public Date getUltimaAlteracao() {
 		return ultimaAlteracao;
 	}
 
-	/**
-	 * @param ultimaAlteracao O ultimaAlteracao a ser setado.
-	 */
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
@@ -217,25 +171,43 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 
 	public ArquivoTextoAtualizacaoCadastral() {
 	}
-	
-	public ArquivoTextoAtualizacaoCadastral(Integer id, String descricaoArquivo, Integer codigoSetorComercial, 
-			Integer numeroQuadraInicial, Integer numeroQuadraFinal, Rota rota, Integer quantidadeImovel,
-			byte[] arquivoTexto, Date ultimaAlteracao, Localidade localidade, Leiturista leiturista, 
-			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura, Integer quantidadeImoveisTransmitidos) {
-		this.id = id;
-		this.descricaoArquivo = descricaoArquivo;
-		this.codigoSetorComercial = codigoSetorComercial;
-		this.numeroQuadraInicial = numeroQuadraInicial;
-		this.numeroQuadraFinal = numeroQuadraFinal;
-		this.rota = rota;
-		this.quantidadeImovel = quantidadeImovel;
-		this.arquivoTexto = arquivoTexto;
-		this.ultimaAlteracao = ultimaAlteracao;
-		this.localidade = localidade;
-		this.leiturista = leiturista;
-		this.situacaoTransmissaoLeitura = situacaoTransmissaoLeitura;
-		this.quantidadeImoveisTransmitidos = quantidadeImoveisTransmitidos;
+
+	public String getTipoRetorno() {
+		return tipoRetorno;
 	}
-   
-    
+
+	public void setTipoRetorno(String tipoRetorno) {
+		this.tipoRetorno = tipoRetorno;
+	}
+	
+	public boolean isArquivoRetornoTransmissao() {
+		return tipoRetorno.equals(null) || tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO);
+	}
+	
+	public boolean isArquivoRetornoRevisao() {
+		return !tipoRetorno.equals(null) && tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISAO);
+	}
+	
+	public boolean isArquivoRetornoFiscalizacao() {
+		return !tipoRetorno.equals(null) && tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_FISCALIZACAO);
+	}
+	
+	public boolean isArquivoRetornoRevisita() {
+		return tipoRetorno.equals(null) || tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA);
+	}
+	
+	public String getDescricaoTipoRetorno() {
+		String descricao = "";
+		if (!tipoRetorno.equals(null)) 
+			if (tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA))
+					descricao = "Revisita";
+			else if (tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_FISCALIZACAO))
+					descricao = "Fiscalização";
+			else if (tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISAO))
+				descricao = "Revisão";
+			else if (tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO))
+				descricao = "Transmissão";
+			
+		return descricao;
+	}
 }

@@ -10,34 +10,25 @@ import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 @ControleAlteracao()
-/** @author Hibernate CodeGenerator */
+
 public class CobrancaSituacaoMotivo extends ObjetoTransacao implements Serializable {
 	private static final long serialVersionUID = 1L;
-	//	Indicador usado para a empresa Terceirizada da CAEMA
-    public final static Integer IMOVEIS_ENVIADOS_EMPRESA_TERCEIRIZADA = new Integer(12);
-    
+
+	public final static Integer EM_PROCESSO_JUDICIAL = new Integer(4);
+	public final static Integer IMOVEIS_ENVIADOS_EMPRESA_TERCEIRIZADA = new Integer(12);
     public final static Integer IMOVEL_CADASTRADO_VIVA_AGUA = new Integer(14);
 
-    /** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
 
-    /** full constructor */
     public CobrancaSituacaoMotivo(String descricao, Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;
         this.indicadorUso = indicadorUso;
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public CobrancaSituacaoMotivo() {
     }
 

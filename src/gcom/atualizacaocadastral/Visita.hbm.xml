@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping>
+	<class name="gcom.atualizacaocadastral.Visita"
+		table="atualizacaocadastral.visita">
+
+		<id name="id" type="java.lang.Integer" column="vist_id">
+			<generator class="sequence">
+				<param name="sequence">atualizacaocadastral.seq_visita</param>
+			</generator>
+		</id>
+
+		<many-to-one name="imovelControleAtualizacaoCadastral"
+			class="gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral">
+			<column name="icac_id" />
+		</many-to-one>
+		<many-to-one name="cadastroOcorrencia"
+			class="gcom.cadastro.imovel.CadastroOcorrencia">
+			<column name="cocr_id" />
+		</many-to-one>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp"
+			column="vist_tmultimaalteracao" not-null="true" length="8" />
+
+		<property name="coordenadaX" type="java.lang.String"
+			column="vist_nncoordenadax" not-null="false" length="50" />
+		<property name="coordenadaY" type="java.lang.String"
+			column="vist_nncoordenaday" not-null="false" length="50" />
+
+	</class>
+</hibernate-mapping>

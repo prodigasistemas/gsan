@@ -5,12 +5,13 @@ import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorCPFsClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorCepClienteProprietarioResponsavel;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorCepImovelCommand;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorCoordenadasCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorEconomiasCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorHidrometroCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorLogradouroCommand;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorNomesClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorRamoAtividadeCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorSexoCommand;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorSituacaoImovelCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoEnderecoCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoLogradouroCommand;
@@ -46,6 +47,7 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral,
 			ControladorClienteLocal controladorCliente,
 			IRepositorioClienteImovel repositorioClienteImovel) {
+		
 		super(parser, repositorioCadastro, controladorUtil, controladorTransacao,
 				repositorioImovel, controladorEndereco,
 				controladorAtualizacaoCadastral, controladorCliente);
@@ -55,21 +57,22 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 
 	@Override
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
-		
 		imovelAtual = atualizacao.getImovelAtual();
-		
-		CadastroOcorrencia cadastroOcorrencia = imovelAtual.getCadastroOcorrencia();
-		
-		if (cadastroOcorrencia != null 
-				&& cadastroOcorrencia.getIndicadorValidacao().equals(ConstantesSistema.SIM)) {
-			
+
+		CadastroOcorrencia ocorrencia = imovelAtual.getCadastroOcorrencia();
+
+		new ValidadorSituacaoImovelCommand(imovelAtual, controladorAtualizacaoCadastral).execute();
+		new ValidadorCoordenadasCommand(imovelAtual, controladorAtualizacaoCadastral).execute();
+
+		if (ocorrencia != null && ocorrencia.getIndicadorValidacao().equals(ConstantesSistema.SIM)) {
 			validarLinhaCliente();
 			validarLinhaImovel();
 			validarLinhaRamoAtividade();
 			validarLinhaMedidor();
 		}
-		
-		new ValidadorCepImovelCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();		
+
+		if (!imovelAtual.isErroLayout())
+			new ValidadorCepImovelCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();
 	}
 
 	private void validarLinhaMedidor() {
@@ -78,16 +81,6 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 
 	private void validarLinhaRamoAtividade() {
 		new ValidadorRamoAtividadeCommand(imovelAtual, imovelAtual.getLinhaRamoAtividade(), repositorioCadastro);
-		
-		if (imovelAtual.getDadosImovel().contemTipoEconomia(
-				TipoEconomia.COMERCIAL,
-				TipoEconomia.PUBLICO,
-				TipoEconomia.INDUSTRIAL)) {
-			
-			if (imovelAtual.getDadosRamoAtividade().isEmpty()) {
-				imovelAtual.addMensagemErro("Imóvel do tipo comercial, público ou industrial deve possuir ramo de atividade");
-			}
-		}
 	}
 
 	private void validarLinhaImovel() throws Exception {
@@ -99,7 +92,6 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 
 	private void validarLinhaCliente() throws Exception {
 		new ValidadorSexoCommand(imovelAtual, imovelAtual.getLinhaCliente()).execute();
-		new ValidadorNomesClientesCommand(imovelAtual, imovelAtual.getLinhaCliente()).execute();
 		new ValidadorCPFsClientesCommand(imovelAtual, imovelAtual.getLinhaCliente(), repositorioClienteImovel).execute();
 		new ValidadorCepClienteProprietarioResponsavel(imovelAtual, imovelAtual.getLinhaCliente()).execute();
 		new ValidadorTipoPessoaCommand(imovelAtual, imovelAtual.getLinhaCliente(), repositorioClienteImovel).execute();

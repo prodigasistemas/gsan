@@ -9,8 +9,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class Tabela extends TabelaAuxiliarAbreviada {
 	private static final long serialVersionUID = 1L;
 	
@@ -21,13 +19,17 @@ public class Tabela extends TabelaAuxiliarAbreviada {
 	public static final Integer IMOVEL_RAMO_ATIVIDADE_ATUALIZACAO_CADASTRAL = new Integer(665);
 	public static final Integer IMOVEL_QUANTIDADE_TIPO_OCUPANTE_ATUALIZACAO_CADASTRAL = new Integer(666);
     
-    /** nullable persistent field */
     private String nomeTabela;
 
-    /** tabelaColunas */
     private Set tabelaColunas;
 
-    /** full constructor */
+    public Tabela() {
+    }
+    
+    public Tabela(Integer id) {
+    	this.id = id;
+    }
+    
     public Tabela(String descricaoTabela, String nomeTabela, Date ultimaAlteracao) {
         this.descricao = descricaoTabela;
         this.ultimaAlteracao = ultimaAlteracao;
@@ -42,26 +44,16 @@ public class Tabela extends TabelaAuxiliarAbreviada {
 		this.nomeTabela = nomeTabela;
 	}
 
-	/** default constructor */
-    public Tabela() {
-    }
-
     public String toString() {
         return new ToStringBuilder(this)
             .append("id", getId())
             .toString();
     }
 
-	/**
-	 * @return Retorna o campo tabelaColunas.
-	 */
 	public Set getTabelaColunas() {
 		return tabelaColunas;
 	}
 
-	/**
-	 * @param tabelaColunas O tabelaColunas a ser setado.
-	 */
 	public void setTabelaColunas(Set tabelaColunas) {
 		this.tabelaColunas = tabelaColunas;
 	}

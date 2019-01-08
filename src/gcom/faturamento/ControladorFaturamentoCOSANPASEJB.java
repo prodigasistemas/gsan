@@ -2137,6 +2137,26 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 									BigDecimal valorMultasCobradas = repositorioFaturamento.pesquisarValorMultasCobradas(idConta);
 									
+									Date vencimentoContaSemDocumento = calculaVencimentoConta(conta, indicadorExistePagamentoClassificadoConta, null);
+									
+									CalcularAcrescimoPorImpontualidadeHelper helper = this.getControladorCobranca()
+											.calcularAcrescimoPorImpontualidade(
+													conta.getReferencia(),
+													vencimentoContaSemDocumento,
+													pagamentoContasMenorData,
+													valorConta,
+													valorMultasCobradas,
+													conta.getIndicadorCobrancaMulta(),
+													"" + anoMesReferenciaArrecadacao,
+													conta.getId(),
+													ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
+									
+									logger.info("		acrescimos SEM documento : ");
+									logger.info("			atualizacao monetaria: " + helper.getValorAtualizacaoMonetaria() );
+									logger.info("			juros                : " + helper.getValorJurosMora() );
+									logger.info("			multa                : " + helper.getValorMulta() );
+									
+									
 									Date vencimentoConta = calculaVencimentoConta(conta, indicadorExistePagamentoClassificadoConta, documentoCobranca);
 									
 									calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
@@ -2150,7 +2170,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 													"" + anoMesReferenciaArrecadacao,
 													conta.getId(),
 													ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
-
+									
+									logger.info("		acrescimos COM documento : ");
+									logger.info("			atualizacao monetaria: " + calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria() );
+									logger.info("			juros                : " + calcularAcrescimoPorImpontualidade.getValorJurosMora() );
+									logger.info("			multa                : " + calcularAcrescimoPorImpontualidade.getValorMulta() );
+									
 									DebitoTipo debitoTipo = null;
 
 									if (indicadorGeracaoMulta.equals(ConstantesSistema.SIM)
@@ -2412,22 +2437,30 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private boolean isMultaJaCobrada(Integer idConta, boolean indicadorExistePagamentoClassificadoConta, CobrancaDocumento documentoCobranca) throws ControladorException {
 		boolean multaCobrada = false;
 		
+		logger.info("indicadorExistePagamentoClassificadoConta? " + indicadorExistePagamentoClassificadoConta);
 		if (indicadorExistePagamentoClassificadoConta) {
 			FiltroCobrancaDocumentoItem filtroItem = new FiltroCobrancaDocumentoItem();
 			
-			filtroItem.adicionarParametro(new ParametroSimples(FiltroPagamento.CONTA, idConta));
+			filtroItem.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumentoItem.CONTA_GERAL_ID, idConta));
+			filtroItem.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumentoItem.COBRANCA_DOCUMENTO_ID, documentoCobranca.getId()));
 			
 			Collection colecaoItem = getControladorUtil().pesquisar(filtroItem,CobrancaDocumentoItem.class.getSimpleName());
 			
-			if (!colecaoItem.isEmpty()) {
+			logger.info("	achou algum item? " + (colecaoItem != null) );
+			if (colecaoItem != null && !colecaoItem.isEmpty()) {
 				CobrancaDocumentoItem item = (CobrancaDocumentoItem) Util.retonarObjetoDeColecao(colecaoItem);
-				if (item.getValorAcrescimos() != null) multaCobrada = true;
+				logger.info("	id do item: " + item.getId() );
+				if (item.getValorAcrescimos() != null) {
+					multaCobrada = true;
+				}
 			} 
 		}
 
+		logger.info("	multa cobrada? " + multaCobrada );
 		return multaCobrada;	
 	}
 
@@ -2795,22 +2828,19 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	
 	private Date calculaVencimentoConta(Conta conta, boolean pagamentoClassificadoConta, CobrancaDocumento documento) throws ControladorException {
 		Date vencimento = conta.getDataVencimentoConta();
-		
+		logger.info("	Vencimento conta: " + vencimento);
 		if (pagamentoClassificadoConta) {
 			Fatura fatura = pesquisarFaturaDeConta(conta.getId());
 			
 			if (fatura != null ) {
 				vencimento = fatura.getVencimento();
-			}
-			
-			if (documento != null) {
+			} else if (documento != null) {
 				vencimento = documento.getEmissao();
-			}
-			if (conta.getImovel().getId().intValue() == 5832373) {
-				System.out.println("Vencimento documento: " + documento.getEmissao());
+				logger.info("	Vencimento documento de cobranca: " + vencimento);
 			}
 		}
 		
+		logger.info("	Vencimento final: " + vencimento);
 		return vencimento;
 		
 	}
@@ -2822,11 +2852,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		filtroPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroPagamento.COBRANCA_DOCUMENTO);
 		
 		Collection colecaoPagamento = getControladorUtil().pesquisar(filtroPagamento,Pagamento.class.getSimpleName());
-		
 		if (!colecaoPagamento.isEmpty()) {
 			Pagamento pagamento = (Pagamento) Util.retonarObjetoDeColecao(colecaoPagamento);
+			logger.info("	Documento de cobranca: " + pagamento.getCobrancaDocumento().getId());
 			return pagamento.getCobrancaDocumento();
 		} else {
+			logger.info("	Não tem documento de cobranca.");
 			return null;
 		}
 	}

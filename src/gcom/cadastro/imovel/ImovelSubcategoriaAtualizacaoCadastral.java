@@ -133,4 +133,8 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao impl
 		return "ImovelSubcategoriaAtualizacaoCadastral [descricaoCategoria=" + descricaoCategoria + ", descricaoSubcategoria=" + descricaoSubcategoria
 				+ ", quantidadeEconomias=" + quantidadeEconomias + "]";
 	}
+	
+	public String getComplemento() {
+		return categoria.getDescricao() + " - " + subcategoria.getDescricao();
+	}
 }

@@ -98,6 +98,7 @@ public class AtualizarImovelAction extends GcomAction {
 		Collection colecaoImovelSubcategoriasRemovidas = (Collection) sessao.getAttribute("colecaoImovelSubcategoriasRemoviadas");
 		Collection colecaoImovelRamosAtividadesRemovidos = (Collection) sessao.getAttribute("colecaoImovelRamosAtividadesRemovidos");
 		Collection colecaoClientesImoveisRemovidos = (Collection) sessao.getAttribute("colecaoClientesImoveisRemovidos");
+		Date dataInicioRelacaoUsuario = (Date) sessao.getAttribute("dataInicioRelacaoUsuario");
 		
 		String idLocalidade = (String) inserirImovelActionForm.get("idLocalidade");
 		String idSetorComercial = (String) inserirImovelActionForm.get("idSetorComercial");
@@ -137,7 +138,6 @@ public class AtualizarImovelAction extends GcomAction {
 		String cordenadasX = (String) inserirImovelActionForm.get("cordenadasUtmX");
 		String cordenadasY = (String) inserirImovelActionForm.get("cordenadasUtmY");
 		String extratoResponsavel = (String) inserirImovelActionForm.get("extratoResponsavel");
-		// String nomeContaForm = (String) inserirImovelActionForm.get("tipoOcupacao");
 		String tipoDespejo = (String) inserirImovelActionForm.get("tipoDespejo");
 		String idImovelPrincipal = (String) inserirImovelActionForm.get("idImovel");
 		String sequencialRota = (String) inserirImovelActionForm.get("sequencialRota");
@@ -148,16 +148,8 @@ public class AtualizarImovelAction extends GcomAction {
 		String numeroMedidorEnergia = (String) inserirImovelActionForm.get("numeroMedidorEnergia");
 		String dataVisitaComercialInformada  = (String) inserirImovelActionForm.get("dataVisitaComercial");
 		String informacoesComplementares = (String) inserirImovelActionForm.get("informacoesComplementares");
-		
-
-		/**
-		 * Disponibilizar o campo nome do Imóvel no cadastro do Imóvel
-		 * 
-		 * @author Wellington Rocha
-		 * @date 14/11/2012*/
 		String nomeDoImovel = (String) inserirImovelActionForm.get("nomeDoImovel");
 		String numeroQuadraEntrega = (String) inserirImovelActionForm.get("numeroQuadraEntrega");
-		
 		String indicadorNivelInstalacaoEsgoto = (String) inserirImovelActionForm.get("indicadorNivelInstalacaoEsgoto");
 		
 		Imovel imovel = imovelAtualizar;
@@ -174,9 +166,6 @@ public class AtualizarImovelAction extends GcomAction {
 		ImovelAbaLocalidadeRetornoHelper resultadoAbaLocalidade = fachada.validarImovelAbaLocalidade(helperLocalidade);
 		
 		
-		//imovel.setLote(new Short(lote));
-		
-		
 		if (Util.verificarNaoVazio(testadaLote)) {
 			imovel.setTestadaLote(new Short(testadaLote).shortValue());
 		} else {
@@ -190,13 +179,7 @@ public class AtualizarImovelAction extends GcomAction {
 		
 		// ABA ENDERECO
 		Collection colecaoEnderecos = (Collection) sessao.getAttribute("colecaoEnderecos");
-		//**********************************************************************
-		// Autor: Ivan Sergio
-		// Data: 23/07/2009
-		// CRC2103
-		// Guarda o endereco do Imovel para o caso em que o Inserir/Manter
-		// cliente ï¿½ invocado pelo Inserir/Manter Imovel como PopUp
-		//**********************************************************************
+
 		if (sessao.getAttribute("POPUP") != null) {
 			if (sessao.getAttribute("POPUP").equals("true")) {
 				if (colecaoEnderecos != null && !colecaoEnderecos.isEmpty()) {
@@ -212,7 +195,6 @@ public class AtualizarImovelAction extends GcomAction {
 				}
 			}
 		}
-		//**********************************************************************
 		
 		ImovelAbaEnderecoHelper helperEndereco = new ImovelAbaEnderecoHelper();
 		helperEndereco.setImovelEnderecos(colecaoEnderecos);
@@ -232,10 +214,6 @@ public class AtualizarImovelAction extends GcomAction {
 			logradouro = new Logradouro();
 			logradouro.setId(idLogradouro);
 		} else {
-			// ALTERAï¿½ï¿½O FEITTA PARA FUNCIONAMENTO DA APLICAï¿½ï¿½O, APAGAR
-			// A CONDIï¿½ï¿½O DO "SE Nï¿½O",
-			// ALTERAï¿½ï¿½O DO VALOR DO LOGRADOURO ESTA SENDO ANALIZADA POR ARYED,
-			// ANA E LEO NARDO NO DIA 16/03/2006
 			logradouro = new Logradouro();
 			logradouro.setId(new Integer("0"));
 		}
@@ -288,24 +266,9 @@ public class AtualizarImovelAction extends GcomAction {
 		helperCaracteristica.setIdLigacaoEsgotoSituacao(situacaoLigacaoEsgoto);
 		helperCaracteristica.setIdLigacaoEsgotoEsgotamento(idLigacaoEsgotoEsgotamento);
 		helperCaracteristica.setIdImovelPerfil(perfilImovel);
-		
-		
-		//*************************************************
-		// Autor: Ivan Sergio
-		// Data: 23/04/2009
-		// CRC1657
-		//*************************************************
-		// [FS0023] - Verificar Setor e Quadra
-		//*************************************************
 		helperCaracteristica.setIdSetorComercial(idSetorComercial);
 		helperCaracteristica.setIdQuadra(idQuadra);
-		//*************************************************
-		
-		// Autor: Nathalia Santos 
-		// Data: 12/07/2011
-		// RR201106690 - Verifica se Existe nï¿½vel para instalaï¿½ï¿½o de esgoto caso a empresa seja CAER.
 		helperCaracteristica.setIdNivelInstalacaoEsgoto(indicadorNivelInstalacaoEsgoto);
-		//*****************************************************
 		
 		ImovelAbaCaracteristicasRetornoHelper resultadoAbaCaracteristicas = 
 			fachada.validarImovelAbaCaracteristicas(helperCaracteristica);
@@ -476,7 +439,6 @@ public class AtualizarImovelAction extends GcomAction {
 		}
 		
 		// OUTROS
-		//imovel.setUltimaAlteracao(new Date());
 		imovel.setIndicadorEmissaoExtratoFaturamento(Util.verificarNaoVazio(extratoResponsavel) ? new Short(extratoResponsavel) : ConstantesSistema.NAO);
 		
 		if(imovelAtualizar.getIndicadorExclusao() == null){
@@ -514,17 +476,10 @@ public class AtualizarImovelAction extends GcomAction {
 			imovel.setIndicadorEmissaoExtratoFaturamento(new Short("2"));
 		}
 		
-		//CRC2258 solicitacao do analista Adriano Brito
-		//data alteracao: 13/07/2009
 		if (imovel.getIndicadorVencimentoMesSeguinte() == null){
 			imovel.setIndicadorVencimentoMesSeguinte(new Short("2"));
 		}
-		//fim da alteracao
 		
-		
-		// CRC3184 
-		// Desenvolvedor:Hugo Amorim Analista:Rosana
-		// Data: 15/12/2009	
 		if(imovel.getImovelPerfil()!=null){
 		boolean achou = false;	
 			if(imovel.getImovelPerfil().getSubcategoria()!=null){
@@ -553,7 +508,6 @@ public class AtualizarImovelAction extends GcomAction {
 			}
 			}
 		}		
-		//Fim da Alteraï¿½ï¿½o CRC3184
 
 		/**
 		 * [SB0004] ï¿½ Verificar Alteraï¿½ï¿½o da Inscriï¿½ï¿½o do Imï¿½vel
@@ -609,14 +563,7 @@ public class AtualizarImovelAction extends GcomAction {
 			sessao.removeAttribute("remove");
 			//httpServletRequest.setAttribute("url","javascript:window.location.href='/gsan/atualizarImovelWizardAction.do?action=exibirAtualizarImovelLocalidadeAction';");
 		}
-		// FIM		[SB0004] ï¿½ Verificar Alteraï¿½ï¿½o da Inscriï¿½ï¿½o do Imï¿½vel
 		
-		
-		//**********************************************************************
-		// Autor: Rodrigo Cabral
-		// Data: 13/09/2011
-		// Atualizar a Principal Categoria e SubCategoria do Imovel
-		//**********************************************************************
 		
 		Categoria principalCategoria = fachada.obterPrincipalCategoria(subcategorias);
 		
@@ -646,6 +593,7 @@ public class AtualizarImovelAction extends GcomAction {
 		inserirImovelHelper.setColecaoClientesImoveisRemovidos(colecaoClientesImoveisRemovidos);
 		inserirImovelHelper.setColecaoImovelSubcategoriasRemovidas(colecaoImovelSubcategoriasRemovidas);
 		inserirImovelHelper.setColecaoRamoAtividadesRemovidas(colecaoImovelRamosAtividadesRemovidos);
+		inserirImovelHelper.setDataInicioRelacaoUsuario(dataInicioRelacaoUsuario);
 
 		fachada.atualizarImovel(inserirImovelHelper);
 		

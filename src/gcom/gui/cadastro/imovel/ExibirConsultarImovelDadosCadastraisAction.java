@@ -58,7 +58,7 @@ public class ExibirConsultarImovelDadosCadastraisAction extends GcomAction {
             	
                 sessao.setAttribute("imovelDadosCadastrais", imovel);
                 sessao.setAttribute("idImovelPrincipalAba", imovel.getId().toString());
-                ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = Fachada.getInstancia().pesquisarImovelControleAtualizacaoCadastral(imovel.getId());
+                ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = Fachada.getInstancia().pesquisarImovelControleAtualizacao(imovel.getId());
                 SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
                
                 consultarImovelActionForm.setIdImovelDadosCadastrais(imovel.getId().toString());
@@ -356,6 +356,11 @@ public class ExibirConsultarImovelDadosCadastraisAction extends GcomAction {
 			consultarImovelActionForm.setTipoCoberturaDadosCadastrais("");
 		}
 		
+		if(imovel.getObservacaoCategoria() != null){
+			consultarImovelActionForm.setObservacaoCategoriaDadosCadastrais(imovel.getObservacaoCategoria().toString());	
+		} else {
+			consultarImovelActionForm.setObservacaoCategoriaDadosCadastrais("");
+		}
 		try{
 			Municipio municipio = imovel.getLocalidade().getMunicipio();
 			if(municipio != null){

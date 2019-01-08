@@ -153,10 +153,9 @@ public interface IRepositorioCadastro {
     public void excluirFeriadosMunicipais( String anoDestino ) throws ErroRepositorioException;
 
  	@SuppressWarnings("rawtypes")
-    public Collection pesquisarLocalidades() throws ErroRepositorioException ;
+    public Collection pesquisarLocalidades() throws ErroRepositorioException;
 
- 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao)throws ErroRepositorioException;
+ 	public List<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) throws ErroRepositorioException;
 
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(Integer idArquivoTxt)
 		throws ErroRepositorioException;
@@ -223,8 +222,7 @@ public interface IRepositorioCadastro {
 	
 	public Integer pesquisarImovelAtualizacaoCadastralComIndicadorExclusaoCount() throws ErroRepositorioException;
 	
-	public Integer pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
-			Integer situacao, Integer idArquivoTexto) throws ErroRepositorioException;
+	public Integer pesquisarQuantidadeImoveisTransmitidosAtualizacaoCadastral(Integer idArquivoTexto) throws ErroRepositorioException;
 	
 	public Collection<Integer> pesquisarIdsImoveisAtualizacaoCadastral(Integer idEmpresaLeiturista, 
 			Integer idRota) throws ErroRepositorioException;

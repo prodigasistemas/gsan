@@ -475,7 +475,7 @@ face: Verdana, Arial, Helvetica, sans-serif;
 								
 								<%}else if( (session.getAttribute("qtdePagContas") != null) && ((Integer) session.getAttribute("qtdePagContas") > ConstantesSistema.NUMERO_MAXIMO_REGISTROS_CONSULTA_PAGAMENTO)) {%>
 																<tr>
-									<td height="190" colspan="7">
+									<td height="190" colspan="8">
 									<div style="width: 100%; height: 100%; overflow: auto;">
 									<table width="100%">
 
@@ -681,11 +681,6 @@ face: Verdana, Arial, Helvetica, sans-serif;
 					<td colspan="4" height="10"></td>
 				</tr>
 
-
-
-
-
-
 				<tr>
 					<td colspan="4">
 					<table width="100%" align="center" bgcolor="#99CCFF" border="0"
@@ -726,24 +721,22 @@ face: Verdana, Arial, Helvetica, sans-serif;
 
 								<%}else if((session.getAttribute("qtdePagGuiaPagamento") != null) && ((Integer) session.getAttribute("qtdePagGuiaPagamento") <= ConstantesSistema.NUMERO_MAXIMO_REGISTROS_CONSULTA_PAGAMENTO)) {%>
 
-								<logic:present name="colecaoPagamentosImovelGuiaPagamento"
-									scope="session">
-									<logic:notEmpty name="colecaoPagamentosImovelGuiaPagamento"
-										scope="session">
+								<logic:present name="colecaoPagamentosImovelGuiaPagamento" scope="session">
+									<logic:notEmpty name="colecaoPagamentosImovelGuiaPagamento" scope="session">
 										<logic:iterate name="colecaoPagamentosImovelGuiaPagamento"
 											id="pagamento" type="Pagamento">
 											<%contad = contad + 1;
 				if (contad % 2 == 0) {%>
-											<tr bgcolor="#FFFFFF">
+											<tr bgcolor="#FFFFFF" width="100%">
 												<%} else {
 
 				%>
-											<tr bgcolor="#cbe5fe">
+											<tr bgcolor="#cbe5fe" width="100%">
 												<%}%>
 
-												<td width="12%" align="center">
+												<td width="12%" align="center" >
 												${pagamento.cliente.id}&nbsp;</td>
-												<td width="11%" align="center">
+												<td width="11%" align="center" >
 													<logic:present name="pagamento" property="guiaPagamento">
 														<a 
 															href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamento.getGuiaPagamento().getId() %>')">${pagamento.debitoTipo.descricao}
@@ -754,29 +747,37 @@ face: Verdana, Arial, Helvetica, sans-serif;
 													</logic:notPresent>			
 														
 												</td>
-												<td width="11%" align="right">
+												<td width="11%" align="right" >
 													<logic:notEmpty name="pagamento" property="guiaPagamento">
-														<logic:notEmpty name="pagamento" property="guiaPagamento.guiaPagamento.valorDebito">
-															<bean:write name="pagamento" property="guiaPagamento.guiaPagamento.valorDebito" formatKey="money.format" />&nbsp;
+														<logic:notEmpty name="pagamento" property="guiaPagamento.guiaPagamento">
+															<logic:notEmpty name="pagamento" property="guiaPagamento.guiaPagamento.valorDebito">
+																<bean:write name="pagamento" property="guiaPagamento.guiaPagamento.valorDebito" formatKey="money.format" />&nbsp;
+															</logic:notEmpty>
+														</logic:notEmpty>
+														
+														<logic:notEmpty name="pagamento" property="guiaPagamento.guiaPagamentoHistorico">
+															<logic:notEmpty name="pagamento" property="guiaPagamento.guiaPagamentoHistorico.valorDebito">
+																<bean:write name="pagamento" property="guiaPagamento.guiaPagamentoHistorico.valorDebito" formatKey="money.format" />&nbsp;
+															</logic:notEmpty>
 														</logic:notEmpty>
 													</logic:notEmpty>
-												</td>
-												<td width="11%" align="right">
+												</td> 
+												<td width="11%" align="right" >
 													<bean:write name="pagamento" property="valorPagamento" formatKey="money.format" />&nbsp;
 												</td>
-												<td width="11%" align="center">
+												<td width="11%" align="center" >
 													<a  href="javascript:abrirPopup('exibirConsultarDadosPagamentoAction.do?idPagamento=<%=""+ pagamento.getId()%>' ,800,600);">
 														<bean:write name="pagamento" property="dataPagamento" formatKey="date.format" />
 													</a>
 												</td>	
 													
-												<td width="14%" align="center">
+												<td width="14%" align="center" >
 													${pagamento.avisoBancario.arrecadador.cliente.nome}&nbsp;
 												</td>
 												<td width="15%">
 													${pagamento.pagamentoSituacaoAnterior.descricaoAbreviada}&nbsp;
 												</td>
-												<td width="15%">
+												<td width="15%" >
 													${pagamento.pagamentoSituacaoAtual.descricaoAbreviada}&nbsp;
 												</td>
 											</tr>
@@ -858,7 +859,7 @@ face: Verdana, Arial, Helvetica, sans-serif;
 
 
 								<tr>
-									<td height="190" colspan="7">
+									<td height="190" colspan="8">
 									<div style="width: 100%; height: 100%; overflow: auto;">
 									<table width="100%">
 
@@ -892,9 +893,9 @@ face: Verdana, Arial, Helvetica, sans-serif;
 														<td width="11%" align="right"><logic:notEmpty
 															name="pagamento" property="guiaPagamento">
 															<logic:notEmpty name="pagamento"
-																property="guiaPagamento.valorDebito">
+																property="guiaPagamento.guiaPagamento.valorDebito">
 																<bean:write name="pagamento"
-																	property="guiaPagamento.valorDebito"
+																	property="guiaPagamento.guiaPagamento.valorDebito"
 																	formatKey="money.format" />&nbsp;
 													</logic:notEmpty>
 														</logic:notEmpty></td>
@@ -961,7 +962,7 @@ face: Verdana, Arial, Helvetica, sans-serif;
 																property="guiaPagamentoGeral.guiaPagamentoHistorico.valorDebito">
 																<font color="#ff0000"> <bean:write
 																	name="pagamentoHistorico"
-																	property="guiaPagamento.valorDebito"
+																	property="guiaPagamentoGeral.guiaPagamentoHistorico.valorDebito"
 																	formatKey="money.format" /> </font>
 																	&nbsp;
 													</logic:notEmpty>

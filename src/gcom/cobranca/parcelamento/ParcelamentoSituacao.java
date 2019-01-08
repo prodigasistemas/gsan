@@ -13,7 +13,7 @@ public class ParcelamentoSituacao implements Serializable {
 	public final static Integer DESFEITO = new Integer(2);
 	public final static Integer CONCLUIDO = new Integer(3);
 	public final static Integer CANCELADO = new Integer(4);
-	
+
 	private Integer id;
 
 	private String descricao;
@@ -22,8 +22,9 @@ public class ParcelamentoSituacao implements Serializable {
 
 	private Date ultimaAlteracao;
 
-	public ParcelamentoSituacao() {}
-	
+	public ParcelamentoSituacao() {
+	}
+
 	public ParcelamentoSituacao(Integer id) {
 		super();
 		this.id = id;

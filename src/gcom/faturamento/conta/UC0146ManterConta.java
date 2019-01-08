@@ -2,6 +2,8 @@ package gcom.faturamento.conta;
 
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
+import gcom.atendimentopublico.registroatendimento.EspecificacaoTipoValidacao;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
@@ -291,6 +293,8 @@ private static UC0146ManterConta instancia;
 		ContaMotivoRetificacao contaMotivoRetificacao, Short indicadorCategoriaEconomiaConta, SistemaParametro sistemaParametro, Usuario usuarioLogado) throws ControladorException {
 
 		if (colecaoContas != null && !colecaoContas.isEmpty()) {
+			
+			Integer idImovel = null;
 
 			Iterator colecaoContasIterator = colecaoContas.iterator();
 
@@ -339,13 +343,17 @@ private static UC0146ManterConta instancia;
 				Conta contaParaRetificacao =  this.getControladorRetificarConta().pesquisarContaRetificacao(conta.getId());
 
 				this.getControladorRetificarConta().retificarConta(
-				contaParaRetificacao.getReferencia(), contaParaRetificacao, contaParaRetificacao.getImovel(), colecaoDebitoCobrado,
-				colecaoCreditoRealizado, ligacaoAguaSituacao, ligacaoEsgotoSituacao,
-				colecaoCategoriaOUSubcategoria, consumoAgua.toString(), consumoEsgoto.toString(),
-				contaParaRetificacao.getPercentualEsgoto().toString(), dataVencimento, valoresConta, 
-				contaMotivoRetificacao, null, usuarioLogado, contaParaRetificacao.getConsumoTarifa().getId().toString(),
-				false,null,null,false, null,null,null,null,null, null);
+						contaParaRetificacao.getReferencia(), contaParaRetificacao, contaParaRetificacao.getImovel(), colecaoDebitoCobrado,
+						colecaoCreditoRealizado, ligacaoAguaSituacao, ligacaoEsgotoSituacao,
+						colecaoCategoriaOUSubcategoria, consumoAgua.toString(), consumoEsgoto.toString(),
+						contaParaRetificacao.getPercentualEsgoto().toString(), dataVencimento, valoresConta, 
+						contaMotivoRetificacao, null, usuarioLogado, contaParaRetificacao.getConsumoTarifa().getId().toString(),
+						false,null,null,false, null,null,null,null,null, null);
+				
+				idImovel = contaParaRetificacao.getImovel().getId();
 			}
+			
+			getControladorRetificarConta().encerrarRA(idImovel, usuarioLogado);
 		}
 	}
 }

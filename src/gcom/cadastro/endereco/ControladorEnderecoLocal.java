@@ -145,4 +145,6 @@ public interface ControladorEnderecoLocal extends javax.ejb.EJBLocalObject {
 	
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarEnderecoFormatadoCliente(Integer idCliente) throws ControladorException;
+	
+	public String obterEnderecoCorrespondenciaImovel(Integer idImovel) throws ControladorException;
 }

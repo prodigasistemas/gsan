@@ -8,42 +8,29 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class ContaMotivoRevisao extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
 
-    /** nullable persistent field */
+	private Integer id;
     private String descricaoMotivoRevisaoConta;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
     
-    
-    public static final Integer REVISAO_POR_PAGAMENTO_COMPROVADO = new Integer("98");
+    public static final Integer EM_COBRANCA_JUDICIAL = new Integer("6");
     public static final Integer REVISAO_AUTOMATICA_ESTOURO_CONSUMO = new Integer("91");
+    public static final Integer REVISAO_POR_PAGAMENTO_COMPROVADO = new Integer("98");
     public static final Integer REVISAO_AUTOMATICA_BAIXO_CONSUMO = new Integer("100");
     public static final Integer REVISAO_ENTRADA_DE_PARCELAMENTO = new Integer("101");
-    
     public static final Integer REVISAO_POR_ANTIGUIDADE = new Integer("102");
-    
     public static final Integer CONTA_EM_CONTRATO_PARCELAMENTO = new Integer("105");
-    
     public static final Integer DEBITO_A_COBRAR_EM_CONTRATO_PARCELAMENTO = new Integer("106");
 
-    /** full constructor */
     public ContaMotivoRevisao(String descricaoMotivoRevisaoConta, Short indicadorUso, Date ultimaAlteracao) {
         this.descricaoMotivoRevisaoConta = descricaoMotivoRevisaoConta;
         this.indicadorUso = indicadorUso;
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public ContaMotivoRevisao() {
     }
 

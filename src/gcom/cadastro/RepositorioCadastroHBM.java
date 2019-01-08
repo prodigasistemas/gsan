@@ -1,29 +1,5 @@
 package gcom.cadastro;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.NonUniqueResultException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-import org.jboss.logging.Logger;
-
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
@@ -76,6 +52,30 @@ import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 import gcom.util.Util;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.NonUniqueResultException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
+import org.jboss.logging.Logger;
 
 public class RepositorioCadastroHBM implements IRepositorioCadastro {
 	
@@ -4557,45 +4557,45 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade,
-			String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao) throws ErroRepositorioException {
+	public List<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade,
+			String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) throws ErroRepositorioException {
 
-		Collection retorno = null;
+		List<ArquivoTextoAtualizacaoCadastral> retorno = null;
 		Session session = HibernateUtil.getSession();
-		String consulta = "";
 
 		try {
-			consulta = "SELECT txac "
-				+ "FROM ArquivoTextoAtualizacaoCadastral txac "
-				+ "INNER JOIN FETCH txac.localidade localidade "
-				+ "INNER JOIN FETCH txac.rota rota "
-				+ "INNER JOIN FETCH rota.setorComercial setorComercial "
-				+ "INNER JOIN FETCH txac.situacaoTransmissaoLeitura situacao "
-				+ "INNER JOIN FETCH txac.leiturista leiturista "
-				+ "LEFT JOIN FETCH leiturista.cliente cliente "
-				+ "LEFT JOIN FETCH leiturista.funcionario funcionario "
-				+ "WHERE leiturista.empresa.id = " + idEmpresa;
+			String consulta = "SELECT txac "
+							+ "FROM ArquivoTextoAtualizacaoCadastral txac "
+							+ "INNER JOIN FETCH txac.localidade localidade "
+							+ "INNER JOIN FETCH txac.rota rota "
+							+ "INNER JOIN FETCH rota.setorComercial setorComercial "
+							+ "INNER JOIN FETCH txac.situacaoTransmissaoLeitura situacao "
+							+ "INNER JOIN FETCH txac.leiturista leiturista "
+							+ "LEFT JOIN FETCH leiturista.cliente cliente "
+							+ "LEFT JOIN FETCH leiturista.funcionario funcionario "
+							+ "WHERE leiturista.empresa.id = " + idEmpresa;
 
 			if (idLocalidade != null && !idLocalidade.equals("")) {
-				consulta = consulta + " and txac.localidade.id = " + idLocalidade;
+				consulta += " and txac.localidade.id = " + idLocalidade;
 			}
 			
 			if (codigoSetorComercial != null && !codigoSetorComercial.equals("")) {
-				consulta = consulta + " and txac.codigoSetorComercial = " + codigoSetorComercial;
+				consulta += " and txac.codigoSetorComercial = " + codigoSetorComercial;
 			}
 
-			if (idAgenteComercial != null
-					&& !idAgenteComercial.trim().equals(
-							"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-				consulta = consulta + " and leiturista.id = " + idAgenteComercial;
+			if (idAgenteComercial != null && !idAgenteComercial.trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+				consulta += " and leiturista.id = " + idAgenteComercial;
 			}
 
-			if (idSituacaoTransmissao != null
-					&& !idSituacaoTransmissao.equals("")) {
-				consulta = consulta + " and situacao.id = " + idSituacaoTransmissao;
+			if (idSituacaoTransmissao != null && !idSituacaoTransmissao.equals("")) {
+				consulta += " and situacao.id = " + idSituacaoTransmissao;
+			}
+			
+			if (exibicao.equals(ArquivoTextoAtualizacaoCadastral.EXIBIR_EM_REVISAO)) {
+				consulta += " and txac.id IN (SELECT distinct imovel.idArquivoTexto FROM ImovelAtualizacaoCadastral imovel WHERE imovel.idSituacaoAtualizacaoCadastral = " + SituacaoAtualizacaoCadastral.EM_REVISAO + ")";
 			}
 
-			consulta = consulta + " order by localidade.id, setorComercial.codigo, rota.codigo, txac.descricaoArquivo ";
+			consulta += " order by localidade.id, setorComercial.codigo, rota.codigo, txac.descricaoArquivo ";
 
 			retorno = session.createQuery(consulta).list();
 
@@ -4608,22 +4608,20 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
-			Integer idArquivoTxt) throws ErroRepositorioException {
-
+	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(Integer idArquivoTxt) throws ErroRepositorioException {
 		ArquivoTextoAtualizacaoCadastral retorno = null;
 		Session session = HibernateUtil.getSession();
-		String consulta = "";
 
 		try {
-			consulta = " select txac"// 2
-					+ " from ArquivoTextoAtualizacaoCadastral txac"
-					+ " inner join fetch txac.leiturista leit"
-					+ " where txac.id = " + idArquivoTxt;
+			String consulta = "SELECT txac FROM ArquivoTextoAtualizacaoCadastral txac " 
+							+ "INNER JOIN FETCH txac.leiturista leit "
+							+ "INNER JOIN FETCH txac.rota rota "
+							+ "INNER JOIN FETCH rota.setorComercial setor "
+							+ "INNER JOIN FETCH setor.localidade localidade "
+							+ "INNER JOIN FETCH rota.faturamentoGrupo grupo "
+							+ "WHERE txac.id = " + idArquivoTxt;
 
-			retorno = (ArquivoTextoAtualizacaoCadastral) session.createQuery(
-					consulta).uniqueResult();
-
+			retorno = (ArquivoTextoAtualizacaoCadastral) session.createQuery(consulta).uniqueResult();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
@@ -5801,21 +5799,21 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	public Integer pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
-			Integer situacao, Integer idArquivoTexto) throws ErroRepositorioException {
-
-		Integer retorno = null;
+	public Integer pesquisarQuantidadeImoveisTransmitidosAtualizacaoCadastral(Integer idArquivoTexto) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		String consulta = "";
+		Integer qtd = null;
 
 		try {
-			consulta = "SELECT count(distinct imov_id) as cont"
-				+ " FROM cadastro.imovel_atlz_cadastral imovel"
-				+ " WHERE siac_id = " + situacao
-				+ " AND txac_id = " + idArquivoTexto;
+			String sql = "SELECT count(distinct imov_id) AS cont "
+					   + "FROM cadastro.imovel_atlz_cadastral imovel "
+					   + "WHERE siac_id >= :situacao "
+					   + "AND txac_id = :idArquivoTexto";
 
-			retorno = (Integer) session.createSQLQuery(consulta)
-					.addScalar("cont", Hibernate.INTEGER).uniqueResult();
+			qtd = (Integer) session.createSQLQuery(sql)
+					.addScalar("cont", Hibernate.INTEGER)
+					.setInteger("situacao", SituacaoAtualizacaoCadastral.TRANSMITIDO)
+					.setInteger("idArquivoTexto", idArquivoTexto)
+					.uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -5823,7 +5821,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			HibernateUtil.closeSession(session);
 		}
 
-		return retorno;
+		return qtd;
 	}
 	
 	public Collection<Integer> pesquisarIdsImoveisAtualizacaoCadastral(

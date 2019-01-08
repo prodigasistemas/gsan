@@ -1,72 +1,80 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
-import java.util.Arrays;
-
-import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.util.ConstantesSistema;
 
 import org.apache.struts.action.ActionForm;
 
 public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
+	
 	private static final long serialVersionUID = 1L;
 
-	public static Integer FILTRO_APROVACAO_EM_LOTE = -2;
-	public static Integer FILTRO_TODOS = -1;
-	public static String FILTRO_APROVADOS = "1";
-	public static String FILTRO_PENDENTES = "2";
-	
-    private String idEmpresa;
-    
-    private String nomeEmpresa;
-    
-    private String idLeiturista;
-    
-    private String nomeLeiturista;
-    
-    private String periodoRealizacaoInicial;
-    
-    private String periodoRealizacaoFinal;
-    
+	public static int FILTRO_PENDENTES = -1;
+	public static int FILTRO_PARA_APROVACAO_EM_LOTE = -2;
+	public static int FILTRO_TODOS = -3;
+
+	private String idEmpresa;
+
+	private String nomeEmpresa;
+
+	private String idLeiturista;
+
+	private String nomeLeiturista;
+
+	private String periodoInicial;
+
+	private String periodoFinal;
+
 	private String idRegistrosNaoAutorizados;
-	
+
 	private String idRegistrosAutorizados;
-	
-	private String exibirCampos = SituacaoAtualizacaoCadastral.TRANSMITIDO.toString(); 
-	
-	private String[] colunaImoveisSelecionados;
-	
-	private String idLocalidadeInicial;	
+
+	private String situacaoImoveis;
+
+	private String idLocalidadeInicial;
 
 	private String idLocalidadeFinal;
 
-	private String nomeLocalidadeInicial;	
+	private String nomeLocalidadeInicial;
 
 	private String nomeLocalidadeFinal;
-	
-	private String cdSetorComercialInicial;	
-	
+
+	private String cdSetorComercialInicial;
+
 	private String cdSetorComercialFinal;
-	
-	private String nomeSetorComercialInicial;	
-	
+
+	private String nomeSetorComercialInicial;
+
 	private String nomeSetorComercialFinal;
-	
+
 	private String cdRotaInicial;
 
 	private String cdRotaFinal;
-	
+
 	private String alteracaoHidrometro = "-1";
-	
+
 	private String alteracaoSituacaoAgua = "-1";
-	
+
 	private String alteracaoSituacaoEsgoto = "-1";
-	
+
 	private String alteracaoCategoria = "-1";
 
 	private String ocorrenciaCadastro = "-1";
 	
+	private String ocorrenciaCadastroSelecionada;
+	
+	private String lote;
+	
+	private String matricula;
+	
+	private String inscricao;
+	
+	private String quantidadeVisitas = "-1";
+	
+	private String cpfCnpjCadastrado = "-1";
+	
+	private String cpfCnpjTransmitido = "-1";
+
 	public FiltrarAlteracaoAtualizacaoCadastralActionForm() {
-		System.out.println("COnstrutor.");
 	}
 
 	public String getIdRegistrosAutorizados() {
@@ -85,20 +93,20 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.idRegistrosNaoAutorizados = idRegistrosNaoAutorizados;
 	}
 
-	public String getPeriodoRealizacaoFinal() {
-		return periodoRealizacaoFinal;
+	public String getPeriodoInicial() {
+		return periodoInicial;
 	}
 
-	public void setPeriodoRealizacaoFinal(String periodoRealizacaoFinal) {
-		this.periodoRealizacaoFinal = periodoRealizacaoFinal;
+	public void setPeriodoInicial(String periodoInicial) {
+		this.periodoInicial = periodoInicial;
 	}
 
-	public String getPeriodoRealizacaoInicial() {
-		return periodoRealizacaoInicial;
+	public String getPeriodoFinal() {
+		return periodoFinal;
 	}
 
-	public void setPeriodoRealizacaoInicial(String periodoRealizacaoInicial) {
-		this.periodoRealizacaoInicial = periodoRealizacaoInicial;
+	public void setPeriodoFinal(String periodoFinal) {
+		this.periodoFinal = periodoFinal;
 	}
 
 	public String getNomeLeiturista() {
@@ -131,22 +139,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	public void setNomeEmpresa(String nomeEmpresa) {
 		this.nomeEmpresa = nomeEmpresa;
-	}
-
-	public String[] getColunaImoveisSelecionados() {
-		return colunaImoveisSelecionados;
-	}
-
-	public void setColunaImoveisSelecionados(String[] colunaImoveisSelecionados) {
-		this.colunaImoveisSelecionados = colunaImoveisSelecionados;
-	}
-
-	public String getExibirCampos() {
-		return exibirCampos;
-	}
-
-	public void setExibirCampos(String exibirCampos) {
-		this.exibirCampos = exibirCampos;
 	}
 
 	public String getIdLocalidadeInicial() {
@@ -228,7 +220,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	public void setCdRotaFinal(String codRotaFinal) {
 		this.cdRotaFinal = codRotaFinal;
 	}
-	
+
 	public String getAlteracaoHidrometro() {
 		return alteracaoHidrometro;
 	}
@@ -269,70 +261,133 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.ocorrenciaCadastro = ocorrenciaCadastro;
 	}
 
+	public String getOcorrenciaCadastroSelecionada() {
+		return ocorrenciaCadastroSelecionada;
+	}
+
+	public void setOcorrenciaCadastroSelecionada(String ocorrenciaCadastroSelecionada) {
+		this.ocorrenciaCadastroSelecionada = ocorrenciaCadastroSelecionada;
+	}
+
+	public String getLote() {
+		return lote;
+	}
+
+	public void setLote(String lote) {
+		this.lote = lote;
+	}
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
+	}
+
+	public String getInscricao() {
+		return inscricao;
+	}
+
+	public void setInscricao(String inscricao) {
+		this.inscricao = inscricao;
+	}
+
+	public String getSituacaoImoveis() {
+		return situacaoImoveis;
+	}
+
+	public void setSituacaoImoveis(String situacaoImoveis) {
+		this.situacaoImoveis = situacaoImoveis;
+	}
+
+	public String getQuantidadeVisitas() {
+		return quantidadeVisitas;
+	}
+
+	public void setQuantidadeVisitas(String quantidadeVisitas) {
+		this.quantidadeVisitas = quantidadeVisitas;
+	}
+
+	public String getCpfCnpjCadastrado() {
+		return cpfCnpjCadastrado;
+	}
+
+	public void setCpfCnpjCadastrado(String cpfCnpjCadastrado) {
+		this.cpfCnpjCadastrado = cpfCnpjCadastrado;
+	}
+
+	public String getCpfCnpjTransmitido() {
+		return cpfCnpjTransmitido;
+	}
+
+	public void setCpfCnpjTransmitido(String cpfCnpjTransmitido) {
+		this.cpfCnpjTransmitido = cpfCnpjTransmitido;
+	}
+
 	public boolean existeParametroInformado() {
 		boolean peloMenosUmParametroInformado = false;
 
-		if (this.getIdEmpresa() != null
-				&& !this.getIdEmpresa().trim().equals(
-						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+		if (this.getIdEmpresa() != null && !this.getIdEmpresa().trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getIdLeiturista() != null
-				&& !this.getIdLeiturista().equals("")) {
+		if (isParametroInformado(getIdLeiturista()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getIdLocalidadeInicial() != null
-				&& !this.getIdLocalidadeInicial().equals("")) {
+		if (isParametroInformado(getIdLocalidadeInicial()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getCdSetorComercialInicial() != null
-				&& !this.getCdSetorComercialInicial().equals("")) {
+		if (isParametroInformado(getCdSetorComercialInicial()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getCdRotaInicial() != null
-				&& !this.getCdRotaInicial().equals("")) {
+		if (isParametroInformado(getCdRotaInicial()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getIdLocalidadeFinal() != null
-				&& !this.getIdLocalidadeFinal().equals("")) {
+		if (isParametroInformado(getIdLocalidadeFinal()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getCdSetorComercialFinal() != null
-				&& !this.getCdSetorComercialFinal().equals("")) {
+		if (isParametroInformado(getCdSetorComercialFinal()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getCdRotaFinal() != null && !this.getCdRotaFinal().equals("")) {
+		if (isParametroInformado(getCdRotaFinal()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getExibirCampos() != null
-				&& !this.getExibirCampos().equals("")) {
+		if (isParametroInformado(getSituacaoImoveis()))
 			peloMenosUmParametroInformado = true;
-		}
 
-		if (this.getColunaImoveisSelecionados() != null
-				&& !this.getColunaImoveisSelecionados().equals("")) {
+		if (isParametroInformado(getLote()))
 			peloMenosUmParametroInformado = true;
-		}
+		
+		if (isParametroInformado(getMatricula()))
+			peloMenosUmParametroInformado = true;
 
 		return peloMenosUmParametroInformado;
 	}
 
 	public String toString() {
-		return "FiltrarAlteracaoAtualizacaoCadastralActionForm [idEmpresa=" + idEmpresa + ", nomeEmpresa=" + nomeEmpresa + ", idLeiturista=" + idLeiturista
-				+ ", nomeLeiturista=" + nomeLeiturista + ", periodoRealizacaoInicial=" + periodoRealizacaoInicial + ", periodoRealizacaoFinal="
-				+ periodoRealizacaoFinal + ", idRegistrosNaoAutorizados=" + idRegistrosNaoAutorizados + ", idRegistrosAutorizados=" + idRegistrosAutorizados
-				+ ", exibirCampos=" + exibirCampos + ", colunaImoveisSelecionados=" + Arrays.toString(colunaImoveisSelecionados) + ", idLocalidadeInicial="
-				+ idLocalidadeInicial + ", idLocalidadeFinal=" + idLocalidadeFinal + ", nomeLocalidadeInicial=" + nomeLocalidadeInicial
-				+ ", nomeLocalidadeFinal=" + nomeLocalidadeFinal + ", cdSetorComercialInicial=" + cdSetorComercialInicial + ", cdSetorComercialFinal="
-				+ cdSetorComercialFinal + ", nomeSetorComercialInicial=" + nomeSetorComercialInicial + ", nomeSetorComercialFinal=" + nomeSetorComercialFinal
-				+ ", cdRotaInicial=" + cdRotaInicial + ", cdRotaFinal=" + cdRotaFinal + "]";
+		return "FiltrarAlteracaoAtualizacaoCadastralActionForm ["
+				+ "idEmpresa=" + idEmpresa + ","
+				+ "nomeEmpresa=" + nomeEmpresa + ","
+				+ "idLeiturista=" + idLeiturista + ","
+				+ "nomeLeiturista=" + nomeLeiturista + ","
+				+ "periodoRealizacaoInicial=" + periodoInicial + ","
+				+ "periodoRealizacaoFinal=" + periodoFinal + ","
+				+ "idRegistrosNaoAutorizados=" + idRegistrosNaoAutorizados + ","
+				+ "idRegistrosAutorizados=" + idRegistrosAutorizados + ","
+				+ "exibirCampos=" + situacaoImoveis + ","
+				+ "idLocalidadeInicial=" + idLocalidadeInicial + ","
+				+ "idLocalidadeFinal=" + idLocalidadeFinal + ","
+				+ "nomeLocalidadeInicial=" + nomeLocalidadeInicial + ","
+				+ "nomeLocalidadeFinal=" + nomeLocalidadeFinal + ","
+				+ "cdSetorComercialInicial=" + cdSetorComercialInicial + ","
+				+ "cdSetorComercialFinal=" + cdSetorComercialFinal + ","
+				+ "nomeSetorComercialInicial=" + nomeSetorComercialInicial + ","
+				+ "nomeSetorComercialFinal=" + nomeSetorComercialFinal + ","
+				+ "cdRotaInicial=" + cdRotaInicial + ","
+				+ "cdRotaFinal=" + cdRotaFinal + "]";
+	}
+	
+	private boolean isParametroInformado(String parametro) {
+		return parametro != null && !parametro.trim().equals("");
 	}
 }

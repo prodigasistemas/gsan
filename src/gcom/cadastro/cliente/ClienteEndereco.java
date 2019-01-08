@@ -407,7 +407,6 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 	}
 
 	public void setNomeMunicipio(String nomeMunicipio) {
-		
 	}
 
 	public String getNomeBairro() {
@@ -419,7 +418,6 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 	}
 
 	public void setNomeBairro(String nomeBairro) {
-		
 	}
 
 	public String getDescricaoLogradouro() {
@@ -431,7 +429,6 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 	}
 
 	public void setDescricaoLogradouro(String descricaoLogradouro) {
-		
 	}
 	
 	public Integer getCodigoCep(){
@@ -439,11 +436,12 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 	}
 	
 	public void setCodigoCep(Integer codigoCep){
-		
 	}
 
 	public void getPerimetroInicial(Logradouro perimetroInicial) {
-		
-		
+	}
+	
+	public String getEnderecoCompleto() {
+		return null;
 	}
 }

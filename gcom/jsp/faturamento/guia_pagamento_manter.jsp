@@ -165,7 +165,7 @@ function verficarSelecao(objeto){
 		retorno = false;
 	
 		for(indice = 0; indice < form.elements.length; indice++){
-			if (form.elements[indice].type == "checkbox" && form.elements[indice].checked == true) {
+			if (form.elements[indice].type == "radio" && form.elements[indice].checked == true) {
 				retorno = true;
 				break;
 			}
@@ -456,7 +456,7 @@ function verficarSelecao(objeto){
 			%>
 														<tr bgcolor="#FFFFFF">
 															<%}%>
-															<td width="6%"><div align="center"><input type="checkbox" name="idRegistrosRemocao" value="<bean:write name="guiaPagamento" property="id"/>" /></div></td>
+															<td width="6%"><div align="center"><input type="radio" name="idRegistrosRemocao" value="<bean:write name="guiaPagamento" property="id"/>" /></div></td>
 															<td width="10%" align="center" align="center">
 																<logic:present name="guiaPagamento" property="anoMesReferenciaContabil"><%=Util.formatarAnoMesParaMesAno(guiaPagamento.getAnoMesReferenciaContabil().intValue())%>
 																</logic:present> <logic:notPresent name="<%guiaPagamento.getAnoMesReferenciaContabil();%>">&nbsp;</logic:notPresent></td>

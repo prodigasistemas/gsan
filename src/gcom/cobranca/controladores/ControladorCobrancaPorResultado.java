@@ -775,8 +775,8 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		Map<String, EmpresaCobrancaContaPagamentos> mapPagamentos = new HashMap<String, EmpresaCobrancaContaPagamentos>();
 		try {
 			Collection<EmpresaCobrancaContaPagamentos> pagamentos = obterPagamentosEmpresa(idLocalidade, anoMesArrecadacao);
-
 			for (EmpresaCobrancaContaPagamentos pagamento : pagamentos) {
+				System.out.println("Imovel:" + pagamento.getIdImovel());
 				if (!isPagamentoDuplicado(pagamento, mapPagamentos)) {
 					getControladorUtil().inserir(pagamento);
 					atualizarSituacaoCobranca(pagamento.getIdImovel(), pagamento.getEmpresaCobrancaConta().getComandoEmpresaCobrancaConta().getId());
@@ -820,7 +820,7 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		if (repositorio.isContasPagas(idImovel, idComando)) {
 			try {
 				SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
-				
+				System.out.println("Atualizando Imovel:" + idImovel);
 				atualizarSituacaoCobrancaImovel(idImovel);
 				atualizarImovelCobrancaSituacao(idImovel, new Date());
 				atualizarCobrancaSituacaoHistorico(idImovel, parametros.getAnoMesFaturamento(), "TODAS AS CONTAS FORAM PAGAS", new Date(), null);
@@ -838,11 +838,15 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		filtro.adicionarParametro(new ParametroNulo(FiltroImovelCobrancaSituacao.DATA_RETIRADA_COBRANCA));
 		
 		Collection<ImovelCobrancaSituacao> colecao = getControladorUtil().pesquisar(filtro, ImovelCobrancaSituacao.class.getName());
+		System.out.println("atualizarImovelCobrancaSituacao :" + idImovel + " [" + colecao.size() + "]");
 		if (colecao != null && !colecao.isEmpty()) {
-			ImovelCobrancaSituacao situacao = (ImovelCobrancaSituacao) Util.retonarObjetoDeColecao(colecao);
-			situacao.setDataRetiradaCobranca(new Date());
-			situacao.setUltimaAlteracao(new Date());
-			getControladorUtil().atualizar(situacao);
+			for (ImovelCobrancaSituacao imovelCobranca : colecao) {
+				imovelCobranca.setDataRetiradaCobranca(new Date());
+				imovelCobranca.setUltimaAlteracao(new Date());
+				System.out.println("atualizando imovel cobranca OK");
+				getControladorUtil().atualizar(imovelCobranca);
+				
+			}
 		}
 	}
 	
@@ -852,11 +856,13 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
 		
 		Collection<Imovel> colecao = getControladorUtil().pesquisar(filtro, Imovel.class.getName());
+		System.out.println("atualizarSituacaoCobrancaImovel :" + idImovel + " [" + colecao.size() + "]");
 		if (colecao != null && !colecao.isEmpty()) {
 			Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(colecao);
 			imovel.setCobrancaSituacao(null);
 			imovel.setCobrancaSituacaoTipo(null);
 			imovel.setUltimaAlteracao(new Date());
+			System.out.println(" atualizando situacao OK");
 			getControladorUtil().atualizar(imovel);
 		}
 	}
@@ -870,14 +876,17 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		filtro.adicionarParametro(new ParametroNulo(FiltroCobrancaSituacaoHistorico.ANO_MES_COBRANCA_RETIRADA));
 		
 		Collection<CobrancaSituacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, CobrancaSituacaoHistorico.class.getName());
+		System.out.println("atualizarCobrancaSituacaoHistorico :" + idImovel + " [" + colecao.size() + "]");
 		if (colecao != null && !colecao.isEmpty()) {
-			CobrancaSituacaoHistorico situacao = (CobrancaSituacaoHistorico) Util.retonarObjetoDeColecao(colecao);
-			situacao.setAnoMesCobrancaRetirada(Util.formataAnoMes(new Date()));
-			situacao.setObservacaoRetira(observacaoRetirada);
-			situacao.setUsuarioRetira(usuario);
-			situacao.setDataFimSituacao(new Date());
-			situacao.setUltimaAlteracao(new Date());
-			getControladorUtil().atualizar(situacao);
+			for (CobrancaSituacaoHistorico historico : colecao) {
+				historico.setAnoMesCobrancaRetirada(Util.formataAnoMes(new Date()));
+				historico.setObservacaoRetira(observacaoRetirada);
+				historico.setUsuarioRetira(usuario);
+				historico.setDataFimSituacao(new Date());
+				historico.setUltimaAlteracao(new Date());
+				System.out.println("atualizando Cobranca Situacao Historico OK");
+				getControladorUtil().atualizar(historico);
+			}
 		}
 	}
 	
@@ -971,9 +980,11 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	}
 	
 	private boolean isContaPrazoCobranca(Pagamento pagamento, ComandoEmpresaCobrancaConta comando) {
-		if (pagamento.getDataPagamento().before(comando.getDataFimCiclo()))
-			return true;
-		else return false;
+		if (comando.getDataExecucao() != null && comando.getDataFimCiclo() != null) {
+			if (pagamento.getDataPagamento().before(comando.getDataFimCiclo()))
+				return true;
+			else return false;
+		} else return false;
 	}
 
 	private Collection<EmpresaCobrancaContaPagamentos> gerarPagamentosCobrandaDeDebitos(Pagamento pagamento) throws ControladorException {

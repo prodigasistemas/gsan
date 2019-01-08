@@ -91,11 +91,7 @@ import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
-import gcom.batch.ControladorBatchLocal;
-import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
-import gcom.cadastro.ControladorCadastroLocal;
-import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
@@ -109,15 +105,11 @@ import gcom.cadastro.cliente.IRepositorioCliente;
 import gcom.cadastro.cliente.RepositorioClienteHBM;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.Cep;
-import gcom.cadastro.endereco.ControladorEnderecoLocal;
-import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.endereco.EnderecoReferencia;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.funcionario.Funcionario;
 import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.ControladorImovelLocal;
-import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.EntidadeBeneficente;
 import gcom.cadastro.imovel.FiltroCategoria;
 import gcom.cadastro.imovel.FiltroEntidadeBeneficente;
@@ -129,8 +121,6 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelDoacao;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
-import gcom.cadastro.localidade.ControladorLocalidadeLocal;
-import gcom.cadastro.localidade.ControladorLocalidadeLocalHome;
 import gcom.cadastro.localidade.FiltroGerenciaRegional;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroUnidadeNegocio;
@@ -145,8 +135,6 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDebitoSituacao;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoItem;
-import gcom.cobranca.ControladorCobrancaLocal;
-import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.DocumentoTipo;
 import gcom.cobranca.FiltroCobrancaDocumento;
 import gcom.cobranca.FiltroCobrancaDocumentoItem;
@@ -157,8 +145,6 @@ import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.DebitoACobrarValoresHelper;
 import gcom.cobranca.bean.GuiaPagamentoValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
-import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocal;
-import gcom.cobranca.contratoparcelamento.ControladorContratoParcelamentoLocalHome;
 import gcom.cobranca.contratoparcelamento.InformarPagamentoContratoParcelamentoHelper;
 import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.FiltroParcelamentoPagamentoCartaoCredito;
@@ -168,8 +154,6 @@ import gcom.cobranca.parcelamento.ParcelamentoPerfil;
 import gcom.cobranca.parcelamento.msg.FiltroMensagemParcelamentoBoleto;
 import gcom.cobranca.parcelamento.msg.MensagemParcelamentoBoleto;
 import gcom.fachada.Fachada;
-import gcom.faturamento.ControladorFaturamentoLocal;
-import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.IRepositorioFaturamento;
@@ -183,8 +167,6 @@ import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
 import gcom.faturamento.conta.IConta;
-import gcom.faturamento.controladores.ControladorRetificarContaLocal;
-import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoARealizarGeral;
 import gcom.faturamento.credito.CreditoOrigem;
@@ -208,8 +190,6 @@ import gcom.gerencial.cadastro.IRepositorioGerencialCadastro;
 import gcom.gerencial.cadastro.RepositorioGerencialCadastroHBM;
 import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
-import gcom.micromedicao.ControladorMicromedicaoLocal;
-import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.Leiturista;
 import gcom.micromedicao.RepositorioMicromedicaoHBM;
@@ -237,38 +217,25 @@ import gcom.relatorio.arrecadacao.RelatorioTranferenciaPagamentoBean;
 import gcom.relatorio.arrecadacao.dto.ResumoCreditosAvisosBancariosDTO;
 import gcom.relatorio.arrecadacao.pagamento.GuiaPagamentoRelatorioHelper;
 import gcom.relatorio.big.RelatorioBIGHelper;
-import gcom.seguranca.ControladorPermissaoEspecialLocal;
-import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
 import gcom.seguranca.acesso.Abrangencia;
-import gcom.seguranca.acesso.ControladorAcessoLocal;
-import gcom.seguranca.acesso.ControladorAcessoLocalHome;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
-import gcom.seguranca.transacao.ControladorTransacaoLocal;
-import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
-import gcom.spcserasa.ControladorSpcSerasaLocal;
-import gcom.spcserasa.ControladorSpcSerasaLocalHome;
 import gcom.spcserasa.IRepositorioSpcSerasa;
 import gcom.spcserasa.RepositorioSpcSerasaHBM;
 import gcom.tarefa.TarefaRelatorio;
 import gcom.util.CodigoBarras;
 import gcom.util.ConstantesAplicacao;
-import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
 import gcom.util.FormatoData;
 import gcom.util.IRepositorioUtil;
 import gcom.util.IoUtil;
 import gcom.util.RepositorioUtilHBM;
-import gcom.util.ServiceLocator;
-import gcom.util.ServiceLocatorException;
-import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
@@ -285,7 +252,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -305,13 +271,12 @@ import java.util.zip.ZipOutputStream;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.mail.SendFailedException;
 
 import org.apache.log4j.Logger;
 
-public class ControladorArrecadacao implements SessionBean {
+public class ControladorArrecadacao extends ControladorComum {
 
 	private static final long serialVersionUID = 1L;
 
@@ -368,247 +333,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
-	}
-
-	protected ControladorAcessoLocal getControladorAcesso() {
-		ControladorAcessoLocalHome localHome = null;
-		ControladorAcessoLocal local = null;
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorAcessoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ACESSO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	protected ControladorSpcSerasaLocal getControladorSpcSerasa() {
-		ControladorSpcSerasaLocalHome localHome = null;
-		ControladorSpcSerasaLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorSpcSerasaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorCadastroLocal getControladorCadastro() {
-		ControladorCadastroLocalHome localHome = null;
-		ControladorCadastroLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCadastroLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-	
-	private ControladorMicromedicaoLocal getControladorMicromedicao() {
-		ControladorMicromedicaoLocalHome localHome = null;
-		ControladorMicromedicaoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorMicromedicaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorLocalidadeLocal getControladorLocalidade() {
-		ControladorLocalidadeLocalHome localHome = null;
-		ControladorLocalidadeLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorLocalidadeLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorCobrancaLocal getControladorCobranca() {
-		ControladorCobrancaLocalHome localHome = null;
-		ControladorCobrancaLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCobrancaLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-
-	protected ControladorUtilLocal getControladorUtil() {
-		ControladorUtilLocalHome localHome = null;
-		ControladorUtilLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			local = localHome.create();
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorImovelLocal getControladorImovel() {
-		ControladorImovelLocalHome localHome = null;
-		ControladorImovelLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorImovelLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			local = localHome.create();
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorFaturamentoLocal getControladorFaturamento() {
-		ControladorFaturamentoLocalHome localHome = null;
-		ControladorFaturamentoLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	private ControladorRetificarContaLocal getControladorRetificarConta() {
-		ControladorRetificarContaLocalHome localHome = null;
-		ControladorRetificarContaLocal local = null;
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorRetificarContaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_RETIFICAR_CONTA);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorEnderecoLocal getControladorEndereco() {
-
-		ControladorEnderecoLocalHome localHome = null;
-		ControladorEnderecoLocal local = null;
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorEnderecoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
-
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorPermissaoEspecialLocal getControladorPermissaoEspecial() {
-		ControladorPermissaoEspecialLocalHome localHome = null;
-		ControladorPermissaoEspecialLocal local = null;
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorPermissaoEspecialLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
-			local = localHome.create();
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-	}
-
-	protected ControladorContratoParcelamentoLocal getControladorContratoParcelamento() {
-		ControladorContratoParcelamentoLocalHome localHome = null;
-		ControladorContratoParcelamentoLocal local = null;
-
-		ServiceLocator locator = null;
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorContratoParcelamentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_CONTRATO_PARCELAMENTO_SEJB);
-			local = localHome.create();
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
 	}
 
 	/**
@@ -2304,15 +2028,7 @@ public class ControladorArrecadacao implements SessionBean {
 									Pagamento pagamento = (Pagamento) iter.next();
 
 									getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(pagamento, CobrancaDebitoSituacao.PAGO);
-
-									// CRC2725 - alterado por Vivianne Sousa -
-									// 11/09/2009 analista:Fátima
-									// Atualizar os itens de negativação
-									// [SB0017] - Verificar correspondência do
-									// pagamento com item de cobrança ou de
-									// negativação
 									getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirPagamento(pagamento);
-
 								}
 
 								System.out.println(" >> MovArrec.Finalizou atualização dos itens");
@@ -5056,7 +4772,9 @@ public class ControladorArrecadacao implements SessionBean {
 								debitoACobrar.setId((Integer) arrayCobrancaDocumentoItem[2]);
 								debitoACobrar.setNumeroPrestacaoDebito((Short) arrayCobrancaDocumentoItem[16]);
 								debitoACobrar.setNumeroPrestacaoCobradas((Short) arrayCobrancaDocumentoItem[17]);
-
+								
+								debitoACobrar.setParcelamento(new Parcelamento((Integer) arrayCobrancaDocumentoItem[20]));
+								
 								debitoACobrarGeral.setDebitoACobrar(debitoACobrar);
 								debitoACobrarGeral.setId(debitoACobrar.getId());
 
@@ -5159,6 +4877,8 @@ public class ControladorArrecadacao implements SessionBean {
 										colecaoDebitosACobrarJurosParcelamento.add(debitoACobrarJurosParcelamento);
 									}
 								}
+							} else if (idDebitoTipo != null && idDebitoTipo.equals(DebitoTipo.PARCELAMENTO_CONTAS)) {
+								getControladorParcelamento().cancelarJurosParcelamento(cobrancaDocumentoItem.getDebitoACobrarGeral().getDebitoACobrar().getParcelamento().getId());
 							}
 
 							// GERANDO O PAGAMENTO
@@ -6183,6 +5903,9 @@ public class ControladorArrecadacao implements SessionBean {
 			}
 		}
 
+		if (idClienteNaBase != null) {
+			
+		}
 		// valida o namo mes de referencia da conta
 		anoMes = Util.formatarMesAnoParaAnoMes(Integer
 				.parseInt(registroHelperCodigoBarras
@@ -6196,23 +5919,22 @@ public class ControladorArrecadacao implements SessionBean {
 		Integer numeroSequencial = new Integer(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento6());
 		
 		Fatura fatura = null;
-		try {
-			fatura = repositorioFaturamento.pesquisarFatura(idClienteNaBase, anoMes, numeroSequencial, valorPagamento);
-		} catch (ErroRepositorioException e1) {
-			throw new ControladorException("erro.pagamento.fatura", e1);
+		
+		if (idClienteNaBase != null) {
+			try {
+				fatura = repositorioFaturamento.pesquisarFatura(idClienteNaBase, anoMes, numeroSequencial, valorPagamento);
+			} catch (ErroRepositorioException e1) {
+				throw new ControladorException("erro.pagamento.fatura", e1);
+			}
+			
+			if (fatura != null && fatura.getDebito().compareTo(valorPagamento) != 0) {
+				descricaoOcorrencia = "VALOR DA FATURA DIFERENTE DO VALOR DO PAGAMENTO";
+			}
 		}
 		
-		if (fatura != null && fatura.getDebito().compareTo(valorPagamento) != 0) {
-			descricaoOcorrencia = "VALOR DA FATURA DIFERENTE DO VALOR DO PAGAMENTO";
-		}
-				
 		if (descricaoOcorrencia.equals("OK")) {
-
-			// inicializa a coleção de fatura item
 			Collection faturaItens = null;
 
-			
-			
 			try {
 				faturaItens = repositorioFaturamento.pesquisarFaturaItem(
 						idClienteNaBase, anoMes, numeroSequencial,
@@ -6356,8 +6078,7 @@ public class ControladorArrecadacao implements SessionBean {
 				}
 			}
 		} else {
-			// atribui o valor 2(NÃO) ao indicador aceitacao
-			// registro
+			// atribui o valor 2(NÃO) ao indicador aceitacao registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
@@ -12536,55 +12257,6 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	protected ControladorBatchLocal getControladorBatch() {
-		ControladorBatchLocalHome localHome = null;
-		ControladorBatchLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorBatchLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_BATCH_SEJB);
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
-	
-	private ControladorTransacaoLocal getControladorTransacao() {
-		ControladorTransacaoLocalHome localHome = null;
-		ControladorTransacaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorTransacaoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_TRANSACAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
-	}
 	
 	/**
 	 * Gera os dados diários da arrecadação acumulando a quantidade e o valor
@@ -12597,9 +12269,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * 
 	 * @throws ControladorException
 	 */
-	public void gerarDadosDiariosArrecadacao(int idFuncionalidadeIniciada,
-			Collection<Integer> colecaoIdsLocalidades)
- throws ControladorException {
+	public void gerarDadosDiariosArrecadacao(int idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
@@ -37573,129 +37243,46 @@ public class ControladorArrecadacao implements SessionBean {
 
 	/**
 	 * Inserir uma coleção de pagamentos informados manualmente
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 26/09/2007
-	 * 
-	 * @return Collection, Usuario, AvisoBancario
-	 * @throws ControladorException
 	 */
-	public Integer inserirPagamentos(Collection<Pagamento> colecaoPagamento,
-			Usuario usuarioLogado, AvisoBancario avisoBancario)
-			throws ControladorException {
-		try{
-			Integer retorno = null;
-	
+	public Integer inserirPagamentos(Collection<Pagamento> colecaoPagamento, Usuario usuarioLogado, AvisoBancario avisoBancario) throws ControladorException {
+		try {
+			Integer idPagamento = null;
+
 			if (colecaoPagamento != null && !colecaoPagamento.isEmpty()) {
-	
-				/*
-				// ------------ REGISTRAR TRANSAÇÃO ----------------
-				RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-						Operacao.OPERACAO_PAGAMENTO_INSERIR,
-						new UsuarioAcaoUsuarioHelper(usuarioLogado,
-								UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-	
-				Operacao operacao = new Operacao();
-				operacao.setId(Operacao.OPERACAO_PAGAMENTO_INSERIR);
-	
-				OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-				operacaoEfetuada.setOperacao(operacao);
-				// ------------ REGISTRAR TRANSAÇÃO ----------------
-				 */
-				
-				// Cria a variável que vai acumular os valores de pagamentos
-				// informados
+
 				BigDecimal valorPagamentoAcumulado = new BigDecimal("0.00");
-	
-				// Laço para incluir todos os pagamentos informados
+
 				for (Pagamento pagamento : colecaoPagamento) {
-	
-					// Acumula o valor do pagamento
-					valorPagamentoAcumulado = valorPagamentoAcumulado.add(pagamento
-							.getValorPagamento());
-					
-					/*
-					 * Colocado por Raphael Rossiter em 16/01/2007
-					 * OBJ: Evitar que o campo anoMesReferenciaPagamento seja gravado com valor "0".
-					 */
-					if (pagamento.getAnoMesReferenciaPagamento() != null &&
-						pagamento.getAnoMesReferenciaPagamento().equals(new Integer(ConstantesSistema.ZERO))){
-						
+					valorPagamentoAcumulado = valorPagamentoAcumulado.add(pagamento.getValorPagamento());
+
+					if (pagamento.getAnoMesReferenciaPagamento() != null && pagamento.getAnoMesReferenciaPagamento().equals(new Integer(ConstantesSistema.ZERO))) {
 						pagamento.setAnoMesReferenciaPagamento(null);
 					}
-	
+
 					pagamento.setAvisoBancario(avisoBancario);
 					pagamento.setUltimaAlteracao(new Date());
-					
-					Integer idImovelCliente = null;
-					if( pagamento.getImovel() != null){
-						idImovelCliente = pagamento.getImovel().getId();
-					}else{
-						idImovelCliente = pagamento.getCliente().getId();
-					}
-					
-					//------------ REGISTRAR TRANSAÇÃO ----------------
-					RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-						    Operacao.OPERACAO_PAGAMENTO_INSERIR,
-						    idImovelCliente,pagamento.getId(),
-						    new UsuarioAcaoUsuarioHelper(usuarioLogado,
-						    UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-	
-					registradorOperacao.registrarOperacao(pagamento);
-	
-					//------------ REGISTRAR TRANSAÇÃO ----------------
-	/*
-					// ------------ REGISTRAR TRANSAÇÃO ----------------
-					pagamento.setOperacaoEfetuada(operacaoEfetuada);
-					pagamento.adicionarUsuario(usuarioLogado,
-							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-					registradorOperacao.registrarOperacao(pagamento);
-					// ------------ REGISTRAR TRANSAÇÃO ----------------
-	*/
-						
-					// Chama o metódo de inserir pagamento da fachada
-					retorno = (Integer) this.getControladorUtil()
-							.inserir(pagamento);
-					
-					// Alterado por Francisco - 26/05/08, por conta do Resumo de Ações de cobrança
-					// Analista: Ana Breda
-					getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(pagamento,
-							CobrancaDebitoSituacao.PAGO);			
-					
-					//CRC2725 - alterado por Vivianne Sousa - 14/09/2009 analista:Fátima
-					//Atualizar os itens de negativação
-					//[SB0005] - Inclui Pagamento 1.1.3 - 1.1.4 - 1.2.3 - 1.2.4
+					idPagamento = (Integer) this.getControladorUtil().inserir(pagamento);
+
+					getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(pagamento, CobrancaDebitoSituacao.PAGO);
 					getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirPagamento(pagamento);
 					
 				}
-	
-				// Atualiza o valor do aviso bancário
-				avisoBancario.setValorArrecadacaoCalculado(avisoBancario
-						.getValorArrecadacaoCalculado()
-						.add(valorPagamentoAcumulado));
+
+				avisoBancario.setValorArrecadacaoCalculado(avisoBancario.getValorArrecadacaoCalculado().add(valorPagamentoAcumulado));
 				avisoBancario.setUltimaAlteracao(new Date());
-	
-	/*			// ------------ REGISTRAR TRANSAÇÃO ----------------
-				avisoBancario.setOperacaoEfetuada(operacaoEfetuada);
-				avisoBancario.adicionarUsuario(usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-				registradorOperacao.registrarOperacao(avisoBancario);
-				// ------------ REGISTRAR TRANSAÇÃO ----------------
-	*/
-				this.getControladorUtil().atualizar(avisoBancario);
+				getControladorUtil().atualizar(avisoBancario);
 			} else {
 				throw new ControladorException("atencao.documento_naoinformado");
 			}
-	
-			return retorno;
-			
+
+			return idPagamento;
 		} catch (ControladorException e) {
 			sessionContext.setRollbackOnly();
 			throw e;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
-		}	
+		}
 	}
 	
 	
@@ -37760,26 +37347,17 @@ public class ControladorArrecadacao implements SessionBean {
 	
 	/**
 	 * Inserir Pagamentos por código de barras
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 30/10/2007
-	 * 
-	 * @return
-	 * @throws ControladorException
 	 */
 	public Integer inserirPagamentosCodigoBarras(
-			Collection<Pagamento> colecaoPagamentos,
-			Collection<Devolucao> colecaoDevolucoes, Usuario usuarioLogado,
+			Collection<Pagamento> pagamentos,
+			Collection<Devolucao> devolucoes, 
+			Usuario usuarioLogado,
 			AvisoBancario avisoBancario) throws ControladorException {
 
-		// INSERINDO PAGAMENTOS
-		Integer retorno = this.inserirPagamentos(colecaoPagamentos,
-				usuarioLogado, avisoBancario);
+		Integer idPagamento = inserirPagamentos(pagamentos, usuarioLogado, avisoBancario);
+		inserirDevolucoes(devolucoes, usuarioLogado, avisoBancario);
 
-		// INSERINDO DEVOLUCOES
-		this.inserirDevolucoes(colecaoDevolucoes, usuarioLogado, avisoBancario);
-
-		return retorno;
+		return idPagamento;
 	}
 
 	/**
@@ -38630,7 +38208,8 @@ public class ControladorArrecadacao implements SessionBean {
 					pagamento.setDocumentoTipoAgregador(documentoAgregador);
 
 					colecaoPagamentos.add(pagamento);
-
+					
+					indicadorAceitacaoRegistro = "1";
 				} else {
 					indicadorAceitacaoRegistro = "2";
 				}
@@ -38697,6 +38276,8 @@ public class ControladorArrecadacao implements SessionBean {
 						pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo8Novo(registroHelperCodigoBarras, registroTipo7, idFormaArrecadacao);
 					}
 					
+					indicadorAceitacaoRegistro = "1";
+
 					pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.DOCUMENTO_COBRANCA);
 					pagamentoHelperCodigoBarras.setIdDocumento(registroTipo7.getIdDocumentoEmitido());
 					pagamentoHelperCodigoBarras.setValorDocumento(registroTipo7.getValorRecebidoFormatado());
@@ -38715,6 +38296,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 				// [FS0002 - Validar documento de cobrança]
 				if (cobrancaDocumentoItem == null) {
+					indicadorAceitacaoRegistro = "2";
 					descricaoOcorrencia = "DOCUMENTO ITEM INEXISTENTE";
 				}
 
@@ -38740,6 +38322,7 @@ public class ControladorArrecadacao implements SessionBean {
 							registroTipo7.getDataLiquidacaoFormatado(), Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado()),
 							registroTipo7.getValorRecebidoFormatado(), ArrecadacaoForma.FICHA_COMPENSACAO, usuarioLogado);
 					
+					indicadorAceitacaoRegistro = "1";
 					pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.DOCUMENTO_COBRANCA);
 					pagamentoHelperCodigoBarras.setIdDocumento(registroTipo7.getIdDocumentoEmitido());
 					pagamentoHelperCodigoBarras.setValorDocumento(registroTipo7.getValorRecebidoFormatado());
@@ -38792,7 +38375,9 @@ public class ControladorArrecadacao implements SessionBean {
 								registroTipo7.getDataLiquidacaoFormatado(), Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado()),
 								registroTipo7.getValorRecebidoFormatado(), idFormaArrecadacao);
 					}
-
+					indicadorAceitacaoRegistro = "1";
+					
+					
 					pagamentoHelperCodigoBarras.setTipoDocumento(DocumentoTipo.GUIA_PAGAMENTO);
 					pagamentoHelperCodigoBarras.setIdDocumento(registroTipo7.getIdDocumentoEmitido());
 					pagamentoHelperCodigoBarras.setValorDocumento(registroTipo7.getValorRecebidoFormatado());
@@ -38804,6 +38389,7 @@ public class ControladorArrecadacao implements SessionBean {
 				pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 				pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 			}
+			pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 		}
 
 		return pagamentoHelperCodigoBarras;
@@ -51113,5 +50699,3 @@ public class ControladorArrecadacao implements SessionBean {
 		return guiaPagamentoHistorico;
 	}
 }
-
-

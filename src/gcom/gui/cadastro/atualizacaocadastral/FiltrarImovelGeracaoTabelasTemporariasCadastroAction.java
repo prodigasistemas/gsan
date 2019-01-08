@@ -15,6 +15,7 @@ import gcom.micromedicao.FiltroRota;
 import gcom.micromedicao.Rota;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
 import java.util.Collection;
@@ -34,456 +35,394 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 public class FiltrarImovelGeracaoTabelasTemporariasCadastroAction extends GcomAction {
-	
+
 	private static Fachada fachada = Fachada.getInstancia();
 	private ImovelGeracaoTabelasTemporariasCadastroHelper helper;
-	
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
 
-		ActionForward retorno = actionMapping.findForward("telaSucesso");
-		
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		helper = new ImovelGeracaoTabelasTemporariasCadastroHelper();
-		
-		String linha = null;
 
 		try {
 			DiskFileUpload upload = new DiskFileUpload();
-			List itens = upload.parseRequest(httpServletRequest);
+			List itens = upload.parseRequest(request);
 			FileItem item = null;
-			
+
 			Iterator iterator = itens.iterator();
 			while (iterator.hasNext()) {
 				item = (FileItem) iterator.next();
-				
-				this.carregarCampos(httpServletRequest, item);
-				
+
+				this.carregarCampos(request, item);
+
 			}
 		} catch (NumberFormatException ex) {
 			throw new ActionServletException("erro.importacao.nao_concluida");
 		} catch (FileUploadException e) {
 			throw new ActionServletException("erro.sistema", e);
-		}	
-		
+		}
+
 		Collection<Integer> colecaoIdsImoveis = fachada.obterIdsImovelGeracaoTabelasTemporarias(helper);
-		
+
 		if (colecaoIdsImoveis.size() > 0) {
 			if (helper.getSugestao().equals("1")) {
-				throw new ActionServletException("atencao.quantidade_imoveis_sugestao_sim", String.valueOf(colecaoIdsImoveis.size()));		
+				throw new ActionServletException("atencao.quantidade_imoveis_sugestao_sim", String.valueOf(colecaoIdsImoveis.size()));
 			} else {
 				helper.setColecaoIdsImoveis(colecaoIdsImoveis);
-				
+
 				Map parametros = new HashMap();
 				parametros.put("imovelGeracaoTabelasTemporariasCadastroHelper", helper);
-				
-				Fachada.getInstancia().inserirProcessoIniciadoParametrosLivres(parametros,
-						Processo.GERAR_TABELAS_TEMP_ATU_CADASTRAL, this.getUsuarioLogado(httpServletRequest));
-				
-				montarPaginaSucesso(httpServletRequest, "Geração de tabelas encaminhada para Batch.", "", "");
+
+				Fachada.getInstancia().inserirProcessoIniciadoParametrosLivres(parametros, Processo.GERAR_TABELAS_TEMP_ATU_CADASTRAL, this.getUsuarioLogado(request));
+
+				montarPaginaSucesso(request, "Geração de tabelas encaminhada para Batch.", "", "");
 			}
 		} else {
 			throw new ActionServletException("atencao.sem_imoveis_disponiveis");
 		}
 
-		return retorno;
+		return mapping.findForward("telaSucesso");
 	}
 
-	private void carregarCampos(HttpServletRequest httpServletRequest,
-			FileItem item) throws NumberFormatException {
-		
-		//Matricula do imovel
-		if(item.getFieldName().equals("matricula") && !item.getString().equals("")) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void carregarCampos(HttpServletRequest httpServletRequest, FileItem item) throws NumberFormatException {
+		// Matricula do imovel
+		if (item.getFieldName().equals("matricula") && !item.getString().equals("")) {
 			helper.setMatricula(item.getString());
 		}
-		
-		//Cliente
+
+		// Cliente
 		if (item.getFieldName().equals("cliente") && !item.getString().equals("")) {
 			helper.setCliente(item.getString());
 		}
-		
-		//Sugestao
+
+		// Sugestao
 		if (item.getFieldName().equals("sugestao") && !item.getString().equals("")) {
 			helper.setSugestao(item.getString());
 		}
-		
-		//Firma(empresa)
+
+		// Firma(empresa)
 		if (item.getFieldName().equals("firma") && !item.getString().equals("-1")) {
 			helper.setFirma(item.getString());
 		}
-		
-		//Leiturista(Agente Cadastral)
+
+		// Leiturista(Agente Cadastral)
 		if (item.getFieldName().equals("leiturista") && !item.getString().equals("-1")) {
 			helper.setLeiturista(item.getString());
-		} 
-		
-		//Quantidade Maxima
+		}
+
+		// Quantidade Maxima
 		if (item.getFieldName().equals("quantidadeMaxima") && !item.getString().equals("")) {
 			helper.setQuantidadeMaxima(new Integer(item.getString()));
 		}
-		
-		//Agencia
+
+		// Agencia
 		if (item.getFieldName().equals("elo") && !item.getString().equals("")) {
 			helper.setElo(item.getString());
 		}
-		
-		//Localidade Inicial
+
+		// Localidade Inicial
 		if (item.getFieldName().equals("localidadeInicial") && !item.getString().equals("")) {
 			helper.setLocalidadeInicial(item.getString());
 			this.pesquisarLocalidade("origem", httpServletRequest);
 		}
-		
-		//Setor Comercial Inicial
+
+		// Setor Comercial Inicial
 		if (item.getFieldName().equals("codigoSetorComercialInicial") && !item.getString().equals("")) {
 			helper.setCodigoSetorComercialInicial(item.getString());
-			
-			if(helper.getLocalidadeInicial() != null) {
 
-				FiltroSetorComercial filtroSetorComercialInicial = new FiltroSetorComercial();
-				filtroSetorComercialInicial.adicionarParametro(new ParametroSimples(
-						FiltroSetorComercial.ID_LOCALIDADE, helper.getLocalidadeInicial()));		
-				filtroSetorComercialInicial.adicionarParametro(new ParametroSimples(
-						FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, helper.getCodigoSetorComercialInicial()));		
+			if (helper.getLocalidadeInicial() != null) {
+				Filtro filtro = new FiltroSetorComercial();
+				filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, helper.getLocalidadeInicial()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, helper.getCodigoSetorComercialInicial()));
 
-				Collection colecaoSetorComercialInicial = fachada.pesquisar(
-						filtroSetorComercialInicial, SetorComercial.class.getName());		
-				
-				if(colecaoSetorComercialInicial != null && !colecaoSetorComercialInicial.isEmpty()) {
-					SetorComercial setorComercialInicial = (SetorComercial) Util.retonarObjetoDeColecao(
-							colecaoSetorComercialInicial);
-					
+				Collection pesquisa = fachada.pesquisar(filtro, SetorComercial.class.getName());
+
+				if (pesquisa != null && !pesquisa.isEmpty()) {
+					SetorComercial setorComercialInicial = (SetorComercial) Util.retonarObjetoDeColecao(pesquisa);
 					helper.setSetorComercialInicial(setorComercialInicial.getId().toString());
-					
 					this.pesquisarSetorComercial("origem", httpServletRequest);
 				}
 			}
 		}
 
-		//Quadra Inicial
+		// Quadra Inicial
 		if (item.getFieldName().equals("quadraInicial") && !item.getString().equals("")) {
 			helper.setQuadraInicial(item.getString());
 			this.pesquisarQuadra("origem", httpServletRequest);
 		}
-		
-		//Localidade Final
+
+		// Localidade Final
 		if (item.getFieldName().equals("localidadeFinal") && !item.getString().equals("")) {
 			helper.setLocalidadeFinal(item.getString());
 			this.pesquisarLocalidade("destino", httpServletRequest);
 		}
-		
-		//Setor Comercial Final
+
+		// Setor Comercial Final
 		if (item.getFieldName().equals("codigoSetorComercialFinal") && !item.getString().equals("")) {
-			helper.setCodigoSetorComercialFinal(item.getString()) ;
-			
-			if(helper.getLocalidadeFinal() != null) {
+			helper.setCodigoSetorComercialFinal(item.getString());
 
-				FiltroSetorComercial filtroSetorComercialFinal = new FiltroSetorComercial();
-				filtroSetorComercialFinal.adicionarParametro(new ParametroSimples(
-						FiltroSetorComercial.ID_LOCALIDADE, helper.getLocalidadeFinal()));		
-				filtroSetorComercialFinal.adicionarParametro(new ParametroSimples(
-						FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, helper.getCodigoSetorComercialFinal()));		
+			if (helper.getLocalidadeFinal() != null) {
+				Filtro filtro = new FiltroSetorComercial();
+				filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, helper.getLocalidadeFinal()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, helper.getCodigoSetorComercialFinal()));
 
-				Collection colecaoSetorComercialFinal = fachada.pesquisar(filtroSetorComercialFinal, 
-						SetorComercial.class.getName());		
-				
-				if(colecaoSetorComercialFinal != null && !colecaoSetorComercialFinal.isEmpty()) {
-					SetorComercial setorComercialFinal = (SetorComercial) Util.retonarObjetoDeColecao(
-							colecaoSetorComercialFinal);
+				Collection pesquisa = fachada.pesquisar(filtro, SetorComercial.class.getName());
 
+				if (pesquisa != null && !pesquisa.isEmpty()) {
+					SetorComercial setorComercialFinal = (SetorComercial) Util.retonarObjetoDeColecao(pesquisa);
 					helper.setSetorComercialFinal(setorComercialFinal.getId().toString());
-					
 					this.pesquisarSetorComercial("destino", httpServletRequest);
 				}
 			}
 		}
-		
-		//Quadra Final
+
+		// Quadra Final
 		if (item.getFieldName().equals("quadraFinal") && !item.getString().equals("")) {
 			helper.setQuadraFinal(item.getString());
 			this.pesquisarQuadra("destino", httpServletRequest);
 		}
-		
-		//Rota Inicial
+
+		// Rota Inicial
 		if (item.getFieldName().equals("rotaInicial") && !item.getString().equals("")) {
-			
+
 			helper.setRotaInicial(new Integer(item.getString()));
-			
-			if(helper.getSetorComercialInicial() != null) {
 
-				FiltroRota filtroRotaInicial = new FiltroRota();
-				filtroRotaInicial.adicionarParametro(new ParametroSimples(
-						FiltroRota.SETOR_COMERCIAL_ID, helper.getSetorComercialInicial()));		
-				filtroRotaInicial.adicionarParametro(new ParametroSimples(
-						FiltroRota.CODIGO_ROTA, helper.getRotaInicial()));		
+			if (helper.getSetorComercialInicial() != null) {
+				Filtro filtro = new FiltroRota();
+				filtro.adicionarParametro(new ParametroSimples(FiltroRota.SETOR_COMERCIAL_ID, helper.getSetorComercialInicial()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroRota.CODIGO_ROTA, helper.getRotaInicial()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroRota.INDICADOR_USO, ConstantesSistema.SIM));
 
-				Collection colecaoRotaInicial = fachada.pesquisar(filtroRotaInicial, Rota.class.getName());		
-				
-				if(colecaoRotaInicial != null && !colecaoRotaInicial.isEmpty()){
-					Rota rota = (Rota) Util.retonarObjetoDeColecao(colecaoRotaInicial);
+				Collection colecao = fachada.pesquisar(filtro, Rota.class.getName());
+
+				if (colecao != null && !colecao.isEmpty()) {
+					Rota rota = (Rota) Util.retonarObjetoDeColecao(colecao);
 					helper.setRotaInicial(rota.getId());
-				}					
+				}
 			}
 		}
-		
-		//Sequencial Rota Inicial
+
+		// Sequencial Rota Inicial
 		if (item.getFieldName().equals("rotaSequenciaInicial") && !item.getString().equals("")) {
 			helper.setRotaSequenciaInicial(new Integer(item.getString()));
 		}
-		
-		//Rota Final
+
+		// Rota Final
 		if (item.getFieldName().equals("rotaFinal") && !item.getString().equals("")) {
 			helper.setRotaFinal(new Integer(item.getString()));
-			
+
 			if (helper.getSetorComercialFinal() != null) {
+				Filtro filtro = new FiltroRota();
+				filtro.adicionarParametro(new ParametroSimples(FiltroRota.SETOR_COMERCIAL_ID, helper.getSetorComercialFinal()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroRota.CODIGO_ROTA, helper.getRotaFinal()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroRota.INDICADOR_USO, ConstantesSistema.SIM));
 
-				FiltroRota filtroRotaFinal = new FiltroRota();
-				filtroRotaFinal.adicionarParametro(new ParametroSimples(
-						FiltroRota.SETOR_COMERCIAL_ID, helper.getSetorComercialFinal()));		
-				filtroRotaFinal.adicionarParametro(new ParametroSimples(
-						FiltroRota.CODIGO_ROTA, helper.getRotaFinal()));		
+				Collection colecaoRotaFinal = fachada.pesquisar(filtro, Rota.class.getName());
 
-				Collection colecaoRotaFinal = fachada.pesquisar(filtroRotaFinal, Rota.class.getName());		
-				
 				if (colecaoRotaFinal != null && !colecaoRotaFinal.isEmpty()) {
 					Rota rota = (Rota) Util.retonarObjetoDeColecao(colecaoRotaFinal);
 					helper.setRotaFinal(rota.getId());
-				}					
+				}
 			}
 		}
-		
-		//Sequencial Rota Final
+
+		// Sequencial Rota Final
 		if (item.getFieldName().equals("rotaSequenciaFinal") && !item.getString().equals("")) {
 			helper.setRotaSequenciaFinal(new Integer(item.getString()));
 		}
-		
-		//Perfil do Imovel
+
+		// Perfil do Imovel
 		if (item.getFieldName().equals("perfilImovel") && !item.getString().equals("-1")) {
 			helper.setPerfilImovel(item.getString());
-		} 
-		
-		//Categoria 
+		}
+
+		// Categoria
 		if (item.getFieldName().equals("categoria") && !item.getString().equals("-1")) {
 			helper.setCategoria(item.getString());
-		} 
-		
-		//Subcategoria
+		}
+
+		// Subcategoria
 		if (item.getFieldName().equals("subCategoria") && !item.getString().equals("-1")) {
 			helper.setSubCategoria(item.getString());
-		} 
-		
-		//Situacao Ligacao Agua
+		}
+
+		// Situacao Ligacao Agua
 		if (item.getFieldName().equals("idSituacaoLigacaoAgua") && !item.getString().equals("-1")) {
 			helper.setIdSituacaoLigacaoAgua(item.getString());
 		}
-		
-		//Situacao do Imovel
+
+		// Situacao do Imovel
 		if (item.getFieldName().equals("imovelSituacao") && !item.getString().equals("")) {
 			helper.setImovelSituacao(item.getString());
 		}
 	}
-	
-	private void pesquisarLocalidade(String inscricaoTipo,
-			HttpServletRequest httpServletRequest) {
 
-		FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void pesquisarLocalidade(String inscricaoTipo, HttpServletRequest request) {
+		Filtro filtro = new FiltroLocalidade();
 
 		if (inscricaoTipo.equalsIgnoreCase("origem")) {
-			String localidadeID = helper.getLocalidadeInicial().toString();
-			
-			filtroLocalidade.adicionarParametro(new ParametroSimples(
-					FiltroLocalidade.ID, localidadeID));
-			filtroLocalidade.adicionarParametro(new ParametroSimples(
-					FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			
-			Collection colecaoPesquisa = fachada.pesquisar(filtroLocalidade, Localidade.class.getName());
-			
-			if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
-				throw new ActionServletException("atencao.localidade.inexistente", null, "Localidade");					
-			} else {
-				Localidade objetoLocalidade = (Localidade) Util.retonarObjetoDeColecao(colecaoPesquisa);
-				helper.setLocalidadeInicial(objetoLocalidade.getId().toString());
-				httpServletRequest.setAttribute("corLocalidadeOrigem", "valor");
-				httpServletRequest.setAttribute("nomeCampo","codigoSetorComercialInicial");
-				//destino
-				helper.setLocalidadeFinal(objetoLocalidade.getId().toString());
-				httpServletRequest.setAttribute("corLocalidadeDestino", "valor");
-			}
-		} else {
-			String localidadeID = helper.getLocalidadeFinal().toString();
-			
-			filtroLocalidade.adicionarParametro(new ParametroSimples(
-					FiltroLocalidade.ID, localidadeID));
-			filtroLocalidade.adicionarParametro(new ParametroSimples(
-					FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
-			
-			Collection colecaoPesquisa = fachada.pesquisar(filtroLocalidade, Localidade.class.getName());
-			
-			if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
+			filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, helper.getLocalidadeInicial()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+
+			Collection pesquisa = fachada.pesquisar(filtro, Localidade.class.getName());
+
+			if (pesquisa == null || pesquisa.isEmpty()) {
 				throw new ActionServletException("atencao.localidade.inexistente", null, "Localidade");
 			} else {
-				Localidade objetoLocalidade = (Localidade) Util.retonarObjetoDeColecao(colecaoPesquisa);
-				helper.setLocalidadeFinal(objetoLocalidade.getId().toString());
-				httpServletRequest.setAttribute("corLocalidadeDestino", "valor");
-				httpServletRequest.setAttribute("nomeCampo","codigoSetorComercialFinal");
+				Localidade localidade = (Localidade) Util.retonarObjetoDeColecao(pesquisa);
+				helper.setLocalidadeInicial(localidade.getId().toString());
+				request.setAttribute("corLocalidadeOrigem", "valor");
+				request.setAttribute("nomeCampo", "codigoSetorComercialInicial");
+				// destino
+				helper.setLocalidadeFinal(localidade.getId().toString());
+				request.setAttribute("corLocalidadeDestino", "valor");
+			}
+		} else {
+			filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, helper.getLocalidadeFinal()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+
+			Collection pesquisa = fachada.pesquisar(filtro, Localidade.class.getName());
+
+			if (pesquisa == null || pesquisa.isEmpty()) {
+				throw new ActionServletException("atencao.localidade.inexistente", null, "Localidade");
+			} else {
+				Localidade localidade = (Localidade) Util.retonarObjetoDeColecao(pesquisa);
+				helper.setLocalidadeFinal(localidade.getId().toString());
+				request.setAttribute("corLocalidadeDestino", "valor");
+				request.setAttribute("nomeCampo", "codigoSetorComercialFinal");
 			}
 		}
 	}
-	
-	private void pesquisarSetorComercial(String inscricaoTipo,
-			HttpServletRequest httpServletRequest) {
-		
-		FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
-		
-		String setorComercialCD = helper.getCodigoSetorComercialInicial();
-		
-		if (inscricaoTipo.equalsIgnoreCase("origem")) {
-			String localidadeID = helper.getLocalidadeInicial().toString();
 
-			// O campo localidadeOrigemID será obrigatório
-			if (localidadeID != null && !localidadeID.trim().equalsIgnoreCase("")) {
-				setorComercialCD = helper.getCodigoSetorComercialInicial();
-				
-				filtroSetorComercial.adicionarParametro(new ParametroSimples(
-						FiltroSetorComercial.ID_LOCALIDADE, localidadeID));
-				filtroSetorComercial.adicionarParametro(new ParametroSimples(
-						FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, setorComercialCD));
-				filtroSetorComercial.adicionarParametro(new ParametroSimples(
-						FiltroSetorComercial.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
-				
-				Collection colecaoPesquisa = fachada.pesquisar(filtroSetorComercial, SetorComercial.class.getName());
-				
-				if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
-					throw new ActionServletException("atencao.setor_comercial.inexistente", null, "Localidade");	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void pesquisarSetorComercial(String inscricaoTipo, HttpServletRequest request) {
+		Filtro filtro = new FiltroSetorComercial();
+		String codigo = helper.getCodigoSetorComercialInicial();
+
+		if (inscricaoTipo.equalsIgnoreCase("origem")) {
+			String idLocalidade = helper.getLocalidadeInicial().toString();
+
+			if (idLocalidade != null && !idLocalidade.trim().equalsIgnoreCase("")) {
+				codigo = helper.getCodigoSetorComercialInicial();
+
+				filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, idLocalidade));
+				filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, codigo));
+				filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+
+				Collection pesquisa = fachada.pesquisar(filtro, SetorComercial.class.getName());
+
+				if (pesquisa == null || pesquisa.isEmpty()) {
+					throw new ActionServletException("atencao.setor_comercial.inexistente", null, "Localidade");
 				} else {
-					SetorComercial objetoSetorComercial = (SetorComercial) Util.retonarObjetoDeColecao(colecaoPesquisa);
-					
-					helper.setCodigoSetorComercialInicial(String.valueOf(objetoSetorComercial.getCodigo()));
-					httpServletRequest.setAttribute("corSetorComercialDestino", "valor");
+					SetorComercial setor = (SetorComercial) Util.retonarObjetoDeColecao(pesquisa);
+
+					helper.setCodigoSetorComercialInicial(String.valueOf(setor.getCodigo()));
+					request.setAttribute("corSetorComercialDestino", "valor");
 				}
 			} else {
-				httpServletRequest.setAttribute("codigoSetorComercialInicial", "");
+				request.setAttribute("codigoSetorComercialInicial", "");
 				helper.setCodigoSetorComercialInicial("");
 				helper.setNomeSetorComercialInicial("Informe a localidade da inscrição de origem.");
-				httpServletRequest.setAttribute("corSetorComercialOrigem", "exception");
+				request.setAttribute("corSetorComercialOrigem", "exception");
 			}
 		} else {
-			String localidadeID = helper.getLocalidadeFinal().toString();
+			String idLocalidade = helper.getLocalidadeFinal().toString();
 
-			if (localidadeID != null && !localidadeID.trim().equalsIgnoreCase("")) {
-				setorComercialCD = helper.getCodigoSetorComercialFinal();
+			if (idLocalidade != null && !idLocalidade.trim().equalsIgnoreCase("")) {
+				codigo = helper.getCodigoSetorComercialFinal();
 
-				filtroSetorComercial.adicionarParametro(new ParametroSimples(
-						FiltroSetorComercial.ID_LOCALIDADE, localidadeID));
-				filtroSetorComercial.adicionarParametro(new ParametroSimples(
-						FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, setorComercialCD));
-				filtroSetorComercial.adicionarParametro(new ParametroSimples(
-						FiltroSetorComercial.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+				filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, idLocalidade));
+				filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, codigo));
+				filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-				Collection colecaoPesquisa = fachada.pesquisar(filtroSetorComercial, SetorComercial.class.getName());
+				Collection pesquisa = fachada.pesquisar(filtro, SetorComercial.class.getName());
 
-				if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
+				if (pesquisa == null || pesquisa.isEmpty()) {
 					helper.setCodigoSetorComercialFinal("");
 					helper.setSetorComercialFinal("");
 					helper.setNomeSetorComercialFinal("Setor comercial inexistente.");
-					httpServletRequest.setAttribute("corSetorComercialDestino", "exception");
-					httpServletRequest.setAttribute("nomeCampo","codigoSetorComercialFinal");
-					
+					request.setAttribute("corSetorComercialDestino", "exception");
+					request.setAttribute("nomeCampo", "codigoSetorComercialFinal");
+
 					throw new ActionServletException("atencao.setor_comercial.inexistente", null, "Localidade");
-					
+
 				} else {
-					SetorComercial objetoSetorComercial = (SetorComercial) Util.retonarObjetoDeColecao(colecaoPesquisa);
-					
-					helper.setCodigoSetorComercialFinal(String.valueOf(objetoSetorComercial.getCodigo()));
-					httpServletRequest.setAttribute("corSetorComercialDestino", "valor");
+					SetorComercial setor = (SetorComercial) Util.retonarObjetoDeColecao(pesquisa);
+					helper.setCodigoSetorComercialFinal(String.valueOf(setor.getCodigo()));
+					request.setAttribute("corSetorComercialDestino", "valor");
 				}
 			} else {
-				httpServletRequest.setAttribute("codigoSetorComercialFinal", "");
+				request.setAttribute("codigoSetorComercialFinal", "");
 				helper.setCodigoSetorComercialFinal("");
 				helper.setNomeSetorComercialFinal("Informe a localidade da inscrição de destino.");
-				httpServletRequest.setAttribute("corSetorComercialDestino", "exception");
+				request.setAttribute("corSetorComercialDestino", "exception");
 			}
 		}
 	}
-	
-	private void pesquisarQuadra(String inscricaoTipo,
-			HttpServletRequest httpServletRequest) {
-		
-		FiltroQuadra filtroQuadra = new FiltroQuadra();
 
-		String setorComercialCD = helper.getCodigoSetorComercialInicial();
-		String setorComercialID = helper.getSetorComercialInicial().toString();
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void pesquisarQuadra(String inscricaoTipo, HttpServletRequest request) {
+		Filtro filtro = new FiltroQuadra();
+
+		String codigoSetor = helper.getCodigoSetorComercialInicial();
+		String idSetor = helper.getSetorComercialInicial().toString();
 
 		if (inscricaoTipo.equalsIgnoreCase("origem")) {
 			String idLocalidadeInicial = helper.getLocalidadeInicial().toString();
-			
-			if (setorComercialCD != null && !setorComercialCD.trim().equalsIgnoreCase("") &&
-					setorComercialID != null && !setorComercialID.trim().equalsIgnoreCase("")) {
-				
-				String quadraNM = (String) helper.getQuadraInicial();
-				
-				filtroQuadra.adicionarParametro(new ParametroSimples(
-						FiltroQuadra.ID_LOCALIDADE, new Integer(idLocalidadeInicial)));
-				filtroQuadra.adicionarParametro(new ParametroSimples(
-						FiltroQuadra.ID_SETORCOMERCIAL, setorComercialID));
-				filtroQuadra.adicionarParametro(new ParametroSimples(
-						FiltroQuadra.NUMERO_QUADRA, quadraNM));
-				filtroQuadra.adicionarParametro(new ParametroSimples(
-						FiltroQuadra.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-				Collection colecaoPesquisa = fachada.pesquisar(filtroQuadra, Quadra.class.getName());
+			if (codigoSetor != null && !codigoSetor.trim().equalsIgnoreCase("") && idSetor != null && !idSetor.trim().equalsIgnoreCase("")) {
+				filtro.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_LOCALIDADE, new Integer(idLocalidadeInicial)));
+				filtro.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_SETORCOMERCIAL, idSetor));
+				filtro.adicionarParametro(new ParametroSimples(FiltroQuadra.NUMERO_QUADRA, helper.getQuadraInicial()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroQuadra.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-				if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
+				Collection pesquisa = fachada.pesquisar(filtro, Quadra.class.getName());
+
+				if (pesquisa == null || pesquisa.isEmpty()) {
 					throw new ActionServletException("atencao.quadra.inexistente", null, "Localidade");
 				} else {
-					Quadra objetoQuadra = (Quadra) Util.retonarObjetoDeColecao(colecaoPesquisa);
-					helper.setQuadraInicial(String.valueOf(objetoQuadra.getNumeroQuadra()));
-					helper.setIdQuadraInicial(objetoQuadra.getId().toString());
-					httpServletRequest.setAttribute("corQuadraOrigem", null);
-					httpServletRequest.setAttribute("nomeCampo","loteOrigem");
+					Quadra quadra = (Quadra) Util.retonarObjetoDeColecao(pesquisa);
+					helper.setQuadraInicial(String.valueOf(quadra.getNumeroQuadra()));
+					helper.setIdQuadraInicial(quadra.getId().toString());
+					request.setAttribute("corQuadraOrigem", null);
+					request.setAttribute("nomeCampo", "loteOrigem");
 				}
 			} else {
 				helper.setQuadraInicial("");
-				httpServletRequest.setAttribute("corQuadraOrigem", "exception");
+				request.setAttribute("corQuadraOrigem", "exception");
 			}
-		} else { //QUADRA FINAL
-			setorComercialCD = (String) helper.getCodigoSetorComercialFinal();
-			setorComercialID = (String) helper.getSetorComercialFinal();
+		} else { // QUADRA FINAL
+			codigoSetor = (String) helper.getCodigoSetorComercialFinal();
+			idSetor = (String) helper.getSetorComercialFinal();
 
-			String idLocalidadeFinal = helper.getLocalidadeFinal().toString();			
-			
-			if (setorComercialCD != null && !setorComercialCD.trim().equalsIgnoreCase("") &&
-					setorComercialID != null && !setorComercialID.trim().equalsIgnoreCase("")) {
-				
-				String quadraNM = (String) helper.getQuadraFinal();
+			String idLocalidadeFinal = helper.getLocalidadeFinal().toString();
 
-				filtroQuadra.adicionarParametro(new ParametroSimples(
-						FiltroQuadra.ID_LOCALIDADE, new Integer(idLocalidadeFinal)));
-				filtroQuadra.adicionarParametro(new ParametroSimples(
-						FiltroQuadra.ID_SETORCOMERCIAL, setorComercialID));
-				filtroQuadra.adicionarParametro(new ParametroSimples(
-						FiltroQuadra.NUMERO_QUADRA, quadraNM));
-				filtroQuadra.adicionarParametro(new ParametroSimples(
-						FiltroQuadra.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
-				
-				Collection colecaoPesquisa = fachada.pesquisar(filtroQuadra, Quadra.class.getName());
-				
-				if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
+			if (codigoSetor != null && !codigoSetor.trim().equalsIgnoreCase("") && idSetor != null && !idSetor.trim().equalsIgnoreCase("")) {
+				filtro.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_LOCALIDADE, new Integer(idLocalidadeFinal)));
+				filtro.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_SETORCOMERCIAL, idSetor));
+				filtro.adicionarParametro(new ParametroSimples(FiltroQuadra.NUMERO_QUADRA, helper.getQuadraFinal()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroQuadra.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+
+				Collection pesquisa = fachada.pesquisar(filtro, Quadra.class.getName());
+
+				if (pesquisa == null || pesquisa.isEmpty()) {
 					helper.setQuadraFinal("");
 					helper.setIdQuadraFinal("");
-					httpServletRequest.setAttribute("msgQuadraFinal", "QUADRA INEXISTENTE");					
-					httpServletRequest.setAttribute("corQuadraDestino", "exception");
-					httpServletRequest.setAttribute("nomeCampo","quadraDestinoNM");
-					
+					request.setAttribute("msgQuadraFinal", "QUADRA INEXISTENTE");
+					request.setAttribute("corQuadraDestino", "exception");
+					request.setAttribute("nomeCampo", "quadraDestinoNM");
+
 					throw new ActionServletException("atencao.quadra.inexistente", null, "Localidade");
 				} else {
-					Quadra objetoQuadra = (Quadra) Util.retonarObjetoDeColecao(colecaoPesquisa);
-					helper.setQuadraFinal(String.valueOf(objetoQuadra.getNumeroQuadra()));
-					helper.setIdQuadraFinal(objetoQuadra.getId().toString());
-					httpServletRequest.setAttribute("corQuadraDestino", null);
+					Quadra quadra = (Quadra) Util.retonarObjetoDeColecao(pesquisa);
+					helper.setQuadraFinal(String.valueOf(quadra.getNumeroQuadra()));
+					helper.setIdQuadraFinal(quadra.getId().toString());
+					request.setAttribute("corQuadraDestino", null);
 				}
 			} else {
 				helper.setQuadraFinal("");
-				httpServletRequest.setAttribute("corQuadraDestino", "exception");
+				request.setAttribute("corQuadraDestino", "exception");
 			}
 		}
 	}

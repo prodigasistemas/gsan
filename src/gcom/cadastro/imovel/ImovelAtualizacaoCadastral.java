@@ -200,6 +200,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	
 	private Integer idRota;
 	
+	private String observacaoCategoria;
+	
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short classeSocial;
     
@@ -227,6 +229,99 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short percentualAbastecimento;
 		
+	public ImovelAtualizacaoCadastral(Integer idImovel, 
+	        Integer idLocalidade,
+			Integer codigoSetorComercial, 
+			Integer numeroQuadra, 
+			short lote,
+			short subLote, 
+			Integer numeroSequencialRota,
+			Short numeroMorador, 
+			Integer idLogradouro,
+			Integer codigoCep,
+			Integer idBairro,
+			String nomeBairro, 
+			Integer idEnderecoReferencia,
+			String numeroImovel,
+			String complementoEndereco,
+			BigDecimal areaConstruida,
+			Integer idLigacaoAguaSituacao, 
+			BigDecimal volumeReservatorioInferior,
+			BigDecimal volumeReservatorioSuperior,
+			BigDecimal volumePiscina,
+			Short indicadorJardim,
+			Integer idPavimentoCalcada,
+			Integer idPavimentoRua,
+			Integer idFonteAbastecimento,
+			Integer idPocoTipo, 
+			Short numeroPontosUtilizacao,
+			Integer idLigacaoEsgotoSituacao,
+			Integer idImovelPerfil,
+			Integer idDespejo, 
+			String coordenadaX,
+			String coordenadaY,
+			Integer codigoImovelPrincipal,
+			String numeroIptu,
+			Long numeroContratoEnergia, 
+			Integer idLocalInstalacaoRamal,
+			Short classeSocial,
+			Short quantidadeAnimaisDomesticos,
+			BigDecimal volumeCisterna,
+			BigDecimal volumeCaixaDagua,
+			Short tipoUso,
+			Short acessoHidrometro,
+			Integer quantidadeEconomiasSocial,
+			Integer quantidadeEconomiasOutra,
+			Short percentualAbastecimento,
+			String observacaoCategoria) {
+		this.id                         = idImovel;
+	    this.idImovel                   = idImovel;
+	    this.idLocalidade               = idLocalidade;
+	    this.codigoSetorComercial       = codigoSetorComercial;
+	    this.numeroQuadra               = numeroQuadra;
+	    this.lote                       = lote;
+	    this.subLote                    = subLote;
+	    this.numeroSequencialRota       = numeroSequencialRota;
+	    this.numeroMorador              = numeroMorador;
+	    this.idLogradouro               = idLogradouro;
+	    this.codigoCep                  = codigoCep;
+	    this.idBairro                   = idBairro;
+	    this.nomeBairro                 = nomeBairro;
+	    this.idEnderecoReferencia       = idEnderecoReferencia;
+	    this.numeroImovel               = numeroImovel;
+	    this.complementoEndereco        = complementoEndereco;
+	    this.areaConstruida             = areaConstruida;
+	    this.idLigacaoAguaSituacao      = idLigacaoAguaSituacao ;
+	    this.volumeReservatorioInferior = volumeReservatorioInferior;
+	    this.volumeReservatorioSuperior = volumeReservatorioSuperior;
+	    this.volumePiscina              = volumePiscina;
+	    this.indicadorJardim            = indicadorJardim;
+	    this.idPavimentoCalcada         = idPavimentoCalcada;
+	    this.idPavimentoRua             = idPavimentoRua;
+	    this.idFonteAbastecimento       = idFonteAbastecimento;
+	    this.idPocoTipo                 = idPocoTipo;
+	    this.numeroPontosUtilizacao     = numeroPontosUtilizacao;
+	    this.idLigacaoEsgotoSituacao    = idLigacaoEsgotoSituacao;
+	    this.idImovelPerfil             = idImovelPerfil;
+	    this.idDespejo                  = idDespejo;
+	    this.coordenadaX                = coordenadaX;
+	    this.coordenadaY                = coordenadaY;
+	    this.codigoImovelPrincipal      = codigoImovelPrincipal;
+	    this.numeroIptu                 = numeroIptu;
+	    this.numeroContratoEnergia      = numeroContratoEnergia ;
+	    this.idLocalInstalacaoRamal     = idLocalInstalacaoRamal;
+        this.classeSocial               = classeSocial; 
+        this.quantidadeAnimaisDomesticos = quantidadeAnimaisDomesticos;
+        this.volumeCaixaDagua            = volumeCaixaDagua;
+        this.volumeCisterna              = volumeCisterna;
+        this.tipoUso                     = tipoUso;
+        this.acessoHidrometro            = acessoHidrometro;
+        this.quantidadeEconomiasSocial   = quantidadeEconomiasSocial;
+        this.quantidadeEconomiasOutra    = quantidadeEconomiasOutra;
+        this.percentualAbastecimento     = percentualAbastecimento;
+        this.observacaoCategoria         = observacaoCategoria;
+	}
+	
 	public ImovelAtualizacaoCadastral(Integer idImovel, 
 	        Integer idLocalidade,
 			Integer codigoSetorComercial, 
@@ -1108,5 +1203,13 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	public void setPercentualAbastecimento(Short percentualAbastecimento) {
 		this.percentualAbastecimento = percentualAbastecimento;
+	}
+
+	public String getObservacaoCategoria() {
+		return observacaoCategoria;
+	}
+
+public void setObservacaoCategoria (String observacaoCategoria) {
+	this.observacaoCategoria = observacaoCategoria;
 	}
 }

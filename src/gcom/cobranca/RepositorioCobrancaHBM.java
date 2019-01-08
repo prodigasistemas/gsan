@@ -2616,7 +2616,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "debitoACobrar.numeroPrestacaoDebito, " // 16
 					+ "debitoACobrar.numeroPrestacaoCobradas, " // 17
 					+ "cdi.numeroParcelasAntecipadas, " // 18
-					+ "cdi.id " // 19
+					+ "cdi.id, " // 19
+					+ "debitoACobrar.parcelamento.id " // 20
 					+ "FROM CobrancaDocumentoItem cdi " + "LEFT JOIN cdi.cobrancaDocumento cd " + "LEFT JOIN cd.imovel imovel "
 					+ "LEFT JOIN cd.documentoTipo documentoTipo " + "LEFT JOIN cdi.contaGeral.conta conta "
 					+ "LEFT JOIN cdi.contaGeral.contaHistorico contaHistorico "
@@ -2940,12 +2941,10 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			// alguns pagamentos não estavam guardando o id da guia,
 			// para esses casos recupera o pagamento do imovel correspondente a
 			// entrada de parcelamento
-			consulta = " select pgmt_id as idPagamento " + " from arrecadacao.pagamento " + " where  gpag_id = :idGuiaPagamento "
-					+ " or (imov_id = :idImovel and dbtp_id = :entradaParcelamento )";
+			consulta = " select pgmt_id as idPagamento " + " from arrecadacao.pagamento " + " where  gpag_id = :idGuiaPagamento ";
 
 			retorno = session.createSQLQuery(consulta).addScalar("idPagamento", Hibernate.INTEGER)
-					.setInteger("idGuiaPagamento", new Integer(igGuiaPagamento))
-					.setInteger("entradaParcelamento", DebitoTipo.ENTRADA_PARCELAMENTO).setInteger("idImovel", idImovel).list();
+					.setInteger("idGuiaPagamento", new Integer(igGuiaPagamento)).list();
 
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
@@ -24660,7 +24659,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @throws ErroRepositorioException
 	 * @date 29/03/2011
 	 */
-	public boolean pesquisarDebitoCobradoParcelamento(Integer codigoParcelamento) throws ErroRepositorioException {
+	public boolean parecelamentoPossuiDebitoJaCobrado(Integer codigoParcelamento) throws ErroRepositorioException {
 		boolean retorno = false;
 		Session session = HibernateUtil.getSession();
 
@@ -26607,7 +26606,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 	      retorno = session.createQuery(consulta).setInteger("parcelamentoSituacao", new Integer(parcelamentoSituacao))
 	          .setInteger("normal", DebitoCreditoSituacao.NORMAL)
-	          .setFirstResult(numeroIncial)
+	         // .setFirstResult(numeroIncial)
 	          .setMaxResults(numeroFinal)
 	          .list();
 

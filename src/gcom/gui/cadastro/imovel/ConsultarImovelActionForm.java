@@ -58,6 +58,8 @@ public class ConsultarImovelActionForm extends ValidatorActionForm {
 	private String tipoConstrucaoDadosCadastrais;
 	private String tipoCoberturaDadosCadastrais;
 	private String dataProcessamento;
+	private String observacaoCategoriaDadosCadastrais;
+	
 	
 	private String indicadorNivelInstalacaoEsgotoDadosCadastrais;
 	
@@ -4057,7 +4059,14 @@ public class ConsultarImovelActionForm extends ValidatorActionForm {
 		this.dataProcessamento = dataProcessamento;
 	}
 	
-	
+	public String getObservacaoCategoriaDadosCadastrais() {
+		return observacaoCategoriaDadosCadastrais;
+	}
+
+
+	public void setObservacaoCategoriaDadosCadastrais(String observacaoCategoriaDadosCadastrais) {
+		this.observacaoCategoriaDadosCadastrais = observacaoCategoriaDadosCadastrais;
+	}
 
 
 }

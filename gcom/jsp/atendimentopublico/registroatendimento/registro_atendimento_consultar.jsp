@@ -90,9 +90,6 @@
 	function consultarDebitos() {
 		var form = document.forms[0];
 
-		//form.action = 'consultarDebitoAction.do?codigoImovel='+form.matriculaImovel.value;
-		//form.submit();
-		
 		abrirPopup('consultarDebitoAction.do?ehPopup=true&codigoImovel='+form.matriculaImovel.value, 550, 735);
 	}
 	
@@ -179,6 +176,12 @@
 		form.target = "_new";
 		form.action = "exibirConsultarRegistroAtendimentoAction.do?visualizar=" + identificacao;
 	
+		form.submit();
+	}
+
+	function imprimirFIC(){
+		var form = document.forms[0];
+		form.action = 'imprimirFichaFiscalizacaoCadastralAction.do?numeroRA='+form.numeroRAPesquisado.value;
 		form.submit();
 	}
 	
@@ -2111,6 +2114,14 @@
 						                  		class="bottonRightCol" 
 												value="Imprimir Via Cliente" 
 												onClick="javascript:imprimir(true);" >
+										
+											<logic:equal name="permiteImprimirFIC" value="true" scope="session">		
+												<input name="ButtonImprimirFIC"  
+													type="button" 
+													class="bottonRightCol" 
+													value="Imprimir FIC"
+	                            					onclick="javascript:imprimirFIC();">
+                            				</logic:equal>
 										</td>
 					              	</tr>
 					              	

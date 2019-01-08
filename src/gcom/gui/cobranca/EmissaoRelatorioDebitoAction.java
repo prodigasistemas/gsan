@@ -397,7 +397,7 @@ public class EmissaoRelatorioDebitoAction extends GcomAction {
 			retorno = new Object[6];
 			colecaoContas = new ArrayList();
 			
-			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoConta");
+			Collection colecaoContasSessao = (Collection) sessao.getAttribute("colecaoContaExtrato");
 			Iterator itColecaoContasSessao = colecaoContasSessao.iterator();
 			ContaValoresHelper contaValoresHelper = null;
 			

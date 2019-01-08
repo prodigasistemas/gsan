@@ -6,42 +6,23 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class TabelaColuna extends ObjetoGcom {
 	private static final long serialVersionUID = 1L;
 
 	public static final int DATA_VENCIMENTO_CONTA = 419;
 
-	/** identifier field */
 	private Integer id;
-
-	/** nullable persistent field */
 	private String coluna;
-
-	/** nullable persistent field */
 	private String descricaoColuna;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
-
-	/** nullable persistent field */
 	private Short indicadorPrimaryKey = new Short((short) 2);
-
-	/** nullable persistent field */
 	private String nomeAbreviado;
-
-	/** persistent field */
 	private gcom.seguranca.transacao.Tabela tabela;
-
 	private Integer indicadorPodeRetificarConta;
-
 	private Short indicadorAtualizacaoCadastral;
 
-	// Constantes
-	// Nome do campo + tabela correspondente
 	public final static Integer CPF_CNPJ_CLIENTE_ATU_CADASTRAL = 23829;
 
-	// public final static Integer CNPJ_CLIENTE_ATU_CADASTRAL = 275;
 	public final static Integer NOME_CLIENTE_ATU_CADASTRAL = 23820;
 
 	public final static Integer PROFISSAO_CLIENTE_ATU_CADASTRAL = 23827;
@@ -103,8 +84,10 @@ public class TabelaColuna extends ObjetoGcom {
 	public static final String NOME_COLUNA_AGUA = "last_id";
 	
 	public static final String NOME_COLUNA_NUMERO_HUDROMETRO = "imac_nnhidrometro";
+	
+	public static final String NOME_COLUNA_ID_SUBCATEGORIA = "isac_qteconomia";
+	
 
-	/** full constructor */
 	public TabelaColuna(String coluna, String descricaoColuna,
 			Date ultimaAlteracao, gcom.seguranca.transacao.Tabela tabela,
 			Short indicadorPrimaryKey, String nomeAbreviado) {
@@ -116,7 +99,6 @@ public class TabelaColuna extends ObjetoGcom {
 		this.nomeAbreviado = nomeAbreviado;
 	}
 
-	/** default constructor */
 	public TabelaColuna() {
 	}
 

@@ -6,33 +6,28 @@ import gcom.util.Util;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class TabelaLinhaColunaAlteracao implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
+	
+	private Integer id;
 
-    /** nullable persistent field */
-    private String conteudoColunaAnterior;
+	private String conteudoColunaAnterior;
 
-    /** nullable persistent field */
-    private String conteudoColunaAtual;
+	private String conteudoColunaAtual;
 
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
+	private Date ultimaAlteracao;
 
-    /** persistent field */
-    private gcom.seguranca.transacao.TabelaColuna tabelaColuna;
+	private gcom.seguranca.transacao.TabelaColuna tabelaColuna;
 
-    /** persistent field */
-    private gcom.seguranca.transacao.TabelaLinhaAlteracao tabelaLinhaAlteracao;
-    
-    private short indicadorAtualizada;
+	private gcom.seguranca.transacao.TabelaLinhaAlteracao tabelaLinhaAlteracao;
 
-    public short getIndicadorAtualizada() {
+	private short indicadorAtualizada;
+
+	public short getIndicadorAtualizada() {
 		return indicadorAtualizada;
 	}
 
@@ -40,74 +35,65 @@ public class TabelaLinhaColunaAlteracao implements Serializable {
 		this.indicadorAtualizada = indicadorAtualizada;
 	}
 
-	/** full constructor */
-    public TabelaLinhaColunaAlteracao(String conteudoColunaAnterior, String conteudoColunaAtual, Date ultimaAlteracao, gcom.seguranca.transacao.TabelaColuna tabelaColuna, gcom.seguranca.transacao.TabelaLinhaAlteracao tabelaLinhaAlteracao) {
-        this.conteudoColunaAnterior = conteudoColunaAnterior;
-        this.conteudoColunaAtual = conteudoColunaAtual;
-        this.ultimaAlteracao = ultimaAlteracao;
-        this.tabelaColuna = tabelaColuna;
-        this.tabelaLinhaAlteracao = tabelaLinhaAlteracao;
-    }
+	public TabelaLinhaColunaAlteracao(String conteudoColunaAnterior, String conteudoColunaAtual, Date ultimaAlteracao, gcom.seguranca.transacao.TabelaColuna tabelaColuna,
+			gcom.seguranca.transacao.TabelaLinhaAlteracao tabelaLinhaAlteracao) {
+		this.conteudoColunaAnterior = conteudoColunaAnterior;
+		this.conteudoColunaAtual = conteudoColunaAtual;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.tabelaColuna = tabelaColuna;
+		this.tabelaLinhaAlteracao = tabelaLinhaAlteracao;
+	}
 
-    /** default constructor */
-    public TabelaLinhaColunaAlteracao() {
-    }
+	public TabelaLinhaColunaAlteracao() {
+	}
 
-    /** minimal constructor */
-    public TabelaLinhaColunaAlteracao(gcom.seguranca.transacao.TabelaColuna tabelaColuna, gcom.seguranca.transacao.TabelaLinhaAlteracao tabelaLinhaAlteracao) {
-        this.tabelaColuna = tabelaColuna;
-        this.tabelaLinhaAlteracao = tabelaLinhaAlteracao;
-    }
+	public TabelaLinhaColunaAlteracao(gcom.seguranca.transacao.TabelaColuna tabelaColuna, gcom.seguranca.transacao.TabelaLinhaAlteracao tabelaLinhaAlteracao) {
+		this.tabelaColuna = tabelaColuna;
+		this.tabelaLinhaAlteracao = tabelaLinhaAlteracao;
+	}
 
-    public Integer getId() {
-        return this.id;
-    }
+	public Integer getId() {
+		return this.id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getConteudoColunaAnterior() {
-        return this.conteudoColunaAnterior;
-    }
+	public String getConteudoColunaAnterior() {
+		return this.conteudoColunaAnterior;
+	}
 
-    /**
-     * Recebe um object e converte para string aplicando a formatação adequada 
-     * @param conteudoColunaAnterior
-     */
-    public void setConteudoColunaAnterior(Object conteudoColunaAnterior) {
-        this.conteudoColunaAnterior = formatarConteudo(conteudoColunaAnterior);
-    }
-    
-    /**
-     * Este método determina como será a formatação dos conteudos exibidos
-     * no registrar transação.  Para cada tipo, é definido uma formatação.
-     * @param conteudo
-     * @return
-     */
-    private String formatarConteudo(Object conteudo){
-    	String retorno = "";
-    	if (conteudo != null){
-    		retorno = conteudo.toString();
-    		if (conteudo instanceof Date){
-    			retorno = Util.formatarDataComHora((Date)conteudo);
-    		} else if (conteudo instanceof Short && tabelaColuna != null 
-    				&& tabelaColuna.getColuna() != null 
-    				&& tabelaColuna.getColuna().indexOf("_ic") != -1){
-    			if (ConstantesSistema.INDICADOR_USO_ATIVO.equals(conteudo)){
-    				retorno = "Sim";
-    			} else {
-    				retorno = "Nao";
-    			}
-    		} else if (conteudo instanceof Integer){
-    			Integer conteudoInt = (Integer) conteudo;
-    			if (tabelaColuna != null 
-    				&& tabelaColuna.getColuna() != null){
-    				if (tabelaColuna.getColuna().indexOf("_am") != -1){
-    					retorno = Util.formatarAnoMesParaMesAno(conteudoInt);
-    				} else if (tabelaColuna.getColuna().indexOf("psex_id") != -1){
-    					
-    					switch (conteudoInt) {
+	/**
+	 * Recebe um object e converte para string aplicando a formatação adequada
+	 */
+	public void setConteudoColunaAnterior(Object conteudoColunaAnterior) {
+		this.conteudoColunaAnterior = formatarConteudo(conteudoColunaAnterior);
+	}
+
+	/**
+	 * Este método determina como será a formatação dos conteudos exibidos no registrar transação. Para cada tipo, é definido uma formatação.
+	 */
+	private String formatarConteudo(Object conteudo) {
+		String retorno = "";
+		if (conteudo != null) {
+			retorno = conteudo.toString();
+			if (conteudo instanceof Date) {
+				retorno = Util.formatarDataComHora((Date) conteudo);
+			} else if (conteudo instanceof Short && tabelaColuna != null && tabelaColuna.getColuna() != null && tabelaColuna.getColuna().indexOf("_ic") != -1) {
+				if (ConstantesSistema.INDICADOR_USO_ATIVO.equals(conteudo)) {
+					retorno = "Sim";
+				} else {
+					retorno = "Nao";
+				}
+			} else if (conteudo instanceof Integer) {
+				Integer conteudoInt = (Integer) conteudo;
+				if (tabelaColuna != null && tabelaColuna.getColuna() != null) {
+					if (tabelaColuna.getColuna().indexOf("_am") != -1) {
+						retorno = Util.formatarAnoMesParaMesAno(conteudoInt);
+					} else if (tabelaColuna.getColuna().indexOf("psex_id") != -1) {
+
+						switch (conteudoInt) {
 						case 1:
 							retorno = "MASCULINO";
 							break;
@@ -117,64 +103,63 @@ public class TabelaLinhaColunaAlteracao implements Serializable {
 						default:
 							retorno = "INDEFINIDO";
 							break;
-						}    					
-    				}
-    			} 
-    		} else if (conteudo instanceof BigDecimal){
-    			//  Numero do IPTU eh BigDecimal mas nao deve ser formatado com #.###,## 
-    			if (tabelaColuna != null 
-        				&& tabelaColuna.getColuna() != null 
-        				&& (tabelaColuna.getColuna().equals("imec_nniptu")
-        				   || tabelaColuna.getColuna().equals("imov_nniptu"))){
-    				retorno = conteudo + "";
-    			} else {
-    				retorno = Util.formataBigDecimal((BigDecimal) conteudo, 2, true);	
-    			}
-    			
-    		} 
-    		if (retorno != null && retorno.length() > 50) {
-				retorno = retorno.substring(0, 49);
-    		}
-    	}
-		return retorno; 
-    }
+						}
+					}
+				}
+			} else if (conteudo instanceof BigDecimal) {
+				// Numero do IPTU eh BigDecimal mas nao deve ser formatado com #.###,##
+				if (tabelaColuna != null && tabelaColuna.getColuna() != null && (tabelaColuna.getColuna().equals("imec_nniptu") || tabelaColuna.getColuna().equals("imov_nniptu"))) {
+					retorno = conteudo + "";
+				} else {
+					retorno = Util.formataBigDecimal((BigDecimal) conteudo, 2, true);
+				}
+			}
 
-    public String getConteudoColunaAtual() {
-        return this.conteudoColunaAtual;
-    }
+			if (retorno != null && retorno.length() > 50) {
+				if (tabelaColuna != null && tabelaColuna.getColuna() != null) {
+					if (tabelaColuna.getColuna().equals("imac_dsoutrasinformacoes"))
+						retorno = retorno.substring(0, retorno.length());
+					else
+						retorno = retorno.substring(0, 49);
+				}
+			}
+		}
+		return retorno;
+	}
 
-    public void setConteudoColunaAtual(Object conteudoColunaAtual) {
-        this.conteudoColunaAtual = formatarConteudo(conteudoColunaAtual);
-    }
+	public String getConteudoColunaAtual() {
+		return this.conteudoColunaAtual;
+	}
 
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public void setConteudoColunaAtual(Object conteudoColunaAtual) {
+		this.conteudoColunaAtual = formatarConteudo(conteudoColunaAtual);
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
 
-    public gcom.seguranca.transacao.TabelaColuna getTabelaColuna() {
-        return this.tabelaColuna;
-    }
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 
-    public void setTabelaColuna(gcom.seguranca.transacao.TabelaColuna tabelaColuna) {
-        this.tabelaColuna = tabelaColuna;
-    }
+	public gcom.seguranca.transacao.TabelaColuna getTabelaColuna() {
+		return this.tabelaColuna;
+	}
 
-    public gcom.seguranca.transacao.TabelaLinhaAlteracao getTabelaLinhaAlteracao() {
-        return this.tabelaLinhaAlteracao;
-    }
+	public void setTabelaColuna(gcom.seguranca.transacao.TabelaColuna tabelaColuna) {
+		this.tabelaColuna = tabelaColuna;
+	}
 
-    public void setTabelaLinhaAlteracao(gcom.seguranca.transacao.TabelaLinhaAlteracao tabelaLinhaAlteracao) {
-        this.tabelaLinhaAlteracao = tabelaLinhaAlteracao;
-    }
+	public gcom.seguranca.transacao.TabelaLinhaAlteracao getTabelaLinhaAlteracao() {
+		return this.tabelaLinhaAlteracao;
+	}
 
-    public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
-    }
+	public void setTabelaLinhaAlteracao(gcom.seguranca.transacao.TabelaLinhaAlteracao tabelaLinhaAlteracao) {
+		this.tabelaLinhaAlteracao = tabelaLinhaAlteracao;
+	}
 
+	public String toString() {
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
 }

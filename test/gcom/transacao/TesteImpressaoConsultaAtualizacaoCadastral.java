@@ -43,7 +43,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral {
 		lista.add(imovel);
 				
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtro.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtro.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtro.setAlteracaoHidrometro(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtro);
@@ -74,7 +74,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtro.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtro.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtro.setAlteracaoHidrometro(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtro);
@@ -107,7 +107,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtro.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtro.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtro.setAlteracaoSituacaoAgua(true);
 		filtro.setAlteracaoSituacaoEsgoto(true);
 		
@@ -145,7 +145,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtro.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtro.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtro.setAlteracaoSituacaoAgua(true);
 		filtro.setAlteracaoSituacaoEsgoto(true);
 		
@@ -182,7 +182,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtro.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());
+		filtro.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);
 		filtro.setAlteracaoSituacaoAgua(true);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtro);
@@ -214,7 +214,7 @@ public class TesteImpressaoConsultaAtualizacaoCadastral {
 		imovel.addColunaAtualizacao(coluna);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtro.setExibirCampos(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES.toString());		
+		filtro.setSituacaoImoveis(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES);		
 		filtro.setAlteracaoHidrometro(false);
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtro);

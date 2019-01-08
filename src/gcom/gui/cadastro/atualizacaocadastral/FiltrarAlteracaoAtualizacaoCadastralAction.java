@@ -3,9 +3,12 @@ package gcom.gui.cadastro.atualizacaocadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.Localidade;
-import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.micromedicao.Leiturista;
+import gcom.micromedicao.leitura.FiltroLeiturista;
+import gcom.util.Util;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
 import java.util.Collection;
@@ -21,12 +24,10 @@ import org.apache.struts.action.ActionMapping;
 
 public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		Fachada fachada = Fachada.getInstancia();
-
-		ActionForward retorno = actionMapping.findForward("filtrarAlteracaoAtualizacaoCadastral");
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		ActionForward retorno = mapping.findForward("filtrarAlteracaoAtualizacaoCadastral");
 		
-		HttpSession sessao = httpServletRequest.getSession(false);
+		HttpSession sessao = request.getSession(false);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionForm form = (FiltrarAlteracaoAtualizacaoCadastralActionForm) actionForm;
         
@@ -34,49 +35,80 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 			throw new ActionServletException("atencao.filtro.nenhum_parametro_informado");
 		}
 		
-		if(form.getNomeLocalidadeInicial().trim().equalsIgnoreCase("") && !form.getIdLocalidadeInicial().trim().equalsIgnoreCase("")) {
-			form.setNomeLocalidadeInicial(this.pesquisarNomeLocalidade(form.getIdLocalidadeInicial(), fachada));
-		}
-		
-		if(form.getNomeLocalidadeFinal().trim().equalsIgnoreCase("") && !form.getIdLocalidadeFinal().trim().equalsIgnoreCase("")) {
-			form.setNomeLocalidadeFinal(this.pesquisarNomeLocalidade(form.getIdLocalidadeFinal(), fachada));
-		}
+		setForm(form);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper(form);
-		filtro.setNomeLocalidadeFinal(form.getNomeLocalidadeFinal());
 		
-		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> helper = fachada.pesquisarMovimentoAtualizacaoCadastral(filtro);
+		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> helper = getFachada().pesquisarMovimentoAtualizacaoCadastral(filtro);
 		
 		filtro.setTotalImoveis(helper.size());
-//		filtro.setNomeLocalidadeInicial(form.getNomeLocalidadeInicial());
-//		filtro.setNomeLocalidadeFinal(form.getIdLocalidadeFinal());
         
         if( helper.isEmpty()){
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado", "exibirFiltrarAlteracaoAtualizacaoCadastralAction.do", null, new String[] {});
         }
+        
         sessao.setAttribute("colecaoConsultarMovimentoAtualizacaoCadastralHelper",helper);
         sessao.setAttribute("filtroMovimentoAtualizacaoCadastral", filtro);
-        sessao.setAttribute("aprovacaoEmLote", filtro.isAprovacaoEmLote());
+        sessao.setAttribute("aprovacaoEmLote", filtro.paraAprovacaoEmLote());
+        sessao.setAttribute("loteInformado", filtro.loteInformado());
         
         if ((filtro.isAlteracaoHidrometro() != null && filtro.isAlteracaoHidrometro()) 
-        		|| (filtro.isAlteracaoSituacaoAgua() != null && filtro.isAlteracaoSituacaoAgua())
-        		|| (filtro.isAlteracaoSituacaoEsgoto() != null && filtro.isAlteracaoSituacaoEsgoto())
-        		|| (filtro.isAlteracaoCategoria() != null && filtro.isAlteracaoCategoria())) {
+        	|| (filtro.isAlteracaoSituacaoAgua() != null && filtro.isAlteracaoSituacaoAgua())
+        	|| (filtro.isAlteracaoSituacaoEsgoto() != null && filtro.isAlteracaoSituacaoEsgoto())
+        	|| (filtro.isAlteracaoCategoria() != null && filtro.isAlteracaoCategoria())) {
+        	
         	sessao.setAttribute("relatorio", true);
         }
 
 		return retorno;
 	}
+
+	private void setForm(FiltrarAlteracaoAtualizacaoCadastralActionForm form) {
+		form.setNomeLeiturista(this.pesquisarNomeLeiturista(form.getIdLeiturista()));
+		form.setNomeLocalidadeInicial(this.pesquisarNomeLocalidade(form.getIdLocalidadeInicial()));
+		form.setNomeLocalidadeFinal(this.pesquisarNomeLocalidade(form.getIdLocalidadeFinal()));
+	}
 	
-	private String pesquisarNomeLocalidade(String idLocalidade, Fachada fachada) {
-		FiltroLocalidade filtroLocalidade = new FiltroLocalidade(FiltroLocalidade.DESCRICAO);
-		filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, new Integer(idLocalidade)));
-		Collection localidades = fachada.pesquisar(filtroLocalidade, Localidade.class.getName());
-		String nomeLocalidade = "";
-		if (localidades != null && !localidades.isEmpty()) {
-			nomeLocalidade = (((List<Localidade>) localidades).get(0)).getDescricao();
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private String pesquisarNomeLeiturista(String idLeiturista) {
+		if (idLeiturista != null && !idLeiturista.trim().equals("")) {
+			Filtro filtro = new FiltroLeiturista();
+			filtro.adicionarParametro(new ParametroSimples(FiltroLeiturista.ID, idLeiturista));
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.FUNCIONARIO);
+			
+			Collection pesquisa = getFachada().pesquisar(filtro, Leiturista.class.getName());
+			
+			String nome = "";
+			if (pesquisa != null && !pesquisa.isEmpty()) {
+				Leiturista leiturista = (Leiturista) Util.retonarObjetoDeColecao(pesquisa);
+				
+				if (leiturista.getFuncionario() != null) {
+					nome = leiturista.getFuncionario().getNome();
+				}
+			}
+			
+			return nome.trim();
+		} else {
+			return null;
 		}
-		
-		return nomeLocalidade.trim();
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private String pesquisarNomeLocalidade(String idLocalidade) {
+		if(idLocalidade.trim().equalsIgnoreCase("") && !idLocalidade.trim().equalsIgnoreCase("")) {
+			Filtro filtro = new FiltroLocalidade(FiltroLocalidade.DESCRICAO);
+			filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, idLocalidade));
+			
+			Collection pesquisa = getFachada().pesquisar(filtro, Localidade.class.getName());
+			
+			String nomeLocalidade = "";
+			if (pesquisa != null && !pesquisa.isEmpty()) {
+				nomeLocalidade = (((List<Localidade>) pesquisa).get(0)).getDescricao();
+			}
+			
+			return nomeLocalidade.trim();
+		} else {
+			return null;
+		}
 	}
 }

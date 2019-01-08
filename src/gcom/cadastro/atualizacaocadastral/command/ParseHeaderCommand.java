@@ -28,6 +28,8 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 		String idRota = parser.obterDadoParser(4);
 		String versaoCelular = parser.obterDadoParser(10);
 		
+		String tipoRetorno = parser.obterDadoCabecalhoParser(1);
+		
 		ArquivoTextoAtualizacaoCadastral arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
 				localidade + "_" + setor + "_" + rota);
 		
@@ -35,7 +37,10 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 			throw new ArquivoAtualizacaoInexistenteException();
 		}
 		
+		arquivoTexto.setTipoRetorno(tipoRetorno);
+		
 		atualizacao.setArquivoTexto(arquivoTexto);
 		atualizacao.setIdRota(Integer.valueOf(idRota));
 	}
+	
 }

@@ -1,21 +1,10 @@
 package gcom.relatorio.cobranca;
 
+import gcom.relatorio.RelatorioBean;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-import gcom.relatorio.RelatorioBean;
-
-/**
- * Bean responsável de pegar os parametros que serão exibidos na parte de detail
- * do relatório.
- * 
- * @author Rafael Corrêa
- * @created 02/09/2009
- */
-/**
- * @author Administrador
- *
- */
 public class RelatorioNotificacaoDebitoBean implements RelatorioBean {
 
 	private String idImovel;
@@ -81,8 +70,7 @@ public class RelatorioNotificacaoDebitoBean implements RelatorioBean {
 		return representacaoNumericaCodBarraFormatada;
 	}
 
-	public void setRepresentacaoNumericaCodBarraFormatada(
-			String representacaoNumericaCodBarraFormatada) {
+	public void setRepresentacaoNumericaCodBarraFormatada(String representacaoNumericaCodBarraFormatada) {
 		this.representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarraFormatada;
 	}
 
@@ -90,8 +78,7 @@ public class RelatorioNotificacaoDebitoBean implements RelatorioBean {
 		return representacaoNumericaCodBarraSemDigito;
 	}
 
-	public void setRepresentacaoNumericaCodBarraSemDigito(
-			String representacaoNumericaCodBarraSemDigito) {
+	public void setRepresentacaoNumericaCodBarraSemDigito(String representacaoNumericaCodBarraSemDigito) {
 		this.representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarraSemDigito;
 	}
 
@@ -155,8 +142,7 @@ public class RelatorioNotificacaoDebitoBean implements RelatorioBean {
 		return ruaComplementoCorrespondencia;
 	}
 
-	public void setRuaComplementoCorrespondencia(
-			String ruaComplementoCorrespondencia) {
+	public void setRuaComplementoCorrespondencia(String ruaComplementoCorrespondencia) {
 		this.ruaComplementoCorrespondencia = ruaComplementoCorrespondencia;
 	}
 
@@ -183,7 +169,4 @@ public class RelatorioNotificacaoDebitoBean implements RelatorioBean {
 	public void setCepCorrespondencia(String cepCorrespondencia) {
 		this.cepCorrespondencia = cepCorrespondencia;
 	}
-
-	
-	
 }

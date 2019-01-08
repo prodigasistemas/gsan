@@ -48,8 +48,9 @@ public class RepositorioSegurancaHBM implements IRepositorioSeguranca {
 		try {
 			String consulta = " SELECT tabelaColuna "
 					+ " FROM TabelaColunaAtualizacaoCadastral tabelaColuna "
-					+ " INNER JOIN tabelaColuna.tabelaAtualizacaoCadastral tabela "
-					+ " WHERE tabela.id = :idTabelaAtualizacaoCadastral ";
+					+ " INNER JOIN fetch tabelaColuna.tabelaAtualizacaoCadastral tabelaAtualizacao "
+					+ " INNER JOIN fetch tabelaAtualizacao.tabela tabela "
+					+ " WHERE tabelaAtualizacao.id = :idTabelaAtualizacaoCadastral ";
 			return (List<TabelaColunaAtualizacaoCadastral>) session.createQuery(consulta)
 					.setInteger("idTabelaAtualizacaoCadastral", idTabelaAtualizacaoCadastral).list();
 		}catch(HibernateException e) {
@@ -89,7 +90,7 @@ public class RepositorioSegurancaHBM implements IRepositorioSeguranca {
 
 			return (Integer) (session.createSQLQuery(sql.toString())
 									.addScalar("usuarioLogado", Hibernate.INTEGER)
-									.setInteger("idImovel", idImovel).uniqueResult());
+									.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult());
 		}catch(HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

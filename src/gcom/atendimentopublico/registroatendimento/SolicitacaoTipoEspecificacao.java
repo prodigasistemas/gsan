@@ -20,6 +20,8 @@ public class SolicitacaoTipoEspecificacao extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
 	
+	public static Integer MUDANCA_TITULARIDADE_CONTA = 993;
+	
     /** identifier field */
     private Integer id;
 

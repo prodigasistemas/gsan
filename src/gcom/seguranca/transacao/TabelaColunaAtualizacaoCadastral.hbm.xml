@@ -14,8 +14,12 @@
 			</generator>
 		</id>
 		<property name="colunaValorAnterior" type="java.lang.String" column="tcac_cnvaloranterior" length="100"/>
-		<property name="colunaValorAtual" type="java.lang.String" column="tcac_cnvaloratual" length="100"/>
+		<property name="colunaValorTransmitido" type="java.lang.String" column="tcac_cnvalortransmitido" length="100"/>
+		<property name="colunaValorRevisado" type="java.lang.String" column="tcac_cnvalorrevisado" length="100"/>
+		<property name="colunaValorFiscalizado" type="java.lang.String" column="tcac_cnvalorfiscalizado" length="100"/>
+		<property name="colunaValorPreAprovado" type="java.lang.String" column="tcac_cnvalorpreaprovado" length="100"/>
 		<property name="indicadorAutorizado" type="java.lang.Short" column="tcac_icautorizado" length="2"/>
+		<property name="indicadorFiscalizado" type="java.lang.Short" column="tcac_icfiscalizado" length="2"/>
 		<property name="dataValidacao" type="java.sql.Timestamp" column="tcac_dtvalidacao" length="4"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tcac_ultimaatualizacao" length="8"/>
 		<!-- Associations -->

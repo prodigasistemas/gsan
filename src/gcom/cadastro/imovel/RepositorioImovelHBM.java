@@ -30828,26 +30828,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		return colecaoRamoAtividadeImovel;
 	}
 	
-	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException {
-		Session session = HibernateUtil.getSession();
-		try {
-
-			String consulta = "SELECT icac "
-					+ "FROM ImovelControleAtualizacaoCadastral icac "
-					+ "LEFT JOIN FETCH icac.imovel imovel "
-					+ "LEFT JOIN FETCH icac.situacaoAtualizacaoCadastral situacao "
-					+ "LEFT JOIN FETCH icac.cadastroOcorrencia cadastroOcorrencia "
-					+ "WHERE icac.imovel.id = :idImovel ";
-
-			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
-					.setInteger("idImovel", idImovel).uniqueResult();
-		}catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao pesquisar controle de atualizacao cadastral");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-	}
-	
 	public Collection<Integer> pesquisarIdImoveisAprovados() throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try {

@@ -9,7 +9,11 @@ public class ColunaAtualizacaoCadastral implements Serializable{
 	
 	private String valorAnterior;
 
-	private String valorAtual;
+	private String valorTransmitido;
+	
+	private String valorRevisado;
+	
+	private String valorFiscalizado;
 	
 	private String complemento;
 	
@@ -29,12 +33,28 @@ public class ColunaAtualizacaoCadastral implements Serializable{
 		this.valorAnterior = valorColuna;
 	}
 	
-	public String getValorAtual() {
-		return valorAtual;
+	public String getValorTransmitido() {
+		return valorTransmitido;
 	}
 
-	public void setValorAtual(String valorAtual) {
-		this.valorAtual = valorAtual;
+	public void setValorTransmitido(String valorTransmitido) {
+		this.valorTransmitido = valorTransmitido;
+	}
+
+	public String getValorRevisado() {
+		return valorRevisado;
+	}
+
+	public void setValorRevisado(String valorRevisado) {
+		this.valorRevisado = valorRevisado;
+	}
+
+	public String getValorFiscalizado() {
+		return valorFiscalizado;
+	}
+
+	public void setValorFiscalizado(String valorFiscalizado) {
+		this.valorFiscalizado = valorFiscalizado;
 	}
 
 	public String getComplemento() {

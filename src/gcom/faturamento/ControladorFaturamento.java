@@ -20,8 +20,10 @@ import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.FiltroCategoria;
 import gcom.cadastro.imovel.FiltroImovel;
+import gcom.cadastro.imovel.FiltroImovelCobrancaSituacao;
 import gcom.cadastro.imovel.FiltroImovelDoacao;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.ImovelCobrancaSituacao;
 import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.ImovelDoacao;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
@@ -73,6 +75,8 @@ import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.ContaImpressao;
 import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMotivoInclusao;
+import gcom.faturamento.conta.ContaMotivoRetificacao;
+import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.ContaTipo;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FiltroConta;
@@ -15786,6 +15790,37 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	public Object[] pesquisarParmsContaMensagem(EmitirContaHelper helper, Integer idGrupo, Integer idGerencia, Integer idLocalidade, Integer idSetor) throws ControladorException {
 		try {
 			return repositorioFaturamento.pesquisarParmsContaMensagem(helper, idGrupo, idGerencia, idLocalidade, idSetor);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	public boolean isAlgumaContaEmProcessoJudicial (Integer idImovel, Date data) throws ControladorException {
+		try {
+			FiltroConta filtro = new FiltroConta();
+			filtro.adicionarParametro(new ParametroSimples(FiltroConta.IMOVEL_ID, idImovel));
+			filtro.adicionarParametro(new ParametroNaoNulo(FiltroConta.DATA_REVISAO));
+			filtro.adicionarParametro(new ParametroSimples(FiltroConta.CONTA_MOTIVO_REVISAO_ID, ContaMotivoRevisao.EM_COBRANCA_JUDICIAL));
+			
+	
+			Collection<Conta> contas = getControladorUtil().pesquisar(filtro, Conta.class.getName());
+			
+			if (contas != null && !contas.isEmpty()) {
+				for (Conta conta : contas) {
+					if (conta.getDataEmissao().after(data))
+						return true;
+				}
+			}
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.pesquisar.conta.cobranca.judicial", e);
+		}
+		
+		return false;
+	}
+	
+	public List<IClienteConta> pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(Integer idImovel, Date dataEmissao) throws ControladorException {
+		try {
+			return repositorioFaturamento.pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(idImovel, dataEmissao);
 		} catch (Exception e) {
 			throw new ControladorException("erro.sistema", e);
 		}

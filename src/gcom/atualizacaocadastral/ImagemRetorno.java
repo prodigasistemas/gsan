@@ -25,6 +25,8 @@ public class ImagemRetorno extends ObjetoTransacao {
 	private String pathImagem;
 	
     private Date ultimaAlteracao;
+    
+    private Short indicadorImagemAtualizada;
 	
 	public Integer getId() {
 		return id;
@@ -72,6 +74,14 @@ public class ImagemRetorno extends ObjetoTransacao {
 
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
+	}
+
+	public Short getIndicadorImagemAtualizada() {
+		return indicadorImagemAtualizada;
+	}
+
+	public void setIndicadorImagemAtualizada(Short indicadorImagemAtualizada) {
+		this.indicadorImagemAtualizada = indicadorImagemAtualizada;
 	}
 
 	@Override

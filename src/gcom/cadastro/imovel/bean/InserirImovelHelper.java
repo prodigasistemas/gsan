@@ -9,43 +9,44 @@ import gcom.seguranca.acesso.usuario.Usuario;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 
-/**
- * Esta classe tem a finalidade de encapsular as informações necessárias para inserir um imóvel
- * 
- * @author Raphael Rossiter
- * @date 19/08/2008
- */
 public class InserirImovelHelper implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private Imovel imovel;
-	
+
 	private Collection<ImovelSubcategoria> subcategorias;
-	
+
 	private Collection<ImovelRamoAtividade> ramosAtividades;
-	
+
+	@SuppressWarnings("rawtypes")
 	private Collection endereco;
-	
+
 	private Collection<ClienteImovel> clientes;
-	
+
 	private Usuario usuario;
-	
+
 	private LigacaoEsgotoEsgotamento ligacaoEsgotoEsgotamento;
-	
+
+	private Date dataInicioRelacaoUsuario;
+
 	private Collection<ClienteImovel> colecaoClientesImoveisRemovidos;
-	
+
+	@SuppressWarnings("rawtypes")
 	private Collection colecaoImovelSubcategoriasRemovidas;
-	
+
+	@SuppressWarnings("rawtypes")
 	private Collection colecaoRamoAtividadesRemovidas;
-	
-	public InserirImovelHelper(){}
-	
-	public InserirImovelHelper(Imovel imovel, Collection subcategorias, Collection ramosAtividades, Collection endereco,
-			Collection clientes, LigacaoEsgotoEsgotamento ligacaoEsgotoEsgotamento, 
-			Usuario usuario){
-		
+
+	public InserirImovelHelper() {
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public InserirImovelHelper(Imovel imovel, Collection subcategorias, Collection ramosAtividades, Collection endereco, Collection clientes,
+			LigacaoEsgotoEsgotamento ligacaoEsgotoEsgotamento, Usuario usuario) {
+
 		this.ramosAtividades = ramosAtividades;
 		this.imovel = imovel;
 		this.subcategorias = subcategorias;
@@ -53,9 +54,8 @@ public class InserirImovelHelper implements Serializable {
 		this.clientes = clientes;
 		this.ligacaoEsgotoEsgotamento = ligacaoEsgotoEsgotamento;
 		this.usuario = usuario;
-	
+
 	}
-	
 
 	public Collection<ClienteImovel> getClientes() {
 		return clientes;
@@ -65,10 +65,12 @@ public class InserirImovelHelper implements Serializable {
 		this.clientes = clientes;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection getEndereco() {
 		return endereco;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setEndereco(Collection endereco) {
 		this.endereco = endereco;
 	}
@@ -85,9 +87,16 @@ public class InserirImovelHelper implements Serializable {
 		return ligacaoEsgotoEsgotamento;
 	}
 
-	public void setLigacaoEsgotoEsgotamento(
-			LigacaoEsgotoEsgotamento ligacaoEsgotoEsgotamento) {
+	public void setLigacaoEsgotoEsgotamento(LigacaoEsgotoEsgotamento ligacaoEsgotoEsgotamento) {
 		this.ligacaoEsgotoEsgotamento = ligacaoEsgotoEsgotamento;
+	}
+
+	public Date getDataInicioRelacaoUsuario() {
+		return dataInicioRelacaoUsuario;
+	}
+
+	public void setDataInicioRelacaoUsuario(Date dataInicioRelacaoUsuario) {
+		this.dataInicioRelacaoUsuario = dataInicioRelacaoUsuario;
 	}
 
 	public Collection<ImovelSubcategoria> getSubcategorias() {
@@ -114,12 +123,13 @@ public class InserirImovelHelper implements Serializable {
 		this.colecaoClientesImoveisRemovidos = colecaoClientesImoveisRemovidos;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection getColecaoImovelSubcategoriasRemovidas() {
 		return colecaoImovelSubcategoriasRemovidas;
 	}
 
-	public void setColecaoImovelSubcategoriasRemovidas(
-			Collection colecaoImovelSubcategoriasRemovidas) {
+	@SuppressWarnings("rawtypes")
+	public void setColecaoImovelSubcategoriasRemovidas(Collection colecaoImovelSubcategoriasRemovidas) {
 		this.colecaoImovelSubcategoriasRemovidas = colecaoImovelSubcategoriasRemovidas;
 	}
 
@@ -131,21 +141,14 @@ public class InserirImovelHelper implements Serializable {
 		this.ramosAtividades = ramosAtividades;
 	}
 
-	/**
-	 * @return Returns the colecaoRamoAtividadesRemovidas.
-	 */
+	@SuppressWarnings("rawtypes")
 	public Collection getColecaoRamoAtividadesRemovidas() {
 		return colecaoRamoAtividadesRemovidas;
 	}
 
-	/**
-	 * @param colecaoRamoAtividadesRemovidas The colecaoRamoAtividadesRemovidas to set.
-	 */
-	public void setColecaoRamoAtividadesRemovidas(
-			Collection colecaoRamoAtividadesRemovidas) {
+	@SuppressWarnings("rawtypes")
+	public void setColecaoRamoAtividadesRemovidas(Collection colecaoRamoAtividadesRemovidas) {
 		this.colecaoRamoAtividadesRemovidas = colecaoRamoAtividadesRemovidas;
 	}
 
-	
-	
 }

@@ -51,7 +51,7 @@ public class TesteCargaAlteracoesArquivo {
 			.append(";")
 			.append(helper.getColunaValorAnterior())
 			.append(";")
-			.append(helper.getColunaValorAtual());
+			.append(helper.getColunaValorTransmitido());
 			
 		assertEquals("last_id;LIGADO;LIGADO", campo.toString());
 	}
@@ -67,7 +67,7 @@ public class TesteCargaAlteracoesArquivo {
 		
 		DadosTabelaAtualizacaoCadastralHelper item = new DadosTabelaAtualizacaoCadastralHelper();
 		item.setColunaValorAnterior("LIGADO");
-		item.setColunaValorAtual("DESLIGADO");
+		//item.setColunaValorAtual("DESLIGADO");
 		item.setNomeColuna("last_id");
 		lista.add(item);
 		
@@ -78,7 +78,7 @@ public class TesteCargaAlteracoesArquivo {
 			.append(";")
 			.append(helper.getColunaValorAnterior())
 			.append(";")
-			.append(helper.getColunaValorAtual());
+			.append(helper.getColunaValorTransmitido());
 		
 		assertEquals("last_id;LIGADO;DESLIGADO", campo.toString());
 	}
@@ -96,7 +96,7 @@ public class TesteCargaAlteracoesArquivo {
 		
 		DadosTabelaAtualizacaoCadastralHelper item = new DadosTabelaAtualizacaoCadastralHelper();
 		item.setColunaValorAnterior("LIGADO");
-		item.setColunaValorAtual("DESLIGADO");
+		//item.setColunaValorAtual("DESLIGADO");
 		item.setNomeColuna("lest_id");
 		lista.add(item);
 		
@@ -108,7 +108,7 @@ public class TesteCargaAlteracoesArquivo {
 			.append(";")
 			.append(dado.getColunaValorAnterior())
 			.append(";")
-			.append(dado.getColunaValorAtual())
+			.append(dado.getColunaValorTransmitido())
 			.append("]");
 		}
 		
@@ -134,7 +134,7 @@ public class TesteCargaAlteracoesArquivo {
 			.append(";")
 			.append(dado.getColunaValorAnterior())
 			.append(";")
-			.append(dado.getColunaValorAtual())
+			.append(dado.getColunaValorTransmitido())
 			.append("]");
 		}
 		
@@ -159,7 +159,7 @@ public class TesteCargaAlteracoesArquivo {
 			.append(";")
 			.append(dado.getColunaValorAnterior())
 			.append(";")
-			.append(dado.getColunaValorAtual())
+			.append(dado.getColunaValorTransmitido())
 			.append("]");
 		}
 		
@@ -177,7 +177,7 @@ public class TesteCargaAlteracoesArquivo {
 		
 		DadosTabelaAtualizacaoCadastralHelper item = new DadosTabelaAtualizacaoCadastralHelper();
 		item.setColunaValorAnterior("4");
-		item.setColunaValorAtual("2");
+		//item.setColunaValorAtual("2");
 		item.setComplemento("RESIDENCIAL - R2");		
 		item.setNomeColuna("isac_qteconomia");
 		lista.add(item);
@@ -190,7 +190,7 @@ public class TesteCargaAlteracoesArquivo {
 			.append(";")
 			.append(dado.getColunaValorAnterior())
 			.append(";")
-			.append(dado.getColunaValorAtual())
+			.append(dado.getColunaValorTransmitido())
 			.append("]");
 		}
 		
@@ -208,7 +208,7 @@ public class TesteCargaAlteracoesArquivo {
 		
 		DadosTabelaAtualizacaoCadastralHelper item = new DadosTabelaAtualizacaoCadastralHelper();
 		item.setColunaValorAnterior("4");
-		item.setColunaValorAtual("2");
+		//item.setColunaValorAtual("2");
 		item.setComplemento("RESIDENCIAL - R1");
 		item.setNomeColuna("isac_qteconomia");
 		lista.add(item);
@@ -221,7 +221,7 @@ public class TesteCargaAlteracoesArquivo {
 			.append(";")
 			.append(dado.getColunaValorAnterior())
 			.append(";")
-			.append(dado.getColunaValorAtual())
+			.append(dado.getColunaValorTransmitido())
 			.append(";")
 			.append(dado.getComplemento())
 			.append("]");
@@ -240,7 +240,7 @@ public class TesteCargaAlteracoesArquivo {
 		
 		DadosTabelaAtualizacaoCadastralHelper item = new DadosTabelaAtualizacaoCadastralHelper();
 		item.setColunaValorAnterior("4");
-		item.setColunaValorAtual("2");
+		//item.setColunaValorAtual("2");
 		item.setComplemento("RESIDENCIAL - R1");
 		item.setNomeColuna("isac_qteconomia");
 		lista.add(item);
@@ -253,7 +253,7 @@ public class TesteCargaAlteracoesArquivo {
 			.append(";")
 			.append(dado.getColunaValorAnterior())
 			.append(";")
-			.append(dado.getColunaValorAtual())
+			.append(dado.getColunaValorTransmitido())
 			.append(";")
 			.append(dado.getComplemento())
 			.append("]");
@@ -272,14 +272,14 @@ public class TesteCargaAlteracoesArquivo {
 		
 		DadosTabelaAtualizacaoCadastralHelper item = new DadosTabelaAtualizacaoCadastralHelper();
 		item.setColunaValorAnterior("4");
-		item.setColunaValorAtual("2");
+		//item.setColunaValorAtual("2");
 		item.setComplemento("RESIDENCIAL - R1");
 		item.setNomeColuna("isac_qteconomia");
 		lista.add(item);
 
 		item = new DadosTabelaAtualizacaoCadastralHelper();
 		item.setColunaValorAnterior("4");
-		item.setColunaValorAtual("2");
+		//item.setColunaValorAtual("2");
 		item.setComplemento("RESIDENCIAL - R2");
 		item.setNomeColuna("isac_qteconomia");
 		lista.add(item);
@@ -292,7 +292,7 @@ public class TesteCargaAlteracoesArquivo {
 			.append(";")
 			.append(dado.getColunaValorAnterior())
 			.append(";")
-			.append(dado.getColunaValorAtual())
+			.append(dado.getColunaValorTransmitido())
 			.append(";")
 			.append(dado.getComplemento())
 			.append("]");
@@ -311,7 +311,7 @@ public class TesteCargaAlteracoesArquivo {
 		
 		DadosTabelaAtualizacaoCadastralHelper item = new DadosTabelaAtualizacaoCadastralHelper();
 		item.setColunaValorAnterior("NOME");
-		item.setColunaValorAtual("SOBRENOME");
+		//item.setColunaValorAtual("SOBRENOME");
 		item.setNomeColuna("nome");
 		lista.add(item);
 		
@@ -323,7 +323,7 @@ public class TesteCargaAlteracoesArquivo {
 			.append(";")
 			.append(helper.getColunaValorAnterior())
 			.append(";")
-			.append(helper.getColunaValorAtual())
+			.append(helper.getColunaValorTransmitido())
 			.append("]");
 		}
 

@@ -49,6 +49,9 @@
     <td><strong><a href="${sessionScope.urlPortal}">Portal Gsan</a></strong><br></td>
   </tr>
   <tr>
+    <td><strong><a href="/gsan/treinamentos.do">Treinamentos</a></strong><br></td>
+  </tr>
+  <tr>
     <td><strong><a href="/gsan/exibirInformarMelhoriasGcomAction.do">Entre em Contato</a></strong><br></td>
   </tr>
   <tr>

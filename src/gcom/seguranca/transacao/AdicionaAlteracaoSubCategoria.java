@@ -16,7 +16,7 @@ public class AdicionaAlteracaoSubCategoria extends RelatorioConsultaAtualizacaoC
 			for (ColunaAtualizacaoCadastral coluna : imovel.getColunasAtualizacao()) {
 				if (coluna.getNomeColuna().contains(TabelaColuna.NOME_COLUNA_ECONOMIAS)){
 					AlteracaoImovelRelatorioAtualizacaoCadastral alteracao = 
-							new AlteracaoImovelRelatorioAtualizacaoCadastral("Quantidade de economias - " + coluna.getComplemento(), coluna.getValorAnterior(), coluna.getValorAtual());
+							new AlteracaoImovelRelatorioAtualizacaoCadastral("Quantidade de economias - " + coluna.getComplemento(), coluna.getValorAnterior(), coluna.getValorTransmitido());
 					relatorio.addAlteracao(alteracao);
 				}
 			}

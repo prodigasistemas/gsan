@@ -1,7 +1,6 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -10,10 +9,12 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	private String idEmpresa;
 
 	private String idLeiturista;
+	
+	private String periodoInicial;
+	
+	private String periodoFinal;
 
-	private String exibirCampos;
-
-	private String[] colunaImoveisSelecionados;
+	private int situacaoImoveis;
 
 	private String idLocalidadeInicial;
 
@@ -41,7 +42,21 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	private int totalImoveis;
 
-	private String ocorrenciaCadastro;
+	private int ocorrenciaCadastro;
+	
+	private int ocorrenciaCadastroSelecionada;
+	
+	private String lote;
+	
+	private String matricula;
+	
+	private int quantidadeVisitas;
+	
+	private short cpfCnpjCadastrado;
+	
+	private short cpfCnpjTransmitido;
+	
+	private Integer idImovelRetorno;
 	
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper() {
 	}
@@ -49,8 +64,9 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper(FiltrarAlteracaoAtualizacaoCadastralActionForm form) {
 		this.idEmpresa = form.getIdEmpresa();
 		this.idLeiturista = form.getIdLeiturista();
-		this.exibirCampos = form.getExibirCampos();
-		this.colunaImoveisSelecionados = form.getColunaImoveisSelecionados();
+		this.periodoInicial = form.getPeriodoInicial();
+		this.periodoFinal = form.getPeriodoFinal();
+		this.situacaoImoveis = Integer.valueOf(form.getSituacaoImoveis());
 		this.idLocalidadeInicial = form.getIdLocalidadeInicial();
 		this.nomeLocalidadeInicial = form.getNomeLocalidadeInicial();
 		this.nomeLocalidadeFinal = form.getNomeLocalidadeFinal();
@@ -60,18 +76,26 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.cdSetorComercialFinal = form.getCdSetorComercialFinal();
 		this.cdRotaFinal = form.getCdRotaFinal();
 
-		this.alteracaoHidrometro = consisteAlteracao(form.getAlteracaoHidrometro(), this.exibirCampos);
-		this.alteracaoSituacaoAgua = consisteAlteracao(form.getAlteracaoSituacaoAgua(), this.exibirCampos);
-		this.alteracaoSituacaoEsgoto = consisteAlteracao(form.getAlteracaoSituacaoEsgoto(), this.exibirCampos);
-		this.alteracaoCategoria = consisteAlteracao(form.getAlteracaoCategoria(), this.exibirCampos);
+		this.alteracaoHidrometro = consisteAlteracao(form.getAlteracaoHidrometro());
+		this.alteracaoSituacaoAgua = consisteAlteracao(form.getAlteracaoSituacaoAgua());
+		this.alteracaoSituacaoEsgoto = consisteAlteracao(form.getAlteracaoSituacaoEsgoto());
+		this.alteracaoCategoria = consisteAlteracao(form.getAlteracaoCategoria());
 		
-		this.ocorrenciaCadastro = form.getOcorrenciaCadastro();
+		this.ocorrenciaCadastro = Integer.valueOf(form.getOcorrenciaCadastro());
+		this.ocorrenciaCadastroSelecionada = form.getOcorrenciaCadastroSelecionada() != null ? Integer.valueOf(form.getOcorrenciaCadastroSelecionada()) : 0;
+		
+		this.lote = form.getLote();
+		this.matricula = form.getMatricula();
+		this.quantidadeVisitas = Integer.valueOf(form.getQuantidadeVisitas());
+		
+		this.cpfCnpjCadastrado = Short.valueOf(form.getCpfCnpjCadastrado());
+		this.cpfCnpjTransmitido = Short.valueOf(form.getCpfCnpjTransmitido());
 	}
 
-	private Boolean consisteAlteracao(String campo, String exibirCampos) {
+	private Boolean consisteAlteracao(String campo) {
 		Boolean aplicaFiltro = null;
 
-		if (exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString())) {
+		if (this.situacaoImoveis == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PARA_APROVACAO_EM_LOTE) {
 			aplicaFiltro = true;
 		} else if (StringUtils.isNotEmpty(campo)) {
 			Integer altera = Integer.parseInt(campo);
@@ -89,127 +113,72 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		return idEmpresa;
 	}
 
-	public void setIdEmpresa(String idEmpresa) {
-		this.idEmpresa = idEmpresa;
-	}
-
 	public String getIdLeiturista() {
 		return idLeiturista;
 	}
 
-	public void setIdLeiturista(String idLeiturista) {
-		this.idLeiturista = idLeiturista;
+	public String getPeriodoInicial() {
+		return periodoInicial;
 	}
 
-	public String getExibirCampos() {
-		return exibirCampos;
+	public String getPeriodoFinal() {
+		return periodoFinal;
 	}
 
-	public void setExibirCampos(String exibirCampos) {
-		this.exibirCampos = exibirCampos;
+	public int getSituacaoImoveis() {
+		return situacaoImoveis;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Collection getColunaImoveisSelecionados() {
-		if (colunaImoveisSelecionados != null && colunaImoveisSelecionados.length > 0) {
-			Collection colecaoColunaImoveisSelecionados = new ArrayList();
-
-			for (int i = 0; i < colunaImoveisSelecionados.length; i++) {
-				colecaoColunaImoveisSelecionados.add(colunaImoveisSelecionados[i]);
-			}
-
-			return colecaoColunaImoveisSelecionados;
-		} else {
-			return null;
-		}
-	}
-
-	public void setColunaImoveisSelecionados(String[] colunaImoveisSelecionados) {
-		this.colunaImoveisSelecionados = colunaImoveisSelecionados;
+	public void setSituacaoImoveis(int situacaoImoveis) {
+		this.situacaoImoveis = situacaoImoveis;
 	}
 
 	public String getIdLocalidadeInicial() {
 		return idLocalidadeInicial;
 	}
 
-	public void setIdLocalidadeInicial(String idLocalidadeInicial) {
-		this.idLocalidadeInicial = idLocalidadeInicial;
-	}
-
 	public String getCdSetorComercialInicial() {
 		return cdSetorComercialInicial;
-	}
-
-	public void setCdSetorComercialInicial(String cdSetorComercialInicial) {
-		this.cdSetorComercialInicial = cdSetorComercialInicial;
 	}
 
 	public String getCdRotaInicial() {
 		return cdRotaInicial;
 	}
 
-	public void setCdRotaInicial(String cdRotaInicial) {
-		this.cdRotaInicial = cdRotaInicial;
-	}
-
 	public String getIdLocalidadeFinal() {
 		return idLocalidadeFinal;
-	}
-
-	public void setIdLocalidadeFinal(String idLocalidadeFinal) {
-		this.idLocalidadeFinal = idLocalidadeFinal;
 	}
 
 	public String getCdSetorComercialFinal() {
 		return cdSetorComercialFinal;
 	}
 
-	public void setCdSetorComercialFinal(String cdSetorComercialFinal) {
-		this.cdSetorComercialFinal = cdSetorComercialFinal;
-	}
-
 	public String getCdRotaFinal() {
 		return cdRotaFinal;
-	}
-
-	public void setCdRotaFinal(String cdRotaFinal) {
-		this.cdRotaFinal = cdRotaFinal;
 	}
 
 	public Boolean isAlteracaoHidrometro() {
 		return alteracaoHidrometro;
 	}
 
-	public void setAlteracaoHidrometro(Boolean alteracaoHidrometro) {
-		this.alteracaoHidrometro = alteracaoHidrometro;
-	}
-
 	public Boolean isAlteracaoSituacaoAgua() {
 		return alteracaoSituacaoAgua;
-	}
-
-	public void setAlteracaoSituacaoAgua(Boolean alteracaoSituacaoAgua) {
-		this.alteracaoSituacaoAgua = alteracaoSituacaoAgua;
 	}
 
 	public Boolean isAlteracaoSituacaoEsgoto() {
 		return alteracaoSituacaoEsgoto;
 	}
 
-	public void setAlteracaoSituacaoEsgoto(Boolean alteracaoSituacaoEsgoto) {
-		this.alteracaoSituacaoEsgoto = alteracaoSituacaoEsgoto;
-	}
-
 	public Boolean isAlteracaoCategoria() {
 		return alteracaoCategoria;
 	}
 
-	public void setAlteracaoCategoria(Boolean alteracaoCategoria) {
-		this.alteracaoCategoria = alteracaoCategoria;
+	public boolean paraAprovacaoEmLote() {
+		return this.situacaoImoveis == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PARA_APROVACAO_EM_LOTE ? true : false;
 	}
-
-	public boolean isAprovacaoEmLote() {
-		return this.exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString()) ? true : false;
+	
+	public boolean loteInformado() {
+		return this.lote != null && !this.lote.trim().equals("") && Integer.parseInt(this.lote.trim()) > 0 && permiteAprovarLote();
 	}
 
 	public int getTotalImoveis() {
@@ -224,23 +193,66 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		return nomeLocalidadeInicial;
 	}
 
-	public void setNomeLocalidadeInicial(String nomeLocalidadeInicial) {
-		this.nomeLocalidadeInicial = nomeLocalidadeInicial;
-	}
-
 	public String getNomeLocalidadeFinal() {
 		return nomeLocalidadeFinal;
 	}
 
-	public void setNomeLocalidadeFinal(String nomeLocalidadeFinal) {
-		this.nomeLocalidadeFinal = nomeLocalidadeFinal;
-	}
-
-	public String getOcorrenciaCadastro() {
+	public int getOcorrenciaCadastro() {
 		return ocorrenciaCadastro;
 	}
 
-	public void setOcorrenciaCadastro(String ocorrenciaCadastro) {
-		this.ocorrenciaCadastro = ocorrenciaCadastro;
+	public int getOcorrenciaCadastroSelecionada() {
+		return ocorrenciaCadastroSelecionada;
+	}
+
+	public String getLote() {
+		return lote;
+	}
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+	public int getQuantidadeVisitas() {
+		return quantidadeVisitas;
+	}
+
+	public short getCpfCnpjCadastrado() {
+		return cpfCnpjCadastrado;
+	}
+
+	public short getCpfCnpjTransmitido() {
+		return cpfCnpjTransmitido;
+	}
+
+	public void setAlteracaoHidrometro(Boolean alteracaoHidrometro) {
+		this.alteracaoHidrometro = alteracaoHidrometro;
+	}
+
+	public void setAlteracaoSituacaoAgua(Boolean alteracaoSituacaoAgua) {
+		this.alteracaoSituacaoAgua = alteracaoSituacaoAgua;
+	}
+
+	public void setAlteracaoSituacaoEsgoto(Boolean alteracaoSituacaoEsgoto) {
+		this.alteracaoSituacaoEsgoto = alteracaoSituacaoEsgoto;
+	}
+
+	public void setAlteracaoCategoria(Boolean alteracaoCategoria) {
+		this.alteracaoCategoria = alteracaoCategoria;
+	}
+	
+	public Integer getIdImovelRetorno() {
+		return idImovelRetorno;
+	}
+
+	public void setIdImovelRetorno(Integer idImovelRetorno) {
+		this.idImovelRetorno = idImovelRetorno;
+	}
+
+	private boolean permiteAprovarLote() {
+		return this.situacaoImoveis == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_PENDENTES ||
+			   this.situacaoImoveis == SituacaoAtualizacaoCadastral.PRE_APROVADO ||
+			   this.situacaoImoveis == SituacaoAtualizacaoCadastral.EM_FISCALIZACAO ||
+			   this.situacaoImoveis == SituacaoAtualizacaoCadastral.FISCALIZADO;
 	}
 }

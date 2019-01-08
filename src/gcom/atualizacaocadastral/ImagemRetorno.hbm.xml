@@ -18,5 +18,6 @@
 		<property name="nomeImagem" type="java.lang.String" column="imgr_nomeimagem" not-null="true" length="50" />
 		<property name="pathImagem" type="java.lang.String" column="imgr_pathimagem" not-null="true" length="255" />
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imgr_tmultimaalteracao" not-null="true" length="8" />
+		<property name="indicadorImagemAtualizada" type="java.lang.Short" column="imgr_icimagematualizada" length="2" not-null="true"/>
 	</class>
 </hibernate-mapping>

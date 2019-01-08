@@ -8,25 +8,20 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class HidrometroProtecao extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
+
+	public final static Integer SMA_PISO = new Integer (6);
+	public final static Integer SMA_PAREDE = new Integer (7);
+	public final static Integer SMA_INTERNO = new Integer (8);
+	public final static Integer OUTROS = new Integer (9);
+	
     private Integer id;
-
-    /** persistent field */
     private String descricao;
-
-    /** persistent field */
     private String descricaoAbreviada;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
 
-    /** full constructor */
     public HidrometroProtecao(String descricao, String descricaoAbreviada,
             Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;

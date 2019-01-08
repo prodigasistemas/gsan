@@ -728,8 +728,6 @@ public interface IRepositorioImovel {
 
 	public Collection<ImovelRamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel) throws ErroRepositorioException;
 
-	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
-
 	public Collection<Integer> pesquisarIdImoveisAprovados() throws ErroRepositorioException;
 
 	public LogradouroTipo pesquisarTipoLogradouro(Integer idTipoLogradouro) throws ErroRepositorioException;

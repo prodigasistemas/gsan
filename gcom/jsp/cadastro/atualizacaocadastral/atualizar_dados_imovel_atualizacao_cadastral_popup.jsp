@@ -25,7 +25,7 @@
 <script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
 
 <script language="JavaScript">
-	function confirma() {    
+	function aprovarTransmitidos() {    
 		var form = document.forms[0];
 		var valoresNao = "";
 		var valoresSim = "";
@@ -47,6 +47,33 @@
 		
 			form.idRegistrosAutorizados.value = valoresSim;
 			form.idRegistrosNaoAutorizados.value = valoresNao;
+	
+			form.submit();
+		}
+	}
+
+	function aprovarFiscalizados() {    
+		var form = document.forms[0];
+		var valoresNao = "";
+		var valoresSim = "";
+		// Varre os checkbox que estao desmarcados.
+		for (var i = 0;i < document.forms[0].elements.length; i++){
+			var elemento = document.forms[0].elements[i];
+			if (elemento.type == "checkbox" && elemento.name == "chkRegistrosFiscalizacao"){
+				if (elemento.checked == false) {
+					valoresNao += (valoresNao != "" ? "," : "") + elemento.value;
+				} else {
+					valoresSim += (valoresSim != "" ? "," : "") + elemento.value;
+				}
+			}
+		}
+		
+		if(valoresNao == "" && valoresSim == ""){
+			alert('Informe um registro para atualização.');
+		}else{
+		
+			form.idRegistrosFiscalizados.value = valoresSim;
+			form.idRegistrosNaoFiscalizados.value = valoresNao;
 	
 			form.submit();
 		}
@@ -91,6 +118,9 @@
 	<html:hidden property="idRegistrosNaoAutorizados" />
 	<html:hidden property="idRegistrosAutorizados" />
 
+	<html:hidden property="idRegistrosNaoFiscalizados" />
+	<html:hidden property="idRegistrosFiscalizados" />
+	
 	<table width="1000" border="0" cellpadding="0" cellspacing="5">
 		<tr>
       <td width="160" valign="top" class="leftcoltext">
@@ -174,7 +204,7 @@
 					<td align="left"><html:text property="situacao" readonly="true" size="20" styleClass="texto-exibicao" /></td>
 				</tr>
 				
-				<logic:equal name="fiscalizado" value="false" scope="session">
+				<logic:equal name="exibirBotaoFiscalizar" value="true" scope="session">
 					<logic:notEqual name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" property="descricaoImovel" value="NOVO">
 						<tr>
 							<td>&nbsp;</td>
@@ -243,7 +273,10 @@
 											<td width="150"><strong>Tabela</strong></td>
 											<td width="150"><strong>Campo</strong></td>
     										<td width="200" align="center"><strong>Anterior</strong></td>
-    										<td width="200" align="center"><strong>Atual</strong></td>
+    										<td width="200" align="center"><strong>Pré-Aprovado</strong></td>
+    										<logic:equal name="emFiscalizacao" value="true" scope="session">
+	    										<td width="200" align="center"><strong>Fiscalizado</strong></td>
+    										</logic:equal>
 											<td width="200" align="center" ><strong>Data/Hora Valida&ccedil;&atilde;o</strong></td>
 											<td width="100" align="center"><strong>Usu&aacute;rio</strong></td>
 											<td width="50"><strong><a href="javascript:facilitador(this);">Todos</a></strong></td>
@@ -279,8 +312,14 @@
     											<bean:write name="item" property="colunaValorAnterior" />
     										</td>
     										<td width="200">
-    											<bean:write name="item" property="colunaValorAtual" />
+   													<bean:write name="item" property="valorAtualizarRetorno" />
     										</td>
+    										<logic:equal name="emFiscalizacao" value="true" scope="session">
+	    										<td width="200">
+	    											<bean:write name="item" property="colunaValorFiscalizado" />
+	    										</td>
+    										</logic:equal>
+    										
     										<td width="200">
     											<bean:write name="item" property="dataValidacao" />
     										</td>
@@ -290,11 +329,20 @@
     										<td width="50">
     										<div align="center">
                                                   <logic:equal name="item" property="habilitaAlteracao" value="true">
+                                                  <logic:equal name="item" property="informativo" value="false">
                                                   	<logic:equal name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" property="temPermissaoAprovarImovel" value="true">
-		    											<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" 
-		    											value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) item).getIdTabelaColunaAtualizacaoCadastral()%>" />
+                                                  		<logic:equal name="emFiscalizacao" value="false" scope="session">
+			    											<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" 
+			    											value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) item).getIdTabelaColunaAtualizacaoCadastral()%>" />
+                                                  		</logic:equal>
+
+                                                  		<logic:equal name="emFiscalizacao" value="true" scope="session">
+                                                  			<input type="checkbox" name="chkRegistrosFiscalizacao" id="chkRegistrosFiscalizacao" 
+			    											value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) item).getIdTabelaColunaAtualizacaoCadastral()%>" />
+                                                  		</logic:equal>
                                                   	</logic:equal>
-    										  </logic:equal>
+    										  	  </logic:equal>
+    										  	  </logic:equal>
     										</div>
     										</td>
     									</tr>
@@ -312,7 +360,13 @@
 					<td height="24">
 					<div align="right"><input type="hidden" name="testeInserir"> 
 					<logic:equal name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" property="temPermissaoAprovarImovel" value="true">
-						<input name="Button" type="button" class="bottonRightCol" value="Aprovar" onClick="confirma();"  >
+						<logic:equal name="exibirBotaoConcluirFiscalizacao" value="true" scope="session">
+								<input name="Button" type="button" class="bottonRightCol" value="Concluir Fiscalização" onClick="aprovarFiscalizados();"  >
+						</logic:equal>
+						
+						<logic:equal name="emFiscalizacao" value="false" scope="session">
+							<input name="Button" type="button" class="bottonRightCol" value="Aprovar" onClick="aprovarTransmitidos();"  >
+						</logic:equal>
 					</logic:equal>
 					
 					<input name="Button2" type="button" class="bottonRightCol"

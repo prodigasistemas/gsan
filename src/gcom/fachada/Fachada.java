@@ -150,6 +150,7 @@ import gcom.atendimentopublico.registroatendimento.bean.VerificarRAFaltaAguaHelp
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.ProcessoIniciado;
@@ -545,6 +546,7 @@ import gcom.relatorio.cadastro.micromedicao.RelatorioImoveisComLeiturasQuantitat
 import gcom.relatorio.cadastro.micromedicao.RelatorioImoveisComLeiturasRelacaoBean;
 import gcom.relatorio.cadastro.micromedicao.RelatorioImoveisComLeiturasTipo7Bean;
 import gcom.relatorio.cadastro.micromedicao.RelatorioResumoLigacoesCapacidadeHidrometroHelper;
+import gcom.relatorio.cobranca.AvisoCorteDTO;
 import gcom.relatorio.cobranca.FiltrarRelatorioBoletimMedicaoCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAcompanhamentoAcoesCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAnalisePerdasCreditosBean;
@@ -28165,9 +28167,9 @@ public class Fachada {
 		}
 	}
 
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao) {
+	public List<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) {
 		try {
-			return this.getControladorCadastro().pesquisarArquivoTextoAtualizacaoCadastro(idEmpresa, idLocalidade, codigoSetorComercial, idAgenteComercial, idSituacaoTransmissao);
+			return this.getControladorCadastro().pesquisarArquivoTextoAtualizacaoCadastro(idEmpresa, idLocalidade, codigoSetorComercial, idAgenteComercial, idSituacaoTransmissao, exibicao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -28617,9 +28619,9 @@ public class Fachada {
 		return this.getControladorTransacao().consultarDadosTabelaColunaAtualizacaoCadastral(idRegistroAlterado, idArquivo, idImovel, idCliente, idTipoAlteracao);
 	}
 
-	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral, Short indicador, Usuario usuarioLogado) {
+	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral, Short indicador, Usuario usuarioLogado, String campo) {
 		try {
-			this.getControladorTransacao().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idImovel, idsAtualizacaoCadastral, indicador, usuarioLogado);
+			this.getControladorTransacao().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idImovel, idsAtualizacaoCadastral, indicador, usuarioLogado, campo);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -39806,14 +39808,14 @@ public class Fachada {
 		return this.getControladorCadastro().retornaIpServidorRelatorios();
 	}
 
-	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) {
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) {
 		try {
-			return this.getControladorImovel().pesquisarImovelControleAtualizacaoCadastral(idImovel);
+			return this.getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(idImovel);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
-
+	
 	public void fiscalizarImovel(Integer idImovel) {
 		try {
 			this.getControladorAtualizacaoCadastral().fiscalizarImovel(idImovel);
@@ -39823,22 +39825,14 @@ public class Fachada {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) {
+	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis, boolean dadosOriginais) {
 		try {
-			return this.getControladorAtualizacaoCadastral().pesquisarDadosFichaFiscalizacaoCadastral(listaIdImoveis);
+			return this.getControladorAtualizacaoCadastral().pesquisarDadosFichaFiscalizacaoCadastral(listaIdImoveis, dadosOriginais);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
-
-	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) {
-		try {
-			return this.getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(idImovel);
-		} catch (ControladorException e) {
-			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
-		}
-	}
-
+	
 	public void validarImovelEmCampo(Integer idImovel) {
 		try {
 			this.getControladorMicromedicao().validarImovelEmCampo(idImovel);
@@ -40168,6 +40162,174 @@ public class Fachada {
 			return getControladorImovel().obterContratoAdesao(idImovel);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public void encerrarRA(Integer idImovel, Usuario usuario) {
+		try {
+			getControladorRetificarConta().encerrarRA(idImovel, usuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public List<AvisoCorteDTO> gerarAvisoCorteEnderecoAlternativo(Integer idAcaoCronograma, Integer idAcaoComando) {
+		try {
+			return getControladorCobranca().gerarAvisoCorteEnderecoAlternativo(idAcaoCronograma, idAcaoComando);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosRevisaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao) {
+		try {
+			return getControladorAtualizacaoCadastral().gerarArquivosRevisaoAtualizacaoCadastral(idsArquivos, percentualFiscalizacao);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosFiscalizacaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao, Integer lote) {
+		try {
+			return getControladorAtualizacaoCadastral().gerarArquivosFiscalizacaoAtualizacaoCadastral(idsArquivos, percentualFiscalizacao, lote);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo, Date dataUltimaTransmissao) {
+		try {
+			return getControladorAtualizacaoCadastral().regerarArquivosAtualizacaoCadastral(idsArquivos, tipoArquivo, dataUltimaTransmissao);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public void atualizarSituacaoImovelControle(Integer idImovelControle, Integer idNovaSituacao) {
+		try {
+			getControladorAtualizacaoCadastral().atualizarSituacaoImovelControle(idImovelControle, idNovaSituacao);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public boolean possuiInformacoesFiscalizacao(ImovelControleAtualizacaoCadastral imovelControle) {
+		try {
+			return getControladorAtualizacaoCadastral().possuiInformacoesFiscalizacao(imovelControle);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public void inserirImagemRetorno(Integer matricula, String nomeImagem, String pasta, Integer idImovelRetorno) throws Exception {
+		try {
+			getControladorAtualizacaoCadastral().inserirImagemRetorno(matricula, nomeImagem, pasta, idImovelRetorno);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Integer obterIdImovelRetorno(Integer idImovel) throws Exception {
+		try {
+			return getControladorAtualizacaoCadastral().obterIdImovelRetorno(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+  
+	public void apagarImagemRetorno(Integer idImovel) {
+		try {
+			getControladorAtualizacaoCadastral().apagarImagemRetorno(idImovel);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(String idLocalidade, String codigoSetor, String dataInicio, String dataFim, String idLeiturista, boolean incluirImoveisNovos) {
+        try {
+            return getControladorAtualizacaoCadastral().obterIdsImovelControleGeracaoLote(new Integer(idLocalidade), new Integer(codigoSetor), dataInicio, dataFim, new Integer(idLeiturista), incluirImoveisNovos);
+        } catch (Exception ex) {
+            throw new FachadaException(ex.getMessage(), ex);
+        }
+    }
+
+	public void gerarLote(List<ImovelControleAtualizacaoCadastral> imoveisControle, String lote)  {
+        try {
+            getControladorAtualizacaoCadastral().gerarLote(imoveisControle, new Integer(lote));
+        } catch (Exception ex) {
+            throw new FachadaException(ex.getMessage(), ex);
+        }
+    }
+	
+	public Integer obterProximoLote() {
+		try {
+            return getControladorAtualizacaoCadastral().obterProximoLote();
+        } catch (Exception ex) {
+            throw new FachadaException(ex.getMessage(), ex);
+        }
+	}
+	
+	public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados) {
+		try {
+			return getControladorAtualizacaoCadastral().isDefinicaoSubcategoriaValida(idImovel, registrosSelecionados);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Integer reprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) {
+		try {
+			return this.getControladorAtualizacaoCadastral().reprovarImoveisEmLote(usuarioLogado, listaImoveis);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public boolean isImovelEmCobrancaJudicial(Integer idImovel) {
+		try {
+			return this.getControladorCobranca().isImovelEmCobrancaJudicial(idImovel);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public boolean isContaImovelEmCobrancaJudicial(Integer idImovel, Date data) {
+		try {
+			return this.getControladorFaturamento().isAlgumaContaEmProcessoJudicial(idImovel, data);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public boolean existeRAAbertaPorSoliticacao(Integer idImovel, Integer idSolicitacao) {
+		try {
+			return this.getControladorRegistroAtendimento().existeRAAbertaPorSoliticacao(idImovel, idSolicitacao);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public boolean isDataMudancaTitularidaRetroativaPermitida(Integer idImovel, Date data) {
+		try {
+			return getControladorImovel().isDataMudancaTitularidaRetroativaPermitida(idImovel, data);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public boolean isImovelNegativado(Integer idImovel) {
+		try {
+			return getControladorSpcSerasa().isImovelNegativado(idImovel);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public ImovelRetorno pesquisarImovelRetornoPorIdRetorno(Integer idImovelRetorno) {
+		try {
+			return getControladorAtualizacaoCadastral().pesquisarImovelRetornoPorIdRetorno(idImovelRetorno);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
 		}
 	}
 }

@@ -9169,5 +9169,36 @@ public class RepositorioRegistroAtendimentoHBM implements
 		return retorno;
     }
 	
-	
+    public boolean existeRAAbertaPorSoliticacao(Integer idImovel, Integer idSolicitacao) throws ErroRepositorioException {
+
+		boolean retorno = false;
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append(" SELECT COUNT(*) FROM RegistroAtendimento rgat ")
+					.append(" INNER JOIN rgat.imovel imov ")
+					.append(" INNER JOIN rgat.solicitacaoTipoEspecificacao solicitacao ")
+					.append(" WHERE imov.id = :idImovel ")
+					.append(" AND solicitacao.id = :idSolicitacao ")
+					.append(" AND rgat.dataEncerramento is null ");
+
+			Integer qtd = (Integer) session.createQuery(consulta.toString())
+							.setInteger("idImovel", idImovel)
+							.setInteger("idSolicitacao", idSolicitacao)
+							.setMaxResults(1).uniqueResult();
+
+			if (qtd != null && qtd.intValue() > 0)
+				retorno =  true;
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }

@@ -1786,7 +1786,7 @@ public interface IRepositorioCobranca {
 	 */
 	public Integer pesquisarCobrancaSituacao(Integer codigoConstante) throws ErroRepositorioException;
 
-	public boolean pesquisarDebitoCobradoParcelamento(Integer codigoParcelamento) throws ErroRepositorioException;
+	public boolean parecelamentoPossuiDebitoJaCobrado(Integer codigoParcelamento) throws ErroRepositorioException;
 
 	/**
 	 * [UC1140] Cancelar Contrato de Parcelamento por Cliente

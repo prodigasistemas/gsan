@@ -30,6 +30,7 @@ import gcom.cadastro.sistemaparametro.SistemaAlteracaoHistorico;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cadastro.sistemaparametro.bean.DadosEnvioEmailHelper;
 import gcom.cadastro.tarifasocial.TarifaSocialComandoCarta;
+import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.cobranca.CobrancaAcao;
 import gcom.cobranca.CobrancaAcaoAtividadeComando;
 import gcom.cobranca.CobrancaAcaoAtividadeCronograma;
@@ -274,8 +275,7 @@ public interface IControladorCadastro {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarLocalidades() throws ControladorException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao) throws ControladorException;
+	public List<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade, String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) throws ControladorException;
 
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
 			Integer idArquivoTxt) throws ControladorException;
@@ -513,4 +513,8 @@ public interface IControladorCadastro {
 	public Object[] pesquisarQtdeDebitosPreteritos(Integer idImovel) throws Exception;
 	
 	public boolean verificarExistenciaEmpresa(Integer idEmpresa) throws ControladorException;
+	
+	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto, String tipoArquivo) throws ControladorException;
+
+	public UnidadeOrganizacional obterUnidadePorLocalidade(Integer idImovel) throws ControladorException;
 }

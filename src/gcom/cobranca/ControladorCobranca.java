@@ -283,6 +283,8 @@ import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.RelatorioDataSource;
+import gcom.relatorio.cobranca.AvisoCorteContaDTO;
+import gcom.relatorio.cobranca.AvisoCorteDTO;
 import gcom.relatorio.cobranca.CurvaAbcDebitosHelper;
 import gcom.relatorio.cobranca.FiltrarRelatorioBoletimMedicaoCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAcompanhamentoAcoesCobrancaHelper;
@@ -3881,7 +3883,6 @@ public class ControladorCobranca extends ControladorComum {
 		Collection contas = null;
 		Short indicadorAcrescimosCliente = null;
 
-		logger.info("[" + idImovel + "] indicadorDebito: " + indicadorDebito);
 		if (indicadorDebito == 1) {
 			// contas do imovel
 			try {
@@ -3892,7 +3893,6 @@ public class ControladorCobranca extends ControladorComum {
 						anoMesFinalVencimentoDebito, indicadorDividaAtiva, false);
 				
 				indicadorAcrescimosCliente = this.obterIndicadorAcrescimosClienteResponsavel(idImovel);
-				logger.info("[" + idImovel + "] indicadorAcrescimosCliente: " + indicadorAcrescimosCliente);
 			} catch (ErroRepositorioException ex) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("erro.sistema", ex);
@@ -3908,7 +3908,6 @@ public class ControladorCobranca extends ControladorComum {
 						anoMesFinalVencimentoDebito, indicadorDividaAtiva);
 
 				indicadorAcrescimosCliente = this.obterIndicadorAcrescimosCliente(idCliente);
-				logger.info("[" + idImovel + "] indicadorAcrescimosCliente: " + indicadorAcrescimosCliente);
 			} catch (ErroRepositorioException ex) {
 				throw new ControladorException("erro.sistema", ex);
 			}
@@ -3925,7 +3924,6 @@ public class ControladorCobranca extends ControladorComum {
 					if (idCliente != null) {
 
 						indicadorAcrescimosCliente = this.obterIndicadorAcrescimosCliente(idCliente);
-						logger.info("[" + idImovel + "] indicadorAcrescimosCliente: " + indicadorAcrescimosCliente);
 					}
 				}
 			} catch (ErroRepositorioException ex) {
@@ -3944,7 +3942,6 @@ public class ControladorCobranca extends ControladorComum {
 							anoMesFinalVencimentoDebito, indicadorDividaAtiva);
 
 					indicadorAcrescimosCliente = this.obterIndicadorAcrescimosCliente(idCliente);
-					logger.info("[" + idImovel + "] indicadorAcrescimosCliente: " + indicadorAcrescimosCliente);
 				}
 			} catch (ErroRepositorioException ex) {
 				sessionContext.setRollbackOnly();
@@ -4119,7 +4116,6 @@ public class ControladorCobranca extends ControladorComum {
 
 				if (categoriaPrincipal.getIndicadorCobrancaAcrescimos().equals(ConstantesSistema.NAO)) {
 					indicadorCobrancaAcrescimos = false;
-					logger.info("[" + idImovel + "] 1 - indicadorCobrancaAcrescimos: " + indicadorCobrancaAcrescimos);
 				}
 
 				/**
@@ -4143,11 +4139,8 @@ public class ControladorCobranca extends ControladorComum {
 				if (indicadorAcrescimosClienteResponsavel != null && indicadorAcrescimosClienteResponsavel.equals(ConstantesSistema.NAO)) {
 
 					indicadorCobrancaAcrescimos = false;
-					logger.info("[" + idImovel + "] 2 - indicadorCobrancaAcrescimos: " + indicadorCobrancaAcrescimos);
 				}
 
-				logger.info("[" + idImovel + "] indicadorCalcularAcrescimoImpontualidade: " + indicadorCalcularAcrescimoImpontualidade);
-				
 				// Calcular o Acrescimo por Impontualidade
 				if (indicadorCalcularAcrescimoImpontualidade == 1 && indicadorCobrancaAcrescimos) {
 
@@ -4165,8 +4158,6 @@ public class ControladorCobranca extends ControladorComum {
 							conta.getIndicadorCobrancaMulta(), anoMesArrecadacao, conta.getId(),
 							ConstantesSistema.INDICADOR_ARRECADACAO_DESATIVO);
 
-					logger.info("[" + idImovel + "] calcularAcrescimoPorImpontualidade != null ?? " + (calcularAcrescimoPorImpontualidade != null));
-					
 					// set os Valores
 					if (calcularAcrescimoPorImpontualidade != null) {
 
@@ -6339,7 +6330,7 @@ public class ControladorCobranca extends ControladorComum {
 	 */
 	public void removerDebitoACobrarDoParcelamento(Integer codigoImovel, Integer codigoParcelamento) throws ControladorException {
 		try {
-			if (repositorioCobranca.pesquisarDebitoCobradoParcelamento(codigoParcelamento)) {
+			if (repositorioCobranca.parecelamentoPossuiDebitoJaCobrado(codigoParcelamento)) {
 				throw new ControladorException("atencao.parcelamento_ja_cobrado_em_conta");
 			}
 			repositorioCobranca.removerDebitoACobrarDoParcelamento(codigoImovel, codigoParcelamento);
@@ -6364,7 +6355,7 @@ public class ControladorCobranca extends ControladorComum {
 	public void removerDebitoACobrarCategoriaDoParcelamento(Integer codigoParcelamento, Integer idDebito) throws ControladorException {
 		try {
 
-			if (repositorioCobranca.pesquisarDebitoCobradoParcelamento(codigoParcelamento)) {
+			if (repositorioCobranca.parecelamentoPossuiDebitoJaCobrado(codigoParcelamento)) {
 				throw new ControladorException("atencao.parcelamento_ja_cobrado_em_conta");
 			}
 
@@ -24252,18 +24243,11 @@ public class ControladorCobranca extends ControladorComum {
 					colecaoDebitosACobrar,
 					valorAcrescimosImpontualidade,
 					valorDesconto,
-					null, // anoMesReferenciaDebito
-					// é
-					// nulo
-					// para o parcelamento
+					null, // anoMesReferenciaDebito é nulo para o parcelamento
 					documentoEmissaoForma,
 					documentoTipo,
-					null, // cobrancaAcaoAtividadeComando
-					// é nulo
-					// para o
-					// parcelamento
-					null, // cobrancaAcaoAtividadeCronograma é nulo para o
-					// parcelamento
+					null, // cobrancaAcaoAtividadeComando é nulo para o parcelamento
+					null, // cobrancaAcaoAtividadeCronograma é nulo para o parcelamento
 					null, // Empresa é nulo para o parcelamento
 					null, // CobrancaCriterio é nulo para o parcelamento
 					null, // CobrancaAcao é nulo para o parcelamento
@@ -32972,7 +32956,7 @@ public class ControladorCobranca extends ControladorComum {
 
 		return retorno;
 	}
-
+	
 	/**
 	 * [UC0394] - Gerar Débitos a Cobrar de Doações
 	 * 
@@ -38143,7 +38127,9 @@ public class ControladorCobranca extends ControladorComum {
 				debitoCreditoParcelamentoHelper = new DebitoCreditoParcelamentoHelper();
 
 				debitoCreditoParcelamentoHelper = apresentarDebitoCreditoImovelExtratoDebito(parcelamento);
-				colecaoDebitoCreditoParcelamentoHelper.add(debitoCreditoParcelamentoHelper);
+				
+				if (!debitoCreditoParcelamentoHelper.getValorTotal().equals(BigDecimal.ZERO))
+					colecaoDebitoCreditoParcelamentoHelper.add(debitoCreditoParcelamentoHelper);
 			}
 
 			imovelDebitoCredito.setColecaoDebitoCreditoParcelamentoHelper(colecaoDebitoCreditoParcelamentoHelper);
@@ -61828,17 +61814,13 @@ public class ControladorCobranca extends ControladorComum {
 
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
 
-		// cria uma coleção de parcelamentos de débitos efetuados no mês
-		// corrente
-		Collection parcelamentosMes = null;
-		// cria uma coleção de guias de pagamento correspondente a entrada do
-		// parcelamento
+		// cria uma coleção de parcelamentos de débitos efetuados no mês corrente
+		Collection parcelamentos = null;
+		// cria uma coleção de guias de pagamento correspondente a entrada do parcelamento
 		Collection guiaPagamento = null;
-		// cria uma coleção de pagamentos para a guia de pagamento
-		// correspondente a entrada do parcelamento
+		// cria uma coleção de pagamentos para a guia de pagamento correspondente a entrada do parcelamento
 		Collection pagamento = null;
-		// cria uma coleção de pagamentos para a guia de pagamento
-		// correspondente a entrada do parcelamento
+		// cria uma coleção de pagamentos para a guia de pagamento correspondente a entrada do parcelamento
 		Collection pagamentoConta = null;
 
 		try {
@@ -61854,33 +61836,23 @@ public class ControladorCobranca extends ControladorComum {
 			boolean flagTerminou = false;
 
 			while (!flagTerminou) {
-				// recupera todos os parcelamentos no mes atual e que esteja com
-				// a
-				// situacao normal
-				parcelamentosMes = repositorioCobranca.pesquisarParcelamentosSituacaoNormal(ParcelamentoSituacao.NORMAL.toString(), numeroInicial, 500);
+				parcelamentos = repositorioCobranca.pesquisarParcelamentosSituacaoNormal(ParcelamentoSituacao.NORMAL.toString(), numeroInicial, 500);
 
-				if (parcelamentosMes.size() < 500) {
+				if (parcelamentos.size() < 500) {
 					flagTerminou = true;
 				}
 
-				if (!Util.isVazioOrNulo(parcelamentosMes)) {
+				if (!Util.isVazioOrNulo(parcelamentos)) {
 
-					Iterator parcelamentosMesIterator = parcelamentosMes.iterator();
+					Iterator parcelamentosMesIterator = parcelamentos.iterator();
 
 					while (parcelamentosMesIterator.hasNext()) {
 
-						// Obtém os dados do crédito realizado
 						Object[] dadosParcelamento = (Object[]) parcelamentosMesIterator.next();
-						Integer numeroParcelamentosMes = (Integer) dadosParcelamento[0];
+						Integer idParcelamento = (Integer) dadosParcelamento[0];
 						Integer idImovel = (Integer) dadosParcelamento[2];
 
-						// recupera todos os parcelamentos no mes atual e que
-						// esteja com a situacao normal
-
-						System.out.println(" **** PESQUISAR GUIA POR PARCELAMENTO **** ");
-						System.out.println(" ------------------------------------------ ");
-
-						guiaPagamento = repositorioCobranca.pesquisarGuiaPagamentoDoParcelamento(numeroParcelamentosMes.toString());
+						guiaPagamento = repositorioCobranca.pesquisarGuiaPagamentoDoParcelamento(idParcelamento.toString());
 
 						if (guiaPagamento != null && !guiaPagamento.isEmpty()) {
 
@@ -61890,7 +61862,7 @@ public class ControladorCobranca extends ControladorComum {
 
 								Object[] dadosGuiaPagamento = (Object[]) guiaPagamentoIterator.next();
 
-								Integer numeroGuiaPagamento = (Integer) dadosGuiaPagamento[0];
+								Integer idGuiaPagamento = (Integer) dadosGuiaPagamento[0];
 
 								Date dataVencimentoGuia = Util.getData((Date) dadosGuiaPagamento[1]);
 								Integer diasParaPagamentoGuia = Integer.parseInt(this.getCobrancaParametro(CobrancaParametro.NOME_PARAMETRO_COBRANCA.QUANTIDADE_DIAS_VENCIMENTO_GUIA.toString()));
@@ -61898,32 +61870,17 @@ public class ControladorCobranca extends ControladorComum {
 
 								if ((dataLimitePagamentoGuia).compareTo(new Date()) <= 0) {
 
-									// retorno da pesquisa
+									pagamento = repositorioCobranca.pesquisarPagamentoParaGuiaPagamentoDoParcelamento(idGuiaPagamento.toString(), idImovel);
 
-									// recupera todos os parcelamentos no mes
-									// atual e que esteja com a situacao normal
-
-									System.out.println(" **** PESQUISAR PAGAMENTO DA GUIA **** ");
-									System.out.println(" ------------------------------------------ ");
-
-									pagamento = repositorioCobranca.pesquisarPagamentoParaGuiaPagamentoDoParcelamento(numeroGuiaPagamento.toString(), idImovel);
-
-									if (pagamento == null || pagamento.isEmpty()) {
-
-										System.out.println("");
-										System.out.println("");
-
-										System.out.println(" ---------------------------------------------- ");
-										System.out.println(" **** DESFAZER " + numeroParcelamentosMes + " **** ");
-										System.out.println(" ---------------------------------------------- ");
-										System.out.println("");
-										System.out.println("");
-
+									if ( (pagamento == null || pagamento.isEmpty()) && !repositorioCobranca.parecelamentoPossuiDebitoJaCobrado(idParcelamento) ) {
+										
 										Usuario usuarioBatch = this.getControladorUsuario().pesquisarUsuarioRotinaBatch();
 										if (usuarioBatch == null) {
 											throw new ControladorException("atencao.usuario_rotina_batch_nao_cadastrado");
 										} else {
-											this.desfazerParcelamentosDebito(ParcelamentoMotivoDesfazer.ENTRADA_NAO_PAGA.toString(), numeroParcelamentosMes, usuarioBatch);
+											
+											logger.info(" **** DESFAZER " + idParcelamento + " **** ");
+											this.desfazerParcelamentosDebito(ParcelamentoMotivoDesfazer.ENTRADA_NAO_PAGA.toString(), idParcelamento, usuarioBatch);
 										}
 
 									}
@@ -61994,4 +61951,165 @@ public class ControladorCobranca extends ControladorComum {
 		}
 		return documento;
 	}
+
+	public List<AvisoCorteDTO> gerarAvisoCorteEnderecoAlternativo(Integer idAcaoCronograma, Integer idAcaoComando) throws ControladorException {
+		List<AvisoCorteDTO> avisos = new ArrayList<AvisoCorteDTO>();
+
+		try {
+			Collection<CobrancaDocumento> documentos = repositorioCobranca.pesquisarCobrancaDocumentoParaRelatorio(idAcaoCronograma, idAcaoComando);
+
+			for (CobrancaDocumento documento : documentos) {
+				AvisoCorteDTO aviso = montarAvisoCorte(documento);
+
+				Integer idClienteResponsavel = repositorioClienteImovel.retornaIdClienteResponsavelIndicadorEnvioConta(documento.getImovel().getId());
+				if (idClienteResponsavel != null) {
+					aviso = montarEnderecoCorrespondenciaAvisoCorte(aviso, idClienteResponsavel);
+				} else {
+					continue;
+				}
+
+				aviso = setCodigoBarrasAvisoCorte(aviso, documento);
+				aviso.setContas(montarContasAvisoCorte(documento.getId()));
+				avisos.add(aviso);
+			}
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+
+		return avisos;
+	}
+
+	private AvisoCorteDTO montarAvisoCorte(CobrancaDocumento documento) throws ControladorException {
+		AvisoCorteDTO aviso = new AvisoCorteDTO();
+		aviso.setImovel(documento.getImovel().getId());
+		aviso.setCliente(getControladorImovel().consultarClienteUsuarioImovel(documento.getImovel().getId()));
+		aviso.setInscricao(getControladorImovel().pesquisarInscricaoImovel(documento.getImovel().getId()));
+		aviso.setCodigoRota(documento.getImovel().getQuadra().getRota().getCodigo());
+		aviso.setSequencialRota(documento.getImovel().getNumeroSequencialRota());
+		aviso.setIdDocumentoCobranca(documento.getId());
+		aviso.setValorTotal(Util.formatarMoedaReal(documento.getValorDocumento()));
+		aviso.setEndereco(getControladorEndereco().pesquisarEndereco(documento.getImovel().getId()));
+		return aviso;
+	}
+
+	private AvisoCorteDTO montarEnderecoCorrespondenciaAvisoCorte(AvisoCorteDTO aviso, Integer idClienteResponsavel) throws ControladorException {
+		aviso.setEnderecoCorrespondencia(getControladorEndereco().pesquisarEnderecoClienteAbreviado(idClienteResponsavel));
+		
+		String[] enderecoCorrespondenciaFormatado = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDivididoCosanpa(idClienteResponsavel);
+		aviso.setComplementoCorrespondencia(enderecoCorrespondenciaFormatado[0]);
+		aviso.setCidadeEstadoCorrespondencia(enderecoCorrespondenciaFormatado[1] + " - " + enderecoCorrespondenciaFormatado[2]);
+		aviso.setBairroCorrespondencia(enderecoCorrespondenciaFormatado[3]);
+		aviso.setCepCorrespondencia(Util.formatarCEP(enderecoCorrespondenciaFormatado[4]));
+		
+		return aviso;
+	}
+
+	private List<AvisoCorteContaDTO> montarContasAvisoCorte(Integer idDocumento) throws ErroRepositorioException {
+		List<AvisoCorteContaDTO> contasDTO = new ArrayList<AvisoCorteContaDTO>();
+		
+		List<Conta> contas = (List<Conta>) repositorioCobranca.pesquisarCobrancaDocumentoItem(idDocumento);
+		
+		int count = 0;
+		BigDecimal valor = new BigDecimal(0);
+		
+		for (Conta conta : contas) {
+			count++;
+
+			if ((contas.size() - count) > 35) {
+				valor = valor.add(conta.getValorTotal());
+			} else {
+				AvisoCorteContaDTO contaDTO = new AvisoCorteContaDTO();
+
+				if ((contas.size() - count) == 35) {
+					valor = valor.add(conta.getValorTotal());
+					contaDTO.setReferencia("ATÉ " + conta.getReferenciaFormatada());
+					contaDTO.setValor(Util.formatarMoedaReal(valor));
+				} else {
+					contaDTO.setReferencia(conta.getReferenciaFormatada());
+					contaDTO.setVencimento(Util.formatarData(conta.getDataVencimentoConta()));
+					contaDTO.setValor(Util.formatarMoedaReal(conta.getValorTotal()));
+				}
+				
+				contasDTO.add(contaDTO);
+			}
+		}
+		
+		return contasDTO;
+	}
+
+	private AvisoCorteDTO setCodigoBarrasAvisoCorte(AvisoCorteDTO aviso, CobrancaDocumento documento) throws ControladorException {
+		String representacaoNumericaCodigoBarras = getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(5, documento.getValorDocumento(), documento.getLocalidade().getId(),
+				documento.getImovel().getId(), null, null, null, null, String.valueOf(documento.getNumeroSequenciaDocumento()), documento.getDocumentoTipo().getId(), null, null, null);
+
+		String codigoBarras = representacaoNumericaCodigoBarras.substring(0, 11)
+				+ representacaoNumericaCodigoBarras.substring(12, 23) 
+				+ representacaoNumericaCodigoBarras.substring(24, 35)
+				+ representacaoNumericaCodigoBarras.substring(36, 47);
+		
+		String codigoBarrasFormatado = representacaoNumericaCodigoBarras.substring(0, 11) + "-" + representacaoNumericaCodigoBarras.substring(11, 12) + " " 
+				+ representacaoNumericaCodigoBarras.substring(12, 23) + "-" + representacaoNumericaCodigoBarras.substring(23, 24) + " " 
+				+ representacaoNumericaCodigoBarras.substring(24, 35) + "-" + representacaoNumericaCodigoBarras.substring(35, 36) + " " 
+				+ representacaoNumericaCodigoBarras.substring(36, 47) + "-" + representacaoNumericaCodigoBarras.substring(47, 48);
+
+		aviso.setCodigoBarras(codigoBarras);
+		aviso.setCodigoBarrasFormatado(codigoBarrasFormatado);
+		
+		return aviso;
+	}
+	
+	public boolean isImovelEmCobrancaJudicial(Integer idImovel) throws ControladorException {
+		
+		CobrancaSituacaoHistorico historico = existeCobrancaSituacaoHistoricoImovel(idImovel, CobrancaSituacaoTipo.PARALISAR_ACOES_DE_COBRANÇA, CobrancaSituacaoMotivo.EM_PROCESSO_JUDICIAL);
+		
+		if (historico != null)
+			return true;
+		else {
+			ImovelCobrancaSituacao situacao = existeCobrancaSituacaoImovel(idImovel, CobrancaSituacao.EM_COBRANCA_JUDICIAL);
+			
+			if (situacao != null)
+				return true;
+		}
+		return false;
+	}
+	
+	private CobrancaSituacaoHistorico existeCobrancaSituacaoHistoricoImovel(Integer idImovel, Integer idCobrancaSituacaoTipo, Integer idMotivo) throws ControladorException {
+		try {
+			Filtro filtro = new FiltroCobrancaSituacaoHistorico();
+			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.IMOVEL_ID, idImovel));
+			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.COBRANCA_TIPO_ID, idCobrancaSituacaoTipo));
+			filtro.adicionarParametro(new ParametroNulo(FiltroCobrancaSituacaoHistorico.ANO_MES_COBRANCA_RETIRADA));
+			if (idMotivo != null)
+				filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.COBRANCA_SITUACAO_MOTIVO_ID, idMotivo));
+			
+			Collection<CobrancaSituacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, CobrancaSituacaoHistorico.class.getName());
+
+			if (colecao != null && !colecao.isEmpty())
+				return (CobrancaSituacaoHistorico)Util.retonarObjetoDeColecao(colecao);
+			else 
+				return null;
+			
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.pesquisar.imovel.cobranca.judicial", e);
+		}
+	}
+	
+	private ImovelCobrancaSituacao existeCobrancaSituacaoImovel(Integer idImovel, Integer idCobrancaSituacao) throws ControladorException {
+		try {
+			Filtro filtro = new FiltroImovelCobrancaSituacao();
+			filtro.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID, idImovel));
+			filtro.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.ID_COBRANCA_SITUACAO, idCobrancaSituacao));
+			filtro.adicionarParametro(new ParametroNulo(FiltroImovelCobrancaSituacao.DATA_RETIRADA_COBRANCA));
+			
+			Collection<ImovelCobrancaSituacao> colecao = getControladorUtil().pesquisar(filtro, ImovelCobrancaSituacao.class.getName());
+		
+			if (colecao != null && !colecao.isEmpty())
+				return (ImovelCobrancaSituacao)Util.retonarObjetoDeColecao(colecao);
+			else 
+				return null;
+			
+		} catch (ControladorException e) {
+			throw new ControladorException("erro.pesquisar.imovel.cobranca.judicial", e);
+		}
+	}
+	
 }

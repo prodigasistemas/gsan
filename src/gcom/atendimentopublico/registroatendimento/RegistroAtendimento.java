@@ -6,6 +6,8 @@ import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.geografico.BairroArea;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.PavimentoCalcada;
+import gcom.cadastro.imovel.PavimentoRua;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.SetorComercial;
@@ -74,124 +76,88 @@ public class RegistroAtendimento extends ObjetoTransacao {
 	
 	public final static Short INDICADOR_ATENDIMENTO_MANUAL = new Short("2");
 
-	/** identifier field */
 	private Integer id;
 
-	/** persistent field */
 	private short codigoSituacao;
 
-	/** persistent field */
 	private Date registroAtendimento;
 
-	/** persistent field */
 	private Date dataPrevistaOriginal;
 
-	/** persistent field */
 	private Date dataPrevistaAtual;
 
-	/** nullable persistent field */
 	private Date ultimaEmissao;
 
-	/** nullable persistent field */
 	private Date dataEncerramento;
 
-	/** nullable persistent field */
 	private Short quantidadeReiteracao;
 
-	/** nullable persistent field */
 	private Date ultimaReiteracao;
 
-	/** nullable persistent field */
 	private String observacao;
 
-	/** nullable persistent field */
 	private String descricaoLocalOcorrencia;
 
-	/** persistent field */
 	private Date ultimaAlteracao;
 
-	/** nullable persistent field */
 	private String parecerEncerramento;
 
-	/** nullable persistent field */
 	private String pontoReferencia;
 
-	/** nullable persistent field */
 	private String complementoEndereco;
 
-	/** persistent field */
 	private short indicadorAtendimentoOnline;
 
-	/** nullable persistent field */
 	private Date dataInicioEspera;
 
-	/** nullable persistent field */
 	private Date dataFimEspera;
 
-	/** nullable persistent field */
 	private String numeroImovel;
 
-	/** persistent field */
 	private LogradouroBairro logradouroBairro;
 
-	/** persistent field */
 	private SetorComercial setorComercial;
 
-	/** persistent field */
-	private gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento atendimentoMotivoEncerramento;
+	private AtendimentoMotivoEncerramento atendimentoMotivoEncerramento;
 
-	/** persistent field */
-	private gcom.cadastro.imovel.PavimentoCalcada pavimentoCalcada;
+	private PavimentoCalcada pavimentoCalcada;
 
-	/** persistent field */
-	private gcom.atendimentopublico.registroatendimento.LocalOcorrencia localOcorrencia;
+	private LocalOcorrencia localOcorrencia;
 
-	/** persistent field */
 	private LogradouroCep logradouroCep;
 
-	/** persistent field */
-	private gcom.atendimentopublico.registroatendimento.MeioSolicitacao meioSolicitacao;
+	private MeioSolicitacao meioSolicitacao;
 
-	/** persistent field */
-	private gcom.atendimentopublico.registroatendimento.RaMotivoReativacao raMotivoReativacao;
+	private RaMotivoReativacao raMotivoReativacao;
 
-	/** persistent field */
-	private gcom.atendimentopublico.registroatendimento.RegistroAtendimento registroAtendimentoReativacao;
+	private RegistroAtendimento registroAtendimentoReativacao;
 
-	/** persistent field */
-	private gcom.atendimentopublico.registroatendimento.RegistroAtendimento registroAtendimentoDuplicidade;
+	private RegistroAtendimento registroAtendimentoDuplicidade;
 
-	/** persistent field */
 	private Imovel imovel;
 
-	/** persistent field */
 	private BairroArea bairroArea;
 
-	/** persistent field */
-	private gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao solicitacaoTipoEspecificacao;
+	private SolicitacaoTipoEspecificacao solicitacaoTipoEspecificacao;
 
-	/** persistent field */
 	private Quadra quadra;
 
-	/** persistent field */
 	private Localidade localidade;
 
-	/** persistent field */
-	private gcom.cadastro.imovel.PavimentoRua pavimentoRua;
+	private PavimentoRua pavimentoRua;
 
-	/** persistent field */
 	private DivisaoEsgoto divisaoEsgoto;
 	
-	/** persistent field */
 	private Integer manual;
 	
+	@SuppressWarnings("rawtypes")
 	private Set tramites;
 	
+	@SuppressWarnings("rawtypes")
 	private Set raDadosAgenciaReguladoras;
 	
+	@SuppressWarnings("rawtypes")
 	private Set registroAtendimentoUnidades;
-	
-//	private UnidadeOrganizacional unidadeOrganizacionalAtual;
 	
     private UnidadeOrganizacional unidadeAtual;
     
@@ -217,7 +183,6 @@ public class RegistroAtendimento extends ObjetoTransacao {
 		this.nnDiametro = nnDiametro;
 	}
 
-	/** full constructor */
 	public RegistroAtendimento(
 			short codigoSituacao,
 			Date registroAtendimento,
@@ -953,26 +918,32 @@ public class RegistroAtendimento extends ObjetoTransacao {
 		this.numeroImovel = numeroImovel;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getTramites() {
 		return tramites;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setTramites(Set tramites) {
 		this.tramites = tramites;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Set getRaDadosAgenciaReguladoras() {
 		return raDadosAgenciaReguladoras;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setRaDadosAgenciaReguladoras(Set raDadosAgenciaReguladoras) {
 		this.raDadosAgenciaReguladoras = raDadosAgenciaReguladoras;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getRegistroAtendimentoUnidades() {
 		return registroAtendimentoUnidades;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setRegistroAtendimentoUnidades(Set registroAtendimentoUnidades) {
 		this.registroAtendimentoUnidades = registroAtendimentoUnidades;
 	}
@@ -1150,6 +1121,16 @@ public class RegistroAtendimento extends ObjetoTransacao {
 		}
 
 		return endereco;
+	}
+	
+	public String obterNumeroImovelRetorno() {
+		if (this.observacao.contains("IMOVEL RETORNO:")) {
+			int inicio = observacao.indexOf("[");
+			int fim = observacao.indexOf("]");
+			
+			return observacao.substring(inicio + 17 , fim);
+		} else
+			return null;
 	}
 	
 }

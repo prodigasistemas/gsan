@@ -12,5 +12,6 @@
 		<property name="indicadorUso" type="java.lang.Short" column="cocr_icuso" length="2"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cocr_tmultimaalteracao" length="8"/>
 		<property name="indicadorValidacao" type="java.lang.Short" column="cocr_icvalidacao" length="2"/>
+		<property name="indicadorVisita" type="java.lang.Short" column="cocr_icvisita" length="2"/>
 	</class>
 </hibernate-mapping>

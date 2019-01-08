@@ -1,73 +1,61 @@
 package gcom.relatorio.cadastro.atualizacaocadastral;
 
+import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
+import gcom.util.Util;
+
+import java.math.BigDecimal;
+import java.util.List;
+
 public class RelatorioFichaFiscalizacaoCadastralHelper {
 	
 	private Integer idImovel;
-	
 	private String nomeLocalidade;
-	
 	private Integer codigoSetor;
-	
 	private Integer numeroQuadra;
-	
 	private Integer numeroLote;
-	
 	private Integer numeroSublote;
-	
 	private String descricaoLogradouroImovel;
-	
 	private Integer idLogradouroImovel;
-	
 	private String numeroImovel;
-	
 	private String complementoEnderecoImovel;
-	
 	private String bairroImovel;
-	
 	private Integer cepImovel;
-	
 	private Integer codigoRota;
-	
 	private Integer numeroFace;
-	
 	private String nomeMunicipioImovel;
-	
 	private Integer idMunicipioImovel;
-	
 	private Integer idCliente;
-	
 	private String nomeCliente;
-	
 	private String cpfCnpj;
-	
 	private String rg;
-	
 	private String uf;
-	
 	private Integer sexo;
-	
 	private String descricaoLogradouroCliente;
-	
 	private String numeroImovelCliente;
-	
 	private Integer enderecoTipoCliente;
-	
 	private String nomeMunicipioCliente;
-	
 	private String complementoEnderecoCliente;
-	
 	private String bairroCliente;
-	
 	private Integer cepCliente;
-	
 	private String emailCliente;
-	
 	private String ddd;
-	
 	private String telefone;
-	
 	private String celular;
-
+	private String contratoEnergia;
+	private Integer fonteAbastecimento;
+	private Integer ligacaoAguaSituacao;
+	private Integer ligacaoEsgotoSituacao;
+	private String numeroHidrometro;
+	private String hidrometroCapacidade;
+	private Integer hidrometroProtecao;
+	private String hidrometroMarca;
+	private String outrasInformacoes;
+	private BigDecimal areaConstruida;
+	private Integer pontosUtilizacao;
+	private Integer moradores;
+	
+	private List<ImovelSubcategoriaRetorno> subcategorias;
+	
 	public Integer getIdImovel() {
 		return idImovel;
 	}
@@ -330,5 +318,116 @@ public class RelatorioFichaFiscalizacaoCadastralHelper {
 
 	public void setCelular(String celular) {
 		this.celular = celular;
+	}
+
+	public String getContratoEnergia() {
+		return contratoEnergia;
+	}
+
+	public void setContratoEnergia(String contratoEnergia) {
+		this.contratoEnergia = contratoEnergia;
+	}
+
+	public Integer getFonteAbastecimento() {
+		return fonteAbastecimento;
+	}
+
+	public void setFonteAbastecimento(Integer fonteAbastecimento) {
+		this.fonteAbastecimento = fonteAbastecimento;
+	}
+
+	public Integer getLigacaoAguaSituacao() {
+		return ligacaoAguaSituacao;
+	}
+
+	public void setLigacaoAguaSituacao(Integer ligacaoAguaSituacao) {
+		this.ligacaoAguaSituacao = ligacaoAguaSituacao;
+	}
+
+	public Integer getLigacaoEsgotoSituacao() {
+		return ligacaoEsgotoSituacao;
+	}
+
+	public void setLigacaoEsgotoSituacao(Integer ligacaoEsgotoSituacao) {
+		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
+	}
+
+	public String getNumeroHidrometro() {
+		return numeroHidrometro;
+	}
+
+	public void setNumeroHidrometro(String numeroHidrometro) {
+		this.numeroHidrometro = numeroHidrometro;
+	}
+
+	public String getHidrometroCapacidade() {
+		return hidrometroCapacidade;
+	}
+
+	public void setHidrometroCapacidade(String hidrometroCapacidade) {
+		this.hidrometroCapacidade = hidrometroCapacidade;
+	}
+
+	public Integer getHidrometroProtecao() {
+		return hidrometroProtecao;
+	}
+
+	public void setHidrometroProtecao(Integer hidrometroProtecao) {
+		this.hidrometroProtecao = hidrometroProtecao;
+	}
+
+	public String getHidrometroMarca() {
+		return hidrometroMarca;
+	}
+
+	public void setHidrometroMarca(String hidrometroMarca) {
+		this.hidrometroMarca = hidrometroMarca;
+	}
+
+	public String getOutrasInformacoes() {
+		return outrasInformacoes;
+	}
+
+	public void setOutrasInformacoes(String outrasInformacoes) {
+		this.outrasInformacoes = outrasInformacoes;
+	}
+
+	public BigDecimal getAreaConstruida() {
+		return areaConstruida;
+	}
+
+	public void setAreaConstruida(BigDecimal areaConstruida) {
+		this.areaConstruida = areaConstruida;
+	}
+
+	public Integer getPontosUtilizacao() {
+		return pontosUtilizacao;
+	}
+
+	public void setPontosUtilizacao(Integer pontosUtilizacao) {
+		this.pontosUtilizacao = pontosUtilizacao;
+	}
+
+	public Integer getMoradores() {
+		return moradores;
+	}
+
+	public void setMoradores(Integer moradores) {
+		this.moradores = moradores;
+	}
+	
+	public String getDescricaoAreaConstruida() {
+		if (this.areaConstruida != null)
+			return Util.formatarBigDecimalParaStringComVirgula(this.areaConstruida);
+		else
+			return null;
+	}
+
+	public List<ImovelSubcategoriaRetorno> getSubcategorias() {
+		return subcategorias;
+	}
+
+	public void setSubcategorias(List<ImovelSubcategoriaRetorno> subcategorias) {
+		this.subcategorias = subcategorias;
 	}
 }

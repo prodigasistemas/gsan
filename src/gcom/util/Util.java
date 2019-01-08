@@ -163,6 +163,7 @@ public class Util {
 		return retorno;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static Object[] retonarObjetoDeColecaoArray(Collection colecao) {
 		Object[] retorno = null;
 
@@ -396,6 +397,22 @@ public class Util {
 	
 	public static Date formatarDDMMAAAAParaDate(String diaAnoMes) {
 		String[] arrayDia = diaAnoMes.split("/");
+			
+		String dia = arrayDia[0]; 
+		String mes = arrayDia[1]; 
+		String ano = arrayDia[2]; 
+
+		Calendar calendario = GregorianCalendar.getInstance();
+
+		calendario.set(Calendar.DAY_OF_MONTH, new Integer(dia));
+		calendario.set(Calendar.MONTH, new Integer(mes) - 1);
+		calendario.set(Calendar.YEAR, new Integer(ano));
+		
+		return calendario.getTime();
+	}
+	
+	public static Date formatarStringParaDate(String diaAnoMes) {
+		String[] arrayDia = diaAnoMes.split("-");
 			
 		String dia = arrayDia[0]; 
 		String mes = arrayDia[1]; 
@@ -2049,6 +2066,7 @@ public class Util {
 	 * 
 	 * @return boolean (true - eh dia util, false - nao dia util)
 	 */
+	@SuppressWarnings("rawtypes")
 	public static boolean ehDiaUtil(Date dataAnalisada, Collection<NacionalFeriado> colecaoNacionalFeriado, Collection<MunicipioFeriado> colecaoMunicipioFeriado) {
 
 		boolean ehDiaUtil = true;
@@ -2120,6 +2138,7 @@ public class Util {
 	 * 
 	 * @return Ultimo Dia do Mes util
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static int obterUltimoDiaUtilMes(int mes, int ano, Collection colecaoDatasFeriados) {
 		int ultimoDiaUtil = 0;
 
@@ -3296,6 +3315,7 @@ public class Util {
 	 * @author Rafael Francisco Pinto
 	 * @return Collection com os valores separado da String
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Collection separarCamposString(String separador, String campos) {
 
 		Collection retorno = new LinkedList();
@@ -3919,6 +3939,7 @@ public class Util {
 	 * Data: 12/04/2007
 	 * 
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Collection<Categoria> montarColecaoCategoria(Collection colecaoSubcategorias) {
 
 		Collection<Categoria> colecaoRetorno = null;
@@ -4012,6 +4033,7 @@ public class Util {
 		return dt;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static String separarStringPorLetraMaiuscula(String target) {
 
 		StringBuilder builder = new StringBuilder(target);
@@ -4418,6 +4440,7 @@ public class Util {
 	 * Author: Vivianne Sousa Data: 21/11/2008 Adiciona nº de dias uteis para
 	 * uma data
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Date adicionarNumeroDiasUteisDeUmaData(Date data, int numeroDias, Collection colecaoFeriadosNacionais, Collection colecaoFeriadosMunicipais) {
 
 		int cont = 0;
@@ -5624,6 +5647,7 @@ public class Util {
 	 *            linhas
 	 * @return Vetor de linhas do arquivo texto.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Vector carregaLinhas(InputStream arquivo, int maxLinhas) throws IOException {
 		Vector vetor = new Vector();
 		vetor.removeAllElements();
@@ -6098,7 +6122,7 @@ public class Util {
 
 	public static boolean nomeInvalido(String nome){
 		nome = nome.trim();
-		String regexNome = "[a-zA-Z\\s &/]*";
+		String regexNome = "[a-zA-Z0-9\\s &/]*";
 		if (StringUtils.isNotEmpty(nome) && nome.matches(regexNome)){
 			return false;
 		}
@@ -6150,4 +6174,52 @@ public class Util {
             return false;
         }
     }
+    
+    public static List<Integer> sortear(List<Integer> listaIds, double percentual) {
+		List<Integer> sorteados = new ArrayList<Integer>();
+		
+		double qtdPercentual = Math.round((listaIds.size() * percentual)/100); 
+		
+		for (int i = 0; i < qtdPercentual; i++) {
+			sorteados.add(listaIds.get(i));
+		}
+		return sorteados;
+	}
+    
+    public static Integer setValorInteiro(String valor) {
+		return valor.trim().equals("") || valor.trim().equals("0") ? null : Integer.parseInt(valor.trim());
+	}
+    
+    public static <T> List<List<T>> quebrarListaEmPartes(List<T> lista, final int L) {
+	    List<List<T>> partes = new ArrayList<List<T>>();
+	    final int N = lista.size();
+	    for (int i = 0; i < N; i += L) {
+	        partes.add(new ArrayList<T>(
+	            lista.subList(i, Math.min(N, i + L)))
+	        );
+	    }
+	    
+	    return partes;
+	}
+    
+    public static void main(String[] args) {
+		String observacao = "INCLUSAO DE IMÓVEL - RECADASTRAMENTO. End: JOSE TV DA VILETA, n 83, CA 000, MARCO, BELEM, CEP: 66085560. CLIENTES: Nome: ANA PAULA CARNEIRO DE OLIVEIRA. Email:apcdeoliveira@hotmail.com. Tipo de relaCAo: USUARIO. Quadra: 1504. Setor Comercial: 5. Local de Instalacao de Ramal: ESQUERDA.[IMOVEL RETORNO: 1234567]";
+		
+		String hidrometro = "         ";
+		
+		System.out.println("." + hidrometro + ".");
+		System.out.println("." + hidrometro.trim() + ".");
+		//String[] splitObservacao = observacao.split("[");
+		
+		int inicio = observacao.indexOf("[");
+		int fim = observacao.indexOf("]");
+		
+		String idImovel = observacao.substring(inicio + 17 , fim);
+		
+		System.out.println(idImovel);
+		if (observacao.contains("IMOVEL RETORNO:"))
+			System.out.println(true);
+		else
+			System.out.println(false);
+	}
 }

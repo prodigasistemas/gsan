@@ -20,7 +20,14 @@ public class ParserUtil {
 		return fonte.substring(posicaoInicial, contador);
 
 	}
-
+	
+	public String obterDadoCabecalhoParser(int tamanho) {
+		if (fonte.length() == 32)
+			return obterDadoParser(tamanho);
+		else
+			return " ";
+	}
+	
 	public String getFonte() {
 		return fonte;
 	}

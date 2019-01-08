@@ -1514,6 +1514,8 @@ public class ControladorGerencialCadastroSEJB implements SessionBean {
 						// Pesquisamos as quantidades de economia do imovel corrente
 						imovelObterQtdEconomia = new Imovel();
 						imovelObterQtdEconomia.setId((Integer) retorno[0]);
+						System.out.println("--> IMOVEL --> ");
+						System.out.println(imovelObterQtdEconomia);
 						quantidadeEconomia = this.getControladorImovel().obterQuantidadeEconomias(imovelObterQtdEconomia);
 						if (quantidadeEconomia == null) {
 							quantidadeEconomia = 0;
