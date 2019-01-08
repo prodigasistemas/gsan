@@ -7832,8 +7832,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 					+ "WHERE rota.id = :idRota AND imovel.rotaAlternativa IS NULL "
 					+ "AND imovel.indicadorImovelCondominio <> 1 "
-					+ "AND imovel.indicadorExclusao <> 1 "
-					+ "AND imovel.id = 4931203 ";
+					+ "AND imovel.indicadorExclusao <> 1 ";
 
 			retorno = session.createQuery(consulta)
 					.setInteger("idRota", idRota).list();
