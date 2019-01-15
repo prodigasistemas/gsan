@@ -12505,6 +12505,7 @@ public class ControladorCobranca extends ControladorComum {
 					parcelamentoItem.setDebitoACobrarGeral(null);
 					parcelamentoItem.setCreditoARealizarGeral(creditoARealizar.getCreditoARealizarGeral());
 					parcelamentoItem.setGuiaPagamentoGeral(null);
+					parcelamentoItem.setContaGeral(null);
 
 					// Inseri Parcelamento Item na Base
 					getControladorUtil().inserir(parcelamentoItem);
