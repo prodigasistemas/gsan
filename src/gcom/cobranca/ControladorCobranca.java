@@ -61839,7 +61839,7 @@ public class ControladorCobranca extends ControladorComum {
 			while (!flagTerminou) {
 				parcelamentos = repositorioCobranca.pesquisarParcelamentosSituacaoNormal(ParcelamentoSituacao.NORMAL.toString(), numeroInicial, 500);
 
-				if (parcelamentos.size() < 500) {
+				if (parcelamentos.size() <= 500) {
 					flagTerminou = true;
 				}
 
