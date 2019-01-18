@@ -13005,13 +13005,6 @@ public class ControladorArrecadacao extends ControladorComum {
 										}
 									}
 
-									/**
-									 * Detalhar
-									 * classificação de documentos inexistentes
-									 * 
-									 * @author Wellington Rocha
-									 * @date 01/08/2012
-									 */
 									if (colecaoPagamentosDocumentoInexistenteContaCancelada != null
 											&& !colecaoPagamentosDocumentoInexistenteContaCancelada.isEmpty()) {
 										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoPagamentosDocumentoInexistenteContaCancelada,
@@ -13041,80 +13034,44 @@ public class ControladorArrecadacao extends ControladorComum {
 									}
 									colecaoPagamentosDocumentoInexistenteErroProcessamento = new ArrayList();
 
-									/**
-									 * Atualiza a situação e o valor excedente
-									 * dos pagamentos.
-									 */
 									if (colecaoPagamentosAtualizar != null && !colecaoPagamentosAtualizar.isEmpty()) {
 										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoPagamentosAtualizar,
 												PagamentoSituacao.DOCUMENTO_INEXISTENTE);
 									}
 
-									/**
-									 * Atualiza a situação e o valor excedente
-									 * dos pagamentos em duplicidade.
-									 */
 									if (colecaoPagamentosDuplicidade != null && !colecaoPagamentosDuplicidade.isEmpty()) {
 										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoPagamentosDuplicidade,
 												PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE);
 									}
 
-									/**
-									 * Processa os pagamentos e suas respectivas
-									 * contas.
-									 */
 									if (mapPagamentosProcessados != null && !mapPagamentosProcessados.isEmpty()) {
 										repositorioArrecadacao.processarPagamentoConta(mapPagamentosProcessados);
 									}
 
-									/**
-									 * Atualiza a situação dos pagamentos com
-									 * valor igual a valor não confere.
-									 */
 									if (mapPagamentosValorNaoConfere != null && !mapPagamentosValorNaoConfere.isEmpty()) {
 										this.repositorioArrecadacao.processarPagamentoValorNaoConfereConta(mapPagamentosValorNaoConfere);
 									}
 
-									/**
-									 * Atualiza a situação dos pagamentos para
-									 * valor não confere e seta o CNTA_ID,
-									 * GPAG_ID E DBAC_ID para nulo.
-									 */
 									if (colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo != null
 											&& !colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo.isEmpty()) {
 										this.repositorioArrecadacao
 												.processarPagamentoValorNaoConfereIdentificadorDocumentoIgualANulo(colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo);
 									}
 
-									/**
-									 * Atualiza a situação dos pagamentos com
-									 * valor igual a pagamento classificado.
-									 */
 									if (colecaoPagamentoClassificado != null && !colecaoPagamentoClassificado.isEmpty()) {
 										this.repositorioArrecadacao.atualizarSituacaoPagamentoClassificado(colecaoPagamentoClassificado);
 									}
 
-									/**
-									 * Atualiza a situação dos pagamentos com
-									 * valor igual a pagamento em duplicidade.
-									 */
 									if (colecaoPagamentoEmDuplicidade != null && !colecaoPagamentoEmDuplicidade.isEmpty()) {
 										this.repositorioArrecadacao.atualizarSituacaoPagamento(PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE,
 												colecaoPagamentoEmDuplicidade);
 									}
 
-									/**
-									 * Atualiza o valor excedente dos
-									 * pagamentos.
-									 */
 									if (colecaoPagamentoAtualizarValorExcedente != null && !colecaoPagamentoAtualizarValorExcedente.isEmpty()) {
 										repositorioArrecadacao.atualizarValorExcedentePagamento(colecaoPagamentoAtualizarValorExcedente);
 									}
 								}
 
-								/**
-								 * Incrementa o nº do indice da páginação
-								 */
 								numeroIndice = numeroIndice + quantidadeRegistros;
 
 								/**
@@ -13540,21 +13497,12 @@ public class ControladorArrecadacao extends ControladorComum {
 			Collection<Pagamento> colecaoPagamentos)
 			throws ControladorException {
 
-		/**
-		 * Declaração das variáveis
-		 */
 		Object[] retorno = new Object[2];
 		Map mapPagamentosProcessados = new HashMap();
 		Object[] arrayColecoesPagamentosAtualizar = null;
 
-		// Atribuir o valor da conta ao valor do documento
 		BigDecimal valorDocumento = conta.getValorTotal();
-
-		/*
-		 * [SF0007] Calcular Valor Total dos Pagamentos
-		 */
-		BigDecimal valorTotalPagamentosConta = this
-				.calcularValorTotalPagamentos(colecaoPagamentos);
+		BigDecimal valorTotalPagamentosConta = this.calcularValorTotalPagamentos(colecaoPagamentos);
 
 		/*
 		 * Caso valor total dos pagamentos da conta seja igual ao valor do
@@ -13565,8 +13513,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		 */
 		// recurepa o valor absoluto da diferença entre o total dos pagamentos e
 		// o valor documento
-		BigDecimal diferenca = (valorTotalPagamentosConta
-				.subtract(valorDocumento)).abs();
+		BigDecimal diferenca = (valorTotalPagamentosConta.subtract(valorDocumento)).abs();
 
 		// o limite permitido entre a diferença
 		BigDecimal limitePermitido = new BigDecimal("0.03");

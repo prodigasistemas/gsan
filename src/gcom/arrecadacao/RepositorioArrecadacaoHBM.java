@@ -24459,7 +24459,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				+ "WHERE pgmt.anoMesReferenciaArrecadacao <= :anoMesReferencia " 
 				+ "AND dotp.id = :debitoACobrar "
 				+ "AND loca.id = :idLocalidade "
-				+ "AND dbac.anoMesReferenciaContabil < :referenciafaturamento "
+				+ "AND dbac.anoMesReferenciaContabil <= :referenciafaturamento "
 				+ "AND pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 				+ "ORDER BY dbac.id, pgmt.dataPagamento ";
 
@@ -24523,7 +24523,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				+ "WHERE pgmt.anoMesReferenciaArrecadacao <= :anoMesReferencia " 
 				+ "AND dotp.id = :debitoACobrar "
 				+ "AND loca.id = :idLocalidade "
-				+ "AND dbac.anoMesReferenciaContabil >= :referenciafaturamento "
+				+ "AND dbac.anoMesReferenciaContabil > :referenciafaturamento "
 				+ "AND pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 				+ "ORDER BY dbac.id, pgmt.dataPagamento ";
 

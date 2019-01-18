@@ -1124,7 +1124,7 @@ public class RegistroAtendimento extends ObjetoTransacao {
 	}
 	
 	public String obterNumeroImovelRetorno() {
-		if (this.observacao.contains("IMOVEL RETORNO:")) {
+		if (this.observacao != null && this.observacao.contains("IMOVEL RETORNO:")) {
 			int inicio = observacao.indexOf("[");
 			int fim = observacao.indexOf("]");
 			
