@@ -2151,10 +2151,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 													conta.getId(),
 													ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
 									
-									logger.info("		acrescimos SEM documento : ");
-									logger.info("			atualizacao monetaria: " + helper.getValorAtualizacaoMonetaria() );
-									logger.info("			juros                : " + helper.getValorJurosMora() );
-									logger.info("			multa                : " + helper.getValorMulta() );
+									if (imovel.getId().intValue() == 6793843 || imovel.getId().intValue() == 6793860 || imovel.getId().intValue() == 6793894 || imovel.getId().intValue() == 7024142) {
+										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "		acrescimos SEM documento : ");
+										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			atualizacao monetaria: " + helper.getValorAtualizacaoMonetaria() );
+										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			juros                : " + helper.getValorJurosMora() );
+										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			multa                : " + helper.getValorMulta() );
+									}
 									
 									
 									Date vencimentoConta = calculaVencimentoConta(conta, indicadorExistePagamentoClassificadoConta, documentoCobranca);
@@ -2171,10 +2173,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 													conta.getId(),
 													ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
 									
-									logger.info("		acrescimos COM documento : ");
-									logger.info("			atualizacao monetaria: " + calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria() );
-									logger.info("			juros                : " + calcularAcrescimoPorImpontualidade.getValorJurosMora() );
-									logger.info("			multa                : " + calcularAcrescimoPorImpontualidade.getValorMulta() );
+									if (imovel.getId().intValue() == 6793843 || imovel.getId().intValue() == 6793860 || imovel.getId().intValue() == 6793894 || imovel.getId().intValue() == 7024142) {
+										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "		acrescimos COM documento : ");
+										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			atualizacao monetaria: " + calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria() );
+										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			juros                : " + calcularAcrescimoPorImpontualidade.getValorJurosMora() );
+										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			multa                : " + calcularAcrescimoPorImpontualidade.getValorMulta() );
+									}
 									
 									DebitoTipo debitoTipo = null;
 
@@ -2442,7 +2446,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		boolean multaCobrada = false;
 		
 		logger.info("indicadorExistePagamentoClassificadoConta? " + indicadorExistePagamentoClassificadoConta);
-		if (indicadorExistePagamentoClassificadoConta) {
+		if (indicadorExistePagamentoClassificadoConta && documentoCobranca != null) {
 			FiltroCobrancaDocumentoItem filtroItem = new FiltroCobrancaDocumentoItem();
 			
 			filtroItem.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumentoItem.CONTA_GERAL_ID, idConta));
@@ -2854,8 +2858,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		Collection colecaoPagamento = getControladorUtil().pesquisar(filtroPagamento,Pagamento.class.getSimpleName());
 		if (!colecaoPagamento.isEmpty()) {
 			Pagamento pagamento = (Pagamento) Util.retonarObjetoDeColecao(colecaoPagamento);
-			logger.info("	Documento de cobranca: " + pagamento.getCobrancaDocumento().getId());
-			return pagamento.getCobrancaDocumento();
+			
+			if (pagamento.getCobrancaDocumento() != null) {
+				logger.info("	Documento de cobranca: " + pagamento.getCobrancaDocumento().getId());
+				return pagamento.getCobrancaDocumento();
+			} else {
+				logger.info("	Não tem documento de cobranca.");
+				return null;
+			}
 		} else {
 			logger.info("	Não tem documento de cobranca.");
 			return null;

@@ -59372,7 +59372,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		if (colecaoContas != null && !colecaoContas.isEmpty()) {
 			for (Object[] dadosConta : colecaoContas) {
 				Integer idConta = (Integer) dadosConta[0];
-				logger.info("idconta: " + idConta);
 				idsContas.add(idConta);
 			}
 
