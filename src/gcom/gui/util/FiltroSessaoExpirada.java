@@ -82,6 +82,7 @@ public class FiltroSessaoExpirada extends HttpServlet implements Filter {
 							&& !enderecoURL.contains("gerarCertidaoNegativaImovelPortalAction")
 							&& !enderecoURL.contains("certidao-negativa-cliente")
 							&& !enderecoURL.contains("gerarCertidaoNegativaClientePortalAction")
+							&& !enderecoURL.contains("processarRequisicaoDispositivoMovelRecadastramentoAction")
 					)) {
 
 				RequestDispatcher rd = filterConfig.getServletContext().getRequestDispatcher("/jsp/util/sessao_expirada.jsp");
