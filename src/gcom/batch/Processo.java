@@ -172,6 +172,7 @@ public class Processo extends ObjetoGcom {
 	public static final int GERAR_RELATORIO_DEBITO = 1000;
 	public static final int GERAR_RELATORIO_REGISTRO_ATENDIMENTO_POR_UNIDADE_POR_USUARIO = 1001;
 	public static final int ATUALIZACAO_CADASTRAL = 507;
+	public static final int EXECUTAR_COMANDO_NEGATIVACAO = 130;
 	
 	private Integer id;
 	private String descricaoProcesso;

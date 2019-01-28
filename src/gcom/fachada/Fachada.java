@@ -27680,10 +27680,10 @@ public class Fachada {
 	 * @date 18/12/2008
 	 * 
 	 */
-	public boolean verificarProcessoEmExecucao(Integer idProcesso) {
+	public boolean isProcessoEmExecucao(Integer idProcesso) {
 		try {
 
-			return this.getControladorBatch().verificarProcessoEmExecucao(idProcesso);
+			return this.getControladorBatch().isProcessoEmExecucao(idProcesso);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

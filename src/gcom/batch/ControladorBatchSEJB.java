@@ -207,6 +207,7 @@ import gcom.gerencial.atendimentopublico.registroatendimento.TarefaBatchGerarRes
 import gcom.gerencial.faturamento.ControladorGerencialFaturamentoLocal;
 import gcom.gerencial.faturamento.ControladorGerencialFaturamentoLocalHome;
 import gcom.gerencial.micromedicao.TarefaBatchGerarResumoHidrometro;
+import gcom.gui.ActionServletException;
 import gcom.micromedicao.FiltroRota;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.MovimentoHidrometroHelper;
@@ -258,7 +259,7 @@ import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
-public class ControladorBatchSEJB extends ControladorComum  implements SessionBean {
+public class ControladorBatchSEJB extends ControladorComum implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
 
@@ -306,7 +307,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 		Collection<Integer> colecaoIdsLocalidadesEncerrarArrecadacaoMes = getControladorArrecadacao().pesquisarIdsLocalidadeComPagamentosOuDevolucoes();
 
 		try {
-			// Todos os processo serao iniciados com a situacao EM_ESPERA para q sejam executados o mais cedo possivel
+			// Todos os processo serao iniciados com a situacao EM_ESPERA para q
+			// sejam executados o mais cedo possivel
 			ProcessoSituacao processoSituacao = new ProcessoSituacao();
 			Integer processoSituacaoId = this.verificarAutorizacaoBatch(processoIniciado.getProcesso().getId());
 			processoSituacao.setId(processoSituacaoId);
@@ -316,10 +318,13 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 
 			codigoProcessoIniciadoGerado = (Integer) getControladorUtil().inserir(processoIniciado);
 
-			// Este trecho pesquisa todos do processoFuncionalidade relacionados com o processo do objeto a ser inserido
+			// Este trecho pesquisa todos do processoFuncionalidade relacionados
+			// com o processo do objeto a ser inserido
 			FiltroProcessoFuncionalidade filtroProcessoFuncionalidade = new FiltroProcessoFuncionalidade();
-			filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.ID_PROCESSO, processoIniciado.getProcesso().getId()));
-			filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.INDICADOR_USO,ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.ID_PROCESSO, processoIniciado.getProcesso()
+					.getId()));
+			filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.INDICADOR_USO,
+					ConstantesSistema.INDICADOR_USO_ATIVO));
 
 			Collection processosFuncionaliadade = getControladorUtil().pesquisar(filtroProcessoFuncionalidade, ProcessoFuncionalidade.class.getName());
 
@@ -330,7 +335,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 
 				FuncionalidadeSituacao funcionalidadeSituacao = new FuncionalidadeSituacao();
 				funcionalidadeSituacao.setId(FuncionalidadeSituacao.EM_ESPERA);
-				
+
 				funcionalidadeIniciada.setFuncionalidadeSituacao(funcionalidadeSituacao);
 				funcionalidadeIniciada.setProcessoIniciado(processoIniciado);
 				funcionalidadeIniciada.setProcessoFuncionalidade(processoFuncionalidade);
@@ -338,2223 +343,2241 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 
 				try {
 					switch (funcionalidadeIniciada.getProcessoFuncionalidade().getFuncionalidade().getId()) {
-	
-						case Funcionalidade.GERAR_RESUMO_DIARIO_NEGATIVACAO:
-							TarefaBatchGerarResumoDiarioNegativacao gerarResumoDiarioNegativacao = new TarefaBatchGerarResumoDiarioNegativacao(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection rotasResumoDiarioNegativacao = getControladorSpcSerasa().consultarRotasParaGerarResumoDiarioNegativacao();
-	
-							gerarResumoDiarioNegativacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, rotasResumoDiarioNegativacao);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoDiarioNegativacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-							
-						case Funcionalidade.EXECUTAR_COMANDO_DE_NEGATIVACAO:
-							TarefaBatchExecutarComandoNegativacao executarComandoNegativacao = new TarefaBatchExecutarComandoNegativacao(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							if (getControladorSpcSerasa().existeOcorrenciaMovimentoExclusaoIncompleto()) {
-								throw new ControladorException("atencao.movimento_exclusao_incompleto");
-							}
-	
-							NegativacaoComando negativacaoComando = getControladorSpcSerasa().consultarNegativacaoComandadoParaExecutar();
-	
-							if (negativacaoComando != null && !negativacaoComando.equals("")) {
-	
-								NegativacaoCriterio negativacaoCriterio = getControladorSpcSerasa().pesquisarNegativacaoCriterio(negativacaoComando.getId());
-	
-								Negativador negativador = negativacaoComando.getNegativador();
-								NegativadorContrato negativadorContrato = getControladorSpcSerasa().consultarNegativadorContratoVigente(negativador.getId());
-	
-								Collection colecaoParametroNegativacaoCriterio = (Collection) getControladorSpcSerasa().pesquisarParametroNegativacaoCriterio(
-										negativacaoCriterio.getId());
-	
-								Collection rotas = null;
-								Object[] parametroNegCrit = null;
-	
-								if (negativacaoComando.getComandoSimulacao() != null && !negativacaoComando.getComandoSimulacao().equals("")) {
-	
-									rotas = getControladorSpcSerasa().pesquisarRotasImoveisComandoSimulacao(negativacaoComando.getComandoSimulacao().getId());
-	
-								} else if (negativacaoCriterio.getCliente() != null) {
-									rotas = getControladorSpcSerasa().pesquisarRotasImoveis();
+
+					case Funcionalidade.GERAR_RESUMO_DIARIO_NEGATIVACAO:
+						TarefaBatchGerarResumoDiarioNegativacao gerarResumoDiarioNegativacao = new TarefaBatchGerarResumoDiarioNegativacao(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						if (this.isProcessoEmExecucao(Processo.EXECUTAR_COMANDO_NEGATIVACAO)) {
+							throw new ActionServletException("atencao.processo.negativacao.em.execucao");
+						}
+
+						if (this.isProcessoEmEspera(Processo.EXECUTAR_COMANDO_NEGATIVACAO)) {
+							throw new ActionServletException("atencao.processo.negativacao.em.espera");
+						}
+
+						Collection rotasResumoDiarioNegativacao = getControladorSpcSerasa().consultarRotasParaGerarResumoDiarioNegativacao();
+
+						gerarResumoDiarioNegativacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, rotasResumoDiarioNegativacao);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoDiarioNegativacao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.EXECUTAR_COMANDO_DE_NEGATIVACAO:
+						TarefaBatchExecutarComandoNegativacao executarComandoNegativacao = new TarefaBatchExecutarComandoNegativacao(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						if (getControladorSpcSerasa().existeOcorrenciaMovimentoExclusaoIncompleto()) {
+							throw new ControladorException("atencao.movimento_exclusao_incompleto");
+						}
+
+						if (this.isProcessoEmExecucao(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
+							throw new ActionServletException("atencao.processo.negativacao.em.execucao");
+						}
+
+						if (this.isProcessoEmEspera(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
+							throw new ActionServletException("atencao.processo.negativacao.em.espera");
+						}
+
+						NegativacaoComando negativacaoComando = getControladorSpcSerasa().consultarNegativacaoComandadoParaExecutar();
+
+						if (negativacaoComando != null && !negativacaoComando.equals("")) {
+
+							NegativacaoCriterio negativacaoCriterio = getControladorSpcSerasa().pesquisarNegativacaoCriterio(negativacaoComando.getId());
+
+							Negativador negativador = negativacaoComando.getNegativador();
+							NegativadorContrato negativadorContrato = getControladorSpcSerasa().consultarNegativadorContratoVigente(negativador.getId());
+
+							Collection colecaoParametroNegativacaoCriterio = (Collection) getControladorSpcSerasa().pesquisarParametroNegativacaoCriterio(
+									negativacaoCriterio.getId());
+
+							Collection rotas = null;
+							Object[] parametroNegCrit = null;
+
+							if (negativacaoComando.getComandoSimulacao() != null && !negativacaoComando.getComandoSimulacao().equals("")) {
+
+								rotas = getControladorSpcSerasa().pesquisarRotasImoveisComandoSimulacao(negativacaoComando.getComandoSimulacao().getId());
+
+							} else if (negativacaoCriterio.getCliente() != null) {
+								rotas = getControladorSpcSerasa().pesquisarRotasImoveis();
+							} else {
+								if (colecaoParametroNegativacaoCriterio != null && !colecaoParametroNegativacaoCriterio.isEmpty()) {
+
+									for (Iterator iteratorColecaoParametroNegativacaoCriterio = colecaoParametroNegativacaoCriterio.iterator(); iteratorColecaoParametroNegativacaoCriterio
+											.hasNext();) {
+
+										parametroNegCrit = (Object[]) iteratorColecaoParametroNegativacaoCriterio.next();
+
+										if (parametroNegCrit[0] != null) {
+											rotas = getControladorSpcSerasa().pesquisarRotasPorCobrancaGrupoParaNegativacao(negativacaoCriterio);
+											break;
+										} else if (parametroNegCrit[1] != null) {
+											rotas = getControladorSpcSerasa().pesquisarRotasPorGerenciaRegionalParaNegativacao(negativacaoCriterio);
+											break;
+										} else if (parametroNegCrit[2] != null) {
+											rotas = getControladorSpcSerasa().pesquisarRotasPorUnidadeNegocioParaNegativacao(negativacaoCriterio);
+											break;
+										} else if (parametroNegCrit[3] != null) {
+											rotas = getControladorSpcSerasa().pesquisarRotasPorLocalidadeParaNegativacao(negativacaoCriterio);
+											break;
+										} else if (parametroNegCrit[4] != null && parametroNegCrit[5] != null) {
+											rotas = getControladorSpcSerasa().pesquisarRotasPorLocalidadesParaNegativacao(negativacaoCriterio);
+											break;
+										} else {
+											rotas = getControladorSpcSerasa().pesquisarRotasImoveis();
+											break;
+										}
+									}
 								} else {
-									if (colecaoParametroNegativacaoCriterio != null && !colecaoParametroNegativacaoCriterio.isEmpty()) {
-	
-										for (Iterator iteratorColecaoParametroNegativacaoCriterio = colecaoParametroNegativacaoCriterio.iterator(); iteratorColecaoParametroNegativacaoCriterio
-												.hasNext();) {
-	
-											parametroNegCrit = (Object[]) iteratorColecaoParametroNegativacaoCriterio.next();
-	
-											if (parametroNegCrit[0] != null) {
-												rotas = getControladorSpcSerasa().pesquisarRotasPorCobrancaGrupoParaNegativacao(negativacaoCriterio);
-												break;
-											} else if (parametroNegCrit[1] != null) {
-												rotas = getControladorSpcSerasa().pesquisarRotasPorGerenciaRegionalParaNegativacao(negativacaoCriterio);
-												break;
-											} else if (parametroNegCrit[2] != null) {
-												rotas = getControladorSpcSerasa().pesquisarRotasPorUnidadeNegocioParaNegativacao(negativacaoCriterio);
-												break;
-											} else if (parametroNegCrit[3] != null) {
-												rotas = getControladorSpcSerasa().pesquisarRotasPorLocalidadeParaNegativacao(negativacaoCriterio);
-												break;
-											} else if (parametroNegCrit[4] != null && parametroNegCrit[5] != null) {
-												rotas = getControladorSpcSerasa().pesquisarRotasPorLocalidadesParaNegativacao(negativacaoCriterio);
-												break;
-											} else {
-												rotas = getControladorSpcSerasa().pesquisarRotasImoveis();
-												break;
-											}
-										}
-									} else {
-										rotas = getControladorSpcSerasa().pesquisarRotasImoveis();
-									}
+									rotas = getControladorSpcSerasa().pesquisarRotasImoveis();
 								}
-	
-								// Eliminando as rotas duplicadas
-								rotas = new HashSet<Integer>(rotas);
-	
-								executarComandoNegativacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, rotas);
-								executarComandoNegativacao.addParametro("nCriterio", negativacaoCriterio);
-								executarComandoNegativacao.addParametro("neg", negativador);
-								executarComandoNegativacao.addParametro("nComando", negativacaoComando);
-								executarComandoNegativacao.addParametro("nContrato", negativadorContrato);
-	
-								if (negativacaoComando.getIndicadorSimulacao() != NegativacaoComando.SIMULACAO) {
-									int numeroSequencialEnvio = negativadorContrato.getNumeroSequencialEnvio() + 1;
-									Integer idNegativacaoMovimento = getControladorSpcSerasa().gerarNegativadorMovimento(negativador.getId(),
-											numeroSequencialEnvio, negativacaoComando.getId());
-	
-									getControladorSpcSerasa().gerarRegistroDeInclusaoTipoHeader(ConstantesSistema.TIPO_COMANDO_POR_CRITERIO, 1, negativador,
-											negativadorContrato, negativacaoComando, negativacaoCriterio, idNegativacaoMovimento);
-								}
-							} else {
-								throw new ControladorException("atencao.comando.negativacao.vazio.para.executar");
 							}
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(executarComandoNegativacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.ATUALIZAR_LIGACAO_AGUA_LIGADO_ANALISE_PARA_LIGADO:
-							
-							TarefaBatchAtualizarLigacaoAguaLigadoAnaliseParaLigado atualizarLigacaoAguaLigadoAnaliseParaLigado = new TarefaBatchAtualizarLigacaoAguaLigadoAnaliseParaLigado(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection colecaoLocalidade = getControladorArrecadacao().pesquisarLocalidadeComImoveisComSituacaoLigadoEmAnalise();
-	
-							atualizarLigacaoAguaLigadoAnaliseParaLigado.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoLocalidade);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(atualizarLigacaoAguaLigadoAnaliseParaLigado));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.ATUALIZAR_NUMERO_EXECUCAO_RESUMO_NEGATIVACAO:
-	
-							TarefaBatchAtualizarNumeroExecucaoResumoNegativacao atualizarNumeroExecucaoResumoNegativacao = new TarefaBatchAtualizarNumeroExecucaoResumoNegativacao(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(atualizarNumeroExecucaoResumoNegativacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_MOVIMENTO_EXCLUSAO_NEGATIVACAO:
-	
-							TarefaBatchGerarMovimentoExclusaoNegativacao gerarMovimentoExclusaoNegativacao = new TarefaBatchGerarMovimentoExclusaoNegativacao(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarMovimentoExclusaoNegativacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_MOVIMENTO_RETORNO_NEGATIVACAO:
-	
-							TarefaBatchGerarMovimentoRetornoNegativacao gerarMovimentoRetornoNegativacao = new TarefaBatchGerarMovimentoRetornoNegativacao(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarMovimentoRetornoNegativacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_DADOS_DIARIOS_ARRECADACAO:
-	
-							TarefaBatchGerarDadosDiariosArrecadacao dadosArrecadacao = new TarefaBatchGerarDadosDiariosArrecadacao(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsLocalidadesGerarDadosDiariosArrecadacao = getControladorArrecadacao()
-									.pesquisarIdsLocalidadeComPagamentosOuDevolucoes();
-	
-							dadosArrecadacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsLocalidadesGerarDadosDiariosArrecadacao);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosArrecadacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_DEBITOS_A_COBRAR_ACRESCIMOS_IMPONTUALIDADE:
-						
-							TarefaBatchGerarDebitosACobrarAcrescimosImpontualidade impontualidade = new TarefaBatchGerarDebitosACobrarAcrescimosImpontualidade(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							System.out.println("ENCERRAR ARRECADACAO DO MES");
-							Collection colecaoTodasRotas = getControladorMicromedicao().pesquisarListaRotasCarregadas();
-	
-							impontualidade.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoTodasRotas);
-							impontualidade.addParametro("indicadorGeracaoMulta", ConstantesSistema.SIM);
-							impontualidade.addParametro("indicadorGeracaoJuros", ConstantesSistema.SIM);
-							impontualidade.addParametro("indicadorGeracaoAtualizacao", ConstantesSistema.SIM);
-							impontualidade.addParametro("indicadorEncerrandoArrecadacao", true);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(impontualidade));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.CLASSIFICAR_PAGAMENTOS_DEVOLUCOES:
-	
-							TarefaBatchClassificarPagamentosDevolucoes dadosClassificarPagamentosDevolucoes = new TarefaBatchClassificarPagamentosDevolucoes(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsLocalidadesClassificarPagamentosDevolucoes = getControladorArrecadacao()
-									.pesquisarIdsLocalidadeComPagamentosOuDevolucoes();
-	
-							dadosClassificarPagamentosDevolucoes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesClassificarPagamentosDevolucoes);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosClassificarPagamentosDevolucoes));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.ENCERRAR_ARRECADACAO_MES:
-	
-							TarefaBatchEncerrarArrecadacaoMes dadosEncerrarArrecadacaoMes = new TarefaBatchEncerrarArrecadacaoMes(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							dadosEncerrarArrecadacaoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesEncerrarArrecadacaoMes);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosEncerrarArrecadacaoMes));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_HISTORICO_PARA_ENCERRAR_ARRECADACAO_MES:
 
-				            if (!getControladorArrecadacao().verificarExistenciaResumoArrecadacaoParaAnoMes(
-				                    getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao())) {
-				              throw new ControladorException("Não existem dados do resumo da arrecadação para o ano/mês de referencia");
-				            }
+							// Eliminando as rotas duplicadas
+							rotas = new HashSet<Integer>(rotas);
 
-				            TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes dadosGerarHistoricoEncerrarArrecadacaoMes = new TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes(
-				                processoIniciado.getUsuario(),
-				                funcionalidadeIniciada.getId());
+							executarComandoNegativacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, rotas);
+							executarComandoNegativacao.addParametro("nCriterio", negativacaoCriterio);
+							executarComandoNegativacao.addParametro("neg", negativador);
+							executarComandoNegativacao.addParametro("nComando", negativacaoComando);
+							executarComandoNegativacao.addParametro("nContrato", negativadorContrato);
 
-				            dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,colecaoIdsLocalidadesEncerrarArrecadacaoMes);
-				            dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro("anoMesReferenciaArrecadacao",anoMesArrecadacaoSistemaParametro);
+							if (negativacaoComando.getIndicadorSimulacao() != NegativacaoComando.SIMULACAO) {
+								int numeroSequencialEnvio = negativadorContrato.getNumeroSequencialEnvio() + 1;
+								Integer idNegativacaoMovimento = getControladorSpcSerasa().gerarNegativadorMovimento(negativador.getId(),
+										numeroSequencialEnvio, negativacaoComando.getId());
 
-				            funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoEncerrarArrecadacaoMes));
+								getControladorSpcSerasa().gerarRegistroDeInclusaoTipoHeader(ConstantesSistema.TIPO_COMANDO_POR_CRITERIO, 1, negativador,
+										negativadorContrato, negativacaoComando, negativacaoCriterio, idNegativacaoMovimento);
+							}
+						} else {
+							throw new ControladorException("atencao.comando.negativacao.vazio.para.executar");
+						}
 
-				            getControladorUtil().atualizar(funcionalidadeIniciada);
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(executarComandoNegativacao));
 
-				            break;
-	
-						case Funcionalidade.GERAR_HISTORICO_CONTA:
-							
-							TarefaBatchGerarHistoricoConta dadosGerarHistoricoConta = new TarefaBatchGerarHistoricoConta(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsSetoresEncerrarArrecadacaoMes = getControladorArrecadacao()
-									.pesquisarIdsSetoresComPagamentosOuDevolucoes();
-	
-							dadosGerarHistoricoConta.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsSetoresEncerrarArrecadacaoMes);
-							dadosGerarHistoricoConta.addParametro("anoMesReferenciaArrecadacao", anoMesFaturamentoSistemaParametro);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoConta));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.ENCERRAR_FATURAMENTO_MES:
-						
-							TarefaBatchEncerrarFaturamentoMes dadosEncerrarFaturamentoMes = new TarefaBatchEncerrarFaturamentoMes(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsLocalidadesEncerrarFaturamentoMes = getControladorFaturamento()
-									.pesquisarIdsLocalidadeParaEncerrarFaturamento();
-	
-							dadosEncerrarFaturamentoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesEncerrarFaturamentoMes);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosEncerrarFaturamentoMes));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_HISTORICO_PARA_ENCERRAR_FATURAMENTO_MES:
-							TarefaBatchGerarHistoricoParaEncerrarFaturamentoMes dadosGerarHistoricoParaEncerrarFaturamentoMes = new TarefaBatchGerarHistoricoParaEncerrarFaturamentoMes(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsSetoresEncerrarFaturamentoMes = getControladorFaturamento()
-									.pesquisarIdsSetorParaGerarHistoricoParaEncerrarFaturamento();
-	
-							dadosGerarHistoricoParaEncerrarFaturamentoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsSetoresEncerrarFaturamentoMes);
-	
-							dadosGerarHistoricoParaEncerrarFaturamentoMes.addParametro("anoMesFaturamentoSistemaParametro", anoMesFaturamentoSistemaParametro);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoParaEncerrarFaturamentoMes));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_LIGACOES_ECONOMIAS:
-							
-							TarefaBatchGerarResumoLigacoesEconomias gerarResumoLigacoesEconomias = new TarefaBatchGerarResumoLigacoesEconomias(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial novoFiltro = new FiltroSetorComercial();
-							Collection<SetorComercial> colecaoSetorComercial = getControladorUtil().pesquisar(novoFiltro, SetorComercial.class.getName());
-	
-							gerarResumoLigacoesEconomias.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoSetorComercial);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoLigacoesEconomias));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_HIDROMETRO:
-							
-							TarefaBatchGerarResumoHidrometro gerarResumoHidrometro = new TarefaBatchGerarResumoHidrometro(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							FiltroHidrometroMarca filtroHidrometro = new FiltroHidrometroMarca();
-							Collection colMarca = getControladorUtil().pesquisar(filtroHidrometro, HidrometroMarca.class.getName());
-	
-							gerarResumoHidrometro.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colMarca);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoHidrometro));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_REGISTRO_ATENDIMENTO:
-							
-							TarefaBatchGerarResumoRegistroAtendimento gerarResumoRegistroAtendimento = new TarefaBatchGerarResumoRegistroAtendimento(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsLocalidadesGerarResumoRegistroAtendimentoMes = getControladorLocalidade().pesquisarTodosIdsLocalidade();
-	
-							gerarResumoRegistroAtendimento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesGerarResumoRegistroAtendimentoMes);
-	
-							gerarResumoRegistroAtendimento.addParametro("anoMesFaturamentoSistemaParametro", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoRegistroAtendimento));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_CONSUMO_AGUA:
-							
-							TarefaBatchGerarResumoConsumoAgua gerarResumoConsumoAgua = new TarefaBatchGerarResumoConsumoAgua(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtro = new FiltroSetorComercial();
-							Collection<SetorComercial> colSetor = getControladorUtil().pesquisar(filtro, SetorComercial.class.getName());
-	
-							gerarResumoConsumoAgua.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetor);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoConsumoAgua));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_LANCAMENTOS_CONTABEIS_ARRECADACAO:
-	
-							TarefaBatchGerarLancamentosContabeisArrecadacao dadosGerarLancamentosContabeisArrecadacao = new TarefaBatchGerarLancamentosContabeisArrecadacao(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroLocalidade filtroLocalidadeLancamentoContabeisArrecadacao = new FiltroLocalidade();
-	
-							Collection<Localidade> colecaoIdsLocalidadesGerarLancamentosContabeisArrecadacao = getControladorUtil().pesquisar(
-									filtroLocalidadeLancamentoContabeisArrecadacao, Localidade.class.getName());
-	
-							dadosGerarLancamentosContabeisArrecadacao.addParametro("anoMesArrecadacao", sistemaParametros.getAnoMesArrecadacao());
-							dadosGerarLancamentosContabeisArrecadacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesGerarLancamentosContabeisArrecadacao);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarLancamentosContabeisArrecadacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_LANCAMENTOS_CONTABEIS_AVISO_BANCARIO:
-	
-							TarefaBatchGerarLancamentosContabeisAvisosBancarios tarefaBatch = new TarefaBatchGerarLancamentosContabeisAvisosBancarios(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							tarefaBatch.addParametro("anoMesArrecadacao", sistemaParametros.getAnoMesArrecadacao());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatch));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_SITUACAO_ESPECIAL_FATURAMENTO:
-							
-							TarefaBatchGerarResumoSituacaoEspecialFaturamento gerarResumoSituacaoEspecialFaturamento = new TarefaBatchGerarResumoSituacaoEspecialFaturamento(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoLocalidadeFaturamento = getControladorFaturamento().pesquisarIdsLocalidadeParaGerarResumoLigacoesEconomias();
-	
-							gerarResumoSituacaoEspecialFaturamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoLocalidadeFaturamento);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoSituacaoEspecialFaturamento));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_HISTOGRAMA_AGUA_ESGOTO:
-	
-							TarefaBatchGerarResumoHistogramaAguaEsgoto gerarResumoAguaEsgoto = new TarefaBatchGerarResumoHistogramaAguaEsgoto(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroHistograma = new FiltroSetorComercial();
-	
-							Collection<SetorComercial> colSetorHistograma = getControladorUtil().pesquisar(filtroHistograma, SetorComercial.class.getName());
-	
-							gerarResumoAguaEsgoto.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorHistograma);
-							gerarResumoAguaEsgoto.addParametro("anoMesFaturamentoSistemaParametro", anoMesFaturamentoSistemaParametro);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoAguaEsgoto));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_ACOES_COBRANCA_CRONOGRAMA:
-							
-							TarefaBatchGerarResumoAcoesCobrancaCronograma dadosGerarResumoAcoesCobrancaCronograma = new TarefaBatchGerarResumoAcoesCobrancaCronograma(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection colecaoCobrancaGrupoCronogramaMes = getControladorCobranca().pesquisarCobrancaGrupoCronogramaMes();
-	
-							int POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR = 0;
-							int POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR = 1;
-							int POSICAO_DATA_COM_ATIV_ENCERRAR = 2;
-							int POSICAO_DATA_PREV_ATIV_ENCERRAR = 3;
-							int POSICAO_DATA_PREV_ATIV_EMITIR = 4;
-							int POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES = 5;
-							int POSICAO_ID_COB_ACAO_CRONOG = 6;
-							int POSICAO_ID_COB_GRUPO = 7;
-							int POSICAO_ID_COB_ACAO = 8;
-							int POSICAO_DATA_REA_ATIV_EMITIR = 9;
-	
-							Collection colecaoDadosCobrancaAcaoAtividadeCronograma = new ArrayList();
-	
-							if (colecaoCobrancaGrupoCronogramaMes != null) {
-								Iterator iteratorColecaoCobrancaGrupoCronogramaMes = colecaoCobrancaGrupoCronogramaMes.iterator();
-	
-								while (iteratorColecaoCobrancaGrupoCronogramaMes.hasNext()) {
-	
-									Object[] dadosCobrancaGrupoCronogramaMes = (Object[]) iteratorColecaoCobrancaGrupoCronogramaMes.next();
-	
-									Integer anoMesReferencia = null;
-									Integer idGrupo = null;
-	
-									Collection colecaoCobrancaAcaoCronograma = null;
-	
-									int idCobrancaGrupoCronogramaMes = -1;
-	
-									if (dadosCobrancaGrupoCronogramaMes[0] != null) {
-										idCobrancaGrupoCronogramaMes = ((Integer) dadosCobrancaGrupoCronogramaMes[0]).intValue();
-									}
-	
-									if (dadosCobrancaGrupoCronogramaMes[1] != null) {
-										anoMesReferencia = (Integer) dadosCobrancaGrupoCronogramaMes[1];
-									}
-	
-									if (dadosCobrancaGrupoCronogramaMes[2] != null) {
-										idGrupo = (Integer) dadosCobrancaGrupoCronogramaMes[2];
-									}
-	
-									colecaoCobrancaAcaoCronograma = getControladorCobranca().pesquisarCobrancaAcaoCronograma(idCobrancaGrupoCronogramaMes);
-	
-									if (colecaoCobrancaAcaoCronograma != null && !colecaoCobrancaAcaoCronograma.isEmpty()) {
-	
-										Iterator iteratorColecaoCobrancaAcaoCronograma = colecaoCobrancaAcaoCronograma.iterator();
-	
-										int idCobrancaAcaoCronograma = -1;
-	
-										Object[] dadosCobrancaAcaoCronograma = null;
-										Object[] dadosCobrancaAcaoAtividadeCronograma = null;
-	
-										while (iteratorColecaoCobrancaAcaoCronograma.hasNext()) {
-											dadosCobrancaAcaoCronograma = (Object[]) iteratorColecaoCobrancaAcaoCronograma.next();
-	
-											dadosCobrancaAcaoAtividadeCronograma = new Object[10];
-	
-											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES] = anoMesReferencia;
-											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_GRUPO] = idGrupo;
-	
-											if (dadosCobrancaAcaoCronograma[0] != null) {
-												idCobrancaAcaoCronograma = ((Integer) dadosCobrancaAcaoCronograma[0]).intValue();
-												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_CRONOG] = dadosCobrancaAcaoCronograma[0];
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.ATUALIZAR_LIGACAO_AGUA_LIGADO_ANALISE_PARA_LIGADO:
+
+						TarefaBatchAtualizarLigacaoAguaLigadoAnaliseParaLigado atualizarLigacaoAguaLigadoAnaliseParaLigado = new TarefaBatchAtualizarLigacaoAguaLigadoAnaliseParaLigado(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection colecaoLocalidade = getControladorArrecadacao().pesquisarLocalidadeComImoveisComSituacaoLigadoEmAnalise();
+
+						atualizarLigacaoAguaLigadoAnaliseParaLigado.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoLocalidade);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(atualizarLigacaoAguaLigadoAnaliseParaLigado));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.ATUALIZAR_NUMERO_EXECUCAO_RESUMO_NEGATIVACAO:
+
+						TarefaBatchAtualizarNumeroExecucaoResumoNegativacao atualizarNumeroExecucaoResumoNegativacao = new TarefaBatchAtualizarNumeroExecucaoResumoNegativacao(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(atualizarNumeroExecucaoResumoNegativacao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_MOVIMENTO_EXCLUSAO_NEGATIVACAO:
+
+						TarefaBatchGerarMovimentoExclusaoNegativacao gerarMovimentoExclusaoNegativacao = new TarefaBatchGerarMovimentoExclusaoNegativacao(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarMovimentoExclusaoNegativacao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_MOVIMENTO_RETORNO_NEGATIVACAO:
+
+						TarefaBatchGerarMovimentoRetornoNegativacao gerarMovimentoRetornoNegativacao = new TarefaBatchGerarMovimentoRetornoNegativacao(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarMovimentoRetornoNegativacao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_DADOS_DIARIOS_ARRECADACAO:
+
+						TarefaBatchGerarDadosDiariosArrecadacao dadosArrecadacao = new TarefaBatchGerarDadosDiariosArrecadacao(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsLocalidadesGerarDadosDiariosArrecadacao = getControladorArrecadacao()
+								.pesquisarIdsLocalidadeComPagamentosOuDevolucoes();
+
+						dadosArrecadacao
+								.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsLocalidadesGerarDadosDiariosArrecadacao);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosArrecadacao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_DEBITOS_A_COBRAR_ACRESCIMOS_IMPONTUALIDADE:
+
+						TarefaBatchGerarDebitosACobrarAcrescimosImpontualidade impontualidade = new TarefaBatchGerarDebitosACobrarAcrescimosImpontualidade(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						System.out.println("ENCERRAR ARRECADACAO DO MES");
+						Collection colecaoTodasRotas = getControladorMicromedicao().pesquisarListaRotasCarregadas();
+
+						impontualidade.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoTodasRotas);
+						impontualidade.addParametro("indicadorGeracaoMulta", ConstantesSistema.SIM);
+						impontualidade.addParametro("indicadorGeracaoJuros", ConstantesSistema.SIM);
+						impontualidade.addParametro("indicadorGeracaoAtualizacao", ConstantesSistema.SIM);
+						impontualidade.addParametro("indicadorEncerrandoArrecadacao", true);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(impontualidade));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.CLASSIFICAR_PAGAMENTOS_DEVOLUCOES:
+
+						TarefaBatchClassificarPagamentosDevolucoes dadosClassificarPagamentosDevolucoes = new TarefaBatchClassificarPagamentosDevolucoes(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsLocalidadesClassificarPagamentosDevolucoes = getControladorArrecadacao()
+								.pesquisarIdsLocalidadeComPagamentosOuDevolucoes();
+
+						dadosClassificarPagamentosDevolucoes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesClassificarPagamentosDevolucoes);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosClassificarPagamentosDevolucoes));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.ENCERRAR_ARRECADACAO_MES:
+
+						TarefaBatchEncerrarArrecadacaoMes dadosEncerrarArrecadacaoMes = new TarefaBatchEncerrarArrecadacaoMes(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						dadosEncerrarArrecadacaoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesEncerrarArrecadacaoMes);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosEncerrarArrecadacaoMes));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_HISTORICO_PARA_ENCERRAR_ARRECADACAO_MES:
+
+						if (!getControladorArrecadacao().verificarExistenciaResumoArrecadacaoParaAnoMes(
+								getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao())) {
+							throw new ControladorException("Não existem dados do resumo da arrecadação para o ano/mês de referencia");
+						}
+
+						TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes dadosGerarHistoricoEncerrarArrecadacaoMes = new TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesEncerrarArrecadacaoMes);
+						dadosGerarHistoricoEncerrarArrecadacaoMes.addParametro("anoMesReferenciaArrecadacao", anoMesArrecadacaoSistemaParametro);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoEncerrarArrecadacaoMes));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_HISTORICO_CONTA:
+
+						TarefaBatchGerarHistoricoConta dadosGerarHistoricoConta = new TarefaBatchGerarHistoricoConta(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsSetoresEncerrarArrecadacaoMes = getControladorArrecadacao()
+								.pesquisarIdsSetoresComPagamentosOuDevolucoes();
+
+						dadosGerarHistoricoConta.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsSetoresEncerrarArrecadacaoMes);
+						dadosGerarHistoricoConta.addParametro("anoMesReferenciaArrecadacao", anoMesFaturamentoSistemaParametro);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoConta));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.ENCERRAR_FATURAMENTO_MES:
+
+						TarefaBatchEncerrarFaturamentoMes dadosEncerrarFaturamentoMes = new TarefaBatchEncerrarFaturamentoMes(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsLocalidadesEncerrarFaturamentoMes = getControladorFaturamento()
+								.pesquisarIdsLocalidadeParaEncerrarFaturamento();
+
+						dadosEncerrarFaturamentoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesEncerrarFaturamentoMes);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosEncerrarFaturamentoMes));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_HISTORICO_PARA_ENCERRAR_FATURAMENTO_MES:
+						TarefaBatchGerarHistoricoParaEncerrarFaturamentoMes dadosGerarHistoricoParaEncerrarFaturamentoMes = new TarefaBatchGerarHistoricoParaEncerrarFaturamentoMes(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsSetoresEncerrarFaturamentoMes = getControladorFaturamento()
+								.pesquisarIdsSetorParaGerarHistoricoParaEncerrarFaturamento();
+
+						dadosGerarHistoricoParaEncerrarFaturamentoMes.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsSetoresEncerrarFaturamentoMes);
+
+						dadosGerarHistoricoParaEncerrarFaturamentoMes.addParametro("anoMesFaturamentoSistemaParametro", anoMesFaturamentoSistemaParametro);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarHistoricoParaEncerrarFaturamentoMes));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_LIGACOES_ECONOMIAS:
+
+						TarefaBatchGerarResumoLigacoesEconomias gerarResumoLigacoesEconomias = new TarefaBatchGerarResumoLigacoesEconomias(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial novoFiltro = new FiltroSetorComercial();
+						Collection<SetorComercial> colecaoSetorComercial = getControladorUtil().pesquisar(novoFiltro, SetorComercial.class.getName());
+
+						gerarResumoLigacoesEconomias.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoSetorComercial);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoLigacoesEconomias));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_HIDROMETRO:
+
+						TarefaBatchGerarResumoHidrometro gerarResumoHidrometro = new TarefaBatchGerarResumoHidrometro(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						FiltroHidrometroMarca filtroHidrometro = new FiltroHidrometroMarca();
+						Collection colMarca = getControladorUtil().pesquisar(filtroHidrometro, HidrometroMarca.class.getName());
+
+						gerarResumoHidrometro.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colMarca);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoHidrometro));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_REGISTRO_ATENDIMENTO:
+
+						TarefaBatchGerarResumoRegistroAtendimento gerarResumoRegistroAtendimento = new TarefaBatchGerarResumoRegistroAtendimento(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsLocalidadesGerarResumoRegistroAtendimentoMes = getControladorLocalidade().pesquisarTodosIdsLocalidade();
+
+						gerarResumoRegistroAtendimento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesGerarResumoRegistroAtendimentoMes);
+
+						gerarResumoRegistroAtendimento.addParametro("anoMesFaturamentoSistemaParametro", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoRegistroAtendimento));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_CONSUMO_AGUA:
+
+						TarefaBatchGerarResumoConsumoAgua gerarResumoConsumoAgua = new TarefaBatchGerarResumoConsumoAgua(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtro = new FiltroSetorComercial();
+						Collection<SetorComercial> colSetor = getControladorUtil().pesquisar(filtro, SetorComercial.class.getName());
+
+						gerarResumoConsumoAgua.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetor);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoConsumoAgua));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_LANCAMENTOS_CONTABEIS_ARRECADACAO:
+
+						TarefaBatchGerarLancamentosContabeisArrecadacao dadosGerarLancamentosContabeisArrecadacao = new TarefaBatchGerarLancamentosContabeisArrecadacao(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroLocalidade filtroLocalidadeLancamentoContabeisArrecadacao = new FiltroLocalidade();
+
+						Collection<Localidade> colecaoIdsLocalidadesGerarLancamentosContabeisArrecadacao = getControladorUtil().pesquisar(
+								filtroLocalidadeLancamentoContabeisArrecadacao, Localidade.class.getName());
+
+						dadosGerarLancamentosContabeisArrecadacao.addParametro("anoMesArrecadacao", sistemaParametros.getAnoMesArrecadacao());
+						dadosGerarLancamentosContabeisArrecadacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesGerarLancamentosContabeisArrecadacao);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarLancamentosContabeisArrecadacao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_LANCAMENTOS_CONTABEIS_AVISO_BANCARIO:
+
+						TarefaBatchGerarLancamentosContabeisAvisosBancarios tarefaBatch = new TarefaBatchGerarLancamentosContabeisAvisosBancarios(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						tarefaBatch.addParametro("anoMesArrecadacao", sistemaParametros.getAnoMesArrecadacao());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatch));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_SITUACAO_ESPECIAL_FATURAMENTO:
+
+						TarefaBatchGerarResumoSituacaoEspecialFaturamento gerarResumoSituacaoEspecialFaturamento = new TarefaBatchGerarResumoSituacaoEspecialFaturamento(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoLocalidadeFaturamento = getControladorFaturamento().pesquisarIdsLocalidadeParaGerarResumoLigacoesEconomias();
+
+						gerarResumoSituacaoEspecialFaturamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoLocalidadeFaturamento);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoSituacaoEspecialFaturamento));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_HISTOGRAMA_AGUA_ESGOTO:
+
+						TarefaBatchGerarResumoHistogramaAguaEsgoto gerarResumoAguaEsgoto = new TarefaBatchGerarResumoHistogramaAguaEsgoto(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroHistograma = new FiltroSetorComercial();
+
+						Collection<SetorComercial> colSetorHistograma = getControladorUtil().pesquisar(filtroHistograma, SetorComercial.class.getName());
+
+						gerarResumoAguaEsgoto.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorHistograma);
+						gerarResumoAguaEsgoto.addParametro("anoMesFaturamentoSistemaParametro", anoMesFaturamentoSistemaParametro);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoAguaEsgoto));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_ACOES_COBRANCA_CRONOGRAMA:
+
+						TarefaBatchGerarResumoAcoesCobrancaCronograma dadosGerarResumoAcoesCobrancaCronograma = new TarefaBatchGerarResumoAcoesCobrancaCronograma(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection colecaoCobrancaGrupoCronogramaMes = getControladorCobranca().pesquisarCobrancaGrupoCronogramaMes();
+
+						int POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR = 0;
+						int POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR = 1;
+						int POSICAO_DATA_COM_ATIV_ENCERRAR = 2;
+						int POSICAO_DATA_PREV_ATIV_ENCERRAR = 3;
+						int POSICAO_DATA_PREV_ATIV_EMITIR = 4;
+						int POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES = 5;
+						int POSICAO_ID_COB_ACAO_CRONOG = 6;
+						int POSICAO_ID_COB_GRUPO = 7;
+						int POSICAO_ID_COB_ACAO = 8;
+						int POSICAO_DATA_REA_ATIV_EMITIR = 9;
+
+						Collection colecaoDadosCobrancaAcaoAtividadeCronograma = new ArrayList();
+
+						if (colecaoCobrancaGrupoCronogramaMes != null) {
+							Iterator iteratorColecaoCobrancaGrupoCronogramaMes = colecaoCobrancaGrupoCronogramaMes.iterator();
+
+							while (iteratorColecaoCobrancaGrupoCronogramaMes.hasNext()) {
+
+								Object[] dadosCobrancaGrupoCronogramaMes = (Object[]) iteratorColecaoCobrancaGrupoCronogramaMes.next();
+
+								Integer anoMesReferencia = null;
+								Integer idGrupo = null;
+
+								Collection colecaoCobrancaAcaoCronograma = null;
+
+								int idCobrancaGrupoCronogramaMes = -1;
+
+								if (dadosCobrancaGrupoCronogramaMes[0] != null) {
+									idCobrancaGrupoCronogramaMes = ((Integer) dadosCobrancaGrupoCronogramaMes[0]).intValue();
+								}
+
+								if (dadosCobrancaGrupoCronogramaMes[1] != null) {
+									anoMesReferencia = (Integer) dadosCobrancaGrupoCronogramaMes[1];
+								}
+
+								if (dadosCobrancaGrupoCronogramaMes[2] != null) {
+									idGrupo = (Integer) dadosCobrancaGrupoCronogramaMes[2];
+								}
+
+								colecaoCobrancaAcaoCronograma = getControladorCobranca().pesquisarCobrancaAcaoCronograma(idCobrancaGrupoCronogramaMes);
+
+								if (colecaoCobrancaAcaoCronograma != null && !colecaoCobrancaAcaoCronograma.isEmpty()) {
+
+									Iterator iteratorColecaoCobrancaAcaoCronograma = colecaoCobrancaAcaoCronograma.iterator();
+
+									int idCobrancaAcaoCronograma = -1;
+
+									Object[] dadosCobrancaAcaoCronograma = null;
+									Object[] dadosCobrancaAcaoAtividadeCronograma = null;
+
+									while (iteratorColecaoCobrancaAcaoCronograma.hasNext()) {
+										dadosCobrancaAcaoCronograma = (Object[]) iteratorColecaoCobrancaAcaoCronograma.next();
+
+										dadosCobrancaAcaoAtividadeCronograma = new Object[10];
+
+										dadosCobrancaAcaoAtividadeCronograma[POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES] = anoMesReferencia;
+										dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_GRUPO] = idGrupo;
+
+										if (dadosCobrancaAcaoCronograma[0] != null) {
+											idCobrancaAcaoCronograma = ((Integer) dadosCobrancaAcaoCronograma[0]).intValue();
+											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_CRONOG] = dadosCobrancaAcaoCronograma[0];
+										}
+
+										if (dadosCobrancaAcaoCronograma[1] != null) {
+											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO] = dadosCobrancaAcaoCronograma[1];
+										}
+
+										boolean primeiraCondicao = true;
+										boolean segundaCondicao = true;
+
+										Collection colecaoCobrancaAtividadeAcaoCronogramaEmitir = null;
+										Collection colecaoCobrancaAtividadeAcaoCronogramaEncerrar = null;
+
+										colecaoCobrancaAtividadeAcaoCronogramaEmitir = getControladorCobranca()
+												.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.EMITIR);
+
+										if (colecaoCobrancaAtividadeAcaoCronogramaEmitir != null && !colecaoCobrancaAtividadeAcaoCronogramaEmitir.isEmpty()) {
+
+											Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEmitir.iterator().next();
+
+											if (dadosCobrancaAtividade[0] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR] = dadosCobrancaAtividade[0];
 											}
-	
-											if (dadosCobrancaAcaoCronograma[1] != null) {
-												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO] = dadosCobrancaAcaoCronograma[1];
-											}
-	
-											boolean primeiraCondicao = true;
-											boolean segundaCondicao = true;
-	
-											Collection colecaoCobrancaAtividadeAcaoCronogramaEmitir = null;
-											Collection colecaoCobrancaAtividadeAcaoCronogramaEncerrar = null;
-	
-											colecaoCobrancaAtividadeAcaoCronogramaEmitir = getControladorCobranca()
-													.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.EMITIR);
-	
-											if (colecaoCobrancaAtividadeAcaoCronogramaEmitir != null && !colecaoCobrancaAtividadeAcaoCronogramaEmitir.isEmpty()) {
-	
-												Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEmitir.iterator().next();
-	
-												if (dadosCobrancaAtividade[0] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR] = dadosCobrancaAtividade[0];
-												}
-	
-												if (dadosCobrancaAtividade[1] == null) {
-													primeiraCondicao = false;
-												} else {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_REA_ATIV_EMITIR] = dadosCobrancaAtividade[1];
-												}
-	
-												if (dadosCobrancaAtividade[2] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_EMITIR] = dadosCobrancaAtividade[2];
-												}
-	
-											} else {
+
+											if (dadosCobrancaAtividade[1] == null) {
 												primeiraCondicao = false;
-											}
-	
-											colecaoCobrancaAtividadeAcaoCronogramaEncerrar = getControladorCobranca()
-													.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.ENCERRAR);
-	
-											if (colecaoCobrancaAtividadeAcaoCronogramaEncerrar != null && !colecaoCobrancaAtividadeAcaoCronogramaEncerrar.isEmpty()) {
-	
-												Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEncerrar.iterator().next();
-	
-												if (dadosCobrancaAtividade[0] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR] = dadosCobrancaAtividade[0];
-												}
-	
-												if (dadosCobrancaAtividade[1] != null) {
-													segundaCondicao = false;
-												}
-	
-												if (dadosCobrancaAtividade[2] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_ENCERRAR] = dadosCobrancaAtividade[2];
-												}
-	
-												if (dadosCobrancaAtividade[3] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_COM_ATIV_ENCERRAR] = dadosCobrancaAtividade[3];
-												}
-	
-												dadosCobrancaAtividade = null;
-											} 
-	
-											if (primeiraCondicao && segundaCondicao) {
-												colecaoDadosCobrancaAcaoAtividadeCronograma.add(dadosCobrancaAcaoAtividadeCronograma);
-											}
-											dadosCobrancaAcaoAtividadeCronograma = null;
-										}
-									}
-	
-								}
-								dadosGerarResumoAcoesCobrancaCronograma.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										colecaoDadosCobrancaAcaoAtividadeCronograma);
-	
-								funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoAcoesCobrancaCronograma));
-	
-								getControladorUtil().atualizar(funcionalidadeIniciada);
-							} else {
-								throw new ControladorException("atencao.nao.existe.dados.tabela.cronograma");
-							}
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_ACOES_COBRANCA_CRONOGRAMA_ENCERRAR_OS:
-							TarefaBatchGerarResumoAcoesCobrancaCronogramaEncerrarOS dadosGerarResumoAcoesCobrancaCronogramaEncerrarOS = new TarefaBatchGerarResumoAcoesCobrancaCronogramaEncerrarOS(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							colecaoCobrancaGrupoCronogramaMes = getControladorCobranca().pesquisarCobrancaGrupoCronogramaMes();
-	
-							// posiaaes do array com os dados que serao atualizados
-							POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR = 0;
-							POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR = 1;
-							POSICAO_DATA_COM_ATIV_ENCERRAR = 2;
-							POSICAO_DATA_PREV_ATIV_ENCERRAR = 3;
-							POSICAO_DATA_PREV_ATIV_EMITIR = 4;
-							POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES = 5;
-							POSICAO_ID_COB_ACAO_CRONOG = 6;
-							POSICAO_ID_COB_GRUPO = 7;
-							POSICAO_ID_COB_ACAO = 8;
-							POSICAO_DATA_REA_ATIV_EMITIR = 9;
-	
-							colecaoDadosCobrancaAcaoAtividadeCronograma = new ArrayList();
-	
-							if (colecaoCobrancaGrupoCronogramaMes != null) {
-								Iterator iteratorColecaoCobrancaGrupoCronogramaMes = colecaoCobrancaGrupoCronogramaMes.iterator();
-	
-								while (iteratorColecaoCobrancaGrupoCronogramaMes.hasNext()) {
-	
-									Object[] dadosCobrancaGrupoCronogramaMes = (Object[]) iteratorColecaoCobrancaGrupoCronogramaMes.next();
-	
-									Integer anoMesReferencia = null;
-									Integer idGrupo = null;
-	
-									Collection colecaoCobrancaAcaoCronograma = null;
-	
-									int idCobrancaGrupoCronogramaMes = -1;
-	
-									if (dadosCobrancaGrupoCronogramaMes[0] != null) {
-										idCobrancaGrupoCronogramaMes = ((Integer) dadosCobrancaGrupoCronogramaMes[0]).intValue();
-									}
-	
-									if (dadosCobrancaGrupoCronogramaMes[1] != null) {
-										anoMesReferencia = (Integer) dadosCobrancaGrupoCronogramaMes[1];
-									}
-	
-									if (dadosCobrancaGrupoCronogramaMes[2] != null) {
-										idGrupo = (Integer) dadosCobrancaGrupoCronogramaMes[2];
-									}
-	
-									colecaoCobrancaAcaoCronograma = getControladorCobranca().pesquisarCobrancaAcaoCronograma(idCobrancaGrupoCronogramaMes);
-	
-									if (colecaoCobrancaAcaoCronograma != null && !colecaoCobrancaAcaoCronograma.isEmpty()) {
-	
-										Iterator iteratorColecaoCobrancaAcaoCronograma = colecaoCobrancaAcaoCronograma.iterator();
-	
-										int idCobrancaAcaoCronograma = -1;
-	
-										Object[] dadosCobrancaAcaoCronograma = null;
-										Object[] dadosCobrancaAcaoAtividadeCronograma = null;
-	
-										while (iteratorColecaoCobrancaAcaoCronograma.hasNext()) {
-											dadosCobrancaAcaoCronograma = (Object[]) iteratorColecaoCobrancaAcaoCronograma.next();
-	
-											dadosCobrancaAcaoAtividadeCronograma = new Object[10];
-	
-											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES] = anoMesReferencia;
-											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_GRUPO] = idGrupo;
-	
-											if (dadosCobrancaAcaoCronograma[0] != null) {
-												idCobrancaAcaoCronograma = ((Integer) dadosCobrancaAcaoCronograma[0]).intValue();
-												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_CRONOG] = dadosCobrancaAcaoCronograma[0];
-											}
-	
-											if (dadosCobrancaAcaoCronograma[1] != null) {
-												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO] = dadosCobrancaAcaoCronograma[1];
-											}
-	
-											boolean primeiraCondicao = true;
-											boolean segundaCondicao = true;
-	
-											Collection colecaoCobrancaAtividadeAcaoCronogramaEmitir = null;
-											Collection colecaoCobrancaAtividadeAcaoCronogramaEncerrar = null;
-	
-											colecaoCobrancaAtividadeAcaoCronogramaEmitir = getControladorCobranca()
-													.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.EMITIR);
-	
-											if (colecaoCobrancaAtividadeAcaoCronogramaEmitir != null && !colecaoCobrancaAtividadeAcaoCronogramaEmitir.isEmpty()) {
-	
-												Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEmitir.iterator().next();
-	
-												if (dadosCobrancaAtividade[0] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR] = dadosCobrancaAtividade[0];
-												}
-	
-												if (dadosCobrancaAtividade[1] == null) {
-													primeiraCondicao = false;
-												} else {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_REA_ATIV_EMITIR] = dadosCobrancaAtividade[1];
-												}
-	
-												if (dadosCobrancaAtividade[2] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_EMITIR] = dadosCobrancaAtividade[2];
-												}
-	
 											} else {
-												primeiraCondicao = false;
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_REA_ATIV_EMITIR] = dadosCobrancaAtividade[1];
 											}
-	
-											colecaoCobrancaAtividadeAcaoCronogramaEncerrar = getControladorCobranca()
-													.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.ENCERRAR);
-	
-											if (colecaoCobrancaAtividadeAcaoCronogramaEncerrar != null && !colecaoCobrancaAtividadeAcaoCronogramaEncerrar.isEmpty()) {
-	
-												Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEncerrar.iterator().next();
-	
-												if (dadosCobrancaAtividade[0] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR] = dadosCobrancaAtividade[0];
-												}
-	
-												if (dadosCobrancaAtividade[1] != null) {
-													segundaCondicao = false;
-												}
-	
-												if (dadosCobrancaAtividade[2] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_ENCERRAR] = dadosCobrancaAtividade[2];
-												}
-	
-												if (dadosCobrancaAtividade[3] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_COM_ATIV_ENCERRAR] = dadosCobrancaAtividade[3];
-												}
-												dadosCobrancaAtividade = null;
-											} 
-	
-											if (primeiraCondicao && segundaCondicao) {
-												colecaoDadosCobrancaAcaoAtividadeCronograma.add(dadosCobrancaAcaoAtividadeCronograma);
+
+											if (dadosCobrancaAtividade[2] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_EMITIR] = dadosCobrancaAtividade[2];
 											}
-											dadosCobrancaAcaoAtividadeCronograma = null;
+
+										} else {
+											primeiraCondicao = false;
 										}
+
+										colecaoCobrancaAtividadeAcaoCronogramaEncerrar = getControladorCobranca()
+												.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.ENCERRAR);
+
+										if (colecaoCobrancaAtividadeAcaoCronogramaEncerrar != null && !colecaoCobrancaAtividadeAcaoCronogramaEncerrar.isEmpty()) {
+
+											Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEncerrar.iterator().next();
+
+											if (dadosCobrancaAtividade[0] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR] = dadosCobrancaAtividade[0];
+											}
+
+											if (dadosCobrancaAtividade[1] != null) {
+												segundaCondicao = false;
+											}
+
+											if (dadosCobrancaAtividade[2] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_ENCERRAR] = dadosCobrancaAtividade[2];
+											}
+
+											if (dadosCobrancaAtividade[3] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_COM_ATIV_ENCERRAR] = dadosCobrancaAtividade[3];
+											}
+
+											dadosCobrancaAtividade = null;
+										}
+
+										if (primeiraCondicao && segundaCondicao) {
+											colecaoDadosCobrancaAcaoAtividadeCronograma.add(dadosCobrancaAcaoAtividadeCronograma);
+										}
+										dadosCobrancaAcaoAtividadeCronograma = null;
 									}
 								}
-								dadosGerarResumoAcoesCobrancaCronogramaEncerrarOS.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										colecaoDadosCobrancaAcaoAtividadeCronograma);
-	
-								funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoAcoesCobrancaCronogramaEncerrarOS));
-	
-								getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							} else {
-								throw new ControladorException("atencao.nao.existe.dados.tabela.cronograma");
+
 							}
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_ACOES_COBRANCA_EVENTUAL:
-							
-							TarefaBatchGerarResumoAcoesCobrancaEventual tarefaBatchGerarResumoAcoesCobrancaEventual = new TarefaBatchGerarResumoAcoesCobrancaEventual(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection colecaoAcaoCobrancaEventual = getControladorCobranca().pesquisarCobrancaAcaoAtividadeComandoSemRealizacao();
-	
-							if (colecaoAcaoCobrancaEventual != null && !colecaoAcaoCobrancaEventual.isEmpty()) {
-								tarefaBatchGerarResumoAcoesCobrancaEventual.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										colecaoAcaoCobrancaEventual);
-	
-								funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoAcoesCobrancaEventual));
-	
-								getControladorUtil().atualizar(funcionalidadeIniciada);
-							} else {
-								throw new ControladorException("atencao.nao.existe.dados.tabela.comando");
-							}
-	
-							break;
-	
-						case Funcionalidade.INSERIR_RESUMO_ACOES_COBRANCA_CRONOGRAMA:
-							TarefaBatchInserirResumoAcoesCobrancaCronograma dadosInserirResumoAcoesCobrancaCronograma = new TarefaBatchInserirResumoAcoesCobrancaCronograma(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR = 0;
-							POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR = 1;
-							POSICAO_DATA_COM_ATIV_ENCERRAR = 2;
-							POSICAO_DATA_PREV_ATIV_ENCERRAR = 3;
-							POSICAO_DATA_PREV_ATIV_EMITIR = 4;
-							POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES = 5;
-							POSICAO_ID_COB_ACAO_CRONOG = 6;
-							POSICAO_ID_COB_GRUPO = 7;
-							POSICAO_ID_COB_ACAO = 8;
-							POSICAO_DATA_REA_ATIV_EMITIR = 9;
-	
-							Collection colecaoCobrancaGrupoCronogramaMesInserir = getControladorCobranca().pesquisarCobrancaGrupoCronogramaMes();
-	
-							Collection colecaoDadosCobrancaAcaoAtividadeCronogramaParaInserir = new ArrayList();
-	
-							if (colecaoCobrancaGrupoCronogramaMesInserir != null) {
-								Iterator iteratorColecaoCobrancaGrupoCronogramaMes = colecaoCobrancaGrupoCronogramaMesInserir.iterator();
-	
-								while (iteratorColecaoCobrancaGrupoCronogramaMes.hasNext()) {
-	
-									Object[] dadosCobrancaGrupoCronogramaMes = (Object[]) iteratorColecaoCobrancaGrupoCronogramaMes.next();
-	
-									Integer anoMesReferencia = null;
-									Integer idGrupo = null;
-	
-									Collection colecaoCobrancaAcaoCronograma = null;
-	
-									int idCobrancaGrupoCronogramaMes = -1;
-	
-									if (dadosCobrancaGrupoCronogramaMes[0] != null) {
-										idCobrancaGrupoCronogramaMes = ((Integer) dadosCobrancaGrupoCronogramaMes[0]).intValue();
-									}
-	
-									if (dadosCobrancaGrupoCronogramaMes[1] != null) {
-										anoMesReferencia = (Integer) dadosCobrancaGrupoCronogramaMes[1];
-									}
-	
-									if (dadosCobrancaGrupoCronogramaMes[2] != null) {
-										idGrupo = (Integer) dadosCobrancaGrupoCronogramaMes[2];
-									}
-	
-									colecaoCobrancaAcaoCronograma = getControladorCobranca().pesquisarCobrancaAcaoCronograma(idCobrancaGrupoCronogramaMes);
-	
-									if (colecaoCobrancaAcaoCronograma != null && !colecaoCobrancaAcaoCronograma.isEmpty()) {
-	
-										Iterator iteratorColecaoCobrancaAcaoCronograma = colecaoCobrancaAcaoCronograma.iterator();
-	
-										int idCobrancaAcaoCronograma = -1;
-	
-										Object[] dadosCobrancaAcaoCronograma = null;
-										Object[] dadosCobrancaAcaoAtividadeCronograma = null;
-	
-										while (iteratorColecaoCobrancaAcaoCronograma.hasNext()) {
-											dadosCobrancaAcaoCronograma = (Object[]) iteratorColecaoCobrancaAcaoCronograma.next();
-	
-											dadosCobrancaAcaoAtividadeCronograma = new Object[10];
-	
-											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES] = anoMesReferencia;
-											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_GRUPO] = idGrupo;
-	
-											if (dadosCobrancaAcaoCronograma[0] != null) {
-												idCobrancaAcaoCronograma = ((Integer) dadosCobrancaAcaoCronograma[0]).intValue();
-												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_CRONOG] = dadosCobrancaAcaoCronograma[0];
+							dadosGerarResumoAcoesCobrancaCronograma.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+									colecaoDadosCobrancaAcaoAtividadeCronograma);
+
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoAcoesCobrancaCronograma));
+
+							getControladorUtil().atualizar(funcionalidadeIniciada);
+						} else {
+							throw new ControladorException("atencao.nao.existe.dados.tabela.cronograma");
+						}
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_ACOES_COBRANCA_CRONOGRAMA_ENCERRAR_OS:
+						TarefaBatchGerarResumoAcoesCobrancaCronogramaEncerrarOS dadosGerarResumoAcoesCobrancaCronogramaEncerrarOS = new TarefaBatchGerarResumoAcoesCobrancaCronogramaEncerrarOS(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						colecaoCobrancaGrupoCronogramaMes = getControladorCobranca().pesquisarCobrancaGrupoCronogramaMes();
+
+						// posiaaes do array com os dados que serao atualizados
+						POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR = 0;
+						POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR = 1;
+						POSICAO_DATA_COM_ATIV_ENCERRAR = 2;
+						POSICAO_DATA_PREV_ATIV_ENCERRAR = 3;
+						POSICAO_DATA_PREV_ATIV_EMITIR = 4;
+						POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES = 5;
+						POSICAO_ID_COB_ACAO_CRONOG = 6;
+						POSICAO_ID_COB_GRUPO = 7;
+						POSICAO_ID_COB_ACAO = 8;
+						POSICAO_DATA_REA_ATIV_EMITIR = 9;
+
+						colecaoDadosCobrancaAcaoAtividadeCronograma = new ArrayList();
+
+						if (colecaoCobrancaGrupoCronogramaMes != null) {
+							Iterator iteratorColecaoCobrancaGrupoCronogramaMes = colecaoCobrancaGrupoCronogramaMes.iterator();
+
+							while (iteratorColecaoCobrancaGrupoCronogramaMes.hasNext()) {
+
+								Object[] dadosCobrancaGrupoCronogramaMes = (Object[]) iteratorColecaoCobrancaGrupoCronogramaMes.next();
+
+								Integer anoMesReferencia = null;
+								Integer idGrupo = null;
+
+								Collection colecaoCobrancaAcaoCronograma = null;
+
+								int idCobrancaGrupoCronogramaMes = -1;
+
+								if (dadosCobrancaGrupoCronogramaMes[0] != null) {
+									idCobrancaGrupoCronogramaMes = ((Integer) dadosCobrancaGrupoCronogramaMes[0]).intValue();
+								}
+
+								if (dadosCobrancaGrupoCronogramaMes[1] != null) {
+									anoMesReferencia = (Integer) dadosCobrancaGrupoCronogramaMes[1];
+								}
+
+								if (dadosCobrancaGrupoCronogramaMes[2] != null) {
+									idGrupo = (Integer) dadosCobrancaGrupoCronogramaMes[2];
+								}
+
+								colecaoCobrancaAcaoCronograma = getControladorCobranca().pesquisarCobrancaAcaoCronograma(idCobrancaGrupoCronogramaMes);
+
+								if (colecaoCobrancaAcaoCronograma != null && !colecaoCobrancaAcaoCronograma.isEmpty()) {
+
+									Iterator iteratorColecaoCobrancaAcaoCronograma = colecaoCobrancaAcaoCronograma.iterator();
+
+									int idCobrancaAcaoCronograma = -1;
+
+									Object[] dadosCobrancaAcaoCronograma = null;
+									Object[] dadosCobrancaAcaoAtividadeCronograma = null;
+
+									while (iteratorColecaoCobrancaAcaoCronograma.hasNext()) {
+										dadosCobrancaAcaoCronograma = (Object[]) iteratorColecaoCobrancaAcaoCronograma.next();
+
+										dadosCobrancaAcaoAtividadeCronograma = new Object[10];
+
+										dadosCobrancaAcaoAtividadeCronograma[POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES] = anoMesReferencia;
+										dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_GRUPO] = idGrupo;
+
+										if (dadosCobrancaAcaoCronograma[0] != null) {
+											idCobrancaAcaoCronograma = ((Integer) dadosCobrancaAcaoCronograma[0]).intValue();
+											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_CRONOG] = dadosCobrancaAcaoCronograma[0];
+										}
+
+										if (dadosCobrancaAcaoCronograma[1] != null) {
+											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO] = dadosCobrancaAcaoCronograma[1];
+										}
+
+										boolean primeiraCondicao = true;
+										boolean segundaCondicao = true;
+
+										Collection colecaoCobrancaAtividadeAcaoCronogramaEmitir = null;
+										Collection colecaoCobrancaAtividadeAcaoCronogramaEncerrar = null;
+
+										colecaoCobrancaAtividadeAcaoCronogramaEmitir = getControladorCobranca()
+												.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.EMITIR);
+
+										if (colecaoCobrancaAtividadeAcaoCronogramaEmitir != null && !colecaoCobrancaAtividadeAcaoCronogramaEmitir.isEmpty()) {
+
+											Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEmitir.iterator().next();
+
+											if (dadosCobrancaAtividade[0] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR] = dadosCobrancaAtividade[0];
 											}
-	
-											if (dadosCobrancaAcaoCronograma[1] != null) {
-												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO] = dadosCobrancaAcaoCronograma[1];
-											}
-	
-											boolean primeiraCondicao = true;
-											boolean segundaCondicao = true;
-	
-											Collection colecaoCobrancaAtividadeAcaoCronogramaEmitir = null;
-											Collection colecaoCobrancaAtividadeAcaoCronogramaEncerrar = null;
-	
-											colecaoCobrancaAtividadeAcaoCronogramaEmitir = getControladorCobranca()
-													.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.EMITIR);
-	
-											if (colecaoCobrancaAtividadeAcaoCronogramaEmitir != null && !colecaoCobrancaAtividadeAcaoCronogramaEmitir.isEmpty()) {
-	
-												Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEmitir.iterator().next();
-	
-												if (dadosCobrancaAtividade[0] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR] = dadosCobrancaAtividade[0];
-												}
-	
-												if (dadosCobrancaAtividade[1] == null) {
-													primeiraCondicao = false;
-												} else {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_REA_ATIV_EMITIR] = dadosCobrancaAtividade[1];
-												}
-	
-												if (dadosCobrancaAtividade[2] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_EMITIR] = dadosCobrancaAtividade[2];
-												}
-	
+
+											if (dadosCobrancaAtividade[1] == null) {
+												primeiraCondicao = false;
 											} else {
-												primeiraCondicao = false;
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_REA_ATIV_EMITIR] = dadosCobrancaAtividade[1];
 											}
-	
-											colecaoCobrancaAtividadeAcaoCronogramaEncerrar = getControladorCobranca()
-													.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.ENCERRAR);
-	
-											if (colecaoCobrancaAtividadeAcaoCronogramaEncerrar != null && !colecaoCobrancaAtividadeAcaoCronogramaEncerrar.isEmpty()) {
-	
-												Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEncerrar.iterator().next();
-	
-												if (dadosCobrancaAtividade[0] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR] = dadosCobrancaAtividade[0];
-												}
-	
-												if (dadosCobrancaAtividade[1] != null) {
-													segundaCondicao = false;
-												}
-	
-												if (dadosCobrancaAtividade[2] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_ENCERRAR] = dadosCobrancaAtividade[2];
-												}
-	
-												if (dadosCobrancaAtividade[3] != null) {
-													dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_COM_ATIV_ENCERRAR] = dadosCobrancaAtividade[3];
-												}
-	
-												dadosCobrancaAtividade = null;
-											} 
-	
-											if (primeiraCondicao && segundaCondicao) {
-												colecaoDadosCobrancaAcaoAtividadeCronogramaParaInserir.add(dadosCobrancaAcaoAtividadeCronograma);
+
+											if (dadosCobrancaAtividade[2] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_EMITIR] = dadosCobrancaAtividade[2];
 											}
-											dadosCobrancaAcaoAtividadeCronograma = null;
+
+										} else {
+											primeiraCondicao = false;
 										}
+
+										colecaoCobrancaAtividadeAcaoCronogramaEncerrar = getControladorCobranca()
+												.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.ENCERRAR);
+
+										if (colecaoCobrancaAtividadeAcaoCronogramaEncerrar != null && !colecaoCobrancaAtividadeAcaoCronogramaEncerrar.isEmpty()) {
+
+											Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEncerrar.iterator().next();
+
+											if (dadosCobrancaAtividade[0] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR] = dadosCobrancaAtividade[0];
+											}
+
+											if (dadosCobrancaAtividade[1] != null) {
+												segundaCondicao = false;
+											}
+
+											if (dadosCobrancaAtividade[2] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_ENCERRAR] = dadosCobrancaAtividade[2];
+											}
+
+											if (dadosCobrancaAtividade[3] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_COM_ATIV_ENCERRAR] = dadosCobrancaAtividade[3];
+											}
+											dadosCobrancaAtividade = null;
+										}
+
+										if (primeiraCondicao && segundaCondicao) {
+											colecaoDadosCobrancaAcaoAtividadeCronograma.add(dadosCobrancaAcaoAtividadeCronograma);
+										}
+										dadosCobrancaAcaoAtividadeCronograma = null;
 									}
-	
 								}
-								dadosInserirResumoAcoesCobrancaCronograma.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										colecaoDadosCobrancaAcaoAtividadeCronogramaParaInserir);
-	
-								funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosInserirResumoAcoesCobrancaCronograma));
-	
-								getControladorUtil().atualizar(funcionalidadeIniciada);
-							} else {
-								throw new ControladorException("atencao.nao.existe.dados.tabela.cronograma");
 							}
-							break;
-	
-						case Funcionalidade.INSERIR_RESUMO_ACOES_COBRANCA_EVENTUAL:
-							
-							TarefaBatchInserirResumoAcoesCobrancaEventual tarefaBatchInserirResumoAcoesCobrancaEventual = new TarefaBatchInserirResumoAcoesCobrancaEventual(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection colecaoAcaoCobrancaEventualParaInserir = getControladorCobranca().pesquisarCobrancaAcaoAtividadeComandoSemRealizacao();
-	
-							if (colecaoAcaoCobrancaEventualParaInserir != null && !colecaoAcaoCobrancaEventualParaInserir.isEmpty()) {
-								tarefaBatchInserirResumoAcoesCobrancaEventual.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										colecaoAcaoCobrancaEventualParaInserir);
-	
-								funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchInserirResumoAcoesCobrancaEventual));
-	
-								getControladorUtil().atualizar(funcionalidadeIniciada);
-							} else {
-								throw new ControladorException("atencao.nao.existe.dados.tabela.comando");
-							}
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_PENDENCIA:
-							TarefaBatchGerarResumoPendencia dadosGerarResumoPendencia = new TarefaBatchGerarResumoPendencia(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial novoFiltroSetorComercial = new FiltroSetorComercial();
-							Collection<SetorComercial> colecaoSetorPendencia = getControladorUtil().pesquisar(novoFiltroSetorComercial,
-									SetorComercial.class.getName());
-	
-							dadosGerarResumoPendencia.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoSetorPendencia);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoPendencia));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_GUIA_PAGAMENTO_POR_CLIENTE_RESUMO_PENDENCIA:
-							
-							TarefaBatchGerarGuiaPagamentoPorClienteResumoPendencia dados = new TarefaBatchGerarGuiaPagamentoPorClienteResumoPendencia(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroLocalidade filtroLocalidadeResumoPendencia = new FiltroLocalidade();
-							Collection<Localidade> colecaoLocalidadePendencia = getControladorUtil().pesquisar(filtroLocalidadeResumoPendencia,
-									Localidade.class.getName());
-	
-							dados.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoLocalidadePendencia);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dados));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_ANORMALIDADES:
-							
-							TarefaBatchGerarResumoAnormalidades tarefaBatchGerarResumoAnormalidades = new TarefaBatchGerarResumoAnormalidades(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsLocalidadesAnormalidades = getControladorFaturamento()
-									.pesquisarIdsLocalidadeParaGerarResumoLigacoesEconomias();
-	
-							tarefaBatchGerarResumoAnormalidades.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesAnormalidades);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoAnormalidades));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_SITUACAO_ESPECIAL_COBRANCA:
-						
-							TarefaBatchGerarResumoSituacaoEspecialCobranca tarefaBatchGerarResumoSituacaoEspecialCobranca = new TarefaBatchGerarResumoSituacaoEspecialCobranca(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsLocalidadesCobranca = getControladorFaturamento()
-									.pesquisarIdsLocalidadeParaGerarResumoLigacoesEconomias();
-	
-							tarefaBatchGerarResumoSituacaoEspecialCobranca.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesCobranca);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoSituacaoEspecialCobranca));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_FATURA_CLIENTE_RESPONSAVEL:
-						
-							TarefaBatchGerarFaturaClienteResponsavel dadosGerarFaturaClienteResponsavel = new TarefaBatchGerarFaturaClienteResponsavel(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarFaturaClienteResponsavel));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.EMITIR_CONTAS:
-							
-							TarefaBatchEmitirContas emitirContas = new TarefaBatchEmitirContas(processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							emitirContas.addParametro("anoMesFaturamentoGrupo", anoMesFaturamentoSistemaParametro);
-							emitirContas.addParametro("faturamentoGrupo", null);
-	
-							Collection colecaoIdsEmpresas = getControladorCadastro().pesquisarIdsEmpresa();
-							emitirContas.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsEmpresas);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(emitirContas));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA:
-							TarefaBatchDesfazerParcelamentoPorEntradaNaoPaga dadosDesfazerParcelamentoPorEntradaNaoPaga = new TarefaBatchDesfazerParcelamentoPorEntradaNaoPaga(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosDesfazerParcelamentoPorEntradaNaoPaga));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-							
-						case Funcionalidade.CANCELAR_PARCELAMENTOS:
-							TarefaBatchCancelarParcelamentos dadosCancelarParcelamentos = new TarefaBatchCancelarParcelamentos(processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-							dadosCancelarParcelamentos.addParametro("usuario", processoIniciado.getUsuario());
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosCancelarParcelamentos));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_INSTALACOES_HIDROMETROS:
-	
-							TarefaBatchGerarResumoInstalacoesHidrometros dadosGerarResumoInstalacoesHidrometros = new TarefaBatchGerarResumoInstalacoesHidrometros(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsSetoresComercial = getControladorGerencialMicromedicao()
-									.pesquisarIdsSetorComercialParaGerarResumoInstalacaoHidrometro(anoMesFaturamentoSistemaParametro);
-	
-							dadosGerarResumoInstalacoesHidrometros.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsSetoresComercial);
-							dadosGerarResumoInstalacoesHidrometros.addParametro("anoMesReferenciaFaturamento", anoMesFaturamentoSistemaParametro);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoInstalacoesHidrometros));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_LEITURA_ANORMALIDADE:
-	
-							TarefaBatchGerarResumoLeituraAnormalidade dadosGerarResumoLeituraAnormalidade = new TarefaBatchGerarResumoLeituraAnormalidade(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroSetor = new FiltroSetorComercial();
-							Collection<SetorComercial> colSetorComercial = getControladorUtil().pesquisar(filtroSetor, SetorComercial.class.getName());
-	
-							dadosGerarResumoLeituraAnormalidade.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorComercial);
-							dadosGerarResumoLeituraAnormalidade.addParametro("anoMesReferenciaFaturamento", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoLeituraAnormalidade));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_ARRECADACAO:
-	
-							TarefaBatchGerarResumoArrecadacao dadosGerarResumoArrecadacao = new TarefaBatchGerarResumoArrecadacao(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							FiltroLocalidade filtroLocalidadeResumoArrecadacao = new FiltroLocalidade(FiltroLocalidade.ID);
-							Collection<Localidade> colLocalidadeResumoArrecadacao = getControladorUtil().pesquisar(filtroLocalidadeResumoArrecadacao,
-									Localidade.class.getName());
-	
-							dadosGerarResumoArrecadacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colLocalidadeResumoArrecadacao);
-							dadosGerarResumoArrecadacao.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoArrecadacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_PARCELAMENTO:
-	
-							TarefaBatchGerarResumoParcelamento dadosGerarResumoParcelamento = new TarefaBatchGerarResumoParcelamento(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-							Collection<Integer> colecaoLocalidadesParcelamento = getControladorFaturamento()
-									.pesquisarIdsLocalidadeParaGerarResumoLigacoesEconomias();
-	
-							dadosGerarResumoParcelamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoLocalidadesParcelamento);
-							dadosGerarResumoParcelamento.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoParcelamento));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_FATURAMENTO:
-	
-							TarefaBatchGerarResumoFaturamento dadosGerarResumoFaturamento = new TarefaBatchGerarResumoFaturamento(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroFaturamento = new FiltroSetorComercial();
-	
-							Collection<SetorComercial> colSetorFaturamento = getControladorUtil().pesquisar(filtroFaturamento, SetorComercial.class.getName());
-	
-							dadosGerarResumoFaturamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorFaturamento);
-							dadosGerarResumoFaturamento.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoFaturamento));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_FATURAMENTO_AGUA_ESGOTO:
-						
-							TarefaBatchGerarResumoFaturamentoAguaEsgoto dadosGerarResumoFaturamentoAguaEsgoto = new TarefaBatchGerarResumoFaturamentoAguaEsgoto(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							filtroFaturamento = new FiltroSetorComercial();
-	
-							colSetorFaturamento = getControladorUtil().pesquisar(filtroFaturamento, SetorComercial.class.getName());
-	
-							dadosGerarResumoFaturamentoAguaEsgoto.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorFaturamento);
-							dadosGerarResumoFaturamentoAguaEsgoto.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoFaturamentoAguaEsgoto));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_REFATURAMENTO:
-							
-							TarefaBatchGerarResumoReFaturamento dadosGerarResumoReFaturamento = new TarefaBatchGerarResumoReFaturamento(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroReFaturamento = new FiltroSetorComercial();
-	
-							Collection<SetorComercial> colSetorReFaturamento = getControladorUtil() // getControladorGerencialFaturamento().pesquisarIdsSetores();
-									.pesquisar(filtroReFaturamento, SetorComercial.class.getName());
-	
-							dadosGerarResumoReFaturamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorReFaturamento);
-							dadosGerarResumoReFaturamento.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoReFaturamento));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_REFATURAMENTO_OLAP:
-							
-							TarefaBatchGerarResumoReFaturamentoOlap dadosGerarResumoReFaturamentoOlap = new TarefaBatchGerarResumoReFaturamentoOlap(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroReFaturamentoOlap = new FiltroSetorComercial();
-	
-							Collection<SetorComercial> colSetorReFaturamentoOlap = getControladorUtil().pesquisar(filtroReFaturamentoOlap,
-									SetorComercial.class.getName());
-	
-							dadosGerarResumoReFaturamentoOlap.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorReFaturamentoOlap);
-							dadosGerarResumoReFaturamentoOlap.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoReFaturamentoOlap));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_LANCAMENTOS_CONTABEIS_FATURAMENTO:
-	
-							TarefaBatchGerarLancamentosContabeisFaturamento dadosGerarLancamentosContabeisFaturamento = new TarefaBatchGerarLancamentosContabeisFaturamento(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroLocalidade filtroLocalidadeLancamentoContabeisFaturamento = new FiltroLocalidade();
-	
-							Collection<Localidade> colecaoIdsLocalidadesGerarLancamentosContabeisFaturamento = getControladorUtil().pesquisar(
-									filtroLocalidadeLancamentoContabeisFaturamento, Localidade.class.getName());
-	
-							dadosGerarLancamentosContabeisFaturamento.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-							dadosGerarLancamentosContabeisFaturamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesGerarLancamentosContabeisFaturamento);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarLancamentosContabeisFaturamento));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_DEVEDORES_DUVIDOSOS:
-	
-							TarefaBatchGerarResumoDevedoresDuvidosos dadosGerarResumoDevedoresDuvidosos = new TarefaBatchGerarResumoDevedoresDuvidosos(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsLocalidadesGerarResumoDevedoresDuvidosos = getControladorFinanceiro()
-									.pesquisarIdsLocalidadesParaGerarResumoDevedoresDuvidosos(sistemaParametros.getAnoMesFaturamento());
-	
-							dadosGerarResumoDevedoresDuvidosos.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-							dadosGerarResumoDevedoresDuvidosos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesGerarResumoDevedoresDuvidosos);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoDevedoresDuvidosos));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_METAS:
-	
-							TarefaBatchGerarResumoMetas tarefaBatchGerarResumoMetas = new TarefaBatchGerarResumoMetas(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroSetorC = new FiltroSetorComercial();
-							Collection<SetorComercial> colSetorC = getControladorUtil().pesquisar(filtroSetorC, SetorComercial.class.getName());
-	
-							Collection colecaoResumoMetas = getControladorFaturamento().pesquisarResumoMetas(sistemaParametros.getAnoMesArrecadacao());
-	
-							if (colecaoResumoMetas != null && !colecaoResumoMetas.isEmpty()) {
-								throw new ControladorException("atencao.dados.existente.resumo.metas", null, "" + sistemaParametros.getAnoMesArrecadacao());
-							}
-	
-							tarefaBatchGerarResumoMetas.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorC);
-	
-							Date dataInicial = Util.gerarDataInicialApartirAnoMesRefencia(sistemaParametros.getAnoMesArrecadacao());
-							Date dataFinal = Util.gerarDataApartirAnoMesRefencia(sistemaParametros.getAnoMesArrecadacao());
-							tarefaBatchGerarResumoMetas.addParametro("dataInicial", dataInicial);
-	
-							tarefaBatchGerarResumoMetas.addParametro("dataFinal", dataFinal);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoMetas));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_METAS_ACUMULADO:
-							
-							TarefaBatchGerarResumoMetasAcumulado tarefaBatchGerarResumoMetasAcumulado = new TarefaBatchGerarResumoMetasAcumulado(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroSetorCA = new FiltroSetorComercial();
-							Collection<SetorComercial> colSetorCA = getControladorUtil().pesquisar(filtroSetorCA, SetorComercial.class.getName());
-	
-							Collection colecaoResumoMetasA = getControladorFaturamento().pesquisarResumoMetasAcumulado(sistemaParametros.getAnoMesArrecadacao());
-	
-							if (colecaoResumoMetasA != null && !colecaoResumoMetasA.isEmpty()) {
-								throw new ControladorException("atencao.dados.existente.resumo.metas", null, "" + sistemaParametros.getAnoMesArrecadacao());
-							}
-	
-							tarefaBatchGerarResumoMetasAcumulado.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorCA);
-							tarefaBatchGerarResumoMetasAcumulado.addParametro("anoMesArrecadacao", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoMetasAcumulado));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.EMITIR_CONTAS_ORGAO_PUBLICO:
-							
-							TarefaBatchEmitirContasOrgaoPublico tarefaBatchEmitirContasOrgaoPublico = new TarefaBatchEmitirContasOrgaoPublico(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Integer anoMesFaturamento = sistemaParametros.getAnoMesFaturamento();
-							FaturamentoGrupo faturamentoGrupo = new FaturamentoGrupo();
-							faturamentoGrupo.setId(0);
-	
-							tarefaBatchEmitirContasOrgaoPublico.addParametro("anoMesFaturamento", anoMesFaturamento);
-							tarefaBatchEmitirContasOrgaoPublico.addParametro("faturamentoGrupo", faturamentoGrupo);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEmitirContasOrgaoPublico));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_COLETA_ESGOTO:
-							
-							TarefaBatchGerarResumoColetaEsgoto gerarResumoColetaEsgoto = new TarefaBatchGerarResumoColetaEsgoto(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroSetorCom = new FiltroSetorComercial();
-							Collection<SetorComercial> colSetorCom = getControladorUtil().pesquisar(filtroSetorCom, SetorComercial.class.getName());
-	
-							gerarResumoColetaEsgoto.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorCom);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoColetaEsgoto));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_CONTAS_A_RECEBER_CONTABIL:
-							
-							TarefaBatchGerarContasAReceberContabil gerarContaAReceberContabil = new TarefaBatchGerarContasAReceberContabil(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
-	
-							Collection<Localidade> colLocalidade = getControladorUtil().pesquisar(filtroLocalidade, Localidade.class.getName());
-	
-							gerarContaAReceberContabil.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colLocalidade);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarContaAReceberContabil));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.ATUALIZA_QUANTIDADE_PARCELA_PAGA_CONSECUTIVA_PARCELA_BONUS:
-	
-							TarefaBatchAtualizaQuantidadeParcelaPagaConsecutivaParcelaBonus dadosAtualizarParcela = new TarefaBatchAtualizaQuantidadeParcelaPagaConsecutivaParcelaBonus(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							dadosAtualizarParcela.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsLocalidadesEncerrarArrecadacaoMes);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosAtualizarParcela));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.EXECUTAR_COMANDO_DE_ENCERRAMENTO_RA:
-							
-							TarefaBatchExecutarComandoEncerramentoRA executarComandoEncerramentoRA = new TarefaBatchExecutarComandoEncerramentoRA(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsLocalidadesRA = getControladorLocalidade().pesquisarTodosIdsLocalidade();
-	
-							FiltroRaEncerramentoComando filtroRaEncerramentoComando = new FiltroRaEncerramentoComando();
-							filtroRaEncerramentoComando.adicionarCaminhoParaCarregamentoEntidade("atendimentoMotivoEncerramento");
-							filtroRaEncerramentoComando.adicionarCaminhoParaCarregamentoEntidade("usuario.unidadeOrganizacional");
-							filtroRaEncerramentoComando.adicionarParametro(new ParametroNulo(FiltroRaEncerramentoComando.TEMPO_REALIZACAO));
-							Collection<RaEncerramentoComando> colRaEncerramentoComando = getControladorUtil().pesquisar(filtroRaEncerramentoComando,
-									RaEncerramentoComando.class.getName());
-	
-							if (colRaEncerramentoComando != null && !colRaEncerramentoComando.isEmpty()) {
-	
-								executarComandoEncerramentoRA.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsLocalidadesRA);
-								executarComandoEncerramentoRA.addParametro("raEncerramentoComandos", colRaEncerramentoComando);
-	
-							} else {
-								throw new ControladorException("atencao.comando.encerramento.ra.vazio.para.executar");
-							}
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(executarComandoEncerramentoRA));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_VALOR_VOLUMES_CONSUMIDOS_NAO_FATURADOS:
-						
-							TarefaBatchGerarValorVolumesConsumidosNaoFaturados gerarValorVolumesConsumidosNaoFaturados = new TarefaBatchGerarValorVolumesConsumidosNaoFaturados(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsLocalidades = getControladorLocalidade().pesquisarIdsLocalidadesImoveis();
-	
-							gerarValorVolumesConsumidosNaoFaturados.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsLocalidades);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarValorVolumesConsumidosNaoFaturados));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_INDICADORES_COMERCIALIZACAO:
-	
-							TarefaBatchGerarResumoIndicadoresComercializacao gerarResumoIndicadoresComercializacao = new TarefaBatchGerarResumoIndicadoresComercializacao(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoIndicadoresComercializacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_INDICADORES_MICROMEDICAO:
-	
-							TarefaBatchGerarResumoIndicadoresMicromedicao gerarResumoIndicadoresMicromedicao = new TarefaBatchGerarResumoIndicadoresMicromedicao(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoIndicadoresMicromedicao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_INDICADORES_FATURAMENTO:
-	
-							TarefaBatchGerarResumoIndicadoresFaturamento gerarResumoIndicadoresFaturamento = new TarefaBatchGerarResumoIndicadoresFaturamento(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoIndicadoresFaturamento));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_INDICADORES_COBRANCA:
-	
-							TarefaBatchGerarResumoIndicadoresCobranca gerarResumoIndicadoresCobranca = new TarefaBatchGerarResumoIndicadoresCobranca(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoIndicadoresCobranca));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.INCLUIR_DEBITO_A_COBRAR_ENTRADA_PARCELAMENTO_NAO_PAGA:
-	
-							TarefaBatchIncluirDebitoACobrarEntradaParcelamentoNaoPaga dadosIncluirDebitoACobrarEntradaParcelamentoNaoPaga = new TarefaBatchIncluirDebitoACobrarEntradaParcelamentoNaoPaga(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosIncluirDebitoACobrarEntradaParcelamentoNaoPaga));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.ATUALIZAR_PAGAMENTOS_CONTAS_COBRANCA:
-	
-							TarefaBatchAtualizarPagamentosContasCobranca atualizarPagamentosContasCobranca = 
-								new TarefaBatchAtualizarPagamentosContasCobranca(processoIniciado.getUsuario(),funcionalidadeIniciada.getId());
+							dadosGerarResumoAcoesCobrancaCronogramaEncerrarOS.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+									colecaoDadosCobrancaAcaoAtividadeCronograma);
 
-					            Collection<Integer> colecaoIdsLocalidadesAtualizarPagamentos = getControladorLocalidade().pesquisarTodosIdsLocalidade();
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoAcoesCobrancaCronogramaEncerrarOS));
 
-					            atualizarPagamentosContasCobranca.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,colecaoIdsLocalidadesAtualizarPagamentos);
-					            atualizarPagamentosContasCobranca.addParametro("anoMesArrecadacaoSistemaParametro", anoMesArrecadacaoSistemaParametro);
+							getControladorUtil().atualizar(funcionalidadeIniciada);
 
-					            funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(atualizarPagamentosContasCobranca));
-
-					            getControladorUtil().atualizar(funcionalidadeIniciada);
-
-					            break;
-	
-						case Funcionalidade.GERAR_MOVIMENTO_EXTENSAO_CONTAS_COBRANCA_POR_EMPRESA:
-	
-							TarefaBatchGerarMovimentoExtensaoContasCobrancaPorEmpresa gerarMovimentoExtensaoContasCobrancaPorEmpresa = new TarefaBatchGerarMovimentoExtensaoContasCobrancaPorEmpresa(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroComandoEmpresaCobrancaContaExtensao filtroComandoEmpresaCobrancaContaExtensao = new FiltroComandoEmpresaCobrancaContaExtensao();
-							filtroComandoEmpresaCobrancaContaExtensao
-									.adicionarParametro(new ParametroNulo(FiltroComandoEmpresaCobrancaContaExtensao.DATA_EXECUCAO));
-							filtroComandoEmpresaCobrancaContaExtensao
-									.adicionarCaminhoParaCarregamentoEntidade(FiltroComandoEmpresaCobrancaContaExtensao.COMANDO_EMPRESA_COBRANCA_CONTA);
-							filtroComandoEmpresaCobrancaContaExtensao.adicionarCaminhoParaCarregamentoEntidade("comandoEmpresaCobrancaConta.empresa");
-	
-							Collection colecaoComandoEmpresaCobrancaContaExtensao = getControladorUtil().pesquisar(filtroComandoEmpresaCobrancaContaExtensao,
-									ComandoEmpresaCobrancaContaExtensao.class.getName());
-	
-							Collection colecaoLocalidades = getControladorCadastro().pesquisarLocalidades();
-	
-							gerarMovimentoExtensaoContasCobrancaPorEmpresa.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoLocalidades);
-	
-							gerarMovimentoExtensaoContasCobrancaPorEmpresa.addParametro("colecaoComandoEmpresaCobrancaContaExtensao",
-									colecaoComandoEmpresaCobrancaContaExtensao);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarMovimentoExtensaoContasCobrancaPorEmpresa));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.ATUALIZAR_AUTOS_INFRACAO_PRAZO_RECURSO_VENCIDO:
-						
-							TarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido tarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido = new TarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							tarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									Collections.singletonList(0));
-	
-							tarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido.addParametro("sistemaParametro", sistemaParametros);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.EXCLUIR_IMOVEIS_DA_TARIFA_SOCIAL:
-							
-							TarefaBatchExcluirImoveisDaTarifaSocial excluirImoveisDaTarifaSocial = new TarefaBatchExcluirImoveisDaTarifaSocial(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Integer anoMesFaturamento_ExcluirImoveisDaTarifaSocial = sistemaParametros.getAnoMesFaturamento();
-	
-							FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
-							Collection<SetorComercial> colecaoSetor = getControladorUtil().pesquisar(filtroSetorComercial, SetorComercial.class.getName());
-	
-							excluirImoveisDaTarifaSocial.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoSetor);
-							excluirImoveisDaTarifaSocial.addParametro("anoMesReferenciaFaturamento", anoMesFaturamento_ExcluirImoveisDaTarifaSocial);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(excluirImoveisDaTarifaSocial));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_NEGATIVACAO:
-							
-							TarefaBatchGerarResumoNegativacao gerarResumoNegativacao = new TarefaBatchGerarResumoNegativacao(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							Collection colecaoRotas = getControladorSpcSerasa().consultarRotasParaGerarResumoDiarioNegativacao();
-	
-							Integer penultimaExecucaoResumo = sistemaParametros.getNumeroExecucaoResumoNegativacao() - 1;
-							getControladorSpcSerasa().apagarResumoNegativacao(penultimaExecucaoResumo);
-	
-							gerarResumoNegativacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoRotas);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoNegativacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.ACOMPANHAR_PAGAMENTO_DO_PARCELAMENTO:
-	
-							TarefaBatchAcompanharPagamentoDoParcelamento acompanharPagamentoDoParcelamento = new TarefaBatchAcompanharPagamentoDoParcelamento(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection rotas = getControladorSpcSerasa().consultarRotasParaGerarResumoDiarioNegativacao();
-	
-							acompanharPagamentoDoParcelamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, rotas);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(acompanharPagamentoDoParcelamento));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_DOCUMENTOS_A_RECEBER:
-	
-							TarefaBatchGerarResumoDocumentosAReceber tarefaBatchGerarResumoDocumentosAReceber = new TarefaBatchGerarResumoDocumentosAReceber(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroLocalidade filtroLocalidadeGerarResumoDocumentosAReceber = new FiltroLocalidade();
-	
-							Collection<Localidade> colLocalidadeGerarResumoDocumentosAReceber = getControladorUtil().pesquisar(
-									filtroLocalidadeGerarResumoDocumentosAReceber, Localidade.class.getName());
-	
-							tarefaBatchGerarResumoDocumentosAReceber.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colLocalidadeGerarResumoDocumentosAReceber);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoDocumentosAReceber));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.BATCH_EMITIR_ORDEM_FISCALIZAO:
-	
-							TarefaBatchEmitirOrdemDeFiscalizacao tarefaBatchEmitirOrdemDeFiscalizacao = new TarefaBatchEmitirOrdemDeFiscalizacao(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroSetores = new FiltroSetorComercial();
-	
-							filtroSetores.adicionarParametro(new ParametroSimples(FiltroSetorComercial.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
-	
-							Collection<SetorComercial> colecaoSetores = getControladorUtil().pesquisar(filtroSetores, SetorComercial.class.getName());
-	
-							tarefaBatchEmitirOrdemDeFiscalizacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoSetores);
-							tarefaBatchEmitirOrdemDeFiscalizacao.addParametro("SistemaParametros", sistemaParametros);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEmitirOrdemDeFiscalizacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-							break;
-						case Funcionalidade.BATCH_GERAR_ARQUIVO_ORDEM_FISCALIZAO:
-	
-							TarefaBatchGerarArquivoOrdemDeFiscalizacaoMDB tarefaBatchGerarArquivoOrdemDeFiscalizacaoMDB = new TarefaBatchGerarArquivoOrdemDeFiscalizacaoMDB(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarArquivoOrdemDeFiscalizacaoMDB));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-							break;
-	
-						case Funcionalidade.DETERMINAR_CONFIRMACAO_DA_NEGATIVACAO:
-							
-							TarefaBatchDeterminarConfirmacaoDaNegativacao determinarConfirmacaoDaNegativacao = new TarefaBatchDeterminarConfirmacaoDaNegativacao(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection colLocalidades = getControladorSpcSerasa().consultarLocalidadeParaDeterminarConfirmacaoDaNegativacao();
-	
-							determinarConfirmacaoDaNegativacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colLocalidades);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(determinarConfirmacaoDaNegativacao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_PENDENCIA_POR_ANO:
-							
-							TarefaBatchGerarResumoPendenciaPorAno dadosGerarResumoPendenciaPorAno = new TarefaBatchGerarResumoPendenciaPorAno(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroPendenciaPorAno = new FiltroSetorComercial();
-							Collection<SetorComercial> colecaoSetorComercialPendenciaPorAno = getControladorUtil().pesquisar(filtroPendenciaPorAno,
-									SetorComercial.class.getName());
-	
-							dadosGerarResumoPendenciaPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoSetorComercialPendenciaPorAno);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoPendenciaPorAno));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-						case Funcionalidade.BATCH_ATUALIZAR_CODIGO_DEBITO_AUTOMATICO:
-	
-							TarefaBatchAtualizarCodigoDebitoAutomatico tarefaBatchAtualizarCodigoDebitoAutomatico = new TarefaBatchAtualizarCodigoDebitoAutomatico(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroSetoresParaAtualizarCodigoDebitoAutomatico = new FiltroSetorComercial();
-	
-							Collection<SetorComercial> colecaoSetoresParaAtualizar = getControladorUtil().pesquisar(
-									filtroSetoresParaAtualizarCodigoDebitoAutomatico, SetorComercial.class.getName());
-	
-							tarefaBatchAtualizarCodigoDebitoAutomatico.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoSetoresParaAtualizar);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchAtualizarCodigoDebitoAutomatico));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_LIGACOES_ECONOMIAS_POR_ANO:
-							
-							TarefaBatchGerarResumoLigacoesEconomiasPorAno gerarResumoLigacoesEconomiasPorAno = new TarefaBatchGerarResumoLigacoesEconomiasPorAno(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial fSetorComercial = new FiltroSetorComercial();
-							Collection<SetorComercial> setorComercialColecao = getControladorUtil().pesquisar(fSetorComercial, SetorComercial.class.getName());
-	
-							gerarResumoLigacoesEconomiasPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, setorComercialColecao);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoLigacoesEconomiasPorAno));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_INDICADORES_MICROMEDICAO_POR_ANO:
-	
-							TarefaBatchGerarResumoIndicadoresMicromedicaoPorAno gerarResumoIndicadoresMicromedicaoPorAno = new TarefaBatchGerarResumoIndicadoresMicromedicaoPorAno(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoIndicadoresMicromedicaoPorAno));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_CONSUMO_AGUA_POR_ANO:
-							TarefaBatchGerarResumoConsumoAguaPorAno gerarResumoConsumoAguaPorAno = new TarefaBatchGerarResumoConsumoAguaPorAno(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroSetComercial = new FiltroSetorComercial();
-							Collection<SetorComercial> colSetComercial = getControladorUtil().pesquisar(filtroSetComercial, SetorComercial.class.getName());
-	
-							gerarResumoConsumoAguaPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetComercial);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoConsumoAguaPorAno));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_RECEITA:
-	
-							TarefaBatchGerarResumoReceita tarefaBatchGerarResumoReceita = new TarefaBatchGerarResumoReceita(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoReceita));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_FATURAMENTO_POR_ANO:
-	
-							TarefaBatchGerarResumoFaturamentoPorAno dadosGerarResFaturamento = new TarefaBatchGerarResumoFaturamentoPorAno(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filFaturamento = new FiltroSetorComercial();
-	
-							Collection<SetorComercial> colSetFaturamento = getControladorUtil().pesquisar(filFaturamento, SetorComercial.class.getName());
-	
-							SetorComercial setComercial = new SetorComercial();
-							setComercial.setId(99999);
-							colSetFaturamento.add(setComercial);
-	
-							dadosGerarResFaturamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetFaturamento);
-							dadosGerarResFaturamento.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResFaturamento));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_ARRECADACAO_POR_ANO:
-	
-							TarefaBatchGerarResumoArrecadacaoPorAno dadosGerarResumoArrecadacaoAno = new TarefaBatchGerarResumoArrecadacaoPorAno(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroLocalidade filtroLocalidadeResumoArrecadacaoAno = new FiltroLocalidade();
-							Collection<Localidade> colLocalidadeResumoArrecadacaoAno = getControladorUtil().pesquisar(filtroLocalidadeResumoArrecadacaoAno,
-									Localidade.class.getName());
-	
-							dadosGerarResumoArrecadacaoAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colLocalidadeResumoArrecadacaoAno);
-							dadosGerarResumoArrecadacaoAno.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoArrecadacaoAno));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_COLETA_ESGOTO_POR_ANO:
-							TarefaBatchGerarResumoColetaEsgotoPorAno gerarResumoColetaEsgotoPorAno = new TarefaBatchGerarResumoColetaEsgotoPorAno(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroSetorComPorAno = new FiltroSetorComercial();
-							Collection<SetorComercial> colSetorComPorAno = getControladorUtil().pesquisar(filtroSetorComPorAno, SetorComercial.class.getName());
-	
-							gerarResumoColetaEsgotoPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorComPorAno);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoColetaEsgotoPorAno));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_REGISTRO_ATENDIMENTO_POR_ANO:
-							TarefaBatchGerarResumoRegistroAtendimentoPorAno gerarResumoRegistroAtendimentoPorAno = new TarefaBatchGerarResumoRegistroAtendimentoPorAno(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsLocalidadesGerarResumoRegistroAtendimentoMesPorAno = getControladorLocalidade()
-									.pesquisarTodosIdsLocalidade();
-	
-							gerarResumoRegistroAtendimentoPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesGerarResumoRegistroAtendimentoMesPorAno);
-	
-							gerarResumoRegistroAtendimentoPorAno.addParametro("anoMesFaturamentoSistemaParametro", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoRegistroAtendimentoPorAno));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_INSTALACOES_HIDROMETROS_POR_ANO:
-	
-							TarefaBatchGerarResumoInstalacoesHidrometrosPorAno dadosGerarResumoInstalacoesHidrometrosPorAno = new TarefaBatchGerarResumoInstalacoesHidrometrosPorAno(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoIdsSetoresComercialPorAno = getControladorGerencialMicromedicao()
-									.pesquisarIdsSetorComercialParaGerarResumoInstalacaoHidrometro(anoMesFaturamentoSistemaParametro);
-	
-							dadosGerarResumoInstalacoesHidrometrosPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsSetoresComercialPorAno);
-	
-							dadosGerarResumoInstalacoesHidrometrosPorAno.addParametro("anoMesReferenciaFaturamento", anoMesFaturamentoSistemaParametro);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoInstalacoesHidrometrosPorAno));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_PARCELAMENTO_POR_ANO:
-							TarefaBatchGerarResumoParcelamentoPorAno dadosGerarResumoParcelamentoPorAno = new TarefaBatchGerarResumoParcelamentoPorAno(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoLocalidadesParcelamentoPorAno = getControladorFaturamento()
-									.pesquisarIdsLocalidadeParaGerarResumoLigacoesEconomias();
-	
-							dadosGerarResumoParcelamentoPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoLocalidadesParcelamentoPorAno);
-	
-							dadosGerarResumoParcelamentoPorAno.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoParcelamentoPorAno));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.ALTERAR_INSCRICOES_IMOVEIS:
-	
-							TarefaBatchAlterarInscricaoImovel tarefaBatchAlterarInscricaoImovel = new TarefaBatchAlterarInscricaoImovel(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroLocalidade filtroLocalidadeAlterarInscricoesImoveis = new FiltroLocalidade();
-	
-							Collection<Localidade> colecaoLocalidadeAlterarInscricoesImoveis = getControladorUtil().pesquisar(
-									filtroLocalidadeAlterarInscricoesImoveis, Localidade.class.getName());
-	
-							tarefaBatchAlterarInscricaoImovel.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoLocalidadeAlterarInscricoesImoveis);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchAlterarInscricaoImovel));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-							break;
-	
-						case Funcionalidade.GERAR_PRESCREVER_DEBITOS_DE_IMOVEIS:
-	
-							TarefaBatchGerarPrescreverDebitosDeImoveis dadosGerarPrescreverDebitosDeImoveis = new TarefaBatchGerarPrescreverDebitosDeImoveis(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Integer> colecaoCobrancaSituacao = getControladorCobranca().obterCobrancaSituacaoParaPrescreverDebitos();
-	
-							dadosGerarPrescreverDebitosDeImoveis.addParametro("colecaoCobrancaSituacao", colecaoCobrancaSituacao);
-							dadosGerarPrescreverDebitosDeImoveis.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarPrescreverDebitosDeImoveis));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_REFATURAMENTO_NOVO:
-	
-							Integer existeResumo = null;
-	
-							existeResumo = getControladorGerencialFaturamento().verificarExistenciaResumoReFaturamento(sistemaParametros.getAnoMesFaturamento());
-	
-							if (existeResumo == null || existeResumo > 0) {
-	
-								throw new ControladorException("atencao.resumo.refaturamento.ja.existe", null, sistemaParametros.getAnoMesFaturamento().toString());
-	
-							}
-	
-							TarefaBatchGerarResumoReFaturamentoNovo dadosGerarResumoReFaturamentoNovo = new TarefaBatchGerarResumoReFaturamentoNovo(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroReFaturamentoNovo = new FiltroSetorComercial();
-	
-							Collection<SetorComercial> colSetorReFaturamentoNovo = getControladorUtil().pesquisar(filtroReFaturamentoNovo,
-									SetorComercial.class.getName());
-	
-							dadosGerarResumoReFaturamentoNovo.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorReFaturamentoNovo);
-							dadosGerarResumoReFaturamentoNovo.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoReFaturamentoNovo));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_RESUMO_HISTOGRAMA_AGUA_ESGOTO_SEM_QUADRA:
-							
-							TarefaBatchGerarResumoHistogramaAguaEsgotoSemQuadra gerarResumoAguaEsgotoSemQuadra = new TarefaBatchGerarResumoHistogramaAguaEsgotoSemQuadra(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroSetorComercial filtroHistogramaSemQuadra = new FiltroSetorComercial();
-							Collection<SetorComercial> colSetorHistogramaSemQuadra = getControladorUtil().pesquisar(filtroHistogramaSemQuadra,
-									SetorComercial.class.getName());
-	
-							gerarResumoAguaEsgotoSemQuadra.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorHistogramaSemQuadra);
-							gerarResumoAguaEsgotoSemQuadra.addParametro("anoMesFaturamentoSistemaParametro", anoMesFaturamentoSistemaParametro);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoAguaEsgotoSemQuadra));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.RELIGAR_IMOVEIS_CORTADOS_COM_CONSUMO_REAL:
-	
-							TarefaBatchReligarImoveisCortadosComConsumoReal dadosReligarImoveisCortadosComConsumoReal = new TarefaBatchReligarImoveisCortadosComConsumoReal(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroLocalidade filtroLocalidadeReligarImoveisCortadosComConsumoReal = new FiltroLocalidade();
-	
-							Collection<Localidade> colecaoLocalidadesReligarImoveisCortadosComConsumoReal = getControladorUtil().pesquisar(
-									filtroLocalidadeReligarImoveisCortadosComConsumoReal, Localidade.class.getName());
-	
-							dadosReligarImoveisCortadosComConsumoReal.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-							dadosReligarImoveisCortadosComConsumoReal.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoLocalidadesReligarImoveisCortadosComConsumoReal);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosReligarImoveisCortadosComConsumoReal));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.PRESCREVER_DEBITOS_IMOVEIS_PUBLICOS:
-						
-							TarefaBatchPrescreverDebitosImoveisPublicosAutomatico prescricao = new TarefaBatchPrescreverDebitosImoveisPublicosAutomatico(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection colecaoDadosPrescricaoAutomaticos = getControladorFaturamento().obterDadosPrescricaoDebitosAutomaticos();
-	
-							if (Util.isVazioOrNulo(colecaoDadosPrescricaoAutomaticos)) {
-								colecaoDadosPrescricaoAutomaticos = new ArrayList();
-								colecaoDadosPrescricaoAutomaticos.add(EsferaPoder.obterIdsEsferaPoderPublico());
-							}
-	
-							prescricao.addParametro("colecaoDadosPrescricao", colecaoDadosPrescricaoAutomaticos);
-							prescricao.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(prescricao));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-							break;
-	
-						case Funcionalidade.SELECIONAR_COMANDO_RETIRAR_IMOVEL_TARIFA_SOCIAL:
-	
-							TarefaBatchRetirarImovelTarifaSocial tarefaBatchRetirarImovelTarifaSocial = new TarefaBatchRetirarImovelTarifaSocial(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection idsLocalidade = getControladorCadastro().pesquisarLocalidade();
-	
-							tarefaBatchRetirarImovelTarifaSocial.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, idsLocalidade);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchRetirarImovelTarifaSocial));
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-							break;
-	
-						case Funcionalidade.AUTOMATIZAR_PERFIS_DE_GRANDES_CONSUMIDORES:
-	
-							TarefaBatchAutomatizarPerfisDeGrandesConsumidores dadosAutomatizarPerfisDeGrandesConsumidores = new TarefaBatchAutomatizarPerfisDeGrandesConsumidores(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroLocalidade filtroLocalidadeAutomatizarPerfis = new FiltroLocalidade();
-	
-							Collection<Localidade> colecaoIdsLocalidadesAutomatizarPerfisDeGrandesConsumidores = getControladorUtil().pesquisar(
-									filtroLocalidadeAutomatizarPerfis, Localidade.class.getName());
-	
-							dadosAutomatizarPerfisDeGrandesConsumidores.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesAutomatizarPerfisDeGrandesConsumidores);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosAutomatizarPerfisDeGrandesConsumidores));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_TXT_IMPRESSAO_CONTAS_FORMATO_BRAILLE:
-	
-							Collection colecaoGrupoNaoFaturados = getControladorFaturamento().pesquisarGrupoFaturamentoGrupoNaoFaturados(
-									anoMesFaturamentoSistemaParametro);
-	
-							if (colecaoGrupoNaoFaturados != null && !colecaoGrupoNaoFaturados.isEmpty()) {
-								throw new ControladorException("atencao.processo_cancelado_grupo_nao_faturado");
-							}
-	
-							TarefaBatchGerarTxtImpressaoContasBraille gerarTxtContasBraille = new TarefaBatchGerarTxtImpressaoContasBraille(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarTxtContasBraille));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_ARQUIVO_TXT_OS_CONTAS_PAGAS_PARCELADAS:
-	
-							TarefaBatchGerarArquivoTextoOSContasPagasParceladas gerarArqvTxtOSContasPagasParceladas = new TarefaBatchGerarArquivoTextoOSContasPagasParceladas(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarArqvTxtOSContasPagasParceladas));
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.ENVIO_EMAIL_CONTA_PARA_CLIENTE:
-							
-							TarefaBatchEnvioEmailContaParaCliente tarefaBatchEnvioEmailContaParaCliente = new TarefaBatchEnvioEmailContaParaCliente(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							FiltroLocalidade filtroLocalidadeEnvioEmail = new FiltroLocalidade();
-							filtroLocalidadeEnvioEmail
-									.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
-	
-							Collection<Localidade> collectionLocalidades = Fachada.getInstancia().pesquisar(filtroLocalidadeEnvioEmail, Localidade.class.getName());
-	
-							tarefaBatchEnvioEmailContaParaCliente.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, collectionLocalidades);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEnvioEmailContaParaCliente));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.PROGRAMACAO_AUTO_ROTEIRO_ACOMPANHAMENTO_OS:
-	
-							TarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS tarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS = new TarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection collIdsUnidadesOrganizacionais = getControladorOrdemServico().pequisarUnidadesOrganizacionaisdasEquipes();
-	
-							tarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									collIdsUnidadesOrganizacionais);
-	
-							tarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS.addParametro("dataAtual", new Date());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_DADOS_ARQUIVO_ACOMPANHAMENTO_SERVICO:
-							
-							TarefaBatchGerarDadosArquivoAcompanhamentoServico tarefaBatchGerarDadosArquivoAcompanhamentoServico = new TarefaBatchGerarDadosArquivoAcompanhamentoServico(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection collIdsUnidadesOrganizacionais2 = getControladorOrdemServico().pequisarUnidadesOrganizacionaisdasEquipes();
-	
-							tarefaBatchGerarDadosArquivoAcompanhamentoServico.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									collIdsUnidadesOrganizacionais2);
-	
-							tarefaBatchGerarDadosArquivoAcompanhamentoServico.addParametro("dataAtual", new Date());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarDadosArquivoAcompanhamentoServico));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.PROCESSAR_ENCERRAMENTO_OS_FISCALIZACAO_DECURSO_PRAZO:
-	
-							TarefaBatchProcessarEncerramentoOSFiscalizacaoDecursoPrazo tarefaBatchProcessarEncerramentoOSFiscalizacaoDecursoPrazo = new TarefaBatchProcessarEncerramentoOSFiscalizacaoDecursoPrazo(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchProcessarEncerramentoOSFiscalizacaoDecursoPrazo));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.GERAR_DADOS_RELATORIO_BIG: {
-							TarefaBatchGerarDadosRelatorioBIG gerarDadosRelatorioBIG = new TarefaBatchGerarDadosRelatorioBIG(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							gerarDadosRelatorioBIG.addParametro("anoMesReferencia", sistemaParametros.getAnoMesArrecadacao());
-	
-							Collection<Localidade> colecaoLocalidadesGerarDadosRelatorioBIG = obterLocalidadesAtivas();
-	
-							gerarDadosRelatorioBIG.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoLocalidadesGerarDadosRelatorioBIG);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarDadosRelatorioBIG));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
+						} else {
+							throw new ControladorException("atencao.nao.existe.dados.tabela.cronograma");
 						}
-	
-						case Funcionalidade.CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS:
-	
-							TarefaBatchCancelarGuiasPagamentoNaoPagas cancelarGuiasPagamentoNaoPagas = new TarefaBatchCancelarGuiasPagamentoNaoPagas(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Date dataReferencia = new Date();
-							cancelarGuiasPagamentoNaoPagas.addParametro("dataReferencia", dataReferencia);
-	
-							Collection<Integer> colecaoIdsLocalidadesComGuiasPagamentoNaoPagas = getControladorArrecadacao()
-									.pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(dataReferencia, null);
-	
-							cancelarGuiasPagamentoNaoPagas.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-									colecaoIdsLocalidadesComGuiasPagamentoNaoPagas);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(cancelarGuiasPagamentoNaoPagas));
-	
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_ACOES_COBRANCA_EVENTUAL:
+
+						TarefaBatchGerarResumoAcoesCobrancaEventual tarefaBatchGerarResumoAcoesCobrancaEventual = new TarefaBatchGerarResumoAcoesCobrancaEventual(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection colecaoAcaoCobrancaEventual = getControladorCobranca().pesquisarCobrancaAcaoAtividadeComandoSemRealizacao();
+
+						if (colecaoAcaoCobrancaEventual != null && !colecaoAcaoCobrancaEventual.isEmpty()) {
+							tarefaBatchGerarResumoAcoesCobrancaEventual.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+									colecaoAcaoCobrancaEventual);
+
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoAcoesCobrancaEventual));
+
 							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-	
-						case Funcionalidade.PROCESSAR_PAGAMENTOS_COM_DIFERENCA_DE_DOIS_REAIS: {
-							
-							TarefaBatchProcessarPagamentosComDiferencaDoisReais batch = new TarefaBatchProcessarPagamentosComDiferencaDoisReais(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							batch.addParametro("anoMesReferencia", sistemaParametros.getAnoMesArrecadacao());
-	
-							Collection<Localidade> localidades = obterLocalidadesAtivas();
-	
-							batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, localidades);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
+						} else {
+							throw new ControladorException("atencao.nao.existe.dados.tabela.comando");
 						}
-	
-						case Funcionalidade.ATUALIZACAO_CADASTRAL: {
-							
-							TarefaBatchAtualizacaoCadastral batchAtualizacaoCadastral = new TarefaBatchAtualizacaoCadastral(processoIniciado.getUsuario(),
-									funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizacaoCadastral));
+
+						break;
+
+					case Funcionalidade.INSERIR_RESUMO_ACOES_COBRANCA_CRONOGRAMA:
+						TarefaBatchInserirResumoAcoesCobrancaCronograma dadosInserirResumoAcoesCobrancaCronograma = new TarefaBatchInserirResumoAcoesCobrancaCronograma(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR = 0;
+						POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR = 1;
+						POSICAO_DATA_COM_ATIV_ENCERRAR = 2;
+						POSICAO_DATA_PREV_ATIV_ENCERRAR = 3;
+						POSICAO_DATA_PREV_ATIV_EMITIR = 4;
+						POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES = 5;
+						POSICAO_ID_COB_ACAO_CRONOG = 6;
+						POSICAO_ID_COB_GRUPO = 7;
+						POSICAO_ID_COB_ACAO = 8;
+						POSICAO_DATA_REA_ATIV_EMITIR = 9;
+
+						Collection colecaoCobrancaGrupoCronogramaMesInserir = getControladorCobranca().pesquisarCobrancaGrupoCronogramaMes();
+
+						Collection colecaoDadosCobrancaAcaoAtividadeCronogramaParaInserir = new ArrayList();
+
+						if (colecaoCobrancaGrupoCronogramaMesInserir != null) {
+							Iterator iteratorColecaoCobrancaGrupoCronogramaMes = colecaoCobrancaGrupoCronogramaMesInserir.iterator();
+
+							while (iteratorColecaoCobrancaGrupoCronogramaMes.hasNext()) {
+
+								Object[] dadosCobrancaGrupoCronogramaMes = (Object[]) iteratorColecaoCobrancaGrupoCronogramaMes.next();
+
+								Integer anoMesReferencia = null;
+								Integer idGrupo = null;
+
+								Collection colecaoCobrancaAcaoCronograma = null;
+
+								int idCobrancaGrupoCronogramaMes = -1;
+
+								if (dadosCobrancaGrupoCronogramaMes[0] != null) {
+									idCobrancaGrupoCronogramaMes = ((Integer) dadosCobrancaGrupoCronogramaMes[0]).intValue();
+								}
+
+								if (dadosCobrancaGrupoCronogramaMes[1] != null) {
+									anoMesReferencia = (Integer) dadosCobrancaGrupoCronogramaMes[1];
+								}
+
+								if (dadosCobrancaGrupoCronogramaMes[2] != null) {
+									idGrupo = (Integer) dadosCobrancaGrupoCronogramaMes[2];
+								}
+
+								colecaoCobrancaAcaoCronograma = getControladorCobranca().pesquisarCobrancaAcaoCronograma(idCobrancaGrupoCronogramaMes);
+
+								if (colecaoCobrancaAcaoCronograma != null && !colecaoCobrancaAcaoCronograma.isEmpty()) {
+
+									Iterator iteratorColecaoCobrancaAcaoCronograma = colecaoCobrancaAcaoCronograma.iterator();
+
+									int idCobrancaAcaoCronograma = -1;
+
+									Object[] dadosCobrancaAcaoCronograma = null;
+									Object[] dadosCobrancaAcaoAtividadeCronograma = null;
+
+									while (iteratorColecaoCobrancaAcaoCronograma.hasNext()) {
+										dadosCobrancaAcaoCronograma = (Object[]) iteratorColecaoCobrancaAcaoCronograma.next();
+
+										dadosCobrancaAcaoAtividadeCronograma = new Object[10];
+
+										dadosCobrancaAcaoAtividadeCronograma[POSICAO_ANO_MES_REF_COB_GRUP_CRON_MES] = anoMesReferencia;
+										dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_GRUPO] = idGrupo;
+
+										if (dadosCobrancaAcaoCronograma[0] != null) {
+											idCobrancaAcaoCronograma = ((Integer) dadosCobrancaAcaoCronograma[0]).intValue();
+											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_CRONOG] = dadosCobrancaAcaoCronograma[0];
+										}
+
+										if (dadosCobrancaAcaoCronograma[1] != null) {
+											dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO] = dadosCobrancaAcaoCronograma[1];
+										}
+
+										boolean primeiraCondicao = true;
+										boolean segundaCondicao = true;
+
+										Collection colecaoCobrancaAtividadeAcaoCronogramaEmitir = null;
+										Collection colecaoCobrancaAtividadeAcaoCronogramaEncerrar = null;
+
+										colecaoCobrancaAtividadeAcaoCronogramaEmitir = getControladorCobranca()
+												.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.EMITIR);
+
+										if (colecaoCobrancaAtividadeAcaoCronogramaEmitir != null && !colecaoCobrancaAtividadeAcaoCronogramaEmitir.isEmpty()) {
+
+											Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEmitir.iterator().next();
+
+											if (dadosCobrancaAtividade[0] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_EMITIR] = dadosCobrancaAtividade[0];
+											}
+
+											if (dadosCobrancaAtividade[1] == null) {
+												primeiraCondicao = false;
+											} else {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_REA_ATIV_EMITIR] = dadosCobrancaAtividade[1];
+											}
+
+											if (dadosCobrancaAtividade[2] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_EMITIR] = dadosCobrancaAtividade[2];
+											}
+
+										} else {
+											primeiraCondicao = false;
+										}
+
+										colecaoCobrancaAtividadeAcaoCronogramaEncerrar = getControladorCobranca()
+												.pesquisarDataRelizacaoCobrancaAtividadeAcaoConograma(idCobrancaAcaoCronograma, CobrancaAtividade.ENCERRAR);
+
+										if (colecaoCobrancaAtividadeAcaoCronogramaEncerrar != null && !colecaoCobrancaAtividadeAcaoCronogramaEncerrar.isEmpty()) {
+
+											Object[] dadosCobrancaAtividade = (Object[]) colecaoCobrancaAtividadeAcaoCronogramaEncerrar.iterator().next();
+
+											if (dadosCobrancaAtividade[0] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_ID_COB_ACAO_ATIV_CRON_ENCERRAR] = dadosCobrancaAtividade[0];
+											}
+
+											if (dadosCobrancaAtividade[1] != null) {
+												segundaCondicao = false;
+											}
+
+											if (dadosCobrancaAtividade[2] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_PREV_ATIV_ENCERRAR] = dadosCobrancaAtividade[2];
+											}
+
+											if (dadosCobrancaAtividade[3] != null) {
+												dadosCobrancaAcaoAtividadeCronograma[POSICAO_DATA_COM_ATIV_ENCERRAR] = dadosCobrancaAtividade[3];
+											}
+
+											dadosCobrancaAtividade = null;
+										}
+
+										if (primeiraCondicao && segundaCondicao) {
+											colecaoDadosCobrancaAcaoAtividadeCronogramaParaInserir.add(dadosCobrancaAcaoAtividadeCronograma);
+										}
+										dadosCobrancaAcaoAtividadeCronograma = null;
+									}
+								}
+
+							}
+							dadosInserirResumoAcoesCobrancaCronograma.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+									colecaoDadosCobrancaAcaoAtividadeCronogramaParaInserir);
+
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosInserirResumoAcoesCobrancaCronograma));
+
 							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
+						} else {
+							throw new ControladorException("atencao.nao.existe.dados.tabela.cronograma");
 						}
-	
-						case Funcionalidade.GERAR_DADOS_RECEITAS_A_FATURAR_RESUMO: {
-							
-							TarefaBatchGerarDadosReceitasAFaturarResumo gerarDadosReceitasAFaturarResumo = new TarefaBatchGerarDadosReceitasAFaturarResumo(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							gerarDadosReceitasAFaturarResumo.addParametro("anoMesReferencia", sistemaParametros.getAnoMesArrecadacao());
-	
-							FiltroFaturamentoGrupo filtroFaturamentoGrupo = new FiltroFaturamentoGrupo();
-							filtroFaturamentoGrupo.setCampoOrderBy(FiltroFaturamentoGrupo.ID);
-							filtroFaturamentoGrupo.adicionarParametro(new ParametroSimples(FiltroFaturamentoGrupo.INDICADOR_USO, ConstantesSistema.SIM));
-							Collection<FaturamentoGrupo> colecaoFaturamentoGrupos = getControladorUtil().pesquisar(filtroFaturamentoGrupo,
-									FaturamentoGrupo.class.getName());
-	
-							gerarDadosReceitasAFaturarResumo.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoFaturamentoGrupos);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarDadosReceitasAFaturarResumo));
-	
+						break;
+
+					case Funcionalidade.INSERIR_RESUMO_ACOES_COBRANCA_EVENTUAL:
+
+						TarefaBatchInserirResumoAcoesCobrancaEventual tarefaBatchInserirResumoAcoesCobrancaEventual = new TarefaBatchInserirResumoAcoesCobrancaEventual(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection colecaoAcaoCobrancaEventualParaInserir = getControladorCobranca().pesquisarCobrancaAcaoAtividadeComandoSemRealizacao();
+
+						if (colecaoAcaoCobrancaEventualParaInserir != null && !colecaoAcaoCobrancaEventualParaInserir.isEmpty()) {
+							tarefaBatchInserirResumoAcoesCobrancaEventual.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+									colecaoAcaoCobrancaEventualParaInserir);
+
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchInserirResumoAcoesCobrancaEventual));
+
 							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
+						} else {
+							throw new ControladorException("atencao.nao.existe.dados.tabela.comando");
 						}
-	
-						case Funcionalidade.GERAR_ARQUIVO_PAGAMENTO_CONTAS_COBRANCA_EMPRESA: {
-							
-							TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa batch = new TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-							
-							Collection<Empresa> empresas = obterEmpresasCobranca();
-							
-							batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, empresas);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
 
-							getControladorUtil().atualizar(funcionalidadeIniciada);
+						break;
 
-							break;
+					case Funcionalidade.GERAR_RESUMO_PENDENCIA:
+						TarefaBatchGerarResumoPendencia dadosGerarResumoPendencia = new TarefaBatchGerarResumoPendencia(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial novoFiltroSetorComercial = new FiltroSetorComercial();
+						Collection<SetorComercial> colecaoSetorPendencia = getControladorUtil().pesquisar(novoFiltroSetorComercial,
+								SetorComercial.class.getName());
+
+						dadosGerarResumoPendencia.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoSetorPendencia);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoPendencia));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_GUIA_PAGAMENTO_POR_CLIENTE_RESUMO_PENDENCIA:
+
+						TarefaBatchGerarGuiaPagamentoPorClienteResumoPendencia dados = new TarefaBatchGerarGuiaPagamentoPorClienteResumoPendencia(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroLocalidade filtroLocalidadeResumoPendencia = new FiltroLocalidade();
+						Collection<Localidade> colecaoLocalidadePendencia = getControladorUtil().pesquisar(filtroLocalidadeResumoPendencia,
+								Localidade.class.getName());
+
+						dados.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoLocalidadePendencia);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dados));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_ANORMALIDADES:
+
+						TarefaBatchGerarResumoAnormalidades tarefaBatchGerarResumoAnormalidades = new TarefaBatchGerarResumoAnormalidades(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsLocalidadesAnormalidades = getControladorFaturamento()
+								.pesquisarIdsLocalidadeParaGerarResumoLigacoesEconomias();
+
+						tarefaBatchGerarResumoAnormalidades.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesAnormalidades);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoAnormalidades));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_SITUACAO_ESPECIAL_COBRANCA:
+
+						TarefaBatchGerarResumoSituacaoEspecialCobranca tarefaBatchGerarResumoSituacaoEspecialCobranca = new TarefaBatchGerarResumoSituacaoEspecialCobranca(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsLocalidadesCobranca = getControladorFaturamento()
+								.pesquisarIdsLocalidadeParaGerarResumoLigacoesEconomias();
+
+						tarefaBatchGerarResumoSituacaoEspecialCobranca.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesCobranca);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoSituacaoEspecialCobranca));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_FATURA_CLIENTE_RESPONSAVEL:
+
+						TarefaBatchGerarFaturaClienteResponsavel dadosGerarFaturaClienteResponsavel = new TarefaBatchGerarFaturaClienteResponsavel(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarFaturaClienteResponsavel));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.EMITIR_CONTAS:
+
+						TarefaBatchEmitirContas emitirContas = new TarefaBatchEmitirContas(processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						emitirContas.addParametro("anoMesFaturamentoGrupo", anoMesFaturamentoSistemaParametro);
+						emitirContas.addParametro("faturamentoGrupo", null);
+
+						Collection colecaoIdsEmpresas = getControladorCadastro().pesquisarIdsEmpresa();
+						emitirContas.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsEmpresas);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(emitirContas));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA:
+						TarefaBatchDesfazerParcelamentoPorEntradaNaoPaga dadosDesfazerParcelamentoPorEntradaNaoPaga = new TarefaBatchDesfazerParcelamentoPorEntradaNaoPaga(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosDesfazerParcelamentoPorEntradaNaoPaga));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.CANCELAR_PARCELAMENTOS:
+						TarefaBatchCancelarParcelamentos dadosCancelarParcelamentos = new TarefaBatchCancelarParcelamentos(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+						dadosCancelarParcelamentos.addParametro("usuario", processoIniciado.getUsuario());
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosCancelarParcelamentos));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_INSTALACOES_HIDROMETROS:
+
+						TarefaBatchGerarResumoInstalacoesHidrometros dadosGerarResumoInstalacoesHidrometros = new TarefaBatchGerarResumoInstalacoesHidrometros(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsSetoresComercial = getControladorGerencialMicromedicao()
+								.pesquisarIdsSetorComercialParaGerarResumoInstalacaoHidrometro(anoMesFaturamentoSistemaParametro);
+
+						dadosGerarResumoInstalacoesHidrometros.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsSetoresComercial);
+						dadosGerarResumoInstalacoesHidrometros.addParametro("anoMesReferenciaFaturamento", anoMesFaturamentoSistemaParametro);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoInstalacoesHidrometros));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_LEITURA_ANORMALIDADE:
+
+						TarefaBatchGerarResumoLeituraAnormalidade dadosGerarResumoLeituraAnormalidade = new TarefaBatchGerarResumoLeituraAnormalidade(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroSetor = new FiltroSetorComercial();
+						Collection<SetorComercial> colSetorComercial = getControladorUtil().pesquisar(filtroSetor, SetorComercial.class.getName());
+
+						dadosGerarResumoLeituraAnormalidade.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorComercial);
+						dadosGerarResumoLeituraAnormalidade.addParametro("anoMesReferenciaFaturamento", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoLeituraAnormalidade));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_ARRECADACAO:
+
+						TarefaBatchGerarResumoArrecadacao dadosGerarResumoArrecadacao = new TarefaBatchGerarResumoArrecadacao(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						FiltroLocalidade filtroLocalidadeResumoArrecadacao = new FiltroLocalidade(FiltroLocalidade.ID);
+						Collection<Localidade> colLocalidadeResumoArrecadacao = getControladorUtil().pesquisar(filtroLocalidadeResumoArrecadacao,
+								Localidade.class.getName());
+
+						dadosGerarResumoArrecadacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colLocalidadeResumoArrecadacao);
+						dadosGerarResumoArrecadacao.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoArrecadacao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_PARCELAMENTO:
+
+						TarefaBatchGerarResumoParcelamento dadosGerarResumoParcelamento = new TarefaBatchGerarResumoParcelamento(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+						Collection<Integer> colecaoLocalidadesParcelamento = getControladorFaturamento()
+								.pesquisarIdsLocalidadeParaGerarResumoLigacoesEconomias();
+
+						dadosGerarResumoParcelamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoLocalidadesParcelamento);
+						dadosGerarResumoParcelamento.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoParcelamento));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_FATURAMENTO:
+
+						TarefaBatchGerarResumoFaturamento dadosGerarResumoFaturamento = new TarefaBatchGerarResumoFaturamento(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroFaturamento = new FiltroSetorComercial();
+
+						Collection<SetorComercial> colSetorFaturamento = getControladorUtil().pesquisar(filtroFaturamento, SetorComercial.class.getName());
+
+						dadosGerarResumoFaturamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorFaturamento);
+						dadosGerarResumoFaturamento.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoFaturamento));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_FATURAMENTO_AGUA_ESGOTO:
+
+						TarefaBatchGerarResumoFaturamentoAguaEsgoto dadosGerarResumoFaturamentoAguaEsgoto = new TarefaBatchGerarResumoFaturamentoAguaEsgoto(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						filtroFaturamento = new FiltroSetorComercial();
+
+						colSetorFaturamento = getControladorUtil().pesquisar(filtroFaturamento, SetorComercial.class.getName());
+
+						dadosGerarResumoFaturamentoAguaEsgoto.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorFaturamento);
+						dadosGerarResumoFaturamentoAguaEsgoto.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoFaturamentoAguaEsgoto));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_REFATURAMENTO:
+
+						TarefaBatchGerarResumoReFaturamento dadosGerarResumoReFaturamento = new TarefaBatchGerarResumoReFaturamento(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroReFaturamento = new FiltroSetorComercial();
+
+						Collection<SetorComercial> colSetorReFaturamento = getControladorUtil() // getControladorGerencialFaturamento().pesquisarIdsSetores();
+								.pesquisar(filtroReFaturamento, SetorComercial.class.getName());
+
+						dadosGerarResumoReFaturamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorReFaturamento);
+						dadosGerarResumoReFaturamento.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoReFaturamento));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_REFATURAMENTO_OLAP:
+
+						TarefaBatchGerarResumoReFaturamentoOlap dadosGerarResumoReFaturamentoOlap = new TarefaBatchGerarResumoReFaturamentoOlap(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroReFaturamentoOlap = new FiltroSetorComercial();
+
+						Collection<SetorComercial> colSetorReFaturamentoOlap = getControladorUtil().pesquisar(filtroReFaturamentoOlap,
+								SetorComercial.class.getName());
+
+						dadosGerarResumoReFaturamentoOlap.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorReFaturamentoOlap);
+						dadosGerarResumoReFaturamentoOlap.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoReFaturamentoOlap));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_LANCAMENTOS_CONTABEIS_FATURAMENTO:
+
+						TarefaBatchGerarLancamentosContabeisFaturamento dadosGerarLancamentosContabeisFaturamento = new TarefaBatchGerarLancamentosContabeisFaturamento(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroLocalidade filtroLocalidadeLancamentoContabeisFaturamento = new FiltroLocalidade();
+
+						Collection<Localidade> colecaoIdsLocalidadesGerarLancamentosContabeisFaturamento = getControladorUtil().pesquisar(
+								filtroLocalidadeLancamentoContabeisFaturamento, Localidade.class.getName());
+
+						dadosGerarLancamentosContabeisFaturamento.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+						dadosGerarLancamentosContabeisFaturamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesGerarLancamentosContabeisFaturamento);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarLancamentosContabeisFaturamento));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_DEVEDORES_DUVIDOSOS:
+
+						TarefaBatchGerarResumoDevedoresDuvidosos dadosGerarResumoDevedoresDuvidosos = new TarefaBatchGerarResumoDevedoresDuvidosos(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsLocalidadesGerarResumoDevedoresDuvidosos = getControladorFinanceiro()
+								.pesquisarIdsLocalidadesParaGerarResumoDevedoresDuvidosos(sistemaParametros.getAnoMesFaturamento());
+
+						dadosGerarResumoDevedoresDuvidosos.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+						dadosGerarResumoDevedoresDuvidosos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesGerarResumoDevedoresDuvidosos);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoDevedoresDuvidosos));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_METAS:
+
+						TarefaBatchGerarResumoMetas tarefaBatchGerarResumoMetas = new TarefaBatchGerarResumoMetas(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroSetorC = new FiltroSetorComercial();
+						Collection<SetorComercial> colSetorC = getControladorUtil().pesquisar(filtroSetorC, SetorComercial.class.getName());
+
+						Collection colecaoResumoMetas = getControladorFaturamento().pesquisarResumoMetas(sistemaParametros.getAnoMesArrecadacao());
+
+						if (colecaoResumoMetas != null && !colecaoResumoMetas.isEmpty()) {
+							throw new ControladorException("atencao.dados.existente.resumo.metas", null, "" + sistemaParametros.getAnoMesArrecadacao());
 						}
-						
-						case Funcionalidade.GERAR_NEGOCIACAO_CONTAS_COBRANCA_EMPRESA: {
-							
-							TarefaBatchGerarNegociacaoContasCobrancaEmpresa batch = new TarefaBatchGerarNegociacaoContasCobrancaEmpresa(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							Collection<Empresa> empresas = obterEmpresasCobranca();
-	
-							batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, empresas);
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
+
+						tarefaBatchGerarResumoMetas.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorC);
+
+						Date dataInicial = Util.gerarDataInicialApartirAnoMesRefencia(sistemaParametros.getAnoMesArrecadacao());
+						Date dataFinal = Util.gerarDataApartirAnoMesRefencia(sistemaParametros.getAnoMesArrecadacao());
+						tarefaBatchGerarResumoMetas.addParametro("dataInicial", dataInicial);
+
+						tarefaBatchGerarResumoMetas.addParametro("dataFinal", dataFinal);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoMetas));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_METAS_ACUMULADO:
+
+						TarefaBatchGerarResumoMetasAcumulado tarefaBatchGerarResumoMetasAcumulado = new TarefaBatchGerarResumoMetasAcumulado(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroSetorCA = new FiltroSetorComercial();
+						Collection<SetorComercial> colSetorCA = getControladorUtil().pesquisar(filtroSetorCA, SetorComercial.class.getName());
+
+						Collection colecaoResumoMetasA = getControladorFaturamento().pesquisarResumoMetasAcumulado(sistemaParametros.getAnoMesArrecadacao());
+
+						if (colecaoResumoMetasA != null && !colecaoResumoMetasA.isEmpty()) {
+							throw new ControladorException("atencao.dados.existente.resumo.metas", null, "" + sistemaParametros.getAnoMesArrecadacao());
 						}
-						
-						case Funcionalidade.GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS: {
 
-							TarefaBatchGerarDadosPagamentosNaoClassificados batch = new TarefaBatchGerarDadosPagamentosNaoClassificados(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-							
-							batch.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
-							
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
-							
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-							
-							break;
+						tarefaBatchGerarResumoMetasAcumulado.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorCA);
+						tarefaBatchGerarResumoMetasAcumulado.addParametro("anoMesArrecadacao", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoMetasAcumulado));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.EMITIR_CONTAS_ORGAO_PUBLICO:
+
+						TarefaBatchEmitirContasOrgaoPublico tarefaBatchEmitirContasOrgaoPublico = new TarefaBatchEmitirContasOrgaoPublico(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Integer anoMesFaturamento = sistemaParametros.getAnoMesFaturamento();
+						FaturamentoGrupo faturamentoGrupo = new FaturamentoGrupo();
+						faturamentoGrupo.setId(0);
+
+						tarefaBatchEmitirContasOrgaoPublico.addParametro("anoMesFaturamento", anoMesFaturamento);
+						tarefaBatchEmitirContasOrgaoPublico.addParametro("faturamentoGrupo", faturamentoGrupo);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEmitirContasOrgaoPublico));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_COLETA_ESGOTO:
+
+						TarefaBatchGerarResumoColetaEsgoto gerarResumoColetaEsgoto = new TarefaBatchGerarResumoColetaEsgoto(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroSetorCom = new FiltroSetorComercial();
+						Collection<SetorComercial> colSetorCom = getControladorUtil().pesquisar(filtroSetorCom, SetorComercial.class.getName());
+
+						gerarResumoColetaEsgoto.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorCom);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoColetaEsgoto));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_CONTAS_A_RECEBER_CONTABIL:
+
+						TarefaBatchGerarContasAReceberContabil gerarContaAReceberContabil = new TarefaBatchGerarContasAReceberContabil(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
+
+						Collection<Localidade> colLocalidade = getControladorUtil().pesquisar(filtroLocalidade, Localidade.class.getName());
+
+						gerarContaAReceberContabil.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colLocalidade);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarContaAReceberContabil));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.ATUALIZA_QUANTIDADE_PARCELA_PAGA_CONSECUTIVA_PARCELA_BONUS:
+
+						TarefaBatchAtualizaQuantidadeParcelaPagaConsecutivaParcelaBonus dadosAtualizarParcela = new TarefaBatchAtualizaQuantidadeParcelaPagaConsecutivaParcelaBonus(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						dadosAtualizarParcela.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsLocalidadesEncerrarArrecadacaoMes);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosAtualizarParcela));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.EXECUTAR_COMANDO_DE_ENCERRAMENTO_RA:
+
+						TarefaBatchExecutarComandoEncerramentoRA executarComandoEncerramentoRA = new TarefaBatchExecutarComandoEncerramentoRA(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsLocalidadesRA = getControladorLocalidade().pesquisarTodosIdsLocalidade();
+
+						FiltroRaEncerramentoComando filtroRaEncerramentoComando = new FiltroRaEncerramentoComando();
+						filtroRaEncerramentoComando.adicionarCaminhoParaCarregamentoEntidade("atendimentoMotivoEncerramento");
+						filtroRaEncerramentoComando.adicionarCaminhoParaCarregamentoEntidade("usuario.unidadeOrganizacional");
+						filtroRaEncerramentoComando.adicionarParametro(new ParametroNulo(FiltroRaEncerramentoComando.TEMPO_REALIZACAO));
+						Collection<RaEncerramentoComando> colRaEncerramentoComando = getControladorUtil().pesquisar(filtroRaEncerramentoComando,
+								RaEncerramentoComando.class.getName());
+
+						if (colRaEncerramentoComando != null && !colRaEncerramentoComando.isEmpty()) {
+
+							executarComandoEncerramentoRA.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsLocalidadesRA);
+							executarComandoEncerramentoRA.addParametro("raEncerramentoComandos", colRaEncerramentoComando);
+
+						} else {
+							throw new ControladorException("atencao.comando.encerramento.ra.vazio.para.executar");
 						}
-						case Funcionalidade.GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS: {
 
-							System.out.println("Inserindo processo ");
-							TarefaBatchGerarDadosDocumentosNaoIdentificados batch = new TarefaBatchGerarDadosDocumentosNaoIdentificados(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-							
-							batch.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
-							
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
-							
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-							
-							break;
-						}	
-						
-						case Funcionalidade.DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA: 
-							TarefaBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferencia batch = new TarefaBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferencia(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-	
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
-	
-							getControladorUtil().atualizar(funcionalidadeIniciada);
-	
-							break;
-							
-						case Funcionalidade.ENCERRAR_COMANDO_DE_COBRANCA_POR_RESULTADO_POR_EMPRESA:
-							TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa dadosEncerrarComandos = new TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa(
-									processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(executarComandoEncerramentoRA));
 
-							Collection<Empresa> empresas = obterEmpresasCobranca();
-							
-							dadosEncerrarComandos.addParametro("usuario", processoIniciado.getUsuario());
-							dadosEncerrarComandos.addParametro("idCobrancaSituacao", CobrancaSituacao.COBRANCA_EMPRESA_TERCEIRIZADA);
-							dadosEncerrarComandos.addParametro("empresas", empresas);
-							dadosEncerrarComandos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, empresas);
+						getControladorUtil().atualizar(funcionalidadeIniciada);
 
-							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosEncerrarComandos));
+						break;
 
-							getControladorUtil().atualizar(funcionalidadeIniciada);
+					case Funcionalidade.GERAR_VALOR_VOLUMES_CONSUMIDOS_NAO_FATURADOS:
 
-							break;
+						TarefaBatchGerarValorVolumesConsumidosNaoFaturados gerarValorVolumesConsumidosNaoFaturados = new TarefaBatchGerarValorVolumesConsumidosNaoFaturados(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-							
-						default:
+						Collection<Integer> colecaoIdsLocalidades = getControladorLocalidade().pesquisarIdsLocalidadesImoveis();
+
+						gerarValorVolumesConsumidosNaoFaturados.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoIdsLocalidades);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarValorVolumesConsumidosNaoFaturados));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_INDICADORES_COMERCIALIZACAO:
+
+						TarefaBatchGerarResumoIndicadoresComercializacao gerarResumoIndicadoresComercializacao = new TarefaBatchGerarResumoIndicadoresComercializacao(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoIndicadoresComercializacao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_INDICADORES_MICROMEDICAO:
+
+						TarefaBatchGerarResumoIndicadoresMicromedicao gerarResumoIndicadoresMicromedicao = new TarefaBatchGerarResumoIndicadoresMicromedicao(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoIndicadoresMicromedicao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_INDICADORES_FATURAMENTO:
+
+						TarefaBatchGerarResumoIndicadoresFaturamento gerarResumoIndicadoresFaturamento = new TarefaBatchGerarResumoIndicadoresFaturamento(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoIndicadoresFaturamento));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_INDICADORES_COBRANCA:
+
+						TarefaBatchGerarResumoIndicadoresCobranca gerarResumoIndicadoresCobranca = new TarefaBatchGerarResumoIndicadoresCobranca(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoIndicadoresCobranca));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.INCLUIR_DEBITO_A_COBRAR_ENTRADA_PARCELAMENTO_NAO_PAGA:
+
+						TarefaBatchIncluirDebitoACobrarEntradaParcelamentoNaoPaga dadosIncluirDebitoACobrarEntradaParcelamentoNaoPaga = new TarefaBatchIncluirDebitoACobrarEntradaParcelamentoNaoPaga(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosIncluirDebitoACobrarEntradaParcelamentoNaoPaga));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.ATUALIZAR_PAGAMENTOS_CONTAS_COBRANCA:
+
+						TarefaBatchAtualizarPagamentosContasCobranca atualizarPagamentosContasCobranca = new TarefaBatchAtualizarPagamentosContasCobranca(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsLocalidadesAtualizarPagamentos = getControladorLocalidade().pesquisarTodosIdsLocalidade();
+
+						atualizarPagamentosContasCobranca.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesAtualizarPagamentos);
+						atualizarPagamentosContasCobranca.addParametro("anoMesArrecadacaoSistemaParametro", anoMesArrecadacaoSistemaParametro);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(atualizarPagamentosContasCobranca));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_MOVIMENTO_EXTENSAO_CONTAS_COBRANCA_POR_EMPRESA:
+
+						TarefaBatchGerarMovimentoExtensaoContasCobrancaPorEmpresa gerarMovimentoExtensaoContasCobrancaPorEmpresa = new TarefaBatchGerarMovimentoExtensaoContasCobrancaPorEmpresa(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroComandoEmpresaCobrancaContaExtensao filtroComandoEmpresaCobrancaContaExtensao = new FiltroComandoEmpresaCobrancaContaExtensao();
+						filtroComandoEmpresaCobrancaContaExtensao
+								.adicionarParametro(new ParametroNulo(FiltroComandoEmpresaCobrancaContaExtensao.DATA_EXECUCAO));
+						filtroComandoEmpresaCobrancaContaExtensao
+								.adicionarCaminhoParaCarregamentoEntidade(FiltroComandoEmpresaCobrancaContaExtensao.COMANDO_EMPRESA_COBRANCA_CONTA);
+						filtroComandoEmpresaCobrancaContaExtensao.adicionarCaminhoParaCarregamentoEntidade("comandoEmpresaCobrancaConta.empresa");
+
+						Collection colecaoComandoEmpresaCobrancaContaExtensao = getControladorUtil().pesquisar(filtroComandoEmpresaCobrancaContaExtensao,
+								ComandoEmpresaCobrancaContaExtensao.class.getName());
+
+						Collection colecaoLocalidades = getControladorCadastro().pesquisarLocalidades();
+
+						gerarMovimentoExtensaoContasCobrancaPorEmpresa.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoLocalidades);
+
+						gerarMovimentoExtensaoContasCobrancaPorEmpresa.addParametro("colecaoComandoEmpresaCobrancaContaExtensao",
+								colecaoComandoEmpresaCobrancaContaExtensao);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarMovimentoExtensaoContasCobrancaPorEmpresa));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.ATUALIZAR_AUTOS_INFRACAO_PRAZO_RECURSO_VENCIDO:
+
+						TarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido tarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido = new TarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						tarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								Collections.singletonList(0));
+
+						tarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido.addParametro("sistemaParametro", sistemaParametros);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.EXCLUIR_IMOVEIS_DA_TARIFA_SOCIAL:
+
+						TarefaBatchExcluirImoveisDaTarifaSocial excluirImoveisDaTarifaSocial = new TarefaBatchExcluirImoveisDaTarifaSocial(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Integer anoMesFaturamento_ExcluirImoveisDaTarifaSocial = sistemaParametros.getAnoMesFaturamento();
+
+						FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
+						Collection<SetorComercial> colecaoSetor = getControladorUtil().pesquisar(filtroSetorComercial, SetorComercial.class.getName());
+
+						excluirImoveisDaTarifaSocial.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoSetor);
+						excluirImoveisDaTarifaSocial.addParametro("anoMesReferenciaFaturamento", anoMesFaturamento_ExcluirImoveisDaTarifaSocial);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(excluirImoveisDaTarifaSocial));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_NEGATIVACAO:
+
+						TarefaBatchGerarResumoNegativacao gerarResumoNegativacao = new TarefaBatchGerarResumoNegativacao(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						Collection colecaoRotas = getControladorSpcSerasa().consultarRotasParaGerarResumoDiarioNegativacao();
+
+						Integer penultimaExecucaoResumo = sistemaParametros.getNumeroExecucaoResumoNegativacao() - 1;
+						getControladorSpcSerasa().apagarResumoNegativacao(penultimaExecucaoResumo);
+
+						gerarResumoNegativacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoRotas);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoNegativacao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.ACOMPANHAR_PAGAMENTO_DO_PARCELAMENTO:
+
+						TarefaBatchAcompanharPagamentoDoParcelamento acompanharPagamentoDoParcelamento = new TarefaBatchAcompanharPagamentoDoParcelamento(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection rotas = getControladorSpcSerasa().consultarRotasParaGerarResumoDiarioNegativacao();
+
+						acompanharPagamentoDoParcelamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, rotas);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(acompanharPagamentoDoParcelamento));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_DOCUMENTOS_A_RECEBER:
+
+						TarefaBatchGerarResumoDocumentosAReceber tarefaBatchGerarResumoDocumentosAReceber = new TarefaBatchGerarResumoDocumentosAReceber(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroLocalidade filtroLocalidadeGerarResumoDocumentosAReceber = new FiltroLocalidade();
+
+						Collection<Localidade> colLocalidadeGerarResumoDocumentosAReceber = getControladorUtil().pesquisar(
+								filtroLocalidadeGerarResumoDocumentosAReceber, Localidade.class.getName());
+
+						tarefaBatchGerarResumoDocumentosAReceber.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colLocalidadeGerarResumoDocumentosAReceber);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoDocumentosAReceber));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.BATCH_EMITIR_ORDEM_FISCALIZAO:
+
+						TarefaBatchEmitirOrdemDeFiscalizacao tarefaBatchEmitirOrdemDeFiscalizacao = new TarefaBatchEmitirOrdemDeFiscalizacao(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroSetores = new FiltroSetorComercial();
+
+						filtroSetores.adicionarParametro(new ParametroSimples(FiltroSetorComercial.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+
+						Collection<SetorComercial> colecaoSetores = getControladorUtil().pesquisar(filtroSetores, SetorComercial.class.getName());
+
+						tarefaBatchEmitirOrdemDeFiscalizacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoSetores);
+						tarefaBatchEmitirOrdemDeFiscalizacao.addParametro("SistemaParametros", sistemaParametros);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEmitirOrdemDeFiscalizacao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+						break;
+					case Funcionalidade.BATCH_GERAR_ARQUIVO_ORDEM_FISCALIZAO:
+
+						TarefaBatchGerarArquivoOrdemDeFiscalizacaoMDB tarefaBatchGerarArquivoOrdemDeFiscalizacaoMDB = new TarefaBatchGerarArquivoOrdemDeFiscalizacaoMDB(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarArquivoOrdemDeFiscalizacaoMDB));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+						break;
+
+					case Funcionalidade.DETERMINAR_CONFIRMACAO_DA_NEGATIVACAO:
+
+						TarefaBatchDeterminarConfirmacaoDaNegativacao determinarConfirmacaoDaNegativacao = new TarefaBatchDeterminarConfirmacaoDaNegativacao(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection colLocalidades = getControladorSpcSerasa().consultarLocalidadeParaDeterminarConfirmacaoDaNegativacao();
+
+						determinarConfirmacaoDaNegativacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colLocalidades);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(determinarConfirmacaoDaNegativacao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_PENDENCIA_POR_ANO:
+
+						TarefaBatchGerarResumoPendenciaPorAno dadosGerarResumoPendenciaPorAno = new TarefaBatchGerarResumoPendenciaPorAno(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroPendenciaPorAno = new FiltroSetorComercial();
+						Collection<SetorComercial> colecaoSetorComercialPendenciaPorAno = getControladorUtil().pesquisar(filtroPendenciaPorAno,
+								SetorComercial.class.getName());
+
+						dadosGerarResumoPendenciaPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoSetorComercialPendenciaPorAno);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoPendenciaPorAno));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+					case Funcionalidade.BATCH_ATUALIZAR_CODIGO_DEBITO_AUTOMATICO:
+
+						TarefaBatchAtualizarCodigoDebitoAutomatico tarefaBatchAtualizarCodigoDebitoAutomatico = new TarefaBatchAtualizarCodigoDebitoAutomatico(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroSetoresParaAtualizarCodigoDebitoAutomatico = new FiltroSetorComercial();
+
+						Collection<SetorComercial> colecaoSetoresParaAtualizar = getControladorUtil().pesquisar(
+								filtroSetoresParaAtualizarCodigoDebitoAutomatico, SetorComercial.class.getName());
+
+						tarefaBatchAtualizarCodigoDebitoAutomatico.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoSetoresParaAtualizar);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchAtualizarCodigoDebitoAutomatico));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_LIGACOES_ECONOMIAS_POR_ANO:
+
+						TarefaBatchGerarResumoLigacoesEconomiasPorAno gerarResumoLigacoesEconomiasPorAno = new TarefaBatchGerarResumoLigacoesEconomiasPorAno(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial fSetorComercial = new FiltroSetorComercial();
+						Collection<SetorComercial> setorComercialColecao = getControladorUtil().pesquisar(fSetorComercial, SetorComercial.class.getName());
+
+						gerarResumoLigacoesEconomiasPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, setorComercialColecao);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoLigacoesEconomiasPorAno));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_INDICADORES_MICROMEDICAO_POR_ANO:
+
+						TarefaBatchGerarResumoIndicadoresMicromedicaoPorAno gerarResumoIndicadoresMicromedicaoPorAno = new TarefaBatchGerarResumoIndicadoresMicromedicaoPorAno(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoIndicadoresMicromedicaoPorAno));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_CONSUMO_AGUA_POR_ANO:
+						TarefaBatchGerarResumoConsumoAguaPorAno gerarResumoConsumoAguaPorAno = new TarefaBatchGerarResumoConsumoAguaPorAno(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroSetComercial = new FiltroSetorComercial();
+						Collection<SetorComercial> colSetComercial = getControladorUtil().pesquisar(filtroSetComercial, SetorComercial.class.getName());
+
+						gerarResumoConsumoAguaPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetComercial);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoConsumoAguaPorAno));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_RECEITA:
+
+						TarefaBatchGerarResumoReceita tarefaBatchGerarResumoReceita = new TarefaBatchGerarResumoReceita(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarResumoReceita));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_FATURAMENTO_POR_ANO:
+
+						TarefaBatchGerarResumoFaturamentoPorAno dadosGerarResFaturamento = new TarefaBatchGerarResumoFaturamentoPorAno(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filFaturamento = new FiltroSetorComercial();
+
+						Collection<SetorComercial> colSetFaturamento = getControladorUtil().pesquisar(filFaturamento, SetorComercial.class.getName());
+
+						SetorComercial setComercial = new SetorComercial();
+						setComercial.setId(99999);
+						colSetFaturamento.add(setComercial);
+
+						dadosGerarResFaturamento.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetFaturamento);
+						dadosGerarResFaturamento.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResFaturamento));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_ARRECADACAO_POR_ANO:
+
+						TarefaBatchGerarResumoArrecadacaoPorAno dadosGerarResumoArrecadacaoAno = new TarefaBatchGerarResumoArrecadacaoPorAno(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroLocalidade filtroLocalidadeResumoArrecadacaoAno = new FiltroLocalidade();
+						Collection<Localidade> colLocalidadeResumoArrecadacaoAno = getControladorUtil().pesquisar(filtroLocalidadeResumoArrecadacaoAno,
+								Localidade.class.getName());
+
+						dadosGerarResumoArrecadacaoAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colLocalidadeResumoArrecadacaoAno);
+						dadosGerarResumoArrecadacaoAno.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoArrecadacaoAno));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_COLETA_ESGOTO_POR_ANO:
+						TarefaBatchGerarResumoColetaEsgotoPorAno gerarResumoColetaEsgotoPorAno = new TarefaBatchGerarResumoColetaEsgotoPorAno(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroSetorComPorAno = new FiltroSetorComercial();
+						Collection<SetorComercial> colSetorComPorAno = getControladorUtil().pesquisar(filtroSetorComPorAno, SetorComercial.class.getName());
+
+						gerarResumoColetaEsgotoPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorComPorAno);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoColetaEsgotoPorAno));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_REGISTRO_ATENDIMENTO_POR_ANO:
+						TarefaBatchGerarResumoRegistroAtendimentoPorAno gerarResumoRegistroAtendimentoPorAno = new TarefaBatchGerarResumoRegistroAtendimentoPorAno(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsLocalidadesGerarResumoRegistroAtendimentoMesPorAno = getControladorLocalidade()
+								.pesquisarTodosIdsLocalidade();
+
+						gerarResumoRegistroAtendimentoPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesGerarResumoRegistroAtendimentoMesPorAno);
+
+						gerarResumoRegistroAtendimentoPorAno.addParametro("anoMesFaturamentoSistemaParametro", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoRegistroAtendimentoPorAno));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_INSTALACOES_HIDROMETROS_POR_ANO:
+
+						TarefaBatchGerarResumoInstalacoesHidrometrosPorAno dadosGerarResumoInstalacoesHidrometrosPorAno = new TarefaBatchGerarResumoInstalacoesHidrometrosPorAno(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoIdsSetoresComercialPorAno = getControladorGerencialMicromedicao()
+								.pesquisarIdsSetorComercialParaGerarResumoInstalacaoHidrometro(anoMesFaturamentoSistemaParametro);
+
+						dadosGerarResumoInstalacoesHidrometrosPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsSetoresComercialPorAno);
+
+						dadosGerarResumoInstalacoesHidrometrosPorAno.addParametro("anoMesReferenciaFaturamento", anoMesFaturamentoSistemaParametro);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoInstalacoesHidrometrosPorAno));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_PARCELAMENTO_POR_ANO:
+						TarefaBatchGerarResumoParcelamentoPorAno dadosGerarResumoParcelamentoPorAno = new TarefaBatchGerarResumoParcelamentoPorAno(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoLocalidadesParcelamentoPorAno = getControladorFaturamento()
+								.pesquisarIdsLocalidadeParaGerarResumoLigacoesEconomias();
+
+						dadosGerarResumoParcelamentoPorAno.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoLocalidadesParcelamentoPorAno);
+
+						dadosGerarResumoParcelamentoPorAno.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoParcelamentoPorAno));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.ALTERAR_INSCRICOES_IMOVEIS:
+
+						TarefaBatchAlterarInscricaoImovel tarefaBatchAlterarInscricaoImovel = new TarefaBatchAlterarInscricaoImovel(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroLocalidade filtroLocalidadeAlterarInscricoesImoveis = new FiltroLocalidade();
+
+						Collection<Localidade> colecaoLocalidadeAlterarInscricoesImoveis = getControladorUtil().pesquisar(
+								filtroLocalidadeAlterarInscricoesImoveis, Localidade.class.getName());
+
+						tarefaBatchAlterarInscricaoImovel.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoLocalidadeAlterarInscricoesImoveis);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchAlterarInscricaoImovel));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+						break;
+
+					case Funcionalidade.GERAR_PRESCREVER_DEBITOS_DE_IMOVEIS:
+
+						TarefaBatchGerarPrescreverDebitosDeImoveis dadosGerarPrescreverDebitosDeImoveis = new TarefaBatchGerarPrescreverDebitosDeImoveis(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Integer> colecaoCobrancaSituacao = getControladorCobranca().obterCobrancaSituacaoParaPrescreverDebitos();
+
+						dadosGerarPrescreverDebitosDeImoveis.addParametro("colecaoCobrancaSituacao", colecaoCobrancaSituacao);
+						dadosGerarPrescreverDebitosDeImoveis.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarPrescreverDebitosDeImoveis));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_REFATURAMENTO_NOVO:
+
+						Integer existeResumo = null;
+
+						existeResumo = getControladorGerencialFaturamento().verificarExistenciaResumoReFaturamento(sistemaParametros.getAnoMesFaturamento());
+
+						if (existeResumo == null || existeResumo > 0) {
+
+							throw new ControladorException("atencao.resumo.refaturamento.ja.existe", null, sistemaParametros.getAnoMesFaturamento().toString());
+
+						}
+
+						TarefaBatchGerarResumoReFaturamentoNovo dadosGerarResumoReFaturamentoNovo = new TarefaBatchGerarResumoReFaturamentoNovo(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroReFaturamentoNovo = new FiltroSetorComercial();
+
+						Collection<SetorComercial> colSetorReFaturamentoNovo = getControladorUtil().pesquisar(filtroReFaturamentoNovo,
+								SetorComercial.class.getName());
+
+						dadosGerarResumoReFaturamentoNovo.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorReFaturamentoNovo);
+						dadosGerarResumoReFaturamentoNovo.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosGerarResumoReFaturamentoNovo));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_RESUMO_HISTOGRAMA_AGUA_ESGOTO_SEM_QUADRA:
+
+						TarefaBatchGerarResumoHistogramaAguaEsgotoSemQuadra gerarResumoAguaEsgotoSemQuadra = new TarefaBatchGerarResumoHistogramaAguaEsgotoSemQuadra(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroSetorComercial filtroHistogramaSemQuadra = new FiltroSetorComercial();
+						Collection<SetorComercial> colSetorHistogramaSemQuadra = getControladorUtil().pesquisar(filtroHistogramaSemQuadra,
+								SetorComercial.class.getName());
+
+						gerarResumoAguaEsgotoSemQuadra.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colSetorHistogramaSemQuadra);
+						gerarResumoAguaEsgotoSemQuadra.addParametro("anoMesFaturamentoSistemaParametro", anoMesFaturamentoSistemaParametro);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarResumoAguaEsgotoSemQuadra));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.RELIGAR_IMOVEIS_CORTADOS_COM_CONSUMO_REAL:
+
+						TarefaBatchReligarImoveisCortadosComConsumoReal dadosReligarImoveisCortadosComConsumoReal = new TarefaBatchReligarImoveisCortadosComConsumoReal(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroLocalidade filtroLocalidadeReligarImoveisCortadosComConsumoReal = new FiltroLocalidade();
+
+						Collection<Localidade> colecaoLocalidadesReligarImoveisCortadosComConsumoReal = getControladorUtil().pesquisar(
+								filtroLocalidadeReligarImoveisCortadosComConsumoReal, Localidade.class.getName());
+
+						dadosReligarImoveisCortadosComConsumoReal.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+						dadosReligarImoveisCortadosComConsumoReal.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoLocalidadesReligarImoveisCortadosComConsumoReal);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosReligarImoveisCortadosComConsumoReal));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.PRESCREVER_DEBITOS_IMOVEIS_PUBLICOS:
+
+						TarefaBatchPrescreverDebitosImoveisPublicosAutomatico prescricao = new TarefaBatchPrescreverDebitosImoveisPublicosAutomatico(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection colecaoDadosPrescricaoAutomaticos = getControladorFaturamento().obterDadosPrescricaoDebitosAutomaticos();
+
+						if (Util.isVazioOrNulo(colecaoDadosPrescricaoAutomaticos)) {
+							colecaoDadosPrescricaoAutomaticos = new ArrayList();
+							colecaoDadosPrescricaoAutomaticos.add(EsferaPoder.obterIdsEsferaPoderPublico());
+						}
+
+						prescricao.addParametro("colecaoDadosPrescricao", colecaoDadosPrescricaoAutomaticos);
+						prescricao.addParametro("anoMesFaturamento", sistemaParametros.getAnoMesFaturamento());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(prescricao));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+						break;
+
+					case Funcionalidade.SELECIONAR_COMANDO_RETIRAR_IMOVEL_TARIFA_SOCIAL:
+
+						TarefaBatchRetirarImovelTarifaSocial tarefaBatchRetirarImovelTarifaSocial = new TarefaBatchRetirarImovelTarifaSocial(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection idsLocalidade = getControladorCadastro().pesquisarLocalidade();
+
+						tarefaBatchRetirarImovelTarifaSocial.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, idsLocalidade);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchRetirarImovelTarifaSocial));
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+						break;
+
+					case Funcionalidade.AUTOMATIZAR_PERFIS_DE_GRANDES_CONSUMIDORES:
+
+						TarefaBatchAutomatizarPerfisDeGrandesConsumidores dadosAutomatizarPerfisDeGrandesConsumidores = new TarefaBatchAutomatizarPerfisDeGrandesConsumidores(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroLocalidade filtroLocalidadeAutomatizarPerfis = new FiltroLocalidade();
+
+						Collection<Localidade> colecaoIdsLocalidadesAutomatizarPerfisDeGrandesConsumidores = getControladorUtil().pesquisar(
+								filtroLocalidadeAutomatizarPerfis, Localidade.class.getName());
+
+						dadosAutomatizarPerfisDeGrandesConsumidores.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesAutomatizarPerfisDeGrandesConsumidores);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosAutomatizarPerfisDeGrandesConsumidores));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_TXT_IMPRESSAO_CONTAS_FORMATO_BRAILLE:
+
+						Collection colecaoGrupoNaoFaturados = getControladorFaturamento().pesquisarGrupoFaturamentoGrupoNaoFaturados(
+								anoMesFaturamentoSistemaParametro);
+
+						if (colecaoGrupoNaoFaturados != null && !colecaoGrupoNaoFaturados.isEmpty()) {
+							throw new ControladorException("atencao.processo_cancelado_grupo_nao_faturado");
+						}
+
+						TarefaBatchGerarTxtImpressaoContasBraille gerarTxtContasBraille = new TarefaBatchGerarTxtImpressaoContasBraille(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarTxtContasBraille));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_ARQUIVO_TXT_OS_CONTAS_PAGAS_PARCELADAS:
+
+						TarefaBatchGerarArquivoTextoOSContasPagasParceladas gerarArqvTxtOSContasPagasParceladas = new TarefaBatchGerarArquivoTextoOSContasPagasParceladas(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarArqvTxtOSContasPagasParceladas));
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.ENVIO_EMAIL_CONTA_PARA_CLIENTE:
+
+						TarefaBatchEnvioEmailContaParaCliente tarefaBatchEnvioEmailContaParaCliente = new TarefaBatchEnvioEmailContaParaCliente(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroLocalidade filtroLocalidadeEnvioEmail = new FiltroLocalidade();
+						filtroLocalidadeEnvioEmail
+								.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+
+						Collection<Localidade> collectionLocalidades = Fachada.getInstancia().pesquisar(filtroLocalidadeEnvioEmail, Localidade.class.getName());
+
+						tarefaBatchEnvioEmailContaParaCliente.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, collectionLocalidades);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEnvioEmailContaParaCliente));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.PROGRAMACAO_AUTO_ROTEIRO_ACOMPANHAMENTO_OS:
+
+						TarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS tarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS = new TarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection collIdsUnidadesOrganizacionais = getControladorOrdemServico().pequisarUnidadesOrganizacionaisdasEquipes();
+
+						tarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								collIdsUnidadesOrganizacionais);
+
+						tarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS.addParametro("dataAtual", new Date());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchProgramacaoAutoRoteiroAcompanhamentoOS));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_DADOS_ARQUIVO_ACOMPANHAMENTO_SERVICO:
+
+						TarefaBatchGerarDadosArquivoAcompanhamentoServico tarefaBatchGerarDadosArquivoAcompanhamentoServico = new TarefaBatchGerarDadosArquivoAcompanhamentoServico(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection collIdsUnidadesOrganizacionais2 = getControladorOrdemServico().pequisarUnidadesOrganizacionaisdasEquipes();
+
+						tarefaBatchGerarDadosArquivoAcompanhamentoServico.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								collIdsUnidadesOrganizacionais2);
+
+						tarefaBatchGerarDadosArquivoAcompanhamentoServico.addParametro("dataAtual", new Date());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarDadosArquivoAcompanhamentoServico));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.PROCESSAR_ENCERRAMENTO_OS_FISCALIZACAO_DECURSO_PRAZO:
+
+						TarefaBatchProcessarEncerramentoOSFiscalizacaoDecursoPrazo tarefaBatchProcessarEncerramentoOSFiscalizacaoDecursoPrazo = new TarefaBatchProcessarEncerramentoOSFiscalizacaoDecursoPrazo(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchProcessarEncerramentoOSFiscalizacaoDecursoPrazo));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.GERAR_DADOS_RELATORIO_BIG: {
+						TarefaBatchGerarDadosRelatorioBIG gerarDadosRelatorioBIG = new TarefaBatchGerarDadosRelatorioBIG(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						gerarDadosRelatorioBIG.addParametro("anoMesReferencia", sistemaParametros.getAnoMesArrecadacao());
+
+						Collection<Localidade> colecaoLocalidadesGerarDadosRelatorioBIG = obterLocalidadesAtivas();
+
+						gerarDadosRelatorioBIG.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoLocalidadesGerarDadosRelatorioBIG);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarDadosRelatorioBIG));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+					}
+
+					case Funcionalidade.CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS:
+
+						TarefaBatchCancelarGuiasPagamentoNaoPagas cancelarGuiasPagamentoNaoPagas = new TarefaBatchCancelarGuiasPagamentoNaoPagas(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Date dataReferencia = new Date();
+						cancelarGuiasPagamentoNaoPagas.addParametro("dataReferencia", dataReferencia);
+
+						Collection<Integer> colecaoIdsLocalidadesComGuiasPagamentoNaoPagas = getControladorArrecadacao()
+								.pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(dataReferencia, null);
+
+						cancelarGuiasPagamentoNaoPagas.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesComGuiasPagamentoNaoPagas);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(cancelarGuiasPagamentoNaoPagas));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.PROCESSAR_PAGAMENTOS_COM_DIFERENCA_DE_DOIS_REAIS: {
+
+						TarefaBatchProcessarPagamentosComDiferencaDoisReais batch = new TarefaBatchProcessarPagamentosComDiferencaDoisReais(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						batch.addParametro("anoMesReferencia", sistemaParametros.getAnoMesArrecadacao());
+
+						Collection<Localidade> localidades = obterLocalidadesAtivas();
+
+						batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, localidades);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+					}
+
+					case Funcionalidade.ATUALIZACAO_CADASTRAL: {
+
+						TarefaBatchAtualizacaoCadastral batchAtualizacaoCadastral = new TarefaBatchAtualizacaoCadastral(processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizacaoCadastral));
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+					}
+
+					case Funcionalidade.GERAR_DADOS_RECEITAS_A_FATURAR_RESUMO: {
+
+						TarefaBatchGerarDadosReceitasAFaturarResumo gerarDadosReceitasAFaturarResumo = new TarefaBatchGerarDadosReceitasAFaturarResumo(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						gerarDadosReceitasAFaturarResumo.addParametro("anoMesReferencia", sistemaParametros.getAnoMesArrecadacao());
+
+						FiltroFaturamentoGrupo filtroFaturamentoGrupo = new FiltroFaturamentoGrupo();
+						filtroFaturamentoGrupo.setCampoOrderBy(FiltroFaturamentoGrupo.ID);
+						filtroFaturamentoGrupo.adicionarParametro(new ParametroSimples(FiltroFaturamentoGrupo.INDICADOR_USO, ConstantesSistema.SIM));
+						Collection<FaturamentoGrupo> colecaoFaturamentoGrupos = getControladorUtil().pesquisar(filtroFaturamentoGrupo,
+								FaturamentoGrupo.class.getName());
+
+						gerarDadosReceitasAFaturarResumo.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoFaturamentoGrupos);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarDadosReceitasAFaturarResumo));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+					}
+
+					case Funcionalidade.GERAR_ARQUIVO_PAGAMENTO_CONTAS_COBRANCA_EMPRESA: {
+
+						TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa batch = new TarefaBatchGerarArquivoTextoPagamentosContasCobrancaEmpresa(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Empresa> empresas = obterEmpresasCobranca();
+
+						batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, empresas);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+					}
+
+					case Funcionalidade.GERAR_NEGOCIACAO_CONTAS_COBRANCA_EMPRESA: {
+
+						TarefaBatchGerarNegociacaoContasCobrancaEmpresa batch = new TarefaBatchGerarNegociacaoContasCobrancaEmpresa(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Empresa> empresas = obterEmpresasCobranca();
+
+						batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, empresas);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+					}
+
+					case Funcionalidade.GERAR_DADOS_PAGAMENTOS_NAO_CLASSIFICADOS: {
+
+						TarefaBatchGerarDadosPagamentosNaoClassificados batch = new TarefaBatchGerarDadosPagamentosNaoClassificados(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						batch.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+					}
+					case Funcionalidade.GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS: {
+
+						System.out.println("Inserindo processo ");
+						TarefaBatchGerarDadosDocumentosNaoIdentificados batch = new TarefaBatchGerarDadosDocumentosNaoIdentificados(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						batch.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+					}
+
+					case Funcionalidade.DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA:
+						TarefaBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferencia batch = new TarefaBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferencia(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					case Funcionalidade.ENCERRAR_COMANDO_DE_COBRANCA_POR_RESULTADO_POR_EMPRESA:
+						TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa dadosEncerrarComandos = new TarefaBatchEncerrarComandosDeCobrancaResultadoPorEmpresa(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						Collection<Empresa> empresas = obterEmpresasCobranca();
+
+						dadosEncerrarComandos.addParametro("usuario", processoIniciado.getUsuario());
+						dadosEncerrarComandos.addParametro("idCobrancaSituacao", CobrancaSituacao.COBRANCA_EMPRESA_TERCEIRIZADA);
+						dadosEncerrarComandos.addParametro("empresas", empresas);
+						dadosEncerrarComandos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, empresas);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(dadosEncerrarComandos));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+					default:
 					}
 				} catch (IOException e) {
 					sessionContext.setRollbackOnly();
@@ -3440,7 +3463,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 						break;
 
 					case Funcionalidade.EMITIR_BOLETIM_CADASTRO:
-						
+
 						TarefaBatchEmitirBoletimCadastro tarefaBatchEmitirBoletimCadastro = new TarefaBatchEmitirBoletimCadastro(processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
@@ -3513,12 +3536,12 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 				FuncionalidadeIniciada funcionalidadeIniciada = iterator.next();
 				ProcessoIniciado processoIniciado = funcionalidadeIniciada.getProcessoIniciado();
 				Integer processoSituacao = processoIniciado.getProcessoSituacao().getId();
-				
+
 				if (!processoSituacao.equals(ProcessoSituacao.EM_PROCESSAMENTO)) {
 					if (!permiteIniciarProcesso(processoIniciado.getUsuario())) {
 						continue;
 					}
-					
+
 					processoIniciado.setProcessoSituacao(new ProcessoSituacao(ProcessoSituacao.EM_PROCESSAMENTO));
 					getControladorUtil().atualizar(processoIniciado);
 				}
@@ -3531,7 +3554,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 				if (tarefaBatch != null) {
 					tarefaBatch.agendarTarefaBatch();
 				}
-				
+
 				break;
 			}
 		} catch (IOException e) {
@@ -3801,7 +3824,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Insere uma coleaao de objetos genaricos na base com um flush para cada 50 registros inseridos.
+	 * Insere uma coleaao de objetos genaricos na base com um flush para cada 50
+	 * registros inseridos.
 	 * 
 	 * @param colecaoObjetos
 	 * @throws ControladorException
@@ -3818,7 +3842,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Insere uma coleaao de objetos genaricos na base com um flush para cada 50 registros inseridos.
+	 * Insere uma coleaao de objetos genaricos na base com um flush para cada 50
+	 * registros inseridos.
 	 * 
 	 * @param colecaoObjetos
 	 * @throws ControladorException
@@ -3860,7 +3885,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Insere uma coleaao de objetos genaricos na base com um flush para cada 50 registros inseridos.
+	 * Insere uma coleaao de objetos genaricos na base com um flush para cada 50
+	 * registros inseridos.
 	 * 
 	 * @param colecaoObjetos
 	 * @throws ControladorException
@@ -3874,7 +3900,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Atualiza uma coleaao de objetos genaricos na base com um flush para cada 50 registros inseridos.
+	 * Atualiza uma coleaao de objetos genaricos na base com um flush para cada
+	 * 50 registros inseridos.
 	 * 
 	 * @param colecaoObjetos
 	 * @throws ControladorException
@@ -3889,7 +3916,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Atualiza uma coleaao de objetos genaricos na base com um flush para cada 50 registros inseridos.
+	 * Atualiza uma coleaao de objetos genaricos na base com um flush para cada
+	 * 50 registros inseridos.
 	 * 
 	 * @param colecaoObjetos
 	 * @throws ControladorException
@@ -3904,7 +3932,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Funaao que executa as rotinas de execuaao e fechamento das tarefas batch do sistema
+	 * Funaao que executa as rotinas de execuaao e fechamento das tarefas batch
+	 * do sistema
 	 */
 	public void verificadorProcessosSistema() throws ControladorException {
 		verificarProcessosIniciados();
@@ -3949,7 +3978,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Retorna todas as Funcionalidades Iniciadas que estao em situacaoo de iniciar o processamento
+	 * Retorna todas as Funcionalidades Iniciadas que estao em situacaoo de
+	 * iniciar o processamento
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection<FuncionalidadeIniciada> verificarFuncionalidadesIniciadasProntasParaExecucao() throws ControladorException {
@@ -3961,10 +3991,11 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 			for (Object[] dados : funcionalidadesParaExecucao) {
 				FuncionalidadeIniciada funcionalidadeIniciada = (FuncionalidadeIniciada) dados[0];
 
-				int quantidadeFuncionalidadesForaOrdem = repositorioBatch.pesquisarQuantidadeFuncionaldadesIniciadasForaOrdemExecucao(
-						(int) ((Short) dados[1]), funcionalidadeIniciada.getProcessoIniciado().getId());
-				
-				if (quantidadeFuncionalidadesForaOrdem == 0 && (!funcionalidadeIniciada.getFuncionalidadeSituacao().getId().equals(FuncionalidadeSituacao.CONCLUIDA))) {
+				int quantidadeFuncionalidadesForaOrdem = repositorioBatch.pesquisarQuantidadeFuncionaldadesIniciadasForaOrdemExecucao((int) ((Short) dados[1]),
+						funcionalidadeIniciada.getProcessoIniciado().getId());
+
+				if (quantidadeFuncionalidadesForaOrdem == 0
+						&& (!funcionalidadeIniciada.getFuncionalidadeSituacao().getId().equals(FuncionalidadeSituacao.CONCLUIDA))) {
 					retorno.add(funcionalidadeIniciada);
 				}
 			}
@@ -4014,7 +4045,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Pesquisa todos as funcionalidades iniciadas que representam os relatarios batch do sistema
+	 * Pesquisa todos as funcionalidades iniciadas que representam os relatarios
+	 * batch do sistema
 	 */
 	public Collection<Object[]> pesquisarRelatoriosBatchSistema() throws ControladorException {
 		try {
@@ -4026,7 +4058,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Remove uma coleaao de objetos genaricos na base com um flush para cada 50 registros removidos.
+	 * Remove uma coleaao de objetos genaricos na base com um flush para cada 50
+	 * registros removidos.
 	 * 
 	 * @param colecaoObjetos
 	 * @throws ControladorException
@@ -4042,7 +4075,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Remove uma coleaao de objetos genaricos na base com um flush para cada 50 registros removidos.
+	 * Remove uma coleaao de objetos genaricos na base com um flush para cada 50
+	 * registros removidos.
 	 * 
 	 * @param colecaoObjetos
 	 * @throws ControladorException
@@ -4059,7 +4093,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Remove uma coleção de objetos genéricos na base com um flush para cada 50 registros removidos.
+	 * Remove uma coleção de objetos genéricos na base com um flush para cada 50
+	 * registros removidos.
 	 * 
 	 * @param colecaoObjetos
 	 * @throws ErroRepositorioException
@@ -4073,7 +4108,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Inicia um processo relacionado com um relatoio que seria processado em batch
+	 * Inicia um processo relacionado com um relatoio que seria processado em
+	 * batch
 	 * 
 	 * @throws ControladorException
 	 */
@@ -4136,7 +4172,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Pesquisa todos as funcionalidades iniciadas que representam os relatarios batch do sistema por Usuario
+	 * Pesquisa todos as funcionalidades iniciadas que representam os relatarios
+	 * batch do sistema por Usuario
 	 */
 	public Collection<Object[]> pesquisarRelatoriosBatchPorUsuarioSistema(int idProcesso) throws ControladorException {
 
@@ -4171,7 +4208,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Remove do sistema todos os relatarios batch que estao na data de expiraaao
+	 * Remove do sistema todos os relatarios batch que estao na data de
+	 * expiraaao
 	 */
 	public void deletarRelatoriosBatchDataExpiracao() throws ControladorException {
 		try {
@@ -4229,7 +4267,6 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 		}
 
 	}
-
 
 	public Object inserirObjetoParaBatchGerencial(Object objeto) throws ControladorException {
 		try {
@@ -4643,7 +4680,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Insere um processo batch ativado por um usuário através de uma funcionalidade comum
+	 * Insere um processo batch ativado por um usuário através de uma
+	 * funcionalidade comum
 	 * 
 	 * @param processoIniciado
 	 * @throws ControladorException
@@ -4654,7 +4692,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 		Integer codigoProcessoIniciadoGerado = null;
 
 		try {
-			
+
 			ProcessoIniciado processoIniciado = inserirProcessoIniciadoParametrosLivres(idProcesso, usuario);
 
 			ProcessoSituacao processoSituacao = new ProcessoSituacao();
@@ -4749,7 +4787,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 						break;
 
 					case Funcionalidade.GERAR_TALELAS_TEMPORARIAS_ATUALIZACAO_CADASTRAL:
-						
+
 						TarefaBatchGerarTabelasTemporariasAtualizacaoCadastral tabela = new TarefaBatchGerarTabelasTemporariasAtualizacaoCadastral(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
@@ -4765,7 +4803,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 						break;
 
 					case Funcionalidade.GERAR_ARQUIVO_TEXTO_ATUALIZACAO_CADASTRAL:
-						
+
 						TarefaBatchGerarArquivoTextoAtualizacaoCadastral arquivoTexto = new TarefaBatchGerarArquivoTextoAtualizacaoCadastral(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
@@ -4778,7 +4816,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 						break;
 
 					case Funcionalidade.EMITIR_BOLETOS:
-						
+
 						TarefaBatchEmitirBoletos dadosEmitirBoletos = new TarefaBatchEmitirBoletos(processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
@@ -4976,21 +5014,23 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 		}
 		return codigoProcessoIniciadoGerado;
 	}
-	
+
 	private List<Integer> obterIdsComandos(Collection<ComandoEmpresaCobrancaConta> comandos) {
 		List<Integer> ids = new ArrayList<Integer>();
-		
-		for (ComandoEmpresaCobrancaConta comando: comandos) {
+
+		for (ComandoEmpresaCobrancaConta comando : comandos) {
 			ids.add(comando.getId());
 		}
-		
+
 		return ids;
 	}
 
 	/**
-	 * Cria um ProcessoIniciado para os processos batch iniciados através da interface comum
+	 * Cria um ProcessoIniciado para os processos batch iniciados através da
+	 * interface comum
 	 * 
-	 * @param usuarioUsuário que iniciou o processo
+	 * @param usuarioUsuário
+	 *            que iniciou o processo
 	 * @return
 	 */
 	private ProcessoIniciado inserirProcessoIniciadoParametrosLivres(int idProcesso, Usuario usuario) {
@@ -5115,9 +5155,17 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 
 	}
 
-	public boolean verificarProcessoEmExecucao(Integer idProcesso) throws ControladorException {
+	public boolean isProcessoEmExecucao(Integer idProcesso) throws ControladorException {
 		try {
-			return this.repositorioBatch.verificarProcessoEmExecucao(idProcesso);
+			return this.repositorioBatch.isProcessoNaSituacao(idProcesso, ProcessoSituacao.EM_PROCESSAMENTO);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+
+	public boolean isProcessoEmEspera(Integer idProcesso) throws ControladorException {
+		try {
+			return this.repositorioBatch.isProcessoNaSituacao(idProcesso, ProcessoSituacao.EM_ESPERA);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -5173,7 +5221,6 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 				ProcessoFuncionalidade processoFuncionalidade = (ProcessoFuncionalidade) iterator.next();
 				FuncionalidadeIniciada funcionalidadeIniciada = new FuncionalidadeIniciada();
 
-				
 				FuncionalidadeSituacao funcionalidadeSituacao = new FuncionalidadeSituacao();
 				funcionalidadeSituacao.setId(FuncionalidadeSituacao.EM_ESPERA);
 				funcionalidadeIniciada.setFuncionalidadeSituacao(funcionalidadeSituacao);
@@ -5187,18 +5234,18 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 
 					TarefaBatchGerarArquivoTextoContasCobrancaEmpresa tarefaBatchGerarArquivoTextoContasCobrancaEmpresa = new TarefaBatchGerarArquivoTextoContasCobrancaEmpresa(
 							processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-					
+
 					tarefaBatchGerarArquivoTextoContasCobrancaEmpresa.addParametro("idsRegistros", ids);
 					tarefaBatchGerarArquivoTextoContasCobrancaEmpresa.addParametro("idEmpresa", idEmpresa);
-					
+
 					funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarArquivoTextoContasCobrancaEmpresa));
-					
+
 					getControladorUtil().atualizar(funcionalidadeIniciada);
 
 					break;
-					
+
 				case Funcionalidade.GERAR_MOVIMENTO_CONTAS_COBRANCA_POR_EMPRESA:
-					
+
 					TarefaBatchGerarMovimentoContasCobrancaPorEmpresa gerarMovimentoContasCobrancaPorEmpresa = new TarefaBatchGerarMovimentoContasCobrancaPorEmpresa(
 							processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
@@ -5206,7 +5253,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 					filtroComandoEmpresaCobrancaConta.adicionarParametro(new ParametroNulo(FiltroComandoEmpresaCobrancaConta.DATA_EXECUCAO));
 
 					Collection colecaoComandoEmpresaCobrancaConta = getControladorCobrancaPorResultado().obterComandosParaIniciar(idsRegistros);
-							
+
 					Collection colecaoComandoEmpresaCobrancaContaParaBatch = new ArrayList();
 
 					if (colecaoComandoEmpresaCobrancaConta != null && !colecaoComandoEmpresaCobrancaConta.isEmpty()) {
@@ -5242,8 +5289,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 					getControladorUtil().atualizar(funcionalidadeIniciada);
 
 					break;
-					
-					
+
 				default:
 				}
 			}
@@ -5585,84 +5631,104 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 		}
 	}
 
-//	@SuppressWarnings({ "rawtypes", "rawtypes" })
-//	public Integer inserirProcessoIniciadoPagamentosContasCobranca(Integer idEmpresa, Integer referenciaInicial, Integer referenciaFinal, Usuario usuario)
-//			throws ControladorException {
-//
-//		Integer codigoProcessoIniciadoGerado = null;
-//
-//		try {
-//
-//			ProcessoIniciado processoIniciado = new ProcessoIniciado();
-//			processoIniciado.setUsuario(usuario);
-//
-//			ProcessoSituacao processoSituacao = new ProcessoSituacao();
-//
-//			Processo processo = new Processo();
-//
-//			processo.setId(Processo.GERAR_ARQUIVO_TEXTO_PAGAMENTOS_CONTAS_COBRANCA_EMPRESA);
-//
-//			Integer processoSituacaoId = this.verificarAutorizacaoBatch(processo.getId());
-//			processoSituacao.setId(processoSituacaoId);
-//
-//			processoIniciado.setProcessoSituacao(processoSituacao);
-//			processoIniciado.setProcesso(processo);
-//			processoIniciado.setDataHoraAgendamento(new Date());
-//			processoIniciado.setDataHoraInicio(new Date());
-//			processoIniciado.setDataHoraComando(new Date());
-//
-//			codigoProcessoIniciadoGerado = (Integer) getControladorUtil().inserir(processoIniciado);
-//
-//			FiltroProcessoFuncionalidade filtroProcessoFuncionalidade = new FiltroProcessoFuncionalidade();
-//
-//			filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.ID_PROCESSO, processoIniciado.getProcesso()
-//					.getId()));
-//
-//			filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.INDICADOR_USO,
-//					ConstantesSistema.INDICADOR_USO_ATIVO));
-//
-//			Collection processosFuncionaliadade = getControladorUtil().pesquisar(filtroProcessoFuncionalidade, ProcessoFuncionalidade.class.getName());
-//
-//			Iterator iterator = processosFuncionaliadade.iterator();
-//
-//			while (iterator.hasNext()) {
-//				ProcessoFuncionalidade processoFuncionalidade = (ProcessoFuncionalidade) iterator.next();
-//				FuncionalidadeIniciada funcionalidadeIniciada = new FuncionalidadeIniciada();
-//
-//				FuncionalidadeSituacao funcionalidadeSituacao = new FuncionalidadeSituacao();
-//				funcionalidadeSituacao.setId(FuncionalidadeSituacao.EM_ESPERA);
-//				funcionalidadeIniciada.setFuncionalidadeSituacao(funcionalidadeSituacao);
-//
-//				funcionalidadeIniciada.setProcessoIniciado(processoIniciado);
-//
-//				funcionalidadeIniciada.setProcessoFuncionalidade(processoFuncionalidade);
-//
-//				funcionalidadeIniciada.setId((Integer) getControladorUtil().inserir(funcionalidadeIniciada));
-//
-//				TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa = new TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa(
-//						processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
-//
-//				Collection colecaoUnidadeNegocio = getControladorCobranca().obterUnidadeNegocioPagamentosEmpresaCobrancaConta();
-//
-//				tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-//						colecaoUnidadeNegocio);
-//
-//				tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa.addParametro("referenciaInicial", referenciaInicial);
-//				tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa.addParametro("referenciaFinal", referenciaFinal);
-//				tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa.addParametro("idEmpresa", idEmpresa);
-//
-//
-//				funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa));
-//
-//				getControladorUtil().atualizar(funcionalidadeIniciada);
-//
-//				break;
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		return codigoProcessoIniciadoGerado;
-//	}
+	// @SuppressWarnings({ "rawtypes", "rawtypes" })
+	// public Integer inserirProcessoIniciadoPagamentosContasCobranca(Integer
+	// idEmpresa, Integer referenciaInicial, Integer referenciaFinal, Usuario
+	// usuario)
+	// throws ControladorException {
+	//
+	// Integer codigoProcessoIniciadoGerado = null;
+	//
+	// try {
+	//
+	// ProcessoIniciado processoIniciado = new ProcessoIniciado();
+	// processoIniciado.setUsuario(usuario);
+	//
+	// ProcessoSituacao processoSituacao = new ProcessoSituacao();
+	//
+	// Processo processo = new Processo();
+	//
+	// processo.setId(Processo.GERAR_ARQUIVO_TEXTO_PAGAMENTOS_CONTAS_COBRANCA_EMPRESA);
+	//
+	// Integer processoSituacaoId =
+	// this.verificarAutorizacaoBatch(processo.getId());
+	// processoSituacao.setId(processoSituacaoId);
+	//
+	// processoIniciado.setProcessoSituacao(processoSituacao);
+	// processoIniciado.setProcesso(processo);
+	// processoIniciado.setDataHoraAgendamento(new Date());
+	// processoIniciado.setDataHoraInicio(new Date());
+	// processoIniciado.setDataHoraComando(new Date());
+	//
+	// codigoProcessoIniciadoGerado = (Integer)
+	// getControladorUtil().inserir(processoIniciado);
+	//
+	// FiltroProcessoFuncionalidade filtroProcessoFuncionalidade = new
+	// FiltroProcessoFuncionalidade();
+	//
+	// filtroProcessoFuncionalidade.adicionarParametro(new
+	// ParametroSimples(FiltroProcessoFuncionalidade.ID_PROCESSO,
+	// processoIniciado.getProcesso()
+	// .getId()));
+	//
+	// filtroProcessoFuncionalidade.adicionarParametro(new
+	// ParametroSimples(FiltroProcessoFuncionalidade.INDICADOR_USO,
+	// ConstantesSistema.INDICADOR_USO_ATIVO));
+	//
+	// Collection processosFuncionaliadade =
+	// getControladorUtil().pesquisar(filtroProcessoFuncionalidade,
+	// ProcessoFuncionalidade.class.getName());
+	//
+	// Iterator iterator = processosFuncionaliadade.iterator();
+	//
+	// while (iterator.hasNext()) {
+	// ProcessoFuncionalidade processoFuncionalidade = (ProcessoFuncionalidade)
+	// iterator.next();
+	// FuncionalidadeIniciada funcionalidadeIniciada = new
+	// FuncionalidadeIniciada();
+	//
+	// FuncionalidadeSituacao funcionalidadeSituacao = new
+	// FuncionalidadeSituacao();
+	// funcionalidadeSituacao.setId(FuncionalidadeSituacao.EM_ESPERA);
+	// funcionalidadeIniciada.setFuncionalidadeSituacao(funcionalidadeSituacao);
+	//
+	// funcionalidadeIniciada.setProcessoIniciado(processoIniciado);
+	//
+	// funcionalidadeIniciada.setProcessoFuncionalidade(processoFuncionalidade);
+	//
+	// funcionalidadeIniciada.setId((Integer)
+	// getControladorUtil().inserir(funcionalidadeIniciada));
+	//
+	// TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa
+	// tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa = new
+	// TarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa(
+	// processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+	//
+	// Collection colecaoUnidadeNegocio =
+	// getControladorCobranca().obterUnidadeNegocioPagamentosEmpresaCobrancaConta();
+	//
+	// tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+	// colecaoUnidadeNegocio);
+	//
+	// tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa.addParametro("referenciaInicial",
+	// referenciaInicial);
+	// tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa.addParametro("referenciaFinal",
+	// referenciaFinal);
+	// tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa.addParametro("idEmpresa",
+	// idEmpresa);
+	//
+	//
+	// funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarArquivoTextoPagametosContasCobrancaEmpresa));
+	//
+	// getControladorUtil().atualizar(funcionalidadeIniciada);
+	//
+	// break;
+	// }
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// return codigoProcessoIniciadoGerado;
+	// }
 
 	/**
 	 * [UC0972] Gerar TXT das Contas dos Projetos Especiais
@@ -5830,7 +5896,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 
 				FuncionalidadeSituacao funcionalidadeSituacao = new FuncionalidadeSituacao();
 				funcionalidadeSituacao.setId(FuncionalidadeSituacao.EM_ESPERA);
-				
+
 				funcionalidadeIniciada.setFuncionalidadeSituacao(funcionalidadeSituacao);
 				funcionalidadeIniciada.setProcessoIniciado(processoIniciado);
 				funcionalidadeIniciada.setProcessoFuncionalidade(processoFuncionalidade);
@@ -5922,7 +5988,8 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 	}
 
 	/**
-	 * Insere um processo batch ativado por um usuário através de uma funcionalidade comum
+	 * Insere um processo batch ativado por um usuário através de uma
+	 * funcionalidade comum
 	 * 
 	 * @param processoIniciado
 	 * @throws ControladorException
@@ -5969,7 +6036,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 
 				FuncionalidadeSituacao funcionalidadeSituacao = new FuncionalidadeSituacao();
 				funcionalidadeSituacao.setId(FuncionalidadeSituacao.AGENDADA);
-			
+
 				funcionalidadeIniciada.setFuncionalidadeSituacao(funcionalidadeSituacao);
 				funcionalidadeIniciada.setProcessoIniciado(processoIniciado);
 				funcionalidadeIniciada.setProcessoFuncionalidade(processoFuncionalidade);
@@ -6054,7 +6121,7 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 		FiltroProcesso filtroProcesso = new FiltroProcesso();
 		filtroProcesso.adicionarParametro(new ParametroSimples(FiltroProcesso.ID, processoId));
 		filtroProcesso.adicionarCaminhoParaCarregamentoEntidade(FiltroProcesso.PROCESSO_TIPO);
-		
+
 		Collection colecaoProcesso = Fachada.getInstancia().pesquisar(filtroProcesso, Processo.class.getName());
 
 		Processo processo = (Processo) Util.retonarObjetoDeColecao(colecaoProcesso);
@@ -6124,12 +6191,12 @@ public class ControladorBatchSEJB extends ControladorComum  implements SessionBe
 			throw new ControladorException("Erro ao obter usuario que disparou processo", e);
 		}
 	}
-	
+
 	private boolean permiteIniciarProcesso(Usuario usuario) throws ControladorException {
 		try {
 			Short quantidade = repositorioBatch.pesquisarQuantidadeBatchPorUsuario(usuario.getId());
 			Short limite = usuario.getLimiteBatch();
-			
+
 			if (limite != null && limite > 0) {
 				return quantidade >= limite ? false : true;
 			} else {

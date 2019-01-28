@@ -1878,7 +1878,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		
 	}
 	
-	public boolean verificarProcessoEmExecucao(Integer idProcesso)
+	public boolean isProcessoNaSituacao(Integer idProcesso, Integer idSituacao)
 			throws ErroRepositorioException {
 		boolean retorno = false;
 
@@ -1893,7 +1893,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 					 + " and proi.processoSituacao.id = :idSituacaoProcesso";
 			retornoHQL = (Integer)session.createQuery(consulta)
 							.setInteger("idProcesso", idProcesso)
-							.setInteger("idSituacaoProcesso",ProcessoSituacao.EM_PROCESSAMENTO)
+							.setInteger("idSituacaoProcesso",idSituacao)
 							.setMaxResults(1).uniqueResult();
 			
 			if (retornoHQL != null) {retorno = true;}
