@@ -943,6 +943,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			for (ClienteImovelRetorno clienteImovelRetorno : clientesImovelInclusao) {
 
 				if (!isImovelEmCampo(clienteImovelRetorno.getImovel().getId())) {
+					logger.info("Atualizando imóvel " + clienteImovelRetorno.getImovel().getId() + ", cliente: " + clienteImovelRetorno.getIdClienteRetorno() );
 					ICliente clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
 					IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getImovel().getId());
 					Collection<IClienteFone> telefones  = repositorioAtualizacaoCadastral.pesquisarClienteFoneRetorno(clienteImovelRetorno.getIdClienteRetorno());
@@ -969,6 +970,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("Erro ao inserir cliente." + idImovel);
 			throw new ControladorException("Erro ao inserir cliente.", e);
 
