@@ -40332,4 +40332,12 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e);
 		}
 	}
+	
+	public void validarInclusaoProcessosNegativacao() {
+		try {
+			getControladorBatch().validarInclusaoProcessosNegativacao();
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
 }

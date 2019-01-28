@@ -687,6 +687,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 			retorno = (Collection<IClienteEndereco>)session.createQuery(consulta).setInteger("idClienteRetorno", idClienteRetorno).list();
 		}catch(HibernateException e) {
+			e.printStackTrace();
 			throw new ErroRepositorioException("Erro ao pesquisar cliente endereco retorno");
 		}finally {
 			HibernateUtil.closeSession(session);

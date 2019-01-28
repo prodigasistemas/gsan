@@ -50,6 +50,8 @@ public class ExibirInserirComandoNegativacaoLocalizacaoAction extends
 
 		Fachada fachada = Fachada.getInstancia();
 
+		fachada.validarInclusaoProcessosNegativacao();
+		
 		InserirComandoNegativacaoActionForm inserirComandoNegativacaoActionForm = (InserirComandoNegativacaoActionForm) actionForm;
 
 		// Caso informe o cliente, os campos da Aba 5 - Dados da Localização

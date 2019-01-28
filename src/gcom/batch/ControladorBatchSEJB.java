@@ -348,13 +348,7 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						TarefaBatchGerarResumoDiarioNegativacao gerarResumoDiarioNegativacao = new TarefaBatchGerarResumoDiarioNegativacao(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-						if (this.isProcessoEmExecucao(Processo.EXECUTAR_COMANDO_NEGATIVACAO)) {
-							throw new ActionServletException("atencao.processo.negativacao.em.execucao");
-						}
-
-						if (this.isProcessoEmEspera(Processo.EXECUTAR_COMANDO_NEGATIVACAO)) {
-							throw new ActionServletException("atencao.processo.negativacao.em.espera");
-						}
+						validarInclusaoProcessosNegativacao();
 
 						Collection rotasResumoDiarioNegativacao = getControladorSpcSerasa().consultarRotasParaGerarResumoDiarioNegativacao();
 
@@ -374,13 +368,7 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 							throw new ControladorException("atencao.movimento_exclusao_incompleto");
 						}
 
-						if (this.isProcessoEmExecucao(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
-							throw new ActionServletException("atencao.processo.negativacao.em.execucao");
-						}
-
-						if (this.isProcessoEmEspera(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
-							throw new ActionServletException("atencao.processo.negativacao.em.espera");
-						}
+						validarInclusaoProcessosNegativacao();
 
 						NegativacaoComando negativacaoComando = getControladorSpcSerasa().consultarNegativacaoComandadoParaExecutar();
 
@@ -6204,6 +6192,24 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 			}
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("Erro ao verificar se permite inserir processo", e);
+		}
+	}
+	
+	public void validarInclusaoProcessosNegativacao() throws ControladorException {
+		if (this.isProcessoEmExecucao(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
+			throw new ControladorException("atencao.processo.negativacao.em.execucao");
+		}
+
+		if (this.isProcessoEmEspera(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
+			throw new ActionServletException("atencao.processo.negativacao.em.espera");
+		}
+		
+		if (this.isProcessoEmExecucao(Processo.EXECUTAR_COMANDO_NEGATIVACAO)) {
+			throw new ControladorException("atencao.processo.negativacao.em.execucao");
+		}
+
+		if (this.isProcessoEmEspera(Processo.EXECUTAR_COMANDO_NEGATIVACAO)) {
+			throw new ControladorException("atencao.processo.negativacao.em.espera");
 		}
 	}
 }

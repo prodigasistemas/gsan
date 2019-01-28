@@ -1587,11 +1587,11 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			String indicadorImovelCategoriaPublico) throws ControladorException {
 
 		if (getControladorBatch().isProcessoEmExecucao(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
-			throw new ActionServletException("atencao.processo.negativacao.em.execucao");
+			throw new ControladorException("atencao.processo.negativacao.em.execucao");
 		}
 
 		if (getControladorBatch().isProcessoEmEspera(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
-			throw new ActionServletException("atencao.processo.negativacao.em.espera");
+			throw new ControladorException("atencao.processo.negativacao.em.espera");
 		}
 
 		
@@ -5198,6 +5198,8 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				throw new ControladorException("atencao.comando_nao_realizado_mesmo_parametro", null, nomeNegativacaoComando);
 			}
 
+			getControladorBatch().validarInclusaoProcessosNegativacao();
+			
 			// Incluir Comando Negativacao
 			NegativacaoComando negativacaoComando = helper.getNegativacaoComando();
 			negativacaoComando.setUltimaAlteracao(new Date());
