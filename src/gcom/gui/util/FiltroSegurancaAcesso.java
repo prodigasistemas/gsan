@@ -1,5 +1,20 @@
 package gcom.gui.util;
 
+import gcom.fachada.Fachada;
+import gcom.seguranca.acesso.Abrangencia;
+import gcom.seguranca.acesso.FiltroFuncionalidade;
+import gcom.seguranca.acesso.FiltroFuncionalidadeCategoria;
+import gcom.seguranca.acesso.FiltroOperacao;
+import gcom.seguranca.acesso.Funcionalidade;
+import gcom.seguranca.acesso.FuncionalidadeCategoria;
+import gcom.seguranca.acesso.Grupo;
+import gcom.seguranca.acesso.Operacao;
+import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.ConstantesAplicacao;
+import gcom.util.Util;
+import gcom.util.filtro.ComparacaoTexto;
+import gcom.util.filtro.ParametroSimples;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -17,21 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-
-import gcom.fachada.Fachada;
-import gcom.seguranca.acesso.Abrangencia;
-import gcom.seguranca.acesso.FiltroFuncionalidade;
-import gcom.seguranca.acesso.FiltroFuncionalidadeCategoria;
-import gcom.seguranca.acesso.FiltroOperacao;
-import gcom.seguranca.acesso.Funcionalidade;
-import gcom.seguranca.acesso.FuncionalidadeCategoria;
-import gcom.seguranca.acesso.Grupo;
-import gcom.seguranca.acesso.Operacao;
-import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.util.ConstantesAplicacao;
-import gcom.util.Util;
-import gcom.util.filtro.ComparacaoTexto;
-import gcom.util.filtro.ParametroSimples;
 
 
 
@@ -189,7 +189,8 @@ public class FiltroSegurancaAcesso extends HttpServlet implements Filter {
 				!enderecoURL.contains("processarCoordenadasGisAction") &&
 				!enderecoURL.contains("processarRequisicaoDipositivoMovelImpressaoSimultaneaAction") &&
 				!enderecoURL.contains("processarRequisicaoDispositivoMovelAcompanhamentoServicoAction") &&
-				!enderecoURL.contains("treinamentos") 
+				!enderecoURL.contains("treinamentos") &&
+				!enderecoURL.contains("processarRequisicaoDispositivoMovelRecadastramentoAction")
 				 ){
 
 				//Caso o tipo da url não esteja nulo
