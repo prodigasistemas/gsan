@@ -117,7 +117,7 @@ public interface IRepositorioBatch {
 
 	public void atualizarSituacaoFuncionalidadeIniciadaConcluida(FuncionalidadeIniciada funcionalidadeIniciada) throws ErroRepositorioException;
 
-	public boolean verificarProcessoEmExecucao(Integer idProcesso) throws ErroRepositorioException;
+	public boolean isProcessoNaSituacao(Integer idProcesso, Integer idSituacao) throws ErroRepositorioException;
 
 	public boolean validarAutorizacaoInserirRelatorioBatch(Usuario usuario, int idProcesso) throws ErroRepositorioException;
 	

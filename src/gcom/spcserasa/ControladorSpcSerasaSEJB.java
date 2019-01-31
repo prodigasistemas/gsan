@@ -118,6 +118,7 @@ import gcom.faturamento.debito.DebitoACobrarGeral;
 import gcom.faturamento.debito.DebitoACobrarHistorico;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
+import gcom.gui.ActionServletException;
 import gcom.gui.cobranca.spcserasa.RelatorioAcompanhamentoClientesNegativadosSomatorioDadosParcelamentoHelper;
 import gcom.gui.cobranca.spcserasa.RelatorioNegativacoesExcluidasSomatorioDadosParcelamentoHelper;
 import gcom.interceptor.RegistradorOperacao;
@@ -1585,6 +1586,15 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			Date dataPrevista, String indicadorBaixaRenda, String indicadorContaNomeCliente,
 			String indicadorImovelCategoriaPublico) throws ControladorException {
 
+		if (getControladorBatch().isProcessoEmExecucao(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
+			throw new ControladorException("atencao.processo.negativacao.em.execucao");
+		}
+
+		if (getControladorBatch().isProcessoEmEspera(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
+			throw new ControladorException("atencao.processo.negativacao.em.espera");
+		}
+
+		
 		// 2.0
 		Integer quantidadeInclusao = 0;
 		Integer quantidadeItensIncluidos = 0;
@@ -5188,6 +5198,8 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				throw new ControladorException("atencao.comando_nao_realizado_mesmo_parametro", null, nomeNegativacaoComando);
 			}
 
+			getControladorBatch().validarInclusaoProcessosNegativacao();
+			
 			// Incluir Comando Negativacao
 			NegativacaoComando negativacaoComando = helper.getNegativacaoComando();
 			negativacaoComando.setUltimaAlteracao(new Date());

@@ -27680,10 +27680,10 @@ public class Fachada {
 	 * @date 18/12/2008
 	 * 
 	 */
-	public boolean verificarProcessoEmExecucao(Integer idProcesso) {
+	public boolean isProcessoEmExecucao(Integer idProcesso) {
 		try {
 
-			return this.getControladorBatch().verificarProcessoEmExecucao(idProcesso);
+			return this.getControladorBatch().isProcessoEmExecucao(idProcesso);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -40328,6 +40328,14 @@ public class Fachada {
 	public ImovelRetorno pesquisarImovelRetornoPorIdRetorno(Integer idImovelRetorno) {
 		try {
 			return getControladorAtualizacaoCadastral().pesquisarImovelRetornoPorIdRetorno(idImovelRetorno);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public void validarInclusaoProcessosNegativacao() {
+		try {
+			getControladorBatch().validarInclusaoProcessosNegativacao();
 		} catch (Exception e) {
 			throw new FachadaException(e.getMessage(), e);
 		}

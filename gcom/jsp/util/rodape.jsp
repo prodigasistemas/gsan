@@ -15,7 +15,7 @@
 					PMSS
 					</logic:notPresent>
 				</td>
-          		<td align="right">Vers&atilde;o: ${gsan.versao} (Online) 18/12/2018 - 16:53:14 </td>
+          		<td align="right">Vers&atilde;o: ${gsan.versao} (Online) 28/01/2019 - 10:36:30 </td>
         	</tr>
       	</table>
 		</td>

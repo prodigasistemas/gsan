@@ -122,7 +122,7 @@ public interface ControladorBatchLocal extends javax.ejb.EJBLocalObject {
 
 	public void continuarFuncionalidadesIniciadas(String[] idsFuncionalidadesIniciadas, Integer idProcessoIniciado) throws ControladorException;
 
-	public boolean verificarProcessoEmExecucao(Integer idProcesso)throws ControladorException;
+	public boolean isProcessoEmExecucao(Integer idProcesso)throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Integer inserirProcessoIniciadoContasCobranca(Collection ids, Integer idEmpresa, Usuario usuario) throws ControladorException;
@@ -169,4 +169,8 @@ public interface ControladorBatchLocal extends javax.ejb.EJBLocalObject {
 	public String getIpNovoBatch();
 	
 	public Usuario obterUsuarioQueDisparouProcesso(Integer idFuncionalidadeIniciada) throws ControladorException;
+	
+	public boolean isProcessoEmEspera(Integer idProcesso) throws ControladorException;
+	
+	public void validarInclusaoProcessosNegativacao() throws ControladorException;
 }

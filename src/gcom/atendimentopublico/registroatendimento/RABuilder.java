@@ -279,7 +279,7 @@ public class RABuilder {
 		}
 								
 		if (alteracaoTipo == AlteracaoTipo.INCLUSAO) {
-			raLocalOcorrenciaHelper.parecerUnidadeDestino("Inclusão - Origem: RECADASTRAMENTO");
+			raLocalOcorrenciaHelper.parecerUnidadeDestino("Inclusão - Origem: RECADASTRAMENTO").idImovel(imovel.getIdImovel());
 		}
 		
 		if (alteracaoTipo == AlteracaoTipo.EXCLUSAO) {
@@ -684,13 +684,19 @@ public class RABuilder {
 		if (clienteRetorno.getClienteTipo().getId().equals(ClienteTipo.INDICADOR_PESSOA_FISICA)) {
 			if (clienteRetorno.getCpf() != null) 
 				informacoesTipoPessoa.append("CPF: ").append(clienteRetorno.getCpf()).append(". ");
+			else
+				informacoesTipoPessoa.append("CPF nao informado.");
 			
 			if (clienteRetorno.getRg() != null) 
 				informacoesTipoPessoa.append("RG: ").append(clienteRetorno.getRg()).append(". ");
+			else
+				informacoesTipoPessoa.append("RG nao informado.");
 			
 		} else if (clienteRetorno.getClienteTipo().getId().equals(ClienteTipo.INDICADOR_PESSOA_JURIDICA)) {
 			if (clienteRetorno.getCnpj() != null) 
 				informacoesTipoPessoa.append("CNPJ: ").append(clienteRetorno.getCnpj()).append(". ");
+			else
+				informacoesTipoPessoa.append("CNPJ nao informado.");
 		}
 		
 		return informacoesTipoPessoa;

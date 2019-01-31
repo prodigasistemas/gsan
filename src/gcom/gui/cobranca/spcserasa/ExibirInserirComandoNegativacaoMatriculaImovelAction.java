@@ -49,11 +49,10 @@ public class ExibirInserirComandoNegativacaoMatriculaImovelAction extends
 
 		InserirComandoNegativacaoActionForm inserirComandoNegativacaoActionForm = (InserirComandoNegativacaoActionForm) actionForm;
 
-	    boolean processoiniciado = fachada.verificarProcessoEmExecucao(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO);
+	    boolean processoiniciado = fachada.isProcessoEmExecucao(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO);
 	    
 	    if(processoiniciado){
-			throw new ActionServletException(
-					"atencao.negativacao_por_imovel_nao_negativar");		    	
+			throw new ActionServletException("atencao.negativacao_por_imovel_nao_negativar");		    	
 	    }
 		
 		//Remover Imóvel
