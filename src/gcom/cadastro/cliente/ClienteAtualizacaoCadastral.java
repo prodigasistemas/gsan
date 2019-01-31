@@ -627,7 +627,6 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 		return cnpj != null && !cnpj.trim().equals("");
 	}
 
-	@Override
 	public String getEnderecoCompleto() {
 		return null;
 	}
