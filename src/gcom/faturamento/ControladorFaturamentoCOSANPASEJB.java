@@ -2137,28 +2137,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 									BigDecimal valorMultasCobradas = repositorioFaturamento.pesquisarValorMultasCobradas(idConta);
 									
-									Date vencimentoContaSemDocumento = calculaVencimentoConta(conta, indicadorExistePagamentoClassificadoConta, null);
-									
-									CalcularAcrescimoPorImpontualidadeHelper helper = this.getControladorCobranca()
-											.calcularAcrescimoPorImpontualidade(
-													conta.getReferencia(),
-													vencimentoContaSemDocumento,
-													pagamentoContasMenorData,
-													valorConta,
-													valorMultasCobradas,
-													conta.getIndicadorCobrancaMulta(),
-													"" + anoMesReferenciaArrecadacao,
-													conta.getId(),
-													ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
-									
-									if (imovel.getId().intValue() == 6793843 || imovel.getId().intValue() == 6793860 || imovel.getId().intValue() == 6793894 || imovel.getId().intValue() == 7024142) {
-										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "		acrescimos SEM documento : ");
-										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			atualizacao monetaria: " + helper.getValorAtualizacaoMonetaria() );
-										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			juros                : " + helper.getValorJurosMora() );
-										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			multa                : " + helper.getValorMulta() );
-									}
-									
-									
 									Date vencimentoConta = calculaVencimentoConta(conta, indicadorExistePagamentoClassificadoConta, documentoCobranca);
 									
 									calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
@@ -2172,13 +2150,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 													"" + anoMesReferenciaArrecadacao,
 													conta.getId(),
 													ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
-									
-									if (imovel.getId().intValue() == 6793843 || imovel.getId().intValue() == 6793860 || imovel.getId().intValue() == 6793894 || imovel.getId().intValue() == 7024142) {
-										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "		acrescimos COM documento : ");
-										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			atualizacao monetaria: " + calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria() );
-										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			juros                : " + calcularAcrescimoPorImpontualidade.getValorJurosMora() );
-										logger.info(imovel.getId() + " , rota: " + rota.getId() + " , conta: " + conta.getAnoMesReferenciaConta() + "			multa                : " + calcularAcrescimoPorImpontualidade.getValorMulta() );
-									}
 									
 									DebitoTipo debitoTipo = null;
 
@@ -2832,7 +2803,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	
 	private Date calculaVencimentoConta(Conta conta, boolean pagamentoClassificadoConta, CobrancaDocumento documento) throws ControladorException {
 		Date vencimento = conta.getDataVencimentoConta();
-		logger.info("	Vencimento conta: " + vencimento);
+
 		if (pagamentoClassificadoConta) {
 			Fatura fatura = pesquisarFaturaDeConta(conta.getId());
 			
@@ -2840,11 +2811,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				vencimento = fatura.getVencimento();
 			} else if (documento != null) {
 				vencimento = documento.getEmissao();
-				logger.info("	Vencimento documento de cobranca: " + vencimento);
 			}
 		}
 		
-		logger.info("	Vencimento final: " + vencimento);
 		return vencimento;
 		
 	}
