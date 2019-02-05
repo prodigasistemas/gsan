@@ -50,7 +50,7 @@ public class ExibirInserirComandoNegativacaoLocalizacaoAction extends
 
 		Fachada fachada = Fachada.getInstancia();
 
-		fachada.validarInclusaoProcessosNegativacao();
+		fachada.validarInclusaoProcessosNegativacao(null);
 		
 		InserirComandoNegativacaoActionForm inserirComandoNegativacaoActionForm = (InserirComandoNegativacaoActionForm) actionForm;
 

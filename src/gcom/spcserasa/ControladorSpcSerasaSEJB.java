@@ -5198,7 +5198,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				throw new ControladorException("atencao.comando_nao_realizado_mesmo_parametro", null, nomeNegativacaoComando);
 			}
 
-			getControladorBatch().validarInclusaoProcessosNegativacao();
+			getControladorBatch().validarInclusaoProcessosNegativacao(null);
 			
 			// Incluir Comando Negativacao
 			NegativacaoComando negativacaoComando = helper.getNegativacaoComando();

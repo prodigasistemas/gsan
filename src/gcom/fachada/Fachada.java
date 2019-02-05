@@ -40333,9 +40333,9 @@ public class Fachada {
 		}
 	}
 	
-	public void validarInclusaoProcessosNegativacao() {
+	public void validarInclusaoProcessosNegativacao(Integer idFuncionalidade) {
 		try {
-			getControladorBatch().validarInclusaoProcessosNegativacao();
+			getControladorBatch().validarInclusaoProcessosNegativacao(idFuncionalidade);
 		} catch (Exception e) {
 			throw new FachadaException(e.getMessage(), e);
 		}

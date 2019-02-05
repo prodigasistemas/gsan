@@ -172,5 +172,5 @@ public interface ControladorBatchLocal extends javax.ejb.EJBLocalObject {
 	
 	public boolean isProcessoEmEspera(Integer idProcesso) throws ControladorException;
 	
-	public void validarInclusaoProcessosNegativacao() throws ControladorException;
+	public void validarInclusaoProcessosNegativacao(Integer idFuncionalidade) throws ControladorException;
 }

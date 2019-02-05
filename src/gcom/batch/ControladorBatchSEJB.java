@@ -348,7 +348,7 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						TarefaBatchGerarResumoDiarioNegativacao gerarResumoDiarioNegativacao = new TarefaBatchGerarResumoDiarioNegativacao(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-						validarInclusaoProcessosNegativacao();
+						validarInclusaoProcessosNegativacao(Funcionalidade.GERAR_RESUMO_DIARIO_NEGATIVACAO);
 
 						Collection rotasResumoDiarioNegativacao = getControladorSpcSerasa().consultarRotasParaGerarResumoDiarioNegativacao();
 
@@ -368,7 +368,7 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 							throw new ControladorException("atencao.movimento_exclusao_incompleto");
 						}
 
-						validarInclusaoProcessosNegativacao();
+						validarInclusaoProcessosNegativacao(Funcionalidade.EXECUTAR_COMANDO_DE_NEGATIVACAO);
 
 						NegativacaoComando negativacaoComando = getControladorSpcSerasa().consultarNegativacaoComandadoParaExecutar();
 
@@ -6195,21 +6195,27 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 		}
 	}
 	
-	public void validarInclusaoProcessosNegativacao() throws ControladorException {
-		if (this.isProcessoEmExecucao(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
-			throw new ControladorException("atencao.processo.negativacao.em.execucao");
-		}
-
-		if (this.isProcessoEmEspera(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
-			throw new ActionServletException("atencao.processo.negativacao.em.espera");
+	public void validarInclusaoProcessosNegativacao(Integer idFuncionalidade) throws ControladorException {
+		
+		if (idFuncionalidade == null || idFuncionalidade.equals(Funcionalidade.EXECUTAR_COMANDO_DE_NEGATIVACAO)) {
+			
+			if (this.isProcessoEmExecucao(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
+				throw new ControladorException("atencao.processo.negativacao.em.execucao");
+			}
+			
+			if (this.isProcessoEmEspera(Processo.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
+				throw new ActionServletException("atencao.processo.negativacao.em.espera");
+			}
 		}
 		
-		if (this.isProcessoEmExecucao(Processo.EXECUTAR_COMANDO_NEGATIVACAO)) {
-			throw new ControladorException("atencao.processo.negativacao.em.execucao");
-		}
-
-		if (this.isProcessoEmEspera(Processo.EXECUTAR_COMANDO_NEGATIVACAO)) {
-			throw new ControladorException("atencao.processo.negativacao.em.espera");
+		if (idFuncionalidade == null || idFuncionalidade.equals(Funcionalidade.GERAR_RESUMO_DIARIO_NEGATIVACAO)) {
+			if (this.isProcessoEmExecucao(Processo.EXECUTAR_COMANDO_NEGATIVACAO)) {
+				throw new ControladorException("atencao.processo.negativacao.em.execucao");
+			}
+			
+			if (this.isProcessoEmEspera(Processo.EXECUTAR_COMANDO_NEGATIVACAO)) {
+				throw new ControladorException("atencao.processo.negativacao.em.espera");
+			}
 		}
 	}
 }
