@@ -88,10 +88,6 @@ function habilitacaoSistemaEsgotoBacia(indicadorRedeEsgotoAux){
 		form.baciaID.disabled = true;
 		form.baciaID.value = "-1"; 
 		
-		form.grauDificuldadeExecucaoID.value = "-1"; 
-		form.grauRiscoSegurancaFisicaID.value = "-1"; 
-		form.nivelPressaoID.value = "-1"; 
-		form.grauIntermitenciaID.value = "-1"; 
 	}else{
 		form.sistemaEsgotoID.disabled = false;
 		form.baciaID.disabled = false;
