@@ -47,6 +47,11 @@ import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.fachada.Fachada;
+import gcom.faturamento.FaturamentoGrupo;
+import gcom.faturamento.FaturamentoSituacaoMotivo;
+import gcom.faturamento.FaturamentoSituacaoTipo;
+import gcom.faturamento.bean.SituacaoEspecialFaturamentoHelper;
+import gcom.faturamento.conta.IConta;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
@@ -1971,4 +1976,283 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			throw new ControladorException("Erro ao pesquisar imovel retortno.", e);
 		}
 	}
+	
+//	private void fluxograma(Integer idImovel) throws ControladorException {
+//        try {
+//            
+//            FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
+//            Integer referenciaFinal = null;
+//            
+//            boolean inserirSituacao = false;
+//            
+//            if (!getControladorFaturamento().isImovelEmsituacaoEspecialFaturamento(idImovel, grupo.getAnoMesReferencia())) {
+//                
+//                if (!getControladorImovel().isImovelHidrometrado(idImovel)) {
+//                    
+//                    if (houveMudancaCategoria(idImovel)) {
+//                        inserirSituacao = true;
+//                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
+//                        
+//                    } else if (houveMudancaoEconomiasPorCategoria(idImovel)){
+//                        inserirSituacao = true;
+//                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
+//                        
+//                    } else if (houveMudancaSubcategoria(idImovel)){
+//                        inserirSituacao = true;
+//                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 80);
+//                    }
+//                    
+//                }  else if (houveMudancaCategoria(idImovel) || houveMudancaoEconomiasPorCategoria(idImovel) || houveMudancaSubcategoria(idImovel)) {
+//                    inserirSituacao = true;
+//                    referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
+//                }
+//                
+//                if (inserirSituacao ) {
+//                    this.inserisSituacaoEspecialFaturamentoAlteracaoSubcategoria(idImovel, FaturamentoSituacaoTipo.FATURAR_MEDIA_RECADASTRAMENTO, grupo.getAnoMesReferencia(), referenciaFinal);
+//                }
+//            }
+//        } catch (ErroRepositorioException e) {
+//            e.printStackTrace();
+//        }
+//    }
+    
+    private boolean houveAlteracaoSubcategoria(Integer idImovel) {
+        boolean alteracao = false;
+        
+        try {
+            TabelaColuna coluna = new TabelaColuna();
+            
+            coluna.setTabela(new Tabela(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL));
+            coluna.setDescricaoColuna(TabelaColuna.NOME_COLUNA_ID_SUBCATEGORIA);
+            
+            List<TabelaColunaAtualizacaoCadastral> colunas = this.pesquisarTabelaColunasPorImovel(coluna, idImovel);
+
+            if (colunas != null && !colunas.isEmpty())
+                alteracao = true;
+        
+        } catch (ControladorException e) {
+            e.printStackTrace();
+        }
+        
+        return alteracao;
+    }
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private void inserisSituacaoEspecialFaturamentoAlteracaoSubcategoria(Integer idImovel, Integer idFaturamentoSituacaoTipo, Integer anoMesReferenciaInicial, Integer anoMesReferenciaFinal) {
+        
+        Object[] dadosImoveis = new Object[]{idImovel, new Date()};
+        try {
+            
+            Collection<Object> imoveis = new ArrayList();
+            
+            imoveis.add(dadosImoveis);
+            
+            SituacaoEspecialFaturamentoHelper helper = new SituacaoEspecialFaturamentoHelper();
+            
+            helper.setIdImovel(idImovel.toString());
+            helper.setObservacao("ALTERACAO DE DADOS DE FATURAMENTO - ATUALIZACAO CADASTRAL");
+            helper.setObservacaoInforma("ALTERACAO DE DADOS DE FATURAMENTO - ATUALIZACAO CADASTRAL");
+            helper.setUsuarioLogado(Usuario.USUARIO_BATCH);
+           // helper.setIdFaturamentoSituacaoMotivo(FaturamentoSituacaoMotivo.ATUALIZACAO_CADASTRAL_RECADASTRAMENTO.toString());
+            helper.setIdFaturamentoSituacaoTipo(idFaturamentoSituacaoTipo.toString());
+            helper.setNumeroConsumoAguaMedido(null);
+            helper.setNumeroConsumoAguaNaoMedido(this.obterConsumoFixadoSituacaoEspecialFaturamento(idImovel));
+            helper.setNumeroVolumeEsgotoMedido(null);
+            helper.setNumeroVolumeEsgotoNaoMedido(null);
+            helper.setQuantidadeDeImoveis("1");
+
+            getControladorFaturamento().inserirSituacaoEspecialFaturamento(helper, false, imoveis, idFaturamentoSituacaoTipo, anoMesReferenciaInicial, anoMesReferenciaFinal);
+        
+        } catch (ControladorException e) {
+            logger.error("ERRO AO INSERIR SITUACAO ESPECIAL FATURAMENTO - RECADASTRAMENTO [IMOVEL: " + idImovel + "]");
+            e.printStackTrace();
+        }
+    }
+    
+    private Integer obterConsumoFixadoSituacaoEspecialFaturamento(Integer idImovel) {
+        Integer consumo = 0;
+        try {
+            ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel);
+            
+            Integer referenciaAnterior = Util.recuperaAnoMesDaData(controle.getDataProcessamento());
+
+            IConta conta = null;
+            
+            //getControladorFaturamento().obterContaOuContaHistorico(idImovel, referenciaAnterior);
+
+            if (conta != null)
+                consumo = conta.getConsumoAgua();
+            else {
+            }
+            
+        } catch (ControladorException e) {
+            e.printStackTrace();
+        }
+        return consumo;
+    }
+    
+    private boolean houveMudancaCategoria(Integer idImovel) throws ControladorException, ErroRepositorioException  {
+        boolean retorno = false;
+        try {
+            List<ImovelSubcategoriaAtualizacaoCadastral> originais = null;
+            //this.obterSubcategoriasOriginais(idImovel);
+            List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
+            
+            if (originais != null && novas != null) {
+                
+                List<Integer> idsOriginais = this.obterIdsCategoriasOriginais(originais);
+                List<Integer> idsNovas = this.obterIdsCategoriasNovas(novas);
+                
+                for (Integer nova : idsNovas) {
+                    if (!idsOriginais.contains(nova)) {
+                        retorno =  true;
+                    }
+                }
+            }
+            
+            return retorno;
+        } catch (ControladorException e) {
+            e.printStackTrace();
+            throw new ControladorException("Erro ao inserir situação especial de faturamento para imóveis com alteração de subcategoria.", e);
+        }
+    }
+    
+    private boolean houveMudancaoEconomiasPorCategoria(Integer idImovel) throws ControladorException, ErroRepositorioException {
+        boolean retorno = false;
+        try {
+            
+            List<ImovelSubcategoriaAtualizacaoCadastral> originais = null;
+            //this.obterSubcategoriasOriginais(idImovel);
+            List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
+            
+            if (originais != null && novas != null) {
+                
+                if (originais.size() >= novas.size()) {
+                    
+                    for (ImovelSubcategoriaAtualizacaoCadastral original : originais) {
+                        
+                        Short qtdEconomiasNovas = null;
+                        //getControladorImovel().pesquisarObterQuantidadeEconomias(new Imovel(idImovel), original.getCategoria());
+                        
+                        Short qtdEconomiasOriginais = this.pesquisarQuantidadeEconomiasOriginais(idImovel, original.getCategoria().getId());
+                        
+                        if (qtdEconomiasNovas == null || qtdEconomiasNovas.intValue() == 0) {
+                            logger.info("Imóvel: " + idImovel + " fixo com mudança de qtd de economias por categoria - vala comum -- Categoria removida [cat " + original.getCategoria().getId() + "]");
+                            retorno = true;
+                        } else if (qtdEconomiasNovas.intValue() != qtdEconomiasOriginais.intValue()) {
+                            logger.info("Imóvel: " + idImovel + " fixo com mudança de qtd de economias por categoria - vala comum -- Mudanca qtd economias [cat " + original.getCategoria().getId() + "]");
+                            retorno = true;
+                        }
+                    }
+                } else if (originais.size() < novas.size()) {
+                    
+                    for (ImovelSubcategoria nova : novas) {
+                        
+                        Short qtdEconomiasNovas = null;
+                        		//getControladorImovel().pesquisarObterQuantidadeEconomias(new Imovel(idImovel), nova.getSubcategoria().getCategoria());
+                        
+                        Short qtdEconomiasOriginais = this.pesquisarQuantidadeEconomiasOriginais(idImovel, nova.getSubcategoria().getCategoria().getId());
+                        
+                        if (qtdEconomiasOriginais == null || qtdEconomiasOriginais.intValue() == 0) {
+                            logger.info("Imóvel: " + idImovel + " fixo com mudança de qtd de economias por categoria - vala comum -- Categoria removida [cat " + nova.getSubcategoria().getCategoria().getId() + "]");
+                            retorno = true;
+                        } else if (qtdEconomiasNovas.intValue() != qtdEconomiasOriginais.intValue()) {
+                            logger.info("Imóvel: " + idImovel + " fixo com mudança de qtd de economias por categoria - vala comum -- Mudanca qtd economias [cat " + nova.getSubcategoria().getCategoria().getId() + "]");
+                            retorno = true;
+                        }
+                    }
+                }
+                
+            }
+            return retorno;
+        } catch (ControladorException e) {
+            e.printStackTrace();
+            throw new ControladorException("Erro ao inserir situação especial de faturamento para imóveis com alteração de subcategoria.", e);
+        }
+    }
+    
+    private boolean houveMudancaSubcategoria(Integer idImovel) throws ControladorException, ErroRepositorioException {
+        boolean retorno = false;
+        try {
+            List<ImovelSubcategoriaAtualizacaoCadastral> originais = null;
+            //this.obterSubcategoriasOriginais(idImovel);
+            List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
+            
+            if (idImovel.intValue() == 3142116) {
+                System.out.println("debug;");
+            }
+            if (originais != null && novas != null) {
+                
+                if (originais.size() != novas.size()) {
+                    logger.info("Imóvel: "+ idImovel + " - Qtd de subcategorias originais maior que o atual - indefinido ");
+                    retorno = true;
+                } else {
+                    
+                    List<Integer> idsOriginais = this.obterIdsSubcategoriasOriginais(originais);
+                    
+                    for (ImovelSubcategoria nova : novas) {
+                        if (!idsOriginais.contains(nova.getSubcategoria().getId())) {
+                            logger.info("Imóvel: "+ idImovel + " - Mudanca de subcategorias - indefinido ");
+                            retorno = true;
+                        }
+                    }
+                }
+            }
+            
+            return retorno;
+        } catch (ControladorException e) {
+            e.printStackTrace();
+            throw new ControladorException("Erro ao inserir situação especial de faturamento para imóveis com alteração de subcategoria.", e);
+        }
+    }
+    
+    private List<Integer> obterIdsSubcategoriasOriginais(List<ImovelSubcategoriaAtualizacaoCadastral> imoveis) {
+        List<Integer> subcategorias = new ArrayList<Integer>();
+        
+        for (ImovelSubcategoriaAtualizacaoCadastral subcategoria : imoveis) {
+            subcategorias.add(subcategoria.getSubcategoria().getId());
+        }
+        
+        return subcategorias;
+    }
+    
+    private List<Integer> obterIdsCategoriasNovas(List<ImovelSubcategoria> imoveis) {
+        List<Integer> subcategorias = new ArrayList<Integer>();
+        
+        for (ImovelSubcategoria subcategoria : imoveis) {
+            subcategorias.add(subcategoria.getSubcategoria().getCategoria().getId());
+        }
+        
+        return subcategorias;
+    }
+    
+    private List<Integer> obterIdsCategoriasOriginais(List<ImovelSubcategoriaAtualizacaoCadastral> imoveis) {
+        List<Integer> subcategorias = new ArrayList<Integer>();
+        
+        for (ImovelSubcategoriaAtualizacaoCadastral subcategoria : imoveis) {
+            subcategorias.add(subcategoria.getSubcategoria().getCategoria().getId());
+        }
+        
+        return subcategorias;
+    }
+    
+    private List<Integer> obterIdsSubcategoriasNovas(List<ImovelSubcategoria> imoveis) {
+        List<Integer> subcategorias = new ArrayList<Integer>();
+        
+        for (ImovelSubcategoria subcategoria : imoveis) {
+            subcategorias.add(subcategoria.getSubcategoria().getId());
+        }
+        
+        return subcategorias;
+    }
+    
+    public Short pesquisarQuantidadeEconomiasOriginais(Integer idImovel, Integer idCategoria) throws ControladorException {
+    	return null;
+//        try {
+//            return null;
+//            //repositorioAtualizacaoCadastral.pesquisarQuantidadeEconomiasOriginais(idImovel, idCategoria);
+//        } catch (ErroRepositorioException e) {
+//            throw new ControladorException("Erro obter quantidade de economias da categoria original do imovel - atualizacao cadastral", e);
+//        }
+    }
 }
