@@ -1352,12 +1352,21 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			throws ControladorException {
 		String[] parmsPartesConta = obterMensagemDebitoConta3Partes(emitirContaHelper, sistemaParametro);
 		
-		contaTxt.append(Util.completaString(parmsPartesConta[0], 100));
-		contaTxt.append(Util.completaString(parmsPartesConta[1], 100));
-		contaTxt.append(Util.completaString(parmsPartesConta[2], 100));
 
-		// Preencher somente se houver debitos
-		if (isImovelEmDebito) {
+		if (getControladorAtualizacaoCadastral().isImovelAtualizadoComAlteracaoFaturamento(emitirContaHelper.getIdImovel())) {
+			contaTxt.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
+			contaTxt.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
+			contaTxt.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
+			
+			emitirContaHelper.setMsgLinha1Conta("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif");
+			emitirContaHelper.setMsgLinha2Conta("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif");
+			emitirContaHelper.setMsgLinha3Conta("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif");
+		
+		} else if (isImovelEmDebito) {
+			contaTxt.append(Util.completaString(parmsPartesConta[0], 100));
+			contaTxt.append(Util.completaString(parmsPartesConta[1], 100));
+			contaTxt.append(Util.completaString(parmsPartesConta[2], 100));
+
 			emitirContaHelper.setMsgLinha1Conta(parmsPartesConta[0]);
 			emitirContaHelper.setMsgLinha2Conta(parmsPartesConta[1]);
 			emitirContaHelper.setMsgLinha3Conta(parmsPartesConta[2]);

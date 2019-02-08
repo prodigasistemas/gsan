@@ -191,26 +191,39 @@ public class ContaSegundaViaBO {
 
 	private Object[] obterMensagens() throws ControladorException {
 		try {
-			Object[] mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), contaHelper.getIdLocalidade(), contaHelper.getIdSetorComercial());
-
-			if (mensagens == null)
-				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), contaHelper.getIdLocalidade(), null);
-
-			if (mensagens == null)
-				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), null, null);
-
-			if (mensagens == null)
-				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, contaHelper.getIdFaturamentoGrupo(), null, null, null);
-
-			if (mensagens == null)
-				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, null, null, null);
-
-			if (mensagens == null) {
+			Object[] mensagens = null;
+			
+			if (fachada.isAtualizadaoAntesFaturamento(contaHelper.getIdImovel(), contaHelper.getAmReferencia()) 
+					&& fachada.isImovelAtualizadoComAlteracaoFaturamento(contaHelper.getIdImovel())) {
+				
 				mensagens = new Object[3];
-				mensagens[0] = "";
-				mensagens[1] = "";
-				mensagens[2] = "";
+				mensagens[0] = "soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif";
+				mensagens[1] = "soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif";
+				mensagens[2] = "soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif";
+				
+			} else {
+				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), contaHelper.getIdLocalidade(), contaHelper.getIdSetorComercial());
+				
+				if (mensagens == null)
+					mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), contaHelper.getIdLocalidade(), null);
+				
+				if (mensagens == null)
+					mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), null, null);
+				
+				if (mensagens == null)
+					mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, contaHelper.getIdFaturamentoGrupo(), null, null, null);
+				
+				if (mensagens == null)
+					mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, null, null, null);
+				
+				if (mensagens == null) {
+					mensagens = new Object[3];
+					mensagens[0] = "";
+					mensagens[1] = "";
+					mensagens[2] = "";
+				}
 			}
+			
 
 			return mensagens;
 		} catch (ErroRepositorioException e) {

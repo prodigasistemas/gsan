@@ -118,5 +118,7 @@ public interface IControladorAtualizacaoCadastral {
     
     public boolean houveMudancaSubcategoria(Integer idImovel) throws ControladorException;
     
-    public boolean houveAlgumaAlteracaoFaturamento(Integer idImovel) throws ControladorException;
+    public boolean isImovelAtualizadoComAlteracaoFaturamento(Integer idImovel) throws ControladorException;
+    
+    public boolean isAtualizadaoAntesFaturamento(Integer idImovel, Integer referenciaFaturamento) throws ControladorException;
 }

@@ -6203,23 +6203,6 @@ public class Util {
 	}
     
     public static void main(String[] args) {
-		String observacao = "INCLUSAO DE IMÓVEL - RECADASTRAMENTO. End: JOSE TV DA VILETA, n 83, CA 000, MARCO, BELEM, CEP: 66085560. CLIENTES: Nome: ANA PAULA CARNEIRO DE OLIVEIRA. Email:apcdeoliveira@hotmail.com. Tipo de relaCAo: USUARIO. Quadra: 1504. Setor Comercial: 5. Local de Instalacao de Ramal: ESQUERDA.[IMOVEL RETORNO: 1234567]";
-		
-		String hidrometro = "         ";
-		
-		System.out.println("." + hidrometro + ".");
-		System.out.println("." + hidrometro.trim() + ".");
-		//String[] splitObservacao = observacao.split("[");
-		
-		int inicio = observacao.indexOf("[");
-		int fim = observacao.indexOf("]");
-		
-		String idImovel = observacao.substring(inicio + 17 , fim);
-		
-		System.out.println(idImovel);
-		if (observacao.contains("IMOVEL RETORNO:"))
-			System.out.println(true);
-		else
-			System.out.println(false);
+		System.out.println(Util.getAnoMesComoInteger(new Date()));
 	}
 }

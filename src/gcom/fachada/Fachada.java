@@ -40340,4 +40340,20 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e);
 		}
 	}
+	
+	public boolean isImovelAtualizadoComAlteracaoFaturamento(Integer idImovel) {
+		try {
+			return getControladorAtualizacaoCadastral().isImovelAtualizadoComAlteracaoFaturamento(idImovel);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public boolean isAtualizadaoAntesFaturamento(Integer idImovel, Integer referenciaFaturamento) throws ControladorException {
+		try {
+			return getControladorAtualizacaoCadastral().isAtualizadaoAntesFaturamento(idImovel, referenciaFaturamento);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
 }

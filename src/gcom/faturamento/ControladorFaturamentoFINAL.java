@@ -61978,7 +61978,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
         boolean rotaSoComImoveisInformativos = true;
 
         UC0745GerarArquivoTextoFaturamento gerarArquivoTextoFaturamento = UC0745GerarArquivoTextoFaturamento.getInstancia(repositorioFaturamento,
-                sessionContext, repositorioCobranca);
+                sessionContext, repositorioCobranca, getControladorAtualizacaoCadastral());
 
         SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 

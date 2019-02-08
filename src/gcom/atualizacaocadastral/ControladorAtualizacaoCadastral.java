@@ -2016,9 +2016,12 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         }
     }
 	
-	public boolean houveAlgumaAlteracaoFaturamento(Integer idImovel) throws ControladorException {
+	public boolean isImovelAtualizadoComAlteracaoFaturamento(Integer idImovel) throws ControladorException {
 		try {
-			if (houveMudancaCategoria(idImovel) || houveMudancaoEconomiasPorCategoria(idImovel) || houveMudancaSubcategoria(idImovel))
+			ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel); 
+			
+			if (controle != null && (controle.isAtualizado() && houveAlteracaoTabelaColunaSubcategoria(idImovel)
+					&& (houveMudancaCategoria(idImovel) || houveMudancaoEconomiasPorCategoria(idImovel) || houveMudancaSubcategoria(idImovel))))
 				return true;
 			else
 				return false;
@@ -2027,7 +2030,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
     
-    private boolean houveAlteracaoSubcategoria(Integer idImovel) {
+    private boolean houveAlteracaoTabelaColunaSubcategoria(Integer idImovel) {
         boolean alteracao = false;
         
         try {
@@ -2258,5 +2261,23 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         } catch (ErroRepositorioException e) {
             throw new ControladorException("Erro ao consultar subcategorias originais ", e);
         }
+    }
+    
+    public boolean isAtualizadaoAntesFaturamento(Integer idImovel, Integer referenciaFaturamento) throws ControladorException {
+    	boolean retorno = false;
+    	try {
+	    	ImovelControleAtualizacaoCadastral controle = this.pesquisarImovelControleAtualizacao(idImovel);
+	    	
+	    	if (controle.isAtualizado()) {
+	    		Integer referenciaAtualizacao = Util.getAnoMesComoInteger(controle.getDataProcessamento());
+		    		
+	    		if (referenciaAtualizacao < referenciaFaturamento)
+	    			retorno = true;
+	    	} 
+    	
+    	} catch (ControladorException e) {
+    		throw new ControladorException("Erro ao verificar data atualizacao ", e);
+    	}
+		return retorno;
     }
 }

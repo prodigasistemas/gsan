@@ -6,6 +6,7 @@ import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
+import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.cadastro.cliente.Cliente;
@@ -126,25 +127,29 @@ public class UC0745GerarArquivoTextoFaturamento {
 	private IRepositorioFaturamento repositorioFaturamento;
 	private IRepositorioCobranca repositorioCobranca;
 	private SessionContext sessionContext;
+	private IControladorAtualizacaoCadastral controladorAtualizacaoCadastral;
 
 	private UC0745GerarArquivoTextoFaturamento(
 			IRepositorioFaturamento repositorioFaturamento,
 			SessionContext sessionContext,
-			IRepositorioCobranca repositorioCobranca) {
+			IRepositorioCobranca repositorioCobranca,
+			IControladorAtualizacaoCadastral controladorAtualizacaoCadastral) {
 
 		this.repositorioFaturamento = repositorioFaturamento;
 		this.repositorioCobranca = repositorioCobranca;
 		this.sessionContext = sessionContext;
+		this.controladorAtualizacaoCadastral = controladorAtualizacaoCadastral;
 	}
 
 	public static UC0745GerarArquivoTextoFaturamento getInstancia(
 			IRepositorioFaturamento repositorioFaturamento,
 			SessionContext sessionContext,
-			IRepositorioCobranca repositorioCobranca) {
+			IRepositorioCobranca repositorioCobranca,
+			IControladorAtualizacaoCadastral controladorAtualizacaoCadastral) {
 
 		if (instancia == null) {
 			instancia = new UC0745GerarArquivoTextoFaturamento(
-					repositorioFaturamento, sessionContext, repositorioCobranca);
+					repositorioFaturamento, sessionContext, repositorioCobranca, controladorAtualizacaoCadastral);
 		}
 		return instancia;
 	}
@@ -1738,18 +1743,26 @@ public class UC0745GerarArquivoTextoFaturamento {
 				arquivoTextoRegistroTipo01.append(Util.completaString("", 300));
 			}
 		} else {
-			String[] mensagemContaDividida = getControladorFaturamento().obterMensagemConta3Partes(emitirContaHelper, sistemaParametro);
-			if (mensagemContaDividida != null) {
-				// Parte 1
-				arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[0], 100));
-				// Parte 2
-				arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[1], 100));
-				// Parte 3
-				arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[2], 100));
-
+			if (controladorAtualizacaoCadastral.isImovelAtualizadoComAlteracaoFaturamento(emitirContaHelper.getIdImovel())) {
+				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
+				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
+				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
 			} else {
-				arquivoTextoRegistroTipo01.append(Util.completaString("", 300));
+				String[] mensagemContaDividida = getControladorFaturamento().obterMensagemConta3Partes(emitirContaHelper, sistemaParametro);
+				if (mensagemContaDividida != null) {
+					// Parte 1
+					arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[0], 100));
+					// Parte 2
+					arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[1], 100));
+					// Parte 3
+					arquivoTextoRegistroTipo01.append(Util.completaString(mensagemContaDividida[2], 100));
+					
+				} else {
+					arquivoTextoRegistroTipo01.append(Util.completaString("", 300));
+				}
+				
 			}
+			
 		}
 
 		// QUITAÇÃO ANUAL DE DÉBITOS

@@ -11,11 +11,14 @@ import gcom.cadastro.localidade.SetorComercial;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.FiltroFaturamentoGrupo;
+import gcom.faturamento.conta.ContaMensagemTipo;
+import gcom.faturamento.conta.FiltroContaMensagemTipo;
 import gcom.gui.GcomAction;
 import gcom.util.filtro.ParametroSimples;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+
 import gcom.util.Util;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,9 +57,13 @@ public class ExibirInserirMensagemContaAction extends GcomAction {
 		filtroGerenciaRegional.setCampoOrderBy(FiltroGerenciaRegional.NOME);
 		Collection colecaoGerenciaRegional = fachada.pesquisar(filtroGerenciaRegional, GerenciaRegional.class.getName());
 		
+		FiltroContaMensagemTipo filtroTiposMensagem = new FiltroContaMensagemTipo();
+		filtroTiposMensagem.setCampoOrderBy(FiltroContaMensagemTipo.DESCRICAO);
+		Collection colecaoTipos = fachada.pesquisar(filtroTiposMensagem, ContaMensagemTipo.class.getName());
 		
 		sessao.setAttribute("colecaoFaturamentoGrupo", colecaoFaturamentoGrupo);
 		sessao.setAttribute("colecaoGerenciaRegional", colecaoGerenciaRegional);
+		sessao.setAttribute("tiposMensagem", colecaoTipos);
 		
 		InserirMensagemContaActionForm inserirMensagemContaActionForm = (InserirMensagemContaActionForm) actionForm;
 		
@@ -141,30 +148,6 @@ public class ExibirInserirMensagemContaAction extends GcomAction {
 			
 			httpServletRequest.setAttribute("colecaoSetorComercialPorQualidade",colecaoSetorComercial);
 		}
-		
-		 
-		
-//		String idSetorComercial = inserirMensagemContaActionForm.getSetorComercial();
-//		
-//		if (idSetorComercial != null && !idSetorComercial.trim().equals("")){
-//			FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
-//			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, idLocalidade));
-//			filtroSetorComercial.adicionarCaminhoParaCarregamentoEntidade("localidade");
-//			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, idSetorComercial));
-//			
-//			Collection colecaoSetor = fachada.pesquisar(filtroSetorComercial, SetorComercial.class.getName());
-//			
-//			if (colecaoSetor != null && !colecaoSetor.isEmpty()) {
-//				SetorComercial setorComercial = (SetorComercial) colecaoSetor.iterator().next();
-//				inserirMensagemContaActionForm.setSetorComercialDescricao(setorComercial.getDescricao());
-//				//httpServletRequest.setAttribute("localidadeInexistente", false);
-//			} else {
-//				inserirMensagemContaActionForm.setSetorComercialDescricao("");
-//				inserirMensagemContaActionForm.setSetorComercialDescricao("SETOR COMERCIAL INEXISTENTE");
-//				httpServletRequest.setAttribute("setorComercialInexistente", true);
-//			}
-//			httpServletRequest.setAttribute("identificadorPesquisa", true);
-//		}
 		
 		return retorno;
 
