@@ -1977,7 +1977,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	private void fluxograma(Integer idImovel) throws ControladorException {
+	public void verificarAlteracoesSubcategorias(Integer idImovel) throws ControladorException {
         try {
             
             FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
@@ -2015,6 +2015,17 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
             e.printStackTrace();
         }
     }
+	
+	public boolean houveAlgumaAlteracaoFaturamento(Integer idImovel) throws ControladorException {
+		try {
+			if (houveMudancaCategoria(idImovel) || houveMudancaoEconomiasPorCategoria(idImovel) || houveMudancaSubcategoria(idImovel))
+				return true;
+			else
+				return false;
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao verificar se houve alteracao de faturamento no imóvel.", e);
+		}
+	}
     
     private boolean houveAlteracaoSubcategoria(Integer idImovel) {
         boolean alteracao = false;
@@ -2089,7 +2100,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         return consumo;
     }
     
-    private boolean houveMudancaCategoria(Integer idImovel) throws ControladorException, ErroRepositorioException  {
+    public boolean houveMudancaCategoria(Integer idImovel) throws ControladorException {
         boolean retorno = false;
         try {
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
@@ -2114,7 +2125,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         }
     }
     
-    private boolean houveMudancaoEconomiasPorCategoria(Integer idImovel) throws ControladorException, ErroRepositorioException {
+    public boolean houveMudancaoEconomiasPorCategoria(Integer idImovel) throws ControladorException {
         boolean retorno = false;
         try {
             
@@ -2132,10 +2143,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
                         Short qtdEconomiasOriginais = this.pesquisarQuantidadeEconomiasOriginais(idImovel, original.getCategoria().getId());
                         
                         if (qtdEconomiasNovas == null || qtdEconomiasNovas.intValue() == 0) {
-                            logger.info("Imóvel: " + idImovel + " fixo com mudança de qtd de economias por categoria - vala comum -- Categoria removida [cat " + original.getCategoria().getId() + "]");
                             retorno = true;
+
                         } else if (qtdEconomiasNovas.intValue() != qtdEconomiasOriginais.intValue()) {
-                            logger.info("Imóvel: " + idImovel + " fixo com mudança de qtd de economias por categoria - vala comum -- Mudanca qtd economias [cat " + original.getCategoria().getId() + "]");
                             retorno = true;
                         }
                     }
@@ -2148,10 +2158,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
                         Short qtdEconomiasOriginais = this.pesquisarQuantidadeEconomiasOriginais(idImovel, nova.getSubcategoria().getCategoria().getId());
                         
                         if (qtdEconomiasOriginais == null || qtdEconomiasOriginais.intValue() == 0) {
-                            logger.info("Imóvel: " + idImovel + " fixo com mudança de qtd de economias por categoria - vala comum -- Categoria removida [cat " + nova.getSubcategoria().getCategoria().getId() + "]");
                             retorno = true;
+                       
                         } else if (qtdEconomiasNovas.intValue() != qtdEconomiasOriginais.intValue()) {
-                            logger.info("Imóvel: " + idImovel + " fixo com mudança de qtd de economias por categoria - vala comum -- Mudanca qtd economias [cat " + nova.getSubcategoria().getCategoria().getId() + "]");
                             retorno = true;
                         }
                     }
@@ -2165,27 +2174,23 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         }
     }
     
-    private boolean houveMudancaSubcategoria(Integer idImovel) throws ControladorException, ErroRepositorioException {
+    public boolean houveMudancaSubcategoria(Integer idImovel) throws ControladorException {
         boolean retorno = false;
         try {
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
             List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
             
-            if (idImovel.intValue() == 3142116) {
-                System.out.println("debug;");
-            }
             if (originais != null && novas != null) {
                 
                 if (originais.size() != novas.size()) {
-                    logger.info("Imóvel: "+ idImovel + " - Qtd de subcategorias originais maior que o atual - indefinido ");
                     retorno = true;
+                    
                 } else {
                     
                     List<Integer> idsOriginais = this.obterIdsSubcategoriasOriginais(originais);
                     
                     for (ImovelSubcategoria nova : novas) {
                         if (!idsOriginais.contains(nova.getSubcategoria().getId())) {
-                            logger.info("Imóvel: "+ idImovel + " - Mudanca de subcategorias - indefinido ");
                             retorno = true;
                         }
                     }

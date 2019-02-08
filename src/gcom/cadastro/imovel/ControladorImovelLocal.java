@@ -40,6 +40,7 @@ import gcom.relatorio.cadastro.dto.ContratoAdesaoimovelDTO;
 import gcom.relatorio.micromedicao.FiltrarAnaliseExcecoesLeiturasHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
+import gcom.util.ErroRepositorioException;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -755,4 +756,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public boolean isDataMudancaTitularidaRetroativaPermitida(Integer idImovel, Date data) throws ControladorException;
 	
 	public Short pesquisarObterQuantidadeEconomias(Imovel imovel, Categoria categoria) throws ControladorException;
+	
+	public boolean isImovelHidrometrado(Integer idImovel) throws ErroRepositorioException;
 }

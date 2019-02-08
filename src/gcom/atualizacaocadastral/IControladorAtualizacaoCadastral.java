@@ -111,4 +111,12 @@ public interface IControladorAtualizacaoCadastral {
     public Integer reprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ControladorException;
 
     public ImovelRetorno pesquisarImovelRetornoPorIdRetorno(Integer idImovelRetorno) throws ControladorException;
+    
+    public boolean houveMudancaoEconomiasPorCategoria(Integer idImovel) throws ControladorException;
+    
+    public boolean houveMudancaCategoria(Integer idImovel) throws ControladorException;
+    
+    public boolean houveMudancaSubcategoria(Integer idImovel) throws ControladorException;
+    
+    public boolean houveAlgumaAlteracaoFaturamento(Integer idImovel) throws ControladorException;
 }

@@ -15855,4 +15855,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
         }
         return conta;
     }
+	
+	public boolean isImovelEmsituacaoEspecialFaturamento(Integer idImovel, Integer anoMesReferencia) throws ControladorException {
+        Collection<FaturamentoSituacaoHistorico> situacoes = pesquisarSituacaoEspecialFaturamentoVigente(idImovel, anoMesReferencia);
+        
+        return situacoes != null && situacoes.size() > 0; 
+    }
 }

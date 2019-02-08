@@ -41,6 +41,7 @@ import gcom.gui.relatorio.cadastro.micromedicao.FiltrarRelatorioColetaMedidorEne
 import gcom.gui.relatorio.seguranca.GerarRelatorioAlteracoesSistemaColunaHelper;
 import gcom.micromedicao.ArquivoTextoLigacoesHidrometroHelper;
 import gcom.micromedicao.Rota;
+import gcom.micromedicao.hidrometro.Hidrometro;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.relatorio.cadastro.GerarRelatorioAtualizacaoCadastralViaInternetHelper;
 import gcom.relatorio.cadastro.RelatorioAcessoSPCBean;
@@ -65,6 +66,7 @@ import gcom.relatorio.cadastro.imovel.RelatorioImoveisUltimosConsumosAguaHelper;
 import gcom.relatorio.cadastro.micromedicao.RelatorioColetaMedidorEnergiaHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
+import gcom.util.ErroRepositorioException;
 
 import java.io.BufferedReader;
 import java.math.BigDecimal;
@@ -517,4 +519,6 @@ public interface IControladorCadastro {
 	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto, String tipoArquivo) throws ControladorException;
 
 	public UnidadeOrganizacional obterUnidadePorLocalidade(Integer idImovel) throws ControladorException;
+	
+	public Hidrometro obterHidrometroAtualmenteInstalado(Integer idImovel) throws ErroRepositorioException;
 }

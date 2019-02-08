@@ -1273,4 +1273,6 @@ public interface IControladorFaturamento {
 	public List<IClienteConta> pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(Integer idImovel, Date dataEmissao) throws ControladorException;
 	
 	public IConta obterContaOuContaHistorico(Integer idImovel, Integer referencia);
+	
+	public boolean isImovelEmsituacaoEspecialFaturamento(Integer idImovel, Integer anoMesReferencia) throws ControladorException;
 }

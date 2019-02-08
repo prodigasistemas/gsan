@@ -21,7 +21,6 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
-import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
@@ -116,6 +115,7 @@ import gcom.micromedicao.Rota;
 import gcom.micromedicao.bean.RelatorioAnaliseConsumoHelper;
 import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.FiltroConsumoHistorico;
+import gcom.micromedicao.hidrometro.Hidrometro;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.medicao.FiltroMedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoHistorico;
@@ -16292,5 +16292,14 @@ public class ControladorImovelSEJB extends ControladorComum {
         } catch (ErroRepositorioException e) {
             throw new ControladorException("erro.sistema", e);
         } 
+    }
+	
+	public boolean isImovelHidrometrado(Integer idImovel) throws ErroRepositorioException {
+        Hidrometro hidrometro = getControladorCadastro().obterHidrometroAtualmenteInstalado(idImovel);
+        
+        if (hidrometro != null)
+            return true;
+        else
+            return false;
     }
 }
