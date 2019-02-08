@@ -16285,4 +16285,12 @@ public class ControladorImovelSEJB extends ControladorComum {
 		}
 		
 	}
+	
+	public Short pesquisarObterQuantidadeEconomias(Imovel imovel, Categoria categoria) throws ControladorException {
+        try {
+            return repositorioImovel.pesquisarObterQuantidadeEconomias(imovel, categoria);
+        } catch (ErroRepositorioException e) {
+            throw new ControladorException("erro.sistema", e);
+        } 
+    }
 }

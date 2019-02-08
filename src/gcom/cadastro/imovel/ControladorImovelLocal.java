@@ -753,4 +753,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public void incluirImovelCobranca(Integer idCobrancaSituacao, Integer idCobrancaSituacaoTipo, Integer idImovel, Usuario usuario) throws ControladorException;
 
 	public boolean isDataMudancaTitularidaRetroativaPermitida(Integer idImovel, Date data) throws ControladorException;
+	
+	public Short pesquisarObterQuantidadeEconomias(Imovel imovel, Categoria categoria) throws ControladorException;
 }

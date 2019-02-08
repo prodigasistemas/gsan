@@ -1977,44 +1977,44 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-//	private void fluxograma(Integer idImovel) throws ControladorException {
-//        try {
-//            
-//            FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
-//            Integer referenciaFinal = null;
-//            
-//            boolean inserirSituacao = false;
-//            
-//            if (!getControladorFaturamento().isImovelEmsituacaoEspecialFaturamento(idImovel, grupo.getAnoMesReferencia())) {
-//                
-//                if (!getControladorImovel().isImovelHidrometrado(idImovel)) {
-//                    
-//                    if (houveMudancaCategoria(idImovel)) {
-//                        inserirSituacao = true;
-//                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
-//                        
-//                    } else if (houveMudancaoEconomiasPorCategoria(idImovel)){
-//                        inserirSituacao = true;
-//                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
-//                        
-//                    } else if (houveMudancaSubcategoria(idImovel)){
-//                        inserirSituacao = true;
-//                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 80);
-//                    }
-//                    
-//                }  else if (houveMudancaCategoria(idImovel) || houveMudancaoEconomiasPorCategoria(idImovel) || houveMudancaSubcategoria(idImovel)) {
-//                    inserirSituacao = true;
-//                    referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
-//                }
-//                
-//                if (inserirSituacao ) {
-//                    this.inserisSituacaoEspecialFaturamentoAlteracaoSubcategoria(idImovel, FaturamentoSituacaoTipo.FATURAR_MEDIA_RECADASTRAMENTO, grupo.getAnoMesReferencia(), referenciaFinal);
-//                }
-//            }
-//        } catch (ErroRepositorioException e) {
-//            e.printStackTrace();
-//        }
-//    }
+	private void fluxograma(Integer idImovel) throws ControladorException {
+        try {
+            
+            FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
+            Integer referenciaFinal = null;
+            
+            boolean inserirSituacao = false;
+            
+            if (!getControladorFaturamento().isImovelEmsituacaoEspecialFaturamento(idImovel, grupo.getAnoMesReferencia())) {
+                
+                if (!getControladorImovel().isImovelHidrometrado(idImovel)) {
+                    
+                    if (houveMudancaCategoria(idImovel)) {
+                        inserirSituacao = true;
+                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
+                        
+                    } else if (houveMudancaoEconomiasPorCategoria(idImovel)){
+                        inserirSituacao = true;
+                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
+                        
+                    } else if (houveMudancaSubcategoria(idImovel)){
+                        inserirSituacao = true;
+                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 80);
+                    }
+                    
+                }  else if (houveMudancaCategoria(idImovel) || houveMudancaoEconomiasPorCategoria(idImovel) || houveMudancaSubcategoria(idImovel)) {
+                    inserirSituacao = true;
+                    referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
+                }
+                
+                if (inserirSituacao ) {
+                    this.inserisSituacaoEspecialFaturamentoAlteracaoSubcategoria(idImovel, FaturamentoSituacaoTipo.FATURAR_MEDIA_RECADASTRAMENTO, grupo.getAnoMesReferencia(), referenciaFinal);
+                }
+            }
+        } catch (ErroRepositorioException e) {
+            e.printStackTrace();
+        }
+    }
     
     private boolean houveAlteracaoSubcategoria(Integer idImovel) {
         boolean alteracao = false;
@@ -2053,7 +2053,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
             helper.setObservacao("ALTERACAO DE DADOS DE FATURAMENTO - ATUALIZACAO CADASTRAL");
             helper.setObservacaoInforma("ALTERACAO DE DADOS DE FATURAMENTO - ATUALIZACAO CADASTRAL");
             helper.setUsuarioLogado(Usuario.USUARIO_BATCH);
-           // helper.setIdFaturamentoSituacaoMotivo(FaturamentoSituacaoMotivo.ATUALIZACAO_CADASTRAL_RECADASTRAMENTO.toString());
+            helper.setIdFaturamentoSituacaoMotivo(FaturamentoSituacaoMotivo.ATUALIZACAO_CADASTRAL_RECADASTRAMENTO.toString());
             helper.setIdFaturamentoSituacaoTipo(idFaturamentoSituacaoTipo.toString());
             helper.setNumeroConsumoAguaMedido(null);
             helper.setNumeroConsumoAguaNaoMedido(this.obterConsumoFixadoSituacaoEspecialFaturamento(idImovel));
@@ -2076,9 +2076,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
             
             Integer referenciaAnterior = Util.recuperaAnoMesDaData(controle.getDataProcessamento());
 
-            IConta conta = null;
-            
-            //getControladorFaturamento().obterContaOuContaHistorico(idImovel, referenciaAnterior);
+            IConta conta = getControladorFaturamento().obterContaOuContaHistorico(idImovel, referenciaAnterior);
 
             if (conta != null)
                 consumo = conta.getConsumoAgua();
@@ -2094,8 +2092,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     private boolean houveMudancaCategoria(Integer idImovel) throws ControladorException, ErroRepositorioException  {
         boolean retorno = false;
         try {
-            List<ImovelSubcategoriaAtualizacaoCadastral> originais = null;
-            //this.obterSubcategoriasOriginais(idImovel);
+            List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
             List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
             
             if (originais != null && novas != null) {
@@ -2121,8 +2118,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         boolean retorno = false;
         try {
             
-            List<ImovelSubcategoriaAtualizacaoCadastral> originais = null;
-            //this.obterSubcategoriasOriginais(idImovel);
+            List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
             List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
             
             if (originais != null && novas != null) {
@@ -2131,8 +2127,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
                     
                     for (ImovelSubcategoriaAtualizacaoCadastral original : originais) {
                         
-                        Short qtdEconomiasNovas = null;
-                        //getControladorImovel().pesquisarObterQuantidadeEconomias(new Imovel(idImovel), original.getCategoria());
+                        Short qtdEconomiasNovas = getControladorImovel().pesquisarObterQuantidadeEconomias(new Imovel(idImovel), original.getCategoria());
                         
                         Short qtdEconomiasOriginais = this.pesquisarQuantidadeEconomiasOriginais(idImovel, original.getCategoria().getId());
                         
@@ -2148,8 +2143,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
                     
                     for (ImovelSubcategoria nova : novas) {
                         
-                        Short qtdEconomiasNovas = null;
-                        		//getControladorImovel().pesquisarObterQuantidadeEconomias(new Imovel(idImovel), nova.getSubcategoria().getCategoria());
+                        Short qtdEconomiasNovas = getControladorImovel().pesquisarObterQuantidadeEconomias(new Imovel(idImovel), nova.getSubcategoria().getCategoria());
                         
                         Short qtdEconomiasOriginais = this.pesquisarQuantidadeEconomiasOriginais(idImovel, nova.getSubcategoria().getCategoria().getId());
                         
@@ -2174,8 +2168,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     private boolean houveMudancaSubcategoria(Integer idImovel) throws ControladorException, ErroRepositorioException {
         boolean retorno = false;
         try {
-            List<ImovelSubcategoriaAtualizacaoCadastral> originais = null;
-            //this.obterSubcategoriasOriginais(idImovel);
+            List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
             List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
             
             if (idImovel.intValue() == 3142116) {
@@ -2247,12 +2240,18 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     }
     
     public Short pesquisarQuantidadeEconomiasOriginais(Integer idImovel, Integer idCategoria) throws ControladorException {
-    	return null;
-//        try {
-//            return null;
-//            //repositorioAtualizacaoCadastral.pesquisarQuantidadeEconomiasOriginais(idImovel, idCategoria);
-//        } catch (ErroRepositorioException e) {
-//            throw new ControladorException("Erro obter quantidade de economias da categoria original do imovel - atualizacao cadastral", e);
-//        }
+        try {
+            return repositorioAtualizacaoCadastral.pesquisarQuantidadeEconomiasOriginais(idImovel, idCategoria);
+        } catch (ErroRepositorioException e) {
+            throw new ControladorException("Erro obter quantidade de economias da categoria original do imovel - atualizacao cadastral", e);
+        }
+    }
+    
+    private List<ImovelSubcategoriaAtualizacaoCadastral> obterSubcategoriasOriginais(Integer idImovel) throws ControladorException {
+        try {
+            return repositorioAtualizacaoCadastral.obterSubcategoriasOriginais(idImovel);
+        } catch (ErroRepositorioException e) {
+            throw new ControladorException("Erro ao consultar subcategorias originais ", e);
+        }
     }
 }

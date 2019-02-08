@@ -39,6 +39,7 @@ public class FaturamentoSituacaoTipo extends ObjetoTransacao implements Serializ
     public final static Integer FATURAR_NORMAL = new Integer(5);
     public final static Integer NITRATO = new Integer(9);
     public final static Integer PARALISAR_FATURAMENTO_DE_ESGOTO = new Integer(12);
+    public final static Integer FATURAR_MEDIA_RECADASTRAMENTO = new Integer(14);
 
     public FaturamentoSituacaoTipo(String descricao, Short indicadorParalisacaoFaturamento, Short indicadorParalisacaoLeitura, Short indicadorUso, Date ultimaAlteracao, Short indicadorFaturamentoParalisacaoEsgoto, LeituraAnormalidadeLeitura leituraAnormalidadeLeituraComLeitura, LeituraAnormalidadeLeitura leituraAnormalidadeLeituraSemLeitura, LeituraAnormalidadeConsumo leituraAnormalidadeConsumoComLeitura, LeituraAnormalidadeConsumo leituraAnormalidadeConsumoSemLeitura) {
         this.descricao = descricao;

@@ -2348,4 +2348,56 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 		return retorno;
 	}
+	
+	public Short pesquisarQuantidadeEconomiasOriginais(Integer idImovel, Integer idCategoria) throws ErroRepositorioException {
+
+        Short retorno = null;
+
+        Session session = HibernateUtil.getSession();
+        StringBuilder consulta = new StringBuilder();
+
+        try {
+            consulta.append("select sum( imsc.quantidadeEconomias ) ") 
+                    .append("from ImovelSubcategoriaAtualizacaoCadastral as imsc ") 
+                    .append("where imsc.imovel.id = :imovelId and ") 
+                    .append("  imsc.categoria.id = :categoriaId ");
+
+            retorno = (Short)session.createQuery(consulta.toString())
+                    .setInteger("imovelId", idImovel)
+                    .setInteger("categoriaId", idCategoria)
+                    .uniqueResult();
+
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro no Hibernate");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+        return retorno;
+    }
+	
+	@SuppressWarnings("unchecked")
+    public List<ImovelSubcategoriaAtualizacaoCadastral> obterSubcategoriasOriginais(Integer idImovel) throws ErroRepositorioException {
+        List<ImovelSubcategoriaAtualizacaoCadastral> retorno = null;
+
+        Session session = HibernateUtil.getSession();
+
+        try {
+            StringBuilder sql =  new StringBuilder();
+            
+            sql.append("SELECT original FROM ImovelSubcategoriaAtualizacaoCadastral original ")
+                .append(" inner join fetch original.imovel imovel ")
+                .append(" inner join fetch original.subcategoria subcategoria ")
+                .append(" inner join fetch original.categoria categoria ")
+                .append(" WHERE imovel.id = :id ");
+            retorno = (List<ImovelSubcategoriaAtualizacaoCadastral>) session.createQuery(sql.toString()).setInteger("id", idImovel).list();
+
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar imovel controle por ids.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return retorno;
+    }
+	
 }

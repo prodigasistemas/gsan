@@ -50,6 +50,7 @@ import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
 import gcom.faturamento.conta.GerarImpostosDeduzidosContaHelper;
+import gcom.faturamento.conta.IConta;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.credito.CreditoTipo;
@@ -1270,4 +1271,6 @@ public interface IControladorFaturamento {
 	public boolean isAlgumaContaEmProcessoJudicial (Integer idImovel, Date data);
 	
 	public List<IClienteConta> pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(Integer idImovel, Date dataEmissao) throws ControladorException;
+	
+	public IConta obterContaOuContaHistorico(Integer idImovel, Integer referencia);
 }

@@ -20,10 +20,8 @@ import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.FiltroCategoria;
 import gcom.cadastro.imovel.FiltroImovel;
-import gcom.cadastro.imovel.FiltroImovelCobrancaSituacao;
 import gcom.cadastro.imovel.FiltroImovelDoacao;
 import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.imovel.ImovelCobrancaSituacao;
 import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.ImovelDoacao;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
@@ -75,7 +73,6 @@ import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.ContaImpressao;
 import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMotivoInclusao;
-import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.ContaTipo;
 import gcom.faturamento.conta.Fatura;
@@ -193,6 +190,7 @@ import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
+import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
 
 import java.io.BufferedReader;
@@ -15825,4 +15823,36 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
+	
+	public IConta obterContaOuContaHistorico(Integer idImovel, Integer referencia) {
+        
+        IConta conta = null; 
+        try {
+
+            FiltroConta filtroConta = new FiltroConta();
+            filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.IMOVEL_ID, idImovel));
+            filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.REFERENCIA, referencia));
+            filtroConta.adicionarParametro(new ParametroSimplesDiferenteDe(FiltroConta.DEBITO_CREDITO_SITUACAO_ATUAL_ID, DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO));
+
+            Collection colecaoConta = getControladorUtil().pesquisar(filtroConta, Conta.class.getName());
+            
+            if (colecaoConta != null && !colecaoConta.isEmpty()) {
+                conta = (IConta) colecaoConta.iterator().next();
+            } else {
+                FiltroContaHistorico filtroHistorico = new FiltroContaHistorico();
+                filtroHistorico.adicionarParametro(new ParametroSimples(FiltroContaHistorico.IMOVEL_ID, idImovel));
+                filtroHistorico.adicionarParametro(new ParametroSimples(FiltroContaHistorico.ANO_MES_REFERENCIA, referencia));
+                filtroHistorico.adicionarParametro(new ParametroSimplesDiferenteDe(FiltroContaHistorico.DEBITO_CREDITO_SITUACAO_ATUAL_ID, DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO));
+
+                Collection colecaoContaHistorico = getControladorUtil().pesquisar(filtroConta, Conta.class.getName());
+                
+                if (colecaoConta != null && !colecaoConta.isEmpty()) {
+                    conta = (IConta) colecaoConta.iterator().next();
+                }
+            }
+        } catch (ControladorException e) {
+            e.printStackTrace();
+        }
+        return conta;
+    }
 }

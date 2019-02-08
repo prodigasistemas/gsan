@@ -34,6 +34,8 @@ public class FaturamentoSituacaoMotivo extends ObjetoTransacao implements Serial
     public final static Integer IMOVEL_MEDIDO_COM_HIDROMETRO_RETIRADO = 14;
     
     public final static Integer IMOVEL_COM_CONSUMO_MENOR_IGUAL_10M3_VARIOS_MESES = 15;
+    
+    public final static Integer ATUALIZACAO_CADASTRAL_RECADASTRAMENTO = 16;
 
     /** full constructor */
     public FaturamentoSituacaoMotivo(String descricao, Short indicadorUso, Date ultimaAlteracao) {
