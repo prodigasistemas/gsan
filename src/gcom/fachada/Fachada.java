@@ -374,6 +374,7 @@ import gcom.faturamento.bean.VolumesFaturadosRelatorioHelper;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaHistorico;
@@ -40343,7 +40344,7 @@ public class Fachada {
 	
 	public boolean isImovelAtualizadoComAlteracaoFaturamento(Integer idImovel) {
 		try {
-			return getControladorAtualizacaoCadastral().isImovelAtualizadoComAlteracaoFaturamento(idImovel);
+			return getControladorAtualizacaoCadastral().isImovelAprovadoComAlteracaoFaturamento(idImovel);
 		} catch (Exception e) {
 			throw new FachadaException(e.getMessage(), e);
 		}
@@ -40352,6 +40353,22 @@ public class Fachada {
 	public boolean isAtualizadaoAntesFaturamento(Integer idImovel, Integer referenciaFaturamento) throws ControladorException {
 		try {
 			return getControladorAtualizacaoCadastral().isAtualizadaoAntesFaturamento(idImovel, referenciaFaturamento);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public ComunicadoEmitirConta pesquisarComunicado(Integer idImovel, Integer tipo) {
+		try {
+			return getControladorFaturamento().pesquisarComunicado(idImovel, tipo);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
+	public ComunicadoEmitirConta pesquisarUltimoComunicadoGerado(Integer idImovel, Integer tipoComunicado) {
+		try {
+			return getControladorFaturamento().pesquisarUltimoComunicadoGerado(idImovel, tipoComunicado);
 		} catch (Exception e) {
 			throw new FachadaException(e.getMessage(), e);
 		}

@@ -48,6 +48,7 @@ import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
 import gcom.faturamento.consumotarifa.ConsumoTarifaFaixa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaHistorico;
@@ -60148,5 +60149,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 		return clientes;
 	}
+
+	public ComunicadoEmitirConta pesquisarUltimoComunicadoGerado(Integer idImovel, Integer tipoComunicado) throws ErroRepositorioException {
+		ComunicadoEmitirConta comunicado = null;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
 			
+			consulta.append(" select comunicado from ComunicadoEmitirConta comunicado ")
+					.append(" inner join comunicado.imovel imovel ")
+					.append(" where imovel.id = :idImovel ")
+					.append(" and comunicado.tipoComunicado = :tipoComunicado ")
+					.append(" order by comunicado.dataGeracao desc ");
+
+			comunicado = (ComunicadoEmitirConta) session.createQuery(consulta.toString())
+					   .setInteger("idImovel", idImovel)
+					   .setInteger("tipoComunicado", tipoComunicado).setMaxResults(1).uniqueResult();
+
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return comunicado;
+	}
 }

@@ -5,9 +5,9 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.bean.ImovelMicromedicao;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FaturamentoGrupo;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.gui.GcomAction;
-import gcom.micromedicao.consumo.ComunicadoAltoConsumo;
-import gcom.micromedicao.consumo.FiltroComunicadoAltoConsumo;
+import gcom.micromedicao.consumo.FiltroComunicadoEmitirConta;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
 import gcom.util.ConstantesSistema;
@@ -1801,10 +1801,10 @@ public class ExibirConsultarImovelDadosAnaliseMedicaoConsumoAction extends GcomA
 	private void preencherComunicadosAltoConsumo(Integer idImovel, HttpSession sessao) {
 		sessao.setAttribute("comunicados", null);
 		
-		FiltroComunicadoAltoConsumo filtro = new FiltroComunicadoAltoConsumo();
-		filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoAltoConsumo.IMOVEL_ID, idImovel));
+		FiltroComunicadoEmitirConta filtro = new FiltroComunicadoEmitirConta();
+		filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.IMOVEL_ID, idImovel));
 
-		Collection<ComunicadoAltoConsumo> comunicados = getFachada().pesquisar(filtro, ComunicadoAltoConsumo.class.getName());
+		Collection<ComunicadoEmitirConta> comunicados = getFachada().pesquisar(filtro, ComunicadoEmitirConta.class.getName());
 
 		if (comunicados.size() > 0) {
 			sessao.setAttribute("comunicados", comunicados);

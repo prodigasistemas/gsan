@@ -40,6 +40,7 @@ import gcom.faturamento.bean.VolumesFaturadosRelatorioHelper;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
@@ -1275,4 +1276,8 @@ public interface IControladorFaturamento {
 	public IConta obterContaOuContaHistorico(Integer idImovel, Integer referencia);
 	
 	public boolean isImovelEmsituacaoEspecialFaturamento(Integer idImovel, Integer anoMesReferencia) throws ControladorException;
+	
+	public ComunicadoEmitirConta pesquisarComunicado(Integer idImovel, Integer tipo) throws ControladorException;
+	
+	public ComunicadoEmitirConta pesquisarUltimoComunicadoGerado(Integer idImovel, Integer tipoComunicado) throws ControladorException;
 }

@@ -1743,7 +1743,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				arquivoTextoRegistroTipo01.append(Util.completaString("", 300));
 			}
 		} else {
-			if (controladorAtualizacaoCadastral.isImovelAtualizadoComAlteracaoFaturamento(emitirContaHelper.getIdImovel())) {
+			if (controladorAtualizacaoCadastral.isImovelAprovadoComAlteracaoFaturamento(emitirContaHelper.getIdImovel())) {
 				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
 				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
 				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));

@@ -776,6 +776,18 @@ function carregaMaps() {
 						</tr>
 						<tr>
 							<td height="10" align="left">
+								<div class="style9"><strong>Data geração comunicado faturamento:</strong></div>
+							</td>
+							<td align="left">
+								<div class="style9">
+									<html:text property="dataEmissaoComunicadoIrregularidadeFaturamento" readonly="true"
+									style="background-color:#EFEFEF; border:0; color: #000000"
+									size="20" maxlength="20" />
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td height="10" align="left">
 							<div class="style9"><strong>Data de Processamento:</strong></div>
 							</td>
 							<td align="left">

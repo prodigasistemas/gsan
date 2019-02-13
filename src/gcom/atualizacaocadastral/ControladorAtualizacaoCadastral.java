@@ -29,6 +29,7 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.IClienteFone;
+import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelImagem;
 import gcom.cadastro.imovel.IImovel;
@@ -51,6 +52,7 @@ import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.FaturamentoSituacaoMotivo;
 import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.bean.SituacaoEspecialFaturamentoHelper;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.IConta;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
@@ -837,6 +839,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.ATUALIZADO));
 
 		getControladorUtil().atualizar(imovelControle);
+		
+		if (this.isImovelAprovadoComAlteracaoFaturamento(imovelControle.getImovel().getId()))
+			this.gerarComunicadoIrregularidadeFaturamento(imovelControle.getImovel().getId());
 	}
 
 	public Collection<Integer> pesquisarImoveisPorSituacaoPeriodo(Date dataInicial, Date dataFinal, Integer idSituacaoCadastral)
@@ -1167,7 +1172,16 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 						getControladorUtil().atualizar(tabelaColuna);
 					}
 				}
-				repositorioAtualizacaoCadastral.aprovarImovel(imovel.getId());
+				
+				Date dataLiberacao = new Date();
+				if (isImovelComAlteracaoFaturamento(imovel.getId())) {
+					dataLiberacao = Util.adicionarNumeroDiasDeUmaData(dataLiberacao, 45);
+					getControladorUtil().inserir(new ComunicadoEmitirConta(imovel.getId(), 
+																			getControladorImovel().pesquisarGrupoImovel(imovel.getId()).getAnoMesReferencia(), 
+																			ComunicadoEmitirConta.IRREGULARIDADE_CADASTRO));
+				} 
+				
+				repositorioAtualizacaoCadastral.aprovarImovel(imovel.getId(), dataLiberacao);
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao aprovar imoveis em lote. " + e);
@@ -2016,15 +2030,31 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         }
     }
 	
-	public boolean isImovelAtualizadoComAlteracaoFaturamento(Integer idImovel) throws ControladorException {
+	public boolean isImovelAprovadoComAlteracaoFaturamento(Integer idImovel) throws ControladorException {
 		try {
 			ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel); 
 			
-			if (controle != null && (controle.isAtualizado() && houveAlteracaoTabelaColunaSubcategoria(idImovel)
-					&& (houveMudancaCategoria(idImovel) || houveMudancaoEconomiasPorCategoria(idImovel) || houveMudancaSubcategoria(idImovel))))
+			if (controle != null && (controle.isAprovado() && isImovelComAlteracaoFaturamento(idImovel)))
 				return true;
 			else
 				return false;
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao verificar se houve alteracao de faturamento no imóvel.", e);
+		}
+	}
+	
+	private boolean isImovelComAlteracaoFaturamento(Integer idImovel) throws ControladorException {
+		try {
+			ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel);
+			
+			if (controle != null && (houveAlteracaoTabelaColunaSubcategoria(controle.getImovel().getId()) 
+						&& (houveMudancaCategoria(controle.getImovel().getId()) 
+							|| houveMudancaoEconomiasPorCategoria(controle.getImovel().getId()) 
+							|| houveMudancaSubcategoria(controle.getImovel().getId()) ) ) )
+				return true;
+			else
+				return false;
+			
 		} catch (ControladorException e) {
 			throw new ControladorException("Erro ao verificar se houve alteracao de faturamento no imóvel.", e);
 		}
@@ -2128,6 +2158,38 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         }
     }
     
+    public String[] getDescricaoMudancaCategoria(Integer idImovel) throws ControladorException {
+        String retorno[] = new String[]{"", ""};
+        StringBuilder descricao = new StringBuilder();
+
+        try {
+            List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
+            List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
+            
+            if (originais != null && novas != null) {
+                
+                List<Integer> idsOriginais = this.obterIdsCategoriasOriginais(originais);
+                
+                for (Integer original : idsOriginais) {
+                	descricao.append(Categoria.getNomeCategoria(original)).append(", ");
+                }
+                retorno[0] = Util.removerUltimosCaracteres(descricao.toString(), 2);
+                
+                descricao = new StringBuilder();
+                List<Integer> idsNovas = this.obterIdsCategoriasNovas(novas);
+                for (Integer nova : idsNovas) {
+                	descricao.append(Categoria.getNomeCategoria(nova)).append(", ");
+                }
+                retorno[1] = Util.removerUltimosCaracteres(descricao.toString(), 2);
+            }
+            
+            return retorno;
+        } catch (ControladorException e) {
+            e.printStackTrace();
+            throw new ControladorException("Erro ao inserir situação especial de faturamento para imóveis com alteração de subcategoria.", e);
+        }
+    }
+    
     public boolean houveMudancaoEconomiasPorCategoria(Integer idImovel) throws ControladorException {
         boolean retorno = false;
         try {
@@ -2177,6 +2239,44 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         }
     }
     
+    public String[] getDescricaoMudancaEconomiasPorSubcategoria(Integer idImovel) throws ControladorException {
+        String retorno[] = new String[]{"", ""};
+        StringBuilder descricao = new StringBuilder();
+
+        try {
+            List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
+            List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
+            
+            if (originais != null && novas != null) {
+                
+                for (ImovelSubcategoriaAtualizacaoCadastral original : originais) {
+                	Short qtdEconomiasOriginais = this.pesquisarQuantidadeEconomiasOriginais(idImovel, original.getCategoria().getId());
+                	
+                	descricao.append(Subcategoria.getDescricaoSubcategoria(original.getSubcategoria().getId())).append(" - ").append(qtdEconomiasOriginais).append(", ");
+                }
+                
+                retorno[0] = Util.removerUltimosCaracteres(descricao.toString(), 2);
+                
+            	descricao = new StringBuilder();
+                	
+                for (ImovelSubcategoria nova : novas) {
+                    
+                    Short qtdEconomiasNovas = getControladorImovel().pesquisarObterQuantidadeEconomias(new Imovel(idImovel), nova.getSubcategoria().getCategoria());
+                    
+                    descricao.append(Subcategoria.getDescricaoSubcategoria(nova.getSubcategoria().getId())).append(" - ").append(qtdEconomiasNovas).append(", ");
+                }
+                    
+                retorno[1] = Util.removerUltimosCaracteres(descricao.toString(), 2);
+                
+            }
+            
+            return retorno;
+        } catch (ControladorException e) {
+            e.printStackTrace();
+            throw new ControladorException("Erro ao inserir situação especial de faturamento para imóveis com alteração de subcategoria.", e);
+        }
+    }
+    
     public boolean houveMudancaSubcategoria(Integer idImovel) throws ControladorException {
         boolean retorno = false;
         try {
@@ -2198,6 +2298,40 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
                         }
                     }
                 }
+            }
+            
+            return retorno;
+        } catch (ControladorException e) {
+            e.printStackTrace();
+            throw new ControladorException("Erro ao inserir situação especial de faturamento para imóveis com alteração de subcategoria.", e);
+        }
+    }
+    
+    public String[] getDescricaoMudancaSubcategoria(Integer idImovel) throws ControladorException {
+        String retorno[] = new String[]{"", ""};
+        StringBuilder descricao = new StringBuilder();
+
+        try {
+            List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
+            List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
+            
+            if (originais != null && novas != null) {
+                
+            	List<Integer> idsOriginais = this.obterIdsSubcategoriasOriginais(originais);
+                
+                for (Integer original : idsOriginais) {
+                	descricao.append(Subcategoria.getDescricaoSubcategoria(original) + ", ");
+                }
+                
+                retorno[0] = Util.removerUltimosCaracteres(descricao.toString(), 2);
+                
+                descricao = new StringBuilder();
+                List<Integer> idsNovas = this.obterIdsCategoriasNovas(novas);
+                for (Integer nova : idsNovas) {
+                	descricao.append(Subcategoria.getDescricaoSubcategoria(nova) + ", ");
+                }
+                
+                retorno[1] = Util.removerUltimosCaracteres(descricao.toString(), 2);
             }
             
             return retorno;
@@ -2279,5 +2413,18 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     		throw new ControladorException("Erro ao verificar data atualizacao ", e);
     	}
 		return retorno;
+    }
+    
+    private void gerarComunicadoIrregularidadeFaturamento(Integer idImovel) throws ControladorException {
+    	try {
+    		FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
+    	
+    		ComunicadoEmitirConta comunicado = new ComunicadoEmitirConta(idImovel, grupo.getAnoMesReferencia(), ComunicadoEmitirConta.IRREGULARIDADE_CADASTRO);
+
+			getControladorUtil().inserir(comunicado);
+		} catch (ControladorException e) {
+			logger.error("Erro ao gerar comunicado de irregularidade de faturamento para o imovel" + idImovel, e);
+			throw new ControladorException("Erro ao gerar comunicado de irregularidade de faturamento para o imovel" + idImovel, e);
+		}
     }
 }

@@ -8,6 +8,7 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.bean.IntegracaoQuadraFaceHelper;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.fachada.Fachada;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
@@ -62,8 +63,14 @@ public class ExibirConsultarImovelDadosCadastraisAction extends GcomAction {
                 SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
                
                 consultarImovelActionForm.setIdImovelDadosCadastrais(imovel.getId().toString());
-                if (imovelControleAtualizacaoCadastral != null && imovelControleAtualizacaoCadastral.getDataProcessamento() != null) {
-                	consultarImovelActionForm.setDataProcessamento(formatador.format(imovelControleAtualizacaoCadastral.getDataProcessamento()));
+                if (imovelControleAtualizacaoCadastral != null ) {
+                	if (imovelControleAtualizacaoCadastral.getDataProcessamento() != null)
+                		consultarImovelActionForm.setDataProcessamento(formatador.format(imovelControleAtualizacaoCadastral.getDataProcessamento()));
+                	
+                	ComunicadoEmitirConta comunicado = Fachada.getInstancia().pesquisarUltimoComunicadoGerado(imovel.getId(), ComunicadoEmitirConta.IRREGULARIDADE_CADASTRO);
+                	
+                	if (comunicado != null)
+                		consultarImovelActionForm.setDataEmissaoComunicadoIrregularidadeFaturamento(formatador.format(comunicado.getDataGeracao()));
                 }
                 
                 if (imovel.getIndicadorExclusao().equals(ConstantesSistema.SIM)) {

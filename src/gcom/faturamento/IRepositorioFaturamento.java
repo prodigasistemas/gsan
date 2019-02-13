@@ -29,6 +29,7 @@ import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
 import gcom.faturamento.consumotarifa.ConsumoTarifaFaixa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaHistorico;
@@ -3060,4 +3061,6 @@ public interface IRepositorioFaturamento {
 	public Object[] pesquisarContatosAgenciaReguladora(Integer idMunicipio) throws ErroRepositorioException;
 	
 	public List<IClienteConta> pesquisarClienteContaDeContasEmitidasAPartirDeUmaData(Integer idImovel, Date dataEmissao) throws ErroRepositorioException;
+	
+	public ComunicadoEmitirConta pesquisarUltimoComunicadoGerado(Integer idImovel, Integer tipoComunicado) throws ErroRepositorioException;
 }

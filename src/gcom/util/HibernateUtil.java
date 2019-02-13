@@ -504,6 +504,7 @@ import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
 import gcom.faturamento.consumotarifa.ConsumoTarifaFaixa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
@@ -684,7 +685,6 @@ import gcom.micromedicao.TelemetriaLog;
 import gcom.micromedicao.TelemetriaMov;
 import gcom.micromedicao.TelemetriaMovReg;
 import gcom.micromedicao.TelemetriaRetMot;
-import gcom.micromedicao.consumo.ComunicadoAltoConsumo;
 import gcom.micromedicao.consumo.ConsumoAnormalidade;
 import gcom.micromedicao.consumo.ConsumoAnormalidadeAcao;
 import gcom.micromedicao.consumo.ConsumoHistorico;
@@ -1344,7 +1344,7 @@ public class HibernateUtil {
 					.addClass(ConsumoAnormalidadeAcao.class)
 					.addClass(RotaAtualizacaoSeq.class)
 					.addClass(ReleituraMobile.class)
-					.addClass(ComunicadoAltoConsumo.class)
+					.addClass(ComunicadoEmitirConta.class)
 
 					// ************************************//
 					// CLASSES DO PACOTE gcom.financeiro //

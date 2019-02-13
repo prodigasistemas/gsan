@@ -90,7 +90,7 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public Collection<IClienteImovel> obterClientesParaExcluirRelacao() throws ErroRepositorioException;
 
-	public void aprovarImovel(Integer idImovelRetorno) throws ErroRepositorioException;
+	public void aprovarImovel(Integer idImovelRetorno, Date dataLiberacao) throws ErroRepositorioException;
 
 	public Integer obterquantidadeImoveisAprovadosArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
 

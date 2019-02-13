@@ -34,6 +34,7 @@ import gcom.faturamento.bean.DebitoCobradoAgrupadoHelper;
 import gcom.faturamento.bean.EmitirContaHelper;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.FiltroConsumoTarifa;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
@@ -47,10 +48,10 @@ import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.micromedicao.FiltroLeituraSituacao;
 import gcom.micromedicao.Rota;
-import gcom.micromedicao.consumo.ComunicadoAltoConsumo;
 import gcom.micromedicao.consumo.ConsumoAnormalidade;
 import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.ConsumoTipo;
+import gcom.micromedicao.consumo.FiltroComunicadoEmitirConta;
 import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.medicao.MedicaoHistorico;
@@ -152,6 +153,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 			StringBuilder contasTxtLista = new StringBuilder();
 			StringBuilder contasTxtAltoConsumo = new StringBuilder();
+			StringBuilder contasIrregularidadeCadadastro = new StringBuilder();
 
 			while (!flagTerminou) {
 				mapAtualizaSequencial = new HashMap();
@@ -560,11 +562,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 								} else {
 									
+//									if (getControladorAtualizacaoCadastral().existeComunicadoIrregularidadeCadastro(emitirContaHelper.getIdImovel())) {
+//										contasIrregularidadeCadadastro.append(contaTxt.toString());
+//										contasIrregularidadeCadadastro.append(gerarDadosComunicadoIrregularidadeCadastro(anoMesReferenciaFaturamento,emitirContaHelper));
+//										contasIrregularidadeCadadastro.append(System.getProperty("line.separator"));
+//									}
 									if (isEmitirComunicadoAltoConsumo(emitirContaHelper)) {
 										contasTxtAltoConsumo.append(contaTxt.toString());
 										contasTxtAltoConsumo.append(System.getProperty("line.separator"));
 										
-										getControladorUtil().inserir(new ComunicadoAltoConsumo(emitirContaHelper.getIdImovel(), anoMesReferenciaFaturamento));
+										getControladorUtil().inserir(new ComunicadoEmitirConta(emitirContaHelper.getIdImovel(), anoMesReferenciaFaturamento, ComunicadoEmitirConta.ALTO_CONSUMO));
 									} else {
 										contasTxtLista.append(contaTxt.toString());
 										contasTxtLista.append(System.getProperty("line.separator"));
@@ -621,10 +628,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 			String nomeZip = "CONTA" + idGrupoFaturamento + mesReferencia;
 			String nomeZipAltoConsumo = "CONTA_ALTO_CONSUMO" + idGrupoFaturamento + mesReferencia ;
+			String nomeZipIrregularidadeCadastro = "CONTA_OCORRENCIA_IRREGULARIDADE_CADASTRO" + idGrupoFaturamento + mesReferencia ;
 			String nomeArquivoImpressaoFormatada = "ArquivoImpressaoTermica" + idGrupoFaturamento + mesReferencia;
 
 			formatarArquivoContas(contasTxtLista, nomeZip);
 			formatarArquivoContas(contasTxtAltoConsumo, nomeZipAltoConsumo);
+			formatarArquivoContas(contasIrregularidadeCadadastro, nomeZipIrregularidadeCadastro);
 			formatarArquivoImpressoraTermica(stringFormatadaImpressaoTermica, colecaoLocalidadesArquivo, nomeArquivoImpressaoFormatada);
 
 			tipoConta++;
@@ -643,6 +652,46 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}
+	}
+
+	private String gerarDadosComunicadoIrregularidadeCadastro(Integer referencia, EmitirContaHelper helper) throws ControladorException {
+		
+		StringBuilder retorno = new StringBuilder();
+		
+		
+		retorno.append(Util.completaString(helper.getIdImovel().toString(), 10))
+				.append(Util.completaString(helper.getNomeCliente().toString(), 50))
+				.append(Util.completaString(helper.getEnderecoClienteResponsavel().toString(), 100))
+				.append(Util.completaString(helper.getEnderecoClienteResponsavel().toString(), 100));
+		if (getControladorAtualizacaoCadastral().houveMudancaCategoria(helper.getIdImovel())) {
+			retorno.append(Util.completaString("CATEGORIA", 40));
+			
+			String categorias[] = getControladorAtualizacaoCadastral().getDescricaoMudancaCategoria(helper.getIdImovel());
+			
+			retorno.append(Util.completaString(categorias[0], 30)); // DE
+			retorno.append(Util.completaString(categorias[1], 30)); // PARA
+			
+		} else if (getControladorAtualizacaoCadastral().houveMudancaSubcategoria(helper.getIdImovel())) {
+			retorno.append(Util.completaString("SUBCATEGORIA", 40));
+			
+			String subcategorias[] = getControladorAtualizacaoCadastral().getDescricaoMudancaSubcategoria(helper.getIdImovel());
+			
+			retorno.append(Util.completaString(subcategorias[0], 30)); // DE
+			retorno.append(Util.completaString(subcategorias[1], 30)); // PARA
+			
+		} else {
+			retorno.append(Util.completaString("QUANTIDADE DE ECONOMIAS POR CATEGORIA", 40));
+
+			String economias[] = getControladorAtualizacaoCadastral().getDescricaoMudancaEconomiasPorSubcategoria(helper.getIdImovel());
+			
+			retorno.append(Util.completaString(economias[0], 30)); // DE
+			retorno.append(Util.completaString(economias[1], 30)); // PARA
+		}
+		
+		this.emitirComunicado(helper.getIdImovel(), ComunicadoEmitirConta.IRREGULARIDADE_CADASTRO);
+		getControladorUtil().inserir(new ComunicadoEmitirConta(helper.getIdImovel(), referencia, ComunicadoEmitirConta.IRREGULARIDADE_CADASTRO));
+		
+		return retorno.toString();
 	}
 
 	private boolean isEmitirComunicadoAltoConsumo(EmitirContaHelper helper) throws ControladorException {
@@ -1353,7 +1402,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		String[] parmsPartesConta = obterMensagemDebitoConta3Partes(emitirContaHelper, sistemaParametro);
 		
 
-		if (getControladorAtualizacaoCadastral().isImovelAtualizadoComAlteracaoFaturamento(emitirContaHelper.getIdImovel())) {
+		if (getControladorAtualizacaoCadastral().isImovelAprovadoComAlteracaoFaturamento(emitirContaHelper.getIdImovel())) {
 			contaTxt.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
 			contaTxt.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
 			contaTxt.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
@@ -3687,4 +3736,25 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 		return contaTxt;
 	}
+	
+	public void emitirComunicado(Integer idImovel, Integer tipoComunicado) {
+		
+		try {
+			FiltroComunicadoEmitirConta filtro = new FiltroComunicadoEmitirConta();
+			
+			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.IMOVEL_ID, idImovel));
+			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.INDICADOR_EMISSAO, ConstantesSistema.NAO));
+			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.TIPO_COMUNICADO, tipoComunicado));	
+			
+			ComunicadoEmitirConta comunicado = (ComunicadoEmitirConta) getControladorUtil().pesquisar(filtro, ComunicadoEmitirConta.class.getName()).iterator().next();
+			
+			comunicado.setIndicadorEmitido(ConstantesSistema.SIM);
+			comunicado.setUltimaAlteracao(new Date());
+
+			getControladorUtil().atualizar(comunicado);
+		} catch (ControladorException e) {
+			logger.error("Erro ao emitir comunicado.");
+		}
+	}
+	
 }

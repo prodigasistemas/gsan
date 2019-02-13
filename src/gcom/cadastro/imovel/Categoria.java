@@ -367,4 +367,15 @@ public class Categoria extends ObjetoTransacao {
 	public boolean isPublico() {
 		return id.intValue() ==	PUBLICO.intValue();
 	}
+	
+	public static String getNomeCategoria(Integer id) {
+		if (id.equals(RESIDENCIAL.intValue()))
+			return "RESIDENCIAL";
+		else if (id.equals(COMERCIAL.intValue()))
+			return "COMERCIAL";
+		else if (id.equals(INDUSTRIAL.intValue()))
+			return "INDUSTRIAL";
+		else
+			return "PUBLICO";
+	}
 }

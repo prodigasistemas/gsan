@@ -1,8 +1,8 @@
 package gcom.gui.cadastro.imovel;
 
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.gui.GcomAction;
-import gcom.micromedicao.consumo.ComunicadoAltoConsumo;
-import gcom.micromedicao.consumo.FiltroComunicadoAltoConsumo;
+import gcom.micromedicao.consumo.FiltroComunicadoEmitirConta;
 import gcom.util.filtro.ParametroSimples;
 
 import java.util.Collection;
@@ -29,10 +29,10 @@ public class ExibirComunicadoAltoConsumoPopupAction extends GcomAction {
 
 		if (idImovel != null && !idImovel.trim().equals("")) {
 
-			FiltroComunicadoAltoConsumo filtro = new FiltroComunicadoAltoConsumo();
-			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoAltoConsumo.IMOVEL_ID, idImovel));
+			FiltroComunicadoEmitirConta filtro = new FiltroComunicadoEmitirConta();
+			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.IMOVEL_ID, idImovel));
 
-			Collection<ComunicadoAltoConsumo> comunicados = getFachada().pesquisar(filtro, ComunicadoAltoConsumo.class.getName());
+			Collection<ComunicadoEmitirConta> comunicados = getFachada().pesquisar(filtro, ComunicadoEmitirConta.class.getName());
 
 			sessao.setAttribute("comunicados", comunicados);
 		}

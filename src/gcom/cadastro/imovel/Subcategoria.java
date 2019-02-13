@@ -87,6 +87,26 @@ public class Subcategoria extends ObjetoTransacao {
     public static final String DESCRICAO_P2 = "PUBLICO - P2";
     public static final String DESCRICAO_P3 = "PUBLICO - P3";
     public static final String DESCRICAO_P4 = "PUBLICO - P4";
+    
+    public static final String DESCRICAO_SUB_R1 = "R1";
+    public static final String DESCRICAO_SUB_R2 = "R2";
+    public static final String DESCRICAO_SUB_R3 = "R3";
+    public static final String DESCRICAO_SUB_R4 = "R4";
+
+    public static final String DESCRICAO_SUB_C1 = "C1";
+    public static final String DESCRICAO_SUB_C2 = "C2";
+    public static final String DESCRICAO_SUB_C3 = "C3";
+    public static final String DESCRICAO_SUB_C4 = "C4";
+    
+    public static final String DESCRICAO_SUB_I1 = "I1";
+    public static final String DESCRICAO_SUB_I2 = "I2";
+    public static final String DESCRICAO_SUB_I3 = "I3";
+    public static final String DESCRICAO_SUB_I4 = "I4";
+    
+    public static final String DESCRICAO_SUB_P1 = "P1";
+    public static final String DESCRICAO_SUB_P2 = "P2";
+    public static final String DESCRICAO_SUB_P3 = "P3";
+    public static final String DESCRICAO_SUB_P4 = "P4";
 
     static {
     	SUBCATEGORIA_ZERO = new Subcategoria();
@@ -315,6 +335,29 @@ public class Subcategoria extends ObjetoTransacao {
 		else if (descricao.equals(DESCRICAO_P3)) return PUBLICA_P3;
 		else return PUBLICA_P4;
 	}
+	
+	public static String getDescricaoSubcategoria(Integer id) {
+        if (id.equals(RESIDENCIAL_R1)) return DESCRICAO_SUB_R1;
+        else if (id.equals(RESIDENCIAL_R2)) return DESCRICAO_SUB_R2;
+        else if (id.equals(RESIDENCIAL_R3)) return DESCRICAO_SUB_R3;
+        else if (id.equals(RESIDENCIAL_R4)) return DESCRICAO_SUB_R4;
+        
+        else if (id.equals(COMERCIAL_C1)) return DESCRICAO_SUB_C1;
+        else if (id.equals(COMERCIAL_C2)) return DESCRICAO_SUB_C2;
+        else if (id.equals(COMERCIAL_C3)) return DESCRICAO_SUB_C3;
+        else if (id.equals(COMERCIAL_C4)) return DESCRICAO_SUB_C4;
+        
+        else if (id.equals(INDUSTRIAL_I1)) return DESCRICAO_SUB_I1;
+        else if (id.equals(INDUSTRIAL_I2)) return DESCRICAO_SUB_I2;
+        else if (id.equals(INDUSTRIAL_I3)) return DESCRICAO_SUB_I3;
+        else if (id.equals(INDUSTRIAL_I4)) return DESCRICAO_SUB_I4;
+        
+        else if (id.equals(PUBLICA_P1)) return DESCRICAO_SUB_P1;
+        else if (id.equals(PUBLICA_P2)) return DESCRICAO_SUB_P2;
+        else if (id.equals(PUBLICA_P3)) return DESCRICAO_SUB_P3;
+        else return DESCRICAO_SUB_P4;
+    }
+	
 	
 	public boolean isR1() {
 		return this.id.intValue() == RESIDENCIAL_R1;

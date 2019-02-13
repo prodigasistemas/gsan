@@ -17,6 +17,7 @@ public class ImovelControleAtualizacaoCadastral {
 	private Date dataAprovacao;
 	private Date dataProcessamento;
 	private Date dataPreAprovacao;
+	private Date dataLiberacaoProcessamento;
 
 	private SituacaoAtualizacaoCadastral situacaoAtualizacaoCadastral;
 
@@ -185,4 +186,13 @@ public class ImovelControleAtualizacaoCadastral {
 	public void setDataReprovacaoLote(Date dataReprovacaoLote) {
 		this.dataReprovacaoLote = dataReprovacaoLote;
 	}
+
+	public Date getDataLiberacaoProcessamento() {
+		return dataLiberacaoProcessamento;
+	}
+
+	public void setDataLiberacaoProcessamento(Date dataLiberacaoProcessamento) {
+		this.dataLiberacaoProcessamento = dataLiberacaoProcessamento;
+	}
+	
 }

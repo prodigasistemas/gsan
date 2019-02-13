@@ -64,6 +64,7 @@ import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
 import gcom.faturamento.consumotarifa.FiltroConsumoTarifaCategoria;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
@@ -142,6 +143,7 @@ import gcom.micromedicao.SituacaoTransmissaoLeitura;
 import gcom.micromedicao.consumo.ConsumoAnormalidade;
 import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.ConsumoTipo;
+import gcom.micromedicao.consumo.FiltroComunicadoEmitirConta;
 import gcom.micromedicao.consumo.FiltroConsumoAnormalidade;
 import gcom.micromedicao.consumo.FiltroConsumoHistorico;
 import gcom.micromedicao.consumo.LigacaoTipo;
@@ -15861,4 +15863,22 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
         
         return situacoes != null && situacoes.size() > 0; 
     }
+	
+	public ComunicadoEmitirConta pesquisarComunicado(Integer idImovel, Integer tipoComunicado) throws ControladorException {
+		FiltroComunicadoEmitirConta filtro = new FiltroComunicadoEmitirConta(FiltroComunicadoEmitirConta.REFERENCIA);
+		
+		filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.IMOVEL_ID, idImovel));
+		filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.TIPO_COMUNICADO, tipoComunicado));	
+		
+		return  (ComunicadoEmitirConta) getControladorUtil().pesquisar(filtro, ComunicadoEmitirConta.class.getName()).iterator().next();
+		
+	}
+	
+	public ComunicadoEmitirConta pesquisarUltimoComunicadoGerado(Integer idImovel, Integer tipoComunicado) throws ControladorException {
+		try {
+			return repositorioFaturamento.pesquisarUltimoComunicadoGerado(idImovel, tipoComunicado);
+		} catch (Exception e) {
+			throw new ControladorException("Erro ao pesquisar ultimo comunicado gerado", e);
+		}
+	}
 }

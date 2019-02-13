@@ -118,7 +118,15 @@ public interface IControladorAtualizacaoCadastral {
     
     public boolean houveMudancaSubcategoria(Integer idImovel) throws ControladorException;
     
-    public boolean isImovelAtualizadoComAlteracaoFaturamento(Integer idImovel) throws ControladorException;
+    public boolean isImovelAprovadoComAlteracaoFaturamento(Integer idImovel) throws ControladorException;
     
     public boolean isAtualizadaoAntesFaturamento(Integer idImovel, Integer referenciaFaturamento) throws ControladorException;
+    
+    public String[] getDescricaoMudancaCategoria(Integer idImovel) throws ControladorException;
+    
+    public String[] getDescricaoMudancaSubcategoria(Integer idImovel) throws ControladorException;
+    
+    public String[] getDescricaoMudancaEconomiasPorSubcategoria(Integer idImovel) throws ControladorException;
+    
+//    public boolean existeComunicadoIrregularidadeCadastro(Integer idImovel);
 }

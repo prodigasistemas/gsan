@@ -59,6 +59,7 @@ public class ConsultarImovelActionForm extends ValidatorActionForm {
 	private String tipoCoberturaDadosCadastrais;
 	private String dataProcessamento;
 	private String observacaoCategoriaDadosCadastrais;
+	private String dataEmissaoComunicadoIrregularidadeFaturamento;
 	
 	
 	private String indicadorNivelInstalacaoEsgotoDadosCadastrais;
@@ -4069,4 +4070,14 @@ public class ConsultarImovelActionForm extends ValidatorActionForm {
 	}
 
 
+	public String getDataEmissaoComunicadoIrregularidadeFaturamento() {
+		return dataEmissaoComunicadoIrregularidadeFaturamento;
+	}
+
+
+	public void setDataEmissaoComunicadoIrregularidadeFaturamento(String dataEmissaoComunicadoIrregularidadeFaturamento) {
+		this.dataEmissaoComunicadoIrregularidadeFaturamento = dataEmissaoComunicadoIrregularidadeFaturamento;
+	}
+
+	
 }
