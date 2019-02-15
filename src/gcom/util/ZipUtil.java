@@ -1,12 +1,15 @@
 package gcom.util;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
@@ -302,5 +305,33 @@ public class ZipUtil {
 		sos.close();
 
 		arquivoZIP.delete();
+	}
+	
+	public static void salvarArquivoZip(StringBuilder arquivo, String nomeZip, File compactadoTipo, File leituraTipo)
+			throws FileNotFoundException, IOException {
+		
+//		File compactadoTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".zip");
+//		File leituraTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") +nomeZip + ".txt");
+		BufferedWriter out = null;
+		ZipOutputStream zos = null;
+
+		System.out.println("Gerando arquivo " + leituraTipo.getAbsolutePath().toString());
+		if (arquivo != null && arquivo.length() != 0) {
+			zos = new ZipOutputStream(new FileOutputStream(compactadoTipo));
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leituraTipo.getAbsolutePath())));
+			out.write(arquivo.toString());
+			out.flush();
+			ZipUtil.adicionarArquivo(zos, leituraTipo);
+			zos.close();
+			leituraTipo.delete();
+			out.close();
+		}
+		
+		out = null;
+		zos = null;
+		nomeZip = null;
+		compactadoTipo = null;
+		leituraTipo = null;
+		arquivo = null;
 	}
 }

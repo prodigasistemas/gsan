@@ -1277,7 +1277,9 @@ public interface IControladorFaturamento {
 	
 	public boolean isImovelEmsituacaoEspecialFaturamento(Integer idImovel, Integer anoMesReferencia) throws ControladorException;
 	
-	public ComunicadoEmitirConta pesquisarComunicado(Integer idImovel, Integer tipo) throws ControladorException;
+	public ComunicadoEmitirConta pesquisarComunicadoNaoEmitido(Integer idImovel, Integer tipo) throws ControladorException;
 	
 	public ComunicadoEmitirConta pesquisarUltimoComunicadoGerado(Integer idImovel, Integer tipoComunicado) throws ControladorException;
+	
+	public Collection<ComunicadoEmitirConta> pesquisarComunicadosNaoEmitidos(Integer tipoComunicado) throws ControladorException;
 }

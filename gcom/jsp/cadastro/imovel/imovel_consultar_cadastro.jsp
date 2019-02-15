@@ -776,7 +776,7 @@ function carregaMaps() {
 						</tr>
 						<tr>
 							<td height="10" align="left">
-								<div class="style9"><strong>Data geração comunicado faturamento:</strong></div>
+								<div class="style9"><strong>Data geração TAC:</strong></div>
 							</td>
 							<td align="left">
 								<div class="style9">

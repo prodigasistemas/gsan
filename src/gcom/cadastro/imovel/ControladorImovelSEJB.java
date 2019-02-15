@@ -7215,15 +7215,11 @@ public class ControladorImovelSEJB extends ControladorComum {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
-	public String consultarClienteUsuarioImovel(Integer idImovel)
-			throws ControladorException {
+	public String consultarNomeClienteUsuarioImovel(Integer idImovel) throws ControladorException {
 		String nomeClienteUsuario = null;
 
 		try {
-
-			nomeClienteUsuario = this.repositorioImovel
-					.consultarClienteUsuarioImovel(idImovel);
-
+			nomeClienteUsuario = this.repositorioImovel.consultarNomeClienteImovel(idImovel, ClienteRelacaoTipo.USUARIO);
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
@@ -9967,7 +9963,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 	public Cliente consultarClienteUsuarioImovel(Imovel imovel)
 			throws ControladorException {
 		try {
-			return repositorioImovel.consultarClienteUsuarioImovel(imovel);
+			return repositorioImovel.consultarClienteImovel(imovel, ClienteRelacaoTipo.USUARIO);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -16167,7 +16163,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 		String data = Util.formatarDataComTracoAAAAMMDD(new Date());
 		String nomeRelatorio = "contrato_adesao_"+ idImovel + data + ".pdf";
 		
-		String endereco = getControladorEndereco().obterEnderecoCorrespondenciaImovel(idImovel);
+		String endereco = getControladorEndereco().obterDescricaoEnderecoImovel(idImovel);
 		return new ContratoAdesaoimovelDTO(nomeRelatorio, cliente.getNome(), idImovel.toString(), "Belem", endereco, Util.formatarDataComBarraDDMMAAAA(new Date()));
 	}
 	
@@ -16302,4 +16298,25 @@ public class ControladorImovelSEJB extends ControladorComum {
         else
             return false;
     }
+	
+	public Cliente consultarClienteResponsavel(Imovel imovel) throws ControladorException {
+		try {
+			return repositorioImovel.consultarClienteImovel(imovel, ClienteRelacaoTipo.RESPONSAVEL);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	public String consultarNomeClienteResponsavelImovel(Integer idImovel) throws ControladorException {
+		String nomeClienteUsuario = null;
+
+		try {
+			nomeClienteUsuario = this.repositorioImovel.consultarNomeClienteImovel(idImovel, ClienteRelacaoTipo.RESPONSAVEL);
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+
+		return nomeClienteUsuario;
+	}
 }

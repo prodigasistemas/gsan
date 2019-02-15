@@ -16,6 +16,7 @@ import java.util.Map;
 
 public interface ControladorUtilLocal extends javax.ejb.EJBLocalObject {
 
+	@SuppressWarnings("rawtypes")
 	public Object obterPorId(Class classe, Integer id) throws ControladorException;
 	
 	@SuppressWarnings("rawtypes")
@@ -103,5 +104,8 @@ public interface ControladorUtilLocal extends javax.ejb.EJBLocalObject {
 	
 	public String getCaminhoDownloadArquivos(String modulo);
 	
+	@SuppressWarnings("rawtypes")
 	public Collection listar(Class tipo) throws ControladorException;
+	
+	public void salvarArquivoZip(StringBuilder arquivo, String nomeZip, String diretorio) throws ControladorException;
 }

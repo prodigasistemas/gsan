@@ -13370,7 +13370,7 @@ public class Fachada {
 
 	public String consultarClienteUsuarioImovel(Integer idImovel) {
 		try {
-			return this.getControladorImovel().consultarClienteUsuarioImovel(idImovel);
+			return this.getControladorImovel().consultarNomeClienteUsuarioImovel(idImovel);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -40214,6 +40214,14 @@ public class Fachada {
 		}
 	}
 	
+	public void aprovarImovel(Integer idImovel) {
+		try {
+			getControladorAtualizacaoCadastral().aprovarImovel(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 	public boolean possuiInformacoesFiscalizacao(ImovelControleAtualizacaoCadastral imovelControle) {
 		try {
 			return getControladorAtualizacaoCadastral().possuiInformacoesFiscalizacao(imovelControle);
@@ -40353,14 +40361,6 @@ public class Fachada {
 	public boolean isAtualizadaoAntesFaturamento(Integer idImovel, Integer referenciaFaturamento) throws ControladorException {
 		try {
 			return getControladorAtualizacaoCadastral().isAtualizadaoAntesFaturamento(idImovel, referenciaFaturamento);
-		} catch (Exception e) {
-			throw new FachadaException(e.getMessage(), e);
-		}
-	}
-	
-	public ComunicadoEmitirConta pesquisarComunicado(Integer idImovel, Integer tipo) {
-		try {
-			return getControladorFaturamento().pesquisarComunicado(idImovel, tipo);
 		} catch (Exception e) {
 			throw new FachadaException(e.getMessage(), e);
 		}

@@ -2416,4 +2416,25 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         return retorno;
     }
 	
+	@SuppressWarnings("unchecked")
+    public List<ImovelSubcategoriaRetorno> obterSubcategoriasRetorno(Integer idImovel) throws ErroRepositorioException {
+        List<ImovelSubcategoriaRetorno> retorno = null;
+        StringBuilder sql =  new StringBuilder();
+        Session session = HibernateUtil.getSession();
+        try {
+            sql.append("SELECT retorno FROM ImovelSubcategoriaRetorno retorno ")
+                .append(" inner join fetch retorno.imovel imovel ")
+                .append(" inner join fetch retorno.subcategoria subcategoria ")
+                .append(" inner join fetch subcategoria.categoria categoria ")
+                .append(" WHERE imovel.id = :id ");
+            retorno = (List<ImovelSubcategoriaRetorno>) session.createQuery(sql.toString()).setInteger("id", idImovel).list();
+
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar imovel controle por ids.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return retorno;
+    }
+	
 }

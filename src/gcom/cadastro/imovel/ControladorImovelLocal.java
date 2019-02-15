@@ -280,7 +280,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 
 	public Imovel consultarImovelHistoricoFaturamento(Integer idImovel) throws ControladorException;
 
-	public String consultarClienteUsuarioImovel(Integer idImovel) throws ControladorException;
+	public String consultarNomeClienteUsuarioImovel(Integer idImovel) throws ControladorException;
 
 	public Cliente consultarClienteUsuarioImovel(Imovel imovel) throws ControladorException;
 
@@ -758,4 +758,8 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public Short pesquisarObterQuantidadeEconomias(Imovel imovel, Categoria categoria) throws ControladorException;
 	
 	public boolean isImovelHidrometrado(Integer idImovel) throws ErroRepositorioException;
+	
+	public Cliente consultarClienteResponsavel(Imovel imovel) throws ControladorException;
+	
+	public String consultarNomeClienteResponsavelImovel(Integer idImovel) throws ControladorException;
 }

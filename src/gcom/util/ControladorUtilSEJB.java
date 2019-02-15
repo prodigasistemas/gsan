@@ -19,6 +19,7 @@ import gcom.util.filtro.ParametroSimples;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -647,5 +648,21 @@ public class ControladorUtilSEJB implements SessionBean {
             sessionContext.setRollbackOnly();
             throw new ControladorException("erro.sistema", ex);
         }
+	}
+	
+	public void salvarArquivoZip(StringBuilder arquivo, String nomeZip, String diretorio) throws ControladorException {
+		
+		File leituraTipo = new File(this.getCaminhoDownloadArquivos(diretorio) +nomeZip + ".txt");
+		File compactadoTipo = new File(this.getCaminhoDownloadArquivos(diretorio) + nomeZip + ".zip");
+
+		try {
+			ZipUtil.salvarArquivoZip(arquivo, nomeZip, compactadoTipo, leituraTipo);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new ControladorException("Erro ao salvar arquivo zip: " + compactadoTipo.getAbsolutePath(), e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new ControladorException("Erro ao salvar arquivo zip: " + compactadoTipo.getAbsolutePath(), e);
+		}
 	}
 }

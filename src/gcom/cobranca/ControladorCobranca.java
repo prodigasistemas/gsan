@@ -32793,7 +32793,7 @@ public class ControladorCobranca extends ControladorComum {
 				BigDecimal valor = new BigDecimal(0);
 
 				String inscricao = getControladorImovel().pesquisarInscricaoImovel(cobrancaDocumento.getImovel().getId());
-				String clienteUsuario = getControladorImovel().consultarClienteUsuarioImovel(cobrancaDocumento.getImovel().getId());
+				String clienteUsuario = getControladorImovel().consultarNomeClienteUsuarioImovel(cobrancaDocumento.getImovel().getId());
 				String endereco = getControladorEndereco().pesquisarEndereco(cobrancaDocumento.getImovel().getId());
 
 				String ruaComplementoCorrespondencia = null;
@@ -49293,7 +49293,7 @@ public class ControladorCobranca extends ControladorComum {
 			for (CobrancaDocumento cobrancaDocumento : colecaoDocumentoCobranca) {
 
 				String inscricao = getControladorImovel().pesquisarInscricaoImovel(cobrancaDocumento.getImovel().getId());
-				String clienteUsuario = getControladorImovel().consultarClienteUsuarioImovel(cobrancaDocumento.getImovel().getId());
+				String clienteUsuario = getControladorImovel().consultarNomeClienteUsuarioImovel(cobrancaDocumento.getImovel().getId());
 				String endereco = getControladorEndereco().pesquisarEndereco(cobrancaDocumento.getImovel().getId());
 
 				String codigoRota = cobrancaDocumento.getImovel().getQuadra().getRota().getCodigo().toString();
@@ -61983,7 +61983,7 @@ public class ControladorCobranca extends ControladorComum {
 	private AvisoCorteDTO montarAvisoCorte(CobrancaDocumento documento) throws ControladorException {
 		AvisoCorteDTO aviso = new AvisoCorteDTO();
 		aviso.setImovel(documento.getImovel().getId());
-		aviso.setCliente(getControladorImovel().consultarClienteUsuarioImovel(documento.getImovel().getId()));
+		aviso.setCliente(getControladorImovel().consultarNomeClienteUsuarioImovel(documento.getImovel().getId()));
 		aviso.setInscricao(getControladorImovel().pesquisarInscricaoImovel(documento.getImovel().getId()));
 		aviso.setCodigoRota(documento.getImovel().getQuadra().getRota().getCodigo());
 		aviso.setSequencialRota(documento.getImovel().getNumeroSequencialRota());

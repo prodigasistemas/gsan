@@ -234,7 +234,7 @@ public interface IRepositorioImovel {
 	@SuppressWarnings("rawtypes")
 	public Collection consultarImovelHistoricoFaturamento(Integer idImovel) throws ErroRepositorioException;
 
-	public String consultarClienteUsuarioImovel(Integer idImovel) throws ErroRepositorioException;
+	public String consultarNomeClienteImovel(Integer idImovel, Short relacaoTipo) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection consultarContasImovel(Integer idImovel) throws ErroRepositorioException;
@@ -366,7 +366,7 @@ public interface IRepositorioImovel {
 
 	public Collection<Integer> pesquisarTodosIdsPerfilImovel() throws ErroRepositorioException;
 
-	public Cliente consultarClienteUsuarioImovel(Imovel imovel) throws ErroRepositorioException;
+	public Cliente consultarClienteImovel(Imovel imovel, Short relacaoTipo) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovelClientesEspeciaisRelatorio(String idUnidadeNegocio, String idGerenciaRegional, String idLocalidadeInicial,

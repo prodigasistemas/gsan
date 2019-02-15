@@ -70,7 +70,7 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		if (imovelControle.isEmFiscalizacao()) {
 			getFachada().atualizarSituacaoImovelControle(imovelControle.getImovel().getId(), SituacaoAtualizacaoCadastral.FISCALIZADO);
 		} else if (imovelControle.isPreAprovado() || imovelControle.isFiscalizado()) {
-			getFachada().atualizarSituacaoImovelControle(imovelControle.getImovel().getId(), SituacaoAtualizacaoCadastral.APROVADO);
+			getFachada().aprovarImovel(imovelControle.getImovel().getId());
 		}
 	}
 

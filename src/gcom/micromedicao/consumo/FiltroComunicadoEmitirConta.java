@@ -16,7 +16,7 @@ public class FiltroComunicadoEmitirConta extends Filtro {
 	public final static String IMOVEL = "imovel";
 	public final static String IMOVEL_ID = "imovel.id";
 	public final static String REFERENCIA = "referencia";
-	public final static String INDICADOR_EMISSAO = "indicadorEmissao";
+	public final static String INDICADOR_EMISSAO = "indicadorEmitido";
 	public final static String TIPO_COMUNICADO = "tipoComunicado";
 	public final static String ULTIMA_ALTERACAO = "ultimaAlteracao";
 	

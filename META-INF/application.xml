@@ -923,6 +923,10 @@
 	</module>
 	
 	<module>
+		<ejb>BatchEmitirComunicadoAlteracaoCadastralMDB.jar</ejb>
+	</module>
+	
+	<module>
 		<java>gcom.jar</java>
 	</module>
 	

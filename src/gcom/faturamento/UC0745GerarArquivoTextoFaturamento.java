@@ -44,6 +44,7 @@ import gcom.cobranca.bean.CalcularValorDataVencimentoAnteriorHelper;
 import gcom.fachada.Fachada;
 import gcom.faturamento.bean.EmitirContaHelper;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.debito.DebitoCobrado;
@@ -127,18 +128,15 @@ public class UC0745GerarArquivoTextoFaturamento {
 	private IRepositorioFaturamento repositorioFaturamento;
 	private IRepositorioCobranca repositorioCobranca;
 	private SessionContext sessionContext;
-	private IControladorAtualizacaoCadastral controladorAtualizacaoCadastral;
 
 	private UC0745GerarArquivoTextoFaturamento(
 			IRepositorioFaturamento repositorioFaturamento,
 			SessionContext sessionContext,
-			IRepositorioCobranca repositorioCobranca,
-			IControladorAtualizacaoCadastral controladorAtualizacaoCadastral) {
+			IRepositorioCobranca repositorioCobranca) {
 
 		this.repositorioFaturamento = repositorioFaturamento;
 		this.repositorioCobranca = repositorioCobranca;
 		this.sessionContext = sessionContext;
-		this.controladorAtualizacaoCadastral = controladorAtualizacaoCadastral;
 	}
 
 	public static UC0745GerarArquivoTextoFaturamento getInstancia(
@@ -148,8 +146,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 			IControladorAtualizacaoCadastral controladorAtualizacaoCadastral) {
 
 		if (instancia == null) {
-			instancia = new UC0745GerarArquivoTextoFaturamento(
-					repositorioFaturamento, sessionContext, repositorioCobranca, controladorAtualizacaoCadastral);
+			instancia = new UC0745GerarArquivoTextoFaturamento(repositorioFaturamento, sessionContext, repositorioCobranca);
 		}
 		return instancia;
 	}
@@ -1166,12 +1163,13 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 * @param anoMesReferencia
 	 * @return StringBuilder
 	 * @throws ControladorException
+	 * @throws ErroRepositorioException 
 	 */
 	public Object[] gerarArquivoTexto(Imovel imovel, Conta conta,
 			Integer anoMesReferencia, Rota rota,
 			FaturamentoGrupo faturamentoGrupo,
 			SistemaParametro sistemaParametro, Date dataComando)
-			throws ControladorException {
+			throws ControladorException, ErroRepositorioException {
 
 		StringBuilder arquivoTexto = new StringBuilder();
 
@@ -1263,10 +1261,11 @@ public class UC0745GerarArquivoTextoFaturamento {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * [SB0001] - Gerar Arquivo Texto - Registro Tipo 01
+	 * @throws ErroRepositorioException 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public StringBuilder gerarArquivoTextoRegistroTipo01(Imovel imovel, Conta conta, Integer anoMesReferencia, Rota rota,
-			FaturamentoGrupo faturamentoGrupo, SistemaParametro sistemaParametro, CobrancaDocumento cobrancaDocumento) throws ControladorException {
+			FaturamentoGrupo faturamentoGrupo, SistemaParametro sistemaParametro, CobrancaDocumento cobrancaDocumento) throws ControladorException, ErroRepositorioException {
 
 		StringBuilder arquivoTextoRegistroTipo01 = new StringBuilder();
 
@@ -1743,7 +1742,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				arquivoTextoRegistroTipo01.append(Util.completaString("", 300));
 			}
 		} else {
-			if (controladorAtualizacaoCadastral.isImovelAprovadoComAlteracaoFaturamento(emitirContaHelper.getIdImovel())) {
+			if (repositorioFaturamento.possuiComunicadoNaoEmitido(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL)) {
 				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
 				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
 				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));

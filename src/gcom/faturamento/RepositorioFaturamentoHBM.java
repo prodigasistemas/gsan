@@ -60174,4 +60174,36 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 		return comunicado;
 	}
+	
+	public boolean possuiComunicadoNaoEmitido(Integer idImovel, Integer referencia, Integer tipoComunicado) throws ErroRepositorioException {
+		ComunicadoEmitirConta comunicado = null;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append(" select count(comunicado.id) from ComunicadoEmitirConta comunicado ")
+					.append(" inner join comunicado.imovel imovel ")
+					.append(" where imovel.id = :idImovel ")
+					.append(" and comunicado.tipoComunicado = :tipoComunicado ")
+					.append(" and comunicado.indicadorEmitido = :indicadorEmitido ")
+					.append(" and comunicado.referencia = :referencia ")
+					.append(" order by comunicado.dataGeracao desc ");
+
+			Integer qtd = (Integer) session.createQuery(consulta.toString())
+					   .setInteger("idImovel", idImovel)
+					   .setInteger("tipoComunicado", tipoComunicado)
+					   .setInteger("indicadorEmitido", ConstantesSistema.NAO)
+					   .setInteger("referencia", referencia).setMaxResults(1).uniqueResult();
+
+			if (qtd != null && qtd > 0) 
+				return true;
+			else return false;
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 }

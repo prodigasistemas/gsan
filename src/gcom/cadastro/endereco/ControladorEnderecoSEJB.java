@@ -1,17 +1,5 @@
 package gcom.cadastro.endereco;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
@@ -19,6 +7,7 @@ import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendiment
 import gcom.atendimentopublico.registroatendimento.RAReiteracao;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
+import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
@@ -55,6 +44,18 @@ import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.filtro.ComparacaoTextoCompleto;
 import gcom.util.filtro.ParametroSimples;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
 
 
 /**
@@ -6053,7 +6054,7 @@ public class ControladorEnderecoSEJB implements SessionBean {
 		}
 	}
 	
-	public String obterEnderecoCorrespondenciaImovel(Integer idImovel) throws ControladorException {
+	public String obterDescricaoEnderecoImovel(Integer idImovel) throws ControladorException {
 		StringBuilder enderecoFormatado = new StringBuilder();
 		String[] endereco = this.pesquisarEnderecoImovelDividido(idImovel);
 		
@@ -6064,6 +6065,19 @@ public class ControladorEnderecoSEJB implements SessionBean {
 						 .append("-").append(endereco[2]).append(", ")			// 2 - unidade federeção
 						 .append("CEP ").append(endereco[4]).append(".");		// 4 - CEP
 		return enderecoFormatado.toString();
+	}
+	
+	public String obterEnderecoCorrespondenciaImovel(Integer idImovel) throws ControladorException {
+		
+		Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
+		
+		if (imovel.getImovelContaEnvio().isEnviarClienteResponsavel()) {
+			System.out.println("pesquisr endereco imovel");
+			Cliente responsavel = getControladorImovel().consultarClienteResponsavel(imovel);
+			return getControladorCliente().obterEnderecoCorrespondencia(responsavel.getId()); 
+		} else {
+			return this.obterDescricaoEnderecoImovel(idImovel);
+		}
 	}
 
 }

@@ -9,8 +9,10 @@
 			</generator>
 		</id>
 		<property name="referencia" type="int" column="cmec_amreferencia" not-null="true" length="4"/>
+		<property name="dataGeracao" type="java.sql.Timestamp" column="cmec_tmgeracao" length="8"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cmec_tmultimaalteracao" length="8"/>
 		<property name="tipoComunicado" type="java.lang.Integer" column="cmec_tipo" length="4"/>
+		<property name="indicadorEmitido" type="java.lang.Short" column="cmec_icemitido" length="2"/>
 		
 		<!-- associations -->
 		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">

@@ -13764,7 +13764,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 */
 
-	public Cliente consultarClienteUsuarioImovel(Imovel imovel)
+	public Cliente consultarClienteImovel(Imovel imovel, Short clienteRelacaoTipo)
 
 	throws ErroRepositorioException {
 
@@ -13777,30 +13777,18 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		try {
 
 			consulta = "SELECT cli "
-
 					+ "from ClienteImovel cliimo "
-
 					+ "left join cliimo.cliente cli "
-					
 					+ "left join fetch cli.clienteFones cliFones "
-
 					+ "left join fetch cli.clienteTipo cliTipo "
-
 					+ "left join fetch cliTipo.esferaPoder esfPoder "
-
 					+ "where cliimo.imovel.id = :idImovel and cliimo.imovel.indicadorExclusao != 1 and "
-
-					+ "cliimo.clienteRelacaoTipo.id = :idClienteUsuario and cliimo.dataFimRelacao is null  ";
+					+ "cliimo.clienteRelacaoTipo.id = :tipoRelacao and cliimo.dataFimRelacao is null  ";
 
 			resultadoConsultar = (Cliente) session.createQuery(consulta)
-
-			.setInteger("idImovel", imovel.getId()).setShort(
-
-			"idClienteUsuario",
-
-			ClienteRelacaoTipo.USUARIO.shortValue())
-
-			.setMaxResults(1).uniqueResult();
+						.setInteger("idImovel", imovel.getId())
+						.setShort("tipoRelacao",clienteRelacaoTipo)
+						.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
 
@@ -13840,7 +13828,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 */
 
-	public String consultarClienteUsuarioImovel(Integer idImovel)
+	public String consultarNomeClienteImovel(Integer idImovel, Short relacaoTipo)
 
 	throws ErroRepositorioException {
 
@@ -13850,52 +13838,31 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		Session session = HibernateUtil.getSession();
 
-		String consulta = null;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
 
-			consulta = "SELECT cliente.nome "
+			consulta.append("SELECT cliente.nome ")
+					.append("from ClienteImovel clienteImovel ")
+					.append("left join clienteImovel.cliente cliente ")
+					.append("where clienteImovel.imovel.id = :idImovel and clienteImovel.imovel.indicadorExclusao != 1 and ")
+					.append("clienteImovel.clienteRelacaoTipo.id = :relacaoTipo and clienteImovel.dataFimRelacao is null ");
 
-					+ "from ClienteImovel clienteImovel "
-
-					+ "left join clienteImovel.cliente cliente "
-
-					+ "where clienteImovel.imovel.id = :idImovel and clienteImovel.imovel.indicadorExclusao != 1 and "
-
-					+ "clienteImovel.clienteRelacaoTipo.id = :idClienteUsuario and clienteImovel.dataFimRelacao is null ";
-
-			resultadoConsultar = session.createQuery(consulta).setInteger(
-
-			"idImovel", idImovel.intValue())
-
-			.setShort("idClienteUsuario",
-
-			ClienteRelacaoTipo.USUARIO.shortValue())
-
-			.uniqueResult();
+			resultadoConsultar = session.createQuery(consulta.toString())
+						.setInteger("idImovel", idImovel.intValue())
+						.setShort("relacaoTipo",relacaoTipo)
+						.uniqueResult();
 
 			if (resultadoConsultar != null) {
-
 				retorno = (String) resultadoConsultar;
-
 			}
 
 		} catch (HibernateException e) {
-
-			// levanta a exceção para a próxima camada
-
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-
 		} finally {
-
-			// fecha a sessão
-
 			HibernateUtil.closeSession(session);
-
 		}
-
 		return retorno;
-
 	}
 
 	// Alteração para não carregar contas na situação ERRO_PROCESSAMENTO

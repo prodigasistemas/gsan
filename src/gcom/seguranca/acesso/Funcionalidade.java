@@ -204,6 +204,8 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	
 	public static final int ENCERRAR_COMANDO_DE_COBRANCA_POR_RESULTADO = 16045;
 	
+	public static final int EMITIR_COMUNICADO_ALTERACAO_CADASTRAL = 16067;
+	
 	private Integer id;
 
 	private String descricao;

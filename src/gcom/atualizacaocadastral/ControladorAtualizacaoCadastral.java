@@ -49,9 +49,6 @@ import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FaturamentoGrupo;
-import gcom.faturamento.FaturamentoSituacaoMotivo;
-import gcom.faturamento.FaturamentoSituacaoTipo;
-import gcom.faturamento.bean.SituacaoEspecialFaturamentoHelper;
 import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.IConta;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
@@ -840,8 +837,6 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 		getControladorUtil().atualizar(imovelControle);
 		
-		if (this.isImovelAprovadoComAlteracaoFaturamento(imovelControle.getImovel().getId()))
-			this.gerarComunicadoIrregularidadeFaturamento(imovelControle.getImovel().getId());
 	}
 
 	public Collection<Integer> pesquisarImoveisPorSituacaoPeriodo(Date dataInicial, Date dataFinal, Integer idSituacaoCadastral)
@@ -1172,21 +1167,39 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 						getControladorUtil().atualizar(tabelaColuna);
 					}
 				}
+				this.aprovarImovel(imovel.getId());
 				
-				Date dataLiberacao = new Date();
-				if (isImovelComAlteracaoFaturamento(imovel.getId())) {
-					dataLiberacao = Util.adicionarNumeroDiasDeUmaData(dataLiberacao, 45);
-					getControladorUtil().inserir(new ComunicadoEmitirConta(imovel.getId(), 
-																			getControladorImovel().pesquisarGrupoImovel(imovel.getId()).getAnoMesReferencia(), 
-																			ComunicadoEmitirConta.IRREGULARIDADE_CADASTRO));
-				} 
-				
-				repositorioAtualizacaoCadastral.aprovarImovel(imovel.getId(), dataLiberacao);
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao aprovar imoveis em lote. " + e);
 			throw new ControladorException("Erro ao aprovar imoveis em lote.", e);
 		}
+	}
+	
+	public void aprovarImovel(Integer idImovel) throws ControladorException {
+			try {
+				Date dataLiberacao = new Date();
+
+				if (isImovelComAlteracaoFaturamento(idImovel)) {
+					dataLiberacao = Util.adicionarNumeroDiasDeUmaData(dataLiberacao, 45);
+					
+					getControladorUtil().inserir(new ComunicadoEmitirConta(idImovel, 
+																		getControladorImovel().pesquisarGrupoImovel(idImovel).getAnoMesReferencia(), 
+																		ComunicadoEmitirConta.ALTERACAO_CADASTRAL));
+				}
+			
+				ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel);
+				
+				controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.APROVADO));
+				controle.setDataAprovacao(new Date());
+				controle.setDataLiberacaoProcessamento(dataLiberacao);
+				//repositorioAtualizacaoCadastral.aprovarImovel(idImovel, dataLiberacao);
+				getControladorUtil().atualizar(controle);
+			} catch (Exception e) {
+				logger.error("Erro ao aprovar imovel " + idImovel);
+				throw new ControladorException("Erro ao aprovar imovel " + idImovel, e);
+			}
+		
 	}
 	
 	private void validarSubcategoria(Integer idImovelRetorno, TabelaColunaAtualizacaoCadastral tabelaColuna) {
@@ -1991,44 +2004,44 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	public void verificarAlteracoesSubcategorias(Integer idImovel) throws ControladorException {
-        try {
-            
-            FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
-            Integer referenciaFinal = null;
-            
-            boolean inserirSituacao = false;
-            
-            if (!getControladorFaturamento().isImovelEmsituacaoEspecialFaturamento(idImovel, grupo.getAnoMesReferencia())) {
-                
-                if (!getControladorImovel().isImovelHidrometrado(idImovel)) {
-                    
-                    if (houveMudancaCategoria(idImovel)) {
-                        inserirSituacao = true;
-                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
-                        
-                    } else if (houveMudancaoEconomiasPorCategoria(idImovel)){
-                        inserirSituacao = true;
-                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
-                        
-                    } else if (houveMudancaSubcategoria(idImovel)){
-                        inserirSituacao = true;
-                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 80);
-                    }
-                    
-                }  else if (houveMudancaCategoria(idImovel) || houveMudancaoEconomiasPorCategoria(idImovel) || houveMudancaSubcategoria(idImovel)) {
-                    inserirSituacao = true;
-                    referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
-                }
-                
-                if (inserirSituacao ) {
-                    this.inserisSituacaoEspecialFaturamentoAlteracaoSubcategoria(idImovel, FaturamentoSituacaoTipo.FATURAR_MEDIA_RECADASTRAMENTO, grupo.getAnoMesReferencia(), referenciaFinal);
-                }
-            }
-        } catch (ErroRepositorioException e) {
-            e.printStackTrace();
-        }
-    }
+//	public void verificarAlteracoesSubcategorias(Integer idImovel) throws ControladorException {
+//        try {
+//            
+//            FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
+//            Integer referenciaFinal = null;
+//            
+//            boolean inserirSituacao = false;
+//            
+//            if (!getControladorFaturamento().isImovelEmsituacaoEspecialFaturamento(idImovel, grupo.getAnoMesReferencia())) {
+//                
+//                if (!getControladorImovel().isImovelHidrometrado(idImovel)) {
+//                    
+//                    if (houveMudancaCategoria(idImovel)) {
+//                        inserirSituacao = true;
+//                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
+//                        
+//                    } else if (houveMudancaoEconomiasPorCategoria(idImovel)){
+//                        inserirSituacao = true;
+//                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
+//                        
+//                    } else if (houveMudancaSubcategoria(idImovel)){
+//                        inserirSituacao = true;
+//                        referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 80);
+//                    }
+//                    
+//                }  else if (houveMudancaCategoria(idImovel) || houveMudancaoEconomiasPorCategoria(idImovel) || houveMudancaSubcategoria(idImovel)) {
+//                    inserirSituacao = true;
+//                    referenciaFinal = Util.somaMesAnoMesReferencia(grupo.getAnoMesReferencia(), 2);
+//                }
+//                
+//                if (inserirSituacao ) {
+//                    this.inserisSituacaoEspecialFaturamentoAlteracaoSubcategoria(idImovel, FaturamentoSituacaoTipo.FATURAR_MEDIA_RECADASTRAMENTO, grupo.getAnoMesReferencia(), referenciaFinal);
+//                }
+//            }
+//        } catch (ErroRepositorioException e) {
+//            e.printStackTrace();
+//        }
+//    }
 	
 	public boolean isImovelAprovadoComAlteracaoFaturamento(Integer idImovel) throws ControladorException {
 		try {
@@ -2081,37 +2094,37 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         return alteracao;
     }
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void inserisSituacaoEspecialFaturamentoAlteracaoSubcategoria(Integer idImovel, Integer idFaturamentoSituacaoTipo, Integer anoMesReferenciaInicial, Integer anoMesReferenciaFinal) {
-        
-        Object[] dadosImoveis = new Object[]{idImovel, new Date()};
-        try {
-            
-            Collection<Object> imoveis = new ArrayList();
-            
-            imoveis.add(dadosImoveis);
-            
-            SituacaoEspecialFaturamentoHelper helper = new SituacaoEspecialFaturamentoHelper();
-            
-            helper.setIdImovel(idImovel.toString());
-            helper.setObservacao("ALTERACAO DE DADOS DE FATURAMENTO - ATUALIZACAO CADASTRAL");
-            helper.setObservacaoInforma("ALTERACAO DE DADOS DE FATURAMENTO - ATUALIZACAO CADASTRAL");
-            helper.setUsuarioLogado(Usuario.USUARIO_BATCH);
-            helper.setIdFaturamentoSituacaoMotivo(FaturamentoSituacaoMotivo.ATUALIZACAO_CADASTRAL_RECADASTRAMENTO.toString());
-            helper.setIdFaturamentoSituacaoTipo(idFaturamentoSituacaoTipo.toString());
-            helper.setNumeroConsumoAguaMedido(null);
-            helper.setNumeroConsumoAguaNaoMedido(this.obterConsumoFixadoSituacaoEspecialFaturamento(idImovel));
-            helper.setNumeroVolumeEsgotoMedido(null);
-            helper.setNumeroVolumeEsgotoNaoMedido(null);
-            helper.setQuantidadeDeImoveis("1");
-
-            getControladorFaturamento().inserirSituacaoEspecialFaturamento(helper, false, imoveis, idFaturamentoSituacaoTipo, anoMesReferenciaInicial, anoMesReferenciaFinal);
-        
-        } catch (ControladorException e) {
-            logger.error("ERRO AO INSERIR SITUACAO ESPECIAL FATURAMENTO - RECADASTRAMENTO [IMOVEL: " + idImovel + "]");
-            e.printStackTrace();
-        }
-    }
+//    @SuppressWarnings({ "rawtypes", "unchecked" })
+//    private void inserisSituacaoEspecialFaturamentoAlteracaoSubcategoria(Integer idImovel, Integer idFaturamentoSituacaoTipo, Integer anoMesReferenciaInicial, Integer anoMesReferenciaFinal) {
+//        
+//        Object[] dadosImoveis = new Object[]{idImovel, new Date()};
+//        try {
+//            
+//            Collection<Object> imoveis = new ArrayList();
+//            
+//            imoveis.add(dadosImoveis);
+//            
+//            SituacaoEspecialFaturamentoHelper helper = new SituacaoEspecialFaturamentoHelper();
+//            
+//            helper.setIdImovel(idImovel.toString());
+//            helper.setObservacao("ALTERACAO DE DADOS DE FATURAMENTO - ATUALIZACAO CADASTRAL");
+//            helper.setObservacaoInforma("ALTERACAO DE DADOS DE FATURAMENTO - ATUALIZACAO CADASTRAL");
+//            helper.setUsuarioLogado(Usuario.USUARIO_BATCH);
+//            helper.setIdFaturamentoSituacaoMotivo(FaturamentoSituacaoMotivo.ATUALIZACAO_CADASTRAL_RECADASTRAMENTO.toString());
+//            helper.setIdFaturamentoSituacaoTipo(idFaturamentoSituacaoTipo.toString());
+//            helper.setNumeroConsumoAguaMedido(null);
+//            helper.setNumeroConsumoAguaNaoMedido(this.obterConsumoFixadoSituacaoEspecialFaturamento(idImovel));
+//            helper.setNumeroVolumeEsgotoMedido(null);
+//            helper.setNumeroVolumeEsgotoNaoMedido(null);
+//            helper.setQuantidadeDeImoveis("1");
+//
+//            getControladorFaturamento().inserirSituacaoEspecialFaturamento(helper, false, imoveis, idFaturamentoSituacaoTipo, anoMesReferenciaInicial, anoMesReferenciaFinal);
+//        
+//        } catch (ControladorException e) {
+//            logger.error("ERRO AO INSERIR SITUACAO ESPECIAL FATURAMENTO - RECADASTRAMENTO [IMOVEL: " + idImovel + "]");
+//            e.printStackTrace();
+//        }
+//    }
     
     private Integer obterConsumoFixadoSituacaoEspecialFaturamento(Integer idImovel) {
         Integer consumo = 0;
@@ -2137,7 +2150,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         boolean retorno = false;
         try {
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
-            List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
+            List<ImovelSubcategoriaRetorno> novas = (List<ImovelSubcategoriaRetorno>) this.obterSubcategoriasRetorno(idImovel);
             
             if (originais != null && novas != null) {
                 
@@ -2164,7 +2177,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
         try {
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
-            List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
+            List<ImovelSubcategoriaRetorno> novas = this.obterSubcategoriasRetorno(idImovel);
             
             if (originais != null && novas != null) {
                 
@@ -2195,7 +2208,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         try {
             
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
-            List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
+            List<ImovelSubcategoriaRetorno> novas = (List<ImovelSubcategoriaRetorno>) this.obterSubcategoriasRetorno(idImovel);
             
             if (originais != null && novas != null) {
                 
@@ -2216,7 +2229,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
                     }
                 } else if (originais.size() < novas.size()) {
                     
-                    for (ImovelSubcategoria nova : novas) {
+                    for (ImovelSubcategoriaRetorno nova : novas) {
                         
                         Short qtdEconomiasNovas = getControladorImovel().pesquisarObterQuantidadeEconomias(new Imovel(idImovel), nova.getSubcategoria().getCategoria());
                         
@@ -2281,7 +2294,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         boolean retorno = false;
         try {
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
-            List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
+            List<ImovelSubcategoriaRetorno> novas = (List<ImovelSubcategoriaRetorno>) this.obterSubcategoriasRetorno(idImovel);
             
             if (originais != null && novas != null) {
                 
@@ -2292,7 +2305,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
                     
                     List<Integer> idsOriginais = this.obterIdsSubcategoriasOriginais(originais);
                     
-                    for (ImovelSubcategoria nova : novas) {
+                    for (ImovelSubcategoriaRetorno nova : novas) {
                         if (!idsOriginais.contains(nova.getSubcategoria().getId())) {
                             retorno = true;
                         }
@@ -2313,7 +2326,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
         try {
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
-            List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
+            List<ImovelSubcategoriaRetorno> novas = (List<ImovelSubcategoriaRetorno>) this.obterSubcategoriasRetorno(idImovel);
             
             if (originais != null && novas != null) {
                 
@@ -2351,10 +2364,10 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         return subcategorias;
     }
     
-    private List<Integer> obterIdsCategoriasNovas(List<ImovelSubcategoria> imoveis) {
+    private List<Integer> obterIdsCategoriasNovas(List<ImovelSubcategoriaRetorno> imoveis) {
         List<Integer> subcategorias = new ArrayList<Integer>();
         
-        for (ImovelSubcategoria subcategoria : imoveis) {
+        for (ImovelSubcategoriaRetorno subcategoria : imoveis) {
             subcategorias.add(subcategoria.getSubcategoria().getCategoria().getId());
         }
         
@@ -2371,15 +2384,15 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         return subcategorias;
     }
     
-    private List<Integer> obterIdsSubcategoriasNovas(List<ImovelSubcategoria> imoveis) {
-        List<Integer> subcategorias = new ArrayList<Integer>();
-        
-        for (ImovelSubcategoria subcategoria : imoveis) {
-            subcategorias.add(subcategoria.getSubcategoria().getId());
-        }
-        
-        return subcategorias;
-    }
+//    private List<Integer> obterIdsSubcategoriasNovas(List<ImovelSubcategoria> imoveis) {
+//        List<Integer> subcategorias = new ArrayList<Integer>();
+//        
+//        for (ImovelSubcategoria subcategoria : imoveis) {
+//            subcategorias.add(subcategoria.getSubcategoria().getId());
+//        }
+//        
+//        return subcategorias;
+//    }
     
     public Short pesquisarQuantidadeEconomiasOriginais(Integer idImovel, Integer idCategoria) throws ControladorException {
         try {
@@ -2394,6 +2407,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
             return repositorioAtualizacaoCadastral.obterSubcategoriasOriginais(idImovel);
         } catch (ErroRepositorioException e) {
             throw new ControladorException("Erro ao consultar subcategorias originais ", e);
+        }
+    }
+    
+    private List<ImovelSubcategoriaRetorno> obterSubcategoriasRetorno(Integer idImovel) throws ControladorException {
+        try {
+            return repositorioAtualizacaoCadastral.obterSubcategoriasRetorno(idImovel);
+        } catch (ErroRepositorioException e) {
+            throw new ControladorException("Erro ao consultar subcategorias retorno ", e);
         }
     }
     
@@ -2419,12 +2440,91 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     	try {
     		FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
     	
-    		ComunicadoEmitirConta comunicado = new ComunicadoEmitirConta(idImovel, grupo.getAnoMesReferencia(), ComunicadoEmitirConta.IRREGULARIDADE_CADASTRO);
+    		ComunicadoEmitirConta comunicado = new ComunicadoEmitirConta(idImovel, grupo.getAnoMesReferencia(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
 
 			getControladorUtil().inserir(comunicado);
 		} catch (ControladorException e) {
 			logger.error("Erro ao gerar comunicado de irregularidade de faturamento para o imovel" + idImovel, e);
 			throw new ControladorException("Erro ao gerar comunicado de irregularidade de faturamento para o imovel" + idImovel, e);
+		}
+    }
+    
+    public void emitirComunicadoAlteracaoCadastral(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException {
+    	int idUnidadeIniciada = 0;
+    	try {
+    		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidade, UnidadeProcessamento.FUNCIONALIDADE, 0);
+
+    		Collection<ComunicadoEmitirConta> comunicados = getControladorFaturamento().pesquisarComunicadosNaoEmitidos(ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
+			
+			Iterator<ComunicadoEmitirConta> itComunicados = comunicados.iterator();
+			
+			StringBuilder arquivo = new StringBuilder();
+			arquivo.append(comunicados.size());
+			String dataFormatada = Util.formatarDataAAAAMMDD(new Date());
+
+			while (itComunicados.hasNext()) {
+				
+				ComunicadoEmitirConta comunicado = itComunicados.next();
+				
+				arquivo.append(Util.completaString(comunicado.getImovel().getId().toString(), 9));
+				arquivo.append(Util.completaString(getControladorCliente().obterNomeClienteConta(comunicado.getImovel().getId()), 40));
+				arquivo.append(Util.completaString(getControladorEndereco().obterDescricaoEnderecoImovel(comunicado.getImovel().getId()), 120));
+				arquivo.append(Util.completaString(getControladorEndereco().obterEnderecoCorrespondenciaImovel(comunicado.getImovel().getId()), 120));
+				arquivo.append(descricaoAlteracoesComunicadoIrregularidadefaturamento(comunicado.getImovel().getId()));
+				arquivo.append(dataFormatada);
+				arquivo.append(System.getProperty("line.separator"));
+				
+				comunicado.setIndicadorEmitido(ConstantesSistema.SIM);
+				getControladorUtil().atualizar(comunicado);
+			}
+			
+			
+			
+			String nomeZip = "COMUNICADO_OCORRENCIA_IRREGULARIDADE_CADASTRO" + dataFormatada;
+			getControladorUtil().salvarArquivoZip(arquivo, nomeZip, "recadastramento");
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			
+		} catch (ControladorException e) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+			logger.error("Erro ao emitir comunicados não emitidos", e);
+			throw new ControladorException("Erro ao emitir comunicados não emitidos", e);
+		}  
+    }
+    
+    private String descricaoAlteracoesComunicadoIrregularidadefaturamento(Integer idImovel) throws ControladorException {
+    	StringBuilder arquivo = new StringBuilder();
+    	
+    	try {
+			if (this.houveMudancaCategoria(idImovel)) {
+				arquivo.append(Util.completaString("CATEGORIA", 40));
+				
+				String categorias[] = this.getDescricaoMudancaCategoria(idImovel);
+				
+				arquivo.append(Util.completaString(categorias[0], 30)); // DE
+				arquivo.append(Util.completaString(categorias[1], 30)); // PARA
+				
+			} else if (this.houveMudancaSubcategoria(idImovel)) {
+				arquivo.append(Util.completaString("SUBCATEGORIA", 40));
+				
+				String subcategorias[] = this.getDescricaoMudancaSubcategoria(idImovel);
+				
+				arquivo.append(Util.completaString(subcategorias[0], 30)); // DE
+				arquivo.append(Util.completaString(subcategorias[1], 30)); // PARA
+				
+			} else {
+				arquivo.append(Util.completaString("QUANTIDADE DE ECONOMIAS POR CATEGORIA", 40));
+
+				String economias[] = this.getDescricaoMudancaEconomiasPorSubcategoria(idImovel);
+				
+				arquivo.append(Util.completaString(economias[0], 30)); // DE
+				arquivo.append(Util.completaString(economias[1], 30)); // PARA
+			}
+			
+			return arquivo.toString();
+		} catch (ControladorException e) {
+			logger.error("Erro ao obter descricao das mudancas do faturamento - comunicado - " + idImovel, e);
+			throw new ControladorException("Erro ao obter descricao das mudancas do faturamento - comunicado - " + idImovel, e);
 		}
     }
 }

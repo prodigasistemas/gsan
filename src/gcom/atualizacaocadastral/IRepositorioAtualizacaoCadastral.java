@@ -172,4 +172,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public Short pesquisarQuantidadeEconomiasOriginais(Integer idImovel, Integer idCategoria) throws ErroRepositorioException;
 	
 	public List<ImovelSubcategoriaAtualizacaoCadastral> obterSubcategoriasOriginais(Integer idImovel) throws ErroRepositorioException;
+	
+    public List<ImovelSubcategoriaRetorno> obterSubcategoriasRetorno(Integer idImovel) throws ErroRepositorioException;
 }

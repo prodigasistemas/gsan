@@ -13,7 +13,7 @@ public class ComunicadoEmitirConta extends ObjetoTransacao {
 	private static final long serialVersionUID = -6870445042577196496L;
 
 	public final static Integer ALTO_CONSUMO = new Integer(0);
-	public final static Integer IRREGULARIDADE_CADASTRO = new Integer(1);
+	public final static Integer ALTERACAO_CADASTRAL = new Integer(1);
 	
 	private Integer id;
 	private Imovel imovel;
@@ -39,6 +39,7 @@ public class ComunicadoEmitirConta extends ObjetoTransacao {
 		this.referencia = referencia;
 		this.tipoComunicado = tipoComunicado;
 		this.ultimaAlteracao = new Date();
+		this.dataGeracao = new Date();
 		this.indicadorEmitido = ConstantesSistema.NAO;
 	}
 	

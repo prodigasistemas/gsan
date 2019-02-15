@@ -162,4 +162,8 @@ public class ImovelContaEnvio extends ObjetoTransacao {
 	public void setIndicadorClienteResponsavel(Short indicadorClienteResponsavel) {
 		this.indicadorClienteResponsavel = indicadorClienteResponsavel;
 	}
+	
+	public boolean isEnviarClienteResponsavel() {
+		return this.id.intValue() == ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL.intValue();
+	}
 }

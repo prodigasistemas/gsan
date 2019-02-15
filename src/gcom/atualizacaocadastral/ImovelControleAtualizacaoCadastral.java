@@ -188,7 +188,7 @@ public class ImovelControleAtualizacaoCadastral {
 	}
 
 	public Date getDataLiberacaoProcessamento() {
-		return dataLiberacaoProcessamento;
+		return this.dataLiberacaoProcessamento;
 	}
 
 	public void setDataLiberacaoProcessamento(Date dataLiberacaoProcessamento) {

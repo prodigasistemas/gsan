@@ -8749,7 +8749,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										.pesquisarInscricaoImovel(idImovel);
 								String nomeCliente = this
 										.getControladorImovel()
-										.consultarClienteUsuarioImovel(idImovel);
+										.consultarNomeClienteUsuarioImovel(idImovel);
 								String endereco = this.getControladorEndereco()
 										.pesquisarEndereco(idImovel);
 								FaturamentoGrupo faturamentoGrupo = this
@@ -15864,11 +15864,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
         return situacoes != null && situacoes.size() > 0; 
     }
 	
-	public ComunicadoEmitirConta pesquisarComunicado(Integer idImovel, Integer tipoComunicado) throws ControladorException {
+	public ComunicadoEmitirConta pesquisarComunicadoNaoEmitido(Integer idImovel, Integer tipoComunicado) throws ControladorException {
 		FiltroComunicadoEmitirConta filtro = new FiltroComunicadoEmitirConta(FiltroComunicadoEmitirConta.REFERENCIA);
 		
 		filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.IMOVEL_ID, idImovel));
 		filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.TIPO_COMUNICADO, tipoComunicado));	
+		filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.INDICADOR_EMISSAO, ConstantesSistema.NAO));
 		
 		return  (ComunicadoEmitirConta) getControladorUtil().pesquisar(filtro, ComunicadoEmitirConta.class.getName()).iterator().next();
 		
@@ -15880,5 +15881,20 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (Exception e) {
 			throw new ControladorException("Erro ao pesquisar ultimo comunicado gerado", e);
 		}
+	}
+	
+	public Collection pesquisarComunicadosNaoEmitidos(Integer tipoComunicado) throws ControladorException {
+		
+		try {
+			FiltroComunicadoEmitirConta filtro = new FiltroComunicadoEmitirConta();
+			
+			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.TIPO_COMUNICADO, tipoComunicado));
+			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.INDICADOR_EMISSAO, ConstantesSistema.NAO));
+
+			return  (Collection) getControladorUtil().pesquisar(filtro, ComunicadoEmitirConta.class.getName());
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao pesquisar comunicados não emitidos", e);
+		}
+		
 	}
 }

@@ -193,4 +193,6 @@ public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 	public Localidade pesquisarLocalidadeCliente(Integer idCliente) throws ControladorException;
 	
 	public String obterEnderecoCorrespondencia(Integer idCliente) throws ControladorException;
+	
+	public String obterNomeClienteConta(Integer idImovel) throws ControladorException;
 }
