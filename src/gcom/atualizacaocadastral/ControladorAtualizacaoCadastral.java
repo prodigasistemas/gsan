@@ -30,6 +30,7 @@ import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.FiltroImagemAtualizacaoCadastral;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelImagem;
 import gcom.cadastro.imovel.IImovel;
@@ -84,6 +85,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1190,10 +1192,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			
 				ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel);
 				
-				controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.APROVADO));
-				controle.setDataAprovacao(new Date());
+				if (!controle.isAprovado())
+					controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.APROVADO));
+				
+				if (controle.getDataAprovacao() == null)
+					controle.setDataAprovacao(new Date());
+				
 				controle.setDataLiberacaoProcessamento(dataLiberacao);
-				//repositorioAtualizacaoCadastral.aprovarImovel(idImovel, dataLiberacao);
+
 				getControladorUtil().atualizar(controle);
 			} catch (Exception e) {
 				logger.error("Erro ao aprovar imovel " + idImovel);
@@ -2436,15 +2442,24 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return retorno;
     }
     
-    private void gerarComunicadoIrregularidadeFaturamento(Integer idImovel) throws ControladorException {
+    private void emitirComunicadosAprovacoesAntigas() throws ControladorException {
+    	Integer idImovel = null; 
     	try {
-    		FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(idImovel);
-    	
-    		ComunicadoEmitirConta comunicado = new ComunicadoEmitirConta(idImovel, grupo.getAnoMesReferencia(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
-
-			getControladorUtil().inserir(comunicado);
-		} catch (ControladorException e) {
-			logger.error("Erro ao gerar comunicado de irregularidade de faturamento para o imovel" + idImovel, e);
+    		
+    		Collection<Integer> imoveisAprovados = repositorioAtualizacaoCadastral.pesquisarImoveisPorSituacaoPeriodo(
+    								SituacaoAtualizacaoCadastral.APROVADO, 
+    								Util.obterUltimaDataMes(01, 2018), 
+    								new Date());
+    		Iterator<Integer> itImoveis = imoveisAprovados.iterator();
+    		
+    		while (itImoveis.hasNext()) {
+    			idImovel = itImoveis.next();
+    			
+    			this.aprovarImovel(idImovel);
+    		}
+    		
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao emitir comunicados para imóveis previamente aprovados " + idImovel, e);
 			throw new ControladorException("Erro ao gerar comunicado de irregularidade de faturamento para o imovel" + idImovel, e);
 		}
     }
@@ -2452,6 +2467,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     public void emitirComunicadoAlteracaoCadastral(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException {
     	int idUnidadeIniciada = 0;
     	try {
+    		
+    		this.emitirComunicadosAprovacoesAntigas();
+    		
     		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidade, UnidadeProcessamento.FUNCIONALIDADE, 0);
 
     		Collection<ComunicadoEmitirConta> comunicados = getControladorFaturamento().pesquisarComunicadosNaoEmitidos(ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
