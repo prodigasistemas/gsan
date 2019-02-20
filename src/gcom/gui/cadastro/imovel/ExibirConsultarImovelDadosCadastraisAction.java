@@ -66,11 +66,15 @@ public class ExibirConsultarImovelDadosCadastraisAction extends GcomAction {
                 if (imovelControleAtualizacaoCadastral != null ) {
                 	if (imovelControleAtualizacaoCadastral.getDataProcessamento() != null)
                 		consultarImovelActionForm.setDataProcessamento(formatador.format(imovelControleAtualizacaoCadastral.getDataProcessamento()));
+                	else 
+                		consultarImovelActionForm.setDataProcessamento(null);
                 	
                 	ComunicadoEmitirConta comunicado = Fachada.getInstancia().pesquisarUltimoComunicadoGerado(imovel.getId(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
                 	
                 	if (comunicado != null)
                 		consultarImovelActionForm.setDataEmissaoComunicadoIrregularidadeFaturamento(formatador.format(comunicado.getDataGeracao()));
+                	else 
+                		consultarImovelActionForm.setDataEmissaoComunicadoIrregularidadeFaturamento(null);
                 }
                 
                 if (imovel.getIndicadorExclusao().equals(ConstantesSistema.SIM)) {

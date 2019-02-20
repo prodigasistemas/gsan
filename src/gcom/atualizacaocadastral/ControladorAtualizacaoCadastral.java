@@ -1194,6 +1194,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				
 				if (!controle.isAprovado())
 					controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.APROVADO));
+				else
+					dataLiberacao = controle.getDataAprovacao();
 				
 				if (controle.getDataAprovacao() == null)
 					controle.setDataAprovacao(new Date());
