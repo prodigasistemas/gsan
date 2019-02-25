@@ -1180,6 +1180,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	
 	public void aprovarImovel(Integer idImovel) throws ControladorException {
 			try {
+				ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel);
+
 				Date dataLiberacao = new Date();
 
 				if (isImovelComAlteracaoFaturamento(idImovel)) {
@@ -1188,14 +1190,16 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 					getControladorUtil().inserir(new ComunicadoEmitirConta(idImovel, 
 																		getControladorImovel().pesquisarGrupoImovel(idImovel).getAnoMesReferencia(), 
 																		ComunicadoEmitirConta.ALTERACAO_CADASTRAL));
+					
+					if (!controle.isAprovado())
+						controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.APROVADO));
+					
+				} else {
+					if (!controle.isAprovado())
+						controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.APROVADO));
+					else
+						dataLiberacao = controle.getDataAprovacao();
 				}
-			
-				ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel);
-				
-				if (!controle.isAprovado())
-					controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.APROVADO));
-				else
-					dataLiberacao = controle.getDataAprovacao();
 				
 				if (controle.getDataAprovacao() == null)
 					controle.setDataAprovacao(new Date());
@@ -2455,10 +2459,12 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     		Iterator<Integer> itImoveis = imoveisAprovados.iterator();
     		
     		while (itImoveis.hasNext()) {
-    			idImovel = itImoveis.next();
-    			
-    			this.aprovarImovel(idImovel);
-    		}
+                idImovel = itImoveis.next();
+                ComunicadoEmitirConta comunicado = getControladorFaturamento().pesquisarComunicadoNaoEmitido(idImovel, ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
+                        
+                if (comunicado == null)
+                    this.aprovarImovel(idImovel);
+            }
     		
 		} catch (ErroRepositorioException e) {
 			logger.error("Erro ao emitir comunicados para imóveis previamente aprovados " + idImovel, e);

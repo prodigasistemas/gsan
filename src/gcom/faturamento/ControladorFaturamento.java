@@ -15871,8 +15871,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.TIPO_COMUNICADO, tipoComunicado));	
 		filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.INDICADOR_EMISSAO, ConstantesSistema.NAO));
 		
-		return  (ComunicadoEmitirConta) getControladorUtil().pesquisar(filtro, ComunicadoEmitirConta.class.getName()).iterator().next();
+		Collection<ComunicadoEmitirConta> comunicados = getControladorUtil().pesquisar(filtro, ComunicadoEmitirConta.class.getName());
 		
+		if (comunicados != null && !comunicados.isEmpty())
+			return  comunicados.iterator().next();
+		else
+			return null;
 	}
 	
 	public ComunicadoEmitirConta pesquisarUltimoComunicadoGerado(Integer idImovel, Integer tipoComunicado) throws ControladorException {
