@@ -364,6 +364,20 @@ public class Util {
 		}
 		return anoMesFormatado;
 	}
+	
+	public static String formatarAnoMesParaMesAnoComBarra(int anoMes) {
+
+		String anoMesFormatado = "";
+		String anoMesRecebido = "" + anoMes;
+		if (anoMesRecebido.length() < 6) {
+			anoMesFormatado = anoMesRecebido;
+		} else {
+			String mes = anoMesRecebido.substring(4, 6);
+			String ano = anoMesRecebido.substring(0, 4);
+			anoMesFormatado = mes + "/" + ano;
+		}
+		return anoMesFormatado;
+	}
 
 	/**
 	 * Formata o anomes para o mesano sem barra e o no só com os 2 ultimos digitos 
@@ -5473,8 +5487,8 @@ public class Util {
 	 * 
 	 * @return O valor de inscricaoEstadualFormatado
 	 */
-	public static String formatarInscricaoEstadualCaema(String inscricaoEstadualCaema) {
-		String inscricaoEstadua = inscricaoEstadualCaema;
+	public static String formatarInscricaoEstadual(String inscricaoEstadual) {
+		String inscricaoEstadua = inscricaoEstadual;
 		String zeros = "";
 
 		if (inscricaoEstadua != null) {
@@ -6203,6 +6217,6 @@ public class Util {
 	}
     
     public static void main(String[] args) {
-		System.out.println(Util.getAnoMesComoInteger(new Date()));
+		System.out.println(Util.formatarAnoMesParaMesAnoComBarra(201908));
 	}
 }

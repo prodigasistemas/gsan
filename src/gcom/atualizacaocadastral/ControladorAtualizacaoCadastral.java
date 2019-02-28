@@ -30,7 +30,6 @@ import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.FiltroImagemAtualizacaoCadastral;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelImagem;
 import gcom.cadastro.imovel.IImovel;
@@ -47,9 +46,9 @@ import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.Subcategoria;
+import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.fachada.Fachada;
-import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.IConta;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
@@ -85,7 +84,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -2472,7 +2470,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
     }
     
-    public void emitirComunicadoAlteracaoCadastral(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException {
+    public void emitirTermoAlteracaoCadastral(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException {
     	int idUnidadeIniciada = 0;
     	try {
     		
@@ -2485,7 +2483,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			Iterator<ComunicadoEmitirConta> itComunicados = comunicados.iterator();
 			
 			StringBuilder arquivo = new StringBuilder();
-			arquivo.append(comunicados.size());
+			arquivo.append(getCabecalhoComunicadoAlteracaoCadqstral(comunicados.size())).append(System.getProperty("line.separator"));
 			String dataFormatada = Util.formatarDataAAAAMMDD(new Date());
 
 			while (itComunicados.hasNext()) {
@@ -2497,6 +2495,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				arquivo.append(Util.completaString(getControladorEndereco().obterDescricaoEnderecoImovel(comunicado.getImovel().getId()), 120));
 				arquivo.append(Util.completaString(getControladorEndereco().obterEnderecoCorrespondenciaImovel(comunicado.getImovel().getId()), 120));
 				arquivo.append(descricaoAlteracoesComunicadoIrregularidadefaturamento(comunicado.getImovel().getId()));
+				arquivo.append(Util.formatarAnoMesParaMesAnoComBarra(comunicado.getReferencia()));
 				arquivo.append(dataFormatada);
 				arquivo.append(System.getProperty("line.separator"));
 				
@@ -2504,9 +2503,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				getControladorUtil().atualizar(comunicado);
 			}
 			
-			
-			
-			String nomeZip = "COMUNICADO_OCORRENCIA_IRREGULARIDADE_CADASTRO" + dataFormatada;
+			String nomeZip = "TERMO_ALTERACAO_CADASTRAL_" + dataFormatada;
 			getControladorUtil().salvarArquivoZip(arquivo, nomeZip, "recadastramento");
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
@@ -2516,6 +2513,17 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			logger.error("Erro ao emitir comunicados não emitidos", e);
 			throw new ControladorException("Erro ao emitir comunicados não emitidos", e);
 		}  
+    }
+    
+    private String getCabecalhoComunicadoAlteracaoCadqstral(Integer qtdRegistros) throws ControladorException {
+    	StringBuilder cabecalho = new StringBuilder();
+    	SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
+    	
+    	cabecalho.append(Util.completaStringComZeroAEsquerda(qtdRegistros.toString(), 4));
+    	cabecalho.append(Util.completaString(Util.formatarCnpj(parametros.getCnpjEmpresa()), 18));
+    	cabecalho.append(Util.completaString(Util.formatarInscricaoEstadual(parametros.getInscricaoEstadual()), 12));
+    	
+    	return cabecalho.toString();
     }
     
     private String descricaoAlteracoesComunicadoIrregularidadefaturamento(Integer idImovel) throws ControladorException {

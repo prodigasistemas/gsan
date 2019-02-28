@@ -14,6 +14,7 @@ import gcom.faturamento.RepositorioFaturamentoHBM;
 import gcom.faturamento.bean.ContaSegundaViaDTO;
 import gcom.faturamento.bean.ContaSegundaViaHelper;
 import gcom.faturamento.bean.EmitirContaHelper;
+import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;
@@ -193,13 +194,13 @@ public class ContaSegundaViaBO {
 		try {
 			Object[] mensagens = null;
 			
-			if (fachada.isAtualizadaoAntesFaturamento(contaHelper.getIdImovel(), contaHelper.getAmReferencia()) 
-					&& fachada.isImovelAtualizadoComAlteracaoFaturamento(contaHelper.getIdImovel())) {
+			ComunicadoEmitirConta comunicado = fachada.pesquisarComunicado(contaHelper.getIdImovel(), contaHelper.getAmReferencia(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
+			if (comunicado != null) {
 				
 				mensagens = new Object[3];
-				mensagens[0] = "soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif";
-				mensagens[1] = "soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif";
-				mensagens[2] = "soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif";
+				mensagens[0] = "Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.";
+				mensagens[1] = "";
+				mensagens[2] = "";
 				
 			} else {
 				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), contaHelper.getIdLocalidade(), contaHelper.getIdSetorComercial());

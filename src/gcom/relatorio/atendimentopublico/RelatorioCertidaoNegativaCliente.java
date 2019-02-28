@@ -106,7 +106,7 @@ public class RelatorioCertidaoNegativaCliente extends TarefaRelatorio {
 			parametros.put("atendente", usuarioLogado.getNomeUsuario());
 			parametros.put("nomeEmpresa", "COMPANHIA DE SANEAMENTO AMBIENTAL DO MARANHÃO");
 			parametros.put("cnpjEmpresa", Util.formatarCnpj( sistemaParametro.getCnpjEmpresa()) );
-			parametros.put("inscricaoEstadual", Util.formatarInscricaoEstadualCaema( sistemaParametro.getInscricaoEstadual()) );
+			parametros.put("inscricaoEstadual", Util.formatarInscricaoEstadual( sistemaParametro.getInscricaoEstadual()) );
 			parametros.put("nomeRelatorio", "CERTIDÃO NEGATIVA DE DÉBITOS POR CLIENTE");
 			nomeRelatorio = ConstantesRelatorios.RELATORIO_CERTIDAO_NEGATIVA_CLIENTE_CAEMA;
 			

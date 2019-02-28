@@ -200,8 +200,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt.append(Util.completaString(Util.formatarData(new Date()), 10));
 								contaTxt.append(Util.completaString(localidade.getEnderecoFormatadoTituloAbreviado(), 120));
 								contaTxt.append(Util.completaString(localidade.getFone(), 9));
-								contaTxt.append(Util.completaString("06.274.757/0001-50", 18));
-								contaTxt.append(Util.completaString("12.050.537-1", 12));
+								contaTxt.append(Util.completaString(Util.formatarCnpj(sistemaParametro.getCnpjEmpresa()), 18));
+								contaTxt.append(Util.completaString(Util.formatarInscricaoEstadual(sistemaParametro.getInscricaoEstadual()), 12));
 								contaTxt = preencherUnidadeNegocio(contaTxt, localidade);
 								contaTxt.append(Util.adicionarZerosEsquedaNumero(4, emitirContaHelper.getCodigoSetorComercialConta().toString()));
 								contaTxt.append(Util.adicionarZerosEsquedaNumero(3, emitirContaHelper.getIdLocalidade().toString()));
@@ -1401,15 +1401,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			throws ControladorException {
 		String[] parmsPartesConta = obterMensagemDebitoConta3Partes(emitirContaHelper, sistemaParametro);
 		
-
-		if (getControladorAtualizacaoCadastral().isImovelAprovadoComAlteracaoFaturamento(emitirContaHelper.getIdImovel())) {
-			contaTxt.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
-			contaTxt.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
-			contaTxt.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
+		ComunicadoEmitirConta comunicado = getControladorFaturamento().pesquisarComunicadoNaoEmitido(emitirContaHelper.getIdImovel(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
+		
+		if (comunicado != null) {
+			contaTxt.append(Util.completaString("Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.", 100));
+			contaTxt.append(Util.completaString("", 100));
+			contaTxt.append(Util.completaString("", 100));
 			
-			emitirContaHelper.setMsgLinha1Conta("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif");
-			emitirContaHelper.setMsgLinha2Conta("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif");
-			emitirContaHelper.setMsgLinha3Conta("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif");
+			emitirContaHelper.setMsgLinha1Conta("Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.");
+			emitirContaHelper.setMsgLinha2Conta("");
+			emitirContaHelper.setMsgLinha3Conta("");
 		
 		} else if (isImovelEmDebito) {
 			contaTxt.append(Util.completaString(parmsPartesConta[0], 100));

@@ -1282,4 +1282,6 @@ public interface IControladorFaturamento {
 	public ComunicadoEmitirConta pesquisarUltimoComunicadoGerado(Integer idImovel, Integer tipoComunicado) throws ControladorException;
 	
 	public Collection<ComunicadoEmitirConta> pesquisarComunicadosNaoEmitidos(Integer tipoComunicado) throws ControladorException;
+	
+	public ComunicadoEmitirConta pesquisarComunicado(Integer idImovel, Integer referencia, Integer tipoComunicado) throws ControladorException;
 }

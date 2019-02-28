@@ -3,10 +3,10 @@
 <ejb-jar>
 	<enterprise-beans>
 		<message-driven>
-			<display-name>BatchEmitirComunicadoAlteracaoCadastralMDB</display-name>
-			<ejb-name>BatchEmitirComunicadoAlteracaoCadastralMDB</ejb-name>
+			<display-name>BatchEmitirTermoAlteracaoCadastralMDB</display-name>
+			<ejb-name>BatchEmitirTermoAlteracaoCadastralMDB</ejb-name>
 			<ejb-class>
-				gcom.batch.cadastro.BatchEmitirComunicadoAlteracaoCadastral
+				gcom.batch.cadastro.BatchEmitirTermoAlteracaoCadastral
 			</ejb-class>
 			<transaction-type>Container</transaction-type>
 			<message-driven-destination>
@@ -17,7 +17,7 @@
 	<assembly-descriptor>
 		<container-transaction>
 			<method>
-				<ejb-name>BatchEmitirComunicadoAlteracaoCadastralMDB</ejb-name>
+				<ejb-name>BatchEmitirTermoAlteracaoCadastralMDB</ejb-name>
 				<method-name>*</method-name>
 			</method>
 			<trans-attribute>NotSupported</trans-attribute>

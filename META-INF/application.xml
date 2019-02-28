@@ -923,7 +923,7 @@
 	</module>
 	
 	<module>
-		<ejb>BatchEmitirComunicadoAlteracaoCadastralMDB.jar</ejb>
+		<ejb>BatchEmitirTermoAlteracaoCadastralMDB.jar</ejb>
 	</module>
 	
 	<module>

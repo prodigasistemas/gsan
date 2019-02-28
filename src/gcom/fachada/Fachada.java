@@ -40373,4 +40373,12 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e);
 		}
 	}
+	
+	public ComunicadoEmitirConta pesquisarComunicado(Integer idImovel, Integer referencia, Integer tipoComunicado) {
+		try {
+			return getControladorFaturamento().pesquisarComunicado(idImovel, referencia, tipoComunicado);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
 }

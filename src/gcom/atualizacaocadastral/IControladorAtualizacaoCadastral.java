@@ -128,7 +128,7 @@ public interface IControladorAtualizacaoCadastral {
     
     public String[] getDescricaoMudancaEconomiasPorSubcategoria(Integer idImovel) throws ControladorException;
     
-    public void emitirComunicadoAlteracaoCadastral(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException;
+    public void emitirTermoAlteracaoCadastral(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException;
     
     public void aprovarImovel(Integer idImovel) throws ControladorException;
 }

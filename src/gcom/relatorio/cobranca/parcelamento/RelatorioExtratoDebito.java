@@ -110,7 +110,7 @@ public class RelatorioExtratoDebito extends TarefaRelatorio {
 			String endereco = localidade.getEnderecoFormatadoTituloAbreviado();
 			String telefone = Util.completaString(localidade.getFone(), 9);
 			String cnpj = Util.formatarCnpj(sistemaParametro.getCnpjEmpresa());
-			String inscricaoEstadual = Util.formatarInscricaoEstadualCaema(sistemaParametro.getInscricaoEstadual());
+			String inscricaoEstadual = Util.formatarInscricaoEstadual(sistemaParametro.getInscricaoEstadual());
 			/*
 			empresa = "Nº Fatura:"+numeroFatura+"    "+endereco+"\n"+
 				"Emitida em:"+dataEmissao+"   Cnpj:"+cnpj+"    Fone:"+telefone+"\n" +

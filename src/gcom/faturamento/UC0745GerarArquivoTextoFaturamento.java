@@ -1743,9 +1743,9 @@ public class UC0745GerarArquivoTextoFaturamento {
 			}
 		} else {
 			if (repositorioFaturamento.possuiComunicadoNaoEmitido(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL)) {
-				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
-				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
-				arquivoTextoRegistroTipo01.append(Util.completaString("soifwi fjweifj wifj so ifw ifjwfjwi fjsoifwifj weifjw ifjsoi fwifj weifjw ifjsoifwifj weifj wif", 100));
+				arquivoTextoRegistroTipo01.append(Util.completaString("Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.", 100));
+				arquivoTextoRegistroTipo01.append(Util.completaString("", 100));
+				arquivoTextoRegistroTipo01.append(Util.completaString("", 100));
 			} else {
 				String[] mensagemContaDividida = getControladorFaturamento().obterMensagemConta3Partes(emitirContaHelper, sistemaParametro);
 				if (mensagemContaDividida != null) {

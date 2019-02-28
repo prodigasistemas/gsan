@@ -1,6 +1,5 @@
 package gcom.batch.cadastro;
 
-import gcom.atualizacaocadastral.BatchAtualizacaoCadastralMDB;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -19,15 +18,15 @@ import javax.jms.ObjectMessage;
 
 import org.apache.log4j.Logger;
 
-public class BatchEmitirComunicadoAlteracaoCadastral implements MessageDrivenBean, MessageListener {
+public class BatchEmitirTermoAlteracaoCadastral implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = 1L;
 	
 	private Logger logger;
 	
-	public BatchEmitirComunicadoAlteracaoCadastral() {
+	public BatchEmitirTermoAlteracaoCadastral() {
 		super();
-		logger = Logger.getLogger(BatchEmitirComunicadoAlteracaoCadastral.class);
+		logger = Logger.getLogger(BatchEmitirTermoAlteracaoCadastral.class);
 	}
 
 	public void onMessage(Message message) {
@@ -38,7 +37,7 @@ public class BatchEmitirComunicadoAlteracaoCadastral implements MessageDrivenBea
 			
 			try {
 				
-				this.getControladorAtualizacaoCadastral().emitirComunicadoAlteracaoCadastral(
+				this.getControladorAtualizacaoCadastral().emitirTermoAlteracaoCadastral(
 						(Integer) ((Object[])objectMessage.getObject())[0],
 						(Usuario)((Object[])objectMessage.getObject())[1]);
 			} catch (Exception ce) {

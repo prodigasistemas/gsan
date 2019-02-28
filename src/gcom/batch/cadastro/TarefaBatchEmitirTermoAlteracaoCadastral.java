@@ -8,15 +8,15 @@ import gcom.util.agendadortarefas.AgendadorTarefas;
 
 import java.util.Collection;
 
-public class TarefaBatchEmitirComunicadoAlteracaoCadastral extends TarefaBatch {
+public class TarefaBatchEmitirTermoAlteracaoCadastral extends TarefaBatch {
 
 	private static final long serialVersionUID = 8564102611933688902L;
 
-	public TarefaBatchEmitirComunicadoAlteracaoCadastral(Usuario usuario, int idFuncionalidadeIniciada) {
+	public TarefaBatchEmitirTermoAlteracaoCadastral(Usuario usuario, int idFuncionalidadeIniciada) {
 		super(usuario, idFuncionalidadeIniciada);
 	}
 	
-	public TarefaBatchEmitirComunicadoAlteracaoCadastral() {
+	public TarefaBatchEmitirTermoAlteracaoCadastral() {
 		super(null, 0);
 	}
 
@@ -35,7 +35,7 @@ public class TarefaBatchEmitirComunicadoAlteracaoCadastral extends TarefaBatch {
 		
 		Usuario usuario = (Usuario) getParametro("usuario");
 		
-		enviarMensagemControladorBatch(ConstantesJNDI.BATCH_EMITIR_COMUNICADO_ALTERACAO_CADASTRAL, 
+		enviarMensagemControladorBatch(ConstantesJNDI.BATCH_EMITIR_TERMO_ALTERACAO_CADASTRAL, 
 				new Object[] {this.getIdFuncionalidadeIniciada(),usuario});
 		return null;
 	}

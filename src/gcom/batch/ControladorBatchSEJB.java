@@ -31,7 +31,7 @@ import gcom.batch.auxiliarbatch.CobrancaDocumentoControleGeracao;
 import gcom.batch.cadastro.TarefaBatchAtualizarCodigoDebitoAutomatico;
 import gcom.batch.cadastro.TarefaBatchEmitirBoletimCadastro;
 import gcom.batch.cadastro.TarefaBatchEmitirBoletos;
-import gcom.batch.cadastro.TarefaBatchEmitirComunicadoAlteracaoCadastral;
+import gcom.batch.cadastro.TarefaBatchEmitirTermoAlteracaoCadastral;
 import gcom.batch.cadastro.TarefaBatchExcluirImoveisDaTarifaSocial;
 import gcom.batch.cadastro.TarefaBatchGerarArquivoTextoAtualizacaoCadastral;
 import gcom.batch.cadastro.TarefaBatchGerarCartaTarifaSocial;
@@ -2459,7 +2459,7 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 					
 					case Funcionalidade.EMITIR_COMUNICADO_ALTERACAO_CADASTRAL: {
 
-						TarefaBatchEmitirComunicadoAlteracaoCadastral batchAtualizacaoCadastral = new TarefaBatchEmitirComunicadoAlteracaoCadastral(processoIniciado.getUsuario(),
+						TarefaBatchEmitirTermoAlteracaoCadastral batchAtualizacaoCadastral = new TarefaBatchEmitirTermoAlteracaoCadastral(processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizacaoCadastral));

@@ -4,10 +4,10 @@
 	<enterprise-beans>
 		<message-driven>
 			<ejb-name>
-				BatchEmitirComunicadoAlteracaoCadastralMDB
+				BatchEmitirTermoAlteracaoCadastralMDB
 			</ejb-name>
 			<destination-jndi-name>
-				BatchEmitirComunicadoAlteracaoCadastralMDB
+				BatchEmitirTermoAlteracaoCadastralMDB
 			</destination-jndi-name>
 		</message-driven>
 	</enterprise-beans>

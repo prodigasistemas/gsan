@@ -116,7 +116,7 @@ public class Relatorio2ViaConta extends TarefaRelatorio {
 				String endereco = localidade.getEnderecoFormatadoTituloAbreviado();
 				String telefone = Util.completaString(localidade.getFone(), 9);
 				String cnpj = Util.formatarCnpj(sistemaParametro.getCnpjEmpresa());
-				String inscricaoEstadual = Util.formatarInscricaoEstadualCaema(sistemaParametro.getInscricaoEstadual());
+				String inscricaoEstadual = Util.formatarInscricaoEstadual(sistemaParametro.getInscricaoEstadual());
 				String dataEmissao = Util.formatarData(new Date());
 				/*
 				empresa = "Nº Fatura:"+numeroFatura+"    "+endereco+"\n"+

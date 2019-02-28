@@ -118,7 +118,7 @@ public class RelatorioCertidaoNegativa extends TarefaRelatorio {
 			parametros.put("nomeRelatorio", "CERTIDÃO NEGATIVA DE DÉBITOS");
 			parametros.put("nomeEmpresa", "COMPAHIA DE SANEAMENTO AMBIENTAL DO MARANHÃO");
 			parametros.put("cnpjEmpresa", Util.formatarCnpj( sistemaParametro.getCnpjEmpresa()) );
-			parametros.put("inscricaoEstadual", Util.formatarInscricaoEstadualCaema( sistemaParametro.getInscricaoEstadual()) );
+			parametros.put("inscricaoEstadual", Util.formatarInscricaoEstadual( sistemaParametro.getInscricaoEstadual()) );
 			parametros.put("textoCertidaoNegativa",
 					"Pelo presente instrumento certificamos, para fins de direito, que revendo os nossos controles, não encontramos débitos referente ao imóvel acima especificado(s) até a presente data: "
 							+ Util.formatarData(new Date()) + ".");

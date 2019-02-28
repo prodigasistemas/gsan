@@ -15901,4 +15901,24 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 		
 	}
+	
+	public ComunicadoEmitirConta pesquisarComunicado(Integer idImovel, Integer referencia, Integer tipoComunicado) throws ControladorException {
+		try {
+			FiltroComunicadoEmitirConta filtro = new FiltroComunicadoEmitirConta();
+			
+			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.IMOVEL, idImovel));
+			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.REFERENCIA, referencia));
+			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.TIPO_COMUNICADO, tipoComunicado));
+
+			Collection<ComunicadoEmitirConta> comunicados = getControladorUtil().pesquisar(filtro, ComunicadoEmitirConta.class.getName());
+			
+			if (comunicados != null && !comunicados.isEmpty())
+				return  comunicados.iterator().next();
+			else
+				return null;
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao pesquisar comunicados não emitidos", e);
+		}
+	}
+	
 }
