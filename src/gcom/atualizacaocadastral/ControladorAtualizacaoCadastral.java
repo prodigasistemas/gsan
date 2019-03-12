@@ -1,6 +1,5 @@
 package gcom.atualizacaocadastral;
 
-
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiltroOrdemServico;

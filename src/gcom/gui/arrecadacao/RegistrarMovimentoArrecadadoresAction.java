@@ -341,9 +341,11 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
 					"/exibirRegistrarMovimentoArredadadoresAction.do");
 
 		} catch (IOException ex) {
+			ex.printStackTrace();
 			throw new ActionServletException("erro.importacao.nao_concluida");
 
 		} catch (NumberFormatException ex) {
+			ex.printStackTrace();
 			throw new ActionServletException("erro.importacao.nao_concluida");
 		} catch (FileUploadException e) {
 			throw new ActionServletException("erro.sistema", e);

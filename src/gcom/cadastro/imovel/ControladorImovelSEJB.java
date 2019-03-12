@@ -16124,16 +16124,16 @@ public class ControladorImovelSEJB extends ControladorComum {
 	
 	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) throws ControladorException {
 		ContratoAdesaoimovelDTO dto = null;
-		ContratoAdesao contratoDemanda = obterContratoAtivo(idImovel, ContratoTipo.ADESAO);
+		ContratoAdesao contratoAdesao = obterContratoAtivo(idImovel, ContratoTipo.ADESAO);
 		Cliente cliente = getControladorImovel().consultarClienteUsuarioImovel(new Imovel(idImovel));
-		if (contratoDemanda != null) {
+		if (contratoAdesao != null) {
 			
-			if (contratoDemanda.getClienteImovel().getCliente().getId().intValue() != cliente.getId().intValue()) {
-				finalizarContatoDemanda(idImovel, cliente);
+			if (contratoAdesao.getClienteImovel().getCliente().getId().intValue() != cliente.getId().intValue()) {
+				finalizarContato(idImovel, cliente, ContratoTipo.ADESAO);
 				gerarContatoAdesao(idImovel, cliente);
 				cliente = cliente;
 			}  else {
-				cliente = contratoDemanda.getClienteImovel().getCliente();
+				cliente = contratoAdesao.getClienteImovel().getCliente();
 			}
 		} else {
 			gerarContatoAdesao(idImovel, cliente);
@@ -16167,8 +16167,8 @@ public class ControladorImovelSEJB extends ControladorComum {
 		return new ContratoAdesaoimovelDTO(nomeRelatorio, cliente.getNome(), idImovel.toString(), "Belem", endereco, Util.formatarDataComBarraDDMMAAAA(new Date()));
 	}
 	
-	private void finalizarContatoDemanda(Integer idImovel, Cliente cliente) throws ControladorException {
-		ContratoAdesao contratoDemanda = this.obterContratoAtivo(idImovel, ContratoTipo.DEMANDA);
+	private void finalizarContato(Integer idImovel, Cliente cliente, Integer idContratoTipo) throws ControladorException {
+		ContratoAdesao contratoDemanda = this.obterContratoAtivo(idImovel, idContratoTipo);
 		
 		Contrato contrato = contratoDemanda.getContrato();
 		
