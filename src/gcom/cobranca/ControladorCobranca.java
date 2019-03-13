@@ -6059,7 +6059,7 @@ public class ControladorCobranca extends ControladorComum {
 			ligacaoTipo.setId(LigacaoTipo.LIGACAO_ESGOTO);
 
 			// consultar consumo Historico imovel condominio Ligacao Esgoto
-			consumoHistorico = this.obterConsumoHistorico(imovelCondominio, ligacaoTipo, new Integer(anoMesFaturamento).intValue());
+			consumoHistorico = getControladorMicromedicao().obterConsumoHistorico(imovelCondominio, ligacaoTipo, new Integer(anoMesFaturamento).intValue());
 
 			// consumo esgoto do imovel condominio
 			if (consumoHistorico != null) {
@@ -6143,7 +6143,7 @@ public class ControladorCobranca extends ControladorComum {
 
 					// consultar consumo Historico imovel vinculado Ligacao
 					// Esgoto
-					consumoHistorico = this.obterConsumoHistorico(imovelVinculado, ligacaoTipo, new Integer(anoMesFaturamento).intValue());
+					consumoHistorico = getControladorMicromedicao().obterConsumoHistorico(imovelVinculado, ligacaoTipo, new Integer(anoMesFaturamento).intValue());
 
 					// consumo esgoto do imovel vinculado
 					if (consumoHistorico != null) {
@@ -9394,196 +9394,196 @@ public class ControladorCobranca extends ControladorComum {
 	 * tipo de ligação e ano mês de referência
 	 */
 
-	public ConsumoHistorico obterConsumoHistorico(Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia) throws ControladorException {
-
-		ConsumoHistorico consumoHistorico = null;
-
-		Collection colecaoConsumoHistoricoArray = null;
-
-		try {
-
-			colecaoConsumoHistoricoArray = repositorioMicromedicao.pesquisarConsumoHistorico(imovel, ligacaoTipo,
-
-			anoMesReferencia);
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
-		}
-
-		if (colecaoConsumoHistoricoArray != null && !colecaoConsumoHistoricoArray.isEmpty()) {
-
-			Object[] consumoHistoricoArray = (Object[]) Util.retonarObjetoDeColecaoArray(colecaoConsumoHistoricoArray);
-
-			consumoHistorico = new ConsumoHistorico();
-
-			// Seta o id do histórico
-			if (consumoHistoricoArray[0] != null) {
-
-				consumoHistorico.setId((Integer) consumoHistoricoArray[0]);
-			}
-			// Seta o id do imóvel
-			if (consumoHistoricoArray[1] != null) {
-				imovel.setId(imovel.getId());
-			}
-			// Seta o tipo de ligação
-			if (consumoHistoricoArray[2] != null) {
-
-				consumoHistorico.setLigacaoTipo(ligacaoTipo);
-			}
-
-			// Seta o ano mes de referência
-			if (consumoHistoricoArray[3] != null) {
-
-				consumoHistorico.setReferenciaFaturamento(anoMesReferencia);
-			}
-			// Seta o indicador de alteração dos últimos consumos
-			if (consumoHistoricoArray[4] != null) {
-
-				consumoHistorico
-
-				.setIndicadorAlteracaoUltimosConsumos(new Short("2"));
-			}
-
-			// Seta o indicador de ajuste
-			if (consumoHistoricoArray[5] != null) {
-
-				consumoHistorico
-
-				.setIndicadorAjuste((Short) consumoHistoricoArray[5]);
-			}
-
-			// Seta o consumo a ser cobrado no mês
-			if (consumoHistoricoArray[6] != null) {
-
-				consumoHistorico
-
-				.setNumeroConsumoFaturadoMes((Integer) consumoHistoricoArray[6]);
-			}
-
-			// Seta o consumo rateio
-			if (consumoHistoricoArray[7] != null) {
-
-				consumoHistorico
-
-				.setConsumoRateio((Integer) consumoHistoricoArray[7]);
-			}
-
-			// Seta o consumo histórico condomínio
-			if (consumoHistoricoArray[8] != null) {
-
-				ConsumoHistorico consumoHistoricoCondominio = new ConsumoHistorico();
-
-				consumoHistoricoCondominio
-
-				.setId((Integer) consumoHistoricoArray[8]);
-
-				consumoHistorico
-
-				.setConsumoHistoricoCondominio(consumoHistoricoCondominio);
-			}
-
-			// Seta o indicador imóvel condomínio
-			if (consumoHistoricoArray[9] != null) {
-
-				consumoHistorico
-
-				.setIndicadorImovelCondominio((Short) consumoHistoricoArray[9]);
-			}
-
-			// Seta o consumo médio
-			if (consumoHistoricoArray[10] != null) {
-
-				consumoHistorico
-
-				.setConsumoMedio((Integer) consumoHistoricoArray[10]);
-			}
-
-			// Seta o consumo mínimo de água
-			if (consumoHistoricoArray[11] != null) {
-
-				consumoHistorico
-
-				.setConsumoMinimo((Integer) consumoHistoricoArray[11]);
-			}
-
-			// Seta o percentual de coleta
-			if (consumoHistoricoArray[12] != null) {
-
-				consumoHistorico
-
-				.setPercentualColeta((BigDecimal) consumoHistoricoArray[12]);
-			}
-
-			// Seta a última alteração
-			if (consumoHistoricoArray[13] != null) {
-
-				consumoHistorico
-
-				.setUltimaAlteracao((Date) consumoHistoricoArray[13]);
-			}
-
-			// Seta o rateio tipo
-			if (consumoHistoricoArray[14] != null) {
-				RateioTipo rateioTipo = new RateioTipo();
-
-				rateioTipo.setId((Integer) consumoHistoricoArray[14]);
-
-				consumoHistorico.setRateioTipo(rateioTipo);
-			}
-
-			// Seta o consumo tipo
-			if (consumoHistoricoArray[15] != null) {
-				ConsumoTipo consumoTipo = new ConsumoTipo();
-
-				consumoTipo.setId((Integer) consumoHistoricoArray[15]);
-
-				consumoHistorico.setConsumoTipo(consumoTipo);
-			}
-
-			// Seta a anormalidade de consumo
-			if (consumoHistoricoArray[16] != null) {
-
-				ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade();
-
-				consumoAnormalidade.setId((Integer) consumoHistoricoArray[16]);
-
-				consumoHistorico.setConsumoAnormalidade(consumoAnormalidade);
-			}
-
-			// Seta o poço tipo
-			if (consumoHistoricoArray[17] != null) {
-				PocoTipo pocoTipo = new PocoTipo();
-
-				pocoTipo.setId((Integer) consumoHistoricoArray[17]);
-
-				consumoHistorico.setPocoTipo(pocoTipo);
-			}
-
-			// Seta o faturamento situação tipo
-			if (consumoHistoricoArray[18] != null) {
-
-				FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
-
-				faturamentoSituacaoTipo
-
-				.setId((Integer) consumoHistoricoArray[18]);
-
-				consumoHistorico
-
-				.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-			}
-
-			// Seta o faturamento situação tipo
-			if (consumoHistoricoArray[19] != null) {
-
-				consumoHistorico
-
-				.setIndicadorFaturamento((Short) consumoHistoricoArray[19]);
-			}
-		}
-
-		return consumoHistorico;
-	}
+//	public ConsumoHistorico obterConsumoHistorico(Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia) throws ControladorException {
+//
+//		ConsumoHistorico consumoHistorico = null;
+//
+//		Collection colecaoConsumoHistoricoArray = null;
+//
+//		try {
+//
+//			colecaoConsumoHistoricoArray = repositorioMicromedicao.pesquisarConsumoHistorico(imovel, ligacaoTipo,
+//
+//			anoMesReferencia);
+//		} catch (ErroRepositorioException ex) {
+//			sessionContext.setRollbackOnly();
+//			throw new ControladorException("erro.sistema", ex);
+//		}
+//
+//		if (colecaoConsumoHistoricoArray != null && !colecaoConsumoHistoricoArray.isEmpty()) {
+//
+//			Object[] consumoHistoricoArray = (Object[]) Util.retonarObjetoDeColecaoArray(colecaoConsumoHistoricoArray);
+//
+//			consumoHistorico = new ConsumoHistorico();
+//
+//			// Seta o id do histórico
+//			if (consumoHistoricoArray[0] != null) {
+//
+//				consumoHistorico.setId((Integer) consumoHistoricoArray[0]);
+//			}
+//			// Seta o id do imóvel
+//			if (consumoHistoricoArray[1] != null) {
+//				imovel.setId(imovel.getId());
+//			}
+//			// Seta o tipo de ligação
+//			if (consumoHistoricoArray[2] != null) {
+//
+//				consumoHistorico.setLigacaoTipo(ligacaoTipo);
+//			}
+//
+//			// Seta o ano mes de referência
+//			if (consumoHistoricoArray[3] != null) {
+//
+//				consumoHistorico.setReferenciaFaturamento(anoMesReferencia);
+//			}
+//			// Seta o indicador de alteração dos últimos consumos
+//			if (consumoHistoricoArray[4] != null) {
+//
+//				consumoHistorico
+//
+//				.setIndicadorAlteracaoUltimosConsumos(new Short("2"));
+//			}
+//
+//			// Seta o indicador de ajuste
+//			if (consumoHistoricoArray[5] != null) {
+//
+//				consumoHistorico
+//
+//				.setIndicadorAjuste((Short) consumoHistoricoArray[5]);
+//			}
+//
+//			// Seta o consumo a ser cobrado no mês
+//			if (consumoHistoricoArray[6] != null) {
+//
+//				consumoHistorico
+//
+//				.setNumeroConsumoFaturadoMes((Integer) consumoHistoricoArray[6]);
+//			}
+//
+//			// Seta o consumo rateio
+//			if (consumoHistoricoArray[7] != null) {
+//
+//				consumoHistorico
+//
+//				.setConsumoRateio((Integer) consumoHistoricoArray[7]);
+//			}
+//
+//			// Seta o consumo histórico condomínio
+//			if (consumoHistoricoArray[8] != null) {
+//
+//				ConsumoHistorico consumoHistoricoCondominio = new ConsumoHistorico();
+//
+//				consumoHistoricoCondominio
+//
+//				.setId((Integer) consumoHistoricoArray[8]);
+//
+//				consumoHistorico
+//
+//				.setConsumoHistoricoCondominio(consumoHistoricoCondominio);
+//			}
+//
+//			// Seta o indicador imóvel condomínio
+//			if (consumoHistoricoArray[9] != null) {
+//
+//				consumoHistorico
+//
+//				.setIndicadorImovelCondominio((Short) consumoHistoricoArray[9]);
+//			}
+//
+//			// Seta o consumo médio
+//			if (consumoHistoricoArray[10] != null) {
+//
+//				consumoHistorico
+//
+//				.setConsumoMedio((Integer) consumoHistoricoArray[10]);
+//			}
+//
+//			// Seta o consumo mínimo de água
+//			if (consumoHistoricoArray[11] != null) {
+//
+//				consumoHistorico
+//
+//				.setConsumoMinimo((Integer) consumoHistoricoArray[11]);
+//			}
+//
+//			// Seta o percentual de coleta
+//			if (consumoHistoricoArray[12] != null) {
+//
+//				consumoHistorico
+//
+//				.setPercentualColeta((BigDecimal) consumoHistoricoArray[12]);
+//			}
+//
+//			// Seta a última alteração
+//			if (consumoHistoricoArray[13] != null) {
+//
+//				consumoHistorico
+//
+//				.setUltimaAlteracao((Date) consumoHistoricoArray[13]);
+//			}
+//
+//			// Seta o rateio tipo
+//			if (consumoHistoricoArray[14] != null) {
+//				RateioTipo rateioTipo = new RateioTipo();
+//
+//				rateioTipo.setId((Integer) consumoHistoricoArray[14]);
+//
+//				consumoHistorico.setRateioTipo(rateioTipo);
+//			}
+//
+//			// Seta o consumo tipo
+//			if (consumoHistoricoArray[15] != null) {
+//				ConsumoTipo consumoTipo = new ConsumoTipo();
+//
+//				consumoTipo.setId((Integer) consumoHistoricoArray[15]);
+//
+//				consumoHistorico.setConsumoTipo(consumoTipo);
+//			}
+//
+//			// Seta a anormalidade de consumo
+//			if (consumoHistoricoArray[16] != null) {
+//
+//				ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade();
+//
+//				consumoAnormalidade.setId((Integer) consumoHistoricoArray[16]);
+//
+//				consumoHistorico.setConsumoAnormalidade(consumoAnormalidade);
+//			}
+//
+//			// Seta o poço tipo
+//			if (consumoHistoricoArray[17] != null) {
+//				PocoTipo pocoTipo = new PocoTipo();
+//
+//				pocoTipo.setId((Integer) consumoHistoricoArray[17]);
+//
+//				consumoHistorico.setPocoTipo(pocoTipo);
+//			}
+//
+//			// Seta o faturamento situação tipo
+//			if (consumoHistoricoArray[18] != null) {
+//
+//				FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
+//
+//				faturamentoSituacaoTipo
+//
+//				.setId((Integer) consumoHistoricoArray[18]);
+//
+//				consumoHistorico
+//
+//				.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+//			}
+//
+//			// Seta o faturamento situação tipo
+//			if (consumoHistoricoArray[19] != null) {
+//
+//				consumoHistorico
+//
+//				.setIndicadorFaturamento((Short) consumoHistoricoArray[19]);
+//			}
+//		}
+//
+//		return consumoHistorico;
+//	}
 
 	/**
 	 * Inseri a cobrança situação historico na base passando a coleção de

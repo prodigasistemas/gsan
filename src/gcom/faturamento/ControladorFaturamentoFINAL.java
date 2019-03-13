@@ -1298,71 +1298,48 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					
 					this.prepararFaturamentoImovel(atividade, rota, null);
 
-					// Variáveis para a paginação da pesquisa de Imovel por
-					// Grupo Faturamento
-					// ========================================================================
 					boolean flagTerminou = false;
 					final int quantidadeRegistros = 3000;
 					int numeroIndice = 0;
-					// ========================================================================
 
 					while (!flagTerminou) {
 
-						Collection colecaoImovel = this
-								.pesquisarImovelGrupoFaturamento(
+						Collection colecaoImovel = this.pesquisarImovelGrupoFaturamento(
 										faturamentoAtivCronRota.getRota(),
 										numeroIndice, quantidadeRegistros,
 										false, false);
 
-						// Resumos de faturamento para simulação.
 						Collection colecaoResumoFaturamento = new ArrayList();
 
-						/*
-						 * Caso exista ids de imóveis para a rota atual
-						 * determina o faturamento para cada imóvel retornado.
-						 */
 						if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
 
-							Iterator iteratorColecaoImoveis = colecaoImovel
-									.iterator();
+							Iterator iteratorColecaoImoveis = colecaoImovel.iterator();
 
-							// LAÇO PARA DETERMINAR O FATURAMENTO DE TODOS OS
-							// IMOVEIS DA ROTA ATUAL
 							Imovel imovel = null;
 							while (iteratorColecaoImoveis.hasNext()) {
 
 								imovel = (Imovel) iteratorColecaoImoveis.next();
 
 								// FATURAMENTO ATUAL
-								// --------------------------------------------------------------------------------
 								this.faturarImovel(
 										faturamentoGrupo.getAnoMesReferencia(),
 										atividade, sistemaParametro,
 										faturamentoAtivCronRota,
 										colecaoResumoFaturamento, imovel,
 										false, faturamentoGrupo);
-								// --------------------------------------------------------------------------------
 
 								// FATURAMENTO ANTECIPADO
-								// --------------------------------------------------------------------------------
 								this.faturarImovelAntecipado(
 										faturamentoGrupo.getAnoMesReferencia(),
 										atividade, sistemaParametro,
 										faturamentoAtivCronRota,
 										colecaoResumoFaturamento, imovel,
 										faturamentoGrupo);
-								// --------------------------------------------------------------------------------
-							}// FIM DO LOOP DE IMOVEIS
+							}
+						}
+						
 
-						}// FIM DO LOOP DE IMOVEIS
-
-						/*
-						 * Caso a coleção de resumo de faturamento não esteja
-						 * vazia ou nula inseri os resumos na base de dados.
-						 */
-						if (colecaoResumoFaturamento != null
-								&& !colecaoResumoFaturamento.isEmpty()) {
-
+						if (colecaoResumoFaturamento != null&& !colecaoResumoFaturamento.isEmpty()) {
 							this.inserirResumoSimulacaoFaturamento(colecaoResumoFaturamento);
 
 							if (colecaoResumoFaturamento != null) {
@@ -1371,19 +1348,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 						}
 
-						/**
-						 * Incrementa o nº do indice da páginação
-						 */
 						numeroIndice = numeroIndice + quantidadeRegistros;
 
-						/**
-						 * Caso a coleção de imoveis retornados for menor que a
-						 * quantidade de registros seta a flag indicando que a
-						 * paginação terminou.
-						 */
-						if (colecaoImovel == null
-								|| colecaoImovel.size() < quantidadeRegistros) {
-
+						if (colecaoImovel == null || colecaoImovel.size() < quantidadeRegistros) {
 							flagTerminou = true;
 						}
 
@@ -1392,58 +1359,45 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							colecaoImovel = null;
 						}
 
-					}// FIM DO LOOP DA PAGINAÇÃO
+					}
+					this.atualizarConsumosImoveisMacro(rota);
 				}
 
-				// ATUALIZAÇÃO DO SEQUENCIAL DE ROTA, BASEADO NA
-				// TABELA ROTA_ATUALIZACAO_SEQUENCIAL
-				// --------------------------------------------------------------------------------
+				
+				// ATUALIZAÇÃO DO SEQUENCIAL DE ROTA, BASEADO NA TABELA ROTA_ATUALIZACAO_SEQUENCIAL
 				Integer idRota = ((FaturamentoAtivCronRota) Util
 						.retonarObjetoDeColecao(colecaoFaturamentoAtividadeCronogramaRota))
 						.getRota().getId();
 
-				// this.atualizarSequencialRota( idRota,
-				// faturamentoGrupo.getAnoMesReferencia() );
-
-				// Selecionamos os dados necessários
 				Collection<RotaAtualizacaoSeq> dados = this.repositorioMicromedicao
-						.pesquisarRotaAtualizacao(idRota,
-								faturamentoGrupo.getAnoMesReferencia());
+						.pesquisarRotaAtualizacao(idRota, faturamentoGrupo.getAnoMesReferencia());
 
 				for (RotaAtualizacaoSeq seq : dados) {
-
-					// Para cada um, atualizamos o imovel
 					this.repositorioCadastro.atualizarSequenciaRotaImovel(seq);
 				}
-				// --------------------------------------------------------------------------------
 
 			} else {
-				// A LISTA COM AS ROTAS ESTÁ NULA OU VAZIA
-
-				throw new ControladorException(
-						"atencao.pesquisa.grupo_rota_vazio");
+				throw new ControladorException("atencao.pesquisa.grupo_rota_vazio");
 			}
 
-			// --------------------------------------------------------
-			//
-			// Registrar o fim da execução da Unidade de Processamento
-			//
-			// --------------------------------------------------------
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
-
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
 		} catch (Exception e) {
 
-			/*
-			 * Este catch serve para interceptar qualquer exceção que o processo
-			 * batch venha a lançar e garantir que a unidade de processamento do
-			 * batch será atualizada com o erro ocorrido.
-			 */
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
-					idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}
 
+	}
+	
+	private void atualizarConsumosImoveisMacro(Rota rota) throws ControladorException {
+		try {
+			getControladorMicromedicao().atualizarConsumosCondominios(rota, new LigacaoTipo(LigacaoTipo.LIGACAO_AGUA));
+			getControladorMicromedicao().atualizarConsumosCondominios(rota, new LigacaoTipo(LigacaoTipo.LIGACAO_ESGOTO));
+
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao atualizar os consumos dos micros", e);
+		}
+		
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -68526,7 +68480,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		int qtdEconomiasCondominio = this.getControladorMicromedicao().obterQuantidadeEconomiasCondominio(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia());
 		
-		System.out.println("Qtd economias: " + qtdEconomiasCondominio);
+		System.out.println(idImovelCondominio + " Qtd economias condominio : " + qtdEconomiasCondominio);
 		Imovel imovelCondominio = (Imovel) getControladorImovel().pesquisarImovel(idImovelCondominio);
 
 		BigDecimal[] valoresAguaEsgotoContaRateio = this.obterValorConsumoASerRateado(imovelCondominio, faturamentoGrupo);
@@ -68576,6 +68530,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			consumoEsgotoASerRateado = 0;
 		}
 
+		logger.info("Consumo condomino agua: " + consumoAguaASerRateado);
+		logger.info("Consumo condomino esgoto: " + consumoEsgotoASerRateado);
 		return this.calcularValorAguaEsgotoParaRateio(imovelCondominio, consumoAguaASerRateado, consumoEsgotoASerRateado, faturamentoGrupo);
 	}
 
@@ -68661,8 +68617,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			valoresContaRateio[1] = helperValoresAguaEsgoto.getValorTotalEsgoto();
 		}
 
-		System.out.println("Valor agua: " + helperValoresAguaEsgoto.getValorTotalAgua());
-		System.out.println("Valor esgoto: " + helperValoresAguaEsgoto.getValorTotalEsgoto());
+		System.out.println("Valor agua condominio : " + helperValoresAguaEsgoto.getValorTotalAgua());
+		System.out.println("Valor esgoto condominio: " + helperValoresAguaEsgoto.getValorTotalEsgoto());
 
 		return valoresContaRateio;
 	}

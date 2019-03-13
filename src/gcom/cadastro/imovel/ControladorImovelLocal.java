@@ -25,7 +25,6 @@ import gcom.cadastro.imovel.bean.InserirImovelHelper;
 import gcom.cadastro.tarifasocial.TarifaSocialCarta;
 import gcom.cadastro.tarifasocial.TarifaSocialComandoCarta;
 import gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia;
-import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.cobranca.CobrancaSituacao;
 import gcom.cobranca.bean.SituacaoEspecialCobrancaHelper;
 import gcom.faturamento.FaturamentoGrupo;
@@ -762,4 +761,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public Cliente consultarClienteResponsavel(Imovel imovel) throws ControladorException;
 	
 	public String consultarNomeClienteResponsavelImovel(Integer idImovel) throws ControladorException;
+
+	public List<Imovel> pesquisarCondominios(Rota rota) throws ControladorException;
 }

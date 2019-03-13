@@ -271,9 +271,8 @@ public interface IRepositorioMicromedicao {
 	 * @exception ErroRepositorioException
 	 *                Descrição da exceção
 	 */
-	public Collection pesquisarConsumoHistorico(Imovel imovel,
-			LigacaoTipo ligacaoTipo, int anoMesReferencia)
-			throws ErroRepositorioException;
+	//public Collection pesquisarConsumoHistorico(Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia) throws ErroRepositorioException;
+	public ConsumoHistorico pesquisarConsumoHistorico(Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia) throws ErroRepositorioException;
 
 	public Collection pesquisarAnormalidadeLeitura(
 			LeituraAnormalidade leituraAnormalidadeFaturamento)

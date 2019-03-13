@@ -741,4 +741,6 @@ public interface IRepositorioImovel {
 	public DebitoAutomatico pesquisarDebitoAutomaticoAtivoImovel(Integer idImovel) throws ErroRepositorioException;
 
 	public void incluirImovelCobranca(Integer idCobrancaSituacao, Integer idCobrancaSituacaoTipo, Integer idImovel) throws ErroRepositorioException;
+	
+	public List<Imovel> pesquisarCondominios(Rota rota) throws ErroRepositorioException;
 }

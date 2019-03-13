@@ -1214,44 +1214,71 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public Collection pesquisarConsumoHistorico(Imovel imovel,
-			LigacaoTipo ligacaoTipo, int anoMesReferencia)
-			throws ErroRepositorioException {
+//	public Collection pesquisarConsumoHistorico(Imovel imovel,
+//			LigacaoTipo ligacaoTipo, int anoMesReferencia)
+//			throws ErroRepositorioException {
+//
+//		Collection retorno = null;
+//
+//		Session session = HibernateUtil.getSession();
+//
+//		try {
+//			String consulta = "select ch.id, " + "ch.imovel.id, "
+//					+ "ch.ligacaoTipo.id, " + "ch.referenciaFaturamento, "
+//					+ "ch.indicadorAlteracaoUltimosConsumos, "
+//					+ "ch.indicadorAjuste, " + "ch.numeroConsumoFaturadoMes, "
+//					+ "ch.consumoRateio, "
+//					+ "ch.consumoHistoricoCondominio.id, "
+//					+ "ch.indicadorImovelCondominio, " + "ch.consumoMedio,"
+//					+ "ch.consumoMinimo, " + "ch.percentualColeta, "
+//					+ "ch.ultimaAlteracao, " + "ch.rateioTipo.id, "
+//					+ "ch.consumoTipo.id, " + "ch.consumoAnormalidade.id, "
+//					+ "ch.pocoTipo.id, " + "ch.faturamentoSituacaoTipo.id, "
+//					+ "ch.indicadorFaturamento, "
+//					+ "ch.consumoImovelVinculadosCondominio, "
+//					+ "ch.numeroConsumoFaturadoMes "
+//					+ "from ConsumoHistorico ch "
+//					+ "where ch.imovel.id = :id and "
+//					+ "ch.referenciaFaturamento = :anoMes and "
+//					+ "ch.ligacaoTipo.id = :ligacaoTipoId ";
+//
+//			retorno = session.createQuery(consulta).setInteger("id",
+//					imovel.getId().intValue()).setInteger("ligacaoTipoId",
+//					ligacaoTipo.getId().intValue()).setInteger("anoMes",
+//					anoMesReferencia).list();
+//
+//		} catch (HibernateException e) {
+//			// levanta a exceção para a próxima camada
+//			throw new ErroRepositorioException(e, "Erro no Hibernate");
+//		} finally {
+//			// fecha a sessão
+//			HibernateUtil.closeSession(session);
+//		}
+//
+//		return retorno;
+//	}
+	
+	public ConsumoHistorico pesquisarConsumoHistorico(Imovel imovel, LigacaoTipo ligacaoTipo, int anoMesReferencia) throws ErroRepositorioException {
 
-		Collection retorno = null;
+		ConsumoHistorico retorno = null;
 
 		Session session = HibernateUtil.getSession();
 
 		try {
-			String consulta = "select ch.id, " + "ch.imovel.id, "
-					+ "ch.ligacaoTipo.id, " + "ch.referenciaFaturamento, "
-					+ "ch.indicadorAlteracaoUltimosConsumos, "
-					+ "ch.indicadorAjuste, " + "ch.numeroConsumoFaturadoMes, "
-					+ "ch.consumoRateio, "
-					+ "ch.consumoHistoricoCondominio.id, "
-					+ "ch.indicadorImovelCondominio, " + "ch.consumoMedio,"
-					+ "ch.consumoMinimo, " + "ch.percentualColeta, "
-					+ "ch.ultimaAlteracao, " + "ch.rateioTipo.id, "
-					+ "ch.consumoTipo.id, " + "ch.consumoAnormalidade.id, "
-					+ "ch.pocoTipo.id, " + "ch.faturamentoSituacaoTipo.id, "
-					+ "ch.indicadorFaturamento, "
-					+ "ch.consumoImovelVinculadosCondominio, "
-					+ "ch.numeroConsumoFaturadoMes "
+			String consulta = "select ch "
 					+ "from ConsumoHistorico ch "
 					+ "where ch.imovel.id = :id and "
 					+ "ch.referenciaFaturamento = :anoMes and "
 					+ "ch.ligacaoTipo.id = :ligacaoTipoId ";
 
-			retorno = session.createQuery(consulta).setInteger("id",
-					imovel.getId().intValue()).setInteger("ligacaoTipoId",
-					ligacaoTipo.getId().intValue()).setInteger("anoMes",
-					anoMesReferencia).list();
+			retorno = (ConsumoHistorico) session.createQuery(consulta)
+					.setInteger("id", imovel.getId().intValue())
+					.setInteger("ligacaoTipoId", ligacaoTipo.getId().intValue())
+					.setInteger("anoMes", anoMesReferencia).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 

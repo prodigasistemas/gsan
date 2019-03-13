@@ -30909,39 +30909,62 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	public void incluirImovelCobranca(Integer idCobrancaSituacao, Integer idCobrancaSituacaoTipo, Integer idImovel)
 			throws ErroRepositorioException {
 
-			StringBuilder consulta = new StringBuilder();
+		StringBuilder consulta = new StringBuilder();
 
-			Session session = HibernateUtil.getSession();
+		Session session = HibernateUtil.getSession();
 
-			try {
-					consulta.append(" update gcom.cadastro.imovel.Imovel set ")
-							.append(" cbst_id = :idCobrancaSituacao, ")
-							.append(" cbsp_id = :idCobrancaSituacaoTipo, ")
-							.append(" imov_tmultimaalteracao = :ultimaAlteracao  ")
-							.append(" where imov_id = :idImovel ");
+		try {
+				consulta.append(" update gcom.cadastro.imovel.Imovel set ")
+						.append(" cbst_id = :idCobrancaSituacao, ")
+						.append(" cbsp_id = :idCobrancaSituacaoTipo, ")
+						.append(" imov_tmultimaalteracao = :ultimaAlteracao  ")
+						.append(" where imov_id = :idImovel ");
 
-					session.createQuery(consulta.toString()).
-					   setInteger("idCobrancaSituacao",idCobrancaSituacao).
-					   setInteger("idCobrancaSituacaoTipo",idCobrancaSituacaoTipo).
-					   setTimestamp("ultimaAlteracao",new Date()).
-					   setInteger("idImovel",idImovel).
-					   executeUpdate();
+				session.createQuery(consulta.toString()).
+				   setInteger("idCobrancaSituacao",idCobrancaSituacao).
+				   setInteger("idCobrancaSituacaoTipo",idCobrancaSituacaoTipo).
+				   setTimestamp("ultimaAlteracao",new Date()).
+				   setInteger("idImovel",idImovel).
+				   executeUpdate();
 
 
-			} catch (HibernateException e) {
+		} catch (HibernateException e) {
 
-				// levanta a exceção para a próxima camada
+			// levanta a exceção para a próxima camada
 
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
-			} finally {
+		} finally {
 
-				// fecha a sessão
+			// fecha a sessão
 
-				HibernateUtil.closeSession(session);
-
-			}
+			HibernateUtil.closeSession(session);
 
 		}
+
+	}
+	
+	public List<Imovel> pesquisarCondominios(Rota rota) throws ErroRepositorioException {
+		StringBuilder consulta = new StringBuilder();
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			consulta.append(" select imovel from Imovel imovel ")
+					.append(" inner join imovel.quadra quadra ")
+					.append(" inner join quadra.rota rota ")
+					.append(" where imovel.indicadorImovelCondominio = :indicadorCondominio  ")
+					.append(" and rota.id = :idRota ");
+
+			return (List<Imovel>) session.createQuery(consulta.toString())
+						.setInteger("idRota",rota.getId())
+						.setShort("indicadorCondominio",ConstantesSistema.SIM).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 
 }

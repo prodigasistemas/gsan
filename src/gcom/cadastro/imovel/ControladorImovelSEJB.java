@@ -16319,4 +16319,12 @@ public class ControladorImovelSEJB extends ControladorComum {
 
 		return nomeClienteUsuario;
 	}
+	
+	public List<Imovel> pesquisarCondominios(Rota rota) throws ControladorException {
+		try {
+			return this.repositorioImovel.pesquisarCondominios(rota);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 }
