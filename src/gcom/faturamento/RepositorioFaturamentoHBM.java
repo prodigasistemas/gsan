@@ -60187,8 +60187,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.append(" where imovel.id = :idImovel ")
 					.append(" and comunicado.tipoComunicado = :tipoComunicado ")
 					.append(" and comunicado.indicadorEmitido = :indicadorEmitido ")
-					.append(" and comunicado.referencia = :referencia ")
-					.append(" order by comunicado.dataGeracao desc ");
+					.append(" and comunicado.referencia = :referencia ");
 
 			Integer qtd = (Integer) session.createQuery(consulta.toString())
 					   .setInteger("idImovel", idImovel)
