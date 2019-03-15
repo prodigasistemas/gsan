@@ -1412,14 +1412,17 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			emitirContaHelper.setMsgLinha2Conta("");
 			emitirContaHelper.setMsgLinha3Conta("");
 		
-		} else if (isImovelEmDebito) {
+		} else { 
 			contaTxt.append(Util.completaString(parmsPartesConta[0], 100));
 			contaTxt.append(Util.completaString(parmsPartesConta[1], 100));
 			contaTxt.append(Util.completaString(parmsPartesConta[2], 100));
 
-			emitirContaHelper.setMsgLinha1Conta(parmsPartesConta[0]);
-			emitirContaHelper.setMsgLinha2Conta(parmsPartesConta[1]);
-			emitirContaHelper.setMsgLinha3Conta(parmsPartesConta[2]);
+			if (isImovelEmDebito) {
+				emitirContaHelper.setMsgLinha1Conta(parmsPartesConta[0]);
+				emitirContaHelper.setMsgLinha2Conta(parmsPartesConta[1]);
+				emitirContaHelper.setMsgLinha3Conta(parmsPartesConta[2]);
+			}
+
 		}
 		
 		
