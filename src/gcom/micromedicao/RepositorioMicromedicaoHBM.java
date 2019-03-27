@@ -1267,6 +1267,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		try {
 			String consulta = "select ch "
 					+ "from ConsumoHistorico ch "
+					+ " left join fetch ch.consumoAnormalidade csan "
 					+ "where ch.imovel.id = :id and "
 					+ "ch.referenciaFaturamento = :anoMes and "
 					+ "ch.ligacaoTipo.id = :ligacaoTipoId ";
