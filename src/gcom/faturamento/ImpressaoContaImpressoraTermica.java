@@ -1470,7 +1470,9 @@ public class ImpressaoContaImpressoraTermica {
 		retorno.append("T 0 0 201 47 " + Util.formatarCnpj(sistemaParametro.getCnpjEmpresa().trim()) + "\n");
 		retorno.append("T 0 0 285 64 " + sistemaParametro.getInscricaoEstadual().trim() + "\n");
 		retorno.append(formarLinha(0, 0, 222, 81, emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
-		retorno.append(formarLinha(0, 2, 52, 172, obterNomeCliente(emitirContaHelper, imovelEmitido), 0, 0) + formarLinha(0, 2, 52, 199, cpfCnpjFormatado, 0, 0) + dividirLinha(0, 2, 434, 169, endereco.trim(), 40, 27));
+		retorno.append(formarLinha(0, 2, 52, 172, obterNomeCliente(emitirContaHelper, imovelEmitido), 0, 0) 
+					+ formarLinha(0, 2, 52, 199, cpfCnpjFormatado, 0, 0) 
+					+ dividirLinha(0, 2, 434, 169, endereco.trim(), 40, 27));
 		retorno.append(formarLinha(7, 0, 15, 250, imovelEmitido.getInscricaoFormatada(), 0, 0));
 		retorno.append(formarLinha(7, 0, 315, 250, imovelEmitido.getQuadra().getRota().getCodigo() + "", 0, 0));
 		retorno.append(formarLinha(7, 0, 415, 250, imovelEmitido.getNumeroSequencialRota() + "", 0, 0));
