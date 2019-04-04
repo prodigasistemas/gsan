@@ -40381,4 +40381,15 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e);
 		}
 	}
+	
+	public LigacaoAgua obterLigacaoAgua(Integer idLigacao){
+		try {
+			return getControladorMicromedicao().obterLigacaoAgua(idLigacao);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+
 }
+
+

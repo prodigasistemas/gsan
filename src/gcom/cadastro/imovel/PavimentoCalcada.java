@@ -8,29 +8,17 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class PavimentoCalcada  extends ObjetoTransacao{
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-    /** persistent field */
     private String descricao;
-
-    /** persistent field */
     private String descricaoAbreviada;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
     private String descricaoComId;
 
-    /** full constructor */
     public PavimentoCalcada(String descricao, String descricaoAbreviada,
             Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;
@@ -39,18 +27,16 @@ public class PavimentoCalcada  extends ObjetoTransacao{
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public PavimentoCalcada() {
     }
 
-    /** minimal constructor */
     public PavimentoCalcada(String descricao, String descricaoAbreviada) {
         this.descricao = descricao;
         this.descricaoAbreviada = descricaoAbreviada;
     }
 
-    public PavimentoCalcada(Integer osPavimentoCalcada) {
-		this.id = osPavimentoCalcada;
+    public PavimentoCalcada(Integer id) {
+		this.id = id;
 	}
 
 	public Integer getId() {
@@ -109,16 +95,6 @@ public class PavimentoCalcada  extends ObjetoTransacao{
 		return filtro;
 	}
 
-	/**
-	 * <Breve descrição sobre o caso de uso>
-	 *
-	 * <Identificador e nome do caso de uso>
-	 *
-	 * @author Pedro Alexandre
-	 * @date 19/09/2007
-	 *
-	 * @return
-	 */
 	public String getDescricaoComId() {
 		
 		if(this.getId().compareTo(10) == -1){

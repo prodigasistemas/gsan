@@ -27,31 +27,13 @@ public class PavimentoRua extends ObjetoTransacao{
 	public static final Integer SEM_PAVIMENTO  = new Integer(10);
 
 	
-	
-	
-	
-
-    /** identifier field */
     private Integer id;
-
-    /** persistent field */
     private String descricao;
-
-    /** persistent field */
     private String descricaoAbreviada;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
-    /**
-     * @since 19/09/2007
-     */
     private String descricaoComId;
 
-    /** full constructor */
     public PavimentoRua(String descricao, String descricaoAbreviada,
             Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;
@@ -60,18 +42,16 @@ public class PavimentoRua extends ObjetoTransacao{
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public PavimentoRua() {
     }
-
-    /** minimal constructor */
+    
     public PavimentoRua(String descricao, String descricaoAbreviada) {
         this.descricao = descricao;
         this.descricaoAbreviada = descricaoAbreviada;
     }
 
-    public PavimentoRua(Integer osPavimentoRua) {
-		this.id = osPavimentoRua;
+    public PavimentoRua(Integer id) {
+		this.id = id;
 	}
 
 	public Integer getId() {
@@ -130,16 +110,6 @@ public class PavimentoRua extends ObjetoTransacao{
 		return filtro;
 	}
 	
-	/**
-	 * <Breve descrição sobre o caso de uso>
-	 *
-	 * <Identificador e nome do caso de uso>
-	 *
-	 * @author Pedro Alexandre
-	 * @date 19/09/2007
-	 *
-	 * @return
-	 */
 	public String getDescricaoComId() {
 		
 		if(this.getId().compareTo(10) == -1){

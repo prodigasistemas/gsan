@@ -1,5 +1,6 @@
 package gcom.relatorio.atendimentopublico;
 
+import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.atendimentopublico.ordemservico.bean.OSRelatorioHelper;
 import gcom.batch.Relatorio;
@@ -104,11 +105,7 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 				ordemServicoRelatorioHelper = (OSRelatorioHelper) colecaoOSRelatorioHelperIterator
 				.next();
 				
-				// Prepara os campos na formatação correta ou passando-os para
-				// String
-				// para ser colocado no Bean do relatório
-				
-				// Data da Geração
+				LigacaoAgua ligacaoAgua = null;
 				String dataGeracao = "";
 				
 				if (ordemServicoRelatorioHelper.getDataGeracao() != null) {
@@ -116,7 +113,6 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 							.getDataGeracao());
 				}
 				
-				//Data Emissao
 				String dataEmissao = "";
 				
 				if (ordemServicoRelatorioHelper.getDataEmissao() != null) {
@@ -129,20 +125,20 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 					nomeUsuario = ordemServicoRelatorioHelper.getNomeUsuarioImovel();
 				}
 				
-				// Matrícula do Imóvel
 				String idImovel = "";
 
 				if (ordemServicoRelatorioHelper.getIdImovel() != null) {
 					
 					idImovel = ordemServicoRelatorioHelper.getIdImovel().toString();
+					ligacaoAgua = fachada.obterLigacaoAgua(new Integer(idImovel));
 					
 					if(nomeUsuario != null){
 						idImovel = idImovel +" "+nomeUsuario;
 					}
+					
+					
 				}
 				
-		
-				// Categoria/Quantidade Economias
 				String categoriaQtdeEconomias = "";
 				if (ordemServicoRelatorioHelper.getCategoria() != null
 						&& !ordemServicoRelatorioHelper.getCategoria().equals(
@@ -155,7 +151,6 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 					.getQuantidadeEconomias();
 				}
 				
-				// Situação Água/Esgoto
 				String situacaoAguaEsgoto = "";
 				if (ordemServicoRelatorioHelper.getSituacaoAgua() != null
 						&& !ordemServicoRelatorioHelper.getSituacaoAgua()
@@ -166,13 +161,11 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 					+ ordemServicoRelatorioHelper.getSituacaoEsgoto();
 				}
 				
-				// Id do RA
 				String idRA = "";
 				if (ordemServicoRelatorioHelper.getIdRA() != null) {
 					idRA = ordemServicoRelatorioHelper.getIdRA().toString();
 				}
 				
-				// Serviço Solicitado
 				String servicoSolicitado = "";
 				if (ordemServicoRelatorioHelper.getIdServicoSolicitado() != null) {
 					servicoSolicitado = ordemServicoRelatorioHelper
@@ -182,7 +175,6 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 					.getDescricaoServicoSolicitado();
 				}
 				
-				// Valor Solicitado(Valor do serviço tipo)
 				String valorSolicitado = "";
 				if (ordemServicoRelatorioHelper.getValorServicoSolicitado() != null
 						&& !ordemServicoRelatorioHelper
@@ -191,7 +183,6 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 					.getValorServicoSolicitado();
 				}
 				
-				// Previsão
 				String previsao = "";
 				
 				if (ordemServicoRelatorioHelper.getTempoMedioExecucao() != null) {
@@ -200,7 +191,6 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 					+ ":00";
 				}
 				
-				// Local Ocorrência
 				String localOcorrencia = "";
 				
 				if (ordemServicoRelatorioHelper.getLocalOcorrencia() != null) {
@@ -208,7 +198,6 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 					.getLocalOcorrencia();
 				}
 				
-				// Serviço Tipo Referência
 				String servicoTipoReferencia = "";
 				if (ordemServicoRelatorioHelper
 						.getIdServicoTipoReferencia() != null) {
@@ -636,8 +625,12 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 						hidrometroNumeroDigitos, dataEncerramento, parecerEncerramento,
 						
 						//Cpf ou Cnpj do Cliente
-						cpfCnpjCliente);
-				
+						cpfCnpjCliente,
+						
+						(ligacaoAgua.getRamalLocalInstalacao() != null ? ligacaoAgua.getRamalLocalInstalacao().getDescricao() : ""),
+						(ligacaoAgua.getProfundidadeRamal() != null ? Util.formatarBigDecimalParaStringComVirgula(ligacaoAgua.getProfundidadeRamal()) : ""),
+						(ligacaoAgua.getDistanciaInstalacaoRamal() != null ? Util.formatarBigDecimalParaStringComVirgula(ligacaoAgua.getDistanciaInstalacaoRamal()) : ""));
+						
 				//Perfil do imovel
 				OrdemServico ordemServico = fachada.pesquisarOrdemServico(ordemServicoRelatorioHelper.getIdOrdemServico());
 				if(ordemServico != null && ordemServico.getImovel() != null 

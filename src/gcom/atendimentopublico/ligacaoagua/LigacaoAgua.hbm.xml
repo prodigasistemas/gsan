@@ -11,72 +11,84 @@
 		<id name="id" type="java.lang.Integer" column="lagu_id">
 			<generator class="assigned"/>
 		</id>
-		<property name="dataImplantacao" type="java.sql.Date" column="lagu_dtimplantacao" length="4"/>
-		<property name="dataLigacao" type="java.sql.Date" column="lagu_dtligacaoagua" length="4"/>
-		<property name="dataSupressao" type="java.sql.Date" column="lagu_dtsupressaoagua" length="4"/>
-		<property name="dataCorte" type="java.sql.Date" column="lagu_dtcorte" length="4"/>
-		<property name="dataReligacao" type="java.sql.Date" column="lagu_dtreligacaoagua" length="4"/>
-		<property name="numeroSeloCorte" type="java.lang.Integer" column="lagu_nnselocorte" length="4"/>
-		<property name="numeroSeloSupressao" type="java.lang.Integer" column="lagu_nnselosupressao" length="4"/>
-		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lagu_tmultimaalteracao" length="8"/>
-		<property name="numeroConsumoMinimoAgua" type="java.lang.Integer" column="lagu_nnconsumominimoagua" length="4"/>
-		<property name="laguIcemissaocortesupressao" type="java.lang.Short" column="lagu_icemissaocortesupressao" length="2"/>
-		<property name="dataCorteAdministrativo" type="java.sql.Date" column="lagu_dtcorteadministrativo" length="4"/>
-		<property name="dataRestabelecimentoAgua" type="java.sql.Date" column="lagu_dtrestabelecimentoagua" length="4"/>
-		<property name="numeroLacre" type="java.lang.String" column="lagu_nnlacre" length="10"/>
+		<property name="dataImplantacao" 			 type="java.sql.Date" 		column="lagu_dtimplantacao" length="4"/>
+		<property name="dataLigacao" 				 type="java.sql.Date" 		column="lagu_dtligacaoagua" length="4"/>
+		<property name="dataSupressao" 				 type="java.sql.Date" 		column="lagu_dtsupressaoagua" length="4"/>
+		<property name="dataCorte" 					 type="java.sql.Date" 		column="lagu_dtcorte" length="4"/>
+		<property name="dataReligacao" 				 type="java.sql.Date" 		column="lagu_dtreligacaoagua" length="4"/>
+		<property name="numeroSeloCorte" 			 type="java.lang.Integer" 	column="lagu_nnselocorte" length="4"/>
+		<property name="numeroSeloSupressao" 		 type="java.lang.Integer" 	column="lagu_nnselosupressao" length="4"/>
+		<property name="ultimaAlteracao" 			 type="java.sql.Timestamp" 	column="lagu_tmultimaalteracao" length="8"/>
+		<property name="numeroConsumoMinimoAgua" 	 type="java.lang.Integer" 	column="lagu_nnconsumominimoagua" length="4"/>
+		<property name="laguIcemissaocortesupressao" type="java.lang.Short" 	column="lagu_icemissaocortesupressao" length="2"/>
+		<property name="dataCorteAdministrativo" 	 type="java.sql.Date" 		column="lagu_dtcorteadministrativo" length="4"/>
+		<property name="dataRestabelecimentoAgua" 	 type="java.sql.Date" 		column="lagu_dtrestabelecimentoagua" length="4"/>
+		<property name="numeroLacre" 				 type="java.lang.String" 	column="lagu_nnlacre" length="10"/>
+		<property name="profundidadeRamal" 			 type="java.math.BigDecimal" column="lagu_profundidade_ramal" not-null="false" length="7"/>
+		<property name="distanciaInstalacaoRamal" 	 type="java.math.BigDecimal" column="lagu_dist_inst_ramal" not-null="false" length="13"/>
+
 		<!-- associations -->
-		<!-- bi-directional one-to-one association to Imovel -->
+
 		<one-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" outer-join="auto" constrained="true"/>
-		<!-- bi-directional many-to-one association to SupressaoTipo -->
+
 		<many-to-one name="supressaoTipo" class="gcom.atendimentopublico.ligacaoagua.SupressaoTipo" not-null="true">
 			<column name="stip_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to EmissaoOrdemCobrancaTipo -->
+
 		<many-to-one name="emissaoOrdemCobrancaTipo" class="gcom.atendimentopublico.ligacaoagua.EmissaoOrdemCobrancaTipo" not-null="true">
 			<column name="eoct_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to LigacaoAguaPerfil -->
+
 		<many-to-one name="ligacaoAguaPerfil" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaPerfil" not-null="true">
 			<column name="lapf_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to HidrometroInstalacaoHistorico -->
+
 		<many-to-one name="hidrometroInstalacaoHistorico" class="gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico" not-null="true">
 			<column name="hidi_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to LigacaoAguaDiametro -->
+
 		<many-to-one name="ligacaoAguaDiametro" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaDiametro" not-null="true">
 			<column name="lagd_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to CorteTipo -->
+
 		<many-to-one name="corteTipo" class="gcom.atendimentopublico.ligacaoagua.CorteTipo" not-null="true">
 			<column name="cotp_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to LigacaoAguaMaterial -->
+
 		<many-to-one name="ligacaoAguaMaterial" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaMaterial" not-null="true">
 			<column name="lagm_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to MotivoCorte -->
+
 		<many-to-one name="motivoCorte" class="gcom.atendimentopublico.ligacaoagua.MotivoCorte" not-null="false">
 			<column name="mtco_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to SupressaoMotivo -->
+
 		<many-to-one name="supressaoMotivo" class="gcom.atendimentopublico.ordemservico.SupressaoMotivo" not-null="false">
 			<column name="spmt_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to SupressaoMotivo -->
+
 		<many-to-one name="ramalLocalInstalacao" class="gcom.atendimentopublico.ligacaoagua.RamalLocalInstalacao" not-null="false">
 			<column name="rlin_id"/>
 		</many-to-one>
-		<!--  bi-directional one-to-many association to MedicaoHistorico  -->
+		
+		<many-to-one name="ligacaoOrigem" class="gcom.atendimentopublico.LigacaoOrigem" not-null="false">
+			<column name="lgor_id"/>
+		</many-to-one>
+
+		<many-to-one name="pavimentoRua" class="gcom.cadastro.imovel.PavimentoRua" not-null="false">
+			<column name="prua_id"/>
+		</many-to-one>
+		
+		<many-to-one name="pavimentoCalcada" class="gcom.cadastro.imovel.PavimentoCalcada" not-null="false">
+			<column name="pcal_id"/>
+		</many-to-one>
+
 		<set name="medicaoHistoricos" lazy="true" inverse="true">
 			<key>
 				<column name="lagu_id"/>
 			</key>
 			<one-to-many class="gcom.micromedicao.medicao.MedicaoHistorico"/>
 		</set>
-		<!-- bi-directional many-to-one association to LigacaoOrigem -->
-		<many-to-one name="ligacaoOrigem" class="gcom.atendimentopublico.LigacaoOrigem" not-null="false">
-			<column name="lgor_id"/>
-		</many-to-one>
+
 	</class>
 </hibernate-mapping>

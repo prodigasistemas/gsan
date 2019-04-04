@@ -469,11 +469,10 @@ public class ExibirEfetuarLigacaoAguaAction extends GcomAction {
 				ligacaoAguaActionForm.setMotivoNaoCobranca("-1");
 				ligacaoAguaActionForm.setAceitaLacre("2");
 				ligacaoAguaActionForm.setIdLigacaoOrigem("-1");
-
-				/*
-				 * Colocado por Raphael Rossiter em 18/04/2007 [FS0013 - Alteração
-				 * de Valor]
-				 */
+				ligacaoAguaActionForm.setProfundidadeRamal("");
+				ligacaoAguaActionForm.setDistanciaInstalacaoRamal("");
+				ligacaoAguaActionForm.setIdPavimentoCalcada("-1");
+				ligacaoAguaActionForm.setIdPavimentoRua("-1");
 				ligacaoAguaActionForm.setAlteracaoValor("");
 			
 			}else{
@@ -501,11 +500,10 @@ public class ExibirEfetuarLigacaoAguaAction extends GcomAction {
 				ligacaoAguaActionForm.setMotivoNaoCobranca("-1");
 				ligacaoAguaActionForm.setAceitaLacre("2");
 				ligacaoAguaActionForm.setIdLigacaoOrigem("-1");
-
-				/*
-				 * Colocado por Raphael Rossiter em 18/04/2007 [FS0013 - Alteração
-				 * de Valor]
-				 */
+				ligacaoAguaActionForm.setProfundidadeRamal("");
+				ligacaoAguaActionForm.setDistanciaInstalacaoRamal("");
+				ligacaoAguaActionForm.setIdPavimentoCalcada("-1");
+				ligacaoAguaActionForm.setIdPavimentoRua("-1");
 				ligacaoAguaActionForm.setAlteracaoValor("");
 			}
 		}

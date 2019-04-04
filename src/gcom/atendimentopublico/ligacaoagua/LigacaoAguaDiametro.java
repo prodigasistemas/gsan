@@ -34,10 +34,13 @@ public class LigacaoAguaDiametro extends ObjetoTransacao {
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public LigacaoAguaDiametro() {
     }
 
+    public LigacaoAguaDiametro(Integer id) {
+    	this.id = id;
+    }
+    
     public Integer getId() {
         return this.id;
     }

@@ -559,15 +559,6 @@
 																<logic:present name="colecaoDiametroLigacao"
 																	scope="session">
 																	<html:option value="">&nbsp;</html:option>
-																	<!--<logic:iterate name="colecaoDiametroLigacao"
-																		id="diametroLigacao">
-																		<option
-																			value="<bean:write property="id" name="diametroLigacao"/>">
-																		<bean:write property="descricao"
-																			name="diametroLigacao" /></option>
-																	</logic:iterate>-->
-
-
 																	<html:options collection="colecaoDiametroLigacao"
 																		labelProperty="descricao" property="id" />
 
@@ -639,7 +630,57 @@
 																</logic:present>
 															</html:select></td>
 														</tr>
+														
+														<tr>
+															<td class="style3">
+																<strong>Profundidade do Ramal:<font color="#FF0000">*</font></strong>
+															</td>
+															<td colspan="2">
+																<html:text property="profundidadeRamal" size="8" maxlength="8" />
+															</td>
+														</tr>
+														
+														<tr>
+															<td class="style3">
+																<strong>Distância de Instalação do Ramal:<font color="#FF0000">*</font></strong>
+															</td>
+															<td colspan="2">
+																<html:text property="distanciaInstalacaoRamal" size="8" maxlength="8" />
+															</td>
+														</tr>
 
+														<tr>
+															<td class="style3">
+																<strong>Pavimento Rua :</strong>
+															</td>
+
+															<td colspan="2">
+																<html:select property="idPavimentoRua"style="width: 230px;">
+
+																	<logic:present name="colecaoPavimentoRua" scope="session">
+																		<html:option value="">&nbsp;</html:option>
+																		<html:options collection="colecaoPavimentoRua"labelProperty="descricao" property="id" />
+																	</logic:present>
+																</html:select>
+															</td>	
+														</tr>
+														
+																												<tr>
+															<td class="style3">
+																<strong>Pavimento Calçada :</strong>
+															</td>
+
+															<td colspan="2">
+																<html:select property="idPavimentoCalcada"style="width: 230px;">
+
+																	<logic:present name="colecaoPavimentoCalcada" scope="session">
+																		<html:option value="">&nbsp;</html:option>
+																		<html:options collection="colecaoPavimentoCalcada"labelProperty="descricao" property="id" />
+																	</logic:present>
+																</html:select>
+															</td>	
+														</tr>
+														
 														<tr>
 															<td class="style3"><strong>Ligação Origem :</strong></td>
 

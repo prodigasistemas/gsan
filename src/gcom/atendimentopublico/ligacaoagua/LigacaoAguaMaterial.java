@@ -34,8 +34,11 @@ public class LigacaoAguaMaterial extends ObjetoTransacao {
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public LigacaoAguaMaterial() {
+    }
+    
+    public LigacaoAguaMaterial(Integer id) {
+    	this.id = id;
     }
 
     public Integer getId() {

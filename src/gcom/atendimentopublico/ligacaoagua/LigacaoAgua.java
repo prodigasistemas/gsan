@@ -1,18 +1,21 @@
 package gcom.atendimentopublico.ligacaoagua;
 
-import java.util.Date;
-import java.util.Set;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import gcom.atendimentopublico.LigacaoOrigem;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.PavimentoCalcada;
+import gcom.cadastro.imovel.PavimentoRua;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Set;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 @ControleAlteracao
 public class LigacaoAgua extends ObjetoTransacao {
@@ -99,6 +102,14 @@ public class LigacaoAgua extends ObjetoTransacao {
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_EFETUAR_LIGACAO, ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO,ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA,
 			ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO_SEM_RA})			
 	private String numeroLacre;
+	
+	private BigDecimal profundidadeRamal;
+	
+	private BigDecimal distanciaInstalacaoRamal;
+
+	private PavimentoRua pavimentoRua;
+	
+	private PavimentoCalcada pavimentoCalcada;
 	
 	@SuppressWarnings("rawtypes")
 	public Set medicaoHistoricos;
@@ -418,7 +429,41 @@ public class LigacaoAgua extends ObjetoTransacao {
 		this.medicaoHistoricos = medicaoHistoricos;
 	}
 	
-    public boolean existeHidrometroInstalado() {
+	
+	
+    public BigDecimal getProfundidadeRamal() {
+		return profundidadeRamal;
+	}
+
+	public void setProfundidadeRamal(BigDecimal profundidadeRamal) {
+		this.profundidadeRamal = profundidadeRamal;
+	}
+
+	public BigDecimal getDistanciaInstalacaoRamal() {
+		return distanciaInstalacaoRamal;
+	}
+
+	public void setDistanciaInstalacaoRamal(BigDecimal distanciaInstalacaoRamal) {
+		this.distanciaInstalacaoRamal = distanciaInstalacaoRamal;
+	}
+
+	public PavimentoRua getPavimentoRua() {
+		return pavimentoRua;
+	}
+
+	public void setPavimentoRua(PavimentoRua pavimentoRua) {
+		this.pavimentoRua = pavimentoRua;
+	}
+
+	public PavimentoCalcada getPavimentoCalcada() {
+		return pavimentoCalcada;
+	}
+
+	public void setPavimentoCalcada(PavimentoCalcada pavimentoCalcada) {
+		this.pavimentoCalcada = pavimentoCalcada;
+	}
+
+	public boolean existeHidrometroInstalado() {
         boolean existe = false;
         if (hidrometroInstalacaoHistorico != null) {
             existe = hidrometroInstalacaoHistorico.getDataRetirada() == null;

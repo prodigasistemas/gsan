@@ -2,14 +2,6 @@ package gcom.relatorio.atendimentopublico;
 
 import gcom.relatorio.RelatorioBean;
 
-/**
- * [UC0450] Filtrar Registro de Atendimento
- * 
- * Classe facilitadora para o retorno do filtro a ser usado no manter.
- * 
- * @author Rafael Pinto
- * @date 18/08/2006
- */
 public class RelatorioOrdemServicoBean implements RelatorioBean {
 
 	private String idOrdemServico;
@@ -107,6 +99,11 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 	private String cpfCnpjCliente;
 	
 	private String imovelPerfil;
+	
+	private String localInstalacaoRamal;
+	private String profundidadeRamal;
+	private String distanciaInstalacaoRamal;
+	
 	
 	public RelatorioOrdemServicoBean(
 			String idOrdemServico, 
@@ -240,7 +237,10 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 			String hidrometroNumeroDigitos,
 			String dataEncerramento,
 			String parecerEncerramento,
-			String cpfCnpjCliente) {
+			String cpfCnpjCliente,
+			String localInstalacaoRamal,
+			String profundidadeRamal,
+			String distanciaInstalacaoRamal) {
 		
 		this.idOrdemServico = idOrdemServico;
 		this.idRA = idRA;
@@ -265,7 +265,6 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 		this.valorSolicitado = valorSolicitado;
 		this.observacaoOS = observacaoOS;
 		this.servicoTipoReferencia = servicoTipoReferencia;
-
 		this.anoMesHistoricoConsumo1 = anoMesHistoricoConsumo1; 
 		this.dtLeituraAtualInformada1 = dtLeituraAtualInformada1; 
 		this.leituraAtualInformada1 = leituraAtualInformada1; 
@@ -310,10 +309,12 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 		this.hidrometroLocal = hidrometroLocal;
 		this.hidrometroLeitura = hidrometroLeitura;
 		this.hidrometroNumeroDigitos = hidrometroNumeroDigitos;
-		
 		this.dataEncerramento = dataEncerramento;
 		this.parecerEncerramento = parecerEncerramento;
 		this.cpfCnpjCliente = cpfCnpjCliente;
+		this.localInstalacaoRamal = localInstalacaoRamal;
+		this.profundidadeRamal = profundidadeRamal; 
+		this.distanciaInstalacaoRamal = distanciaInstalacaoRamal;
 		
 	}
 	
@@ -379,7 +380,8 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 			String hidrometroDiametro,
 			String hidrometroLocal,
 			String hidrometroLeitura,
-			String hidrometroNumeroDigitos) {
+			String hidrometroNumeroDigitos
+	) {
 		
 		this.idOrdemServico = idOrdemServico;
 		this.idRA = idRA;
@@ -447,23 +449,38 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 		
 	}
 
-	/**
-	 * @return Retorna o campo servicoTipoReferencia.
-	 */
+	public String getLocalInstalacaoRamal() {
+		return localInstalacaoRamal;
+	}
+
+	public void setLocalInstalacaoRamal(String localInstalacaoRamal) {
+		this.localInstalacaoRamal = localInstalacaoRamal;
+	}
+
+	public String getProfundidadeRamal() {
+		return profundidadeRamal;
+	}
+
+	public void setProfundidadeRamal(String profundidadeRamal) {
+		this.profundidadeRamal = profundidadeRamal;
+	}
+
+	public String getDistanciaInstalacaoRamal() {
+		return distanciaInstalacaoRamal;
+	}
+
+	public void setDistanciaInstalacaoRamal(String distanciaInstalacaoRamal) {
+		this.distanciaInstalacaoRamal = distanciaInstalacaoRamal;
+	}
+
 	public String getServicoTipoReferencia() {
 		return servicoTipoReferencia;
 	}
 
-	/**
-	 * @param servicoTipoReferencia O servicoTipoReferencia a ser setado.
-	 */
 	public void setServicoTipoReferencia(String servicoTipoReferencia) {
 		this.servicoTipoReferencia = servicoTipoReferencia;
 	}
 
-	/**
-	 * @return Retorna o campo tipoSolicitanteEmpresa.
-	 */
 	public String getTipoSolicitanteEmpresa() {
 		return tipoSolicitanteEmpresa;
 	}
@@ -476,359 +493,206 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 		this.especificacao = especificacao;
 	}
 
-	/**
-	 * @param tipoSolicitanteEmpresa O tipoSolicitanteEmpresa a ser setado.
-	 */
 	public void setTipoSolicitanteEmpresa(String tipoSolicitanteEmpresa) {
 		this.tipoSolicitanteEmpresa = tipoSolicitanteEmpresa;
 	}
 
-	/**
-	 * @return Retorna o campo tipoSolicitanteUsuario.
-	 */
 	public String getTipoSolicitanteUsuario() {
 		return tipoSolicitanteUsuario;
 	}
 
-	/**
-	 * @param tipoSolicitanteUsuario O tipoSolicitanteUsuario a ser setado.
-	 */
 	public void setTipoSolicitanteUsuario(String tipoSolicitanteUsuario) {
 		this.tipoSolicitanteUsuario = tipoSolicitanteUsuario;
 	}
 
-	/**
-	 * @return Retorna o campo categoriaQtdeEconomias.
-	 */
 	public String getCategoriaQtdeEconomias() {
 		return categoriaQtdeEconomias;
 	}
 
-	/**
-	 * @param categoriaQtdeEconomias O categoriaQtdeEconomias a ser setado.
-	 */
 	public void setCategoriaQtdeEconomias(String categoriaQtdeEconomias) {
 		this.categoriaQtdeEconomias = categoriaQtdeEconomias;
 	}
 
-	/**
-	 * @return Retorna o campo dataGeracao.
-	 */
 	public String getDataGeracao() {
 		return dataGeracao;
 	}
 
-	/**
-	 * @param dataGeracao O dataGeracao a ser setado.
-	 */
 	public void setDataGeracao(String dataGeracao) {
 		this.dataGeracao = dataGeracao;
 	}
 
-	/**
-	 * @return Retorna o campo descricaoServicoSolicitado.
-	 */
 	public String getServicoSolicitado() {
 		return servicoSolicitado;
 	}
 
-	/**
-	 * @param descricaoServicoSolicitado O descricaoServicoSolicitado a ser setado.
-	 */
 	public void setServicoSolicitado(String servicoSolicitado) {
 		this.servicoSolicitado = servicoSolicitado;
 	}
 
-	/**
-	 * @return Retorna o campo endereco.
-	 */
 	public String getEndereco() {
 		return endereco;
 	}
 
-	/**
-	 * @param endereco O endereco a ser setado.
-	 */
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
 	}
 
-	/**
-	 * @return Retorna o campo esgotoFixo.
-	 */
 	public String getEsgotoFixo() {
 		return esgotoFixo;
 	}
 
-	/**
-	 * @param esgotoFixo O esgotoFixo a ser setado.
-	 */
 	public void setEsgotoFixo(String esgotoFixo) {
 		this.esgotoFixo = esgotoFixo;
 	}
 
-	/**
-	 * @return Retorna o campo idAtendente.
-	 */
 	public String getIdAtendente() {
 		return idAtendente;
 	}
 
-	/**
-	 * @param idAtendente O idAtendente a ser setado.
-	 */
 	public void setIdAtendente(String idAtendente) {
 		this.idAtendente = idAtendente;
 	}
 
-	/**
-	 * @return Retorna o campo idImovel.
-	 */
 	public String getIdImovel() {
 		return idImovel;
 	}
 
-	/**
-	 * @param idImovel O idImovel a ser setado.
-	 */
 	public void setIdImovel(String idImovel) {
 		this.idImovel = idImovel;
 	}
 
-	/**
-	 * @return Retorna o campo idOrdemServico.
-	 */
 	public String getIdOrdemServico() {
 		return idOrdemServico;
 	}
 
-	/**
-	 * @param idOrdemServico O idOrdemServico a ser setado.
-	 */
 	public void setIdOrdemServico(String idOrdemServico) {
 		this.idOrdemServico = idOrdemServico;
 	}
 
-	/**
-	 * @return Retorna o campo idRA.
-	 */
 	public String getIdRA() {
 		return idRA;
 	}
 
-	/**
-	 * @param idRA O idRA a ser setado.
-	 */
 	public void setIdRA(String idRA) {
 		this.idRA = idRA;
 	}
 
-	/**
-	 * @return Retorna o campo idSolicitante.
-	 */
 	public String getSolicitante() {
 		return solicitante;
 	}
 
-	/**
-	 * @param idSolicitante O idSolicitante a ser setado.
-	 */
 	public void setSolicitante(String solicitante) {
 		this.solicitante = solicitante;
 	}
 
-	/**
-	 * @return Retorna o campo idUnidade.
-	 */
 	public String getUnidade() {
 		return unidade;
 	}
 
-	/**
-	 * @param idUnidade O idUnidade a ser setado.
-	 */
 	public void setUnidade(String unidade) {
 		this.unidade = unidade;
 	}
 
-	/**
-	 * @return Retorna o campo inscricaoImovel.
-	 */
 	public String getInscricaoImovel() {
 		return inscricaoImovel;
 	}
 
-	/**
-	 * @param inscricaoImovel O inscricaoImovel a ser setado.
-	 */
 	public void setInscricaoImovel(String inscricaoImovel) {
 		this.inscricaoImovel = inscricaoImovel;
 	}
 
-	/**
-	 * @return Retorna o campo localOcorrencia.
-	 */
 	public String getLocalOcorrencia() {
 		return localOcorrencia;
 	}
 
-	/**
-	 * @param localOcorrencia O localOcorrencia a ser setado.
-	 */
 	public void setLocalOcorrencia(String localOcorrencia) {
 		this.localOcorrencia = localOcorrencia;
 	}
 
-	/**
-	 * @return Retorna o campo meio.
-	 */
 	public String getMeio() {
 		return meio;
 	}
 
-	/**
-	 * @param meio O meio a ser setado.
-	 */
 	public void setMeio(String meio) {
 		this.meio = meio;
 	}
 
-	/**
-	 * @return Retorna o campo nomeAtendente.
-	 */
 	public String getNomeAtendente() {
 		return nomeAtendente;
 	}
 
-	/**
-	 * @param nomeAtendente O nomeAtendente a ser setado.
-	 */
 	public void setNomeAtendente(String nomeAtendente) {
 		this.nomeAtendente = nomeAtendente;
 	}
 
-	/**
-	 * @return Retorna o campo observacaoOS.
-	 */
 	public String getObservacaoOS() {
 		return observacaoOS;
 	}
 
-	/**
-	 * @param observacaoOS O observacaoOS a ser setado.
-	 */
 	public void setObservacaoOS(String observacaoOS) {
 		this.observacaoOS = observacaoOS;
 	}
 
-	/**
-	 * @return Retorna o campo observacaoRA.
-	 */
 	public String getObservacaoRA() {
 		return observacaoRA;
 	}
 
-	/**
-	 * @param observacaoRA O observacaoRA a ser setado.
-	 */
 	public void setObservacaoRA(String observacaoRA) {
 		this.observacaoRA = observacaoRA;
 	}
 
-	/**
-	 * @return Retorna o campo pavimentoCalcada.
-	 */
 	public String getPavimentoCalcada() {
 		return pavimentoCalcada;
 	}
 
-	/**
-	 * @param pavimentoCalcada O pavimentoCalcada a ser setado.
-	 */
 	public void setPavimentoCalcada(String pavimentoCalcada) {
 		this.pavimentoCalcada = pavimentoCalcada;
 	}
 
-	/**
-	 * @return Retorna o campo pavimentoRua.
-	 */
 	public String getPavimentoRua() {
 		return pavimentoRua;
 	}
 
-	/**
-	 * @param pavimentoRua O pavimentoRua a ser setado.
-	 */
 	public void setPavimentoRua(String pavimentoRua) {
 		this.pavimentoRua = pavimentoRua;
 	}
 
-	/**
-	 * @return Retorna o campo pontoReferencia.
-	 */
 	public String getPontoReferencia() {
 		return pontoReferencia;
 	}
 
-	/**
-	 * @param pontoReferencia O pontoReferencia a ser setado.
-	 */
 	public void setPontoReferencia(String pontoReferencia) {
 		this.pontoReferencia = pontoReferencia;
 	}
 
-	/**
-	 * @return Retorna o campo previsao.
-	 */
 	public String getPrevisao() {
 		return previsao;
 	}
 
-	/**
-	 * @param previsao O previsao a ser setado.
-	 */
 	public void setPrevisao(String previsao) {
 		this.previsao = previsao;
 	}
 
-	/**
-	 * @return Retorna o campo situacaoAguaEsgoto.
-	 */
 	public String getSituacaoAguaEsgoto() {
 		return situacaoAguaEsgoto;
 	}
 
-	/**
-	 * @param situacaoAguaEsgoto O situacaoAguaEsgoto a ser setado.
-	 */
 	public void setSituacaoAguaEsgoto(String situacaoAguaEsgoto) {
 		this.situacaoAguaEsgoto = situacaoAguaEsgoto;
 	}
 
-	/**
-	 * @return Retorna o campo telefone.
-	 */
 	public String getTelefone() {
 		return telefone;
 	}
 
-	/**
-	 * @param telefone O telefone a ser setado.
-	 */
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
 
-	/**
-	 * @return Retorna o campo unidadeGeracao.
-	 */
 	public String getUnidadeGeracao() {
 		return unidadeGeracao;
 	}
 
-	/**
-	 * @param unidadeGeracao O unidadeGeracao a ser setado.
-	 */
 	public void setUnidadeGeracao(String unidadeGeracao) {
 		this.unidadeGeracao = unidadeGeracao;
 	}
@@ -1199,30 +1063,19 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 		this.valorSolicitado = valorSolicitado;
 	}
 
-	/**
-	 * @return Retorna o campo dataEncerramento.
-	 */
+	
 	public String getDataEncerramento() {
 		return dataEncerramento;
 	}
 
-	/**
-	 * @param dataEncerramento O dataEncerramento a ser setado.
-	 */
 	public void setDataEncerramento(String dataEncerramento) {
 		this.dataEncerramento = dataEncerramento;
 	}
 
-	/**
-	 * @return Retorna o campo parecerEncerramento.
-	 */
 	public String getParecerEncerramento() {
 		return parecerEncerramento;
 	}
 
-	/**
-	 * @param parecerEncerramento O parecerEncerramento a ser setado.
-	 */
 	public void setParecerEncerramento(String parecerEncerramento) {
 		this.parecerEncerramento = parecerEncerramento;
 	}

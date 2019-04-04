@@ -23854,7 +23854,10 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
  		
  		try {
  			
- 			consulta = "select ligacao from LigacaoAgua ligacao "
+ 			consulta = " select ligacao from LigacaoAgua ligacao "
+ 					+ " left join fetch ligacao.ramalLocalInstalacao ramallocalistalacao "
+ 					+ " left join fetch ligacao.pavimentoRua pavimentorua "
+ 					+ " left join fetch ligacao.pavimentocalcada pavimentocalcada "
  					+ " where ligacao.id = :idLigacao ";
  			
  			retorno = (LigacaoAgua) session.createQuery(consulta).setInteger("idLigacao",idLigacao).setMaxResults(1).uniqueResult();

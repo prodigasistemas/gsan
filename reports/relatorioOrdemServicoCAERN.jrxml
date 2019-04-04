@@ -99,6 +99,9 @@
 	<field name="getDescAbrevAnormalidadeLeitura6" class="java.lang.String"/>
 	<field name="getNomeProjeto" class="java.lang.String"/>
 	<field name="getImovelPerfil" class="java.lang.String"/>
+	<field name="getLocalInstalacaoRamal" class="java.lang.String"/>
+	<field name="getDistanciaInstalacaoRamal" class="java.lang.String"/>
+	<field name="getProfundidadeRamal" class="java.lang.String"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -118,6 +121,15 @@
 		</columnHeader>
 		<detail>
 			<band height="802"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="0"
+						y="152"
+						width="535"
+						height="89"
+						key="rectangle-5"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
 				<rectangle>
 					<reportElement
 						x="0"
@@ -697,19 +709,10 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getPontoReferencia}]]></textFieldExpression>
 				</textField>
-				<rectangle>
-					<reportElement
-						x="0"
-						y="152"
-						width="535"
-						height="86"
-						key="rectangle-5"/>
-					<graphicElement stretchType="NoStretch"/>
-				</rectangle>
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="168"
+						y="164"
 						width="535"
 						height="0"
 						key="line-12"/>
@@ -718,9 +721,9 @@
 				<staticText>
 					<reportElement
 						x="6"
-						y="154"
+						y="153"
 						width="524"
-						height="12"
+						height="10"
 						key="staticText-19"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -731,16 +734,16 @@
 				<line direction="TopDown">
 					<reportElement
 						x="159"
-						y="168"
+						y="165"
 						width="0"
-						height="70"
+						height="34"
 						key="line-13"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<staticText>
 					<reportElement
 						x="2"
-						y="170"
+						y="166"
 						width="60"
 						height="10"
 						key="staticText-20"/>
@@ -753,7 +756,7 @@
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="2"
-						y="180"
+						y="176"
 						width="156"
 						height="22"
 						key="textField-17"/>
@@ -766,7 +769,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="203"
+						y="199"
 						width="535"
 						height="0"
 						key="line-14"/>
@@ -774,10 +777,10 @@
 				</line>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="2"
-						y="215"
-						width="156"
-						height="22"
+						x="112"
+						y="201"
+						width="187"
+						height="13"
 						key="textField-18"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement>
@@ -787,9 +790,9 @@
 				</textField>
 				<staticText>
 					<reportElement
-						x="2"
-						y="205"
-						width="115"
+						x="1"
+						y="201"
+						width="109"
 						height="10"
 						key="staticText-21"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -801,7 +804,7 @@
 				<staticText>
 					<reportElement
 						x="162"
-						y="170"
+						y="166"
 						width="118"
 						height="10"
 						key="staticText-22"/>
@@ -814,7 +817,7 @@
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="162"
-						y="180"
+						y="176"
 						width="287"
 						height="10"
 						key="textField-19"/>
@@ -827,9 +830,9 @@
 				<rectangle>
 					<reportElement
 						x="0"
-						y="238"
+						y="241"
 						width="535"
-						height="134"
+						height="131"
 						key="rectangle-6"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
@@ -2655,10 +2658,10 @@
 				</line>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="162"
-						y="205"
-						width="372"
-						height="32"
+						x="308"
+						y="200"
+						width="226"
+						height="40"
 						key="textField-20"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement isStyledText="true">
@@ -2669,7 +2672,7 @@
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="162"
-						y="191"
+						y="187"
 						width="287"
 						height="10"
 						key="textField-21"/>
@@ -3278,9 +3281,9 @@
 				<staticText>
 					<reportElement
 						x="6"
-						y="240"
+						y="243"
 						width="524"
-						height="12"
+						height="10"
 						key="staticText-23"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -3559,6 +3562,119 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getImovelPerfil}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement
+						x="1"
+						y="216"
+						width="111"
+						height="10"
+						key="staticText-119"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Local Instalação ramal:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="113"
+						y="216"
+						width="186"
+						height="10"
+						key="textField-36"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Courier New" pdfFontName="Courier" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getLocalInstalacaoRamal}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="160"
+						y="229"
+						width="49"
+						height="10"
+						key="staticText-120"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Distância:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="269"
+						y="229"
+						width="8"
+						height="10"
+						key="staticText-121"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[m]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="213"
+						y="229"
+						width="51"
+						height="10"
+						key="textField-37"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Courier New" pdfFontName="Courier" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getDistanciaInstalacaoRamal}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="305"
+						y="200"
+						width="0"
+						height="41"
+						key="line-102"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="3"
+						y="229"
+						width="65"
+						height="10"
+						key="staticText-122"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Profundidade:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="71"
+						y="229"
+						width="53"
+						height="10"
+						key="textField-38"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Courier New" pdfFontName="Courier" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getProfundidadeRamal}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="126"
+						y="228"
+						width="8"
+						height="10"
+						key="staticText-123"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false"/>
+					</textElement>
+				<text><![CDATA[m]]></text>
+				</staticText>
 			</band>
 		</detail>
 		<columnFooter>

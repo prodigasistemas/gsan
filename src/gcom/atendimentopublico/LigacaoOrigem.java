@@ -11,7 +11,13 @@ public class LigacaoOrigem extends TabelaAuxiliarAbreviada implements Serializab
 	
 	private static final long serialVersionUID = 1L;
 
-    
+	public LigacaoOrigem() {
+    }
+	
+	public LigacaoOrigem(Integer id) {
+    	this.id = id;
+    }
+	
 	public String toString() {
 		return new ToStringBuilder(this).append("id", getId()).toString();
 	}
