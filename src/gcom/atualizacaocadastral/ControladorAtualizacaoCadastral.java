@@ -2473,7 +2473,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     	int idUnidadeIniciada = 0;
     	try {
     		
-    		this.emitirComunicadosAprovacoesAntigas();
+    		//this.emitirComunicadosAprovacoesAntigas();
     		
     		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidade, UnidadeProcessamento.FUNCIONALIDADE, 0);
 

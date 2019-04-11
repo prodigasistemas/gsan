@@ -689,7 +689,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 		
 		this.emitirComunicado(helper.getIdImovel(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
-		getControladorUtil().inserir(new ComunicadoEmitirConta(helper.getIdImovel(), referencia, ComunicadoEmitirConta.ALTERACAO_CADASTRAL));
+		//getControladorUtil().inserir(new ComunicadoEmitirConta(helper.getIdImovel(), referencia, ComunicadoEmitirConta.ALTERACAO_CADASTRAL));
 		
 		return retorno.toString();
 	}
