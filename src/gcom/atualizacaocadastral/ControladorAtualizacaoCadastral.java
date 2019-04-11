@@ -1182,7 +1182,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				Date dataLiberacao = new Date();
 
 				if (isImovelComAlteracaoFaturamento(idImovel)) {
-					dataLiberacao = Util.adicionarNumeroDiasDeUmaData(dataLiberacao, 45);
+					dataLiberacao = Util.adicionarNumeroDiasDeUmaData(dataLiberacao, 90);
 					
 					getControladorUtil().inserir(new ComunicadoEmitirConta(idImovel, 
 																		getControladorImovel().pesquisarGrupoImovel(idImovel).getAnoMesReferencia(), 
