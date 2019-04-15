@@ -779,7 +779,7 @@
 					<reportElement
 						x="112"
 						y="201"
-						width="187"
+						width="109"
 						height="13"
 						key="textField-18"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -2658,9 +2658,9 @@
 				</line>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="308"
+						x="224"
 						y="200"
-						width="226"
+						width="310"
 						height="40"
 						key="textField-20"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -3579,7 +3579,7 @@
 					<reportElement
 						x="113"
 						y="216"
-						width="186"
+						width="108"
 						height="10"
 						key="textField-36"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -3590,7 +3590,7 @@
 				</textField>
 				<staticText>
 					<reportElement
-						x="160"
+						x="131"
 						y="229"
 						width="49"
 						height="10"
@@ -3603,7 +3603,7 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="269"
+						x="212"
 						y="229"
 						width="8"
 						height="10"
@@ -3616,9 +3616,9 @@
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="213"
+						x="184"
 						y="229"
-						width="51"
+						width="27"
 						height="10"
 						key="textField-37"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -3629,7 +3629,7 @@
 				</textField>
 				<line direction="TopDown">
 					<reportElement
-						x="305"
+						x="222"
 						y="200"
 						width="0"
 						height="41"
@@ -3653,7 +3653,7 @@
 					<reportElement
 						x="71"
 						y="229"
-						width="53"
+						width="29"
 						height="10"
 						key="textField-38"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -3664,7 +3664,7 @@
 				</textField>
 				<staticText>
 					<reportElement
-						x="126"
+						x="98"
 						y="228"
 						width="8"
 						height="10"
