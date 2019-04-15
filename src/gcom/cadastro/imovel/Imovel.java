@@ -2564,4 +2564,12 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 		return ((this.getCoordenadaX() != null && (this.getCoordenadaX().equals("0.0") || this.getCoordenadaX().equals("0")))
 				|| (this.getCoordenadaY() != null && (this.getCoordenadaY().equals("0.0") || this.getCoordenadaY().equals("0"))));
 	}
+	
+	public boolean isLigadoAgua() {
+		return this.ligacaoAguaSituacao != null && this.ligacaoAguaSituacao.getId().equals(LigacaoAguaSituacao.LIGADO);
+	}
+	
+	public boolean isLigadoEsgoto() {
+		return this.ligacaoEsgotoSituacao != null && this.ligacaoEsgotoSituacao.getId().equals(LigacaoEsgotoSituacao.LIGADO);
+	}
 }

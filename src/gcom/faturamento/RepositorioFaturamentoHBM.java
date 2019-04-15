@@ -132,7 +132,6 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
-import org.jboss.proxy.ClientContainer;
 
 public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 

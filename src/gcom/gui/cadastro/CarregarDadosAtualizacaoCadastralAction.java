@@ -64,14 +64,17 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 
 						String nomeItem = entry.getName().toLowerCase();
 
-						if (nomeItem.endsWith(".txt")) {
+						if (!nomeItem.contains("macosx"))  {
 							
-							System.out.println("Descompactando " + nomeItem);
-							buffer = this.lerArquivoTxt(buffer, zis, nomeItem);
-
-						} else if (isFoto(nomeItem)) {
-							
-							imagens = this.lerImagem(zis, nomeItem, imagens, nomeArquivoZip);
+							if (nomeItem.endsWith(".txt")) {
+								
+								System.out.println("Descompactando " + nomeItem);
+								buffer = this.lerArquivoTxt(buffer, zis, nomeItem);
+								
+							} else if (isFoto(nomeItem)) {
+								
+								imagens = this.lerImagem(zis, nomeItem, imagens, nomeArquivoZip);
+							}
 						}
 					}
 					

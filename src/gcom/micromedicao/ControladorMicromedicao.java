@@ -24768,7 +24768,9 @@ public class ControladorMicromedicao extends ControladorComum {
 			
 			while (imovelporRotaIterator.hasNext()) {
 				ImovelPorRotaHelper helper = buildImovelPorRotaHelper(rota, (Object[]) imovelporRotaIterator.next());
-				objetosImoveis.add(helper);
+				
+				if (helper.getImovel().isLigadoAgua() || helper.getImovel().isLigadoEsgoto())
+					objetosImoveis.add(helper);
 			}
 		}
 		
