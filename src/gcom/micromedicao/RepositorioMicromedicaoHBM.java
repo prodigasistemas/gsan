@@ -3002,6 +3002,9 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 							+ intervalo.getIntervaloFinal() + ") and ";
 				}
 			}
+			
+			sqlSegundaParte = sqlSegundaParte + " (imovel.last_id = " + LigacaoAguaSituacao.LIGADO 
+					+ " or imovel.lest_id = " + LigacaoEsgotoSituacao.LIGADO + ") and ";
 
 			if (filtroParametro instanceof ParametroSimples) {
 				ParametroSimples parametroSimples = ((ParametroSimples) filtroParametro);
@@ -23857,7 +23860,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
  			consulta = " select ligacao from LigacaoAgua ligacao "
  					+ " left join fetch ligacao.ramalLocalInstalacao ramallocalistalacao "
  					+ " left join fetch ligacao.pavimentoRua pavimentorua "
- 					+ " left join fetch ligacao.pavimentocalcada pavimentocalcada "
+ 					+ " left join fetch ligacao.pavimentoCalcada pavimentocalcada "
  					+ " where ligacao.id = :idLigacao ";
  			
  			retorno = (LigacaoAgua) session.createQuery(consulta).setInteger("idLigacao",idLigacao).setMaxResults(1).uniqueResult();
