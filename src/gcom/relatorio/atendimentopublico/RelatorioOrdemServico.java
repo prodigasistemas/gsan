@@ -627,9 +627,9 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 						//Cpf ou Cnpj do Cliente
 						cpfCnpjCliente,
 						
-						(ligacaoAgua.getRamalLocalInstalacao() != null ? ligacaoAgua.getRamalLocalInstalacao().getDescricao() : ""),
-						(ligacaoAgua.getProfundidadeRamal() != null ? Util.formatarBigDecimalParaStringComVirgula(ligacaoAgua.getProfundidadeRamal()) : ""),
-						(ligacaoAgua.getDistanciaInstalacaoRamal() != null ? Util.formatarBigDecimalParaStringComVirgula(ligacaoAgua.getDistanciaInstalacaoRamal()) : ""));
+						(ligacaoAgua != null && ligacaoAgua.getRamalLocalInstalacao() != null ? ligacaoAgua.getRamalLocalInstalacao().getDescricao() : ""),
+						(ligacaoAgua != null && ligacaoAgua.getProfundidadeRamal() != null ? Util.formatarBigDecimalParaStringComVirgula(ligacaoAgua.getProfundidadeRamal()) : ""),
+						(ligacaoAgua != null && ligacaoAgua.getDistanciaInstalacaoRamal() != null ? Util.formatarBigDecimalParaStringComVirgula(ligacaoAgua.getDistanciaInstalacaoRamal()) : ""));
 						
 				//Perfil do imovel
 				OrdemServico ordemServico = fachada.pesquisarOrdemServico(ordemServicoRelatorioHelper.getIdOrdemServico());
