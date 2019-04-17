@@ -242,10 +242,10 @@ public class EfetuarLigacaoAguaAction extends GcomAction {
 					ligacaoAgua.setLigacaoOrigem(ligacaoOrigem);
 				}
 				
-				if (form.getProfundidadeRamal() != null)
+				if (form.getProfundidadeRamal() != null && form.getProfundidadeRamal() != "" )
 					ligacaoAgua.setProfundidadeRamal(new BigDecimal(form.getProfundidadeRamal()));
 				
-				if (form.getDistanciaInstalacaoRamal() != null)
+				if (form.getDistanciaInstalacaoRamal() != null && form.getDistanciaInstalacaoRamal() != "")
 					ligacaoAgua.setDistanciaInstalacaoRamal(new BigDecimal(form.getDistanciaInstalacaoRamal()));
 
 				if(numeroLacre !=null && !numeroLacre.equals("")){
