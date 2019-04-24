@@ -25820,10 +25820,7 @@ public class ControladorMicromedicao extends ControladorComum {
 		// Área Virtual = área construída do imóvel / quantidade de economias
 		// virtuais
 		BigDecimal areaConstruidaVirtual = areaConstruida.divide(new BigDecimal(qtdEconomiasVirtuais), 2, BigDecimal.ROUND_HALF_UP);
-		System.out.println("---> imovel : " + idImovel);
-		
-		System.out.println("		---> areaConstruida : " + areaConstruida);
-		System.out.println("		---> qtdEconomiasVirtuais : " + qtdEconomiasVirtuais);
+
 		if (colecaoSubcategoria != null && !colecaoSubcategoria.isEmpty()) {
 
 			Iterator iterator = colecaoSubcategoria.iterator();
@@ -25832,9 +25829,6 @@ public class ControladorMicromedicao extends ControladorComum {
 
 				Subcategoria subcategoria = (Subcategoria) iterator.next();
 				
-				System.out.println("		---> areaConstruidaVirtual : " + areaConstruidaVirtual);
-				System.out.println("		---> anoMesReferencia : " + anoMesReferencia);
-				System.out.println("		---> subcategoria : " + subcategoria.getId());
 				Integer consumoMinimo = this.pesquisarConsumoMinimoArea(areaConstruidaVirtual, anoMesReferencia, subcategoria, null);
 
 				// Caso a categoria associada à subcategoria tenha fator de economias diferente de NULO
@@ -25843,9 +25837,6 @@ public class ControladorMicromedicao extends ControladorComum {
 					// Multiplica o consumo mínimo pelo fator obtido.
 					consumoNaoMedido = consumoNaoMedido + (consumoMinimo * subcategoria.getCategoria().getFatorEconomias().intValue());
 				} else {
-					System.out.println("		---> consumoNaoMedido : " + consumoNaoMedido);
-					System.out.println("		---> consumoMinimo : " + consumoMinimo);
-					System.out.println("		---> subcategoria.getQuantidadeEconomias() : " + subcategoria.getQuantidadeEconomias());
 					// Multiplica o consumo mínimo pela quantidade de economias
 					// da subcategoria.
 					consumoNaoMedido = consumoNaoMedido + (consumoMinimo * subcategoria.getQuantidadeEconomias());

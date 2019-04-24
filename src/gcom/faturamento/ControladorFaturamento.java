@@ -8738,27 +8738,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												dados[7].toString()));
 								extratoQuitacao.setIndicadorImpressaoNaConta(new Integer(dados[8].toString()));
 								
-								Integer idImovel = new Integer(
-										dados[1].toString());
-								Integer anoReferencia = new Integer(
-										dados[2].toString());
-								String matriculaFormatada = Util
-										.retornaMatriculaImovelFormatada(idImovel);
-								String inscricaoImovel = this
-										.getControladorImovel()
-										.pesquisarInscricaoImovel(idImovel);
-								String nomeCliente = this
-										.getControladorImovel()
-										.consultarNomeClienteUsuarioImovel(idImovel);
-								String endereco = this.getControladorEndereco()
-										.pesquisarEndereco(idImovel);
-								FaturamentoGrupo faturamentoGrupo = this
-										.getControladorImovel()
-										.pesquisarGrupoImovel(idImovel);
-								String[] enderecoDividido = this
-										.getControladorEndereco()
-										.pesquisarEnderecoFormatadoDividido(
-												idImovel);
+								Integer idImovel = new Integer(dados[1].toString());
+								Integer anoReferencia = new Integer(dados[2].toString());
+								String matriculaFormatada = Util.retornaMatriculaImovelFormatada(idImovel);
+								String inscricaoImovel = this.getControladorImovel().pesquisarInscricaoImovel(idImovel);
+								String nomeCliente = this.getControladorImovel().consultarNomeClienteUsuarioImovel(idImovel);
+								String endereco = this.getControladorEndereco().pesquisarEndereco(idImovel);
+								FaturamentoGrupo faturamentoGrupo = this.getControladorImovel().pesquisarGrupoImovel(idImovel);
+								String[] enderecoDividido = this.getControladorEndereco().pesquisarEnderecoFormatadoDividido(idImovel);
 								
 								boolean enderecoAlternativo = false;
 								short endAlternativo = 0;
@@ -8815,8 +8802,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								helper.setNomeClienteUsuario(nomeCliente);
 								helper.setEndereco(endereco);
 								helper.setFirma(dados[4].toString());
-								helper.setIdGrupo(faturamentoGrupo.getId()
-										.toString());
+								helper.setIdGrupo(faturamentoGrupo.getId().toString());
 								helper.setEnderecoDestinatario(enderecoDividido[0]);
 								helper.setBairro(enderecoDividido[3]);
 								helper.setMunicipio(enderecoDividido[1]);
@@ -8832,15 +8818,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								helper.setEnderecoAlternativo(endAlternativo);
 								
 								Collection<ExtratoQuitacaoItem> colecaoExtratosItens = this.repositorioFaturamento
-										.pesquisarExtratoQuitacaoItensParaGeracaoArquivoTexto(extratoQuitacao
-												.getId());
+										.pesquisarExtratoQuitacaoItensParaGeracaoArquivoTexto(extratoQuitacao.getId());
 
 								helper.setFaturas(colecaoExtratosItens);
 
 								sequencial++;
 
-								linha = this.gerarlinhaArquivoExtratoQuitacao(
-										helper, sequencial);
+								linha = this.gerarlinhaArquivoExtratoQuitacao(helper, sequencial);
 
 								out.write(linha.toString());
 								out.flush();
@@ -8849,15 +8833,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								// EXTRATO_QUITACAO.EXQT_ICIMPRESSAO,
 								// para os registros em que foram gerados o TXT,
 								// para o valor 1;
-								ExtratoQuitacao extratoQuitacaoParaAtualizacao = helper
-										.getExtratoQuitacaoParaAtualizacao();
+								ExtratoQuitacao extratoQuitacaoParaAtualizacao = helper.getExtratoQuitacaoParaAtualizacao();
 
-								extratoQuitacaoParaAtualizacao
-										.setIndicadorImpressao(ConstantesSistema.SIM
-												.intValue());
+								extratoQuitacaoParaAtualizacao.setIndicadorImpressao(ConstantesSistema.SIM.intValue());
 
-								getControladorBatch().atualizarObjetoParaBatch(
-										extratoQuitacaoParaAtualizacao);
+								getControladorBatch().atualizarObjetoParaBatch(extratoQuitacaoParaAtualizacao);
 
 								linha = null;
 
@@ -8872,9 +8852,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						 * quantidade de registros seta a flag indicando que a
 						 * paginação terminou.
 						 */
-						if (colecaoExtratos == null
-								|| colecaoExtratos.size() < quantidadeMaxima) {
-
+						if (colecaoExtratos == null || colecaoExtratos.size() < quantidadeMaxima) {
 							flagTerminou = true;
 							flagTerminouParte = true;
 						}
@@ -8894,9 +8872,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								zos.close();
 								leitura.delete();
 							} catch (IOException e) {
-								getControladorBatch()
-										.encerrarUnidadeProcessamentoBatch(e,
-												idUnidadeIniciada, true);
+								getControladorBatch().encerrarUnidadeProcessamentoBatch(e,idUnidadeIniciada, true);
 								throw new EJBException(e);
 							}
 							contadorDosTresMil = 0;
@@ -8908,8 +8884,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}// Terminou
 			}
 
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
 		} catch (Exception e) {
 
@@ -8920,8 +8895,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			// venha a lançar e garantir que a unidade
 			// de processamento do batch será atualizada
 			// com o erro ocorrido
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
-					idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 		}
 
 	}
@@ -8931,86 +8905,37 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		StringBuilder linha = new StringBuilder();
 
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getAnoMesArrecadacao().toString(), 4));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getNomeClienteUsuario(), 50));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getEndereco(), 120));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getMatriculaFormatada(), 9));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						sequencial.toString(), 50));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getInscricaoImovel(), 20));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getFirma(), 10));
-		/**
-		 * autor: Adriana Muniz
-		 * Data: 26/04/2011
-		 * Alteração de 2 para 3 o tamanho do campo do id do grupo
-		 * */
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getIdGrupo().toString(), 3));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getNomeClienteUsuario(), 50));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getEnderecoDestinatario(), 70));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getBairro(), 30));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getMunicipio(), 30));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getUf(), 2));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getAnoMesArrecadacao().toString(), 4));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getNomeClienteUsuario(), 50));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getEndereco(), 120));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getMatriculaFormatada(), 9));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(sequencial.toString(), 50));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getInscricaoImovel(), 20));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getFirma(), 10));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getIdGrupo().toString(), 3));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getNomeClienteUsuario(), 50));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getEnderecoDestinatario(), 70));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getBairro(), 30));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getMunicipio(), 30));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getUf(), 2));
 
 		if (helper.getCep().length() == 8) {
-			linha.append(Util
-					.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-							Util.formatarCEP(helper.getCep()), 10));
+			linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(Util.formatarCEP(helper.getCep()), 10));
 		} else {
-			linha.append(Util
-					.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-							helper.getCep(), 10));
+			linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getCep(), 10));
 		}
 
-		/**
-		 * autor: Adriana Muniz
-		 * Data:30/03/2011
-		 * 
-		 * Alteração para evitar que pagamentos duplicados sejam enviados para o arquivo de texto
-		 */
 		Collection<Integer> anomesreferencia = new ArrayList<Integer>();
 		BigDecimal valorDuplicado = new BigDecimal(0);
+
 		for (ExtratoQuitacaoItem item : helper.getFaturas()) {
 
 			if(!anomesreferencia.contains(item.getAnoMesReferenciaConta())) {
 				anomesreferencia.add(item.getAnoMesReferenciaConta());
-				linha.append(Util
-						.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-								Util.formatarAnoMesParaMesAno(item
-										.getAnoMesReferenciaConta()), 7));
-				linha.append(Util
-						.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-								item.getDescricaoSituacao(), 30));
-				linha.append(Util
-						.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-								Util.formatarData(item.getDataSituacao()), 10));
-				linha.append(Util
-						.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-								Util.formatarMoedaReal(item.getValorConta()), 14));
+				linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(Util.formatarAnoMesParaMesAno(item.getAnoMesReferenciaConta()), 7));
+				linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(item.getDescricaoSituacao(), 30));
+				linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(Util.formatarData(item.getDataSituacao()), 10));
+				linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(Util.formatarMoedaReal(item.getValorConta()), 14));
 			} else {
 				valorDuplicado = valorDuplicado.add(item.getValorConta());
 			}
@@ -9027,19 +8952,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		   */
 		BigDecimal valorTotal = helper.getExtratoQuitacaoParaAtualizacao().getValorTotalDasContas().subtract(valorDuplicado);
 		
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						Util.formatarMoedaReal(valorTotal),14));
-
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getAnoMesArrecadacao().toString(), 4));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getCodigoRota().toString(), 5));
-		linha.append(Util
-				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-						helper.getSeguencialRota().toString(), 5));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(Util.formatarMoedaReal(valorTotal),14));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getAnoMesArrecadacao().toString(), 4));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getCodigoRota().toString(), 5));
+		linha.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(helper.getSeguencialRota().toString(), 5));
 
 		/**
 		 * autor: Adriana Muniz
@@ -9048,7 +8964,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		 * Se sim, adiciona-se 1, senão adiciona-se 0 
 		 */
 		linha.append(helper.getEnderecoAlternativo()+"");
-		
 		linha.append(System.getProperty("line.separator"));
 
 		return linha;
