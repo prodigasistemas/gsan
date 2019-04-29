@@ -9025,11 +9025,9 @@ public class ControladorImovelSEJB extends ControladorComum {
 					//3.1.4. Caso o intervalo de referência dos débitos associados à situação de cobrança 
 					//esteja preenchido (ISCB_AMREFERENCIAINICIO e ISCB_AMREFERENCIAFINAL 
 					//com o valor diferente de nulo)
-					if(iCS.getAnoMesReferenciaInicio() != null 
-							&& iCS.getAnoMesReferenciaFinal() != null){
+					if(iCS.getAnoMesReferenciaInicio() != null && iCS.getAnoMesReferenciaFinal() != null){
 						
-						if(iCS.getContaMotivoRevisao() != null &&
-								iCS.getCobrancaSituacao().getContaMotivoRevisao() != null){
+						if(iCS.getContaMotivoRevisao() != null && iCS.getCobrancaSituacao().getContaMotivoRevisao() != null){
 							
 							//3.1.4.1.	Seleciona as contas ativas do imóvel no intervalo 
 							//de referência dos débitos associados a situação de cobrança 
@@ -9047,8 +9045,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 							//3.1.4.2.	Caso existam contas, retira as contas selecionadas 
 							//de revisão [UC0149 – Retirar Conta de Revisão] 
 							if (conta != null && !conta.isEmpty()) {
-								getControladorFaturamento().retirarRevisaoConta(conta,
-										null, usuarioLogado, true, null);
+								getControladorFaturamento().retirarRevisaoConta(conta, null, usuarioLogado, true, null);
 							}
 						}
 					}
@@ -9069,6 +9066,8 @@ public class ControladorImovelSEJB extends ControladorComum {
 					iCS.adicionarUsuario(usuarioLogado,UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 					registradorOperacaoRota.registrarOperacao(iCS);
 					getControladorUtil().atualizar(iCS);
+					
+					getControladorSpcSerasa().exluirNegativacaoImovel(iCS.getImovel());
 					
 				}
 			}

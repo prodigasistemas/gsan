@@ -275,4 +275,6 @@ public interface ControladorSpcSerasaLocal extends javax.ejb.EJBLocalObject {
 	
 	public boolean isImovelNegativado(Integer idImovel) throws ControladorException;
 	
+	public void exluirNegativacaoImovel(Imovel imovel) throws ControladorException;
+	
 }

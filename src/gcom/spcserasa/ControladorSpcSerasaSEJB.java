@@ -13821,6 +13821,30 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		}
 	}
 	
+	public void exluirNegativacaoImovel(Imovel imovel) throws ControladorException {
+		try {
+			FiltroNegativacaoImoveis filtro = new FiltroNegativacaoImoveis();
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID, imovel.getId()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.INDICADOR_EXCLUIDO, new Integer(2)));
+
+			Collection negativacaoImoveis = RepositorioUtilHBM.getInstancia().pesquisar(filtro, NegativacaoImoveis.class.getName());
+
+			if (negativacaoImoveis != null && !negativacaoImoveis.isEmpty()) {
+				NegativacaoImoveis negativacaoImovel = (NegativacaoImoveis) Util.retonarObjetoDeColecao(negativacaoImoveis);
+				
+				negativacaoImovel.setIndicadorExcluido(ConstantesSistema.SIM);
+				negativacaoImovel.setDataExclusao(new Date());
+				negativacaoImovel.setUltimaAlteracao(new Date());
+				RepositorioUtilHBM.getInstancia().atualizar(negativacaoImovel);
+			}
+
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
 	public boolean isImovelNegativado(Integer idImovel) throws ControladorException {
 
 		try {
