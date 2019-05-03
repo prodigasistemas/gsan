@@ -6217,6 +6217,13 @@ public class Util {
 	}
     
     public static void main(String[] args) {
-		System.out.println(Util.formatarAnoMesParaMesAnoComBarra(201908));
+		Integer a = 201903;
+		Integer b = 201904;
+		
+		Integer result = a.compareTo(b);
+		if (a.compareTo(b) > -1)
+			System.out.println("maior que -1 " + result);
+		else 
+			System.out.println("menor que -1 " + result);
 	}
 }

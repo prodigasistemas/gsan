@@ -25,14 +25,15 @@ public class ExibirFiltrarPagamentosAClassificarAction extends GcomAction {
 
 		HttpSession sessao = httpServletRequest.getSession(false);
 
-		PagamentosAClassificarActionForm pagamentosAClassificarActionForm = (PagamentosAClassificarActionForm) actionForm;
+		PagamentosAClassificarActionForm form = (PagamentosAClassificarActionForm) actionForm;
 
+		//this.limparFormulario(form);
 		
 		Collection<PagamentoSituacao> listaSituacoesPagamento = obterSituacaoPagamento();
 
 		httpServletRequest.setAttribute("listaSituacoesPagamento", listaSituacoesPagamento);
 		
-		sessao.setAttribute("pagamentosAClassificarActionForm",pagamentosAClassificarActionForm);
+		sessao.setAttribute("pagamentosAClassificarActionForm",form);
 
 		return retorno;
 	}
@@ -60,5 +61,10 @@ public class ExibirFiltrarPagamentosAClassificarAction extends GcomAction {
 		listaSituacoesPagamento.add(pagamentoSituacao);
 		
 		return listaSituacoesPagamento;
+	}
+	
+	private void limparFormulario(PagamentosAClassificarActionForm formulario) {
+		formulario.setIdRegistrosClassificacao(null);
+		formulario.setColecaoPagamentosAClassificar(null);
 	}
 }

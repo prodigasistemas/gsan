@@ -3084,7 +3084,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "INNER JOIN cnta.imovel as imov "
 					+ "INNER JOIN cnta.debitoCreditoSituacaoAtual as dcst "
 					+ "WHERE imov.id = :imovelPagamento AND cnta.referencia = :anoMesReferenciaPagamento "
-					+ "AND dcst.id IN(:normal, :retificada, :incluida) ";
+					+ "AND dcst.id IN(:normal, :retificada, :incluida, :erroProcessamento) ";
 
 			retorno = (Object[]) session.createQuery(consulta)
 					.setInteger("imovelPagamento", imovel.getId())
@@ -3092,6 +3092,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
 					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
 					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+					.setInteger("erroProcessamento", DebitoCreditoSituacao.ERRO_PROCESSAMENTO)
 					.setMaxResults(1).uniqueResult();
 			
 

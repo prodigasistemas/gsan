@@ -15,7 +15,7 @@
 		<script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
 		<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
 		
-		<script language="JavaScript">
+		<script language="JavaScript">build_
 		
 			function refaturar(form) {
 				form.action = 'refaturarPagamentosNaoClassificadosAction.do?devolver=0';
@@ -24,6 +24,7 @@
 			
 			function devolver(form) {
 				form.action = 'classificarPagamentosAction.do?devolver=1';
+				document.getElementById("desabilita").disabled=true;
 		  		form.submit();
 			}
 			
