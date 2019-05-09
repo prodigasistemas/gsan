@@ -88,6 +88,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.CreateException;
+import javax.ejb.EJBException;
 
 import org.apache.log4j.Logger;
 
@@ -2348,7 +2349,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
                 retorno[0] = Util.removerUltimosCaracteres(descricao.toString(), 2);
                 
                 descricao = new StringBuilder();
-                List<Integer> idsNovas = this.obterIdsCategoriasNovas(novas);
+                List<Integer> idsNovas = this.obterIdsSubcategoriasNovas(novas);
                 for (Integer nova : idsNovas) {
                 	descricao.append(Subcategoria.getDescricaoSubcategoria(nova) + ", ");
                 }
@@ -2367,6 +2368,16 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         List<Integer> subcategorias = new ArrayList<Integer>();
         
         for (ImovelSubcategoriaAtualizacaoCadastral subcategoria : imoveis) {
+            subcategorias.add(subcategoria.getSubcategoria().getId());
+        }
+        
+        return subcategorias;
+    }
+    
+    private List<Integer> obterIdsSubcategoriasNovas(List<ImovelSubcategoriaRetorno> imoveis) {
+        List<Integer> subcategorias = new ArrayList<Integer>();
+        
+        for (ImovelSubcategoriaRetorno subcategoria : imoveis) {
             subcategorias.add(subcategoria.getSubcategoria().getId());
         }
         
@@ -2482,12 +2493,18 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			Iterator<ComunicadoEmitirConta> itComunicados = comunicados.iterator();
 			
 			StringBuilder arquivo = new StringBuilder();
+			StringBuilder arquivoComSeparador = new StringBuilder();
+			
 			arquivo.append(getCabecalhoComunicadoAlteracaoCadqstral(comunicados.size())).append(System.getProperty("line.separator"));
+			arquivoComSeparador.append(getCabecalhoComunicadoAlteracaoCadqstral(comunicados.size())).append(System.getProperty("line.separator"));
+			
 			String dataFormatada = Util.formatarDataAAAAMMDD(new Date());
 
 			while (itComunicados.hasNext()) {
 				
 				ComunicadoEmitirConta comunicado = itComunicados.next();
+
+				logger.info("Emitindo comunicado - " + comunicado.getImovel().getId());
 				
 				arquivo.append(Util.completaString(comunicado.getImovel().getId().toString(), 9));
 				arquivo.append(Util.completaString(getControladorCliente().obterNomeClienteConta(comunicado.getImovel().getId()), 40));
@@ -2498,19 +2515,38 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				arquivo.append(dataFormatada);
 				arquivo.append(System.getProperty("line.separator"));
 				
+				arquivoComSeparador.append(Util.completaString(comunicado.getImovel().getId().toString(), 9));
+				arquivoComSeparador.append(";");
+				arquivoComSeparador.append(Util.completaString(getControladorCliente().obterNomeClienteConta(comunicado.getImovel().getId()), 40));
+				arquivoComSeparador.append(";");
+				arquivoComSeparador.append(Util.completaString(getControladorEndereco().obterDescricaoEnderecoImovel(comunicado.getImovel().getId()), 120));
+				arquivoComSeparador.append(";");
+				arquivoComSeparador.append(Util.completaString(getControladorEndereco().obterEnderecoCorrespondenciaImovel(comunicado.getImovel().getId()), 120));
+				arquivoComSeparador.append(";");
+				arquivoComSeparador.append(descricaoAlteracoesComunicadoIrregularidadefaturamento(comunicado.getImovel().getId()));
+				arquivoComSeparador.append(";");
+				arquivoComSeparador.append(Util.formatarAnoMesParaMesAnoComBarra(comunicado.getReferencia()));
+				arquivoComSeparador.append(";");
+				arquivoComSeparador.append(dataFormatada);
+				arquivoComSeparador.append(";");
+				arquivoComSeparador.append(System.getProperty("line.separator"));
+				
 				comunicado.setIndicadorEmitido(ConstantesSistema.SIM);
 				getControladorUtil().atualizar(comunicado);
 			}
 			
 			String nomeZip = "TERMO_ALTERACAO_CADASTRAL_" + dataFormatada;
+			String nomeZipComSeparados = "TERMO_ALTERACAO_CADASTRAL_SEPARADO_" + dataFormatada;
 			getControladorUtil().salvarArquivoZip(arquivo, nomeZip, "recadastramento");
+			
+			getControladorUtil().salvarArquivoZip(arquivoComSeparador, nomeZipComSeparados, "recadastramento");
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			
 		} catch (ControladorException e) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			logger.error("Erro ao emitir comunicados não emitidos", e);
-			throw new ControladorException("Erro ao emitir comunicados não emitidos", e);
+			throw new EJBException(e);
 		}  
     }
     
