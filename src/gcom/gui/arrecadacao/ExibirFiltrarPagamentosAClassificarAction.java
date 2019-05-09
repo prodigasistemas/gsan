@@ -27,8 +27,6 @@ public class ExibirFiltrarPagamentosAClassificarAction extends GcomAction {
 
 		PagamentosAClassificarActionForm form = (PagamentosAClassificarActionForm) actionForm;
 
-		//this.limparFormulario(form);
-		
 		Collection<PagamentoSituacao> listaSituacoesPagamento = obterSituacaoPagamento();
 
 		httpServletRequest.setAttribute("listaSituacoesPagamento", listaSituacoesPagamento);
@@ -41,30 +39,24 @@ public class ExibirFiltrarPagamentosAClassificarAction extends GcomAction {
 	private Collection<PagamentoSituacao> obterSituacaoPagamento () {
 		Collection<PagamentoSituacao> listaSituacoesPagamento = new ArrayList<PagamentoSituacao>();
 			
-		PagamentoSituacao pagamentoSituacao = new PagamentoSituacao();
-		pagamentoSituacao.setId(PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_PARCELADA);
+		PagamentoSituacao pagamentoSituacao = new PagamentoSituacao(PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_PARCELADA);
 		pagamentoSituacao.setDescricao("CANCELADO POR PARCELAMENTO");
-			
 		listaSituacoesPagamento.add(pagamentoSituacao);
 		
 		
-		pagamentoSituacao = new PagamentoSituacao();
-		
-		pagamentoSituacao.setId(PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_CANCELADA);
+		pagamentoSituacao = new PagamentoSituacao(PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_CANCELADA);
 		pagamentoSituacao.setDescricao("CONTA CANCELADA");
 		listaSituacoesPagamento.add(pagamentoSituacao);
 		
-		pagamentoSituacao = new PagamentoSituacao();
-			
-		pagamentoSituacao.setId(PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE);
+		pagamentoSituacao = new PagamentoSituacao(PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE);
 		pagamentoSituacao.setDescricao("PAGAMENTO EM DUPLICIDADE");
+		listaSituacoesPagamento.add(pagamentoSituacao);
+		
+		pagamentoSituacao = new PagamentoSituacao(PagamentoSituacao.DOCUMENTO_INEXISTENTE_ERRO_PROCESSAMENTO);
+		pagamentoSituacao.setDescricao("CANCELADO ERRO PROCESSAMENTO");
 		listaSituacoesPagamento.add(pagamentoSituacao);
 		
 		return listaSituacoesPagamento;
 	}
 	
-	private void limparFormulario(PagamentosAClassificarActionForm formulario) {
-		formulario.setIdRegistrosClassificacao(null);
-		formulario.setColecaoPagamentosAClassificar(null);
-	}
 }

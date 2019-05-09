@@ -12912,9 +12912,6 @@ public class ControladorArrecadacao extends ControladorComum {
 										imovel = new Imovel();
 										imovel.setId(idImovel);
 
-										if (idImovel.intValue() == 2111942) {
-											System.out.println("Cheguei no imóvel");
-										}
 										Collection<Integer> colecaoAnoMesPagamento = null;
 
 										/**
@@ -32543,8 +32540,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							
 							if (situacaoConta.equals(DebitoCreditoSituacao.NORMAL) 
 									|| situacaoConta.equals(DebitoCreditoSituacao.INCLUIDA) 
-									|| situacaoConta.equals(DebitoCreditoSituacao.RETIFICADA)
-									|| situacaoConta.equals(DebitoCreditoSituacao.ERRO_PROCESSAMENTO)){
+									|| situacaoConta.equals(DebitoCreditoSituacao.RETIFICADA)){
 								colecaoPagamentosAtualizarSituacaoAnterior.add(pagamentoConjunto);
 								try {
 									repositorioArrecadacao.atualizarSituacaoAnteriorAtualEValorExcedentePagamento(colecaoPagamentosAtualizarSituacaoAnterior,
@@ -32571,7 +32567,6 @@ public class ControladorArrecadacao extends ControladorComum {
 					if(situacaoConta.equals(DebitoCreditoSituacao.NORMAL)
 									|| situacaoConta.equals(DebitoCreditoSituacao.INCLUIDA)
 									|| situacaoConta.equals(DebitoCreditoSituacao.RETIFICADA)
-									|| situacaoConta.equals(DebitoCreditoSituacao.ERRO_PROCESSAMENTO)
 									|| processarPagamentoConta) {
 						// [SF0002] Processar Pagamento de Conta
 						
