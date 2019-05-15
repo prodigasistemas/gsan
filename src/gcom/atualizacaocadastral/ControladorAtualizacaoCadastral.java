@@ -1183,7 +1183,10 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				Date dataLiberacao = new Date();
 
 				if (isImovelComAlteracaoFaturamento(idImovel)) {
-					dataLiberacao = Util.adicionarNumeroDiasDeUmaData(dataLiberacao, 90);
+					if (getControladorImovel().isImovelHidrometrado(idImovel))
+						dataLiberacao = Util.adicionarNumeroDiasDeUmaData(dataLiberacao, 90);
+					else
+						dataLiberacao = Util.adicionarNumeroDiasDeUmaData(dataLiberacao, 400);
 					
 					getControladorUtil().inserir(new ComunicadoEmitirConta(idImovel, 
 																		getControladorImovel().pesquisarGrupoImovel(idImovel).getAnoMesReferencia(), 
@@ -2480,6 +2483,49 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
     }
     
+    private List<ComunicadoEmitirConta> obterComunicadosParaSeremEmitidos() throws ControladorException {
+			
+    	List<ComunicadoEmitirConta> retorno = new ArrayList<ComunicadoEmitirConta>();
+
+    	try {
+				Collection<ComunicadoEmitirConta> comunicados = getControladorFaturamento().pesquisarComunicadosNaoEmitidos(ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
+				
+				Iterator<ComunicadoEmitirConta> itComunicados = comunicados.iterator();
+				
+				
+				while (itComunicados.hasNext()) {
+					
+					ComunicadoEmitirConta comunicado = itComunicados.next();
+					
+					if (getControladorImovel().isImovelHidrometrado(comunicado.getImovel().getId())) {
+						this.atualizarDataLiberacaoProcessamento(comunicado.getImovel().getId());
+						retorno.add(comunicado);
+					}
+				}
+			} catch (ErroRepositorioException e) {
+				logger.error("Erro ao consultar comunicados para serem emitidos.", e);
+				throw new ControladorException("Erro ao consultar comunicados para serem emitidos.", e);
+			}
+			
+		return retorno;
+    }
+    
+    private void atualizarDataLiberacaoProcessamento(Integer idImovel) throws ControladorException {
+    	try {
+			ImovelControleAtualizacaoCadastral controle = obterImovelControle(idImovel);
+			SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
+			
+			controle.setDataLiberacaoProcessamento(Util.adicionarNumeroDiasDeUmaData(new Date(), parametros.getQuantidadeDiasLiberacaoProcessamento()));
+			
+			getControladorUtil().atualizar(controle);
+			
+		} catch (ControladorException e) {
+			logger.error("Erro ao atualizar data de liberacao de processamento do imovel " + idImovel, e);
+			throw new ControladorException("Erro ao atualizar data de liberacao de processamento do imovel " + idImovel, e);
+		}
+    	
+    }
+    
     public void emitirTermoAlteracaoCadastral(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException {
     	int idUnidadeIniciada = 0;
     	try {
@@ -2488,9 +2534,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     		
     		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidade, UnidadeProcessamento.FUNCIONALIDADE, 0);
 
-    		Collection<ComunicadoEmitirConta> comunicados = getControladorFaturamento().pesquisarComunicadosNaoEmitidos(ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
-			
-			Iterator<ComunicadoEmitirConta> itComunicados = comunicados.iterator();
+    		List<ComunicadoEmitirConta> comunicados = this.obterComunicadosParaSeremEmitidos();
 			
 			StringBuilder arquivo = new StringBuilder();
 			StringBuilder arquivoComSeparador = new StringBuilder();
@@ -2500,9 +2544,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			
 			String dataFormatada = Util.formatarDataAAAAMMDD(new Date());
 
-			while (itComunicados.hasNext()) {
-				
-				ComunicadoEmitirConta comunicado = itComunicados.next();
+			for (ComunicadoEmitirConta comunicado : comunicados) {
 
 				logger.info("Emitindo comunicado - " + comunicado.getImovel().getId());
 				

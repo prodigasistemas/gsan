@@ -673,6 +673,8 @@
 		
 		<property name="descricaoAplicativoAtendimento" type="java.lang.String" column="parm_descaplicativoatendimento"  length="15" not-null="false" />
 		<property name="telefoneAplicativoAtendimento"  type="java.lang.String" column="parm_foneaplicativoatendimento" length="9"  not-null="false" />
+		
+		<property name="quantidadeDiasLiberacaoProcessamento"  type="java.lang.Integer" column="parm_qtddiasliberacaoproc" length="4"  not-null="false" />
 
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to Logradouro -->

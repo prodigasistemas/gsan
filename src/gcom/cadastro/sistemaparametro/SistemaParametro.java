@@ -502,6 +502,8 @@ public class SistemaParametro extends ObjetoTransacao {
 	
 	private String descricaoAplicativoAtendimento;
 	private String telefoneAplicativoAtendimento;
+	
+	private Integer quantidadeDiasLiberacaoProcessamento;
 
 	public Short getNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo() {
 		return numeroDiasEncerrarOsFiscalizacaoDecursoPrazo;
@@ -2582,4 +2584,13 @@ public class SistemaParametro extends ObjetoTransacao {
 	public void setTelefoneAplicativoAtendimento(String telefoneAplicativoAtendimento) {
 		this.telefoneAplicativoAtendimento = telefoneAplicativoAtendimento;
 	}
+
+	public Integer getQuantidadeDiasLiberacaoProcessamento() {
+		return quantidadeDiasLiberacaoProcessamento;
+	}
+
+	public void setQuantidadeDiasLiberacaoProcessamento(Integer quantidadeDiasLiberacaoProcessamento) {
+		this.quantidadeDiasLiberacaoProcessamento = quantidadeDiasLiberacaoProcessamento;
+	}
+	
 }
