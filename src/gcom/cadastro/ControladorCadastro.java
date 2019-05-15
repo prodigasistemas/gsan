@@ -10226,30 +10226,18 @@ public class ControladorCadastro extends ControladorComum {
 	 * @return O hidrômetro atualmente instalado no imóvel
 	 * @throws ErroRepositorioException
 	 */
-	public Hidrometro obterHidrometroAtualmenteInstalado(Integer idImovel)
-			throws ErroRepositorioException {
-		Integer idHidrometroInstalacaoHistorico;
-		idHidrometroInstalacaoHistorico = repositorioMicromedicao
-				.verificarExistenciaHidrometroInstalacaoHistoricoTipoAgua(idImovel);
-		if (idHidrometroInstalacaoHistorico == null
-				|| 0 == idHidrometroInstalacaoHistorico)
-			idHidrometroInstalacaoHistorico = repositorioMicromedicao
-					.verificarExistenciaHidrometroInstalacaoHistoricoTipoPoco(idImovel);
+	public Hidrometro obterHidrometroAtualmenteInstalado(Integer idImovel) throws ErroRepositorioException {
+		Integer idHistorico = repositorioMicromedicao.verificarExistenciaHidrometroInstalacaoHistoricoTipoAgua(idImovel);
+		
+		if (idHistorico == null || 0 == idHistorico)
+			idHistorico = repositorioMicromedicao.verificarExistenciaHidrometroInstalacaoHistoricoTipoPoco(idImovel);
 
-		if (idHidrometroInstalacaoHistorico != null
-				&& 0 != idHidrometroInstalacaoHistorico) {
-			FiltroHidrometroInstalacaoHistorico filtroHidrometroInstalacaoHistorico = new FiltroHidrometroInstalacaoHistorico();
-			filtroHidrometroInstalacaoHistorico
-					.adicionarParametro(new ParametroSimples(
-							FiltroHidrometroInstalacaoHistorico.ID,
-							idHidrometroInstalacaoHistorico));
-			filtroHidrometroInstalacaoHistorico
-					.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.HIDROMETRO);
-			return ((HidrometroInstalacaoHistorico) Util
-					.retonarObjetoDeColecao(repositorioUtil.pesquisar(
-							filtroHidrometroInstalacaoHistorico,
-							HidrometroInstalacaoHistorico.class.getName())))
-					.getHidrometro();
+		if (idHistorico != null && 0 != idHistorico) {
+			FiltroHidrometroInstalacaoHistorico filtro = new FiltroHidrometroInstalacaoHistorico();
+			filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroInstalacaoHistorico.ID,idHistorico));
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.HIDROMETRO);
+			
+			return ((HidrometroInstalacaoHistorico) Util.retonarObjetoDeColecao(repositorioUtil.pesquisar(filtro,HidrometroInstalacaoHistorico.class.getName()))).getHidrometro();
 		} else {
 			return null;
 		}
