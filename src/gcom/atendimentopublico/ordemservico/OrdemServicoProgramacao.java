@@ -51,7 +51,7 @@ public class OrdemServicoProgramacao extends ObjetoTransacao {
 
 	private Short situacaoFechamento;
 	
-	private Short indicadorAcompanhamentoServico;
+	private short indicadorAcompanhamentoServico;
 
 	public final static Short INDICADOR_ATIVO = new Short("1");
 
@@ -200,12 +200,12 @@ public class OrdemServicoProgramacao extends ObjetoTransacao {
 		this.equipamentoEspecialFaltante = equipamentoEspecialFaltante;
 	}
 
-	public Short getIndicadorAcompanhamentoServico() {
+	public short getIndicadorAcompanhamentoServico() {
 		return indicadorAcompanhamentoServico;
 	}
 
 	public void setIndicadorAcompanhamentoServico(
-			Short indicadorAcompanhamentoServico) {
+			short indicadorAcompanhamentoServico) {
 		this.indicadorAcompanhamentoServico = indicadorAcompanhamentoServico;
 	}
 

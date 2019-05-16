@@ -15756,7 +15756,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 					// Caso indicador de acompanhamento de serviço igual a 3,
 					// então recebe 1.
 					// Caso contrário, recebe 2.
-					if (programacao.getIndicadorAcompanhamentoServico().equals(OrdemServicoProgramacao.INDICADOR_ACOMP_SERV_REALOCADA)) {
+					if (programacao.getIndicadorAcompanhamentoServico() == OrdemServicoProgramacao.INDICADOR_ACOMP_SERV_REALOCADA.shortValue()) {
 						osProgramacaoAcompanhamentoServico.setIndicadorExcluido(ConstantesSistema.SIM);
 					} else {
 						osProgramacaoAcompanhamentoServico.setIndicadorExcluido(ConstantesSistema.NAO);
@@ -17487,7 +17487,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 					// Caso indicador de acompanhamento de serviço igual a 3,
 					// então recebe 1.
 					// Caso contrário, recebe 2.
-					if (programacao.getIndicadorAcompanhamentoServico().equals(OrdemServicoProgramacao.INDICADOR_ACOMP_SERV_REALOCADA)) {
+					if (programacao.getIndicadorAcompanhamentoServico() == OrdemServicoProgramacao.INDICADOR_ACOMP_SERV_REALOCADA.shortValue()) {
 						osProgramacaoAcompanhamentoServico.setIndicadorExcluido(ConstantesSistema.SIM);
 					} else {
 						osProgramacaoAcompanhamentoServico.setIndicadorExcluido(ConstantesSistema.NAO);
@@ -17512,7 +17512,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 						// Caso indicador de acompanhamento de serviço igual a
 						// 3, então recebe 1.
 						// Caso contrário, recebe 2.
-						if (programacao.getIndicadorAcompanhamentoServico().equals(OrdemServicoProgramacao.INDICADOR_ACOMP_SERV_REALOCADA)) {
+						if (programacao.getIndicadorAcompanhamentoServico() == OrdemServicoProgramacao.INDICADOR_ACOMP_SERV_REALOCADA.shortValue()) {
 							osAtividadeProgramacaoAcompanhamentoServico.setIndicadorExcluido(ConstantesSistema.SIM);
 						} else {
 							osAtividadeProgramacaoAcompanhamentoServico.setIndicadorExcluido(ConstantesSistema.NAO);
@@ -17520,7 +17520,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 
 						this.getControladorUtil().atualizar(osAtividadeProgramacaoAcompanhamentoServico);
 					}
-					if (programacao.getIndicadorAcompanhamentoServico().equals(ConstantesSistema.NAO)) {
+					if (programacao.getIndicadorAcompanhamentoServico() == ConstantesSistema.NAO.shortValue()) {
 						programacao.setIndicadorAcompanhamentoServico(ConstantesSistema.SIM);
 						this.getControladorUtil().atualizar(programacao);
 					}
