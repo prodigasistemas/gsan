@@ -1181,10 +1181,11 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel);
 
 				Date dataLiberacao = new Date();
-
+				SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
+				
 				if (isImovelComAlteracaoFaturamento(idImovel)) {
 					if (getControladorImovel().isImovelHidrometrado(idImovel))
-						dataLiberacao = Util.adicionarNumeroDiasDeUmaData(dataLiberacao, 90);
+						dataLiberacao = Util.adicionarNumeroDiasDeUmaData(dataLiberacao, parametros.getQuantidadeDiasLiberacaoProcessamento());
 					else
 						dataLiberacao = Util.adicionarNumeroDiasDeUmaData(dataLiberacao, 400);
 					
