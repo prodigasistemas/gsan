@@ -88,9 +88,13 @@ public class ExibirDesfazerVinculoPopupAction extends GcomAction {
 		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial.municipio.unidadeFederacao");
 		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
 		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra.rota");
-
 		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
-		
+		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial");
+    	filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
+    	filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
+    	filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal");
+    	filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
+    	filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
 		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO, ClienteRelacaoTipo.USUARIO));
 		filtroClienteImovel.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
 		filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_CONDOMINIO_ID, matriculaImovel));
@@ -102,4 +106,5 @@ public class ExibirDesfazerVinculoPopupAction extends GcomAction {
 
 		return retorno;
 	}
+	
 }
