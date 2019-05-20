@@ -12888,15 +12888,6 @@ public class ControladorArrecadacao extends ControladorComum {
 								Collection<Integer> colecaoIdsImoveis = repositorioArrecadacao.pesquisarIdsImovelPorLocalidade(idLocalidade, numeroIndice,
 										quantidadeRegistros);
 
-								
-								
-								
-								colecaoIdsImoveis = null;
-								flagTerminou = true;
-								
-								
-								
-								
 								if (colecaoIdsImoveis != null && !colecaoIdsImoveis.isEmpty()) {
 
 									/**
@@ -12921,9 +12912,6 @@ public class ControladorArrecadacao extends ControladorComum {
 										imovel = new Imovel();
 										imovel.setId(idImovel);
 
-										if (idImovel.intValue() == 6018530) {
-											System.out.println("Cheguei no imovel");
-										}
 										Collection<Integer> colecaoAnoMesPagamento = null;
 
 										/**
@@ -13131,11 +13119,6 @@ public class ControladorArrecadacao extends ControladorComum {
 
 								if (pagamentoArray[1] != null) {
 									idGuiaPagamento = (Integer) pagamentoArray[1];
-									
-									if (idGuiaPagamento.intValue() == 43348046  || idGuiaPagamento.intValue() == 11013)
-										System.out.println("Cheguei 1");
-									
-									
 									guiaGeral = new GuiaPagamentoGeral(idGuiaPagamento);
 									guiaPagamento = new GuiaPagamento(idGuiaPagamento);
 									guiaGeral.setGuiaPagamento(guiaPagamento);
@@ -13143,16 +13126,11 @@ public class ControladorArrecadacao extends ControladorComum {
 									idGuiaPagamento = null;
 								}
 
-								
 								if (pagamentoArray[2] != null) {
 									valorPagamento = (BigDecimal) pagamentoArray[2];
 								} else {
 									valorPagamento = null;
 								}
-
-								Integer idPag = (Integer) pagamentoArray[0];
-								if (idPag.intValue() == 11320305.1)
-									System.out.println("Cheguei 1.1");
 
 								pagamento = new Pagamento();
 								pagamento.setId((Integer) pagamentoArray[0]);
@@ -31464,11 +31442,6 @@ public class ControladorArrecadacao extends ControladorComum {
 					pagamentoArray = (Object[]) iteratorColecaoPagamentosGuiaPagamentoPreenchida
 							.next();
 
-					Integer idPag = (Integer) pagamentoArray[0];
-					
-					if (idPag.intValue() == 11320305)
-						System.out.println("Cheguei 2");
-					
 					if (pagamentoArray[1] != null) {
 						documentoTipo = new DocumentoTipo();
 						documentoTipo.setId((Integer) pagamentoArray[1]);
@@ -31640,8 +31613,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				 * Último registro
 				 */
 				if (!colecaoConjuntoPagamentos.isEmpty()) {
-					System.out.println("Guia 1: " + guiaPagamentoAnterior.getId());
-					
+
 					// [SF0004] Processar Pagamento de Guia de Pagamento
 					arrayDadosPagamentoGuia = this
 							.processarPagamentoGuiaPagamento(
@@ -31718,11 +31690,6 @@ public class ControladorArrecadacao extends ControladorComum {
 					pagamentoArray = (Object[]) iteratorColecaoPagamentosGuiaPagamentoNaoPreenchida
 							.next();
 
-					Integer idPag = (Integer) pagamentoArray[0];
-					
-					if (idPag.intValue() == 11320305)
-						System.out.println("Cheguei 3");
-					
 					if (pagamentoArray[1] != null) {
 						documentoTipo = new DocumentoTipo();
 						documentoTipo.setId((Integer) pagamentoArray[1]);
@@ -31794,7 +31761,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					pagamento.setDebitoTipo(debitoTipo);
 					pagamento.setValorPagamento(valorPagamento);
 					pagamento.setDataPagamento(dataPagamento);
-					pagamento.setAnoMesReferenciaPagamento(anoMesReferenciaPagamento);
+					pagamento
+							.setAnoMesReferenciaPagamento(anoMesReferenciaPagamento);
 
 					if (!primeiraEntrada) {
 
@@ -31856,15 +31824,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					if (conjuntoFechado) {
 
-						if (!debitoTipoAnterior.getId().equals(DebitoTipo.ENTRADA_PARCELAMENTO)) {
 						//[SF0003] Selecionar Guia de Pagamento pela Localidade, Imóvel, Cliente, Tipo de Débito
-							guiaPagamentoConjunto = this.selecionarGuiaPagamentoPelaLocalidadeImovelClienteDebitoTipo(
-									imovelAnterior, clienteAnterior,
-									debitoTipoAnterior, anoMesFaturamento);
-						}
+						guiaPagamentoConjunto = this.selecionarGuiaPagamentoPelaLocalidadeImovelClienteDebitoTipo(
+										imovelAnterior, clienteAnterior,
+										debitoTipoAnterior, anoMesFaturamento);
 
-						if (guiaPagamentoConjunto != null)
-							System.out.println("Guia 2: " + guiaPagamentoConjunto.getGuiaPagamentoGeral().getId());
 						/*
 						 * Caso a guia de pagamento não seja encontrada (retorno
 						 * nulo do [SB0003]) e a situação atual (PGST_IDATUAL)
@@ -31957,12 +31921,6 @@ public class ControladorArrecadacao extends ControladorComum {
 					imovelAnterior = pagamento.getImovel();
 					clienteAnterior = pagamento.getCliente();
 					debitoTipoAnterior = pagamento.getDebitoTipo();
-					
-					if (pagamento.getImovel() != null)
-						System.out.println("[ imovel: " + pagamento.getImovel().getId() + " - pagamento: " + pagamento.getId() + "]");
-					
-					if (pagamento.getCliente() != null)
-						System.out.println("[ cliente: " + pagamento.getCliente().getId() + " - pagamento: " + pagamento.getId() + "]");
 				}
 
 				/*
@@ -31970,8 +31928,6 @@ public class ControladorArrecadacao extends ControladorComum {
 				 */
 				if (!colecaoConjuntoPagamentos.isEmpty()) {
 
-					if (localidade.getId().intValue() == 1)
-						System.out.println("Cheguei na localidade");
 					/*
 					 * [SF0003] Selecionar Guia de Pagamento pela Localidade,
 					 * Imóvel, Cliente, Tipo de Débito
