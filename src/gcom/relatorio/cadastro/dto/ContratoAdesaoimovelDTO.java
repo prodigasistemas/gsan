@@ -13,10 +13,11 @@ public class ContratoAdesaoimovelDTO {
 	private String nomeCidade;
 	private String enderecoContratoAdesao;
 	private String dataGeracao;
+	private String cpfCnpjCliente;
 	
 	public ContratoAdesaoimovelDTO() {}
 	
-	public ContratoAdesaoimovelDTO(String nomeRelatorio, String nomeCliente, String matricula, String nomeCidade, String endereco, String dataGeracao) {
+	public ContratoAdesaoimovelDTO(String nomeRelatorio, String nomeCliente, String matricula, String nomeCidade, String endereco, String dataGeracao, String cpfCnpjCliente) {
 		super();
 		
 		this.nomeRelatorio = nomeRelatorio;
@@ -26,6 +27,7 @@ public class ContratoAdesaoimovelDTO {
 		this.nomeCidade = nomeCidade;
 		this.enderecoContratoAdesao = endereco;
 		this.dataGeracao = dataGeracao;
+		this.cpfCnpjCliente = cpfCnpjCliente;
 	}
 
 	public String getNomeRelatorio() {
@@ -56,6 +58,8 @@ public class ContratoAdesaoimovelDTO {
 		this.numeroContrato = matricula + Util.formatarDataAAAAMMDD(new Date()); 
 		return numeroContrato;
 	}
-	
-	
+
+	public String getCpfCnpjCliente() {
+		return cpfCnpjCliente;
+	}
 }

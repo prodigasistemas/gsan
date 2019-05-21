@@ -16163,7 +16163,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 		String nomeRelatorio = "contrato_adesao_"+ idImovel + data + ".pdf";
 		
 		String endereco = getControladorEndereco().obterDescricaoEnderecoImovel(idImovel);
-		return new ContratoAdesaoimovelDTO(nomeRelatorio, cliente.getNome(), idImovel.toString(), "Belem", endereco, Util.formatarDataComBarraDDMMAAAA(new Date()));
+		return new ContratoAdesaoimovelDTO(nomeRelatorio, cliente.getNome(), idImovel.toString(), "Belem", endereco, Util.formatarDataComBarraDDMMAAAA(new Date()), cliente.getCpfOuCnpjFormatado());
 	}
 	
 	private void finalizarContato(Integer idImovel, Cliente cliente, Integer idContratoTipo) throws ControladorException {

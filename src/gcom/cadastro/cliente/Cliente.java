@@ -692,4 +692,11 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 	public boolean cpfCnpjValido(String cpfCnpj) {
 		return cpfCnpj.equals(this.cpf) || cpfCnpj.equals(this.cnpj);
 	}
+	
+	public String getCpfOuCnpjFormatado() {
+		if (cpf != null) return this.getCpfFormatado();
+		else if (cpf != null) return this.getCpfFormatado();
+		else return null;
+	}
+	
 }
