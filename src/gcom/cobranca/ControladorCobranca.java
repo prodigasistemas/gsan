@@ -61834,15 +61834,16 @@ public class ControladorCobranca extends ControladorComum {
 			int anoMesReferenciaArrecadacaoMenosUm = anoMesReferenciaArrecadacao;
 
 			int numeroInicial = 0;
+			int lote = 1;
 			boolean flagTerminou = false;
 
 			while (!flagTerminou) {
 				parcelamentos = repositorioCobranca.pesquisarParcelamentosSituacaoNormal(ParcelamentoSituacao.NORMAL.toString(), numeroInicial, 500);
 
-				if (parcelamentos.size() <= 500) {
+				if (parcelamentos.size() < 500) {
 					flagTerminou = true;
 				}
-
+				logger.info(" **** LOTE PARCELAMENTOS: " + lote + " -  QTD: "+ parcelamentos.size() + " **** ");
 				if (!Util.isVazioOrNulo(parcelamentos)) {
 
 					Iterator parcelamentosMesIterator = parcelamentos.iterator();
@@ -61892,7 +61893,7 @@ public class ControladorCobranca extends ControladorComum {
 				} else {
 					flagTerminou = true;
 				}
-
+				lote++;
 				numeroInicial += 500;
 			}
 

@@ -26606,7 +26606,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 	      retorno = session.createQuery(consulta).setInteger("parcelamentoSituacao", new Integer(parcelamentoSituacao))
 	          .setInteger("normal", DebitoCreditoSituacao.NORMAL)
-	         // .setFirstResult(numeroIncial)
+	          .setFirstResult(numeroIncial)
 	          .setMaxResults(numeroFinal)
 	          .list();
 
