@@ -6142,6 +6142,8 @@ public class Util {
 		}
 		return true;
 	}
+	
+
 
 	public static String formatarIPTU(String numeroIPTU) {
 		return numeroIPTU.substring(0, 3) + "/"

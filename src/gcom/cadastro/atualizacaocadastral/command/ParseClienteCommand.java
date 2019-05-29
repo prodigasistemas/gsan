@@ -94,13 +94,13 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 			String sexoUsuario = parser.obterDadoParser(1).trim();
 			linha.put("sexoUsuario", getSexoTipo(matriculaUsuario, sexoUsuario));
-
+			
 			String telefoneUsuario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("telefoneUsuario", telefoneUsuario);
-
+			
 			String celularUsuario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
-			linha.put("celularUsuario", celularUsuario);
-
+			linha.put("celularUsuario", celularUsuario);				
+								
 			String emailUsuario = parser.obterDadoParser(30).trim();
 			linha.put("emailUsuario", emailUsuario);
 
@@ -130,13 +130,13 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 			String sexoProprietario = parser.obterDadoParser(1).trim();
 			linha.put("sexoProprietario", getSexoTipo(matriculaProprietario, sexoProprietario));
-
+		
 			String telefoneProprietario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
-			linha.put("telefoneProprietario", telefoneProprietario);
-
+			linha.put("telefoneProprietario", telefoneProprietario);				
+				
 			String celularProprietario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
-			linha.put("celularProprietario", celularProprietario);
-
+			linha.put("celularProprietario", celularProprietario);				
+					
 			String emailProprietario = parser.obterDadoParser(30).trim();
 			linha.put("emailProprietario", emailProprietario);
 
@@ -191,13 +191,13 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 			String sexoResponsavel = parser.obterDadoParser(1).trim();
 			linha.put("sexoResponsavel", getSexoTipo(matriculaResponsavel, sexoResponsavel));
-
+			
 			String telefoneResponsavel = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
-			linha.put("telefoneResponsavel", telefoneResponsavel);
-
+			linha.put("telefoneResponsavel", telefoneResponsavel);				
+				
 			String celularResponsavel = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
-			linha.put("celularResponsavel", celularResponsavel);
-
+			linha.put("celularResponsavel", celularResponsavel);				
+				
 			String emailResponsavel = parser.obterDadoParser(30).trim();
 			linha.put("emailResponsavel", emailResponsavel);
 

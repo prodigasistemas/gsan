@@ -299,7 +299,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	private ClienteFoneAtualizacaoCadastral getClienteFoneAtualizacaoCadastral(String tipoClientFone, Integer foneTipo, int matriculaCliente) {
 		ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
 
-		if (tipoClientFone.length() == IClienteFone.TAMANHO_TELEFONE) {
+		if (tipoClientFone.length() >= (IClienteFone.TAMANHO_TELEFONE-1)) {
 			clienteFone.setDdd(tipoClientFone.substring(0, 2));
 			clienteFone.setTelefone(tipoClientFone.substring(2));
 		} else {
