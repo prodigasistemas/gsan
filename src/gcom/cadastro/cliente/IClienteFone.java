@@ -4,6 +4,8 @@ import java.util.Date;
 
 public interface IClienteFone {
 	
+	int TAMANHO_DDD = 2;
+	
 	int TAMANHO_TELEFONE = 11;
 
 	public abstract Integer getId();

@@ -29,6 +29,7 @@ import gcom.cadastro.cliente.ClienteUsuarioBuilder;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.FoneTipo;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.cliente.RamoAtividade;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
@@ -263,7 +264,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	private ClienteFoneAtualizacaoCadastral getClienteFoneAtualizacaoCadastral(String tipoClientFone, Integer foneTipo, int matriculaCliente) {
 		ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
 
-		if (tipoClientFone.length() == 10) {
+		if (tipoClientFone.length() >= (IClienteFone.TAMANHO_TELEFONE-1)) {
 			clienteFone.setDdd(tipoClientFone.substring(0, 2));
 			clienteFone.setTelefone(tipoClientFone.substring(2));
 		} else {

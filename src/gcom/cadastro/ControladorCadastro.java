@@ -7760,9 +7760,9 @@ public class ControladorCadastro extends ControladorComum {
 			// Celular Usuario
             if (celular != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getDdd(), 2));
-                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 8));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 9));
             } else {
-                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 11));
             }
 
 			// E-mail usuario
@@ -7851,9 +7851,9 @@ public class ControladorCadastro extends ControladorComum {
             // Celular Proprietario
             if (celular != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getDdd(), 2));
-                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 8));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 9));
             } else {
-                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 11));
             }
 
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getEmail() != null ? clienteProprietario.getEmail() : "", 30));
@@ -7941,9 +7941,9 @@ public class ControladorCadastro extends ControladorComum {
             // Celular Responsavel
             if (celular != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getDdd(), 2));
-                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 8));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(celular.getTelefone(), 9));
             } else {
-                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 11));
             }
 
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getEmail() != null ? clienteResponsavel.getEmail() : "", 30));
