@@ -331,12 +331,27 @@ function disableAll(){
 						</tr>
 				</logic:notPresent>
 				
-				<tr>
-					<td><strong>Tipo de Pessoa:<font color="#FF0000">*</font></strong>
-					</td>
-					<td><html:radio property="indicadorPessoaFisicaJuridica" value="1" tabindex="3" onchange="redirecionarSubmit('atualizarClienteWizardAction.do?destino=1&action=exibirAtualizarClienteNomeTipoAction');" />Física 
+				
+				
+					<tr>
+					<td><strong>Tipo de Pessoa:</strong></td>
+					
+					<logic:present name="temCpfCnpj" scope="session">
+						<td>
+						<html:radio property="indicadorPessoaFisicaJuridica" value="1" tabindex="3" disabled="true" onchange="redirecionarSubmit('atualizarClienteWizardAction.do?destino=1&action=exibirAtualizarClienteNomeTipoAction');" />Física 
+						<html:radio property="indicadorPessoaFisicaJuridica" value="2" tabindex="4" disabled="true" onchange="redirecionarSubmit('atualizarClienteWizardAction.do?destino=1&action=exibirAtualizarClienteNomeTipoAction');" />Jurídica </td>
+			
+						</td>
+					</logic:present>
+					
+					<logic:notPresent name="temCpfCnpj" scope="session">
+						<td>
+						<html:radio property="indicadorPessoaFisicaJuridica" value="1" tabindex="3" onchange="redirecionarSubmit('atualizarClienteWizardAction.do?destino=1&action=exibirAtualizarClienteNomeTipoAction');" />Física 
 						<html:radio property="indicadorPessoaFisicaJuridica" value="2" tabindex="4" onchange="redirecionarSubmit('atualizarClienteWizardAction.do?destino=1&action=exibirAtualizarClienteNomeTipoAction');" />Jurídica </td>
+						</td>
+					</logic:notPresent>
 				</tr>
+
 				<tr>
 					<td><strong>Tipo do Cliente:<font color="#FF0000">* </font></strong></td>
 					<td><html:hidden property="tipoPessoaAntes" /> <html:select

@@ -1,8 +1,11 @@
 package gcom.gui.cadastro.cliente;
 
 import java.util.Collection;
+import java.util.List;
 
+import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteTipo;
+import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.FiltroClienteTipo;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.fachada.Fachada;
@@ -49,14 +52,14 @@ public class ExibirAtualizarClienteNomeTipoAction extends GcomAction {
 		// Seta o mapeamento de retorno
 		ActionForward retorno = actionMapping
 				.findForward("atualizarClienteNomeTipo");
-
+		
 		// Pesquisa os Tipos de Clientes para a página
 		FiltroClienteTipo filtroClienteTipo = new FiltroClienteTipo();
 		HttpSession session = httpServletRequest.getSession(false);
 		Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
 		Fachada fachada = Fachada.getInstancia();
 //		DynaValidatorForm clienteActionForm = (DynaValidatorForm) actionForm;
-
+		
 		/** *************************************************************************************** */
 		/**
 		 * Recebe o form da inicialização do processo - Esta foi a solução
@@ -78,7 +81,7 @@ public class ExibirAtualizarClienteNomeTipoAction extends GcomAction {
 		}
 		
 		DynaValidatorForm clienteActionForm = (DynaValidatorForm) session.getAttribute("ClienteActionForm");
-
+		
 		/** *************************************************************************************** */
 
 		/** Verificar as permissão especial para alterar o nome do cliente * */
@@ -86,6 +89,16 @@ public class ExibirAtualizarClienteNomeTipoAction extends GcomAction {
 				.verificarPermissaoAlterarNomeCliente(usuario);
 		httpServletRequest.setAttribute("temPermissaoAlterarNomeCliente",
 				temPermissaoAlterarNomeCliente);
+		/** *************************************************************************************** */
+				
+		//Verificar se o usuário possui cnpj ou rg
+		
+		String clienteCnpj = (String) clienteActionForm.get("cnpj");
+		String clienteCpf = (String) clienteActionForm.get("cpf"); 
+			
+		if (clienteCnpj != null && !clienteCnpj.equals("")  || clienteCpf != null && !clienteCpf.equals("")) {
+			session.setAttribute("temCpfCnpj", "true");
+		}
 		/** *************************************************************************************** */
 		
 		/** Verificar as permissão especial habilitar acrescimos por impontualidade* */
@@ -131,7 +144,7 @@ public class ExibirAtualizarClienteNomeTipoAction extends GcomAction {
 		
 		
 		
-		String indicadorPessoaFisicaJuridica = (String) clienteActionForm.get("indicadorPessoaFisicaJuridica");
+		String indicadorPessoaFisicaJuridica = (String) clienteActionForm.get("indicadorPessoaFisicaJuridica"); 
 		
 		filtroClienteTipo.adicionarParametro(new ParametroSimples(
 				FiltroClienteTipo.INDICADOR_USO,
