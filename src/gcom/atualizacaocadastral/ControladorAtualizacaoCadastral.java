@@ -464,6 +464,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 
 		Collection<IClienteFone> clienteFonesRetorno = this.obterClientesFoneParaAtualizar(imovelRetorno.getIdImovel());
+		List<String> clienteId = new ArrayList<String>();
 
 		for (IClienteFone clienteFoneRetorno : clienteFonesRetorno) {
 			getControladorCliente().removerTodosTelefonesPorCliente(clienteFoneRetorno.getCliente().getId());
@@ -472,6 +473,18 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			MergeProperties.mergeProperties(clienteFone, clienteFoneRetorno);
 			clienteFone.setUltimaAlteracao(new Date());
 			clienteFone.setId(null);
+			
+			if(clienteId == null) {
+				clienteFone.setIndicadorTelefonePadrao(ConstantesSistema.INDICADOR_TELEFONE_PRINCIPAL);
+				
+			}else {
+			
+				if(clienteId.contains(Integer.toString(clienteFoneRetorno.getCliente().getId()))) {
+					clienteFone.setIndicadorTelefonePadrao(ConstantesSistema.INDICADOR_NAO_TELEFONE_PRINCIPAL);
+				} clienteFone.setIndicadorTelefonePadrao(ConstantesSistema.INDICADOR_TELEFONE_PRINCIPAL);
+						
+			}
+			clienteId.add(Integer.toString(clienteFoneRetorno.getCliente().getId()+'-'));
 			getControladorUtil().inserir(clienteFone);
 		}
 	}
