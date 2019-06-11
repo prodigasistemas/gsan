@@ -91,7 +91,7 @@ public class ExibirAtualizarClienteNomeTipoAction extends GcomAction {
 				temPermissaoAlterarNomeCliente);
 		/** *************************************************************************************** */
 				
-		//Verificar se o usuário possui cnpj ou rg
+		//Verificar se o usuário possui cnpj ou rg para poder liberar o combo de seleção do tipo pessoa
 		
 		String clienteCnpj = (String) clienteActionForm.get("cnpj");
 		String clienteCpf = (String) clienteActionForm.get("cpf"); 

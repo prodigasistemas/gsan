@@ -331,9 +331,7 @@ function disableAll(){
 						</tr>
 				</logic:notPresent>
 				
-				
-				
-					<tr>
+				<tr>
 					<td><strong>Tipo de Pessoa:</strong></td>
 					
 					<logic:present name="temCpfCnpj" scope="session">
