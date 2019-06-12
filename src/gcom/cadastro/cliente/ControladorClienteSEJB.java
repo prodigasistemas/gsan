@@ -1,5 +1,14 @@
 package gcom.cadastro.cliente;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+
 import gcom.cadastro.cliente.bean.ClienteEmitirBoletimCadastroHelper;
 import gcom.cadastro.cliente.bean.PesquisarClienteResponsavelSuperiorHelper;
 import gcom.cadastro.endereco.Cep;
@@ -30,15 +39,6 @@ import gcom.util.ErroRepositorioException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
 
 public class ControladorClienteSEJB extends ControladorComum {
 

@@ -167,7 +167,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<IClienteFone> obterClienterFoneParaAtualizar(Integer idImovel) throws ErroRepositorioException {
+	public Collection<IClienteFone> obterClienteFoneParaAtualizar(Integer idImovel, Integer idCliente) throws ErroRepositorioException {
 		Collection<IClienteFone> retorno = null;
 		Session session = HibernateUtil.getSession();
 
@@ -179,9 +179,13 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					+ " ClienteImovelRetorno clienteImovelRetorno"
 					+ " inner join clienteFoneRetorno.cliente cliente "
 					+ " where clienteFoneRetorno.idClienteRetorno = clienteImovelRetorno.idClienteRetorno "
-					+ " and clienteImovelRetorno.imovel.id = :idImovel ";
+					+ " and clienteImovelRetorno.imovel.id = :idImovel "
+					+ " and clienteImovelRetorno.cliente.id = :idCliente ";
 
-			retorno = (Collection<IClienteFone>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
+			retorno = (Collection<IClienteFone>) session.createQuery(consulta)
+					.setInteger("idImovel", idImovel)
+					.setInteger("idCliente", idCliente)
+					.list();
 		} catch (HibernateException e) {
 			e.printStackTrace();
 		} finally {
