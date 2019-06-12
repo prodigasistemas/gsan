@@ -1,5 +1,25 @@
 package gcom.atualizacaocadastral;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import org.apache.log4j.Logger;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiltroOrdemServico;
@@ -71,26 +91,6 @@ import gcom.util.MergeProperties;
 import gcom.util.RepositorioUtilHBM;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-
-import org.apache.log4j.Logger;
 
 public class ControladorAtualizacaoCadastral extends ControladorComum implements IControladorAtualizacaoCadastral {
 		
@@ -459,33 +459,28 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 
-	private void atualizarClienteFoneAtualizacaoCadastral(Integer idImovel) throws Exception {
-		ImovelRetorno imovelRetorno = (ImovelRetorno) repositorioAtualizacaoCadastral.pesquisarImovelRetorno(idImovel);
+	private void atualizarClienteFone(ClienteImovelRetorno clienteImovelRetorno) throws Exception {
+		getControladorCliente().removerTodosTelefonesPorCliente(clienteImovelRetorno.getCliente().getId());
 
+		Collection<IClienteFone> retornos = repositorioAtualizacaoCadastral.obterClienteFoneParaAtualizar(
+				clienteImovelRetorno.getImovel().getId(), clienteImovelRetorno.getCliente().getId());
+		
+		boolean telefonePadraoSetado = false;
 
-		Collection<IClienteFone> clienteFonesRetorno = this.obterClientesFoneParaAtualizar(imovelRetorno.getIdImovel());
-		List<String> clienteId = new ArrayList<String>();
-
-		for (IClienteFone clienteFoneRetorno : clienteFonesRetorno) {
-			getControladorCliente().removerTodosTelefonesPorCliente(clienteFoneRetorno.getCliente().getId());
-
-			ClienteFone clienteFone = new ClienteFone();
-			MergeProperties.mergeProperties(clienteFone, clienteFoneRetorno);
-			clienteFone.setUltimaAlteracao(new Date());
-			clienteFone.setId(null);
+		for (IClienteFone retorno : retornos) {
+			ClienteFone telefone = new ClienteFone();
+			MergeProperties.mergeProperties(telefone, retorno);
+			telefone.setId(null);
+			telefone.setUltimaAlteracao(new Date());
 			
-			if(clienteId == null) {
-				clienteFone.setIndicadorTelefonePadrao(ConstantesSistema.INDICADOR_TELEFONE_PRINCIPAL);
-				
-			}else {
-			
-				if(clienteId.contains(Integer.toString(clienteFoneRetorno.getCliente().getId()))) {
-					clienteFone.setIndicadorTelefonePadrao(ConstantesSistema.INDICADOR_NAO_TELEFONE_PRINCIPAL);
-				} clienteFone.setIndicadorTelefonePadrao(ConstantesSistema.INDICADOR_TELEFONE_PRINCIPAL);
-						
+			if (telefonePadraoSetado) {
+				telefone.setIndicadorTelefonePadrao(ConstantesSistema.INDICADOR_NAO_TELEFONE_PRINCIPAL);
+			} else {
+				telefone.setIndicadorTelefonePadrao(ConstantesSistema.INDICADOR_TELEFONE_PRINCIPAL);
+				telefonePadraoSetado = true;
 			}
-			clienteId.add(Integer.toString(clienteFoneRetorno.getCliente().getId()+'-'));
-			getControladorUtil().inserir(clienteFone);
+			
+			getControladorUtil().inserir(telefone);
 		}
 	}
 
@@ -615,11 +610,6 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		} catch (ControladorException e) {
 			return true;
 		}
-	}
-
-	private Collection<IClienteFone> obterClientesFoneParaAtualizar(Integer idImovel) throws Exception {
-		Collection<IClienteFone> clientesFone =  repositorioAtualizacaoCadastral.obterClienterFoneParaAtualizar(idImovel);
-		return clientesFone;
 	}
 
 	private void atualizarImovelControle(Integer idImovel) throws Exception {
@@ -871,11 +861,11 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 				idImovel = clienteImovelRetorno.getImovel().getId();
 
-				if (!isImovelEmCampo(clienteImovelRetorno.getImovel().getId())) {
+				if (!isImovelEmCampo(idImovel)) {
 
 					if (existeRelacaoClienteImovel(clienteImovelRetorno)) {
 						atualizarInformacoesCliente(clienteImovelRetorno);
-						atualizarClienteFoneAtualizacaoCadastral(clienteImovelRetorno.getImovel().getId());
+						atualizarClienteFone(clienteImovelRetorno);
 
 					} else {
 						incluirNovaRelacaoCliente(clienteImovelRetorno);

@@ -38,7 +38,7 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public Collection<IImovelRamoAtividade> obterImovelRamoAtividadeParaAtualizar(Integer idImovel) throws ErroRepositorioException;
 
-	public Collection<IClienteFone> obterClienterFoneParaAtualizar(Integer idImovel) throws ErroRepositorioException;
+	public Collection<IClienteFone> obterClienteFoneParaAtualizar(Integer idImovel, Integer idCliente) throws ErroRepositorioException;
 
 	public void apagarImovelQuantidadesOcupantes(Integer idImovel) throws ErroRepositorioException;
 
