@@ -72,6 +72,7 @@ import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.IConta;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarGerarLoteAtualizacaoCadastralActionHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaBean;
 import gcom.seguranca.IRepositorioSeguranca;
@@ -1832,9 +1833,10 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, Integer codigoSetor, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ControladorException {
+     
+    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(FiltrarGerarLoteAtualizacaoCadastralActionHelper helper) throws ControladorException {
         try {
-            return repositorioAtualizacaoCadastral.obterIdsImovelControleGeracaoLote(idLocalidade, codigoSetor, dataInicio, dataFim, idLeiturista, incluirImoveisNovos);
+            return repositorioAtualizacaoCadastral.obterIdsImovelControleGeracaoLote(helper);
         } catch (ErroRepositorioException e) {
             throw new ControladorException("erro.lote.atualizacaocadastral.pesquisar.imoveis", e);
         }

@@ -2,6 +2,8 @@ package gcom.gui.cadastro.atualizacaocadastral;
 
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.empresa.FiltroEmpresa;
+import gcom.cadastro.imovel.CadastroOcorrencia;
+import gcom.cadastro.imovel.FiltroCadastroOcorrencia;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -43,9 +46,11 @@ public class ExibirFiltrarGerarLoteAtualizacaoCadastralAction extends GcomAction
 
 			carregarComboEmpresas(sessao);
 			carregarComboLeiturista(sessao);
+			
 			form.setNomeLocalidadeInicial(this.pesquisarNomeLocalidade(form.getIdLocalidadeInicial()));
 			form.setNomeSetorComercialInicial(this.pesquisarNomeSetor(form));
 			
+			carregarComboOcorrencias(sessao);
 		} catch (Exception e) {
 			logger.error("Erro ao filtrar Cadastro", e);
 		}
@@ -134,4 +139,18 @@ public class ExibirFiltrarGerarLoteAtualizacaoCadastralAction extends GcomAction
             return null;
         }
     }
+	
+	@SuppressWarnings("unchecked")
+	private void carregarComboOcorrencias(HttpSession sessao) {
+		if (StringUtils.isNotEmpty(form.getOcorrenciaCadastro()) && !form.getOcorrenciaCadastro().equals("-1")) {
+
+			Filtro filtro = new FiltroCadastroOcorrencia(FiltroCadastroOcorrencia.ID);
+			filtro.adicionarParametro(new ParametroSimples(FiltroCadastroOcorrencia.INDICADOR_VALIDACAO, form.getOcorrenciaCadastro()));
+
+			Collection<CadastroOcorrencia> colecao = getFachada().pesquisar(filtro, CadastroOcorrencia.class.getName());
+			sessao.setAttribute("colecaoCadastroOcorrencia", colecao);
+		} else {
+			sessao.setAttribute("colecaoCadastroOcorrencia", null);
+		}
+	} 
 }

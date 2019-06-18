@@ -1,5 +1,24 @@
 package gcom.fachada;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
+
+import javax.ejb.CreateException;
+import javax.mail.SendFailedException;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
@@ -427,6 +446,7 @@ import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocal;
 import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocalHome;
 import gcom.gui.atendimentopublico.registroatendimento.FiltrarAcompanhamentoRegistroAtendimentoHelper;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarGerarLoteAtualizacaoCadastralActionHelper;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEmitirOSHelper;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEncerrarOSHelper;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoGerarOSHelper;
@@ -655,27 +675,7 @@ import gcom.util.filtro.ParametroSimples;
 import gcom.util.tabelaauxiliar.ControladorTabelaAuxiliarLocal;
 import gcom.util.tabelaauxiliar.ControladorTabelaAuxiliarLocalHome;
 import gcom.util.tabelaauxiliar.TabelaAuxiliarAbstrata;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Vector;
-
-import javax.ejb.CreateException;
-import javax.mail.SendFailedException;
-import javax.servlet.http.HttpSession;
-
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
-import org.apache.commons.fileupload.FileItem;
 
 public class Fachada {
 
@@ -28614,7 +28614,15 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
-
+	
+	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(FiltrarGerarLoteAtualizacaoCadastralActionHelper helper) {
+		try {
+            return getControladorAtualizacaoCadastral().obterIdsImovelControleGeracaoLote(helper);
+        } catch (Exception ex) {
+            throw new FachadaException(ex.getMessage(), ex);
+        }
+	}
+	
 	public Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> consultarDadosTabelaColunaAtualizacaoCadastral(Long idRegistroAlterado, Integer idArquivo, Integer idImovel, Long idCliente,
 			Integer idTipoAlteracao) throws Exception {
 		return this.getControladorTransacao().consultarDadosTabelaColunaAtualizacaoCadastral(idRegistroAlterado, idArquivo, idImovel, idCliente, idTipoAlteracao);
@@ -40253,14 +40261,6 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex);
 		}
 	}
-	
-	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(String idLocalidade, String codigoSetor, String dataInicio, String dataFim, String idLeiturista, boolean incluirImoveisNovos) {
-        try {
-            return getControladorAtualizacaoCadastral().obterIdsImovelControleGeracaoLote(new Integer(idLocalidade), new Integer(codigoSetor), dataInicio, dataFim, new Integer(idLeiturista), incluirImoveisNovos);
-        } catch (Exception ex) {
-            throw new FachadaException(ex.getMessage(), ex);
-        }
-    }
 
 	public void gerarLote(List<ImovelControleAtualizacaoCadastral> imoveisControle, String lote)  {
         try {
@@ -40389,6 +40389,8 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e);
 		}
 	}
+
+	
 
 }
 

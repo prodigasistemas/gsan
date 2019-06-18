@@ -103,11 +103,6 @@
 		form.nomeSetorComercialFinal.value = form.nomeSetorComercialInicial.value;
 	}
 
-   function replicarRota() {
-		var form = document.forms[0];
-		form.cdRotaFinal.value = form.cdRotaInicial.value;
-	}
-
    function replicarPeriodo() {
 		var form = document.forms[0];
 		form.periodoFinal.value = form.periodoInicial.value;
@@ -177,7 +172,7 @@
       <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
         <tr>
           <td width="11"><img border="0" src="<bean:message key="caminho.imagens"/>parahead_left.gif"/></td>
-          <td class="parabg">Gerar lote de aprovação - Atualizações Cadastrais</td>
+          <td class="parabg">Gerar Lote - Atualização Cadastral</td>
           <td width="11"><img border="0" src="<bean:message key="caminho.imagens"/>parahead_right.gif"/></td>
         </tr>
       </table>
@@ -265,16 +260,50 @@
       </td>
     </tr>
     
-    
 	<tr>
-      <td width="170"><strong>Incluir imóveis novos:</strong></td>
+      <td width="170"><strong>Imóveis Novos:</strong></td>
       <td>
 		<strong> 
-			<html:radio property="quantidadeVisitas" value="1" /> Sim 
-			<html:radio property="quantidadeVisitas" value="2" /> Não
+			<html:radio property="imoveisNovos" value="1" /> Sim 
+			<html:radio property="imoveisNovos" value="2" /> Não
+			<html:radio property="imoveisNovos" value="-1" /> Todos
 		</strong>
       </td>
     </tr>
+    
+	<tr>
+      <td width="170"><strong>Grandes Consumidores:</strong></td>
+      <td>
+        <strong> 
+	        <html:radio property="grandesConsumidores" value="1" /> Sim
+	        <html:radio property="grandesConsumidores" value="2" /> Não 
+	        <html:radio property="grandesConsumidores" value="-1" /> Todos
+        </strong>
+      </td>
+    </tr>
+    <tr>
+      <td width="170"><strong>Ocorr&ecirc;ncia de Cadastro:</strong></td>
+      <td>
+        <strong> 
+          <html:radio property="ocorrenciaCadastro" value="1"  onclick="javascript: recarregar();" /> N&atilde;o 
+          <html:radio property="ocorrenciaCadastro" value="2"  onclick="javascript: recarregar();" /> Sim  
+          <html:radio property="ocorrenciaCadastro" value="-1" onclick="javascript: recarregar()" /> Todos
+        </strong>
+      </td>
+    </tr>
+    <logic:present name="colecaoCadastroOcorrencia" >
+	    <tr>
+	      <td width="170"></td>
+	      <td>
+	      	<html:select property="ocorrenciaCadastroSelecionada">
+				<html:option value="-1">TODAS</html:option>
+				<html:options collection="colecaoCadastroOcorrencia" labelProperty="descricao" property="id" />
+			</html:select>
+	      </td>
+	    </tr>
+    </logic:present>
+    
+    
     <tr>
       <td colspan="2"><hr></td>
     </tr>

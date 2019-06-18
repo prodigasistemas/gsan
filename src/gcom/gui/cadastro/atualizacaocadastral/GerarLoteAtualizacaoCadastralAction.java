@@ -34,8 +34,8 @@ public class GerarLoteAtualizacaoCadastralAction extends GcomAction {
         }
 
         montarPaginaSucesso(request, 
-                "Lote gerado com sucesso.", 
-                "Gerar lote atualização cadastral",
+                "Lote " + form.getLote() + " gerado com sucesso.", 
+                "Gerar outro lote de Atualização Cadastral",
                 "exibirFiltrarGerarLoteAtualizacaoCadastralAction.do?menu=sim");
         
         return mapping.findForward("telaSucesso");

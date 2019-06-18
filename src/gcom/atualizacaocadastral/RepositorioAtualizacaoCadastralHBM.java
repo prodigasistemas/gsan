@@ -10,6 +10,7 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.Subcategoria;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarGerarLoteAtualizacaoCadastralActionHelper;
 import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.seguranca.transacao.Tabela;
 import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
@@ -2043,58 +2044,80 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
     @SuppressWarnings("unchecked")
-    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, Integer codigoSetor, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ErroRepositorioException {
-        List<ImovelControleAtualizacaoCadastral> retorno = null;
+    public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(FiltrarGerarLoteAtualizacaoCadastralActionHelper helper) throws ErroRepositorioException {
+        List<ImovelControleAtualizacaoCadastral> retorno = new ArrayList<ImovelControleAtualizacaoCadastral>();
         Session session = HibernateUtil.getSession();
-        StringBuilder consulta = new StringBuilder();
+        
         try {
-            consulta.append(" select controle from ArquivoTextoAtualizacaoCadastral arquivo,  ")
-                    .append(" ImovelAtualizacaoCadastral imovelAtualizacao, ImovelControleAtualizacaoCadastral controle ")  
-                    .append(" inner join arquivo.leiturista leiturista ")
-                    .append(" inner join controle.situacaoAtualizacaoCadastral situacao ")
-                    .append(" inner join controle.situacaoAtualizacaoCadastral situacao ")
-                    .append(" where arquivo.id = imovelAtualizacao.idArquivoTexto ")
-                    .append(" and controle.imovel.id = imovelAtualizacao.idImovel ")
-                    .append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
-                    .append(" and imovelAtualizacao.idLocalidade = :idLocalidade ")
-                    .append(" and imovelAtualizacao.codigoSetorComercial = :codigoSetor ")
-                    .append(" and controle.dataPreAprovacao >= '" + dataInicio + "'")
-                    .append(" and controle.dataPreAprovacao <= '" + dataFim + "'")
-                    .append(" and controle.lote is null ");
-            
-            if (idLeiturista != null && idLeiturista.intValue() > 0) {
-                consulta.append(" and leiturista.id = " + idLeiturista);
-            }
-            retorno = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consulta.toString())
-                                .setInteger("emFiscalizacao",SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)
-                                .setInteger("preAprovado",SituacaoAtualizacaoCadastral.PRE_APROVADO)
-                                .setInteger("idLocalidade",idLocalidade)
-                                .setInteger("codigoSetor",codigoSetor).list();
-            
-            if (incluirImoveisNovos) {
+
+        	StringBuilder consulta = new StringBuilder();
+        	consulta.append(" select controle from ArquivoTextoAtualizacaoCadastral arquivo,  ")
+        			.append(" ImovelAtualizacaoCadastral imovelAtualizacao, ImovelControleAtualizacaoCadastral controle ")  
+		        	.append(" inner join controle.imovel imovel ")
+		        	.append(" inner join imovel.imovelPerfil imovelPerfil ")
+		        	.append(" inner join arquivo.leiturista leiturista ")
+		        	.append(" inner join controle.situacaoAtualizacaoCadastral situacao ")
+		        	.append(" inner join controle.cadastroOcorrencia ocorrencia ")
+		        	.append(" where arquivo.id = imovelAtualizacao.idArquivoTexto ")
+		        	.append(" and controle.imovel.id = imovelAtualizacao.idImovel ")
+		        	.append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
+		        	.append(" and imovelAtualizacao.idLocalidade = :idLocalidade ")
+		        	.append(" and imovelAtualizacao.codigoSetorComercial = :codigoSetor ")
+		        	.append(" and controle.dataPreAprovacao >= '" + helper.getPeriodoInicial() + "'")
+		        	.append(" and controle.dataPreAprovacao <= '" + helper.getPeriodoFinal() + "'")
+		        	.append(" and controle.lote is null ");
+        	
+        	if (helper.getGrandesConsumidores() != FiltrarGerarLoteAtualizacaoCadastralActionHelper.TODOS) {
+        		consulta.append(" and imovelPerfil.indicadorGrandeConsumidor = " + helper.getGrandesConsumidores());
+        	}
+        	
+        	if (helper.getIdLeiturista() > 0) {
+        		consulta.append(" and leiturista.id = " + helper.getIdLeiturista());
+        	}
+        	
+        	if (helper.getOcorrenciaCadastro() > 0) {
+        		if (helper.getOcorrenciaCadastroSelecionada() == FiltrarGerarLoteAtualizacaoCadastralActionHelper.TODOS)
+        			consulta.append(" AND ocorrencia.indicadorValidacao = " + helper.getOcorrenciaCadastro());
+        		else
+        			consulta.append(" AND ocorrencia.id = " + helper.getOcorrenciaCadastroSelecionada());
+        	}
+        	
+        	retorno = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consulta.toString())
+        			.setInteger("emFiscalizacao",SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)
+        			.setInteger("preAprovado",SituacaoAtualizacaoCadastral.PRE_APROVADO)
+        			.setInteger("idLocalidade",helper.getIdLocalidadeInicial())
+        			.setInteger("codigoSetor",helper.getCdSetorComercialInicial())
+        			.list();
+        	
+        	StringBuilder consultaImoveisNovos = new StringBuilder();
+        	consultaImoveisNovos.append(" select controle from ImovelControleAtualizacaoCadastral controle, ImovelRetorno retorno ")
+        						.append(" inner join controle.situacaoAtualizacaoCadastral situacao ")
+					        	.append(" where controle.imovelRetorno.id = retorno.id ")
+					        	.append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
+					        	.append(" and retorno.idLocalidade = :idLocalidade ")
+					        	.append(" and retorno.codigoSetorComercial = :codigoSetor ")
+					        	.append(" and retorno.tipoOperacao = :inclusao ")
+					        	.append(" and controle.dataPreAprovacao >= '" + helper.getPeriodoInicial() + "'")
+					        	.append(" and controle.dataPreAprovacao <= '" + helper.getPeriodoFinal() + "'")
+					        	.append(" and controle.lote is null ");
+        	
+        	if (helper.getImoveisNovos() == ConstantesSistema.SIM.intValue()) {
+                retorno = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consultaImoveisNovos.toString())
+                		.setInteger("emFiscalizacao",SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)
+                		.setInteger("preAprovado",SituacaoAtualizacaoCadastral.PRE_APROVADO)
+                		.setInteger("inclusao", AlteracaoTipo.INCLUSAO)
+                        .setInteger("idLocalidade",helper.getIdLocalidadeInicial())
+                        .setInteger("codigoSetor",helper.getCdSetorComercialInicial())
+                        .list();
                 
-                consulta = new StringBuilder();
-                
-                consulta.append(" select controle from ImovelControleAtualizacaoCadastral controle, ImovelRetorno retorno  ")
-                        .append(" inner join controle.situacaoAtualizacaoCadastral situacao ")
-                        .append(" inner join controle.situacaoAtualizacaoCadastral situacao ")
-                        .append(" where controle.imovelRetorno.id = retorno.id ")
-                        .append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
-                        .append(" and retorno.idLocalidade = :idLocalidade ")
-                        .append(" and retorno.tipoOperacao = :inclusao ")
-                        .append(" and controle.dataPreAprovacao <= '" + dataInicio + "'")
-                        .append(" and controle.dataPreAprovacao >= '" + dataFim + "'")
-                        .append(" and controle.lote is null ");
-                
-                List<ImovelControleAtualizacaoCadastral> imoveisNovos = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consulta.toString())
-                            .setInteger("emFiscalizacao",SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)
-                            .setInteger("preAprovado",SituacaoAtualizacaoCadastral.PRE_APROVADO)
-                            .setInteger("inclusao", AlteracaoTipo.INCLUSAO)
-                            .setInteger("idLocalidade",idLocalidade).list();
-                
-                if (imoveisNovos != null && !imoveisNovos.isEmpty()) {
-                    retorno.addAll(imoveisNovos);
-                }
+            } else if (helper.getImoveisNovos() == FiltrarGerarLoteAtualizacaoCadastralActionHelper.TODOS) {
+            	retorno.addAll((List<ImovelControleAtualizacaoCadastral>) session.createQuery(consultaImoveisNovos.toString())
+                        .setInteger("emFiscalizacao",SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)
+                        .setInteger("preAprovado",SituacaoAtualizacaoCadastral.PRE_APROVADO)
+                        .setInteger("inclusao", AlteracaoTipo.INCLUSAO)
+                        .setInteger("idLocalidade",helper.getIdLocalidadeInicial())
+                        .setInteger("codigoSetor",helper.getCdSetorComercialInicial())
+                        .list());
             }
         } catch (HibernateException e) {
             throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");

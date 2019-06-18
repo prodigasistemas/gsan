@@ -1,16 +1,14 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
-import gcom.util.ConstantesSistema;
-
 import org.apache.struts.action.ActionForm;
 
+import gcom.util.ConstantesSistema;
+
 public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
-	
+
 	private static final long serialVersionUID = 1L;
 
-	public static int FILTRO_PENDENTES = -1;
-	public static int FILTRO_PARA_APROVACAO_EM_LOTE = -2;
-	public static int FILTRO_TODOS = -3;
+	private static final String TODOS = "-1";
 
 	private String idEmpresa;
 
@@ -26,48 +24,54 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 
 	private String idLocalidadeInicial;
 
-	private String idLocalidadeFinal;
-
 	private String nomeLocalidadeInicial;
-
-	private String nomeLocalidadeFinal;
 
 	private String cdSetorComercialInicial;
 
-	private String cdSetorComercialFinal;
-
 	private String nomeSetorComercialInicial;
 
-	private String nomeSetorComercialFinal;
+	private String imoveisNovos = TODOS;
 
-	private String cdRotaInicial;
+	private String grandesConsumidores = TODOS;
 
-	private String cdRotaFinal;
+	private String ocorrenciaCadastro = TODOS;
 
-	private String alteracaoHidrometro = "-1";
+	private String ocorrenciaCadastroSelecionada = TODOS;
 
-	private String alteracaoSituacaoAgua = "-1";
-
-	private String alteracaoSituacaoEsgoto = "-1";
-
-	private String alteracaoCategoria = "-1";
-
-	private String ocorrenciaCadastro = "-1";
-	
-	private String ocorrenciaCadastroSelecionada;
-	
 	private String lote;
-	
-	private String matricula;
-	
-	private String inscricao;
-	
-	private String quantidadeVisitas = "1";
-	
-	private String qtdImoveisLote;
-	
 
-	public GerarLoteAtualizacaoCadastralForm() {
+	private String qtdImoveisLote;
+
+	public String getIdEmpresa() {
+		return idEmpresa;
+	}
+
+	public void setIdEmpresa(String idEmpresa) {
+		this.idEmpresa = idEmpresa;
+	}
+
+	public String getNomeEmpresa() {
+		return nomeEmpresa;
+	}
+
+	public void setNomeEmpresa(String nomeEmpresa) {
+		this.nomeEmpresa = nomeEmpresa;
+	}
+
+	public String getIdLeiturista() {
+		return idLeiturista;
+	}
+
+	public void setIdLeiturista(String idLeiturista) {
+		this.idLeiturista = idLeiturista;
+	}
+
+	public String getNomeLeiturista() {
+		return nomeLeiturista;
+	}
+
+	public void setNomeLeiturista(String nomeLeiturista) {
+		this.nomeLeiturista = nomeLeiturista;
 	}
 
 	public String getPeriodoInicial() {
@@ -86,52 +90,12 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 		this.periodoFinal = periodoFinal;
 	}
 
-	public String getNomeLeiturista() {
-		return nomeLeiturista;
-	}
-
-	public void setNomeLeiturista(String nomeLeiturista) {
-		this.nomeLeiturista = nomeLeiturista;
-	}
-
-	public String getIdLeiturista() {
-		return idLeiturista;
-	}
-
-	public void setIdLeiturista(String idLeiturista) {
-		this.idLeiturista = idLeiturista;
-	}
-
-	public String getIdEmpresa() {
-		return idEmpresa;
-	}
-
-	public void setIdEmpresa(String idEmpresa) {
-		this.idEmpresa = idEmpresa;
-	}
-
-	public String getNomeEmpresa() {
-		return nomeEmpresa;
-	}
-
-	public void setNomeEmpresa(String nomeEmpresa) {
-		this.nomeEmpresa = nomeEmpresa;
-	}
-
 	public String getIdLocalidadeInicial() {
 		return idLocalidadeInicial;
 	}
 
 	public void setIdLocalidadeInicial(String idLocalidadeInicial) {
 		this.idLocalidadeInicial = idLocalidadeInicial;
-	}
-
-	public String getIdLocalidadeFinal() {
-		return idLocalidadeFinal;
-	}
-
-	public void setIdLocalidadeFinal(String idLocalidadeFinal) {
-		this.idLocalidadeFinal = idLocalidadeFinal;
 	}
 
 	public String getNomeLocalidadeInicial() {
@@ -142,92 +106,36 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 		this.nomeLocalidadeInicial = nomeLocalidadeInicial;
 	}
 
-	public String getNomeLocalidadeFinal() {
-		return nomeLocalidadeFinal;
-	}
-
-	public void setNomeLocalidadeFinal(String nomeLocalidadeFinal) {
-		this.nomeLocalidadeFinal = nomeLocalidadeFinal;
-	}
-
 	public String getCdSetorComercialInicial() {
 		return cdSetorComercialInicial;
 	}
 
-	public void setCdSetorComercialInicial(String setorInicial) {
-		this.cdSetorComercialInicial = setorInicial;
-	}
-
-	public String getCdSetorComercialFinal() {
-		return cdSetorComercialFinal;
-	}
-
-	public void setCdSetorComercialFinal(String setorFinal) {
-		this.cdSetorComercialFinal = setorFinal;
+	public void setCdSetorComercialInicial(String cdSetorComercialInicial) {
+		this.cdSetorComercialInicial = cdSetorComercialInicial;
 	}
 
 	public String getNomeSetorComercialInicial() {
 		return nomeSetorComercialInicial;
 	}
 
-	public void setNomeSetorComercialInicial(String nomeSetorInicial) {
-		this.nomeSetorComercialInicial = nomeSetorInicial;
+	public void setNomeSetorComercialInicial(String nomeSetorComercialInicial) {
+		this.nomeSetorComercialInicial = nomeSetorComercialInicial;
 	}
 
-	public String getNomeSetorComercialFinal() {
-		return nomeSetorComercialFinal;
+	public String getImoveisNovos() {
+		return imoveisNovos;
 	}
 
-	public void setNomeSetorComercialFinal(String nomeSetorFinal) {
-		this.nomeSetorComercialFinal = nomeSetorFinal;
+	public void setImoveisNovos(String imoveisNovos) {
+		this.imoveisNovos = imoveisNovos;
 	}
 
-	public String getCdRotaInicial() {
-		return cdRotaInicial;
+	public String getGrandesConsumidores() {
+		return grandesConsumidores;
 	}
 
-	public void setCdRotaInicial(String codRotaInicial) {
-		this.cdRotaInicial = codRotaInicial;
-	}
-
-	public String getCdRotaFinal() {
-		return cdRotaFinal;
-	}
-
-	public void setCdRotaFinal(String codRotaFinal) {
-		this.cdRotaFinal = codRotaFinal;
-	}
-
-	public String getAlteracaoHidrometro() {
-		return alteracaoHidrometro;
-	}
-
-	public void setAlteracaoHidrometro(String alteracaoHidrometro) {
-		this.alteracaoHidrometro = alteracaoHidrometro;
-	}
-
-	public String getAlteracaoSituacaoAgua() {
-		return alteracaoSituacaoAgua;
-	}
-
-	public void setAlteracaoSituacaoAgua(String alteracaoSituacaoAgua) {
-		this.alteracaoSituacaoAgua = alteracaoSituacaoAgua;
-	}
-
-	public String getAlteracaoSituacaoEsgoto() {
-		return alteracaoSituacaoEsgoto;
-	}
-
-	public void setAlteracaoSituacaoEsgoto(String alteracaoSituacaoEsgoto) {
-		this.alteracaoSituacaoEsgoto = alteracaoSituacaoEsgoto;
-	}
-
-	public String getAlteracaoCategoria() {
-		return alteracaoCategoria;
-	}
-
-	public void setAlteracaoCategoria(String alteracaoCategoria) {
-		this.alteracaoCategoria = alteracaoCategoria;
+	public void setGrandesConsumidores(String grandesConsumidores) {
+		this.grandesConsumidores = grandesConsumidores;
 	}
 
 	public String getOcorrenciaCadastro() {
@@ -254,29 +162,6 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 		this.lote = lote;
 	}
 
-	public String getMatricula() {
-		return matricula;
-	}
-
-	public void setMatricula(String matricula) {
-		this.matricula = matricula;
-	}
-
-	public String getInscricao() {
-		return inscricao;
-	}
-
-	public void setInscricao(String inscricao) {
-		this.inscricao = inscricao;
-	}
-
-	public String getQuantidadeVisitas() {
-		return quantidadeVisitas;
-	}
-
-	public void setQuantidadeVisitas(String quantidadeVisitas) {
-		this.quantidadeVisitas = quantidadeVisitas;
-	}
 	public String getQtdImoveisLote() {
 		return qtdImoveisLote;
 	}
@@ -288,10 +173,13 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 	public boolean existeParametroInformado() {
 		boolean peloMenosUmParametroInformado = false;
 
-		if (this.getIdEmpresa() != null && !this.getIdEmpresa().trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO))
+		if (idEmpresa != null && !idEmpresa.trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO))
 			peloMenosUmParametroInformado = true;
 
-		if (isParametroInformado(getIdLeiturista()))
+		if (isParametroInformado(idEmpresa))
+			peloMenosUmParametroInformado = true;
+
+		if (isParametroInformado(periodoInicial) && isParametroInformado(periodoFinal))
 			peloMenosUmParametroInformado = true;
 
 		if (isParametroInformado(getIdLocalidadeInicial()))
@@ -300,52 +188,22 @@ public class GerarLoteAtualizacaoCadastralForm extends ActionForm {
 		if (isParametroInformado(getCdSetorComercialInicial()))
 			peloMenosUmParametroInformado = true;
 
-		if (isParametroInformado(getCdRotaInicial()))
+		if (isParametroInformado(imoveisNovos))
 			peloMenosUmParametroInformado = true;
 
-		if (isParametroInformado(getIdLocalidadeFinal()))
+		if (isParametroInformado(grandesConsumidores))
 			peloMenosUmParametroInformado = true;
 
-		if (isParametroInformado(getCdSetorComercialFinal()))
-			peloMenosUmParametroInformado = true;
-
-		if (isParametroInformado(getCdRotaFinal()))
+		if (isParametroInformado(ocorrenciaCadastro))
 			peloMenosUmParametroInformado = true;
 
 		if (isParametroInformado(getLote()))
-			peloMenosUmParametroInformado = true;
-		
-		if (isParametroInformado(getMatricula()))
 			peloMenosUmParametroInformado = true;
 
 		return peloMenosUmParametroInformado;
 	}
 
-	public String toString() {
-		return "FiltrarAlteracaoAtualizacaoCadastralActionForm ["
-				+ "idEmpresa=" + idEmpresa + ","
-				+ "nomeEmpresa=" + nomeEmpresa + ","
-				+ "idLeiturista=" + idLeiturista + ","
-				+ "nomeLeiturista=" + nomeLeiturista + ","
-				+ "periodoRealizacaoInicial=" + periodoInicial + ","
-				+ "periodoRealizacaoFinal=" + periodoFinal + ","
-				+ "idLocalidadeInicial=" + idLocalidadeInicial + ","
-				+ "idLocalidadeFinal=" + idLocalidadeFinal + ","
-				+ "nomeLocalidadeInicial=" + nomeLocalidadeInicial + ","
-				+ "nomeLocalidadeFinal=" + nomeLocalidadeFinal + ","
-				+ "cdSetorComercialInicial=" + cdSetorComercialInicial + ","
-				+ "cdSetorComercialFinal=" + cdSetorComercialFinal + ","
-				+ "nomeSetorComercialInicial=" + nomeSetorComercialInicial + ","
-				+ "nomeSetorComercialFinal=" + nomeSetorComercialFinal + ","
-				+ "cdRotaInicial=" + cdRotaInicial + ","
-				+ "cdRotaFinal=" + cdRotaFinal + "]";
-	}
-	
 	private boolean isParametroInformado(String parametro) {
 		return parametro != null && !parametro.trim().equals("");
-	}
-	
-	public boolean isIncluirImoveisNovos() {
-		return this.quantidadeVisitas.equals(ConstantesSistema.SIM.toString()) ? true : false;
 	}
 }

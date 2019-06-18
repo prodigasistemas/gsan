@@ -8,6 +8,7 @@ import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarGerarLoteAtualizacaoCadastralActionHelper;
 import gcom.seguranca.transacao.Tabela;
 import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaColuna;
@@ -151,8 +152,8 @@ public interface IRepositorioAtualizacaoCadastral {
 	
 	public void atualizarSubcategoriarAoPreAprovar(Integer idImovel) throws ErroRepositorioException;
 	
-	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(Integer idLocalidade, Integer codigoSetor, String dataInicio, String dataFim, Integer idLeiturista, boolean incluirImoveisNovos) throws ErroRepositorioException;
-
+	public List<ImovelControleAtualizacaoCadastral> obterIdsImovelControleGeracaoLote(FiltrarGerarLoteAtualizacaoCadastralActionHelper helper) throws ErroRepositorioException;
+	
     public boolean isLoteExistente(Integer lote) throws ErroRepositorioException;
     
     public Integer obterProximoLote() throws ErroRepositorioException;
@@ -174,4 +175,5 @@ public interface IRepositorioAtualizacaoCadastral {
 	public List<ImovelSubcategoriaAtualizacaoCadastral> obterSubcategoriasOriginais(Integer idImovel) throws ErroRepositorioException;
 	
     public List<ImovelSubcategoriaRetorno> obterSubcategoriasRetorno(Integer idImovel) throws ErroRepositorioException;
-}
+
+	}
