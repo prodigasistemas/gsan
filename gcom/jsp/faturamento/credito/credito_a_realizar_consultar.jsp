@@ -6,7 +6,7 @@
 
 <%@ page import="gcom.util.Util"%>
 <%@ page
-	import="gcom.faturamento.credito.CreditoARealizar,gcom.cobranca.parcelamento.ParcelamentoItem,gcom.faturamento.credito.CreditoARealizarHistorico"
+	import="gcom.faturamento.credito.CreditoARealizar,gcom.cobranca.parcelamento.ParcelamentoItem,gcom.faturamento.credito.CreditoARealizarGeral,gcom.faturamento.credito.CreditoARealizarHistorico"
 	isELIgnored="false"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -463,72 +463,74 @@ function fechar(){
 					<td colspan="3" height="300">
 					<div style="width: 100%; height: 300; overflow: auto;">
 					<table width="80%" border="0">
-						<logic:iterate name="colecaoParcelamentoItem"
-							id="parcelamentoItem" type="ParcelamentoItem">
+						<logic:iterate name="colecaoParcelamentoItem" id="parcelamentoItem" type="ParcelamentoItem">
+						
+							<bean:define name="parcelamentoItem" property="creditoARealizarGeral" id="creditoARealizarGeral" /> 
 							<tr>
 								<td><strong>Tipo do Crédito:<font color="#FF0000"> </font></strong></td>
 								<td colspan="2" align="right">
-								<div align="left"><logic:notEmpty name="parcelamentoItem"
-									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem">
-										<logic:present name="creditoARealizarGeral.creditoARealizar">
-										    <html:text name="parcelamentoItem"
-										      property="creditoARealizarGeral.creditoARealizar.creditoTipo.descricao"
-										      size="30" maxlength="30" readonly="true"
-										      style="background-color:#EFEFEF; border:0" />
-										</logic:present>
-										<logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-										    <html:text name="parcelamentoItem"
-										      property="creditoARealizarGeral.creditoARealizarHistorico.creditoTipo.descricao"
-										      size="30" maxlength="30" readonly="true"
-										      style="background-color:#EFEFEF; border:0" />
-										</logic:notPresent>
-									</logic:notEmpty>
+								<div align="left">
+								
+								<logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+								<logic:present name="creditoARealizarGeral" property="creditoARealizar">
+											<bean:define name="creditoARealizarGeral" property="creditoARealizar" id="creditoARealizar" /> 
+											<bean:define name="creditoARealizar" property="creditoTipo" id="creditoTipo" /> 
+											<bean:write name="creditoTipo" property="descricao" />
+								</logic:present>
+								<logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+											<bean:define name="creditoARealizarGeral" property="creditoARealizarHistorico" id="creditoARealizarHistorico" /> 
+											<bean:define name="creditoARealizarHistorico" property="creditoTipo" id="creditoTipo" /> 
+											<bean:write name="creditoTipo" property="descricao" />
+								</logic:notPresent>					
+			
 								</logic:notEmpty></div>
 								</td>
 							</tr>
 							<tr>
 								<td><strong>Situa&ccedil;&atilde;o do Crédito a Realizar:</strong></td>
 								<td colspan="2" align="right">
-								<div align="left"><logic:notEmpty name="parcelamentoItem"
-									property="creditoARealizarGeral">
-									<logic:notEmpty name="parcelamentoItem">
-										<logic:present name="creditoARealizarGeral.creditoARealizar">
-											<html:text name="parcelamentoItem"
-											property="creditoARealizarGeral.creditoARealizar.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao"
-											size="30" maxlength="30" readonly="true"
-											style="background-color:#EFEFEF; border:0" />
-										</logic:present>
-										<logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-											<html:text name="parcelamentoItem"
-											property="creditoARealizarGeral.creditoARealizarHistorico.debitoCreditoSituacaoAtual.descricaoDebitoCreditoSituacao"
-											size="30" maxlength="30" readonly="true"
-											style="background-color:#EFEFEF; border:0" />
-										</logic:notPresent>
-									</logic:notEmpty>
+								<div align="left">
+								<logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
+								<logic:present name="creditoARealizarGeral" property="creditoARealizar">
+											<bean:define name="creditoARealizarGeral" property="creditoARealizar" id="creditoARealizar" /> 
+											<bean:define name="creditoARealizar" property="debitoCreditoSituacaoAtual" id="debitoCreditoSituacaoAtual" /> 
+											<bean:write name="debitoCreditoSituacaoAtual" property="descricaoDebitoCreditoSituacao" />
+								</logic:present>
+								<logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+											<bean:define name="creditoARealizarGeral" property="creditoARealizarHistorico" id="creditoARealizarHistorico" /> 
+											<bean:define name="creditoARealizarHistorico" property="debitoCreditoSituacaoAtual" id="debitoCreditoSituacaoAtual" /> 
+											<bean:write name="debitoCreditoSituacaoAtual" property="descricaoDebitoCreditoSituacao" />
+								</logic:notPresent>					
+															
 								</logic:notEmpty></div>
 								</td>
 							</tr>
-							<tr>
+							
+							
+							<tr>							
 							  <td width="183" height="25"><strong>Usuário:</strong></td>
 							  <td colspan="3">
-							    <logic:present name="creditoARealizarGeral.creditoARealizar">
-							      <logic:present name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.usuario">
-							        <html:text name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.usuario.nomeUsuario" 
-							               size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
-							      </logic:present>    
-							      <logic:notPresent name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.usuario">
-							        <input type="text" name="usuario" size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
-							      </logic:notPresent>
-							    </logic:present>
-							    <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							      <logic:present name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.usuario">
-							        <html:text name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.usuario.nomeUsuario" 
-							               size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
-							      </logic:present>    
-							      <logic:notPresent name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.usuario">
-							        <input type="text" name="usuario" size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
-							      </logic:notPresent>
+							   	<logic:present name="creditoARealizarGeral" property="creditoARealizar">
+							   		 	<bean:define name="creditoARealizarGeral" property="creditoARealizar" id="creditoARealizar" /> 
+									<logic:present name="creditoARealizar" property="usuario">
+									 	<bean:define name="creditoARealizar" property="usuario" id="usuario" /> 
+								 			<bean:write name="usuario" property="nomeUsuario"/>
+							        </logic:present>
+   
+							    	<logic:notPresent name="creditoARealizar" property="usuario">
+							        	<input type="text" name="usuario" size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
+							     	</logic:notPresent>
+							     </logic:present>   
+							     
+							    <logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+							  			<bean:define name="creditoARealizarGeral" property="creditoARealizarHistorico" id="creditoARealizarHistorico" /> 
+							   		<logic:present name="creditoARealizarHistorico" property="usuario">
+							   			<bean:define name="creditoARealizarHistorico" property="usuario" id="usuario" /> 
+							    		<bean:write name="usuario" property="nomeUsuario" />
+							     	</logic:present>    
+							      	<logic:notPresent name="creditoARealizarHistorico" property="usuario">
+							        		<input type="text" name="usuario" size="30" readonly="true" style="background-color:#EFEFEF; border:0" />
+							     	</logic:notPresent>
 							    </logic:notPresent>
 							  </td>
 							</tr>
@@ -536,101 +538,93 @@ function fechar(){
 							  <td><strong>Data e Hora de Gera&ccedil;&atilde;o do Crédito:</strong></td>
 							  <td colspan="2" align="right">
 							  <div align="left">
-							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
-							    <logic:present name="creditoARealizarGeral.creditoARealizar">
-							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.geracaoCredito">
-							        <input type="text" size="10" maxlength="10" readonly="true"
-							          style="background-color:#EFEFEF; border:0" 
-							          value="<bean:write name="parcelamentoItem"  property="creditoARealizarGeral.creditoARealizar.geracaoCredito" 
-							          formatKey="date.format" />">
-							        &nbsp; <input type="text" size="8" maxlength="8"
-							          readonly="true" style="background-color:#EFEFEF; border:0"
-							          value="<bean:write name="parcelamentoItem"  property="creditoARealizarGeral.creditoARealizar.geracaoCredito" formatKey="hour.format" />">
-							      </logic:notEmpty>
-							    </logic:present>
-							    <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.geracaoCreditoARealizar">
-							        <input type="text" size="10" maxlength="10" readonly="true"
-							          style="background-color:#EFEFEF; border:0" 
-							          value="<bean:write name="parcelamentoItem"  property="creditoARealizarGeral.creditoARealizarHistorico.geracaoCreditoARealizar" 
-							          formatKey="date.format" />">
-							        &nbsp; <input type="text" size="8" maxlength="8"
-							          readonly="true" style="background-color:#EFEFEF; border:0"
-							          value="<bean:write name="parcelamentoItem"  property="creditoARealizarGeral.creditoARealizarHistorico.geracaoCreditoARealizar" formatKey="hour.format" />">
-							      </logic:notEmpty>
-							    </logic:notPresent>
-							  </logic:notEmpty>
+							  
+				   		       <logic:present name="creditoARealizarGeral" property="creditoARealizar">
+							   		<logic:present name="creditoARealizar" property="geracaoCredito">
+							   			<bean:define name="creditoARealizar" property="geracaoCredito" id="geracaoCredito" />  		
+											<input type="text" size="10" maxlength="10" readonly="true" style="background-color:#EFEFEF; border:0" value="<bean:write name="creditoARealizar" property="geracaoCredito" 
+							         			 formatKey="date.format" />"> &nbsp; 
+							         	    <input type="text" size="8" maxlength="8"readonly="true" style="background-color:#EFEFEF; border:0" value="<bean:write name="creditoARealizar" property="geracaoCredito" formatKey="hour.format" />">
+									</logic:present>
+								</logic:present>
+							    
+							    <logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+									<logic:present name="creditoARealizarHistorico" property="geracaoCreditoARealizar">
+										<bean:define name="creditoARealizarHistorico" property="geracaoCreditoARealizar" id="geracaoCreditoARealizar" />  
+											<input type="text" size="10" maxlength="10" readonly="true" style="background-color:#EFEFEF; border:0" value="<bean:write name="creditoARealizarHistorico" property="geracaoCreditoARealizar" 
+							         			 formatKey="date.format" />"> &nbsp; 
+							         	    <input type="text" size="8" maxlength="8"readonly="true" style="background-color:#EFEFEF; border:0" value="<bean:write name="creditoARealizarHistorico" property="geracaoCreditoARealizar" formatKey="hour.format" />">
+									</logic:present>
+								</logic:notPresent>
+
 							  </td>
 							</tr>
 							<tr>
 							  <td><strong>M&ecirc;s e Ano de Refer&ecirc;ncia do Crédito:</strong></td>
 							  <td colspan="2" align="right">
 							  <div align="left">
-							    <logic:present name="creditoARealizarGeral.creditoARealizar">
-							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
-							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.anoMesReferenciaCredito">
-							          <input type="text" size="7" maxlength="7" readonly="true"
-							            style="background-color:#EFEFEF; border:0"
-							            value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getAnoMesReferenciaCredito())%>">
-							        </logic:notEmpty>
-							      </logic:notEmpty>
-							    </logic:present>
-							    <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
-							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.anoMesReferenciaCredito">
-							          <input type="text" size="7" maxlength="7" readonly="true"
-							            style="background-color:#EFEFEF; border:0"
-							            value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizarHistorico().getAnoMesReferenciaCredito())%>">
-							        </logic:notEmpty>
-							      </logic:notEmpty>
-							    </logic:notPresent>
-							  </td>
+							  
+							     <logic:present name="creditoARealizarGeral" property="creditoARealizar">
+									<logic:present name="creditoARealizar" property="anoMesReferenciaCredito">
+										<bean:define name="creditoARealizar" property="anoMesReferenciaCredito" id="anoMesReferenciaCredito" /> 
+											 <input type="text" size="7" maxlength="7" readonly="true" style="background-color:#EFEFEF; border:0"
+							           			 value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getAnoMesReferenciaCredito())%>">
+									</logic:present>
+								</logic:present>
+							  	
+							  	 <logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+									<logic:present name="creditoARealizarHistorico" property="anoMesReferenciaCredito">
+										<bean:define name="creditoARealizarHistorico" property="anoMesReferenciaCredito" id="anoMesReferenciaCredito" />  
+										  <input type="text" size="7" maxlength="7" readonly="true" style="background-color:#EFEFEF; border:0"
+							           			 value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizarHistorico().getAnoMesReferenciaCredito())%>">
+									</logic:present>
+								</logic:notPresent>
+							 </td>
 							</tr>
 							<tr>
 							  <td><strong>M&ecirc;s e Ano da Cobran&ccedil;a do Crédito:</strong></td>
 							  <td colspan="2" align="right">
 							  <div align="left">
-							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
-							      <logic:present name="creditoARealizarGeral.creditoARealizar">
-							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.anoMesCobrancaCredito">
-							          <input type="text" size="7" maxlength="7" readonly="true"
-							            style="background-color:#EFEFEF; border:0"
-							            value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getAnoMesCobrancaCredito())%>">
-							        </logic:notEmpty>
-							      </logic:present>
-							      <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.anoMesCobrancaCredito">
-							          <input type="text" size="7" maxlength="7" readonly="true"
-							            style="background-color:#EFEFEF; border:0"
-							            value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizarHistorico().getAnoMesCobrancaCredito())%>">
-							        </logic:notEmpty>
-							      </logic:notPresent>
-							  </logic:notEmpty>
+							  
+							   <logic:present name="creditoARealizarGeral" property="creditoARealizar">
+							   		<logic:present name="creditoARealizar" property="anoMesCobrancaCredito">
+										<bean:define name="creditoARealizar" property="anoMesCobrancaCredito" id="anoMesCobrancaCredito" />  
+											<input type="text" size="7" maxlength="7" readonly="true" style="background-color:#EFEFEF; border:0"
+							           			 value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getAnoMesCobrancaCredito())%>">
+									</logic:present>
+								</logic:present>
+							  	
+							  	 <logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+									<logic:present name="creditoARealizarHistorico" property="anoMesCobrancaCredito">
+										<bean:define name="creditoARealizarHistorico" property="anoMesCobrancaCredito" id="anoMesCobrancaCredito" />  
+											<input type="text" size="7" maxlength="7" readonly="true" style="background-color:#EFEFEF; border:0"
+							           			 value="<%="" + Util.formatarMesAnoReferencia(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizarHistorico().getAnoMesCobrancaCredito())%>">
+									</logic:present>
+								</logic:notPresent>
 							  </td>
 							</tr>
 							<tr>
-							  <td><strong>N&uacute;mero de Presta&ccedil;&otilde;es
-							  Creditadas:<strong></strong></td>
+							
+							
+							  <td><strong>N&uacute;mero de Presta&ccedil;&otilde;es Creditadas:<strong></strong></td>
 							  <td colspan="2" align="right">
 							    <div align="left">
-							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
-							        <logic:present name="creditoARealizarGeral.creditoARealizar">
-							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.prestacaoRealizadas">
-							            <html:text name="parcelamentoItem"
-							              property="creditoARealizarGeral.creditoARealizarHistorico.prestacaoRealizadas"
-							              size="7" maxlength="7" readonly="true"
-							              style="background-color:#EFEFEF; border:0; text-align: right;" />
-							          </logic:notEmpty>
-							        </logic:present>
-							        <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.prestacaoRealizadas">
-							            <html:text name="parcelamentoItem"
-							              property="creditoARealizarGeral.creditoARealizarHistorico.prestacaoRealizadas"
-							              size="7" maxlength="7" readonly="true"
-							              style="background-color:#EFEFEF; border:0; text-align: right;" />
-							          </logic:notEmpty>
-							        </logic:notPresent>
-							      </logic:notEmpty>
+							    
+							    <logic:present name="creditoARealizarGeral" property="creditoARealizar">
+										<logic:present name="creditoARealizar" property="numeroPrestacaoRealizada">
+											<bean:define name="creditoARealizar" property="numeroPrestacaoRealizada" id="numeroPrestacaoRealizada" />  
+											 <html:text name="creditoARealizar" property="numeroPrestacaoRealizada" size="7" maxlength="7" readonly="true"
+							             		 style="background-color:#EFEFEF; border:0; text-align: right;" />
+									</logic:present>
+								</logic:present>
+								<logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+									<logic:present name="creditoARealizarHistorico" property="numeroPrestacaoRealizada">
+											<bean:define name="creditoARealizarHistorico" property="numeroPrestacaoRealizada" id="numeroPrestacaoRealizada" />  
+											 <html:text name="creditoARealizarHistorico" property="numeroPrestacaoRealizada" size="7" maxlength="7" readonly="true"
+							             		 style="background-color:#EFEFEF; border:0; text-align: right;" />
+									</logic:present>
+								</logic:notPresent>
+							   
 							    </div>
 							  </td>
 							</tr>
@@ -639,24 +633,22 @@ function fechar(){
 							    color="#FF0000"> </font></strong></strong></td>
 							  <td colspan="2" align="right">
 							  <div align="left">
-							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
-							        <logic:present name="creditoARealizarGeral.creditoARealizar">
-							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.numeroPrestacaoCreditoMenosBonus">
-							            <html:text name="parcelamentoItem"
-							              property="creditoARealizarGeral.creditoARealizar.numeroPrestacaoCreditoMenosBonus"
-							              size="7" maxlength="7" readonly="true"
-							              style="background-color:#EFEFEF; border:0; text-align: right;" />
-							          </logic:notEmpty>
-							        </logic:present>
-							        <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.numeroPrestacaoCreditoMenosBonus">
-							            <html:text name="parcelamentoItem"
-							              property="creditoARealizarGeral.creditoARealizarHistorico.numeroPrestacaoCreditoMenosBonus"
-							              size="7" maxlength="7" readonly="true"
-							              style="background-color:#EFEFEF; border:0; text-align: right;" />
-							          </logic:notEmpty>
-							        </logic:notPresent>
-							    </logic:notEmpty>
+							  
+							   <logic:present name="creditoARealizarGeral" property="creditoARealizar">
+									<logic:present name="creditoARealizar" property="numeroPrestacaoCreditoMenosBonus">
+										<bean:define name="creditoARealizar" property="numeroPrestacaoCreditoMenosBonus" id="numeroPrestacaoCreditoMenosBonus" />  
+											  <html:text name="creditoARealizar" property="numeroPrestacaoCreditoMenosBonus" size="7" maxlength="7" readonly="true"
+							             			 style="background-color:#EFEFEF; border:0; text-align: right;" />
+								 		</logic:present>
+								 </logic:present>
+								 	<logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+								  		<logic:present name="creditoARealizarHistorico" property="numeroPrestacaoCreditoMenosBonus">
+											<bean:define name="creditoARealizarHistorico" property="numeroPrestacaoCreditoMenosBonus" id="numeroPrestacaoCreditoMenosBonus" />  
+											 <html:text name="creditoARealizarHistorico" property="numeroPrestacaoCreditoMenosBonus" size="7" maxlength="7" readonly="true"
+							             		 style="background-color:#EFEFEF; border:0; text-align: right;" />
+									</logic:present>
+								</logic:notPresent>
+				
 							  </div>
 							  </td>
 							</tr>
@@ -664,22 +656,21 @@ function fechar(){
 							  <td><strong>Valor Total do Crédito:<strong></strong></strong></td>
 							  <td colspan="2" align="right">
 							    <div align="left">
-							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
-							        <logic:present name="creditoARealizarGeral.creditoARealizar">
-							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.valorCredito">
-							            <input type="text" size="17" maxlength="17" readonly="true"
-							              style="background-color:#EFEFEF; border:0; text-align: right;"
-							              value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getValorCredito())%>">
-							          </logic:notEmpty>
-							        </logic:present>
-							        <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.valorCredito">
-							            <input type="text" size="17" maxlength="17" readonly="true"
-							              style="background-color:#EFEFEF; border:0; text-align: right;"
-							              value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizarHistorico().getValorCredito())%>">
-							          </logic:notEmpty>
-							        </logic:notPresent>
-							      </logic:notEmpty>
+							    <logic:present name="creditoARealizarGeral" property="creditoARealizar">
+									<logic:present name="creditoARealizar" property="valorCredito">
+										<bean:define name="creditoARealizar" property="valorCredito" id="valorCredito" />  
+											   <input type="text" size="17" maxlength="17" readonly="true" style="background-color:#EFEFEF; border:0; text-align: right;"
+							              		value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getValorCredito())%>">
+								 		</logic:present>
+								 </logic:present>
+								 	<logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+								 		<logic:present name="creditoARealizarHistorico" property="valorCredito">
+								 			<bean:define name="creditoARealizarHistorico" property="valorCredito" id="valorCredito" />  
+											 <input type="text" size="17" maxlength="17" readonly="true" style="background-color:#EFEFEF; border:0; text-align: right;"
+							             		 value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizarHistorico().getValorCredito())%>">
+									</logic:present>
+								</logic:notPresent>
+							   
 							    </div>
 							  </td>
 							</tr>
@@ -687,22 +678,22 @@ function fechar(){
 							  <td><strong>Valor Restante a Ser Creditado:<strong></strong></strong></td>
 							  <td colspan="2" align="right">
 							    <div align="left">
-							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
-							        <logic:present name="creditoARealizarGeral.creditoARealizar">
-							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.valorTotalComBonus">
-							            <input type="text" size="17" maxlength="17" readonly="true"
-							              style="background-color:#EFEFEF; border:0; text-align: right;"
+							    
+							    <logic:present name="creditoARealizarGeral" property="creditoARealizar">
+									<logic:present name="creditoARealizar" property="valorTotalComBonus">
+										<bean:define name="creditoARealizar" property="valorTotalComBonus" id="valorTotalComBonus" />  
+											              <input type="text" size="17" maxlength="17" readonly="true"style="background-color:#EFEFEF; border:0; text-align: right;"
 							              value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizar().getValorTotalComBonus())%>">
-							          </logic:notEmpty>
-							        </logic:present>
-							        <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							          <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.valorTotalComBonus">
-							            <input type="text" size="17" maxlength="17" readonly="true"
-							              style="background-color:#EFEFEF; border:0; text-align: right;"
+								 		</logic:present>
+								 </logic:present>
+								 	<logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+										<logic:present name="creditoARealizarHistorico" property="valorTotalComBonus">
+											<bean:define name="creditoARealizarHistorico" property="valorTotalComBonus" id="valorTotalComBonus" />  
+											     <input type="text" size="17" maxlength="17" readonly="true" style="background-color:#EFEFEF; border:0; text-align: right;"
 							              value="<%="" + Util.formatarMoedaReal(parcelamentoItem.getCreditoARealizarGeral().getCreditoARealizarHistorico().getValorTotalComBonus())%>">
-							          </logic:notEmpty>
-							        </logic:notPresent>
-							      </logic:notEmpty>
+									</logic:present>
+								</logic:notPresent>
+						
 							    </div>
 							  </td>
 							</tr>
@@ -710,98 +701,92 @@ function fechar(){
 							  <td><strong>Registro de Atendimento:<strong><font
 							    color="#FF0000"> </font></strong><font color="#FF0000"> </font></strong></td>
 							  <td colspan="2" align="left">
-							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
-							      <logic:present name="creditoARealizarGeral.creditoARealizar">
-							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.registroAtendimento">
-							          <html:text name="parcelamentoItem"
-							            property="creditoARealizarGeral.creditoARealizar.registroAtendimento.id"
-							            size="9" readonly="true"
-							            style="background-color:#EFEFEF; border:0; text-align: right;" />
-							        </logic:notEmpty>
-							      </logic:present>
-							      <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.registroAtendimento">
-							          <html:text name="parcelamentoItem"
-							            property="creditoARealizarGeral.creditoARealizarHistorico.registroAtendimento.id"
-							            size="9" readonly="true"
-							            style="background-color:#EFEFEF; border:0; text-align: right;" />
-							        </logic:notEmpty>      
-							      </logic:notPresent>
-							  </logic:notEmpty> &nbsp;</td>
+							  
+							  	    <logic:present name="creditoARealizarGeral" property="creditoARealizar">
+										<logic:present name="creditoARealizar" property="registroAtendimento">
+											<bean:define name="creditoARealizar" property="registroAtendimento" id="registroAtendimento" />  
+											<bean:define name="registroAtendimento" property="id" id="id" /> 
+											             <html:text name="registroAtendimento"	property="id" size="9" readonly="true" style="background-color:#EFEFEF; border:0; text-align: right;" />
+								 		</logic:present>
+								 	</logic:present>
+								 	<logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+										<logic:present name="creditoARealizarHistorico" property="registroAtendimento">
+											<bean:define name="creditoARealizarHistorico" property="registroAtendimento" id="registroAtendimento" />  
+											<bean:define name="registroAtendimento" property="id" id="id" /> 
+											     <html:text name="registroAtendimento"	property="id" size="9" readonly="true" style="background-color:#EFEFEF; border:0; text-align: right;" />
+										</logic:present>
+									</logic:notPresent>
+				
 							</tr>
 							<tr>
 							  <td><strong>Ordem de Servi&ccedil;o:<strong><font
 							    color="#FF0000"> </font></strong><font color="#FF0000"> </font></strong></td>
 							  <td colspan="2" align="left">
-							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
-							      <logic:present name="creditoARealizarGeral.creditoARealizar">
-							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.ordemServico">
-							          <html:text name="parcelamentoItem"
-							            property="creditoARealizarGeral.creditoARealizar.ordemServico.id"
-							            size="9" readonly="true"
-							            style="background-color:#EFEFEF; border:0; text-align: right;" />
-							        </logic:notEmpty>      
-							      </logic:present>
-							      <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							        <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.ordemServico">
-							            <html:text name="parcelamentoItem"
-							              property="creditoARealizarGeral.creditoARealizarHistorico.ordemServico.id"
-							              size="9" readonly="true"
-							              style="background-color:#EFEFEF; border:0; text-align: right;" />
-							          </logic:notEmpty>      
-							      </logic:notPresent>
-							  </logic:notEmpty> &nbsp;</td>
+							  
+							    	<logic:present name="creditoARealizarGeral" property="creditoARealizar">
+										<logic:present name="creditoARealizar" property="ordemServico">
+											<bean:define name="creditoARealizar" property="ordemServico" id="ordemServico" />  
+											<bean:define name="ordemServico" property="id" id="id" /> 
+											             <html:text name="ordemServico"	property="id" size="9" readonly="true" style="background-color:#EFEFEF; border:0; text-align: right;" />
+								 		</logic:present>
+								 	</logic:present>
+								 	<logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+										<logic:present name="creditoARealizarHistorico" property="ordemServico">
+											<bean:define name="creditoARealizarHistorico" property="ordemServico" id="ordemServico" />  
+											<bean:define name="ordemServico" property="id" id="id" /> 
+											     <html:text name="ordemServico"	property="id" size="9" readonly="true" style="background-color:#EFEFEF; border:0; text-align: right;" />
+										</logic:present>
+									</logic:notPresent>
+							  
 							</tr>
 							<tr>
 							  <td><strong>Origem do Crédito:<font color="#FF0000"></font></strong></td>
 							  <td colspan="2" align="right">
 							  <div align="left">
-							    <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral">
-							    <logic:present name="creditoARealizarGeral.creditoARealizar">
-							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.creditoOrigem">
-							        <html:text name="parcelamentoItem"
-							          property="creditoARealizarGeral.creditoARealizar.creditoOrigem.descricaoCreditoOrigem"
-							          size="45" maxlength="45" readonly="true"
-							          style="background-color:#EFEFEF; border:0" />
-							      </logic:notEmpty>
-							    </logic:present>
-							    <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							      <logic:notEmpty name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.creditoOrigem">
-							          <html:text name="parcelamentoItem"
-							            property="creditoARealizarGeral.creditoARealizarHistorico.creditoOrigem.descricaoCreditoOrigem"
-							            size="45" maxlength="45" readonly="true"
-							            style="background-color:#EFEFEF; border:0" />
-							      </logic:notEmpty>
-							    </logic:notPresent>  
-							  </logic:notEmpty></div>
-							  </td>
+							  
+							  	   <logic:present name="creditoARealizarGeral" property="creditoARealizar">
+										<logic:present name="creditoARealizar" property="creditoOrigem">
+											 <bean:define name="creditoARealizar" property="creditoOrigem" id="creditoOrigem" />
+												 <html:text name="creditoOrigem"	property="descricaoCreditoOrigem" size="45" maxlength="45" readonly="true" style="background-color:#EFEFEF; border:0" />
+								 		</logic:present>
+									</logic:present>
+								 	<logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+										<logic:present name="creditoARealizarHistorico" property="creditoOrigem">
+											<bean:define name="creditoARealizarHistorico" property="creditoOrigem" id="creditoOrigem" />  
+												<html:text name="creditoOrigem"	property="descricaoCreditoOrigem" size="45" maxlength="45" readonly="true" style="background-color:#EFEFEF; border:0" />
+										</logic:present>
+									</logic:notPresent>
+							 </td>
 							</tr>
 							<tr>
-							  <td><strong>Matrícula do Imóvel Origem:</strong></td>
+							  <td><strong>Matrcula do Imóvel Origem:</strong></td>
 							  <td colspan="2">
-							    <logic:present name="creditoARealizarGeral.creditoARealizar">
-							      <logic:present name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.origem">
-							        <html:text name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.origem.creditoARealizar.imovel.id"
-							        size="12" maxlength="10" readonly="true"
-							        style="background-color:#EFEFEF; border:0" />
-							      </logic:present>
-							      <logic:notPresent name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.origem">
-							        <input type="text" name="imovelOrigem" size="12" maxlength="10"
-							        readonly="true" style="background-color:#EFEFEF; border:0" />
-							      </logic:notPresent>
-							    </logic:present>
-							    <logic:notPresent name="creditoARealizarGeral.creditoARealizar">
-							      <logic:present name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.origem">
-							        <html:text name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizar.origem.creditoARealizarHistorico.imovel.id"
-							        size="12" maxlength="10" readonly="true"
-							        style="background-color:#EFEFEF; border:0" />
-							      </logic:present>
-							      <logic:notPresent name="parcelamentoItem" property="creditoARealizarGeral.creditoARealizarHistorico.origem">
-							        <input type="text" name="imovelOrigem" size="12" maxlength="10"
-							        readonly="true" style="background-color:#EFEFEF; border:0" />
-							      </logic:notPresent>
-							    </logic:notPresent>
-							  </td>
+							  
+							   	    <logic:present name="creditoARealizarGeral" property="creditoARealizar">
+										<logic:present name="creditoARealizar" property="origem">
+											<bean:define name="creditoARealizar" property="origem" id="origem" />  
+											<bean:define name="origem" property="creditoARealizar" id="creditoARealizar" /> 
+											<bean:define name="creditoARealizar" property="imovel" id="imovel" /> 
+											<bean:define name="imovel" property="id" id="id" /> 
+											              <html:text name="imovel" property="id" size="12" maxlength="10" readonly="true" style="background-color:#EFEFEF; border:0" />
+								 		</logic:present>
+								 		<logic:notPresent name="creditoARealizar" property="origem">
+								 						   <input type="text" name="imovelOrigem" size="12" maxlength="10" readonly="true" style="background-color:#EFEFEF; border:0" />
+								 		</logic:notPresent>
+									 </logic:present>
+							  	
+								 	<logic:notPresent name="creditoARealizarGeral" property="creditoARealizar">
+										<logic:present name="creditoARealizarHistorico" property="origem">
+											<bean:define name="creditoARealizarHistorico" property="origem" id="origem" /> 
+											<bean:define name="origem" property="creditoARealizarHistorico" id="creditoARealizarHistorico" /> 
+											<bean:define name="creditoARealizarHistorico" property="imovel" id="imovel" /> 
+												<html:text name="imovel" property="id" size="12" maxlength="10" readonly="true" style="background-color:#EFEFEF; border:0" />
+										</logic:present>
+										<logic:notPresent name="creditoARealizar" property="origem">
+								 						   <input type="text" name="imovelOrigem" size="12" maxlength="10" readonly="true" style="background-color:#EFEFEF; border:0" />
+								 		</logic:notPresent>
+									</logic:notPresent>
+												  </td>
 							</tr>						
 					</table>
 					<table width="100%" border="0">
