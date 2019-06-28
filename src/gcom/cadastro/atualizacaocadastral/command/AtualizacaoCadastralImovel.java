@@ -1,12 +1,12 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.cadastro.imovel.CadastroOcorrencia;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.cadastro.imovel.CadastroOcorrencia;
 
 public class AtualizacaoCadastralImovel {
 
@@ -26,21 +26,24 @@ public class AtualizacaoCadastralImovel {
 	private DadoAtualizacaoImovel dadosImovel = new DadoAtualizacaoImovel();
 
 	private List<DadoAtualizacaoRamoAtividade> dadosRamoAtividade = new ArrayList<DadoAtualizacaoRamoAtividade>();
-	
+
 	private AtualizacaoCadastral atualizacaoArquivo;
-	
+
 	private Boolean erroLayout = false;
-	
+
 	private Boolean existeMedidor = false;
-	
+
 	private CadastroOcorrencia cadastroOcorrencia;
+
+	private ImovelControleAtualizacaoCadastral imovelControle;
+
+	private boolean imovelNovo = false;
 	
-	private ImovelControleAtualizacaoCadastral imovelControle; 
-	
-	public AtualizacaoCadastralImovel(){
-		
+	private int identificacaoImovelNovo = 0;
+
+	public AtualizacaoCadastralImovel() {
 	}
-	
+
 	public AtualizacaoCadastralImovel(AtualizacaoCadastral atualizacaoArquivo) {
 		this.atualizacaoArquivo = atualizacaoArquivo;
 	}
@@ -48,7 +51,7 @@ public class AtualizacaoCadastralImovel {
 	public Map<String, String> getLinhaImovel() {
 		return linhaImovel;
 	}
-	
+
 	public String getLinhaImovel(String campo) {
 		return linhaImovel.get(campo);
 	}
@@ -60,7 +63,7 @@ public class AtualizacaoCadastralImovel {
 	public Map<String, String> getLinhaCliente() {
 		return linhaCliente;
 	}
-	
+
 	public String getLinhaCliente(String campo) {
 		return linhaCliente.get(campo);
 	}
@@ -80,7 +83,7 @@ public class AtualizacaoCadastralImovel {
 	public Map<String, String> getLinhaServicos() {
 		return linhaServicos;
 	}
-	
+
 	public String getLinhaServicos(String campo) {
 		return linhaServicos.get(campo);
 	}
@@ -92,7 +95,7 @@ public class AtualizacaoCadastralImovel {
 	public Map<String, String> getLinhaMedidor() {
 		return linhaMedidor;
 	}
-	
+
 	public String getLinhaMedidor(String campo) {
 		return linhaMedidor.get(campo);
 	}
@@ -104,7 +107,7 @@ public class AtualizacaoCadastralImovel {
 	public Map<String, String> getLinhaAnormalidade() {
 		return linhaAnormalidade;
 	}
-	
+
 	public String getLinhaAnormalidade(String campo) {
 		return linhaAnormalidade.get(campo);
 	}
@@ -129,7 +132,7 @@ public class AtualizacaoCadastralImovel {
 		erroLayout = true;
 		mensagensErro.add(erro.toUpperCase());
 	}
-	
+
 	public int getMatricula() {
 		return matricula;
 	}
@@ -137,7 +140,7 @@ public class AtualizacaoCadastralImovel {
 	public void setMatricula(int matricula) {
 		this.matricula = matricula;
 	}
-	
+
 	public boolean isImovelAprovado() {
 		return imovelAprovado;
 	}
@@ -165,11 +168,11 @@ public class AtualizacaoCadastralImovel {
 	public AtualizacaoCadastral getAtualizacaoArquivo() {
 		return atualizacaoArquivo;
 	}
-	
-	public Boolean isErroLayout(){
+
+	public Boolean isErroLayout() {
 		return erroLayout;
 	}
-	
+
 	public Boolean isExisteMedidor() {
 		return existeMedidor;
 	}
@@ -185,7 +188,7 @@ public class AtualizacaoCadastralImovel {
 	public void setCadastroOcorrencia(CadastroOcorrencia cadastroOcorrencia) {
 		this.cadastroOcorrencia = cadastroOcorrencia;
 	}
-	
+
 	public ImovelControleAtualizacaoCadastral getImovelControle() {
 		return imovelControle;
 	}
@@ -197,16 +200,32 @@ public class AtualizacaoCadastralImovel {
 	public void limparDadosUsuario() {
 		linhaCliente.put("matriculaUsuario", "0");
 	}
-	
+
 	public void limparDadosProprietario() {
 		linhaCliente.put("usuarioProprietario", "1");
 		linhaCliente.put("matriculaProprietario", "0");
 		linhaCliente.put("cnpjCpfProprietario", "");
-	}		
-	
+	}
+
 	public void limparDadosResponsavel() {
 		linhaCliente.put("tipoResponsavel", "0");
 		linhaCliente.put("matriculaResponsavel", "0");
 		linhaCliente.put("cnpjCpfResponsavel", "");
+	}
+
+	public boolean isImovelNovo() {
+		return imovelNovo;
+	}
+
+	public void setImovelNovo(boolean imovelNovo) {
+		this.imovelNovo = imovelNovo;
+	}
+
+	public int getIdentificacaoImovelNovo() {
+		return identificacaoImovelNovo;
+	}
+
+	public void setIdentificacaoImovelNovo(int identificacaoImovelNovo) {
+		this.identificacaoImovelNovo = identificacaoImovelNovo;
 	}
 }

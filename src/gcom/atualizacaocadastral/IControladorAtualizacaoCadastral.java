@@ -132,4 +132,6 @@ public interface IControladorAtualizacaoCadastral {
     public void emitirTermoAlteracaoCadastral(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException;
     
     public void aprovarImovel(Integer idImovel) throws ControladorException;
+    
+    public List<Visita> obterVisitasPorCoordenadas(String latitude, String longitude) throws ControladorException;
 }

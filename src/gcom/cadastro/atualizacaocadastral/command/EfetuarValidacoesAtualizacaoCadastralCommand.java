@@ -61,7 +61,9 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 
 		CadastroOcorrencia ocorrencia = imovelAtual.getCadastroOcorrencia();
 
-		new ValidadorSituacaoImovelCommand(imovelAtual, controladorAtualizacaoCadastral).execute();
+		if (!imovelAtual.isImovelNovo()) {
+			new ValidadorSituacaoImovelCommand(imovelAtual, controladorAtualizacaoCadastral).execute();
+		}
 		new ValidadorCoordenadasCommand(imovelAtual, controladorAtualizacaoCadastral).execute();
 
 		if (ocorrencia != null && ocorrencia.getIndicadorValidacao().equals(ConstantesSistema.SIM)) {

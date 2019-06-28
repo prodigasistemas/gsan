@@ -1,5 +1,22 @@
 package gcom.atualizacaocadastral;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
+
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.jboss.logging.Logger;
+
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IImovel;
@@ -20,23 +37,6 @@ import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 import gcom.util.IoUtil;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.jboss.logging.Logger;
 
 public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizacaoCadastral {
 
@@ -1843,10 +1843,14 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			String sql = "from Visita v where v.imovelControleAtualizacaoCadastral.id = :idImovelControle and v.coordenadaX = :latitude and v.coordenadaY =  :longitude";
 			
-			return session.createQuery(sql).setInteger("idImovelControle", imovelControle.getId())
-										   .setString("latitude", latitude)
-										   .setString("longitude", longitude)
-										   .list();
+			if (imovelControle == null) {
+				return null;
+			} else {
+				return session.createQuery(sql).setInteger("idImovelControle", imovelControle.getId())
+						.setString("latitude", latitude)
+						.setString("longitude", longitude)
+						.list();
+			}
 			
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao atualizar situacao de um conjunto de imovel controle.");
@@ -2463,5 +2467,21 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         }
         return retorno;
     }
+
+	@SuppressWarnings("unchecked")
+	public List<Visita> obterVisitasPorCoordenadas(String latitude, String longitude) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			return session.createQuery("from Visita v where v.coordenadaX = :latitude and v.coordenadaY =  :longitude")
+					.setString("latitude", latitude)
+					.setString("longitude", longitude)
+					.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao obter visita por coordenadas.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 	
 }

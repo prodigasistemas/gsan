@@ -1,13 +1,16 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
-import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.jboss.logging.Logger;
+
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaClienteCommand;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.endereco.LogradouroTipo;
-import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
 import gcom.util.Util;
@@ -17,40 +20,27 @@ import gcom.util.exception.MatriculaUsuarioException;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.jboss.logging.Logger;
-
 public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	
 	private static Logger logger = Logger.getLogger(ParseClienteCommand.class);
 	
-	private IControladorAtualizacaoCadastral controladorAtualizacaoCadastral;
-	
-	public ParseClienteCommand(ParserUtil parser,
-			ControladorUtilLocal controladorUtil,
-			IRepositorioImovel repositorioImovel,
-			IControladorAtualizacaoCadastral controladorAtualizacaoCadastral) {
-
+	public ParseClienteCommand(ParserUtil parser, ControladorUtilLocal controladorUtil) {
 		super(parser);
 
 		this.controladorUtil = controladorUtil;
-		this.repositorioImovel = repositorioImovel;
-		this.controladorAtualizacaoCadastral = controladorAtualizacaoCadastral;
 	}
-
+	
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaCliente();
 		AtualizacaoCadastralImovel imovelAtual = atualizacao.getImovelAtual();
 		
-		new ValidadorTamanhoLinhaClienteCommand(parser, imovelAtual, linha).execute();;
+		new ValidadorTamanhoLinhaClienteCommand(parser, imovelAtual, linha).execute();
+		
 		String matriculaImovelCliente = parser.obterDadoParser(9).trim();
 		atualizacao.getImovelAtual().setMatricula(Integer.valueOf(matriculaImovelCliente));
 		
 		if(!imovelAtual.isErroLayout()) {
-			logger.info("Carregando Imovel: " + Integer.parseInt(matriculaImovelCliente));
+			logger.info("Carregando Imovel: " + matriculaImovelCliente);
 
 			linha.put("matriculaImovelCliente", matriculaImovelCliente);
 			
@@ -235,32 +225,6 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 			String data = parser.obterDadoParser(26).trim();
 			linha.put("data", data);
-
-			verificarImovel(atualizacao, imovelAtual);
-		}
-	}
-	
-	private void verificarImovel(AtualizacaoCadastral atualizacao, AtualizacaoCadastralImovel imovelAtual) throws Exception {
-		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = controladorAtualizacaoCadastral.pesquisarImovelControleAtualizacao(atualizacao.getImovelAtual().getMatricula());
-
-		if (imovelControleAtualizacaoCadastral != null) {
-
-			if (imovelControleAtualizacaoCadastral.isPreAprovado() 
-					|| imovelControleAtualizacaoCadastral.isAprovado() 
-					|| imovelControleAtualizacaoCadastral.isAtualizado()) {
-
-				atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'PRE APROVADO', 'APROVADO' ou 'ATUALIZADO'");
-				atualizacao.getImovelAtual().setImovelAprovado(true);
-			}
-			
-			if (atualizacao.getArquivoTexto().isArquivoRetornoTransmissao()) {
-				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
-			}
-			
-		} else {
-			if (atualizacao.getImovelAtual().getMatricula() > 0 && atualizacao.getArquivoTexto().isArquivoRetornoTransmissao()) {
-				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
-			}
 		}
 	}
 	

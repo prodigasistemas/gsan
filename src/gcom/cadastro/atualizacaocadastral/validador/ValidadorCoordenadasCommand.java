@@ -1,20 +1,22 @@
 package gcom.cadastro.atualizacaocadastral.validador;
 
-import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
-import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.atualizacaocadastral.Visita;
-import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
-import gcom.util.ControladorException;
-
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.Visita;
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
+import gcom.util.ControladorException;
 
 public class ValidadorCoordenadasCommand extends ValidadorCommand {
 
 	private ControladorAtualizacaoCadastralLocal controlador;
 
-	public ValidadorCoordenadasCommand(AtualizacaoCadastralImovel cadastroImovel, ControladorAtualizacaoCadastralLocal controlador) {
+	public ValidadorCoordenadasCommand(
+			AtualizacaoCadastralImovel cadastroImovel,
+			ControladorAtualizacaoCadastralLocal controlador) {
+		
 		super(cadastroImovel);
 
 		this.controlador = controlador;
@@ -34,21 +36,20 @@ public class ValidadorCoordenadasCommand extends ValidadorCommand {
 			cadastroImovel.addMensagemErro("Longitude inválida.");
 		}
 
-		if (coordenadasRepetidas())
+		if (coordenadasRepetidas(latitude, longitude))
 			cadastroImovel.addMensagemErro("Já existe uma visita no imóvel para as coordenadas informadas no arquivo.");
 	}
 
-	private boolean coordenadasRepetidas() throws ControladorException {
-		ImovelControleAtualizacaoCadastral controle = controlador.obterImovelControle(cadastroImovel.getMatricula());
-		
-		if (controle == null) {
-			return false;
+	private boolean coordenadasRepetidas(String latitude, String longitude) throws ControladorException {
+		List<Visita> visitas = null;
+
+		if (cadastroImovel.isImovelNovo()) {
+			visitas = controlador.obterVisitasPorCoordenadas(latitude, longitude);
 		} else {
-			List<Visita> visitas = controlador.obterVisitasPorImovelControleECoordenadas(controle, 
-					cadastroImovel.getLinhaAnormalidade("latitude"), 
-					cadastroImovel.getLinhaAnormalidade("longitude"));
-			
-			return visitas != null && !visitas.isEmpty();
+			visitas = controlador.obterVisitasPorImovelControleECoordenadas(controlador.obterImovelControle(cadastroImovel.getMatricula()),
+					latitude, longitude);
 		}
+
+		return visitas != null && !visitas.isEmpty();
 	}
 }

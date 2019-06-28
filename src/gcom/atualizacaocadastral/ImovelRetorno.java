@@ -92,7 +92,7 @@ public class ImovelRetorno implements IImovel{
 	}
 
 	public ImovelRetorno(IImovel imovelAtualizacaoCadastral) {
-		this.idImovel = imovelAtualizacaoCadastral.getIdImovel();;
+		this.idImovel = imovelAtualizacaoCadastral.getIdImovel();
 		this.tipoOperacao = imovelAtualizacaoCadastral.getTipoOperacao();
 		this.idLocalidade = imovelAtualizacaoCadastral.getIdLocalidade();
 		this.codigoSetorComercial = imovelAtualizacaoCadastral.getCodigoSetorComercial();

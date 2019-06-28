@@ -1,12 +1,5 @@
 package gcom.gui.cadastro;
 
-import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
-import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
-import gcom.fachada.Fachada;
-import gcom.gui.ActionServletException;
-import gcom.gui.GcomAction;
-import gcom.util.exception.BaseRuntimeException;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,6 +24,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.jboss.logging.Logger;
+
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
+import gcom.fachada.Fachada;
+import gcom.gui.ActionServletException;
+import gcom.gui.GcomAction;
+import gcom.util.exception.BaseRuntimeException;
 
 public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 
@@ -147,7 +147,8 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 
 				if (erros == null) {
 					erros = new ArrayList<String>();
-					mapErros.put(String.valueOf(imovel.getMatricula()), erros);
+					
+					mapErros.put(getMatricula(imovel), erros);
 				}
 				erros.addAll(imovel.getMensagensErro());
 			}
@@ -163,6 +164,10 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 			retorno = mapping.findForward("CarregarDadosAtualizacaoCadastralAction");
 		}
 		return retorno;
+	}
+
+	private String getMatricula(AtualizacaoCadastralImovel imovel) {
+		return imovel.isImovelNovo() ? "IMÓVEL NOVO - " + imovel.getIdentificacaoImovelNovo() : String.valueOf(imovel.getMatricula());
 	}
 
 	private void salvarArquivoZip(FormFile arquivoCarregado, String nomeArquivoZip) {

@@ -54,7 +54,6 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	private int matriculaUsuario;
 	private int matriculaResponsavel;
 	private int matriculaProprietario;
-	private int tipoOperacao;
 	private Integer idImovelRetorno;
 
 	private IRepositorioClienteImovel repositorioClienteImovel;
@@ -75,18 +74,17 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	public void execute(AtualizacaoCadastral atualizacaoCadastral) throws Exception {
 		this.atualizacaoCadastral = atualizacaoCadastral;
 		this.atualizacaoCadastralImovel = atualizacaoCadastral.getImovelAtual();
-		this.matriculaImovel = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("matricula"));
+		this.matriculaImovel = atualizacaoCadastralImovel.getMatricula();
 		this.matriculaUsuario = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaUsuario"));
 		this.matriculaResponsavel = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaResponsavel"));
 		this.matriculaProprietario = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaProprietario"));
-		this.tipoOperacao = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOperacao"));
 
 		salvarObjetosRetorno();
 		atualizarImovelControle();
 	}
 
 	public void salvarObjetosRetorno() throws Exception {
-		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTransmissao()) {
+		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTransmissao() || atualizacaoCadastralImovel.isImovelNovo()) {
 			salvarImovelRetorno();
 			salvarClienteUsuario();
 			salvarClienteProprietario();
@@ -101,7 +99,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		for (String nomeImagem : atualizacaoCadastral.getImagens()) {
 			String pasta = "/images/" + atualizacaoCadastral.getArquivoTexto().getDescricaoArquivo();
 
-			if (nomeImagem.contains(Integer.toString(atualizacaoCadastralImovel.getMatricula()))) {
+			if (nomeImagem.contains(String.valueOf(atualizacaoCadastralImovel.getMatricula()))) {
 				controladorAtualizacaoCadastral.inserirImagemRetorno(atualizacaoCadastralImovel.getMatricula(), nomeImagem, pasta, idImovelRetorno);
 			}
 		}
@@ -116,7 +114,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	}
 
 	private void salvarImovelRetorno() throws Exception {
-		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(matriculaImovel, atualizacaoCadastral, atualizacaoCadastralImovel, tipoOperacao);
+		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(atualizacaoCadastral, atualizacaoCadastralImovel);
 		ImovelAtualizacaoCadastral imovelTxt = builder.getImovelAtualizacaoCadastral();
 
 		salvarImovelRetorno(imovelTxt);
@@ -144,7 +142,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = getImovelSubcategorias();
 
 		for (ImovelSubcategoriaAtualizacaoCadastral subcategoria : subcategorias) {
-			salvarImovelSubcategoriaRetorno(subcategoria, idImovelRetorno);
+			salvarImovelSubcategoriaRetorno(subcategoria);
 		}
 	}
 
@@ -288,7 +286,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		idImovelRetorno = (Integer) controladorUtil.inserir(imovelRetorno);
 	}
 
-	private void salvarImovelSubcategoriaRetorno(ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaTxt, Integer idImovelRetorno) throws ControladorException {
+	private void salvarImovelSubcategoriaRetorno(ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaTxt) throws ControladorException {
 		ImovelSubcategoriaRetorno imovelSubcategoriaRetorno = new ImovelSubcategoriaRetorno();
 		imovelSubcategoriaRetorno.setImovel(imovelSubcategoriaTxt.getImovel());
 		imovelSubcategoriaRetorno.setSubcategoria(imovelSubcategoriaTxt.getSubcategoria());
@@ -317,7 +315,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	private Integer salvarClienteRetorno(IClienteAtualizacaoCadastral clienteTxt) throws ControladorException {
 		ClienteRetorno clienteRetorno = new ClienteRetorno(clienteTxt);
 		clienteRetorno.setUltimaAlteracao(new Date());
-		return (Integer)controladorUtil.inserir(clienteRetorno);
+		return (Integer) controladorUtil.inserir(clienteRetorno);
 
 	}
 
@@ -330,11 +328,17 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	}
 
 	private void atualizarImovelControle() throws ControladorException {
-		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
+		ImovelControleAtualizacaoCadastral controle = null;
+		if (atualizacaoCadastralImovel.isImovelNovo()) {
+			controle = atualizacaoCadastralImovel.getImovelControle();
+		} else {
+			controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getMatricula());
+		}
 
 		if (controle != null) {
 		    if (controle.isTransmitido() || controle.isRevisita())
 		        inserirVisitaParaImovelControle(controle);
+		    
 			controle.setImovelRetorno(new ImovelRetorno(idImovelRetorno));
 			controladorUtil.atualizar(controle);
 		}
@@ -358,7 +362,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 				boolean existeSubcategoria = controladorAtualizacaoCadastral.existeSubcategoriaRetorno(subcategoria.getImovel().getId(), subcategoria.getSubcategoria().getId());
 				
 				if (!existeSubcategoria) {
-					salvarImovelSubcategoriaRetorno(subcategoria, idImovelRetorno);
+					salvarImovelSubcategoriaRetorno(subcategoria);
 				}
 			}
 	}

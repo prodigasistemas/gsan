@@ -1,25 +1,29 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaImovelCommand;
-import gcom.cadastro.endereco.LogradouroTipo;
-import gcom.cadastro.imovel.IRepositorioImovel;
-import gcom.util.ControladorUtilLocal;
-import gcom.util.ParserUtil;
-
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+
+import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaImovelCommand;
+import gcom.cadastro.endereco.LogradouroTipo;
+import gcom.seguranca.transacao.AlteracaoTipo;
+import gcom.util.ConstantesSistema;
+import gcom.util.ControladorUtilLocal;
+import gcom.util.ParserUtil;
 
 public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
 	private IControladorAtualizacaoCadastral controladorAtualizacaoCadastral;
 	
-	public ParseImovelCommand(ParserUtil parser, ControladorUtilLocal controladorUtil, IControladorAtualizacaoCadastral controladorAtualizacaoCadastral, IRepositorioImovel repositorioImovel){
+	public ParseImovelCommand(
+			ParserUtil parser, 
+			ControladorUtilLocal controladorUtil, 
+			IControladorAtualizacaoCadastral controladorAtualizacaoCadastral) {
 		super(parser);
 		this.controladorUtil = controladorUtil;
 		this.controladorAtualizacaoCadastral = controladorAtualizacaoCadastral;
-		this.repositorioImovel = repositorioImovel;
 	}
 	
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
@@ -30,22 +34,26 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		if(!imovel.isErroLayout()) {
 			linha.put("matricula", parser.obterDadoParserTrim(9));
-			
-			verificaImovelNovo(atualizacao);
 
-			linha.put("tipoOperacao",     parser.obterDadoParserTrim(1));
-			linha.put("codigoCliente",    parser.obterDadoParser(30).trim());
-			linha.put("inscricao",        parser.obterDadoParser(17).trim());
-			linha.put("rota",             parser.obterDadoParser(2).trim());
-			linha.put("face",             parser.obterDadoParser(2).trim());
-			linha.put("codigoMunicipio",  parser.obterDadoParser(8).trim());
+			String tipoOperacao = parser.obterDadoParserTrim(1);
+			linha.put("tipoOperacao", tipoOperacao);
+			
+			if (!isImovelNovo(atualizacao.getImovelAtual(), tipoOperacao)) {
+				verificarImovel(atualizacao);
+			}
+			
+			linha.put("codigoCliente",   parser.obterDadoParser(30).trim());
+			linha.put("inscricao",       parser.obterDadoParser(17).trim());
+			linha.put("rota",            parser.obterDadoParser(2).trim());
+			linha.put("face",            parser.obterDadoParser(2).trim());
+			linha.put("codigoMunicipio", parser.obterDadoParser(8).trim());
 
 			String numeroIPTU = parser.obterDadoParser(31).trim();
 			linha.put("numeroIPTU", numeroIPTU.trim().equals("") ? null : numeroIPTU);
 			
-			linha.put("numeroCelpa",                   parser.obterDadoParser(20).trim());
-			linha.put("numeroPontosUteis",             parser.obterDadoParser(5).trim());
-			linha.put("numeroOcupantes",               parser.obterDadoParser(5).trim());
+			linha.put("numeroCelpa", 		parser.obterDadoParser(20).trim());
+			linha.put("numeroPontosUteis",	parser.obterDadoParser(5).trim());
+			linha.put("numeroOcupantes",	parser.obterDadoParser(5).trim());
 			
 			String idTipoLogradouroImovel = parser.obterDadoParser(2).trim();
 			
@@ -103,22 +111,48 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 			linha.put("data",                          parser.obterDadoParser(26).trim());
 			
 			if(parser.getFonte().length() == 545)
-			linha.put("obsersacaoCategoria", 		   parser.obterDadoParserTrim(100));
+				linha.put("obsersacaoCategoria", 	   parser.obterDadoParserTrim(100));
 		}
 	}
 
-	private void verificaImovelNovo(AtualizacaoCadastral atualizacao) throws Exception {
-		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaImovel();
-		
-		String matricula = linha.get("matricula");
-		
-		if (matriculaInvalida(matricula)){
-			matricula = String.valueOf(controladorAtualizacaoCadastral.recuperaValorSequenceImovelRetorno() + 1);
-			linha.put("matricula", matricula);
+	private boolean isImovelNovo(AtualizacaoCadastralImovel imovelAtual, String tipoOperacao) {
+		if (isInclusao(tipoOperacao)) {
+			imovelAtual.setImovelNovo(true);
+			imovelAtual.setIdentificacaoImovelNovo(imovelAtual.getMatricula());
+			imovelAtual.setMatricula(ConstantesSistema.ZERO);
+			return true;
+		} else {
+			imovelAtual.setImovelNovo(false);
+			return false;
 		}
 	}
-	
-	private boolean matriculaInvalida(String matricula){
-		return StringUtils.isEmpty(matricula) || !StringUtils.isNumeric(matricula) || Integer.parseInt(matricula) <=0;
+
+	private boolean isInclusao(String tipoOperacao) {
+		return Integer.valueOf(tipoOperacao) == AlteracaoTipo.INCLUSAO.intValue();
+	}
+
+	private void verificarImovel(AtualizacaoCadastral atualizacao) throws Exception {
+		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.pesquisarImovelControleAtualizacao(atualizacao.getImovelAtual().getMatricula());
+
+		if (controle != null) {
+			if (controle.isPreAprovado() || 
+				controle.isAprovado() ||
+				controle.isAtualizado()) {
+
+				atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'PRE APROVADO', 'APROVADO' ou 'ATUALIZADO'");
+				atualizacao.getImovelAtual().setImovelAprovado(true);
+			}
+
+			if (atualizacao.getArquivoTexto().isArquivoRetornoTransmissao()) {
+				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(
+						atualizacao.getImovelAtual().getMatricula());
+			}
+
+		} else {
+			if (atualizacao.getImovelAtual().getMatricula() > 0 && atualizacao.getArquivoTexto().isArquivoRetornoTransmissao()) {
+				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(
+						atualizacao.getImovelAtual().getMatricula());
+			}
+		}
 	}
 }

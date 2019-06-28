@@ -1,5 +1,15 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
+import org.apache.commons.lang.StringUtils;
+
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
@@ -31,19 +41,10 @@ import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
+import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
-import org.apache.commons.lang.StringUtils;
 
 public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizacaoCadastralCommand {
 	
@@ -73,7 +74,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	public void execute(AtualizacaoCadastral atualizacaoCadastral) throws Exception {
 		this.atualizacaoCadastral = atualizacaoCadastral;
 		this.atualizacaoCadastralImovel = atualizacaoCadastral.getImovelAtual(); 
-		this.matriculaImovel = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("matricula"));
+		this.matriculaImovel = atualizacaoCadastralImovel.getMatricula();
 		this.matriculaUsuario = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaUsuario"));
 		this.matriculaResponsavel = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaResponsavel"));
 		this.matriculaProprietario = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaProprietario"));
@@ -93,13 +94,13 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	}
 
 	private void salvarImovel() throws Exception {
-		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(matriculaImovel, atualizacaoCadastral, atualizacaoCadastralImovel, tipoOperacao);
+		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(atualizacaoCadastral, atualizacaoCadastralImovel);
 		ImovelAtualizacaoCadastral imovelTxt = builder.getImovelAtualizacaoCadastral();
 		
 		ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = controladorAtualizacaoCadastral.pesquisarImovelAtualizacaoCadastral(matriculaImovel);
 		
-		if (imovelAtualizacaoCadastralBase == null){
-			imovelAtualizacaoCadastralBase = new ImovelAtualizacaoCadastral(matriculaImovel);
+		if (imovelAtualizacaoCadastralBase == null) {
+			imovelAtualizacaoCadastralBase = new ImovelAtualizacaoCadastral(ConstantesSistema.ZERO.intValue());
 			tipoOperacao = AlteracaoTipo.INCLUSAO;
 		}
 		
@@ -311,26 +312,39 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	}
 	
 	private void atualizarSituacaoControleImovelAtualizacaoCadastral() throws Exception {
-		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.pesquisarImovelControleAtualizacao(matriculaImovel);
+		if (atualizacaoCadastralImovel.isImovelNovo())
+			inserirControleImovelNovo();
+		else
+			inserirOuAtualizarControleImovel();
+	}
 
+	private void inserirOuAtualizarControleImovel() throws ControladorException {
+		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.pesquisarImovelControleAtualizacao(matriculaImovel);
+		
 		if (controle == null) {
 			controle = new ImovelControleAtualizacaoCadastral();
 			controle.setImovel(new Imovel(matriculaImovel));
 			controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO));
 		}
-
+		
 		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTransmissao())
 			controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO));
-
+		
 		controle.setDataRetorno(new Date());
 		controle.setCadastroOcorrencia(new CadastroOcorrencia(atualizacaoCadastralImovel.getCadastroOcorrencia().getId()));
-		Integer idImovelControle = (Integer) controladorUtil.inserirOuAtualizar(controle);
+		
+		controladorUtil.inserirOuAtualizar(controle);
+		atualizacaoCadastralImovel.setImovelControle(controle);
+	}
 
-		if (controle != null) {
-			idImovelControle = controle.getId();
-		}
-		controle = controladorAtualizacaoCadastral.obterImovelControle(matriculaImovel);
-
+	private void inserirControleImovelNovo() throws ControladorException {
+		ImovelControleAtualizacaoCadastral controle = new ImovelControleAtualizacaoCadastral();
+		controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO));
+		controle.setDataGeracao(new Date());
+		controle.setDataRetorno(new Date());
+		controle.setCadastroOcorrencia(new CadastroOcorrencia(atualizacaoCadastralImovel.getCadastroOcorrencia().getId()));
+		
+		controladorUtil.inserir(controle);
 		atualizacaoCadastralImovel.setImovelControle(controle);
 	}
 }

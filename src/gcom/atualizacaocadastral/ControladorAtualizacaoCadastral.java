@@ -69,7 +69,6 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.fachada.Fachada;
 import gcom.faturamento.conta.ComunicadoEmitirConta;
-import gcom.faturamento.conta.IConta;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarGerarLoteAtualizacaoCadastralActionHelper;
@@ -297,6 +296,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return colecaoImagemRetorno;
 	}
 
+	@SuppressWarnings("resource")
 	private File copiarImagensRetorno(ImagemRetorno imagemRetorno) throws ControladorException {
 		String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		File arquivoOrigem = new File(caminhoJboss, imagemRetorno.getPathImagem());
@@ -2144,26 +2144,26 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 //            e.printStackTrace();
 //        }
 //    }
-    
-    private Integer obterConsumoFixadoSituacaoEspecialFaturamento(Integer idImovel) {
-        Integer consumo = 0;
-        try {
-            ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel);
-            
-            Integer referenciaAnterior = Util.recuperaAnoMesDaData(controle.getDataProcessamento());
-
-            IConta conta = getControladorFaturamento().obterContaOuContaHistorico(idImovel, referenciaAnterior);
-
-            if (conta != null)
-                consumo = conta.getConsumoAgua();
-            else {
-            }
-            
-        } catch (ControladorException e) {
-            e.printStackTrace();
-        }
-        return consumo;
-    }
+//    
+//    private Integer obterConsumoFixadoSituacaoEspecialFaturamento(Integer idImovel) {
+//        Integer consumo = 0;
+//        try {
+//            ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel);
+//            
+//            Integer referenciaAnterior = Util.recuperaAnoMesDaData(controle.getDataProcessamento());
+//
+//            IConta conta = getControladorFaturamento().obterContaOuContaHistorico(idImovel, referenciaAnterior);
+//
+//            if (conta != null)
+//                consumo = conta.getConsumoAgua();
+//            else {
+//            }
+//            
+//        } catch (ControladorException e) {
+//            e.printStackTrace();
+//        }
+//        return consumo;
+//    }
     
     public boolean houveMudancaCategoria(Integer idImovel) throws ControladorException {
         boolean retorno = false;
@@ -2465,29 +2465,29 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return retorno;
     }
     
-    private void emitirComunicadosAprovacoesAntigas() throws ControladorException {
-    	Integer idImovel = null; 
-    	try {
-    		
-    		Collection<Integer> imoveisAprovados = repositorioAtualizacaoCadastral.pesquisarImoveisPorSituacaoPeriodo(
-    								SituacaoAtualizacaoCadastral.APROVADO, 
-    								Util.obterUltimaDataMes(01, 2018), 
-    								new Date());
-    		Iterator<Integer> itImoveis = imoveisAprovados.iterator();
-    		
-    		while (itImoveis.hasNext()) {
-                idImovel = itImoveis.next();
-                ComunicadoEmitirConta comunicado = getControladorFaturamento().pesquisarComunicadoNaoEmitido(idImovel, ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
-                        
-                if (comunicado == null)
-                    this.aprovarImovel(idImovel);
-            }
-    		
-		} catch (ErroRepositorioException e) {
-			logger.error("Erro ao emitir comunicados para imóveis previamente aprovados " + idImovel, e);
-			throw new ControladorException("Erro ao gerar comunicado de irregularidade de faturamento para o imovel" + idImovel, e);
-		}
-    }
+//    private void emitirComunicadosAprovacoesAntigas() throws ControladorException {
+//    	Integer idImovel = null; 
+//    	try {
+//    		
+//    		Collection<Integer> imoveisAprovados = repositorioAtualizacaoCadastral.pesquisarImoveisPorSituacaoPeriodo(
+//    								SituacaoAtualizacaoCadastral.APROVADO, 
+//    								Util.obterUltimaDataMes(01, 2018), 
+//    								new Date());
+//    		Iterator<Integer> itImoveis = imoveisAprovados.iterator();
+//    		
+//    		while (itImoveis.hasNext()) {
+//                idImovel = itImoveis.next();
+//                ComunicadoEmitirConta comunicado = getControladorFaturamento().pesquisarComunicadoNaoEmitido(idImovel, ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
+//                        
+//                if (comunicado == null)
+//                    this.aprovarImovel(idImovel);
+//            }
+//    		
+//		} catch (ErroRepositorioException e) {
+//			logger.error("Erro ao emitir comunicados para imóveis previamente aprovados " + idImovel, e);
+//			throw new ControladorException("Erro ao gerar comunicado de irregularidade de faturamento para o imovel" + idImovel, e);
+//		}
+//    }
     
     private List<ComunicadoEmitirConta> obterComunicadosParaSeremEmitidos() throws ControladorException {
 			
@@ -2644,4 +2644,12 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			throw new ControladorException("Erro ao obter descricao das mudancas do faturamento - comunicado - " + idImovel, e);
 		}
     }
+
+	public List<Visita> obterVisitasPorCoordenadas(String latitude, String longitude) throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.obterVisitasPorCoordenadas(latitude, longitude);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao obter visita por coordenadas.", e);
+		}
+	}
 }
