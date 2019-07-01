@@ -7745,12 +7745,12 @@ public class ControladorCadastro extends ControladorComum {
 
             if (residencial != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getDdd(), 2));
-                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getTelefone(), 8));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getTelefone(), 9));
             } else if (comercial != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getDdd(), 2));
-                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getTelefone(), 8));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getTelefone(), 9));
             } else {
-                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 11));
             }
 
 			// Celular Usuario
@@ -7836,12 +7836,12 @@ public class ControladorCadastro extends ControladorComum {
 
             if (residencial != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getDdd(), 2));
-                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getTelefone(), 8));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getTelefone(), 9));
             } else if (comercial != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getDdd(), 2));
-                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getTelefone(), 8));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getTelefone(), 9));
             } else {
-                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 11));
             }
 
             // Celular Proprietario
@@ -7926,12 +7926,12 @@ public class ControladorCadastro extends ControladorComum {
 
             if (residencial != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getDdd(), 2));
-                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getTelefone(), 8));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(residencial.getTelefone(), 9));
             } else if (comercial != null) {
                 arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getDdd(), 2));
-                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getTelefone(), 8));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString(comercial.getTelefone(), 9));
             } else {
-                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 10));
+                arquivoTextoRegistroTipoCliente.append(Util.completaString("", 11));
             }
 
             // Celular Responsavel
