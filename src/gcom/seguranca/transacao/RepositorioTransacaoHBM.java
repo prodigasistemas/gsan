@@ -618,8 +618,11 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				sql.append(" AND leit.leit_id = " + filtro.getIdLeiturista());
 			
 			if (StringUtils.isNotEmpty(filtro.getPeriodoInicial()))
-				sql.append(" AND ctrl.icac_tmpreaprovacao between '" + filtro.getPeriodoInicial() + "' AND '" + filtro.getPeriodoFinal() + "'");
-			
+				if(!filtro.getPeriodoInicial().equals(filtro.getPeriodoFinal())) {
+					sql.append(" AND Cast(ctrl.icac_tmpreaprovacao as Date) between '" + filtro.getPeriodoInicial() + "' AND '" + filtro.getPeriodoFinal() + "'");
+				}else{
+					sql.append(" AND Cast(ctrl.icac_tmpreaprovacao as Date) = '" + filtro.getPeriodoInicial() + "'");
+				}
 			if (StringUtils.isNotEmpty(filtro.getLote()))
 				sql.append(" AND ctrl.icac_lote = '" + filtro.getLote() + "'");
 			
