@@ -7861,7 +7861,7 @@ public class ControladorCadastro extends ControladorComum {
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getCodigoCep() != null ? clienteProprietario.getCodigoCep().toString() : "", 8));
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNomeMunicipio() != null ? clienteProprietario.getNomeMunicipio() : "", 15));
         } else {
-			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 255));
+			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 256));
 		}
 
 		// Dados Cliente Responsavel
@@ -7951,7 +7951,7 @@ public class ControladorCadastro extends ControladorComum {
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getCodigoCep() != null ? clienteResponsavel.getCodigoCep().toString() : "", 8));
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNomeMunicipio() != null ? clienteResponsavel.getNomeMunicipio() : "", 15));
         } else {
-			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 255));
+			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 256));
 		}
 
 		arquivoTextoRegistroTipoCliente.append(System.getProperty("line.separator"));
