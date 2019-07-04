@@ -2066,12 +2066,17 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		        	.append(" and controle.imovel.id = imovelAtualizacao.idImovel ")
 		        	.append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
 		        	.append(" and imovelAtualizacao.idLocalidade = :idLocalidade ")
-		        	.append(" and imovelAtualizacao.codigoSetorComercial = :codigoSetor ")
-		        	.append(" and controle.dataPreAprovacao >= '" + helper.getPeriodoInicial() + "'")
-		        	.append(" and controle.dataPreAprovacao <= '" + helper.getPeriodoFinal() + "'")
-		        	.append(" and controle.lote is null ");
+		        	.append(" and imovelAtualizacao.codigoSetorComercial = :codigoSetor ");
+		      
+		      if(!helper.getPeriodoInicial().equals(helper.getPeriodoFinal())) {
+						consulta.append(" and controle.dataPreAprovacao between '" + helper.getPeriodoInicial() + "' AND '" + helper.getPeriodoFinal() + "'");
+		      }else{
+						consulta.append(" and controle.dataPreAprovacao = '" + helper.getPeriodoInicial() + "'");
+					}
+		        	
+        		consulta.append(" and controle.lote is null ");
         	
-        	if (helper.getGrandesConsumidores() != FiltrarGerarLoteAtualizacaoCadastralActionHelper.TODOS) {
+			if (helper.getGrandesConsumidores() != FiltrarGerarLoteAtualizacaoCadastralActionHelper.TODOS) {
         		consulta.append(" and imovelPerfil.indicadorGrandeConsumidor = " + helper.getGrandesConsumidores());
         	}
         	
@@ -2100,10 +2105,15 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					        	.append(" and situacao.id in (:emFiscalizacao, :preAprovado) ")
 					        	.append(" and retorno.idLocalidade = :idLocalidade ")
 					        	.append(" and retorno.codigoSetorComercial = :codigoSetor ")
-					        	.append(" and retorno.tipoOperacao = :inclusao ")
-					        	.append(" and controle.dataPreAprovacao >= '" + helper.getPeriodoInicial() + "'")
-					        	.append(" and controle.dataPreAprovacao <= '" + helper.getPeriodoFinal() + "'")
-					        	.append(" and controle.lote is null ");
+					        	.append(" and retorno.tipoOperacao = :inclusao ");
+        	
+        	  if(!helper.getPeriodoInicial().equals(helper.getPeriodoFinal())) {
+        		  consultaImoveisNovos.append(" and controle.dataPreAprovacao between '" + helper.getPeriodoInicial() + "' AND '" + helper.getPeriodoFinal() + "'");
+        	  }else{
+        		  consultaImoveisNovos.append(" and controle.dataPreAprovacao = '" + helper.getPeriodoInicial() + "'");
+			  }
+					      
+        	  consultaImoveisNovos.append(" and controle.lote is null ");
         	
         	if (helper.getImoveisNovos() == ConstantesSistema.SIM.intValue()) {
                 retorno = (List<ImovelControleAtualizacaoCadastral>) session.createQuery(consultaImoveisNovos.toString())
