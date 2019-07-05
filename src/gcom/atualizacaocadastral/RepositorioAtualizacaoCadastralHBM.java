@@ -2069,9 +2069,9 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		        	.append(" and imovelAtualizacao.codigoSetorComercial = :codigoSetor ");
 		      
 		      if(!helper.getPeriodoInicial().equals(helper.getPeriodoFinal())) {
-						consulta.append(" and controle.dataPreAprovacao between '" + helper.getPeriodoInicial() + "' AND '" + helper.getPeriodoFinal() + "'");
+						consulta.append(" and cast(controle.dataPreAprovacao as date) between '" + helper.getPeriodoInicial() + "' AND '" + helper.getPeriodoFinal() + "'");
 		      }else{
-						consulta.append(" and controle.dataPreAprovacao = '" + helper.getPeriodoInicial() + "'");
+						consulta.append(" and cast(controle.dataPreAprovacao as date)  = '" + helper.getPeriodoInicial() + "'");
 					}
 		        	
         		consulta.append(" and controle.lote is null ");
@@ -2108,9 +2108,9 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					        	.append(" and retorno.tipoOperacao = :inclusao ");
         	
         	  if(!helper.getPeriodoInicial().equals(helper.getPeriodoFinal())) {
-        		  consultaImoveisNovos.append(" and controle.dataPreAprovacao between '" + helper.getPeriodoInicial() + "' AND '" + helper.getPeriodoFinal() + "'");
+        		  consultaImoveisNovos.append(" and cast(controle.dataPreAprovacao as date) between '" + helper.getPeriodoInicial() + "' AND '" + helper.getPeriodoFinal() + "'");
         	  }else{
-        		  consultaImoveisNovos.append(" and controle.dataPreAprovacao = '" + helper.getPeriodoInicial() + "'");
+        		  consultaImoveisNovos.append(" and cast(controle.dataPreAprovacao as date) = '" + helper.getPeriodoInicial() + "'");
 			  }
 					      
         	  consultaImoveisNovos.append(" and controle.lote is null ");
