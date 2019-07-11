@@ -1,5 +1,27 @@
 package gcom.seguranca.transacao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArraySet;
+
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.jboss.logging.Logger;
+
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.LinkedHashSetAlteracaoCadastral;
@@ -30,28 +52,6 @@ import gcom.util.filtro.MenorQue;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesColecao;
 import gcom.util.filtro.PersistenciaUtil;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArraySet;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.jboss.logging.Logger;
 
 public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 	
@@ -617,12 +617,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			if (StringUtils.isNotEmpty(filtro.getIdLeiturista()) && StringUtils.isNumeric(filtro.getIdLeiturista()) && Integer.valueOf(filtro.getIdLeiturista()) > 0)
 				sql.append(" AND leit.leit_id = " + filtro.getIdLeiturista());
 			
-			if (StringUtils.isNotEmpty(filtro.getPeriodoInicial())) {
-				if(!filtro.getPeriodoInicial().equals(filtro.getPeriodoFinal())) {
-					sql.append(" AND Cast(ctrl.icac_tmpreaprovacao as Date) between '" + filtro.getPeriodoInicial() + "' AND '" + filtro.getPeriodoFinal() + "'");
-				}else{
-					sql.append(" AND Cast(ctrl.icac_tmpreaprovacao as Date) = '" + filtro.getPeriodoInicial() + "'");
-				}
+			if (filtro.getPeriodoInicial() != null && filtro.getPeriodoFinal() != null) {
+				sql.append(" AND ctrl.icac_tmpreaprovacao between :periodoInicial AND :periodoFinal ");
 			}
 			
 			if (StringUtils.isNotEmpty(filtro.getLote()))
@@ -631,7 +627,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			if (StringUtils.isNotEmpty(filtro.getMatricula()))
 				sql.append(" AND ctrl.imov_id = " + filtro.getMatricula());
 
-			if (filtro.getSituacaoImoveis() !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS)
+			if (filtro.getSituacaoImoveis() != FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS)
 				sql.append(" AND ctrl.siac_id in (:listaSituacao) ");
 			else
 				sql.append(" AND ctrl.siac_id not in (:listaSituacao) ");
@@ -651,31 +647,35 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			sql.append(" ORDER BY tatc.tatc_cdimovel");
 			
 			SQLQuery query = session.createSQLQuery(sql.toString())
-									.addScalar("idImovel", Hibernate.INTEGER)
-									.addScalar("tipoAlteracao", Hibernate.INTEGER)
-									.addScalar("nomeFuncionario", Hibernate.STRING)
-									.addScalar("icAutorizado", Hibernate.INTEGER)
-									.addScalar("numeroHidrometro", Hibernate.STRING)
-									.addScalar("idLigacaoAgua", Hibernate.INTEGER)
-									.addScalar("idLigacaoEsgoto", Hibernate.INTEGER)
-									.addScalar("nomeColuna", Hibernate.STRING)
-									.addScalar("idCategoria", Hibernate.INTEGER)
-									.addScalar("idSubcategoria", Hibernate.INTEGER)
-									.addScalar("qtdEconomias", Hibernate.INTEGER)
-									.addScalar("valorAnterior", Hibernate.STRING)
-									.addScalar("valorTransmitido", Hibernate.STRING)
-									.addScalar("complemento", Hibernate.STRING)
-									.addScalar("idSituacao", Hibernate.INTEGER)
-									.addScalar("descricaoSituacao", Hibernate.STRING)
-									.addScalar("valorRevisado", Hibernate.STRING)
-									.addScalar("valorFiscalizado", Hibernate.STRING)
-									.addScalar("idControle", Hibernate.INTEGER);
-
-			List<Integer> listaSituacao = montarListaSituacaoMovimentoAtualizacaoCadastral(filtro);
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("tipoAlteracao", Hibernate.INTEGER)
+					.addScalar("nomeFuncionario", Hibernate.STRING)
+					.addScalar("icAutorizado", Hibernate.INTEGER)
+					.addScalar("numeroHidrometro", Hibernate.STRING)
+					.addScalar("idLigacaoAgua", Hibernate.INTEGER)
+					.addScalar("idLigacaoEsgoto", Hibernate.INTEGER)
+					.addScalar("nomeColuna", Hibernate.STRING)
+					.addScalar("idCategoria", Hibernate.INTEGER)
+					.addScalar("idSubcategoria", Hibernate.INTEGER)
+					.addScalar("qtdEconomias", Hibernate.INTEGER)
+					.addScalar("valorAnterior", Hibernate.STRING)
+					.addScalar("valorTransmitido", Hibernate.STRING)
+					.addScalar("complemento", Hibernate.STRING)
+					.addScalar("idSituacao", Hibernate.INTEGER)
+					.addScalar("descricaoSituacao", Hibernate.STRING)
+					.addScalar("valorRevisado", Hibernate.STRING)
+					.addScalar("valorFiscalizado", Hibernate.STRING)
+					.addScalar("idControle", Hibernate.INTEGER);
 			
+			if (filtro.getPeriodoInicial() != null && filtro.getPeriodoFinal() != null) {
+				query.setTimestamp("periodoInicial", filtro.getPeriodoInicial());
+				query.setTimestamp("periodoFinal", filtro.getPeriodoFinal());
+			}
+			
+			List<Integer> listaSituacao = montarListaSituacaoMovimentoAtualizacaoCadastral(filtro);
 			if (!listaSituacao.isEmpty())
 				query.setParameterList("listaSituacao", listaSituacao);
-			
+
 			Collection itens = query.list();
 			
 			Map<Integer, ConsultarMovimentoAtualizacaoCadastralHelper> map = new LinkedHashSetAlteracaoCadastral();
@@ -728,8 +728,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 
 	private List<Integer> montarListaSituacaoMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) {
 		List<Integer> lista = new ArrayList<Integer>();
+		
 		int situacao = filtro.getSituacaoImoveis();
-
 		if (situacao != FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
 			
 			switch (situacao) {
@@ -755,7 +755,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			lista.add(SituacaoAtualizacaoCadastral.ATUALIZADO);
 			lista.add(SituacaoAtualizacaoCadastral.EM_CORRECAO);
 		}
-		
+
 		return lista;
 	}
 	

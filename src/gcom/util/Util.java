@@ -1,10 +1,5 @@
 package gcom.util;
 
-import gcom.cadastro.geografico.MunicipioFeriado;
-import gcom.cadastro.imovel.Categoria;
-import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.sistemaparametro.NacionalFeriado;
-
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -49,6 +44,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.GenericValidator;
+
+import gcom.cadastro.geografico.MunicipioFeriado;
+import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.Subcategoria;
+import gcom.cadastro.sistemaparametro.NacionalFeriado;
 
 public class Util {
 
@@ -6216,16 +6216,5 @@ public class Util {
 	    }
 	    
 	    return partes;
-	}
-    
-    public static void main(String[] args) {
-		Integer a = 201903;
-		Integer b = 201904;
-		
-		Integer result = a.compareTo(b);
-		if (a.compareTo(b) > -1)
-			System.out.println("maior que -1 " + result);
-		else 
-			System.out.println("menor que -1 " + result);
 	}
 }
