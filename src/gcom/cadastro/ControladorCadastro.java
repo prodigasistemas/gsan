@@ -57,6 +57,7 @@ import gcom.cadastro.arquivo.GeradorRegistroAcessoHidrometro;
 import gcom.cadastro.arquivo.GeradorRegistroClasseSocial;
 import gcom.cadastro.arquivo.GeradorRegistroHidromedro;
 import gcom.cadastro.arquivo.GeradorRegistroLocalizacao;
+import gcom.cadastro.arquivo.GeradorRegistroLoginUsuario;
 import gcom.cadastro.arquivo.GeradorRegistroServicos;
 import gcom.cadastro.arquivo.GeradorRegistroTipoLogradouro;
 import gcom.cadastro.arquivo.GeradorRegistroTipoUsoImovel;
@@ -6837,7 +6838,8 @@ public class ControladorCadastro extends ControladorComum {
 			}
 
 			// Trailer
-			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, rota, ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO);
+			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, rota,
+					ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO, leiturista.getEmpresa().getId());
 			arquivoTexto.append((StringBuilder) arquivoTrailerEQuantidadeTotalDeLinhas[0]);
 
 			StringBuilder arquivoTextoFinal = new StringBuilder();
@@ -6892,7 +6894,7 @@ public class ControladorCadastro extends ControladorComum {
 				qtdRegistro += 1;
 			}
 
-			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota(), tipoArquivo);
+			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota(), tipoArquivo, null);
 			builder.append((StringBuilder) trailler[0]);
 
 			StringBuilder arquivoTexto = new StringBuilder();
@@ -8245,19 +8247,24 @@ public class ControladorCadastro extends ControladorComum {
 
 		return arquivoTextoRegistroTipoHidrometroCapacidade;
 	}
-
+	
 	/**
-	 * Gerar Arquivo Texto para Atualiza√ß√£o Cadastral
+	 * Gerar Arquivo Texto para Atualiza√ß√£o Cadastral 
 	 *
 	 * Registro Tipo Trailer
 	 *
 	 * @author Ana Maria
 	 * @date 11/05/2009
 	 *
+	 *(Atualizado para inserÁ„o do parametro login e senha Usu·rio)
+	 * @author Paulo Almeida Jr
+	 * @date 11/07/2019
+	 * 
 	 * @param imovel
 	 * @throws ControladorException
+	 * @throws ErroRepositorioException 
 	 */
-    public Object[] gerarArquivoTextoRegistroTipoTrailer(Integer qtdRegistro, Rota rota, String tipoArquivo) throws ControladorException {
+    public Object[] gerarArquivoTextoRegistroTipoTrailer(Integer qtdRegistro, Rota rota, String tipoArquivo, Integer idEmpresa) throws ControladorException, ErroRepositorioException {
         Object[] retorno = new Object[2];
         StringBuilder arquivoTextoRegistroTipoTrailer = new StringBuilder();
 
@@ -8377,7 +8384,7 @@ public class ControladorCadastro extends ControladorComum {
             }
         }
 
-        FiltroLogradouroTipo filtroLogradouroTipo = new FiltroLogradouroTipo();
+        FiltroLogradouroTipo filtroLogradouroTipo = new FiltroLogradouroTipo();	
         filtroLogradouroTipo.adicionarParametro(new ParametroSimples(FiltroLogradouroTipo.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
         Collection<LogradouroTipo> logradouroTipoCollection = Fachada.getInstancia().pesquisar(filtroLogradouroTipo, LogradouroTipo.class.getName());
 
@@ -8389,6 +8396,12 @@ public class ControladorCadastro extends ControladorComum {
         qtdRegistro += TipoUsoImovel.values().length;
         arquivoTextoRegistroTipoTrailer.append(new GeradorRegistroAcessoHidrometro().build());
         qtdRegistro += AcessoHidrometro.values().length;
+        
+        FiltroUsuario filtroUsuario = new FiltroUsuario();
+        Collection<Usuario> loginUsuarioCollection = repositorioCadastro.pesquisarUsuariosPorEmpresa(idEmpresa); 
+        
+        arquivoTextoRegistroTipoTrailer.append(new GeradorRegistroLoginUsuario(loginUsuarioCollection).build());
+        qtdRegistro += loginUsuarioCollection.size();
 
         retorno[0] = arquivoTextoRegistroTipoTrailer;
         retorno[1] = qtdRegistro;
