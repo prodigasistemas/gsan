@@ -117,21 +117,21 @@ public class ControladorRetificarConta extends ControladorComum {
 
 			validarContaParaRetificacao(contaAtual, imovel, dataVencimentoConta);
 
-			// Detalhe: Essa alteração só irá ser realizada quando chamada da
+			// Detalhe: Essa alteraï¿½ï¿½o sï¿½ irï¿½ ser realizada quando chamada da
 			// tela de retificar conta.
-			// Caso o consumo de agua tenha sido alterado e a situação da
-			// ligação de água do imovel
+			// Caso o consumo de agua tenha sido alterado e a situaï¿½ï¿½o da
+			// ligaï¿½ï¿½o de ï¿½gua do imovel
 			// ( a nova, caso tenha sido alterada) determine faturamento
 			atualizarMediaConsumoHistoricoAoRetificarConta(mesAnoConta, contaAtual, consumoAgua, atualizarMediaConsumoHistorico);
 
-			// Atualização da leitura atual faturada, se o motivo da retificação
-			// for ALTERAÇÃO DA LEITURA FATURADA
+			// Atualizaï¿½ï¿½o da leitura atual faturada, se o motivo da retificaï¿½ï¿½o
+			// for ALTERAï¿½ï¿½O DA LEITURA FATURADA
 			if (contaMotivoRetificacao != null && contaMotivoRetificacao.getId().equals(ContaMotivoRetificacao.ALTERACAO_DE_LEITURA_FATURADA)) {
 
 				boolean imovelHidrometrado = repositorioMicromedicao.verificaExistenciaHidrometro(contaAtual.getImovel().getId());
 
-				logger.info("Motivo da retificação: ALTERAÇÃO DA LEITURA FATURADA");
-				logger.info("Imóvel: " + imovel.getId());
+				logger.info("Motivo da retificaï¿½ï¿½o: ALTERAï¿½ï¿½O DA LEITURA FATURADA");
+				logger.info("Imï¿½vel: " + imovel.getId());
 
 				if (imovelHidrometrado) {
 
@@ -204,8 +204,8 @@ public class ControladorRetificarConta extends ControladorComum {
 	}
 
 	private void validarLeiturasRetificarConta(Conta contaAtual, Imovel imovel, Integer leituraAtual, Integer consumoMedido) throws ControladorException, ErroRepositorioException {
-		// Essa verificação será válida ate que seja analisado o motivo dessa
-		// diferença entre as leituras faturadas e as leituras nas contas
+		// Essa verificaï¿½ï¿½o serï¿½ vï¿½lida ate que seja analisado o motivo dessa
+		// diferenï¿½a entre as leituras faturadas e as leituras nas contas
 		Object[] leiturasMedicao = getControladorMicromedicao().obterLeituraAnteriorEAtualFaturamentoMedicaoHistorico(imovel.getId(),
 				contaAtual.getReferencia());
 
@@ -214,9 +214,9 @@ public class ControladorRetificarConta extends ControladorComum {
 		if ((leituraAtualMedicao != null && leituraAtualMedicao.equals(contaAtual.getNumeroLeituraAtual()) || (leituraAtualMedicao == null && contaAtual
 				.getNumeroLeituraAtual() == null))) {
 
-			// Verifica se houve alteração nas leituras, se sim verifica se já
-			// tem rota gerada para próxima referência, se tiver não deixa fazer
-			// a alteração
+			// Verifica se houve alteraï¿½ï¿½o nas leituras, se sim verifica se jï¿½
+			// tem rota gerada para prï¿½xima referï¿½ncia, se tiver nï¿½o deixa fazer
+			// a alteraï¿½ï¿½o
 			boolean leituraAlterada = false;
 
 			leituraAlterada = getControladorMicromedicao().verificarLeituraAtualFaturadaImovel(leituraAtual, contaAtual.getReferencia(), imovel.getId());
@@ -444,25 +444,28 @@ public class ControladorRetificarConta extends ControladorComum {
 		RegistroAtendimento ra = getControladorRegistroAtendimento().verificarExistenciaRegistroAtendimentoSemLevantarExcecao(
 				idImovel, EspecificacaoTipoValidacao.ALTERACAO_CONTA);
 		
-		Integer os = getControladorRegistroAtendimento().verificarOrdemServicoParaRA(ra.getId());
 		
-		if (ra != null && os == null) {
-			ra.setDataEncerramento(new Date());
-			ra.setParecerEncerramento("ENCERRAMENTO AUTOMÁTICO POR RETIFICAÇÃO DE CONTA.");
-			ra.setCodigoSituacao(RegistroAtendimento.SITUACAO_ENCERRADO);
-			ra.setAtendimentoMotivoEncerramento(new AtendimentoMotivoEncerramento(AtendimentoMotivoEncerramento.CONCLUSAO_SERVICO));
-			ra.setUltimaAlteracao(new Date());
+		if (ra != null) {
+			Integer os = getControladorRegistroAtendimento().verificarOrdemServicoParaRA(ra.getId());
 			
-			getControladorUtil().atualizar(ra);
-			
-			RegistroAtendimentoUnidade raUnidade = new RegistroAtendimentoUnidade(
-					new Date(),
-					usuario, 
-					ra, 
-					usuario.getUnidadeOrganizacional(), 
-					new AtendimentoRelacaoTipo(AtendimentoRelacaoTipo.ENCERRAR));
-			
-			getControladorUtil().inserir(raUnidade);
+			if (os == null) {
+				ra.setDataEncerramento(new Date());
+				ra.setParecerEncerramento("ENCERRAMENTO AUTOMï¿½TICO POR RETIFICAï¿½ï¿½O DE CONTA.");
+				ra.setCodigoSituacao(RegistroAtendimento.SITUACAO_ENCERRADO);
+				ra.setAtendimentoMotivoEncerramento(new AtendimentoMotivoEncerramento(AtendimentoMotivoEncerramento.CONCLUSAO_SERVICO));
+				ra.setUltimaAlteracao(new Date());
+				
+				getControladorUtil().atualizar(ra);
+				
+				RegistroAtendimentoUnidade raUnidade = new RegistroAtendimentoUnidade(
+						new Date(),
+						usuario, 
+						ra, 
+						usuario.getUnidadeOrganizacional(), 
+						new AtendimentoRelacaoTipo(AtendimentoRelacaoTipo.ENCERRAR));
+				
+				getControladorUtil().inserir(raUnidade);
+			}
 		}
 	}
 
@@ -504,12 +507,12 @@ public class ControladorRetificarConta extends ControladorComum {
 				repositorioFaturamento.atualizarContaCanceladaOuRetificada(contaAtual, raParaRetificacao);
 			}
 
-			logger.info("Antes da Atualização no banco ");
-			logger.info("Imóvel: " + imovel.getId());
-			logger.info("Referência da conta: " + contaAtual.getReferencia());
-			logger.info("Situação anterior da conta : "
+			logger.info("Antes da Atualizaï¿½ï¿½o no banco ");
+			logger.info("Imï¿½vel: " + imovel.getId());
+			logger.info("Referï¿½ncia da conta: " + contaAtual.getReferencia());
+			logger.info("Situaï¿½ï¿½o anterior da conta : "
 					+ (contaAtual.getDebitoCreditoSituacaoAnterior() != null ? contaAtual.getDebitoCreditoSituacaoAnterior().getId() : ""));
-			logger.info("Situação atual da conta : "
+			logger.info("Situaï¿½ï¿½o atual da conta : "
 					+ (contaAtual.getDebitoCreditoSituacaoAtual() != null ? contaAtual.getDebitoCreditoSituacaoAtual().getId() : ""));
 
 			if (contaAtual.getDebitoCreditoSituacaoAnterior() == null) {
@@ -860,14 +863,14 @@ public class ControladorRetificarConta extends ControladorComum {
 			throws ControladorException {
 
 		/*
-		 * Atualizar, caso o imóvel seja optante de débito automatico
+		 * Atualizar, caso o imï¿½vel seja optante de dï¿½bito automatico
 		 * (IMOV_ICDEBITOCONTA = 1 da TABELA IMOVEL)
 		 */
 		if (imovel != null && imovel.getIndicadorDebitoConta().equals(ConstantesSistema.SIM)) {
 
 			/*
-			 * Caso a conta tenha sido gerada como movimento de débito
-			 * automático e o movimento não tenha sido enviado para o banco
+			 * Caso a conta tenha sido gerada como movimento de dï¿½bito
+			 * automï¿½tico e o movimento nï¿½o tenha sido enviado para o banco
 			 * (CNTA_ID da conta a ser retificada existente na tabela
 			 * DEBITO_AUTOMATICO_MOVIMENTO com DAMV_NNNSAENVIO igual a nulo)
 			 */
@@ -901,9 +904,9 @@ public class ControladorRetificarConta extends ControladorComum {
 			if (rotaRetificacao != null && conta.getReferencia() == rotaRetificacao.getFaturamentoGrupo().getAnoMesReferencia().intValue()) {
 
 				/*
-				 * Caso o arquivo texto da rota do imóvel não esteja finalizado e seja de impressão simultânea (SITL_ID =1, 2, 3 ou 5 e
+				 * Caso o arquivo texto da rota do imï¿½vel nï¿½o esteja finalizado e seja de impressï¿½o simultï¿½nea (SITL_ID =1, 2, 3 ou 5 e
 				 * STCE_ID=2, onde ROTA_ID da tabela ARQUIVO_TEXTO_ROT_EMP seja igual a ROTA_ID da tabela CONTA e CNTA_AMREFERENCIACONTA da
-				 * tabela conta seja igual a TXRE_AMREFERENCIA da tabela ARQUIVO_TEXTO_ROT_EMP) não habilitar esta conta para retificação.
+				 * tabela conta seja igual a TXRE_AMREFERENCIA da tabela ARQUIVO_TEXTO_ROT_EMP) nï¿½o habilitar esta conta para retificaï¿½ï¿½o.
 				 */
 				Integer idArquivoTextoRoteiroEmpresa = repositorioFaturamento.pesquisarArquivoTextoRoteiroEmpresaNaoFinalizado(conta, rotaRetificacao);
 
@@ -947,7 +950,7 @@ public class ControladorRetificarConta extends ControladorComum {
 						anoMesFim, indicadorContaPaga);
 
 				/**
-				 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3. Caso o indicador de bloqueio de contas vinculadas a contrato de
+				 * [UC0407] Filtrar Imï¿½veis para Inserir ou Manter Conta 3. Caso o indicador de bloqueio de contas vinculadas a contrato de
 				 * parcelamento no manter contas esteja ativo retirar da lista de contas selecionadas as contas vinculadas a algum contrato
 				 * de parcelamento ativo
 				 * */
@@ -1101,7 +1104,7 @@ public class ControladorRetificarConta extends ControladorComum {
 			if (colecaoContasManutencao != null && !colecaoContasManutencao.isEmpty()) {
 
 				/**
-				 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3. Caso o indicador de bloqueio de contas vinculadas a contrato de
+				 * [UC0407] Filtrar Imï¿½veis para Inserir ou Manter Conta 3. Caso o indicador de bloqueio de contas vinculadas a contrato de
 				 * parcelamento no manter contas esteja ativo retirar da lista de contas selecionadas as contas vinculadas a algum contrato
 				 * de parcelamento ativo
 				 * */
@@ -1214,7 +1217,7 @@ public class ControladorRetificarConta extends ControladorComum {
 			Collection colecao = new ArrayList();
 			while (i <= helper.getColecaoImovel().size()) {
 
-				// PAGINAÇÃO
+				// PAGINAï¿½ï¿½O
 				if (helper.getColecaoImovel().size() - i >= cont) {
 					colecao = colecaoAuxiliar.subList(i, i + cont);
 				} else {
@@ -1229,7 +1232,7 @@ public class ControladorRetificarConta extends ControladorComum {
 							helper.getDataVencimentoContaFim(), helper.getAnoMesFim(), helper.getIndicadorContaPaga());
 
 					/**
-					 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3. Caso o indicador de bloqueio de contas vinculadas a
+					 * [UC0407] Filtrar Imï¿½veis para Inserir ou Manter Conta 3. Caso o indicador de bloqueio de contas vinculadas a
 					 * contrato de parcelamento no manter contas esteja ativo retirar da lista de contas selecionadas as contas
 					 * vinculadas a algum contrato de parcelamento ativo
 					 */
@@ -1276,11 +1279,11 @@ public class ControladorRetificarConta extends ControladorComum {
 							Collection colecaoDebitoCobrado = getControladorFaturamento().obterDebitosCobradosConta(conta);
 
 							/*
-							 * Caso na conta a ser retificada o consumo de água seja igual ao volume de esgoto da conta os dois
-							 * campos devem ser alterados (mesmo que o volume não tenha sido informado).
+							 * Caso na conta a ser retificada o consumo de ï¿½gua seja igual ao volume de esgoto da conta os dois
+							 * campos devem ser alterados (mesmo que o volume nï¿½o tenha sido informado).
 							 * 
-							 * Caso contrário na conta a ser retificada o consumo de água seja diferente do volume de
-							 * esgoto da conta só deve ser alterado o consumo de água.
+							 * Caso contrï¿½rio na conta a ser retificada o consumo de ï¿½gua seja diferente do volume de
+							 * esgoto da conta sï¿½ deve ser alterado o consumo de ï¿½gua.
 							 */
 							Integer volumeEsgoto = helper.getVolumeEsgoto();
 
@@ -1489,7 +1492,7 @@ public class ControladorRetificarConta extends ControladorComum {
 								contaMotivoRetificacao, null, usuarioLogado, contaParaRetificacao.getConsumoTarifa().getId().toString(), false, null, null,
 								false, null, null, null, null, null, null);
 
-						// Inseri o débito a Cobrar e o Débito a Cobrar
+						// Inseri o dï¿½bito a Cobrar e o Dï¿½bito a Cobrar
 						// Categoria
 						if (dadosDebitosACobrar != null && !dadosDebitosACobrar.isEmpty()) {
 							Iterator itDebitoACobrar = dadosDebitosACobrar.iterator();
@@ -1499,7 +1502,7 @@ public class ControladorRetificarConta extends ControladorComum {
 								Integer idDebitoACobrar = (Integer) dadosDebitoACobrar[0];
 								BigDecimal valorDebitoACobrar = (BigDecimal) dadosDebitoACobrar[1];
 
-								// Pesquisa os débitos a cobrar
+								// Pesquisa os dï¿½bitos a cobrar
 								FiltroDebitoACobrar filtroDebitoACobrar = new FiltroDebitoACobrar();
 								filtroDebitoACobrar.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.ID, idDebitoACobrar));
 								filtroDebitoACobrar.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarCategorias");
@@ -1525,9 +1528,9 @@ public class ControladorRetificarConta extends ControladorComum {
 									getControladorFaturamento().inserirDebitoACobrar(1, debitoACobrarInserir, valorDebitoACobrar,
 											contaParaRetificacao.getImovel(), null, null, usuarioLogado, true);
 								} else {
-									// Caso não tenha débito a cobrar então
-									// procura o débito a cobrar histórico
-									// Pesquisa os débitos a cobrar
+									// Caso nï¿½o tenha dï¿½bito a cobrar entï¿½o
+									// procura o dï¿½bito a cobrar histï¿½rico
+									// Pesquisa os dï¿½bitos a cobrar
 									FiltroDebitoACobrarHistorico filtroDebitoACobrarHistorico = new FiltroDebitoACobrarHistorico();
 									filtroDebitoACobrarHistorico.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.ID, idDebitoACobrar));
 									filtroDebitoACobrarHistorico.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
