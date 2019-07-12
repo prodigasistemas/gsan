@@ -26,10 +26,16 @@ public class RetornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction ex
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		ConsultarArquivoTextoAtualizacaoCadastralActionForm form = (ConsultarArquivoTextoAtualizacaoCadastralActionForm) actionForm;
 
+		Integer idEmpresa = null;
+		if (!form.getIdEmpresa().equals("") && !form.getIdEmpresa().equals("0")) {
+			idEmpresa = Integer.valueOf(form.getIdEmpresa());
+		}
+		
 		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().regerarArquivosAtualizacaoCadastral(
 				getIdsArquivos(form),
 				ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO,
-				null);
+				null,
+				idEmpresa);
 
 		if (listaArquivoTexto != null && !listaArquivoTexto.isEmpty()) {
 			try {

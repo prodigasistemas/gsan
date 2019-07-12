@@ -516,7 +516,7 @@ public interface IControladorCadastro {
 	
 	public boolean verificarExistenciaEmpresa(Integer idEmpresa) throws ControladorException;
 	
-	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto, String tipoArquivo) throws ControladorException;
+	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto, String tipoArquivo, Integer idEmpresa) throws ControladorException;
 
 	public UnidadeOrganizacional obterUnidadePorLocalidade(Integer idImovel) throws ControladorException;
 	

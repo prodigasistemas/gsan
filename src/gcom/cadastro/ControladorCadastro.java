@@ -6855,7 +6855,7 @@ public class ControladorCadastro extends ControladorComum {
 		}
 	}
 
-	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto, String tipoArquivo) throws ControladorException {
+	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto, String tipoArquivo, Integer idEmpresa) throws ControladorException {
 		try {
 			StringBuilder builder = new StringBuilder();
 			int qtdRegistro = 0;
@@ -6894,7 +6894,7 @@ public class ControladorCadastro extends ControladorComum {
 				qtdRegistro += 1;
 			}
 
-			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota(), tipoArquivo, null);
+			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota(), tipoArquivo, idEmpresa);
 			builder.append((StringBuilder) trailler[0]);
 
 			StringBuilder arquivoTexto = new StringBuilder();
