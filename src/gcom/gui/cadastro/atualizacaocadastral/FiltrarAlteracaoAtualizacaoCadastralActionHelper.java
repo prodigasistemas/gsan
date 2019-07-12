@@ -1,8 +1,11 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
-import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
+
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import gcom.util.Util;
 
 public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
@@ -10,9 +13,9 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	private String idLeiturista;
 	
-	private String periodoInicial;
+	private Date periodoInicial;
 	
-	private String periodoFinal;
+	private Date periodoFinal;
 
 	private int situacaoImoveis;
 
@@ -64,8 +67,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper(FiltrarAlteracaoAtualizacaoCadastralActionForm form) {
 		this.idEmpresa = form.getIdEmpresa();
 		this.idLeiturista = form.getIdLeiturista();
-		this.periodoInicial = form.getPeriodoInicial();
-		this.periodoFinal = form.getPeriodoFinal();
+		this.periodoInicial = Util.formatarDataInicial(Util.converteStringParaDate(form.getPeriodoInicial()));
+		this.periodoFinal = Util.formatarDataFinal(Util.converteStringParaDate(form.getPeriodoFinal()));
 		this.situacaoImoveis = Integer.valueOf(form.getSituacaoImoveis());
 		this.idLocalidadeInicial = form.getIdLocalidadeInicial();
 		this.nomeLocalidadeInicial = form.getNomeLocalidadeInicial();
@@ -117,11 +120,11 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		return idLeiturista;
 	}
 
-	public String getPeriodoInicial() {
+	public Date getPeriodoInicial() {
 		return periodoInicial;
 	}
 
-	public String getPeriodoFinal() {
+	public Date getPeriodoFinal() {
 		return periodoFinal;
 	}
 
