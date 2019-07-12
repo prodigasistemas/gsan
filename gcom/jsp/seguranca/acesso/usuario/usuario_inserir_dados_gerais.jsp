@@ -126,12 +126,14 @@
      	this.af = new Array("email", "Informe E-mail.", new Function ("varName", " return this[varName];"));
      	this.ag = new Array("confirmacaoEmail","Informe Confirmação E-Mail.", new Function ("varName", " return this[varName];"));
      	this.ah = new Array("idLotacao","Informe Unidade organizacional.", new Function ("varName", " return this[varName];"));
+     	this.pb = new Array("limiteBatch", "Informe Quantidade de Processos Batch.", new Function ("varName", " return this[varName];"));
     } 
 
     function IntegerValidations () { 
     	this.aa = new Array("usuarioTipo", "Tipo de Usuário deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
      	this.ab = new Array("empresa", "Empresa deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
      	this.ac = new Array("idLotacao", "Unidade organizacional deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
+     	this.pb = new Array("limiteBatch", "Processos Batch deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
     } 
 
     function caracteresespeciais () { 
@@ -392,6 +394,8 @@ function desabilitaCPFeNasc(){
 	}
 	
 }
+
+
 </script>
 </head>
 
@@ -626,7 +630,7 @@ function desabilitaCPFeNasc(){
 
 				<tr>
 					<td width="26%"><strong>Limite de Processos Batch:</strong></td>
-					<td width="74%"><html:text property="limiteBatch" size="11" maxlength="3" onkeypress="return isCampoNumerico(event);" /></td>
+					<td width="74%" ><html:text property="limiteBatch" value="3" size="11" maxlength="3" /></td>
 				</tr>
 				
 				<tr>

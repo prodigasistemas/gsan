@@ -84,6 +84,7 @@
      	this.ae = new Array("login", "Informe Login.", new Function ("varName", " return this[varName];"));
      	this.af = new Array("email", "Informe Email.", new Function ("varName", " return this[varName];"));
      	this.ag = new Array("idLotacao", "Informe a Unidade Organizacional.", new Function ("varName", " return this[varName];"));
+     	this.pb = new Array("limiteBatch", "Informe Quantidade de Processos Batch.", new Function ("varName", " return this[varName];"));
 	
 		var form = document.forms[0];
 		var radioBatch = form.indicadorUsuarioBatch[0].checked;
@@ -100,6 +101,7 @@
      	this.aa = new Array("usuarioTipo", "Tipo de Usuário deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
      	this.ab = new Array("empresa", "Empresa deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
      	this.ac = new Array("idLotacao", "Lotação deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
+     	this.pb = new Array("limiteBatch", "Processos Batch deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
     } 
 
     function caracteresespeciais () { 
@@ -598,7 +600,7 @@ function desabilitaCPFeNasc(){
 					
 					<tr>
 						<td width="26%"><strong>Limite de Processos Batch:</strong></td>
-						<td width="74%"><html:text property="limiteBatch" size="11" maxlength="3" onkeypress="return isCampoNumerico(event);" /></td>
+						<td width="74%"><html:text property="limiteBatch" size="11" value = "3" maxlength="3" /></td>
 					</tr>
 					
 					<tr>
