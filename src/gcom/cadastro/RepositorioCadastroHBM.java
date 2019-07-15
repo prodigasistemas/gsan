@@ -32,6 +32,7 @@ import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.gui.relatorio.cadastro.FiltrarRelatorioAcessoSPCHelper;
 import gcom.gui.relatorio.cadastro.GerarRelatorioAlteracoesCpfCnpjHelper;
 import gcom.gui.relatorio.seguranca.GerarRelatorioAlteracoesSistemaColunaHelper;
+import gcom.interceptor.ControleAlteracao;
 import gcom.micromedicao.ArquivoTextoLigacoesHidrometroHelper;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.RotaAtualizacaoSeq;
@@ -48,6 +49,7 @@ import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisTipoConsumoHelper;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisUltimosConsumosAguaHelper;
 import gcom.relatorio.cadastro.imovel.RelatorioImoveisConsumoMedioHelper;
 import gcom.relatorio.cadastro.micromedicao.RelatorioColetaMedidorEnergiaHelper;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
@@ -8928,5 +8930,43 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
         } finally {
             HibernateUtil.closeSession(session);
         }
-    }	
+    }
+    
+    /**
+	 * Método para pesquisar os usuários de uma determinada empresa
+	 * 
+	 * @author Paulo Almeida Jr
+	 * @date 03/07/2019
+	 */
+	public Collection pesquisarUsuariosPorEmpresa(Integer idEmpresa) throws ErroRepositorioException {
+		Collection retorno = null;
+		
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// cria a variável que vai conter o hql
+		String consulta = "";
+
+		try { 
+
+			consulta = "SELECT distinct usua.* "
+			 		   + "FROM  cadastro.arquivo_texto_atlz_cad arqt "
+					   + "INNER JOIN micromedicao.leiturista leit on leit.leit_id = arqt.leit_id "
+					   + "INNER JOIN cadastro.funcionario func on func.func_id = leit.func_id "
+					   + "INNER JOIN seguranca.usuario usua on usua.usur_nmlogin = func.func_id "
+					   + "WHERE leit.empr_id = " + idEmpresa;
+
+			retorno = session.createSQLQuery(consulta).addEntity(Usuario.class).list();
+
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }

@@ -36,7 +36,14 @@ public class RetornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction extend
 		if (!form.getLote().equals("") && !form.getLote().equals("0")) {
 			lote = Integer.parseInt(form.getLote()); 
 		}
-		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().gerarArquivosFiscalizacaoAtualizacaoCadastral(getIdsArquivos(form), percentualAleatorios, lote);
+		
+		Integer idEmpresa = null;
+		if (!form.getIdEmpresa().equals("") && !form.getIdEmpresa().equals("0")) {
+			idEmpresa = Integer.valueOf(form.getIdEmpresa());
+		}
+		
+		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().gerarArquivosFiscalizacaoAtualizacaoCadastral(
+				getIdsArquivos(form), percentualAleatorios, lote, idEmpresa);
 
 		if (listaArquivoTexto != null && !listaArquivoTexto.isEmpty()) {
 			try {

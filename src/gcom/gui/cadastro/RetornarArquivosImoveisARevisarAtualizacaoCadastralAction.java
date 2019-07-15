@@ -32,7 +32,13 @@ public class RetornarArquivosImoveisARevisarAtualizacaoCadastralAction extends G
 			percentualAleatorios = Integer.parseInt(form.getPercentualAleatorios()); 
 		}
 		
-		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().gerarArquivosRevisaoAtualizacaoCadastral(getIdsArquivos(form), percentualAleatorios);
+		Integer idEmpresa = null;
+		if (!form.getIdEmpresa().equals("") && !form.getIdEmpresa().equals("0")) {
+			idEmpresa = Integer.valueOf(form.getIdEmpresa());
+		}
+		
+		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().gerarArquivosRevisaoAtualizacaoCadastral(
+				getIdsArquivos(form), percentualAleatorios, idEmpresa);
 
 		if (listaArquivoTexto != null && !listaArquivoTexto.isEmpty()) {
 			try {

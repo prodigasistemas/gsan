@@ -36,6 +36,7 @@ import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisTipoConsumoHelper;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisUltimosConsumosAguaHelper;
 import gcom.relatorio.cadastro.imovel.RelatorioImoveisConsumoMedioHelper;
 import gcom.relatorio.cadastro.micromedicao.RelatorioColetaMedidorEnergiaHelper;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ErroRepositorioException;
 
 public interface IRepositorioCadastro {
@@ -403,5 +404,7 @@ public interface IRepositorioCadastro {
     public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> recuperarTipoOcupantesParaAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
     
     public void removerQuantidadesOcupantesImovel(Integer idImovel) throws ErroRepositorioException;
+    
+    public Collection<Usuario> pesquisarUsuariosPorEmpresa(Integer idEmpresa) throws ErroRepositorioException;
 
 }

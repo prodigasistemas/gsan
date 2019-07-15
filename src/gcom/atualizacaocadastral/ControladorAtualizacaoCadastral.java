@@ -1541,14 +1541,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         }
 	}
 
-	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo, Date dataUltimaTransmissao) throws ControladorException {
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo, Date dataUltimaTransmissao, Integer idEmpresa) throws ControladorException {
 		try {
 			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
 			for (Integer idArquivo : idsArquivos) {
 				List<Integer> imoveis = obterImoveisParaRegerarArquivo(idArquivo, tipoArquivo, dataUltimaTransmissao);
 
 				if (imoveis != null && !imoveis.isEmpty()) {
-					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveis, idArquivo, tipoArquivo));
+					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveis, idArquivo, tipoArquivo, idEmpresa));
 				}
 			}
 
@@ -1558,7 +1558,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosRevisaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualAleatorios) throws ControladorException {
+	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosRevisaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualAleatorios, Integer idEmpresa) throws ControladorException {
 		try {
 			Integer situacao = SituacaoAtualizacaoCadastral.EM_REVISAO;
 			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
@@ -1566,7 +1566,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				List<Integer> imoveis = repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, situacao);
 				List<Integer> sorteados = this.sortearImoveis(idArquivo, SituacaoAtualizacaoCadastral.TRANSMITIDO, percentualAleatorios, null);
 
-				ArquivoTextoAtualizacaoCadastral arquivo = obterArquivoComImoveisSorteados(imoveis, sorteados, idArquivo, ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISAO, situacao);
+				ArquivoTextoAtualizacaoCadastral arquivo = obterArquivoComImoveisSorteados(imoveis, sorteados, idArquivo, 
+						ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISAO, situacao, idEmpresa);
 				
 				if (arquivo != null)
 					arquivos.add(arquivo);
@@ -1578,7 +1579,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosFiscalizacaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualAleatorios, Integer lote) throws ControladorException {
+	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosFiscalizacaoAtualizacaoCadastral(List<Integer> idsArquivos, 
+			double percentualAleatorios, Integer lote, Integer idEmpresa) throws ControladorException {
 		try {
 			Integer situacao = SituacaoAtualizacaoCadastral.EM_FISCALIZACAO;
 			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
@@ -1586,7 +1588,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				List<Integer> imoveis = repositorioAtualizacaoCadastral.obterImoveisPorSituacaoELote(idArquivo, situacao, lote);
 				List<Integer> sorteados = this.sortearImoveis(idArquivo, SituacaoAtualizacaoCadastral.PRE_APROVADO, percentualAleatorios, lote);
 
-				ArquivoTextoAtualizacaoCadastral arquivo = obterArquivoComImoveisSorteados(imoveis, sorteados, idArquivo, ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_FISCALIZACAO, situacao);
+				ArquivoTextoAtualizacaoCadastral arquivo = obterArquivoComImoveisSorteados(imoveis, sorteados, idArquivo, 
+						ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_FISCALIZACAO, situacao, idEmpresa);
 				
 				if (arquivo != null)
 					arquivos.add(arquivo);
@@ -1598,13 +1601,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	private ArquivoTextoAtualizacaoCadastral obterArquivoComImoveisSorteados(List<Integer> imoveis, List<Integer> sorteados, Integer idArquivo, String tipoArquivo, Integer situacao) throws ControladorException {
+	private ArquivoTextoAtualizacaoCadastral obterArquivoComImoveisSorteados(List<Integer> imoveis, List<Integer> sorteados, 
+			Integer idArquivo, String tipoArquivo, Integer situacao, Integer idEmpresa) throws ControladorException {
 		try {
 			ArquivoTextoAtualizacaoCadastral arquivo = null;
 			
 			if (imoveis != null && !imoveis.isEmpty()) {
 				imoveis.addAll(sorteados);
-				arquivo = getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveis, idArquivo, tipoArquivo);
+				arquivo = getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveis, idArquivo, tipoArquivo, idEmpresa);
 				
 				if (!sorteados.isEmpty())
 					repositorioAtualizacaoCadastral.atualizarSituacaoConjuntoImovelControle(situacao, sorteados);

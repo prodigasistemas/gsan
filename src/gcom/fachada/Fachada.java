@@ -40190,25 +40190,25 @@ public class Fachada {
 		}
 	}
 	
-	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosRevisaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao) {
+	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosRevisaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao, Integer idEmpresa) {
 		try {
-			return getControladorAtualizacaoCadastral().gerarArquivosRevisaoAtualizacaoCadastral(idsArquivos, percentualFiscalizacao);
+			return getControladorAtualizacaoCadastral().gerarArquivosRevisaoAtualizacaoCadastral(idsArquivos, percentualFiscalizacao, idEmpresa);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 	
-	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosFiscalizacaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao, Integer lote) {
+	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosFiscalizacaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao, Integer lote, Integer idEmpresa) {
 		try {
-			return getControladorAtualizacaoCadastral().gerarArquivosFiscalizacaoAtualizacaoCadastral(idsArquivos, percentualFiscalizacao, lote);
+			return getControladorAtualizacaoCadastral().gerarArquivosFiscalizacaoAtualizacaoCadastral(idsArquivos, percentualFiscalizacao, lote, idEmpresa);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 	
-	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo, Date dataUltimaTransmissao) {
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo, Date dataUltimaTransmissao, Integer idEmpresa) {
 		try {
-			return getControladorAtualizacaoCadastral().regerarArquivosAtualizacaoCadastral(idsArquivos, tipoArquivo, dataUltimaTransmissao);
+			return getControladorAtualizacaoCadastral().regerarArquivosAtualizacaoCadastral(idsArquivos, tipoArquivo, dataUltimaTransmissao, idEmpresa);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
