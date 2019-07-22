@@ -1978,7 +1978,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			ImovelControleAtualizacaoCadastral controle = obterImovelControle(helper.getIdImovel());
 			
 			Integer quantidadeVisitas = this.obterQuantidadeDeVisitasPorImovelControle(controle);
-			if (quantidadeVisitas < Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO && controle.getCadastroOcorrencia().permiteReprovarLote())
+			if (quantidadeVisitas < Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO && !controle.isAprovado())
 				imoveisParaReprovar.add(controle.getId());					
 		}
 		if (!imoveisParaReprovar.isEmpty()) 
