@@ -17,7 +17,8 @@ public class SegurancaParametro implements Serializable {
 		URL_SEGURANCA,
 		URL_SEGUNDA_VIA,
 		URL_CONTRATO_ADESAO,
-		URL_AVISO_CORTE;
+		URL_AVISO_CORTE,
+		VERSAO_APLICATIVO_RECADASTRAMENTO;
 	}
 
 	public Integer getId() {

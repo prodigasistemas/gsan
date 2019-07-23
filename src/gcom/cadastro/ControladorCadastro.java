@@ -249,6 +249,7 @@ import gcom.relatorio.cadastro.imovel.RelatorioImoveisTipoConsumoHelper;
 import gcom.relatorio.cadastro.imovel.RelatorioImoveisUltimosConsumosAguaHelper;
 import gcom.relatorio.cadastro.micromedicao.RelatorioColetaMedidorEnergiaHelper;
 import gcom.seguranca.Atributo;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.usuario.FiltroUsuario;
@@ -8014,6 +8015,7 @@ public class ControladorCadastro extends ControladorComum {
 	public StringBuilder gerarArquivoTextoRegistroTipoGeral(Rota rota, String tipoArquivo) throws ControladorException {
 		StringBuilder arquivoTexto = new StringBuilder();
 		SistemaParametro parametrosSistema = getControladorUtil().pesquisarParametrosDoSistema();
+		String versaoApp = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.VERSAO_APLICATIVO_RECADASTRAMENTO.toString());
 
 		// TIPO DO REGISTRO
 		arquivoTexto.append("07");
@@ -8042,12 +8044,8 @@ public class ControladorCadastro extends ControladorComum {
 
 		arquivoTexto.append(" ");
 
-		if (parametrosSistema.getVersaoCelular() != null) {
-			arquivoTexto.append(Util.adicionarZerosEsquedaNumero(10, parametrosSistema.getVersaoCelular()));
-		} else {
-			arquivoTexto.append(Util.completaString("", 10));
-		}
-
+		
+		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(10, versaoApp));
 		arquivoTexto.append(Util.completaString("", 8));
 		arquivoTexto.append(Util.completaString("", 8));
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(4, rota.getId().toString()));
