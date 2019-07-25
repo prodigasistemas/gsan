@@ -8395,11 +8395,12 @@ public class ControladorCadastro extends ControladorComum {
         arquivoTextoRegistroTipoTrailer.append(new GeradorRegistroAcessoHidrometro().build());
         qtdRegistro += AcessoHidrometro.values().length;
         
-        FiltroUsuario filtroUsuario = new FiltroUsuario();
-        Collection<Usuario> loginUsuarioCollection = repositorioCadastro.pesquisarUsuariosPorEmpresa(idEmpresa); 
+        FiltroUsuario filtroUsuario = new FiltroUsuario(FiltroUsuario.NOME_USUARIO);
+        filtroUsuario.adicionarParametro(new ParametroSimples(FiltroUsuario.EMPRESA_ID, idEmpresa));
+        Collection<Usuario> usuarios = Fachada.getInstancia().pesquisar(filtroUsuario, Usuario.class.getName());
         
-        arquivoTextoRegistroTipoTrailer.append(new GeradorRegistroLoginUsuario(loginUsuarioCollection).build());
-        qtdRegistro += loginUsuarioCollection.size();
+        arquivoTextoRegistroTipoTrailer.append(new GeradorRegistroLoginUsuario(usuarios).build());
+        qtdRegistro += usuarios.size();
 
         retorno[0] = arquivoTextoRegistroTipoTrailer;
         retorno[1] = qtdRegistro;
