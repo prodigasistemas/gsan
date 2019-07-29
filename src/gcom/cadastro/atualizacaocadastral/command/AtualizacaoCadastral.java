@@ -1,25 +1,25 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 
 public class AtualizacaoCadastral {
 
 	private ArquivoTextoAtualizacaoCadastral arquivoTexto = null;
 
 	private boolean validacaoLiberada = false;
-	
+
 	private List<AtualizacaoCadastralImovel> imoveisComErro = new ArrayList<AtualizacaoCadastralImovel>();
-	
+
 	private AtualizacaoCadastralImovel imovelAtual = new AtualizacaoCadastralImovel();
-	
+
 	private List<String> imagens = new ArrayList<String>();
-	
+
 	private Integer idRota = new Integer(0);
-	
-	private int totalImoveis = 0;	
+
+	private int totalImoveis = 0;
 	
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
 		return arquivoTexto;
@@ -32,12 +32,12 @@ public class AtualizacaoCadastral {
 	public void liberarValidacao() {
 		validacaoLiberada = true;
 	}
-	
-	public boolean validacaoLiberada(){
+
+	public boolean validacaoLiberada() {
 		return validacaoLiberada;
 	}
-	
-	public AtualizacaoCadastralImovel novaAtualizacaoImovel(){
+
+	public AtualizacaoCadastralImovel novaAtualizacaoImovel() {
 		validacaoLiberada = false;
 		AtualizacaoCadastralImovel imovel = new AtualizacaoCadastralImovel(this);
 		imovelAtual = imovel;
@@ -45,19 +45,19 @@ public class AtualizacaoCadastral {
 		totalImoveis++;
 		return imovel;
 	}
-	
-	public AtualizacaoCadastralImovel getImovelAtual(){
+
+	public AtualizacaoCadastralImovel getImovelAtual() {
 		return imovelAtual;
 	}
-	
-	public List<AtualizacaoCadastralImovel> getImoveisComErro(){
+
+	public List<AtualizacaoCadastralImovel> getImoveisComErro() {
 		return imoveisComErro;
 	}
 
 	public void excluirImovelSemErros() {
 		imoveisComErro.remove(imovelAtual);
 	}
-	
+
 	public boolean existeErroNoArquivo() {
 		return imoveisComErro.size() > 0;
 	}
@@ -89,5 +89,4 @@ public class AtualizacaoCadastral {
 	public void setIdRota(Integer idRota) {
 		this.idRota = idRota;
 	}
-	
 }

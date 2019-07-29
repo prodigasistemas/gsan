@@ -7,6 +7,7 @@ import java.util.Map;
 
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.imovel.CadastroOcorrencia;
+import gcom.seguranca.acesso.usuario.Usuario;
 
 public class AtualizacaoCadastralImovel {
 
@@ -38,8 +39,10 @@ public class AtualizacaoCadastralImovel {
 	private ImovelControleAtualizacaoCadastral imovelControle;
 
 	private boolean imovelNovo = false;
-	
+
 	private int identificacaoImovelNovo = 0;
+
+	private Usuario usuario;
 
 	public AtualizacaoCadastralImovel() {
 	}
@@ -227,5 +230,13 @@ public class AtualizacaoCadastralImovel {
 
 	public void setIdentificacaoImovelNovo(int identificacaoImovelNovo) {
 		this.identificacaoImovelNovo = identificacaoImovelNovo;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 }

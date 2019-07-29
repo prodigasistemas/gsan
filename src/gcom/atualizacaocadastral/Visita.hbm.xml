@@ -4,8 +4,7 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
 
 <hibernate-mapping>
-	<class name="gcom.atualizacaocadastral.Visita"
-		table="atualizacaocadastral.visita">
+	<class name="gcom.atualizacaocadastral.Visita" table="atualizacaocadastral.visita">
 
 		<id name="id" type="java.lang.Integer" column="vist_id">
 			<generator class="sequence">
@@ -13,21 +12,21 @@
 			</generator>
 		</id>
 
-		<many-to-one name="imovelControleAtualizacaoCadastral"
-			class="gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral">
+		<many-to-one name="imovelControleAtualizacaoCadastral" class="gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral">
 			<column name="icac_id" />
 		</many-to-one>
-		<many-to-one name="cadastroOcorrencia"
-			class="gcom.cadastro.imovel.CadastroOcorrencia">
+		
+		<many-to-one name="cadastroOcorrencia" class="gcom.cadastro.imovel.CadastroOcorrencia">
 			<column name="cocr_id" />
 		</many-to-one>
-		<property name="ultimaAlteracao" type="java.sql.Timestamp"
-			column="vist_tmultimaalteracao" not-null="true" length="8" />
-
-		<property name="coordenadaX" type="java.lang.String"
-			column="vist_nncoordenadax" not-null="false" length="50" />
-		<property name="coordenadaY" type="java.lang.String"
-			column="vist_nncoordenaday" not-null="false" length="50" />
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="vist_tmultimaalteracao" not-null="true" length="8" />
+		<property name="coordenadaX" type="java.lang.String" column="vist_nncoordenadax" not-null="false" length="50" />
+		<property name="coordenadaY" type="java.lang.String" column="vist_nncoordenaday" not-null="false" length="50" />
+		
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario">
+			<column name="usur_id"/>
+		</many-to-one>
 
 	</class>
 </hibernate-mapping>

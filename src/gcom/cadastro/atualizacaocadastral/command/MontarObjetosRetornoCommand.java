@@ -106,10 +106,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	}
 	
 	private void inserirVisitaParaImovelControle(ImovelControleAtualizacaoCadastral controle) throws ControladorException {
-		Visita visita = new Visita(controle, 
-				atualizacaoCadastralImovel.getLinhaAnormalidade("latitude"), 
-				atualizacaoCadastralImovel.getLinhaAnormalidade("longitude"));
-		
+		Visita visita = new Visita(controle, atualizacaoCadastralImovel);
 		controladorUtil.inserir(visita);
 	}
 
