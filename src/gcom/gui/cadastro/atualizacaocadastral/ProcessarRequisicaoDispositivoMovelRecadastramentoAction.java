@@ -1,10 +1,5 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
-import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
-import gcom.fachada.Fachada;
-import gcom.gui.GcomAction;
-import gcom.gui.micromedicao.ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction;
-
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -21,15 +16,19 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.jboss.logging.Logger;
 
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
+import gcom.fachada.Fachada;
+import gcom.gui.GcomAction;
+
 public class ProcessarRequisicaoDispositivoMovelRecadastramentoAction extends GcomAction {
 
 	private static final byte RESPOSTA_OK = '*';
 	private static final char RESPOSTA_ERRO = '#';
 	private static final char RESPOSTA_INCONSISTENCIA = '!';
 	
-	private static final int ATUALIZAR_MOVIMENTO = 1;
+	private static final int ATUALIZAR_CADASTRO = 1;
 
-	private Logger logger = Logger.getLogger(ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.class);
+	private Logger logger = Logger.getLogger(ProcessarRequisicaoDispositivoMovelRecadastramentoAction.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
@@ -49,7 +48,7 @@ public class ProcessarRequisicaoDispositivoMovelRecadastramentoAction extends Gc
 			int pacote = din.readByte();
 			switch (pacote) {
 
-			case ATUALIZAR_MOVIMENTO:
+			case ATUALIZAR_CADASTRO:
 				this.atualizarCadastro(din, response, out);
 				break;
 			}
