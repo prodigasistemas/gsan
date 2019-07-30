@@ -74,6 +74,8 @@ public class ProcessarRequisicaoDispositivoMovelRecadastramentoAction extends Gc
 
 	private void atualizarCadastro(DataInputStream data, HttpServletResponse response, OutputStream out) throws IOException {
 		try {
+			logger.info("Iniciando atualização online de cadastro...");
+			
 			InputStreamReader reader = new InputStreamReader(data);
 			BufferedReader buffer = new BufferedReader(reader);
 			
@@ -84,13 +86,13 @@ public class ProcessarRequisicaoDispositivoMovelRecadastramentoAction extends Gc
 				out.write(RESPOSTA_OK);
 				out.flush();
 				
-				logger.info("Fim da atualização de cadastro");
+				logger.info("Fim da atualização online de cadastro.");
 			} else {
 				response.setContentLength(1);
 				out.write(RESPOSTA_INCONSISTENCIA);
 				out.flush();
 				
-				logger.info("Não foi possível atualizar cadastro do imóvel " + atualizacao.getImovelAtual().getMatricula() 
+				logger.info("Não foi possível atualizar o cadastro do imóvel " + atualizacao.getImovelAtual().getMatricula() 
 						+ " com inconsistências: " + atualizacao.getImoveisComErro().get(0).getMensagensErro());
 			}
 		} catch (Exception e) {

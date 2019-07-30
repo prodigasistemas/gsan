@@ -28,13 +28,35 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
+//		if (parser.getFonte().length() == 23) {
+//			String localidade = parser.obterDadoParser(3);
+//			String setor = parser.obterDadoParser(3);
+//			String rota = parser.obterDadoParser(2);
+//			String idRota = parser.obterDadoParser(4);
+//			String versaoCelular = parser.obterDadoParser(10);
+//			String tipoRetorno = parser.obterDadoCabecalhoParser(1);
+//		} else {
+//			String grupo = parser.obterDadoParser(3);
+//			String localidade = parser.obterDadoParser(3);
+//			String setor = parser.obterDadoParser(3);
+//			String rota = parser.obterDadoParser(2);
+//			String anoMesReferencia = parser.obterDadoParser(6);
+//			String idRota = parser.obterDadoParser(4);
+//			String versaoCelular = parser.obterDadoParser(10);
+//			
+//			String tipoRetorno = parser.obterDadoCabecalhoParser(1);
+//		}
+
+		String grupo = parser.obterDadoParser(3);
 		String localidade = parser.obterDadoParser(3);
 		String setor = parser.obterDadoParser(3);
 		String rota = parser.obterDadoParser(2);
+		String anoMesReferencia = parser.obterDadoParser(6);
 		String idRota = parser.obterDadoParser(4);
 		String versaoCelular = parser.obterDadoParser(10);
+		
 		String tipoRetorno = parser.obterDadoCabecalhoParser(1);
-
+		
 		atualizacao.setArquivoTexto(pesquisarArquivoTexto(localidade, setor, rota, tipoRetorno));
 		atualizacao.setIdRota(Integer.valueOf(idRota));
 	}
