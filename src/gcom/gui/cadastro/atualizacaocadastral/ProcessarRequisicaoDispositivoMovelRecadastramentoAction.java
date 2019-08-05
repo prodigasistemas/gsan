@@ -91,12 +91,12 @@ public class ProcessarRequisicaoDispositivoMovelRecadastramentoAction extends Gc
 				out.write(RESPOSTA_INCONSISTENCIA);
 				out.flush();
 				
-				logger.info("Não foi possível atualizar o cadastro do imóvel " + atualizacao.getImovelAtual().getMatricula() 
+				logger.warn("Não foi possível atualizar o cadastro do imóvel " + atualizacao.getImovelAtual().getMatricula() 
 						+ " com inconsistências: " + atualizacao.getImoveisComErro().get(0).getMensagensErro());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Erro ao atualizar cadastro");
+			logger.error("Erro ao atualizar cadastro: " + e.getMessage());
 			response.setContentLength(1);
 			out.write(RESPOSTA_ERRO);
 			out.flush();
