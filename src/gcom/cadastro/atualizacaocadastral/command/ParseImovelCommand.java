@@ -111,7 +111,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 			linha.put("data",                          parser.obterDadoParser(26).trim());
 			
 			if(parser.getFonte().length() == 545)
-				linha.put("obsersacaoCategoria", 	   parser.obterDadoParserTrim(100));
+				linha.put("observacaoCategoria", 	   parser.obterDadoParserTrim(100));
 		}
 	}
 
