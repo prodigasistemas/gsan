@@ -32,6 +32,8 @@ import java.util.zip.ZipOutputStream;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.jboss.logging.Logger;
 
 import br.com.danhil.BarCode.Interleaved2of5;
@@ -263,6 +265,7 @@ import gcom.util.Criptografia;
 import gcom.util.ErroCriptografiaException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.FachadaException;
+import gcom.util.HibernateUtil;
 import gcom.util.IRepositorioUtil;
 import gcom.util.IoUtil;
 import gcom.util.ParserUtil;
@@ -6924,6 +6927,9 @@ public class ControladorCadastro extends ControladorComum {
 	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(
 			BufferedReader buffer, List<String> imagens) throws Exception {
 
+		Session session = HibernateUtil.getSession();
+		Transaction transaction = session.beginTransaction();
+
 		AtualizacaoCadastral atualizacao = new AtualizacaoCadastral();
 		atualizacao.setImagens(imagens);
 
@@ -7034,6 +7040,14 @@ public class ControladorCadastro extends ControladorComum {
 				}
 
 				if (atualizacao.validacaoLiberada() && !atualizacao.getImovelAtual().cadastroInvalido()) {
+					ImovelControleAtualizacaoCadastral controle = 
+							getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(atualizacao.getImovelAtual().getMatricula());
+					
+					if (atualizacao.getArquivoTexto().isArquivoRetornoTransmissao()
+							&& controle != null) {
+						getControladorAtualizacaoCadastral().apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
+					}
+					
 					AbstractAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(
 							parserConteudo,
 							repositorioCadastro,
@@ -7071,14 +7085,20 @@ public class ControladorCadastro extends ControladorComum {
 				repositorioCadastro.atualizarArquivoTextoAtualizacaoCadstral(atualizacao.getArquivoTexto().getId(),
 						SituacaoTransmissaoLeitura.TRANSMITIDO);
 			}
+			
+			transaction.commit();
 		} catch (Exception e) {
+			transaction.rollback();
 		    logger.error("Erro ao carregar arquivo de retorno de atualizacao cadastral", e);
-			throw new Exception("Erro ao carregar arquivo de retorno de atualizacao cadastral", e);
+			throw new ControladorException("Erro ao carregar arquivo de retorno de atualizacao cadastral", e);
 		} finally {
+			HibernateUtil.closeSession(session);
 			if (buffer != null) {
 				try {
 					buffer.close();
-				} catch (Exception e) {}
+				} catch (Exception e) {
+					logger.error("Erro ao tentar fechar arquivo de retorno de atualizacao cadastral", e);
+				}
 			}
 		}
 
