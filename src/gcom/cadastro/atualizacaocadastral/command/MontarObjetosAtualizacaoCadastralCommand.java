@@ -251,16 +251,18 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		Integer tipoOperacaoCliente = getTipoOperacaoCliente(matricula, matriculaImovel, clienteTxt.getCpf(), clienteRelacaoTipo, repositorioClienteImovel);
 		clienteTxt.setTipoOperacao(tipoOperacaoCliente);
 		
+		String dddTelefone = atualizacaoCadastralImovel.getLinhaCliente("dddTelefone" + tipoCliente);
 		String telefone = atualizacaoCadastralImovel.getLinhaCliente("telefone" + tipoCliente);
+		String dddCelular = atualizacaoCadastralImovel.getLinhaCliente("dddTelefone" + tipoCliente);
 		String celular = atualizacaoCadastralImovel.getLinhaCliente("celular" + tipoCliente);
 		
-		salvarClienteAtualizacaoCadastral(matricula, clienteRelacaoTipo, clienteTxt, telefone, celular);
+		salvarClienteAtualizacaoCadastral(matricula, clienteRelacaoTipo, clienteTxt, dddTelefone, telefone, dddCelular, celular);
 	}
 
-	private void salvarClienteAtualizacaoCadastral(int matricula, Short clienteRelacaoTipo, IClienteAtualizacaoCadastral clienteTxt, String telefone, String celular) throws ControladorException {
+	private void salvarClienteAtualizacaoCadastral(int matricula, Short clienteRelacaoTipo, IClienteAtualizacaoCadastral clienteTxt, String dddTelefone, String telefone, String dddCelular, String celular) throws ControladorException {
 
-		salvarClienteFoneAtualizacaoCadastral(telefone, clienteRelacaoTipo, FoneTipo.RESIDENCIAL, matricula);
-		salvarClienteFoneAtualizacaoCadastral(celular, clienteRelacaoTipo, FoneTipo.CELULAR, matricula);
+		salvarClienteFoneAtualizacaoCadastral(dddTelefone, telefone, clienteRelacaoTipo, FoneTipo.RESIDENCIAL, matricula);
+		salvarClienteFoneAtualizacaoCadastral(dddCelular, celular, clienteRelacaoTipo, FoneTipo.CELULAR, matricula);
 		
 		IClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = null;
 		if (clienteTxt.getTipoOperacao() != AlteracaoTipo.INCLUSAO) {
@@ -273,10 +275,10 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteAtualizacaoCadastralBase, clienteTxt, matriculaImovel, tipoOperacao);
 	}
 
-	private void salvarClienteFoneAtualizacaoCadastral(String telefone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente) {
+	private void salvarClienteFoneAtualizacaoCadastral(String ddd, String telefone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente) {
 		
 		if (!telefone.trim().equals("")) {
-			ClienteFoneAtualizacaoCadastral clienteFone = getClienteFoneAtualizacaoCadastral(telefone, foneTipo, matriculaCliente);
+			ClienteFoneAtualizacaoCadastral clienteFone = getClienteFoneAtualizacaoCadastral(ddd, telefone, foneTipo, matriculaCliente);
 
 			try {
 				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = controladorCliente
@@ -297,13 +299,14 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 	}
 
-	private ClienteFoneAtualizacaoCadastral getClienteFoneAtualizacaoCadastral(String tipoClientFone, Integer foneTipo, int matriculaCliente) {
+	private ClienteFoneAtualizacaoCadastral getClienteFoneAtualizacaoCadastral(String ddd, String tipoClientFone, Integer foneTipo, int matriculaCliente) {
 		ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
 
 		if (tipoClientFone.length() >= (IClienteFone.TAMANHO_TELEFONE_COM_DDD - 1)) {
 			clienteFone.setDdd(tipoClientFone.substring(0, 2));
 			clienteFone.setTelefone(tipoClientFone.substring(2));
 		} else {
+			clienteFone.setDdd(ddd);
 			clienteFone.setTelefone(tipoClientFone);
 		}
 		clienteFone.setIdFoneTipo(foneTipo);
