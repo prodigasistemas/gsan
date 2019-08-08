@@ -26,6 +26,7 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 	private Usuario usuario;
 	private boolean registroInclusao;
 	private Short indicadorFiscalizado;
+	private String complemento;
     
     public TabelaColunaAtualizacaoCadastral(Integer id, String colunaValorAnterior, String colunaValorTransmitido, Short indicadorAutorizado, 
     		Date dataValidacao, Date ultimaAlteracao, TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, TabelaColuna tabelaColuna) {
@@ -38,6 +39,20 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.tabelaAtualizacaoCadastral = tabelaAtualizacaoCadastral;
 		this.tabelaColuna = tabelaColuna;
+	}
+    
+    public TabelaColunaAtualizacaoCadastral(Integer id, String colunaValorAnterior, String colunaValorTransmitido, Short indicadorAutorizado, 
+    		Date dataValidacao, Date ultimaAlteracao, TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, TabelaColuna tabelaColuna, String complemento) {
+
+		this.id = id;
+		this.colunaValorAnterior = colunaValorAnterior;
+		this.colunaValorTransmitido = colunaValorTransmitido;
+		this.indicadorAutorizado = indicadorAutorizado;
+		this.dataValidacao = dataValidacao;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.tabelaAtualizacaoCadastral = tabelaAtualizacaoCadastral;
+		this.tabelaColuna = tabelaColuna;
+		this.complemento = complemento;
 	}
 
     public TabelaColunaAtualizacaoCadastral() {
@@ -190,6 +205,14 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 		return tabelaAtualizacaoCadastral != null 
 				&& this.tabelaAtualizacaoCadastral.getTabela() != null
 				&& this.tabelaAtualizacaoCadastral.getTabela().getId().intValue() == tipo.intValue();
+	}
+	
+	public String getComplemento() {
+		return this.complemento;
+	}
+	
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
 	}
 	
 	public boolean possuiValorFiscalizado() {
