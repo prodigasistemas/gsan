@@ -19,12 +19,13 @@ import org.jboss.logging.Logger;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
+import gcom.util.Util;
 
 public class ProcessarRequisicaoDispositivoMovelRecadastramentoAction extends GcomAction {
 
 	private static final byte RESPOSTA_OK = '*';
-	private static final char RESPOSTA_ERRO = '#';
-	private static final char RESPOSTA_INCONSISTENCIA = '!';
+	private static final byte RESPOSTA_ERRO = '#';
+	private static final String RESPOSTA_INCONSISTENCIA = "!";
 	
 	private static final int ATUALIZAR_CADASTRO = 1;
 
@@ -87,8 +88,10 @@ public class ProcessarRequisicaoDispositivoMovelRecadastramentoAction extends Gc
 				
 				logger.info("Fim da atualização online de cadastro.");
 			} else {
-				response.setContentLength(1);
-				out.write(RESPOSTA_INCONSISTENCIA);
+				String resposta = RESPOSTA_INCONSISTENCIA + Util.removerCaractereEspecial(atualizacao.getImoveisComErro().get(0).getMensagensErro().toString());
+				
+				response.setContentLength(resposta.length());
+				out.write(resposta.getBytes());
 				out.flush();
 				
 				logger.warn("Não foi possível atualizar o cadastro do imóvel " + atualizacao.getImovelAtual().getMatricula() 

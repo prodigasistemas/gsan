@@ -51,7 +51,7 @@ import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.sistemaparametro.NacionalFeriado;
 
 public class Util {
-
+	
 	public static int getMes(Date date) {
 		Calendar dataCalendar = GregorianCalendar.getInstance();
 		dataCalendar.setTime(date);
