@@ -8929,4 +8929,46 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
             HibernateUtil.closeSession(session);
         }
     }
+    
+    public Date buscarUltimadataAlteracaoNoImovel(Integer idImovel) throws ErroRepositorioException {
+    	Session session = HibernateUtil.getSession();
+        StringBuilder consulta;
+        Date retorno = null;
+
+        Query query = null;
+
+        try {
+            consulta = new StringBuilder("select opef.opef_tmultimaalteracao as ultima_alteracao ")
+            .append(" from seguranca.operacao_efetuada opef ")
+            .append(" inner join seguranca.usuario_alteracao usalt on opef.opef_id=usalt.tref_id ")
+            .append(" inner join seguranca.usuario us on usalt.usis_id=us.usur_id ")
+            .append(" left outer join cadastro.unidade_negocio unneg on us.uneg_id=unneg.uneg_id ")
+            .append(" inner join seguranca.tabela_linha_alteracao tablinha on opef.opef_id=tablinha.tref_id ")
+            .append(" inner join seguranca.tab_linha_col_alteracao tablinha3 on tablinha.tbla_id=tablinha3.tbla_id ")
+            .append(" inner join seguranca.tabela_coluna tabcol4 on tablinha3.tbco_id=tabcol4.tbco_id ")
+            .append(" inner join seguranca.tabela tabela5_ on tabcol4.tabe_id=tabela5_.tabe_id ")
+            .append(" inner join seguranca.operacao oper on opef.oper_id=oper.oper_id ")
+            .append(" left outer join seguranca.tabela_coluna tabcol on oper.tbco_idargumento=tabcol.tbco_id ")
+            .append(" left outer join seguranca.tabela tab on tabcol.tabe_id=tab.tabe_id, seguranca.tabela_coluna tabcol2 ")
+            .append(" where oper.tbco_idargumento=tabcol2.tbco_id ")
+            .append(" and tabcol2.tbco_nmcoluna='imov_id' ")
+            .append(" and opef.opef_cnargumento= :idImovel ")
+            .append(" order by opef.opef_tmultimaalteracao desc ")
+            .append(" limit 1 ");
+
+            query = session.createSQLQuery(consulta.toString())
+            		.addScalar("ultima_alteracao", Hibernate.TIMESTAMP)
+                    .setInteger("idImovel", idImovel);
+
+            retorno = (Date) query.uniqueResult();
+        }catch (NonUniqueResultException e ){
+            return null;
+        }catch (HibernateException e) {
+            throw new ErroRepositorioException("Erro no Hibernate");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+        return retorno;
+    }
 }
