@@ -22,6 +22,7 @@
 		<property name="indicadorFiscalizado" type="java.lang.Short" column="tcac_icfiscalizado" length="2"/>
 		<property name="dataValidacao" type="java.sql.Timestamp" column="tcac_dtvalidacao" length="4"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tcac_ultimaatualizacao" length="8"/>
+		<property name="complemento" type="java.lang.String" column="tcac_complemento" length="100" not-null="false" />
 		<!-- Associations -->
 		<!-- bi-directional many-to-one association to Tabela -->
 		<many-to-one name="tabelaAtualizacaoCadastral" class="gcom.seguranca.transacao.TabelaAtualizacaoCadastral" not-null="true">

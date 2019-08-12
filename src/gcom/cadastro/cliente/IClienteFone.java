@@ -6,7 +6,9 @@ public interface IClienteFone {
 	
 	int TAMANHO_DDD = 2;
 	
-	int TAMANHO_TELEFONE = 11;
+	int TAMANHO_TELEFONE = 9;
+	
+	int TAMANHO_TELEFONE_COM_DDD = 11;
 
 	public abstract Integer getId();
 

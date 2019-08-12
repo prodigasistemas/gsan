@@ -1,5 +1,11 @@
 package gcom.cadastro.imovel;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
@@ -12,12 +18,6 @@ import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.seguranca.transacao.FiltroTabela;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
-
-import java.math.BigDecimal;
-import java.util.Date;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 
 @ControleAlteracao()
@@ -200,6 +200,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	
 	private Integer idRota;
 	
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
 	private String observacaoCategoria;
 	
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
@@ -1209,7 +1210,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 		return observacaoCategoria;
 	}
 
-public void setObservacaoCategoria (String observacaoCategoria) {
-	this.observacaoCategoria = observacaoCategoria;
+	public void setObservacaoCategoria (String observacaoCategoria) {
+		this.observacaoCategoria = observacaoCategoria;
 	}
 }
