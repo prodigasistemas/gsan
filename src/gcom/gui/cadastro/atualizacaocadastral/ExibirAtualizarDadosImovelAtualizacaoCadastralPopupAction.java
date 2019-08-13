@@ -127,6 +127,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 
 			sessao.setAttribute("emFiscalizacao", emFiscalizaacao);
 			sessao.setAttribute("exibirBotaoConcluirFiscalizacao", exibirBotaoConcluirFiscalizacao(emFiscalizaacao));
+			sessao.setAttribute("exibirBotaoAprovado", exibirBotaoAprovado(controle));
 			sessao.setAttribute("exibirBotaoFiscalizar", exibirBotaoFiscalizar(controle));
 		} catch (Exception e) {
 			throw new ActionServletException("erro.exibir.dados.atualizacao", e, "Dados do Imovel e Cliente");
@@ -162,6 +163,10 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 	
 	private boolean exibirBotaoFiscalizar(ImovelControleAtualizacaoCadastral controle) {
 		return controle != null && controle.isPreAprovado();
+	}
+	
+	private boolean exibirBotaoAprovado(ImovelControleAtualizacaoCadastral controle) {
+		return controle != null && (controle.isPreAprovado() || controle.isFiscalizado());
 	}
 	
 }
