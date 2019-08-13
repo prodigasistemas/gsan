@@ -14,7 +14,7 @@
 			</generator>
 		</id>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="usat_tmultimaalteracao" length="8"/>
-		<property name="ipAlteracao" type="java.lang.String" column="usac_nnip" length="15"/>
+		<property name="ipAlteracao" type="java.lang.String" column="usac_nnip" length="39"/>
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to UsuarioAcao -->
 		<many-to-one name="usuarioAcao" class="gcom.seguranca.acesso.usuario.UsuarioAcao" not-null="true">
