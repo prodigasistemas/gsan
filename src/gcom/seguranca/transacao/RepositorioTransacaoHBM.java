@@ -621,8 +621,10 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				sql.append(" AND ctrl.icac_tmpreaprovacao between :periodoInicial AND :periodoFinal ");
 			}
 			
-			if (StringUtils.isNotEmpty(filtro.getLote()))
+			if (StringUtils.isNotEmpty(filtro.getLote())) {
 				sql.append(" AND ctrl.icac_lote = '" + filtro.getLote() + "'");
+				sql.append(" AND ctrl.siac_id <> 13 "); // SE definir um lote nao pode vir imoveis com siac ATUALIZADO-LOJA
+			}
 			
 			if (StringUtils.isNotEmpty(filtro.getMatricula()))
 				sql.append(" AND ctrl.imov_id = " + filtro.getMatricula());
