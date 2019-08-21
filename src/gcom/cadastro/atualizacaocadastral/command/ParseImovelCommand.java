@@ -9,9 +9,11 @@ import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaImovelCommand;
 import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.seguranca.transacao.AlteracaoTipo;
+import gcom.util.CollectionUtil;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
+import gcom.util.Util;
 
 public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
@@ -111,7 +113,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 			linha.put("data",                          parser.obterDadoParser(26).trim());
 			
 			if(parser.getFonte().length() == 545)
-				linha.put("obsersacaoCategoria", 	   parser.obterDadoParserTrim(100));
+				linha.put("observacaoCategoria", 	   parser.obterDadoParserTrim(100));
 		}
 	}
 
@@ -132,27 +134,12 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 
 	private void verificarImovel(AtualizacaoCadastral atualizacao) throws Exception {
-		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.pesquisarImovelControleAtualizacao(atualizacao.getImovelAtual().getMatricula());
+		ImovelControleAtualizacaoCadastral controle = 
+				controladorAtualizacaoCadastral.pesquisarImovelControleAtualizacao(atualizacao.getImovelAtual().getMatricula());
 
-		if (controle != null) {
-			if (controle.isPreAprovado() || 
-				controle.isAprovado() ||
-				controle.isAtualizado()) {
-
-				atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'PRE APROVADO', 'APROVADO' ou 'ATUALIZADO'");
-				atualizacao.getImovelAtual().setImovelAprovado(true);
-			}
-
-			if (atualizacao.getArquivoTexto().isArquivoRetornoTransmissao()) {
-				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(
-						atualizacao.getImovelAtual().getMatricula());
-			}
-
-		} else {
-			if (atualizacao.getImovelAtual().getMatricula() > 0 && atualizacao.getArquivoTexto().isArquivoRetornoTransmissao()) {
-				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(
-						atualizacao.getImovelAtual().getMatricula());
-			}
+		if (controle != null && (controle.isPreAprovado() || controle.isAprovado() || controle.isAtualizado())) {
+			atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'PRE APROVADO', 'APROVADO' ou 'ATUALIZADO'");
+			atualizacao.getImovelAtual().setImovelAprovado(true);
 		}
 	}
 }

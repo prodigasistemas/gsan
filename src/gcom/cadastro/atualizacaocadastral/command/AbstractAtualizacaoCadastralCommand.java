@@ -119,6 +119,8 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 				Tabela tabela = new Tabela();
 
 				Long idPorTempo = Calendar.getInstance().getTimeInMillis();
+				
+				String colunaComplemento = null;
 
 				if (objetoAtualizacaoCadastralBase instanceof ClienteAtualizacaoCadastral) {
 					ClienteAtualizacaoCadastral txt = (ClienteAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
@@ -160,6 +162,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 					tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
 					tabelaAtualizacaoCadastral.setIdRegistroAlterado(idPorTempo);
 					
+					colunaComplemento = String.valueOf(txt.getFoneTipo().getId());
 				} else if (objetoAtualizacaoCadastralBase instanceof ImovelSubcategoriaAtualizacaoCadastral) {
 					ImovelSubcategoriaAtualizacaoCadastral txt = (ImovelSubcategoriaAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 
@@ -196,8 +199,10 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 					
 					TabelaLinhaColunaAlteracao tabelaLinhaColunaAlteracao = (TabelaLinhaColunaAlteracao) colunasAlteradasIterator.next();
 					
-					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = this.pesquisarColunaParaAtualizar(tabela, tabelaLinhaColunaAlteracao.getTabelaColuna(), 
-							matriculaImovel,  tabelaAtualizacaoCadastral.getComplemento());
+					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = 
+							this.pesquisarColunaParaAtualizar(tabela, tabelaLinhaColunaAlteracao.getTabelaColuna(), 
+									matriculaImovel,  tabelaAtualizacaoCadastral.getComplemento(), colunaComplemento);
+					tabelaColunaAtualizacaoCadastral.setComplemento(colunaComplemento);
 					
 					if (arquivoTexto.isArquivoRetornoTransmissao() || arquivoTexto.isArquivoRetornoRevisita()) {
 						tabelaColunaAtualizacaoCadastral.setColunaValorAnterior(tabelaLinhaColunaAlteracao.getConteudoColunaAnterior());
@@ -296,9 +301,11 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 			return tabela;
 		}
 
-	private TabelaColunaAtualizacaoCadastral pesquisarColunaParaAtualizar(Tabela tabela, TabelaColuna coluna, Integer idImovel, String complemento) throws ControladorException {
+	private TabelaColunaAtualizacaoCadastral pesquisarColunaParaAtualizar(
+			Tabela tabela, TabelaColuna coluna, Integer idImovel, String complemento, String complementoColuna) throws ControladorException {
 		coluna.setTabela(tabela);
-		TabelaColunaAtualizacaoCadastral tabelaColuna = controladorAtualizacaoCadastral.pesquisarTabelaColunaPorImovel(coluna, idImovel, complemento);
+		TabelaColunaAtualizacaoCadastral tabelaColuna = 
+				controladorAtualizacaoCadastral.pesquisarTabelaColunaPorImovel(coluna, idImovel, complemento, complementoColuna);
 
 		if (tabelaColuna == null) {
 			tabelaColuna = new TabelaColunaAtualizacaoCadastral();

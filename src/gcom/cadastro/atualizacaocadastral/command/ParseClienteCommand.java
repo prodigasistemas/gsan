@@ -85,8 +85,14 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			String sexoUsuario = parser.obterDadoParser(1).trim();
 			linha.put("sexoUsuario", getSexoTipo(matriculaUsuario, sexoUsuario));
 			
+			String dddTelefoneUsuario =  parser.obterDadoParser(IClienteFone.TAMANHO_DDD).trim();
+			linha.put("dddTelefoneUsuario", dddTelefoneUsuario);
+			
 			String telefoneUsuario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("telefoneUsuario", telefoneUsuario);
+			
+			String dddCelularUsuario =  parser.obterDadoParser(IClienteFone.TAMANHO_DDD).trim();
+			linha.put("dddCelularUsuario", dddCelularUsuario);
 			
 			String celularUsuario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("celularUsuario", celularUsuario);				
@@ -120,9 +126,15 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 			String sexoProprietario = parser.obterDadoParser(1).trim();
 			linha.put("sexoProprietario", getSexoTipo(matriculaProprietario, sexoProprietario));
+			
+			String dddTelefoneProprietario =  parser.obterDadoParser(IClienteFone.TAMANHO_DDD).trim();
+			linha.put("dddTelefoneProprietario", dddTelefoneProprietario);
 		
 			String telefoneProprietario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
-			linha.put("telefoneProprietario", telefoneProprietario);				
+			linha.put("telefoneProprietario", telefoneProprietario);
+			
+			String dddCelularProprietario =  parser.obterDadoParser(IClienteFone.TAMANHO_DDD).trim();
+			linha.put("dddCelularProprietario", dddCelularProprietario);
 				
 			String celularProprietario = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("celularProprietario", celularProprietario);				
@@ -182,8 +194,14 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			String sexoResponsavel = parser.obterDadoParser(1).trim();
 			linha.put("sexoResponsavel", getSexoTipo(matriculaResponsavel, sexoResponsavel));
 			
+			String dddTelefoneResponsavel =  parser.obterDadoParser(IClienteFone.TAMANHO_DDD).trim();
+			linha.put("dddTelefoneResponsavel", dddTelefoneResponsavel);
+			
 			String telefoneResponsavel = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
-			linha.put("telefoneResponsavel", telefoneResponsavel);				
+			linha.put("telefoneResponsavel", telefoneResponsavel);
+			
+			String dddCelularResponsavel =  parser.obterDadoParser(IClienteFone.TAMANHO_DDD).trim();
+			linha.put("dddCelularResponsavel", dddCelularResponsavel);
 				
 			String celularResponsavel = parser.obterDadoParser(IClienteFone.TAMANHO_TELEFONE).trim();
 			linha.put("celularResponsavel", celularResponsavel);				

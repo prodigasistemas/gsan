@@ -230,24 +230,27 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		Integer tipoOperacaoCliente = getTipoOperacaoCliente(matricula, matriculaImovel, clienteTxt.getCpf(), clienteRelacaoTipo, repositorioClienteImovel);
 		clienteTxt.setTipoOperacao(tipoOperacaoCliente);
 
+		String dddTelefone = atualizacaoCadastralImovel.getLinhaCliente("dddTelefone" + tipoCliente);
 		String telefone = atualizacaoCadastralImovel.getLinhaCliente("telefone" + tipoCliente);
+		String dddCelular = atualizacaoCadastralImovel.getLinhaCliente("dddTelefone" + tipoCliente);
 		String celular = atualizacaoCadastralImovel.getLinhaCliente("celular" + tipoCliente);
 
-		salvarClienteRetorno(matricula, clienteRelacaoTipo, clienteTxt, telefone, celular);
+		salvarClienteRetorno(matricula, clienteRelacaoTipo, clienteTxt, dddTelefone, telefone, dddCelular, celular);
 	}
 
-	private void salvarClienteRetorno(int matricula, Short clienteRelacaoTipo, IClienteAtualizacaoCadastral clienteTxt, String telefone, String celular) throws ControladorException {
+	private void salvarClienteRetorno(int matricula, Short clienteRelacaoTipo, IClienteAtualizacaoCadastral clienteTxt, 
+			String dddTelefone, String telefone, String dddCelular, String celular) throws ControladorException {
 		Integer idclienteRetorno = salvarClienteRetorno(clienteTxt);
 		salvarClienteImovelRetorno(clienteTxt, matriculaImovel, idclienteRetorno);
 
-		salvarClienteFoneRetorno(telefone, clienteRelacaoTipo, FoneTipo.RESIDENCIAL, matricula, idclienteRetorno);
-		salvarClienteFoneRetorno(celular, clienteRelacaoTipo, FoneTipo.CELULAR, matricula, idclienteRetorno);
+		salvarClienteFoneRetorno(dddTelefone, telefone, clienteRelacaoTipo, FoneTipo.RESIDENCIAL, matricula, idclienteRetorno);
+		salvarClienteFoneRetorno(dddCelular, celular, clienteRelacaoTipo, FoneTipo.CELULAR, matricula, idclienteRetorno);
 		salvarClienteEnderecoRetorno(matricula, clienteTxt, idclienteRetorno);
 	}
 
-	private void salvarClienteFoneRetorno(String tipoClientFone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente, Integer idClienteRetorno) throws ControladorException {
+	private void salvarClienteFoneRetorno(String ddd, String tipoClientFone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente, Integer idClienteRetorno) throws ControladorException {
 		if (!tipoClientFone.trim().equals("")) {
-			ClienteFoneAtualizacaoCadastral clienteFone = getClienteFoneAtualizacaoCadastral(tipoClientFone, foneTipo, matriculaCliente);
+			ClienteFoneAtualizacaoCadastral clienteFone = getClienteFoneAtualizacaoCadastral(ddd, tipoClientFone, foneTipo, matriculaCliente);
 
 			ClienteFoneRetorno clienteFoneRetorno = new ClienteFoneRetorno(clienteFone);
 			clienteFoneRetorno.setUltimaAlteracao(new Date());
@@ -256,13 +259,14 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		}
 	}
 
-	private ClienteFoneAtualizacaoCadastral getClienteFoneAtualizacaoCadastral(String tipoClientFone, Integer foneTipo, int matriculaCliente) {
+	private ClienteFoneAtualizacaoCadastral getClienteFoneAtualizacaoCadastral(String ddd, String tipoClientFone, Integer foneTipo, int matriculaCliente) {
 		ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
 
-		if (tipoClientFone.length() >= (IClienteFone.TAMANHO_TELEFONE-1)) {
+		if (tipoClientFone.length() >= (IClienteFone.TAMANHO_TELEFONE_COM_DDD - 1)) {
 			clienteFone.setDdd(tipoClientFone.substring(0, 2));
 			clienteFone.setTelefone(tipoClientFone.substring(2));
 		} else {
+			clienteFone.setDdd(ddd);
 			clienteFone.setTelefone(tipoClientFone);
 		}
 		clienteFone.setIdFoneTipo(foneTipo);
