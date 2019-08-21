@@ -477,19 +477,13 @@ function verificarAberturaPopup(abertura){
 <%@ include file="/jsp/util/telaespera.jsp"%>
 
 <script>
-document.getElementById('botaoConcluir').onclick = function() { botaoAvancarTelaEspera('/gsan/atualizarImovelWizardAction.do?concluir=true&action=atualizarImovelClienteAction'); }
+	document.getElementById('botaoConcluir').onclick = function() {
+		botaoAvancarTelaEspera('/gsan/atualizarImovelWizardAction.do?concluir=true&action=atualizarImovelClienteAction'); 
+	}
+
+	if(document.forms[0].idNomeConta != undefined) {
+		verficarSelecao(document.forms[0].idNomeConta,'radio');
+	}
 </script>
-
-
-
-<script>
-
-	if(document.forms[0].idNomeConta != undefined){
-
-      verficarSelecao(document.forms[0].idNomeConta,'radio');
-    }
-
-</script>
-
 
 </html:html>
