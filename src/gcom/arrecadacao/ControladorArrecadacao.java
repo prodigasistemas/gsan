@@ -45500,6 +45500,9 @@ public class ControladorArrecadacao extends ControladorComum {
 			creditoARealizar.setUltimaAlteracao(new Date());
 			creditoARealizar.setUsuario(usuarioLogado);
 			
+			//Debito a Cobrar Origem
+			creditoARealizar.setCreditoARealizarGeral(cobrancaDocumentoItem.getCreditoARealizarGeral());
+			
 			//[UC0194] - Inserir Crédito a Realizar
 			Integer idCreditoARealizar = this.getControladorFaturamento().gerarCreditoARealizar(creditoARealizar, imovel, usuarioLogado);
 			creditoARealizar.setId(idCreditoARealizar);
