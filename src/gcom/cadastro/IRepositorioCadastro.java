@@ -403,4 +403,6 @@ public interface IRepositorioCadastro {
     public Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> recuperarTipoOcupantesParaAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
     
     public void removerQuantidadesOcupantesImovel(Integer idImovel) throws ErroRepositorioException;
+    
+    public Date buscarUltimadataAlteracaoNoImovel(Integer idImovel) throws ErroRepositorioException;
 }
