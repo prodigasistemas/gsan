@@ -42,7 +42,7 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		String idRota = parser.obterDadoParser(4);
 		parser.obterDadoParser(10);
-		String tipoRetorno = parser.obterDadoCabecalhoParser(1);
+		String tipoRetorno = parser.obterDadoParser(1);
 
 		atualizacao.setArquivoTexto(pesquisarArquivoTexto(localidade, setor, rota, tipoRetorno));
 		atualizacao.setIdRota(Integer.valueOf(idRota));

@@ -364,7 +364,7 @@
 								<input name="Button" type="button" class="bottonRightCol" value="Concluir Fiscalização" onClick="aprovarFiscalizados();"  >
 						</logic:equal>
 						
-						<logic:equal name="emFiscalizacao" value="false" scope="session">
+						<logic:equal name="exibirBotaoAprovado" value="true" scope="session">
 							<input name="Button" type="button" class="bottonRightCol" value="Aprovar" onClick="aprovarTransmitidos();"  >
 						</logic:equal>
 					</logic:equal>

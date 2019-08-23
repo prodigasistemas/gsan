@@ -2664,4 +2664,12 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			throw new ControladorException("Erro ao obter visita por coordenadas.", e);
 		}
 	}
+	
+	public Date pesquisarDataDaUltimaAlteracaoDoImovel(Integer idImovel) throws ControladorException {
+		try {
+			return repositorioCadastro.buscarUltimadataAlteracaoNoImovel(idImovel);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao obter data da ultima alteracao no imovel.", e);
+		}
+	}
 }

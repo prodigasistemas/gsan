@@ -2,10 +2,13 @@ package gcom.atualizacaocadastral;
 
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.tabelaauxiliar.FiltroTabelaAuxiliar;
@@ -23,6 +26,7 @@ public class Visita extends ObjetoTransacao {
 	private String coordenadaX;
 	private String coordenadaY;
 	private Usuario usuario;
+	private Date dataVisita;
 
 	public Visita() {
 	}
@@ -33,6 +37,7 @@ public class Visita extends ObjetoTransacao {
 		setCoordenadaX(atualizacaoCadastralImovel.getLinhaAnormalidade("latitude"));
 		setCoordenadaY(atualizacaoCadastralImovel.getLinhaAnormalidade("longitude"));
 		setUltimaAlteracao(new Date());
+		setDataVisita(atualizacaoCadastralImovel.getLinhaAnormalidade("dataServico"));
 		this.usuario = atualizacaoCadastralImovel.getUsuario();
 	}
 
@@ -93,6 +98,20 @@ public class Visita extends ObjetoTransacao {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+	
+	public Date getDataVisita() {
+		return dataVisita;
+	}
+
+	public void setDataVisita(Date dataVisita) {
+		this.dataVisita = dataVisita;
+	}
+	
+	public void setDataVisita(String dataVisita) {
+		if (StringUtils.isNotEmpty(dataVisita)) {
+			this.dataVisita = Util.converterStringDateComDataETempo(dataVisita);
+		}
 	}
 
 	@Override

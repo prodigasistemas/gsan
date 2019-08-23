@@ -336,6 +336,8 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		controle.setDataRetorno(new Date());
 		controle.setCadastroOcorrencia(new CadastroOcorrencia(atualizacaoCadastralImovel.getCadastroOcorrencia().getId()));
 		
+		definirSeImovelFoiAlteradoPelaLojaDuranteRecadastramento(controle);
+		
 		controladorUtil.inserirOuAtualizar(controle);
 		atualizacaoCadastralImovel.setImovelControle(controle);
 	}
@@ -349,5 +351,14 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		
 		controladorUtil.inserir(controle);
 		atualizacaoCadastralImovel.setImovelControle(controle);
+	}
+	
+	private void definirSeImovelFoiAlteradoPelaLojaDuranteRecadastramento(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException {
+		Date dataDaUltimaAlteracaoDoImovel = controladorAtualizacaoCadastral.pesquisarDataDaUltimaAlteracaoDoImovel(matriculaImovel);
+		if (imovelControle != null && dataDaUltimaAlteracaoDoImovel != null) {
+			if (dataDaUltimaAlteracaoDoImovel.compareTo(imovelControle.getDataGeracao()) > 0) {
+				imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.ATUALIZADO_LOJA));
+			}
+		}
 	}
 }

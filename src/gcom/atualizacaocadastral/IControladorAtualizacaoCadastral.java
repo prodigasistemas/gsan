@@ -136,4 +136,6 @@ public interface IControladorAtualizacaoCadastral {
     public void aprovarImovel(Integer idImovel) throws ControladorException;
     
     public List<Visita> obterVisitasPorCoordenadas(String latitude, String longitude) throws ControladorException;
+    
+    public Date pesquisarDataDaUltimaAlteracaoDoImovel(Integer idImovel) throws ControladorException;
 }

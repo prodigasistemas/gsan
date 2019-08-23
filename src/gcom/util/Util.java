@@ -567,6 +567,27 @@ public class Util {
 
 		return retorno;
 	}
+	
+	/**
+	 * Converte uma data em {@code String} para {@code Date} 
+	 * 
+	 * @param timestamp - data no formato yyyy-MM-dd hh:mm:ss.SSS
+	 * @return
+	 */
+	public static Date converterStringDateComDataETempo(String timestamp) {
+
+		Date retorno = null;
+
+		SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+
+		try {
+			retorno = formatoData.parse(timestamp);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return retorno;
+	}
 
 	public static int dividirArredondarResultado(int n, int d) {
 		int retorno = 0;
