@@ -8051,8 +8051,6 @@ public class ControladorCadastro extends ControladorComum {
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(20, parametrosSistema.getInscricaoEstadual()));
 		// LOGIN LEITURISTA
 		arquivoTexto.append(Util.completaString("gcom", 11));
-		// ID ARQUIVO TEXTO
-		arquivoTexto.append(Util.completaStringComZeroAEsquerda(String.valueOf(idArquivoTexto), 11));
 
 		// SENHA LEITURISTA
 		String senhaGerada = "senha";
@@ -8076,6 +8074,9 @@ public class ControladorCadastro extends ControladorComum {
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + ""));
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(3, rota.getFaturamentoGrupo().getId() + ""));
 		arquivoTexto.append(tipoArquivo);
+		
+		// ID ARQUIVO TEXTO
+		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(11, String.valueOf(idArquivoTexto)));
 
 		arquivoTexto.append(System.getProperty("line.separator"));
 
