@@ -17,8 +17,11 @@ public class ParserUtil {
 	public String obterDadoParser(int tamanho) {
 		int posicaoInicial = contador;
 		contador += tamanho;
-		return fonte.substring(posicaoInicial, contador);
-
+		try {
+			return fonte.substring(posicaoInicial, contador);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 	
 	public String obterDadoCabecalhoParser(int tamanho) {
