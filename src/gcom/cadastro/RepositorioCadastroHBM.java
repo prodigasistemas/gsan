@@ -4560,11 +4560,14 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 	public List<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade,
 			String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) throws ErroRepositorioException {
 
-		List<ArquivoTextoAtualizacaoCadastral> retorno = null;
+		List<ArquivoTextoAtualizacaoCadastral> retorno = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
 		Session session = HibernateUtil.getSession();
-
+		
 		try {
-			String consulta = "SELECT txac "
+			String consulta = "SELECT txac, "
+							+ "(select count(distinct im.idImovel) from ImovelAtualizacaoCadastral im "
+								+ "	WHERE im.idArquivoTexto = txac.id"
+								+ "	and im.idSituacaoAtualizacaoCadastral >= " + SituacaoAtualizacaoCadastral.TRANSMITIDO + ") "
 							+ "FROM ArquivoTextoAtualizacaoCadastral txac "
 							+ "INNER JOIN FETCH txac.localidade localidade "
 							+ "INNER JOIN FETCH txac.rota rota "
@@ -4592,13 +4595,20 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			}
 			
 			if (exibicao.equals(ArquivoTextoAtualizacaoCadastral.EXIBIR_EM_REVISAO)) {
-				consulta += " and txac.id IN (SELECT distinct imovel.idArquivoTexto FROM ImovelAtualizacaoCadastral imovel WHERE imovel.idSituacaoAtualizacaoCadastral = " + SituacaoAtualizacaoCadastral.EM_REVISAO + ")";
+				consulta += " and txac.id IN (SELECT distinct imovel.idArquivoTexto FROM ImovelAtualizacaoCadastral imovel "
+						+ " WHERE imovel.idSituacaoAtualizacaoCadastral = " + SituacaoAtualizacaoCadastral.EM_REVISAO + ")";
 			}
 
 			consulta += " order by localidade.id, setorComercial.codigo, rota.codigo, txac.descricaoArquivo ";
 
-			retorno = session.createQuery(consulta).list();
-
+			List<Object[]> resultado = session.createQuery(consulta).list();
+			if (resultado != null && !resultado.isEmpty()) {
+				for (Object[] array : resultado) {
+					ArquivoTextoAtualizacaoCadastral arquivo = (ArquivoTextoAtualizacaoCadastral) array[0];
+					arquivo.setQuantidadeImoveisTransmitidos((Integer) array[1]);
+					retorno.add(arquivo);
+				}
+			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
