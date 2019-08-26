@@ -138,6 +138,9 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	}
 
 	public Integer getQuantidadeImovel() {
+		if (quantidadeImovel == null) {
+			return 0;
+		}
 		return quantidadeImovel;
 	}
 
@@ -162,6 +165,9 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	}
 
 	public Integer getQuantidadeImoveisTransmitidos() {
+		if (quantidadeImoveisTransmitidos == null) {
+			return 0;
+		}
 		return quantidadeImoveisTransmitidos;
 	}
 
@@ -209,5 +215,9 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 				descricao = "Transmissão";
 			
 		return descricao;
+	}
+	
+	public int getQuantidadeImoveisFaltantes() {
+		return getQuantidadeImovel() - getQuantidadeImoveisTransmitidos();
 	}
 }

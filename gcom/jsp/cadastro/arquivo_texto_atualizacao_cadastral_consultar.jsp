@@ -382,8 +382,16 @@
 				<logic:present name="colecaoArquivoTextoAtualizacaoCadastral">
 					<logic:notEmpty name="colecaoArquivoTextoAtualizacaoCadastral">
 						<tr>
-					      <td colspan="3"><hr></td>
-					    </tr>
+								<td colspan="3"><hr></td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<center><strong>Faltam ${requestScope.quantidadeTotalFaltantes} de ${requestScope.quantidadeTotal} imóvel(is) de acordo com a pesquisa executada</strong></center>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3"><br></td>
+						</tr>
 						<tr>
 							<td colspan="1"> 
 								<strong>Tipo de arquivo para baixar:</strong>
@@ -461,26 +469,29 @@
 								<div align="center"><strong><a
 									href="javascript:facilitador(this);">Todos</a></strong></div>
 								</td>
-								<td width="19%" bgcolor="#90c7fc">
-								<div align="center"><strong>Nome do Arquivo</strong></div>
+								<td width="15%" bgcolor="#90c7fc">
+								<div align="center"><strong>Arquivo</strong></div>
 								</td>
-							    <td width="9%" bgcolor="#90c7fc">
-								<div align="center"><strong>Qtd Imóveis</strong></div>
+							  <td width="10%" bgcolor="#90c7fc">
+									<div align="center"><strong>Qtd Imóveis</strong></div>
 								</td>
-								<td width="10%" bgcolor="#90c7fc">
-								<div align="center"><strong>Localidade</strong></div>
-								</td>
-								<td width="10%" bgcolor="#90c7fc">
-								<div align="center"><strong>Setor Comercial</strong></div>
+								<td width="8%" bgcolor="#90c7fc">
+									<div align="center"><strong>Qtd Faltante</strong></div>
 								</td>
 								<td width="10%" bgcolor="#90c7fc">
-								<div align="center"><strong>Código da Rota</strong></div>
+									<div align="center"><strong>Localidade</strong></div>
+								</td>
+								<td width="10%" bgcolor="#90c7fc">
+									<div align="center"><strong>Setor Comercial</strong></div>
+								</td>
+								<td width="10%" bgcolor="#90c7fc">
+									<div align="center"><strong>Rota</strong></div>
 								</td>
 								<td width="15%" bgcolor="#90c7fc">
-								<div align="center"><strong>Agente Cadastral</strong></div>
+									<div align="center"><strong>Agente Cadastral</strong></div>
 								</td>
-								<td width="19%" bgcolor="#90c7fc">
-								<div align="center"><strong>Situação do Arquivo</strong></div>
+								<td width="15%" bgcolor="#90c7fc">
+									<div align="center"><strong>Sit. Arquivo</strong></div>
 								</td>
 							</tr>
 						</table>
@@ -505,7 +516,7 @@
 												</div>
 											</td>	
 											
-											<td width="19%" align="center"><html:link
+											<td width="15%" align="center"><html:link
 												page="/retornarArquivoTxtAtualizacaoCadastralAction.do"
 												title="${arquivoTextoAtualizacaoCadastral.descricaoArquivo}"
 												paramName="arquivoTextoAtualizacaoCadastral" paramProperty="id"
@@ -514,8 +525,12 @@
 										 		</html:link>								 										
 											</td>								
 											
-											<td width="9%" align="center">													
+											<td width="10%" align="center">													
 										 		<div align="center">${arquivoTextoAtualizacaoCadastral.quantidadeImoveisTransmitidos} / ${arquivoTextoAtualizacaoCadastral.quantidadeImovel}</div>									 										
+											</td>
+
+											<td width="8%" align="center">													
+										 		<div align="center">${arquivoTextoAtualizacaoCadastral.quantidadeImoveisFaltantes}</div>									 										
 											</td>
 											
 											<td width="10%">
@@ -541,7 +556,7 @@
 													</c:otherwise>
 											</c:choose></div>
 											</td>
-											<td width="19%">
+											<td width="15%">
 												<div align="center">
 													<a href="javascript:abrirPopup('exibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction.do?idArquivo=${arquivoTextoAtualizacaoCadastral.id}', 480, 800);">
 														${arquivoTextoAtualizacaoCadastral.situacaoTransmissaoLeitura.descricaoSituacao}
