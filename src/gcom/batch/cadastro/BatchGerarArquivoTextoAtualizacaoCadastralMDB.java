@@ -2,7 +2,6 @@ package gcom.batch.cadastro;
 
 import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
-import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;

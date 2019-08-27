@@ -1,5 +1,7 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import org.apache.commons.lang.StringUtils;
+
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
@@ -43,13 +45,22 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 		String idRota = parser.obterDadoParser(4);
 		parser.obterDadoParser(10);
 		String tipoRetorno = parser.obterDadoParser(1);
+		
+		String idArquivoTexto = parser.obterDadoParser(11);
 
-		atualizacao.setArquivoTexto(pesquisarArquivoTexto(localidade, setor, rota, tipoRetorno));
+		atualizacao.setArquivoTexto(pesquisarArquivoTexto(localidade, setor, rota, tipoRetorno, idArquivoTexto));
 		atualizacao.setIdRota(Integer.valueOf(idRota));
 	}
 
-	private ArquivoTextoAtualizacaoCadastral pesquisarArquivoTexto(String localidade, String setor, String rota, String tipoRetorno) throws ErroRepositorioException {
-		ArquivoTextoAtualizacaoCadastral arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(localidade + "_" + setor + "_" + rota);
+	private ArquivoTextoAtualizacaoCadastral pesquisarArquivoTexto(String localidade, String setor, String rota, String tipoRetorno,
+			String idArquivoTexto) throws ErroRepositorioException {
+		
+		ArquivoTextoAtualizacaoCadastral arquivoTexto = null;
+		if (StringUtils.isNotEmpty(idArquivoTexto) && StringUtils.isNumeric(idArquivoTexto) && Integer.parseInt(idArquivoTexto) > 0) {
+			arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(Integer.parseInt(idArquivoTexto));
+		} else {
+			arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(localidade + "_" + setor + "_" + rota);
+		}
 
 		if (arquivoTexto == null) {
 			throw new ArquivoAtualizacaoInexistenteException();

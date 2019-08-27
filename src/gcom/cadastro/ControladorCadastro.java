@@ -6843,7 +6843,7 @@ public class ControladorCadastro extends ControladorComum {
 
 			// Trailer
 			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, rota,
-					ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO, leiturista.getEmpresa().getId());
+					ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO, leiturista.getEmpresa().getId(), idArquivoTexto);
 			arquivoTexto.append((StringBuilder) arquivoTrailerEQuantidadeTotalDeLinhas[0]);
 
 			StringBuilder arquivoTextoFinal = new StringBuilder();
@@ -6898,7 +6898,7 @@ public class ControladorCadastro extends ControladorComum {
 				qtdRegistro += 1;
 			}
 
-			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota(), tipoArquivo, idEmpresa);
+			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota(), tipoArquivo, idEmpresa, idArquivoTexto);
 			builder.append((StringBuilder) trailler[0]);
 
 			StringBuilder arquivoTexto = new StringBuilder();
@@ -8032,7 +8032,7 @@ public class ControladorCadastro extends ControladorComum {
 	 *
 	 * @author Wellington Rocha
 	 */
-	public StringBuilder gerarArquivoTextoRegistroTipoGeral(Rota rota, String tipoArquivo) throws ControladorException {
+	public StringBuilder gerarArquivoTextoRegistroTipoGeral(Rota rota, String tipoArquivo, Integer idArquivoTexto) throws ControladorException {
 		StringBuilder arquivoTexto = new StringBuilder();
 		SistemaParametro parametrosSistema = getControladorUtil().pesquisarParametrosDoSistema();
 		String versaoApp = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.VERSAO_APLICATIVO_RECADASTRAMENTO.toString());
@@ -8074,6 +8074,9 @@ public class ControladorCadastro extends ControladorComum {
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + ""));
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(3, rota.getFaturamentoGrupo().getId() + ""));
 		arquivoTexto.append(tipoArquivo);
+		
+		// ID ARQUIVO TEXTO
+		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(11, String.valueOf(idArquivoTexto)));
 
 		arquivoTexto.append(System.getProperty("line.separator"));
 
@@ -8282,11 +8285,12 @@ public class ControladorCadastro extends ControladorComum {
 	 * @throws ControladorException
 	 * @throws ErroRepositorioException 
 	 */
-    public Object[] gerarArquivoTextoRegistroTipoTrailer(Integer qtdRegistro, Rota rota, String tipoArquivo, Integer idEmpresa) throws ControladorException, ErroRepositorioException {
+    private Object[] gerarArquivoTextoRegistroTipoTrailer(Integer qtdRegistro, Rota rota, String tipoArquivo, 
+    		Integer idEmpresa, Integer idArquivoTexto) throws ControladorException, ErroRepositorioException {
         Object[] retorno = new Object[2];
         StringBuilder arquivoTextoRegistroTipoTrailer = new StringBuilder();
 
-        arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoGeral(rota, tipoArquivo));
+        arquivoTextoRegistroTipoTrailer.append(this.gerarArquivoTextoRegistroTipoGeral(rota, tipoArquivo, idArquivoTexto));
         qtdRegistro = qtdRegistro + 1;
 
         Collection<CadastroOcorrencia> ocorrenciasCadastroCollection = this.pesquisarOcorrenciasCadastro();
