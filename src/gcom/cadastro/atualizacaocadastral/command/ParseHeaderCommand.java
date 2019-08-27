@@ -56,12 +56,11 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 			String idArquivoTexto) throws ErroRepositorioException {
 		
 		ArquivoTextoAtualizacaoCadastral arquivoTexto = null;
-		if (StringUtils.isNotEmpty(idArquivoTexto) && StringUtils.isNumeric(idArquivoTexto)) {
+		if (StringUtils.isNotEmpty(idArquivoTexto) && StringUtils.isNumeric(idArquivoTexto) && Integer.parseInt(idArquivoTexto) > 0) {
 			arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(Integer.parseInt(idArquivoTexto));
 		} else {
 			arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(localidade + "_" + setor + "_" + rota);
 		}
-		
 
 		if (arquivoTexto == null) {
 			throw new ArquivoAtualizacaoInexistenteException();

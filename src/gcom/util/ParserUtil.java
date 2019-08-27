@@ -13,7 +13,7 @@ public class ParserUtil {
 	public String obterDadoParserTrim(int tamanho) {
 		return obterDadoParser(tamanho).trim();
 	}
-	
+
 	public String obterDadoParser(int tamanho) {
 		int posicaoInicial = contador;
 		contador += tamanho;
@@ -23,14 +23,7 @@ public class ParserUtil {
 			return null;
 		}
 	}
-	
-	public String obterDadoCabecalhoParser(int tamanho) {
-		if (fonte.length() == 32)
-			return obterDadoParser(tamanho);
-		else
-			return " ";
-	}
-	
+
 	public String getFonte() {
 		return fonte;
 	}
