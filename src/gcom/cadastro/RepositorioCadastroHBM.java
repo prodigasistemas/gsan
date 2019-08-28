@@ -4566,8 +4566,9 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		try {
 			String consulta = "SELECT txac, "
 							+ "(select count(distinct im.idImovel) from ImovelAtualizacaoCadastral im "
-								+ "	WHERE im.idArquivoTexto = txac.id"
-								+ "	and im.idSituacaoAtualizacaoCadastral >= " + SituacaoAtualizacaoCadastral.TRANSMITIDO + ") "
+								+ " inner join im.imovelControleAtualizacaoCadastral ic "
+								+ "	WHERE im.idArquivoTexto = txac.id "
+								+ "	and ic.situacaoAtualizacaoCadastral.id >= " + SituacaoAtualizacaoCadastral.TRANSMITIDO + ") "
 							+ "FROM ArquivoTextoAtualizacaoCadastral txac "
 							+ "INNER JOIN FETCH txac.localidade localidade "
 							+ "INNER JOIN FETCH txac.rota rota "
@@ -4596,7 +4597,8 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			
 			if (exibicao.equals(ArquivoTextoAtualizacaoCadastral.EXIBIR_EM_REVISAO)) {
 				consulta += " and txac.id IN (SELECT distinct imovel.idArquivoTexto FROM ImovelAtualizacaoCadastral imovel "
-						+ " WHERE imovel.idSituacaoAtualizacaoCadastral = " + SituacaoAtualizacaoCadastral.EM_REVISAO + ")";
+						+ " inner join imovel.imovelControleAtualizacaoCadastral ic2 "
+						+ " WHERE ic2.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.EM_REVISAO + ")";
 			}
 
 			consulta += " order by localidade.id, setorComercial.codigo, rota.codigo, txac.descricaoArquivo ";
