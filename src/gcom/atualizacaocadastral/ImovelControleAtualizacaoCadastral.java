@@ -3,6 +3,7 @@ package gcom.atualizacaocadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 
 import java.util.Date;
 
@@ -29,6 +30,8 @@ public class ImovelControleAtualizacaoCadastral {
 	private Date dataGeracaoLote;
 	private Date dataAprovacaoLote;
 	private Date dataReprovacaoLote;
+	
+	private ImovelAtualizacaoCadastral imovelAtualizacaoCadastral;
 
 	public ImovelControleAtualizacaoCadastral() {
 		super();
@@ -194,5 +197,12 @@ public class ImovelControleAtualizacaoCadastral {
 	public void setDataLiberacaoProcessamento(Date dataLiberacaoProcessamento) {
 		this.dataLiberacaoProcessamento = dataLiberacaoProcessamento;
 	}
-	
+
+	public ImovelAtualizacaoCadastral getImovelAtualizacaoCadastral() {
+		return imovelAtualizacaoCadastral;
+	}
+
+	public void setImovelAtualizacaoCadastral(ImovelAtualizacaoCadastral imovelAtualizacaoCadastral) {
+		this.imovelAtualizacaoCadastral = imovelAtualizacaoCadastral;
+	}
 }

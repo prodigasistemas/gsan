@@ -81,6 +81,8 @@
 		<property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imac_qtd_economias_outra"           not-null="false"/>
 		<property name="percentualAbastecimento"     type="java.lang.Short"      column="imac_percentual_abastecimento"      not-null="false"/>
 		<property name="observacaoCategoria"         type="java.lang.String"     column="imac_dsobservacaotegoria"           not-null="false"/>
+		
+		<one-to-one name="imovelControleAtualizacaoCadastral" class="gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral" outer-join="auto" constrained="true" property-ref="imovel" />
 
 	</class>
 </hibernate-mapping>
