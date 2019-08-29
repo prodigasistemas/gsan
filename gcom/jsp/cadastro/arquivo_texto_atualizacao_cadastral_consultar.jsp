@@ -103,12 +103,12 @@
 		if (objeto.id == "0" || objeto.id == undefined){
 			objeto.id = "1";
 			marcarTodos();
-			atualizarImoveisSelecionadosComTodos();
+			atualizarImoveisSelecionadosComTodos(true);
 		}
 		else{
 			objeto.id = "0";
 			desmarcarTodos();
-			atualizarImoveisSelecionadosComTodos();
+			atualizarImoveisSelecionadosComTodos(false);
 		}
 	}
 
@@ -176,13 +176,16 @@
 		setTimeout(function(){ $("#div-qnt-imoveis-selecionados").css("background-color", ""); }, 1000);
 	}
 
-	function atualizarImoveisSelecionadosComTodos() {
+	function atualizarImoveisSelecionadosComTodos(selecionarTodos) {
 		form = document.forms[0];
+		$('#qnt-imoveis-selecionados').text(0);
+		if (selecionarTodos === true) {
 			for(indice = 0; indice < form.elements.length; indice++) {
 					if (form.elements[indice].type == "checkbox") {
 						atualizarImoveisSelecionados(form.elements[indice]);
 					}
 			}
+		} 
 	}
 </script>
 
