@@ -8593,24 +8593,16 @@ public class ControladorCadastro extends ControladorComum {
 	}
 
 	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
+	 * [UC0890]Consultar Arquivo Texto Atualizacao Cadastral
 	 */
 	public List<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String idEmpresa, String idLocalidade,
 			String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) throws ControladorException {
 
 		try {
-			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList();
-
 			List<ArquivoTextoAtualizacaoCadastral> colecao = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
 					idEmpresa, idLocalidade, codigoSetorComercial, idAgenteComercial, idSituacaoTransmissao, exibicao);
 
-			for (ArquivoTextoAtualizacaoCadastral arquivo : colecao) {
-				Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisTransmitidosAtualizacaoCadastral(arquivo.getId());
-				arquivo.setQuantidadeImoveisTransmitidos(quantidadeImoveisTransmitidos);
-				arquivos.add(arquivo);
-			}
-
-			return arquivos;
+			return colecao;
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}

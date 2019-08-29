@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
 
 <script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
+<script language="JavaScript" src="<bean:message key="caminho.jquery"/>jquery.js"></script>
 <html:javascript staticJavascript="false" formName="ConsultarArquivoTextoAtualizacaoCadastralActionForm" dynamicJavascript="true" />
 <script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
 <script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
@@ -102,10 +103,12 @@
 		if (objeto.id == "0" || objeto.id == undefined){
 			objeto.id = "1";
 			marcarTodos();
+			atualizarImoveisSelecionadosComTodos(true);
 		}
 		else{
 			objeto.id = "0";
 			desmarcarTodos();
+			atualizarImoveisSelecionadosComTodos(false);
 		}
 	}
 
@@ -156,6 +159,33 @@
 		 var form = document.forms[0];
 		 form.action = 'exibirConsultarArquivoTextoAtualizacaoCadastralAction.do';
 	  	 form.submit();
+	}
+
+	function atualizarImoveisSelecionados(checkbox) {
+		var form = document.forms[0];
+		var quantidadeAtual = parseInt($('#qnt-imoveis-selecionados').text(), 10);
+		var quantidadeRegistro = parseInt($('#div-' + checkbox.value).text(), 10);
+		var novaQuantidade = 0;
+		if (checkbox.checked) {
+			novaQuantidade = quantidadeAtual + quantidadeRegistro;
+		} else {
+			novaQuantidade = quantidadeAtual - quantidadeRegistro;
+		}
+		$('#qnt-imoveis-selecionados').text(novaQuantidade);
+		$("#div-qnt-imoveis-selecionados").css("background-color", "yellow");
+		setTimeout(function(){ $("#div-qnt-imoveis-selecionados").css("background-color", ""); }, 1000);
+	}
+
+	function atualizarImoveisSelecionadosComTodos(selecionarTodos) {
+		form = document.forms[0];
+		$('#qnt-imoveis-selecionados').text(0);
+		if (selecionarTodos === true) {
+			for(indice = 0; indice < form.elements.length; indice++) {
+					if (form.elements[indice].type == "checkbox") {
+						atualizarImoveisSelecionados(form.elements[indice]);
+					}
+			}
+		} 
 	}
 </script>
 
@@ -267,7 +297,7 @@
 
 				<tr>
 					<td width="150"><strong>Localidade:</strong></td>
-					<td>
+					<td colspan="2">
 						<html:text tabindex="8" maxlength="3" property="idLocalidade" size="5"
 							onkeypress="form.target=''; validaEnter(event, 'exibirConsultarArquivoTextoAtualizacaoCadastralAction.do?objetoConsulta=1', 'idLocalidade'); limparSetorComercial();"
 							 />
@@ -308,7 +338,7 @@
 				
 				<tr>
 					<td width="150"><strong>Setor Comercial:</strong></td>
-					<td>
+					<td colspan="2">
 						<html:text tabindex="8" maxlength="3" property="codigoSetorComercial" size="5"
 							onkeypress="form.target=''; validaEnter(event, 'exibirConsultarArquivoTextoAtualizacaoCadastralAction.do?objetoConsulta=2', 'codigoSetorComercial');"
 							 />
@@ -349,7 +379,7 @@
 
 				<tr>
 					<td width="150"><strong>Situação Transmissão:</strong></td>
-					<td>
+					<td colspan="2">
 					    <strong><html:radio property="idSituacaoTransmissao" value="2" />Liberado</strong> 
 					    <strong><html:radio property="idSituacaoTransmissao" value="3" />Em Campo</strong> 
 					    <strong><html:radio property="idSituacaoTransmissao" value="4" />Finalizado</strong>
@@ -359,7 +389,7 @@
 				
 				<tr>
 					<td width="150"><strong>Exibição:</strong></td>
-					<td>
+					<td colspan="2">
     					<strong><html:radio property="exibicao" value="" />Todos</strong>
 					    <strong><html:radio property="exibicao" value="1" />Rotas com Imóveis em Revisão</strong> 
 					</td>
@@ -378,12 +408,20 @@
 				
 				<tr></tr>
 				
-				
+
 				<logic:present name="colecaoArquivoTextoAtualizacaoCadastral">
 					<logic:notEmpty name="colecaoArquivoTextoAtualizacaoCadastral">
 						<tr>
-					      <td colspan="3"><hr></td>
-					    </tr>
+								<td colspan="3"><hr></td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<center><strong>Faltam ${requestScope.quantidadeTotalFaltantes} de ${requestScope.quantidadeTotal} imóvel(is) de acordo com a pesquisa executada</strong></center>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3"><br></td>
+						</tr>
 						<tr>
 							<td colspan="1"> 
 								<strong>Tipo de arquivo para baixar:</strong>
@@ -394,7 +432,11 @@
 								<gsan:controleAcessoBotao name="Button" value="Compactado" onclick="javascript:gerarZip('retornarZipArquivoTxtAtualizacaoCadastralAction.do');" url="retornarZipArquivoTxtAtualizacaoCadastralAction.do" tabindex="13" />
 								<gsan:controleAcessoBotao name="Button" value="Imóveis Não Transmitidos" onclick="javascript:gerarZip('retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do" tabindex="13" />
 							</td>
-							
+							<td style="text-align: right">
+								<div id="div-qnt-imoveis-selecionados">
+									<strong><span id="qnt-imoveis-selecionados">0</span> imóvel(eis) faltante(s) selecionado(s)</strong>
+								</div>
+							</td>
 						</tr>
 				
 						<tr><td><p>&nbsp;</p></td></tr>
@@ -461,26 +503,29 @@
 								<div align="center"><strong><a
 									href="javascript:facilitador(this);">Todos</a></strong></div>
 								</td>
-								<td width="19%" bgcolor="#90c7fc">
-								<div align="center"><strong>Nome do Arquivo</strong></div>
+								<td width="15%" bgcolor="#90c7fc">
+								<div align="center"><strong>Arquivo</strong></div>
 								</td>
-							    <td width="9%" bgcolor="#90c7fc">
-								<div align="center"><strong>Qtd Imóveis</strong></div>
+							  <td width="10%" bgcolor="#90c7fc">
+									<div align="center"><strong>Qtd Imóveis</strong></div>
 								</td>
-								<td width="10%" bgcolor="#90c7fc">
-								<div align="center"><strong>Localidade</strong></div>
-								</td>
-								<td width="10%" bgcolor="#90c7fc">
-								<div align="center"><strong>Setor Comercial</strong></div>
+								<td width="8%" bgcolor="#90c7fc">
+									<div align="center"><strong>Qtd Faltante</strong></div>
 								</td>
 								<td width="10%" bgcolor="#90c7fc">
-								<div align="center"><strong>Código da Rota</strong></div>
+									<div align="center"><strong>Localidade</strong></div>
+								</td>
+								<td width="10%" bgcolor="#90c7fc">
+									<div align="center"><strong>Setor Comercial</strong></div>
+								</td>
+								<td width="10%" bgcolor="#90c7fc">
+									<div align="center"><strong>Rota</strong></div>
 								</td>
 								<td width="15%" bgcolor="#90c7fc">
-								<div align="center"><strong>Agente Cadastral</strong></div>
+									<div align="center"><strong>Agente Cadastral</strong></div>
 								</td>
-								<td width="19%" bgcolor="#90c7fc">
-								<div align="center"><strong>Situação do Arquivo</strong></div>
+								<td width="15%" bgcolor="#90c7fc">
+									<div align="center"><strong>Sit. Arquivo</strong></div>
 								</td>
 							</tr>
 						</table>
@@ -499,13 +544,13 @@
 										<tr bgcolor="#FFFFFF" class="styleFontePequena">
 											<%}%>
 											<td width="8%">
-												<div align="center">																																																																		
+												<div align="center">
 														<html:checkbox property="idsRegistros"
-															value="${arquivoTextoAtualizacaoCadastral.id}" />												
+															value="${arquivoTextoAtualizacaoCadastral.id}" onclick="atualizarImoveisSelecionados(this);" />
 												</div>
 											</td>	
 											
-											<td width="19%" align="center"><html:link
+											<td width="15%" align="center"><html:link
 												page="/retornarArquivoTxtAtualizacaoCadastralAction.do"
 												title="${arquivoTextoAtualizacaoCadastral.descricaoArquivo}"
 												paramName="arquivoTextoAtualizacaoCadastral" paramProperty="id"
@@ -514,8 +559,12 @@
 										 		</html:link>								 										
 											</td>								
 											
-											<td width="9%" align="center">													
+											<td width="10%" align="center">													
 										 		<div align="center">${arquivoTextoAtualizacaoCadastral.quantidadeImoveisTransmitidos} / ${arquivoTextoAtualizacaoCadastral.quantidadeImovel}</div>									 										
+											</td>
+
+											<td width="8%" align="center">													
+										 		<div id="div-${arquivoTextoAtualizacaoCadastral.id}" align="center">${arquivoTextoAtualizacaoCadastral.quantidadeImoveisFaltantes}</div>									 										
 											</td>
 											
 											<td width="10%">
@@ -541,7 +590,7 @@
 													</c:otherwise>
 											</c:choose></div>
 											</td>
-											<td width="19%">
+											<td width="15%">
 												<div align="center">
 													<a href="javascript:abrirPopup('exibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction.do?idArquivo=${arquivoTextoAtualizacaoCadastral.id}', 480, 800);">
 														${arquivoTextoAtualizacaoCadastral.situacaoTransmissaoLeitura.descricaoSituacao}

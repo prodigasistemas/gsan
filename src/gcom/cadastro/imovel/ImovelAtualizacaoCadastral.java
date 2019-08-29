@@ -9,6 +9,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
@@ -229,6 +230,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short percentualAbastecimento;
+    
+    private ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral;
 		
 	public ImovelAtualizacaoCadastral(Integer idImovel, 
 	        Integer idLocalidade,
@@ -1212,5 +1215,14 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	public void setObservacaoCategoria (String observacaoCategoria) {
 		this.observacaoCategoria = observacaoCategoria;
+	}
+
+	public ImovelControleAtualizacaoCadastral getImovelControleAtualizacaoCadastral() {
+		return imovelControleAtualizacaoCadastral;
+	}
+
+	public void setImovelControleAtualizacaoCadastral(
+			ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral) {
+		this.imovelControleAtualizacaoCadastral = imovelControleAtualizacaoCadastral;
 	}
 }

@@ -37,6 +37,8 @@
 			<column name="imre_id"/>
 		</many-to-one>
 		
+		<one-to-one name="imovelAtualizacaoCadastral" class="gcom.cadastro.imovel.ImovelAtualizacaoCadastral" outer-join="auto" />
+		
 	</class> 
 	
 </hibernate-mapping>

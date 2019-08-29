@@ -42,7 +42,21 @@ public class ConsultarArquivoTextoAtualizacaoCadastralAction extends GcomAction 
 		}
 
 		sessao.setAttribute("colecaoArquivoTextoAtualizacaoCadastral", lista);
+		definirSomatorioDeFaltantesETotal(request, lista);
 
 		return mapping.findForward("consultarArquivoTextoAtualizacaoCadastral");
+	}
+	
+	private void definirSomatorioDeFaltantesETotal(HttpServletRequest httpServletRequest, List<ArquivoTextoAtualizacaoCadastral> lista) {
+		int quantidadeTotalFaltantes = 0;
+		int quantidadeTotal = 0;
+		
+		for (ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral : lista) {
+			quantidadeTotalFaltantes += arquivoTextoAtualizacaoCadastral.getQuantidadeImoveisFaltantes();
+			quantidadeTotal += arquivoTextoAtualizacaoCadastral.getQuantidadeImovel();
+		}
+		
+		httpServletRequest.setAttribute("quantidadeTotalFaltantes", quantidadeTotalFaltantes);
+		httpServletRequest.setAttribute("quantidadeTotal", quantidadeTotal);
 	}
 }
