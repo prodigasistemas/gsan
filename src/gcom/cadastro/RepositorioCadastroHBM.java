@@ -4568,7 +4568,27 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 							+ "(select count(distinct im.idImovel) from ImovelAtualizacaoCadastral im "
 								+ " inner join im.imovelControleAtualizacaoCadastral ic "
 								+ "	WHERE im.idArquivoTexto = txac.id "
-								+ "	and ic.situacaoAtualizacaoCadastral.id >= " + SituacaoAtualizacaoCadastral.TRANSMITIDO + ") "
+								+ "	and ic.situacaoAtualizacaoCadastral.id >= " + SituacaoAtualizacaoCadastral.TRANSMITIDO + "), "
+							+ "(select count(distinct im.idImovel) from ImovelAtualizacaoCadastral im "
+								+ " inner join im.imovelControleAtualizacaoCadastral ic "
+								+ "	WHERE im.idArquivoTexto = txac.id "
+								+ "	and ic.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.EM_CAMPO + "), "
+							+ "(select count(distinct im.idImovel) from ImovelAtualizacaoCadastral im "
+								+ " inner join im.imovelControleAtualizacaoCadastral ic "
+								+ " inner join ic.cadastroOcorrencia oc "
+								+ "	WHERE im.idArquivoTexto = txac.id "
+								+ " and oc.indicadorValidacao = 2 "
+								+ " and 3 > (select count(v.id) from Visita v where v.imovelControleAtualizacaoCadastral = ic) "
+								+ "	and ic.situacaoAtualizacaoCadastral.id IN (" + SituacaoAtualizacaoCadastral.EM_CAMPO
+									+ ", " + SituacaoAtualizacaoCadastral.REVISITA + ")), "
+							+ "(select count(distinct im.idImovel) from ImovelAtualizacaoCadastral im "
+								+ " inner join im.imovelControleAtualizacaoCadastral ic "
+								+ "	WHERE im.idArquivoTexto = txac.id "
+								+ "	and ic.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.EM_REVISAO + "), "
+							+ "(select count(distinct im.idImovel) from ImovelAtualizacaoCadastral im "
+								+ " inner join im.imovelControleAtualizacaoCadastral ic "
+								+ "	WHERE im.idArquivoTexto = txac.id "
+								+ "	and ic.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.EM_FISCALIZACAO + ") "
 							+ "FROM ArquivoTextoAtualizacaoCadastral txac "
 							+ "INNER JOIN FETCH txac.localidade localidade "
 							+ "INNER JOIN FETCH txac.rota rota "
@@ -4608,6 +4628,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				for (Object[] array : resultado) {
 					ArquivoTextoAtualizacaoCadastral arquivo = (ArquivoTextoAtualizacaoCadastral) array[0];
 					arquivo.setQuantidadeImoveisTransmitidos((Integer) array[1]);
+					arquivo.setQuantidadeEmCampo((Integer) array[2]);
+					arquivo.setQuantidadeRevisita((Integer) array[3]);
+					arquivo.setQuantidadeRevisao((Integer) array[4]);
+					arquivo.setQuantidadeEmFiscalizacao((Integer) array[5]);
 					retorno.add(arquivo);
 				}
 			}
