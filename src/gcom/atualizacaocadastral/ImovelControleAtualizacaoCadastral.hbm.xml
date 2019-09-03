@@ -37,7 +37,7 @@
 			<column name="imre_id"/>
 		</many-to-one>
 		
-		<one-to-one name="imovelAtualizacaoCadastral" class="gcom.cadastro.imovel.ImovelAtualizacaoCadastral" outer-join="auto" />
+		<one-to-one name="imovelAtualizacaoCadastral" class="gcom.cadastro.imovel.ImovelAtualizacaoCadastral" outer-join="auto" constrained="true" />
 		
 	</class> 
 	
