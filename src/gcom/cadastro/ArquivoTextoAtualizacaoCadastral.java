@@ -46,6 +46,14 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	private Integer quantidadeImoveisTransmitidos;
 	
 	private String tipoRetorno;
+	
+	private Integer quantidadeEmCampo;
+	
+	private Integer quantidadeRevisita;
+	
+	private Integer quantidadeRevisao;
+	
+	private Integer quantidadeEmFiscalizacao;
 
 	public ArquivoTextoAtualizacaoCadastral(Integer id, String descricaoArquivo, Integer codigoSetorComercial, Integer numeroQuadraInicial, Integer numeroQuadraFinal, Rota rota, Integer quantidadeImovel,
 			byte[] arquivoTexto, Date ultimaAlteracao, Localidade localidade, Leiturista leiturista, SituacaoTransmissaoLeitura situacaoTransmissaoLeitura, Integer quantidadeImoveisTransmitidos) {
@@ -186,6 +194,47 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 		this.tipoRetorno = tipoRetorno;
 	}
 	
+	public Integer getQuantidadeEmCampo() {
+		return quantidadeEmCampo;
+	}
+
+	public void setQuantidadeEmCampo(Integer quantidadeEmCampo) {
+		this.quantidadeEmCampo = quantidadeEmCampo;
+	}
+
+	public Integer getQuantidadeRevisita() {
+		if (quantidadeRevisita == null) {
+			return 0;
+		}
+		return quantidadeRevisita;
+	}
+
+	public void setQuantidadeRevisita(Integer quantidadeRevisita) {
+		this.quantidadeRevisita = quantidadeRevisita;
+	}
+
+	public Integer getQuantidadeRevisao() {
+		if (quantidadeRevisao == null) {
+			return 0;
+		}
+		return quantidadeRevisao;
+	}
+
+	public void setQuantidadeRevisao(Integer quantidadeRevisao) {
+		this.quantidadeRevisao = quantidadeRevisao;
+	}
+
+	public Integer getQuantidadeEmFiscalizacao() {
+		if (quantidadeEmFiscalizacao == null) {
+			return 0;
+		}
+		return quantidadeEmFiscalizacao;
+	}
+
+	public void setQuantidadeEmFiscalizacao(Integer quantidadeEmFiscalizacao) {
+		this.quantidadeEmFiscalizacao = quantidadeEmFiscalizacao;
+	}
+
 	public boolean isArquivoRetornoTransmissao() {
 		return tipoRetorno.equals(null) || tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO);
 	}
@@ -217,7 +266,7 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 		return descricao;
 	}
 	
-	public int getQuantidadeImoveisFaltantes() {
-		return getQuantidadeImovel() - getQuantidadeImoveisTransmitidos();
+	public Integer getQuantidadeImoveisSemBloqueados() {
+		return getQuantidadeEmCampo() + getQuantidadeImoveisTransmitidos();
 	}
 }

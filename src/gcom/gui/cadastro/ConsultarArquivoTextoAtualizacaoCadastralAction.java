@@ -52,11 +52,11 @@ public class ConsultarArquivoTextoAtualizacaoCadastralAction extends GcomAction 
 		int quantidadeTotal = 0;
 		
 		for (ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral : lista) {
-			quantidadeTotalFaltantes += arquivoTextoAtualizacaoCadastral.getQuantidadeImoveisFaltantes();
-			quantidadeTotal += arquivoTextoAtualizacaoCadastral.getQuantidadeImovel();
+			quantidadeTotalFaltantes += arquivoTextoAtualizacaoCadastral.getQuantidadeEmCampo();
+			quantidadeTotal += arquivoTextoAtualizacaoCadastral.getQuantidadeImoveisSemBloqueados();
 		}
 		
-		httpServletRequest.setAttribute("quantidadeTotalFaltantes", quantidadeTotalFaltantes);
+		httpServletRequest.setAttribute("quantidadeTotalEmCampo", quantidadeTotalFaltantes);
 		httpServletRequest.setAttribute("quantidadeTotal", quantidadeTotal);
 	}
 }

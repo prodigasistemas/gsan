@@ -163,22 +163,34 @@
 
 	function atualizarImoveisSelecionados(checkbox) {
 		var form = document.forms[0];
-		var quantidadeAtual = parseInt($('#qnt-imoveis-selecionados').text(), 10);
-		var quantidadeRegistro = parseInt($('#div-' + checkbox.value).text(), 10);
+		var situacoes = ['em-campo', 'revisita', 'revisao', 'em-fiscalizacao'];
+		situacoes.forEach(function (situacao, indice, array) {
+			atualizarPorSituacao(situacao, checkbox);
+		});
+		$("#div-qnt-imoveis-selecionados").css("background-color", "DeepSkyBlue");
+		setTimeout(function(){ $("#div-qnt-imoveis-selecionados").css("background-color", ""); }, 1000);
+	}
+
+	function atualizarPorSituacao(situacao, checkbox) {
+		var quantidadeAtual = parseInt($('#qnt-imoveis-selecionados-' + situacao ).text(), 10);
+		var idTx = '#div-' + situacao + '-' + checkbox.value;
+		console.log("ID => " + idTx);
+		var quantidadeRegistro = parseInt($('#div-' + situacao + '-' + checkbox.value).text(), 10);
 		var novaQuantidade = 0;
 		if (checkbox.checked) {
 			novaQuantidade = quantidadeAtual + quantidadeRegistro;
 		} else {
 			novaQuantidade = quantidadeAtual - quantidadeRegistro;
 		}
-		$('#qnt-imoveis-selecionados').text(novaQuantidade);
-		$("#div-qnt-imoveis-selecionados").css("background-color", "yellow");
-		setTimeout(function(){ $("#div-qnt-imoveis-selecionados").css("background-color", ""); }, 1000);
+		$('#qnt-imoveis-selecionados-' + situacao).text(novaQuantidade);
 	}
 
 	function atualizarImoveisSelecionadosComTodos(selecionarTodos) {
 		form = document.forms[0];
-		$('#qnt-imoveis-selecionados').text(0);
+		var situacoes = ['em-campo', 'revisita', 'revisao', 'em-fiscalizacao'];
+		situacoes.forEach(function (situacao, indice, array) {
+			$('#qnt-imoveis-selecionados-' + situacao).text(0);
+		});
 		if (selecionarTodos === true) {
 			for(indice = 0; indice < form.elements.length; indice++) {
 					if (form.elements[indice].type == "checkbox") {
@@ -416,37 +428,27 @@
 						</tr>
 						<tr>
 							<td colspan="3">
-								<center><strong>Faltam ${requestScope.quantidadeTotalFaltantes} de ${requestScope.quantidadeTotal} imóvel(is) de acordo com a pesquisa executada</strong></center>
+								<center><strong>Há ${requestScope.quantidadeTotalEmCampo} de ${requestScope.quantidadeTotal} imóvel(is) 'EM CAMPO' de acordo com a pesquisa executada</strong></center>
 							</td>
 						</tr>
 						<tr>
 							<td colspan="3"><br></td>
 						</tr>
 						<tr>
-							<td colspan="1"> 
+							<td colspan="3"> 
 								<strong>Tipo de arquivo para baixar:</strong>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2"> 
+								&nbsp;
 								<gsan:controleAcessoBotao name="Button" value="Compactado" onclick="javascript:gerarZip('retornarZipArquivoTxtAtualizacaoCadastralAction.do');" url="retornarZipArquivoTxtAtualizacaoCadastralAction.do" tabindex="13" />
 								<gsan:controleAcessoBotao name="Button" value="Imóveis Não Transmitidos" onclick="javascript:gerarZip('retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction.do" tabindex="13" />
 							</td>
-							<td style="text-align: right">
-								<div id="div-qnt-imoveis-selecionados">
-									<strong><span id="qnt-imoveis-selecionados">0</span> imóvel(eis) faltante(s) selecionado(s)</strong>
-								</div>
-							</td>
 						</tr>
-				
-						<tr><td><p>&nbsp;</p></td></tr>
+
+						<tr>
+							<td colspan="3"><hr></td>
+						</tr>
 						
 						<tr>
-					      <td colspan="3"><hr></td>
-					    </tr>
-						
-						<tr>
-							<td colspan="4">
+							<td colspan="3">
 								<strong>Data da Última Transmissão:</strong>
 								<html:text property="dataUltimaTransmissao" size="10" maxlength="10" onkeypress="return isCampoNumerico(event);" onkeyup="mascaraData(this, event);" />
 								<a href="javascript:abrirCalendario('ConsultarArquivoTextoAtualizacaoCadastralActionForm', 'dataUltimaTransmissao');">
@@ -457,8 +459,8 @@
 						</tr>
 						
 						<tr>
-					      <td colspan="3"><hr></td>
-					    </tr>
+							<td colspan="3"><hr></td>
+						</tr>
 					    
 						<tr>
 							<td colspan="1">
@@ -482,6 +484,22 @@
 							<td colspan="2">
 								<gsan:controleAcessoBotao name="Button" value="Rota(s) para Revisão" onclick="javascript:gerarZip('retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
 								<gsan:controleAcessoBotao name="Button" value="Rota(s) para Fiscalização" onclick="javascript:gerarZip('retornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
+							</td>
+						</tr>
+
+						<tr>
+							<td colspan="3"><hr></td>
+						</tr>
+
+						<tr>
+							<td><strong>Resumo da seleção:</strong></td>
+							<td colspan="2">
+								<div id="div-qnt-imoveis-selecionados" style="text-align: right">
+									<strong><span id="qnt-imoveis-selecionados-em-campo">0</span> imóvel(eis) 'EM CAMPO' selecionado(s)</strong><br>
+									<strong><span id="qnt-imoveis-selecionados-revisita">0</span> imóvel(eis) 'REVISITA' selecionado(s)</strong><br>
+									<strong><span id="qnt-imoveis-selecionados-revisao">0</span> imóvel(eis) 'REVISÃO' selecionado(s)</strong><br>
+									<strong><span id="qnt-imoveis-selecionados-em-fiscalizacao">0</span> imóvel(eis) 'EM FISCALIZAÇÃO' selecionado(s)</strong><br>
+								</div>
 							</td>
 						</tr>
 							
@@ -509,8 +527,8 @@
 							  <td width="10%" bgcolor="#90c7fc">
 									<div align="center"><strong>Qtd Imóveis</strong></div>
 								</td>
-								<td width="8%" bgcolor="#90c7fc">
-									<div align="center"><strong>Qtd Faltante</strong></div>
+								<td width="10%" bgcolor="#90c7fc">
+									<div align="center"><strong>Qtd Em Campo</strong></div>
 								</td>
 								<td width="10%" bgcolor="#90c7fc">
 									<div align="center"><strong>Localidade</strong></div>
@@ -518,7 +536,7 @@
 								<td width="10%" bgcolor="#90c7fc">
 									<div align="center"><strong>Setor Comercial</strong></div>
 								</td>
-								<td width="10%" bgcolor="#90c7fc">
+								<td width="7%" bgcolor="#90c7fc">
 									<div align="center"><strong>Rota</strong></div>
 								</td>
 								<td width="15%" bgcolor="#90c7fc">
@@ -554,19 +572,28 @@
 												page="/retornarArquivoTxtAtualizacaoCadastralAction.do"
 												title="${arquivoTextoAtualizacaoCadastral.descricaoArquivo}"
 												paramName="arquivoTextoAtualizacaoCadastral" paramProperty="id"
-												paramId="idRegistroAtualizacao">													
+												paramId="idRegistroAtualizacao">
 										 		<div align="center">${arquivoTextoAtualizacaoCadastral.descricaoArquivo}</div>	
-										 		</html:link>								 										
+										 		</html:link>
 											</td>								
 											
-											<td width="10%" align="center">													
-										 		<div align="center">${arquivoTextoAtualizacaoCadastral.quantidadeImoveisTransmitidos} / ${arquivoTextoAtualizacaoCadastral.quantidadeImovel}</div>									 										
+											<td width="10%" align="center">
+										 		<div align="center">${arquivoTextoAtualizacaoCadastral.quantidadeImoveisTransmitidos} / ${arquivoTextoAtualizacaoCadastral.quantidadeImoveisSemBloqueados}</div>
+												<div style="display: none" id="div-revisita-${arquivoTextoAtualizacaoCadastral.id}" align="center">
+													${arquivoTextoAtualizacaoCadastral.quantidadeRevisita}
+												</div>
+												<div style="display: none" id="div-revisao-${arquivoTextoAtualizacaoCadastral.id}" align="center">
+													${arquivoTextoAtualizacaoCadastral.quantidadeRevisao}
+												</div>
+												<div style="display: none" id="div-em-fiscalizacao-${arquivoTextoAtualizacaoCadastral.id}" align="center">
+													${arquivoTextoAtualizacaoCadastral.quantidadeEmFiscalizacao}
+												</div>
 											</td>
 
-											<td width="8%" align="center">													
-										 		<div id="div-${arquivoTextoAtualizacaoCadastral.id}" align="center">${arquivoTextoAtualizacaoCadastral.quantidadeImoveisFaltantes}</div>									 										
+											<td width="10%" align="center">
+										 		<div id="div-em-campo-${arquivoTextoAtualizacaoCadastral.id}" align="center">${arquivoTextoAtualizacaoCadastral.quantidadeEmCampo}</div>
 											</td>
-											
+
 											<td width="10%">
 												<div align="center">${arquivoTextoAtualizacaoCadastral.localidade.id}</div>
 											</td>
@@ -575,9 +602,9 @@
 												<div align="center">${arquivoTextoAtualizacaoCadastral.codigoSetorComercial}</div>
 											</td>
 											
-											<td width="10%" align="center">
-												<div align="center">${arquivoTextoAtualizacaoCadastral.rota.codigo}</div>													
-											</td>																							
+											<td width="7%" align="center">
+												<div align="center">${arquivoTextoAtualizacaoCadastral.rota.codigo}</div>
+											</td>
 
 											<td width="15%">
 											<div align="center"><c:choose>
