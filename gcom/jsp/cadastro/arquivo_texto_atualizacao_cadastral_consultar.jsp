@@ -495,10 +495,10 @@
 							<td><strong>Resumo da seleção:</strong></td>
 							<td colspan="2">
 								<div id="div-qnt-imoveis-selecionados" style="text-align: right">
-									<strong><span id="qnt-imoveis-selecionados-em-campo">0</span> imóvel(eis) 'EM CAMPO' selecionado(s)</strong><br>
-									<strong><span id="qnt-imoveis-selecionados-revisita">0</span> imóvel(eis) 'REVISITA' selecionado(s)</strong><br>
-									<strong><span id="qnt-imoveis-selecionados-revisao">0</span> imóvel(eis) 'REVISÃO' selecionado(s)</strong><br>
-									<strong><span id="qnt-imoveis-selecionados-em-fiscalizacao">0</span> imóvel(eis) 'EM FISCALIZAÇÃO' selecionado(s)</strong><br>
+									<strong><span id="qnt-imoveis-selecionados-em-campo">0</span> imóvel(eis) 'EM CAMPO'</strong><br>
+									<strong><span id="qnt-imoveis-selecionados-revisita">0</span> imóvel(eis) 'REVISITA'</strong><br>
+									<strong><span id="qnt-imoveis-selecionados-revisao">0</span> imóvel(eis) 'REVISÃO'</strong><br>
+									<strong><span id="qnt-imoveis-selecionados-em-fiscalizacao">0</span> imóvel(eis) 'EM FISCALIZAÇÃO'</strong><br>
 								</div>
 							</td>
 						</tr>
