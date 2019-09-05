@@ -304,9 +304,9 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 		imovelAtualizacaoCadastral = (ImovelAtualizacaoCadastral)session.createQuery(consulta)
 										.setInteger("idImovel", idImovel)
-										.setMaxResults(1).setMaxResults(1).uniqueResult();
+										.setMaxResults(1).uniqueResult();
 		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ap pesquisar imovel atualizacao cadastral");
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imovel atualizacao cadastral");
 		} finally {
 
 			HibernateUtil.closeSession(session);
@@ -1279,8 +1279,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 
             retorno = (List<Integer>) session.createQuery(consulta.toString())
-            		.setInteger("situacao", idSituacao)
-            		.setInteger("idArquivo", idArquivo)
+            		.setParameter("situacao", idSituacao)
+            		.setParameter("idArquivo", idArquivo)
             		.list();
 
         } catch (HibernateException e) {
@@ -1828,24 +1828,162 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         try {
         	consulta.append("select ic.imovel.id from ImovelControleAtualizacaoCadastral ic ")
             		.append("inner join ic.situacaoAtualizacaoCadastral situacao ")
-            		.append("where situacao.id = :situacao ")
-            		.append("and ic.lote = :lote ")
-            		.append("and ic.imovel.id in (select idImovel from ImovelAtualizacaoCadastral where idArquivoTexto = :idArquivo ) ");
-
-
-            retorno = (List<Integer>) session.createQuery(consulta.toString())
-            		.setInteger("situacao", idSituacao)
-            		.setInteger("idArquivo", idArquivo)
-            		.setInteger("lote", lote)
-            		.list();
-
+            		.append("where 1 = 1 ")
+            		.append("and ic.lote = :lote ");
+        	
+        	if (idArquivo != null) {
+        		consulta.append("and ic.imovel.id in (select idImovel from ImovelAtualizacaoCadastral where idArquivoTexto = :idArquivo ) ");
+        	}
+        	
+        	if (idSituacao != null) {
+        		consulta.append("and situacao.id = :situacao ");
+        	}
+            
+            Query query = session.createQuery(consulta.toString())
+            		.setParameter("lote", lote);
+            
+            if (idArquivo != null) {
+            	query.setParameter("idArquivo", idArquivo);
+            }
+            
+            if (idSituacao != null) {
+            	query.setInteger("situacao", idSituacao);
+            }
+            retorno = (List<Integer>) query.list();
         } catch (HibernateException e) {
-            throw new ErroRepositorioException(e, "Erro ao pesquisar tipos ocupantes.");
+            throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis por situao e lote.");
         } finally {
             HibernateUtil.closeSession(session);
         }
 
         return retorno;
+	}
+	
+	public Integer obterQuantidadeImoveisPorSituacaoELote(Integer idArquivo, Integer idSituacao, Integer lote) throws ErroRepositorioException{
+		Integer retorno = null;
+        Session session = HibernateUtil.getSession();
+
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append("select count(distinct ic.imovel.id) from ImovelControleAtualizacaoCadastral ic ")
+            		.append("inner join ic.situacaoAtualizacaoCadastral situacao ")
+            		.append("where 1 = 1 ")
+            		.append("and ic.lote = :lote ");
+        	
+        	if (idArquivo != null) {
+        		consulta.append("and ic.imovel.id in (select idImovel from ImovelAtualizacaoCadastral where idArquivoTexto = :idArquivo ) ");
+        	}
+        	
+        	if (idSituacao != null) {
+        		consulta.append("and situacao.id = :situacao ");
+        	}
+            
+            Query query = session.createQuery(consulta.toString())
+            		.setParameter("lote", lote);
+            
+            if (idArquivo != null) {
+            	query.setParameter("idArquivo", idArquivo);
+            }
+            
+            if (idSituacao != null) {
+            	query.setInteger("situacao", idSituacao);
+            }
+            retorno = (Integer) query.uniqueResult();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar quantidade de imoveis por situao e lote.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+        return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> obterImoveisPorIdArquivoESituacaoELoteParaSorteioComQuantidadeEAleatoriamente(
+			Integer idArquivo, Integer idSituacao, Integer lote, Integer quantidade) throws ErroRepositorioException {
+		List<Integer> retorno = null;
+        Session session = HibernateUtil.getSession();
+
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append("select ic.imov_id as imov_id ")
+            		.append("from atualizacaocadastral.imovel_controle_atlz_cad ic ")
+            		.append("inner join cadastro.imovel_atlz_cadastral a on a.imov_id = ic.imov_id ")
+            		.append("left join atualizacaocadastral.visita v on v.icac_id = ic.icac_id ")
+            		.append("left join cadastro.cadastro_ocorrencia oc on oc.cocr_id = ic.cocr_id ")
+            		.append("where 1 = 1 ")
+            		.append("and oc.cocr_icvalidacao <> 2 ") // Com ocorrencia nao impeditiva
+            		.append("and ic.siac_id = :situacao ")
+            		.append("and ic.icac_lote = :lote ")
+            		.append("and a.txac_id = :idArquivo ")
+            		.append("group by ic.icac_id ")
+            		.append("having count(v.icac_id) < 3 ") // Com menos de 3 visitas
+            		.append("order by random() limit " + quantidade); // Aleatorios de acordo com a quantidade
+        	
+            Query query = session.createSQLQuery(consulta.toString())
+            		.addScalar("imov_id", Hibernate.INTEGER)
+            		.setParameter("situacao", idSituacao)
+            		.setParameter("lote", lote)
+            		.setParameter("idArquivo", idArquivo);
+            
+            retorno = (List<Integer>) query.list();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis para sorteio por lote e arquivo.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+        return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> obterImoveisPorLote(Integer lote) throws ErroRepositorioException {
+		List<Integer> retorno = null;
+        Session session = HibernateUtil.getSession();
+
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append("select ic.imovel.id from ImovelControleAtualizacaoCadastral ic ")
+            		.append("inner join ic.situacaoAtualizacaoCadastral situacao ")
+            		.append("where 1 = 1 ")
+            		.append("and ic.lote = :lote ");
+        	
+            Query query = session.createQuery(consulta.toString())
+            		.setInteger("lote", lote);
+            
+            retorno = (List<Integer>) query.list();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis por lote.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> obterIdsArquivosPorLote(Integer lote) throws ErroRepositorioException {
+		List<Integer> retorno = null;
+		Session session = HibernateUtil.getSession();
+
+        StringBuilder consulta = new StringBuilder();
+        try {
+        	consulta.append("select distinct a.txac_id as txac_id ")
+        			.append("from atualizacaocadastral.imovel_controle_atlz_cad ic ")
+            		.append("inner join cadastro.imovel_atlz_cadastral a on a.imov_id = ic.imov_id ")
+            		.append("where 1 = 1 ")
+            		.append("and ic.icac_lote = :lote ");
+        	
+            Query query = session.createSQLQuery(consulta.toString())
+            		.addScalar("txac_id", Hibernate.INTEGER)
+            		.setParameter("lote", lote);
+            
+            retorno = (List<Integer>) query.list();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar ids dos arquivos por lote.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+		return retorno;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -130,13 +130,10 @@
   	    return retorno;
     }
     
-    function gerarZip(url) {
+    function gerarZipFiscalizacao(url) {
 		var form = document.forms[0];
-		
-		if(CheckboxNaoVazio(document.forms[0].idsRegistros)){
-			form.action = url;
-			form.submit();
-		}
+		form.action = url;
+		form.submit();
 	}
 
     function gerarZipRevisita(url) {
@@ -483,7 +480,7 @@
 						<tr>
 							<td colspan="2">
 								<gsan:controleAcessoBotao name="Button" value="Rota(s) para Revisão" onclick="javascript:gerarZip('retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
-								<gsan:controleAcessoBotao name="Button" value="Rota(s) para Fiscalização" onclick="javascript:gerarZip('retornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
+								<gsan:controleAcessoBotao name="Button" value="Rota(s) para Fiscalização" onclick="javascript:gerarZipFiscalizacao('retornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
 							</td>
 						</tr>
 

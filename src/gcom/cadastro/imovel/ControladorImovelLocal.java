@@ -365,6 +365,8 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public Collection<Subcategoria> obterQuantidadeEconomiasSubCategoria(Integer idImovel) throws ControladorException;
 
 	public Imovel pesquisarImovel(Integer idImovel) throws ControladorException;
+	
+	public Collection<Imovel> pesquisarImoveis(Collection<Integer> idsImoveis) throws ControladorException;
 
 	public void atualizarLogradouroCep(LogradouroCep logradouroCepAntigo, LogradouroCep logradouroCepNovo) throws ControladorException;
 

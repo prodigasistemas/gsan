@@ -9573,6 +9573,22 @@ public class ControladorImovelSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	/**
+	 * Pesquisa imoveis por id, ate no maximo 1000 ids
+	 * 
+	 * @param idsImoveis
+	 * @return
+	 * @throws ControladorException
+	 */
+	public Collection<Imovel> pesquisarImoveis(Collection<Integer> idsImoveis) throws ControladorException {
+		try {
+			return this.repositorioImovel.pesquisarImoveis(idsImoveis);
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 
 	/**
 	 * Atualiza logradouroCep de um ou mais imóveis

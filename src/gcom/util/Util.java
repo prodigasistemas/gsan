@@ -4683,7 +4683,9 @@ public class Util {
 	 * @author Marlon Patrick
 	 * @date 11/08/2009
 	 * 
+	 * Utilizar {@code CollectionUtil.ehVazia} no lugar
 	 */
+	@Deprecated
 	public static boolean isVazioOrNulo(Collection<? extends Object> colecao) {
 
 		return (colecao == null || colecao.isEmpty());
@@ -6221,6 +6223,10 @@ public class Util {
 			sorteados.add(listaIds.get(i));
 		}
 		return sorteados;
+	}
+    
+    public static int calcularQuantidadeFinalAPartirDoPercentual(int total, double percentual) {
+		return (int) Math.ceil((total * percentual) / 100.0); 
 	}
     
     public static Integer setValorInteiro(String valor) {

@@ -330,6 +330,8 @@ public interface IRepositorioImovel {
 	public Collection pesquisarImovelSubcategorias(Integer idImovel) throws ErroRepositorioException;
 
 	public Imovel pesquisarImovel(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection<Imovel> pesquisarImoveis(Collection<Integer> idsImoveis) throws ErroRepositorioException;
 
 	public void atualizarLogradouroBairro(LogradouroBairro logradouroBairroAntigo, LogradouroBairro logradouroBairroNovo) throws ErroRepositorioException;
 

@@ -19056,6 +19056,57 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 		return imovel;
 	}
+	
+	public Collection<Imovel> pesquisarImoveis(Collection<Integer> idsImoveis) throws ErroRepositorioException {
+
+		Collection<Imovel> imoveis = null;
+		StringBuilder consulta = new StringBuilder();
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			consulta.append("SELECT imov FROM Imovel imov ")
+		      .append(" LEFT JOIN FETCH imov.imovelPerfil imovelPerfil ")
+		      .append(" LEFT JOIN FETCH imov.localidade lo")
+		      .append(" LEFT JOIN FETCH lo.gerenciaRegional geRe")
+		      .append(" LEFT JOIN FETCH imov.setorComercial sc")
+		      .append(" LEFT JOIN FETCH imov.quadra qu")
+		      .append(" LEFT JOIN FETCH imov.quadraFace qdfa")
+		      .append(" LEFT JOIN FETCH qu.rota rota")
+		      .append(" LEFT JOIN FETCH imov.logradouroBairro logBairro")
+		      .append(" LEFT JOIN FETCH logBairro.bairro bairro")
+		      .append(" LEFT JOIN FETCH bairro.municipio")
+		      .append(" LEFT JOIN FETCH imov.ligacaoEsgoto lesg")
+		      .append(" LEFT JOIN FETCH imov.ligacaoEsgotoSituacao lest")
+		      .append(" LEFT JOIN FETCH imov.ligacaoAgua lagu")
+		      .append(" LEFT JOIN FETCH imov.ligacaoAguaSituacao last")
+		      .append(" LEFT JOIN FETCH imov.fonteAbastecimento ftab")
+		      .append(" LEFT JOIN FETCH lagu.hidrometroInstalacaoHistorico hih")
+		      .append(" LEFT JOIN FETCH hih.hidrometroLocalInstalacao hil")
+		      .append(" LEFT JOIN FETCH hih.hidrometroProtecao hip")
+		      .append(" LEFT JOIN FETCH hih.hidrometro hid")
+		      .append(" LEFT JOIN FETCH hid.hidrometroMarca him")
+		      .append(" LEFT JOIN FETCH hid.hidrometroCapacidade hic")
+		      .append(" LEFT JOIN FETCH imov.cadastroOcorrencia co")
+		      .append(" LEFT JOIN FETCH imov.cobrancaSituacaoTipo cbst")
+		      .append(" LEFT JOIN FETCH imov.imovelSubcategorias subcategorias ")
+		      .append(" INNER JOIN FETCH imov.imovelContaEnvio icte ")
+		      .append(" LEFT JOIN FETCH hih.hidrometro")
+		      .append(" LEFT JOIN FETCH imov.funcionario ")
+		      .append(" LEFT JOIN FETCH imov.imovelCondominio imovelCondominio")
+		      .append(" WHERE  imov.id in (:idsImoveis)");
+			
+			imoveis = session.createQuery(consulta.toString())
+					.setParameterList("idsImoveis", idsImoveis)
+					.setMaxResults(1000).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return imoveis;
+	}
 
 	/**
 	 * 

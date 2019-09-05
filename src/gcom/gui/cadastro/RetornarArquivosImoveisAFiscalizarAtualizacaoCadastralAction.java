@@ -1,11 +1,5 @@
 package gcom.gui.cadastro;
 
-import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
-import gcom.gui.ActionServletException;
-import gcom.gui.GcomAction;
-import gcom.tarefa.TarefaException;
-import gcom.util.ZipUtil;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,13 +16,20 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
+import gcom.gui.ActionServletException;
+import gcom.gui.GcomAction;
+import gcom.tarefa.TarefaException;
+import gcom.util.CollectionUtil;
+import gcom.util.ZipUtil;
+
 public class RetornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction extends GcomAction {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 		ConsultarArquivoTextoAtualizacaoCadastralActionForm form = (ConsultarArquivoTextoAtualizacaoCadastralActionForm) actionForm;
 
 		int percentualAleatorios = 0;
-		if (!form.getPercentualAleatorios().equals("") && !form.getPercentualAleatorios().equals("0")) {
+ 		if (!form.getPercentualAleatorios().equals("") && !form.getPercentualAleatorios().equals("0")) {
 			percentualAleatorios = Integer.parseInt(form.getPercentualAleatorios()); 
 		}
 		
@@ -45,7 +46,7 @@ public class RetornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction extend
 		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().gerarArquivosFiscalizacaoAtualizacaoCadastral(
 				getIdsArquivos(form), percentualAleatorios, lote, idEmpresa);
 
-		if (listaArquivoTexto != null && !listaArquivoTexto.isEmpty()) {
+		if (CollectionUtil.naoEhVazia(listaArquivoTexto)) {
 			try {
 				String nomeArquivoZIP = getNomeArquivo(form.getIdLocalidade());
 				File arquivoZIP = new File(nomeArquivoZIP);
@@ -63,6 +64,8 @@ public class RetornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction extend
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 				throw new TarefaException("Erro ao gerar o arquivo txt", e);
+			} finally {
+				
 			}
 		} else {
 			throw new ActionServletException("atencao.arquivo_fiscalizacao_atualizacao_cadastral_vazio");
@@ -74,8 +77,10 @@ public class RetornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction extend
 	private List<Integer> getIdsArquivos(ConsultarArquivoTextoAtualizacaoCadastralActionForm form) {
 		List<Integer> ids = new ArrayList<Integer>();
 
-		for (String id : form.getIdsRegistros()) {
-			ids.add(Integer.parseInt(id));
+		if (form.getIdsRegistros() != null && form.getIdsRegistros().length > 0) {
+			for (String id : form.getIdsRegistros()) {
+				ids.add(Integer.parseInt(id));
+			}
 		}
 		return ids;
 	}

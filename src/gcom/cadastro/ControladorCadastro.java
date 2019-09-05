@@ -258,6 +258,7 @@ import gcom.seguranca.acesso.usuario.FiltroUsuario;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
+import gcom.util.CollectionUtil;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
@@ -6803,15 +6804,16 @@ public class ControladorCadastro extends ControladorComum {
 			while (imovelFiltradoIterator.hasNext()) {
 
 				Integer idImovel = (Integer) imovelFiltradoIterator.next();
+				Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
 
 				Collection colecaoClienteImovel = repositorioClienteImovel.pesquisarClienteImovelAtualizacaoCadastral(idImovel);
 
 				// REGISTRO_TIPO_01(Dados do cliente)
-				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoCliente(colecaoClienteImovel, idImovel));
+				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoCliente(colecaoClienteImovel, imovel));
 				qtdRegistro = qtdRegistro + 1;
 
 				// REGISTRO_TIPO_02(Dados do imóvel)
-				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoImovel(idImovel));
+				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoImovel(imovel));
 				qtdRegistro = qtdRegistro + 1;
 
 				Collection<ImovelRamoAtividade> colecaoImovelRamoAtividade = getControladorImovel().pesquisarRamoAtividadeDoImovel(idImovel);
@@ -6823,7 +6825,7 @@ public class ControladorCadastro extends ControladorComum {
 				}
 
 				ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(idImovel);
-				Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
+				
 
 				// REGISTRO_TIPO_04 (Dados Serviços)
 				arquivoTexto.append(new GeradorRegistroServicos(imovelAtualizacaoCadastral, imovel).build());
@@ -6859,22 +6861,32 @@ public class ControladorCadastro extends ControladorComum {
 		}
 	}
 
-	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, Integer idArquivoTexto, String tipoArquivo, Integer idEmpresa) throws ControladorException {
+	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastral(List<Integer> idsImoveis, 
+			Integer idArquivoTexto, String tipoArquivo, Integer idEmpresa) throws ControladorException {
 		try {
 			StringBuilder builder = new StringBuilder();
 			int qtdRegistro = 0;
+			Collection<Imovel> imoveisCollection = new ArrayList<Imovel>(100);
 
 			ArquivoTextoAtualizacaoCadastral arquivo = pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTexto);
-
-			for (Integer idImovel : idsImoveis) {
-				builder.append(this.gerarArquivoTextoRegistroTipoCliente(repositorioClienteImovel.pesquisarClienteImovelAtualizacaoCadastral(idImovel), idImovel));
+			if (CollectionUtil.naoEhVazia(idsImoveis)) {
+				List<List<Integer>> listasDeIds = CollectionUtil.particionarListaNoTamanhoDeMilEmMil(idsImoveis);
+				for (List<Integer> lista : listasDeIds) {
+					imoveisCollection.addAll(getControladorImovel().pesquisarImoveis(lista));
+				}
+			}
+			
+			for (Imovel imovel : imoveisCollection) {
+				Integer idImovel = imovel.getId();
+				builder.append(this.gerarArquivoTextoRegistroTipoCliente(
+						repositorioClienteImovel.pesquisarClienteImovelAtualizacaoCadastral(idImovel), imovel));
 				qtdRegistro += 1;
 
-				builder.append(this.gerarArquivoTextoRegistroTipoImovel(idImovel));
+				builder.append(this.gerarArquivoTextoRegistroTipoImovel(imovel));
 				qtdRegistro += 1;
 
 				Collection<ImovelRamoAtividade> colecaoImovelRamoAtividade = getControladorImovel().pesquisarRamoAtividadeDoImovel(idImovel);
-				if (!Util.isVazioOrNulo(colecaoImovelRamoAtividade)) {
+				if (CollectionUtil.naoEhVazia(colecaoImovelRamoAtividade)) {
 					builder.append(this.gerarArquivoTextoRegistroTipoRamoAtividadeImovel(colecaoImovelRamoAtividade, idImovel));
 					qtdRegistro += colecaoImovelRamoAtividade.size();
 				}
@@ -6885,8 +6897,6 @@ public class ControladorCadastro extends ControladorComum {
 					imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.REVISITA));
 					getControladorUtil().atualizar(imovelControle);
 				}
-
-				Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
 
 				builder.append(new GeradorRegistroServicos(imovelAtualizacaoCadastral, imovel).build());
 				qtdRegistro += 1;
@@ -7169,10 +7179,10 @@ public class ControladorCadastro extends ControladorComum {
 	 * @param idImovel
 	 * @throws ControladorException
 	 */
-	public StringBuilder gerarArquivoTextoRegistroTipoImovel(Integer idImovel) throws ControladorException {
-		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(idImovel);
+	public StringBuilder gerarArquivoTextoRegistroTipoImovel(Imovel imovel) throws ControladorException {
+		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(imovel.getId());
 
-		Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
+//		Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
 
 		StringBuilder arquivoTextoRegistroTipoImovel = new StringBuilder();
 
@@ -7250,7 +7260,7 @@ public class ControladorCadastro extends ControladorComum {
 		arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(9, imovelAtualizacaoCadastral.getIdLogradouro().toString()));
 
 		// Subcategorias
-		Collection colecaoImovelSubcategoria = getControladorAtualizacaoCadastral().pesquisarImovelSubcategoriaAtualizacaoCadastral(idImovel, null, null);
+		Collection colecaoImovelSubcategoria = getControladorAtualizacaoCadastral().pesquisarImovelSubcategoriaAtualizacaoCadastral(imovel.getId(), null, null);
 
 		Iterator imovelSubcategoriaIterator = colecaoImovelSubcategoria.iterator();
 
@@ -7558,7 +7568,8 @@ public class ControladorCadastro extends ControladorComum {
 
             Map<Integer, ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> hashQuantidades = new HashMap<Integer, ImovelTipoOcupanteQuantidadeAtualizacaoCadastral>();
 
-            Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> quantidadesOcupantes = repositorioCadastro.recuperarTipoOcupantesParaAtualizacaoCadastral(idImovel);
+            Collection<ImovelTipoOcupanteQuantidadeAtualizacaoCadastral> quantidadesOcupantes =
+            		repositorioCadastro.recuperarTipoOcupantesParaAtualizacaoCadastral(imovel.getId());
 
             for (ImovelTipoOcupanteQuantidadeAtualizacaoCadastral item : quantidadesOcupantes) {
                 hashQuantidades.put(item.getTipoOcupante().getId(), item);
@@ -7596,8 +7607,10 @@ public class ControladorCadastro extends ControladorComum {
 	 * @throws ControladorException
 	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoCliente(
-			Collection colecaoClienteImovel, Integer idImovel)
+			Collection colecaoClienteImovel, Imovel imovel)
 			throws ControladorException {
+		
+		Integer idImovel = imovel.getId();
 
 		StringBuilder arquivoTextoRegistroTipoCliente = new StringBuilder();
 
@@ -7606,8 +7619,6 @@ public class ControladorCadastro extends ControladorComum {
 
 		// IMOVEL
 		arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, idImovel.toString()));
-
-		Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
 
 		Localidade locaImovel = null;
 		GerenciaRegional gereRegional = null;
@@ -8599,10 +8610,8 @@ public class ControladorCadastro extends ControladorComum {
 			String codigoSetorComercial, String idAgenteComercial, String idSituacaoTransmissao, String exibicao) throws ControladorException {
 
 		try {
-			List<ArquivoTextoAtualizacaoCadastral> colecao = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
+			return repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
 					idEmpresa, idLocalidade, codigoSetorComercial, idAgenteComercial, idSituacaoTransmissao, exibicao);
-
-			return colecao;
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}

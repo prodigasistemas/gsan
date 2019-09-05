@@ -117,6 +117,15 @@ public interface IRepositorioAtualizacaoCadastral {
 	public List<Integer> obterImoveisPorSituacao(Integer idArquivo, Integer idSituacao) throws ErroRepositorioException;
 
 	public List<Integer> obterImoveisPorSituacaoELote(Integer idArquivo, Integer idSituacao, Integer lote) throws ErroRepositorioException;
+	
+	public Integer obterQuantidadeImoveisPorSituacaoELote(Integer idArquivo, Integer idSituacao, Integer lote) throws ErroRepositorioException;
+	
+	public List<Integer> obterImoveisPorIdArquivoESituacaoELoteParaSorteioComQuantidadeEAleatoriamente(
+			Integer idArquivo, Integer idSituacao, Integer lote, Integer quantidade) throws ErroRepositorioException;
+	
+	public List<Integer> obterImoveisPorLote(Integer lote) throws ErroRepositorioException;
+	
+	public List<Integer> obterIdsArquivosPorLote(Integer lote) throws ErroRepositorioException;
 
 	public TabelaColunaAtualizacaoCadastral obterTabelaColuna(TabelaColuna coluna, Integer idImovel, String complemento) throws ErroRepositorioException;
 	

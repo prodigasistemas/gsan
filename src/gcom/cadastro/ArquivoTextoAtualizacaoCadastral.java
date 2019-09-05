@@ -4,11 +4,12 @@ import gcom.cadastro.localidade.Localidade;
 import gcom.micromedicao.Leiturista;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.SituacaoTransmissaoLeitura;
+import gcom.util.Conversivel;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class ArquivoTextoAtualizacaoCadastral implements Serializable {
+public class ArquivoTextoAtualizacaoCadastral implements Serializable, Conversivel {
 
 	private static final long serialVersionUID = 1L;
 

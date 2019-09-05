@@ -82,6 +82,7 @@ import gcom.seguranca.transacao.Tabela;
 import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaColuna;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
+import gcom.util.CollectionUtil;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
@@ -1584,15 +1585,21 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		try {
 			Integer situacao = SituacaoAtualizacaoCadastral.EM_FISCALIZACAO;
 			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
+			
+			if (CollectionUtil.ehVazia(idsArquivos)) {
+				idsArquivos = repositorioAtualizacaoCadastral.obterIdsArquivosPorLote(lote);
+			}
+			
 			for (Integer idArquivo : idsArquivos) {
 				List<Integer> imoveis = repositorioAtualizacaoCadastral.obterImoveisPorSituacaoELote(idArquivo, situacao, lote);
 				List<Integer> sorteados = this.sortearImoveis(idArquivo, SituacaoAtualizacaoCadastral.PRE_APROVADO, percentualAleatorios, lote);
-
+				
 				ArquivoTextoAtualizacaoCadastral arquivo = obterArquivoComImoveisSorteados(imoveis, sorteados, idArquivo, 
 						ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_FISCALIZACAO, situacao, idEmpresa);
 				
-				if (arquivo != null)
+				if (arquivo != null) {
 					arquivos.add(arquivo);
+				}
 			}
 
 			return arquivos;
@@ -1606,12 +1613,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		try {
 			ArquivoTextoAtualizacaoCadastral arquivo = null;
 			
-			if (imoveis != null && !imoveis.isEmpty()) {
-				imoveis.addAll(sorteados);
+			imoveis.addAll(sorteados);
+			
+			if (CollectionUtil.naoEhVazia(imoveis)) {
 				arquivo = getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveis, idArquivo, tipoArquivo, idEmpresa);
 				
-				if (!sorteados.isEmpty())
+				if (CollectionUtil.naoEhVazia(sorteados)) {
 					repositorioAtualizacaoCadastral.atualizarSituacaoConjuntoImovelControle(situacao, sorteados);
+				}
 			}
 			return arquivo;
 		} catch (Exception e) {
@@ -1652,13 +1661,17 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		List<Integer> sorteados = new ArrayList<Integer>();
 		List<Integer> imoveis = new ArrayList<Integer>();
 		try {
-			if (lote == null)
+			if (lote == null) {
 				imoveis = repositorioAtualizacaoCadastral.obterImoveisPorSituacao(idArquivo, situacao);
-			else
-				imoveis = repositorioAtualizacaoCadastral.obterImoveisPorSituacaoELote(idArquivo, situacao, lote);
-			
-			Collections.shuffle(imoveis);
-			sorteados = Util.sortear(imoveis, percentual);
+				Collections.shuffle(imoveis);
+				sorteados = Util.sortear(imoveis, percentual);
+			} else {
+				int total = repositorioAtualizacaoCadastral.obterQuantidadeImoveisPorSituacaoELote(idArquivo, situacao, lote);
+				int quantidade = Util.calcularQuantidadeFinalAPartirDoPercentual(total, percentual);
+				sorteados = 
+						repositorioAtualizacaoCadastral.obterImoveisPorIdArquivoESituacaoELoteParaSorteioComQuantidadeEAleatoriamente(
+								idArquivo, situacao, lote, quantidade);
+			}
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.gerar.arquivo.atualizacao.cadastral", e);
 		}
