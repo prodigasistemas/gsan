@@ -4621,7 +4621,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 						+ " WHERE ic2.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.EM_REVISAO + ")";
 			}
 
-			consulta += " order by localidade.id, setorComercial.codigo, rota.codigo, txac.descricaoArquivo ";
+			consulta += " order by localidade.id, setorComercial.codigo, rota.codigo, txac.id ";
 
 			List<Object[]> resultado = session.createQuery(consulta).list();
 			if (resultado != null && !resultado.isEmpty()) {
