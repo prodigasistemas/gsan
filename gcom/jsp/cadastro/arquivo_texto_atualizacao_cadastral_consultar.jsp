@@ -129,6 +129,16 @@
   		
   	    return retorno;
     }
+
+		function gerarZip(url) {
+			var form = document.forms[0];
+			
+			if(CheckboxNaoVazio(document.forms[0].idsRegistros)){
+				form.action = url;
+				form.submit();
+			}
+		}
+
     
     function gerarZipFiscalizacao(url) {
 		var form = document.forms[0];
