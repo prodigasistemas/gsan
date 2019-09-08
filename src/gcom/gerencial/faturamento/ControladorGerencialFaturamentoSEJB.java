@@ -1100,7 +1100,7 @@ public class ControladorGerencialFaturamentoSEJB extends ControladorComum {
 					if (obj instanceof Object[]) {
 						Object[] retorno = (Object[]) obj;
 						idImovelError = (Integer) retorno[01];
-
+						
 						Integer quantidadeEconomias = new Integer((Short) retorno[26]);
 						if (quantidadeEconomias == null){
 							quantidadeEconomias = 0;
@@ -1567,6 +1567,8 @@ public class ControladorGerencialFaturamentoSEJB extends ControladorComum {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
 					idUnidadeIniciada, false);
 		} catch (Exception ex) {
+			System.out.println("IMOVEL COM ERRO: " + idImovelError);
+			ex.printStackTrace();
 			logger.error(" ERRO NO SETOR " + idSetor+" PROCESSANDO RESUMO FATURAMENTO AGUA ESGOTO", ex);
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,	idUnidadeIniciada, true);
 			throw new EJBException(ex);
