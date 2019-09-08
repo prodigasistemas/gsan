@@ -9559,6 +9559,8 @@ public class ControladorGerencialFaturamentoSEJB extends ControladorComum {
     	while (iterCreditoARealizarCategoria.hasNext()) {
     		
 			CreditoARealizarCategoria creditoARealizarCategoria = (CreditoARealizarCategoria) iterCreditoARealizarCategoria.next();
+			System.out.println("Crar_id: " + creditoARealizarCategoria.getCreditoARealizar().getId());
+			System.out.println("  Catg_id: " + creditoARealizarCategoria.getCategoria().getId());
 			
 			BigDecimal valorResidualCategoria = (valorResidual.divide(new BigDecimal(qtEconomias),2, BigDecimal.ROUND_HALF_UP))
 					.multiply(new BigDecimal(creditoARealizarCategoria.getQuantidadeEconomia()));
