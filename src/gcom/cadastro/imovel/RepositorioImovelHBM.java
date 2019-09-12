@@ -1,5 +1,31 @@
 package gcom.cadastro.imovel;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.JDBCException;
+import org.hibernate.NonUniqueResultException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.exception.DataException;
+import org.jboss.logging.Logger;
+
 import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
@@ -7,7 +33,6 @@ import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoAgua;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoEsgoto;
-import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -58,32 +83,6 @@ import gcom.util.HibernateUtil;
 import gcom.util.RemocaoInvalidaException;
 import gcom.util.Util;
 import gcom.util.filtro.GeradorHQLCondicional;
-
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.JDBCException;
-import org.hibernate.NonUniqueResultException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.exception.DataException;
-import org.jboss.logging.Logger;
 
 public class RepositorioImovelHBM implements IRepositorioImovel {
 
@@ -19089,11 +19088,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		      .append(" LEFT JOIN FETCH hid.hidrometroCapacidade hic")
 		      .append(" LEFT JOIN FETCH imov.cadastroOcorrencia co")
 		      .append(" LEFT JOIN FETCH imov.cobrancaSituacaoTipo cbst")
-		      .append(" LEFT JOIN FETCH imov.imovelSubcategorias subcategorias ")
-		      .append(" INNER JOIN FETCH imov.imovelContaEnvio icte ")
 		      .append(" LEFT JOIN FETCH hih.hidrometro")
-		      .append(" LEFT JOIN FETCH imov.funcionario ")
-		      .append(" LEFT JOIN FETCH imov.imovelCondominio imovelCondominio")
 		      .append(" WHERE  imov.id in (:idsImoveis)");
 			
 			imoveis = session.createQuery(consulta.toString())
