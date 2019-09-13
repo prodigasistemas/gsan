@@ -19087,8 +19087,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		      .append(" LEFT JOIN FETCH hid.hidrometroMarca him")
 		      .append(" LEFT JOIN FETCH hid.hidrometroCapacidade hic")
 		      .append(" LEFT JOIN FETCH imov.cadastroOcorrencia co")
-		      .append(" LEFT JOIN FETCH imov.cobrancaSituacaoTipo cbst")
-		      .append(" LEFT JOIN FETCH hih.hidrometro")
 		      .append(" WHERE  imov.id in (:idsImoveis)");
 			
 			imoveis = session.createQuery(consulta.toString())
