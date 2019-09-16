@@ -34,7 +34,7 @@ public class RepositorioDebitoACobrar{
 		StringBuilder sql = new StringBuilder();
 		sql.append("select dc from DebitoACobrar dc ")
 		.append(" inner join fetch dc.debitoTipo dt ")
-		.append(" left join dc.parcelamento parc ")
+		.append(" left join fetch dc.parcelamento parc ")
 		.append(" where dc.imovel.id = :idImovel ")
 		.append(" and dc.numeroPrestacaoCobradas < (dc.numeroPrestacaoDebito - coalesce(dc.numeroParcelaBonus, 0))")
 		.append(" and dc.dataRevisao is null")
