@@ -1082,12 +1082,24 @@ public class ControladorImovelSEJB extends ControladorComum {
 						
 						getControladorUtil().atualizar(clienteImovel);
 						
-						if (clienteImovel.isClienteResponsavel() || clienteImovel.isClienteUsuario())
+						if ((clienteImovel.isClienteResponsavel() || clienteImovel.isClienteUsuario()) 
+								&& !colecaoPossuiMesmoCliente(inserirImovelHelper.getClientes(), clienteImovel))
 							excluirDebitoAutomaticoClienteImovel(clienteImovel, inserirImovelHelper);
 						
 					}
 			}
 		}
+	}
+	
+	private boolean colecaoPossuiMesmoCliente(Collection<ClienteImovel> clientes, ClienteImovel clienteImovelExcluir) {
+		
+		for (ClienteImovel clienteImovelNovo : clientes) {
+			if (clienteImovelNovo.getCliente().getId().equals(clienteImovelExcluir.getCliente().getId())) { 
+					//&& clienteImovelNovo.getClienteRelacaoTipo().getId() == clienteImovelExcluir.getClienteRelacaoTipo().getId()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -16126,6 +16138,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 		
 		if (debitoAutomatico != null ) {
 			debitoAutomatico.setDataExclusao(new Date());
+			debitoAutomatico.setUsuarioExclusao(inserirImovelHelper.getUsuario());
 			debitoAutomatico.setUltimaAlteracao(new Date());
 			getControladorUtil().atualizar(debitoAutomatico);
 			

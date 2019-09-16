@@ -2,8 +2,11 @@ package gcom.arrecadacao.debitoautomatico;
 
 import gcom.arrecadacao.banco.Agencia;
 import gcom.cadastro.imovel.Imovel;
+import gcom.seguranca.acesso.usuario.Usuario;
+
 import java.io.Serializable;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class DebitoAutomatico implements Serializable {
@@ -16,6 +19,7 @@ public class DebitoAutomatico implements Serializable {
     private Date dataInclusaoNovoDebitoAutomatico;
     private Date dataExclusao;
     private Date ultimaAlteracao;
+    private Usuario usuarioExclusao;
 
     private Agencia agencia;
     private Imovel imovel;
@@ -106,4 +110,12 @@ public class DebitoAutomatico implements Serializable {
         return new ToStringBuilder(this).append("id", getId()).toString();
     }
 
+	public Usuario getUsuarioExclusao() {
+		return usuarioExclusao;
+	}
+
+	public void setUsuarioExclusao(Usuario usuarioExclusao) {
+		this.usuarioExclusao = usuarioExclusao;
+	}
+    
 }

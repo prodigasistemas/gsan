@@ -38,9 +38,15 @@
 		<many-to-one name="agencia" class="gcom.arrecadacao.banco.Agencia" not-null="true">
 			<column name="agen_id"/>
 		</many-to-one>
+		
 		<!-- bi-directional many-to-one association to Imovel -->
 		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
 			<column name="imov_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="usuarioExclusao" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="deba_idusuarioexclusao"/>
 		</many-to-one>
 	</class>
 </hibernate-mapping>
