@@ -8,7 +8,7 @@ public class GeradorRegistroLocalizacao {
     public GeradorRegistroLocalizacao(Integer idImovel) {
         this.idImovel = idImovel;
     }
-
+    
     public StringBuilder build() {
         StringBuilder linha = new StringBuilder();
 
@@ -23,7 +23,7 @@ public class GeradorRegistroLocalizacao {
 
         // Longitude
         linha.append(Util.adicionarZerosEsquedaNumero(15, "0"));
-
+        
         linha.append(System.getProperty("line.separator"));
 
         return linha;

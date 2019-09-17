@@ -115,6 +115,9 @@ public interface IRepositorioAtualizacaoCadastral {
 	public Collection<IImovelTipoOcupanteQuantidade> obterImovelQuantidadesOcupantesParaAtualizar(Integer idImovel) throws ErroRepositorioException;
 
 	public List<Integer> obterImoveisPorSituacao(Integer idArquivo, Integer idSituacao) throws ErroRepositorioException;
+	
+	public List<ImovelControleAtualizacaoCadastral> obterImoveisPorArquivoSituacaoLoteTrazendoInformativos(Integer idArquivo, List<Integer> situacoes, 
+			Date dataUltimaTransmissao) throws ErroRepositorioException;
 
 	public List<Integer> obterImoveisPorSituacaoELote(Integer idArquivo, Integer idSituacao, Integer lote) throws ErroRepositorioException;
 	

@@ -181,7 +181,6 @@
 	function atualizarPorSituacao(situacao, checkbox) {
 		var quantidadeAtual = parseInt($('#qnt-imoveis-selecionados-' + situacao ).text(), 10);
 		var idTx = '#div-' + situacao + '-' + checkbox.value;
-		console.log("ID => " + idTx);
 		var quantidadeRegistro = parseInt($('#div-' + situacao + '-' + checkbox.value).text(), 10);
 		var novaQuantidade = 0;
 		if (checkbox.checked) {
