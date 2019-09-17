@@ -32,6 +32,8 @@ public class ImovelControleAtualizacaoCadastral {
 	private Date dataReprovacaoLote;
 	
 	private ImovelAtualizacaoCadastral imovelAtualizacaoCadastral;
+	private Integer informativo;
+	private Integer quantidadeVisitas;
 
 	public ImovelControleAtualizacaoCadastral() {
 		super();
@@ -204,5 +206,25 @@ public class ImovelControleAtualizacaoCadastral {
 
 	public void setImovelAtualizacaoCadastral(ImovelAtualizacaoCadastral imovelAtualizacaoCadastral) {
 		this.imovelAtualizacaoCadastral = imovelAtualizacaoCadastral;
+	}
+	
+	public Integer getInformativo() {
+		return informativo;
+	}
+
+	public void setInformativo(Integer informativo) {
+		this.informativo = informativo;
+	}
+	
+	public Integer getQuantidadeVisitas() {
+		return quantidadeVisitas;
+	}
+
+	public void setQuantidadeVisitas(Integer quantidadeVisitas) {
+		this.quantidadeVisitas = quantidadeVisitas;
+	}
+
+	public boolean ehInformativo() {
+		return informativo != null && informativo.intValue() == 1;
 	}
 }

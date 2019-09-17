@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -1542,21 +1543,29 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         }
 	}
 
-	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo, Date dataUltimaTransmissao, Integer idEmpresa) throws ControladorException {
+	public List<ArquivoTextoAtualizacaoCadastral> regerarArquivosAtualizacaoCadastral(List<Integer> idsArquivos, String tipoArquivo, 
+			Date dataUltimaTransmissao, Integer idEmpresa) throws ControladorException {
 		try {
 			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
 			for (Integer idArquivo : idsArquivos) {
-				List<Integer> imoveis = obterImoveisParaRegerarArquivo(idArquivo, tipoArquivo, dataUltimaTransmissao);
+				List<ImovelControleAtualizacaoCadastral> imoveisControle = 
+						repositorioAtualizacaoCadastral.obterImoveisPorArquivoSituacaoLoteTrazendoInformativos(idArquivo, definirSituacaoCadastral(tipoArquivo), dataUltimaTransmissao);
 
-				if (imoveis != null && !imoveis.isEmpty()) {
-					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastral(imoveis, idArquivo, tipoArquivo, idEmpresa));
+				if (CollectionUtil.naoEhVazia(imoveisControle)) {
+					arquivos.add(getControladorCadastro().regerarArquivoTextoAtualizacaoCadastralComObjetos(imoveisControle, idArquivo, tipoArquivo, idEmpresa));
 				}
 			}
-
 			return arquivos;
 		} catch (Exception e) {
-			throw new ControladorException("Erro ao regerar Arquivo de Atualiza��o Cadastral", e);
+			throw new ControladorException("Erro ao regerar Arquivo de Atualizacao Cadastral", e);
 		}
+	}
+	
+	private List<Integer> definirSituacaoCadastral(String tipoArquivo) {
+		if (tipoArquivo.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA)) {
+			return Arrays.asList(SituacaoAtualizacaoCadastral.TRANSMITIDO, SituacaoAtualizacaoCadastral.REVISITA);
+		}
+		return Arrays.asList(SituacaoAtualizacaoCadastral.EM_CAMPO);
 	}
 	
 	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosRevisaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualAleatorios, Integer idEmpresa) throws ControladorException {
