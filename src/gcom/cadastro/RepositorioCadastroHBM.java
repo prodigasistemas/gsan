@@ -4588,7 +4588,11 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 							+ "(select count(distinct im.idImovel) from ImovelAtualizacaoCadastral im "
 								+ " inner join im.imovelControleAtualizacaoCadastral ic "
 								+ "	WHERE im.idArquivoTexto = txac.id "
-								+ "	and ic.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.EM_FISCALIZACAO + ") "
+								+ "	and ic.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.EM_FISCALIZACAO + "), "
+							+ "(select count(distinct im.idImovel) from ImovelAtualizacaoCadastral im "
+								+ " inner join im.imovelControleAtualizacaoCadastral ic "
+								+ "	WHERE im.idArquivoTexto = txac.id "
+								+ "	and ic.situacaoAtualizacaoCadastral.id >= " + SituacaoAtualizacaoCadastral.DISPONIVEL + ") "
 							+ "FROM ArquivoTextoAtualizacaoCadastral txac "
 							+ "INNER JOIN FETCH txac.localidade localidade "
 							+ "INNER JOIN FETCH txac.rota rota "
@@ -4632,6 +4636,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					arquivo.setQuantidadeRevisita((Integer) array[3]);
 					arquivo.setQuantidadeRevisao((Integer) array[4]);
 					arquivo.setQuantidadeEmFiscalizacao((Integer) array[5]);
+					arquivo.setQuantidadeDisponivel((Integer) array[6]);
 					retorno.add(arquivo);
 				}
 			}
