@@ -55,6 +55,8 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable, Conversiv
 	private Integer quantidadeRevisao;
 	
 	private Integer quantidadeEmFiscalizacao;
+	
+	private Integer quantidadeDisponivel;
 
 	public ArquivoTextoAtualizacaoCadastral(Integer id, String descricaoArquivo, Integer codigoSetorComercial, Integer numeroQuadraInicial, Integer numeroQuadraFinal, Rota rota, Integer quantidadeImovel,
 			byte[] arquivoTexto, Date ultimaAlteracao, Localidade localidade, Leiturista leiturista, SituacaoTransmissaoLeitura situacaoTransmissaoLeitura, Integer quantidadeImoveisTransmitidos) {
@@ -235,6 +237,15 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable, Conversiv
 	public void setQuantidadeEmFiscalizacao(Integer quantidadeEmFiscalizacao) {
 		this.quantidadeEmFiscalizacao = quantidadeEmFiscalizacao;
 	}
+	
+	public Integer getQuantidadeDisponivel() {
+		return quantidadeDisponivel;
+	}
+
+	public void setQuantidadeDisponivel(Integer quantidadeDisponivel) {
+		this.quantidadeDisponivel = quantidadeDisponivel;
+	}
+	
 
 	public boolean isArquivoRetornoTransmissao() {
 		return tipoRetorno.equals(null) || tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO);
@@ -268,6 +279,10 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable, Conversiv
 	}
 	
 	public Integer getQuantidadeImoveisSemBloqueados() {
-		return getQuantidadeEmCampo() + getQuantidadeImoveisTransmitidos();
-	}
+			if (getQuantidadeEmCampo() > 0 ) {
+				return getQuantidadeEmCampo() + getQuantidadeImoveisTransmitidos();
+				}else {
+				return getQuantidadeDisponivel();
+				}
+		}
 }
