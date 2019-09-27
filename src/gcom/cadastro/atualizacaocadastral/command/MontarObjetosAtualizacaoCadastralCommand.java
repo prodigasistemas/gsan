@@ -354,11 +354,11 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	}
 	
 	private void definirSeImovelFoiAlteradoPelaLojaDuranteRecadastramento(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException {
-		Date dataDaUltimaAlteracaoDoImovel = controladorAtualizacaoCadastral.pesquisarDataDaUltimaAlteracaoDoImovel(matriculaImovel);
-		if (imovelControle != null && dataDaUltimaAlteracaoDoImovel != null) {
-			if (dataDaUltimaAlteracaoDoImovel.compareTo(imovelControle.getDataGeracao()) > 0) {
-				imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.ATUALIZADO_LOJA));
-			}
+		if (imovelControle == null || imovelControle.getImovel() == null || imovelControle.getImovel().getId() == null) {
+			return;
+		}
+		if (controladorAtualizacaoCadastral.verificarSeHouveAlteracaoNoImovelRelevanteParaAtualizacaoCadastral(imovelControle.getImovel().getId())) {
+			imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.ATUALIZADO_LOJA));
 		}
 	}
 }

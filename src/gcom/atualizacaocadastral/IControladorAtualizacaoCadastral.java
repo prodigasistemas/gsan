@@ -135,5 +135,28 @@ public interface IControladorAtualizacaoCadastral {
     
     public List<Visita> obterVisitasPorCoordenadas(String latitude, String longitude) throws ControladorException;
     
+    /**
+     * Retorna a data da ultima alteracao de um imovel utilizando o controle de transacoes efeutas.
+     * Encontra-se depreciado pois existem varias transacoes e muitas irrelevantes para esse comparacao.
+     * 
+     * Utilizar o metodo {@code IControladorAtualizacaoCadastral.verificarSeHouveAlteracaoNoImovelRelevanteParaAtualizacaoCadastral} no lugar.
+     * 
+     * @param idImovel
+     * @return
+     * @throws ControladorException
+     */
+    @Deprecated
     public Date pesquisarDataDaUltimaAlteracaoDoImovel(Integer idImovel) throws ControladorException;
+    
+    /**
+     * Verifica se houve alteracao no cadastral do imovel em atualizacao cadastral quanto a:
+     * - CPF/Cliente/Relacao Cliente
+     * - Quantidade de economias;
+     * - Subcategoria e categorias;
+     * 
+     * @param idImovel
+     * @return
+     * @throws ControladorException
+     */
+    public boolean verificarSeHouveAlteracaoNoImovelRelevanteParaAtualizacaoCadastral(Integer idImovel) throws ControladorException;
 }

@@ -201,5 +201,38 @@ public interface IRepositorioAtualizacaoCadastral {
      * @param idsImoveisControle
      * @throws ErroRepositorioException
      */
-    public void excluirVisitasDosImoveisControle(List<Integer> idsImoveisControle) throws ErroRepositorioException;
+		public void excluirVisitasDosImoveisControle(List<Integer> idsImoveisControle) throws ErroRepositorioException;
+		
+		/*
+     * Compara se um imovel teve alteracao na situacao da agua, na situacao do esgoto 
+     * ou alteracao do hidrometro no seu cadastro, estando ele em atualizacao cadastral 
+     * 
+     * @param idImovel
+     * @return true se houve alteracao, false nos demais casos
+     * @throws ErroRepositorioException
+     */
+    public boolean obterIndicadorSeHouveAlteracaoNaSituacaoAguaEEsgotoEHidrometroDoImovelDuranteAtualizacaoCadastral(Integer idImovel)
+			throws ErroRepositorioException;
+    
+    /**
+     * Compara as informacoes do cadastro com a de atualizacao cadastral, identificando se o imovel teve mudanca no cadastro
+     * quanto a sua categoria, subcategoria ou quantidade de econimias.
+     * 
+     * @param idImovel
+     * @return true se houve alteracao, false nos demais casos
+     * @throws ErroRepositorioException
+     */
+    public boolean obterIndicadorSeHouveAlteracaoNasSubcategoriasEQuantidadesDeEconomiasDoImovelDuranteAtualizacaoCadastral(Integer idImovel)
+			throws ErroRepositorioException;
+    
+    /**
+     * Compara as informacoes do cadastro com a de atualizacao cadastral, identificando se o imovel teve mudanca no cadastro
+     * de cliente, olhando para o id, tipo_relacao e cpf/cnpj  
+     * 
+     * @param idImovel
+     * @return true se houve alteracao, false nos demais casos
+     * @throws ErroRepositorioException
+     */
+    public boolean obterIndicadorSeHouveAlteracaoNosClientesDoImovelDuranteAtualizacaoCadastral(Integer idImovel)
+			throws ErroRepositorioException;
 }

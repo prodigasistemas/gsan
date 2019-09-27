@@ -2703,4 +2703,20 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			throw new ControladorException("Erro ao obter data da ultima alteracao no imovel.", e);
 		}
 	}
+	
+	public boolean verificarSeHouveAlteracaoNoImovelRelevanteParaAtualizacaoCadastral(Integer idImovel) throws ControladorException {
+		try {
+			boolean alteracaoSubcategorias = 
+						repositorioAtualizacaoCadastral.
+							obterIndicadorSeHouveAlteracaoNasSubcategoriasEQuantidadesDeEconomiasDoImovelDuranteAtualizacaoCadastral(idImovel);
+			boolean alteracaoCliente =
+						repositorioAtualizacaoCadastral.
+							obterIndicadorSeHouveAlteracaoNosClientesDoImovelDuranteAtualizacaoCadastral(idImovel);
+
+			return alteracaoSubcategorias || alteracaoCliente;
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException(
+					"Erro ao obter indicadores de alteracoes do imovel relevantes para processo de atualizacao cadastral.", e);
+		}
+	}
 }

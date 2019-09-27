@@ -2769,4 +2769,96 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         }
 	}
 	
+	public boolean obterIndicadorSeHouveAlteracaoNaSituacaoAguaEEsgotoEHidrometroDoImovelDuranteAtualizacaoCadastral(Integer idImovel)
+			throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder consulta = new StringBuilder("select exists( ");
+			consulta.append("select imovel.imov_id, imovel.last_id, imovel.lest_id, hidrometro.hicp_id, instalacao_hist.hili_id, hidrometro.himc_id ");
+			consulta.append("from cadastro.imovel imovel ");
+			consulta.append("inner join atualizacaocadastral.imovel_controle_atlz_cad controle on controle.imov_id = imovel.imov_id ");
+			consulta.append("left join atendimentopublico.ligacao_agua ligagua on ligagua.lagu_id = imovel.imov_id ");
+			consulta.append("left join micromedicao.hidrometro_inst_hist instalacao_hist on ligagua.hidi_id = instalacao_hist.hidi_id ");
+			consulta.append("left join micromedicao.hidrometro hidrometro on hidrometro.hidr_id = instalacao_hist.hidr_id ");
+			consulta.append("where imovel.imov_id = :idImovel ");
+			consulta.append("except ");
+			consulta.append("select imovel.imov_id, imovel.last_id, imovel.lest_id, imovel.hicp_id, imovel.hili_id, imovel.himc_id ");
+			consulta.append("from cadastro.imovel_atlz_cadastral imovel ");
+			consulta.append("where imovel.imov_id = :idImovel) as retorno ");
+
+			return (Boolean) session.createSQLQuery(consulta.toString())
+					.addScalar("retorno", Hibernate.BOOLEAN)
+					.setInteger("idImovel", idImovel)
+					.uniqueResult();
+		} catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro ao recuperar indicador de alteracao no imovel.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public boolean obterIndicadorSeHouveAlteracaoNasSubcategoriasEQuantidadesDeEconomiasDoImovelDuranteAtualizacaoCadastral(Integer idImovel)
+			throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder consulta = new StringBuilder("select exists( ");
+			consulta.append("select imov_sub.imov_id, imov_sub.scat_id, imov_sub.imsb_qteconomia ");
+			consulta.append("from cadastro.imovel_subcategoria imov_sub ");
+			consulta.append("inner join atualizacaocadastral.imovel_controle_atlz_cad controle on controle.imov_id = imov_sub.imov_id ");
+			consulta.append("where imov_sub.imov_id = :idImovel ");
+			consulta.append("  except ");
+			consulta.append("select subatlz.imov_id, subatlz.scat_id, subatlz.isac_qteconomia ");
+			consulta.append("from cadastro.imovel_subcatg_atlz_cad subatlz ");
+			consulta.append("where subatlz.imov_id = :idImovel) as retorno ");
+
+			return (Boolean) session.createSQLQuery(consulta.toString())
+					.addScalar("retorno", Hibernate.BOOLEAN)
+					.setInteger("idImovel", idImovel)
+					.uniqueResult();
+		} catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro ao recuperar indicador de alteracao nas subcategorios ou quantiade de economias do imovel.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public boolean obterIndicadorSeHouveAlteracaoNosClientesDoImovelDuranteAtualizacaoCadastral(Integer idImovel)
+			throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder consulta = new StringBuilder("select exists( ");
+			consulta.append("select imovel.imov_id, ");
+			consulta.append("       cliente.clie_id, ");
+			consulta.append("       cliente_imovel.crtp_id, ");
+			consulta.append("       case ");
+			consulta.append("           when cliente_tipo.cltp_icpessoafisicajuridica = 1 then ");
+			consulta.append("               cliente.clie_nncpf ");
+			consulta.append("           else ");
+			consulta.append("               cliente.clie_nncnpj ");
+			consulta.append("           end as nncpfcpnj ");
+			consulta.append("from cadastro.imovel imovel ");
+			consulta.append("         inner join atualizacaocadastral.imovel_controle_atlz_cad controle on imovel.imov_id = controle.imov_id ");
+			consulta.append("         inner join cadastro.cliente_imovel cliente_imovel on imovel.imov_id = cliente_imovel.imov_id ");
+			consulta.append("         inner join cadastro.cliente cliente on cliente_imovel.clie_id = cliente.clie_id ");
+			consulta.append("         inner join cadastro.cliente_tipo cliente_tipo on cliente.cltp_id = cliente_tipo.cltp_id ");
+			consulta.append("where 1 = 1 ");
+			consulta.append("  and cliente_imovel.clim_dtrelacaofim is null ");
+			consulta.append("  and imovel.imov_id = :idImovel ");
+			consulta.append("except ");
+			consulta.append("select imovel.imov_id, cliente_atlz.clie_id, cliente_atlz.crtp_id, cliente_atlz.clac_nncpfcnpj as nncpfcpnj ");
+			consulta.append("from cadastro.imovel_atlz_cadastral imovel ");
+			consulta.append("         inner join cadastro.cliente_atlz_cadastral cliente_atlz on imovel.imov_id = cliente_atlz.imov_id ");
+			consulta.append("where 1 = 1 ");
+			consulta.append("  and imovel.imov_id = :idImovel) as retorno ");
+
+			return (Boolean) session.createSQLQuery(consulta.toString())
+					.addScalar("retorno", Hibernate.BOOLEAN)
+					.setInteger("idImovel", idImovel)
+					.uniqueResult();
+		} catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro ao recuperar indicador de alteracao nos clientes do imovel.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 }
