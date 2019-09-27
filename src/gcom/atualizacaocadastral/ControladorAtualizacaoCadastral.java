@@ -1565,7 +1565,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		if (tipoArquivo.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA)) {
 			return Arrays.asList(SituacaoAtualizacaoCadastral.TRANSMITIDO, SituacaoAtualizacaoCadastral.REVISITA);
 		}
-		return Arrays.asList(SituacaoAtualizacaoCadastral.EM_CAMPO);
+		return Arrays.asList(SituacaoAtualizacaoCadastral.EM_CAMPO, SituacaoAtualizacaoCadastral.DISPONIVEL);
 	}
 	
 	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosRevisaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualAleatorios, Integer idEmpresa) throws ControladorException {
