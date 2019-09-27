@@ -216,4 +216,16 @@ public interface IImovel {
     public String getObservacaoCategoria();
 
 	public void setObservacaoCategoria(String observacaoCategoria); 
+	
+	public void setQuantidadeNosFundos(Integer quantidadeNosFundos);
+	
+	public Integer getQuantidadeNosFundos();
+	
+	public void setQuantidadeNosAltos(Integer quantidadeNosAltos);
+	
+	public Integer getQuantidadeNosAltos();
+	
+	public void setIndividualizacao(Integer individualizacao);
+	
+	public Integer getIndividualizacao();
 }

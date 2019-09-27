@@ -7662,6 +7662,10 @@ public class ControladorCadastro extends ControladorComum {
         arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovelAtualizacaoCadastral.getQuantidadeEconomiasOutra()));
         arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovelAtualizacaoCadastral.getPercentualAbastecimento()));
         
+        arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovelAtualizacaoCadastral.getQuantidadeNosFundos()));
+        arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovelAtualizacaoCadastral.getQuantidadeNosAltos()));
+        arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovelAtualizacaoCadastral.getIndividualizacao()));
+
         if (informativo == null) {
         	arquivoTextoRegistroTipoImovel.append("2"); // Por padrao envia como nao informativo
         } else {
