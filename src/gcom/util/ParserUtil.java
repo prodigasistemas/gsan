@@ -17,13 +17,14 @@ public class ParserUtil {
 	public String obterDadoParser(int tamanho) {
 		int posicaoInicial = contador;
 		contador += tamanho;
-		try {
+
+		if (contador <= fonte.length()) {
 			return fonte.substring(posicaoInicial, contador);
-		} catch (IndexOutOfBoundsException e) {
+		} else {
 			return null;
 		}
 	}
-
+	
 	public String getFonte() {
 		return fonte;
 	}

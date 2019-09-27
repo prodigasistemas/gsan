@@ -116,10 +116,9 @@ public class ImovelAtualizacaoCadastralBuilder {
 		
 		imovelAtualizacaoCadastral.setObservacaoCategoria(imovel.getLinhaImovel("observacaoCategoria"));
 		
-		imovelAtualizacaoCadastral.setQuantidadeNosAltos(Integer.parseInt(imovel.getLinhaImovel("quantidadeNosAltos")));
-		imovelAtualizacaoCadastral.setQuantidadeNosFundos(Integer.parseInt(imovel.getLinhaImovel("quantidadeNosFundos")));
-		imovelAtualizacaoCadastral.setIndividualizacao(Integer.parseInt(imovel.getLinhaImovel("individualizacao")));
-		
+		imovelAtualizacaoCadastral.setQuantidadeNosAltos(Util.setValorInteiro(imovel.getLinhaImovel("quantidadeNosAltos")));
+		imovelAtualizacaoCadastral.setQuantidadeNosFundos(Util.setValorInteiro(imovel.getLinhaImovel("quantidadeNosFundos")));
+		imovelAtualizacaoCadastral.setIndividualizacao(Util.setValorInteiro(imovel.getLinhaImovel("individualizacao")));
 
 		// Linha 4
 		imovelAtualizacaoCadastral.setIdLigacaoAguaSituacao(Util.setValorInteiro(imovel.getLinhaServicos("ligacaoAguaSituacao")));

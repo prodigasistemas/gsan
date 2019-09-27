@@ -9,11 +9,9 @@ import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaImovelCommand;
 import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.seguranca.transacao.AlteracaoTipo;
-import gcom.util.CollectionUtil;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
-import gcom.util.Util;
 
 public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
@@ -111,24 +109,29 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 			linha.put("latitude",                      parser.obterDadoParser(20).trim());
 			linha.put("longitude",                     parser.obterDadoParser(20).trim());
 			linha.put("data",                          parser.obterDadoParser(26).trim());
-			
-			if(parser.getFonte().length() == 554) {
-				linha.put("observacaoCategoria", 	   parser.obterDadoParserTrim(100));
-			}
-			linha.put("quantidadeNosFundos",       	   parser.obterDadoParserTrim(3));
-			linha.put("quantidadeNosAltos",       	   parser.obterDadoParserTrim(3));
-			linha.put("individualizacao",       	   parser.obterDadoParserTrim(3));
+			linha.put("observacaoCategoria", 	   	   parser.obterDadoParserTrim(100));
+			linha.put("quantidadeNosFundos",       	   parser.obterDadoParser(3));
+			linha.put("quantidadeNosAltos",       	   parser.obterDadoParser(3));
+			linha.put("individualizacao",       	   parser.obterDadoParser(3));
 		}
 	}
 
 	private boolean isImovelNovo(AtualizacaoCadastralImovel imovelAtual, String tipoOperacao) {
 		if (isInclusao(tipoOperacao)) {
 			imovelAtual.setImovelNovo(true);
-			imovelAtual.setIdentificacaoImovelNovo(imovelAtual.getMatricula());
+			
+			int identificacaoImovelNovo = imovelAtual.getMatricula();
+			if (imovelAtual.getMatricula() < 0) {
+				identificacaoImovelNovo *= -1;
+			}
+			
+			imovelAtual.setIdentificacaoImovelNovo(identificacaoImovelNovo);
 			imovelAtual.setMatricula(ConstantesSistema.ZERO);
+			
 			return true;
 		} else {
 			imovelAtual.setImovelNovo(false);
+			
 			return false;
 		}
 	}
