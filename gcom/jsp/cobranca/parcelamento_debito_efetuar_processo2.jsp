@@ -315,15 +315,15 @@ function limpaRadioButton(nomeCampo){
 							</td>
 							<td align="right" bgcolor="#FFFFFF">
 								<logic:notEqual name="EfetuarParcelamentoDebitosActionForm" 
-									property="valorCreditoARealizar" value="0,00">
+									property="valorTotalCreditoARealizar" value="0,00">
 									<a href="javascript:abrirPopup('exibirConsultarCreditoARealizarAction.do?imovelID=<bean:define name="EfetuarParcelamentoDebitosActionForm" property="matriculaImovel" id="imovel" />
 										<bean:write name="EfetuarParcelamentoDebitosActionForm" property="matriculaImovel" />&parcelamentoID=', 600, 800);">
-											<bean:write name="EfetuarParcelamentoDebitosActionForm" property="valorCreditoARealizar" formatKey="money.format"/>
+											<bean:write name="EfetuarParcelamentoDebitosActionForm" property="valorTotalCreditoARealizar" formatKey="money.format"/>
 									</a>
 								</logic:notEqual>
 								<logic:equal name="EfetuarParcelamentoDebitosActionForm" 
-									property="valorCreditoARealizar" value="0,00">
-									<bean:write	name="EfetuarParcelamentoDebitosActionForm" property="valorCreditoARealizar" formatKey="money.format" />
+									property="valorTotalCreditoARealizar" value="0,00">
+									<bean:write	name="EfetuarParcelamentoDebitosActionForm" property="valorTotalCreditoARealizar" formatKey="money.format" />
 								</logic:equal>
 							</td>
 							<td align="right" bgcolor="#FFFFFF"><bean:write

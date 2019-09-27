@@ -74,7 +74,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso4Action extends GcomAction 
 					form.set("valorASerParcelado", Util.formatarMoedaReal(valorASerParcelado));
 
 					form.set("taxaJurosEscolhida", Util.formatarMoedaReal(opcoesParcelamento.getTaxaJuros()));
-
+					break;
 				}
 			}
 		}

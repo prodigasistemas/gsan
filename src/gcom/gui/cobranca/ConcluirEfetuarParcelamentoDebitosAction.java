@@ -183,11 +183,13 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 		BigDecimal valorCreditosAnterioresCurtoPrazo = BigDecimal.ZERO;
 		if (form.get("valorCreditosAnterioresCurtoPrazo") != null && !form.get("valorCreditosAnterioresCurtoPrazo").equals("")) {
 			valorCreditosAnterioresCurtoPrazo = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorCreditosAnterioresCurtoPrazo")));
+			valorCreditoARealizar = valorCreditoARealizar.add(valorCreditosAnterioresCurtoPrazo);
 		}
 		
 		BigDecimal valorCreditosAnterioresLongoPrazo = BigDecimal.ZERO;
 		if (form.get("valorCreditosAnterioresLongoPrazo") != null && !form.get("valorCreditosAnterioresLongoPrazo").equals("")) {
 			valorCreditosAnterioresLongoPrazo = Util.formatarMoedaRealparaBigDecimal((String) (form.get("valorCreditosAnterioresLongoPrazo")));
+			valorCreditoARealizar = valorCreditoARealizar.add(valorCreditosAnterioresLongoPrazo);
 		}
 		
 		BigDecimal valorTotalCreditosAnteriores = BigDecimal.ZERO;
