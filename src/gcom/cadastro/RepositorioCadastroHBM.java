@@ -4578,7 +4578,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 								+ " inner join ic.cadastroOcorrencia oc "
 								+ "	WHERE im.idArquivoTexto = txac.id "
 								+ " and oc.indicadorValidacao = 2 "
-								+ " and 3 > (select count(v.id) from Visita v where v.imovelControleAtualizacaoCadastral = ic) "
+								+ " and 3 > (select count(v.id) from Visita v where v.imovelControleAtualizacaoCadastral = ic and v.indicadorExclusao = false ) "
 								+ "	and ic.situacaoAtualizacaoCadastral.id IN (" + SituacaoAtualizacaoCadastral.EM_CAMPO
 									+ ", " + SituacaoAtualizacaoCadastral.REVISITA + ")), "
 							+ "(select count(distinct im.idImovel) from ImovelAtualizacaoCadastral im "

@@ -34,6 +34,8 @@ public class ImovelControleAtualizacaoCadastral {
 	private ImovelAtualizacaoCadastral imovelAtualizacaoCadastral;
 	private Integer informativo;
 	private Integer quantidadeVisitas;
+	
+	private Integer quantidadeVisitaNaoExcluidas;
 
 	public ImovelControleAtualizacaoCadastral() {
 		super();
@@ -226,5 +228,16 @@ public class ImovelControleAtualizacaoCadastral {
 
 	public boolean ehInformativo() {
 		return informativo != null && informativo.intValue() == 1;
+	}
+
+	public Integer getQuantidadeVisitaNaoExcluidas() {
+		if (quantidadeVisitaNaoExcluidas == null) {
+			return 0;
+		}
+		return quantidadeVisitaNaoExcluidas;
+	}
+
+	public void setQuantidadeVisitaNaoExcluidas(Integer quantidadeVisitaNaoExcluidas) {
+		this.quantidadeVisitaNaoExcluidas = quantidadeVisitaNaoExcluidas;
 	}
 }

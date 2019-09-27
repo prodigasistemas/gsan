@@ -57,7 +57,7 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 	}
 
 	private boolean imovelSuperouLimiteVisitas(ImovelControleAtualizacaoCadastral controle) throws ControladorException {
-		Integer quantidadeVisitas = controlador.obterQuantidadeDeVisitasPorImovelControle(controle);
+		Integer quantidadeVisitas = controle.getQuantidadeVisitaNaoExcluidas();
 
 		return arquivoTexto.isArquivoRetornoRevisita() && quantidadeVisitas >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO;
 	}

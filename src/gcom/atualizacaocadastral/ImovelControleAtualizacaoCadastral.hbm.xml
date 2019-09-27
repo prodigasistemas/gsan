@@ -25,6 +25,10 @@
 		<property name="dataReprovacaoLote" 			    type="java.sql.Timestamp" 	column="icac_tmreprovacaolote" 	length="8"/>
 		<property name="dataLiberacaoProcessamento" 		type="java.sql.Timestamp" 	column="icac_tmliberacaoproc" 	length="8"/>
 		
+		<property name="quantidadeVisitaNaoExcluidas" 		type="java.lang.Integer" 	column="icac_qntvisitanaoexcluida" 
+			formula="(select count(0) from atualizacaocadastral.visita v where v.icac_id = icac_id and v.vist_icexclusao = 'false')"/>
+		
+		
 		<many-to-one name="situacaoAtualizacaoCadastral" class="gcom.cadastro.SituacaoAtualizacaoCadastral" not-null="true">
 			<column name="siac_id"/>
 		</many-to-one>

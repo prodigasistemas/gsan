@@ -137,8 +137,8 @@ public class CadastroOcorrencia extends ObjetoTransacao {
 		retornaCamposChavePrimaria();
 	}
 	
-	public boolean permiteReprovarLote() {
-		return indicadorValidacao.equals(ConstantesSistema.NAO);
+	public boolean ehOcorrenciaImpeditiva() {
+		return indicadorValidacao.equals(ConstantesSistema.SIM);
 	}
 
 }

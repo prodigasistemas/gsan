@@ -2069,7 +2069,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 		Session session = HibernateUtil.getSession();
 		try {
-			visitas = (List<Visita>) session.createQuery("from Visita v where v.imovelControleAtualizacaoCadastral.id = :idImovelControle")
+			visitas = (List<Visita>) session.createQuery("from Visita v where v.imovelControleAtualizacaoCadastral.id = :idImovelControle and v.indicadorExclusao = false ")
 											.setInteger("idImovelControle", imovelControle.getId())
 											.list();
 
@@ -2103,7 +2103,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	public List<Visita> pesquisarVisitasPorImovelControleELatitudeELongitude(ImovelControleAtualizacaoCadastral imovelControle, String latitude, String longitude) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try {
-			String sql = "from Visita v where v.imovelControleAtualizacaoCadastral.id = :idImovelControle and v.coordenadaX = :latitude and v.coordenadaY =  :longitude";
+			String sql = "from Visita v where v.imovelControleAtualizacaoCadastral.id = :idImovelControle and v.coordenadaX = :latitude and v.coordenadaY = :longitude and v.indicadorExclusao = false ";
 			
 			if (imovelControle == null) {
 				return null;
@@ -2744,7 +2744,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	public List<Visita> obterVisitasPorCoordenadas(String latitude, String longitude) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try {
-			return session.createQuery("from Visita v where v.coordenadaX = :latitude and v.coordenadaY =  :longitude")
+			return session.createQuery("from Visita v where v.coordenadaX = :latitude and v.coordenadaY = :longitude and v.indicadorExclusao = false ")
 					.setString("latitude", latitude)
 					.setString("longitude", longitude)
 					.list();
@@ -2754,6 +2754,19 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+	}
+	
+	public void excluirVisitasDosImoveisControle(List<Integer> idsImoveisControle) throws ErroRepositorioException {
+        Session session = HibernateUtil.getSession();
+        try {
+    		session.createQuery("UPDATE Visita v set v.indicadorExclusao = true WHERE v.imovelControleAtualizacaoCadastral.id in (:ids) ")
+    			.setParameterList("ids", idsImoveisControle)
+    			.executeUpdate();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar imovel controle por ids.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
 	}
 	
 }
