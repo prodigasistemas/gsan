@@ -1085,4 +1085,9 @@ public interface IControladorCobranca {
 	public List<AvisoCorteDTO> gerarAvisoCorteEnderecoAlternativo(Integer idAcaoCronograma, Integer idAcaoComando) throws ControladorException;
 	
 	public boolean isImovelEmCobrancaJudicial(Integer idImovel) throws ControladorException;
+	
+	public Parcelamento obterUltimoParcelamento(Integer idImovel) throws ControladorException;
+
+	@SuppressWarnings("rawtypes")
+	public Collection obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes() throws ControladorException;
 }

@@ -26620,4 +26620,65 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 	    return retorno;
 	  }
+	
+	public Parcelamento obterUltimoParcelamento(Integer idImovel) throws ErroRepositorioException {
+
+	    Parcelamento retorno = null;
+
+	    Session session = HibernateUtil.getSession();
+	    StringBuilder consulta = new StringBuilder();
+
+	    try {
+
+	      consulta.append("SELECT parc  FROM Parcelamento parc ")
+	      			.append("WHERE parc.imovel.id = :idImovel ")
+	      			.append("order by parc.parcelamento desc ");
+
+	      retorno = (Parcelamento) session.createQuery(consulta.toString())
+	    		  	.setInteger("idImovel", idImovel)
+	    		  	.setMaxResults(1).uniqueResult();
+
+	    } catch (HibernateException e) {
+	      throw new ErroRepositorioException(e, "Erro no Hibernate");
+	    } finally {
+	      HibernateUtil.closeSession(session);
+	    }
+
+	    return retorno;
+	  }
+	
+	public Collection<CobrancaAcaoAtividadeComando> obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes() throws ErroRepositorioException {
+
+		Collection<CobrancaAcaoAtividadeComando> retorno = new ArrayList();
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// cria a variável que vai conter o hql
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			// constroi o hql
+			consulta.append("select comando from CobrancaAcaoAtividadeComando comando ")
+					.append(" inner join fetch comando.cobrancaAcao acao ")
+					.append(" inner join fetch comando.cobrancaAtividade atividade ")
+					.append(" inner join fetch comando.cobrancaCriterio criterio ")
+					.append(" where comando.comando is not null ")
+					.append(" and comando.dataEncerramentoRealizada is not null ")
+					.append(" order by comando.realizacao desc ");
+
+			// executa o hql
+			retorno = new ArrayList(session.createQuery(consulta.toString()).setMaxResults(50).list());
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		// retorna a coleção do resultado da pesquisa
+		return retorno;
+	}
 }

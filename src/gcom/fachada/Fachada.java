@@ -40390,7 +40390,22 @@ public class Fachada {
 		}
 	}
 
-	
+	public Parcelamento obterUltimoParcelamento(Integer idImovel) {
+		try {
+			return getControladorCobranca().obterUltimoParcelamento(idImovel);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Collection obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes() throws FachadaException {
+		try {
+			return this.getControladorCobranca().obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes();
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 }
 

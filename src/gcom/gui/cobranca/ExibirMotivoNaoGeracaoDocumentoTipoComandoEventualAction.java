@@ -91,8 +91,7 @@ public class ExibirMotivoNaoGeracaoDocumentoTipoComandoEventualAction extends Gc
 		
 		
 		//CobrancaAcaoAtividadeComando
-		Collection colecaoCobrancaAcaoAtividadeComando = fachada.obterListaAtividadesEventuaisAcaoCobrancaComandadas();
-		
+		Collection colecaoCobrancaAcaoAtividadeComando = fachada.obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes();
 			
 		//[SB0002] - Comandos de Ação de Cobrança Eventual
 		//6.2. Caso o comando seja por cliente não disponibilizar as opções geográficas.

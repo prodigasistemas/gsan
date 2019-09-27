@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -45,6 +46,8 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 
 	private static Logger logger = Logger.getLogger(ConcluirEfetuarParcelamentoDebitosAction.class);
 	
+	Fachada fachada = Fachada.getInstancia();
+
 	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse httpServletResponse) {
 
@@ -54,7 +57,6 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 
 		DynaActionForm form = (DynaActionForm) actionForm;
 
-		Fachada fachada = Fachada.getInstancia();
 
 		Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
 
@@ -439,7 +441,10 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 				valorCreditosAnterioresLongoPrazo, 
 				valorTotalCreditosAnteriores);
 
-		Integer idParcelamento = fachada.concluirParcelamentoDebitos(helper, usuarioLogado);
+		Integer idParcelamento = 0;
+		
+		if (isParcelamentoValido(helper))
+			idParcelamento = fachada.concluirParcelamentoDebitos(helper, usuarioLogado);
 		
 		System.out.println(" ====== ConcluirEfetuarParcelamentoDebitosAction ====== " 
 				+ "\n Matricula: " + imovel.getId() 
@@ -530,5 +535,52 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 		String linkBoletoBB = Fachada.getInstancia().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), true);
 		
 		return linkBoletoBB;
+	}
+	
+	public boolean isParcelamentoValido(ConcluirParcelamentoDebitosHelper helper) {
+		boolean isParcelamentoValido = true;
+		
+		BigDecimal valorParcelamentoCalculado = helper.getValorPrestacao().multiply(new BigDecimal(helper.getNumeroPrestacoes()));
+		BigDecimal valorParceladoCalculado = helper.getValorDebitoTotalAtualizado().subtract(helper.getValorTotalDescontos());
+		BigDecimal valorAcrescimosCalculado = helper.getValorAtualizacaoMonetaria().add(helper.getValorJurosMora()).add(helper.getValorMulta());
+		
+		if (helper.getValorASerParcelado().compareTo(valorParcelamentoCalculado) != 0) {
+			isParcelamentoValido = false;
+			throw new ActionServletException("Valores de parcelamento incompatíveis. Favor reiniciar o processo.", null, "Diferença no valor a ser parcelado");
+		}
+		
+		if(helper.getValorASerNegociado().compareTo(valorParceladoCalculado) != 0) {
+			isParcelamentoValido = false;
+			throw new ActionServletException("Valores de parcelamento incompatíveis. Favor reiniciar o processo.", null, "Diferença no valor negociado");			
+		}
+		
+		if(helper.getValorAcrescimosImpontualidade().compareTo(valorAcrescimosCalculado) != 0) {
+			isParcelamentoValido = false;
+			throw new ActionServletException("Valores de parcelamento incompatíveis. Favor reiniciar o processo.", null, "Diferença no valor a ser parcelado");			
+		}
+		
+		if(isParcelamentoDuplicado(helper)) {
+			isParcelamentoValido = false;
+			throw new ActionServletException("Parcelamento duplicado.");			
+		}
+		
+		return isParcelamentoValido;
+	}
+	
+	private boolean isParcelamentoDuplicado(ConcluirParcelamentoDebitosHelper helper) {
+		boolean duplicado = false;
+		
+		Parcelamento ultimoParcelamento = fachada.obterUltimoParcelamento(helper.getImovel().getId());
+		
+		if (ultimoParcelamento != null && ultimoParcelamento.isNormal()) {
+			
+			if ( (helper.getValorEntradaInformado().compareTo(ultimoParcelamento.getValorEntrada()) == 0)
+					&& (helper.getValorASerParcelado().compareTo(ultimoParcelamento.getValorParcelado()) == 0)
+					&& (Util.obterQuantidadeDiasEntreDuasDatas(helper.getDataParcelamento(), ultimoParcelamento.getParcelamento()) == 0)) {
+				duplicado = true;
+			}
+		}
+		
+		return duplicado;
 	}
 }

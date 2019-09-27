@@ -605,4 +605,12 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 	public void setValorTotalCreditosAnteriores(BigDecimal valorTotalCreditosAnteriores) {
 		this.valorTotalCreditosAnteriores = valorTotalCreditosAnteriores;
 	}
+	
+	public BigDecimal getValorTotalDescontos() {
+		return descontoAcrescimosImpontualidade.add(descontoAntiguidadeDebito)
+				.add(descontoFaixaReferenciaConta)
+				.add(descontoInatividadeLigacaoAgua)
+				.add(descontoSancoesRDEspecial)
+				.add(descontoTarifaSocialRDEspecial);
+	}
 }

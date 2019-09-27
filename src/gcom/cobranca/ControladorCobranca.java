@@ -11404,6 +11404,7 @@ public class ControladorCobranca extends ControladorComum {
 		BigDecimal valorZero = new BigDecimal("0.00");
 
 		logger.info("L11485 gerarDebitosACobrarParcelamento Imóvel: " + imovel.getId() + " | valorTotalAcrescimosImpontualidade: " + valorTotalAcrescimosImpontualidade);
+		
 		// 1. Parcelamento de Contas
 		if (valorTotalContas != null && valorTotalContas.doubleValue() > 0) {
 
@@ -11416,26 +11417,17 @@ public class ControladorCobranca extends ControladorComum {
 			}
 
 			if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalContas) < 0) {
-				// valor entrada diferente de Zero e
-				// menor q o valor total de contas
-
+				// valor entrada diferente de Zero e menor q o valor total de contas
 				valorTotalContas = valorTotalContas.subtract(valorEntrada);
 				valorEntrada = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalContas) == 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada igual a valor total de contas
-
+				// valor entrada diferente de Zero e valor entrada igual a valor total de contas
 				valorEntrada = valorZero;
 				valorTotalContas = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalContas) > 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada maior q o valor total de contas
-
+				// valor entrada diferente de Zero e valor entrada maior q o valor total de contas
 				valorEntrada = valorEntrada.subtract(valorTotalContas);
 				valorTotalContas = valorZero;
-
 			}
 
 			if (!valorTotalContas.equals(valorZero)) {
@@ -11452,26 +11444,17 @@ public class ControladorCobranca extends ControladorComum {
 			DebitoTipo debitoTipoParcelamentoGuiasPagamento = filtrarDebitoTipo(DebitoTipo.PARCELAMENTO_GUIAS_PAGAMENTO);
 
 			if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalGuiasPagamento) < 0) {
-				// valor entrada diferente de Zero e
-				// menor q o valor total de Guias de Pagamento
-
+				// valor entrada diferente de Zero e menor q o valor total de Guias de Pagamento
 				valorTotalGuiasPagamento = valorTotalGuiasPagamento.subtract(valorEntrada);
 				valorEntrada = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalGuiasPagamento) == 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada igual a valor total de Guias de Pagamento
-
+				// valor entrada diferente de Zero e valor entrada igual a valor total de Guias de Pagamento
 				valorEntrada = valorZero;
 				valorTotalGuiasPagamento = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalGuiasPagamento) > 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada maior q o valor total de Guias de Pagamento
-
+				// valor entrada diferente de Zero e valor entrada maior q o valor total de Guias de Pagamento
 				valorEntrada = valorEntrada.subtract(valorTotalGuiasPagamento);
 				valorTotalGuiasPagamento = valorZero;
-
 			}
 
 			if (valorTotalGuiasPagamento.compareTo(valorZero) != 0) {
@@ -11498,39 +11481,29 @@ public class ControladorCobranca extends ControladorComum {
 			}
 
 			if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalAcrescimosImpontualidade) < 0) {
-				// valor entrada diferente de Zero e
-				// menor q o valor total de Acrescimos por Impontualidade
+				// valor entrada diferente de Zero e menor q o valor total de Acrescimos por Impontualidade
 				logger.info("L11582 gerarDebitosACobrarParcelamento Imóvel: " + imovel.getId() + " Primeiro if");
 				valorTotalAcrescimosImpontualidade = valorTotalAcrescimosImpontualidade.subtract(valorEntrada);
 				valorEntrada = valorZero;
 
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalAcrescimosImpontualidade) == 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada igual a valor total de Acrescimos por
-				// Impontualidade
-
+				// valor entrada diferente de Zero e valor entrada igual a valor total de Acrescimos por Impontualidade
 				logger.info("L11591 gerarDebitosACobrarParcelamento Imóvel: " + imovel.getId() + " Segundo if");
 				valorEntrada = valorZero;
 				valorTotalAcrescimosImpontualidade = valorZero;
 
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalAcrescimosImpontualidade) > 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada maior q o valor total de Acrescimos por
-				// Impontualidade
+				// valor entrada diferente de Zero e valor entrada maior q o valor total de Acrescimos por Impontualidade
 				logger.info("L11599 gerarDebitosACobrarParcelamento Imóvel: " + imovel.getId() + " Terceiro if");
 				valorEntrada = valorEntrada.subtract(valorTotalAcrescimosImpontualidade);
 				valorTotalAcrescimosImpontualidade = valorZero;
-
 			}
 
 			if (valorTotalAcrescimosImpontualidade.compareTo(valorZero) != 0) {
-				
-				System.out.println(" ====== ControladorCobrança >> gerarDebitosACobrarParcelamento ====== "
+				logger.info(" ====== ControladorCobrança >> gerarDebitosACobrarParcelamento ====== "
 							+ "\n Matricula: " + imovel.getId()
 							+ "\n Acréscimos de Impontualidade: " + valorTotalAcrescimosImpontualidade);
-				// 3. Inclui o débito a cobrar para Parcelamento de Acrescimos
-				// por
-				// Impontualidade
+				// 3. Inclui o débito a cobrar para Parcelamento de Acrescimos por Impontualidade
 				inserirDebitoACobrarDebitoTipo(debitoTipoParcelamentoAcrescimosImpontualidade, imovel, numeroPrestacao,
 						valorTotalAcrescimosImpontualidade, taxaJuros, parcelamentoId, colecaoCategoria,
 						ParcelamentoGrupo.FINANCIAMENTOS_A_COBRAR_CURTO_PRAZO, DebitoCreditoSituacao.NORMAL, null, usuarioLogado,
@@ -11543,34 +11516,21 @@ public class ControladorCobranca extends ControladorComum {
 			DebitoTipo debitoTipoParcelamentoDebitosACobrarCurtoPrazo = filtrarDebitoTipo(DebitoTipo.PARCELAMENTO_DEBITO_A_COBRAR_CURTO_PRAZO);
 
 			if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalServicosDebitosACobrarCurtoPrazo) < 0) {
-				// valor entrada diferente de Zero e
-				// menor q o valor total de Debitos A Cobrar de Curto Prazo
-
+				// valor entrada diferente de Zero e menor q o valor total de Debitos A Cobrar de Curto Prazo
 				valorTotalServicosDebitosACobrarCurtoPrazo = valorTotalServicosDebitosACobrarCurtoPrazo.subtract(valorEntrada);
 				valorEntrada = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalServicosDebitosACobrarCurtoPrazo) == 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada igual a valor total de Debitos A Cobrar de
-				// Curto Prazo
-
+				// valor entrada diferente de Zero e valor entrada igual a valor total de Debitos A Cobrar de Curto Prazo
 				valorEntrada = valorZero;
 				valorTotalServicosDebitosACobrarCurtoPrazo = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalServicosDebitosACobrarCurtoPrazo) > 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada maior q o valor total de Debitos A Cobrar de
-				// Curto Prazo
-
+				// valor entrada diferente de Zero e valor entrada maior q o valor total de Debitos A Cobrar de Curto Prazo
 				valorEntrada = valorEntrada.subtract(valorTotalServicosDebitosACobrarCurtoPrazo);
 				valorTotalServicosDebitosACobrarCurtoPrazo = valorZero;
-
 			}
 
 			if (valorTotalServicosDebitosACobrarCurtoPrazo.compareTo(valorZero) != 0) {
-				// 4. Inclui o débito a cobrar para Parcelamento de ADebitos A
-				// Cobrar de
-				// Curto Prazo
+				// 4. Inclui o débito a cobrar para Parcelamento de ADebitos A Cobrar de Curto Prazo
 				inserirDebitoACobrarDebitoTipo(debitoTipoParcelamentoDebitosACobrarCurtoPrazo, imovel, numeroPrestacao,
 						valorTotalServicosDebitosACobrarCurtoPrazo, taxaJuros, parcelamentoId, colecaoCategoria,
 						ParcelamentoGrupo.FINANCIAMENTOS_A_COBRAR_CURTO_PRAZO, DebitoCreditoSituacao.NORMAL, null, usuarioLogado,
@@ -11583,35 +11543,21 @@ public class ControladorCobranca extends ControladorComum {
 			DebitoTipo debitoTipoParcelamentoDebitosACobrarLongoPrazo = filtrarDebitoTipo(DebitoTipo.PARCELAMENTO_DEBITO_A_COBRAR_LONGO_PRAZO);
 
 			if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalServicosDebitosACobrarLongoPrazo) < 0) {
-				// valor entrada diferente de Zero e
-				// menor q o valor total de Debitos A Cobrar de Longo Prazo
-
+				// valor entrada diferente de Zero e menor q o valor total de Debitos A Cobrar de Longo Prazo
 				valorTotalServicosDebitosACobrarLongoPrazo = valorTotalServicosDebitosACobrarLongoPrazo.subtract(valorEntrada);
 				valorEntrada = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalServicosDebitosACobrarLongoPrazo) == 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada igual a valor total de Debitos A Cobrar de
-				// Longo Prazo
-
+				// valor entrada diferente de Zero e valor entrada igual a valor total de Debitos A Cobrar de Longo Prazo
 				valorEntrada = valorZero;
 				valorTotalServicosDebitosACobrarLongoPrazo = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalServicosDebitosACobrarLongoPrazo) > 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada maior q o valor total de Debitos A Cobrar de
-				// Longo Prazo
-
+				// valor entrada diferente de Zero e valor entrada maior q o valor total de Debitos A Cobrar de Longo Prazo
 				valorEntrada = valorEntrada.subtract(valorTotalServicosDebitosACobrarLongoPrazo);
 				valorTotalServicosDebitosACobrarLongoPrazo = valorZero;
-
 			}
 
 			if (valorTotalServicosDebitosACobrarLongoPrazo.compareTo(valorZero) != 0) {
-				// 5. Inclui o débito a cobrar para Parcelamento de Debitos A
-				// Cobrar
-				// de
-				// Longo Prazo
+				// 5. Inclui o débito a cobrar para Parcelamento de Debitos A Cobrar de Longo Prazo
 				inserirDebitoACobrarDebitoTipo(debitoTipoParcelamentoDebitosACobrarLongoPrazo, imovel, numeroPrestacao,
 						valorTotalServicosDebitosACobrarLongoPrazo, taxaJuros, parcelamentoId, colecaoCategoria,
 						ParcelamentoGrupo.FINANCIAMENTOS_A_COBRAR_LONGO_PRAZO, DebitoCreditoSituacao.NORMAL, null, usuarioLogado,
@@ -11630,28 +11576,17 @@ public class ControladorCobranca extends ControladorComum {
 			}
 
 			if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalReparcelamentosCurtoPrazo) < 0) {
-				// valor entrada diferente de Zero e
-				// menor q o valor total de Reparcelamentos Curto Prazo
-
+				// valor entrada diferente de Zero e menor q o valor total de Reparcelamentos Curto Prazo
 				valorTotalReparcelamentosCurtoPrazo = valorTotalReparcelamentosCurtoPrazo.subtract(valorEntrada);
 				valorEntrada = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalReparcelamentosCurtoPrazo) == 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada igual a valor total de Reparcelamentos Curto
-				// Prazo
-
+				// valor entrada diferente de Zero e valor entrada igual a valor total de Reparcelamentos Curto Prazo
 				valorEntrada = valorZero;
 				valorTotalReparcelamentosCurtoPrazo = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalReparcelamentosCurtoPrazo) > 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada maior q o valor total de Reparcelamentos Curto
-				// Prazo
-
+				// valor entrada diferente de Zero e valor entrada maior q o valor total de Reparcelamentos Curto Prazo
 				valorEntrada = valorEntrada.subtract(valorTotalReparcelamentosCurtoPrazo);
 				valorTotalReparcelamentosCurtoPrazo = valorZero;
-
 			}
 
 			if (valorTotalReparcelamentosCurtoPrazo.compareTo(valorZero) != 0) {
@@ -11675,32 +11610,20 @@ public class ControladorCobranca extends ControladorComum {
 			}
 
 			if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalReparcelamentosLongoPrazo) < 0) {
-				// valor entrada diferente de Zero e
-				// menor q o valor total de Reparcelamentos Longo Prazo
-
+				// valor entrada diferente de Zero e menor q o valor total de Reparcelamentos Longo Prazo
 				valorTotalReparcelamentosLongoPrazo = valorTotalReparcelamentosLongoPrazo.subtract(valorEntrada);
 				valorEntrada = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalReparcelamentosLongoPrazo) == 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada igual a valor total de Reparcelamentos Longo
-				// Prazo
-
+				// valor entrada diferente de Zero e valor entrada igual a valor total de Reparcelamentos Longo Prazo
 				valorEntrada = valorZero;
 				valorTotalReparcelamentosLongoPrazo = valorZero;
-
 			} else if (valorEntrada.compareTo(valorZero) != 0 && valorEntrada.compareTo(valorTotalReparcelamentosLongoPrazo) > 0) {
-				// valor entrada diferente de Zero e
-				// valor entrada maior q o valor total de Reparcelamentos Longo
-				// Prazo
-
+				// valor entrada diferente de Zero e valor entrada maior q o valor total de Reparcelamentos Longo Prazo
 				valorEntrada = valorEntrada.subtract(valorTotalReparcelamentosLongoPrazo);
 				valorTotalReparcelamentosLongoPrazo = valorZero;
-
 			}
 
 			if (valorTotalReparcelamentosLongoPrazo.compareTo(valorZero) != 0) {
-
 				// 7. Inclui Reparcelamentos Longo Prazo
 				inserirDebitoACobrarDebitoTipo(debitoTipoReparcelamentosLongoPrazo, imovel, numeroPrestacao,
 						valorTotalReparcelamentosLongoPrazo, taxaJuros, parcelamentoId, colecaoCategoria,
@@ -12238,39 +12161,6 @@ public class ControladorCobranca extends ControladorComum {
 			Short indicadorDebitosACobrar = helper.getIndicadorDebitosACobrar().equals("") ? null : new Short(helper.getIndicadorDebitosACobrar());
 			Short indicadorCreditoARealizar = helper.getIndicadorCreditoARealizar().equals("") ? null : new Short(helper.getIndicadorCreditoARealizar());
 			Short indicadorConfirmacaoParcelamento = helper.getIndicadorConfirmacaoParcelamento().equals("") ? ConstantesSistema.SIM : new Short(helper.getIndicadorConfirmacaoParcelamento());
-		
-/*		helper.getValorGuiasPagamento(),  valorGuiaPapagamento
-		helper.getValorDebitoACobrarServico(), valorServicosACobrar
-		helper.getValorDebitoACobrarParcelamento(), valorParcelamentosACobrar
-		helper.getValorCreditoARealizar(), valorCreditoARealizar
-		helper.getValorAtualizacaoMonetaria(), valorAtualizacaoMonetaria
-		helper.getValorJurosMora(), valorJurosMora
-		helper.getValorMulta(), valorMulta
-		helper.getValorDebitoTotalAtualizado(), valorDebitoAtualizado
-		helper.getDescontoFaixaReferenciaConta(), valorDescontoFaixaReferenciaConta
-		helper.getDescontoAcrescimosImpontualidade(),  valorDescontoAcrescimos
-		helper.getDescontoAntiguidadeDebito(), 		 valorDescontoAntiguidade, 
-		helper.getDescontoInatividadeLigacaoAgua(), valorDescontoInatividade
-		helper.getValorEntradaInformado(), valorEntrada
-		valorJurosParcelamento,
-		helper.getNumeroPrestacoes(),  numeroPrestacoes
-		helper.getValorPrestacao(), valorPrestacao 
-		helper.getPercentualDescontoAcrescimosImpontualidade(), percentualDescontoAcrescimos
-		helper.getPercentualDescontoAntiguidadeDebito(), percentualDescontoAntiguidade 
-		helper.getPercentualDescontoInatividadeLigacaoAgua(), percentualDescontoInatividadeLigacaoAgua 
-		, helper.getUsuarioLogado(), usuario
-		helper.getParcelamentoPerfilId(), parcelamentoPerfilId
-		colecaoContasParaParcelamento,
-		helper.getColecaoGuiaPagamentoValores(), colecaoGuiaPagamentoValores
-		helper.getColecaoDebitoACobrar(), colecaoDebitoACobrar
-		helper.getColecaoCreditoARealizar(), colecaoCreditoARealizar
-		helper.getTaxaJuros(),  taxaJuros
-		
-		helper.getCliente(), cliente
-		helper.getDescontoSancoesRDEspecial(), descontoSancoesRDEspecial
-		helper.getDescontoTarifaSocialRDEspecial(), descontoTarifaSocialRDEspecial
-		referenciaContabil);*/
-
 		
 		try {
 			// 1. Gera os dados relativos a parcelamento
@@ -13135,18 +13025,8 @@ public class ControladorCobranca extends ControladorComum {
 	public Collection obterListaAtividadesEventuaisAcaoCobrancaComandadas() throws ControladorException {
 		Collection colecaoAtividadesEventuaisAcaoCobrancaComandadas = null;
 
-		FiltroCobrancaAcaoAtividadeComando filtroCobrancaAcaoAtividadeComando = new FiltroCobrancaAcaoAtividadeComando();
-		filtroCobrancaAcaoAtividadeComando.adicionarParametro(new ParametroNaoNulo(FiltroCobrancaAcaoAtividadeComando.COMANDO));
-
-		filtroCobrancaAcaoAtividadeComando.adicionarParametro(new ParametroNulo(
-				FiltroCobrancaAcaoAtividadeComando.DATA_ENCERRAMENTO_REALIZADA));
-
-		filtroCobrancaAcaoAtividadeComando.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaAcaoAtividadeComando.COBRANCA_ACAO);
-		filtroCobrancaAcaoAtividadeComando.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaAcaoAtividadeComando.COBRANCA_ATIVIDADE);
-		filtroCobrancaAcaoAtividadeComando.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaAcaoAtividadeComando.COBRANCA_CRITERIO);
-
-		filtroCobrancaAcaoAtividadeComando.setConsultaSemLimites(true);
-
+		FiltroCobrancaAcaoAtividadeComando filtroCobrancaAcaoAtividadeComando = getFiltroListaAtividadesEventuaisAcaoCobrancaComandadas();
+		
 		filtroCobrancaAcaoAtividadeComando.setCampoOrderBy(FiltroCobrancaAcaoAtividadeComando.COMANDO);
 
 		colecaoAtividadesEventuaisAcaoCobrancaComandadas = this.getControladorUtil().pesquisar(filtroCobrancaAcaoAtividadeComando,
@@ -62122,5 +62002,35 @@ public class ControladorCobranca extends ControladorComum {
 			throw new ControladorException("erro.pesquisar.imovel.cobranca.judicial", e);
 		}
 	}
+
+	public Parcelamento obterUltimoParcelamento(Integer idImovel) throws ControladorException {
+		try {
+			return repositorioCobranca.obterUltimoParcelamento(idImovel);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 	
+	public Collection<CobrancaAcaoAtividadeComando> obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes() throws ControladorException {
+		try {
+			return repositorioCobranca.obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes();
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	private FiltroCobrancaAcaoAtividadeComando getFiltroListaAtividadesEventuaisAcaoCobrancaComandadas() {
+		FiltroCobrancaAcaoAtividadeComando filtro = new FiltroCobrancaAcaoAtividadeComando();
+		filtro.adicionarParametro(new ParametroNaoNulo(FiltroCobrancaAcaoAtividadeComando.COMANDO));
+
+		filtro.adicionarParametro(new ParametroNulo(FiltroCobrancaAcaoAtividadeComando.DATA_ENCERRAMENTO_REALIZADA));
+
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaAcaoAtividadeComando.COBRANCA_ACAO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaAcaoAtividadeComando.COBRANCA_ATIVIDADE);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaAcaoAtividadeComando.COBRANCA_CRITERIO);
+
+		filtro.setConsultaSemLimites(true);
+		
+		return filtro;
+	}
 }

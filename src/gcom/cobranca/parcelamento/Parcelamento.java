@@ -748,4 +748,11 @@ public class Parcelamento extends ObjetoTransacao {
 		return getId().toString();
 	}
 
+	public boolean isDesfeito() {
+		return parcelamentoSituacao != null && parcelamentoSituacao.getId() == ParcelamentoSituacao.DESFEITO;
+	}
+	
+	public boolean isNormal() {
+		return parcelamentoSituacao != null && parcelamentoSituacao.getId() == ParcelamentoSituacao.NORMAL;
+	}
 }
