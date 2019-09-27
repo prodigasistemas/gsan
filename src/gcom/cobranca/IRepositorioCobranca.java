@@ -1958,6 +1958,8 @@ public interface IRepositorioCobranca {
 	public Integer[] obterPeriodoDebitosParcelados(Integer idParcelamento) throws ErroRepositorioException;
 	
 	public Collection pesquisarParcelamentosSituacaoNormal(String parcelamentoSituacao, int numeroInicial, int numeroFinal) throws ErroRepositorioException;
+	
+	public Parcelamento obterParcelamentoDaConta(Integer idConta, Integer idSituacao) throws ErroRepositorioException;
 
 	public Parcelamento obterUltimoParcelamento(Integer idImovel) throws ErroRepositorioException;
 	

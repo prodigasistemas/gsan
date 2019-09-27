@@ -26621,6 +26621,30 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	    return retorno;
 	  }
 	
+	public Parcelamento obterParcelamentoDaConta(Integer idConta, Integer idSituacao) throws ErroRepositorioException {
+		Parcelamento retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("SELECT parcelamento from ParcelamentoItem item ")
+					.append(" inner join item.contaGeral conta ")
+					.append(" inner join item.parcelamento parcelamento ")
+					.append("WHERE parcelamento.parcelamentoSituacao.id = :idSituacao ")
+					.append("AND conta.id = :idConta")
+					.append(" order by parcelamento.parcelamento desc ");
+
+			retorno = (Parcelamento) session.createQuery(consulta.toString()).setInteger("idConta", idConta).setInteger("idSituacao", idSituacao)
+					.setMaxResults(1).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+		
 	public Parcelamento obterUltimoParcelamento(Integer idImovel) throws ErroRepositorioException {
 
 	    Parcelamento retorno = null;
@@ -26629,24 +26653,22 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	    StringBuilder consulta = new StringBuilder();
 
 	    try {
+	    	consulta.append("SELECT parc  FROM Parcelamento parc ")
+  			.append("WHERE parc.imovel.id = :idImovel ")
+  			.append("order by parc.parcelamento desc ");
 
-	      consulta.append("SELECT parc  FROM Parcelamento parc ")
-	      			.append("WHERE parc.imovel.id = :idImovel ")
-	      			.append("order by parc.parcelamento desc ");
+	    	retorno = (Parcelamento) session.createQuery(consulta.toString())
+	    			.setInteger("idImovel", idImovel)
+	    			.setMaxResults(1).uniqueResult();
 
-	      retorno = (Parcelamento) session.createQuery(consulta.toString())
-	    		  	.setInteger("idImovel", idImovel)
-	    		  	.setMaxResults(1).uniqueResult();
-
-	    } catch (HibernateException e) {
-	      throw new ErroRepositorioException(e, "Erro no Hibernate");
-	    } finally {
-	      HibernateUtil.closeSession(session);
-	    }
-
+		} catch (HibernateException e) {
+		  throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+		  HibernateUtil.closeSession(session);
+		}
 	    return retorno;
-	  }
-	
+	}
+
 	public Collection<CobrancaAcaoAtividadeComando> obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes() throws ErroRepositorioException {
 
 		Collection<CobrancaAcaoAtividadeComando> retorno = new ArrayList();

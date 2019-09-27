@@ -62003,6 +62003,14 @@ public class ControladorCobranca extends ControladorComum {
 		}
 	}
 
+	public Parcelamento obterParcelamentoNormalDaConta(Integer idConta) throws ControladorException {
+		try {
+			return repositorioCobranca.obterParcelamentoDaConta(idConta, ParcelamentoSituacao.NORMAL);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+
 	public Parcelamento obterUltimoParcelamento(Integer idImovel) throws ControladorException {
 		try {
 			return repositorioCobranca.obterUltimoParcelamento(idImovel);

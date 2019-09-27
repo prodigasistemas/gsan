@@ -1086,6 +1086,8 @@ public interface IControladorCobranca {
 	
 	public boolean isImovelEmCobrancaJudicial(Integer idImovel) throws ControladorException;
 	
+	public Parcelamento obterParcelamentoNormalDaConta(Integer idConta) throws ControladorException;
+
 	public Parcelamento obterUltimoParcelamento(Integer idImovel) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")

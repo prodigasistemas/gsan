@@ -23,61 +23,79 @@ import org.apache.struts.action.ActionMapping;
 
 public class FiltrarPagamentosAClassificarAction extends GcomAction {
 
+	Fachada fachada;
+	
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
 		ActionForward retorno = actionMapping.findForward("filtrarPagamentosRecuperacaoDeCreditoAction");
 
-		Fachada fachada = Fachada.getInstancia();
+		fachada = Fachada.getInstancia();
 		
 		PagamentosAClassificarActionForm form = (PagamentosAClassificarActionForm) actionForm;
-
 		Integer situacaoPagamento = new Integer(form.getIdSituacaoPagamento());
-		Integer referenciaArrecadacao = Util.formatarMesAnoComBarraParaAnoMes(form.getReferenciaArrecadacao());
-		String matriculaImovel = new String (form.getMatriculaImovel());
-		String dataPagamento = new String (form.getDataPagamento());
-
-		FiltroClassificarPagamentos filtroClassificarPagamentos = new FiltroClassificarPagamentos(FiltroClassificarPagamentos.ORDER_BY);
-
 		
-		if ( situacaoPagamento != null && referenciaArrecadacao != null ) {
+		Collection<Pagamento> colecaoPagamentosAClassificar = obterPagamentosParaClassificar(form);
+				
+		form.setColecaoPagamentosAClassificar(colecaoPagamentosAClassificar);
+		form.setSituacaoPagamento(getDescricaoSituacaoPagamento(situacaoPagamento));
 			
-			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_SITUACAO_PAGAMENTO, situacaoPagamento));
-			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.REFERENCIA_ARRECADACAO, referenciaArrecadacao));
-			filtroClassificarPagamentos.adicionarParametro(new ParametroNaoNulo(FiltroClassificarPagamentos.ID_CONTA));
-			
-			if (isMatriculaImovelPreenchida(matriculaImovel)) {
-				filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_IMOVEL, matriculaImovel));
-			}
-			
-			if (isDataPagementoPreenchida(dataPagamento)) {
-				filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.DATA_PAGAMENTO, Util.converteStringParaDate(dataPagamento)));
-			}
-			
-		}
+		httpServletRequest.setAttribute("colecaoPagamentosAClassificar",colecaoPagamentosAClassificar);
+		httpServletRequest.setAttribute("totalRegistros",colecaoPagamentosAClassificar.size());
 
+		httpServletRequest.setAttribute("situacaoPesquisada",getDescricaoSituacaoPagamento(situacaoPagamento));
+		httpServletRequest.setAttribute("qtdPagamentos",colecaoPagamentosAClassificar.size());
+			
+		return retorno;
+		
+	}
+	
+	private Collection<Pagamento> obterPagamentosParaClassificar(PagamentosAClassificarActionForm form) {
+		Integer situacaoPagamento = new Integer(form.getIdSituacaoPagamento());
+
+		FiltroClassificarPagamentos filtro = obterFiltro(form);
+		
 		@SuppressWarnings("unchecked")
-		Collection<Pagamento> colecaoPagamentos = (Collection<Pagamento>) getFachada().pesquisar(filtroClassificarPagamentos, Pagamento.class.getName());;
+		Collection<Pagamento> colecaoPagamentos = (Collection<Pagamento>) getFachada().pesquisar(filtro, Pagamento.class.getName());;
 		
 		if (colecaoPagamentos == null || colecaoPagamentos.isEmpty() ) {
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado");
 			
 		}else{
 			Collection<Pagamento> colecaoPagamentosAClassificar = fachada.obterPagamentos(getIdPagamentos(colecaoPagamentos));
-					
-			form.setColecaoPagamentosAClassificar(colecaoPagamentosAClassificar);
-			form.setSituacaoPagamento(getDescricaoSituacaoPagamento(situacaoPagamento));
-				
-			httpServletRequest.setAttribute("colecaoPagamentosAClassificar",colecaoPagamentosAClassificar);
-			httpServletRequest.setAttribute("totalRegistros",colecaoPagamentosAClassificar.size());
-	
-			httpServletRequest.setAttribute("situacaoPesquisada",colecaoPagamentosAClassificar.size());
-			httpServletRequest.setAttribute("qtdPagamentos",colecaoPagamentosAClassificar.size());
 			
-			return retorno;
+			if (situacaoPagamento.equals(PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_PARCELADA))
+				return fachada.validarRecuperacaoCreditoContaParcelada(colecaoPagamentosAClassificar);
+			else
+				return colecaoPagamentosAClassificar;
+		}
+	}
+	
+	private FiltroClassificarPagamentos obterFiltro(PagamentosAClassificarActionForm form) {
+		Integer situacaoPagamento = new Integer(form.getIdSituacaoPagamento());
+		Integer referenciaArrecadacao = Util.formatarMesAnoComBarraParaAnoMes(form.getReferenciaArrecadacao());
+		String matriculaImovel = new String (form.getMatriculaImovel());
+		String dataPagamento = new String (form.getDataPagamento());
+
+		FiltroClassificarPagamentos filtro = new FiltroClassificarPagamentos(FiltroClassificarPagamentos.ORDER_BY);
+		
+		if ( situacaoPagamento != null && referenciaArrecadacao != null ) {
+			
+			filtro.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_SITUACAO_PAGAMENTO, situacaoPagamento));
+			filtro.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.REFERENCIA_ARRECADACAO, referenciaArrecadacao));
+			filtro.adicionarParametro(new ParametroNaoNulo(FiltroClassificarPagamentos.ID_CONTA));
+			
+			if (isMatriculaImovelPreenchida(matriculaImovel)) {
+				filtro.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_IMOVEL, matriculaImovel));
+			}
+			
+			if (isDataPagementoPreenchida(dataPagamento)) {
+				filtro.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.DATA_PAGAMENTO, Util.converteStringParaDate(dataPagamento)));
+			}
 		}
 		
+		return filtro;
 	}
 	
 	private Collection<Integer> getIdPagamentos(Collection<Pagamento> pagamentos) {

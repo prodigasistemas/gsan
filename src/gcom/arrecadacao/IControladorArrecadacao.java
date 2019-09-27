@@ -811,4 +811,6 @@ public interface IControladorArrecadacao {
 	
 	public void gerarDadosDocumentosNaoIdentificados(Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException;
 	
+	public Collection<Pagamento> validarRecuperacaoCreditoContaParcelada(Collection<Pagamento> pagamentos) throws ControladorException;
+	
 }

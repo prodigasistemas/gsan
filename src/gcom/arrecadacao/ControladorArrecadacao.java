@@ -50108,20 +50108,38 @@ public class ControladorArrecadacao extends ControladorComum {
 			} else {
 				repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(pagamentos, PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_CANCELADO);
 			}
-			
-			logger.info(String.format("		   						RECUPERACAO CREDITO 2.8: Depois de atualizar indicador classificado recuperacao credito "
-					+ "| Usuario: %s", usuarioLogado.getLogin()));
 		} catch(Exception e) {
 			throw new ControladorException("Erro ao recuperar credito", e);
 		}
+	}
+	
+	public Collection<Pagamento> validarRecuperacaoCreditoContaParcelada(Collection<Pagamento> pagamentos) throws ControladorException {
+		Iterator<Pagamento> itPagamentos = pagamentos.iterator();
+		Collection<Pagamento> pagamentosExcluir = new ArrayList<Pagamento>();
+		
+		try {
+			while (itPagamentos.hasNext()) {
+				Pagamento pagamento = (Pagamento) itPagamentos.next();
+				
+				Parcelamento parcelamento;
+					parcelamento = getControladorCobranca().obterParcelamentoNormalDaConta(pagamento.getContaGeral().getId());
+				
+				if (!getControladorCobranca().isEntradaParcelamentoPaga(parcelamento))
+					pagamentosExcluir.add(pagamento);
+			}
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao validar pagamentos para recuperacao de credito.", e);
+		}
+		
+		pagamentos.removeAll(pagamentosExcluir);
+		
+		return pagamentos;
 	}
 	
 	private Collection<Pagamento> atualizarIndicacaoClassificacaoReuperacaoCredito(Collection<Pagamento> pagamentos) {
 		Collection<Pagamento> pagamentosAtualizados = new ArrayList<Pagamento>();
 		
 		for (Pagamento pagamento : pagamentos) {
-			logger.info(String.format("						RECUPERACAO CREDITO 2.7: Antes de atualizar indicador classificado recuperacao credito "
-					+ "| Imovel: %s", pagamento.getImovel().getId()));
 			pagamento.setIndicadorClassificadoRecuperacaoCredito(ConstantesSistema.SIM);
 			pagamentosAtualizados.add(pagamento);
 		}
@@ -50188,9 +50206,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			credito.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
 			credito.setUsuario(usuarioLogado);
 			
-			logger.info(String.format("					RECUPERACAO CREDITO 2.5: Antes de salvar credito a realizar | Imovel: %s | Pagamento: %s | Usuario: %s", pagamento.getImovel().getId(), pagamento.getId(), usuarioLogado.getLogin()));
 			getControladorFaturamento().gerarCreditoARealizar(credito, imovel, usuarioLogado);
-			logger.info(String.format("					RECUPERACAO CREDITO 2.6: Antes de salvar credito a realizar | Imovel: %s | Pagamento: %s | Usuario: %s", pagamento.getImovel().getId(), pagamento.getId(), usuarioLogado.getLogin()));
 		}
 	}
 	

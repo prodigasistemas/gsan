@@ -40389,7 +40389,15 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e);
 		}
 	}
-
+	
+	public Collection<Pagamento> validarRecuperacaoCreditoContaParcelada(Collection<Pagamento> pagamentos) {
+		try {
+			return getControladorArrecadacao().validarRecuperacaoCreditoContaParcelada(pagamentos);
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage(), e);
+		}
+	}
+	
 	public Parcelamento obterUltimoParcelamento(Integer idImovel) {
 		try {
 			return getControladorCobranca().obterUltimoParcelamento(idImovel);
