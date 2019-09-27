@@ -49,8 +49,6 @@ public interface IControladorAtualizacaoCadastral {
 
 	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle) throws ControladorException;
 
-	public Integer obterQuantidadeDeVisitasPorImovelControle(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException;;
-
 	public void fiscalizarImovel(Integer idImovel) throws ControladorException;
 
 	public Collection<RelatorioFichaFiscalizacaoCadastralHelper> pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis, boolean dadosOriginais) throws ControladorException;

@@ -20,6 +20,8 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
@@ -88,6 +90,7 @@ import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
+import gcom.util.HibernateUtil;
 import gcom.util.IRepositorioUtil;
 import gcom.util.MergeProperties;
 import gcom.util.RepositorioUtilHBM;
@@ -194,15 +197,6 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovel) throws ControladorException {
 		return  repositorioAtualizacaoCadastral.obterImovelControle(idImovel);
-	}
-
-	public Integer obterQuantidadeDeVisitasPorImovelControle(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException {
-		try {
-			return repositorioAtualizacaoCadastral.pesquisarVisitasPorImovelControle(imovelControle).size();
-		} catch (ErroRepositorioException e) {
-			logger.error("Erro ao pesquisar visitas por ImovelControle.", e);
-			throw new ControladorException("Erro ao pesquisar visitas por ImovelControle.", e);
-		}
 	}
 
 	/************************************************************
@@ -1656,7 +1650,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			List<ImovelControleAtualizacaoCadastral> controles = repositorioAtualizacaoCadastral.obterImoveisControlePorImovel(imoveisParaRevisita);
 			
 			for (ImovelControleAtualizacaoCadastral controle : controles) {
-				Integer quantidadeVisitas = this.obterQuantidadeDeVisitasPorImovelControle(controle);
+				Integer quantidadeVisitas = controle.getQuantidadeVisitaNaoExcluidas();
 				
 				if (quantidadeVisitas >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO)
 					imoveisParaRevisita.remove(controle.getImovel().getId());
@@ -1743,6 +1737,11 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		getControladorUtil().atualizar(imovelControle);
 	}
 	
+	private void atualizarSituacaoImovelControle(ImovelControleAtualizacaoCadastral imovelControle, Integer idNovaSituacao) throws ControladorException {
+		imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(idNovaSituacao));
+		getControladorUtil().atualizar(imovelControle);
+	}
+	
 	public boolean possuiInformacoesFiscalizacao(ImovelControleAtualizacaoCadastral imovelControle) throws ControladorException {
 		try {
 			return repositorioAtualizacaoCadastral.possuiInformacoesFiscalizacao(imovelControle);
@@ -1819,7 +1818,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		boolean diferente = false;
 
 		if (filtroQuantidadeVisitas >= 0) {
-			int visitas = getControladorAtualizacaoCadastral().obterQuantidadeDeVisitasPorImovelControle(controle);
+			int visitas = controle.getQuantidadeVisitaNaoExcluidas();
 
 			if (visitas != filtroQuantidadeVisitas) {
 				diferente = true;
@@ -2003,26 +2002,36 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
     	
     	List<Integer> imoveisParaReprovar = new ArrayList<Integer>();
 		
-		for (ConsultarMovimentoAtualizacaoCadastralHelper helper : listaImoveis){
+		for (ConsultarMovimentoAtualizacaoCadastralHelper helper : listaImoveis) {
 			
-			ImovelControleAtualizacaoCadastral controle = obterImovelControle(helper.getIdImovel());
-			
-			Integer quantidadeVisitas = this.obterQuantidadeDeVisitasPorImovelControle(controle);
-			if (quantidadeVisitas < Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO && !controle.isAprovado())
-				imoveisParaReprovar.add(controle.getId());					
+			ImovelControleAtualizacaoCadastral imovelControle = obterImovelControle(helper.getIdImovel());
+			if (imovelControle.getQuantidadeVisitaNaoExcluidas() < Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO
+					&& !imovelControle.isAprovado()) {
+				imoveisParaReprovar.add(imovelControle.getId());
+			} else if (imovelControle.getCadastroOcorrencia().ehOcorrenciaImpeditiva())
+				atualizarSituacaoImovelControle(imovelControle, SituacaoAtualizacaoCadastral.CONCLUIDO_ANORMALIDADE);
 		}
-		if (!imoveisParaReprovar.isEmpty()) 
-			this.reprovarImoveis(imoveisParaReprovar, usuarioLogado);
+		
+		if (CollectionUtil.naoEhVazia(imoveisParaReprovar)) { 
+			this.reprovarImoveisEExcluirVisitas(imoveisParaReprovar, usuarioLogado);
+		}
 			
 		return imoveisParaReprovar.size();
 	}
 	
-	private void reprovarImoveis(List<Integer> imoveisParaReprovar, Usuario usuarioLogado) throws ControladorException {
+	private void reprovarImoveisEExcluirVisitas(List<Integer> imoveisParaReprovar, Usuario usuarioLogado) throws ControladorException {
+		Session session = HibernateUtil.getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			repositorioAtualizacaoCadastral.reprovarImoveis(imoveisParaReprovar);
-
+			List<List<Integer>> idsDeMilEmMil = CollectionUtil.particionarListaNoTamanhoDeMilEmMil(imoveisParaReprovar);
+			for (List<Integer> ids : idsDeMilEmMil) {
+				repositorioAtualizacaoCadastral.excluirVisitasDosImoveisControle(ids);
+			}
+			transaction.commit();
 		} catch (Exception e) {
 			logger.error("Erro ao reprovar imoveis em lote. " + e);
+			transaction.rollback();
 			throw new ControladorException("Erro ao aprovar imoveis em lote.", e);
 		}
 	}

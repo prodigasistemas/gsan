@@ -27,6 +27,7 @@ public class Visita extends ObjetoTransacao {
 	private String coordenadaY;
 	private Usuario usuario;
 	private Date dataVisita;
+	private boolean indicadorExclusao;
 
 	public Visita() {
 	}
@@ -112,6 +113,14 @@ public class Visita extends ObjetoTransacao {
 		if (StringUtils.isNotEmpty(dataVisita)) {
 			this.dataVisita = Util.converterStringDateComDataETempo(dataVisita);
 		}
+	}
+	
+	public boolean isIndicadorExclusao() {
+		return indicadorExclusao;
+	}
+
+	public void setIndicadorExclusao(boolean indicadorExclusao) {
+		this.indicadorExclusao = indicadorExclusao;
 	}
 
 	@Override

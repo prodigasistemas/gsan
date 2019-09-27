@@ -191,4 +191,15 @@ public interface IRepositorioAtualizacaoCadastral {
     public List<ImovelSubcategoriaRetorno> obterSubcategoriasRetorno(Integer idImovel) throws ErroRepositorioException;
     
     public List<Visita> obterVisitasPorCoordenadas(String latitude, String longitude) throws ErroRepositorioException;
+    
+    /**
+     * Marca as visitas dos imoveis controle informados com o 
+     * indicadorExclusao = true
+     * 
+     * Nao passar mais de HUM MIL ids de uma so vez
+     * 
+     * @param idsImoveisControle
+     * @throws ErroRepositorioException
+     */
+    public void excluirVisitasDosImoveisControle(List<Integer> idsImoveisControle) throws ErroRepositorioException;
 }

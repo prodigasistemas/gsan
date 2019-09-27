@@ -24,6 +24,7 @@
 		<property name="coordenadaX" type="java.lang.String" column="vist_nncoordenadax" not-null="false" length="50" />
 		<property name="coordenadaY" type="java.lang.String" column="vist_nncoordenaday" not-null="false" length="50" />
 		<property name="dataVisita" type="java.sql.Timestamp" column="vist_tmvisita" not-null="false" />
+		<property name="indicadorExclusao" type="java.lang.Boolean" column="vist_icexclusao" not-null="true" />
 		
 		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario">
 			<column name="usur_id"/>
