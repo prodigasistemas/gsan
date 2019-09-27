@@ -230,7 +230,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 
 	@ControleAlteracao(value=FiltroImovel.CADASTRO_OCORRENCIA, funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
 	private gcom.cadastro.imovel.CadastroOcorrencia cadastroOcorrencia;
-
+	
 	@ControleAlteracao(value=FiltroImovel.POCO_TIPO, funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
 	private gcom.cadastro.imovel.PocoTipo pocoTipo;
 
@@ -328,7 +328,16 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
     private Integer quantidadeEconomiasOutra;
     
     @ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
-    private Short percentualAbastecimento;    
+    private Short percentualAbastecimento;   
+    
+    @ControleAlteracao (funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
+    private Integer quantidadeNosFundos;
+	
+    @ControleAlteracao (funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
+    private Integer quantidadeNosAltos;
+	
+    @ControleAlteracao (funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
+	private Integer individualizacao;
     
     private Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes;
 
@@ -1425,6 +1434,30 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 		return endereco;
 	}
 	
+	public Integer getQuantidadeNosFundos() {
+		return quantidadeNosFundos;
+	}
+
+	public void setQuantidadeNosFundos(Integer quantidadeNosFundos) {
+		this.quantidadeNosFundos = quantidadeNosFundos;
+	}
+
+	public Integer getQuantidadeNosAltos() {
+		return quantidadeNosAltos;
+	}
+
+	public void setQuantidadeNosAltos(Integer quantidadeNosAltos) {
+		this.quantidadeNosAltos = quantidadeNosAltos;
+	}
+
+	public Integer getIndividualizacao() {
+		return individualizacao;
+	}
+
+	public void setIndividualizacao(Integer individualizacao) {
+		this.individualizacao = individualizacao;
+	}
+
 	public String getEnderecoTipoTituloLogradouro() {
 		String endereco = null;
 

@@ -46,6 +46,9 @@
         <property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imre_qtd_economias_outra"           not-null="false"/>
         <property name="percentualAbastecimento"     type="java.lang.Short"      column="imre_percentual_abastecimento"      not-null="false"/>
         <property name="observacaoCategoria" 		 type="java.lang.String"     column="imre_dsobservacaotegoria" 			 not-null="false"/>
+        <property name="quantidadeNosFundos" 		 type="java.lang.Integer"     column="imre_qtd_nos_fundos" 				 length="3"/>
+        <property name="quantidadeNosAltos" 		 type="java.lang.Integer"     column="imre_qtd_nos_altos" 				 length="3"/>
+        <property name="individualizacao" 			 type="java.lang.Integer"     column="imre_individualizacao" 			 length="3"/>
         
 		
 

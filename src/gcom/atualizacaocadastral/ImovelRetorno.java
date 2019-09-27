@@ -83,6 +83,12 @@ public class ImovelRetorno implements IImovel{
     private Short percentualAbastecimento;
     
     private String observacaoCategoria;
+    
+    private Integer quantidadeNosFundos;
+    
+	private Integer quantidadeNosAltos;
+	
+	private Integer individualizacao;
 
 	public ImovelRetorno () {
 	}
@@ -135,6 +141,9 @@ public class ImovelRetorno implements IImovel{
 		this.quantidadeEconomiasOutra     = imovelAtualizacaoCadastral.getQuantidadeEconomiasOutra();
 		this.percentualAbastecimento      = imovelAtualizacaoCadastral.getPercentualAbastecimento();
 		this.observacaoCategoria     	  = imovelAtualizacaoCadastral.getObservacaoCategoria();
+		this.quantidadeNosFundos		  = imovelAtualizacaoCadastral.getQuantidadeNosFundos();
+		this.quantidadeNosAltos		  	  = imovelAtualizacaoCadastral.getQuantidadeNosAltos();
+		this.individualizacao			  = imovelAtualizacaoCadastral.getIndividualizacao();
 	}
 
 	public Integer getId() {
@@ -562,4 +571,29 @@ public class ImovelRetorno implements IImovel{
 	public String getObservacaoCategoria() {
 		return observacaoCategoria;
 	}
+	public Integer getQuantidadeNosFundos() {
+		return quantidadeNosFundos;
+	}
+
+	public void setQuantidadeNosFundos(Integer quantidadeNosFundos) {
+		this.quantidadeNosFundos = quantidadeNosFundos;
+	}
+
+	public Integer getQuantidadeNosAltos() {
+		return quantidadeNosAltos;
+	}
+
+	public void setQuantidadeNosAltos(Integer quantidadeNosAltos) {
+		this.quantidadeNosAltos = quantidadeNosAltos;
+	}
+
+	public Integer getIndividualizacao() {
+		return individualizacao;
+	}
+
+	public void setIndividualizacao(Integer individualizacao) {
+		this.individualizacao = individualizacao;
+	}
+
+	
 }
