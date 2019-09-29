@@ -6230,7 +6230,7 @@ public class Util {
 	}
     
     public static Integer setValorInteiro(String valor) {
-		return valor.trim().equals("") || valor.trim().equals("0") ? null : Integer.parseInt(valor.trim());
+		return valor == null || valor.trim().equals("") || valor.trim().equals("0") ? null : Integer.parseInt(valor.trim());
 	}
     
     public static <T> List<List<T>> quebrarListaEmPartes(List<T> lista, final int L) {
