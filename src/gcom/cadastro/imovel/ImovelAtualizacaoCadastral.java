@@ -242,105 +242,177 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer individualizacao;
 		
-	public ImovelAtualizacaoCadastral(Integer idImovel, 
-	        Integer idLocalidade,
-			Integer codigoSetorComercial, 
-			Integer numeroQuadra, 
-			short lote,
-			short subLote, 
+    
+	public ImovelAtualizacaoCadastral(Integer id, 
+			Integer idImovel,
+			String numeroImovel, 
+			Integer idLocalidade,
+			int codigoSetorComercial,
+			int numeroQuadra, 
+			short lote, 
+			short subLote,
 			Integer numeroSequencialRota,
-			Short numeroMorador, 
-			Integer idLogradouro,
+			Integer idLogradouroTipo, 
+			String dsLogradouroTipo,
+			Integer idLogradouroTitulo,
+			String dsLogradouroTitulo,
+			Integer idLogradouro, 
+			String descricaoLogradouro, 
+			Integer idBairro, String nomeBairro,
 			Integer codigoCep,
-			Integer idBairro,
-			String nomeBairro, 
-			Integer idEnderecoReferencia,
-			String numeroImovel,
-			String complementoEndereco,
-			BigDecimal areaConstruida,
-			Integer idLigacaoAguaSituacao, 
+			String complementoEndereco, 
+			Integer idEnderecoReferencia, 
+			Integer idDespejo,
+			BigDecimal volumeReservatorioSuperior, 
 			BigDecimal volumeReservatorioInferior,
-			BigDecimal volumeReservatorioSuperior,
-			BigDecimal volumePiscina,
-			Short indicadorJardim,
 			Integer idPavimentoCalcada,
 			Integer idPavimentoRua,
 			Integer idFonteAbastecimento,
-			Integer idPocoTipo, 
-			Short numeroPontosUtilizacao,
-			Integer idLigacaoEsgotoSituacao,
-			Integer idImovelPerfil,
-			Integer idDespejo, 
-			String coordenadaX,
-			String coordenadaY,
-			Integer codigoImovelPrincipal,
+			Integer idLigacaoAguaSituacao,
+			Integer idLigacaoEsgotoSituacao, 
+			Integer idImovelPerfil, 
+			BigDecimal volumePiscina, 
+			Integer idPocoTipo,
+			Short numeroPontosUtilizacao, 
+			Short numeroMorador, 
 			String numeroIptu,
-			Long numeroContratoEnergia, 
+			Long numeroContratoEnergia,
+			String coordenadaX, 
+			String coordenadaY, 
+			Date ultimaAlteracao, 
+			BigDecimal areaConstruida,
+			Short indicadorJardim, 
+			Integer numeroLeituraInstalacaoHidrometro,
+			Integer idCapacidadeHidrometro,
+			Integer idMarcaHidrometro, 
+			Integer idLocalInstalacaoHidrometro,
+			Integer idProtecaoHidrometro,
+			String numeroHidrometro, 
+			Short indicadorCavalete, 
+			String numeroMedidorEnergia, 
+			Integer idCadastroOcorrencia,
+			String descricaoOutrasInformacoes, 
+			String tipoEntrevistado,
 			Integer idLocalInstalacaoRamal,
-			Short classeSocial,
-			Short quantidadeAnimaisDomesticos,
-			BigDecimal volumeCisterna,
-			BigDecimal volumeCaixaDagua,
-			Short tipoUso,
-			Short acessoHidrometro,
-			Integer quantidadeEconomiasSocial,
-			Integer quantidadeEconomiasOutra,
-			Short percentualAbastecimento,
+			Integer codigoImovelPrincipal,
+			Integer idSituacaoAtualizacaoCadastral,
+			Integer idEmpresa,
+			Integer idMunicipio, 
+			String nomeMunicipio, 
+			Integer idUinidadeFederacao,
+			String dsUFSiglaMunicipio,
+			Integer idArquivoTexto,
+			Integer indicadorAtualizado,
+			LigacaoEsgotoSituacao ligacaoEsgotoSituacao,
+			LigacaoAguaSituacao ligacaoAguaSituacao,
+			LogradouroCep logradouroCep, 
+			FonteAbastecimento fonteAbastecimento,
+			LigacaoAgua ligacaoAgua,
+			Integer tipoOperacao, 
+			Integer codigoMunicipio, 
+			Integer idRota,
 			String observacaoCategoria,
+			Short classeSocial, 
+			Short quantidadeAnimaisDomesticos,
+			BigDecimal volumeCisterna,
+			BigDecimal volumeCaixaDagua, 
+			Short tipoUso, 
+			Short acessoHidrometro,
+			Integer quantidadeEconomiasSocial, 
+			Integer quantidadeEconomiasOutra, 
+			Short percentualAbastecimento,
+			ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral, 
 			Integer quantidadeNosFundos,
-			Integer quantidadeNosAltos,
+			Integer quantidadeNosAltos, 
 			Integer individualizacao) {
-		this.id                         = idImovel;
-	    this.idImovel                   = idImovel;
-	    this.idLocalidade               = idLocalidade;
-	    this.codigoSetorComercial       = codigoSetorComercial;
-	    this.numeroQuadra               = numeroQuadra;
-	    this.lote                       = lote;
-	    this.subLote                    = subLote;
-	    this.numeroSequencialRota       = numeroSequencialRota;
-	    this.numeroMorador              = numeroMorador;
-	    this.idLogradouro               = idLogradouro;
-	    this.codigoCep                  = codigoCep;
-	    this.idBairro                   = idBairro;
-	    this.nomeBairro                 = nomeBairro;
-	    this.idEnderecoReferencia       = idEnderecoReferencia;
-	    this.numeroImovel               = numeroImovel;
-	    this.complementoEndereco        = complementoEndereco;
-	    this.areaConstruida             = areaConstruida;
-	    this.idLigacaoAguaSituacao      = idLigacaoAguaSituacao ;
-	    this.volumeReservatorioInferior = volumeReservatorioInferior;
-	    this.volumeReservatorioSuperior = volumeReservatorioSuperior;
-	    this.volumePiscina              = volumePiscina;
-	    this.indicadorJardim            = indicadorJardim;
-	    this.idPavimentoCalcada         = idPavimentoCalcada;
-	    this.idPavimentoRua             = idPavimentoRua;
-	    this.idFonteAbastecimento       = idFonteAbastecimento;
-	    this.idPocoTipo                 = idPocoTipo;
-	    this.numeroPontosUtilizacao     = numeroPontosUtilizacao;
-	    this.idLigacaoEsgotoSituacao    = idLigacaoEsgotoSituacao;
-	    this.idImovelPerfil             = idImovelPerfil;
-	    this.idDespejo                  = idDespejo;
-	    this.coordenadaX                = coordenadaX;
-	    this.coordenadaY                = coordenadaY;
-	    this.codigoImovelPrincipal      = codigoImovelPrincipal;
-	    this.numeroIptu                 = numeroIptu;
-	    this.numeroContratoEnergia      = numeroContratoEnergia ;
-	    this.idLocalInstalacaoRamal     = idLocalInstalacaoRamal;
-        this.classeSocial               = classeSocial; 
-        this.quantidadeAnimaisDomesticos = quantidadeAnimaisDomesticos;
-        this.volumeCaixaDagua            = volumeCaixaDagua;
-        this.volumeCisterna              = volumeCisterna;
-        this.tipoUso                     = tipoUso;
-        this.acessoHidrometro            = acessoHidrometro;
-        this.quantidadeEconomiasSocial   = quantidadeEconomiasSocial;
-        this.quantidadeEconomiasOutra    = quantidadeEconomiasOutra;
-        this.percentualAbastecimento     = percentualAbastecimento;
-        this.observacaoCategoria         = observacaoCategoria;
-        this.quantidadeNosFundos         = quantidadeNosFundos;
-        this.quantidadeNosAltos          = quantidadeNosAltos;
-        this.individualizacao        	 = individualizacao;
+		
+		super();
+		
+		this.id = id;
+		this.idImovel = idImovel;
+		this.numeroImovel = numeroImovel;
+		this.idLocalidade = idLocalidade;
+		this.codigoSetorComercial = codigoSetorComercial;
+		this.numeroQuadra = numeroQuadra;
+		this.lote = lote;
+		this.subLote = subLote;
+		this.numeroSequencialRota = numeroSequencialRota;
+		this.idLogradouroTipo = idLogradouroTipo;
+		this.dsLogradouroTipo = dsLogradouroTipo;
+		this.idLogradouroTitulo = idLogradouroTitulo;
+		this.dsLogradouroTitulo = dsLogradouroTitulo;
+		this.idLogradouro = idLogradouro;
+		this.descricaoLogradouro = descricaoLogradouro;
+		this.idBairro = idBairro;
+		this.nomeBairro = nomeBairro;
+		this.codigoCep = codigoCep;
+		this.complementoEndereco = complementoEndereco;
+		this.idEnderecoReferencia = idEnderecoReferencia;
+		this.idDespejo = idDespejo;
+		this.volumeReservatorioSuperior = volumeReservatorioSuperior;
+		this.volumeReservatorioInferior = volumeReservatorioInferior;
+		this.idPavimentoCalcada = idPavimentoCalcada;
+		this.idPavimentoRua = idPavimentoRua;
+		this.idFonteAbastecimento = idFonteAbastecimento;
+		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
+		this.idLigacaoEsgotoSituacao = idLigacaoEsgotoSituacao;
+		this.idImovelPerfil = idImovelPerfil;
+		this.volumePiscina = volumePiscina;
+		this.idPocoTipo = idPocoTipo;
+		this.numeroPontosUtilizacao = numeroPontosUtilizacao;
+		this.numeroMorador = numeroMorador;
+		this.numeroIptu = numeroIptu;
+		this.numeroContratoEnergia = numeroContratoEnergia;
+		this.coordenadaX = coordenadaX;
+		this.coordenadaY = coordenadaY;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.areaConstruida = areaConstruida;
+		this.indicadorJardim = indicadorJardim;
+		this.numeroLeituraInstalacaoHidrometro = numeroLeituraInstalacaoHidrometro;
+		this.idCapacidadeHidrometro = idCapacidadeHidrometro;
+		this.idMarcaHidrometro = idMarcaHidrometro;
+		this.idLocalInstalacaoHidrometro = idLocalInstalacaoHidrometro;
+		this.idProtecaoHidrometro = idProtecaoHidrometro;
+		this.numeroHidrometro = numeroHidrometro;
+		this.indicadorCavalete = indicadorCavalete;
+		this.numeroMedidorEnergia = numeroMedidorEnergia;
+		this.idCadastroOcorrencia = idCadastroOcorrencia;
+		this.descricaoOutrasInformacoes = descricaoOutrasInformacoes;
+		this.tipoEntrevistado = tipoEntrevistado;
+		this.idLocalInstalacaoRamal = idLocalInstalacaoRamal;
+		this.codigoImovelPrincipal = codigoImovelPrincipal;
+		this.idSituacaoAtualizacaoCadastral = idSituacaoAtualizacaoCadastral;
+		this.idEmpresa = idEmpresa;
+		this.idMunicipio = idMunicipio;
+		this.nomeMunicipio = nomeMunicipio;
+		this.idUinidadeFederacao = idUinidadeFederacao;
+		this.dsUFSiglaMunicipio = dsUFSiglaMunicipio;
+		this.idArquivoTexto = idArquivoTexto;
+		this.indicadorAtualizado = indicadorAtualizado;
+		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
+		this.ligacaoAguaSituacao = ligacaoAguaSituacao;
+		this.logradouroCep = logradouroCep;
+		this.fonteAbastecimento = fonteAbastecimento;
+		this.ligacaoAgua = ligacaoAgua;
+		this.tipoOperacao = tipoOperacao;
+		this.codigoMunicipio = codigoMunicipio;
+		this.idRota = idRota;
+		this.observacaoCategoria = observacaoCategoria;
+		this.classeSocial = classeSocial;
+		this.quantidadeAnimaisDomesticos = quantidadeAnimaisDomesticos;
+		this.volumeCisterna = volumeCisterna;
+		this.volumeCaixaDagua = volumeCaixaDagua;
+		this.tipoUso = tipoUso;
+		this.acessoHidrometro = acessoHidrometro;
+		this.quantidadeEconomiasSocial = quantidadeEconomiasSocial;
+		this.quantidadeEconomiasOutra = quantidadeEconomiasOutra;
+		this.percentualAbastecimento = percentualAbastecimento;
+		this.imovelControleAtualizacaoCadastral = imovelControleAtualizacaoCadastral;
+		this.quantidadeNosFundos = quantidadeNosFundos;
+		this.quantidadeNosAltos = quantidadeNosAltos;
+		this.individualizacao = individualizacao;
 	}
-	
+
 	public ImovelAtualizacaoCadastral(Integer idImovel, 
 	        Integer idLocalidade,
 			Integer codigoSetorComercial, 
@@ -384,10 +456,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 			Short acessoHidrometro,
 			Integer quantidadeEconomiasSocial,
 			Integer quantidadeEconomiasOutra,
-			Short percentualAbastecimento,
-			Integer quantidadeNosFundos,
-			Integer quantidadeNosAltos,
-			Integer individualizacao) {
+			Short percentualAbastecimento) {
 		this.id                         = idImovel;
 	    this.idImovel                   = idImovel;
 	    this.idLocalidade               = idLocalidade;
@@ -433,9 +502,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
         this.quantidadeEconomiasSocial   = quantidadeEconomiasSocial;
         this.quantidadeEconomiasOutra    = quantidadeEconomiasOutra;
         this.percentualAbastecimento     = percentualAbastecimento;
-        this.quantidadeNosFundos         = quantidadeNosFundos;
-        this.quantidadeNosAltos          = quantidadeNosAltos;
-        this.individualizacao        	 = individualizacao;
 	}
 
 	public Integer getQuantidadeNosFundos() {
