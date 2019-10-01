@@ -11,7 +11,13 @@ public class ParserUtil {
 	}
 
 	public String obterDadoParserTrim(int tamanho) {
-		return obterDadoParser(tamanho).trim();
+		String campo = obterDadoParser(tamanho);
+		
+		if (campo != null) {
+			return campo.trim();
+		} else {
+			return null;
+		}
 	}
 
 	public String obterDadoParser(int tamanho) {
