@@ -595,7 +595,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append("INNER JOIN micromedicao.leiturista leit on tatc.leit_id = leit.leit_id ")
 				.append("LEFT JOIN cadastro.funcionario func on leit.func_id = func.func_id ")
 				.append("LEFT JOIN cadastro.cliente clie on leit.clie_id = clie.clie_id ")
-				.append("LEFT JOIN atualizacaocadastral.imovel_controle_atlz_cad ctrl on ctrl.imov_id = tatc.tatc_cdimovel ")
+				.append("LEFT JOIN atualizacaocadastral.imovel_controle_atlz_cad ctrl on ctrl.imov_id = tatc.tatc_cdimovel OR ctrl.icac_id = tatc.tatc_cdimovel ")
 				.append("LEFT JOIN cadastro.situacao_atlz_cadastral siac on siac.siac_id = ctrl.siac_id ")
 				.append("LEFT JOIN cadastro.imovel_atlz_cadastral im on im.imov_id = tatc_cdimovel ")
 				.append("LEFT JOIN cadastro.imovel_subcatg_atlz_cad isac on isac.imov_id = tatc.tatc_cdimovel ")

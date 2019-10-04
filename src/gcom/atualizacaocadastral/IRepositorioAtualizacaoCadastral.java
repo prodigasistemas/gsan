@@ -58,6 +58,8 @@ public interface IRepositorioAtualizacaoCadastral {
 	public Collection<Integer> pesquisarImoveisPorSituacaoPeriodo(Integer idSituacaoCadastral, Date dataInicial, Date dataFinal) throws ErroRepositorioException;
 
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ErroRepositorioException;
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel, Integer tipoOperacao) throws ErroRepositorioException;
 
 	public Integer recuperaValorSequenceImovelRetorno() throws ErroRepositorioException;
 

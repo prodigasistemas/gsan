@@ -102,7 +102,7 @@ public class ValidadorTipoOperacaoCommand extends ValidadorCommand {
 
 				int qtdInscricao = 0;
 				for (AtualizacaoCadastralImovel itemAtualizacao : 
-					cadastroImovel.getAtualizacaoArquivo().getImoveisComErro()) {
+					cadastroImovel.getAtualizacaoArquivo().getImoveisComInconsistencia()) {
 					
 					if (itemAtualizacao.getLinhaImovel("inscricao").equals(inscricao)) {
 						qtdInscricao++;

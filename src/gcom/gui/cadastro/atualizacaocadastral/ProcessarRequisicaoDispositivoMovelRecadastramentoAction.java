@@ -26,15 +26,18 @@ public class ProcessarRequisicaoDispositivoMovelRecadastramentoAction extends Gc
 	private static final byte RESPOSTA_OK = '*';
 	private static final byte RESPOSTA_ERRO = '#';
 	private static final String RESPOSTA_INCONSISTENCIA = "!";
-	
+
 	private static final int ATUALIZAR_CADASTRO = 1;
 
 	private Logger logger = Logger.getLogger(ProcessarRequisicaoDispositivoMovelRecadastramentoAction.class);
 
+	private HttpServletResponse response;
+	private InputStream in;
+	private OutputStream out;
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 
-		InputStream in = null;
-		OutputStream out = null;
+		this.response = response;
 
 		try {
 			out = response.getOutputStream();
@@ -55,74 +58,76 @@ public class ProcessarRequisicaoDispositivoMovelRecadastramentoAction extends Gc
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
-
 			logger.error("Erro: " + e.getMessage());
-			response.setContentLength(1);
-			try {
-				out.write(RESPOSTA_ERRO);
-				out.flush();
-			} catch (IOException e1) {
-				logger.error("Erro: " + e.getMessage());
-			}
+			escreverResposta(RESPOSTA_ERRO);
 		} finally {
-			fecharInput(in);
-			fecharOutput(out);
+			fecharStream();
 		}
 		return null;
 	}
 
-	private void atualizarCadastro(DataInputStream data, HttpServletResponse response, OutputStream out) throws IOException {
+	private void atualizarCadastro(DataInputStream data, HttpServletResponse response, OutputStream out)
+			throws IOException {
 		try {
 			logger.info("Iniciando atualização online de cadastro...");
-			
+
 			InputStreamReader reader = new InputStreamReader(data);
 			BufferedReader buffer = new BufferedReader(reader);
-			
-			AtualizacaoCadastral atualizacao = Fachada.getInstancia().carregarImovelAtualizacaoCadastral(buffer, new ArrayList<String>());
 
-			if (atualizacao.getTotalImoveisComErro() == 0) {
-				response.setContentLength(1);
-				out.write(RESPOSTA_OK);
-				out.flush();
+			AtualizacaoCadastral atualizacao = Fachada.getInstancia().carregarImovelAtualizacaoCadastral(buffer,
+					new ArrayList<String>());
+
+			if (atualizacao.comErro()) {
+				escreverResposta(RESPOSTA_ERRO);
 				
+			} else if (atualizacao.getTotalImoveisComInconsistencia() == 0) {
+				escreverResposta(RESPOSTA_OK);
 				logger.info("Fim da atualização online de cadastro.");
+
 			} else {
-				String resposta = RESPOSTA_INCONSISTENCIA + Util.removerCaractereEspecial(atualizacao.getImoveisComErro().get(0).getMensagensErro().toString());
-				
-				response.setContentLength(resposta.length());
-				out.write(resposta.getBytes());
-				out.flush();
-				
-				logger.warn("Não foi possível atualizar o cadastro do imóvel " + atualizacao.getImovelAtual().getMatricula() 
-						+ " com inconsistências: " + atualizacao.getImoveisComErro().get(0).getMensagensErro());
+				String resposta = RESPOSTA_INCONSISTENCIA + Util.removerCaractereEspecial(atualizacao.getImoveisComInconsistencia().get(0).getMensagensErro().toString());
+
+				escreverResposta(resposta);
+
+				logger.warn("Não foi possível atualizar o cadastro do imóvel "
+						+ atualizacao.getImovelAtual().getMatricula() + " com inconsistências: "
+						+ atualizacao.getImoveisComInconsistencia().get(0).getMensagensErro());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			escreverResposta(RESPOSTA_ERRO);
 			logger.error("Erro ao atualizar cadastro: " + e.getMessage());
+		}
+	}
+
+	private void escreverResposta(byte resposta) {
+		try {
 			response.setContentLength(1);
-			out.write(RESPOSTA_ERRO);
+			out.write(resposta);
 			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	private void fecharOutput(OutputStream out) {
-		if (out != null) {
-			try {
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	private void escreverResposta(String resposta) {
+		try {
+			response.setContentLength(resposta.length());
+			out.write(resposta.getBytes());
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
-
-	private void fecharInput(InputStream in) {
-		if (in != null) {
-			try {
+	
+	private void fecharStream() {
+		try {
+			if (in != null)
 				in.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
+			if (out != null)
+				out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

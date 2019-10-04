@@ -127,18 +127,41 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
+		
 		try {
 
-			String consulta = "SELECT icac "
-					+ "FROM ImovelControleAtualizacaoCadastral icac "
+			String consulta = "SELECT icac FROM ImovelControleAtualizacaoCadastral icac "
 					+ "LEFT JOIN FETCH icac.imovel imovel "
 					+ "LEFT JOIN FETCH icac.situacaoAtualizacaoCadastral situacao "
 					+ "LEFT JOIN FETCH icac.cadastroOcorrencia cadastroOcorrencia "
 					+ "WHERE icac.imovel.id = :idImovel ";
 
-			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
-					.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
-		}catch (HibernateException e) {
+			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta).setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar controle de atualizacao cadastral");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer id, Integer tipoOperacao) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		
+		try {
+
+			String consulta = "SELECT icac FROM ImovelControleAtualizacaoCadastral icac "
+					+ "LEFT JOIN FETCH icac.imovel imovel "
+					+ "LEFT JOIN FETCH icac.situacaoAtualizacaoCadastral situacao "
+					+ "LEFT JOIN FETCH icac.cadastroOcorrencia cadastroOcorrencia ";
+
+			if (tipoOperacao.intValue() == AlteracaoTipo.INCLUSAO.intValue()) {
+				consulta += "WHERE icac.id = :id ";
+			} else {
+				consulta += "WHERE icac.imovel.id = :id ";
+			}
+
+			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta).setInteger("id", id).setMaxResults(1).uniqueResult();
+		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao pesquisar controle de atualizacao cadastral");
 		} finally {
 			HibernateUtil.closeSession(session);

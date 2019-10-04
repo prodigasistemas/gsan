@@ -7155,11 +7155,11 @@ public class ControladorCadastro extends ControladorComum {
 							repositorioClienteImovel);
 					retornoCommand.execute(atualizacao);
 
-					atualizacao.excluirImovelSemErros();
+					atualizacao.excluirImovelSemInconsistencia();
 				}
 			}
 
-			this.excluirImagemImoveisComErro(atualizacao);
+			this.excluirImagemImoveisComInconsistencia(atualizacao);
 
 			Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisTransmitidosAtualizacaoCadastral(atualizacao.getArquivoTexto().getId());
 
@@ -7170,6 +7170,7 @@ public class ControladorCadastro extends ControladorComum {
 			
 			transaction.commit();
 		} catch (Exception e) {
+			atualizacao.setComErro(true);
 			transaction.rollback();
 		    logger.error("Erro ao carregar arquivo de retorno de atualizacao cadastral", e);
 			throw new ControladorException("Erro ao carregar arquivo de retorno de atualizacao cadastral", e);
@@ -7187,12 +7188,12 @@ public class ControladorCadastro extends ControladorComum {
 		return atualizacao;
 	}
 
-	private void excluirImagemImoveisComErro(AtualizacaoCadastral atualizacao) throws Exception {
+	private void excluirImagemImoveisComInconsistencia(AtualizacaoCadastral atualizacao) throws Exception {
 
-		List<AtualizacaoCadastralImovel> imoveisComErro = atualizacao.getImoveisComErro();
+		List<AtualizacaoCadastralImovel> imoveisComInconsistencia = atualizacao.getImoveisComInconsistencia();
 
-		for (AtualizacaoCadastralImovel imovelComErro : imoveisComErro) {
-			Integer matricula = imovelComErro.getMatricula();
+		for (AtualizacaoCadastralImovel imovel : imoveisComInconsistencia) {
+			Integer matricula = imovel.getMatricula();
 
 			for (String nomeImagem : atualizacao.getImagens()) {
 				String caminhoJboss = System.getProperty("jboss.server.home.dir");

@@ -1,5 +1,18 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import gcom.atualizacaocadastral.ImagemRetorno;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
@@ -22,19 +35,7 @@ import gcom.util.AtualizacaoCadastralUtil;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
+@SuppressWarnings("unchecked")
 public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends GcomAction {
 	
 	private Fachada fachada = Fachada.getInstancia();
@@ -53,6 +54,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
 		
 		form.setTemPermissaoAprovarImovel(temPermissaoAprovarImovel(usuario.getId(), idImovel));
+		
 		try {
 			Collection<DadosTabelaAtualizacaoCadastralHelper> resumoImovel = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
 
@@ -60,12 +62,11 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				form.setIdImovel(idImovel);
 
 				Imovel imovel = null;
-				if (idTipoAlteracao.equals(AlteracaoTipo.ALTERACAO.toString())
-						|| idTipoAlteracao.equals(AlteracaoTipo.EXCLUSAO.toString()))
+				if (idTipoAlteracao.equals(AlteracaoTipo.ALTERACAO.toString()) || idTipoAlteracao.equals(AlteracaoTipo.EXCLUSAO.toString())) {
 					imovel = pesquisarImovel(fachada, idImovel);
+				}
 
 				if (imovel != null) {
-
 					form.setDescricaoImovel(imovel.getId().toString());
 					
 					Localidade localidade = imovel.getLocalidade();
@@ -84,8 +85,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 					resumoImovel.add(new SituacaoAguaHelper(imovel.getLigacaoAguaSituacao().getDescricao()));
 					resumoImovel.add(new SituacaoEsgotoHelper(imovel.getLigacaoEsgotoSituacao().getDescricao()));
 
-					Collection<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = fachada.pesquisarSubCategoriasAtualizacaoCadastral(
-							imovel.getId());
+					Collection<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = fachada.pesquisarSubCategoriasAtualizacaoCadastral(imovel.getId());
 					for (ImovelSubcategoriaAtualizacaoCadastral economia : subcategorias) {
 						String subcategoria = economia.getDescricaoCategoria() + " - " + economia.getDescricaoSubcategoria();
 						resumoImovel.add(new SituacaoSubcategoriaHelper(String.valueOf(economia.getQuantidadeEconomias()), subcategoria));
@@ -96,9 +96,9 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				}
 			}
 
-			Collection<ImagemRetorno> colecaoImagens = fachada.pesquisarImagensRetornoPorIdImovel(Integer.parseInt(idImovel));
-			if (colecaoImagens != null && !colecaoImagens.isEmpty()) {
-				sessao.setAttribute("colecaoImagens", colecaoImagens);
+			Collection<ImagemRetorno> imagens = fachada.pesquisarImagensRetornoPorIdImovel(Integer.parseInt(idImovel));
+			if (imagens != null && !imagens.isEmpty()) {
+				sessao.setAttribute("colecaoImagens", imagens);
 			} else {
 				sessao.setAttribute("colecaoImagens", null);
 			}
@@ -113,7 +113,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				sessao.setAttribute("colecaoDadosTabelaAtualizacaoCadastral", atualizacoes);
 			}
 
-			ImovelControleAtualizacaoCadastral controle = fachada.pesquisarImovelControleAtualizacao(Integer.valueOf(idImovel));
+			ImovelControleAtualizacaoCadastral controle = fachada.pesquisarImovelControleAtualizacao(Integer.valueOf(idImovel), Integer.valueOf(idTipoAlteracao));
 
 			boolean emFiscalizaacao = false;
 
@@ -125,6 +125,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				form.setSituacao(controle.getSituacaoAtualizacaoCadastral().getDescricao());
 			}
 
+			sessao.setAttribute("exibirLinkVisualizar", imovelAlterado(controle));
 			sessao.setAttribute("emFiscalizacao", emFiscalizaacao);
 			sessao.setAttribute("exibirBotaoConcluirFiscalizacao", exibirBotaoConcluirFiscalizacao(emFiscalizaacao));
 			sessao.setAttribute("exibirBotaoAprovado", exibirBotaoAprovado(controle));
@@ -136,7 +137,6 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		return retorno;
 	}
 
-	@SuppressWarnings("unchecked")
 	private Imovel pesquisarImovel(Fachada fachada, String idImovel) {
 		FiltroImovel filtro = new FiltroImovel();
 		filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
@@ -145,8 +145,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.QUADRA);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.LIGACAO_AGUA_SITUACAO);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.LIGACAO_ESGOTO_SITUACAO);
-		Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(fachada.pesquisar(filtro, Imovel.class.getName()));
-		return imovel;
+		return (Imovel) Util.retonarObjetoDeColecao(fachada.pesquisar(filtro, Imovel.class.getName()));
 	}
 	
 	public boolean temPermissaoAprovarImovel(Integer idUsuario, String idImovel) {
@@ -157,16 +156,19 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		return true;
 	}
 	
-	private boolean exibirBotaoConcluirFiscalizacao(boolean fiscalizado) {
-		return fiscalizado && possuiArquivoFiscalizacao();
+	private boolean exibirBotaoFiscalizar(ImovelControleAtualizacaoCadastral controle) {
+		return imovelAlterado(controle) && controle.isPreAprovado();
 	}
 	
-	private boolean exibirBotaoFiscalizar(ImovelControleAtualizacaoCadastral controle) {
-		return controle != null && controle.isPreAprovado();
+	private boolean exibirBotaoConcluirFiscalizacao(boolean fiscalizado) {
+		return fiscalizado && possuiArquivoFiscalizacao();
 	}
 	
 	private boolean exibirBotaoAprovado(ImovelControleAtualizacaoCadastral controle) {
 		return controle != null && (controle.isPreAprovado() || controle.isFiscalizado());
 	}
 	
+	private boolean imovelAlterado(ImovelControleAtualizacaoCadastral controle) {
+		return controle != null && controle.getImovel() != null;
+	}
 }

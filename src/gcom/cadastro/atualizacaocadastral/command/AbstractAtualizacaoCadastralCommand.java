@@ -92,7 +92,8 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void salvarTabelaColunaAtualizacaoCadastral(AtualizacaoCadastral atualizacaoCadastral,
 			Object objetoAtualizacaoCadastralBase, Object objetoAtualizacaoCadastralTxt,
-			int matriculaImovel, int tipoOperacao) throws ControladorException {
+			int matriculaImovel, int tipoOperacao, int idControle) throws ControladorException {
+		
 		Collection<TabelaLinhaColunaAlteracao> colunasAlteradas = null;
 
 		ArquivoTextoAtualizacaoCadastral arquivoTexto = atualizacaoCadastral.getArquivoTexto();
@@ -112,10 +113,10 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 			Collection<TabelaColunaAtualizacaoCadastral> colecaoInserirTabelaColunaAtualizacaoCadastral = new ArrayList<TabelaColunaAtualizacaoCadastral>();
 
 			if (colunasAlteradas != null && !colunasAlteradas.isEmpty()) {
-				TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral = pesquisarTabelaParaAtualizar(objetoAtualizacaoCadastralTxt, matriculaImovel);
-				AlteracaoTipo alteracaoTipo = new AlteracaoTipo();
-				alteracaoTipo.setId(tipoOperacao);
-				tabelaAtualizacaoCadastral.setAlteracaoTipo(alteracaoTipo);
+				TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral = pesquisarTabelaParaAtualizar(objetoAtualizacaoCadastralTxt, 
+						matriculaImovel, tipoOperacao, idControle);
+				tabelaAtualizacaoCadastral.setAlteracaoTipo(new AlteracaoTipo(tipoOperacao));
+				
 				Tabela tabela = new Tabela();
 
 				Long idPorTempo = Calendar.getInstance().getTimeInMillis();
@@ -267,18 +268,28 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 		return complemento;
 	}
 
-	private TabelaAtualizacaoCadastral pesquisarTabelaParaAtualizar(Object objeto, Integer matriculaImovel) throws ControladorException {
+	private TabelaAtualizacaoCadastral pesquisarTabelaParaAtualizar(Object objeto, int matriculaImovel, int tipoOperacao, int idControle) throws ControladorException {
 		Tabela tabela = obterTabelaAtualizacaoCadastral(objeto);
-
-		TabelaAtualizacaoCadastral tabelaAtualizacao = controladorAtualizacaoCadastral.pesquisarTabelaPorImovel(tabela, matriculaImovel, getComplemento(objeto));
+		
+		TabelaAtualizacaoCadastral tabelaAtualizacao = null;
+		if (tipoOperacao == AlteracaoTipo.ALTERACAO) {
+			tabelaAtualizacao = controladorAtualizacaoCadastral.pesquisarTabelaPorImovel(tabela, matriculaImovel, getComplemento(objeto));
+		}
 
 		if (tabelaAtualizacao == null) {
 			tabelaAtualizacao = new TabelaAtualizacaoCadastral();
-			tabelaAtualizacao.setCodigoImovel(matriculaImovel);
+			
+			if (tipoOperacao == AlteracaoTipo.INCLUSAO) {
+				tabelaAtualizacao.setCodigoImovel(idControle);
+			} else {
+				tabelaAtualizacao.setCodigoImovel(matriculaImovel);
+			}
+			
 			tabelaAtualizacao.setRegistroInclusao(true);
 		} else {
 			tabelaAtualizacao.setRegistroInclusao(false);
 		}
+		
 		return tabelaAtualizacao;
 	}
 

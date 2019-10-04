@@ -1395,6 +1395,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			throw new ControladorException("Erro ao pesquisar ImovelControleAtualizacaoCadastral.", e);
 		}
 	}
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel, Integer tipoOperacao) throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.pesquisarImovelControleAtualizacao(idImovel, tipoOperacao);
+		} catch (Exception e) {
+			throw new ControladorException("Erro ao pesquisar ImovelControleAtualizacaoCadastral.", e);
+		}
+	}
 
 	@SuppressWarnings("rawtypes")
 	public Collection<RelatorioRelacaoImoveisRotaBean> pesquisarDadosRelatorioRelacaoImoveisRotaAtualizacaoCadastral(String idLocalidade, String cdSetorComercial, String cdRota)

@@ -39825,6 +39825,14 @@ public class Fachada {
 		}
 	}
 	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel, Integer tipoOperacao) {
+		try {
+			return this.getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(idImovel, tipoOperacao);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
 	public void fiscalizarImovel(Integer idImovel) {
 		try {
 			this.getControladorAtualizacaoCadastral().fiscalizarImovel(idImovel);

@@ -137,11 +137,11 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 		
 		AtualizacaoCadastral atualizacao = Fachada.getInstancia().carregarImovelAtualizacaoCadastral(buffer, imagens);
 
-		if (atualizacao.existeErroNoArquivo()) {
+		if (atualizacao.existeInconsistenciaNoArquivo()) {
 
 			Map<String, List<String>> mapErros = new HashMap<String, List<String>>();
 
-			for (AtualizacaoCadastralImovel imovel : atualizacao.getImoveisComErro()) {
+			for (AtualizacaoCadastralImovel imovel : atualizacao.getImoveisComInconsistencia()) {
 
 				List<String> erros = mapErros.get(String.valueOf(imovel.getMatricula()));
 
@@ -158,7 +158,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 			form.setColecaoErrosCadastro(mapErros);
 			form.setNomeArquivo(arquivo.getFileName());
 			form.setTotalImoveis(atualizacao.getTotalImoveis() + "");
-			form.setTotalImoveisComErro(atualizacao.getTotalImoveisComErro() + "");
+			form.setTotalImoveisComErro(atualizacao.getTotalImoveisComInconsistencia() + "");
 			form.setTipoArquivo(atualizacao.getArquivoTexto().getDescricaoTipoRetorno());
 
 			retorno = mapping.findForward("CarregarDadosAtualizacaoCadastralAction");

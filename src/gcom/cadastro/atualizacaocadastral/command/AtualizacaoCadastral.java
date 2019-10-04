@@ -11,7 +11,7 @@ public class AtualizacaoCadastral {
 
 	private boolean validacaoLiberada = false;
 
-	private List<AtualizacaoCadastralImovel> imoveisComErro = new ArrayList<AtualizacaoCadastralImovel>();
+	private List<AtualizacaoCadastralImovel> imoveisComInconsistencia = new ArrayList<AtualizacaoCadastralImovel>();
 
 	private AtualizacaoCadastralImovel imovelAtual = new AtualizacaoCadastralImovel();
 
@@ -20,7 +20,9 @@ public class AtualizacaoCadastral {
 	private Integer idRota = new Integer(0);
 
 	private int totalImoveis = 0;
-	
+
+	private boolean comErro = false;
+
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
 		return arquivoTexto;
 	}
@@ -41,7 +43,7 @@ public class AtualizacaoCadastral {
 		validacaoLiberada = false;
 		AtualizacaoCadastralImovel imovel = new AtualizacaoCadastralImovel(this);
 		imovelAtual = imovel;
-		imoveisComErro.add(imovel);
+		imoveisComInconsistencia.add(imovel);
 		totalImoveis++;
 		return imovel;
 	}
@@ -50,20 +52,20 @@ public class AtualizacaoCadastral {
 		return imovelAtual;
 	}
 
-	public List<AtualizacaoCadastralImovel> getImoveisComErro() {
-		return imoveisComErro;
+	public List<AtualizacaoCadastralImovel> getImoveisComInconsistencia() {
+		return imoveisComInconsistencia;
 	}
 
-	public void excluirImovelSemErros() {
-		imoveisComErro.remove(imovelAtual);
+	public void excluirImovelSemInconsistencia() {
+		imoveisComInconsistencia.remove(imovelAtual);
 	}
 
-	public boolean existeErroNoArquivo() {
-		return imoveisComErro.size() > 0;
+	public boolean existeInconsistenciaNoArquivo() {
+		return imoveisComInconsistencia.size() > 0;
 	}
 
-	public int getTotalImoveisComErro() {
-		return imoveisComErro.size();
+	public int getTotalImoveisComInconsistencia() {
+		return imoveisComInconsistencia.size();
 	}
 
 	public int getTotalImoveis() {
@@ -88,5 +90,13 @@ public class AtualizacaoCadastral {
 
 	public void setIdRota(Integer idRota) {
 		this.idRota = idRota;
+	}
+
+	public boolean comErro() {
+		return comErro;
+	}
+
+	public void setComErro(boolean comErro) {
+		this.comErro = comErro;
 	}
 }
