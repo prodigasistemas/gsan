@@ -561,7 +561,9 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) throws ErroRepositorioException {
+	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) 
+			throws ErroRepositorioException {
+		
 		Session session = HibernateUtil.getSession();
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> retorno = new LinkedList<ConsultarMovimentoAtualizacaoCadastralHelper>();
 
@@ -569,7 +571,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT distinct tatc.tatc_cdimovel AS idImovel, ")
 				.append("      tatc.altp_id AS tipoAlteracao, ")
-				.append("      func.func_nmfuncionario AS nomeFuncionario, ")
+				.append("      us.usur_nmusuario AS nomeFuncionario, ")
 				.append("      tatc.tatc_icautorizado AS icAutorizado, ")
 				.append("      im.imac_nnhidrometro AS numeroHidrometro, ")
 				.append("      im.last_id AS idLigacaoAgua, ")
@@ -591,16 +593,17 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append("INNER JOIN seguranca.tab_col_atlz_cadastral tcac on  tatc.tatc_id = tcac.tatc_id ")
 				.append("INNER JOIN seguranca.tabela_coluna tbco on tbco.tbco_id = tcac.tbco_id ")
 				.append("INNER JOIN cadastro.arquivo_texto_atlz_cad txac on tatc.txac_id = txac.txac_id ")
+				.append("INNER JOIN micromedicao.leiturista leit on leit.leit_id = txac.leit_id ")
 				.append("INNER JOIN micromedicao.rota rota on rota.rota_id = txac.rota_id ")
-				.append("INNER JOIN micromedicao.leiturista leit on tatc.leit_id = leit.leit_id ")
-				.append("LEFT JOIN cadastro.funcionario func on leit.func_id = func.func_id ")
-				.append("LEFT JOIN cadastro.cliente clie on leit.clie_id = clie.clie_id ")
-				.append("LEFT JOIN atualizacaocadastral.imovel_controle_atlz_cad ctrl on ctrl.imov_id = tatc.tatc_cdimovel OR ctrl.icac_id = tatc.tatc_cdimovel ")
+				.append("INNER JOIN atualizacaocadastral.imovel_controle_atlz_cad ctrl on ctrl.imov_id = tatc.tatc_cdimovel OR ctrl.icac_id = tatc.tatc_cdimovel ")
+				.append("LEFT JOIN atualizacaocadastral.visita vis on vis.icac_id = ctrl.icac_id ")
+				.append("LEFT JOIN seguranca.usuario us on us.usur_id = vis.usur_id ")
 				.append("LEFT JOIN cadastro.situacao_atlz_cadastral siac on siac.siac_id = ctrl.siac_id ")
 				.append("LEFT JOIN cadastro.imovel_atlz_cadastral im on im.imov_id = tatc_cdimovel ")
 				.append("LEFT JOIN cadastro.imovel_subcatg_atlz_cad isac on isac.imov_id = tatc.tatc_cdimovel ")
 				.append("LEFT JOIN cadastro.cadastro_ocorrencia cocr on cocr.cocr_id = ctrl.cocr_id ")
-				.append("WHERE 1 = 1 ");
+				.append("WHERE 1 = 1 ")
+				.append("AND vis.vist_id = (SELECT MAX(v2.vist_id) FROM atualizacaocadastral.visita v2 WHERE v2.icac_id = ctrl.icac_id)");
 
 			if (StringUtils.isNotEmpty(filtro.getIdLocalidadeInicial()))
 				sql.append(" AND txac.loca_id between " + filtro.getIdLocalidadeInicial() + " AND " + filtro.getIdLocalidadeFinal());
@@ -614,8 +617,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			if (StringUtils.isNotEmpty(filtro.getIdEmpresa()))
 				sql.append(" AND leit.empr_id = " + filtro.getIdEmpresa());
 
-			if (StringUtils.isNotEmpty(filtro.getIdLeiturista()) && StringUtils.isNumeric(filtro.getIdLeiturista()) && Integer.valueOf(filtro.getIdLeiturista()) > 0)
-				sql.append(" AND leit.leit_id = " + filtro.getIdLeiturista());
+			if (StringUtils.isNotEmpty(filtro.getIdLeiturista()) && StringUtils.isNumeric(filtro.getIdLeiturista()) && Integer.valueOf(filtro.getIdLeiturista()) > 0) {
+				sql.append(" AND vis.usur_id = (SELECT usur.usur_id FROM micromedicao.leiturista leit ");
+				sql.append(" INNER JOIN cadastro.funcionario func ON leit.func_id = func.func_id ");
+				sql.append(" INNER JOIN seguranca.usuario usur ON usur.usur_nncpf = func.func_nncpf ");
+				sql.append(String.format(" WHERE leit.leit_id = %s LIMIT 1) ", filtro.getIdLeiturista()));
+			}
 			
 			if (filtro.getPeriodoInicial() != null && filtro.getPeriodoFinal() != null) {
 				sql.append(" AND ctrl.icac_tmpreaprovacao between :periodoInicial AND :periodoFinal ");
