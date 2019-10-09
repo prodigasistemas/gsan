@@ -40198,17 +40198,10 @@ public class Fachada {
 		}
 	}
 	
-	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosRevisaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao, Integer idEmpresa) {
+	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosFiscalizacaoOuRevisaoDeAtualizacaoCadastral(
+			Integer situacao, List<Integer> idsArquivos, double percentualFiscalizacao, Integer lote, Integer idEmpresa) {
 		try {
-			return getControladorAtualizacaoCadastral().gerarArquivosRevisaoAtualizacaoCadastral(idsArquivos, percentualFiscalizacao, idEmpresa);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-	}
-	
-	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosFiscalizacaoAtualizacaoCadastral(List<Integer> idsArquivos, double percentualFiscalizacao, Integer lote, Integer idEmpresa) {
-		try {
-			return getControladorAtualizacaoCadastral().gerarArquivosFiscalizacaoAtualizacaoCadastral(idsArquivos, percentualFiscalizacao, lote, idEmpresa);
+			return getControladorAtualizacaoCadastral().gerarArquivosAtualizacaoCadastralRevisaoOuFiscalizacao(situacao, idsArquivos, percentualFiscalizacao, idEmpresa, lote);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

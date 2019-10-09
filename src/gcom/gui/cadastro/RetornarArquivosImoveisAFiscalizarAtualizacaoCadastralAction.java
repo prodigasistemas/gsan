@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.tarefa.TarefaException;
@@ -43,8 +44,8 @@ public class RetornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction extend
 			idEmpresa = Integer.valueOf(form.getIdEmpresa());
 		}
 		
-		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().gerarArquivosFiscalizacaoAtualizacaoCadastral(
-				getIdsArquivos(form), percentualAleatorios, lote, idEmpresa);
+		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().gerarArquivosFiscalizacaoOuRevisaoDeAtualizacaoCadastral(
+				SituacaoAtualizacaoCadastral.EM_FISCALIZACAO, getIdsArquivos(form), percentualAleatorios, lote, idEmpresa);
 
 		if (CollectionUtil.naoEhVazia(listaArquivoTexto)) {
 			try {
@@ -89,6 +90,6 @@ public class RetornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction extend
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String data = formatter.format(new Date());
 
-		return "ROTAS_RECADASTRAMENTO_REVISAO_" + data;
+		return "ROTAS_RECADASTRAMENTO_FISCALIZACAO_" + data;
 	}
 }
