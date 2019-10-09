@@ -118,8 +118,23 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public List<Integer> obterImoveisPorSituacao(Integer idArquivo, Integer idSituacao) throws ErroRepositorioException;
 	
+	/**
+	 * Busca no banco todos os imoveis de um arquivo, podendo se acrescentar matriculas atraves
+	 * do parametro {@code idsImoveis}.
+	 * 
+	 * NAO SE DEVE PASSAR {@code dataUltimaTransmissao} e {@code idsImoveis} com valores nao
+	 * nulos ao mesmo tempo. 
+	 * 
+	 * 
+	 * @param idArquivo - id do arquivo texto atualizacao cadastral
+	 * @param situacoes - quais as situacoes devem ter imoveis como NAO INFORMATIVOs
+	 * @param dataUltimaTransmissao - data para filtrar em caso de REVISITA
+	 * @param idsImoveis - ids dos imoveis que se quer acrescentar como NAO INFORMATIVO
+	 * @return {@code ImovelControleAtualizacaoCadastral} com informacoes
+	 * @throws ErroRepositorioException
+	 */
 	public List<ImovelControleAtualizacaoCadastral> obterImoveisPorArquivoSituacaoLoteTrazendoInformativos(Integer idArquivo, List<Integer> situacoes, 
-			Date dataUltimaTransmissao) throws ErroRepositorioException;
+			Date dataUltimaTransmissao, List<Integer> idsImoveis) throws ErroRepositorioException;
 
 	public List<Integer> obterImoveisPorSituacaoELote(Integer idArquivo, Integer idSituacao, Integer lote) throws ErroRepositorioException;
 	

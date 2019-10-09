@@ -1317,39 +1317,17 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List<ImovelControleAtualizacaoCadastral> obterImoveisPorArquivoSituacaoLoteTrazendoInformativos(Integer idArquivo, List<Integer> situacoes, 
-			Date dataUltimaTransmissao) throws ErroRepositorioException {
+	public List<ImovelControleAtualizacaoCadastral> obterImoveisPorArquivoSituacaoLoteTrazendoInformativos(
+			Integer idArquivo, List<Integer> situacoes, Date dataUltimaTransmissao, List<Integer> idsImoveis)
+					throws ErroRepositorioException {
 		List<ImovelControleAtualizacaoCadastral> retorno = null;
         Session session = HibernateUtil.getSession();
 
-        StringBuilder consulta = new StringBuilder();
         try {
-        	consulta.append("select {imc.*}, {atualizacao.*}, ");
-        	consulta.append("       case when imc.siac_id in (:situacoes) ");
-        	
-        	if (dataUltimaTransmissao != null) {
-        		consulta.append("   and ocorrencia.cocr_icvisita = 1 and imc.icac_tmretorno < :dataUltimaTransmissao ");
-        	}
-        	
-        	consulta.append("       then 2 else 1 end as informativo, ");
-        	consulta.append("       (select count(vist_id) from atualizacaocadastral.visita v where v.icac_id = imc.icac_id) as visitas ");
-        	consulta.append("from atualizacaocadastral.imovel_controle_atlz_cad imc ");
-    		consulta.append("left join cadastro.cadastro_ocorrencia ocorrencia on ocorrencia.cocr_id = imc.cocr_id ");
-        	consulta.append("inner join cadastro.imovel imov on imov.imov_id = imc.imov_id ");
-        	consulta.append("inner join cadastro.imovel_atlz_cadastral atualizacao on atualizacao.imov_id = imc.imov_id ");
-        	consulta.append("where imc.imov_id in (select distinct imov_id from ( ");
-        	
-        	consulta.append("select controle.imov_id as imov_id ");
-        	consulta.append("from atualizacaocadastral.imovel_controle_atlz_cad controle ");
-        	consulta.append("inner join cadastro.imovel_atlz_cadastral atlz on atlz.imov_id = controle.imov_id ");
-        	consulta.append("inner join cadastro.arquivo_texto_atlz_cad arquivo on arquivo.txac_id = atlz.txac_id ");
-        	consulta.append("inner join cadastro.imovel imovel on imovel.imov_id = controle.imov_id ");
-        	consulta.append("inner join cadastro.quadra quadra on quadra.rota_id = arquivo.rota_id ");
-        	consulta.append("where arquivo.txac_id = :idArquivo ");
-
-        	consulta.append("order by quadra.qdra_id, imovel.imov_nnlote, imovel.imov_nnsublote) as imoveis) ");
-        	
-            Query query = session.createSQLQuery(consulta.toString())
+        	String consulta = 
+        			montarQueryParaObterImoveisPorArquivoSituacaoLoteTrazendoInformativos(
+        					idArquivo, situacoes, dataUltimaTransmissao, idsImoveis);
+            Query query = session.createSQLQuery(consulta)
             		.addEntity("imc", ImovelControleAtualizacaoCadastral.class)
             		.addJoin("atualizacao", "imc.imovelAtualizacaoCadastral")
             		.addScalar("informativo", Hibernate.INTEGER)
@@ -1357,14 +1335,15 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
             		.setParameterList("situacoes", situacoes)
             		.setInteger("idArquivo", idArquivo);
             
-            if (dataUltimaTransmissao != null) {
+            if (CollectionUtil.naoEhVazia(idsImoveis)) {
+            	query.setParameterList("ids", idsImoveis);
+            } else if (dataUltimaTransmissao != null) {
         		query.setDate("dataUltimaTransmissao", dataUltimaTransmissao);
         	}
             
             List<Object[]> resultado = query.list();
             
 			if (CollectionUtil.naoEhVazia(resultado)) {
-				
 				retorno = new ArrayList(resultado.size());
 				
 				for (Object[] array : resultado) {
@@ -1373,10 +1352,10 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					controle.setQuantidadeVisitas((Integer) array[1]);
 					controle.setInformativo((Integer) array[0]);
 					
-					if (dataUltimaTransmissao != null && controle.getQuantidadeVisitas().intValue() >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO) {
+					if (dataUltimaTransmissao != null && 
+							controle.getQuantidadeVisitas().intValue() >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO) {
 						controle.setInformativo(1);
 					}
-					
 					retorno.add(controle);
 				}
 			}
@@ -1385,8 +1364,42 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         } finally {
             HibernateUtil.closeSession(session);
         }
-
         return retorno;
+	}
+	
+	private String montarQueryParaObterImoveisPorArquivoSituacaoLoteTrazendoInformativos(Integer idArquivo, List<Integer> situacoes, 
+			Date dataUltimaTransmissao, List<Integer> idsImoveis) {
+		StringBuilder consulta = new StringBuilder();
+    	consulta.append("select {imc.*}, {atualizacao.*}, ");
+    	consulta.append("       case when imc.siac_id in (:situacoes) ");
+    	
+    	if (CollectionUtil.naoEhVazia(idsImoveis)) {
+    		consulta.append("   or imc.imov_id in (:ids) ");
+    	} else if (dataUltimaTransmissao != null) {
+    		consulta.append("   and ocorrencia.cocr_icvisita = 1 and imc.icac_tmretorno < :dataUltimaTransmissao ");
+    	}
+    	
+    	consulta.append("       then 2 else 1 end as informativo, ");
+    	consulta.append("       (select count(vist_id) from atualizacaocadastral.visita v where v.icac_id = imc.icac_id) as visitas ");
+    	consulta.append("from atualizacaocadastral.imovel_controle_atlz_cad imc ");
+		consulta.append("left join cadastro.cadastro_ocorrencia ocorrencia on ocorrencia.cocr_id = imc.cocr_id ");
+    	consulta.append("inner join cadastro.imovel imov on imov.imov_id = imc.imov_id ");
+    	consulta.append("inner join cadastro.imovel_atlz_cadastral atualizacao on atualizacao.imov_id = imc.imov_id ");
+    	consulta.append("where imc.imov_id in (select distinct imov_id from ( ");
+    	consulta.append("select controle.imov_id as imov_id ");
+    	consulta.append("from atualizacaocadastral.imovel_controle_atlz_cad controle ");
+    	consulta.append("inner join cadastro.imovel_atlz_cadastral atlz on atlz.imov_id = controle.imov_id ");
+    	consulta.append("inner join cadastro.arquivo_texto_atlz_cad arquivo on arquivo.txac_id = atlz.txac_id ");
+    	consulta.append("inner join cadastro.imovel imovel on imovel.imov_id = controle.imov_id ");
+    	consulta.append("inner join cadastro.quadra quadra on quadra.rota_id = arquivo.rota_id ");
+    	consulta.append("where arquivo.txac_id = :idArquivo ");
+    	
+    	if (CollectionUtil.naoEhVazia(idsImoveis)) {
+    		consulta.append("or controle.imov_id in (:ids) ");
+    	}
+
+    	consulta.append("order by quadra.qdra_id, imovel.imov_nnlote, imovel.imov_nnsublote) as imoveis) ");
+    	return consulta.toString();
 	}
 	
 	public TabelaColunaAtualizacaoCadastral obterTabelaColuna(

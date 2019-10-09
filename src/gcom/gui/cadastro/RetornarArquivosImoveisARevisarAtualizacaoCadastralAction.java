@@ -1,6 +1,7 @@
 package gcom.gui.cadastro;
 
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.tarefa.TarefaException;
@@ -37,8 +38,8 @@ public class RetornarArquivosImoveisARevisarAtualizacaoCadastralAction extends G
 			idEmpresa = Integer.valueOf(form.getIdEmpresa());
 		}
 		
-		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().gerarArquivosRevisaoAtualizacaoCadastral(
-				getIdsArquivos(form), percentualAleatorios, idEmpresa);
+		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().gerarArquivosFiscalizacaoOuRevisaoDeAtualizacaoCadastral(
+				SituacaoAtualizacaoCadastral.EM_REVISAO, getIdsArquivos(form), percentualAleatorios, null, idEmpresa);
 
 		if (listaArquivoTexto != null && !listaArquivoTexto.isEmpty()) {
 			try {
