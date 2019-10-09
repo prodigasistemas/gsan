@@ -6965,7 +6965,9 @@ public class ControladorCadastro extends ControladorComum {
 				if (imovelAtualizacaoCadastral == null) {
 					imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(idImovel);
 				}
-				if (imovelControle != null && ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA.equalsIgnoreCase(tipoArquivo)) {
+				if (imovelControle != null 
+						&& ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA.equalsIgnoreCase(tipoArquivo)
+						&& !imovelControle.ehInformativo()) {
 					imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.REVISITA));
 					getControladorUtil().atualizar(imovelControle);
 				}
