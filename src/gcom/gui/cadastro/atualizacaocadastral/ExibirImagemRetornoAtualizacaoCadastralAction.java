@@ -1,14 +1,7 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
-import gcom.atualizacaocadastral.FiltroImagemRetorno;
-import gcom.atualizacaocadastral.ImagemRetorno;
-import gcom.fachada.Fachada;
-import gcom.gui.GcomAction;
-import gcom.util.filtro.ParametroSimples;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 
@@ -19,40 +12,43 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import gcom.atualizacaocadastral.FiltroImagemRetorno;
+import gcom.atualizacaocadastral.ImagemRetorno;
+import gcom.gui.GcomAction;
+import gcom.util.ImagemUtil;
+import gcom.util.filtro.Filtro;
+import gcom.util.filtro.ParametroSimples;
+
 public class ExibirImagemRetornoAtualizacaoCadastralAction extends GcomAction {
-	
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
 
-		Fachada fachada = Fachada.getInstancia();
-		
-		String idImagemRetorno = httpServletRequest.getParameter("id");
-		
-		FiltroImagemRetorno filtro = new FiltroImagemRetorno();
-		filtro.adicionarParametro(new ParametroSimples(FiltroImagemRetorno.ID, idImagemRetorno));
-		
-		Collection colecaoImagemRetorno = fachada.pesquisar(filtro, ImagemRetorno.class.getName());
-		ImagemRetorno imagemRetorno = (ImagemRetorno) colecaoImagemRetorno.iterator().next();
-		
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+
+		ImagemRetorno imagemRetorno = obterImagemRetorno(request.getParameter("id"));
+
 		try {
-			String caminhoJboss = System.getProperty("jboss.server.home.dir");
-			FileInputStream in = new FileInputStream(new File(caminhoJboss + imagemRetorno.getPathImagem()));
-
-			httpServletResponse.setContentType("image/jpeg");
-
-			OutputStream out = httpServletResponse.getOutputStream();
-			byte[] outputByte = new byte[1024];
-			while (in.read(outputByte, 0, 1024) != -1) {
-				out.write(outputByte, 0, 1024);
-			}
+			InputStream input = ImagemUtil.carregarImagemDoServidorDeArquivos(String.format("/recadastramento%s", imagemRetorno.getPathImagem()));
 			
-			out.flush();
-			out.close();
+			response.setContentType("image/jpeg");
+
+			OutputStream output = response.getOutputStream();
+			ImagemUtil.copiar(input, output, false);
+
+			input.close();
+			output.flush();
+			output.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
+	}
+
+	private ImagemRetorno obterImagemRetorno(String idImagemRetorno) {
+		Filtro filtro = new FiltroImagemRetorno();
+		filtro.adicionarParametro(new ParametroSimples(FiltroImagemRetorno.ID, idImagemRetorno));
+
+		Collection<?> colecao = getFachada().pesquisar(filtro, ImagemRetorno.class.getName());
+
+		return (ImagemRetorno) colecao.iterator().next();
 	}
 }
