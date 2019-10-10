@@ -1,14 +1,7 @@
 package gcom.gui.cadastro.imovel;
 
-import gcom.cadastro.imovel.FiltroImovelImagem;
-import gcom.cadastro.imovel.ImovelImagem;
-import gcom.fachada.Fachada;
-import gcom.gui.GcomAction;
-import gcom.util.filtro.ParametroSimples;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 
@@ -19,40 +12,43 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import gcom.cadastro.imovel.FiltroImovelImagem;
+import gcom.cadastro.imovel.ImovelImagem;
+import gcom.gui.GcomAction;
+import gcom.util.ImagemUtil;
+import gcom.util.filtro.Filtro;
+import gcom.util.filtro.ParametroSimples;
+
 public class ExibirImovelImagemAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 
-		Fachada fachada = Fachada.getInstancia();
-		
-		String idImovelImagem = httpServletRequest.getParameter("id");
-		
-		FiltroImovelImagem filtro = new FiltroImovelImagem();
-		filtro.adicionarParametro(new ParametroSimples(FiltroImovelImagem.ID, idImovelImagem));
-		
-		Collection colecaoImovelImagem = fachada.pesquisar(filtro, ImovelImagem.class.getName());
-		ImovelImagem imovelImagem = (ImovelImagem) colecaoImovelImagem.iterator().next();
-		
+		ImovelImagem imovelImagem = obterImovelImagem(request.getParameter("id"));
+
 		try {
-			String caminhoJboss = System.getProperty("jboss.server.home.dir");
-			FileInputStream in = new FileInputStream(new File(caminhoJboss + imovelImagem.getCaminhoImagem()));
+			InputStream input = ImagemUtil.carregarImagemDoServidorDeArquivos(String.format("/cadastro%s", imovelImagem.getCaminhoImagem()));
 
-			httpServletResponse.setContentType("image/jpeg");
+			response.setContentType("image/jpeg");
 
-			OutputStream out = httpServletResponse.getOutputStream();
-			byte[] outputByte = new byte[1024];
-			while (in.read(outputByte, 0, 1024) != -1) {
-				out.write(outputByte, 0, 1024);
-			}
-			
-			out.flush();
-			out.close();
+			OutputStream output = response.getOutputStream();
+			ImagemUtil.copiar(input, output, false);
+
+			input.close();
+			output.flush();
+			output.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
+	}
+
+	private ImovelImagem obterImovelImagem(String idImovelImagem) {
+		Filtro filtro = new FiltroImovelImagem();
+		filtro.adicionarParametro(new ParametroSimples(FiltroImovelImagem.ID, idImovelImagem));
+
+		Collection<?> colecaoImovelImagem = getFachada().pesquisar(filtro, ImovelImagem.class.getName());
+
+		return (ImovelImagem) colecaoImovelImagem.iterator().next();
 	}
 }
