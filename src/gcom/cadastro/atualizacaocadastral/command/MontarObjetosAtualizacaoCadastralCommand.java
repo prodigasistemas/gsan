@@ -364,6 +364,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 		if (controladorAtualizacaoCadastral.verificarSeHouveAlteracaoNoImovelRelevanteParaAtualizacaoCadastral(imovelControle.getImovel().getId())) {
 			imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.ATUALIZADO_LOJA));
+			imovelControle.setDataAprovacao(new Date());
 		}
 	}
 }
