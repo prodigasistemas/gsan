@@ -12,21 +12,23 @@ public class ValidadorNomesClientesCommand extends ValidadorCommand {
 	public ValidadorNomesClientesCommand(AtualizacaoCadastralImovel cadastroImovel, Map<String, String> linha) {
 		super(cadastroImovel, linha);
 	}
-	
-	public void execute() throws Exception{
-		if (Util.nomeInvalido(linha.get("nomeUsuario"))){
-			cadastroImovel.addMensagemErro("Nome de usuário inválido");
+
+	public void execute() throws Exception {
+		if (Util.nomeInvalido(linha.get("nomeUsuario"))) {
+			cadastroImovel.addMensagemErro("Nome do cliente usuário inválido.");
 		}
-		
-		if (StringUtils.isNotEmpty(linha.get("nomeProprietario"))){
-			if (Util.nomeInvalido(linha.get("nomeProprietario"))){
-				cadastroImovel.addMensagemErro("Nome de proprietário inválido");
+
+		String nomeProprietario = linha.get("nomeProprietario");
+		if (StringUtils.isNotEmpty(nomeProprietario)) {
+			if (Util.nomeInvalido(nomeProprietario)) {
+				cadastroImovel.addMensagemErro("Nome do cliente proprietário inválido.");
 			}
 		}
-		
-		if (StringUtils.isNotEmpty(linha.get("nomeResponsavel"))){
-			if (Util.nomeInvalido(linha.get("nomeResponsavel"))){
-				cadastroImovel.addMensagemErro("Nome de responsável inválido");
+
+		String nomeResponsavel = linha.get("nomeResponsavel");
+		if (StringUtils.isNotEmpty(nomeResponsavel)) {
+			if (Util.nomeInvalido(nomeResponsavel)) {
+				cadastroImovel.addMensagemErro("Nome do cliente responsável inválido.");
 			}
 		}
 	}

@@ -9,6 +9,7 @@ import gcom.cadastro.atualizacaocadastral.validador.ValidadorCoordenadasCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorEconomiasCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorHidrometroCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorLogradouroCommand;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorNomesClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorRamoAtividadeCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorSexoCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorSituacaoImovelCommand;
@@ -28,30 +29,29 @@ import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
 
 public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtualizacaoCadastralCommand {
-	
+
 	private AtualizacaoCadastralImovel imovelAtual;
-	
+
 	private IRepositorioClienteImovel repositorioClienteImovel;
-	
+
 	public EfetuarValidacoesAtualizacaoCadastralCommand() {
 		super();
 	}
 
 	public EfetuarValidacoesAtualizacaoCadastralCommand(
-			ParserUtil parser,
+			ParserUtil parser, 
 			IRepositorioCadastro repositorioCadastro,
-			ControladorUtilLocal controladorUtil,
+			ControladorUtilLocal controladorUtil, 
 			ControladorTransacaoLocal controladorTransacao,
-			IRepositorioImovel repositorioImovel,
+			IRepositorioImovel repositorioImovel, 
 			ControladorEnderecoLocal controladorEndereco,
 			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral,
-			ControladorClienteLocal controladorCliente,
+			ControladorClienteLocal controladorCliente, 
 			IRepositorioClienteImovel repositorioClienteImovel) {
-		
-		super(parser, repositorioCadastro, controladorUtil, controladorTransacao,
-				repositorioImovel, controladorEndereco,
-				controladorAtualizacaoCadastral, controladorCliente);
-		
+
+		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel,
+				controladorEndereco, controladorAtualizacaoCadastral, controladorCliente);
+
 		this.repositorioClienteImovel = repositorioClienteImovel;
 	}
 
@@ -64,6 +64,7 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 		if (!imovelAtual.isImovelNovo()) {
 			new ValidadorSituacaoImovelCommand(imovelAtual, controladorAtualizacaoCadastral).execute();
 		}
+		
 		new ValidadorCoordenadasCommand(imovelAtual, controladorAtualizacaoCadastral).execute();
 
 		if (ocorrencia != null && ocorrencia.getIndicadorValidacao().equals(ConstantesSistema.SIM)) {
@@ -73,8 +74,9 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 			validarLinhaMedidor();
 		}
 
-		if (!imovelAtual.isErroLayout())
+		if (!imovelAtual.isErroLayout()) {
 			new ValidadorCepImovelCommand(imovelAtual, imovelAtual.getLinhaImovel()).execute();
+		}
 	}
 
 	private void validarLinhaMedidor() {
@@ -93,6 +95,7 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 	}
 
 	private void validarLinhaCliente() throws Exception {
+		new ValidadorNomesClientesCommand(imovelAtual, imovelAtual.getLinhaCliente()).execute();
 		new ValidadorSexoCommand(imovelAtual, imovelAtual.getLinhaCliente()).execute();
 		new ValidadorCPFsClientesCommand(imovelAtual, imovelAtual.getLinhaCliente(), repositorioClienteImovel).execute();
 		new ValidadorCepClienteProprietarioResponsavel(imovelAtual, imovelAtual.getLinhaCliente()).execute();
