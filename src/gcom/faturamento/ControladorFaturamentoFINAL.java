@@ -22271,7 +22271,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			SistemaParametro sistemaParametro = getControladorUtil()
 					.pesquisarParametrosDoSistema();
 
-			sistemaParametro.setAnoMesFaturamento(201909);
 			// Recupera o ano/mês de faturamento corrente
 			Integer anoMesFaturamentoCorrente = sistemaParametro.getAnoMesFaturamento();
 			// Se o mês de faturamento for igual a 11 e o indicador
