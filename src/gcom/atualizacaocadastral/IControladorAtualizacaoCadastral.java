@@ -160,4 +160,17 @@ public interface IControladorAtualizacaoCadastral {
      * @throws ControladorException
      */
     public boolean verificarSeHouveAlteracaoNoImovelRelevanteParaAtualizacaoCadastral(Integer idImovel) throws ControladorException;
+    
+    /**
+     * Pesquisa o Cliente Retorno pela matricula do imovel
+     * e pelo tipo de relacao
+     * 
+     * 
+     * @param matriculaCliente
+     * @param tipoRelacao
+     * @return
+     * @throws ControladorException
+     */
+    public ClienteRetorno pesquisarClienteRetornoPorMatriculaClienteETipoRelacao(Integer matriculaCliente, Short tipoRelacao)
+			throws ControladorException;
 }

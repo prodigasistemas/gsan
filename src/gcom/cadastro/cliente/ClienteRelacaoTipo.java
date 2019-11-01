@@ -97,4 +97,34 @@ public class ClienteRelacaoTipo extends ObjetoTransacao {
 	public void initializeLazy() {
 		retornaCamposChavePrimaria();
 	}
+	
+	public static String converterRelacaoTipo(int tipo) {
+		switch (tipo) {
+		case 1:
+			return ClienteBuilder.PROPRIETARIO;
+		case 2:
+			return ClienteBuilder.USUARIO;
+		case 3:
+			return ClienteBuilder.RESPONSAVEL;
+		default:
+			return "";
+		}
+	}
+	
+	public static Short converterRelacaoTipo(String tipo) {
+		
+		if (ClienteBuilder.PROPRIETARIO.equalsIgnoreCase(tipo)) {
+			return PROPRIETARIO;
+		}
+		
+		if (ClienteBuilder.USUARIO.equalsIgnoreCase(tipo)) {
+			return USUARIO;
+		}
+		
+		if (ClienteBuilder.RESPONSAVEL.equalsIgnoreCase(tipo)) {
+			return RESPONSAVEL;
+		}
+		
+		return null;
+	}
 }

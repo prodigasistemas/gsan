@@ -270,7 +270,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		if (clienteTxt.getTipoOperacao() != AlteracaoTipo.INCLUSAO) {
 			clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(
 					matricula, matriculaImovel, new Integer(clienteRelacaoTipo));			
-		}else{
+		} else {
 			clienteAtualizacaoCadastralBase = new ClienteAtualizacaoCadastral();
 		}
 		

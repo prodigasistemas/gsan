@@ -10,8 +10,10 @@ import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaCliente
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.IClienteFone;
+import gcom.cadastro.cliente.RepositorioClienteHBM;
 import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.util.ControladorUtilLocal;
+import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
 import gcom.util.Util;
 import gcom.util.exception.MatriculaProprietarioException;
@@ -23,6 +25,10 @@ import gcom.util.filtro.ParametroSimples;
 public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	
 	private static Logger logger = Logger.getLogger(ParseClienteCommand.class);
+	
+	public static final String INDICADOR_TRANSMISSAO_CPF_CNPJ = "indicadorTransmissaoCpfCnpj";
+	
+	public static final String[] TIPOS_CLIENTE = { "Proprietario", "Usuario", "Responsavel" };
 	
 	public ParseClienteCommand(ParserUtil parser, ControladorUtilLocal controladorUtil) {
 		super(parser);
@@ -243,6 +249,10 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 			String data = parser.obterDadoParser(26).trim();
 			linha.put("data", data);
+			
+			// Tratamento para CPF ou CNPJ parcial vindo do arquivo, 
+			// ou seja, com 7 DIGITOS
+			tratarCpfCnpjParcial(linha);
 		}
 	}
 	
@@ -263,5 +273,43 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		}
 
 		return sexoTipo;
+	}
+	
+	private void tratarCpfCnpjParcial(Map<String, String> linhaCliente) {
+		for (String tipoCliente : TIPOS_CLIENTE) {
+			String cpfCnpj = linhaCliente.get(String.format("cnpjCpf%s", tipoCliente));
+			if (StringUtils.isNotEmpty(cpfCnpj)) { // Significa que houve transmissao parcial
+				if (cpfCnpj.length() == 7) {
+					String matriculaCliente = linhaCliente.get(String.format("matricula%s", tipoCliente));
+					if (StringUtils.isNotEmpty(matriculaCliente)) {
+						try {
+							Cliente cliente = RepositorioClienteHBM.getInstancia()
+									.pesquisarCliente(Integer.parseInt(matriculaCliente));
+							if (cliente.getClienteTipo().ehPessoaFisica()) {
+								if (StringUtils.isNotEmpty(cliente.getCpf()) && cliente.getCpf().startsWith(cpfCnpj)) {
+									linhaCliente.put(String.format("cnpjCpf%s", tipoCliente), cliente.getCpf());
+									linhaCliente.put(String.format("%s%s", INDICADOR_TRANSMISSAO_CPF_CNPJ, tipoCliente), "false");
+								}
+							} else {
+								if (StringUtils.isNotEmpty(cliente.getCnpj())
+										&& cliente.getCnpj().startsWith(cpfCnpj)) {
+									linhaCliente.put(String.format("cnpjCpf%s", tipoCliente), cliente.getCnpj());
+									linhaCliente.put(String.format("%s%s", INDICADOR_TRANSMISSAO_CPF_CNPJ, tipoCliente), "false");
+								}
+							}
+						} catch (ErroRepositorioException e) {
+							logger.error("Erro ao tentar buscar cpf/cnpf do cliente para comparar com informacao parcial da transmissao", e);
+						}
+					}
+				} else {
+					// Significa que foi transmitido um CPF/CNPJ com mais de 7 digitos
+					linhaCliente.put(String.format("%s%s", INDICADOR_TRANSMISSAO_CPF_CNPJ, tipoCliente), "true");
+				}
+			} else {
+				// Significa que NAO foi transmitido CPF/CNPJ
+				linhaCliente.put(String.format("%s%s", INDICADOR_TRANSMISSAO_CPF_CNPJ, tipoCliente), "false");
+			}
+		}
+
 	}
 }

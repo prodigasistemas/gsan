@@ -127,7 +127,7 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	private Imovel imovel;
 
 	private ClienteRelacaoTipo clienteRelacaoTipo;
-
+	
 	public ClienteAtualizacaoCadastral() {
 		clienteTipo = new ClienteTipo();
 		unidadeFederacao = new UnidadeFederacao();

@@ -21,6 +21,7 @@
 		<property name="email" type="java.lang.String" column="clir_dsemail" length="40"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="clir_tmultimaalteracao" length="8"/>
 		<property name="tipoOperacao" type="java.lang.Integer" column="clir_tipooperacao" length="1"/>
+		<property name="indicadorTransmissaoCpfCnpj" type="java.lang.Short" column="clir_ictransmissaocpfcnpj" length="1"/>
 		
 		<set name="clienteFones" lazy="true" inverse="true" cascade="delete">
 			<key>

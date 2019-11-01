@@ -1,6 +1,9 @@
 
 package gcom.atualizacaocadastral;
 
+import java.util.Date;
+import java.util.Set;
+
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
@@ -8,9 +11,6 @@ import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.PessoaSexo;
 import gcom.cadastro.geografico.UnidadeFederacao;
-
-import java.util.Date;
-import java.util.Set;
 
 public class ClienteRetorno implements ICliente {
     
@@ -24,6 +24,7 @@ public class ClienteRetorno implements ICliente {
 	private Date ultimaAlteracao;
 	private Integer idClienteTipo;
 	private Integer tipoOperacao;
+	private Short indicadorTransmissaoCpfCnpj;
 	
 	private UnidadeFederacao unidadeFederacao;
 	private PessoaSexo pessoaSexo;
@@ -38,7 +39,7 @@ public class ClienteRetorno implements ICliente {
 		
 	}
 	
-	public ClienteRetorno (ICliente cliente) {
+	public ClienteRetorno(ICliente cliente) {
 		this.idCliente = cliente.getIdCliente();
 		this.nome = cliente.getNome();
 		this.rg = cliente.getRg();
@@ -187,5 +188,12 @@ public class ClienteRetorno implements ICliente {
 	public void setTipoOperacao(Integer tipoOperacao) {
 		this.tipoOperacao = tipoOperacao;
 	}
-	
+
+	public Short getIndicadorTransmissaoCpfCnpj() {
+		return indicadorTransmissaoCpfCnpj;
+	}
+
+	public void setIndicadorTransmissaoCpfCnpj(Short indicadorTransmissaoCpfCnpj) {
+		this.indicadorTransmissaoCpfCnpj = indicadorTransmissaoCpfCnpj;
+	}
 }
