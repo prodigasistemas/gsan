@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.jboss.logging.Logger;
 
 import gcom.atualizacaocadastral.ClienteEnderecoRetorno;
 import gcom.atualizacaocadastral.ClienteFoneRetorno;
@@ -42,11 +43,16 @@ import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoOcupante;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
+import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
 
 public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCommand {
+	
+	private static Logger logger = Logger.getLogger(MontarObjetosRetornoCommand.class);
+	
+	private static final String MATRICULA_ZERO = "0";
 
 	private AtualizacaoCadastral atualizacaoCadastral;
 	private AtualizacaoCadastralImovel atualizacaoCadastralImovel;
@@ -92,6 +98,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 			salvarImagens();
 		} else {
 			atualizarRetorno();
+			atualizarValorIndicadorTransmissaoCpfCnpj();
 		}
 	}
 
@@ -240,7 +247,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 
 	private void salvarClienteRetorno(int matricula, Short clienteRelacaoTipo, IClienteAtualizacaoCadastral clienteTxt, 
 			String dddTelefone, String telefone, String dddCelular, String celular) throws ControladorException {
-		Integer idclienteRetorno = salvarClienteRetorno(clienteTxt);
+		Integer idclienteRetorno = salvarClienteRetorno(clienteTxt, clienteRelacaoTipo);
 		salvarClienteImovelRetorno(clienteTxt, matriculaImovel, idclienteRetorno);
 
 		salvarClienteFoneRetorno(dddTelefone, telefone, clienteRelacaoTipo, FoneTipo.RESIDENCIAL, matricula, idclienteRetorno);
@@ -313,9 +320,11 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
         }
     }
 
-	private Integer salvarClienteRetorno(IClienteAtualizacaoCadastral clienteTxt) throws ControladorException {
+	private Integer salvarClienteRetorno(IClienteAtualizacaoCadastral clienteTxt, Short clienteRelacaoTipo) throws ControladorException {
 		ClienteRetorno clienteRetorno = new ClienteRetorno(clienteTxt);
 		clienteRetorno.setUltimaAlteracao(new Date());
+		
+		definirValorIndicadorTransmissaoCpfCnpj(clienteRetorno, clienteRelacaoTipo);
 		return (Integer) controladorUtil.inserir(clienteRetorno);
 
 	}
@@ -367,4 +376,44 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 				}
 			}
 	}
+	
+	private void definirValorIndicadorTransmissaoCpfCnpj(ClienteRetorno clienteRetorno, Short clienteRelacaoTipo) {
+		String indicadorTransmissao = atualizacaoCadastralImovel
+				.getLinhaCliente(String.format("%s%s", ParseClienteCommand.INDICADOR_TRANSMISSAO_CPF_CNPJ,
+						ClienteRelacaoTipo.converterRelacaoTipo(clienteRelacaoTipo.intValue())));
+		boolean indicadorTransmissaoCpfCnpj = Boolean.parseBoolean(indicadorTransmissao);
+		if (indicadorTransmissaoCpfCnpj) {
+			clienteRetorno.setIndicadorTransmissaoCpfCnpj(ConstantesSistema.SIM);
+		} else {
+			clienteRetorno.setIndicadorTransmissaoCpfCnpj(ConstantesSistema.NAO);
+		}
+	}
+	
+	private void atualizarValorIndicadorTransmissaoCpfCnpj() {
+		for (String tipoCliente : ParseClienteCommand.TIPOS_CLIENTE) {
+			boolean indicador = Boolean.parseBoolean(this.atualizacaoCadastralImovel.getLinhaCliente(
+					String.format("%s%s", ParseClienteCommand.INDICADOR_TRANSMISSAO_CPF_CNPJ, tipoCliente)));
+			String matriculaCliente = atualizacaoCadastralImovel.getLinhaCliente(String.format("matricula%s", tipoCliente));
+			if (StringUtils.isNotEmpty(matriculaCliente) && !MATRICULA_ZERO.equalsIgnoreCase(matriculaCliente)) {
+				try {
+					ClienteRetorno clienteRetorno = controladorAtualizacaoCadastral
+							.pesquisarClienteRetornoPorMatriculaClienteETipoRelacao(
+									Integer.parseInt(matriculaCliente),
+									ClienteRelacaoTipo.converterRelacaoTipo(tipoCliente));
+					
+					// Pela regra, deve-se alterar apenas para verdadeiro se houver transmissao
+					if (indicador) {
+						clienteRetorno.setIndicadorTransmissaoCpfCnpj(ConstantesSistema.SIM);
+					} else if (clienteRetorno.getIndicadorTransmissaoCpfCnpj() == null) { // Preenche como nao apenas se for null
+						clienteRetorno.setIndicadorTransmissaoCpfCnpj(ConstantesSistema.NAO);
+					}
+					
+					controladorUtil.atualizar(clienteRetorno);
+				} catch (ControladorException e) {
+					logger.error("Ocorreu algo inexperado ao definir indicador de transmissao cpf/cnpj", e);
+				}
+			}
+		}
+	}
+	
 }

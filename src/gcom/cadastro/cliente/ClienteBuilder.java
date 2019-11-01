@@ -32,6 +32,7 @@ public abstract class ClienteBuilder {
 		clienteTxt.setNome(atualizacaoCadastralImovel.getLinhaCliente("nome" + tipoCliente));
 
 		String cnpjCpf = atualizacaoCadastralImovel.getLinhaCliente("cnpjCpf" + tipoCliente);
+		
 		if (cnpjCpf.length() == 11) {
 			clienteTxt.setCpf(cnpjCpf);
 		} else if (cnpjCpf.length() == 14) {

@@ -2075,6 +2075,15 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
+	public ClienteRetorno pesquisarClienteRetornoPorMatriculaClienteETipoRelacao(Integer matriculaCliente, Short tipoRelacao)
+			throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.pesquisarClienteRetornoPorMatriculaClienteETipoRelacao(matriculaCliente, tipoRelacao);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao pesquisar cliente retortno.", e);
+		}
+	}
+	
 //	public void verificarAlteracoesSubcategorias(Integer idImovel) throws ControladorException {
 //        try {
 //            

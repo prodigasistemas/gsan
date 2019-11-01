@@ -2,6 +2,7 @@ package gcom.cadastro.cliente;
 
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.util.ConstantesSistema;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
@@ -133,5 +134,9 @@ public class ClienteTipo extends ObjetoTransacao {
 			}				
 		}
 			return descricao;
+	}
+	
+	public Boolean ehPessoaFisica() {
+		return getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM.shortValue();
 	}
 }

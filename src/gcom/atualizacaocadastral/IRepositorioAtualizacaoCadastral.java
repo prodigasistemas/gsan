@@ -252,4 +252,14 @@ public interface IRepositorioAtualizacaoCadastral {
      */
     public boolean obterIndicadorSeHouveAlteracaoNosClientesDoImovelDuranteAtualizacaoCadastral(Integer idImovel)
 			throws ErroRepositorioException;
+    
+    /**
+     * Metodo para pesquisar o ClienteRetorno com as informacoes de clie_id e crtp_id (ClienteRelacaoTipo)
+     * 
+     * @param idImovel
+     * @param tipoRelacao
+     * @return ClienteRetorno do imovel com esse tipo de relacionamento
+     */
+    public ClienteRetorno pesquisarClienteRetornoPorMatriculaClienteETipoRelacao(Integer idImovel, Short tipoRelacao)
+    		throws ErroRepositorioException;
 }

@@ -2897,4 +2897,29 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	public ClienteRetorno pesquisarClienteRetornoPorMatriculaClienteETipoRelacao(Integer matriculaCliente, Short tipoRelacao)
+			throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		ClienteRetorno retorno = null;
+		try {
+			StringBuilder consulta = new StringBuilder("select cr ")
+					.append(" from ClienteRetorno cr ")
+					.append(" join cr.cliente c ")
+					.append(" join c.clienteImoveis ci ")
+					.append(" join ci.clienteRelacaoTipo crtp ")
+					.append(" where c.id = :matriculaCliente ")
+					.append(" and ci.dataFimRelacao is null")
+					.append(" and crtp.id = :tipoRelacao");
+
+			retorno = (ClienteRetorno) session.createQuery(consulta.toString())
+					.setInteger("matriculaCliente", matriculaCliente)
+					.setInteger("tipoRelacao", tipoRelacao.intValue()).setMaxResults(1).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro ao pesquisar cliente retorno");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
 }
