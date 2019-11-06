@@ -401,14 +401,16 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 									Integer.parseInt(matriculaCliente),
 									ClienteRelacaoTipo.converterRelacaoTipo(tipoCliente));
 					
-					// Pela regra, deve-se alterar apenas para verdadeiro se houver transmissao
-					if (indicador) {
-						clienteRetorno.setIndicadorTransmissaoCpfCnpj(ConstantesSistema.SIM);
-					} else if (clienteRetorno.getIndicadorTransmissaoCpfCnpj() == null) { // Preenche como nao apenas se for null
-						clienteRetorno.setIndicadorTransmissaoCpfCnpj(ConstantesSistema.NAO);
+					if (clienteRetorno != null) {
+						// Pela regra, deve-se alterar apenas para verdadeiro se houver transmissao
+						if (indicador) {
+							clienteRetorno.setIndicadorTransmissaoCpfCnpj(ConstantesSistema.SIM);
+						} else if (clienteRetorno.getIndicadorTransmissaoCpfCnpj() == null) { // Preenche como nao apenas se for null
+							clienteRetorno.setIndicadorTransmissaoCpfCnpj(ConstantesSistema.NAO);
+						}
+						
+						controladorUtil.atualizar(clienteRetorno);
 					}
-					
-					controladorUtil.atualizar(clienteRetorno);
 				} catch (ControladorException e) {
 					logger.error("Ocorreu algo inexperado ao definir indicador de transmissao cpf/cnpj", e);
 				}
