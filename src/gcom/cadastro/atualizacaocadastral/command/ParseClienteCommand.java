@@ -277,26 +277,34 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	
 	private void tratarCpfCnpjParcial(Map<String, String> linhaCliente) {
 		for (String tipoCliente : TIPOS_CLIENTE) {
+			
 			String cpfCnpj = linhaCliente.get(String.format("cnpjCpf%s", tipoCliente));
-			if (StringUtils.isNotEmpty(cpfCnpj)) { // Significa que houve transmissao parcial
-				if (cpfCnpj.length() == 7) {
+			
+			if (StringUtils.isNotEmpty(cpfCnpj)) {
+				
+				if (cpfCnpj.length() == 7) { // Significa que houve transmissao parcial
+					
 					String matriculaCliente = linhaCliente.get(String.format("matricula%s", tipoCliente));
+					
 					if (StringUtils.isNotEmpty(matriculaCliente)) {
 						try {
 							Cliente cliente = RepositorioClienteHBM.getInstancia()
 									.pesquisarCliente(Integer.parseInt(matriculaCliente));
-							if (cliente.getClienteTipo().ehPessoaFisica()) {
-								if (StringUtils.isNotEmpty(cliente.getCpf()) && cliente.getCpf().startsWith(cpfCnpj)) {
-									linhaCliente.put(String.format("cnpjCpf%s", tipoCliente), cliente.getCpf());
-									linhaCliente.put(String.format("%s%s", INDICADOR_TRANSMISSAO_CPF_CNPJ, tipoCliente), "false");
-								}
-							} else {
-								if (StringUtils.isNotEmpty(cliente.getCnpj())
-										&& cliente.getCnpj().startsWith(cpfCnpj)) {
-									linhaCliente.put(String.format("cnpjCpf%s", tipoCliente), cliente.getCnpj());
-									linhaCliente.put(String.format("%s%s", INDICADOR_TRANSMISSAO_CPF_CNPJ, tipoCliente), "false");
+							
+							if (cliente != null) {
+								if (cliente.getClienteTipo().ehPessoaFisica()) {
+									if (StringUtils.isNotEmpty(cliente.getCpf()) && cliente.getCpf().startsWith(cpfCnpj)) {
+										linhaCliente.put(String.format("cnpjCpf%s", tipoCliente), cliente.getCpf());
+									}
+								} else {
+									if (StringUtils.isNotEmpty(cliente.getCnpj())
+											&& cliente.getCnpj().startsWith(cpfCnpj)) {
+										linhaCliente.put(String.format("cnpjCpf%s", tipoCliente), cliente.getCnpj());
+									}
 								}
 							}
+
+							linhaCliente.put(String.format("%s%s", INDICADOR_TRANSMISSAO_CPF_CNPJ, tipoCliente), "false");
 						} catch (ErroRepositorioException e) {
 							logger.error("Erro ao tentar buscar cpf/cnpf do cliente para comparar com informacao parcial da transmissao", e);
 						}
@@ -310,6 +318,5 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 				linhaCliente.put(String.format("%s%s", INDICADOR_TRANSMISSAO_CPF_CNPJ, tipoCliente), "false");
 			}
 		}
-
 	}
 }
