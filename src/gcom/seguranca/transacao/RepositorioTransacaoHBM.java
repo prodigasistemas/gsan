@@ -562,7 +562,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 	
 	@SuppressWarnings("rawtypes")
 	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) 
-			throws ErroRepositorioException {
+			throws ErroRepositorioException {                      
 		
 		Session session = HibernateUtil.getSession();
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> retorno = new LinkedList<ConsultarMovimentoAtualizacaoCadastralHelper>();
@@ -587,7 +587,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append("      siac_dssituacao AS descricaoSituacao, ")
 				.append("      tcac.tcac_cnvalorrevisado AS valorRevisado, ")
 				.append("      tcac.tcac_cnvalorfiscalizado AS valorFiscalizado, ")
-				.append("      ctrl.icac_id AS idControle ")
+				.append("      ctrl.icac_id AS idControle, ")
+				.append("      (select count(vist_id) from atualizacaocadastral.visita v where v.icac_id = ctrl.icac_id and v.vist_icexclusao = 'f') AS quantidadeVisitaNaoExcluidas ")
 				.append("FROM seguranca.tab_atlz_cadastral tatc ")
 				.append("INNER JOIN seguranca.operacao_efetuada opef on opef.opef_id = tatc.opef_id ")
 				.append("INNER JOIN seguranca.tab_col_atlz_cadastral tcac on  tatc.tatc_id = tcac.tatc_id ")
@@ -603,8 +604,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append("LEFT JOIN cadastro.imovel_subcatg_atlz_cad isac on isac.imov_id = tatc.tatc_cdimovel ")
 				.append("LEFT JOIN cadastro.cadastro_ocorrencia cocr on cocr.cocr_id = ctrl.cocr_id ")
 				.append("WHERE 1 = 1 ")
-				.append("AND vis.vist_id = (SELECT MAX(v2.vist_id) FROM atualizacaocadastral.visita v2 WHERE v2.icac_id = ctrl.icac_id)");
-
+				.append("AND vis.vist_id = (SELECT MAX(v2.vist_id) FROM atualizacaocadastral.visita v2 WHERE v2.icac_id = ctrl.icac_id and v2.vist_icexclusao = 'f')");
+			
 			if (StringUtils.isNotEmpty(filtro.getIdLocalidadeInicial()))
 				sql.append(" AND txac.loca_id between " + filtro.getIdLocalidadeInicial() + " AND " + filtro.getIdLocalidadeFinal());
 			
@@ -674,7 +675,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					.addScalar("descricaoSituacao", Hibernate.STRING)
 					.addScalar("valorRevisado", Hibernate.STRING)
 					.addScalar("valorFiscalizado", Hibernate.STRING)
-					.addScalar("idControle", Hibernate.INTEGER);
+					.addScalar("idControle", Hibernate.INTEGER)
+					.addScalar("quantidadeVisitaNaoExcluidas", Hibernate.INTEGER);
 			
 			if (filtro.getPeriodoInicial() != null && filtro.getPeriodoFinal() != null) {
 				query.setTimestamp("periodoInicial", filtro.getPeriodoInicial());
@@ -693,10 +695,10 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				Object[] dados = (Object[]) item;
 				Integer idImovel = (Integer) dados[0];
 						
-				ConsultarMovimentoAtualizacaoCadastralHelper helper = map.get(idImovel);
+				ConsultarMovimentoAtualizacaoCadastralHelper helper = map.get(idImovel); 
 
 				if (helper == null) {
-					helper = new ConsultarMovimentoAtualizacaoCadastralHelper();
+					helper = new ConsultarMovimentoAtualizacaoCadastralHelper(); 
 
 					helper.setIdImovel((Integer) dados[0]);
 					helper.setIdTipoAlteracao((Integer) dados[1]);
@@ -707,11 +709,16 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					helper.setIdLigacaoEsgoto((Integer) dados[6]);
 					helper.setIdSituacao((Integer) dados[14]);
 					helper.setDescricaoSituacao((String) dados[15]);
-					helper.setControle(new ImovelControleAtualizacaoCadastral((Integer) dados[18]));
-
+					
+					ImovelControleAtualizacaoCadastral controle = new ImovelControleAtualizacaoCadastral();
+					controle.setId((Integer) dados[18]);
+					controle.setQuantidadeVisitaNaoExcluidas((Integer) dados[19]);
+										
+					helper.setControle(controle);
+					
 					map.put(helper.getIdImovel(), helper);
 				}
-
+				
 				ColunaAtualizacaoCadastral coluna = new ColunaAtualizacaoCadastral();
 				coluna.setNomeColuna((String) dados[7]);
 				coluna.setValorAnterior((String) dados[11]);

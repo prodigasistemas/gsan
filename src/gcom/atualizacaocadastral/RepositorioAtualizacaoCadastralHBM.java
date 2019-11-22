@@ -1380,7 +1380,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
     	}
     	
     	consulta.append("       then 2 else 1 end as informativo, ");
-    	consulta.append("       (select count(vist_id) from atualizacaocadastral.visita v where v.icac_id = imc.icac_id) as visitas ");
+    	consulta.append("       (select count(vist_id) from atualizacaocadastral.visita v where v.icac_id = imc.icac_id and v.vist_icexclusao = 'f') as visitas ");
     	consulta.append("from atualizacaocadastral.imovel_controle_atlz_cad imc ");
 		consulta.append("left join cadastro.cadastro_ocorrencia ocorrencia on ocorrencia.cocr_id = imc.cocr_id ");
     	consulta.append("inner join cadastro.imovel imov on imov.imov_id = imc.imov_id ");
