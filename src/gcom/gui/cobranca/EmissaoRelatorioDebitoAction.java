@@ -91,9 +91,7 @@ public class EmissaoRelatorioDebitoAction extends GcomAction {
 		if (idsDebitosPreteritos != null) {
 			if (idsContas == null)
 				idsContas = idsDebitosPreteritos;
-			else
-				idsContas += "," + idsDebitosPreteritos;
-		}
+			}
 		String idsDebitos = httpServletRequest.getParameter("debito");
 		String idsCreditos = httpServletRequest.getParameter("credito");
 		String idsGuias = httpServletRequest.getParameter("guiaPagamento");

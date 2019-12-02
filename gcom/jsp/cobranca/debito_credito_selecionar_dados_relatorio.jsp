@@ -81,8 +81,14 @@
 				
 			}
 			if (idsContaPreteritas != null && idsContaPreteritas.length > 0){
-				urlTransferencia = urlTransferencia + "debitosPreteritos=" + idsContaPreteritas;
-				concatenador = true;
+				if(idsConta != null && idsConta.length > 0){
+					urlTransferencia = urlTransferencia + "," + idsContaPreteritas;
+					concatenador = true;
+				}else{
+					urlTransferencia = urlTransferencia + "debitosPreteritos=" + idsContaPreteritas;
+					concatenador = true;
+				}
+					
 				
 			}
 			if (idsDebito != null && idsDebito.length > 0){

@@ -81,9 +81,13 @@
 			}
 
 			if (idsContaPreterita != null && idsContaPreterita.length > 0){
-				urlTransferencia = urlTransferencia + "contaPreterita=" + idsContaPreterita;
-				concatenador = true;
-				
+				if(idsConta != null && idsConta.length > 0){
+					urlTransferencia = urlTransferencia + "," + idsContaPreterita;
+					concatenador = true;
+				}else{
+					urlTransferencia = urlTransferencia + "contaPreterita=" + idsContaPreterita;
+					concatenador = true;
+					}
 			}
 			
 			if (idsDebito != null && idsDebito.length > 0){
