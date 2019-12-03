@@ -383,6 +383,7 @@
 				<html:option value="7">PRÉ APROVADOS</html:option>
 				<html:option value="5">EM FISCALIZAÇÃO</html:option>
 				<html:option value="10">FISCALIZADOS</html:option>
+        <html:option value="15">AGUARDANDO ANÁLISE</html:option>
 				<html:option value="4">APROVADOS</html:option>
 				<html:option value="-2">PARA APROVAÇÃO EM LOTE</html:option>
 				<html:option value="-3">TODOS</html:option>

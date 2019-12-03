@@ -145,6 +145,10 @@ public class ImovelControleAtualizacaoCadastral {
 	public boolean isEmFiscalizacao() {
 		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO);
 	}
+	
+	public boolean isAguardandoAnalise() {
+		return SituacaoAtualizacaoCadastral.AGUARDANDO_ANALISE.equals(this.situacaoAtualizacaoCadastral.getId());
+	}
 
 	public boolean isFiscalizado() {
 		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.FISCALIZADO);

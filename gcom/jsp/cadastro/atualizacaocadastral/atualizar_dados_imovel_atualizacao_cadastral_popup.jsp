@@ -52,7 +52,7 @@
 		}
 	}
 
-	function aprovarFiscalizados() {    
+	function aprovarFiscalizados() {
 		var form = document.forms[0];
 		var valoresNao = "";
 		var valoresSim = "";
@@ -277,7 +277,7 @@
 											<td width="150"><strong>Campo</strong></td>
     										<td width="200" align="center"><strong>Anterior</strong></td>
     										<td width="200" align="center"><strong>Pré-Aprovado</strong></td>
-    										<logic:equal name="emFiscalizacao" value="true" scope="session">
+    										<logic:equal name="emAguardandoAnalise" value="true" scope="session">
 	    										<td width="200" align="center"><strong>Fiscalizado</strong></td>
     										</logic:equal>
 											<td width="200" align="center" ><strong>Data/Hora Valida&ccedil;&atilde;o</strong></td>
@@ -317,7 +317,7 @@
     										<td width="200">
    													<bean:write name="item" property="valorAtualizarRetorno" />
     										</td>
-    										<logic:equal name="emFiscalizacao" value="true" scope="session">
+    										<logic:equal name="emAguardandoAnalise" value="true" scope="session">
 	    										<td width="200">
 	    											<bean:write name="item" property="colunaValorFiscalizado" />
 	    										</td>
@@ -334,12 +334,12 @@
                                                   <logic:equal name="item" property="habilitaAlteracao" value="true">
                                                   <logic:equal name="item" property="informativo" value="false">
                                                   	<logic:equal name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" property="temPermissaoAprovarImovel" value="true">
-                                                  		<logic:equal name="emFiscalizacao" value="false" scope="session">
+                                                  		<logic:equal name="emAguardandoAnalise" value="false" scope="session">
 			    											<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" 
 			    											value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) item).getIdTabelaColunaAtualizacaoCadastral()%>" />
                                                   		</logic:equal>
 
-                                                  		<logic:equal name="emFiscalizacao" value="true" scope="session">
+                                                  		<logic:equal name="emAguardandoAnalise" value="true" scope="session">
                                                   			<input type="checkbox" name="chkRegistrosFiscalizacao" id="chkRegistrosFiscalizacao" 
 			    											value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) item).getIdTabelaColunaAtualizacaoCadastral()%>" />
                                                   		</logic:equal>

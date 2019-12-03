@@ -11,6 +11,7 @@ import gcom.util.ConstantesSistema;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -29,13 +30,14 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 				if (isImovelFiscalizado(controle)) {
 					String registrosSelecionados = null;
 
-					if (controle.isEmFiscalizacao()) {
+					if (controle.isAguardandoAnalise()) {
 						registrosSelecionados = form.getIdRegistrosFiscalizados();
 					} else {
 						registrosSelecionados = form.getIdRegistrosAutorizados();
+						
 					}
 
-					if (!registrosSelecionados.equals("")) {
+					if (StringUtils.isNotEmpty(registrosSelecionados)) {
 						String[] listaIdRegistrosSim = registrosSelecionados.split(",");
 
 						if (isDefinicaoSubcategoriaValida(controle, form.getIdImovel(), listaIdRegistrosSim)) {
@@ -48,7 +50,7 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 						} else {
 							throw new ActionServletException("atencao.imovel.sem.subcategorias", "");
 						}
-					} else if (controle.isEmFiscalizacao()) {
+					} else if (controle.isAguardandoAnalise()) {
 						this.atualizarSituacaoImovel(controle);
 					}
 
@@ -67,7 +69,7 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 	}
 
 	private void atualizarSituacaoImovel(ImovelControleAtualizacaoCadastral imovelControle) {
-		if (imovelControle.isEmFiscalizacao()) {
+		if (imovelControle.isAguardandoAnalise()) {
 			getFachada().atualizarSituacaoImovelControle(imovelControle.getImovel().getId(), SituacaoAtualizacaoCadastral.FISCALIZADO);
 		} else if (imovelControle.isPreAprovado() || imovelControle.isFiscalizado()) {
 			getFachada().aprovarImovel(imovelControle.getImovel().getId());
@@ -77,7 +79,7 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 	private boolean isImovelFiscalizado(ImovelControleAtualizacaoCadastral imovelControle) {
 		boolean imovelFiscalizado = true;
 
-		if (imovelControle.isEmFiscalizacao() && !getFachada().possuiInformacoesFiscalizacao(imovelControle)) {
+		if (imovelControle.isAguardandoAnalise() && !getFachada().possuiInformacoesFiscalizacao(imovelControle)) {
 			imovelFiscalizado = false;
 		}
 
@@ -89,13 +91,13 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		if (imovelControle.isPreAprovado())
 			campo = "preaprovado";
 
-		if (imovelControle.isEmFiscalizacao() || imovelControle.isFiscalizado())
+		if (imovelControle.isAguardandoAnalise() || imovelControle.isFiscalizado())
 			campo = "fiscalizado";
 		return campo;
 	}
 	
 	private boolean permiteAprovarOuConcluirFiscalizacao(ImovelControleAtualizacaoCadastral controle, short indicadorValidacao) {
-		return (controle.isPreAprovado() && retornoValidado(indicadorValidacao)) || controle.isEmFiscalizacao() || controle.isFiscalizado();
+		return (controle.isPreAprovado() && retornoValidado(indicadorValidacao)) || controle.isAguardandoAnalise() || controle.isFiscalizado();
 	}
 	
 	private boolean retornoValidado(short indicadorValidacao) {
