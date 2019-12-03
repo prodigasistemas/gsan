@@ -21,6 +21,7 @@ import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
 import gcom.atualizacaocadastral.ImovelTipoOcupanteQuantidadeRetorno;
 import gcom.atualizacaocadastral.Visita;
 import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteBuilder;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteProprietarioBuilder;
@@ -346,8 +347,14 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		}
 
 		if (controle != null) {
-		    if (controle.isTransmitido() || controle.isRevisita())
+		    if (controle.isTransmitido() || controle.isRevisita()) {
 		        inserirVisitaParaImovelControle(controle);
+		    }
+		    
+		    // Apenas no retorno da fiscalizacao
+		    if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoFiscalizacao()) {
+		    	controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.AGUARDANDO_ANALISE));
+		    }
 		    
 			controle.setImovelRetorno(new ImovelRetorno(idImovelRetorno));
 			controladorUtil.atualizar(controle);
