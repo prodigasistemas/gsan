@@ -1174,6 +1174,14 @@ public class Fachada {
 			throw new SistemaException(e);
 		}
 	}
+	
+	public String getFaturamentoParametro(String parametro) {
+		try {
+			return this.getControladorFaturamento().getFaturamentoParametro(parametro);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
 
 	private ControladorRetificarContaLocal getControladorRetificarConta() {
 		ControladorRetificarContaLocalHome localHome = null;

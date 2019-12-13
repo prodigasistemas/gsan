@@ -1,9 +1,21 @@
 package gcom.faturamento;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionContext;
+
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
+import gcom.cadastro.ControladorCadastro;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ControladorClienteLocal;
@@ -16,6 +28,8 @@ import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.bean.ImovelSubcategoriaHelper;
+import gcom.cadastro.localidade.FiltroLocalidade;
+import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.faturamento.bean.EmitirContaHelper;
 import gcom.faturamento.conta.Conta;
@@ -41,19 +55,9 @@ import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
 import gcom.util.Util;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesIn;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionContext;
 
 public class ImpressaoContaImpressoraTermica {
 
@@ -819,7 +823,9 @@ public class ImpressaoContaImpressoraTermica {
 				retorno.append(formarLinha(5, 0, 352, 1661, "4", 0, 0));
 				retorno.append(formarLinha(5, 0, 615, 1661, "" + contador, 0, 0));
 				
-				this.gerarLinhasAliquotasImpostos(emitirContaHelper, sistemaParametro, retorno);
+				Object[] dadosAgenciaReguladora = getControladorFaturamento().obterDadosAgenciaReguladora();
+						
+				this.gerarLinhasAliquotasImpostos(emitirContaHelper, sistemaParametro, dadosAgenciaReguladora, retorno);
 				
 				this.gerarLinhaTelefoneAgenciaReguladora(retorno);
 
@@ -835,7 +841,7 @@ public class ImpressaoContaImpressoraTermica {
 		return retorno.toString();
 
 	}
-
+	
 	private void gerarDadosComuns(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro, StringBuilder retorno, Imovel imovelEmitido,
 			ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto) throws ControladorException {
 		
@@ -1572,57 +1578,83 @@ public class ImpressaoContaImpressoraTermica {
 		return parmsConsumoHistorico;
 	}
 	
-	private void gerarLinhasAliquotasImpostos(EmitirContaHelper helper, SistemaParametro sistemaParametro, StringBuilder retorno) {
-	    try {
+	private void gerarLinhasAliquotasImpostos(EmitirContaHelper helper, SistemaParametro sistemaParametro, Object[] dadosAgenciaReguladora, StringBuilder retorno) {
+		try {
 
-	        String linha = "";
-	        int coluna = 30;
-	        
-	        String descricaoImposto = sistemaParametro.getDescricaoAliquotaImposto();
-	        BigDecimal aliquotaImposto = sistemaParametro.getValorAliquotaImposto();
-	        
-	        // Tipos de financiamento que nao sao utilizados para calculo de demonstrativo de imposto
-	        Collection<Integer> financiamentosTipo = new ArrayList<Integer>();
-	      financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_AGUA);
-	      financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_ESGOTO);
-	      financiamentosTipo.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
-	      financiamentosTipo.add(FinanciamentoTipo.JUROS_PARCELAMENTO);
-	      
-	      FiltroDebitoCobrado filtro = new FiltroDebitoCobrado();
-	      filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobrado.CONTA_ID, helper.getIdConta()));
-	      filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobrado.FINANCIAMENTO_TIPO_ID, financiamentosTipo));
-	      
-	      Collection<DebitoCobrado> debitosParcelamento = getControladorUtil().pesquisar(filtro, DebitoCobrado.class.getName());
-	      
-	      BigDecimal valorPrestacao = new BigDecimal(0.00);
-	      for (Iterator<DebitoCobrado> iterator = debitosParcelamento.iterator(); iterator.hasNext();) {
-	        DebitoCobrado debito = (DebitoCobrado) iterator.next();
-	        valorPrestacao = valorPrestacao.add(debito.getValorPrestacao());
-	      }
-	        
-	      BigDecimal valorBaseCalculo = helper.getValorAgua().add(helper.getValorEsgoto()).add(helper.getDebitos()).subtract(valorPrestacao);
-	      BigDecimal percentualAliquota = aliquotaImposto.divide(new BigDecimal(100));
-	      BigDecimal valorImposto = valorBaseCalculo.multiply(percentualAliquota);
-	      String texto = String.format("%s\t\t%.2f%%", descricaoImposto, aliquotaImposto);
-	      
-	      // Linha do cabecalho
-	      linha += formarLinha(0, 2, 30, 1165, "Tributos", coluna, 0);
-	      linha += formarLinha(0, 2, 200, 1165, "(%)", coluna, 0);
-	      linha += formarLinha(0, 2, 260, 1165, "Base calculo", coluna, 0);
-	      linha += formarLinha(0, 2, 380, 1165, "Valor (R$)", coluna, 0);
-	      // Linha dos valores
-	      linha += formarLinha(0, 2, 30, 1190, texto, coluna, 0);
-	      linha += formarLinha(0, 2, 260, 1190, String.format("R$%.2f", valorBaseCalculo.doubleValue()), coluna, 0); // Valor conta
-	      linha += formarLinha(0, 2, 380, 1190, String.format("R$%.2f", valorImposto.doubleValue()), coluna, 0); // Valor imposto
-	        
-	        retorno.append(linha);
-	      
-	    } catch (Exception e) {
-	      e.printStackTrace();
-	    }
-	  }
+			String linha = "";
+			int coluna = 30;
+
+			BigDecimal valorBaseCalculo = helper.getValorAgua().add(helper.getValorEsgoto()).add(helper.getDebitos()).subtract(obterValorPrestacao(helper));
+
+			// Tributo PIS/Pasep
+			BigDecimal percentualAliquota = sistemaParametro.getValorAliquotaImposto().divide(new BigDecimal(100));
+			BigDecimal valorImposto = valorBaseCalculo.multiply(percentualAliquota);
+
+			// Tributo Agencia Reguladora
+			String nomeAgenciaReguladora = (String) dadosAgenciaReguladora[0];
+			
+			BigDecimal aliquotaAgenciaReguladora = (BigDecimal) dadosAgenciaReguladora[1];
+			BigDecimal percentualAliquotaAgenciaReguladora = aliquotaAgenciaReguladora.divide(new BigDecimal(100));
+			BigDecimal valorImpostoAgenciaReguladora = valorBaseCalculo.multiply(percentualAliquotaAgenciaReguladora);
+			
+			int municipioAgenciaReguladora = (Integer) dadosAgenciaReguladora[2];
+			
+			Localidade localidade = getControladorFaturamento().pesquisarLocalidadeConta(helper.getIdLocalidade());
+						
+			int municipio = localidade != null ? localidade.getMunicipio().getId() : -1;
+			
+			// Linha do cabecalho
+			linha += formarLinha(0, 2, 30, 1140, "Tributos", coluna, 0);
+			linha += formarLinha(0, 2, 200, 1140, "(%)", coluna, 0);
+			linha += formarLinha(0, 2, 260, 1140, "Base calculo", coluna, 0);
+			linha += formarLinha(0, 2, 380, 1140, "Valor (R$)", coluna, 0);
+			// Linha dos valores
+			linha += formarLinha(0, 2, 30, 1165, sistemaParametro.getDescricaoAliquotaImposto(), coluna, 0);
+			linha += formarLinha(0, 2, 200, 1165, String.format("%.2f", sistemaParametro.getValorAliquotaImposto()), coluna, 0);
+			linha += formarLinha(0, 2, 260, 1165, String.format("R$%.2f", valorBaseCalculo.doubleValue()), coluna, 0);
+			linha += formarLinha(0, 2, 380, 1165, String.format("R$%.2f", valorImposto.doubleValue()), coluna, 0);
+			
+			if (municipio == municipioAgenciaReguladora) {
+				// Linha dos valores da Agencia Reguladora
+				linha += formarLinha(0, 2, 30, 1190, nomeAgenciaReguladora, coluna, 0);
+				linha += formarLinha(0, 2, 200, 1190, String.format("%.2f", aliquotaAgenciaReguladora), coluna, 0);
+				linha += formarLinha(0, 2, 260, 1190, String.format("R$%.2f", valorBaseCalculo.doubleValue()), coluna, 0);
+				linha += formarLinha(0, 2, 380, 1190, String.format("R$%.2f", valorImpostoAgenciaReguladora.doubleValue()), coluna, 0);
+			}
+
+			retorno.append(linha);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
-	public void gerarLinhaTelefoneAgenciaReguladora(StringBuilder retorno) {
+	
+	@SuppressWarnings("unchecked")
+	private BigDecimal obterValorPrestacao(EmitirContaHelper helper) throws ControladorException {
+		// Tipos de financiamento que nao sao utilizados para calculo de demonstrativo de imposto
+		Collection<Integer> tipos = new ArrayList<Integer>();
+		tipos.add(FinanciamentoTipo.PARCELAMENTO_AGUA);
+		tipos.add(FinanciamentoTipo.PARCELAMENTO_ESGOTO);
+		tipos.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
+		tipos.add(FinanciamentoTipo.JUROS_PARCELAMENTO);
+
+		Filtro filtro = new FiltroDebitoCobrado();
+		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobrado.CONTA_ID, helper.getIdConta()));
+		filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobrado.FINANCIAMENTO_TIPO_ID, tipos));
+
+		Collection<DebitoCobrado> debitosParcelamento = getControladorUtil().pesquisar(filtro, DebitoCobrado.class.getName());
+
+		BigDecimal valorPrestacao = new BigDecimal(0.00);
+		for (Iterator<DebitoCobrado> iterator = debitosParcelamento.iterator(); iterator.hasNext();) {
+			DebitoCobrado debito = (DebitoCobrado) iterator.next();
+			valorPrestacao = valorPrestacao.add(debito.getValorPrestacao());
+		}
+		
+		return valorPrestacao;
+	}
+	
+	private void gerarLinhaTelefoneAgenciaReguladora(StringBuilder retorno) {
     	String linha = formarLinha(0, 2, 450, 31, String.format("Ag. reguladora (%s)", ConstantesSistema.NOME_AGENCIA_REGULADORA), 0, 0);
     	linha += formarLinha(0, 2, 450, 51, String.format("Telefone: %s", ConstantesSistema.NUMERO_AGENCIA_REGULADORA), 0, 0);
     	linha += formarLinha(0, 2, 450, 66, String.format("Email: %s", ConstantesSistema.EMAIL_AGENCIA_REGULADORA), 0, 0);    	

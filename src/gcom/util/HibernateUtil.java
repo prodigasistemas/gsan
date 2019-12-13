@@ -466,6 +466,7 @@ import gcom.faturamento.FaturamentoDados;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.FaturamentoGrupoCronogramaMensal;
 import gcom.faturamento.FaturamentoImediatoAjuste;
+import gcom.faturamento.FaturamentoParametro;
 import gcom.faturamento.FaturamentoSituacaoComando;
 import gcom.faturamento.FaturamentoSituacaoHistorico;
 import gcom.faturamento.FaturamentoSituacaoMotivo;
@@ -1283,6 +1284,7 @@ public class HibernateUtil {
 					.addClass(ReceitasAFaturarResumo.class)
 					.addClass(ContaImpressaoTermicaQtde.class)
 					.addClass(LancamentoAgenciaReguladora.class)
+					.addClass(FaturamentoParametro.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.micromedicao //

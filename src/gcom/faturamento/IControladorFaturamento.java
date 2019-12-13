@@ -1284,4 +1284,11 @@ public interface IControladorFaturamento {
 	public Collection<ComunicadoEmitirConta> pesquisarComunicadosNaoEmitidos(Integer tipoComunicado) throws ControladorException;
 	
 	public ComunicadoEmitirConta pesquisarComunicado(Integer idImovel, Integer referencia, Integer tipoComunicado) throws ControladorException;
+	
+	public String getFaturamentoParametro(String parametro) throws ControladorException;
+	
+	public Object[] obterDadosAgenciaReguladora() throws ControladorException;
+	
+	public Localidade pesquisarLocalidadeConta(Integer parametro) throws ControladorException;
+
 }

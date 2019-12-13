@@ -1,5 +1,42 @@
 	package gcom.faturamento;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionContext;
+
+import org.apache.commons.fileupload.FileItem;
+import org.jboss.logging.Logger;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.api.relatorio.ReportItemDTO;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.FiltroDevolucao;
@@ -311,44 +348,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionContext;
-
-import org.apache.commons.fileupload.FileItem;
-import org.jboss.logging.Logger;
-
-import br.com.danhil.BarCode.Interleaved2of5;
 
 public class ControladorFaturamentoFINAL extends ControladorComum {
 
@@ -1280,7 +1279,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		try {
 
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
-
+	
 			if (colecaoFaturamentoAtividadeCronogramaRota != null && !colecaoFaturamentoAtividadeCronogramaRota.isEmpty()) {
 
 				Iterator iteratorColecaoFaturamentoAtividadeCronogramaRota = colecaoFaturamentoAtividadeCronogramaRota.iterator();
@@ -61935,7 +61934,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                 sessionContext, repositorioCobranca, getControladorAtualizacaoCadastral());
 
         SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
-
+        
+        
+		Object[] dadosAgenciaReguladora = getControladorFaturamento().obterDadosAgenciaReguladora();
+		
         // [FS0005] - Verificar existência do arquivo texto por rota
         boolean gerarArquivoTexto = gerarArquivoTextoFaturamento.verificarExistenciaArquivoTextoRota(rota.getId(), anoMesFaturamento);
 
@@ -62231,7 +62233,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
                                 Integer qtdArquivosDividido = colecaoArquivoDivisao.size() + 1;
                                 Object[] dadosRetorno = this.gerarPassosFinais(gerarArquivoTextoFaturamento, sistemaParametro, imovel, qtdArquivosDividido,
-                                        anoMesFaturamento);
+                                        anoMesFaturamento, dadosAgenciaReguladora);
 
                                 StringBuilder dadosFinais = new StringBuilder();
                                 dadosFinais.append(dadosRetorno[0]);
@@ -62305,7 +62307,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
                 Integer qtdArquivosDividido = colecaoArquivoDivisao.size() + 1;
 
-                Object[] dadosRetorno = this.gerarPassosFinais(gerarArquivoTextoFaturamento, sistemaParametro, imovel, qtdArquivosDividido, anoMesFaturamento);
+                Object[] dadosRetorno = this.gerarPassosFinais(gerarArquivoTextoFaturamento, sistemaParametro, imovel, qtdArquivosDividido, anoMesFaturamento, dadosAgenciaReguladora);
 
                 StringBuilder dadosFinais = new StringBuilder();
                 dadosFinais.append(dadosRetorno[0]);
@@ -62344,7 +62346,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
                 Integer qtdArquivosDividido = colecaoArquivoDivisao.size() + 1;
 
-                Object[] dadosRetorno = this.gerarPassosFinais(gerarArquivoTextoFaturamento, sistemaParametro, imovel, qtdArquivosDividido, anoMesFaturamento);
+                Object[] dadosRetorno = this.gerarPassosFinais(gerarArquivoTextoFaturamento, sistemaParametro, imovel, qtdArquivosDividido, anoMesFaturamento, dadosAgenciaReguladora);
 
                 StringBuilder dadosFinais = new StringBuilder();
                 dadosFinais.append(dadosRetorno[0]);
@@ -66362,7 +66364,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	private Object[] gerarPassosFinais(
 			UC0745GerarArquivoTextoFaturamento gerarArquivoTextoFaturamento,
 			SistemaParametro sistemaParametro, Imovel imovel,
-			Integer sequenciaRota, Integer anoMesFaturamento)
+			Integer sequenciaRota, Integer anoMesFaturamento, Object[] dadosAgenciaReguladora)
 			throws ControladorException {
 
 		StringBuilder arquivoFinal = new StringBuilder();
@@ -66374,7 +66376,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		arquivoFinal.append(System.getProperty("line.separator"));
 		arquivoFinal.append(gerarArquivoTextoFaturamento
 				.gerarArquivoTextoRegistroTipo11(sistemaParametro, imovel,
-						sequenciaRota, anoMesFaturamento));
+						sequenciaRota, anoMesFaturamento, dadosAgenciaReguladora));
 		tamanhoArquivoFinal = tamanhoArquivoFinal + 1;
 		// registro tipo 12
 		Object[] reg12 = gerarArquivoTextoFaturamento
@@ -69554,5 +69556,4 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 		return retorno;
     }
-	
 }

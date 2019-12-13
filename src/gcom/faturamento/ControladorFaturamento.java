@@ -1,5 +1,40 @@
 package gcom.faturamento;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.EJBException;
+
+import org.apache.commons.beanutils.BeanComparator;
+import org.hibernate.LazyInitializationException;
+import org.jboss.logging.Logger;
+
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
@@ -29,6 +64,7 @@ import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.ImovelCobrarDoacaoHelper;
+import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.QuadraFace;
@@ -194,41 +230,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.EJBException;
-
-import org.apache.commons.beanutils.BeanComparator;
-import org.hibernate.LazyInitializationException;
-import org.jboss.logging.Logger;
 
 public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
@@ -15624,7 +15625,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	
 	@SuppressWarnings("unchecked")
 	protected Object[] gerarDadosAliquotasImpostos(EmitirContaHelper helper, boolean isContaHistorico) {
-		Object[] retorno = new Object[4];
+		Object[] retorno = new Object[8];
 		try {
 			
 			BigDecimal valorPrestacao = new BigDecimal(0.00);
@@ -15665,6 +15666,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			FiltroSistemaParametro filtroSistemaParametro = new FiltroSistemaParametro();
 			Collection colecao = getControladorUtil().pesquisar(filtroSistemaParametro,SistemaParametro.class.getName());
 			
+			String descricaoAgenciaReguladora = getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.AGENCIA_REGULADORA_NOME.toString());
+			BigDecimal alicotaAgenciaReguladora = new BigDecimal(getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.AGENCIA_REGULADORA_ALIQUOTA.toString()));
+			
 			String descricaoAliquotaImposto = "";
 			BigDecimal aliquota = null;
 				
@@ -15676,19 +15680,38 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			
 			BigDecimal valorBaseCalculo = helper.getValorAgua().add(helper.getValorEsgoto()).add(helper.getDebitos()).subtract(valorPrestacao);
 			
-			
 			BigDecimal percentualAliquota = aliquota.divide(new BigDecimal(100));
 			BigDecimal valorImposto = valorBaseCalculo.multiply(percentualAliquota);
+			
+			BigDecimal percentualAliquotaAgenciaReguladora = alicotaAgenciaReguladora.divide(new BigDecimal(100));
+			BigDecimal valorImpostoAgenciaReguladora = valorBaseCalculo.multiply(percentualAliquotaAgenciaReguladora);
 	    	
 			retorno[0] = descricaoAliquotaImposto; 
 			retorno[1] = aliquota; 
 			retorno[2] = valorBaseCalculo.setScale(2, BigDecimal.ROUND_HALF_UP);
 			retorno[3] = valorImposto.setScale(2, BigDecimal.ROUND_HALF_UP);
+			retorno[4] = descricaoAgenciaReguladora;
+			retorno[5] = alicotaAgenciaReguladora;
+			retorno[6] = valorImpostoAgenciaReguladora.setScale(2, BigDecimal.ROUND_HALF_UP);
+			
 		} catch (ControladorException e) {
 			e.printStackTrace();
 		}
 		return retorno;
     }
+	
+	public Object[] obterDadosAgenciaReguladora() {
+		String nome = Fachada.getInstancia().getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.AGENCIA_REGULADORA_NOME.toString());
+		String aliquota = Fachada.getInstancia().getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.AGENCIA_REGULADORA_ALIQUOTA.toString());
+		String municipio = Fachada.getInstancia().getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.AGENCIA_REGULADORA_MUNICIPIO.toString());
+		
+		Object[] retorno = new Object[3];
+		retorno[0] = nome;
+		retorno[1] = new BigDecimal(aliquota);
+		retorno[2] = new Integer(municipio);
+		
+		return retorno;
+	}
 	
 	public Short obterDiaVencimentoConta(Integer idImovel) throws ControladorException {
 		Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
@@ -15833,6 +15856,28 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				return null;
 		} catch (ControladorException e) {
 			throw new ControladorException("Erro ao pesquisar comunicados não emitidos", e);
+		}
+	}
+	
+	public String getFaturamentoParametro(String parametro) throws ControladorException {
+		Filtro filtro = new FiltroFaturamentoParametro();
+		filtro.adicionarParametro(new ParametroSimples(FiltroFaturamentoParametro.NOME, parametro));
+
+		Collection parametros = Fachada.getInstancia().pesquisar(filtro, FaturamentoParametro.class.getName());
+
+		return ((FaturamentoParametro) parametros.iterator().next()).getValor();
+	}
+	
+	public Localidade pesquisarLocalidadeConta(Integer parametro) throws ControladorException {
+		Filtro filtro = new FiltroLocalidade();
+		filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, parametro));
+
+		Collection<Localidade> colecao = getControladorUtil().pesquisar(filtro, Localidade.class.getName());
+		
+		if (colecao != null && !colecao.isEmpty()) {
+			return (Localidade) Util.retonarObjetoDeColecao(colecao);
+		} else {
+			return null;
 		}
 	}
 	

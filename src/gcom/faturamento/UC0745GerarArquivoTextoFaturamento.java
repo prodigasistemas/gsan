@@ -5188,7 +5188,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 	 */
 	public StringBuilder gerarArquivoTextoRegistroTipo11(
 			SistemaParametro sistemaParametro, Imovel imovel,
-			Integer sequenciaRota, Integer anoMesFaturamento)
+			Integer sequenciaRota, Integer anoMesFaturamento, Object[] dadosAgenciaReguladora)
 			throws ControladorException {
 
 		StringBuilder arquivoTextoRegistroTipo11 = new StringBuilder();
@@ -5457,7 +5457,16 @@ public class UC0745GerarArquivoTextoFaturamento {
 		// INFORMACOES DE IMPOSTOS PARA DEMONSTRACAO NA CONTA
 		arquivoTextoRegistroTipo11.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximo(sistemaParametro.getDescricaoAliquotaImposto(), 30));
 		arquivoTextoRegistroTipo11.append(Util.adicionarZerosEsquedaNumero(14, Util.formatarBigDecimalComPonto(sistemaParametro.getValorAliquotaImposto())));
-
+		
+		Localidade localidade = getControladorFaturamento().pesquisarLocalidadeConta(imovel.getLocalidade().getId());
+		
+		int municipio = localidade != null ? localidade.getMunicipio().getId() : -1;
+		
+		if (municipio == (Integer) dadosAgenciaReguladora[2]) {
+			arquivoTextoRegistroTipo11.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximo((String) dadosAgenciaReguladora[0], 30));
+			arquivoTextoRegistroTipo11.append(Util.adicionarZerosEsquedaNumero(14, Util.formatarBigDecimalComPonto((BigDecimal) dadosAgenciaReguladora[1])));
+			}
+		
 		return arquivoTextoRegistroTipo11;
 	}
 

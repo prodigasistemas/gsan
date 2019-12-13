@@ -1,5 +1,30 @@
 package gcom.faturamento;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
+
+import org.jboss.logging.Logger;
+
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
@@ -63,33 +88,9 @@ import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.exception.BaseRuntimeException;
 import gcom.util.exception.EmitirContaException;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-
-import org.jboss.logging.Logger;
 
 public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		implements SessionBean {
@@ -536,7 +537,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								
 								contaTxt = preencherDadosAliquotaImposto(emitirContaHelper, contaTxt);
 								contaTxt = preencherContatosAgenciaReguladora(emitirContaHelper, contaTxt);
-								
+								contaTxt = preencherDadosAliquotaAgenciaReguladora(emitirContaHelper, contaTxt);
 								
 								if (isEmitirImpressaoTermica(imovelEmitido, municipioEntrega, municipioImovel)) {
 
@@ -3741,6 +3742,38 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return contaTxt;
 	}
 	
+	private StringBuilder preencherDadosAliquotaAgenciaReguladora(EmitirContaHelper helper, StringBuilder contaTxt) throws ControladorException {
+		Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(helper, false);
+		
+		int municipioAgenciaReguladora = new Integer(getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.AGENCIA_REGULADORA_MUNICIPIO.toString()));
+		
+		Localidade localidade = pesquisarLocalidadeConta(helper);
+		
+		int municipio = localidade != null ? localidade.getMunicipio().getId() : -1;
+		
+		if (dadosAliquotasImpostos.length > 0 && municipio == municipioAgenciaReguladora) {
+			contaTxt.append(Util.truncarString(Util.completaString((String) dadosAliquotasImpostos[4], 21), 21));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[5]), 13));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[6]), 13));
+		}
+		
+		return contaTxt;
+	}
+
+	private Localidade pesquisarLocalidadeConta(EmitirContaHelper helper) throws ControladorException {
+		Filtro filtro = new FiltroLocalidade();
+		filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, helper.getIdLocalidade()));
+
+		Collection<?> colecao = getControladorUtil().pesquisar(filtro, Localidade.class.getName());
+
+		if (colecao != null && !colecao.isEmpty()) {
+			return (Localidade) Util.retonarObjetoDeColecao(colecao);
+		} else {
+			return null;
+		}
+	}
+	
 	public void emitirComunicado(Integer idImovel, Integer tipoComunicado) {
 		
 		try {
@@ -3760,5 +3793,4 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			logger.error("Erro ao emitir comunicado.");
 		}
 	}
-	
 }
