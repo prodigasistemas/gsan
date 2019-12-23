@@ -870,7 +870,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 	}
 	
 	private String obterIndicadorAutorizacao(SituacaoAtualizacaoCadastral situacao) {
-		if (situacao.getId().equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO))
+		if (situacao.getId().equals(SituacaoAtualizacaoCadastral.AGUARDANDO_ANALISE))
 			return "tcol.indicadorFiscalizado";
 			else
 			return "tcol.indicadorAutorizado";

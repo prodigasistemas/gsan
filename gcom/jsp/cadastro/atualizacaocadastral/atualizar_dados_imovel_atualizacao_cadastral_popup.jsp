@@ -277,8 +277,8 @@
 											<td width="150"><strong>Campo</strong></td>
     										<td width="200" align="center"><strong>Anterior</strong></td>
     										<td width="200" align="center"><strong>Pré-Aprovado</strong></td>
-    										<logic:equal name="emAguardandoAnalise" value="true" scope="session">
-	    										<td width="200" align="center"><strong>Fiscalizado</strong></td>
+    										<logic:equal name="exibirColunaFiscalizado" value="true" scope="session">
+		   										<td width="200" align="center"><strong>Fiscalizado</strong></td>
     										</logic:equal>
 											<td width="200" align="center" ><strong>Data/Hora Valida&ccedil;&atilde;o</strong></td>
 											<td width="100" align="center"><strong>Usu&aacute;rio</strong></td>
@@ -315,9 +315,9 @@
     											<bean:write name="item" property="colunaValorAnterior" />
     										</td>
     										<td width="200">
-   													<bean:write name="item" property="valorAtualizarRetorno" />
+  												<bean:write name="item" property="valorAtualizarRetorno" />
     										</td>
-    										<logic:equal name="emAguardandoAnalise" value="true" scope="session">
+    										<logic:equal name="exibirColunaFiscalizado" value="true" scope="session">
 	    										<td width="200">
 	    											<bean:write name="item" property="colunaValorFiscalizado" />
 	    										</td>
@@ -334,12 +334,12 @@
                                                   <logic:equal name="item" property="habilitaAlteracao" value="true">
                                                   <logic:equal name="item" property="informativo" value="false">
                                                   	<logic:equal name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" property="temPermissaoAprovarImovel" value="true">
-                                                  		<logic:equal name="emAguardandoAnalise" value="false" scope="session">
+                                                  		<logic:equal name="aguardandoAnalise" value="false" scope="session">
 			    											<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" 
 			    											value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) item).getIdTabelaColunaAtualizacaoCadastral()%>" />
                                                   		</logic:equal>
 
-                                                  		<logic:equal name="emAguardandoAnalise" value="true" scope="session">
+                                                  		<logic:equal name="aguardandoAnalise" value="true" scope="session">
                                                   			<input type="checkbox" name="chkRegistrosFiscalizacao" id="chkRegistrosFiscalizacao" 
 			    											value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) item).getIdTabelaColunaAtualizacaoCadastral()%>" />
                                                   		</logic:equal>

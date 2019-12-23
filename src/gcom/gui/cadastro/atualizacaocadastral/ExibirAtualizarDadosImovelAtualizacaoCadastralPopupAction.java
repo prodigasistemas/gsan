@@ -115,19 +115,16 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 
 			ImovelControleAtualizacaoCadastral controle = fachada.pesquisarImovelControleAtualizacao(Integer.valueOf(idImovel), Integer.valueOf(idTipoAlteracao));
 
-			boolean emFiscalizaacao = false;	
-
 			if (controle != null) {
-				emFiscalizaacao = controle.isEmFiscalizacao() || controle.isAguardandoAnalise();
 				form.setSituacao(controle.getSituacaoAtualizacaoCadastral().getDescricao());
-				sessao.setAttribute("emAguardandoAnalise", controle.isAguardandoAnalise());
+				
+				sessao.setAttribute("aguardandoAnalise", controle.isAguardandoAnalise());
+				sessao.setAttribute("exibirColunaFiscalizado", controle.isAguardandoAnalise() || controle.isFiscalizado() || controle.isAprovado());
+				sessao.setAttribute("exibirLinkVisualizar", imovelAlterado(controle));
+				sessao.setAttribute("exibirBotaoConcluirFiscalizacao", exibirBotaoConcluirFiscalizacao(controle));
+				sessao.setAttribute("exibirBotaoAprovado", exibirBotaoAprovado(controle));
+				sessao.setAttribute("exibirBotaoFiscalizar", exibirBotaoFiscalizar(controle));
 			}
-
-			sessao.setAttribute("exibirLinkVisualizar", imovelAlterado(controle));
-			sessao.setAttribute("emFiscalizacao", emFiscalizaacao);
-			sessao.setAttribute("exibirBotaoConcluirFiscalizacao", exibirBotaoConcluirFiscalizacao(controle));
-			sessao.setAttribute("exibirBotaoAprovado", exibirBotaoAprovado(controle));
-			sessao.setAttribute("exibirBotaoFiscalizar", exibirBotaoFiscalizar(controle));
 		} catch (Exception e) {
 			throw new ActionServletException("erro.exibir.dados.atualizacao", e, "Dados do Imovel e Cliente");
 		}
@@ -154,9 +151,8 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		return imovelAlterado(controle) && controle.isPreAprovado();
 	}
 	
-	private boolean exibirBotaoConcluirFiscalizacao(ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral) {
-		return imovelControleAtualizacaoCadastral != null
-				&& imovelControleAtualizacaoCadastral.isAguardandoAnalise();
+	private boolean exibirBotaoConcluirFiscalizacao(ImovelControleAtualizacaoCadastral controle) {
+		return controle != null && controle.isAguardandoAnalise();
 	}
 	
 	private boolean exibirBotaoAprovado(ImovelControleAtualizacaoCadastral controle) {

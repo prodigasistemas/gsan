@@ -1438,7 +1438,6 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 				
 				TabelaColunaAtualizacaoCadastral tabelaColuna = this.repositorioTransacao.pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
 				getControladorAtualizacaoCadastral().atualizarImovelRetorno(tabelaColuna, campo);
-
 			}
 
 			boolean existePendencia = repositorioTransacao.existeAlteracaoNaoAprovadaParaImovel(idImovel);
