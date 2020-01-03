@@ -3756,6 +3756,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[5]), 13));
 			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
 			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[6]), 13));
+		} else {
+			contaTxt.append(Util.completaStringComEspacoAEsquerda("", 60));
 		}
 		
 		return contaTxt;
