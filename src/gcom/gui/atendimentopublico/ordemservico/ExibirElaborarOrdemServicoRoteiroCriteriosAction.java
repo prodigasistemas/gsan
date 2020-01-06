@@ -5,8 +5,10 @@ import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,117 +21,87 @@ import org.apache.struts.action.ActionMapping;
 /**
  * [UC0456] Elaborar Roteiro de Programação de Ordem de Serviço
  * 
- * @author Rafael Pinto 
+ * @author Rafael Pinto
  *
  * @date 04/09/2006
  */
 public class ExibirElaborarOrdemServicoRoteiroCriteriosAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 
-		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping.findForward("exibirElaborarOrdemServico");
-		
-		HttpSession sessao = httpServletRequest.getSession(false);
-		
-		ElaborarOrdemServicoRoteiroCriteriosActionForm 
-			elaborarOrdemServicoRoteiroCriteriosActionForm = 
-				(ElaborarOrdemServicoRoteiroCriteriosActionForm) actionForm;
-		
-		String origemServicos = 
-			elaborarOrdemServicoRoteiroCriteriosActionForm.getOrigemServicos();
+		ActionForward retorno = mapping.findForward("exibirElaborarOrdemServico");
 
-		String criterioSelecao = 
-			elaborarOrdemServicoRoteiroCriteriosActionForm.getCriterioSelecao();
-		
-		String servicoDiagnosticado = 
-			elaborarOrdemServicoRoteiroCriteriosActionForm.getServicoDiagnosticado();
+		HttpSession sessao = request.getSession(false);
 
-		String servicoAcompanhamento = 
-			elaborarOrdemServicoRoteiroCriteriosActionForm.getServicoAcompanhamento();
+		ElaborarOrdemServicoRoteiroCriteriosActionForm form = (ElaborarOrdemServicoRoteiroCriteriosActionForm) actionForm;
 
 		// Coloca com default a orige serviço como (Solicitado)
-		if(origemServicos == null || origemServicos.equals("")){
+		String origemServicos = form.getOrigemServicos();
+		if (origemServicos == null || origemServicos.equals("")) {
 			origemServicos = "1";
-			elaborarOrdemServicoRoteiroCriteriosActionForm.setOrigemServicos(origemServicos);
+			form.setOrigemServicos(origemServicos);
 		}
 
 		// Coloca com default o criterio de seleção como (Tipo de Serviço)
-		if(criterioSelecao == null || criterioSelecao.equals("")){
+		String criterioSelecao = form.getCriterioSelecao();
+		if (criterioSelecao == null || criterioSelecao.equals("")) {
 			criterioSelecao = "1";
 		}
 
-		// Coloca com default o serviço diagnosticado como (Todos)		
-		if(servicoDiagnosticado == null || servicoDiagnosticado.equals("")){
-			elaborarOrdemServicoRoteiroCriteriosActionForm.setServicoDiagnosticado(
-				""+ConstantesSistema.NUMERO_NAO_INFORMADO);
+		// Coloca com default o serviço diagnosticado como (Todos)
+		String servicoDiagnosticado = form.getServicoDiagnosticado();
+		if (servicoDiagnosticado == null || servicoDiagnosticado.equals("")) {
+			form.setServicoDiagnosticado("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
 		}
 
 		// Coloca com default os serviços acompanhados como (Todos)
-		if(servicoAcompanhamento == null || servicoAcompanhamento.equals("")){
-			elaborarOrdemServicoRoteiroCriteriosActionForm.setServicoAcompanhamento(
-				""+ConstantesSistema.NUMERO_NAO_INFORMADO);
+		String servicoAcompanhamento = form.getServicoAcompanhamento();
+		if (servicoAcompanhamento == null || servicoAcompanhamento.equals("")) {
+			form.setServicoAcompanhamento("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
 		}
 
-		// Recebe a data do roteiro de [UC0455] - Exbir Calendario
-		//elaborarOrdemServicoRoteiroCriteriosActionForm.setDataRoteiro("12/09/2006");
-		
+		Date dataRoteiro = Util.converteStringParaDate(form.getDataRoteiro());
+		form.setDataRoteiro(Util.formatarData(dataRoteiro));
+
 		// Seta o id da Unidade de Lotacao do Usuario
 		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
-		elaborarOrdemServicoRoteiroCriteriosActionForm.setUnidadeLotacao(
-				""+usuario.getUnidadeOrganizacional().getId());
-
-		// Monta a colecao de tipos Servicos
-		this.pesquisarServicoDisponivel(
-			httpServletRequest,new Integer(criterioSelecao),new Integer(origemServicos));
 		
+		form.setUnidadeLotacao(usuario.getUnidadeOrganizacional().getId().toString());
+
+		this.pesquisarServicoDisponivel(request, new Integer(criterioSelecao), new Integer(origemServicos));
+
 		return retorno;
 	}
-	
+
 	/**
-	 * Pesquisa Servicos Disponiveis a partir da origem do servico:(Solicitados,Seletivos e Ambos) 
-	 * e partir do criterio:(Tipo de Servico,Tipo de Equipe,Unidade,Localidade,Setor e Distrito)
-	 * 
-	 * @author Rafael Pinto
-	 * @date 17/08/2006
+	 * Pesquisa Servicos Disponiveis a partir da origem do servico (Solicitados,Seletivos e Ambos) e 
+	 * a partir do criterio (Tipo de Servico, Tipo de Equipe, Unidade, Localidade, Setor e Distrito)
 	 * 
 	 * @param criterio,origemServico
-	 *  
-	 * @return Tipos de Servico:
-	 *  	ServicoTipo
-	 *  	ServicoPerfilTipo
-	 *  	UnidadeOrganizacional
-	 *  	Localidade
-	 *  	SetorComercial
-	 *  	DistritoOperacional
+	 * 
+	 * @return Tipos de Servico: ServicoTipo ServicoPerfilTipo UnidadeOrganizacional
+	 *         Localidade SetorComercial DistritoOperacional
 	 */
-	private void pesquisarServicoDisponivel(HttpServletRequest httpServletRequest,
-		int criterio,int origemServicos){
-		
-		HttpSession sessao = httpServletRequest.getSession(false);
+	private void pesquisarServicoDisponivel(HttpServletRequest request, int criterio, int origemServicos) {
 
-		Collection colecaoServicoDisponivel = 
-			(Collection) sessao.getAttribute("colecaoServicoDisponivel"+criterio+origemServicos);
-		
-		if(colecaoServicoDisponivel == null){
-			
+		HttpSession sessao = request.getSession(false);
+
+		Collection<?> colecao = (Collection<?>) sessao.getAttribute("colecaoServicoDisponivel" + criterio + origemServicos);
+
+		if (colecao == null) {
+
 			Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
-			
-			colecaoServicoDisponivel = 
-				Fachada.getInstancia().pesquisarTipoServicoDisponivelPorCriterio(
-					usuario.getUnidadeOrganizacional(),criterio,origemServicos);
-			
-			sessao.setAttribute("colecaoServicoDisponivel"+criterio+origemServicos,colecaoServicoDisponivel);
-			
+
+			colecao = Fachada.getInstancia().pesquisarTipoServicoDisponivelPorCriterio(
+					usuario.getUnidadeOrganizacional(), criterio, origemServicos);
+
+			sessao.setAttribute("colecaoServicoDisponivel" + criterio 	+ origemServicos, colecao);
 		}
 
-		if (colecaoServicoDisponivel == null || colecaoServicoDisponivel.isEmpty()) {
-			throw new ActionServletException("atencao.naocadastrado", null,"Serviço Disponível");
+		if (colecao == null || colecao.isEmpty()) {
+			throw new ActionServletException("atencao.naocadastrado", null, "Serviço Disponível");
 		} else {
-			httpServletRequest.setAttribute("colecaoTipoServico",colecaoServicoDisponivel);
+			request.setAttribute("colecaoTipoServico", colecao);
 		}
 	}
-
 }
