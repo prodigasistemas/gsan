@@ -32282,7 +32282,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @throws ControladorException
 	 */
 	public Collection<EmitirContaHelper> emitir2ViaContas(
-			Collection idsContaEP, boolean cobrarTaxaEmissaoConta,
+			Collection<Integer> idsContaEP, boolean cobrarTaxaEmissaoConta,
 			Short contaSemCodigoBarras) throws ControladorException {
 
 		Collection<EmitirContaHelper> colecaoEmitirContaHelper = new ArrayList();

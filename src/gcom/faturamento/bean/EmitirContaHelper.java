@@ -164,6 +164,11 @@ public class EmitirContaHelper implements Serializable {
 	private BigDecimal percentualImpostosEAliquotas;
 	private BigDecimal valorBaseCalculoImpostos;
 	private BigDecimal valorImpostosEAliquotas;
+	
+	private String descricaoAgenciaReguladora;
+	private BigDecimal percentualAgenciaReguladora;
+	private BigDecimal valorAgenciaReguladora;
+		
 
 	private String agenciaReguladora;
 	private String telefoneAgenciaReguladora;
@@ -1846,7 +1851,31 @@ public class EmitirContaHelper implements Serializable {
 	public void setValorImpostosEAliquotas(BigDecimal valorImpostosEAliquotas) {
 		this.valorImpostosEAliquotas = valorImpostosEAliquotas;
 	}
+	
+	public String getDescricaoAgenciaReguladora() {
+		return descricaoAgenciaReguladora;
+	}
 
+	public void setDescricaoAgenciaReguladora(String descricaoAgenciaReguladora) {
+		this.descricaoAgenciaReguladora = descricaoAgenciaReguladora;
+	}
+
+	public BigDecimal getPercentualAgenciaReguladora() {
+		return percentualAgenciaReguladora;
+	}
+
+	public void setPercentualAgenciaReguladora(BigDecimal percentualAgenciaReguladora) {
+		this.percentualAgenciaReguladora = percentualAgenciaReguladora;
+	}
+
+	public BigDecimal getValorAgenciaReguladora() {
+		return valorAgenciaReguladora;
+	}
+
+	public void setValorAgenciaReguladora(BigDecimal valorAgenciaReguladora) {
+		this.valorAgenciaReguladora = valorAgenciaReguladora;
+	}
+	
 	public boolean isInformarImpostos() {
 		return informarImpostos;
 	}
@@ -1918,4 +1947,6 @@ public class EmitirContaHelper implements Serializable {
 	public void setMensagemQuitacao(String mensagemQuitacao) {
 		this.mensagemQuitacao = mensagemQuitacao;
 	}
+
+	
 }
