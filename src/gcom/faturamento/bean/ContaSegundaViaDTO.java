@@ -73,6 +73,11 @@ public class ContaSegundaViaDTO {
 	private String impostosPercentual;
 	private String impostosValorBase;
 	private String impostosValor;
+	
+	private String impostosDescricaoAgenciaReguladora;
+	private String impostosPercentualAgenciaReguladora;
+	//private String impostosValorBase;
+	private String impostosValorAgenciaReguladora;
 
 	private String padraoTurbidez;
 	private String padraoCor;
@@ -183,6 +188,10 @@ public class ContaSegundaViaDTO {
 		this.impostosPercentual = Util.formatarMoedaReal(helper.getPercentualImpostosEAliquotas());
 		this.impostosValorBase = Util.formatarMoedaReal(helper.getValorBaseCalculoImpostos());
 		this.impostosValor = Util.formatarMoedaReal(helper.getValorImpostosEAliquotas());
+		
+		this.impostosDescricaoAgenciaReguladora = helper.getDescricaoAgenciaReguladora();
+		this.impostosPercentualAgenciaReguladora = Util.formatarMoedaReal(helper.getPercentualAgenciaReguladora());
+		this.impostosValorAgenciaReguladora = Util.formatarMoedaReal(helper.getValorAgenciaReguladora());
 
 		this.padraoTurbidez = helper.getPadraoTurbidez();
 		this.padraoCor = helper.getPadraoCor();
@@ -482,6 +491,18 @@ public class ContaSegundaViaDTO {
 
 	public String getImpostosValor() {
 		return impostosValor;
+	}
+	
+	public String getImpostosDescricaoAgenciaReguladora() {
+		return impostosDescricaoAgenciaReguladora;
+	}
+
+	public String getImpostosPercentualAgenciaReguladora() {
+		return impostosPercentualAgenciaReguladora;
+	}
+
+	public String getImpostosValorAgenciaReguladora() {
+		return impostosValorAgenciaReguladora;
 	}
 
 	public String getPadraoTurbidez() {

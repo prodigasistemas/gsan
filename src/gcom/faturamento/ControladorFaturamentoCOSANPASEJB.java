@@ -3029,148 +3029,145 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return imovel;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Collection<EmitirContaHelper> emitir2ViaContas(Collection idsContaEP, boolean cobrarTaxaEmissaoConta,
-			Short contaSemCodigoBarras) throws ControladorException {
+	public Collection<EmitirContaHelper> emitir2ViaContas(Collection<Integer> idsContaEP, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) throws ControladorException {
 
-		Collection<EmitirContaHelper> colecaoEmitirContaHelper = new ArrayList();
-
-		Iterator iter = idsContaEP.iterator();
-
-		while (iter.hasNext()) {
-			Integer idContaEP = (Integer) iter.next();
-
-			Collection colectionConta;
+		Collection<EmitirContaHelper> colecaoHelper = new ArrayList<EmitirContaHelper>();
+		
+		for (Integer id : idsContaEP) {
+			
+			EmitirContaHelper helper;
 			try {
-				colectionConta = this.repositorioFaturamento.pesquisarConta(idContaEP);
+				helper = (EmitirContaHelper) repositorioFaturamento.pesquisarConta(id).iterator().next();
 			} catch (ErroRepositorioException ex) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("erro.sistema", ex);
 			}
 
-			EmitirContaHelper emitirContaHelper = (EmitirContaHelper) colectionConta.iterator().next();
+			helper = preencherNomeCliente2Via(helper);
+			helper = preencherDadosEnderecoImovel2Via(helper);
+			helper = preencherInscricaoImovel2Via(helper);
+			helper = preencherDadosClienteResponsavel2Via(helper);
 
-			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
-
-			emitirContaHelper = preencherNomeCliente2Via(emitirContaHelper);
-			emitirContaHelper = preencherDadosEnderecoImovel2Via(emitirContaHelper);
-			emitirContaHelper= preencherInscricaoImovel2Via(emitirContaHelper);
-			emitirContaHelper = preencherDadosClienteResponsavel2Via(emitirContaHelper);
-
-			if (emitirContaHelper.getIdImovelContaEnvio() != null && emitirContaHelper.getIdImovelContaEnvio().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL_FINAL_GRUPO)) {
-				emitirContaHelper.setClienteComFaturaAgrupada(new Short("1"));
+			if (helper.getIdImovelContaEnvio() != null && helper.getIdImovelContaEnvio().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL_FINAL_GRUPO)) {
+				helper.setClienteComFaturaAgrupada(new Short("1"));
 			} else {
-				emitirContaHelper.setClienteComFaturaAgrupada(new Short("2"));
+				helper.setClienteComFaturaAgrupada(new Short("2"));
 			}
 
-			Integer[] parmSituacao = determinarTipoLigacaoMedicao(emitirContaHelper);
-			Integer tipoLigacao = parmSituacao[0];
-			Integer tipoMedicao = parmSituacao[1];
+			Integer[] situacao = determinarTipoLigacaoMedicao(helper);
+			Integer tipoLigacao = situacao[0];
+			Integer tipoMedicao = situacao[1];
 
-			emitirContaHelper.setDadosConsumoMes1(obterDadosConsumoAnterior(emitirContaHelper, 1, tipoLigacao, tipoMedicao).toString());
-			emitirContaHelper.setDadosConsumoMes2(obterDadosConsumoAnterior(emitirContaHelper, 2, tipoLigacao, tipoMedicao).toString());
-			emitirContaHelper.setDadosConsumoMes3(obterDadosConsumoAnterior(emitirContaHelper, 3, tipoLigacao, tipoMedicao).toString());
-			emitirContaHelper.setDadosConsumoMes4(obterDadosConsumoAnterior(emitirContaHelper, 4, tipoLigacao, tipoMedicao).toString());
-			emitirContaHelper.setDadosConsumoMes5(obterDadosConsumoAnterior(emitirContaHelper, 5, tipoLigacao, tipoMedicao).toString());
-			emitirContaHelper.setDadosConsumoMes6(obterDadosConsumoAnterior(emitirContaHelper, 6, tipoLigacao, tipoMedicao).toString());
+			helper.setDadosConsumoMes1(obterDadosConsumoAnterior(helper, 1, tipoLigacao, tipoMedicao).toString());
+			helper.setDadosConsumoMes2(obterDadosConsumoAnterior(helper, 2, tipoLigacao, tipoMedicao).toString());
+			helper.setDadosConsumoMes3(obterDadosConsumoAnterior(helper, 3, tipoLigacao, tipoMedicao).toString());
+			helper.setDadosConsumoMes4(obterDadosConsumoAnterior(helper, 4, tipoLigacao, tipoMedicao).toString());
+			helper.setDadosConsumoMes5(obterDadosConsumoAnterior(helper, 5, tipoLigacao, tipoMedicao).toString());
+			helper.setDadosConsumoMes6(obterDadosConsumoAnterior(helper, 6, tipoLigacao, tipoMedicao).toString());
 
-			Object[] parmsMedicaoHistorico = obterDadosMedicaoConta(emitirContaHelper, tipoMedicao);
-			
+			Object[] medicaoHistorico = obterDadosMedicaoConta(helper, tipoMedicao);
+
 			String leituraAnterior = "";
 			String leituraAtual = "";
 			String dataLeituraAnterior = "";
 			String dataLeituraAtual = "";
 			String leituraAnormalidadeFaturamento = "";
 			String descricaoAbreviadaLeituraAnormalidade = "";
-			if (parmsMedicaoHistorico != null) {
-
-				if (parmsMedicaoHistorico[0] != null) {
-					leituraAnterior = "" + (Integer) parmsMedicaoHistorico[0];
+			
+			if (medicaoHistorico != null) {
+				if (medicaoHistorico[0] != null) {
+					leituraAnterior = "" + (Integer) medicaoHistorico[0];
 				}
-				if (parmsMedicaoHistorico[1] != null) {
-					leituraAtual = "" + (Integer) parmsMedicaoHistorico[1];
+				
+				if (medicaoHistorico[1] != null) {
+					leituraAtual = "" + (Integer) medicaoHistorico[1];
 				}
-				if (parmsMedicaoHistorico[3] != null) {
-					dataLeituraAnterior = Util.formatarData((Date) parmsMedicaoHistorico[3]);
+				
+				if (medicaoHistorico[3] != null) {
+					dataLeituraAnterior = Util.formatarData((Date) medicaoHistorico[3]);
 				}
-				if (parmsMedicaoHistorico[2] != null) {
-					dataLeituraAtual = Util.formatarData((Date) parmsMedicaoHistorico[2]);
+				
+				if (medicaoHistorico[2] != null) {
+					dataLeituraAtual = Util.formatarData((Date) medicaoHistorico[2]);
 				}
-				if (parmsMedicaoHistorico[5] != null) {
-					leituraAnormalidadeFaturamento = "" + (Integer) parmsMedicaoHistorico[5];
+				
+				if (medicaoHistorico[5] != null) {
+					leituraAnormalidadeFaturamento = "" + (Integer) medicaoHistorico[5];
 				}
-				if (parmsMedicaoHistorico[7] != null) {
-					descricaoAbreviadaLeituraAnormalidade = "" 	+ (String) parmsMedicaoHistorico[7];
+				
+				if (medicaoHistorico[7] != null) {
+					descricaoAbreviadaLeituraAnormalidade = "" + (String) medicaoHistorico[7];
 				}
 			}
-			
-			emitirContaHelper.setDataLeituraAnterior(dataLeituraAnterior);
-			emitirContaHelper.setDataLeituraAtual(dataLeituraAtual);
-			emitirContaHelper.setDescricaoAbreviadaLeituraAnormalidade(descricaoAbreviadaLeituraAnormalidade);
-			emitirContaHelper.setLeituraAnormalidade(leituraAnormalidadeFaturamento);
+
+			helper.setDataLeituraAnterior(dataLeituraAnterior);
+			helper.setDataLeituraAtual(dataLeituraAtual);
+			helper.setDescricaoAbreviadaLeituraAnormalidade(descricaoAbreviadaLeituraAnormalidade);
+			helper.setLeituraAnormalidade(leituraAnormalidadeFaturamento);
 
 			String diasConsumo = "";
 			if (!dataLeituraAnterior.equals("") && !dataLeituraAtual.equals("")) {
-				diasConsumo = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) parmsMedicaoHistorico[3], (Date) parmsMedicaoHistorico[2]);
+				diasConsumo = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) medicaoHistorico[3], (Date) medicaoHistorico[2]);
 			}
 
-			String[] parmsConsumo = obterConsumoFaturadoConsumoMedioDiario(emitirContaHelper, tipoMedicao, diasConsumo);
-			String consumoFaturamento = parmsConsumo[0];
-			
-			emitirContaHelper.setConsumoFaturamento(parmsConsumo[0]);
-			emitirContaHelper.setConsumoMedioDiario(parmsConsumo[1]);
-			emitirContaHelper.setLeituraAnterior(Util.completaString(leituraAnterior, 7));
-			emitirContaHelper.setLeituraAtual(Util.completaString(leituraAtual, 7));
-			emitirContaHelper.setDiasConsumo(Util.completaString(diasConsumo, 2));
+			String[] consumo = obterConsumoFaturadoConsumoMedioDiario(helper, tipoMedicao, diasConsumo);
+			String consumoFaturamento = consumo[0];
 
-			Object[] parmsConsumoHistorico = null;
+			helper.setConsumoFaturamento(consumo[0]);
+			helper.setConsumoMedioDiario(consumo[1]);
+			helper.setLeituraAnterior(Util.completaString(leituraAnterior, 7));
+			helper.setLeituraAtual(Util.completaString(leituraAtual, 7));
+			helper.setDiasConsumo(Util.completaString(diasConsumo, 2));
+
+			Object[] consumoHistorico = null;
 			String descricaoAbreviadaTipoConsumo = "";
 			String descricaoTipoConsumo = "";
 			String consumoMedio = "";
 			String descricaoAbreviadaAnormalidadeConsumo = "";
 			String descricaoAnormalidadeConsumo = "";
 			String consumoRateio = "";
+			
 			if (tipoLigacao != null) {
 				try {
-					parmsConsumoHistorico = getControladorMicromedicao()
-							.obterDadosConsumoConta(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(),
-									tipoLigacao);
+					consumoHistorico = getControladorMicromedicao().obterDadosConsumoConta(helper.getIdImovel(), helper.getAmReferencia(), tipoLigacao);
 				} catch (ControladorException e) {
 					logger.error(e);
 				}
 
-				if (parmsConsumoHistorico != null) {
-					if (parmsConsumoHistorico[0] != null) {
-						descricaoAbreviadaTipoConsumo = (String) parmsConsumoHistorico[0];
+				if (consumoHistorico != null) {
+					if (consumoHistorico[0] != null) {
+						descricaoAbreviadaTipoConsumo = (String) consumoHistorico[0];
 					}
-					if (parmsConsumoHistorico[1] != null) {
-						descricaoTipoConsumo = (String) parmsConsumoHistorico[1];
+					
+					if (consumoHistorico[1] != null) {
+						descricaoTipoConsumo = (String) consumoHistorico[1];
 					}
-					if (parmsConsumoHistorico[2] != null) {
-						consumoMedio = "" + (Integer) parmsConsumoHistorico[2];
+					
+					if (consumoHistorico[2] != null) {
+						consumoMedio = "" + (Integer) consumoHistorico[2];
 					}
-					if (parmsConsumoHistorico[3] != null) {
-						descricaoAbreviadaAnormalidadeConsumo = (String) parmsConsumoHistorico[3];
+					
+					if (consumoHistorico[3] != null) {
+						descricaoAbreviadaAnormalidadeConsumo = (String) consumoHistorico[3];
 					}
-					if (parmsConsumoHistorico[4] != null) {
-						descricaoAnormalidadeConsumo = (String) parmsConsumoHistorico[4];
+					
+					if (consumoHistorico[4] != null) {
+						descricaoAnormalidadeConsumo = (String) consumoHistorico[4];
 					}
-					if (parmsConsumoHistorico[5] != null) {
-						consumoRateio = "" + (Integer) parmsConsumoHistorico[5];
+					
+					if (consumoHistorico[5] != null) {
+						consumoRateio = "" + (Integer) consumoHistorico[5];
 					}
 				}
 			}
 
-			emitirContaHelper.setDescricaoTipoConsumo(descricaoTipoConsumo);
-			emitirContaHelper.setDescricaoAnormalidadeConsumo(descricaoAnormalidadeConsumo);
-			emitirContaHelper.setConsumoAnormalidade(descricaoAbreviadaAnormalidadeConsumo);
+			helper.setDescricaoTipoConsumo(descricaoTipoConsumo);
+			helper.setDescricaoAnormalidadeConsumo(descricaoAnormalidadeConsumo);
+			helper.setConsumoAnormalidade(descricaoAbreviadaAnormalidadeConsumo);
 
-			Short quantidadeEconomiaConta = 0;
-			quantidadeEconomiaConta = obterQuantidadeEconomiasConta(emitirContaHelper.getIdConta(), false);
-			emitirContaHelper.setQuantidadeEconomiaConta(""+ quantidadeEconomiaConta);
-			
+			Short quantidadeEconomiaConta = obterQuantidadeEconomiasConta(helper.getIdConta(), false);
+			helper.setQuantidadeEconomiaConta("" + quantidadeEconomiaConta);
+
 			BigDecimal consumoFaturadoBigDecimal = null;
 			if (consumoFaturamento != null && !consumoFaturamento.equals("")) {
 				consumoFaturadoBigDecimal = Util.formatarMoedaRealparaBigDecimal(consumoFaturamento);
@@ -3178,14 +3175,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			}
 			BigDecimal qtdEconomiasBigDecimal = null;
 			if (quantidadeEconomiaConta != null && !quantidadeEconomiaConta.equals("")) {
-				qtdEconomiasBigDecimal = Util.formatarMoedaRealparaBigDecimal(""+ quantidadeEconomiaConta);
+				qtdEconomiasBigDecimal = Util.formatarMoedaRealparaBigDecimal("" + quantidadeEconomiaConta);
 			}
-			
+
 			String consumoEconomia = "";
 			if (consumoFaturadoBigDecimal != null && qtdEconomiasBigDecimal != null) {
 				BigDecimal consumoEconomiaBigDecimal = consumoFaturadoBigDecimal.divide(qtdEconomiasBigDecimal, 2, RoundingMode.UP);
 				consumoEconomia = Util.formatarMoedaReal(consumoEconomiaBigDecimal);
-				emitirContaHelper.setConsumoEconomia(consumoEconomia.substring(0, (consumoEconomia.length() - 3)));
+				helper.setConsumoEconomia(consumoEconomia.substring(0, (consumoEconomia.length() - 3)));
 			}
 
 			StringBuilder codigoAuxiliar = new StringBuilder();
@@ -3194,71 +3191,78 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			codigoAuxiliar.append(Util.completaString(leituraAnormalidadeFaturamento, 2));
 			codigoAuxiliar.append(Util.completaString(descricaoAbreviadaAnormalidadeConsumo, 2));
 
-			if (emitirContaHelper.getIdImovelPerfil() != null) {
-				codigoAuxiliar.append(Util.completaString(""+ emitirContaHelper.getIdImovelPerfil(), 1));
+			if (helper.getIdImovelPerfil() != null) {
+				codigoAuxiliar.append(Util.completaString("" + helper.getIdImovelPerfil(), 1));
 			} else {
 				codigoAuxiliar.append(Util.completaString("", 1));
 			}
 
 			codigoAuxiliar.append(Util.completaString(diasConsumo, 2));
 			codigoAuxiliar.append(Util.completaString(consumoMedio, 6));
+
+			helper.setCodigoAuxiliarString(codigoAuxiliar.toString());
+
+			StringBuilder mesagemConsumo = obterMensagemRateioConsumo(helper, consumoRateio, medicaoHistorico, tipoMedicao);
+			helper.setMensagemConsumoString(mesagemConsumo.toString());
+
+			Collection<?> linhasDescricaoServicosTarifasTotalHelper = gerarLinhasDescricaoServicoTarifasRelatorio(
+					helper, consumoRateio, medicaoHistorico, tipoMedicao, false);
 			
-			emitirContaHelper.setCodigoAuxiliarString(codigoAuxiliar.toString());
+			helper.setColecaoContaLinhasDescricaoServicosTarifasTotalHelper(linhasDescricaoServicosTarifasTotalHelper);
 
-			StringBuilder mesagemConsumo = obterMensagemRateioConsumo(emitirContaHelper, consumoRateio, parmsMedicaoHistorico,tipoMedicao);
-			emitirContaHelper.setMensagemConsumoString(mesagemConsumo.toString());
+			BigDecimal valorConta = obterValorConta2Via(helper);
 
-			Collection colecaoContaLinhasDescricaoServicosTarifasTotalHelper = gerarLinhasDescricaoServicoTarifasRelatorio(
-					emitirContaHelper, consumoRateio, parmsMedicaoHistorico,tipoMedicao, false);
-			emitirContaHelper.setColecaoContaLinhasDescricaoServicosTarifasTotalHelper(colecaoContaLinhasDescricaoServicosTarifasTotalHelper);
+			helper.setValorContaString(Util.formatarMoedaReal(valorConta));
+			helper.setValorConta(valorConta);
+			helper = preencherDadosPagamento2Via(id, helper, valorConta);
+			helper = preencherInfoCodigoBarras2Via(helper, valorConta);
+			helper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(helper, 1)));
+			helper = preencherDadosQualidadeAgua2Via(helper);
+			helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
 
-			BigDecimal valorConta = obterValorConta2Via(emitirContaHelper);
-
-			emitirContaHelper.setValorContaString(Util.formatarMoedaReal(valorConta));
-			emitirContaHelper.setValorConta(valorConta);
-			emitirContaHelper = preencherDadosPagamento2Via(idContaEP, emitirContaHelper, valorConta);
-			emitirContaHelper = preencherInfoCodigoBarras2Via(emitirContaHelper, valorConta);
-			emitirContaHelper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(emitirContaHelper, 1)));
-			emitirContaHelper = preencherDadosQualidadeAgua2Via(emitirContaHelper);
-			emitirContaHelper = preencherRepresentacaoNumericaCodBarras2Via(emitirContaHelper, valorConta);
-			
 			Integer esferaPoder = null;
 			try {
-				esferaPoder = repositorioFaturamento.pesquisarEsferaPoderImovelConta(idContaEP);
+				esferaPoder = repositorioFaturamento.pesquisarEsferaPoderImovelConta(id);
 			} catch (Exception e) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("erro.sistema", e);
 			}
-			
+
 			// Nao exibe demonstrativo de impostos para imoveis publicos federais
 			if (esferaPoder.shortValue() != EsferaPoder.FEDERAL) {
-				emitirContaHelper.setInformarImpostos(true);
-				Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, false);
-				emitirContaHelper.setDescricaoImpostosEAliquotas((String) dadosAliquotasImpostos[0]);
-				emitirContaHelper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
-				emitirContaHelper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
-				emitirContaHelper.setValorImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[3]);
+				helper.setInformarImpostos(true);
+
+				Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(helper, false);
+				helper.setDescricaoImpostosEAliquotas((String) dadosAliquotasImpostos[0]);
+				helper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
+				helper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
+				helper.setValorImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[3]);
+				
+				if (isMunipicioContaIgualMunicipioAgenciaReguladora(helper, dadosAliquotasImpostos)) {
+					helper.setDescricaoAgenciaReguladora((String) dadosAliquotasImpostos[4]);
+					helper.setPercentualAgenciaReguladora((BigDecimal) dadosAliquotasImpostos[5]);
+					helper.setValorAgenciaReguladora((BigDecimal) dadosAliquotasImpostos[6]);
+				}
 			}
-			
-			
+
 			Object[] contatoAgenciaReguladora = null;
 			try {
-				contatoAgenciaReguladora = this.pesquisarContatosAgenciaReguladora(emitirContaHelper);
+				contatoAgenciaReguladora = this.pesquisarContatosAgenciaReguladora(helper);
 				if (contatoAgenciaReguladora != null && contatoAgenciaReguladora.length > 0) {
-					emitirContaHelper.setAgenciaReguladora((String) contatoAgenciaReguladora[0]);
-					emitirContaHelper.setTelefoneAgenciaReguladora((String) contatoAgenciaReguladora[1]);
-					emitirContaHelper.setEmailAgenciaReguladora((String) contatoAgenciaReguladora[2]);
+					helper.setAgenciaReguladora((String) contatoAgenciaReguladora[0]);
+					helper.setTelefoneAgenciaReguladora((String) contatoAgenciaReguladora[1]);
+					helper.setEmailAgenciaReguladora((String) contatoAgenciaReguladora[2]);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("erro.sistema", e);
 			}
-			
-			colecaoEmitirContaHelper.add(emitirContaHelper);
+
+			colecaoHelper.add(helper);
 
 			if (cobrarTaxaEmissaoConta) {
-				this.gerarDebitoACobrarTaxaEmissaoConta(emitirContaHelper.getIdImovel(),emitirContaHelper.getAmReferencia());
+				this.gerarDebitoACobrarTaxaEmissaoConta(helper.getIdImovel(), helper.getAmReferencia());
 			}
 
 			String leituraAnteriorInformada = "";
@@ -3266,68 +3270,64 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			String dataLeituraAnteriorInformada = "";
 			String dataLeituraAtualInformada = "";
 
-			MedicaoHistorico medicaoHistoricoAgua = getControladorMicromedicao()
-					.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(
-							emitirContaHelper.getIdImovel(),
-							emitirContaHelper.getAmReferencia());
-			
-			MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao()
-					.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(
-							emitirContaHelper.getIdImovel(),
-							emitirContaHelper.getAmReferencia());
+			MedicaoHistorico medicaoHistoricoAgua = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(
+					helper.getIdImovel(),helper.getAmReferencia());
 
+			MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(
+					helper.getIdImovel(), helper.getAmReferencia());
 
 			if (medicaoHistoricoAgua != null) {
 
-				MedicaoHistorico medicaoHistoricoAguaMesAnterior = getControladorMicromedicao()
-						.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(
-								emitirContaHelper.getIdImovel(),
-								Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), 1));
-				
+				MedicaoHistorico medicaoHistoricoAguaMesAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(
+						helper.getIdImovel(), Util.subtrairMesDoAnoMes(helper.getAmReferencia(), 1));
+
 				if (medicaoHistoricoAgua.getLeituraAnteriorInformada() != null) {
 					leituraAnteriorInformada = medicaoHistoricoAgua.getLeituraAnteriorInformada() + "";
 				}
+				
 				if (medicaoHistoricoAgua.getLeituraAtualInformada() != null) {
 					leituraAtualInformada = medicaoHistoricoAgua.getLeituraAtualInformada() + "";
 				}
+				
 				if (medicaoHistoricoAgua.getDataLeituraAtualInformada() != null) {
 					dataLeituraAtualInformada = Util.formatarData(medicaoHistoricoAgua.getDataLeituraAtualInformada());
 				}
+				
 				if (medicaoHistoricoAguaMesAnterior != null) {
 					if (medicaoHistoricoAguaMesAnterior.getDataLeituraAtualInformada() != null) {
 						dataLeituraAnteriorInformada = Util.formatarData(medicaoHistoricoAguaMesAnterior.getDataLeituraAtualInformada());
 					}
 				}
-				
+
 			} else if (medicaoHistoricoPoco != null) {
-				
-				MedicaoHistorico medicaoHistoricoPocoMesAnterior = getControladorMicromedicao()
-						.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(
-								emitirContaHelper.getIdImovel(),
-								Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), 1));
-				
+
+				MedicaoHistorico medicaoHistoricoPocoMesAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(
+						helper.getIdImovel(), Util.subtrairMesDoAnoMes(helper.getAmReferencia(), 1));
 
 				if (medicaoHistoricoPoco.getLeituraAnteriorInformada() != null) {
 					leituraAnteriorInformada = medicaoHistoricoPoco.getLeituraAnteriorInformada() + "";
 				}
+				
 				if (medicaoHistoricoPoco.getLeituraAtualInformada() != null) {
 					leituraAtualInformada = medicaoHistoricoPoco.getLeituraAtualInformada() + "";
 				}
+				
 				if (medicaoHistoricoPoco.getDataLeituraAtualInformada() != null) {
 					dataLeituraAtualInformada = Util.formatarData(medicaoHistoricoPoco.getDataLeituraAtualInformada());
 				}
+				
 				if (medicaoHistoricoPocoMesAnterior.getDataLeituraAtualInformada() != null) {
 					dataLeituraAnteriorInformada = Util.formatarData(medicaoHistoricoPocoMesAnterior.getDataLeituraAtualInformada());
 				}
 			}
-			emitirContaHelper.setLeituraAnteriorInformada(leituraAnteriorInformada);
-			emitirContaHelper.setLeituraAtualInformada(leituraAtualInformada);
-			emitirContaHelper.setDataLeituraAnteriorInformada(dataLeituraAnteriorInformada);
-			emitirContaHelper.setDataLeituraAtualInformada(dataLeituraAtualInformada);
-
+			
+			helper.setLeituraAnteriorInformada(leituraAnteriorInformada);
+			helper.setLeituraAtualInformada(leituraAtualInformada);
+			helper.setDataLeituraAnteriorInformada(dataLeituraAnteriorInformada);
+			helper.setDataLeituraAtualInformada(dataLeituraAtualInformada);
 		}
 
-		return colecaoEmitirContaHelper;
+		return colecaoHelper;
 	}
 
 	private EmitirContaHelper preencherDadosEnderecoImovel2Via(EmitirContaHelper emitirContaHelper) {
@@ -3745,13 +3745,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	private StringBuilder preencherDadosAliquotaAgenciaReguladora(EmitirContaHelper helper, StringBuilder contaTxt) throws ControladorException {
 		Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(helper, false);
 		
-		int municipioAgenciaReguladora = new Integer(getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.AGENCIA_REGULADORA_MUNICIPIO.toString()));
-		
-		Localidade localidade = pesquisarLocalidadeConta(helper);
-		
-		int municipio = localidade != null ? localidade.getMunicipio().getId() : -1;
-		
-		if (dadosAliquotasImpostos.length > 0 && municipio == municipioAgenciaReguladora) {
+		if (dadosAliquotasImpostos.length > 0 && isMunipicioContaIgualMunicipioAgenciaReguladora(helper, dadosAliquotasImpostos)) {
 			contaTxt.append(Util.truncarString(Util.completaString((String) dadosAliquotasImpostos[4], 21), 21));
 			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[5]), 13));
 			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
@@ -3794,5 +3788,17 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} catch (ControladorException e) {
 			logger.error("Erro ao emitir comunicado.");
 		}
+	}
+	
+	private boolean isMunipicioContaIgualMunicipioAgenciaReguladora(EmitirContaHelper helper, Object[] dadosAliquotasImpostos)
+			throws NumberFormatException, ControladorException {
+		
+		int municipioAgenciaReguladora = new Integer(getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.AGENCIA_REGULADORA_MUNICIPIO.toString()));
+		
+		Localidade localidade = pesquisarLocalidadeConta(helper);
+		
+		int municipio = localidade != null ? localidade.getMunicipio().getId() : -1;
+		
+		return municipio == municipioAgenciaReguladora;
 	}
 }

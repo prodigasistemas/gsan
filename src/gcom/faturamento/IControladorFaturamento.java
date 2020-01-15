@@ -348,9 +348,7 @@ public interface IControladorFaturamento {
 
 	public BigDecimal pesquisarValorMultasCobradas(int idConta) throws ControladorException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection<EmitirContaHelper> emitir2ViaContas(Collection idsContaEP, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras)
-			throws ControladorException;
+	public Collection<EmitirContaHelper> emitir2ViaContas(Collection<Integer> idsContaEP, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) throws ControladorException;
 
 	public Integer pesquisarIdClienteResponsavelConta(Integer idConta, boolean contaHistorico) throws ControladorException;
 
