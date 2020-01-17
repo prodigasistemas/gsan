@@ -1,7 +1,9 @@
 package gcom.gui.cadastro;
 
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
+import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.micromedicao.SituacaoTransmissaoLeitura;
 import gcom.tarefa.TarefaException;
 import gcom.util.ZipUtil;
 
@@ -45,6 +47,9 @@ public class RetornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction ex
 
 				for (ArquivoTextoAtualizacaoCadastral arquivoTexto : listaArquivoTexto) {
 					ZipUtil.adicionarEmZip(zip, arquivoTexto.getDescricaoArquivo(), arquivoTexto.getArquivoTexto());
+					if(arquivoTexto.getSituacaoTransmissaoLeitura().getId().equals(SituacaoTransmissaoLeitura.DISPONIVEL)) {
+						throw new ActionServletException("atencao.erro_escolha_dearquivo");
+					}
 				}
 
 				ZipUtil.download(response, zip, nomeArquivoZIP, arquivoZIP);
@@ -57,7 +62,7 @@ public class RetornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction ex
 				throw new TarefaException("Erro ao gerar o arquivo txt", e);
 			}
 		}
-
+		
 		return null;
 	}
 
