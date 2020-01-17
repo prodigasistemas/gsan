@@ -1,17 +1,11 @@
 package gcom.gui.cadastro;
 
-import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
-import gcom.gui.ActionServletException;
-import gcom.gui.GcomAction;
-import gcom.micromedicao.SituacaoTransmissaoLeitura;
-import gcom.tarefa.TarefaException;
-import gcom.util.ZipUtil;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
@@ -23,6 +17,17 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.FiltroArquivoTextoAtualizacaoCadastral;
+import gcom.gui.ActionServletException;
+import gcom.gui.GcomAction;
+import gcom.micromedicao.SituacaoTransmissaoLeitura;
+import gcom.tarefa.TarefaException;
+import gcom.util.Util;
+import gcom.util.ZipUtil;
+import gcom.util.filtro.Filtro;
+import gcom.util.filtro.ParametroSimples;
+
 public class RetornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction extends GcomAction {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
@@ -33,8 +38,12 @@ public class RetornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction ex
 			idEmpresa = Integer.valueOf(form.getIdEmpresa());
 		}
 		
+		List<Integer> ids = getIdsArquivos(form);
+		
+		verificarArquivosEmCampo(ids);
+		
 		List<ArquivoTextoAtualizacaoCadastral> listaArquivoTexto = getFachada().regerarArquivosAtualizacaoCadastral(
-				getIdsArquivos(form),
+				ids,
 				ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO,
 				null,
 				idEmpresa);
@@ -47,9 +56,6 @@ public class RetornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction ex
 
 				for (ArquivoTextoAtualizacaoCadastral arquivoTexto : listaArquivoTexto) {
 					ZipUtil.adicionarEmZip(zip, arquivoTexto.getDescricaoArquivo(), arquivoTexto.getArquivoTexto());
-					if(arquivoTexto.getSituacaoTransmissaoLeitura().getId().equals(SituacaoTransmissaoLeitura.DISPONIVEL)) {
-						throw new ActionServletException("atencao.erro_escolha_dearquivo");
-					}
 				}
 
 				ZipUtil.download(response, zip, nomeArquivoZIP, arquivoZIP);
@@ -64,6 +70,25 @@ public class RetornarArquivosImoveisNaoTransmitidosAtualizacaoCadastralAction ex
 		}
 		
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void verificarArquivosEmCampo(List<Integer> ids) {
+		
+		for (Integer id : ids) {
+			Filtro filtro = new FiltroArquivoTextoAtualizacaoCadastral();
+			filtro.adicionarParametro(new ParametroSimples(FiltroArquivoTextoAtualizacaoCadastral.ID, id));
+
+			Collection<ArquivoTextoAtualizacaoCadastral> colecao = getFachada().pesquisar(filtro, ArquivoTextoAtualizacaoCadastral.class.getName());
+
+			if (colecao != null && !colecao.isEmpty()) {
+				ArquivoTextoAtualizacaoCadastral arquivo = (ArquivoTextoAtualizacaoCadastral) Util.retonarObjetoDeColecao(colecao);
+
+				if (arquivo.getSituacaoTransmissaoLeitura().getId().intValue() < SituacaoTransmissaoLeitura.EM_CAMPO.intValue()) {
+					throw new ActionServletException("atencao.arquivo_deve_estar_em_campo");
+				}
+			}
+		}
 	}
 
 	private List<Integer> getIdsArquivos(ConsultarArquivoTextoAtualizacaoCadastralActionForm form) {
