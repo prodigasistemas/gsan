@@ -167,6 +167,12 @@ public class LancamentoTipo implements Serializable {
 	public final static Short INDICADOR_RESUMIDO_ATIVO = new Short("1");
 	public final static Short INDICADOR_RESUMIDO_DESATIVO = new Short("2");
 	
+	public final static Integer CANCELAMENTOS = new Integer(108);
+	public final static Integer TOTAL_CANCELAMENTOS = new Integer(109);
+	public final static Integer PARCELAMENTOS_COBRADOS_SUP_CANCELAMENTOS = new Integer(110);
+	public final static Integer IMPOSTOS_CANCELADOS = new Integer(111);
+	public final static Integer OUTROS_CREDITOS_CANCELADOS = new Integer(112);
+	
 	private Integer id;
 	private String descricao;
 	private String descricaoAbreviada;
