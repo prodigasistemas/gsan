@@ -1,5 +1,43 @@
 package gcom.cobranca;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionContext;
+import javax.mail.SendFailedException;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.log4j.Logger;
+import org.hibernate.cache.HashtableCache;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
@@ -104,7 +142,6 @@ import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelSituacao;
 import gcom.cadastro.imovel.ImovelSituacaoTipo;
 import gcom.cadastro.imovel.ImovelSubcategoria;
-import gcom.cadastro.imovel.PocoTipo;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.GerarRelacaoDebitosHelper;
@@ -202,7 +239,6 @@ import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoAtividade;
 import gcom.faturamento.FaturamentoGrupo;
-import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.QualidadeAgua;
@@ -269,12 +305,10 @@ import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.FiltroRota;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.ItemServico;
-import gcom.micromedicao.RateioTipo;
 import gcom.micromedicao.RepositorioMicromedicaoHBM;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.bean.ConsultarHistoricoMedicaoIndividualizadaHelper;
 import gcom.micromedicao.bean.ConsumoHistoricoCondominio;
-import gcom.micromedicao.consumo.ConsumoAnormalidade;
 import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.ConsumoTipo;
 import gcom.micromedicao.consumo.LigacaoTipo;
@@ -356,45 +390,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionContext;
-import javax.mail.SendFailedException;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.log4j.Logger;
-import org.hibernate.cache.HashtableCache;
-
-import br.com.danhil.BarCode.Interleaved2of5;
 
 public class ControladorCobranca extends ControladorComum {
 
@@ -32748,6 +32743,7 @@ public class ControladorCobranca extends ControladorComum {
 						bean.setCodigoRota(codigoRota);
 						bean.setSequencialRota(sequencialRota);
 						bean.setIdDocumentoCobranca(cobrancaDocumento.getId());
+						bean.setDataEmissao(cobrancaDocumento.getEmissao());
 
 						if ((contas.size() - count) == tamanhoMaximoDebito) {
 							valor = valor.add(conta.getValorTotal());
@@ -32806,6 +32802,7 @@ public class ControladorCobranca extends ControladorComum {
 						bean.setCodigoRota(codigoRota);
 						bean.setSequencialRota(sequencialRota);
 						bean.setIdDocumentoCobranca(cobrancaDocumento.getId());
+						bean.setDataEmissao(cobrancaDocumento.getEmissao());
 
 						bean.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
 						bean.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
@@ -61872,6 +61869,7 @@ public class ControladorCobranca extends ControladorComum {
 
 	private AvisoCorteDTO montarAvisoCorte(CobrancaDocumento documento) throws ControladorException {
 		AvisoCorteDTO aviso = new AvisoCorteDTO();
+		
 		aviso.setImovel(documento.getImovel().getId());
 		aviso.setCliente(getControladorImovel().consultarNomeClienteUsuarioImovel(documento.getImovel().getId()));
 		aviso.setInscricao(getControladorImovel().pesquisarInscricaoImovel(documento.getImovel().getId()));
@@ -61880,6 +61878,8 @@ public class ControladorCobranca extends ControladorComum {
 		aviso.setIdDocumentoCobranca(documento.getId());
 		aviso.setValorTotal(Util.formatarMoedaReal(documento.getValorDocumento()));
 		aviso.setEndereco(getControladorEndereco().pesquisarEndereco(documento.getImovel().getId()));
+		aviso.setDataEmissao(Util.formatarData(documento.getEmissao()));
+		
 		return aviso;
 	}
 

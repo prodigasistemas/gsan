@@ -43,6 +43,7 @@
 	<field name="getSequencialRota" class="java.lang.String"/>
 	<field name="getEndereco" class="java.lang.String"/>
 	<field name="getEnderecoCorrespondencia" class="java.lang.String"/>
+	<field name="getDataEmissao" class="java.util.Date"/>
 
 	<variable name="valor" class="java.math.BigDecimal" resetType="Group" resetGroup="documento" calculation="Sum">
 		<variableExpression><![CDATA[$F{getValor}]]></variableExpression>
@@ -69,7 +70,7 @@
 		</title>
 		<pageHeader>
 			<band height="248"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="204"
 						y="31"
@@ -80,7 +81,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
 					</textElement>
-				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{getDataEmissao}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -503,16 +504,16 @@
 				</line>
 				<staticText>
 					<reportElement
-						x="102"
+						x="0"
 						y="162"
-						width="209"
+						width="388"
 						height="15"
 						key="staticText-14"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Tahoma" pdfFontName="Courier-Bold" size="9" isBold="true"/>
 					</textElement>
-				<text><![CDATA[AVISO DE CORTE]]></text>
+				<text><![CDATA[AVISO DE SUSPENSÃO DE FORNECIMENTO]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
@@ -957,7 +958,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" size="6"/>
 					</textElement>
-				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{getDataEmissao}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

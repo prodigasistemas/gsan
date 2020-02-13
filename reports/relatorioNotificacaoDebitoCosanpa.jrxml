@@ -46,6 +46,7 @@
 	<field name="getCidadeEstadoCorrespondencia" class="java.lang.String"/>
 	<field name="getCepCorrespondencia" class="java.lang.String"/>
 	<field name="getIcEnderecoAlternativo" class="java.lang.String"/>
+	<field name="getDataEmissao" class="java.util.Date"/>
 
 	<variable name="valor" class="java.math.BigDecimal" resetType="Group" resetGroup="imovel" calculation="Sum">
 		<variableExpression><![CDATA[$F{getValor}]]></variableExpression>
@@ -133,7 +134,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Tahoma" pdfFontName="Courier-Bold" size="12" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Aviso de Corte]]></text>
+				<text><![CDATA[Aviso de Suspensão de Fornecimento]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -223,7 +224,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{getDataEmissao}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -934,7 +935,7 @@ Após a regularização das pendências por parte do cliente, havendo necessidad
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{getDataEmissao}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

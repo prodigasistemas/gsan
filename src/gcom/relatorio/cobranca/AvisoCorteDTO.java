@@ -12,6 +12,7 @@ public class AvisoCorteDTO {
 	private Integer sequencialRota;
 
 	private Integer idDocumentoCobranca;
+	private String dataEmissao;
 	private String valorTotal;
 
 	private String endereco;
@@ -77,6 +78,14 @@ public class AvisoCorteDTO {
 
 	public void setIdDocumentoCobranca(Integer idDocumentoCobranca) {
 		this.idDocumentoCobranca = idDocumentoCobranca;
+	}
+
+	public String getDataEmissao() {
+		return dataEmissao;
+	}
+
+	public void setDataEmissao(String dataEmissao) {
+		this.dataEmissao = dataEmissao;
 	}
 
 	public String getValorTotal() {
