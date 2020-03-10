@@ -61,6 +61,7 @@ import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.ConsumoTipo;
 import gcom.relatorio.cobranca.AvisoCorteDTO;
 import gcom.relatorio.cobranca.FiltrarRelatorioBoletimMedicaoCobrancaHelper;
+import gcom.relatorio.cobranca.OrdemSuspensaoFornecimentoDTO;
 import gcom.relatorio.cobranca.RelatorioAcompanhamentoAcoesCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAnalisePerdasCreditosBean;
 import gcom.relatorio.cobranca.RelatorioBoletimMedicaoCobrancaHelper;
@@ -1092,4 +1093,6 @@ public interface IControladorCobranca {
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes() throws ControladorException;
+	
+	public List<OrdemSuspensaoFornecimentoDTO> gerarOrdemSuspensaoFornecimento(Integer idAcaoCronograma, Integer idAcaoComando) throws ControladorException;
 }

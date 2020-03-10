@@ -569,6 +569,7 @@ import gcom.relatorio.cadastro.micromedicao.RelatorioImoveisComLeiturasTipo7Bean
 import gcom.relatorio.cadastro.micromedicao.RelatorioResumoLigacoesCapacidadeHidrometroHelper;
 import gcom.relatorio.cobranca.AvisoCorteDTO;
 import gcom.relatorio.cobranca.FiltrarRelatorioBoletimMedicaoCobrancaHelper;
+import gcom.relatorio.cobranca.OrdemSuspensaoFornecimentoDTO;
 import gcom.relatorio.cobranca.RelatorioAcompanhamentoAcoesCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAnalisePerdasCreditosBean;
 import gcom.relatorio.cobranca.RelatorioBoletimMedicaoCobrancaHelper;
@@ -40424,6 +40425,13 @@ public class Fachada {
 		}
 	}
 
+	public List<OrdemSuspensaoFornecimentoDTO> gerarOrdemSuspensaoFornecimento(Integer idAcaoCronograma, Integer idAcaoComando) {
+		try {
+			return getControladorCobranca().gerarOrdemSuspensaoFornecimento(idAcaoCronograma, idAcaoComando);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }
 
 

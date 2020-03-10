@@ -26,7 +26,7 @@ public class AvisoCorteDTO {
 	private String codigoBarras;
 	private String codigoBarrasFormatado;
 
-	private List<AvisoCorteContaDTO> contas;
+	private List<CobrancaDocumentoContaDTO> contas;
 
 	public AvisoCorteDTO() {
 		super();
@@ -160,11 +160,11 @@ public class AvisoCorteDTO {
 		this.codigoBarrasFormatado = codigoBarrasFormatado;
 	}
 
-	public List<AvisoCorteContaDTO> getContas() {
+	public List<CobrancaDocumentoContaDTO> getContas() {
 		return contas;
 	}
 
-	public void setContas(List<AvisoCorteContaDTO> contas) {
+	public void setContas(List<CobrancaDocumentoContaDTO> contas) {
 		this.contas = contas;
 	}
 }
