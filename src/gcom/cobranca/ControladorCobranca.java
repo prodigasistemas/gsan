@@ -317,10 +317,11 @@ import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.RelatorioDataSource;
-import gcom.relatorio.cobranca.AvisoCorteContaDTO;
 import gcom.relatorio.cobranca.AvisoCorteDTO;
+import gcom.relatorio.cobranca.CobrancaDocumentoContaDTO;
 import gcom.relatorio.cobranca.CurvaAbcDebitosHelper;
 import gcom.relatorio.cobranca.FiltrarRelatorioBoletimMedicaoCobrancaHelper;
+import gcom.relatorio.cobranca.OrdemSuspensaoFornecimentoDTO;
 import gcom.relatorio.cobranca.RelatorioAcompanhamentoAcoesCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAnalisePerdasCreditosBean;
 import gcom.relatorio.cobranca.RelatorioBoletimMedicaoCobrancaHelper;
@@ -61855,9 +61856,7 @@ public class ControladorCobranca extends ControladorComum {
 				} else {
 					continue;
 				}
-
-				aviso = setCodigoBarrasAvisoCorte(aviso, documento);
-				aviso.setContas(montarContasAvisoCorte(documento.getId()));
+				
 				avisos.add(aviso);
 			}
 		} catch (ErroRepositorioException e) {
@@ -61867,7 +61866,7 @@ public class ControladorCobranca extends ControladorComum {
 		return avisos;
 	}
 
-	private AvisoCorteDTO montarAvisoCorte(CobrancaDocumento documento) throws ControladorException {
+	private AvisoCorteDTO montarAvisoCorte(CobrancaDocumento documento) throws ControladorException, ErroRepositorioException {
 		AvisoCorteDTO aviso = new AvisoCorteDTO();
 		
 		aviso.setImovel(documento.getImovel().getId());
@@ -61879,6 +61878,12 @@ public class ControladorCobranca extends ControladorComum {
 		aviso.setValorTotal(Util.formatarMoedaReal(documento.getValorDocumento()));
 		aviso.setEndereco(getControladorEndereco().pesquisarEndereco(documento.getImovel().getId()));
 		aviso.setDataEmissao(Util.formatarData(documento.getEmissao()));
+		
+		String[] codigoBarras = gerarCodigoBarrasCobrancaDocumento(documento);
+		aviso.setCodigoBarras(codigoBarras[0]);
+		aviso.setCodigoBarrasFormatado(codigoBarras[1]);
+		
+		aviso.setContas(montarContasCobrancaDocumento(documento.getId(), 35));
 		
 		return aviso;
 	}
@@ -61895,8 +61900,8 @@ public class ControladorCobranca extends ControladorComum {
 		return aviso;
 	}
 
-	private List<AvisoCorteContaDTO> montarContasAvisoCorte(Integer idDocumento) throws ErroRepositorioException {
-		List<AvisoCorteContaDTO> contasDTO = new ArrayList<AvisoCorteContaDTO>();
+	private List<CobrancaDocumentoContaDTO> montarContasCobrancaDocumento(Integer idDocumento, int qtdContasVisiveis) throws ErroRepositorioException {
+		List<CobrancaDocumentoContaDTO> contasDTO = new ArrayList<CobrancaDocumentoContaDTO>();
 		
 		List<Conta> contas = (List<Conta>) repositorioCobranca.pesquisarCobrancaDocumentoItem(idDocumento);
 		
@@ -61906,12 +61911,12 @@ public class ControladorCobranca extends ControladorComum {
 		for (Conta conta : contas) {
 			count++;
 
-			if ((contas.size() - count) > 35) {
+			if ((contas.size() - count) > qtdContasVisiveis) {
 				valor = valor.add(conta.getValorTotal());
 			} else {
-				AvisoCorteContaDTO contaDTO = new AvisoCorteContaDTO();
+				CobrancaDocumentoContaDTO contaDTO = new CobrancaDocumentoContaDTO();
 
-				if ((contas.size() - count) == 35) {
+				if ((contas.size() - count) == qtdContasVisiveis) {
 					valor = valor.add(conta.getValorTotal());
 					contaDTO.setReferencia("ATÉ " + conta.getReferenciaFormatada());
 					contaDTO.setValor(Util.formatarMoedaReal(valor));
@@ -61928,24 +61933,32 @@ public class ControladorCobranca extends ControladorComum {
 		return contasDTO;
 	}
 
-	private AvisoCorteDTO setCodigoBarrasAvisoCorte(AvisoCorteDTO aviso, CobrancaDocumento documento) throws ControladorException {
-		String representacaoNumericaCodigoBarras = getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(5, documento.getValorDocumento(), documento.getLocalidade().getId(),
-				documento.getImovel().getId(), null, null, null, null, String.valueOf(documento.getNumeroSequenciaDocumento()), documento.getDocumentoTipo().getId(), null, null, null);
-
-		String codigoBarras = representacaoNumericaCodigoBarras.substring(0, 11)
-				+ representacaoNumericaCodigoBarras.substring(12, 23) 
-				+ representacaoNumericaCodigoBarras.substring(24, 35)
-				+ representacaoNumericaCodigoBarras.substring(36, 47);
+	private String[] gerarCodigoBarrasCobrancaDocumento(CobrancaDocumento documento) throws ControladorException {
 		
-		String codigoBarrasFormatado = representacaoNumericaCodigoBarras.substring(0, 11) + "-" + representacaoNumericaCodigoBarras.substring(11, 12) + " " 
-				+ representacaoNumericaCodigoBarras.substring(12, 23) + "-" + representacaoNumericaCodigoBarras.substring(23, 24) + " " 
-				+ representacaoNumericaCodigoBarras.substring(24, 35) + "-" + representacaoNumericaCodigoBarras.substring(35, 36) + " " 
-				+ representacaoNumericaCodigoBarras.substring(36, 47) + "-" + representacaoNumericaCodigoBarras.substring(47, 48);
+		String representacaoNumerica = getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(5, 
+				documento.getValorDocumento(), documento.getLocalidade().getId(), documento.getImovel().getId(), 
+				null, null, null, null, String.valueOf(documento.getNumeroSequenciaDocumento()), 
+				documento.getDocumentoTipo().getId(), null, null, null);
 
-		aviso.setCodigoBarras(codigoBarras);
-		aviso.setCodigoBarrasFormatado(codigoBarrasFormatado);
+		String codigoBarras = representacaoNumerica.substring(0, 11) + 
+							  representacaoNumerica.substring(12, 23) +
+							  representacaoNumerica.substring(24, 35) +
+							  representacaoNumerica.substring(36, 47);
 		
-		return aviso;
+		String codigoBarrasFormatado = representacaoNumerica.substring(0, 11) + "-" + 
+									   representacaoNumerica.substring(11, 12) + " " +
+									   representacaoNumerica.substring(12, 23) + "-" + 
+									   representacaoNumerica.substring(23, 24) + " " + 
+									   representacaoNumerica.substring(24, 35) + "-" + 
+									   representacaoNumerica.substring(35, 36) + " " + 
+									   representacaoNumerica.substring(36, 47) + "-" + 
+									   representacaoNumerica.substring(47, 48);
+
+		String[] retorno = new String[2];
+		retorno[0] = codigoBarras;
+		retorno[1] = codigoBarrasFormatado;
+		
+		return retorno;
 	}
 	
 	public boolean isImovelEmCobrancaJudicial(Integer idImovel) throws ControladorException {
@@ -62040,5 +62053,75 @@ public class ControladorCobranca extends ControladorComum {
 		filtro.setConsultaSemLimites(true);
 		
 		return filtro;
+	}
+	
+	public List<OrdemSuspensaoFornecimentoDTO> gerarOrdemSuspensaoFornecimento(Integer idAcaoCronograma, Integer idAcaoComando) throws ControladorException {
+
+		List<OrdemSuspensaoFornecimentoDTO> ordens = new ArrayList<OrdemSuspensaoFornecimentoDTO>();
+
+		try {
+			Collection<CobrancaDocumento> documentos = repositorioCobranca.pesquisarCobrancaDocumentoParaRelatorio(idAcaoCronograma, idAcaoComando);
+
+			for (CobrancaDocumento documento : documentos) {
+				ordens.add(montarOrdemSuspensaoFornecimentoDTO(documento));
+			}
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+
+		return ordens;
+
+	}
+	
+	private OrdemSuspensaoFornecimentoDTO montarOrdemSuspensaoFornecimentoDTO(CobrancaDocumento documento) throws ControladorException {
+		OrdemSuspensaoFornecimentoDTO dto = new OrdemSuspensaoFornecimentoDTO();
+
+		try {
+			dto.setCliente(getControladorImovel().consultarNomeClienteUsuarioImovel(documento.getImovel().getId()));
+			dto.setEndereco(getControladorEndereco().pesquisarEndereco(documento.getImovel().getId()));
+			dto.setGrupo(documento.getImovel().getQuadra().getRota().getFaturamentoGrupo().getDescricaoAbreviada());
+			dto.setRota(Util.completaStringComZeroAEsquerda(documento.getImovel().getQuadra().getRota().getCodigo().toString(), 4));
+			dto.setRotaSequencial(Util.completaStringComZeroAEsquerda(documento.getImovel().getNumeroSequencialRota().toString(), 3));
+			dto.setMatricula(documento.getImovel().getId());
+			dto.setInscricao(getControladorImovel().pesquisarInscricaoImovel(documento.getImovel().getId()));
+			dto.setDocumento(documento.getId());
+			dto.setDataEmissao(Util.formatarData(documento.getEmissao()));
+			dto.setValorTotal(Util.formatarMoedaReal(documento.getValorDocumento()));
+			dto.setCategoria(getControladorImovel().obterPrincipalCategoriaImovel(documento.getImovel().getId()).getDescricao());
+			dto.setLigacaoAgua(documento.getLigacaoAguaSituacao().getDescricao());
+			dto.setLigacaoEsgoto(documento.getLigacaoEsgotoSituacao().getDescricao());
+			dto.setOrdemServico(repositorioCobranca.obterOrdemServicoAssociadaDocumentoCobranca(documento.getId()));
+
+			HidrometroInstalacaoHistorico dadosHidrometro = pesquisarHidrometroOrdemSuspensaoFornecimento(documento.getImovel().getId());
+			if (dadosHidrometro != null) {
+				dto.setHidrometro(dadosHidrometro.getHidrometro().getNumero());
+				dto.setHidrometroLocalizacao(dadosHidrometro.getHidrometroLocalInstalacao().getDescricao());
+			}
+			
+			String[] codigoBarras = gerarCodigoBarrasCobrancaDocumento(documento);
+			dto.setCodigoBarras(codigoBarras[0]);
+			dto.setCodigoBarrasFormatado(codigoBarras[1]);
+			dto.setContas(montarContasCobrancaDocumento(documento.getId(), 27));
+
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+
+		return dto;
+	}
+
+	private HidrometroInstalacaoHistorico pesquisarHidrometroOrdemSuspensaoFornecimento(Integer idImovel) throws ErroRepositorioException {
+		Filtro filtro = new FiltroHidrometroInstalacaoHistorico();
+		filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroInstalacaoHistorico.LIGACAO_AGUA_ID, idImovel));
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.HIDROMETRO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(
+				FiltroHidrometroInstalacaoHistorico.HIDROMETRO_LOCAL_INSTALACAO);
+
+		Collection colecao = repositorioUtil.pesquisar(filtro, HidrometroInstalacaoHistorico.class.getName());
+		if (colecao != null && !colecao.isEmpty()) {
+			return (HidrometroInstalacaoHistorico) colecao.iterator().next();
+		} else {
+			return null;
+		}
 	}
 }

@@ -8,111 +8,96 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
-public class EnderecoTipo extends ObjetoTransacao{
-	
+public class EnderecoTipo extends ObjetoTransacao {
+
 	private static final long serialVersionUID = 1L;
+	
+	public static final int ALTERNATIVO = 3;
 
-    /** identifier field */
-    private Integer id;
+	private Integer id;
 
-    /** nullable persistent field */
-    private String descricao;
+	private String descricao;
 
-    /** nullable persistent field */
-    private Short indicadorUso;
+	private Short indicadorUso;
 
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
-    
-    private String descricaoComId;
+	private Date ultimaAlteracao;
 
-    /** full constructor */
-    public EnderecoTipo(String descricao, Short indicadorUso,
-            Date ultimaAlteracao) {
-        this.descricao = descricao;
-        this.indicadorUso = indicadorUso;
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	private String descricaoComId;
 
-    /** default constructor */
-    public EnderecoTipo() {
-    }
-    
-    public EnderecoTipo(Integer id){
-    	this.id = id;
-    }
+	public EnderecoTipo(String descricao, Short indicadorUso, Date ultimaAlteracao) {
+		this.descricao = descricao;
+		this.indicadorUso = indicadorUso;
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 
-    public Integer getId() {
-        return this.id;
-    }
+	/** default constructor */
+	public EnderecoTipo() {
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public EnderecoTipo(Integer id) {
+		this.id = id;
+	}
 
-    public String getDescricao() {
-        return this.descricao;
-    }
+	public Integer getId() {
+		return this.id;
+	}
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public Short getIndicadorUso() {
-        return this.indicadorUso;
-    }
+	public String getDescricao() {
+		return this.descricao;
+	}
 
-    public void setIndicadorUso(Short indicadorUso) {
-        this.indicadorUso = indicadorUso;
-    }
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
 
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public Short getIndicadorUso() {
+		return this.indicadorUso;
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public void setIndicadorUso(Short indicadorUso) {
+		this.indicadorUso = indicadorUso;
+	}
 
-    public String toString() {
-        return new ToStringBuilder(this).append("id", getId()).toString();
-    }
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
 
-    /**
-	 * <Breve descrição sobre o caso de uso>
-	 *
-	 * <Identificador e nome do caso de uso>
-	 *
-	 * @author Pedro Alexandre
-	 * @date 19/09/2007
-	 *
-	 * @return
-	 */
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
+
 	public String getDescricaoComId() {
-		
-		if(this.getId().compareTo(10) == -1){
-			descricaoComId = "0" + getId()+ " - " + getDescricao();
-		}else{
-			descricaoComId = getId()+ " - " + getDescricao();
+
+		if (this.getId().compareTo(10) == -1) {
+			descricaoComId = "0" + getId() + " - " + getDescricao();
+		} else {
+			descricaoComId = getId() + " - " + getDescricao();
 		}
-		
+
 		return descricaoComId;
 	}
 
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		String[] retorno = {"id"};
+		String[] retorno = { "id" };
 		return retorno;
 	}
 
 	@Override
 	public Filtro retornaFiltro() {
 		FiltroEnderecoTipo filtroEnderecoTipo = new FiltroEnderecoTipo();
-		filtroEnderecoTipo.adicionarParametro(new ParametroSimples(FiltroEnderecoTipo.ID,this.getId()));
+		filtroEnderecoTipo.adicionarParametro(new ParametroSimples(FiltroEnderecoTipo.ID, this.getId()));
 		return filtroEnderecoTipo;
 	}
-	
+
 	@Override
 	public String getDescricaoParaRegistroTransacao() {
 		return getDescricao();
