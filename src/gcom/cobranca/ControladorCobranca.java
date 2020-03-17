@@ -62113,9 +62113,9 @@ public class ControladorCobranca extends ControladorComum {
 	private HidrometroInstalacaoHistorico pesquisarHidrometroOrdemSuspensaoFornecimento(Integer idImovel) throws ErroRepositorioException {
 		Filtro filtro = new FiltroHidrometroInstalacaoHistorico();
 		filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroInstalacaoHistorico.LIGACAO_AGUA_ID, idImovel));
+		filtro.adicionarParametro(new ParametroNulo(FiltroHidrometroInstalacaoHistorico.DATA_RETIRADA));
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.HIDROMETRO);
-		filtro.adicionarCaminhoParaCarregamentoEntidade(
-				FiltroHidrometroInstalacaoHistorico.HIDROMETRO_LOCAL_INSTALACAO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.HIDROMETRO_LOCAL_INSTALACAO);
 
 		Collection colecao = repositorioUtil.pesquisar(filtro, HidrometroInstalacaoHistorico.class.getName());
 		if (colecao != null && !colecao.isEmpty()) {
