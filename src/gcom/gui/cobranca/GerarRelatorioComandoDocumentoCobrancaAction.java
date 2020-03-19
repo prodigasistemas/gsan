@@ -1,7 +1,12 @@
 package gcom.gui.cobranca;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +32,8 @@ import gcom.relatorio.cobranca.RelatorioNotificacaoDebito;
 import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaRelatorio;
+import gcom.util.Util;
+import gcom.util.ZipUtil;
 import gcom.util.filtro.Filtro;
 
 public class GerarRelatorioComandoDocumentoCobrancaAction extends ExibidorProcessamentoTarefaRelatorio {
@@ -137,17 +144,26 @@ public class GerarRelatorioComandoDocumentoCobrancaAction extends ExibidorProces
 
 	private void gerarOrdemSuspensaoFornecimento(HttpServletResponse response, Integer idAcaoCronograma, Integer idAcaoComando) {
 
-		List<OrdemSuspensaoFornecimentoDTO> ordens = getFachada().gerarOrdemSuspensaoFornecimento(idAcaoCronograma, idAcaoComando);
+		List<List<OrdemSuspensaoFornecimentoDTO>> ordensEmPartes = obterOrdensSuspensaoFornecimento(idAcaoCronograma, idAcaoComando);
 
-		if (ordens != null && !ordens.isEmpty()) {
+		if (ordensEmPartes != null && !ordensEmPartes.isEmpty()) {
 			try {
-				OrdemSuspensaoFornecimentoHelper helper = new OrdemSuspensaoFornecimentoHelper(getParametros(), ordens);
+				File arquivoZIP = new File("ORDEM_SUSPENSAO-" + idAcaoComando);
+				ZipOutputStream zip = montarZip(arquivoZIP);
 
-				String url = getFachada().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_ORDEM_SUSPENSAO_FORNECIMENTO.toString());
+				for (int parte = 0; parte < ordensEmPartes.size(); parte++) {
+					List<OrdemSuspensaoFornecimentoDTO> ordens = ordensEmPartes.get(parte);
 
-				GsanApi api = new GsanApi(url);
-				api.invoke(helper);
-				api.download(helper.getNomeArquivo(), response);
+					String nomeArquivo = getNomeArquivoOrdemSuspensao(idAcaoComando, parte + 1);
+
+					OrdemSuspensaoFornecimentoHelper helper = new OrdemSuspensaoFornecimentoHelper(nomeArquivo, getParametros(), ordens);
+
+					String url = getFachada().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_ORDEM_SUSPENSAO_FORNECIMENTO.toString());
+
+					salvarOrdemSuspensaoFornecimento(zip, helper, url);
+				}
+
+				ZipUtil.download(response, zip, arquivoZIP.getName(), arquivoZIP);
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new ActionServletException("atencao.erro_baixar_ordem_suspensao_fornecimento");
@@ -155,6 +171,29 @@ public class GerarRelatorioComandoDocumentoCobrancaAction extends ExibidorProces
 		} else {
 			throw new ActionServletException("atencao.ordem_suspensao_fornecimento_sem_dados");
 		}
+	}
+
+	private void salvarOrdemSuspensaoFornecimento(ZipOutputStream zip, OrdemSuspensaoFornecimentoHelper helper,
+			String url) throws IOException, Exception {
+		GsanApi api = new GsanApi(url);
+		api.invoke(helper);
+		File arquivo = api.salvar(helper.getNomeArquivo());
+		ZipUtil.adicionarArquivo(zip, arquivo);
+		arquivo.delete();
+	}
+
+	private ZipOutputStream montarZip(File arquivoZIP) {
+		ZipOutputStream zip = null;
+		try {
+			zip = new ZipOutputStream(new FileOutputStream(arquivoZIP));
+		} catch (FileNotFoundException e) {
+			throw new ActionServletException("atencao.erro_salvar_arquivo_zip");
+		}
+		return zip;
+	}
+
+	private String getNomeArquivoOrdemSuspensao(Integer idAcaoComando, int parte) {
+		return "ORDEM_SUSPENSAO-" + idAcaoComando + "-PARTE" + Util.adicionarZerosEsquedaNumero(2, parte) + ".pdf";
 	}
 
 	private Integer getAcaoComando(HttpServletRequest request) {
@@ -175,5 +214,10 @@ public class GerarRelatorioComandoDocumentoCobrancaAction extends ExibidorProces
 		} else {
 			return null;
 		}
+	}
+	
+	private List<List<OrdemSuspensaoFornecimentoDTO>> obterOrdensSuspensaoFornecimento(Integer idAcaoCronograma, Integer idAcaoComando) {
+		List<OrdemSuspensaoFornecimentoDTO> ordens = getFachada().gerarOrdemSuspensaoFornecimento(idAcaoCronograma, idAcaoComando);
+		return Util.quebrarListaEmPartes(ordens, 300);
 	}
 }

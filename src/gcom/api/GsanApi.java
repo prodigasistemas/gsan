@@ -66,6 +66,22 @@ public class GsanApi {
 			throw new ActionServletException("atencao.erro_baixar_relatorio");
 		}
 	}
+	
+	public File salvar(final String nome) throws IOException {
+		BufferedInputStream in = new BufferedInputStream(new URL(url + nome).openStream());
+		FileOutputStream out = new FileOutputStream(nome);
+
+		final byte data[] = new byte[1024];
+		int count;
+		while ((count = in.read(data, 0, 1024)) != -1) {
+			out.write(data, 0, count);
+		}
+
+		in.close();
+		out.close();
+
+		return new File(nome);
+	}
 
 	private StringBuilder montarRetorno(BufferedReader reader) throws IOException {
 		StringBuilder builder = new StringBuilder();
@@ -84,21 +100,5 @@ public class GsanApi {
 		WebResource webResource = client.resource(url);
 
 		return webResource.type("application/json").post(ClientResponse.class, json);
-	}
-
-	private File salvar(final String nome) throws IOException {
-		BufferedInputStream in = new BufferedInputStream(new URL(url + nome).openStream());
-		FileOutputStream out = new FileOutputStream(nome);
-
-		final byte data[] = new byte[1024];
-		int count;
-		while ((count = in.read(data, 0, 1024)) != -1) {
-			out.write(data, 0, count);
-		}
-
-		in.close();
-		out.close();
-
-		return new File(nome);
 	}
 }

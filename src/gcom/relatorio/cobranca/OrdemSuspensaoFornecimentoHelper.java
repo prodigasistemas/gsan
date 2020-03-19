@@ -17,10 +17,10 @@ public class OrdemSuspensaoFornecimentoHelper {
 
 	private List<OrdemSuspensaoFornecimentoDTO> ordens;
 
-	public OrdemSuspensaoFornecimentoHelper(SistemaParametro parametros, List<OrdemSuspensaoFornecimentoDTO> ordens) {
+	public OrdemSuspensaoFornecimentoHelper(String nomeArquivo, SistemaParametro parametros, List<OrdemSuspensaoFornecimentoDTO> ordens) {
 		super();
-
-		this.nomeArquivo = "ORDEM_SUSPENSAO_FORNECIMENTO.pdf";
+		
+		this.nomeArquivo = nomeArquivo;
 
 		this.nomeEmpresa = parametros.getNomeEmpresa();
 		this.nomeAbreviadoEmpresa = parametros.getNomeAbreviadoEmpresa();
