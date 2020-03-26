@@ -2232,7 +2232,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
             List<ImovelSubcategoriaRetorno> novas = (List<ImovelSubcategoriaRetorno>) this.obterSubcategoriasRetorno(idImovel);
             
-            if (originais != null && novas != null) {
+            if (originais != null && novas != null && !originais.isEmpty() && !novas.isEmpty()) {
                 
                 List<Integer> idsOriginais = this.obterIdsCategoriasOriginais(originais);
                 List<Integer> idsNovas = this.obterIdsCategoriasNovas(novas);
@@ -2259,7 +2259,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
             List<ImovelSubcategoriaRetorno> novas = this.obterSubcategoriasRetorno(idImovel);
             
-            if (originais != null && novas != null) {
+            if (originais != null && novas != null && !originais.isEmpty() && !novas.isEmpty()) {
                 
                 List<Integer> idsOriginais = this.obterIdsCategoriasOriginais(originais);
                 
@@ -2340,7 +2340,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
             List<ImovelSubcategoria> novas = (List<ImovelSubcategoria>) getControladorImovel().pesquisarImovelSubcategorias(new Imovel(idImovel));
             
-            if (originais != null && novas != null) {
+            if (originais != null && novas != null && !originais.isEmpty() && !novas.isEmpty()) {
                 
                 for (ImovelSubcategoriaAtualizacaoCadastral original : originais) {
                 	Short qtdEconomiasOriginais = this.pesquisarQuantidadeEconomiasOriginais(idImovel, original.getCategoria().getId());
@@ -2376,7 +2376,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
             List<ImovelSubcategoriaRetorno> novas = (List<ImovelSubcategoriaRetorno>) this.obterSubcategoriasRetorno(idImovel);
             
-            if (originais != null && novas != null) {
+            if (originais != null && novas != null && !originais.isEmpty() && !novas.isEmpty()) {
                 
                 if (originais.size() != novas.size()) {
                     retorno = true;
@@ -2408,7 +2408,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
             List<ImovelSubcategoriaAtualizacaoCadastral> originais = this.obterSubcategoriasOriginais(idImovel);
             List<ImovelSubcategoriaRetorno> novas = (List<ImovelSubcategoriaRetorno>) this.obterSubcategoriasRetorno(idImovel);
             
-            if (originais != null && novas != null) {
+            if (originais != null && novas != null && !originais.isEmpty() && !novas.isEmpty()) {
                 
             	List<Integer> idsOriginais = this.obterIdsSubcategoriasOriginais(originais);
                 
