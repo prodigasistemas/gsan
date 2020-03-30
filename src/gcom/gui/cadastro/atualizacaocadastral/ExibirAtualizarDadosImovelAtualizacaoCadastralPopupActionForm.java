@@ -20,7 +20,16 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm exten
 	private boolean temPermissaoAprovarImovel;
 	private String idRegistrosFiscalizados;
 	private String idRegistrosNaoFiscalizados;
+	private String idTipoAlteracao;
 	
+	public String getIdTipoAlteracao() {
+		return idTipoAlteracao;
+	}
+
+	public void setIdTipoAlteracao(String idTipoAlteracao) {
+		this.idTipoAlteracao = idTipoAlteracao;
+	}
+
 	public String getIdImovel() {
 		return idImovel;
 	}

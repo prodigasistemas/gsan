@@ -1,13 +1,5 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
-import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.cadastro.SituacaoAtualizacaoCadastral;
-import gcom.cadastro.imovel.CadastroOcorrencia;
-import gcom.gui.ActionServletException;
-import gcom.gui.GcomAction;
-import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.util.ConstantesSistema;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,16 +8,26 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import gcom.cadastro.imovel.CadastroOcorrencia;
+import gcom.gui.ActionServletException;
+import gcom.gui.GcomAction;
+import gcom.seguranca.transacao.AlteracaoTipo;
+import gcom.util.ConstantesSistema;
+
 public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm form = (ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm) actionForm;
-
-		ImovelControleAtualizacaoCadastral controle = getFachada().pesquisarImovelControleAtualizacao(new Integer(form.getIdImovel()));
+		
+		ImovelControleAtualizacaoCadastral controle = getFachada().pesquisarImovelControleAtualizacao(
+				Integer.valueOf(form.getIdImovel()), Integer.valueOf(form.getIdTipoAlteracao()));
+		
 		CadastroOcorrencia ocorrencia = controle.getCadastroOcorrencia();
 
 		if (ocorrencia != null) {
-			if (permiteAprovarOuConcluirFiscalizacao(controle, ocorrencia.getIndicadorValidacao())) {
+			if (permiteAprovarOuConcluirFiscalizacao(controle, ocorrencia.getIndicadorValidacao(), Integer.valueOf(form.getIdTipoAlteracao()))) {
 
 				if (isImovelFiscalizado(controle)) {
 					String registrosSelecionados = null;
@@ -34,16 +36,16 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 						registrosSelecionados = form.getIdRegistrosFiscalizados();
 					} else {
 						registrosSelecionados = form.getIdRegistrosAutorizados();
-						
 					}
 
 					if (StringUtils.isNotEmpty(registrosSelecionados)) {
 						String[] listaIdRegistrosSim = registrosSelecionados.split(",");
 
 						if (isDefinicaoSubcategoriaValida(controle, form.getIdImovel(), listaIdRegistrosSim)) {
+							
 							if (listaIdRegistrosSim != null && !listaIdRegistrosSim.equals("")) {
-								getFachada().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer.valueOf(form.getIdImovel()), listaIdRegistrosSim, ConstantesSistema.SIM,
-										(Usuario) request.getSession(false).getAttribute("usuarioLogado"), obterCampoParaAtualizar(controle));
+								getFachada().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer.valueOf(form.getIdImovel()), 
+										listaIdRegistrosSim, ConstantesSistema.SIM, getUsuarioLogado(request), obterCampoParaAtualizar(controle));
 								
 								this.atualizarSituacaoImovel(controle);
 							}
@@ -96,10 +98,21 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		return campo;
 	}
 	
-	private boolean permiteAprovarOuConcluirFiscalizacao(ImovelControleAtualizacaoCadastral controle, short indicadorValidacao) {
-		return (controle.isPreAprovado() && retornoValidado(indicadorValidacao)) || controle.isAguardandoAnalise() || controle.isFiscalizado();
+	private boolean permiteAprovarOuConcluirFiscalizacao(ImovelControleAtualizacaoCadastral controle, short indicadorValidacao, Integer tipoAlteracao) {
+		return imovelValido(controle, indicadorValidacao) || 
+			   imovelNovoValido(controle, indicadorValidacao, tipoAlteracao) ||
+			   controle.isAguardandoAnalise() ||
+			   controle.isFiscalizado();
+	}
+
+	private boolean imovelValido(ImovelControleAtualizacaoCadastral controle, short indicadorValidacao) {
+		return controle.isPreAprovado() && retornoValidado(indicadorValidacao);
 	}
 	
+	private boolean imovelNovoValido(ImovelControleAtualizacaoCadastral controle, short indicadorValidacao, Integer tipoAlteracao) {
+		return imovelValido(controle, indicadorValidacao) && tipoAlteracao == AlteracaoTipo.INCLUSAO;
+	}
+
 	private boolean retornoValidado(short indicadorValidacao) {
 		return indicadorValidacao == ConstantesSistema.SIM.shortValue();
 	}
