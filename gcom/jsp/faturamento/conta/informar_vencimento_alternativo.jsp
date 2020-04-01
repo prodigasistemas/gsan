@@ -110,13 +110,20 @@
   }
   
   function habilitaBotaoInserir(){
-   var form = document.forms[0];
-   if(form.novoDiaVencimento.value != ''){
-   	form.inserir.disabled = false;
-   }else{
-    form.inserir.disabled = true;
-   }
-  }
+      var form = document.forms[0];
+      
+      if (form.diaVencimentoAtual.value != '' && form.novoDiaVencimento.value != ''){
+              form.inserir.disabled = true;
+              alert("Vencimento Alternativo já existe. Primeiro remova o dia de vencimento atual para adicionar nova data.");
+              
+      }else{
+             if(form.novoDiaVencimento.value != ''){
+                            form.inserir.disabled = false;
+                            }else{
+                            form.inserir.disabled = true;
+                    }         
+               } 
+     }
   
 /*function desfazer(){
  form = document.forms[0];

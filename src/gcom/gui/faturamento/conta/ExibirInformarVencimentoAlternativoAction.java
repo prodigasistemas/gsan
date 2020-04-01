@@ -130,14 +130,13 @@ public class ExibirInformarVencimentoAlternativoAction extends GcomAction {
 		}
 		
 
-		FiltroVencimentoAlternativo filtroVencimentoAlternativo = new FiltroVencimentoAlternativo(FiltroVencimentoAlternativo.DATA_IMPLANTACAO);
+		FiltroVencimentoAlternativo filtroVencimentoAlternativo = new FiltroVencimentoAlternativo(FiltroVencimentoAlternativo.DATA_IMPLANTACAO+" DESC");
 
 		filtroVencimentoAlternativo
 				.adicionarParametro(new ParametroSimples(
 						FiltroVencimentoAlternativo.IMOVEL_ID, clienteImovel.getImovel().getId()));
 
-		Collection<VencimentoAlternativo> vencimentosAlternativos = fachada.pesquisar(
-				filtroVencimentoAlternativo, VencimentoAlternativo.class.getName());
+		Collection<VencimentoAlternativo> vencimentosAlternativos = fachada.pesquisar(filtroVencimentoAlternativo, VencimentoAlternativo.class.getName());
 
 		if (!Util.isVazioOrNulo(vencimentosAlternativos)) {
 
