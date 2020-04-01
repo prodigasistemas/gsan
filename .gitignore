@@ -25,4 +25,4 @@ migrations/comercial/environments/production.properties
 migrations/comercial/environments/local.properties
 src/gcom/properties/version.properties
 .vscode/
-scripts/*
+scripts/*.sh
