@@ -5133,13 +5133,16 @@ public class ControladorCobranca extends ControladorComum {
 						 * Caso a data de pagamento não seja nula, passar a data de pagamento, caso contrário, passar a data corrente
 						 * menos a quantidade mínima de dias para início da cobrança da conta parm_nndiasvenctocobranca.
 						 */
+						Date dataVencimentoCobranca = null;
 						if (dataPagamento == null) {
 							dataPagamento = new Date();
-							dataPagamento = Util.subtrairNumeroDiasDeUmaData(dataPagamento, sistemaParametros.getNumeroDiasVencimentoCobranca());
+							dataVencimentoCobranca = Util.subtrairNumeroDiasDeUmaData(dataPagamento, sistemaParametros.getNumeroDiasVencimentoCobranca());
+						} else {
+							dataVencimentoCobranca = dataPagamento;
 						}
 
 						// [UC0747] - Calcular diferença de dias úteis entre duas datas
-						Integer qtdDiasUteis = getControladorUtil().calcularDiferencaDiasUteisEntreDuasDatas(dataVencimento, dataPagamento, municipio);
+						Integer qtdDiasUteis = getControladorUtil().calcularDiferencaDiasUteisEntreDuasDatas(dataVencimento, dataVencimentoCobranca, municipio);
 
 						/*
 						 * Caso a diferença retornada seja igual ou menor que o valor da coluna parm_nndiascalculoacrescimos da
