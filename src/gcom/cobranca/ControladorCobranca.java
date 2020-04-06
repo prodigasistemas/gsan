@@ -5135,8 +5135,7 @@ public class ControladorCobranca extends ControladorComum {
 						 */
 						if (dataPagamento == null) {
 							dataPagamento = new Date();
-
-							Util.subtrairNumeroDiasDeUmaData(dataPagamento, sistemaParametros.getNumeroDiasVencimentoCobranca());
+							dataPagamento = Util.subtrairNumeroDiasDeUmaData(dataPagamento, sistemaParametros.getNumeroDiasVencimentoCobranca());
 						}
 
 						// [UC0747] - Calcular diferença de dias úteis entre duas datas
