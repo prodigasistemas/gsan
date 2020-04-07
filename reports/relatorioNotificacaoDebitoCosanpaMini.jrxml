@@ -505,15 +505,15 @@
 				<staticText>
 					<reportElement
 						x="0"
-						y="162"
+						y="160"
 						width="388"
 						height="15"
 						key="staticText-14"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Tahoma" pdfFontName="Courier-Bold" size="9" isBold="true"/>
+						<font fontName="Tahoma" pdfFontName="Courier-Bold" size="8" isBold="true"/>
 					</textElement>
-				<text><![CDATA[AVISO DE SUSPENSÃO DE FORNECIMENTO]]></text>
+				<text><![CDATA[INFORMATIVO]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
@@ -526,8 +526,8 @@
 				</line>
 				<staticText>
 					<reportElement
-						x="3"
-						y="177"
+						x="4"
+						y="172"
 						width="380"
 						height="68"
 						key="staticText-15"/>
@@ -535,7 +535,7 @@
 					<textElement textAlignment="Justified" verticalAlignment="Top" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
-				<text><![CDATA[Notificamos V.S.ª que consta em nossos registros pendência de pagamento das faturas abaixo relacionadas, pertencentes ao imóvel que está sob sua responsabilidade. De acordo com a Lei 11.445/07, a inadimplência nos autoriza a interromper o fornecimento de água e/ou coleta de esgoto sanitário. A regularização do débito poderá ser feita com o pagamento do valor constante nesse documento, onde não estão inclusos os acréscimos por impontualidade, valores estes que serão cobrados na próxima fatura. Para esclarecer qualquer dúvida procure uma das nossas lojas de atendimento/escritório regional, ou ligue para 0800 70 71 195, a ligação é gratuita. Lembre-se da importância que a água tratada tem na sua vida. Caso o débito já esteja pago, este aviso deve ser desconsiderado.]]></text>
+				<text><![CDATA[Contamos com você! Excepcionalmente, por causa da Pandemia da Covid-19, a Companhia de Saneamento do Pará suspendeu os cortes de água por inadimplência. Porém, estar com a conta de água em dia é fundamental para a continuidade do serviço. ]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
@@ -821,9 +821,7 @@
 					<textElement textAlignment="Justified" verticalAlignment="Top" lineSpacing="1_1_2">
 						<font fontName="Courier New" pdfFontName="Courier" size="5" isBold="false"/>
 					</textElement>
-				<text><![CDATA[A violação do lacre, a danificação do hidrômetro e/ou cavalete é considerada infração, passível de cobrança de multa e outras cominações legais, podendo ocorrer à interrupção imediata do serviço de abastecimento de água e/ou coleta de esgoto sanitário. 
-A religação abusiva do ramal predial de água e/ou de coleta de esgoto, após a interrupção, feita clandestinamente pelo consumidor ou por sua ordem, é considerada manipulação indevida na tubulação, caracterizando infração grave, passível das penalidades acima informadas. 
-Após a regularização das pendências por parte do cliente, havendo necessidade de recomposição do ramal predial para restabelecimento do serviço de abastecimento de água e/ou esgotamento sanitário, o cliente fica obrigado, à suas expensas, a recompor o ramal suprimido, de acordo com o padrão atual adotado pela COSANPA.]]></text>
+				<text><![CDATA[Os custos para coletar a água, tratar, distribuir e dar manutenção são cobrados através de tarifas. Ou seja, ao pagar a conta de água você mantém os serviços de captação, tratamento, distribuição e outras despesas para que a água chegue até a sua casa. A tarifa refere-se ao serviço prestado pela Companhia.  Para que o abastecimento continue chegando nas residências com quantidade e qualidade para todos, contamos com você! Em casos de dúvida, reclamação, sugestão ou se estiver interessado em negociar os débitos, basta entrar em contato com a COSANPA pelos nossos canais de atendimento. Ligue para 0800 7071 195 ou acesse o chat online disponível no site www.cosanpa.pa.gov.br . ]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
