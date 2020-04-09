@@ -127,19 +127,19 @@
 					<reportElement
 						x="142"
 						y="169"
-						width="283"
-						height="17"
+						width="291"
+						height="23"
 						key="staticText-78"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Tahoma" pdfFontName="Courier-Bold" size="12" isBold="true"/>
+						<font fontName="Tahoma" pdfFontName="Courier-Bold" size="16" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Informativo]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
 						x="1"
-						y="186"
+						y="197"
 						width="563"
 						height="76"
 						key="staticText-79"/>
@@ -147,7 +147,7 @@
 					<textElement textAlignment="Justified" verticalAlignment="Top" lineSpacing="Single">
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false"/>
 					</textElement>
-				<text><![CDATA[Contamos com você! Excepcionalmente, por causa da Pandemia da Covid-19, a Companhia de Saneamento do Pará suspendeu os cortes de água por inadimplência. Porém, estar com a conta de água em dia é fundamental para a continuidade do serviço. ]]></text>
+				<text><![CDATA[Contamos com você! Excepcionalmente, por causa da Pandemia da Covid-19, a Companhia de Saneamento do Pará suspendeu os cortes de água por inadimplência. Porém, estar com a conta de água em dia é fundamental para a continuidade do serviço. Os custos para coletar a água, tratar, distribuir e dar manutenção são cobrados através de tarifas. Ou seja, ao pagar a conta de água você mantém os serviços de captação, tratamento, distribuição e outras despesas para que a água chegue até a sua casa. A tarifa refere-se ao serviço prestado pela Companhia. ]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -763,15 +763,15 @@
 				<staticText>
 					<reportElement
 						x="1"
-						y="15"
+						y="16"
 						width="564"
-						height="86"
+						height="35"
 						key="staticText-80"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Justified" verticalAlignment="Top" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="10" isBold="false"/>
 					</textElement>
-				<text><![CDATA[Os custos para coletar a água, tratar, distribuir e dar manutenção são cobrados através de tarifas. Ou seja, ao pagar a conta de água você mantém os serviços de captação, tratamento, distribuição e outras despesas para que a água chegue até a sua casa. A tarifa refere-se ao serviço prestado pela Companhia. Para que o abastecimento continue chegando nas residências com quantidade e qualidade para todos, contamos com você! Em casos de dúvida, reclamação, sugestão ou se estiver interessado em negociar os débitos, basta entrar em contato com a COSANPA pelos nossos canais de atendimento. Ligue para 0800 7071 195 ou acesse o chat online no site www.cosanpa.pa.gov.br .]]></text>
+				<text><![CDATA[Para que o abastecimento continue chegando nas residências com quantidade e qualidade para todos, contamos com você!  De acordo com as normas da ABNT, todo imóvel deve ter reservatório. Uma caixa d’água de 500 litros atende as necessidades de uma residência por até 24 horas. ]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
@@ -1188,6 +1188,19 @@
 						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true"/>
 					</textElement>
 				<text><![CDATA[ENDEREÇO DE ENTREGA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="52"
+						width="564"
+						height="35"
+						key="staticText-120"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Em casos de dúvida, reclamação, sugestão ou se estiver interessado em negociar os débitos, basta entrar em contato com a COSANPA pelos nossos canais de atendimento. Ligue para 0800 70 71 195 ou acesse o chat online disponível no site www.cosanpa.pa.gov.br .]]></text>
 				</staticText>
 			</band>
 		</pageFooter>
