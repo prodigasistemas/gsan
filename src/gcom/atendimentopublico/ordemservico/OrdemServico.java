@@ -1,5 +1,11 @@
 package gcom.atendimentopublico.ordemservico;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Set;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
@@ -11,12 +17,6 @@ import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Set;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 
 /** @author Hibernate CodeGenerator */

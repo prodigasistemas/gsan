@@ -1,5 +1,11 @@
 package gcom.cadastro.imovel;
 
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
@@ -35,17 +41,11 @@ import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.cadastro.GerarRelatorioImoveisDoacoesHelper;
-import gcom.relatorio.cadastro.dto.ContratoAdesaoimovelDTO;
+import gcom.relatorio.cadastro.dto.ContratoDTO;
 import gcom.relatorio.micromedicao.FiltrarAnaliseExcecoesLeiturasHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
-
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 
@@ -750,7 +750,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 
 	public ImovelCobrancaSituacao obterImovelCobrancaSituacao(Integer idImovelSituacaoCobranca) throws ControladorException;
 	
-	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) throws ControladorException; 
+	public ContratoDTO obterContratoAdesao(int idContrato) throws ControladorException; 
 
 	public void incluirImovelCobranca(Integer idCobrancaSituacao, Integer idCobrancaSituacaoTipo, Integer idImovel, Usuario usuario) throws ControladorException;
 
@@ -765,4 +765,9 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public String consultarNomeClienteResponsavelImovel(Integer idImovel) throws ControladorException;
 
 	public List<Imovel> pesquisarCondominios(Rota rota) throws ControladorException;
+	
+	public ContratoDTO obterContratoInstalacaoReservacao(int idContrato) throws ControladorException;
+
+	public void gerarContratoInstalacaoReservacao(Integer idImovel, Integer idCliente) throws ControladorException;
+
 }

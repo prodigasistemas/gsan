@@ -1,5 +1,19 @@
 package gcom.gui.cadastro.imovel;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import gcom.cadastro.imovel.Contrato;
 import gcom.cadastro.imovel.ContratoHelper;
 import gcom.cadastro.imovel.ContratoTipo;
@@ -19,20 +33,6 @@ import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 /**
  * [UC0473] Consultar Imovel
@@ -485,32 +485,26 @@ public class ExibirConsultarImovelDadosComplementaresAction extends GcomAction {
 	}
 	
 
-	/**
-	 *@since 06/01/2011
-	 *@author Mariana Victor
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("unchecked")
 	private void setarColecaoContratoHelper(Imovel imovel,HttpSession sessao) {
 		List<ContratoHelper> contratosHelper = new ArrayList<ContratoHelper>();
 		
 		FiltroContrato filtroContrato = new FiltroContrato();
 		filtroContrato.adicionarParametro(new ParametroSimples(FiltroContrato.IMOVEL, imovel.getId()));
-		//filtroContrato.adicionarParametro(new ParametroNulo(FiltroContrato.DATACONTRATOENCERRAMENTO));
 		filtroContrato.adicionarCaminhoParaCarregamentoEntidade("contratoTipo");
-		Collection colecaoContrato = this.getFachada().pesquisar(filtroContrato, Contrato.class.getName());
-		
+		Collection<Contrato> colecao = getFachada().pesquisar(filtroContrato, Contrato.class.getName());
 
-		Iterator<Contrato> itContratos = colecaoContrato.iterator();
+		Iterator<Contrato> iterator = colecao.iterator();
 		
-		while (itContratos.hasNext()) {
+		while (iterator.hasNext()) {
 			ContratoHelper contratoHelper = null;
 
-			if (colecaoContrato != null && !colecaoContrato.isEmpty()) {
+			if (colecao != null && !colecao.isEmpty()) {
 				contratoHelper = new ContratoHelper();
-				contratoHelper.setContrato((Contrato) itContratos.next());
+				contratoHelper.setContrato((Contrato) iterator.next());
 				
 				Object[] consumoContratado = this.getFachada().consultarConsumoCadastrado(imovel.getId());
-				if (contratoHelper.getContrato().getContratoTipo().getId().intValue() == ContratoTipo.DEMANDA && consumoContratado != null) {
+				if (contratoHelper.getContrato().getContratoTipo().getId() == ContratoTipo.DEMANDA && consumoContratado != null) {
 					contratoHelper.setConsumoContratado(consumoContratado[0].toString());
 					contratoHelper.setValorTarifa(Util.formatarBigDecimalParaStringComVirgula((BigDecimal) consumoContratado[1]));
 				}

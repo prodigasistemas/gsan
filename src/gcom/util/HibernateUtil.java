@@ -264,6 +264,7 @@ import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.CategoriaTipo;
 import gcom.cadastro.imovel.Contrato;
 import gcom.cadastro.imovel.ContratoAdesao;
+import gcom.cadastro.imovel.ContratoInstalacaoReservacao;
 import gcom.cadastro.imovel.ContratoTipo;
 import gcom.cadastro.imovel.Despejo;
 import gcom.cadastro.imovel.EloAnormalidade;
@@ -1101,6 +1102,7 @@ public class HibernateUtil {
 					.addClass(ContratoTipo.class)
 					.addClass(Contrato.class)
 					.addClass(ContratoAdesao.class)
+					.addClass(ContratoInstalacaoReservacao.class)
 					.addClass(Visita.class)
 					
 					// *************************************//

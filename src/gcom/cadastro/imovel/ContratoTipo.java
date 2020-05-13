@@ -16,6 +16,7 @@ public class ContratoTipo implements Serializable{
 
     public final static Integer DEMANDA = new Integer(1);
     public final static Integer ADESAO = new Integer(2);
+    public final static Integer INSTALACAO_RESERVACAO = new Integer(3);
 
     public ContratoTipo(String descricao, Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;

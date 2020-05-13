@@ -543,7 +543,7 @@ import gcom.relatorio.cadastro.GerarRelatorioAtualizacaoCadastralViaInternetHelp
 import gcom.relatorio.cadastro.GerarRelatorioImoveisDoacoesHelper;
 import gcom.relatorio.cadastro.RelatorioAcessoSPCBean;
 import gcom.relatorio.cadastro.RelatorioBoletimCadastroIndividualBean;
-import gcom.relatorio.cadastro.dto.ContratoAdesaoimovelDTO;
+import gcom.relatorio.cadastro.dto.ContratoDTO;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisAlteracaoInscricaoViaBatchHelper;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisAtivosNaoMedidosHelper;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisConsumoMedioHelper;
@@ -40183,9 +40183,9 @@ public class Fachada {
 		}
 	}
 	
-	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) {
+	public ContratoDTO obterContratoAdesao(int idContrato) {
 		try {
-			return getControladorImovel().obterContratoAdesao(idImovel);
+			return getControladorImovel().obterContratoAdesao(idContrato);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -40428,6 +40428,14 @@ public class Fachada {
 	public List<OrdemSuspensaoFornecimentoDTO> gerarOrdemSuspensaoFornecimento(Integer idAcaoCronograma, Integer idAcaoComando) {
 		try {
 			return getControladorCobranca().gerarOrdemSuspensaoFornecimento(idAcaoCronograma, idAcaoComando);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public ContratoDTO obterContratoInstalacaoReservacao(int idContrato) {
+		try {
+			return getControladorImovel().obterContratoInstalacaoReservacao(idContrato);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

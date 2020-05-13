@@ -42,11 +42,6 @@
 			form.action = 'consultarImovelWizardAction.do?action=exibirConsultarImovelDadosComplementaresAction&limparForm=OK'
 			form.submit();
 		}
-
-		function teste2(id){
-			alert('teste');
-			abrirPopup('exibirFotoOcorrenciaCadastroConsultarImovelAction.do?id=' + id, 600, 800);
-		}		
 		
 		function consultarMatricula(matricula){
 		   	var form = document.forms[0];
@@ -89,17 +84,11 @@
 			}
 		}
 
-		function gerarContratoAdesao(){
+		function gerarContrato(idContrato, tipoContrato) {
 		   	var form = document.forms[0];
 
-		   	if (form.idImovelDadosComplementares.value != null && form.matriculaImovelDadosComplementares.value != null && 
-					form.matriculaImovelDadosComplementares.value != "" && form.matriculaImovelDadosComplementares.value != "IMÓVEL INEXISTENTE") {
-			   	form.action = 'gerarRelatorioContratoAdesaoImovelAction.do?matricula='+form.matriculaImovelDadosComplementares.value;
-				form.submit();
-			} else {
-				alert("Para gerar um contrato de adesão, é necessário pesquisar um imóvel.")
-			}
-			
+		   	form.action = 'gerarDocumentoContratoAction.do?idContrato=' + idContrato + '&tipoContrato=' + tipoContrato;
+			form.submit();
 		}
 
 		</script>
@@ -1371,41 +1360,41 @@
 						border="0">
 			  <tr>
 					<td colspan="6" align="center" bgcolor="#79bbfd">
-					   <strong>Dados do Contrato</strong>
+					   <strong>Contratos</strong>
 					</td>
 			  </tr>
 			  	<tr bordercolor="#000000" bgcolor="#90c7fc">
 					<td align="center" bgcolor="#90c7fc" width="20%">
 						<div class="style9">
 							<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
-								<strong>Número do Contrato</strong>
+								<strong>Número</strong>
 							</font>
 						</div>
 					</td>
 					
 					<td align="center" bgcolor="#90c7fc" width="20%">
 						<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
-							<strong>Tipo Contrato</strong>
+							<strong>Tipo</strong>
 						</font>
 					</td>
 					
-					<td align="center" bgcolor="#90c7fc" width="20%">
+					<td align="center" bgcolor="#90c7fc" width="15%">
 						<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
-							<strong>Data Início</strong>
+							<strong>Data de Início</strong>
 						</font>
 					</td>
 							
-					<td align="center" bgcolor="#90c7fc" width="20%">
+					<td align="center" bgcolor="#90c7fc" width="15%">
 						<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
-							<strong>Data término</strong>
+							<strong>Data de Término</strong>
 						</font>
 					</td>
-					<td align="center" bgcolor="#90c7fc" width="20%">
+					<td align="center" bgcolor="#90c7fc" width="15%">
 						<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
 							<strong>Valor da Tarifa</strong>
 						</font>
 					</td>
-					<td align="center" bgcolor="#90c7fc" width="20%">
+					<td align="center" bgcolor="#90c7fc" width="15%">
 						<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
 							<strong>Consumo Contratado</strong>
 						</font>
@@ -1425,31 +1414,33 @@
 									<td align="center" width="20%">
 										<div class="style9">
 											<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
-												<bean:write name="contratoHelper" property="contrato.numeroContrato" />												
+												<a href="javascript:gerarContrato(<bean:write name="contratoHelper" property="contrato.id"/>,<bean:write name="contratoHelper" property="contrato.contratoTipo.id"/>);">
+													<bean:write name="contratoHelper" property="contrato.numeroContrato" />												
+												</a>
 											 </font>
 										</div>
 									</td>
 									<td align="center" width="20%">
 										<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
-											<bean:write name="contratoHelper" property="contrato.contratoTipo.descricao" formatKey="date.format"/>													
+											<bean:write name="contratoHelper" property="contrato.contratoTipo.descricao"/>													
 										</font>
 									</td>
-									<td align="center" width="20%">
+									<td align="center" width="15%">
 										<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
 											<bean:write name="contratoHelper" property="contrato.dataContratoInicio" formatKey="date.format"/>													
 										</font>
 									</td>
-									<td align="center" width="20%">
+									<td align="center" width="15%">
 										<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
 											<bean:write name="contratoHelper" property="contrato.dataContratoFim" formatKey="date.format"/>													
 										</font>
 									</td>
-									<td align="center" width="20%">
+									<td align="center" width="15%">
 										<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
 											<bean:write name="contratoHelper" property="valorTarifa" />													
 										</font>
 									</td>
-									<td align="center" width="20%">
+									<td align="center" width="15%">
 										<font style="font-size: 9px;" color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
 											<bean:write name="contratoHelper" property="consumoContratado" />													
 										</font>
@@ -1513,12 +1504,6 @@
 											title="Imprimir Dados Adicionais" /> 
 									</a>
 							  </div>
-						</td>
-					</tr>
-					
-					<tr>
-						<td>
-							<input type="button" name="ButtonImprimir" class="bottonRightCol" value="Imprimir Contrato Adesão" onClick="gerarContratoAdesao();">
 						</td>
 					</tr>
 					<tr>
