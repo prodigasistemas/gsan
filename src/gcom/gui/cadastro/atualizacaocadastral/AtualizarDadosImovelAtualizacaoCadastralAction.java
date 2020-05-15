@@ -99,18 +99,18 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 	}
 	
 	private boolean permiteAprovarOuConcluirFiscalizacao(ImovelControleAtualizacaoCadastral controle, short indicadorValidacao, Integer tipoAlteracao) {
-		return imovelValido(controle, indicadorValidacao) || 
+		return imovelValido(controle, indicadorValidacao, tipoAlteracao) || 
 			   imovelNovoValido(controle, indicadorValidacao, tipoAlteracao) ||
 			   controle.isAguardandoAnalise() ||
 			   controle.isFiscalizado();
 	}
 
-	private boolean imovelValido(ImovelControleAtualizacaoCadastral controle, short indicadorValidacao) {
-		return controle.isPreAprovado() && retornoValidado(indicadorValidacao);
+	private boolean imovelValido(ImovelControleAtualizacaoCadastral controle, short indicadorValidacao, Integer tipoAlteracao) {
+		return controle.isPreAprovado() && retornoValidado(indicadorValidacao) && tipoAlteracao.intValue() == AlteracaoTipo.ALTERACAO.intValue();
 	}
 	
 	private boolean imovelNovoValido(ImovelControleAtualizacaoCadastral controle, short indicadorValidacao, Integer tipoAlteracao) {
-		return imovelValido(controle, indicadorValidacao) && tipoAlteracao == AlteracaoTipo.INCLUSAO;
+		return controle.isPreAprovado() && tipoAlteracao.intValue() == AlteracaoTipo.INCLUSAO.intValue();
 	}
 
 	private boolean retornoValidado(short indicadorValidacao) {
