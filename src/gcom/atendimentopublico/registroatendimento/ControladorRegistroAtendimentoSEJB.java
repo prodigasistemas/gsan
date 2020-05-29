@@ -12027,7 +12027,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 				UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
 		//FS0001 - Verificar existencia de dados para o ano/mes referencia informado
-		getControladorGerencialCadastro().excluirResumoGerencialC(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento(), "atendimentopublico.un_resumo_registro_atendimento", "rera_amreferencia", "loca_id", idLocalidade );				
+		getControladorGerencialCadastro().excluirResumoGerencialC(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento(), "atendimentopublico.un_resumo_ra", "rera_amreferencia", "loca_id", idLocalidade );				
 		
 		try {
 			Integer dtAtual = Integer.decode(Util.recuperaDataInvertida(new Date()));
@@ -14141,7 +14141,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 		//FS0001 - Verificar existencia de dados para o ano/mes referencia informado
 		getControladorGerencialCadastro().excluirResumoGerencialC(getControladorUtil()
 				.pesquisarParametrosDoSistema().getAnoMesFaturamento(), 
-					"atendimentopublico.un_resumo_registro_atendimento_ref_2010", "rera_amreferencia", 
+					"atendimentopublico.un_resumo_ra_ref_2010", "rera_amreferencia", 
 						"loca_id", idLocalidade );				
 		
 		try {
