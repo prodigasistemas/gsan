@@ -41,21 +41,23 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 					if (StringUtils.isNotEmpty(registrosSelecionados)) {
 						String[] listaIdRegistrosSim = registrosSelecionados.split(",");
 
-						if (isDefinicaoSubcategoriaValida(controle, form.getIdImovel(), listaIdRegistrosSim)) {
+						if (isDefinicaoSubcategoriaValida(controle, form.getIdImovel(), listaIdRegistrosSim, Integer.valueOf(form.getIdTipoAlteracao()))) {
 							
 							if (listaIdRegistrosSim != null && !listaIdRegistrosSim.equals("")) {
-								getFachada().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer.valueOf(form.getIdImovel()), 
-										listaIdRegistrosSim, ConstantesSistema.SIM, getUsuarioLogado(request), obterCampoParaAtualizar(controle));
+								getFachada().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer.valueOf(form.getIdImovel()),
+										listaIdRegistrosSim, ConstantesSistema.SIM, getUsuarioLogado(request), obterCampoParaAtualizar(controle), Integer.valueOf(form.getIdTipoAlteracao()));
 								
-								this.atualizarSituacaoImovel(controle);
+								this.atualizarSituacaoImovel(controle, Integer.valueOf(form.getIdTipoAlteracao()));
 							}
 						} else {
 							throw new ActionServletException("atencao.imovel.sem.subcategorias", "");
 						}
 					} else if (controle.isAguardandoAnalise()) {
-						this.atualizarSituacaoImovel(controle);
+						this.atualizarSituacaoImovel(controle, Integer.valueOf(form.getIdTipoAlteracao()));   
 					}
 
+					
+					
 					request.setAttribute("reload", true);
 				} else {
 					throw new ActionServletException("atencao.imovel_nao_fiscalizado", "");
@@ -70,11 +72,17 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		return mapping.findForward("filtrarAlteracaoAtualizacaoCadastral");
 	}
 
-	private void atualizarSituacaoImovel(ImovelControleAtualizacaoCadastral imovelControle) {
+	private void atualizarSituacaoImovel(ImovelControleAtualizacaoCadastral imovelControle, Integer tipoAlteracao) {
 		if (imovelControle.isAguardandoAnalise()) {
 			getFachada().atualizarSituacaoImovelControle(imovelControle.getImovel().getId(), SituacaoAtualizacaoCadastral.FISCALIZADO);
-		} else if (imovelControle.isPreAprovado() || imovelControle.isFiscalizado()) {
-			getFachada().aprovarImovel(imovelControle.getImovel().getId());
+		} else if (imovelControle.isPreAprovado() || imovelControle.isFiscalizado())   {
+			if (tipoAlteracao == AlteracaoTipo.INCLUSAO.intValue()) {
+				getFachada().aprovarImovel(imovelControle.getId(), tipoAlteracao);
+			} else {
+				getFachada().aprovarImovel(imovelControle.getImovel().getId(), tipoAlteracao);
+			}
+			
+			
 		}
 	}
 
@@ -117,7 +125,7 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		return indicadorValidacao == ConstantesSistema.SIM.shortValue();
 	}
 	
-	private boolean isDefinicaoSubcategoriaValida(ImovelControleAtualizacaoCadastral controle, String idImovel,String[] registrosSelecionados) {
-		return getFachada().isDefinicaoSubcategoriaValida(idImovel, registrosSelecionados);
+	private boolean isDefinicaoSubcategoriaValida(ImovelControleAtualizacaoCadastral controle, String idImovel,String[] registrosSelecionados, Integer tipoAlteracao) {
+		return getFachada().isDefinicaoSubcategoriaValida(idImovel, registrosSelecionados, tipoAlteracao);
 	}
 }
