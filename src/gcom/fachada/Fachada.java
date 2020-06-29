@@ -28637,9 +28637,9 @@ public class Fachada {
 		return this.getControladorTransacao().consultarDadosTabelaColunaAtualizacaoCadastral(idRegistroAlterado, idArquivo, idImovel, idCliente, idTipoAlteracao);
 	}
 
-	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral, Short indicador, Usuario usuarioLogado, String campo) {
+	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral, Short indicador, Usuario usuarioLogado, String campo, Integer tipoAlteracao) {
 		try {
-			this.getControladorTransacao().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idImovel, idsAtualizacaoCadastral, indicador, usuarioLogado, campo);
+			this.getControladorTransacao().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idImovel, idsAtualizacaoCadastral, indicador, usuarioLogado, campo, tipoAlteracao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -40232,9 +40232,9 @@ public class Fachada {
 		}
 	}
 	
-	public void aprovarImovel(Integer idImovel) {
+	public void aprovarImovel(Integer idImovel, Integer tipoAlteracao) {
 		try {
-			getControladorAtualizacaoCadastral().aprovarImovel(idImovel);
+			getControladorAtualizacaoCadastral().aprovarImovel(idImovel, tipoAlteracao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -40288,9 +40288,9 @@ public class Fachada {
         }
 	}
 	
-	public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados) {
+	public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados, Integer tipoAlteracao) {
 		try {
-			return getControladorAtualizacaoCadastral().isDefinicaoSubcategoriaValida(idImovel, registrosSelecionados);
+			return getControladorAtualizacaoCadastral().isDefinicaoSubcategoriaValida(idImovel, registrosSelecionados, tipoAlteracao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

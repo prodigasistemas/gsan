@@ -1167,7 +1167,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 						getControladorUtil().atualizar(tabelaColuna);
 					}
 				}
-				this.aprovarImovel(imovel.getIdImovel());
+				this.aprovarImovel(imovel.getIdImovel(), null);
 				
 			}
 		} catch (Exception e) {
@@ -1176,9 +1176,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	public void aprovarImovel(Integer idImovel) throws ControladorException {
+	public void aprovarImovel(Integer idImovel, Integer tipoAlteracao) throws ControladorException {
 			try {
-				ImovelControleAtualizacaoCadastral controle = this.obterImovelControle(idImovel);
+				ImovelControleAtualizacaoCadastral controle = this.pesquisarImovelControleAtualizacao(idImovel, tipoAlteracao);
 
 				Date dataLiberacao = new Date();
 				SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
@@ -1387,7 +1387,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
-
+	
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ControladorException {
 		try {
 			return repositorioAtualizacaoCadastral.pesquisarImovelControleAtualizacao(idImovel);
@@ -1396,9 +1396,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel, Integer tipoOperacao) throws ControladorException {
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel, Integer tipoAlteracao) throws ControladorException {
 		try {
-			return repositorioAtualizacaoCadastral.pesquisarImovelControleAtualizacao(idImovel, tipoOperacao);
+			return repositorioAtualizacaoCadastral.pesquisarImovelControleAtualizacao(idImovel, tipoAlteracao);
 		} catch (Exception e) {
 			throw new ControladorException("Erro ao pesquisar ImovelControleAtualizacaoCadastral.", e);
 		}
@@ -1723,9 +1723,9 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
-	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) throws ControladorException {
+	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo, Integer tipoAlteracao) throws ControladorException {
 		try {
-			repositorioAtualizacaoCadastral.atualizarImovelRetorno(tabelaColunaAtualizacaoCadastral, campo);
+			repositorioAtualizacaoCadastral.atualizarImovelRetorno(tabelaColunaAtualizacaoCadastral, campo, tipoAlteracao);
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 			throw new ControladorException("erro.pesquisar.tabela.coluna.atualizacao.cadastral", e);
@@ -1764,7 +1764,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			Collection<TabelaColunaAtualizacaoCadastral> colunasAlteradas = repositorioAtualizacaoCadastral.obterColunasPreAprovadas(imovelControle);
 			
 			for (TabelaColunaAtualizacaoCadastral tabelaColuna : colunasAlteradas) {
-				this.atualizarImovelRetorno(tabelaColuna, TabelaColunaAtualizacaoCadastral.VALOR_CAMPO_PRE_APROVADO);
+				this.atualizarImovelRetorno(tabelaColuna, TabelaColunaAtualizacaoCadastral.VALOR_CAMPO_PRE_APROVADO, null);
 			}
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("Erro atualizar retorno da atualizacao cadastral", e);
@@ -1914,13 +1914,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
         }
     }
     
-    public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados) throws ControladorException {
-    	ImovelControleAtualizacaoCadastral controle = this.pesquisarImovelControleAtualizacao(new Integer(idImovel));
+    public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados, Integer tipoAlteracao) throws ControladorException {
+    	ImovelControleAtualizacaoCadastral controle = this.pesquisarImovelControleAtualizacao(new Integer(idImovel), tipoAlteracao);
     	
-    	if (controle.isPreAprovado())
+    	if (controle.isPreAprovado()) { 
     		return isDefinicaoSubcategoriaValidaImovelPreAprovado(idImovel, registrosSelecionados);
-    	else 
+    	} else {
     		return isDefinicaoSubcategoriaValidaImovelEmFIscalizacao(idImovel, registrosSelecionados);
+    	}
     }
     
     public boolean isDefinicaoSubcategoriaValidaImovelEmFIscalizacao(String idImovel,String[] registrosSelecionados) throws ControladorException {
@@ -2737,4 +2738,5 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 					"Erro ao obter indicadores de alteracoes do imovel relevantes para processo de atualizacao cadastral.", e);
 		}
 	}
+	
 }
