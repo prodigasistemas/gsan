@@ -126,7 +126,7 @@
 						x="0"
 						y="152"
 						width="535"
-						height="89"
+						height="105"
 						key="rectangle-5"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
@@ -830,16 +830,16 @@
 				<rectangle>
 					<reportElement
 						x="0"
-						y="241"
+						y="258"
 						width="535"
-						height="131"
+						height="117"
 						key="rectangle-6"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="254"
+						y="267"
 						width="535"
 						height="0"
 						key="line-15"/>
@@ -866,95 +866,95 @@
 				<staticText>
 					<reportElement
 						x="2"
-						y="259"
+						y="270"
 						width="48"
 						height="12"
 						key="staticText-25"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
 					</textElement>
 				<text><![CDATA[IMÓVEL:]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
-						x="51"
-						y="257"
-						width="18"
-						height="16"
+						x="54"
+						y="269"
+						width="14"
+						height="12"
 						key="rectangle-8"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<staticText>
 					<reportElement
 						x="70"
-						y="259"
+						y="270"
 						width="50"
 						height="12"
 						key="staticText-26"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[DEMOLIDO]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
-						x="124"
-						y="257"
-						width="18"
-						height="16"
+						x="127"
+						y="269"
+						width="14"
+						height="12"
 						key="rectangle-9"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<staticText>
 					<reportElement
 						x="143"
-						y="259"
+						y="270"
 						width="76"
 						height="12"
 						key="staticText-27"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[EM CONSTRUÇÃO]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
-						x="222"
-						y="257"
-						width="18"
-						height="16"
+						x="225"
+						y="269"
+						width="14"
+						height="12"
 						key="rectangle-10"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<staticText>
 					<reportElement
 						x="241"
-						y="259"
+						y="270"
 						width="43"
 						height="12"
 						key="staticText-28"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[TERRENO]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
-						x="286"
-						y="254"
-						width="0"
-						height="22"
+						x="285"
+						y="268"
+						width="1"
+						height="16"
 						key="line-17"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="276"
+						y="283"
 						width="535"
 						height="0"
 						key="line-18"/>
@@ -963,241 +963,241 @@
 				<staticText>
 					<reportElement
 						x="288"
-						y="259"
+						y="270"
 						width="64"
 						height="12"
 						key="staticText-29"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
 					</textElement>
 				<text><![CDATA[CATEGORIA:]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
-						x="353"
-						y="257"
-						width="18"
-						height="16"
+						x="356"
+						y="269"
+						width="14"
+						height="12"
 						key="rectangle-11"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<staticText>
 					<reportElement
 						x="372"
-						y="259"
+						y="270"
 						width="26"
 						height="12"
 						key="staticText-30"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[RES.]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
-						x="401"
-						y="257"
-						width="18"
-						height="16"
+						x="404"
+						y="269"
+						width="14"
+						height="12"
 						key="rectangle-12"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<staticText>
 					<reportElement
 						x="420"
-						y="259"
+						y="270"
 						width="23"
 						height="12"
 						key="staticText-31"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[COM.]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
 						x="465"
-						y="259"
+						y="270"
 						width="23"
 						height="12"
 						key="staticText-32"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[IND.]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
-						x="446"
-						y="257"
-						width="18"
-						height="16"
+						x="449"
+						y="269"
+						width="14"
+						height="12"
 						key="rectangle-13"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<staticText>
 					<reportElement
 						x="510"
-						y="259"
+						y="270"
 						width="23"
 						height="12"
 						key="staticText-33"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[PUB.]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
-						x="491"
-						y="257"
-						width="18"
-						height="16"
+						x="494"
+						y="269"
+						width="14"
+						height="12"
 						key="rectangle-14"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<staticText>
 					<reportElement
 						x="2"
-						y="281"
+						y="286"
 						width="105"
 						height="12"
 						key="staticText-34"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Área Constr.=_____m² ]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
-						x="112"
-						y="279"
-						width="18"
-						height="16"
+						x="114"
+						y="285"
+						width="14"
+						height="12"
 						key="rectangle-15"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<staticText>
 					<reportElement
 						x="131"
-						y="281"
+						y="286"
 						width="32"
 						height="12"
 						key="staticText-35"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[ÁGUA]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
-						x="166"
-						y="279"
-						width="18"
-						height="16"
+						x="168"
+						y="285"
+						width="14"
+						height="12"
 						key="rectangle-16"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<staticText>
 					<reportElement
 						x="185"
-						y="281"
+						y="286"
 						width="32"
 						height="12"
 						key="staticText-36"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[POÇO]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
 						x="220"
-						y="281"
+						y="286"
 						width="40"
 						height="12"
 						key="staticText-37"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[ESGOTO:]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
 						x="336"
-						y="281"
+						y="286"
 						width="32"
 						height="12"
 						key="staticText-38"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[COND.]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
-						x="317"
-						y="279"
-						width="18"
-						height="16"
+						x="320"
+						y="285"
+						width="14"
+						height="12"
 						key="rectangle-17"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<staticText>
 					<reportElement
 						x="280"
-						y="281"
+						y="286"
 						width="32"
 						height="11"
 						key="staticText-39"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[CONV.]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement
-						x="261"
-						y="279"
-						width="18"
-						height="16"
+						x="264"
+						y="285"
+						width="14"
+						height="12"
 						key="rectangle-18"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<staticText>
 					<reportElement
 						x="372"
-						y="281"
+						y="286"
 						width="65"
 						height="12"
 						key="staticText-40"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Pav.=_____m² ]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
 						x="443"
-						y="281"
+						y="286"
 						width="90"
 						height="12"
 						key="staticText-41"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Material: _______]]></text>
 				</staticText>
@@ -2641,27 +2641,27 @@
 				<line direction="TopDown">
 					<reportElement
 						x="218"
-						y="276"
+						y="284"
 						width="0"
-						height="22"
+						height="14"
 						key="line-96"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<line direction="TopDown">
 					<reportElement
 						x="370"
-						y="276"
-						width="0"
-						height="22"
+						y="284"
+						width="1"
+						height="14"
 						key="line-97"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="224"
-						y="200"
+						y="201"
 						width="310"
-						height="40"
+						height="37"
 						key="textField-20"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement isStyledText="true">
@@ -3281,7 +3281,7 @@
 				<staticText>
 					<reportElement
 						x="6"
-						y="243"
+						y="258"
 						width="524"
 						height="10"
 						key="staticText-23"/>
@@ -3565,8 +3565,8 @@
 				<staticText>
 					<reportElement
 						x="1"
-						y="216"
-						width="111"
+						y="245"
+						width="117"
 						height="10"
 						key="staticText-119"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
@@ -3575,23 +3575,10 @@
 					</textElement>
 				<text><![CDATA[Local Instalação ramal:]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="113"
-						y="216"
-						width="108"
-						height="10"
-						key="textField-36"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font fontName="Courier New" pdfFontName="Courier" size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getLocalInstalacaoRamal}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						x="131"
-						y="229"
+						y="214"
 						width="49"
 						height="10"
 						key="staticText-120"/>
@@ -3604,7 +3591,7 @@
 				<staticText>
 					<reportElement
 						x="212"
-						y="229"
+						y="214"
 						width="8"
 						height="10"
 						key="staticText-121"/>
@@ -3617,7 +3604,7 @@
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="184"
-						y="229"
+						y="214"
 						width="27"
 						height="10"
 						key="textField-37"/>
@@ -3638,8 +3625,8 @@
 				</line>
 				<staticText>
 					<reportElement
-						x="3"
-						y="229"
+						x="1"
+						y="214"
 						width="65"
 						height="10"
 						key="staticText-122"/>
@@ -3652,7 +3639,7 @@
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="71"
-						y="229"
+						y="214"
 						width="29"
 						height="10"
 						key="textField-38"/>
@@ -3665,7 +3652,7 @@
 				<staticText>
 					<reportElement
 						x="98"
-						y="228"
+						y="214"
 						width="8"
 						height="10"
 						key="staticText-123"/>
@@ -3674,6 +3661,125 @@
 						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false"/>
 					</textElement>
 				<text><![CDATA[m]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="1"
+						y="241"
+						width="535"
+						height="0"
+						key="line-103"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<rectangle>
+					<reportElement
+						x="123"
+						y="243"
+						width="14"
+						height="12"
+						key="rectangle-26"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<staticText>
+					<reportElement
+						x="139"
+						y="243"
+						width="66"
+						height="12"
+						key="staticText-124"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
+					</textElement>
+				<text><![CDATA[LATERAL ESQUERDA]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement
+						x="215"
+						y="243"
+						width="14"
+						height="12"
+						key="rectangle-27"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<staticText>
+					<reportElement
+						x="231"
+						y="243"
+						width="63"
+						height="12"
+						key="staticText-125"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
+					</textElement>
+				<text><![CDATA[LATERAL DIREITA 7]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement
+						x="303"
+						y="243"
+						width="14"
+						height="12"
+						key="rectangle-28"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<staticText>
+					<reportElement
+						x="319"
+						y="243"
+						width="25"
+						height="12"
+						key="staticText-126"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
+					</textElement>
+				<text><![CDATA[FUNDOS]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement
+						x="353"
+						y="243"
+						width="14"
+						height="12"
+						key="rectangle-29"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<staticText>
+					<reportElement
+						x="369"
+						y="243"
+						width="70"
+						height="12"
+						key="staticText-127"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
+					</textElement>
+				<text><![CDATA[CENTRO DA FACHADA]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement
+						x="449"
+						y="243"
+						width="14"
+						height="12"
+						key="rectangle-30"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<staticText>
+					<reportElement
+						x="465"
+						y="243"
+						width="57"
+						height="12"
+						key="staticText-128"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="7" isBold="true"/>
+					</textElement>
+				<text><![CDATA[CONVERSÃO]]></text>
 				</staticText>
 			</band>
 		</detail>

@@ -2,15 +2,15 @@ package gcom.cadastro.imovel;
 
 import gcom.util.filtro.Filtro;
 
-public class FiltroContratoAdesao extends Filtro {
+public class FiltroContratoInstalacaoReservacao extends Filtro {
 
 	private static final long serialVersionUID = 1L;
 
-	public FiltroContratoAdesao(String campoOrderBy) {
+	public FiltroContratoInstalacaoReservacao(String campoOrderBy) {
 		this.campoOrderBy = campoOrderBy;
 	}
 
-	public FiltroContratoAdesao() {
+	public FiltroContratoInstalacaoReservacao() {
 	}
 
 	public final static String CONTRATO = "contrato";

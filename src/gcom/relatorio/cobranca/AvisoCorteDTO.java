@@ -12,6 +12,7 @@ public class AvisoCorteDTO {
 	private Integer sequencialRota;
 
 	private Integer idDocumentoCobranca;
+	private String dataEmissao;
 	private String valorTotal;
 
 	private String endereco;
@@ -25,7 +26,7 @@ public class AvisoCorteDTO {
 	private String codigoBarras;
 	private String codigoBarrasFormatado;
 
-	private List<AvisoCorteContaDTO> contas;
+	private List<CobrancaDocumentoContaDTO> contas;
 
 	public AvisoCorteDTO() {
 		super();
@@ -77,6 +78,14 @@ public class AvisoCorteDTO {
 
 	public void setIdDocumentoCobranca(Integer idDocumentoCobranca) {
 		this.idDocumentoCobranca = idDocumentoCobranca;
+	}
+
+	public String getDataEmissao() {
+		return dataEmissao;
+	}
+
+	public void setDataEmissao(String dataEmissao) {
+		this.dataEmissao = dataEmissao;
 	}
 
 	public String getValorTotal() {
@@ -151,11 +160,11 @@ public class AvisoCorteDTO {
 		this.codigoBarrasFormatado = codigoBarrasFormatado;
 	}
 
-	public List<AvisoCorteContaDTO> getContas() {
+	public List<CobrancaDocumentoContaDTO> getContas() {
 		return contas;
 	}
 
-	public void setContas(List<AvisoCorteContaDTO> contas) {
+	public void setContas(List<CobrancaDocumentoContaDTO> contas) {
 		this.contas = contas;
 	}
 }

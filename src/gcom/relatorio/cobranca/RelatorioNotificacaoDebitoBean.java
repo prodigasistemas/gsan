@@ -25,6 +25,7 @@ public class RelatorioNotificacaoDebitoBean implements RelatorioBean {
 	private String cidadeEstadoCorrespondencia;
 	private String bairroCorrespondencia;
 	private String cepCorrespondencia;
+	private Date dataEmissao;
 
 	public Date getDataVencimento() {
 		return dataVencimento;
@@ -168,5 +169,13 @@ public class RelatorioNotificacaoDebitoBean implements RelatorioBean {
 
 	public void setCepCorrespondencia(String cepCorrespondencia) {
 		this.cepCorrespondencia = cepCorrespondencia;
+	}
+
+	public Date getDataEmissao() {
+		return dataEmissao;
+	}
+
+	public void setDataEmissao(Date dataEmissaoDocumento) {
+		this.dataEmissao = dataEmissaoDocumento;
 	}
 }

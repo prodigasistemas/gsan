@@ -76,7 +76,7 @@ public interface IControladorAtualizacaoCadastral {
 	
 	public TabelaAtualizacaoCadastral pesquisarTabelaPorImovel(Tabela tabela, Integer idImovel, String complemento) throws ControladorException;
 	
-	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) throws ControladorException;
+	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo, Integer tipoAlteracao) throws ControladorException;
 
 	public void atualizarImovelParaSituacaoEmCampoPorArquivo(Integer idArquivo) throws ControladorException;
 	
@@ -108,7 +108,7 @@ public interface IControladorAtualizacaoCadastral {
     
     public Integer obterProximoLote() throws ControladorException;
     
-    public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados) throws ControladorException;
+    public boolean isDefinicaoSubcategoriaValida(String idImovel,String[] registrosSelecionados, Integer tipoAlteracao) throws ControladorException;
     
     public Integer reprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ControladorException;
 
@@ -132,7 +132,7 @@ public interface IControladorAtualizacaoCadastral {
     
     public void emitirTermoAlteracaoCadastral(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException;
     
-    public void aprovarImovel(Integer idImovel) throws ControladorException;
+    public void aprovarImovel(Integer idImovel, Integer tipoAlteracao) throws ControladorException;
     
     public List<Visita> obterVisitasPorCoordenadas(String latitude, String longitude) throws ControladorException;
     

@@ -1,5 +1,23 @@
 package gcom.atendimentopublico.registroatendimento;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+
+import org.apache.commons.fileupload.FileItem;
+import org.hibernate.collection.PersistentSet;
+
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.atendimentopublico.ControladorAtendimentoPublicoLocal;
@@ -56,7 +74,6 @@ import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
-import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.FiltroCliente;
@@ -181,24 +198,6 @@ import gcom.util.filtro.MenorQue;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
-
-import org.apache.commons.fileupload.FileItem;
-import org.hibernate.collection.PersistentSet;
 
 public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 	
@@ -7161,9 +7160,12 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			
 			osGeradaAutomatica.setRegistroAtendimento(ra);
 			osGeradaAutomatica.setObservacao(raDadosGerais.getObservacao());
-			Integer idOrdemServico = this.getControladorOrdemServico()
-			.gerarOrdemServico(osGeradaAutomatica, usuario, 
-					Funcionalidade.INSERIR_REGISTRO_ATENDIMENTO);
+			
+			Integer idOrdemServico = this.getControladorOrdemServico().gerarOrdemServico(osGeradaAutomatica, usuario,Funcionalidade.INSERIR_REGISTRO_ATENDIMENTO);
+			
+			if (idOrdemServico != null && raSolicitante.getIdServicoTipo() == ServicoTipo.TIPO_INSTALACAO_RESERVACAO) {
+				getControladorImovel().gerarContratoInstalacaoReservacao(osGeradaAutomatica.getImovel().getId(), raSolicitante.getIdCliente());
+			}
 			
 			retorno[1] = idOrdemServico;
 		}
@@ -12025,7 +12027,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 				UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
 		//FS0001 - Verificar existencia de dados para o ano/mes referencia informado
-		getControladorGerencialCadastro().excluirResumoGerencialC(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento(), "atendimentopublico.un_resumo_registro_atendimento", "rera_amreferencia", "loca_id", idLocalidade );				
+		getControladorGerencialCadastro().excluirResumoGerencialC(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento(), "atendimentopublico.un_resumo_ra", "rera_amreferencia", "loca_id", idLocalidade );				
 		
 		try {
 			Integer dtAtual = Integer.decode(Util.recuperaDataInvertida(new Date()));
@@ -14139,7 +14141,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 		//FS0001 - Verificar existencia de dados para o ano/mes referencia informado
 		getControladorGerencialCadastro().excluirResumoGerencialC(getControladorUtil()
 				.pesquisarParametrosDoSistema().getAnoMesFaturamento(), 
-					"atendimentopublico.un_resumo_registro_atendimento_ref_2010", "rera_amreferencia", 
+					"atendimentopublico.un_resumo_ra_ref_2010", "rera_amreferencia", 
 						"loca_id", idLocalidade );				
 		
 		try {

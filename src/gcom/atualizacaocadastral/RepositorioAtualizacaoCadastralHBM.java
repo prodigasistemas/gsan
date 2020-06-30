@@ -1519,12 +1519,12 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
         return retorno;
 	}
 
-	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) throws ErroRepositorioException {
+	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo, Integer tipoAlteracao) throws ErroRepositorioException {
         Session session = HibernateUtil.getSession();
         
         if (campo.equals("fiscalizado") || campo.equals("preaprovado")) {
         	try {
-        		String update = this.montarUpdate(tabelaColunaAtualizacaoCadastral, campo);
+        		String update = this.montarUpdate(tabelaColunaAtualizacaoCadastral, campo, tipoAlteracao);
         		PreparedStatement st = null;
         		
         		try {	
@@ -1558,7 +1558,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 	}
 	
-	private String montarUpdate(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) throws ErroRepositorioException {
+	private String montarUpdate(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo, Integer tipoAlteracao) throws ErroRepositorioException {
 		Properties props = IoUtil.carregaPropriedades("tabela_retorno.properties");
 		String update = new String();
 		
@@ -1570,7 +1570,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			else if (isTabelaCliente(tabelaDestino))
 				update = montarUpdateCliente(tabelaDestino, props, tabelaColunaAtualizacaoCadastral, campo);
 			else if (isTabelaSubcategoria(tabelaDestino))
-				update = montarUpdateSubcategoria(tabelaDestino, props, tabelaColunaAtualizacaoCadastral, campo);
+				update = montarUpdateSubcategoria(tabelaDestino, props, tabelaColunaAtualizacaoCadastral, campo, tipoAlteracao);
 		}
 		
 		return update;
@@ -1672,12 +1672,13 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return update.toString();
 	}
 	
-	private String montarUpdateSubcategoria(String tabelaDestino, Properties props, TabelaColunaAtualizacaoCadastral tabelaColuna, String campo) throws ErroRepositorioException {
+	private String montarUpdateSubcategoria(String tabelaDestino, Properties props, TabelaColunaAtualizacaoCadastral tabelaColuna, String campo, Integer tipoAlteracao) throws ErroRepositorioException {
 		StringBuilder sql = new StringBuilder();
 
 		String valor = tabelaColuna.obterValorParaAtualizar(campo);
 		
 		Integer qtdEconomia = (valor == null ? 0 : new Integer(valor) );
+		Integer idImovelRetorno = null; 
 		
 		if (existeSubcategoriaRetorno(tabelaColuna) ) {
 			if (qtdEconomia > 0) {
@@ -1688,14 +1689,20 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			sql.append(" where imov_id = ").append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel())
 			.append(" and scat_id = ").append(Subcategoria.obterIdSubcategoria(tabelaColuna.getTabelaAtualizacaoCadastral().getComplemento()));
 		} else if (qtdEconomia > 0) {
-			ImovelRetorno retorno = (ImovelRetorno) pesquisarImovelRetorno(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel());
 			
+			if (tipoAlteracao.intValue() == AlteracaoTipo.INCLUSAO.intValue()) {
+				ImovelControleAtualizacaoCadastral controle = (ImovelControleAtualizacaoCadastral) pesquisarImovelControleAtualizacao(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel(), tipoAlteracao);
+				idImovelRetorno = controle.getImovelRetorno().getId();
+			}else {
+				ImovelRetorno retorno = (ImovelRetorno) pesquisarImovelRetorno(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel());
+				idImovelRetorno = retorno.getId();
+			}
 			sql.append("insert into atualizacaocadastral.imovel_subcategoria_retorno values ")
 			.append("(nextval(\'atualizacaocadastral.sequence_imovel_subcategoria_retorno\'), ")
 			.append(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel()).append(", ")
 			.append(Subcategoria.obterIdSubcategoria(tabelaColuna.getTabelaAtualizacaoCadastral().getComplemento())).append(", ")
 			.append(qtdEconomia).append(", ")
-			.append(retorno.getId()).append(", ")
+			.append(idImovelRetorno).append(", ")
 			.append("now())");
 		}
 			

@@ -1,14 +1,12 @@
 package gcom.relatorio.cobranca;
 
-public class AvisoCorteContaDTO {
+public class CobrancaDocumentoContaDTO {
 
 	private String referencia;
-
 	private String vencimento;
-
 	private String valor;
 
-	public AvisoCorteContaDTO() {
+	public CobrancaDocumentoContaDTO() {
 		super();
 	}
 

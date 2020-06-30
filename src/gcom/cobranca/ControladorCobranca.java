@@ -1,5 +1,43 @@
 package gcom.cobranca;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionContext;
+import javax.mail.SendFailedException;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.log4j.Logger;
+import org.hibernate.cache.HashtableCache;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
@@ -104,7 +142,6 @@ import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelSituacao;
 import gcom.cadastro.imovel.ImovelSituacaoTipo;
 import gcom.cadastro.imovel.ImovelSubcategoria;
-import gcom.cadastro.imovel.PocoTipo;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.GerarRelacaoDebitosHelper;
@@ -202,7 +239,6 @@ import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoAtividade;
 import gcom.faturamento.FaturamentoGrupo;
-import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.QualidadeAgua;
@@ -269,12 +305,10 @@ import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.micromedicao.FiltroRota;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.ItemServico;
-import gcom.micromedicao.RateioTipo;
 import gcom.micromedicao.RepositorioMicromedicaoHBM;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.bean.ConsultarHistoricoMedicaoIndividualizadaHelper;
 import gcom.micromedicao.bean.ConsumoHistoricoCondominio;
-import gcom.micromedicao.consumo.ConsumoAnormalidade;
 import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.ConsumoTipo;
 import gcom.micromedicao.consumo.LigacaoTipo;
@@ -283,10 +317,11 @@ import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.RelatorioDataSource;
-import gcom.relatorio.cobranca.AvisoCorteContaDTO;
 import gcom.relatorio.cobranca.AvisoCorteDTO;
+import gcom.relatorio.cobranca.CobrancaDocumentoContaDTO;
 import gcom.relatorio.cobranca.CurvaAbcDebitosHelper;
 import gcom.relatorio.cobranca.FiltrarRelatorioBoletimMedicaoCobrancaHelper;
+import gcom.relatorio.cobranca.OrdemSuspensaoFornecimentoDTO;
 import gcom.relatorio.cobranca.RelatorioAcompanhamentoAcoesCobrancaHelper;
 import gcom.relatorio.cobranca.RelatorioAnalisePerdasCreditosBean;
 import gcom.relatorio.cobranca.RelatorioBoletimMedicaoCobrancaHelper;
@@ -356,45 +391,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionContext;
-import javax.mail.SendFailedException;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.log4j.Logger;
-import org.hibernate.cache.HashtableCache;
-
-import br.com.danhil.BarCode.Interleaved2of5;
 
 public class ControladorCobranca extends ControladorComum {
 
@@ -5137,14 +5133,16 @@ public class ControladorCobranca extends ControladorComum {
 						 * Caso a data de pagamento não seja nula, passar a data de pagamento, caso contrário, passar a data corrente
 						 * menos a quantidade mínima de dias para início da cobrança da conta parm_nndiasvenctocobranca.
 						 */
+						Date dataVencimentoCobranca = null;
 						if (dataPagamento == null) {
 							dataPagamento = new Date();
-
-							Util.subtrairNumeroDiasDeUmaData(dataPagamento, sistemaParametros.getNumeroDiasVencimentoCobranca());
+							dataVencimentoCobranca = Util.subtrairNumeroDiasDeUmaData(dataPagamento, sistemaParametros.getNumeroDiasVencimentoCobranca());
+						} else {
+							dataVencimentoCobranca = dataPagamento;
 						}
 
 						// [UC0747] - Calcular diferença de dias úteis entre duas datas
-						Integer qtdDiasUteis = getControladorUtil().calcularDiferencaDiasUteisEntreDuasDatas(dataVencimento, dataPagamento, municipio);
+						Integer qtdDiasUteis = getControladorUtil().calcularDiferencaDiasUteisEntreDuasDatas(dataVencimento, dataVencimentoCobranca, municipio);
 
 						/*
 						 * Caso a diferença retornada seja igual ou menor que o valor da coluna parm_nndiascalculoacrescimos da
@@ -32748,6 +32746,7 @@ public class ControladorCobranca extends ControladorComum {
 						bean.setCodigoRota(codigoRota);
 						bean.setSequencialRota(sequencialRota);
 						bean.setIdDocumentoCobranca(cobrancaDocumento.getId());
+						bean.setDataEmissao(cobrancaDocumento.getEmissao());
 
 						if ((contas.size() - count) == tamanhoMaximoDebito) {
 							valor = valor.add(conta.getValorTotal());
@@ -32806,6 +32805,7 @@ public class ControladorCobranca extends ControladorComum {
 						bean.setCodigoRota(codigoRota);
 						bean.setSequencialRota(sequencialRota);
 						bean.setIdDocumentoCobranca(cobrancaDocumento.getId());
+						bean.setDataEmissao(cobrancaDocumento.getEmissao());
 
 						bean.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
 						bean.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
@@ -61858,9 +61858,7 @@ public class ControladorCobranca extends ControladorComum {
 				} else {
 					continue;
 				}
-
-				aviso = setCodigoBarrasAvisoCorte(aviso, documento);
-				aviso.setContas(montarContasAvisoCorte(documento.getId()));
+				
 				avisos.add(aviso);
 			}
 		} catch (ErroRepositorioException e) {
@@ -61870,8 +61868,9 @@ public class ControladorCobranca extends ControladorComum {
 		return avisos;
 	}
 
-	private AvisoCorteDTO montarAvisoCorte(CobrancaDocumento documento) throws ControladorException {
+	private AvisoCorteDTO montarAvisoCorte(CobrancaDocumento documento) throws ControladorException, ErroRepositorioException {
 		AvisoCorteDTO aviso = new AvisoCorteDTO();
+		
 		aviso.setImovel(documento.getImovel().getId());
 		aviso.setCliente(getControladorImovel().consultarNomeClienteUsuarioImovel(documento.getImovel().getId()));
 		aviso.setInscricao(getControladorImovel().pesquisarInscricaoImovel(documento.getImovel().getId()));
@@ -61880,6 +61879,14 @@ public class ControladorCobranca extends ControladorComum {
 		aviso.setIdDocumentoCobranca(documento.getId());
 		aviso.setValorTotal(Util.formatarMoedaReal(documento.getValorDocumento()));
 		aviso.setEndereco(getControladorEndereco().pesquisarEndereco(documento.getImovel().getId()));
+		aviso.setDataEmissao(Util.formatarData(documento.getEmissao()));
+		
+		String[] codigoBarras = gerarCodigoBarrasCobrancaDocumento(documento);
+		aviso.setCodigoBarras(codigoBarras[0]);
+		aviso.setCodigoBarrasFormatado(codigoBarras[1]);
+		
+		aviso.setContas(montarContasCobrancaDocumento(documento.getId(), 35));
+		
 		return aviso;
 	}
 
@@ -61895,8 +61902,8 @@ public class ControladorCobranca extends ControladorComum {
 		return aviso;
 	}
 
-	private List<AvisoCorteContaDTO> montarContasAvisoCorte(Integer idDocumento) throws ErroRepositorioException {
-		List<AvisoCorteContaDTO> contasDTO = new ArrayList<AvisoCorteContaDTO>();
+	private List<CobrancaDocumentoContaDTO> montarContasCobrancaDocumento(Integer idDocumento, int qtdContasVisiveis) throws ErroRepositorioException {
+		List<CobrancaDocumentoContaDTO> contasDTO = new ArrayList<CobrancaDocumentoContaDTO>();
 		
 		List<Conta> contas = (List<Conta>) repositorioCobranca.pesquisarCobrancaDocumentoItem(idDocumento);
 		
@@ -61906,12 +61913,12 @@ public class ControladorCobranca extends ControladorComum {
 		for (Conta conta : contas) {
 			count++;
 
-			if ((contas.size() - count) > 35) {
+			if ((contas.size() - count) > qtdContasVisiveis) {
 				valor = valor.add(conta.getValorTotal());
 			} else {
-				AvisoCorteContaDTO contaDTO = new AvisoCorteContaDTO();
+				CobrancaDocumentoContaDTO contaDTO = new CobrancaDocumentoContaDTO();
 
-				if ((contas.size() - count) == 35) {
+				if ((contas.size() - count) == qtdContasVisiveis) {
 					valor = valor.add(conta.getValorTotal());
 					contaDTO.setReferencia("ATÉ " + conta.getReferenciaFormatada());
 					contaDTO.setValor(Util.formatarMoedaReal(valor));
@@ -61928,24 +61935,32 @@ public class ControladorCobranca extends ControladorComum {
 		return contasDTO;
 	}
 
-	private AvisoCorteDTO setCodigoBarrasAvisoCorte(AvisoCorteDTO aviso, CobrancaDocumento documento) throws ControladorException {
-		String representacaoNumericaCodigoBarras = getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(5, documento.getValorDocumento(), documento.getLocalidade().getId(),
-				documento.getImovel().getId(), null, null, null, null, String.valueOf(documento.getNumeroSequenciaDocumento()), documento.getDocumentoTipo().getId(), null, null, null);
-
-		String codigoBarras = representacaoNumericaCodigoBarras.substring(0, 11)
-				+ representacaoNumericaCodigoBarras.substring(12, 23) 
-				+ representacaoNumericaCodigoBarras.substring(24, 35)
-				+ representacaoNumericaCodigoBarras.substring(36, 47);
+	private String[] gerarCodigoBarrasCobrancaDocumento(CobrancaDocumento documento) throws ControladorException {
 		
-		String codigoBarrasFormatado = representacaoNumericaCodigoBarras.substring(0, 11) + "-" + representacaoNumericaCodigoBarras.substring(11, 12) + " " 
-				+ representacaoNumericaCodigoBarras.substring(12, 23) + "-" + representacaoNumericaCodigoBarras.substring(23, 24) + " " 
-				+ representacaoNumericaCodigoBarras.substring(24, 35) + "-" + representacaoNumericaCodigoBarras.substring(35, 36) + " " 
-				+ representacaoNumericaCodigoBarras.substring(36, 47) + "-" + representacaoNumericaCodigoBarras.substring(47, 48);
+		String representacaoNumerica = getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(5, 
+				documento.getValorDocumento(), documento.getLocalidade().getId(), documento.getImovel().getId(), 
+				null, null, null, null, String.valueOf(documento.getNumeroSequenciaDocumento()), 
+				documento.getDocumentoTipo().getId(), null, null, null);
 
-		aviso.setCodigoBarras(codigoBarras);
-		aviso.setCodigoBarrasFormatado(codigoBarrasFormatado);
+		String codigoBarras = representacaoNumerica.substring(0, 11) + 
+							  representacaoNumerica.substring(12, 23) +
+							  representacaoNumerica.substring(24, 35) +
+							  representacaoNumerica.substring(36, 47);
 		
-		return aviso;
+		String codigoBarrasFormatado = representacaoNumerica.substring(0, 11) + "-" + 
+									   representacaoNumerica.substring(11, 12) + " " +
+									   representacaoNumerica.substring(12, 23) + "-" + 
+									   representacaoNumerica.substring(23, 24) + " " + 
+									   representacaoNumerica.substring(24, 35) + "-" + 
+									   representacaoNumerica.substring(35, 36) + " " + 
+									   representacaoNumerica.substring(36, 47) + "-" + 
+									   representacaoNumerica.substring(47, 48);
+
+		String[] retorno = new String[2];
+		retorno[0] = codigoBarras;
+		retorno[1] = codigoBarrasFormatado;
+		
+		return retorno;
 	}
 	
 	public boolean isImovelEmCobrancaJudicial(Integer idImovel) throws ControladorException {
@@ -62040,5 +62055,75 @@ public class ControladorCobranca extends ControladorComum {
 		filtro.setConsultaSemLimites(true);
 		
 		return filtro;
+	}
+	
+	public List<OrdemSuspensaoFornecimentoDTO> gerarOrdemSuspensaoFornecimento(Integer idAcaoCronograma, Integer idAcaoComando) throws ControladorException {
+
+		List<OrdemSuspensaoFornecimentoDTO> ordens = new ArrayList<OrdemSuspensaoFornecimentoDTO>();
+
+		try {
+			Collection<CobrancaDocumento> documentos = repositorioCobranca.pesquisarCobrancaDocumentoParaRelatorio(idAcaoCronograma, idAcaoComando);
+
+			for (CobrancaDocumento documento : documentos) {
+				ordens.add(montarOrdemSuspensaoFornecimentoDTO(documento));
+			}
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+
+		return ordens;
+
+	}
+	
+	private OrdemSuspensaoFornecimentoDTO montarOrdemSuspensaoFornecimentoDTO(CobrancaDocumento documento) throws ControladorException {
+		OrdemSuspensaoFornecimentoDTO dto = new OrdemSuspensaoFornecimentoDTO();
+
+		try {
+			dto.setCliente(getControladorImovel().consultarNomeClienteUsuarioImovel(documento.getImovel().getId()));
+			dto.setEndereco(getControladorEndereco().pesquisarEndereco(documento.getImovel().getId()));
+			dto.setGrupo(documento.getImovel().getQuadra().getRota().getFaturamentoGrupo().getDescricaoAbreviada());
+			dto.setRota(Util.completaStringComZeroAEsquerda(documento.getImovel().getQuadra().getRota().getCodigo().toString(), 4));
+			dto.setRotaSequencial(Util.completaStringComZeroAEsquerda(documento.getImovel().getNumeroSequencialRota().toString(), 3));
+			dto.setMatricula(documento.getImovel().getId());
+			dto.setInscricao(getControladorImovel().pesquisarInscricaoImovel(documento.getImovel().getId()));
+			dto.setDocumento(documento.getId());
+			dto.setDataEmissao(Util.formatarData(documento.getEmissao()));
+			dto.setValorTotal(Util.formatarMoedaReal(documento.getValorDocumento()));
+			dto.setCategoria(getControladorImovel().obterPrincipalCategoriaImovel(documento.getImovel().getId()).getDescricao());
+			dto.setLigacaoAgua(documento.getLigacaoAguaSituacao().getDescricao());
+			dto.setLigacaoEsgoto(documento.getLigacaoEsgotoSituacao().getDescricao());
+			dto.setOrdemServico(repositorioCobranca.obterOrdemServicoAssociadaDocumentoCobranca(documento.getId()));
+
+			HidrometroInstalacaoHistorico dadosHidrometro = pesquisarHidrometroOrdemSuspensaoFornecimento(documento.getImovel().getId());
+			if (dadosHidrometro != null) {
+				dto.setHidrometro(dadosHidrometro.getHidrometro().getNumero());
+				dto.setHidrometroLocalizacao(dadosHidrometro.getHidrometroLocalInstalacao().getDescricao());
+			}
+			
+			String[] codigoBarras = gerarCodigoBarrasCobrancaDocumento(documento);
+			dto.setCodigoBarras(codigoBarras[0]);
+			dto.setCodigoBarrasFormatado(codigoBarras[1]);
+			dto.setContas(montarContasCobrancaDocumento(documento.getId(), 27));
+
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+
+		return dto;
+	}
+
+	private HidrometroInstalacaoHistorico pesquisarHidrometroOrdemSuspensaoFornecimento(Integer idImovel) throws ErroRepositorioException {
+		Filtro filtro = new FiltroHidrometroInstalacaoHistorico();
+		filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroInstalacaoHistorico.LIGACAO_AGUA_ID, idImovel));
+		filtro.adicionarParametro(new ParametroNulo(FiltroHidrometroInstalacaoHistorico.DATA_RETIRADA));
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.HIDROMETRO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.HIDROMETRO_LOCAL_INSTALACAO);
+
+		Collection colecao = repositorioUtil.pesquisar(filtro, HidrometroInstalacaoHistorico.class.getName());
+		if (colecao != null && !colecao.isEmpty()) {
+			return (HidrometroInstalacaoHistorico) colecao.iterator().next();
+		} else {
+			return null;
+		}
 	}
 }

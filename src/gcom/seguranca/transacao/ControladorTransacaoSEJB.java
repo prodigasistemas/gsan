@@ -1425,19 +1425,19 @@ public class ControladorTransacaoSEJB extends ControladorComum implements Sessio
 
 	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
 			Integer idImovel, String[] idsAtualizacaoCadastral,
-			Short indicador, Usuario usuarioLogado, String campo) throws ControladorException {
+			Short indicador, Usuario usuarioLogado, String campo, Integer tipoAlteracao) throws ControladorException {
 		try {
 
 			for (int i = 0; i < idsAtualizacaoCadastral.length; i++) {
 
 				Integer idAtualizacaoCadastral = new Integer(idsAtualizacaoCadastral[i]);
-				ImovelControleAtualizacaoCadastral imovelControle = getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(idImovel);
+				ImovelControleAtualizacaoCadastral imovelControle = getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(idImovel, tipoAlteracao);
 				
 				this.repositorioTransacao.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
 						idAtualizacaoCadastral, indicador, usuarioLogado, imovelControle);
 				
 				TabelaColunaAtualizacaoCadastral tabelaColuna = this.repositorioTransacao.pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
-				getControladorAtualizacaoCadastral().atualizarImovelRetorno(tabelaColuna, campo);
+				getControladorAtualizacaoCadastral().atualizarImovelRetorno(tabelaColuna, campo, tipoAlteracao);
 			}
 
 			boolean existePendencia = repositorioTransacao.existeAlteracaoNaoAprovadaParaImovel(idImovel);

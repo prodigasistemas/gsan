@@ -1,5 +1,10 @@
 package gcom.cadastro.cliente;
 
+import java.util.Date;
+import java.util.Set;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import gcom.atualizacaocadastral.ICliente;
 import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.interceptor.ControleAlteracao;
@@ -8,11 +13,6 @@ import gcom.model.IAtualizacaoCadastro;
 import gcom.util.ConstantesSistema;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
-
-import java.util.Date;
-import java.util.Set;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 @ControleAlteracao()
 public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCadastro {
@@ -694,9 +694,12 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 	}
 	
 	public String getCpfOuCnpjFormatado() {
-		if (cpf != null) return this.getCpfFormatado();
-		else if (cpf != null) return this.getCpfFormatado();
-		else return null;
+		if (cpf != null && !cpf.trim().equals(""))
+			return this.getCpfFormatado();
+		else if (cnpj != null && !cnpj.trim().equals(""))
+			return this.getCnpjFormatado();
+		else
+			return "";
 	}
 	
 }

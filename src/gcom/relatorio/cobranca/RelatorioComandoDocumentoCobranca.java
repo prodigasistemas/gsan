@@ -1,5 +1,12 @@
 package gcom.relatorio.cobranca;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import gcom.batch.Relatorio;
 import gcom.cadastro.sistemaparametro.FiltroSistemaParametro;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
@@ -15,13 +22,6 @@ import gcom.tarefa.TarefaRelatorio;
 import gcom.util.ControladorException;
 import gcom.util.Util;
 import gcom.util.agendadortarefas.AgendadorTarefas;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 public class RelatorioComandoDocumentoCobranca extends TarefaRelatorio {
 

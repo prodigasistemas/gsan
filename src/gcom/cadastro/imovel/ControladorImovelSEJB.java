@@ -1,5 +1,23 @@
 package gcom.cadastro.imovel;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.ejb.CreateException;
+import javax.transaction.SystemException;
+
+import org.jboss.logging.Logger;
+
 import gcom.arrecadacao.banco.Agencia;
 import gcom.arrecadacao.banco.Banco;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
@@ -20,7 +38,13 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoEsgotamento;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
+import gcom.atendimentopublico.ordemservico.ServicoTipo;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
+import gcom.atendimentopublico.registroatendimento.AtendimentoRelacaoTipo;
+import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
+import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoUnidade;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
@@ -126,10 +150,11 @@ import gcom.operacional.DivisaoEsgoto;
 import gcom.operacional.SistemaEsgoto;
 import gcom.relatorio.cadastro.GerarRelatorioImoveisDoacoesHelper;
 import gcom.relatorio.cadastro.RelatorioResumoQtdeImoveisExcluidosTarifaSocialHelper;
-import gcom.relatorio.cadastro.dto.ContratoAdesaoimovelDTO;
+import gcom.relatorio.cadastro.dto.ContratoDTO;
 import gcom.relatorio.micromedicao.FiltrarAnaliseExcecoesLeiturasHelper;
 import gcom.seguranca.acesso.Abrangencia;
 import gcom.seguranca.acesso.Funcionalidade;
+import gcom.seguranca.acesso.Grupo;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.PermissaoEspecial;
@@ -149,24 +174,6 @@ import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.ejb.CreateException;
-import javax.transaction.SystemException;
-
-import org.jboss.logging.Logger;
 
 public class ControladorImovelSEJB extends ControladorComum {
 	private static final long serialVersionUID = -1644768299562397955L;
@@ -16150,55 +16157,59 @@ public class ControladorImovelSEJB extends ControladorComum {
 		}
 	}
 	
-	public ContratoAdesaoimovelDTO obterContratoAdesao(Integer idImovel) throws ControladorException {
-		ContratoAdesaoimovelDTO dto = null;
-		ContratoAdesao contratoAdesao = obterContratoAtivo(idImovel, ContratoTipo.ADESAO);
-		Cliente cliente = getControladorImovel().consultarClienteUsuarioImovel(new Imovel(idImovel));
-		if (contratoAdesao != null) {
-			
-			if (contratoAdesao.getClienteImovel().getCliente().getId().intValue() != cliente.getId().intValue()) {
-				finalizarContato(idImovel, cliente, ContratoTipo.ADESAO);
-				gerarContatoAdesao(idImovel, cliente);
+	public ContratoDTO obterContratoAdesao(int idContrato) throws ControladorException {
+		ContratoAdesao contrato = pesquisarContratoAdesao(idContrato);
+		Imovel imovel = contrato.getClienteImovel().getImovel();
+		
+		Cliente cliente = getControladorImovel().consultarClienteUsuarioImovel(imovel);
+		
+		if (contrato != null) {
+
+			if (contrato.getClienteImovel().getCliente().getId().intValue() != cliente.getId().intValue()) {
+				finalizarContratoAdesao(contrato);
+				gerarContratoAdesao(imovel, cliente);
 				cliente = cliente;
-			}  else {
-				cliente = contratoAdesao.getClienteImovel().getCliente();
+			} else {
+				cliente = contrato.getClienteImovel().getCliente();
 			}
 		} else {
-			gerarContatoAdesao(idImovel, cliente);
+			gerarContratoAdesao(imovel, cliente);
 		}
-		dto = obterContratoAdesaoImovelDTO(idImovel, cliente);
-		return dto;
+		return obterContratoAdesaoImovelDTO(contrato);
 	}
 	
-	private ContratoAdesao obterContratoAtivo(Integer idImovel, Integer tipoContrato) throws ControladorException {
+	private ContratoAdesao pesquisarContratoAdesao(int idContrato) throws ControladorException {
 		FiltroContratoAdesao filtro = new FiltroContratoAdesao();
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoAdesao.CONTRATO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoAdesao.CONTRATO_TIPO);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoAdesao.CLIENTE);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoAdesao.IMOVEL);
+		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.CONTRATO_ID, idContrato));
 
-		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.IMOVEL, idImovel));
-		filtro.adicionarParametro(new ParametroSimples(FiltroContratoAdesao.CONTRATO_TIPO, tipoContrato));
-		filtro.adicionarParametro(new ParametroNulo(FiltroContratoAdesao.DATACONTRATOENCERRAMENTO));
-		Collection colecaoContratoDemanda = getControladorUtil().pesquisar(filtro, ContratoAdesao.class.getName());
-		
-		if (colecaoContratoDemanda != null && !colecaoContratoDemanda.isEmpty()) {
-			return (ContratoAdesao) colecaoContratoDemanda.iterator().next();
+		Collection colecao = getControladorUtil().pesquisar(filtro, ContratoAdesao.class.getName());
+
+		if (colecao != null && !colecao.isEmpty()) {
+			return (ContratoAdesao) colecao.iterator().next();
 		} else {
 			return null;
 		}
 	}
 	
-	private ContratoAdesaoimovelDTO obterContratoAdesaoImovelDTO(Integer idImovel, Cliente cliente) throws ControladorException {
-		String data = Util.formatarDataComTracoAAAAMMDD(new Date());
-		String nomeRelatorio = "contrato_adesao_"+ idImovel + data + ".pdf";
-		
-		String endereco = getControladorEndereco().obterDescricaoEnderecoImovel(idImovel);
-		return new ContratoAdesaoimovelDTO(nomeRelatorio, cliente.getNome(), idImovel.toString(), "Belem", endereco, Util.formatarDataComBarraDDMMAAAA(new Date()), cliente.getCpfOuCnpjFormatado());
+	private ContratoDTO obterContratoAdesaoImovelDTO(ContratoAdesao contratoAdesao) throws ControladorException {
+		Imovel imovel = contratoAdesao.getClienteImovel().getImovel();
+		Cliente cliente = contratoAdesao.getClienteImovel().getCliente();
+		String endereco = getControladorEndereco().pesquisarEndereco(imovel.getId());
+		Contrato contrato = contratoAdesao.getContrato();
+
+		if (imovel != null && cliente != null && endereco != null && !endereco.isEmpty() && contrato != null) {
+			return new ContratoDTO(imovel, cliente, endereco, contrato);
+		} else {
+			return null;
+		}
 	}
 	
-	private void finalizarContato(Integer idImovel, Cliente cliente, Integer idContratoTipo) throws ControladorException {
-		ContratoAdesao contratoDemanda = this.obterContratoAtivo(idImovel, idContratoTipo);
-		
-		Contrato contrato = contratoDemanda.getContrato();
+	private void finalizarContratoAdesao(ContratoAdesao contratoAdesao) throws ControladorException {
+		Contrato contrato = contratoAdesao.getContrato();
 		
 		contrato.setDataContratoEncerrado(new Date());
 		contrato.setDataContratoFim(new Date());
@@ -16207,14 +16218,14 @@ public class ControladorImovelSEJB extends ControladorComum {
 		getControladorUtil().atualizar(contrato);
 	}
 	
-	private void gerarContatoAdesao(Integer idImovel, Cliente cliente) throws ControladorException {
+	private void gerarContratoAdesao(Imovel imovel, Cliente cliente) throws ControladorException {
 		Contrato contrato = new Contrato();
 		ContratoAdesao contratoAdesao = new ContratoAdesao();
 		
 		contratoAdesao.setUltimaAlteracao(new Date());
-		contratoAdesao.setClienteImovel(obterClienteImovel(idImovel, cliente.getId(), ClienteRelacaoTipo.USUARIO.intValue()));
+		contratoAdesao.setClienteImovel(obterClienteImovel(imovel.getId(), cliente.getId(), ClienteRelacaoTipo.USUARIO.intValue()));
 		
-		contrato.setImovel(new Imovel(idImovel));
+		contrato.setImovel(imovel);
 		contrato.setContratoTipo(new ContratoTipo(ContratoTipo.ADESAO));
 		contrato.setDataContratoInicio(new Date());
 		contrato.setNumeroContrato(contratoAdesao.gerarNumeroContrato());
@@ -16354,5 +16365,103 @@ public class ControladorImovelSEJB extends ControladorComum {
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
+	}
+	
+	public ContratoDTO obterContratoInstalacaoReservacao(int idContrato) throws ControladorException {
+		Filtro filtro = new FiltroContratoInstalacaoReservacao();
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoInstalacaoReservacao.CONTRATO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoInstalacaoReservacao.CONTRATO_TIPO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoInstalacaoReservacao.CLIENTE);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContratoInstalacaoReservacao.IMOVEL);
+        filtro.adicionarParametro(new ParametroSimples(FiltroContratoInstalacaoReservacao.CONTRATO_ID, idContrato));
+
+		Collection colecao = getControladorUtil().pesquisar(filtro, ContratoInstalacaoReservacao.class.getName());
+
+		if (colecao != null && !colecao.isEmpty()) {
+			ContratoInstalacaoReservacao contrato = (ContratoInstalacaoReservacao) colecao.iterator().next();
+			return obterContratoInstalacaoReservacaoDTO(contrato);
+		} else {
+			return null;
+		}
+	}
+
+	private ContratoDTO obterContratoInstalacaoReservacaoDTO(ContratoInstalacaoReservacao contratoInstalacaoReservacao) throws ControladorException {
+		Imovel imovel = contratoInstalacaoReservacao.getClienteImovel().getImovel();
+		Municipio municipio = pesquisarMunicipioImovel(imovel.getId());
+		imovel.setNomeMunicipio(municipio.getNome());
+		Cliente cliente = contratoInstalacaoReservacao.getClienteImovel().getCliente();
+		String endereco = getControladorEndereco().pesquisarEndereco(imovel.getId());
+		Usuario usuario = obterUsuarioResponsavelPelaRA(imovel.getId());
+		Grupo grupo = obterGrupoUsuario(usuario);
+		
+		Contrato contrato = contratoInstalacaoReservacao.getContrato();
+
+		if (imovel != null && cliente != null && endereco != null && !endereco.isEmpty() && contrato != null && usuario != null && grupo != null) {
+			return new ContratoDTO(imovel, cliente, endereco, contrato, usuario, grupo);
+		} else {
+			return null;
+		}
+	}
+
+	private Grupo obterGrupoUsuario(Usuario usuario) throws ControladorException {
+		Collection colecao = getControladorUsuario().pesquisarGruposUsuario(usuario.getId());
+		if (colecao != null && !colecao.isEmpty()) {
+			return (Grupo) colecao.iterator().next();
+		} else {
+			return null;
+		}
+	}
+	
+	private Usuario obterUsuarioResponsavelPelaRA(Integer idImovel) throws ControladorException {
+		RegistroAtendimento ra = obterRAContrato(idImovel);
+		
+		Filtro filtro = new FiltroRegistroAtendimentoUnidade();
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroRegistroAtendimentoUnidade.USUARIO);
+		filtro.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoUnidade.REGISTRO_ATENDIMENTO_ID, ra.getId()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimentoUnidade.ATENDIMENTO_RELACAO_TIPO, AtendimentoRelacaoTipo.ABRIR_REGISTRAR));
+
+		Collection colecao = getControladorUtil().pesquisar(filtro, RegistroAtendimentoUnidade.class.getName());
+
+		if (colecao != null && !colecao.isEmpty()) {
+			RegistroAtendimentoUnidade unidade = (RegistroAtendimentoUnidade) colecao.iterator().next();
+			return unidade.getUsuario();
+		} else {
+			return null;
+		}
+	}
+
+	private RegistroAtendimento obterRAContrato(Integer idImovel) throws ControladorException {
+		Filtro filtro = new FiltroRegistroAtendimento();
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroRegistroAtendimento.SOLICITACAO_TIPO_ESPECIFICACAO);
+		filtro.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.IMOVEL_ID, idImovel));
+		filtro.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.SERVICO_TIPO_ID, ServicoTipo.TIPO_INSTALACAO_RESERVACAO));
+
+		Collection colecao = getControladorUtil().pesquisar(filtro, RegistroAtendimento.class.getName());
+
+		if (colecao != null && !colecao.isEmpty()) {
+			return (RegistroAtendimento) colecao.iterator().next();
+		} else {
+			return null;
+		}
+	}
+
+	public void gerarContratoInstalacaoReservacao(Integer idImovel, Integer idCliente) throws ControladorException {
+		Contrato contrato = new Contrato();
+		ContratoInstalacaoReservacao contratoInstalacaoReservacao = new ContratoInstalacaoReservacao();
+		
+		contratoInstalacaoReservacao.setUltimaAlteracao(new Date());
+		contratoInstalacaoReservacao.setClienteImovel(obterClienteImovel(idImovel, idCliente, ClienteRelacaoTipo.USUARIO.intValue()));
+		
+		contrato.setImovel(new Imovel(idImovel));
+		contrato.setContratoTipo(new ContratoTipo(ContratoTipo.INSTALACAO_RESERVACAO));
+		contrato.setDataContratoInicio(new Date());
+		contrato.setNumeroContrato(contratoInstalacaoReservacao.gerarNumeroContrato());
+		contrato.setUltimaAlteracao(new Date());
+		
+		Integer idContrato = (Integer) getControladorUtil().inserir(contrato);
+		contrato.setId(idContrato);
+		
+		contratoInstalacaoReservacao.setContrato(contrato);
+		getControladorUtil().inserir(contratoInstalacaoReservacao);
 	}
 }

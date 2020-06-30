@@ -57,7 +57,8 @@ public class CancelarParcelamentoHelper {
 	}
 
 	public BigDecimal getSaldoDevedorTotal() {
-		return getSaldoDevedorContas().add(getSaldoDevedorAcrescimos()).add(getTotalCancelamentoDescontos()).add(getTotalCancelamentoDescontoFaixa());
+		return getSaldoDevedorContas().add(getSaldoDevedorAcrescimos()).add(getTotalCancelamentoDescontos()).add(getTotalCancelamentoDescontoFaixa().add(getSaldoDevedorGuias()));
+	
 	}
 
 	public BigDecimal getTotalCancelamentoDescontos() {

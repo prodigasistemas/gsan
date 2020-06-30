@@ -77,8 +77,8 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public ICliente pesquisarClienteRetorno(ClienteImovelRetorno clienteImovel) throws ErroRepositorioException;
 
-	public IImovel pesquisarImovelRetorno(Integer idImovel) throws ErroRepositorioException;
-
+	public IImovel pesquisarImovelRetorno(Integer idImovel) throws ErroRepositorioException; 
+	
 	public Collection<IClienteFone> pesquisarClienteFoneRetorno(Integer idCliente) throws ErroRepositorioException;
 
 	public Collection<IClienteEndereco> pesquisarClienteEnderecoRetorno(Integer idCliente) throws ErroRepositorioException;
@@ -153,7 +153,7 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public TabelaAtualizacaoCadastral obterTabela(Tabela tabela, Integer idImovel, String complemento) throws ErroRepositorioException;
 
-	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo) throws ErroRepositorioException;
+	public void atualizarImovelRetorno(TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, String campo, Integer tipoAlteracao) throws ErroRepositorioException;
 
 	public void atualizarImovelParaSituacaoEmCampoPorArquivo(Integer idArquivo) throws ErroRepositorioException;
 

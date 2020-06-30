@@ -1813,7 +1813,7 @@ $F{getCodigoCentroCusto} + " > ") )+ (($F{getLocalidade} != null) ?
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="138"
+						x="139"
 						y="17"
 						width="526"
 						height="14"

@@ -4655,6 +4655,11 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 		try {
 			String consulta = "SELECT txac FROM ArquivoTextoAtualizacaoCadastral txac " 
+							+ "INNER JOIN FETCH txac.leiturista leit "
+							+ "INNER JOIN FETCH txac.rota rota "
+							+ "INNER JOIN FETCH rota.setorComercial setor "
+							+ "INNER JOIN FETCH setor.localidade localidade "
+							+ "INNER JOIN FETCH rota.faturamentoGrupo grupo "
 							+ "WHERE txac.id = " + idArquivoTxt;
 
 			retorno = (ArquivoTextoAtualizacaoCadastral) session.createQuery(consulta).uniqueResult();

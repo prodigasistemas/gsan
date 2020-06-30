@@ -82,6 +82,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 					form.setIdQuadra(quadra.getId().toString());
 					form.setNumeroQuadra(Integer.toString(quadra.getNumeroQuadra()));
 					
+					form.setIdTipoAlteracao(idTipoAlteracao);
 					resumoImovel.add(new SituacaoAguaHelper(imovel.getLigacaoAguaSituacao().getDescricao()));
 					resumoImovel.add(new SituacaoEsgotoHelper(imovel.getLigacaoEsgotoSituacao().getDescricao()));
 

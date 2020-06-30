@@ -128,6 +128,8 @@ public class ServicoTipo extends ObjetoTransacao {
 	
 	public final static int TIPO_SUBSTITUICAO_COM_REMOCAO = 351;
 	
+	public final static int TIPO_INSTALACAO_RESERVACAO = 1417;
+	
 	//--------------------------------------------------- [YTS - 30/05/2008]
 	
 	public final static short INDICADOR_PAVIMENTO_CALCADA_SIM = 1;
