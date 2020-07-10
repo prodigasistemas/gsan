@@ -7623,6 +7623,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					// 33
 					+ "os.cobrancaDocumento.id, os.dataEmissao, "// 34, 35
 					+ "os.projeto.id "// 36
+					+ "rota.faturamentoGrupo "// 37
 					+ "FROM OrdemServicoUnidade osu "
 					+ "INNER JOIN osu.atendimentoRelacaoTipo atrt "
 					+ "INNER JOIN osu.usuario usuario "
