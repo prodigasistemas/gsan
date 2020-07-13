@@ -102,6 +102,7 @@
 	<field name="getLocalInstalacaoRamal" class="java.lang.String"/>
 	<field name="getDistanciaInstalacaoRamal" class="java.lang.String"/>
 	<field name="getProfundidadeRamal" class="java.lang.String"/>
+	<field name="getGrupoFaturamento" class="java.lang.String"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
