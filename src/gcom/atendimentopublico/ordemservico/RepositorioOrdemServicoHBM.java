@@ -104,11 +104,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UC0450] Pesquisar Ordem de Servico
 	 * 
-	 * [SB001] Selecionar Ordem de Servico por Situação [SB002] Selecionar Ordem
-	 * de Servico por Situação da Programação [SB003] Selecionar Ordem de
+	 * [SB001] Selecionar Ordem de Servico por Situao [SB002] Selecionar Ordem
+	 * de Servico por Situao da Programao [SB003] Selecionar Ordem de
 	 * Servico por Matricula do Imovel [SB004] Selecionar Ordem de Servico por
 	 * Codigo do Cliente [SB005] Selecionar Ordem de Servico por Unidade
-	 * Superior [SB006] Selecionar Ordem de Servico por Município [SB007]
+	 * Superior [SB006] Selecionar Ordem de Servico por Municpio [SB007]
 	 * Selecionar Ordem de Servico por Bairro [SB008] Selecionar Ordem de
 	 * Servico por Bairro Logradouro [SB009] Selecionar Ordem de Servico por
 	 * Origem
@@ -260,19 +260,19 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				parameters.put("documentoCobranca", documentoCobranca);
 			}
 
-			// [SB0001] - Selecionar Ordem de Servico por Situação
+			// [SB0001] - Selecionar Ordem de Servico por Situao
 			if (situacaoOrdemServico != ConstantesSistema.NUMERO_NAO_INFORMADO) {
 				consulta += " AND os.orse_cdsituacao = (:situacaoOrdemServico) ";
 				parameters.put("situacaoOrdemServico", situacaoOrdemServico);
 			}
 
-			// Tipo de Serviços
+			// Tipo de Servios
 			if (tipoServicos != null && tipoServicos.length > 0) {
 				consulta += " AND servicotipo.svtp_id in (:idServicoTipo) ";
 				parameters.put("idServicoTipo", tipoServicos);
 			}
 
-			// [SB0003] - Selecionar Ordem de Servico por Matricula do Imóvel
+			// [SB0003] - Selecionar Ordem de Servico por Matricula do Imvel
 			if (matriculaImovel != null) {
 				consulta += " AND imovel.imov_id = (:matriculaImovel) ";
 				parameters.put("matriculaImovel", matriculaImovel);
@@ -284,7 +284,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				parameters.put("idPerfilImovel", idsPerfilImovel);
 			}
 
-			// Unidade Geração
+			// Unidade Gerao
 			if (unidadeGeracao != null) {
 
 				consulta += "AND unid.unid_id = :idUnidadeGeracao "
@@ -299,9 +299,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			// Unidade Atual
 			if (unidadeAtual != null) {
 
-				// inclusão da coluna unidade atual na tabela
+				// incluso da coluna unidade atual na tabela
 				// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
-				// Vivianne Sousa 11/06/2008 analista:Fátima Sampaio
+				// Vivianne Sousa 11/06/2008 analista:Ftima Sampaio
 				consulta += " AND os.unid_idatual = (:idUnidadeAtual) ";
 				parameters.put("idUnidadeAtual", unidadeAtual);
 			}
@@ -329,7 +329,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				parameters.put("listaIdOS", colecaoIdsOS);
 			}
 
-			// Período de Atendimento
+			// Perodo de Atendimento
 			if (dataAtendimentoInicial != null && dataAtendimentoFinal != null) {
 				consulta += " AND ra.rgat_tmregistroatendimento BETWEEN (:dataAtendimentoInicial) AND (:dataAtendimentoFinal) ";
 				parameters.put("dataAtendimentoInicial",
@@ -338,7 +338,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						Util.formatarDataFinal(dataAtendimentoFinal));
 			}
 
-			// Período de Data Geracao
+			// Perodo de Data Geracao
 			if (dataGeracaoInicial != null && dataGeracaoFinal != null) {
 
 				consulta += " AND os.orse_tmgeracao BETWEEN (:dataGeracaoInicial) AND (:dataGeracaoFinal) ";
@@ -348,7 +348,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						Util.formatarDataFinal(dataGeracaoFinal));
 			}
 
-			// Período de Data Encerramento
+			// Perodo de Data Encerramento
 			if (dataEncerramentoInicial != null
 					&& dataEncerramentoFinal != null) {
 
@@ -359,11 +359,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						Util.formatarDataFinal(dataEncerramentoFinal));
 			}
 
-			// [SB0006] - Selecionar Ordem de Servico por Município
+			// [SB0006] - Selecionar Ordem de Servico por Municpio
 			if (municipio != null) {
 
 				if (origemOrdemServico.equals(OrdemServico.TODAS)) {
-					// 1.1. Caso tenha selecionado a opção Todas
+					// 1.1. Caso tenha selecionado a opo Todas
 
 					// 1.1.1
 					consulta += " AND ( mun.muni_id = :municipioId ";
@@ -375,7 +375,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					consulta += "  OR  (imovmun.muni_id=:municipioId AND ra.rgat_id is null)) ";
 
 				} else if (origemOrdemServico.equals(OrdemServico.SOLICITADAS)) {
-					// 1.2. Caso tenha selecionado a opção Solicitadas
+					// 1.2. Caso tenha selecionado a opo Solicitadas
 
 					// 1.2.1
 					consulta += " AND (mun.muni_id = :municipioId ";
@@ -385,15 +385,15 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_COBRANCA)) {
-					// 1.3 Caso tenha selecionado a opção Seletivas de
-					// Cobrança
+					// 1.3 Caso tenha selecionado a opo Seletivas de
+					// Cobrana
 
 					// 1.3.1
 					consulta += " AND (imovmun.muni_id = :municipioId AND cobra.cbdo_id is not null) ";
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_HIDROMETRO)) {
-					// 1.4 Caso tenha selecionado a opção Seletivas de
+					// 1.4 Caso tenha selecionado a opo Seletivas de
 					// Hidrometro
 
 					// 1.4.1
@@ -407,7 +407,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			if (bairro != null && !bairro.equals("")) {
 
 				if (origemOrdemServico.equals(OrdemServico.TODAS)) {
-					// 1.1. Caso tenha selecionado a opção Todas
+					// 1.1. Caso tenha selecionado a opo Todas
 
 					// 1.1.1
 					consulta += " AND (bair.bair_id = :bairroId ";
@@ -419,7 +419,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					consulta += " OR (imovbair.bair_id = :bairroId AND ra.rgat_id is null))  ";
 
 				} else if (origemOrdemServico.equals(OrdemServico.SOLICITADAS)) {
-					// 1.2. Caso tenha selecionado a opção Solicitadas
+					// 1.2. Caso tenha selecionado a opo Solicitadas
 
 					// 1.2.1
 					consulta += " AND (bair.bair_id = :bairroId ";
@@ -429,15 +429,15 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_COBRANCA)) {
-					// 1.3 Caso tenha selecionado a opção Seletivas de
-					// Cobrança
+					// 1.3 Caso tenha selecionado a opo Seletivas de
+					// Cobrana
 
 					// 1.3.1
 					consulta += " AND (imovbair.bair_id = :bairroId AND cobra.cbdo_id is not null) ";
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_HIDROMETRO)) {
-					// 1.4 Caso tenha selecionado a opção Seletivas de
+					// 1.4 Caso tenha selecionado a opo Seletivas de
 					// Hidrometro
 
 					// 1.4.1
@@ -457,7 +457,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			if (logradouro != null && !logradouro.equals("")) {
 
 				if (origemOrdemServico.equals(OrdemServico.TODAS)) {
-					// 1.1. Caso tenha selecionado a opção Todas
+					// 1.1. Caso tenha selecionado a opo Todas
 
 					// 1.1.1
 					consulta += "  AND (logr.logr_id = :logradouroId  ";
@@ -469,7 +469,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					consulta += " OR  (imovlogr.logr_id = :logradouroId AND ra.rgat_id is null))  ";
 
 				} else if (origemOrdemServico.equals(OrdemServico.SOLICITADAS)) {
-					// 1.2. Caso tenha selecionado a opção Solicitadas
+					// 1.2. Caso tenha selecionado a opo Solicitadas
 
 					// 1.2.1
 					consulta += " AND (logr.logr_id = :logradouroId ";
@@ -479,15 +479,15 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_COBRANCA)) {
-					// 1.3 Caso tenha selecionado a opção Seletivas de
-					// Cobrança
+					// 1.3 Caso tenha selecionado a opo Seletivas de
+					// Cobrana
 
 					// 1.3.1
 					consulta += " AND (imovlogr.logr_id = :logradouroId AND cobra.cbdo_id is not null) ";
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_HIDROMETRO)) {
-					// 1.4 Caso tenha selecionado a opção Seletivas de
+					// 1.4 Caso tenha selecionado a opo Seletivas de
 					// Hidrometro
 
 					// 1.4.1
@@ -498,7 +498,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				parameters.put("logradouroId", new Integer(logradouro));
 			}
 
-			// indicador de terceirização
+			// indicador de terceirizao
 			if (indicadorTerceirizado != null) {
 				consulta += " AND servicotipo.svtp_icterceirizado = (:icTerceirizado) ";
 				parameters.put("icTerceirizado", indicadorTerceirizado);
@@ -521,7 +521,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					&& logradouro == null) {
 
 				// Origem da OS
-				// SB0009 - Selciona Ordem de servço por origem
+				// SB0009 - Selciona Ordem de servo por origem
 				if (origemOrdemServico.equals(OrdemServico.SOLICITADAS)) {
 
 					consulta += " AND ra.rgat_id is not null ";
@@ -758,10 +758,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0450] Pesquisar Ordem Serviço
+	 * [UC0450] Pesquisar Ordem Servio
 	 * 
 	 * Caso exista ordem de servico abertos para a unidade de geracao informada
-	 * (existe ocorrência na tabela ORDEM_SERVICO com ORDEM_SERVICO_UNIDADE=Id
+	 * (existe ocorrncia na tabela ORDEM_SERVICO com ORDEM_SERVICO_UNIDADE=Id
 	 * da Unidade de Atendimento e ATTP_ID=1 - ABRIR/REGISTRAR)
 	 * 
 	 * @author Rafael Pinto
@@ -806,10 +806,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0450] Pesquisar Ordem Serviço
+	 * [UC0450] Pesquisar Ordem Servio
 	 * 
 	 * Caso exista ordem de servico abertos para a unidade de geracao informada
-	 * (existe ocorrência na tabela ORDEM_SERVICO com ORDEM_SERVICO_UNIDADE=Id
+	 * (existe ocorrncia na tabela ORDEM_SERVICO com ORDEM_SERVICO_UNIDADE=Id
 	 * da Unidade de Atendimento e ATTP_ID=1 - ABRIR/REGISTRAR)
 	 * 
 	 * @author Rafael Pinto
@@ -854,7 +854,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0367] Atualizar Dados da Ligação Agua
+	 * [UC0367] Atualizar Dados da Ligao Agua
 	 * 
 	 * Consulta a ordem de servico pelo id
 	 * 
@@ -973,7 +973,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "imovelOS.subLote, "// 111
 					+ "setor.codigo, "// 112
 
-					// Dados do Imóvel da OS
+					// Dados do Imvel da OS
 					+ "ligAguaOS.id,"// 113
 					+ "ligAguaSituOS.id,"// 114
 					+ "ligAguaSituOS.descricao,"// 115
@@ -1087,11 +1087,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
                     /**
 					 * Felipe Santos
 					 * 
-					 * Inclusão do atributo servicoTipoReferencia para 
-					 * não retornar objeto com o campo nulo.
+					 * Incluso do atributo servicoTipoReferencia para 
+					 * no retornar objeto com o campo nulo.
 					 */
 					+ "servicoTipoReferencia.id "// 224
-					// fim da alteração
+					// fim da alterao
 					+ "FROM OrdemServico os "
 					+ "LEFT JOIN os.registroAtendimento ra  "
 					+ "LEFT JOIN os.atendimentoMotivoEncerramento amen "
@@ -1106,12 +1106,12 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					/**
 					 * Felipe Santos
 					 * 
-					 * Inclusão do atributo servicoTipoReferencia para 
-					 * não retornar objeto com o campo nulo.
+					 * Incluso do atributo servicoTipoReferencia para 
+					 * no retornar objeto com o campo nulo.
 					 */
 					 + "LEFT JOIN os.servicoTipoReferencia servicoTipoReferencia "
-					 // fim da alteração
-					// Dados do Imóvel do RA da OS
+					 // fim da alterao
+					// Dados do Imvel do RA da OS
 					+ "LEFT JOIN ra.imovel imovel "
 					+ "LEFT JOIN imovel.localidade local "
 					+ "LEFT JOIN imovel.setorComercial setor  "
@@ -1147,7 +1147,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "LEFT JOIN imovel.consumoTarifa consumoTarifa  "
 					+ "LEFT JOIN ligEsgoto.ligacaoOrigem ligOrigem "
 
-					// Dados do Imóvel da OS
+					// Dados do Imvel da OS
 					+ "LEFT JOIN os.imovel imovelOS "
 					+ "LEFT JOIN imovelOS.localidade locaOS "
 					+ "LEFT JOIN imovelOS.setorComercial stcmOS  "
@@ -1706,13 +1706,13 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				/**
 				 * Felipe Santos
 				 * 
-				 * Inclusão do atributo servicoTipoReferencia para 
-				 * não retornar objeto com o campo nulo.
+				 * Incluso do atributo servicoTipoReferencia para 
+				 * no retornar objeto com o campo nulo.
 				 */
 				ServicoTipo servicoTipoReferencia = new ServicoTipo();
 				servicoTipoReferencia.setId((Integer) retornoConsulta[224]);
 				ordemServico.setServicoTipoReferencia(servicoTipoReferencia);
-				// fim da alteração
+				// fim da alterao
 
 				ordemServico.setServicoTipo(servicoTipo);
 
@@ -1747,7 +1747,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				ordemServico
 				.setIndicadorComercialAtualizado((Short) retornoConsulta[86]);
 
-				// Imóvel da OS - Colocado por Raphael Rossiter em 16/01/2007
+				// Imvel da OS - Colocado por Raphael Rossiter em 16/01/2007
 				if (retornoConsulta[104] != null) {
 
 					Imovel imovelOS = new Imovel();
@@ -2174,9 +2174,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0450] Pesquisar Ordem Serviço
+	 * [UC0450] Pesquisar Ordem Servio
 	 * 
-	 * Seleciona ordem de serviço por codigo do cliente atraves do RASolicitante
+	 * Seleciona ordem de servio por codigo do cliente atraves do RASolicitante
 	 * 
 	 * @author Rafael Pinto
 	 * @date 19/08/2006
@@ -2215,9 +2215,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0450] Pesquisar Ordem Serviço
+	 * [UC0450] Pesquisar Ordem Servio
 	 * 
-	 * Seleciona ordem de serviço por codigo do cliente atraves do cliente
+	 * Seleciona ordem de servio por codigo do cliente atraves do cliente
 	 * imovel
 	 * 
 	 * @author Rafael Pinto
@@ -2272,10 +2272,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0450] Pesquisar Ordem Serviço
+	 * [UC0450] Pesquisar Ordem Servio
 	 * 
-	 * Seleciona ordem de serviço por codigo do cliente atraves do documento
-	 * cobrança
+	 * Seleciona ordem de servio por codigo do cliente atraves do documento
+	 * cobrana
 	 * 
 	 * @author Rafael Pinto
 	 * @date 19/08/2006
@@ -2318,9 +2318,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0454] Obter Descrição da situação da OS
+	 * [UC0454] Obter Descrio da situao da OS
 	 * 
-	 * Verificar a situação(ORSE_CDSITUACAO) da ordem de serviço
+	 * Verificar a situao(ORSE_CDSITUACAO) da ordem de servio
 	 * 
 	 * 
 	 * @author Leonardo Regis
@@ -2357,7 +2357,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0441] Consultar Dados da Ordem de Serviço
+	 * [UC0441] Consultar Dados da Ordem de Servio
 	 * 
 	 * @author Leonardo Regis
 	 * @date 15/08/2006
@@ -2680,7 +2680,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					retorno.setAtendimentoMotivoEncerramento(atendimentoMotivoEncerramento);
 				}
 
-				// Dados do Imóvel
+				// Dados do Imvel
 				if (retornoConsulta[40] != null) {
 					Imovel imovel = new Imovel();
 					imovel.setId((Integer) retornoConsulta[40]);
@@ -2759,7 +2759,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UC0427] Tramitar Registro Atendimento
 	 * 
-	 * Verifica Existência de Ordem de Serviço Programada
+	 * Verifica Existncia de Ordem de Servio Programada
 	 * 
 	 * @author Leonardo Regis
 	 * @date 19/08/2006
@@ -2800,9 +2800,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0450] Pesquisar Ordem Serviço
+	 * [UC0450] Pesquisar Ordem Servio
 	 * 
-	 * Seleciona ordem de serviço por codigo do cliente atraves do RASolicitante
+	 * Seleciona ordem de servio por codigo do cliente atraves do RASolicitante
 	 * 
 	 * @author Leandro Cavalcanti
 	 * @date 19/08/2006
@@ -2885,7 +2885,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0413] Pesquisar Tipo de Serviço
+	 * [UC0413] Pesquisar Tipo de Servio
 	 * 
 	 * select a.svtp_id from ATENDIMENTOPUBLICO.SERVICO_TIPO A,
 	 * ATENDIMENTOPUBLICO.SERVICO_TIPO_ATIVIDADE B,
@@ -2987,7 +2987,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						servicoTipo.getIndicadorPavimentoRua());
 			}
 
-			// Indicador de pavimento de calçada
+			// Indicador de pavimento de calada
 			if (servicoTipo.getIndicadorPavimentoCalcada() != null
 					&& new Short(servicoTipo.getIndicadorPavimentoCalcada()) != 0
 					&& new Short(servicoTipo.getIndicadorPavimentoCalcada()) != 3) {
@@ -3142,11 +3142,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0413] Pesquisar Tipo de Serviço
+	 * [UC0413] Pesquisar Tipo de Servio
 	 * 
 	 * Faz o count para saber a quantidade total de registros retornados
 	 * 
-	 * @author Flávio
+	 * @author Flvio
 	 * @date 17/08/2006
 	 * 
 	 */
@@ -3229,7 +3229,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						servicoTipo.getIndicadorPavimentoRua());
 			}
 
-			// Indicador de pavimento de calçada
+			// Indicador de pavimento de calada
 			if (servicoTipo.getIndicadorPavimentoCalcada() != null
 					&& new Short(servicoTipo.getIndicadorPavimentoCalcada()) != 0
 					&& new Short(servicoTipo.getIndicadorPavimentoCalcada()) != 3) {
@@ -3383,10 +3383,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC413]- Pesquisar Tipo de Serviço
+	 * [UC413]- Pesquisar Tipo de Servio
 	 * 
 	 * Pesquisar o Objeto servicoTipo referente ao idTiposervico recebido na
-	 * descrição da pesquisa, onde o mesmo sera detalhado.
+	 * descrio da pesquisa, onde o mesmo sera detalhado.
 	 * 
 	 * @author Leandro Cavalcanti
 	 * @date 23/08/2006
@@ -3578,7 +3578,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * 
-	 * [UC0430] - Gerar Ordem de Serviço
+	 * [UC0430] - Gerar Ordem de Servio
 	 * 
 	 * @author lms
 	 * @date 14/08/2006
@@ -3606,7 +3606,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * 
-	 * [UC0430] - Gerar Ordem de Serviço
+	 * [UC0430] - Gerar Ordem de Servio
 	 * 
 	 * @author lms
 	 * @date 14/08/2006
@@ -3664,7 +3664,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0430] Gerar Ordem de Serviço
+	 * [UC0430] Gerar Ordem de Servio
 	 * 
 	 * @author lms
 	 * @date 17/08/2006
@@ -3708,7 +3708,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto,Vivianne Sousa
 	 * @date 04/09/2006,13/06/2008
@@ -3735,9 +3735,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			// + "AND art.id = :idAtendimentoTipo "
 			// + "ORDER BY svtp.descricao";
 
-			// inclusão da coluna unidade atual nas tabelas
+			// incluso da coluna unidade atual nas tabelas
 			// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
-			// Vivianne Sousa 13/06/2008 analista:Fátima Sampaio
+			// Vivianne Sousa 13/06/2008 analista:Ftima Sampaio
 
 			consulta = "SELECT DISTINCT svtp " + "FROM OrdemServico os  "
 					+ "INNER JOIN os.unidadeAtual unid  "
@@ -3759,7 +3759,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/09/2006
@@ -3793,11 +3793,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					indice++;
 				}
 
-				System.out.println("## QUANTIDADE PARTIÇÕES = " + indice);
+				System.out.println("## QUANTIDADE PARTIES = " + indice);
 
 				for (int i = 0; i < indice; i++) {
 
-					System.out.println("## TAMANHO PARTIÇÃO DE INDICE  "
+					System.out.println("## TAMANHO PARTIO DE INDICE  "
 							+ indice + " = " + particoes.get(i).size());
 
 					Collection<ServicoTipo> retornoConsultaParte = null;
@@ -3823,7 +3823,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/09/2006
@@ -3857,11 +3857,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					indice++;
 				}
 
-				System.out.println("## QUANTIDADE PARTIÇÕES = " + indice);
+				System.out.println("## QUANTIDADE PARTIES = " + indice);
 
 				for (int i = 0; i < indice; i++) {
 
-					System.out.println("## TAMANHO PARTÇÃO DE INDICE  "
+					System.out.println("## TAMANHO PARTO DE INDICE  "
 							+ indice + " = " + particoes.get(i).size());
 
 					Collection<Localidade> retornoConsultaParte = null;
@@ -3887,7 +3887,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/09/2006
@@ -3915,9 +3915,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			// + "AND art.id = :idAtendimentoTipo "
 			// + "ORDER BY local.descricao";
 
-			// inclusão da coluna unidade atual nas tabelas
+			// incluso da coluna unidade atual nas tabelas
 			// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
-			// Vivianne Sousa 13/06/2008 analista:Fátima Sampaio
+			// Vivianne Sousa 13/06/2008 analista:Ftima Sampaio
 
 			consulta = "SELECT DISTINCT local " + "FROM OrdemServico os  "
 					+ "INNER JOIN os.unidadeAtual unid  "
@@ -3940,7 +3940,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto,Vivianne Sousa
 	 * @date 04/09/2006,13/06/2008
@@ -3969,9 +3969,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			// + "AND art.id = :idAtendimentoTipo "
 			// + "ORDER BY setorComercial.descricao";
 
-			// inclusão da coluna unidade atual nas tabelas
+			// incluso da coluna unidade atual nas tabelas
 			// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
-			// Vivianne Sousa 13/06/2008 analista:Fátima Sampaio
+			// Vivianne Sousa 13/06/2008 analista:Ftima Sampaio
 
 			consulta = "SELECT DISTINCT setorComercial "
 					+ "FROM OrdemServico os  "
@@ -3997,7 +3997,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/09/2006
@@ -4034,11 +4034,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					indice++;
 				}
 
-				System.out.println("## QUANTIDADE PARTIÇÕES = " + indice);
+				System.out.println("## QUANTIDADE PARTIES = " + indice);
 
 				for (int i = 0; i < indice; i++) {
 
-					System.out.println("## TAMANHO PARTIÇÃO DE INDICE  "
+					System.out.println("## TAMANHO PARTIO DE INDICE  "
 							+ indice + " = " + particoes.get(i).size());
 
 					Collection<SetorComercial> retornoConsultaParte = null;
@@ -4064,7 +4064,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto, Raphael Rossiter
 	 * @date 04/09/2006, 22/05/2009
@@ -4107,11 +4107,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					indice++;
 				}
 
-				System.out.println("## QUANTIDADE PARTIÇÕES = " + indice);
+				System.out.println("## QUANTIDADE PARTIES = " + indice);
 
 				for (int i = 0; i < indice; i++) {
 
-					System.out.println("## TAMANHO PARTIÇÃO DE INDICE  "
+					System.out.println("## TAMANHO PARTIO DE INDICE  "
 							+ indice + " = " + particoes.get(i).size());
 
 					Collection<Object[]> retornoConsultaParte = null;
@@ -4157,7 +4157,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto, Raphael Rossiter
 	 * @date 04/09/2006, 22/05/2009
@@ -4200,11 +4200,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					indice++;
 				}
 
-				System.out.println("## QUANTIDADE PARTIÇÕES = " + indice);
+				System.out.println("## QUANTIDADE PARTIES = " + indice);
 
 				for (int i = 0; i < indice; i++) {
 
-					System.out.println("## TAMANHO PARTIÇÃO DE INDICE  "
+					System.out.println("## TAMANHO PARTIO DE INDICE  "
 							+ indice + " = " + particoes.get(i).size());
 
 					Collection<Object[]> retornoConsultaParte = null;
@@ -4250,7 +4250,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto, Raphael Rossiter
 	 * 
@@ -4310,7 +4310,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto, Vivianne Sousa, Raphael Rossiter
 	 * @date 04/09/2006, 13/06/2008, 22/05/2009
@@ -4330,9 +4330,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 		try {
 
-			// inclusão da coluna unidade atual nas tabelas
+			// incluso da coluna unidade atual nas tabelas
 			// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
-			// Vivianne Sousa 13/06/2008 analista:Fátima Sampaio
+			// Vivianne Sousa 13/06/2008 analista:Ftima Sampaio
 
 			consulta = "SELECT DISTINCT distritoOperacional.id," // 0
 					+ "distritoOperacional.descricao " // 1
@@ -4380,7 +4380,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/09/2006
@@ -4489,7 +4489,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0465] Filtrar Ordem Serviço
+	 * [UC0465] Filtrar Ordem Servio
 	 * 
 	 * Recupera OS programadas
 	 * 
@@ -4549,10 +4549,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UC0450] Pesquisar Ordem de Servico
 	 * 
-	 * [SB0003] Seleciona Ordem de Servico por Criterio de Seleção [SB0004]
+	 * [SB0003] Seleciona Ordem de Servico por Criterio de Seleo [SB0004]
 	 * Seleciona Ordem de Servico por Situacao de Diagnostico [SB0005] Seleciona
 	 * Ordem de Servico por Situacao de Acompanhamento pela Agencia [SB0006]
-	 * Seleciona Ordem de Servico por Critério Geral
+	 * Seleciona Ordem de Servico por Critrio Geral
 	 * 
 	 * @author Rafael Pinto
 	 * @date 07/09/2006
@@ -4615,9 +4615,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "servicoTipoPrioridadeAtual.id "// 9
 					+ "FROM OrdemServico os "
 
-					// inclusão da coluna unidade atual nas tabelas
+					// incluso da coluna unidade atual nas tabelas
 					// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
-					// comentado por Vivianne Sousa 13/06/2008 analista:Fátima
+					// comentado por Vivianne Sousa 13/06/2008 analista:Ftima
 					// Sampaio
 					// + "INNER JOIN os.ordemServicoUnidades osUnidade "
 					// + "INNER JOIN osUnidade.atendimentoRelacaoTipo art  "
@@ -4633,10 +4633,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				consulta += "INNER JOIN os.registroAtendimento ra "
 
-						// inclusão da coluna unidade atual nas tabelas
+						// incluso da coluna unidade atual nas tabelas
 						// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
 						// comentado por Vivianne Sousa 13/06/2008
-						// analista:Fátima Sampaio
+						// analista:Ftima Sampaio
 						// + "INNER JOIN ra.tramites tramite "
 
 						+ "INNER JOIN ra.localidade raLocal "
@@ -4660,10 +4660,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				consulta += "LEFT JOIN os.registroAtendimento ra "
 
-						// inclusão da coluna unidade atual nas tabelas
+						// incluso da coluna unidade atual nas tabelas
 						// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
 						// comentado por Vivianne Sousa 13/06/2008
-						// analista:Fátima Sampaio
+						// analista:Ftima Sampaio
 						// + "LEFT JOIN ra.tramites tramite "
 
 						+ "LEFT JOIN ra.localidade raLocal "
@@ -4700,13 +4700,13 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			consulta += "AND os.indicadorProgramada = :naoProgramada ";
 			parameters.put("naoProgramada", OrdemServico.NAO_PROGRAMADA);
 
-			// [SB0003] - Seleciona Ordem de Servico por Criterio de Seleção
+			// [SB0003] - Seleciona Ordem de Servico por Criterio de Seleo
 			if (tipoServicos != null) {
 				switch (criterioSelecao.intValue()) {
 
 				case 1:
 
-					// Tipo de Serviço
+					// Tipo de Servio
 					consulta += " AND servicoTipo.id in (:idServicoTipo) ";
 					break;
 
@@ -4736,10 +4736,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						// +
 						// "AND osUnidade.atendimentoRelacaoTipo = :idAtendimentoTipo ";
 
-						// inclusão da coluna unidade atual nas tabelas
+						// incluso da coluna unidade atual nas tabelas
 						// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
 						// comentado por Vivianne Sousa 16/06/2008
-						// analista:Fátima Sampaio
+						// analista:Ftima Sampaio
 
 						consulta += " AND os.registroAtendimento is null AND os.unidadeAtual.id in (:idServicoTipo) ";
 
@@ -4753,7 +4753,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						// +
 						// "AND osUnidade.atendimentoRelacaoTipo = :idAtendimentoTipo) ) ";
 
-						// inclusão da coluna unidade atual nas tabelas
+						// incluso da coluna unidade atual nas tabelas
 						// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
 						// comentado por Vivianne Sousa 16/06/2008
 						// analista:Fatima Sampaio
@@ -4855,7 +4855,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 			}
 
-			// [SB0006] - Seleciona Ordem de Servico por Critério Geral
+			// [SB0006] - Seleciona Ordem de Servico por Critrio Geral
 
 			// Solicitados
 			if (origemServico == 1) {
@@ -4866,7 +4866,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				// " AND tramite.dataTramite = (SELECT max(tram.dataTramite) FROM Tramite tram "
 				// + " WHERE tram.registroAtendimento.id = ra.id)  ";
 
-				// inclusão da coluna unidade atual nas tabelas
+				// incluso da coluna unidade atual nas tabelas
 				// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
 				// comentado por Vivianne Sousa 16/06/2008 analista:Fatima
 				// Sampaio
@@ -4879,7 +4879,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			} else if (origemServico == 2) {
 
 				consulta += " AND os.registroAtendimento is null AND os.unidadeAtual.id = :unidadeLotacao ";
-				// inclusão da coluna unidade atual nas tabelas
+				// incluso da coluna unidade atual nas tabelas
 				// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
 				// comentado por Vivianne Sousa 16/06/2008 analista:Fatima
 				// Sampaio
@@ -4900,7 +4900,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				// +
 				// " (ra is null AND unid.id = :unidadeLotacao AND art.id = :idAtendimentoTipo) )";
 
-				// inclusão da coluna unidade atual nas tabelas
+				// incluso da coluna unidade atual nas tabelas
 				// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
 				// comentado por Vivianne Sousa 16/06/2008 analista:Fatima
 				// Sampaio
@@ -4917,7 +4917,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 			}
 
-			// Período de Atraso
+			// Perodo de Atraso
 			if (dataAtrasoInicial != null && dataAtrasoFinal != null) {
 
 				consulta += " AND ( ra.dataPrevistaAtual BETWEEN (:dataAtrasoInicial) AND CURRENT_DATE ";
@@ -4934,7 +4934,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						Util.formatarDataFinal(dataAtrasoInicial));
 			}
 
-			// Período de Atendimento
+			// Perodo de Atendimento
 			if (dataAtendimentoInicial != null && dataAtendimentoFinal != null) {
 
 				// Solicitados
@@ -4962,7 +4962,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						Util.formatarDataFinal(dataAtendimentoFinal));
 			}
 
-			// Período de Data Geracao
+			// Perodo de Data Geracao
 			if (dataGeracaoInicial != null && dataGeracaoFinal != null) {
 
 				consulta += " AND os.dataGeracao BETWEEN (:dataGeracaoInicial) AND (:dataGeracaoFinal) ";
@@ -4972,7 +4972,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						Util.formatarDataFinal(dataGeracaoFinal));
 			}
 
-			// Período de Previsão para Cliente
+			// Perodo de Previso para Cliente
 			if (dataPrevisaoClienteInicial != null
 					&& dataPrevisaoClienteFinal != null) {
 
@@ -5068,9 +5068,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0465] Filtrar Ordem Serviço
+	 * [UC0465] Filtrar Ordem Servio
 	 * 
-	 * Recupera OS por Data de Programação
+	 * Recupera OS por Data de Programao
 	 * 
 	 * @author Leonardo Regis
 	 * @date 05/09/2006
@@ -5386,7 +5386,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 11/09/2006
@@ -5458,7 +5458,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de Serviço
+	 * [UC0470] Acompanhar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 11/09/2006
@@ -5806,7 +5806,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UC0460] Obter Carga de Trabalho da Equipe
 	 * 
-	 * obter programações ativas por os e situacao
+	 * obter programaes ativas por os e situacao
 	 * 
 	 * @author Leonardo Regis
 	 * @date 14/09/2006
@@ -5841,7 +5841,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UC0460] Obter Carga de Trabalho da Equipe
 	 * 
-	 * obter o somatório de horas para a OS informada e para o dia do roteiro
+	 * obter o somatrio de horas para a OS informada e para o dia do roteiro
 	 * solicitado
 	 * 
 	 * @author Leonardo Regis
@@ -5914,9 +5914,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 18/09/2006
 	 */
 	public Integer pesquisarRAOrdemServico(Integer numeroOS)
@@ -5947,14 +5947,14 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * pesquisa se a OS tenha uma prgramação ativa com a data menor ou igual a
-	 * data corrente e não tenha recebido a data de encerramento
+	 * pesquisa se a OS tenha uma prgramao ativa com a data menor ou igual a
+	 * data corrente e no tenha recebido a data de encerramento
 	 * 
-	 * [UC0457] Encerra Ordem de Serviço
+	 * [UC0457] Encerra Ordem de Servio
 	 * 
-	 * [FS0006] - Verificar Origem do Encerramento da Ordem de Serviço
+	 * [FS0006] - Verificar Origem do Encerramento da Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 18/09/2006
 	 * 
 	 * @throws ControladorException
@@ -5995,14 +5995,14 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * pesquisa se a OS tenha uma programação ativa com a data menor ou igual a
-	 * data corrente e não tenha recebido a data de encerramento
+	 * pesquisa se a OS tenha uma programao ativa com a data menor ou igual a
+	 * data corrente e no tenha recebido a data de encerramento
 	 * 
-	 * [UC0457] Encerra Ordem de Serviço
+	 * [UC0457] Encerra Ordem de Servio
 	 * 
-	 * [SB0001] - Encerrar sem execução
+	 * [SB0001] - Encerrar sem execuo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 18/09/2006
 	 * 
 	 * @throws ControladorException
@@ -6054,11 +6054,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
-	 * [SB0001] - Encerrar sem execução
+	 * [SB0001] - Encerrar sem execuo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 18/09/2006
 	 */
 	public Integer pesquisarOSReferencia(Integer numeroOS)
@@ -6089,11 +6089,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerra Ordem de Serviço
+	 * [UC0457] Encerra Ordem de Servio
 	 * 
-	 * [SB0001] - Encerrar sem execução
+	 * [SB0001] - Encerrar sem execuo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 18/09/2006
 	 * 
 	 * @throws ControladorException
@@ -6129,7 +6129,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UC1185] - Informar Calibragem
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @param osProgramacaoCalibragem
 	 * @throws ControladorException
 	 * @date 28/06/2011
@@ -6165,11 +6165,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * 
-	 * [UC0457] Encerra Ordem de Serviço
+	 * [UC0457] Encerra Ordem de Servio
 	 * 
-	 * [FS0004] - Verificar/Excluir/Atualizar Programação da Ordem de Serviço
+	 * [FS0004] - Verificar/Excluir/Atualizar Programao da Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 18/09/2006
 	 * 
 	 * @throws ControladorException
@@ -6206,11 +6206,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * 
-	 * [UC0457] Encerra Ordem de Serviço
+	 * [UC0457] Encerra Ordem de Servio
 	 * 
-	 * [FS0004] - Verificar/Excluir/Atualizar Programação da Ordem de Serviço
+	 * [FS0004] - Verificar/Excluir/Atualizar Programao da Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 18/09/2006
 	 * 
 	 * @throws ControladorException
@@ -6247,11 +6247,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * 
-	 * [UC0457] Encerra Ordem de Serviço
+	 * [UC0457] Encerra Ordem de Servio
 	 * 
-	 * [FS0004] - Verificar/Excluir/Atualizar Programação da Ordem de Serviço
+	 * [FS0004] - Verificar/Excluir/Atualizar Programao da Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 18/09/2006
 	 * 
 	 * @throws ControladorException
@@ -6288,9 +6288,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerra Ordem de Serviço
+	 * [UC0457] Encerra Ordem de Servio
 	 * 
-	 * [FS0004] - Verificar/Excluir/Atualizar Programação da Ordem de Serviço
+	 * [FS0004] - Verificar/Excluir/Atualizar Programao da Ordem de Servio
 	 * 
 	 * @author Sá¶©o Luiz
 	 * @date 18/09/2006
@@ -6337,7 +6337,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de Serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de Servio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/09/2006
@@ -6373,7 +6373,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de Serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de Servio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/09/2006
@@ -6408,7 +6408,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de Serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de Servio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/09/2006
@@ -6445,7 +6445,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de Serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de Servio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/09/2006
@@ -6485,7 +6485,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de Serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de Servio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 19/09/2006
@@ -6518,7 +6518,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de Serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de Servio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 19/09/2006
@@ -6551,7 +6551,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de Serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de Servio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 19/09/2006
@@ -6590,7 +6590,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de Serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de Servio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 19/09/2006
@@ -6676,9 +6676,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de Serviço
+	 * [UC0470] Acompanhar Roteiro de Programao de Ordens de Servio
 	 * 
-	 * [FS0008] - Verificar possibilidade da inclusão da ordem de Serviço
+	 * [FS0008] - Verificar possibilidade da incluso da ordem de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 21/09/2006
@@ -6724,7 +6724,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de Serviço
+	 * [UC0470] Acompanhar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 21/09/2006
@@ -7015,9 +7015,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 25/09/2006
 	 * 
 	 * @param numeroOS
@@ -7052,7 +7052,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de Serviço
+	 * [UC0470] Acompanhar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 25/09/2006
@@ -7145,9 +7145,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 25/09/2006
 	 * 
 	 * @param numeroOS
@@ -7179,9 +7179,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 25/09/2006
 	 * 
 	 * @param numeroOS
@@ -7212,7 +7212,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de Serviço
+	 * [UC0470] Acompanhar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 25/09/2006
@@ -7258,7 +7258,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de Serviço
+	 * [UC0470] Acompanhar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 26/09/2006
@@ -7299,9 +7299,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 26/09/2006
 	 * 
 	 * @param idOsReferidaRetornoTipo
@@ -7338,9 +7338,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 26/09/2006
 	 * 
 	 * @param idOsReferidaRetornoTipo
@@ -7378,7 +7378,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de Serviço
+	 * [UC0470] Acompanhar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/09/2006
@@ -7422,9 +7422,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 29/09/2006
 	 * 
 	 * @param idOsReferidaRetornoTipo
@@ -7464,9 +7464,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 29/09/2006
 	 * 
 	 * @param idOsReferidaRetornoTipo
@@ -7500,9 +7500,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 02/10/2006
 	 * 
 	 * @param idOsReferidaRetornoTipo
@@ -7541,9 +7541,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 02/10/2006
 	 * 
 	 * @param idOsReferidaRetornoTipo
@@ -7584,7 +7584,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * Pesquisa os campos da OS que serï¿½o impressos no relatï¿½rio de Ordem de
 	 * Servico
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 17/10/2006
 	 * 
 	 * @param idOrdemServico
@@ -7622,7 +7622,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "os.dataEncerramento, os.descricaoParecerEncerramento, " // 32,
 					// 33
 					+ "os.cobrancaDocumento.id, os.dataEmissao, "// 34, 35
-					+ "os.projeto.id "// 36
+					+ "os.projeto.id, "// 36
+					+ "rota.faturamentoGrupo.id "// 37
 					+ "FROM OrdemServicoUnidade osu "
 					+ "INNER JOIN osu.atendimentoRelacaoTipo atrt "
 					+ "INNER JOIN osu.usuario usuario "
@@ -7663,9 +7664,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de Serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de Servio
 	 * 
-	 * Obtï¿½m as datas de encerramento e geraï¿½ï¿½o de uma ordem de Serviço
+	 * Obtï¿½m as datas de encerramento e geraï¿½ï¿½o de uma ordem de Servio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 18/10/2006
@@ -7700,11 +7701,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
 	 * Recupera o id do imï¿½vel do registro atendimento
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/10/2006
 	 * 
 	 * @param numeroOS
@@ -7737,11 +7738,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
 	 * Recupera o id do imï¿½vel do registro atendimento
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/10/2006
 	 * 
 	 * @param numeroOS
@@ -7781,7 +7782,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * Pesquisa os dados da OS usados para saber de onde serï¿½ recebido o
 	 * endereï¿½o abreviado
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 19/10/2006
 	 * 
 	 * 
@@ -7818,7 +7819,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 23/10/2006
@@ -7873,7 +7874,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * Atualiza a data de emissï¿½o e a de ï¿½ltima alteraï¿½ï¿½o de OS quando
 	 * gerar o relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 26/10/2006
 	 * 
 	 * 
@@ -7900,10 +7901,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 			// } catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			// throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7914,9 +7915,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * usuï¿½rio
 	 * 
 	 * [UC0492] - Gerar Relatï¿½rio Acompanhamento de Execuï¿½ï¿½o de Ordem de
-	 * Serviço
+	 * Servio
 	 * 
-	 * @author Rafael Corrêa, Mariana Victor
+	 * @author Rafael Corra, Mariana Victor
 	 * @date 01/11/06, 10/11/2010
 	 * 
 	 * @param idImovel
@@ -7955,7 +7956,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 		/*
 		 *
-		 * Acréscimo dos alias para todas as colunas selecionadas na consulta
+		 * Acrscimo dos alias para todas as colunas selecionadas na consulta
 		 */		
 		try {
 			consulta = "SELECT DISTINCT os.orse_id as idOS, " // 0
@@ -8007,7 +8008,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						+ " INNER JOIN cadastro.unidade_organizacional unidadeAtendimento on unidadeAtendimento.unid_id = raUnidade.unid_id "
 						+ " INNER JOIN atendimentopublico.solicitacao_tipo_espec solTpEsp on solTpEsp.step_id = ra.step_id ";
 
-				// inclusão da coluna unidade atual na tabela
+				// incluso da coluna unidade atual na tabela
 				// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
 				// Vivianne Sousa 11/06/2008 analista:Fatima Sampaio
 				// + " INNER JOIN "
@@ -8018,10 +8019,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				/*
 				 * Alterado por Raphael Rossiter em 26/10/2010 OBJ: Refletir na
-				 * aplicação o que esta sendo pedido no caso de uso.
+				 * aplicao o que esta sendo pedido no caso de uso.
 				 * 
-				 * 1.2. Seletivas ï¿½ Ordens de Serviço associadas a um
-				 * Documento de Cobrança (CBDO_ID da tabela DOCUMENTO_COBRANCA
+				 * 1.2. Seletivas ï¿½ Ordens de Servio associadas a um
+				 * Documento de Cobrana (CBDO_ID da tabela DOCUMENTO_COBRANCA
 				 * com valor diferente de nulo);
 				 */
 				consulta = consulta
@@ -8103,9 +8104,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * pelo usuï¿½rio
 	 * 
 	 * [UC0492] - Gerar Relatï¿½rio Acompanhamento de Execuï¿½ï¿½o de Ordem de
-	 * Serviço
+	 * Servio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 01/11/06
 	 * 
 	 * @param idImovel
@@ -8197,7 +8198,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			// + " ra.rgat_id = tr.rgat_id)"
 			// + " and ";
 
-			// inclusão da coluna unidade atual na tabela REGISTRO_ATENDIMENTO
+			// incluso da coluna unidade atual na tabela REGISTRO_ATENDIMENTO
 			// e ORDEM_SERVICO
 			// Vivianne Sousa 11/06/2008 analista:Fatima Sampaio
 
@@ -8322,7 +8323,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0461] - Manter Dados das Atividades da Ordem de Serviço
+	 * [UC0461] - Manter Dados das Atividades da Ordem de Servio
 	 * 
 	 * Pesquisa os dados da OrdemServicoAtividade
 	 * 
@@ -8365,7 +8366,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0461] - Manter Dados das Atividades da Ordem de Serviço
+	 * [UC0461] - Manter Dados das Atividades da Ordem de Servio
 	 * 
 	 * Pesquisa os dados da OsAtividadeMaterialExecucao associada ï¿½
 	 * OrdemServicoAtividade para a data informada
@@ -8409,9 +8410,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa a equipe principal de uma OS de programação através do id da OS
+	 * Pesquisa a equipe principal de uma OS de programao atravs do id da OS
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 07/11/2006
 	 * 
 	 * @param idOS
@@ -8448,10 +8449,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa a equipe principal de uma OS de execução da equipe através do id
+	 * Pesquisa a equipe principal de uma OS de execuo da equipe atravs do id
 	 * da OS
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 07/11/2006
 	 * 
 	 * @param idOS
@@ -8493,9 +8494,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * usuï¿½rio
 	 * 
 	 * [UC0492] - Gerar Relatï¿½rio Acompanhamento de Execuï¿½ï¿½o de Ordem de
-	 * Serviço
+	 * Servio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 01/11/06
 	 * 
 	 * @param idImovel
@@ -8554,7 +8555,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						+ " INNER JOIN "
 						+ " cadastro.unidade_organizacional unidadeAtendimento "
 						+ " on unidadeAtendimento.unid_id = raUnidade.unid_id ";
-				// inclusão da coluna unidade atual na tabela
+				// incluso da coluna unidade atual na tabela
 				// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
 				// Vivianne Sousa 11/06/2008 analista:Fatima Sampaio
 				// + " INNER JOIN "
@@ -8567,7 +8568,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				 * Alterado por Raphael Rossiter em 26/10/2010 OBJ: Refletir na
 				 * aplicaï¿½ï¿½o o que esta sendo pedido no caso de uso.
 				 * 
-				 * 1.2. Seletivas ï¿½ Ordens de Serviço associadas a um
+				 * 1.2. Seletivas ï¿½ Ordens de Servio associadas a um
 				 * Documento de Cobranï¿½a (CBDO_ID da tabela DOCUMENTO_COBRANCA
 				 * com valor diferente de nulo);
 				 */
@@ -8638,7 +8639,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * 
 	 * [UC0370] - Filtrar Equipe
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 01/11/06
 	 * 
 	 * @param idEquipe
@@ -8726,7 +8727,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * 
 	 * [UC0370] - Filtrar Equipe
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 01/11/06
 	 * 
 	 * @param idEquipe
@@ -8828,7 +8829,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * 
 	 * [UC0370] - Filtrar Equipe
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 01/11/06
 	 * 
 	 * @param idEquipe
@@ -8899,12 +8900,12 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Verifica se o Serviço associado ï¿½ ordem de Serviço não corresponde a um
-	 * Serviço de fiscalização de infraï¿½ï¿½o
+	 * Verifica se o Servio associado ï¿½ ordem de Servio no corresponde a um
+	 * Servio de fiscalizao de infraï¿½ï¿½o
 	 * 
-	 * [UC0488] - Informar Retorno Ordem de Fiscalização
+	 * [UC0488] - Informar Retorno Ordem de Fiscalizao
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 01/11/06
 	 * 
 	 * @return Integer
@@ -8941,11 +8942,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * Recupera os parï¿½metros necessï¿½rios da OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 24/08/2006
 	 * 
 	 * @param idOS
@@ -8996,11 +8997,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * Recupera os parï¿½metros necessï¿½rios da OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 14/11/2006
 	 * 
 	 * @param idOS
@@ -9043,7 +9044,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * Obtï¿½m o nï¿½mero de meses da fatura a partir da tabela
 	 * FISCALIZACAO_SITUACAO_AGUA
@@ -9087,7 +9088,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * Obtï¿½m o nï¿½mero de meses da fatura a partir da tabela
 	 * FISCALIZACAO_SITUACAO_ESGOTO
@@ -9134,11 +9135,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * Recupera os parï¿½metros necessï¿½rios da OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 14/11/2006
 	 * 
 	 * @param idOS
@@ -9183,12 +9184,12 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizao
 	 * 
-	 * [SB0001] - Atualizar Ordem de Serviço
+	 * [SB0001] - Atualizar Ordem de Servio
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 14/11/2006
 	 * 
 	 * @param idOS
@@ -9243,11 +9244,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * Recupera os parï¿½metros necessï¿½rios da OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 14/11/2006
 	 * 
 	 * @param idOS
@@ -9290,11 +9291,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * Recupera os parï¿½metros necessï¿½rios da OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 14/11/2006
 	 * 
 	 * @param idOS
@@ -9338,10 +9339,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 14/11/2006
 	 * 
 	 * @param idOS
@@ -9383,10 +9384,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 15/11/2006
 	 * 
 	 * @param idOS
@@ -9427,10 +9428,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 15/11/2006
 	 * 
 	 * @param idOS
@@ -9469,10 +9470,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 20/11/2006
 	 * 
 	 * @param idOS
@@ -9517,10 +9518,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * [UC0450] Pesquisar Ordem de Servico verifica o tamanho da consulta
 	 * 
 	 * [SB001] Selecionar Ordem de Servico por Situaï¿½ï¿½o [SB002] Selecionar
-	 * Ordem de Servico por Situaï¿½ï¿½o da Programação [SB003] Selecionar Ordem
+	 * Ordem de Servico por Situaï¿½ï¿½o da Programao [SB003] Selecionar Ordem
 	 * de Servico por Matricula do Imovel [SB004] Selecionar Ordem de Servico
 	 * por Codigo do Cliente [SB005] Selecionar Ordem de Servico por Unidade
-	 * Superior [SB006] Selecionar Ordem de Servico por Município [SB007]
+	 * Superior [SB006] Selecionar Ordem de Servico por Municpio [SB007]
 	 * Selecionar Ordem de Servico por Bairro [SB008] Selecionar Ordem de
 	 * Servico por Bairro Logradouro
 	 * 
@@ -9626,7 +9627,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ " LEFT JOIN atendimentopublico.registro_atendimento ra ON os.rgat_id = ra.rgat_id  ";
 			// }
 
-			// inclusão da coluna unidade atual na tabela REGISTRO_ATENDIMENTO
+			// incluso da coluna unidade atual na tabela REGISTRO_ATENDIMENTO
 			// e ORDEM_SERVICO
 			// Vivianne Sousa 11/06/2008 analista:Fatima Sampaio
 			// if (unidadeAtual != null) {
@@ -9696,7 +9697,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				parameters.put("situacaoOrdemServico", situacaoOrdemServico);
 			}
 
-			// Tipo de Serviços
+			// Tipo de Servios
 			if (tipoServicos != null && tipoServicos.length > 0) {
 				consulta += " AND servicotipo.svtp_id in (:idServicoTipo) ";
 				parameters.put("idServicoTipo", tipoServicos);
@@ -9730,7 +9731,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			// Unidade Atual
 			if (unidadeAtual != null) {
 
-				// inclusão da coluna unidade atual na tabela
+				// incluso da coluna unidade atual na tabela
 				// REGISTRO_ATENDIMENTO e ORDEM_SERVICO
 				// Vivianne Sousa 11/06/2008 analista:Fatima Sampaio
 				consulta += " AND os.unid_idatual = (:idUnidadeAtual) ";
@@ -9760,7 +9761,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				parameters.put("listaIdOS", colecaoIdsOS);
 			}
 
-			// Período de Atendimento
+			// Perodo de Atendimento
 			if (dataAtendimentoInicial != null && dataAtendimentoFinal != null) {
 				consulta += " AND ra.rgat_tmregistroatendimento BETWEEN (:dataAtendimentoInicial) AND (:dataAtendimentoFinal) ";
 				parameters.put("dataAtendimentoInicial",
@@ -9769,7 +9770,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						Util.formatarDataFinal(dataAtendimentoFinal));
 			}
 
-			// Período de Data Geracao
+			// Perodo de Data Geracao
 			if (dataGeracaoInicial != null && dataGeracaoFinal != null) {
 
 				consulta += " AND os.orse_tmgeracao BETWEEN (:dataGeracaoInicial) AND (:dataGeracaoFinal) ";
@@ -9779,7 +9780,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						Util.formatarDataFinal(dataGeracaoFinal));
 			}
 
-			// Período de Data Encerramento
+			// Perodo de Data Encerramento
 			if (dataEncerramentoInicial != null
 					&& dataEncerramentoFinal != null) {
 
@@ -9790,11 +9791,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						Util.formatarDataFinal(dataEncerramentoFinal));
 			}
 
-			// [SB0006] - Selecionar Ordem de Servico por Município
+			// [SB0006] - Selecionar Ordem de Servico por Municpio
 			if (municipio != null) {
 
 				if (origemOrdemServico.equals(OrdemServico.TODAS)) {
-					// 1.1. Caso tenha selecionado a opção Todas
+					// 1.1. Caso tenha selecionado a opo Todas
 
 					// 1.1.1
 					consulta += " AND ( mun.muni_id = :municipioId ";
@@ -9806,7 +9807,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					consulta += "  OR  (imovmun.muni_id=:municipioId AND ra.rgat_id is null)) ";
 
 				} else if (origemOrdemServico.equals(OrdemServico.SOLICITADAS)) {
-					// 1.2. Caso tenha selecionado a opção Solicitadas
+					// 1.2. Caso tenha selecionado a opo Solicitadas
 
 					// 1.2.1
 					consulta += " AND (mun.muni_id = :municipioId ";
@@ -9816,7 +9817,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_COBRANCA)) {
-					// 1.3 Caso tenha selecionado a opção Seletivas de
+					// 1.3 Caso tenha selecionado a opo Seletivas de
 					// Cobranï¿½a
 
 					// 1.3.1
@@ -9824,7 +9825,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_HIDROMETRO)) {
-					// 1.4 Caso tenha selecionado a opção Seletivas de
+					// 1.4 Caso tenha selecionado a opo Seletivas de
 					// Hidrometro
 
 					// 1.4.1
@@ -9838,7 +9839,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			if (bairro != null && !bairro.equals("")) {
 
 				if (origemOrdemServico.equals(OrdemServico.TODAS)) {
-					// 1.1. Caso tenha selecionado a opção Todas
+					// 1.1. Caso tenha selecionado a opo Todas
 
 					// 1.1.1
 					consulta += " AND (bair.bair_id = :bairroId ";
@@ -9850,7 +9851,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					consulta += " OR (imovbair.bair_id = :bairroId AND ra.rgat_id is null))  ";
 
 				} else if (origemOrdemServico.equals(OrdemServico.SOLICITADAS)) {
-					// 1.2. Caso tenha selecionado a opção Solicitadas
+					// 1.2. Caso tenha selecionado a opo Solicitadas
 
 					// 1.2.1
 					consulta += " AND (bair.bair_id = :bairroId ";
@@ -9860,7 +9861,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_COBRANCA)) {
-					// 1.3 Caso tenha selecionado a opção Seletivas de
+					// 1.3 Caso tenha selecionado a opo Seletivas de
 					// Cobranï¿½a
 
 					// 1.3.1
@@ -9868,7 +9869,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_HIDROMETRO)) {
-					// 1.4 Caso tenha selecionado a opção Seletivas de
+					// 1.4 Caso tenha selecionado a opo Seletivas de
 					// Hidrometro
 
 					// 1.4.1
@@ -9888,7 +9889,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			if (logradouro != null && !logradouro.equals("")) {
 
 				if (origemOrdemServico.equals(OrdemServico.TODAS)) {
-					// 1.1. Caso tenha selecionado a opção Todas
+					// 1.1. Caso tenha selecionado a opo Todas
 
 					// 1.1.1
 					consulta += "  AND (logr.logr_id = :logradouroId  ";
@@ -9900,7 +9901,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					consulta += " OR  (imovlogr.logr_id = :logradouroId AND ra.rgat_id is null))  ";
 
 				} else if (origemOrdemServico.equals(OrdemServico.SOLICITADAS)) {
-					// 1.2. Caso tenha selecionado a opção Solicitadas
+					// 1.2. Caso tenha selecionado a opo Solicitadas
 
 					// 1.2.1
 					consulta += " AND (logr.logr_id = :logradouroId ";
@@ -9910,7 +9911,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_COBRANCA)) {
-					// 1.3 Caso tenha selecionado a opção Seletivas de
+					// 1.3 Caso tenha selecionado a opo Seletivas de
 					// Cobranï¿½a
 
 					// 1.3.1
@@ -9918,7 +9919,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 				} else if (origemOrdemServico
 						.equals(OrdemServico.SELETIVAS_HIDROMETRO)) {
-					// 1.4 Caso tenha selecionado a opção Seletivas de
+					// 1.4 Caso tenha selecionado a opo Seletivas de
 					// Hidrometro
 
 					// 1.4.1
@@ -10005,11 +10006,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 14/11/2006
 	 * 
 	 * @param idOS
@@ -10041,7 +10042,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 25/01/2007
@@ -10077,7 +10078,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * Consulta a ordem de servico pelo id
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 03/01/2007
 	 * 
 	 * @param idOS
@@ -10131,7 +10132,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * Atualiza os imoveis da OS que refere a RA passada como parametro
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 03/01/2007
 	 * 
 	 * @param idOS
@@ -10194,9 +10195,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa as Os do Serviço tipo especifico com RA
+	 * Pesquisa as Os do Servio tipo especifico com RA
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 23/02/2007
 	 * 
 	 * @param idProgramacaoRoteiro
@@ -10230,9 +10231,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa as Os do Serviço tipo especifico com RA
+	 * Pesquisa as Os do Servio tipo especifico com RA
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 23/02/2007
 	 * 
 	 * @param idProgramacaoRoteiro
@@ -10266,7 +10267,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * 
-	 * Pesquisar data e equipe da programação da ordem Serviço
+	 * Pesquisar data e equipe da programao da ordem Servio
 	 * 
 	 * @author Ana Maria
 	 * 
@@ -10332,7 +10333,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerra Ordem de Serviço
+	 * [UC0457] Encerra Ordem de Servio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 25/04/2007
@@ -11314,9 +11315,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa os dados necessï¿½rios para exportar a ordem de Serviço.
+	 * Pesquisa os dados necessï¿½rios para exportar a ordem de Servio.
 	 * 
-	 * [UC0720] Exportar Ordem Serviço Prestadoras
+	 * [UC0720] Exportar Ordem Servio Prestadoras
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 21/12/2007
@@ -11422,7 +11423,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 */
 
 	/**
-	 * Inclusão da Origem da OS na busca para encerrar as mesmas quando vencidas.
+	 * Incluso da Origem da OS na busca para encerrar as mesmas quando vencidas.
 	 * @author Wellington Rocha
 	 * @date 18/01/2012*/
 	public List pesquisarOrdemServicoVencida(Integer idServicoTipo, String dataVencimento)
@@ -11445,10 +11446,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 							"	and substring(os.dataGeracao, 1, 10) <= :dataVencimento ";
 
 			/**
-			 * Inclusão da Origem da OS na busca para encerrar as mesmas quando vencidas.
+			 * Incluso da Origem da OS na busca para encerrar as mesmas quando vencidas.
 			 * @author Wellington Rocha
 			 * @date 18/01/2012*/
-			/*Alterações em testes.
+			/*Alteraes em testes.
 				if (codigoOrigemOS.equals(OrdemServico.SELETIVAS_COBRANCA)){
 					hql = hql + " and os.cobrancaDocumento.id is not null ";
 
@@ -11524,9 +11525,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa o movimento da ordem de Serviço
+	 * Pesquisa o movimento da ordem de Servio
 	 * 
-	 * [UC0720] Exportar Ordem de Serviço Movimento
+	 * [UC0720] Exportar Ordem de Servio Movimento
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 18/01/2008
@@ -11772,7 +11773,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0720] Exportar Ordem de Serviço Prestadoras
+	 * [UC0720] Exportar Ordem de Servio Prestadoras
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/04/2008
@@ -11985,7 +11986,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa Ordens em Processo de Repavimentação
+	 * Pesquisa Ordens em Processo de Repavimentao
 	 * 
 	 * [UC0639] Filtrar Ordens em Processo de Repavimetaï¿½ï¿½o.
 	 * 
@@ -12176,7 +12177,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa Ordens em Processo de Repavimentação
+	 * Pesquisa Ordens em Processo de Repavimentao
 	 * 
 	 * [UC0639] Filtrar Ordens em Processo de Repavimetaï¿½ï¿½o Calcada.
 	 * 
@@ -12274,7 +12275,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa Ordens em Processo de Repavimentação
+	 * Pesquisa Ordens em Processo de Repavimentao
 	 * 
 	 * [UC0639] Filtrar Ordens em Processo de Repavimetaï¿½ï¿½o Calcada.
 	 * 
@@ -12475,7 +12476,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa Ordens em Processo de Repavimentação
+	 * Pesquisa Ordens em Processo de Repavimentao
 	 * 
 	 * [UC0639] Filtrar Ordens em Processo de Repavimetaï¿½ï¿½o Calcada.
 	 * 
@@ -12675,7 +12676,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UC0457]Encerrar Ordem de Servico
 	 * 
-	 * Obtï¿½m as datas de geraï¿½ï¿½o de uma ordem de Serviço
+	 * Obtï¿½m as datas de geraï¿½ï¿½o de uma ordem de Servio
 	 * 
 	 * @author Yara Taciane
 	 * @date 18/06/2006
@@ -12893,8 +12894,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de Serviço [FS0008]
-	 * - Verificar possibilidade da inclusão da ordem de Serviço
+	 * [UC0470] Acompanhar Roteiro de Programao de Ordens de Servio [FS0008]
+	 * - Verificar possibilidade da incluso da ordem de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 12/06/2008
@@ -12929,7 +12930,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0456] Elaborar Roteiro de Programação de Ordens de Serviço
+	 * [UC0456] Elaborar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/06/2008
@@ -13710,9 +13711,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisar Serviço Tipo Seletivo
+	 * Pesquisar Servio Tipo Seletivo
 	 * 
-	 * Seleciona Serviço Tipo Seletivo por codigo da constante
+	 * Seleciona Servio Tipo Seletivo por codigo da constante
 	 * 
 	 * @author Hugo Amorim
 	 * @date 09/10/2009
@@ -13750,7 +13751,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de Serviço
+	 * [UC0470] Acompanhar Roteiro de Programao de Ordens de Servio
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/09/2006
@@ -13784,9 +13785,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisar Serviço Tipo Seletivo
+	 * Pesquisar Servio Tipo Seletivo
 	 * 
-	 * Seleciona Serviço Tipo Seletivo por codigo da constante
+	 * Seleciona Servio Tipo Seletivo por codigo da constante
 	 * 
 	 * @author Hugo Amorim
 	 * @date 12/02/2009
@@ -13821,7 +13822,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa a quantidade Ordens em Processo de Repavimentação
+	 * Pesquisa a quantidade Ordens em Processo de Repavimentao
 	 * 
 	 * [UC0639] Filtrar Ordens em Processo de Repavimetaï¿½ï¿½o.
 	 * 
@@ -14005,7 +14006,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * Pesquisa a quantidade de Ocorrï¿½ncias Consecultivas da anormalidade
 	 * 
-	 * Parte do [UC0711] Filtro Para Geraï¿½ï¿½o de Ordens de Serviço
+	 * Parte do [UC0711] Filtro Para Geraï¿½ï¿½o de Ordens de Servio
 	 * Hidrï¿½metro.
 	 * 
 	 * @author Daniel Alves
@@ -14189,9 +14190,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [SB0006] - Obter Unidade Repavimentadora do Município
+	 * [SB0006] - Obter Unidade Repavimentadora do Municpio
 	 * 
-	 * 1.1.1.1. Obter a unidade repavimentadora a partir do município do
+	 * 1.1.1.1. Obter a unidade repavimentadora a partir do municpio do
 	 * endereï¿½o do CEP ou do endereco do bairro
 	 * 
 	 * @author Arthur Carvalho
@@ -14261,7 +14262,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa Ordens de Repavimentação em Processo de Aceite.
+	 * Pesquisa Ordens de Repavimentao em Processo de Aceite.
 	 * 
 	 * [UC1019] Filtrar Ordens de Repavimetaï¿½ï¿½o em Processo de Aceite.
 	 * 
@@ -14404,7 +14405,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Pesquisa quantidade Ordens de Repavimentação em Processo de Aceite.
+	 * Pesquisa quantidade Ordens de Repavimentao em Processo de Aceite.
 	 * 
 	 * [UC1019] Filtrar Ordens de Repavimetaï¿½ï¿½o em Processo de Aceite.
 	 * 
@@ -14541,7 +14542,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * Seleciona OSFS_DTFISCALIZACAOSITUACAO da tabela ORDEM_SERVICO_FISC_SIT
 	 * para ORSE_ID=ORSE_ID da tabela ORDEM_SERVICO
@@ -14582,7 +14583,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 29/07/2010
@@ -14620,7 +14621,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 30/07/2010
@@ -14652,7 +14653,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/08/2010
@@ -14687,7 +14688,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 03/08/2010
@@ -14722,7 +14723,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 09/08/2010
@@ -14753,7 +14754,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização [SB0003] ï¿½
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao [SB0003] ï¿½
 	 * Calcular/Inserir Valor
 	 * 
 	 * @author Vivianne Sousa
@@ -14791,8 +14792,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização [SB0001] ï¿½ Atualizar
-	 * Ordem de Serviço.
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao [SB0001] ï¿½ Atualizar
+	 * Ordem de Servio.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/08/2010
@@ -14821,8 +14822,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização [SB0001] ï¿½ Atualizar
-	 * Ordem de Serviço.
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao [SB0001] ï¿½ Atualizar
+	 * Ordem de Servio.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/08/2010
@@ -14851,7 +14852,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizao
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 19/08/2010
@@ -14923,7 +14924,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0441] Consultar Dados da Ordem de Serviço
+	 * [UC0441] Consultar Dados da Ordem de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 01/09/2010
@@ -15058,7 +15059,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * [UC1109] Filtrar Dados para Geraï¿½ï¿½o Boletim de Custo de
-	 * Repavimentação
+	 * Repavimentao
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 03/01/2011
@@ -15069,7 +15070,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			FiltrarBoletimCustoPavimentoHelper relatorioHelper)
 					throws ErroRepositorioException {
 
-		// Cria uma sessão com o hibernate
+		// Cria uma sesso com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		// Retorno Consulta
@@ -15158,10 +15159,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 			// Erro no hibernate
 		} catch (HibernateException e) {
-			// Levanta a exceção para a próxima camada
+			// Levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// Fecha a sessão com o hibernate
+			// Fecha a sesso com o hibernate
 			HibernateUtil.closeSession(session);
 		}
 
@@ -15170,7 +15171,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * 
-	 * [UC1110] Gerar Boletim de Custo de Repavimentação por Tipo de Pavimento
+	 * [UC1110] Gerar Boletim de Custo de Repavimentao por Tipo de Pavimento
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 04/01/2011
@@ -15285,7 +15286,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * 
-	 * [UC1110] Gerar Boletim de Custo de Repavimentação por Tipo de Pavimento
+	 * [UC1110] Gerar Boletim de Custo de Repavimentao por Tipo de Pavimento
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 04/01/2011
@@ -15406,7 +15407,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * 
-	 * [UC1110] Gerar Boletim de Custo de Repavimentação por Tipo de Pavimento
+	 * [UC1110] Gerar Boletim de Custo de Repavimentao por Tipo de Pavimento
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 10/01/2011
@@ -15491,7 +15492,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * 
-	 * [UC1110] Gerar Boletim de Custo de Repavimentação por Tipo de Pavimento
+	 * [UC1110] Gerar Boletim de Custo de Repavimentao por Tipo de Pavimento
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 10/01/2011
@@ -15584,7 +15585,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * 
-	 * [UC1110] Gerar Boletim de Custo de Repavimentação por Tipo de Pavimento
+	 * [UC1110] Gerar Boletim de Custo de Repavimentao por Tipo de Pavimento
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 10/01/2011
@@ -15669,7 +15670,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/01/2011
@@ -15702,7 +15703,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/01/2011
@@ -15735,7 +15736,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1116] Atualizar Informações da OS para Boletim de Medição
+	 * [UC1116] Atualizar Informaes da OS para Boletim de Medio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/02/2011
@@ -15839,7 +15840,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1116] Atualizar Informações da OS para Boletim de Medição
+	 * [UC1116] Atualizar Informaes da OS para Boletim de Medio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/02/2011
@@ -15871,7 +15872,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Serviço
+	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/04/2011
@@ -16086,7 +16087,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Serviço
+	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/04/2011
@@ -16160,7 +16161,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Serviço
+	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/04/2011
@@ -16317,7 +16318,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * 
 	 * Recupera os parï¿½metros necessï¿½rios da OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 04/04/2011
 	 * 
 	 * @param idOS
@@ -16353,7 +16354,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Serviço
+	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 04/05/2011
@@ -16494,10 +16495,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * Atualiza o documento de cobranï¿½a da ordem de Serviço que foi gerado
+	 * Atualiza o documento de cobranï¿½a da ordem de Servio que foi gerado
 	 * pelo "[UC0444 Gerar e Emitir Extrato de Dï¿½bito]"
 	 * 
-	 * [UC1169] Movimentar Ordens de Serviço de Cobranï¿½a por Resultado
+	 * [UC1169] Movimentar Ordens de Servio de Cobranï¿½a por Resultado
 	 * 
 	 * @author Mariana Victor
 	 * @date 19/05/2011
@@ -16529,9 +16530,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
+	 * [UC1176] Gerar Ordem de Fiscalizao para Ordem de Servio Encerrada
 	 * 
-	 * [FS0001] ï¿½ Validar Ordem de Serviço.
+	 * [FS0001] ï¿½ Validar Ordem de Servio.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 24/05/2011
@@ -16568,8 +16569,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
-	 * [SB0001] - Selecionar Ordens de Serviço
+	 * [UC1176] Gerar Ordem de Fiscalizao para Ordem de Servio Encerrada
+	 * [SB0001] - Selecionar Ordens de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 24/05/2011
@@ -16606,7 +16607,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ " AND imov.imov_icexclusao = 2 "
 					+ " AND orse.orse_cdsituacao = 2 "
 					+ " AND orse.amen_id = 2 "
-					+ // CONCLUSï¿½O DO Serviço
+					+ // CONCLUSï¿½O DO Servio
 					" AND not exists (select os.orse_id  "
 					+ " from ATENDIMENTOPUBLICO.ordem_servico os "
 					+ " where os.orse_idreferencia = orse.orse_id  "
@@ -16665,8 +16666,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
-	 * [SB0001] - Selecionar Ordens de Serviço
+	 * [UC1176] Gerar Ordem de Fiscalizao para Ordem de Servio Encerrada
+	 * [SB0001] - Selecionar Ordens de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 24/05/2011
@@ -16703,7 +16704,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ " AND imov.imov_icexclusao = 2 "
 					+ " AND orse.orse_cdsituacao = 2 "
 					+ " AND orse.amen_id not in (32,2)"
-					+ // CANCELADO POR DECURSO DE PRAZO,CONCLUSï¿½O DO Serviço
+					+ // CANCELADO POR DECURSO DE PRAZO,CONCLUSï¿½O DO Servio
 					" AND not exists (select os.orse_id  "
 					+ " from ATENDIMENTOPUBLICO.ordem_servico os "
 					+ " where os.orse_idreferencia = orse.orse_id  "
@@ -16760,9 +16761,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
+	 * [UC1176] Gerar Ordem de Fiscalizao para Ordem de Servio Encerrada
 	 * 
-	 * [FS0001] ï¿½ Validar Ordem de Serviço.
+	 * [FS0001] ï¿½ Validar Ordem de Servio.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/05/2011
@@ -16795,9 +16796,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
+	 * [UC1176] Gerar Ordem de Fiscalizao para Ordem de Servio Encerrada
 	 * 
-	 * [SB0001] - Selecionar Ordens de Serviço
+	 * [SB0001] - Selecionar Ordens de Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/05/2011
@@ -16829,8 +16830,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
-	 * [SB0002] ï¿½ Verificar Ordem Serviço
+	 * [UC1176] Gerar Ordem de Fiscalizao para Ordem de Servio Encerrada
+	 * [SB0002] ï¿½ Verificar Ordem Servio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/05/2011
@@ -16862,8 +16863,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
-	 * [SB0003] - Gerar Vï¿½rias Ordens de Fiscalização
+	 * [UC1176] Gerar Ordem de Fiscalizao para Ordem de Servio Encerrada
+	 * [SB0003] - Gerar Vï¿½rias Ordens de Fiscalizao
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/05/2011
@@ -16900,7 +16901,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ " AND imov.imov_icexclusao = 2 "
 					+ " AND orse.orse_cdsituacao = 2 "
 					+ " AND orse.amen_id = 2 "
-					+ // CONCLUSï¿½O DO Serviço
+					+ // CONCLUSï¿½O DO Servio
 					" AND not exists (select os.orse_id  "
 					+ " from ATENDIMENTOPUBLICO.ordem_servico os "
 					+ " where os.orse_idreferencia = orse.orse_id  "
@@ -16955,8 +16956,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
-	 * [SB0003] - Gerar Vï¿½rias Ordens de Fiscalização
+	 * [UC1176] Gerar Ordem de Fiscalizao para Ordem de Servio Encerrada
+	 * [SB0003] - Gerar Vï¿½rias Ordens de Fiscalizao
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/05/2011
@@ -16993,7 +16994,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ " AND imov.imov_icexclusao = 2 "
 					+ " AND orse.orse_cdsituacao = 2 "
 					+ " AND orse.amen_id not in (32,2)"
-					+ // CANCELADO POR DECURSO DE PRAZO,CONCLUSï¿½O DO Serviço
+					+ // CANCELADO POR DECURSO DE PRAZO,CONCLUSï¿½O DO Servio
 					" AND not exists (select os.orse_id  "
 					+ " from ATENDIMENTOPUBLICO.ordem_servico os "
 					+ " where os.orse_idreferencia = orse.orse_id  "
@@ -17049,8 +17050,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
-	 * [SB0004] ï¿½ Gerar Ordem de Serviço.
+	 * [UC1176] Gerar Ordem de Fiscalizao para Ordem de Servio Encerrada
+	 * [SB0004] ï¿½ Gerar Ordem de Servio.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 27/05/2011
@@ -17087,7 +17088,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
+	 * [UC1176] Gerar Ordem de Fiscalizao para Ordem de Servio Encerrada
 	 * 
 	 * @author Vivianne sousa
 	 * @date 30/05/2011
@@ -17138,7 +17139,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1116] Atualizar Informações da OS para Boletim de Medição
+	 * [UC1116] Atualizar Informaes da OS para Boletim de Medio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 01/06/2011
@@ -17175,7 +17176,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1116] Atualizar Informações da OS para Boletim de Medição
+	 * [UC1116] Atualizar Informaes da OS para Boletim de Medio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 01/06/2011
@@ -17201,10 +17202,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 
@@ -17219,7 +17220,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0713] Emitir Ordem de Serviço Seletiva [SB0002] Gerar TXT
+	 * [UC0713] Emitir Ordem de Servio Seletiva [SB0002] Gerar TXT
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 28/06/2011
@@ -17266,7 +17267,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0713] Emitir Ordem de Serviço Seletiva [SB0002] Gerar TXT
+	 * [UC0713] Emitir Ordem de Servio Seletiva [SB0002] Gerar TXT
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 29/06/2011
@@ -17298,7 +17299,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0713] Emitir Ordem de Serviço Seletiva [SB0002] Gerar TXT
+	 * [UC0713] Emitir Ordem de Servio Seletiva [SB0002] Gerar TXT
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 05/07/2011
@@ -17339,7 +17340,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0713] Emitir Ordem de Serviço Seletiva [SB0002] Gerar TXT
+	 * [UC0713] Emitir Ordem de Servio Seletiva [SB0002] Gerar TXT
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 05/07/2011
@@ -17369,9 +17370,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0412] Manter Tipo de Serviço [SB0003] Atualizar Grau de Importância
+	 * [UC0412] Manter Tipo de Servio [SB0003] Atualizar Grau de Importncia
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 30/06/2011
 	 */
 	public void atualizarGrauImportanciaServicoTipo(ServicoTipo servicoTipo)
@@ -17390,10 +17391,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					.setTimestamp("dataAtual", new Date()).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -17441,10 +17442,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 
@@ -17518,10 +17519,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 
@@ -17571,10 +17572,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 							.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -17607,10 +17608,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 							idComandoOrdemSeletiva).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -17643,10 +17644,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 							idComandoOrdemSeletiva).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -17679,10 +17680,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 							idComandoOrdemSeletiva).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -17714,10 +17715,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 							.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -17788,7 +17789,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 	/**
 	 * [UC1192] Movimentar OS Seletiva de Inspeï¿½ï¿½o de Anormalidade [FS0001]
-	 * - Verificar se ordem de Serviço faz parte do comando
+	 * - Verificar se ordem de Servio faz parte do comando
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 19/07/2011
@@ -17862,10 +17863,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Servio do Roteiro Programado
 	 * 
 	 * Pesquisa os id's das equipes que ainda possuem OS, para a data informada,
-	 * que ainda não foram encaminhadas para o campo.
+	 * que ainda no foram encaminhadas para o campo.
 	 * 
 	 * @author Bruno Barros
 	 * @date 06/07/2011
@@ -17873,7 +17874,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * @param dataRoteiro
 	 *            - Data para a pesquisa das OS
 	 * 
-	 * @return Collection<Integer> - Coleção com todos os ID's das equipes.
+	 * @return Collection<Integer> - Coleo com todos os ID's das equipes.
 	 * 
 	 * @throws ErroRepositorioException
 	 */
@@ -17909,9 +17910,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Servio do Roteiro Programado
 	 * 
-	 * Pesquisa se ja foi incluido um arquivo de acompanhamento de Serviço para
+	 * Pesquisa se ja foi incluido um arquivo de acompanhamento de Servio para
 	 * a equipe / data informadas
 	 * 
 	 * @author Bruno Barros
@@ -17963,7 +17964,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Servio do Roteiro Programado
 	 * 
 	 * Pesquisa o imei de uma equipe
 	 * 
@@ -18002,9 +18003,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Servio do Roteiro Programado
 	 * 
-	 * Pesquisa as OS que ainda não foram enviadas para uma equipe em uma
+	 * Pesquisa as OS que ainda no foram enviadas para uma equipe em uma
 	 * determinada data
 	 * 
 	 * @author Bruno Barros
@@ -18013,8 +18014,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * @param idEquipe
 	 *            - id da equipe que terï¿½ as os incluidas
 	 * 
-	 * @return Collection<OSProgramacao> - Coleção com todos as ordens de
-	 *         servico a serem incluidas na programação
+	 * @return Collection<OSProgramacao> - Coleo com todos as ordens de
+	 *         servico a serem incluidas na programao
 	 * 
 	 * @throws ErroRepositorioException
 	 */
@@ -18064,7 +18065,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Servio do Roteiro Programado
 	 * 
 	 * Pesquisa as OS que foram enviadas para uma equipe em uma determinada data
 	 * 
@@ -18074,8 +18075,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * @param idEquipe
 	 *            - id da equipe que terï¿½ as os incluidas
 	 * 
-	 * @return Collection<OSProgramacao> - Coleção com todos as ordens de
-	 *         servico a serem incluidas na programação
+	 * @return Collection<OSProgramacao> - Coleo com todos as ordens de
+	 *         servico a serem incluidas na programao
 	 * 
 	 * @throws ErroRepositorioException
 	 */
@@ -18118,9 +18119,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Servio do Roteiro Programado
 	 * 
-	 * Pesquisa o id do Arquivo Texto do Acompanhamento de Serviço
+	 * Pesquisa o id do Arquivo Texto do Acompanhamento de Servio
 	 * 
 	 * @author Bruno Barros
 	 * @date 06/07/2011
@@ -18163,9 +18164,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UC1199] ï¿½ Acompanhar Arquivos de Roteiro
 	 * 
-	 * Pesquisa o Arquivo Texto do Acompanhamento de Serviço
+	 * Pesquisa o Arquivo Texto do Acompanhamento de Servio
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 19/07/2011
 	 * 
 	 * @param periodoProgramacaoInicial
@@ -18253,7 +18254,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * 
 	 * Pesquisa OS Programacao Acompanhamento Servico
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 21/07/2011
 	 * 
 	 * @param idArqTextoAcompServico
@@ -18369,7 +18370,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0713] Emitir Ordem de Serviço Seletiva [SB0002] Gerar TXT
+	 * [UC0713] Emitir Ordem de Servio Seletiva [SB0002] Gerar TXT
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/07/2011
@@ -18398,9 +18399,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public Date pesquisarDataAnteriorProgramacaoRoteiro(
@@ -18433,9 +18434,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * -- [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * -- [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public Collection pesquisarOSAcompServicoTransmitidasNaoAtualizadas(
@@ -18479,9 +18480,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public Collection pesquisarOSAcompServicoNaoENcerradas(
@@ -18527,9 +18528,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public Equipe pesquisarEquipeComEquipamentoEspecial(
@@ -18566,11 +18567,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * [SB0002] Inserir Ordem de Serviço na Programação
+	 * [SB0002] Inserir Ordem de Servio na Programao
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public ProgramacaoRoteiro pesquisarProgramacaoRoteiro(
@@ -18608,11 +18609,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * [SB0002] Inserir Ordem de Serviço na Programação
+	 * [SB0002] Inserir Ordem de Servio na Programao
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public short pesquisarMaiorSequencialOSProgramacao(
@@ -18650,11 +18651,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * [SB0002] Inserir Ordem de Serviço na Programação
+	 * [SB0002] Inserir Ordem de Servio na Programao
 	 * 
-	 * @author Sávio Luiz -
+	 * @author Svio Luiz -
 	 * @date 19/07/2011
 	 */
 	public void atualizarIndicadorOSProgramada(Integer idOrdemServico)
@@ -18672,20 +18673,20 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			.setTimestamp("dataAtual", new Date()).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * [SB0003] Programação Automática das Ordens de Serviço por Prioridade
+	 * [SB0003] Programao Automtica das Ordens de Servio por Prioridade
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public Collection<Object[]> pesquisarOSProgramacaoAutomatica(
@@ -18739,11 +18740,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * [SB0003] Programação Automática das Ordens de Serviço por Prioridade
+	 * [SB0003] Programao Automtica das Ordens de Servio por Prioridade
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public Object[] pesquisarDadosOSCalibragem(Integer idPriorizacaoTipo,
@@ -18790,10 +18791,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Servio do Roteiro Programado
 	 * 
 	 * Pesquisa a tabela atendimentopublico.os_prg_acomp_servico retornando
-	 * apenas as os que ainda não foram enviadas.
+	 * apenas as os que ainda no foram enviadas.
 	 * 
 	 * @author Bruno Barros
 	 * @date 26/07/2011
@@ -18801,8 +18802,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * @param idEquipe
 	 *            - id da equipe que terï¿½ as os incluidas
 	 * 
-	 * @return Collection<OSProgramacaoAcompanhamentoServico> - Coleção com
-	 *         todos as ordens de servico a serem incluidas na programação
+	 * @return Collection<OSProgramacaoAcompanhamentoServico> - Coleo com
+	 *         todos as ordens de servico a serem incluidas na programao
 	 * 
 	 * @throws ErroRepositorioException
 	 */
@@ -18846,10 +18847,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Servio do Roteiro Programado
 	 * 
 	 * Pesquisa a tabela atendimentopublico.os_at_prg_acomp_servico apenas as os
-	 * que ainda não foram enviadas.
+	 * que ainda no foram enviadas.
 	 * 
 	 * @author Bruno Barros
 	 * @date 26/07/2011
@@ -18857,8 +18858,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * @param idOSProgramacaoAcompanhamentoServico
 	 *            - id da ativdade programacao
 	 * 
-	 * @return Collection<OSAtividadeProgramacaoAcompanhamentoServico> - Coleção
-	 *         com todas as atividades a serem incluidas na programação
+	 * @return Collection<OSAtividadeProgramacaoAcompanhamentoServico> - Coleo
+	 *         com todas as atividades a serem incluidas na programao
 	 * 
 	 * @throws ErroRepositorioException
 	 */
@@ -18893,11 +18894,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * [SB0004] Recuperar Equipe Pela Ordem de Serviço
+	 * [SB0004] Recuperar Equipe Pela Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public Collection<Equipe> pequisarEquipesPorUnidade(Integer idUnidade)
@@ -18924,11 +18925,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * [SB0004] Recuperar Equipe Pela Ordem de Serviço
+	 * [SB0004] Recuperar Equipe Pela Ordem de Servio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public Object[] pesquisarTempoMedioOSProgramacaoComDataRoteiroUnidade(
@@ -18972,9 +18973,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS D
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS D
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public Collection<Integer> pesquisarOSFatorPrioridadeDecrescente(
@@ -19014,7 +19015,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeção de Anormalidade
+	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeo de Anormalidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/07/2011
@@ -19049,9 +19050,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public void excluirOSProgramadas(Integer idUnidadeOrganizacional,
@@ -19175,10 +19176,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC0412] Manter Tipo de Serviço
+	 * [UC0412] Manter Tipo de Servio
 	 * 
-	 * Metodo responsável por deletar motivos de encerramento a partir de um
-	 * tipo de Serviço
+	 * Metodo responsvel por deletar motivos de encerramento a partir de um
+	 * tipo de Servio
 	 * 
 	 * @author Raimundo Martins
 	 * @date 26/07/2011
@@ -19198,20 +19199,20 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			.setInteger("idServicoTipo", idServicoTipo).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * [SB0003] Programação Automática das Ordens de Serviço por Prioridade
+	 * [SB0003] Programao Automtica das Ordens de Servio por Prioridade
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public void atualizarFatorPrioridadeOS(Integer idOrdemServico,
@@ -19233,20 +19234,20 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			.executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
-	 * [SB0003] Programação Automática das Ordens de Serviço por Prioridade
+	 * [SB0003] Programao Automtica das Ordens de Servio por Prioridade
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 19/07/2011
 	 */
 	public Integer pesquisarQuantidadeRAReativacao(Integer idRA)
@@ -19264,20 +19265,20 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					.setInteger("idRA", idRA).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 		return qdtRAReativacao;
 	}
 
 	/**
-	 * [UC1190] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1190] Programao Automtica do Roteiro para Acompanhamento das OS
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 30/07/2011
 	 */
 	public Collection pequisarUnidadesOrganizacionaisdasEquipes()
@@ -19304,7 +19305,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UC1199] Acompanhamento de Arquivos de Roteiro
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 28/07/2011
 	 * 
 	 * @param ids
@@ -19336,8 +19337,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1192] Movimentar OS Seletiva de Inspeção de Anormalidade Verificar se
-	 * ordem de serviço que faz parte do comando ja esta encerrada
+	 * [UC1192] Movimentar OS Seletiva de Inspeo de Anormalidade Verificar se
+	 * ordem de servio que faz parte do comando ja esta encerrada
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/08/2011
@@ -19397,7 +19398,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Servio do Roteiro Programado
 	 * 
 	 * Exclue o arquivo de uma equipe para uma determinada data
 	 * 
@@ -19431,7 +19432,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Servio do Roteiro Programado
 	 * 
 	 * Exclue o as os programadas
 	 * 
@@ -19463,7 +19464,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Servio do Roteiro Programado
 	 * 
 	 * Exclue o as os programadas
 	 * 
@@ -19661,12 +19662,12 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * [UC1199] - Acompanhar Arquivos de Roteiro
 	 * 
 	 * Pesquisa a(s) equipe(s) da OS Programacao Acompanhamento Servico
-	 * filtrando pelo identificador da Ordem de Serviço
+	 * filtrando pelo identificador da Ordem de Servio
 	 * 
 	 * @author Raimundo Martins
 	 * @date 09/08/2011
 	 * 
-	 * @param idOrdemServiço
+	 * @param idOrdemServio
 	 * 
 	 * @return Collection<Integer>
 	 * @throws ErroRepositorioException
@@ -19700,7 +19701,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * 
 	 * Pesquisa OS Programacao Acompanhamento Servico por Equipe
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 22/08/2011
 	 * 
 	 * @param idArqTextoAcompServico
@@ -19873,7 +19874,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UC1199] Acompanhamento de Arquivos de Roteiro
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 27/08/2011
 	 * 
 	 * @throws ErroRepositorioException
@@ -19917,7 +19918,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UC1199] Acompanhamento de Arquivos de Roteiro
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 27/08/2011
 	 * 
 	 * @throws ErroRepositorioException
@@ -19969,7 +19970,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * Pesquisa as OS que ainda nã¯ foram enviadas para uma equipe em uma
 	 * determinada data
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 06/07/2011
 	 * 
 	 * @param idEquipe
@@ -20034,7 +20035,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * Pesquisa os id's das equipes que ainda possuem OS, para a data informada,
 	 * que ainda nã¯ foram encaminhadas para o campo.
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 06/07/2011
 	 * 
 	 * @param dataRoteiro
@@ -20087,7 +20088,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * Pesquisa o Arquivo Texto do Acompanhamento de Serviç¯ por Equipe e Data
 	 * Roteiro
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 06/07/2011
 	 * 
 	 * @param idEquipe
@@ -20131,7 +20132,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	/**
 	 * [UCXXX] - Retornar Mensagem Cadastrada para Equipe
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 08/09/2011
 	 * 
 	 * @param idArquivo
@@ -20177,7 +20178,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * 
 	 * Pesquisar o id do Arquivo Texto do Acompanhamento de Serviç¯¿
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 15/09/2011
 	 * 
 	 * @param imei
@@ -20506,17 +20507,17 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1225] Incluir Dados Acompanhamento de Serviço
+	 * [UC1225] Incluir Dados Acompanhamento de Servio
 	 * 
-	 * [FS0001] - Verificar existência do número da ordem de serviço
+	 * [FS0001] - Verificar existncia do nmero da ordem de servio
 	 * 
-	 * Caso o numero da ordem de serviço não exista na tabela ORDEM_SERVICO,
-	 * exibir a mensagem Ordem de Serviço inexistente: <<número da Ordem de
-	 * Serviço>
+	 * Caso o numero da ordem de servionoexista na tabela ORDEM_SERVICO,
+	 * exibir a mensagem Ordem de Servioinexistente: <<nmero da Ordem de
+	 * Servio>
 	 * 
 	 * e retornar para pro tipo 1 do arquivo de retorno.
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 23/09/2011
 	 * 
 	 * @param helperLaco
@@ -20628,11 +20629,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1225] Incluir Dados Acompanhamento de Serviço
+	 * [UC1225] Incluir Dados Acompanhamento de Servio
 	 * 
 	 * Pesquisa OS Programacao Acompanhamento Servico por idOs e dataProgramacao
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 23/09/2011
 	 * 
 	 * @param idOs
@@ -20671,12 +20672,12 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1225] Incluir Dados Acompanhamento de Serviço
+	 * [UC1225] Incluir Dados Acompanhamento de Servio
 	 * 
 	 * Pesquisa OS Atividade Programacao Acompanhamento Servico por idOs,
 	 * dataProgramacao, idAtividade
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 23/09/2011
 	 * 
 	 * @param idOrdemServico
@@ -20717,12 +20718,12 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1225] Incluir Dados Acompanhamento de Serviço
+	 * [UC1225] Incluir Dados Acompanhamento de Servio
 	 * 
 	 * Excluir os dados da tabela OSAtividadeExecucaoAcompanhamentoServico para
 	 * cada id da tabela OsAtividadeProgramcaoAcompanhamentoServico
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 26/09/2011
 	 * 
 	 * @param Collection
@@ -20758,13 +20759,13 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1225] Incluir Dados Acompanhamento de Serviço
+	 * [UC1225] Incluir Dados Acompanhamento de Servio
 	 * 
 	 * Excluir os dados da tabela
 	 * OSAtividadeMaterialProgramacaoAcompanhamentoServico para cada id da
 	 * tabela OsAtividadeProgramcaoAcompanhamentoServico
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 26/09/2011
 	 * 
 	 * @param Collection
@@ -20800,12 +20801,12 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	}
 
 	/**
-	 * [UC1225] Incluir Dados Acompanhamento de Serviço
+	 * [UC1225] Incluir Dados Acompanhamento de Servio
 	 * 
 	 * Excluir os dados da tabela OSAtividadeProgramacaoAcompanhamentoServico
 	 * para cada id da tabela OsAtividadeProgramcaoAcompanhamentoServico
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thlio Arajo
 	 * @date 26/09/2011
 	 * 
 	 * @param Collection
