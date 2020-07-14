@@ -16,9 +16,9 @@
 					</logic:notPresent>
 				</td>
 <<<<<<< HEAD
-          		<td align="right">Vers&atilde;o:  (Online) 20/01/2020 - 16:57:50 </td>
+          		<td align="right">Vers&atilde;o:  (Online) 14/07/2020 - 12:29:50 </td>
 =======
-          		<td align="right">Vers&atilde;o: ${gsan.versao} (Online) 18/06/2020 - 18:29:41 </td>
+          		<td align="right">Vers&atilde;o:  (Online) 14/07/2020 - 12:29:50 </td>
 >>>>>>> c90b5ea5afd052b5ff0cc374babb1b47697a57d0
         	</tr>
       	</table>

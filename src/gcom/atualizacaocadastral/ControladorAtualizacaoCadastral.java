@@ -1167,7 +1167,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 						getControladorUtil().atualizar(tabelaColuna);
 					}
 				}
-				this.aprovarImovel(imovel.getIdImovel(), null);
+				this.aprovarImovel(imovel.getIdImovel(), imovel.getTipoOperacao());
 				
 			}
 		} catch (Exception e) {
