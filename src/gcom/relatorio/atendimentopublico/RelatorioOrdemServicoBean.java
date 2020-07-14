@@ -103,7 +103,7 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 	private String localInstalacaoRamal;
 	private String profundidadeRamal;
 	private String distanciaInstalacaoRamal;
-	
+	private String grupoFaturamento;
 	
 	public RelatorioOrdemServicoBean(
 			String idOrdemServico, 
@@ -240,7 +240,8 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 			String cpfCnpjCliente,
 			String localInstalacaoRamal,
 			String profundidadeRamal,
-			String distanciaInstalacaoRamal) {
+			String distanciaInstalacaoRamal,
+			String grupoFaturamento) {
 		
 		this.idOrdemServico = idOrdemServico;
 		this.idRA = idRA;
@@ -315,6 +316,7 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 		this.localInstalacaoRamal = localInstalacaoRamal;
 		this.profundidadeRamal = profundidadeRamal; 
 		this.distanciaInstalacaoRamal = distanciaInstalacaoRamal;
+		this.grupoFaturamento = grupoFaturamento;
 		
 	}
 	
@@ -380,7 +382,8 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 			String hidrometroDiametro,
 			String hidrometroLocal,
 			String hidrometroLeitura,
-			String hidrometroNumeroDigitos
+			String hidrometroNumeroDigitos,
+			String grupoFaturamento
 	) {
 		
 		this.idOrdemServico = idOrdemServico;
@@ -446,6 +449,7 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 		this.hidrometroLocal = hidrometroLocal;
 		this.hidrometroLeitura = hidrometroLeitura;
 		this.hidrometroNumeroDigitos = hidrometroNumeroDigitos;
+		this.grupoFaturamento = grupoFaturamento;
 		
 	}
 
@@ -575,6 +579,14 @@ public class RelatorioOrdemServicoBean implements RelatorioBean {
 
 	public void setIdRA(String idRA) {
 		this.idRA = idRA;
+	}
+	
+	public String getGrupoFaturamento() {
+		return grupoFaturamento;
+	}
+
+	public void setGrupoFaturamento(String grupoFaturamento) {
+		this.grupoFaturamento = grupoFaturamento;
 	}
 
 	public String getSolicitante() {

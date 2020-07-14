@@ -113,6 +113,16 @@ public class OSRelatorioHelper implements Serializable {
 	private HidrometroRelatorioOSHelper hidrometroRelatorioOSHelper;
 	
 	private String nomeProjeto;
+	
+	private Integer grupoFaturamento; 
+	
+	public Integer getGrupoFaturamento() {
+		return grupoFaturamento;
+	}
+
+	public void setGrupoFaturamento(Integer grupoFaturamento) {
+		this.grupoFaturamento = grupoFaturamento;
+	}
 
 	public String getNomeProjeto() {
 		return nomeProjeto;
@@ -545,5 +555,7 @@ public class OSRelatorioHelper implements Serializable {
 	public void setDataEmissao(Date dataEmissao) {
 		this.dataEmissao = dataEmissao;
 	}
+
+	
 
 }

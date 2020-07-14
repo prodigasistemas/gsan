@@ -519,6 +519,14 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 					nomeSolicitante = ordemServicoRelatorioHelper.getNomeSolicitante();							
 				}
 				
+				String grupoFaturamento = "";
+				if(ordemServicoRelatorioHelper.getGrupoFaturamento() != null && 
+						!"".equals(ordemServicoRelatorioHelper.getGrupoFaturamento())){
+					
+					grupoFaturamento = ordemServicoRelatorioHelper.getGrupoFaturamento().toString();							
+				}
+				
+				
 				// 	inicio do relatorio bean
 				relatorioBean = new RelatorioOrdemServicoBean(
 						
@@ -629,7 +637,10 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 						
 						(ligacaoAgua != null && ligacaoAgua.getRamalLocalInstalacao() != null ? ligacaoAgua.getRamalLocalInstalacao().getDescricao() : ""),
 						(ligacaoAgua != null && ligacaoAgua.getProfundidadeRamal() != null ? Util.formatarBigDecimalParaStringComVirgula(ligacaoAgua.getProfundidadeRamal()) : ""),
-						(ligacaoAgua != null && ligacaoAgua.getDistanciaInstalacaoRamal() != null ? Util.formatarBigDecimalParaStringComVirgula(ligacaoAgua.getDistanciaInstalacaoRamal()) : ""));
+						(ligacaoAgua != null && ligacaoAgua.getDistanciaInstalacaoRamal() != null ? Util.formatarBigDecimalParaStringComVirgula(ligacaoAgua.getDistanciaInstalacaoRamal()) : ""),
+						
+						// grupo de Faturamento
+						grupoFaturamento);
 						
 				//Perfil do imovel
 				OrdemServico ordemServico = fachada.pesquisarOrdemServico(ordemServicoRelatorioHelper.getIdOrdemServico());

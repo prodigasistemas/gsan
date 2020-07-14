@@ -102,6 +102,7 @@
 	<field name="getLocalInstalacaoRamal" class="java.lang.String"/>
 	<field name="getDistanciaInstalacaoRamal" class="java.lang.String"/>
 	<field name="getProfundidadeRamal" class="java.lang.String"/>
+	<field name="getGrupoFaturamento" class="java.lang.String"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -3525,7 +3526,7 @@
 					<reportElement
 						x="45"
 						y="49"
-						width="486"
+						width="273"
 						height="10"
 						key="textField">
 							<printWhenExpression><![CDATA[new Boolean($F{getNomeProjeto}!=null)]]></printWhenExpression>
@@ -3781,6 +3782,41 @@
 					</textElement>
 				<text><![CDATA[CONVERSÃO]]></text>
 				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="396"
+						y="48"
+						width="0"
+						height="12"
+						key="line-104"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="399"
+						y="50"
+						width="56"
+						height="10"
+						key="staticText-129"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Grupo Fat.:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="455"
+						y="50"
+						width="78"
+						height="10"
+						key="textField-39"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Courier New" pdfFontName="Courier" size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getGrupoFaturamento}]]></textFieldExpression>
+				</textField>
 			</band>
 		</detail>
 		<columnFooter>
