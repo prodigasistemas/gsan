@@ -114,13 +114,13 @@ public class OSRelatorioHelper implements Serializable {
 	
 	private String nomeProjeto;
 	
-	private String grupoFaturamento; 
+	private Integer grupoFaturamento; 
 	
-	public String getGrupoFaturamento() {
+	public Integer getGrupoFaturamento() {
 		return grupoFaturamento;
 	}
 
-	public void setGrupoFaturamento(String grupoFaturamento) {
+	public void setGrupoFaturamento(Integer grupoFaturamento) {
 		this.grupoFaturamento = grupoFaturamento;
 	}
 

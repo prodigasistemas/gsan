@@ -5793,6 +5793,11 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 							oSRelatorioHelper.setNomeProjeto(projeto.getNome());
 						}
 					}
+					// Grupo de Faturamento
+					if (dadosOS[37] != null) { // 37
+						oSRelatorioHelper.setGrupoFaturamento((Integer) dadosOS[37]);
+					}
+					
 					colecaoOSRelatorioHelper.add(oSRelatorioHelper);
 				}
 			}

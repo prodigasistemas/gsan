@@ -523,7 +523,7 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 				if(ordemServicoRelatorioHelper.getGrupoFaturamento() != null && 
 						!"".equals(ordemServicoRelatorioHelper.getGrupoFaturamento())){
 					
-					grupoFaturamento = ordemServicoRelatorioHelper.getGrupoFaturamento();							
+					grupoFaturamento = ordemServicoRelatorioHelper.getGrupoFaturamento().toString();							
 				}
 				
 				
