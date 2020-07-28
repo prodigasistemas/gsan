@@ -64,6 +64,7 @@ public class FiltrarRotaAction extends GcomAction {
 		String indicadorRotaAlternativa = rotaActionForm.getIndicadorRotaAlternativa();
 		String empresaEntregaContas = rotaActionForm.getEmpresaEntregaContas();
 		String indicadorTransmissaoOffline = rotaActionForm.getIndicadorTransmissaoOffline();
+		String indicadorImpressaoTermicaFinalGrupo = rotaActionForm.getIndicadorImpressaoTermicaFinalGrupo();
 		// 1 check   --- null uncheck 
 		String indicadorAtualizar = httpServletRequest.getParameter("indicadorAtualizar");
 		
@@ -191,7 +192,13 @@ public class FiltrarRotaAction extends GcomAction {
 			peloMenosUmParametroInformado = true;
 		}
 
-
+		if(indicadorImpressaoTermicaFinalGrupo != null && !indicadorImpressaoTermicaFinalGrupo.equals("")) {
+			filtroRota.adicionarParametro(new ParametroSimples(
+					FiltroRota.INDICADOR_IMPRESSAO_TERMICA_FINAL_GRUPO,indicadorImpressaoTermicaFinalGrupo));
+			
+			peloMenosUmParametroInformado = true;
+		}
+		
 		//Verificar preenchimento dos campos
 		if (!peloMenosUmParametroInformado){
 			throw new ActionServletException(
