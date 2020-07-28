@@ -90,6 +90,7 @@ public class ExibirFiltrarRotaAction extends GcomAction {
         	rotaActionForm.setEmpresaCobranca("");
         	rotaActionForm.setEmpresaEntregaContas("");
         	rotaActionForm.setEmpresaLeituristica("");
+        	rotaActionForm.setIndicadorImpressaoTermicaFinalGrupo(ConstantesSistema.NAO.shortValue()+"");
         	
         	sessao.setAttribute("indicadorAtualizar","1");
             sessao.removeAttribute("caminhoRetornoTelaPesquisa");
@@ -156,6 +157,8 @@ public class ExibirFiltrarRotaAction extends GcomAction {
 			rotaActionForm.setIndicadorTransmissaoOffline(ConstantesSistema.NAO.shortValue()+"");
 		}
         
+		
+		
         // código para checar ou naum o Atualizar
         String primeiraVez = httpServletRequest.getParameter("menu");
 		if (primeiraVez != null && !primeiraVez.equals("")) {

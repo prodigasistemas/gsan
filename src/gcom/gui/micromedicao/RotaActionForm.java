@@ -34,6 +34,7 @@ public class RotaActionForm extends ActionForm {
 	private String indicadorUso;
 	private String empresaEntregaContas;
 	private String indicadorTransmissaoOffline;
+	private String indicadorImpressaoTermicaFinalGrupo;
 	
 	public String getCobrancaCriterio() {
 		return cobrancaCriterio;
@@ -192,6 +193,13 @@ public class RotaActionForm extends ActionForm {
 	public void setIndicadorTransmissaoOffline(String indicadorTransmissaoOffline) {
 		this.indicadorTransmissaoOffline = indicadorTransmissaoOffline;
 	}
+	public String getIndicadorImpressaoTermicaFinalGrupo() {
+		return indicadorImpressaoTermicaFinalGrupo;
+	}
+	public void setIndicadorImpressaoTermicaFinalGrupo(String indicadorImpressaoTermicaFinalGrupo) {
+		this.indicadorImpressaoTermicaFinalGrupo = indicadorImpressaoTermicaFinalGrupo;
+	}
+	
 	
 	
 }
