@@ -81,7 +81,7 @@ public class RelatorioMotivoNaoGeracaoDocumentoCobranca extends TarefaRelatorio 
 			quadra = new Integer(form.getIdQuadra());
 		
 		
-		
+		parametros.put("descricaoTitulo", cobrancaAcaoAtividadeComando.getDescricaoTitulo());
 
 		byte[] retorno = null;
 		

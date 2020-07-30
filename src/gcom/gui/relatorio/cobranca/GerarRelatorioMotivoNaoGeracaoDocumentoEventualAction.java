@@ -75,6 +75,7 @@ public class GerarRelatorioMotivoNaoGeracaoDocumentoEventualAction extends Exibi
 		relatorio.addParametro("tipoRelatorio", tipoRelatorio);
 		relatorio.addParametro("indicadorCronograma", 2);
 		relatorio.addParametro("form",form);
+		relatorio.addParametro("descricaoTitulo", cobrancaAcaoAtividadeComando.getDescricaoTitulo());
 		
 		if(httpServletRequest.getParameter("filtroPorComandoSintetico") != null 
 				&& httpServletRequest.getParameter("filtroPorComandoSintetico").equals("true")){
