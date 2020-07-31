@@ -616,6 +616,7 @@ onload="setarFoco('${requestScope.nomeCampo}');">
 						tabindex="13" /> Sim <html:radio
 						property="indicadorImpressaoTermicaFinalGrupo" value="<%=ConstantesSistema.NAO.toString()%>"/>
 					Não </span></strong></td>
+					<html:hidden property = "ultimaAlteracao"/>
 				</tr>
 				
 				<tr>

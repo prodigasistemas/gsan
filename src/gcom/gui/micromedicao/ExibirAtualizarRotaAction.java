@@ -268,6 +268,7 @@ public class ExibirAtualizarRotaAction extends GcomAction {
 	        	inserirRotaActionForm.setIndicadorGerarFalsaFaixa("" + rota.getIndicadorGerarFalsaFaixa());
                 inserirRotaActionForm.setIndicadorAjusteConsumo( "" + rota.getIndicadorAjusteConsumo() );
                 inserirRotaActionForm.setIndicadorRotaAlternativa(""+rota.getIndicadorRotaAlternativa().shortValue());
+                inserirRotaActionForm.setIndicadorImpressaoTermicaFinalGrupo(""+rota.getIndicadorImpressaoTermicaFinalGrupo().shortValue());
                         
                 
                 if(rota.getNumeroDiasConsumoAjuste() != null && !rota.getNumeroDiasConsumoAjuste().equals("")){
@@ -313,6 +314,10 @@ public class ExibirAtualizarRotaAction extends GcomAction {
 	        	}
 	        	if ((rota.getIndicadorUso() != null) && (!rota.getIndicadorUso().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO))){
 	        		inserirRotaActionForm.setIndicadorUso("" + rota.getIndicadorUso());
+	        	}
+	        	
+	        	if ((rota.getIndicadorImpressaoTermicaFinalGrupo() != null) && (!rota.getIndicadorImpressaoTermicaFinalGrupo().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO))){
+	        		inserirRotaActionForm.setIndicadorImpressaoTermicaFinalGrupo("" + rota.getIndicadorImpressaoTermicaFinalGrupo());
 	        	}
 	        	
 	        	if(rota.getIndicadorRotaAlternativa() != null){

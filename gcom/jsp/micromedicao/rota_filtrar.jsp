@@ -318,6 +318,14 @@ onload="setarFoco('${requestScope.nomeCampo}');verificarChecado('${sessionScope.
 				</tr>	
 				
 				<tr>
+					<td><strong>Indicador de Impressão Térmica:</strong></td>
+					<td><strong> <span class="style1"> <html:radio
+						property="indicadorImpressaoTermicaFinalGrupo" value="<%=ConstantesSistema.SIM.toString()%>" tabindex="13" /> Sim <html:radio
+						property="indicadorImpressaoTermicaFinalGrupo" value="<%=ConstantesSistema.NAO.toString()%>"/> Não <html:radio 
+						property="indicadorImpressaoTermicaFinalGrupo" value=""/> Todos</span></strong></td>
+				</tr>
+				
+				<tr>
 					<td><strong>Indicador de Transmissão Off-line:<font color="#FF0000">*</font></strong></td>
 					<td><strong> <span class="style1"> <html:radio
 						property="indicadorTransmissaoOffline" value="<%=ConstantesSistema.SIM.toString()%>"

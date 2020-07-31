@@ -88,6 +88,7 @@ public class FiltroRota extends Filtro implements Serializable {
     
     public static final String INDICADOR_TRANSMISSAO_OFFLINE = "indicadorTransmissaoOffline";
     
+    public static final String INDICADOR_IMPRESSAO_TERMICA_FINAL_GRUPO = "indicadorImpressaoTermicaFinalGrupo"; 
 
     public FiltroRota() {
     }

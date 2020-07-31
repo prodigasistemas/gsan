@@ -15,11 +15,7 @@
 					PMSS
 					</logic:notPresent>
 				</td>
-<<<<<<< HEAD
-          		<td align="right">Vers&atilde;o:  (Online) 14/07/2020 - 12:29:50 </td>
-=======
-          		<td align="right">Vers&atilde;o:  (Online) 14/07/2020 - 12:29:50 </td>
->>>>>>> c90b5ea5afd052b5ff0cc374babb1b47697a57d0
+          		<td align="right">Vers&atilde;o:  (Online) 30/07/2020 - 11:10:29 </td>
         	</tr>
       	</table>
 		</td>
