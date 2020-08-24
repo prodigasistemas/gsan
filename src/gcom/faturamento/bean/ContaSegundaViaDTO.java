@@ -169,9 +169,20 @@ public class ContaSegundaViaDTO {
 
 		setMensagensFixas(helper);
 
-		this.mensagem1 = helper.getPrimeiraParte().trim().equals("") ? null : helper.getPrimeiraParte();
-		this.mensagem2 = helper.getSegundaParte().trim().equals("") ? null : helper.getSegundaParte();
-		this.mensagem3 = helper.getTerceiraParte().trim().equals("") ? null : helper.getTerceiraParte();
+		if (helper.getPrimeiraParte() != null && !helper.getPrimeiraParte().trim().equals(""))
+			this.mensagem1 = helper.getPrimeiraParte();
+		else
+			this.mensagem1 = null;
+		
+		if (helper.getSegundaParte() != null && !helper.getSegundaParte().trim().equals("")  )
+			this.mensagem2 = helper.getSegundaParte();
+		else
+			this.mensagem2 = null;
+		
+		if (helper.getTerceiraParte() != null && !helper.getTerceiraParte().trim().equals("") )
+			this.mensagem3 = helper.getTerceiraParte();
+		else
+			this.mensagem3 = null;
 
 		this.mensagemAnormalidade = helper.getMensagemAnormalidade();
 		this.mensagemDebitos = helper.getMensagemDebitos();
