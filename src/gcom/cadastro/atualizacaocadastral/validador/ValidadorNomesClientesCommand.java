@@ -14,10 +14,12 @@ public class ValidadorNomesClientesCommand extends ValidadorCommand {
 	}
 
 	public void execute() throws Exception {
-		if (Util.nomeInvalido(linha.get("nomeUsuario"))) {
-			cadastroImovel.addMensagemErro("Nome do cliente usuário inválido.");
+		String nomeUsuario = linha.get("nomeUsuario");
+		if (StringUtils.isNotEmpty(nomeUsuario)) {
+			if (Util.nomeInvalido(linha.get("nomeUsuario"))) {
+				cadastroImovel.addMensagemErro("Nome do cliente usuário inválido.");
+			}
 		}
-
 		String nomeProprietario = linha.get("nomeProprietario");
 		if (StringUtils.isNotEmpty(nomeProprietario)) {
 			if (Util.nomeInvalido(nomeProprietario)) {
