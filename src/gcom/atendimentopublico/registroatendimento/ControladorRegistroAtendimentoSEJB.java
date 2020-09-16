@@ -7496,7 +7496,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 	 * @param registroAtendimentoUnidade
 	 * @param dataConcorrencia
 	 */
-	public void encerrarRegistroAtendimento(
+	public Integer encerrarRegistroAtendimento(
 			RegistroAtendimento registroAtendimento,
 			RegistroAtendimentoUnidade registroAtendimentoUnidade,
 			Usuario usuarioLogado,
@@ -7506,6 +7506,8 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			String percentualCobranca,
 			Boolean confirmadoGeracaoNovoRA,String urlBotaoVoltar,boolean encerrarDebitoACobrar) 
 	throws ControladorException {
+		
+		Integer[] idsGeradas = null;
 		
 		try {
 			
@@ -7609,14 +7611,15 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 				UnidadeOrganizacional unidadeAtendimento = 
 					this.getControladorUnidade().pesquisarUnidadeUsuario(usuarioLogado.getId());
 				
-				Collection colecaoEnderecos = new ArrayList();
 				
-				Imovel imovelEndereco = 
-					this.getControladorEndereco().pesquisarImovelParaEndereco( 
-							registroAtendimento.getImovel().getId() );
+				Collection colecaoEnderecos = new ArrayList();
+				if(registroAtendimento.getImovel() != null && !registroAtendimento.getImovel().equals("")) { 
+					
+				
+					Imovel imovelEndereco = this.getControladorEndereco().pesquisarImovelParaEndereco( registroAtendimento.getImovel().getId() );
 				
 				colecaoEnderecos.add(imovelEndereco);
-				
+				}
 				//ANEXOS
 				FiltroRegistroAtendimentoAnexo filtroRegistroAtendimentoAnexo = new FiltroRegistroAtendimentoAnexo();
 				
@@ -7629,14 +7632,18 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 				RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(registroAtendimento, usuarioLogado, unidadeAtendimento.getId(), colecaoRegistroAtendimentoAnexo);
 				RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(registroAtendimento, colecaoEnderecos, unidadeAtendimento.getId());
 				RASolicitanteHelper raSolicitante = RABuilder.buildRASolicitante(registroAtendimento, false, unidadeAtendimento.getId());
-				
-				this.inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
+												
+				idsGeradas = this.inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
 			}            
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
+		if(idsGeradas != null) {
+			return idsGeradas[1];
+		}
+		return null;
 	}
 	
 	/**

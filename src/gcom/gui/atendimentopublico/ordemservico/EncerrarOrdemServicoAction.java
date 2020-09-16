@@ -91,7 +91,7 @@ public class EncerrarOrdemServicoAction extends GcomAction {
         String valorConfirmacaoBoletimValorZero = (String) sessao.getAttribute("confirmaBoletimValorZero"); 
         ///////////////////////////////////////////////////////////////////////////////////////////////
         
-    	
+        Integer idOS = null;
 		Integer idOSDiagnostico = null;
 		OrdemServicoBoletim ordemServicoBoletim = null;
 		// parte da integração com o sistema comercial
@@ -320,8 +320,7 @@ public class EncerrarOrdemServicoAction extends GcomAction {
 								sessao.removeAttribute("osFiscalizacao");
 							}
 							// se o serviço tipo referencia seja igual a nulo
-							if (encerrarOrdemServicoActionForm.getTipoServicoReferenciaId() == null
-									|| encerrarOrdemServicoActionForm.getTipoServicoReferenciaId().equals("")) {
+							if (encerrarOrdemServicoActionForm.getTipoServicoReferenciaId() == null || encerrarOrdemServicoActionForm.getTipoServicoReferenciaId().equals("")) {
 								
 								OrdemServicoPavimento ordemServicoPavimento = new OrdemServicoPavimento();								
 								//Verifica o id pavimento rua.
@@ -642,7 +641,7 @@ public class EncerrarOrdemServicoAction extends GcomAction {
 							"100", 
 							confirmadoGeracaoNovoRA,null,false );
 				} else {
-					fachada.encerrarRegistroAtendimento(
+					idOS = fachada.encerrarRegistroAtendimento(
 						registroAtendimento,
 						registroAtendimentoUnidade, 
 						usuarioLogado, 
@@ -657,12 +656,7 @@ public class EncerrarOrdemServicoAction extends GcomAction {
 
 		if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
 			// montando página de sucesso
-			if (idOSDiagnostico == null) {
-				montarPaginaSucesso(httpServletRequest,
-									"Ordem de Serviço de código " + encerrarOrdemServicoActionForm.getNumeroOS() + " encerrada com sucesso.", 
-									"Voltar",
-									"exibirConsultarDadosOrdemServicoAction.do?menu=sim&numeroOS=" + encerrarOrdemServicoActionForm.getNumeroOS());
-			} else {
+			if (idOSDiagnostico != null ) {
 				String msg = 
 					"Ordem de Serviço de código " + encerrarOrdemServicoActionForm.getNumeroOS() 
 					+ " encerrada com sucesso. Ordem de Serviço de código " 
@@ -678,6 +672,27 @@ public class EncerrarOrdemServicoAction extends GcomAction {
 					"Imprimir Ordem de Serviço Encerrada",
 					"Imprimir Ordem de Serviço Gerada",
 					"gerarRelatorioOrdemServicoAction.do?idsOS=" + idOSDiagnostico);
+				
+			} else if(idOS != null ) {
+				
+				String msg = 
+						"Ordem de Serviço de código " + encerrarOrdemServicoActionForm.getNumeroOS() 
+						+ " encerrada com sucesso. Ordem de Serviço de código " 
+						+ idOS 
+						+ " gerada com sucesso";
+					
+					montarPaginaSucesso(
+						httpServletRequest,
+						msg,
+						"Voltar",
+						"exibirConsultarDadosOrdemServicoAction.do?menu=sim&numeroOS=" + encerrarOrdemServicoActionForm.getNumeroOS());
+			} else {
+				
+				montarPaginaSucesso(httpServletRequest,
+						"Ordem de Serviço de código " + encerrarOrdemServicoActionForm.getNumeroOS() + " encerrada com sucesso.", 
+						"Voltar",
+						"exibirConsultarDadosOrdemServicoAction.do?menu=sim&numeroOS=" + encerrarOrdemServicoActionForm.getNumeroOS());
+				
 			}
 			sessao.removeAttribute("canceladoOSFiscalizacao");
 			sessao.removeAttribute("integracaoComercialHelper");

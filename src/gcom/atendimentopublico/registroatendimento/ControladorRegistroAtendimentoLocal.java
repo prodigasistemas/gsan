@@ -332,8 +332,9 @@ public interface ControladorRegistroAtendimentoLocal extends javax.ejb.EJBLocalO
 	 * @param registroAtendimento
 	 * @param registroAtendimentoUnidade
 	 * @param dataConcorrencia
+	 * @return 
 	 */
-	public void encerrarRegistroAtendimento(RegistroAtendimento registroAtendimento, RegistroAtendimentoUnidade registroAtendimentoUnidade,
+	public Integer encerrarRegistroAtendimento(RegistroAtendimento registroAtendimento, RegistroAtendimentoUnidade registroAtendimentoUnidade,
 			Usuario usuarioLogado, Integer idDebitoTipo, BigDecimal valorDebito, Integer qtdeParcelas, String percentualCobranca,
 			Boolean confirmadoGeracaoNovoRA, String urlBotaoVoltar, boolean encerrarDebitoACobrar) throws ControladorException;
 

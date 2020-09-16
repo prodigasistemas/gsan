@@ -15,9 +15,7 @@
 					PMSS
 					</logic:notPresent>
 				</td>
-
           		<td align="right">Vers&atilde;o:  (Online) 30/07/2020 - 11:10:29 </td>
-
         	</tr>
       	</table>
 		</td>

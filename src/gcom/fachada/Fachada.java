@@ -12690,11 +12690,11 @@ public class Fachada {
 		}
 	}
 
-	public void encerrarRegistroAtendimento(RegistroAtendimento registroAtendimento, RegistroAtendimentoUnidade registroAtendimentoUnidade, Usuario usuarioLogado, Integer idDebitoTipo,
+	public Integer encerrarRegistroAtendimento(RegistroAtendimento registroAtendimento, RegistroAtendimentoUnidade registroAtendimentoUnidade, Usuario usuarioLogado, Integer idDebitoTipo,
 			BigDecimal valorDebito, Integer qtdeParcelas, String percentualCobranca, Boolean confirmadoGeracaoNovoRA, String urlBotaoVoltar, boolean encerrarDebitoACobrar) {
 
 		try {
-			this.getControladorRegistroAtendimento().encerrarRegistroAtendimento(registroAtendimento, registroAtendimentoUnidade, usuarioLogado, idDebitoTipo, valorDebito, qtdeParcelas,
+			return this.getControladorRegistroAtendimento().encerrarRegistroAtendimento(registroAtendimento, registroAtendimentoUnidade, usuarioLogado, idDebitoTipo, valorDebito, qtdeParcelas,
 					percentualCobranca, confirmadoGeracaoNovoRA, urlBotaoVoltar, encerrarDebitoACobrar);
 
 		} catch (ControladorException ex) {

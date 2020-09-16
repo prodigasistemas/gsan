@@ -312,71 +312,28 @@ public class ExibirEncerrarOrdemServicoAction extends GcomAction {
 							encerrarOrdemServicoActionForm.setIndicadorVistoriaServicoTipo(
 									String.valueOf(ordemServico.getServicoTipo().getIndicadorVistoria()));
 							
-							if (ordemServico.getServicoTipo().getServicoTipoReferencia() != null
-									&& !ordemServico.getServicoTipo().getServicoTipoReferencia().equals("")) {
+							if (ordemServico.getServicoTipo().getServicoTipoReferencia() != null && !ordemServico.getServicoTipo().getServicoTipoReferencia().equals("")) {
 								/*
 								 * 19/03/2012
 								 * 
 								 * Seta o ServicoTipoReferencia no form caso seja Diagnostico (1)
 								 * ou Fiscalizacao (2)
 								 */
-								if (ordemServico.getServicoTipo().getServicoTipoReferencia()
-										.getId().equals(ServicoTipoReferencia.DIAGONISTICO_ID)
-										|| ordemServico.getServicoTipo().getServicoTipoReferencia()
-												.getId().equals(ServicoTipoReferencia.FISCALIZACAO_ID)) {
+								if (ordemServico.getServicoTipo().getServicoTipoReferencia().getId().equals(ServicoTipoReferencia.FISCALIZACAO_ID)
+										|| ordemServico.getServicoTipo().getServicoTipoReferencia().getId().equals(ServicoTipoReferencia.DIAGONISTICO_ID)) {
 
-								encerrarOrdemServicoActionForm
-										.setTipoServicoReferenciaId(""
-												+ ordemServico
-														.getServicoTipo()
-														.getServicoTipoReferencia()
-														.getId());
-								encerrarOrdemServicoActionForm
-										.setServicoTipoReferenciaDescricao(ordemServico
-												.getServicoTipo()
-												.getServicoTipoReferencia()
-												.getDescricao());
+								encerrarOrdemServicoActionForm.setTipoServicoReferenciaId("" + ordemServico.getServicoTipo().getServicoTipoReferencia().getId());
+								encerrarOrdemServicoActionForm.setServicoTipoReferenciaDescricao(ordemServico.getServicoTipo().getServicoTipoReferencia().getDescricao());
 
-								encerrarOrdemServicoActionForm
-										.setIndicadorDiagnostico(ordemServico
-												.getServicoTipo()
-												.getServicoTipoReferencia()
-												.getIndicadorDiagnostico()
-												+ "");
+								encerrarOrdemServicoActionForm.setIndicadorDiagnostico(ordemServico.getServicoTipo().getServicoTipoReferencia().getIndicadorDiagnostico() + "");
 
 								}
-								// fim da alteração
-							
-							/*
-							if (ordemServico.getServicoTipo().getServicoTipoReferencia() != null
-									&& !ordemServico.getServicoTipo().getServicoTipoReferencia().equals("")) {
-								encerrarOrdemServicoActionForm.setTipoServicoReferenciaId(
-										String.valueOf(ordemServico.getServicoTipo().getServicoTipoReferencia().getId()));
-								encerrarOrdemServicoActionForm.setTipoServicoReferenciaIndicadorFiscalizacao(
-										String.valueOf(ordemServico.getServicoTipo().getServicoTipoReferencia().getIndicadorFiscalizacao()));
-								encerrarOrdemServicoActionForm.setServicoTipoReferenciaDescricao(ordemServico.getServicoTipo()
-												.getServicoTipoReferencia().getDescricao());
-                                
-                                encerrarOrdemServicoActionForm.setIndicadorDiagnostico(
-                                		String.valueOf(ordemServico.getServicoTipo().getServicoTipoReferencia().getIndicadorDiagnostico()));
-							}*/
-
 							}
 						}
 						// dados da referencia do serviço tipo da OS
-						if (ordemServico.getServicoTipoReferencia() != null
-								&& !ordemServico.getServicoTipoReferencia()
-										.equals("")) {
-							encerrarOrdemServicoActionForm
-									.setServicoTipoReferenciaOS(""
-											+ ordemServico
-													.getServicoTipoReferencia()
-													.getId());
-							encerrarOrdemServicoActionForm
-									.setServicoTipoReferenciaOSDescricao(""
-											+ ordemServico
-													.getServicoTipoReferencia()
-													.getDescricao());
+						if (ordemServico.getServicoTipoReferencia() != null	&& !ordemServico.getServicoTipoReferencia().equals("")) {
+							encerrarOrdemServicoActionForm.setServicoTipoReferenciaOS("" + ordemServico.getServicoTipoReferencia().getId());
+							encerrarOrdemServicoActionForm.setServicoTipoReferenciaOSDescricao("" + ordemServico.getServicoTipoReferencia().getDescricao());
 						}
 						if (ordemServico.getOsReferencia() != null) {
 							sessao.setAttribute("osReferencia", ordemServico

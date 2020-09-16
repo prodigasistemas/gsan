@@ -190,6 +190,7 @@ public class RABuilder {
 					.idSolicitacaoTipo(registroAtendimento.getSolicitacaoTipoEspecificacao().getSolicitacaoTipoEspecificacaoNovoRA().getId())
 					.indicadorAtendimentoOnline(registroAtendimento.getIndicadorAtendimentoOnline())
 					.dataAtendimento(Util.formatarData(new Date()))
+					.dataPrevista(Util.formatarData(registroAtendimento.getDataPrevistaOriginal()))
 					.horaAtendimento(Util.formatarHoraSemData(new Date()))
 					.idMeioSolicitacao(registroAtendimento.getMeioSolicitacao().getId())
 					.idUnidadeAtendimento(idUnidadeAtendimento)
