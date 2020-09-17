@@ -1690,7 +1690,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			.append(" and scat_id = ").append(Subcategoria.obterIdSubcategoria(tabelaColuna.getTabelaAtualizacaoCadastral().getComplemento()));
 		} else if (qtdEconomia > 0) {
 			
-			if (tipoAlteracao.intValue() == AlteracaoTipo.INCLUSAO.intValue()) {
+			if (tipoAlteracao != null && tipoAlteracao.intValue() == AlteracaoTipo.INCLUSAO.intValue()) {
 				ImovelControleAtualizacaoCadastral controle = (ImovelControleAtualizacaoCadastral) pesquisarImovelControleAtualizacao(tabelaColuna.getTabelaAtualizacaoCadastral().getCodigoImovel(), tipoAlteracao);
 				idImovelRetorno = controle.getImovelRetorno().getId();
 			}else {
