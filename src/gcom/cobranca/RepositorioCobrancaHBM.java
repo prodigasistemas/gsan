@@ -24916,13 +24916,22 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "cecc.cecc_qtdcontasfinal as qtdContasFinal, "// 34
 					+ "cecc.cecc_qtddiasvencimento as qtdDiasVencimento, "// 35
 					+ "las.last_dsligacaoaguasituacao as situacaoAgua "// 36
-					+ "from cobranca.cmd_empr_cobr_conta cecc " + "inner join cadastro.empresa empre on cecc.empr_id = empre.empr_id "
-					+ "left join cadastro.empr_contrato_cobranca emco on emco.empr_id = empre.empr_id "
-					+ "left join cadastro.cliente cli on cli.clie_id = cecc.clie_id "
-					+ "left join cadastro.unidade_negocio uneg on uneg.uneg_id = cecc.uneg_id "
-					+ "left join cadastro.imovel_perfil iper on iper.iper_id = cecc.iper_id "
-					+ "left join cadastro.gerencia_regional greg on cecc.greg_id = greg.greg_id "
-					+ "left join atendimentopublico.ligacao_agua_situacao las on cecc.last_id = las.last_id "
+					+ "from cobranca.cmd_empr_cobr_conta cecc " 
+					+ "inner join cadastro.empresa empre 						on cecc.empr_id = empre.empr_id "
+					+ "left join cadastro.empr_contrato_cobranca emco 			on emco.empr_id = empre.empr_id "
+					+ "left join cadastro.cliente cli 							on cli.clie_id = cecc.clie_id "
+					
+					+ "left join cobranca.cmd_empr_cobr_conta_uneg ceuneg 		on ceuneg.cecc_id = cecc.cecc_id "
+					+ "left join cadastro.unidade_negocio uneg 					on uneg.uneg_id = ceuneg.uneg_id "
+
+					+ "left join cobranca.cmd_empr_cobr_conta_per ceiper		on ceiper.cecc_id = cecc.cecc_id "
+					+ "left join cadastro.imovel_perfil iper 					on iper.iper_id = ceiper.iper_id "
+					
+					+ "left join cobranca.cmd_empr_cobr_conta_ger cegreg 		on cegreg.cecc_id = cecc.cecc_id "
+					+ "left join cadastro.gerencia_regional greg 				on greg.greg_id = cegreg.greg_id "
+					
+					+ "left join cobranca.cmd_empr_cobr_conta_last celas 	    on cecc.cecc_id = celas.cecc_id "
+					+ "left join atendimentopublico.ligacao_agua_situacao las 	on celas.last_id = las.last_id "
 					+ "where cecc.cecc_id = :idComando ";
 
 			retorno = session.createSQLQuery(consulta).addScalar("empresa", Hibernate.STRING).addScalar("dataInicioCiclo", Hibernate.DATE)
