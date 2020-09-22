@@ -4041,6 +4041,10 @@ public class ControladorEnderecoSEJB implements SessionBean {
 				registroAtendimento.setComplementoEndereco(""
 						+ arrayEndereco[16]);
 			}
+			// Número do Imóvel
+			if (arrayEndereco[22] != null) {
+						registroAtendimento.setNumeroImovel("" + arrayEndereco[22]);
+			}
 			
 			// Perímetro
 			if (arrayEndereco[23] != null) {

@@ -7002,7 +7002,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 		} else {
 			
 			if (!raDadosGerais.getIndicadorRaAtualizacaoCadastral() && (this.especificacaoExigeMatriculaImovel(solicitacaoTipoEspecificacao) 
-					|| (raLocalOcorrencia.getColecaoEndereco() != null && !raLocalOcorrencia.getColecaoEndereco().isEmpty()))) {
+					|| (raLocalOcorrencia.getColecaoEndereco() != null && !raLocalOcorrencia.getColecaoEndereco().isEmpty()) && !raDadosGerais.getIndicadorRaNova())) {
 				
 				Imovel imovelEndereco = (Imovel) Util
 				.retonarObjetoDeColecao(raLocalOcorrencia.getColecaoEndereco());
@@ -7020,7 +7020,17 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 				
 				ra.setPerimetroInicial(imovelEndereco.getPerimetroInicial());
 				ra.setPerimetroFinal(imovelEndereco.getPerimetroFinal());
+				
+			}else if(raDadosGerais.getIndicadorRaNova() && raLocalOcorrencia.getIdImovel() == null) {
+				
+				RegistroAtendimento registroAtendimento = (RegistroAtendimento) Util.retonarObjetoDeColecao(raLocalOcorrencia.getColecaoEndereco());
+				
+				ra.setLogradouroBairro(registroAtendimento.getLogradouroBairro());
+				ra.setLogradouroCep(registroAtendimento.getLogradouroCep());
+				ra.setNumeroImovel(registroAtendimento.getNumeroImovel());
 			}
+			
+			
 			
 			if (raLocalOcorrencia.getPontoReferenciaLocalOcorrencia() != null && !raLocalOcorrencia.getPontoReferenciaLocalOcorrencia().equalsIgnoreCase("")) {
 				ra.setPontoReferencia(raLocalOcorrencia.getPontoReferenciaLocalOcorrencia());
@@ -7513,6 +7523,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			
 			this.verificarRegistroAtendimentoControleConcorrencia(registroAtendimento);
 			
+			
 			// Inserir Registro Atendimento Unidade
 			getControladorUtil().inserir(registroAtendimentoUnidade);
 			
@@ -7584,42 +7595,34 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			
 			if ( confirmadoGeracaoNovoRA != null && confirmadoGeracaoNovoRA ){
 				
-				FiltroRegistroAtendimento filtro = 
-					new FiltroRegistroAtendimento();
+				FiltroRegistroAtendimento filtro = new FiltroRegistroAtendimento();
 				
-				filtro.adicionarParametro( new ParametroSimples( 
-						FiltroRegistroAtendimento.ID, 
-						registroAtendimento.getId() ) );
+				filtro.adicionarParametro( new ParametroSimples(FiltroRegistroAtendimento.ID,registroAtendimento.getId() ) );
+				filtro.adicionarCaminhoParaCarregamentoEntidade("imovel" );
+				filtro.adicionarCaminhoParaCarregamentoEntidade("solicitacaoTipoEspecificacao.solicitacaoTipoEspecificacaoNovoRA" );    
+				filtro.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.cep" );  
+				filtro.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio" );  
+				filtro.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro" );  
 				
-				filtro.adicionarCaminhoParaCarregamentoEntidade( 
-				"imovel" );
+				Collection<RegistroAtendimento> colRegistroAtendimento = this.getControladorUtil().pesquisar(filtro, RegistroAtendimento.class.getName() );
 				
-				filtro.adicionarCaminhoParaCarregamentoEntidade( 
-				"solicitacaoTipoEspecificacao.solicitacaoTipoEspecificacaoNovoRA" );               
-				
-				Collection<RegistroAtendimento> 
-				colRegistroAtendimento = 
-					this.getControladorUtil().pesquisar( 
-							filtro, 
-							RegistroAtendimento.class.getName() );
-				
-				registroAtendimento  = 
-					( RegistroAtendimento ) 
-					Util.retonarObjetoDeColecao( 
-							colRegistroAtendimento );                
+				registroAtendimento  = ( RegistroAtendimento ) Util.retonarObjetoDeColecao(colRegistroAtendimento );  
 				
 				UnidadeOrganizacional unidadeAtendimento = 
 					this.getControladorUnidade().pesquisarUnidadeUsuario(usuarioLogado.getId());
 				
 				
 				Collection colecaoEnderecos = new ArrayList();
+									
+								
 				if(registroAtendimento.getImovel() != null && !registroAtendimento.getImovel().equals("")) { 
-					
-				
 					Imovel imovelEndereco = this.getControladorEndereco().pesquisarImovelParaEndereco( registroAtendimento.getImovel().getId() );
-				
-				colecaoEnderecos.add(imovelEndereco);
+					colecaoEnderecos.add(imovelEndereco);
+								
+				}else{
+					colecaoEnderecos.add(registroAtendimento);
 				}
+				
 				//ANEXOS
 				FiltroRegistroAtendimentoAnexo filtroRegistroAtendimentoAnexo = new FiltroRegistroAtendimentoAnexo();
 				
@@ -7629,12 +7632,12 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 
 				Collection colecaoRegistroAtendimentoAnexo = this.getControladorUtil().pesquisar(filtroRegistroAtendimentoAnexo, RegistroAtendimentoAnexo.class.getName());
 				
-				RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(registroAtendimento, usuarioLogado, unidadeAtendimento.getId(), colecaoRegistroAtendimentoAnexo);
+				RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGeraisRaNova(registroAtendimento, usuarioLogado, unidadeAtendimento.getId(), colecaoRegistroAtendimentoAnexo);
 				RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(registroAtendimento, colecaoEnderecos, unidadeAtendimento.getId());
 				RASolicitanteHelper raSolicitante = RABuilder.buildRASolicitante(registroAtendimento, false, unidadeAtendimento.getId());
 												
 				idsGeradas = this.inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
-			}            
+			}           
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			ex.printStackTrace();

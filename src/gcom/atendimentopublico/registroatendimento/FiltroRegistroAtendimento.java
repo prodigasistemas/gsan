@@ -35,4 +35,21 @@ public class FiltroRegistroAtendimento extends Filtro implements Serializable {
 	
 	public final static String SERVICO_TIPO = "solicitacaoTipoEspecificacao.servicoTipo";
 	public final static String SERVICO_TIPO_ID = "solicitacaoTipoEspecificacao.servicoTipo.id";
+	
+	public final static String CEP_CODIGO = "logradouroCep.cep.codigo";
+
+	public final static String CEP = "logradouroCep.cep";
+
+	public final static String MUNICIPIO_ID = "logradouroBairro.bairro.municipio.id";
+
+	public final static String MUNICIPIO = "logradouroBairro.bairro.municipio";
+
+	public final static String UNIDADE_FEDERACAO = "logradouroBairro.bairro.municipio.unidadeFederacao";
+
+	public final static String BAIRRO_ID = "logradouroBairro.bairro.id";
+
+	public final static String BAIRRO = "logradouroBairro.bairro";
+
+	public final static String LOGRADOURO_NOME = "logradouroCep.logradouro.nome";
+	
 }

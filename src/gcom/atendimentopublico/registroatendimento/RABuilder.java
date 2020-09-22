@@ -200,6 +200,26 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	public static RADadosGeraisHelper buildRADadosGeraisRaNova(RegistroAtendimento registroAtendimento, Usuario usuario, 
+																Integer idUnidadeAtendimento, Collection colecaoRegistroAtendimentoAnexo){
+		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
+		
+		raDadosGerais.idSolicitacaoTipoEspecificacao(registroAtendimento.getSolicitacaoTipoEspecificacao().getSolicitacaoTipoEspecificacaoNovoRA().getId())
+					.idSolicitacaoTipo(registroAtendimento.getSolicitacaoTipoEspecificacao().getSolicitacaoTipoEspecificacaoNovoRA().getId())
+					.indicadorAtendimentoOnline(registroAtendimento.getIndicadorAtendimentoOnline())
+					.dataAtendimento(Util.formatarData(new Date()))
+					.dataPrevista(Util.formatarData(registroAtendimento.getDataPrevistaOriginal()))
+					.horaAtendimento(Util.formatarHoraSemData(new Date()))
+					.idMeioSolicitacao(registroAtendimento.getMeioSolicitacao().getId())
+					.idUnidadeAtendimento(idUnidadeAtendimento)
+					.idUsuarioLogado(usuario.getId())
+					.colecaoRegistroAtendimentoAnexo(colecaoRegistroAtendimentoAnexo)
+					.indicadorRaNova(true);
+		
+		return raDadosGerais;
+	}
+	
 	public static RADadosGeraisHelper buildRADadosGerais(Short indicadorAtendimentoOnline, Date dataAtual, Integer meioSolicitacao, 
 																Integer idSolicitacaoTipoEspecificacao, String dataPrevista, Integer idSolicitacaoTipo,
 																Usuario usuarioLogado){
@@ -342,19 +362,25 @@ public class RABuilder {
 	@SuppressWarnings("rawtypes")
 	public static RALocalOcorrenciaHelper buildRALocalOcorrencia(RegistroAtendimento registroAtendimento, Collection colecaoEnderecos, Integer idUnidadeDestino){
 		RALocalOcorrenciaHelper raLocalOcorrencia = new RALocalOcorrenciaHelper();
-		raLocalOcorrencia.nnDiametro(registroAtendimento.getNnDiametro())
-						.idImovel(registroAtendimento.getImovel().getId())
-						.colecaoEndereco(colecaoEnderecos)
-						.idLocalidade(registroAtendimento.getLocalidade().getId())
-						.idSetorComercial(registroAtendimento.getSetorComercial().getId())
-						.idQuadra(registroAtendimento.getImovel().getQuadra().getId())
-						.idPavimentoRua(registroAtendimento.getImovel().getPavimentoRua().getId())
-						.idPavimentoCalcada(registroAtendimento.getImovel().getPavimentoCalcada().getId())
-						.idUnidadeDestino(idUnidadeDestino);
-		
+		 if(registroAtendimento.getImovel() != null && !registroAtendimento.getImovel().equals("")) {
+			raLocalOcorrencia.nnDiametro(registroAtendimento.getNnDiametro())
+							.idImovel(registroAtendimento.getImovel().getId())
+							.colecaoEndereco(colecaoEnderecos)
+							.idLocalidade(registroAtendimento.getLocalidade().getId())
+							.idSetorComercial(registroAtendimento.getSetorComercial().getId())
+							.idQuadra(registroAtendimento.getImovel().getQuadra().getId())
+							.idPavimentoRua(registroAtendimento.getImovel().getPavimentoRua().getId())
+							.idPavimentoCalcada(registroAtendimento.getImovel().getPavimentoCalcada().getId())
+							.idUnidadeDestino(idUnidadeDestino);
+		 }else {
+			 
+			 raLocalOcorrencia.colecaoEndereco(colecaoEnderecos)
+				.idLocalidade(registroAtendimento.getLocalidade().getId())
+				.idUnidadeDestino(idUnidadeDestino);			 
+		 }
 		return raLocalOcorrencia;
 	}
-	
+			
 	@SuppressWarnings("rawtypes")
 	public static RALocalOcorrenciaHelper buildRALocalOcorrencia(Imovel imovel, Collection colecaoEndereco, Integer idUnidadeDestino, 
 																	String parecerUnidadeDestino, Short indicadorCoordenadaSemLogradouro){
