@@ -115,6 +115,7 @@
 		form.dataInstalacao.value = "";	
 		form.leituraInstalacao.value = "";
 		form.numeroSelo.value = "";
+		form.numeroLacre.value = "";
 		form.numeroHidrometro.value = "";
 		form.protecao.selectedIndex = 0;
 		form.localInstalacao.selectedIndex = 0;
@@ -672,6 +673,14 @@
 																value="1" /> <strong>COM <html:radio
 																property="situacaoCavalete" value="2" /> SEM</strong> </strong></td>
 														</tr>
+														<tr>
+															<td class="style3"><strong>N&uacute;mero do Lacre:</strong></td>
+															<td colspan="2"><strong><b><span class="style2"> <html:text
+																property="numeroLacre" size="10" maxlength="10"
+																onkeyup="" onkeydown=""
+																onkeypress="return isCampoNumerico(event);" /> </span></b></strong></td>
+														</tr>	
+																											
 													</table>
 													</td>
 												</tr>

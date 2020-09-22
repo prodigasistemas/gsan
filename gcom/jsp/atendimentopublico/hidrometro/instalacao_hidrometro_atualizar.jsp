@@ -564,8 +564,9 @@
 
 										<tr>
 											<td class="style3"><strong>N&uacute;mero do Selo:</strong></td>
-											<td><strong><b><span class="style2"> <html:text
-												property="numeroSelo" size="10" maxlength="8" /> </span></b></strong>
+											<td colspan="2"><strong><b><span class="style2"> <html:text
+												property="numeroSelo" size="10" maxlength="8" onkeyup=""
+												onkeydown="" onkeypress="" /> </span></b></strong>
 											</td>
 										</tr>
 										
