@@ -37,6 +37,7 @@ public class EfetuarSubstituicaoHidrometroActionForm extends ValidatorActionForm
 	private String dataInstalacao;
 	private String leituraInstalacao;
 	private String numeroSelo;
+	private String numeroLacre;
 	private String numeroHidrometroAtual;
 	private String tipoMedicaoAtual;
 	private String dataRetirada;
@@ -402,11 +403,28 @@ public class EfetuarSubstituicaoHidrometroActionForm extends ValidatorActionForm
 		return numeroSelo;
 	}
 
+
 	/**
 	 * @param numeroSelo a ser setado.
 	 */
 	public void setNumeroSelo(String numeroSelo) {
 		this.numeroSelo = numeroSelo;
+	}
+	
+	
+	/**
+	 * @param numeroLacre a ser setado.
+	 */
+	public void setNumeroLacre(String numeroLacre) {
+		this.numeroLacre = numeroLacre;
+	}
+
+	
+	/**
+	 * @return Retorna o campo numeroLacre.
+	 */
+	public String getNumeroLacre() {
+		return numeroLacre;
 	}
 
 	/**
@@ -546,6 +564,13 @@ public class EfetuarSubstituicaoHidrometroActionForm extends ValidatorActionForm
 			hidrometroInstalacaoHistorico.setNumeroSelo(getNumeroSelo());
 		} else {
 			hidrometroInstalacaoHistorico.setNumeroSelo(null);
+		}
+		
+		//numero lacre
+		if (getNumeroLacre() != null && !getNumeroLacre().equals("")){
+			hidrometroInstalacaoHistorico.setNumeroLacre(getNumeroLacre());
+		} else {
+			hidrometroInstalacaoHistorico.setNumeroLacre(null);
 		}
 		
 		//tipo de rateio
