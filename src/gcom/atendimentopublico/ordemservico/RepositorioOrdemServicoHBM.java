@@ -10487,12 +10487,12 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						+ anoMesFaturamento + " ";
 			}
 
-			if ((helper.getTipoOrdem().equals(""
-					+ ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO))
-					|| (helper.getTipoOrdem().equals(""
-							+ ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO))
-							|| (helper.getTipoOrdem().equals(""
-									+ ServicoTipo.TIPO_INSPECAO_ANORMALIDADE))) {
+			if ((helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)) 
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_INSPECAO_ANORMALIDADE)) 
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_HDT_CONTROLE_DE_PERDAS)) 
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_HDT_CONTROLE_DE_PERDAS))) {
 				hql += " left  join ligacaoAgua.hidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoAgua "
 						+ " left  join hidrometroInstalacaoHistoricoAgua.hidrometro hidrometroAgua "
 						+ " left  join imovel.hidrometroInstalacaoHistorico hidrometroInstalacaoHistorico "
@@ -10548,8 +10548,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			}
 
 			// Seleciona os Imoveis de acordo com o Tipo de Ordem
-			if (helper.getTipoOrdem().equals(
-					"" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO)) {
+			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO) 
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_CONTROLE_DE_PERDAS)))  {
 				if (helper.getTipoMedicao() != null) {
 					if (helper.getTipoMedicao().equals(
 							MedicaoTipo.LIGACAO_AGUA.toString())) {
@@ -10566,8 +10567,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						hqlAux += "imovel.hidrometroInstalacaoHistorico.id is null and ";
 					}
 				}
-			} else if (helper.getTipoOrdem().equals(
-					"" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)) {
+			} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_HDT_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_HDT_CONTROLE_DE_PERDAS))) {
 				if (helper.getTipoMedicao() != null) {
 					if (helper.getTipoMedicao().equals(
 							MedicaoTipo.LIGACAO_AGUA.toString())) {
@@ -11116,6 +11119,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO + " or "
 					+ "    os.servicoTipo.id = "
 					+ ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO + " or "
+					+ "    os.servicoTipo.id = "
+					+ ServicoTipo.TIPO_INSTALACAO_RAMAL_CONTROLE_DE_PERDAS + " or "
 					+ "    os.servicoTipo.id = "
 					+ ServicoTipo.TIPO_INSPECAO_ANORMALIDADE
 					+ " ) "
@@ -13190,8 +13195,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						+ " and ";
 			}
 
-			if (helper.getTipoOrdem().equals(
-					"" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO)) {
+			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO)) {
 				if (helper.getTipoMedicao() != null) {
 					if (helper.getTipoMedicao().equals(
 							MedicaoTipo.LIGACAO_AGUA.toString())) {
@@ -13212,8 +13216,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						hqlAux += "ligacaoEsgotoSituacao.id = imovel.ligacaoEsgotoSituacao and ";
 					}
 				}
-			} else if (helper.getTipoOrdem().equals(
-					"" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)) {
+			} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)) {
 				if (helper.getTipoMedicao() != null) {
 					if (helper.getTipoMedicao().equals(
 							MedicaoTipo.LIGACAO_AGUA.toString())) {
@@ -13738,6 +13741,38 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			retornoConsulta = session.createSQLQuery(consulta)
 					.addScalar("svtp", Hibernate.INTEGER)
 					.setInteger("codigoConstante", codigoConstante).list();
+
+			retorno = (Integer) retornoConsulta.iterator().next();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public Integer recuperaServicoTipoSeletivoPorId(
+			Integer id) throws ErroRepositorioException {
+
+		Integer retorno;
+
+		Collection retornoConsulta = new ArrayList();
+
+		Session session = HibernateUtil.getSession();
+
+		String consulta = "";
+
+		try {
+			consulta = "select  svse.svse_cdconstante as svtp"
+					+ " from atendimentopublico.servico_tipo_seletiva svse"
+					+ " where svse.svtp_id = :id ";
+
+			retornoConsulta = session.createSQLQuery(consulta)
+					.addScalar("svtp", Hibernate.INTEGER)
+					.setInteger("id", id).list();
+					
 
 			retorno = (Integer) retornoConsulta.iterator().next();
 

@@ -130,6 +130,16 @@ public class ServicoTipo extends ObjetoTransacao {
 	
 	public final static int TIPO_INSTALACAO_RESERVACAO = 1417;
 	
+	public final static int TIPO_INSTALACAO_RAMAL_CONTROLE_DE_PERDAS = 142;
+	
+	public final static int TIPO_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS = 418;
+		
+	public final static int TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS = 419;
+	
+	public final static int TIPO_SUBSTITUICAO_RAMAL_COM_HDT_CONTROLE_DE_PERDAS = 421;
+	
+	public final static int TIPO_SUBSTITUICAO_RAMAL_SEM_HDT_CONTROLE_DE_PERDAS = 422;
+
 	//--------------------------------------------------- [YTS - 30/05/2008]
 	
 	public final static short INDICADOR_PAVIMENTO_CALCADA_SIM = 1;

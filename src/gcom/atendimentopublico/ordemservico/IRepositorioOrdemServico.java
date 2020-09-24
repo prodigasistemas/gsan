@@ -2226,8 +2226,9 @@ public interface IRepositorioOrdemServico {
 	 * @date 09/10/2009
 	 * 
 	 */
-	public Integer recuperaServicoTipoSeletivoPorConstante(
-			Integer codigoConstante) throws ErroRepositorioException;
+	public Integer recuperaServicoTipoSeletivoPorConstante(Integer codigoConstante) throws ErroRepositorioException;
+	
+	public Integer recuperaServicoTipoSeletivoPorId(Integer id) throws ErroRepositorioException;
 	
 	
 	/**

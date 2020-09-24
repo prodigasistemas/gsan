@@ -15,6 +15,8 @@ public class ImovelEmissaoOrdensSeletivasActionForm extends ValidatorActionForm 
 	public static final String TIPO_ORDEM_SUBSTITUICAO = "SUBSTITUICAO";
 	public static final String TIPO_ORDEM_REMOCAO = "REMOCAO";
 	public static final String TIPO_INSPECAO_ANORMALIDADE = "INSPECAO";
+	public static final String TIPO_ORDEM_INSTALACAO_RAMAL = "RAMAL";
+	
 	
 	// Parametros
 	private String tipoOrdem;

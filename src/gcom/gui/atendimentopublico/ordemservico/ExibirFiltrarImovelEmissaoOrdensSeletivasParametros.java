@@ -1,5 +1,7 @@
 package gcom.gui.atendimentopublico.ordemservico;
 
+import gcom.atendimentopublico.ordemservico.FiltroServicoTipo;
+import gcom.atendimentopublico.ordemservico.ServicoTipo;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.empresa.FiltroEmpresa;
 import gcom.cadastro.endereco.FiltroLogradouro;
@@ -70,9 +72,25 @@ public class ExibirFiltrarImovelEmissaoOrdensSeletivasParametros extends
 		}
 		
 		
-		if (imovelEmissaoOrdensSeletivas.getTipoOrdem() != null) {
-			httpServletRequest.setAttribute("tipoOrdem", imovelEmissaoOrdensSeletivas.getTipoOrdem());
+
+		if(sessao.getAttribute("colecaoServicoTipo") == null){
+		
+		FiltroServicoTipo filtroServicoTipo = new FiltroServicoTipo();
+		
+		filtroServicoTipo.adicionarParametro(new ParametroSimples(FiltroServicoTipo.INDICADOR_SERVICO_ORDEM_SELETIVA, ConstantesSistema.INDICADOR_USO_ATIVO));
+		
+		filtroServicoTipo.setCampoOrderBy(FiltroServicoTipo.DESCRICAO);
+		
+		Collection<ServicoTipo> colecaoServicoTipo = fachada.pesquisar(filtroServicoTipo, ServicoTipo.class.getName());
+		
+		// [FS0001 - Verificar Existencia de dados]
+		if ( (colecaoServicoTipo == null) || (colecaoServicoTipo.size() == 0) ) {
+			throw new ActionServletException(
+					"atencao.entidade_sem_dados_para_selecao", null, ServicoTipo.class.getName());
+		}else {
+			sessao.setAttribute("colecaoServicoTipo", colecaoServicoTipo);
 		}
+	}
 		
 		if (imovelEmissaoOrdensSeletivas.getSugestao() != null) {
 			httpServletRequest.setAttribute("sugestao", imovelEmissaoOrdensSeletivas.getSugestao());

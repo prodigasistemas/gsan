@@ -762,7 +762,6 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
-
 	/**
 	 * 
 	 * [UC0430] - Gerar Ordem de Serviço
@@ -9123,18 +9122,26 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 			// Subtrai 1 mes do ano/mes faturamento para pegar sempre o mes
 			// fechado
 			String anoMesFaturamento = Util.subtraiAteSeisMesesAnoMesReferencia(sistemaParametro.getAnoMesFaturamento(), 1).toString();
-
-			// Verifica o Tipo de Ordem(Servico)
+			
+			Integer codServicoTipo = repositorioOrdemServico.recuperaServicoTipoSeletivoPorId(Util.converterStringParaInteger(helper.getTipoOrdem()).intValue());
+			
+			if( codServicoTipo != null) {
+					helper.setTipoOrdem("" + codServicoTipo);		
+			};
+			
+			/* Verifica o Tipo de Ordem(Servico)
 			if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO)) {
 				helper.setTipoOrdem("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO);
 			} else if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_SUBSTITUICAO)) {
 				helper.setTipoOrdem("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO);
 			} else if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_INSPECAO_ANORMALIDADE)) {
 				helper.setTipoOrdem("" + ServicoTipo.TIPO_INSPECAO_ANORMALIDADE);
+			}else if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO_RAMAL)){
+				helper.setTipoOrdem("" + ServicoTipo.TIPO_ORDEM_INSTALACAO_RAMAL_CONTROLE_PERDAS);   
 			} else {
 				helper.setTipoOrdem("" + ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO);
 			}
-
+			*/
 			// Data Atual - 30 dias para verificar os Imoveis com
 			// Hidrometro instalado a mais de 30 dias
 			data = Util.subtrairNumeroDiasDeUmaData(new Date(), 30);
@@ -9303,8 +9310,8 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 						}
 
 						// se nao for do tipo instalação, executar o filtro
-						if (!helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO)
-								&& colecaoImoveisComAnormalidades != null) {
+						if (!helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO)	&& colecaoImoveisComAnormalidades != null || 
+								!helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO_RAMAL)	&& colecaoImoveisComAnormalidades != null) {
 							boolean isImovAnormalidade = false;
 
 							for (Iterator iterator = colecaoImoveisComAnormalidades.iterator(); iterator.hasNext();) {
@@ -9393,9 +9400,16 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
-
+		
+		if (colecaoImoveis == null || colecaoImoveis.size() == 0) {
+			throw new ControladorException("atencao.pesquisa.nenhumresultado", null, "");
+		}
+		
+		/*
 		if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO)) {
 			helper.setTipoOrdem("" + ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO);
+		} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_ORDEM_INSTALACAO_RAMAL_CONTROLE_PERDAS)) {
+			helper.setTipoOrdem("" + ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO_RAMAL);
 		} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)) {
 			helper.setTipoOrdem(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_SUBSTITUICAO);
 			// caso o relatorio passe pelo count mas nao haja Ordens de Serviço
@@ -9418,7 +9432,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 				throw new ControladorException("atencao.pesquisa.nenhumresultado", null, "");
 			}
 		}
-
+		*/
 		if (colecaoImoveisPorLocalidade != null && !colecaoImoveisPorLocalidade.isEmpty()) {
 
 			return colecaoImoveisPorLocalidade;
@@ -14455,7 +14469,9 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 		comandoOrdemSeletiva.setUltimaAlteracao(new Date());
 
 		ServicoTipo servicoTipo = new ServicoTipo();
+		servicoTipo.setId(Util.converterStringParaInteger(helper.getTipoOrdem()).intValue());
 		boolean gerarTxtInspecaoAnormalidade = false;
+		/*
 		if (helper.getTipoOrdem().equals("" + ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO)) {
 			servicoTipo.setId(ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO);
 		} else if (helper.getTipoOrdem().equals("" + ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_SUBSTITUICAO)) {
@@ -14463,10 +14479,13 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 		} else if (helper.getTipoOrdem().equals("" + ImovelEmissaoOrdensSeletivasActionForm.TIPO_INSPECAO_ANORMALIDADE)) {
 			servicoTipo.setId(ServicoTipo.TIPO_INSPECAO_ANORMALIDADE);
 			gerarTxtInspecaoAnormalidade = true;
+		} else if (helper.getTipoOrdem().equals("" + ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO_RAMAL)) {
+			servicoTipo.setId(ServicoTipo.TIPO_ORDEM_INSTALACAO_RAMAL_CONTROLE_PERDAS);
+			gerarTxtInspecaoAnormalidade = true;
 		} else if (helper.getTipoOrdem().equals("" + ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_REMOCAO)) {
 			servicoTipo.setId(ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO);
 		}
-		// servicoTipo.setId(new Integer(helper.getTipoOrdem()));
+		*/
 		comandoOrdemSeletiva.setServicoTipo(servicoTipo);
 
 		if (helper.getPerfilImovel() != null && !helper.getPerfilImovel().equals("")

@@ -14,14 +14,21 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
-<link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
+<link rel="stylesheet"
+	href="<bean:message key="caminho.css"/>EstilosCompesa.css"
+	type="text/css">
 
-<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
-<script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
+<script language="JavaScript"
+	src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
+<script language="JavaScript"
+	src="<bean:message key="caminho.js"/>util.js"></script>
 
-<html:javascript staticJavascript="false" formName="ImovelEmissaoOrdensSeletivasActionForm" dynamicJavascript="false" />
+<html:javascript staticJavascript="false"
+	formName="ImovelEmissaoOrdensSeletivasActionForm"
+	dynamicJavascript="false" />
 
-<script language="JavaScript" src="<bean:message key="caminho.js"/>cadastro/imovel/imovel_emissao_ordens_seletivas.js"></script>
+<script language="JavaScript"
+	src="<bean:message key="caminho.js"/>cadastro/imovel/imovel_emissao_ordens_seletivas.js"></script>
 
 <script>
 	var bCancel = false; 
@@ -117,7 +124,7 @@
     }
     
     
-    function habilitaDesabilitaAbaHidrometro() {
+    /*function habilitaDesabilitaAbaHidrometro() {
 		var form = document.forms[0];
 		
 		if (form.tipoOrdem[0].checked) {
@@ -133,12 +140,12 @@
 		var form = document.forms[0];
 
 		
-		if (form.tipoOrdem.value == 304 || form.tipoOrdem.value == -1) {
+		if (form.tipoOrdem.value == -1) {
 			document.getElementById('2').style.display = 'none';
 		}else{
 			document.getElementById('2').style.display = '';
 		}
-	}
+	}*/
 	
 	function duplicarReferenciaCobranca(){
 		var formulario = document.forms[0]; 
@@ -663,671 +670,660 @@ function recuperarDadosQuatroParametros(idRegistro, descricaoRegistro, codigoReg
 </script>
 
 </head>
-<body leftmargin="5" topmargin="5" onload="//setarFoco('${requestScope.nomeCampo}');">
+<body leftmargin="5" topmargin="5"
+	onload="//setarFoco('${requestScope.nomeCampo}');">
 
 
-<html:form action="/filtrarImovelEmissaoOrdensSeletivasWizardAction"
-	type="gcom.gui.atendimentopublico.ordemservico.ImovelEmissaoOrdensSeletivasActionForm"
-	onsubmit="return validateImovelEmissaoOrdensSeletivasActionForm(this);"
-	name="ImovelEmissaoOrdensSeletivasActionForm" method="post">
+	<html:form action="/filtrarImovelEmissaoOrdensSeletivasWizardAction"
+		type="gcom.gui.atendimentopublico.ordemservico.ImovelEmissaoOrdensSeletivasActionForm"
+		onsubmit="return validateImovelEmissaoOrdensSeletivasActionForm(this);"
+		name="ImovelEmissaoOrdensSeletivasActionForm" method="post">
 
-	<jsp:include page="/jsp/util/wizard/navegacao_abas_wizard_valida_avancar_valida_voltar.jsp?numeroPagina=1" />
+		<jsp:include
+			page="/jsp/util/wizard/navegacao_abas_wizard_valida_avancar_valida_voltar.jsp?numeroPagina=1" />
 
-	<%@ include file="/jsp/util/cabecalho.jsp"%>
-	<%@ include file="/jsp/util/menu.jsp"%>
+		<%@ include file="/jsp/util/cabecalho.jsp"%>
+		<%@ include file="/jsp/util/menu.jsp"%>
 
-	<table width="770" border="0" cellspacing="5" cellpadding="0">
-		<input type="hidden" name="numeroPagina" value="1" />
-		<html:hidden property="nomeFirma"/>
-		<html:hidden property="usuarioSemPermissaoGerarOS"/>
-		<tr>
-			<td width="130" valign="top" class="leftcoltext">
-				<div align="center">
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-	
-				<%@ include file="/jsp/util/informacoes_usuario.jsp"%>
-	
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-	
-				<%@ include file="/jsp/util/mensagens.jsp"%>
-	
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				<p align="left">&nbsp;</p>
-				</div>
-			</td>
+		<table width="770" border="0" cellspacing="5" cellpadding="0">
+			<input type="hidden" name="numeroPagina" value="1" />
+			<html:hidden property="nomeFirma" />
+			<html:hidden property="usuarioSemPermissaoGerarOS" />
+			<tr>
+				<td width="130" valign="top" class="leftcoltext">
+					<div align="center">
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
 
-			<td width="625" valign="top" class="centercoltext">
-				
-				<!--
+						<%@ include file="/jsp/util/informacoes_usuario.jsp"%>
+
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+
+						<%@ include file="/jsp/util/mensagens.jsp"%>
+
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+						<p align="left">&nbsp;</p>
+					</div>
+				</td>
+
+				<td width="625" valign="top" class="centercoltext">
+					<!--
 				******************************************************************
 				** Início do Formulário ******************************************
 				******************************************************************
 				-->
-				
-				<table width="100%" border="0" align="center" cellpadding="0"
-					cellspacing="0">
-					<tr>
-						<td width="11"><img border="0"
-							src="<bean:message key="caminho.imagens"/>parahead_left.gif" /></td>
-						<td class="parabg">Filtrar Imóvel</td>
-						<td width="11"><img border="0"
-							src="<bean:message key="caminho.imagens"/>parahead_right.gif" /></td>
-					</tr>
-				</table>
-				<p>&nbsp;</p>
-			
-				<table width="100%" border="0">
-				<tr>
-					<td colspan="2">Para filtrar o(s) im&oacute;vel(is), informe os dados abaixo:</td>
-				</tr>
-					
-				 <tr>
-					<td width="22%"><strong>Tipo da Ordem:</strong></td>
-					<td align="left">
-						<table width="100%" border="0">
-							<tr>
-								<logic:present name="tipoOrdem">
-									<td>
-									    <html:radio value="INSTALACAO" property="tipoOrdem" onclick="habilitaDesabilitaAbaHidrometro();"></html:radio>&nbsp;Instala&ccedil;&atilde;o Hidr&ocirc;metro
-									    <html:radio value="SUBSTITUICAO" property="tipoOrdem" onclick="habilitaDesabilitaAbaHidrometro();"></html:radio>&nbsp;Substitui&ccedil;&atilde;o Hidr&ocirc;metro
-									    <html:radio value="REMOCAO" property="tipoOrdem" onclick="habilitaDesabilitaAbaHidrometro();"></html:radio>Remoção Hidr&ocirc;metro
-									    <html:radio value="INSPECAO" property="tipoOrdem" onclick="habilitaDesabilitaAbaHidrometro();"></html:radio>Inspeção de Anormalidade
-									</td>
-								</logic:present>
-								<logic:notPresent name="tipoOrdem">
-									<td>
-									    <input type="radio" name="tipoOrdem" value="INSTALACAO" checked="checked" onclick="habilitaDesabilitaAbaHidrometro();">Instala&ccedil;&atilde;o Hidr&ocirc;metro
-									    <input type="radio" name="tipoOrdem" value="SUBSTITUICAO" onclick="habilitaDesabilitaAbaHidrometro();">Substitui&ccedil;&atilde;o Hidr&ocirc;metro
-									    <input type="radio" name="tipoOrdem" value="REMOCAO" onclick="habilitaDesabilitaAbaHidrometro();">Remoção Hidr&ocirc;metro
-									    <input type="radio" name="tipoOrdem" value="INSPECAO" onclick="habilitaDesabilitaAbaHidrometro();">Inspeção de Anormalidade
-									</td>
-								</logic:notPresent>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<!-- 	
-				<tr>
-					<td width="22%"><strong>Tipo da Ordem:<font color="#FF0000">*</font></strong></td>
-					<td>
-						<html:select property="tipoOrdem" style="width: 240px;" onclick="habilitaDesabilitaAbaHidrometro();">
-							<html:option value="-1">&nbsp;</html:option>
-						</html:select>
+
+					<table width="100%" border="0" align="center" cellpadding="0"
+						cellspacing="0">
+						<tr>
+							<td width="11"><img border="0"
+								src="<bean:message key="caminho.imagens"/>parahead_left.gif" /></td>
+							<td class="parabg">Filtrar Imóvel</td>
+							<td width="11"><img border="0"
+								src="<bean:message key="caminho.imagens"/>parahead_right.gif" /></td>
+						</tr>
+					</table>
+					<p>&nbsp;</p>
+
+					<table width="100%" border="0">
+						<tr>
+							<td colspan="2">Para filtrar o(s) im&oacute;vel(is), informe
+								os dados abaixo:</td>
+						</tr>
 						
-					</td>
-				</tr>
-				-->	
-					
-					
-				<tr>
-					<td><strong>Tipo de Emissão:</strong></td>
-					<td align="left">
-						<table width="100%" border="0">
+						<tr>
+							<td><strong> Tipo da Ordem :</strong></td>
+							<td><html:select property="tipoOrdem">
+									<html:option value="-1">&nbsp;</html:option>
+									<html:options collection="colecaoServicoTipo" property="id" labelProperty="descricao"/>
+								</html:select></td>
+						</tr>
+
 							<tr>
-								<td>
-									
-									<logic:present name="sugestao">
-									
-										<html:radio value="1" property="sugestao" onclick="habilitaDesabilitaFirma();"></html:radio>&nbsp;Relatório
-									
-										<logic:equal name="usuarioPermissaoGerar" value="true">
-											<html:radio value="2" property="sugestao" onclick="habilitaDesabilitaFirma();"></html:radio>&nbsp;Ordem de Serviço
-										</logic:equal>
-										
-										<logic:equal name="usuarioPermissaoGerar" value="false">
-											<html:radio value="2" property="sugestao" onclick="habilitaDesabilitaFirma();" disabled="true"></html:radio>&nbsp;Ordem de Serviço
-										</logic:equal>
-									
-									</logic:present>
-								
-									<logic:notPresent name="sugestao">
-										
-										<input type="radio" name="sugestao" value="1" onclick="habilitaDesabilitaFirma();" checked="checked">&nbsp;Relatório
+							<td><strong>Tipo de Emissão:</strong></td>
+							<td align="left">
+								<table width="100%" border="0">
+									<tr>
+										<td><logic:present name="sugestao">
+
+												<html:radio value="1" property="sugestao"
+													onclick="habilitaDesabilitaFirma();"></html:radio>&nbsp;Relatório
 									
 										<logic:equal name="usuarioPermissaoGerar" value="true">
-											<html:radio value="2" property="sugestao" onclick="habilitaDesabilitaFirma();"></html:radio>&nbsp;Ordem de Serviço
+													<html:radio value="2" property="sugestao"
+														onclick="habilitaDesabilitaFirma();"></html:radio>&nbsp;Ordem de Serviço
 										</logic:equal>
-									
-										<logic:equal name="usuarioPermissaoGerar" value="false">
-											<html:radio value="2" property="sugestao" onclick="habilitaDesabilitaFirma();" disabled="true"></html:radio>&nbsp;Ordem de Serviço
+
+												<logic:equal name="usuarioPermissaoGerar" value="false">
+													<html:radio value="2" property="sugestao"
+														onclick="habilitaDesabilitaFirma();" disabled="true"></html:radio>&nbsp;Ordem de Serviço
 										</logic:equal>
+
+											</logic:present> <logic:notPresent name="sugestao">
+
+												<input type="radio" name="sugestao" value="1"
+													onclick="habilitaDesabilitaFirma();" checked="checked">&nbsp;Relatório
 									
-									</logic:notPresent>
-								
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				
-				<tr id="tipoRelatorio">
-					<td>
-						&nbsp;
-					</td>
-					<td align="left">
-						<table width="100%" border="0">
-							<tr>
-								<td>			
 										<logic:equal name="usuarioPermissaoGerar" value="true">
-											<html:radio value="1" property="tipoRelatorio"></html:radio>&nbsp;Sintético
+													<html:radio value="2" property="sugestao"
+														onclick="habilitaDesabilitaFirma();"></html:radio>&nbsp;Ordem de Serviço
+										</logic:equal>
+
+												<logic:equal name="usuarioPermissaoGerar" value="false">
+													<html:radio value="2" property="sugestao"
+														onclick="habilitaDesabilitaFirma();" disabled="true"></html:radio>&nbsp;Ordem de Serviço
+										</logic:equal>
+
+											</logic:notPresent></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+						<tr id="tipoRelatorio">
+							<td>&nbsp;</td>
+							<td align="left">
+								<table width="100%" border="0">
+									<tr>
+										<td><logic:equal name="usuarioPermissaoGerar"
+												value="true">
+												<html:radio value="1" property="tipoRelatorio"></html:radio>&nbsp;Sintético
 											<html:radio value="2" property="tipoRelatorio"></html:radio>&nbsp;Analítico
-										</logic:equal>
-										
-										<logic:equal name="usuarioPermissaoGerar" value="false">
-											<html:radio value="1" property="tipoRelatorio"  disabled="true"></html:radio>&nbsp;Sintético
-											<html:radio value="2" property="tipoRelatorio"  disabled="true"></html:radio>&nbsp;Analítico
-										</logic:equal>		
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-					
-				<tr>
-					<td ><strong>Descrição Comando:</strong></td>
-					<td align="left"><html:text property="descricaoComando" size="50" maxlength="50" ></html:text></td>
-				</tr>	
-					
-				<tr>
-					<td><strong>Firma:</strong></td>
-					<td>
-						<logic:present name="sugestao">
-						
-							<logic:equal name="sugestao" value="1">
-								<html:select property="firma" disabled="true">
+										</logic:equal> <logic:equal name="usuarioPermissaoGerar" value="false">
+												<html:radio value="1" property="tipoRelatorio"
+													disabled="true"></html:radio>&nbsp;Sintético
+											<html:radio value="2" property="tipoRelatorio"
+													disabled="true"></html:radio>&nbsp;Analítico
+										</logic:equal></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+						<tr>
+							<td><strong>Descrição Comando:</strong></td>
+							<td align="left"><html:text property="descricaoComando"
+									size="50" maxlength="50"></html:text></td>
+						</tr>
+
+						<tr>
+							<td><strong>Firma:</strong></td>
+							<td><logic:present name="sugestao">
+
+									<logic:equal name="sugestao" value="1">
+										<html:select property="firma" disabled="true">
+											<html:option value="-1">&nbsp;</html:option>
+											<html:options collection="colecaoFirma" property="id"
+												labelProperty="descricao" />
+										</html:select>
+									</logic:equal>
+
+									<logic:equal name="sugestao" value="2">
+										<html:select property="firma">
+											<html:option value="-1">&nbsp;</html:option>
+											<html:options collection="colecaoFirma" property="id"
+												labelProperty="descricao" />
+										</html:select>
+									</logic:equal>
+
+								</logic:present> <logic:notPresent name="sugestao">
+
+									<html:select property="firma">
+										<html:option value="-1">&nbsp;</html:option>
+										<html:options collection="colecaoFirma" property="id"
+											labelProperty="descricao" />
+									</html:select>
+
+								</logic:notPresent></td>
+						</tr>
+
+						<tr>
+							<td><strong>Quantidade Máxima:</strong></td>
+							<td align="left"><html:text property="quantidadeMaxima"
+									size="5" maxlength="4"
+									onkeypress="return isCampoNumerico(event);"></html:text></td>
+						</tr>
+
+						<tr>
+							<td><strong>Matr&iacute;cula do Im&oacute;vel:</strong></td>
+							<td align="left"><html:text property="idImovel" size="10"
+									maxlength="9" tabindex="1"
+									onkeypress="validaEnterComMensagem(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&pesquisarImovel=OK', 'idImovel', 'Matrícula do Imóvel');return isCampoNumerico(event);" />
+								<a
+								href="javascript:abrirPopup('exibirPesquisarImovelAction.do', 490, 800);">
+									<img src="<bean:message key='caminho.imagens'/>pesquisa.gif"
+									width="23" height="21" alt="Pesquisar" title="Pesquisar"
+									border="0">
+							</a> <logic:present name="corImovel">
+
+									<logic:equal name="corImovel" value="exception">
+										<html:text property="inscricaoImovel" size="22"
+											readonly="true"
+											style="background-color:#EFEFEF; border:0; color: #ff0000" />
+									</logic:equal>
+
+									<logic:notEqual name="corImovel" value="exception">
+										<html:text property="inscricaoImovel" size="22"
+											readonly="true"
+											style="background-color:#EFEFEF; border:0; color: #000000" />
+									</logic:notEqual>
+
+								</logic:present> <logic:notPresent name="corImovel">
+
+									<logic:empty name="ImovelEmissaoOrdensSeletivasActionForm"
+										property="idImovel">
+										<html:text property="inscricaoImovel" value="" size="22"
+											readonly="true"
+											style="background-color:#EFEFEF; border:0; color: #ff0000" />
+									</logic:empty>
+									<logic:notEmpty name="ImovelEmissaoOrdensSeletivasActionForm"
+										property="idImovel">
+										<html:text property="inscricaoImovel" size="22"
+											readonly="true"
+											style="background-color:#EFEFEF; border:0; color: #000000" />
+									</logic:notEmpty>
+
+
+								</logic:notPresent> <a
+								href="javascript:limparImovel();habilitarDesabilitarDemaisCampos();">
+									<img src="<bean:message key='caminho.imagens'/>limparcampo.gif"
+									alt="Apagar" title="Apagar" border="0">
+							</a></td>
+						</tr>
+
+						<tr>
+							<td><strong>Gerência Regional:</strong></td>
+							<td><html:select property="gerenciaRegional"
+									onchange="habilitaDesabilitaInscricao();" style="width: 240px;">
 									<html:option value="-1">&nbsp;</html:option>
-									<html:options collection="colecaoFirma" property="id" labelProperty="descricao" />
-								</html:select>
-							</logic:equal>
-							
-							<logic:equal name="sugestao" value="2">
-								<html:select property="firma">
+									<html:options collection="colecaoGerenciaRegional"
+										property="id" labelProperty="nome" />
+								</html:select></td>
+						</tr>
+
+						<tr>
+							<td><strong>Unidade Negócio:</strong></td>
+							<td><html:select property="unidadeNegocio"
+									onchange="habilitaDesabilitaInscricao();" style="width: 240px;">
 									<html:option value="-1">&nbsp;</html:option>
-									<html:options collection="colecaoFirma" property="id" labelProperty="descricao" />
-								</html:select>
-							</logic:equal>
-						
-						</logic:present>
-									
-						<logic:notPresent name="sugestao">
-						
-							<html:select property="firma">
-								<html:option value="-1">&nbsp;</html:option>
-								<html:options collection="colecaoFirma" property="id" labelProperty="descricao" />
-							</html:select>
-						
-						</logic:notPresent>
-						
-					</td>
-				</tr>
+									<html:options collection="colecaoUnidadeNegocio" property="id"
+										labelProperty="nome" />
+								</html:select></td>
+						</tr>
 
-				<tr>
-					<td ><strong>Quantidade Máxima:</strong></td>
-					<td align="left"><html:text property="quantidadeMaxima" size="5" maxlength="4" 
-					onkeypress="return isCampoNumerico(event);"></html:text></td>
-				</tr>
-				
-			<tr>
-		      	<td><strong>Matr&iacute;cula do  Im&oacute;vel:</strong></td>
-		        <td align = "left">
-					<html:text property="idImovel" size="10" maxlength="9" tabindex="1" 
-						onkeypress="validaEnterComMensagem(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&pesquisarImovel=OK', 'idImovel', 'Matrícula do Imóvel');return isCampoNumerico(event);"/>
-					<a href="javascript:abrirPopup('exibirPesquisarImovelAction.do', 490, 800);">
-					<img src="<bean:message key='caminho.imagens'/>pesquisa.gif" width="23" height="21" alt="Pesquisar" title="Pesquisar" border="0"></a>
-		
-					<logic:present name="corImovel">
-		
-						<logic:equal name="corImovel" value="exception">
-							<html:text property="inscricaoImovel" size="22" readonly="true" style="background-color:#EFEFEF; border:0; color: #ff0000"/>
-						</logic:equal>
-		
-						<logic:notEqual name="corImovel" value="exception">
-							<html:text property="inscricaoImovel" size="22" readonly="true" style="background-color:#EFEFEF; border:0; color: #000000"/>
-						</logic:notEqual>
-		
-					</logic:present>
-		
-					<logic:notPresent name="corImovel">
-		
-						<logic:empty name="ImovelEmissaoOrdensSeletivasActionForm" property="idImovel">
-							<html:text property="inscricaoImovel" value="" size="22" readonly="true" style="background-color:#EFEFEF; border:0; color: #ff0000"/>
-						</logic:empty>
-						<logic:notEmpty name="ImovelEmissaoOrdensSeletivasActionForm" property="idImovel">
-							<html:text property="inscricaoImovel" size="22" readonly="true" style="background-color:#EFEFEF; border:0; color: #000000"/>
-						</logic:notEmpty>
-						
-		
-					</logic:notPresent>
-		        	
-		        	<a href="javascript:limparImovel();habilitarDesabilitarDemaisCampos();">
-		        	<img src="<bean:message key='caminho.imagens'/>limparcampo.gif" alt="Apagar" title="Apagar" border="0"></a>
-		
-		       	</td>
-	  		</tr>
-				
-				<tr>
-					<td><strong>Gerência Regional:</strong></td>
-					<td>
-						
-						<html:select property="gerenciaRegional" onchange="habilitaDesabilitaInscricao();" 
-						style="width: 240px;">
-							<html:option value="-1">&nbsp;</html:option>
-							<html:options collection="colecaoGerenciaRegional" property="id" labelProperty="nome" />
-						</html:select>
-						
-					</td>
-				</tr>
-				
-				<tr>
-					<td><strong>Unidade Negócio:</strong></td>
-					<td>
-						
-						<html:select property="unidadeNegocio" onchange="habilitaDesabilitaInscricao();"
-						style="width: 240px;">
-							<html:option value="-1">&nbsp;</html:option>
-							<html:options collection="colecaoUnidadeNegocio" property="id" labelProperty="nome" />
-						</html:select>
-						
-					</td>
-				</tr>
-					
-				<tr>
-					<td><strong>Localidade Pólo:</strong></td>
-					<td>
-						<html:text tabindex="7" maxlength="3" property="elo" size="5"
-						onkeypress="habilitaDesabilitaInscricao(); validaEnter(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=4&inscricaoTipo=origem', 'elo');return isCampoNumerico(event);"/>
-						
-						<a href="javascript:chamarPopup('exibirPesquisarEloAction.do', 'origem', null, null, 275, 480, '');" id="btPesqElo">
-						<img width="23" height="21" border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"
-						title="Pesquisar" /></a>
-						
-						<logic:present name="corEloOrigem">
-							<logic:equal name="corEloOrigem" value="exception">
-								<html:text property="nomeElo" size="35" readonly="true"
-									style="background-color:#EFEFEF; border:0; color: #ff0000" />
-							</logic:equal>
-		
-							<logic:notEqual name="corEloOrigem" value="exception">
-								<html:text property="nomeElo" size="35" readonly="true"
-									style="background-color:#EFEFEF; border:0; color: #000000" />
-							</logic:notEqual>
-						</logic:present>
-							
-						<logic:notPresent name="corEloOrigem">
-							<logic:empty name="ImovelEmissaoOrdensSeletivasActionForm"
-								property="elo">
-								<html:text property="nomeElo" value="" size="35" readonly="true"
-									style="background-color:#EFEFEF; border:0; color: #ff0000" />
-							</logic:empty>
+						<tr>
+							<td><strong>Localidade Pólo:</strong></td>
+							<td><html:text tabindex="7" maxlength="3" property="elo"
+									size="5"
+									onkeypress="habilitaDesabilitaInscricao(); validaEnter(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=4&inscricaoTipo=origem', 'elo');return isCampoNumerico(event);" />
 
-							<logic:notEmpty name="ImovelEmissaoOrdensSeletivasActionForm"
-								property="elo">
-								<html:text property="nomeElo" size="35" readonly="true"
-									style="background-color:#EFEFEF; border:0; color: 	#000000" />
-							</logic:notEmpty>
-						</logic:notPresent>
-							
-						<a href="javascript:limparBorrachaElo(); habilitaDesabilitaInscricao();">
-						<img src="<bean:message key="caminho.imagens"/>limparcampo.gif"
-						border="0" title="Apagar" /></a>
-					</td>
-				</tr>
-				
-				<tr>
-					<td><strong>Logradouro:</strong></td>
-					<td><html:text property="logradouro" maxlength="9" size="9" 
-						onkeypress="javascript:habilitaDesabilitaInscricao();validaEnter(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=5&inscricaoTipo=origem', 'logradouro');return isCampoNumerico(event);"/>
-					
-						<a href="javascript:abrirPopup('exibirPesquisarLogradouroAction.do?indicadorUsoTodos=1&primeriaVez=1', 400, 800);"><img
-						src="/gsan/imagens/pesquisa.gif" width="23"
-						height="21" border="0" style="cursor:hand;" alt="Pesquisar" title="Pesquisar"></a>  
-						
-						<logic:present name="corLogradouro">
-							<logic:equal name="corLogradouro" value="exception">
-								<html:text property="descricaoLogradouro" size="40" readonly="true"
-									style="background-color:#EFEFEF; border:0; color: #ff0000" />
-							</logic:equal>
-		
-							<logic:notEqual name="corLogradouro" value="exception">
-								<html:text property="descricaoLogradouro" size="40" readonly="true"
-									style="background-color:#EFEFEF; border:0; color: #000000" />
-							</logic:notEqual>
-						</logic:present>
-							
-						<logic:notPresent name="corLogradouro">
-							<logic:empty name="ImovelEmissaoOrdensSeletivasActionForm"
-								property="elo">
-								<html:text property="descricaoLogradouro" value="" size="40" readonly="true"
-									style="background-color:#EFEFEF; border:0; color: #ff0000" />
-							</logic:empty>
+								<a
+								href="javascript:chamarPopup('exibirPesquisarEloAction.do', 'origem', null, null, 275, 480, '');"
+								id="btPesqElo"> <img width="23" height="21" border="0"
+									src="<bean:message key="caminho.imagens"/>pesquisa.gif"
+									title="Pesquisar" /></a> <logic:present name="corEloOrigem">
+									<logic:equal name="corEloOrigem" value="exception">
+										<html:text property="nomeElo" size="35" readonly="true"
+											style="background-color:#EFEFEF; border:0; color: #ff0000" />
+									</logic:equal>
 
-							<logic:notEmpty name="ImovelEmissaoOrdensSeletivasActionForm"
-								property="elo">
-								<html:text property="descricaoLogradouro" size="40" readonly="true"
-									style="background-color:#EFEFEF; border:0; color: 	#000000" />
-							</logic:notEmpty>
-						</logic:notPresent>
-						
-						
-					 	<a href="javascript:limparBorrachaLogradouro(); habilitaDesabilitaInscricao();">
-						<img src="/gsan/imagens/limparcampo.gif"
-						border="0" title="Apagar" /></a>
-					</td>
-				</tr>
-				
-				</table>
-					
-					
-				<table width="100%" border="0">
-					<tr>
-						<td colspan="2">
-					
-							<table width="100%" align="center" bgcolor="#90c7fc" border="0">
-							<tr>
-								<td><strong>Inscrição Inicial</strong></td>
-							</tr>
-							<tr bgcolor="#cbe5fe">
-								<td width="100%" align="center">
-								
-									<table width="100%" border="0">
-								
+									<logic:notEqual name="corEloOrigem" value="exception">
+										<html:text property="nomeElo" size="35" readonly="true"
+											style="background-color:#EFEFEF; border:0; color: #000000" />
+									</logic:notEqual>
+								</logic:present> <logic:notPresent name="corEloOrigem">
+									<logic:empty name="ImovelEmissaoOrdensSeletivasActionForm"
+										property="elo">
+										<html:text property="nomeElo" value="" size="35"
+											readonly="true"
+											style="background-color:#EFEFEF; border:0; color: #ff0000" />
+									</logic:empty>
+
+									<logic:notEmpty name="ImovelEmissaoOrdensSeletivasActionForm"
+										property="elo">
+										<html:text property="nomeElo" size="35" readonly="true"
+											style="background-color:#EFEFEF; border:0; color: 	#000000" />
+									</logic:notEmpty>
+								</logic:notPresent> <a
+								href="javascript:limparBorrachaElo(); habilitaDesabilitaInscricao();">
+									<img src="<bean:message key="caminho.imagens"/>limparcampo.gif"
+									border="0" title="Apagar" />
+							</a></td>
+						</tr>
+
+						<tr>
+							<td><strong>Logradouro:</strong></td>
+							<td><html:text property="logradouro" maxlength="9" size="9"
+									onkeypress="javascript:habilitaDesabilitaInscricao();validaEnter(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=5&inscricaoTipo=origem', 'logradouro');return isCampoNumerico(event);" />
+
+								<a
+								href="javascript:abrirPopup('exibirPesquisarLogradouroAction.do?indicadorUsoTodos=1&primeriaVez=1', 400, 800);"><img
+									src="/gsan/imagens/pesquisa.gif" width="23" height="21"
+									border="0" style="cursor: hand;" alt="Pesquisar"
+									title="Pesquisar"></a> <logic:present name="corLogradouro">
+									<logic:equal name="corLogradouro" value="exception">
+										<html:text property="descricaoLogradouro" size="40"
+											readonly="true"
+											style="background-color:#EFEFEF; border:0; color: #ff0000" />
+									</logic:equal>
+
+									<logic:notEqual name="corLogradouro" value="exception">
+										<html:text property="descricaoLogradouro" size="40"
+											readonly="true"
+											style="background-color:#EFEFEF; border:0; color: #000000" />
+									</logic:notEqual>
+								</logic:present> <logic:notPresent name="corLogradouro">
+									<logic:empty name="ImovelEmissaoOrdensSeletivasActionForm"
+										property="elo">
+										<html:text property="descricaoLogradouro" value="" size="40"
+											readonly="true"
+											style="background-color:#EFEFEF; border:0; color: #ff0000" />
+									</logic:empty>
+
+									<logic:notEmpty name="ImovelEmissaoOrdensSeletivasActionForm"
+										property="elo">
+										<html:text property="descricaoLogradouro" size="40"
+											readonly="true"
+											style="background-color:#EFEFEF; border:0; color: 	#000000" />
+									</logic:notEmpty>
+								</logic:notPresent> <a
+								href="javascript:limparBorrachaLogradouro(); habilitaDesabilitaInscricao();">
+									<img src="/gsan/imagens/limparcampo.gif" border="0"
+									title="Apagar" />
+							</a></td>
+						</tr>
+
+					</table>
+
+
+					<table width="100%" border="0">
+						<tr>
+							<td colspan="2">
+
+								<table width="100%" align="center" bgcolor="#90c7fc" border="0">
 									<tr>
-										<td width="21%"><strong>Localidade:</strong></td>
-										<td>
-											<html:text tabindex="8" maxlength="3" property="localidadeInicial" size="5"
-											onkeypress="duplicarLocalidade(); controleSetorComercial(); validaEnter(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=1&inscricaoTipo=origem', 'localidadeInicial');return isCampoNumerico(event);"
-											onclick="javascript:validarLocalidade();" onblur="duplicarLocalidade();"/>
-											
-											<a href="javascript:chamarPopup('exibirPesquisarLocalidadeAction.do', 'origem', null, null, 275, 480, ''); controleSetorComercial();" id="btPesqLocalidadeInicial">
-											<img width="23" height="21" border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"
-											title="Pesquisar" /></a>
-											
-											<logic:present name="corLocalidadeOrigem">
-												<logic:equal name="corLocalidadeOrigem" value="exception">
-													<html:text property="nomeLocalidadeInicial" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #ff0000" />
-												</logic:equal>
-						
-												<logic:notEqual name="corLocalidadeOrigem" value="exception">
-													<html:text property="nomeLocalidadeInicial" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #000000" />
-												</logic:notEqual>
-											</logic:present>
-											
-											<logic:notPresent name="corLocalidadeOrigem">
-												<logic:empty name="ImovelEmissaoOrdensSeletivasActionForm"
-													property="localidadeInicial">
-													<html:text property="nomeLocalidadeInicial" value="" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #ff0000" />
-												</logic:empty>
-				
-												<logic:notEmpty name="ImovelEmissaoOrdensSeletivasActionForm"
-													property="localidadeInicial">
-													<html:text property="nomeLocalidadeInicial" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: 	#000000" />
-												</logic:notEmpty>
-											</logic:notPresent>
-											
-											<a href="javascript:limparBorrachaOrigem(1);">
-											<img src="<bean:message key="caminho.imagens"/>limparcampo.gif"
-											border="0" title="Apagar" /></a>
+										<td><strong>Inscrição Inicial</strong></td>
+									</tr>
+									<tr bgcolor="#cbe5fe">
+										<td width="100%" align="center">
+
+											<table width="100%" border="0">
+
+												<tr>
+													<td width="21%"><strong>Localidade:</strong></td>
+													<td><html:text tabindex="8" maxlength="3"
+															property="localidadeInicial" size="5"
+															onkeypress="duplicarLocalidade(); controleSetorComercial(); validaEnter(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=1&inscricaoTipo=origem', 'localidadeInicial');return isCampoNumerico(event);"
+															onclick="javascript:validarLocalidade();"
+															onblur="duplicarLocalidade();" /> <a
+														href="javascript:chamarPopup('exibirPesquisarLocalidadeAction.do', 'origem', null, null, 275, 480, ''); controleSetorComercial();"
+														id="btPesqLocalidadeInicial"> <img width="23"
+															height="21" border="0"
+															src="<bean:message key="caminho.imagens"/>pesquisa.gif"
+															title="Pesquisar" /></a> <logic:present
+															name="corLocalidadeOrigem">
+															<logic:equal name="corLocalidadeOrigem" value="exception">
+																<html:text property="nomeLocalidadeInicial" size="35"
+																	readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #ff0000" />
+															</logic:equal>
+
+															<logic:notEqual name="corLocalidadeOrigem"
+																value="exception">
+																<html:text property="nomeLocalidadeInicial" size="35"
+																	readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #000000" />
+															</logic:notEqual>
+														</logic:present> <logic:notPresent name="corLocalidadeOrigem">
+															<logic:empty
+																name="ImovelEmissaoOrdensSeletivasActionForm"
+																property="localidadeInicial">
+																<html:text property="nomeLocalidadeInicial" value=""
+																	size="35" readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #ff0000" />
+															</logic:empty>
+
+															<logic:notEmpty
+																name="ImovelEmissaoOrdensSeletivasActionForm"
+																property="localidadeInicial">
+																<html:text property="nomeLocalidadeInicial" size="35"
+																	readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: 	#000000" />
+															</logic:notEmpty>
+														</logic:notPresent> <a href="javascript:limparBorrachaOrigem(1);"> <img
+															src="<bean:message key="caminho.imagens"/>limparcampo.gif"
+															border="0" title="Apagar" /></a></td>
+												</tr>
+												<tr>
+													<td><strong>Setor Comercial:</strong></td>
+													<td><html:text tabindex="9" maxlength="3"
+															property="codigoSetorComercialInicial" size="5"
+															onkeypress="duplicarSetorComercial(); controleQuadra(); validaEnterDependencia(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=2&inscricaoTipo=origem', document.forms[0].codigoSetorComercialInicial, document.forms[0].localidadeInicial.value, 'Localidade Inicial.');return isCampoNumerico(event);"
+															onblur="duplicarSetorComercial(); controleQuadra();" />
+														<a
+														href="javascript:chamarPopup('exibirPesquisarSetorComercialAction.do', 'setorComercialOrigem','idLocalidade', document.ImovelEmissaoOrdensSeletivasActionForm.localidadeInicial.value, 275, 480, 'Informe Localidade Inicial.'); controleQuadra();"
+														id="btPesqSetorComercialInicial"> <img width="23"
+															height="21" border="0"
+															src="<bean:message key="caminho.imagens"/>pesquisa.gif"
+															title="Pesquisar" /></a> <logic:present
+															name="corSetorComercialOrigem">
+															<logic:equal name="corSetorComercialOrigem"
+																value="exception">
+																<html:text property="nomeSetorComercialInicial"
+																	size="35" readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #ff0000" />
+															</logic:equal>
+
+															<logic:notEqual name="corSetorComercialOrigem"
+																value="exception">
+																<html:text property="nomeSetorComercialInicial"
+																	size="35" readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #000000" />
+															</logic:notEqual>
+
+														</logic:present> <logic:notPresent name="corSetorComercialOrigem">
+															<logic:empty
+																name="ImovelEmissaoOrdensSeletivasActionForm"
+																property="codigoSetorComercialInicial">
+																<html:text property="nomeSetorComercialInicial" value=""
+																	size="35" readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #ff0000" />
+															</logic:empty>
+															<logic:notEmpty
+																name="ImovelEmissaoOrdensSeletivasActionForm"
+																property="codigoSetorComercialInicial">
+																<html:text property="nomeSetorComercialInicial"
+																	size="35" readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #000000" />
+															</logic:notEmpty>
+														</logic:notPresent> <a href="javascript:limparBorrachaOrigem(2);"> <img
+															src="<bean:message key="caminho.imagens"/>limparcampo.gif"
+															border="0" title="Apagar" />
+													</a> <html:hidden property="setorComercialInicial" /></td>
+												</tr>
+												<tr>
+													<td><strong>Quadra:</strong></td>
+													<td colspan="3"><html:text tabindex="10" maxlength="4"
+															property="quadraInicial" size="5"
+															onkeypress="validaEnterDependencia(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=3&inscricaoTipo=origem', document.forms[0].quadraInicial, document.forms[0].codigoSetorComercialInicial.value, 'Setor Comercial Inicial.');return isCampoNumerico(event);"
+															onblur="duplicarQuadra();" /> <logic:present
+															name="corQuadraOrigem" scope="request">
+															<span style="color: #ff0000" id="msgQuadraInicial">
+																<bean:write scope="request" name="msgQuadraInicial" />
+															</span>
+														</logic:present> <logic:notPresent name="corQuadraOrigem" scope="request"></logic:notPresent>
+
+														<html:hidden property="idQuadraInicial" /></td>
+												</tr>
+
+												<tr>
+													<td><strong>Rota inicial:</strong></td>
+													<td align="left"><html:text property="rotaInicial"
+															size="5" maxlength="4" disabled="true"
+															onkeypress="return isCampoNumerico(event);"></html:text>
+														seq.: <html:text property="rotaSequenciaInicial" size="7"
+															maxlength="6" disabled="true"
+															onkeypress="return isCampoNumerico(event);"></html:text></td>
+												</tr>
+											</table>
+
 										</td>
 									</tr>
-									<tr>
-										<td><strong>Setor Comercial:</strong></td>
-										<td>
-											<html:text tabindex="9" maxlength="3"
-											property="codigoSetorComercialInicial" size="5"
-											onkeypress="duplicarSetorComercial(); controleQuadra(); validaEnterDependencia(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=2&inscricaoTipo=origem', document.forms[0].codigoSetorComercialInicial, document.forms[0].localidadeInicial.value, 'Localidade Inicial.');return isCampoNumerico(event);"
-											onblur="duplicarSetorComercial(); controleQuadra();"/>
-											
-											<a href="javascript:chamarPopup('exibirPesquisarSetorComercialAction.do', 'setorComercialOrigem','idLocalidade', document.ImovelEmissaoOrdensSeletivasActionForm.localidadeInicial.value, 275, 480, 'Informe Localidade Inicial.'); controleQuadra();" id="btPesqSetorComercialInicial">
-											<img width="23" height="21" border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif" title="Pesquisar" /></a>
-											
-											<logic:present name="corSetorComercialOrigem">
-												<logic:equal name="corSetorComercialOrigem" value="exception">
-													<html:text property="nomeSetorComercialInicial" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #ff0000" />
-												</logic:equal>
-					
-												<logic:notEqual name="corSetorComercialOrigem" value="exception">
-													<html:text property="nomeSetorComercialInicial" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #000000" />
-												</logic:notEqual>
-					
-											</logic:present>
-											
-											<logic:notPresent name="corSetorComercialOrigem">
-												<logic:empty name="ImovelEmissaoOrdensSeletivasActionForm" property="codigoSetorComercialInicial">
-													<html:text property="nomeSetorComercialInicial" value="" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #ff0000" />
-												</logic:empty>
-												<logic:notEmpty name="ImovelEmissaoOrdensSeletivasActionForm" property="codigoSetorComercialInicial">
-													<html:text property="nomeSetorComercialInicial" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #000000" />
-												</logic:notEmpty>
-											</logic:notPresent>
-											<a href="javascript:limparBorrachaOrigem(2);">
-												<img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
-											</a>
-											<html:hidden property="setorComercialInicial"/>
-										</td>
-									</tr>
-									<tr>
-										<td><strong>Quadra:</strong></td>
-										<td colspan="3">
-										
-											<html:text tabindex="10" maxlength="4" property="quadraInicial" size="5"
-											onkeypress="validaEnterDependencia(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=3&inscricaoTipo=origem', document.forms[0].quadraInicial, document.forms[0].codigoSetorComercialInicial.value, 'Setor Comercial Inicial.');return isCampoNumerico(event);"
-											onblur="duplicarQuadra();"/> 
-											
-											<logic:present name="corQuadraOrigem" scope="request">
-												<span style="color:#ff0000" id="msgQuadraInicial">
-													<bean:write scope="request" name="msgQuadraInicial" />
-												</span>
-											</logic:present> 
-											
-											<logic:notPresent name="corQuadraOrigem" scope="request"></logic:notPresent> 
-											
-											<html:hidden property="idQuadraInicial" />
-										
-										</td>
-									</tr>
-									
-									<tr>
-										<td><strong>Rota inicial:</strong></td>
-										<td align="left"><html:text property="rotaInicial" size="5" maxlength="4" disabled="true" 
-											onkeypress="return isCampoNumerico(event);"></html:text>
-										seq.:
-										<html:text property="rotaSequenciaInicial" size="7" maxlength="6" disabled="true" 
-											onkeypress="return isCampoNumerico(event);"></html:text></td>
-									</tr>
-									</table>
-									
-								</td>
-							</tr>
-							</table>
-						
-						</td>
-					</tr>
-				</table>		
-				
-				
-				<table width="100%" border="0">
-					<tr>
-						<td colspan="2">
-					
-							<table width="100%" align="center" bgcolor="#90c7fc" border="0">
-							<tr>
-								<td><strong>Inscrição Final</strong></td>
-							</tr>
-							<tr bgcolor="#cbe5fe">
-								<td width="100%" align="center">
-								
-									<table width="100%" border="0">
-									<tr>
-										<td width="21%"><strong>Localidade:</strong></td>
-										<td>
-											<html:text maxlength="3" property="localidadeFinal" size="5"
-											onkeypress="controleSetorComercial(); limparDestino(1); validaEnter(event,'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=1&inscricaoTipo=destino', 'localidadeFinal');return isCampoNumerico(event);"
-											tabindex="11"/>
-											<a href="javascript:chamarPopup('exibirPesquisarLocalidadeAction.do', 'destino', null, null, 275, 480, ''); limparDestino(1);" id="btPesqLocalidadeFinal">
-												<img width="23" height="21" border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif" title="Pesquisar" /></a>
-											<logic:present name="corLocalidadeDestino">
-												<logic:equal name="corLocalidadeDestino" value="exception">
-													<html:text property="nomeLocalidadeFinal" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #ff0000" />
-												</logic:equal>
-						
-												<logic:notEqual name="corLocalidadeDestino" value="exception">
-													<html:text property="nomeLocalidadeFinal" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #000000" />
-												</logic:notEqual>
-											</logic:present>
-											
-											<logic:notPresent name="corLocalidadeDestino">
-												<logic:empty name="ImovelEmissaoOrdensSeletivasActionForm" property="localidadeFinal">
-													<html:text property="nomeLocalidadeFinal" value="" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #ff0000" />
-												</logic:empty>
-												<logic:notEmpty name="ImovelEmissaoOrdensSeletivasActionForm" property="localidadeFinal">
-													<html:text property="nomeLocalidadeFinal" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: 	#000000" />
-												</logic:notEmpty>
-											</logic:notPresent>
-											
-											<a href="javascript:limparBorrachaDestino(1);">
-												<img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
-											</a>
-										</td>
-									</tr>
-									<tr>
-										<td><strong>Setor Comercial :</strong></td>
-										<td>
-											<html:text maxlength="3" property="codigoSetorComercialFinal" size="5"
-												onkeyup="limparDestino(2);"
-												onkeypress="controleQuadra(); validaEnterDependencia(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=2&inscricaoTipo=destino', document.forms[0].codigoSetorComercialFinal, document.forms[0].localidadeFinal.value, 'Localidade Final.');return isCampoNumerico(event);"
-												tabindex="12" />
-											<a href="javascript:chamarPopup('exibirPesquisarSetorComercialAction.do', 'setorComercialDestino', 'idLocalidade', document.ImovelEmissaoOrdensSeletivasActionForm.localidadeFinal.value, 275, 480, 'Informe Localidade Final.'); limparDestino(2);" id="btPesqSetorComercialFinal">
-												<img width="23" height="21" border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"
-													title="Pesquisar" /></a>
-											
-											<logic:present name="corSetorComercialDestino">
-												<logic:equal name="corSetorComercialDestino" value="exception">
-													<html:text property="nomeSetorComercialFinal" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #ff0000" />
-												</logic:equal>
-				
-												<logic:notEqual name="corSetorComercialDestino" value="exception">
-													<html:text property="nomeSetorComercialFinal" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #000000" />
-												</logic:notEqual>
-											</logic:present>
-											
-											<logic:notPresent name="corSetorComercialDestino">
-												<logic:empty name="ImovelEmissaoOrdensSeletivasActionForm" property="codigoSetorComercialFinal">
-													<html:text property="nomeSetorComercialFinal" value="" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #ff0000" />
-												</logic:empty>
-												<logic:notEmpty name="ImovelEmissaoOrdensSeletivasActionForm" property="codigoSetorComercialFinal">
-													<html:text property="nomeSetorComercialFinal" size="35" readonly="true"
-														style="background-color:#EFEFEF; border:0; color: #000000" />
-												</logic:notEmpty>
-											</logic:notPresent>
-											
-											<a href="javascript:limparBorrachaDestino(2);">
-												<img src="<bean:message key="caminho.imagens"/>limparcampo.gif"
-													border="0" title="Apagar" /></a>
-													
-											<html:hidden property="setorComercialFinal" />
-										</td>
-									</tr>
-									<tr>
-										<td><strong>Quadra:</strong></td>
-										<td><html:text maxlength="4" property="quadraFinal" size="5"
-											onkeypress="limparDestino(3); validaEnterDependencia(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=3&inscricaoTipo=destino', document.forms[0].quadraFinal, document.forms[0].codigoSetorComercialFinal.value, 'Setor Comercial Final.');return isCampoNumerico(event);"
-											tabindex="13"/> 
-											
-											<logic:present name="corQuadraDestino" scope="request">
-												<span style="color:#ff0000" id="msgQuadraFinal">
-													<bean:write scope="request" name="msgQuadraFinal" />
-												</span>
-											</logic:present> 
-											
-											<logic:notPresent name="corQuadraDestino" scope="request"></logic:notPresent> 
-											
-											<html:hidden property="idQuadraFinal" />
-										</td>
-									</tr>
-									
-									<tr>
-										<td><strong>Rota Final:</strong></td>
-										<td align="left"><html:text property="rotaFinal" size="5" maxlength="4" disabled="true" 
-											onkeypress="return isCampoNumerico(event);"></html:text>
-										seq.:
-										<html:text property="rotaSequenciaFinal" size="7" maxlength="6" disabled="true" 
-											onkeypress="return isCampoNumerico(event);"></html:text></td>
-									</tr>
-									</table>
-								
-								</td>
-							</tr>
-							</table>
-						</td>
-					</tr>
-				</table>
-				
-				<table width="100%" border="0">	
-					<tr>
-						<td colspan="4">
-							<div align="right">
-								<jsp:include page="/jsp/util/wizard/navegacao_botoes_wizard_valida_avancar_valida_voltar.jsp?numeroPagina=1" />
-							</div>
-						</td>
-					</tr>
-				</table>
-				
-				<p>&nbsp;</p>
-			</td>
-		</tr>
-	</table>
+								</table>
 
-	<%@ include file="/jsp/util/rodape.jsp"%>
+							</td>
+						</tr>
+					</table>
 
-</html:form>
 
-<logic:present name="tipoOrdem">
-	<logic:equal name="tipoOrdem" value="INSTALACAO">
+					<table width="100%" border="0">
+						<tr>
+							<td colspan="2">
+
+								<table width="100%" align="center" bgcolor="#90c7fc" border="0">
+									<tr>
+										<td><strong>Inscrição Final</strong></td>
+									</tr>
+									<tr bgcolor="#cbe5fe">
+										<td width="100%" align="center">
+
+											<table width="100%" border="0">
+												<tr>
+													<td width="21%"><strong>Localidade:</strong></td>
+													<td><html:text maxlength="3"
+															property="localidadeFinal" size="5"
+															onkeypress="controleSetorComercial(); limparDestino(1); validaEnter(event,'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=1&inscricaoTipo=destino', 'localidadeFinal');return isCampoNumerico(event);"
+															tabindex="11" /> <a
+														href="javascript:chamarPopup('exibirPesquisarLocalidadeAction.do', 'destino', null, null, 275, 480, ''); limparDestino(1);"
+														id="btPesqLocalidadeFinal"> <img width="23"
+															height="21" border="0"
+															src="<bean:message key="caminho.imagens"/>pesquisa.gif"
+															title="Pesquisar" /></a> <logic:present
+															name="corLocalidadeDestino">
+															<logic:equal name="corLocalidadeDestino"
+																value="exception">
+																<html:text property="nomeLocalidadeFinal" size="35"
+																	readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #ff0000" />
+															</logic:equal>
+
+															<logic:notEqual name="corLocalidadeDestino"
+																value="exception">
+																<html:text property="nomeLocalidadeFinal" size="35"
+																	readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #000000" />
+															</logic:notEqual>
+														</logic:present> <logic:notPresent name="corLocalidadeDestino">
+															<logic:empty
+																name="ImovelEmissaoOrdensSeletivasActionForm"
+																property="localidadeFinal">
+																<html:text property="nomeLocalidadeFinal" value=""
+																	size="35" readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #ff0000" />
+															</logic:empty>
+															<logic:notEmpty
+																name="ImovelEmissaoOrdensSeletivasActionForm"
+																property="localidadeFinal">
+																<html:text property="nomeLocalidadeFinal" size="35"
+																	readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: 	#000000" />
+															</logic:notEmpty>
+														</logic:notPresent> <a href="javascript:limparBorrachaDestino(1);"> <img
+															src="<bean:message key="caminho.imagens"/>limparcampo.gif"
+															border="0" title="Apagar" />
+													</a></td>
+												</tr>
+												<tr>
+													<td><strong>Setor Comercial :</strong></td>
+													<td><html:text maxlength="3"
+															property="codigoSetorComercialFinal" size="5"
+															onkeyup="limparDestino(2);"
+															onkeypress="controleQuadra(); validaEnterDependencia(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=2&inscricaoTipo=destino', document.forms[0].codigoSetorComercialFinal, document.forms[0].localidadeFinal.value, 'Localidade Final.');return isCampoNumerico(event);"
+															tabindex="12" /> <a
+														href="javascript:chamarPopup('exibirPesquisarSetorComercialAction.do', 'setorComercialDestino', 'idLocalidade', document.ImovelEmissaoOrdensSeletivasActionForm.localidadeFinal.value, 275, 480, 'Informe Localidade Final.'); limparDestino(2);"
+														id="btPesqSetorComercialFinal"> <img width="23"
+															height="21" border="0"
+															src="<bean:message key="caminho.imagens"/>pesquisa.gif"
+															title="Pesquisar" /></a> <logic:present
+															name="corSetorComercialDestino">
+															<logic:equal name="corSetorComercialDestino"
+																value="exception">
+																<html:text property="nomeSetorComercialFinal" size="35"
+																	readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #ff0000" />
+															</logic:equal>
+
+															<logic:notEqual name="corSetorComercialDestino"
+																value="exception">
+																<html:text property="nomeSetorComercialFinal" size="35"
+																	readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #000000" />
+															</logic:notEqual>
+														</logic:present> <logic:notPresent name="corSetorComercialDestino">
+															<logic:empty
+																name="ImovelEmissaoOrdensSeletivasActionForm"
+																property="codigoSetorComercialFinal">
+																<html:text property="nomeSetorComercialFinal" value=""
+																	size="35" readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #ff0000" />
+															</logic:empty>
+															<logic:notEmpty
+																name="ImovelEmissaoOrdensSeletivasActionForm"
+																property="codigoSetorComercialFinal">
+																<html:text property="nomeSetorComercialFinal" size="35"
+																	readonly="true"
+																	style="background-color:#EFEFEF; border:0; color: #000000" />
+															</logic:notEmpty>
+														</logic:notPresent> <a href="javascript:limparBorrachaDestino(2);"> <img
+															src="<bean:message key="caminho.imagens"/>limparcampo.gif"
+															border="0" title="Apagar" /></a> <html:hidden
+															property="setorComercialFinal" /></td>
+												</tr>
+												<tr>
+													<td><strong>Quadra:</strong></td>
+													<td><html:text maxlength="4" property="quadraFinal"
+															size="5"
+															onkeypress="limparDestino(3); validaEnterDependencia(event, 'filtrarImovelEmissaoOrdensSeletivasWizardAction.do?action=exibirFiltrarImovelEmissaoOrdensSeletivasParametros&objetoConsulta=3&inscricaoTipo=destino', document.forms[0].quadraFinal, document.forms[0].codigoSetorComercialFinal.value, 'Setor Comercial Final.');return isCampoNumerico(event);"
+															tabindex="13" /> <logic:present name="corQuadraDestino"
+															scope="request">
+															<span style="color: #ff0000" id="msgQuadraFinal">
+																<bean:write scope="request" name="msgQuadraFinal" />
+															</span>
+														</logic:present> <logic:notPresent name="corQuadraDestino" scope="request"></logic:notPresent>
+
+														<html:hidden property="idQuadraFinal" /></td>
+												</tr>
+
+												<tr>
+													<td><strong>Rota Final:</strong></td>
+													<td align="left"><html:text property="rotaFinal"
+															size="5" maxlength="4" disabled="true"
+															onkeypress="return isCampoNumerico(event);"></html:text>
+														seq.: <html:text property="rotaSequenciaFinal" size="7"
+															maxlength="6" disabled="true"
+															onkeypress="return isCampoNumerico(event);"></html:text></td>
+												</tr>
+											</table>
+
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+
+					<table width="100%" border="0">
+						<tr>
+							<td colspan="4">
+								<div align="right">
+									<jsp:include
+										page="/jsp/util/wizard/navegacao_botoes_wizard_valida_avancar_valida_voltar.jsp?numeroPagina=1" />
+								</div>
+							</td>
+						</tr>
+					</table>
+
+					<p>&nbsp;</p>
+				</td>
+			</tr>
+		</table>
+
+		<%@ include file="/jsp/util/rodape.jsp"%>
+
+	</html:form>
+
+	<!--<logic:present name="tipoOrdem">
+		<logic:equal name="tipoOrdem" value="INSTALACAO">
+			<script>document.getElementById('2').style.display = 'none';</script>
+		</logic:equal>
+		<logic:notEqual name="tipoOrdem" value="INSTALACAO">
+			<script>document.getElementById('2').style.display = '';</script>
+		</logic:notEqual>
+	</logic:present>
+	<logic:notPresent name="tipoOrdem">
 		<script>document.getElementById('2').style.display = 'none';</script>
-	</logic:equal>
-	<logic:notEqual name="tipoOrdem" value="INSTALACAO">
-		<script>document.getElementById('2').style.display = '';</script>
-	</logic:notEqual>
-</logic:present>
-<logic:notPresent name="tipoOrdem">
-	<script>document.getElementById('2').style.display = 'none';</script>
-</logic:notPresent>
+	</logic:notPresent>-->
+	
 
-<script>
-	habilitaDesabilitaAbaHidrometro();
+	<script>
+	/*habilitaDesabilitaAbaHidrometro();*/
 	habilitaDesabilitaFirma();
 	habilitaDesabilitaInscricao();
 	controleSetorComercial();

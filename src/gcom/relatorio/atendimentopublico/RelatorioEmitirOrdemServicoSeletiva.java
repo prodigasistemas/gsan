@@ -142,20 +142,24 @@ public class RelatorioEmitirOrdemServicoSeletiva extends TarefaRelatorio {
 				HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = null;
 				
 				ServicoTipo servTipo = new ServicoTipo();
-				int constante = 0;
-				
 				StringBuilder documentoTxt = new StringBuilder();
 				
+				/*
+				int constante = 0;
 				if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO)) {
 					constante = ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO;
 				}else if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_SUBSTITUICAO)){
 					constante = ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO;
 				}else if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_INSPECAO_ANORMALIDADE)){
 					constante = ServicoTipo.TIPO_INSPECAO_ANORMALIDADE;
-				}else {
+				}else if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO_RAMAL)){
+					constante = ServicoTipo.TIPO_ORDEM_INSTALACAO_RAMAL_CONTROLE_PERDAS;
+				} else {
 					constante = ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO;
 				}
-				servTipo =  pesquisaServicoTipo(constante, fachada, servTipo);
+				*/
+				
+				servTipo =  pesquisaServicoTipo(Util.converterStringParaInteger(helper.getTipoOrdem()).intValue(), fachada, servTipo);
 				
 				idTipoServico = servTipo.getId();
 				
@@ -242,12 +246,15 @@ public class RelatorioEmitirOrdemServicoSeletiva extends TarefaRelatorio {
 						Iterator iClienteFone = cliente.getClienteFones().iterator();
 						clienteFone = new ClienteFone();
 						
-						while (iClienteFone.hasNext() & !achou) {
+						while (iClienteFone.hasNext() && !achou) {
 							clienteFone = (ClienteFone) iClienteFone.next();
 							
-							if (clienteFone.getIndicadorTelefonePadrao().equals(ClienteFone.INDICADOR_FONE_PADRAO)) {
+							if (clienteFone.getIndicadorTelefonePadrao() != null && clienteFone.getIndicadorTelefonePadrao().equals(ClienteFone.INDICADOR_FONE_PADRAO)) {
 								telefone = clienteFone.getTelefone();
 								achou = true;
+							} else {
+								telefone = clienteFone.getTelefone();
+								achou = false;
 							}
 						}
 					}
