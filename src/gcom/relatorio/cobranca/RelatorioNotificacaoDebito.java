@@ -87,6 +87,16 @@ public class RelatorioNotificacaoDebito extends TarefaRelatorio {
 				parametros.put("dataSource", ds);
 
 				retorno = gerarRelatorio(ConstantesRelatorios.RELATORIO_NOTIFICACAO_DEBITO_COSANPA_2_PAGINAS, parametros, dsRelatorio, tipoFormatoRelatorio);
+				
+			} else if (tipoEndRelatorio.equals("4")) {	
+				
+				ArrayList<String> array = new ArrayList<String>();
+				array.add("relatorio");
+				RelatorioDataSource dsRelatorio = new RelatorioDataSource(array);
+				parametros.put("dataSource", ds);
+
+				retorno = gerarRelatorio(ConstantesRelatorios.RELATORIO_INFORMATIVO_DEBITO_COSANPA_2_PAGINAS, parametros, dsRelatorio, tipoFormatoRelatorio);
+				
 			} else {
 				retorno = gerarRelatorio(ConstantesRelatorios.RELATORIO_NOTIFICACAO_DEBITO_COSANPA, parametros, ds, tipoFormatoRelatorio);
 			}
