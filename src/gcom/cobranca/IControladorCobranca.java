@@ -281,8 +281,8 @@ public interface IControladorCobranca {
 			String quantidadeMaximaDocumentos, String valorLimiteObrigatoria, String indicadorImoveisDebito, String indicadorGerarBoletimCadastro,
 			String codigoClienteSuperior, String codigoRotaInicial, String codigoRotaFinal, String logradouroId, String cosumoMedioInicial,
 			String cosumoMedioFinal, String tipoConsumo, String periodoInicialFiscalizacao, String periodoFinalFiscalizacao, String[] situacaoFiscalizacao,
-			String numeroQuadraInicial, String numeroQuadraFinal) throws ControladorException;
-
+			String numeroQuadraInicial, String numeroQuadraFinal, String[] idsSubCategoria) throws ControladorException;
+	
 	@SuppressWarnings("rawtypes")
 	public Collection executarComandoAcaoCobranca(String periodoInicialConta, String periodoFinalConta, String periodoVencimentoContaInicial,
 			String periodoVencimentoContaFinal, String[] idsCobrancaAcao, String idCobrancaAtividade, String idCobrancaGrupo, String idGerenciaRegional,
