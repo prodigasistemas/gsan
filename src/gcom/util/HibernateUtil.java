@@ -345,6 +345,7 @@ import gcom.cobranca.CmdEmpresaCobrancaContaLigacaoAguaSituacao;
 import gcom.cobranca.CobrancaAcao;
 import gcom.cobranca.CobrancaAcaoAtividadeComando;
 import gcom.cobranca.CobrancaAcaoAtividadeComandoFiscalizacaoSituacao;
+import gcom.cobranca.CobrancaAcaoAtividadeComandoSubcategoria;
 import gcom.cobranca.CobrancaAcaoAtividadeCronograma;
 import gcom.cobranca.CobrancaAcaoCronograma;
 import gcom.cobranca.CobrancaAcaoOrdemServicoNaoAceitas;
@@ -1179,6 +1180,8 @@ public class HibernateUtil {
 					.addClass(NegociacaoContaCobrancaEmpresa.class)
 					.addClass(CobrancaParametro.class)
 					.addClass(MensagemParcelamentoBoleto.class)
+					.addClass(CobrancaAcaoAtividadeComandoSubcategoria.class)
+
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cobranca.contratoparcelamento //

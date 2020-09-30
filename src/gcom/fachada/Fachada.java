@@ -5613,14 +5613,14 @@ public class Fachada {
 			String setorComercialOrigemID, String setorComercialDestinoID, String idComando, String unidadeNegocio, Usuario usuarioLogado, String titulo, String descricaoSolicitacao,
 			String prazoExecucao, String quantidadeMaximaDocumentos, String valorLimiteObrigatoria, String indicadorImoveisDebito, String indicadorGerarBoletimCadastro, String codigoClienteSuperior,
 			String codigoRotaInicial, String codigoRotaFinal, String logradouroId, String consumoMedioInicial, String consumoMedioFinal, String tipoConsumo, String periodoInicialFiscalizacao,
-			String periodoFinalFiscalizacao, String[] situacaoFiscalizacao, String numeroQuadraInicial, String numeroQuadraFinal) {
+			String periodoFinalFiscalizacao, String[] situacaoFiscalizacao, String numeroQuadraInicial, String numeroQuadraFinal, String[] idsSubCategoria) {
 
 		try {
 			return this.getControladorCobranca().concluirComandoAcaoCobranca(periodoInicialConta, periodoFinalConta, periodoVencimentoContaInicial, periodoVencimentoContaFinal, idsCobrancaAcao,
 					idCobrancaAtividade, idCobrancaGrupo, idGerenciaRegional, localidadeOrigemID, localidadeDestinoID, setorComercialOrigemCD, setorComercialDestinoCD, idCliente, clienteRelacaoTipo,
 					indicador, rotaInicial, rotaFinal, setorComercialOrigemID, setorComercialDestinoID, idComando, unidadeNegocio, usuarioLogado, titulo, descricaoSolicitacao, prazoExecucao,
 					quantidadeMaximaDocumentos, valorLimiteObrigatoria, indicadorImoveisDebito, indicadorGerarBoletimCadastro, codigoClienteSuperior, codigoRotaInicial, codigoRotaFinal, logradouroId,
-					consumoMedioInicial, consumoMedioFinal, tipoConsumo, periodoInicialFiscalizacao, periodoFinalFiscalizacao, situacaoFiscalizacao, numeroQuadraInicial, numeroQuadraFinal);
+					consumoMedioInicial, consumoMedioFinal, tipoConsumo, periodoInicialFiscalizacao, periodoFinalFiscalizacao, situacaoFiscalizacao, numeroQuadraInicial, numeroQuadraFinal, idsSubCategoria);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

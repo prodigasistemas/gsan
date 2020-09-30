@@ -8161,11 +8161,11 @@ public class ControladorCobranca extends ControladorComum {
 			Integer idDocumentoTipoCobrancaAcaoPrecedente, boolean validacaoPorItemCobrado) throws ControladorException {
 
 		// cria o objeto de retorno do metódo
-		VerificarCriterioCobrancaParaImovelHelper verificarCriterioCobrancaParaImovelHelper = new VerificarCriterioCobrancaParaImovelHelper();
+		VerificarCriterioCobrancaParaImovelHelper criterioCobrancaHelper = new VerificarCriterioCobrancaParaImovelHelper();
 
 		// seta a flag do critério de cobrança para false(o imóvel não satisfaz
 		// o critério de cobrança)
-		verificarCriterioCobrancaParaImovelHelper.setFlagCriterioCobrancaImovel(false);
+		criterioCobrancaHelper.setFlagCriterioCobrancaImovel(false);
 
 		// item 1
 		// se o indicador de emissão da ação de cobrança para imóvel,com
@@ -8182,7 +8182,7 @@ public class ControladorCobranca extends ControladorComum {
 			imovelNaoGerado = null;
 
 			// indica que o imóvel não satisfaz o critério de cobrança
-			return verificarCriterioCobrancaParaImovelHelper;
+			return criterioCobrancaHelper;
 		}
 		// fim item 1
 
@@ -8209,7 +8209,7 @@ public class ControladorCobranca extends ControladorComum {
 
 				imovelNaoGerado = null;
 
-				return verificarCriterioCobrancaParaImovelHelper;
+				return criterioCobrancaHelper;
 			} else {
 				boolean situacaoCobrancaImovelContidaNasSelecionadas = false;
 
@@ -8245,7 +8245,7 @@ public class ControladorCobranca extends ControladorComum {
 
 					imovelNaoGerado = null;
 
-					return verificarCriterioCobrancaParaImovelHelper;
+					return criterioCobrancaHelper;
 				}
 
 			}
@@ -8270,7 +8270,7 @@ public class ControladorCobranca extends ControladorComum {
 
 			imovelNaoGerado = null;
 
-			return verificarCriterioCobrancaParaImovelHelper;
+			return criterioCobrancaHelper;
 		}
 
 		final int indicadorDebitoImovel = 1;
@@ -8497,7 +8497,7 @@ public class ControladorCobranca extends ControladorComum {
 
 					imovelNaoGerado = null;
 
-					return verificarCriterioCobrancaParaImovelHelper;
+					return criterioCobrancaHelper;
 				}
 
 			}
@@ -8566,7 +8566,7 @@ public class ControladorCobranca extends ControladorComum {
 
 				getControladorUtil().inserir(imovelNaoGerado);
 				imovelNaoGerado = null;
-				return verificarCriterioCobrancaParaImovelHelper;
+				return criterioCobrancaHelper;
 			}
 		}
 
@@ -8633,7 +8633,7 @@ public class ControladorCobranca extends ControladorComum {
 
 					imovelNaoGerado = null;
 
-					return verificarCriterioCobrancaParaImovelHelper;
+					return criterioCobrancaHelper;
 				}
 				// Caso exista fiscalização para o imóvel
 				else {
@@ -8665,7 +8665,7 @@ public class ControladorCobranca extends ControladorComum {
 
 									// indica que o imóvel não satisfaz o
 									// critério de cobrança
-									return verificarCriterioCobrancaParaImovelHelper;
+									return criterioCobrancaHelper;
 								}
 							}
 						}
@@ -8704,12 +8704,28 @@ public class ControladorCobranca extends ControladorComum {
 					imovelNaoGerado = null;
 
 					// indica que o imóvel não satisfaz o critério de cobrança
-					return verificarCriterioCobrancaParaImovelHelper;
+					return criterioCobrancaHelper;
 				}
 			}
 		}
 		// fim item Período de Fiscalização do Imóvel
-
+		
+		Collection<CobrancaAcaoAtividadeComandoSubcategoria> subcategoriasComando = pesquisarComandoSubcategorias(cobrancaAcaoAtividadeComando);
+		
+		boolean subcategoriaAtendeCriterio = verificarCriterioComandoSubcategorias(imovel, subcategoriasComando);
+		
+		if (subcategoriasComando != null && !subcategoriasComando.isEmpty() && subcategoriaAtendeCriterio == false) {
+			MotivoNaoGeracaoDocCobranca motivoNaoGeracao = new MotivoNaoGeracaoDocCobranca();
+			motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.SUBCATEGORIA_NAO_ATENDE_CRITERIO);
+			imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
+			
+			getControladorUtil().inserir(imovelNaoGerado);
+			
+			imovelNaoGerado = null;
+			
+			return criterioCobrancaHelper;
+		}
+		
 		// item 7
 		// se as coleções de contas, débitos a cobrar e guias de pagamento
 		// estiverem vazia
@@ -8732,7 +8748,7 @@ public class ControladorCobranca extends ControladorComum {
 				imovelNaoGerado = null;
 
 				// indica que o imóvel não satisfaz o critério de cobrança
-				return verificarCriterioCobrancaParaImovelHelper;
+				return criterioCobrancaHelper;
 			} else {
 				// caso não seja cmando, seja cronograma então descarta
 				if (cobrancaAcaoAtividadeComando == null) {
@@ -8746,7 +8762,7 @@ public class ControladorCobranca extends ControladorComum {
 					imovelNaoGerado = null;
 
 					// indica que o imóvel não satisfaz o critério de cobrança
-					return verificarCriterioCobrancaParaImovelHelper;
+					return criterioCobrancaHelper;
 				}
 			}
 
@@ -8779,7 +8795,7 @@ public class ControladorCobranca extends ControladorComum {
 
 						// indica que o imóvel não satisfaz o critério de
 						// cobrança
-						return verificarCriterioCobrancaParaImovelHelper;
+						return criterioCobrancaHelper;
 					}
 				}
 			}
@@ -8811,7 +8827,7 @@ public class ControladorCobranca extends ControladorComum {
 
 						// indica que o imóvel não satisfaz o critério de
 						// cobrança
-						return verificarCriterioCobrancaParaImovelHelper;
+						return criterioCobrancaHelper;
 					}
 				}
 			}
@@ -8867,7 +8883,7 @@ public class ControladorCobranca extends ControladorComum {
 
 						// indica que o imóvel não satisfaz o critério de
 						// cobrança
-						return verificarCriterioCobrancaParaImovelHelper;
+						return criterioCobrancaHelper;
 					}
 
 				}
@@ -9044,7 +9060,7 @@ public class ControladorCobranca extends ControladorComum {
 
 				// indica que o imóvel não satisfaz o critério de
 				// cobrança
-				return verificarCriterioCobrancaParaImovelHelper;
+				return criterioCobrancaHelper;
 			}
 
 		}
@@ -9259,20 +9275,54 @@ public class ControladorCobranca extends ControladorComum {
 		// se o imóvel satisfaz o critério de cobrança
 		if (flagIndicadorCriterioCobranca) {
 			// seta os dados no objeto que vai ser retornado pelo metódo
-			verificarCriterioCobrancaParaImovelHelper.setFlagCriterioCobrancaImovel(true);
-			verificarCriterioCobrancaParaImovelHelper.setQuantidadeItensEmDebito(quantidadeItensEmDebito);
-			verificarCriterioCobrancaParaImovelHelper.setValorDebitoImovel(valorDebitoImovel);
-			verificarCriterioCobrancaParaImovelHelper.setColecaoContasValores(colecaoContasValores);
-			verificarCriterioCobrancaParaImovelHelper.setColecaoDebitoACobrar(colecaoDebitoACobrar);
-			verificarCriterioCobrancaParaImovelHelper.setColecaoGuiasPagamentoValores(colecaoGuiasPagamentoValores);
+			criterioCobrancaHelper.setFlagCriterioCobrancaImovel(true);
+			criterioCobrancaHelper.setQuantidadeItensEmDebito(quantidadeItensEmDebito);
+			criterioCobrancaHelper.setValorDebitoImovel(valorDebitoImovel);
+			criterioCobrancaHelper.setColecaoContasValores(colecaoContasValores);
+			criterioCobrancaHelper.setColecaoDebitoACobrar(colecaoDebitoACobrar);
+			criterioCobrancaHelper.setColecaoGuiasPagamentoValores(colecaoGuiasPagamentoValores);
 		}
 		imovelNaoGerado = null;
 
 		// retorna o objeto com todas as informações necessárias
 		// para identificar se o imóvel satisfaz ou não o critério de cobrança
-		return verificarCriterioCobrancaParaImovelHelper;
+		return criterioCobrancaHelper;
 		// fim item 14
 	}
+
+	private Collection<CobrancaAcaoAtividadeComandoSubcategoria> pesquisarComandoSubcategorias(
+			CobrancaAcaoAtividadeComando comando) throws ControladorException {
+		
+		Filtro filtro = new FiltroCobrancaAcaoAtividadeComandoSubcategoria(FiltroCobrancaAcaoAtividadeComandoSubcategoria.SUBCATEGORIA_ID);
+		filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaAcaoAtividadeComandoSubcategoria.COBRANCA_ACAO_ATIVIDADE_COMANDO_ID, comando.getId()));
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaAcaoAtividadeComandoSubcategoria.SUBCATEGORIA);
+		
+		return getControladorUtil().pesquisar(filtro, CobrancaAcaoAtividadeComandoSubcategoria.class.getName());
+	}
+	
+	private boolean verificarCriterioComandoSubcategorias(Imovel imovel, 
+			Collection<CobrancaAcaoAtividadeComandoSubcategoria> subcategoriasComando) throws ControladorException {
+		
+		if (subcategoriasComando != null && !subcategoriasComando.isEmpty()) {
+			Collection<ImovelSubcategoria> subcategoriasImovel = getControladorImovel().pesquisarImovelSubcategorias(imovel);
+			
+			for (ImovelSubcategoria imovelSubcategoria : subcategoriasImovel) {
+				
+				int idSubcategoriaImovel = imovelSubcategoria.getComp_id().getSubcategoria().getId();
+				
+				for (CobrancaAcaoAtividadeComandoSubcategoria subcategoriaComando : subcategoriasComando) {
+					int idSubcategoriaComando = subcategoriaComando.getSubcategoria().getId();
+
+					if (idSubcategoriaImovel == idSubcategoriaComando) {
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+
 
 	/**
 	 * [UC0246] Executar Atividade de Ação de Cobrança [SF0001] Selecionar Lista
@@ -14106,6 +14156,36 @@ public class ControladorCobranca extends ControladorComum {
 			String codigoRotaFinal, String logradouroId, String consumoMedioInicial, String consumoMedioFinal, String tipoConsumo,
 			String periodoInicialFiscalizacao, String periodoFinalFiscalizacao, String[] situacaoFiscalizacao, String numeroQuadraInicial,
 			String numeroQuadraFinal) throws ControladorException {
+		
+		return inserirComandoAcaoCobrancaCriterioEventual(idsCobrancaAcao, idCobrancaAtividade, idCobrancaGrupo, idGerenciaRegional, 
+				idLocalidadeInicial, idLocalidadeFinal, codigoSetorComercialInicial, codigoSetorComercialFinal, idSetorComercialInicial, 
+				idSetorComercialFinal, idCliente, idClienteRelacaoTipo, anoMesReferencialInicial, anoMesReferencialFinal, 
+				dataVencimentoContaInicial, dataVencimentoContaFinal, indicador, idRotaInicial, idRotaFinal, idComando, unidadeNegocio, 
+				usuarioLogado, titulo, descricaoSolicitacao, prazoExecucao, quantidadeMaximaDocumentos, valorLimiteObrigatoria, 
+				indicadorImoveisDebito, indicadorGerarBoletimCadastro, codigoClienteSuperior, codigoRotaInicial, codigoRotaFinal, 
+				logradouroId, consumoMedioInicial, consumoMedioFinal, tipoConsumo, periodoInicialFiscalizacao, periodoFinalFiscalizacao, 
+				situacaoFiscalizacao, numeroQuadraInicial, numeroQuadraFinal, null);
+		
+	}
+	
+	/**
+	 * 
+	 * Sobrecarga de método com ainclusao do atribut subcategoria
+	 * 
+	 * @author Mrcelo Giovani
+	 * @date 29/09/2020
+	 */
+	public Collection inserirComandoAcaoCobrancaCriterioEventual(String[] idsCobrancaAcao, String idCobrancaAtividade,
+			String idCobrancaGrupo, String idGerenciaRegional, String idLocalidadeInicial, String idLocalidadeFinal,
+			String codigoSetorComercialInicial, String codigoSetorComercialFinal, String idSetorComercialInicial,
+			String idSetorComercialFinal, String idCliente, String idClienteRelacaoTipo, String anoMesReferencialInicial,
+			String anoMesReferencialFinal, String dataVencimentoContaInicial, String dataVencimentoContaFinal, String indicador,
+			String idRotaInicial, String idRotaFinal, String idComando, String unidadeNegocio, Usuario usuarioLogado, String titulo,
+			String descricaoSolicitacao, String prazoExecucao, String quantidadeMaximaDocumentos, String valorLimiteObrigatoria,
+			String indicadorImoveisDebito, String indicadorGerarBoletimCadastro, String codigoClienteSuperior, String codigoRotaInicial,
+			String codigoRotaFinal, String logradouroId, String consumoMedioInicial, String consumoMedioFinal, String tipoConsumo,
+			String periodoInicialFiscalizacao, String periodoFinalFiscalizacao, String[] situacaoFiscalizacao, String numeroQuadraInicial,
+			String numeroQuadraFinal, String[] idsSubCategoria) throws ControladorException {
 
 		// ------------ REGISTRAR TRANSAÇÃO ----------------
 		RegistradorOperacao registradorOperacao = null;
@@ -14395,6 +14475,7 @@ public class ControladorCobranca extends ControladorComum {
 		filtroCobrancaAcao.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaAcao.SERVICO_TIPO);
 		Collection colecaoCobrancaAcao = this.getControladorUtil().pesquisar(filtroCobrancaAcao, CobrancaAcao.class.getName());
 
+		
 		if (idComando != null && !idComando.equals("")) {
 			FiltroCobrancaCriterio filtroCobrancaCriterio = new FiltroCobrancaCriterio();
 			filtroCobrancaCriterio.adicionarParametro(new ParametroSimples(FiltroCobrancaCriterio.ID, idComando));
@@ -14604,6 +14685,14 @@ public class ControladorCobranca extends ControladorComum {
 				// CobrancaAcaoAtividadeComandoFiscalizacaoSituacao.
 			}
 		}
+		
+		// SUBCATEGORIA
+		if (idsSubCategoria != null) {
+			// Para cada relacionamento entre comando e subcategoria
+			// na tabela Cobranca_acao_ativ_cmd_subcategoria
+			this.atualizarCobrancaAcaoAtividadeComandoSubCategoria(cobrancaAcaoAtividadeComando, idsSubCategoria);
+			
+		}
 
 		return colecaoCobrancaAcaoAtividadeComando;
 	}
@@ -14687,6 +14776,11 @@ public class ControladorCobranca extends ControladorComum {
 	 * @param idCobrancaAcaoAtividadeComando
 	 * @return
 	 * @throws ControladorException
+	 * 
+	 * @author Marcelo Giovani
+	 * @date 29/09/2020
+	 * Inclusao:
+	 * @param subCategoria
 	 */
 	public Collection concluirComandoAcaoCobranca(String periodoInicialConta, String periodoFinalConta,
 			String periodoVencimentoContaInicial, String periodoVencimentoContaFinal, String[] idsCobrancaAcao, String idCobrancaAtividade,
@@ -14698,7 +14792,7 @@ public class ControladorCobranca extends ControladorComum {
 			String indicadorGerarBoletimCadastro, String codigoClienteSuperior, String codigoRotaInicial, String codigoRotaFinal,
 			String logradouroId, String consumoMedioInicial, String consumoMedioFinal, String tipoConsumo,
 			String periodoInicialFiscalizacao, String periodoFinalFiscalizacao, String[] situacaoFiscalizacao, String numeroQuadraInicial,
-			String numeroQuadraFinal) throws ControladorException {
+			String numeroQuadraFinal, String[] idsSubCategoria) throws ControladorException {
 
 		// [FS0012] - Verificar referência final menor que referência inicial
 		this.validarAnoMesInicialFinalComandoAcaoCobranca(periodoInicialConta, periodoFinalConta);
@@ -14725,7 +14819,7 @@ public class ControladorCobranca extends ControladorComum {
 				quantidadeMaximaDocumentos, valorLimiteObrigatoria, indicadorImoveisDebito, indicadorGerarBoletimCadastro,
 				codigoClienteSuperior, codigoRotaInicial, codigoRotaFinal, logradouroId, consumoMedioInicial, consumoMedioFinal,
 				tipoConsumo, periodoInicialFiscalizacao, periodoFinalFiscalizacao, situacaoFiscalizacao, numeroQuadraInicial,
-				numeroQuadraFinal);
+				numeroQuadraFinal, idsSubCategoria);
 
 		return colecaoCobrancaAcaoAtividadeComando;
 	}
@@ -15070,6 +15164,27 @@ public class ControladorCobranca extends ControladorComum {
 			}
 		}
 		// Fim insert de CobrancaAcaoAtividadeComandoFiscalizacaoSituacao.
+	}
+	
+	private void atualizarCobrancaAcaoAtividadeComandoSubCategoria(CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando,
+			String[] idsSubCategoria) throws ControladorException {
+
+		// Para cada SubCategoria selecionada, inclui a acaoAtividadeCmd
+		// na tabela cobranca_acao_ativ_cmd_subcategoria.
+		Date dataAtual = new Date();
+		for (String idSub : idsSubCategoria) {
+			if (!idSub.isEmpty()) {
+				Subcategoria subCat = new Subcategoria();
+				subCat.setId(Integer.valueOf(idSub));
+				
+				CobrancaAcaoAtividadeComandoSubcategoria cobAcaoAtividadeSubcat = new CobrancaAcaoAtividadeComandoSubcategoria(
+						cobrancaAcaoAtividadeComando, subCat, dataAtual);
+
+				this.getControladorUtil().inserir(cobAcaoAtividadeSubcat);	
+			}
+		}
+
+		// Fim insert de CobrancaAcaoAtividadeComandoSubCategoria.
 	}
 
 	/**

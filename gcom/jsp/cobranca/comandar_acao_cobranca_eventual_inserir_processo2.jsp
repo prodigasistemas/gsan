@@ -2117,20 +2117,38 @@ function validarExibicaoTipoCosumo(){
 					<hr>
 					</td>
 				</tr>
+				
+				<!-- Novo critério solicitado -->
 				<tr>
-					<td><strong>Per&iacute;odo de Refer&ecirc;ncia das Contas</strong><strong>:</strong></td>
+					<td width="16%"><strong>Subcategoria:</strong></td>
+					<td colspan="3">
+						<html:select property="subcategoria" style="height: 100px" multiple="true" tabindex="13">
+							<logic:present scope="session" name="colecaoSubcategoria">
+								<html:options name="session" collection="colecaoSubcategoria" labelProperty="descricao" property="id" />
+							</logic:present>
+						</html:select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5">
+					<hr>
+					</td>
+				</tr>
+						
+				<tr>
+					<td><strong>Per&iacute;odo de Refer&ecirc;ncia das Contas:</strong><strong>:</strong></td>
 					<td colspan="3"><strong> <html:text maxlength="7"
-						property="periodoInicialConta" size="7" tabindex="13"
+						property="periodoInicialConta" size="7" tabindex="14"
 						onkeyup="mascaraAnoMes(this, event);" 
 						onkeypress="return isCampoNumerico(event);"/><strong> a</strong> <html:text
-						name="InserirComandoAcaoCobrancaEventualCriterioRotaActionForm" tabindex="14"
+						name="InserirComandoAcaoCobrancaEventualCriterioRotaActionForm" tabindex="15"
 						maxlength="7" property="periodoFinalConta" size="7"
 						onkeyup="mascaraAnoMes(this, event);"
 						onkeypress="return isCampoNumerico(event);" /> </strong>mm/aaaa</td>
 				</tr>
 				<tr>
 					<td><strong>Per&iacute;odo de Vencimento das Contas:</strong></td>
-					<td colspan="3"><strong> <html:text maxlength="10" tabindex="15"
+					<td colspan="3"><strong> <html:text maxlength="10" tabindex="16"
 						property="periodoVencimentoContaInicial" size="10"
 						onkeyup="mascaraData(this, event);"
 						onkeypress="return isCampoNumerico(event);" /> <a
@@ -2138,7 +2156,7 @@ function validarExibicaoTipoCosumo(){
 					<img border="0"
 						src="<bean:message key='caminho.imagens'/>calendario.gif"
 						width="20" border="0" align="middle" alt="Exibir Calendário" /></a><strong>
-					a</strong> <html:text maxlength="10" tabindex="16"
+					a</strong> <html:text maxlength="10" tabindex="17"
 						property="periodoVencimentoContaFinal" size="10"
 						onkeyup="mascaraData(this, event);"
 						onkeypress="return isCampoNumerico(event);" /> <a

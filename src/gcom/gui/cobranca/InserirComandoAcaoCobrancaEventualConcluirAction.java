@@ -1,18 +1,5 @@
 package gcom.gui.cobranca;
 
-import gcom.cadastro.localidade.FiltroLocalidade;
-import gcom.cadastro.localidade.FiltroSetorComercial;
-import gcom.cadastro.localidade.Localidade;
-import gcom.cadastro.localidade.SetorComercial;
-import gcom.cobranca.CobrancaAtividade;
-import gcom.gui.ActionServletException;
-import gcom.gui.GcomAction;
-import gcom.micromedicao.FiltroRota;
-import gcom.micromedicao.Rota;
-import gcom.util.ConstantesSistema;
-import gcom.util.Util;
-import gcom.util.filtro.ParametroSimples;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,6 +12,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
+import gcom.cadastro.localidade.FiltroLocalidade;
+import gcom.cadastro.localidade.FiltroSetorComercial;
+import gcom.cadastro.localidade.Localidade;
+import gcom.cadastro.localidade.SetorComercial;
+import gcom.cobranca.CobrancaAtividade;
+import gcom.gui.ActionServletException;
+import gcom.gui.GcomAction;
+import gcom.micromedicao.FiltroRota;
+import gcom.micromedicao.Rota;
+import gcom.util.ConstantesSistema;
+import gcom.util.Util;
+import gcom.util.filtro.ParametroSimples;
 
 /**
  * [UC0243] Inserir Comando de Ação de Conbrança - Tipo de Comando Cronograma
@@ -71,7 +71,7 @@ public class InserirComandoAcaoCobrancaEventualConcluirAction extends GcomAction
 				form.getCodigoClienteSuperior(), codigoRotaInicial, codigoRotaFinal, form.getLogradouroId(),
 				form.getConsumoMedioInicial(), form.getConsumoMedioFinal(), form.getTipoConsumo(),
 				form.getPeriodoInicialFiscalizacao(), form.getPeriodoFinalFiscalizacao(),
-				form.getSituacaoFiscalizacao(), form.getNumeroQuadraInicial(), form.getNumeroQuadraFinal());
+				form.getSituacaoFiscalizacao(), form.getNumeroQuadraInicial(), form.getNumeroQuadraFinal(), form.getSubcategoria());
 
 		CobrancaAtividade cobrancaAtividade = this.getFachada().consultarCobrancaAtividade(form.getCobrancaAtividade());
 
