@@ -508,6 +508,8 @@ public class ConstantesRelatorios {
 	public static final String RELATORIO_NOTIFICACAO_DEBITO = "/relatorioNotificacaoDebito.jasper";
 
 	public static final String RELATORIO_NOTIFICACAO_DEBITO_COSANPA = "/relatorioNotificacaoDebitoCosanpa.jasper";
+	
+	public static final String RELATORIO_INFORMATIVO_DEBITO_COSANPA = "/relatorioInformativoDebitoCosanpa.jasper";
 
 	public static final String RELATORIO_ANALISAR_METAS_CICLO = "/relatorioAnalisarMetasCiclo.jasper";
 
@@ -632,6 +634,8 @@ public class ConstantesRelatorios {
 	public static final String RELATORIO_VAZIO = "/relatorioVazio.jasper";
 
 	public static final String RELATORIO_ANORMALIDADE_POR_AMOSTRAGEM = "/relatorioAnormalidadeConsumoELeituraPorAmostragem.jasper";
+	
+	public static final String RELATORIO_INFORMATIVO_DEBITO_COSANPA_2_PAGINAS = "/relatorioInformativoDebitoCosanpa2Paginas.jasper";
 
 	public static final String RELATORIO_NOTIFICACAO_DEBITO_COSANPA_2_PAGINAS = "/relatorioNotificacaoDebitoCosanpa2Paginas.jasper";
 
