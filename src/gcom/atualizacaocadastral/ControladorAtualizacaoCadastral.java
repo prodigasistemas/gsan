@@ -117,22 +117,21 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		repositorioUtil                 = RepositorioUtilHBM.getInstancia();
 	}
 
-	public void atualizarImoveisAprovados(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException{
+	public void atualizarImoveisAprovados(Integer idFuncionalidade, Integer idRota) throws ControladorException{
 		int idUnidadeIniciada = 0;
 
 		try {
-			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidade, UnidadeProcessamento.FUNCIONALIDADE, 0);
-
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidade, UnidadeProcessamento.ROTA, idRota);
 
 			usuario = getControladorBatch().obterUsuarioQueDisparouProcesso(idFuncionalidade);
 
-			atualizarImagensImoveisAprovados();
-			
-			processarClientes();
-			processarImoveis();
+			atualizarImagensImoveisAprovados(idRota);
+			processarClientes(idRota);
+			processarImoveis(idRota);
 
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			listaRAParaExclusao.clear();
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception e) {
 		    logger.error("Erro ao processar imoveis aprovados", e);
 
@@ -142,7 +141,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			}
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
-			throw new ControladorException("Erro ao atualizar imoveis aprovados.", e);
+			throw new EJBException(e);
 		}
 	}
 
@@ -204,16 +203,16 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	 * @throws ErroRepositorioException
 	 ************************************************************/
 
-	private void processarClientes() throws ControladorException, ErroRepositorioException {
-		atualizarClientes();
-		incluirClientes();
-		excluirClientes();
+	private void processarClientes(Integer idRota) throws ControladorException, ErroRepositorioException {
+		atualizarClientes(idRota);
+		incluirClientes(idRota);
+		excluirClientes(idRota);
 	}
 
-	private void processarImoveis() throws ControladorException {
-		atualizarImoveis();
-		incluirImoveis();
-		excluirImoveis();
+	private void processarImoveis(Integer idRota) throws ControladorException {
+		atualizarImoveis(idRota);
+		incluirImoveis(idRota);
+		excluirImoveis(idRota);
 	}
 
 	private void atualizarImovelAtualizacaoCadastral(IImovel imovelRetorno) throws ControladorException {
@@ -552,52 +551,16 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return ids;
 	}
 
-	private Collection<IImovel> obterImoveisParaAtualizar(Integer tipoOperacao) throws ControladorException {
+	private Collection<IImovel> obterImoveisParaAtualizar(Integer tipoOperacao, Integer idRota) throws ControladorException {
 		Collection<IImovel> imoveis = null;
 		try {
-			imoveis = repositorioAtualizacaoCadastral.obterImoveisParaAtualizar(tipoOperacao);
+			imoveis = repositorioAtualizacaoCadastral.obterImoveisParaAtualizar(tipoOperacao, idRota);
 		} catch (ErroRepositorioException e) {
 			logger.error("Erro ao pesquisar imoveis para atualizar.", e);
 			throw new ControladorException("Erro ao pesquisar imoveis para atualizar.", e);
 
 		}
 		return imoveis;
-	}
-
-	private Collection<ClienteImovelRetorno> obterClientesParaAtualizar() throws ControladorException {
-		Collection<ClienteImovelRetorno> clienteImoveisRetorno = null;
-		try {
-			clienteImoveisRetorno = repositorioAtualizacaoCadastral.obterClientesParaAtualizar();
-		} catch (ErroRepositorioException e) {
-			logger.error("Erro ao pesquisar clientes para atualizar.", e);
-			throw new ControladorException("Erro ao pesquisar clientes para atualizar.", e);
-
-		}
-		return clienteImoveisRetorno;
-	}
-
-	private Collection<ClienteImovelRetorno> obterClientesParaIncluir() throws ControladorException {
-		Collection<ClienteImovelRetorno> clienteImoveisRetorno = null;
-		try {
-			clienteImoveisRetorno = repositorioAtualizacaoCadastral.obterClientesParaIncluir();
-		} catch (ErroRepositorioException e) {
-			logger.error("Erro ao pesquisar clientes para incluir.", e);
-			throw new ControladorException("Erro ao pesquisar clientes para incluir.", e);
-
-		}
-		return clienteImoveisRetorno;
-	}
-
-	private Collection<IClienteImovel> obterClientesParaExcluirRelacao() throws ControladorException {
-		Collection<IClienteImovel> clienteImoveis = null;
-		try {
-			clienteImoveis = repositorioAtualizacaoCadastral.obterClientesParaExcluirRelacao();
-		} catch (ErroRepositorioException e) {
-			logger.error("Erro ao pesquisar clientes para excluir.", e);
-			throw new ControladorException("Erro ao pesquisar clientes para excluir.", e);
-
-		}
-		return clienteImoveis;
 	}
 
 	private boolean isImovelEmCampo(Integer idImovel) {
@@ -690,12 +653,12 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		repositorioAtualizacaoCadastral.apagarImagemRetornoPorIdImovel(idImovel);
 	}
 
-	private void atualizarImoveis() throws ControladorException {
+	private void atualizarImoveis(Integer idRota) throws ControladorException {
 		int idImovelRetorno = -1;
 
 		try {
-
-			Collection<IImovel> imoveisAlteracao = this.obterImoveisParaAtualizar(AlteracaoTipo.ALTERACAO);
+			Collection<IImovel> imoveisAlteracao = this.obterImoveisParaAtualizar(AlteracaoTipo.ALTERACAO, idRota);
+			
 			for (IImovel imovelRetorno : imoveisAlteracao) {
 				if (!isImovelEmCampo(imovelRetorno.getIdImovel())) {
 					idImovelRetorno = imovelRetorno.getId();
@@ -709,18 +672,17 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao atualizar imovel retorno " + idImovelRetorno, e);
-			logger.error("Erro ao atualizar imovel retorno. " + e.getMessage() , e);
 			throw new ControladorException("Erro ao atualizar imovel retorno  " + idImovelRetorno, e);
 		}
 	}
 	
-	private void atualizarImagensImoveisAprovados() throws ControladorException {
-		
+	private void atualizarImagensImoveisAprovados(Integer idRota) throws ControladorException {
+
 		try {
-			List<Integer> imoveis = repositorioAtualizacaoCadastral.obterImagensImoveisAprovador();
-			
-			for (Integer idImovel: imoveis) {
-					inserirImovelImagens(idImovel);
+			List<Integer> imoveis = repositorioAtualizacaoCadastral.obterImagensImoveisAprovados(idRota);
+
+			for (Integer idImovel : imoveis) {
+				inserirImovelImagens(idImovel);
 			}
 		} catch (ControladorException e) {
 			throw new ControladorException("Erro ao atualizar imagens de imoveis aprovados.", e);
@@ -729,15 +691,17 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 
-	private void incluirImoveis() throws ControladorException {
-		Integer idImovel = null;
+	private void incluirImoveis(Integer idRota) throws ControladorException {
+		Integer idImovelRetorno = null;
 
 		try {
-			Collection<IImovel> imoveisInclusao = this.obterImoveisParaAtualizar(AlteracaoTipo.INCLUSAO);
+			Collection<IImovel> imoveisInclusao = this.obterImoveisParaAtualizar(AlteracaoTipo.INCLUSAO, idRota);
 
 			for (IImovel imovelRetorno : imoveisInclusao) {
-
+				
+				idImovelRetorno = imovelRetorno.getId();
 				imovelRetorno.setIdImovel(null);
+				
 				Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 
 				String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
@@ -757,8 +721,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 				atualizarImovelProcessado(imovelRetorno.getId());
 			}
 		} catch (Exception e) {
-			logger.error("Erro ao inserir imovel retorno " + idImovel);
-			throw new ControladorException("Erro ao inserir imovel retorno  " + idImovel, e);
+			throw new ControladorException("Erro ao incluir imovel novo para o imovel retorno: " + idImovelRetorno, e);
 
 		}
 	}
@@ -782,11 +745,11 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return mapClientes;
 	}
 
-	private void excluirImoveis() throws ControladorException {
+	private void excluirImoveis(Integer idRota) throws ControladorException {
 		Integer idImovel = null;
 
 		try {
-			Collection<IImovel> imoveisExclusao = this.obterImoveisParaAtualizar(AlteracaoTipo.EXCLUSAO);
+			Collection<IImovel> imoveisExclusao = this.obterImoveisParaAtualizar(AlteracaoTipo.EXCLUSAO, idRota);
 
 			for (IImovel imovelRetorno : imoveisExclusao) {
 
@@ -848,30 +811,28 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 
-	private void atualizarClientes() throws ControladorException {
+	private void atualizarClientes(Integer idRota) throws ControladorException {
 		int idImovel = -1;
 
 		try {
-			Collection<ClienteImovelRetorno> clientesAlteracao = this.obterClientesParaAtualizar();
+			Collection<ClienteImovelRetorno> lista = repositorioAtualizacaoCadastral.obterClientesPorTipoOperacao(idRota, AlteracaoTipo.ALTERACAO);
 
-			for (ClienteImovelRetorno clienteImovelRetorno : clientesAlteracao) {
+			for (ClienteImovelRetorno clienteImovel : lista) {
 
-				idImovel = clienteImovelRetorno.getImovel().getId();
+				idImovel = clienteImovel.getImovel().getId();
 
 				if (!isImovelEmCampo(idImovel)) {
 
-					if (existeRelacaoClienteImovel(clienteImovelRetorno)) {
-						atualizarInformacoesCliente(clienteImovelRetorno);
-						atualizarClienteFone(clienteImovelRetorno);
-
+					if (existeRelacaoClienteImovel(clienteImovel)) {
+						atualizarInformacoesCliente(clienteImovel);
+						atualizarClienteFone(clienteImovel);
 					} else {
-						incluirNovaRelacaoCliente(clienteImovelRetorno);
+						incluirNovaRelacaoCliente(clienteImovel);
 					}
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Erro ao atualizar clientes do imovel " + idImovel, e);
-			throw new ControladorException("Erro ao atualizar clientes do imovel.", e);
+			throw new ControladorException("Erro ao atualizar clientes do imovel " + idImovel, e);
 		}
 	}
 
@@ -938,12 +899,11 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 
 	}
 
-	private void incluirClientes() throws ControladorException {
+	private void incluirClientes(Integer idRota) throws ControladorException {
 		Integer idImovel = null;
 
 		try {
-			Collection<ClienteImovelRetorno> clientesImovelInclusao = this.obterClientesParaIncluir();
-
+			Collection<ClienteImovelRetorno> clientesImovelInclusao = repositorioAtualizacaoCadastral.obterClientesPorTipoOperacao(idRota, AlteracaoTipo.INCLUSAO);
 		
 			for (ClienteImovelRetorno clienteImovelRetorno : clientesImovelInclusao) {
 
@@ -1125,8 +1085,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		return null;
 	}
 
-	private void excluirClientes() throws ControladorException, ErroRepositorioException {
-		Collection<IClienteImovel> clientesImovelExcluirRelacao = this.obterClientesParaExcluirRelacao();
+	private void excluirClientes(Integer idRota) throws ControladorException, ErroRepositorioException {
+		Collection<IClienteImovel> clientesImovelExcluirRelacao = repositorioAtualizacaoCadastral.obterClientesParaExcluirRelacao(idRota);
 
 		for (IClienteImovel clienteImovel : clientesImovelExcluirRelacao) {
 			if (!isImovelEmCampo(clienteImovel.getImovel().getId())) {
@@ -2736,6 +2696,14 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException(
 					"Erro ao obter indicadores de alteracoes do imovel relevantes para processo de atualizacao cadastral.", e);
+		}
+	}
+	
+	public Collection<Integer> pesquisarRotasComImoveisAprovados() throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.pesquisarRotasComImoveisAprovados();
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao pesquisar rotas com imoveis aprovados", e);
 		}
 	}
 	

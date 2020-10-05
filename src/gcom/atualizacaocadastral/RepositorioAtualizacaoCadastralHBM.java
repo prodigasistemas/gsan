@@ -54,7 +54,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<IImovel> obterImoveisParaAtualizar(Integer tipoOperacao) throws ErroRepositorioException {
+	public Collection<IImovel> obterImoveisParaAtualizar(Integer tipoOperacao, Integer idRota) throws ErroRepositorioException {
 
 		Collection<IImovel> retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -67,6 +67,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					.append(" from ImovelRetorno imovelRetorno ")
 					.append(" left join fetch imovelRetorno.ramalLocalInstalacao ")
 					.append(" where imovelRetorno.tipoOperacao = :tipoOperacao ")
+					.append(" and imovelRetorno.idRota = :idRota ")
 					.append(" and imovelRetorno.id in ")
 						.append(" ( select imovelControle.imovelRetorno.id from ImovelControleAtualizacaoCadastral imovelControle ")
 						.append(" where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO)
@@ -74,10 +75,13 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 						.append(" and imovelControle.dataProcessamento is null ) ");
 
 			retorno = (Collection<IImovel>) session.createQuery(consulta.toString())
-					.setInteger("tipoOperacao",  tipoOperacao)
-					.setDate("dataLiberacao",  new Date()).list();
+					.setInteger("tipoOperacao", tipoOperacao)
+					.setInteger("idRota", idRota)
+					.setDate("dataLiberacao", new Date())
+					.list();
+			
 		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
+			throw new ErroRepositorioException(e, "Erro ao obter imoveis para atualizar");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -516,24 +520,25 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 	@SuppressWarnings("unchecked")
 	public Collection<ImovelControleAtualizacaoCadastral> obterImoveisControle(Collection<IImovel> listaImoveisRetorno) {
-		Collection<ImovelControleAtualizacaoCadastral> listaImoveisControle = null;
+		Collection<ImovelControleAtualizacaoCadastral> retorno = null;
 
 		Session session = HibernateUtil.getSession();
 
 		try {
 			String consulta = "select imovelControle "
-							+ " from ImovelControleAtualizacaoCadastral imovelControle "
-							+ " inner join imovelControle.imovelRetorno imovelRetorno "
-							+ " where imovelRetorno.id in (:listaImoveisRetorno)";
+							+ "from ImovelControleAtualizacaoCadastral imovelControle "
+							+ "inner join imovelControle.imovelRetorno imovelRetorno "
+							+ "where imovelRetorno.id in (:listaImoveisRetorno)";
 
-			listaImoveisControle = (Collection<ImovelControleAtualizacaoCadastral>)session.createQuery(consulta)
-										.setParameterList("listaImoveisRetorno", getIdsImovelRetorno(listaImoveisRetorno)).list();
+			retorno = (Collection<ImovelControleAtualizacaoCadastral>) session.createQuery(consulta)
+					.setParameterList("listaImoveisRetorno", getIdsImovelRetorno(listaImoveisRetorno))
+					.list();
 
 		} catch (HibernateException e) {
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-		return listaImoveisControle;
+		return retorno;
 	}
 
 	public ImovelControleAtualizacaoCadastral obterImovelControlePorImovelRetorno(Integer idImovelRetorno) {
@@ -543,13 +548,14 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 		try {
 			String consulta = "select imovelControle "
-							+ " from ImovelControleAtualizacaoCadastral imovelControle "
-							+ " inner join imovelControle.imovelRetorno imovelRetorno "
-							
-							+ " where imovelRetorno.id in (:listaImoveisRetorno)";
+							+ "from ImovelControleAtualizacaoCadastral imovelControle "
+							+ "inner join imovelControle.imovelRetorno imovelRetorno "							
+							+ "where imovelRetorno.id = :idImovelRetorno)";
 
 			imovelControle = (ImovelControleAtualizacaoCadastral)session.createQuery(consulta)
-								.setInteger("listaImoveisRetorno", idImovelRetorno).setMaxResults(1).uniqueResult();
+					.setInteger("idImovelRetorno", idImovelRetorno)
+					.setMaxResults(1)
+					.uniqueResult();
 			
 		} catch (HibernateException e) {
 		} finally {
@@ -619,33 +625,44 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<ClienteImovelRetorno> obterClientesParaAtualizar() throws ErroRepositorioException {
+	public Collection<ClienteImovelRetorno> obterClientesPorTipoOperacao(Integer idRota, Integer tipoOperacao) throws ErroRepositorioException {
 
-		Collection<ClienteImovelRetorno> retorno = null;
 		Session session = HibernateUtil.getSession();
-		StringBuilder consulta = new StringBuilder();
 		try {
-			consulta.append(" select clienteImovelRetorno ")
-					.append("from ClienteImovelRetorno clienteImovelRetorno, Cliente cliente ")
-					.append(" inner join fetch clienteImovelRetorno.clienteRelacaoTipo clienteRelacaoTipo ")
-					.append(" where clienteImovelRetorno.cliente.id = cliente.id ")
-					.append(" and clienteImovelRetorno.idImovelRetorno in ")
-						.append(" ( select imovelControle.imovelRetorno.id from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel ")
-						.append(" where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO)
-						.append(" and imovel.id = imovelControle.imovel.id  ")
-						.append(" and imovelControle.dataLiberacaoProcessamento <= :dataLiberacao  ")
-						.append(" and imovelControle.dataProcessamento is null ) ") ;
-
-			retorno = (Collection<ClienteImovelRetorno>) session.createQuery(consulta.toString())
-														.setDate("dataLiberacao", new Date())
-														.list();
+			StringBuilder subquery = new StringBuilder();
+			subquery.append("SELECT imovelControle.imovel.id ")
+					.append("FROM ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel, ImovelRetorno imovelRetorno ")
+					.append("WHERE imovel.id = imovelControle.imovel.id ")
+					.append("AND imovelRetorno.id = imovelControle.imovelRetorno.id ")
+					.append("AND imovelControle.situacaoAtualizacaoCadastral.id = :situacao ")
+					.append("AND imovelRetorno.idRota = :idRota ")
+					.append("AND imovelControle.dataLiberacaoProcessamento <= :dataLiberacao ")
+					.append("AND imovelControle.dataProcessamento IS NULL") ;
+			
+			StringBuilder query = new StringBuilder();
+			query.append("SELECT clienteImovelRetorno ")
+				 .append("FROM ClienteImovelRetorno clienteImovelRetorno ")
+				 .append("INNER JOIN FETCH clienteImovelRetorno.cliente cliente ")
+				 .append("INNER JOIN FETCH clienteImovelRetorno.clienteRelacaoTipo clienteRelacaoTipo ")
+				 .append("WHERE clienteImovelRetorno.imovel.id in (" + subquery.toString() + ") ");
+			
+			if (tipoOperacao.intValue() == AlteracaoTipo.ALTERACAO) {
+				query.append("AND clienteImovelRetorno.cliente.id > 0");
+			} else if (tipoOperacao.intValue() == AlteracaoTipo.INCLUSAO) {
+				query.append("AND clienteImovelRetorno.cliente.id = 0");
+			}
+					
+			return (Collection<ClienteImovelRetorno>) session.createQuery(query.toString())
+					.setInteger("situacao", SituacaoAtualizacaoCadastral.APROVADO)
+					.setInteger("idRota", idRota)
+					.setDate("dataLiberacao", new Date())
+					.list();
+			
 		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
+			throw new ErroRepositorioException(e, "Erro ao obter clientes para atualizar");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-
-		return retorno;
 	}
 
 	public ICliente pesquisarClienteRetorno(ClienteImovelRetorno clienteImovelRetorno) throws ErroRepositorioException {
@@ -805,38 +822,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<ClienteImovelRetorno> obterClientesParaIncluir() throws ErroRepositorioException {
-
-		Collection<ClienteImovelRetorno> retorno = null;
-		Session session = HibernateUtil.getSession();
-		StringBuilder consulta = new StringBuilder();
-		try {
-			consulta.append(" select clienteImovelRetorno ")
-					.append("from ClienteImovelRetorno clienteImovelRetorno ")
-					.append(" inner join fetch clienteImovelRetorno.clienteRelacaoTipo clienteRelacaoTipo ")
-					.append(" where clienteImovelRetorno.cliente.id = " + ConstantesSistema.ZERO)
-					.append(" and clienteImovelRetorno.imovel.id in ")
-							.append(" ( select imovelControle.imovelRetorno.idImovel from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel ")
-							.append(" where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO)
-							.append(" and imovel.id = imovelControle.imovel.id  ")
-							.append(" and imovelControle.dataLiberacaoProcessamento <= :dataLiberacao  ")
-							.append(" and imovelControle.dataProcessamento is null ) ");
-
-
-			retorno = (Collection<ClienteImovelRetorno>) session.createQuery(consulta.toString())
-																.setDate("dataLiberacao", new Date())
-																.list();
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-	}
-
-	@SuppressWarnings("unchecked")
-	public Collection<IClienteImovel> obterClientesParaExcluirRelacao() throws ErroRepositorioException {
+	public Collection<IClienteImovel> obterClientesParaExcluirRelacao(Integer idRota) throws ErroRepositorioException {
 
 		Collection<IClienteImovel> retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -850,6 +836,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 								.append(" and imovel.id = imovelControle.imovel.id  ")
 								.append(" and imovelRetorno.id = imovelControle.imovelRetorno.id ")
 								.append(" and imovelControle.dataProcessamento is null ")
+								.append(" and imovelRetorno.idRota = :idRota ")
 								.append(" and imovelControle.dataLiberacaoProcessamento <= :dataLiberacao ")
 								.append(" and imovelRetorno.tipoOperacao <> " + AlteracaoTipo.INCLUSAO);
 
@@ -869,9 +856,11 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 						+ " and clienteImovel.cliente.id not in ("+ subqueryClientesImovelRetorno +")";
 
 			retorno = (Collection<IClienteImovel>) session.createQuery(consulta)
-													.setDate("dataLiberacao", new Date()).list();
+					.setInteger("idRota", idRota)
+					.setDate("dataLiberacao", new Date())
+					.list();
 		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
+			throw new ErroRepositorioException(e, "Erro ao obter clientes para excluir relacao");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -2485,37 +2474,37 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
     }
     
     @SuppressWarnings("unchecked")
-	public List<Integer> obterImagensImoveisAprovador() throws ErroRepositorioException {
+	public List<Integer> obterImagensImoveisAprovados(Integer idRota) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
-		
-		List <Integer> retorno = null;
-		String consulta = null;
 
 		try {
-
-			consulta = " select imovelControle.imovel.id "
-					+ " from  ImovelControleAtualizacaoCadastral imovelControle"
-					+ " where imovelControle.situacaoAtualizacaoCadastral.id = :SituacaoImovel "
-					+ " and imovelControle.dataGeracao like :DataGeracao "
-					+ " and imovelControle.dataLiberacaoProcessamento like :dataLiberacao "
-					+ " and imovelControle.imovel.id not in ( "
-						+ "	select imagem.idImovel"
-						+ " from ImovelImagem imagem"
-						+ " where imagem.ultimaAlteracao like :DataGeracao)";
-
-			retorno = (List<Integer>) session.createQuery(consulta)
-					.setInteger("SituacaoImovel",  SituacaoAtualizacaoCadastral.ATUALIZADO)
-					.setString("DataGeracao", "2018%")
-					.setDate("dataLiberacao", new Date()).list();
+			StringBuilder consultaImovelImagem = new StringBuilder();
+			consultaImovelImagem.append("SELECT imagem.idImovel ")
+								.append("FROM ImovelImagem imagem ")
+								.append("WHERE imagem.ultimaAlteracao like :dataGeracao) ");
 			
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT imovelControle.imovel.id as idImovel ")
+			.append("FROM ImovelControleAtualizacaoCadastral imovelControle ")
+			.append("INNER JOIN imovelControle.imovelRetorno imovelRetorno ")
+			.append("WHERE imovelControle.situacaoAtualizacaoCadastral.id = :situacaoImovel ")
+			.append("AND imovelRetorno.idRota = :idRota ")
+			.append("AND imovelControle.dataGeracao like :dataGeracao ")
+			.append("AND imovelControle.dataLiberacaoProcessamento like :dataLiberacao ")
+			.append("AND imovelControle.imovel.id not in (" + consultaImovelImagem.toString() + ") ");
+
+			return (List<Integer>) session.createQuery(consulta.toString())
+					.setInteger("situacaoImovel", SituacaoAtualizacaoCadastral.ATUALIZADO)
+					.setInteger("idRota", idRota)
+					.setString("dataGeracao", "2018%")
+					.setDate("dataLiberacao", new Date()).list();			
 			
         } catch (HibernateException e) {
             throw new ErroRepositorioException(e, "Erro ao verificar se o lote já existe.");
         } finally {
             HibernateUtil.closeSession(session);
         }
-        return retorno;
     }
 
 	public void reprovarImoveis(List<Integer> imoveisParaReprovar) throws ErroRepositorioException {
@@ -2928,5 +2917,30 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Integer> pesquisarRotasComImoveisAprovados() throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT rota_id ")
+			   .append("FROM atualizacaocadastral.imovel_controle_atlz_cad ic ")
+			   .append("INNER JOIN atualizacaocadastral.imovel_retorno ir ON ir.imre_id = ic.imre_id ")
+			   .append("WHERE siac_id = :situacao ")
+			   .append("GROUP BY rota_id ")
+			   .append("ORDER BY rota_id;");
+			
+			return session.createSQLQuery(sql.toString())
+					.addScalar("rota_id", Hibernate.INTEGER)
+					.setInteger("situacao", SituacaoAtualizacaoCadastral.APROVADO)
+					.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro ao pesquisar rotas com imoveis aprovados");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 	}
 }

@@ -2448,8 +2448,10 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 
 					case Funcionalidade.ATUALIZACAO_CADASTRAL: {
 
-						TarefaBatchAtualizacaoCadastral batchAtualizacaoCadastral = new TarefaBatchAtualizacaoCadastral(processoIniciado.getUsuario(),
-								funcionalidadeIniciada.getId());
+						TarefaBatchAtualizacaoCadastral batchAtualizacaoCadastral = new TarefaBatchAtualizacaoCadastral(processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+						
+						Collection<Integer> rotasBatchAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarRotasComImoveisAprovados();
+						batchAtualizacaoCadastral.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, rotasBatchAtualizacaoCadastral);
 
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizacaoCadastral));
 						getControladorUtil().atualizar(funcionalidadeIniciada);
