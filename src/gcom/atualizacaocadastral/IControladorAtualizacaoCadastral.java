@@ -25,7 +25,7 @@ import gcom.util.ErroRepositorioException;
 
 public interface IControladorAtualizacaoCadastral {
 
-	public void atualizarImoveisAprovados(Integer idFuncionalidade, Usuario usuarioLogado) throws Exception;
+	public void atualizarImoveisAprovados(Integer idFuncionalidade, Integer idRota) throws Exception;
 
 	public void apagarInformacoesRetornoImovelAtualizacaoCadastral(Integer idImovel) throws Exception;
 
@@ -173,4 +173,12 @@ public interface IControladorAtualizacaoCadastral {
      */
     public ClienteRetorno pesquisarClienteRetornoPorMatriculaClienteETipoRelacao(Integer matriculaCliente, Short tipoRelacao)
 			throws ControladorException;
+    
+    /**
+     * Pesquisa todas as rotas contendo imoveis aprovados para serem atualizados em definitivo
+     * 
+     * @return Collection<Integer> com os ids das rotas
+     * @throws ControladorException
+     */
+    public Collection<Integer> pesquisarRotasComImoveisAprovados() throws ControladorException;
 }

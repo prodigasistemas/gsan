@@ -33,7 +33,7 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public Collection<Integer> pesquisarIdsClienteRetorno(Integer idImovel) throws ErroRepositorioException;
 
-	public Collection<IImovel> obterImoveisParaAtualizar(Integer tipoOperacao) throws ErroRepositorioException;
+	public Collection<IImovel> obterImoveisParaAtualizar(Integer tipoOperacao, Integer idRota) throws ErroRepositorioException;
 
 	public Collection<IImovelSubcategoria> obterImovelSubcategoriaParaAtualizar(Integer idImovel) throws ErroRepositorioException;
 
@@ -73,7 +73,7 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
 
-	public Collection<ClienteImovelRetorno> obterClientesParaAtualizar() throws ErroRepositorioException;
+	public Collection<ClienteImovelRetorno> obterClientesPorTipoOperacao(Integer idRota, Integer tipoOperacao) throws ErroRepositorioException;
 
 	public ICliente pesquisarClienteRetorno(ClienteImovelRetorno clienteImovel) throws ErroRepositorioException;
 
@@ -89,9 +89,7 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public boolean existeRelacaoClienteImovel(Integer idImovel, Integer idCliente, Integer idClienteRelacaoTipo) throws ErroRepositorioException;
 
-	public Collection<ClienteImovelRetorno> obterClientesParaIncluir() throws ErroRepositorioException;
-
-	public Collection<IClienteImovel> obterClientesParaExcluirRelacao() throws ErroRepositorioException;
+	public Collection<IClienteImovel> obterClientesParaExcluirRelacao(Integer idRota) throws ErroRepositorioException;
 
 	public void aprovarImovel(Integer idImovelRetorno, Date dataLiberacao) throws ErroRepositorioException;
 
@@ -189,7 +187,7 @@ public interface IRepositorioAtualizacaoCadastral {
     
     public Integer obterProximoLote() throws ErroRepositorioException;
 	
-	public List<Integer> obterImagensImoveisAprovador() throws ErroRepositorioException;
+	public List<Integer> obterImagensImoveisAprovados(Integer idRota) throws ErroRepositorioException;
 
 	public void reprovarImoveis(List<Integer> imoveisParaReprovar) throws ErroRepositorioException;
 
@@ -262,4 +260,12 @@ public interface IRepositorioAtualizacaoCadastral {
      */
     public ClienteRetorno pesquisarClienteRetornoPorMatriculaClienteETipoRelacao(Integer idImovel, Short tipoRelacao)
     		throws ErroRepositorioException;
+    
+    /**
+     * Pesquisa todas as rotas contendo imoveis aprovados para serem atualizados em definitivo
+     * 
+     * @return Collection<Integer> com os ids das rotas
+     * @throws ErroRepositorioException
+     */
+    public Collection<Integer> pesquisarRotasComImoveisAprovados() throws ErroRepositorioException;
 }

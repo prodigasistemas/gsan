@@ -6,6 +6,7 @@ import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaException;
 import gcom.util.ConstantesJNDI;
+import gcom.util.ConstantesSistema;
 import gcom.util.agendadortarefas.AgendadorTarefas;
 
 public class TarefaBatchAtualizacaoCadastral extends TarefaBatch {
@@ -15,7 +16,7 @@ public class TarefaBatchAtualizacaoCadastral extends TarefaBatch {
 	public TarefaBatchAtualizacaoCadastral(Usuario usuario, int idFuncionalidadeIniciada) {
 		super(usuario, idFuncionalidadeIniciada);
 	}
-	
+
 	public TarefaBatchAtualizacaoCadastral() {
 		super(null, 0);
 	}
@@ -30,13 +31,16 @@ public class TarefaBatchAtualizacaoCadastral extends TarefaBatch {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object executar() throws TarefaException {
-		
-		Usuario usuario = (Usuario) getParametro("usuario");
-		
-		enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ATUALIZACAO_CADASTRAL, 
-				new Object[] {this.getIdFuncionalidadeIniciada(),usuario});
+		Collection<Integer> idRotas = (Collection<Integer>) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
+
+		for (Integer idRota : idRotas) {
+			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ATUALIZACAO_CADASTRAL, new Object[] { 
+					this.getIdFuncionalidadeIniciada(), 
+					idRota });
+		}
 		return null;
 	}
 
@@ -44,5 +48,4 @@ public class TarefaBatchAtualizacaoCadastral extends TarefaBatch {
 	public void agendarTarefaBatch() {
 		AgendadorTarefas.agendarTarefa("AtualizacaoCadastralBatch", this);
 	}
-
 }
