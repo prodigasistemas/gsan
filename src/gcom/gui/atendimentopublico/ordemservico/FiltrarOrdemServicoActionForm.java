@@ -21,7 +21,8 @@ public class FiltrarOrdemServicoActionForm extends ValidatorActionForm {
 	private String situacaoOrdemServico;
 	private String situacaoProgramacao;
 	
-	private Integer[] tipoServico;
+	private String tipoSolicitacao;
+	private String tipoServico;
 	private Integer[] tipoServicoSelecionados;
 	
 	private String matriculaImovel;
@@ -107,8 +108,20 @@ public class FiltrarOrdemServicoActionForm extends ValidatorActionForm {
 		descricaoLogradouro = null;
 		
 		indicadorTipoServico = null;
-
+		
+		tipoSolicitacao = null; 
 	}
+
+
+	public String getTipoSolicitacao() {
+		return tipoSolicitacao;
+	}
+
+
+	public void setTipoSolicitacao(String tipoSolicitacao) {
+		this.tipoSolicitacao = tipoSolicitacao;
+	}
+
 
 	public String getInscricaoImovel() {
 		return inscricaoImovel;
@@ -358,23 +371,27 @@ public class FiltrarOrdemServicoActionForm extends ValidatorActionForm {
 
 	public void setUnidadeSuperior(String unidadeSuperior) {
 		this.unidadeSuperior = unidadeSuperior;
-	}
+	}	
 
-	public Integer[] getTipoServico() {
+	public String getTipoServico() {
 		return tipoServico;
 	}
 
-	public void setTipoServico(Integer[] tipoServico) {
+
+	public void setTipoServico(String tipoServico) {
 		this.tipoServico = tipoServico;
 	}
+
 
 	public Integer[] getTipoServicoSelecionados() {
 		return tipoServicoSelecionados;
 	}
 
+
 	public void setTipoServicoSelecionados(Integer[] tipoServicoSelecionados) {
 		this.tipoServicoSelecionados = tipoServicoSelecionados;
 	}
+
 
 	public String getAreaBairro() {
 		return areaBairro;

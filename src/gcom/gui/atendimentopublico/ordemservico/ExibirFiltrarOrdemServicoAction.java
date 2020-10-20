@@ -1,11 +1,30 @@
 package gcom.gui.atendimentopublico.ordemservico;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import gcom.atendimentopublico.ordemservico.FiltroServicoTipo;
 import gcom.atendimentopublico.ordemservico.ServicoTipo;
 import gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento;
 import gcom.atendimentopublico.registroatendimento.FiltroAtendimentoMotivoEncerramento;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
+import gcom.atendimentopublico.registroatendimento.FiltroSolicitacaoTipo;
+import gcom.atendimentopublico.registroatendimento.FiltroSolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
+import gcom.atendimentopublico.registroatendimento.SolicitacaoTipo;
+import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.endereco.FiltroLogradouro;
@@ -26,776 +45,541 @@ import gcom.cadastro.unidade.FiltroUnidadeOrganizacional;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.FiltroDocumentoCobranca;
-import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import gcom.util.filtro.ParametroSimplesIn;
 
 /**
  * [UC0450] Pesquisar Ordem Servico - Exibir
- * 
- * @author Leonardo Regis
- *
- * @date 04/09/2006
  */
 public class ExibirFiltrarOrdemServicoAction extends GcomAction {
+	
+	private HttpSession sessao;
+	private HttpServletRequest request;
+	private FiltrarOrdemServicoActionForm form;
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		this.sessao = request.getSession(false);
+		this.request = request;
+		this.form = (FiltrarOrdemServicoActionForm) actionForm;
 
-		// Seta o mapeamento de retorno
 		ActionForward retorno = actionMapping.findForward("filtrarOrdemServico");
+
+		configurarQuantidadeDiasMesAtual();
+		configurarPesquisas();
+		configurarConsultasForm();
+
+		pesquisarAtendimentoMotivoEncerramento();
+		pesquisarSolicitacaoTipo();
+		pesquisarServicoTipo();
+		pesquisarPerfilImovel();
+		pesquisarProjeto();
+
+		configurarCamposEncontrados();
+
+		if (request.getParameter("caminhoRetornoTelaPesquisaOrdemServico") != null) {
+			sessao.setAttribute("caminhoRetornoTelaPesquisaOrdemServico", request.getParameter("caminhoRetornoTelaPesquisaOrdemServico"));
+		}
+
+		if (form.getSituacaoProgramacao() == null || form.getSituacaoProgramacao().equals("")) {
+			form.setSituacaoProgramacao(ConstantesSistema.SET_ZERO.toString());
+		}
+
+		return retorno;
+	}
+
+	private void configurarConsultasForm() {
+		if (request.getParameter("tipoConsulta") != null && !request.getParameter("tipoConsulta").equals("")) {
+
+			String id = request.getParameter("idCampoEnviarDados");
+			String descricao = request.getParameter("descricaoCampoEnviarDados");
+
+			if (request.getParameter("tipoConsulta").equals("registroAtendimento")) {
+				form.setNumeroRA(id);
+				form.setDescricaoRA(descricao);
+				
+			} else if (request.getParameter("tipoConsulta").equals("documentoCobranca")) {
+				form.setDocumentoCobranca(id);
+				form.setDescricaoDocumentoCobranca(descricao);
+				
+			} else if (request.getParameter("tipoConsulta").equals("imovel")) {
+				form.setMatriculaImovel(id);
+				form.setInscricaoImovel(descricao);
+				
+			} else if (request.getParameter("tipoConsulta").equals("cliente")) {
+				form.setCodigoCliente(id);
+				form.setNomeCliente(descricao);
+				
+			} else if (request.getParameter("tipoConsulta").equals("unidadeOrganizacional")) {
+				
+				if (sessao.getAttribute("tipoUnidade").equals("unidadeGeracao")) {
+					form.setUnidadeGeracao(id);
+					form.setDescricaoUnidadeGeracao(descricao);
+					
+				} else if (sessao.getAttribute("tipoUnidade").equals("unidadeAtual")) {
+					form.setUnidadeAtual(id);
+					form.setDescricaoUnidadeAtual(descricao);
+					
+				} else {
+					form.setUnidadeSuperior(id);
+					form.setDescricaoUnidadeSuperior(descricao);
+				}
+			} else if (request.getParameter("tipoConsulta").equals("municipio")) {
+				form.setMunicipio(id);
+				form.setDescricaoMunicipio(descricao);
+				
+			} else if (request.getParameter("tipoConsulta").equals("bairro")) {
+				form.setCodigoBairro(id);
+				form.setDescricaoBairro(descricao);
+				
+			} else if (request.getParameter("tipoConsulta").equals("logradouro")) {
+				form.setLogradouro(id);
+				form.setDescricaoLogradouro(descricao);
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void pesquisarProjeto() {
+		if (sessao.getAttribute("colecaoProjeto") == null) {
+			Filtro filtro = new FiltroProjeto();
+
+			Collection<Projeto> colecao = getFachada().pesquisar(filtro, Projeto.class.getName());
+			if (colecao != null && !colecao.isEmpty()) {
+				sessao.setAttribute("colecaoProjeto", colecao);
+			}
+		}
+	}
+
+	private void configurarPesquisas() {
+		String objetoConsulta = request.getParameter("objetoConsulta");
 		
-		HttpSession sessao = httpServletRequest.getSession(false);		
+		// [UC0443] - Pesquisar Registro Atendimento
+		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("1")) {
+			pesquisarRegistroAtendimento();
+		}
+
+		// [UC9999] - Pesquisar Documento de Cobrança
+		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("2")) {
+			pesquisarDocumentoCobranca();
+		}
+
+		// [UC0013] - Pesquisar Imovel
+		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("3")) {
+			pesquisarImovel();
+		}
+
+		// [UC0012] - Pesquisar Cliente
+		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("4")) {
+			pesquisarCliente();
+		}
+
+		// [UC0376 - Pesquisar Unidade
+		if ((objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("5"))
+				|| (objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("6"))
+				|| (objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("7"))) {
+
+			pesquisarUnidadeOrganizacional(objetoConsulta);
+		}
+
+		// [UC0075] - Pesquisar Municipio
+		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("8")) {
+			pesquisarMunicipio();
+		}
+
+		// [UC0141] - Pesquisar Bairro
+		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("9")) {
+			pesquisarBairro();
+		}
+
+		// [UC0004] - Pesquisar Logradouro
+		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("10")) {
+			pesquisarLogradouro();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void pesquisarAtendimentoMotivoEncerramento() {
+		Collection<AtendimentoMotivoEncerramento> colecao = (Collection<AtendimentoMotivoEncerramento>) sessao.getAttribute("colecaoAtendimentoMotivoEncerramento");
 		
-		// Form
-		FiltrarOrdemServicoActionForm filtrarOrdemServicoActionForm = 
-			(FiltrarOrdemServicoActionForm) actionForm;
-		
-		//Colocado por Raphael Rossiter em 29/01/2007 
-		String menu = httpServletRequest.getParameter("menu");
-		  
-		if (menu != null && !menu.equalsIgnoreCase("")){
-			//Sugerindo um período para realização da filtragem de uma OS
-			//SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
+		if (colecao == null) {
+			Filtro filtro = new FiltroAtendimentoMotivoEncerramento();
+			filtro.setCampoOrderBy(FiltroAtendimentoMotivoEncerramento.DESCRICAO);
 			
+			colecao = getFachada().pesquisar(filtro, AtendimentoMotivoEncerramento.class.getName());
+			sessao.setAttribute("colecaoAtendimentoMotivoEncerramento", colecao);
+		}
+	}
+
+	private void configurarQuantidadeDiasMesAtual() {
+		String menu = request.getParameter("menu");
+		if (menu != null && !menu.equalsIgnoreCase("")) {
 			Date dataAtual = new Date();
 			Calendar calendario = new GregorianCalendar();
 			calendario.setTime(dataAtual);
 
-			// ******************************************************************
-			// Solicitado por Leonardo Vieira sem U.C. Executor: Marcio Roberto *
-			// Pega quantidade de dias do mês atual,  antes tinha fixo 30 dias. * 
-			Integer qtdDias = new Integer(Util.obterUltimoDiaMes(calendario.get(Calendar.MONTH), calendario.get(Calendar.YEAR)));
+			Integer quantidadeDias = new Integer(Util.obterUltimoDiaMes(calendario.get(Calendar.MONTH), calendario.get(Calendar.YEAR)));
+			Date dataSugestao = Util.subtrairNumeroDiasDeUmaData(dataAtual, quantidadeDias - 1);
 			
-			Date dataSugestao = Util.subtrairNumeroDiasDeUmaData(dataAtual, qtdDias-1);
-			
-			filtrarOrdemServicoActionForm.setPeriodoGeracaoInicial(Util.formatarData(dataSugestao));
-			filtrarOrdemServicoActionForm.setPeriodoGeracaoFinal(Util.formatarData(dataAtual));
-			
+			form.setPeriodoGeracaoInicial(Util.formatarData(dataSugestao));
+			form.setPeriodoGeracaoFinal(Util.formatarData(dataAtual));
 		}
-
-		// Flag indicando que o usuário fez uma consulta a partir da tecla Enter
-		String objetoConsulta = httpServletRequest.getParameter("objetoConsulta");
-
-		//[UC0443] - Pesquisar Registro Atendimento
-		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && 
-			objetoConsulta.trim().equals("1")) {
-
-			// Faz a consulta de Registro Atendimento
-			this.pesquisarRegistroAtendimento(filtrarOrdemServicoActionForm);
-		}
-
-		//[UC9999] - Pesquisar Documento de Cobrança
-		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && 
-				objetoConsulta.trim().equals("2")) {
-
-			// Faz a consulta de Documento Cobrança
-			this.pesquisarDocumentoCobranca(filtrarOrdemServicoActionForm);
-		}
-		
-		//[UC0013] - Pesquisar Imovel
-		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && 
-				objetoConsulta.trim().equals("3")) {
-
-			// Faz a consulta de Imovel
-			this.pesquisarImovel(filtrarOrdemServicoActionForm);
-		}
-
-		//[UC0012] - Pesquisar Cliente
-		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && 
-				objetoConsulta.trim().equals("4")) {
-
-			// Faz a consulta de Cliente
-			this.pesquisarCliente(filtrarOrdemServicoActionForm);
-		}
-
-		//[UC0376 - Pesquisar Unidade
-		if ( (objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("5")) ||
-			(objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("6")) ||
-			(objetoConsulta != null && !objetoConsulta.trim().equals("") && objetoConsulta.trim().equals("7")) ) {
-
-			// Faz a consulta de Cliente
-			this.pesquisarUnidadeOrganizacional(filtrarOrdemServicoActionForm,objetoConsulta);
-		}
-
-		//[UC0075] - Pesquisar Municipio
-		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && 
-				objetoConsulta.trim().equals("8")) {
-
-			// Faz a consulta de Municipio
-			this.pesquisarMunicipio(filtrarOrdemServicoActionForm);
-		}
-
-		//[UC0141] - Pesquisar Bairro
-		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && 
-				objetoConsulta.trim().equals("9")) {
-
-			// Faz a consulta de Bairro
-			this.pesquisarBairro(filtrarOrdemServicoActionForm,httpServletRequest);
-		}
-
-		//[UC0004] - Pesquisar Logradouro
-		if (objetoConsulta != null && !objetoConsulta.trim().equals("") && 
-				objetoConsulta.trim().equals("10")) {
-
-			// Faz a consulta de logradouro
-			this.pesquisarLogradouro(filtrarOrdemServicoActionForm);
-		}
-		
-		if (httpServletRequest.getParameter("tipoConsulta") != null && 
-			!httpServletRequest.getParameter("tipoConsulta").equals("")) {
-			
-			String id = httpServletRequest.getParameter("idCampoEnviarDados");
-			String descricao = httpServletRequest.getParameter("descricaoCampoEnviarDados");
-			
-			if (httpServletRequest.getParameter("tipoConsulta").equals("registroAtendimento")) {
-
-				filtrarOrdemServicoActionForm.setNumeroRA(id);
-				filtrarOrdemServicoActionForm.setDescricaoRA(descricao);
-
-			}else if (httpServletRequest.getParameter("tipoConsulta").equals("documentoCobranca")) {
-
-				filtrarOrdemServicoActionForm.setDocumentoCobranca(id);
-				filtrarOrdemServicoActionForm.setDescricaoDocumentoCobranca(descricao);
-
-			}else if (httpServletRequest.getParameter("tipoConsulta").equals("imovel")) {
-
-				filtrarOrdemServicoActionForm.setMatriculaImovel(id);
-				filtrarOrdemServicoActionForm.setInscricaoImovel(descricao);
-
-			}else if (httpServletRequest.getParameter("tipoConsulta").equals("cliente")) {
-
-				filtrarOrdemServicoActionForm.setCodigoCliente(id);
-				filtrarOrdemServicoActionForm.setNomeCliente(descricao);
-
-			}else if (httpServletRequest.getParameter("tipoConsulta").equals("unidadeOrganizacional")) {
-
-				if(sessao.getAttribute("tipoUnidade").equals("unidadeGeracao")){
-					filtrarOrdemServicoActionForm.setUnidadeGeracao(id);
-					filtrarOrdemServicoActionForm.setDescricaoUnidadeGeracao(descricao);
-					
-				}else if(sessao.getAttribute("tipoUnidade").equals("unidadeAtual")){
-					filtrarOrdemServicoActionForm.setUnidadeAtual(id);
-					filtrarOrdemServicoActionForm.setDescricaoUnidadeAtual(descricao);
-					
-				}else{
-					filtrarOrdemServicoActionForm.setUnidadeSuperior(id);
-					filtrarOrdemServicoActionForm.setDescricaoUnidadeSuperior(descricao);
-				}
-
-			}else if (httpServletRequest.getParameter("tipoConsulta").equals("municipio")) {
-
-				filtrarOrdemServicoActionForm.setMunicipio(id);
-				filtrarOrdemServicoActionForm.setDescricaoMunicipio(descricao);
-
-			}else if (httpServletRequest.getParameter("tipoConsulta").equals("bairro")) {
-
-				filtrarOrdemServicoActionForm.setCodigoBairro(id);
-				filtrarOrdemServicoActionForm.setDescricaoBairro(descricao);
-
-			}else if (httpServletRequest.getParameter("tipoConsulta").equals("logradouro")) {
-
-				filtrarOrdemServicoActionForm.setLogradouro(id);
-				filtrarOrdemServicoActionForm.setDescricaoLogradouro(descricao);
-
-			}	
-		}		
-		
-		// Atendimento Motivo Encerramento
-		FiltroAtendimentoMotivoEncerramento filtroAtendimentoMotivoEncerramento = new FiltroAtendimentoMotivoEncerramento();
-		filtroAtendimentoMotivoEncerramento.setCampoOrderBy(FiltroAtendimentoMotivoEncerramento.DESCRICAO);
-		Collection colecaoAtendimentoMotivoEncerramento = Fachada.getInstancia().pesquisar(
-				filtroAtendimentoMotivoEncerramento, AtendimentoMotivoEncerramento.class.getName());
-		sessao.setAttribute("colecaoAtendimentoMotivoEncerramento", colecaoAtendimentoMotivoEncerramento);
-		
-		//Monta a colecao de tipos Servicos
-		this.pesquisarTipoServico(httpServletRequest);
-		
-		// Perfil Imovel
-		this.getPerfilImovelCollection(sessao, this.getFachada());
-		
-		//Seta os request´s encontrados
-		this.setaRequest(httpServletRequest,filtrarOrdemServicoActionForm);
-		
-		if (httpServletRequest.getParameter("caminhoRetornoTelaPesquisaOrdemServico") != null) {
-			
-			sessao.setAttribute("caminhoRetornoTelaPesquisaOrdemServico",
-				httpServletRequest.getParameter("caminhoRetornoTelaPesquisaOrdemServico"));
-			
-		}
-		
-		if(filtrarOrdemServicoActionForm.getSituacaoProgramacao() == null || 
-			filtrarOrdemServicoActionForm.getSituacaoProgramacao().equals("")){
-			
-			filtrarOrdemServicoActionForm.setSituacaoProgramacao(ConstantesSistema.SET_ZERO.toString());	
-		}
-		
-		/*
-		 * Colocado por Raphael Rossiter em 15/10/2009
-		 * 
-		 * Permitir efetuar a pesquisa das ordens de serviço pelo projeto
-		 */
-		Fachada fachada = Fachada.getInstancia();
-		
-		if (sessao.getAttribute("colecaoProjeto") == null){
-			
-			FiltroProjeto filtroProjeto = new FiltroProjeto();
-			
-			Collection colecaoProjeto = fachada.pesquisar(filtroProjeto, Projeto.class.getName());
-			
-			if (colecaoProjeto != null && !colecaoProjeto.isEmpty()){
-				
-				sessao.setAttribute("colecaoProjeto", colecaoProjeto);
-			}
-		}
-		
-		
-		return retorno;
 	}
 	
-	/**
-	 * Pesquisa Imóvel 
-	 *
-	 * @author Rafael Pinto
-	 * @date 15/08/2006
-	 */
-	private void pesquisarImovel(FiltrarOrdemServicoActionForm form) {
+	@SuppressWarnings("unchecked")
+	private void pesquisarImovel() {
+		Filtro filtro = new FiltroImovel();
+		filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, form.getMatriculaImovel()));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("localidade");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("setorComercial");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("quadra");
 
-		// Filtra Imovel
-		FiltroImovel filtroImovel = new FiltroImovel();
-		filtroImovel.adicionarParametro(
-				new ParametroSimples(FiltroImovel.ID, 
-				form.getMatriculaImovel()));
-		
-		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("localidade");
-		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("setorComercial");
-		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("quadra");
-		
-		// Recupera Imóvel
-		Collection colecaoImovel = 
-			Fachada.getInstancia().pesquisar(filtroImovel, Imovel.class.getName());
-	
-		if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
+		Collection<Imovel> colecao = getFachada().pesquisar(filtro, Imovel.class.getName());
 
-			Imovel imovel = 
-				(Imovel) Util.retonarObjetoDeColecao(colecaoImovel);
-			
+		if (colecao != null && !colecao.isEmpty()) {
+			Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(colecao);
 			form.setMatriculaImovel(imovel.getId().toString());
 			form.setInscricaoImovel(imovel.getInscricaoFormatada());
-			
+
 		} else {
 			form.setMatriculaImovel("");
 			form.setInscricaoImovel("Matrícula inexistente");
 		}
 	}
 
-	/**
-	 * Pesquisa Registro Atendimento 
-	 *
-	 * @author Rafael Pinto
-	 * @date 15/08/2006
-	 */
-	private void pesquisarRegistroAtendimento(FiltrarOrdemServicoActionForm form) {
-		
-		// Filtro para obter o localidade ativo de id informado
-		FiltroRegistroAtendimento filtroRegistroAtendimento = new FiltroRegistroAtendimento();
+	@SuppressWarnings("unchecked")
+	private void pesquisarRegistroAtendimento() {
+		Filtro filtro = new FiltroRegistroAtendimento();
+		filtro.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.ID, new Integer(form.getNumeroRA())));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("solicitacaoTipoEspecificacao");
 
-		filtroRegistroAtendimento.adicionarParametro(
-			new ParametroSimples(FiltroRegistroAtendimento.ID, 
-			new Integer(form.getNumeroRA())));
-		
-		filtroRegistroAtendimento.adicionarCaminhoParaCarregamentoEntidade("solicitacaoTipoEspecificacao");
-		
+		Collection<RegistroAtendimento> colecao = getFachada().pesquisar(filtro, RegistroAtendimento.class.getName());
 
-		// Pesquisa de acordo com os parâmetros informados no filtro
-		Collection colecaoRegistros = Fachada.getInstancia()
-				.pesquisar(filtroRegistroAtendimento,RegistroAtendimento.class.getName());
-
-		// Verifica se a pesquisa retornou algum objeto para a coleção
-		if (colecaoRegistros != null && !colecaoRegistros.isEmpty()) {
-
-			// Obtém o objeto da coleção pesquisada
-			RegistroAtendimento registroAtendimento = 
-				(RegistroAtendimento) Util.retonarObjetoDeColecao(colecaoRegistros);
-			
+		if (colecao != null && !colecao.isEmpty()) {
+			RegistroAtendimento registroAtendimento = (RegistroAtendimento) Util.retonarObjetoDeColecao(colecao);
 			form.setNumeroRA(registroAtendimento.getId().toString());
 			form.setDescricaoRA(registroAtendimento.getSolicitacaoTipoEspecificacao().getDescricao());
-			
-
 		} else {
-
 			form.setDescricaoRA("Registro Atendimento inexistente");
 			form.setNumeroRA("");
-
 		}
 	}
 
-	/**
-	 * Pesquisa Documento Cobrança 
-	 *
-	 * @author Rafael Pinto
-	 * @date 21/08/2006
-	 */
-	private void pesquisarDocumentoCobranca(FiltrarOrdemServicoActionForm form){
+	@SuppressWarnings("unchecked")
+	private void pesquisarDocumentoCobranca() {
+		Filtro filtro = new FiltroDocumentoCobranca();
+		filtro.adicionarParametro(new ParametroSimples(FiltroDocumentoCobranca.ID, new Integer(form.getDocumentoCobranca())));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
 
-		FiltroDocumentoCobranca filtroDocumentoCobranca = new FiltroDocumentoCobranca();
+		Collection<CobrancaDocumento> colecao = getFachada().pesquisar(filtro,CobrancaDocumento.class.getName());
 
-		filtroDocumentoCobranca.adicionarParametro(
-			new ParametroSimples(FiltroDocumentoCobranca.ID, 
-			new Integer(form.getDocumentoCobranca())));
-		
-		filtroDocumentoCobranca.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
-		
-		// Pesquisa de acordo com os parâmetros informados no filtro
-		Collection colecaoDocumentoCobranca = Fachada.getInstancia()
-				.pesquisar(filtroDocumentoCobranca,CobrancaDocumento.class.getName());
-
-		// Verifica se a pesquisa retornou algum objeto para a coleção
-		if (colecaoDocumentoCobranca != null && !colecaoDocumentoCobranca.isEmpty()) {
-
-			// Obtém o objeto da coleção pesquisada
-			CobrancaDocumento cobrancaDocumento = 
-				(CobrancaDocumento) Util.retonarObjetoDeColecao(colecaoDocumentoCobranca);
-
+		if (colecao != null && !colecao.isEmpty()) {
+			CobrancaDocumento cobrancaDocumento = (CobrancaDocumento) Util.retonarObjetoDeColecao(colecao);
 			form.setDocumentoCobranca(cobrancaDocumento.getId().toString());
 			form.setDescricaoDocumentoCobranca(cobrancaDocumento.getDocumentoTipo().getDescricaoDocumentoTipo());
-			
-
 		} else {
 			form.setDocumentoCobranca("");
 			form.setDescricaoDocumentoCobranca("Documento Cobrança inexistente");
 		}
 	}
 	
-	/**
-	 * Pesquisa Cliente 
-	 *
-	 * @author Rafael Pinto
-	 * @date 15/08/2006
-	 */
-	private void pesquisarCliente(FiltrarOrdemServicoActionForm form) {
-		
-		FiltroCliente filtroCliente = new FiltroCliente();
+	@SuppressWarnings("unchecked")
+	private void pesquisarCliente() {
+		Filtro filtro = new FiltroCliente();
+		filtro.adicionarParametro(new ParametroSimples(FiltroCliente.ID, new Integer(form.getCodigoCliente())));
+		Collection<Cliente> colecao = getFachada().pesquisar(filtro, Cliente.class.getName());
 
-		filtroCliente.adicionarParametro(
-			new ParametroSimples(FiltroCliente.ID, 
-			new Integer(form.getCodigoCliente())));
-
-		// Pesquisa de acordo com os parâmetros informados no filtro
-		Collection colecaoCliente = Fachada.getInstancia()
-				.pesquisar(filtroCliente,Cliente.class.getName());
-
-		// Verifica se a pesquisa retornou algum objeto para a coleção
-		if (colecaoCliente != null && !colecaoCliente.isEmpty()) {
-
-			// Obtém o objeto da coleção pesquisada
-			Cliente cliente = 
-				(Cliente) Util.retonarObjetoDeColecao(colecaoCliente);
-
+		if (colecao != null && !colecao.isEmpty()) {
+			Cliente cliente = (Cliente) Util.retonarObjetoDeColecao(colecao);
 			form.setCodigoCliente(cliente.getId().toString());
 			form.setNomeCliente(cliente.getNome());
-			
-
 		} else {
 			form.setCodigoCliente("");
 			form.setNomeCliente("Cliente inexistente");
 		}
 	}
 	
-	/**
-	 * Pesquisa Unidade Organizacional 
-	 *
-	 * @author Rafael Pinto
-	 * @date 15/08/2006
-	 */
-	private void pesquisarUnidadeOrganizacional(FiltrarOrdemServicoActionForm form, String objetoConsulta) {
-		
-		FiltroUnidadeOrganizacional filtroUnidadeOrganizacional = new FiltroUnidadeOrganizacional();
-		
-		Integer idUnidade = null;
+	@SuppressWarnings("unchecked")
+	private void pesquisarUnidadeOrganizacional(String objetoConsulta) {
+		Filtro filtro = new FiltroUnidadeOrganizacional();
 
-		if(objetoConsulta.equals("5")){
+		Integer idUnidade = null;
+		if (objetoConsulta.equals("5")) {
 			idUnidade = new Integer(form.getUnidadeGeracao());
-		}else if(objetoConsulta.equals("6")){
+		} else if (objetoConsulta.equals("6")) {
 			idUnidade = new Integer(form.getUnidadeAtual());
-		}else{
+		} else {
 			idUnidade = new Integer(form.getUnidadeSuperior());
-			
 		}
 
-		filtroUnidadeOrganizacional.adicionarParametro(
-				new ParametroSimples(FiltroUnidadeOrganizacional.ID,idUnidade));
+		filtro.adicionarParametro(new ParametroSimples(FiltroUnidadeOrganizacional.ID, idUnidade));
 
-		// Pesquisa de acordo com os parâmetros informados no filtro
-		Collection colecaoUnidade = Fachada.getInstancia()
-				.pesquisar(filtroUnidadeOrganizacional,UnidadeOrganizacional.class.getName());
+		Collection<UnidadeOrganizacional> colecao = getFachada().pesquisar(filtro,UnidadeOrganizacional.class.getName());
 
-		// Verifica se a pesquisa retornou algum objeto para a coleção
-		if (colecaoUnidade != null && !colecaoUnidade.isEmpty()) {
+		if (colecao != null && !colecao.isEmpty()) {
+			UnidadeOrganizacional unidadeOrganizacional = (UnidadeOrganizacional) Util.retonarObjetoDeColecao(colecao);
 
-			// Obtém o objeto da coleção pesquisada
-			UnidadeOrganizacional unidadeOrganizacional = 
-				(UnidadeOrganizacional) Util.retonarObjetoDeColecao(colecaoUnidade);
-
-			if(objetoConsulta.equals("5")){
-			
+			if (objetoConsulta.equals("5")) {
 				form.setUnidadeGeracao(unidadeOrganizacional.getId().toString());
 				form.setDescricaoUnidadeGeracao(unidadeOrganizacional.getDescricao());
-				
-			}else if(objetoConsulta.equals("6")){
 
+			} else if (objetoConsulta.equals("6")) {
 				form.setUnidadeAtual(unidadeOrganizacional.getId().toString());
 				form.setDescricaoUnidadeAtual(unidadeOrganizacional.getDescricao());
-				
-			}else{
-				
-				//[FS0009] - Verificar existência de unidades subordinadas
-				filtroUnidadeOrganizacional = new FiltroUnidadeOrganizacional();
+			} else {
+				// [FS0009] - Verificar existência de unidades subordinadas
+				filtro = new FiltroUnidadeOrganizacional();
+				filtro.adicionarParametro(new ParametroSimples(	FiltroUnidadeOrganizacional.ID_UNIDADE_SUPERIOR, idUnidade));
 
-				filtroUnidadeOrganizacional.adicionarParametro(
-						new ParametroSimples(FiltroUnidadeOrganizacional.ID_UNIDADE_SUPERIOR,idUnidade));
-				
-				colecaoUnidade = 
-					Fachada.getInstancia().pesquisar(filtroUnidadeOrganizacional,UnidadeOrganizacional.class.getName());
+				colecao = getFachada().pesquisar(filtro,UnidadeOrganizacional.class.getName());
 
-				// Verifica se a pesquisa retornou algum objeto para a coleção
-				if (colecaoUnidade != null && !colecaoUnidade.isEmpty()) {
+				if (colecao != null && !colecao.isEmpty()) {
 					form.setUnidadeSuperior(unidadeOrganizacional.getId().toString());
 					form.setDescricaoUnidadeSuperior(unidadeOrganizacional.getDescricao());
-				}else{
+				} else {
 					throw new ActionServletException("atencao.filtrar_ra_sem_unidades_subordinadas");
 				}
-				
-				
 			}
-
 		} else {
-			if(objetoConsulta.equals("5")){
-				
+			if (objetoConsulta.equals("5")) {
 				form.setUnidadeGeracao("");
 				form.setDescricaoUnidadeGeracao("Unidade de Geração inexistente");
-				
-			}else if(objetoConsulta.equals("6")){
 
+			} else if (objetoConsulta.equals("6")) {
 				form.setUnidadeAtual("");
 				form.setDescricaoUnidadeAtual("Unidade Atual inexistente");
-				
-			}else{
-				
+
+			} else {
 				form.setUnidadeSuperior("");
 				form.setDescricaoUnidadeSuperior("Unidade Superior inexistente");
-				
 			}
 		}
 	}
-	
-	/**
-	 * Pesquisa Municipio 
-	 *
-	 * @author Rafael Pinto
-	 * @date 16/08/2006
-	 */
-	private void pesquisarMunicipio(FiltrarOrdemServicoActionForm form) {
-		
-		FiltroMunicipio filtroMunicipio = new FiltroMunicipio();
 
-		filtroMunicipio.adicionarParametro(
-			new ParametroSimples(FiltroMunicipio.ID, 
-			new Integer(form.getMunicipio())));
+	@SuppressWarnings("unchecked")
+	private void pesquisarMunicipio() {
+		Filtro filtro = new FiltroMunicipio();
+		filtro.adicionarParametro(new ParametroSimples(FiltroMunicipio.ID, new Integer(form.getMunicipio())));
 
-		// Pesquisa de acordo com os parâmetros informados no filtro
-		Collection colecaoMunicipio = Fachada.getInstancia()
-				.pesquisar(filtroMunicipio,Municipio.class.getName());
+		Collection<Municipio> colecao = getFachada().pesquisar(filtro, Municipio.class.getName());
 
-		// Verifica se a pesquisa retornou algum objeto para a coleção
-		if (colecaoMunicipio != null && !colecaoMunicipio.isEmpty()) {
-
-			// Obtém o objeto da coleção pesquisada
-			Municipio municipio = 
-				(Municipio) Util.retonarObjetoDeColecao(colecaoMunicipio);
+		if (colecao != null && !colecao.isEmpty()) {
+			Municipio municipio = (Municipio) Util.retonarObjetoDeColecao(colecao);
 
 			form.setMunicipio(municipio.getId().toString());
 			form.setDescricaoMunicipio(municipio.getNome());
-			
-
 		} else {
 			form.setMunicipio("");
 			form.setDescricaoMunicipio("Município inexistente");
 		}
 	}
 	
-	/**
-	 * Pesquisa Bairro 
-	 *
-	 * @author Rafael Pinto
-	 * @date 16/08/2006
-	 */
-	private void pesquisarBairro(FiltrarOrdemServicoActionForm form,HttpServletRequest httpServletRequest) {
-		
-		//[FS0013] - Verificar informação do munícipio
+	@SuppressWarnings("unchecked")
+	private void pesquisarBairro() {
 		String codigoMunicipio = form.getMunicipio();
-		if(codigoMunicipio == null || codigoMunicipio.equals("")){
-			throw new ActionServletException("atencao.filtrar_informar_municipio");	
+		if (codigoMunicipio == null || codigoMunicipio.equals("")) {
+			throw new ActionServletException("atencao.filtrar_informar_municipio");
 		}
-		
-		FiltroBairro filtroBairro = new FiltroBairro();
 
-		filtroBairro.adicionarParametro(
-			new ParametroSimples(FiltroBairro.CODIGO, 
-			new Integer(form.getCodigoBairro())));
+		Filtro filtro = new FiltroBairro();
+		filtro.adicionarParametro(new ParametroSimples(FiltroBairro.CODIGO, new Integer(form.getCodigoBairro())));
+		filtro.adicionarParametro(new ParametroSimples(FiltroBairro.MUNICIPIO_ID, new Integer(codigoMunicipio)));
 
-		filtroBairro.adicionarParametro(
-				new ParametroSimples(FiltroBairro.MUNICIPIO_ID,new Integer(codigoMunicipio)));
+		Collection<Bairro> colecao = getFachada().pesquisar(filtro, Bairro.class.getName());
 
-		// Pesquisa de acordo com os parâmetros informados no filtro
-		Collection colecaoBairro = Fachada.getInstancia()
-				.pesquisar(filtroBairro,Bairro.class.getName());
+		if (colecao != null && !colecao.isEmpty()) {
+			Bairro bairro = (Bairro) Util.retonarObjetoDeColecao(colecao);
 
-		// Verifica se a pesquisa retornou algum objeto para a coleção
-		if (colecaoBairro != null && !colecaoBairro.isEmpty()) {
+			montarAreaBairroPorId(bairro.getId());
 
-			// Obtém o objeto da coleção pesquisada
-			Bairro bairro = 
-				(Bairro) Util.retonarObjetoDeColecao(colecaoBairro);
-
-			this.montarAreaBairroPorId(httpServletRequest,new Integer(bairro.getId()));			
-			
-			form.setCodigoBairro(""+bairro.getCodigo());
-			form.setIdBairro(""+bairro.getId());
+			form.setCodigoBairro("" + bairro.getCodigo());
+			form.setIdBairro("" + bairro.getId());
 			form.setDescricaoBairro(bairro.getNome());
-
 		} else {
 			form.setCodigoBairro(null);
 			form.setDescricaoBairro("Bairro inexistente");
 		}
 	}
 
-	/**
-	 * Pesquisa Logradouro 
-	 *
-	 * @author Rafael Pinto
-	 * @date 16/08/2006
-	 */
-	private void pesquisarLogradouro(FiltrarOrdemServicoActionForm form) {
-		
-		FiltroLogradouro filtroLogradouro = new FiltroLogradouro();
+	@SuppressWarnings("unchecked")
+	private void pesquisarLogradouro() {
+		FiltroLogradouro filtro = new FiltroLogradouro();
+		filtro.adicionarParametro(new ParametroSimples(FiltroLogradouro.ID, new Integer(form.getLogradouro())));
 
-		filtroLogradouro.adicionarParametro(
-			new ParametroSimples(FiltroLogradouro.ID, 
-			new Integer(form.getLogradouro())));
+		Collection<Logradouro> colecao = getFachada().pesquisar(filtro, Logradouro.class.getName());
 
-		// Pesquisa de acordo com os parâmetros informados no filtro
-		Collection colecaoLogradouro = Fachada.getInstancia()
-				.pesquisar(filtroLogradouro,Logradouro.class.getName());
-
-		// Verifica se a pesquisa retornou algum objeto para a coleção
-		if (colecaoLogradouro != null && !colecaoLogradouro.isEmpty()) {
-
-			// Obtém o objeto da coleção pesquisada
-			Logradouro logradouro = 
-				(Logradouro) Util.retonarObjetoDeColecao(colecaoLogradouro);
+		if (colecao != null && !colecao.isEmpty()) {
+			Logradouro logradouro = (Logradouro) Util.retonarObjetoDeColecao(colecao);
 
 			form.setLogradouro(logradouro.getId().toString());
 			form.setDescricaoLogradouro(logradouro.getNome());
-
 		} else {
 			form.setLogradouro("");
 			form.setDescricaoLogradouro("Logradouro inexistente");
 		}
 	}
 
-	/**
-	 * Pesquisa Area do Bairro pelo Id 
-	 *
-	 * @author Rafael Pinto
-	 * @date 16/08/2006
-	 */
-	private void montarAreaBairroPorId(HttpServletRequest request,Integer id){
+	@SuppressWarnings("unchecked")
+	private void montarAreaBairroPorId(Integer id) {
+		Filtro filtro = new FiltroBairroArea();
+		filtro.adicionarParametro(new ParametroSimples(FiltroBairroArea.ID_BAIRRO, id));
 
-		
-		// Parte que passa as coleções necessárias no jsp
-		Collection colecaoAreaBairro = new ArrayList();
-			
-		FiltroBairroArea filtroBairroArea = new FiltroBairroArea();
-		filtroBairroArea.adicionarParametro(new ParametroSimples(FiltroBairroArea.ID_BAIRRO,id));
+		Collection<BairroArea> colecao = getFachada().pesquisar(filtro,BairroArea.class.getName());
 
-		colecaoAreaBairro = 
-			Fachada.getInstancia().pesquisar(filtroBairroArea, BairroArea.class.getName());
-
-		if (colecaoAreaBairro != null && !colecaoAreaBairro.isEmpty()) {
-			request.setAttribute("colecaoAreaBairro", colecaoAreaBairro);
+		if (colecao != null && !colecao.isEmpty()) {
+			request.setAttribute("colecaoAreaBairro", colecao);
 		} else {
-			throw new ActionServletException("atencao.naocadastrado", null,"Área do Bairro");
+			throw new ActionServletException("atencao.naocadastrado", null, "Área do Bairro");
 		}
-		
 	}
 
-	/**
-	 * Pesquisa Tipo Servico 
-	 *
-	 * @author Rafael Pinto
-	 * @date 17/08/2006
-	 */
-	private void pesquisarTipoServico(HttpServletRequest httpServletRequest){
-		
-		FiltroServicoTipo filtroServicoTipo = new FiltroServicoTipo();
-		
-		filtroServicoTipo.setConsultaSemLimites(true);
-		filtroServicoTipo.setCampoOrderBy(FiltroServicoTipo.DESCRICAO);
+	@SuppressWarnings("unchecked")
+	private void pesquisarServicoTipo() {
+		Filtro filtro = new FiltroServicoTipo();
+		filtro.setConsultaSemLimites(true);
+		filtro.setCampoOrderBy(FiltroServicoTipo.DESCRICAO);
+		filtro.adicionarParametro(new ParametroSimples(FiltroServicoTipo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-		Collection colecaoTipoServico = 
-			Fachada.getInstancia().pesquisar(filtroServicoTipo,ServicoTipo.class.getName());
+		String pesquisarEspecificacao = request.getParameter("pesquisarEspecificacao");
+		if (pesquisarEspecificacao != null && !pesquisarEspecificacao.equalsIgnoreCase("")) {
+			List<Integer> idsServicoTipo = obterIdsServicoTipoPorEspecificacao();
 
+			filtro.adicionarParametro(new ParametroSimplesIn(FiltroServicoTipo.ID, idsServicoTipo));
+		}
 
-		if (colecaoTipoServico == null || colecaoTipoServico.isEmpty()) {
-			throw new ActionServletException("atencao.naocadastrado", null,"Tipo de Serviço");
-		} else {
-			httpServletRequest.setAttribute("colecaoTipoServico",colecaoTipoServico);
+		if (nenhumTipoServicoSelecionado()) {
+			Collection<ServicoTipo> colecao = getFachada().pesquisar(filtro, ServicoTipo.class.getName());
+
+			if (colecao == null || colecao.isEmpty()) {
+				throw new ActionServletException("atencao.naocadastrado", null, "Tipo de Serviço");
+			} else {
+				request.setAttribute("colecaoTipoServico", colecao);
+			}
 		}
 	}
-	/**
-	 * Seta os request com os id encontrados 
-	 *
-	 * @author Rafael Pinto
-	 * @date 16/08/2006
-	 */
-	private void setaRequest(HttpServletRequest httpServletRequest,
-			FiltrarOrdemServicoActionForm form){
-		
-		//Imovel
-		if(form.getMatriculaImovel() != null && 
-			!form.getMatriculaImovel().equals("") && 
-			form.getInscricaoImovel() != null && 
-			!form.getInscricaoImovel().equals("")){
-			
-			httpServletRequest.setAttribute("matriculaImovelEncontrada","true");			
-		}
 
-		//Registro Atendimento
-		if(form.getNumeroRA() != null && 
-			!form.getNumeroRA().equals("") && 
-			form.getDescricaoRA() != null && 
-			!form.getDescricaoRA().equals("")){
-					
-			httpServletRequest.setAttribute("numeroRAEncontrada","true");
-		}
-		
-		//Documento Cobrança
-		if(form.getDocumentoCobranca() != null && 
-			!form.getDocumentoCobranca().equals("") && 
-			form.getDescricaoDocumentoCobranca() != null && 
-			!form.getDescricaoDocumentoCobranca().equals("")){
-					
-			httpServletRequest.setAttribute("documentoCobrancaEncontrada","true");
-		}
-		
-		//Codigo Cliente
-		if(form.getCodigoCliente() != null && 
-			!form.getCodigoCliente().equals("") && 
-			form.getNomeCliente() != null && 
-			!form.getNomeCliente().equals("")){
-							
-			httpServletRequest.setAttribute("codigoClienteEncontrada","true");
-		}
-
-		//Unidade Geração
-		if(form.getUnidadeGeracao() != null && 
-			!form.getUnidadeGeracao().equals("") && 
-			form.getDescricaoUnidadeGeracao() != null && 
-			!form.getDescricaoUnidadeGeracao().equals("")){
-								
-			httpServletRequest.setAttribute("unidadeGeracaoEncontrada","true");
-		}
-
-		//Unidade Atual
-		if(form.getUnidadeAtual() != null && 
-			!form.getUnidadeAtual().equals("") && 
-			form.getDescricaoUnidadeAtual() != null && 
-			!form.getDescricaoUnidadeAtual().equals("")){
-								
-			httpServletRequest.setAttribute("unidadeAtualEncontrada","true");
-		}
-		
-		//Unidade Superior
-		if(form.getUnidadeSuperior() != null && 
-			!form.getUnidadeSuperior().equals("") && 
-			form.getDescricaoUnidadeSuperior() != null && 
-			!form.getDescricaoUnidadeSuperior().equals("")){
-								
-			httpServletRequest.setAttribute("unidadeSuperiorEncontrada","true");
-		}
-		
-		//Municipio
-		if(form.getMunicipio() != null && 
-			!form.getMunicipio().equals("") && 
-			form.getDescricaoMunicipio() != null && 
-			!form.getDescricaoMunicipio().equals("")){
-								
-			httpServletRequest.setAttribute("municipioEncontrada","true");
-		}
-		
-		//Bairro
-		if(form.getCodigoBairro() != null && 
-			!form.getCodigoBairro().equals("") && 
-			form.getDescricaoBairro() != null && 
-			!form.getDescricaoBairro().equals("")){
-								
-			httpServletRequest.setAttribute("bairroEncontrada","true");
-		}
-
-		//Logradouro
-		if(form.getLogradouro() != null && 
-			!form.getLogradouro().equals("") && 
-			form.getDescricaoLogradouro() != null && 
-			!form.getDescricaoLogradouro().equals("")){
-								
-			httpServletRequest.setAttribute("logradouroEncontrado","true");
-		}
-		
-		
-		
+	private boolean nenhumTipoServicoSelecionado() {
+		return form.getTipoServicoSelecionados() == null || form.getTipoServicoSelecionados().length <= 0;
 	}
 	
+	@SuppressWarnings("unchecked")
+	private void pesquisarSolicitacaoTipo() {
+		Collection<SolicitacaoTipo> colecao = (Collection<SolicitacaoTipo>) sessao.getAttribute("colecaoSolicitacaoTipo");
+
+		if (colecao == null) {
+			Filtro filtro = new FiltroSolicitacaoTipo(FiltroSolicitacaoTipo.DESCRICAO);
+			filtro.setConsultaSemLimites(true);
+			filtro.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipo.INDICADOR_USO_SISTEMA, SolicitacaoTipo.INDICADOR_USO_SISTEMA_NAO));
+
+			colecao = getFachada().pesquisar(filtro, SolicitacaoTipo.class.getName());
+			
+			if (colecao == null || colecao.isEmpty()) {
+				throw new ActionServletException("atencao.entidade_sem_dados_para_selecao", null, "SOLICITACAO_TIPO");
+			} else {
+				sessao.setAttribute("colecaoSolicitacaoTipo", colecao);
+			}
+		}
+	}
 	
-	/**
-	 * Carrega coleção de Perfil do Imóvel
-	 *
-	 * @author Daniel Alves
-	 * @date 09/07/2010
-	 *
-	 * @param sessao
-	 * @param fachada
-	 */
-	private void getPerfilImovelCollection(HttpSession sessao, Fachada fachada) {
-		// Filtra Solicitação Tipo
-		FiltroImovelPerfil filtroImovelPerfil = new FiltroImovelPerfil();
-		filtroImovelPerfil.setCampoOrderBy(FiltroImovelPerfil.DESCRICAO);
+	private List<Integer> obterIdsServicoTipoPorEspecificacao() {
+		List<SolicitacaoTipoEspecificacao> colecaoEspecificacao = pesquisarSolicitacaoTipoEspecificacao();
+		
+		List<Integer> ids = new ArrayList<Integer>();
+		for (SolicitacaoTipoEspecificacao especificacao : colecaoEspecificacao) {
+			ids.add(especificacao.getServicoTipo().getId());
+		}
+		
+		return ids;
+	}
 
-		Collection<ImovelPerfil> colecaoPerfilImovel= fachada.pesquisar(filtroImovelPerfil, ImovelPerfil.class.getName());
+	@SuppressWarnings("unchecked")
+	private List<SolicitacaoTipoEspecificacao> pesquisarSolicitacaoTipoEspecificacao() {
+		Filtro filtro = new FiltroSolicitacaoTipoEspecificacao(FiltroSolicitacaoTipoEspecificacao.DESCRICAO);
+		filtro.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.SOLICITACAO_TIPO_ID, new Integer(form.getTipoSolicitacao())));
+		filtro.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroSolicitacaoTipoEspecificacao.SERVICO_TIPO);
+		filtro.setConsultaSemLimites(true);
 
-		if (colecaoPerfilImovel != null && !colecaoPerfilImovel.isEmpty()) {
-			sessao.setAttribute("colecaoPerfilImovel",	colecaoPerfilImovel);
+		return (List<SolicitacaoTipoEspecificacao>) getFachada().pesquisar(filtro, SolicitacaoTipoEspecificacao.class.getName());
+	}
+
+	private void configurarCamposEncontrados() {
+
+		if (form.getMatriculaImovel() != null && !form.getMatriculaImovel().equals("") && 
+				form.getInscricaoImovel() != null && !form.getInscricaoImovel().equals("")) {
+
+			request.setAttribute("matriculaImovelEncontrada", "true");
+		}
+
+		if (form.getNumeroRA() != null && !form.getNumeroRA().equals("") && form.getDescricaoRA() != null && !form.getDescricaoRA().equals("")) {
+			request.setAttribute("numeroRAEncontrada", "true");
+		}
+
+		if (form.getDocumentoCobranca() != null && !form.getDocumentoCobranca().equals("") && 
+				form.getDescricaoDocumentoCobranca() != null && !form.getDescricaoDocumentoCobranca().equals("")) {
+
+			request.setAttribute("documentoCobrancaEncontrada", "true");
+		}
+
+		if (form.getCodigoCliente() != null && !form.getCodigoCliente().equals("") && 
+				form.getNomeCliente() != null && !form.getNomeCliente().equals("")) {
+
+			request.setAttribute("codigoClienteEncontrada", "true");
+		}
+
+		if (form.getUnidadeGeracao() != null && !form.getUnidadeGeracao().equals("") && 
+				form.getDescricaoUnidadeGeracao() != null && !form.getDescricaoUnidadeGeracao().equals("")) {
+
+			request.setAttribute("unidadeGeracaoEncontrada", "true");
+		}
+
+		if (form.getUnidadeAtual() != null && !form.getUnidadeAtual().equals("") && 
+				form.getDescricaoUnidadeAtual() != null && !form.getDescricaoUnidadeAtual().equals("")) {
+
+			request.setAttribute("unidadeAtualEncontrada", "true");
+		}
+
+		if (form.getUnidadeSuperior() != null && !form.getUnidadeSuperior().equals("") && 
+				form.getDescricaoUnidadeSuperior() != null && !form.getDescricaoUnidadeSuperior().equals("")) {
+
+			request.setAttribute("unidadeSuperiorEncontrada", "true");
+		}
+
+		if (form.getMunicipio() != null && !form.getMunicipio().equals("") && 
+				form.getDescricaoMunicipio() != null && !form.getDescricaoMunicipio().equals("")) {
+
+			request.setAttribute("municipioEncontrada", "true");
+		}
+
+		if (form.getCodigoBairro() != null && !form.getCodigoBairro().equals("") && 
+				form.getDescricaoBairro() != null && !form.getDescricaoBairro().equals("")) {
+
+			request.setAttribute("bairroEncontrada", "true");
+		}
+
+		if (form.getLogradouro() != null && !form.getLogradouro().equals("") && 
+				form.getDescricaoLogradouro() != null && !form.getDescricaoLogradouro().equals("")) {
+
+			request.setAttribute("logradouroEncontrado", "true");
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void pesquisarPerfilImovel() {
+		Filtro filtro = new FiltroImovelPerfil();
+		filtro.setCampoOrderBy(FiltroImovelPerfil.DESCRICAO);
+
+		Collection<ImovelPerfil> colecao = getFachada().pesquisar(filtro, ImovelPerfil.class.getName());
+
+		if (colecao != null && !colecao.isEmpty()) {
+			sessao.setAttribute("colecaoPerfilImovel", colecao);
 		} else {
 			throw new ActionServletException("atencao.naocadastrado", null, "Perfil do Imovel");
 		}
 	}
-
 }
