@@ -20,7 +20,7 @@
 
 <script language="JavaScript" src="<bean:message key="caminho.js"/>scroll_horizontal.js"></script>
 
-<script language="JavaScript"><!--
+<script language="JavaScript">
 
 	function validarForm(){
    		var form = document.forms[0];
@@ -103,6 +103,7 @@
 		origemOrdemServicoInformado();
 		
 		form.situacaoOrdemServico.selectedIndex = 0;
+		form.tipoSolicitacao.selectedIndex = 0;
 		form.areaBairro.selectedIndex = 0;
 
 		//form.situacaoProgramacao[0].checked = true;
@@ -628,8 +629,19 @@
 			habilitaAreaBairro();
 		}
 	}
+
+	function carregarEspecificacao(){
+		
+		var form = document.forms[0];
+		
+		if (form.tipoSolicitacao.value > 0){
+			redirecionarSubmit('exibirFiltrarOrdemServicoAction.do?menu=sim&pesquisarEspecificacao=OK');
+		} else {
+			redirecionarSubmit('exibirFiltrarOrdemServicoAction.do?menu=sim');
+			}
+	}
 	
---></script>
+</script>
 
 </head>
 
@@ -862,7 +874,27 @@ OnDivScroll(document.forms[0].tipoServico, 6); OnDivScroll(document.forms[0].tip
 						</strong>
 					</td>
 				</tr>
-
+				
+				<tr>
+			        <td HEIGHT="30"><strong>Tipo de Solicitação:</strong></td>
+				        <td>
+							<logic:present name="generalizada">
+								<html:select property="tipoSolicitacao" style="width: 350px;font-size:11px;" tabindex="10" disabled="true">
+									<html:option value="<%=""+ConstantesSistema.NUMERO_NAO_INFORMADO%>">&nbsp;</html:option>
+									<html:options collection="colecaoSolicitacaoTipo" labelProperty="descricao" property="id"/>
+								</html:select>
+							</logic:present>
+							
+							<logic:notPresent name="generalizada">
+								<html:select property="tipoSolicitacao" style="width: 350px;font-size:11px;" tabindex="10" onchange="carregarEspecificacao()">
+									<html:option value="<%=""+ConstantesSistema.NUMERO_NAO_INFORMADO%>">&nbsp;</html:option>
+									<html:options collection="colecaoSolicitacaoTipo" labelProperty="descricao" property="id"/>
+								</html:select>
+							</logic:notPresent>
+						</td>
+			      </tr>
+			      
+				
 				<tr>
 					<td width="120">
 						<strong>Tipo de Servi&ccedil;o:<font color="#FF0000">*</font></strong>
@@ -877,11 +909,10 @@ OnDivScroll(document.forms[0].tipoServico, 6); OnDivScroll(document.forms[0].tip
 								<div id='disponiveis' style="OVERFLOW: auto;WIDTH: 190px;HEIGHT: 120px" onscroll="OnDivScroll(document.forms[0].tipoServico, 6);" >
 								
 									<html:select property="tipoServico" size="6" multiple="true" onfocus="OnSelectFocus(this, document.getElementById('disponiveis'), 6);">
-									
-										<html:options collection="colecaoTipoServico" 
-											labelProperty="descricao" 
-											property="id"/>
-									</html:select>
+										<logic:present name="colecaoTipoServico">
+											<html:options collection="colecaoTipoServico" labelProperty="descricao" property="id"/>
+										</logic:present>	
+								</html:select>
 									
 								</div>
 							</td>
@@ -935,7 +966,7 @@ OnDivScroll(document.forms[0].tipoServico, 6); OnDivScroll(document.forms[0].tip
 									<strong>Selecionados</strong>
 								</div>
 								
-								<div id='selecionados' style="OVERFLOW: auto;WIDTH: 190px;HEIGHT: 120px" onscroll="OnDivScroll(document.forms[0].tipoServicoSelecionados, 6);" >
+								<div id='selecionados' style="OVERFLOW: auto;WIDTH: 190px;HEIGHT: 120px" onscroll="OnDivScroll(document.forms[0].tipoServicoSelecionados, 6);">
 								
 									<html:select property="tipoServicoSelecionados" size="6" multiple="true" onfocus="OnSelectFocus(this, document.getElementById('selecionados'), 6);">
 									
