@@ -13,7 +13,8 @@
 <%@ page import="gcom.util.ConstantesSistema"%>
 <%@ page import="gcom.atendimentopublico.ordemservico.OrdemServico"%>
 
-<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script><html:javascript staticJavascript="false"  formName="FiltrarOrdemServicoActionForm"/>
+<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
+<html:javascript staticJavascript="false" formName="FiltrarOrdemServicoActionForm"/>
 
 <script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
 <script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js" ></script>
@@ -645,11 +646,12 @@
 
 </head>
 
-<body leftmargin="5" topmargin="5" onload="validaForm();window.focus();javascript:setarFoco('${requestScope.numeroOS}');
-OnDivScroll(document.forms[0].tipoServico, 6); OnDivScroll(document.forms[0].tipoServicoSelecionados, 6);">
+<body leftmargin="5" topmargin="5" onload="validaForm();window.focus();javascript:setarFoco('${requestScope.numeroOS}');">
 
 <div id="formDiv">
-<html:form action="/filtrarOrdemServicoAction" method="post">
+<html:form action="/filtrarOrdemServicoAction" method="post"
+name="FiltrarOrdemServicoActionForm"
+type="gcom.gui.atendimentopublico.ordemservico.FiltrarOrdemServicoActionForm">
 
 
 <%@ include file="/jsp/util/cabecalho.jsp"%>
@@ -894,93 +896,78 @@ OnDivScroll(document.forms[0].tipoServico, 6); OnDivScroll(document.forms[0].tip
 						</td>
 			      </tr>
 			      
-				
 				<tr>
-					<td width="120">
-						<strong>Tipo de Servi&ccedil;o:<font color="#FF0000">*</font></strong>
+					<td height="10" colspan="3">
+					<div align="right">
+					<hr>
+					</div>
+					<div align="right"></div>
 					</td>
+				</tr>
+				<tr>
+					<td width="120"><strong>Tipo de Servi&ccedil;o:<font color="#FF0000">*</font></strong></td>
 					<td colspan="2">
-					<table width="100%" border=0 cellpadding=0 cellspacing=0 align="left">
+					<table width="100%" border=0 cellpadding=0 cellspacing=0
+						align="left">
 						<tr>
 							<td width="175">
-							
-								<div align="left"><strong>Disponíveis</strong></div>
 
-								<div id='disponiveis' style="OVERFLOW: auto;WIDTH: 190px;HEIGHT: 120px" onscroll="OnDivScroll(document.forms[0].tipoServico, 6);" >
-								
-									<html:select property="tipoServico" size="6" multiple="true" onfocus="OnSelectFocus(this, document.getElementById('disponiveis'), 6);">
-										<logic:present name="colecaoTipoServico">
-											<html:options collection="colecaoTipoServico" labelProperty="descricao" property="id"/>
-										</logic:present>	
-								</html:select>
-									
-								</div>
-							</td>
+							<div align="left"><strong>Disponíveis</strong></div>
 
-							<td width="5" valign="center"><br>
-								<table width="50" align="center">
-									<tr>
-										<td align="center">
-											<input type="button" 
-												class="bottonRightCol"
-												onclick="javascript:MoverTodosDadosSelectMenu1PARAMenu2('FiltrarOrdemServicoActionForm', 'tipoServico', 'tipoServicoSelecionados');
-												OnDivScroll(document.forms[0].tipoServico, 6); OnDivScroll(document.forms[0].tipoServicoSelecionados, 6);"
-												value=" &gt;&gt; ">
-										</td>
-									</tr>
-	
-									<tr>
-										<td align="center">
-											<input type="button" 
-												class="bottonRightCol"
-												onclick="javascript:MoverDadosSelectMenu1PARAMenu2('FiltrarOrdemServicoActionForm', 'tipoServico', 'tipoServicoSelecionados');
-												OnDivScroll(document.forms[0].tipoServico, 6); OnDivScroll(document.forms[0].tipoServicoSelecionados, 6);"
-												value=" &nbsp;&gt;  ">
-										</td>
-									</tr>
-	
-									<tr>
-										<td align="center">
-											<input type="button" 
-												class="bottonRightCol"
-												onclick="javascript:MoverDadosSelectMenu2PARAMenu1('FiltrarOrdemServicoActionForm', 'tipoServico', 'tipoServicoSelecionados');
-												OnDivScroll(document.forms[0].tipoServico, 6); OnDivScroll(document.forms[0].tipoServicoSelecionados, 6);"
-												value=" &nbsp;&lt;  ">
-										</td>
-									</tr>
-	
-									<tr>
-										<td align="center">
-											<input type="button" 
-												class="bottonRightCol"
-												onclick="javascript:MoverTodosDadosSelectMenu2PARAMenu1('FiltrarOrdemServicoActionForm', 'tipoServico', 'tipoServicoSelecionados');
-												OnDivScroll(document.forms[0].tipoServico, 6); OnDivScroll(document.forms[0].tipoServicoSelecionados, 6);"
-												value=" &lt;&lt; ">
-										</td>
-									</tr>
-								</table>
+							<html:select property="tipoServico" size="6" multiple="true" style="width:190px" >
+								<html:options collection="colecaoTipoServico" labelProperty="descricao" property="id"/>
+							</html:select></td>
+
+							<td width="5" align="center"><br>
+							<table width="50" align="center">
+								<tr>
+									<td align="center"><input type="button" class="bottonRightCol"
+										onclick="javascript:MoverTodosDadosSelectMenu1PARAMenu2('FiltrarOrdemServicoActionForm', 'tipoServico', 'tipoServicoSelecionados'); enviarSelectMultiplo('FiltrarOrdemServicoActionForm','tipoServicoSelecionados');"
+										value=" &gt;&gt; "></td>
+								</tr>
+
+								<tr>
+									<td align="center"><input type="button" class="bottonRightCol"
+										onclick="javascript:MoverDadosSelectMenu1PARAMenu2('FiltrarOrdemServicoActionForm', 'tipoServico', 'tipoServicoSelecionados'); enviarSelectMultiplo('FiltrarOrdemServicoActionForm','tipoServicoSelecionados');"
+										value=" &nbsp;&gt;  "></td>
+								</tr>
+
+								<tr>
+									<td align="center"><input type="button" class="bottonRightCol"
+										onclick="javascript:MoverDadosSelectMenu2PARAMenu1('FiltrarOrdemServicoActionForm', 'tipoServico', 'tipoServicoSelecionados'); enviarSelectMultiplo('FiltrarOrdemServicoActionForm','tipoServicoSelecionados');"
+										value=" &nbsp;&lt;  "></td>
+								</tr>
+
+								<tr>
+									<td align="center"><input type="button" class="bottonRightCol"
+										onclick="javascript:MoverTodosDadosSelectMenu2PARAMenu1('FiltrarOrdemServicoActionForm', 'tipoServico', 'tipoServicoSelecionados'); enviarSelectMultiplo('FiltrarOrdemServicoActionForm','tipoServicoSelecionados');"
+										value=" &lt;&lt; "></td>
+								</tr>
+							</table>
 							</td>
 
 							<td>
-								<div align="left">
-									<strong>Selecionados</strong>
-								</div>
-								
-								<div id='selecionados' style="OVERFLOW: auto;WIDTH: 190px;HEIGHT: 120px" onscroll="OnDivScroll(document.forms[0].tipoServicoSelecionados, 6);">
-								
-									<html:select property="tipoServicoSelecionados" size="6" multiple="true" onfocus="OnSelectFocus(this, document.getElementById('selecionados'), 6);">
-									
-									</html:select>
-								
-								</div>
-								
-							</td>
+							<div align="left"><strong>Selecionados</strong></div>
+
+							<html:select property="tipoServicoSelecionados" size="6"
+								multiple="true" style="width:190px">								
+								<logic:present name="colecaoTipoServicoSelecionados">
+									<html:options collection="colecaoTipoServicoSelecionados" labelProperty="descricao" property="id" />
+								</logic:present>
+							</html:select></td>
 						</tr>
 					</table>
 					</td>
 				</tr>
-
-
+				<tr>
+					<td height="10" colspan="3">
+					<div align="right">
+					<hr>
+					</div>
+					<div align="right"></div>
+					</td>
+				</tr>
+				
  				<tr>
 		          <td>
 		            <strong>Indicadores do Tipo de Serviço:</strong>
@@ -1176,6 +1163,7 @@ OnDivScroll(document.forms[0].tipoServico, 6); OnDivScroll(document.forms[0].tip
 							tabindex="1"
 							property="unidadeAtual" 
 							size="4"
+							onkeyup="javascript:limparUnidadeSuperior();"
 							onkeypress="validaEnterComMensagem(event, 'exibirFiltrarOrdemServicoAction.do?objetoConsulta=6','unidadeAtual','Unidade Atual');return isCampoNumerico(event);"/> 
 							
 							<a href="javascript:setUnidade(2); chamarPopup('exibirPesquisarUnidadeOrganizacionalAction.do?tipoUnidade=unidadeAtual', 'unidadeAtual', null, null, 275, 480, '', document.forms[0].unidadeAtual);">
@@ -1221,6 +1209,7 @@ OnDivScroll(document.forms[0].tipoServico, 6); OnDivScroll(document.forms[0].tip
 							tabindex="1"
 							property="unidadeSuperior" 
 							size="4"
+							onkeyup="javascript:limparUnidadeAtual();"
 							onkeypress="validaEnterComMensagem(event, 'exibirFiltrarOrdemServicoAction.do?objetoConsulta=7','unidadeSuperior','Unidade Superior');return isCampoNumerico(event);"
 							/> 
 							

@@ -1,10 +1,12 @@
 package gcom.gui.atendimentopublico.ordemservico;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +47,7 @@ import gcom.cadastro.unidade.FiltroUnidadeOrganizacional;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.FiltroDocumentoCobranca;
+import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
@@ -72,10 +75,9 @@ public class ExibirFiltrarOrdemServicoAction extends GcomAction {
 		configurarQuantidadeDiasMesAtual();
 		configurarPesquisas();
 		configurarConsultasForm();
-
+		pesquisarServicoTipo();
 		pesquisarAtendimentoMotivoEncerramento();
 		pesquisarSolicitacaoTipo();
-		pesquisarServicoTipo();
 		pesquisarPerfilImovel();
 		pesquisarProjeto();
 
@@ -437,29 +439,35 @@ public class ExibirFiltrarOrdemServicoAction extends GcomAction {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void pesquisarServicoTipo() {
 		Filtro filtro = new FiltroServicoTipo();
 		filtro.setConsultaSemLimites(true);
 		filtro.setCampoOrderBy(FiltroServicoTipo.DESCRICAO);
 		filtro.adicionarParametro(new ParametroSimples(FiltroServicoTipo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
+		List<Integer> idsServicoTipo = null;
+		
 		String pesquisarEspecificacao = request.getParameter("pesquisarEspecificacao");
-		if (pesquisarEspecificacao != null && !pesquisarEspecificacao.equalsIgnoreCase("")) {
-			List<Integer> idsServicoTipo = obterIdsServicoTipoPorEspecificacao();
-
-			filtro.adicionarParametro(new ParametroSimplesIn(FiltroServicoTipo.ID, idsServicoTipo));
-		}
-
-		if (nenhumTipoServicoSelecionado()) {
-			Collection<ServicoTipo> colecao = getFachada().pesquisar(filtro, ServicoTipo.class.getName());
-
-			if (colecao == null || colecao.isEmpty()) {
-				throw new ActionServletException("atencao.naocadastrado", null, "Tipo de Serviço");
-			} else {
-				request.setAttribute("colecaoTipoServico", colecao);
+		if (pesquisarEspecificacao != null && !pesquisarEspecificacao.equalsIgnoreCase("")
+				|| !(form.getTipoSolicitacao() == null ||  form.getTipoSolicitacao().equals("-1"))) {
+			idsServicoTipo = obterIdsServicoTipoPorEspecificacao();
+			
+			if (idsServicoTipo != null) {
+				filtro.adicionarParametro(new ParametroSimplesIn(FiltroServicoTipo.ID, idsServicoTipo));
+				
 			}
+			
+			if (idsServicoTipo == null || idsServicoTipo.isEmpty()) {
+				throw new ActionServletException("atencao.naocadastrado", null, "Tipo de Serviço");
+					
+			}
+			
 		}
+		
+		Collection<ServicoTipo>  colecao = getFachada().pesquisar(filtro, ServicoTipo.class.getName());
+		request.setAttribute("colecaoTipoServico", colecao);
+
+
 	}
 
 	private boolean nenhumTipoServicoSelecionado() {
@@ -471,6 +479,11 @@ public class ExibirFiltrarOrdemServicoAction extends GcomAction {
 		Collection<SolicitacaoTipo> colecao = (Collection<SolicitacaoTipo>) sessao.getAttribute("colecaoSolicitacaoTipo");
 
 		if (colecao == null) {
+			
+			List<Integer> idsEspecificacoes = new ArrayList<Integer>();
+			idsEspecificacoes.addAll(obterIdsServicoTipoPorEspecificacao());
+			
+			
 			Filtro filtro = new FiltroSolicitacaoTipo(FiltroSolicitacaoTipo.DESCRICAO);
 			filtro.setConsultaSemLimites(true);
 			filtro.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipo.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
@@ -491,7 +504,9 @@ public class ExibirFiltrarOrdemServicoAction extends GcomAction {
 		
 		List<Integer> ids = new ArrayList<Integer>();
 		for (SolicitacaoTipoEspecificacao especificacao : colecaoEspecificacao) {
-			ids.add(especificacao.getServicoTipo().getId());
+			
+			if (especificacao.getServicoTipo() != null)
+				ids.add(especificacao.getServicoTipo().getId());
 		}
 		
 		return ids;
@@ -500,9 +515,12 @@ public class ExibirFiltrarOrdemServicoAction extends GcomAction {
 	@SuppressWarnings("unchecked")
 	private List<SolicitacaoTipoEspecificacao> pesquisarSolicitacaoTipoEspecificacao() {
 		Filtro filtro = new FiltroSolicitacaoTipoEspecificacao(FiltroSolicitacaoTipoEspecificacao.DESCRICAO);
-		filtro.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.SOLICITACAO_TIPO_ID, new Integer(form.getTipoSolicitacao())));
+		if (form.getTipoSolicitacao() != null)
+			filtro.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.SOLICITACAO_TIPO_ID, new Integer(form.getTipoSolicitacao())));
+		
 		filtro.adicionarParametro(new ParametroSimples(FiltroSolicitacaoTipoEspecificacao.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroSolicitacaoTipoEspecificacao.SERVICO_TIPO);
+		filtro.setInitializeLazy(false);
 		filtro.setConsultaSemLimites(true);
 
 		return (List<SolicitacaoTipoEspecificacao>) getFachada().pesquisar(filtro, SolicitacaoTipoEspecificacao.class.getName());
@@ -567,6 +585,35 @@ public class ExibirFiltrarOrdemServicoAction extends GcomAction {
 
 			request.setAttribute("logradouroEncontrado", "true");
 		}
+		
+		
+		Collection colecaoTipoServicoSelecionados = null;
+		
+		if(form.getTipoServicoSelecionados() != null){
+			
+			Integer[] aux = form.getTipoServicoSelecionados();
+			
+			List aux1 = Arrays.asList(aux);
+			colecaoTipoServicoSelecionados = aux1;
+			
+			FiltroServicoTipo filtroServicoTipo = new FiltroServicoTipo();
+			
+			filtroServicoTipo.adicionarParametro(new ParametroSimplesIn(FiltroServicoTipo.ID, colecaoTipoServicoSelecionados));
+			
+			filtroServicoTipo.setCampoOrderBy(FiltroServicoTipo.DESCRICAO);
+			// Pesquisa de acordo com os parâmetros informados no filtro
+			colecaoTipoServicoSelecionados = Fachada.getInstancia().pesquisar(
+					filtroServicoTipo, ServicoTipo.class.getName());
+			
+			
+			// Verifica se a pesquisa retornou algum objeto para a coleção
+			if (colecaoTipoServicoSelecionados != null && !colecaoTipoServicoSelecionados.isEmpty()) {
+				this.request.setAttribute("colecaoTipoServicoSelecionados", colecaoTipoServicoSelecionados);
+			}
+		}
+		
+		// Monta a colecao de tipos Servicos
+		// pesquisarServicoTipo(colecaoTipoServicoSelecionados);
 	}
 	
 	@SuppressWarnings("unchecked")
