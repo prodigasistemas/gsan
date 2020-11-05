@@ -353,6 +353,8 @@ public class Operacao extends TabelaAuxiliarAbreviada {
 	public static final Integer ATUALIZAR_IMPORTANCIA_LOGRADOURO = 1816;
 	public static final Integer ATUALIZAR_IMPORTANCIA_TIPO_SERVICO = 1819;
 
+	public static final int OPERACAO_SUBSTITUIR_RAMAL_DE_AGUA_EFETUAR = 16043;
+
 	private String descricaoAbreviada;
 	private Short indicadorRegistraTransacao;
 	private String caminhoUrl;

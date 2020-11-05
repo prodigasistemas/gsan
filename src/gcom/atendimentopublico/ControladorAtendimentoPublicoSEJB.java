@@ -212,13 +212,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0354] Efetuar Corte de Ligação de Água.
+	 * [UC0354] Efetuar Corte de Ligao de gua.
 	 * 
-	 * Permite efetuar Ligação de Água ou pelo menu ou pela funcionalidade
-	 * encerrar a Execução da ordem de serviço.
+	 * Permite efetuar Ligao de gua ou pelo menu ou pela funcionalidade
+	 * encerrar a Execuo da ordem de servio.
 	 * 
-	 * [FS0003] Validar Consumo Mínimo. [SB0001] Gerar Ligação de Água [SB0002]
-	 * Atualizar Imóvel Situação do Imovel.
+	 * [FS0003] Validar Consumo Mnimo. [SB0001] Gerar Ligao de gua [SB0002]
+	 * Atualizar Imvel Situao do Imovel.
 	 * 
 	 * @author Leandro Cavalcanti.
 	 * @date 03/08/2006
@@ -241,7 +241,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		
 		if (ligacaoAgua != null && imovel != null) {
 
-			// [SB0001] Gerar Ligação de Água
+			// [SB0001] Gerar Ligao de gua
 
 			// LAGU_ID
 			ligacaoAgua.setId(imovel.getId());
@@ -259,15 +259,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			Date dataCorrente = new Date();
 			ligacaoAgua.setUltimaAlteracao(dataCorrente);
 			
-			// ------------ REGISTRAR TRANSAÇÃO----------------------------
+			// ------------ REGISTRAR TRANSAO----------------------------
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 					Operacao.OPERACAO_LIGACAO_AGUA_EFETUAR,
 					ligacaoAgua.getId(), ligacaoAgua.getId(),
 					new UsuarioAcaoUsuarioHelper(usuarioLogado,
 							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 			registradorOperacao.registrarOperacao(ligacaoAgua);
-			// ------------ REGISTRAR TRANSAÇÃO----------------------------
-			//Alteração feita por Sávio Luiz
+			// ------------ REGISTRAR TRANSAO----------------------------
+			//Alterao feita por Svio Luiz
 			//Data: 25/05/2011
 			if (!colecaoLigacaoAguaBase.isEmpty()) {
 				getControladorUtil().atualizar(ligacaoAgua);
@@ -291,7 +291,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				ligacaoEsgotoSituacao.setId(LigacaoEsgotoSituacao.LIGADO);
 
 				imovel.setUltimaAlteracao(new Date());
-				// [SB0002] Atualizar Imóvel
+				// [SB0002] Atualizar Imvel
 				getControladorImovel()
 						.atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(
 								imovel, ligacaoEsgotoSituacao);
@@ -324,10 +324,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0354] Efetuar Ligação de Água.
+	 * [UC0354] Efetuar Ligao de gua.
 	 * 
-	 * Permite validar Ligação de Água Efetuar ou pelo menu ou pela
-	 * funcionalidade encerrar a Execução da ordem de serviço.
+	 * Permite validar Ligao de gua Efetuar ou pelo menu ou pela
+	 * funcionalidade encerrar a Execuo da ordem de servio.
 	 * 
 	 * 
 	 * 
@@ -349,13 +349,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0354] Efetuar Ligação de Água.
+	 * [UC0354] Efetuar Ligao de gua.
 	 * 
-	 * Permite validar Ligação de Água Exibir ou pelo menu ou pela
-	 * funcionalidade encerrar a Execução da ordem de serviço.
+	 * Permite validar Ligao de gua Exibir ou pelo menu ou pela
+	 * funcionalidade encerrar a Execuo da ordem de servio.
 	 * 
-	 * [FS0008] Verificar Situação Rede de Água na Quadra. [FS0007] Verificar
-	 * Situação do Imovel. [FS0002] Validar Situação de Água do Imóvel
+	 * [FS0008] Verificar Situao Rede de gua na Quadra. [FS0007] Verificar
+	 * Situao do Imovel. [FS0002] Validar Situao de gua do Imvel
 	 * 
 	 * @author Leandro Cavalcanti.
 	 * @date 12/07/2006
@@ -368,20 +368,21 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			boolean veioEncerrarOS) throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR LIGAÇÃO DE ÁGUA, não será necessário realizar as
-		 * validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR LIGAO DE GUA, no ser necessrio realizar as
+		 * validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
 		 */
 		Integer idOperacao = this.getControladorOrdemServico()
 				.pesquisarServicoTipoOperacao(ordem.getServicoTipo().getId());
+		
+		if (idOperacao.intValue() != Operacao.OPERACAO_SUBSTITUIR_RAMAL_DE_AGUA_EFETUAR 
+				&& idOperacao == null 
+				&& idOperacao.intValue() != Operacao.OPERACAO_LIGACAO_AGUA_EFETUAR_INT ){
 
-		if (idOperacao == null
-				|| idOperacao.intValue() != Operacao.OPERACAO_LIGACAO_AGUA_EFETUAR_INT) {
-
-			// [FS0001] Validar Ordem de Servico
+			// [FS0001] Validar Ordem de Servico 
 			// Caso 2
 			if (ordem.getServicoTipo().getId().intValue() != ServicoTipo.TIPO_LIGACAO_AGUA) {
 				throw new ControladorException(
@@ -390,7 +391,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
+		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
 		 * Rossiter Data: 26/04/2007
 		 * 
 		 * ===============================================================================
@@ -409,23 +410,27 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		Imovel imovel = ordem.getRegistroAtendimento().getImovel();
 
-		// [FS0002] Validar Situação de Água do Imóvel.
-		if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.POTENCIAL
-				.intValue()
-				&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.FACTIVEL
-						.intValue()
-				&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.EM_FISCALIZACAO
-						.intValue()) {
-
-			throw new ControladorException(
-					"atencao.situacao_validar_ligacao_agua_invalida_exibir",
-					null, imovel.getLigacaoAguaSituacao().getDescricao());
+		// [FS0002] Validar Situao de gua do Imvel.
+		
+		
+		if (idOperacao == null || idOperacao.intValue() != Operacao.OPERACAO_SUBSTITUIR_RAMAL_DE_AGUA_EFETUAR) {
+			
+			if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.POTENCIAL
+					.intValue()
+					&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.FACTIVEL
+							.intValue()
+					&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.EM_FISCALIZACAO
+							.intValue()) {
+	
+				throw new ControladorException(
+						"atencao.situacao_validar_ligacao_agua_invalida_exibir",
+						null, imovel.getLigacaoAguaSituacao().getDescricao());
+			}
 		}
-
 		/*
-		 * [FS0007] Verificar Situação Rede de Água na Quadra
+		 * [FS0007] Verificar Situao Rede de gua na Quadra
 		 * 
-		 * Integração com o conceito de face da quadra Raphael Rossiter em
+		 * Integrao com o conceito de face da quadra Raphael Rossiter em
 		 * 21/05/2009
 		 */
 		IntegracaoQuadraFaceHelper integracao = this.getControladorLocalidade()
@@ -438,7 +443,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							+ "");
 		}
 
-		// [FS0006] Verificar Situação do Imovel
+		// [FS0006] Verificar Situao do Imovel
 		if (imovel.getIndicadorExclusao() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 			throw new ControladorException(
 					"atencao.situacao_imovel_indicador_exclusao", null, imovel
@@ -452,13 +457,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0353] Efetuar Ligação de Esgoto.
+	 * [UC0353] Efetuar Ligao de Esgoto.
 	 * 
-	 * Permite validar Ligação de esgoto Exibir ou pelo menu ou pela
-	 * funcionalidade encerrar a Execução da ordem de serviço.
+	 * Permite validar Ligao de esgoto Exibir ou pelo menu ou pela
+	 * funcionalidade encerrar a Execuo da ordem de servio.
 	 * 
-	 * [FS0008] Verificar Situação Rede de Esgoto na Quadra. [FS0007] Verificar
-	 * Situação do Imovel. [FS0002] Validar Situação de Esgoto do Imóvel
+	 * [FS0008] Verificar Situao Rede de Esgoto na Quadra. [FS0007] Verificar
+	 * Situao do Imovel. [FS0002] Validar Situao de Esgoto do Imvel
 	 * 
 	 * @author Leandro Cavalcanti.
 	 * @date 12/07/2006
@@ -471,9 +476,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			boolean veioEncerrarOS) throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR LIGAÇÃO DE ESGOTO, não será necessário realizar as
-		 * validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR LIGAO DE ESGOTO, no ser necessrio realizar as
+		 * validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
@@ -494,7 +499,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
+		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
 		 * Rossiter Data: 26/04/2007
 		 * 
 		 * ===============================================================================
@@ -512,7 +517,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		Imovel imovel = ordem.getRegistroAtendimento().getImovel();
 
-		// [FS0002] Validar Situação de Água do Imóvel.
+		// [FS0002] Validar Situao de gua do Imvel.
 		if (imovel.getLigacaoEsgotoSituacao().getId().intValue() != LigacaoEsgotoSituacao.POTENCIAL
 				.intValue()
 				&& imovel.getLigacaoEsgotoSituacao().getId().intValue() != LigacaoEsgotoSituacao.FACTIVEL
@@ -526,9 +531,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * [FS0003] Verificar Situação Rede de Água na Quadra
+		 * [FS0003] Verificar Situao Rede de gua na Quadra
 		 * 
-		 * Integração com o conceito de face da quadra Raphael Rossiter em
+		 * Integrao com o conceito de face da quadra Raphael Rossiter em
 		 * 17/09/2009
 		 */
 		IntegracaoQuadraFaceHelper integracao = this.getControladorLocalidade()
@@ -542,7 +547,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							+ "");
 		}
 
-		// [FS0006] Verificar Situação do Imovel
+		// [FS0006] Verificar Situao do Imovel
 		if (imovel.getIndicadorExclusao() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 			throw new ControladorException(
 					"situacao_imovel_indicador_exclusao_esgoto", null, imovel
@@ -557,9 +562,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * Ligação de esgoto do Imóvel no momento da atualização. // [UC0105] -
-	 * Obter Consumo Mínimo da Ligação //[FS0003] Validar Consumo Minimo
+	 * Este mtodo se destina a validar todas as situaes e particularidades da
+	 * Ligao de esgoto do Imvel no momento da atualizao. // [UC0105] -
+	 * Obter Consumo Mnimo da Ligao //[FS0003] Validar Consumo Minimo
 	 * 
 	 * @author Leandro Cavalcanti
 	 * @date 20/07/2006
@@ -573,17 +578,17 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// [FS0003] Validar Consumo Minimo
 		/*
 		 * atencao.situacao_volume_minimo_fixado_nao_multiplo= Valor do volume
-		 * Mínimo Fixado deve ser alterado para {0} valor multiplo de quantidade
+		 * Mnimo Fixado deve ser alterado para {0} valor multiplo de quantidade
 		 * de economias {1}.
 		 */
 
-		// [UC0105] - Obter Consumo Mínimo da Ligação
+		// [UC0105] - Obter Consumo Mnimo da Ligao
 		int consumoMinimoObtido = getControladorMicromedicao()
 				.obterConsumoMinimoLigacao(imovel, null);
 		Integer consumoMinimoObtido1 = new Integer(consumoMinimoObtido);
 
-		// Verificar se o volume Mínimo informado seja menor que o valor
-		// Mínimo obtido para Imóvel.
+		// Verificar se o volume Mnimo informado seja menor que o valor
+		// Mnimo obtido para Imvel.
 		if (volumeMinimoFixado != null && !volumeMinimoFixado.trim().equals("")) {
 			if (!volumeMinimoFixado.trim().equalsIgnoreCase(
 					ConstantesSistema.SET_ZERO.toString())) {
@@ -598,7 +603,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			}
 		} else {
 			throw new ControladorException("atencao.requerid", null,
-					"Situação da Ligação de Esgoto");
+					"Situao da Ligao de Esgoto");
 		}
 
 		return new Integer(volumeMinimoFixado);
@@ -606,11 +611,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * Ligação de agua do Imóvel no momento da exibição.
+	 * Este mtodo se destina a validar todas as situaes e particularidades da
+	 * Ligao de agua do Imvel no momento da exibio.
 	 * 
-	 * [FS0001] Verificar existência da matrícula do Imóvel. [FS0002] Verificar
-	 * Situação do Imovel. [FS0003] Validar Situação de Esgoto do Imóvel.
+	 * [FS0001] Verificar existncia da matrcula do Imvel. [FS0002] Verificar
+	 * Situao do Imovel. [FS0003] Validar Situao de Esgoto do Imvel.
 	 * 
 	 * @author Rafael Pinto
 	 * @date 20/07/2006
@@ -688,7 +693,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
 
-		// [FS0002] Verificar Situação do Imovel.
+		// [FS0002] Verificar Situao do Imovel.
 		if (imovel.getIndicadorExclusao() != null
 				&& imovel.getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 
@@ -699,10 +704,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		if (imovel.getLigacaoAgua() == null) {
 			throw new ControladorException("atencao.naocadastrado", null,
-					"Ligacao de Água");
+					"Ligacao de gua");
 		}
 
-		// [FS003] Validar Situação de Água do Imóvel.
+		// [FS003] Validar Situao de gua do Imvel.
 		if (imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.POTENCIAL
 				.intValue()
 				|| imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.FACTIVEL
@@ -716,7 +721,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
+	 * Este mtodo se destina a validar todas as situaes e particularidades da
 	 * retirada de hidrometro
 	 * 
 	 * @author Rafael Pinto
@@ -728,9 +733,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			boolean veioEncerrarOS) throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR RETIRADA HIDROMETRO, não será necessário realizar as
-		 * validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR RETIRADA HIDROMETRO, no ser necessrio realizar as
+		 * validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
@@ -753,7 +758,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
+		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
 		 * Rossiter Data: 26/04/2007
 		 * 
 		 * ===============================================================================
@@ -779,7 +784,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			}
 		}
 
-		// [FS0002] Verificar Situação do Imovel.
+		// [FS0002] Verificar Situao do Imovel.
 		if (imovel.getIndicadorExclusao() != null
 				&& imovel.getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 
@@ -788,10 +793,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							.getId().toString());
 		}
 
-		// // [FS0003] - Verificar Situação de Agua ou Esgoto.
-		// // [FS0004] - Verificar a existência de hidrômetro no Imóvel/Ligação
+		// // [FS0003] - Verificar Situao de Agua ou Esgoto.
+		// // [FS0004] - Verificar a existncia de hidrmetro no Imvel/Ligao
 		// de
-		// // Água
+		// // gua
 		//
 		// // Caso 1
 		// if (servicoTipo == ServicoTipo.TIPO_RETIRADA_HIDROMETRO_POCO) {
@@ -848,7 +853,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
+	 * Este mtodo se destina a validar todas as situaes e particularidades da
 	 * remanejamento de hidrometro
 	 * 
 	 * @author Rafael Pinto
@@ -861,9 +866,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR REMANEJAMENTO HIDROMETRO, não será necessário
-		 * realizar as validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR REMANEJAMENTO HIDROMETRO, no ser necessrio
+		 * realizar as validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
@@ -886,7 +891,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
+		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
 		 * Rossiter Data: 26/04/2007
 		 * 
 		 * ===============================================================================
@@ -913,7 +918,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			}
 		}
 
-		// [FS0002] Verificar Situação do Imovel.
+		// [FS0002] Verificar Situao do Imovel.
 		if (imovel.getIndicadorExclusao() != null
 				&& imovel.getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 
@@ -924,10 +929,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		if (imovel.getLigacaoAgua() == null) {
 			throw new ControladorException("atencao.naocadastrado", null,
-					"Ligação de Água");
+					"Ligao de gua");
 		}
 
-		// [FS0003] - Verificar a existência de hidrômetro no Imóvel
+		// [FS0003] - Verificar a existncia de hidrmetro no Imvel
 
 		// Caso 1
 		/*
@@ -967,8 +972,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades do
-	 * substituição de hidrometro
+	 * Este mtodo se destina a validar todas as situaes e particularidades do
+	 * substituio de hidrometro
 	 * 
 	 * @author Rafael Pinto
 	 * @date 31/07/2006
@@ -979,9 +984,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			boolean veioEncerrarOS) throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR SUBSTITUICAO HIDROMETRO, não será necessário
-		 * realizar as validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR SUBSTITUICAO HIDROMETRO, no ser necessrio
+		 * realizar as validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
@@ -1005,7 +1010,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
+		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
 		 * Rossiter Data: 26/04/2007
 		 * 
 		 * ===============================================================================
@@ -1034,7 +1039,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			}
 		}
 
-		// [FS0007] Verificar Situação do Imovel.
+		// [FS0007] Verificar Situao do Imovel.
 		if (imovel.getIndicadorExclusao() != null
 				&& imovel.getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 
@@ -1043,7 +1048,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							.getId().toString());
 		}
 
-		// [FS0008] - Verificar existência de hidrômetro no tipo de medição
+		// [FS0008] - Verificar existncia de hidrmetro no tipo de medio
 
 		// Caso 1
 		if (ordemServico.getRegistroAtendimento() == null
@@ -1064,7 +1069,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			}
 		}
 
-		// [FS0002] Verificar Situação do hidrometro.
+		// [FS0002] Verificar Situao do hidrometro.
 		/*
 		 * Hidrometro hidrometro =
 		 * hidrometroInstalacaoHistorico.getHidrometro();
@@ -1082,8 +1087,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades do
-	 * restabelecimento Ligação de agua
+	 * Este mtodo se destina a validar todas as situaes e particularidades do
+	 * restabelecimento Ligao de agua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 29/07/2006
@@ -1095,9 +1100,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR RESTABELECIMENTO LIGAÇÃO DE ÁGUA, não será
-		 * necessário realizar as validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR RESTABELECIMENTO LIGAO DE GUA, no ser
+		 * necessrio realizar as validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
@@ -1118,7 +1123,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
+		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
 		 * Rossiter Data: 26/04/2007
 		 * 
 		 * ===============================================================================
@@ -1137,7 +1142,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
 
-		// [FS0002] Verificar Situação do Imovel.
+		// [FS0002] Verificar Situao do Imovel.
 		if (imovel.getIndicadorExclusao() != null
 				&& imovel.getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 
@@ -1148,10 +1153,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		if (imovel.getLigacaoAgua() == null) {
 			throw new ControladorException("atencao.naocadastrado", null,
-					"Ligação de Água");
+					"Ligao de gua");
 		}
 
-		// [FS0003] Verificar a situação de Água
+		// [FS0003] Verificar a situao de gua
 		if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.SUPRIMIDO
 				.intValue()
 				&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.SUPR_PARC_PEDIDO
@@ -1169,8 +1174,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades de
-	 * corte adimistrativo de Ligação de Água
+	 * Este mtodo se destina a validar todas as situaes e particularidades de
+	 * corte adimistrativo de Ligao de gua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 29/07/2006
@@ -1182,9 +1187,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR CORTE ADMINISTRATIVO LIGAÇÃO DE ÁGUA, não será
-		 * necessário realizar as validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR CORTE ADMINISTRATIVO LIGAO DE GUA, no ser
+		 * necessrio realizar as validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
@@ -1205,7 +1210,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
+		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
 		 * Rossiter Data: 26/04/2007
 		 * 
 		 * ===============================================================================
@@ -1233,7 +1238,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
 		Imovel imovel = ordemServico.getImovel();
 
-		// [FS0002] Verificar Situação do Imovel.
+		// [FS0002] Verificar Situao do Imovel.
 		if (imovel.getIndicadorExclusao() != null
 				&& imovel.getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 
@@ -1244,10 +1249,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		if (imovel.getLigacaoAgua() == null) {
 			throw new ControladorException("atencao.naocadastrado", null,
-					"Ligação de Água");
+					"Ligao de gua");
 		}
 
-		// [FS0003] Verificar a situação de Água
+		// [FS0003] Verificar a situao de gua
 		int idLigacaoAguaSituacao = imovel.getLigacaoAguaSituacao().getId()
 				.intValue();
 		if (idLigacaoAguaSituacao != LigacaoAguaSituacao.LIGADO.intValue()
@@ -1267,8 +1272,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades de
-	 * reLigação de Água
+	 * Este mtodo se destina a validar todas as situaes e particularidades de
+	 * reLigao de gua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 29/07/2006
@@ -1279,9 +1284,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
  boolean veioEncerrarOS) throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR RELIGAÇÃO LIGAÇÃO DE ÁGUA, não será necessário
-		 * realizar as validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR RELIGAO LIGAO DE GUA, no ser necessrio
+		 * realizar as validaes abaixo.
 		 */
 		Integer idOperacao = this.getControladorOrdemServico().pesquisarServicoTipoOperacao(ordemServico.getServicoTipo().getId());
 
@@ -1309,10 +1314,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		if (imovel.getLigacaoAgua() == null) {
-			throw new ControladorException("atencao.naocadastrado", null, "Ligação de Água");
+			throw new ControladorException("atencao.naocadastrado", null, "Ligao de gua");
 		}
 
-		// [FS0003] Verificar a situação de Água
+		// [FS0003] Verificar a situao de gua
 		if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.CORTADO.intValue()) {
 
 			throw new ControladorException("atencao.situacao_ligacao_agua_invalida", null, "" + imovel.getId(), "Cortado");
@@ -1324,8 +1329,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades do
-	 * supressao Ligação de agua
+	 * Este mtodo se destina a validar todas as situaes e particularidades do
+	 * supressao Ligao de agua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 28/07/2006
@@ -1336,9 +1341,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			boolean veioEncerrarOS) throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR SUPRESSÃO LIGAÇÃO DE ÁGUA, não será necessário
-		 * realizar as validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR SUPRESSO LIGAO DE GUA, no ser necessrio
+		 * realizar as validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
@@ -1359,7 +1364,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
+		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
 		 * Rossiter Data: 26/04/2007
 		 * 
 		 * ===============================================================================
@@ -1388,7 +1393,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
 		Imovel imovel = ordemServico.getImovel();
 
-		// [FS0002] Verificar Situação do Imovel.
+		// [FS0002] Verificar Situao do Imovel.
 		if (imovel.getIndicadorExclusao() != null
 				&& imovel.getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 
@@ -1399,10 +1404,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		if (imovel.getLigacaoAgua() == null) {
 			throw new ControladorException("atencao.naocadastrado", null,
-					"Ligação de Água");
+					"Ligao de gua");
 		}
 
-		// [FS0003] Verificar a situação de Água
+		// [FS0003] Verificar a situao de gua
 		if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.LIGADO
 				.intValue()
 				&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.LIGADO_EM_ANALISE
@@ -1427,9 +1432,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0367]Atualizar Ligação de Agua no sistema.
+	 * [UC0367]Atualizar Ligao de Agua no sistema.
 	 * 
-	 * [SB002] Atualiza Ligação de agua.
+	 * [SB002] Atualiza Ligao de agua.
 	 * 
 	 * @author Rafael Pinto
 	 * @date 20/07/2006
@@ -1444,10 +1449,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		
 		if (ligacaoAgua != null) {
 
-			// item [FS0001] Verificar existência da matrícula do Imóvel.
+			// item [FS0001] Verificar existncia da matrcula do Imvel.
 			if (ligacaoAgua.getImovel() != null) {
 
-				// item [FS0002] Verificar Situação do Imovel
+				// item [FS0002] Verificar Situao do Imovel
 				if (ligacaoAgua.getImovel().getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException(
@@ -1455,7 +1460,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							ligacaoAgua.getImovel().getId() + "");
 				}
 
-				// item [FS0003] Validar Situação de Agua do Imovel
+				// item [FS0003] Validar Situao de Agua do Imovel
 				if (ligacaoAgua.getImovel().getLigacaoAguaSituacao().getId()
 						.intValue() == LigacaoAguaSituacao.POTENCIAL.intValue()
 						|| ligacaoAgua.getImovel().getLigacaoAguaSituacao()
@@ -1539,18 +1544,18 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			this.verificarLigacaoAguaControleConcorrencia(ligacaoAgua);
 
 			/*
-			 * [UC0107] Registrar Transação
+			 * [UC0107] Registrar Transao
 			 */
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 					Operacao.OPERACAO_ATUALIZAR_LIGACAO_AGUA, ligacaoAgua
 							.getId(), ligacaoAgua.getId(),
 					new UsuarioAcaoUsuarioHelper(usuario,
 							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-			// [UC0107] -Fim- Registrar Transação
+			// [UC0107] -Fim- Registrar Transao
 
 			registradorOperacao.registrarOperacao(ligacaoAgua);
 
-			// Efetuando uma Ligação de Agua
+			// Efetuando uma Ligao de Agua
 			getControladorUtil().atualizar(ligacaoAgua);
 
 			HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = ligacaoAgua
@@ -1626,8 +1631,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		HidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoAtual = (HidrometroInstalacaoHistorico) Util
 				.retonarObjetoDeColecao(colecaoHidrometroInstalacaoHistorico);
 
-		// Verificar se categoria já foi atualizada por outro usuário durante
-		// esta atualização
+		// Verificar se categoria j foi atualizada por outro usurio durante
+		// esta atualizao
 		if (hidrometroInstalacaoHistoricoAtual.getUltimaAlteracao().after(
 				hidrometroInstalacaoHistorico.getUltimaAlteracao())) {
 
@@ -1662,8 +1667,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		Hidrometro hidrometroAtual = (Hidrometro) Util
 				.retonarObjetoDeColecao(colecaoHidrometro);
 
-		// Verificar se categoria já foi atualizada por outro usuário durante
-		// esta atualização
+		// Verificar se categoria j foi atualizada por outro usurio durante
+		// esta atualizao
 		if (hidrometroAtual.getUltimaAlteracao().after(
 				hidrometro.getUltimaAlteracao())) {
 
@@ -1674,10 +1679,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0354] Efetuar Corte de Ligação de Água.
+	 * [UC0354] Efetuar Corte de Ligao de gua.
 	 * 
-	 * Permite efetuar Ligação de Esgoto ou pelo menu ou pela funcionalidade
-	 * encerrar a Execução da ordem de serviço.
+	 * Permite efetuar Ligao de Esgoto ou pelo menu ou pela funcionalidade
+	 * encerrar a Execuo da ordem de servio.
 	 * 
 	 * @author Leandro Cavalcanti.
 	 * @date 12/07/2006
@@ -1697,14 +1702,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		String qtdParcelas = integracaoComercialHelper.getQtdParcelas();
 
 		/*
-		 * [UC0107] Registrar Transação
+		 * [UC0107] Registrar Transao
 		 */
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_LIGACAO_ESGOTO_EFETUAR, imovel.getId(),
 				imovel.getId(), new UsuarioAcaoUsuarioHelper(
 						integracaoComercialHelper.getUsuarioLogado(),
 						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		// [UC0107] -Fim- Registrar Transação
+		// [UC0107] -Fim- Registrar Transao
 
 		getControladorMicromedicao().validarImovelEmCampo(imovel.getId());
 		
@@ -1756,12 +1761,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * inserção da especificacao situacao criterio imovel.
+	 * Este mtodo se destina a validar todas as situaes e particularidades da
+	 * insero da especificacao situacao criterio imovel.
 	 * 
-	 * [FS0001] Validar especificação da situaçãoo já existente [FS0002] Validar
-	 * existência de hidrômetro na Ligação Água [FS0003] Validar existência de
-	 * hidrômetro no Poço
+	 * [FS0001] Validar especificao da situaoo j existente [FS0002] Validar
+	 * existncia de hidrmetro na Ligao gua [FS0003] Validar existncia de
+	 * hidrmetro no Poo
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/08/2006
@@ -1776,7 +1781,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// Verificar objeto a ser inserido na base.
 		if (especImovSitCriterio != null) {
 
-			// [FS0002] Validar existência de hidrômetro na Ligação Água
+			// [FS0002] Validar existncia de hidrmetro na Ligao gua
 
 			// Caso 1
 			if (especImovSitCriterio.getLigacaoAguaSituacao() != null) {
@@ -1812,7 +1817,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				}
 			}
 
-			// [FS0003] Validar existência de hidrômetro no Poço
+			// [FS0003] Validar existncia de hidrmetro no Poo
 
 			// Caso 1
 			if (especImovSitCriterio.getLigacaoEsgotoSituacao() != null) {
@@ -1847,11 +1852,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				}
 			}
 
-			// Testar se nova especificacao pode ser inserido na coleção
+			// Testar se nova especificacao pode ser inserido na coleo
 			if (colecaoEspecificacaoImovSitCriterio != null
 					&& !colecaoEspecificacaoImovSitCriterio.isEmpty()) {
 
-				// Varre coleção de especificacao da grid (ainda não inseridos
+				// Varre coleo de especificacao da grid (ainda no inseridos
 				// na base)
 				for (Iterator iter = colecaoEspecificacaoImovSitCriterio
 						.iterator(); iter.hasNext();) {
@@ -1859,7 +1864,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					EspecificacaoImovSitCriterio element = (EspecificacaoImovSitCriterio) iter
 							.next();
 
-					// [FS0001] Validar especificação da situação já existente
+					// [FS0001] Validar especificao da situao j existente
 					if (element.equals(especImovSitCriterio)) {
 						sessionContext.setRollbackOnly();
 						throw new ControladorException(
@@ -1878,12 +1883,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0365] Efetuar Remanejamento de hidrômetro [SB0001] Atualizar Histórico
-	 * de instalação do hidrômetro
+	 * [UC0365] Efetuar Remanejamento de hidrmetro [SB0001] Atualizar Histrico
+	 * de instalao do hidrmetro
 	 * 
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rmulo Aurlio
 	 * @date 30/06/2006
 	 * 
 	 * @param hidrometroInstalacaoHistorico
@@ -1907,7 +1912,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		ordemServico.setUltimaAlteracao(new Date());
 
-		// [SB006]Atualizar Ordem de Serviço
+		// [SB006]Atualizar Ordem de Servio
 		if (!integracaoComercialHelper.isVeioEncerrarOS()
 				&& ordemServico.getServicoTipo().getDebitoTipo() != null) {
 
@@ -1930,14 +1935,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0357] Efetuar ReLigação de Água
+	 * [UC0357] Efetuar ReLigao de gua
 	 * 
-	 * Permite efetuar reLigação da Ligação de Água ou pelo menu ou pela
-	 * funcionalidade encerrar a Execução da ordem de Serviço.
+	 * Permite efetuar reLigao da Ligao de gua ou pelo menu ou pela
+	 * funcionalidade encerrar a Execuo da ordem de Servio.
 	 * 
-	 * [SB0001] Atualizar Imóvel/Ligação de Água/Ligação de Esgoto
+	 * [SB0001] Atualizar Imvel/Ligao de gua/Ligao de Esgoto
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rmulo Aurlio
 	 * @date 07/07/2006
 	 * 
 	 * @param ordemServico
@@ -1952,7 +1957,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		LigacaoAgua ligacaoAgua = integracaoComercialHelper.getLigacaoAgua();
 
 		/*
-		 * [UC0107] Registrar Transação
+		 * [UC0107] Registrar Transao
 		 * 
 		 */
 
@@ -1962,9 +1967,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						integracaoComercialHelper.getUsuarioLogado(),
 						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
-		// [UC0107] -Fim- Registrar Transação
+		// [UC0107] -Fim- Registrar Transao
 
-		// [SB0001] - Atualizar Imóvel/Ligação de Água/Ligação de Esgoto
+		// [SB0001] - Atualizar Imvel/Ligao de gua/Ligao de Esgoto
 
 		// Caso 1
 		Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
@@ -2041,10 +2046,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0363] Efetuar Retirada de hidrômetro [SB0001] Atualizar Histórico de
-	 * instalação do hidrômetro
+	 * [UC0363] Efetuar Retirada de hidrmetro [SB0001] Atualizar Histrico de
+	 * instalao do hidrmetro
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenrio
 	 * @date 30/06/2006
 	 * 
 	 * @param hidrometroInstalacaoHistorico
@@ -2071,7 +2076,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		getControladorUtil().atualizar(hidrometroInstalacaoHistorico.getHidrometro());
 
 		try {
-			// Caso o tipo de medição seja igual a Ligação de Água, atualiza as
+			// Caso o tipo de medio seja igual a Ligao de gua, atualiza as
 			// colunas da tabela LIGACAO_AGUA
 			// Integer id = hidrometroInstalacaoHistorico.getId();
 			if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId().equals(
@@ -2082,7 +2087,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 								hidrometroInstalacaoHistorico.getLigacaoAgua()
 										.getId(), null);
 
-				// Caso o tipo de medição seja igual a Poço, atualiza as colunas
+				// Caso o tipo de medio seja igual a Poo, atualiza as colunas
 				// da tabela POCO
 			} else if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId()
 					.equals(MedicaoTipo.POCO)) {
@@ -2096,7 +2101,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			OrdemServico ordemServico = integracaoComercialHelper
 					.getOrdemServico();
 			if (ordemServico != null) {
-				// [SB006]Atualizar Ordem de Serviço
+				// [SB006]Atualizar Ordem de Servio
 				if (!integracaoComercialHelper.isVeioEncerrarOS()
 						&& ordemServico.getServicoTipo().getDebitoTipo() != null) {
 					getControladorOrdemServico().atualizaOSGeral(
@@ -2124,13 +2129,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0365] Efetuar Instalação de hidrômetro
+	 * [UC0365] Efetuar Instalao de hidrmetro
 	 * 
-	 * [SB0001] Gerar Histórico de instalação do hidrômetro [SB0002] Atualizar
-	 * Imóvel/Ligação de Água [SB0003] Atualizar situação de hidrômetro na
+	 * [SB0001] Gerar Histrico de instalao do hidrmetro [SB0002] Atualizar
+	 * Imvel/Ligao de gua [SB0003] Atualizar situao de hidrmetro na
 	 * tabela HIDROMETRO
 	 * 
-	 * @author Ana Maria, Ivan Sérgio
+	 * @author Ana Maria, Ivan Srgio
 	 * @date 12/07/2006, 24/03/2008
 	 * @alteracao: Retirar os dois indicadores: indicadorTrocaProtecao e
 	 *             indicadorTrocaRegistro; Gerar Boletim de Ordens de Servico
@@ -2167,14 +2172,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		validacaoInstalacaoHidrometro(hidrometroInstalacaoHistorico.getHidrometro().getNumero());
 
 		/*
-		 * [UC0107] Registrar Transação
+		 * [UC0107] Registrar Transao
 		 */
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_INSTALACAO_HIDROMETRO_EFETUAR,
 				imovel.getId(), imovel.getId(), new UsuarioAcaoUsuarioHelper(
 						integracaoComercialHelper.getUsuarioLogado(),
 						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		// [UC0107] -Fim- Registrar Transação
+		// [UC0107] -Fim- Registrar Transao
 
 		// regitrando operacao
 		registradorOperacao.registrarOperacao(hidrometroInstalacaoHistorico);
@@ -2193,9 +2198,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		id = (Integer) getControladorUtil().inserir(
 				hidrometroInstalacaoHistorico);
 
-		// [SB0002]Atualizar Imóvel/Ligação de Água
+		// [SB0002]Atualizar Imvel/Ligao de gua
 		try {
-			// Caso o tipo de medição seja igual a Ligação de Água, atualiza as
+			// Caso o tipo de medio seja igual a Ligao de gua, atualiza as
 			// colunas da tabela LIGACAO_AGUA
 			if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId().equals(
 					MedicaoTipo.LIGACAO_AGUA)) {
@@ -2203,7 +2208,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						.atualizarHidrometroInstalacaoHistoricoLigacaoAgua(
 								hidrometroInstalacaoHistorico.getLigacaoAgua()
 										.getId(), id);
-				// Caso o tipo de medição seja igual a Poço, atualiza as colunas
+				// Caso o tipo de medio seja igual a Poo, atualiza as colunas
 				// da tabela POCO
 			} else if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId()
 					.equals(MedicaoTipo.POCO)) {
@@ -2213,13 +2218,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 										.getId(), id, imovel.getPocoTipo().getId());
 			}
 
-			// [SB003]Atualizar situação de hidrômetro na tabela HIDROMETRO
+			// [SB003]Atualizar situao de hidrmetro na tabela HIDROMETRO
 			Integer situacaoHidrometro = HidrometroSituacao.INSTALADO;
 			repositorioAtendimentoPublico.atualizarSituacaoHidrometro(
 					hidrometroInstalacaoHistorico.getHidrometro().getId(),
 					situacaoHidrometro);
 
-			// [SB006]Atualizar Ordem de Serviço
+			// [SB006]Atualizar Ordem de Servio
 			if (!integracaoComercialHelper.isVeioEncerrarOS()
 					&& ordemServico.getServicoTipo().getDebitoTipo() != null) {
 				this
@@ -2302,9 +2307,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0362] Efetuar Instalacao de hidrômetro
+	 * [UC0362] Efetuar Instalacao de hidrmetro
 	 * 
-	 * Validar Instalacao de hidrômetro
+	 * Validar Instalacao de hidrmetro
 	 * 
 	 * @author Ana Maria
 	 * @date 13/07/2006
@@ -2334,9 +2339,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		 colecaoHidrometro = getControladorUtil().pesquisar(filtroHidrometro,
 		 Hidrometro.class.getName());
 		
-		 // [FS002]Caso o hidrômetro informado esteja com a situação diferente
+		 // [FS002]Caso o hidrmetro informado esteja com a situao diferente
 		 // de
-		 // DISPONíVEL
+		 // DISPONVEL
 		 Iterator iteratorHidrometro = colecaoHidrometro.iterator();
 		 while (iteratorHidrometro.hasNext()) {
 			 Hidrometro hidrometro = (Hidrometro) iteratorHidrometro.next();
@@ -2353,9 +2358,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0362] Efetuar Instalacao de hidrômetro
+	 * [UC0362] Efetuar Instalacao de hidrmetro
 	 * 
-	 * Validar Instalacao de hidrômetro
+	 * Validar Instalacao de hidrmetro
 	 * 
 	 * @author Ana Maria
 	 * @date 13/07/2006
@@ -2371,9 +2376,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			boolean veioEncerrarOS) throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR INSTALACAO HIDROMETRO, não será necessário realizar
-		 * as validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR INSTALACAO HIDROMETRO, no ser necessrio realizar
+		 * as validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
@@ -2396,7 +2401,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
+		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
 		 * Rossiter Data: 26/04/2007
 		 * 
 		 * ===============================================================================
@@ -2425,7 +2430,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			}
 		}
 
-		// [FS0002] Verificar Situação do Imovel.
+		// [FS0002] Verificar Situao do Imovel.
 		if (imovel.getIndicadorExclusao() != null
 				&& imovel.getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 
@@ -2434,9 +2439,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							.getId().toString());
 		}
 
-		// [FS0003] - Verificar Situação de Agua ou Esgoto.
-		// [FS0004] - Verificar a existência de hidrômetro no Imóvel/Ligação de
-		// Água
+		// [FS0003] - Verificar Situao de Agua ou Esgoto.
+		// [FS0004] - Verificar a existncia de hidrmetro no Imvel/Ligao de
+		// gua
 
 		/* HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = null; */
 
@@ -2460,7 +2465,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 			if (imovel.getLigacaoAgua() == null) {
 				throw new ControladorException("atencao.naocadastrado", null,
-						"Ligação de Água");
+						"Ligao de gua");
 			}
 
 			if (imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
@@ -2487,7 +2492,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			}
 		}
 
-		// [FS0002] Verificar Situação do hidrometro.
+		// [FS0002] Verificar Situao do hidrometro.
 		/*
 		 * Hidrometro hidrometro =
 		 * hidrometroInstalacaoHistorico.getHidrometro();
@@ -2504,7 +2509,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0356] Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto
+	 * [UC0356] Efetuar Mudana de Situao de Faturamento da Ligao de Esgoto
 	 */
 	public String validarMudancaSituacaoFaturamentoLigacaoesgotoExibir(OrdemServico os, boolean encerrar) throws ControladorException {
 		String retorno = "";
@@ -2560,11 +2565,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0356] Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto
+	 * [UC0356] Efetuar Mudana de Situao de Faturamento da Ligao de Esgoto
 	 * 
-	 * [FS0001]- Validar Ordem de Serviço [FS0002] Verificar Situação do Imovel
-	 * [FS0002] Verificar Situação do Imovel [FS0003]- Validar Situação da
-	 * Ligação de Esgoto do Imóvel
+	 * [FS0001]- Validar Ordem de Servio [FS0002] Verificar Situao do Imovel
+	 * [FS0002] Verificar Situao do Imovel [FS0003]- Validar Situao da
+	 * Ligao de Esgoto do Imvel
 	 */
 	public void efetuarMudancaSituacaoFaturamentoLiagacaoEsgoto(IntegracaoComercialHelper helper) throws ControladorException {
 		OrdemServico os = helper.getOrdemServico();
@@ -2624,7 +2629,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		imovel.setLigacaoEsgotoSituacao(ligacao);
 
 		/*
-		 * [UC0107] Registrar Transação
+		 * [UC0107] Registrar Transao
 		 */
 
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_MUDANCA_SITUACAO_FATURAMENTO_LIGACAO_ESGOTO, ligacaoEsgoto.getId(), ligacaoEsgoto.getId(),
@@ -2633,7 +2638,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		registradorOperacao.registrarOperacao(os);
 		registradorOperacao.registrarOperacao(imovel);
 		getControladorTransacao().registrarTransacao(imovel);
-		// [UC0107] -Fim- Registrar Transação
+		// [UC0107] -Fim- Registrar Transao
 
 		getControladorImovel().atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(imovel, ligacao);
 
@@ -2653,11 +2658,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0356]- Efetuar mudança de Faturamento na Ligação de Água
-	 * [FS0006]-Atualizar Ligação de Esgoto
+	 * [UC0356]- Efetuar mudana de Faturamento na Ligao de gua
+	 * [FS0006]-Atualizar Ligao de Esgoto
 	 * 
-	 * Permite atualizar a Tabele de Ligação Esdoto . Update LIGACAO_ESGOTO
-	 * LESG_NNCONSUMOMINIMOESGOTO (volume Mínimo fixado) LESG_TMULTIMAALTERADAO
+	 * Permite atualizar a Tabele de Ligao Esdoto . Update LIGACAO_ESGOTO
+	 * LESG_NNCONSUMOMINIMOESGOTO (volume Mnimo fixado) LESG_TMULTIMAALTERADAO
 	 * (data e hora correntes) Where LESG_ID=IMOV_ID da tabela IMOVEL
 	 * 
 	 * @author Leandro Cavalcanti
@@ -2672,7 +2677,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	public void atualizarLigacaoEsgoto(Imovel imovel, String volumeMinimoFixado)
 			throws ControladorException {
 
-		// Ligação de Esgoto
+		// Ligao de Esgoto
 
 		String idImovel = imovel.getId().toString();
 
@@ -2709,19 +2714,19 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		} else {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("atencao.requerid", null,
-					"Volume Mínimo Fixado");
+					"Volume Mnimo Fixado");
 		}
 	}
 
 	/**
-	 * [UC0368] Atualizar Instalação do hidrômetro
+	 * [UC0368] Atualizar Instalao do hidrmetro
 	 * 
-	 * [FS0001] - Verificar a existência da matrícula do Imóvel [FS0002] -
-	 * Verificar a situação do Imóvel [FS0003] - Validar existência do
-	 * hidrômetro [FS0004] - Validar leitura instalação hidrômetro [FS0005] -
-	 * Validar leitura retirada hidrômetro [FS0006] - Validar leitura retirada
-	 * corte [FS0007] - Validar Leitura Supressão [FS0009] - Verificar sucesso
-	 * da transação
+	 * [FS0001] - Verificar a existncia da matrcula do Imvel [FS0002] -
+	 * Verificar a situao do Imvel [FS0003] - Validar existncia do
+	 * hidrmetro [FS0004] - Validar leitura instalao hidrmetro [FS0005] -
+	 * Validar leitura retirada hidrmetro [FS0006] - Validar leitura retirada
+	 * corte [FS0007] - Validar Leitura Supresso [FS0009] - Verificar sucesso
+	 * da transao
 	 * 
 	 * @author lms
 	 * @created 21/07/2006
@@ -2751,47 +2756,47 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		hidrometroInstalacaoHistorico.setUltimaAlteracao(new Date());
 		
 		
-		// [FS0001] - Verificar a existência da matrícula do Imóvel
-		// [FS0002] - Verificar a situação do Imóvel
+		// [FS0001] - Verificar a existncia da matrcula do Imvel
+		// [FS0002] - Verificar a situao do Imvel
 		FiltroImovel filtroImovel = new FiltroImovel();
 		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID,
 				imovel.getId()));
 		getControladorImovel().pesquisarImovelSituacaoAtiva(filtroImovel);
 
-		// [FS0003] - Validar existência do hidrômetro
+		// [FS0003] - Validar existncia do hidrmetro
 		getControladorImovel().validarExistenciaHidrometro(imovel, medicaoTipo);
 
-		// [FS0004] - Validar leitura instalação hidrômetro
+		// [FS0004] - Validar leitura instalao hidrmetro
 
 		/*
-		 * Caso a leitura da instalção do hidrômetro informada seja igual a zero
-		 * ou valores negativos, exibir a mensagem: "Leitura instalação deve
-		 * somente conter números positivos"
+		 * Caso a leitura da instalo do hidrmetro informada seja igual a zero
+		 * ou valores negativos, exibir a mensagem: "Leitura instalao deve
+		 * somente conter nmeros positivos"
 		 */
 		if (!Util.validarNumeroMaiorQueZERO(hidrometroInstalacaoHistorico
 				.getNumeroLeituraInstalacao())) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("atencao.long", null,
-					"Leitura de Instalação");
+					"Leitura de Instalao");
 		}
 
-		// [FS0005] - Validar leitura retirada hidrômetro
+		// [FS0005] - Validar leitura retirada hidrmetro
 
 		if (hidrometroInstalacaoHistorico.getDataRetirada() == null) {
 
 			/*
-			 * Caso a data de retirada do hidrômetro não esteja informada, o
-			 * sistema não deve deixar infomar a leitura de retirada do
-			 * hidrômetro <<Qual a mensagem???>>
+			 * Caso a data de retirada do hidrmetro no esteja informada, o
+			 * sistema no deve deixar infomar a leitura de retirada do
+			 * hidrmetro <<Qual a mensagem???>>
 			 */
 
 		} else {
 
 			/*
-			 * Caso a data de retirada do hidrômetro esteja informada e o
-			 * usuário informar a leitura de retirada do hidrômetro igual a
+			 * Caso a data de retirada do hidrmetro esteja informada e o
+			 * usurio informar a leitura de retirada do hidrmetro igual a
 			 * zeros ou valores negativos, exibir a mensagem: "Leitura de
-			 * retirada do hidrômetro deve somente conter números positivos"
+			 * retirada do hidrmetro deve somente conter nmeros positivos"
 			 */
 
 			if (!Util.validarNumeroMaiorQueZERO(hidrometroInstalacaoHistorico
@@ -2808,18 +2813,18 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		if (imovel.getLigacaoAgua().getDataCorte() == null) {
 
 			/*
-			 * Caso a data do corte não esteja informada para o Imóvel, o
-			 * sistema não deve deixar infomar a leitura de corte do hidrômetro <<Qual
+			 * Caso a data do corte no esteja informada para o Imvel, o
+			 * sistema no deve deixar infomar a leitura de corte do hidrmetro <<Qual
 			 * a mensagem???>>
 			 */
 
 		} else {
 
 			/*
-			 * Caso a data do corte esteja informada para o Imóvel e o usuário
-			 * informar a leitura de corte da Ligação de Água igual a zeros ou
+			 * Caso a data do corte esteja informada para o Imvel e o usurio
+			 * informar a leitura de corte da Ligao de gua igual a zeros ou
 			 * valores negativos, exibir a mensagem: "Leitura de Corte da
-			 * Ligação de Água deve somente conter números positivos"
+			 * Ligao de gua deve somente conter nmeros positivos"
 			 */
 
 			if (!Util.validarNumeroMaiorQueZERO(hidrometroInstalacaoHistorico
@@ -2831,7 +2836,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		}
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		// ------------ REGISTRAR TRANSAO ----------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_INSTALACAO_HIDROMETRO_ATUALIZAR, imovel
 						.getId(), imovel.getId(), new UsuarioAcaoUsuarioHelper(
@@ -2839,18 +2844,18 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		registradorOperacao.registrarOperacao(hidrometroInstalacaoHistorico);
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		// ------------ REGISTRAR TRANSAO ----------------
 
-		// [FS0009] - Verificar sucesso da transação
+		// [FS0009] - Verificar sucesso da transao
 		getControladorUtil().atualizar(hidrometroInstalacaoHistorico);
 		getControladorUtil().atualizar(atualizarPocoTipoImovel);
 
 	}
 
 	/**
-	 * [UC0356]- Efetuar mudança de Faturamento na Ligação de Água
+	 * [UC0356]- Efetuar mudana de Faturamento na Ligao de gua
 	 * 
-	 * [FS0007]- Validar Situação da Ligação de Água do Imóvel
+	 * [FS0007]- Validar Situao da Ligao de gua do Imvel
 	 * 
 	 * @author Leandro Cavalcanti
 	 * @date 18/07/2006
@@ -2893,9 +2898,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0356]- Efetuar mudança de Faturamento na Ligação de Água
+	 * [UC0356]- Efetuar mudana de Faturamento na Ligao de gua
 	 * 
-	 * [FS0003]- Validar Situação da Ligação de Esgoto do Imóvel
+	 * [FS0003]- Validar Situao da Ligao de Esgoto do Imvel
 	 * 
 	 * @author Leandro Cavalcanti
 	 * @date 18/07/2006
@@ -2939,11 +2944,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0364] Efetuar Substituição de hidrômetro
-	 * [SB0001] Atualizar o histórico da instalação do hidrômetro substituido
-	 * [SB0002] Gerar Histórico de instalação do hidrômetro [SB0003] Atualizar
-	 * Imóvel/Ligação de Água [SB0004] Atualizar situação de hidrômetro na
-	 * tabela HIDROMETRO [SB0005] Atualizar situação do hidrômetro substituido
+	 * [UC0364] Efetuar Substituio de hidrmetro
+	 * [SB0001] Atualizar o histrico da instalao do hidrmetro substituido
+	 * [SB0002] Gerar Histrico de instalao do hidrmetro [SB0003] Atualizar
+	 * Imvel/Ligao de gua [SB0004] Atualizar situao de hidrmetro na
+	 * tabela HIDROMETRO [SB0005] Atualizar situao do hidrmetro substituido
 	 * na tabela HIDROMETRO
 	 */
 	@SuppressWarnings("rawtypes")
@@ -3007,7 +3012,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			
 			id = (Integer) getControladorUtil().inserir(hidrometroInstalacaoHistorico);
 
-			// [SB0003]Atualizar Imóvel/Ligação de Água
+			// [SB0003]Atualizar Imvel/Ligao de gua
 			if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId().equals(MedicaoTipo.LIGACAO_AGUA)) {
 				repositorioAtendimentoPublico.atualizarHidrometroInstalacaoHistoricoLigacaoAgua(hidrometroInstalacaoHistorico.getLigacaoAgua().getId(), id);
 
@@ -3015,7 +3020,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				repositorioAtendimentoPublico.atualizarHidrometroIntalacaoHistoricoImovel(hidrometroInstalacaoHistorico.getImovel().getId(), id, null);
 			}
 
-			// [SB004]Atualizar situação de hidrômetro na tabela HIDROMETRO
+			// [SB004]Atualizar situao de hidrmetro na tabela HIDROMETRO
 			Integer situacaoHidrometro = HidrometroSituacao.INSTALADO;
 			repositorioAtendimentoPublico.atualizarSituacaoHidrometro(hidrometroInstalacaoHistorico.getHidrometro().getId(),situacaoHidrometro);
 
@@ -3081,9 +3086,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0364] Efetuar Substituição de hidrômetro
+	 * [UC0364] Efetuar Substituio de hidrmetro
 	 * 
-	 * Validar Substituição de hidrômetro
+	 * Validar Substituio de hidrmetro
 	 * 
 	 * @author Ana Maria
 	 * @date 25/07/2006
@@ -3100,7 +3105,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		this.getControladorMicromedicao().validarImovelEmCampo(new Integer(matriculaImovel));
 		
-		// Caso o hidrômetro substituido esteja com situacao igual a DISPONÍVEL
+		// Caso o hidrmetro substituido esteja com situacao igual a DISPONVEL
 		if (situacaoHidrometroSubstituido.equals(-1) || situacaoHidrometroSubstituido.equals(HidrometroSituacao.INSTALADO.toString())) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("atencao.hidrometro_situacao_disponivel");
@@ -3115,7 +3120,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		colecaoHidrometro = getControladorUtil().pesquisar(filtroHidrometro,Hidrometro.class.getName());
 
-		// [FS002]Caso o hidrômetro informado esteja com a situação diferente de DISPONÍVEL
+		// [FS002]Caso o hidrmetro informado esteja com a situao diferente de DISPONVEL
 		Iterator iteratorHidrometro = colecaoHidrometro.iterator();
 		while (iteratorHidrometro.hasNext()) {
 			Hidrometro hidrometro = (Hidrometro) iteratorHidrometro.next();
@@ -3136,7 +3141,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		Iterator iteratorImovel = colecaoImoveis.iterator();
 		Imovel imovel = (Imovel) iteratorImovel.next();
 
-		// [FS008]Caso situção do Imóvel não seja ativo(IMOV_ICEXCLUSAO da tabela IMOVEL correspondete a "não")
+		// [FS008]Caso situo do Imvel no seja ativo(IMOV_ICEXCLUSAO da tabela IMOVEL correspondete a "no")
 		if (imovel.getIndicadorExclusao() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("atencao.situacao_imovel_indicador_exclusao", null, imovel.getId().toString());
@@ -3144,12 +3149,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0360]- Efetuar Supressão da Ligação de Água
+	 * [UC0360]- Efetuar Supresso da Ligao de gua
 	 * 
-	 * [SB0001]- Atualizar Ligação de Água [SB0002]- Atualizar Imóvel [SB0004]-
-	 * Atualizar Histótico de Instalação de hidrômetro
+	 * [SB0001]- Atualizar Ligao de gua [SB0002]- Atualizar Imvel [SB0004]-
+	 * Atualizar Histtico de Instalao de hidrmetro
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rmulo Aurlio
 	 * @date 28/07/2006
 	 * @param imovel
 	 * 
@@ -3166,28 +3171,28 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// 4.3.1 Caso PARM_ICSUPRESSAO = 1
 		if (sistemaParametro.getIndicadorSupressao().equals(ConstantesSistema.SIM)) {
 
-			// 4.3.1.1 caso o motivo de supressão selecionado seja igual a "A PEDIDO DO CLIENTE",
-			// verificar se existe débito para o imóvel
+			// 4.3.1.1 caso o motivo de supresso selecionado seja igual a "A PEDIDO DO CLIENTE",
+			// verificar se existe dbito para o imvel
 			SupressaoMotivo supressaoMotivo = ligacaoAgua.getSupressaoMotivo();
 			if (supressaoMotivo.getId() != null && supressaoMotivo.getId().equals(SupressaoMotivo.A_PEDIDO_DO_CLIENTE)) {
 
-				// FS0015 - Verificar existencia de débitos
+				// FS0015 - Verificar existencia de dbitos
 				ObterDebitoImovelOuClienteHelper colecaoDebitoImovel = getControladorCobranca()
-						.obterDebitoImovelOuCliente(1, // Indicador débito imóvel
-								imovel.getId().toString(), // Matrícula do imóvel
-								null, // Código do cliente
-								null, // Tipo de relação do cliento com o imóvel
-								"190101", // Referência inicial do débito
-								"999912", // Referência final do débito
+						.obterDebitoImovelOuCliente(1, // Indicador dbito imvel
+								imovel.getId().toString(), // Matrcula do imvel
+								null, // Cdigo do cliente
+								null, // Tipo de relao do cliento com o imvel
+								"190101", // Referncia inicial do dbito
+								"999912", // Referncia final do dbito
 								Util.converteStringParaDate("01/01/1901"), // Inicio Vencimento
 								Util.converteStringParaDate("31/12/9999"), // Final Vencimento
 								1, // Indicador pagamento
-								1, // Indicador conta em revisão
-								1, // Indicador débito a cobrar
-								1, // Indicador crédito a realizar
-								1, // Indicador notas promissórias
+								1, // Indicador conta em reviso
+								1, // Indicador dbito a cobrar
+								1, // Indicador crdito a realizar
+								1, // Indicador notas promissrias
 								1, // Indicador guias de pagamento
-								1, // Indicador acréscimos por impontualidade
+								1, // Indicador acrscimos por impontualidade
 								null); // Indicador Contas
 
 				if ((colecaoDebitoImovel.getColecaoContasValoresImovel() != null && colecaoDebitoImovel.getColecaoContasValoresImovel().size() > 0)
@@ -3199,9 +3204,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 			}
 			// 4.3.1.2 caso contrario,
-			// se o usuário não tiver permissão especial para efetuar supressão,
-			// exibir a mensagem "Necessário permissão especial para efetuar
-			// supressão
+			// se o usurio no tiver permisso especial para efetuar supresso,
+			// exibir a mensagem "Necessrio permisso especial para efetuar
+			// supresso
 			else {
 				boolean temPermissaoEfetuarSupressaoAgua = getControladorPermissaoEspecial().verificarPermissaoEfetuarSupressaoAgua(integracaoComercialHelper.getUsuarioLogado());
 
@@ -3213,15 +3218,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * [UC0107] Registrar Transação
+		 * [UC0107] Registrar Transao
 		 * 
 		 */
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_SUPRESSAO_LIGACAO_AGUA_EFETUAR, 
 				imovel.getId(), imovel.getId(), 
 				new UsuarioAcaoUsuarioHelper(integracaoComercialHelper.getUsuarioLogado(), UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		// [UC0107] -Fim- Registrar Transação
+		// [UC0107] -Fim- Registrar Transao
 
-		// [SB0001] Atualizar Ligação de Água
+		// [SB0001] Atualizar Ligao de gua
 		this.verificarLigacaoAguaControleConcorrencia(ligacaoAgua);
 		registradorOperacao.registrarOperacao(ligacaoAgua);
 		getControladorUtil().atualizar(ligacaoAgua);
@@ -3239,8 +3244,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			 * Alterado por Arthur Carvalho
 			 * Analista: Rosana Carvalho
 			 * Data: 18/05/2010
-			 * Devido a duplicidade da geração de debito na supressao do imóvel, 
-			 * é efetuada a retirada do hidrometro sem geração de débito.
+			 * Devido a duplicidade da gerao de debito na supressao do imvel, 
+			 *  efetuada a retirada do hidrometro sem gerao de dbito.
 			 */
 			this.efetuarRetiradaHidrometroSemGeracaoDebito(integracaoComercialHelper);
 			getControladorUtil().atualizar(hidrometroInstalacaoHistorico);
@@ -3257,7 +3262,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
 		}
-		// [SB006]Atualizar Ordem de Serviço
+		// [SB006]Atualizar Ordem de Servio
 		if (!integracaoComercialHelper.isVeioEncerrarOS()) {
 			getControladorOrdemServico().atualizaOSGeral(ordemServico);
 		}
@@ -3276,17 +3281,17 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	// atencao.situacao_volume_minimo_fixado_nao_multiplo= Valor do volume
-	// Mínimo Fixado deve ser alterado para {0} valor multiplo de quantidade de
+	// Mnimo Fixado deve ser alterado para {0} valor multiplo de quantidade de
 	// economias {1}.
 	public Integer validarVolumeMinimoFixadoEsgoto(Imovel imovel,
 			String volumeMinimoFixado) throws ControladorException {
-		// [UC0105] - Obter Consumo Mínimo da Ligação
+		// [UC0105] - Obter Consumo Mnimo da Ligao
 		int consumoMinimoObtido = getControladorMicromedicao()
 				.obterConsumoMinimoLigacao(imovel, null);
 		Integer consumoMinimoObtido1 = new Integer(consumoMinimoObtido);
 
-		// Verificar se o volume Mínimo informado seja menor que o valor
-		// Mínimo obtido para Imóvel.
+		// Verificar se o volume Mnimo informado seja menor que o valor
+		// Mnimo obtido para Imvel.
 		if (volumeMinimoFixado != null && !volumeMinimoFixado.trim().equals("")) {
 			if (!volumeMinimoFixado.trim().equalsIgnoreCase(
 					ConstantesSistema.SET_ZERO.toString())) {
@@ -3302,24 +3307,24 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		} else {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("atencao.requerid", null,
-					"Situação da Ligação de Esgoto");
+					"Situao da Ligao de Esgoto");
 		}
 
 		return new Integer(volumeMinimoFixado);
 	}
 
 	/**
-	 * [UC0359] Efetuar Restabelecimento Ligação de Água
+	 * [UC0359] Efetuar Restabelecimento Ligao de gua
 	 * 
-	 * Permite efetuar restabelecimento da Ligação de Água ou pelo menu ou pela
-	 * funcionalidade encerrar a Execução da ordem de Serviço.
-	 * 
-	 * 
-	 * [SB0001] Atualizar Imóvel/Ligação de Água/Ligação de Esgoto
+	 * Permite efetuar restabelecimento da Ligao de gua ou pelo menu ou pela
+	 * funcionalidade encerrar a Execuo da ordem de Servio.
 	 * 
 	 * 
+	 * [SB0001] Atualizar Imvel/Ligao de gua/Ligao de Esgoto
 	 * 
-	 * @author Rômulo Aurélio
+	 * 
+	 * 
+	 * @author Rmulo Aurlio
 	 * @date 12/07/2006
 	 * 
 	 * @param idImovel,idOrdemServico
@@ -3331,7 +3336,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			IntegracaoComercialHelper integracaoComercialHelper)
 			throws ControladorException {
 
-		// [SB0001] - Atualizar Imóvel/Ligação de Água
+		// [SB0001] - Atualizar Imvel/Ligao de gua
 
 		OrdemServico ordemServico = integracaoComercialHelper.getOrdemServico();
 
@@ -3340,7 +3345,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		this.getControladorMicromedicao().validarImovelEmCampo(imovel.getId());
 		/*
-		 * [UC0107] Registrar Transação
+		 * [UC0107] Registrar Transao
 		 */
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_RESTABELECIMENTO_LIGACAO_AGUA_EFETUAR, imovel
@@ -3379,7 +3384,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		registradorOperacao.registrarOperacao(imovel);
 		getControladorTransacao().registrarTransacao(imovel);
 
-		// [SB0002] Atualizar Imóvel
+		// [SB0002] Atualizar Imvel
 		getControladorImovel().atualizarImovelExecucaoOrdemServicoLigacaoAgua(
 				imovel, ligacaoAguaSituacao);
 
@@ -3452,10 +3457,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// [FS0003] - Validar atendimento do motivo de encerramento.
 
 		/*
-		 * Caso o indicador de deferimento esteja preenchido com não, o
-		 * indicador de Execução do motivo de encerramento informado deverá
-		 * estar com não, caso contrário, exibir a mensagem: "Motivo de
-		 * encerramento do atendimento incompatível com o indicador de
+		 * Caso o indicador de deferimento esteja preenchido com no, o
+		 * indicador de Execuo do motivo de encerramento informado dever
+		 * estar com no, caso contrrio, exibir a mensagem: "Motivo de
+		 * encerramento do atendimento incompatvel com o indicador de
 		 * deferimento informado"
 		 */
 		if (osReferidaRetornoTipo.getAtendimentoMotivoEncerramento() != null) {
@@ -3475,11 +3480,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	/**
 	 * [UC0396] Inserir Tipo de Retorno da OS Referida
 	 * 
-	 * [FS0002] - Solicitar o indicador de troca de Serviço, situação e motivo
+	 * [FS0002] - Solicitar o indicador de troca de Servio, situao e motivo
 	 * de encerramento [FS0003] - Validar atendimento do motivo de encerramento
 	 * [FS0005] - Validar indicador de deferimento [FS0006] - Validar indicador
-	 * de deferimento x indicador de troca de Serviço [FS0007] - Verificar
-	 * sucesso da transação
+	 * de deferimento x indicador de troca de Servio [FS0007] - Verificar
+	 * sucesso da transao
 	 * 
 	 * @author lms
 	 * @created 21/07/2006
@@ -3490,14 +3495,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			OsReferidaRetornoTipo osReferidaRetornoTipo)
 			throws ControladorException {
 
-		// [FS0002] - Solicitar o indicador de troca de Serviço, situação e
+		// [FS0002] - Solicitar o indicador de troca de Servio, situao e
 		// motivo de encerramento
 
 		/*
-		 * Caso a Referência do tipo Serviço escolhido possuir o indicador de
-		 * existência da Referência preenchido com não, as seguintes informações
-		 * deverão estar desabilitadas para preenchimento e os seus conteúdos
-		 * deverão estar preenchidos com:
+		 * Caso a Referncia do tipo Servio escolhido possuir o indicador de
+		 * existncia da Referncia preenchido com no, as seguintes informaes
+		 * devero estar desabilitadas para preenchimento e os seus contedos
+		 * devero estar preenchidos com:
 		 * 
 		 * ORRT_ICTROCASERVICO = 2 ORRT_CDSITUACAOOSREFERENCIA = null AMEN_ID =
 		 * null
@@ -3518,12 +3523,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// [FS0005] - Validar indicador de deferimento
 
 		/*
-		 * Apenas uma das descrições dos tipos de retorno da OS referida, por
-		 * Referência do tipo de Serviço cujo identificador de uso esteja ATIVO,
-		 * pode ter este indicador com o valor UM, o resto deverá possuir o
-		 * valor igual a DOIS, caso contrário, exibir a mensagem: "Existe mais
-		 * de um indicador de deferimento com situação de deferido para a mesma
-		 * Referência do tipo Serviço informado."
+		 * Apenas uma das descries dos tipos de retorno da OS referida, por
+		 * Referncia do tipo de Servio cujo identificador de uso esteja ATIVO,
+		 * pode ter este indicador com o valor UM, o resto dever possuir o
+		 * valor igual a DOIS, caso contrrio, exibir a mensagem: "Existe mais
+		 * de um indicador de deferimento com situao de deferido para a mesma
+		 * Referncia do tipo Servio informado."
 		 */
 		try {
 			if (ConstantesSistema.SIM.equals(osReferidaRetornoTipo
@@ -3542,13 +3547,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		// [FS0006] - Validar indicador de deferimento x indicador de troca de
-		// Serviço
+		// Servio
 
 		/*
 		 * Caso o indicador de deferimento estiver marcando deferido, o
-		 * indicador da troca de Serviço deve estar marcado como não, caso
-		 * contrário, exibir a mensagem: "Indicador de troca de Serviço
-		 * incompatível com o indicador de deferimento informado."
+		 * indicador da troca de Servio deve estar marcado como no, caso
+		 * contrrio, exibir a mensagem: "Indicador de troca de Servio
+		 * incompatvel com o indicador de deferimento informado."
 		 */
 		if (ConstantesSistema.SIM.equals(osReferidaRetornoTipo
 				.getIndicadorDeferimento())
@@ -3561,7 +3566,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				.setIndicadorUso(ConstantesSistema.INDICADOR_USO_ATIVO);
 		osReferidaRetornoTipo.setUltimaAlteracao(new Date());
 
-		// [FS0007] - Verificar sucesso da transação
+		// [FS0007] - Verificar sucesso da transao
 		return (Integer) getControladorUtil().inserir(osReferidaRetornoTipo);
 
 	}
@@ -3578,7 +3583,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 * 
 	 * 
 	 * 
-	 * @author Rômulo Aurélio, Diogo Peixoto
+	 * @author Rmulo Aurlio, Diogo Peixoto
 	 * @date 31/07/2006, 18/08/2011
 	 * 
 	 * @param codigoMaterial
@@ -3605,7 +3610,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		material.setIndicadorUso(ConstantesSistema.INDICADOR_USO_ATIVO);
 
-		// [FS0001] Verificar existencia da Descrição
+		// [FS0001] Verificar existencia da Descrio
 		FiltroMaterial filtroMaterial = new FiltroMaterial();
 
 		filtroMaterial.adicionarParametro(new ParametroSimples(FiltroMaterial.DESCRICAO, material.getDescricao()));
@@ -3619,7 +3624,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 			filtroMaterial = new FiltroMaterial();
 
-			// [FS0002]- Verificar existência da Descrição abreviada
+			// [FS0002]- Verificar existncia da Descrio abreviada
 			filtroMaterial.adicionarParametro(new ParametroSimples(FiltroMaterial.DESCRICAO_ABREVIADA, material.getDescricao()));
 			colecaoMaterial = getControladorUtil().pesquisar(filtroMaterial, Material.class.getName());
 
@@ -3633,7 +3638,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				Integer codigo = Integer.valueOf(codigoMaterial);
 				
 				filtroMaterial.limparListaParametros();
-				//[FS0005]- Verificar existência do código
+				//[FS0005]- Verificar existncia do cdigo
 				filtroMaterial.adicionarParametro(new ParametroSimples(FiltroMaterial.CODIGO, codigo));
 				colecaoMaterial = getControladorUtil().pesquisar(filtroMaterial, Material.class.getName());
 				
@@ -3648,7 +3653,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		
 		material.setUltimaAlteracao(new Date());
 
-		// ------------ REGISTRAR TRANSação----------------------------
+		// ------------ REGISTRAR TRANSao----------------------------
 
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_MATERIAL_INSERIR, new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
@@ -3664,7 +3669,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(material);
 
-		// --------FIM---- REGISTRAR TRANSação----------------------------
+		// --------FIM---- REGISTRAR TRANSao----------------------------
 		Integer idMaterial = (Integer) getControladorUtil().inserir(material);
 
 		return idMaterial;
@@ -3672,7 +3677,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0385] Inserir Tipo Perfil Serviço
+	 * [UC0385] Inserir Tipo Perfil Servio
 	 * 
 	 * @author Ana Maria
 	 * @date 01/08/2006
@@ -3683,7 +3688,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	public Integer inserirServicoTipoPerfil(ServicoPerfilTipo servicoPerfilTipo)
 			throws ControladorException {
 
-		// [FS0004] Verificar existencia da Descrição
+		// [FS0004] Verificar existencia da Descrio
 		FiltroServicoPerfilTipo filtroServicoPerfilTipo = new FiltroServicoPerfilTipo();
 
 		filtroServicoPerfilTipo.adicionarParametro(new ParametroSimples(
@@ -3706,7 +3711,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		getControladorUtil().inserir(servicoPerfilTipo);
 
-		// ------------ REGISTRAR TRANSação----------------------------
+		// ------------ REGISTRAR TRANSao----------------------------
 		/*
 		 * RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 		 * Operacao.OPERACAO_SERVICO_TIPO_INSERIR, new
@@ -3725,15 +3730,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		 * registradorOperacao.registrarOperacao(servicoPerfilTipo);
 		 */
 
-		// ------------ REGISTRAR TRANSação----------------------------
+		// ------------ REGISTRAR TRANSao----------------------------
 		return servicoPerfilTipo.getId();
 	}
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de Serviço
+	 * [UC0410] - Inserir Tipo de Servio
 	 * 
-	 * [FS0004] - Validar Perfil do Serviço
+	 * [FS0004] - Validar Perfil do Servio
 	 * 
 	 * @author lms
 	 * @date 01/08/2006
@@ -3758,14 +3763,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	public Operacao pesquisarOperacao(Integer idOperacao) throws ControladorException {
 		FiltroOperacao filtro = new FiltroOperacao();
 		filtro.adicionarParametro(new ParametroSimples(FiltroOperacao.ID, idOperacao));
-		return pesquisar(filtro, Operacao.class, "Operação");
+		return pesquisar(filtro, Operacao.class, "Operao");
 	}
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de Serviço
+	 * [UC0410] - Inserir Tipo de Servio
 	 * 
-	 * [FS0005] - Validar Tipo de Serviço de Referência
+	 * [FS0005] - Validar Tipo de Servio de Referncia
 	 * 
 	 * @author lms
 	 * @date 02/08/2006
@@ -3776,12 +3781,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		filtro.adicionarParametro(new ParametroSimples(
 				FiltroServicoTipoReferencia.ID, idServicoTipoReferencia));
 		return pesquisar(filtro, ServicoTipoReferencia.class,
-				"Tipo do Serviço de Referência");
+				"Tipo do Servio de Referncia");
 	}
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de Serviço
+	 * [UC0410] - Inserir Tipo de Servio
 	 * 
 	 * [FS0009] - Validar Atividade
 	 * 
@@ -3800,7 +3805,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de Serviço
+	 * [UC0410] - Inserir Tipo de Servio
 	 * 
 	 * [FS0010] - Validar Material
 	 * 
@@ -3831,9 +3836,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de Serviço
+	 * [UC0410] - Inserir Tipo de Servio
 	 * 
-	 * [FS0006] - Validar Ordem de Execução
+	 * [FS0006] - Validar Ordem de Execuo
 	 * 
 	 * @author lms
 	 * @date 05/08/2006
@@ -3870,7 +3875,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de Serviço
+	 * [UC0410] - Inserir Tipo de Servio
 	 * 
 	 * @author lms
 	 * @date 07/08/2006
@@ -3878,7 +3883,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	public Integer inserirServicoTipo(ServicoTipo servicoTipo,
 			Usuario usuarioLogado,ServicoTipoBoletim servicoTipoBoletim) throws ControladorException {
 
-		// [FS0001] - Verificar existência da Descrição
+		// [FS0001] - Verificar existncia da Descrio
 		FiltroServicoTipo filtroServicoTipo = new FiltroServicoTipo();
 		filtroServicoTipo.adicionarParametro(new ParametroSimples(
 				FiltroServicoTipo.DESCRICAO, servicoTipo.getDescricao()));
@@ -3898,7 +3903,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					"atencao.servico_tipo.descricao_ja_existente");
 		}
 
-		// ------------ REGISTRAR TRANSação----------------------------
+		// ------------ REGISTRAR TRANSao----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_TIPO_SERVICO_INSERIR,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -3915,9 +3920,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(servicoTipo);
 
-		// ------------ REGISTRAR TRANSação----------------------------
+		// ------------ REGISTRAR TRANSao----------------------------
 
-		// [FS0002] - Verificar existência da Descrição abreviada
+		// [FS0002] - Verificar existncia da Descrio abreviada
 		if (servicoTipo.getDescricaoAbreviada() != null && !servicoTipo.getDescricaoAbreviada().equals("")) {
 
 			filtroServicoTipo = new FiltroServicoTipo();
@@ -3941,19 +3946,19 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		}
 
-		// [FS0003] - Validar Tipo de Débito
+		// [FS0003] - Validar Tipo de Dbito
 		if (servicoTipo.getDebitoTipo() != null) {
 			getControladorFaturamento().pesquisarDebitoTipo(
 					servicoTipo.getDebitoTipo().getId());
 		}
 
-		// [FS0004] - Validar Perfil do Serviço
+		// [FS0004] - Validar Perfil do Servio
 		if (servicoTipo.getServicoPerfilTipo() != null) {
 			pesquisarServicoPerfilTipo(servicoTipo.getServicoPerfilTipo()
 					.getId());
 		}
 
-		// [FS0006] - Validar Ordem de Execução
+		// [FS0006] - Validar Ordem de Execuo
 
 		// [FS0009] - Validar Atividade
 
@@ -3987,7 +3992,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				servicoTipo.getServicoTipoReferencia().setId(referencia);
 			} else if (servicoTipo.getServicoTipoReferencia() != null
 					&& servicoTipo.getServicoTipoReferencia().getId() != null) {
-				// [FS0005] - Validar Tipo de Serviço Referência
+				// [FS0005] - Validar Tipo de Servio Referncia
 				if (servicoTipo.getServicoTipoReferencia() != null) {
 					servicoTipo.getServicoTipoReferencia().setUltimaAlteracao(
 							new Date());
@@ -3997,13 +4002,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			}
 			
 
-			// [FS0008] - Verificar Sucesso da Operação
+			// [FS0008] - Verificar Sucesso da Operao
 			id = inserirServicoTipoSemColecoes(servicoTipo);
 		
 
 		if (colecaoServicoTipoAtividades != null
 				&& !colecaoServicoTipoAtividades.isEmpty()) {
-			// Serviço Tipo Atividade (1..n)
+			// Servio Tipo Atividade (1..n)
 			for (Iterator iter = colecaoServicoTipoAtividades.iterator(); iter
 					.hasNext();) {
 
@@ -4031,7 +4036,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		if (colecaoServicoTipoMateriais != null
 				&& !colecaoServicoTipoMateriais.isEmpty()) {
-			// Serviço Tipo Material (1..n)
+			// Servio Tipo Material (1..n)
 			for (Iterator iter = colecaoServicoTipoMateriais.iterator(); iter
 					.hasNext();) {
 
@@ -4085,15 +4090,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de Serviço
+	 * [UC0410] - Inserir Tipo de Servio
 	 * 
-	 * @author Flávio
+	 * @author Flvio
 	 * @date 08/12/2006
 	 */
 	public Integer atualizarServicoTipo(ServicoTipo servicoTipo,ServicoTipoBoletim servicoTipoBoletim)
 			throws ControladorException {
 
-		// [FS0001] - Verificar existência da Descrição
+		// [FS0001] - Verificar existncia da Descrio
 		FiltroServicoTipo filtroServicoTipo = new FiltroServicoTipo();
 		filtroServicoTipo.adicionarParametro(new ParametroSimples(
 				FiltroServicoTipo.DESCRICAO, servicoTipo.getDescricao()));
@@ -4101,7 +4106,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				FiltroServicoTipo.INDICADOR_USO,
 				ConstantesSistema.INDICADOR_USO_ATIVO));
 
-		// [FS0002] - Verificar existência da Descrição abreviada
+		// [FS0002] - Verificar existncia da Descrio abreviada
 		if (servicoTipo.getDescricaoAbreviada() != null) {
 
 			filtroServicoTipo = new FiltroServicoTipo();
@@ -4114,13 +4119,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					ConstantesSistema.INDICADOR_USO_ATIVO));
 		}
 
-		// [FS0003] - Validar Tipo de Débito
+		// [FS0003] - Validar Tipo de Dbito
 		if (servicoTipo.getDebitoTipo() != null) {
 			getControladorFaturamento().pesquisarDebitoTipo(
 					servicoTipo.getDebitoTipo().getId());
 		}
 
-		// [FS0004] - Validar Perfil do Serviço
+		// [FS0004] - Validar Perfil do Servio
 		if (servicoTipo.getServicoPerfilTipo() != null) {
 			pesquisarServicoPerfilTipo(servicoTipo.getServicoPerfilTipo()
 					.getId());
@@ -4174,7 +4179,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 			
 			
-		// [FS0006] - Validar Ordem de Execução
+		// [FS0006] - Validar Ordem de Execuo
 
 		// [FS0009] - Validar Atividade
 
@@ -4205,7 +4210,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				servicoTipo.getServicoTipoReferencia().setId(referencia);
 			} else if (servicoTipo.getServicoTipoReferencia() != null
 					&& servicoTipo.getServicoTipoReferencia().getId() != null) {
-				// [FS0005] - Validar Tipo de Serviço Referência
+				// [FS0005] - Validar Tipo de Servio Referncia
 				if (servicoTipo.getServicoTipoReferencia() != null) {
 					servicoTipo.getServicoTipoReferencia().setUltimaAlteracao(
 							new Date());
@@ -4214,7 +4219,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				}
 			}
 
-			// [FS0008] - Verificar Sucesso da Operação
+			// [FS0008] - Verificar Sucesso da Operao
 			atualizarServicoTipoSemColecoes(servicoTipo);
 		} catch (ControladorException e) {
 			servicoTipo.getServicoTipoReferencia().setId(null);
@@ -4226,7 +4231,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// filtroServicoTipoAtividade.adicionarParametro(new
 		// ParametroSimples(FiltroServicoTipoAtividade.));
 
-		// Serviço Tipo Atividade (1..n)
+		// Servio Tipo Atividade (1..n)
 
 		FiltroServicoTipoAtividade filtroServicoTipoAtividade = new FiltroServicoTipoAtividade();
 		filtroServicoTipoAtividade
@@ -4285,7 +4290,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			}
 		}
 
-		// Serviço Tipo Material (1..n)
+		// Servio Tipo Material (1..n)
 		if (colecaoServicoTipoMateriais != null) {
 			for (Iterator iter = colecaoServicoTipoMateriais.iterator(); iter
 					.hasNext();) {
@@ -4349,7 +4354,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de Serviço
+	 * [UC0410] - Inserir Tipo de Servio
 	 * 
 	 * @author lms
 	 * @date 07/08/2006
@@ -4363,12 +4368,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				FiltroServicoTipoReferencia.INDICADOR_USO,
 				ConstantesSistema.INDICADOR_USO_ATIVO));
 		return pesquisar(filtro, ServicoTipoSubgrupo.class,
-				"Serviço Tipo Subgrupo");
+				"Servio Tipo Subgrupo");
 	}
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de Serviço
+	 * [UC0410] - Inserir Tipo de Servio
 	 * 
 	 * @author lms
 	 * @date 07/08/2006
@@ -4382,12 +4387,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				FiltroServicoTipoPrioridade.INDICADOR_USO,
 				ConstantesSistema.INDICADOR_USO_ATIVO));
 		return pesquisar(filtro, ServicoTipoPrioridade.class,
-				"Serviço Tipo Prioridade");
+				"Servio Tipo Prioridade");
 	}
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de Serviço
+	 * [UC0410] - Inserir Tipo de Servio
 	 * 
 	 * @author lms
 	 * @date 07/08/2006
@@ -4411,7 +4416,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de Serviço
+	 * [UC0410] - Inserir Tipo de Servio
 	 * 
 	 * @author lms
 	 * @date 07/08/2006
@@ -4432,15 +4437,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0436] Inserir Tipo de Serviço de Referência.
+	 * [UC0436] Inserir Tipo de Servio de Referncia.
 	 * 
-	 * Permite a inclusão de um tipo de Serviço de Referência.
+	 * Permite a incluso de um tipo de Servio de Referncia.
 	 * 
-	 * [FS0001] Verificar existencia da Descrição [FS0002]- Verificar existência
-	 * da Descrição abreviada [FS0003] Validar indicador de existencia x
-	 * Situação da Os de referencia
+	 * [FS0001] Verificar existencia da Descrio [FS0002]- Verificar existncia
+	 * da Descrio abreviada [FS0003] Validar indicador de existencia x
+	 * Situao da Os de referencia
 	 * 
-	 * @author Rômulo Aurélio.
+	 * @author Rmulo Aurlio.
 	 * @date 05/08/2006
 	 * 
 	 * 
@@ -4458,7 +4463,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		servicoTipoReferencia.setUltimaAlteracao(new Date());
 
-		// ------------ REGISTRAR TRANSação----------------------------
+		// ------------ REGISTRAR TRANSao----------------------------
 
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_SERVICO_TIPO_REFERENCIA_INSERIR,
@@ -4476,7 +4481,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(servicoTipoReferencia);
 
-		// --------FIM---- REGISTRAR TRANSação----------------------------
+		// --------FIM---- REGISTRAR TRANSao----------------------------
 		Integer idTipoServicoReferencia = (Integer) getControladorUtil()
 				.inserir(servicoTipoReferencia);
 
@@ -4486,11 +4491,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método valida os dados que são necessarios para a inserção do
-	 * Serviço tipo referencia.
+	 * Este mtodo valida os dados que so necessarios para a insero do
+	 * Servio tipo referencia.
 	 * 
 	 * 
-	 * @author Flávio Leonardo
+	 * @author Flvio Leonardo
 	 * @date 31/10/2006
 	 * 
 	 * @param servicoTipoReferencia
@@ -4501,7 +4506,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			ServicoTipoReferencia servicoTipoReferencia)
 			throws ControladorException {
 
-		// [FS0001] Verificar existencia da Descrição
+		// [FS0001] Verificar existencia da Descrio
 
 		FiltroServicoTipoReferencia filtroServicoTipoReferencia = new FiltroServicoTipoReferencia();
 
@@ -4525,7 +4530,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 			filtroServicoTipoReferencia.limparListaParametros();
 
-			// [FS0002]- Verificar existência da Descrição abreviada
+			// [FS0002]- Verificar existncia da Descrio abreviada
 			filtroServicoTipoReferencia
 					.adicionarParametro(new ParametroSimples(
 							FiltroServicoTipoReferencia.DESCRICAO_ABREVIADA,
@@ -4546,8 +4551,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		}
 
-		// [FS0003]- Validar indicador de existência x Situação da Os de
-		// Referência
+		// [FS0003]- Validar indicador de existncia x Situao da Os de
+		// Referncia
 
 		Short indicadorExistenciaOS = servicoTipoReferencia
 				.getIndicadorExistenciaOsReferencia();
@@ -4591,15 +4596,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0449] Inserir Prioridade do Tipo de Serviço
+	 * [UC0449] Inserir Prioridade do Tipo de Servio
 	 * 
-	 * Permite a inclusão de uma prioridade do tipo de Serviço.
+	 * Permite a incluso de uma prioridade do tipo de Servio.
 	 * 
-	 * [FS0001] Verificar existencia da Descrição [FS0003]- Verificar existência
-	 * da Descrição abreviada [FS0002] Validar quantidade de horas início e
+	 * [FS0001] Verificar existencia da Descrio [FS0003]- Verificar existncia
+	 * da Descrio abreviada [FS0002] Validar quantidade de horas incio e
 	 * quantidade de horas fim
 	 * 
-	 * @author Rômulo Aurélio.
+	 * @author Rmulo Aurlio.
 	 * @date 11/08/2006
 	 * 
 	 * 
@@ -4611,7 +4616,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			ServicoTipoPrioridade servicoTipoPrioridade, Usuario usuarioLogado)
 			throws ControladorException {
 
-		// [FS0001] Verificar existencia da Descrição
+		// [FS0001] Verificar existencia da Descrio
 
 		FiltroServicoTipoPrioridade filtroServicoTipoPrioridade = new FiltroServicoTipoPrioridade();
 
@@ -4637,7 +4642,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 			filtroServicoTipoPrioridade.limparListaParametros();
 
-			// [FS0002]- Verificar existência da Descrição abreviada
+			// [FS0002]- Verificar existncia da Descrio abreviada
 			filtroServicoTipoPrioridade
 					.adicionarParametro(new ParametroSimples(
 							FiltroServicoTipoPrioridade.DESCRICAO_ABREVIADA,
@@ -4658,14 +4663,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		}
 
-		// [FS0002] Validar quantidade de horas início e quantidade de horas fim
+		// [FS0002] Validar quantidade de horas incio e quantidade de horas fim
 
 		if (servicoTipoPrioridade.getPrazoExecucaoInicio() != null) {
 
 			if ((servicoTipoPrioridade.getPrazoExecucaoInicio() < 0)
 					|| (servicoTipoPrioridade.getPrazoExecucaoInicio() == 0)) {
 				throw new ControladorException(
-						"atencao.quantidade_hora_invalida", null, "início de ");
+						"atencao.quantidade_hora_invalida", null, "incio de ");
 			}
 
 		}
@@ -4688,7 +4693,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		servicoTipoPrioridade.setUltimaAlteracao(new Date());
 
-		// ------------ REGISTRAR TRANSação----------------------------
+		// ------------ REGISTRAR TRANSao----------------------------
 
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_SERVICO_TIPO_PRIORIDADE_INSERIR,
@@ -4706,7 +4711,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(servicoTipoPrioridade);
 
-		// --------FIM---- REGISTRAR TRANSação----------------------------
+		// --------FIM---- REGISTRAR TRANSao----------------------------
 		Integer idTPrioridadeipoServico = (Integer) getControladorUtil()
 				.inserir(servicoTipoPrioridade);
 
@@ -4716,8 +4721,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * atualização da instalação de hidrômetro do Imóvel no momento da exibição.
+	 * Este mtodo se destina a validar todas as situaes e particularidades da
+	 * atualizao da instalao de hidrmetro do Imvel no momento da exibio.
 	 * 
 	 * @author Rafael Pinto
 	 * @date 20/07/2006
@@ -4753,7 +4758,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					"atencao.servico_associado_atualizar_instalacao_hidrometro_invalida");
 		}
 
-		// [FS0002] Verificar Situação do Imovel.
+		// [FS0002] Verificar Situao do Imovel.
 
 		if (ConstantesSistema.INDICADOR_IMOVEL_EXCLUIDO == imovel
 				.getIndicadorExclusao()) {
@@ -4802,7 +4807,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0475] Obter Valor do Débito
+	 * [UC0475] Obter Valor do Dbito
 	 * 
 	 * @author Leonardo Regis
 	 * @date 09/09/2006
@@ -4810,7 +4815,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 * @param servicoTipoId
 	 * @param imovelId
 	 * @param tipoMedicao
-	 * @return valor do Débito
+	 * @return valor do Dbito
 	 * 
 	 * @throws ControladorException
 	 */
@@ -4908,7 +4913,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * método que retorna o número do hidrômetro da Ligação de Água
+	 * mtodo que retorna o nmero do hidrmetro da Ligao de gua
 	 * 
 	 * @throws ErroRepositorioException
 	 */
@@ -4926,8 +4931,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * método que retorna o tipo da Ligação de Água e a data do corte da Ligação
-	 * de Água
+	 * mtodo que retorna o tipo da Ligao de gua e a data do corte da Ligao
+	 * de gua
 	 * 
 	 * @throws ErroRepositorioException
 	 */
@@ -4945,9 +4950,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * Consulta os dados das ordens de Serviço para a geração do relatório
+	 * Consulta os dados das ordens de Servio para a gerao do relatrio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @created 07/10/2006
 	 * 
 	 * @return
@@ -4968,7 +4973,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 				OrdemServicoProgramacao ordemServicoProgramacao = new OrdemServicoProgramacao();
 
-				// Obtém os dados do crédito realizado
+				// Obtm os dados do crdito realizado
 				Object[] dadosArray = (Object[]) colecaoDadosOrdemServicoProgramacaoIterator
 						.next();
 
@@ -4980,26 +4985,26 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 				RegistroAtendimento registroAtendimento = new RegistroAtendimento();
 
-				// número do RA
+				// nmero do RA
 				if (dadosArray[1] != null) {
 					registroAtendimento.setId((Integer) dadosArray[1]);
 				}
 
 				OrdemServico ordemServico = new OrdemServico();
 
-				// número da OS
+				// nmero da OS
 				if (dadosArray[2] != null) {
 					ordemServico.setId((Integer) dadosArray[2]);
 				}
 
-				// Tipo de Serviço
+				// Tipo de Servio
 				if (dadosArray[3] != null) {
 					ServicoTipo servicoTipo = new ServicoTipo();
 					servicoTipo.setId((Integer) dadosArray[3]);
 					ordemServico.setServicoTipo(servicoTipo);
 				}
 
-				// Observação
+				// Observao
 				if (dadosArray[4] != null) {
 					ordemServico.setObservacao((String) dadosArray[4]);
 				} else {
@@ -5021,15 +5026,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0475] Obter Valor do Débito
+	 * [UC0475] Obter Valor do Dbito
 	 * 
-	 * Verificar existência de hidrômetro na Ligação de Água.
+	 * Verificar existncia de hidrmetro na Ligao de gua.
 	 * 
 	 * @author Leonardo Regis
 	 * @date 09/09/2006
 	 * 
 	 * @param imovelId
-	 * @return existencia de hidrometro ou não
+	 * @return existencia de hidrometro ou no
 	 * @throws ErroRepositorioException
 	 */
 	public boolean verificarExistenciaHidrometroEmLigacaoAgua(Integer imovelId)
@@ -5044,15 +5049,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0475] Obter Valor do Débito
+	 * [UC0475] Obter Valor do Dbito
 	 * 
-	 * Verificar existência de hidrômetro na Ligação de Água.
+	 * Verificar existncia de hidrmetro na Ligao de gua.
 	 * 
 	 * @author Leonardo Regis
 	 * @date 09/09/2006
 	 * 
 	 * @param imovelId
-	 * @return existencia de hidrometro ou não
+	 * @return existencia de hidrometro ou no
 	 * @throws ErroRepositorioException
 	 */
 	public boolean verificarExistenciaHidrometroEmImovel(Integer imovelId)
@@ -5067,7 +5072,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0387] Manter Tipo Perfil Serviço [SB0002] Remover Tipo Perfil Serviço
+	 * [UC0387] Manter Tipo Perfil Servio [SB0002] Remover Tipo Perfil Servio
 	 * 
 	 * @author Kassia Albuquerque
 	 * @date 08/11/2006
@@ -5078,7 +5083,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	public void removerServicoTipoPerfil(String[] ids, Usuario usuarioLogado)
 			throws ControladorException {
 
-		// ------------ REGISTRAR TRANSação ----------------
+		// ------------ REGISTRAR TRANSao ----------------
 		Operacao operacao = new Operacao();
 		operacao.setId(Operacao.OPERACAO_TIPO_PERFIL_SERVICO_REMOVER);
 
@@ -5089,7 +5094,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		Collection<UsuarioAcaoUsuarioHelper> colecaoUsuarios = new ArrayList();
 		colecaoUsuarios.add(usuarioAcaoUsuarioHelper);
-		// ------------ REGISTRAR TRANSação ----------------
+		// ------------ REGISTRAR TRANSao ----------------
 
 		this.getControladorUtil().remover(ids,
 				ServicoPerfilTipo.class.getName(), operacaoEfetuada,
@@ -5098,8 +5103,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0387] Manter Tipo Perfil Serviço [SB0001] Atualizar Tipo Perfil
-	 * Serviço
+	 * [UC0387] Manter Tipo Perfil Servio [SB0001] Atualizar Tipo Perfil
+	 * Servio
 	 * 
 	 * @author Kassia Albuquerque
 	 * @date 01/11/2006
@@ -5110,8 +5115,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	public void atualizarServicoTipoPerfil(ServicoPerfilTipo servicoPerfilTipo,
 			Usuario usuarioLogado) throws ControladorException {
 
-		// [UC0107] - Registrar Transação
-		// ------------ REGISTRAR TRANSação----------------------------
+		// [UC0107] - Registrar Transao
+		// ------------ REGISTRAR TRANSao----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_TIPO_PERFIL_SERVICO_ATUALIZAR,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -5127,9 +5132,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		servicoPerfilTipo.adicionarUsuario(usuarioLogado,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(servicoPerfilTipo);
-		// ------------ REGISTRAR TRANSação----------------------------
+		// ------------ REGISTRAR TRANSao----------------------------
 
-		// [FS0003] - Atualização realizada por outro usuário
+		// [FS0003] - Atualizao realizada por outro usurio
 		FiltroServicoPerfilTipo filtroServicoPerfilTipo = new FiltroServicoPerfilTipo();
 		// Seta o filtro para buscar o servicoPerfilTipo na base
 		filtroServicoPerfilTipo.adicionarParametro(new ParametroSimples(
@@ -5149,8 +5154,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					"atencao.registro_remocao_nao_existente");
 		}
 
-		// Verificar se o servicoPerfilTipo já foi atualizado por outro usuário
-		// durante esta atualização
+		// Verificar se o servicoPerfilTipo j foi atualizado por outro usurio
+		// durante esta atualizao
 
 		if (servicoPerfilTipoNaBase.getUltimaAlteracao().after(
 				servicoPerfilTipo.getUltimaAlteracao())) {
@@ -5200,11 +5205,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0404] Manter Especificação da Situação do Imovel
+	 * [UC0404] Manter Especificao da Situao do Imovel
 	 * 
-	 * Este caso de uso remove a especificação e os critério
+	 * Este caso de uso remove a especificao e os critrio
 	 * 
-	 * [SB0002] Remover Especificação da situacao
+	 * [SB0002] Remover Especificao da situacao
 	 * 
 	 * @author Rafael Pinto
 	 * @created 08/11/2006
@@ -5268,7 +5273,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	public void removerMaterial(String[] ids, Usuario usuarioLogado)
 			throws ControladorException {
 
-		// ------------ REGISTRAR TRANSação ----------------
+		// ------------ REGISTRAR TRANSao ----------------
 		Operacao operacao = new Operacao();
 		operacao.setId(Operacao.OPERACAO_MATERIAL_REMOVER);
 
@@ -5279,7 +5284,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		Collection<UsuarioAcaoUsuarioHelper> colecaoUsuarios = new ArrayList();
 		colecaoUsuarios.add(usuarioAcaoUsuarioHelper);
-		// ------------ REGISTRAR TRANSação ----------------
+		// ------------ REGISTRAR TRANSao ----------------
 
 		this.getControladorUtil().remover(ids, Material.class.getName(),
 				operacaoEfetuada, colecaoUsuarios);
@@ -5301,7 +5306,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		String descricaoMaterial = material.getDescricao();
 		String descricaoAbreviadaMaterial = material.getDescricaoAbreviada();
 		
-		// [FS0001] Verificar existencia da Descrição
+		// [FS0001] Verificar existencia da Descrio
 		FiltroMaterial filtroMaterial = new FiltroMaterial();
 		filtroMaterial.adicionarParametro(new ParametroSimples(FiltroMaterial.DESCRICAO, descricaoMaterial));
 		filtroMaterial.adicionarParametro(new ParametroSimplesDiferenteDe(FiltroMaterial.ID, material.getId()));
@@ -5313,7 +5318,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		
 		if (Util.verificarNaoVazio(descricaoAbreviadaMaterial)) {
 			filtroMaterial.limparListaParametros();
-			// [FS0002]- Verificar existência da Descrição abreviada
+			// [FS0002]- Verificar existncia da Descrio abreviada
 			filtroMaterial.adicionarParametro(new ParametroSimples(FiltroMaterial.DESCRICAO_ABREVIADA, descricaoAbreviadaMaterial));
 			filtroMaterial.adicionarParametro(new ParametroSimplesDiferenteDe(FiltroMaterial.ID, material.getId()));
 			colecaoMaterial = getControladorUtil().pesquisar(filtroMaterial, Material.class.getName());
@@ -5325,7 +5330,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		if(codigoMaterial != null){
 			filtroMaterial.limparListaParametros();
-			//[FS0008]- Verificar existência do código
+			//[FS0008]- Verificar existncia do cdigo
 			filtroMaterial.adicionarParametro(new ParametroSimples(FiltroMaterial.CODIGO, codigoMaterial));
 			filtroMaterial.adicionarParametro(new ParametroSimplesDiferenteDe(FiltroMaterial.ID, material.getId()));
 			colecaoMaterial = getControladorUtil().pesquisar(filtroMaterial, Material.class.getName());
@@ -5337,7 +5342,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		
 		material.setUltimaAlteracao(new Date());
 
-		// ------------ INICIO REGISTRAR TRANSação----------------------------
+		// ------------ INICIO REGISTRAR TRANSao----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_MATERIAL_ATUALIZAR,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -5353,9 +5358,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		material.adicionarUsuario(usuarioLogado,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(material);
-		// ------------ FIM REGISTRAR TRANSação----------------------------
+		// ------------ FIM REGISTRAR TRANSao----------------------------
 
-		// [FS0005] - Atualização realizada por outro usuário
+		// [FS0005] - Atualizao realizada por outro usurio
 		FiltroMaterial filtroMaterialBase = new FiltroMaterial();
 		// Seta o filtro para buscar o material na base
 		filtroMaterialBase.adicionarParametro(new ParametroSimples(FiltroMaterial.ID, material.getId()));
@@ -5369,8 +5374,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			throw new ControladorException("atencao.registro_remocao_nao_existente");
 		}
 
-		// Verificar se o material já foi atualizado por outro usuário
-		// durante esta atualização
+		// Verificar se o material j foi atualizado por outro usurio
+		// durante esta atualizao
 
 		if (materialNaBase.getUltimaAlteracao().after(material.getUltimaAlteracao())){
 			sessionContext.setRollbackOnly();
@@ -5384,16 +5389,16 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0498] Efetuar Ligação de Água com Instalação de hidrômetro.
+	 * [UC0498] Efetuar Ligao de gua com Instalao de hidrmetro.
 	 * 
-	 * Permite validar o efetuar Ligação de Água com Instalação de hidrômetro
-	 * Exibir ou pelo menu ou pela funcionalidade encerrar a Execução da ordem
-	 * de serviço.
+	 * Permite validar o efetuar Ligao de gua com Instalao de hidrmetro
+	 * Exibir ou pelo menu ou pela funcionalidade encerrar a Execuo da ordem
+	 * de servio.
 	 * 
-	 * [FS0008] Verificar Situação Rede de Água na Quadra. [FS0007] Verificar
-	 * Situação do Imovel. [FS0002] Validar Situação de Água do Imóvel
+	 * [FS0008] Verificar Situao Rede de gua na Quadra. [FS0007] Verificar
+	 * Situao do Imovel. [FS0002] Validar Situao de gua do Imvel
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 27/11/2006
 	 * 
 	 * 
@@ -5405,9 +5410,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR LIGACAO AGUA COM INSTALACAO HIDROMETRO, não será
-		 * necessário realizar as validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR LIGACAO AGUA COM INSTALACAO HIDROMETRO, no ser
+		 * necessrio realizar as validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
@@ -5427,7 +5432,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
+		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
 		 * Rossiter Data: 26/04/2007
 		 * 
 		 * ===============================================================================
@@ -5445,7 +5450,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		Imovel imovel = ordem.getRegistroAtendimento().getImovel();
 
-		// [FS0002] Validar Situação de Água do Imóvel.
+		// [FS0002] Validar Situao de gua do Imvel.
 		if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.POTENCIAL
 				.intValue()
 				&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.FACTIVEL
@@ -5459,9 +5464,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * [FS0007] Verificar Situação Rede de Água na Quadra
+		 * [FS0007] Verificar Situao Rede de gua na Quadra
 		 * 
-		 * Integração com o conceito de face da quadra Raphael Rossiter em
+		 * Integrao com o conceito de face da quadra Raphael Rossiter em
 		 * 21/05/2009
 		 */
 		IntegracaoQuadraFaceHelper integracao = this.getControladorLocalidade()
@@ -5474,7 +5479,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							+ "");
 		}
 
-		// [FS0006] Verificar Situação do Imovel
+		// [FS0006] Verificar Situao do Imovel
 		if (imovel.getIndicadorExclusao() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 			throw new ControladorException(
 					"atencao.situacao_imovel_indicador_exclusao", null, imovel
@@ -5482,7 +5487,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							+ "");
 		}
 
-		// [FS0014] - Verificar existência de hidrômetro na Ligação de Água
+		// [FS0014] - Verificar existncia de hidrmetro na Ligao de gua
 		if (imovel.getLigacaoAgua() != null
 				&& imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
 			throw new ControladorException(
@@ -5496,17 +5501,17 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0540] Efetuar Restabelecimento da Ligação de Água com Instalação de
-	 * hidrômetro.
+	 * [UC0540] Efetuar Restabelecimento da Ligao de gua com Instalao de
+	 * hidrmetro.
 	 * 
-	 * Permite validar o Efetuar Restabelecimento Ligação de Água com Instalação
-	 * de hidrômetro Exibir ou pelo menu ou pela funcionalidade encerrar a
-	 * Execução da ordem de serviço.
+	 * Permite validar o Efetuar Restabelecimento Ligao de gua com Instalao
+	 * de hidrmetro Exibir ou pelo menu ou pela funcionalidade encerrar a
+	 * Execuo da ordem de servio.
 	 * 
-	 * [FS0008] Verificar Situação Rede de Água na Quadra. [FS0007] Verificar
-	 * Situação do Imovel. [FS0002] Validar Situação de Água do Imóvel
+	 * [FS0008] Verificar Situao Rede de gua na Quadra. [FS0007] Verificar
+	 * Situao do Imovel. [FS0002] Validar Situao de gua do Imvel
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 18/04/2007
 	 * 
 	 * 
@@ -5520,9 +5525,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// [FS0001] Validar Ordem de Servico
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR LIGACAO AGUA COM INSTALACAO HIDROMETRO, não será
-		 * necessário realizar as validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR LIGACAO AGUA COM INSTALACAO HIDROMETRO, no ser
+		 * necessrio realizar as validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
@@ -5553,7 +5558,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		Imovel imovel = ordem.getRegistroAtendimento().getImovel();
 
-		// [FS0002] Validar Situação de Água do Imóvel.
+		// [FS0002] Validar Situao de gua do Imvel.
 		if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.SUPRIMIDO
 				.intValue()
 				&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.SUPR_PARC_PEDIDO
@@ -5565,9 +5570,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * [FS0007] Verificar Situação Rede de Água na Quadra
+		 * [FS0007] Verificar Situao Rede de gua na Quadra
 		 * 
-		 * Integração com o conceito de face da quadra Raphael Rossiter em
+		 * Integrao com o conceito de face da quadra Raphael Rossiter em
 		 * 21/05/2009
 		 */
 		IntegracaoQuadraFaceHelper integracao = this.getControladorLocalidade()
@@ -5580,7 +5585,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							+ "");
 		}
 
-		// [FS0006] Verificar Situação do Imovel
+		// [FS0006] Verificar Situao do Imovel
 		if (imovel.getIndicadorExclusao() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 			throw new ControladorException(
 					"atencao.situacao_imovel_indicador_exclusao", null, imovel
@@ -5588,7 +5593,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							+ "");
 		}
 
-		// [FS0014] - Verificar existência de hidrômetro na Ligação de Água
+		// [FS0014] - Verificar existncia de hidrmetro na Ligao de gua
 		if (imovel.getLigacaoAgua() != null
 				&& imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
 			throw new ControladorException(
@@ -5602,7 +5607,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 * Servico Metodo que atualiza a Prioridade do Tipo de Servico
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenrio
 	 * @date 25/05/2006
 	 * 
 	 * @param Prioridade
@@ -5638,13 +5643,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		}
 
-		// Verifica se o campo Descrição da Prioridade foi preenchido
+		// Verifica se o campo Descrio da Prioridade foi preenchido
 
 		if (servicoTipoPrioridade.getDescricao() == null
 				|| servicoTipoPrioridade.getDescricao().equals(
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException("atencao.Informe_entidade", null,
-					" Descrição da Prioridade");
+					" Descrio da Prioridade");
 		}
 
 		// Verifica se o campo Abreviatura da Prioridade foi preenchido
@@ -5656,25 +5661,25 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					"Abreviatura da Prioridade");
 		}
 
-		// Verifica se o campo Horas para Execução do Serviço foi preenchido
+		// Verifica se o campo Horas para Execuo do Servio foi preenchido
 
 		if (servicoTipoPrioridade.getPrazoExecucaoInicio() == null
 				|| servicoTipoPrioridade.getPrazoExecucaoInicio().equals(
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException("atencao.Informe_entidade", null,
-					"Horas para Execução do Serviço");
+					"Horas para Execuo do Servio");
 		}
 
-		// Verifica se o campo Horas para Finalização do Serviço foi preenchido
+		// Verifica se o campo Horas para Finalizao do Servio foi preenchido
 
 		if (servicoTipoPrioridade.getPrazoExecucaoFim() == null
 				|| servicoTipoPrioridade.getPrazoExecucaoFim().equals(
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException("atencao.Informe_entidade", null,
-					"Horas para Finalização do Serviço");
+					"Horas para Finalizao do Servio");
 		}
 
-		// [FS0003] - Atualização realizada por outro usuário
+		// [FS0003] - Atualizao realizada por outro usurio
 		FiltroServicoTipoPrioridade filtroServicoTipoPrioridade = new FiltroServicoTipoPrioridade();
 		filtroServicoTipoPrioridade.adicionarParametro(new ParametroSimples(
 				FiltroServicoTipoPrioridade.ID, servicoTipoPrioridade.getId()));
@@ -5705,12 +5710,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0498] Efetuar Ligação de Água com Instalação de hidrômetro.
+	 * [UC0498] Efetuar Ligao de gua com Instalao de hidrmetro.
 	 * 
-	 * Permite efetuar Ligação de Água com Instalação de Hidrômetro ou pelo menu
-	 * ou pela funcionalidade encerrar a Execução da ordem de serviço.
+	 * Permite efetuar Ligao de gua com Instalao de Hidrmetro ou pelo menu
+	 * ou pela funcionalidade encerrar a Execuo da ordem de servio.
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 29/11/2006
 	 * 
 	 * @param integracaoComercialHelper
@@ -5721,7 +5726,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			throws ControladorException {
 
 		/*
-		 * [UC0107] Registrar Transação
+		 * [UC0107] Registrar Transao
 		 */
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_EFETUAR_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO,
@@ -5741,7 +5746,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		
 		if (ligacaoAgua != null && imovel != null) {
 
-			// [SB0001] Gerar Ligação de Água
+			// [SB0001] Gerar Ligao de gua
 
 			// LAGU_DTIMPLANTACAO
 			ligacaoAgua.setDataImplantacao(new Date());
@@ -5770,7 +5775,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					.setHidrometroInstalacaoHistorico(integracaoComercialHelper
 							.getHidrometroInstalacaoHistorico());
 			
-			//Alteração feita por Sávio Luiz
+			//Alterao feita por Svio Luiz
 			//Data: 25/05/2011
 			FiltroLigacaoAgua filtroLigacaoAgua = new FiltroLigacaoAgua();
 			filtroLigacaoAgua.adicionarParametro(new ParametroSimples(
@@ -5802,13 +5807,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		try {
 
-			// Caso o tipo de medição seja igual a Ligação de Água, atualiza as
+			// Caso o tipo de medio seja igual a Ligao de gua, atualiza as
 			// colunas da tabela LIGACAO_AGUA
 			// if
 			// (hidrometroInstalacaoHistorico.getMedicaoTipo().getId().equals(
 			// MedicaoTipo.LIGACAO_AGUA)) {
 			//				
-			// // Caso o tipo de medição seja igual a Poço, atualiza as colunas
+			// // Caso o tipo de medio seja igual a Poo, atualiza as colunas
 			// // da tabela POCO
 			// } else if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId()
 			// .equals(MedicaoTipo.POCO)) {
@@ -5818,7 +5823,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			// .getId(), id);
 			// }
 
-			// [SB003]Atualizar situação de hidrômetro na tabela HIDROMETRO
+			// [SB003]Atualizar situao de hidrmetro na tabela HIDROMETRO
 			Integer situacaoHidrometro = HidrometroSituacao.INSTALADO;
 			repositorioAtendimentoPublico.atualizarSituacaoHidrometro(
 					hidrometroInstalacaoHistorico.getHidrometro().getId(),
@@ -5832,7 +5837,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 			if (ligacaoAgua != null && imovel != null) {
 
-				// // [SB0001] Gerar Ligação de Água
+				// // [SB0001] Gerar Ligao de gua
 				//
 				// // LAGU_DTIMPLANTACAO
 				// ligacaoAgua.setDataImplantacao(new Date());
@@ -5884,7 +5889,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					ligacaoEsgotoSituacao.setId(LigacaoEsgotoSituacao.LIGADO);
 
 					imovel.setUltimaAlteracao(new Date());
-					// [SB0002] Atualizar Imóvel
+					// [SB0002] Atualizar Imvel
 					getControladorImovel()
 							.atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(
 									imovel, ligacaoEsgotoSituacao);
@@ -5921,14 +5926,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0540] Efetuar Restabelecimento da Ligação de Água com Instalação de
-	 * hidrômetro.
+	 * [UC0540] Efetuar Restabelecimento da Ligao de gua com Instalao de
+	 * hidrmetro.
 	 * 
-	 * Permite efetuar o Restabelecimento Ligação de Água com Instalação de
-	 * Hidrômetro ou pelo menu ou pela funcionalidade encerrar a Execução da
-	 * ordem de serviço.
+	 * Permite efetuar o Restabelecimento Ligao de gua com Instalao de
+	 * Hidrmetro ou pelo menu ou pela funcionalidade encerrar a Execuo da
+	 * ordem de servio.
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 19/04/2007
 	 * 
 	 * @param integracaoComercialHelper
@@ -5946,7 +5951,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		this.getControladorMicromedicao().validarImovelEmCampo(imovel.getId());
 		
 		/*
-		 * [UC0107] Registrar Transação
+		 * [UC0107] Registrar Transao
 		 */
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_EFETUAR_RESTABELECIMENTO_LIGACAO_AGUA_COM_INSTALACAO_DE_HIDROMETRO,
@@ -5955,7 +5960,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		if (ligacaoAgua != null && imovel != null) {
 
-			// [SB0001] Gerar Ligação de Água
+			// [SB0001] Gerar Ligao de gua
 
 			// LAGU_TMULTIMAALTERACAO
 			Date dataCorrente = new Date();
@@ -5982,7 +5987,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		try {
 
-			// [SB003]Atualizar situação de hidrômetro na tabela HIDROMETRO
+			// [SB003]Atualizar situao de hidrmetro na tabela HIDROMETRO
 			Integer situacaoHidrometro = HidrometroSituacao.INSTALADO;
 			repositorioAtendimentoPublico.atualizarSituacaoHidrometro(
 					hidrometroInstalacaoHistorico.getHidrometro().getId(),
@@ -6016,7 +6021,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					ligacaoEsgotoSituacao.setId(LigacaoEsgotoSituacao.LIGADO);
 
 					imovel.setUltimaAlteracao(new Date());
-					// [SB0002] Atualizar Imóvel
+					// [SB0002] Atualizar Imvel
 					getControladorImovel()
 							.atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(
 									imovel, ligacaoEsgotoSituacao);
@@ -6052,7 +6057,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0475] Obter Valor do Débito
+	 * [UC0475] Obter Valor do Dbito
 	 * 
 	 * @author Rafael Pinto
 	 * @date 22/02/2007
@@ -6062,7 +6067,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 * @param tipoMedicao
 	 * @param idHidrometroCapacidade
 	 * 
-	 * @return valor do Débito
+	 * @return valor do Dbito
 	 * 
 	 * @throws ControladorException
 	 */
@@ -6101,7 +6106,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar a ordem de servico do [UC0555]-Alterar
+	 * Este mtodo se destina a validar a ordem de servico do [UC0555]-Alterar
 	 * Situacao Ligacao
 	 * 
 	 * @author Romulo Aurelio
@@ -6138,7 +6143,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
 		/*
 		 * Imovel imovel = ordemServico.getImovel(); // [FS0002] Verificar
-		 * Situação do Imovel. if (imovel.getIndicadorExclusao() != null &&
+		 * Situao do Imovel. if (imovel.getIndicadorExclusao() != null &&
 		 * imovel.getIndicadorExclusao().intValue() !=
 		 * ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 		 * 
@@ -6147,11 +6152,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		 * .getId().toString()); }
 		 * 
 		 * if (imovel.getLigacaoAgua() == null) { throw new
-		 * ControladorException("atencao.naocadastrado", null, "Ligação de
-		 * Água"); }
+		 * ControladorException("atencao.naocadastrado", null, "Ligao de
+		 * gua"); }
 		 */
 
-		// [FS0003] Verificar a situação de Água
+		// [FS0003] Verificar a situao de gua
 		/*
 		 * if (imovel.getLigacaoAguaSituacao().getId().intValue() !=
 		 * LigacaoAguaSituacao.LIGADO .intValue() &&
@@ -6195,12 +6200,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
 		operacaoEfetuada.setOperacao(operacao);
-		// [UC0107] -Fim- Registrar Transação
+		// [UC0107] -Fim- Registrar Transao
 
 		// [FS0009] - Verificar existencia de debitos
 		// adicionadao por Vivianne Sousa - 18/03/2009 - analista: Dennys
 		boolean temPermissaoAlterarSituacaoLigacaoParaImovelComDebito = getControladorPermissaoEspecial().verificarPermissaoAlterarSituacaoLigacaoParaImovelComDebito(usuarioLogado);
-		// caso o usuario tenha permisão especial, não verificar existencia de
+		// caso o usuario tenha permiso especial, no verificar existencia de
 		// debitos
 		if (!temPermissaoAlterarSituacaoLigacaoParaImovelComDebito) {
 
@@ -6261,8 +6266,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 						/*
 						 * Pesquisa o grupo na base de dados e verifica se o
-						 * registro não foi atualizado por outro usuário durante
-						 * essa transação
+						 * registro no foi atualizado por outro usurio durante
+						 * essa transao
 						 */
 						getControladorUtil().remover(ligacaoAgua);
 						// [SB0002]- Atualizar Situacao do Imovel
@@ -6320,7 +6325,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			// Recupera o grupo na base de dados
 			Imovel imovelBase = (Imovel) colecaoImovelBase.iterator().next();
 
-			// [FS0004] - Atualização realizada por outro usuário
+			// [FS0004] - Atualizao realizada por outro usurio
 			if (imovelBase.getUltimaAlteracao().after(imovel.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
@@ -6352,9 +6357,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa todos os ids das situações de ligação de água.
+	 * Pesquisa todos os ids das situaes de ligao de gua.
 	 * 
-	 * [UC0564 - Gerar Resumo das Instalações de Hidrômetros]
+	 * [UC0564 - Gerar Resumo das Instalaes de Hidrmetros]
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 25/04/2007
@@ -6373,9 +6378,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa todos os ids das situações de ligação de esgoto.
+	 * Pesquisa todos os ids das situaes de ligao de esgoto.
 	 * 
-	 * [UC0564 - Gerar Resumo das Instalações de Hidrômetros]
+	 * [UC0564 - Gerar Resumo das Instalaes de Hidrmetros]
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 25/04/2007
@@ -6395,13 +6400,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 	/**
 	 * 
-	 * Este cso de uso permite efetuar a ligação de água e eventualmente a
-	 * instalação de hidrômetro, sem informação de RA sendo chamado direto pelo
+	 * Este cso de uso permite efetuar a ligao de gua e eventualmente a
+	 * instalao de hidrmetro, sem informao de RA sendo chamado direto pelo
 	 * menu.
 	 * 
-	 * [UC0579] - Efetuar Ligação de Água com Intalação de Hidrômetro
+	 * [UC0579] - Efetuar Ligao de gua com Intalao de Hidrmetro
 	 * 
-	 * @author Flávio Leonardo
+	 * @author Flvio Leonardo
 	 * @date 25/04/2007
 	 * 
 	 * @param idImovel
@@ -6451,9 +6456,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					}
 
 					/*
-					 * [FS0007] Verificar Situação Rede de Água na Quadra
+					 * [FS0007] Verificar Situao Rede de gua na Quadra
 					 * 
-					 * Integração com o conceito de face da quadra Raphael
+					 * Integrao com o conceito de face da quadra Raphael
 					 * Rossiter em 22/05/2009
 					 */
 					IntegracaoQuadraFaceHelper integracao = this
@@ -6474,19 +6479,19 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 				}
 
-				// [FS0006] Verifica Situação do Imovel
+				// [FS0006] Verifica Situao do Imovel
 				if (indicadorExclusao == ConstantesSistema.SIM) {
 					throw new ControladorException(
 							"atencao.atualizar_situacao_imovel_indicador_exclusao_esgoto",
 							null, idImovel.toString());
 				}
-				// [FS0007] Verifica Situação rede de água da quadra
+				// [FS0007] Verifica Situao rede de gua da quadra
 				if (indicadorRedeAgua == ConstantesSistema.SIM) {
 					throw new ControladorException(
 							"atencao.seituacao_rede_agua_quadra", null,
 							idImovel.toString());
 				}
-				// [FS0002] Validar Situação de Água do Imóvel
+				// [FS0002] Validar Situao de gua do Imvel
 				if (!retorno.getIdSituacaoLigacaoAgua().equals(
 						LigacaoAguaSituacao.POTENCIAL)
 						&& !retorno.getIdSituacaoLigacaoAgua().equals(
@@ -6507,9 +6512,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0874] Gerar Contrato de Prestação de Serviço
+	 * [UC0874] Gerar Contrato de Prestao de Servio
 	 * 
-	 * @author Rafael Corrêa, Rômulo Aurélio
+	 * @author Rafael Corra, Rmulo Aurlio
 	 * @date 03/05/2007, 15/12/2008
 	 * 
 	 * @throws ControladorException
@@ -6530,7 +6535,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 				ContratoPrestacaoServicoHelper contratoPrestacaoServicoHelper = new ContratoPrestacaoServicoHelper();
 
-				// Obtém os dados do crédito realizado
+				// Obtm os dados do crdito realizado
 				Object[] dadosRelatorio = (Object[]) colecaoDadosRelatorioIterator
 						.next();
 
@@ -6547,25 +6552,25 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							.setNomeLocalidade((String) dadosRelatorio[0]);
 				}
 
-				// Id do Responsável
+				// Id do Responsvel
 				if (dadosRelatorio[4] != null) {
 
 					clienteResponsavel = new Cliente();
 
 					clienteResponsavel.setId((Integer) dadosRelatorio[4]);
 
-					// Nome Responsável
+					// Nome Responsvel
 					if (dadosRelatorio[1] != null) {
 
 						clienteResponsavel.setNome((String) dadosRelatorio[1]);
 					}
 
-					// CPF Responsável
+					// CPF Responsvel
 					if (dadosRelatorio[2] != null) {
 						clienteResponsavel.setCpf((String) dadosRelatorio[2]);
 					}
 
-					// RG Responsável
+					// RG Responsvel
 					if (dadosRelatorio[3] != null) {
 						clienteResponsavel.setRg((String) dadosRelatorio[3]);
 					}
@@ -6581,7 +6586,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					imovel.setConsumoTarifa(consumoTarifa);
 				}
 
-				// Nome Unidade Negócio
+				// Nome Unidade Negcio
 				if (dadosRelatorio[6] != null) {
 					contratoPrestacaoServicoHelper
 							.setNomeMunicipio((String) dadosRelatorio[6]);
@@ -6646,7 +6651,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							|| cliente.getCpf().equalsIgnoreCase("")) {
 						throw new ControladorException(
 								"atencao.cpf_cliente_nao_informado", null,
-								"cliente responsável");
+								"cliente responsvel");
 					}
 
 					if (cliente.getRg() == null
@@ -6720,10 +6725,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	/**
 	 * [UC0582] - Emitir Boletim de Cadastro
 	 * 
-	 * Obtém os dados necessário da ligação de água, de esgoto e do hidrômetro
-	 * instalado na ligação de água
+	 * Obtm os dados necessrio da ligao de gua, de esgoto e do hidrmetro
+	 * instalado na ligao de gua
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 17/05/2007
 	 * 
 	 * @throws ControladorException
@@ -6745,21 +6750,21 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = null;
 				Hidrometro hidrometro = null;
 
-				// Diâmetro da Ligação de Água
+				// Dimetro da Ligao de gua
 				if (dadosLigacos[0] != null) {
 					LigacaoAguaDiametro ligacaoAguaDiametro = new LigacaoAguaDiametro();
 					ligacaoAguaDiametro.setId((Integer) dadosLigacos[0]);
 					ligacaoAgua.setLigacaoAguaDiametro(ligacaoAguaDiametro);
 				}
 
-				// Material da Ligação de Água
+				// Material da Ligao de gua
 				if (dadosLigacos[1] != null) {
 					LigacaoAguaMaterial ligacaoAguaMaterial = new LigacaoAguaMaterial();
 					ligacaoAguaMaterial.setId((Integer) dadosLigacos[1]);
 					ligacaoAgua.setLigacaoAguaMaterial(ligacaoAguaMaterial);
 				}
 
-				// Diâmetro da Ligação de Esgoto
+				// Dimetro da Ligao de Esgoto
 				if (dadosLigacos[2] != null) {
 					LigacaoEsgotoDiametro ligacaoEsgotoDiametro = new LigacaoEsgotoDiametro();
 					ligacaoEsgotoDiametro.setId((Integer) dadosLigacos[2]);
@@ -6767,7 +6772,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							.setLigacaoEsgotoDiametro(ligacaoEsgotoDiametro);
 				}
 
-				// Material da Ligação de Esgoto
+				// Material da Ligao de Esgoto
 				if (dadosLigacos[3] != null) {
 					LigacaoEsgotoMaterial ligacaoEsgotoMaterial = new LigacaoEsgotoMaterial();
 					ligacaoEsgotoMaterial.setId((Integer) dadosLigacos[3]);
@@ -6783,21 +6788,21 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							.setNumeroLeituraInstalacao((Integer) dadosLigacos[4]);
 				}
 
-				// Capacidade do Hidrômetro
+				// Capacidade do Hidrmetro
 				if (dadosLigacos[5] != null) {
 					HidrometroCapacidade hidrometroCapacidade = new HidrometroCapacidade();
 					hidrometroCapacidade.setId((Integer) dadosLigacos[5]);
 					hidrometro.setHidrometroCapacidade(hidrometroCapacidade);
 				}
 
-				// Marca do Hidrômetro
+				// Marca do Hidrmetro
 				if (dadosLigacos[6] != null) {
 					HidrometroMarca hidrometroMarca = new HidrometroMarca();
 					hidrometroMarca.setId((Integer) dadosLigacos[6]);
 					hidrometro.setHidrometroMarca(hidrometroMarca);
 				}
 
-				// Local de Instalação do Hidrômetro
+				// Local de Instalao do Hidrmetro
 				if (dadosLigacos[7] != null) {
 					HidrometroLocalInstalacao hidrometroLocalInstalacao = new HidrometroLocalInstalacao();
 					hidrometroLocalInstalacao.setId((Integer) dadosLigacos[7]);
@@ -6805,7 +6810,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							.setHidrometroLocalInstalacao(hidrometroLocalInstalacao);
 				}
 
-				// Proteção do Hidrômetro
+				// Proteo do Hidrmetro
 				if (dadosLigacos[8] != null) {
 					HidrometroProtecao hidrometroProtecao = new HidrometroProtecao();
 					hidrometroProtecao.setId((Integer) dadosLigacos[8]);
@@ -6819,7 +6824,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							.setIndicadorExistenciaCavalete((Short) dadosLigacos[9]);
 				}
 
-				// Numero do Hidrômetro
+				// Numero do Hidrmetro
 				if (dadosLigacos[10] != null) {
 					hidrometro.setNumero((String) dadosLigacos[10]);
 				}
@@ -6893,7 +6898,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						.pesquisaClienteContrato(sistemaParametro
 								.getClienteDiretorComercial().getId());
 
-				// [FS0002]- Identificar informações do presidente e diretor
+				// [FS0002]- Identificar informaes do presidente e diretor
 				// fincanceiro da empresa
 
 				if (clientePresidente == null) {
@@ -6975,12 +6980,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							"atencao.cliente_associado_contrato_pessoa_juridica");
 				}
 
-				// [FS0004]- Informações do cliente associado ao contrato
+				// [FS0004]- Informaes do cliente associado ao contrato
 				if (clienteEmpresa.getCpf() == null
 						|| clienteEmpresa.getCpf().equals("")) {
 					throw new ControladorException(
 							"atencao.cpf_cliente_nao_informado", null,
-							"cliente responsável");
+							"cliente responsvel");
 				}
 				if (clienteEmpresa.getRg() == null
 						|| clienteEmpresa.getRg().equals("")) {
@@ -7037,15 +7042,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0608] Efetuar Ligação de Esgoto sem RA.
+	 * [UC0608] Efetuar Ligao de Esgoto sem RA.
 	 * 
-	 * [FS0001] Verificar existência da matrícula do Imovel.
+	 * [FS0001] Verificar existncia da matrcula do Imovel.
 	 * 
-	 * [FS0007] Verificar situação do imóvel.
+	 * [FS0007] Verificar situao do imvel.
 	 * 
-	 * [FS0008] Verificar Situação Rede de Esgoto da Quadra.
+	 * [FS0008] Verificar Situao Rede de Esgoto da Quadra.
 	 * 
-	 * @author Sávio Luiz.
+	 * @author Svio Luiz.
 	 * @date 10/09/2007
 	 * 
 	 * 
@@ -7062,21 +7067,21 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		if (quantidadeImoveis == 0) {
 			boolean imovelExcluido = getControladorImovel()
 					.confirmarImovelExcluido(idImovel);
-			// [FS0007] Verificar situação do imóvel.
+			// [FS0007] Verificar situao do imvel.
 			if (imovelExcluido) {
 				throw new ControladorException(
 						"atencao.atualizar_situacao_imovel_indicador_exclusao_esgoto",
 						null, "" + idImovel);
 			} else {
-				// [FS0001] Verificar existência da matrícula do Imovel.
-				mensagem = "Matrícula do imóvel inexistente.";
+				// [FS0001] Verificar existncia da matrcula do Imovel.
+				mensagem = "Matrcula do imvel inexistente.";
 			}
 		}
 
 		/*
-		 * [FS0007] - Verificar situação rede de esgoto da quadra
+		 * [FS0007] - Verificar situao rede de esgoto da quadra
 		 * 
-		 * Integração com o conceito de face da quadra Raphael Rossiter em
+		 * Integrao com o conceito de face da quadra Raphael Rossiter em
 		 * 22/05/2009
 		 */
 		IntegracaoQuadraFaceHelper integracao = this.getControladorLocalidade()
@@ -7093,14 +7098,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0482]Emitir 2ª Via de Conta obter numero do hidrômetro na ligação de
-	 * água.
+	 * [UC0482]Emitir 2 Via de Conta obter numero do hidrmetro na ligao de
+	 * gua.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/09/2007
 	 * 
 	 * @param imovelId
-	 * @return existencia de hidrometro ou não
+	 * @return existencia de hidrometro ou no
 	 * @throws ErroRepositorioException
 	 */
 	public String obterNumeroHidrometroEmLigacaoAgua(Integer imovelId)
@@ -7114,15 +7119,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0475] Obter Valor do Débito
+	 * [UC0475] Obter Valor do Dbito
 	 * 
-	 * Obter Capacidade de Hidrômetro pela Ligação de Água.
+	 * Obter Capacidade de Hidrmetro pela Ligao de gua.
 	 * 
 	 * @author Leonardo Regis
 	 * @date 09/09/2006
 	 * 
 	 * @param imovelId
-	 * @return existencia de hidrometro ou não
+	 * @return existencia de hidrometro ou no
 	 * @throws ErroRepositorioException
 	 */
 	public HidrometroCapacidade obterHidrometroCapacidadeEmLigacaoAgua(
@@ -7136,7 +7141,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0726] Gerar Relatório de Imóveis com Faturas em Atraso
+	 * [UC0726] Gerar Relatrio de Imveis com Faturas em Atraso
 	 * 
 	 * @author Bruno Barros
 	 * @date 06/12/2007
@@ -7173,14 +7178,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 				helper = new RelatorioCertidaoNegativaHelper();
 
-				// Nome do usuário
+				// Nome do usurio
 				helper.setNomeClienteUsuario((String) objeto[0]);
 
 				// Matricula do imovel
 				helper.setMatriculaImovel((Integer) objeto[1]);
 
 				// Carregamos os dados no imovel para selecionarmos sua
-				// matrícula formatada
+				// matrcula formatada
 				// Id do imovel
 				Imovel imovel = new Imovel();
 				imovel.setId((Integer) objeto[1]);
@@ -7190,7 +7195,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				local.setId((Integer) objeto[2]);
 				imovel.setLocalidade(local);
 
-				// Código do Setor Comercial
+				// Cdigo do Setor Comercial
 				SetorComercial setorComercial = new SetorComercial();
 				setorComercial.setCodigo((Integer) objeto[3]);
 				imovel.setSetorComercial(setorComercial);
@@ -7203,15 +7208,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				imovel.setLote((Short) objeto[5]);
 				imovel.setSubLote((Short) objeto[6]);
 
-				// Inscrição formatada
+				// Inscrio formatada
 				helper.setInscricaoImovel(imovel.getInscricaoFormatada());
 
-				// Nome do Usuário
+				// Nome do Usurio
 				Cliente clienteUsuario = getControladorImovel()
 						.pesquisarClienteUsuarioImovel(imovel.getId());
 				helper.setNomeUsuario(clienteUsuario.getNome());
 
-				// Selecionamos os dados do Endereço
+				// Selecionamos os dados do Endereo
 				String[] dadosEndereco = this
 						.getControladorEndereco()
 						.pesquisarEnderecoFormatadoDividido((Integer) objeto[1]);
@@ -7253,10 +7258,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				// Obtemos o perfil do imovel
 				helper.setPerfilImovel((String) objeto[8]);
 
-				// Obtemos a situação da ligacao de agua
+				// Obtemos a situao da ligacao de agua
 				helper.setLigacaoAguaSituacao((String) objeto[9]);
 
-				// Obtemos a situação da ligacao de esgoto
+				// Obtemos a situao da ligacao de esgoto
 				helper.setLigacaoEsgotoSituacao((String) objeto[10]);
 
 				// Obtemos o tipo do poco
@@ -7295,7 +7300,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				// Obtemos O 0800
 				helper.setZeroOitossentosEmpresa((String) objeto[23]);
 
-				// Obtemos a inscrição estadual
+				// Obtemos a inscrio estadual
 				helper.setInscricaoEstadualEmpresa((String) objeto[24]);
 
 				String area = "";
@@ -7319,12 +7324,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					helper.setNumeroHidrometro("");
 				}
 				
-				// Unidade Negócio
+				// Unidade Negcio
 				helper.setUnidadeNegocio((String) objeto[28]);
 				
 				// Cliente Tipo
 				if(objeto[31] != null){
-					// verifica se é cpf
+					// verifica se  cpf
 					if(((Short) objeto[31]).compareTo(ConstantesSistema.SIM) == 0){
 						
 						if(objeto[29] != null){
@@ -7342,7 +7347,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					}
 				}
 				
-				// Endereço Completo
+				// Endereo Completo
 				String enderecoCompleto = getControladorEndereco().pesquisarEnderecoFormatado(imovel.getId());
 				helper.setEnderecoCompleto(enderecoCompleto);
 				
@@ -7356,7 +7361,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		dataFimVencimentoDebito.add(Calendar.DATE, -sistemaParametro
 				.getNumeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos());
 
-		// Pesquisamos se o imovel possue debitos ou não
+		// Pesquisamos se o imovel possue debitos ou no
 		ObterDebitoImovelOuClienteHelper debitoGeral = Fachada.getInstancia()
 				.obterDebitoImovelOuCliente(1, imo.getId() + "", null, null,
 						"190001", "299901", Util.criarData(1, 1, 1900),
@@ -7387,7 +7392,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		}
 
-		// Verificamos se existe débito para o imovel selecionado
+		// Verificamos se existe dbito para o imovel selecionado
 		if ((debitoGeral.getColecaoContasValores() != null && debitoGeral
 				.getColecaoContasValores().size() > 0)
 				|| (debitoGeral.getColecaoCreditoARealizar() != null && debitoGeral
@@ -7543,7 +7548,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					// analista responsavel: Adriano
 
 					RelatorioCertidaoNegativaItemBean credito = new RelatorioCertidaoNegativaItemBean(
-							"Crédito a Realizar",
+							"Crdito a Realizar",
 							creditoHelper.getCreditoTipo().getDescricao(),
 							Util.formatarAnoMesParaMesAno(creditoHelper
 									.getAnoMesReferenciaContabil()),
@@ -7560,7 +7565,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 					// RelatorioCertidaoNegativaItemBean credito = new
 					// RelatorioCertidaoNegativaItemBean(
-					// "Crédito a Realizar",
+					// "Crdito a Realizar",
 					// creditoHelper.getCreditoTipo().getDescricao(),
 					// Util.formatarAnoMesParaMesAno(
 					// creditoHelper.getAnoMesReferenciaContabil() ),
@@ -7612,12 +7617,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0498] Efetuar Religação de Água com Instalação de hidrômetro.
+	 * [UC0498] Efetuar Religao de gua com Instalao de hidrmetro.
 	 * 
-	 * Permite efetuar religação de Água com Instalação de Hidrômetro ou pelo
-	 * menu ou pela funcionalidade encerrar a Execução da ordem de serviço.
+	 * Permite efetuar religao de gua com Instalao de Hidrmetro ou pelo
+	 * menu ou pela funcionalidade encerrar a Execuo da ordem de servio.
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 29/01/2008
 	 * 
 	 * @param integracaoComercialHelper
@@ -7628,7 +7633,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			throws ControladorException {
 
 		/*
-		 * [UC0107] Registrar Transação
+		 * [UC0107] Registrar Transao
 		 */
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO,
@@ -7653,7 +7658,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 			Integer id = null;
 
-			// [SB0003] Gerar Histórico de Instalação do Hidrometro
+			// [SB0003] Gerar Histrico de Instalao do Hidrometro
 
 			HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = integracaoComercialHelper
 					.getHidrometroInstalacaoHistorico();
@@ -7672,7 +7677,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 			try {
 
-				// [SB004] Atualizar Hidrômetro
+				// [SB004] Atualizar Hidrmetro
 				Integer situacaoHidrometro = HidrometroSituacao.INSTALADO;
 				repositorioAtendimentoPublico.atualizarSituacaoHidrometro(
 						hidrometroInstalacaoHistorico.getHidrometro().getId(),
@@ -7681,12 +7686,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				hidrometroInstalacaoHistorico.setId(id);
 				hidrometroInstalacaoHistorico.setLigacaoAgua(ligacaoAgua);
 
-				// [SB0001] Atualizar Imóvel/Ligação de Água
+				// [SB0001] Atualizar Imvel/Ligao de gua
 
 				Date dataCorrente = new Date();
 				ligacaoAgua.setUltimaAlteracao(dataCorrente);
 
-				// [FS0007] - Atualização realizada por outrio usuário
+				// [FS0007] - Atualizao realizada por outrio usurio
 				FiltroLigacaoAgua filtroLigacaoAgua = new FiltroLigacaoAgua();
 				filtroLigacaoAgua.adicionarParametro(new ParametroSimples(
 						FiltroLigacaoAgua.ID, ligacaoAgua.getId()));
@@ -7766,7 +7771,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			}
 		}
 
-		// [SB0002] Atualizar Ordem de Serviço
+		// [SB0002] Atualizar Ordem de Servio
 		ordemServico.setOperacaoEfetuada(operacaoEfetuada);
 		ordemServico.adicionarUsuario(usuario,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
@@ -7793,15 +7798,15 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0747] Efetuar Religação de Água com Instalação de hidrômetro.
+	 * [UC0747] Efetuar Religao de gua com Instalao de hidrmetro.
 	 * 
-	 * Permite validar o efetuar religação de Água com Instalação de hidrômetro
-	 * Exibir ou pelo menu ou pela funcionalidade encerrar a Execução da ordem
-	 * de serviço.
+	 * Permite validar o efetuar religao de gua com Instalao de hidrmetro
+	 * Exibir ou pelo menu ou pela funcionalidade encerrar a Execuo da ordem
+	 * de servio.
 	 * 
-	 * [FS0002] Verificar Situação do Imovel. [FS0003] Validar Situação de Água
+	 * [FS0002] Verificar Situao do Imovel. [FS0003] Validar Situao de gua
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 29/01/2008
 	 * 
 	 * 
@@ -7813,9 +7818,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de serviço recebida esteja associado a
-		 * operação EFETUAR LIGACAO AGUA COM INSTALACAO HIDROMETRO, não será
-		 * necessário realizar as validações abaixo.
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
+		 * operao EFETUAR LIGACAO AGUA COM INSTALACAO HIDROMETRO, no ser
+		 * necessrio realizar as validaes abaixo.
 		 * 
 		 * Autor: Raphael Rossiter Data: 26/04/2007
 		 * 
@@ -7835,7 +7840,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		}
 
 		/*
-		 * Validações já contidas no método anteriormente Autor: Raphael
+		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
 		 * Rossiter Data: 26/04/2007
 		 * 
 		 * ===============================================================================
@@ -7853,7 +7858,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		Imovel imovel = ordem.getRegistroAtendimento().getImovel();
 
-		// [FS0003] Validar Situação de Água do Imóvel.
+		// [FS0003] Validar Situao de gua do Imvel.
 		if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.CORTADO
 				.intValue()) {
 
@@ -7862,7 +7867,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					null, imovel.getLigacaoAguaSituacao().getDescricao());
 		}
 
-		// [FS0002] Verificar Situação do Imovel
+		// [FS0002] Verificar Situao do Imovel
 		if (imovel.getIndicadorExclusao() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 			throw new ControladorException(
 					"atencao.situacao_imovel_indicador_exclusao", null, imovel
@@ -7876,11 +7881,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0778] Gerar Relatório Gestão de Serviços UPA<br>
-	 * [UC0497] Gerar Relatório Resumo de Solicitações de RA por Unidade
+	 * [UC0778] Gerar Relatrio Gesto de Servios UPA<br>
+	 * [UC0497] Gerar Relatrio Resumo de Solicitaes de RA por Unidade
 	 * <p>
 	 * Retorna todas as unidades filhas (direta ou indiretamente) da Unidade
-	 * Superior passada como parâmetro.
+	 * Superior passada como parmetro.
 	 * 
 	 * @see gcom.fachada.Fachada#pesquisarUnidadesFilhas(int)
 	 * 
@@ -7981,7 +7986,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			
 			if (hidrometroInstalacaoHistorico != null) {
 
-				//Alteração feita por Sávio Luiz
+				//Alterao feita por Svio Luiz
 				//Data: 25/05/2011
 				FiltroLigacaoAgua filtroLigacaoAgua = new FiltroLigacaoAgua();
 				filtroLigacaoAgua.adicionarParametro(new ParametroSimples(
@@ -8023,9 +8028,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os dados necessários para a geração do relatório
+	 * Pesquisa os dados necessrios para a gerao do relatrio
 	 * 
-	 * [UC0864] Gerar Certidão Negativa por Cliente
+	 * [UC0864] Gerar Certido Negativa por Cliente
 	 * 
 	 * @return
 	 * 
@@ -8049,7 +8054,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						+ clienteInformado.getNome();
 				relatorioCertidaoNegativaClienteBean.setCliente(cliente);
 
-				// Responsável
+				// Responsvel
 				if (dadosRelatorio[0] != null) {
 					relatorioCertidaoNegativaClienteBean
 							.setResponsavel(((Integer) dadosRelatorio[0])
@@ -8058,7 +8063,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				
 				// Cliente Tipo
 				if(dadosRelatorio[5] != null){
-					// verifica se é cpf
+					// verifica se  cpf
 					if(((Short) dadosRelatorio[5]).compareTo(ConstantesSistema.SIM) == 0){
 						
 						if(dadosRelatorio[3] != null){
@@ -8076,29 +8081,29 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					}
 				}
 				
-				// Id do Imóvel e Endereço
+				// Id do Imvel e Endereo
 				if (dadosRelatorio[1] != null) {
 					Integer idImovel = (Integer) dadosRelatorio[1];
 					relatorioCertidaoNegativaClienteBean.setIdImovel(Util
 							.retornaMatriculaImovelFormatada(idImovel));
 
-					// Nome do Usuário
+					// Nome do Usurio
 					Cliente clienteUsuario = getControladorImovel()
 							.pesquisarClienteUsuarioImovel(idImovel);
 					relatorioCertidaoNegativaClienteBean
 							.setNomeUsuario(clienteUsuario.getNome());
 
-					// Endereço
+					// Endereo
 					String endereco = getControladorEndereco()
 							.obterEnderecoAbreviadoImovel(idImovel);
 					relatorioCertidaoNegativaClienteBean.setEndereco(endereco);
 					
-					// Endereço Completo
+					// Endereo Completo
 					String enderecoCompleto = getControladorEndereco().pesquisarEnderecoFormatado(idImovel);
 					relatorioCertidaoNegativaClienteBean.setEnderecoCompleto(enderecoCompleto);
 				}
 
-				// Situação da Ligação de Água
+				// Situao da Ligao de gua
 				if (dadosRelatorio[2] != null) {
 					relatorioCertidaoNegativaClienteBean
 							.setSituacaoLigacaoAgua((String) dadosRelatorio[2]);
@@ -8118,9 +8123,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	/**
 	 * [UC0541] Emitir 2a Via Conta Internet
 	 * 
-	 * [FS0003] - Verificar se documento é válido
+	 * [FS0003] - Verificar se documento  vlido
 	 * 
-	 * [FS0004] - Cliente não associado ao documento
+	 * [FS0004] - Cliente no associado ao documento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 21/10/2008
@@ -8137,14 +8142,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				.pesquisarParametrosDoSistema();
 
 		/*
-		 * O sistema solicita o documento válido para emissão (CPF/CNPJ), caso
-		 * esta informação seja obrigatória para a empresa solicitante.
+		 * O sistema solicita o documento vlido para emisso (CPF/CNPJ), caso
+		 * esta informao seja obrigatria para a empresa solicitante.
 		 */
 		if (sistemaParametro.getIndicadorDocumentoValido().equals(
 				ConstantesSistema.SIM)) {
 
 			/*
-			 * O sistema deverá verificar se algum cliente do imóvel selecionado
+			 * O sistema dever verificar se algum cliente do imvel selecionado
 			 * tenha o documento informado.
 			 */
 			Collection colecaoCliente = null;
@@ -8173,7 +8178,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 			if (colecaoCliente == null || colecaoCliente.isEmpty()) {
 
-				// [FS0004] - Cliente não associado ao documento
+				// [FS0004] - Cliente no associado ao documento
 				throw new ControladorException(
 						"atencao.cliente_nao_associado_documento", null,
 						sistemaParametro.getNomeAbreviadoEmpresa());
@@ -8200,14 +8205,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				.pesquisarParametrosDoSistema();
 
 		/*
-		 * O sistema solicita o documento válido para emissão (CPF/CNPJ), caso
-		 * esta informação seja obrigatória para a empresa solicitante.
+		 * O sistema solicita o documento vlido para emisso (CPF/CNPJ), caso
+		 * esta informao seja obrigatria para a empresa solicitante.
 		 */
 		if (sistemaParametro.getIndicadorDocumentoValido().equals(
 				ConstantesSistema.SIM)) {
 
 			/*
-			 * Verificando se o usuário logado possuí permissão especial para
+			 * Verificando se o usurio logado possu permisso especial para
 			 * emitir 2 via de conta sem o documento (CPF ou CNPJ)informado.
 			 */
 			boolean temPermissaoEmitir2ViaSemDocumentoValido = false;
@@ -8220,8 +8225,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 			if (!temPermissaoEmitir2ViaSemDocumentoValido) {
 
-				// O sistema verifica se algum dos clientes associados ao imóvel
-				// tem documento válido.
+				// O sistema verifica se algum dos clientes associados ao imvel
+				// tem documento vlido.
 				Collection colecaoCliente = null;
 
 				try {
@@ -8258,7 +8263,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		if (ligacaoEsgotoPerfil.getDescricao() != null
 				&& ligacaoEsgotoPerfil.getDescricao().equalsIgnoreCase("")) {
 			throw new ControladorException("atencao.required", null,
-					"Descrição");
+					"Descrio");
 
 		}
 
@@ -8286,7 +8291,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// Ultima Alteracao
 		ligacaoEsgotoPerfil.setUltimaAlteracao(new Date());
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		// ------------ REGISTRAR TRANSAO ----------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_INSERIR_LIGACAO_ESGOTO_PERFIL,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -8302,7 +8307,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		ligacaoEsgotoPerfil.adicionarUsuario(usuarioLogado,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(ligacaoEsgotoPerfil);
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		// ------------ REGISTRAR TRANSAO ----------------
 
 		retorno = (Integer) getControladorUtil().inserir(ligacaoEsgotoPerfil);
 
@@ -8328,7 +8333,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		if (ligacaoEsgotoPerfil.getDescricao() != null
 				&& ligacaoEsgotoPerfil.getDescricao().equalsIgnoreCase("")) {
 			throw new ControladorException("atencao.required", null,
-					"Descrição");
+					"Descrio");
 
 		}
 
@@ -8378,7 +8383,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		// Ultima Alteracao
 		ligacaoEsgotoPerfil.setUltimaAlteracao(new Date());
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		// ------------ REGISTRAR TRANSAO ----------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_ATUALIZAR_LIGACAO_ESGOTO_PERFIL,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -8395,7 +8400,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		ligacaoEsgotoPerfil.adicionarUsuario(usuarioLogado,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(ligacaoEsgotoPerfil);
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		// ------------ REGISTRAR TRANSAO ----------------
 
 	}
 
@@ -8417,9 +8422,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0898] Atualizar Autos de Infração com prazo de Recurso Vencido
+	 * [UC0898] Atualizar Autos de Infrao com prazo de Recurso Vencido
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 08/05/2009
 	 */
 	public void atualizarAutosInfracaoComPrazoRecursoVencido(
@@ -8443,14 +8448,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			Collection<Integer> idsAutosInfracao = new ArrayList();
 			if (colecaoAutosInfracao != null && !colecaoAutosInfracao.isEmpty()) {
 				for (AutosInfracao autosInfracao : colecaoAutosInfracao) {
-					// [SB0002] - Gerar Débito a Cobrar
+					// [SB0002] - Gerar Dbito a Cobrar
 					gerarDebitoACobrarAutoInfracao(autosInfracao,
 							sistemaParametro);
 					idsAutosInfracao.add(autosInfracao.getId());
 				}
 			}
 
-			// [SB0001] - Atualizar Autos de Infração
+			// [SB0001] - Atualizar Autos de Infrao
 			if (idsAutosInfracao != null && !idsAutosInfracao.isEmpty()) {
 				repositorioAtendimentoPublico.atualizarAutosInfracao(
 						idsAutosInfracao,
@@ -8471,11 +8476,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0898] Atualizar Autos de Infração com prazo de Recurso Vencido
+	 * [UC0898] Atualizar Autos de Infrao com prazo de Recurso Vencido
 	 * 
-	 * [SB0002] - Gerar Débito a Cobrar
+	 * [SB0002] - Gerar Dbito a Cobrar
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 08/05/2009
 	 */
 	public Short gerarDebitoACobrarAutoInfracao(AutosInfracao autosInfracao,
@@ -8497,12 +8502,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 					DebitoACobrar debitoACobrar = null;
 
-					// código do consumo = 7
+					// cdigo do consumo = 7
 					if (fssc
 							.getConsumoCalculo()
 							.equals(
 									FiscalizacaoSituacaoServicoACobrar.CONSUMO_CALCULO_SETE)) {
-						// indicador de atualização do auto igual a ativo
+						// indicador de atualizao do auto igual a ativo
 						if (fssc.getFiscalizacaoSituacao() != null
 								&& fssc
 										.getFiscalizacaoSituacao()
@@ -8521,12 +8526,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 						}
 					}
-					// código do consumo = 8
+					// cdigo do consumo = 8
 					if (fssc
 							.getConsumoCalculo()
 							.equals(
 									FiscalizacaoSituacaoServicoACobrar.CONSUMO_CALCULO_OITO)) {
-						// indicador de atualização do auto igual a ativo
+						// indicador de atualizao do auto igual a ativo
 						if (fssc.getFiscalizacaoSituacao() != null
 								&& fssc
 										.getFiscalizacaoSituacao()
@@ -8544,12 +8549,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 						}
 					}
-					// código do consumo = 9
+					// cdigo do consumo = 9
 					if (fssc
 							.getConsumoCalculo()
 							.equals(
 									FiscalizacaoSituacaoServicoACobrar.CONSUMO_CALCULO_NOVE)) {
-						// indicador de atualização do auto igual a ativo
+						// indicador de atualizao do auto igual a ativo
 						if (fssc.getFiscalizacaoSituacao() != null
 								&& fssc
 										.getFiscalizacaoSituacao()
@@ -8567,12 +8572,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 								consumoCobradoMes = consumos[2];
 							}
 
-							// LigacaoAguaSituacao do Imóvel
+							// LigacaoAguaSituacao do Imvel
 							Integer idLigacaoAguaSituacaoImovel = getControladorImovel()
 									.pesquisarIdLigacaoAguaSituacao(
 											autosInfracao.getImovel().getId());
 
-							// LigacaoEsgotoSituacao do Imóvel
+							// LigacaoEsgotoSituacao do Imvel
 							/*
 							 * Integer idLigacaoEsgotoSituacaoImovel =
 							 * getControladorImovel()
@@ -8581,7 +8586,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 							Integer idLigacaoEsgotoSituacaoImovel = null;
 
-							// [SB0003 - Calcular Valor de Água e/ou Esgoto]
+							// [SB0003 - Calcular Valor de gua e/ou Esgoto]
 							BigDecimal valorEstimado = getControladorOrdemServico()
 									.calcularValorAguaEsgoto(
 											consumoCobradoMes,
@@ -8598,7 +8603,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						}
 					}
 
-					// [SB0005] - Vincular Débitos a Cobrar ao Auto de Infração
+					// [SB0005] - Vincular Dbitos a Cobrar ao Auto de Infrao
 					if (debitoACobrar != null) {
 						AutosInfracaoDebitoACobrar autosInfracaoDebitoACobrar = new AutosInfracaoDebitoACobrar();
 						autosInfracaoDebitoACobrar.setAutosInfracao(autosInfracao);
@@ -8610,7 +8615,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						autosInfracaoDebitoACobrar.setIndicadorMultaInfracao(fssc.getIndicadorMultaInfracao());
 						getControladorUtil().inserir(autosInfracaoDebitoACobrar);
 						
-						//2. O sistema atualiza a indicação de geração de débito para a situação de fiscalização 
+						//2. O sistema atualiza a indicao de gerao de dbito para a situao de fiscalizao 
 						getControladorOrdemServico().atualizarIndicadorDebitoOS(
 							new Integer(1),
 							autosInfracao.getFiscalizacaoSituacao().getId(), 
@@ -8633,11 +8638,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0896] Manter Autos de Infração
+	 * [UC0896] Manter Autos de Infrao
 	 * 
-	 * [SB0007] - Calcular Consumo para o Imóvel
+	 * [SB0007] - Calcular Consumo para o Imvel
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corra
 	 * @date 17/06/2009
 	 */
 	private Integer[] calcularConsumoImovelAutosInfracao(Integer idImovel,
@@ -8681,11 +8686,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [UC0898] Atualizar Autos de Infração com prazo de Recurso Vencido
+	 * [UC0898] Atualizar Autos de Infrao com prazo de Recurso Vencido
 	 * 
 	 * [SB0004] - Calcular/Inserir Valor
 	 * 
-	 * @author Sávio Luiz
+	 * @author Svio Luiz
 	 * @date 08/05/2009
 	 */
 	public DebitoACobrar gerarDebitoACobrarAutoInfracao(
@@ -8706,12 +8711,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				valorDebitoNovo = valorDebito;
 			}
 
-			// id da ordem de serviço
+			// id da ordem de servio
 			Integer idOrdemServico = null;
 			if (autosInfracao.getOrdemServico() != null) {
 				idOrdemServico = autosInfracao.getOrdemServico().getId();
 			}
-			// id do tipo do débito
+			// id do tipo do dbito
 			Integer idDebitoTipo = null;
 			if (fssc.getDebitoTipo() != null) {
 				idDebitoTipo = fssc.getDebitoTipo().getId();
@@ -8731,7 +8736,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				qtdParcelas = autosInfracao.getNumeroParcelasDebito();
 			}
 
-			// [UC0479] - Gerar Débito Ordem de Serviço
+			// [UC0479] - Gerar Dbito Ordem de Servio
 			debitoACobrar = getControladorOrdemServico()
 					.gerarDebitoOrdemServico(idOrdemServico, idDebitoTipo,
 							valorDebitoNovo, qtdParcelas, "100", usuario);
@@ -8758,7 +8763,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				anoMesDataCorte = (Util.recuperaAnoMesDaData(ligacaoAgua
 						.getDataCorte()));
 			}
-			// Último mês/ano faturado do imóvel
+			// ltimo ms/ano faturado do imvel
 			Integer ultimaReferenciaConsumo = getControladorMicromedicao()
 					.pesquisarUltimoAnoMesConsumoFaturado(
 							autosInfracao.getImovel().getId(),
@@ -8780,9 +8785,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						.intValue();
 			}
 
-			// verifica se a quantidade de meses calculado é maior que o limite
+			// verifica se a quantidade de meses calculado  maior que o limite
 			// de meses.
-			// Se for, a quantidade de meses será a quantidade limite.
+			// Se for, a quantidade de meses ser a quantidade limite.
 			if (anoMesDataCorte == null
 					|| quantidadeMeses > numeroMesesCalculoMedia) {
 				quantidadeMeses = numeroMesesCalculoMedia;
@@ -8794,12 +8799,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							LigacaoTipo.LIGACAO_AGUA,
 							quantidadeMeses.shortValue());
 
-			// LigacaoAguaSituacao do Imóvel
+			// LigacaoAguaSituacao do Imvel
 			Integer idLigacaoAguaSituacaoImovel = getControladorImovel()
 					.pesquisarIdLigacaoAguaSituacao(
 							autosInfracao.getImovel().getId());
 
-			// LigacaoEsgotoSituacao do Imóvel
+			// LigacaoEsgotoSituacao do Imvel
 			/*
 			 * Integer idLigacaoEsgotoSituacaoImovel = getControladorImovel()
 			 * .pesquisarIdLigacaoEsgotoSituacao(autosInfracao.getImovel().getId());
@@ -8827,7 +8832,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							numeroConsumoFaturadoMes = consumoNaoMedido;
 						}
 
-						// [SB0003 - Calcular Valor de Água e/ou Esgoto]
+						// [SB0003 - Calcular Valor de gua e/ou Esgoto]
 
 						BigDecimal valorTotal = getControladorOrdemServico()
 								.calcularValorAguaEsgoto(
@@ -8857,11 +8862,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		return valorAcumulado;
 	}
 	/**
-	 * [UC0996] Emitir Ordem de Fiscalização para imóveis suprimidos
+	 * [UC0996] Emitir Ordem de Fiscalizao para imveis suprimidos
 	 * 
-	 *  Este caso de uso permite realizar a recuperação das informações dos imóveis que estejam com seus ramais surprimidos,
-	 *  parcialmente ou totalmente, por um período pré-determinado e os armazena em uma base de dados
-	 * 	para uma posterior geração de arquivo de texto.
+	 *  Este caso de uso permite realizar a recuperao das informaes dos imveis que estejam com seus ramais surprimidos,
+	 *  parcialmente ou totalmente, por um perodo pr-determinado e os armazena em uma base de dados
+	 * 	para uma posterior gerao de arquivo de texto.
 	 * 
 	 * 
 	 * @author Hugo Amorim
@@ -8894,11 +8899,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			Date dataPesquisa = Util.adcionarOuSubtrairMesesAData(dataAtual,qtdMesesNegativo,00000);
 			
 			// O sistema deve excluir todos os registros da tabela BATCH_IMOVEIS_SUPRIMIDOS,
-			// que estejam com a situação de finalizado na tabela ORDEM_SERVICO.
+			// que estejam com a situao de finalizado na tabela ORDEM_SERVICO.
 			this.excluirDadosFinalizados(setorComercial.getId());
 			
 			
-			// Variáveis para a paginação da pesquisa
+			// Variveis para a paginao da pesquisa
 			// ========================================================================
 			boolean flagTerminou = false;
 			final int quantidadeMaxima = 1000;
@@ -8989,13 +8994,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					
 				}
 								
-				// Incrementa o nº do indice da páginação
+				// Incrementa o n do indice da pginao
 				quantidadeInicio = quantidadeInicio + quantidadeMaxima;
 	
 				/**
-				 * Caso a coleção de dados retornados for menor que a
+				 * Caso a coleo de dados retornados for menor que a
 				 * quantidade de registros seta a flag indicando que a
-				 * paginação terminou.
+				 * paginao terminou.
 				 */
 				if (colecaoHelpers == null || 
 						colecaoHelpers.size() < quantidadeMaxima) {
@@ -9015,9 +9020,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			
 		} catch (Exception e) { 
 			// Este catch serve para interceptar
-			// qualquer exceção que o processo batch
-			// venha a lançar e garantir que a unidade
-			// de processamento do batch será atualizada
+			// qualquer exceo que o processo batch
+			// venha a lanar e garantir que a unidade
+			// de processamento do batch ser atualizada
 			// com o erro ocorrido						
 			
 			e.printStackTrace();
@@ -9029,12 +9034,12 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 *  [UC0996] Emitir Ordem de Fiscalização para imóveis suprimidos
+	 *  [UC0996] Emitir Ordem de Fiscalizao para imveis suprimidos
 	 * 
-	 * O sistema deve recuperar informações dos imóveis ativos 
+	 * O sistema deve recuperar informaes dos imveis ativos 
 	 * que estejam com seus ramais suprimidos (parcialmente ou totalmente) 
 	 * de acordo com a quantidade de meses prefedefidos na tabela SISTEMA_PARAMETROS,
-	 * que não possua Ordem de Serviço de Fiscalização ou que possua, porém,
+	 * que no possua Ordem de Servio de Fiscalizao ou que possua, porm,
 	 * que esteja em aberto.
 	 *  
 	 * @author Hugo Amorim
@@ -9175,7 +9180,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				}
 				
 				/**
-				 *  Alterando o cálculo da média
+				 *  Alterando o clculo da mdia
 				 */
 				MedicaoTipo medicao = new MedicaoTipo();
 				medicao.setId(1);
@@ -9195,13 +9200,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				String ocorrencia = getControladorMicromedicao()
 					.pesquisarAnormalidadesImovel(idImovel,ConstantesSistema.CALCULAR_AGUA);
 				
-				//OBTEM VALOR DO SERVIÇO E DO DÉBITO
+				//OBTEM VALOR DO SERVIO E DO DBITO
 				String referenciaInicial = "01/0001";
 				String referenciaFinal = "12/9999";
 				String dataVencimentoInicial = "01/01/0001";
 				String dataVencimentoFinal = "31/12/9999";
 
-				// Para auxiliar na formatação de uma data
+				// Para auxiliar na formatao de uma data
 				SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
 				String mesInicial = referenciaInicial.substring(0, 2);
 				String anoInicial = referenciaInicial.substring(3, referenciaInicial.length());
@@ -9341,7 +9346,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				valorTotalSemAcrescimo = valorTotalSemAcrescimo.add(valorGuiaPagamento);
 				valorTotalSemAcrescimo = valorTotalSemAcrescimo.subtract(valorCreditoARealizar);			
 				
-				//SETA DADOS PESQUISADOS EM UM HELPER E ADICIONA NA COLEÇÃO DE RETORNO
+				//SETA DADOS PESQUISADOS EM UM HELPER E ADICIONA NA COLEO DE RETORNO
 				EmitirOrdemDeFiscalizacaoHelper helper = 
 					new EmitirOrdemDeFiscalizacaoHelper();
 				
@@ -9418,10 +9423,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 *  [UC0996] Emitir Ordem de Fiscalização para imóveis suprimidos
+	 *  [UC0996] Emitir Ordem de Fiscalizao para imveis suprimidos
 	 * 
 	 * 	O sistema deve excluir todos os registros da tabela IMOVEIS_SUPRIMIDOS,
-	 *  que estejam com a situação de finalizado na tabela ORDEM_SERVICO. 
+	 *  que estejam com a situao de finalizado na tabela ORDEM_SERVICO. 
 	 *  
 	 * @author Hugo Amorim
 	 * @param idSetorComercial 
@@ -9454,7 +9459,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0996] Emitir Ordem de Fiscalização para imóveis suprimidos
+	 * [UC0996] Emitir Ordem de Fiscalizao para imveis suprimidos
 	 * 
 	 *  Step que gera os arquivos.
 	 * 
@@ -9470,7 +9475,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		
 		int idUnidadeIniciada = 0;
 		
-		// Criação do Arquivo
+		// Criao do Arquivo
 		// ========================================================================
 		Date dataAtual = new Date();
 		String nomeZip = null;
@@ -9486,7 +9491,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		try {
 			
 			// -------------------------
-			// Registrar o início do processamento da Unidade de
+			// Registrar o incio do processamento da Unidade de
 			// Processamento do Batch
 			// -------------------------
 
@@ -9497,7 +9502,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			zos = new ZipOutputStream(new FileOutputStream(compactado));
         	out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
 				
-			// Variáveis para a paginação da pesquisa
+			// Variveis para a paginao da pesquisa
 			// ========================================================================
 			boolean flagTerminou = false;
 			final int quantidadeMaxima = 1000;
@@ -9538,13 +9543,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					
 				}
 				
-				// Incrementa o nº do indice da páginação
+				// Incrementa o n do indice da pginao
 				quantidadeInicio = quantidadeInicio + quantidadeMaxima;
 	
 				/**
-				 * Caso a coleção de dados retornados for menor que a
+				 * Caso a coleo de dados retornados for menor que a
 				 * quantidade de registros seta a flag indicando que a
-				 * paginação terminou.
+				 * paginao terminou.
 				 */
 				if (colecaoDados == null || 
 						colecaoDados.size() < quantidadeMaxima) {
@@ -9581,9 +9586,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [SB0002] – Replicar os serviços existentes para uma nova vigência e
-	 * valor. Pesquisa a última vigência de cada tipo serviço, e retorna uma
-	 * coleção.
+	 * [SB0002]  Replicar os servios existentes para uma nova vigncia e
+	 * valor. Pesquisa a ltima vigncia de cada tipo servio, e retorna uma
+	 * coleo.
 	 * 
 	 * @author Josenildo Neves - Hugo Leonardo
 	 * @date 03/02/2010 - 23/04/2010
@@ -9696,8 +9701,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [SB0002] – Replicar os serviços existentes para uma nova vigência e
-	 * valor. Pesquisa a última vigência de cada tipo serviço, e retorna o
+	 * [SB0002]  Replicar os servios existentes para uma nova vigncia e
+	 * valor. Pesquisa a ltima vigncia de cada tipo servio, e retorna o
 	 * total.
 	 * 
 	 * @author Josenildo Neves
@@ -9717,9 +9722,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 
 	/**
-	 * [SB0002] – Replicar os serviços existentes para uma nova vigência e
-	 * valor. Pesquisa a última vigência de cada tipo serviço, e retorna uma
-	 * coleção.
+	 * [SB0002]  Replicar os servios existentes para uma nova vigncia e
+	 * valor. Pesquisa a ltima vigncia de cada tipo servio, e retorna uma
+	 * coleo.
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 23/04/2010
@@ -9837,9 +9842,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0391] Inserir valor cobrança Serviço.
+	 * [UC0391] Inserir valor cobrana Servio.
 	 * 
-	 * Verificar se existe vigência já cadastrada para o Serviço Tipo.
+	 * Verificar se existe vigncia j cadastrada para o Servio Tipo.
 	 * 
 	 * @author Hugo Leonardo
 	 * @param dataVigenciaInicial
@@ -9849,8 +9854,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 * @throws ControladorException
 	 * @data 03/05/2010
 	 * 
-	 * @see Caso a opcao = 1 - verifica as situações de inserir e atualizar Serviço Tipo.
-	 * @see Caso a opcao = 2 - verifica a situação de retificar Serviço Tipo.
+	 * @see Caso a opcao = 1 - verifica as situaes de inserir e atualizar Servio Tipo.
+	 * @see Caso a opcao = 2 - verifica a situao de retificar Servio Tipo.
 	 */
 	public void verificarExistenciaVigenciaServicoTipo(String dataVigenciaInicial, String dataVigenciaFinal, Integer idServicoTipo, Integer opcao) 
 			throws ControladorException {
@@ -9865,9 +9870,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 		
-		// Caso a opcao seja iqual a 1 - verifica as situações de inserir e atualizar Serviço Tipo.
+		// Caso a opcao seja iqual a 1 - verifica as situaes de inserir e atualizar Servio Tipo.
 		// 
-		// Caso a opcao seja iqual a 2 - verifica a situação de retificar Serviço Tipo.
+		// Caso a opcao seja iqual a 2 - verifica a situao de retificar Servio Tipo.
 		//
 		if(opcao == 1){
 			if (retorno != null && !retorno.equals("")) {
@@ -9883,7 +9888,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0363] Efetuar Retirada de hidrômetro quando chamado atraves da funcionalidade
+	 * [UC0363] Efetuar Retirada de hidrmetro quando chamado atraves da funcionalidade
 	 * efetuar supressao do imovel 
 	 * 
 	 * 
@@ -9921,7 +9926,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		getControladorUtil().atualizar(hidrometroInstalacaoHistorico.getHidrometro());
 
 		try {
-			// Caso o tipo de medição seja igual a Ligação de Água, atualiza as
+			// Caso o tipo de medio seja igual a Ligao de gua, atualiza as
 			// colunas da tabela LIGACAO_AGUA
 			// Integer id = hidrometroInstalacaoHistorico.getId();
 			if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId().equals(
@@ -9932,7 +9937,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 								hidrometroInstalacaoHistorico.getLigacaoAgua()
 										.getId(), null);
 
-				// Caso o tipo de medição seja igual a Poço, atualiza as colunas
+				// Caso o tipo de medio seja igual a Poo, atualiza as colunas
 				// da tabela POCO
 			} else if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId()
 					.equals(MedicaoTipo.POCO)) {
@@ -9946,7 +9951,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			OrdemServico ordemServico = integracaoComercialHelper
 					.getOrdemServico();
 			if (ordemServico != null) {
-				// [SB006]Atualizar Ordem de Serviço
+				// [SB006]Atualizar Ordem de Servio
 				if (!integracaoComercialHelper.isVeioEncerrarOS()
 						&& ordemServico.getServicoTipo().getDebitoTipo() != null) {
 					getControladorOrdemServico().atualizaOSGeral(
@@ -9962,9 +9967,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
-	 *  [SB0034] – Verificar RA de urgência
+	 *  [SB0034]  Verificar RA de urgncia
 	 * 
-	 * Verifica se o Registro de Atendimento tem o nivel selecionado como Urgência
+	 * Verifica se o Registro de Atendimento tem o nivel selecionado como Urgncia
 	 * 
 	 * @author Daniel Alves
 	 * @param  ID do Registro de Atendimento 
@@ -9985,9 +9990,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
-	 *  [SB0034] – Verificar RA de urgência
+	 *  [SB0034]  Verificar RA de urgncia
 	 *  
-	 * Adicionar os Usuários da Unidade relacionada a RA, na tabela "VisualizacaoRaUrgencia" 
+	 * Adicionar os Usurios da Unidade relacionada a RA, na tabela "VisualizacaoRaUrgencia" 
 	 * 
 	 * @author Daniel Alves
 	 * @param  ID do Registro de Atendimento 
@@ -10037,9 +10042,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	
 	/**
 	 * [UC0503] Tramitar Conjunto Registro Atendimento
-	 *  [SB0004] – Verificar RA de urgência
+	 *  [SB0004]  Verificar RA de urgncia
 	 *  
-	 * Atualizar os Usuários da Unidade relacionada a RA, na tabela "VisualizacaoRaUrgencia" 
+	 * Atualizar os Usurios da Unidade relacionada a RA, na tabela "VisualizacaoRaUrgencia" 
 	 * 
 	 * @author Daniel Alves
 	 * @param  ID do Registro de Atendimento 
@@ -10082,9 +10087,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	
 	/**
 	 * [UC0503] Tramitar Conjunto Registro Atendimento	 * 
-	 *  [SB0004] – Verificar RA de urgência
+	 *  [SB0004]  Verificar RA de urgncia
 	 * 
-	 * Verifica se o Registro de Atendimento já está relacionado a uma Unidade informada.
+	 * Verifica se o Registro de Atendimento j est relacionado a uma Unidade informada.
 	 * 
 	 * @author Daniel Alves
 	 * @param  ID do Registro de Atendimento 
@@ -10107,7 +10112,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	
 	
 	/**	 
-	 * [UC1028] Exibir Registro Atendimento Urgência
+	 * [UC1028] Exibir Registro Atendimento Urgncia
 	 *  
 	 * Verifica se o Usuario possui algum Registro de Atendimento urgente.
 	 * 
@@ -10131,7 +10136,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
     /**
-	 * [UC0251] Gerar Atividade de Ação de Cobrança
+	 * [UC0251] Gerar Atividade de Ao de Cobrana
 	 * 
 	 * @author Hugo Amorim
 	 * @date 15/07/2010
@@ -10152,7 +10157,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}  
 	
 	/**
-	 * [UC1056] Gerar Relatório de Acompanhamento dos Registros de Atendimento Analitico
+	 * [UC1056] Gerar Relatrio de Acompanhamento dos Registros de Atendimento Analitico
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 28/09/2010
@@ -10180,7 +10185,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				
 				Object[] objeto = (Object[]) iterator.next();
 				
-				// Número RA
+				// Nmero RA
 				String idRA = "";
 				if ( objeto[0] != null ) {
 					idRA = objeto[0].toString();
@@ -10228,7 +10233,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					relatorioHelper.setMotivoEncerramento( motivoEncerramento);
 				}
 				
-				// Descrição Unidade Atendimento
+				// Descrio Unidade Atendimento
 				String descricaoUnidadeAtendimento = "";
 				if( objeto[6] != null){
 					descricaoUnidadeAtendimento = objeto[6].toString();
@@ -10246,14 +10251,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				}
 				
 				if(!Util.isVazioOrNulo(helper.getMunicipiosAssociados())){
-					//Descrição Município (Caso o filtro tenha selecionado pelo menos um município associado à localidade)
+					//Descrio Municpio (Caso o filtro tenha selecionado pelo menos um municpio associado  localidade)
 					String descricaoMunicipio;
 					if(objeto[8] != null){
 						descricaoMunicipio = objeto[8].toString();
 						relatorioHelper.setDescricaoMunicipio(descricaoMunicipio);
 					}
 					
-					//ID Município (Caso o filtro tenha selecionado pelo menos um município associado à localidade)
+					//ID Municpio (Caso o filtro tenha selecionado pelo menos um municpio associado  localidade)
 					String idMunicipio;
 					if(objeto[9] != null){
 						idMunicipio = objeto[9].toString();
@@ -10271,7 +10276,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [UC1056] Pesquisar Total de RA's do Relatório de Acompanhamento dos Registros de Atendimento
+	 * [UC1056] Pesquisar Total de RA's do Relatrio de Acompanhamento dos Registros de Atendimento
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 30/09/2010
@@ -10295,7 +10300,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [UC1056] Gerar Relatório de Acompanhamento dos Registros de Atendimento Sintetico Encerrado
+	 * [UC1056] Gerar Relatrio de Acompanhamento dos Registros de Atendimento Sintetico Encerrado
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 28/09/2010
@@ -10326,7 +10331,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				
 				Object[] objeto = (Object[]) iterator.next();
 				
-				// Descrição Unidade Atendimento
+				// Descrio Unidade Atendimento
 				if( objeto[0] != null){
 					descricaoUnidadeAtendimento = objeto[0].toString();
 				}
@@ -10341,7 +10346,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					quantidade = (Integer) objeto[2];
 				}
 
-				//Município Associado à Localidade
+				//Municpio Associado  Localidade
 				if(!Util.isVazioOrNulo(helper.getMunicipiosAssociados())){
 					if(objeto[3] != null){
 						descricaoMunicipio = (String) objeto[3];
@@ -10362,7 +10367,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [UC1056] Gerar Relatório de Acompanhamento dos Registros de Atendimento Sintetico Aberto
+	 * [UC1056] Gerar Relatrio de Acompanhamento dos Registros de Atendimento Sintetico Aberto
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 28/09/2010
@@ -10390,7 +10395,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				
 				Object[] objeto = (Object[]) iterator.next();
 				
-				// Descrição Unidade Atendimento
+				// Descrio Unidade Atendimento
 				String descricaoUnidadeAtendimento = null;
 				String descricaoMunicipio = null;
 				Integer quantidade = 0;
@@ -10426,7 +10431,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	
 	/**
 	 * Remover todas as LocalidadeComEspecificacaoUnidade
-	 * [UC1091] Informar Associação de Localidade com Especificação e Unidade
+	 * [UC1091] Informar Associao de Localidade com Especificao e Unidade
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 30/11/2010
@@ -10491,7 +10496,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		corteTipo.setIndicadorCorteAdministrativo(new Short(indicadorCorteAdministrativo));
 		corteTipo.setUltimaAlteracao(new Date());
 
-		// [FS0002] Verificar existencia da Descrição
+		// [FS0002] Verificar existencia da Descrio
 		FiltroCorteTipo filtroCorteTipo = new FiltroCorteTipo();
 		filtroCorteTipo.adicionarParametro(new ParametroSimples(
 				FiltroCorteTipo.DESCRICAO, corteTipo.getDescricao()));
@@ -10569,7 +10574,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					"atencao.descricao_ja_existente_tipo_corte", null, corteTipo.getDescricao());
 		}
 		
-		// ------------ INICIO REGISTRAR TRANSação----------------------------
+		// ------------ INICIO REGISTRAR TRANSao----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_TIPO_CORTE_ATUALIZAR,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -10585,7 +10590,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		corteTipo.adicionarUsuario(usuarioLogado,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(corteTipo);
-		// ------------ FIM REGISTRAR TRANSação----------------------------
+		// ------------ FIM REGISTRAR TRANSao----------------------------
 
 		corteTipo.setUltimaAlteracao(new Date());
 
@@ -10605,7 +10610,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 */
 	public void removerCorteTipo(String[] ids, Usuario usuarioLogado) throws ControladorException {
 		
-		// ------------ REGISTRAR TRANSação ----------------
+		// ------------ REGISTRAR TRANSao ----------------
 		Operacao operacao = new Operacao();
 		operacao.setId(Operacao.OPERACAO_TIPO_CORTE_REMOVER);
 		
@@ -10616,7 +10621,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		Collection<UsuarioAcaoUsuarioHelper> colecaoUsuarios = new ArrayList();
 		colecaoUsuarios.add(usuarioAcaoUsuarioHelper);
-		// ------------ REGISTRAR TRANSação ----------------
+		// ------------ REGISTRAR TRANSao ----------------
 		
 		this.getControladorUtil().remover(ids, CorteTipo.class.getName(),
 				operacaoEfetuada, colecaoUsuarios);
@@ -10629,7 +10634,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
  	 * @author Hugo Leonardo
  	 * @date 27/12/2010
  	 * 
- 	 * @param idRepavimentadora, idPavimento, indicadorPavimento: 1-Rua, 2-Calçada
+ 	 * @param idRepavimentadora, idPavimento, indicadorPavimento: 1-Rua, 2-Calada
  	 * @return boolean
 	 */
 	public boolean verificaRemoverCustoPavimentoPorRepavimentadora(Integer idRepavimentadora,
@@ -10651,7 +10656,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
  	 * @author Hugo Leonardo
  	 * @date 28/12/2010
  	 * 
- 	 * @param id, idRepavimentadora, idPavimento, dataInicio, dataFinal, indicadorPavimento: 1-Rua, 2-Calçada
+ 	 * @param id, idRepavimentadora, idPavimento, dataInicio, dataFinal, indicadorPavimento: 1-Rua, 2-Calada
  	 * @return void
 	 */
 	public void verificaAtualizarCustoPavimentoPorRepavimentadora(Integer idAtualizacao, 
@@ -10716,7 +10721,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
  	 * @author Hugo Leonardo
  	 * @date 11/01/2010
  	 * 
- 	 * @param id, idRepavimentadora, idPavimento, dataInicio, dataFinal, indicadorPavimento: 1-Rua, 2-Calçada
+ 	 * @param id, idRepavimentadora, idPavimento, dataInicio, dataFinal, indicadorPavimento: 1-Rua, 2-Calada
  	 * @return Integer
 	 */
 	public Integer verificarExistenciDiasSemValorCustoPavimentoPorRepavimentadora(Integer idAtualizacao, 
@@ -10756,7 +10761,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-     * [UC0412] Manter Tipo de Serviço
+     * [UC0412] Manter Tipo de Servio
      * 
      * @author Vivianne Sousa
      * @created 07/01/2011
@@ -10774,7 +10779,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
    
 
 	/**
-	 * [UC1120] Gerar Relatório de religação de clientes inadimplentes
+	 * [UC1120] Gerar Relatrio de religao de clientes inadimplentes
 	 *
 	 * @author Hugo Leonardo
 	 * @date 25/01/2011
@@ -10815,7 +10820,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					objeto = (Object[]) iterator.next();
 				}
 				
-				// Todas as Ocorrencias no Período
+				// Todas as Ocorrencias no Perodo
 				if(relatorioHelper.getEscolhaRelatorio() == 1){
 					
 					// [0]- OS
@@ -10835,7 +10840,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					
 					
 					// [0]- Usuario
-					// obtém  as OS's
+					// obtm  as OS's
 					colecaoIds = this.repositorioAtendimentoPublico.pesquisarRecorrenciaPorUsuarioQueAbriuOuEncerrouOS(
 							idUsuario, relatorioHelper);
 					
@@ -10879,7 +10884,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					// [0]- Imovel
 					// [1]- Quantidade
 					
-					//obtém as datas de encerramento as os's passando o imóvel.
+					//obtm as datas de encerramento as os's passando o imvel.
 					Collection colecaoResultado = 
 						this.repositorioAtendimentoPublico.pesquisarRelatorioReligacaoClientesInadiplentesDatasOS(
 							relatorioHelper, (Integer)objeto[0]);
@@ -10908,7 +10913,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							if((colecaoDebitosOS != null && !colecaoDebitosOS.isEmpty()) || 
 									(colecaoDebitosOSHistorico != null && !colecaoDebitosOSHistorico.isEmpty())){
 								
-								// recupera o id das OS do imóvel.
+								// recupera o id das OS do imvel.
 								colecaoIdsOSTemp.add(idOs);
 							}
 						}
@@ -10937,7 +10942,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			
 			if (idsOS != null && !idsOS.isEmpty()) {
 				
-				// pesquisa as ordens de Serviço para o relatório.
+				// pesquisa as ordens de Servio para o relatrio.
 				colecaoOS = this.repositorioAtendimentoPublico
 					.pesquisarRelatorioReligacaoClientesInadiplentes( idsOS);
 			}
@@ -10946,10 +10951,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				
 				for (OrdemServico os : colecaoOS) {
 					
-					// Matrícula
+					// Matrcula
 					String matricula = Util.retornaMatriculaImovelFormatada( os.getImovel().getId());
 					
-					// Endereço
+					// Endereo
 					String endereco = getControladorEndereco().pesquisarEnderecoFormatado(os.getImovel().getId());
 					
 					// Perfil
@@ -10965,10 +10970,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					ImovelPerfil imovelPerfil = (ImovelPerfil) Util.retonarObjetoDeColecao(collImovelPerfil);
 					perfil += imovelPerfil != null ? "- " + imovelPerfil.getDescricao() : "";
 					
-					// Número O.S
+					// Nmero O.S
 					String numeroOS = os.getId().toString();
 					
-					// Obter os usuários
+					// Obter os usurios
 					FiltroOrdemServicoUnidade filtroOrdemServicoUnidade = new FiltroOrdemServicoUnidade();
 					filtroOrdemServicoUnidade.adicionarCaminhoParaCarregamentoEntidade(
 							"atendimentoRelacaoTipo");
@@ -10983,11 +10988,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					Iterator it = collOrdemServicoUnidades.iterator();
 					OrdemServicoUnidade unidade = null;
 
-					// Usuário Abertura
+					// Usurio Abertura
 					String usuarioAberturaOS = "";
 					String nomeUsuarioAberturaOS = "";
 					
-					// Usuário Encerramento
+					// Usurio Encerramento
 					String usuarioEncerramentoOS = "";
 					String nomeUsuarioEncerramentoOS = "";
 					
@@ -11010,7 +11015,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					// Data Encerramento
 					String dataEncerramento = Util.formatarData( os.getDataEncerramento());
 					
-					// Obtendo os débitos do imovel
+					// Obtendo os dbitos do imovel
 					Integer tipoImovel = new Integer(1);
 					Integer indicadorPagamento = new Integer(1);
 					Integer indicadorConta = new Integer(1);
@@ -11025,7 +11030,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					String dataVencimentoInicial = "01/01/0001";
 					String dataVencimentoFinal = "31/12/9999";
 
-					// Para auxiliar na formatação de uma data
+					// Para auxiliar na formatao de uma data
 					SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
 					String mesInicial = referenciaInicial.substring(0, 2);
 					String anoInicial = referenciaInicial.substring(3, referenciaInicial.length());
@@ -11078,7 +11083,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						}
 					}
 					
-					// Débito a Cobrar
+					// Dbito a Cobrar
 					Collection<DebitoACobrar> colecaoDebitoACobrar = colecaoDebitoImovel.getColecaoDebitoACobrar();
 
 					BigDecimal valorDebitoACobrar = new BigDecimal("0.00");
@@ -11111,7 +11116,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						}
 					}
 					
-					// Crédito a Realizar
+					// Crdito a Realizar
 					BigDecimal valorCreditoARealizar = new BigDecimal("0.00");
 					CreditoARealizar dadosCredito = null;
 					
@@ -11132,7 +11137,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					valorTotalSemAcrescimo = valorTotalSemAcrescimo.add(valorGuiaPagamento);
 					valorTotalSemAcrescimo = valorTotalSemAcrescimo.subtract(valorCreditoARealizar);
 					
-					// Valor Débito
+					// Valor Dbito
 					String valorDebito = Util.formatarMoedaReal(valorTotalSemAcrescimo);
 					
 					if(relatorioHelper.getEscolhaRelatorio() == 1){
@@ -11284,7 +11289,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [UC1120] Gerar Relatório de religação de clientes inadimplentes
+	 * [UC1120] Gerar Relatrio de religao de clientes inadimplentes
 	 *
 	 * @author Hugo Leonardo
 	 * @date 25/01/2011
@@ -11313,7 +11318,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-     * Obtém a coleção de perfis de tipo de serviço para OS.
+     * Obtm a coleo de perfis de tipo de servio para OS.
      * 
      * @author Hugo Azevedo
      * @date 22/06/2011
@@ -11351,7 +11356,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	
 	
 	/**
-     * Obtém a coleção de OS a partir dos parâmetros passados pela funcionalidade de Acompanhamento de Cobrança por Resultado.
+     * Obtm a coleo de OS a partir dos parmetros passados pela funcionalidade de Acompanhamento de Cobrana por Resultado.
      * 
      * @author Hugo Azevedo
      * @date 27/06/2011
@@ -11404,11 +11409,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [UC1177] Gerar Relatório de Ordens de Serviço por Situação
+	 * [UC1177] Gerar Relatrio de Ordens de Servio por Situao
 	 * 
-	 * O segundo parâmetro (boletimGerado) é um booleano que
-	 * indica se para um dado grupo de cobrança e um mês referencia
-	 * foi gerado um boletim de medição.
+	 * O segundo parmetro (boletimGerado)  um booleano que
+	 * indica se para um dado grupo de cobrana e um ms referencia
+	 * foi gerado um boletim de medio.
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 09/06/2011
@@ -11432,10 +11437,10 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			filtroBoletim.adicionarParametro(new ParametroSimples(FiltroCobrancaBoletimMedicao.ANO_MES_REFERENCIA, filtro.getDataReferencia()));
 			Collection<CobrancaBoletimMedicao> medicoes = Fachada.getInstancia().pesquisar(filtroBoletim, CobrancaBoletimMedicao.class.getName());
 			
-			//Caso o grupo de cobrança com ano/mês já tenha sido gerado boletim 
+			//Caso o grupo de cobrana com ano/ms j tenha sido gerado boletim 
 			if(!Util.isVazioOrNulo(medicoes)){
 				colecaoOSSituacao = this.repositorioAtendimentoPublico.filtrarRelatorioOSSituacao(filtro, true);
-			//Caso contrário	
+			//Caso contrrio	
 			}else{
 				colecaoOSSituacao = this.repositorioAtendimentoPublico.filtrarRelatorioOSSituacao(filtro, false);
 			}
@@ -11505,13 +11510,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						if(linha[10] != null){
 							situacaoOS = (String) linha[10];
 							/*
-							 * Se a situação da ordem de serviço for igual a TODAS, o resultset da situação os
-							 * será números de acordo com o seguinte critério:
+							 * Se a situao da ordem de servio for igual a TODAS, o resultset da situao os
+							 * ser nmeros de acordo com o seguinte critrio:
 							 * 1.Fiscalizadas
 							 * 2.Descontadas
 							 * 3.Executadas
 							 * 4.Justificadas
-							 * 5.Penalizadas por Fiscalização
+							 * 5.Penalizadas por Fiscalizao
 							 * 6.Penalizadas por Decurso de Prazo
 							 * 
 							 */
@@ -11534,7 +11539,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 									break;
 									
 								case 5:
-									situacaoOS = "Penalizadas por Fiscalização";
+									situacaoOS = "Penalizadas por Fiscalizao";
 									break;
 									
 								case 6:
@@ -11546,7 +11551,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 									break;
 								
 								case 8:
-									situacaoOS = "Encerradas com Execução";
+									situacaoOS = "Encerradas com Execuo";
 									break;
 								
 								case 9:
@@ -11570,13 +11575,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						String retornoFiscalizacao = (String) linha[2];
 						String situacaoOS = (String) linha[3];
 						/*
-						 * Se a situação da ordem de serviço for igual a TODAS, o resultset da situação os
-						 * será números de acordo com o seguinte critério:
+						 * Se a situao da ordem de servio for igual a TODAS, o resultset da situao os
+						 * ser nmeros de acordo com o seguinte critrio:
 						 * 1.Fiscalizadas
 						 * 2.Descontadas
 						 * 3.Executadas
 						 * 4.Justificadas
-						 * 5.Penalizadas por Fiscalização
+						 * 5.Penalizadas por Fiscalizao
 						 * 6.Penalizadas por Decurso de Prazo
 						 * 
 						 */
@@ -11599,7 +11604,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 								break;
 								
 							case 5:
-								situacaoOS = "Penalizadas por Fiscalização";
+								situacaoOS = "Penalizadas por Fiscalizao";
 								break;
 								
 							case 6:
@@ -11611,7 +11616,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 								break;
 							
 							case 8:
-								situacaoOS = "Encerradas com Execução";
+								situacaoOS = "Encerradas com Execuo";
 								break;
 							
 							case 9:
@@ -11634,7 +11639,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					}
 				}		
 				
-				//Configurando os parâmetros da consulta
+				//Configurando os parmetros da consulta
 				GerenciaRegional gerenciaRegional = filtro.getGerenciaRegional();
 				if(gerenciaRegional != null){
 					helper.setGerenciaRegional(gerenciaRegional.getId() + " - " + gerenciaRegional.getNome());
@@ -11690,11 +11695,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [UC1178] Gerar Relatório de Acompanhamento dos Boletins de Medição
+	 * [UC1178] Gerar Relatrio de Acompanhamento dos Boletins de Medio
 	 * 
-	 * Método utilizado para auxiliar na inserção dos dados no Relatório
-	 * de Acompanhamento dos Boletins de Medição. Recebe como parâmetro
-	 * o um filtro e retorno o Bean do relatório.
+	 * Mtodo utilizado para auxiliar na insero dos dados no Relatrio
+	 * de Acompanhamento dos Boletins de Medio. Recebe como parmetro
+	 * o um filtro e retorno o Bean do relatrio.
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 17/06/2011
@@ -11795,7 +11800,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						valorMedidoPeriodo = (BigDecimal) linha[8];
 					}
 					
-					//Acumular para fazer o cálculo da penalidade de contrato de não execução.
+					//Acumular para fazer o clculo da penalidade de contrato de no execuo.
 					valorMedidoPeriodoTotal = valorMedidoPeriodoTotal.add(valorMedidoPeriodo);
 					
 					bean = new RelatorioAcompanhamentoBoletimMedicaoBean(idItemServico, descricaoServico, quantidadeOrcada, 
@@ -11814,8 +11819,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 						filtro, relatorioDefinitivo);
 				Iterator<BigDecimal> iterator = penalidades.iterator();
 				/*
-				 * Calculas as penalidades de ordem de serviço e de fiscalização
-				 * O método do repositório sempre irá retornar no mínimo dois valores.
+				 * Calculas as penalidades de ordem de servio e de fiscalizao
+				 * O mtodo do repositrio sempre ir retornar no mnimo dois valores.
 				 */
 				if(iterator.hasNext()){
 					penalidadeOS = iterator.next();
@@ -11823,8 +11828,8 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				}
 				
 				/*
-				 * Caso o relatório seja definitivo o método do repositório irá retornar duas penalidades a mais:
-				 *  penalidade pela não realização de serviços e penalidade por corte ou supressão indevida.
+				 * Caso o relatrio seja definitivo o mtodo do repositrio ir retornar duas penalidades a mais:
+				 *  penalidade pela no realizao de servios e penalidade por corte ou supresso indevida.
 				 *  
 				 */
 				if(relatorioDefinitivo){
@@ -11857,7 +11862,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					helper = new RelatorioAcompanhamentoBoletimMedicaoHelper(beans, tipoRelatorio, taxaSucesso, penalidadeOS, penalidadeFiscalizacao, 
 							penalidadeContratoNaoExecucao, penalidadeCorteSupressao, penalidadeNaoRealizacao, penalidadeContratoNaoRealizacaoServico);
 				}else{
-					tipoRelatorio = "SIMULAÇÃO";
+					tipoRelatorio = "SIMULAO";
 					helper = new RelatorioAcompanhamentoBoletimMedicaoHelper(beans, tipoRelatorio, taxaSucesso, penalidadeOS, penalidadeFiscalizacao);
 				}				
 			}
@@ -11870,9 +11875,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [UC1186] Gerar Relatório Ordem de Serviço Cobrança p/Resultado
+	 * [UC1186] Gerar Relatrio Ordem de Servio Cobrana p/Resultado
 	 * 
-	 * Pesquisar as Ordens de serviços a partir de seu imóvel e tipo de serviço
+	 * Pesquisar as Ordens de servios a partir de seu imvel e tipo de servio
 	 * 
 	 * @author Hugo Azevedo
 	 * @data 14/01/2011
@@ -11889,9 +11894,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	
 	/**
 	 * 
-	 * [UC1186] Gerar Relatório Ordem de Serviço Cobrança p/Resultado
+	 * [UC1186] Gerar Relatrio Ordem de Servio Cobrana p/Resultado
 	 * 
-     * Obtém a quantida de OS a partir dos parâmetros passados pela funcionalidade de Acompanhamento de Cobrança por Resultado.
+     * Obtm a quantida de OS a partir dos parmetros passados pela funcionalidade de Acompanhamento de Cobrana por Resultado.
      * 
      * @author Hugo Azevedo
      * @date 27/06/2011
@@ -11951,7 +11956,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		
 				// -------------------------
 				//
-				// Registrar o início do processamento da Unidade de
+				// Registrar o incio do processamento da Unidade de
 				// Processamento
 				// do Batch
 				//
@@ -11972,19 +11977,19 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					SistemaParametro sistemaParametro = getControladorUtil()
 							.pesquisarParametrosDoSistema();
 					
-					//1. Caso o número de dias para encerrar as ordens de serviço de fiscalização por decurso de prazo tenha sido informado
+					//1. Caso o nmero de dias para encerrar as ordens de servio de fiscalizao por decurso de prazo tenha sido informado
 					if(sistemaParametro.getNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo() != null && sistemaParametro.getNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo().intValue() > 0){
 					
 						
 						Short idMotivoEncerramento = AtendimentoMotivoEncerramento.CANCELADO_POR_DERCURSO_DE_PRAZO;
 					
-						//seleciona as ordens de serviço de "Fiscalização" que ainda não tenham sido executadas
+						//seleciona as ordens de servio de "Fiscalizao" que ainda no tenham sido executadas
 						Collection colecaoOS = repositorioAtendimentoPublico.obterColecaoOSFiscalizacaoNaoExecutadas();
 						Date dataAtual = new Date();
 						
 						Iterator it = colecaoOS.iterator();
 						
-						//Unidade Organizacional do usuário logado
+						//Unidade Organizacional do usurio logado
 						FiltroUsuario filtroUsuario = new FiltroUsuario();
 						filtroUsuario.adicionarParametro(
 								new ParametroSimples(FiltroUsuario.ID, usuarioLogado.getId()));
@@ -12006,7 +12011,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 								getControladorUtil().pesquisarFeriadosNacionais();
 							
 							
-							//Calculando a data de validade da Ordem de Serviço
+							//Calculando a data de validade da Ordem de Servio
 							Date  DataVencimento = 
 									Util.adicionarNumeroDiasUteisDeUmaData(
 											dataEmissao, 
@@ -12017,9 +12022,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							//Verificar se a OS venceu
 							if(Util.compararData(dataAtual, DataVencimento) == 1){
 							
-									// encerrar a ordem de serviço, com o motivo
+									// encerrar a ordem de servio, com o motivo
 									// correspodente a decurso de prazo
-									// [UC0457] - Encerrar Ordem de Serviço
+									// [UC0457] - Encerrar Ordem de Servio
 									this.getControladorOrdemServico()
 										.encerrarOSSemExecucao(
 												osId,
@@ -12046,9 +12051,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					}
 
 				} catch (Exception e) {
-					// Este catch serve para interceptar qualquer exceção que o processo
-					// batch venha a lançar e garantir que a unidade de processamento do
-					// batch será atualizada com o erro ocorrido
+					// Este catch serve para interceptar qualquer exceo que o processo
+					// batch venha a lanar e garantir que a unidade de processamento do
+					// batch ser atualizada com o erro ocorrido
 					e.printStackTrace();
 
 					getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
@@ -12061,19 +12066,19 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	}
 	
 	/**
-	 * [UC1199] – Acompanhar Arquivos de Roteiro
-	 * [SB0003] – Pesquisar Fotos da OS
+	 * [UC1199]  Acompanhar Arquivos de Roteiro
+	 * [SB0003]  Pesquisar Fotos da OS
 	 * 
-	 * Método que vai retornar as fotos de uma determinada
-	 * ordem de serviço passada no parâmetro.
+	 * Mtodo que vai retornar as fotos de uma determinada
+	 * ordem de servio passada no parmetro.
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 12/08/2011
 	 * 
-	 * @param Integer - ID (Ordem de Serviço ou da Foto Ordem de Serviço)
-	 * @param Boolean - Indica se o id é da OS ou da Foto (true = OS, false = Foto) 
+	 * @param Integer - ID (Ordem de Servio ou da Foto Ordem de Servio)
+	 * @param Boolean - Indica se o id  da OS ou da Foto (true = OS, false = Foto) 
 	 * 
-	 * @return Collection<OrdemServicoFoto> - Coleção das Fotos da OS
+	 * @return Collection<OrdemServicoFoto> - Coleo das Fotos da OS
 	 * @throws ControladorException
 	 */
 	public Collection<OrdemServicoFoto> pesquisarFotosOrdemServico(Integer id, boolean idOS) throws ControladorException{
@@ -12092,7 +12097,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 				
 				Object[] ordemServicoFoto;
 				
-				//Ordem de serviço foto e seus atributos necessários para instanciação.
+				//Ordem de servio foto e seus atributos necessrios para instanciao.
 				OrdemServicoFoto osFoto = null;
 				Integer idFoto = null;
 				OrdemServico os = null;
@@ -12140,9 +12145,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 * @autor: Wellington Rocha
 	 * @date: 03/07/2012
 	 * 
-	 *        Pesquisar Locais de Instação de Ramal Ativos
+	 *        Pesquisar Locais de Instao de Ramal Ativos
 	 * 
-	 *        Geração de rotas para recadastramento
+	 *        Gerao de rotas para recadastramento
 	 * 
 	 * @return Collection
 	 * @throws ControladorException
