@@ -1,7 +1,11 @@
 package gcom.gui.atendimentopublico.ordemservico;
 
 
+import java.util.Collection;
+
 import org.apache.struts.validator.ValidatorActionForm;
+
+import gcom.atendimentopublico.ordemservico.ServicoTipo;
 
 /**
  * [UC0450] Pesquisar Ordem Serviço
@@ -62,6 +66,7 @@ public class FiltrarOrdemServicoActionForm extends ValidatorActionForm {
 	
 	private String[] colecaoAtendimentoMotivoEncerramento;
 	private String[] colecaoPerfilImovel;
+	private Collection<ServicoTipo> colecaoTipoServico;
 	
 	private String projeto;
 
@@ -456,6 +461,16 @@ public class FiltrarOrdemServicoActionForm extends ValidatorActionForm {
 
 	public void setColecaoPerfilImovel(String[] colecaoPerfilImovel) {
 		this.colecaoPerfilImovel = colecaoPerfilImovel;
+	}
+
+
+	public Collection<ServicoTipo> getColecaoTipoServico() {
+		return colecaoTipoServico;
+	}
+
+
+	public void setColecaoTipoServico(Collection<ServicoTipo> colecaoTipoServico) {
+		this.colecaoTipoServico = colecaoTipoServico;
 	}
 		
 }
