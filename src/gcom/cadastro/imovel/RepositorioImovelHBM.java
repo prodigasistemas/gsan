@@ -891,46 +891,28 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 */
 
-	public Object pesquisarObterQuantidadeEconomias(Imovel imovel)
-
-	throws ErroRepositorioException {
-
-		Object retorno = null;
-
+	public Integer pesquisarObterQuantidadeEconomias(Imovel imovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-
-		String consulta;
+		Integer retorno = null;
 
 		try {
+			String consulta = "select sum(imsc.quantidadeEconomias) "
+							+ "from gcom.cadastro.imovel.ImovelSubcategoria as imsc "
+							+ "inner join imsc.comp_id.imovel "
+							+ "where imsc.comp_id.imovel.id = :imovelId ";
 
-			consulta = "select sum(imsc.quantidadeEconomias) "
-
-			+ "from gcom.cadastro.imovel.ImovelSubcategoria as imsc "
-
-			+ "inner join imsc.comp_id.imovel "
-
-			+ "where imsc.comp_id.imovel.id = :imovelId ";
-
-			retorno = session.createQuery(consulta).setInteger("imovelId",
-
-			imovel.getId().intValue()).uniqueResult();
+			retorno = (Integer) session.createQuery(consulta)
+					.setInteger("imovelId", imovel.getId().intValue())
+					.uniqueResult();
 
 		} catch (HibernateException e) {
 			e.printStackTrace();
-			// levanta a exceção para a próxima camada
-
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-
 		} finally {
-
-			// fecha a sessão
-
 			HibernateUtil.closeSession(session);
-
 		}
 
 		return retorno;
-
 	}
 	
 	/**
