@@ -901,9 +901,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 							+ "inner join imsc.comp_id.imovel "
 							+ "where imsc.comp_id.imovel.id = :imovelId ";
 
-			retorno = (Integer) session.createQuery(consulta)
+			Short economias = (Short) session.createQuery(consulta)
 					.setInteger("imovelId", imovel.getId().intValue())
 					.uniqueResult();
+			
+			if (economias != null) {
+				retorno = economias.intValue();
+			}
 
 		} catch (HibernateException e) {
 			e.printStackTrace();
