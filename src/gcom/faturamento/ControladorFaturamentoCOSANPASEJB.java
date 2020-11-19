@@ -695,11 +695,17 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return retorno.toString();
 	}
 
+	/*
+	 * Alteração conforme Redmind-2869
+	 * 
+	 * Quando confirmado o CI e o resultado do calculo de consumo permaner nos parametro de alto consumo - Emitir Carta
+	 */
 	private boolean isEmitirComunicadoAltoConsumo(EmitirContaHelper helper) throws ControladorException {
 		return isAltoConsumo(helper) 
 				&& !isImovelEmsituacaoEspecialFaturamento(helper.getIdImovel(), helper.getAmReferencia())
 				&& isImovelLeituraConfirmada(helper)
 				&& isImovelAnalisado(helper);
+		
 	}
 	
 	private boolean isImovelLeituraConfirmada(EmitirContaHelper helper) throws ControladorException {
@@ -713,11 +719,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	}
 	
 	private boolean isAltoConsumo(EmitirContaHelper helper) {
+		
 		return helper.getIdConsumoAnormalidade() != null 
 				&& (helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ALTO_CONSUMO.intValue()
 				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ESTOURO_CONSUMO.intValue()
 				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ESTOURO_CONSUMO_COBRANCA_MEDIA.intValue()
-				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.HIDROMETRO_SUBSTITUIDO_NAO_INFORMADO.intValue()); 
+				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.HIDROMETRO_SUBSTITUIDO_NAO_INFORMADO.intValue()
+				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.CONSUMO_INFORMADO.intValue()); 
 	}
 
 	private boolean isEmitirImpressaoTermica(Imovel imovelEmitido, String municipioEntrega, String municipioImovel) {

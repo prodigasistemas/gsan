@@ -307,16 +307,12 @@ public class ControladorImovelSEJB extends ControladorComum {
 	}
 
 	public int obterQuantidadeEconomias(Imovel imovel) throws ControladorException {
-		Short quantidadeEconomias = null;
-
 		try {
-			Object objetoQuantidadeEconomias = repositorioImovel.pesquisarObterQuantidadeEconomias(imovel);
-			quantidadeEconomias = (Short) objetoQuantidadeEconomias;
-		} catch (ErroRepositorioException ex) {        
+			return repositorioImovel.pesquisarObterQuantidadeEconomias(imovel);
+		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		return quantidadeEconomias.intValue();	
 	}
 
 	@SuppressWarnings("rawtypes")

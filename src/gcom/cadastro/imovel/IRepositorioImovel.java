@@ -1,11 +1,16 @@
 package gcom.cadastro.imovel;
 
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
-import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
@@ -34,12 +39,6 @@ import gcom.relatorio.micromedicao.FiltrarAnaliseExcecoesLeiturasHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ErroRepositorioException;
 
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 public interface IRepositorioImovel {
 
 	public Imovel obterImovelPorId(Integer idImovel) throws ErroRepositorioException;
@@ -64,7 +63,7 @@ public interface IRepositorioImovel {
 
 	public void atualizarImovelSubCategoria(ImovelSubcategoria imovelSubcategoria) throws ErroRepositorioException;
 
-	public Object pesquisarObterQuantidadeEconomias(Imovel imovel) throws ErroRepositorioException;
+	public Integer pesquisarObterQuantidadeEconomias(Imovel imovel) throws ErroRepositorioException;
 
 	public Short pesquisarObterQuantidadeEconomias(Imovel imovel, Categoria categoria) throws ErroRepositorioException;
 
