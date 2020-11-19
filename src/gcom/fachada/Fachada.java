@@ -13508,6 +13508,15 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public void atualizarOSViaApp(Integer idServicoTipo, IntegracaoComercialHelper integracaoComercialHelper, Usuario usuarioLogado) {
+		try {
+			this.getControladorOrdemServico().integracaoComercial(idServicoTipo, integracaoComercialHelper, usuarioLogado);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 
 	public void encerrarOSSemExecucao(Integer numeroOS, Date dataEncerramento, Usuario usuarioLogado, String motivoEncerramento, Date ultimaAlteracao, String parecerEncerramento,
 			OrdemServico osFiscalizacao, String indicadorVistoriaServicoTipo, String codigoRetornoVistoriaOs, OrdemServicoBoletim ordemServicoBoletim, Short indicadorServicoAceito) {

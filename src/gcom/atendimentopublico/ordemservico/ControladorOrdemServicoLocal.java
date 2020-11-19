@@ -568,6 +568,10 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 			String codigoRetornoVistoriaOs,OrdemServicoBoletim ordemServicoBoletim,
 			Short indicadorServicoAceito) throws ControladorException;
 
+	
+	public void integracaoComercial(Integer idServicoTipo, IntegracaoComercialHelper integracaoComercialHelper, Usuario usuarioLogado) 
+			throws ControladorException;
+	
 	/**
 	 * [UC0461] Manter Dados das Atividades da Ordem de Serviço
 	 * 
