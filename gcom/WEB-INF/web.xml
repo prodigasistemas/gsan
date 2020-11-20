@@ -4,6 +4,16 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
 	version="2.4">
 
+	<servlet>
+	  <servlet-name>EncerraOSServlet</servlet-name>
+	  <servlet-class>gcom.api.servicosOperacionais.EncerraOSServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+	  <servlet-name>EncerraOSServlet</servlet-name>
+	  <url-pattern>/encerrar/*</url-pattern>
+	</servlet-mapping>
+
 	<filter>
 		<filter-name>filtroSSO</filter-name>
 		<filter-class>gcom.gui.util.FiltroSSO</filter-class>
