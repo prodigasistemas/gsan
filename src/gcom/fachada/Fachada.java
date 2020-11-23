@@ -12530,6 +12530,14 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public Integer pesquisarServicoTipoOperacao(Integer idServicoTipo) {
+		try {
+			return this.getControladorOrdemServico().pesquisarServicoTipoOperacao(idServicoTipo);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 	public RegistroAtendimento validarRegistroAtendimento(Integer idRA) throws FachadaException {
 		try {
