@@ -14,10 +14,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.jmx.snmp.Enumerated;
 
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
@@ -25,8 +29,11 @@ import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.cadastro.imovel.Imovel;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
+import gcom.gui.micromedicao.ProcessarRequisicaoAplicativoExecucaoOSAction;
 import gcom.micromedicao.ArquivoRetornoAplicativoExecucaoOSHelper;
+import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.seguranca.acesso.usuario.UsuarioDTO;
 import gcom.util.ControladorException;
 import gcom.util.FachadaException;
 import gcom.util.Util;
@@ -34,47 +41,64 @@ import gcom.util.Util;
 @SuppressWarnings("serial")
 public class EncerraOSServlet extends HttpServlet {
 
-	private static Gson gson;
-	
-	@Override
+	@PathParam(value = "usuario")
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		resp.getOutputStream().print("{\"id\":1, \"Nome\":\"Marcelo\"}");
-		resp.setStatus(HttpServletResponse.SC_OK);
+		
+		if (req.getRequestURI().contains("usuario"))
+			getUsuario(Integer.valueOf(getRequestParameter(req, "usuario")), req, resp);
+		
+		if (req.getRequestURI().contains("programadas"))
+			getProgramadas(req, resp);
+
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		encerramentoOS(req, resp);
 		
-		resp.setStatus(HttpServletResponse.SC_OK);
 		
+	}
+	
 
+
+	private void getProgramadas(HttpServletRequest req, HttpServletResponse resp) {
+		
+		//UsuarioDTO usuario = Fachada.getInstancia().pesquisarUsuario(1);
+		Gson gson = new Gson();
+		
+		try {
+			resp.getOutputStream().print("Programadas");
+			resp.setStatus(HttpServletResponse.SC_OK);
+			
+		} catch (IOException e) {
+			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void getUsuario(int id, HttpServletRequest req, HttpServletResponse resp) {
+		
+		UsuarioDTO usuario = Fachada.getInstancia().pesquisarUsuario(id);
+		Gson gson = new Gson();
+		
+		try {
+			resp.getOutputStream().print(gson.toJson(usuario));
+			resp.setStatus(HttpServletResponse.SC_OK);
+			
+		} catch (IOException e) {
+			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			e.printStackTrace();
+		}
 		
 	}
 	
-	@SuppressWarnings("unused")
-	private static void encerramentoOS(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 	
-		Fachada fachada = Fachada.getInstancia();
-		JsonObject json = montarRetorno(req);
-		
-		// Aqui estou setando os valores no Helper generico
-		ArquivoRetornoAplicativoExecucaoOSHelper araeOSH = gson.fromJson(json, ArquivoRetornoAplicativoExecucaoOSHelper.class);
-		
-		criarObjetosHelperEncerramento(araeOSH, fachada);
-		
-		
-	}
-	
-	private static void criarObjetosHelperEncerramento(ArquivoRetornoAplicativoExecucaoOSHelper araeOSH, Fachada fachada) {		
-		// Aqui entra a classe que monta o helper
-		
-		
-	}
-	
-	
+    protected String getRequestParameter(HttpServletRequest request, String name) {
+        String param = request.getParameter(name);
+        return !param.isEmpty() ? param : getInitParameter(name);
+    }
+    
 	@SuppressWarnings("unused")
 	private void envocaMetdodo(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
@@ -88,8 +112,7 @@ public class EncerraOSServlet extends HttpServlet {
 		
 		for (Method method : met) {
 			
-			nomeMetodo = jo.get("operacao").toString();
-		//	nomeMetodo = identificadorAcao(req, resp);
+			nomeMetodo = identificadorAcao(req, resp);
 			
 			if (method.getName().equals(nomeMetodo)) {
 				try {
@@ -152,9 +175,9 @@ public class EncerraOSServlet extends HttpServlet {
 		}
 		throw new Exception("Recurso sem identificador");
 		
-	}
-
+	}	
 	
+
 	private static JsonObject montarRetorno(HttpServletRequest req) throws IOException {
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(req.getInputStream()));

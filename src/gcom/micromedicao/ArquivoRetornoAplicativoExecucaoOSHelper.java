@@ -1,17 +1,42 @@
 package gcom.micromedicao;
 
+import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
+import gcom.atendimentopublico.ligacaoagua.bean.DadosEfetuacaoCorteLigacaoAguaHelper;
+import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.cadastro.imovel.Imovel;
+import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.seguranca.acesso.usuario.Usuario;
 
 import java.io.Serializable;
+
+import com.google.gson.annotations.SerializedName;
 
 public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 
 	private static final long serialVersionUID = 1448570895806137609L;
 	
+	@SerializedName(value = "id")
 	private Integer idOrdemServico;
 	private Integer idServicoTipo;
 	private Usuario usuario ;
+	
+	@SerializedName(value = "dados_ligacao_agua")
+    private LigacaoAgua ligacaoAgua;
+	
+	@SerializedName(value = "dados_hidrometro_instalacao")
+    private HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico;
+	
+	@SerializedName(value = "dados_hidrometro_substituicao")
+    private HidrometroInstalacaoHistorico hidrometroSubstituicaoHistorico;
+    
+	@SerializedName(value = "motivo_encerramento")
+	private String motivoEncerramento;
+	
+	@SerializedName(value = "parecer_encerramento")
+	private String parecerEncerramento;
+	
+	@SerializedName(value = "data_encerramento")
+	private String dataEncerramento;
 	
 	private Integer idServicoMotivoNaoCobranca ;
 	private String  valorPercentual ;
@@ -28,6 +53,54 @@ public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 	private Integer numeroSequenciaArquivo;
 	private Integer idRota;
 	
+	public LigacaoAgua getLigacaoAgua() {
+		return ligacaoAgua;
+	}
+
+	public void setLigacaoAgua(LigacaoAgua ligacaoAgua) {
+		this.ligacaoAgua = ligacaoAgua;
+	}
+
+	public HidrometroInstalacaoHistorico getHidrometroInstalacaoHistorico() {
+		return hidrometroInstalacaoHistorico;
+	}
+
+	public void setHidrometroInstalacaoHistorico(HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico) {
+		this.hidrometroInstalacaoHistorico = hidrometroInstalacaoHistorico;
+	}
+
+	public HidrometroInstalacaoHistorico getHidrometroSubstituicaoHistorico() {
+		return hidrometroSubstituicaoHistorico;
+	}
+
+	public void setHidrometroSubstituicaoHistorico(HidrometroInstalacaoHistorico hidrometroSubstituicaoHistorico) {
+		this.hidrometroSubstituicaoHistorico = hidrometroSubstituicaoHistorico;
+	}
+
+	public String getMotivoEncerramento() {
+		return motivoEncerramento;
+	}
+
+	public void setMotivoEncerramento(String motivoEncerramento) {
+		this.motivoEncerramento = motivoEncerramento;
+	}
+
+	public String getParecerEncerramento() {
+		return parecerEncerramento;
+	}
+
+	public void setParecerEncerramento(String parecerEncerramento) {
+		this.parecerEncerramento = parecerEncerramento;
+	}
+
+	public String getDataEncerramento() {
+		return dataEncerramento;
+	}
+
+	public void setDataEncerramento(String dataEncerramento) {
+		this.dataEncerramento = dataEncerramento;
+	}
+
 	public ArquivoRetornoAplicativoExecucaoOSHelper(){}
 	
 	public ArquivoRetornoAplicativoExecucaoOSHelper(String registro0, Integer idRota){

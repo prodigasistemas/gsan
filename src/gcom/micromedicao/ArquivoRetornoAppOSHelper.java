@@ -1,10 +1,10 @@
-package gcom.micromedicao.is.retorno;
-
-import gcom.cadastro.imovel.Imovel;
+package gcom.micromedicao;
 
 import java.io.Serializable;
 
-public class CabecalhoArquivoHelper implements Serializable{
+import gcom.cadastro.imovel.Imovel;
+
+public class ArquivoRetornoAppOSHelper implements Serializable{
 
 	private static final long serialVersionUID = 1448570895806137609L;
 
@@ -15,9 +15,9 @@ public class CabecalhoArquivoHelper implements Serializable{
 	private Integer numeroSequenciaArquivo;
 	private Integer idRota;
 	
-	public CabecalhoArquivoHelper(){}
+	public ArquivoRetornoAppOSHelper(){}
 	
-	public CabecalhoArquivoHelper(String registro0, Integer idRota){
+	public ArquivoRetornoAppOSHelper(String registro0, Integer idRota){
 		this.indcFinalizacao = Integer.parseInt(registro0.substring(1,2));
 		this.codRota = Integer.parseInt(registro0.substring(8,15));
 		this.setorComercial = Integer.parseInt(registro0.substring(5,8));

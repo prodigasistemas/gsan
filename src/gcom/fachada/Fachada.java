@@ -649,6 +649,7 @@ import gcom.seguranca.acesso.usuario.FiltroUsuarioGrupo;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAbrangencia;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
+import gcom.seguranca.acesso.usuario.UsuarioDTO;
 import gcom.seguranca.acesso.usuario.UsuarioSituacao;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
@@ -10312,6 +10313,13 @@ public class Fachada {
 		}
 	}
 
+	public UsuarioDTO pesquisarUsuario(Integer idUsuario) {
+		try {
+			return getControladorUsuario().pesquisarUsuario(idUsuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 	/**
 	 * método que retorna o maior número da quadra de um setor comercial
 	 * 

@@ -1131,7 +1131,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "LEFT JOIN hidroInstHist.hidrometroLocalInstalacao hidroLocalInst  "
 					+ "LEFT JOIN hidroInstHist.hidrometroProtecao hidroProtecao  "
 					+ "LEFT JOIN hidroInstHist.medicaoTipo  medicaoTipo "
-					+ "LEFT JOIN hidroInstHist.hidrometro  hidro "
+					+ "LEFT JOIN FETCH hidroInstHist.hidrometro  hidro "
 					+ "LEFT JOIN hidro.hidrometroSituacao hidroSit "
 					+ "LEFT JOIN imovel.ligacaoEsgoto ligEsgoto "
 					+ "LEFT JOIN imovel.ligacaoEsgotoSituacao ligEsgotoSitu  "
@@ -1148,7 +1148,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "LEFT JOIN ligEsgoto.ligacaoOrigem ligOrigem "
 
 					// Dados do Imvel da OS
-					+ "LEFT JOIN os.imovel imovelOS "
+					+ "LEFT JOIN FETCH os.imovel imovelOS "
 					+ "LEFT JOIN imovelOS.localidade locaOS "
 					+ "LEFT JOIN imovelOS.setorComercial stcmOS  "
 					+ "LEFT JOIN imovelOS.quadra qdraOS  "

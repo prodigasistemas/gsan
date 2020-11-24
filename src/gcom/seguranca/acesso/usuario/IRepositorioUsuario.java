@@ -217,10 +217,9 @@ public interface IRepositorioUsuario {
 	 */
 	public Collection pesquisarGrupoUsuario(Integer idUsuario)throws ErroRepositorioException;	
 
-
 	/**
 	 * [UC0146] Manter Conta
-	 * [SB0012] – Determinar competência de retificação de consumo
+	 * [SB0012]  Determinar competência de retificação de consumo
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 16/02/2011
@@ -236,6 +235,8 @@ public interface IRepositorioUsuario {
 	 * @date 03/03/2011
 	 */
 	public Usuario pesquisarUsuarioRotinaBatch()throws ErroRepositorioException;
+	
+	public UsuarioDTO pesquisarUsuario(Integer idUsuario) throws ErroRepositorioException;
 	
 	/**
 	 * [UC0230] Inserir Usuário

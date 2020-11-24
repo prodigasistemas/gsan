@@ -94,6 +94,42 @@ public class RepositorioUsuarioHBM implements IRepositorioUsuario {
 	}
 	
 	/**
+	 * Método que busca um usuário
+	 * 
+	 * @author Marcelo Giovani
+	 * @date 24/11/2020
+	 */
+	public UsuarioDTO pesquisarUsuario(Integer idUsuario) throws ErroRepositorioException {
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// cria a variável que vai conter o hql
+		String consulta = "";
+		
+		UsuarioDTO dto  = null;
+
+		try {
+			consulta = "select new gcom.seguranca.acesso.usuario.UsuarioDTO(id, nomeUsuario) " 
+					+ "from Usuario usuario "
+					+ "where usuario.id = :idUsuario ";
+
+			dto = (UsuarioDTO)session.createQuery(consulta)
+					.setInteger("idUsuario",
+					idUsuario.intValue()).uniqueResult();
+			
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		return dto;
+	}
+	/**
 	 * Método que consulta os grupos do usuário
 	 * 
 	 * @author Sávio Luiz

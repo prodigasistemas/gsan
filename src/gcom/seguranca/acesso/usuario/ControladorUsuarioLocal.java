@@ -276,7 +276,8 @@ public interface ControladorUsuarioLocal extends javax.ejb.EJBLocalObject {
 	 */
 	public Collection pesquisarGruposUsuarioAcesso(Collection colecaoUsuarioGrupos)throws ControladorException;
 	
-
+	public UsuarioDTO pesquisarUsuario(Integer idUsuario) throws ControladorException;
+	
 	/**
 	* Método que consulta o nome do usuário de uma guia de devolução,
 	* passando por parâmetro o id da guia de devolucao
