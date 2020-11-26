@@ -1,105 +1,107 @@
 package gcom.gui.micromedicao;
 
-import gcom.api.servicosOperacionais.EncerraOSServlet;
+import java.math.BigDecimal;
+import java.util.Date;
+
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts.action.ActionForward;
+
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.atendimentopublico.ordemservico.ServicoNaoCobrancaMotivo;
 import gcom.cadastro.imovel.Imovel;
 import gcom.fachada.Fachada;
-import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.micromedicao.ArquivoRetornoAplicativoExecucaoOSHelper;
-import gcom.micromedicao.SituacaoTransmissaoLeitura;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.Util;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
-import com.google.gson.JsonObject;
-
-/**
- * IMplementação do Fechamento das ordens de serviço
- * 
- * @author mgssantos
- * @author pauloalmeida
- */
-public class ProcessarRequisicaoAplicativoExecucaoOSAction {
+public class ProcessarRequisicaoAplicativoExecucaoOSAction extends GcomAction {
 	
-	private static final byte[] RESPOSTA_ERRO = null;
+	private static ProcessarRequisicaoAplicativoExecucaoOSAction instancia;
 
-
-	private static final byte[] RESPOSTA_OK = null;
-
-
-	//preparando a instância do objeto
-	private static ProcessarRequisicaoAplicativoExecucaoOSAction instance;
-
+	public static ProcessarRequisicaoAplicativoExecucaoOSAction getInstancia() {
+		if (instancia == null) {
+			instancia = new ProcessarRequisicaoAplicativoExecucaoOSAction();
+		}
+		return instancia;
+	}
+	
 
 	// Fachada
 	Fachada fachada = Fachada.getInstancia();
-	
-	/**
-	 * Método que executa o encerramento da OS
-	 * 
-	 * @param ArquivoRetornoAplicativoExecucaoOSHelper
-	 */
-	public void executeEncerramento(ArquivoRetornoAplicativoExecucaoOSHelper araeOSH){
 
-		// Carrega as informações básicas
-		OrdemServico ordemServico = fachada.recuperaOSPorId(araeOSH.getIdOrdemServico()); 
-		Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
+	public ActionForward execute(ArquivoRetornoAplicativoExecucaoOSHelper arquivoRetornoAplicativoExecucaoOSHelper, Usuario usuario ){
+
+			OrdemServico ordemServico = null;
+			Boolean veioEncerrarOS = Boolean.TRUE;
+			
+			LigacaoAgua ligacaoAgua = new LigacaoAgua();
+			
+			ordemServico = fachada.recuperaOSPorId(arquivoRetornoAplicativoExecucaoOSHelper.getIdOrdemServico()); 
+			Integer idOperacao = fachada.pesquisarServicoTipoOperacao(ordemServico.getServicoTipo().getId());
+			Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
+		                                      
+			 
+			if(idOperacao == Operacao.OPERACAO_RELIGACAO_AGUA_EFETUAR) {
+			
+					fachada.validarExibirRestabelecimentoLigacaoAgua(ordemServico, veioEncerrarOS);
+						
+					if (ordemServico != null && arquivoRetornoAplicativoExecucaoOSHelper.getIdTipoDebito() != null) {
 		
-		System.out.println(ordemServico.getServicoTipo());
-		System.out.println(ordemServico.getServicoTipo().getOperacao());
-		System.out.println(ordemServico.getServicoTipo().getOperacao().getCaminhoUrl());
+						ServicoNaoCobrancaMotivo servicoNaoCobrancaMotivo = null;
 		
-		try {
-			envocaMetdodoEncerramento(araeOSH.getIdServicoTipo(), ordemServico, imovel, araeOSH);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+						ordemServico.setIndicadorComercialAtualizado(new Short("1"));
 		
+						BigDecimal valorAtual = new BigDecimal(0);
+						if (arquivoRetornoAplicativoExecucaoOSHelper.getValorDebito() != null) {
+							
+							String valorDebito = arquivoRetornoAplicativoExecucaoOSHelper.getValorDebito().toString().replace(".", "");
+		
+							valorDebito = valorDebito.replace(",", ".");
+		
+							valorAtual = new BigDecimal(valorDebito);
+		
+							ordemServico.setValorAtual(valorAtual);
+						}
+		
+						if (arquivoRetornoAplicativoExecucaoOSHelper.getIdServicoMotivoNaoCobranca() != null) {
+							servicoNaoCobrancaMotivo = new ServicoNaoCobrancaMotivo();
+							servicoNaoCobrancaMotivo.setId(arquivoRetornoAplicativoExecucaoOSHelper.getIdServicoMotivoNaoCobranca());
+						}
+						ordemServico.setServicoNaoCobrancaMotivo(servicoNaoCobrancaMotivo);
+		
+						if (arquivoRetornoAplicativoExecucaoOSHelper.getValorPercentual() != null) {
+							ordemServico.setPercentualCobranca(new BigDecimal(arquivoRetornoAplicativoExecucaoOSHelper.getPercentualCobranca()));
+						}
+					}
+		
+							Date data = Util.converteStringParaDate(arquivoRetornoAplicativoExecucaoOSHelper.getDataReligacao());
+							ligacaoAgua.setId(imovel.getId());
+							ligacaoAgua.setDataReligacao(data);
+			
+			}//fim if_religaçãoagua
+			
+			
 			IntegracaoComercialHelper integracaoComercialHelper = new IntegracaoComercialHelper();
 
 			integracaoComercialHelper.setImovel(imovel);
 			integracaoComercialHelper.setLigacaoAgua(ligacaoAgua);
 			integracaoComercialHelper.setOrdemServico(ordemServico);
-			integracaoComercialHelper.setQtdParcelas(araeOSH.getQtdParcelas());
-			integracaoComercialHelper.setUsuarioLogado(araeOSH.getUsuario());
-							
-			fachada.atualizarOSViaApp(araeOSH.getIdServicoTipo(), integracaoComercialHelper,
-					araeOSH.getUsuario());
-		
-		//return null;
+			integracaoComercialHelper.setQtdParcelas(arquivoRetornoAplicativoExecucaoOSHelper.getQtdParcelas());
+			integracaoComercialHelper.setUsuarioLogado(usuario);
+			
+			//fachada.atualizarOSViaApp(arquivoRetornoAplicativoExecucaoOSHelper.getIdServicoTipo(), integracaoComercialHelper, arquivoRetornoAplicativoExecucaoOSHelper.getUsuario());
+			fachada.atualizarOSViaApp(arquivoRetornoAplicativoExecucaoOSHelper.getIdServicoTipo(), integracaoComercialHelper,
+					null);
+
+			
+		return null;		
 	}
 	
 	
-	// Método singleton
-	public static ProcessarRequisicaoAplicativoExecucaoOSAction getInstance() {
-		if (instance == null) {
-			instance = new ProcessarRequisicaoAplicativoExecucaoOSAction();
-		}
-		
-		return instance;
-	}
 }

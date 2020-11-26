@@ -43,7 +43,6 @@ import gcom.util.Util;
 @SuppressWarnings("serial")
 public class EncerraOSServlet extends HttpServlet {
 
-	@PathParam(value = "usuario")
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		if (req.getRequestURI().contains("usuario"))
@@ -78,7 +77,7 @@ public class EncerraOSServlet extends HttpServlet {
 		ArquivoRetornoAplicativoExecucaoOSHelper araeOSH = gson.fromJson(json, ArquivoRetornoAplicativoExecucaoOSHelper.class);
 		
 		ProcessarRequisicaoAplicativoExecucaoOSAction pros = ProcessarRequisicaoAplicativoExecucaoOSAction.getInstance();
-		pros.executeEncerramento(araeOSH);;
+		pros.executeEncerramento(araeOSH);
 		
 		
 	}
