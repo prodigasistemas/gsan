@@ -3,8 +3,6 @@ package gcom.gui.micromedicao;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.ActionForward;
 
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;

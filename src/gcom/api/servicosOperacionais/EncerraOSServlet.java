@@ -8,37 +8,22 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.util.Collection;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.jmx.snmp.Enumerated;
 
 import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
 import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
-import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
-import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
-import gcom.atendimentopublico.ordemservico.OrdemServico;
-import gcom.cadastro.imovel.Imovel;
 import gcom.fachada.Fachada;
-import gcom.gui.ActionServletException;
 import gcom.gui.micromedicao.ProcessarRequisicaoAplicativoExecucaoOSAction;
 import gcom.micromedicao.ArquivoRetornoAplicativoExecucaoOSHelper;
-import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.util.ControladorException;
-import gcom.util.FachadaException;
-import gcom.util.Util;
 
 @SuppressWarnings("serial")
 public class EncerraOSServlet extends HttpServlet {
@@ -56,28 +41,23 @@ public class EncerraOSServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		
-		
-	}
-	
-	@Override
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
 		encerramentoOS(req, resp);
-		resp.setStatus(HttpServletResponse.SC_OK);
+
 	}
 	
 	@SuppressWarnings("unused")
 	private static void encerramentoOS(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 	
 		Gson gson = new Gson();
+		Fachada fachada = Fachada.getInstancia();
+		
+		ProcessarRequisicaoAplicativoExecucaoOSAction prae = ProcessarRequisicaoAplicativoExecucaoOSAction.getInstancia();
 		JsonObject json = montarRetorno(req);
 		
 		// Aqui estou setando os valores no Helper generico
 		ArquivoRetornoAplicativoExecucaoOSHelper araeOSH = gson.fromJson(json, ArquivoRetornoAplicativoExecucaoOSHelper.class);
 		
-		ProcessarRequisicaoAplicativoExecucaoOSAction pros = ProcessarRequisicaoAplicativoExecucaoOSAction.getInstance();
-		pros.executeEncerramento(araeOSH);
+		ProcessarRequisicaoAplicativoExecucaoOSAction.getInstancia().execute(araeOSH, new Usuario());	
 		
 		
 	}
