@@ -3,6 +3,8 @@ package gcom.gui.micromedicao;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForward;
 
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
@@ -14,22 +16,26 @@ import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
 import gcom.micromedicao.ArquivoRetornoAplicativoExecucaoOSHelper;
 import gcom.seguranca.acesso.Operacao;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.Util;
 
 
 public class ProcessarRequisicaoAplicativoExecucaoOSAction extends GcomAction {
 	
-	// Constantes da classe	
-	// Tipos de Respota
-	private static final byte RESPOSTA_ERRO = '#';
-	private static final byte RESPOSTA_OK = '*';
-	private static final short ENCERRAR_ARQUIVO_RETORNO = 7;
+	private static ProcessarRequisicaoAplicativoExecucaoOSAction instancia;
+
+	public static ProcessarRequisicaoAplicativoExecucaoOSAction getInstancia() {
+		if (instancia == null) {
+			instancia = new ProcessarRequisicaoAplicativoExecucaoOSAction();
+		}
+		return instancia;
+	}
 	
 
 	// Fachada
 	Fachada fachada = Fachada.getInstancia();
 
-	public ActionForward execute(ArquivoRetornoAplicativoExecucaoOSHelper arquivoRetornoAplicativoExecucaoOSHelper ){
+	public ActionForward execute(ArquivoRetornoAplicativoExecucaoOSHelper arquivoRetornoAplicativoExecucaoOSHelper, Usuario usuario ){
 
 			OrdemServico ordemServico = null;
 			Boolean veioEncerrarOS = Boolean.TRUE;
@@ -39,7 +45,7 @@ public class ProcessarRequisicaoAplicativoExecucaoOSAction extends GcomAction {
 			ordemServico = fachada.recuperaOSPorId(arquivoRetornoAplicativoExecucaoOSHelper.getIdOrdemServico()); 
 			Integer idOperacao = fachada.pesquisarServicoTipoOperacao(ordemServico.getServicoTipo().getId());
 			Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
-			                                                 
+		                                      
 			 
 			if(idOperacao == Operacao.OPERACAO_RELIGACAO_AGUA_EFETUAR) {
 			
@@ -87,11 +93,12 @@ public class ProcessarRequisicaoAplicativoExecucaoOSAction extends GcomAction {
 			integracaoComercialHelper.setLigacaoAgua(ligacaoAgua);
 			integracaoComercialHelper.setOrdemServico(ordemServico);
 			integracaoComercialHelper.setQtdParcelas(arquivoRetornoAplicativoExecucaoOSHelper.getQtdParcelas());
-			integracaoComercialHelper.setUsuarioLogado(arquivoRetornoAplicativoExecucaoOSHelper.getUsuario());
+			integracaoComercialHelper.setUsuarioLogado(usuario);
 			
+			//fachada.atualizarOSViaApp(arquivoRetornoAplicativoExecucaoOSHelper.getIdServicoTipo(), integracaoComercialHelper, arquivoRetornoAplicativoExecucaoOSHelper.getUsuario());
 			fachada.atualizarOSViaApp(arquivoRetornoAplicativoExecucaoOSHelper.getIdServicoTipo(), integracaoComercialHelper,
-					arquivoRetornoAplicativoExecucaoOSHelper.getUsuario());
-			
+					null);
+
 			
 		return null;		
 	}

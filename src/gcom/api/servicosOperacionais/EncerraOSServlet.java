@@ -25,6 +25,7 @@ import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.cadastro.imovel.Imovel;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
+import gcom.gui.micromedicao.ProcessarRequisicaoAplicativoExecucaoOSAction;
 import gcom.micromedicao.ArquivoRetornoAplicativoExecucaoOSHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
@@ -46,10 +47,19 @@ public class EncerraOSServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		encerramentoOS(req, resp);
+		Gson gson = new Gson();
 		
-		resp.setStatus(HttpServletResponse.SC_OK);
+		ProcessarRequisicaoAplicativoExecucaoOSAction prae = ProcessarRequisicaoAplicativoExecucaoOSAction.getInstancia();
+		JsonObject json = montarRetorno(req);
 		
+		HttpSession sessao = req.getSession(false);
+	    Usuario usuarioLogado = (Usuario)sessao.getAttribute(Usuario.USUARIO_LOGADO);  
+		
+		// Aqui estou setando os valores no Helper generico
+		ArquivoRetornoAplicativoExecucaoOSHelper araeOSH = gson.fromJson(json, ArquivoRetornoAplicativoExecucaoOSHelper.class);
+		//araeOSH.setIdOrdemServico(json.getAsJsonPrimitive("id").getAsInt());
+		
+		ProcessarRequisicaoAplicativoExecucaoOSAction.getInstancia().execute(araeOSH, usuarioLogado);		
 
 		
 	}

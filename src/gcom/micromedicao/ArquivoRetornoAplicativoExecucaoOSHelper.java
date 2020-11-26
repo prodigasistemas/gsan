@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import com.google.gson.annotations.SerializedName;
 
-import gcom.seguranca.acesso.usuario.Usuario;
-
 public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 
 	private static final long serialVersionUID = 1448570895806137609L;
@@ -17,92 +15,16 @@ public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 	private String  dataEncerramento;
 	
 	@SerializedName("motivo_encerramento")
-	private Integer dotivoEncerramento;
+	private Integer motivoEncerramento;
 
 	@SerializedName("parecer_encerramento")
-	private String  darecer;
+	private String  parecer;
+		
+	private DadosHidrometroSubstituicaoDTO dados_hidrometro_substituicao;
 	
-	//dados_hidrometro_substituicao
-	@SerializedName("numero")
-	private Integer  idSubstituicao;
+	private DadosHidrometroInstalacaoDTO dados_hidrometro_instalacao;
 	
-	@SerializedName("dataSubstituicao") 
-	private String  dataSubstituicao;
-	
-	@SerializedName("leituraSubstituicao")
-	private Integer  leituraSubstituicao;
-	
-	@SerializedName("situacaoHidrometro") 
-	private Integer  situacaoHidrometro;
-	
-	@SerializedName("localArmazenagem") 
-	private Integer localArmazenagem;
-	
-	
-	//dados_hidrometro_instalacao
-	@SerializedName("numero") 
-	private Integer idInstalacao;
-	
-	@SerializedName("dataInstalacao") 
-	private String dataInstalacao;
-	
-	@SerializedName("localInstalacao") 
-	private Integer localInstalacao;
-	
-	@SerializedName("protecao")
-	private Integer protecao;
-	
-	@SerializedName("trocaProtecao")
-	private Integer trocaProtecao;
-	
-	@SerializedName("trocaRegistro")
-	private Integer trocaRegistro;
-	
-	@SerializedName("leituraInstalacao")
-	private Integer leituraInstalacao;
-	
-	@SerializedName("selo")
-	private Integer selo;
-	
-	@SerializedName("cavalete")
-	private Integer cavalete;
-	
-	@SerializedName("lacre")
-	private Integer lacreHidrometro;
-	
-	//dados_ligacao_agua
-	@SerializedName("dataLigacao")
-	private String dataLigacao;
-	
-	@SerializedName("diametro")
-	private Integer diametro;
-	
-	@SerializedName("material")
-	private Integer material;
-	
-	@SerializedName("perfil")
-	private Integer perfil;
-	
-	@SerializedName("localInstalacaoRamal") 
-	private Integer localInstalacaoRamal;
-	
-	@SerializedName("profundidade")
-	private Integer profundidade;
-	
-	@SerializedName("distanciaInstalacaoRamal") 
-	private Integer distanciaInstalacaoRamal;
-	
-	@SerializedName("pavimentoRua") 
-	private Integer pavimentoRua;
-	
-	@SerializedName("pavimentoCalcada") 
-	private Integer pavimentoCalcada;
-	
-	@SerializedName("origem") 
-	private Integer origem;
-	
-	@SerializedName("lacre")
-	private Integer lacreAgua;
+	private DadosLigacaoAguaDTO dados_ligacao_agua;
 	
 	private Integer idServicoTipo;
 	
@@ -115,16 +37,18 @@ public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 	private String  PercentualCobranca;
 	private String  DataReligacao;
 	
-    @SerializedName("") 
-	private Integer indcFinalizacao;
+    //@SerializedName("") 
+	//private Integer indcFinalizacao;
 
-	private Usuario usuario;
-    
-
+	//private Usuario usuario;
+  
 	
-	public ArquivoRetornoAplicativoExecucaoOSHelper(){}
+	public ArquivoRetornoAplicativoExecucaoOSHelper(){
+		
+	}
 	
-	public Integer getIdOrdemServico() {
+	
+		public Integer getIdOrdemServico() {
 		return idOrdemServico;
 	}
 
@@ -140,13 +64,13 @@ public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 		this.idServicoTipo = idServicoTipo;
 	}
 
-	public Usuario getUsuario() {
+	/*public Usuario getUsuario() {
 		return usuario;
 	}
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-	}
+	}*/
 
 	public Integer getIdServicoMotivoNaoCobranca() {
 		return idServicoMotivoNaoCobranca;
@@ -205,12 +129,12 @@ public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 		DataReligacao = dataReligacao;
 	}
 
-	public Integer getIndcFinalizacao() {
+	/*public Integer getIndcFinalizacao() {
 		return indcFinalizacao;
 	}
 	public void setIndcFinalizacao(Integer indcFinalizacao) {
 		this.indcFinalizacao = indcFinalizacao;
-	}
+	}*/
 
 
 	
