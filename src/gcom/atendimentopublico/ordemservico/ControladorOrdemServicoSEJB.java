@@ -1,5 +1,6 @@
 package gcom.atendimentopublico.ordemservico;
 
+import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
@@ -1852,6 +1853,16 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 
 		try {
 			return this.repositorioOrdemServico.recuperaOSProgramacaoPorDataRoteiro(dataRoteiro);
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	public Collection<ProgramadasDTO> recuperaOSProgramacao() throws ControladorException {
+
+		try {
+			return this.repositorioOrdemServico.recuperaOSProgramacao();
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);

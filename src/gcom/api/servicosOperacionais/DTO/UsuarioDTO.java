@@ -1,4 +1,4 @@
-package gcom.seguranca.acesso.usuario;
+package gcom.api.servicosOperacionais.DTO;
 
 public class UsuarioDTO {
 

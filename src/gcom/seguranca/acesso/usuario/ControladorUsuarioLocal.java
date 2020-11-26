@@ -1,5 +1,6 @@
 package gcom.seguranca.acesso.usuario;
 
+import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
 import gcom.seguranca.acesso.Operacao;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;

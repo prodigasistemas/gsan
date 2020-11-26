@@ -1,5 +1,6 @@
 package gcom.seguranca.acesso.usuario;
 
+import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
 import gcom.util.ErroRepositorioException;
 
 import java.math.BigDecimal;

@@ -1,5 +1,6 @@
 package gcom.seguranca.acesso.usuario;
 
+import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
 import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.EnvioEmail;

@@ -19,6 +19,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 
+import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
+import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
@@ -649,7 +651,6 @@ import gcom.seguranca.acesso.usuario.FiltroUsuarioGrupo;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAbrangencia;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
-import gcom.seguranca.acesso.usuario.UsuarioDTO;
 import gcom.seguranca.acesso.usuario.UsuarioSituacao;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
@@ -13263,6 +13264,15 @@ public class Fachada {
 	public Collection<OrdemServicoProgramacao> recuperaOSProgramacaoPorDataRoteiro(Date dataRoteiro) {
 		try {
 			return this.getControladorOrdemServico().recuperaOSProgramacaoPorDataRoteiro(dataRoteiro);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+
+	}
+	
+	public Collection<ProgramadasDTO> recuperaOSProgramacao() {
+		try {
+			return this.getControladorOrdemServico().recuperaOSProgramacao();
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

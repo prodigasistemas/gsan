@@ -1,5 +1,6 @@
 package gcom.atendimentopublico.ordemservico;
 
+import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
 import gcom.atendimentopublico.ordemservico.bean.DadosAtualizacaoOSParaInstalacaoHidrometroHelper;
 import gcom.atendimentopublico.ordemservico.bean.OSPavimentoHelper;
 import gcom.atendimentopublico.ordemservico.bean.OrdemRepavimentacaoProcessoAceiteHelper;
@@ -552,6 +553,8 @@ public interface IRepositorioOrdemServico {
 	 */
 	public Collection<OrdemServicoProgramacao> recuperaOSProgramacaoPorDataRoteiro(
 			Date dataRoteiro) throws ErroRepositorioException;
+	
+	public Collection<ProgramadasDTO> recuperaOSProgramacao() throws ErroRepositorioException;
 
 	/**
 	 * [UC0462] Obter Dados das Atividades da OS

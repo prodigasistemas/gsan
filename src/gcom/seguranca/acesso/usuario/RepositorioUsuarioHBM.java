@@ -1,5 +1,6 @@
 package gcom.seguranca.acesso.usuario;
 
+import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
 import gcom.seguranca.acesso.Grupo;
 import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.util.ConstantesSistema;
@@ -110,7 +111,7 @@ public class RepositorioUsuarioHBM implements IRepositorioUsuario {
 		UsuarioDTO dto  = null;
 
 		try {
-			consulta = "select new gcom.seguranca.acesso.usuario.UsuarioDTO(id, nomeUsuario) " 
+			consulta = "select new gcom.api.servicosOperacionais.DTO.UsuarioDTO(id, nomeUsuario) " 
 					+ "from Usuario usuario "
 					+ "where usuario.id = :idUsuario ";
 

@@ -1,5 +1,6 @@
 package gcom.atendimentopublico.ordemservico;
 
+import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
 import gcom.atendimentopublico.LigacaoOrigem;
 import gcom.atendimentopublico.ligacaoagua.CorteTipo;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
@@ -1131,7 +1132,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "LEFT JOIN hidroInstHist.hidrometroLocalInstalacao hidroLocalInst  "
 					+ "LEFT JOIN hidroInstHist.hidrometroProtecao hidroProtecao  "
 					+ "LEFT JOIN hidroInstHist.medicaoTipo  medicaoTipo "
-					+ "LEFT JOIN FETCH hidroInstHist.hidrometro  hidro "
+					+ "LEFT JOIN hidroInstHist.hidrometro  hidro "
 					+ "LEFT JOIN hidro.hidrometroSituacao hidroSit "
 					+ "LEFT JOIN imovel.ligacaoEsgoto ligEsgoto "
 					+ "LEFT JOIN imovel.ligacaoEsgotoSituacao ligEsgotoSitu  "
@@ -5448,6 +5449,79 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			 * 
 			 * }
 			 */
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retornoConsulta;
+	}
+
+	public Collection<ProgramadasDTO> recuperaOSProgramacao() throws ErroRepositorioException {
+
+		Collection<ProgramadasDTO> retornoConsulta = new ArrayList();
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append("SELECT new gcom.api.servicosOperacionais.DTO.ProgramadasDTO (").
+			   append("orse.id as ordem_servico_id, ").
+			   append("orse.situacao as situacao, ").
+ 			   append("orse.dataGeracao as data_geracao, ").
+ 			   append("svtp.descricao as servico_tipo_descricao,").
+ 			   append("svtp.valor  as servico_tipo_valor, ").
+ 			   append("orse.observacao as observacao, ").
+ 			   append("eqpe.nome as equipe_programacao, ").
+ 			   append("imov.id as imovel_id, ").
+ 			   append("loca.id as imovel_localidade_id, ").
+ 			   append("stcm.codigo as imovel_setor_comercial, ").
+ 			   append("qdra.numeroQuadra as imovel_quadra, ").
+ 			   append("imov.lote as imovel_lote, ").
+ 			   append("imov.subLote as imovel_sublote, ").
+ 			   append("last.descricao as imovel_ligacao_agua, ").
+ 			   append("lest.descricao as imovel_ligacao_esgoto, ").
+ 			   append("clie.nome as cliente_nome, ").
+ 			   
+ 			   append("clie.cnpj as cnpj,  ").
+ 			   append("clie.cpf as cpf, ").
+ 			   append("logradouroCep, ").
+ 			   append("imov.numeroImovel as numImovel, ").
+ 			   append("logradouroBairro, ").
+ 			   append("imov.complementoEndereco").
+ 			   
+ 			   append(") ").
+ 			   append("FROM OrdemServicoProgramacao 			ospg ").
+	 		   append(" JOIN FETCH ospg.equipe 					eqpe ").
+	 		   append(" LEFT JOIN FETCH ospg.ordemServico 		orse ").
+	 		   append("	JOIN orse.servicoTipo  					svtp ").
+	 		   append("	JOIN orse.imovel						imov ").
+	 		   append("	JOIN imov.localidade					loca ").
+	 		   append("	JOIN imov.setorComercial				stcm ").
+	 		   append("	JOIN imov.quadra						qdra ").
+	 		   append("	JOIN imov.ligacaoAguaSituacao 			last ").
+	 		   append("	JOIN imov.ligacaoEsgotoSituacao			lest ").
+	 		   append("	JOIN FETCH imov.clienteImoveis			clim ").
+	 		   append("	JOIN clim.cliente						clie ").
+	 		   append("	JOIN FETCH imov.logradouroCep 			logradouroCep ").
+	 		   append("	JOIN FETCH logradouroCep.logradouro 	logradouro ").
+	 		   append("	JOIN logradouro.logradouroTipo 			logradouroTipo ").
+	 		   append("	JOIN logradouro.logradouroTitulo 		logradouroTitulo ").
+	 		   append("	JOIN FETCH imov.logradouroBairro 		logradouroBairro ").
+	 		   append("	JOIN logradouroBairro.bairro 		bairro ").
+	 		   append("	JOIN bairro.municipio 				municipio ").
+	 		   append("	JOIN municipio.unidadeFederacao 	unidadeFederacao ").
+	 		   append("	WHERE clim.dataFimRelacao IS NULL ").
+	 		   append("	AND clim.clienteRelacaoTipo.id = 2 ").
+	 		   append("	ORDER BY ospg.id ");
+
+			Query query = session.createQuery(sb.toString());
+			query.setMaxResults(100);
+			retornoConsulta = query.list();
+
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -23,6 +24,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.jmx.snmp.Enumerated;
 
+import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
+import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
@@ -33,7 +36,6 @@ import gcom.gui.micromedicao.ProcessarRequisicaoAplicativoExecucaoOSAction;
 import gcom.micromedicao.ArquivoRetornoAplicativoExecucaoOSHelper;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.seguranca.acesso.usuario.UsuarioDTO;
 import gcom.util.ControladorException;
 import gcom.util.FachadaException;
 import gcom.util.Util;
@@ -59,15 +61,36 @@ public class EncerraOSServlet extends HttpServlet {
 		
 	}
 	
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+		encerramentoOS(req, resp);
+		resp.setStatus(HttpServletResponse.SC_OK);
+	}
+	
+	@SuppressWarnings("unused")
+	private static void encerramentoOS(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	
+		Gson gson = new Gson();
+		JsonObject json = montarRetorno(req);
+		
+		// Aqui estou setando os valores no Helper generico
+		ArquivoRetornoAplicativoExecucaoOSHelper araeOSH = gson.fromJson(json, ArquivoRetornoAplicativoExecucaoOSHelper.class);
+		
+		ProcessarRequisicaoAplicativoExecucaoOSAction pros = ProcessarRequisicaoAplicativoExecucaoOSAction.getInstance();
+		pros.executeEncerramento(araeOSH);;
+		
+		
+	}
 
 	private void getProgramadas(HttpServletRequest req, HttpServletResponse resp) {
 		
-		//UsuarioDTO usuario = Fachada.getInstancia().pesquisarUsuario(1);
+		Collection<ProgramadasDTO> dto = Fachada.getInstancia().recuperaOSProgramacao();
 		Gson gson = new Gson();
 		
 		try {
-			resp.getOutputStream().print("Programadas");
+			String jo = gson.toJson(dto);
+			resp.getOutputStream().print(jo);
 			resp.setStatus(HttpServletResponse.SC_OK);
 			
 		} catch (IOException e) {
@@ -92,7 +115,6 @@ public class EncerraOSServlet extends HttpServlet {
 		}
 		
 	}
-	
 	
     protected String getRequestParameter(HttpServletRequest request, String name) {
         String param = request.getParameter(name);
@@ -176,7 +198,6 @@ public class EncerraOSServlet extends HttpServlet {
 		throw new Exception("Recurso sem identificador");
 		
 	}	
-	
 
 	private static JsonObject montarRetorno(HttpServletRequest req) throws IOException {
 		

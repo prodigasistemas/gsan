@@ -1,5 +1,6 @@
 package gcom.atendimentopublico.ordemservico;
 
+import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ordemservico.bean.AcompanhamentoArquivosRoteiroHelper;
@@ -427,9 +428,6 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	public void validarInsercaoEquipeEquipamentosEspeciais(
 			Collection colecaoEquipeEquipamentosEspeciais) throws ControladorException;
 
-	
-	
-	
 	/**
 	 * [UC0462] Obter Dados das Atividades da OS
 	 * 
@@ -455,7 +453,9 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	 */
 	public Collection<OrdemServicoProgramacao> recuperaOSProgramacaoPorDataRoteiro(
 			Date dataRoteiro) throws ControladorException;
-
+	
+	public Collection<ProgramadasDTO> recuperaOSProgramacao() throws ControladorException;
+	
 	/**
 	 * [UC0479] Gerar Débito da Ordem de Serviço
 	 * 
@@ -3154,4 +3154,5 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	public void atualizarSituacaoArquivoTextoAcompanhamentoServico( long imei,Short idSituacaoTransmissaoLeitura  ) throws ControladorException;
 
 	public void validarEncerramentoOsImovelEmCampo(OrdemServico ordemServico) throws ControladorException;
+
 }
