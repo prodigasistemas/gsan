@@ -142,8 +142,10 @@ public class RepositorioUsuarioHBM implements IRepositorioUsuario {
 		UsuarioDTO dto  = null;
 
 		try {
-			consulta = "select new gcom.api.servicosOperacionais.DTO.UsuarioDTO(id, nomeUsuario) " 
-					+ "from Usuario usuario "
+			consulta = "select new gcom.api.ordemServico.DTO.UsuarioDTO(usuario.id, usuario.nomeUsuario, unidade.nome, equipe.nome) " 
+					+ "from Equipe equipe "
+					+ "join fetch equipe.usuarioRespExecServico usuario "
+					+ "join fetch usuario.unidadeNegocio unidade "
 					+ "where usuario.id = :idUsuario ";
 
 			dto = (UsuarioDTO)session.createQuery(consulta)

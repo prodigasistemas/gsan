@@ -23,6 +23,7 @@ import gcom.api.ordemServico.DTO.UsuarioDTO;
 import gcom.api.ordemServico.helper.ArquivoRetornoAplicativoExecucaoOSHelper;
 import gcom.fachada.Fachada;
 import gcom.gui.micromedicao.ProcessarRequisicaoAplicativoExecucaoOSAction;
+import gcom.micromedicao.hidrometro.Hidrometro;
 import gcom.seguranca.acesso.usuario.Usuario;
 
 @SuppressWarnings("serial")
@@ -30,8 +31,11 @@ public class EncerraOSServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		if (req.getRequestURI().contains("usuario"))
+		if (req.getParameterMap().containsKey("usuario"))
 			getUsuario(Integer.valueOf(getRequestParameter(req, "usuario")), req, resp);
+		
+		if (req.getParameterMap().containsKey("hidrometro"))
+			getHidrometro(getRequestParameter(req, "hidrometro"), req, resp);
 		
 		if (req.getRequestURI().contains("programadas"))
 			getProgramadas(req, resp);
@@ -77,14 +81,24 @@ public class EncerraOSServlet extends HttpServlet {
 		UsuarioDTO usuario = Fachada.getInstancia().pesquisarUsuarioDto(id);
 		Gson gson = new Gson();
 		
-		try {
-			resp.getOutputStream().print(gson.toJson(usuario));
+		if (usuario != null)
 			resp.setStatus(HttpServletResponse.SC_OK);
-			
-		} catch (IOException e) {
+		else
 			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			e.printStackTrace();
-		}
+		
+	}
+	
+	private void getHidrometro(String numero, HttpServletRequest req, HttpServletResponse resp) {
+		
+		Hidrometro hidrometro = Fachada.getInstancia().pesquisarHidrometroNumeroSituacao(numero, 3);
+		
+		Gson gson = new Gson();
+		
+		if (hidrometro != null)
+			resp.setStatus(HttpServletResponse.SC_OK);
+		else
+			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			
 		
 	}
 	

@@ -5468,7 +5468,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			
 			StringBuilder sb = new StringBuilder();
 			
-			sb.append("SELECT new gcom.api.servicosOperacionais.DTO.ProgramadasDTO (").
+			sb.append("SELECT new gcom.api.ordemServico.DTO.ProgramadasDTO (").
 			   append("orse.id as ordem_servico_id, ").
 			   append("orse.situacao as situacao, ").
  			   append("orse.dataGeracao as data_geracao, ").

@@ -3,8 +3,6 @@ package gcom.gui.micromedicao;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.apache.struts.action.ActionForward;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -49,8 +47,21 @@ public class ProcessarRequisicaoAplicativoExecucaoOSAction extends GcomAction {
 		Integer idOperacao = fachada.pesquisarServicoTipoOperacao(ordemServico.getServicoTipo().getId());
 		Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
 		                
-		if (idOperacao == Operacao.OPERACAO_RELIGACAO_AGUA_EFETUAR) {
-			operacaoReligacaoAguaEfetuar(ordemServico, imovel, araeOSH, usuario);
+		if (idOperacao != null) {
+
+			switch (idOperacao) {
+				case (Operacao.OPERACAO_RELIGACAO_AGUA_EFETUAR_INT):
+					operacaoReligacaoAguaEfetuar(ordemServico, imovel, araeOSH, usuario);
+					break;
+				case (Operacao.OPERACAO_INSTALACAO_HIDROMETRO_EFETUAR_INT):
+					break;
+				case (Operacao.OPERACAO_SUBSTITUICAO_HIDROMETRO_EFETUAR_INT):
+					break;
+				case (Operacao.OPERACAO_RESTABELECIMENTO_LIGACAO_AGUA_EFETUAR_INT):
+					break;
+				case (Operacao.OPERACAO_LIGACAO_AGUA_EFETUAR_INT):
+					break;
+			}
 		}
 			
 	}
@@ -102,7 +113,7 @@ public class ProcessarRequisicaoAplicativoExecucaoOSAction extends GcomAction {
 		integracaoComercialHelper.setQtdParcelas(araeOSH.getQtdParcelas());
 		integracaoComercialHelper.setUsuarioLogado(usuario);
 		
-		fachada.atualizarOSViaApp(araeOSH.getIdServicoTipo(), integracaoComercialHelper, null);
+		fachada.atualizarOSViaApp(araeOSH.getIdServicoTipo(), integracaoComercialHelper, usuario);
 	}
 	
 	
