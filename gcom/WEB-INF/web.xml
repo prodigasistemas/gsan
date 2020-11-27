@@ -6,7 +6,7 @@
 
 	<servlet>
 	  <servlet-name>EncerraOSServlet</servlet-name>
-	  <servlet-class>gcom.api.servicosOperacionais.EncerraOSServlet</servlet-class>
+	  <servlet-class>gcom.api.ordemServico.EncerraOSServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
