@@ -1,4 +1,4 @@
-package gcom.micromedicao;
+package gcom.api.ordemServico.DTO;
 
 import com.google.gson.annotations.SerializedName;
 

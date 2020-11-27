@@ -1,8 +1,12 @@
-package gcom.micromedicao;
+package gcom.api.ordemServico.helper;
 
 import java.io.Serializable;
 
 import com.google.gson.annotations.SerializedName;
+
+import gcom.api.ordemServico.DTO.DadosHidrometroInstalacaoDTO;
+import gcom.api.ordemServico.DTO.DadosHidrometroSubstituicaoDTO;
+import gcom.api.ordemServico.DTO.DadosLigacaoAguaDTO;
 
 public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 
@@ -26,6 +30,9 @@ public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 	
 	private DadosLigacaoAguaDTO dados_ligacao_agua;
 	
+	@SerializedName("id_usuario")
+	private Integer idUsuario;
+	
 	private Integer idServicoTipo;
 	
 	@SerializedName(value = "parecer_encerramento")
@@ -40,6 +47,14 @@ public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 	private String  PercentualCobranca;
 	private String  DataReligacao;
 	
+	public Integer getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Integer idusuario) {
+		this.idUsuario = idusuario;
+	}
+
 	public Integer getMotivoEncerramento() {
 		return motivoEncerramento;
 	}

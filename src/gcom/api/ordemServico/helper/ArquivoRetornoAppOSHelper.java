@@ -1,4 +1,4 @@
-package gcom.micromedicao;
+package gcom.api.ordemServico.helper;
 
 import java.io.Serializable;
 

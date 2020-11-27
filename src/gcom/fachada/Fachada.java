@@ -19,8 +19,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 
-import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
-import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
+import gcom.api.ordemServico.DTO.ProgramadasDTO;
+import gcom.api.ordemServico.DTO.UsuarioDTO;
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
@@ -10314,13 +10314,23 @@ public class Fachada {
 		}
 	}
 
-	public UsuarioDTO pesquisarUsuario(Integer idUsuario) {
+	public Usuario pesquisarUsuario(Integer idUsuario) {
 		try {
 			return getControladorUsuario().pesquisarUsuario(idUsuario);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+
+	public UsuarioDTO pesquisarUsuarioDto(Integer idUsuario) {
+		try {
+			return getControladorUsuario().pesquisarUsuarioDto(idUsuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 	/**
 	 * método que retorna o maior número da quadra de um setor comercial
 	 * 

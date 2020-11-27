@@ -1,6 +1,6 @@
 package gcom.seguranca.acesso.usuario;
 
-import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
+import gcom.api.ordemServico.DTO.UsuarioDTO;
 import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.EnvioEmail;
@@ -2112,7 +2112,7 @@ public class ControladorUsuarioSEJB implements SessionBean {
 		}
 	}	
 	
-	public UsuarioDTO pesquisarUsuario(Integer idUsuario) throws ControladorException {
+	public Usuario pesquisarUsuario(Integer idUsuario) throws ControladorException {
 		try {
 			return repositorioUsuario.pesquisarUsuario(idUsuario);
 		} catch (ErroRepositorioException ex) {
@@ -2120,6 +2120,16 @@ public class ControladorUsuarioSEJB implements SessionBean {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	public UsuarioDTO pesquisarUsuarioDto(Integer idUsuario) throws ControladorException {
+		try {
+			return repositorioUsuario.pesquisarUsuarioDto(idUsuario);
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
 	/**
 	 * [UC0230] Inserir Usuário
 	 * [FS0022] Verificar existência de usuário internet

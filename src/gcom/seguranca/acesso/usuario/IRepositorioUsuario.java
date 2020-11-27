@@ -1,6 +1,6 @@
 package gcom.seguranca.acesso.usuario;
 
-import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
+import gcom.api.ordemServico.DTO.UsuarioDTO;
 import gcom.util.ErroRepositorioException;
 
 import java.math.BigDecimal;
@@ -237,8 +237,10 @@ public interface IRepositorioUsuario {
 	 */
 	public Usuario pesquisarUsuarioRotinaBatch()throws ErroRepositorioException;
 	
-	public UsuarioDTO pesquisarUsuario(Integer idUsuario) throws ErroRepositorioException;
-	
+	public Usuario pesquisarUsuario(Integer idUsuario) throws ErroRepositorioException;
+
+	public UsuarioDTO pesquisarUsuarioDto(Integer idUsuario) throws ErroRepositorioException;
+
 	/**
 	 * [UC0230] Inserir Usuário
 	 * [FS0022] Verificar existência de usuário internet

@@ -1,4 +1,4 @@
-package gcom.api.servicosOperacionais.DTO;
+package gcom.api.ordemServico.DTO;
 
 import java.math.BigDecimal;
 import java.util.Date;

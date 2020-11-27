@@ -1,6 +1,6 @@
 package gcom.atendimentopublico.ordemservico;
 
-import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
+import gcom.api.ordemServico.DTO.ProgramadasDTO;
 import gcom.atendimentopublico.ordemservico.bean.DadosAtualizacaoOSParaInstalacaoHidrometroHelper;
 import gcom.atendimentopublico.ordemservico.bean.OSPavimentoHelper;
 import gcom.atendimentopublico.ordemservico.bean.OrdemRepavimentacaoProcessoAceiteHelper;

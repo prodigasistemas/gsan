@@ -1,6 +1,6 @@
 package gcom.seguranca.acesso.usuario;
 
-import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
+import gcom.api.ordemServico.DTO.UsuarioDTO;
 import gcom.seguranca.acesso.Grupo;
 import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.util.ConstantesSistema;
@@ -100,7 +100,38 @@ public class RepositorioUsuarioHBM implements IRepositorioUsuario {
 	 * @author Marcelo Giovani
 	 * @date 24/11/2020
 	 */
-	public UsuarioDTO pesquisarUsuario(Integer idUsuario) throws ErroRepositorioException {
+	public Usuario pesquisarUsuario(Integer idUsuario) throws ErroRepositorioException {
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// cria a variável que vai conter o hql
+		String consulta = "";
+		
+		Usuario usuario  = null;
+
+		try {
+			consulta = "select usuario " 
+					+ "from Usuario usuario "
+					+ "where usuario.id = :idUsuario ";
+
+			usuario = (Usuario)session.createQuery(consulta)
+					.setInteger("idUsuario",
+					idUsuario.intValue()).uniqueResult();
+			
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		return usuario;
+	}
+	
+	public UsuarioDTO pesquisarUsuarioDto(Integer idUsuario) throws ErroRepositorioException {
 
 		// cria uma sessão com o hibernate
 		Session session = HibernateUtil.getSession();

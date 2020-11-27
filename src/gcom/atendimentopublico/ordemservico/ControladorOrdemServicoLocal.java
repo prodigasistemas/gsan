@@ -1,6 +1,6 @@
 package gcom.atendimentopublico.ordemservico;
 
-import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
+import gcom.api.ordemServico.DTO.ProgramadasDTO;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ordemservico.bean.AcompanhamentoArquivosRoteiroHelper;

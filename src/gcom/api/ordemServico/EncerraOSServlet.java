@@ -1,4 +1,4 @@
-package gcom.api.servicosOperacionais;
+package gcom.api.ordemServico;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,11 +18,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
-import gcom.api.servicosOperacionais.DTO.UsuarioDTO;
+import gcom.api.ordemServico.DTO.ProgramadasDTO;
+import gcom.api.ordemServico.DTO.UsuarioDTO;
+import gcom.api.ordemServico.helper.ArquivoRetornoAplicativoExecucaoOSHelper;
 import gcom.fachada.Fachada;
 import gcom.gui.micromedicao.ProcessarRequisicaoAplicativoExecucaoOSAction;
-import gcom.micromedicao.ArquivoRetornoAplicativoExecucaoOSHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 
 @SuppressWarnings("serial")
@@ -48,17 +48,10 @@ public class EncerraOSServlet extends HttpServlet {
 	@SuppressWarnings("unused")
 	private static void encerramentoOS(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 	
-		Gson gson = new Gson();
-		Fachada fachada = Fachada.getInstancia();
-		
 		ProcessarRequisicaoAplicativoExecucaoOSAction prae = ProcessarRequisicaoAplicativoExecucaoOSAction.getInstancia();
 		JsonObject json = montarRetorno(req);
 		
-		// Aqui estou setando os valores no Helper generico
-		ArquivoRetornoAplicativoExecucaoOSHelper araeOSH = gson.fromJson(json, ArquivoRetornoAplicativoExecucaoOSHelper.class);
-		
-		ProcessarRequisicaoAplicativoExecucaoOSAction.getInstancia().execute(araeOSH, new Usuario());	
-		
+		ProcessarRequisicaoAplicativoExecucaoOSAction.getInstancia().execute(json);	
 		
 	}
 
@@ -81,7 +74,7 @@ public class EncerraOSServlet extends HttpServlet {
 
 	private void getUsuario(int id, HttpServletRequest req, HttpServletResponse resp) {
 		
-		UsuarioDTO usuario = Fachada.getInstancia().pesquisarUsuario(id);
+		UsuarioDTO usuario = Fachada.getInstancia().pesquisarUsuarioDto(id);
 		Gson gson = new Gson();
 		
 		try {

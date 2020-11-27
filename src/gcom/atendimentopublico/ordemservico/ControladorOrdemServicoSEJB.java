@@ -1,6 +1,6 @@
 package gcom.atendimentopublico.ordemservico;
 
-import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
+import gcom.api.ordemServico.DTO.ProgramadasDTO;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;

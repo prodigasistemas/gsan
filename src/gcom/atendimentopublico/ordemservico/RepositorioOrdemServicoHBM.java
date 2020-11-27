@@ -1,6 +1,6 @@
 package gcom.atendimentopublico.ordemservico;
 
-import gcom.api.servicosOperacionais.DTO.ProgramadasDTO;
+import gcom.api.ordemServico.DTO.ProgramadasDTO;
 import gcom.atendimentopublico.LigacaoOrigem;
 import gcom.atendimentopublico.ligacaoagua.CorteTipo;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
