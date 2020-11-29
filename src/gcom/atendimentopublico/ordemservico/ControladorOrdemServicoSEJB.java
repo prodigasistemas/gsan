@@ -35,7 +35,7 @@ import org.jboss.logging.Logger;
 
 import gcom.api.ordemservico.dto.HidrometroDTO;
 import gcom.api.ordemservico.dto.ImovelDTO;
-import gcom.api.ordemservico.dto.ProgramadasDTO;
+import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
@@ -1867,116 +1867,6 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 		}
 	}
 	
-	public List<ProgramadasDTO> recuperaOSProgramacao() throws ControladorException {
-		try {
-			List<ProgramadasDTO> programadas = new ArrayList<ProgramadasDTO>();
-			Collection<Object[]> consulta = (Collection<Object[]>) repositorioOrdemServico.recuperaOSProgramacao();
-
-			for (Object[] objeto : consulta) {
-				ProgramadasDTO dto = new ProgramadasDTO(
-						(Integer) objeto[0],
-						(Integer) objeto[1],
-						(Date) objeto[2], 
-						(String) objeto[3],
-						(BigDecimal) objeto[4],
-						(String) objeto[5],
-						(Date) objeto[6],
-						(String) objeto[7]);
-				
-				Integer idImovel = (Integer) objeto[8];				
-				Integer idServicoTipo = (Integer) objeto[9];
-				
-				dto.setImovel(montarImovelOrdemServicoProgramada(idImovel));
-				dto.setHidrometro(montarHidrometroOrdemServicoProgramada(idImovel));
-				dto.setOperacao(pesquisarServicoTipoOperacao(idServicoTipo));				
-				
-				programadas.add(dto);
-			}
-
-			return programadas;
-		} catch (ErroRepositorioException e) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", e);
-		}
-	}
-
-	private ImovelDTO montarImovelOrdemServicoProgramada(int idImovel) throws ControladorException {
-		ClienteImovel clienteImovel = pesquisarClienteImovelOrdemServicoProgramada(idImovel);
-		
-		return new ImovelDTO(
-				clienteImovel.getImovel().getId(), 
-				clienteImovel.getImovel().getInscricaoFormatada(), 
-				clienteImovel.getImovel().getEnderecoFormatadoAbreviado(), 
-				clienteImovel.getImovel().getLigacaoAguaSituacao().getDescricao(),
-				clienteImovel.getImovel().getLigacaoEsgotoSituacao().getDescricao(), 
-				clienteImovel.getCliente().getNome(), 
-				clienteImovel.getCliente().getCpfOuCnpjFormatado());
-	}
-
-	@SuppressWarnings("unchecked")
-	private ClienteImovel pesquisarClienteImovelOrdemServicoProgramada(int idImovel) throws ControladorException {
-		Filtro filtro = new FiltroClienteImovel();
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.LOCALIDADE);
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.SETOR_COMERCIAL);
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.QUADRA);
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.areaConstruidaFaixa");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoEsgotoSituacao");
-		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, idImovel));
-		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
-		filtro.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
-
-		Collection<ClienteImovel> colecao = getControladorUtil().pesquisar(filtro, ClienteImovel.class.getName());
-
-		if (colecao != null && !colecao.isEmpty()) {
-			return colecao.iterator().next();
-		}
-
-		return null;
-	}
-	
-	private HidrometroDTO montarHidrometroOrdemServicoProgramada(int idImovel) throws ControladorException {
-		HidrometroInstalacaoHistorico instalacao = pesquisarHidrometroOrdemServicoProgramada(idImovel);
-
-		if (existeHidrometroOrdemServicoProgramada(instalacao)) {
-			return new HidrometroDTO(
-					instalacao.getHidrometro().getNumero(), 
-					instalacao.getMedicaoTipo().getDescricao());
-		}
-
-		return null;
-	}
-
-	private boolean existeHidrometroOrdemServicoProgramada(HidrometroInstalacaoHistorico instalacao) {
-		return instalacao != null && instalacao.getHidrometro() != null && instalacao.getMedicaoTipo() != null;
-	}
-	
-	@SuppressWarnings("unchecked")
-	private HidrometroInstalacaoHistorico pesquisarHidrometroOrdemServicoProgramada(int idImovel) throws ControladorException {
-		Filtro filtro = new FiltroHidrometroInstalacaoHistorico();
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.HIDROMETRO);
-		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.MEDICAO_TIPO);
-		filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroInstalacaoHistorico.IMOVEL_ID, idImovel));
-		filtro.adicionarParametro(new ParametroNulo(FiltroHidrometroInstalacaoHistorico.DATA_RETIRADA));
-
-		Collection<HidrometroInstalacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, HidrometroInstalacaoHistorico.class.getName());
-
-		if (colecao != null && !colecao.isEmpty())
-			return colecao.iterator().next();
-		else
-			return null;
-	}
-
 	/**
 	 * [UC0479] Gerar Débito da Ordem de Serviço
 	 * 
@@ -19012,4 +18902,118 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 
 	}
 
+	/**
+	 * Método que retorna os dados das Ordens de Serviços programadas 
+	 * 
+	 * @return List<OrdemServicoDTO> DTO das Ordens de Serviços
+	 * @throws ControladorException
+	 */
+	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas() throws ControladorException {
+		try {
+			List<OrdemServicoDTO> programadas = new ArrayList<OrdemServicoDTO>();
+			Collection<Object[]> consulta = (Collection<Object[]>) repositorioOrdemServico.pesquisarOrdensServicoProgramadas();
+
+			for (Object[] objeto : consulta) {
+				OrdemServicoDTO dto = new OrdemServicoDTO(
+						Util.converterObjetoParaInteger(objeto[0]),
+						Util.converterObjetoParaInteger(objeto[1]),
+						Util.converterObjetoParaDate(objeto[2]), 
+						Util.converterObjetoParaString(objeto[3]),
+						Util.converterObjetoParaBigDecimal(objeto[4]),
+						Util.converterObjetoParaString(objeto[5]),
+						Util.converterObjetoParaDate(objeto[6]),
+						Util.converterObjetoParaString(objeto[7]),
+						Util.converterObjetoParaInteger(objeto[8]));
+				
+				Integer idImovel = Util.converterObjetoParaInteger(objeto[9]);				
+				
+				dto.setImovel(montarImovelOrdemServicoProgramada(idImovel));
+				dto.setHidrometro(montarHidrometroOrdemServicoProgramada(idImovel));
+				
+				programadas.add(dto);
+			}
+
+			return programadas;
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+
+	private ImovelDTO montarImovelOrdemServicoProgramada(int idImovel) throws ControladorException {
+		ClienteImovel clienteImovel = pesquisarClienteImovelOrdemServicoProgramada(idImovel);
+		
+		return new ImovelDTO(
+				clienteImovel.getImovel().getId(), 
+				clienteImovel.getImovel().getInscricaoFormatada(), 
+				clienteImovel.getImovel().getEnderecoFormatadoAbreviado(), 
+				clienteImovel.getImovel().getLigacaoAguaSituacao().getDescricao(),
+				clienteImovel.getImovel().getLigacaoEsgotoSituacao().getDescricao(), 
+				clienteImovel.getCliente().getNome(), 
+				clienteImovel.getCliente().getCpfOuCnpjFormatado());
+	}
+
+	@SuppressWarnings("unchecked")
+	private ClienteImovel pesquisarClienteImovelOrdemServicoProgramada(int idImovel) throws ControladorException {
+		Filtro filtro = new FiltroClienteImovel();
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.LOCALIDADE);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.SETOR_COMERCIAL);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.QUADRA);
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.areaConstruidaFaixa");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoEsgotoSituacao");
+		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, idImovel));
+		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
+		filtro.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+
+		Collection<ClienteImovel> colecao = getControladorUtil().pesquisar(filtro, ClienteImovel.class.getName());
+
+		if (colecao != null && !colecao.isEmpty()) {
+			return colecao.iterator().next();
+		}
+
+		return null;
+	}
+	
+	private HidrometroDTO montarHidrometroOrdemServicoProgramada(int idImovel) throws ControladorException {
+		HidrometroInstalacaoHistorico instalacao = pesquisarHidrometroOrdemServicoProgramada(idImovel);
+
+		if (existeHidrometroOrdemServicoProgramada(instalacao)) {
+			return new HidrometroDTO(
+					instalacao.getHidrometro().getNumero(), 
+					instalacao.getMedicaoTipo().getDescricao());
+		}
+
+		return null;
+	}
+
+	private boolean existeHidrometroOrdemServicoProgramada(HidrometroInstalacaoHistorico instalacao) {
+		return instalacao != null && instalacao.getHidrometro() != null && instalacao.getMedicaoTipo() != null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private HidrometroInstalacaoHistorico pesquisarHidrometroOrdemServicoProgramada(int idImovel) throws ControladorException {
+		Filtro filtro = new FiltroHidrometroInstalacaoHistorico();
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.HIDROMETRO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.MEDICAO_TIPO);
+		filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroInstalacaoHistorico.LIGACAO_AGUA_ID, idImovel));
+		filtro.adicionarParametro(new ParametroNulo(FiltroHidrometroInstalacaoHistorico.DATA_RETIRADA));
+
+		Collection<HidrometroInstalacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, HidrometroInstalacaoHistorico.class.getName());
+
+		if (colecao != null && !colecao.isEmpty())
+			return colecao.iterator().next();
+		else
+			return null;
+	}
 }

@@ -3124,11 +3124,31 @@ public class Util {
 	 *         contrário.
 	 */
 	public static String converterObjetoParaString(Object objeto) {
-		String string = "";
 		if (objeto != null) {
-			string = objeto.toString();
+			return objeto.toString();
 		}
-		return string;
+		return "";
+	}
+
+	public static Integer converterObjetoParaInteger(Object objeto) {
+		if (objeto != null) {
+			return (Integer) objeto;
+		}
+		return null;
+	}
+
+	public static BigDecimal converterObjetoParaBigDecimal(Object objeto) {
+		if (objeto != null) {
+			return (BigDecimal) objeto;
+		}
+		return null;
+	}
+
+	public static Date converterObjetoParaDate(Object objeto) {
+		if (objeto != null) {
+			return (Date) objeto;
+		}
+		return null;
 	}
 
 	/**

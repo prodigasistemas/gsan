@@ -553,8 +553,6 @@ public interface IRepositorioOrdemServico {
 	public Collection<OrdemServicoProgramacao> recuperaOSProgramacaoPorDataRoteiro(
 			Date dataRoteiro) throws ErroRepositorioException;
 	
-	public Collection<Object[]> recuperaOSProgramacao() throws ErroRepositorioException;
-
 	/**
 	 * [UC0462] Obter Dados das Atividades da OS
 	 * 
@@ -3793,4 +3791,6 @@ public interface IRepositorioOrdemServico {
 	 * @throws ErroRepositorioException
 	 */
 	public void excluirOsAtividadeProgramacaoAcompahamentoServico(Collection<Integer> isOsAtividadeProgramacaoAcompanhamentoServico) throws ErroRepositorioException;
+	
+	public Collection<Object[]> pesquisarOrdensServicoProgramadas() throws ErroRepositorioException;
 }

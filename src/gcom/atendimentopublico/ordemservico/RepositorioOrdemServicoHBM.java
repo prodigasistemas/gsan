@@ -5457,57 +5457,6 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 		return retornoConsulta;
 	}
 
-	public Collection<Object[]> recuperaOSProgramacao() throws ErroRepositorioException {
-
-		Session session = HibernateUtil.getSession();
-
-		try {
-
-			StringBuilder sql = new StringBuilder();
-
-			sql.append("SELECT orse.orse_id as id, ")
-			   .append("       orse.orse_cdsituacao as situacao, ")
-			   .append("       orse.orse_tmgeracao as dataGeracao, ")
-			   .append("       svtp.svtp_dsservicotipo as servicoTipoDescricao, ")
-			   .append("       svtp.svtp_vlservico servicoTipoValor, ")
-			   .append("       orse.orse_dsobservacao as observacao, ")
-			   .append("       pgrt.pgrt_tmroteiro as dataProgramacao, ")
-			   .append("       eqpe.eqpe_nmequipe as equipeProgramacao, ")
-			   .append("       orse.imov_id as idImovel, ")
-			   .append("       orse.svtp_id as idServicoTipo ")
-			   .append("FROM atendimentopublico.os_programacao ospg ")
-			   .append("INNER JOIN atendimentopublico.programacao_roteiro pgrt ON pgrt.pgrt_id = ospg.pgrt_id ")
-			   .append("INNER JOIN atendimentopublico.ordem_servico orse ON orse.orse_id = ospg.orse_id ")
-			   .append("INNER JOIN atendimentopublico.servico_tipo svtp ON svtp.svtp_id = orse.svtp_id ")
-			   .append("INNER JOIN atendimentopublico.equipe eqpe ON eqpe.eqpe_id = ospg.eqpe_id ")
-			   .append("INNER JOIN cadastro.imovel imov ON imov.imov_id = orse.imov_id ")
-			   .append("WHERE 1=1 ")
-			   //.append("AND eqpe.eqpe_id = 58 ")
-			   .append("AND orse.orse_cdsituacao = 1 ")
-			   .append("AND (svtp_dsservicotipo LIKE 'SUBST. HIDR%' OR svtp_dsservicotipo LIKE 'INST%HIDR%') ")
-			   .append("GROUP BY orse.orse_id, orse.orse_cdsituacao, orse.orse_tmgeracao, svtp.svtp_dsservicotipo, svtp.svtp_vlservico, orse.orse_dsobservacao, pgrt.pgrt_tmroteiro, eqpe.eqpe_nmequipe, orse.imov_id ")
-			   .append("ORDER BY orse.orse_id");
-
-			return session.createSQLQuery(sql.toString())
-						  .addScalar("id", Hibernate.INTEGER)
-						  .addScalar("situacao", Hibernate.INTEGER)
-						  .addScalar("dataGeracao", Hibernate.TIMESTAMP)
-						  .addScalar("servicoTipoDescricao", Hibernate.STRING)
-						  .addScalar("servicoTipoValor", Hibernate.BIG_DECIMAL)
-						  .addScalar("observacao", Hibernate.STRING)
-						  .addScalar("dataProgramacao", Hibernate.TIMESTAMP)
-						  .addScalar("equipeProgramacao", Hibernate.STRING)
-						  .addScalar("idImovel", Hibernate.INTEGER)
-						  .addScalar("idServicoTipo", Hibernate.INTEGER)
-						  .list();
-
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-	}
-
 	/**
 	 * [UC0470] Acompanhar Roteiro de Programao de Ordens de Servio
 	 * 
@@ -20919,6 +20868,59 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					"idOsAtividadeProgramacaoAcompanhamentoServico",
 					isOsAtividadeProgramacaoAcompanhamentoServico)
 					.executeUpdate();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public Collection<Object[]> pesquisarOrdensServicoProgramadas() throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("SELECT orse.orse_id as idOrdemServico, ")
+			   .append("       orse.orse_cdsituacao as situacao, ")
+			   .append("       orse.orse_tmgeracao as dataGeracao, ")
+			   .append("       svtp.svtp_dsservicotipo as servicoTipoDescricao, ")
+			   .append("       svtp.svtp_vlservico servicoTipoValor, ")
+			   .append("       orse.orse_dsobservacao as observacao, ")
+			   .append("       pgrt.pgrt_tmroteiro as dataProgramacao, ")
+			   .append("       eqpe.eqpe_nmequipe as equipeProgramacao, ")
+			   .append("       stop.oper_id as idOperacao, ")
+			   .append("       orse.imov_id as idImovel ")
+			   .append("FROM atendimentopublico.os_programacao ospg ")
+			   .append("INNER JOIN atendimentopublico.programacao_roteiro pgrt ON pgrt.pgrt_id = ospg.pgrt_id ")
+			   .append("INNER JOIN atendimentopublico.ordem_servico orse ON orse.orse_id = ospg.orse_id ")
+			   .append("INNER JOIN atendimentopublico.servico_tipo svtp ON svtp.svtp_id = orse.svtp_id ")
+			   .append("LEFT JOIN atendimentopublico.servico_tipo_operacao stop ON stop.svtp_id = svtp.svtp_id ")
+			   .append("INNER JOIN atendimentopublico.equipe eqpe ON eqpe.eqpe_id = ospg.eqpe_id ")
+			   .append("INNER JOIN cadastro.imovel imov ON imov.imov_id = orse.imov_id ")
+			   .append("WHERE 1=1 ")
+			   //.append("AND eqpe.eqpe_id = 58 ")
+			   .append("AND orse.orse_cdsituacao = 1 ")
+			   .append("AND stop.oper_id IN (49,50,51,257,335,16043) ")
+			   .append("GROUP BY idOrdemServico, situacao, dataGeracao, servicoTipoDescricao, servicoTipoValor, observacao, dataProgramacao, equipeProgramacao, idOperacao, idImovel ")
+			   .append("ORDER BY idOrdemServico");
+
+			return session.createSQLQuery(sql.toString())
+						  .addScalar("idOrdemServico", Hibernate.INTEGER)
+						  .addScalar("situacao", Hibernate.INTEGER)
+						  .addScalar("dataGeracao", Hibernate.TIMESTAMP)
+						  .addScalar("servicoTipoDescricao", Hibernate.STRING)
+						  .addScalar("servicoTipoValor", Hibernate.BIG_DECIMAL)
+						  .addScalar("observacao", Hibernate.STRING)
+						  .addScalar("dataProgramacao", Hibernate.TIMESTAMP)
+						  .addScalar("equipeProgramacao", Hibernate.STRING)
+						  .addScalar("idOperacao", Hibernate.INTEGER)
+						  .addScalar("idImovel", Hibernate.INTEGER)
+						  .setMaxResults(10)
+						  .list();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

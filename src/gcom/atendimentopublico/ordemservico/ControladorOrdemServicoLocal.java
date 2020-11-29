@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import gcom.api.ordemservico.dto.ProgramadasDTO;
+import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ordemservico.bean.AcompanhamentoArquivosRoteiroHelper;
@@ -453,8 +453,6 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	 */
 	public Collection<OrdemServicoProgramacao> recuperaOSProgramacaoPorDataRoteiro(
 			Date dataRoteiro) throws ControladorException;
-	
-	public List<ProgramadasDTO> recuperaOSProgramacao() throws ControladorException;
 	
 	/**
 	 * [UC0479] Gerar Débito da Ordem de Serviço
@@ -3155,4 +3153,11 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 
 	public void validarEncerramentoOsImovelEmCampo(OrdemServico ordemServico) throws ControladorException;
 
+	/**
+	 * Método que retorna os dados das Ordens de Serviços programadas 
+	 * 
+	 * @return List<OrdemServicoDTO> DTO das Ordens de Serviços
+	 * @throws ControladorException
+	 */
+	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas() throws ControladorException;
 }

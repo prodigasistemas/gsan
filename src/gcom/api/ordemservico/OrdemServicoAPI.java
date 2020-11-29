@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import gcom.api.ordemservico.dto.ProgramadasDTO;
+import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.fachada.Fachada;
 import gcom.gui.micromedicao.ProcessarRequisicaoAplicativoExecucaoOSAction;
@@ -52,7 +52,7 @@ public class OrdemServicoAPI extends HttpServlet {
 
 	private void getProgramadas(HttpServletRequest req, HttpServletResponse resp) {
 		
-		Collection<ProgramadasDTO> dto = Fachada.getInstancia().recuperaOSProgramacao();
+		Collection<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas();
 		Gson gson = new Gson();
 		
 		try {

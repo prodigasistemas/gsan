@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 
-import gcom.api.ordemservico.dto.ProgramadasDTO;
+import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoForma;
@@ -13288,15 +13288,6 @@ public class Fachada {
 
 	}
 	
-	public List<ProgramadasDTO> recuperaOSProgramacao() {
-		try {
-			return this.getControladorOrdemServico().recuperaOSProgramacao();
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-
-	}
-
 	public BigDecimal obterValorDebito(Integer servicoTipoId, Integer imovelId, Short tipoMedicao) {
 		try {
 			return this.getControladorAtendimentoPublico().obterValorDebito(servicoTipoId, imovelId, tipoMedicao);
@@ -40489,6 +40480,14 @@ public class Fachada {
 	public ContratoDTO obterContratoInstalacaoReservacao(int idContrato) {
 		try {
 			return getControladorImovel().obterContratoInstalacaoReservacao(idContrato);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas() {
+		try {
+			return this.getControladorOrdemServico().pesquisarOrdensServicoProgramadas();
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
