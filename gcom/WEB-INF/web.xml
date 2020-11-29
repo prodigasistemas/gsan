@@ -11,7 +11,7 @@
 
 	<servlet-mapping>
 	  <servlet-name>OrdemServicoAPI</servlet-name>
-	  <url-pattern>/ordem-servico-api/*</url-pattern>
+	  <url-pattern>/api/ordem-servico/*</url-pattern>
 	</servlet-mapping>
 
 	<filter>
