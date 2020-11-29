@@ -1,4 +1,4 @@
-package gcom.api.ordemServico.DTO;
+package gcom.api.ordemservico.dto;
 
 public class UsuarioDTO {
 

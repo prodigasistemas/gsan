@@ -1,6 +1,14 @@
 package gcom.atendimentopublico.ordemservico;
 
-import gcom.api.ordemServico.DTO.ProgramadasDTO;
+import java.io.BufferedReader;
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import gcom.api.ordemservico.dto.ProgramadasDTO;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ordemservico.bean.AcompanhamentoArquivosRoteiroHelper;
@@ -33,14 +41,6 @@ import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.FachadaException;
-
-import java.io.BufferedReader;
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 
@@ -454,7 +454,7 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	public Collection<OrdemServicoProgramacao> recuperaOSProgramacaoPorDataRoteiro(
 			Date dataRoteiro) throws ControladorException;
 	
-	public Collection<ProgramadasDTO> recuperaOSProgramacao() throws ControladorException;
+	public List<ProgramadasDTO> recuperaOSProgramacao() throws ControladorException;
 	
 	/**
 	 * [UC0479] Gerar Débito da Ordem de Serviço

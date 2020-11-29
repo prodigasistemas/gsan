@@ -1,6 +1,6 @@
 package gcom.seguranca.acesso.usuario;
 
-import gcom.api.ordemServico.DTO.UsuarioDTO;
+import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.seguranca.acesso.Grupo;
 import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.util.ConstantesSistema;

@@ -1,12 +1,12 @@
-package gcom.api.ordemServico.helper;
+package gcom.api.ordemservico.helper;
 
 import java.io.Serializable;
 
 import com.google.gson.annotations.SerializedName;
 
-import gcom.api.ordemServico.DTO.DadosHidrometroInstalacaoDTO;
-import gcom.api.ordemServico.DTO.DadosHidrometroSubstituicaoDTO;
-import gcom.api.ordemServico.DTO.DadosLigacaoAguaDTO;
+import gcom.api.ordemservico.dto.DadosHidrometroInstalacaoDTO;
+import gcom.api.ordemservico.dto.DadosHidrometroSubstituicaoDTO;
+import gcom.api.ordemservico.dto.DadosLigacaoAguaDTO;
 
 public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 

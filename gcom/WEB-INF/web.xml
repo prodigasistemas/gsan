@@ -5,13 +5,13 @@
 	version="2.4">
 
 	<servlet>
-	  <servlet-name>EncerraOSServlet</servlet-name>
-	  <servlet-class>gcom.api.ordemServico.EncerraOSServlet</servlet-class>
+	  <servlet-name>OrdemServicoAPI</servlet-name>
+	  <servlet-class>gcom.api.ordemservico.OrdemServicoAPI</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-	  <servlet-name>EncerraOSServlet</servlet-name>
-	  <url-pattern>/encerrar/*</url-pattern>
+	  <servlet-name>OrdemServicoAPI</servlet-name>
+	  <url-pattern>/ordem-servico-api/*</url-pattern>
 	</servlet-mapping>
 
 	<filter>

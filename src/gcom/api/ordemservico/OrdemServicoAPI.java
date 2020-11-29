@@ -1,4 +1,4 @@
-package gcom.api.ordemServico;
+package gcom.api.ordemservico;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,16 +18,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import gcom.api.ordemServico.DTO.ProgramadasDTO;
-import gcom.api.ordemServico.DTO.UsuarioDTO;
-import gcom.api.ordemServico.helper.ArquivoRetornoAplicativoExecucaoOSHelper;
+import gcom.api.ordemservico.dto.ProgramadasDTO;
+import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.fachada.Fachada;
 import gcom.gui.micromedicao.ProcessarRequisicaoAplicativoExecucaoOSAction;
 import gcom.micromedicao.hidrometro.Hidrometro;
-import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.micromedicao.hidrometro.HidrometroSituacao;
 
-@SuppressWarnings("serial")
-public class EncerraOSServlet extends HttpServlet {
+public class OrdemServicoAPI extends HttpServlet {
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
@@ -44,19 +42,12 @@ public class EncerraOSServlet extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
 		encerramentoOS(req, resp);
-
 	}
 	
-	@SuppressWarnings("unused")
 	private static void encerramentoOS(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-	
-		ProcessarRequisicaoAplicativoExecucaoOSAction prae = ProcessarRequisicaoAplicativoExecucaoOSAction.getInstancia();
 		JsonObject json = montarRetorno(req);
-		
-		ProcessarRequisicaoAplicativoExecucaoOSAction.getInstancia().execute(json);	
-		
+		ProcessarRequisicaoAplicativoExecucaoOSAction.getInstancia().execute(json);
 	}
 
 	private void getProgramadas(HttpServletRequest req, HttpServletResponse resp) {
@@ -88,9 +79,8 @@ public class EncerraOSServlet extends HttpServlet {
 		
 	}
 	
-	private void getHidrometro(String numero, HttpServletRequest req, HttpServletResponse resp) {
-		
-		Hidrometro hidrometro = Fachada.getInstancia().pesquisarHidrometroNumeroSituacao(numero, 3);
+	private void getHidrometro(String numero, HttpServletRequest req, HttpServletResponse resp) {		
+		Hidrometro hidrometro = Fachada.getInstancia().pesquisarHidrometroNumeroSituacao(numero, HidrometroSituacao.DISPONIVEL);
 		
 		Gson gson = new Gson();
 		
@@ -98,8 +88,6 @@ public class EncerraOSServlet extends HttpServlet {
 			resp.setStatus(HttpServletResponse.SC_OK);
 		else
 			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			
-		
 	}
 	
     protected String getRequestParameter(HttpServletRequest request, String name) {
@@ -124,23 +112,18 @@ public class EncerraOSServlet extends HttpServlet {
 			
 			if (method.getName().equals(nomeMetodo)) {
 				try {
-					method = EncerraOSServlet.class.getDeclaredMethod(nomeMetodo, HttpServletRequest.class, HttpServletResponse.class);
+					method = OrdemServicoAPI.class.getDeclaredMethod(nomeMetodo, HttpServletRequest.class, HttpServletResponse.class);
 					method.invoke(null, req, resp);
 					
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (SecurityException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -177,7 +160,7 @@ public class EncerraOSServlet extends HttpServlet {
 				try {
 					return URLDecoder.decode(contexto, "UTF-8");
 				} catch (UnsupportedEncodingException e) {
-					return URLDecoder.decode(contexto);
+					return URLDecoder.decode(contexto, "UTF-8");
 				}
 			}
 		}

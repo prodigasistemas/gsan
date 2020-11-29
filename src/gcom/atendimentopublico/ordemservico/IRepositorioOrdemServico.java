@@ -1,6 +1,10 @@
 package gcom.atendimentopublico.ordemservico;
 
-import gcom.api.ordemServico.DTO.ProgramadasDTO;
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
 import gcom.atendimentopublico.ordemservico.bean.DadosAtualizacaoOSParaInstalacaoHidrometroHelper;
 import gcom.atendimentopublico.ordemservico.bean.OSPavimentoHelper;
 import gcom.atendimentopublico.ordemservico.bean.OrdemRepavimentacaoProcessoAceiteHelper;
@@ -13,11 +17,6 @@ import gcom.relatorio.atendimentopublico.bean.ImovelEmissaoOrdensSeletivasHelper
 import gcom.relatorio.atendimentopublico.ordemservico.FiltrarBoletimCustoPavimentoHelper;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
-
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 public interface IRepositorioOrdemServico {
 
@@ -554,7 +553,7 @@ public interface IRepositorioOrdemServico {
 	public Collection<OrdemServicoProgramacao> recuperaOSProgramacaoPorDataRoteiro(
 			Date dataRoteiro) throws ErroRepositorioException;
 	
-	public Collection<ProgramadasDTO> recuperaOSProgramacao() throws ErroRepositorioException;
+	public Collection<Object[]> recuperaOSProgramacao() throws ErroRepositorioException;
 
 	/**
 	 * [UC0462] Obter Dados das Atividades da OS

@@ -1,6 +1,23 @@
 package gcom.atendimentopublico.ordemservico;
 
-import gcom.api.ordemServico.DTO.ProgramadasDTO;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+
 import gcom.atendimentopublico.LigacaoOrigem;
 import gcom.atendimentopublico.ligacaoagua.CorteTipo;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
@@ -59,24 +76,6 @@ import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 import gcom.util.Util;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
 
 public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
@@ -5458,77 +5457,55 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 		return retornoConsulta;
 	}
 
-	public Collection<ProgramadasDTO> recuperaOSProgramacao() throws ErroRepositorioException {
-
-		Collection<ProgramadasDTO> retornoConsulta = new ArrayList();
+	public Collection<Object[]> recuperaOSProgramacao() throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
 		try {
-			
-			StringBuilder sb = new StringBuilder();
-			
-			sb.append("SELECT new gcom.api.ordemServico.DTO.ProgramadasDTO (").
-			   append("orse.id as ordem_servico_id, ").
-			   append("orse.situacao as situacao, ").
- 			   append("orse.dataGeracao as data_geracao, ").
- 			   append("svtp.descricao as servico_tipo_descricao,").
- 			   append("svtp.valor  as servico_tipo_valor, ").
- 			   append("orse.observacao as observacao, ").
- 			   append("eqpe.nome as equipe_programacao, ").
- 			   append("imov.id as imovel_id, ").
- 			   append("loca.id as imovel_localidade_id, ").
- 			   append("stcm.codigo as imovel_setor_comercial, ").
- 			   append("qdra.numeroQuadra as imovel_quadra, ").
- 			   append("imov.lote as imovel_lote, ").
- 			   append("imov.subLote as imovel_sublote, ").
- 			   append("last.descricao as imovel_ligacao_agua, ").
- 			   append("lest.descricao as imovel_ligacao_esgoto, ").
- 			   append("clie.nome as cliente_nome, ").
- 			   
- 			   append("clie.cnpj as cnpj,  ").
- 			   append("clie.cpf as cpf, ").
- 			   append("logradouroCep, ").
- 			   append("imov.numeroImovel as numImovel, ").
- 			   append("logradouroBairro, ").
- 			   append("imov.complementoEndereco").
- 			   
- 			   append(") ").
- 			   append("FROM OrdemServicoProgramacao 			ospg ").
-	 		   append(" JOIN FETCH ospg.equipe 					eqpe ").
-	 		   append(" LEFT JOIN FETCH ospg.ordemServico 		orse ").
-	 		   append("	JOIN orse.servicoTipo  					svtp ").
-	 		   append("	JOIN orse.imovel						imov ").
-	 		   append("	JOIN imov.localidade					loca ").
-	 		   append("	JOIN imov.setorComercial				stcm ").
-	 		   append("	JOIN imov.quadra						qdra ").
-	 		   append("	JOIN imov.ligacaoAguaSituacao 			last ").
-	 		   append("	JOIN imov.ligacaoEsgotoSituacao			lest ").
-	 		   append("	JOIN FETCH imov.clienteImoveis			clim ").
-	 		   append("	JOIN clim.cliente						clie ").
-	 		   append("	JOIN FETCH imov.logradouroCep 			logradouroCep ").
-	 		   append("	JOIN FETCH logradouroCep.logradouro 	logradouro ").
-	 		   append("	JOIN logradouro.logradouroTipo 			logradouroTipo ").
-	 		   append("	JOIN logradouro.logradouroTitulo 		logradouroTitulo ").
-	 		   append("	JOIN FETCH imov.logradouroBairro 		logradouroBairro ").
-	 		   append("	JOIN logradouroBairro.bairro 		bairro ").
-	 		   append("	JOIN bairro.municipio 				municipio ").
-	 		   append("	JOIN municipio.unidadeFederacao 	unidadeFederacao ").
-	 		   append("	WHERE clim.dataFimRelacao IS NULL ").
-	 		   append("	AND clim.clienteRelacaoTipo.id = 2 ").
-	 		   append("	ORDER BY ospg.id ");
 
-			Query query = session.createQuery(sb.toString());
-			query.setMaxResults(100);
-			retornoConsulta = query.list();
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("SELECT orse.orse_id as id, ")
+			   .append("       orse.orse_cdsituacao as situacao, ")
+			   .append("       orse.orse_tmgeracao as dataGeracao, ")
+			   .append("       svtp.svtp_dsservicotipo as servicoTipoDescricao, ")
+			   .append("       svtp.svtp_vlservico servicoTipoValor, ")
+			   .append("       orse.orse_dsobservacao as observacao, ")
+			   .append("       pgrt.pgrt_tmroteiro as dataProgramacao, ")
+			   .append("       eqpe.eqpe_nmequipe as equipeProgramacao, ")
+			   .append("       orse.imov_id as idImovel, ")
+			   .append("       orse.svtp_id as idServicoTipo ")
+			   .append("FROM atendimentopublico.os_programacao ospg ")
+			   .append("INNER JOIN atendimentopublico.programacao_roteiro pgrt ON pgrt.pgrt_id = ospg.pgrt_id ")
+			   .append("INNER JOIN atendimentopublico.ordem_servico orse ON orse.orse_id = ospg.orse_id ")
+			   .append("INNER JOIN atendimentopublico.servico_tipo svtp ON svtp.svtp_id = orse.svtp_id ")
+			   .append("INNER JOIN atendimentopublico.equipe eqpe ON eqpe.eqpe_id = ospg.eqpe_id ")
+			   .append("INNER JOIN cadastro.imovel imov ON imov.imov_id = orse.imov_id ")
+			   .append("WHERE 1=1 ")
+			   //.append("AND eqpe.eqpe_id = 58 ")
+			   .append("AND orse.orse_cdsituacao = 1 ")
+			   .append("AND (svtp_dsservicotipo LIKE 'SUBST. HIDR%' OR svtp_dsservicotipo LIKE 'INST%HIDR%') ")
+			   .append("GROUP BY orse.orse_id, orse.orse_cdsituacao, orse.orse_tmgeracao, svtp.svtp_dsservicotipo, svtp.svtp_vlservico, orse.orse_dsobservacao, pgrt.pgrt_tmroteiro, eqpe.eqpe_nmequipe, orse.imov_id ")
+			   .append("ORDER BY orse.orse_id");
+
+			return session.createSQLQuery(sql.toString())
+						  .addScalar("id", Hibernate.INTEGER)
+						  .addScalar("situacao", Hibernate.INTEGER)
+						  .addScalar("dataGeracao", Hibernate.TIMESTAMP)
+						  .addScalar("servicoTipoDescricao", Hibernate.STRING)
+						  .addScalar("servicoTipoValor", Hibernate.BIG_DECIMAL)
+						  .addScalar("observacao", Hibernate.STRING)
+						  .addScalar("dataProgramacao", Hibernate.TIMESTAMP)
+						  .addScalar("equipeProgramacao", Hibernate.STRING)
+						  .addScalar("idImovel", Hibernate.INTEGER)
+						  .addScalar("idServicoTipo", Hibernate.INTEGER)
+						  .list();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-
-		return retornoConsulta;
 	}
 
 	/**

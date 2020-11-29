@@ -6,7 +6,7 @@ import java.util.Date;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import gcom.api.ordemServico.helper.ArquivoRetornoAplicativoExecucaoOSHelper;
+import gcom.api.ordemservico.helper.ArquivoRetornoAplicativoExecucaoOSHelper;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ordemservico.OrdemServico;

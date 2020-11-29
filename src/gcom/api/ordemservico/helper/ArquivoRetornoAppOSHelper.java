@@ -1,4 +1,4 @@
-package gcom.api.ordemServico.helper;
+package gcom.api.ordemservico.helper;
 
 import java.io.Serializable;
 

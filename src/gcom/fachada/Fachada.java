@@ -19,8 +19,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 
-import gcom.api.ordemServico.DTO.ProgramadasDTO;
-import gcom.api.ordemServico.DTO.UsuarioDTO;
+import gcom.api.ordemservico.dto.ProgramadasDTO;
+import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
@@ -13288,7 +13288,7 @@ public class Fachada {
 
 	}
 	
-	public Collection<ProgramadasDTO> recuperaOSProgramacao() {
+	public List<ProgramadasDTO> recuperaOSProgramacao() {
 		try {
 			return this.getControladorOrdemServico().recuperaOSProgramacao();
 		} catch (ControladorException ex) {

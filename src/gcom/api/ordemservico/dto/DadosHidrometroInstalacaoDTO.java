@@ -1,4 +1,4 @@
-package gcom.api.ordemServico.DTO;
+package gcom.api.ordemservico.dto;
 
 import com.google.gson.annotations.SerializedName;
 
