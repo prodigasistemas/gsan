@@ -40,15 +40,21 @@ public class OrdemServicoAPI extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		if (request.getRequestURI().contains("encerrar"))
-			encerrarOrdemServico(request);
+			encerrarOrdemServico(request, response);
 	}
 
-	private void encerrarOrdemServico(HttpServletRequest request) throws IOException {
+	private void encerrarOrdemServico(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String json = converterJson(request);
 
 		Gson gson = new Gson();
 		OrdemServicoDTO dto = gson.fromJson(json.toString(), OrdemServicoDTO.class);
-		ProcessarRequisicaoOrdemServicoBO.getInstancia().execute(dto);
+		boolean isEncerrado = ProcessarRequisicaoOrdemServicoBO.getInstancia().execute(dto);
+		
+		if (isEncerrado)
+			response.setStatus(HttpServletResponse.SC_OK);
+		else 
+			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+			
 	}
 
 	private void pesquisarOrdensServicoProgramadas(HttpServletResponse response) {
@@ -61,7 +67,7 @@ public class OrdemServicoAPI extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_OK);
 
 		} catch (IOException e) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 			e.printStackTrace();
 		}
 	}
@@ -72,7 +78,7 @@ public class OrdemServicoAPI extends HttpServlet {
 		if (usuario != null)
 			response.setStatus(HttpServletResponse.SC_OK);
 		else
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 
 	}
 
@@ -82,7 +88,7 @@ public class OrdemServicoAPI extends HttpServlet {
 		if (hidrometro != null)
 			response.setStatus(HttpServletResponse.SC_OK);
 		else
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
 
 	private String getRequestParameter(HttpServletRequest request, String name) {
