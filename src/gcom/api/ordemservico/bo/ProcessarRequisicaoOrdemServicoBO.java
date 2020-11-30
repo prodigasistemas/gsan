@@ -12,12 +12,10 @@ import gcom.atendimentopublico.ligacaoagua.LigacaoAguaMaterial;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaPerfil;
 import gcom.atendimentopublico.ligacaoagua.RamalLocalInstalacao;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
-import gcom.atendimentopublico.ordemservico.ServicoNaoCobrancaMotivo;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.PavimentoCalcada;
 import gcom.cadastro.imovel.PavimentoRua;
 import gcom.fachada.Fachada;
-import gcom.gui.micromedicao.ArquivoRetornoAplicativoExecucaoOSHelper;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
@@ -61,6 +59,7 @@ public class ProcessarRequisicaoOrdemServicoBO {
 				break;
 
 			case (Operacao.OPERACAO_LIGACAO_AGUA_EFETUAR_INT):
+				operacaoLigacaoAguaEfetuar(ordemServico, imovel, usuario, dto);
 				break;
 			}
 		}
@@ -68,7 +67,7 @@ public class ProcessarRequisicaoOrdemServicoBO {
 
 	protected void operacaoReligacaoAguaEfetuar(OrdemServico ordemServico, Imovel imovel, Usuario usuario, OrdemServicoDTO ordemServicoDTO) {
 
-		fachada.validarExibirRestabelecimentoLigacaoAgua(ordemServico, true); // TODO - Retornar boolean
+//		fachada.validarExibirRestabelecimentoLigacaoAgua(ordemServico, true); // TODO - Retornar boolean
 
 		ordemServico.setIndicadorComercialAtualizado(new Short("1"));
 		ordemServico.setValorAtual(ordemServico.getValorOriginal());
@@ -90,9 +89,7 @@ public class ProcessarRequisicaoOrdemServicoBO {
 	}
 	
 	protected void operacaoLigacaoAguaEfetuar(OrdemServico ordemServico, Imovel imovel, Usuario usuario, OrdemServicoDTO ordemServicoDTO) {
-		
-		
-		
+			
 	/*	
 		FiltroConsumoTarifa filtroConsumoTarifa = new FiltroConsumoTarifa();
 		filtroConsumoTarifa.adicionarParametro(new ParametroSimples (FiltroConsumoTarifa.LIGACAO_AGUA_PERFIL,araeOSH.getDados_ligacao_agua().getPerfil()));
@@ -127,90 +124,63 @@ public class ProcessarRequisicaoOrdemServicoBO {
 		Date data = Util.converteStringParaDate(ordemServicoDTO.getDataEncerramento());
 		ligacaoAgua.setDataLigacao(data);
 		
-		LigacaoAguaDiametro ligacaoAguaDiametro = new LigacaoAguaDiametro(araeOSH.getDados_ligacao_agua().getDiametro());
+		LigacaoAguaDiametro ligacaoAguaDiametro = new LigacaoAguaDiametro(ordemServicoDTO.getLigacaoAgua().getDiametro());
 		ligacaoAgua.setLigacaoAguaDiametro(ligacaoAguaDiametro);
 			
-		LigacaoAguaMaterial ligacaoAguaMaterialMaterial = new LigacaoAguaMaterial(araeOSH.getDados_ligacao_agua().getMaterial());
+		LigacaoAguaMaterial ligacaoAguaMaterialMaterial = new LigacaoAguaMaterial(ordemServicoDTO.getLigacaoAgua().getMaterial());
 		ligacaoAgua.setLigacaoAguaMaterial(ligacaoAguaMaterialMaterial);
 
-		LigacaoAguaPerfil ligacaoAguaPerfil = new LigacaoAguaPerfil(araeOSH.getDados_ligacao_agua().getPerfil());
+		LigacaoAguaPerfil ligacaoAguaPerfil = new LigacaoAguaPerfil(ordemServicoDTO.getLigacaoAgua().getPerfil());
 		ligacaoAgua.setLigacaoAguaPerfil(ligacaoAguaPerfil);
 		
 			
-			if (isIdValido(araeOSH.getDados_ligacao_agua().getLocalInstalacaoRamal().toString())) {
-				RamalLocalInstalacao ramalLocal = new RamalLocalInstalacao(araeOSH.getDados_ligacao_agua().getLocalInstalacaoRamal());
+			if (isIdValido(ordemServicoDTO.getLigacaoAgua().getLocalInstalacaoRamal().toString())) {
+				RamalLocalInstalacao ramalLocal = new RamalLocalInstalacao(ordemServicoDTO.getLigacaoAgua().getLocalInstalacaoRamal());
 				ligacaoAgua.setRamalLocalInstalacao(ramalLocal);
 			}
 
-			if(isIdValido(araeOSH.getDados_ligacao_agua().getOrigem().toString())){
-				LigacaoOrigem ligacaoOrigem = new LigacaoOrigem(araeOSH.getDados_ligacao_agua().getOrigem());
+			if(isIdValido(ordemServicoDTO.getLigacaoAgua().getOrigem().toString())){
+				LigacaoOrigem ligacaoOrigem = new LigacaoOrigem(ordemServicoDTO.getLigacaoAgua().getOrigem());
 				ligacaoAgua.setLigacaoOrigem(ligacaoOrigem);
 			}
 			
-			if(araeOSH.getDados_ligacao_agua().getLacreAgua() !=null && !araeOSH.getDados_ligacao_agua().getLacreAgua().equals("")){
-				ligacaoAgua.setNumeroLacre(araeOSH.getDados_ligacao_agua().getLacreAgua().toString());
+			if(ordemServicoDTO.getLigacaoAgua().getLacre() !=null && !ordemServicoDTO.getLigacaoAgua().getLacre().equals("")){
+				ligacaoAgua.setNumeroLacre(ordemServicoDTO.getLigacaoAgua().getLacre().toString());
 			}
 			
-			if(isIdValido(araeOSH.getDados_ligacao_agua().getPavimentoRua().toString())){
-				PavimentoRua pavimentoRua = new PavimentoRua(araeOSH.getDados_ligacao_agua().getPavimentoRua());
+			if(isIdValido(ordemServicoDTO.getLigacaoAgua().getPavimentoRua().toString())){
+				PavimentoRua pavimentoRua = new PavimentoRua(ordemServicoDTO.getLigacaoAgua().getPavimentoRua());
 				ligacaoAgua.setPavimentoRua(pavimentoRua);
 			}
 				
-			if(isIdValido(araeOSH.getDados_ligacao_agua().getPavimentoCalcada().toString())){
-					PavimentoCalcada pavimentoCalcada = new PavimentoCalcada(araeOSH.getDados_ligacao_agua().getPavimentoCalcada());
+			if(isIdValido(ordemServicoDTO.getLigacaoAgua().getPavimentoCalcada().toString())){
+					PavimentoCalcada pavimentoCalcada = new PavimentoCalcada(ordemServicoDTO.getLigacaoAgua().getPavimentoCalcada());
 					ligacaoAgua.setPavimentoCalcada(pavimentoCalcada);
 			}
 			
 			/*
-			if (araeOSH.getDados_ligacao_agua().getProfundidade() != null && !araeOSH.getDados_ligacao_agua().getProfundidade().isEmpty())
-					ligacaoAgua.setProfundidadeRamal(new BigDecimal(araeOSH.getDados_ligacao_agua().getProfundidade().replace(",", ".")));
+			if (ordemServicoDTO.getLigacaoAgua().getProfundidadeRamal() != null && !ordemServicoDTO.getLigacaoAgua().getProfundidadeRamal().isEmpty())
+					ligacaoAgua.setProfundidadeRamal(new BigDecimal(ordemServicoDTO.getLigacaoAgua().getProfundidadeRamal().replace(",", ".")));
 				
-			if (araeOSH.getDados_ligacao_agua().getDistanciaInstalacaoRamal() != null && !araeOSH.getDados_ligacao_agua().getDistanciaInstalacaoRamal().isEmpty())
-					ligacaoAgua.setDistanciaInstalacaoRamal(new BigDecimal(araeOSH.getDados_ligacao_agua().getDistanciaInstalacaoRamal().replace(",", ".")));
+			if (ordemServicoDTO.getLigacaoAgua().getDistanciaInstalacaoRamal() != null && !ordemServicoDTO.getLigacaoAgua().getDistanciaInstalacaoRamal().isEmpty())
+					ligacaoAgua.setDistanciaInstalacaoRamal(new BigDecimal(ordemServicoDTO.getLigacaoAgua().getDistanciaInstalacaoRamal().replace(",", ".")));
 			 */
-				
-			if (ordemServico != null && araeOSH.getIdTipoDebito() != null) {
-
-				ServicoNaoCobrancaMotivo servicoNaoCobrancaMotivo = null;
-
-				ordemServico.setIndicadorComercialAtualizado(new Short("1"));
-				
-				if (araeOSH.getIdServicoMotivoNaoCobranca() != null) {
-					servicoNaoCobrancaMotivo = new ServicoNaoCobrancaMotivo();
-					servicoNaoCobrancaMotivo.setId(araeOSH.getIdServicoMotivoNaoCobranca());
-				}
-				ordemServico.setServicoNaoCobrancaMotivo(servicoNaoCobrancaMotivo);
-
-				if (araeOSH.getValorPercentual() != null) {
-					ordemServico.setPercentualCobranca(new BigDecimal(araeOSH.getPercentualCobranca()));
-				}
-				ordemServico.setUltimaAlteracao(new Date());
-						
-			}
 			
-			BigDecimal valorAtual = new BigDecimal(0);
-			if (araeOSH.getValorDebito() != null) {
-				
-				String valorDebito = araeOSH.getValorDebito().toString().replace(".", "");
-
-				valorDebito = valorDebito.replace(",", ".");
-
-				valorAtual = new BigDecimal(valorDebito);
-
-				ordemServico.setValorAtual(valorAtual);
-			}
-
+			ordemServico.setIndicadorComercialAtualizado(new Short("1"));
+			ordemServico.setValorAtual(ordemServico.getValorOriginal());
+			ordemServico.setPercentualCobranca(new BigDecimal(100));
+			ordemServico.setUltimaAlteracao(new Date());
+		
 		IntegracaoComercialHelper integracaoComercialHelper = new IntegracaoComercialHelper();
-		
-		
-		integracaoComercialHelper.setVeioEncerrarOS(Boolean.FALSE);	
+				
+		integracaoComercialHelper.setVeioEncerrarOS(Boolean.TRUE);	
 		integracaoComercialHelper.setImovel(imovel);
 		integracaoComercialHelper.setLigacaoAgua(ligacaoAgua);
 		integracaoComercialHelper.setOrdemServico(ordemServico);
-		integracaoComercialHelper.setQtdParcelas(araeOSH.getQtdParcelas());
+		integracaoComercialHelper.setQtdParcelas("1");
 		integracaoComercialHelper.setUsuarioLogado(usuario);
 		
-		fachada.atualizarOSViaApp(araeOSH.getIdServicoTipo(), integracaoComercialHelper, usuario);
+		fachada.atualizarOSViaApp(ordemServico.getServicoTipo().getId(), integracaoComercialHelper, usuario);
 	}
 	
 	private boolean isIdValido(String idCampo) {
