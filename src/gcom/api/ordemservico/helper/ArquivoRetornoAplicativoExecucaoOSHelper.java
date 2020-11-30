@@ -8,23 +8,38 @@ public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable {
 
 	private static final long serialVersionUID = 1448570895806137609L;
 
-	private OrdemServicoDTO ordemServicoDTO;
+	private OrdemServicoDTO ordemServico;
+
 	private Integer idServicoTipo;
+
 	private Integer idServicoMotivoNaoCobranca;
+
 	private String valorusuario;
+
 	private Integer valorPercentual;
+
 	private String qtdParcelas;
+
 	private Integer idTipoDebito;
+
 	private String valorDebito;
+
 	private String PercentualCobranca;
+
 	private String DataReligacao;
 
-	public OrdemServicoDTO getOrdemServicoDTO() {
-		return ordemServicoDTO;
+	public ArquivoRetornoAplicativoExecucaoOSHelper(OrdemServicoDTO ordemServico) {
+		super();
+
+		this.ordemServico = ordemServico;
 	}
 
-	public void setOrdemServicoDTO(OrdemServicoDTO ordemServicoDTO) {
-		this.ordemServicoDTO = ordemServicoDTO;
+	public OrdemServicoDTO getOrdemServico() {
+		return ordemServico;
+	}
+
+	public void setOrdemServico(OrdemServicoDTO ordemServico) {
+		this.ordemServico = ordemServico;
 	}
 
 	public Integer getIdServicoTipo() {
