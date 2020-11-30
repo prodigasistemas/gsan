@@ -2,133 +2,31 @@ package gcom.api.ordemservico.helper;
 
 import java.io.Serializable;
 
-import com.google.gson.annotations.SerializedName;
+import gcom.api.ordemservico.dto.OrdemServicoDTO;
 
-import gcom.api.ordemservico.dto.DadosHidrometroInstalacaoDTO;
-import gcom.api.ordemservico.dto.DadosHidrometroSubstituicaoDTO;
-import gcom.api.ordemservico.dto.DadosLigacaoAguaDTO;
-
-public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
+public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable {
 
 	private static final long serialVersionUID = 1448570895806137609L;
-	
-	@SerializedName("id") 
-	private Integer idOrdemServico;
-	
-	@SerializedName("data_encerramento") 
-	private String  dataEncerramento;
-	
-	@SerializedName("motivo_encerramento")
-	private Integer motivoEncerramento;
 
-	@SerializedName("parecer_encerramento")
-	private String  parecer;
-		
-	private DadosHidrometroSubstituicaoDTO dados_hidrometro_substituicao;
-	
-	private DadosHidrometroInstalacaoDTO dados_hidrometro_instalacao;
-	
-	private DadosLigacaoAguaDTO dados_ligacao_agua;
-	
-	@SerializedName("id_usuario")
-	private Integer idUsuario;
-	
+	private OrdemServicoDTO ordemServicoDTO;
 	private Integer idServicoTipo;
-	
-	@SerializedName(value = "parecer_encerramento")
-	private String parecerEncerramento;
-	
-	private Integer idServicoMotivoNaoCobranca ;
-	private String  valorusuario ;
-	private Integer valorPercentual ;
-	private String  qtdParcelas ;
-	private Integer idTipoDebito; 
-	private String  valorDebito;
-	private String  PercentualCobranca;
-	private String  DataReligacao;
-	
-	public Integer getIdUsuario() {
-		return idUsuario;
+	private Integer idServicoMotivoNaoCobranca;
+	private String valorusuario;
+	private Integer valorPercentual;
+	private String qtdParcelas;
+	private Integer idTipoDebito;
+	private String valorDebito;
+	private String PercentualCobranca;
+	private String DataReligacao;
+
+	public OrdemServicoDTO getOrdemServicoDTO() {
+		return ordemServicoDTO;
 	}
 
-	public void setIdUsuario(Integer idusuario) {
-		this.idUsuario = idusuario;
+	public void setOrdemServicoDTO(OrdemServicoDTO ordemServicoDTO) {
+		this.ordemServicoDTO = ordemServicoDTO;
 	}
 
-	public Integer getMotivoEncerramento() {
-		return motivoEncerramento;
-	}
-
-	public void setMotivoEncerramento(Integer motivoEncerramento) {
-		this.motivoEncerramento = motivoEncerramento;
-	}
-
-	public String getParecer() {
-		return parecer;
-	}
-
-	public void setParecer(String parecer) {
-		this.parecer = parecer;
-	}
-
-	public DadosHidrometroSubstituicaoDTO getDados_hidrometro_substituicao() {
-		return dados_hidrometro_substituicao;
-	}
-
-	public void setDados_hidrometro_substituicao(DadosHidrometroSubstituicaoDTO dados_hidrometro_substituicao) {
-		this.dados_hidrometro_substituicao = dados_hidrometro_substituicao;
-	}
-
-	public DadosHidrometroInstalacaoDTO getDados_hidrometro_instalacao() {
-		return dados_hidrometro_instalacao;
-	}
-
-	public void setDados_hidrometro_instalacao(DadosHidrometroInstalacaoDTO dados_hidrometro_instalacao) {
-		this.dados_hidrometro_instalacao = dados_hidrometro_instalacao;
-	}
-
-	public DadosLigacaoAguaDTO getDados_ligacao_agua() {
-		return dados_ligacao_agua;
-	}
-
-	public void setDados_ligacao_agua(DadosLigacaoAguaDTO dados_ligacao_agua) {
-		this.dados_ligacao_agua = dados_ligacao_agua;
-	}
-
-	public String getValorusuario() {
-		return valorusuario;
-	}
-
-	public void setValorusuario(String valorusuario) {
-		this.valorusuario = valorusuario;
-	}
-
-	public String getParecerEncerramento() {
-		return parecerEncerramento;
-	}
-
-	public void setParecerEncerramento(String parecerEncerramento) {
-		this.parecerEncerramento = parecerEncerramento;
-	}
-
-	public String getDataEncerramento() {
-		return dataEncerramento;
-	}
-
-	public void setDataEncerramento(String dataEncerramento) {
-		this.dataEncerramento = dataEncerramento;
-	}
-
-	public ArquivoRetornoAplicativoExecucaoOSHelper(){}
-	
-	public Integer getIdOrdemServico() {
-		return idOrdemServico;
-	}
-
-	public void setIdOrdemServico(Integer idOrdemServico) {
-		this.idOrdemServico = idOrdemServico;
-	}
-	
 	public Integer getIdServicoTipo() {
 		return idServicoTipo;
 	}
@@ -145,6 +43,13 @@ public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 		this.idServicoMotivoNaoCobranca = idServicoMotivoNaoCobranca;
 	}
 
+	public String getValorusuario() {
+		return valorusuario;
+	}
+
+	public void setValorusuario(String valorusuario) {
+		this.valorusuario = valorusuario;
+	}
 
 	public Integer getValorPercentual() {
 		return valorPercentual;
@@ -193,5 +98,4 @@ public class ArquivoRetornoAplicativoExecucaoOSHelper implements Serializable{
 	public void setDataReligacao(String dataReligacao) {
 		DataReligacao = dataReligacao;
 	}
-	
 }

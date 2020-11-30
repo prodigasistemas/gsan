@@ -42,7 +42,8 @@ public class OrdemServicoAPI extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		encerramentoOS(req, resp);
+		if (req.getParameterMap().containsKey("encerrar"))
+			encerramentoOS(req, resp);
 	}
 	
 	private static void encerramentoOS(HttpServletRequest req, HttpServletResponse resp) throws IOException {

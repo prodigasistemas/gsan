@@ -1,48 +1,25 @@
 package gcom.api.ordemservico.dto;
 
-import com.google.gson.annotations.SerializedName;
+public class LigacaoAguaDTO {
 
-public class DadosLigacaoAguaDTO {
-	
-	@SerializedName("dataLigacao")
-	private String dataLigacao;
-	
-	@SerializedName("diametro")
+	private String data;
 	private Integer diametro;
-	
-	@SerializedName("material")
 	private Integer material;
-	
-	@SerializedName("perfil")
 	private Integer perfil;
-	
-	@SerializedName("localInstalacaoRamal") 
 	private Integer localInstalacaoRamal;
-	
-	@SerializedName("profundidade")
-	private Integer profundidade;
-	
-	@SerializedName("distanciaInstalacaoRamal") 
+	private Integer profundidadeRamal;
 	private Integer distanciaInstalacaoRamal;
-	
-	@SerializedName("pavimentoRua") 
 	private Integer pavimentoRua;
-	
-	@SerializedName("pavimentoCalcada") 
 	private Integer pavimentoCalcada;
-	
-	@SerializedName("origem") 
 	private Integer origem;
-	
-	@SerializedName("lacreAgua")
-	private Integer lacreAgua;
+	private Integer lacre;
 
-	public String getDataLigacao() {
-		return dataLigacao;
+	public String getData() {
+		return data;
 	}
 
-	public void setDataLigacao(String dataLigacao) {
-		this.dataLigacao = dataLigacao;
+	public void setData(String data) {
+		this.data = data;
 	}
 
 	public Integer getDiametro() {
@@ -77,12 +54,12 @@ public class DadosLigacaoAguaDTO {
 		this.localInstalacaoRamal = localInstalacaoRamal;
 	}
 
-	public Integer getProfundidade() {
-		return profundidade;
+	public Integer getProfundidadeRamal() {
+		return profundidadeRamal;
 	}
 
-	public void setProfundidade(Integer profundidade) {
-		this.profundidade = profundidade;
+	public void setProfundidadeRamal(Integer profundidadeRamal) {
+		this.profundidadeRamal = profundidadeRamal;
 	}
 
 	public Integer getDistanciaInstalacaoRamal() {
@@ -117,14 +94,11 @@ public class DadosLigacaoAguaDTO {
 		this.origem = origem;
 	}
 
-	public Integer getLacreAgua() {
-		return lacreAgua;
+	public Integer getLacre() {
+		return lacre;
 	}
 
-	public void setLacreAgua(Integer lacreAgua) {
-		this.lacreAgua = lacreAgua;
+	public void setLacre(Integer lacre) {
+		this.lacre = lacre;
 	}
-	
-	
-
 }
