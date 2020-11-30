@@ -3,10 +3,6 @@ package gcom.api.ordemservico;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URLDecoder;
 import java.util.Collection;
 
 import javax.servlet.ServletException;
@@ -15,169 +11,94 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
+import gcom.api.ordemservico.bo.ProcessarRequisicaoOrdemServicoBO;
 import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.fachada.Fachada;
-import gcom.gui.micromedicao.ProcessarRequisicaoAplicativoExecucaoOSAction;
 import gcom.micromedicao.hidrometro.Hidrometro;
 import gcom.micromedicao.hidrometro.HidrometroSituacao;
 
 public class OrdemServicoAPI extends HttpServlet {
 
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		if (req.getParameterMap().containsKey("usuario"))
-			getUsuario(Integer.valueOf(getRequestParameter(req, "usuario")), req, resp);
-		
-		if (req.getParameterMap().containsKey("hidrometro"))
-			getHidrometro(getRequestParameter(req, "hidrometro"), req, resp);
-		
-		if (req.getRequestURI().contains("programadas"))
-			getProgramadas(req, resp);
+	private static final long serialVersionUID = 4409487621679625139L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		if (request.getParameterMap().containsKey("usuario"))
+			validarLogin(Integer.valueOf(getRequestParameter(request, "usuario")), response);
+
+		if (request.getParameterMap().containsKey("hidrometro"))
+			validarHidrometro(getRequestParameter(request, "hidrometro"), response);
+
+		if (request.getRequestURI().contains("programadas"))
+			pesquisarOrdensServicoProgramadas(response);
 
 	}
-	
+
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		encerramentoOS(req, resp);
-	}
-	
-	private static void encerramentoOS(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		JsonObject json = montarRetorno(req);
-		ProcessarRequisicaoAplicativoExecucaoOSAction.getInstancia().execute(json);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		if (request.getRequestURI().contains("encerrar"))
+			encerrarOrdemServico(request);
 	}
 
-	private void getProgramadas(HttpServletRequest req, HttpServletResponse resp) {
-		
-		Collection<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas();
+	private void encerrarOrdemServico(HttpServletRequest request) throws IOException {
+		String json = converterJson(request);
+
 		Gson gson = new Gson();
-		
+		OrdemServicoDTO dto = gson.fromJson(json.toString(), OrdemServicoDTO.class);
+		ProcessarRequisicaoOrdemServicoBO.getInstancia().execute(dto);
+	}
+
+	private void pesquisarOrdensServicoProgramadas(HttpServletResponse response) {
+		Collection<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas();
+
 		try {
+			Gson gson = new Gson();
 			String jo = gson.toJson(dto);
-			resp.getOutputStream().print(jo);
-			resp.setStatus(HttpServletResponse.SC_OK);
-			
+			response.getOutputStream().print(jo);
+			response.setStatus(HttpServletResponse.SC_OK);
+
 		} catch (IOException e) {
-			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			e.printStackTrace();
 		}
-		
 	}
 
-	private void getUsuario(int id, HttpServletRequest req, HttpServletResponse resp) {
-		
+	private void validarLogin(int id, HttpServletResponse response) {
 		UsuarioDTO usuario = Fachada.getInstancia().pesquisarUsuarioDto(id);
-		Gson gson = new Gson();
-		
+
 		if (usuario != null)
-			resp.setStatus(HttpServletResponse.SC_OK);
+			response.setStatus(HttpServletResponse.SC_OK);
 		else
-			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+
 	}
-	
-	private void getHidrometro(String numero, HttpServletRequest req, HttpServletResponse resp) {		
+
+	private void validarHidrometro(String numero, HttpServletResponse response) {
 		Hidrometro hidrometro = Fachada.getInstancia().pesquisarHidrometroNumeroSituacao(numero, HidrometroSituacao.DISPONIVEL);
-		
-		Gson gson = new Gson();
-		
+
 		if (hidrometro != null)
-			resp.setStatus(HttpServletResponse.SC_OK);
+			response.setStatus(HttpServletResponse.SC_OK);
 		else
-			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}
-	
-    protected String getRequestParameter(HttpServletRequest request, String name) {
-        String param = request.getParameter(name);
-        return !param.isEmpty() ? param : getInitParameter(name);
-    }
-    
-	@SuppressWarnings("unused")
-	private void envocaMetdodo(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		
-		// Monta a lista com os métodos declarados na classe
-		Method[] met = getClass().getDeclaredMethods();
-		
-		// Monta o objeto Json com os campos passados na requisição 
-		JsonObject jo = montarRetorno(req);
-		
-		String nomeMetodo = "";
-		
-		for (Method method : met) {
-			
-			nomeMetodo = identificadorAcao(req, resp);
-			
-			if (method.getName().equals(nomeMetodo)) {
-				try {
-					method = OrdemServicoAPI.class.getDeclaredMethod(nomeMetodo, HttpServletRequest.class, HttpServletResponse.class);
-					method.invoke(null, req, resp);
-					
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	private String identificadorAcao(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-	
-			try {
-				return  obtemIdentificador(req);
-			} catch (Exception e) {
-				resp.sendError(400, e.getMessage());
-				return null;
-			}
-			
 
+	private String getRequestParameter(HttpServletRequest request, String name) {
+		String param = request.getParameter(name);
+		return !param.isEmpty() ? param : getInitParameter(name);
 	}
-	
-	/*
-	 * Obtem o identificador do recurso que se deseja
-	 */
-	private String obtemIdentificador(HttpServletRequest req) throws Exception {
-		String requestUri = req.getRequestURI();
-		
-		String[] pedacosDaUri = requestUri.replaceFirst("/", "").split("/");
-		boolean contextoEncontrado = false;
-		
-		for (String contexto : pedacosDaUri) {
-			if (contexto.equals("encerrar")) {
-				contextoEncontrado = true;
-				continue;
-			}
-			if (contextoEncontrado) {
-				try {
-					return URLDecoder.decode(contexto, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					return URLDecoder.decode(contexto, "UTF-8");
-				}
-			}
-		}
-		throw new Exception("Recurso sem identificador");
-		
-	}	
 
-	private static JsonObject montarRetorno(HttpServletRequest req) throws IOException {
-		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(req.getInputStream()));
-		StringBuilder builder = new StringBuilder();
+	private String converterJson(HttpServletRequest request) throws IOException {
+		StringBuilder json = new StringBuilder();
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+
 		String linha = null;
 		while ((linha = reader.readLine()) != null) {
-			builder.append(linha);
+			json.append(linha);
 		}
-		
-		JsonParser jp = new JsonParser();
-		return  jp.parse(builder.toString()).getAsJsonObject();
-	}	
+		return json.toString();
+	}
 }
