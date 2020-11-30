@@ -19,6 +19,7 @@ import gcom.fachada.Fachada;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
+import gcom.util.FachadaException;
 import gcom.util.Util;
 
 public class ProcessarRequisicaoOrdemServicoBO {
@@ -34,7 +35,7 @@ public class ProcessarRequisicaoOrdemServicoBO {
 		return instancia;
 	}
 
-	public void execute(OrdemServicoDTO dto) {
+	public boolean execute(OrdemServicoDTO dto) {
 		OrdemServico ordemServico = fachada.recuperaOSPorId(dto.getId());
 		Usuario usuario = fachada.pesquisarUsuario(dto.getIdUsuarioEncerramento());
 		Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
@@ -46,8 +47,7 @@ public class ProcessarRequisicaoOrdemServicoBO {
 			switch (idOperacao) {
 
 			case (Operacao.OPERACAO_RELIGACAO_AGUA_EFETUAR_INT):
-				operacaoReligacaoAguaEfetuar(ordemServico, imovel, usuario, dto);
-				break;
+				return operacaoReligacaoAguaEfetuar(ordemServico, imovel, usuario, dto);
 
 			case (Operacao.OPERACAO_INSTALACAO_HIDROMETRO_EFETUAR_INT):
 				break;
@@ -59,37 +59,44 @@ public class ProcessarRequisicaoOrdemServicoBO {
 				break;
 
 			case (Operacao.OPERACAO_LIGACAO_AGUA_EFETUAR_INT):
-				operacaoLigacaoAguaEfetuar(ordemServico, imovel, usuario, dto);
-				break;
+				return operacaoLigacaoAguaEfetuar(ordemServico, imovel, usuario, dto);
 			}
 		}
+		
+		return false;
 	}
 
-	protected void operacaoReligacaoAguaEfetuar(OrdemServico ordemServico, Imovel imovel, Usuario usuario, OrdemServicoDTO ordemServicoDTO) {
+	protected boolean operacaoReligacaoAguaEfetuar(OrdemServico ordemServico, Imovel imovel, Usuario usuario, OrdemServicoDTO ordemServicoDTO) {
 
-//		fachada.validarExibirRestabelecimentoLigacaoAgua(ordemServico, true); // TODO - Retornar boolean
-
-		ordemServico.setIndicadorComercialAtualizado(new Short("1"));
-		ordemServico.setValorAtual(ordemServico.getValorOriginal());
-		ordemServico.setPercentualCobranca(new BigDecimal(100));
-
-		Date data = Util.converteStringParaDate(ordemServicoDTO.getDataEncerramento());
-		LigacaoAgua ligacaoAgua = new LigacaoAgua();
-		ligacaoAgua.setId(imovel.getId());
-		ligacaoAgua.setDataReligacao(data);
-
-		IntegracaoComercialHelper helper = new IntegracaoComercialHelper();
-		helper.setImovel(imovel);
-		helper.setLigacaoAgua(ligacaoAgua);
-		helper.setOrdemServico(ordemServico);
-		helper.setQtdParcelas("1"); // TODO - Verificar
-		helper.setUsuarioLogado(usuario);
-
-		fachada.atualizarOSViaApp(ordemServico.getServicoTipo().getId(), helper, usuario);
+		try {
+			ordemServico.setIndicadorComercialAtualizado(new Short("1"));
+			ordemServico.setValorAtual(ordemServico.getValorOriginal());
+			ordemServico.setPercentualCobranca(new BigDecimal(100));
+	
+			Date data = Util.converteStringParaDate(ordemServicoDTO.getDataEncerramento());
+			LigacaoAgua ligacaoAgua = new LigacaoAgua();
+			ligacaoAgua.setId(imovel.getId());
+			ligacaoAgua.setDataReligacao(data);
+	
+			IntegracaoComercialHelper helper = new IntegracaoComercialHelper();
+			helper.setImovel(imovel);
+			helper.setLigacaoAgua(ligacaoAgua);
+			helper.setOrdemServico(ordemServico);
+			helper.setQtdParcelas("1"); // TODO - Verificar
+			helper.setUsuarioLogado(usuario);
+	
+			fachada.atualizarOSViaApp(ordemServico.getServicoTipo().getId(), helper, usuario);
+			
+			return true;
+			
+		} catch (FachadaException e) {
+			return false;
+		}
 	}
 	
-	protected void operacaoLigacaoAguaEfetuar(OrdemServico ordemServico, Imovel imovel, Usuario usuario, OrdemServicoDTO ordemServicoDTO) {
+	protected boolean operacaoLigacaoAguaEfetuar(OrdemServico ordemServico, Imovel imovel, Usuario usuario, OrdemServicoDTO ordemServicoDTO) {
 			
+		try {
 	/*	
 		FiltroConsumoTarifa filtroConsumoTarifa = new FiltroConsumoTarifa();
 		filtroConsumoTarifa.adicionarParametro(new ParametroSimples (FiltroConsumoTarifa.LIGACAO_AGUA_PERFIL,araeOSH.getDados_ligacao_agua().getPerfil()));
@@ -181,6 +188,13 @@ public class ProcessarRequisicaoOrdemServicoBO {
 		integracaoComercialHelper.setUsuarioLogado(usuario);
 		
 		fachada.atualizarOSViaApp(ordemServico.getServicoTipo().getId(), integracaoComercialHelper, usuario);
+		
+		return true;
+		
+		} catch (FachadaException e) {
+			return false;
+		}
+		
 	}
 	
 	private boolean isIdValido(String idCampo) {
