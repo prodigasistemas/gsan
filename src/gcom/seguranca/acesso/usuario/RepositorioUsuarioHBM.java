@@ -1,14 +1,5 @@
 package gcom.seguranca.acesso.usuario;
 
-import gcom.api.ordemservico.dto.UsuarioDTO;
-import gcom.seguranca.acesso.Grupo;
-import gcom.seguranca.acesso.PermissaoEspecial;
-import gcom.util.ConstantesSistema;
-import gcom.util.ErroRepositorioException;
-import gcom.util.HibernateUtil;
-import gcom.util.Util;
-import gcom.util.filtro.GeradorHQLCondicional;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +12,14 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+
+import gcom.seguranca.acesso.Grupo;
+import gcom.seguranca.acesso.PermissaoEspecial;
+import gcom.util.ConstantesSistema;
+import gcom.util.ErroRepositorioException;
+import gcom.util.HibernateUtil;
+import gcom.util.Util;
+import gcom.util.filtro.GeradorHQLCondicional;
 
 /**
  * < <Descrição da Classe>>
@@ -131,38 +130,6 @@ public class RepositorioUsuarioHBM implements IRepositorioUsuario {
 		return usuario;
 	}
 	
-	public UsuarioDTO pesquisarUsuarioDto(Integer idUsuario) throws ErroRepositorioException {
-
-		// cria uma sessão com o hibernate
-		Session session = HibernateUtil.getSession();
-
-		// cria a variável que vai conter o hql
-		String consulta = "";
-		
-		UsuarioDTO dto  = null;
-
-		try {
-			consulta = "select new gcom.api.ordemServico.DTO.UsuarioDTO(usuario.id, usuario.nomeUsuario, unidade.nome, equipe.nome) " 
-					+ "from Equipe equipe "
-					+ "join fetch equipe.usuarioRespExecServico usuario "
-					+ "join fetch usuario.unidadeNegocio unidade "
-					+ "where usuario.id = :idUsuario ";
-
-			dto = (UsuarioDTO)session.createQuery(consulta)
-					.setInteger("idUsuario",
-					idUsuario.intValue()).uniqueResult();
-			
-			// erro no hibernate
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão com o hibernate
-			HibernateUtil.closeSession(session);
-		}
-
-		return dto;
-	}
 	/**
 	 * Método que consulta os grupos do usuário
 	 * 

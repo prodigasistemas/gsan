@@ -3,7 +3,7 @@ package gcom.api.ordemservico;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import gcom.api.ordemservico.bo.ProcessarRequisicaoOrdemServicoBO;
 import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.fachada.Fachada;
 import gcom.micromedicao.hidrometro.Hidrometro;
 import gcom.micromedicao.hidrometro.HidrometroSituacao;
+import gcom.seguranca.acesso.usuario.Usuario;
 
 public class OrdemServicoAPI extends HttpServlet {
 
@@ -26,7 +26,7 @@ public class OrdemServicoAPI extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		if (request.getParameterMap().containsKey("usuario"))
-			validarLogin(Integer.valueOf(getRequestParameter(request, "usuario")), response);
+			validarLogin(request, response);
 
 		if (request.getParameterMap().containsKey("hidrometro"))
 			validarHidrometro(getRequestParameter(request, "hidrometro"), response);
@@ -40,40 +40,60 @@ public class OrdemServicoAPI extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		if (request.getRequestURI().contains("encerrar"))
-			encerrarOrdemServico(request);
+			encerrarOrdemServico(request, response);
 	}
 
-	private void encerrarOrdemServico(HttpServletRequest request) throws IOException {
-		String json = converterJson(request);
-
-		Gson gson = new Gson();
-		OrdemServicoDTO dto = gson.fromJson(json.toString(), OrdemServicoDTO.class);
-		ProcessarRequisicaoOrdemServicoBO.getInstancia().execute(dto);
-	}
-
-	private void pesquisarOrdensServicoProgramadas(HttpServletResponse response) {
-		Collection<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas();
-
+	private void encerrarOrdemServico(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
-			Gson gson = new Gson();
-			String jo = gson.toJson(dto);
-			response.getOutputStream().print(jo);
-			response.setStatus(HttpServletResponse.SC_OK);
+			String json = converterJson(request);
 
-		} catch (IOException e) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			Gson gson = new Gson();
+			OrdemServicoDTO dto = gson.fromJson(json.toString(), OrdemServicoDTO.class);
+
+//			ProcessarRequisicaoOrdemServicoBO.getInstancia().execute(dto);
+			
+			response.setStatus(HttpServletResponse.SC_OK);
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
 		}
 	}
 
-	private void validarLogin(int id, HttpServletResponse response) {
-		UsuarioDTO usuario = Fachada.getInstancia().pesquisarUsuarioDto(id);
+	private void pesquisarOrdensServicoProgramadas(HttpServletResponse response) {
+		List<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas();
 
-		if (usuario != null)
+		try {
+			response.getOutputStream().print(toJson(dto));
 			response.setStatus(HttpServletResponse.SC_OK);
-		else
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+		}
+	}
 
+	private void validarLogin(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String login = getRequestParameter(request, "login");
+			String senha = getRequestParameter(request, "senha");
+
+			Usuario usuario = Fachada.getInstancia().validarUsuario(login, senha);
+
+			if (usuario != null) {
+				UsuarioDTO dto = new UsuarioDTO(
+						usuario.getId(), 
+						usuario.getNomeUsuario(), 
+						usuario.getUnidadeOrganizacional().getId(),
+						usuario.getUnidadeOrganizacional().getDescricao());
+				
+				response.getOutputStream().print(toJson(dto));
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			}
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+		}
 	}
 
 	private void validarHidrometro(String numero, HttpServletResponse response) {
@@ -100,5 +120,10 @@ public class OrdemServicoAPI extends HttpServlet {
 			json.append(linha);
 		}
 		return json.toString();
+	}
+	
+	private String toJson(Object objeto) {
+		Gson gson = new Gson();
+		return gson.toJson(objeto);
 	}
 }

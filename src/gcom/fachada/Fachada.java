@@ -20,7 +20,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 
 import gcom.api.ordemservico.dto.OrdemServicoDTO;
-import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
@@ -10317,15 +10316,6 @@ public class Fachada {
 	public Usuario pesquisarUsuario(Integer idUsuario) {
 		try {
 			return getControladorUsuario().pesquisarUsuario(idUsuario);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-	}
-	
-
-	public UsuarioDTO pesquisarUsuarioDto(Integer idUsuario) {
-		try {
-			return getControladorUsuario().pesquisarUsuarioDto(idUsuario);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

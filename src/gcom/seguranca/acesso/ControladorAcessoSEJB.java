@@ -77,6 +77,7 @@ import gcom.util.Util;
 import gcom.util.email.ErroEmailException;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.ComparacaoTexto;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.FiltroParametro;
 import gcom.util.filtro.GeradorHQLCondicional;
 import gcom.util.filtro.ParametroNulo;
@@ -1687,56 +1688,36 @@ public class ControladorAcessoSEJB extends ControladorComum {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public Usuario validarUsuario(String login, String senha)
-			throws ControladorException {
-		// Variável que vai armazenar o usuário logado
-		Usuario retorno = null;
+	@SuppressWarnings("rawtypes")
+	public Usuario validarUsuario(String login, String senha) throws ControladorException {
+		Filtro filtro = new FiltroUsuario();
+		filtro.adicionarParametro(new ParametroSimples(FiltroUsuario.LOGIN, login));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("gerenciaRegional");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("localidadeElo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("localidade");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("usuarioSituacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("usuarioTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("unidadeOrganizacional");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("unidadeOrganizacional.unidadeTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("funcionario");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("empresa");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("usuarioAbrangencia");
 
-		// Cria o filtro de usuário
-		FiltroUsuario filtroUsuario = new FiltroUsuario();
-
-		// Busca o usuário por senha e login
-		filtroUsuario.adicionarParametro(new ParametroSimples(
-				FiltroUsuario.LOGIN, login));
-		filtroUsuario
-				.adicionarCaminhoParaCarregamentoEntidade("gerenciaRegional");
-		filtroUsuario.adicionarCaminhoParaCarregamentoEntidade("localidadeElo");
-		filtroUsuario.adicionarCaminhoParaCarregamentoEntidade("localidade");
-
-		filtroUsuario
-				.adicionarCaminhoParaCarregamentoEntidade("usuarioSituacao");
-		filtroUsuario.adicionarCaminhoParaCarregamentoEntidade("usuarioTipo");
-		filtroUsuario
-				.adicionarCaminhoParaCarregamentoEntidade("unidadeOrganizacional.unidadeTipo");
-		filtroUsuario.adicionarCaminhoParaCarregamentoEntidade("funcionario");
-		filtroUsuario.adicionarCaminhoParaCarregamentoEntidade("empresa");
-		filtroUsuario.adicionarCaminhoParaCarregamentoEntidade("usuarioAbrangencia");
-
-		// filtroUsuario.adicionarParametro(new
-		// ParametroSimples(FiltroUsuario.SENHA,senha));
 		try {
 			// Criptografa a senha para compará-la no banco de dados
-			filtroUsuario.adicionarParametro(new ParametroSimples(
-					FiltroUsuario.SENHA, Criptografia.encriptarSenha(senha)));
-
+			filtro.adicionarParametro(new ParametroSimples(FiltroUsuario.SENHA, Criptografia.encriptarSenha(senha)));
 		} catch (ErroCriptografiaException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.criptografia.senha");
 		}
 
-		// Faz a pesquisa
-		Collection usuarioEncontrado = getControladorUtil().pesquisar(
-				filtroUsuario, Usuario.class.getName());
+		Collection usuarioEncontrado = getControladorUtil().pesquisar(filtro, Usuario.class.getName());
 
-		// Caso tenha encontrad o usuário no sistema com o login e a senha
-		// informados
-		// retorna o usuário para o casode uso que chamou a função
 		if (!usuarioEncontrado.isEmpty()) {
-			retorno = (Usuario) usuarioEncontrado.iterator().next();
+			return (Usuario) usuarioEncontrado.iterator().next();
 		}
 
-		// Retorna o usuário encontrado ou nulo se não encontrar
-		return retorno;
+		return null;
 	}
 
 	/**
