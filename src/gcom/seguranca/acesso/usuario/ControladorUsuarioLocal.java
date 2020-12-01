@@ -1,13 +1,12 @@
 package gcom.seguranca.acesso.usuario;
 
-import gcom.api.ordemservico.dto.UsuarioDTO;
-import gcom.seguranca.acesso.Operacao;
-import gcom.util.ControladorException;
-import gcom.util.ErroRepositorioException;
-
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Map;
+
+import gcom.seguranca.acesso.Operacao;
+import gcom.util.ControladorException;
+import gcom.util.ErroRepositorioException;
 
 /**
  * Declaração pública de serviços do Session Bean de ControladorCliente
@@ -278,8 +277,6 @@ public interface ControladorUsuarioLocal extends javax.ejb.EJBLocalObject {
 	public Collection pesquisarGruposUsuarioAcesso(Collection colecaoUsuarioGrupos)throws ControladorException;
 	
 	public Usuario pesquisarUsuario(Integer idUsuario) throws ControladorException;
-
-	public UsuarioDTO pesquisarUsuarioDto(Integer idUsuario) throws ControladorException;
 
 	/**
 	* Método que consulta o nome do usuário de uma guia de devolução,

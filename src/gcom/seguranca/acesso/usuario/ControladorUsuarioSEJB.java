@@ -1,6 +1,17 @@
 package gcom.seguranca.acesso.usuario;
 
-import gcom.api.ordemservico.dto.UsuarioDTO;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+
 import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.EnvioEmail;
@@ -34,18 +45,6 @@ import gcom.util.email.ErroEmailException;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
 
 /**
  * Definição da lógica de negócio do Session Bean de ControladorCliente
@@ -2115,15 +2114,6 @@ public class ControladorUsuarioSEJB implements SessionBean {
 	public Usuario pesquisarUsuario(Integer idUsuario) throws ControladorException {
 		try {
 			return repositorioUsuario.pesquisarUsuario(idUsuario);
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
-		}
-	}
-	
-	public UsuarioDTO pesquisarUsuarioDto(Integer idUsuario) throws ControladorException {
-		try {
-			return repositorioUsuario.pesquisarUsuarioDto(idUsuario);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);

@@ -3,7 +3,7 @@ package gcom.api.ordemservico;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +18,7 @@ import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.fachada.Fachada;
 import gcom.micromedicao.hidrometro.Hidrometro;
 import gcom.micromedicao.hidrometro.HidrometroSituacao;
+import gcom.seguranca.acesso.usuario.Usuario;
 
 public class OrdemServicoAPI extends HttpServlet {
 
@@ -26,7 +27,7 @@ public class OrdemServicoAPI extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		if (request.getParameterMap().containsKey("usuario"))
-			validarLogin(Integer.valueOf(getRequestParameter(request, "usuario")), response);
+			validarLogin(request, response);
 
 		if (request.getParameterMap().containsKey("hidrometro"))
 			validarHidrometro(getRequestParameter(request, "hidrometro"), response);
@@ -44,42 +45,58 @@ public class OrdemServicoAPI extends HttpServlet {
 	}
 
 	private void encerrarOrdemServico(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String json = converterJson(request);
-
-		Gson gson = new Gson();
-		OrdemServicoDTO dto = gson.fromJson(json.toString(), OrdemServicoDTO.class);
-		boolean isEncerrado = ProcessarRequisicaoOrdemServicoBO.getInstancia().execute(dto);
-		
-		if (isEncerrado)
-			response.setStatus(HttpServletResponse.SC_OK);
-		else 
-			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-			
-	}
-
-	private void pesquisarOrdensServicoProgramadas(HttpServletResponse response) {
-		Collection<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas();
-
 		try {
-			Gson gson = new Gson();
-			String jo = gson.toJson(dto);
-			response.getOutputStream().print(jo);
-			response.setStatus(HttpServletResponse.SC_OK);
+			String json = converterJson(request);
 
-		} catch (IOException e) {
-			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+			Gson gson = new Gson();
+			OrdemServicoDTO dto = gson.fromJson(json.toString(), OrdemServicoDTO.class);
+			boolean isEncerrado = ProcessarRequisicaoOrdemServicoBO.getInstancia().execute(dto);
+
+			if (isEncerrado)
+				response.setStatus(HttpServletResponse.SC_OK);
+			else
+				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
 		}
 	}
 
-	private void validarLogin(int id, HttpServletResponse response) {
-		UsuarioDTO usuario = Fachada.getInstancia().pesquisarUsuarioDto(id);
-
-		if (usuario != null)
+	private void pesquisarOrdensServicoProgramadas(HttpServletResponse response) {
+		try {
+			List<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas();
+			
+			response.getOutputStream().print(toJson(dto));
 			response.setStatus(HttpServletResponse.SC_OK);
-		else
-			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+		}
+	}
 
+	private void validarLogin(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String login = getRequestParameter(request, "login");
+			String senha = getRequestParameter(request, "senha");
+
+			Usuario usuario = Fachada.getInstancia().validarUsuario(login, senha);
+
+			if (usuario != null) {
+				UsuarioDTO dto = new UsuarioDTO(
+						usuario.getId(), 
+						usuario.getNomeUsuario(), 
+						usuario.getUnidadeOrganizacional().getId(),
+						usuario.getUnidadeOrganizacional().getDescricao());
+				
+				response.getOutputStream().print(toJson(dto));
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			}
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+		}
 	}
 
 	private void validarHidrometro(String numero, HttpServletResponse response) {
@@ -106,5 +123,10 @@ public class OrdemServicoAPI extends HttpServlet {
 			json.append(linha);
 		}
 		return json.toString();
+	}
+	
+	private String toJson(Object objeto) {
+		Gson gson = new Gson();
+		return gson.toJson(objeto);
 	}
 }

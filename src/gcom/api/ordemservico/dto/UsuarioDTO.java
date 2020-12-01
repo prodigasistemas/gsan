@@ -3,49 +3,51 @@ package gcom.api.ordemservico.dto;
 public class UsuarioDTO {
 
 	private Integer id;
+
 	private String nome;
-	private String unidade;
-	private String equipe;
-	
-	public UsuarioDTO(Integer id, String nome, String unidade, String equipe) {
+
+	private Integer unidadeId;
+
+	private String unidadeDescricao;
+
+	public UsuarioDTO(Integer id, String nome, Integer unidadeId, String unidadeDescricao) {
 		super();
+		
 		this.id = id;
 		this.nome = nome;
-		this.unidade = unidade;
-		this.equipe = equipe;
+		this.unidadeId = unidadeId;
+		this.unidadeDescricao = unidadeDescricao;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}
-	
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
-	public String getUnidade() {
-		return unidade;
-	}
-	
-	public void setUnidade(String unidade) {
-		this.unidade = unidade;
-	}
-	
-	public String getEquipe() {
-		return equipe;
-	}
-	
-	public void setEquipe(String equipe) {
-		this.equipe = equipe;
-	}
-	
 
+	public Integer getUnidadeId() {
+		return unidadeId;
+	}
+
+	public void setUnidadeId(Integer unidadeId) {
+		this.unidadeId = unidadeId;
+	}
+
+	public String getUnidadeDescricao() {
+		return unidadeDescricao;
+	}
+
+	public void setUnidadeDescricao(String unidadeDescricao) {
+		this.unidadeDescricao = unidadeDescricao;
+	}
 }
