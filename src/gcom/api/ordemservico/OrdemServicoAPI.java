@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
+import gcom.api.ordemservico.bo.ProcessarRequisicaoOrdemServicoBO;
 import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.fachada.Fachada;
@@ -49,10 +50,12 @@ public class OrdemServicoAPI extends HttpServlet {
 
 			Gson gson = new Gson();
 			OrdemServicoDTO dto = gson.fromJson(json.toString(), OrdemServicoDTO.class);
+			boolean isEncerrado = ProcessarRequisicaoOrdemServicoBO.getInstancia().execute(dto);
 
-//			ProcessarRequisicaoOrdemServicoBO.getInstancia().execute(dto);
-			
-			response.setStatus(HttpServletResponse.SC_OK);
+			if (isEncerrado)
+				response.setStatus(HttpServletResponse.SC_OK);
+			else
+				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 		} catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
@@ -60,9 +63,9 @@ public class OrdemServicoAPI extends HttpServlet {
 	}
 
 	private void pesquisarOrdensServicoProgramadas(HttpServletResponse response) {
-		List<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas();
-
 		try {
+			List<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas();
+			
 			response.getOutputStream().print(toJson(dto));
 			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (Exception e) {
@@ -102,7 +105,7 @@ public class OrdemServicoAPI extends HttpServlet {
 		if (hidrometro != null)
 			response.setStatus(HttpServletResponse.SC_OK);
 		else
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
 
 	private String getRequestParameter(HttpServletRequest request, String name) {
