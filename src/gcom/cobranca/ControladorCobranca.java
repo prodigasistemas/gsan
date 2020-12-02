@@ -11783,16 +11783,9 @@ public class ControladorCobranca extends ControladorComum {
 				|| (valorCreditoAnteriores != null && valorCreditoAnteriores.doubleValue() > 0)) {
 			CreditoTipo creditoTipo = filtrarCreditoTipo(CreditoTipo.CREDITOS_ANTERIORES_CURTO_PRAZO);
 			
-			BigDecimal valorTotalCreditos = new BigDecimal(0);
-			
-			if (valorCreditosAnterioresCurtoPrazo != null && valorCreditosAnterioresCurtoPrazo.doubleValue() > 0)
-				valorTotalCreditos = valorTotalCreditos.add(valorCreditosAnterioresCurtoPrazo);
-
-			if (valorCreditoAnteriores != null && valorCreditoAnteriores.doubleValue() > 0)
-				valorTotalCreditos = valorTotalCreditos.add(valorCreditoAnteriores);
-			
+						
 			Short prestacoesCurtoPrazo = 0;
-			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorTotalCreditos, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
+			inserirCreditoARealizarCreditoTipo(creditoTipo, imovel, valorCreditosAnterioresCurtoPrazo, numeroPrestacao, parcelamentoId, colecaoCategoria, isContaEntradaParcelamento,
 					anoMesEntradaGuia, maiorAnoMesConta, CreditoOrigem.DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO);
 			
 		}
