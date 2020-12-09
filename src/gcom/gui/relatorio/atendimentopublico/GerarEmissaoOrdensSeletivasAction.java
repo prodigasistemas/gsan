@@ -641,6 +641,7 @@ public class GerarEmissaoOrdensSeletivasAction extends ExibidorProcessamentoTare
 					Integer idEmpresa = 0;
 					int indice = 0;
 					
+					
 					if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO)) {
 						idTipoServico = ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO;
 					}else if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_SUBSTITUICAO)){
@@ -648,7 +649,7 @@ public class GerarEmissaoOrdensSeletivasAction extends ExibidorProcessamentoTare
 					}else if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_INSPECAO_ANORMALIDADE)){
 						idTipoServico = ServicoTipo.TIPO_INSPECAO_ANORMALIDADE;
 					}else if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO_RAMAL)){
-						idTipoServico = ServicoTipo.TIPO_INSTALACAO_RAMAL_CONTROLE_DE_PERDAS;
+						idTipoServico = ServicoTipo.TIPO_INSTALACAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS;
 					}else {
 						idTipoServico = ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO;
 					}
