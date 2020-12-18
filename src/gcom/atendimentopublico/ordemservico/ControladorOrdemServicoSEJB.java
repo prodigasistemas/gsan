@@ -1302,6 +1302,10 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 						colecao = this.repositorioOrdemServico.pesquisarServicoTipoPorRA(idsRa);
 						retorno.addAll(colecao);
 						break;
+					} else {
+						colecao = this.repositorioOrdemServico.pesquisarServicoTipoPorUnidadeSemRA(unidadeLotacao.getId());
+						retorno.addAll(colecao);
+						break;
 					}
 
 					// Consulta somente o servico seletivo

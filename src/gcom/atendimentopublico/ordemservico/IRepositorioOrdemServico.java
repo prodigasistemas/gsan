@@ -3791,4 +3791,6 @@ public interface IRepositorioOrdemServico {
 	 * @throws ErroRepositorioException
 	 */
 	public void excluirOsAtividadeProgramacaoAcompahamentoServico(Collection<Integer> isOsAtividadeProgramacaoAcompanhamentoServico) throws ErroRepositorioException;
+
+	public Collection<ServicoTipo> pesquisarServicoTipoPorUnidadeSemRA(Integer unidadeLotacao) throws ErroRepositorioException;
 }

@@ -20915,4 +20915,36 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	/**
+	 * 09/12/2020
+	 * Para atender as OS programadas sem RA
+	 */
+	public Collection<ServicoTipo> pesquisarServicoTipoPorUnidadeSemRA(Integer unidadeLotacao) throws ErroRepositorioException {
+
+		Collection<ServicoTipo> retornoConsulta = new ArrayList();
+
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+
+		try {
+
+			consulta = "SELECT DISTINCT svtp " + "FROM OrdemServico os  "
+					+ "INNER JOIN os.unidadeAtual unid  "
+					+ "LEFT JOIN os.servicoTipo svtp  "
+					+ "LEFT JOIN os.registroAtendimento ra  "
+					+ "WHERE unid.id = :unidadeLotacao "
+					+ "AND os.situacao in (1,3) " + "ORDER BY svtp.descricao";
+
+			retornoConsulta = session.createQuery(consulta)
+					.setInteger("unidadeLotacao", unidadeLotacao).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retornoConsulta;
+	}
 }
