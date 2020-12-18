@@ -1,5 +1,10 @@
 package gcom.atendimentopublico.ordemservico;
 
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
 import gcom.atendimentopublico.ordemservico.bean.DadosAtualizacaoOSParaInstalacaoHidrometroHelper;
 import gcom.atendimentopublico.ordemservico.bean.OSPavimentoHelper;
 import gcom.atendimentopublico.ordemservico.bean.OrdemRepavimentacaoProcessoAceiteHelper;
@@ -12,11 +17,6 @@ import gcom.relatorio.atendimentopublico.bean.ImovelEmissaoOrdensSeletivasHelper
 import gcom.relatorio.atendimentopublico.ordemservico.FiltrarBoletimCustoPavimentoHelper;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
-
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 public interface IRepositorioOrdemServico {
 
@@ -3791,6 +3791,8 @@ public interface IRepositorioOrdemServico {
 	 * @throws ErroRepositorioException
 	 */
 	public void excluirOsAtividadeProgramacaoAcompahamentoServico(Collection<Integer> isOsAtividadeProgramacaoAcompanhamentoServico) throws ErroRepositorioException;
+	
+	public Collection<Object[]> pesquisarOrdensServicoProgramadas(Integer unidadeOrganizacionalId) throws ErroRepositorioException;
 
 	public Collection<ServicoTipo> pesquisarServicoTipoPorUnidadeSemRA(Integer unidadeLotacao) throws ErroRepositorioException;
 }

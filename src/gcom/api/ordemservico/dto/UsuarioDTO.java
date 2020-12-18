@@ -6,17 +6,16 @@ public class UsuarioDTO {
 
 	private String nome;
 
-	private Integer unidadeId;
+	private Integer unidadeOrganizacionalId;
 
-	private String unidadeDescricao;
+	private String unidadeOrganizacionalDescricao;
 
-	public UsuarioDTO(Integer id, String nome, Integer unidadeId, String unidadeDescricao) {
+	public UsuarioDTO(Integer id, String nome, Integer unidadeOrganizacionalId, String unidadeOrganizacionalDescricao) {
 		super();
-		
 		this.id = id;
 		this.nome = nome;
-		this.unidadeId = unidadeId;
-		this.unidadeDescricao = unidadeDescricao;
+		this.unidadeOrganizacionalId = unidadeOrganizacionalId;
+		this.unidadeOrganizacionalDescricao = unidadeOrganizacionalDescricao;
 	}
 
 	public Integer getId() {
@@ -35,19 +34,19 @@ public class UsuarioDTO {
 		this.nome = nome;
 	}
 
-	public Integer getUnidadeId() {
-		return unidadeId;
+	public Integer getUnidadeOrganizacionalId() {
+		return unidadeOrganizacionalId;
 	}
 
-	public void setUnidadeId(Integer unidadeId) {
-		this.unidadeId = unidadeId;
+	public void setUnidadeOrganizacionalId(Integer unidadeOrganizacionalId) {
+		this.unidadeOrganizacionalId = unidadeOrganizacionalId;
 	}
 
-	public String getUnidadeDescricao() {
-		return unidadeDescricao;
+	public String getUnidadeOrganizacionalDescricao() {
+		return unidadeOrganizacionalDescricao;
 	}
 
-	public void setUnidadeDescricao(String unidadeDescricao) {
-		this.unidadeDescricao = unidadeDescricao;
+	public void setUnidadeOrganizacionalDescricao(String unidadeOrganizacionalDescricao) {
+		this.unidadeOrganizacionalDescricao = unidadeOrganizacionalDescricao;
 	}
 }

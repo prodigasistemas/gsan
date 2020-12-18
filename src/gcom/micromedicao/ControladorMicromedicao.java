@@ -16393,6 +16393,36 @@ public class ControladorMicromedicao extends ControladorComum {
 	}
 
 	/**
+	 * [UC0498] - Efetuar Ligação de Água com Instalaação de Hidrômetro
+	 * 
+	 * Pesquisa o id do hidrômetro e a sua situação pelo número
+	 * 
+	 * @author Rafael Corrêa
+	 * @date 29/11/2006
+	 * 
+	 * @param numeroHidrometro
+	 * @return Hidrometro
+	 * @throws ControladorException
+	 */
+	public Hidrometro pesquisarHidrometroNumeroSituacao(String numeroHidrometro, Integer idSituacao)
+			throws ControladorException {
+
+		Hidrometro hidrometro = null;
+
+		try {
+
+			hidrometro = repositorioMicromedicao
+					.pesquisarHidrometroNumeroSituacao(numeroHidrometro, idSituacao);
+
+
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+
+		return hidrometro;
+	}
+
+	/**
 	 * [UC0488] Informar Retorno Ordem de Fiscalização
 	 * 
 	 * 

@@ -3,13 +3,18 @@ package gcom.api.ordemservico.dto;
 public class HidrometroDTO {
 
 	private String numero;
-	private String tipoMedicao;
+
+	private Integer tipoMedicao;
+
 	private String dataRetirada;
-	private Integer leituraRetirada;
+
+	private String leituraRetirada;
+
 	private Integer situacao;
+
 	private Integer localArmazenagem;
 
-	public HidrometroDTO(String numero, String tipoMedicao) {
+	public HidrometroDTO(String numero, Integer tipoMedicao) {
 		super();
 
 		this.numero = numero;
@@ -24,11 +29,11 @@ public class HidrometroDTO {
 		this.numero = numero;
 	}
 
-	public String getTipoMedicao() {
+	public Integer getTipoMedicao() {
 		return tipoMedicao;
 	}
 
-	public void setTipoMedicao(String tipoMedicao) {
+	public void setTipoMedicao(Integer tipoMedicao) {
 		this.tipoMedicao = tipoMedicao;
 	}
 
@@ -41,10 +46,13 @@ public class HidrometroDTO {
 	}
 
 	public Integer getLeituraRetirada() {
-		return leituraRetirada;
+		if (leituraRetirada != null && !leituraRetirada.trim().equals("")) {
+			return Integer.parseInt(leituraRetirada);
+		}
+		return null;
 	}
 
-	public void setLeituraRetirada(Integer leituraRetirada) {
+	public void setLeituraRetirada(String leituraRetirada) {
 		this.leituraRetirada = leituraRetirada;
 	}
 

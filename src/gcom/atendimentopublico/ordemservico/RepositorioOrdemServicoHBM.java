@@ -1,5 +1,23 @@
 package gcom.atendimentopublico.ordemservico;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+
 import gcom.atendimentopublico.LigacaoOrigem;
 import gcom.atendimentopublico.ligacaoagua.CorteTipo;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
@@ -58,24 +76,6 @@ import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 import gcom.util.Util;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
 
 public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
@@ -1090,7 +1090,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					 * Incluso do atributo servicoTipoReferencia para 
 					 * no retornar objeto com o campo nulo.
 					 */
-					+ "servicoTipoReferencia.id "// 224
+					+ "servicoTipoReferencia.id, "// 224
+					+ "os.valorOriginal, " // 225
+					+ "os.valorAtual " // 226
+					
 					// fim da alterao
 					+ "FROM OrdemServico os "
 					+ "LEFT JOIN os.registroAtendimento ra  "
@@ -2160,9 +2163,14 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					}
 
 					ordemServico.setImovel(imovelOS);
+					
+					ordemServico.setValorOriginal((BigDecimal) retornoConsulta[225]);
+					ordemServico.setValorAtual((BigDecimal) retornoConsulta[226]);
+					
 				}
 
 			}
+
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -20916,6 +20924,59 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 		}
 	}
 	
+	public Collection<Object[]> pesquisarOrdensServicoProgramadas(Integer unidadeOrganizacionalId) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("SELECT orse.orse_id as idOrdemServico, ")
+			   .append("       orse.orse_cdsituacao as situacao, ")
+			   .append("       orse.orse_tmgeracao as dataGeracao, ")
+			   .append("       svtp.svtp_dsservicotipo as servicoTipoDescricao, ")
+			   .append("       svtp.svtp_vlservico servicoTipoValor, ")
+			   .append("       orse.orse_dsobservacao as observacao, ")
+			   .append("       pgrt.pgrt_tmroteiro as dataProgramacao, ")
+			   .append("       eqpe.eqpe_nmequipe as equipeProgramacao, ")
+			   .append("       stop.oper_id as idOperacao, ")
+			   .append("       orse.imov_id as idImovel ")
+			   .append("FROM atendimentopublico.os_programacao ospg ")
+			   .append("INNER JOIN atendimentopublico.programacao_roteiro pgrt ON pgrt.pgrt_id = ospg.pgrt_id ")
+			   .append("INNER JOIN atendimentopublico.ordem_servico orse ON orse.orse_id = ospg.orse_id ")
+			   .append("INNER JOIN atendimentopublico.servico_tipo svtp ON svtp.svtp_id = orse.svtp_id ")
+			   .append("LEFT JOIN atendimentopublico.servico_tipo_operacao stop ON stop.svtp_id = svtp.svtp_id ")
+			   .append("INNER JOIN atendimentopublico.equipe eqpe ON eqpe.eqpe_id = ospg.eqpe_id ")
+			   .append("INNER JOIN cadastro.unidade_organizacional unid ON unid.unid_id = pgrt.unid_id ")
+			   .append("INNER JOIN cadastro.imovel imov ON imov.imov_id = orse.imov_id ")
+			   .append("WHERE 1=1 ")
+			   .append("AND unid.unid_id = :unidadeOrganizacionalId ")
+			   .append("AND orse.orse_cdsituacao = :situacao ")
+			   .append("GROUP BY idOrdemServico, situacao, dataGeracao, servicoTipoDescricao, servicoTipoValor, observacao, dataProgramacao, equipeProgramacao, idOperacao, idImovel ")
+			   .append("ORDER BY idOrdemServico");
+
+			return session.createSQLQuery(sql.toString())
+						  .addScalar("idOrdemServico", Hibernate.INTEGER)
+						  .addScalar("situacao", Hibernate.INTEGER)
+						  .addScalar("dataGeracao", Hibernate.TIMESTAMP)
+						  .addScalar("servicoTipoDescricao", Hibernate.STRING)
+						  .addScalar("servicoTipoValor", Hibernate.BIG_DECIMAL)
+						  .addScalar("observacao", Hibernate.STRING)
+						  .addScalar("dataProgramacao", Hibernate.TIMESTAMP)
+						  .addScalar("equipeProgramacao", Hibernate.STRING)
+						  .addScalar("idOperacao", Hibernate.INTEGER)
+						  .addScalar("idImovel", Hibernate.INTEGER)
+						  .setInteger("unidadeOrganizacionalId", unidadeOrganizacionalId)
+						  .setInteger("situacao", OrdemServicoSituacao.PENDENTE)
+						  .list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
 	/**
 	 * 09/12/2020
 	 * Para atender as OS programadas sem RA
@@ -20938,7 +20999,6 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 			retornoConsulta = session.createQuery(consulta)
 					.setInteger("unidadeLotacao", unidadeLotacao).list();
-
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

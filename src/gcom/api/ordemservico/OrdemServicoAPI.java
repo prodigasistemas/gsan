@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,56 +17,72 @@ import gcom.api.ordemservico.bo.ProcessarRequisicaoOrdemServicoBO;
 import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.fachada.Fachada;
-import gcom.micromedicao.hidrometro.Hidrometro;
-import gcom.micromedicao.hidrometro.HidrometroSituacao;
 import gcom.seguranca.acesso.usuario.Usuario;
 
 public class OrdemServicoAPI extends HttpServlet {
 
 	private static final long serialVersionUID = 4409487621679625139L;
 
+	private HttpServletRequest request = null;
+	private HttpServletResponse response = null;
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		this.request = request;
+		this.response = response;
 
-		if (request.getParameterMap().containsKey("usuario"))
-			validarLogin(request, response);
+		if (verificarRequisicao("usuario"))
+			validarLogin();
 
-		if (request.getParameterMap().containsKey("hidrometro"))
-			validarHidrometro(getRequestParameter(request, "hidrometro"), response);
-
-		if (request.getRequestURI().contains("programadas"))
-			pesquisarOrdensServicoProgramadas(response);
-
+		if (verificarRequisicao("programadas"))
+			pesquisarOrdensServicoProgramadas();
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		if (request.getRequestURI().contains("encerrar"))
-			encerrarOrdemServico(request, response);
+		this.request = request;
+		this.response = response;
+		
+		if (verificarRequisicao("encerrar"))
+			encerrarOrdemServico();
 	}
 
-	private void encerrarOrdemServico(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void encerrarOrdemServico() throws IOException {
 		try {
-			String json = converterJson(request);
+			String json = obterJson();
 
 			Gson gson = new Gson();
-			OrdemServicoDTO dto = gson.fromJson(json.toString(), OrdemServicoDTO.class);
-			boolean isEncerrado = ProcessarRequisicaoOrdemServicoBO.getInstancia().execute(dto);
+			OrdemServicoDTO dto = gson.fromJson(json, OrdemServicoDTO.class);
+			ProcessarRequisicaoOrdemServicoBO processar = new ProcessarRequisicaoOrdemServicoBO();
+			Map<String, String> respostaProcessamento = processar.execute(dto);
 
-			if (isEncerrado)
-				response.setStatus(HttpServletResponse.SC_OK);
-			else
-				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+			OrdemServicoResponse ordemServicoResponse = new OrdemServicoResponse();
+			int status = -1;
+
+			if (!respostaProcessamento.containsKey("msg")) {
+				ordemServicoResponse.setMensagem("");
+				ordemServicoResponse.setEncerrada(true);
+				status = HttpServletResponse.SC_OK;
+
+			} else {
+				ordemServicoResponse.setMensagem(respostaProcessamento.get("msg"));
+				ordemServicoResponse.setEncerrada(false);
+				status = HttpServletResponse.SC_ACCEPTED;
+			}
+
+			response.getOutputStream().print(toJson(ordemServicoResponse));
+			response.setStatus(status);
 		} catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
 		}
 	}
 
-	private void pesquisarOrdensServicoProgramadas(HttpServletResponse response) {
+	private void pesquisarOrdensServicoProgramadas() {
 		try {
-			List<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas();
+			Integer unidadeOrganizacionalId = Integer.valueOf(obterParametro("unidadeOrganizacionalId"));
 			
+			List<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas(unidadeOrganizacionalId);
+
 			response.getOutputStream().print(toJson(dto));
 			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (Exception e) {
@@ -74,20 +91,20 @@ public class OrdemServicoAPI extends HttpServlet {
 		}
 	}
 
-	private void validarLogin(HttpServletRequest request, HttpServletResponse response) {
+	private void validarLogin() {
 		try {
-			String login = getRequestParameter(request, "login");
-			String senha = getRequestParameter(request, "senha");
+			String login = obterParametro("login");
+			String senha = obterParametro("senha");
 
 			Usuario usuario = Fachada.getInstancia().validarUsuario(login, senha);
 
 			if (usuario != null) {
 				UsuarioDTO dto = new UsuarioDTO(
-						usuario.getId(), 
-						usuario.getNomeUsuario(), 
+						usuario.getId(),
+						usuario.getNomeUsuario(),
 						usuario.getUnidadeOrganizacional().getId(),
 						usuario.getUnidadeOrganizacional().getDescricao());
-				
+
 				response.getOutputStream().print(toJson(dto));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
@@ -99,21 +116,12 @@ public class OrdemServicoAPI extends HttpServlet {
 		}
 	}
 
-	private void validarHidrometro(String numero, HttpServletResponse response) {
-		Hidrometro hidrometro = Fachada.getInstancia().pesquisarHidrometroNumeroSituacao(numero, HidrometroSituacao.DISPONIVEL);
-
-		if (hidrometro != null)
-			response.setStatus(HttpServletResponse.SC_OK);
-		else
-			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+	private String obterParametro(String nome) {
+		String parametro = request.getParameter(nome);
+		return !parametro.isEmpty() ? parametro : getInitParameter(nome);
 	}
 
-	private String getRequestParameter(HttpServletRequest request, String name) {
-		String param = request.getParameter(name);
-		return !param.isEmpty() ? param : getInitParameter(name);
-	}
-
-	private String converterJson(HttpServletRequest request) throws IOException {
+	private String obterJson() throws IOException {
 		StringBuilder json = new StringBuilder();
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
@@ -124,9 +132,13 @@ public class OrdemServicoAPI extends HttpServlet {
 		}
 		return json.toString();
 	}
-	
+
 	private String toJson(Object objeto) {
 		Gson gson = new Gson();
 		return gson.toJson(objeto);
+	}
+
+	private boolean verificarRequisicao(String url) {
+		return request.getRequestURI().contains(url);
 	}
 }

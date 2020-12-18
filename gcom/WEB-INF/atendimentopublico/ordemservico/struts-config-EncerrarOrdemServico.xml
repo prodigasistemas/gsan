@@ -79,6 +79,9 @@
 			<forward 
 				name="efetuarReligacaoAguaAction"
 				path="/exibirEfetuarReligacaoAguaAction.do" />
+			<forward 
+				name="efetuarReligacaoAguaComInstalacaoHidrometroAction"
+				path="/exibirEfetuarReligacaoAguaComInstalacaoHidrometroAction.do" />
 			<!-- SERVIÇO_TIPO_ID=11 -->
 			<forward 
 				name="efetuarCorteAdministrativoLigacaoAguaAction"
@@ -164,6 +167,9 @@
 			<forward 
 				name="efetuarReligacaoAguaAction"
 				path="/exibirEfetuarReligacaoAguaAction.do" />
+			<forward 
+				name="efetuarReligacaoAguaComInstalacaoHidrometroAction"
+				path="/exibirEfetuarReligacaoAguaComInstalacaoHidrometroAction.do" />
 			<!-- SERVIÇO_TIPO_ID=11 -->
 			<forward 
 				name="efetuarCorteAdministrativoLigacaoAguaAction"

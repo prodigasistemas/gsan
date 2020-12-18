@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 
+import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
@@ -10312,6 +10313,14 @@ public class Fachada {
 		}
 	}
 
+	public Usuario pesquisarUsuario(Integer idUsuario) {
+		try {
+			return getControladorUsuario().pesquisarUsuario(idUsuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 	/**
 	 * método que retorna o maior número da quadra de um setor comercial
 	 * 
@@ -12526,6 +12535,14 @@ public class Fachada {
 	public OrdemServico recuperaOSPorId(Integer idOS) {
 		try {
 			return this.getControladorOrdemServico().recuperaOSPorId(idOS);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Integer pesquisarServicoTipoOperacao(Integer idServicoTipo) {
+		try {
+			return this.getControladorOrdemServico().pesquisarServicoTipoOperacao(idServicoTipo);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -16389,6 +16406,14 @@ public class Fachada {
 	public Hidrometro pesquisarHidrometroPeloNumero(String numeroHidrometro) {
 		try {
 			return this.getControladorMicromedicao().pesquisarHidrometroPeloNumero(numeroHidrometro);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Hidrometro pesquisarHidrometroNumeroSituacao(String numeroHidrometro, Integer idSituacao) {
+		try {
+			return this.getControladorMicromedicao().pesquisarHidrometroNumeroSituacao(numeroHidrometro, idSituacao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -40440,6 +40465,12 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas(Integer unidadeOrganizacionalId) {
+		try {
+			return this.getControladorOrdemServico().pesquisarOrdensServicoProgramadas(unidadeOrganizacionalId);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }
-
-

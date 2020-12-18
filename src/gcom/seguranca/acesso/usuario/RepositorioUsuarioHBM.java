@@ -1,13 +1,5 @@
 package gcom.seguranca.acesso.usuario;
 
-import gcom.seguranca.acesso.Grupo;
-import gcom.seguranca.acesso.PermissaoEspecial;
-import gcom.util.ConstantesSistema;
-import gcom.util.ErroRepositorioException;
-import gcom.util.HibernateUtil;
-import gcom.util.Util;
-import gcom.util.filtro.GeradorHQLCondicional;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +12,14 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+
+import gcom.seguranca.acesso.Grupo;
+import gcom.seguranca.acesso.PermissaoEspecial;
+import gcom.util.ConstantesSistema;
+import gcom.util.ErroRepositorioException;
+import gcom.util.HibernateUtil;
+import gcom.util.Util;
+import gcom.util.filtro.GeradorHQLCondicional;
 
 /**
  * < <Descrição da Classe>>
@@ -91,6 +91,43 @@ public class RepositorioUsuarioHBM implements IRepositorioUsuario {
 		}
 
 		return retorno;
+	}
+	
+	/**
+	 * Método que busca um usuário
+	 * 
+	 * @author Marcelo Giovani
+	 * @date 24/11/2020
+	 */
+	public Usuario pesquisarUsuario(Integer idUsuario) throws ErroRepositorioException {
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// cria a variável que vai conter o hql
+		String consulta = "";
+		
+		Usuario usuario  = null;
+
+		try {
+			consulta = "select usuario " 
+					+ "from Usuario usuario "
+					+ "where usuario.id = :idUsuario ";
+
+			usuario = (Usuario)session.createQuery(consulta)
+					.setInteger("idUsuario",
+					idUsuario.intValue()).uniqueResult();
+			
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		return usuario;
 	}
 	
 	/**

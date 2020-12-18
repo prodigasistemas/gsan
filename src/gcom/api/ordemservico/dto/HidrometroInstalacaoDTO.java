@@ -2,9 +2,11 @@ package gcom.api.ordemservico.dto;
 
 public class HidrometroInstalacaoDTO {
 
-	private Integer numero;
+	private String numero;
 
 	private String data;
+
+	private Integer tipoMedicao;
 
 	private Integer local;
 
@@ -14,19 +16,19 @@ public class HidrometroInstalacaoDTO {
 
 	private Integer trocaRegistro;
 
-	private Integer leitura;
+	private String leitura;
 
-	private Integer selo;
+	private String selo;
 
 	private Integer cavalete;
 
-	private Integer lacre;
+	private String lacre;
 
-	public Integer getNumero() {
+	public String getNumero() {
 		return numero;
 	}
 
-	public void setNumero(Integer numero) {
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 
@@ -36,6 +38,14 @@ public class HidrometroInstalacaoDTO {
 
 	public void setData(String data) {
 		this.data = data;
+	}
+
+	public Integer getTipoMedicao() {
+		return tipoMedicao;
+	}
+
+	public void setTipoMedicao(Integer tipoMedicao) {
+		this.tipoMedicao = tipoMedicao;
 	}
 
 	public Integer getLocal() {
@@ -71,18 +81,21 @@ public class HidrometroInstalacaoDTO {
 	}
 
 	public Integer getLeitura() {
-		return leitura;
+		if (leitura != null && !leitura.trim().equals("")) {
+			return Integer.parseInt(leitura);
+		}
+		return 0;
 	}
 
-	public void setLeitura(Integer leitura) {
+	public void setLeitura(String leitura) {
 		this.leitura = leitura;
 	}
 
-	public Integer getSelo() {
+	public String getSelo() {
 		return selo;
 	}
 
-	public void setSelo(Integer selo) {
+	public void setSelo(String selo) {
 		this.selo = selo;
 	}
 
@@ -94,11 +107,11 @@ public class HidrometroInstalacaoDTO {
 		this.cavalete = cavalete;
 	}
 
-	public Integer getLacre() {
+	public String getLacre() {
 		return lacre;
 	}
 
-	public void setLacre(Integer lacre) {
+	public void setLacre(String lacre) {
 		this.lacre = lacre;
 	}
 }

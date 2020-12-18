@@ -29,6 +29,7 @@ import gcom.micromedicao.bean.PesquisarRelatorioRotasOnlinePorEmpresaHelper;
 import gcom.micromedicao.consumo.ConsumoAnormalidadeAcao;
 import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.LigacaoTipo;
+import gcom.micromedicao.hidrometro.Hidrometro;
 import gcom.micromedicao.hidrometro.HidrometroCapacidade;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
@@ -976,7 +977,10 @@ public interface IRepositorioMicromedicao {
 	 */
 	public Object[] pesquisarHidrometroPeloNumero(String numeroHidrometro)
 			throws ErroRepositorioException;
-	
+
+	public Hidrometro pesquisarHidrometroNumeroSituacao(String numeroHidrometro, Integer idSituacao)
+			throws ErroRepositorioException;
+
 	/**
 	 * [UC0488] Informar Retorno Ordem de Fiscalização
 	 * 

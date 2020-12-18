@@ -1,48 +1,49 @@
 package gcom.atendimentopublico.bean;
 
+import java.io.Serializable;
+
+import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.bean.DadosEfetuacaoCorteLigacaoAguaHelper;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
+import gcom.atendimentopublico.ordemservico.OrdemServico;
+import gcom.cadastro.imovel.Imovel;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.seguranca.acesso.usuario.Usuario;
 
-import java.io.Serializable;
-
-/**
- * @author Hibernate CodeGenerator
- * @created 1 de Junho de 2004
- */
 public class IntegracaoComercialHelper implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
-    private gcom.cadastro.imovel.Imovel imovel;
-    
-    private gcom.atendimentopublico.ligacaoagua.LigacaoAgua ligacaoAgua;
-    
-    private gcom.atendimentopublico.ordemservico.OrdemServico ordemServico;
-    
-    private LigacaoEsgoto ligacaoEsgoto;
-    
-    private HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico;
-    
-    private HidrometroInstalacaoHistorico hidrometroSubstituicaoHistorico;
-    
-    private DadosEfetuacaoCorteLigacaoAguaHelper dadosEfetuacaoCorteLigacaoAguaHelper;
-    
-    private boolean veioEncerrarOS;
-    
-    private String qtdParcelas;
-    
-    private Integer localArmazenagemHidrometro;
-    
-    private String matriculaImovel;
-    
-    private String situacaoHidrometroSubstituido;   
-    
-    private Usuario usuarioLogado;
-    
-	public IntegracaoComercialHelper(){}
+	private Imovel imovel;
 
-	public gcom.cadastro.imovel.Imovel getImovel() {
+	private LigacaoAgua ligacaoAgua;
+
+	private OrdemServico ordemServico;
+
+	private LigacaoEsgoto ligacaoEsgoto;
+
+	private HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico;
+
+	private HidrometroInstalacaoHistorico hidrometroSubstituicaoHistorico;
+
+	private DadosEfetuacaoCorteLigacaoAguaHelper dadosEfetuacaoCorteLigacaoAguaHelper;
+
+	private boolean veioEncerrarOS;
+
+	private String qtdParcelas;
+
+	private Integer localArmazenagemHidrometro;
+
+	private String matriculaImovel;
+
+	private String situacaoHidrometroSubstituido;
+
+	private Usuario usuarioLogado;
+
+	public IntegracaoComercialHelper() {
+	}
+
+	public Imovel getImovel() {
 		return imovel;
 	}
 
@@ -51,23 +52,22 @@ public class IntegracaoComercialHelper implements Serializable {
 	}
 
 	public boolean equals(Object other) {
-        if ((this == other)) {
-            return true;
-        }
-        if (!(other instanceof IntegracaoComercialHelper)) {
-            return false;
-        }
-        IntegracaoComercialHelper castOther = (IntegracaoComercialHelper) other;
+		if ((this == other)) {
+			return true;
+		}
+		if (!(other instanceof IntegracaoComercialHelper)) {
+			return false;
+		}
+		IntegracaoComercialHelper castOther = (IntegracaoComercialHelper) other;
 
-        return (this.getImovel().getId().equals(castOther.getImovel().getId()));
-    }
+		return (this.getImovel().getId().equals(castOther.getImovel().getId()));
+	}
 
-	public gcom.atendimentopublico.ligacaoagua.LigacaoAgua getLigacaoAgua() {
+	public LigacaoAgua getLigacaoAgua() {
 		return ligacaoAgua;
 	}
 
-	public void setLigacaoAgua(
-			gcom.atendimentopublico.ligacaoagua.LigacaoAgua ligacaoAgua) {
+	public void setLigacaoAgua(LigacaoAgua ligacaoAgua) {
 		this.ligacaoAgua = ligacaoAgua;
 	}
 
@@ -75,8 +75,7 @@ public class IntegracaoComercialHelper implements Serializable {
 		return ordemServico;
 	}
 
-	public void setOrdemServico(
-			gcom.atendimentopublico.ordemservico.OrdemServico ordemServico) {
+	public void setOrdemServico(gcom.atendimentopublico.ordemservico.OrdemServico ordemServico) {
 		this.ordemServico = ordemServico;
 	}
 
@@ -86,6 +85,10 @@ public class IntegracaoComercialHelper implements Serializable {
 
 	public void setQtdParcelas(String qtdParcelas) {
 		this.qtdParcelas = qtdParcelas;
+	}
+
+	public void setQtdParcelas(int qtdParcelas) {
+		this.qtdParcelas = String.valueOf(qtdParcelas);
 	}
 
 	public LigacaoEsgoto getLigacaoEsgoto() {
@@ -108,8 +111,7 @@ public class IntegracaoComercialHelper implements Serializable {
 		return hidrometroInstalacaoHistorico;
 	}
 
-	public void setHidrometroInstalacaoHistorico(
-			HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico) {
+	public void setHidrometroInstalacaoHistorico(HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico) {
 		this.hidrometroInstalacaoHistorico = hidrometroInstalacaoHistorico;
 	}
 
@@ -117,8 +119,7 @@ public class IntegracaoComercialHelper implements Serializable {
 		return hidrometroSubstituicaoHistorico;
 	}
 
-	public void setHidrometroSubstituicaoHistorico(
-			HidrometroInstalacaoHistorico hidrometroSubstituicaoHistorico) {
+	public void setHidrometroSubstituicaoHistorico(HidrometroInstalacaoHistorico hidrometroSubstituicaoHistorico) {
 		this.hidrometroSubstituicaoHistorico = hidrometroSubstituicaoHistorico;
 	}
 
@@ -142,8 +143,7 @@ public class IntegracaoComercialHelper implements Serializable {
 		return situacaoHidrometroSubstituido;
 	}
 
-	public void setSituacaoHidrometroSubstituido(
-			String situacaoHidrometroSubstituido) {
+	public void setSituacaoHidrometroSubstituido(String situacaoHidrometroSubstituido) {
 		this.situacaoHidrometroSubstituido = situacaoHidrometroSubstituido;
 	}
 
@@ -151,8 +151,7 @@ public class IntegracaoComercialHelper implements Serializable {
 		return dadosEfetuacaoCorteLigacaoAguaHelper;
 	}
 
-	public void setDadosEfetuacaoCorteLigacaoAguaHelper(
-			DadosEfetuacaoCorteLigacaoAguaHelper dadosEfetuacaoCorteLigacaoAguaHelper) {
+	public void setDadosEfetuacaoCorteLigacaoAguaHelper(DadosEfetuacaoCorteLigacaoAguaHelper dadosEfetuacaoCorteLigacaoAguaHelper) {
 		this.dadosEfetuacaoCorteLigacaoAguaHelper = dadosEfetuacaoCorteLigacaoAguaHelper;
 	}
 
