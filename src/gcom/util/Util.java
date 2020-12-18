@@ -6201,6 +6201,13 @@ public class Util {
 		return temp.replaceAll("[^\\p{ASCII}]", "");
 	}
 
+	public static String removerSimbolosPontuacao(String texto) {
+		if (texto == null)
+			return "";
+		
+		texto = texto.replaceAll("[^0-9A-Za-z' ']*", "");  
+		return texto;
+	}
     public static String converterDecimalParaString(BigDecimal valorBase) {
         DecimalFormat format = new DecimalFormat("#0.00");
         return format.format(valorBase.doubleValue());

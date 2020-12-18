@@ -621,10 +621,9 @@
 						<bean:define id="nomeEquipe" 
 							name="osProgramacaoHelper" 
 							property="key"
-							type="String"/>
-
-						<%	nomeEquipe = nomeEquipe.replace("-","");	%>
-						<%	nomeEquipe = nomeEquipe.replace(" ","");	%>						
+							type="String"/>		
+							
+						<%	nomeEquipe = nomeEquipe.replace(" ","");	%>				
 
 						<bean:define id="percentualTrabalhoPrevista" 
 							name="<%="percentualTrabalhoPrevista"+nomeEquipe%>"

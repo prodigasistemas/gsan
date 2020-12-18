@@ -420,7 +420,7 @@ public class ExibirAcompanharRoteiroProgramacaoOrdemServicoAction extends GcomAc
 				OrdemServico ordemServico = ordemServicoProgramacao.getOrdemServico();
 				
 				Equipe equipe = ordemServicoProgramacao.getEquipe();
-				String chave = equipe.getNome();
+				String chave =  Util.removerSimbolosPontuacao(equipe.getNome().toString());
 				
 				OSProgramacaoHelper helper = new OSProgramacaoHelper();
 				
@@ -547,7 +547,7 @@ public class ExibirAcompanharRoteiroProgramacaoOrdemServicoAction extends GcomAc
 				OSProgramacaoHelper osProgramacaoHelper = (OSProgramacaoHelper) iteraOsProgramacao.next();
 				
 				OrdemServicoProgramacao osProgramacao = osProgramacaoHelper.getOrdemServicoProgramacao();
-				String chaveNome = osProgramacao.getEquipe().getNome();
+				String chaveNome = Util.removerSimbolosPontuacao(osProgramacao.getEquipe().getNome());
 				
 				if(!mapEquipeIdsOsProgramadas.containsKey(chaveNome)){
 
