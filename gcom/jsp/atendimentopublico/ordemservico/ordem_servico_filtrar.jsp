@@ -914,7 +914,7 @@ type="gcom.gui.atendimentopublico.ordemservico.FiltrarOrdemServicoActionForm">
 
 							<div align="left"><strong>Disponíveis</strong></div>
 
-							<html:select property="tipoServico" size="6" multiple="true" style="width:190px" >
+							<html:select property="tipoServico" size="6" multiple="true" style="width:190px; overflow:auto;" >
 								<html:options collection="colecaoTipoServico" labelProperty="descricao" property="id"/>
 							</html:select></td>
 
