@@ -729,8 +729,8 @@ public class RelatorioEmitirOrdemServicoSeletiva extends TarefaRelatorio {
 			FiltroUnidadeOrganizacional filtroUnidadeOrganizacional = new FiltroUnidadeOrganizacional();
 			filtroUnidadeOrganizacional.adicionarParametro(new ParametroSimples(
 					FiltroUnidadeOrganizacional.EMPRESA, idEmpresa));
-			filtroUnidadeOrganizacional.adicionarParametro(new ParametroSimples(
-					FiltroUnidadeOrganizacional.ID_LOCALIDADE, idLocalidade));
+			//filtroUnidadeOrganizacional.adicionarParametro(new ParametroSimples(
+			//		FiltroUnidadeOrganizacional.ID_LOCALIDADE, idLocalidade));
 			filtroUnidadeOrganizacional.adicionarParametro(new ParametroSimples(
 					FiltroUnidadeOrganizacional.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
 			

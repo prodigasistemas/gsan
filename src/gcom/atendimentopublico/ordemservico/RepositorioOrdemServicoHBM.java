@@ -10491,8 +10491,16 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO))
 							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_INSPECAO_ANORMALIDADE)) 
 							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
-							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_HDT_CONTROLE_DE_PERDAS)) 
-							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_HDT_CONTROLE_DE_PERDAS))) {
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS)) 
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_SEM_HINST_DT_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))) {
 				hql += " left  join ligacaoAgua.hidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoAgua "
 						+ " left  join hidrometroInstalacaoHistoricoAgua.hidrometro hidrometroAgua "
 						+ " left  join imovel.hidrometroInstalacaoHistorico hidrometroInstalacaoHistorico "
@@ -10550,18 +10558,17 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			// Seleciona os Imoveis de acordo com o Tipo de Ordem
 			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO) 
 					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_CONTROLE_DE_PERDAS)))  {
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)))  {
 				if (helper.getTipoMedicao() != null) {
-					if (helper.getTipoMedicao().equals(
-							MedicaoTipo.LIGACAO_AGUA.toString())) {
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
 						// hqlAux += "(imovel.ligacaoAguaSituacao.id = " +
 						// LigacaoAguaSituacao.LIGADO + " or ";
 						// hqlAux += "imovel.ligacaoAguaSituacao.id = " +
 						// LigacaoAguaSituacao.LIGADO_A_REVELIA + ") and ";
 						hqlAux += "ligacaoAgua.hidrometroInstalacaoHistorico.id is null and ";
 						finaliza = true;
-					} else if (helper.getTipoMedicao().equals(
-							MedicaoTipo.POCO.toString())) {
+					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
 						// hqlAux += "imovel.ligacaoEsgotoSituacao.id = " +
 						// LigacaoEsgotoSituacao.LIGADO + " and ";
 						hqlAux += "imovel.hidrometroInstalacaoHistorico.id is null and ";
@@ -10569,11 +10576,19 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				}
 			} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO) 
 					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_HDT_CONTROLE_DE_PERDAS)) 
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_HDT_CONTROLE_DE_PERDAS))) {
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_SEM_HINST_DT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))) {
 				if (helper.getTipoMedicao() != null) {
-					if (helper.getTipoMedicao().equals(
-							MedicaoTipo.LIGACAO_AGUA.toString())) {
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
 						// hqlAux += "(imovel.ligacaoAguaSituacao.id = " +
 						// LigacaoAguaSituacao.LIGADO + " or ";
 						// hqlAux += "imovel.ligacaoAguaSituacao.id = " +
@@ -11120,7 +11135,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "    os.servicoTipo.id = "
 					+ ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO + " or "
 					+ "    os.servicoTipo.id = "
-					+ ServicoTipo.TIPO_INSTALACAO_RAMAL_CONTROLE_DE_PERDAS + " or "
+					+ ServicoTipo.TIPO_INSTALACAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS + " or "
 					+ "    os.servicoTipo.id = "
 					+ ServicoTipo.TIPO_INSPECAO_ANORMALIDADE
 					+ " ) "
@@ -13151,12 +13166,21 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						+ anoMesFaturamento + " ";
 			}
 
-			if (helper.getTipoOrdem().equals(
-					"" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)
-					|| helper.getTipoOrdem().equals(
-							"" + ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO)
-							|| helper.getTipoOrdem().equals(
-									"" + ServicoTipo.TIPO_INSPECAO_ANORMALIDADE)) {
+			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS)
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS) 
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS) 
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS) 
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS) 
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_SEM_HINST_DT_CONTROLE_DE_PERDAS)
+					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)
+					|| helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO)
+					|| helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSPECAO_ANORMALIDADE)) {
 				hql += " left  join ligacaoAgua.hidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoAgua "
 						+ " left  join hidrometroInstalacaoHistoricoAgua.hidrometro hidrometroAgua "
 						+ " left  join imovel.hidrometroInstalacaoHistorico hidrometroInstalacaoHistorico "
@@ -13195,7 +13219,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						+ " and ";
 			}
 
-			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO)) {
+			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO) 
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))) {
 				if (helper.getTipoMedicao() != null) {
 					if (helper.getTipoMedicao().equals(
 							MedicaoTipo.LIGACAO_AGUA.toString())) {
@@ -13216,7 +13243,20 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						hqlAux += "ligacaoEsgotoSituacao.id = imovel.ligacaoEsgotoSituacao and ";
 					}
 				}
-			} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)) {
+			} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS)) 
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_SEM_HINST_DT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))) {
+				
 				if (helper.getTipoMedicao() != null) {
 					if (helper.getTipoMedicao().equals(
 							MedicaoTipo.LIGACAO_AGUA.toString())) {
