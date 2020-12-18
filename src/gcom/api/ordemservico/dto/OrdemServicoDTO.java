@@ -57,11 +57,11 @@ public class OrdemServicoDTO {
 
 		this.id = id;
 		this.situacao = situacao;
-		this.dataGeracao = Util.formatarData(dataGeracao, FormatoData.AMERICANO_COM_TRACO);
+		this.dataGeracao = Util.formatarData(dataGeracao, FormatoData.AMERICANO_COMPLETO);
 		this.servicoTipoDescricao = servicoTipoDescricao;
 		this.servicoTipoValor = servicoTipoValor;
 		this.observacao = observacao;
-		this.dataProgramacao = Util.formatarData(dataProgramacao, FormatoData.AMERICANO_COM_TRACO);
+		this.dataProgramacao = Util.formatarData(dataProgramacao, FormatoData.AMERICANO_COMPLETO);
 		this.equipeProgramacao = equipeProgramacao;
 		this.operacao = operacao;
 	}

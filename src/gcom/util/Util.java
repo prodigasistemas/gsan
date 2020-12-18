@@ -568,17 +568,29 @@ public class Util {
 		return retorno;
 	}
 	
+	public static Date converterStringParaData(String dataHora, String fomatoAtual) {
+
+		SimpleDateFormat formatoData = new SimpleDateFormat(fomatoAtual);
+
+		try {
+			return formatoData.parse(dataHora);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 	/**
 	 * Converte uma data em {@code String} para {@code Date} 
 	 * 
 	 * @param timestamp - data no formato yyyy-MM-dd hh:mm:ss.SSS
 	 * @return
 	 */
-	public static Date converterStringDateComDataETempo(String timestamp) {
+	public static Date converterStringParaDateComDataETempo(String timestamp) {
 
 		Date retorno = null;
 
-		SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+		SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
 		try {
 			retorno = formatoData.parse(timestamp);
@@ -3129,6 +3141,27 @@ public class Util {
 			string = objeto.toString();
 		}
 		return string;
+	}
+	
+	public static Integer converterObjetoParaInteger(Object objeto) {
+		if (objeto != null) {
+			return (Integer) objeto;
+		}
+		return null;
+	}
+
+	public static BigDecimal converterObjetoParaBigDecimal(Object objeto) {
+		if (objeto != null) {
+			return (BigDecimal) objeto;
+		}
+		return null;
+	}
+
+	public static Date converterObjetoParaDate(Object objeto) {
+		if (objeto != null) {
+			return (Date) objeto;
+		}
+		return null;
 	}
 
 	/**

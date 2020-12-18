@@ -2,112 +2,107 @@ package gcom.micromedicao.hidrometro;
 
 import java.util.Date;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
-/** @author Hibernate CodeGenerator */
-public class HidrometroLocalInstalacao extends  ObjetoTransacao {
+public class HidrometroLocalInstalacao extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
 
-    /** persistent field */
-    private String descricao;
+	private Integer id;
 
-    /** persistent field */
-    private String descricaoAbreviada;
+	private String descricao;
 
-    /** nullable persistent field */
-    private Short indicadorUso;
+	private String descricaoAbreviada;
 
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
+	private Short indicadorUso;
 
-    /** full constructor */
-    public HidrometroLocalInstalacao(String descricao,
-            String descricaoAbreviada, Short indicadorUso, Date ultimaAlteracao) {
-        this.descricao = descricao;
-        this.descricaoAbreviada = descricaoAbreviada;
-        this.indicadorUso = indicadorUso;
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	private Date ultimaAlteracao;
 
-    /** default constructor */
-    public HidrometroLocalInstalacao() {
-    }
+	public HidrometroLocalInstalacao() {
+	}
 
-    /** minimal constructor */
-    public HidrometroLocalInstalacao(String descricao, String descricaoAbreviada) {
-        this.descricao = descricao;
-        this.descricaoAbreviada = descricaoAbreviada;
-    }
+	public HidrometroLocalInstalacao(Integer id) {
+		super();
+		this.id = id;
+	}
 
-    public Integer getId() {
-        return this.id;
-    }
+	public HidrometroLocalInstalacao(String descricao, String descricaoAbreviada, Short indicadorUso, Date ultimaAlteracao) {
+		this.descricao = descricao;
+		this.descricaoAbreviada = descricaoAbreviada;
+		this.indicadorUso = indicadorUso;
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public HidrometroLocalInstalacao(String descricao, String descricaoAbreviada) {
+		this.descricao = descricao;
+		this.descricaoAbreviada = descricaoAbreviada;
+	}
 
-    public String getDescricao() {
-        return this.descricao;
-    }
+	public Integer getId() {
+		return this.id;
+	}
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getDescricaoAbreviada() {
-        return this.descricaoAbreviada;
-    }
+	public String getDescricao() {
+		return this.descricao;
+	}
 
-    public void setDescricaoAbreviada(String descricaoAbreviada) {
-        this.descricaoAbreviada = descricaoAbreviada;
-    }
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
 
-    public Short getIndicadorUso() {
-        return this.indicadorUso;
-    }
+	public String getDescricaoAbreviada() {
+		return this.descricaoAbreviada;
+	}
 
-    public void setIndicadorUso(Short indicadorUso) {
-        this.indicadorUso = indicadorUso;
-    }
+	public void setDescricaoAbreviada(String descricaoAbreviada) {
+		this.descricaoAbreviada = descricaoAbreviada;
+	}
 
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public Short getIndicadorUso() {
+		return this.indicadorUso;
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public void setIndicadorUso(Short indicadorUso) {
+		this.indicadorUso = indicadorUso;
+	}
 
-    public String toString() {
-        return new ToStringBuilder(this).append("id", getId()).toString();
-    }
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
 
-	 public String[] retornaCamposChavePrimaria(){
-			String[] retorno = new String[1];
-			retorno[0] = "id";
-			return retorno;
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
+
+	public String[] retornaCamposChavePrimaria() {
+		String[] retorno = new String[1];
+		retorno[0] = "id";
+		return retorno;
 	}
 
 	@Override
 	public Filtro retornaFiltro() {
 		FiltroHidrometroLocalInstalacao filtro = new FiltroHidrometroLocalInstalacao();
-		filtro.adicionarParametro(
-				new ParametroSimples(FiltroHidrometroLocalInstalacao.ID, this.getId()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroLocalInstalacao.ID, this.getId()));
 		return filtro;
 	}
-	
+
 	@Override
 	public void initializeLazy() {
 		getDescricao();
-	} 
-	
+	}
+
 	@Override
 	public String getDescricaoParaRegistroTransacao() {
 		return getDescricao();

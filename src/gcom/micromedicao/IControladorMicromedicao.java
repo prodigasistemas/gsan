@@ -581,6 +581,8 @@ public interface IControladorMicromedicao {
 	 */
 	public Hidrometro pesquisarHidrometroPeloNumero(String numeroHidrometro) throws ControladorException;
 
+	public Hidrometro pesquisarHidrometroNumeroSituacao(String numeroHidrometro, Integer idSituacao) throws ControladorException;
+
 	/**
 	 * [UC0488] Informar Retorno Ordem de Fiscalização
 	 * 

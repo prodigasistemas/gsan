@@ -111,7 +111,7 @@ public class Visita extends ObjetoTransacao {
 	
 	public void setDataVisita(String dataVisita) {
 		if (StringUtils.isNotEmpty(dataVisita)) {
-			this.dataVisita = Util.converterStringDateComDataETempo(dataVisita);
+			this.dataVisita = Util.converterStringParaDateComDataETempo(dataVisita);
 		}
 	}
 	

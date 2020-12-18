@@ -1,5 +1,41 @@
 package gcom.atendimentopublico.ordemservico;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.jboss.logging.Logger;
+
+import gcom.api.ordemservico.dto.HidrometroDTO;
+import gcom.api.ordemservico.dto.ImovelDTO;
+import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
@@ -53,6 +89,9 @@ import gcom.batch.Processo;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.ClienteRelacaoTipo;
+import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.funcionario.FiltroFuncionario;
@@ -128,7 +167,9 @@ import gcom.micromedicao.RepositorioMicromedicaoHBM;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.SituacaoTransmissaoLeitura;
 import gcom.micromedicao.consumo.LigacaoTipo;
+import gcom.micromedicao.hidrometro.FiltroHidrometroInstalacaoHistorico;
 import gcom.micromedicao.hidrometro.FiltroHidrometroLocalInstalacao;
+import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.hidrometro.HidrometroLocalInstalacao;
 import gcom.micromedicao.hidrometro.HidrometroMarca;
 import gcom.micromedicao.medicao.MedicaoTipo;
@@ -162,41 +203,9 @@ import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.ComparacaoTexto;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.Intervalo;
+import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.jboss.logging.Logger;
 
 public class ControladorOrdemServicoSEJB extends ControladorComum{
 	private static final long serialVersionUID = -9200009057620946040L;
@@ -3243,6 +3252,11 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 			integracaoComercialHelper.getOrdemServico().setUltimaAlteracao(new Date());
 			integracaoComercialHelper.getOrdemServico().setDataEncerramento(dataEncerramento);
 		}
+		
+		if (tipoServicoOSId != null) {
+			int idServicoTipoInt = Util.converterStringParaInteger(tipoServicoOSId);
+			integracaoComercial(idServicoTipoInt, integracaoComercialHelper, usuarioLogado);
+		}
 
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_ORDEM_SERVICO_ENCERRAR, osNaBase.getId(), osNaBase.getId(),
 				new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
@@ -3355,12 +3369,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 			}
 		}
 
-		if (tipoServicoOSId != null) {
-			int idServicoTipoInt = Util.converterStringParaInteger(tipoServicoOSId);
-			integracaoComercial(idServicoTipoInt, integracaoComercialHelper, usuarioLogado);
-		}
-
-		if (indicadorServicoAceito != null && indicadorServicoAceito.equals(ConstantesSistema.NAO)) {
+		if (indicadorServicoAceito != null && indicadorServicoAceito.equals(ConstantesSistema.NAO_ACEITO)) {
 			rejeitarOrdemServico(numeroOS, usuarioLogado);
 		}
 	}
@@ -8984,10 +8993,10 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 	 *            , integracaoComercialHelper
 	 * @throws ControladorException
 	 */
-	public void integracaoComercial(Integer idServicoTipo, IntegracaoComercialHelper integracaoComercialHelper, Usuario usuarioLogado)
+	public void integracaoComercial(Integer idServicoTipo, IntegracaoComercialHelper helper, Usuario usuarioLogado)
 			throws ControladorException {
 
-		if (idServicoTipo != null && integracaoComercialHelper != null) {
+		if (idServicoTipo != null && helper != null) {
 
 			Integer idOperacao = this.pesquisarServicoTipoOperacao(idServicoTipo);
 
@@ -8995,67 +9004,94 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 
 				switch (idOperacao) {
 				case (Operacao.OPERACAO_LIGACAO_AGUA_EFETUAR_INT):
-					getControladorAtendimentoPublico().efetuarLigacaoAgua(integracaoComercialHelper);
+					getControladorAtendimentoPublico().efetuarLigacaoAgua(helper);
 					break;
+
 				case (Operacao.OPERACAO_LIGACAO_ESGOTO_EFETUAR_INT):
-					getControladorAtendimentoPublico().inserirLigacaoEsgoto(integracaoComercialHelper);
+					getControladorAtendimentoPublico().inserirLigacaoEsgoto(helper);
 					break;
+
 				case (Operacao.OPERACAO_CORTE_LIGACAO_AGUA_EFETUAR_INT):
-					getControladorLigacaoAgua().efetuarCorteLigacaoAgua(integracaoComercialHelper);
+					getControladorLigacaoAgua().efetuarCorteLigacaoAgua(helper);
 					break;
+
 				case (Operacao.OPERACAO_SUPRESSAO_LIGACAO_AGUA_EFETUAR_INT):
-					getControladorAtendimentoPublico().efetuarSupressaoLigacaoAgua(integracaoComercialHelper);
+					getControladorAtendimentoPublico().efetuarSupressaoLigacaoAgua(helper);
 					break;
+
 				case (Operacao.OPERACAO_RESTABELECIMENTO_LIGACAO_AGUA_EFETUAR_INT):
-					getControladorAtendimentoPublico().efetuarRestabelecimentoLigacaoAgua(integracaoComercialHelper);
+					getControladorAtendimentoPublico().efetuarRestabelecimentoLigacaoAgua(helper);
 					break;
+
 				case (Operacao.OPERACAO_RELIGACAO_AGUA_EFETUAR_INT):
-					getControladorAtendimentoPublico().efetuarReligacaoAgua(integracaoComercialHelper);
+					getControladorAtendimentoPublico().efetuarReligacaoAgua(helper);
 					break;
+
 				case (Operacao.OPERACAO_CORTE_ADMINISTRATIVO_LIGACAO_AGUA_EFETUAR_INT):
-					getControladorLigacaoAgua().efetuarCorteAdministrativoLigacaoAgua(integracaoComercialHelper.getDadosEfetuacaoCorteLigacaoAguaHelper(),
-							usuarioLogado);
+					getControladorLigacaoAgua().efetuarCorteAdministrativoLigacaoAgua(helper.getDadosEfetuacaoCorteLigacaoAguaHelper(), usuarioLogado);
 					break;
+
 				case (Operacao.OPERACAO_RETIRADA_HIDROMETRO_EFETUAR_INT):
-					getControladorAtendimentoPublico().efetuarRetiradaHidrometro(integracaoComercialHelper);
+					getControladorAtendimentoPublico().efetuarRetiradaHidrometro(helper);
 					break;
+
 				case (Operacao.OPERACAO_REMANEJAMENTO_HIDROMETRO_EFETUAR_INT):
-					getControladorAtendimentoPublico().efetuarRemanejamentoHidrometro(integracaoComercialHelper);
+					getControladorAtendimentoPublico().efetuarRemanejamentoHidrometro(helper);
 					break;
 
 				case (Operacao.OPERACAO_INSTALACAO_HIDROMETRO_EFETUAR_INT):
-					getControladorAtendimentoPublico().efetuarInstalacaoHidrometro(integracaoComercialHelper);
+					getControladorAtendimentoPublico().efetuarInstalacaoHidrometro(helper);
 					break;
+
 				case (Operacao.OPERACAO_SUBSTITUICAO_HIDROMETRO_EFETUAR_INT):
-					getControladorAtendimentoPublico().efetuarSubstituicaoHidrometro(integracaoComercialHelper);
+					getControladorAtendimentoPublico().efetuarSubstituicaoHidrometro(helper);
 					break;
+
 				case (Operacao.OPERACAO_MUDANCA_SITUACAO_FATURAMENTO_LIGACAO_ESGOTO_INT):
-					getControladorAtendimentoPublico().efetuarMudancaSituacaoFaturamentoLiagacaoEsgoto(integracaoComercialHelper);
+					getControladorAtendimentoPublico().efetuarMudancaSituacaoFaturamentoLiagacaoEsgoto(helper);
 					break;
+
 				case (Operacao.OPERACAO_CONSUMO_MINIMO_LIGACAO_AGUA_ATUALIZAR_INT):
-					getControladorLigacaoAgua().atualizarConsumoMinimoLigacaoAgua(integracaoComercialHelper);
+					getControladorLigacaoAgua().atualizarConsumoMinimoLigacaoAgua(helper);
 					break;
+
 				case (Operacao.OPERACAO_VOLUME_MINIMO_LIGACAO_ESGOTO_ATUALIZAR_INT):
-					getControladorLigacaoEsgoto().atualizarVolumeMinimoLigacaoEsgoto(integracaoComercialHelper);
+					getControladorLigacaoEsgoto().atualizarVolumeMinimoLigacaoEsgoto(helper);
 					break;
+
 				case (Operacao.OPERACAO_EFETUAR_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT):
-					getControladorAtendimentoPublico().efetuarLigacaoAguaComInstalacaoHidrometro(integracaoComercialHelper, usuarioLogado);
+					getControladorAtendimentoPublico().efetuarLigacaoAguaComInstalacaoHidrometro(helper, usuarioLogado);
 					break;
-				case (Operacao.RESTABELECIMENTO_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT):
-					getControladorAtendimentoPublico().efetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometro(integracaoComercialHelper, usuarioLogado);
+
+				case (Operacao.OPERACAO_RESTABELECIMENTO_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT):
+					getControladorAtendimentoPublico().efetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometro(helper, usuarioLogado);
 					break;
+
 				case (Operacao.OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT):
-					getControladorAtendimentoPublico().efetuarReligacaoAguaComInstalacaoHidrometro(integracaoComercialHelper, usuarioLogado);
+					getControladorAtendimentoPublico().efetuarReligacaoAguaComInstalacaoHidrometro(helper, usuarioLogado);
 					break;
+
 				case (Operacao.OPERACAO_ALTERAR_TIPO_CORTE_INT):
-
-					getControladorLigacaoAgua().atualizarTipoCorte(integracaoComercialHelper);
-
+					getControladorLigacaoAgua().atualizarTipoCorte(helper);
+					break;
+					
+				case (Operacao.OPERACAO_EFETUAR_LIGACAO_AGUA_COM_SUBSTITUICAO_HIDROMETRO):
+					getControladorAtendimentoPublico().efetuarLigacaoAgua(helper);
+					getControladorAtendimentoPublico().efetuarSubstituicaoHidrometro(helper);
+					break;
+				
+				case (Operacao.OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_SUBSTITUICAO_HIDROMETRO):
+					getControladorAtendimentoPublico().efetuarReligacaoAgua(helper);
+					getControladorAtendimentoPublico().efetuarSubstituicaoHidrometro(helper);
+					break;
+				
+				case (Operacao.OPERACAO_EFETUAR_RESTABELECIMENTO_LIGACAO_AGUA_COM_SUBSTITUICAO_HIDROMETRO):
+					getControladorAtendimentoPublico().efetuarRestabelecimentoLigacaoAgua(helper);
+					getControladorAtendimentoPublico().efetuarSubstituicaoHidrometro(helper);
 					break;
 
 				}
 			}
-
 		}
 	}
 
@@ -18897,4 +18933,118 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 
 	}
 
+	/**
+	 * Método que retorna os dados das Ordens de Serviços programadas 
+	 * 
+	 * @return List<OrdemServicoDTO> DTO das Ordens de Serviços
+	 * @throws ControladorException
+	 */
+	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas(Integer unidadeOrganizacionalId) throws ControladorException {
+		try {
+			List<OrdemServicoDTO> programadas = new ArrayList<OrdemServicoDTO>();
+			Collection<Object[]> consulta = (Collection<Object[]>) repositorioOrdemServico.pesquisarOrdensServicoProgramadas(unidadeOrganizacionalId);
+
+			for (Object[] objeto : consulta) {
+				OrdemServicoDTO dto = new OrdemServicoDTO(
+						Util.converterObjetoParaInteger(objeto[0]),
+						Util.converterObjetoParaInteger(objeto[1]),
+						Util.converterObjetoParaDate(objeto[2]), 
+						Util.converterObjetoParaString(objeto[3]),
+						Util.converterObjetoParaBigDecimal(objeto[4]),
+						Util.converterObjetoParaString(objeto[5]),
+						Util.converterObjetoParaDate(objeto[6]),
+						Util.converterObjetoParaString(objeto[7]),
+						Util.converterObjetoParaInteger(objeto[8]));
+				
+				Integer idImovel = Util.converterObjetoParaInteger(objeto[9]);				
+				
+				dto.setImovel(montarImovelOrdemServicoProgramada(idImovel));
+				dto.setHidrometro(montarHidrometroOrdemServicoProgramada(idImovel));
+				
+				programadas.add(dto);
+			}
+
+			return programadas;
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+
+	private ImovelDTO montarImovelOrdemServicoProgramada(int idImovel) throws ControladorException {
+		ClienteImovel clienteImovel = pesquisarClienteImovelOrdemServicoProgramada(idImovel);
+
+		if (clienteImovel != null &&
+			clienteImovel.getImovel() != null &&
+			clienteImovel.getCliente() != null) {
+			
+			return new ImovelDTO(clienteImovel);
+		}
+
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private ClienteImovel pesquisarClienteImovelOrdemServicoProgramada(int idImovel) throws ControladorException {
+		Filtro filtro = new FiltroClienteImovel();
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.LOCALIDADE);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.SETOR_COMERCIAL);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.QUADRA);
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.areaConstruidaFaixa");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoEsgotoSituacao");
+		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, idImovel));
+		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
+		filtro.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+
+		Collection<ClienteImovel> colecao = getControladorUtil().pesquisar(filtro, ClienteImovel.class.getName());
+
+		if (colecao != null && !colecao.isEmpty()) {
+			return colecao.iterator().next();
+		}
+
+		return null;
+	}
+	
+	private HidrometroDTO montarHidrometroOrdemServicoProgramada(int idImovel) throws ControladorException {
+		HidrometroInstalacaoHistorico instalacao = pesquisarHidrometroOrdemServicoProgramada(idImovel);
+
+		if (existeHidrometroOrdemServicoProgramada(instalacao)) {
+			return new HidrometroDTO(
+					instalacao.getHidrometro().getNumero(), 
+					instalacao.getMedicaoTipo().getId());
+		}
+
+		return null;
+	}
+
+	private boolean existeHidrometroOrdemServicoProgramada(HidrometroInstalacaoHistorico instalacao) {
+		return instalacao != null && instalacao.getHidrometro() != null && instalacao.getMedicaoTipo() != null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private HidrometroInstalacaoHistorico pesquisarHidrometroOrdemServicoProgramada(int idImovel) throws ControladorException {
+		Filtro filtro = new FiltroHidrometroInstalacaoHistorico();
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.HIDROMETRO);
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroHidrometroInstalacaoHistorico.MEDICAO_TIPO);
+		filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroInstalacaoHistorico.LIGACAO_AGUA_ID, idImovel));
+		filtro.adicionarParametro(new ParametroNulo(FiltroHidrometroInstalacaoHistorico.DATA_RETIRADA));
+
+		Collection<HidrometroInstalacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, HidrometroInstalacaoHistorico.class.getName());
+
+		if (colecao != null && !colecao.isEmpty())
+			return colecao.iterator().next();
+		else
+			return null;
+	}
 }

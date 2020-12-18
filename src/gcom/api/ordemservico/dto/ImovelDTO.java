@@ -1,5 +1,7 @@
 package gcom.api.ordemservico.dto;
 
+import gcom.cadastro.cliente.ClienteImovel;
+
 public class ImovelDTO {
 
 	private int matricula;
@@ -10,24 +12,16 @@ public class ImovelDTO {
 	private String clienteNome;
 	private String clienteCpfCnpj;
 
-	public ImovelDTO(
-			int matricula, 
-			String inscricao, 
-			String endereco, 
-			String situacaoAgua, 
-			String situacaoEsgoto, 
-			String clienteNome,
-			String clienteCpfCnpj) {
-		
+	public ImovelDTO(ClienteImovel clienteImovel) {
 		super();
-		
-		this.matricula = matricula;
-		this.inscricao = inscricao;
-		this.endereco = endereco;
-		this.situacaoAgua = situacaoAgua;
-		this.situacaoEsgoto = situacaoEsgoto;
-		this.clienteNome = clienteNome;
-		this.clienteCpfCnpj = clienteCpfCnpj;
+
+		this.matricula = clienteImovel.getImovel().getId();
+		this.inscricao = clienteImovel.getImovel().getInscricaoFormatada();
+		this.endereco = clienteImovel.getImovel().getEnderecoFormatadoAbreviado();
+		this.situacaoAgua = clienteImovel.getImovel().getLigacaoAguaSituacao().getDescricao();
+		this.situacaoEsgoto = clienteImovel.getImovel().getLigacaoEsgotoSituacao().getDescricao();
+		this.clienteNome = clienteImovel.getCliente().getNome();
+		this.clienteCpfCnpj = clienteImovel.getCliente().getCpfOuCnpjFormatado();
 	}
 
 	public int getMatricula() {

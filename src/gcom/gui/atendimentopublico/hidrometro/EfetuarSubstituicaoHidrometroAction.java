@@ -230,6 +230,7 @@ public class EfetuarSubstituicaoHidrometroAction extends GcomAction {
 		sessao.removeAttribute("hidrometroSubstituicaoHistorico");
 
 		return retorno;
+		
 	}
 	
 }

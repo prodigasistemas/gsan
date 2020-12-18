@@ -1,13 +1,13 @@
 package gcom.seguranca.acesso;
 
+import java.util.Date;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import gcom.seguranca.transacao.TabelaColuna;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.tabelaauxiliar.abreviada.TabelaAuxiliarAbreviada;
-
-import java.util.Date;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Operacao extends TabelaAuxiliarAbreviada {
 
@@ -207,8 +207,8 @@ public class Operacao extends TabelaAuxiliarAbreviada {
 	public static final Integer OPERACAO_TIPO_SERVICO_REMOVER = new Integer(747);
 	public static final Integer OPERACAO_CORTE_ADMINISTRATIVO_LIGACAO_AGUA_EFETUAR = new Integer(358);
 	public static final int OPERACAO_CORTE_ADMINISTRATIVO_LIGACAO_AGUA_EFETUAR_INT = 358;
-	public static final Integer RESTABELECIMENTO_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO = new Integer(879);
-	public static final int RESTABELECIMENTO_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT = 879;
+	public static final Integer OPERACAO_RESTABELECIMENTO_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO = new Integer(879);
+	public static final int OPERACAO_RESTABELECIMENTO_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT = 879;
 	public static final Integer OPERACAO_LEITURA_FISCALIZACAO_INFORMAR = new Integer(889);
 	public static final Integer OPERACAO_ARRECADADOR_CONTRATO_ATUALIZAR = new Integer(1044);
 	public static final Integer OPERACAO_CANCELAMENTO_RETIFICACAO_CONTA_DESFAZER = new Integer(361);
@@ -266,8 +266,8 @@ public class Operacao extends TabelaAuxiliarAbreviada {
 	public static final Integer GERAR_RESUMO_DIARIO_NEGATIVACAO = new Integer(1128);
 	public static final Integer EXECUTAR_COMANDO_NEGATIVACAO = new Integer(1129);
 	public static final Integer EXCLUIR_NEGATIVACAO_ON_LINE = new Integer(133);
-	public static final Integer OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO = new Integer(1130);
-	public static final int OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT = 1130;
+	public static final Integer OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO = new Integer(16044);
+	public static final int OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT = 16044;
 	public static final Integer OPERACAO_INFORMAR_UNIDADE_NEGOCIO_TESTEMUNHA = new Integer(1323);
 	public static final Integer OPERACAO_ATUALIZAR_DADOS_REGISTRO = new Integer(1183);
 	public static final Integer OPERACAO_ATUALIZAR_LIGACAO_AGUA = new Integer(422);
@@ -352,8 +352,10 @@ public class Operacao extends TabelaAuxiliarAbreviada {
 	public static final Integer OPERACAO_INFORMAR_PAGAMENTO_CONTRATO_PARCELAMENTO_POR_CLIENTE = 1804;
 	public static final Integer ATUALIZAR_IMPORTANCIA_LOGRADOURO = 1816;
 	public static final Integer ATUALIZAR_IMPORTANCIA_TIPO_SERVICO = 1819;
-
 	public static final int OPERACAO_SUBSTITUIR_RAMAL_DE_AGUA_EFETUAR = 16043;
+	public static final int OPERACAO_EFETUAR_LIGACAO_AGUA_COM_SUBSTITUICAO_HIDROMETRO = 16045;
+	public static final int OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_SUBSTITUICAO_HIDROMETRO = 16046;
+	public static final int OPERACAO_EFETUAR_RESTABELECIMENTO_LIGACAO_AGUA_COM_SUBSTITUICAO_HIDROMETRO = 16047;
 
 	private String descricaoAbreviada;
 	private Short indicadorRegistraTransacao;

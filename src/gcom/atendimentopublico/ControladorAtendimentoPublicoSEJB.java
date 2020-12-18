@@ -5718,11 +5718,11 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 * @author Rafael Corra
 	 * @date 29/11/2006
 	 * 
-	 * @param integracaoComercialHelper
+	 * @param helper
 	 * @throws ControladorException
 	 */
 	public void efetuarLigacaoAguaComInstalacaoHidrometro(
-			IntegracaoComercialHelper integracaoComercialHelper, Usuario usuario)
+			IntegracaoComercialHelper helper, Usuario usuario)
 			throws ControladorException {
 
 		/*
@@ -5730,199 +5730,97 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		 */
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_EFETUAR_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO,
-				integracaoComercialHelper.getLigacaoAgua().getId(),
-				integracaoComercialHelper.getLigacaoAgua().getId(),
-				new UsuarioAcaoUsuarioHelper(usuario,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+				helper.getLigacaoAgua().getId(), 
+				helper.getLigacaoAgua().getId(),
+				new UsuarioAcaoUsuarioHelper(usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
-		LigacaoAgua ligacaoAgua = integracaoComercialHelper.getLigacaoAgua();
-		Imovel imovel = integracaoComercialHelper.getImovel();
-		OrdemServico ordemServico = integracaoComercialHelper.getOrdemServico();
-		String qtdParcelas = integracaoComercialHelper.getQtdParcelas();
+		LigacaoAgua ligacaoAgua = helper.getLigacaoAgua();
+		Imovel imovel = helper.getImovel();
+		OrdemServico ordemServico = helper.getOrdemServico();
+		String qtdParcelas = helper.getQtdParcelas();
 
 		ligacaoAgua.setId(imovel.getId());
 
 		this.getControladorMicromedicao().validarImovelEmCampo(imovel.getId());
-		
+
 		if (ligacaoAgua != null && imovel != null) {
 
 			// [SB0001] Gerar Ligao de gua
-
-			// LAGU_DTIMPLANTACAO
 			ligacaoAgua.setDataImplantacao(new Date());
+			ligacaoAgua.setUltimaAlteracao(new Date());
+			ligacaoAgua.setHidrometroInstalacaoHistorico(helper.getHidrometroInstalacaoHistorico());
 
-			// LAGU_TMULTIMAALTERACAO
-			Date dataCorrente = new Date();
-			ligacaoAgua.setUltimaAlteracao(dataCorrente);
-
-			// FiltroLigacaoAgua filtroLigacaoAgua = new
-			// FiltroLigacaoAgua();
-			// filtroLigacaoAgua.adicionarParametro(new ParametroSimples(
-			// FiltroLigacaoAgua.ID, imovel.getId()));
-			// Collection colecaoLigacaoAguaBase = getControladorUtil()
-			// .pesquisar(filtroLigacaoAgua,
-			// LigacaoAgua.class.getName());
-			//
-			// if (!colecaoLigacaoAguaBase.isEmpty()) {
-			// sessionContext.setRollbackOnly();
-			// throw new ControladorException(
-			// "atencao.imovel_ja_existente", null, ""
-			// + ligacaoAgua.getId());
-			// }
-
-			// regitrando operacao
-			ligacaoAgua
-					.setHidrometroInstalacaoHistorico(integracaoComercialHelper
-							.getHidrometroInstalacaoHistorico());
-			
-			//Alterao feita por Svio Luiz
-			//Data: 25/05/2011
-			FiltroLigacaoAgua filtroLigacaoAgua = new FiltroLigacaoAgua();
-			filtroLigacaoAgua.adicionarParametro(new ParametroSimples(
-					FiltroLigacaoAgua.ID, imovel.getId()));
-			Collection colecaoLigacaoAguaBase = getControladorUtil().pesquisar(
-					filtroLigacaoAgua, LigacaoAgua.class.getName());
-
+			Filtro filtroLigacaoAgua = new FiltroLigacaoAgua();
+			filtroLigacaoAgua.adicionarParametro(new ParametroSimples(FiltroLigacaoAgua.ID, imovel.getId()));
+			Collection colecaoLigacaoAguaBase = getControladorUtil().pesquisar(filtroLigacaoAgua, LigacaoAgua.class.getName());
 			registradorOperacao.registrarOperacao(ligacaoAgua);
 			if (!colecaoLigacaoAguaBase.isEmpty()) {
 				getControladorUtil().atualizar(ligacaoAgua);
-			}else{
+			} else {
 				getControladorUtil().inserir(ligacaoAgua);
 			}
-			
 		}
 
-		Integer id = null;
-
-		HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = integracaoComercialHelper
-				.getHidrometroInstalacaoHistorico();
-
-		validacaoInstalacaoHidrometro(hidrometroInstalacaoHistorico
-				.getHidrometro().getNumero());
-
+		HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = helper.getHidrometroInstalacaoHistorico();
+		validacaoInstalacaoHidrometro(hidrometroInstalacaoHistorico.getHidrometro().getNumero());
 		registradorOperacao.registrarOperacao(hidrometroInstalacaoHistorico);
-
-		id = (Integer) getControladorUtil().inserir(
-				hidrometroInstalacaoHistorico);
+		Integer id = (Integer) getControladorUtil().inserir(hidrometroInstalacaoHistorico);
 
 		try {
 
-			// Caso o tipo de medio seja igual a Ligao de gua, atualiza as
-			// colunas da tabela LIGACAO_AGUA
-			// if
-			// (hidrometroInstalacaoHistorico.getMedicaoTipo().getId().equals(
-			// MedicaoTipo.LIGACAO_AGUA)) {
-			//				
-			// // Caso o tipo de medio seja igual a Poo, atualiza as colunas
-			// // da tabela POCO
-			// } else if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId()
-			// .equals(MedicaoTipo.POCO)) {
-			// repositorioAtendimentoPublico
-			// .atualizarHidrometroIntalacaoHistoricoImovel(
-			// hidrometroInstalacaoHistorico.getImovel()
-			// .getId(), id);
-			// }
-
 			// [SB003]Atualizar situao de hidrmetro na tabela HIDROMETRO
 			Integer situacaoHidrometro = HidrometroSituacao.INSTALADO;
-			repositorioAtendimentoPublico.atualizarSituacaoHidrometro(
-					hidrometroInstalacaoHistorico.getHidrometro().getId(),
-					situacaoHidrometro);
+			repositorioAtendimentoPublico.atualizarSituacaoHidrometro(hidrometroInstalacaoHistorico.getHidrometro().getId(), situacaoHidrometro);
 
 			hidrometroInstalacaoHistorico.setId(id);
 			hidrometroInstalacaoHistorico.setLigacaoAgua(ligacaoAgua);
 
-			ligacaoAgua
-					.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
+			ligacaoAgua.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
 
 			if (ligacaoAgua != null && imovel != null) {
 
-				// // [SB0001] Gerar Ligao de gua
-				//
-				// // LAGU_DTIMPLANTACAO
-				// ligacaoAgua.setDataImplantacao(new Date());
-				//
-				// // LAGU_TMULTIMAALTERACAO
-				// Date dataCorrente = new Date();
-				// ligacaoAgua.setUltimaAlteracao(dataCorrente);
-				//
-				// // FiltroLigacaoAgua filtroLigacaoAgua = new
-				// // FiltroLigacaoAgua();
-				// // filtroLigacaoAgua.adicionarParametro(new ParametroSimples(
-				// // FiltroLigacaoAgua.ID, imovel.getId()));
-				// // Collection colecaoLigacaoAguaBase = getControladorUtil()
-				// // .pesquisar(filtroLigacaoAgua,
-				// // LigacaoAgua.class.getName());
-				// //
-				// // if (!colecaoLigacaoAguaBase.isEmpty()) {
-				// // sessionContext.setRollbackOnly();
-				// // throw new ControladorException(
-				// // "atencao.imovel_ja_existente", null, ""
-				// // + ligacaoAgua.getId());
-				// // }
-				//
-				// // regitrando operacao
-				// ligacaoAgua.setOperacaoEfetuada(operacaoEfetuada);
-				// ligacaoAgua.adicionarUsuario(usuario,
-				// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-				// registradorOperacao.registrarOperacao(ligacaoAgua);
-				//
-				// getControladorUtil().inserir(ligacaoAgua);
-
-				repositorioAtendimentoPublico
-						.atualizarHidrometroInstalacaoHistoricoLigacaoAgua(
-								hidrometroInstalacaoHistorico.getLigacaoAgua()
-										.getId(), id);
+				repositorioAtendimentoPublico.atualizarHidrometroInstalacaoHistoricoLigacaoAgua(
+						hidrometroInstalacaoHistorico.getLigacaoAgua().getId(), id);
 
 				LigacaoAguaSituacao ligacaoAguaSituacao = new LigacaoAguaSituacao();
 				ligacaoAguaSituacao.setId(LigacaoAguaSituacao.LIGADO);
 
-				getControladorImovel()
-						.atualizarImovelExecucaoOrdemServicoLigacaoAgua(imovel,
-								ligacaoAguaSituacao);
+				getControladorImovel().atualizarImovelExecucaoOrdemServicoLigacaoAgua(imovel, ligacaoAguaSituacao);
 
 				if (imovel.getLigacaoEsgotoSituacao() != null
-						&& imovel.getLigacaoEsgotoSituacao().getId().intValue() == LigacaoEsgotoSituacao.LIG_FORA_DE_USO
-								.intValue()) {
+						&& imovel.getLigacaoEsgotoSituacao().getId().intValue() == LigacaoEsgotoSituacao.LIG_FORA_DE_USO.intValue()) {
 
 					LigacaoEsgotoSituacao ligacaoEsgotoSituacao = new LigacaoEsgotoSituacao();
 					ligacaoEsgotoSituacao.setId(LigacaoEsgotoSituacao.LIGADO);
 
 					imovel.setUltimaAlteracao(new Date());
 					// [SB0002] Atualizar Imvel
-					getControladorImovel()
-							.atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(
-									imovel, ligacaoEsgotoSituacao);
+					getControladorImovel().atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(imovel, ligacaoEsgotoSituacao);
 				}
 			}
 			if (ordemServico != null) {
 				registradorOperacao.registrarOperacao(ordemServico);
 
-				if (!integracaoComercialHelper.isVeioEncerrarOS()
-						&& ordemServico.getServicoTipo().getDebitoTipo() != null) {
+				if (!helper.isVeioEncerrarOS() && ordemServico.getServicoTipo().getDebitoTipo() != null) {
 
-					this.getControladorOrdemServico()
-							.verificarOrdemServicoControleConcorrencia(
-									ordemServico);
+					this.getControladorOrdemServico().verificarOrdemServicoControleConcorrencia(ordemServico);
 					getControladorOrdemServico().atualizaOSGeral(ordemServico);
 				}
 
-				if (ordemServico.getServicoTipo().getDebitoTipo() != null
-						&& ordemServico.getServicoNaoCobrancaMotivo() == null) {
+				if (ordemServico.getServicoTipo().getDebitoTipo() != null && ordemServico.getServicoNaoCobrancaMotivo() == null) {
 					getControladorOrdemServico().gerarDebitoOrdemServico(
-							ordemServico.getId(),
-							ordemServico.getServicoTipo().getDebitoTipo()
-									.getId(), ordemServico.getValorAtual(),
-							new Integer(qtdParcelas),
+							ordemServico.getId(), 
+							ordemServico.getServicoTipo().getDebitoTipo().getId(),
+							ordemServico.getValorAtual(), 
+							new Integer(qtdParcelas), 
 							ordemServico.getPercentualCobranca().toString(),
-							integracaoComercialHelper.getUsuarioLogado());
+							helper.getUsuarioLogado());
 				}
 			}
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
-
 	}
 
 	/**
@@ -7625,66 +7523,51 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 * @author Svio Luiz
 	 * @date 29/01/2008
 	 * 
-	 * @param integracaoComercialHelper
+	 * @param helper
 	 * @throws ControladorException
 	 */
-	public void efetuarReligacaoAguaComInstalacaoHidrometro(
-			IntegracaoComercialHelper integracaoComercialHelper, Usuario usuario)
-			throws ControladorException {
-
+	public void efetuarReligacaoAguaComInstalacaoHidrometro(IntegracaoComercialHelper helper, Usuario usuario) throws ControladorException {
 		/*
 		 * [UC0107] Registrar Transao
 		 */
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO,
-				new UsuarioAcaoUsuarioHelper(usuario,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+				new UsuarioAcaoUsuarioHelper(usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 		Operacao operacao = new Operacao();
-		operacao
-				.setId(Operacao.OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO);
+		operacao.setId(Operacao.OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO);
 
 		OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
 		operacaoEfetuada.setOperacao(operacao);
 
-		LigacaoAgua ligacaoAgua = integracaoComercialHelper.getLigacaoAgua();
-		Imovel imovel = integracaoComercialHelper.getImovel();
-		OrdemServico ordemServico = integracaoComercialHelper.getOrdemServico();
-		String qtdParcelas = integracaoComercialHelper.getQtdParcelas();
+		LigacaoAgua ligacaoAgua = helper.getLigacaoAgua();
+		Imovel imovel = helper.getImovel();
+		OrdemServico ordemServico = helper.getOrdemServico();
+		String qtdParcelas = helper.getQtdParcelas();
 
 		this.getControladorMicromedicao().validarImovelEmCampo(imovel.getId());
-		
+
 		if (ligacaoAgua != null && imovel != null) {
-
-			Integer id = null;
-
 			// [SB0003] Gerar Histrico de Instalao do Hidrometro
+			HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = helper.getHidrometroInstalacaoHistorico();
 
-			HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = integracaoComercialHelper
-					.getHidrometroInstalacaoHistorico();
-
-			validacaoInstalacaoHidrometro(hidrometroInstalacaoHistorico
-					.getHidrometro().getNumero());
+			validacaoInstalacaoHidrometro(hidrometroInstalacaoHistorico.getHidrometro().getNumero());
 
 			hidrometroInstalacaoHistorico.setOperacaoEfetuada(operacaoEfetuada);
-			hidrometroInstalacaoHistorico.adicionarUsuario(usuario,
-					UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-			registradorOperacao
-					.registrarOperacao(hidrometroInstalacaoHistorico);
+			hidrometroInstalacaoHistorico.adicionarUsuario(usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+			registradorOperacao.registrarOperacao(hidrometroInstalacaoHistorico);
 
-			id = (Integer) getControladorUtil().inserir(
-					hidrometroInstalacaoHistorico);
+			Integer id = (Integer) getControladorUtil().inserir(hidrometroInstalacaoHistorico);
 
 			try {
 
 				// [SB004] Atualizar Hidrmetro
 				Integer situacaoHidrometro = HidrometroSituacao.INSTALADO;
-				repositorioAtendimentoPublico.atualizarSituacaoHidrometro(
-						hidrometroInstalacaoHistorico.getHidrometro().getId(),
-						situacaoHidrometro);
+				repositorioAtendimentoPublico.atualizarSituacaoHidrometro(hidrometroInstalacaoHistorico.getHidrometro().getId(), situacaoHidrometro);
 
 				hidrometroInstalacaoHistorico.setId(id);
 				hidrometroInstalacaoHistorico.setLigacaoAgua(ligacaoAgua);
+				ligacaoAgua.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
 
 				// [SB0001] Atualizar Imvel/Ligao de gua
 
@@ -7693,53 +7576,38 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 				// [FS0007] - Atualizao realizada por outrio usurio
 				FiltroLigacaoAgua filtroLigacaoAgua = new FiltroLigacaoAgua();
-				filtroLigacaoAgua.adicionarParametro(new ParametroSimples(
-						FiltroLigacaoAgua.ID, ligacaoAgua.getId()));
-				Collection colecaoLigacaoAguaBase = getControladorUtil()
-						.pesquisar(filtroLigacaoAgua,
-								LigacaoAgua.class.getName());
+				filtroLigacaoAgua.adicionarParametro(new ParametroSimples(FiltroLigacaoAgua.ID, ligacaoAgua.getId()));
+				Collection colecaoLigacaoAguaBase = getControladorUtil().pesquisar(filtroLigacaoAgua, LigacaoAgua.class.getName());
 
-				if (colecaoLigacaoAguaBase == null
-						|| colecaoLigacaoAguaBase.isEmpty()) {
+				if (colecaoLigacaoAguaBase == null || colecaoLigacaoAguaBase.isEmpty()) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.atualizacao.timestamp");
+					throw new ControladorException("atencao.atualizacao.timestamp");
 				} else {
-					LigacaoAgua ligacaoAguaBase = (LigacaoAgua) Util
-							.retonarObjetoDeColecao(colecaoLigacaoAguaBase);
-					if (ligacaoAguaBase.getUltimaAlteracao().after(
-							ligacaoAgua.getUltimaAlteracao())) {
+					LigacaoAgua ligacaoAguaBase = (LigacaoAgua) Util.retonarObjetoDeColecao(colecaoLigacaoAguaBase);
+					if (ligacaoAguaBase.getUltimaAlteracao().after(ligacaoAgua.getUltimaAlteracao())) {
 						sessionContext.setRollbackOnly();
-						throw new ControladorException(
-								"atencao.atualizacao.timestamp");
+						throw new ControladorException("atencao.atualizacao.timestamp");
 					}
 				}
 
 				FiltroImovel filtroImovel = new FiltroImovel();
-				filtroImovel.adicionarParametro(new ParametroSimples(
-						FiltroImovel.ID, ligacaoAgua.getId()));
-				Collection colecaoImovelBase = getControladorUtil().pesquisar(
-						filtroImovel, Imovel.class.getName());
+				filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, ligacaoAgua.getId()));
+				Collection colecaoImovelBase = getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName());
 
 				if (colecaoImovelBase == null || colecaoImovelBase.isEmpty()) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.atualizacao.timestamp");
+					throw new ControladorException("atencao.atualizacao.timestamp");
 				} else {
-					Imovel imovelBase = (Imovel) Util
-							.retonarObjetoDeColecao(colecaoImovelBase);
-					if (imovelBase.getUltimaAlteracao().after(
-							ligacaoAgua.getUltimaAlteracao())) {
+					Imovel imovelBase = (Imovel) Util.retonarObjetoDeColecao(colecaoImovelBase);
+					if (imovelBase.getUltimaAlteracao().after(ligacaoAgua.getUltimaAlteracao())) {
 						sessionContext.setRollbackOnly();
-						throw new ControladorException(
-								"atencao.atualizacao.timestamp");
+						throw new ControladorException("atencao.atualizacao.timestamp");
 					}
 				}
 
 				// regitrando operacao
 				ligacaoAgua.setOperacaoEfetuada(operacaoEfetuada);
-				ligacaoAgua.adicionarUsuario(usuario,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+				ligacaoAgua.adicionarUsuario(usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 				registradorOperacao.registrarOperacao(ligacaoAgua);
 
 				getControladorUtil().atualizar(ligacaoAgua);
@@ -7752,47 +7620,39 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			LigacaoAguaSituacao ligacaoAguaSituacao = new LigacaoAguaSituacao();
 			ligacaoAguaSituacao.setId(LigacaoAguaSituacao.LIGADO);
 
-			getControladorImovel()
-					.atualizarImovelExecucaoOrdemServicoLigacaoAgua(imovel,
-							ligacaoAguaSituacao);
+			getControladorImovel().atualizarImovelExecucaoOrdemServicoLigacaoAgua(imovel, ligacaoAguaSituacao);
 
 			if (imovel.getLigacaoEsgotoSituacao() != null
-					&& imovel.getLigacaoEsgotoSituacao().getId().intValue() == LigacaoEsgotoSituacao.LIG_FORA_DE_USO
-							.intValue()) {
+					&& imovel.getLigacaoEsgotoSituacao().getId().intValue() == LigacaoEsgotoSituacao.LIG_FORA_DE_USO.intValue()) {
 
 				LigacaoEsgotoSituacao ligacaoEsgotoSituacao = new LigacaoEsgotoSituacao();
 				ligacaoEsgotoSituacao.setId(LigacaoEsgotoSituacao.LIGADO);
 
 				imovel.setUltimaAlteracao(new Date());
 
-				getControladorImovel()
-						.atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(
-								imovel, ligacaoEsgotoSituacao);
+				getControladorImovel().atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(imovel, ligacaoEsgotoSituacao);
 			}
 		}
 
 		// [SB0002] Atualizar Ordem de Servio
 		ordemServico.setOperacaoEfetuada(operacaoEfetuada);
-		ordemServico.adicionarUsuario(usuario,
-				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+		ordemServico.adicionarUsuario(usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(ordemServico);
 
-		if (!integracaoComercialHelper.isVeioEncerrarOS()
-				&& ordemServico.getServicoTipo().getDebitoTipo() != null) {
+		if (!helper.isVeioEncerrarOS() && ordemServico.getServicoTipo().getDebitoTipo() != null) {
 
-			this.getControladorOrdemServico()
-					.verificarOrdemServicoControleConcorrencia(ordemServico);
+			this.getControladorOrdemServico().verificarOrdemServicoControleConcorrencia(ordemServico);
 			getControladorOrdemServico().atualizaOSGeral(ordemServico);
 		}
 
-		if (ordemServico.getServicoTipo().getDebitoTipo() != null
-				&& ordemServico.getServicoNaoCobrancaMotivo() == null) {
+		if (ordemServico.getServicoTipo().getDebitoTipo() != null && ordemServico.getServicoNaoCobrancaMotivo() == null) {
 			getControladorOrdemServico().gerarDebitoOrdemServico(
-					ordemServico.getId(),
+					ordemServico.getId(), 
 					ordemServico.getServicoTipo().getDebitoTipo().getId(),
-					ordemServico.getValorAtual(), new Integer(qtdParcelas),
+					ordemServico.getValorAtual(), 
+					new Integer(qtdParcelas), 
 					ordemServico.getPercentualCobranca().toString(),
-					integracaoComercialHelper.getUsuarioLogado());
+					helper.getUsuarioLogado());
 		}
 
 	}

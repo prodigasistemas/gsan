@@ -4,414 +4,660 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
+import gcom.api.ordemservico.dto.HidrometroInstalacaoDTO;
+import gcom.api.ordemservico.dto.LigacaoAguaDTO;
 import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
+import gcom.atendimentopublico.ligacaoagua.FiltroLigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
+import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
+import gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento;
+import gcom.atendimentopublico.registroatendimento.AtendimentoRelacaoTipo;
+import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade;
+import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
+import gcom.atendimentopublico.registroatendimento.bean.ObterDadosRegistroAtendimentoHelper;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.localidade.Quadra;
+import gcom.cadastro.localidade.bean.IntegracaoQuadraFaceHelper;
 import gcom.fachada.Fachada;
-import gcom.gui.ActionServletException;
-import gcom.micromedicao.hidrometro.FiltroHidrometro;
 import gcom.micromedicao.hidrometro.Hidrometro;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.hidrometro.HidrometroLocalInstalacao;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
+import gcom.micromedicao.hidrometro.HidrometroSituacao;
 import gcom.micromedicao.medicao.MedicaoTipo;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.FachadaException;
 import gcom.util.Util;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
-public class ProcessarRequisicaoOrdemServicoBO {
+public class ProcessarRequisicaoOrdemServicoBO{
 
 	private Fachada fachada = Fachada.getInstancia();
+	
+	private OrdemServicoDTO dto = null;
+	private OrdemServico ordemServico = null;
+	private Usuario usuario = null;
+	private Imovel imovel = null;
+	private IntegracaoComercialHelper helper = null;
+	private Map<String, String> resposta;
+	
+	public Map<String, String> execute(OrdemServicoDTO dto) {
+		this.dto = dto;
 
-	private static ProcessarRequisicaoOrdemServicoBO instancia;
-
-	public static ProcessarRequisicaoOrdemServicoBO getInstancia() {
-		if (instancia == null) {
-			instancia = new ProcessarRequisicaoOrdemServicoBO();
-		}
-		return instancia;
-	}
-
-	public boolean execute(OrdemServicoDTO dto) {
-		OrdemServico ordemServico = fachada.recuperaOSPorId(dto.getId());
-		Usuario usuario = fachada.pesquisarUsuario(dto.getIdUsuarioEncerramento());
-		Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
+		setarDadosEncerramento();
 
 		Integer idOperacao = dto.getOperacao();
-
-		if (idOperacao != null) {
+		
+		if (idOperacao != null && !resposta.containsKey("msg")) {
 
 			switch (idOperacao) {
 
 			case (Operacao.OPERACAO_RELIGACAO_AGUA_EFETUAR_INT):
-				return operacaoReligacaoAguaEfetuar(ordemServico, imovel, usuario, dto);
+				executarEncerramentoReligacaoAgua();
+				break;
 
 			case (Operacao.OPERACAO_INSTALACAO_HIDROMETRO_EFETUAR_INT):
-				return operacaoInstalacaoHidrometroEfetuar(ordemServico, imovel, usuario, dto);
+				executarEncerramentoInstalacaoHidrometro();
+				break;
 
 			case (Operacao.OPERACAO_SUBSTITUICAO_HIDROMETRO_EFETUAR_INT):
-				return operacaoSubstituicaoHidrometroEfetuar(ordemServico, imovel, usuario, dto);
-				
+				executarEncerramentoSubstituicaoHidrometro();
+				break;
+
 			case (Operacao.OPERACAO_RESTABELECIMENTO_LIGACAO_AGUA_EFETUAR_INT):
+				executarEncerramento();
 				break;
 
 			case (Operacao.OPERACAO_LIGACAO_AGUA_EFETUAR_INT):
-				return operacaoLigacaoAguaEfetuar(ordemServico, imovel, usuario, dto);
-			}
-		}
-		
-		return false;
-	}
+				executarEncerramentoLigacaoAgua();
+				break;
 
-	private boolean operacaoSubstituicaoHidrometroEfetuar2(OrdemServico ordemServico, Imovel imovel, Usuario usuario, OrdemServicoDTO dto) {
-		
-		        
-        Integer localArmazenagemHidrometro = null;
-          
-        // caso o hidrometro esteja extraviado, nao pega o local de armazenagem
-        //situacaodohidrometro extraviado ???
-        if(dto.getHidrometro().getSituacao() != null ){  
-        	localArmazenagemHidrometro = dto.getHidrometro().getLocalArmazenagem();        	
-        }
-        
-       HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = new HidrometroInstalacaoHistorico();
-		
-       if (dto.getHidrometro().getNumero() != null) {
-
-			//Constrói o filtro para pesquisa do Hidrômetro
-			FiltroHidrometro filtroHidrometro = new FiltroHidrometro();
-			filtroHidrometro.adicionarParametro(new ParametroSimples(FiltroHidrometro.NUMERO_HIDROMETRO, dto.getHidrometro().getNumero() ));
-	        
-			//Realiza a pesquisa do Hidrômetro
-			Collection colecaoHidrometro = null;
-			colecaoHidrometro = fachada.pesquisar(filtroHidrometro,Hidrometro.class.getName());
+			case (Operacao.OPERACAO_EFETUAR_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT):
+				executarEncerramentoLigacaoAguaComInstalacaoHidrometro();
+			break;
 			
-			//verifica se o número do hidrômetro não está cadastrado
-			if (colecaoHidrometro == null || colecaoHidrometro.isEmpty()) {
-				throw new ActionServletException("atencao.numero_hidrometro_inexistente", null, dto.getHidrometro().getNumero());
-			}
+			case (Operacao.OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT):
+				executarEncerramentoReligacaoAguaComInstalacaoHidrometro();
+				break;
 			
-			Iterator iteratorHidrometro = colecaoHidrometro.iterator();
-			Hidrometro hidrometro = (Hidrometro) iteratorHidrometro.next();
-			
-			FiltroImovel filtroImovel = new FiltroImovel();
-			filtroImovel.adicionarCaminhoParaCarregamentoEntidade("localidade.hidrometroLocalArmazenagem");
-			filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
-			
-			Collection colecaoImoveis = fachada.pesquisar(filtroImovel, Imovel.class.getName());
-			
-			Imovel imovelComLocalidade = (Imovel) Util.retonarObjetoDeColecao(colecaoImoveis);
-			
-			if (imovelComLocalidade != null && imovelComLocalidade.getLocalidade().getHidrometroLocalArmazenagem() != null &&
-					hidrometro.getHidrometroLocalArmazenagem() != null &&
-				!hidrometro.getHidrometroLocalArmazenagem().getId().equals(imovelComLocalidade.getLocalidade().getHidrometroLocalArmazenagem().getId())) {
-					throw new ActionServletException("atencao.hidrometro_local_armazenagem_imovel_diferente_hidrometro_local_armazenagem_hidrometro");
-			}
-			
-			hidrometroInstalacaoHistorico.setHidrometro(hidrometro);
-		}
-
-		//Atualiza a entidade com os valores do formulário
-        hidrometroInstalacaoHistorico = setFormValues(hidrometroInstalacaoHistorico,dto);
-		
-		HidrometroInstalacaoHistorico hidrometroSubstituicaoHistorico = new HidrometroInstalacaoHistorico();
-		
-			// Tipo medição - Ligação Água
-		if (ordemServico.getRegistroAtendimento() == null || ordemServico.getRegistroAtendimento().getSolicitacaoTipoEspecificacao()
-				.getIndicadorLigacaoAgua().equals(MedicaoTipo.LIGACAO_AGUA.shortValue())) {
-			LigacaoAgua ligacaoAgua = imovel.getLigacaoAgua();
-			hidrometroSubstituicaoHistorico = ligacaoAgua.getHidrometroInstalacaoHistorico();
-		
-			// Tipo medição- Poço
-		} else {
-			hidrometroSubstituicaoHistorico = imovel.getHidrometroInstalacaoHistorico();
-		}
-
-		Date dataRetirada = Util.converteStringParaDate(dto.getHidrometro().getDataRetirada());
-		
-		hidrometroSubstituicaoHistorico.setDataRetirada(dataRetirada);
-		
-		if (dto.getHidrometro().getLeituraRetirada() != null){
-			hidrometroSubstituicaoHistorico.setNumeroLeituraRetirada(dto.getHidrometro().getLeituraRetirada());
-		}
-		
-		hidrometroSubstituicaoHistorico.setUltimaAlteracao(new Date());
+			case (Operacao.OPERACAO_RESTABELECIMENTO_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT):
+				executarEncerramentoRestabelecimentoLigacaoAguaComInstalacaoHidrometro();
+				break;
 				
-		ordemServico.setIndicadorComercialAtualizado(ConstantesSistema.SIM);
-		ordemServico.setValorAtual(ordemServico.getValorOriginal());
-		ordemServico.setPercentualCobranca(new BigDecimal(100));
-		ordemServico.setUltimaAlteracao(new Date());
-		
-			IntegracaoComercialHelper integracaoComercialHelper = new IntegracaoComercialHelper();
-		
-			integracaoComercialHelper.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
-			integracaoComercialHelper.setHidrometroSubstituicaoHistorico(hidrometroSubstituicaoHistorico);
-			integracaoComercialHelper.setSituacaoHidrometroSubstituido(dto.getHidrometro().getSituacao().toString());
-		if(localArmazenagemHidrometro != null){
-			integracaoComercialHelper.setLocalArmazenagemHidrometro(localArmazenagemHidrometro);
-		}
-			integracaoComercialHelper.setMatriculaImovel(imovel.getMatriculaFormatada());
-			integracaoComercialHelper.setOrdemServico(ordemServico);
-			integracaoComercialHelper.setQtdParcelas("1");
-			integracaoComercialHelper.setUsuarioLogado(usuario);
-			integracaoComercialHelper.setVeioEncerrarOS(Boolean.TRUE);	
+			case (Operacao.OPERACAO_EFETUAR_LIGACAO_AGUA_COM_SUBSTITUICAO_HIDROMETRO):
+				executarEncerramentoLigacaoAguaComSubstituicaoHidrometro();
+				break;
 			
-			fachada.validacaoSubstituicaoHidrometro(imovel.getMatriculaFormatada(),hidrometroInstalacaoHistorico.getHidrometro().getNumero(), dto.getHidrometro().getSituacao().toString());
+			case (Operacao.OPERACAO_EFETUAR_RELIGACAO_AGUA_COM_SUBSTITUICAO_HIDROMETRO):
+				executarEncerramentoReligacaoAguaComSubstituicaoHidrometro();
+				break;
+			
+			case (Operacao.OPERACAO_EFETUAR_RESTABELECIMENTO_LIGACAO_AGUA_COM_SUBSTITUICAO_HIDROMETRO):
+				executarEncerramentoRestabelecimentoLigacaoAguaComSubstituicaoHidrometro();
+				break;
+			}
+		}
 
-			fachada.atualizarOSViaApp(ordemServico.getServicoTipo().getId(), integracaoComercialHelper, usuario);	
-				
-		
-		return false;
+		return resposta;
 	}
+	
+	/*
+	 * INÍCIO DOS MÉTODOS DE ENCERRAMENTO
+	 */
+	private void executarEncerramento() {
+		try {
+			encerrarOrdemServico();
 
-	protected boolean operacaoReligacaoAguaEfetuar(OrdemServico ordemServico, Imovel imovel, Usuario usuario, OrdemServicoDTO ordemServicoDTO) {
+			if (existeRegistroAtendimento()) {
+				encerrarRegistroAtendimento();
+			}
+
+		} catch (FachadaException e) {
+			resposta.put("msg", e.getMessage());
+		}
+	}
+	
+	private void encerrarOrdemServico() {
+		try {
+			fachada.encerrarOSComExecucaoSemReferencia(
+					ordemServico.getId(),
+					ordemServico.getDataEncerramento(),
+					usuario,
+					dto.getMotivoEncerramento().toString(),
+					new Date(),
+					dto.getParecerEncerramento(),
+					"",
+					"",
+					null,
+					helper,
+					ordemServico.getServicoTipo().getId().toString(),
+					null,
+					null,
+					"",
+					null,
+					null,
+					ConstantesSistema.ACEITO);
+			
+		} catch (NumberFormatException e) {
+			throw new NumberFormatException(e.getMessage());
+			
+		} catch (FachadaException e) {
+			throw new FachadaException(e.getMessage());
+		}
+	}
+	
+	private void encerrarRegistroAtendimento() {
+		RegistroAtendimento registroAtendimento = montarRegistroAtendimento();
+		RegistroAtendimentoUnidade unidade = montarRegistroAtendimentoUnidade(registroAtendimento);
+
+		ObterDadosRegistroAtendimentoHelper registroAtendimentoHelper = fachada.obterDadosRegistroAtendimento(registroAtendimento.getId());
+
+		Integer idDebitoTipo = null;
+		BigDecimal valorAtual = null;
+		Integer quantidadeParcelas = null;
+		String percentualCobranca = null;
+
+		SolicitacaoTipoEspecificacao especificacao = registroAtendimentoHelper.getRegistroAtendimento().getSolicitacaoTipoEspecificacao();
+		if (especificacao != null && especificacao.getDebitoTipo() != null) {
+			idDebitoTipo = especificacao.getDebitoTipo().getId();
+			valorAtual = ordemServico.getValorAtual();
+			quantidadeParcelas = 1;
+			percentualCobranca = "100";
+		}
 
 		try {
+			
+			fachada.encerrarRegistroAtendimento(
+					registroAtendimento, 
+					unidade, 
+					usuario, 
+					idDebitoTipo, 
+					valorAtual, 
+					quantidadeParcelas, 
+					percentualCobranca,
+					false, 
+					null, 
+					false);
+			
+		} catch (FachadaException e) {
+			throw new FachadaException(e.getMessage());
+		}
+	}
+	
+	/*
+	 * INÍCIO DOS MÉTODOS DE OPERAÇÕES
+	 */
+	private void executarEncerramentoReligacaoAgua() {
+		try {
+			LigacaoAgua ligacaoAgua = obterLigacaoAgua();
+			ligacaoAgua.setDataReligacao(ordemServico.getDataEncerramento());
+			helper.setLigacaoAgua(ligacaoAgua);
+
+			executarEncerramento();
+		} catch (FachadaException e) {
+			resposta.put("msg", e.getMessage());
+		}
+
+	}
+	
+	private void executarEncerramentoInstalacaoHidrometro() {
+		try {
+			HidrometroInstalacaoHistorico instalacao = montarDadosHidrometroInstalacao();
+			helper.setHidrometroInstalacaoHistorico(instalacao); 
+		
+			executarEncerramento();
+		} catch (FachadaException e) {
+			resposta.put("msg", e.getMessage());
+		}
+	}
+	
+	private void executarEncerramentoSubstituicaoHidrometro() {
+		try {
+			HidrometroInstalacaoHistorico instalacao = montarDadosHidrometroInstalacao();
+			HidrometroInstalacaoHistorico substituicao = montarDadosHidrometroSubstituicao();
+
+			helper.setHidrometroInstalacaoHistorico(instalacao);
+			helper.setHidrometroSubstituicaoHistorico(substituicao);
+			helper.setSituacaoHidrometroSubstituido(dto.getHidrometro().getSituacao().toString());
+
+			if (hidrometroNaoExtraviado()) {
+				helper.setLocalArmazenagemHidrometro(dto.getHidrometro().getLocalArmazenagem());
+			}
+
+			executarEncerramento();
+		} catch (FachadaException e) {
+			resposta.put("msg", e.getMessage());
+		}
+	}
+	
+	private void executarEncerramentoLigacaoAgua() {
+		try {
+			LigacaoAguaDTO ligacaoAguaDTO = dto.getLigacaoAgua();
+
+			LigacaoAgua ligacaoAgua = new LigacaoAgua();
+			ligacaoAgua.setImovel(imovel);
+			ligacaoAgua.setDataLigacao(ordemServico.getDataEncerramento());
+			ligacaoAgua.setLigacaoAguaDiametro(ligacaoAguaDTO.getDiametro());
+			ligacaoAgua.setLigacaoAguaMaterial(ligacaoAguaDTO.getMaterial());
+			ligacaoAgua.setLigacaoAguaPerfil(ligacaoAguaDTO.getPerfil());
+			ligacaoAgua.setRamalLocalInstalacao(ligacaoAguaDTO.getLocalInstalacaoRamal());
+			ligacaoAgua.setProfundidadeRamal(ligacaoAguaDTO.getProfundidadeRamal());
+			ligacaoAgua.setDistanciaInstalacaoRamal(ligacaoAguaDTO.getDistanciaInstalacaoRamal());
+			ligacaoAgua.setPavimentoRua(ligacaoAguaDTO.getPavimentoRua());
+			ligacaoAgua.setPavimentoCalcada(ligacaoAguaDTO.getPavimentoCalcada());
+			ligacaoAgua.setLigacaoOrigem(ligacaoAguaDTO.getOrigem());
+			ligacaoAgua.setNumeroLacre(ligacaoAguaDTO.getLacre());
+
+			helper.setLigacaoAgua(ligacaoAgua);
+
+			executarEncerramento();
+		} catch (FachadaException e) {
+			resposta.put("msg", e.getMessage());
+		}
+	}
+	
+	private void executarEncerramentoLigacaoAguaComInstalacaoHidrometro() {
+		try {
+			LigacaoAgua ligacaoAgua = montarDadosLigacaoAgua();
+			HidrometroInstalacaoHistorico instalacao = montarDadosHidrometroInstalacao();
+			instalacao.setLigacaoAgua(ligacaoAgua);
+
+			helper.setLigacaoAgua(ligacaoAgua);
+			helper.setHidrometroInstalacaoHistorico(instalacao);
+
+			executarEncerramento();
+		} catch (Exception e) {
+			resposta.put("msg", e.getMessage());
+		}
+	}
+	
+	private void executarEncerramentoReligacaoAguaComInstalacaoHidrometro() {
+		try {
+			LigacaoAgua ligacaoAgua = obterLigacaoAgua();
+			ligacaoAgua.setDataReligacao(ordemServico.getDataEncerramento());
+			
+			HidrometroInstalacaoHistorico instalacao = montarDadosHidrometroInstalacao();
+			instalacao.setLigacaoAgua(ligacaoAgua);
+
+			helper.setLigacaoAgua(ligacaoAgua);
+			helper.setHidrometroInstalacaoHistorico(instalacao);
+
+			executarEncerramento();
+		} catch (Exception e) {
+			resposta.put("msg", e.getMessage());
+		}
+	}
+
+	private void executarEncerramentoRestabelecimentoLigacaoAguaComInstalacaoHidrometro() {
+		try {
+			validarRestabelecimentoLigacaoAguaComInstalacaoHidrometro();
+
+			LigacaoAgua ligacaoAgua = obterLigacaoAgua();
+			ligacaoAgua.setDataRestabelecimentoAgua(ordemServico.getDataEncerramento());
+			
+			HidrometroInstalacaoHistorico instalacao = montarDadosHidrometroInstalacao();
+			instalacao.setLigacaoAgua(ligacaoAgua);
+
+			helper.setLigacaoAgua(ligacaoAgua);
+			helper.setHidrometroInstalacaoHistorico(instalacao);
+
+			executarEncerramento();
+		} catch (Exception e) {
+			resposta.put("msg", e.getMessage());
+		}
+	}
+	
+	private void executarEncerramentoLigacaoAguaComSubstituicaoHidrometro() {
+		try {
+			LigacaoAgua ligacaoAgua = montarDadosLigacaoAgua();
+
+			HidrometroInstalacaoHistorico instalacao = montarDadosHidrometroInstalacao();
+			instalacao.setLigacaoAgua(ligacaoAgua);
+
+			HidrometroInstalacaoHistorico substituicao = montarDadosHidrometroSubstituicao();
+
+			if (hidrometroNaoExtraviado()) {
+				helper.setLocalArmazenagemHidrometro(dto.getHidrometro().getLocalArmazenagem());
+			}
+
+			helper.setLigacaoAgua(ligacaoAgua);
+			helper.setHidrometroInstalacaoHistorico(instalacao);
+			helper.setHidrometroSubstituicaoHistorico(substituicao);
+			helper.setSituacaoHidrometroSubstituido(dto.getHidrometro().getSituacao().toString());
+
+			executarEncerramento();
+		} catch (Exception e) {
+			resposta.put("msg", e.getMessage());
+		}
+	}
+	
+	private void executarEncerramentoReligacaoAguaComSubstituicaoHidrometro() {
+		try {
+			LigacaoAgua ligacaoAgua = obterLigacaoAgua();
+			ligacaoAgua.setDataReligacao(ordemServico.getDataEncerramento());
+
+			HidrometroInstalacaoHistorico instalacao = montarDadosHidrometroInstalacao();
+			instalacao.setLigacaoAgua(ligacaoAgua);
+
+			HidrometroInstalacaoHistorico substituicao = montarDadosHidrometroSubstituicao();
+
+			if (hidrometroNaoExtraviado()) {
+				helper.setLocalArmazenagemHidrometro(dto.getHidrometro().getLocalArmazenagem());
+			}
+
+			helper.setLigacaoAgua(ligacaoAgua);
+			helper.setHidrometroInstalacaoHistorico(instalacao);
+			helper.setHidrometroSubstituicaoHistorico(substituicao);
+			helper.setSituacaoHidrometroSubstituido(dto.getHidrometro().getSituacao().toString());
+
+			executarEncerramento();
+		} catch (Exception e) {
+			resposta.put("msg", e.getMessage());
+		}
+	}
+	
+	private void executarEncerramentoRestabelecimentoLigacaoAguaComSubstituicaoHidrometro() {
+		try {
+			validarRestabelecimentoLigacaoAguaComInstalacaoHidrometro();
+
+			LigacaoAgua ligacaoAgua = obterLigacaoAgua();
+			ligacaoAgua.setDataRestabelecimentoAgua(ordemServico.getDataEncerramento());
+
+			HidrometroInstalacaoHistorico instalacao = montarDadosHidrometroInstalacao();
+			instalacao.setLigacaoAgua(ligacaoAgua);
+
+			HidrometroInstalacaoHistorico substituicao = montarDadosHidrometroSubstituicao();
+
+			if (hidrometroNaoExtraviado()) {
+				helper.setLocalArmazenagemHidrometro(dto.getHidrometro().getLocalArmazenagem());
+			}
+
+			helper.setLigacaoAgua(ligacaoAgua);
+			helper.setHidrometroInstalacaoHistorico(instalacao);
+			helper.setHidrometroSubstituicaoHistorico(substituicao);
+			helper.setSituacaoHidrometroSubstituido(dto.getHidrometro().getSituacao().toString());
+
+			executarEncerramento();
+		} catch (Exception e) {
+			resposta.put("msg", e.getMessage());
+		}
+	}
+	
+	/*
+	 * INÍCIO DOS MÉTODOS AUXILIARES
+	 */
+	private void setarDadosEncerramento() {
+		
+		resposta = new HashMap<String, String>();
+		
+		try {
+			ordemServico = fachada.recuperaOSPorId(dto.getId());
+			if (ordemServico == null) {
+				resposta.put("msg", "Ordem de Serviço não encontrada");
+				return;
+			}
 			ordemServico.setIndicadorComercialAtualizado(ConstantesSistema.SIM);
-			ordemServico.setValorAtual(ordemServico.getValorOriginal());
+			ordemServico.setValorAtual(dto.getServicoTipoValor());
 			ordemServico.setPercentualCobranca(new BigDecimal(100));
+			ordemServico.setDataEncerramento(Util.converterStringParaDateComDataETempo(dto.getDataEncerramento()));
+			ordemServico.setUltimaAlteracao(new Date());
 	
-			Date data = Util.converteStringParaDate(ordemServicoDTO.getDataEncerramento());
-			LigacaoAgua ligacaoAgua = new LigacaoAgua();
-			ligacaoAgua.setId(imovel.getId());
-			ligacaoAgua.setDataReligacao(data);
+			usuario = fachada.pesquisarUsuario(dto.getIdUsuarioEncerramento());
 	
-			IntegracaoComercialHelper helper = new IntegracaoComercialHelper();
+			imovel = ordemServico.getImovel();
+			imovel.setUltimaAlteracao(new Date());
+	
+			helper = new IntegracaoComercialHelper();
 			helper.setImovel(imovel);
-			helper.setLigacaoAgua(ligacaoAgua);
+			helper.setMatriculaImovel(imovel.getId().toString());
 			helper.setOrdemServico(ordemServico);
-			helper.setQtdParcelas("1"); // TODO - Verificar
+			helper.setQtdParcelas(1);
 			helper.setUsuarioLogado(usuario);
+			helper.setVeioEncerrarOS(true);
+			
+		} catch (Exception e) {
+			resposta.put("msg", e.getMessage());
+			return;
+		}
+	}
 	
-			fachada.atualizarOSViaApp(ordemServico.getServicoTipo().getId(), helper, usuario);
-			
-			return true;
-			
-		} catch (FachadaException e) {
-			return false;
+	@SuppressWarnings("unchecked")
+	private RegistroAtendimento montarRegistroAtendimento() {
+		Filtro filtro = new FiltroRegistroAtendimento();
+		filtro.adicionarParametro(new ParametroSimples(FiltroRegistroAtendimento.ID, ordemServico.getRegistroAtendimento().getId()));
+
+		Collection<RegistroAtendimento> colecao = fachada.pesquisar(filtro, RegistroAtendimento.class.getName());
+
+		RegistroAtendimento registroAtendimento = (RegistroAtendimento) Util.retonarObjetoDeColecao(colecao);
+
+		registroAtendimento.setAtendimentoMotivoEncerramento(getMotivo());
+		registroAtendimento.setCodigoSituacao(RegistroAtendimento.SITUACAO_ENCERRADO);
+		registroAtendimento.setDataEncerramento(ordemServico.getDataEncerramento());
+		registroAtendimento.setObservacao("ENCERRADO VIA APLICATICO");
+		registroAtendimento.setUltimaAlteracao(new Date());
+
+		return registroAtendimento;
+	}
+
+	private AtendimentoMotivoEncerramento getMotivo() {
+		AtendimentoMotivoEncerramento motivo = new AtendimentoMotivoEncerramento();
+		motivo.setId(dto.getMotivoEncerramento());
+		motivo.setIndicadorExecucao(AtendimentoMotivoEncerramento.INDICADOR_EXECUCAO_SIM);
+		return motivo;
+	}
+	
+	private RegistroAtendimentoUnidade montarRegistroAtendimentoUnidade(RegistroAtendimento registroAtendimento) {
+		RegistroAtendimentoUnidade unidade = new RegistroAtendimentoUnidade();
+		unidade.setRegistroAtendimento(registroAtendimento);
+		unidade.setUsuario(usuario);
+
+		if (usuario.getUnidadeOrganizacional() != null) {
+			unidade.setUnidadeOrganizacional(usuario.getUnidadeOrganizacional());
+		}
+
+		unidade.setAtendimentoRelacaoTipo(new AtendimentoRelacaoTipo(AtendimentoRelacaoTipo.ENCERRAR));
+		unidade.setUltimaAlteracao(new Date());
+		
+		return unidade;
+	}
+
+	@SuppressWarnings("unchecked")
+	private LigacaoAgua obterLigacaoAgua() {
+		Filtro filtro = new FiltroLigacaoAgua();
+		filtro.adicionarParametro(new ParametroSimples(FiltroLigacaoAgua.ID, imovel.getId()));
+
+		Collection<LigacaoAgua> colecao = fachada.pesquisar(filtro, LigacaoAgua.class.getName());
+
+		LigacaoAgua ligacaoAgua = (LigacaoAgua) Util.retonarObjetoDeColecao(colecao);
+		ligacaoAgua.setId(imovel.getId());
+
+		return ligacaoAgua;
+	}
+
+	private boolean hidrometroNaoExtraviado() {
+		Integer situacao = dto.getHidrometro().getSituacao();
+		return situacao != null && situacao != HidrometroSituacao.EXTRAVIADO;
+	}
+
+	private HidrometroInstalacaoHistorico montarDadosHidrometroSubstituicao() {
+		HidrometroInstalacaoHistorico substituicao = obterDadosHidrometroSubstituicao();
+		substituicao.setUltimaAlteracao(new Date());
+		substituicao.setDataRetirada(ordemServico.getDataEncerramento());
+		substituicao.setUsuarioInstalacao(helper.getUsuarioLogado());
+
+		if (dto.getHidrometro().getLeituraRetirada() != null) {
+			substituicao.setNumeroLeituraRetirada(dto.getHidrometro().getLeituraRetirada());
+		}
+		return substituicao;
+	}
+
+	private HidrometroInstalacaoHistorico obterDadosHidrometroSubstituicao() {
+		int tipoMedicao = dto.getHidrometro().getTipoMedicao().intValue();
+		if (tipoMedicao == MedicaoTipo.LIGACAO_AGUA.intValue()) {
+			return imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico();
+		} else {
+			return imovel.getHidrometroInstalacaoHistorico();
 		}
 	}
 
-	protected boolean operacaoInstalacaoHidrometroEfetuar(OrdemServico ordemServico, Imovel imovel, Usuario usuario, OrdemServicoDTO ordemServicoDTO) {
-
-		Map<String, Object> params = new HashMap<String, Object>();
-		
-		params = validaInstalacaoHidrometro(ordemServicoDTO, imovel);
-		
+	private HidrometroInstalacaoHistorico montarDadosHidrometroInstalacao() {
 		try {
-			
-			ordemServico.setIndicadorComercialAtualizado(new Short("1"));
-			ordemServico.setValorAtual(ordemServico.getValorOriginal());
-			ordemServico.setPercentualCobranca(new BigDecimal(100));
+			HidrometroInstalacaoHistorico instalacao = new HidrometroInstalacaoHistorico();
 	
-			Date data = Util.converteStringParaDate(ordemServicoDTO.getDataEncerramento());
-			LigacaoAgua ligacaoAgua = new LigacaoAgua();
-			ligacaoAgua.setId(imovel.getId());
-			ligacaoAgua.setDataReligacao(data);
+			Hidrometro hidrometro = validarHidrometroInstalacao(dto.getHidrometroInstalacao().getNumero());
+			instalacao.setHidrometro(hidrometro);
 	
-			IntegracaoComercialHelper helper = new IntegracaoComercialHelper();
-
-			helper.setHidrometroInstalacaoHistorico((HidrometroInstalacaoHistorico)params.get("historico"));
-			helper.setVeioEncerrarOS(Boolean.TRUE);
-			helper.setImovel(imovel);
-			helper.setLigacaoAgua(ligacaoAgua);
-			helper.setOrdemServico(ordemServico);
-			helper.setQtdParcelas("1"); // TODO - Verificar
-			helper.setUsuarioLogado(usuario);
-	
-			fachada.atualizarOSViaApp(ordemServico.getServicoTipo().getId(), helper, usuario);
+			verificarLocalArmazenagemHidrometroInstalacao(hidrometro);
 			
-			params.put("status", true);
-			return true;
+			return setarCamposHidrometroInstalacao(instalacao);
 			
-		} catch (FachadaException e) {
-			params.put("status", false);
-			return false;
+		} catch (Exception e) {
+			throw new FachadaException(e.getMessage());
 		}
 	}
 
-	protected boolean operacaoSubstituicaoHidrometroEfetuar(OrdemServico ordemServico, Imovel imovel, Usuario usuario, OrdemServicoDTO ordemServicoDTO) {
+	@SuppressWarnings("unchecked")
+	private void verificarLocalArmazenagemHidrometroInstalacao(Hidrometro hidrometro) {
+		Filtro filtro = new FiltroImovel();
+		filtro.adicionarCaminhoParaCarregamentoEntidade("localidade.hidrometroLocalArmazenagem");
+		filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
 
+		Collection<Imovel> colecao = fachada.pesquisar(filtro, Imovel.class.getName());
+
+		Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(colecao);
+
+		if (imovel != null && 
+			imovel.getLocalidade().getHidrometroLocalArmazenagem() != null &&
+			hidrometro.getHidrometroLocalArmazenagem() != null &&
+			!hidrometro.getHidrometroLocalArmazenagem().getId().equals(imovel.getLocalidade().getHidrometroLocalArmazenagem().getId())) {
+			
+			throw new FachadaException("Local de armazenagem incompativel");
+		}
+	}
+
+	private Hidrometro validarHidrometroInstalacao(String numero) {
+		Hidrometro hidrometro = fachada.pesquisarHidrometroNumeroSituacao(numero, HidrometroSituacao.DISPONIVEL);
+
+		if (hidrometro == null) {
+			throw new FachadaException("Hidrometro inexistente ou indisponivel");
+		}
+
+		return hidrometro;
+	}
+
+	private boolean existeRegistroAtendimento() {
+		return ordemServico.getRegistroAtendimento() != null && 
+			   ordemServico.getRegistroAtendimento().getId() != null;
+	}
+	
+	private HidrometroInstalacaoHistorico setarCamposHidrometroInstalacao(HidrometroInstalacaoHistorico instalacao) {
 		try {
-			ordemServico.setIndicadorComercialAtualizado(new Short("1"));
-			ordemServico.setValorAtual(ordemServico.getValorOriginal());
-			ordemServico.setPercentualCobranca(new BigDecimal(100));
+			HidrometroInstalacaoDTO instalacaoDTO = dto.getHidrometroInstalacao();
 	
-			Date data = Util.converteStringParaDate(ordemServicoDTO.getDataEncerramento());
-			LigacaoAgua ligacaoAgua = new LigacaoAgua();
-			ligacaoAgua.setId(imovel.getId());
-			ligacaoAgua.setDataReligacao(data);
+			instalacao.setDataInstalacao(ordemServico.getDataEncerramento());
+			instalacao.setUsuarioInstalacao(helper.getUsuarioLogado());
 	
-			IntegracaoComercialHelper helper = new IntegracaoComercialHelper();
-			helper.setImovel(imovel);
-			helper.setLigacaoAgua(ligacaoAgua);
-			helper.setOrdemServico(ordemServico);
-			helper.setQtdParcelas("1"); // TODO - Verificar
-			helper.setUsuarioLogado(usuario);
+			Integer tipoMedicao = instalacaoDTO.getTipoMedicao().intValue();
+			if (tipoMedicao.equals(MedicaoTipo.POCO)) {
+				instalacao.setImovel(ordemServico.getImovel());
+				instalacao.setLigacaoAgua(null);
 	
-			fachada.atualizarOSViaApp(ordemServico.getServicoTipo().getId(), helper, usuario);
-			
-			return true;
-			
-		} catch (FachadaException e) {
-			return false;
-		}
-	}
-
-	protected boolean operacaoLigacaoAguaEfetuar(OrdemServico ordemServico, Imovel imovel, Usuario usuario, OrdemServicoDTO ordemServicoDTO) {
-			
-		return true;
-		
-	}
-	
-
-	@SuppressWarnings("rawtypes")
-	private Map<String, Object> validaInstalacaoHidrometro(OrdemServicoDTO ordemServicoDTO, Imovel imovel) {
-		
-		HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = new HidrometroInstalacaoHistorico();
-		
-		Map<String, Object> params = new HashMap<String, Object>();
-		
-		if (ordemServicoDTO.getHidrometroInstalacao().getNumero() != null) {
-			FiltroHidrometro filtroHidrometro = new FiltroHidrometro();
-			filtroHidrometro.adicionarParametro(new ParametroSimples(FiltroHidrometro.NUMERO_HIDROMETRO, ordemServicoDTO.getHidrometroInstalacao().getNumero()));
-			Collection colecaoHidrometro = fachada.pesquisar(filtroHidrometro,Hidrometro.class.getName());
-			
-			//verificar se o número do hidrômetro não está cadastrado
-			if (colecaoHidrometro == null || colecaoHidrometro.isEmpty()) {
-				params.put("mensagem", "Hidrometro inexistente");
-				return params;
-			}		
-			
-			Iterator iteratorHidrometro = colecaoHidrometro.iterator();
-			Hidrometro hidrometro = (Hidrometro) iteratorHidrometro.next();
-			
-			FiltroImovel filtroImovel = new FiltroImovel();
-			filtroImovel.adicionarCaminhoParaCarregamentoEntidade("localidade.hidrometroLocalArmazenagem");
-			filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovel.getId()));
-			
-			Collection colecaoImoveis = fachada.pesquisar(filtroImovel, Imovel.class.getName());
-			
-			Imovel imovelComLocalidade = (Imovel) Util.retonarObjetoDeColecao(colecaoImoveis);
-			
-			if (imovelComLocalidade != null && imovelComLocalidade.getLocalidade().getHidrometroLocalArmazenagem() != null && 
-				hidrometro.getHidrometroLocalArmazenagem() != null &&
-				!hidrometro.getHidrometroLocalArmazenagem().getId().equals(imovelComLocalidade.getLocalidade().getHidrometroLocalArmazenagem().getId())) {
-					
-				params.put("mensagem", "O local de armazenagem do hidr\\u00F4metro n\\u00E3o \\u00E9 compat\\u00EDvel com a localidade do im\\u00F3vel.");
+			} else if (tipoMedicao.equals(MedicaoTipo.LIGACAO_AGUA)) {
+				LigacaoAgua ligacaoAgua = new LigacaoAgua();
+				ligacaoAgua.setId(ordemServico.getImovel().getId());
+				instalacao.setLigacaoAgua(ligacaoAgua);
+				instalacao.setImovel(null);
 			}
-			
-            hidrometroInstalacaoHistorico.setHidrometro(hidrometro);
-            
-            params.put("historico", hidrometroInstalacaoHistorico);
+	
+			instalacao.setMedicaoTipo(new MedicaoTipo(tipoMedicao));
+			instalacao.setHidrometroLocalInstalacao(new HidrometroLocalInstalacao(instalacaoDTO.getLocal()));
+			instalacao.setHidrometroProtecao(new HidrometroProtecao(instalacaoDTO.getProtecao()));
+			instalacao.setNumeroLeituraInstalacao(instalacaoDTO.getLeitura());
+			instalacao.setIndicadorExistenciaCavalete(instalacaoDTO.getCavalete().shortValue());
+			instalacao.setNumeroSelo(instalacaoDTO.getSelo());
+			instalacao.setNumeroLacre(instalacaoDTO.getLacre());
+			instalacao.setDataImplantacaoSistema(new Date());
+			instalacao.setIndicadorInstalcaoSubstituicao(new Short("1"));
+			instalacao.setUltimaAlteracao(new Date());
+			instalacao.setIndicadorTrocaProtecao(instalacaoDTO.getTrocaProtecao().shortValue());
+			instalacao.setIndicadorTrocaRegistro(instalacaoDTO.getTrocaRegistro().shortValue());
+		} catch (Exception e) {
+			throw new FachadaException("Erro ao setar dados de instalacao do Hidrometro");
 		}
-		
-		return params;
+		return instalacao;
 	}
 	
-	private boolean isIdValido(String idCampo) {
-		return idCampo != null && !idCampo.equals("") &&!idCampo.trim().equalsIgnoreCase(""+ConstantesSistema.NUMERO_NAO_INFORMADO); 
+	private LigacaoAgua montarDadosLigacaoAgua() {
+		LigacaoAguaDTO ligacaoAguaDTO = dto.getLigacaoAgua();
+
+		LigacaoAgua ligacaoAgua = new LigacaoAgua();
+		ligacaoAgua.setImovel(imovel);
+		ligacaoAgua.setDataLigacao(ordemServico.getDataEncerramento());
+		ligacaoAgua.setLigacaoAguaDiametro(ligacaoAguaDTO.getDiametro());
+		ligacaoAgua.setLigacaoAguaMaterial(ligacaoAguaDTO.getMaterial());
+		ligacaoAgua.setLigacaoAguaPerfil(ligacaoAguaDTO.getPerfil());
+		ligacaoAgua.setRamalLocalInstalacao(ligacaoAguaDTO.getLocalInstalacaoRamal());
+		ligacaoAgua.setProfundidadeRamal(ligacaoAguaDTO.getProfundidadeRamal());
+		ligacaoAgua.setDistanciaInstalacaoRamal(ligacaoAguaDTO.getDistanciaInstalacaoRamal());
+		ligacaoAgua.setPavimentoRua(ligacaoAguaDTO.getPavimentoRua());
+		ligacaoAgua.setPavimentoCalcada(ligacaoAguaDTO.getPavimentoCalcada());
+		ligacaoAgua.setLigacaoOrigem(ligacaoAguaDTO.getOrigem());
+		ligacaoAgua.setNumeroLacre(ligacaoAguaDTO.getLacre());
+		
+		return ligacaoAgua;
 	}
 	
-	public HidrometroInstalacaoHistorico setFormValues(HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico, OrdemServicoDTO dto) {
-		
-		/*
-		 * Campos obrigatórios
-		 */
-		
-		//data instalação
-		hidrometroInstalacaoHistorico.setDataInstalacao(Util.converteStringParaDate(dto.getHidrometroInstalacao().getData()));
-		
-		if (dto.getHidrometro().getTipoMedicao().equals(""+MedicaoTipo.POCO)) {
-
-		  Imovel imovel = new Imovel();
-		  imovel.setId(new Integer(dto.getImovel().getMatricula()));
-						
-		  hidrometroInstalacaoHistorico.setImovel(imovel);
-		  hidrometroInstalacaoHistorico.setLigacaoAgua(null);
-					
-		} else if (dto.getHidrometro().getTipoMedicao().equals(""+MedicaoTipo.LIGACAO_AGUA)) {
-
-		  LigacaoAgua ligacaoAgua = new LigacaoAgua();
-		  ligacaoAgua.setId(new Integer(dto.getImovel().getMatricula()));
-						
-		  hidrometroInstalacaoHistorico.setLigacaoAgua(ligacaoAgua);
-		  hidrometroInstalacaoHistorico.setImovel(null);
-	    }
-		//medição tipo
-		MedicaoTipo medicaoTipo = new MedicaoTipo();
-		medicaoTipo.setId(Integer.parseInt(dto.getHidrometro().getTipoMedicao()));
-		hidrometroInstalacaoHistorico.setMedicaoTipo(medicaoTipo);
-		
-		//hidrômetro local instalação
-		HidrometroLocalInstalacao hidrometroLocalInstalacao = new HidrometroLocalInstalacao();
-		hidrometroLocalInstalacao.setId(dto.getHidrometroInstalacao().getLocal());		
-		hidrometroInstalacaoHistorico.setHidrometroLocalInstalacao(hidrometroLocalInstalacao);
-		
-		//proteção
-		HidrometroProtecao hidrometroProtecao = new HidrometroProtecao();
-		hidrometroProtecao.setId(dto.getHidrometroInstalacao().getProtecao());
-		hidrometroInstalacaoHistorico.setHidrometroProtecao(hidrometroProtecao);
-		
-		//leitura instalação
-		if(dto.getHidrometroInstalacao().getLeitura() != null && !dto.getHidrometroInstalacao().getLeitura().equals("")){
-		    hidrometroInstalacaoHistorico.setNumeroLeituraInstalacao(dto.getHidrometroInstalacao().getLeitura());
-		}else{
-			hidrometroInstalacaoHistorico.setNumeroLeituraInstalacao(0);	
+	private void validarRestabelecimentoLigacaoAguaComInstalacaoHidrometro() {
+		if (imovelNaoSuprimido()) {
+			throw new FachadaException("A situação de Ligação de Água do imóvel é inválida");
 		}
-		
-		//cavalete
-		hidrometroInstalacaoHistorico.setIndicadorExistenciaCavalete(dto.getHidrometroInstalacao().getCavalete().shortValue());
-		
-		/*
-		 * Campos opcionais 
-		 */
-		//leitura corte
-		hidrometroInstalacaoHistorico.setNumeroLeituraCorte(null);
-		
-		//leitura supressão
-		hidrometroInstalacaoHistorico.setNumeroLeituraSupressao(null);
-		
-		//numero selo
-		if (dto.getHidrometroInstalacao().getSelo() != null && !dto.getHidrometroInstalacao().getSelo().equals("")){
-			hidrometroInstalacaoHistorico.setNumeroSelo(dto.getHidrometroInstalacao().getSelo().toString());
-		} else {
-			hidrometroInstalacaoHistorico.setNumeroSelo(null);
-		}
-		
-		//numero lacre
-		if (dto.getHidrometroInstalacao().getLacre() != null && !dto.getHidrometroInstalacao().getLacre().equals("")){
-			hidrometroInstalacaoHistorico.setNumeroLacre(dto.getHidrometroInstalacao().getLacre().toString());
-		} else {
-			hidrometroInstalacaoHistorico.setNumeroLacre(null);
-		}
-		
-		//tipo de rateio
-		hidrometroInstalacaoHistorico.setRateioTipo(null);
-		hidrometroInstalacaoHistorico.setDataImplantacaoSistema(new Date());
 
-		//indicador instalação substituição
-		hidrometroInstalacaoHistorico.setIndicadorInstalcaoSubstituicao(new Short("1"));		
-		
-		//data última alteração
-		hidrometroInstalacaoHistorico.setUltimaAlteracao(new Date());
-        
-        if(dto.getHidrometroInstalacao().getTrocaProtecao() != null){
-            hidrometroInstalacaoHistorico.setIndicadorTrocaProtecao(dto.getHidrometroInstalacao().getTrocaProtecao().shortValue());
-        }
-        if(dto.getHidrometroInstalacao().getTrocaRegistro() != null){
-            hidrometroInstalacaoHistorico.setIndicadorTrocaRegistro(dto.getHidrometroInstalacao().getTrocaRegistro().shortValue());
-        }
-		
-		return hidrometroInstalacaoHistorico;
+		if (naoPossuiRedeDeAgua()) {
+			throw new FachadaException("Não existe rede de água na quadra do imóvel");
+		}
+
+		if (imovelInativo()) {
+			throw new FachadaException("O imóvel não está ativo");
+		}
+
+		if (naoPossuiSubstituicao() && possuiHidrometroInstalado()) {
+			throw new FachadaException("O imóvel já possui hidrômetro instalado para o tipo de médição LIGAÇÃO DE ÁGUA");
+		}
+	}
+
+	private boolean imovelNaoSuprimido() {
+		int situacao = imovel.getLigacaoAguaSituacao().getId().intValue();
+
+		return situacao != LigacaoAguaSituacao.SUPRIMIDO.intValue() &&
+			   situacao != LigacaoAguaSituacao.SUPR_PARC_PEDIDO.intValue();
+	}
+
+	private boolean naoPossuiRedeDeAgua() {
+		IntegracaoQuadraFaceHelper integracao = fachada.integracaoQuadraFace(imovel.getId());
+
+		return integracao.getIndicadorRedeAgua().shortValue() == Quadra.SEM_REDE.shortValue();
+	}
+
+	private boolean imovelInativo() {
+		return imovel.getIndicadorExclusao().intValue() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO;
+	}
+
+	private boolean naoPossuiSubstituicao() {
+		return dto.getOperacao().intValue() != Operacao.OPERACAO_EFETUAR_RESTABELECIMENTO_LIGACAO_AGUA_COM_SUBSTITUICAO_HIDROMETRO;
+	}
+	
+	private boolean possuiHidrometroInstalado() {
+		return imovel.getLigacaoAgua() != null &&
+			   imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null;
 	}
 }

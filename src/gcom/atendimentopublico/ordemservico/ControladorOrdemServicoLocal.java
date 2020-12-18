@@ -1,5 +1,14 @@
 package gcom.atendimentopublico.ordemservico;
 
+import java.io.BufferedReader;
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ordemservico.bean.AcompanhamentoArquivosRoteiroHelper;
@@ -32,14 +41,6 @@ import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.FachadaException;
-
-import java.io.BufferedReader;
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 
@@ -568,6 +569,8 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 			String codigoRetornoVistoriaOs,OrdemServicoBoletim ordemServicoBoletim,
 			Short indicadorServicoAceito) throws ControladorException;
 
+	public void integracaoComercial(Integer idServicoTipo, IntegracaoComercialHelper helper, Usuario usuarioLogado) throws ControladorException;
+	
 	/**
 	 * [UC0461] Manter Dados das Atividades da Ordem de Serviço
 	 * 
@@ -3150,4 +3153,12 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	public void atualizarSituacaoArquivoTextoAcompanhamentoServico( long imei,Short idSituacaoTransmissaoLeitura  ) throws ControladorException;
 
 	public void validarEncerramentoOsImovelEmCampo(OrdemServico ordemServico) throws ControladorException;
+
+	/**
+	 * Método que retorna os dados das Ordens de Serviços programadas 
+	 * 
+	 * @return List<OrdemServicoDTO> DTO das Ordens de Serviços
+	 * @throws ControladorException
+	 */
+	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas(Integer unidadeOrganizacionalId) throws ControladorException;
 }

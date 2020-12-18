@@ -16,11 +16,7 @@
 					</logic:notPresent>
 				</td>
 				
-<<<<<<< HEAD
           		<td align="right">Vers&atilde;o: ${gsan.versao} (Online) 11/12/2020 - 16:49:49 </td>
-=======
-          		<td align="right">Vers&atilde;o: ${gsan.versao} (Online) 10/12/2020 - 10:21:19 </td>
->>>>>>> DEV-3172
 
         	</tr>
       	</table>

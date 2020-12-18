@@ -6357,6 +6357,33 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		return retorno;
 	}
+	
+	public Hidrometro pesquisarHidrometroNumeroSituacao(String numeroHidrometro, Integer idSituacao)
+			throws ErroRepositorioException {
+		Hidrometro retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = "SELECT hidr "
+					+ "FROM Hidrometro hidr "
+					+ "INNER JOIN hidr.hidrometroSituacao hidrSit "
+					+ "WHERE hidr.numero = :numeroHidrometro "
+					+ "and hidrSit.id = :idSituacao";
+			
+			retorno = (Hidrometro)session.createQuery(consulta).setString(
+					"numeroHidrometro", numeroHidrometro).setInteger("idSituacao", idSituacao)
+					.uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate. Não foi possível realizar a consulta");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}	
 
 	/**
 	 * [UC0488] Informar Retorno Ordem de Fiscalização
