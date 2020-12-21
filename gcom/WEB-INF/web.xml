@@ -973,6 +973,15 @@
 		<servlet-name>acessarNovoBatch</servlet-name>
 		<url-pattern>/acessarNovoBatch</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>OrdemServicoAPI</servlet-name>
+		<servlet-class>gcom.api.ordemservico.OrdemServicoAPI</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OrdemServicoAPI</servlet-name>
+		<url-pattern>/api/ordem-servico/*</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
