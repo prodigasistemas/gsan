@@ -336,7 +336,7 @@
 							
 								<div align="left"><strong>Disponíveis</strong></div>
 
-								<html:select property="tipoServico" size="6" multiple="true" style="width:230px">
+								<html:select property="tipoServico" size="6" multiple="true" style="width:230px; overflow: auto;">
 									<html:options collection="colecaoTipoServico" labelProperty="descricao" property="id" />
 								</html:select>
 							</td>
@@ -371,7 +371,7 @@
 
 							<td>
 								<div align="left"><strong>Selecionados</strong></div>
-								<html:select property="tipoServicoSelecionados" size="6" multiple="true" style="width:200px">
+								<html:select property="tipoServicoSelecionados" size="6" multiple="true" style="width:200px; overflow: auto;">
 								</html:select>
 							</td>
 						</tr>
