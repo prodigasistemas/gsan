@@ -9162,14 +9162,14 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 			// Subtrai 1 mes do ano/mes faturamento para pegar sempre o mes
 			// fechado
 			String anoMesFaturamento = Util.subtraiAteSeisMesesAnoMesReferencia(sistemaParametro.getAnoMesFaturamento(), 1).toString();
-			
+			/*
 			Integer codServicoTipo = repositorioOrdemServico.recuperaServicoTipoSeletivoPorId(Util.converterStringParaInteger(helper.getTipoOrdem()).intValue());
 			
 			if( codServicoTipo != null) {
 					helper.setTipoOrdem("" + codServicoTipo);		
 			};
 			
-			/* Verifica o Tipo de Ordem(Servico)
+			 Verifica o Tipo de Ordem(Servico)
 			if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_INSTALACAO)) {
 				helper.setTipoOrdem("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO);
 			} else if (helper.getTipoOrdem().equals(ImovelEmissaoOrdensSeletivasActionForm.TIPO_ORDEM_SUBSTITUICAO)) {
@@ -9565,9 +9565,8 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 
 		try {
 
-			Integer servicoId = repositorioOrdemServico.recuperaServicoTipoSeletivoPorConstante(ordemServico.getServicoTipo().getId());
-
-			ordemServicoDados = repositorioOrdemServico.pesquisarDadosServicoTipoPrioridade(servicoId);
+			ordemServicoDados = repositorioOrdemServico.pesquisarDadosServicoTipoPrioridade(ordemServico.getServicoTipo().getId());
+		
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);

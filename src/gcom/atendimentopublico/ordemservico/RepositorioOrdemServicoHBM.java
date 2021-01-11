@@ -4444,7 +4444,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ " unid.id, unid.descricao, sptp.id, sptp.descricao"
 					+ " FROM Equipe eqpe "
 					+ " INNER JOIN eqpe.unidadeOrganizacional unid "
-					+ " INNER JOIN eqpe.servicoPerfilTipo sptp "
+					+ " LEFT JOIN eqpe.servicoPerfilTipo sptp "
 					+ " WHERE eqpe.id = :idEquipe ";
 
 			retorno = session.createQuery(consulta)
