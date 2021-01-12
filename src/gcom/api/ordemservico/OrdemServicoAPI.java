@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import gcom.api.ordemservico.bo.ProcessarRequisicaoOrdemServicoBO;
+import gcom.api.ordemservico.bo.RequisicaoEncerrarOrdemServico;
 import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.api.ordemservico.dto.UsuarioDTO;
 import gcom.fachada.Fachada;
@@ -49,15 +49,13 @@ public class OrdemServicoAPI extends HttpServlet {
 	private void encerrarOrdemServico() throws IOException {
 		try {
 			String json = obterJson();
-
 			Gson gson = new Gson();
 			OrdemServicoDTO dto = gson.fromJson(json, OrdemServicoDTO.class);
-			ProcessarRequisicaoOrdemServicoBO processar = new ProcessarRequisicaoOrdemServicoBO();
-			Map<String, String> respostaProcessamento = processar.execute(dto);
+			Map<String, String> respostaProcessamento = new RequisicaoEncerrarOrdemServico().processar(dto);
 
 			OrdemServicoResponse ordemServicoResponse = new OrdemServicoResponse();
+			
 			int status = -1;
-
 			if (!respostaProcessamento.containsKey("msg")) {
 				ordemServicoResponse.setMensagem("");
 				ordemServicoResponse.setEncerrada(true);

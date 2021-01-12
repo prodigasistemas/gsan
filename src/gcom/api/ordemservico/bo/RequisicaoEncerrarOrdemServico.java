@@ -40,7 +40,7 @@ import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
-public class ProcessarRequisicaoOrdemServicoBO{
+public class RequisicaoEncerrarOrdemServico{
 
 	private Fachada fachada = Fachada.getInstancia();
 	
@@ -51,7 +51,7 @@ public class ProcessarRequisicaoOrdemServicoBO{
 	private IntegracaoComercialHelper helper = null;
 	private Map<String, String> resposta;
 	
-	public Map<String, String> execute(OrdemServicoDTO dto) {
+	public Map<String, String> processar(OrdemServicoDTO dto) {
 		this.dto = dto;
 
 		setarDadosEncerramento();
@@ -493,7 +493,7 @@ public class ProcessarRequisicaoOrdemServicoBO{
 		HidrometroInstalacaoHistorico substituicao = obterDadosHidrometroSubstituicao();
 		substituicao.setUltimaAlteracao(new Date());
 		substituicao.setDataRetirada(ordemServico.getDataEncerramento());
-		substituicao.setUsuarioInstalacao(helper.getUsuarioLogado());
+		substituicao.setUsuarioRetirada(helper.getUsuarioLogado());
 
 		if (dto.getHidrometro().getLeituraRetirada() != null) {
 			substituicao.setNumeroLeituraRetirada(dto.getHidrometro().getLeituraRetirada());
