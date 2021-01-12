@@ -288,6 +288,7 @@ public class ExibirFiltrarEquipeAction extends GcomAction {
 				filtroUsuario = new FiltroUsuario();
 				filtroUsuario.adicionarParametro(new ParametroSimples(FiltroUsuario.LOGIN, codigoUsuario));
 				colecaoUsuario = Fachada.getInstancia().pesquisar(filtroUsuario, Usuario.class.getName());
+				usuario = (Usuario) colecaoUsuario.iterator().next();
 				
 			}
 		}
