@@ -159,9 +159,7 @@ public class RelatorioEmitirOrdemServicoSeletiva extends TarefaRelatorio {
 				}
 				*/
 				
-				servTipo =  pesquisaServicoTipo(Util.converterStringParaInteger(helper.getTipoOrdem()).intValue(), fachada, servTipo);
-				
-				idTipoServico = servTipo.getId();
+				idTipoServico = Util.converterStringParaInteger(helper.getTipoOrdem()).intValue();
 				
 				idEmpresa = Util.converterStringParaInteger(helper.getFirma());
 				
@@ -330,11 +328,10 @@ public class RelatorioEmitirOrdemServicoSeletiva extends TarefaRelatorio {
 					
 					/**
 					 * Caso o Tipo de Ordem seja SUBSTITUICAO OU REMOCAO
-					 */
-					if ( servTipo.getConstanteFuncionalidadeTipoServico().intValue() == 
-							ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO ||
-							servTipo.getConstanteFuncionalidadeTipoServico().intValue() == 
-								ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO ) {
+					 * Paulo Almeida (11.01.2021 -= Comentado pois não existe OS Seletivas para Subs e Remoção de Hid, fora Controle de Perdas,
+					 * que tem idS específicos)
+					 
+					if ( idTipoServico == ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO || idTipoServico == ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO ) {
 						
 						LigacaoAgua ligacaoAgua = imovel.getLigacaoAgua();
 						if (ligacaoAgua.getHidrometroInstalacaoHistorico() != null) {
@@ -450,7 +447,7 @@ public class RelatorioEmitirOrdemServicoSeletiva extends TarefaRelatorio {
 							documentoTxt.append(Util.completaString(descricaoAnormalidade, 25));
 						}
 					}
-					
+					*/
 					// Nome da Firma
 					FiltroEmpresa filtroEmpresa = new FiltroEmpresa();
 					filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.ID, helper.getFirma()));

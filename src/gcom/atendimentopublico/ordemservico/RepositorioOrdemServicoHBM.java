@@ -4444,7 +4444,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ " unid.id, unid.descricao, sptp.id, sptp.descricao"
 					+ " FROM Equipe eqpe "
 					+ " INNER JOIN eqpe.unidadeOrganizacional unid "
-					+ " INNER JOIN eqpe.servicoPerfilTipo sptp "
+					+ " LEFT JOIN eqpe.servicoPerfilTipo sptp "
 					+ " WHERE eqpe.id = :idEquipe ";
 
 			retorno = session.createQuery(consulta)
@@ -10965,7 +10965,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					&& !helper.getQuadraInicial().equals("")
 					&& helper.getQuadraFinal() != null
 					&& !helper.getQuadraFinal().equals("")) {
-				hqlAux += "(quadra.id between " + helper.getQuadraInicial()
+				hqlAux += "(quadra.numeroQuadra between " + helper.getQuadraInicial()
 						+ " and " + helper.getQuadraFinal() + ") and ";
 				finaliza = true;
 			}
@@ -13615,7 +13615,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					&& !helper.getQuadraInicial().equals("")
 					&& helper.getQuadraFinal() != null
 					&& !helper.getQuadraFinal().equals("")) {
-				hqlAux += "(quadra.id between " + helper.getQuadraInicial()
+				hqlAux += "(quadra.numeroQuadra between " + helper.getQuadraInicial()
 						+ " and " + helper.getQuadraFinal() + ") and ";
 				finaliza = true;
 			}
