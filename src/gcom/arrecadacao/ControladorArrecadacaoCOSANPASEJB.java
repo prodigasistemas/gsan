@@ -14,6 +14,7 @@ import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.cadastro.EnvioEmail;
+import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
@@ -1829,13 +1830,29 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 	protected StringBuilder gerarArquivoTxt(
 			ArrecadadorMovimento arrecadadorMovimento,
 			StringBuilder registrosTipoE) {
+		return gerarArquivoTxt(arrecadadorMovimento, registrosTipoE, null);
+	}
+
+	protected StringBuilder gerarArquivoTxt(
+			ArrecadadorMovimento arrecadadorMovimento,
+			StringBuilder registrosTipoE, Banco banco) {
 		
 		StringBuilder arquivoTXTEnvio = new StringBuilder();
 
 		// gera o header do arquivo(registroCódigoA)
 		arquivoTXTEnvio.append("A");
+		//A.02 - Código de Remessa(1 - REMESSA, 2 - RETORNO)
 		arquivoTXTEnvio.append(Util.completaString(""+ arrecadadorMovimento.getCodigoRemessa(), 1));
-		arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getCodigoConvenio(), 20));
+		
+		
+		// A.03 - Código do Convênio 
+		if (banco != null && banco.isAdereCnab150()) {
+			// Alterações apontadas pelos técnicos da CEF
+			arquivoTXTEnvio.append(Util.completaString("303653110001", 20));
+		} else {
+			arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getCodigoConvenio(), 20));
+		}
+		// A.04 - Nome da Empresa.
 		arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getNomeEmpresa(), 20));
 		
 		//codigo agente
@@ -1849,20 +1866,62 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 			Fachada.getInstancia().pesquisar(filtroArrecadador, Arrecadador.class.getName());
 		
 		String codigoAgente = "";
+		boolean adere_cnab150 = false;
 		if(!colecaoArrecadador.isEmpty()){
 			Arrecadador arrecadador = (Arrecadador)Util.retonarObjetoDeColecao(colecaoArrecadador);
 			codigoAgente = arrecadador.getCodigoAgente().toString();
+			
 		}
 		
+		// A.05 - Código do Banco
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(3, ""+ codigoAgente));
-		arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getNomeBanco(), 20));
-		String dataGeracaoArquivo = Util.recuperaAnoMesDiaDaData(arrecadadorMovimento.getDataGeracao());		
+		// A.06 - Nome do Banco
+		if (banco != null && banco.isAdereCnab150()) {
+			// Alterações apontadas pelos técnicos da CEF
+			arquivoTXTEnvio.append(Util.completaString("CAIXA ECONOM FEDERAL", 20));
+		} else {
+			arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getNomeBanco(), 20));
+		}
+		// A.07 - Data do Movimento = Deve ser no formato AAAAMMDD
+		String dataGeracaoArquivo = Util.recuperaAnoMesDiaDaData(arrecadadorMovimento.getDataGeracao());	
 		arquivoTXTEnvio.append(dataGeracaoArquivo);
+		// A.08 - Número seqüencial do arquivo
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, ""+ arrecadadorMovimento.getNumeroSequencialArquivo()));
+		// A.09 - Versão do layout
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(2, ""+ arrecadadorMovimento.getNumeroVersaoLayout()));
-		arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getDescricaoIdentificacaoServico(), 17));
-		arquivoTXTEnvio.append(Util.completaString("", 51));
-		arquivoTXTEnvio.append("*");
+
+		
+		if (banco != null && banco.isAdereCnab150()) {
+			
+			// A.10 - Identificação do serviço
+			// Alterações apontadas pelos técnicos da CEF
+			arquivoTXTEnvio.append(Util.completaString("DEB AUTOMAT", 17)); //
+			
+			// A.11 - Conta Compromisso
+			// Conta informada pelo Joao Moscoso
+			
+			arquivoTXTEnvio.append(Util.completaString("1314003000011104", 16));
+			
+			// A.12 - Identificação do Ambiente Cliente (P - Produção, T - teste)
+			arquivoTXTEnvio.append("P");
+			// A.13 - Identificação do Ambiente Caixa (P - Produção, T - teste)
+			arquivoTXTEnvio.append("P");
+		
+			// A.14 - Reservado para o futuro (Brancos).
+			arquivoTXTEnvio.append(Util.completaString("", 27));
+			// A.15 - Número Sequencial do Registro,  deverá constar:  000000
+			arquivoTXTEnvio.append("000000");
+			// A.16 - Reservado para o futuro (Branco)
+			arquivoTXTEnvio.append(Util.completaString("", 1));
+		} else {
+			
+			// A.10 - Identificação do serviço
+			arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getDescricaoIdentificacaoServico(), 17)); //"DEB AUTOMAT"
+			// A.11 - Reservado para o futuro (Brancos).
+			arquivoTXTEnvio.append(Util.completaString("", 51));
+			// A.12 - Fim de linha.
+			arquivoTXTEnvio.append("*");			
+		}
 
 		arquivoTXTEnvio.append(System.getProperty("line.separator"));
 		
@@ -1871,12 +1930,21 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 		
 		// gera o trailler(registro código "Z") do arquivo de envio
 		arquivoTXTEnvio.append("Z");
-		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, ""+ arrecadadorMovimento.getNumeroRegistrosMovimento()));
+		
+		Integer qtdeLinhas = arrecadadorMovimento.getNumeroRegistrosMovimento();
+		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, "" + qtdeLinhas));
 		
 		String valorSemVirgula = ("" + arrecadadorMovimento.getValorTotalMovimento()).replace(".", "");
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(17,valorSemVirgula));
-		arquivoTXTEnvio.append(Util.completaString("", 125));
-		arquivoTXTEnvio.append("*");
+		arquivoTXTEnvio.append(Util.completaString("", 119));
+		
+		if (banco != null && banco.isAdereCnab150()) {
+			// Alterações apontadas pelos técnicos da CEF
+			arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, (qtdeLinhas -1)));
+			arquivoTXTEnvio.append(" ");
+		} else {
+			arquivoTXTEnvio.append("*");
+		}
 		arquivoTXTEnvio.append(System.getProperty("line.separator"));
 		
 		// fim de arquivo - NÃO UTILIZADO PELA COSANPA
@@ -1904,31 +1972,52 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 	protected StringBuilder criarRegistroTipoE(Banco banco,
 			DebitoAutomaticoMovimento debitoAutomaticoMovimento, Short tamanhoMaximoIdentificacaoImovel)
 			throws ControladorException {
+		return criarRegistroTipoE(banco, debitoAutomaticoMovimento, tamanhoMaximoIdentificacaoImovel, null);
+	}
+	
+	protected StringBuilder criarRegistroTipoE(Banco banco,
+			DebitoAutomaticoMovimento debitoAutomaticoMovimento, Short tamanhoMaximoIdentificacaoImovel, Integer sequencial)
+			throws ControladorException {
 		StringBuilder registroTipoE = new StringBuilder();
 		
 		Conta conta = debitoAutomaticoMovimento.getContaGeral().getConta();
 		
+		FiltroImovel filtroImovel = new FiltroImovel();
+		
+		filtroImovel.adicionarParametro(
+				new ParametroSimples(FiltroImovel.ID,conta.getImovel().getId()));
+		
+		Collection colecaoImoveis = 
+			this.getControladorUtil()
+				.pesquisar(filtroImovel, Imovel.class.getName());
+		
+		Imovel imovel = (Imovel) colecaoImoveis.iterator().next();
+		
+		// E.01 - Código do registro = "E".
 		registroTipoE.append("E");
 		
-		// identificação do cliente na empresa
+		// E.02 - Identificação do cliente na Empresa
 		String identificacaoCliente = Util.adicionarZerosEsquedaNumeroTruncando(tamanhoMaximoIdentificacaoImovel.intValue(), ""
-				+ conta.getImovel().getId());
+				+ imovel.getCodigoDebitoAutomatico());
 		registroTipoE.append(Util.completaString(identificacaoCliente, 25));
 
 		String codigoAgencia = debitoAutomaticoMovimento.getDebitoAutomatico()
 				.getAgencia().getCodigoAgencia();
-		// agencia para débito
+		
+		// E.03 - Agência para débito/crédito
 		registroTipoE
 				.append(Util.adicionarZerosEsquedaNumero(4, codigoAgencia));
 
-		// Identificação do cliente no Banco
+		// E.04 - Identificação do cliente no Banco
 		registroTipoE.append(Util.completaString(debitoAutomaticoMovimento
 				.getDebitoAutomatico().getIdentificacaoClienteBanco(), 14));
-		// data de vencimento(AAAAMMDD)
+		
+		// E.05 - Data do vencimento (AAAAMMDD)
 		String dataVencimento = Util.recuperaAnoMesDiaDaData(conta
 				.getDataVencimentoConta());
 		registroTipoE.append(dataVencimento);
-		// Valor do débito
+		
+		// E.06 - Valor do débito/crédito
 		BigDecimal valorDebito = new BigDecimal("0.00");
 		valorDebito = valorDebito.add(conta.getValorAgua());
 		valorDebito = valorDebito.add(conta.getValorEsgoto());
@@ -1946,9 +2035,12 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 		String valorDebitoString = ("" + valorDebito).replace(".", "");
 		registroTipoE.append(Util.adicionarZerosEsquedaNumero(15,
 				valorDebitoString));
-		// Código da moeda
+		
+		// E.07 - Código da moeda - Deverá ser: "03" - para Reais,
 		registroTipoE.append("03");
-		// inicio preenchido conforme segue abaixo(E.07)
+		
+		// E.08 - Esta informação não será tratada pelo Banco. Irá retornar como a Empresa informou.
+		// inicio preenchido conforme segue abaixo(E.08)
 		// Ano/Mês de referência da conta no formato AAAAMM
 		registroTipoE.append(conta.getReferencia());
 		// Digito verificador da conta
@@ -1957,14 +2049,38 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 		registroTipoE.append(Util.completaString("" + conta.getId(), 9));
 		// id do grupo de faturamento
 		registroTipoE.append(Util.completaString(""
-				+ debitoAutomaticoMovimento.getFaturamentoGrupo().getId(), 3));
+				+ debitoAutomaticoMovimento.getFaturamentoGrupo().getId(), 2));
 		// reservado para o futuro
 		registroTipoE.append(Util.completaString("", 42));
-		// fim preenchido conforme segue abaixo(E.07)
+		// fim preenchido conforme segue abaixo(E.08)
 
-		// reservado para o futuro
-		registroTipoE.append(Util.completaString("", 19));
-		// Tipo do Movimento
+
+		 if (banco != null && banco.isAdereCnab150()) {
+			// E.09 - Número do Agendamento do Cliente evoluir de 1 em 1  é obrigatório e não pode ser zerado.
+			//		  É utilizado em caso de cancelamento do registro
+			 registroTipoE.append(Util.adicionarZerosEsquedaNumero(6, sequencial));
+			 
+			// E.10 - Reservado para o futuro (filler) Brancos
+			registroTipoE.append(Util.completaString("", 8));	
+			
+			// E.11 - Número Seqüencial do Registro é obrigatório e não pode ser zerado 
+			registroTipoE.append(Util.adicionarZerosEsquedaNumero(6, sequencial));
+		 } else {
+		
+			// E.10 - Reservado para o futuro (filler) Brancos
+			registroTipoE.append(Util.completaString("", 20));
+			 
+			// E.11 - Número Seqüencial do Registro é obrigatório e não pode ser zerado 
+			registroTipoE.append(Util.completaString("" + sequencial, 6));
+		 }
+		 
+
+		/*
+		 * E.12 - Código do movimento - Esta informação deverá conter:
+		 * 0 - Débito/crédito Normal.
+		 * EXCLUSIVO PARA A CEF --|1 - Cancelamento (exclusão) de lançamento enviado anteriormente para o Banco
+		 * ENVIADO PELA EMPRESA	  |5 - Cadastro de OPTANTES - para inclusão do cliente no cadastro de optantes (remessa pela Empresa).
+		 */
 		registroTipoE.append("0");
 
 		return registroTipoE;

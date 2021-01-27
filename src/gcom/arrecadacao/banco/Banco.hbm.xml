@@ -17,6 +17,8 @@
 		<property name="descricao" type="java.lang.String" column="bnco_nmbanco" length="40"/>
 		<property name="indicadorUso" type="java.lang.Short" column="bnco_icuso" length="2"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="bnco_tmultimaalteracao" length="8"/>
+		<property name="adereCnab150" type="java.lang.Boolean" column="bnco_adere_cnab150" not-null="true" />
+		
 		<!-- associations -->
 		<!-- bi-directional one-to-many association to Agencia -->
 		<!--    <set

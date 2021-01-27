@@ -5669,6 +5669,15 @@ public class Fachada {
 		}
 	}
 
+	
+	public Map<Banco, Collection<DebitoAutomaticoMovimento>> pesquisaDebitoAutomaticoMovimento(Banco banco) throws ControladorException {
+		try {
+			return this.getControladorArrecadacao().pesquisaDebitoAutomaticoMovimento(banco);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 	@SuppressWarnings("rawtypes")
 	public Map<Banco, Collection<DebitoAutomaticoMovimento>> pesquisaDebitoAutomaticoMovimento(Collection colecaoIdsFaturamentoGrupo, Integer anoMesReferenciaFaturamento) {
 		try {
@@ -5768,6 +5777,17 @@ public class Fachada {
 				new Object[] { debitosAutomaticoBancosMap, usuario });
 	}
 
+	// Método usado apenas para gerar a lista dos clientes que estão em Devito automático
+	// Não existe o recurso no formulário
+	// Para rodar em maquina local
+	public boolean gerarArquivodebitoAutomaticoBanco(Map<Banco, Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap, Usuario usuario) {
+		try {
+			return this.getControladorArrecadacao().gerarArquivodebitoAutomaticoBanco(debitosAutomaticoBancosMap, usuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 	/**
 	 * [UC0319] Gerar Movimento de débito automático para o banco
 	 * 
@@ -13525,7 +13545,7 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
-
+	
 	public void encerrarOSSemExecucao(Integer numeroOS, Date dataEncerramento, Usuario usuarioLogado, String motivoEncerramento, Date ultimaAlteracao, String parecerEncerramento,
 			OrdemServico osFiscalizacao, String indicadorVistoriaServicoTipo, String codigoRetornoVistoriaOs, OrdemServicoBoletim ordemServicoBoletim, Short indicadorServicoAceito) {
 		try {

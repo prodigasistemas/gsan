@@ -14617,7 +14617,47 @@ public class ControladorArrecadacao extends ControladorComum {
 		getControladorUtil().inserir(avisoDeducoes);
 	}
 
+	public Map<Banco, Collection<DebitoAutomaticoMovimento>> pesquisaDebitoAutomaticoMovimento(Banco banco) throws ControladorException {
 
+		Map<Banco, Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap = null;
+		try {
+
+				Collection colecaoBancoDebitoAutomaticoMovimento =  
+						repositorioArrecadacao.pesquisaUltimoMovimentoClienteDebitoAutomaticoMovimento(banco);
+
+				if (colecaoBancoDebitoAutomaticoMovimento != null && !colecaoBancoDebitoAutomaticoMovimento.isEmpty()) {
+
+					debitosAutomaticoBancosMap = new HashMap();
+
+					Iterator iteCollBancoDebitoAutomaticoMovimento = colecaoBancoDebitoAutomaticoMovimento.iterator();
+
+					boolean primeiraVez = true;
+					Integer idBancoUltimo = null;
+					Banco bancoInserir = null;
+					Collection colecaoDebitoAutomaticoMovimento = new ArrayList();
+
+					DebitoAutomaticoMovimento debitoAutomaticoMovimento = null;
+					
+					while (iteCollBancoDebitoAutomaticoMovimento.hasNext()) {
+						Object[] bancoDebitoAutomaticoMovimento = (Object[]) iteCollBancoDebitoAutomaticoMovimento.next();
+						if (bancoDebitoAutomaticoMovimento != null) {
+
+							banco = (Banco) bancoDebitoAutomaticoMovimento[0];
+							debitoAutomaticoMovimento = (DebitoAutomaticoMovimento) bancoDebitoAutomaticoMovimento[1];
+							colecaoDebitoAutomaticoMovimento.add(debitoAutomaticoMovimento);
+						}
+
+					}
+
+					debitosAutomaticoBancosMap.put(banco, colecaoDebitoAutomaticoMovimento);
+
+				}
+			
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+		return debitosAutomaticoBancosMap;
+	}
 	/**
 	 * [UC0319] Gerar Movimento de Débito Automático para o banco
 	 * 
@@ -14871,8 +14911,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	 */
 
 	public void gerarMovimentoDebitoAutomaticoBanco(Map<Banco, 
-		Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap,
-		Usuario usuario) throws ControladorException {
+			Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap,
+			Usuario usuario) throws ControladorException {
 		
 		Collection colecaoGerarMovimentoDebitoAutomatico = new ArrayList();
 
@@ -14892,7 +14932,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer idGrupoFaturamento = null;
 			Integer anoMesReferencia = null;
 			boolean primeiraVez = true;
-
+			Integer sequencial = 0;
 			while (debitosAutomaticoBancosIterator.hasNext()) {
 				
 				Banco banco = (Banco) debitosAutomaticoBancosIterator.next();
@@ -14966,71 +15006,76 @@ public class ControladorArrecadacao extends ControladorComum {
 				Collection colecaoArrecadadorMovimentoItem = new ArrayList();
 				BigDecimal valorTotalDebitado = new BigDecimal("0.00");
 
+				Integer idRegistroCodigo = 
+						repositorioArrecadacao.pesquisarIdRegistroCodigo(RegistroCodigo.CODIGO_E);
+				
 				while (debitoAutomaticoMovimentoIterator.hasNext()) {
 					DebitoAutomaticoMovimento debitoAutomaticoMovimento = 
 						(DebitoAutomaticoMovimento) debitoAutomaticoMovimentoIterator.next();
 
 					Conta conta = debitoAutomaticoMovimento.getContaGeral().getConta();
-
-					if (primeiraVez) {
-						
-						idGrupoFaturamento = 
-							debitoAutomaticoMovimento.getFaturamentoGrupo().getId();
-						
-						anoMesReferencia = conta.getReferencia();
-					}
-
-					try {
-						BigDecimal valorDebito = new BigDecimal("0.00");
-						valorDebito = valorDebito.add(conta.getValorAgua());
-						valorDebito = valorDebito.add(conta.getValorEsgoto());
-						valorDebito = valorDebito.add(conta.getDebitos());
-						valorDebito = valorDebito.subtract(conta.getValorCreditos());
-
-						/*
-						 * Colocado por Raphael Rossiter em 03/07/2007
-						 * (Analista: Rosana Carvalho) OBJETIVO: Retirar o valor
-						 * dos impostos do valor total da conta
-						 */
-						if (conta.getValorImposto() != null) {
-							valorDebito = valorDebito.subtract(conta.getValorImposto());
+					if (conta != null) {
+						if (primeiraVez) {
+							idGrupoFaturamento = 
+								debitoAutomaticoMovimento.getFaturamentoGrupo().getId();
+							
+							anoMesReferencia = conta.getReferencia();
 						}
-
-						valorTotalDebitado = valorTotalDebitado.add(valorDebito);
-
-						// atualiza o objeto debito automatico movimento
-						debitoAutomaticoMovimento.setDataVencimento(conta.getDataVencimentoConta());
-						debitoAutomaticoMovimento.setDataVencimento(conta.getDataVencimentoConta());
-						debitoAutomaticoMovimento.setNumeroSequenciaArquivoEnviado(
-							arrecadadorMovimento.getNumeroSequencialArquivo());
-						debitoAutomaticoMovimento.setUltimaAlteracao(new Date());
-
-						repositorioUtil.atualizar(debitoAutomaticoMovimento);
-
-						StringBuilder linhaTipoE = 
-							criarRegistroTipoE(banco,
-								debitoAutomaticoMovimento, tamanhoMaximoIdentificacaoImovel);
-
-						// inseri o item do movimento arrecadador
-						ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
-						Integer idRegistroCodigo = 
-							repositorioArrecadacao.pesquisarIdRegistroCodigo(RegistroCodigo.CODIGO_E);
-						
-						RegistroCodigo registroCodigo = new RegistroCodigo();
-						registroCodigo.setId(idRegistroCodigo);
-						arrecadadorMovimentoItem.setRegistroCodigo(registroCodigo);
-						arrecadadorMovimentoItem.setConteudoRegistro(linhaTipoE.toString());
-						arrecadadorMovimentoItem.setDescricaoOcorrencia("OK");
-						arrecadadorMovimentoItem.setIndicadorAceitacao(new Short("1"));
-						arrecadadorMovimentoItem.setUltimaAlteracao(new Date());
-						
-						colecaoArrecadadorMovimentoItem.add(arrecadadorMovimentoItem);
-
-						registrosTipoE.append(linhaTipoE);
-						registrosTipoE.append(System.getProperty("line.separator"));
-
-					} catch (ErroRepositorioException e) {
-						throw new ControladorException("erro.sistema", e);
+	
+							BigDecimal valorDebito = new BigDecimal("0.00");
+							valorDebito = valorDebito.add(conta.getValorAgua());
+							valorDebito = valorDebito.add(conta.getValorEsgoto());
+							valorDebito = valorDebito.add(conta.getDebitos());
+							valorDebito = valorDebito.subtract(conta.getValorCreditos());
+	
+							/*
+							 * Colocado por Raphael Rossiter em 03/07/2007
+							 * (Analista: Rosana Carvalho) OBJETIVO: Retirar o valor
+							 * dos impostos do valor total da conta
+							 */
+							if (conta.getValorImposto() != null) {
+								valorDebito = valorDebito.subtract(conta.getValorImposto());
+							}
+	
+							valorTotalDebitado = valorTotalDebitado.add(valorDebito);
+	
+							// atualiza o objeto debito automatico movimento
+							debitoAutomaticoMovimento.setDataVencimento(conta.getDataVencimentoConta());
+							debitoAutomaticoMovimento.setDataVencimento(conta.getDataVencimentoConta());
+							debitoAutomaticoMovimento.setNumeroSequenciaArquivoEnviado(
+								arrecadadorMovimento.getNumeroSequencialArquivo());
+							debitoAutomaticoMovimento.setUltimaAlteracao(new Date());
+	
+							repositorioUtil.atualizar(debitoAutomaticoMovimento);
+	
+							StringBuilder linhaTipoE = null;
+							if (banco.isAdereCnab150()) {
+								sequencial++;
+								linhaTipoE = 
+										criarRegistroTipoE(banco,
+											debitoAutomaticoMovimento, tamanhoMaximoIdentificacaoImovel, sequencial);
+							} else {
+								linhaTipoE = 
+									criarRegistroTipoE(banco,
+										debitoAutomaticoMovimento, tamanhoMaximoIdentificacaoImovel);
+							}
+							
+							// inseri o item do movimento arrecadador
+							ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
+							
+							RegistroCodigo registroCodigo = new RegistroCodigo();
+							registroCodigo.setId(idRegistroCodigo);
+							arrecadadorMovimentoItem.setRegistroCodigo(registroCodigo);
+							arrecadadorMovimentoItem.setConteudoRegistro(linhaTipoE.toString());
+							arrecadadorMovimentoItem.setDescricaoOcorrencia("OK");
+							arrecadadorMovimentoItem.setIndicadorAceitacao(new Short("1"));
+							arrecadadorMovimentoItem.setUltimaAlteracao(new Date());
+							
+							colecaoArrecadadorMovimentoItem.add(arrecadadorMovimentoItem);
+	
+							registrosTipoE.append(linhaTipoE);
+							registrosTipoE.append(System.getProperty("line.separator"));
+	
 					}
 				}
 				
@@ -15063,7 +15108,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				// chama o gerar arquivo TXT para envio do banco
 				StringBuilder arquivoTXTEnvio = 
-					gerarArquivoTxt(arrecadadorMovimento, registrosTipoE);
+					banco.isAdereCnab150() ? gerarArquivoTxt(arrecadadorMovimento, registrosTipoE, banco)
+										   : gerarArquivoTxt(arrecadadorMovimento, registrosTipoE);
 
 				// atualiza o numero sequencial do arquivo no arrecadador
 				// contrato
@@ -15144,7 +15190,6 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			// Parte que gera o relatório e envia por email
-			// cria uma instância da classe do relatório
 			// cria uma instância da classe do relatório
 			RelatorioMovimentoDebitoAutomaticoBanco relatorioMovimentoDebitoAutomaticoBanco = 
 				new RelatorioMovimentoDebitoAutomaticoBanco(usuario);
@@ -15247,6 +15292,215 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	}
 
+	// Método usado apenas para gerar a lista dos clientes que estão em Debito automático
+	// Não existe o recurso no formulário
+	// Para rodar somente em maquina local
+	public boolean gerarArquivodebitoAutomaticoBanco(
+		Map<Banco, 
+		Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap,
+		Usuario usuario) throws ControladorException {
+	
+		Collection colecaoGerarMovimentoDebitoAutomatico = new ArrayList();
+	
+		// cria uma coleção com a a chave(Banco) do Map
+		Iterator debitosAutomaticoBancosIterator = debitosAutomaticoBancosMap.keySet().iterator();
+	
+		ArrecadadorMovimento arrecadadorMovimento = null;
+		try {
+	
+			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+	
+			Integer idGrupoFaturamento = null;
+			Integer anoMesReferencia = null;
+			boolean primeiraVez = true;
+			Integer sequencial = 0;
+			while (debitosAutomaticoBancosIterator.hasNext()) {
+				
+				Banco banco = (Banco) debitosAutomaticoBancosIterator.next();
+				
+				// recupera a coleção de valores(DebitoAutomaticoMovimento) pelo
+				// valor, no map
+				Collection<DebitoAutomaticoMovimento> colecaoDebitoAutomaticoMovimento = 
+					debitosAutomaticoBancosMap.get(banco);
+				
+				Iterator debitoAutomaticoMovimentoIterator = 
+					colecaoDebitoAutomaticoMovimento.iterator();
+				
+				GerarMovimentoDebitoAutomaticoBancoHelper gerarMovimentoDebitoAutomaticoBancoHelper = 
+					new GerarMovimentoDebitoAutomaticoBancoHelper();
+	
+				StringBuilder registrosTipoE = new StringBuilder();
+				Integer idArrecadadorContrato = null;
+				String codigoConvenio = null;
+				Integer numeroSequencialArquivoEnvio = null;
+				String descricaoEmail = null;
+				Short tamanhoMaximoIdentificacaoImovel = null;
+	
+				Object[] arrecadadorContrato = null;
+	
+				try {
+	
+					arrecadadorContrato = repositorioArrecadacao.pesquisaCamposArrecadadorContrato(banco.getId());
+					
+					if (arrecadadorContrato[0] != null) {
+						idArrecadadorContrato = (Integer) arrecadadorContrato[0];
+					}
+					
+					if (arrecadadorContrato[1] != null) {
+						codigoConvenio = (String) arrecadadorContrato[1];
+					}
+					
+					if (arrecadadorContrato[2] != null) {
+						numeroSequencialArquivoEnvio = (Integer) arrecadadorContrato[2];
+					}
+					
+					if (arrecadadorContrato[3] != null) {
+						descricaoEmail = (String) arrecadadorContrato[3];
+					}
+					
+					if (arrecadadorContrato[4] != null) {
+						tamanhoMaximoIdentificacaoImovel = (Short) arrecadadorContrato[4];
+					}
+				} catch (ErroRepositorioException e) {
+					throw new ControladorException("erro.sistema", e);
+				}
+				
+				// instancia um objeto arrecadador movimento
+				arrecadadorMovimento = new ArrecadadorMovimento();
+				
+				// +2 referentes a A e Z
+				Integer quantidadeRegistrosMap = colecaoDebitoAutomaticoMovimento.size() + 2;
+				
+				arrecadadorMovimento.setCodigoRemessa(new Short("1"));
+				
+				// Código do convênio do arrecadador contrato
+				arrecadadorMovimento.setCodigoConvenio(codigoConvenio);
+				arrecadadorMovimento.setNomeEmpresa(getSistemaParametro().getNomeAbreviadoEmpresa());
+				arrecadadorMovimento.setCodigoBanco(new Short(""+ banco.getId()));
+				arrecadadorMovimento.setNomeBanco(banco.getDescricao());
+				arrecadadorMovimento.setDataGeracao(new Date());
+				arrecadadorMovimento.setNumeroSequencialArquivo(numeroSequencialArquivoEnvio + 1);
+				arrecadadorMovimento.setNumeroVersaoLayout(new Integer(""+ getSistemaParametro().getNumeroLayoutFebraban()));
+				arrecadadorMovimento.setDescricaoIdentificacaoServico(ConstantesSistema.DEBITO_AUTOMATICO);
+				arrecadadorMovimento.setNumeroRegistrosMovimento(quantidadeRegistrosMap);
+				
+				Collection colecaoArrecadadorMovimentoItem = new ArrayList();
+				BigDecimal valorTotalDebitado = new BigDecimal("0.00");
+	
+				Integer idRegistroCodigo = 
+						repositorioArrecadacao.pesquisarIdRegistroCodigo(RegistroCodigo.CODIGO_E);
+				
+				while (debitoAutomaticoMovimentoIterator.hasNext()) {
+					DebitoAutomaticoMovimento debitoAutomaticoMovimento = 
+						(DebitoAutomaticoMovimento) debitoAutomaticoMovimentoIterator.next();
+	
+					Conta conta = debitoAutomaticoMovimento.getContaGeral().getConta();
+
+					if (conta != null) {
+						if (primeiraVez) {
+							
+							idGrupoFaturamento = 
+								debitoAutomaticoMovimento.getFaturamentoGrupo().getId();
+							
+							anoMesReferencia = conta.getReferencia();
+						}
+	
+							BigDecimal valorDebito = new BigDecimal("0.00");
+							valorDebito = valorDebito.add(conta.getValorAgua());
+							valorDebito = valorDebito.add(conta.getValorEsgoto());
+							valorDebito = valorDebito.add(conta.getDebitos());
+							valorDebito = valorDebito.subtract(conta.getValorCreditos());
+	
+							/*
+							 * Colocado por Raphael Rossiter em 03/07/2007
+							 * (Analista: Rosana Carvalho) OBJETIVO: Retirar o valor
+							 * dos impostos do valor total da conta
+							 */
+							if (conta.getValorImposto() != null) {
+								valorDebito = valorDebito.subtract(conta.getValorImposto());
+							}
+	
+							valorTotalDebitado = valorTotalDebitado.add(valorDebito);
+	
+							// atualiza o objeto debito automatico movimento
+							debitoAutomaticoMovimento.setDataVencimento(conta.getDataVencimentoConta());
+							debitoAutomaticoMovimento.setDataVencimento(conta.getDataVencimentoConta());
+							debitoAutomaticoMovimento.setNumeroSequenciaArquivoEnviado(
+								arrecadadorMovimento.getNumeroSequencialArquivo());
+							debitoAutomaticoMovimento.setUltimaAlteracao(new Date());
+	
+							StringBuilder linhaTipoE = null;
+							if (banco.getId() == 104) {
+								sequencial++;
+								linhaTipoE = 
+										criarRegistroTipoE(banco,
+											debitoAutomaticoMovimento, tamanhoMaximoIdentificacaoImovel, sequencial);
+							} else {
+								linhaTipoE = 
+									criarRegistroTipoE(banco,
+										debitoAutomaticoMovimento, tamanhoMaximoIdentificacaoImovel);
+							}
+							
+							// inseri o item do movimento arrecadador
+							ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
+							
+							RegistroCodigo registroCodigo = new RegistroCodigo();
+							registroCodigo.setId(idRegistroCodigo);
+							arrecadadorMovimentoItem.setRegistroCodigo(registroCodigo);
+							arrecadadorMovimentoItem.setConteudoRegistro(linhaTipoE.toString());
+							arrecadadorMovimentoItem.setDescricaoOcorrencia("OK");
+							arrecadadorMovimentoItem.setIndicadorAceitacao(new Short("1"));
+							arrecadadorMovimentoItem.setUltimaAlteracao(new Date());
+							
+							colecaoArrecadadorMovimentoItem.add(arrecadadorMovimentoItem);
+	
+							registrosTipoE.append(linhaTipoE);
+							registrosTipoE.append(System.getProperty("line.separator"));
+	
+					}
+				}
+				
+				arrecadadorMovimento.setValorTotalMovimento(valorTotalDebitado);
+				arrecadadorMovimento.setUltimaAlteracao(new Date());
+				Integer idArrecadadorMovimento = null;
+				arrecadadorMovimento.setId(idArrecadadorMovimento);
+				gerarMovimentoDebitoAutomaticoBancoHelper.setArrecadadorMovimento(arrecadadorMovimento);
+				
+				Iterator iteratorArrecadadorMovimentoItem = colecaoArrecadadorMovimentoItem.iterator();
+			
+				// chama o gerar arquivo TXT para envio do banco
+				StringBuilder arquivoTXTEnvio = 
+						banco.isAdereCnab150() ? gerarArquivoTxt(arrecadadorMovimento, registrosTipoE, banco)
+											   : gerarArquivoTxt(arrecadadorMovimento, registrosTipoE);
+						
+				String mesAnoReferenciaFormatada = Util.formatarAnoMesParaMesAnoCom2Digitos(anoMesReferencia);
+				String nomeZip = 
+					banco.getDescricaoAbreviada()+ idGrupoFaturamento + mesAnoReferenciaFormatada;
+	
+				BufferedWriter out = null;
+				
+				// pegar o arquivo, zipar pasta e arquivo e escrever no stream
+	
+				File leitura = new File(getControladorUtil().getCaminhoDownloadArquivos("arrecadacao") + nomeZip + ".rem");
+				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leitura.getAbsolutePath())));
+				out.write(arquivoTXTEnvio.toString());
+				out.flush();
+	
+			}
+	
+		} catch (Exception e) {
+	
+			e.printStackTrace();
+			
+			if(!(e instanceof SendFailedException)) {
+				sessionContext.setRollbackOnly();
+			}
+	
+		}
+		
+		return true;
+
+	}
 	/**
 	 * [UC0319] Gerar Movimento de Débito Automático para o banco
 	 * 
@@ -15262,8 +15516,15 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * @return StringBuilder
 	 * @throws ControladorException
 	 */
+
 	protected StringBuilder criarRegistroTipoE(Banco banco,
 			DebitoAutomaticoMovimento debitoAutomaticoMovimento, Short tamanhoMaximoIdentificacaoImovel)
+			throws ControladorException {
+		return criarRegistroTipoE(banco, debitoAutomaticoMovimento, tamanhoMaximoIdentificacaoImovel, null);
+	}
+	
+	protected StringBuilder criarRegistroTipoE(Banco banco,
+			DebitoAutomaticoMovimento debitoAutomaticoMovimento, Short tamanhoMaximoIdentificacaoImovel, Integer sequencial)
 			throws ControladorException {
 		StringBuilder registroTipoE = new StringBuilder();
 		
@@ -15280,27 +15541,31 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		Imovel imovel = (Imovel) colecaoImoveis.iterator().next();
 		
+		// E.01 - Código do registro = "E".
 		registroTipoE.append("E");
 		
-		// identificação do cliente na empresa
+		// E.02 - Identificação do cliente na Empresa
 		String identificacaoCliente = Util.adicionarZerosEsquedaNumeroTruncando(tamanhoMaximoIdentificacaoImovel.intValue(), ""
 				+ imovel.getCodigoDebitoAutomatico());
 		registroTipoE.append(Util.completaString(identificacaoCliente, 25));
 
 		String codigoAgencia = debitoAutomaticoMovimento.getDebitoAutomatico()
 				.getAgencia().getCodigoAgencia();
-		// agencia para débito
+		
+		// E.03 - Agência para débito/crédito
 		registroTipoE
 				.append(Util.adicionarZerosEsquedaNumero(4, codigoAgencia));
 
-		// Identificação do cliente no Banco
+		// E.04 - Identificação do cliente no Banco
 		registroTipoE.append(Util.completaString(debitoAutomaticoMovimento
 				.getDebitoAutomatico().getIdentificacaoClienteBanco(), 14));
-		// data de vencimento(AAAAMMDD)
+		
+		// E.05 - Data do vencimento (AAAAMMDD)
 		String dataVencimento = Util.recuperaAnoMesDiaDaData(conta
 				.getDataVencimentoConta());
 		registroTipoE.append(dataVencimento);
-		// Valor do débito
+		
+		// E.06 - Valor do débito/crédito
 		BigDecimal valorDebito = new BigDecimal("0.00");
 		valorDebito = valorDebito.add(conta.getValorAgua());
 		valorDebito = valorDebito.add(conta.getValorEsgoto());
@@ -15318,9 +15583,12 @@ public class ControladorArrecadacao extends ControladorComum {
 		String valorDebitoString = ("" + valorDebito).replace(".", "");
 		registroTipoE.append(Util.adicionarZerosEsquedaNumero(15,
 				valorDebitoString));
-		// Código da moeda
+		
+		// E.07 - Código da moeda - Deverá ser: "03" - para Reais,
 		registroTipoE.append("03");
-		// inicio preenchido conforme segue abaixo(E.07)
+		
+		// E.08 - Esta informação não será tratada pelo Banco. Irá retornar como a Empresa informou.
+		// inicio preenchido conforme segue abaixo(E.08)
 		// Ano/Mês de referência da conta no formato AAAAMM
 		registroTipoE.append(conta.getReferencia());
 		// Digito verificador da conta
@@ -15332,11 +15600,35 @@ public class ControladorArrecadacao extends ControladorComum {
 				+ debitoAutomaticoMovimento.getFaturamentoGrupo().getId(), 2));
 		// reservado para o futuro
 		registroTipoE.append(Util.completaString("", 42));
-		// fim preenchido conforme segue abaixo(E.07)
+		// fim preenchido conforme segue abaixo(E.08)
 
-		// reservado para o futuro
-		registroTipoE.append(Util.completaString("", 20));
-		// Tipo do Movimento
+
+		 if (banco != null && banco.isAdereCnab150()) {
+			// E.09 - Número do Agendamento do Cliente evoluir de 1 em 1  é obrigatório e não pode ser zerado.
+			//		  É utilizado em caso de cancelamento do registro
+			 registroTipoE.append(Util.adicionarZerosEsquedaNumero(6, sequencial));
+			 
+			// E.10 - Reservado para o futuro (filler) Brancos
+			registroTipoE.append(Util.completaString("", 8));	
+			
+			// E.11 - Número Seqüencial do Registro é obrigatório e não pode ser zerado 
+			registroTipoE.append(Util.adicionarZerosEsquedaNumero(6, sequencial));
+		 } else {
+		
+			// E.10 - Reservado para o futuro (filler) Brancos
+			registroTipoE.append(Util.completaString("", 20));
+			 
+			// E.11 - Número Seqüencial do Registro é obrigatório e não pode ser zerado 
+			registroTipoE.append(Util.completaString("" + sequencial, 6));
+		 }
+		 
+
+		/*
+		 * E.12 - Código do movimento - Esta informação deverá conter:
+		 * 0 - Débito/crédito Normal.
+		 * EXCLUSIVO PARA A CEF --|1 - Cancelamento (exclusão) de lançamento enviado anteriormente para o Banco
+		 * ENVIADO PELA EMPRESA	  |5 - Cadastro de OPTANTES - para inclusão do cliente no cadastro de optantes (remessa pela Empresa).
+		 */
 		registroTipoE.append("0");
 
 		return registroTipoE;
@@ -15359,13 +15651,30 @@ public class ControladorArrecadacao extends ControladorComum {
 	protected StringBuilder gerarArquivoTxt(
 			ArrecadadorMovimento arrecadadorMovimento,
 			StringBuilder registrosTipoE) {
+		return gerarArquivoTxt(arrecadadorMovimento, registrosTipoE, null);
+	}
+
+	protected StringBuilder gerarArquivoTxt(
+			ArrecadadorMovimento arrecadadorMovimento,
+			StringBuilder registrosTipoE, Banco banco) {
+		
 		
 		StringBuilder arquivoTXTEnvio = new StringBuilder();
 
 		// gera o header do arquivo(registroCódigoA)
 		arquivoTXTEnvio.append("A");
+		//A.02 - Código de Remessa(1 - REMESSA, 2 - RETORNO)
 		arquivoTXTEnvio.append(Util.completaString(""+ arrecadadorMovimento.getCodigoRemessa(), 1));
-		arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getCodigoConvenio(), 20));
+		
+		
+		// A.03 - Código do Convênio 
+		if (banco != null && banco.isAdereCnab150()) {
+			// Alterações apontadas pelos técnicos da CEF
+			arquivoTXTEnvio.append(Util.completaString("303653110001", 20));
+		} else {
+			arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getCodigoConvenio(), 20));
+		}
+		// A.04 - Nome da Empresa.
 		arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getNomeEmpresa(), 20));
 		
 		//codigo agente
@@ -15379,20 +15688,61 @@ public class ControladorArrecadacao extends ControladorComum {
 			Fachada.getInstancia().pesquisar(filtroArrecadador, Arrecadador.class.getName());
 		
 		String codigoAgente = "";
+		boolean adere_cnab150 = false;
 		if(!colecaoArrecadador.isEmpty()){
 			Arrecadador arrecadador = (Arrecadador)Util.retonarObjetoDeColecao(colecaoArrecadador);
 			codigoAgente = arrecadador.getCodigoAgente().toString();
+			
 		}
 		
+		// A.05 - Código do Banco
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(3, ""+ codigoAgente));
-		arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getNomeBanco(), 20));
-		String dataGeracaoArquivo = Util.recuperaAnoMesDiaDaData(arrecadadorMovimento.getDataGeracao());		
+		// A.06 - Nome do Banco
+		if (banco != null && banco.isAdereCnab150()) {
+			// Alterações apontadas pelos técnicos da CEF
+			arquivoTXTEnvio.append(Util.completaString("CAIXA ECONOMICA FEDERAL", 20));
+		} else {
+			arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getNomeBanco(), 20));
+		}
+		// A.07 - Data do Movimento = Deve ser no formato AAAAMMDD
+		String dataGeracaoArquivo = Util.recuperaAnoMesDiaDaData(arrecadadorMovimento.getDataGeracao());	
 		arquivoTXTEnvio.append(dataGeracaoArquivo);
+		// A.08 - Número seqüencial do arquivo
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, ""+ arrecadadorMovimento.getNumeroSequencialArquivo()));
+		// A.09 - Versão do layout
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(2, ""+ arrecadadorMovimento.getNumeroVersaoLayout()));
-		arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getDescricaoIdentificacaoServico(), 17));
-		arquivoTXTEnvio.append(Util.completaString("", 51));
-		arquivoTXTEnvio.append("*");
+		
+		if (banco != null && banco.isAdereCnab150()) {
+			
+			// A.10 - Identificação do serviço
+			// Alterações apontadas pelos técnicos da CEF
+			arquivoTXTEnvio.append(Util.completaString("DEB AUTOMAT", 17)); //
+			
+			// A.11 - Conta Compromisso
+			// Conta informada pelo Joao Moscoso
+			
+			arquivoTXTEnvio.append(Util.completaString("1314003000011104", 16));
+			
+			// A.12 - Identificação do Ambiente Cliente (P - Produção, T - teste)
+			arquivoTXTEnvio.append("T");
+			// A.13 - Identificação do Ambiente Caixa (P - Produção, T - teste)
+			arquivoTXTEnvio.append("T");
+		
+			// A.14 - Reservado para o futuro (Brancos).
+			arquivoTXTEnvio.append(Util.completaString("", 27));
+			// A.15 - Número Sequencial do Registro,  deverá constar:  000000
+			arquivoTXTEnvio.append("000000");
+			// A.16 - Reservado para o futuro (Branco)
+			arquivoTXTEnvio.append(Util.completaString("", 1));
+		} else {
+			
+			// A.10 - Identificação do serviço
+			arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getDescricaoIdentificacaoServico(), 17)); //"DEB AUTOMAT"
+			// A.11 - Reservado para o futuro (Brancos).
+			arquivoTXTEnvio.append(Util.completaString("", 51));
+			// A.12 - Fim de linha.
+			arquivoTXTEnvio.append("*");			
+		}
 
 		arquivoTXTEnvio.append(System.getProperty("line.separator"));
 		
@@ -15401,17 +15751,23 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		// gera o trailler(registro código "Z") do arquivo de envio
 		arquivoTXTEnvio.append("Z");
-		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, ""+ arrecadadorMovimento.getNumeroRegistrosMovimento()));
+		
+		Integer qtdeLinhas = arrecadadorMovimento.getNumeroRegistrosMovimento();
+		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, "" + qtdeLinhas));
 		
 		String valorSemVirgula = ("" + arrecadadorMovimento.getValorTotalMovimento()).replace(".", "");
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(17,valorSemVirgula));
 		arquivoTXTEnvio.append(Util.completaString("", 125));
-		arquivoTXTEnvio.append("*");
+		
+		if (banco != null && banco.isAdereCnab150()) {
+			// Alterações apontadas pelos técnicos da CEF
+			arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, (qtdeLinhas -1)));
+			arquivoTXTEnvio.append(Util.completaString("", 1));
+		} else {
+			arquivoTXTEnvio.append("*");
+		}
 		arquivoTXTEnvio.append(System.getProperty("line.separator"));
 		
-		// fim de arquivo
-		arquivoTXTEnvio.append("\u0004");
-
 		return arquivoTXTEnvio;
 
 	}
@@ -40592,8 +40948,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * @throws ErroRepositorioException
 	 */
 	public void atualizarLigacaoAguaLigadoAnaliseParaLigado(Integer idFuncionalidadeIniciada, Integer idLocalidade) throws ControladorException{
-		
-	
+			
 		// -------------------------
 		//
 		// Registrar o início do processamento da Unidade de
@@ -40662,9 +41017,6 @@ public class ControladorArrecadacao extends ControladorComum {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
 	}
 	
-	
-	
-
 	/**
 	 * Verificar se a entrada de um parcelamento foi paga
 	 * @param idImovel

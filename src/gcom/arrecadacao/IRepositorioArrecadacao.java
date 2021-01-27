@@ -128,6 +128,8 @@ public interface IRepositorioArrecadacao {
 	public Collection pesquisaDebitoAutomaticoMovimento(Collection colecaoFaturamentoGrupo, Integer anoMesReferenciaFaturamento, Collection colecaoidsBanco)
 			throws ErroRepositorioException;
 
+	public Collection pesquisaUltimoMovimentoClienteDebitoAutomaticoMovimento(Banco banco) throws ErroRepositorioException;
+	
 	@SuppressWarnings("rawtypes")
 	public Collection filtrarAvisoBancarioAbertoFechado(AvisoBancarioHelper avisoBancarioHelper) throws ErroRepositorioException;
 

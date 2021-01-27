@@ -112,6 +112,16 @@ public class Banco extends TabelaAuxiliarAbreviada implements Serializable {
 //    }
 //    
 //    
+	private boolean adereCnab150;
+	
+	public boolean isAdereCnab150() {
+		return adereCnab150;
+	}
+
+	public void setAdereCnab150(boolean adereCnab150) {
+		this.adereCnab150 = adereCnab150;
+	}
+
 	public String toString() {
 		return new ToStringBuilder(this).append("id", getId()).toString();
 	}

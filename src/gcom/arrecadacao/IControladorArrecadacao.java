@@ -168,6 +168,8 @@ public interface IControladorArrecadacao {
 	@SuppressWarnings("rawtypes")
 	public Map<Banco, Collection<DebitoAutomaticoMovimento>> pesquisaDebitoAutomaticoMovimento(Collection colecaoIdsFaturamentoGrupo, Integer anoMesReferenciaFaturamento) throws ControladorException;
 
+	public Map<Banco, Collection<DebitoAutomaticoMovimento>> pesquisaDebitoAutomaticoMovimento(Banco banco) throws ControladorException;
+	
 	@SuppressWarnings("rawtypes")
 	public Collection filtrarAvisoBancarioAbertoFechado(AvisoBancarioHelper avisoBancarioHelper) throws ControladorException;
 
@@ -175,6 +177,11 @@ public interface IControladorArrecadacao {
 
 	public void gerarMovimentoDebitoAutomaticoBanco(Map<Banco, Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap, Usuario usuario) throws ControladorException;
 
+	// Método usado apenas para gerar a lista dos clientes que estão em Devito automático
+	// Não existe o recurso no formulário
+	// Para rodar em maquina local
+	public boolean gerarArquivodebitoAutomaticoBanco(Map<Banco, Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap, Usuario usuario) throws ControladorException;
+	
 	public void regerarArquivoTxtMovimentoDebitoAutomatico(ArrecadadorMovimento arrecadadorMovimento, String envioBanco, Usuario usuario) throws ControladorException;
 
 	public Integer inserirGuiaDevolucao(GuiaDevolucao guiaDevolucao, Usuario usuarioLogado) throws ControladorException;

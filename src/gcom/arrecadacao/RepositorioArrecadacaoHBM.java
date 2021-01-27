@@ -1609,6 +1609,53 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
+	 * Busca o id do ultimo movimento do cliente que possui o cadastro em débito automático
+	 * @author Marcelo Giovani
+	 * @date 13/11/2020
+	 */
+	private Collection buscaUmltimoMovimentoDeClientesEmDebitoAutomatico(Banco banco) throws ErroRepositorioException {
+		
+		// Cria a variávelque vai armazenar a coleção
+		Collection retorno = new ArrayList();
+
+		// Cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// Cria a variável que vai conter o SQL
+		String consulta = "select distinct damv_id as idDebAutMov" + 
+				"	from arrecadacao.debito_automatico da " + 
+				"	left join arrecadacao.debito_auto_movimento dam on dam.deba_id = da.deba_id  " + 
+				"													and dam.damv_id in (select dam_id from ( " + 
+				"																						select max(damv_id) as dam_id, deba_id  " + 
+				"																						from arrecadacao.debito_auto_movimento " + 
+				"																						group by deba_id) as t) " + 
+				"	join cadastro.imovel im on da.imov_id = im.imov_id " + 
+				"	inner join arrecadacao.agencia ag on ag.agen_id = da.agen_id " + 
+				"	inner join arrecadacao.banco bc on ag.bnco_id = bc.bnco_id " + 
+				"	left join faturamento.conta ct on ct.imov_id = im.imov_id " + 
+				"	where ct.dcst_idatual in (0, 1, 2) " + 
+				"	and da.deba_dtexclusao is null " + 
+				"	and bc.bnco_id = :banco";
+
+		try {
+
+			retorno = session.createSQLQuery(consulta)
+				.addScalar("idDebAutMov", Hibernate.INTEGER)
+				.setInteger("banco", banco.getId()).list();
+
+			// Erro no hibernate
+		} catch (HibernateException e) {
+			// Levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// Fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		// Retorna a coleção de pagamentos
+		return retorno;
+	}
+	/**
 	 * [UC0300] Classificar Pagamentos e Devoluções
 	 * 
 	 * Atualiza a situação atual dos pagamentos (PGST_IDATUAL) com valor
@@ -3272,6 +3319,54 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 
+	/**
+	 * Pesquisa o último movimento de débito automático para o banco ao cliente em débito automático 
+	 * Implementado para gerar a lista de todos os clientes em débito automático que estejam atívos no banco específico
+	 * @author Marcelo Giovani
+	 * @date 12/11/2020
+	 * 
+	 * 
+	 * @param Banco
+	 * @return Coleção de DebitoAutomaticoMovimento
+	 * @throws ErroRepositorioException
+	 */
+	public Collection pesquisaUltimoMovimentoClienteDebitoAutomaticoMovimento(Banco banco) throws ErroRepositorioException {
+
+		Collection<DebitoAutomaticoMovimento> retorno = new ArrayList();
+		Collection idsDebAutMov = buscaUmltimoMovimentoDeClientesEmDebitoAutomatico(banco);
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		try {
+
+			String consulta = "select banco,debAutoMovimento "
+					+ "from DebitoAutomaticoMovimento debAutoMovimento "
+					+ "inner join fetch debAutoMovimento.debitoAutomatico debAutomatico "
+					+ "inner join fetch debAutomatico.agencia agencia "
+					+ "inner join agencia.banco banco "
+					+ "inner join fetch debAutoMovimento.contaGeral cntaGeral "
+					+ "inner join fetch cntaGeral.conta conta "
+					+ "inner join fetch conta.imovel imovel "
+					+ "where debAutoMovimento.id in (:idsDebAutMov) "
+					+ "and banco.id = :idBanco "
+					+ "order by banco.id";
+
+			retorno = session.createQuery(consulta)
+					.setParameterList("idsDebAutMov", idsDebAutMov)
+					.setInteger("idBanco", banco.getId())
+					.list();
+
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 	/**
 	 * [UC0319] Filtrar Aviso Bancario
 	 * 
