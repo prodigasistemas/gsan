@@ -10600,7 +10600,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						// LigacaoAguaSituacao.LIGADO + " or ";
 						// hqlAux += "imovel.ligacaoAguaSituacao.id = " +
 						// LigacaoAguaSituacao.LIGADO_A_REVELIA + ") and ";
-						hqlAux += "hidrometroInstalacaoHistoricoAgua.id is not null and ";
+						hqlAux += "hidrometroInstalacaoHistoricoAgua.id is not null and "; 
+						hqlAux += "hidrometroInstalacaoHistoricoAgua.dataRetirada is null and ";
 						if (dataInstalacaoHidrometroFinal != null
 								&& !dataInstalacaoHidrometroFinal.equals("")) {
 
@@ -13274,6 +13275,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						hqlAux += "hidrometroInstalacaoHistoricoAgua.id is not null and ";
 						hqlAux += "ligacaoAguaSituacao.indicadorFaturamentoSituacao = 1 and ";
 						hqlAux += "ligacaoAguaSituacao.id = imovel.ligacaoAguaSituacao and ";
+						hqlAux += "hidrometroInstalacaoHistoricoAgua.dataRetirada is null and ";
 						if (dataInstalacaoHidrometroFinal != null
 								&& !dataInstalacaoHidrometroFinal.equals("")) {
 
