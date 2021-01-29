@@ -7811,11 +7811,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			consulta = "SELECT ra.id, imov.id " + "FROM OrdemServico os "
 					+ "LEFT JOIN os.registroAtendimento ra "
 					+ "LEFT JOIN os.cobrancaDocumento cd "
-					+ "LEFT JOIN cd.imovel imov " + "WHERE os.id =  :idOS";
+					+ "LEFT JOIN os.imovel imov " + "WHERE os.id =  :idOS";
 
 			retorno = (Object[]) session.createQuery(consulta)
-					.setInteger("idOS", idOrdemServico).setMaxResults(1)
-					.uniqueResult();
+					.setInteger("idOS", idOrdemServico).uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

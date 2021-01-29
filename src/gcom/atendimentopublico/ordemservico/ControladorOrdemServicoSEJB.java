@@ -5851,7 +5851,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 			}
 
 			// Id do Imóvel
-			if (dadosOS[1] != null) {
+			if (dadosOS[1] != null && dadosOS[0] == null) {
 				Integer idImovel = (Integer) dadosOS[1];
 				endereco = getControladorEndereco().obterEnderecoAbreviadoImovel(idImovel);
 			}
