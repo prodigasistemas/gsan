@@ -2070,8 +2070,6 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 			// E.10 - Reservado para o futuro (filler) Brancos
 			registroTipoE.append(Util.completaString("", 20));
 			 
-			// E.11 - Número Seqüencial do Registro é obrigatório e não pode ser zerado 
-			registroTipoE.append(Util.completaString("" + sequencial, 6));
 		 }
 		 
 
