@@ -5524,7 +5524,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "INNER JOIN osProgramacao.equipe equipe  "
 					+ "INNER JOIN equipe.unidadeOrganizacional unidade  "
 					+ "INNER JOIN equipe.servicoPerfilTipo servicoPerfilTipo  "
-					+ "INNER JOIN ordemServico.registroAtendimento ra "
+					+ "LEFT JOIN ordemServico.registroAtendimento ra "
 					+ "INNER JOIN ordemServico.servicoTipo servicoTipo  "
 					+ "INNER JOIN servicoTipo.servicoPerfilTipo servicoPerfilTipoOs "
 					+ "WHERE programacaoRoteiro.dataRoteiro BETWEEN :dataRoteiroInicial AND :dataRoteiroFinal "
@@ -5538,15 +5538,11 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					.createQuery(consulta)
 					.setTimestamp("dataRoteiroInicial", dataRoteiroInicial)
 					.setTimestamp("dataRoteiroFinal", dataRoteiroFinal)
-					.setInteger("idUnidadeOrganizacional",
-							idUnidadeOrganizacional)
+					.setInteger("idUnidadeOrganizacional",idUnidadeOrganizacional)
 							.setShort("programada", OrdemServico.PROGRAMADA)
-							.setShort("indicadorAtivo",
-									OrdemServicoProgramacao.INDICADOR_ATIVO)
-									.setShort("indicadorAtivoNao",
-											OrdemServicoProgramacao.INDICADOR_ATIVO_NAO)
-											.setShort("situacaoFechamento",
-													OrdemServicoProgramacao.SITUACAO_FECHAMENTO).list();
+							.setShort("indicadorAtivo",OrdemServicoProgramacao.INDICADOR_ATIVO)
+							.setShort("indicadorAtivoNao",OrdemServicoProgramacao.INDICADOR_ATIVO_NAO)
+							.setShort("situacaoFechamento",OrdemServicoProgramacao.SITUACAO_FECHAMENTO).list();
 
 			if (retornoConsulta != null && !retornoConsulta.isEmpty()) {
 
