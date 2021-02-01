@@ -15602,8 +15602,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		registroTipoE.append(Util.completaString("", 42));
 		// fim preenchido conforme segue abaixo(E.08)
 
-
-		 if (banco != null && banco.isAdereCnab150()) {
+		if (banco != null && banco.isAdereCnab150()) {
 			// E.09 - Número do Agendamento do Cliente evoluir de 1 em 1  é obrigatório e não pode ser zerado.
 			//		  É utilizado em caso de cancelamento do registro
 			 registroTipoE.append(Util.adicionarZerosEsquedaNumero(6, sequencial));
@@ -15613,15 +15612,12 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 			// E.11 - Número Seqüencial do Registro é obrigatório e não pode ser zerado 
 			registroTipoE.append(Util.adicionarZerosEsquedaNumero(6, sequencial));
-		 } else {
+		} else {
 		
 			// E.10 - Reservado para o futuro (filler) Brancos
 			registroTipoE.append(Util.completaString("", 20));
 			 
-			// E.11 - Número Seqüencial do Registro é obrigatório e não pode ser zerado 
-			registroTipoE.append(Util.completaString("" + sequencial, 6));
-		 }
-		 
+		}
 
 		/*
 		 * E.12 - Código do movimento - Esta informação deverá conter:
