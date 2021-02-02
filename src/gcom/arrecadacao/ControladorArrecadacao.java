@@ -15430,7 +15430,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							debitoAutomaticoMovimento.setUltimaAlteracao(new Date());
 	
 							StringBuilder linhaTipoE = null;
-							if (banco.getId() == 104) {
+							if (banco.isAdereCnab150()) {
 								sequencial++;
 								linhaTipoE = 
 										criarRegistroTipoE(banco,
@@ -15758,7 +15758,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		if (banco != null && banco.isAdereCnab150()) {
 			// Alterações apontadas pelos técnicos da CEF
 			arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, (qtdeLinhas -1)));
-			arquivoTXTEnvio.append(Util.completaString("", 1));
+			arquivoTXTEnvio.append(" ");
 		} else {
 			arquivoTXTEnvio.append("*");
 		}
