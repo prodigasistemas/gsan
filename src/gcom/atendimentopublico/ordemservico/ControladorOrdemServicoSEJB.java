@@ -18151,15 +18151,8 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 	 *            - array de bytes com a foto em si
 	 * 
 	 * @throws FachadaException
-	 * 
-	 * 05/01/2021
-	 * Por Marcelo Giovani
-	 * Modificação feita para Que as imagens não sejam mais gravadas em banco, e sim em uma pasta (/opt/arquivos/OrdemServico)
 	 */
-	public void inserirFotoOrdemServico(int numeroOS, Integer idImovel, int tipoFoto, byte[] foto) throws ControladorException {
-		// repositorioOrdemServico.inserirFotoOrdemServico( numeroOS, tipoFoto,
-		// foto );
-
+	public void inserirFotoOrdemServico(int numeroOS, int tipoFoto, byte[] foto) throws ControladorException {
 		FiltroFotoSituacaoOrdemServico filtroSituacaoFoto = new FiltroFotoSituacaoOrdemServico();
 		filtroSituacaoFoto.adicionarParametro(new ParametroSimples(FiltroFotoSituacaoOrdemServico.ID, tipoFoto));
 		Collection<FotoSituacaoOrdemServico> colFotoSituacaoOrdemServico = this.getControladorUtil().pesquisar(filtroSituacaoFoto,
@@ -18185,7 +18178,7 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 		try {
 		
 			ControladorUtilSEJB contUtil = new ControladorUtilSEJB();
-			ost.setNomeArquivo(contUtil.gravaImagem(foto, idImovel, "ordemServico", String.valueOf(numeroOS), TipoImagem.JPEG.name(), false));
+			ost.setNomeArquivo(contUtil.gravaImagem(foto, 0, "ordemServico", String.valueOf(numeroOS), TipoImagem.JPEG.name(), false));
 			ost.setCaminhoArquivo(contUtil.getCaminhoDownloadArquivos("ordemServico"));
 			
 			this.getControladorUtil().inserir(ost);
