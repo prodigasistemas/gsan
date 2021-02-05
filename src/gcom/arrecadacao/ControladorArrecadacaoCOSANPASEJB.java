@@ -1936,13 +1936,14 @@ public class ControladorArrecadacaoCOSANPASEJB extends ControladorArrecadacao im
 		
 		String valorSemVirgula = ("" + arrecadadorMovimento.getValorTotalMovimento()).replace(".", "");
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(17,valorSemVirgula));
-		arquivoTXTEnvio.append(Util.completaString("", 125));
 		
 		if (banco != null && banco.isAdereCnab150()) {
 			// Alterações apontadas pelos técnicos da CEF
+			arquivoTXTEnvio.append(Util.completaString("", 119));
 			arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, (qtdeLinhas -1)));
 			arquivoTXTEnvio.append(" ");
 		} else {
+			arquivoTXTEnvio.append(Util.completaString("", 125));
 			arquivoTXTEnvio.append("*");
 		}
 		arquivoTXTEnvio.append(System.getProperty("line.separator"));
