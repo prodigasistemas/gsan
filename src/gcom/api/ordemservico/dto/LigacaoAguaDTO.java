@@ -2,8 +2,6 @@ package gcom.api.ordemservico.dto;
 
 import java.math.BigDecimal;
 
-import org.apache.commons.lang.StringUtils;
-
 import gcom.atendimentopublico.LigacaoOrigem;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaDiametro;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaMaterial;
@@ -81,7 +79,7 @@ public class LigacaoAguaDTO {
 	}
 
 	public BigDecimal getProfundidadeRamal() {
-		if (campoNumericoValido(profundidadeRamal)) {
+		if (campoValido(profundidadeRamal)) {
 			return new BigDecimal(profundidadeRamal);
 		}
 		return null;
@@ -92,7 +90,7 @@ public class LigacaoAguaDTO {
 	}
 
 	public BigDecimal getDistanciaInstalacaoRamal() {
-		if (campoNumericoValido(distanciaInstalacaoRamal)) {
+		if (campoValido(distanciaInstalacaoRamal)) {
 			return new BigDecimal(distanciaInstalacaoRamal);
 		}
 		return null;
@@ -143,8 +141,8 @@ public class LigacaoAguaDTO {
 		this.lacre = lacre;
 	}
 
-	private boolean campoNumericoValido(String campo) {
-		return campo != null && !campo.trim().equals("") && StringUtils.isNumeric(campo);
+	private boolean campoValido(String campo) {
+		return campo != null && !campo.trim().equals("");
 	}
 
 	private boolean campoValido(Integer campo) {
