@@ -8,6 +8,7 @@ import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.util.filtro.Filtro;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
@@ -108,4 +109,8 @@ public interface ControladorUtilLocal extends javax.ejb.EJBLocalObject {
 	public Collection listar(Class tipo) throws ControladorException;
 	
 	public void salvarArquivoZip(StringBuilder arquivo, String nomeZip, String diretorio) throws ControladorException;
+	
+	public String gravaImagem(byte[] imagem, Integer idImovel, String diretorio, String nomeArquivo, String tipo, boolean compactar) throws ControladorException;
+
+	public String retornarPastaDestinoDaImagemOrgemServico(Integer imovelId, String diretorio );
 }

@@ -3092,7 +3092,6 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	 */
 	public void inserirFotoOrdemServico( int numeroOS, int tipoFoto, byte[] foto ) throws ControladorException;	
 	
-	
 	/**
 	 * [UC-1225] Incluir dados acompanhamento servico 
 	 * 

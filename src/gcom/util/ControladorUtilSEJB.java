@@ -1,24 +1,12 @@
 package gcom.util;
 
-import gcom.cadastro.DbVersaoBase;
-import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.geografico.FiltroMunicipioFeriado;
-import gcom.cadastro.geografico.Municipio;
-import gcom.cadastro.geografico.MunicipioFeriado;
-import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.sistemaparametro.NacionalFeriado;
-import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.fachada.Fachada;
-import gcom.seguranca.FiltroSegurancaParametro;
-import gcom.seguranca.SegurancaParametro;
-import gcom.seguranca.acesso.OperacaoEfetuada;
-import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
-import gcom.util.email.ServicosEmail;
-import gcom.util.filtro.Filtro;
-import gcom.util.filtro.ParametroSimples;
-
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,11 +20,32 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+import javax.imageio.ImageIO;
+
+import gcom.cadastro.DbVersaoBase;
+import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.geografico.FiltroMunicipioFeriado;
+import gcom.cadastro.geografico.Municipio;
+import gcom.cadastro.geografico.MunicipioFeriado;
+import gcom.cadastro.imovel.FiltroImovel;
+import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.sistemaparametro.NacionalFeriado;
+import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.fachada.Fachada;
+import gcom.seguranca.FiltroSegurancaParametro;
+import gcom.seguranca.SegurancaParametro;
+import gcom.seguranca.acesso.OperacaoEfetuada;
+import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
+import gcom.util.email.ServicosEmail;
+import gcom.util.filtro.Filtro;
+import gcom.util.filtro.ParametroSimples;
 
 public class ControladorUtilSEJB implements SessionBean {
 	private static final long serialVersionUID = 1L;
@@ -630,15 +639,24 @@ public class ControladorUtilSEJB implements SessionBean {
 	
 	@SuppressWarnings("rawtypes")
 	public String getCaminhoDownloadArquivos(String modulo) {
-		FiltroSegurancaParametro filtroSegurancaParametro = new FiltroSegurancaParametro();
-		filtroSegurancaParametro.adicionarParametro(new ParametroSimples(FiltroSegurancaParametro.NOME, SegurancaParametro.NOME_PARAMETRO_SEGURANCA.CAMINHO_ARQUIVOS.toString()));
+		Filtro filtro = new FiltroSegurancaParametro();
+		filtro.adicionarParametro(new ParametroSimples(FiltroSegurancaParametro.NOME, SegurancaParametro.NOME_PARAMETRO_SEGURANCA.CAMINHO_ARQUIVOS.toString()));
 
-		Collection parametros = Fachada.getInstancia().pesquisar(filtroSegurancaParametro, SegurancaParametro.class.getName());
+		Collection parametros = Fachada.getInstancia().pesquisar(filtro, SegurancaParametro.class.getName());
 
 		SegurancaParametro caminho = (SegurancaParametro) parametros.iterator().next();
 		
-		return caminho.getValor() + "/" + modulo + "/";
-
+		File destDir = new File(caminho.getValor());
+		if (!destDir.exists()) {
+        	destDir.mkdir();
+        }
+		
+		destDir = new File(destDir + File.separator + modulo + "/");
+		if (!destDir.exists()) {
+        	destDir.mkdir();
+        }
+		
+		return destDir + File.separator;
 	}
 	
 	public Collection listar(Class tipo) throws ControladorException{
@@ -664,5 +682,251 @@ public class ControladorUtilSEJB implements SessionBean {
 			e.printStackTrace();
 			throw new ControladorException("Erro ao salvar arquivo zip: " + compactadoTipo.getAbsolutePath(), e);
 		}
+	}
+	
+	/**
+	 * Geração de arquivo de imagem, incluindo sequencial
+	 * 
+	 * @param imagem .....(Bytes para serem convertidos em arquivo)
+	 * @param diretorio...(Pasta de destino que será armazenado s arquivos)
+	 * @param nomeArquivo.(Nome base para os arquivos normalmente um Código ou ID
+	 * @param tipo .......(Aceita as segintes extensões: jpg, jpeg, png, bmp) 
+	 * @param compactar...(Se deseja compactar os arquivos criados, terá o nomeArquivo com extensão ZIP)
+	 * @throws IOException
+	 */
+	public String gravaImagem(byte[] imagem, Integer imovelId, String diretorio, String nomeArquivo, String tipo, boolean compactar) throws ControladorException {
+		String arquivoImg = "";
+
+		try {
+			File destDir = new File(this.retornarPastaDestinoDaImagemOrgemServico(imovelId, diretorio));
+
+			// Verifica a existencia do último arquivo criado
+			final String criterio = nomeArquivo;
+			FileFilter fFiltro = new FileFilter() {
+				public boolean accept(File file) {
+					return file.getName().contains(String.valueOf(criterio));
+				}
+			};
+
+			// Define o seguencial do nome
+			int qtdArquivos = destDir.listFiles(fFiltro).length;
+			nomeArquivo = nomeArquivo + "_" + (++qtdArquivos) + "." + tipo.toLowerCase();
+			arquivoImg = destDir + File.separator + nomeArquivo;
+
+			BufferedImage img = ImageIO.read(new ByteArrayInputStream(imagem));
+			ImageIO.write(img, tipo, new File(arquivoImg));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return nomeArquivo;
+
+	}
+
+	/**
+	 * Geração de arquivos de imagem
+	 * 
+	 * @param imagens ....(Lista da bytes para serem convertidos em arquivos)
+	 * @param diretorio...(Pasta de destino que será armazenado s arquivos)
+	 * @param nomeArquivo.(Nome base para os arquivos normalmente um Código ou ID
+	 * @param tipo .......(Aceita as segintes extensões: jpg, jpeg, png, bmp) 
+	 * @param compactar...(Se deseja compactar os arquivos criados, terá o nomeArquivo com extensão ZIP)
+	 * @throws IOException
+	 */
+    public List<String> gravaImagens(List<byte[]> imagens, Integer imovelId, String diretorio, String nomeArquivo, String tipo, boolean compactar)  throws IOException{
+    	
+    	List<String> listaNomesArquivos = new ArrayList<String>();
+
+    	try {
+        	File destDir = new File(this.retornarPastaDestinoDaImagemOrgemServico(imovelId, diretorio) );
+        	
+	    	int ordem = 0;
+	    	
+	    	for (byte[] foto : imagens) {
+	    		
+	    		String arquivoPng = destDir + File.separator + nomeArquivo + "_" + (++ordem) + "." + tipo;
+	    		
+	    			BufferedImage img = ImageIO.read(new ByteArrayInputStream(foto));
+	    			ImageIO.write(img, tipo, new File(arquivoPng));
+	
+	    			listaNomesArquivos.add(nomeArquivo + "_" + ordem + "." + tipo);
+	    			
+			}
+	    	
+	    	if (compactar) {
+	    		zipMultiplosArquivos(listaNomesArquivos, nomeArquivo, imovelId, diretorio, true);
+	    		listaNomesArquivos.clear();
+	    		listaNomesArquivos.add(nomeArquivo + ".zip");
+	    	}
+
+	    	
+    	} catch (IOException e) {
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}
+
+    	return listaNomesArquivos;
+	
+    }
+    
+    /**
+     * Compacta varios arquivos
+     * 
+     * @param listaNomesArquivos.(Lista com o nome dos arquivos a serem compactados)
+     * @param nomeArquivoZip.....(Nome do arquivo ZIP)
+     * @param diretorio..........(Pasta de destino que será armazenado o arquivo ZIP)
+     * @param excluirOrigem......(Se após compactar é para apagar os originais)
+     * @return ..................(Retorna o nome do arquivo 
+     * @throws IOException
+     */
+    public void zipMultiplosArquivos (List<String> listaNomesArquivos, String nomeArquivoZip, Integer idImovel, String diretorio, boolean excluirOrigem) throws IOException {
+        
+    	
+    	File destDir = new File(this.retornarPastaDestinoDaImagemOrgemServico(idImovel, diretorio) );
+    	
+    	// Criando o arquivo ZIP
+    	String arquivoZip = destDir + File.separator  + nomeArquivoZip + ".zip";
+    	
+        FileOutputStream fos = new FileOutputStream(arquivoZip);
+        ZipOutputStream zipOut = new ZipOutputStream(fos);
+        
+        for (String srcFile : listaNomesArquivos) {
+            File arquivoParaZip = new File(destDir + File.separator  + srcFile);
+            FileInputStream fis = new FileInputStream(arquivoParaZip);
+            ZipEntry zipEntry = new ZipEntry(arquivoParaZip.getName());
+            zipOut.putNextEntry(zipEntry);
+
+            byte[] bytes = new byte[1024];
+            int length;
+            while((length = fis.read(bytes)) >= 0) {
+                zipOut.write(bytes, 0, length);
+            }
+            fis.close();
+        }
+        zipOut.close();
+        fos.close();
+        
+        if (excluirOrigem) {
+	        for (String srcFile : listaNomesArquivos) {
+	            File arquivo = new File(destDir + File.separator + srcFile);
+	            arquivo.delete();
+	        }
+        }
+    }
+    
+    
+   /**
+    * Descompacatar arquivos zipados com um ou muitos arquivos.
+    *   
+     * @param nomeArquivo.....(Nome do arquivo ZIP sem a  sua extensão)
+     * @param diretorio..........(Pasta de destino que será descompactado os arquivos)
+    * @throws IOException
+    */
+    public List<byte[]> UnzipArquivos(String nomeArquivo, Integer imovelId, String diretorio) throws IOException {
+        
+    	List<byte[]> arquivos = new ArrayList<byte[]>();
+    	
+        String arquivoZip = this.retornarPastaDestinoDaImagemOrgemServico(imovelId, diretorio)  + nomeArquivo + ".zip";
+        File destDir = new File(this.getCaminhoDownloadArquivos("unzipTMP"));
+        
+        // Carregando o arquivo compactado
+        byte[] buffer = new byte[1024];
+        ZipInputStream zis = new ZipInputStream(new FileInputStream(arquivoZip));
+        ZipEntry zipEntry = zis.getNextEntry();
+        
+        // Descompactando arquivos
+        while (zipEntry != null) {
+        	
+        	// Criando arquivo temporário 
+        	File destFile = new File(destDir.getAbsolutePath() + File.separator + zipEntry.getName());
+        	
+            // Escrever o conteúdo do arquivo
+            FileOutputStream fos = new FileOutputStream(destFile);
+            int len;
+            while ((len = zis.read(buffer)) > 0) {
+                fos.write(buffer, 0, len);
+            }
+            
+            fos.close();
+
+            // Gardando o binario
+            arquivos.add(getBytes(destFile));
+            
+            // Apagando o arquivo temporário
+            destFile.delete();
+            
+            zipEntry = zis.getNextEntry();
+        
+       }
+        destDir.delete();
+        zis.closeEntry();
+        zis.close();
+        
+        return arquivos;
+    }
+    
+    /**
+     * Carrega imagem de um determinado caminho com um determinado nome
+     * @param nomeArquivo
+     * @param caminhoArquivo
+     * @return
+     * @throws IOException
+     */
+    public byte[] carregaImagem(String nomeArquivo, String caminhoArquivo) throws IOException {
+	   try {
+			File file = new File(caminhoArquivo + nomeArquivo);
+			BufferedImage bImage = ImageIO.read(file);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ImageIO.write(bImage, "jpg", bos );
+			return bos.toByteArray();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+        return null;
+    }
+
+	public byte[] getBytes(File file) {
+	      int len = (int)file.length();  
+	      byte[] sendBuf = new byte[len];
+	      FileInputStream inFile = null;
+	      try {
+	         inFile = new FileInputStream(file);         
+	         inFile.read(sendBuf, 0, len);  
+	      } catch (FileNotFoundException fnfex) {
+	      } catch (IOException ioex) {
+	      }
+	 return sendBuf;
+	}
+	
+	public String retornarPastaDestinoDaImagemOrgemServico(Integer imovelId, String diretorio ) {
+		Imovel imovel = null;
+
+		try {
+			FiltroImovel filtro = new FiltroImovel();
+			filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, imovelId));
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.LOCALIDADE);
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.SETOR_COMERCIAL);
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.QUADRA);
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.QUADRA_ROTA);
+			
+			imovel = (Imovel) Util.retonarObjetoDeColecao(this.pesquisar(filtro, Imovel.class.getName()));
+			
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+
+		String pasta = this.getCaminhoDownloadArquivos(diretorio) + "/"
+					+ Util.completaStringComZeroAEsquerda(imovel.getLocalidade().getId()+"", 3) + "_"
+					+ Util.completaStringComZeroAEsquerda(imovel.getSetorComercial().getCodigo()+"", 3) + "_"
+					+ Util.completaStringComZeroAEsquerda(imovel.getQuadra().getRota().getCodigo()+"", 2);
+		
+		File destDir = new File(pasta + "/");
+		if (!destDir.exists()) {
+			destDir.mkdir();
+        }
+		return pasta;
 	}
 }

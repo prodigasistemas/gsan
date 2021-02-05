@@ -1,4 +1,4 @@
-package gcom.api.ordemservico;
+package gcom.api.ordemservico.response;
 
 public class OrdemServicoResponse {
 

@@ -132,6 +132,7 @@ import gcom.cobranca.MotivoNaoAceitacaoEncerramentoOS;
 import gcom.cobranca.RepositorioCobrancaHBM;
 import gcom.cobranca.bean.DadosPesquisaCobrancaDocumentoHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
+import gcom.enums.TipoImagem;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.FaturamentoSituacaoHistorico;
@@ -191,6 +192,7 @@ import gcom.util.ConstantesAplicacao;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
+import gcom.util.ControladorUtilSEJB;
 import gcom.util.Criptografia;
 import gcom.util.ErroCriptografiaException;
 import gcom.util.ErroRepositorioException;
@@ -18149,8 +18151,12 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 	 *            - array de bytes com a foto em si
 	 * 
 	 * @throws FachadaException
+	 * 
+	 * 05/01/2021
+	 * Por Marcelo Giovani
+	 * Modificação feita para Que as imagens não sejam mais gravadas em banco, e sim em uma pasta (/opt/arquivos/OrdemServico)
 	 */
-	public void inserirFotoOrdemServico(int numeroOS, int tipoFoto, byte[] foto) throws ControladorException {
+	public void inserirFotoOrdemServico(int numeroOS, Integer idImovel, int tipoFoto, byte[] foto) throws ControladorException {
 		// repositorioOrdemServico.inserirFotoOrdemServico( numeroOS, tipoFoto,
 		// foto );
 
@@ -18163,20 +18169,33 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 
 		OrdemServicoFoto ost = new OrdemServicoFoto();
 
-		FotoSituacaoOrdemServico fsos = new FotoSituacaoOrdemServico();
-		fsos.setId(tipoFoto);
-
 		OrdemServico os = new OrdemServico();
 		os.setId(numeroOS);
-
-		ost.setFotoSituacao(fsos);
+		
 		ost.setOrdemServico(os);
-		ost.setDataFoto(new Date());
-		ost.setDescricaoFoto(situacao.getDescricao());
-		ost.setFotoOrdemServico(foto);
+		ost.setData(new Date());
+		
+		if (situacao != null) {
+			ost.setFotoSituacao(situacao);
+			ost.setDescricao(situacao.getDescricao());
+		}
+		
 		ost.setUltimaAlteracao(new Date());
+		
+		try {
+		
+			ControladorUtilSEJB contUtil = new ControladorUtilSEJB();
+			ost.setNomeArquivo(contUtil.gravaImagem(foto, idImovel, "ordemServico", String.valueOf(numeroOS), TipoImagem.JPEG.name(), false));
+			ost.setCaminhoArquivo(contUtil.getCaminhoDownloadArquivos("ordemServico"));
+			
+			this.getControladorUtil().inserir(ost);
 
-		this.getControladorUtil().inserir(ost);
+		} catch (ControladorException e) {
+			File arquivo = new File(ost.getCaminhoArquivo() + ost.getNomeArquivo());
+            arquivo.delete();
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**

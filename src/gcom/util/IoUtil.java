@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -24,6 +25,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * Esta classe tem funções auxiliares de validação que podem ser usadas em todo
@@ -814,4 +819,45 @@ public class IoUtil {
 
         return propriedades;
     }
+	
+	public String compactarStringBytes(String texto) throws ControladorException {
+		if (texto.isEmpty())
+			return null;
+
+		try {
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			GZIPOutputStream gzipOutput = new GZIPOutputStream(baos);
+			gzipOutput.write(texto.getBytes());
+			gzipOutput.close();
+			byte[] compressed = baos.toByteArray();
+			baos.close();
+
+			return new String(Base64.encodeBase64(compressed));
+
+		} catch (IOException e) {
+			throw new ControladorException("Erro na compactação da imagem");
+		}
+	}
+	
+	public static String descompactarStringBytes(String texto) throws ControladorException {
+		try {
+			ByteArrayInputStream bis = new ByteArrayInputStream(Base64.decodeBase64(texto.getBytes()));
+			GZIPInputStream gis = new GZIPInputStream(bis);
+			BufferedReader br = new BufferedReader(new InputStreamReader(gis));
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+			br.close();
+			gis.close();
+			bis.close();
+
+			return sb.toString();
+
+		} catch (IOException e) {
+			throw new ControladorException("Erro na descompactação da imagem");
+		}
+	}
 }

@@ -40,7 +40,7 @@ import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
-public class RequisicaoEncerrarOrdemServico{
+public class RequisicaoEncerrarOrdemServico {
 
 	private Fachada fachada = Fachada.getInstancia();
 	
@@ -51,11 +51,13 @@ public class RequisicaoEncerrarOrdemServico{
 	private IntegracaoComercialHelper helper = null;
 	private Map<String, String> resposta;
 	
-	public Map<String, String> processar(OrdemServicoDTO dto) {
+	public RequisicaoEncerrarOrdemServico(OrdemServicoDTO dto) {
+		super();
 		this.dto = dto;
-
 		setarDadosEncerramento();
+	}
 
+	public Map<String, String> processar() {
 		Integer idOperacao = dto.getOperacao();
 		
 		if (idOperacao != null && !resposta.containsKey("msg")) {

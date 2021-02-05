@@ -1,7 +1,10 @@
 package gcom.atendimentopublico;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -28,6 +31,7 @@ import java.util.zip.ZipOutputStream;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+import javax.imageio.ImageIO;
 
 import gcom.atendimentopublico.bean.ContratoPrestacaoServicoHelper;
 import gcom.atendimentopublico.bean.DadosLigacoesBoletimCadastroHelper;
@@ -188,6 +192,7 @@ import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
+import gcom.util.ControladorUtilSEJB;
 import gcom.util.ErroRepositorioException;
 import gcom.util.IRepositorioUtil;
 import gcom.util.RepositorioUtilHBM;
@@ -11945,11 +11950,16 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		Collection<OrdemServicoFoto> fotos = null;
 		Collection<Object[]> retorno = null;
 		
+		
 		try {
+			if (repositorioAtendimentoPublico == null)
+				ejbCreate();
+			
+
 			if(idOS){
-				retorno = this.repositorioAtendimentoPublico.pesquisarFotosOrdemServico(id);
+				retorno = repositorioAtendimentoPublico.pesquisarFotosOrdemServico(id);
 			}else{
-				retorno = this.repositorioAtendimentoPublico.pesquisarFotosOrdemServicoPorIdFoto(id);
+				retorno = repositorioAtendimentoPublico.pesquisarFotosOrdemServicoPorIdFoto(id);
 			}
 			
 			//Verifica se a consulta trouxe algum ResultSet
@@ -11987,7 +11997,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 					
 					if(ordemServicoFoto[3] != null){
 						foto = (byte[]) ordemServicoFoto[3];
+
+					} else {
+						
+						ControladorUtilSEJB controladorUtil = new ControladorUtilSEJB();
+						foto = controladorUtil.carregaImagem((String) ordemServicoFoto[5], (String) ordemServicoFoto[4]);
+						
 					}
+					
 					osFoto = new OrdemServicoFoto(idFoto, os, descricaoFoto, foto);
 					fotos.add(osFoto);
 				}
@@ -11995,6 +12012,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 			throw new ControladorException("erro.sistema", e);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ControladorException("Não foi possível carregar o arquivo de imagem", e);
+		} catch (CreateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return fotos;
 	}

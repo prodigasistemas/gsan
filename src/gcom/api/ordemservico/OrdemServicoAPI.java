@@ -3,6 +3,8 @@ package gcom.api.ordemservico;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,10 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import gcom.api.ordemservico.bo.RequisicaoEncerrarOrdemServico;
+import gcom.api.ordemservico.bo.RequisicaoFotosOrdemServico;
+import gcom.api.ordemservico.dto.FotoDTO;
 import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.api.ordemservico.dto.UsuarioDTO;
+import gcom.api.ordemservico.response.OrdemServicoResponse;
 import gcom.fachada.Fachada;
 import gcom.seguranca.acesso.usuario.Usuario;
 
@@ -25,6 +31,7 @@ public class OrdemServicoAPI extends HttpServlet {
 
 	private HttpServletRequest request = null;
 	private HttpServletResponse response = null;
+	private Map<String, String> resposta = new HashMap<String, String>();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		this.request = request;
@@ -34,7 +41,8 @@ public class OrdemServicoAPI extends HttpServlet {
 			validarLogin();
 
 		if (verificarRequisicao("programadas"))
-			pesquisarOrdensServicoProgramadas();
+			pesquisarProgramadas();
+		
 	}
 
 	@Override
@@ -43,42 +51,49 @@ public class OrdemServicoAPI extends HttpServlet {
 		this.response = response;
 		
 		if (verificarRequisicao("encerrar"))
-			encerrarOrdemServico();
+			encerrar();
+		
+		if (verificarRequisicao("fotos"))
+			salvarFotos();
 	}
 
-	private void encerrarOrdemServico() throws IOException {
+	private void encerrar() throws IOException {
 		try {
 			String json = obterJson();
-			Gson gson = new Gson();
-			OrdemServicoDTO dto = gson.fromJson(json, OrdemServicoDTO.class);
-			Map<String, String> respostaProcessamento = new RequisicaoEncerrarOrdemServico().processar(dto);
-
-			OrdemServicoResponse ordemServicoResponse = new OrdemServicoResponse();
+			OrdemServicoDTO dto = new Gson().fromJson(json, OrdemServicoDTO.class);
 			
-			int status = -1;
-			if (!respostaProcessamento.containsKey("msg")) {
-				ordemServicoResponse.setMensagem("");
-				ordemServicoResponse.setEncerrada(true);
-				status = HttpServletResponse.SC_OK;
-
-			} else {
-				ordemServicoResponse.setMensagem(respostaProcessamento.get("msg"));
-				ordemServicoResponse.setEncerrada(false);
-				status = HttpServletResponse.SC_ACCEPTED;
-			}
-
-			response.getOutputStream().print(toJson(ordemServicoResponse));
-			response.setStatus(status);
+			resposta = new RequisicaoEncerrarOrdemServico(dto).processar();
 		} catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
 		}
-	}
 
-	private void pesquisarOrdensServicoProgramadas() {
+		enviarResposta();
+	}
+	
+	private void salvarFotos() throws IOException {
+		try {
+			String json = obterJson();
+			Type listaConvertida = new TypeToken<List<FotoDTO>>() {}.getType();
+			List<FotoDTO> listaDTO = new Gson().fromJson(json, listaConvertida);
+
+			new RequisicaoFotosOrdemServico(listaDTO).processar();
+
+			response.setStatus(HttpServletResponse.SC_OK);
+			
+		} catch (Exception e) {
+
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+		}
+
+		enviarResposta();
+	}
+	
+	private void pesquisarProgramadas() {
 		try {
 			Integer unidadeOrganizacionalId = Integer.valueOf(obterParametro("unidadeOrganizacionalId"));
-			
+
 			List<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas(unidadeOrganizacionalId);
 
 			response.getOutputStream().print(toJson(dto));
@@ -138,5 +153,30 @@ public class OrdemServicoAPI extends HttpServlet {
 
 	private boolean verificarRequisicao(String url) {
 		return request.getRequestURI().contains(url);
+	}
+	
+	private void enviarResposta() {
+		try {	
+			
+			OrdemServicoResponse ordemServicoResponse = new OrdemServicoResponse();
+			int status = -1;
+
+			if (!resposta.containsKey("msg")) {
+				ordemServicoResponse.setMensagem("");
+				ordemServicoResponse.setEncerrada(true);
+				status = HttpServletResponse.SC_OK;
+
+			} else {
+				ordemServicoResponse.setMensagem(resposta.get("msg"));
+				ordemServicoResponse.setEncerrada(false);
+				status = HttpServletResponse.SC_ACCEPTED;
+			}
+
+			response.getOutputStream().print(toJson(ordemServicoResponse));
+			response.setStatus(status);
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+		}
 	}
 }

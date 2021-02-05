@@ -209,6 +209,11 @@ public class OrdemServico extends ObjetoTransacao {
 		this.unidadeAtual = unidadeAtual;
 	}
 
+	public OrdemServico(Integer id) {
+		super();
+		this.id = id;
+	}
+
 	/** full constructor */
     public OrdemServico(short situacao, Date dataGeracao, Date dataEmissao, Date dataEncerramento, 
     		String descricaoParecerEncerramento, String observacao, BigDecimal areaPavimento, 

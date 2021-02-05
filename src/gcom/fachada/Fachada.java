@@ -40493,4 +40493,20 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public String gravaImagem(byte[] imagem, Integer idImovel, String diretorio, String nomeArquivo, String tipo, boolean compactar) {
+		try {
+			return this.getControladorUtil().gravaImagem(imagem, idImovel, diretorio, nomeArquivo, tipo, compactar);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public String getCaminhoDownloadArquivos(String modulo) {
+		return this.getControladorUtil().getCaminhoDownloadArquivos(modulo);
+	}
+	
+	public String getPastaDestinoDaImagemOrgemServico(Integer imovelId, String modulo) {
+		return this.getControladorUtil().retornarPastaDestinoDaImagemOrgemServico(imovelId, modulo);
+	}
 }
