@@ -40486,9 +40486,9 @@ public class Fachada {
 		}
 	}
 	
-	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas(Integer unidadeOrganizacionalId) {
+	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas(Integer funcionarioId) {
 		try {
-			return this.getControladorOrdemServico().pesquisarOrdensServicoProgramadas(unidadeOrganizacionalId);
+			return this.getControladorOrdemServico().pesquisarOrdensServicoProgramadas(funcionarioId);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

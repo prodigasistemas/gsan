@@ -20921,7 +20921,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 		}
 	}
 	
-	public Collection<Object[]> pesquisarOrdensServicoProgramadas(Integer unidadeOrganizacionalId) throws ErroRepositorioException {
+	public Collection<Object[]> pesquisarOrdensServicoProgramadas(Integer funcionarioId) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
@@ -20945,10 +20945,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			   .append("INNER JOIN atendimentopublico.servico_tipo svtp ON svtp.svtp_id = orse.svtp_id ")
 			   .append("LEFT JOIN atendimentopublico.servico_tipo_operacao stop ON stop.svtp_id = svtp.svtp_id ")
 			   .append("INNER JOIN atendimentopublico.equipe eqpe ON eqpe.eqpe_id = ospg.eqpe_id ")
-			   .append("INNER JOIN cadastro.unidade_organizacional unid ON unid.unid_id = pgrt.unid_id ")
+			   .append("INNER JOIN atendimentopublico.equipe_componentes eqco ON eqpe.eqpe_id = eqco.eqpe_id  ")
 			   .append("INNER JOIN cadastro.imovel imov ON imov.imov_id = orse.imov_id ")
-			   .append("WHERE 1=1 ")
-			   .append("AND unid.unid_id = :unidadeOrganizacionalId ")
+			   .append("WHERE eqco.func_id = :funcionarioId ")
 			   .append("AND orse.orse_cdsituacao = :situacao ")
 			   .append("GROUP BY idOrdemServico, situacao, dataGeracao, servicoTipoDescricao, servicoTipoValor, observacao, dataProgramacao, equipeProgramacao, idOperacao, idImovel ")
 			   .append("ORDER BY idOrdemServico");
@@ -20964,7 +20963,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						  .addScalar("equipeProgramacao", Hibernate.STRING)
 						  .addScalar("idOperacao", Hibernate.INTEGER)
 						  .addScalar("idImovel", Hibernate.INTEGER)
-						  .setInteger("unidadeOrganizacionalId", unidadeOrganizacionalId)
+						  .setInteger("funcionarioId", funcionarioId)
 						  .setInteger("situacao", OrdemServicoSituacao.PENDENTE)
 						  .list();
 		} catch (HibernateException e) {
@@ -21004,4 +21003,5 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 		return retornoConsulta;
 	}
+
 }

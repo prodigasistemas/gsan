@@ -10,12 +10,21 @@ public class UsuarioDTO {
 
 	private String unidadeOrganizacionalDescricao;
 
-	public UsuarioDTO(Integer id, String nome, Integer unidadeOrganizacionalId, String unidadeOrganizacionalDescricao) {
+	private Integer funcionarioId;
+
+	public UsuarioDTO(
+			Integer id, 
+			String nome, 
+			Integer unidadeOrganizacionalId, 
+			String unidadeOrganizacionalDescricao,
+			Integer funcionarioId) {
 		super();
+		
 		this.id = id;
 		this.nome = nome;
 		this.unidadeOrganizacionalId = unidadeOrganizacionalId;
 		this.unidadeOrganizacionalDescricao = unidadeOrganizacionalDescricao;
+		this.funcionarioId = funcionarioId;
 	}
 
 	public Integer getId() {
@@ -48,5 +57,13 @@ public class UsuarioDTO {
 
 	public void setUnidadeOrganizacionalDescricao(String unidadeOrganizacionalDescricao) {
 		this.unidadeOrganizacionalDescricao = unidadeOrganizacionalDescricao;
+	}
+
+	public Integer getFuncionarioId() {
+		return funcionarioId;
+	}
+
+	public void setFuncionarioId(Integer funcionarioId) {
+		this.funcionarioId = funcionarioId;
 	}
 }
