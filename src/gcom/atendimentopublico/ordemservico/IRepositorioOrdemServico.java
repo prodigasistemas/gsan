@@ -3792,7 +3792,7 @@ public interface IRepositorioOrdemServico {
 	 */
 	public void excluirOsAtividadeProgramacaoAcompahamentoServico(Collection<Integer> isOsAtividadeProgramacaoAcompanhamentoServico) throws ErroRepositorioException;
 	
-	public Collection<Object[]> pesquisarOrdensServicoProgramadas(Integer unidadeOrganizacionalId) throws ErroRepositorioException;
+	public Collection<Object[]> pesquisarOrdensServicoProgramadas(Integer funcionarioId) throws ErroRepositorioException;
 
 	public Collection<ServicoTipo> pesquisarServicoTipoPorUnidadeSemRA(Integer unidadeLotacao) throws ErroRepositorioException;
 }

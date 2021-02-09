@@ -18950,10 +18950,10 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 	 * @return List<OrdemServicoDTO> DTO das Ordens de Serviços
 	 * @throws ControladorException
 	 */
-	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas(Integer unidadeOrganizacionalId) throws ControladorException {
+	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas(Integer funcionarioId) throws ControladorException {
 		try {
 			List<OrdemServicoDTO> programadas = new ArrayList<OrdemServicoDTO>();
-			Collection<Object[]> consulta = (Collection<Object[]>) repositorioOrdemServico.pesquisarOrdensServicoProgramadas(unidadeOrganizacionalId);
+			Collection<Object[]> consulta = (Collection<Object[]>) repositorioOrdemServico.pesquisarOrdensServicoProgramadas(funcionarioId);
 
 			for (Object[] objeto : consulta) {
 				OrdemServicoDTO dto = new OrdemServicoDTO(

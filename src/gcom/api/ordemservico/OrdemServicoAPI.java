@@ -92,9 +92,9 @@ public class OrdemServicoAPI extends HttpServlet {
 	
 	private void pesquisarProgramadas() {
 		try {
-			Integer unidadeOrganizacionalId = Integer.valueOf(obterParametro("unidadeOrganizacionalId"));
-
-			List<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas(unidadeOrganizacionalId);
+			Integer funcionarioId = Integer.valueOf(obterParametro("funcionarioId"));
+			
+			List<OrdemServicoDTO> dto = Fachada.getInstancia().pesquisarOrdensServicoProgramadas(funcionarioId);
 
 			response.getOutputStream().print(toJson(dto));
 			response.setStatus(HttpServletResponse.SC_OK);
@@ -116,7 +116,8 @@ public class OrdemServicoAPI extends HttpServlet {
 						usuario.getId(),
 						usuario.getNomeUsuario(),
 						usuario.getUnidadeOrganizacional().getId(),
-						usuario.getUnidadeOrganizacional().getDescricao());
+						usuario.getUnidadeOrganizacional().getDescricao(),
+						usuario.getFuncionario().getId());
 
 				response.getOutputStream().print(toJson(dto));
 				response.setStatus(HttpServletResponse.SC_OK);
@@ -127,6 +128,7 @@ public class OrdemServicoAPI extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
 		}
+	
 	}
 
 	private String obterParametro(String nome) {

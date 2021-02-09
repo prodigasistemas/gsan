@@ -3155,9 +3155,10 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 
 	/**
 	 * Método que retorna os dados das Ordens de Serviços programadas 
+	 * @param funcionarioID 
 	 * 
 	 * @return List<OrdemServicoDTO> DTO das Ordens de Serviços
 	 * @throws ControladorException
 	 */
-	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas(Integer unidadeOrganizacionalId) throws ControladorException;
+	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas(Integer funcionarioId) throws ControladorException;
 }
