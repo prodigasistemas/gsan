@@ -37,6 +37,7 @@ function fechar(){
 	
 <script type="text/javascript" src="<bean:message key="caminho.js"/>popup.js"></script>
 <script language="JavaScript">
+
 function recuperarDadosPopup(codigoRegistro, descricaoRegistro, tipoConsulta) {
 
    	var form = document.forms[0];
@@ -65,7 +66,7 @@ function expandirConsulta(){
 
 function habilitaMatricula() {
 	var form = document.forms[0];
-	
+	colecaoConsultarImovelRegistroAtendimentoHelper
 	if (form.idImovelRegistroAtendimento.value != null && form.matriculaImovelRegistroAtendimento.value != null && 
 		form.matriculaImovelRegistroAtendimento.value != "" && form.matriculaImovelRegistroAtendimento.value != "IMÓVEL INEXISTENTE"){
 	
@@ -89,6 +90,8 @@ function pesquisarImovel() {
 		document.getElementById("Layer1").style.left = "460px";
 		document.getElementById("Layer1").style.top = "85px";
 	}
+
+	
 </script>
 
 
@@ -164,6 +167,7 @@ function pesquisarImovel() {
 					<table width="100%" align="center" bgcolor="#99CCFF" border="0">
 						<tr>
 						    <td>
+	}
 							    <table width="100%" align="center" bgcolor="#99CCFF" border="0">
 								    <tr>
 									    <td align="left" width="4%">
@@ -217,7 +221,6 @@ function pesquisarImovel() {
 									</logic:notPresent> <a href="javascript:limparForm();"> <img
 										src="<bean:message key="caminho.imagens"/>limparcampo.gif"
 										border="0" title="Apagar" /></a></td>
-
 								</tr>
 								<tr>
 									<td height="10">
@@ -314,21 +317,111 @@ function pesquisarImovel() {
 								
 							</logic:iterate>
 						</logic:present>
+						
 					</table>
 				</tr>
+				
+				<tr>
+					<td colspan="3" height="10"></td>
+				</tr>
+				
+				<tr>
+						<td align="center">
+						
+							<table width="100%" border="0">
+								<tr>
+									<td>
+										<input type="button" 
+					       					name="ButtonReset" 
+					       					class="bottonRightCol"
+											value="Expandir Consulta"
+											onClick="expandirConsulta();">
+									</td>
+								</tr>
+							</table>
+				</tr>
+				
+				<tr>
+					<td colspan="3" height="10"></td>
+				</tr>							
+						
+					<tr>
+						<td align="center">
+	
+						<table width="100%" border="0" bgcolor="#90c7fc">
+							
+							<tr bgcolor="#79bbfd">
+								<td height="18" colspan="6" align="center">
+									<strong>Dados Gerais de Ordens de Serviço Seletivas</strong></td>
+							</tr>
+							
+							<tr>
+								
+								<td bgcolor="#90c7fc" align="center" width="10%">
+									<div align="center"><strong>Número da OS</strong></div>
+								</td>
+								
+								<td bgcolor="#90c7fc" width="40%">
+									<div align="center"><strong>Descrição do Serviço</strong></div>
+								</td>
+								
+								<td bgcolor="#90c7fc" width="10%">
+									<div align="center"><strong>Data de Geração</strong></div>
+								</td>
+	
+								<td bgcolor="#90c7fc" width="10%">
+									<div align="center"><strong>Data de Encerramento</strong></div>
+								</td>
+								
+								<td bgcolor="#90c7fc" width="15%">
+									<div align="center"><strong>Situação</strong></div>
+								</td>
+	
+								<td bgcolor="#90c7fc" width="15%">
+									<div align="center"><strong>Motivo do Encerramento</strong></div>
+								</td>					
+								
+							</tr>
+							
+							<tr bordercolor="#000000">
+						
+						<logic:present name="colecaoOrdemServicoHelper">
+							<%	int cont = 0;	%>
+							<logic:iterate name="colecaoOrdemServicoHelper"
+								id="OrdemServicoHelper">
+								<%	cont = cont + 1;
+								if (cont % 2 == 0) {	%>
+									<tr bgcolor="#cbe5fe">
+							<%	} else {	%>
+									<tr bgcolor="#FFFFFF">
+							<%	}	%>
+
+								
+				                	 <td align="center">
+				                      		<a href="exibirConsultarDadosOrdemServicoAction.do?numeroOS=${OrdemServicoHelper.numeroOrdemServico}"/>
+												${OrdemServicoHelper.numeroOrdemServico}				                      					
+											</a>
+				                     </td>
+				                     				                     											
+									<td align="center">${OrdemServicoHelper.descricaoServicoTipo}</td>
+									
+									<td align="center">${OrdemServicoHelper.dataGeracao}</td>
+									<td align="center">${OrdemServicoHelper.dataEncerramento}</td>
+									<td align="center">${OrdemServicoHelper.situacao}</td>
+									<td align="center">${OrdemServicoHelper.parecerEncerramento}</td>
+								</tr>
+								
+							</logic:iterate>
+						</logic:present>
+							
+							</table>
+							
+						</tr>	
+						
+					
 			</table>
 		<p>&nbsp;</p>
-		<table width="100%" border="0">
-			<tr>
-				<td>
-					<input type="button" 
-       					name="ButtonReset" 
-       					class="bottonRightCol"
-						value="Expandir Consulta"
-						onClick="expandirConsulta();">
-				</td>
-			</tr>
-		</table>
+
 		<table width="100%" border="0">
 			<tr>
 				<td colspan="2">

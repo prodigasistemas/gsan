@@ -1,17 +1,5 @@
 package gcom.gui.cadastro.imovel;
 
-import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoSolicitante;
-import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
-import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
-import gcom.atendimentopublico.registroatendimento.bean.ObterDescricaoSituacaoRAHelper;
-import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.imovel.bean.ConsultarImovelRegistroAtendimentoHelper;
-import gcom.fachada.Fachada;
-import gcom.gui.GcomAction;
-import gcom.util.ConstantesSistema;
-import gcom.util.Util;
-import gcom.util.filtro.ParametroSimples;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,6 +14,21 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
+import gcom.atendimentopublico.ordemservico.OrdemServico;
+import gcom.atendimentopublico.ordemservico.bean.ObterDescricaoSituacaoOSHelper;
+import gcom.atendimentopublico.ordemservico.bean.OrdemServicoHelper;
+import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoSolicitante;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
+import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
+import gcom.atendimentopublico.registroatendimento.bean.ObterDescricaoSituacaoRAHelper;
+import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.bean.ConsultarImovelRegistroAtendimentoHelper;
+import gcom.fachada.Fachada;
+import gcom.gui.GcomAction;
+import gcom.util.ConstantesSistema;
+import gcom.util.Util;
+import gcom.util.filtro.ParametroSimples;
 
 /**
  * 10° Aba - Registro de Atendimento
@@ -74,7 +77,7 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
             //limpar os dados 
         	httpServletRequest.setAttribute(
                     "idImovelRegistroAtendimentoNaoEncontrado", null);
-
+        	
         	sessao.removeAttribute("imovelRegistroAtendimento");
         	sessao.removeAttribute("idImovelPrincipalAba");
         	sessao.removeAttribute("imovelClientes");
@@ -96,6 +99,7 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
         	consultarImovelActionForm.setSituacaoAguaRegistroAtendimento(null);
         	consultarImovelActionForm.setSituacaoEsgotoRegistroAtendimento(null);
         	sessao.removeAttribute("colecaoConsultarImovelRegistroAtendimentoHelper");
+        	sessao.removeAttribute("colecaoOrdemServicoHelper");
             
 //        }else if(idImovelRegistroAtendimento != null && !idImovelRegistroAtendimento.equalsIgnoreCase("")){
         }else if( (idImovelRegistroAtendimento != null && !idImovelRegistroAtendimento.equalsIgnoreCase(""))
@@ -291,9 +295,84 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
 								return dtAtendimento2.compareTo(dtAtendimento1);
 							}
 						});
+						
+						sessao.setAttribute("colecaoConsultarImovelRegistroAtendimentoHelper", colecaoConsultarImovelRegistroAtendimentoHelper);
 					}
 					
-					sessao.setAttribute("colecaoConsultarImovelRegistroAtendimentoHelper", colecaoConsultarImovelRegistroAtendimentoHelper);
+					
+					Collection colecaoOrdensServico = fachada.consultarDadosOrdensServicoSeletivas(new Integer(idImovelRegistroAtendimento.trim()));
+					
+					Collection colecaoOrdensServicoHelper  = null;
+					
+					if(colecaoOrdensServico != null &&
+							!colecaoOrdensServico.isEmpty()){
+						
+						Iterator iteratorColecaoOrdensServico = colecaoOrdensServico.iterator();
+						
+						colecaoOrdensServicoHelper = new ArrayList();
+						
+						while (iteratorColecaoOrdensServico.hasNext()) {
+							OrdemServico os = (OrdemServico) iteratorColecaoOrdensServico.next();
+							
+							OrdemServicoHelper ordemServicoHelper = new OrdemServicoHelper();
+
+							//id registro atendimento
+							if(os != null  && os.getId() != null ){
+								ordemServicoHelper.setNumeroOrdemServico(os.getId().toString());
+							}
+							
+							//descricao servico tipo
+							if(os != null && os.getServicoTipo() != null){ 								
+								ordemServicoHelper.setDescricaoServicoTipo(os.getServicoTipo().getDescricao());
+							}
+							sessao.removeAttribute("colecaoOrdemServicoHelper");
+							//data de geracao
+							if(os != null && os.getDataGeracao() != null ) {
+								ordemServicoHelper.setDataGeracao(Util.formatarData(os.getDataGeracao()));
+							}
+							
+							//Date Encerramento
+							if(os != null && os.getDataEncerramento() != null ){
+								
+								ordemServicoHelper.setDataEncerramento(Util.formatarData(os.getDataEncerramento()));
+							}
+							
+							//situacao
+							if(os != null && os.getId() != null){
+								ObterDescricaoSituacaoOSHelper obterDescricaoSituacaoOSHelper = 
+									fachada.obterDescricaoSituacaoOS(os.getId());
+								ordemServicoHelper.setSituacao(obterDescricaoSituacaoOSHelper.getDescricaoSituacao());
+								
+							}													
+							
+							//Motivo do encerramento
+							if(os != null && os.getAtendimentoMotivoEncerramento() != null ){
+								
+								ordemServicoHelper.setParecerEncerramento(os.getAtendimentoMotivoEncerramento().getDescricao());
+							}
+							
+								colecaoOrdensServicoHelper.add(ordemServicoHelper);
+							
+						}
+						
+						// Track No. 644 : Consultar Imóvel - Aba RA - Ordenação de OS
+						Collections.sort((List) colecaoOrdensServicoHelper, new Comparator() {
+							public int compare(Object a, Object b) {
+								String data1 = ((OrdemServicoHelper) a).getDataGeracao();
+								String data2 = ((OrdemServicoHelper) b).getDataGeracao();
+								
+								data1 = data1.substring(6, 10) + data1.substring(3, 5) + data1.substring(0, 2);
+								data2 = data2.substring(6, 10) + data2.substring(3, 5) + data2.substring(0, 2);
+								
+								Integer dtGeracao1 = Integer.decode(data1);
+								Integer dtGeracao2 = Integer.decode(data2);
+
+								return dtGeracao2.compareTo(dtGeracao1);
+							}
+						});
+					}
+					
+					sessao.setAttribute("colecaoOrdemServicoHelper", colecaoOrdensServicoHelper);
 					
                 }
             } else {
@@ -318,6 +397,7 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
             	consultarImovelActionForm.setSituacaoAguaRegistroAtendimento(null);
             	consultarImovelActionForm.setSituacaoEsgotoRegistroAtendimento(null);
             	sessao.removeAttribute("colecaoConsultarImovelRegistroAtendimentoHelper");
+            	sessao.removeAttribute("colecaoOrdemServicoHelper");
             }
         }else{
         	 consultarImovelActionForm.setIdImovelRegistroAtendimento(idImovelRegistroAtendimento);
@@ -332,6 +412,7 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
         	consultarImovelActionForm.setSituacaoAguaRegistroAtendimento(null);
         	consultarImovelActionForm.setSituacaoEsgotoRegistroAtendimento(null);
         	sessao.removeAttribute("colecaoConsultarImovelRegistroAtendimentoHelper");
+        	sessao.removeAttribute("colecaoOrdemServicoHelper");
         
         }
 

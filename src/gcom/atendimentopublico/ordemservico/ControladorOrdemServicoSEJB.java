@@ -11821,22 +11821,37 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 			if (retornoColecao != null && !retornoColecao.isEmpty()) {
 
 				Iterator itera = retornoColecao.iterator();
-
+				
+				OrdemServico os = null;
+				
+				ServicoTipo servTipo = null;
+				
 				while (itera.hasNext()) {
 					Object[] retorno = (Object[]) itera.next();
-
+					
+					os = new OrdemServico();
+					
+					servTipo = new ServicoTipo();
+					 
 					OrdemServicoHelper osHelper = new OrdemServicoHelper();
+					
+					os.setId((Integer) retorno[0]);
+					os.setDataGeracao((Date) retorno[1]);
+					servTipo.setId((Integer) retorno[2]);
+					servTipo.setDescricao((String) retorno[3]);
+					os.setServicoTipo(servTipo);					
+					os.setDataEncerramento((Date) retorno[4]);
+					os.setDescricaoParecerEncerramento((String) retorno[5]);
 
-					osHelper.setNumeroOrdemServico((Integer) retorno[0]);
-					osHelper.setDataGeracao((Date) retorno[1]);
-					osHelper.setIdServicoTipo((Integer) retorno[2]);
-					osHelper.setDescricaoServicoTipo((String) retorno[3]);
-					osHelper.setDataEncerramento((Date) retorno[4]);
-					osHelper.setParecerEncerramento((String) retorno[5]);
-
-					ObterDescricaoSituacaoOSHelper obterDescricaoSituacaoOSHelper = this.obterDescricaoSituacaoOS(osHelper.getNumeroOrdemServico());
-
+					ObterDescricaoSituacaoOSHelper obterDescricaoSituacaoOSHelper = this.obterDescricaoSituacaoOS(os.getId());
+					
+					osHelper.setNumeroOrdemServico(os.getId().toString());
+					osHelper.setIdServicoTipo(os.getServicoTipo().getId().toString());
+					osHelper.setDescricaoServicoTipo(os.getServicoTipo().getDescricao());
+					osHelper.setDataGeracao(Util.formatarData(os.getDataGeracao()));
+					osHelper.setDataEncerramento(Util.formatarData(os.getDataGeracao()));
 					osHelper.setSituacao(obterDescricaoSituacaoOSHelper.getDescricaoSituacao());
+					osHelper.setParecerEncerramento(os.getDescricaoParecerEncerramento());
 
 					colecaoOs.add(osHelper);
 				}
@@ -19057,5 +19072,70 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 			return colecao.iterator().next();
 		else
 			return null;
+	}
+	
+	public Collection consultarDadosOrdensServicoSeletivas(Integer idImovel) throws ControladorException {
+		
+		Collection colecaoOrdemServico = null;
+		try {
+			colecaoOrdemServico = repositorioOrdemServico.consultarDadosOrdensServicoSeletivas(idImovel);
+			} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+		
+		Collection ordensServico = null;
+		
+		if (colecaoOrdemServico != null
+				&& !colecaoOrdemServico.isEmpty()) {
+			
+			ordensServico = new ArrayList();
+			
+			Iterator iteColecaoOrdemServico = colecaoOrdemServico
+			.iterator();
+			
+			OrdemServico os = null;
+			
+			while (iteColecaoOrdemServico.hasNext()) {
+				Object[] array = (Object[]) iteColecaoOrdemServico
+				.next();
+				
+				os = new OrdemServico();
+				if (array[0] != null) {
+					// seta o id
+					os.setId((Integer) array[0]);
+				}
+				
+				ServicoTipo servTipo = null;
+				if (array[1] != null) {
+					servTipo = new ServicoTipo();
+					servTipo.setDescricao((String) array[1]);
+					// seta a descricao do servico Tipo
+					os.setServicoTipo(servTipo);
+				}
+
+				if (array[2] != null) {
+					// tm registro atendimento
+					os.setDataGeracao((Date) array[2]);
+				}
+				
+				if (array[3] != null) {
+					// tm encerramento
+					os.setDataEncerramento((Date) array[3]);
+				}
+				
+				AtendimentoMotivoEncerramento atme = null;
+				if (array[4] != null) {
+					// id Atendimento Motivo Encerramento
+					atme = new AtendimentoMotivoEncerramento();
+					atme.setDescricao((String) array[4]);
+					os.setAtendimentoMotivoEncerramento(atme);			}
+				
+				ordensServico.add(os);
+			}
+		}
+		return ordensServico;
+		
 	}
 }

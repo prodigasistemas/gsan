@@ -88,7 +88,8 @@
 		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
 			<column name="imov_id"/>
 		</many-to-one>
-		<!-- bi-directional one-to-many association to CreditoARealizarHistorico 
+		<!-- bi-directional one-to-many association to CreditoARealizarHistorico 					+ " atendimento.id, " // 5
+					+ " atendimento.descricao " // 6
     <set
         name="creditoARealizarHistoricos"
         lazy="true"

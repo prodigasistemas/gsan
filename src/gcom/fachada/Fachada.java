@@ -40509,4 +40509,12 @@ public class Fachada {
 	public String getPastaDestinoDaImagemOrgemServico(Integer imovelId, String modulo) {
 		return this.getControladorUtil().retornarPastaDestinoDaImagemOrgemServico(imovelId, modulo);
 	}
+	
+	public Collection consultarDadosOrdensServicoSeletivas(Integer idImovel) {
+		try {
+			return this.getControladorOrdemServico().consultarDadosOrdensServicoSeletivas(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }

@@ -21003,5 +21003,46 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 		return retornoConsulta;
 	}
+	
+	public Collection consultarDadosOrdensServicoSeletivas(Integer idImovel) throws ErroRepositorioException {
 
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+			consulta = "SELECT os.orse_id as idOrdemServico, " // 0
+					+ "st.svtp_dsservicotipo as descricaoServicoTipo, " // 1
+					+ "os.orse_tmGeracao as dataGeracao, " // 2
+					+ "os.orse_tmEncerramento as dataEncerramento, " // 3
+					+ "atme.amen_dsmotivoencerramento as motivoEncerramento " // 4
+					+ "FROM atendimentopublico.ordem_servico as os "
+					+ "LEFT JOIN atendimentopublico.servico_tipo_seletiva as sts on sts.svtp_id = os.svtp_id "
+					+ "LEFT JOIN atendimentopublico.servico_tipo as st on st.svtp_id = sts.svtp_id "
+					+ "LEFT JOIN atendimentopublico.atend_motivo_encmt as atme on atme.amen_id = os.amen_id "
+					
+					+ "WHERE os.imov_id = :idImovel AND os.rgat_id is null AND os.cbdo_id is null "
+					+ "AND os.svtp_id IN (SELECT svtp_id FROM atendimentopublico.servico_tipo_seletiva)";
+
+			
+			Query query = session.createSQLQuery(consulta)
+								 .addScalar("idOrdemServico", Hibernate.INTEGER)
+								 .addScalar("descricaoServicoTipo", Hibernate.STRING)
+								 .addScalar("dataGeracao", Hibernate.DATE)
+								 .addScalar("dataEncerramento", Hibernate.DATE)
+								 .addScalar("motivoEncerramento", Hibernate.STRING)
+								 .setInteger("idImovel", idImovel.intValue());
+			
+
+			retorno = query.list();
+					
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
 }
