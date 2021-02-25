@@ -66,6 +66,7 @@ public class FiltrarOrdemServicoAction extends GcomAction {
 			form.setOrigemOrdemServico(OrdemServico.TODAS);
 		}
 		
+		
 		recuperaPeriodos(form);
 
 		String origemOS = null;

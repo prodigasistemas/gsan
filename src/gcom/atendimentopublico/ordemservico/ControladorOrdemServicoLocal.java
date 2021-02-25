@@ -3161,4 +3161,6 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	 * @throws ControladorException
 	 */
 	public List<OrdemServicoDTO> pesquisarOrdensServicoProgramadas(Integer funcionarioId) throws ControladorException;
+	
+	public Collection consultarDadosOrdensServicoSeletivas(Integer idImovel) throws ControladorException;
 }

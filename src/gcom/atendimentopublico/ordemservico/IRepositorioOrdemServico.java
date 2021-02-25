@@ -3795,4 +3795,6 @@ public interface IRepositorioOrdemServico {
 	public Collection<Object[]> pesquisarOrdensServicoProgramadas(Integer funcionarioId) throws ErroRepositorioException;
 
 	public Collection<ServicoTipo> pesquisarServicoTipoPorUnidadeSemRA(Integer unidadeLotacao) throws ErroRepositorioException;
+	
+	public Collection consultarDadosOrdensServicoSeletivas(Integer idImovel) throws ErroRepositorioException;
 }
