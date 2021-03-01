@@ -132,7 +132,6 @@ import gcom.cobranca.MotivoNaoAceitacaoEncerramentoOS;
 import gcom.cobranca.RepositorioCobrancaHBM;
 import gcom.cobranca.bean.DadosPesquisaCobrancaDocumentoHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
-import gcom.enums.TipoImagem;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.FaturamentoSituacaoHistorico;
@@ -192,7 +191,6 @@ import gcom.util.ConstantesAplicacao;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilSEJB;
 import gcom.util.Criptografia;
 import gcom.util.ErroCriptografiaException;
 import gcom.util.ErroRepositorioException;
@@ -18158,52 +18156,36 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 	 * 
 	 * Método que insere o array de bytes vindo do celular e o insere no banco
 	 * 
-	 * @param numeroOS
-	 *            - Id da OS
-	 * @param tipoFoto
-	 *            - Se essa foto foi do inicio do meio ou do fim da obra
-	 * @param foto
-	 *            - array de bytes com a foto em si
+	 * @param numeroOS - Id da OS
+	 * @param tipoFoto - Se essa foto foi do inicio do meio ou do fim da obra
+	 * @param foto - array de bytes com a foto em si
 	 * 
 	 * @throws FachadaException
 	 */
 	public void inserirFotoOrdemServico(int numeroOS, int tipoFoto, byte[] foto) throws ControladorException {
-		FiltroFotoSituacaoOrdemServico filtroSituacaoFoto = new FiltroFotoSituacaoOrdemServico();
-		filtroSituacaoFoto.adicionarParametro(new ParametroSimples(FiltroFotoSituacaoOrdemServico.ID, tipoFoto));
-		Collection<FotoSituacaoOrdemServico> colFotoSituacaoOrdemServico = this.getControladorUtil().pesquisar(filtroSituacaoFoto,
+		Filtro filtro = new FiltroFotoSituacaoOrdemServico();
+		filtro.adicionarParametro(new ParametroSimples(FiltroFotoSituacaoOrdemServico.ID, tipoFoto));
+
+		Collection<FotoSituacaoOrdemServico> colFotoSituacaoOrdemServico = getControladorUtil().pesquisar(filtro,
 				FotoSituacaoOrdemServico.class.getName());
 
-		FotoSituacaoOrdemServico situacao = (FotoSituacaoOrdemServico) Util.retonarObjetoDeColecao(colFotoSituacaoOrdemServico);
+		FotoSituacaoOrdemServico situacao = (FotoSituacaoOrdemServico) Util
+				.retonarObjetoDeColecao(colFotoSituacaoOrdemServico);
 
-		OrdemServicoFoto ost = new OrdemServicoFoto();
+		OrdemServicoFoto ordemServicoFoto = new OrdemServicoFoto();
 
-		OrdemServico os = new OrdemServico();
-		os.setId(numeroOS);
-		
-		ost.setOrdemServico(os);
-		ost.setData(new Date());
-		
-		if (situacao != null) {
-			ost.setFotoSituacao(situacao);
-			ost.setDescricao(situacao.getDescricao());
-		}
-		
-		ost.setUltimaAlteracao(new Date());
-		
-		try {
-		
-			ControladorUtilSEJB contUtil = new ControladorUtilSEJB();
-			ost.setNomeArquivo(contUtil.gravaImagem(foto, 0, "ordemServico", String.valueOf(numeroOS), TipoImagem.JPEG.name(), false));
-			ost.setCaminhoArquivo(contUtil.getCaminhoDownloadArquivos("ordemServico"));
-			
-			this.getControladorUtil().inserir(ost);
+		FotoSituacaoOrdemServico fotoSituacao = new FotoSituacaoOrdemServico();
+		fotoSituacao.setId(tipoFoto);
 
-		} catch (ControladorException e) {
-			File arquivo = new File(ost.getCaminhoArquivo() + ost.getNomeArquivo());
-            arquivo.delete();
-			e.printStackTrace();
-		}
-		
+		OrdemServico ordemServico = new OrdemServico(numeroOS);
+
+		ordemServicoFoto.setFotoSituacao(fotoSituacao);
+		ordemServicoFoto.setOrdemServico(ordemServico);
+		ordemServicoFoto.setData(new Date());
+		ordemServicoFoto.setDescricao(situacao.getDescricao());
+		ordemServicoFoto.setUltimaAlteracao(new Date());
+
+		getControladorUtil().inserir(ordemServicoFoto);
 	}
 
 	/**

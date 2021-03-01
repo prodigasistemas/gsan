@@ -14,10 +14,9 @@
 
 		<property name="data" type="java.sql.Timestamp" column="osft_dtfoto" not-null="false" length="6" />
 		<property name="descricao" type="java.lang.String" column="osft_dsfoto" length="90" />
-		<property name="foto" type="binary" column="osft_imfoto" length="-1" />
+		<property name="nomeFoto" type="java.lang.String" column="osft_nmfoto" length="200" />
+		<property name="caminhoFoto" type="java.lang.String" column="osft_caminhofoto" length="200" />
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="osft_tmultimaalteracao" not-null="true" length="6" />
-		<property name="nomeArquivo" type="java.lang.String" column="osft_nomearquivo" length="200" />
-		<property name="caminhoArquivo" type="java.lang.String" column="osft_caminhoarquivo" length="200" />
 
 		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="true">
 			<column name="orse_id" />

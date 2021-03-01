@@ -1,9 +1,9 @@
 package gcom.atendimentopublico.ordemservico;
 
+import java.util.Date;
+
 import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
-
-import java.util.Date;
 
 public class OrdemServicoFoto extends ObjetoTransacao {
 
@@ -14,39 +14,43 @@ public class OrdemServicoFoto extends ObjetoTransacao {
 	private FotoSituacaoOrdemServico fotoSituacao;
 	private Date data;
 	private String descricao;
-	private byte[] foto;
+	private String nomeFoto;
+	private String caminhoFoto;
 	private Date ultimaAlteracao;
-	private String nomeArquivo;
-	private String caminhoArquivo;
 
 	public OrdemServicoFoto() {
 		super();
 	}
 
-	public OrdemServicoFoto(Integer id, OrdemServico ordemServico, String descricao, byte[] foto) {
-		this.id = id;
-		this.ordemServico = ordemServico;
-		this.descricao = descricao;
-		this.foto = foto;
-	}
-
-	public OrdemServicoFoto(Integer id, OrdemServico ordemServico, String descricao, String nomeArquivo,
-			String caminhoArquivo) {
-		this.id = id;
-		this.ordemServico = ordemServico;
-		this.descricao = descricao;
-		this.nomeArquivo = nomeArquivo;
-		this.caminhoArquivo = caminhoArquivo;
-	}
-
-	public OrdemServicoFoto(OrdemServico ordemServico, Date data, String descricao, Date ultimaAlteracao,
-			String nomeArquivo) {
+	public OrdemServicoFoto(
+			OrdemServico ordemServico,
+			Date data, 
+			String descricao,
+			String nomeFoto) {
+		
 		super();
+		
 		this.ordemServico = ordemServico;
 		this.data = data;
 		this.descricao = descricao;
-		this.ultimaAlteracao = ultimaAlteracao;
-		this.nomeArquivo = nomeArquivo;
+		this.nomeFoto = nomeFoto;
+		this.ultimaAlteracao = new Date();
+	}
+
+	public OrdemServicoFoto(
+			Integer id, 
+			OrdemServico ordemServico, 
+			String descricao, 
+			String nomeFoto,
+			String caminhoFoto) {
+		
+		super();
+		
+		this.id = id;
+		this.ordemServico = ordemServico;
+		this.descricao = descricao;
+		this.nomeFoto = nomeFoto;
+		this.caminhoFoto = caminhoFoto;
 	}
 
 	public Integer getId() {
@@ -89,12 +93,20 @@ public class OrdemServicoFoto extends ObjetoTransacao {
 		this.descricao = descricao;
 	}
 
-	public byte[] getFoto() {
-		return foto;
+	public String getNomeFoto() {
+		return nomeFoto;
 	}
 
-	public void setFoto(byte[] foto) {
-		this.foto = foto;
+	public void setNomeFoto(String nomeFoto) {
+		this.nomeFoto = nomeFoto;
+	}
+
+	public String getCaminhoFoto() {
+		return caminhoFoto;
+	}
+
+	public void setCaminhoFoto(String caminhoFoto) {
+		this.caminhoFoto = caminhoFoto;
 	}
 
 	public Date getUltimaAlteracao() {
@@ -103,22 +115,6 @@ public class OrdemServicoFoto extends ObjetoTransacao {
 
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
-	}
-
-	public String getNomeArquivo() {
-		return nomeArquivo;
-	}
-
-	public void setNomeArquivo(String nomeArquivo) {
-		this.nomeArquivo = nomeArquivo;
-	}
-
-	public String getCaminhoArquivo() {
-		return caminhoArquivo;
-	}
-
-	public void setCaminhoArquivo(String caminhoArquivo) {
-		this.caminhoArquivo = caminhoArquivo;
 	}
 
 	@Override
