@@ -213,6 +213,12 @@ public class OrdemServico extends ObjetoTransacao {
 		super();
 		this.id = id;
 	}
+	
+	public OrdemServico(Integer id, Integer idImovel) {
+		super();
+		this.id = id;
+		this.imovel = new Imovel(idImovel);
+	}
 
 	/** full constructor */
     public OrdemServico(short situacao, Date dataGeracao, Date dataEmissao, Date dataEncerramento, 

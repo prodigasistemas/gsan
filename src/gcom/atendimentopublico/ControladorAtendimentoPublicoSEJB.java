@@ -1,10 +1,7 @@
 package gcom.atendimentopublico;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -31,7 +28,6 @@ import java.util.zip.ZipOutputStream;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import javax.imageio.ImageIO;
 
 import gcom.atendimentopublico.bean.ContratoPrestacaoServicoHelper;
 import gcom.atendimentopublico.bean.DadosLigacoesBoletimCadastroHelper;
@@ -192,7 +188,6 @@ import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorComum;
 import gcom.util.ControladorException;
-import gcom.util.ControladorUtilSEJB;
 import gcom.util.ErroRepositorioException;
 import gcom.util.IRepositorioUtil;
 import gcom.util.RepositorioUtilHBM;
@@ -11946,80 +11941,61 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 * @return Collection<OrdemServicoFoto> - Coleo das Fotos da OS
 	 * @throws ControladorException
 	 */
-	public Collection<OrdemServicoFoto> pesquisarFotosOrdemServico(Integer id, boolean idOS) throws ControladorException{
+	public Collection<OrdemServicoFoto> pesquisarFotosOrdemServico(Integer id, boolean idOS)
+			throws ControladorException {
 		Collection<OrdemServicoFoto> fotos = null;
 		Collection<Object[]> retorno = null;
-		
-		
-		try {
-			if (repositorioAtendimentoPublico == null)
-				ejbCreate();
-			
 
-			if(idOS){
-				retorno = repositorioAtendimentoPublico.pesquisarFotosOrdemServico(id);
-			}else{
-				retorno = repositorioAtendimentoPublico.pesquisarFotosOrdemServicoPorIdFoto(id);
+		try {
+			if (idOS) {
+				retorno = this.repositorioAtendimentoPublico.pesquisarFotosOrdemServico(id);
+			} else {
+				retorno = this.repositorioAtendimentoPublico.pesquisarFotosOrdemServicoPorIdFoto(id);
 			}
-			
-			//Verifica se a consulta trouxe algum ResultSet
-			if(!Util.isVazioOrNulo(retorno)){
-				
+
+			if (!Util.isVazioOrNulo(retorno)) {
+
 				Object[] ordemServicoFoto;
-				
-				//Ordem de servio foto e seus atributos necessrios para instanciao.
-				OrdemServicoFoto osFoto = null;
-				Integer idFoto = null;
-				OrdemServico os = null;
-				String descricaoFoto = "";
-				byte[] foto = null;
-				
+
 				fotos = new ArrayList<OrdemServicoFoto>();
-				
+
 				Iterator<Object[]> iterator = retorno.iterator();
-					
-				//Itera pelas linhas do ResultSet
-				while(iterator.hasNext()){
+
+				while (iterator.hasNext()) {
 					ordemServicoFoto = iterator.next();
-					
-					if(ordemServicoFoto[0] != null){
+
+					Integer idFoto = null;
+					if (ordemServicoFoto[0] != null) {
 						idFoto = (Integer) ordemServicoFoto[0];
 					}
-					
-					if(ordemServicoFoto[1] != null){
-						os = new OrdemServico();
-						os.setId((Integer) ordemServicoFoto[1]);
-					}
-					
-					if(ordemServicoFoto[2] != null){
-						descricaoFoto = (String) ordemServicoFoto[2];
-					}
-					
-					if(ordemServicoFoto[3] != null){
-						foto = (byte[]) ordemServicoFoto[3];
 
-					} else {
-						
-						ControladorUtilSEJB controladorUtil = new ControladorUtilSEJB();
-						foto = controladorUtil.carregaImagem((String) ordemServicoFoto[5], (String) ordemServicoFoto[4]);
-						
+					OrdemServico ordemServico = null;
+					if (ordemServicoFoto[1] != null) {
+						ordemServico = new OrdemServico((Integer) ordemServicoFoto[1]);
 					}
-					
-					osFoto = new OrdemServicoFoto(idFoto, os, descricaoFoto, foto);
-					fotos.add(osFoto);
+
+					String descricao = "";
+					if (ordemServicoFoto[2] != null) {
+						descricao = (String) ordemServicoFoto[2];
+					}
+
+					String nomeFoto = "";
+					if (ordemServicoFoto[3] != null) {
+						nomeFoto = (String) ordemServicoFoto[3];
+					}
+
+					String caminhoFoto = "";
+					if (ordemServicoFoto[4] != null) {
+						caminhoFoto = (String) ordemServicoFoto[4];
+					}
+
+					OrdemServicoFoto foto = new OrdemServicoFoto(idFoto, ordemServico, descricao, nomeFoto, caminhoFoto);
+					fotos.add(foto);
 				}
 			}
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 			throw new ControladorException("erro.sistema", e);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new ControladorException("Não foi possível carregar o arquivo de imagem", e);
-		} catch (CreateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return fotos;
 	}

@@ -3081,8 +3081,7 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	/**
 	 * [UC-1225] Incluir dados acompanhamento servico 
 	 * 
-	 * Método que insere o array de bytes vindo do celular
-	 * e o insere no banco
+	 * Método que insere o array de bytes vindo do celular e o insere no banco
 	 * 
 	 * @param numeroOS - Id da OS
 	 * @param tipoFoto - Se essa foto foi do inicio do meio ou do fim da obra
@@ -3090,7 +3089,7 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	 * 
 	 * @throws FachadaException
 	 */
-	public void inserirFotoOrdemServico( int numeroOS, int tipoFoto, byte[] foto ) throws ControladorException;	
+	public void inserirFotoOrdemServico( int numeroOS, int tipoFoto, byte[] foto) throws ControladorException;	
 	
 	/**
 	 * [UC-1225] Incluir dados acompanhamento servico 
