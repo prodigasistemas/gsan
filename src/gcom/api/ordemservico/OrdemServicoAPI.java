@@ -111,7 +111,7 @@ public class OrdemServicoAPI extends HttpServlet {
 
 			Usuario usuario = Fachada.getInstancia().validarUsuario(login, senha);
 
-			if (usuario != null) {
+			if (usuarioValido(usuario)) {
 				UsuarioDTO dto = new UsuarioDTO(
 						usuario.getId(),
 						usuario.getNomeUsuario(),
@@ -129,6 +129,10 @@ public class OrdemServicoAPI extends HttpServlet {
 			e.printStackTrace();
 		}
 	
+	}
+
+	private boolean usuarioValido(Usuario usuario) {
+		return usuario != null && usuario.getUnidadeOrganizacional() != null && usuario.getFuncionario() != null;
 	}
 
 	private String obterParametro(String nome) {
