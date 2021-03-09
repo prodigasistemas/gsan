@@ -469,6 +469,12 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			telefone.setId(null);
 			telefone.setUltimaAlteracao(new Date());
 			
+			if (telefone.getTelefone() != null && telefone.getTelefone().length() > 9) {
+				int index = retorno.getTelefone().length() - 9;
+				telefone.setTelefone(retorno.getTelefone().substring(index));
+				telefone.setDdd(retorno.getTelefone().substring(0, index));
+			}
+			
 			if (telefonePadraoSetado) {
 				telefone.setIndicadorTelefonePadrao(ConstantesSistema.INDICADOR_NAO_TELEFONE_PRINCIPAL);
 			} else {
