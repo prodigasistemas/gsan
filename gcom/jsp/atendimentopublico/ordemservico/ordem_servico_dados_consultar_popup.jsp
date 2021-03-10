@@ -35,7 +35,11 @@
 	
 	function encerrar() {
 		var form = document.forms[0];
+		<c:if test="${ConsultarDadosOrdemServicoPopupActionForm.numeroRA != null}">
 		form.action = "exibirEncerrarOrdemServicoPopupAction.do?numeroOS=" + form.numeroOS.value + "&retornoTela=exibirConsultarRegistroAtendimentoAction.do?numeroRA=" + form.numeroRA.value;
+		form.submit();
+		</c:if>
+		form.action = "exibirEncerrarOrdemServicoPopupAction.do?numeroOS=" + form.numeroOS.value;
 		form.submit();
 	}
 	
