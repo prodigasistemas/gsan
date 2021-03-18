@@ -10,3 +10,5 @@ rm -rf $JBOSS_GSAN/server/default/deploy/gsan*.ear
 cd $GSAN_PATH
 
 ant -Dfile.encoding=ISO-8859-1
+
+echo $(date)

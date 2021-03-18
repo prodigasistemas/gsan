@@ -816,109 +816,69 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * < <Descrição do método>>
 	 * 
-	 * @param faturamentoAtividadeCronogramas
-	 *            Descrição do parâmetro
-	 * @param faturamentoGrupoCronogramaMensal
-	 *            Descrição do parâmetro
+	 * @param atividadeCronogramas Descrição do parâmetro
+	 * @param cronogramaMensal Descrição do parâmetro
 	 * @throws ControladorException
 	 */
 	public void inserirFaturamentoCronograma(
-			Collection faturamentoAtividadeCronogramas,
-			FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal,
+			Collection<FaturamentoAtividadeCronograma> atividadeCronogramas,
+			FaturamentoGrupoCronogramaMensal cronogramaMensal,
 			RegistradorOperacao registradorOperacao, Usuario usuarioLogado,
 			Integer anoMesInformado) throws ControladorException {
-		// Prepara iterator para percorrer a coleçao de Faturamento
-		// Atividade
-		// Cronograma
-		Iterator iteratorFaturamentoCronograma = faturamentoAtividadeCronogramas
-				.iterator();
-		FaturamentoAtividadeCronograma faturamentoAtividadeCronograma = new FaturamentoAtividadeCronograma();
-		// FaturamentoAtividadeCronograma faturamentoAtividadeCronogramaVelho =
-		// null;
+
+		Iterator<?> iteratorFaturamentoCronograma = atividadeCronogramas.iterator();
+
 		boolean atualizar = false;
-		Collection faturamentoAtividadeCronogramasNovas = new ArrayList();
+		Collection<FaturamentoAtividadeCronograma> atividadeCronogramasAtualizados = new ArrayList<FaturamentoAtividadeCronograma>();
 		while (iteratorFaturamentoCronograma.hasNext()) {
-			faturamentoAtividadeCronograma = (FaturamentoAtividadeCronograma) iteratorFaturamentoCronograma
-					.next();
-			faturamentoAtividadeCronograma
-					.setFaturamentoGrupoCronogramaMensal(faturamentoGrupoCronogramaMensal);
+			FaturamentoAtividadeCronograma atividadeCronograma = (FaturamentoAtividadeCronograma) iteratorFaturamentoCronograma.next();
+			atividadeCronograma.setFaturamentoGrupoCronogramaMensal(cronogramaMensal);
 
-			// Testa se data prevista é maior ou igual a data atual
-			// Comparar atraves do mes ano do cronograma mensal
-			Calendar dataPrevistaTeste = Calendar.getInstance();
+			Calendar dataPrevistaAtual = Calendar.getInstance();
 
-			if (faturamentoAtividadeCronograma.getDataPrevista() != null) {
-				dataPrevistaTeste.setTime(faturamentoAtividadeCronograma
-						.getDataPrevista());
+			if (atividadeCronograma.getDataPrevista() != null) {
+				dataPrevistaAtual.setTime(atividadeCronograma.getDataPrevista());
 			}
 
-			/*
-			 * int ano = dataPrevistaTeste.get(Calendar.YEAR); int mes =
-			 * dataPrevistaTeste.get(Calendar.MONTH) + 1; String anoMes = null;
-			 * if (mes < 10) { anoMes = ano + "0" + mes; } else { anoMes = ano +
-			 * "" + mes; }
-			 * 
-			 * int mesMenoUm = dataPrevistaTeste.get(Calendar.MONTH) - 1; String
-			 * anoMesMenosUm = null; if (mes < 10) { anoMesMenosUm = ano + "0" +
-			 * mesMenoUm; } else { anoMesMenosUm = ano + "" + mesMenoUm; }
-			 */
-
-			// if (faturamentoGrupoCronogramaMensal.getAnoMesReferencia()
-			// .intValue() <= Integer.parseInt(anoMes)) {
-			faturamentoAtividadeCronograma.setUsuario(usuarioLogado);
-			faturamentoAtividadeCronograma.setUltimaAlteracao(new Date());
+			atividadeCronograma.setUsuario(usuarioLogado);
+			atividadeCronograma.setUltimaAlteracao(new Date());
 
 			// ------------ REGISTRAR TRANSAÇÃO ----------------
-			registradorOperacao
-					.registrarOperacao(faturamentoAtividadeCronograma);
+			registradorOperacao.registrarOperacao(atividadeCronograma);
 			// ------------ REGISTRAR TRANSAÇÃO ----------------
-			if (faturamentoAtividadeCronograma.getId() != null
-					&& !faturamentoAtividadeCronograma.getId().toString()
-							.trim().equalsIgnoreCase("")) {
-				getControladorUtil().atualizar(faturamentoAtividadeCronograma);
+			
+			if (atividadeCronograma.getId() != null && !atividadeCronograma.getId().toString().trim().equalsIgnoreCase("")) {				
+				getControladorUtil().atualizar(atividadeCronograma);
+				atividadeCronogramasAtualizados.add(atividadeCronograma);
 				atualizar = true;
 			} else {
-				faturamentoAtividadeCronograma
-						.setId((Integer) getControladorUtil().inserir(
-								faturamentoAtividadeCronograma));
-				faturamentoAtividadeCronogramasNovas
-						.add(faturamentoAtividadeCronograma);
+				atividadeCronograma.setId((Integer) getControladorUtil().inserir(atividadeCronograma));
 			}
 
-			// Pega id e guarda numa colecao p necessidade de ser
-			// removido
-			// por alguma falha no processo.
-			// faturamentoAtividadeCronogramaVelho =
-			// faturamentoAtividadeCronograma;
-
-			// } else {
-			// throw new
-			// ControladorException("atencao.nao_cadastrado.consumo_cronograma_anterior");
-			// sessionContext.setRollbackOnly();
-			// throw new ControladorException(
-			// "atencao.faturamento_atividade_menor");
-			// }
-			if (faturamentoAtividadeCronograma.getComando() == null) {
+			if (atividadeCronograma.getComando() == null) {
 				removerRotasFaturamentoCronograma(
-						faturamentoGrupoCronogramaMensal.getFaturamentoGrupo(),
-						registradorOperacao, faturamentoAtividadeCronograma);
+						cronogramaMensal.getFaturamentoGrupo(),
+						registradorOperacao, 
+						atividadeCronograma);
 			}
 		}
-		if (!atualizar) {
+		if (atualizar) {
 			insercaoRotasFaturamentoCronogama(
-					faturamentoGrupoCronogramaMensal.getFaturamentoGrupo(),
-					faturamentoAtividadeCronogramas, registradorOperacao,
+					cronogramaMensal.getFaturamentoGrupo(),
+					atividadeCronogramasAtualizados, 
+					registradorOperacao, 
 					anoMesInformado);
+			
 		} else {
 			insercaoRotasFaturamentoCronogama(
-					faturamentoGrupoCronogramaMensal.getFaturamentoGrupo(),
-					faturamentoAtividadeCronogramasNovas, registradorOperacao,
+					cronogramaMensal.getFaturamentoGrupo(),
+					atividadeCronogramas, 
+					registradorOperacao, 
 					anoMesInformado);
-
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "rawtypes" })
+	@SuppressWarnings("rawtypes")
 	public void atualizarFaturamentoGrupoCronogramaMensal(
 			FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal,
 			Collection faturamentoAtividadeCronogramas,
