@@ -15597,14 +15597,15 @@ public class ControladorArrecadacao extends ControladorComum {
 		registroTipoE.append(Util.completaString("" + conta.getId(), 9));
 		// id do grupo de faturamento
 		registroTipoE.append(Util.completaString(""
-				+ debitoAutomaticoMovimento.getFaturamentoGrupo().getId(), 2));
-		// reservado para o futuro
-		registroTipoE.append(Util.completaString("", 42));
+				+ debitoAutomaticoMovimento.getFaturamentoGrupo().getId(), 3));
+
 		// fim preenchido conforme segue abaixo(E.08)
 
 		if (banco != null && banco.isAdereCnab150()) {
 			// E.09 - Número do Agendamento do Cliente evoluir de 1 em 1  é obrigatório e não pode ser zerado.
 			//		  É utilizado em caso de cancelamento do registro
+			// reservado para o futuro
+			registroTipoE.append(Util.completaString("", 41));
 			 registroTipoE.append(Util.adicionarZerosEsquedaNumero(6, sequencial));
 			 
 			// E.10 - Reservado para o futuro (filler) Brancos
@@ -15614,8 +15615,10 @@ public class ControladorArrecadacao extends ControladorComum {
 			registroTipoE.append(Util.adicionarZerosEsquedaNumero(6, sequencial));
 		} else {
 		
+			// reservado para o futuro
+			registroTipoE.append(Util.completaString("", 42));
 			// E.10 - Reservado para o futuro (filler) Brancos
-			registroTipoE.append(Util.completaString("", 20));
+			registroTipoE.append(Util.completaString("", 19));
 			 
 		}
 
