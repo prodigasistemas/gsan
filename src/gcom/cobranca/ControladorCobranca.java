@@ -55867,6 +55867,7 @@ public class ControladorCobranca extends ControladorComum {
 
 			// VARIAVEIS PARA CONTROLE DE FLUXO DA MONTAGEM DA
 			// DA COLECÃO DE BEANS POR TOTALIZAÇÃO
+			// ATUALIZACAO CHAMADA 06.04.2021
 			Integer idUnidadeAnterior = null;
 			Integer idGerenciaAnterior = null;
 
