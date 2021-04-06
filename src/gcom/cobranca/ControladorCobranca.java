@@ -53689,7 +53689,7 @@ public class ControladorCobranca extends ControladorComum {
 			boolean flagTerminouUni = false;
 			boolean flagTerminouGer = false;
 			boolean flagTerminouEst = false;
-			final int quantidadeMaxima = 1000;
+			final int quantidadeMaxima = 10000;
 			int quantidadeInicio = 0;
 			// ========================================================================
 
@@ -55877,21 +55877,25 @@ public class ControladorCobranca extends ControladorComum {
 				break;
 			// Estado por Gerência Regional
 			case 2:
-				for (RelatorioDocumentosAReceberBean beanGer : beansPorGerencia) {
+				retorno.addAll(beansPorGerencia);
+				retorno.addAll(beansPorEstado);
+				/*for (RelatorioDocumentosAReceberBean beanGer : beansPorGerencia) {
 					retorno.add(beanGer);
 				}
 				for (RelatorioDocumentosAReceberBean beanEst : beansPorEstado) {
 					retorno.add(beanEst);
-				}
+				}*/
 				break;
 			// Estado por Unidade de Negócio
 			case 3:
-				for (RelatorioDocumentosAReceberBean beanUni : beansPorUnidade) {
+				retorno.addAll(beansPorUnidade);
+				retorno.addAll(beansPorEstado);
+				/*for (RelatorioDocumentosAReceberBean beanUni : beansPorUnidade) {
 					retorno.add(beanUni);
 				}
 				for (RelatorioDocumentosAReceberBean beanEst : beansPorEstado) {
 					retorno.add(beanEst);
-				}
+				}*/
 				break;
 			// Estado por Gerência Regional e por Localidade
 			case 4:
@@ -55924,9 +55928,10 @@ public class ControladorCobranca extends ControladorComum {
 						}
 					}
 				}
-				for (RelatorioDocumentosAReceberBean beanEst : beansPorEstado) {
+				retorno.addAll(beansPorEstado);
+				/*for (RelatorioDocumentosAReceberBean beanEst : beansPorEstado) {
 					retorno.add(beanEst);
-				}
+				}*/
 				idUnidadeAnterior = null;
 				idGerenciaAnterior = null;
 				break;
@@ -55961,9 +55966,12 @@ public class ControladorCobranca extends ControladorComum {
 						}
 					}
 				}
-				for (RelatorioDocumentosAReceberBean beanEst : beansPorEstado) {
+				
+				retorno.addAll(beansPorEstado);
+				/*
+				/*for (RelatorioDocumentosAReceberBean beanEst : beansPorEstado) {
 					retorno.add(beanEst);
-				}
+				}*/
 				idUnidadeAnterior = null;
 				idGerenciaAnterior = null;
 				break;
@@ -56180,11 +56188,13 @@ public class ControladorCobranca extends ControladorComum {
 			retornoComTotalContaEGuia.add(relatorio);
 
 			if (relatorio.getNomeDocumentoTipo().equalsIgnoreCase("CONTA") && relatorio.getIdSituacao() == 2
-					&& relatorio.getFaixa().equals(helper.getMaiorFaixa())) {
+					&& relatorio.getFaixa().equals(helper.getMaiorFaixa())
+					&& relatorio.getDescricaTotalizacao().equals(documentoComTotalConta.getDescricaTotalizacao())) {
 				retornoComTotalContaEGuia.add(documentoComTotalConta);
 			}
 			if (relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2
-					&& relatorio.getFaixa().equals(helper.getMaiorFaixa())) {
+					&& relatorio.getFaixa().equals(helper.getMaiorFaixa())
+					&& relatorio.getDescricaTotalizacao().equals(documentoComTotalConta.getDescricaTotalizacao())) {
 				retornoComTotalContaEGuia.add(documentoComTotalGuia);
 			}
 		}
