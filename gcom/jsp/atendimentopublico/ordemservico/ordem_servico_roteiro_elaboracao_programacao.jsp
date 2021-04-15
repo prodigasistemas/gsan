@@ -171,6 +171,19 @@
 		
     }
 	
+	   function facilitador(objeto){
+			if (objeto.id == "0" || objeto.id == undefined){
+				objeto.id = "1";
+				marcarTodos();
+				atualizarImoveisSelecionadosComTodos(true);
+			}
+			else{
+				objeto.id = "0";
+				desmarcarTodos();
+				atualizarImoveisSelecionadosComTodos(false);
+			}
+		}
+	
 
 </script>
 
@@ -324,7 +337,9 @@
                         	<td colspan="2"> 
                         	<table border="0" width="100%" >
                             	<tr  bgcolor="#99CCFF"> 
-                                	<td width="5%" height="10" rowspan="2"></td>
+                            	   	<td width="5%" height="10" rowspan="2">
+										<div align="center"><strong><a href="javascript:facilitador(this);">Todos</a></strong></div>
+									</td>
                                   	<td colspan="2"><strong>Dias Atr.</strong></td>
                                   	<td width="4%" rowspan="2"><strong>Pri.</strong></td>
                                   	<td width="2%" rowspan="2"></td>
