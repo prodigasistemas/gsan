@@ -10538,7 +10538,12 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			}
 
 			hql += "where " + "	imovel.indicadorExclusao = 2 and ";
-
+			//Tirar OS ja existente para o TIPO de Serviço selecionado
+			
+			hql += "imovel.id not in (select distinct ordemServico.imovel from gcom.atendimentopublico.ordemservico.OrdemServico ordemServico where ordemServico.servicoTipo = " 
+					+ helper.getTipoOrdem() + " and  ordemServico.situacao = 1) and ";
+							
+		
 			if (helper.getIdImovel() != null) {
 				hql += "	imovel.id = " + helper.getIdImovel().toString()
 						+ " and ";
@@ -10987,6 +10992,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						+ " and " + helper.getRotaFinal() + ") and ";
 				finaliza = true;
 			}
+			
+		
 			// Perfil Imovel
 			if (helper.getPerfilImovel() != null) {
 				hqlAux += "imovelPerfil.id = " + helper.getPerfilImovel()
@@ -11118,7 +11125,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						+ "	setorComercial.codigo, " + "	quadra.numeroQuadra, "
 						+ "	imovel.lote, " + "	imovel.subLote";
 			}
-
+			
 			retorno = session.createQuery(hql).list();
 
 		} catch (HibernateException e) {
@@ -13230,6 +13237,9 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			}
 
 			hql += "where " + "	imovel.indicadorExclusao = 2 and ";
+			
+			hql += "imovel.id not in (select distinct ordemServico.imovel from gcom.atendimentopublico.ordemservico.OrdemServico ordemServico where ordemServico.servicoTipo = " 
+					+ helper.getTipoOrdem() + " and  ordemServico.situacao = 1) and ";
 
 			if (helper.getIdImovel() != null) {
 				hql += "	imovel.id = " + helper.getIdImovel().toString()
