@@ -1,6 +1,7 @@
 package gcom.gui.cadastro.imovel;
 
 import gcom.gui.WizardAction;
+import gcom.util.ControladorException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -243,11 +244,12 @@ public class ConsultarImovelWizardAction extends WizardAction {
      * @param httpServletResponse
      *            Descrição do parâmetro
      * @return Descrição do retorno
+     * @throws ControladorException 
      */
     public ActionForward exibirConsultarImovelRegistroAtendimentoAction(
             ActionMapping actionMapping, ActionForm actionForm,
             HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
+            HttpServletResponse httpServletResponse) throws ControladorException {
     	
         return new ExibirConsultarImovelRegistroAtendimentoAction().execute(
                 actionMapping, actionForm, httpServletRequest,

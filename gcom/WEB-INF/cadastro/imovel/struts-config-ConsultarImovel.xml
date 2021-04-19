@@ -184,6 +184,17 @@
 			path="/atualizarDadosImovelPopupPROMAISAction" 
 			scope="session">
 		</action>
+		
+		<!-- PopUp de foto de Ordem de Serviço -->	
+		
+		<action 
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirOrdemServicoFotoAction"
+			path="/exibirOrdemServicoFotoAction"
+			validate="false"
+			scope="session" >
+			<forward name="exibirOrdemServicoFotoAction"
+				path="/jsp/atendimentopublico/ordemservico/exibir_ordem_servico_foto.jsp" />
+		</action>
 
 	</action-mappings>
 	

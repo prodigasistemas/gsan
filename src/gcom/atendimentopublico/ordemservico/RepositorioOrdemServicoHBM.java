@@ -21085,4 +21085,94 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 		}
 		return retorno;
 	}
+
+	public List<OrdemServicoFoto> pesquisarOrdemServicoFoto(Integer idImovel) throws ErroRepositorioException {
+
+		List<OrdemServicoFoto> retorno = null;
+		Session session = HibernateUtil.getSession();
+
+		try {
+
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT osft ")
+					.append("FROM OrdemServicoFoto osft ")
+					.append("INNER JOIN osft.ordemServico orse ")
+					.append("WHERE orse.imovel.id = :idImovel ")
+					.append("ORDER BY osft.ordemServico.id, osft.nomeFoto");
+
+			retorno = session.createQuery(consulta.toString())
+					.setInteger("idImovel", idImovel)
+					.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public Collection recuperaOSPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+
+		Collection retornoConsulta = new ArrayList();
+
+		Session session = HibernateUtil.getSession();
+
+		String consulta = "";
+
+		try {
+
+			consulta = "SELECT os.id " + "FROM OrdemServico os "
+					+ "LEFT JOIN os.imovel imv  "
+					+ "WHERE imv.id = :idImovel ";
+
+			retornoConsulta = session
+					.createQuery(consulta)
+					.setInteger("idImovel", idImovel).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retornoConsulta;
+	}
+	
+	public boolean verificarExistenciaOrdemServicoFoto(Integer idOrdemServico)
+			throws ErroRepositorioException {
+		boolean retorno = false;
+
+		Integer count;
+
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+
+		try {
+
+			consulta = "SELECT COUNT(DISTINCT os.orse_id) as idOrdemServico " // 1
+ 					+ "FROM atendimentopublico.ordem_servico_foto as osf "
+					+ "LEFT JOIN atendimentopublico.ordem_servico as os on os.orse_id = osf.orse_id "
+					
+					+ "WHERE os.orse_id = :idOrdemServico";
+
+			
+					count = (Integer) session.createSQLQuery(consulta)
+								 .addScalar("idOrdemServico", Hibernate.INTEGER)
+								 .setInteger("idOrdemServico", idOrdemServico.intValue()).setMaxResults(1)
+								 .uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		if (count != null && !count.equals(null)) {
+			retorno = true;
+		}
+
+		return retorno;
+	}
 }

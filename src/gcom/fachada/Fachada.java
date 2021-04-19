@@ -40505,4 +40505,30 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public List<OrdemServicoFoto> pesquisarOrdemServicoFoto(Integer idImovel) throws ControladorException {
+		try {
+			return getControladorOrdemServico().pesquisarOrdemServicoFoto(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public Collection recuperaOSPorIdImovel(Integer idImovel) throws ControladorException {
+		try {
+			return getControladorOrdemServico().recuperaOSPorIdImovel(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public boolean verificarExistenciaOrdemServicoFoto(Integer idOrdemServico) throws ControladorException {
+		try {
+			return getControladorOrdemServico().verificarExistenciaOrdemServicoFoto(idOrdemServico);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 }
