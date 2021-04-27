@@ -19120,4 +19120,37 @@ public class ControladorOrdemServicoSEJB extends ControladorComum{
 		return ordensServico;
 		
 	}
+	
+	public List<OrdemServicoFoto> pesquisarOrdemServicoFoto(Integer idImovel) throws ControladorException {
+		
+		try {
+			return repositorioOrdemServico.pesquisarOrdemServicoFoto(idImovel);
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public Collection recuperaOSPorIdImovel(Integer idImovel) throws ControladorException {
+
+		try {
+			return repositorioOrdemServico.recuperaOSPorIdImovel(idImovel);
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public boolean verificarExistenciaOrdemServicoFoto(Integer idOrdemServico) throws ControladorException {
+		
+		try {
+			return repositorioOrdemServico.verificarExistenciaOrdemServicoFoto(idOrdemServico);
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 }

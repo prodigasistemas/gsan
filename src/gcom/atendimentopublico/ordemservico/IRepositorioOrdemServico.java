@@ -3796,5 +3796,11 @@ public interface IRepositorioOrdemServico {
 
 	public Collection<ServicoTipo> pesquisarServicoTipoPorUnidadeSemRA(Integer unidadeLotacao) throws ErroRepositorioException;
 	
-	public Collection consultarDadosOrdensServicoSeletivas(Integer idImovel) throws ErroRepositorioException;
+	public Collection<?> consultarDadosOrdensServicoSeletivas(Integer idImovel) throws ErroRepositorioException;
+	
+	public List<OrdemServicoFoto> pesquisarOrdemServicoFoto(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection<?> recuperaOSPorIdImovel(Integer idImovel) throws ErroRepositorioException;
+	
+	public boolean verificarExistenciaOrdemServicoFoto(Integer idOrdemServico) throws ErroRepositorioException;
 }

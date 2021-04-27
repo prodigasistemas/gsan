@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import gcom.atendimentopublico.ordemservico.OrdemServico;
+import gcom.atendimentopublico.ordemservico.OrdemServicoFoto;
 import gcom.atendimentopublico.ordemservico.bean.ObterDescricaoSituacaoOSHelper;
 import gcom.atendimentopublico.ordemservico.bean.OrdemServicoHelper;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoSolicitante;
@@ -27,6 +28,7 @@ import gcom.cadastro.imovel.bean.ConsultarImovelRegistroAtendimentoHelper;
 import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
@@ -49,10 +51,12 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
      * @param httpServletResponse
      *            Descrição do parâmetro
      * @return Descrição do retorno
+     * @throws ControladorException 
      */
-    public ActionForward execute(ActionMapping actionMapping,
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public ActionForward execute(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
+            HttpServletResponse httpServletResponse) throws ControladorException {
 
         ActionForward retorno = actionMapping
                 .findForward("consultarImovelRegistroAtendimento");
@@ -299,10 +303,14 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
 						sessao.setAttribute("colecaoConsultarImovelRegistroAtendimentoHelper", colecaoConsultarImovelRegistroAtendimentoHelper);
 					}
 					
+					setColecaoFotosOrdemServico (new Integer(idImovelRegistroAtendimento.trim()), sessao);					
 					
 					Collection colecaoOrdensServico = fachada.consultarDadosOrdensServicoSeletivas(new Integer(idImovelRegistroAtendimento.trim()));
 					
 					Collection colecaoOrdensServicoHelper  = null;
+					
+					
+					
 					
 					if(colecaoOrdensServico != null &&
 							!colecaoOrdensServico.isEmpty()){
@@ -316,7 +324,7 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
 							
 							OrdemServicoHelper ordemServicoHelper = new OrdemServicoHelper();
 
-							//id registro atendimento
+							//id ordem servico
 							if(os != null  && os.getId() != null ){
 								ordemServicoHelper.setNumeroOrdemServico(os.getId().toString());
 							}
@@ -352,7 +360,7 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
 							}
 							
 								colecaoOrdensServicoHelper.add(ordemServicoHelper);
-							
+																							
 						}
 						
 						// Track No. 644 : Consultar Imóvel - Aba RA - Ordenação de OS
@@ -373,6 +381,8 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
 					}
 					
 					sessao.setAttribute("colecaoOrdemServicoHelper", colecaoOrdensServicoHelper);
+					
+					
 					
                 }
             } else {
@@ -398,6 +408,7 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
             	consultarImovelActionForm.setSituacaoEsgotoRegistroAtendimento(null);
             	sessao.removeAttribute("colecaoConsultarImovelRegistroAtendimentoHelper");
             	sessao.removeAttribute("colecaoOrdemServicoHelper");
+            	sessao.removeAttribute("colecaoFotos");
             }
         }else{
         	 consultarImovelActionForm.setIdImovelRegistroAtendimento(idImovelRegistroAtendimento);
@@ -413,10 +424,33 @@ public class ExibirConsultarImovelRegistroAtendimentoAction extends GcomAction {
         	consultarImovelActionForm.setSituacaoEsgotoRegistroAtendimento(null);
         	sessao.removeAttribute("colecaoConsultarImovelRegistroAtendimentoHelper");
         	sessao.removeAttribute("colecaoOrdemServicoHelper");
+        	sessao.removeAttribute("colecaoFotos");
+
         
         }
 
         return retorno;
+    }
+    
+	private void setColecaoFotosOrdemServico (Integer idImovel, HttpSession sessao) throws ControladorException {
+    	
+//    	Collection colecaoOrdemServico = getFachada().recuperaOSPorIdImovel(idImovel);
+//    	
+//    	Collection colecaoFotos = null;
+//		
+//    	Iterator it = colecaoOrdemServico.iterator();
+//    	
+//    	while (it.hasNext()) {
+//    		
+//    		Integer idOs = (Integer) it.next();
+//    		
+//    		if (getFachada().verificarExistenciaOrdemServicoFoto(idOs)) {  		
+//    			colecaoFotos.addAll(getFachada().pesquisarFotoOrdemServico(idOs)); 		
+//    		}
+//    	}
+		List<OrdemServicoFoto> colecaoFotos = getFachada().pesquisarOrdemServicoFoto(idImovel);
+		
+    	sessao.setAttribute("colecaoFotos", colecaoFotos);
     }
 
 }

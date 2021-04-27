@@ -10404,34 +10404,16 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				hql += "select distinct "
 						+ // O distinct foi utilizado por conta das
 						// sub-categorias
-						"	imovel.id, " + "	localidade.id, "
-						+ "	setorComercial.codigo, "
-						+ "   quadra.rota.codigo, "
-						+ "   imovel.numeroSequencialRota, "
-						+ "   localidade.descricao, "
-						+ "   setorComercial.descricao " + "from ";
+						"	imovel.id, " + " localidade.id, " + " setorComercial.codigo, " + " quadra.rota.codigo, "
+						+ " imovel.numeroSequencialRota, " + " localidade.descricao, " + " setorComercial.descricao " + "from ";
 
 			} else {
 				hql += "select distinct "
 						+ // O distinct foi utilizado por conta das
 						// sub-categorias
-						"	imovel.id, " + "	localidade.id, "
-						+ "	setorComercial.codigo, " + "	quadra.numeroQuadra, "
-						+ "	imovel.lote, " + "	imovel.subLote, "
-						+ "   localidade.descricao, "
-						+ "   setorComercial.descricao " + "from ";
+						"	imovel.id, " + " localidade.id, " + " setorComercial.codigo, " + "	quadra.numeroQuadra, "
+						+ "	imovel.lote, " + "	imovel.subLote, " + " localidade.descricao, " + " setorComercial.descricao " + "from ";
 			}
-
-			// String hql =
-			// "select distinct " + // O distinct foi utilizado por conta das
-			// sub-categorias
-			// "	imovel.id, " +
-			// "	localidade.id, " +
-			// "	setorComercial.codigo, " +
-			// "	quadra.numeroQuadra, " +
-			// "	imovel.lote, " +
-			// "	imovel.subLote " +
-			// "from ";
 
 			// Se informou Categoria ou SubCategoria
 			if (helper.getCategoria() != null
@@ -10445,255 +10427,216 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			}
 
 			// se informou Logradouro
-			if (helper.getLogradouro() != null
-					&& !helper.getLogradouro().equals("")) {
+			if (helper.getLogradouro() != null && !helper.getLogradouro().equals("")) {
 				hql += "	left  join imovel.logradouroCep logradouroCep "
-						+ "	left  join logradouroCep.logradouro logradouro ";
+					+  "	left  join logradouroCep.logradouro logradouro ";
 			}
 
-			hql += "	inner join imovel.localidade localidade ";
+				hql += "	inner join imovel.localidade localidade ";
 
 			// Se unidade/gerencia ou elo
-			if (helper.getGerenciaRegional() != null
-					&& !helper.getGerenciaRegional().equals(
-							ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+			if (helper.getGerenciaRegional() != null && !helper.getGerenciaRegional().equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 				hql += "	inner join localidade.gerenciaRegional gerenciaRegional ";
 			}
 
-			if ((helper.getUnidadeNegocio() != null && !helper
-					.getUnidadeNegocio().equals(
-							ConstantesSistema.NUMERO_NAO_INFORMADO))
-							|| (helper.getElo() != null & !helper.getElo().equals(""))) {
+			if ((helper.getUnidadeNegocio() != null && !helper.getUnidadeNegocio().equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) 
+						|| (helper.getElo() != null & !helper.getElo().equals(""))) {
 				hql += "	inner join localidade.unidadeNegocio unidadeNegocio ";
 			}
 
-			hql += "	inner join imovel.setorComercial setorComercial "
-					+ "	inner join imovel.quadra quadra "
-					+ "		with quadra.setorComercial.id = setorComercial.id "
-					+ "  inner join quadra.rota rota ";
+				hql += "	inner join imovel.setorComercial setorComercial "
+					+  "	inner join imovel.quadra quadra "
+					+  "		with quadra.setorComercial.id = setorComercial.id "
+					+  "  inner join quadra.rota rota ";
 
 			// Se informou Perfil Imovel
 			if (helper.getPerfilImovel() != null) {
 				hql += "	left  join imovel.imovelPerfil imovelPerfil ";
-			}
+				}
 
-			hql += "	left  join imovel.ligacaoAgua ligacaoAgua "
-					+ "	left  join ligacaoAgua.medicaoHistoricos medicaoHistorico ";
+				hql += "	left  join imovel.ligacaoAgua ligacaoAgua "
+					+  "	left  join ligacaoAgua.medicaoHistoricos medicaoHistorico ";
 
 			// Tipo Medicao
 			if (helper.getTipoMedicao() != null) {
-				// hql += "and medicaoHistorico.medicaoTipo.id = " + tipoMedicao
-				// + " ";
-				hql += "with medicaoHistorico.medicaoTipo.id = "
-						+ helper.getTipoMedicao() + " "
-						+ "and medicaoHistorico.anoMesReferencia = "
-						+ anoMesFaturamento + " ";
-			}
-
+				hql += "with medicaoHistorico.medicaoTipo.id = " + helper.getTipoMedicao() + " " + "and medicaoHistorico.anoMesReferencia = " + anoMesFaturamento + " ";
+				}
+			//Para Tipo de Serviços que precisam de histórico de hidrometos. 
 			if ((helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)) 
 							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO))
 							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_INSPECAO_ANORMALIDADE)) 
 							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
 							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
-							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
-							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
-							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
-							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
-							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS)) 
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
 							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
-							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
-							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_SEM_HINST_DT_CONTROLE_DE_PERDAS))
 							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))) {
 				hql += " left  join ligacaoAgua.hidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoAgua "
-						+ " left  join hidrometroInstalacaoHistoricoAgua.hidrometro hidrometroAgua "
-						+ " left  join imovel.hidrometroInstalacaoHistorico hidrometroInstalacaoHistorico "
-						+ " left  join hidrometroInstalacaoHistorico.hidrometro hidrometro ";
-				/*
-				 * // Local Instalaï¿½ï¿½o Hidrometro
-				 * if(helper.getLocalInstalacaoHidrometro() != null){ hql +=
-				 * " left join hidrometroInstalacaoHistoricoAgua.hidrometroLocalInstalacao localInstalacaoAgua "
-				 * +
-				 * " left join hidrometroInstalacaoHistorico.hidrometroLocalInstalacao localInstalacaoEsg "
-				 * ; }
-				 */
+					+  " left  join hidrometroInstalacaoHistoricoAgua.hidrometro hidrometroAgua "
+					+  " left  join imovel.hidrometroInstalacaoHistorico hidrometroInstalacaoHistorico "
+					+  " left  join hidrometroInstalacaoHistorico.hidrometro hidrometro ";
 			}
 
-			hql += "	left  join imovel.consumosHistoricos consumosHistorico "
-					+ "		with consumosHistorico.referenciaFaturamento <= "
-					+ anoMesFaturamento + " ";
+				hql += " left  join imovel.consumosHistoricos consumosHistorico with consumosHistorico.referenciaFaturamento <= " + anoMesFaturamento + " ";
 
 			if (helper.getTipoMedicao() != null) {
-				if (helper.getTipoMedicao().equals(
-						MedicaoTipo.LIGACAO_AGUA.toString())) {
-					hql += "and consumosHistorico.ligacaoTipo.id = "
-							+ LigacaoTipo.LIGACAO_AGUA + " ";
+				if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+					hql += "and consumosHistorico.ligacaoTipo.id = " + LigacaoTipo.LIGACAO_AGUA + " ";
 					hql += "	left  join imovel.ligacaoAguaSituacao ligacaoAguaSituacao ";
 				}
 
 				if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
-					hql += "and consumosHistorico.ligacaoTipo.id = "
-							+ LigacaoTipo.LIGACAO_ESGOTO + " ";
+					hql += "and consumosHistorico.ligacaoTipo.id = "+ LigacaoTipo.LIGACAO_ESGOTO + " ";
 					hql += "	left  join imovel.ligacaoEsgotoSituacao ligacaoEsgotoSituacao ";
 				}
 			}
 
-			hql += "where " + "	imovel.indicadorExclusao = 2 and ";
-			//Tirar OS ja existente para o TIPO de Serviço selecionado
-			
-			hql += "imovel.id not in (select distinct ordemServico.imovel from gcom.atendimentopublico.ordemservico.OrdemServico ordemServico where ordemServico.servicoTipo = " 
+				hql += "where " + "	imovel.indicadorExclusao = 2 and ";
+				
+			//Tirar OS existentes para tipo_servico selecionado
+				hql += "imovel.id not in (select distinct ordemServico.imovel from gcom.atendimentopublico.ordemservico.OrdemServico ordemServico where ordemServico.servicoTipo = " 
 					+ helper.getTipoOrdem() + " and  ordemServico.situacao = 1) and ";
 							
 		
 			if (helper.getIdImovel() != null) {
-				hql += "	imovel.id = " + helper.getIdImovel().toString()
-						+ " and ";
-			}
+				hql += "	imovel.id = " + helper.getIdImovel().toString() + " and ";
+				}
 
 			if (helper.getTipoMedicao() != null) {
 				// indicador de faturamento de ï¿½gua =1
-				if (helper.getTipoMedicao().equals(
-						MedicaoTipo.LIGACAO_AGUA.toString())) {
-					hqlAux += "ligacaoAguaSituacao.indicadorFaturamentoSituacao = 1 and ";
+				if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
 					hqlAux += "ligacaoAguaSituacao.id = imovel.ligacaoAguaSituacao and ";
+					
 					// indicador de faturamento de esgoto =1
-				} else if (helper.getTipoMedicao().equals(
-						MedicaoTipo.POCO.toString())) {
-					hqlAux += "ligacaoEsgotoSituacao.indicadorFaturamentoSituacao = 1 and ";
+				} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
 					hqlAux += "ligacaoEsgotoSituacao.id = imovel.ligacaoEsgotoSituacao and ";
 				}
 			}
 			
-		if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO)
-				|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
-				|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
-				|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
-				|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)) 
-				|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
-				|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
-				|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) 
-				|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)) ) {
+			//Relaciona todos os tipo de serviços que busquem imoveis com LigacaoAguaSituacao Ligada
+			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO) 
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)))  {
+				if (helper.getTipoMedicao() != null) {
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+						hqlAux += "ligacaoAguaSituacao.indicadorFaturamentoSituacao = 1 and ";
+													
+						finaliza = true;
+					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+						hqlAux += "ligacaoEsgotoSituacao.indicadorFaturamentoSituacao = 1 and ";
+					}
+				}
+			}
+			
+		//Buscar apenas imoveis com situação da ligação factivel.		
+		if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
+				|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_INSTALACAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) ) {
+				if (helper.getTipoMedicao() != null) {
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+						hqlAux += "imovel.ligacaoAguaSituacao = " + LigacaoAguaSituacao.FACTIVEL + " and ";
+		
+						} 
+					}
+			}
+			
+		
+		//Buscar apenas imoveis com situação da ligação cortada.	
+		if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
+				|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+				|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+				|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+				|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)) ) {
 			if (helper.getTipoMedicao() != null) {
 				if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
-					hqlAux += "(imovel.ligacaoAguaSituacao.id not in (" + LigacaoAguaSituacao.CORTADO + "," + LigacaoAguaSituacao.SUPRIMIDO +  ")) and ";
+					hqlAux += "imovel.ligacaoAguaSituacao = " + LigacaoAguaSituacao.CORTADO + " and ";
 	
 					} 
 				}
-			}	
+			}
+		
+		//Buscar apenas imoveis com situação da ligação suprimida.		
+		if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
+				|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_REFORMA_RAMAL_SEM_INST_DT_CONTROLE_DE_PERDAS))
+				|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)) ) {
+			if (helper.getTipoMedicao() != null) {
+				if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+					hqlAux += "imovel.ligacaoAguaSituacao = " + LigacaoAguaSituacao.SUPRIMIDO + " and ";
+	
+					} 
+				}
+			}
 
-			// Seleciona os Imoveis de acordo com o Tipo de Ordem
+			// Seleciona imoveis sem histórico de hidrometro.
 			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO) 
 					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
 					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)))  {
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_REFORMA_RAMAL_SEM_INST_DT_CONTROLE_DE_PERDAS)))  {
 				if (helper.getTipoMedicao() != null) {
 					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
-						// hqlAux += "(imovel.ligacaoAguaSituacao.id = " +
-						// LigacaoAguaSituacao.LIGADO + " or ";
-						// hqlAux += "imovel.ligacaoAguaSituacao.id = " +
-						// LigacaoAguaSituacao.LIGADO_A_REVELIA + ") and ";
 						hqlAux += "ligacaoAgua.hidrometroInstalacaoHistorico.id is null and ";
 						finaliza = true;
 					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
-						// hqlAux += "imovel.ligacaoEsgotoSituacao.id = " +
-						// LigacaoEsgotoSituacao.LIGADO + " and ";
 						hqlAux += "imovel.hidrometroInstalacaoHistorico.id is null and ";
 					}
 				}
+				// Seleciona imoveis com histórico de hidrometro.	
 			} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO) 
 					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
 					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) 
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)) 
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)) 
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) 
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS)) 
 					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS)) 
 					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_SEM_HINST_DT_CONTROLE_DE_PERDAS))
 					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))) {
 				if (helper.getTipoMedicao() != null) {
 					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
 						hqlAux += "hidrometroInstalacaoHistoricoAgua.id is not null and "; 
 						hqlAux += "hidrometroInstalacaoHistoricoAgua.dataRetirada is null and ";
-						if (dataInstalacaoHidrometroFinal != null
-								&& !dataInstalacaoHidrometroFinal.equals("")) {
-
-							if (dataInstalacaoHidrometroInicial != null
-									&& !dataInstalacaoHidrometroInicial
-									.equals("")) {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between '"
-										+ dataInstalacaoHidrometroInicial
-										+ "' and '"
-										+ dataInstalacaoHidrometroFinal
-										+ "' and ";
+						
+						if (dataInstalacaoHidrometroFinal != null && !dataInstalacaoHidrometroFinal.equals("")) {
+							if (dataInstalacaoHidrometroInicial != null && !dataInstalacaoHidrometroInicial.equals("")) {
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between '" + dataInstalacaoHidrometroInicial + "' and '"
+										+ dataInstalacaoHidrometroFinal	+ "' and ";
 							} else {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= '"
-										+ dataInstalacaoHidrometroFinal
-										+ "' and ";
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= '"+ dataInstalacaoHidrometroFinal + "' and ";
 							}
-
 						}
-
 						finaliza = true;
-					} else if (helper.getTipoMedicao().equals(
-							MedicaoTipo.POCO.toString())) {
-						// hqlAux += "imovel.ligacaoEsgotoSituacao.id = " +
-						// LigacaoEsgotoSituacao.LIGADO + " and ";
+						
+					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
 						hqlAux += "hidrometroInstalacaoHistorico.id is not null and ";
-						if (dataInstalacaoHidrometroFinal != null
-								&& !dataInstalacaoHidrometroFinal.equals("")) {
-
-							if (dataInstalacaoHidrometroInicial != null
-									&& !dataInstalacaoHidrometroInicial
-									.equals("")) {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between '"
-										+ dataInstalacaoHidrometroInicial
-										+ "' and '"
-										+ dataInstalacaoHidrometroFinal
-										+ "' and ";
+						
+						if (dataInstalacaoHidrometroFinal != null && !dataInstalacaoHidrometroFinal.equals("")) {
+							if (dataInstalacaoHidrometroInicial != null && !dataInstalacaoHidrometroInicial.equals("")) {
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between '" + dataInstalacaoHidrometroInicial + "' and '"
+									   + dataInstalacaoHidrometroFinal + "' and ";
 							} else {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= '"
-										+ dataInstalacaoHidrometroFinal
-										+ "' and ";
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= '" + dataInstalacaoHidrometroFinal + "' and ";
 							}
-
 						}
-
 						finaliza = true;
 					}
 
 					// Local Instalaï¿½ï¿½o Hidrometro
 					if (helper.getLocalInstalacaoHidrometro() != null) {
-						if (helper.getTipoMedicao().equals(
-								MedicaoTipo.LIGACAO_AGUA.toString())) {
-							hqlAux += "hidrometroInstalacaoHistoricoAgua.hidrometroLocalInstalacao.id = "
-									+ helper.getLocalInstalacaoHidrometro()
-									+ " and ";
+						if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+							hqlAux += "hidrometroInstalacaoHistoricoAgua.hidrometroLocalInstalacao.id = " + helper.getLocalInstalacaoHidrometro() + " and ";
 							finaliza = true;
-						} else if (helper.getTipoMedicao().equals(
-								MedicaoTipo.POCO.toString())) {
-							hqlAux += "hidrometroInstalacaoHistorico.hidrometroLocalInstalacao.id = "
-									+ helper.getLocalInstalacaoHidrometro()
-									+ " and ";
+						} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+							hqlAux += "hidrometroInstalacaoHistorico.hidrometroLocalInstalacao.id = " + helper.getLocalInstalacaoHidrometro() + " and ";
 							finaliza = true;
 						}
-					}
+					 }
 				}
 
-				// Capacidade Hidrometro
-				/*
-				 * if (helper.getCapacidadeHidrometro() != null) {kj if
-				 * (helper.getTipoMedicao
-				 * ().equals(MedicaoTipo.LIGACAO_AGUA.toString())) { hqlAux +=
-				 * "hidrometroAgua.hidrometroCapacidade.id = " +
-				 * helper.getCapacidadeHidrometro() + " and "; finaliza = true;
-				 * }else if
-				 * (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString()))
-				 * { hqlAux += "hidrometro.hidrometroCapacidade.id = " +
-				 * helper.getCapacidadeHidrometro() + " and "; finaliza = true;
-				 * } }
-				 */
 				if (helper.getCapacidadeHidrometro() != null) {
 					if (!helper.getCapacidadeHidrometro().equals("")) {
 						String idCapacidades = "";
@@ -10703,30 +10646,22 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						}
 						idCapacidades = idCapacidades.substring(0,
 								(idCapacidades.length() - 1));
-						if (helper.getTipoMedicao().equals(
-								MedicaoTipo.LIGACAO_AGUA.toString())) {
-							hqlAux += "hidrometroAgua.hidrometroCapacidade.id in ("
-									+ idCapacidades + ") and ";
+						if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+							hqlAux += "hidrometroAgua.hidrometroCapacidade.id in ("	+ idCapacidades + ") and ";
 							finaliza = true;
-						} else if (helper.getTipoMedicao().equals(
-								MedicaoTipo.POCO.toString())) {
-							hqlAux += "hidrometro.hidrometroCapacidade.id in ("
-									+ idCapacidades + ") and ";
+						} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+							hqlAux += "hidrometro.hidrometroCapacidade.id in ("	+ idCapacidades + ") and ";
 							finaliza = true;
 						}
 					}
 				}
 				// Marca Hidrometro
 				if (helper.getMarcaHidrometro() != null) {
-					if (helper.getTipoMedicao().equals(
-							MedicaoTipo.LIGACAO_AGUA.toString())) {
-						hqlAux += "hidrometroAgua.hidrometroMarca.id = "
-								+ helper.getMarcaHidrometro() + " and ";
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+						hqlAux += "hidrometroAgua.hidrometroMarca.id = " + helper.getMarcaHidrometro() + " and ";
 						finaliza = true;
-					} else if (helper.getTipoMedicao().equals(
-							MedicaoTipo.POCO.toString())) {
-						hqlAux += "hidrometro.hidrometroMarca.id = "
-								+ helper.getMarcaHidrometro() + " and ";
+					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+						hqlAux += "hidrometro.hidrometroMarca.id = " + helper.getMarcaHidrometro() + " and ";
 						finaliza = true;
 					}
 				}
@@ -10741,128 +10676,59 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						}
 						idAnormalidades = idAnormalidades.substring(0,
 								(idAnormalidades.length() - 1));
-						hqlAux += "medicaoHistorico.leituraAnormalidadeFaturamento in ("
-								+ idAnormalidades + ") and ";
+						hqlAux += "medicaoHistorico.leituraAnormalidadeFaturamento in (" + idAnormalidades + ") and ";
 						finaliza = true;
 					}
 				}
-
-				// MesAno Instalacao Hidrometro
-				// if (helper.getMesAnoInstalacaoHidrometro() != null) {
-				/*
-				 * if (helper.getMesAnoInstalacaoInicialHidrometro() != null &&
-				 * helper.getMesAnoInstalacaoFinalHidrometro() != null){ if
-				 * (helper
-				 * .getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString
-				 * ())) { hqlAux +=
-				 * "cast((substring(hidrometroInstalacaoHistoricoAgua.dataInstalacao, 1, 4) || "
-				 * +
-				 * "substring(hidrometroInstalacaoHistoricoAgua.dataInstalacao, 6, 2)) as integer) between "
-				 * + helper.getMesAnoInstalacaoInicialHidrometro() + " and " +
-				 * helper.getMesAnoInstalacaoFinalHidrometro() + " and ";
-				 * finaliza = true; }else if
-				 * (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString()))
-				 * { hqlAux +=
-				 * "cast((substring(hidrometroInstalacaoHistorico.dataInstalacao, 1, 4) || "
-				 * +
-				 * "substring(hidrometroInstalacaoHistorico.dataInstalacao, 6, 2)) as integer) between "
-				 * + helper.getMesAnoInstalacaoInicialHidrometro() + " and " +
-				 * helper.getMesAnoInstalacaoFinalHidrometro() + " and ";
-				 * finaliza = true; } }
-				 */
-
-			} else if (helper.getTipoOrdem().equals(
-					"" + ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO)
-					|| helper.getTipoOrdem().equals(
-							"" + ServicoTipo.TIPO_INSPECAO_ANORMALIDADE)) {
+				
+			} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO) || helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSPECAO_ANORMALIDADE)) {
 				if (helper.getTipoMedicao() != null) {
-					if (helper.getTipoMedicao().equals(
-							MedicaoTipo.LIGACAO_AGUA.toString())) {
+					if (helper.getTipoMedicao().equals( MedicaoTipo.LIGACAO_AGUA.toString())) {
 						// hqlAux += "(imovel.ligacaoAguaSituacao.id = " +
 						// LigacaoAguaSituacao.LIGADO + " or ";
 						// hqlAux += "imovel.ligacaoAguaSituacao.id = " +
 						// LigacaoAguaSituacao.LIGADO_A_REVELIA + ") and ";
 						hqlAux += "hidrometroInstalacaoHistoricoAgua.id is not null and ";
 
-						if (dataInstalacaoHidrometroFinal != null
-								&& !dataInstalacaoHidrometroFinal.equals("")) {
+						if (dataInstalacaoHidrometroFinal != null && !dataInstalacaoHidrometroFinal.equals("")) {
 
-							if (dataInstalacaoHidrometroInicial != null
-									&& !dataInstalacaoHidrometroInicial
-									.equals("")) {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between '"
-										+ dataInstalacaoHidrometroInicial
-										+ "' and '"
-										+ dataInstalacaoHidrometroFinal
-										+ "' and ";
+							if (dataInstalacaoHidrometroInicial != null	&& !dataInstalacaoHidrometroInicial.equals("")) {
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between '" + dataInstalacaoHidrometroInicial + "' and '"
+										+ dataInstalacaoHidrometroFinal	+ "' and ";
 							} else {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= '"
-										+ dataInstalacaoHidrometroFinal
-										+ "' and ";
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= '" + dataInstalacaoHidrometroFinal + "' and ";
 							}
-
 						}
-
 						finaliza = true;
-					} else if (helper.getTipoMedicao().equals(
-							MedicaoTipo.POCO.toString())) {
+					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
 						// hqlAux += "imovel.ligacaoEsgotoSituacao.id = " +
 						// LigacaoEsgotoSituacao.LIGADO + " and ";
 						hqlAux += "hidrometroInstalacaoHistorico.id is not null and ";
 
-						if (dataInstalacaoHidrometroFinal != null
-								&& !dataInstalacaoHidrometroFinal.equals("")) {
+						if (dataInstalacaoHidrometroFinal != null && !dataInstalacaoHidrometroFinal.equals("")) {
 
-							if (dataInstalacaoHidrometroInicial != null
-									&& !dataInstalacaoHidrometroInicial
-									.equals("")) {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between '"
-										+ dataInstalacaoHidrometroInicial
-										+ "' and '"
-										+ dataInstalacaoHidrometroFinal
-										+ "' and ";
+							if (dataInstalacaoHidrometroInicial != null	&& !dataInstalacaoHidrometroInicial.equals("")) {
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between '" + dataInstalacaoHidrometroInicial + "' and '"
+										+ dataInstalacaoHidrometroFinal	+ "' and ";
 							} else {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= '"
-										+ dataInstalacaoHidrometroFinal
-										+ "' and ";
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= '" + dataInstalacaoHidrometroFinal+ "' and ";
 							}
-
 						}
-
 						finaliza = true;
 					}
 
 					// Local Instalaï¿½ï¿½o Hidrometro
 					if (helper.getLocalInstalacaoHidrometro() != null) {
-						if (helper.getTipoMedicao().equals(
-								MedicaoTipo.LIGACAO_AGUA.toString())) {
-							hqlAux += "hidrometroInstalacaoHistoricoAgua.hidrometroLocalInstalacao.id = "
-									+ helper.getLocalInstalacaoHidrometro()
-									+ " and ";
+						if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+							hqlAux += "hidrometroInstalacaoHistoricoAgua.hidrometroLocalInstalacao.id = " + helper.getLocalInstalacaoHidrometro() + " and ";
 							finaliza = true;
-						} else if (helper.getTipoMedicao().equals(
-								MedicaoTipo.POCO.toString())) {
-							hqlAux += "hidrometroInstalacaoHistorico.hidrometroLocalInstalacao.id = "
-									+ helper.getLocalInstalacaoHidrometro()
-									+ " and ";
+						} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+							hqlAux += "hidrometroInstalacaoHistorico.hidrometroLocalInstalacao.id = " + helper.getLocalInstalacaoHidrometro() + " and ";
 							finaliza = true;
 						}
 					}
 				}
 
-				// Capacidade Hidrometro
-				/*
-				 * if (helper.getCapacidadeHidrometro() != null) {jkhkj if
-				 * (helper
-				 * .getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString
-				 * ())) { hqlAux += "hidrometroAgua.hidrometroCapacidade.id = "
-				 * + helper.getCapacidadeHidrometro() + " and "; finaliza =
-				 * true; }else if
-				 * (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString()))
-				 * { hqlAux += "hidrometro.hidrometroCapacidade.id = " +
-				 * helper.getCapacidadeHidrometro() + " and "; finaliza = true;
-				 * } }
-				 */
 				if (helper.getCapacidadeHidrometro() != null) {
 					if (!helper.getCapacidadeHidrometro().equals("")) {
 						String idCapacidades = "";
@@ -10872,30 +10738,22 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 						}
 						idCapacidades = idCapacidades.substring(0,
 								(idCapacidades.length() - 1));
-						if (helper.getTipoMedicao().equals(
-								MedicaoTipo.LIGACAO_AGUA.toString())) {
-							hqlAux += "hidrometroAgua.hidrometroCapacidade.id in ("
-									+ idCapacidades + ") and ";
+						if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+							hqlAux += "hidrometroAgua.hidrometroCapacidade.id in ("	+ idCapacidades + ") and ";
 							finaliza = true;
-						} else if (helper.getTipoMedicao().equals(
-								MedicaoTipo.POCO.toString())) {
-							hqlAux += "hidrometro.hidrometroCapacidade.id in ("
-									+ idCapacidades + ") and ";
+						} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+							hqlAux += "hidrometro.hidrometroCapacidade.id in ("	+ idCapacidades + ") and ";
 							finaliza = true;
 						}
 					}
 				}
 				// Marca Hidrometro
 				if (helper.getMarcaHidrometro() != null) {
-					if (helper.getTipoMedicao().equals(
-							MedicaoTipo.LIGACAO_AGUA.toString())) {
-						hqlAux += "hidrometroAgua.hidrometroMarca.id = "
-								+ helper.getMarcaHidrometro() + " and ";
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+						hqlAux += "hidrometroAgua.hidrometroMarca.id = " + helper.getMarcaHidrometro() + " and ";
 						finaliza = true;
-					} else if (helper.getTipoMedicao().equals(
-							MedicaoTipo.POCO.toString())) {
-						hqlAux += "hidrometro.hidrometroMarca.id = "
-								+ helper.getMarcaHidrometro() + " and ";
+					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+						hqlAux += "hidrometro.hidrometroMarca.id = " + helper.getMarcaHidrometro() + " and ";
 						finaliza = true;
 					}
 				}
@@ -10905,13 +10763,10 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					if (!helper.getAnormalidadeHidrometro().equals("")) {
 						String idAnormalidades = "";
 						for (int i = 0; i < helper.getAnormalidadeHidrometro().length; i++) {
-							idAnormalidades += helper
-									.getAnormalidadeHidrometro()[i] + ",";
-						}
-						idAnormalidades = idAnormalidades.substring(0,
-								(idAnormalidades.length() - 1));
-						hqlAux += "medicaoHistorico.leituraAnormalidadeFaturamento in ("
-								+ idAnormalidades + ") and ";
+							idAnormalidades += helper.getAnormalidadeHidrometro()[i] + ",";
+							}
+						idAnormalidades = idAnormalidades.substring(0,(idAnormalidades.length() - 1));
+						hqlAux += "medicaoHistorico.leituraAnormalidadeFaturamento in (" + idAnormalidades + ") and ";
 						finaliza = true;
 					}
 				}
@@ -10921,189 +10776,114 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			// Cria as condicoes
 
 			// GERENCIA REGIONAL
-			if (helper.getGerenciaRegional() != null
-					&& !helper.getGerenciaRegional().equals(
-							ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-
-				hqlAux += "gerenciaRegional.id = "
-						+ helper.getGerenciaRegional() + " and ";
+			if (helper.getGerenciaRegional() != null && !helper.getGerenciaRegional().equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+				hqlAux += "gerenciaRegional.id = " + helper.getGerenciaRegional() + " and ";
 				finaliza = true;
-			}
-
+				}
 			// UNIDADE NEGOCIO
-			if (helper.getUnidadeNegocio() != null
-					&& !helper.getUnidadeNegocio().equals(
-							ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-
-				hqlAux += "unidadeNegocio.id = " + helper.getUnidadeNegocio()
-						+ " and ";
+			if (helper.getUnidadeNegocio() != null && !helper.getUnidadeNegocio().equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+				hqlAux += "unidadeNegocio.id = " + helper.getUnidadeNegocio() + " and ";
 				finaliza = true;
-			}
-
+				}
 			// Elo
 			if (helper.getElo() != null & !helper.getElo().equals("")) {
-				hqlAux += "localidade.localidade = " + helper.getElo()
-						+ " and ";
+				hqlAux += "localidade.localidade = " + helper.getElo() + " and ";
 				finaliza = true;
-			}
-
+				}
 			// Logradouro
-			if (helper.getLogradouro() != null
-					& !helper.getLogradouro().equals("")) {
+			if (helper.getLogradouro() != null & !helper.getLogradouro().equals("")) {
 				hqlAux += "logradouro.id = " + helper.getLogradouro() + " and ";
 				finaliza = true;
-			}
-
+				}
 			// Localidade
-			if (helper.getLocalidadeInicial() != null
-					&& !helper.getLocalidadeInicial().equals("")
-					&& helper.getLocalidadeFinal() != null
-					&& !helper.getLocalidadeFinal().equals("")) {
-				hqlAux += "(localidade.id between "
-						+ helper.getLocalidadeInicial() + " and "
-						+ helper.getLocalidadeFinal() + ") and ";
+			if (helper.getLocalidadeInicial() != null && !helper.getLocalidadeInicial().equals("") && helper.getLocalidadeFinal() != null && !helper.getLocalidadeFinal().equals("")) {
+				hqlAux += "(localidade.id between "	+ helper.getLocalidadeInicial() + " and " + helper.getLocalidadeFinal() + ") and ";
 				finaliza = true;
-			}
+				}
 			// Setor Comercial
-			if (helper.getSetorComercialInicial() != null
-					&& !helper.getSetorComercialInicial().equals("")
-					&& helper.getSetorComercialFinal() != null
-					&& !helper.getSetorComercialFinal().equals("")) {
-				hqlAux += "(setorComercial.id between "
-						+ helper.getSetorComercialInicial() + " and "
-						+ helper.getSetorComercialFinal() + ") and ";
+			if (helper.getSetorComercialInicial() != null && !helper.getSetorComercialInicial().equals("") && helper.getSetorComercialFinal() != null && !helper.getSetorComercialFinal().equals("")) {
+				hqlAux += "(setorComercial.id between "	+ helper.getSetorComercialInicial() + " and " + helper.getSetorComercialFinal() + ") and ";
 				finaliza = true;
-			}
+				}
 			// Quadra
-			if (helper.getQuadraInicial() != null
-					&& !helper.getQuadraInicial().equals("")
-					&& helper.getQuadraFinal() != null
-					&& !helper.getQuadraFinal().equals("")) {
-				hqlAux += "(quadra.numeroQuadra between " + helper.getQuadraInicial()
-						+ " and " + helper.getQuadraFinal() + ") and ";
+			if (helper.getQuadraInicial() != null && !helper.getQuadraInicial().equals("") && helper.getQuadraFinal() != null && !helper.getQuadraFinal().equals("")) {
+				hqlAux += "(quadra.numeroQuadra between " + helper.getQuadraInicial() + " and " + helper.getQuadraFinal() + ") and ";
 				finaliza = true;
-			}
+				}
 			// Rota
-			if (helper.getRotaInicial() != null
-					&& !helper.getRotaInicial().equals("")
-					&& helper.getRotaFinal() != null
-					&& !helper.getRotaFinal().equals("")) {
-				hqlAux += "(rota.codigo between " + helper.getRotaInicial()
-						+ " and " + helper.getRotaFinal() + ") and ";
+			if (helper.getRotaInicial() != null	&& !helper.getRotaInicial().equals("") && helper.getRotaFinal() != null && !helper.getRotaFinal().equals("")) {
+				hqlAux += "(rota.codigo between " + helper.getRotaInicial() + " and " + helper.getRotaFinal() + ") and ";
 				finaliza = true;
-			}
-			
-		
+				}
 			// Perfil Imovel
 			if (helper.getPerfilImovel() != null) {
-				hqlAux += "imovelPerfil.id = " + helper.getPerfilImovel()
-						+ " and ";
+				hqlAux += "imovelPerfil.id = " + helper.getPerfilImovel() + " and ";
 				finaliza = true;
-			}
+				}
 			// Categoria
 			if (helper.getCategoria() != null) {
 				hqlAux += "categoria.id = " + helper.getCategoria() + " and ";
 				finaliza = true;
-			}
+				}
 			// Subcategoria
 			if (helper.getSubCategoria() != null) {
-				hqlAux += "subcategoria.id = " + helper.getSubCategoria()
-						+ " and ";
+				hqlAux += "subcategoria.id = " + helper.getSubCategoria() + " and ";
 				finaliza = true;
-			}
+				}
 			// Quantidade de Economias
-			if (helper.getQuantidadeEconomiasInicial() != null
-					&& !helper.getQuantidadeEconomiasInicial().equals("")
-					&& helper.getQuantidadeEconomiasFinal() != null
-					&& !helper.getQuantidadeEconomiasFinal().equals("")) {
-				hqlAux += "(imovel.quantidadeEconomias between "
-						+ helper.getQuantidadeEconomiasInicial() + " and "
-						+ helper.getQuantidadeEconomiasFinal() + ") and ";
+			if (helper.getQuantidadeEconomiasInicial() != null && !helper.getQuantidadeEconomiasInicial().equals("") && helper.getQuantidadeEconomiasFinal() != null
+															   && !helper.getQuantidadeEconomiasFinal().equals("")) {
+				hqlAux += "(imovel.quantidadeEconomias between " + helper.getQuantidadeEconomiasInicial() + " and " + helper.getQuantidadeEconomiasFinal() + ") and ";
 				finaliza = true;
-			}
+				}
 			// Numero Moradores
-			if (helper.getNumeroMoradoresInicial() != null
-					&& !helper.getNumeroMoradoresInicial().equals("")
-					&& helper.getNumeroMoradoresFinal() != null
-					&& !helper.getNumeroMoradoresFinal().equals("")) {
-				hqlAux += "(imovel.numeroMorador between "
-						+ helper.getNumeroMoradoresInicial() + " and "
-						+ helper.getNumeroMoradoresFinal() + ") and ";
+			if (helper.getNumeroMoradoresInicial() != null && !helper.getNumeroMoradoresInicial().equals("") && helper.getNumeroMoradoresFinal() != null
+														   && !helper.getNumeroMoradoresFinal().equals("")) {
+				hqlAux += "(imovel.numeroMorador between " + helper.getNumeroMoradoresInicial() + " and " + helper.getNumeroMoradoresFinal() + ") and ";
 				finaliza = true;
-			}
+				}
 			// Area Construida
-			if (helper.getAreaConstruidaInicial() != null
-					&& !helper.getAreaConstruidaInicial().equals("")
-					&& helper.getAreaConstruidaFinal() != null
-					&& !helper.getAreaConstruidaFinal().equals("")) {
-				hqlAux += "(imovel.areaConstruida between "
-						+ helper.getAreaConstruidaInicial() + " and "
-						+ helper.getAreaConstruidaFinal() + ") and ";
+			if (helper.getAreaConstruidaInicial() != null && !helper.getAreaConstruidaInicial().equals("") && helper.getAreaConstruidaFinal() != null
+														  && !helper.getAreaConstruidaFinal().equals("")) {
+				hqlAux += "(imovel.areaConstruida between "	+ helper.getAreaConstruidaInicial() + " and " + helper.getAreaConstruidaFinal() + ") and ";
 				finaliza = true;
-			}
+				}
 			// Imovel Condominio
 			if (helper.getImovelCondominio().equals("1")) {
-				hqlAux += "imovel.indicadorImovelCondominio = "
-						+ Imovel.IMOVEL_CONDOMINIO + " and ";
+				hqlAux += "imovel.indicadorImovelCondominio = " + Imovel.IMOVEL_CONDOMINIO + " and ";
 				finaliza = true;
-			}
+				}
 			// Media do Imovel
-			if (helper.getMediaImovel() != null
-					&& !helper.getMediaImovel().equals("")) {
+			if (helper.getMediaImovel() != null	&& !helper.getMediaImovel().equals("")) {
 				// hqlAux += "consumosHistorico.consumoMedio <= " + mediaImovel
 				// + " and ";
-				hqlAux += "consumosHistorico.consumoMedio >= "
-						+ helper.getMediaImovel() + " and ";
+				hqlAux += "consumosHistorico.consumoMedio >= " + helper.getMediaImovel() + " and ";
 				finaliza = true;
-			}
-
+				}
 			// Consumo por Economia
-			if (helper.getConsumoPorEconomia() != null
-					&& !helper.getConsumoPorEconomia().equals("")
-					&& !helper.getConsumoPorEconomia().equals("--")
-					&& helper.getConsumoPorEconomiaFinal() != null
-					&& !helper.getConsumoPorEconomiaFinal().equals("")
-					&& !helper.getConsumoPorEconomiaFinal().equals("--")) {
+			if (helper.getConsumoPorEconomia() != null && !helper.getConsumoPorEconomia().equals("") && !helper.getConsumoPorEconomia().equals("--")
+					&& helper.getConsumoPorEconomiaFinal() != null && !helper.getConsumoPorEconomiaFinal().equals("") && !helper.getConsumoPorEconomiaFinal().equals("--")) {
 
-				hqlAux += "(coalesce(consumosHistorico.numeroConsumoFaturadoMes, 1) / "
-						+ "coalesce(imovel.quantidadeEconomias, 1)) >= "
-						+ helper.getConsumoPorEconomia() + " and ";
+				hqlAux += "(coalesce(consumosHistorico.numeroConsumoFaturadoMes, 1) / "	+ "coalesce(imovel.quantidadeEconomias, 1)) >= " + helper.getConsumoPorEconomia() + " and ";
 
-				hqlAux += "(coalesce(consumosHistorico.numeroConsumoFaturadoMes, 1) / "
-						+ "coalesce(imovel.quantidadeEconomias, 1)) <= "
-						+ helper.getConsumoPorEconomiaFinal() + " and ";
+				hqlAux += "(coalesce(consumosHistorico.numeroConsumoFaturadoMes, 1) / "	+ "coalesce(imovel.quantidadeEconomias, 1)) <= " + helper.getConsumoPorEconomiaFinal() + " and ";
 
 				finaliza = true;
 			}
-
 			// Situacao Ligacao Agua
-			/*
-			 * if (helper.getSituacaoLigacaoAgua() != null &&
-			 * !helper.getSituacaoLigacaoAgua().equals("") ) {
-			 * 
-			 * Integer idSituacaoLigacao = new
-			 * Integer(helper.getSituacaoLigacaoAgua());
-			 * 
-			 * if (idSituacaoLigacao.intValue() !=
-			 * ConstantesSistema.NUMERO_NAO_INFORMADO){ hqlAux +=
-			 * "imovel.ligacaoAguaSituacao = " + helper.getSituacaoLigacaoAgua()
-			 * + " and "; finaliza = true; } }
-			 */
-
 			if (helper.getSituacaoLigacaoAgua() != null) {
 				if (!helper.getSituacaoLigacaoAgua().equals("")) {
 					String idsLigacaoAguaSituacao = "";
 					for (int i = 0; i < helper.getSituacaoLigacaoAgua().length; i++) {
-						idsLigacaoAguaSituacao += helper
-								.getSituacaoLigacaoAgua()[i] + ",";
+						idsLigacaoAguaSituacao += helper.getSituacaoLigacaoAgua()[i] + ",";
 					}
-					idsLigacaoAguaSituacao = idsLigacaoAguaSituacao.substring(
-							0, (idsLigacaoAguaSituacao.length() - 1));
-					hqlAux += "imovel.ligacaoAguaSituacao in("
-							+ idsLigacaoAguaSituacao + ") and ";
+					idsLigacaoAguaSituacao = idsLigacaoAguaSituacao.substring(0, (idsLigacaoAguaSituacao.length() - 1));
+					hqlAux += "imovel.ligacaoAguaSituacao in(" + idsLigacaoAguaSituacao + ") and ";
 					finaliza = true;
 				}
 			}
+			
+			
 
 			// Finaliza o HQL
 			if (finaliza) {
@@ -11116,15 +10896,14 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			// analista: Ana Cristina
 			if (codigoEmpresaFebraban
 					.equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_CAERN)) {
-				hql += " order by " + "	localidade.id, "
-						+ "	setorComercial.codigo, " + "    rota.codigo, "
-						+ "    imovel.numeroSequencialRota ";
+				hql += " order by " + "	localidade.id, " + " setorComercial.codigo, " + " rota.codigo, " + " imovel.numeroSequencialRota ";
 			} else {
 				// Adiciona o Order By de acordo com a incricao do imovel
-				hql += " order by " + "	localidade.id, "
-						+ "	setorComercial.codigo, " + "	quadra.numeroQuadra, "
-						+ "	imovel.lote, " + "	imovel.subLote";
+				hql += " order by " + "	localidade.id, " + "	setorComercial.codigo, " + " quadra.numeroQuadra, " + "	imovel.lote, " + "	imovel.subLote";
 			}
+			
+			String hqlTeste = "";
+			hqlTeste = hql;
 			
 			retorno = session.createQuery(hql).list();
 
@@ -13098,141 +12877,85 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 
 		Session session = HibernateUtil.getSession();
 
-		if (helper.getMesAnoInstalacaoInicialHidrometro() != null
-				&& !helper.getMesAnoInstalacaoInicialHidrometro().equals("")) {
-			dataInstalacaoHidrometroInicial = Util
-					.formatarDataComTracoAAAAMMDD(Util
-							.converteStringInvertidaSemBarraParaDate(helper
-									.getMesAnoInstalacaoInicialHidrometro()
-									+ "01"));
+		if (helper.getMesAnoInstalacaoInicialHidrometro() != null && !helper.getMesAnoInstalacaoInicialHidrometro().equals("")) {
+			dataInstalacaoHidrometroInicial = Util.formatarDataComTracoAAAAMMDD(Util.converteStringInvertidaSemBarraParaDate(helper.getMesAnoInstalacaoInicialHidrometro() + "01"));
 
-			dataInstalacaoHidrometroFinal = Util
-					.formatarDataComTracoAAAAMMDD(Util.converteStringInvertidaSemBarraParaDate(Util
-							.somaMesAnoMesReferencia(
-									new Integer(
-											helper.getMesAnoInstalacaoFinalHidrometro()),
-											1).toString()
-											+ "01"));
+			dataInstalacaoHidrometroFinal = Util.formatarDataComTracoAAAAMMDD(Util.converteStringInvertidaSemBarraParaDate(Util.somaMesAnoMesReferencia(
+									new Integer(helper.getMesAnoInstalacaoFinalHidrometro()),1).toString()+ "01"));
 		} else {
-
 			Date data = Util.subtrairNumeroDiasDeUmaData(new Date(), 30);
-			dataInstalacaoHidrometroFinal = Util
-					.formatarDataComTracoAAAAMMDD(data);
+			dataInstalacaoHidrometroFinal = Util.formatarDataComTracoAAAAMMDD(data);
 		}
 
 		try {
-			String hql = "select count(distinct imovel.id) " + // O distinct foi
-					// utilizado por
-					// conta das
-					// sub-categorias
-					"from ";
+			String hql = "select count(distinct imovel.id) " + "from ";
 
 			// Se informou Categoria ou SubCategoria
-			if (helper.getCategoria() != null
-					|| helper.getSubCategoria() != null) {
+			if (helper.getCategoria() != null || helper.getSubCategoria() != null) {
 				hql += "	gcom.cadastro.imovel.ImovelSubcategoria imovelSubcategoria "
-						+ "	inner join imovelSubcategoria.comp_id.imovel imovel "
-						+ "	left  join imovelSubcategoria.comp_id.subcategoria subcategoria "
-						+ "	left  join subcategoria.categoria categoria ";
+					+  "	inner join imovelSubcategoria.comp_id.imovel imovel "
+					+  "	left  join imovelSubcategoria.comp_id.subcategoria subcategoria "
+					+  "	left  join subcategoria.categoria categoria ";
 			} else {
 				hql += "	gcom.cadastro.imovel.Imovel imovel ";
-			}
+				}
 
 			// se informou Logradouro
-			if (helper.getLogradouro() != null
-					&& !helper.getLogradouro().equals("")) {
+			if (helper.getLogradouro() != null && !helper.getLogradouro().equals("")) {
 				hql += "	left  join imovel.logradouroCep logradouroCep "
-						+ "	left  join logradouroCep.logradouro logradouro ";
-			}
-
-			hql += "	inner join imovel.localidade localidade ";
+					+  "	left  join logradouroCep.logradouro logradouro ";
+				}
+				hql += "	inner join imovel.localidade localidade ";
 
 			// Se unidade/gerencia ou elo
-			if (helper.getGerenciaRegional() != null
-					&& !helper.getGerenciaRegional().equals(
-							ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+			if (helper.getGerenciaRegional() != null && !helper.getGerenciaRegional().equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 				hql += "	inner join localidade.gerenciaRegional gerenciaRegional ";
-			}
+				}
 
-			if ((helper.getUnidadeNegocio() != null && !helper
-					.getUnidadeNegocio().equals(
-							ConstantesSistema.NUMERO_NAO_INFORMADO))
+			if ((helper.getUnidadeNegocio() != null && !helper.getUnidadeNegocio().equals(ConstantesSistema.NUMERO_NAO_INFORMADO))
 							|| (helper.getElo() != null & !helper.getElo().equals(""))) {
 				hql += "	inner join localidade.unidadeNegocio unidadeNegocio ";
-			}
-
+				}
 			// Setor Comercial
-			if (helper.getSetorComercialInicial() != null
-					&& !helper.getSetorComercialInicial().equals("")
-					&& helper.getSetorComercialFinal() != null
+			if (helper.getSetorComercialInicial() != null && !helper.getSetorComercialInicial().equals("") && helper.getSetorComercialFinal() != null
 					&& !helper.getSetorComercialFinal().equals("")) {
-				hql += "	inner join imovel.setorComercial setorComercial "
-						+ "	inner join imovel.quadra quadra "
-						+ "		with quadra.setorComercial.id = setorComercial.id ";
-			}
-
+				hql += "	inner join imovel.setorComercial setorComercial " + " inner join imovel.quadra quadra " + " with quadra.setorComercial.id = setorComercial.id ";
+				}
 			// Se informou Perfil Imovel
 			if (helper.getPerfilImovel() != null) {
 				hql += "	left  join imovel.imovelPerfil imovelPerfil ";
-			}
-
-			hql += "	left  join imovel.ligacaoAgua ligacaoAgua "
-					+ "   left  join imovel.ligacaoAguaSituacao ligacaoAguaSituacao "
-					+ "	left  join ligacaoAgua.medicaoHistoricos medicaoHistorico ";
-
+				}
+				hql += "	left  join imovel.ligacaoAgua ligacaoAgua "
+					+  "    left  join imovel.ligacaoAguaSituacao ligacaoAguaSituacao "
+					+  "	left  join ligacaoAgua.medicaoHistoricos medicaoHistorico ";
 			// Tipo Medicao
 			if (helper.getTipoMedicao() != null) {
-				// hql += "and medicaoHistorico.medicaoTipo.id = " + tipoMedicao
-				// + " ";
-				hql += "with medicaoHistorico.medicaoTipo.id = "
-						+ helper.getTipoMedicao() + " "
-						+ "and medicaoHistorico.anoMesReferencia = "
-						+ anoMesFaturamento + " ";
+				hql += "with medicaoHistorico.medicaoTipo.id = " + helper.getTipoMedicao() + " " + "and medicaoHistorico.anoMesReferencia = " + anoMesFaturamento + " ";
 			}
 
-			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS)
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS) 
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS) 
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS) 
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS) 
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_SEM_HINST_DT_CONTROLE_DE_PERDAS)
-					|| helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)
-					|| helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO)
-					|| helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSPECAO_ANORMALIDADE)) {
+			//Para Tipo de Serviços que precisam de histórico de hidrometos. 
+			if ((helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)) 
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_INSPECAO_ANORMALIDADE)) 
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))) {
 				hql += " left  join ligacaoAgua.hidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoAgua "
-						+ " left  join hidrometroInstalacaoHistoricoAgua.hidrometro hidrometroAgua "
-						+ " left  join imovel.hidrometroInstalacaoHistorico hidrometroInstalacaoHistorico "
-						+ " left  join hidrometroInstalacaoHistorico.hidrometro hidrometro ";
-				/*
-				 * // Local Instalaï¿½ï¿½o Hidrometro
-				 * if(helper.getLocalInstalacaoHidrometro() != null){ hql +=
-				 * " left join hidrometroInstalacaoHistoricoAgua.hidrometroLocalInstalacao localInstalacaoAgua "
-				 * +
-				 * " left join hidrometroInstalacaoHistorico.hidrometroLocalInstalacao localInstalacaoEsg "
-				 * ; }
-				 */
+					+  " left  join hidrometroInstalacaoHistoricoAgua.hidrometro hidrometroAgua "
+					+  " left  join imovel.hidrometroInstalacaoHistorico hidrometroInstalacaoHistorico "
+					+  " left  join hidrometroInstalacaoHistorico.hidrometro hidrometro ";
 			}
 
-			hql += "	left  join imovel.consumosHistoricos consumosHistorico "
-					+ "		with consumosHistorico.referenciaFaturamento <= "
-					+ anoMesFaturamento + " ";
+			hql += "	left  join imovel.consumosHistoricos consumosHistorico " + " with consumosHistorico.referenciaFaturamento <= " + anoMesFaturamento + " ";
 
 			if (helper.getTipoMedicao() != null) {
-				if (helper.getTipoMedicao().equals(
-						MedicaoTipo.LIGACAO_AGUA.toString())) {
-					hql += "and consumosHistorico.ligacaoTipo.id = "
-							+ LigacaoTipo.LIGACAO_AGUA + " ";
+				if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+					hql += "and consumosHistorico.ligacaoTipo.id = " + LigacaoTipo.LIGACAO_AGUA + " ";
 				}
-
 				if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
-					hql += "and consumosHistorico.ligacaoTipo.id = "
-							+ LigacaoTipo.LIGACAO_ESGOTO + " ";
+					hql += "and consumosHistorico.ligacaoTipo.id = " + LigacaoTipo.LIGACAO_ESGOTO + " ";
 				}
 			}
 
@@ -13242,177 +12965,157 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ helper.getTipoOrdem() + " and  ordemServico.situacao = 1) and ";
 
 			if (helper.getIdImovel() != null) {
-				hql += "	imovel.id = " + helper.getIdImovel().toString()
-						+ " and ";
+				hql += "	imovel.id = " + helper.getIdImovel().toString() + " and ";
 			}
 			
-			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO)
-					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)) 
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) 
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)) ) {
+			//Buscar apenas imoveis com situação da ligação factivel.		
+			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_INSTALACAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) ) {
+					if (helper.getTipoMedicao() != null) {
+						if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+							hqlAux += "imovel.ligacaoAguaSituacao = " + LigacaoAguaSituacao.FACTIVEL + " and ";
+			
+							} 
+						}
+				}
+			//Buscar apenas imoveis com situação da ligação cortada.	
+			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)) ) {
 				if (helper.getTipoMedicao() != null) {
 					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
-						hqlAux += "(imovel.ligacaoAguaSituacao.id not in (" + LigacaoAguaSituacao.CORTADO + "," + LigacaoAguaSituacao.SUPRIMIDO +  ")) and ";
+						hqlAux += "imovel.ligacaoAguaSituacao = " + LigacaoAguaSituacao.CORTADO + " and ";
+		
+						} 
+					}
+				}
+				
+			//Buscar apenas imoveis com situação da ligação suprimida.		
+			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_REFORMA_RAMAL_SEM_INST_DT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)) ) {
+				if (helper.getTipoMedicao() != null) {
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+						hqlAux += "imovel.ligacaoAguaSituacao = " + LigacaoAguaSituacao.SUPRIMIDO + " and ";
 		
 						} 
 					}
 				}	
-
+			// Seleciona imoveis sem histórico de hidrometro.
 			if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO) 
 					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
 					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))) {
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+					|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_REFORMA_RAMAL_SEM_INST_DT_CONTROLE_DE_PERDAS)))  {
 				if (helper.getTipoMedicao() != null) {
-					if (helper.getTipoMedicao().equals(
-							MedicaoTipo.LIGACAO_AGUA.toString())) {
-						// hqlAux += "(imovel.ligacaoAguaSituacao.id = " +
-						// LigacaoAguaSituacao.LIGADO + " or ";
-						// hqlAux += "imovel.ligacaoAguaSituacao.id = " +
-						// LigacaoAguaSituacao.LIGADO_A_REVELIA + ") and ";
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
 						hqlAux += "ligacaoAgua.hidrometroInstalacaoHistorico.id is null and ";
-						hqlAux += "ligacaoAguaSituacao.indicadorFaturamentoSituacao = 1 and ";
 						hqlAux += "ligacaoAguaSituacao.id = imovel.ligacaoAguaSituacao and ";
+						
 						finaliza = true;
-					} else if (helper.getTipoMedicao().equals(
-							MedicaoTipo.POCO.toString())) {
-						// hqlAux += "imovel.ligacaoEsgotoSituacao.id = " +
-						// LigacaoEsgotoSituacao.LIGADO + " and ";
+						
+					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
 						hqlAux += "imovel.hidrometroInstalacaoHistorico.id is null and ";
-						hqlAux += "ligacaoEsgotoSituacao.indicadorFaturamentoSituacao = 1 and ";
 						hqlAux += "ligacaoEsgotoSituacao.id = imovel.ligacaoEsgotoSituacao and ";
 					}
 				}
-			} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO)
+			} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO) 
 					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
 					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) 
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)) 
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS)) 
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS)) 
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS)) 
 					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS)) 
 					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_RELIGACAO_E_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
-					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_SEM_HINST_DT_CONTROLE_DE_PERDAS))
 					|| (helper.getTipoOrdem().equals(""+ ServicoTipo.TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS))) {
 				
 				if (helper.getTipoMedicao() != null) {
-					if (helper.getTipoMedicao().equals(
-							MedicaoTipo.LIGACAO_AGUA.toString())) {
-						// hqlAux += "(imovel.ligacaoAguaSituacao.id = " +
-						// LigacaoAguaSituacao.LIGADO + " or ";
-						// hqlAux += "imovel.ligacaoAguaSituacao.id = " +
-						// LigacaoAguaSituacao.LIGADO_A_REVELIA + ") and ";
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
 						hqlAux += "hidrometroInstalacaoHistoricoAgua.id is not null and ";
-						hqlAux += "ligacaoAguaSituacao.indicadorFaturamentoSituacao = 1 and ";
 						hqlAux += "ligacaoAguaSituacao.id = imovel.ligacaoAguaSituacao and ";
 						hqlAux += "hidrometroInstalacaoHistoricoAgua.dataRetirada is null and ";
-						if (dataInstalacaoHidrometroFinal != null
-								&& !dataInstalacaoHidrometroFinal.equals("")) {
-
-							if (dataInstalacaoHidrometroInicial != null
-									&& !dataInstalacaoHidrometroInicial
-									.equals("")) {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between to_date('"
-										+ dataInstalacaoHidrometroInicial
-										+ "','YYYY-MM-DD') and to_date('"
-										+ dataInstalacaoHidrometroFinal
-										+ "','YYYY-MM-DD') and ";
+							if (dataInstalacaoHidrometroFinal != null && !dataInstalacaoHidrometroFinal.equals("")) {
+								if (dataInstalacaoHidrometroInicial != null	&& !dataInstalacaoHidrometroInicial.equals("")) {
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between to_date('" + dataInstalacaoHidrometroInicial + "','YYYY-MM-DD') and to_date('"
+										+ dataInstalacaoHidrometroFinal	+ "','YYYY-MM-DD') and ";
 							} else {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= to_date('"
-										+ dataInstalacaoHidrometroFinal
-										+ "','YYYY-MM-DD') and ";
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= to_date('" + dataInstalacaoHidrometroFinal + "','YYYY-MM-DD') and ";
 							}
-
 						}
-
 						finaliza = true;
-					} else if (helper.getTipoMedicao().equals(
-							MedicaoTipo.POCO.toString())) {
-						// hqlAux += "imovel.ligacaoEsgotoSituacao.id = " +
-						// LigacaoEsgotoSituacao.LIGADO + " and ";
+						
+					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
 						hqlAux += "hidrometroInstalacaoHistorico.id is not null and ";
-						hqlAux += "ligacaoEsgotoSituacao.indicadorFaturamentoSituacao = 1 and ";
 						hqlAux += "ligacaoEsgotoSituacao.id = imovel.ligacaoEsgotoSituacao and ";
-						if (dataInstalacaoHidrometroFinal != null
-								&& !dataInstalacaoHidrometroFinal.equals("")) {
-
-							if (dataInstalacaoHidrometroInicial != null
-									&& !dataInstalacaoHidrometroInicial
-									.equals("")) {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between to_date('"
-										+ dataInstalacaoHidrometroInicial
-										+ "','YYYY-MM-DD') and to_date('"
-										+ dataInstalacaoHidrometroFinal
-										+ "','YYYY-MM-DD') and ";
+						
+						if (dataInstalacaoHidrometroFinal != null&& !dataInstalacaoHidrometroFinal.equals("")) {
+							if (dataInstalacaoHidrometroInicial != null	&& !dataInstalacaoHidrometroInicial.equals("")) {
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between to_date('" + dataInstalacaoHidrometroInicial + "','YYYY-MM-DD') and to_date('"
+										+ dataInstalacaoHidrometroFinal	+ "','YYYY-MM-DD') and ";
 							} else {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= to_date('"
-										+ dataInstalacaoHidrometroFinal
-										+ "','YYYY-MM-DD') and ";
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= to_date('" + dataInstalacaoHidrometroFinal + "','YYYY-MM-DD') and ";
 							}
-
 						}
-
 						finaliza = true;
 					}
-
+					//Relaciona todos os tipo de serviços que busquem imoveis com LigacaoAguaSituacao Ligada
+					if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_INSTALACAO_HIDROMETRO) 
+							|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSTALACAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO))
+							|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_HIDROMETRO_CONTROLE_DE_PERDAS))
+							|| (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS)))  {
+						if (helper.getTipoMedicao() != null) {
+							if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+								hqlAux += "ligacaoAguaSituacao.indicadorFaturamentoSituacao = 1 and ";
+															
+								finaliza = true;
+							} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+								hqlAux += "ligacaoEsgotoSituacao.indicadorFaturamentoSituacao = 1 and ";
+							}
+						}
+					}
 					// Local Instalaï¿½ï¿½o Hidrometro
 					if (helper.getLocalInstalacaoHidrometro() != null) {
-						if (helper.getTipoMedicao().equals(
-								MedicaoTipo.LIGACAO_AGUA.toString())) {
-							hqlAux += "hidrometroInstalacaoHistoricoAgua.hidrometroLocalInstalacao.id = "
-									+ helper.getLocalInstalacaoHidrometro()
-									+ " and ";
+						if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+							hqlAux += "hidrometroInstalacaoHistoricoAgua.hidrometroLocalInstalacao.id = " + helper.getLocalInstalacaoHidrometro() + " and ";
 							finaliza = true;
-						} else if (helper.getTipoMedicao().equals(
-								MedicaoTipo.POCO.toString())) {
-							hqlAux += "hidrometroInstalacaoHistorico.hidrometroLocalInstalacao.id = "
-									+ helper.getLocalInstalacaoHidrometro()
-									+ " and ";
+						} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+							hqlAux += "hidrometroInstalacaoHistorico.hidrometroLocalInstalacao.id = " + helper.getLocalInstalacaoHidrometro() + " and ";
 							finaliza = true;
 						}
 					}
 				}
-
 				// Capacidade Hidrometro
 				if (helper.getCapacidadeHidrometro() != null) {
 					if (!helper.getCapacidadeHidrometro().equals("")) {
 						String idCapacidades = "";
 						for (int i = 0; i < helper.getCapacidadeHidrometro().length; i++) {
-							idCapacidades += helper.getCapacidadeHidrometro()[i]
-									+ ",";
+							idCapacidades += helper.getCapacidadeHidrometro()[i]+ ",";
 						}
-						idCapacidades = idCapacidades.substring(0,
-								(idCapacidades.length() - 1));
-						if (helper.getTipoMedicao().equals(
-								MedicaoTipo.LIGACAO_AGUA.toString())) {
-							hqlAux += "hidrometroAgua.hidrometroCapacidade.id in ("
-									+ idCapacidades + ") and ";
+						idCapacidades = idCapacidades.substring(0,(idCapacidades.length() - 1));
+						if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+							hqlAux += "hidrometroAgua.hidrometroCapacidade.id in ("	+ idCapacidades + ") and ";
 							finaliza = true;
-						} else if (helper.getTipoMedicao().equals(
-								MedicaoTipo.POCO.toString())) {
-							hqlAux += "hidrometro.hidrometroCapacidade.id in ("
-									+ idCapacidades + ") and ";
+						} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+							hqlAux += "hidrometro.hidrometroCapacidade.id in ("	+ idCapacidades + ") and ";
 							finaliza = true;
 						}
 					}
 				}
 				// Marca Hidrometro
 				if (helper.getMarcaHidrometro() != null) {
-					if (helper.getTipoMedicao().equals(
-							MedicaoTipo.LIGACAO_AGUA.toString())) {
-						hqlAux += "hidrometroAgua.hidrometroMarca.id = "
-								+ helper.getMarcaHidrometro() + " and ";
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+						hqlAux += "hidrometroAgua.hidrometroMarca.id = "+ helper.getMarcaHidrometro() + " and ";
 						finaliza = true;
-					} else if (helper.getTipoMedicao().equals(
-							MedicaoTipo.POCO.toString())) {
-						hqlAux += "hidrometro.hidrometroMarca.id = "
-								+ helper.getMarcaHidrometro() + " and ";
+					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+						hqlAux += "hidrometro.hidrometroMarca.id = " + helper.getMarcaHidrometro() + " and ";
 						finaliza = true;
 					}
 				}
@@ -13421,255 +13124,139 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					if (!helper.getAnormalidadeHidrometro().equals("")) {
 						String idAnormalidades = "";
 						for (int i = 0; i < helper.getAnormalidadeHidrometro().length; i++) {
-							idAnormalidades += helper
-									.getAnormalidadeHidrometro()[i] + ",";
+							idAnormalidades += helper.getAnormalidadeHidrometro()[i] + ",";
 						}
-						idAnormalidades = idAnormalidades.substring(0,
-								(idAnormalidades.length() - 1));
-						hqlAux += "medicaoHistorico.leituraAnormalidadeFaturamento in ("
-								+ idAnormalidades + ") and ";
+						idAnormalidades = idAnormalidades.substring(0,(idAnormalidades.length() - 1));
+						hqlAux += "medicaoHistorico.leituraAnormalidadeFaturamento in (" + idAnormalidades + ") and ";
 						finaliza = true;
 					}
 				}
 
-				// MesAno Instalacao Hidrometro
-				// if (helper.getMesAnoInstalacaoHidrometro() != null) {
-				/*
-				 * if (helper.getMesAnoInstalacaoInicialHidrometro() != null &&
-				 * helper.getMesAnoInstalacaoFinalHidrometro() != null){ if
-				 * (helper
-				 * .getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString
-				 * ())) { hqlAux +=
-				 * "cast((substring(hidrometroInstalacaoHistoricoAgua.dataInstalacao, 1, 4) || "
-				 * +
-				 * "substring(hidrometroInstalacaoHistoricoAgua.dataInstalacao, 6, 2)) as integer) between "
-				 * + helper.getMesAnoInstalacaoInicialHidrometro() + " and " +
-				 * helper.getMesAnoInstalacaoFinalHidrometro() + " and ";
-				 * finaliza = true; }else if
-				 * (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString()))
-				 * { hqlAux +=
-				 * "cast((substring(hidrometroInstalacaoHistorico.dataInstalacao, 1, 4) || "
-				 * +
-				 * "substring(hidrometroInstalacaoHistorico.dataInstalacao, 6, 2)) as integer) between "
-				 * + helper.getMesAnoInstalacaoInicialHidrometro() + " and " +
-				 * helper.getMesAnoInstalacaoFinalHidrometro() + " and ";
-				 * finaliza = true; } }
-				 */
-
-			} else if (helper.getTipoOrdem().equals(
-					"" + ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO)
-					|| helper.getTipoOrdem().equals(
-							"" + ServicoTipo.TIPO_INSPECAO_ANORMALIDADE)) {
+			} else if (helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_EFETUAR_REMOCAO_HIDROMETRO) || helper.getTipoOrdem().equals("" + ServicoTipo.TIPO_INSPECAO_ANORMALIDADE)) {
 				if (helper.getTipoMedicao() != null) {
-					if (helper.getTipoMedicao().equals(
-							MedicaoTipo.LIGACAO_AGUA.toString())) {
-						// hqlAux += "(imovel.ligacaoAguaSituacao.id = " +
-						// LigacaoAguaSituacao.LIGADO + " or ";
-						// hqlAux += "imovel.ligacaoAguaSituacao.id = " +
-						// LigacaoAguaSituacao.LIGADO_A_REVELIA + ") and ";
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
 						hqlAux += "hidrometroInstalacaoHistoricoAgua.id is not null and ";
-						if (dataInstalacaoHidrometroFinal != null
-								&& !dataInstalacaoHidrometroFinal.equals("")) {
-
-							if (dataInstalacaoHidrometroInicial != null
-									&& !dataInstalacaoHidrometroInicial
-									.equals("")) {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between to_date('"
-										+ dataInstalacaoHidrometroInicial
-										+ "','YYYY-MM-DD') and to_date('"
-										+ dataInstalacaoHidrometroFinal
-										+ "','YYYY-MM-DD') and ";
+						if (dataInstalacaoHidrometroFinal != null && !dataInstalacaoHidrometroFinal.equals("")) {
+							if (dataInstalacaoHidrometroInicial != null	&& !dataInstalacaoHidrometroInicial.equals("")) {
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between to_date('" + dataInstalacaoHidrometroInicial
+									   +  "','YYYY-MM-DD') and to_date('" + dataInstalacaoHidrometroFinal + "','YYYY-MM-DD') and ";
 							} else {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= to_date('"
-										+ dataInstalacaoHidrometroFinal
-										+ "','YYYY-MM-DD') and ";
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= to_date('" + dataInstalacaoHidrometroFinal + "','YYYY-MM-DD') and ";
 							}
-
 						}
-
 						finaliza = true;
-					} else if (helper.getTipoMedicao().equals(
-							MedicaoTipo.POCO.toString())) {
-						// hqlAux += "imovel.ligacaoEsgotoSituacao.id = " +
-						// LigacaoEsgotoSituacao.LIGADO + " and ";
+						
+					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
 						hqlAux += "hidrometroInstalacaoHistorico.id is not null and ";
-						if (dataInstalacaoHidrometroFinal != null
-								&& !dataInstalacaoHidrometroFinal.equals("")) {
-
-							if (dataInstalacaoHidrometroInicial != null
-									&& !dataInstalacaoHidrometroInicial
-									.equals("")) {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between to_date('"
-										+ dataInstalacaoHidrometroInicial
-										+ "','YYYY-MM-DD') and to_date('"
-										+ dataInstalacaoHidrometroFinal
-										+ "','YYYY-MM-DD') and ";
+						if (dataInstalacaoHidrometroFinal != null && !dataInstalacaoHidrometroFinal.equals("")) {
+							if (dataInstalacaoHidrometroInicial != null	&& !dataInstalacaoHidrometroInicial.equals("")) {
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao between to_date('" + dataInstalacaoHidrometroInicial + "','YYYY-MM-DD') and to_date('"
+										+ dataInstalacaoHidrometroFinal + "','YYYY-MM-DD') and ";
 							} else {
-								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= to_date('"
-										+ dataInstalacaoHidrometroFinal
-										+ "','YYYY-MM-DD') and ";
+								hqlAux += "hidrometroInstalacaoHistoricoAgua.dataInstalacao <= to_date('" + dataInstalacaoHidrometroFinal + "','YYYY-MM-DD') and ";
 							}
-
 						}
-
 						finaliza = true;
 					}
-
 					// Local Instalaï¿½ï¿½o Hidrometro
 					if (helper.getLocalInstalacaoHidrometro() != null) {
-						if (helper.getTipoMedicao().equals(
-								MedicaoTipo.LIGACAO_AGUA.toString())) {
-							hqlAux += "hidrometroInstalacaoHistoricoAgua.hidrometroLocalInstalacao.id = "
-									+ helper.getLocalInstalacaoHidrometro()
-									+ " and ";
+						if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+							hqlAux += "hidrometroInstalacaoHistoricoAgua.hidrometroLocalInstalacao.id = " + helper.getLocalInstalacaoHidrometro() + " and ";
 							finaliza = true;
-						} else if (helper.getTipoMedicao().equals(
-								MedicaoTipo.POCO.toString())) {
-							hqlAux += "hidrometroInstalacaoHistorico.hidrometroLocalInstalacao.id = "
-									+ helper.getLocalInstalacaoHidrometro()
-									+ " and ";
+						} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+							hqlAux += "hidrometroInstalacaoHistorico.hidrometroLocalInstalacao.id = " + helper.getLocalInstalacaoHidrometro() + " and ";
 							finaliza = true;
 						}
 					}
 
 				}
-
 				// Capacidade Hidrometro
-
 				if (helper.getCapacidadeHidrometro() != null) {
 					if (!helper.getCapacidadeHidrometro().equals("")) {
 						String idCapacidades = "";
 						for (int i = 0; i < helper.getCapacidadeHidrometro().length; i++) {
-							idCapacidades += helper.getCapacidadeHidrometro()[i]
-									+ ",";
+							idCapacidades += helper.getCapacidadeHidrometro()[i] + ",";
 						}
-						idCapacidades = idCapacidades.substring(0,
-								(idCapacidades.length() - 1));
-						if (helper.getTipoMedicao().equals(
-								MedicaoTipo.LIGACAO_AGUA.toString())) {
-							hqlAux += "hidrometroAgua.hidrometroCapacidade.id in ("
-									+ idCapacidades + ") and ";
+						idCapacidades = idCapacidades.substring(0,(idCapacidades.length() - 1));
+						if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+							hqlAux += "hidrometroAgua.hidrometroCapacidade.id in (" + idCapacidades + ") and ";
 							finaliza = true;
-						} else if (helper.getTipoMedicao().equals(
-								MedicaoTipo.POCO.toString())) {
-							hqlAux += "hidrometro.hidrometroCapacidade.id in ("
-									+ idCapacidades + ") and ";
+						} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+							hqlAux += "hidrometro.hidrometroCapacidade.id in (" + idCapacidades + ") and ";
 							finaliza = true;
 						}
 					}
 				}
 				// Marca Hidrometro
 				if (helper.getMarcaHidrometro() != null) {
-					if (helper.getTipoMedicao().equals(
-							MedicaoTipo.LIGACAO_AGUA.toString())) {
-						hqlAux += "hidrometroAgua.hidrometroMarca.id = "
-								+ helper.getMarcaHidrometro() + " and ";
+					if (helper.getTipoMedicao().equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
+						hqlAux += "hidrometroAgua.hidrometroMarca.id = " + helper.getMarcaHidrometro() + " and ";
 						finaliza = true;
-					} else if (helper.getTipoMedicao().equals(
-							MedicaoTipo.POCO.toString())) {
-						hqlAux += "hidrometro.hidrometroMarca.id = "
-								+ helper.getMarcaHidrometro() + " and ";
+					} else if (helper.getTipoMedicao().equals(MedicaoTipo.POCO.toString())) {
+						hqlAux += "hidrometro.hidrometroMarca.id = " + helper.getMarcaHidrometro() + " and ";
 						finaliza = true;
 					}
 				}
-
 				// Anormalidade Hidrometro
 				if (helper.getAnormalidadeHidrometro() != null) {
 					if (!helper.getAnormalidadeHidrometro().equals("")) {
 						String idAnormalidades = "";
 						for (int i = 0; i < helper.getAnormalidadeHidrometro().length; i++) {
-							idAnormalidades += helper
-									.getAnormalidadeHidrometro()[i] + ",";
+							idAnormalidades += helper.getAnormalidadeHidrometro()[i] + ",";
 						}
-						idAnormalidades = idAnormalidades.substring(0,
-								(idAnormalidades.length() - 1));
-						hqlAux += "medicaoHistorico.leituraAnormalidadeFaturamento in ("
-								+ idAnormalidades + ") and ";
+						idAnormalidades = idAnormalidades.substring(0,(idAnormalidades.length() - 1));
+						hqlAux += "medicaoHistorico.leituraAnormalidadeFaturamento in ("+ idAnormalidades + ") and ";
 						finaliza = true;
 					}
 				}
 
 			}
-
 			// Cria as condicoes
 
 			// GERENCIA REGIONAL
-			if (helper.getGerenciaRegional() != null
-					&& !helper.getGerenciaRegional().equals(
-							ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-
-				hqlAux += "gerenciaRegional.id = "
-						+ helper.getGerenciaRegional() + " and ";
+			if (helper.getGerenciaRegional() != null && !helper.getGerenciaRegional().equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+				hqlAux += "gerenciaRegional.id = " + helper.getGerenciaRegional() + " and ";
 				finaliza = true;
 			}
-
 			// UNIDADE NEGOCIO
-			if (helper.getUnidadeNegocio() != null
-					&& !helper.getUnidadeNegocio().equals(
-							ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-
-				hqlAux += "unidadeNegocio.id = " + helper.getUnidadeNegocio()
-						+ " and ";
+			if (helper.getUnidadeNegocio() != null && !helper.getUnidadeNegocio().equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+				hqlAux += "unidadeNegocio.id = " + helper.getUnidadeNegocio() + " and ";
 				finaliza = true;
 			}
-
 			// Elo
-			if (helper.getElo() != null & !helper.getElo().equals("")) {
-				hqlAux += "localidade.localidade = " + helper.getElo()
-						+ " and ";
+			if (helper.getElo() != null && !helper.getElo().equals("")) {
+				hqlAux += "localidade.localidade = " + helper.getElo() + " and ";
 				finaliza = true;
 			}
-
 			// Logradouro
-			if (helper.getLogradouro() != null
-					& !helper.getLogradouro().equals("")) {
+			if (helper.getLogradouro() != null && !helper.getLogradouro().equals("")) {
 				hqlAux += "logradouro.id = " + helper.getLogradouro() + " and ";
 				finaliza = true;
 			}
-
 			// Localidade
-			if (helper.getLocalidadeInicial() != null
-					&& !helper.getLocalidadeInicial().equals("")
-					&& helper.getLocalidadeFinal() != null
-					&& !helper.getLocalidadeFinal().equals("")) {
-				hqlAux += "(localidade.id between "
-						+ helper.getLocalidadeInicial() + " and "
-						+ helper.getLocalidadeFinal() + ") and ";
+			if (helper.getLocalidadeInicial() != null && !helper.getLocalidadeInicial().equals("") && helper.getLocalidadeFinal() != null && !helper.getLocalidadeFinal().equals("")) {
+				hqlAux += "(localidade.id between " + helper.getLocalidadeInicial() + " and " + helper.getLocalidadeFinal() + ") and ";
 				finaliza = true;
 			}
 			// Setor Comercial
-			if (helper.getSetorComercialInicial() != null
-					&& !helper.getSetorComercialInicial().equals("")
-					&& helper.getSetorComercialFinal() != null
+			if (helper.getSetorComercialInicial() != null && !helper.getSetorComercialInicial().equals("") && helper.getSetorComercialFinal() != null
 					&& !helper.getSetorComercialFinal().equals("")) {
-				hqlAux += "(setorComercial.id between "
-						+ helper.getSetorComercialInicial() + " and "
-						+ helper.getSetorComercialFinal() + ") and ";
+				hqlAux += "(setorComercial.id between " + helper.getSetorComercialInicial() + " and " + helper.getSetorComercialFinal() + ") and ";
 				finaliza = true;
 			}
 			// Quadra
-			if (helper.getQuadraInicial() != null
-					&& !helper.getQuadraInicial().equals("")
-					&& helper.getQuadraFinal() != null
-					&& !helper.getQuadraFinal().equals("")) {
-				hqlAux += "(quadra.numeroQuadra between " + helper.getQuadraInicial()
-						+ " and " + helper.getQuadraFinal() + ") and ";
+			if (helper.getQuadraInicial() != null && !helper.getQuadraInicial().equals("") && helper.getQuadraFinal() != null && !helper.getQuadraFinal().equals("")) {
+				hqlAux += "(quadra.numeroQuadra between " + helper.getQuadraInicial() + " and " + helper.getQuadraFinal() + ") and ";
 				finaliza = true;
 			}
 			// Rota
-			if (helper.getRotaInicial() != null
-					&& !helper.getRotaInicial().equals("")
-					&& helper.getRotaFinal() != null
-					&& !helper.getRotaFinal().equals("")) {
-				hqlAux += "(quadra.rota.codigo between "
-						+ helper.getRotaInicial() + " and "
-						+ helper.getRotaFinal() + ") and ";
+			if (helper.getRotaInicial() != null	&& !helper.getRotaInicial().equals("") && helper.getRotaFinal() != null	&& !helper.getRotaFinal().equals("")) {
+				hqlAux += "(quadra.rota.codigo between " + helper.getRotaInicial() + " and " + helper.getRotaFinal() + ") and ";
 				finaliza = true;
 			}
 			// Perfil Imovel
 			if (helper.getPerfilImovel() != null) {
-				hqlAux += "imovelPerfil.id = " + helper.getPerfilImovel()
-						+ " and ";
+				hqlAux += "imovelPerfil.id = " + helper.getPerfilImovel() + " and ";
 				finaliza = true;
 			}
 			// Categoria
@@ -13679,101 +13266,57 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			}
 			// Subcategoria
 			if (helper.getSubCategoria() != null) {
-				hqlAux += "subcategoria.id = " + helper.getSubCategoria()
-						+ " and ";
+				hqlAux += "subcategoria.id = " + helper.getSubCategoria() + " and ";
 				finaliza = true;
 			}
 			// Quantidade de Economias
-			if (helper.getQuantidadeEconomiasInicial() != null
-					&& !helper.getQuantidadeEconomiasInicial().equals("")
-					&& helper.getQuantidadeEconomiasFinal() != null
+			if (helper.getQuantidadeEconomiasInicial() != null && !helper.getQuantidadeEconomiasInicial().equals("") && helper.getQuantidadeEconomiasFinal() != null
 					&& !helper.getQuantidadeEconomiasFinal().equals("")) {
-				hqlAux += "(imovel.quantidadeEconomias between "
-						+ helper.getQuantidadeEconomiasInicial() + " and "
-						+ helper.getQuantidadeEconomiasFinal() + ") and ";
+				hqlAux += "(imovel.quantidadeEconomias between " + helper.getQuantidadeEconomiasInicial() + " and " + helper.getQuantidadeEconomiasFinal() + ") and ";
 				finaliza = true;
 			}
 
 			// Numero Moradores
-			if (helper.getNumeroMoradoresInicial() != null
-					&& !helper.getNumeroMoradoresInicial().equals("")
-					&& helper.getNumeroMoradoresFinal() != null
+			if (helper.getNumeroMoradoresInicial() != null && !helper.getNumeroMoradoresInicial().equals("") && helper.getNumeroMoradoresFinal() != null
 					&& !helper.getNumeroMoradoresFinal().equals("")) {
-				hqlAux += "(imovel.numeroMorador between "
-						+ helper.getNumeroMoradoresInicial() + " and "
-						+ helper.getNumeroMoradoresFinal() + ") and ";
+				hqlAux += "(imovel.numeroMorador between " + helper.getNumeroMoradoresInicial() + " and " + helper.getNumeroMoradoresFinal() + ") and ";
 				finaliza = true;
 			}
 			// Area Construida
-			if (helper.getAreaConstruidaInicial() != null
-					&& !helper.getAreaConstruidaInicial().equals("")
-					&& helper.getAreaConstruidaFinal() != null
+			if (helper.getAreaConstruidaInicial() != null && !helper.getAreaConstruidaInicial().equals("") && helper.getAreaConstruidaFinal() != null
 					&& !helper.getAreaConstruidaFinal().equals("")) {
-				hqlAux += "(imovel.areaConstruida between "
-						+ helper.getAreaConstruidaInicial() + " and "
-						+ helper.getAreaConstruidaFinal() + ") and ";
+				hqlAux += "(imovel.areaConstruida between " + helper.getAreaConstruidaInicial() + " and " + helper.getAreaConstruidaFinal() + ") and ";
 				finaliza = true;
 			}
 			// Imovel Condominio
 			if (helper.getImovelCondominio().equals("1")) {
-				hqlAux += "imovel.indicadorImovelCondominio = "
-						+ Imovel.IMOVEL_CONDOMINIO + " and ";
+				hqlAux += "imovel.indicadorImovelCondominio = "	+ Imovel.IMOVEL_CONDOMINIO + " and ";
 				finaliza = true;
 			}
 			// Media do Imovel
-			if (helper.getMediaImovel() != null
-					&& !helper.getMediaImovel().equals("")) {
-				// hqlAux += "consumosHistorico.consumoMedio <= " + mediaImovel
-				// + " and ";
-				hqlAux += "consumosHistorico.consumoMedio >= "
-						+ helper.getMediaImovel() + " and ";
+			if (helper.getMediaImovel() != null	&& !helper.getMediaImovel().equals("")) {
+				hqlAux += "consumosHistorico.consumoMedio >= "	+ helper.getMediaImovel() + " and ";
 				finaliza = true;
 			}
 
 			// Consumo por Economia
-			if (helper.getConsumoPorEconomia() != null
-					&& !helper.getConsumoPorEconomia().equals("")
-					&& !helper.getConsumoPorEconomia().equals("--")
-					&& helper.getConsumoPorEconomiaFinal() != null
-					&& !helper.getConsumoPorEconomiaFinal().equals("")
-					&& !helper.getConsumoPorEconomiaFinal().equals("--")) {
-
-				hqlAux += "(coalesce(consumosHistorico.numeroConsumoFaturadoMes, 1) / "
-						+ "coalesce(imovel.quantidadeEconomias, 1)) >= "
-						+ helper.getConsumoPorEconomia() + " and ";
-
-				hqlAux += "(coalesce(consumosHistorico.numeroConsumoFaturadoMes, 1) / "
-						+ "coalesce(imovel.quantidadeEconomias, 1)) <= "
-						+ helper.getConsumoPorEconomiaFinal() + " and ";
+			if (helper.getConsumoPorEconomia() != null	&& !helper.getConsumoPorEconomia().equals("") && !helper.getConsumoPorEconomia().equals("--")
+					&& helper.getConsumoPorEconomiaFinal() != null	&& !helper.getConsumoPorEconomiaFinal().equals("")	&& !helper.getConsumoPorEconomiaFinal().equals("--")) {
+				hqlAux += "(coalesce(consumosHistorico.numeroConsumoFaturadoMes, 1) / "	+ "coalesce(imovel.quantidadeEconomias, 1)) >= " + helper.getConsumoPorEconomia() + " and ";
+				hqlAux += "(coalesce(consumosHistorico.numeroConsumoFaturadoMes, 1) / "	+ "coalesce(imovel.quantidadeEconomias, 1)) <= " + helper.getConsumoPorEconomiaFinal() + " and ";
 
 				finaliza = true;
 			}
 
 			// Situacao Ligacao Agua
-			/*
-			 * if (helper.getSituacaoLigacaoAgua() != null &&
-			 * !helper.getSituacaoLigacaoAgua().equals("") ) {
-			 * 
-			 * Integer idSituacaoLigacao = new
-			 * Integer(helper.getSituacaoLigacaoAgua());
-			 * 
-			 * if (idSituacaoLigacao.intValue() !=
-			 * ConstantesSistema.NUMERO_NAO_INFORMADO){ hqlAux +=
-			 * "imovel.ligacaoAguaSituacao = " + helper.getSituacaoLigacaoAgua()
-			 * + " and "; finaliza = true; } }
-			 */
-
 			if (helper.getSituacaoLigacaoAgua() != null) {
 				if (!helper.getSituacaoLigacaoAgua().equals("")) {
 					String idsLigacaoAguaSituacao = "";
 					for (int i = 0; i < helper.getSituacaoLigacaoAgua().length; i++) {
-						idsLigacaoAguaSituacao += helper
-								.getSituacaoLigacaoAgua()[i] + ",";
+						idsLigacaoAguaSituacao += helper.getSituacaoLigacaoAgua()[i] + ",";
 					}
-					idsLigacaoAguaSituacao = idsLigacaoAguaSituacao.substring(
-							0, (idsLigacaoAguaSituacao.length() - 1));
-					hqlAux += "imovel.ligacaoAguaSituacao in("
-							+ idsLigacaoAguaSituacao + ") and ";
+					idsLigacaoAguaSituacao = idsLigacaoAguaSituacao.substring(0, (idsLigacaoAguaSituacao.length() - 1));
+					hqlAux += "imovel.ligacaoAguaSituacao in(" + idsLigacaoAguaSituacao + ") and ";
 					finaliza = true;
 				}
 			}
@@ -13786,8 +13329,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				hql = hql.substring(0, hql.length() - 7);
 			}
 
-			retorno = (Integer) session.createQuery(hql).setMaxResults(1)
-					.uniqueResult();
+			retorno = (Integer) session.createQuery(hql).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -21083,6 +20625,96 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
+		return retorno;
+	}
+
+	public List<OrdemServicoFoto> pesquisarOrdemServicoFoto(Integer idImovel) throws ErroRepositorioException {
+
+		List<OrdemServicoFoto> retorno = null;
+		Session session = HibernateUtil.getSession();
+
+		try {
+
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT osft ")
+					.append("FROM OrdemServicoFoto osft ")
+					.append("INNER JOIN osft.ordemServico orse ")
+					.append("WHERE orse.imovel.id = :idImovel ")
+					.append("ORDER BY osft.ordemServico.id, osft.nomeFoto");
+
+			retorno = session.createQuery(consulta.toString())
+					.setInteger("idImovel", idImovel)
+					.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public Collection recuperaOSPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+
+		Collection retornoConsulta = new ArrayList();
+
+		Session session = HibernateUtil.getSession();
+
+		String consulta = "";
+
+		try {
+
+			consulta = "SELECT os.id " + "FROM OrdemServico os "
+					+ "LEFT JOIN os.imovel imv  "
+					+ "WHERE imv.id = :idImovel ";
+
+			retornoConsulta = session
+					.createQuery(consulta)
+					.setInteger("idImovel", idImovel).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retornoConsulta;
+	}
+	
+	public boolean verificarExistenciaOrdemServicoFoto(Integer idOrdemServico)
+			throws ErroRepositorioException {
+		boolean retorno = false;
+
+		Integer count;
+
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+
+		try {
+
+			consulta = "SELECT COUNT(DISTINCT os.orse_id) as idOrdemServico " // 1
+ 					+ "FROM atendimentopublico.ordem_servico_foto as osf "
+					+ "LEFT JOIN atendimentopublico.ordem_servico as os on os.orse_id = osf.orse_id "
+					
+					+ "WHERE os.orse_id = :idOrdemServico";
+
+			
+					count = (Integer) session.createSQLQuery(consulta)
+								 .addScalar("idOrdemServico", Hibernate.INTEGER)
+								 .setInteger("idOrdemServico", idOrdemServico.intValue()).setMaxResults(1)
+								 .uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		if (count != null && !count.equals(null)) {
+			retorno = true;
+		}
+
 		return retorno;
 	}
 }
