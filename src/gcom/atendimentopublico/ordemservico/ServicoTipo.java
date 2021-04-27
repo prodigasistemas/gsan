@@ -142,7 +142,7 @@ public class ServicoTipo extends ObjetoTransacao {
 	
 	public final static int TIPO_REFORMA_RAMAL_COM_INST_HDT_CONTROLE_DE_PERDAS = 1425;
 	
-	public final static int TIPO_REFORMA_RAMAL_SEM_HINST_DT_CONTROLE_DE_PERDAS  = 1426;
+	public final static int TIPO_REFORMA_RAMAL_SEM_INST_DT_CONTROLE_DE_PERDAS  = 1426;
 	
 	public final static int TIPO_INSTALACAO_RAMAL_SEM_INST_HDT_CONTROLE_DE_PERDAS = 1427;
 	
