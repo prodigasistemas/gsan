@@ -336,11 +336,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 * 
 	 * [SB0020] - Processar Pagamento de Contrato Parcelamento
 	 * 
-	 * DOCUMENTO COBRANÇA TIPO 08 - EXTRATO CONTRATO PARCELAMENTO
+	 * DOCUMENTO COBRANï¿½A TIPO 08 - EXTRATO CONTRATO PARCELAMENTO
 	 * 
 	 * @author Mariana Victor
 	 * @date 04/08/2011
@@ -361,8 +361,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		Collection colecaoPagamentos = new ArrayList();
 		Collection colecaoDevolucoes = new ArrayList();
 
-		// 1.2.	Código do cliente 
-		// [FS0007] ? Validar código do cliente
+		// 1.2.	Cï¿½digo do cliente 
+		// [FS0007] ? Validar cï¿½digo do cliente
 		boolean idClienteInvalido = Util
 				.validarValorNaoNumerico(registroHelperCodigoBarras
 						.getRegistroHelperCodigoBarrasTipoPagamento()
@@ -371,9 +371,9 @@ public class ControladorArrecadacao extends ControladorComum {
 		Integer idClienteNaBase = null;
 
 		if (idClienteInvalido) {
-			descricaoOcorrencia = "CÓDIGO DO CLIENTE NÃO NUMÉRICO";
+			descricaoOcorrencia = "Cï¿½DIGO DO CLIENTE Nï¿½O NUMï¿½RICO";
 		} else {
-			// 1.4.	Caso o código do cliente esteja válido, verifica o cliente 
+			// 1.4.	Caso o cï¿½digo do cliente esteja vï¿½lido, verifica o cliente 
 			Integer idCliente = new Integer(registroHelperCodigoBarras
 					.getRegistroHelperCodigoBarrasTipoPagamento()
 					.getIdPagamento2());
@@ -386,9 +386,9 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (idClienteNaBase == null) {
-				// caso o cliente não exista atribuir o valor
-				//   "CÓDIGO DO CLIENTE NÃO CADASTRADO" ao campo Descrição da Ocorrência do Movimento
-				descricaoOcorrencia = "CLIENTE RESPONSÁVEL NÂO CADASTRADO";
+				// caso o cliente nï¿½o exista atribuir o valor
+				//   "Cï¿½DIGO DO CLIENTE Nï¿½O CADASTRADO" ao campo Descriï¿½ï¿½o da Ocorrï¿½ncia do Movimento
+				descricaoOcorrencia = "CLIENTE RESPONSï¿½VEL Nï¿½O CADASTRADO";
 			}
 		}
 
@@ -400,7 +400,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento4());
 
 		if (tipoDocumentoInvalido) {
-			descricaoOcorrencia = "TIPO DO DOCUMENTO NÃO NUMÉRICO";
+			descricaoOcorrencia = "TIPO DO DOCUMENTO Nï¿½O NUMï¿½RICO";
 		}
 
 		Object[] dadosItem = null;
@@ -422,8 +422,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 
 		if (descricaoOcorrencia.equals("OK")) {
-			// caso exista documento de cobrança
-			// verifica se a coleção é diferente de nula
+			// caso exista documento de cobranï¿½a
+			// verifica se a coleï¿½ï¿½o ï¿½ diferente de nula
 			if (dadosItem != null) {
 
 				BigDecimal valorItemCobrado = null;
@@ -454,7 +454,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				helper.setDataPagamento(Util.formatarData(dataPagamento));
 				helper.setArrecadacaoForma(arrecadacaoForma);
 				
-				// 1.1.1.	Caso contrário:
+				// 1.1.1.	Caso contrï¿½rio:
 				//   O sistema armazena o pagamento, para cada o item cobrado
 				Object[] dadosPagamento = this.getControladorContratoParcelamento()
 					.efetuarPagamentoParcelaContratoParcelamentoPorCliente(
@@ -463,20 +463,20 @@ public class ControladorArrecadacao extends ControladorComum {
 				colecaoPagamentos = (Collection) dadosPagamento[1];
 				
 			} else {
-				// 1.5.1. Caso o documento de cobrança não exista, atribuir o valor 
-				//    "DOCUMENTO DE COBRANÇA INEXISTENTE" ao campo Descrição da Ocorrência do Movimento 
-				descricaoOcorrencia = "DOCUMENTO DE COBRANÇA INEXISTENTE";
-				// e atribuir o valor 2 (NÃO) ao Indicador de Aceitação do Registro do Movimento
+				// 1.5.1. Caso o documento de cobranï¿½a nï¿½o exista, atribuir o valor 
+				//    "DOCUMENTO DE COBRANï¿½A INEXISTENTE" ao campo Descriï¿½ï¿½o da Ocorrï¿½ncia do Movimento 
+				descricaoOcorrencia = "DOCUMENTO DE COBRANï¿½A INEXISTENTE";
+				// e atribuir o valor 2 (Nï¿½O) ao Indicador de Aceitaï¿½ï¿½o do Registro do Movimento
 				indicadorAceitacaoRegistro = "2";
 			}
 
 		} else {
-			// atribui o valor 2(NÃO) ao indicador aceitacao
+			// atribui o valor 2(Nï¿½O) ao indicador aceitacao
 			// registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
-		// Seta os parametros que serão retornados
+		// Seta os parametros que serï¿½o retornados
 		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
 		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 		pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
@@ -488,7 +488,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
     /**
      * [UC0242] - Registrar Movimento dos Arrecadadores 
-     * Autor: Sávio Luiz , Vivianne Sousa, Raphael Rossiter
+     * Autor: Sï¿½vio Luiz , Vivianne Sousa, Raphael Rossiter
      * Data: 30/01/2006 , 23/11/2007, 09/01/2007
      */
 
@@ -524,7 +524,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			// recupera o numeroSequencialArquivoEnvioDebitoAutomatico da tabela
 			// ArrecadadorContrato
-			// para ser inserido no arquivo de envio caso exista a coleção de
+			// para ser inserido no arquivo de envio caso exista a coleï¿½ï¿½o de
 			// registros C
 			Integer numeroSequencialArquivoEnvioDebitoAutomatico = null;
 			Integer numeroSequecialArquivoRetornoCodigoBarras = null;
@@ -552,14 +552,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					String linha = stringBuilderTxt.substring(inicioLinha, inicioLinha + tamanhoLinha);
 
-					// incrementa a primeira linha.O +1 é para tirar o
+					// incrementa a primeira linha.O +1 ï¿½ para tirar o
 
 					inicioLinha = inicioLinha + tamanhoLinha + 1;
 
-					// cria uma variavel da descrição da ocorrencia do
+					// cria uma variavel da descriï¿½ï¿½o da ocorrencia do
 					// movimento com o valor setado para OK
 					String descricaoOcorrenciaMovimento = "OK";
-					// cria uma variavel do indicador de aceitação do
+					// cria uma variavel do indicador de aceitaï¿½ï¿½o do
 					// registro do movimento
 					int indicadorAceitacaoRegistroMovimento = 1;
 
@@ -568,11 +568,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					short numeroSequencialAvisoBancario = 0;
 
-					// verifica se é a primeira linha
+					// verifica se ï¿½ a primeira linha
 					if (primeiraLinha) {
 						/**
 						 * [SF0001] - Validar Arquivo de Movimento de
-						 * Arrecadador Autor: Sávio Luiz Data: 31/01/2006
+						 * Arrecadador Autor: Sï¿½vio Luiz Data: 31/01/2006
 						 */
 						arrecadadorContrato = this.obterArrecadadorContrato(arrecadadorContrato.getId());
 
@@ -628,15 +628,15 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					} else {
 
-						// verifica se o código do registro é "A", caso seja
-						// então
-						// não existe o codigo do registro "Z" e encerra o caso
+						// verifica se o cï¿½digo do registro ï¿½ "A", caso seja
+						// entï¿½o
+						// nï¿½o existe o codigo do registro "Z" e encerra o caso
 						// de uso
 						if (codigoRegistro.toUpperCase().equals("A")) {
 							throw new ControladorException("atencao.arquivo.movimento.nao.codigo.z");
 						}
 						if (registroHelperCodigoA.getTipoMovimento() != null && !registroHelperCodigoA.getTipoMovimento().equals("")) {
-							// caso o tipo de medição seja igual a DEBITO
+							// caso o tipo de mediï¿½ï¿½o seja igual a DEBITO
 							// AUTOMATICO
 							if (registroHelperCodigoA.getTipoMovimento().equals("DEBITO AUTOMATICO")) {
 
@@ -662,24 +662,24 @@ public class ControladorArrecadacao extends ControladorComum {
 
 						}
 
-						// verifica se o código do registro é diferente de "Z",
-						// caso seja então adiciona
-						// a linha na coleção de linhas para depois serem
+						// verifica se o cï¿½digo do registro ï¿½ diferente de "Z",
+						// caso seja entï¿½o adiciona
+						// a linha na coleï¿½ï¿½o de linhas para depois serem
 						// processadas
 						if (!codigoRegistro.toUpperCase().equals("Z")) {
 
 							linhas.add(linha);
 						} else {
-							// se entrou no else então é porque tem registro Z
-							// então seta o boolean para true
+							// se entrou no else entï¿½o ï¿½ porque tem registro Z
+							// entï¿½o seta o boolean para true
 							verificaRegistroZ = true;
 
-							// caso código do registro seja "Z" então processa a
-							// coleção
+							// caso cï¿½digo do registro seja "Z" entï¿½o processa a
+							// coleï¿½ï¿½o
 							// de linhas e inseri o movimento de arrecadadores
 							RegistroHelperCodigoZ registroHelperCodigoZ = (RegistroHelperCodigoZ) distribuirdadosRegistroMovimentoArrecadador(linha, null);
 							// caso a quantidade de registros for diferente da
-							// quantidade de registros do txt então ecerra o
+							// quantidade de registros do txt entï¿½o ecerra o
 							// caso de uso
 							if (Integer.parseInt(registroHelperCodigoZ.getTotalRegistrosArquivo().trim()) != countRegistros) {
 								throw new ControladorException("atencao.total.registros.invalido");
@@ -691,7 +691,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							Date dataGeracao = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoA.getDataGeracaoArquivo());
 
 							// cria uma iterator para pegar linha a linha da
-							// coleção de linhas
+							// coleï¿½ï¿½o de linhas
 							Iterator linhaIterator = linhas.iterator();
 							aux = 1;
 							while (linhaIterator.hasNext()) {
@@ -719,7 +719,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 								case b:
 
-									// [SF0003] - Processar Registro Código B
+									// [SF0003] - Processar Registro Cï¿½digo B
 									RegistroHelperCodigoC registroHelperCodigoC = this.processarRegistroCodigoTipoB(registroHelperCodigoA, linhaRegistro, arrecadadorMovimento);
 
 									if (registroHelperCodigoC != null) {
@@ -738,24 +738,24 @@ public class ControladorArrecadacao extends ControladorComum {
 									dataInvalida = Util.validarAnoMesDiaSemBarra(registroHelperCodigoF.getDataDebito());
 									if (dataInvalida) {
 										dataExcludentes = true;
-										descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO INVÁLIDA";
+										descricaoOcorrenciaMovimento = "DATA DE Dï¿½BITO/PAGAMENTO INVï¿½LIDA";
 									}
-									// caso a data seja inválida não verifica se
-									// é maior que a data atual
+									// caso a data seja invï¿½lida nï¿½o verifica se
+									// ï¿½ maior que a data atual
 									if (!dataExcludentes) {
 										// verifica se a data de
-										// bedito/pagamento é superior a atual
+										// bedito/pagamento ï¿½ superior a atual
 										dataDebito = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoF.getDataDebito());
 										// [FS0008]Validar data de
-										// débito/pagamento
+										// dï¿½bito/pagamento
 
 										if (dataDebito.after(new Date())
 												&& (registroHelperCodigoF.getCodigoRetorno().equals("00") || registroHelperCodigoF.getCodigoRetorno().equals("31"))) {
-											descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
+											descricaoOcorrenciaMovimento = "DATA DE Dï¿½BITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
 										}
 									}
 
-									// VALIDANDO O ANO E MÊS DE REFERÊNCIA DA
+									// VALIDANDO O ANO E Mï¿½S DE REFERï¿½NCIA DA
 									// CONTA
 									boolean anoMesReferencia = false;
 
@@ -764,23 +764,23 @@ public class ControladorArrecadacao extends ControladorComum {
 									}
 
 									if (anoMesReferencia) {
-										descricaoOcorrenciaMovimento = "ANO/MÊS DE REFERÊNCIA DA CONTA INVÁLIDA";
+										descricaoOcorrenciaMovimento = "ANO/Mï¿½S DE REFERï¿½NCIA DA CONTA INVï¿½LIDA";
 									}
 
 									// valida o valor de debito recebido
 									valorDebitoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoF.getValorDebito());
 									if (valorDebitoInvalido) {
-										descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NÃO NUMÉRICO";
+										descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO Nï¿½O NUMï¿½RICO";
 									}
 
-									// verifica se existe a matricula do imóvel
+									// verifica se existe a matricula do imï¿½vel
 									// na base
 									Integer idImovelNaBase = null;
 
 									boolean codigoDebitoAutomaticoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoF.getIdClienteEmpresa());
 
 									if (codigoDebitoAutomaticoInvalido) {
-										descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
+										descricaoOcorrenciaMovimento = "Cï¿½DIGO PARA Dï¿½BITO AUTOMï¿½TICO INVï¿½LIDO";
 									}
 
 									Integer codigoDebitoAutomatico = new Integer(registroHelperCodigoF.getIdClienteEmpresa());
@@ -805,7 +805,7 @@ public class ControladorArrecadacao extends ControladorComum {
 											Imovel imovel = (Imovel) colecaoImoveisAntigo.iterator().next();
 											idImovelNaBase = imovel.getId();
 										} else {
-											descricaoOcorrenciaMovimento = "DÉBITO AUTOMÁTICO NÃO CADASTRADO";
+											descricaoOcorrenciaMovimento = "Dï¿½BITO AUTOMï¿½TICO Nï¿½O CADASTRADO";
 										}
 									}
 
@@ -851,7 +851,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 										// se debitoAutomaticaMovimento for nula
 										// seta o valor para o
-										// campo descrição movimento caso
+										// campo descriï¿½ï¿½o movimento caso
 										// contrario atualiza o
 										// debitoAutomaticaMovimento
 										if (debitoAutomaticoMovimento != null) {
@@ -878,9 +878,9 @@ public class ControladorArrecadacao extends ControladorComum {
 
 										if (!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")) {
 											/**
-											 * As contas em débito automático
-											 * que retornavam com o código 31
-											 * não tinham o seu pagamento
+											 * As contas em dï¿½bito automï¿½tico
+											 * que retornavam com o cï¿½digo 31
+											 * nï¿½o tinham o seu pagamento
 											 * efetuado
 											 * 
 											 * @author Wellington Rocha
@@ -930,7 +930,7 @@ public class ControladorArrecadacao extends ControladorComum {
 												pagamento.setPagamentoSituacaoAtual(null);
 												pagamento.setPagamentoSituacaoAnterior(null);
 												pagamento.setDebitoTipo(null);
-												// verifica se o id da conta é
+												// verifica se o id da conta ï¿½
 												// diferente de nulo
 												if (idConta != null) {
 													ContaGeral conta = new ContaGeral();
@@ -942,7 +942,7 @@ public class ControladorArrecadacao extends ControladorComum {
 												pagamento.setGuiaPagamento(null);
 
 												// verifica se o id da
-												// Localidade é diferente de
+												// Localidade ï¿½ diferente de
 												// nulo
 												if (idLocalidade != null) {
 													Localidade localidade = new Localidade();
@@ -1057,7 +1057,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 													avisoBancario.setArrecadadorMovimento(arrecadadorMovimento);
 													avisoBancario.setUltimaAlteracao(new Date());
-													// atualiza o aviso bancário
+													// atualiza o aviso bancï¿½rio
 													try {
 														repositorioUtil.atualizar(avisoBancario);
 													} catch (ErroRepositorioException e) {
@@ -1072,16 +1072,16 @@ public class ControladorArrecadacao extends ControladorComum {
 													// prevista para quando for
 													// inserir o pagamento saber
 													// de que
-													// aviso bancário o
-													// pagamento está
-													// relacionádo.
+													// aviso bancï¿½rio o
+													// pagamento estï¿½
+													// relacionï¿½do.
 													pagamento.setDataPrevistaCreditoHelper(dataPrevistaCredito);
 
 													Iterator avisosBancarioIterator = avisosBancarios.iterator();
 													// cria um boolean para
 													// saber se existe algum
 													// aviso bancario da
-													// coleção com a mesma data
+													// coleï¿½ï¿½o com a mesma data
 													// prevista da data prevista
 													// calculada anteriormente
 													boolean achou = false;
@@ -1146,10 +1146,10 @@ public class ControladorArrecadacao extends ControladorComum {
 													}
 													if (!achou) {
 
-														// chama o método para
+														// chama o mï¿½todo para
 														// cria
 														// o objeto
-														// do aviso bancário
+														// do aviso bancï¿½rio
 														avisoBancario = gerarOcorrenciaAvisoBancario(arrecadadorMovimento.getId(), registroHelperCodigoA, dataPrevistaCredito,
 																registroHelperCodigoZ.getValorTotalRegistrosArquivo(), registroHelperCodigoA.getCodigoBanco(), valorCalcPagamento,
 																valorInfPagamento, valorCalcDevolucao, valorInfDevolucao, numeroSequencialAvisoBancario, idFormaArrecadacao,
@@ -1160,16 +1160,16 @@ public class ControladorArrecadacao extends ControladorComum {
 														avisoBancario.setValorRealizado(valorInfPagamento);
 
 														// adiciona o aviso
-														// bancário
+														// bancï¿½rio
 														// na
-														// coleção de avisos
-														// bancários
+														// coleï¿½ï¿½o de avisos
+														// bancï¿½rios
 														avisosBancarios.add(avisoBancario);
 													}
 												}
 
 												// adiciona o pagamento na
-												// coleção
+												// coleï¿½ï¿½o
 												// de
 												// pagamentos
 												pagamentos.add(pagamento);
@@ -1178,9 +1178,9 @@ public class ControladorArrecadacao extends ControladorComum {
 
 											} else {
 
-												// Seta o indicador de aceitação
+												// Seta o indicador de aceitaï¿½ï¿½o
 												// do registro do movimento para
-												// 2(NÃO).
+												// 2(Nï¿½O).
 												indicadorAceitacaoRegistroMovimento = 2;
 
 												try {
@@ -1196,9 +1196,9 @@ public class ControladorArrecadacao extends ControladorComum {
 											}
 										} else {
 
-											// Seta o indicador de aceitação do
+											// Seta o indicador de aceitaï¿½ï¿½o do
 											// registro do movimento para
-											// 2(NÃO).
+											// 2(Nï¿½O).
 											indicadorAceitacaoRegistroMovimento = 2;
 
 											this.inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
@@ -1206,8 +1206,8 @@ public class ControladorArrecadacao extends ControladorComum {
 										}
 									} else {
 
-										// Seta o indicador de aceitação do
-										// registro do movimento para 2(NÃO).
+										// Seta o indicador de aceitaï¿½ï¿½o do
+										// registro do movimento para 2(Nï¿½O).
 										indicadorAceitacaoRegistroMovimento = 2;
 
 										this.inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
@@ -1218,8 +1218,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 								case g:
 									/**
-									 * [SF0005] - Processar Registro Código G
-									 * Autor: Sávio Luiz Data: 31/01/2006
+									 * [SF0005] - Processar Registro Cï¿½digo G
+									 * Autor: Sï¿½vio Luiz Data: 31/01/2006
 									 */
 
 									if (aux % 500 == 0) {
@@ -1235,20 +1235,20 @@ public class ControladorArrecadacao extends ControladorComum {
 									dataInvalida = Util.validarAnoMesDiaSemBarra(registroHelperCodigoG.getDataPagamento());
 									if (dataInvalida) {
 										dataExcludentes = true;
-										descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO INVÁLIDA";
+										descricaoOcorrenciaMovimento = "DATA DE Dï¿½BITO/PAGAMENTO INVï¿½LIDA";
 									}
-									// caso a data seja inválida não verifica se
-									// é maior
+									// caso a data seja invï¿½lida nï¿½o verifica se
+									// ï¿½ maior
 									// que a data
 									// atual
 									if (!dataExcludentes) {
 										// verifica se a data de
-										// bedito/pagamento é
+										// bedito/pagamento ï¿½
 										// superior
 										// a atual
 										dataDebito = Util.converteStringInvertidaSemBarraParaDate(registroHelperCodigoG.getDataPagamento());
 										if (dataDebito.after(new Date())) {
-											descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
+											descricaoOcorrenciaMovimento = "DATA DE Dï¿½BITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
 										}
 									}
 									// validar data de credito
@@ -1258,7 +1258,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 										if (dataInvalida) {
 
-											descricaoOcorrenciaMovimento = "DATA DE CRÉDITO INVÁLIDA";
+											descricaoOcorrenciaMovimento = "DATA DE CRï¿½DITO INVï¿½LIDA";
 
 										}
 									}
@@ -1266,7 +1266,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									// valida o valor recebido
 									valorDebitoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoG.getValorRecebido());
 									if (valorDebitoInvalido) {
-										descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NÃO NUMÉRICO";
+										descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO Nï¿½O NUMï¿½RICO";
 									}
 
 									// caso a descricao de movimento seja igual
@@ -1294,7 +1294,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 										indicadorAceitacaoRegistroMovimento = Integer.parseInt(pagamentoHelperCodigoBarras.getIndicadorAceitacaoRegistro());
 
-										// caso o indicador de aceitação for
+										// caso o indicador de aceitaï¿½ï¿½o for
 										// igual a
 										// 1(SIM)
 										Short numeroDiasFloat = null;
@@ -1302,7 +1302,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 										Date dataPrevistaCredito = null;
 
-										// verifica se a data prevista é
+										// verifica se a data prevista ï¿½
 										// zero, se
 										// for calcula a data prevista
 										if (registroHelperCodigoG.getDataPrevistaCredito().equals("")) {
@@ -1321,10 +1321,10 @@ public class ControladorArrecadacao extends ControladorComum {
 										}
 
 										// verifica se a data de
-										// dedito/pagamento é superior a atual
+										// dedito/pagamento ï¿½ superior a atual
 
 										// pesquisa o aviso bancario passando o
-										// código do banco a data de geração
+										// cï¿½digo do banco a data de geraï¿½ï¿½o
 										// do arquivo e a data prevista
 										// calculada
 										AvisoBancario avisoBancario = null;
@@ -1343,7 +1343,7 @@ public class ControladorArrecadacao extends ControladorComum {
 										// valores
 										// calculado e informado do
 										// pagamento e da
-										// devolução
+										// devoluï¿½ï¿½o
 										BigDecimal valorCalcPagamento = new BigDecimal("0.00");
 										BigDecimal valorCalcDevolucao = new BigDecimal("0.00");
 										BigDecimal valorInfPagamento = valorDebito;
@@ -1386,23 +1386,23 @@ public class ControladorArrecadacao extends ControladorComum {
 
 													pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
 
-													// PAGAMENTOS QUE SERÃO
+													// PAGAMENTOS QUE SERï¿½O
 													// INSERIDOS
 													pagamentos.add(pagamento);
 
 												}
 
 												/*
-												 * DEVOLUÇÃO
+												 * DEVOLUï¿½ï¿½O
 												 * 
 												 * Alterado por Raphael Rossiter
 												 * em 31/10/2007 Analista: Aryed
 												 * Lins
 												 * 
-												 * Recupera uma coleção de
-												 * devoluções do caso de uso
+												 * Recupera uma coleï¿½ï¿½o de
+												 * devoluï¿½ï¿½es do caso de uso
 												 * [UC0259] - Processar
-												 * Pagamento com Código de
+												 * Pagamento com Cï¿½digo de
 												 * Barras
 												 */
 												Collection<Devolucao> colecaoDevolucaoCodigoBarras = pagamentoHelperCodigoBarras.getColecaoDevolucao();
@@ -1412,14 +1412,14 @@ public class ControladorArrecadacao extends ControladorComum {
 													for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
 
 														// Adiciona o valor da
-														// devolução
+														// devoluï¿½ï¿½o
 														valorCalcDevolucao = valorCalcDevolucao.add(devolucao.getValorDevolucao());
 
 														devolucao.setAvisoBancario(avisoBancario);
 
 														devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
 
-														// DEVOLUÇÕES QUE SERÃO
+														// DEVOLUï¿½ï¿½ES QUE SERï¿½O
 														// INSERIDAS
 														devolucoes.add(devolucao);
 													}
@@ -1429,12 +1429,12 @@ public class ControladorArrecadacao extends ControladorComum {
 												/*
 												 * PAGAMENTO
 												 * 
-												 * Recupera a coleção de
+												 * Recupera a coleï¿½ï¿½o de
 												 * pagamentos do caso de uso
 												 * [UC0259] - Processar
-												 * Pagamento com Código de
+												 * Pagamento com Cï¿½digo de
 												 * Barras para setar o aviso
-												 * bancário no objeto pagamento
+												 * bancï¿½rio no objeto pagamento
 												 */
 												Collection pagamentosCodigoBarras = pagamentoHelperCodigoBarras.getColecaoPagamentos();
 
@@ -1458,29 +1458,29 @@ public class ControladorArrecadacao extends ControladorComum {
 													 * Seta o valor da data
 													 * prevista para quando for
 													 * inserir o pagamento saber
-													 * de que aviso bancário o
-													 * pagamento está
+													 * de que aviso bancï¿½rio o
+													 * pagamento estï¿½
 													 * relacionado.
 													 */
 													pagamento.setDataPrevistaCreditoHelper(dataPrevistaCredito);
 
-													// PAGAMENTOS QUE SERÃO
+													// PAGAMENTOS QUE SERï¿½O
 													// INSERIDOS
 													pagamentos.add(pagamento);
 
 												}
 
 												/*
-												 * DEVOLUÇÃO
+												 * DEVOLUï¿½ï¿½O
 												 * 
 												 * Alterado por Raphael Rossiter
 												 * em 31/10/2007 Analista: Aryed
 												 * Lins
 												 * 
-												 * Recupera uma coleção de
-												 * devoluções do caso de uso
+												 * Recupera uma coleï¿½ï¿½o de
+												 * devoluï¿½ï¿½es do caso de uso
 												 * [UC0259] - Processar
-												 * Pagamento com Código de
+												 * Pagamento com Cï¿½digo de
 												 * Barras
 												 */
 												Collection<Devolucao> colecaoDevolucaoCodigoBarras = pagamentoHelperCodigoBarras.getColecaoDevolucao();
@@ -1490,7 +1490,7 @@ public class ControladorArrecadacao extends ControladorComum {
 													for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
 
 														// Adiciona o valor da
-														// devolução
+														// devoluï¿½ï¿½o
 														valorCalcDevolucao = valorCalcDevolucao.add(devolucao.getValorDevolucao());
 
 														devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
@@ -1500,13 +1500,13 @@ public class ControladorArrecadacao extends ControladorComum {
 														 * prevista para quando
 														 * for inserir o
 														 * pagamento saber de
-														 * que aviso bancário o
-														 * pagamento está
+														 * que aviso bancï¿½rio o
+														 * pagamento estï¿½
 														 * relacionado.
 														 */
 														devolucao.setDataPrevistaCreditoHelper(dataPrevistaCredito);
 
-														// DEVOLUÇÕES QUE SERÃO
+														// DEVOLUï¿½ï¿½ES QUE SERï¿½O
 														// INSERIDAS
 														devolucoes.add(devolucao);
 													}
@@ -1520,17 +1520,17 @@ public class ControladorArrecadacao extends ControladorComum {
 											 * 13/10/2009 Analista: Rosana
 											 * Carvalho
 											 * 
-											 * Recupera uma coleção de
+											 * Recupera uma coleï¿½ï¿½o de
 											 * pagamentos parciais do caso de
 											 * uso [UC0259] - Processar
-											 * Pagamento com Código de Barras
+											 * Pagamento com Cï¿½digo de Barras
 											 */
 											Collection<ProcessarPagamentoParcialContaHelper> colecaoPagamentosParciaisCodigoBarras = pagamentoHelperCodigoBarras
 													.getColecaoProcessarPagamentoParcialContaHelper();
 
 											if (colecaoPagamentosParciaisCodigoBarras != null && !colecaoPagamentosParciaisCodigoBarras.isEmpty()) {
 
-												// PAGAMENTOS PARCIAIS QUE SERÃO
+												// PAGAMENTOS PARCIAIS QUE SERï¿½O
 												// INSERIDOS
 												pagamentosParciais.addAll(colecaoPagamentosParciaisCodigoBarras);
 											}
@@ -1544,12 +1544,12 @@ public class ControladorArrecadacao extends ControladorComum {
 											ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
 											arrecadadorMovimentoItem.setId(idArrecadadorMovimentoItem);
 
-											// 3.5. Caso contrário, ou seja, o
-											// Indicador de Aceitação do
+											// 3.5. Caso contrï¿½rio, ou seja, o
+											// Indicador de Aceitaï¿½ï¿½o do
 											// Registro do Movimento corresponda
-											// a 2 (NÃO):
+											// a 2 (Nï¿½O):
 											// 3.5.1. E caso exista cliente
-											// fictício para documento não
+											// fictï¿½cio para documento nï¿½o
 											// identificado
 											// (CLIE_IDDOCNAOIDENTIFICADO da
 											// tabela SISTEMA_PARAMETRO com
@@ -1560,12 +1560,12 @@ public class ControladorArrecadacao extends ControladorComum {
 												// 3.5.1.1. O sistema cria um
 												// pagamento para esse cliente
 												// [SB0019 ? Inserir pagamento
-												// para cliente fictício].
+												// para cliente fictï¿½cio].
 												Pagamento pagamentoCliente = this.inserirPagamentosClienteFicticio(registroHelperCodigoG.getValorRecebido(),
 														registroHelperCodigoG.getDataPagamento(), idFormaArrecadacao, dataPrevistaCredito);
 
 												// 3.5.1.2. Adiciona o pagamento
-												// à coleção de pagamentos deste
+												// ï¿½ coleï¿½ï¿½o de pagamentos deste
 												// caso de uso;
 												Collection colecaoPagamentos = new ArrayList();
 												colecaoPagamentos.add(pagamentoCliente);
@@ -1573,13 +1573,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 												// 3.5.1.3. Determina os valores
 												// calculados e informados do
-												// pagamento e da devolução:
+												// pagamento e da devoluï¿½ï¿½o:
 
 												/*
-												 * 3.5.2. Caso já exista o aviso
-												 * bancário o sistema atualiza o
-												 * valor da arrecadação e da
-												 * devolução do aviso bancário
+												 * 3.5.2. Caso jï¿½ exista o aviso
+												 * bancï¿½rio o sistema atualiza o
+												 * valor da arrecadaï¿½ï¿½o e da
+												 * devoluï¿½ï¿½o do aviso bancï¿½rio
 												 */
 												if (avisoBancario != null) {
 
@@ -1602,14 +1602,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 														pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
 
-														// PAGAMENTOS QUE SERÃO
+														// PAGAMENTOS QUE SERï¿½O
 														// INSERIDOS
 														pagamentos.add(pagamento);
 
 													}
 
 													/*
-													 * DEVOLUÇÃO
+													 * DEVOLUï¿½ï¿½O
 													 */
 													Collection<Devolucao> colecaoDevolucaoCodigoBarras = pagamentoHelperCodigoBarras.getColecaoDevolucao();
 
@@ -1618,24 +1618,24 @@ public class ControladorArrecadacao extends ControladorComum {
 														for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
 
 															// Adiciona o valor
-															// da devolução
+															// da devoluï¿½ï¿½o
 															valorCalcDevolucao = valorCalcDevolucao.add(devolucao.getValorDevolucao());
 
 															devolucao.setAvisoBancario(avisoBancario);
 
 															devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
 
-															// DEVOLUÇÕES QUE
-															// SERÃO INSERIDAS
+															// DEVOLUï¿½ï¿½ES QUE
+															// SERï¿½O INSERIDAS
 															devolucoes.add(devolucao);
 														}
 													}
 
 												} else {
-													// 3.5.3. Caso contrário, o
+													// 3.5.3. Caso contrï¿½rio, o
 													// sistema gera uma nova
-													// ocorrência na coleção de
-													// avisos bancários
+													// ocorrï¿½ncia na coleï¿½ï¿½o de
+													// avisos bancï¿½rios
 													/*
 													 * PAGAMENTO
 													 */
@@ -1659,14 +1659,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 														pagamento.setDataPrevistaCreditoHelper(dataPrevistaCredito);
 
-														// PAGAMENTOS QUE SERÃO
+														// PAGAMENTOS QUE SERï¿½O
 														// INSERIDOS
 														pagamentos.add(pagamento);
 
 													}
 
 													/*
-													 * DEVOLUÇÃO
+													 * DEVOLUï¿½ï¿½O
 													 */
 													Collection<Devolucao> colecaoDevolucaoCodigoBarras = pagamentoHelperCodigoBarras.getColecaoDevolucao();
 
@@ -1675,15 +1675,15 @@ public class ControladorArrecadacao extends ControladorComum {
 														for (Devolucao devolucao : colecaoDevolucaoCodigoBarras) {
 
 															// Adiciona o valor
-															// da devolução
+															// da devoluï¿½ï¿½o
 															valorCalcDevolucao = valorCalcDevolucao.add(devolucao.getValorDevolucao());
 
 															devolucao.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
 
 															devolucao.setDataPrevistaCreditoHelper(dataPrevistaCredito);
 
-															// DEVOLUÇÕES QUE
-															// SERÃO INSERIDAS
+															// DEVOLUï¿½ï¿½ES QUE
+															// SERï¿½O INSERIDAS
 															devolucoes.add(devolucao);
 														}
 													}
@@ -1718,11 +1718,11 @@ public class ControladorArrecadacao extends ControladorComum {
 											}
 
 											// se for atualiza o valor da
-											// arrecadação no aviso bancario
+											// arrecadaï¿½ï¿½o no aviso bancario
 
 											avisoBancario.setArrecadadorMovimento(arrecadadorMovimento);
 											avisoBancario.setUltimaAlteracao(new Date());
-											// atualiza o aviso bancário
+											// atualiza o aviso bancï¿½rio
 											try {
 												repositorioUtil.atualizar(avisoBancario);
 											} catch (ErroRepositorioException e) {
@@ -1733,7 +1733,7 @@ public class ControladorArrecadacao extends ControladorComum {
 											// cria um boolean para saber se
 											// existe
 											// algum aviso bancario da
-											// coleção
+											// coleï¿½ï¿½o
 											// com a mesma data prevista da
 											// data
 											// prevista calculada
@@ -1786,31 +1786,31 @@ public class ControladorArrecadacao extends ControladorComum {
 												 * @date 24/10/2013
 												 * @author Adriana Muniz e
 												 *         Wellington Rocha
-												 *         Correção da passagem
-												 *         de paramêtros
+												 *         Correï¿½ï¿½o da passagem
+												 *         de paramï¿½tros
 												 */
 
-												// chama o método para cria
+												// chama o mï¿½todo para cria
 												// o
 												// objeto
-												// do aviso bancário
+												// do aviso bancï¿½rio
 												avisoBancario = gerarOcorrenciaAvisoBancario(arrecadadorMovimento.getId(), registroHelperCodigoA, dataPrevistaCredito,
 														registroHelperCodigoZ.getValorTotalRegistrosArquivo(), registroHelperCodigoA.getCodigoBanco(), valorInfPagamento,
 														valorCalcPagamento, valorCalcDevolucao, valorInfDevolucao, numeroSequencialAvisoBancario, idFormaArrecadacao,
 														indicadorAceitacaoRegistroMovimento, arrecadadorContrato.getCodigoConvenio(), anoMesReferenciaArrecadacao);
 												numeroSequencialAvisoBancario += 1;
 
-												// adiciona o aviso bancário
+												// adiciona o aviso bancï¿½rio
 												// na
-												// coleção de avisos
-												// bancários
+												// coleï¿½ï¿½o de avisos
+												// bancï¿½rios
 												avisosBancarios.add(avisoBancario);
 											}
 										}
 
 									} else {
-										// seta o indicador de aceitação do
-										// registro do movimento para 2(NÃO)
+										// seta o indicador de aceitaï¿½ï¿½o do
+										// registro do movimento para 2(Nï¿½O)
 										indicadorAceitacaoRegistroMovimento = 2;
 
 										inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
@@ -1820,8 +1820,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 								case x:
 									/**
-									 * [SF0007] - Processar Registro Código X
-									 * Autor: Sávio Luiz Data: 21/02/2006
+									 * [SF0007] - Processar Registro Cï¿½digo X
+									 * Autor: Sï¿½vio Luiz Data: 21/02/2006
 									 */
 
 									RegistroHelperCodigoX registroHelperCodigoX = (RegistroHelperCodigoX) distribuirdadosRegistroMovimentoArrecadador(linhaRegistro, null);
@@ -1834,7 +1834,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									} catch (NumberFormatException e) {
 										agencia = null;
 									}
-									// caso exista agencia então atualiza a
+									// caso exista agencia entï¿½o atualiza a
 									// agencia
 									if (agencia != null && !agencia.equals("")) {
 										// nome da agencia
@@ -1860,7 +1860,7 @@ public class ControladorArrecadacao extends ControladorComum {
 										getControladorUtil().atualizar(agencia);
 
 									} else {
-										// caso não exista agencia então cria
+										// caso nï¿½o exista agencia entï¿½o cria
 										// uma
 										// agencia com os dados do arquivo
 										agencia = new Agencia();
@@ -1902,13 +1902,13 @@ public class ControladorArrecadacao extends ControladorComum {
 											null, null, null, null);
 
 									break;
-								// caso não tenha sido nenhuma das opções
+								// caso nï¿½o tenha sido nenhuma das opï¿½ï¿½es
 								// anteriores
 								default:
-									descricaoOcorrenciaMovimento = "CÓDIGO DE MOVIMENTO NÃO IDENTIFICADO";
+									descricaoOcorrenciaMovimento = "Cï¿½DIGO DE MOVIMENTO Nï¿½O IDENTIFICADO";
 
-									// o indicador de aceitação é setado para
-									// 2(NÃO)
+									// o indicador de aceitaï¿½ï¿½o ï¿½ setado para
+									// 2(Nï¿½O)
 									indicadorAceitacaoRegistroMovimento = 2;
 
 									// inseri o item movimento arrecadador
@@ -1918,7 +1918,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								}
 							}
 
-							// verifica se a coleção de registros C é diferente
+							// verifica se a coleï¿½ï¿½o de registros C ï¿½ diferente
 							// de
 							// nulo,null
 							if (colecaoCodigoRegistrosC != null && !colecaoCodigoRegistrosC.isEmpty()) {
@@ -1930,7 +1930,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							}
 
-							// verifica se a coleção de avisos bancario é
+							// verifica se a coleï¿½ï¿½o de avisos bancario ï¿½
 							// diferente
 							// de
 							// nulo
@@ -1942,7 +1942,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									// avisoBancario
 									// .adicionarUsuario(usuario, usuarioAcao);
 									//
-									// inseri o aviso bancário na base e
+									// inseri o aviso bancï¿½rio na base e
 									// recupera o
 									// id
 									Integer idAvisoBancario = (Integer) getControladorUtil().inserir(avisoBancario);
@@ -1952,7 +1952,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								}
 							}
 
-							// PREPARANDO A INSERÇÃO DOS PAGAMENTOS
+							// PREPARANDO A INSERï¿½ï¿½O DOS PAGAMENTOS
 							if (pagamentos != null && !pagamentos.isEmpty()) {
 
 								Collection colecaoPagamentos = new ArrayList();
@@ -1964,9 +1964,9 @@ public class ControladorArrecadacao extends ControladorComum {
 									Pagamento pagamento = (Pagamento) pagamentoIterator.next();
 
 									/*
-									 * Verifica se existe o aviso bancário no
-									 * pagamento, se não existe então seta o
-									 * aviso bancário no pagamento
+									 * Verifica se existe o aviso bancï¿½rio no
+									 * pagamento, se nï¿½o existe entï¿½o seta o
+									 * aviso bancï¿½rio no pagamento
 									 */
 									if (pagamento.getAvisoBancario() == null) {
 
@@ -1978,7 +1978,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 											/*
 											 * Caso a data prevista seja a mesma
-											 * estão seta o aviso bancário no
+											 * estï¿½o seta o aviso bancï¿½rio no
 											 * pagamento.
 											 */
 											boolean comparaDataIguais = Util.datasIguais(avisoBancario.getDataPrevista(), pagamento.getDataPrevistaCreditoHelper());
@@ -1994,7 +1994,7 @@ public class ControladorArrecadacao extends ControladorComum {
 										}
 									}
 
-									// PAGAMENTOS QUE SERÃO INSERIDOS
+									// PAGAMENTOS QUE SERï¿½O INSERIDOS
 									colecaoPagamentos.add(pagamento);
 								}
 
@@ -2011,7 +2011,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								 * 
 								 * Para cada pagamento, atualizar os itens de
 								 * documento de cobranca correspondente Para uso
-								 * do Resumo de Ações de cobranca
+								 * do Resumo de Aï¿½ï¿½es de cobranca
 								 */
 								int contador = 1;
 								int total = colecaoPagamentos.size();
@@ -2031,18 +2031,18 @@ public class ControladorArrecadacao extends ControladorComum {
 									getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirPagamento(pagamento);
 								}
 
-								System.out.println(" >> MovArrec.Finalizou atualização dos itens");
+								System.out.println(" >> MovArrec.Finalizou atualizaï¿½ï¿½o dos itens");
 							}
 
-							// PREPARANDO A INSERÇÃO DAS DEVOLUÇÕES
+							// PREPARANDO A INSERï¿½ï¿½O DAS DEVOLUï¿½ï¿½ES
 							if (devolucoes != null && !devolucoes.isEmpty()) {
 
 								/*
 								 * Colocado por Raphael Rossiter em 29/10/2007
 								 * Analista: Aryed Lins
 								 * 
-								 * OBJ: Este caso de uso ficará responsável pela
-								 * inserção das guias de devolução
+								 * OBJ: Este caso de uso ficarï¿½ responsï¿½vel pela
+								 * inserï¿½ï¿½o das guias de devoluï¿½ï¿½o
 								 */
 								Integer idGuiaDevolucao = null;
 								Collection colecaoDevolucao = new ArrayList();
@@ -2054,8 +2054,8 @@ public class ControladorArrecadacao extends ControladorComum {
 									Devolucao devolucao = (Devolucao) devolucaoIterator.next();
 
 									/*
-									 * Verifica se existe o aviso bancário no
-									 * pagamento, se não existe então seta o
+									 * Verifica se existe o aviso bancï¿½rio no
+									 * pagamento, se nï¿½o existe entï¿½o seta o
 									 * aviso bancario no pagamento
 									 */
 									if (devolucao.getAvisoBancario() == null) {
@@ -2068,7 +2068,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 											/*
 											 * Caso a data prevista seja a mesma
-											 * estão seta o aviso bancário no
+											 * estï¿½o seta o aviso bancï¿½rio no
 											 * pagamento
 											 */
 											boolean comparaDataIguais = Util.datasIguais(devolucao.getDataPrevistaCreditoHelper(), avisoBancario.getDataPrevista());
@@ -2083,15 +2083,15 @@ public class ControladorArrecadacao extends ControladorComum {
 									}
 
 									/*
-									 * Colocado por Sávio Luiz em 14/11/2007
+									 * Colocado por Sï¿½vio Luiz em 14/11/2007
 									 * Analista: Aryed Lins
 									 * 
-									 * OBJ: Este caso de uso ficará responsável
-									 * pela inserção das guias de devolução
+									 * OBJ: Este caso de uso ficarï¿½ responsï¿½vel
+									 * pela inserï¿½ï¿½o das guias de devoluï¿½ï¿½o
 									 */
 									if (devolucao.getGuiaDevolucao() != null) {
 
-										// GERANDO A GUIA DE DEVOLUÇÃO
+										// GERANDO A GUIA DE DEVOLUï¿½ï¿½O
 										idGuiaDevolucao = (Integer) getControladorUtil().inserir(devolucao.getGuiaDevolucao());
 
 										devolucao.getGuiaDevolucao().setId(idGuiaDevolucao);
@@ -2100,12 +2100,12 @@ public class ControladorArrecadacao extends ControladorComum {
 									colecaoDevolucao.add(devolucao);
 								}
 
-								// INSERINDO AS DEVOLUÇÕES
+								// INSERINDO AS DEVOLUï¿½ï¿½ES
 								getControladorBatch().inserirColecaoObjetoParaBatchTransacao(colecaoDevolucao);
 
 							}
 
-							// PREPARANDO A RETIFICAÇÃO DAS CONTAS PARA DAR
+							// PREPARANDO A RETIFICAï¿½ï¿½O DAS CONTAS PARA DAR
 							// BAIXA NOS PAGAMENTOS PARCIAIS
 							if (pagamentosParciais != null && !pagamentosParciais.isEmpty()) {
 
@@ -2140,7 +2140,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 									}
 
-									System.out.println(" >> MovArrec.Finalizou Retificação das Contas");
+									System.out.println(" >> MovArrec.Finalizou Retificaï¿½ï¿½o das Contas");
 
 								} catch (Exception ex) {
 									sessionContext.setRollbackOnly();
@@ -2161,8 +2161,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							}
 
-							// caso a coleção de registros c não está vazia
-							// então
+							// caso a coleï¿½ï¿½o de registros c nï¿½o estï¿½ vazia
+							// entï¿½o
 							// adiciona mais 1 para numero do
 							// sequencial do arquivo de envio.
 							if (colecaoCodigoRegistrosC != null && !colecaoCodigoRegistrosC.isEmpty()) {
@@ -2171,7 +2171,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								arrecadadorContrato.setNumeroSequencialArquivoEnvioDebitoAutomatico(numeroSequencialArquivoEnvioDebitoAutomatico);
 							}
 
-							// atualiza arrecadação contrato na base
+							// atualiza arrecadaï¿½ï¿½o contrato na base
 							try {
 								repositorioArrecadacao.atualizarDadosArrecadadorContrato(arrecadadorContrato, flagEnvioDebitoAutomatico, flagRetornoCodigoBarras,
 										flagRetornoDebitoAutomatico, flagRetornoFichaCompensacao);
@@ -2189,11 +2189,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							pagamentos = new ArrayList();
 							// comentador por: Anderson Italo
 							// data:15/03/2010
-							// motivo: Não faz sentido limpar o
+							// motivo: Nï¿½o faz sentido limpar o
 							// arrecadadorContrato pois
-							// apenas deve existir um, devido ao usuário ter
-							// informado o código do
-							// convênio na tela.
+							// apenas deve existir um, devido ao usuï¿½rio ter
+							// informado o cï¿½digo do
+							// convï¿½nio na tela.
 							// arrecadadorContrato = null;
 							flagEnvioDebitoAutomatico = false;
 							flagRetornoCodigoBarras = false;
@@ -2204,7 +2204,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					}
 				}
-				// caso não exista o registro Z.
+				// caso nï¿½o exista o registro Z.
 				if (!verificaRegistroZ) {
 					throw new ControladorException("atencao.arquivo.movimento.nao.codigo.z");
 				}
@@ -2306,15 +2306,15 @@ public class ControladorArrecadacao extends ControladorComum {
 
 									dataValida = Util.validarDiaMesAnoSemBarraAnoSimples(registroTipo7.getDataLiquidacao());
 									if (!dataValida) {
-										descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO INVÁLIDA";
+										descricaoOcorrenciaMovimento = "DATA DE Dï¿½BITO/PAGAMENTO INVï¿½LIDA";
 									} else {
 										if (registroTipo7.getDataLiquidacaoFormatado().after(new Date())) {
-											descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
+											descricaoOcorrenciaMovimento = "DATA DE Dï¿½BITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
 										}
 									}
 
 									if (Util.validarValorNaoNumerico(registroTipo7.getValorRecebido())) {
-										descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NÃO NUMÉRICO";
+										descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO Nï¿½O NUMï¿½RICO";
 									}
 
 									somatorioValorRecebido = somatorioValorRecebido.add(registroTipo7.getValorRecebidoFormatado());
@@ -2501,13 +2501,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 									break;
 
-								// caso não tenha sido nenhuma das opções
+								// caso nï¿½o tenha sido nenhuma das opï¿½ï¿½es
 								// anteriores
 								default:
-									descricaoOcorrenciaMovimento = "CÓDIGO DE MOVIMENTO NÃO IDENTIFICADO";
+									descricaoOcorrenciaMovimento = "Cï¿½DIGO DE MOVIMENTO Nï¿½O IDENTIFICADO";
 
-									// o indicador de aceitação é setado para
-									// 2(NÃO)
+									// o indicador de aceitaï¿½ï¿½o ï¿½ setado para
+									// 2(Nï¿½O)
 									indicadorAceitacaoRegistroMovimento = 2;
 
 									// inseri o item movimento arrecadador
@@ -2521,14 +2521,14 @@ public class ControladorArrecadacao extends ControladorComum {
 							// ARRECADADOR_MOVIMENTO
 							atualizarValorMovimentoArrecadadorMovimento(arrecadadorMovimento.getId(), somatorioValorRecebido);
 
-							// verifica se a coleção de avisos bancario é
+							// verifica se a coleï¿½ï¿½o de avisos bancario ï¿½
 							// diferente de nulo
 							if (avisosBancarios != null && !avisosBancarios.isEmpty()) {
 								Iterator avisosBancarioIterator = avisosBancarios.iterator();
 								while (avisosBancarioIterator.hasNext()) {
 									AvisoBancario avisoBancario = (AvisoBancario) avisosBancarioIterator.next();
 
-									// insere o aviso bancário na base e
+									// insere o aviso bancï¿½rio na base e
 									// recupera o id
 									Integer idAvisoBancario = (Integer) getControladorUtil().inserir(avisoBancario);
 
@@ -2537,7 +2537,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								}
 							}
 
-							// verifica se a coleção de pagamentos está
+							// verifica se a coleï¿½ï¿½o de pagamentos estï¿½
 							// diferente de nulo
 
 							if (pagamentos != null && !pagamentos.isEmpty()) {
@@ -2549,7 +2549,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									Pagamento pagamento = (Pagamento) pagamentoIterator.next();
 									// verifica se existe o aviso bancario no
 									// pagamento,
-									// se não existe então seta o aviso bancario
+									// se nï¿½o existe entï¿½o seta o aviso bancario
 									// no pagamento
 									if (pagamento.getAvisoBancario() == null || pagamento.getAvisoBancario().equals("")) {
 
@@ -2558,7 +2558,7 @@ public class ControladorArrecadacao extends ControladorComum {
 											AvisoBancario avisoBancario = (AvisoBancario) avisosBancarioIterator.next();
 
 											// caso a data prevista seja a mesma
-											// estão seta o aviso bancário no
+											// estï¿½o seta o aviso bancï¿½rio no
 											// pagamento
 											boolean comparaDataIguais = Util.datasIguais(pagamento.getDataPrevistaCreditoHelper(), avisoBancario.getDataPrevista());
 											if (comparaDataIguais) {
@@ -2578,7 +2578,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 								// Para cada pagamento, atualizar os itens de
 								// documento de cobranca correspondente
-								// Para uso do Resumo de Ações de cobranca
+								// Para uso do Resumo de Aï¿½ï¿½es de cobranca
 								int contador = 1;
 								int total = colecaoPagamentos.size();
 								Iterator iter = colecaoPagamentos.iterator();
@@ -2589,20 +2589,20 @@ public class ControladorArrecadacao extends ControladorComum {
 									Pagamento pagamento = (Pagamento) iter.next();
 									getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(pagamento, CobrancaDebitoSituacao.PAGO);
 
-									// [SB0017] - Verificar correspondência do
-									// pagamento com item de cobrança ou de
-									// negativação
+									// [SB0017] - Verificar correspondï¿½ncia do
+									// pagamento com item de cobranï¿½a ou de
+									// negativaï¿½ï¿½o
 									getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirPagamento(pagamento);
 
 								}
 
-								System.out.println(" >> MovArrec.Finalizou atualização dos itens");
+								System.out.println(" >> MovArrec.Finalizou atualizaï¿½ï¿½o dos itens");
 
 							}
 
 							arrecadadorContrato.setNumeroSequencialArquivoRetornoFichaCompensacao(Integer.valueOf(registroHeader.getSequencialRetorno()));
 
-							// atualiza arrecadação contrato na base
+							// atualiza arrecadaï¿½ï¿½o contrato na base
 							try {
 								repositorioArrecadacao.atualizarDadosArrecadadorContrato(arrecadadorContrato, flagEnvioDebitoAutomatico, flagRetornoCodigoBarras,
 										flagRetornoDebitoAutomatico, flagRetornoFichaCompensacao);
@@ -2614,7 +2614,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 				}
 
-				// caso não exista o registro 9.
+				// caso nï¿½o exista o registro 9.
 				if (!verificaRegistro9) {
 					throw new ControladorException("atencao.arquivo.movimento.nao.codigo.z");
 				}
@@ -2662,8 +2662,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		if (sucesso) {
 			EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.REGISTRAR_MOVIMENTO_ARRECADADORES_PDF);
 
-			// Parte que gera o relatório e envia por email cria uma instância
-			// da classe do relatório
+			// Parte que gera o relatï¿½rio e envia por email cria uma instï¿½ncia
+			// da classe do relatï¿½rio
 			RelatorioMovimentoArrecadador relatorioMovimentoArrecadador = new RelatorioMovimentoArrecadador(usuario);
 
 			Collection arrecadadores = new ArrayList();
@@ -2838,7 +2838,7 @@ public class ControladorArrecadacao extends ControladorComum {
     /**
      * [UC0242] - Registrar Movimento dos Arrecadadores
      *
-     * [SF0003] - Processar Registro Código B
+     * [SF0003] - Processar Registro Cï¿½digo B
      *
      * @author Raphael Rossiter
      * @date 11/11/2008
@@ -2854,17 +2854,17 @@ public class ControladorArrecadacao extends ControladorComum {
     		ArrecadadorMovimento arrecadadorMovimento) throws ControladorException{
     	
     	/**
-         * [SF0003] - Processar Registro Código B 
-         * Autor: Sávio Luiz, Raphael Rossiter 
+         * [SF0003] - Processar Registro Cï¿½digo B 
+         * Autor: Sï¿½vio Luiz, Raphael Rossiter 
          * Data: 31/01/2006, 11/11/2008
          */
     	RegistroHelperCodigoC registroHelperCodigoC = null;
     	
-    	//cria uma variavel da descrição da ocorrencia do
+    	//cria uma variavel da descriï¿½ï¿½o da ocorrencia do
         // movimento com o valor setado para OK
         String descricaoOcorrenciaMovimento = "OK";
         
-        // cria uma variavel do indicador de aceitação do registro do movimento
+        // cria uma variavel do indicador de aceitaï¿½ï¿½o do registro do movimento
         int indicadorAceitacaoRegistroMovimento = 1;
 
         boolean dataInvalida = false;
@@ -2876,11 +2876,11 @@ public class ControladorArrecadacao extends ControladorComum {
         RegistroHelperCodigoB registroHelperCodigoB = (RegistroHelperCodigoB) 
         distribuirdadosRegistroMovimentoArrecadador(linhaRegistro, null);
 
-        // verifica se o código de movimento é diferente de null
+        // verifica se o cï¿½digo de movimento ï¿½ diferente de null
         if (!registroHelperCodigoB.getCodigoMovimento().equals(RegistroHelperCodigoB.EXCLUSAO_DEBITO_AUTOMATICO) && 
         	!registroHelperCodigoB.getCodigoMovimento().equals(RegistroHelperCodigoB.INCLUSAO_DEBITO_AUTOMATICO)) {
             
-        	descricaoOcorrenciaMovimento = "CÓDIGO DE MOVIMENTO INVÁLIDO";
+        	descricaoOcorrenciaMovimento = "Cï¿½DIGO DE MOVIMENTO INVï¿½LIDO";
 
         }
         
@@ -2888,55 +2888,55 @@ public class ControladorArrecadacao extends ControladorComum {
         dataInvalida = Util.validarAnoMesDiaSemBarra(registroHelperCodigoB
                         .getDataOpcaoExclusao());
         if (dataInvalida) {
-            descricaoOcorrenciaMovimento = "DATA DE OPÇÃO/EXCLUSÃO INVÁLIDA";
+            descricaoOcorrenciaMovimento = "DATA DE OPï¿½ï¿½O/EXCLUSï¿½O INVï¿½LIDA";
         }
         
-        // Valida código para debito automático
+        // Valida cï¿½digo para debito automï¿½tico
         codigoDebitoAutomaticoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoB.getIdClienteEmpresa());
         
         if(codigoDebitoAutomaticoInvalido){
-        	descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
+        	descricaoOcorrenciaMovimento = "Cï¿½DIGO PARA Dï¿½BITO AUTOMï¿½TICO INVï¿½LIDO";
         }
         
         // caso a descricao de movimento seja igual a OK
         if (descricaoOcorrenciaMovimento.equals("OK")){
             
         	
-        	//Código do banco
+        	//Cï¿½digo do banco
             String codigoBanco = registroHelperCodigoA.getCodigoBanco();
             
             /*
-             * Alterado por Sávio Luiz Data: 24/04/09
+             * Alterado por Sï¿½vio Luiz Data: 24/04/09
              * Caso o banco que veio no arquivo seja diferente do idArrecador da tabela arrecadador_contrato, passar
-             *  como código do banco o id do arrecadador.
+             *  como cï¿½digo do banco o id do arrecadador.
              */ 
             String idArrecadadorBanco = registroHelperCodigoA.getIdArrecadadorBanco();
             if(idArrecadadorBanco != null && !idArrecadadorBanco.equals(codigoBanco)){
             	codigoBanco = idArrecadadorBanco;
             }
             
-            // Código da agencia
+            // Cï¿½digo da agencia
             String codigoAgencia = registroHelperCodigoB.getAgenciaDebito();
             
-            // identificação do cliente no banco
+            // identificaï¿½ï¿½o do cliente no banco
             String identificacaoCliente = registroHelperCodigoB.getIdClienteBanco();
 
             Date dataExcluso = Util.converteStringInvertidaSemBarraParaDate(
             registroHelperCodigoB.getDataOpcaoExclusao());
         	
-            // Comentado Para inclusão da nova forma de obter a matricula do
+            // Comentado Para inclusï¿½o da nova forma de obter a matricula do
         	// imovel atravez do coigo do debito automatico.
           	//
         	// Author:Hugo Amorim Data:22/03/2010 
         	//
-        	// matricula do imóvel com os 8 primeiros
-            // digitos da identificação do cliente na empresa
+        	// matricula do imï¿½vel com os 8 primeiros
+            // digitos da identificaï¿½ï¿½o do cliente na empresa
             //matriculaImovel = this.recuperarMatriculaImovel(registroHelperCodigoB.getIdClienteEmpresa());
             
         	/*
         	 * Alterado por Raphael Rossiter em 04/08/2010
-        	 * OBJ: Não aceitar os movimentos que venham com a MATRÍCULA DO IMÓVEL no local do CÓDIGO DE DÉBITO AUTOMATICO para os 
-        	 * casos de inclusão de débito automatico, 
+        	 * OBJ: Nï¿½o aceitar os movimentos que venham com a MATRï¿½CULA DO IMï¿½VEL no local do Cï¿½DIGO DE Dï¿½BITO AUTOMATICO para os 
+        	 * casos de inclusï¿½o de dï¿½bito automatico, 
         	 */
             codigoDebitoAutomatico = this.recuperarMatriculaImovel(registroHelperCodigoB.getIdClienteEmpresa());
         	
@@ -2968,24 +2968,24 @@ public class ControladorArrecadacao extends ControladorComum {
          			Imovel imovel = (Imovel) colecaoImoveis.iterator().next();
     	     		matriculaImovel = imovel.getId();
     	     		
-    	     		//Processar inclusão
+    	     		//Processar inclusï¿½o
                     descricaoOcorrenciaMovimento = this.getControladorCobranca()
                     .inserirDebitoAutomatico(matriculaImovel.toString(), codigoBanco, codigoAgencia, identificacaoCliente, dataExcluso);
          		}
          		else{
          			
-         			descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
+         			descricaoOcorrenciaMovimento = "Cï¿½DIGO PARA Dï¿½BITO AUTOMï¿½TICO INVï¿½LIDO";
          		}
             }
      		
-            // caso a descricao de movimento não seja igual a OK
+            // caso a descricao de movimento nï¿½o seja igual a OK
             if (!descricaoOcorrenciaMovimento.equals("OK")) {
-                // seta o indicador de aceitação do registro do movimento para 2(NÃO)
+                // seta o indicador de aceitaï¿½ï¿½o do registro do movimento para 2(Nï¿½O)
                 indicadorAceitacaoRegistroMovimento = 2;
 
-                // adiciona a linha do registro na colecao codigoRegistrosC quando o método
-                // distribuirdadosRegistroMovimentoArrecadador é chamado passando
-                // a descricaoOcorrenciaMovimento então é retornado um registro do tipo C
+                // adiciona a linha do registro na colecao codigoRegistrosC quando o mï¿½todo
+                // distribuirdadosRegistroMovimentoArrecadador ï¿½ chamado passando
+                // a descricaoOcorrenciaMovimento entï¿½o ï¿½ retornado um registro do tipo C
                 registroHelperCodigoC = (RegistroHelperCodigoC) 
                     distribuirdadosRegistroMovimentoArrecadador(linhaRegistro, descricaoOcorrenciaMovimento);
 
@@ -2993,13 +2993,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
         } 
         else {
-            // seta o indicador de aceitação do registro
-            // do movimento para 2(NÃO)
+            // seta o indicador de aceitaï¿½ï¿½o do registro
+            // do movimento para 2(Nï¿½O)
             indicadorAceitacaoRegistroMovimento = 2;
 
-            // adiciona a linha do registro na colecao codigoRegistrosC quando o método
-            // distribuirdadosRegistroMovimentoArrecadador é chamado passando
-            // a descricaoOcorrenciaMovimento então é retornado um registro do tipo C
+            // adiciona a linha do registro na colecao codigoRegistrosC quando o mï¿½todo
+            // distribuirdadosRegistroMovimentoArrecadador ï¿½ chamado passando
+            // a descricaoOcorrenciaMovimento entï¿½o ï¿½ retornado um registro do tipo C
             registroHelperCodigoC = (RegistroHelperCodigoC) distribuirdadosRegistroMovimentoArrecadador(
                     linhaRegistro, descricaoOcorrenciaMovimento);
         }
@@ -3042,7 +3042,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer idArrecadador) throws ControladorException {
 
 		/**
-		 * [SF0001] - Validar Arquivo de Movimento de Arrecadador Autor: Sávio
+		 * [SF0001] - Validar Arquivo de Movimento de Arrecadador Autor: Sï¿½vio
 		 * Luiz Data: 31/01/2006
 		 */
 		RegistroHelperCodigoA registroHelperCodigoA = null;
@@ -3050,7 +3050,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		SistemaParametro sistemaParametro = this.getControladorUtil()
 				.pesquisarParametrosDoSistema();
 
-		// verifica se o código do registro é diferente de "A", caso
+		// verifica se o cï¿½digo do registro ï¿½ diferente de "A", caso
 		// seja encerra o caso de uso
 		if (!codigoRegistro.toUpperCase().equals("A")) {
 			throw new ControladorException(
@@ -3058,12 +3058,12 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 		registroHelperCodigoA = (RegistroHelperCodigoA) distribuirdadosRegistroMovimentoArrecadador(
 				linha, null);
-		// verifica se o código da remessa é diferente de 2 caso
+		// verifica se o cï¿½digo da remessa ï¿½ diferente de 2 caso
 		// seja encerra o caso de uso
 		if (!registroHelperCodigoA.getCodigoRemessa().equals("2")) {
 			throw new ControladorException("atencao.codigo.remessa.invalido");
 		}
-		// verifica se o código do banco é diferente do codigo do
+		// verifica se o cï¿½digo do banco ï¿½ diferente do codigo do
 		// arrecadador caso seja encerra o caso de uso
 		Short codigoBancoTxt = new Short(registroHelperCodigoA.getCodigoBanco()
 				.trim());
@@ -3072,7 +3072,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			throw new ControladorException("atencao.movimento.nao.arrecadador",
 					null, "" + codigoArrecadador, nomeArrecadador);
 		}
-		// verifica se o layout é diferente do layout da tabela
+		// verifica se o layout ï¿½ diferente do layout da tabela
 		// sistemaParematros
 		Short versaoLayoutTxt = new Short(registroHelperCodigoA
 				.getVersaoLayout().trim());
@@ -3080,11 +3080,11 @@ public class ControladorArrecadacao extends ControladorComum {
 			throw new ControladorException("atencao.versao.arquivo.incalida");
 		}
 
-		// verifica se o tipo de movimento do txt é diferente nulo
+		// verifica se o tipo de movimento do txt ï¿½ diferente nulo
 		if (registroHelperCodigoA.getTipoMovimento() != null
 				&& !registroHelperCodigoA.getTipoMovimento().equals("")) {
 
-			// verifica se o tipo de movimento selecionado é
+			// verifica se o tipo de movimento selecionado ï¿½
 			// diferente do tipo de movimento do txt
 			if (!idTipoMovimento.equals("CODIGO DE BARRAS")) {
 				if (!registroHelperCodigoA.getTipoMovimento().trim().equals(
@@ -3101,8 +3101,8 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 		} else {
-			// nesse caso só pode ser CODIGO BARRAS então faz a
-			// verificacao se o tipo selecionado é diferente de DEBITO
+			// nesse caso sï¿½ pode ser CODIGO BARRAS entï¿½o faz a
+			// verificacao se o tipo selecionado ï¿½ diferente de DEBITO
 			// AUTOMATICO
 			if (idTipoMovimento.equals("DEBITO AUTOMATICO")) {
 				throw new ControladorException(
@@ -3110,9 +3110,9 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 		}
 
-		// verifica o numero sequencial do txt se está de acordo com o da base
-		// verifica se o arrecadadorContrato é diferente de nulo , para
-		// não ficar fazendo essa pesquisa varias vezes
+		// verifica o numero sequencial do txt se estï¿½ de acordo com o da base
+		// verifica se o arrecadadorContrato ï¿½ diferente de nulo , para
+		// nï¿½o ficar fazendo essa pesquisa varias vezes
 		//if (arrecadadorContrato == null) {
 
 		//	arrecadadorContrato = this
@@ -3191,7 +3191,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * [UC0242] - Registrar Movimento dos Arrecadadores
 	 * 
 	 * [SF0011] - Validar Arquivo de Movimento de Arrecadador da Ficha de
-	 * Compensação
+	 * Compensaï¿½ï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 10/11/2008
@@ -3211,25 +3211,25 @@ public class ControladorArrecadacao extends ControladorComum {
     		Integer numeroSequecialArquivoRetornoFichaComp,Integer idArrecadador) throws ControladorException {
     	
     	/**
-         * [SF0011] - Validar Arquivo de Movimento de Arrecadador da Ficha de Compensação
+         * [SF0011] - Validar Arquivo de Movimento de Arrecadador da Ficha de Compensaï¿½ï¿½o
          * Autor: Vivianne Sousa
          * Data: 26/11/2007
          */
     	RegistroHelperCodigo0 registroHelperCodigo0 = null;
 
-        //1. verifica se o código do registro é diferente de "0", 
+        //1. verifica se o cï¿½digo do registro ï¿½ diferente de "0", 
         // caso seja encerra o caso de uso
         if (!codigoRegistro.toUpperCase().equals("0")) {
             throw new ControladorException("atencao.arquivo.movimento.sem.header");
         }
 		registroHelperCodigo0 = (RegistroHelperCodigo0) 
 		    distribuirdadosRegistroMovimentoArrecadadorFichaCompensacao(linha, null);
-        //2. verifica se o código da remessa é diferente de 2,
+        //2. verifica se o cï¿½digo da remessa ï¿½ diferente de 2,
         // caso seja encerra o caso de uso
         if (!registroHelperCodigo0.getCodigoRemessaRetorno().equals("2")) {
             throw new ControladorException("atencao.codigo.remessa.invalido");
         }
-        //3. verifica se o código do banco é diferente do codigo do
+        //3. verifica se o cï¿½digo do banco ï¿½ diferente do codigo do
         // arrecadador caso seja encerra o caso de uso
         Short codigoBancoTxt = new Short(registroHelperCodigo0.getCodigoBancoCompensacao().trim());
 
@@ -3237,15 +3237,15 @@ public class ControladorArrecadacao extends ControladorComum {
             throw new ControladorException("atencao.movimento.nao.arrecadador", null, ""
                             + codigoArrecadador, nomeArrecadador);
         }
-        //4. verifica se o lote de serviço é diferente de 0000 caso
+        //4. verifica se o lote de serviï¿½o ï¿½ diferente de 0000 caso
         // seja encerra o caso de uso
         if (!registroHelperCodigo0.getLoteServico().equals("0000")) {
             throw new ControladorException("atencao.lote.nao.corresponde.header");
         }
         
-        //5. verifica o numero sequencial do txt se está de acordo com o da base
-        // verifica se o arrecadadorContrato é diferente de nulo , para
-        // não ficar fazendo essa pesquisa varias vezes
+        //5. verifica o numero sequencial do txt se estï¿½ de acordo com o da base
+        // verifica se o arrecadadorContrato ï¿½ diferente de nulo , para
+        // nï¿½o ficar fazendo essa pesquisa varias vezes
         //if (arrecadadorContrato == null) {
         	
     	arrecadadorContrato = this.obterArrecadadorContrato(arrecadadorContrato.getId());
@@ -3272,10 +3272,10 @@ public class ControladorArrecadacao extends ControladorComum {
     
 	/**
 	 * [UC0262] - Distribuir dados do Registro de Movimento do Arrecadador
-	 * Autor: Sávio Luiz Data: 30/01/2006
+	 * Autor: Sï¿½vio Luiz Data: 30/01/2006
 	 * 
-	 * Caso a descrição de Ocorrencia venha nula então recupera o código
-	 * registro da linha senão então seta o valor de código registro para 'C'
+	 * Caso a descriï¿½ï¿½o de Ocorrencia venha nula entï¿½o recupera o cï¿½digo
+	 * registro da linha senï¿½o entï¿½o seta o valor de cï¿½digo registro para 'C'
 	 */
 
 	public Object A(String linha, String descricaoOcorrencia, String a)
@@ -3284,8 +3284,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		// inicializa a variavel como 0
 		char codigoRegistro = '0';
-		// se a descrição da ocorrencia for diferente de null
-		// então é para setar o objeto registroHelperCodigoC
+		// se a descriï¿½ï¿½o da ocorrencia for diferente de null
+		// entï¿½o ï¿½ para setar o objeto registroHelperCodigoC
 		if (descricaoOcorrencia != null) {
 			codigoRegistro = 'C';
 		} else {
@@ -3301,7 +3301,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			// recupera o codigo da remessa
 			registroHelperCodigoA
 					.setCodigoRemessa(linha.substring(1, 2).trim());
-			// recupera o código do convênio
+			// recupera o cï¿½digo do convï¿½nio
 			registroHelperCodigoA.setCodigoConvenio(linha.substring(2, 22)
 					.trim());
 			// recupera o nome da empresa
@@ -3312,13 +3312,13 @@ public class ControladorArrecadacao extends ControladorComum {
 					.setCodigoBanco(linha.substring(42, 45).trim());
 			// recupera o nome do banco
 			registroHelperCodigoA.setNomeBanco(linha.substring(45, 65).trim());
-			// recupera a data de geração do arquivo
+			// recupera a data de geraï¿½ï¿½o do arquivo
 			registroHelperCodigoA.setDataGeracaoArquivo(linha.substring(65, 73)
 					.trim());
 			// recupera o numero sequencial do arquivo(NSA)
 			registroHelperCodigoA.setNumeroSequencialArquivo(linha.substring(
 					73, 79).trim());
-			// recupera a versão do layout
+			// recupera a versï¿½o do layout
 			registroHelperCodigoA.setVersaoLayout(linha.substring(79, 81)
 					.trim());
 			// recupera o tipo de movimento
@@ -3342,16 +3342,16 @@ public class ControladorArrecadacao extends ControladorComum {
 			RegistroHelperCodigoB registroHelperCodigoB = new RegistroHelperCodigoB();
 			// recupera o codigo do registro
 			registroHelperCodigoB.setCodigoRegistro("" + codigoRegistro);
-			// recupera a identificação do cliente na empresa
+			// recupera a identificaï¿½ï¿½o do cliente na empresa
 			registroHelperCodigoB.setIdClienteEmpresa(linha.substring(1, 26)
 					.trim());
 			// recupera a agencia para debito
 			registroHelperCodigoB.setAgenciaDebito(linha.substring(26, 30)
 					.trim());
-			// recupera o identificação do cliente no banco
+			// recupera o identificaï¿½ï¿½o do cliente no banco
 			registroHelperCodigoB.setIdClienteBanco(linha.substring(30, 44)
 					.trim());
-			// recupera a data de Opção/Exclusão
+			// recupera a data de Opï¿½ï¿½o/Exclusï¿½o
 			registroHelperCodigoB.setDataOpcaoExclusao(linha.substring(44, 52)
 					.trim());
 			// recupera o reservado para o futuro
@@ -3370,16 +3370,16 @@ public class ControladorArrecadacao extends ControladorComum {
 			RegistroHelperCodigoC registroHelperCodigoC = new RegistroHelperCodigoC();
 			// recupera o codigo do registro
 			registroHelperCodigoC.setCodigoRegistro("" + codigoRegistro);
-			// recupera a identificação do cliente na empresa
+			// recupera a identificaï¿½ï¿½o do cliente na empresa
 			registroHelperCodigoC.setIdClienteEmpresa(linha.substring(1, 26)
 					.trim());
 			// recupera a agencia para debito
 			registroHelperCodigoC.setAgenciaDebito(linha.substring(26, 30)
 					.trim());
-			// recupera o identificação do cliente no banco
+			// recupera o identificaï¿½ï¿½o do cliente no banco
 			registroHelperCodigoC.setIdClienteBanco(linha.substring(30, 44)
 					.trim());
-			// recupera a descrição da ocorrencia do movimento
+			// recupera a descriï¿½ï¿½o da ocorrencia do movimento
 			registroHelperCodigoC
 					.setDescricaoOcorrenciaMovimento(descricaoOcorrencia);
 			// recupera os brancos
@@ -3400,13 +3400,13 @@ public class ControladorArrecadacao extends ControladorComum {
 			RegistroHelperCodigoE registroHelperCodigoE = new RegistroHelperCodigoE();
 			// recupera o codigo do registro
 			registroHelperCodigoE.setCodigoRegistro("" + codigoRegistro);
-			// recupera a identificação do cliente na empresa
+			// recupera a identificaï¿½ï¿½o do cliente na empresa
 			registroHelperCodigoE.setIdClienteEmpresa(linha.substring(1, 26)
 					.trim());
 			// recupera a agencia para debito
 			registroHelperCodigoE.setAgenciaDebito(linha.substring(26, 30)
 					.trim());
-			// recupera o identificação do cliente no banco
+			// recupera o identificaï¿½ï¿½o do cliente no banco
 			registroHelperCodigoE.setIdClienteBanco(linha.substring(30, 44)
 					.trim());
 			// recupera a data do debito
@@ -3417,7 +3417,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			// recupera o codigo da moeda
 			registroHelperCodigoE
 					.setCodigoMoeda(linha.substring(67, 69).trim());
-			// recupera o código de movimento
+			// recupera o cï¿½digo de movimento
 			registroHelperCodigoE.setAnoMesReferenciaConta(linha.substring(69,
 					75).trim());
 			// recupera o digito verificado no modulo dez(10) do ano e mes
@@ -3433,7 +3433,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					.trim());
 			if (!linha.substring(149, 150).trim().equals("*")) {
 				// recupera o codigo do movimento enviado no registro de
-				// código
+				// cï¿½digo
 				// E
 				registroHelperCodigoE.setCodigoMovimento(linha.substring(149,
 						150).trim());
@@ -3446,13 +3446,13 @@ public class ControladorArrecadacao extends ControladorComum {
 			RegistroHelperCodigoF registroHelperCodigoF = new RegistroHelperCodigoF();
 			// recupera o codigo do registro
 			registroHelperCodigoF.setCodigoRegistro("" + codigoRegistro);
-			// recupera a identificação do cliente na empresa
+			// recupera a identificaï¿½ï¿½o do cliente na empresa
 			registroHelperCodigoF.setIdClienteEmpresa(linha.substring(1, 26)
 					.trim());
 			// recupera a agencia para debito
 			registroHelperCodigoF.setAgenciaDebito(linha.substring(26, 30)
 					.trim());
-			// recupera o identificação do cliente no banco
+			// recupera o identificaï¿½ï¿½o do cliente no banco
 			registroHelperCodigoF.setIdClienteBanco(linha.substring(30, 44)
 					.trim());
 			// recupera a data do debito
@@ -3479,7 +3479,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					.trim());
 			if (!linha.substring(149, 150).trim().equals("*")) {
 				// recupera o codigo do movimento enviado no registro de
-				// código
+				// cï¿½digo
 				// F
 				registroHelperCodigoF.setCodigoMovimento(linha.substring(149,
 						150).trim());
@@ -3492,7 +3492,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			RegistroHelperCodigoG registroHelperCodigoG = new RegistroHelperCodigoG();
 			// recupera o codigo do registro
 			registroHelperCodigoG.setCodigoRegistro("" + codigoRegistro);
-			// recupera a identificação da agencia /conta/digito creditada
+			// recupera a identificaï¿½ï¿½o da agencia /conta/digito creditada
 			registroHelperCodigoG.setIdAgenciaContaDigito(linha
 					.substring(1, 21).trim());
 			// recupera a data de pagamento(AAAAMMDD)
@@ -3501,10 +3501,10 @@ public class ControladorArrecadacao extends ControladorComum {
 			// recupera a data prevista para o credito(AAAAMMDD)
 			registroHelperCodigoG.setDataPrevistaCredito(linha
 					.substring(29, 37).trim());
-			// recupera O CÓDIGO DE BARRAS
+			// recupera O Cï¿½DIGO DE BARRAS
 			String codigoBarras = linha.substring(37, 81).trim();
 			RegistroHelperCodigoBarras registroHelperCodigoBarras = distribuirDadosCodigoBarras(codigoBarras);
-			// seta também o código de barra como string
+			// seta tambï¿½m o cï¿½digo de barra como string
 			registroHelperCodigoG.setCodigoBarras(codigoBarras);
 			registroHelperCodigoG
 					.setRegistroHelperCodigoBarras(registroHelperCodigoBarras);
@@ -3520,11 +3520,11 @@ public class ControladorArrecadacao extends ControladorComum {
 			// recupera o codigo da agencia arrecadadora
 			registroHelperCodigoG.setCodigoAgenciaArrecadadora(linha.substring(
 					108, 116).trim());
-			// recupera a foma de arrecadação/captura
+			// recupera a foma de arrecadaï¿½ï¿½o/captura
 			registroHelperCodigoG.setFormaArrecadacao(linha.substring(116, 117)
 					.trim());
-			// recupera o numero de autenticação caixa ou código de
-			// transação
+			// recupera o numero de autenticaï¿½ï¿½o caixa ou cï¿½digo de
+			// transaï¿½ï¿½o
 			registroHelperCodigoG.setNumeroAutenticacao(linha.substring(117,
 					140).trim());
 			// recupera a forma de pagamento
@@ -3548,7 +3548,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			RegistroHelperCodigoX registroHelperCodigoX = new RegistroHelperCodigoX();
 			// recupera o codigo do registro
 			registroHelperCodigoX.setCodigoRegistro("" + codigoRegistro);
-			// recupera o código agencia
+			// recupera o cï¿½digo agencia
 			registroHelperCodigoX.setCodigoAgencia(linha.substring(1, 5));
 			// recupera o nome da agencia
 			registroHelperCodigoX.setNomeAgencia(linha.substring(5, 35));
@@ -3556,16 +3556,16 @@ public class ControladorArrecadacao extends ControladorComum {
 			registroHelperCodigoX.setNomelogradouro(linha.substring(35, 65));
 			// recupera o numero
 			registroHelperCodigoX.setNumero(linha.substring(65, 70));
-			// recupera o código do cep
+			// recupera o cï¿½digo do cep
 			registroHelperCodigoX.setCodigoCep(linha.substring(70, 75));
 			// recupera o sufixo do cep
 			registroHelperCodigoX.setSufixoCep(linha.substring(75, 78));
 			// recupera o nome da cidade
 			registroHelperCodigoX.setNomeCidade(linha.substring(78, 98));
-			// recupera a sigla da unidade federação
+			// recupera a sigla da unidade federaï¿½ï¿½o
 			registroHelperCodigoX.setSiglaUnidadeFederacao(linha.substring(98,
 					100));
-			// recupera a situação da agencia
+			// recupera a situaï¿½ï¿½o da agencia
 			registroHelperCodigoX.setCodigoAgencia(linha.substring(100, 101));
 			if (linha.substring(149, 150).trim().equals("*")) {
 				// recupera o reservado para o futuro
@@ -3609,7 +3609,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * [UC0242] - Registrar Movimento dos Arrecadadores [SF0009] - Inserir o
-	 * item de movimento do arrecadador Autor: Sávio Luiz Data: 30/01/2006
+	 * item de movimento do arrecadador Autor: Sï¿½vio Luiz Data: 30/01/2006
 	 */
 	public Integer inserirItemMovimentoArrecadador(String linhaRegistro,
 			Integer idMovimento, String descricaoOcorrencia,
@@ -3667,7 +3667,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 * 
 	 * CONTA
 	 * 
@@ -3706,7 +3706,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento1());
 
 		if (idLocalidadeInvalida) {
-			descricaoOcorrencia = "CÓDIGO DA LOCALIDADE NÃO NUMÉRICA";
+			descricaoOcorrencia = "Cï¿½DIGO DA LOCALIDADE Nï¿½O NUMï¿½RICA";
 		}
 
 		matriculaImovelInvalida = Util
@@ -3715,11 +3715,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento2());
 
 		if (matriculaImovelInvalida) {
-			descricaoOcorrencia = "MÁTRICULA DO IMÓVEL INVÁLIDA";
+			descricaoOcorrencia = "Mï¿½TRICULA DO IMï¿½VEL INVï¿½LIDA";
 		} else {
 
 			/*
-			 * Verifica se existe a matricula do imóvel na base
+			 * Verifica se existe a matricula do imï¿½vel na base
 			 */
 			matriculaImovel = new Integer(registroHelperCodigoBarras
 					.getRegistroHelperCodigoBarrasTipoPagamento()
@@ -3738,7 +3738,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			 * Se o id do imovel pesquisado na base for diferente de nulo
 			 */
 			if (idImovelNaBase == null) {
-				descricaoOcorrencia = "MATRÍCULA DO IMÓVEL NÃO CADASTRADA";
+				descricaoOcorrencia = "MATRï¿½CULA DO IMï¿½VEL Nï¿½O CADASTRADA";
 			}
 		}
 
@@ -3759,11 +3759,11 @@ public class ControladorArrecadacao extends ControladorComum {
 			anoMesReferencia = Util.validarAnoMesSemBarra("" + anoMes);
 
 			if (anoMesReferencia) {
-				descricaoOcorrencia = "ANO/MÊS DE REFERÊNCIA DA CONTA INVÁLIDA";
+				descricaoOcorrencia = "ANO/Mï¿½S DE REFERï¿½NCIA DA CONTA INVï¿½LIDA";
 			}
 
 		} else {
-			descricaoOcorrencia = "ANO/MÊS DE REFERÊNCIA DA CONTA INVÁLIDA";
+			descricaoOcorrencia = "ANO/Mï¿½S DE REFERï¿½NCIA DA CONTA INVï¿½LIDA";
 		}
 
 		if (descricaoOcorrencia.equals("OK")) {
@@ -3793,8 +3793,8 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 			/*
              * Alterado por Raphael Rossiter em 09/01/2008 - Analistas: Eduardo e Aryed
-             * OBJ: Gerar os pagamentos associados com a localidade da conta e NÃO com
-             * a localidade do imóvel.
+             * OBJ: Gerar os pagamentos associados com a localidade da conta e Nï¿½O com
+             * a localidade do imï¿½vel.
              */
 			if (idConta == null || idConta.equals("")) {
 				descricaoOcorrencia = "CONTA INEXISTENTE";
@@ -3824,7 +3824,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			/*
 			 * Caso o ano mes da data de dedito seja maior que o ano mes de
-			 * arrecadação da tabela sistema parametro então seta o ano mes da
+			 * arrecadaï¿½ï¿½o da tabela sistema parametro entï¿½o seta o ano mes da
 			 * data de debito
 			 */
 			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
@@ -3834,7 +3834,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			} else {
 
 				/*
-				 * caso contrario seta o o ano mes arrecadação da tabela sistema
+				 * caso contrario seta o o ano mes arrecadaï¿½ï¿½o da tabela sistema
 				 * parametro
 				 */
 				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
@@ -3847,7 +3847,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			pagamento.setPagamentoSituacaoAnterior(null);
 			pagamento.setDebitoTipo(null);
 
-			// Verifica se o id da conta é diferente de nulo
+			// Verifica se o id da conta ï¿½ diferente de nulo
 			if (idConta != null) {
 				pagamentoHelperCodigoBarras.setIdDocumento(idConta);
 				
@@ -3861,7 +3861,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 			pagamento.setGuiaPagamento(null);
 
-			// verifica se o id da conta é diferente de nulo
+			// verifica se o id da conta ï¿½ diferente de nulo
 			if (idLocalidade != null) {
 
 				Localidade localidade = new Localidade();
@@ -3907,12 +3907,12 @@ public class ControladorArrecadacao extends ControladorComum {
 			colecaoPagamnetos.add(pagamento);
 
 		} else {
-			// atribui o valor 2(NÃO) ao indicador aceitacao
+			// atribui o valor 2(Nï¿½O) ao indicador aceitacao
 			// registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
-		// Seta os parametros que serão retornados
+		// Seta os parametros que serï¿½o retornados
 		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamnetos);
 		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 		pagamentoHelperCodigoBarras
@@ -3922,7 +3922,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 * 
 	 * GUIA DE PAGAMENTO
 	 * 
@@ -3959,7 +3959,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento1());
 
 		if (idLocalidadeInvalida) {
-			descricaoOcorrencia = "CÓDIGO DA LOCALIDADE NÃO NUMÉRICA";
+			descricaoOcorrencia = "Cï¿½DIGO DA LOCALIDADE Nï¿½O NUMï¿½RICA";
 		}
 
 		matriculaImovelInvalida = Util
@@ -3968,10 +3968,10 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento2());
 
 		if (matriculaImovelInvalida) {
-			descricaoOcorrencia = "MÁTRICULA DO IMÓVEL INVÁLIDA";
+			descricaoOcorrencia = "Mï¿½TRICULA DO IMï¿½VEL INVï¿½LIDA";
 		} else {
 
-			// Verifica se existe a matricula do imóvel na base
+			// Verifica se existe a matricula do imï¿½vel na base
 			matriculaImovel = new Integer(registroHelperCodigoBarras
 					.getRegistroHelperCodigoBarrasTipoPagamento()
 					.getIdPagamento2());
@@ -3985,7 +3985,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (idImovelNaBase == null) {
-				descricaoOcorrencia = "MATRÍCULA DO IMÓVEL NÃO CADASTRADA";
+				descricaoOcorrencia = "MATRï¿½CULA DO IMï¿½VEL Nï¿½O CADASTRADA";
 			}
 		}
 
@@ -3996,7 +3996,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento4());
 
 		if (codigoTipoDebito) {
-			descricaoOcorrencia = "TIPO DO DÉBITO NÃO NUMÉRICO";
+			descricaoOcorrencia = "TIPO DO Dï¿½BITO Nï¿½O NUMï¿½RICO";
 		} else {
 
 			Integer idDebitoTipoNaBase = getControladorFaturamento()
@@ -4007,7 +4007,7 @@ public class ControladorArrecadacao extends ControladorComum {
 											.getIdPagamento4()));
 
 			if (idDebitoTipoNaBase == null) {
-				descricaoOcorrencia = "TIPO DO DÉBITO INEXISTENTE";
+				descricaoOcorrencia = "TIPO DO Dï¿½BITO INEXISTENTE";
 			}
 		}
 
@@ -4079,8 +4079,8 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 			/*
              * Alterado por Raphael Rossiter em 11/01/2008 - Analistas: Eduardo e Aryed
-             * OBJ: Gerar os pagamentos associados com a localidade da guia de pagamento e NÃO com
-             * a localidade do imóvel.
+             * OBJ: Gerar os pagamentos associados com a localidade da guia de pagamento e Nï¿½O com
+             * a localidade do imï¿½vel.
              */
             if (idGuiaPagamento != null) {
             	
@@ -4111,7 +4111,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			/*
 			 * Caso o ano mes da data de dedito seja maior que o ano mes de
-			 * arrecadação da tabela sistema parametro então seta o ano mes da
+			 * arrecadaï¿½ï¿½o da tabela sistema parametro entï¿½o seta o ano mes da
 			 * data de debito
 			 */
 			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
@@ -4121,7 +4121,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			} else {
 
 				/*
-				 * caso contrario seta o o ano mes arrecadação da tabela sistema
+				 * caso contrario seta o o ano mes arrecadaï¿½ï¿½o da tabela sistema
 				 * parametro
 				 */
 				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
@@ -4152,7 +4152,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				pagamento.setGuiaPagamento(null);
 			}
 
-			// verifica se o id da conta é diferente de nulo
+			// verifica se o id da conta ï¿½ diferente de nulo
 			if (idLocalidade != null) {
 
 				Localidade localidade = new Localidade();
@@ -4203,7 +4203,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			colecaoPagamentos.add(pagamento);
 			
 			/*
-			 * Caso o pagamento tenha sido incluído para uma guia existente e que tenha uma conta 
+			 * Caso o pagamento tenha sido incluï¿½do para uma guia existente e que tenha uma conta 
 			 * associada (CNTA_ID da tabela GUIA_PAGAMENTO_ITEM com valor diferente de nulo)
 			 */
 			if (idGuiaPagamento != null){
@@ -4231,11 +4231,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		} else {
 
-			// Atribui o valor 2(NÃO) ao indicador aceitacao registro
+			// Atribui o valor 2(Nï¿½O) ao indicador aceitacao registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
-		// Seta os parametros que serão retornados
+		// Seta os parametros que serï¿½o retornados
 		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
 		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 		pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
@@ -4245,7 +4245,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 * 
 	 * GUIA DE PAGAMENTO CLIENTE(Tipo 6)
 	 * 
@@ -4278,7 +4278,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento1());
 
 		if (idLocalidadeInvalida) {
-			descricaoOcorrencia = "CÓDIGO DA LOCALIDADE NÃO NUMÉRICA";
+			descricaoOcorrencia = "Cï¿½DIGO DA LOCALIDADE Nï¿½O NUMï¿½RICA";
 		}
 
 		idClienteInvalido = Util
@@ -4288,7 +4288,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		Integer idCliente = null;
 		if (idClienteInvalido) {
-			descricaoOcorrencia = "CÓDIGO DO CLIENTE NÃO NUMÉRICO";
+			descricaoOcorrencia = "Cï¿½DIGO DO CLIENTE Nï¿½O NUMï¿½RICO";
 		} else {
 			// verifica se existe o id do cliente na
 			// base
@@ -4304,7 +4304,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (idClienteNaBase == null) {
-				descricaoOcorrencia = "CLIENTE RESPONSÁVEL NÂO CADASTRADO";
+				descricaoOcorrencia = "CLIENTE RESPONSï¿½VEL Nï¿½O CADASTRADO";
 			}
 		}
 
@@ -4315,7 +4315,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento4());
 
 		if (codigoTipoDebito) {
-			descricaoOcorrencia = "TIPO DO DÉBITO NÃO NUMÉRICO";
+			descricaoOcorrencia = "TIPO DO Dï¿½BITO Nï¿½O NUMï¿½RICO";
 		} else {
 
 			Integer idDebitoTipoNaBase = getControladorFaturamento()
@@ -4326,7 +4326,7 @@ public class ControladorArrecadacao extends ControladorComum {
 											.getIdPagamento4()));
 
 			if (idDebitoTipoNaBase == null) {
-				descricaoOcorrencia = "TIPO DO DÉBITO INEXISTENTE";
+				descricaoOcorrencia = "TIPO DO Dï¿½BITO INEXISTENTE";
 			}
 		}
 
@@ -4362,7 +4362,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			/*
 			 * Caso o ano mes da data de dedito seja maior que o ano mes de
-			 * arrecadação da tabela sistema parametro então seta o ano mes da
+			 * arrecadaï¿½ï¿½o da tabela sistema parametro entï¿½o seta o ano mes da
 			 * data de debito
 			 */
 			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
@@ -4372,7 +4372,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			} else {
 
 				/*
-				 * caso contrario seta o o ano mes arrecadação da tabela sistema
+				 * caso contrario seta o o ano mes arrecadaï¿½ï¿½o da tabela sistema
 				 * parametro
 				 */
 				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
@@ -4389,7 +4389,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			pagamento.setContaGeral(null);
 
-			// Verifica se o id da conta é diferente de nulo
+			// Verifica se o id da conta ï¿½ diferente de nulo
 			if (idGuiaPagamento != null) {
 				pagamentoHelperCodigoBarras.setIdDocumento(idGuiaPagamento);
 				
@@ -4405,7 +4405,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				pagamento.setGuiaPagamento(null);
 			}
 
-			// verifica se o id da conta é diferente de nulo
+			// verifica se o id da conta ï¿½ diferente de nulo
 			if (idLocalidade != null) {
 
 				Localidade localidade = new Localidade();
@@ -4418,8 +4418,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			DocumentoTipo documentoTipo = new DocumentoTipo();
 		
-			// Alterado por Rômulo Aurélio Data: 15/07/2010, Analista Rosana/Aryed
-			// quando o tipo de debito for Entrada de Guia é pra inserir 
+			// Alterado por Rï¿½mulo Aurï¿½lio Data: 15/07/2010, Analista Rosana/Aryed
+			// quando o tipo de debito for Entrada de Guia ï¿½ pra inserir 
 			// o tipo de documento como guia de Parcelamento
 			documentoTipo.setId(DocumentoTipo.GUIA_PAGAMENTO);				
 		
@@ -4457,11 +4457,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		} else {
 
-			// Atribui o valor 2(NÃO) ao indicador aceitacao registro
+			// Atribui o valor 2(Nï¿½O) ao indicador aceitacao registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
-		// Seta os parametros que serão retornados
+		// Seta os parametros que serï¿½o retornados
 		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamnetos);
 		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 		pagamentoHelperCodigoBarras
@@ -4471,9 +4471,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 * 
-	 * DOCUMENTO COBRANÇA TIPO 05
+	 * DOCUMENTO COBRANï¿½A TIPO 05
 	 * 
 	 * Autor: Raphael Rossiter Data: 02/05/2007
 	 */
@@ -4508,12 +4508,12 @@ public class ControladorArrecadacao extends ControladorComum {
 		idLocalidadeInvalida = Util.validarValorNaoNumerico(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento1());
 
 		if (idLocalidadeInvalida) {
-			descricaoOcorrencia = "CÓDIGO DA LOCALIDADE NÃO NUMÉRICA";
+			descricaoOcorrencia = "Cï¿½DIGO DA LOCALIDADE Nï¿½O NUMï¿½RICA";
 		}
-		// valida a matricula do imóvel
+		// valida a matricula do imï¿½vel
 		matriculaImovelInvalida = Util.validarValorNaoNumerico(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2());
 		if (matriculaImovelInvalida) {
-			descricaoOcorrencia = "MÁTRICULA DO IMÓVEL INVÁLIDA";
+			descricaoOcorrencia = "Mï¿½TRICULA DO IMï¿½VEL INVï¿½LIDA";
 		} else {
 			matriculaImovel = new Integer(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2());
 			try {
@@ -4523,7 +4523,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (idImovelNaBase == null) {
-				descricaoOcorrencia = "MATRÍCULA DO IMÓVEL NÃO CADASTRADA";
+				descricaoOcorrencia = "MATRï¿½CULA DO IMï¿½VEL Nï¿½O CADASTRADA";
 			}
 		}
 
@@ -4531,7 +4531,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		boolean tipoDocumentoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento4());
 
 		if (tipoDocumentoInvalido) {
-			descricaoOcorrencia = "TIPO DO DOCUMENTO NÃO NUMÉRICO";
+			descricaoOcorrencia = "TIPO DO DOCUMENTO Nï¿½O NUMï¿½RICO";
 		}
 
 		int numeroSequencialDocumento = Integer.parseInt(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento3());
@@ -4550,9 +4550,9 @@ public class ControladorArrecadacao extends ControladorComum {
 		if (descricaoOcorrencia.equals("OK")) {
 			Integer idLocalidade = null;
 
-			// inicializa a coleção de cobranca documento item
+			// inicializa a coleï¿½ï¿½o de cobranca documento item
 			Collection cobrancaDocumentoItens = null;
-			// inicializa a coleção de cobranca documento item
+			// inicializa a coleï¿½ï¿½o de cobranca documento item
 
 			try {
 				cobrancaDocumentoItens = repositorioCobranca.pesquisarCobrancaDocumentoItem(idImovelNaBase, numeroSequencialDocumento);
@@ -4560,7 +4560,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				throw new ControladorException("erro.sistema", e);
 			}
 
-			// caso exista documento de cobrança
+			// caso exista documento de cobranï¿½a
 			if (parmsDocumentoCobranca != null) {
 
 				Integer idCobrancaDocumento = null;
@@ -4589,8 +4589,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				/*
 				 * Alterado por Raphael Rossiter em 10/01/2008 - Analistas:
 				 * Eduardo e Aryed OBJ: Gerar os pagamentos associados com a
-				 * localidade do document de cobrança e NÃO com a localidade do
-				 * imóvel.
+				 * localidade do document de cobranï¿½a e Nï¿½O com a localidade do
+				 * imï¿½vel.
 				 */
 				if (parmsDocumentoCobranca[5] != null) {
 
@@ -4612,7 +4612,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				// caso o valor de acrescimo for maior que zero
 				if (valorAcrescimo.compareTo(new BigDecimal("0.00")) == 1) {
 					// [SB0008 - Alterar vencimento dos itens do
-					// documento de cobrança]
+					// documento de cobranï¿½a]
 
 					alterarVencimentoItensDocumentoCobranca(idCobrancaDocumento, dataEmissao);
 
@@ -4644,7 +4644,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				// caso o valor de desconto for maior que zero
 				if (valorDesconto.compareTo(new BigDecimal("0.00")) == 1) {
 					// [SB0006 - Processar Desconto concedido no
-					// documento de cobrança]
+					// documento de cobranï¿½a]
 					Devolucao devolucao = processarDescontoConcedidoDocumentoCobranca(idCobrancaDocumento, dataPagamento, valorDesconto, idImovelNaBase,
 							idLocalidade, getSistemaParametro(), idFormaArrecadacao, idDocumentoTipo);
 
@@ -4652,11 +4652,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				}
 
-				// caso o valor da taxa referente ao documento de cobrança for
+				// caso o valor da taxa referente ao documento de cobranï¿½a for
 				// maior que zero
 				if (valorTaxa.compareTo(new BigDecimal("0.00")) == 1) {
 					// [SB0006 - Processar Desconto concedido no
-					// documento de cobrança]
+					// documento de cobranï¿½a]
 					Pagamento pagamento = processarTaxaDocumentoCobranca(idCobrancaDocumento, dataPagamento, valorTaxa, idImovelNaBase, idLocalidade,
 							getSistemaParametro(), idFormaArrecadacao, idDocumentoTipo);
 
@@ -4664,7 +4664,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				}
 
-				// verifica se a coleção é diferente de nula
+				// verifica se a coleï¿½ï¿½o ï¿½ diferente de nula
 				if (cobrancaDocumentoItens != null && !cobrancaDocumentoItens.isEmpty()) {
 
 					Iterator cobrancaDocumentoItensIterator = cobrancaDocumentoItens.iterator();
@@ -4780,7 +4780,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 								cobrancaDocumentoItem.setDebitoACobrarGeral(debitoACobrarGeral);
 
-								// [SB0012]- Verifica Pagamento de Débito a
+								// [SB0012]- Verifica Pagamento de Dï¿½bito a
 								// Cobrar de Parcelamento
 								this.verificaPagamentoDebitoACobrarParcelamento(cobrancaDocumentoItem.getDebitoACobrarGeral().getDebitoACobrar().getId(),
 										cobrancaDocumentoItem.getNumeroParcelasAntecipadas());
@@ -4793,14 +4793,15 @@ public class ControladorArrecadacao extends ControladorComum {
 								debitoACobrar = new DebitoACobrar();
 
 								debitoACobrar.setId((Integer) arrayCobrancaDocumentoItem[12]);
-
+								debitoACobrar.setParcelamento(new Parcelamento((Integer) arrayCobrancaDocumentoItem[20]));
+								
 								debitoACobrarGeral.setDebitoACobrar(debitoACobrar);
 								debitoACobrarGeral.setId(debitoACobrar.getId());
 
 								cobrancaDocumentoItem.setDebitoACobrarGeral(debitoACobrarGeral);
 							}
 
-							// CRÉDITO A REALIZAR (UTILIZADO PARA PAGAMENTO
+							// CRï¿½DITO A REALIZAR (UTILIZADO PARA PAGAMENTO
 							// ANTECIPADO)
 
 							// IDENTIFICANDO O TIPO DE DEBITO QUE SERA ASSOCIADO
@@ -4837,7 +4838,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								}
 							}
 
-							// [SB0019] – Gerar Débitos/Créditos Parcelas
+							// [SB0019] ï¿½ Gerar Dï¿½bitos/Crï¿½ditos Parcelas
 							// Antecipadas
 							DebitoACobrar debitoACobrarAntecipacao = null;
 							if (cobrancaDocumentoItem.getNumeroParcelasAntecipadas() != null) {
@@ -4846,13 +4847,13 @@ public class ControladorArrecadacao extends ControladorComum {
 										usuarioLogado);
 
 								/*
-								 * Caso o débito a cobrar com parcelas
+								 * Caso o dï¿½bito a cobrar com parcelas
 								 * antecipadas tenha juros de parcelamento
-								 * (FNTP_ID = “Juros de Parcelamento” da tabela
+								 * (FNTP_ID = ï¿½Juros de Parcelamentoï¿½ da tabela
 								 * DEBITO_A_COBRAR com PARC_ID = PARC_ID do
-								 * débito com parcelas antecipadas). O sistema
-								 * deverá atualizar a quantidade de parcela
-								 * bônus do débito a cobrar de juros
+								 * dï¿½bito com parcelas antecipadas). O sistema
+								 * deverï¿½ atualizar a quantidade de parcela
+								 * bï¿½nus do dï¿½bito a cobrar de juros
 								 * (DBAC_NNPARCELABONUS = DBAC_NNPARCELABONUS +
 								 * quantidade de parcelas antecipadas e
 								 * DBAC_TMULTIMAALTERACAO = Data e Hora
@@ -4894,14 +4895,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							/*
 							 * Caso o ano mes da data de debito seja maior que o
-							 * ano mes de arrecadação da tabela sistema
-							 * parametro então seta o ano mes da data de debito
+							 * ano mes de arrecadaï¿½ï¿½o da tabela sistema
+							 * parametro entï¿½o seta o ano mes da data de debito
 							 */
 							if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 
 								pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 							}
-							// Caso contrario seta o o ano mes arrecadação da
+							// Caso contrario seta o o ano mes arrecadaï¿½ï¿½o da
 							// tabela sistema parametro
 							else {
 
@@ -4914,10 +4915,10 @@ public class ControladorArrecadacao extends ControladorComum {
 							// DATA DO PAGAMENTO
 							pagamento.setDataPagamento(dataPagamento);
 
-							// SITUAÇÃO ATUAL
+							// SITUAï¿½ï¿½O ATUAL
 							pagamento.setPagamentoSituacaoAtual(null);
 
-							// SITUAÇÃO ANTERIOR
+							// SITUAï¿½ï¿½O ANTERIOR
 							pagamento.setPagamentoSituacaoAnterior(null);
 
 							if (idDebitoTipo != null) {
@@ -4928,15 +4929,15 @@ public class ControladorArrecadacao extends ControladorComum {
 								pagamento.setDebitoTipo(null);
 							}
 
-							// VERIFICA SE O PAGAMENTO SERÁ RELACIONADO COM UMA
+							// VERIFICA SE O PAGAMENTO SERï¿½ RELACIONADO COM UMA
 							// CONTA
 							if (cobrancaDocumentoItem.getContaGeral() != null) {
 
 								/*
 								 * Colocado por Raphael Rossiter em 26/11/2008 -
 								 * CRC264 OBJ: Inserir o pagamento com a
-								 * localidade da própria conta e não com a
-								 * localidade do documento de cobrança
+								 * localidade da prï¿½pria conta e nï¿½o com a
+								 * localidade do documento de cobranï¿½a
 								 */
 								Integer idLocalidadeConta = null;
 
@@ -4970,15 +4971,15 @@ public class ControladorArrecadacao extends ControladorComum {
 								pagamento.setContaGeral(null);
 							}
 
-							// VERIFICA SE O PAGAMENTO SERÁ RELACIONADO COM UMA
+							// VERIFICA SE O PAGAMENTO SERï¿½ RELACIONADO COM UMA
 							// GUIA DE PAGAMENTO
 							if (cobrancaDocumentoItem.getGuiaPagamentoGeral() != null) {
 
 								/*
 								 * Colocado por Raphael Rossiter em 26/11/2008 -
 								 * CRC264 OBJ: Inserir o pagamento com a
-								 * localidade da própria guia e não com a
-								 * localidade do documento de cobrança
+								 * localidade da prï¿½pria guia e nï¿½o com a
+								 * localidade do documento de cobranï¿½a
 								 */
 								Integer idLocalidadeGuiaPagamento = null;
 
@@ -5012,9 +5013,9 @@ public class ControladorArrecadacao extends ControladorComum {
 								 * com o 'entrada de parcelamento'
 								 */
 
-								// Alterado por Rômulo Aurélio, Analista
+								// Alterado por Rï¿½mulo Aurï¿½lio, Analista
 								// Rosana/Aryed
-								// quando o tipo de debito for Entrada de Guia é
+								// quando o tipo de debito for Entrada de Guia ï¿½
 								// pra inserir
 								// o tipo de documento como guia de Parcelamento
 								documentoTipo.setId(DocumentoTipo.GUIA_PAGAMENTO);
@@ -5027,7 +5028,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								pagamento.setGuiaPagamento(null);
 							}
 
-							// VERIFICA SE O PAGAMENTO SERÁ RELACIONADO COM UM
+							// VERIFICA SE O PAGAMENTO SERï¿½ RELACIONADO COM UM
 							// DEBITO A COBRAR
 							if (cobrancaDocumentoItem.getDebitoACobrarGeral() != null) {
 
@@ -5043,9 +5044,9 @@ public class ControladorArrecadacao extends ControladorComum {
 										/*
 										 * Colocado por Raphael Rossiter em
 										 * 26/11/2008 - CRC264 OBJ: Inserir o
-										 * pagamento com a localidade do próprio
-										 * debito a cobrar e não com a
-										 * localidade do documento de cobrança
+										 * pagamento com a localidade do prï¿½prio
+										 * debito a cobrar e nï¿½o com a
+										 * localidade do documento de cobranï¿½a
 										 */
 										idLocalidade = repositorioLocalidade.pesquisarIdLocalidadePorDebitoACobrar(debitoACobrarGeral.getDebitoACobrar()
 												.getId());
@@ -5055,9 +5056,9 @@ public class ControladorArrecadacao extends ControladorComum {
 										/*
 										 * Colocado por Raphael Rossiter em
 										 * 26/11/2008 - CRC264 OBJ: Inserir o
-										 * pagamento com a localidade do próprio
-										 * debito a cobrar e não com a
-										 * localidade do documento de cobrança
+										 * pagamento com a localidade do prï¿½prio
+										 * debito a cobrar e nï¿½o com a
+										 * localidade do documento de cobranï¿½a
 										 */
 										Integer idLocalidadeDebitoACobrar = null;
 
@@ -5153,7 +5154,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							cobrancaDocumentoItem.setCreditoARealizarGeral(creditoARealizarGeral);
 
-							// [SB0019] – Gerar Débitos/Créditos Parcelas
+							// [SB0019] ï¿½ Gerar Dï¿½bitos/Crï¿½ditos Parcelas
 							// Antecipadas
 							CreditoARealizar creditoARealizarAntecipacao = null;
 							if (cobrancaDocumentoItem.getNumeroParcelasAntecipadas() != null) {
@@ -5166,7 +5167,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							// Para os itens que tenham CreditoARealizar gerar
-							// suas respectivas devoluções
+							// suas respectivas devoluï¿½ï¿½es
 
 							Devolucao devolucao = new Devolucao();
 
@@ -5175,10 +5176,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							/*
 							 * AnoMesReferenciaDevolucao Caso o anoMes da data
-							 * de devolução seja MAIOR que a
+							 * de devoluï¿½ï¿½o seja MAIOR que a
 							 * PARM_AMREFERENCIAARRECADACAO da tabela
 							 * SISTEMA_PARAMETROS atribuir o anoMes da data da
-							 * devolução, caso contrário atribuir o
+							 * devoluï¿½ï¿½o, caso contrï¿½rio atribuir o
 							 * PARM_AMREFERENCIAARRECADACAO.
 							 */
 							Integer anoMesDataDevolucao = Util.getAnoMesComoInteger(devolucao.getDataDevolucao());
@@ -5219,7 +5220,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							// tabela COBRANCA_DOCUMENTO_ITEM
 							devolucao.setCreditoARealizarGeral(creditoARealizarGeral);
 
-							// Ultima Alteração
+							// Ultima Alteraï¿½ï¿½o
 							devolucao.setUltimaAlteracao(new Date());
 
 							CobrancaDocumento cobrancaDocumento = new CobrancaDocumento();
@@ -5240,11 +5241,11 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Caso o débito a cobrar com parcelas antecipadas tenha
-					 * juros de parcelamento (FNTP_ID = “Juros de Parcelamento”
-					 * da tabela DEBITO_A_COBRAR com PARC_ID = PARC_ID do débito
-					 * com parcelas antecipadas). O sistema deverá atualizar a
-					 * quantidade de parcela bônus do débito a cobrar de juros
+					 * Caso o dï¿½bito a cobrar com parcelas antecipadas tenha
+					 * juros de parcelamento (FNTP_ID = ï¿½Juros de Parcelamentoï¿½
+					 * da tabela DEBITO_A_COBRAR com PARC_ID = PARC_ID do dï¿½bito
+					 * com parcelas antecipadas). O sistema deverï¿½ atualizar a
+					 * quantidade de parcela bï¿½nus do dï¿½bito a cobrar de juros
 					 * (DBAC_NNPARCELABONUS = DBAC_NNPARCELABONUS + quantidade
 					 * de parcelas antecipadas e DBAC_TMULTIMAALTERACAO = Data e
 					 * Hora Correntes)
@@ -5261,17 +5262,17 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 			} else {
-				descricaoOcorrencia = "DOCUMENTO DE COBRANÇA INEXISTENTE";
+				descricaoOcorrencia = "DOCUMENTO DE COBRANï¿½A INEXISTENTE";
 				indicadorAceitacaoRegistro = "2";
 			}
 
 		} else {
-			// atribui o valor 2(NÃO) ao indicador aceitacao
+			// atribui o valor 2(Nï¿½O) ao indicador aceitacao
 			// registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
-		// Seta os parametros que serão retornados
+		// Seta os parametros que serï¿½o retornados
 		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
 		pagamentoHelperCodigoBarras.setColecaoDevolucao(colecaoDevolucoes);
 		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
@@ -5305,12 +5306,12 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		idLocalidadeInvalida = Util.validarValorNaoNumerico(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento1());
 		if (idLocalidadeInvalida) {
-			descricaoOcorrencia = "CÓDIGO DA LOCALIDADE NÃO NUMÉRICA";
+			descricaoOcorrencia = "Cï¿½DIGO DA LOCALIDADE Nï¿½O NUMï¿½RICA";
 		}
 
 		matriculaImovelInvalida = Util.validarValorNaoNumerico(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2());
 		if (matriculaImovelInvalida) {
-			descricaoOcorrencia = "MÁTRICULA DO IMÓVEL INVÁLIDA";
+			descricaoOcorrencia = "Mï¿½TRICULA DO IMï¿½VEL INVï¿½LIDA";
 		
 		} else {
 			matriculaImovel = new Integer(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2());
@@ -5322,7 +5323,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (idImovelNaBase == null) {
-				descricaoOcorrencia = "MATRÍCULA DO IMÓVEL NÃO CADASTRADA";
+				descricaoOcorrencia = "MATRï¿½CULA DO IMï¿½VEL Nï¿½O CADASTRADA";
 			}
 		}
 
@@ -5330,7 +5331,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		boolean tipoDocumentoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento4());
 
 		if (tipoDocumentoInvalido) {
-			descricaoOcorrencia = "TIPO DO DOCUMENTO NÃO NUMÉRICO";
+			descricaoOcorrencia = "TIPO DO DOCUMENTO Nï¿½O NUMï¿½RICO";
 		}
 		if (descricaoOcorrencia.equals("OK")) {
 			Integer idLocalidade = null;
@@ -5786,7 +5787,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 			} else {
-				descricaoOcorrencia = "DOCUMENTO DE COBRANÇA INEXISTENTE";
+				descricaoOcorrencia = "DOCUMENTO DE COBRANï¿½A INEXISTENTE";
 				indicadorAceitacaoRegistro = "2";
 			}
 
@@ -5850,9 +5851,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 * 
-	 * CLIENTE RESPONSÁVEL
+	 * CLIENTE RESPONSï¿½VEL
 	 * 
 	 * Autor: Raphael Rossiter Data: 02/05/2007
 	 */
@@ -5876,7 +5877,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		boolean anoMesReferencia = false;
 
-		// valida a matricula do imóvel
+		// valida a matricula do imï¿½vel
 		boolean idClienteInvalido = Util
 				.validarValorNaoNumerico(registroHelperCodigoBarras
 						.getRegistroHelperCodigoBarrasTipoPagamento()
@@ -5884,7 +5885,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		Integer idClienteNaBase = null;
 
 		if (idClienteInvalido) {
-			descricaoOcorrencia = "CÓDIGO DO CLIENTE NÃO NUMÉRICO";
+			descricaoOcorrencia = "Cï¿½DIGO DO CLIENTE Nï¿½O NUMï¿½RICO";
 		} else {
 			// verifica se existe o id do cliente na
 			// base
@@ -5899,7 +5900,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (idClienteNaBase == null) {
-				descricaoOcorrencia = "CLIENTE RESPONSÁVEL NÂO CADASTRADO";
+				descricaoOcorrencia = "CLIENTE RESPONSï¿½VEL Nï¿½O CADASTRADO";
 			}
 		}
 
@@ -5913,7 +5914,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento4()));
 		anoMesReferencia = Util.validarAnoMesSemBarra("" + anoMes);
 		if (anoMesReferencia) {
-			descricaoOcorrencia = "ANO/MÊS DE REFERÊNCIA DA CONTA INVÁLIDA";
+			descricaoOcorrencia = "ANO/Mï¿½S DE REFERï¿½NCIA DA CONTA INVï¿½LIDA";
 		}
 		
 		Integer numeroSequencial = new Integer(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento6());
@@ -5943,7 +5944,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				throw new ControladorException("erro.sistema", e);
 			}
 
-			// verifica se a coleção é diferente de nula
+			// verifica se a coleï¿½ï¿½o ï¿½ diferente de nula
 			if (faturaItens != null && !faturaItens.isEmpty()) {
 				Iterator faturaItensIterator = faturaItens.iterator();
 				while (faturaItensIterator.hasNext()) {
@@ -5971,13 +5972,13 @@ public class ControladorArrecadacao extends ControladorComum {
 						idImovelPesquisa = (Integer) faturaItem[3];
 					}
 					// verifica o id da localidade de Conta
-					// Histórico
+					// Histï¿½rico
 					if (faturaItem[4] != null) {
 						idLocalidadePesquisa = (Integer) faturaItem[4];
 					}
 					
 					
-					// verifica o id do imovel de Conta Histórico
+					// verifica o id do imovel de Conta Histï¿½rico
 					if (faturaItem[5] != null) {
 						idImovelPesquisa = (Integer) faturaItem[5];
 					}
@@ -5995,8 +5996,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					Pagamento pagamento = new Pagamento();
 					pagamento.setAnoMesReferenciaPagamento(anoMes);
 					// caso o ano mes da data de dedito seja
-					// maior que o ano mes de arrecadação da
-					// tabela sistema parametro então seta o ano
+					// maior que o ano mes de arrecadaï¿½ï¿½o da
+					// tabela sistema parametro entï¿½o seta o ano
 					// mes da data de debito
 					if (anoMesPagamento > getSistemaParametro()
 							.getAnoMesArrecadacao()) {
@@ -6004,7 +6005,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 					} else {
 						// caso contrario seta o o ano mes
-						// arrecadação da tabela sistema
+						// arrecadaï¿½ï¿½o da tabela sistema
 						// parametro
 						pagamento
 								.setAnoMesReferenciaArrecadacao(getSistemaParametro()
@@ -6015,7 +6016,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					pagamento.setPagamentoSituacaoAtual(null);
 					pagamento.setPagamentoSituacaoAnterior(null);
 					pagamento.setDebitoTipo(null);
-					// verifica se o id da conta é diferente de
+					// verifica se o id da conta ï¿½ diferente de
 					// nulo
 					if (idContaPesquisa != null) {
 						ContaGeral conta = new ContaGeral();
@@ -6028,7 +6029,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					pagamento.setDebitoACobrarGeral(null);
 
-					// verifica se o id da conta é diferente de
+					// verifica se o id da conta ï¿½ diferente de
 					// nulo
 					if (idLocalidadePesquisa != null) {
 						Localidade localidade = new Localidade();
@@ -6078,11 +6079,11 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 			}
 		} else {
-			// atribui o valor 2(NÃO) ao indicador aceitacao registro
+			// atribui o valor 2(Nï¿½O) ao indicador aceitacao registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
-		// Seta os parametros que serão retornados
+		// Seta os parametros que serï¿½o retornados
 		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamnetos);
 		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 		pagamentoHelperCodigoBarras
@@ -6108,7 +6109,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		Integer idClienteNaBase = null;
 
 		if (idClienteInvalido) {
-			descricaoOcorrencia = "CÓDIGO DO CLIENTE NÃO NUMÉRICO";
+			descricaoOcorrencia = "Cï¿½DIGO DO CLIENTE Nï¿½O NUMï¿½RICO";
 		} else {
 			Integer idCliente = new Integer(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2());
 
@@ -6119,14 +6120,14 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (idClienteNaBase == null) {
-				descricaoOcorrencia = "CLIENTE RESPONSÁVEL NÂO CADASTRADO";
+				descricaoOcorrencia = "CLIENTE RESPONSï¿½VEL Nï¿½O CADASTRADO";
 			}
 		}
 
 		boolean tipoDocumentoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoBarras.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento4());
 
 		if (tipoDocumentoInvalido) {
-			descricaoOcorrencia = "TIPO DO DOCUMENTO NÃO NUMÉRICO";
+			descricaoOcorrencia = "TIPO DO DOCUMENTO Nï¿½O NUMï¿½RICO";
 		}
 
 		if (descricaoOcorrencia.equals("OK")) {
@@ -6465,7 +6466,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 				}
 			} else {
-				descricaoOcorrencia = "DOCUMENTO DE COBRANÇA INEXISTENTE";
+				descricaoOcorrencia = "DOCUMENTO DE COBRANï¿½A INEXISTENTE";
 				indicadorAceitacaoRegistro = "2";
 			}
 
@@ -6482,9 +6483,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 * 
-	 * DOCUMENTO COBRANÇA TIPO 08
+	 * DOCUMENTO COBRANï¿½A TIPO 08
 	 * 
 	 * Autor: Raphael Rossiter Data: 02/05/2007
 	 */
@@ -6513,7 +6514,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		Integer idClienteNaBase = null;
 
 		if (idClienteInvalido) {
-			descricaoOcorrencia = "CÓDIGO DO CLIENTE NÃO NUMÉRICO";
+			descricaoOcorrencia = "Cï¿½DIGO DO CLIENTE Nï¿½O NUMï¿½RICO";
 		} else {
 			// verifica se existe o id do cliente na
 			// base
@@ -6529,7 +6530,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (idClienteNaBase == null) {
-				descricaoOcorrencia = "CLIENTE RESPONSÁVEL NÂO CADASTRADO";
+				descricaoOcorrencia = "CLIENTE RESPONSï¿½VEL Nï¿½O CADASTRADO";
 			}
 		}
 
@@ -6540,14 +6541,14 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento4());
 
 		if (tipoDocumentoInvalido) {
-			descricaoOcorrencia = "TIPO DO DOCUMENTO NÃO NUMÉRICO";
+			descricaoOcorrencia = "TIPO DO DOCUMENTO Nï¿½O NUMï¿½RICO";
 		}
 
 		if (descricaoOcorrencia.equals("OK")) {
 
-			// inicializa a coleção de cobranca documento item
+			// inicializa a coleï¿½ï¿½o de cobranca documento item
 			Collection cobrancaDocumentoItens = null;
-			// inicializa a coleção de cobranca documento item
+			// inicializa a coleï¿½ï¿½o de cobranca documento item
 			// Object[] parmsDocumentoCobranca = null;
 
 			int numeroSequencialDocumento = Integer
@@ -6561,7 +6562,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.pesquisarCobrancaDocumentoItemCliente(idClienteNaBase,
 								numeroSequencialDocumento);
 				
-				//pesquisar o doc de cobrança
+				//pesquisar o doc de cobranï¿½a
 				FiltroCobrancaDocumento filtro = new FiltroCobrancaDocumento();
 				filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.ID, numeroSequencialDocumento));
 				
@@ -6584,8 +6585,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				throw new ControladorException("erro.sistema", e);
 			}
 
-			// caso exista documento de cobrança
-			// verifica se a coleção é diferente de nula
+			// caso exista documento de cobranï¿½a
+			// verifica se a coleï¿½ï¿½o ï¿½ diferente de nula
 			if (cobrancaDocumentoItens != null
 					&& !cobrancaDocumentoItens.isEmpty()) {
 				Iterator cobrancaDocumentoItensIterator = cobrancaDocumentoItens
@@ -6619,13 +6620,13 @@ public class ControladorArrecadacao extends ControladorComum {
 							contaReferencia = (Integer) cobrancaDocumentoItem[4];
 						}
 					} else {
-						// caso não exista na conta então pesquisa
-						// na conta histórico
+						// caso nï¿½o exista na conta entï¿½o pesquisa
+						// na conta histï¿½rico
 						if (cobrancaDocumentoItem[10] != null) {
 							idContaGeralPesquisa = (Integer) cobrancaDocumentoItem[10];
 						}
 
-						// referencia conta histórico
+						// referencia conta histï¿½rico
 						if (cobrancaDocumentoItem[5] != null) {
 							contaReferencia = (Integer) cobrancaDocumentoItem[5];
 						}
@@ -6636,8 +6637,8 @@ public class ControladorArrecadacao extends ControladorComum {
 						idGuiaPagamento = (Integer) cobrancaDocumentoItem[1];
 						idGuiaPagamentoGeralPesquisa = (Integer) cobrancaDocumentoItem[1];
 					} else {
-						// caso não exista no guia pagamento então
-						// pesquisa no guia pagamento histórico
+						// caso nï¿½o exista no guia pagamento entï¿½o
+						// pesquisa no guia pagamento histï¿½rico
 						if (cobrancaDocumentoItem[11] != null) {
 							idGuiaPagamentoGeralPesquisa = (Integer) cobrancaDocumentoItem[11];
 						}
@@ -6649,13 +6650,13 @@ public class ControladorArrecadacao extends ControladorComum {
 						numeroPrestacaoDebito = (Short) cobrancaDocumentoItem[27];
 						numeroPrestacaoCobradas = (Short) cobrancaDocumentoItem[28];
 
-						// [SB0012]- Verifica Pagamento de Débito a Cobrar de
+						// [SB0012]- Verifica Pagamento de Dï¿½bito a Cobrar de
 						// Parcelamento
 						verificaPagamentoDebitoACobrarParcelamento(idDebitoACobrar, null);
 
 					} else {
-						// caso não exista no debito a cobrar então
-						// pesquisa no guia pagamento histórico
+						// caso nï¿½o exista no debito a cobrar entï¿½o
+						// pesquisa no guia pagamento histï¿½rico
 						if (cobrancaDocumentoItem[12] != null) {
 							idDebitoACobrarGeralPesquisa = (Integer) cobrancaDocumentoItem[12];
 						}
@@ -6678,7 +6679,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					
 					/*
 					 * Adicao dos campos 'id do Documento de cobranca' e 'id do tipo de documento' usados no
-					 * relatório do Float
+					 * relatï¿½rio do Float
 					 * Francisco 18/07/08
 					 */
 					if (cobrancaDocumentoItem[25] != null){
@@ -6689,22 +6690,22 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 					
 					// adicionado por Vivianne Sousa - CRC1357 - 27/02/2009
-					//para itens de documento de cobrança com id  do credito a realizar == null
+					//para itens de documento de cobranï¿½a com id  do credito a realizar == null
 					if(idCreditoARealizarGeralPesquisa == null){
 						
 						// se o id da conta for igual a null
 						if (idContaGeralPesquisa == null) {
 							// caso exista guia de pagamento
 							if (idGuiaPagamentoGeralPesquisa != null) {
-								// verifica o id do debito tipo se é da
+								// verifica o id do debito tipo se ï¿½ da
 								// guia
 								if (cobrancaDocumentoItem[6] != null) {
 									idDebitoTipo = (Integer) cobrancaDocumentoItem[6];
 								} else {
-									// caso não exista no guia pagamento
-									// então
+									// caso nï¿½o exista no guia pagamento
+									// entï¿½o
 									// pesquisa no guia pagamento
-									// histórico
+									// histï¿½rico
 									if (cobrancaDocumentoItem[7] != null) {
 										idDebitoTipo = (Integer) cobrancaDocumentoItem[7];
 									}
@@ -6718,11 +6719,11 @@ public class ControladorArrecadacao extends ControladorComum {
 									idDebitoTipo = (Integer) cobrancaDocumentoItem[8];
 	
 								} else {
-									// caso não exista no debito a
+									// caso nï¿½o exista no debito a
 									// cobrar
-									// então
+									// entï¿½o
 									// pesquisa no debito a cobrar
-									// histórico
+									// histï¿½rico
 									if (cobrancaDocumentoItem[9] != null) {
 										idDebitoTipo = (Integer) cobrancaDocumentoItem[9];
 									}
@@ -6740,8 +6741,8 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 	
 						// caso o ano mes da data de dedito seja
-						// maior que o ano mes de arrecadação da
-						// tabela sistema parametro então seta o ano
+						// maior que o ano mes de arrecadaï¿½ï¿½o da
+						// tabela sistema parametro entï¿½o seta o ano
 						// mes da data de debito
 						if (anoMesPagamento > getSistemaParametro()
 								.getAnoMesArrecadacao()) {
@@ -6749,7 +6750,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 						} else {
 							// caso contrario seta o o ano mes
-							// arrecadação da tabela sistema
+							// arrecadaï¿½ï¿½o da tabela sistema
 							// parametro
 							pagamento
 									.setAnoMesReferenciaArrecadacao(getSistemaParametro()
@@ -6767,7 +6768,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							pagamento.setDebitoTipo(null);
 						}
 	
-						// verifica se o id da conta é diferente de
+						// verifica se o id da conta ï¿½ diferente de
 						// nulo
 						if (idContaGeralPesquisa != null) {
 							if (idContaPesquisa != null) {
@@ -6784,7 +6785,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						} else {
 							pagamento.setContaGeral(null);
 						}
-						// verifica se o id da guia de pagamento é
+						// verifica se o id da guia de pagamento ï¿½
 						// diferente de nulo
 						if (idGuiaPagamentoGeralPesquisa != null) {
 							if (idGuiaPagamento != null) {
@@ -6802,7 +6803,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							pagamento.setGuiaPagamento(null);
 						}
 	
-						// verifica se o id do debito a cobrar é
+						// verifica se o id do debito a cobrar ï¿½
 						// diferente de nulo
 						if (idDebitoACobrarGeralPesquisa != null) {
 							if (idDebitoACobrar != null) {
@@ -6814,7 +6815,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									pagamento.setDebitoACobrarGeral(debitoACobrarGeral);
 								}
 								try {
-									// atualiza a situação atual para
+									// atualiza a situaï¿½ï¿½o atual para
 									// cancelada
 									repositorioFaturamento
 											.atualizarSituacaoAtualDebitoACobrar(idDebitoACobrar);
@@ -6839,7 +6840,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamento.setAvisoBancario(null);
 	
 						
-						// SETANDO A LOCALIDADE E O IMÓVEL DO PAGAMENTO 
+						// SETANDO A LOCALIDADE E O IMï¿½VEL DO PAGAMENTO 
 						Imovel imovel = new Imovel();
 						Localidade localidade = new Localidade();
 						
@@ -6957,7 +6958,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					}else{
 						
 						// Para os itens que tenham CreditoARealizar gerar
-						// suas respectivas devoluções
+						// suas respectivas devoluï¿½ï¿½es
 
 						Devolucao devolucao = new Devolucao();
 
@@ -6966,10 +6967,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 						/*
 						 * AnoMesReferenciaDevolucao Caso o anoMes da data
-						 * de devolução seja MAIOR que a
+						 * de devoluï¿½ï¿½o seja MAIOR que a
 						 * PARM_AMREFERENCIAARRECADACAO da tabela
 						 * SISTEMA_PARAMETROS atribuir o anoMes da data da
-						 * devolução, caso contrário atribuir o
+						 * devoluï¿½ï¿½o, caso contrï¿½rio atribuir o
 						 * PARM_AMREFERENCIAARRECADACAO.
 						 */
 						Integer anoMesDataDevolucao = Util.getAnoMesComoInteger(devolucao.getDataDevolucao());
@@ -7009,7 +7010,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						creditoARealizarGeral.setId((Integer) cobrancaDocumentoItem[29]);
 						devolucao.setCreditoARealizarGeral(creditoARealizarGeral);
 
-						// Ultima Alteração
+						// Ultima Alteraï¿½ï¿½o
 						devolucao.setUltimaAlteracao(new Date());
 
 						CobrancaDocumento cobrancaDocumento = new CobrancaDocumento();
@@ -7032,17 +7033,17 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 				
 			} else {
-				descricaoOcorrencia = "DOCUMENTO DE COBRANÇA INEXISTENTE";
+				descricaoOcorrencia = "DOCUMENTO DE COBRANï¿½A INEXISTENTE";
 				indicadorAceitacaoRegistro = "2";
 			}
 
 		} else {
-			// atribui o valor 2(NÃO) ao indicador aceitacao
+			// atribui o valor 2(Nï¿½O) ao indicador aceitacao
 			// registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
-		// Seta os parametros que serão retornados
+		// Seta os parametros que serï¿½o retornados
 		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
 		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 		pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
@@ -7054,9 +7055,9 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 *
-	 * @author Sávio Luiz, Raphael Rossiter
+	 * @author Sï¿½vio Luiz, Raphael Rossiter
 	 * @date 01/02/2006, 26/05/2008
 	 *
 	 * @param codigoBarras
@@ -7080,7 +7081,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		/*
 		 * Recupera o objeto registroHelperCodigoBarras passando a string do
-		 * código de barras.
+		 * cï¿½digo de barras.
 		 */
 		RegistroHelperCodigoBarras registroHelperCodigoBarras = distribuirDadosCodigoBarras(codigoBarras);
 		
@@ -7094,19 +7095,19 @@ public class ControladorArrecadacao extends ControladorComum {
 		registroHelperCodigoBarras.getIdEmpresa());
 
 		/*
-		 * Caso o identificador da empresa no txt não seja igual ao código da
+		 * Caso o identificador da empresa no txt nï¿½o seja igual ao cï¿½digo da
 		 * empresa no sistemas parametro.
 		 */
 		if (!identificadorEmpresaCodigoBarras.equals(getSistemaParametro()
 				.getCodigoEmpresaFebraban())) {
 
-			// Atribui o valor 2(NÃO) ao indicador aceitação registro
+			// Atribui o valor 2(Nï¿½O) ao indicador aceitaï¿½ï¿½o registro
 			indicadorAceitacaoRegistro = "2";
 
-			descricaoOcorrencia = "CÓDIGO DE BARRAS NÃO PERTENCE A "
+			descricaoOcorrencia = "Cï¿½DIGO DE BARRAS Nï¿½O PERTENCE A "
 			+ getSistemaParametro().getNomeEmpresa();
 
-			// Seta os parametros que serão retornados
+			// Seta os parametros que serï¿½o retornados
 			pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
 			pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 			pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
@@ -7114,7 +7115,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		} 
 		else {
 
-			//Processar Pagamentos com Código de Barras
+			//Processar Pagamentos com Cï¿½digo de Barras
 			pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasPorTipoPagamento(registroHelperCodigoBarras, 
 			dataPagamento, anoMesPagamento, valorPagamento, idFormaArrecadacao, getSistemaParametro(), usuarioLogado);
 		}
@@ -7124,7 +7125,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 *
 	 * @author Raphael Rossiter
 	 * @date 26/05/2008
@@ -7222,7 +7223,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			pagamentoHelperCodigoBarras = new PagamentoHelperCodigoBarras();
 			
 			pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
-			pagamentoHelperCodigoBarras.setDescricaoOcorrencia("CÓDIGO DE BARRAS COM TIPO DE PAGAMENTO INVÁLIDO");
+			pagamentoHelperCodigoBarras.setDescricaoOcorrencia("Cï¿½DIGO DE BARRAS COM TIPO DE PAGAMENTO INVï¿½LIDO");
 			pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro("2");
 		}
 
@@ -7230,7 +7231,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamneto com Código de Barras
+	 * [UC0259] - Processar Pagamneto com Cï¿½digo de Barras
 	 * 
 	 * Autor: Rafael Pinto
 	 * 
@@ -7268,11 +7269,11 @@ public class ControladorArrecadacao extends ControladorComum {
 			idImovelPesquisa = (Integer) faturaItem[3];
 		}
 		// verifica o id da localidade de Conta
-		// Histórico
+		// Histï¿½rico
 		if (faturaItem[4] != null) {
 			idLocalidadePesquisa = (Integer) faturaItem[4];
 		}
-		// verifica o id do imovel de Conta Histórico
+		// verifica o id do imovel de Conta Histï¿½rico
 		if (faturaItem[5] != null) {
 			idImovelPesquisa = (Integer) faturaItem[5];
 		}
@@ -7285,14 +7286,14 @@ public class ControladorArrecadacao extends ControladorComum {
 		Pagamento pagamento = new Pagamento();
 		pagamento.setAnoMesReferenciaPagamento(anoMes);
 		// caso o ano mes da data de dedito seja
-		// maior que o ano mes de arrecadação da
-		// tabela sistema parametro então seta o ano
+		// maior que o ano mes de arrecadaï¿½ï¿½o da
+		// tabela sistema parametro entï¿½o seta o ano
 		// mes da data de debito
 		if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 			pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 		} else {
 			// caso contrario seta o o ano mes
-			// arrecadação da tabela sistema
+			// arrecadaï¿½ï¿½o da tabela sistema
 			// parametro
 			pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 					.getAnoMesArrecadacao());
@@ -7302,7 +7303,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		pagamento.setPagamentoSituacaoAtual(null);
 		pagamento.setPagamentoSituacaoAnterior(null);
 		pagamento.setDebitoTipo(null);
-		// verifica se o id da conta é diferente de
+		// verifica se o id da conta ï¿½ diferente de
 		// nulo
 		if (idContaPesquisa != null) {
 			ContaGeral conta = new ContaGeral();
@@ -7315,7 +7316,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		pagamento.setDebitoACobrarGeral(null);
 
-		// verifica se o id da conta é diferente de
+		// verifica se o id da conta ï¿½ diferente de
 		// nulo
 		if (idLocalidadePesquisa != null) {
 			Localidade localidade = new Localidade();
@@ -7366,8 +7367,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 
 	/**
-	 * [UC0259] - Processar Pagamento com código de Barras [SB0005] - Processar
-	 * Recebimento de Acréscimos por Inpontualidade Autor: Sávio Luiz
+	 * [UC0259] - Processar Pagamento com cï¿½digo de Barras [SB0005] - Processar
+	 * Recebimento de Acrï¿½scimos por Inpontualidade Autor: Sï¿½vio Luiz
 	 * Data:15/02/2006
 	 */
 
@@ -7463,8 +7464,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0259] - Processar Pagamento com código de Barras Por Cliente
-	 * [SB0005] - Processar Recebimento de Acréscimos por Inpontualidade 
+	 * [UC0259] - Processar Pagamento com cï¿½digo de Barras Por Cliente
+	 * [SB0005] - Processar Recebimento de Acrï¿½scimos por Inpontualidade 
 	 * Autor: Adriana Muniz e Wellington Rocha
 	 * Data:23/10/2013
 	 */
@@ -7539,14 +7540,14 @@ public class ControladorArrecadacao extends ControladorComum {
 			pagamento.setAnoMesReferenciaPagamento(anoMesPagamento);
 
 			// caso o ano mes da data de dedito seja
-			// maior que o ano mes de arrecadação da
-			// tabela sistema parametro então seta o ano
+			// maior que o ano mes de arrecadaï¿½ï¿½o da
+			// tabela sistema parametro entï¿½o seta o ano
 			// mes da data de debito
 			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 				pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 			} else {
 				// caso contrario seta o o ano mes
-				// arrecadação da tabela sistema
+				// arrecadaï¿½ï¿½o da tabela sistema
 				// parametro
 				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 						.getAnoMesArrecadacao());
@@ -7619,8 +7620,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com código de Barras [SB0006] - Processar
-	 * Desconto Concedido no Documento de Cobrança Autor: Sávio Luiz
+	 * [UC0259] - Processar Pagamento com cï¿½digo de Barras [SB0006] - Processar
+	 * Desconto Concedido no Documento de Cobranï¿½a Autor: Sï¿½vio Luiz
 	 * Data:15/02/2006
 	 */
 
@@ -7698,14 +7699,14 @@ public class ControladorArrecadacao extends ControladorComum {
 		Integer anoMesPagamento = Util.formataAnoMes(dataPagamento);
 
 		// caso o ano mes da data de dedito seja
-		// maior que o ano mes de arrecadação da
-		// tabela sistema parametro então seta o ano
+		// maior que o ano mes de arrecadaï¿½ï¿½o da
+		// tabela sistema parametro entï¿½o seta o ano
 		// mes da data de debito
 		if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 			devolucao.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 		} else {
 			// caso contrario seta o o ano mes
-			// arrecadação da tabela sistema
+			// arrecadaï¿½ï¿½o da tabela sistema
 			// parametro
 			devolucao.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 					.getAnoMesArrecadacao());
@@ -7757,8 +7758,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com código de Barras [SB0007] - Processar
-	 * Taxa do Documento de Cobrança Autor: Sávio Luiz Data:15/02/2006
+	 * [UC0259] - Processar Pagamento com cï¿½digo de Barras [SB0007] - Processar
+	 * Taxa do Documento de Cobranï¿½a Autor: Sï¿½vio Luiz Data:15/02/2006
 	 */
 
 	public Pagamento processarTaxaDocumentoCobranca(
@@ -7856,8 +7857,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com código de Barras [SB0008] - Alterar
-	 * Vencimento dos Itens do documento de cobrança Autor: Sávio Luiz
+	 * [UC0259] - Processar Pagamento com cï¿½digo de Barras [SB0008] - Alterar
+	 * Vencimento dos Itens do documento de cobranï¿½a Autor: Sï¿½vio Luiz
 	 * Data:15/02/2006
 	 */
 
@@ -7892,9 +7893,9 @@ public class ControladorArrecadacao extends ControladorComum {
 
 
 	/**
-	 * [UC0264] - Distribuir Dados do Código de Barras
+	 * [UC0264] - Distribuir Dados do Cï¿½digo de Barras
 	 *
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 12/05/2008
 	 *
 	 * @param codigoBarras
@@ -7902,7 +7903,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 */
 	public RegistroHelperCodigoBarras distribuirDadosCodigoBarrasGeral(
 			String codigoBarras) {
-		// instancia o objeto de código de barras
+		// instancia o objeto de cï¿½digo de barras
 		RegistroHelperCodigoBarras registroHelperCodigoBarras = new RegistroHelperCodigoBarras();
 		// seta as subStrings nos respectivos campos do objeto
 		// registroHelperCodigoBarras
@@ -7922,7 +7923,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 		else{
 			
-			//VALOR DO CÓDIGO DE BARRAS
+			//VALOR DO Cï¿½DIGO DE BARRAS
 			registroHelperCodigoBarras.setValorPagamento(codigoBarras.substring(4, 15).trim());
 		}
 		
@@ -7934,9 +7935,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0264] - Distribuir Dados do Código de Barras 
+	 * [UC0264] - Distribuir Dados do Cï¿½digo de Barras 
 	 *
-	 * @author Sávio Luiz, Rafael Corrêa
+	 * @author Sï¿½vio Luiz, Rafael Corrï¿½a
 	 * @date 15/02/2006, 12/05/2008
 	 *
 	 * @param codigoBarras
@@ -7945,7 +7946,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	public RegistroHelperCodigoBarras distribuirDadosCodigoBarras(
 			String codigoBarras) throws ControladorException {
 		
-		// instancia o objeto de código de barras, setando os valores que são iguais para todas as empresas
+		// instancia o objeto de cï¿½digo de barras, setando os valores que sï¿½o iguais para todas as empresas
 		RegistroHelperCodigoBarras registroHelperCodigoBarras = distribuirDadosCodigoBarrasGeral(codigoBarras);
 		
 		registroHelperCodigoBarras.setTipoPagamento(codigoBarras.substring(43, 44).trim());
@@ -7964,10 +7965,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * retorna o objeto distribuido de acordo comj o tipo de pagamento [UC0264] -
-	 * Distribuir Dados do Código de Barras [SF0001] - Distribuir Pagamento de
+	 * Distribuir Dados do Cï¿½digo de Barras [SF0001] - Distribuir Pagamento de
 	 * Conta [SF0002] - Distribuir Pagamento de Guia de Pagamento [SF0003] -
-	 * Distribuir Pagamento de Documento de Cobramça [SF0004] - Distribuir
-	 * Pagamento de Fatura do Cliente Responsável Autor: Sávio Luiz Data:
+	 * Distribuir Pagamento de Documento de Cobramï¿½a [SF0004] - Distribuir
+	 * Pagamento de Fatura do Cliente Responsï¿½vel Autor: Sï¿½vio Luiz Data:
 	 * 15/02/2006
 	 */
 
@@ -8028,7 +8029,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0264] - Distribuir Dados do Código de Barras
+	 * [UC0264] - Distribuir Dados do Cï¿½digo de Barras
 	 *
 	 * @author Raphael Rossiter
 	 * @date 06/11/2008
@@ -8040,40 +8041,40 @@ public class ControladorArrecadacao extends ControladorComum {
 	public RegistroHelperCodigoBarrasTipoPagamento distribuirDadosCodigoBarrasPorTipoPagamento_CONTA(
 			RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento, String idPagamento) {
 		
-		//seta o código da localidade
+		//seta o cï¿½digo da localidade
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(idPagamento.substring(0, 3).trim());
 		
 		/*
-		 * Identifica se a matrícula ou o id do cliente foram formatados com 8 ou 9 dígitos
-		 * 0 = 8 dígitos
-		 * 1 = 9 dígitos
+		 * Identifica se a matrï¿½cula ou o id do cliente foram formatados com 8 ou 9 dï¿½gitos
+		 * 0 = 8 dï¿½gitos
+		 * 1 = 9 dï¿½gitos
 		 */
 		String indicadorTamanhoIdentificacao = idPagamento.substring(13, 14).trim();
 		
 		if (indicadorTamanhoIdentificacao.equals(ConstantesSistema.OITO_DIGITOS)){
 			
-			//seta a matrícula do imóvel
+			//seta a matrï¿½cula do imï¿½vel
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(idPagamento.substring(3, 11).trim());
 			
-			// não está sendo utilizado
+			// nï¿½o estï¿½ sendo utilizado
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(idPagamento.substring(11, 14).trim());
 		}
 		else{
 			
-			//seta a matrícula do imóvel
+			//seta a matrï¿½cula do imï¿½vel
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(idPagamento.substring(3, 12).trim());
 			
-			// não está sendo utilizado
+			// nï¿½o estï¿½ sendo utilizado
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(idPagamento.substring(12, 14).trim());
 		}
 		
-		//seta o mês e ano de referência(MMAAAA)
+		//seta o mï¿½s e ano de referï¿½ncia(MMAAAA)
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(idPagamento.substring(14, 20).trim());
 		
-		// seta o digito verificador da conta no módulo 10
+		// seta o digito verificador da conta no mï¿½dulo 10
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento5(idPagamento.substring(20, 21).trim());
 		
-		// não está sendo utilizado
+		// nï¿½o estï¿½ sendo utilizado
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento6(idPagamento.substring(21, 24).trim());
 		
 		
@@ -8081,7 +8082,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0264] - Distribuir Dados do Código de Barras
+	 * [UC0264] - Distribuir Dados do Cï¿½digo de Barras
 	 *
 	 * @author Raphael Rossiter
 	 * @date 06/11/2008
@@ -8093,40 +8094,40 @@ public class ControladorArrecadacao extends ControladorComum {
 	public RegistroHelperCodigoBarrasTipoPagamento distribuirDadosCodigoBarrasPorTipoPagamento_GUIA_PAGAMENTO_IMOVEL(
 			RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento, String idPagamento) {
 		
-		//seta o código da localidade
+		//seta o cï¿½digo da localidade
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(idPagamento.substring(0, 3).trim());
 		
 		/*
-		 * Identifica se a matrícula ou o id do cliente foram formatados com 8 ou 9 dígitos
-		 * 0 = 8 dígitos
-		 * 1 = 9 dígitos
+		 * Identifica se a matrï¿½cula ou o id do cliente foram formatados com 8 ou 9 dï¿½gitos
+		 * 0 = 8 dï¿½gitos
+		 * 1 = 9 dï¿½gitos
 		 */
 		String indicadorTamanhoIdentificacao = idPagamento.substring(13, 14).trim();
 		
 		if (indicadorTamanhoIdentificacao.equals(ConstantesSistema.OITO_DIGITOS)){
 			
-			//seta a matrícula do imóvel
+			//seta a matrï¿½cula do imï¿½vel
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(idPagamento.substring(3, 11).trim());
 			
-			// não está sendo utilizado
+			// nï¿½o estï¿½ sendo utilizado
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(idPagamento.substring(11, 14).trim());
 		}
 		else{
 			
-			//seta a matrícula do imóvel
+			//seta a matrï¿½cula do imï¿½vel
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(idPagamento.substring(3, 12).trim());
 			
-			// não está sendo utilizado
+			// nï¿½o estï¿½ sendo utilizado
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(idPagamento.substring(12, 14).trim());
 		}
 		
-		// seta o código do tipo do debito
+		// seta o cï¿½digo do tipo do debito
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(idPagamento.substring(14, 17).trim());
 		
-		// seta o ano da emissão da guia de pagamento(AAAA)
+		// seta o ano da emissï¿½o da guia de pagamento(AAAA)
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento5(idPagamento.substring(17, 21).trim());
 		
-		// não está sendo utilizado
+		// nï¿½o estï¿½ sendo utilizado
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento6(idPagamento.substring(21, 24).trim());
 		
 		
@@ -8134,7 +8135,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0264] - Distribuir Dados do Código de Barras
+	 * [UC0264] - Distribuir Dados do Cï¿½digo de Barras
 	 *
 	 * @author Raphael Rossiter
 	 * @date 06/11/2008
@@ -8146,42 +8147,42 @@ public class ControladorArrecadacao extends ControladorComum {
 	public RegistroHelperCodigoBarrasTipoPagamento distribuirDadosCodigoBarrasPorTipoPagamento_EXTRATO_DEBITO(
 			RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento, String idPagamento) {
 		
-		//seta o código da localidade
+		//seta o cï¿½digo da localidade
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(idPagamento.substring(0, 3).trim());
 		
 		/*
-		 * Identifica se a matrícula ou o id do cliente foram formatados com 8 ou 9 dígitos
-		 * 0 = 8 dígitos
-		 * 1 = 9 dígitos
+		 * Identifica se a matrï¿½cula ou o id do cliente foram formatados com 8 ou 9 dï¿½gitos
+		 * 0 = 8 dï¿½gitos
+		 * 1 = 9 dï¿½gitos
 		 */
 		String indicadorTamanhoIdentificacao = idPagamento.substring(23, 24).trim();
 		
 		if (indicadorTamanhoIdentificacao.equals(ConstantesSistema.OITO_DIGITOS)){
 			
-			//seta a matrícula do imóvel
+			//seta a matrï¿½cula do imï¿½vel
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(idPagamento.substring(3, 11).trim());
 			
-			// seta o sequencial do documento de cobrança
+			// seta o sequencial do documento de cobranï¿½a
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(idPagamento.substring(11, 20).trim());
 			
-			// seta o código do tipo de documento
+			// seta o cï¿½digo do tipo de documento
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(idPagamento.substring(20, 22).trim());
 			
-			// não está sendo utilizado
+			// nï¿½o estï¿½ sendo utilizado
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento5(idPagamento.substring(22, 24).trim());
 		}
 		else{
 			
-			//seta a matrícula do imóvel
+			//seta a matrï¿½cula do imï¿½vel
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(idPagamento.substring(3, 12).trim());
 			
-			// seta o sequencial do documento de cobrança
+			// seta o sequencial do documento de cobranï¿½a
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(idPagamento.substring(12, 21).trim());
 			
-			// seta o código do tipo de documento
+			// seta o cï¿½digo do tipo de documento
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(idPagamento.substring(21, 23).trim());
 			
-			// não está sendo utilizado
+			// nï¿½o estï¿½ sendo utilizado
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento5(idPagamento.substring(23, 24).trim());
 		}
 		
@@ -8189,7 +8190,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0264] - Distribuir Dados do Código de Barras
+	 * [UC0264] - Distribuir Dados do Cï¿½digo de Barras
 	 *
 	 * @author Raphael Rossiter
 	 * @date 06/11/2008
@@ -8201,22 +8202,22 @@ public class ControladorArrecadacao extends ControladorComum {
 	public RegistroHelperCodigoBarrasTipoPagamento distribuirDadosCodigoBarrasPorTipoPagamento_GUIA_PAGAMENTO_CLIENTE(
 			RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento, String idPagamento) {
 		
-		//seta o código da localidade
+		//seta o cï¿½digo da localidade
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(idPagamento
 				.substring(0, 3).trim());
 		// seta o id do cliente
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(idPagamento
 				.substring(3, 11).trim());
-		// não está sendo utilizado
+		// nï¿½o estï¿½ sendo utilizado
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(idPagamento
 				.substring(11, 14).trim());
-		// seta o código do tipo do debito
+		// seta o cï¿½digo do tipo do debito
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(idPagamento
 				.substring(14, 17).trim());
-		// seta o ano da emissão da guia de pagamento(AAAA)
+		// seta o ano da emissï¿½o da guia de pagamento(AAAA)
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento5(idPagamento
 				.substring(17, 21).trim());
-		// não está sendo utilizado
+		// nï¿½o estï¿½ sendo utilizado
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento6(idPagamento
 				.substring(21, 24).trim());
 		
@@ -8224,7 +8225,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0264] - Distribuir Dados do Código de Barras
+	 * [UC0264] - Distribuir Dados do Cï¿½digo de Barras
 	 *
 	 * @author Raphael Rossiter
 	 * @date 06/11/2008
@@ -8236,19 +8237,19 @@ public class ControladorArrecadacao extends ControladorComum {
 	public RegistroHelperCodigoBarrasTipoPagamento distribuirDadosCodigoBarrasPorTipoPagamento_FATURA_CLIENTE_RESPONSAVEL(
 			RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento, String idPagamento) {
 		
-		//seta o código do cliente responsável
+		//seta o cï¿½digo do cliente responsï¿½vel
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(idPagamento
 				.substring(0, 9).trim());
-		// não está sendo utilizado
+		// nï¿½o estï¿½ sendo utilizado
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(idPagamento
 				.substring(9, 11).trim());
-		// seta o mês e ano de referência da conta(MMAAAA)
+		// seta o mï¿½s e ano de referï¿½ncia da conta(MMAAAA)
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(idPagamento
 				.substring(11, 17).trim());
-		// seta o digito verificador da conta no módulo 10
+		// seta o digito verificador da conta no mï¿½dulo 10
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento5(idPagamento
 				.substring(17, 18).trim());
-		// sequencial de fatura do cliente responsável
+		// sequencial de fatura do cliente responsï¿½vel
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento6(idPagamento
 				.substring(18, 24).trim());
 		
@@ -8256,7 +8257,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0264] - Distribuir Dados do Código de Barras
+	 * [UC0264] - Distribuir Dados do Cï¿½digo de Barras
 	 *
 	 * @author Raphael Rossiter
 	 * @date 06/11/2008
@@ -8268,19 +8269,19 @@ public class ControladorArrecadacao extends ControladorComum {
 	public RegistroHelperCodigoBarrasTipoPagamento distribuirDadosCodigoBarrasPorTipoPagamento_DOCUMENTO_COBRANCA(
 			RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento, String idPagamento) {
 		
-		//seta o código da localidade
+		//seta o cï¿½digo da localidade
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(idPagamento
 				.substring(0, 3).trim());
-		// seta o código do cliente
+		// seta o cï¿½digo do cliente
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(idPagamento
 				.substring(3, 11).trim());
-		// seta o sequencial do documento de cobrança
+		// seta o sequencial do documento de cobranï¿½a
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(idPagamento
 				.substring(11, 20).trim());
-		// seta o código do tipo de documento
+		// seta o cï¿½digo do tipo de documento
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(idPagamento
 				.substring(20, 22).trim());
-		// não está sendo utilizado
+		// nï¿½o estï¿½ sendo utilizado
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento5(idPagamento
 				.substring(22, 24).trim());
 		
@@ -8289,9 +8290,9 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * [UC0242] - Registrar Movimento dos Arrecadadores [SF0008] - Gerar
-	 * Ocorrência na coleção de Avisos Bancários
+	 * Ocorrï¿½ncia na coleï¿½ï¿½o de Avisos Bancï¿½rios
 	 * 
-	 * Autor: Sávio Luiz, Bruno Barros 
+	 * Autor: Sï¿½vio Luiz, Bruno Barros 
 	 * Data: 15/02/2006
 	 */
 	public AvisoBancario gerarOcorrenciaAvisoBancario(Integer idMovimento,
@@ -8335,7 +8336,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			/**
 			 * @autor Adriana Muniz e Wellington Rocha
 			 * @data 04/11/2013
-			 * Correção do valor inserido no valor informado
+			 * Correï¿½ï¿½o do valor inserido no valor informado
 			 * */
 			avisoBancario.setValorArrecadacaoInformado(valorArrecadacaoInf);
 		}else{
@@ -8367,7 +8368,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		return avisoBancario;
 	}
 
-	/**Buscar o arrecadador contrato tarifa pelo id da forma de arrecadação e pelo arrecadador contrato
+	/**Buscar o arrecadador contrato tarifa pelo id da forma de arrecadaï¿½ï¿½o e pelo arrecadador contrato
 	 * 
 	 * @param idFormaArrecadacao
 	 * @param colecaoArrecadadorContrato
@@ -8414,9 +8415,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0235] - Inserir Aviso Bancario Autor: Rafael Corrêa Data: 24/03/2006
-	 * [FS0003] Verificar existência de avisos bancários não realizados [FS0004]
-	 * Verificar seleção de aviso Retorna o valor do maior número sequencial do
+	 * [UC0235] - Inserir Aviso Bancario Autor: Rafael Corrï¿½a Data: 24/03/2006
+	 * [FS0003] Verificar existï¿½ncia de avisos bancï¿½rios nï¿½o realizados [FS0004]
+	 * Verificar seleï¿½ï¿½o de aviso Retorna o valor do maior nï¿½mero sequencial do
 	 * arrecadador selecionado
 	 */
 
@@ -8435,7 +8436,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	/**
 	 * [UC0242] - Registrar Movimento dos Arrecadadores [SF0010] - Gerar o
 	 * arquivo de envio para o arrecadador com registros do Movimento Autor:
-	 * Sávio Luiz Data: 15/02/2006
+	 * Sï¿½vio Luiz Data: 15/02/2006
 	 */
 	public void gerarArquivoRegistrosTipoC(
 			RegistroHelperCodigoA registroHelperCodigoA,
@@ -8445,19 +8446,19 @@ public class ControladorArrecadacao extends ControladorComum {
 			String descricaoOcorrencia, Integer indicadorAceitacaoRegistro,
 			String idTipoMovimento) throws ControladorException {
 		StringBuilder registrosC = new StringBuilder();
-		// cria o header do código C para inserir o movimento arrecadador
+		// cria o header do cï¿½digo C para inserir o movimento arrecadador
 		RegistroHelperCodigoA registroHelperHeaderC = new RegistroHelperCodigoA();
-		// cria o trailler do código C para inserir o móvimento arrecadador
+		// cria o trailler do cï¿½digo C para inserir o mï¿½vimento arrecadador
 		RegistroHelperCodigoZ registroHelperTreillerC = new RegistroHelperCodigoZ();
 
-		// inicializa com 1, pois já está contando com a linha do registro A
+		// inicializa com 1, pois jï¿½ estï¿½ contando com a linha do registro A
 		int quantidadeRegistros = 1;
 
 		registrosC.append("A");
 		registroHelperHeaderC.setCodigoRegistro("A");
 		registrosC.append("1");
 		registroHelperHeaderC.setCodigoRemessa("1");
-		// seta o código do convênio
+		// seta o cï¿½digo do convï¿½nio
 		registrosC.append(Util.completaString(registroHelperCodigoA
 				.getCodigoConvenio(), 20));
 		registroHelperHeaderC.setCodigoConvenio(registroHelperCodigoA
@@ -8467,7 +8468,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				.getNomeEmpresa(), 20));
 		registroHelperHeaderC.setNomeEmpresa(registroHelperCodigoA
 				.getNomeEmpresa());
-		// seta o código do banco
+		// seta o cï¿½digo do banco
 		registrosC.append(Util.adicionarZerosEsquedaNumero(3,
 				registroHelperCodigoA.getCodigoBanco()));
 		registroHelperHeaderC.setCodigoBanco(registroHelperCodigoA
@@ -8489,7 +8490,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				+ numeroSequencialArquivoEnvioDebitoAutomatico));
 		registroHelperHeaderC.setNumeroSequencialArquivo(""
 				+ numeroSequencialArquivoEnvioDebitoAutomatico);
-		// seta a versão de layout
+		// seta a versï¿½o de layout
 		registrosC.append(Util.adicionarZerosEsquedaNumero(2, ""
 				+ registroHelperCodigoA.getVersaoLayout()));
 		registroHelperHeaderC.setVersaoLayout(registroHelperCodigoA
@@ -8509,7 +8510,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		// parte do treiller criada para inserir no movimento arrecadador
 		registroHelperTreillerC.setCodigoRegistro("Z");
-		// o total de registros é a quantidade da coleção mais a header e o
+		// o total de registros ï¿½ a quantidade da coleï¿½ï¿½o mais a header e o
 		// treiller (1+1)
 		registroHelperTreillerC.setTotalRegistrosArquivo(""
 				+ (colecaoRegistrosC.size() + 2));
@@ -8524,19 +8525,19 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		Iterator colecaoRegistrosCIterator = colecaoRegistrosC.iterator();
 		while (colecaoRegistrosCIterator.hasNext()) {
-			// cria uma string builder para pegar linha a linha da coleção
+			// cria uma string builder para pegar linha a linha da coleï¿½ï¿½o
 			// inserir o movimento arrecadador e depois inserir na string
 			// builder do registrosC
 			// para ser mandado para o banco.
 			StringBuilder linhaRegistroC = new StringBuilder();
 			// incrementa a quantidade de registros para cada registro da
-			// coleção
+			// coleï¿½ï¿½o
 			quantidadeRegistros = quantidadeRegistros + 1;
-			// começa a criar a string com o registro do tipo c
+			// comeï¿½a a criar a string com o registro do tipo c
 			RegistroHelperCodigoC registroHelperCodigoC = (RegistroHelperCodigoC) colecaoRegistrosCIterator
 					.next();
 			linhaRegistroC.append("C");
-			// Identificação do cliente na empresa
+			// Identificaï¿½ï¿½o do cliente na empresa
 			linhaRegistroC.append(Util.completaString(registroHelperCodigoC
 					.getIdClienteEmpresa(), 25));
 			// agencia para debito
@@ -8631,7 +8632,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * [UC0242] - Registrar Movimento dos Arrecadadores [SF0002] - Inserir o
-	 * movimento do arrecadador Autor: Sávio Luiz Data: 31/01/2006
+	 * movimento do arrecadador Autor: Sï¿½vio Luiz Data: 31/01/2006
 	 */
 
 	public ArrecadadorMovimento inserirMovimentoArrecadador(
@@ -8641,7 +8642,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		Integer idMovimento = null;
 		ArrecadadorMovimento arrecadadorMovimento = new ArrecadadorMovimento();
-		// cria o objeto de arrecadador movimento para a inserção
+		// cria o objeto de arrecadador movimento para a inserï¿½ï¿½o
 		arrecadadorMovimento.setCodigoRemessa(new Short(registroHelperCodigoA.getCodigoRemessa()));
 		arrecadadorMovimento.setCodigoConvenio(registroHelperCodigoA.getCodigoConvenio().trim());
 		arrecadadorMovimento.setNomeEmpresa(registroHelperCodigoA.getNomeEmpresa().trim());
@@ -8681,7 +8682,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * @param movimentoOcorrencia
 	 * @param movimentoAceito
 	 * @param movimentoAbertoFechado
-	 * @return Uma coleçao com os movimentos selecionados
+	 * @return Uma coleï¿½ao com os movimentos selecionados
 	 * @throws ControladorException
 	 */
 	public FiltroArrecadadorMovimento filtrarMovimentoArrecadadores(
@@ -8693,13 +8694,13 @@ public class ControladorArrecadacao extends ControladorComum {
 		Collection<ArrecadadorMovimento> colecaoMovimentoArrecadadoresTotal = null;
 
 		/*
-		 * Movimento com/sem ítens em ocorrência
+		 * Movimento com/sem ï¿½tens em ocorrï¿½ncia
 		 * 
-		 * Caso seja selecionado "COM ÍTENS EM OCORRÊNCIA" selecionar os
-		 * movimentos que tenham algum ítem em ocorrência (a partir da tabela
+		 * Caso seja selecionado "COM ï¿½TENS EM OCORRï¿½NCIA" selecionar os
+		 * movimentos que tenham algum ï¿½tem em ocorrï¿½ncia (a partir da tabela
 		 * ARRECADADOR_MOVIMENTO_ITEM com AMIT_DSOCORRENCIA diferente de "OK"),
-		 * caso seja selecionado "SEM ITENS EM OCORÊNCIA" selecionar os
-		 * movimentos que não tenham itens em ocorrência (a partir da tabela
+		 * caso seja selecionado "SEM ITENS EM OCORï¿½NCIA" selecionar os
+		 * movimentos que nï¿½o tenham itens em ocorrï¿½ncia (a partir da tabela
 		 * ARRECADADOR_MOVIMENTO_ITEM com AMIT_DSOCORRENCIA igual a "OK")
 		 */
 		if (movimentoOcorrencia != null
@@ -8724,11 +8725,11 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 
 		/*
-		 * Movimento com/sem ítens que não foram aceitos
+		 * Movimento com/sem ï¿½tens que nï¿½o foram aceitos
 		 * 
-		 * Caso seja selecionado "COM ITENS NÃO ACEITOS" selecionar os
-		 * movimentos que tenham algum item não aceito (a partir da tabela
-		 * ARRECADADOR_MOVIMENTO_ITEM com AMIT_ICACEITACAO igual de 2 (NÃO)),
+		 * Caso seja selecionado "COM ITENS Nï¿½O ACEITOS" selecionar os
+		 * movimentos que tenham algum item nï¿½o aceito (a partir da tabela
+		 * ARRECADADOR_MOVIMENTO_ITEM com AMIT_ICACEITACAO igual de 2 (Nï¿½O)),
 		 * caso seja selecionado os movimentos em que todos os itens tenha sido
 		 * aceitos (a partir da tabela ARRECADADOR_MOVIMENTO_ITEM com
 		 * AMIT_ICACEITACAO igual de 1 (SIM))
@@ -8755,7 +8756,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 
 		/*
-		 * Coleção com os movimentos abertos e fechados
+		 * Coleï¿½ï¿½o com os movimentos abertos e fechados
 		 */
 		try {
 
@@ -8771,12 +8772,12 @@ public class ControladorArrecadacao extends ControladorComum {
 		 * Movimento aberto / fechado
 		 * 
 		 * Caso seja selecionado "ABERTOS", selecionar os movimentos com valor
-		 * total diferente do valor da soma das arrecadações dos avisos
-		 * bancários relacionados (ARMV_VLTOTALMOVIMENTO seja diferente da soma
+		 * total diferente do valor da soma das arrecadaï¿½ï¿½es dos avisos
+		 * bancï¿½rios relacionados (ARMV_VLTOTALMOVIMENTO seja diferente da soma
 		 * dos AVBC_VLARRECADACAO da tabela AVISO_BANCARIO com ARMV_ID = ARMV_ID
 		 * da tabela ARRECADADOR_MOVIMENTO), caso seja selecionado "FECHADOS",
 		 * selecionar os movimentos com valor total igual ao valor da soma das
-		 * arrecadações dos avisos bancários relacionados (ARMV_VLTOTALMOVIMENTO
+		 * arrecadaï¿½ï¿½es dos avisos bancï¿½rios relacionados (ARMV_VLTOTALMOVIMENTO
 		 * seja igual da soma dos AVBC_VLARRECADACAO da tabela AVISO_BANCARIO
 		 * com ARMV_ID = ARMV_ID da tabela ARRECADADOR_MOVIMENTO)
 		 */
@@ -8812,7 +8813,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				/*
 				 * Selecionar os movimentos com valor total diferente do valor
-				 * da soma das arrecadações dos avisos bancários relacionados
+				 * da soma das arrecadaï¿½ï¿½es dos avisos bancï¿½rios relacionados
 				 */
 				if (movimentoAbertoFechado.equalsIgnoreCase(""
 						+ ConstantesSistema.MOVIMENTO_ABERTO)) {
@@ -8830,7 +8831,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 				/*
 				 * Selecionar os movimentos com valor total igual ao valor da
-				 * soma das arrecadações dos avisos bancários relacionados
+				 * soma das arrecadaï¿½ï¿½es dos avisos bancï¿½rios relacionados
 				 */
 				else if (movimentoAbertoFechado.equalsIgnoreCase(""
 						+ ConstantesSistema.MOVIMENTO_FECHADO)
@@ -8857,8 +8858,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Obtém o número de registros em ocorrência de um determinado movimento
-	 * (número de linhas da tabela ARRECADADOR_MOVIMENTO_ITEM com ARMV_ID =
+	 * Obtï¿½m o nï¿½mero de registros em ocorrï¿½ncia de um determinado movimento
+	 * (nï¿½mero de linhas da tabela ARRECADADOR_MOVIMENTO_ITEM com ARMV_ID =
 	 * ARMV_ID da tabela ARRECADADOR_MOVIMENTO e AMIT_DSOCORRENCIA diferente de
 	 * "OK")
 	 * 
@@ -8891,10 +8892,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Obtém o número de registros que não foram aceitos de um determinado
-	 * movimento (número de linhas da tabela ARRECADADOR_MOVIMENTO_ITEM com
+	 * Obtï¿½m o nï¿½mero de registros que nï¿½o foram aceitos de um determinado
+	 * movimento (nï¿½mero de linhas da tabela ARRECADADOR_MOVIMENTO_ITEM com
 	 * ARMV_ID = ARMV_ID da tabela ARRECADADOR_MOVIMENTO e AMIT_ICACEITACAO
-	 * igual a 2 (NÃO))
+	 * igual a 2 (Nï¿½O))
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 08/03/2006
@@ -8925,7 +8926,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Obtém o valor total dos avisos bancários de um determinado movimento
+	 * Obtï¿½m o valor total dos avisos bancï¿½rios de um determinado movimento
 	 * (Total da soma do campo AVBC_VALORARRECADACAO da tabela AVISO_BANCARIO
 	 * com ARMV_ID = ARMV_ID da tabela ARRECADADOR_MOVIMENTO
 	 * 
@@ -8933,7 +8934,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * @date 08/03/2006
 	 * 
 	 * @param arrecadadorMovimento
-	 * @return Um BigDecimal que representa o total da soma dos avisos bancários
+	 * @return Um BigDecimal que representa o total da soma dos avisos bancï¿½rios
 	 * @throws ControladorException
 	 */
 	public BigDecimal obterTotalArrecadacaoAvisoBancarioPorMovimentoArrecadadores(
@@ -8957,16 +8958,16 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * Caso o valor total do movimento (ARMV_VALORTOTALMOVIMENTO) seja diferente
-	 * do valor da soma das arrecadações dos avisos bancários relacionados
-	 * (ARMV_ID = ARMV_ID da tabela AVISO_BANCARIO e o campo para totalização
-	 * será AVBC_VLARRECADACAO), a situação do movimento será "ABERTO". Caso
-	 * contrário a situação do movimento será "FECHADO"
+	 * do valor da soma das arrecadaï¿½ï¿½es dos avisos bancï¿½rios relacionados
+	 * (ARMV_ID = ARMV_ID da tabela AVISO_BANCARIO e o campo para totalizaï¿½ï¿½o
+	 * serï¿½ AVBC_VLARRECADACAO), a situaï¿½ï¿½o do movimento serï¿½ "ABERTO". Caso
+	 * contrï¿½rio a situaï¿½ï¿½o do movimento serï¿½ "FECHADO"
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 08/03/2006
 	 * 
 	 * @param arrecadadorMovimento
-	 * @return Uma String que representa a situação do movimento
+	 * @return Uma String que representa a situaï¿½ï¿½o do movimento
 	 * @throws ControladorException
 	 */
 	public String obterSituacaoArrecadadorMovimento(
@@ -9063,17 +9064,17 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Lista os avisos bancários associados ao movimento com os seguintes dados:
-	 * Data do Lançamento Sequencial do Aviso Tipo do Aviso Data do Crédito
-	 * Valor do Crédito Valor da Arrecadação Valor Total dos pagamentos
-	 * associados ao aviso Situação do Aviso
+	 * Lista os avisos bancï¿½rios associados ao movimento com os seguintes dados:
+	 * Data do Lanï¿½amento Sequencial do Aviso Tipo do Aviso Data do Crï¿½dito
+	 * Valor do Crï¿½dito Valor da Arrecadaï¿½ï¿½o Valor Total dos pagamentos
+	 * associados ao aviso Situaï¿½ï¿½o do Aviso
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 08/03/2006
 	 * 
 	 * @param arrecadadorMovimento
 	 * @return Uma Collection<AvisoBancarioHelper> que representa a os avisos
-	 *         bancários selecionados
+	 *         bancï¿½rios selecionados
 	 * @throws ControladorException
 	 */
 	public Collection<AvisoBancarioHelper> obterColecaoAvisosBancariosPorArrecadadorMovimento(
@@ -9086,7 +9087,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		AvisoBancarioHelper avisoBancarioHelper = null;
 
 		/*
-		 * Seleciona os avisos bancários de um determinado movimento
+		 * Seleciona os avisos bancï¿½rios de um determinado movimento
 		 */
 		try {
 
@@ -9123,7 +9124,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							.getNumeroSequencial());
 				}
 
-				// CRÉDITO = 1 DÉBITO = 2
+				// CRï¿½DITO = 1 Dï¿½BITO = 2
 				if (avisoBancario.getIndicadorCreditoDebito() != null) {
 
 					if (avisoBancario.getIndicadorCreditoDebito().equals(
@@ -9153,7 +9154,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				/*
 				 * Calcula o valor total dos pagamentos associados a um
-				 * determinado aviso bancário
+				 * determinado aviso bancï¿½rio
 				 */
 				try {
 
@@ -9180,16 +9181,16 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Caso o valor total dos pagamentos seja igual ao valor da arrecadação
-	 * (AVBC_VLARRECADACAO) e o valor total das devoluções seja igual ao valor
-	 * da devolução (AVBC_VLDEVOLUCAO) a situação será "FECHADO"; Caso contrário
-	 * será "ABERTO"
+	 * Caso o valor total dos pagamentos seja igual ao valor da arrecadaï¿½ï¿½o
+	 * (AVBC_VLARRECADACAO) e o valor total das devoluï¿½ï¿½es seja igual ao valor
+	 * da devoluï¿½ï¿½o (AVBC_VLDEVOLUCAO) a situaï¿½ï¿½o serï¿½ "FECHADO"; Caso contrï¿½rio
+	 * serï¿½ "ABERTO"
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 09/03/2006
 	 * 
 	 * @param avisoBancario
-	 * @return Uma String que representa a situação do aviso
+	 * @return Uma String que representa a situaï¿½ï¿½o do aviso
 	 * @throws ControladorException
 	 */
 	public String obterSituacaoAvisoBancarioParaArrecadadorMovimento(
@@ -9201,7 +9202,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		/*
 		 * Calcula o valor total dos pagamentos associados a um determinado
-		 * aviso bancário
+		 * aviso bancï¿½rio
 		 */
 		try {
 
@@ -9214,8 +9215,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 
 		/*
-		 * Calcula o valor total das devoluções associados a um determinado
-		 * aviso bancário
+		 * Calcula o valor total das devoluï¿½ï¿½es associados a um determinado
+		 * aviso bancï¿½rio
 		 */
 		try {
 
@@ -9248,12 +9249,12 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0270] Apresentar Análise do Movimento dos Arrecadadores
+	 * [UC0270] Apresentar Anï¿½lise do Movimento dos Arrecadadores
 	 * 
 	 * O sistema seleciona os itens do movimento do arrecadador com os seguintes
-	 * dados: 1 - Código do Registro 2 - Identificação do Imóvel/Cliente 3 -
-	 * Ocorrência 4 - Indicador de Aceitação 5 - Descrição do Indicador de
-	 * Aceitação
+	 * dados: 1 - Cï¿½digo do Registro 2 - Identificaï¿½ï¿½o do Imï¿½vel/Cliente 3 -
+	 * Ocorrï¿½ncia 4 - Indicador de Aceitaï¿½ï¿½o 5 - Descriï¿½ï¿½o do Indicador de
+	 * Aceitaï¿½ï¿½o
 	 * 
 	 * [SF0001] Consultar os Itens do Movimento do Arrecadador
 	 * 
@@ -9319,8 +9320,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 				/*
-				 * Caso o código do registro corresponda a "B", "C", "E" ou "F",
-				 * exibir a identificação do cliente na empresa retornada pelo
+				 * Caso o cï¿½digo do registro corresponda a "B", "C", "E" ou "F",
+				 * exibir a identificaï¿½ï¿½o do cliente na empresa retornada pelo
 				 * [UC0262]
 				 */
 				if (arrecadadorMovimentoItemHelper.getCodigoRegistro() != null
@@ -9404,15 +9405,15 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 				/*
-				 * Caso o código do registro corresponda a "G"
+				 * Caso o cï¿½digo do registro corresponda a "G"
 				 * 
-				 * Distribui os dados do código de barras [UC0264] - Distribuir
-				 * Dados co Código de Barras passando o código de barras
+				 * Distribui os dados do cï¿½digo de barras [UC0264] - Distribuir
+				 * Dados co Cï¿½digo de Barras passando o cï¿½digo de barras
 				 * retornado pelo [UC0262]- Distribuir Dados do Registro de
 				 * Movimento do Arrecadador.
 				 * 
 				 * Exibir o tipo de pagamento retornado pelo [UC0262] -
-				 * Distribuir Dados co Código de Barras
+				 * Distribuir Dados co Cï¿½digo de Barras
 				 */
 				else if (arrecadadorMovimentoItemHelper.getCodigoRegistro() != null
 						&& arrecadadorMovimentoItemHelper.getCodigoRegistro()
@@ -9443,7 +9444,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					/*
 					 * Caso o tipo de pagamento corresponda a: Conta (valor =
 					 * 3), Guia de Pagamento (valor = 4) ou Documento de
-					 * Cobrança (valor = 5), exibir a matrícula do imóvel
+					 * Cobranï¿½a (valor = 5), exibir a matrï¿½cula do imï¿½vel
 					 * retornada pelo [UC0264]
 					 */
 					
@@ -9582,10 +9583,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * [UC0262] - Distribuir dados do Registro de Movimento do Arrecadador
-	 * Autor: Sávio Luiz Data: 30/01/2006
+	 * Autor: Sï¿½vio Luiz Data: 30/01/2006
 	 * 
-	 * Caso a descrição de Ocorrencia venha nula então recupera o código
-	 * registro da linha senão então seta o valor de código registro para 'C'
+	 * Caso a descriï¿½ï¿½o de Ocorrencia venha nula entï¿½o recupera o cï¿½digo
+	 * registro da linha senï¿½o entï¿½o seta o valor de cï¿½digo registro para 'C'
 	 */
 
 	public Object distribuirdadosRegistroMovimentoArrecadador(String linha, String descricaoOcorrencia) throws ControladorException {
@@ -9593,8 +9594,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		// inicializa a variavel como 0
 		char codigoRegistro = '0';
-		// se a descrição da ocorrencia for diferente de null
-		// então é para setar o objeto registroHelperCodigoC
+		// se a descriï¿½ï¿½o da ocorrencia for diferente de null
+		// entï¿½o ï¿½ para setar o objeto registroHelperCodigoC
 		if (descricaoOcorrencia != null) {
 			codigoRegistro = 'C';
 		} else {
@@ -9609,7 +9610,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			registroHelperCodigoA.setCodigoRegistro("" + codigoRegistro);
 			// recupera o codigo da remessa
 			registroHelperCodigoA.setCodigoRemessa(linha.substring(1, 2).trim());
-			// recupera o código do convênio
+			// recupera o cï¿½digo do convï¿½nio
 			registroHelperCodigoA.setCodigoConvenio(linha.substring(2, 22).trim());
 			// recupera o nome da empresa
 			registroHelperCodigoA.setNomeEmpresa(linha.substring(22, 42).trim());
@@ -9617,11 +9618,11 @@ public class ControladorArrecadacao extends ControladorComum {
 			registroHelperCodigoA.setCodigoBanco(linha.substring(42, 45).trim());
 			// recupera o nome do banco
 			registroHelperCodigoA.setNomeBanco(linha.substring(45, 65).trim());
-			// recupera a data de geração do arquivo
+			// recupera a data de geraï¿½ï¿½o do arquivo
 			registroHelperCodigoA.setDataGeracaoArquivo(linha.substring(65, 73).trim());
 			// recupera o numero sequencial do arquivo(NSA)
 			registroHelperCodigoA.setNumeroSequencialArquivo(linha.substring(73, 79).trim());
-			// recupera a versão do layout
+			// recupera a versï¿½o do layout
 			registroHelperCodigoA.setVersaoLayout(linha.substring(79, 81).trim());
 			// recupera o tipo de movimento
 			registroHelperCodigoA.setTipoMovimento(linha.substring(81, 98).trim());
@@ -9642,13 +9643,13 @@ public class ControladorArrecadacao extends ControladorComum {
 			RegistroHelperCodigoB registroHelperCodigoB = new RegistroHelperCodigoB();
 			// recupera o codigo do registro
 			registroHelperCodigoB.setCodigoRegistro("" + codigoRegistro);
-			// recupera a identificação do cliente na empresa
+			// recupera a identificaï¿½ï¿½o do cliente na empresa
 			registroHelperCodigoB.setIdClienteEmpresa(linha.substring(1, 26).trim());
 			// recupera a agencia para debito
 			registroHelperCodigoB.setAgenciaDebito(linha.substring(26, 30).trim());
-			// recupera o identificação do cliente no banco
+			// recupera o identificaï¿½ï¿½o do cliente no banco
 			registroHelperCodigoB.setIdClienteBanco(linha.substring(30, 44).trim());
-			// recupera a data de Opção/Exclusão
+			// recupera a data de Opï¿½ï¿½o/Exclusï¿½o
 			registroHelperCodigoB.setDataOpcaoExclusao(linha.substring(44, 52).trim());
 			// recupera o reservado para o futuro
 			registroHelperCodigoB.setReservadoFuturo(linha.substring(52, 149).trim());
@@ -9664,13 +9665,13 @@ public class ControladorArrecadacao extends ControladorComum {
 			RegistroHelperCodigoC registroHelperCodigoC = new RegistroHelperCodigoC();
 			// recupera o codigo do registro
 			registroHelperCodigoC.setCodigoRegistro("" + codigoRegistro);
-			// recupera a identificação do cliente na empresa
+			// recupera a identificaï¿½ï¿½o do cliente na empresa
 			registroHelperCodigoC.setIdClienteEmpresa(linha.substring(1, 26).trim());
 			// recupera a agencia para debito
 			registroHelperCodigoC.setAgenciaDebito(linha.substring(26, 30).trim());
-			// recupera o identificação do cliente no banco
+			// recupera o identificaï¿½ï¿½o do cliente no banco
 			registroHelperCodigoC.setIdClienteBanco(linha.substring(30, 44).trim());
-			// recupera a descrição da ocorrencia do movimento
+			// recupera a descriï¿½ï¿½o da ocorrencia do movimento
 			registroHelperCodigoC.setDescricaoOcorrenciaMovimento(descricaoOcorrencia);
 			// recupera os brancos
 			registroHelperCodigoC.setBrancos(linha.substring(84, 124).trim());
@@ -9688,11 +9689,11 @@ public class ControladorArrecadacao extends ControladorComum {
 			RegistroHelperCodigoE registroHelperCodigoE = new RegistroHelperCodigoE();
 			// recupera o codigo do registro
 			registroHelperCodigoE.setCodigoRegistro("" + codigoRegistro);
-			// recupera a identificação do cliente na empresa
+			// recupera a identificaï¿½ï¿½o do cliente na empresa
 			registroHelperCodigoE.setIdClienteEmpresa(linha.substring(1, 26).trim());
 			// recupera a agencia para debito
 			registroHelperCodigoE.setAgenciaDebito(linha.substring(26, 30).trim());
-			// recupera o identificação do cliente no banco
+			// recupera o identificaï¿½ï¿½o do cliente no banco
 			registroHelperCodigoE.setIdClienteBanco(linha.substring(30, 44).trim());
 			// recupera a data do debito
 			registroHelperCodigoE.setDataDebito(linha.substring(44, 52).trim());
@@ -9700,7 +9701,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			registroHelperCodigoE.setValorDebito(linha.substring(52, 67).trim());
 			// recupera o codigo da moeda
 			registroHelperCodigoE.setCodigoMoeda(linha.substring(67, 69).trim());
-			// recupera o código de movimento
+			// recupera o cï¿½digo de movimento
 			registroHelperCodigoE.setAnoMesReferenciaConta(linha.substring(69, 75).trim());
 			// recupera o digito verificado no modulo dez(10) do ano e mes
 			// da
@@ -9712,7 +9713,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			registroHelperCodigoE.setReservadoFuturo(linha.substring(129, 149).trim());
 			if (!linha.substring(149, 150).trim().equals("*")) {
 				// recupera o codigo do movimento enviado no registro de
-				// código
+				// cï¿½digo
 				// E
 				registroHelperCodigoE.setCodigoMovimento(linha.substring(149, 150).trim());
 			}
@@ -9729,19 +9730,19 @@ public class ControladorArrecadacao extends ControladorComum {
 			RegistroHelperCodigoG registroHelperCodigoG = new RegistroHelperCodigoG();
 			// recupera o codigo do registro
 			registroHelperCodigoG.setCodigoRegistro("" + codigoRegistro);
-			// recupera a identificação da agencia /conta/digito creditada
+			// recupera a identificaï¿½ï¿½o da agencia /conta/digito creditada
 			registroHelperCodigoG.setIdAgenciaContaDigito(linha.substring(1, 21).trim());
 			// recupera a data de pagamento(AAAAMMDD)
 			registroHelperCodigoG.setDataPagamento(linha.substring(21, 29).trim());
 			// recupera a data prevista para o credito(AAAAMMDD)
 			registroHelperCodigoG.setDataPrevistaCredito(linha.substring(29, 37).trim());
 
-			// recupera O CÓDIGO DE BARRAS
+			// recupera O Cï¿½DIGO DE BARRAS
 			// String codigoBarras = linha.substring(37, 81).trim();
 			String codigoBarras = linha.substring(37, 93).trim();
 
 			RegistroHelperCodigoBarras registroHelperCodigoBarras = distribuirDadosCodigoBarras(codigoBarras);
-			// seta também o código de barra como string
+			// seta tambï¿½m o cï¿½digo de barra como string
 			registroHelperCodigoG.setCodigoBarras(codigoBarras);
 			registroHelperCodigoG.setRegistroHelperCodigoBarras(registroHelperCodigoBarras);
 			// recupera o valor recebido
@@ -9752,7 +9753,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			registroHelperCodigoG.setNumeroSeqRegistro(linha.substring(100, 108).trim());
 			// recupera o codigo da agencia arrecadadora
 			registroHelperCodigoG.setCodigoAgenciaArrecadadora(linha.substring(108, 116).trim());
-			// recupera a foma de arrecadação/captura
+			// recupera a foma de arrecadaï¿½ï¿½o/captura
 			String codigoArrecadacaoForma = linha.substring(116, 117).trim();
 			registroHelperCodigoG.setCodigoFormaArrecadacao(codigoArrecadacaoForma);
 			String descricaoArrecadacaoForma = "";
@@ -9765,8 +9766,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			registroHelperCodigoG.setFormaArrecadacao(descricaoArrecadacaoForma);
 
-			// recupera o numero de autenticação caixa ou código de
-			// transação
+			// recupera o numero de autenticaï¿½ï¿½o caixa ou cï¿½digo de
+			// transaï¿½ï¿½o
 			registroHelperCodigoG.setNumeroAutenticacao(linha.substring(117, 140).trim());
 			if (!linha.substring(140, 141).trim().equals("")) {
 				// recupera a forma de pagamento
@@ -9791,7 +9792,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			RegistroHelperCodigoX registroHelperCodigoX = new RegistroHelperCodigoX();
 			// recupera o codigo do registro
 			registroHelperCodigoX.setCodigoRegistro("" + codigoRegistro);
-			// recupera o código agencia
+			// recupera o cï¿½digo agencia
 			registroHelperCodigoX.setCodigoAgencia(linha.substring(1, 5));
 			// recupera o nome da agencia
 			registroHelperCodigoX.setNomeAgencia(linha.substring(5, 35));
@@ -9799,15 +9800,15 @@ public class ControladorArrecadacao extends ControladorComum {
 			registroHelperCodigoX.setNomelogradouro(linha.substring(35, 65));
 			// recupera o numero
 			registroHelperCodigoX.setNumero(linha.substring(65, 70));
-			// recupera o código do cep
+			// recupera o cï¿½digo do cep
 			registroHelperCodigoX.setCodigoCep(linha.substring(70, 75));
 			// recupera o sufixo do cep
 			registroHelperCodigoX.setSufixoCep(linha.substring(75, 78));
 			// recupera o nome da cidade
 			registroHelperCodigoX.setNomeCidade(linha.substring(78, 98));
-			// recupera a sigla da unidade federação
+			// recupera a sigla da unidade federaï¿½ï¿½o
 			registroHelperCodigoX.setSiglaUnidadeFederacao(linha.substring(98, 100));
-			// recupera a situação da agencia
+			// recupera a situaï¿½ï¿½o da agencia
 			registroHelperCodigoX.setSituacaoAgencia(linha.substring(100, 101));
 			if (linha.substring(149, 150).trim().equals("*")) {
 				// recupera o reservado para o futuro
@@ -9858,45 +9859,45 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		RegistroHelperCodigoF registroHelperCodigoF = new RegistroHelperCodigoF();
 		
-		// CÓDIGO DO REGISTRO
+		// Cï¿½DIGO DO REGISTRO
 		registroHelperCodigoF.setCodigoRegistro("" + codigoRegistro);
 		
-		// IDENTIFICAÇÃO DO CLIENTE NA EMPRESA
+		// IDENTIFICAï¿½ï¿½O DO CLIENTE NA EMPRESA
 		registroHelperCodigoF.setIdClienteEmpresa(linha.substring(1, 26).trim());
 		
-		// AGÊNCIA PARA DÉBITO
+		// AGï¿½NCIA PARA Dï¿½BITO
 		registroHelperCodigoF.setAgenciaDebito(linha.substring(26, 30).trim());
 		
-		//IDENTIFICAÇÃO DO CLIENTE NO BANCO
+		//IDENTIFICAï¿½ï¿½O DO CLIENTE NO BANCO
 		registroHelperCodigoF.setIdClienteBanco(linha.substring(30, 44).trim());
 		
-		// DATA DO DÉBITO
+		// DATA DO Dï¿½BITO
 		registroHelperCodigoF.setDataDebito(linha.substring(44, 52).trim());
 		
-		// VALOR DO DÉBITO
+		// VALOR DO Dï¿½BITO
 		registroHelperCodigoF.setValorDebito(linha.substring(52, 67).trim());
 		
-		// CÓDIGO DO RETORNO
+		// Cï¿½DIGO DO RETORNO
 		registroHelperCodigoF.setCodigoRetorno(linha.substring(67, 69).trim());
 		
-		// ANO E MÊS DE REFERÊNCIA DA CONTA
+		// ANO E Mï¿½S DE REFERï¿½NCIA DA CONTA
 		registroHelperCodigoF.setAnoMesReferenciaConta(linha.substring(69,75).trim());
 		
-		//DÍGITO VERIFICADOR DO MÓDULO DEZ (10) DO ANO E MÊS DA  CONTA DEBITADA
+		//Dï¿½GITO VERIFICADOR DO Mï¿½DULO DEZ (10) DO ANO E Mï¿½S DA  CONTA DEBITADA
 		registroHelperCodigoF.setDigitoVerificadoAnoMesConta(linha.substring(75, 76).trim());
 		
 		/*
-		 * Caso o ano e mês da conta não esteja informado no arquivo, será necessário recuperar
-		 * a identificação da conta.
+		 * Caso o ano e mï¿½s da conta nï¿½o esteja informado no arquivo, serï¿½ necessï¿½rio recuperar
+		 * a identificaï¿½ï¿½o da conta.
 		 */
 		if (registroHelperCodigoF.getAnoMesReferenciaConta().equals("")){
 			
-			//IDENTIFICAÇÃO DA CONTA
+			//IDENTIFICAï¿½ï¿½O DA CONTA
 			registroHelperCodigoF.setReservadoFuturo(linha.substring(96, 110).trim());
 		}
 		else{
 			
-			//ESPAÇO RESERVADO PARA O FUTURO
+			//ESPAï¿½O RESERVADO PARA O FUTURO
 			registroHelperCodigoF.setReservadoFuturo(linha.substring(129, 149).trim());
 		}
 		
@@ -9905,7 +9906,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		if (!linha.substring(149, 150).trim().equals("*")) {
 			
-			// CÓDIGO DO MOVIMENTO ENVIADO NO REGISTRO DE CÓDIGO F
+			// Cï¿½DIGO DO MOVIMENTO ENVIADO NO REGISTRO DE Cï¿½DIGO F
 			registroHelperCodigoF.setCodigoMovimento(linha.substring(149, 150).trim());
 		}
 		
@@ -9913,12 +9914,12 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0270] Apresentar Análise do Movimento dos Arrecadadores
+	 * [UC0270] Apresentar Anï¿½lise do Movimento dos Arrecadadores
 	 * 
-	 * O sistema captura os dados referentes ao conteúdo do registro de
+	 * O sistema captura os dados referentes ao conteï¿½do do registro de
 	 * Movimento do arrecadador
 	 * 
-	 * [SF0002] Apresentar Dados do Conteúdo do Registro de Movimento do
+	 * [SF0002] Apresentar Dados do Conteï¿½do do Registro de Movimento do
 	 * Arrecadador
 	 * 
 	 * @author Raphael Rossiter
@@ -9950,13 +9951,13 @@ public class ControladorArrecadacao extends ControladorComum {
 				.retonarObjetoDeColecao(colecaoArrecadadorMovimentoItem);
 
 		/*
-		 * Caso o código do registro corresponda a: "B" ou "C", apresentar os
+		 * Caso o cï¿½digo do registro corresponda a: "B" ou "C", apresentar os
 		 * seguintes campos:
 		 * 
-		 * Código do registro Identificação do cliente na empresa Agência para
-		 * débito Identificação do cliente no banco Data de opção/exclusão
-		 * Código do movimento (1 - EXCLUSÃO, 2 - INCLUSÃO) Ocorrência Indicador
-		 * de Aceitação
+		 * Cï¿½digo do registro Identificaï¿½ï¿½o do cliente na empresa Agï¿½ncia para
+		 * dï¿½bito Identificaï¿½ï¿½o do cliente no banco Data de opï¿½ï¿½o/exclusï¿½o
+		 * Cï¿½digo do movimento (1 - EXCLUSï¿½O, 2 - INCLUSï¿½O) Ocorrï¿½ncia Indicador
+		 * de Aceitaï¿½ï¿½o
 		 */
 		if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
 				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
@@ -10051,14 +10052,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		}
 		/*
-		 * Caso o código do registro corresponda a: "E" ou "F", apresentar os
+		 * Caso o cï¿½digo do registro corresponda a: "E" ou "F", apresentar os
 		 * seguintes campos:
 		 * 
-		 * Código do registro Identificação do cliente na empresa Agência para
-		 * débito Identificação do cliente no banco Data do vencimento/débito
-		 * Valor do débito Código da moeda ou código do retorno Mês e ano de
-		 * rferencia da conta Dígito verificador da conta Código do movimento (0 -
-		 * DÉBITO NORMAL, 1 - CANCELAMENTO) Ocorrência Indicador de Aceitação
+		 * Cï¿½digo do registro Identificaï¿½ï¿½o do cliente na empresa Agï¿½ncia para
+		 * dï¿½bito Identificaï¿½ï¿½o do cliente no banco Data do vencimento/dï¿½bito
+		 * Valor do dï¿½bito Cï¿½digo da moeda ou cï¿½digo do retorno Mï¿½s e ano de
+		 * rferencia da conta Dï¿½gito verificador da conta Cï¿½digo do movimento (0 -
+		 * Dï¿½BITO NORMAL, 1 - CANCELAMENTO) Ocorrï¿½ncia Indicador de Aceitaï¿½ï¿½o
 		 */
 		else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
 				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
@@ -10204,10 +10205,10 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			/*
-			 * Caso o código do registro corresponda a "F" apresentar a
-			 * descrição do código de retorno
+			 * Caso o cï¿½digo do registro corresponda a "F" apresentar a
+			 * descriï¿½ï¿½o do cï¿½digo de retorno
 			 * (DURC_DSDEBITOAUTOMATICORETORNOCODIGO da tabela
-			 * DEBITO_AUTOMATICO_RETORNO_COD com DURC_ID = código de retorno)
+			 * DEBITO_AUTOMATICO_RETORNO_COD com DURC_ID = cï¿½digo de retorno)
 			 */
 			FiltroDebitoAutomaticoRetornoCodigo filtroDebitoAutomaticoRetornoCodigo = new FiltroDebitoAutomaticoRetornoCodigo();
 
@@ -10232,7 +10233,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			retorno.setNomeAgencia( arrecadadorMovimentoItem.getArrecadadorMovimento().getNomeBanco() );
 
 			/*
-			 * Lista de pagamentos relacionados ao ítem do movimento
+			 * Lista de pagamentos relacionados ao ï¿½tem do movimento
 			 */
 			FiltroPagamento filtroPagamento = new FiltroPagamento();
 			filtroPagamento.setConsultaSemLimites(true);
@@ -10257,16 +10258,16 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		}
 		/*
-		 * Caso o código do registro corresponda a: "G", apresentar os seguintes
+		 * Caso o cï¿½digo do registro corresponda a: "G", apresentar os seguintes
 		 * campos:
 		 * 
-		 * Código do registro Identificação da agência/conta/dígito creditada
-		 * Data pagamento Data prevista para o crédito Código de Barras [SB003 -
-		 * Apresentar Dados do Conteúdo do Código de Barras] com os dados
-		 * retornados pelo [UC0264] Valor recebido Valor da tarifa NSR - Número
-		 * sequencial de registro Código da agência arrecadadora Forma de
-		 * arrecadação/captura Número de autenticação caixa ou código de
-		 * transação Forma de pagamento
+		 * Cï¿½digo do registro Identificaï¿½ï¿½o da agï¿½ncia/conta/dï¿½gito creditada
+		 * Data pagamento Data prevista para o crï¿½dito Cï¿½digo de Barras [SB003 -
+		 * Apresentar Dados do Conteï¿½do do Cï¿½digo de Barras] com os dados
+		 * retornados pelo [UC0264] Valor recebido Valor da tarifa NSR - Nï¿½mero
+		 * sequencial de registro Cï¿½digo da agï¿½ncia arrecadadora Forma de
+		 * arrecadaï¿½ï¿½o/captura Nï¿½mero de autenticaï¿½ï¿½o caixa ou cï¿½digo de
+		 * transaï¿½ï¿½o Forma de pagamento
 		 */
 		else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
 				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
@@ -10291,7 +10292,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					.formatarData(registroHelperCodigoG
 							.getDataPrevistaCredito()));
 
-			// [SB0003] - Apresentar Dados do Conteúdo do Código de Barras
+			// [SB0003] - Apresentar Dados do Conteï¿½do do Cï¿½digo de Barras
 			DadosConteudoCodigoBarrasHelper dadosConteudoCodigoBarrasHelper = this
 					.apresentarDadosConteudoCodigoBarras(registroHelperCodigoG);
 
@@ -10335,7 +10336,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					.getFormaPagamento());
 
 			/*
-			 * Lista de pagamentos relacionados ao ítem do movimento
+			 * Lista de pagamentos relacionados ao ï¿½tem do movimento
 			 */
 			FiltroPagamento filtroPagamento = new FiltroPagamento();
 			filtroPagamento.setConsultaSemLimites(true);
@@ -10355,12 +10356,12 @@ public class ControladorArrecadacao extends ControladorComum {
 			retorno.setColecaoPagamentos(colecaoPagamentos);
 		}
 		/*
-		 * Caso o código do registro corresponda a: "X", apresentar os seguintes
+		 * Caso o cï¿½digo do registro corresponda a: "X", apresentar os seguintes
 		 * campos:
 		 * 
-		 * Código do registro Código da agência Nome da agência Nome do
-		 * logradouro Número Código do CEP Sufixo do CEP Nome da cidade Sigla da
-		 * unidade da federação Situação da agência ("A" = Ativa, "B" = em
+		 * Cï¿½digo do registro Cï¿½digo da agï¿½ncia Nome da agï¿½ncia Nome do
+		 * logradouro Nï¿½mero Cï¿½digo do CEP Sufixo do CEP Nome da cidade Sigla da
+		 * unidade da federaï¿½ï¿½o Situaï¿½ï¿½o da agï¿½ncia ("A" = Ativa, "B" = em
 		 * regime de encerramento)
 		 */
 		else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
@@ -10406,18 +10407,18 @@ public class ControladorArrecadacao extends ControladorComum {
 		/*
 		 * Alterado por Vivianne Sousa em 28/01/2008 - Analista: Adriano
 		 *
-		 * Caso o código do registro corresponda a: "W", apresentar os seguintes
+		 * Caso o cï¿½digo do registro corresponda a: "W", apresentar os seguintes
 		 * campos:
 		 * 
-		 * Código do registro
-		 * Identificação da agencia/conta/digito creditado
+		 * Cï¿½digo do registro
+		 * Identificaï¿½ï¿½o da agencia/conta/digito creditado
 		 * Data de pagamento
-		 * Data prevista para o crédito
-		 * Código de barras
+		 * Data prevista para o crï¿½dito
+		 * Cï¿½digo de barras
 		 * Valor recebido
-		 * NSR-Número Sequencial de Registro
-		 * Forma de arrecadação/captura
-		 * Número de autenticação caixa ou código de transação
+		 * NSR-Nï¿½mero Sequencial de Registro
+		 * Forma de arrecadaï¿½ï¿½o/captura
+		 * Nï¿½mero de autenticaï¿½ï¿½o caixa ou cï¿½digo de transaï¿½ï¿½o
 		 * Forma de Pagamento
 		 */
 		else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
@@ -10447,16 +10448,16 @@ public class ControladorArrecadacao extends ControladorComum {
 					.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(
 							registroHelperCodigoW.getValorPagoSacado())));
 
-			retorno.setFormaArrecadacaoCaptura("Ficha de Compensação");
+			retorno.setFormaArrecadacaoCaptura("Ficha de Compensaï¿½ï¿½o");
 
-			//[SB0004] - Apresentar Dados do Conteúdo do Código de Barras
+			//[SB0004] - Apresentar Dados do Conteï¿½do do Cï¿½digo de Barras
 			DadosConteudoCodigoBarrasHelper dadosConteudoCodigoBarrasHelper = 
 					apresentarDadosConteudoCodigoBarrasFichaCompensacao(registroHelperCodigoW);
 
 			retorno.setDadosConteudoCodigoBarrasHelper(dadosConteudoCodigoBarrasHelper);
 
 			/*
-			 * Lista de pagamentos relacionados ao ítem do movimento
+			 * Lista de pagamentos relacionados ao ï¿½tem do movimento
 			 */
 			FiltroPagamento filtroPagamento = new FiltroPagamento();
 			filtroPagamento.setConsultaSemLimites(true);
@@ -10531,7 +10532,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				retorno.setValorRecebido(Util.formatarMoedaReal(registroTipo7.getValorRecebidoFormatado()));
 
-				retorno.setFormaArrecadacaoCaptura("Ficha de Compensação");
+				retorno.setFormaArrecadacaoCaptura("Ficha de Compensaï¿½ï¿½o");
 
 				DadosConteudoCodigoBarrasHelper dadosConteudoCodigoBarrasHelper = 
 						apresentarDadosConteudoCodigoBarrasFichaCompensacaoNovo(registroTipo7);
@@ -10567,11 +10568,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0270] Apresentar Análise do Movimento dos Arrecadadores
+	 * [UC0270] Apresentar Anï¿½lise do Movimento dos Arrecadadores
 	 * 
-	 * O sistema captura os dados referentes ao conteúdo do do código de barras
+	 * O sistema captura os dados referentes ao conteï¿½do do do cï¿½digo de barras
 	 * 
-	 * [SF0003] Apresentar Dados do Conteúdo do Código de Barras
+	 * [SF0003] Apresentar Dados do Conteï¿½do do Cï¿½digo de Barras
 	 * 
 	 * @author Raphael Rossiter
 	 * @data 22/03/2006
@@ -10659,8 +10660,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	}
 
-	// Método que verifica (no InserirAvisoBancario) se a conta bancária
-	// selecionada existe para depósito da arrecadação
+	// Mï¿½todo que verifica (no InserirAvisoBancario) se a conta bancï¿½ria
+	// selecionada existe para depï¿½sito da arrecadaï¿½ï¿½o
 	public void verificarExistenciaContaParaAvisoBancario(String idArrecadador,
 			String idConta) throws ControladorException {
 
@@ -10699,7 +10700,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Método que atualiza o aviso bancario, adiciona as deducoes e acertos
+	 * Mï¿½todo que atualiza o aviso bancario, adiciona as deducoes e acertos
 	 * novas e remove as deducoes e os acertos que forma para remover
 	 * 
 	 * @author thiago
@@ -10836,10 +10837,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	
 	/**
-	 * Faz a pesquisa de devolução fazendo os carregamentos de clienteContas,
+	 * Faz a pesquisa de devoluï¿½ï¿½o fazendo os carregamentos de clienteContas,
 	 * clienteImoveis, clientesGuiaPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date
 	 * 
 	 * @param FiltroDevolucao
@@ -10858,11 +10859,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do Imóvel pesquisarPagamentoImovel
+	 * Pesquisa os pagamentos do Imï¿½vel pesquisarPagamentoImovel
 	 * 
 	 * @author Tiago Moreno, Roberta Costa,Rafael Santos
 	 * @date 12/06/06,06/10/2006
@@ -10902,9 +10903,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	 */
 
 	/**
-	 * [UC0239] Filtrar Aviso Bancário
+	 * [UC0239] Filtrar Aviso Bancï¿½rio
 	 * 
-	 * Validar Filtrar Aviso Bancário
+	 * Validar Filtrar Aviso Bancï¿½rio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/03/2006
@@ -10983,9 +10984,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0239] Filtrar Aviso Bancário
+	 * [UC0239] Filtrar Aviso Bancï¿½rio
 	 * 
-	 * Filtrar Aviso Bancário de acordo com a opção Aberto / Fechado
+	 * Filtrar Aviso Bancï¿½rio de acordo com a opï¿½ï¿½o Aberto / Fechado
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/03/2006
@@ -11022,12 +11023,12 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				if ((!tipoAviso.trim().equals("2"))
 						&& (indicadorCreditoDebito == 1)) {
-					// tipo de aviso: Crédito ou Todos
+					// tipo de aviso: Crï¿½dito ou Todos
 					avisoBancarioHelper.setTipoAviso(ConstantesSistema.FECHADO);
 					collectionAvisoBancarioNovo.add(avisoBancarioHelper);
 				} else if ((!tipoAviso.trim().equals("1"))
 						&& (indicadorCreditoDebito == 2)) {
-					// tipo de aviso: Débito ou Todos
+					// tipo de aviso: Dï¿½bito ou Todos
 					avisoBancarioHelper.setTipoAviso(ConstantesSistema.FECHADO);
 					collectionAvisoBancarioNovo.add(avisoBancarioHelper);
 				}
@@ -11037,12 +11038,12 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				if ((!tipoAviso.trim().equals("2"))
 						&& (indicadorCreditoDebito == 1)) {
-					// tipo de aviso: Crédito ou Todos
+					// tipo de aviso: Crï¿½dito ou Todos
 					avisoBancarioHelper.setTipoAviso(ConstantesSistema.ABERTO);
 					collectionAvisoBancarioNovo.add(avisoBancarioHelper);
 				} else if ((!tipoAviso.trim().equals("1"))
 						&& (indicadorCreditoDebito == 2)) {
-					// tipo de aviso: Débito ou Todos
+					// tipo de aviso: Dï¿½bito ou Todos
 					avisoBancarioHelper.setTipoAviso(ConstantesSistema.ABERTO);
 					collectionAvisoBancarioNovo.add(avisoBancarioHelper);
 				}
@@ -11056,7 +11057,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Método que recebe um array de Integer e remove os Avisos Bancarios dos
+	 * Mï¿½todo que recebe um array de Integer e remove os Avisos Bancarios dos
 	 * ids passado, caso exista um Aviso Bancario que tenha um relacionamento
 	 * com outra tabela entao nao remove nenhum. Outra tabela fora aviso_deducao
 	 * e aviso_acerto
@@ -11144,7 +11145,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		try{
 			
-			//------------ REGISTRAR TRANSAÇÃO ----------------
+			//------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 			Operacao.OPERACAO_PAGAMENTO_REMOVER,
 			new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -11156,7 +11157,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
 			operacaoEfetuada.setOperacao(operacao);
 			
-			//------------ REGISTRAR TRANSAÇÃO ----------------
+			//------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 	
 			if (idsPagamentos != null && idsPagamentos.length > 0) {
 	
@@ -11204,26 +11205,26 @@ public class ControladorArrecadacao extends ControladorComum {
 									pagamento.getPagamentoSituacaoAtual().getDescricao());
 						}		
 		
-						//Alterado por Sávio Luiz data:16/03/2007
+						//Alterado por Sï¿½vio Luiz data:16/03/2007
 						valorArrecadacao = valorArrecadacao.subtract(pagamento.getValorPagamento());
 		
-						//------------ REGISTRAR TRANSAÇÃO ----------------
+						//------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 						pagamento.setOperacaoEfetuada(operacaoEfetuada);
 						pagamento.adicionarUsuario(usuarioLogado,
 						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 						registradorOperacao.registrarOperacao(pagamento);
-						//------------ REGISTRAR TRANSAÇÃO ----------------
+						//------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 				
 						getControladorUtil().remover(pagamento);
 		
-						//Alterado por Francisco - 28/05/08, por conta do Resumo de Ações de cobrança
+						//Alterado por Francisco - 28/05/08, por conta do Resumo de Aï¿½ï¿½es de cobranï¿½a
 						//Analista: Ana Breda
 						getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(
 								pagamento,CobrancaDebitoSituacao.PENDENTE);
 						
-						//CRC2725 - alterado por Vivianne Sousa - 14/09/2009 analista:Fátima
-						//O sistema verifica se há relação do pagamento com itens de negativação
-						//[SB0007] - Verifica Associação do Pagamento com Itens de Negativação.
+						//CRC2725 - alterado por Vivianne Sousa - 14/09/2009 analista:Fï¿½tima
+						//O sistema verifica se hï¿½ relaï¿½ï¿½o do pagamento com itens de negativaï¿½ï¿½o
+						//[SB0007] - Verifica Associaï¿½ï¿½o do Pagamento com Itens de Negativaï¿½ï¿½o.
 						getControladorSpcSerasa().verificaAssociacaoPagamentoComItensNegativacao(pagamento);
 						
 					} else {
@@ -11248,18 +11249,18 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Fechado : avisos bancarios com o valor da arrecadação calculado - o valor
-	 * da arrecadação informado + (Somatório dos acertos de credito para
-	 * arrecadação)- (Somatório dos acertos de debitos para arrecadação) =
-	 * avisos bancarios com o valor da devolução calculado - o valor da
-	 * devolução informado + (Somatório dos acertos de credito para devolução)-
-	 * (Somatório dos acertos de debitos para devolução)
+	 * Fechado : avisos bancarios com o valor da arrecadaï¿½ï¿½o calculado - o valor
+	 * da arrecadaï¿½ï¿½o informado + (Somatï¿½rio dos acertos de credito para
+	 * arrecadaï¿½ï¿½o)- (Somatï¿½rio dos acertos de debitos para arrecadaï¿½ï¿½o) =
+	 * avisos bancarios com o valor da devoluï¿½ï¿½o calculado - o valor da
+	 * devoluï¿½ï¿½o informado + (Somatï¿½rio dos acertos de credito para devoluï¿½ï¿½o)-
+	 * (Somatï¿½rio dos acertos de debitos para devoluï¿½ï¿½o)
 	 * 
 	 * @author Viviane Sousa, Raphael Rossiter
 	 * @date 23/03/2006
 	 * 
 	 * @param avisoBancario
-	 * @return Uma String que representa a situação do aviso
+	 * @return Uma String que representa a situaï¿½ï¿½o do aviso
 	 * @throws ControladorException
 	 */
 	public String obterSituacaoAvisoBancario(AvisoBancario avisoBancario)
@@ -11335,10 +11336,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso apresenta a análise do aviso bancário e os
-	 * pagamentos/devoluções associados.
+	 * Este caso de uso apresenta a anï¿½lise do aviso bancï¿½rio e os
+	 * pagamentos/devoluï¿½ï¿½es associados.
 	 * 
-	 * [UC0267] - Apresentar Análise do Aviso Bancário
+	 * [UC0267] - Apresentar Anï¿½lise do Aviso Bancï¿½rio
 	 * 
 	 * @author Raphael Rossiter,Vivianne Sousa
 	 * @date 23/03/2006
@@ -11392,7 +11393,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		retorno.setNumeroContaBancaria(numeroContaBancaria);
 		retorno.setDescricaoArrecadacaoForma(descricaoArrecadacaoForma);
 
-		// somatorio do valor das deduções existentes para o aviso bancario
+		// somatorio do valor das deduï¿½ï¿½es existentes para o aviso bancario
 		BigDecimal valorSomatorioDeducoes = null;
 		try {
 			valorSomatorioDeducoes = repositorioArrecadacao
@@ -11461,10 +11462,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		BigDecimal valorDevolucaoInformado = avisoBancarioCompleto
 				.getValorDevolucaoInformado();
 
-		// (valor da Arrecadação calculado - valor da Arrecadação informado +
-		// Somatório dos Acertos da Arrecadação)-
-		// (valor da Devolução calculado - valor da Devolução informado +
-		// Somatório dos Acertos da Devolução)
+		// (valor da Arrecadaï¿½ï¿½o calculado - valor da Arrecadaï¿½ï¿½o informado +
+		// Somatï¿½rio dos Acertos da Arrecadaï¿½ï¿½o)-
+		// (valor da Devoluï¿½ï¿½o calculado - valor da Devoluï¿½ï¿½o informado +
+		// Somatï¿½rio dos Acertos da Devoluï¿½ï¿½o)
 		BigDecimal valorDiferencaArrecadacaoDevolucao = new BigDecimal("0.00");
 		valorDiferencaArrecadacaoDevolucao = (valorArrecadacaoCalculado
 				.subtract(valorArrecadacaoInformado))
@@ -11488,8 +11489,8 @@ public class ControladorArrecadacao extends ControladorComum {
 			retorno.setSituacao(ConstantesSistema.ABERTO);
 		}
 
-		// Tipo de aviso ("CRÉDITO", caso AVBC_ICCREDITODEBITO = 1,
-		// caso contrário, "DÉBITO")
+		// Tipo de aviso ("CRï¿½DITO", caso AVBC_ICCREDITODEBITO = 1,
+		// caso contrï¿½rio, "Dï¿½BITO")
 		if (avisoBancarioCompleto.getIndicadorCreditoDebito().equals(
 				AvisoBancario.INDICADOR_CREDITO)) {
 			retorno.setTipoAviso(AvisoBancario.CREDITO);
@@ -11498,7 +11499,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 
 		/*
-		 * Lista de pagamentos relacionados ao aviso bancário
+		 * Lista de pagamentos relacionados ao aviso bancï¿½rio
 		 */
 		Collection colecaoDadosPagamentos = null;
 		try {
@@ -11559,7 +11560,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 		}
 		/**
-		 * Alteração feita por Arthur Carvalho
+		 * Alteraï¿½ï¿½o feita por Arthur Carvalho
 		 * @date 12/05/2010
 		 */
 		
@@ -11626,7 +11627,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 
 		/*
-		 * Lista das devoluções relacionados ao aviso bancário
+		 * Lista das devoluï¿½ï¿½es relacionados ao aviso bancï¿½rio
 		 */
 
 		Collection colecaoDadosDevolucoes = null;
@@ -11694,9 +11695,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Seleciona os pagamentos histórios de um aviso
+	 * Seleciona os pagamentos histï¿½rios de um aviso
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 23/04/2007
 	 * 
 	 * @return Collection
@@ -11769,13 +11770,13 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Pesquisa o débito a cobrar do imóvel informado pelo usuário
+	 * Pesquisa o dï¿½bito a cobrar do imï¿½vel informado pelo usuï¿½rio
 	 * 
-	 * [FS0024] - Verificar existência do débito a cobrar
+	 * [FS0024] - Verificar existï¿½ncia do dï¿½bito a cobrar
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -11788,11 +11789,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	public DebitoACobrar pesquisarDebitoACobrarDigitado(String idImovel,
 			String idDebitoACobrar) throws ControladorException {
 
-		// Cria a variável que vai armazenar o débito a cobrar pesquisado
+		// Cria a variï¿½vel que vai armazenar o dï¿½bito a cobrar pesquisado
 		DebitoACobrar debitoACobrarDigitado = null;
 
-		// Cria o filtro de débito a cobrar e seta todos os parâmetros para
-		// pesquisar o débito a cobrar do imóvel
+		// Cria o filtro de dï¿½bito a cobrar e seta todos os parï¿½metros para
+		// pesquisar o dï¿½bito a cobrar do imï¿½vel
 		FiltroDebitoACobrar filtroDebitoACobrar = new FiltroDebitoACobrar();
 		filtroDebitoACobrar.adicionarParametro(new ParametroSimples(
 				FiltroDebitoACobrar.IMOVEL_ID, idImovel));
@@ -11806,30 +11807,30 @@ public class ControladorArrecadacao extends ControladorComum {
 		Collection colecaoDebitoACobrar = getControladorUtil().pesquisar(
 				filtroDebitoACobrar, DebitoACobrar.class.getName());
 
-		// Caso exista o débito a cobrar para o imóvel informado cadastrado no
+		// Caso exista o dï¿½bito a cobrar para o imï¿½vel informado cadastrado no
 		// sistema
-		// Retorna para o usuário o débito a cobrar retornado pela pesquisa
-		// Caso contrário retorna um objeto nulo
+		// Retorna para o usuï¿½rio o dï¿½bito a cobrar retornado pela pesquisa
+		// Caso contrï¿½rio retorna um objeto nulo
 		if (colecaoDebitoACobrar == null || colecaoDebitoACobrar.isEmpty()) {
 			throw new ControladorException("atencao.pesquisa_inexistente",
-					null, "Débito a Cobrar");
+					null, "Dï¿½bito a Cobrar");
 		}
 		debitoACobrarDigitado = (DebitoACobrar) Util
 				.retonarObjetoDeColecao(colecaoDebitoACobrar);
 
-		// Retorna o débito a cobrar encontrado ou nulo se não existir o débito
+		// Retorna o dï¿½bito a cobrar encontrado ou nulo se nï¿½o existir o dï¿½bito
 		// a cobrar
 		return debitoACobrarDigitado;
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Pesquisa a guia de pagamento do imóvel informado pelo usuário
+	 * Pesquisa a guia de pagamento do imï¿½vel informado pelo usuï¿½rio
 	 * 
-	 * [FS0022] - Verificar existência da guia de pagamento
+	 * [FS0022] - Verificar existï¿½ncia da guia de pagamento
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -11852,7 +11853,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		} else if (idCliente != null && !idCliente.trim().equalsIgnoreCase("")) {
 			filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.CLIENTE_ID, idCliente));
 		} else {
-			throw new ControladorException("atencao.naoinformado", null,"Imóvel ou Cliente");
+			throw new ControladorException("atencao.naoinformado", null,"Imï¿½vel ou Cliente");
 		}
 
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idGuiaPagamento));
@@ -11873,14 +11874,14 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica se o usuário informou o código da guia de pagamento e o tipo de
-	 * débito, só pode ser informado um dos dois
+	 * Verifica se o usuï¿½rio informou o cï¿½digo da guia de pagamento e o tipo de
+	 * dï¿½bito, sï¿½ pode ser informado um dos dois
 	 * 
-	 * [FS0021] Verificar preenchimento da guia de pagamento e do tipo de débito
+	 * [FS0021] Verificar preenchimento da guia de pagamento e do tipo de dï¿½bito
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -11893,22 +11894,22 @@ public class ControladorArrecadacao extends ControladorComum {
 			String idGuiaPagamento, String idTipoDebito)
 			throws ControladorException {
 
-		// Caso o usuário não informou a guia de pagamento
+		// Caso o usuï¿½rio nï¿½o informou a guia de pagamento
 		if (idGuiaPagamento == null
 				|| idGuiaPagamento.trim().equalsIgnoreCase("")) {
-			// Caso o usuário não informou o tipo de débito, levanta uma exceção
-			// para o usário
-			// indicando que o usuário precisa informar ou a guia ou o tipo de
-			// débito
+			// Caso o usuï¿½rio nï¿½o informou o tipo de dï¿½bito, levanta uma exceï¿½ï¿½o
+			// para o usï¿½rio
+			// indicando que o usuï¿½rio precisa informar ou a guia ou o tipo de
+			// dï¿½bito
 			if (idTipoDebito == null
 					|| idTipoDebito.trim().equalsIgnoreCase("")) {
 				throw new ControladorException("atencao.naoinformado", null,
-						"Guia Pagamento ou Tipo de Débito");
+						"Guia Pagamento ou Tipo de Dï¿½bito");
 			}
 		} else {
-			// Caso o usuário informou a guia de pagamento e o tipo de débito,
-			// levanta uma exceção para o usário indicando que o usuário
-			// informou a guia e o tipo de débito
+			// Caso o usuï¿½rio informou a guia de pagamento e o tipo de dï¿½bito,
+			// levanta uma exceï¿½ï¿½o para o usï¿½rio indicando que o usuï¿½rio
+			// informou a guia e o tipo de dï¿½bito
 			if (idTipoDebito != null
 					&& !idTipoDebito.trim().equalsIgnoreCase("")) {
 				throw new ControladorException(
@@ -11918,14 +11919,14 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica se o usuário informou o código do débito a cobrar e o tipo de
-	 * débito, só pode ser informado um dos dois
+	 * Verifica se o usuï¿½rio informou o cï¿½digo do dï¿½bito a cobrar e o tipo de
+	 * dï¿½bito, sï¿½ pode ser informado um dos dois
 	 * 
-	 * [FS0023] Verificar preenchimento do débito a cobrar e do tipo de débito
+	 * [FS0023] Verificar preenchimento do dï¿½bito a cobrar e do tipo de dï¿½bito
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -11938,23 +11939,23 @@ public class ControladorArrecadacao extends ControladorComum {
 			String idDebitoACobrar, String idTipoDebito)
 			throws ControladorException {
 
-		// Caso o usuário não informou o débito a cobrar
+		// Caso o usuï¿½rio nï¿½o informou o dï¿½bito a cobrar
 		if (idDebitoACobrar == null
 				|| idDebitoACobrar.trim().equalsIgnoreCase("")) {
-			// Caso o usuário não informou o tipo de débito, levanta uma exceção
-			// para o usário
-			// indicando que o usuário precisa informar ou o débito a cobrar ou
-			// o tipo de débito
+			// Caso o usuï¿½rio nï¿½o informou o tipo de dï¿½bito, levanta uma exceï¿½ï¿½o
+			// para o usï¿½rio
+			// indicando que o usuï¿½rio precisa informar ou o dï¿½bito a cobrar ou
+			// o tipo de dï¿½bito
 			if (idTipoDebito == null
 					|| idTipoDebito.trim().equalsIgnoreCase("")) {
 				throw new ControladorException("atencao.naoinformado", null,
-						"Débito a Cobrar ou Tipo de Débito");
+						"Dï¿½bito a Cobrar ou Tipo de Dï¿½bito");
 			}
 		} else {
-			// Caso o usuário informou o débito a cobrar e o tipo de débito,
-			// levanta uma exceção
-			// para o usário indicando que o usuário informou o débito a cobrar
-			// e o tipo de débito
+			// Caso o usuï¿½rio informou o dï¿½bito a cobrar e o tipo de dï¿½bito,
+			// levanta uma exceï¿½ï¿½o
+			// para o usï¿½rio indicando que o usuï¿½rio informou o dï¿½bito a cobrar
+			// e o tipo de dï¿½bito
 			if (idTipoDebito != null
 					&& !idTipoDebito.trim().equalsIgnoreCase("")) {
 				throw new ControladorException(
@@ -11964,11 +11965,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica se a localidade informada é a mesma da guia de pagamento
+	 * Verifica se a localidade informada ï¿½ a mesma da guia de pagamento
 	 * 
 	 * [FS0014] Verificar localidade da guia de pagamento
 	 * 
@@ -11982,18 +11983,18 @@ public class ControladorArrecadacao extends ControladorComum {
 	public void verificarLocalidadeGuiaPagamento(GuiaPagamento guiaPagamento,
 			String idLocalidade) throws ControladorException {
 
-		// Caso o usuário tenha informado a localidade
+		// Caso o usuï¿½rio tenha informado a localidade
 		if (idLocalidade != null && !idLocalidade.trim().equalsIgnoreCase("")) {
 			// Caso a localidade da guia de pagamento seja diferente da
 			// localidade informada
 			if (!guiaPagamento.getLocalidade().getId().equals(
 					new Integer(idLocalidade))) {
 
-				// Cria a mensagem que vai ser exibida ao usuário
-				// e levanta a exceção
+				// Cria a mensagem que vai ser exibida ao usuï¿½rio
+				// e levanta a exceï¿½ï¿½o
 				String mensagem = "A Localidade da Guia de Pagamento "
 						+ guiaPagamento.getLocalidade().getId()
-						+ " é diferente da Localidade informada "
+						+ " ï¿½ diferente da Localidade informada "
 						+ idLocalidade;
 				throw new ControladorException(
 						"atencao.localidade_guia_pagamento_diferente", null,
@@ -12003,13 +12004,13 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica se a localidade informada é a mesma do débito a cobrar
+	 * Verifica se a localidade informada ï¿½ a mesma do dï¿½bito a cobrar
 	 * 
-	 * [FS0017] Verificar localidade do débito a cobrar
+	 * [FS0017] Verificar localidade do dï¿½bito a cobrar
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -12020,19 +12021,19 @@ public class ControladorArrecadacao extends ControladorComum {
 	 */
 	public void verificarLocalidadeDebitoACobrar(DebitoACobrar debitoACobrar,
 			String idLocalidade) throws ControladorException {
-		// Caso o usuário tenha informado a localidade
+		// Caso o usuï¿½rio tenha informado a localidade
 		if (idLocalidade != null && !idLocalidade.trim().equalsIgnoreCase("")) {
 
-			// Caso a localidade do débito a cobrar seja diferente da localidade
+			// Caso a localidade do dï¿½bito a cobrar seja diferente da localidade
 			// informada
 			if (!debitoACobrar.getLocalidade().getId().equals(
 					new Integer(idLocalidade))) {
 
-				// Cria a mensagem que vai ser exibida ao usuário
-				// e levanta a exceção
-				String mensagem = "A Localidade do Débito a Cobrar "
+				// Cria a mensagem que vai ser exibida ao usuï¿½rio
+				// e levanta a exceï¿½ï¿½o
+				String mensagem = "A Localidade do Dï¿½bito a Cobrar "
 						+ debitoACobrar.getLocalidade().getId()
-						+ " é diferente da Localidade informada "
+						+ " ï¿½ diferente da Localidade informada "
 						+ idLocalidade;
 				throw new ControladorException(
 						"atencao.localidade_debito_a_cobrar_diferente", null,
@@ -12042,14 +12043,14 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica a existência de débito a cobrar com o tipo de débito e o imóvel
+	 * Verifica a existï¿½ncia de dï¿½bito a cobrar com o tipo de dï¿½bito e o imï¿½vel
 	 * informados
 	 * 
-	 * [FS0016] Verificar existência de débito a cobrar com tipo de débito
+	 * [FS0016] Verificar existï¿½ncia de dï¿½bito a cobrar com tipo de dï¿½bito
 	 * informado
 	 * 
 	 * @author Pedro Alexandre
@@ -12063,10 +12064,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	public DebitoACobrar verificarExistenciaDebitoACobrarComTipoDebito(
 			DebitoTipo tipoDebito, String idImovel, BigDecimal valorInformado) throws ControladorException {
 
-		// Cria a variável que vai armazenar o débito a cobrar pesquisado
+		// Cria a variï¿½vel que vai armazenar o dï¿½bito a cobrar pesquisado
 		DebitoACobrar debitoACobrar = null;
 
-		// Cria o filtro de débito a cobrar, e seta os parâmetros para pesquisar
+		// Cria o filtro de dï¿½bito a cobrar, e seta os parï¿½metros para pesquisar
 		FiltroDebitoACobrar filtroDebitoACobrar = new FiltroDebitoACobrar();
 		filtroDebitoACobrar.adicionarParametro(new ParametroSimples(
 				FiltroDebitoACobrar.DEBITO_TIPO_ID, tipoDebito.getId()));
@@ -12076,18 +12077,18 @@ public class ControladorArrecadacao extends ControladorComum {
 				FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL_ID,
 				DebitoCreditoSituacao.NORMAL));
 
-		// Pesquisa o débito a cobrar no sistema
+		// Pesquisa o dï¿½bito a cobrar no sistema
 		Collection colecaoDebitoACobrar = getControladorUtil().pesquisar(
 				filtroDebitoACobrar, DebitoACobrar.class.getName());
 		
 		Collection colecaoComValor = new ArrayList();
 
-		// Caso exista débito a cobrar cadastrado com o tipo de débito informado
+		// Caso exista dï¿½bito a cobrar cadastrado com o tipo de dï¿½bito informado
 		if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
 
-			// Caso exista mais que um débito a cobrar cadastrado para o tipo de
-			// débito
-			// Monta a mensagem para o usuário e levanta a exceção
+			// Caso exista mais que um dï¿½bito a cobrar cadastrado para o tipo de
+			// dï¿½bito
+			// Monta a mensagem para o usuï¿½rio e levanta a exceï¿½ï¿½o
 			if (colecaoDebitoACobrar.size() > 1) {
 				Iterator iteratorColecao = colecaoDebitoACobrar.iterator();
 				
@@ -12115,9 +12116,9 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 				
 				if(colecaoComValor.size() > 1){
-					String mensagem = "Há mais de um Débito a Cobrar com o tipo de débito "
+					String mensagem = "Hï¿½ mais de um Dï¿½bito a Cobrar com o tipo de dï¿½bito "
 						+ tipoDebito.getDescricao()
-						+ " para o Imóvel "
+						+ " para o Imï¿½vel "
 						+ idImovel;
 					throw new ControladorException("atencao.descricao_concatenada",
 						null, mensagem);
@@ -12125,8 +12126,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				debitoACobrar = (DebitoACobrar) Util
 				.retonarObjetoDeColecao(colecaoComValor);
 			} else {
-				// Caso só exista apenas um débito a cobrar cadastrado para o
-				// tipo de débito
+				// Caso sï¿½ exista apenas um dï¿½bito a cobrar cadastrado para o
+				// tipo de dï¿½bito
 				debitoACobrar = (DebitoACobrar) Util
 						.retonarObjetoDeColecao(colecaoDebitoACobrar);
 				
@@ -12150,7 +12151,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 		}
 
-		// Retorna o débito a cobrar encontrado ou nulo se não existir o débito
+		// Retorna o dï¿½bito a cobrar encontrado ou nulo se nï¿½o existir o dï¿½bito
 		// a cobrar
 		return debitoACobrar;
 	}
@@ -12180,13 +12181,13 @@ public class ControladorArrecadacao extends ControladorComum {
 				String mensagem = null;
 
 				if (idImovel != null && !idImovel.trim().equalsIgnoreCase("")) {
-					mensagem = "Há mais de uma Guia de Pagamento com o tipo de débito "
+					mensagem = "Hï¿½ mais de uma Guia de Pagamento com o tipo de dï¿½bito "
 							+ tipoDebito.getDescricao()
-							+ " para o Imóvel "
+							+ " para o Imï¿½vel "
 							+ idImovel
 							+ ". Efetue uma pesquisa para selecionar a Guia";
 				} else {
-					mensagem = "Há mais de uma Guia de Pagamento com o tipo de débito "
+					mensagem = "Hï¿½ mais de uma Guia de Pagamento com o tipo de dï¿½bito "
 							+ tipoDebito.getDescricao()
 							+ " para o Cliente "
 							+ idCliente
@@ -12202,7 +12203,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Responsável pela manutenção das informações de pagamento
+	 * Responsï¿½vel pela manutenï¿½ï¿½o das informaï¿½ï¿½es de pagamento
 	 * 
 	 * [UC0266] Manter Pagamentos
 	 * [SB0001] Atualizar Pagamento
@@ -12221,9 +12222,9 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 			Pagamento pagamentoNaBase = (Pagamento) ((List) (getControladorUtil().pesquisar(filtroPagamento, Pagamento.class.getName()))).get(0);
 	
-			// [FS0017] Atualização realizada por outro usuário
-			// Caso o usuário esteja tentando atualizar um pagamento e o mesmo já tenha
-			// sido atualizado durante a manutençaõ corrente
+			// [FS0017] Atualizaï¿½ï¿½o realizada por outro usuï¿½rio
+			// Caso o usuï¿½rio esteja tentando atualizar um pagamento e o mesmo jï¿½ tenha
+			// sido atualizado durante a manutenï¿½aï¿½ corrente
 			if (pagamentoNaBase.getUltimaAlteracao().after(pagamento.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
@@ -12259,10 +12260,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	
 	/**
-	 * Gera os dados diários da arrecadação acumulando a quantidade e o valor
+	 * Gera os dados diï¿½rios da arrecadaï¿½ï¿½o acumulando a quantidade e o valor
 	 * dos pagamentos
 	 * 
-	 * [UC0301] Gerar Dados Diários da Arrecadação
+	 * [UC0301] Gerar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 * 
 	 * @author Pedro Alexandre, Pedro Alexandre
 	 * @date 11/04/2006, 08/12/2006
@@ -12469,7 +12470,7 @@ public class ControladorArrecadacao extends ControladorComum {
 											qtdDocumentosAgregados = (Integer) arrayDadosPagamento[19];
 										}
 
-										// Caso o imóvel esteja preenchido no pagamento
+										// Caso o imï¿½vel esteja preenchido no pagamento
 										if (imovel != null) {
 
 											principalCategoria = getControladorImovel().obterPrincipalCategoriaImovel(imovel.getId());
@@ -12718,12 +12719,12 @@ public class ControladorArrecadacao extends ControladorComum {
 										qtdDocumentosAgregados = (Integer) arrayDadosDevolucao[18];
 									}
 
-									// Caso o imóvel esteja preenchido na
+									// Caso o imï¿½vel esteja preenchido na
 									// devolucao
 									if (imovel != null) {
 
 										// [UC0306] Obter principal categoria do
-										// imóvel
+										// imï¿½vel
 										principalCategoria = getControladorImovel().obterPrincipalCategoriaImovel(imovel.getId());
 
 										Integer idEsferaPoder = repositorioArrecadacao.pesquisarEsferaPoderClienteResponsavelPeloImovel(imovel.getId());
@@ -12736,17 +12737,17 @@ public class ControladorArrecadacao extends ControladorComum {
 										}
 
 										// [UC0307] - Obter Indicador de
-										// Existência
+										// Existï¿½ncia
 										// de
-										// Hidrômetro
+										// Hidrï¿½metro
 										String indicadorHidrometroString = new Integer(getControladorImovel().obterIndicadorExistenciaHidrometroImovel(
 												imovel.getId())).toString();
 										indicadorHidrometro = new Short(indicadorHidrometroString);
 									}
 
-									// Caso indicador de hidrômetro esteja nulo
-									// Seta 2(dois) = NÃO no indicador de
-									// hidrômetro
+									// Caso indicador de hidrï¿½metro esteja nulo
+									// Seta 2(dois) = Nï¿½O no indicador de
+									// hidrï¿½metro
 									if (indicadorHidrometro == null) {
 										indicadorHidrometro = new Short("2");
 									}
@@ -12755,7 +12756,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									// seta
 									// os
 									// dados
-									// necessários para inclusão
+									// necessï¿½rios para inclusï¿½o
 									devolucaoDadosDiarios = new DevolucaoDadosDiarios();
 									devolucaoDadosDiarios.setAnoMesReferencia(anoMesArrecadacaoAtual);
 									devolucaoDadosDiarios.setArrecadador(arrecadador);
@@ -12814,10 +12815,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso permite classificar os pagamentos e as devoluções no mês
-	 * de arrecadação corrente
+	 * Este caso de uso permite classificar os pagamentos e as devoluï¿½ï¿½es no mï¿½s
+	 * de arrecadaï¿½ï¿½o corrente
 	 * 
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * @author Raphael Rossiter, Pedro Alexandre
 	 * @date 18/04/2006, 06/12/2006
@@ -12838,11 +12839,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 			/**
-			 * Caso exista os parâmetros do sistema cadastrados.
+			 * Caso exista os parï¿½metros do sistema cadastrados.
 			 */
 			if (getSistemaParametro() != null) {
 
-				// Recupera o ano/mês de arrecadação atual.
+				// Recupera o ano/mï¿½s de arrecadaï¿½ï¿½o atual.
 				Integer anoMesArrecadacao = getSistemaParametro().getAnoMesArrecadacao();
 				Integer anoMesFaturamento = getSistemaParametro().getAnoMesFaturamento();
 
@@ -12850,7 +12851,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			//	colecaoIdsLocalidades = new ArrayList<Integer>();
 			//	colecaoIdsLocalidades.add(new Integer(5));
 				/**
-				 * Caso a coleção de ids de localidade não esteja vazia
+				 * Caso a coleï¿½ï¿½o de ids de localidade nï¿½o esteja vazia
 				 * classifica os pagamentos por localidade.
 				 */
 				if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
@@ -12861,7 +12862,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						int numeroIndice = 0;
 
 						/**
-						 * Detalhar classificação de
+						 * Detalhar classificaï¿½ï¿½o de
 						 * documentos inexistentes
 						 * 
 						 * @author Wellington Rocha
@@ -12873,7 +12874,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						Collection colecaoPagamentosDocumentoInexistenteErroProcessamento = new ArrayList();
 
 						/**
-						 * Verifica se a flag que indica que a paginação
+						 * Verifica se a flag que indica que a paginaï¿½ï¿½o
 						 * terminou
 						 */
 						while (!flagTerminou) {
@@ -12881,8 +12882,8 @@ public class ControladorArrecadacao extends ControladorComum {
 							try {
 
 								/**
-								 * Recupera os ids de imóveis para a localidade
-								 * Recupera os ids por páginação de 500
+								 * Recupera os ids de imï¿½veis para a localidade
+								 * Recupera os ids por pï¿½ginaï¿½ï¿½o de 500
 								 * registros por pesquisa.
 								 */
 								Collection<Integer> colecaoIdsImoveis = repositorioArrecadacao.pesquisarIdsImovelPorLocalidade(idLocalidade, numeroIndice,
@@ -12891,7 +12892,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								if (colecaoIdsImoveis != null && !colecaoIdsImoveis.isEmpty()) {
 
 									/**
-									 * Instância as variáveis
+									 * Instï¿½ncia as variï¿½veis
 									 */
 									Collection colecaoPagamentosDuplicidade = new ArrayList();
 									Collection colecaoPagamentosAtualizar = new ArrayList();
@@ -12905,7 +12906,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									Collection colecaoPagamentoAtualizarValorExcedente = new ArrayList();
 
 									/**
-									 * Classifica os pagamentos por imóvel para
+									 * Classifica os pagamentos por imï¿½vel para
 									 * os pagamentos de conta.
 									 */
 									for (Integer idImovel : colecaoIdsImoveis) {
@@ -12915,7 +12916,7 @@ public class ControladorArrecadacao extends ControladorComum {
 										Collection<Integer> colecaoAnoMesPagamento = null;
 
 										/**
-										 * Pesquisa o ano/mês de ref. de pag para o imóvel para o ano/mês da arrecadação e tipo de documento = conta.
+										 * Pesquisa o ano/mï¿½s de ref. de pag para o imï¿½vel para o ano/mï¿½s da arrecadaï¿½ï¿½o e tipo de documento = conta.
 										 */
 										colecaoAnoMesPagamento = repositorioArrecadacao.pesquisarAnoMesReferenciaPagamentoParaImovel(anoMesArrecadacao, idImovel);
 
@@ -12924,25 +12925,25 @@ public class ControladorArrecadacao extends ControladorComum {
 											for (Integer anoMesReferenciaPagamento : colecaoAnoMesPagamento) {
 
 												/*
-												 * O sistema seleciona os pagamentos com ano/mês de referência da arrecadação igual o ano/mês de referência
-												 * da arrecadação corrente (seleciona a partir da tabela PAGAMENTO para PGMT_AMREFERENCIAARRECADACAO
+												 * O sistema seleciona os pagamentos com ano/mï¿½s de referï¿½ncia da arrecadaï¿½ï¿½o igual o ano/mï¿½s de referï¿½ncia
+												 * da arrecadaï¿½ï¿½o corrente (seleciona a partir da tabela PAGAMENTO para PGMT_AMREFERENCIAARRECADACAO
 												 * igual ou menor ao PARM_AMREFERENCIAARRECADACAO)
 												 */
 												colecaoPagamentosConta = repositorioArrecadacao.pesquisarPagamentosPorConta(anoMesArrecadacao, idLocalidade,
 														idImovel, anoMesReferenciaPagamento);
 
 												/**
-												 * Caso a pesquisa de pagamentos para conta do imóvel informado e com o ano/mês de arrecadação do pagamento 
-												 * não esteja nula Classifica os pagamentos selecionados.
+												 * Caso a pesquisa de pagamentos para conta do imï¿½vel informado e com o ano/mï¿½s de arrecadaï¿½ï¿½o do pagamento 
+												 * nï¿½o esteja nula Classifica os pagamentos selecionados.
 												 */
 												if (colecaoPagamentosConta != null && !colecaoPagamentosConta.isEmpty()) {
 
 													/**
-													 * Chama o metódo para classificar os pagamentos do imóvel para o tipo conta, retornando um
+													 * Chama o metï¿½do para classificar os pagamentos do imï¿½vel para o tipo conta, retornando um
 													 * array com os pagamentos classificados. 
-													 * 0 - Coleção de pagamentos para atualizar a situação e o valor excedente. 
+													 * 0 - Coleï¿½ï¿½o de pagamentos para atualizar a situaï¿½ï¿½o e o valor excedente. 
 													 * 1 - Map com os pagamentos para ser processados junto com a respectiva conta. 
-													 * 2 - Array com 4 coleções de pagamentos para atualizar.
+													 * 2 - Array com 4 coleï¿½ï¿½es de pagamentos para atualizar.
 													 */
 													Object[] arrayDadosProcessarContas = this.classificarPagamentosConta(colecaoPagamentosConta, imovel,
 															anoMesArrecadacao, anoMesFaturamento, anoMesReferenciaPagamento);
@@ -13075,9 +13076,9 @@ public class ControladorArrecadacao extends ControladorComum {
 								numeroIndice = numeroIndice + quantidadeRegistros;
 
 								/**
-								 * Caso a coleção de imoveis retornados for
+								 * Caso a coleï¿½ï¿½o de imoveis retornados for
 								 * menor que a quantidade de registros seta a
-								 * flag indicando que a paginação terminou.
+								 * flag indicando que a paginaï¿½ï¿½o terminou.
 								 */
 								if (colecaoIdsImoveis != null && colecaoIdsImoveis.size() < quantidadeRegistros) {
 									flagTerminou = true;
@@ -13090,8 +13091,8 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/**
-						 * Pesquisa as coleções de pagamentos para guia de
-						 * pagamento e para pagamentos de débito a cobrar para
+						 * Pesquisa as coleï¿½ï¿½es de pagamentos para guia de
+						 * pagamento e para pagamentos de dï¿½bito a cobrar para
 						 * classificar.
 						 */
 						// alterado por Vivianne Sousa 25/11/2008
@@ -13243,8 +13244,8 @@ public class ControladorArrecadacao extends ControladorComum {
 						Collection colecaoPagamentosDebitoACobrarNaoPreenchido = repositorioArrecadacao.pesquisarPagamentosPorDebitoACobrarSemDebitoInformada(
 								anoMesArrecadacaoMaisDois, idLocalidade);
 
-						// 4.1.2.2.Caso o débito a cobrar tenha sido encontrado
-						// no histórico de débito a cobrar
+						// 4.1.2.2.Caso o dï¿½bito a cobrar tenha sido encontrado
+						// no histï¿½rico de dï¿½bito a cobrar
 						Collection colecaoPagamentosDebitoACobrarHistoricoPreenchidaRefContabilMaiorIgualRefFaturamento = repositorioArrecadacao
 								.pesquisarPagamentosPorDebitoACobrarHistoricoComDebitoInformadoRefContabil(anoMesArrecadacao, idLocalidade);
 
@@ -13262,7 +13263,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							while (iteratorColecaoPagamentosDebitoACobrarHistorico.hasNext()) {
 								Object[] pagamentoArray = (Object[]) iteratorColecaoPagamentosDebitoACobrarHistorico.next();
 
-								// pagamento não corresponda a baixar valor
+								// pagamento nï¿½o corresponda a baixar valor
 								// excedente
 								if (!PagamentoSituacao.VALOR_A_BAIXAR.equals((pagamentoArray[3] != null ? (Integer) pagamentoArray[3] : -1))) {
 									if (pagamentoArray[1] != null) {
@@ -13301,14 +13302,14 @@ public class ControladorArrecadacao extends ControladorComum {
 							Object[] arrayDadosProcessarDebitosACobrar = arrayDadosProcessarDebitosACobrar = this.classificarPagamentosDebitoACobrar(
 									colecaoPagamentosDebitoACobrarPreenchido, colecaoPagamentosDebitoACobrarNaoPreenchido, anoMesFaturamento);
 							/*
-							 * Chama o metódo de classificar pagamentos para
-							 * débito a cobrar o metódo retorna um array
+							 * Chama o metï¿½do de classificar pagamentos para
+							 * dï¿½bito a cobrar o metï¿½do retorna um array
 							 * contendo: 0 - Map com os pagamentos para ser
-							 * processados junto com o respectivo débito a
-							 * cobrar. 1 - Pagamentos com situação igual a valor
-							 * não confere. 2 - Pagamentos com situação igual
+							 * processados junto com o respectivo dï¿½bito a
+							 * cobrar. 1 - Pagamentos com situaï¿½ï¿½o igual a valor
+							 * nï¿½o confere. 2 - Pagamentos com situaï¿½ï¿½o igual
 							 * pagamentos classificados. 3 - Pagamentos com
-							 * situação igual pagamentos em duplicidade. 4 -
+							 * situaï¿½ï¿½o igual pagamentos em duplicidade. 4 -
 							 * Pagamentos para atualizar valor execedente.
 							 */
 							if (arrayDadosProcessarDebitosACobrar != null) {
@@ -13358,16 +13359,16 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				// --------------------------------------------------------
 				//
-				// Registrar o fim da execução da Unidade de Processamento
+				// Registrar o fim da execuï¿½ï¿½o da Unidade de Processamento
 				//
 				// --------------------------------------------------------
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
 			}// if sistema parametro
 		} catch (Exception e) {
-			// Este catch serve para interceptar qualquer exceção que o processo
-			// batch venha a lançar e garantir que a unidade de processamento do
-			// batch será atualizada com o erro ocorrido
+			// Este catch serve para interceptar qualquer exceï¿½ï¿½o que o processo
+			// batch venha a lanï¿½ar e garantir que a unidade de processamento do
+			// batch serï¿½ atualizada com o erro ocorrido
 			e.printStackTrace();
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
@@ -13407,15 +13408,15 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
-	 * O sistema seleciona a conta correspondente ao pagamento através do imóvel
-	 * e ano/mês de referência do pagamento (a partir da tabela CONTA com
+	 * O sistema seleciona a conta correspondente ao pagamento atravï¿½s do imï¿½vel
+	 * e ano/mï¿½s de referï¿½ncia do pagamento (a partir da tabela CONTA com
 	 * IMOV_ID = IMOV_ID da tabela PAGAMENTO, PGMT_AMREFERENCIAPAGAMENTO da
 	 * tabela PAGAMENTO e DCST_IDATUAL com o valor correspondente a normal,
-	 * retificada ou incluída, da tabela DEBTIO_CREDITO_SITUACAO)
+	 * retificada ou incluï¿½da, da tabela DEBTIO_CREDITO_SITUACAO)
 	 * 
-	 * [SB0001] Selecionar Conta pelo Imóvel e Ano/Mês de Referência
+	 * [SB0001] Selecionar Conta pelo Imï¿½vel e Ano/Mï¿½s de Referï¿½ncia
 	 * 
 	 * @author Raphael Rossiter, Pedro Alexandre, Pedro Alexandre, Pedro Alexandre, Pedro Alexandre
 	 * @date 18/04/2006, 28/11/2006, 05/06/2007, 02/10/2007, 15/01/2008
@@ -13447,12 +13448,12 @@ public class ControladorArrecadacao extends ControladorComum {
 				/*
 				 * Caso o array dos dados da conta esteja preenchido 
 				 * 0 - id da conta 
-				 * 1 - valor da água 
+				 * 1 - valor da ï¿½gua 
 				 * 2 - valor do esgoto 
-				 * 3 - valor dos débitos 
-				 * 4 - valor dos créditos 
+				 * 3 - valor dos dï¿½bitos 
+				 * 4 - valor dos crï¿½ditos 
 				 * 5 - valor dos impostos 
-				 * 6 - ano/mês referência contábil
+				 * 6 - ano/mï¿½s referï¿½ncia contï¿½bil
 				 * 7 - dcst
 				 */
 				if(dadosConta != null){
@@ -13479,7 +13480,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * Processa os pagamentos da conta
 	 * 
@@ -13506,25 +13507,25 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		/*
 		 * Caso valor total dos pagamentos da conta seja igual ao valor do
-		 * documento atualizar a situação atual dos pagamentos (PGST_IDATUAL)
+		 * documento atualizar a situaï¿½ï¿½o atual dos pagamentos (PGST_IDATUAL)
 		 * com valor correspondente a pagamento classificado (tabela
 		 * PAGAMENTO_SITUACAO) e atualizar o id da conta nos pagamentos (seta
 		 * CNTA_ID da tabela PAGAMENTO para CNTA_ID da tabela CONTA);
 		 */
-		// recurepa o valor absoluto da diferença entre o total dos pagamentos e
+		// recurepa o valor absoluto da diferenï¿½a entre o total dos pagamentos e
 		// o valor documento
 		BigDecimal diferenca = (valorTotalPagamentosConta.subtract(valorDocumento)).abs();
 
-		// o limite permitido entre a diferença
+		// o limite permitido entre a diferenï¿½a
 		BigDecimal limitePermitido = new BigDecimal("0.03");
 
-		// caso a diferença não seja maior que o limite permitido
+		// caso a diferenï¿½a nï¿½o seja maior que o limite permitido
 		if (!(diferenca.compareTo(limitePermitido) > 0)) {
 			mapPagamentosProcessados.put(conta.getId(), colecaoPagamentos);
 		}
 
 		/*
-		 * Caso contrário, verifica pagamento a maior ou a menor [SB0008 -
+		 * Caso contrï¿½rio, verifica pagamento a maior ou a menor [SB0008 -
 		 * Processar Pagamento a Maior ou a Menor]
 		 */
 		else {
@@ -13547,7 +13548,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		/**
 		 * O array de retorno vai conter : 0 - um map para processar os
-		 * pagamentos 1 - um array com coleções de pagamento para atualizar.
+		 * pagamentos 1 - um array com coleï¿½ï¿½es de pagamento para atualizar.
 		 */
 		retorno[0] = mapPagamentosProcessados;
 		retorno[1] = arrayColecoesPagamentosAtualizar;
@@ -13556,7 +13557,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * Calcula o valor total dos pagamentos para a conta
 	 * 
@@ -13585,7 +13586,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			pagamento = (Pagamento) iteratorColecaoPagamentos.next();
 
 			// Acumula o valor dos pagamentos (PGMT_VLPAGAMENTO) do conjunto que
-			// está sendo processado
+			// estï¿½ sendo processado
 			if (pagamento.getValorPagamento() != null) {
 				valorPagamentos = valorPagamentos.add(pagamento
 						.getValorPagamento());
@@ -13593,7 +13594,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			/*
 			 * Acumula o valor excedente dos pagamentos (PGMT_VLEXCEDENTE) do
-			 * conjunto que está sendo processado que tenha situação atual
+			 * conjunto que estï¿½ sendo processado que tenha situaï¿½ï¿½o atual
 			 * (PGST_IDATUAL) com valor correspondente a baixar valor excedente
 			 * (tabela PAGAMENTO_SITUACAO)
 			 */
@@ -13615,7 +13616,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * Processar Pagamento a Maior ou a Menor
 	 * 
@@ -13636,7 +13637,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer identificadorDocumento) throws ControladorException {
 
 		/**
-		 * Declaração de variáveis
+		 * Declaraï¿½ï¿½o de variï¿½veis
 		 */
 		Object[] arrayColecoesPagamentosAtualizar = new Object[5];
 		Iterator iteratorColecaoPagamentos = colecaoPagamentos.iterator();
@@ -13653,10 +13654,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		/*
 		 * Caso o valor total dos pagamentos seja menor que o valor do
 		 * documento, atualizar a situacao atual dos pagamentos (PGST_IDATUAL)
-		 * com valor correspondente a valor não confere (tabela
+		 * com valor correspondente a valor nï¿½o confere (tabela
 		 * PAGAMENTO_SITUACAO) e atualizar o identificador do documento no
 		 * pagamento com o identificador do documento (CNTA_ID,GPAG_ID ou
-		 * DBAC_ID conforme seja conta, guia de pagamento ou débito a cobrar
+		 * DBAC_ID conforme seja conta, guia de pagamento ou dï¿½bito a cobrar
 		 * respectivamente,no pagamento)
 		 */
 		if (valorTotalPagamentos.compareTo(valorDocumento) == -1) {
@@ -13690,7 +13691,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				saldoDevido = BigDecimal.ZERO;
 
 				/*
-				 * Atualizar a situação atual do pagamento (PGST_IDATUAL), que
+				 * Atualizar a situaï¿½ï¿½o atual do pagamento (PGST_IDATUAL), que
 				 * tenha a data de pagamento mais antiga (PGMT_DTPAGAMENTO), com
 				 * o valor correspondente a pagamento classificado (tabela
 				 * PAGAMENTO_SITUACAO);
@@ -13732,9 +13733,9 @@ public class ControladorArrecadacao extends ControladorComum {
 							.next();
 
 					/*
-					 * Caso a situação atual (PGST_IDATUAL) esteja com valor
+					 * Caso a situaï¿½ï¿½o atual (PGST_IDATUAL) esteja com valor
 					 * diferente de baixar valor excedente (tabela
-					 * PAGAMENTO_SITUACAO), atualizar a situação atual
+					 * PAGAMENTO_SITUACAO), atualizar a situaï¿½ï¿½o atual
 					 * (PGST_IDATUAL) com o valor correspondente a pagamento em
 					 * duplicidade/excesso (tabela PAGAMENTO_SITUACAO);
 					 */
@@ -13772,11 +13773,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							.next();
 
 					/*
-					 * Item 2.3.1 Caso a situação atual (PGST_IDATUAL) esteja
+					 * Item 2.3.1 Caso a situaï¿½ï¿½o atual (PGST_IDATUAL) esteja
 					 * com o valor diferente de baixar valor excedente (tabela
-					 * PAGAMENTO_SITUACAO), atualizar a situação atual dos
+					 * PAGAMENTO_SITUACAO), atualizar a situaï¿½ï¿½o atual dos
 					 * pagamentos (PGST_IDATUAL) com o valor correspondente a
-					 * valor não confere (tabela PAGAMENTO_SITUACAO)
+					 * valor nï¿½o confere (tabela PAGAMENTO_SITUACAO)
 					 */
 					if (pagamento.getPagamentoSituacaoAtual() == null
 							|| !pagamento.getPagamentoSituacaoAtual().getId()
@@ -13813,11 +13814,11 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 
 		/**
-		 * Retorna um array contendo : 0 - Coleção de pagamentos para atualizar
-		 * situação igual a valor não confere. 1 - Coleção de pagamentos para
-		 * atualizar situação igual a pagamento classificado. 2 - Coleção de
-		 * pagamentos para atualizar situação igual a pagamento em duplicidade.
-		 * 3 - Coleção de pagamentos para atualizar valor excedente.
+		 * Retorna um array contendo : 0 - Coleï¿½ï¿½o de pagamentos para atualizar
+		 * situaï¿½ï¿½o igual a valor nï¿½o confere. 1 - Coleï¿½ï¿½o de pagamentos para
+		 * atualizar situaï¿½ï¿½o igual a pagamento classificado. 2 - Coleï¿½ï¿½o de
+		 * pagamentos para atualizar situaï¿½ï¿½o igual a pagamento em duplicidade.
+		 * 3 - Coleï¿½ï¿½o de pagamentos para atualizar valor excedente.
 		 */
 		arrayColecoesPagamentosAtualizar[0] = mapPagamentosValorNaoConfere;
 		arrayColecoesPagamentosAtualizar[1] = colecaoPagamentoClassificado;
@@ -13829,7 +13830,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * Atualizar Valor Excedente do Pagamento
 	 * 
@@ -13865,18 +13866,18 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getValorPagamento());
 			}
 			/*
-			 * Caso contrário, atualizar o valor excedente do pagamento
+			 * Caso contrï¿½rio, atualizar o valor excedente do pagamento
 			 * (PGMT_VLEXCEDENTE) com o valor do pagamento menos o saldo devido
 			 * (valor excedente do pagamento = valor do pagamento - saldo
 			 * devido) e atribuir o valor zero ao saldo devido Para os
 			 * pagamentos cujo valor (PGMT_VLPAGAMENTO) seja igual ao valor do
-			 * documento: - Atualizar a situação atual do pagamento
+			 * documento: - Atualizar a situaï¿½ï¿½o atual do pagamento
 			 * (PGST_IDATUAL), que tenha a data de pagamento mais antiga
 			 * (PGMT_DTPAGAMENTO), com o valor correspondente a pagamento
 			 * classificado (tabela PAGAMENTO_SITUACAO); - Atribuir o valor zero
-			 * ao saldo devido; - Para os outros pagamentos: - Caso a situação
+			 * ao saldo devido; - Para os outros pagamentos: - Caso a situaï¿½ï¿½o
 			 * atual (PGST_IDATUAL) esteja com valor diferente de baixar valor
-			 * excedente (tabela PAGAMENTO_SITUACAO), atualizar a situação atual
+			 * excedente (tabela PAGAMENTO_SITUACAO), atualizar a situaï¿½ï¿½o atual
 			 * (PGST_IDATUAL) com o valor correspondente a pagamento em
 			 * duplicidade/excesso (tabela PAGAMENTO_SITUACAO); - Atualizar o
 			 * valor excedente [SB0009 - Atualizar Valor Excedente do
@@ -13900,7 +13901,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * Processar Pagamento de Guia de Pagamento
 	 * 
@@ -13923,7 +13924,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		BigDecimal valorDocumento = guiaPagamento.getValorDebito();
 
 		/**
-		 * Declaração de variáveis.
+		 * Declaraï¿½ï¿½o de variï¿½veis.
 		 */
 		Object[] retorno = new Object[2];
 		Map mapPagamentosProcessados = new HashMap();
@@ -13937,7 +13938,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		/*
 		 * Caso valor total dos pagamentos para a guia de pagamento seja igual
-		 * ao valor do documento atualizar a situação atual dos pagamentos
+		 * ao valor do documento atualizar a situaï¿½ï¿½o atual dos pagamentos
 		 * (PGST_IDATUAL) com valor correspondente a pagamento classificado
 		 * (tabela PAGAMENTO_SITUACAO) e atualizar o id da guia de pagamento nos
 		 * pagamentos (seta GPAG_ID da tabela PAGAMENTO para GPAG_ID da tabela
@@ -13966,7 +13967,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		/**
 		 * retorna o array contendo: 0 - Map de pagamentos para processar com
-		 * sua respectiva guia de pagamento. 1 - Array de coleções de pagamentos
+		 * sua respectiva guia de pagamento. 1 - Array de coleï¿½ï¿½es de pagamentos
 		 * para atualizar.
 		 */
 		retorno[0] = mapPagamentosProcessados;
@@ -13976,11 +13977,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
-	 * Processar Devoluções de Pagamento
+	 * Processar Devoluï¿½ï¿½es de Pagamento
 	 * 
-	 * [SF0011] Processar Devoluções de Pagamento
+	 * [SF0011] Processar Devoluï¿½ï¿½es de Pagamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 26/04/2006
@@ -14033,7 +14034,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		}
 
-		// Caso o valor total das devoluções seja igual ao valor total excedente
+		// Caso o valor total das devoluï¿½ï¿½es seja igual ao valor total excedente
 		// dos pagamentos
 		if (valorDevolucoes.equals(valorExcedente)) {
 
@@ -14080,7 +14081,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 			}
 
-			// Para todas a devoluções do conjunto que está sendo processado
+			// Para todas a devoluï¿½ï¿½es do conjunto que estï¿½ sendo processado
 			if (colecaoDevolucao != null && !colecaoDevolucao.isEmpty()) {
 
 				iteratorColecaoDevolucao = colecaoDevolucao.iterator();
@@ -14123,18 +14124,18 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 		} else {
 
-			// [SB0013 - Processar Devolução a Maior ou a Menor]
+			// [SB0013 - Processar Devoluï¿½ï¿½o a Maior ou a Menor]
 			this.processarDevolucaoAMaiorOUAMenor(colecaoDevolucao,
 					valorDevolucoes, colecaoPagamento, valorExcedente);
 		}
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
-	 * Processar Devolução a Maior ou a Menor
+	 * Processar Devoluï¿½ï¿½o a Maior ou a Menor
 	 * 
-	 * [SF0013] Processar Devolução a Maior ou a Menor
+	 * [SF0013] Processar Devoluï¿½ï¿½o a Maior ou a Menor
 	 * 
 	 * @author Raphael Rossiter,Pedro Alexandre
 	 * @date 15/06/2006, 10/07/2007
@@ -14150,7 +14151,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			Collection<Pagamento> colecaoPagamento, BigDecimal totalExcedente)
 			throws ControladorException {
 
-		// declaração de variáveis
+		// declaraï¿½ï¿½o de variï¿½veis
 		Iterator iteratorColecaoDevolucao = null;
 		Iterator iteratorColecaoPagamento = null;
 		Pagamento pagamentoColecao = null;
@@ -14160,7 +14161,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		String[] idDevolucao = new String[1];
 
 		try {
-			// verifica se existe alguma devolução com o vslor igual ao valor
+			// verifica se existe alguma devoluï¿½ï¿½o com o vslor igual ao valor
 			// excedente
 			if (colecaoDevolucao != null && !colecaoDevolucao.isEmpty()) {
 
@@ -14180,7 +14181,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					} else if ((devolucaoColecao.getValorDevolucao() != null && devolucaoColecao
 							.getValorDevolucao().equals(totalExcedente))
 							&& (devolucaoSelecionada != null)) {
-						// [FS0004 - Verificar seleção de mais de uma devolução]
+						// [FS0004 - Verificar seleï¿½ï¿½o de mais de uma devoluï¿½ï¿½o]
 						if (devolucaoColecao.getDataDevolucao() != null
 								&& devolucaoSelecionada.getDataDevolucao() != null
 								&& devolucaoColecao.getDataDevolucao()
@@ -14203,7 +14204,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					iteratorColecaoPagamento = colecaoPagamento.iterator();
 
 					/*
-					 * Para todos os pagamentos da lista, tualiza a situação
+					 * Para todos os pagamentos da lista, tualiza a situaï¿½ï¿½o
 					 * atual do pagamento (PGST_IDATUAL) com o valor
 					 * correspondente a duplicidade/excesso devolvido
 					 */
@@ -14220,10 +14221,10 @@ public class ControladorArrecadacao extends ControladorComum {
 										PagamentoSituacao.DUPLICIDADE_EXCESSO_DEVOLVIDO);
 
 						/*
-						 * Para os pagamentos da lista com ano/mês de
-						 * arrecadação igual ao ano/mês de arrecadação corrente
+						 * Para os pagamentos da lista com ano/mï¿½s de
+						 * arrecadaï¿½ï¿½o igual ao ano/mï¿½s de arrecadaï¿½ï¿½o corrente
 						 * (PGMT_AMREFERENCIAARRECADACAO igual a
-						 * PARM_AMREFERENCIAARRECADACAO), atualiza a situação
+						 * PARM_AMREFERENCIAARRECADACAO), atualiza a situaï¿½ï¿½o
 						 * anterior do pagamento (PGST_IDANTERIOR) com o valor
 						 * correspondente a pagamento em duplicidade/excesso.
 						 */
@@ -14238,12 +14239,12 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 				/*
-				 * Caso a guia de devolução esteja preenchida (GDEV_ID com o
-				 * valor diferente de nulo), atualiza a situação atual da
-				 * devolução (DVST_IDATUAL) com o valor correspondente a
-				 * devolução classificada. Caso contrário, atualiza a situação
-				 * da devolução (DVST_IDATUAL) com o valor correspndente a guia
-				 * de devolução não informada.
+				 * Caso a guia de devoluï¿½ï¿½o esteja preenchida (GDEV_ID com o
+				 * valor diferente de nulo), atualiza a situaï¿½ï¿½o atual da
+				 * devoluï¿½ï¿½o (DVST_IDATUAL) com o valor correspondente a
+				 * devoluï¿½ï¿½o classificada. Caso contrï¿½rio, atualiza a situaï¿½ï¿½o
+				 * da devoluï¿½ï¿½o (DVST_IDATUAL) com o valor correspndente a guia
+				 * de devoluï¿½ï¿½o nï¿½o informada.
 				 */
 				if (devolucaoSelecionada.getGuiaDevolucao() != null) {
 					idDevolucao[0] = String.valueOf(devolucaoSelecionada
@@ -14261,9 +14262,9 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			} else {
 				/*
-				 * Caso não exista nenhuma devolução com o valor igual ao valor
-				 * excedente atualiza a situação atual das devoluções
-				 * (DVST_IDATUAL) com o valor correspondente a valor não
+				 * Caso nï¿½o exista nenhuma devoluï¿½ï¿½o com o valor igual ao valor
+				 * excedente atualiza a situaï¿½ï¿½o atual das devoluï¿½ï¿½es
+				 * (DVST_IDATUAL) com o valor correspondente a valor nï¿½o
 				 * confere.
 				 */
 				if (colecaoDevolucao != null && !colecaoDevolucao.isEmpty()) {
@@ -14290,13 +14291,13 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
-	 * Selecionar Guia de Pagamento pela Localidade, Imóvel, Cliente e Débito
+	 * Selecionar Guia de Pagamento pela Localidade, Imï¿½vel, Cliente e Dï¿½bito
 	 * Tipo
 	 * 
-	 * [SF0003] Selecionar Guia de Pagamento pela Localidade, Imóvel, Cliente e
-	 * Débito Tipo
+	 * [SF0003] Selecionar Guia de Pagamento pela Localidade, Imï¿½vel, Cliente e
+	 * Dï¿½bito Tipo
 	 * 
 	 * @author Raphael Rossiter, Pedro Alexandre, Pedro Alexandre, Pedro
 	 *         Alexandre
@@ -14329,7 +14330,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		/*
 		 * Caso a guia de pagamento seja encontrada o sistema retorna a guia de
-		 * pagamento [FS0002 - Verificar seleção de mais de uma guia de
+		 * pagamento [FS0002 - Verificar seleï¿½ï¿½o de mais de uma guia de
 		 * pagamento]
 		 */
 		if (colecaoGuiaPagamento != null && !colecaoGuiaPagamento.isEmpty()) {
@@ -14355,11 +14356,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
-	 * Processa os pagamentos de débito a cobrar
+	 * Processa os pagamentos de dï¿½bito a cobrar
 	 * 
-	 * [SF0006] Processar Pagamento de Débito a Cobrar
+	 * [SF0006] Processar Pagamento de Dï¿½bito a Cobrar
 	 * 
 	 * @author Raphael Rossiter, Pedro Alexandre
 	 * @date 27/04/2006, 11/12/2006
@@ -14374,7 +14375,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			throws ControladorException {
 
 		/**
-		 * Declaração de variáveis.
+		 * Declaraï¿½ï¿½o de variï¿½veis.
 		 */
 		Object[] retorno = new Object[2];
 		Map mapPagamentosProcessados = new HashMap();
@@ -14393,10 +14394,10 @@ public class ControladorArrecadacao extends ControladorComum {
 				.calcularValorTotalPagamentos(colecaoPagamentos);
 
 		/*
-		 * Caso valor total dos pagamentos para o débito a cobrar seja igual ao
-		 * valor do documento atualizar a situação atual dos pagamentos
+		 * Caso valor total dos pagamentos para o dï¿½bito a cobrar seja igual ao
+		 * valor do documento atualizar a situaï¿½ï¿½o atual dos pagamentos
 		 * (PGST_IDATUAL) com valor correspondente a pagamento classificado
-		 * (tabela PAGAMENTO_SITUACAO) e atualizar o id do débito a cobrar nos
+		 * (tabela PAGAMENTO_SITUACAO) e atualizar o id do dï¿½bito a cobrar nos
 		 * pagamentos (seta DBAC_ID da tabela PAGAMENTO para DBAC_ID da tabela
 		 * DEBITO_A_COBRAR);
 		 */
@@ -14424,7 +14425,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		/**
 		 * Retorna um array contendo: 0 - Map com pagamentos para processar com
-		 * seu respectivos débito a cobrar. 1 - Array de coleções de pagamentos
+		 * seu respectivos dï¿½bito a cobrar. 1 - Array de coleï¿½ï¿½es de pagamentos
 		 * para atualizar.
 		 */
 		retorno[0] = mapPagamentosProcessados;
@@ -14434,11 +14435,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
-	 * Selecionar Débito a Cobrar pela Localidade, Imóvel e Débito Tipo
+	 * Selecionar Dï¿½bito a Cobrar pela Localidade, Imï¿½vel e Dï¿½bito Tipo
 	 * 
-	 * [SF0005] Selecionar Débito a Cobrar pela Localidade, Imóvel e Débito Tipo
+	 * [SF0005] Selecionar Dï¿½bito a Cobrar pela Localidade, Imï¿½vel e Dï¿½bito Tipo
 	 * 
 	 * @author Raphael Rossiter, Pedro Alexandre, Pedro Alexandre
 	 * @date 26/04/2006, 05/06/2007, 02/10/2007
@@ -14468,8 +14469,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 
 		/*
-		 * Caso o débito a cobrar seja encontrado o sistema retorna o débito a
-		 * cobrar [FS0003 - Verificar seleção de mais de um débito a cobrar]
+		 * Caso o dï¿½bito a cobrar seja encontrado o sistema retorna o dï¿½bito a
+		 * cobrar [FS0003 - Verificar seleï¿½ï¿½o de mais de um dï¿½bito a cobrar]
 		 */
 		if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
 
@@ -14497,11 +14498,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
-	 * Selecionar Pagamentos não Classificados de Conta
+	 * Selecionar Pagamentos nï¿½o Classificados de Conta
 	 * 
-	 * [SF0010] Selecionar Pagamentos não Classificados de Conta
+	 * [SF0010] Selecionar Pagamentos nï¿½o Classificados de Conta
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/06/2006
@@ -14535,10 +14536,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
-	 * [SF0012] Selecionar Pagamentos não classificados de guia de pagamento ou
-	 * débito a cobrar
+	 * [SF0012] Selecionar Pagamentos nï¿½o classificados de guia de pagamento ou
+	 * dï¿½bito a cobrar
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/06/2006
@@ -14573,11 +14574,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Insere os aviso deduções no aviso bancário
+	 * Insere os aviso deduï¿½ï¿½es no aviso bancï¿½rio
 	 * 
-	 * [UC0000] Inserir Aviso Bancário
+	 * [UC0000] Inserir Aviso Bancï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 18/04/2006
 	 * 
 	 * @throws ControladorException
@@ -14604,8 +14605,8 @@ public class ControladorArrecadacao extends ControladorComum {
 			Iterator colecaoAvisoDeducaoBaseIterator = colecaoAvisoDeducaoBase
 					.iterator();
 
-			// Remove os avisos deduçoes já existentes na base para fazer a
-			// inserção dos novos avisos deduções
+			// Remove os avisos deduï¿½oes jï¿½ existentes na base para fazer a
+			// inserï¿½ï¿½o dos novos avisos deduï¿½ï¿½es
 			while (colecaoAvisoDeducaoBaseIterator.hasNext()) {
 				AvisoDeducoes avisoDeducoesBase = (AvisoDeducoes) colecaoAvisoDeducaoBaseIterator
 						.next();
@@ -14659,18 +14660,18 @@ public class ControladorArrecadacao extends ControladorComum {
 		return debitosAutomaticoBancosMap;
 	}
 	/**
-	 * [UC0319] Gerar Movimento de Débito Automático para o banco
+	 * [UC0319] Gerar Movimento de Dï¿½bito Automï¿½tico para o banco
 	 * 
-	 * pesquisa os movimentos de débito automático para o banco,referentes ao
-	 * grupo e ano/mês de faturamento informados
+	 * pesquisa os movimentos de dï¿½bito automï¿½tico para o banco,referentes ao
+	 * grupo e ano/mï¿½s de faturamento informados
 	 * 
 	 * [SB0002] - Carregar Lista de Bancos
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 18/04/2006
 	 * 
 	 * @param idFaturamentoGrupo,anoMesReferenciaFaturamento,idBanco
-	 * @return Coleção de DebitoAutomaticoMovimento
+	 * @return Coleï¿½ï¿½o de DebitoAutomaticoMovimento
 	 * @throws ControladorException
 	 */
 
@@ -14716,7 +14717,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (primeiraVez) {
 
-								// VERIFICANDO SE HOUVE MUDANÇA DE BANCO
+								// VERIFICANDO SE HOUVE MUDANï¿½A DE BANCO
 								if (idBancoUltimo != null && !idBancoUltimo.equals(banco.getId())) {
 
 									// FINALIZANDO O MOVIMENTO DO BANCO
@@ -14772,7 +14773,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * @date 20/04/2006
 	 * 
 	 * @param avisoBancarioHelper
-	 * @return Coleção de DebitoAutomaticoMovimento
+	 * @return Coleï¿½ï¿½o de DebitoAutomaticoMovimento
 	 * @throws ErroRepositorioException
 	 */
 
@@ -14897,13 +14898,13 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0319] Gerar Movimento de Débito Automático para o banco
+	 * [UC0319] Gerar Movimento de Dï¿½bito Automï¿½tico para o banco
 	 * 
-	 * Movimento de débito automático em arquivo TXT gerado e enviado ao banco.
+	 * Movimento de dï¿½bito automï¿½tico em arquivo TXT gerado e enviado ao banco.
 	 * 
-	 * [SB0001] - Gerar Movimento para Debito Automático
+	 * [SB0001] - Gerar Movimento para Debito Automï¿½tico
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 20/04/2006
 	 * 
 	 * @param idFaturamentoGrupo,anoMesReferenciaFaturamento,idBanco
@@ -14916,7 +14917,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		Collection colecaoGerarMovimentoDebitoAutomatico = new ArrayList();
 
-		// cria uma coleção com a a chave(Banco) do Map
+		// cria uma coleï¿½ï¿½o com a a chave(Banco) do Map
 		Iterator debitosAutomaticoBancosIterator = 
 			debitosAutomaticoBancosMap.keySet().iterator();
 
@@ -14937,7 +14938,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				
 				Banco banco = (Banco) debitosAutomaticoBancosIterator.next();
 				
-				// recupera a coleção de valores(DebitoAutomaticoMovimento) pelo
+				// recupera a coleï¿½ï¿½o de valores(DebitoAutomaticoMovimento) pelo
 				// valor, no map
 				Collection<DebitoAutomaticoMovimento> colecaoDebitoAutomaticoMovimento = 
 					debitosAutomaticoBancosMap.get(banco);
@@ -14992,7 +14993,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				
 				arrecadadorMovimento.setCodigoRemessa(new Short("1"));
 				
-				// Código do convênio do arrecadador contrato
+				// Cï¿½digo do convï¿½nio do arrecadador contrato
 				arrecadadorMovimento.setCodigoConvenio(codigoConvenio);
 				arrecadadorMovimento.setNomeEmpresa(getSistemaParametro().getNomeAbreviadoEmpresa());
 				arrecadadorMovimento.setCodigoBanco(new Short(""+ banco.getId()));
@@ -15161,14 +15162,14 @@ public class ControladorArrecadacao extends ControladorComum {
 						ServicosEmail.enviarMensagemArquivoAnexado(
 								emailReceptor, emailRemetente, tituloMensagem,
 								"", leitura);
-						situacaoEmail = "Não Enviado";
+						situacaoEmail = "Nï¿½o Enviado";
 					}
 
 				} catch (SendFailedException e) {
 					if (mandouEmailBanco) {
 						situacaoEmail = "Enviado";
 					} else {
-						situacaoEmail = "Não Enviado";
+						situacaoEmail = "Nï¿½o Enviado";
 					}
 
 				} catch (IOException e) {
@@ -15189,8 +15190,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				colecaoGerarMovimentoDebitoAutomatico.add(gerarMovimentoDebitoAutomaticoBancoHelper);
 			}
 
-			// Parte que gera o relatório e envia por email
-			// cria uma instância da classe do relatório
+			// Parte que gera o relatï¿½rio e envia por email
+			// cria uma instï¿½ncia da classe do relatï¿½rio
 			RelatorioMovimentoDebitoAutomaticoBanco relatorioMovimentoDebitoAutomaticoBanco = 
 				new RelatorioMovimentoDebitoAutomaticoBanco(usuario);
 
@@ -15217,9 +15218,9 @@ public class ControladorArrecadacao extends ControladorComum {
 			FileOutputStream out = null;
 			
 			try {
-				//Alterado por Sávio Luiz Data:15/01/2008
-				//Arquivo que é enviado para o e-mail também 
-				//ficará no bin do servidor.
+				//Alterado por Sï¿½vio Luiz Data:15/01/2008
+				//Arquivo que ï¿½ enviado para o e-mail tambï¿½m 
+				//ficarï¿½ no bin do servidor.
 				String nomeZip = "gerar_movimento_banco_sequencial_"+arrecadadorMovimento.getNumeroSequencialArquivo();
 				File leitura = new File("gcom.PDF");
 				File compactado = new File(nomeZip + ".zip"); // nomeZip
@@ -15292,8 +15293,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	}
 
-	// Método usado apenas para gerar a lista dos clientes que estão em Debito automático
-	// Não existe o recurso no formulário
+	// Mï¿½todo usado apenas para gerar a lista dos clientes que estï¿½o em Debito automï¿½tico
+	// Nï¿½o existe o recurso no formulï¿½rio
 	// Para rodar somente em maquina local
 	public boolean gerarArquivodebitoAutomaticoBanco(
 		Map<Banco, 
@@ -15302,7 +15303,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 		Collection colecaoGerarMovimentoDebitoAutomatico = new ArrayList();
 	
-		// cria uma coleção com a a chave(Banco) do Map
+		// cria uma coleï¿½ï¿½o com a a chave(Banco) do Map
 		Iterator debitosAutomaticoBancosIterator = debitosAutomaticoBancosMap.keySet().iterator();
 	
 		ArrecadadorMovimento arrecadadorMovimento = null;
@@ -15318,7 +15319,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				
 				Banco banco = (Banco) debitosAutomaticoBancosIterator.next();
 				
-				// recupera a coleção de valores(DebitoAutomaticoMovimento) pelo
+				// recupera a coleï¿½ï¿½o de valores(DebitoAutomaticoMovimento) pelo
 				// valor, no map
 				Collection<DebitoAutomaticoMovimento> colecaoDebitoAutomaticoMovimento = 
 					debitosAutomaticoBancosMap.get(banco);
@@ -15373,7 +15374,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				
 				arrecadadorMovimento.setCodigoRemessa(new Short("1"));
 				
-				// Código do convênio do arrecadador contrato
+				// Cï¿½digo do convï¿½nio do arrecadador contrato
 				arrecadadorMovimento.setCodigoConvenio(codigoConvenio);
 				arrecadadorMovimento.setNomeEmpresa(getSistemaParametro().getNomeAbreviadoEmpresa());
 				arrecadadorMovimento.setCodigoBanco(new Short(""+ banco.getId()));
@@ -15502,14 +15503,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	}
 	/**
-	 * [UC0319] Gerar Movimento de Débito Automático para o banco
+	 * [UC0319] Gerar Movimento de Dï¿½bito Automï¿½tico para o banco
 	 * 
-	 * Cria uma linha de 150 posições com o registro tipo E.
+	 * Cria uma linha de 150 posiï¿½ï¿½es com o registro tipo E.
 	 * 
 	 * 
-	 * [SB0001] - Gerar Movimento para Debito Automático
+	 * [SB0001] - Gerar Movimento para Debito Automï¿½tico
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 20/04/2006
 	 * 
 	 * @param banco,debitoAutomaticoMovimento
@@ -15541,10 +15542,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		Imovel imovel = (Imovel) colecaoImoveis.iterator().next();
 		
-		// E.01 - Código do registro = "E".
+		// E.01 - Cï¿½digo do registro = "E".
 		registroTipoE.append("E");
 		
-		// E.02 - Identificação do cliente na Empresa
+		// E.02 - Identificaï¿½ï¿½o do cliente na Empresa
 		String identificacaoCliente = Util.adicionarZerosEsquedaNumeroTruncando(tamanhoMaximoIdentificacaoImovel.intValue(), ""
 				+ imovel.getCodigoDebitoAutomatico());
 		registroTipoE.append(Util.completaString(identificacaoCliente, 25));
@@ -15552,11 +15553,11 @@ public class ControladorArrecadacao extends ControladorComum {
 		String codigoAgencia = debitoAutomaticoMovimento.getDebitoAutomatico()
 				.getAgencia().getCodigoAgencia();
 		
-		// E.03 - Agência para débito/crédito
+		// E.03 - Agï¿½ncia para dï¿½bito/crï¿½dito
 		registroTipoE
 				.append(Util.adicionarZerosEsquedaNumero(4, codigoAgencia));
 
-		// E.04 - Identificação do cliente no Banco
+		// E.04 - Identificaï¿½ï¿½o do cliente no Banco
 		registroTipoE.append(Util.completaString(debitoAutomaticoMovimento
 				.getDebitoAutomatico().getIdentificacaoClienteBanco(), 14));
 		
@@ -15565,7 +15566,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				.getDataVencimentoConta());
 		registroTipoE.append(dataVencimento);
 		
-		// E.06 - Valor do débito/crédito
+		// E.06 - Valor do dï¿½bito/crï¿½dito
 		BigDecimal valorDebito = new BigDecimal("0.00");
 		valorDebito = valorDebito.add(conta.getValorAgua());
 		valorDebito = valorDebito.add(conta.getValorEsgoto());
@@ -15573,7 +15574,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		valorDebito = valorDebito.subtract(conta.getValorCreditos());
 
 		/*
-		 * Colocado por Sávio Luiz em 31/08/2007 (Analista: Rosana Carvalho)
+		 * Colocado por Sï¿½vio Luiz em 31/08/2007 (Analista: Rosana Carvalho)
 		 * OBJETIVO: Retirar o valor dos impostos do valor total da conta
 		 */
 		if (conta.getValorImposto() != null) {
@@ -15584,12 +15585,12 @@ public class ControladorArrecadacao extends ControladorComum {
 		registroTipoE.append(Util.adicionarZerosEsquedaNumero(15,
 				valorDebitoString));
 		
-		// E.07 - Código da moeda - Deverá ser: "03" - para Reais,
+		// E.07 - Cï¿½digo da moeda - Deverï¿½ ser: "03" - para Reais,
 		registroTipoE.append("03");
 		
-		// E.08 - Esta informação não será tratada pelo Banco. Irá retornar como a Empresa informou.
+		// E.08 - Esta informaï¿½ï¿½o nï¿½o serï¿½ tratada pelo Banco. Irï¿½ retornar como a Empresa informou.
 		// inicio preenchido conforme segue abaixo(E.08)
-		// Ano/Mês de referência da conta no formato AAAAMM
+		// Ano/Mï¿½s de referï¿½ncia da conta no formato AAAAMM
 		registroTipoE.append(conta.getReferencia());
 		// Digito verificador da conta
 		registroTipoE.append(conta.getDigitoVerificadorConta());
@@ -15602,8 +15603,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		// fim preenchido conforme segue abaixo(E.08)
 
 		if (banco != null && banco.isAdereCnab150()) {
-			// E.09 - Número do Agendamento do Cliente evoluir de 1 em 1  é obrigatório e não pode ser zerado.
-			//		  É utilizado em caso de cancelamento do registro
+			// E.09 - Nï¿½mero do Agendamento do Cliente evoluir de 1 em 1  ï¿½ obrigatï¿½rio e nï¿½o pode ser zerado.
+			//		  ï¿½ utilizado em caso de cancelamento do registro
 			// reservado para o futuro
 			registroTipoE.append(Util.completaString("", 41));
 			 registroTipoE.append(Util.adicionarZerosEsquedaNumero(6, sequencial));
@@ -15611,7 +15612,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			// E.10 - Reservado para o futuro (filler) Brancos
 			registroTipoE.append(Util.completaString("", 8));	
 			
-			// E.11 - Número Seqüencial do Registro é obrigatório e não pode ser zerado 
+			// E.11 - Nï¿½mero Seqï¿½encial do Registro ï¿½ obrigatï¿½rio e nï¿½o pode ser zerado 
 			registroTipoE.append(Util.adicionarZerosEsquedaNumero(6, sequencial));
 		} else {
 		
@@ -15623,10 +15624,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 
 		/*
-		 * E.12 - Código do movimento - Esta informação deverá conter:
-		 * 0 - Débito/crédito Normal.
-		 * EXCLUSIVO PARA A CEF --|1 - Cancelamento (exclusão) de lançamento enviado anteriormente para o Banco
-		 * ENVIADO PELA EMPRESA	  |5 - Cadastro de OPTANTES - para inclusão do cliente no cadastro de optantes (remessa pela Empresa).
+		 * E.12 - Cï¿½digo do movimento - Esta informaï¿½ï¿½o deverï¿½ conter:
+		 * 0 - Dï¿½bito/crï¿½dito Normal.
+		 * EXCLUSIVO PARA A CEF --|1 - Cancelamento (exclusï¿½o) de lanï¿½amento enviado anteriormente para o Banco
+		 * ENVIADO PELA EMPRESA	  |5 - Cadastro de OPTANTES - para inclusï¿½o do cliente no cadastro de optantes (remessa pela Empresa).
 		 */
 		registroTipoE.append("0");
 
@@ -15634,13 +15635,13 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0319] Gerar Movimento de Débito Automático para o banco
+	 * [UC0319] Gerar Movimento de Dï¿½bito Automï¿½tico para o banco
 	 * 
 	 * Gera o arquivo TXT para envio.
 	 * 
 	 * [SB0004] - Gerar Arquivo TXT para Envio do Banco
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 20/04/2006
 	 * 
 	 * @param arrecadadorMovimento,registrosTipoE
@@ -15660,15 +15661,15 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		StringBuilder arquivoTXTEnvio = new StringBuilder();
 
-		// gera o header do arquivo(registroCódigoA)
+		// gera o header do arquivo(registroCï¿½digoA)
 		arquivoTXTEnvio.append("A");
-		//A.02 - Código de Remessa(1 - REMESSA, 2 - RETORNO)
+		//A.02 - Cï¿½digo de Remessa(1 - REMESSA, 2 - RETORNO)
 		arquivoTXTEnvio.append(Util.completaString(""+ arrecadadorMovimento.getCodigoRemessa(), 1));
 		
 		
-		// A.03 - Código do Convênio 
+		// A.03 - Cï¿½digo do Convï¿½nio 
 		if (banco != null && banco.isAdereCnab150()) {
-			// Alterações apontadas pelos técnicos da CEF
+			// Alteraï¿½ï¿½es apontadas pelos tï¿½cnicos da CEF
 			arquivoTXTEnvio.append(Util.completaString("303653110001", 20));
 		} else {
 			arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getCodigoConvenio(), 20));
@@ -15694,11 +15695,11 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 		}
 		
-		// A.05 - Código do Banco
+		// A.05 - Cï¿½digo do Banco
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(3, ""+ codigoAgente));
 		// A.06 - Nome do Banco
 		if (banco != null && banco.isAdereCnab150()) {
-			// Alterações apontadas pelos técnicos da CEF
+			// Alteraï¿½ï¿½es apontadas pelos tï¿½cnicos da CEF
 			arquivoTXTEnvio.append(Util.completaString("CAIXA ECONOMICA FEDERAL", 20));
 		} else {
 			arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getNomeBanco(), 20));
@@ -15706,15 +15707,15 @@ public class ControladorArrecadacao extends ControladorComum {
 		// A.07 - Data do Movimento = Deve ser no formato AAAAMMDD
 		String dataGeracaoArquivo = Util.recuperaAnoMesDiaDaData(arrecadadorMovimento.getDataGeracao());	
 		arquivoTXTEnvio.append(dataGeracaoArquivo);
-		// A.08 - Número seqüencial do arquivo
+		// A.08 - Nï¿½mero seqï¿½encial do arquivo
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, ""+ arrecadadorMovimento.getNumeroSequencialArquivo()));
-		// A.09 - Versão do layout
+		// A.09 - Versï¿½o do layout
 		arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(2, ""+ arrecadadorMovimento.getNumeroVersaoLayout()));
 		
 		if (banco != null && banco.isAdereCnab150()) {
 			
-			// A.10 - Identificação do serviço
-			// Alterações apontadas pelos técnicos da CEF
+			// A.10 - Identificaï¿½ï¿½o do serviï¿½o
+			// Alteraï¿½ï¿½es apontadas pelos tï¿½cnicos da CEF
 			arquivoTXTEnvio.append(Util.completaString("DEB AUTOMAT", 17)); //
 			
 			// A.11 - Conta Compromisso
@@ -15722,20 +15723,20 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 			arquivoTXTEnvio.append(Util.completaString("1314003000011104", 16));
 			
-			// A.12 - Identificação do Ambiente Cliente (P - Produção, T - teste)
+			// A.12 - Identificaï¿½ï¿½o do Ambiente Cliente (P - Produï¿½ï¿½o, T - teste)
 			arquivoTXTEnvio.append("T");
-			// A.13 - Identificação do Ambiente Caixa (P - Produção, T - teste)
+			// A.13 - Identificaï¿½ï¿½o do Ambiente Caixa (P - Produï¿½ï¿½o, T - teste)
 			arquivoTXTEnvio.append("T");
 		
 			// A.14 - Reservado para o futuro (Brancos).
 			arquivoTXTEnvio.append(Util.completaString("", 27));
-			// A.15 - Número Sequencial do Registro,  deverá constar:  000000
+			// A.15 - Nï¿½mero Sequencial do Registro,  deverï¿½ constar:  000000
 			arquivoTXTEnvio.append("000000");
 			// A.16 - Reservado para o futuro (Branco)
 			arquivoTXTEnvio.append(Util.completaString("", 1));
 		} else {
 			
-			// A.10 - Identificação do serviço
+			// A.10 - Identificaï¿½ï¿½o do serviï¿½o
 			arquivoTXTEnvio.append(Util.completaString(arrecadadorMovimento.getDescricaoIdentificacaoServico(), 17)); //"DEB AUTOMAT"
 			// A.11 - Reservado para o futuro (Brancos).
 			arquivoTXTEnvio.append(Util.completaString("", 51));
@@ -15748,7 +15749,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		// recupera todos os registros do tipo E
 		arquivoTXTEnvio.append(registrosTipoE);
 		
-		// gera o trailler(registro código "Z") do arquivo de envio
+		// gera o trailler(registro cï¿½digo "Z") do arquivo de envio
 		arquivoTXTEnvio.append("Z");
 		
 		Integer qtdeLinhas = arrecadadorMovimento.getNumeroRegistrosMovimento();
@@ -15759,7 +15760,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		
 		if (banco != null && banco.isAdereCnab150()) {
-			// Alterações apontadas pelos técnicos da CEF
+			// Alteraï¿½ï¿½es apontadas pelos tï¿½cnicos da CEF
 			arquivoTXTEnvio.append(Util.completaString("", 119));
 			arquivoTXTEnvio.append(Util.adicionarZerosEsquedaNumero(6, (qtdeLinhas -1)));
 			arquivoTXTEnvio.append(" ");
@@ -15774,15 +15775,15 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0319] Gerar Movimento de Débito Automático para o banco
+	 * [UC0319] Gerar Movimento de Dï¿½bito Automï¿½tico para o banco
 	 * 
-	 * Cria uma linha de 150 posições com o registro tipo E.
+	 * Cria uma linha de 150 posiï¿½ï¿½es com o registro tipo E.
 	 * 
 	 * 
-	 * [SB0003] - Regerar arquivo TXT para um movimento de débito automático
+	 * [SB0003] - Regerar arquivo TXT para um movimento de dï¿½bito automï¿½tico
 	 * gerado anteriormente
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 25/04/2006
 	 * 
 	 * @param arrecadadorMovimento
@@ -15860,7 +15861,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				ZipUtil.adicionarArquivo(zos, leitura);
 				
 				leitura.delete();
-				// caso o envio do banco seja igual a 1, então envia para o
+				// caso o envio do banco seja igual a 1, entï¿½o envia para o
 				// banco
 				if (envioBanco.equals("1")) {
 					
@@ -15889,7 +15890,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							"Registros Regerados", 
 							leitura);
 
-						estadoEmail = "Não Enviado";
+						estadoEmail = "Nï¿½o Enviado";
 					}
 
 				} else {
@@ -15900,7 +15901,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						"Registros Gerados", 
 						leitura);
 
-					estadoEmail = "Não Enviado";
+					estadoEmail = "Nï¿½o Enviado";
 				}
 				
 				leitura.delete();
@@ -15909,7 +15910,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				if (mandouEmailBanco) {
 					estadoEmail = "Enviado";
 				} else {
-					estadoEmail = "Não Enviado";
+					estadoEmail = "Nï¿½o Enviado";
 				}
 
 			} catch (IOException e) {
@@ -15923,9 +15924,9 @@ public class ControladorArrecadacao extends ControladorComum {
 				IoUtil.fecharStream(zos);
 			}
 
-			// Parte que gera o relatório e envia por email
-			// cria uma instância da classe do relatório
-			// cria uma instância da classe do relatório
+			// Parte que gera o relatï¿½rio e envia por email
+			// cria uma instï¿½ncia da classe do relatï¿½rio
+			// cria uma instï¿½ncia da classe do relatï¿½rio
 			RelatorioMovimentoDebitoAutomaticoBanco relatorioMovimentoDebitoAutomaticoBanco = 
 				new RelatorioMovimentoDebitoAutomaticoBanco(usuario);
 			
@@ -15968,9 +15969,9 @@ public class ControladorArrecadacao extends ControladorComum {
 			FileOutputStream out2 = null;
 			
 			try {
-				// Alterado por Sávio Luiz Data:15/01/2008
-				// Arquivo que é enviado para o e-mail também
-				// ficará no bin do servidor.
+				// Alterado por Sï¿½vio Luiz Data:15/01/2008
+				// Arquivo que ï¿½ enviado para o e-mail tambï¿½m
+				// ficarï¿½ no bin do servidor.
 				String nomeZip = "regerar_movimento_banco_PDF_sequencial_" + 
 					arrecadadorMovimento.getNumeroSequencialArquivo();
 				
@@ -16015,11 +16016,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0322] - Inserir Guia de Devolução
+	 * [UC0322] - Inserir Guia de Devoluï¿½ï¿½o
 	 * 
-	 * Insere uma Guia de Devolução
+	 * Insere uma Guia de Devoluï¿½ï¿½o
 	 * 
-	 * @author Rafael Corrêa, Pedro Alexandre
+	 * @author Rafael Corrï¿½a, Pedro Alexandre
 	 * @date 29/04/2006, 21/11/2006
 	 * 
 	 * @return Integer
@@ -16034,16 +16035,16 @@ public class ControladorArrecadacao extends ControladorComum {
 		RegistroAtendimento registroAtendimento = null;
 		OrdemServico ordemServico = null;
 
-		//Verificar as permissão especial para inserir uma devolução quando o
-		//valor da devolucao é maior que o valor da guia da devolucao
+		//Verificar as permissï¿½o especial para inserir uma devoluï¿½ï¿½o quando o
+		//valor da devolucao ï¿½ maior que o valor da guia da devolucao
 		//Vivianne Sousa - 01/08/2007
 		boolean temPermissaoIcluirDevolucaoMaiorValorMaximo = 
 			getControladorPermissaoEspecial().verificarPermissaoIcluirDevolucaoMaiorValorMaximo(usuarioLogado);
 
-		// Pesquisar nos parâmetros do sistema AnoMesFaturamento
+		// Pesquisar nos parï¿½metros do sistema AnoMesFaturamento
 		SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 
-		// recupera o ano/mês de referência da arrecadação
+		// recupera o ano/mï¿½s de referï¿½ncia da arrecadaï¿½ï¿½o
 		int anoMesArrecadacaoSistemaParametro = getSistemaParametro().getAnoMesArrecadacao();
 
 		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
@@ -16109,7 +16110,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		if (guiaDevolucao.getDocumentoTipo() != null) {
 
-			// [FS0008] - Verificar existência da conta
+			// [FS0008] - Verificar existï¿½ncia da conta
 			if (guiaDevolucao.getDocumentoTipo().getId().equals(DocumentoTipo.CONTA)) {
 
 				if (guiaDevolucao.getConta() == null) {
@@ -16130,7 +16131,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					
 					ContaGeral contaGeral = Fachada.getInstancia().retornaContaGeral(colecaoConta);
 
-					//[FS0018] - Verificar valor da devolução 
+					//[FS0018] - Verificar valor da devoluï¿½ï¿½o 
 					BigDecimal valorLimite = this.verificarValorDevolucao(contaGeral, null, null);
 
 					if (guiaDevolucao.getValorDevolucao().compareTo(valorLimite) > 0) {
@@ -16155,7 +16156,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					CreditoTipo creditoTipo = 
 						(CreditoTipo) getControladorUtil().pesquisar(filtroCreditoTipo,CreditoTipo.class.getName()).iterator().next();
 
-					// [FS00018] - Verificar valor da devolução
+					// [FS00018] - Verificar valor da devoluï¿½ï¿½o
 					if (guiaDevolucao.getValorDevolucao().compareTo(creditoTipo.getValorLimite()) > 0 && 
 						!temPermissaoIcluirDevolucaoMaiorValorMaximo) {
 						throw new ControladorException("atencao.valor.devolucao.superior.valor.limite.duplicidade",null);
@@ -16180,9 +16181,9 @@ public class ControladorArrecadacao extends ControladorComum {
 					guiaDevolucao.setUltimaAlteracao(new Date());
 
 					/**
-					 * alterado por pedro alexandre dia 21/11/2006 alteração
-					 * feita para acoplar o controle de abrangência de
-					 * usuário
+					 * alterado por pedro alexandre dia 21/11/2006 alteraï¿½ï¿½o
+					 * feita para acoplar o controle de abrangï¿½ncia de
+					 * usuï¿½rio
 					 */
 					Abrangencia abrangencia = 
 						new Abrangencia(usuarioLogado, guiaDevolucao.getLocalidade());
@@ -16195,8 +16196,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					
 					/**
 					 * Alterado por Hugo Leonardo. Data: 27/05/2010
-					 * [UC0322] - Inserir guia de devolução
-					 * 		[FS0023] - Verificar crédito a realizar.
+					 * [UC0322] - Inserir guia de devoluï¿½ï¿½o
+					 * 		[FS0023] - Verificar crï¿½dito a realizar.
 					 * 
 					 * Analista: Ana Cristina.
 					 */
@@ -16216,7 +16217,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						throw new ControladorException("atencao.conta_ja_devolvida", null, msgAnoMes, msgValor);
 					}
 					/**
-					 * Fim Alteração realizada por: Hugo Leonardo. Data: 27/05/2010.
+					 * Fim Alteraï¿½ï¿½o realizada por: Hugo Leonardo. Data: 27/05/2010.
 					 */
 					
 					
@@ -16227,7 +16228,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 			} else if (guiaDevolucao.getDocumentoTipo().getId().equals(DocumentoTipo.GUIA_PAGAMENTO)) {
 
-				// [FS0010] - Verificar existência da guia de pagamento
+				// [FS0010] - Verificar existï¿½ncia da guia de pagamento
 				if (guiaDevolucao.getGuiaPagamento() != null) {
 
 					RegistroAtendimentoSolicitante registroAtendimentoSolicitante = null;
@@ -16246,7 +16247,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					filtro.adicionarCaminhoParaCarregamentoEntidade("cliente");
 
-					// Pesquisa de acordo com os parâmetros informados no filtro
+					// Pesquisa de acordo com os parï¿½metros informados no filtro
 					Collection colecao = 
 						this.getControladorUtil().pesquisar(filtro,RegistroAtendimentoSolicitante.class.getName());
 
@@ -16267,13 +16268,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					// Caso a guia de pagamento esteja cadastrada no sistema
 					// Seta os dados da guai de pagamento no form
-					// Caso contrário seta os dados da guia para nulo e informa
+					// Caso contrï¿½rio seta os dados da guia para nulo e informa
 					// ao
-					// usuário que não existe guia de pagamento cadastrada no
+					// usuï¿½rio que nï¿½o existe guia de pagamento cadastrada no
 					// sistema
 					if (colecaoGuiaPagamento != null && !colecaoGuiaPagamento.isEmpty()) {
 						
-						//[FS0011] - Verificar imóvel ou cliente da guia de Pagamento
+						//[FS0011] - Verificar imï¿½vel ou cliente da guia de Pagamento
 						GuiaPagamentoGeral guiaPagamentoGeral = 
 							this.verificarGuiaPagamentoParaGuiaDevolucao(colecaoGuiaPagamento, 
 								registroAtendimento, 
@@ -16282,7 +16283,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								ordemServico);
 
 						
-						//[FS0018] - Verificar valor da devolução 
+						//[FS0018] - Verificar valor da devoluï¿½ï¿½o 
 						BigDecimal valorLimite = 
 							this.verificarValorDevolucao(null, null, guiaPagamentoGeral);
 
@@ -16312,7 +16313,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							(CreditoTipo) getControladorUtil().pesquisar(filtroCreditoTipo,
 									CreditoTipo.class.getName()).iterator().next();
 
-						// [FS00018] - Verificar valor da devolução
+						// [FS00018] - Verificar valor da devoluï¿½ï¿½o
 						if (guiaDevolucao.getValorDevolucao().compareTo(creditoTipo.getValorLimite()) > 0 && 
 							!temPermissaoIcluirDevolucaoMaiorValorMaximo) {
 							
@@ -16347,8 +16348,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 						/**
 						 * alterado por pedro alexandre dia 21/11/2006
-						 * alteração feita para acoplar o controle de
-						 * abrangência de usuário
+						 * alteraï¿½ï¿½o feita para acoplar o controle de
+						 * abrangï¿½ncia de usuï¿½rio
 						 */
 						Abrangencia abrangencia = 
 							new Abrangencia(usuarioLogado, 
@@ -16371,9 +16372,9 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			} else if (guiaDevolucao.getDocumentoTipo().getId().equals(DocumentoTipo.DEBITO_A_COBRAR)) {
 
-				// [FS0013] - Verificar existência do débito a cobrar
+				// [FS0013] - Verificar existï¿½ncia do dï¿½bito a cobrar
 
-				// Caso o usuário tenha informado o código do débito a cobrar
+				// Caso o usuï¿½rio tenha informado o cï¿½digo do dï¿½bito a cobrar
 				if (guiaDevolucao.getDebitoACobrarGeral() != null) {
 
 					
@@ -16387,8 +16388,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
 						
 						/*
-						 * [FS0014] - Verificar imóvel do débito a cobrar
-						 * [FS0015] - Verificar localidade do débito a cobrar
+						 * [FS0014] - Verificar imï¿½vel do dï¿½bito a cobrar
+						 * [FS0015] - Verificar localidade do dï¿½bito a cobrar
 						 */
 						DebitoACobrarGeral debitoACobrarGeral = 
 							this.verificarDebitoACobrarParaGuiaDevolucao(
@@ -16397,7 +16398,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								registroAtendimento.getImovel().getLocalidade().getId(), 
 								ordemServico);
 
-						//[FS0018] - Verificar valor da devolução 
+						//[FS0018] - Verificar valor da devoluï¿½ï¿½o 
 						BigDecimal valorLimite = 
 							this.verificarValorDevolucao(null, debitoACobrarGeral, null);
 
@@ -16409,7 +16410,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								throw new ControladorException("atencao.valor.devolucao.superior.valor.pagamento",
 									null,
 									Util.formatarMoedaReal(valorLimite),
-									"Débito a Cobrar");
+									"Dï¿½bito a Cobrar");
 							}
 							throw new ControladorException("atencao.valor.devolucao.menor.igual.zero");
 						}
@@ -16424,7 +16425,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						CreditoTipo creditoTipo = 
 							(CreditoTipo) getControladorUtil().pesquisar(filtroCreditoTipo,CreditoTipo.class.getName()).iterator().next();
 
-						// [FS00018] - Verificar valor da devolução
+						// [FS00018] - Verificar valor da devoluï¿½ï¿½o
 						if (guiaDevolucao.getValorDevolucao().compareTo(creditoTipo.getValorLimite()) > 0 && 
 							!temPermissaoIcluirDevolucaoMaiorValorMaximo) {
 							throw new ControladorException("atencao.valor.devolucao.superior.valor.limite.duplicidade",null);
@@ -16456,8 +16457,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 						/**
 						 * alterado por pedro alexandre dia 21/11/2006
-						 * alteração feita para acoplar o controle de
-						 * abrangência de usuário
+						 * alteraï¿½ï¿½o feita para acoplar o controle de
+						 * abrangï¿½ncia de usuï¿½rio
 						 */
 						Abrangencia abrangencia = 
 							new Abrangencia(usuarioLogado, guiaDevolucao.getLocalidade());
@@ -16469,10 +16470,10 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 						id = (Integer) getControladorUtil().inserir(guiaDevolucao);
 					} else {
-						throw new ControladorException("atencao.pesquisa_inexistente", null,"Débito a Cobrar");
+						throw new ControladorException("atencao.pesquisa_inexistente", null,"Dï¿½bito a Cobrar");
 					}
 				} else {
-					throw new ControladorException("atencao.Informe_entidade",null, "Débito a Cobrar");
+					throw new ControladorException("atencao.Informe_entidade",null, "Dï¿½bito a Cobrar");
 				}
 			} else if (guiaDevolucao.getDocumentoTipo().getId().equals(DocumentoTipo.DEVOLUCAO_VALOR)) {
 
@@ -16498,7 +16499,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				if (ordemServico == null || ordemServico.getServicoTipo().getDebitoTipo() == null) {
 					
 					if (guiaDevolucao.getDebitoTipo() == null) {
-						throw new ControladorException("atencao.Informe_entidade", null,"Tipo de Débito");
+						throw new ControladorException("atencao.Informe_entidade", null,"Tipo de Dï¿½bito");
 					}
 					FiltroDebitoTipo filtroDebitoTipo = new FiltroDebitoTipo();
 					filtroDebitoTipo.adicionarParametro(
@@ -16510,7 +16511,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						getControladorUtil().pesquisar(filtroDebitoTipo,DebitoTipo.class.getName());
 
 					if (colecaoDebitoTipo == null || colecaoDebitoTipo.isEmpty()) {
-						throw new ControladorException("atencao.pesquisa_inexistente", null,"Tipo de Débito");
+						throw new ControladorException("atencao.pesquisa_inexistente", null,"Tipo de Dï¿½bito");
 					}
 				}
 
@@ -16525,7 +16526,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				CreditoTipo creditoTipo = (CreditoTipo) getControladorUtil()
 						.pesquisar(filtroCreditoTipo,CreditoTipo.class.getName()).iterator().next();
 
-				// [FS00018] - Verificar valor da devolução
+				// [FS00018] - Verificar valor da devoluï¿½ï¿½o
 				if (guiaDevolucao.getValorDevolucao().compareTo(creditoTipo.getValorLimite()) > 0 && 
 					!temPermissaoIcluirDevolucaoMaiorValorMaximo) {
 					
@@ -16549,8 +16550,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				guiaDevolucao.setUltimaAlteracao(new Date());
 
 				/**
-				 * alterado por pedro alexandre dia 21/11/2006 alteração feita
-				 * para acoplar o controle de abrangência de usuário
+				 * alterado por pedro alexandre dia 21/11/2006 alteraï¿½ï¿½o feita
+				 * para acoplar o controle de abrangï¿½ncia de usuï¿½rio
 				 */
 				Abrangencia abrangencia = 
 					new Abrangencia(usuarioLogado,guiaDevolucao.getLocalidade());
@@ -16593,10 +16594,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * Faz a pesquisa de guia de devolução para o relatório fazendo os
+	 * Faz a pesquisa de guia de devoluï¿½ï¿½o para o relatï¿½rio fazendo os
 	 * carregamentos de clienteContas, clienteImoveis, clientesGuiaPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 11/09/2006
 	 * 
 	 * @param FiltroGuiaDevolucao
@@ -16620,12 +16621,12 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * 
 	 * [UC0324] - Filtrar Guia de Devolucao
 	 * 
-	 * [SF0001] - Seleciona Guias de Devolução do Cliente
+	 * [SF0001] - Seleciona Guias de Devoluï¿½ï¿½o do Cliente
 	 * 
-	 * Faz a pesquisa de guia de devolução fazendo os carregamentos de
+	 * Faz a pesquisa de guia de devoluï¿½ï¿½o fazendo os carregamentos de
 	 * clienteContas, clienteImoveis, clientesGuiaPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date
 	 * 
 	 * @param FiltroGuiaDevolucao
@@ -16649,12 +16650,12 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * 
 	 * [UC0324] - Filtrar Guia de Devolucao
 	 * 
-	 * [SF0001] - Seleciona Guias de Devolução do Cliente
+	 * [SF0001] - Seleciona Guias de Devoluï¿½ï¿½o do Cliente
 	 * 
-	 * Faz a pesquisa de guia de devolução fazendo os carregamentos de
+	 * Faz a pesquisa de guia de devoluï¿½ï¿½o fazendo os carregamentos de
 	 * clienteContas, clienteImoveis, clientesGuiaPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date
 	 * 
 	 * @param FiltroGuiaDevolucao
@@ -16675,13 +16676,13 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0266] - Manter Guia de Devolução
+	 * [UC0266] - Manter Guia de Devoluï¿½ï¿½o
 	 * 
-	 * [SB0001] - Atualizar Guia de Devolução
+	 * [SB0001] - Atualizar Guia de Devoluï¿½ï¿½o
 	 * 
-	 * Atualiza uma Guia de Devolução e as Devoluções associadas a ela
+	 * Atualiza uma Guia de Devoluï¿½ï¿½o e as Devoluï¿½ï¿½es associadas a ela
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 09/05/2006
 	 * 
 	 * @throws ControladorException
@@ -16702,8 +16703,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		Date dataLimite = Util.adicionarNumeroDiasDeUmaData(dataAtual, 30);
 
 		/** ************************************************************************************ */
-		/** Verificar as permissão especial para inserir uma devolução quando o * */
-		/** valor da devolucao é maior que o valor da guia da devolucao * */
+		/** Verificar as permissï¿½o especial para inserir uma devoluï¿½ï¿½o quando o * */
+		/** valor da devolucao ï¿½ maior que o valor da guia da devolucao * */
 		/** Vivianne Sousa - 01/08/2007 * */
 		boolean temPermissaoIcluirDevolucaoMaiorValorMaximo = getControladorPermissaoEspecial()
 				.verificarPermissaoIcluirDevolucaoMaiorValorMaximo(
@@ -16774,7 +16775,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		if (guiaDevolucao.getDocumentoTipo() != null) {
 
-			// [FS0008] - Verificar existência da conta
+			// [FS0008] - Verificar existï¿½ncia da conta
 			if (guiaDevolucao.getDocumentoTipo().getId().equals(
 					DocumentoTipo.CONTA)) {
 				if (guiaDevolucao.getConta() == null) {
@@ -16782,9 +16783,9 @@ public class ControladorArrecadacao extends ControladorComum {
 							null, "Conta");
 				}
 
-				// Cria o filtro de conta e seta todos os parâmetros para
+				// Cria o filtro de conta e seta todos os parï¿½metros para
 				// pesquisar a
-				// conta do imóvel
+				// conta do imï¿½vel
 				FiltroConta filtroConta = new FiltroConta();
 				filtroConta.adicionarParametro(new ParametroSimples(
 						FiltroConta.IMOVEL_ID, registroAtendimento.getImovel()
@@ -16803,7 +16804,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				if (colecaoConta != null && !colecaoConta.isEmpty()) {
 
-					// Recupera a conta do imóvel com a referência informada
+					// Recupera a conta do imï¿½vel com a referï¿½ncia informada
 					Conta conta = (Conta) colecaoConta.iterator().next();
 
 					// [FS0009] - Verificar localidade da conta
@@ -16821,9 +16822,9 @@ public class ControladorArrecadacao extends ControladorComum {
 					BigDecimal valorLimite = new BigDecimal("0.00");
 
 					// Faz uma pesquisa em pagamento para somar o valor de
-					// todos os pagamentos associados ao débito a cobrar,
-					// depois subtraí-lo do valor total do débito e
-					// verificar se o valor digitado é maior do que esse
+					// todos os pagamentos associados ao dï¿½bito a cobrar,
+					// depois subtraï¿½-lo do valor total do dï¿½bito e
+					// verificar se o valor digitado ï¿½ maior do que esse
 					// valor
 					FiltroPagamento filtroPagamento = new FiltroPagamento();
 					filtroPagamento.adicionarParametro(new ParametroSimples(
@@ -16904,7 +16905,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									CreditoTipo.class.getName()).iterator()
 							.next();
 
-					// [FS00018] - Verificar valor da devolução
+					// [FS00018] - Verificar valor da devoluï¿½ï¿½o
 					if (guiaDevolucao.getValorDevolucao().compareTo(
 							creditoTipo.getValorLimite()) > 0
 							&& !temPermissaoIcluirDevolucaoMaiorValorMaximo) {
@@ -16942,22 +16943,22 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 			} else if (guiaDevolucao.getDocumentoTipo().getId().equals(
 					DocumentoTipo.GUIA_PAGAMENTO)) {
-				// [FS0010] - Verificar existência da guia de pagamento
+				// [FS0010] - Verificar existï¿½ncia da guia de pagamento
 				if (guiaDevolucao.getGuiaPagamento() != null) {
-					// Pesquisa a guia de pagamento para o imóvel ou o cliente
-					// informado verificando se o cliente ou o imóvel é nulo
+					// Pesquisa a guia de pagamento para o imï¿½vel ou o cliente
+					// informado verificando se o cliente ou o imï¿½vel ï¿½ nulo
 
 					GuiaPagamento guiaPagamento = null;
 
 					// Caso a guia de pagamento esteja cadastrada no sistema
 					// Seta os dados da guai de pagamento no form
-					// Caso contrário seta os dados da guia para nulo e informa
+					// Caso contrï¿½rio seta os dados da guia para nulo e informa
 					// ao
-					// usuário que não existe guia de pagamento cadastrada no
+					// usuï¿½rio que nï¿½o existe guia de pagamento cadastrada no
 					// sistema
 					if (guiaPagamento != null) {
 
-						// [FS0011] - Verificar imóvel ou cliente da guia de
+						// [FS0011] - Verificar imï¿½vel ou cliente da guia de
 						// pagamento
 						if (registroAtendimento.getImovel() != null) {
 							if (guiaPagamento.getImovel() == null) {
@@ -16965,9 +16966,9 @@ public class ControladorArrecadacao extends ControladorComum {
 										"atencao.guia.pagamento.imovel.inexistente",
 										null);
 							}
-							// Verifica se o id do imóvel do Registro de
+							// Verifica se o id do imï¿½vel do Registro de
 							// Atendimento
-							// é diferente do id do imovel da Guia de
+							// ï¿½ diferente do id do imovel da Guia de
 							// Pagamento
 							if (!(registroAtendimento.getImovel().getId()
 									.equals(guiaPagamento.getImovel()
@@ -16979,10 +16980,10 @@ public class ControladorArrecadacao extends ControladorComum {
 										registroAtendimento.getImovel()
 												.getId().toString());
 							}
-							// Verifica se o id do localidade do imóvel
+							// Verifica se o id do localidade do imï¿½vel
 							// do
 							// Registro de Atendimento
-							// é diferente do id da localidade da Guia
+							// ï¿½ diferente do id da localidade da Guia
 							// de
 							// Pagamento
 							if (!(localidade.getId()
@@ -17018,9 +17019,9 @@ public class ControladorArrecadacao extends ControladorComum {
 						BigDecimal valorLimite = new BigDecimal("0.00");
 
 						// Faz uma pesquisa em pagamento para somar o valor de
-						// todos os pagamentos associados ao débito a cobrar,
-						// depois subtraí-lo do valor total do débito e
-						// verificar se o valor digitado é maior do que esse
+						// todos os pagamentos associados ao dï¿½bito a cobrar,
+						// depois subtraï¿½-lo do valor total do dï¿½bito e
+						// verificar se o valor digitado ï¿½ maior do que esse
 						// valor
 						FiltroPagamento filtroPagamento = new FiltroPagamento();
 						filtroPagamento
@@ -17109,7 +17110,7 @@ public class ControladorArrecadacao extends ControladorComum {
 										CreditoTipo.class.getName())
 								.iterator().next();
 
-						// [FS00018] - Verificar valor da devolução
+						// [FS00018] - Verificar valor da devoluï¿½ï¿½o
 						if (guiaDevolucao.getValorDevolucao().compareTo(
 								creditoTipo.getValorLimite()) > 0
 								&& !temPermissaoIcluirDevolucaoMaiorValorMaximo) {
@@ -17152,11 +17153,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			} else if (guiaDevolucao.getDocumentoTipo().getId().equals(
 					DocumentoTipo.DEBITO_A_COBRAR)) {
-				// [FS0013] - Verificar existência do débito a cobrar
+				// [FS0013] - Verificar existï¿½ncia do dï¿½bito a cobrar
 
-				// Caso o usuário tenha informado o código do débito a cobrar
+				// Caso o usuï¿½rio tenha informado o cï¿½digo do dï¿½bito a cobrar
 				if (guiaDevolucao.getDebitoACobrarGeral() != null) {
-					// Pesquisa o débito a cobrar para o imóvel informado
+					// Pesquisa o dï¿½bito a cobrar para o imï¿½vel informado
 					DebitoACobrar debitoACobrar = this
 							.pesquisarDebitoACobrarDigitado(registroAtendimento
 									.getImovel().getId().toString(),
@@ -17172,7 +17173,7 @@ public class ControladorArrecadacao extends ControladorComum {
 											.toString(), registroAtendimento
 											.getImovel().getId().toString());
 						}
-						// [FS0015] - Verificar localidade do débito a
+						// [FS0015] - Verificar localidade do dï¿½bito a
 						// cobrar
 						if (!registroAtendimento.getImovel()
 								.getLocalidade().getId().equals(
@@ -17208,9 +17209,9 @@ public class ControladorArrecadacao extends ControladorComum {
 						BigDecimal valorLimite = new BigDecimal("0.00");
 
 						// Faz uma pesquisa em pagamento para somar o valor de
-						// todos os pagamentos associados ao débito a cobrar,
-						// depois subtraí-lo do valor total do débito e
-						// verificar se o valor digitado é maior do que esse
+						// todos os pagamentos associados ao dï¿½bito a cobrar,
+						// depois subtraï¿½-lo do valor total do dï¿½bito e
+						// verificar se o valor digitado ï¿½ maior do que esse
 						// valor
 						FiltroPagamento filtroPagamento = new FiltroPagamento();
 						filtroPagamento
@@ -17266,7 +17267,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						} else {
 							throw new ControladorException(
 									"atencao.tipo.documento.sem.pagamentos.associados",
-									null, "Débito a Cobrar "
+									null, "Dï¿½bito a Cobrar "
 											+ debitoACobrar.getId().toString()
 											+ " ");
 						}
@@ -17281,7 +17282,7 @@ public class ControladorArrecadacao extends ControladorComum {
 										"atencao.valor.devolucao.superior.valor.pagamento",
 										null,
 										Util.formatarMoedaReal(valorLimite),
-										"Débito a Cobrar");
+										"Dï¿½bito a Cobrar");
 
 							}
 							throw new ControladorException(
@@ -17299,7 +17300,7 @@ public class ControladorArrecadacao extends ControladorComum {
 										CreditoTipo.class.getName())
 								.iterator().next();
 
-						// [FS00018] - Verificar valor da devolução
+						// [FS00018] - Verificar valor da devoluï¿½ï¿½o
 						if (guiaDevolucao.getValorDevolucao().compareTo(
 								creditoTipo.getValorLimite()) > 0
 								&& !temPermissaoIcluirDevolucaoMaiorValorMaximo) {
@@ -17326,11 +17327,11 @@ public class ControladorArrecadacao extends ControladorComum {
 					} else {
 						throw new ControladorException(
 								"atencao.pesquisa_inexistente", null,
-								"Débito a Cobrar");
+								"Dï¿½bito a Cobrar");
 					}
 				} else {
 					throw new ControladorException("atencao.Informe_entidade",
-							null, "Débito a Cobrar");
+							null, "Dï¿½bito a Cobrar");
 				}
 			} else if (guiaDevolucao.getDocumentoTipo().getId().equals(
 					DocumentoTipo.DEVOLUCAO_VALOR)) {
@@ -17366,7 +17367,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					if (guiaDevolucao.getDebitoTipo() == null) {
 						throw new ControladorException(
 								"atencao.Informe_entidade", null,
-								"Tipo de Débito");
+								"Tipo de Dï¿½bito");
 					}
 					FiltroDebitoTipo filtroDebitoTipo = new FiltroDebitoTipo();
 					filtroDebitoTipo
@@ -17383,7 +17384,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							|| colecaoDebitoTipo.isEmpty()) {
 						throw new ControladorException(
 								"atencao.pesquisa_inexistente", null,
-								"Tipo de Débito");
+								"Tipo de Dï¿½bito");
 					}
 				}
 
@@ -17397,7 +17398,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.pesquisar(filtroCreditoTipo,
 								CreditoTipo.class.getName()).iterator().next();
 
-				// [FS00018] - Verificar valor da devolução
+				// [FS00018] - Verificar valor da devoluï¿½ï¿½o
 				if (guiaDevolucao.getValorDevolucao().compareTo(
 						creditoTipo.getValorLimite()) > 0
 						&& !temPermissaoIcluirDevolucaoMaiorValorMaximo) {
@@ -17446,8 +17447,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		guiaDevolucao.setUltimaAlteracao(new Date());
 		getControladorUtil().atualizar(guiaDevolucao);
 
-		// Faz um filtro das Devoluções associadas à guia de devolução
-		// atualizada para atualizá-las também
+		// Faz um filtro das Devoluï¿½ï¿½es associadas ï¿½ guia de devoluï¿½ï¿½o
+		// atualizada para atualizï¿½-las tambï¿½m
 		FiltroDevolucao filtroDevolucao = new FiltroDevolucao();
 		filtroDevolucao.adicionarParametro(new ParametroSimples(
 				FiltroDevolucao.GUIA_DEVOLUCAO_ID, guiaDevolucao.getId()));
@@ -17462,7 +17463,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				Devolucao devolucao = (Devolucao) colecaoDevolucaoIterator
 						.next();
 
-				// Seta os valores para atualizar as devoluções
+				// Seta os valores para atualizar as devoluï¿½ï¿½es
 				devolucao.setAnoMesReferenciaDevolucao(guiaDevolucao
 						.getAnoMesReferenciaGuiaDevolucao());
 				devolucao.setLocalidade(guiaDevolucao.getLocalidade());
@@ -17478,8 +17479,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo do Arrecadacao' de acordo com a opção de totalização.
+	 * Consulta ResumoArrecadacao para a geraï¿½ï¿½o do relatï¿½rio '[UC0345] Gerar
+	 * Relatï¿½rio de Resumo do Arrecadacao' de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa, Diogo Peixoto
 	 * @created 24/05/2006, 20/04/2011
@@ -17559,7 +17560,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				Iterator iterator = colecaoResumoArrecadacaoRelatorio
 						.iterator();
 
-				// Prepara cada linha do relatório
+				// Prepara cada linha do relatï¿½rio
 
 				String recebimentoTipo = null;
 				String tipoLancamento = null;
@@ -17631,8 +17632,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					boolean condicaoIgual = true;
 					// compara se o registro atual eh do
-					// mesmo tipo de Recebimento, mesmo tipo de lançamento
-					// e mesmo item de lançamento do registro anterior
+					// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+					// e mesmo item de lanï¿½amento do registro anterior
 					if (recebimentoTipo.equals(tempRecebimentoTipo)
 							&& tipoLancamento.equals(tempTipoLancamento)
 							&& itemLancamento.equals(tempItemLancamento)) {
@@ -17685,7 +17686,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					if (!condicaoIgual) {
 
-						// adiciona uma linha no relátorio
+						// adiciona uma linha no relï¿½torio
 						ResumoArrecadacaoRelatorioHelper resumoArrecadacaoRelatorioHelper = new ResumoArrecadacaoRelatorioHelper(
 								arrayValores,
 								(String) elementAnterior[1],
@@ -17734,9 +17735,9 @@ public class ControladorArrecadacao extends ControladorComum {
 					elementAnterior[7] = element[7]; // lancamentoTipo
 					elementAnterior[8] = element[8]; // lancamentoTipoSuperior
 
-					// identifica pelo que vai ser "quebrado" o relátorio
+					// identifica pelo que vai ser "quebrado" o relï¿½torio
 					if (agrupaPorGerencia) {
-						// quebra página por Gerência Regional e não mostra a
+						// quebra pï¿½gina por Gerï¿½ncia Regional e nï¿½o mostra a
 						// Localidade
 						descGerenciaRegionalAnterior = "" + element[10];
 						idGerenciaRegionalAnterior = "" + element[11];
@@ -17745,8 +17746,8 @@ public class ControladorArrecadacao extends ControladorComum {
 								.equalsIgnoreCase("estadoLocalidade")
 								|| opcaoTotalizacao
 										.equalsIgnoreCase("gerenciaRegionalLocalidade")) {
-							// quebra a página por Localidade e mostra a
-							// Gerência
+							// quebra a pï¿½gina por Localidade e mostra a
+							// Gerï¿½ncia
 							// Regional
 							descGerenciaRegionalAnterior = "" + element[10];
 							idGerenciaRegionalAnterior = "" + element[11];
@@ -17754,8 +17755,8 @@ public class ControladorArrecadacao extends ControladorComum {
 							idLocalidadeAnterior = "" + element[13];
 							codigoCentroCusto = "" + element[17];
 						} else {
-							// quebra a página por Localidade e não mostra a
-							// Gerência
+							// quebra a pï¿½gina por Localidade e nï¿½o mostra a
+							// Gerï¿½ncia
 							// Regional
 							descLocalidadeAnterior = "" + element[10];
 							idLocalidadeAnterior = "" + element[11];
@@ -17815,7 +17816,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * [SB0006] - Apresentar Dados Diarios da Arrecadacao por Perfil
 	 * 
 	 * Acumula os dados por Perfil de uma Colecao de Dados Diarios da
-	 * Arrecadação
+	 * Arrecadaï¿½ï¿½o
 	 * 
 	 * @author Fernanda Paiva
 	 * @date 24/05/2006
@@ -17932,7 +17933,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				// indice++;
 			}// fim while
 
-			// verfica se é para acumular
+			// verfica se ï¿½ para acumular
 			if (acumular) {
 
 				arrecadacaoDadosDiariosSubstituir
@@ -17960,9 +17961,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Consulta a qtde de registros ResumoArrecadacao para a geração do
-	 * relatório '[UC0345] Gerar Relatório de Resumo do Arrecadacao' de acordo
-	 * com a opção de totalização.
+	 * Consulta a qtde de registros ResumoArrecadacao para a geraï¿½ï¿½o do
+	 * relatï¿½rio '[UC0345] Gerar Relatï¿½rio de Resumo do Arrecadacao' de acordo
+	 * com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa, Diogo Peixoto
 	 * @created 02/06/2006, 20/04/2011
@@ -17973,7 +17974,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * @param localidade
 	 * @param municipio
 	 * 
-	 * @return Quantidade de registros do relatório
+	 * @return Quantidade de registros do relatï¿½rio
 	 * @throws ControladorException
 	 */
 	public Integer consultarQtdeRegistrosResumoArrecadacaoRelatorio(
@@ -17999,7 +18000,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0276] Encerrar Arrecadação do Mês
+	 * [UC0276] Encerrar Arrecadaï¿½ï¿½o do Mï¿½s
 	 * 
 	 * @param colecaoIdsLocalidades
 	 * @throws ControladorException
@@ -18032,153 +18033,153 @@ public class ControladorArrecadacao extends ControladorComum {
 			BigDecimal valorExcedente = null;
 			Integer idImovel = null;
 
-			// Seqüêncial de Tipo de Lançamento 1100
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1100
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = BigDecimal.ZERO;
 			
-			// Seqüêncial de Tipo de Lançamento 1600
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1600
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599 = BigDecimal.ZERO;
 			
-			// Seqüêncial de Tipo de Lançamento 2000
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2000
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999 = BigDecimal.ZERO;
 			
-			// Seqüêncial de Tipo de Lançamento 2400
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2400
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre2100e2399 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 2460
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2460
 			BigDecimal valorDiferencaSequenciaTipoLancamentoIgual2440e2450 = BigDecimal.ZERO;
 			// Sequencial de tipo de Lancamento 2485
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoIgual2440e2470 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 2500
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2500
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoIgual2000e2400 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 2800
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2800
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre2600e2799 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 3200
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3200
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre2900e3199 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 3300
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3300
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoIgual2800e3200 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 3400
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3400
 			BigDecimal diferencaEntreSequencialTipoIgual2500e3300 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 4500
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4500
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 4510
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4510
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre4210e4499 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 5000
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 5010
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 5400
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 5410
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 5700
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5700
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre5500e5699 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 6100
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6100
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre5800e6099 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 6200
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6200
 			BigDecimal valorAcumuladoContasContabilizadasComoPerdas = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 6600
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6600
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre6300e6599 = BigDecimal.ZERO;
-			// Seqüêncial de Tipo de Lançamento 7000
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 7000
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre6700e6999 = BigDecimal.ZERO;
 
-			// Seqüêncial de Tipo de Lançamento 1200
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1200
 			Map<Integer, BigDecimal> mapValorIRPagamentosClassificadosConta = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 1300
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1300
 			Map<Integer, BigDecimal> mapValorCSLLPagamentosClassificadosConta = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 1400
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1400
 			Map<Integer, BigDecimal> mapValorCOFINSPagamentosClassificadosConta = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 1500
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1500
 			Map<Integer, BigDecimal> mapValorPISPASEPPagamentosClassificadosConta = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2100
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2100
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorPagamentoEmDuplicidade = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2200
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2200
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistente = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2210
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2210
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteDebitoPrescrito = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2220
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2220
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteContaParcelada = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2230
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2230
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteContaCancelada = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2240
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2240
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteErroProcessamento = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2300
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2300
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorValorNaoConfere = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2440
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2440
 			Map<Integer, BigDecimal> mapValorDevolucaoDescontosPagamentoAVista = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2450
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2450
 			Map<Integer, BigDecimal> mapValorDevolucaoDescontosPagamentoAVistaCampanhaCrianca = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2470
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2470
 			Map<Integer, BigDecimal> mapValorDevolucaoDescontosCreditosARealizar = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2600
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2600
 			Map<Integer, BigDecimal> mapValorDevolucaoSituacaoAtualDevolucaoClassificada = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 2900
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2900
 			Map<Integer, BigDecimal> mapValorDevolucaoNaoClassificadaSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 3000
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3000
 			Map<Integer, BigDecimal> mapValorDevolucaoNaoClassificadaSituacaoAtualGuiaDevolucaoNaoInformada = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 3100
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3100
 			Map<Integer, BigDecimal> mapValorDevolucaoNaoClassificadaSituacaoAtualValorNaoConfere = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 4600
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4600
 			Map<Integer, BigDecimal> mapValorIRPagamentosContasEfetuadosMesesAterioresClassificadosMes = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 4650
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4650
 			Map<Integer, BigDecimal> mapValorIRPagamentosContasEfetuadosAte122012ClassificadosMes = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 4700
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4700
 			Map<Integer, BigDecimal> mapValorCSLLPagamentosContasEfetuadosMesesAterioresClassificadosMes = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 4750
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4750
 			Map<Integer, BigDecimal> mapValorCSLLPagamentosContasEfetuadosAte122012ClassificadosMes = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 4800
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4800
 			Map<Integer, BigDecimal> mapValorCOFINSPagamentosContasEfetuadosMesesAterioresClassificadosMes = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 4850
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4850
 			Map<Integer, BigDecimal> mapValorCOFINSPagamentosContasEfetuadosAte122012ClassificadosMes = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 4900
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4900
 			Map<Integer, BigDecimal> mapValorPISPASEPPagamentosContasEfetuadosMesesAterioresClassificadosMes = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 4950
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4950
 			Map<Integer, BigDecimal> mapValorPISPASEPPagamentosContasEfetuadosAte122012ClassificadosMes = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 5500
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5500
 			Map<Integer, BigDecimal> mapValorDevolucaoEfetuadaEmMesesAnterioresClassificadasNoMesSituacaoAtualDevolucaoClassificada = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 5800
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5800
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorPagamentoEmDuplicidade = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 5900
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5900
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistente = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 5910
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5910
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteDebitoPrescrito = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 5920
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5920
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteContaParcelada = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 5930
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5930
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteContaCancelada = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 5940
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5940
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteErroProcessamento = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6000
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6000
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorValorNaoConfere = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6200
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6200
 			Map<Integer, BigDecimal> mapValorImpostosPagamentosContaClassificadosNoMes_EfetuadosEmMesesAnteriores = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6300
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6300
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualPagamentoEmDuplicidade = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6350
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6350
 			Map<Integer, BigDecimal> mapValorPagamentoNoMesEMesesAnterioresCampanhaSolidariedadeCrianca = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6360
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6360
 			Map<Integer, BigDecimal> mapValorPagamentoAVistaCampanhaCriancaComDireitoDesconto = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6400
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6400
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistente = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6410
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6410
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteDebitoPrescrito = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6420
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6420
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteContaParcelada = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6430
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6430
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteContaCancelada = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6440
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6440
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteErroProcessamento = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6500
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6500
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualValorNaoConfere = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6700
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6700
 			Map<Integer, BigDecimal> mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6800
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6800
 			Map<Integer, BigDecimal> mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualGuiaDevolucaoNaoInformada = new HashMap();
-			// Seqüêncial de Tipo de Lançamento 6900
+			// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6900
 			Map<Integer, BigDecimal> mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualValorNaoConfere = new HashMap();
 
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
 			if (getSistemaParametro() == null) {
-				throw new ControladorException("atencao.entidade_sem_dados_para_selecao", null, "Sistema Parâmetro");
+				throw new ControladorException("atencao.entidade_sem_dados_para_selecao", null, "Sistema Parï¿½metro");
 			}
 
 			Integer anoMesCorrente = Util.recuperaAnoMesDaData(new Date());
@@ -18207,10 +18208,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					localidade.setGerenciaRegional(gerenciaRegional);
 					
-					// Seqüêncial de Tipo de Lançamento 2700
+					// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2700
 					Map<Integer, Map> mapValorDevolucaoSituacaoAtualDevolucaoOutrosValoresPorLancamentoContabil = new HashMap();
 
-					// Seqüêncial de Tipo de Lançamento 5600
+					// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5600
 					Map<Integer, Map> mapValorDevolucaoEfetuadasEmMesesAtenrioresSituacaoAtualDevolucaoOutrosValoresPorLancamentoContabil = new HashMap();
 
 					mapValorIRPagamentosClassificadosConta.putAll(obterValorImpostoPagamentosClassificadosConta(anoMesReferenciaArrecadacao, idLocalidade, ImpostoTipo.IR));
@@ -18219,7 +18220,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					mapValorPISPASEPPagamentosClassificadosConta.putAll(obterValorImpostoPagamentosClassificadosConta(anoMesReferenciaArrecadacao, idLocalidade, ImpostoTipo.PIS_PASEP));
 
 					
-					// Seqüêncial de Tipo de Lançamento 2100 Para os pagamentos não classificados do mês com situação atual igual a pagamento em duplicidade 
+					// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2100 Para os pagamentos nï¿½o classificados do mï¿½s com situaï¿½ï¿½o atual igual a pagamento em duplicidade 
 					mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorPagamentoEmDuplicidade.putAll(
 							obterPagamentosNaoClassificadosMesPorSituacaoAtual(anoMesReferenciaArrecadacao, idLocalidade, PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE));
 
@@ -18268,14 +18269,14 @@ public class ControladorArrecadacao extends ControladorComum {
 							anoMesReferenciaArrecadacao, idLocalidade, PagamentoSituacao.DOCUMENTO_INEXISTENTE_ERRO_PROCESSAMENTO));
 
 
-					// Seqüêncial de Tipo de Lançamento 2300 Para os pagamentos não classificados do mês com situação atual igual a valor não confere \
+					// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2300 Para os pagamentos nï¿½o classificados do mï¿½s com situaï¿½ï¿½o atual igual a valor nï¿½o confere \
 					mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorValorNaoConfere.putAll(
 							obterPagamentosNaoClassificadosMesPorSituacaoAtual(anoMesReferenciaArrecadacao, idLocalidade, PagamentoSituacao.VALOR_NAO_CONFERE));
 
 					mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorValorNaoConfere.putAll(
 							obterPagamentosNaoClassificadosMesPorSituacaoAnterior(anoMesReferenciaArrecadacao, idLocalidade, PagamentoSituacao.VALOR_NAO_CONFERE));
 					
-					// Seqüêncial de Tipo de Lançamento 2440 Para as devoluções do tipo desconto por pagamento a vista, 
+					// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2440 Para as devoluï¿½ï¿½es do tipo desconto por pagamento a vista, 
 					Collection colecaoDevolucoesDescontosPagamentoAVista = repositorioArrecadacao.pesquisarDevolucoesDescontosPagamentoAVista(
 							anoMesReferenciaArrecadacao, idLocalidade);
 
@@ -18290,7 +18291,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					Map<Integer, BigDecimal> mapValoresRecuperacaoCreditoCanceladoMesesAnteriores = acumularValoresRecebimentosClassificadosRecuperacaoCreditoMesesAnteriores(localidade, 
 							anoMesReferenciaArrecadacao, PagamentoSituacao.PAGAMENTO_CLASSIFICADO_RECUPERACAO_CREDITO_CANCELADO);
 					
-					//Seqüêncial de Tipo de Lançamento 2450 Para as devoluções do tipo desconto por pagamento a vista pela campanha da criança
+					//Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2450 Para as devoluï¿½ï¿½es do tipo desconto por pagamento a vista pela campanha da crianï¿½a
 					Integer idRDComPercentualDoacao = getControladorCobranca().pesquisarResolucaoDiretoriaComPercentualDoacao();
 
 					if (idRDComPercentualDoacao != null) {
@@ -18302,9 +18303,9 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/* 
-					 * Seqüêncial de Tipo de Lançamento 2470 Para as devoluções do tipo desconto por credito , caracterizadas pelo tipo de documento agregador 
-					 * não nulo e credito a realizar nao nulo. Acumula o valor da devolução por categoria, obtém as categorias do imóvel da devolução 
-					 * relacionada e para cada categoria retornada obtém o valor por categoria.
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2470 Para as devoluï¿½ï¿½es do tipo desconto por credito , caracterizadas pelo tipo de documento agregador 
+					 * nï¿½o nulo e credito a realizar nao nulo. Acumula o valor da devoluï¿½ï¿½o por categoria, obtï¿½m as categorias do imï¿½vel da devoluï¿½ï¿½o 
+					 * relacionada e para cada categoria retornada obtï¿½m o valor por categoria.
 					 */
 					Collection colecaoDevolucoesDescontosCreditos = repositorioArrecadacao.pesquisarDevolucoesDescontosCreditos(anoMesReferenciaArrecadacao,
 							idLocalidade);
@@ -18312,8 +18313,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					mapValorDevolucaoDescontosCreditosARealizar.putAll(agruparValoresPorCategoriaParaContabilizar(colecaoDevolucoesDescontosCreditos));
 					
 					/*
-					 * Seqüêncial de Tipo de Lançamento 2600 Para asdevoluções classificadas com situação atual igual a devolução classificada acumula o valor 
-					 * da devolução por categoria, obtém as categorias do imóvel da devolução relacionada e para cada categoria retornada obtém o valor por
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2600 Para asdevoluï¿½ï¿½es classificadas com situaï¿½ï¿½o atual igual a devoluï¿½ï¿½o classificada acumula o valor 
+					 * da devoluï¿½ï¿½o por categoria, obtï¿½m as categorias do imï¿½vel da devoluï¿½ï¿½o relacionada e para cada categoria retornada obtï¿½m o valor por
 					 * categoria.
 					 */
 					Collection colecaoDevolucoesClassificadasSituacaoAtualDevolucaoClassificada = repositorioArrecadacao
@@ -18322,7 +18323,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					mapValorDevolucaoSituacaoAtualDevolucaoClassificada.putAll(agruparValoresPorCategoriaParaContabilizar(colecaoDevolucoesClassificadasSituacaoAtualDevolucaoClassificada));
 					
 
-					// Laço de lançamento de item contábil para armazenar num map os maps de categoria e valor para cada item contábil
+					// Laï¿½o de lanï¿½amento de item contï¿½bil para armazenar num map os maps de categoria e valor para cada item contï¿½bil
 					for (Object dadosLancamentoItemContabil : colecaoDadosLancamentosItemContabil) {
 
 						Object[] arrayDadosLancamentoItemContabil = (Object[]) dadosLancamentoItemContabil;
@@ -18332,9 +18333,9 @@ public class ControladorArrecadacao extends ControladorComum {
 						Map<Integer, BigDecimal> mapValorDevolucaoSituacaoAtualDevolucaoOutrosValores = new HashMap();
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 2700 Para as devoluções classificadas com situação atual igual a devolução de outros valores 
-						 * acumula o valor da devolução por categoria, obtém as categorias do imóvel da devolução relacionada e para cada categoria
-						 * retornada obtém o valor por categoria.
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2700 Para as devoluï¿½ï¿½es classificadas com situaï¿½ï¿½o atual igual a devoluï¿½ï¿½o de outros valores 
+						 * acumula o valor da devoluï¿½ï¿½o por categoria, obtï¿½m as categorias do imï¿½vel da devoluï¿½ï¿½o relacionada e para cada categoria
+						 * retornada obtï¿½m o valor por categoria.
 						 */
 						Collection colecaoDevolucoesClassificadasSituacaoAtualDevolucaoOutrosValores = repositorioArrecadacao
 								.pesquisarDevolucoesClassificadasSituacaoAtualDevolucaoOutrosValores(anoMesReferenciaArrecadacao, idLocalidade,
@@ -18351,9 +18352,9 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 5600 Para as devoluções efetuadas em meses anteriores classificadas no mês com situação atual 
-						 * igual a devolução de outros valores acumula o valor da devolução por categoria, obtém as categorias do imóvel da devolução 
-						 * relacionada e para cada categoria retornada obtém o valor por categoria.
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5600 Para as devoluï¿½ï¿½es efetuadas em meses anteriores classificadas no mï¿½s com situaï¿½ï¿½o atual 
+						 * igual a devoluï¿½ï¿½o de outros valores acumula o valor da devoluï¿½ï¿½o por categoria, obtï¿½m as categorias do imï¿½vel da devoluï¿½ï¿½o 
+						 * relacionada e para cada categoria retornada obtï¿½m o valor por categoria.
 						 */
 						Map<Integer, BigDecimal> mapValorDevolucaoEfetuadaEmMesesClasificadaNoMesAnterioresSituacaoAtualDevolucaoOutrosValores = new HashMap();
 
@@ -18375,12 +18376,12 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					
 					/*
-					 * Seqüêncial de Tipo de Lançamento 2900 Para as devoluções
-					 * não classificadas no mês com situação atual igual a
-					 * pagamento em duplicidade não encontrado acumula o valor
-					 * da devolução por categoria, obtém as categorias do imóvel
-					 * da devolução relacionada e para cada categoria retornada
-					 * obtém o valor por categoria.
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2900 Para as devoluï¿½ï¿½es
+					 * nï¿½o classificadas no mï¿½s com situaï¿½ï¿½o atual igual a
+					 * pagamento em duplicidade nï¿½o encontrado acumula o valor
+					 * da devoluï¿½ï¿½o por categoria, obtï¿½m as categorias do imï¿½vel
+					 * da devoluï¿½ï¿½o relacionada e para cada categoria retornada
+					 * obtï¿½m o valor por categoria.
 					 */
 					Collection colecaoDevolucoesNaoClassificadasMesSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado = repositorioArrecadacao
 							.pesquisarDevolucoesNaoClassificadasMesPorSituacaoAtual(anoMesReferenciaArrecadacao, idLocalidade,
@@ -18391,9 +18392,9 @@ public class ControladorArrecadacao extends ControladorComum {
 					
 					
 					/*
-					 * Seqüêncial de Tipo de Lançamento 3000 Para as devoluções não classificadas no mês com situação atual igual a guia de devolução não 
-					 * informada acumula o valor da devolução por categoria, obtém as categorias do imóvel da devolução relacionada e para cada categoria 
-					 * retornada obtém o valor por categoria.
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3000 Para as devoluï¿½ï¿½es nï¿½o classificadas no mï¿½s com situaï¿½ï¿½o atual igual a guia de devoluï¿½ï¿½o nï¿½o 
+					 * informada acumula o valor da devoluï¿½ï¿½o por categoria, obtï¿½m as categorias do imï¿½vel da devoluï¿½ï¿½o relacionada e para cada categoria 
+					 * retornada obtï¿½m o valor por categoria.
 					 */
 					Collection colecaoDevolucoesNaoClassificadasMesSituacaoAtualGuiaDevolucaoNaoInformada = repositorioArrecadacao
 							.pesquisarDevolucoesNaoClassificadasMesPorSituacaoAtual(anoMesReferenciaArrecadacao, idLocalidade,
@@ -18404,8 +18405,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 3100 Para as devoluções não classificadas no mês com situação atual igual a valor não confere acumula 
-					 * o valor da devolução por categoria, obtém as categorias do imóvel da devolução relacionada e para cada categoria retornada obtém o 
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3100 Para as devoluï¿½ï¿½es nï¿½o classificadas no mï¿½s com situaï¿½ï¿½o atual igual a valor nï¿½o confere acumula 
+					 * o valor da devoluï¿½ï¿½o por categoria, obtï¿½m as categorias do imï¿½vel da devoluï¿½ï¿½o relacionada e para cada categoria retornada obtï¿½m o 
 					 * valor por categoria.
 					 */
 					Collection colecaoDevolucoesNaoClassificadasMesSituacaoAtualValorNaoConfere = repositorioArrecadacao
@@ -18417,9 +18418,9 @@ public class ControladorArrecadacao extends ControladorComum {
 					
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 4600 Para cada grupo de pagamento de contas efetuadas em meses anteriores classificados no mês com 
-					 * tipo de impostoigual a IR acumula o valor do imposto por categoria, obtém as categorias do imóvel da conta imposto deduzido
-					 * relacionada e para cada categoria retornada obtém o valor por categoria.
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4600 Para cada grupo de pagamento de contas efetuadas em meses anteriores classificados no mï¿½s com 
+					 * tipo de impostoigual a IR acumula o valor do imposto por categoria, obtï¿½m as categorias do imï¿½vel da conta imposto deduzido
+					 * relacionada e para cada categoria retornada obtï¿½m o valor por categoria.
 					 */
 					Collection colecaoContasImpostosDeduzidosPagamentosContasEfetuadosEmMesesAnterioresClassificadosMesImpostoTipoIR = repositorioArrecadacao
 							.pesquisarContasImpostosDeduzidosPagamentosContasEfetuadosEmMesesAnterioresClassificadosMesPorTipoImposto(idLocalidade,
@@ -18470,12 +18471,12 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 4700 Para cada grupo de
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4700 Para cada grupo de
 					 * pagamento de contas efetuadas em meses anteriores
-					 * classificados no mês com tipo de impostoigual a CSLL
-					 * acumula o valor do imposto por categoria, obtém as
-					 * categorias do imóvel da conta imposto deduzido
-					 * relacionada e para cada categoria retornada obtém o valor
+					 * classificados no mï¿½s com tipo de impostoigual a CSLL
+					 * acumula o valor do imposto por categoria, obtï¿½m as
+					 * categorias do imï¿½vel da conta imposto deduzido
+					 * relacionada e para cada categoria retornada obtï¿½m o valor
 					 * por categoria.
 					 */
 					Collection colecaoContasImpostosDeduzidosPagamentosContasEfetuadosEmMesesAnterioresClassificadosMesImpostoTipoCSLL = repositorioArrecadacao
@@ -18526,12 +18527,12 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 4800 Para cada grupo de
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4800 Para cada grupo de
 					 * pagamento de contas efetuadas em meses anteriores
-					 * classificados no mês com tipo de impostoigual a COFINS
-					 * acumula o valor do imposto por categoria, obtém as
-					 * categorias do imóvel da conta imposto deduzido
-					 * relacionada e para cada categoria retornada obtém o valor
+					 * classificados no mï¿½s com tipo de impostoigual a COFINS
+					 * acumula o valor do imposto por categoria, obtï¿½m as
+					 * categorias do imï¿½vel da conta imposto deduzido
+					 * relacionada e para cada categoria retornada obtï¿½m o valor
 					 * por categoria.
 					 */
 					Collection colecaoContasImpostosDeduzidosPagamentosContasEfetuadosEmMesesAnterioresClassificadosMesImpostoTipoCOFINS = repositorioArrecadacao
@@ -18582,12 +18583,12 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 4900 Para cada grupo de
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4900 Para cada grupo de
 					 * pagamento de contas efetuadas em meses anteriores
-					 * classificados no mês com tipo de impostoigual a PIS/PASEP
-					 * acumula o valor do imposto por categoria, obtém as
-					 * categorias do imóvel da conta imposto deduzido
-					 * relacionada e para cada categoria retornada obtém o valor
+					 * classificados no mï¿½s com tipo de impostoigual a PIS/PASEP
+					 * acumula o valor do imposto por categoria, obtï¿½m as
+					 * categorias do imï¿½vel da conta imposto deduzido
+					 * relacionada e para cada categoria retornada obtï¿½m o valor
 					 * por categoria.
 					 */
 					Collection colecaoContasImpostosDeduzidosPagamentosContasEfetuadosEmMesesAnterioresClassificadosMesImpostoTipoPIS_PASEP = repositorioArrecadacao
@@ -18638,7 +18639,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/**
-					 * Alterar na geração do resumo separando contas de meses
+					 * Alterar na geraï¿½ï¿½o do resumo separando contas de meses
 					 * anteriores a 12-2012 dos demais
 					 * 
 					 * @author Wellington Rocha
@@ -18838,12 +18839,12 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 5500 Para as devoluções
-					 * efetuadas em meses anteriores classificados no mês com
-					 * situação da devolução atual igual a devolução
-					 * classificada acumula o valor da devolução por categoria,
-					 * obtém as categorias do imóvel da devolução relacionada e
-					 * para cada categoria retornada obtém o valor por
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5500 Para as devoluï¿½ï¿½es
+					 * efetuadas em meses anteriores classificados no mï¿½s com
+					 * situaï¿½ï¿½o da devoluï¿½ï¿½o atual igual a devoluï¿½ï¿½o
+					 * classificada acumula o valor da devoluï¿½ï¿½o por categoria,
+					 * obtï¿½m as categorias do imï¿½vel da devoluï¿½ï¿½o relacionada e
+					 * para cada categoria retornada obtï¿½m o valor por
 					 * categoria.
 					 */
 					Collection colecaoDevolucoesEfetuadasEmMesesAnterioresClassificadasNoMesSituacaoAtualDevolucaoClassificada = repositorioArrecadacao
@@ -18907,12 +18908,12 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 5800 Para os pagamentos
-					 * não classificados com baixa comandada com situação
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5800 Para os pagamentos
+					 * nï¿½o classificados com baixa comandada com situaï¿½ï¿½o
 					 * anterior igual a pagamento em duplicidade acumula o valor
-					 * excedente do pagamento por categoria, obtém as categorias
-					 * do imóvel do pagamento relacionado e para cada categoria
-					 * retornada obtém o valor por categoria.
+					 * excedente do pagamento por categoria, obtï¿½m as categorias
+					 * do imï¿½vel do pagamento relacionado e para cada categoria
+					 * retornada obtï¿½m o valor por categoria.
 					 */
 					Collection colecaoPagamentosNaoClassificadosComBaixaComandadaSituacaoAnteriorPagamentoEmDuplicidade = repositorioArrecadacao
 							.pesquisarPagamentosNaoClassificadosComBaixaComandadaPorSituacaoAnterior(idLocalidade, anoMesReferenciaArrecadacao,
@@ -18973,17 +18974,17 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 5900 Para os pagamentos
-					 * não classificados com baixa comandada com situação
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5900 Para os pagamentos
+					 * nï¿½o classificados com baixa comandada com situaï¿½ï¿½o
 					 * anterior igual a documento inexistente acumula o valor
-					 * excedente do pagamento por categoria, obtém as categorias
-					 * do imóvel do pagamento relacionado e para cada categoria
-					 * retornada obtém o valor por categoria.
+					 * excedente do pagamento por categoria, obtï¿½m as categorias
+					 * do imï¿½vel do pagamento relacionado e para cada categoria
+					 * retornada obtï¿½m o valor por categoria.
 					 */
 					/**
 					 * 
 					 * 
-					 * Detalhar contabilização de documentos inexistentes
+					 * Detalhar contabilizaï¿½ï¿½o de documentos inexistentes
 					 * 
 					 * @author Wellington Rocha
 					 * @author Felipe Santos
@@ -18997,7 +18998,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					// Autor: Bruno Leonardo Rodrigues Barros
 					// Analista: Aryed
 					// Data: 22/04/2009
-					// Considerar tambem além do documento inexistente tambem os
+					// Considerar tambem alï¿½m do documento inexistente tambem os
 					// documentos a contabilizar
 					Collection colecaoPagamentosNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoAContabilizar = repositorioArrecadacao
 							.pesquisarPagamentosNaoClassificadosComBaixaComandadaPorSituacaoAnterior(idLocalidade, anoMesReferenciaArrecadacao,
@@ -19007,7 +19008,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						colecaoPagamentosNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistente
 								.addAll(colecaoPagamentosNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoAContabilizar);
 					}
-					// Fim alteração Bruno Barros
+					// Fim alteraï¿½ï¿½o Bruno Barros
 
 					mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistente.putAll(this
 							.retornarValorExcedenteSituacaoAnteriorPorPagamentoSituacao(
@@ -19057,12 +19058,12 @@ public class ControladorArrecadacao extends ControladorComum {
 					// ****************************************************************
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 6000 Para os pagamentos
-					 * não classificados com baixa comandada com situação
-					 * anterior igual a valor não confere acumula o valor
-					 * excedente do pagamento por categoria, obtém as categorias
-					 * do imóvel do pagamento relacionado e para cada categoria
-					 * retornada obtém o valor por categoria.
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6000 Para os pagamentos
+					 * nï¿½o classificados com baixa comandada com situaï¿½ï¿½o
+					 * anterior igual a valor nï¿½o confere acumula o valor
+					 * excedente do pagamento por categoria, obtï¿½m as categorias
+					 * do imï¿½vel do pagamento relacionado e para cada categoria
+					 * retornada obtï¿½m o valor por categoria.
 					 */
 					Collection colecaoPagamentosNaoClassificadosComBaixaComandadaSituacaoAnteriorValorNaoConfere = repositorioArrecadacao
 							.pesquisarPagamentosNaoClassificadosComBaixaComandadaPorSituacaoAnterior(idLocalidade, anoMesReferenciaArrecadacao,
@@ -19122,12 +19123,12 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 6200 Para cada grupo de
-					 * pagamentos classificados no mês e meses anterioeres
-					 * acumula o valor dos impostos para as contas já
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6200 Para cada grupo de
+					 * pagamentos classificados no mï¿½s e meses anterioeres
+					 * acumula o valor dos impostos para as contas jï¿½
 					 * contabilizadas como perdas pesquisando as contas impostos
-					 * duzidos, e obtém as categorias do imóvel da conta
-					 * relacionada e para cada categoria retornada obtém o valor
+					 * duzidos, e obtï¿½m as categorias do imï¿½vel da conta
+					 * relacionada e para cada categoria retornada obtï¿½m o valor
 					 * por categoria.
 					 */
 					Collection colecaoContasImpostosDeduzidosPagamentosClassificadosNoMes_MesesAnterioresContaContabilizadasComoPerdasImpostoTipo_IR_CSLL_COFINS_PISPASEP = repositorioArrecadacao
@@ -19184,11 +19185,11 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 6300 Para os pagamentos
-					 * não classificados com situação atual igual a pagamento em
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6300 Para os pagamentos
+					 * nï¿½o classificados com situaï¿½ï¿½o atual igual a pagamento em
 					 * duplicidade acumula o valor excedente do pagamento por
-					 * categoria, obtém as categorias do imóvel do pagamento
-					 * relacionado e para cada categoria retornada obtém o valor
+					 * categoria, obtï¿½m as categorias do imï¿½vel do pagamento
+					 * relacionado e para cada categoria retornada obtï¿½m o valor
 					 * por categoria.
 					 */
 					Collection colecaoPagamentosNaoClassificadosMesEMesesAnterioresSituacaoAtualPagamentoEmDuplicidade = repositorioArrecadacao
@@ -19253,8 +19254,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					/*
 					 * Autor: Vivianne sousa Data: 01/06/2009
 					 * 
-					 * Seqüêncial de Tipo de Lançamento 6350 Para os pagamentos
-					 * de valores da campanha Solidariedade da Criança acumula o
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6350 Para os pagamentos
+					 * de valores da campanha Solidariedade da Crianï¿½a acumula o
 					 * valor dos documentos de cobranca por categoria
 					 */
 
@@ -19320,7 +19321,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					// Autor: Bruno Leonardo Rodrigues Barros
 					// Analista: Aryed
 					// Data: 22/04/2009
-					// Considerar tambem além do documento inexistente tambem os
+					// Considerar tambem alï¿½m do documento inexistente tambem os
 					// documentos a contabilizar
 					Collection colecaoPagamentosNaoClassificadosMesEMesesAnterioresSituacaoAtualDocumentoAContabilizar = repositorioArrecadacao
 							.pesquisarPagamentosNaoClassificadosMesEMesesAnterioresPorSituacaoAtual(anoMesReferenciaArrecadacao, idLocalidade,
@@ -19330,7 +19331,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						colecaoPagamentosNaoClassificadosMesEMesesAnterioresSituacaoAtualDocumentoInexistente
 								.addAll(colecaoPagamentosNaoClassificadosMesEMesesAnterioresSituacaoAtualDocumentoAContabilizar);
 					}
-					// Fim alteração Bruno Barros
+					// Fim alteraï¿½ï¿½o Bruno Barros
 
 					mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistente.putAll(this
 							.retornarValorExcedenteSituacaoAnteriorPorPagamentoSituacao(
@@ -19380,11 +19381,11 @@ public class ControladorArrecadacao extends ControladorComum {
 					// ****************************************************************
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 6500 Para os pagamentos
-					 * não classificados com situação atual igual a valor não
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6500 Para os pagamentos
+					 * nï¿½o classificados com situaï¿½ï¿½o atual igual a valor nï¿½o
 					 * confere acumula o valor excedente do pagamento por
-					 * categoria, obtém as categorias do imóvel do pagamento
-					 * relacionado e para cada categoria retornada obtém o valor
+					 * categoria, obtï¿½m as categorias do imï¿½vel do pagamento
+					 * relacionado e para cada categoria retornada obtï¿½m o valor
 					 * por categoria.
 					 */
 					Collection colecaoPagamentosNaoClassificadosMesEMesesAnterioresSituacaoAtualValorNaoConfere = repositorioArrecadacao
@@ -19449,11 +19450,11 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 6700 Para as devoluções
-					 * não classificadas com situação atual igual a pagamento em
-					 * duplicidade não confere acumula o valor da devolução por
-					 * categoria, obtém as categorias do imóvel da devolução
-					 * relacionada e para cada categoria retornada obtém o valor
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6700 Para as devoluï¿½ï¿½es
+					 * nï¿½o classificadas com situaï¿½ï¿½o atual igual a pagamento em
+					 * duplicidade nï¿½o confere acumula o valor da devoluï¿½ï¿½o por
+					 * categoria, obtï¿½m as categorias do imï¿½vel da devoluï¿½ï¿½o
+					 * relacionada e para cada categoria retornada obtï¿½m o valor
 					 * por categoria.
 					 */
 					Collection colecaoDevolucoesNaoClassificadasMesEAnterioresSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado = repositorioArrecadacao
@@ -19516,11 +19517,11 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 6800 Para as devoluções
-					 * não classificadas com situação atual igual a guia de
-					 * devolução não informada acumula o valor da devolução por
-					 * categoria, obtém as categorias do imóvel da devolução
-					 * relacionada e para cada categoria retornada obtém o valor
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6800 Para as devoluï¿½ï¿½es
+					 * nï¿½o classificadas com situaï¿½ï¿½o atual igual a guia de
+					 * devoluï¿½ï¿½o nï¿½o informada acumula o valor da devoluï¿½ï¿½o por
+					 * categoria, obtï¿½m as categorias do imï¿½vel da devoluï¿½ï¿½o
+					 * relacionada e para cada categoria retornada obtï¿½m o valor
 					 * por categoria.
 					 */
 					Collection colecaoDevolucoesNaoClassificadasMesEAnterioresSituacaoAtualGuiaDevolucaoNaoInformada = repositorioArrecadacao
@@ -19581,11 +19582,11 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 6900 Para as devoluções
-					 * não classificadas com situação atual igual a valor não
-					 * confere acumula o valor da devolução por categoria, obtém
-					 * as categorias do imóvel da devolução relacionada e para
-					 * cada categoria retornada obtém o valor por categoria.
+					 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6900 Para as devoluï¿½ï¿½es
+					 * nï¿½o classificadas com situaï¿½ï¿½o atual igual a valor nï¿½o
+					 * confere acumula o valor da devoluï¿½ï¿½o por categoria, obtï¿½m
+					 * as categorias do imï¿½vel da devoluï¿½ï¿½o relacionada e para
+					 * cada categoria retornada obtï¿½m o valor por categoria.
 					 */
 					Collection colecaoDevolucoesNaoClassificadasMesEAnterioresSituacaoAtualValorNaoConfere = repositorioArrecadacao
 							.pesquisarDevolucoesNaoClassificadasMesEAnterioresPorSituacaoAtual(anoMesReferenciaArrecadacao, idLocalidade,
@@ -19640,15 +19641,15 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 					}
 
-					// Laço para gerar os resumos da arrecadação por categoria
+					// Laï¿½o para gerar os resumos da arrecadaï¿½ï¿½o por categoria
 					for (Integer idCategoria : colecaoIdsCategorias) {
 
 						Categoria categoria = new Categoria();
 						categoria.setId(idCategoria);
 						/*
-						 * Seqüêncial de Tipo de Lançamento 100 Para os
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 100 Para os
 						 * pagamento classificados de conta acumula o valor de
-						 * água por categoria e gera o resumo da arrecadação
+						 * ï¿½gua por categoria e gera o resumo da arrecadaï¿½ï¿½o
 						 * caso o valor acumulado seja maior que 0(zero)
 						 */
 
@@ -19696,11 +19697,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 400 Para os
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 400 Para os
 						 * pagamento classificados de conta acumula o valor dos
-						 * débitos cobrados por categoria para o tipo de
-						 * financiamneto igual a parcelamento água e gera o
-						 * resumo da arrecadação caso o valor acumulado seja
+						 * dï¿½bitos cobrados por categoria para o tipo de
+						 * financiamneto igual a parcelamento ï¿½gua e gera o
+						 * resumo da arrecadaï¿½ï¿½o caso o valor acumulado seja
 						 * maior que 0(zero)
 						 */
 						BigDecimal somaValorDebitoCobradoPagamentosClassificadosContaFinanciamentoTipoParcelamentoAgua = repositorioArrecadacao
@@ -19726,11 +19727,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 500 Para os
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 500 Para os
 						 * pagamento classificados de conta acumula o valor dos
-						 * débitos cobrados por categoria para o tipo de
+						 * dï¿½bitos cobrados por categoria para o tipo de
 						 * financiamneto igual a parcelamento esgoto e gera o
-						 * resumo da arrecadação caso o valor acumulado seja
+						 * resumo da arrecadaï¿½ï¿½o caso o valor acumulado seja
 						 * maior que 0(zero)
 						 */
 						BigDecimal somaValorDebitoCobradoPagamentosClassificadosContaFinanciamentoTipoParcelamentoEsgoto = repositorioArrecadacao
@@ -19756,12 +19757,12 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 700 Para os
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 700 Para os
 						 * pagamento classificados de conta acumula o valor dos
-						 * débitos cobrados por categoria para o tipo de
-						 * financiamneto igual a parcelamento de serviço e grupo
+						 * dï¿½bitos cobrados por categoria para o tipo de
+						 * financiamneto igual a parcelamento de serviï¿½o e grupo
 						 * de parcelamento igual a juros cobrados e gera o
-						 * resumo da arrecadação caso o valor acumulado seja
+						 * resumo da arrecadaï¿½ï¿½o caso o valor acumulado seja
 						 * maior que 0(zero)
 						 */
 						BigDecimal somaValorDebitoCobradoPagamentosClassificadosContaFinanciamentoTipoParcelamentoServicoGrupoParcelamentoIgualJurosCobrados = repositorioArrecadacao
@@ -19787,11 +19788,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 800 Para os
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 800 Para os
 						 * pagamento classificados de conta acumula o valor dos
-						 * créditos realizados por categoria para a origem do
-						 * crédito igual a contas pagas em duplicidade/excesso e
-						 * gera o resumo da arrecadação caso o valor acumulado
+						 * crï¿½ditos realizados por categoria para a origem do
+						 * crï¿½dito igual a contas pagas em duplicidade/excesso e
+						 * gera o resumo da arrecadaï¿½ï¿½o caso o valor acumulado
 						 * seja maior que 0(zero)
 						 */
 						Integer[] idsCreditos = new Integer[1];
@@ -19943,10 +19944,10 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 3500 Para os
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3500 Para os
 						 * pagamentos de contas efetuados em meses anteriores
-						 * classificados no mês acumula o valor de água por
-						 * categoria e gera o resumo da arrecadação caso o valor
+						 * classificados no mï¿½s acumula o valor de ï¿½gua por
+						 * categoria e gera o resumo da arrecadaï¿½ï¿½o caso o valor
 						 * acumulado seja maior que 0(zero)
 						 */
 
@@ -19963,11 +19964,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							if (somaValorAguaPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMes != null
 									&& somaValorAguaPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMes.doubleValue() > 0.00) {
 
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 										.add(somaValorAguaPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMes);
 
-								// Seqüêncial de Tipo de Lançamento 5000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 										.add(somaValorAguaPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMes);
 
@@ -19995,11 +19996,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 3600 Para os
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3600 Para os
 							 * pagamentos de contas efetuados em meses
-							 * anteriores classificados no mês acumula o valor
+							 * anteriores classificados no mï¿½s acumula o valor
 							 * de esgoto por categoria e gera o resumo da
-							 * arrecadação caso o valor acumulado seja maior que
+							 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
 							 * 0(zero)
 							 */
 							BigDecimal somaValorEsgotoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMes = (BigDecimal) arrayValorAguaEsgoto[1];
@@ -20008,11 +20009,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							if (somaValorEsgotoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMes != null
 									&& somaValorEsgotoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMes.doubleValue() > 0.00) {
 
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 										.add(somaValorEsgotoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMes);
 
-								// Seqüêncial de Tipo de Lançamento 5000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 										.add(somaValorEsgotoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMes);
 
@@ -20041,8 +20042,8 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/**
-						 * Alteração para contabilar em contas diferentes
-						 * valores arrecadados até 31/12/2012
+						 * Alteraï¿½ï¿½o para contabilar em contas diferentes
+						 * valores arrecadados atï¿½ 31/12/2012
 						 * 
 						 * @author Wellington Rocha
 						 */
@@ -20061,11 +20062,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							if (somaValorAguaPagamentosContasEfetuadosAte122012ClassificadosNoMes != null
 									&& somaValorAguaPagamentosContasEfetuadosAte122012ClassificadosNoMes.doubleValue() > 0.00) {
 
-								// Seqüêncial de Tipo de Lançamento 5410
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 										.add(somaValorAguaPagamentosContasEfetuadosAte122012ClassificadosNoMes);
 
-								// Seqüêncial de Tipo de Lançamento 5000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 										.add(somaValorAguaPagamentosContasEfetuadosAte122012ClassificadosNoMes);
 
@@ -20099,11 +20100,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							if (somaValorEsgotoPagamentosContasEfetuadosAte122012ClassificadosNoMes != null
 									&& somaValorEsgotoPagamentosContasEfetuadosAte122012ClassificadosNoMes.doubleValue() > 0.00) {
 
-								// Seqüêncial de Tipo de Lançamento 5410
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 										.add(somaValorEsgotoPagamentosContasEfetuadosAte122012ClassificadosNoMes);
 
-								// Seqüêncial de Tipo de Lançamento 5010
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 										.add(somaValorEsgotoPagamentosContasEfetuadosAte122012ClassificadosNoMes);
 
@@ -20132,12 +20133,12 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 3800 Para os
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3800 Para os
 						 * pagamentos de contas efetuados em meses anteriores
-						 * classificados no mês acumula o valor dos débitos
+						 * classificados no mï¿½s acumula o valor dos dï¿½bitos
 						 * cobrados por categoria para tipo de financiamento
-						 * igual a parcelamento de água e gera o resumo da
-						 * arrecadação caso o valor acumulado seja maior que
+						 * igual a parcelamento de ï¿½gua e gera o resumo da
+						 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
 						 * 0(zero)
 						 */
 						BigDecimal somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoAgua = repositorioArrecadacao
@@ -20149,11 +20150,11 @@ public class ControladorArrecadacao extends ControladorComum {
 								&& somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoAgua
 										.doubleValue() > 0.00) {
 
-							// Seqüêncial de Tipo de Lançamento 5400
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 							valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoAgua);
 
-							// Seqüêncial de Tipo de Lançamento 5000
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 							valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoAgua);
 
@@ -20182,12 +20183,12 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 3900 Para os
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3900 Para os
 						 * pagamentos de contas efetuados em meses anteriores
-						 * classificados no mês acumula o valor dos débitos
+						 * classificados no mï¿½s acumula o valor dos dï¿½bitos
 						 * cobrados por categoria para tipo de financiamento
 						 * igual a parcelamento de esgoto e gera o resumo da
-						 * arrecadação caso o valor acumulado seja maior que
+						 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
 						 * 0(zero)
 						 */
 						BigDecimal somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoEsgoto = repositorioArrecadacao
@@ -20199,11 +20200,11 @@ public class ControladorArrecadacao extends ControladorComum {
 								&& somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoEsgoto
 										.doubleValue() > 0.00) {
 
-							// Seqüêncial de Tipo de Lançamento 5400
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 							valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoEsgoto);
 
-							// Seqüêncial de Tipo de Lançamento 5000
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 							valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoEsgoto);
 
@@ -20232,13 +20233,13 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 4100 Para os
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4100 Para os
 						 * pagamentos de contas efetuados em meses anteriores
-						 * classificados no mês acumula o valor dos débitos
+						 * classificados no mï¿½s acumula o valor dos dï¿½bitos
 						 * cobrados por categoria para tipo de financiamento
-						 * igual a parcelamento de serviços e grupo de
+						 * igual a parcelamento de serviï¿½os e grupo de
 						 * parcelamento igual a juros cobrados e gera o resumo
-						 * da arrecadação caso o valor acumulado seja maior que
+						 * da arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
 						 * 0(zero)
 						 */
 						BigDecimal somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoIgualJurosCobrados = repositorioArrecadacao
@@ -20249,11 +20250,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						if (somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoIgualJurosCobrados != null
 								&& somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoIgualJurosCobrados
 										.doubleValue() > 0.00) {
-							// Seqüêncial de Tipo de Lançamento 5400
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 							valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoIgualJurosCobrados);
 
-							// Seqüêncial de Tipo de Lançamento 5000
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 							valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoIgualJurosCobrados);
 
@@ -20282,12 +20283,12 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 4200 Para os
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4200 Para os
 						 * pagamentos de contas efetuados em meses anteriores
-						 * classificados no mês acumula o valor dos créditos
-						 * realizados por categoria para origem do crédito igual
+						 * classificados no mï¿½s acumula o valor dos crï¿½ditos
+						 * realizados por categoria para origem do crï¿½dito igual
 						 * a documentos pagos em duplicidade/excesso e gera o
-						 * resumo da arrecadação caso o valor acumulado seja
+						 * resumo da arrecadaï¿½ï¿½o caso o valor acumulado seja
 						 * maior que 0(zero)
 						 */
 						BigDecimal somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoContasPagasEmDuplicidadeExcesso = repositorioArrecadacao
@@ -20326,7 +20327,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/**
-						 * Contabilizar créditos com crédito origem
+						 * Contabilizar crï¿½ditos com crï¿½dito origem
 						 * correspondente a Contas Pagas em Excesso
 						 * 
 						 * @author Wellington Rocha
@@ -20419,12 +20420,12 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 						
 						/*
-						 * Seqüêncial de Tipo de Lançamento 5100 Para os
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5100 Para os
 						 * pagamentos de guias de pagamento efetuadas em meses
-						 * anteriores classificados no mês acumula o valor das
+						 * anteriores classificados no mï¿½s acumula o valor das
 						 * entradas dos parcelamento por categoria com tipo de
 						 * financiamento igual a entrada de parcelamento e gera
-						 * o resumo da arrecadação caso o valor acumulado seja
+						 * o resumo da arrecadaï¿½ï¿½o caso o valor acumulado seja
 						 * maior que 0(zero)
 						 */
 						BigDecimal somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoEntradaParcelamento = repositorioArrecadacao
@@ -20435,7 +20436,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						if (somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoEntradaParcelamento != null
 								&& somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoEntradaParcelamento
 										.doubleValue() > 0.00) {
-							// Seqüêncial de Tipo de Lançamento 5400
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 							valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 									.add(somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoEntradaParcelamento);
 							recebimentoTipoTemp = new RecebimentoTipo();
@@ -20464,7 +20465,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 						/**
 						 * Contabilizar em contas diferentes o valor arrecadado
-						 * até 31/12/2012
+						 * atï¿½ 31/12/2012
 						 * 
 						 * @author Wellington Rocha
 						 */
@@ -20476,11 +20477,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						if (somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoAgua != null
 								&& somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoAgua.doubleValue() > 0.00) {
 
-							// Seqüêncial de Tipo de Lançamento 5410
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 							valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoAgua);
 
-							// Seqüêncial de Tipo de Lançamento 5010
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 							valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoAgua);
 
@@ -20517,11 +20518,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						if (somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoEsgoto != null
 								&& somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoEsgoto.doubleValue() > 0.00) {
 
-							// Seqüêncial de Tipo de Lançamento 5410
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 							valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoEsgoto);
 
-							// Seqüêncial de Tipo de Lançamento 5010
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 							valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoEsgoto);
 
@@ -20558,11 +20559,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						if (somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoIgualJurosCobrados != null
 								&& somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoIgualJurosCobrados
 										.doubleValue() > 0.00) {
-							// Seqüêncial de Tipo de Lançamento 5410
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 							valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoIgualJurosCobrados);
 
-							// Seqüêncial de Tipo de Lançamento 5010
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 							valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 									.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoIgualJurosCobrados);
 
@@ -20627,7 +20628,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/**
-						 * Contabilizar créditos com crédito origem
+						 * Contabilizar crï¿½ditos com crï¿½dito origem
 						 * correspondente a Contas Pagas em Excesso
 						 * 
 						 * @author Wellington Rocha
@@ -20862,7 +20863,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						if (somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoEntradaParcelamento != null
 								&& somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoEntradaParcelamento
 										.doubleValue() > 0.00) {
-							// Seqüêncial de Tipo de Lançamento 5400
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 							valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 									.add(somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoEntradaParcelamento);
 							recebimentoTipoTemp = new RecebimentoTipo();
@@ -20892,8 +20893,8 @@ public class ControladorArrecadacao extends ControladorComum {
 						// *********************************// Fim novo
 						// recebimento tipo
 
-						// Laço para gerar os resumos por lançamento de item
-						// contábil
+						// Laï¿½o para gerar os resumos por lanï¿½amento de item
+						// contï¿½bil
 						for (Object dadosLancamentoItemContabil : colecaoDadosLancamentosItemContabil) {
 
 							Object[] arrayDadosLancamentoItemContabil = (Object[]) dadosLancamentoItemContabil;
@@ -20904,11 +20905,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							lancamentoItemContabil.setId(idLancamentoItemContabil);
 							lancamentoItemContabil.setSequenciaImpressao(sequencialImpressao);
 							/*
-							 * Seqüêncial de Tipo de Lançamento 300 Para os
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 300 Para os
 							 * pagamento classificados de conta acumula o valor
-							 * dos débitos cobrados por categoria para tipo de
-							 * financiamento igual a serviço e gera o resumo da
-							 * arrecadação caso o valor acumulado seja maior que
+							 * dos dï¿½bitos cobrados por categoria para tipo de
+							 * financiamento igual a serviï¿½o e gera o resumo da
+							 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
 							 * 0(zero)
 							 */
 							Collection<Integer> colecaoIdsTipoFinanciamentoSequencial300E3700 = new ArrayList();
@@ -20940,12 +20941,12 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 600 Para os
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 600 Para os
 							 * pagamento classificados de conta acumula o valor
-							 * dos débitos cobrados por categoria para tipo de
-							 * financiamento igual a parcelamento de serviço e
+							 * dos dï¿½bitos cobrados por categoria para tipo de
+							 * financiamento igual a parcelamento de serviï¿½o e
 							 * grupo de parrcelamento igual a juros cobrados e
-							 * gera o resumo da arrecadação caso o valor
+							 * gera o resumo da arrecadaï¿½ï¿½o caso o valor
 							 * acumulado seja maior que 0(zero)
 							 */
 							Collection<Integer> colecaoIdsTipoFinanciamentoSequencial600E4000 = new ArrayList();
@@ -20972,11 +20973,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 900 Para os
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 900 Para os
 							 * pagamento classificados de conta acumula o valor
-							 * dos créditos realizados por categoria para origem
-							 * de crédito igual a valores cobrados indevidamente
-							 * e gera o resumo da arrecadação caso o valor
+							 * dos crï¿½ditos realizados por categoria para origem
+							 * de crï¿½dito igual a valores cobrados indevidamente
+							 * e gera o resumo da arrecadaï¿½ï¿½o caso o valor
 							 * acumulado seja maior que 0(zero)
 							 */
 							
@@ -21025,11 +21026,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							
 							
 							/*
-							 * Seqüêncial de Tipo de Lançamento 1550 Para os
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1550 Para os
 							 * pagamento classificados de conta acumula o valor
-							 * dos débitos cobrados por categoria para tipo de
-							 * financiamento igual a doações gera o resumo da
-							 * arrecadação caso o valor acumulado seja maior que
+							 * dos dï¿½bitos cobrados por categoria para tipo de
+							 * financiamento igual a doaï¿½ï¿½es gera o resumo da
+							 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
 							 * 0(zero)
 							 */
 							BigDecimal somaValorDebitoCobradoPagamentosClassificadosContaFinanciamentoTipoDoacoes = repositorioArrecadacao
@@ -21052,11 +21053,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 1800 Para os
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1800 Para os
 							 * pagamento classificados de guias de pagamento
 							 * acumula o valor das guias de pagamento por
 							 * categoria com tipo de financiamento igual a
-							 * serviço e gera o resumo da arrecadação caso o
+							 * serviï¿½o e gera o resumo da arrecadaï¿½ï¿½o caso o
 							 * valor acumulado seja maior que 0(zero)
 							 */
 							BigDecimal somaValorEntradaParcelamentoPagamentosClassificadosGuiaPagamentoFinanciamentoTipoServico = repositorioArrecadacao
@@ -21079,12 +21080,12 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 1900 Para os
-							 * pagamento classificados de débitos a cobrar
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1900 Para os
+							 * pagamento classificados de dï¿½bitos a cobrar
 							 * acumula o valor que falta ser cobrado por
-							 * categoria dodébito a cobrar e gera o resumo da
-							 * arrecadação caso o valor acumulado seja maior que
-							 * 0(zero) Esta pesquisa já retorna o valor que
+							 * categoria dodï¿½bito a cobrar e gera o resumo da
+							 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
+							 * 0(zero) Esta pesquisa jï¿½ retorna o valor que
 							 * falta ser cobrado
 							 */
 							BigDecimal somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarSemFinanciamento = repositorioArrecadacao
@@ -21111,12 +21112,12 @@ public class ControladorArrecadacao extends ControladorComum {
 							
 							
 							/*
-							 * Seqüêncial de Tipo de Lançamento 1950 Para os
-							 * pagamento classificados de débitos a cobrar
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1950 Para os
+							 * pagamento classificados de dï¿½bitos a cobrar
 							 * acumula o valor que falta ser cobrado por
-							 * categoria dodébito a cobrar e gera o resumo da
-							 * arrecadação caso o valor acumulado seja maior que
-							 * 0(zero) Esta pesquisa já retorna o valor que
+							 * categoria dodï¿½bito a cobrar e gera o resumo da
+							 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
+							 * 0(zero) Esta pesquisa jï¿½ retorna o valor que
 							 * falta ser cobrado
 							 */
 							BigDecimal somaValorQueFaltaSerCobradoPagamentosClassificadosDebitoACobrarComFinanciamento = repositorioArrecadacao
@@ -21143,11 +21144,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 2700 Para as
-							 * devoluções classificadas acumula o valor da
-							 * devolução por categoria com situação atual igual
-							 * a devolução de outros valores e gera o resumo da
-							 * arrecadação caso o valor acumulado seja maior que
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2700 Para as
+							 * devoluï¿½ï¿½es classificadas acumula o valor da
+							 * devoluï¿½ï¿½o por categoria com situaï¿½ï¿½o atual igual
+							 * a devoluï¿½ï¿½o de outros valores e gera o resumo da
+							 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
 							 * 0(zero)
 							 */
 							if (mapValorDevolucaoSituacaoAtualDevolucaoOutrosValoresPorLancamentoContabil.containsKey(idLancamentoItemContabil)) {
@@ -21158,7 +21159,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 									if (mapValorDevolucaoSituacaoAtualDevolucaoOutrosValores.get(idCategoria).doubleValue() > 0.00) {
 
-										// Seqüêncial de Tipo de Lançamento 2800
+										// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2800
 										valorAcumuladoSequenciaTipoLancamentoEntre2600e2799 = valorAcumuladoSequenciaTipoLancamentoEntre2600e2799
 												.add(mapValorDevolucaoSituacaoAtualDevolucaoOutrosValores.get(idCategoria));
 										recebimentoTipoTemp = new RecebimentoTipo();
@@ -21187,12 +21188,12 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 5600 Para as
-							 * devoluções efetuadas em meses anteriores
-							 * classificadas no mês acumula o valor da devolução
-							 * por categoria com situação atual igual a
-							 * devolução de outros valores e gera o resumo da
-							 * arrecadação caso o valor acumulado seja maior que
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5600 Para as
+							 * devoluï¿½ï¿½es efetuadas em meses anteriores
+							 * classificadas no mï¿½s acumula o valor da devoluï¿½ï¿½o
+							 * por categoria com situaï¿½ï¿½o atual igual a
+							 * devoluï¿½ï¿½o de outros valores e gera o resumo da
+							 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
 							 * 0(zero)
 							 */
 							if (mapValorDevolucaoEfetuadasEmMesesAtenrioresSituacaoAtualDevolucaoOutrosValoresPorLancamentoContabil
@@ -21204,7 +21205,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 									if (mapValorDevolucaoEfetuadasEmMesesAtenrioresSituacaoAtualDevolucaoOutrosValores.get(idCategoria).doubleValue() > 0.00) {
 
-										// Seqüêncial de Tipo de Lançamento 5700
+										// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5700
 										valorAcumuladoSequenciaTipoLancamentoEntre5500e5699 = valorAcumuladoSequenciaTipoLancamentoEntre5500e5699
 												.add(mapValorDevolucaoEfetuadasEmMesesAtenrioresSituacaoAtualDevolucaoOutrosValores.get(idCategoria));
 										recebimentoTipoTemp = new RecebimentoTipo();
@@ -21235,11 +21236,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 3700 Para os
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3700 Para os
 							 * pagamentos em conta efetuados em meses anteriores
-							 * classificados no mês acumula o valor dos débitos
+							 * classificados no mï¿½s acumula o valor dos dï¿½bitos
 							 * cobrados por categoria para tipo de financiamento
-							 * igual a serviço e gera o resumo da arrecadação
+							 * igual a serviï¿½o e gera o resumo da arrecadaï¿½ï¿½o
 							 * caso o valor acumulado seja maior que 0(zero)
 							 */
 							BigDecimal somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoServico = repositorioArrecadacao
@@ -21249,11 +21250,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							// [FS0005] - Verificar valor acumulado igual a zero
 							if (somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoServico != null
 									&& somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoServico.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoServico);
 
-								// Seqüêncial de Tipo de Lançamento 5000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoServico);
 
@@ -21282,13 +21283,13 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 4000 Para os
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4000 Para os
 							 * pagamentos de contas efetuados em meses
-							 * anteriores classificados no mês acumula o valor
-							 * dos débitos cobrados por categoria e item
-							 * contábil para tipo de financiamento igual a
-							 * parcelamento de serviços e gera o resumo da
-							 * arrecadação caso o valor acumulado seja maior que
+							 * anteriores classificados no mï¿½s acumula o valor
+							 * dos dï¿½bitos cobrados por categoria e item
+							 * contï¿½bil para tipo de financiamento igual a
+							 * parcelamento de serviï¿½os e gera o resumo da
+							 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
 							 * 0(zero)
 							 */
 							BigDecimal somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoDiferenteJurosCobrados = repositorioArrecadacao
@@ -21299,11 +21300,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							if (somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoDiferenteJurosCobrados != null
 									&& somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoDiferenteJurosCobrados
 											.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoDiferenteJurosCobrados);
 
-								// Seqüêncial de Tipo de Lançamento 5000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoDiferenteJurosCobrados);
 
@@ -21332,12 +21333,12 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 4950 Para os
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4950 Para os
 							 * pagamentos de contas efetuados em meses
-							 * anteriores classificados no mês acumula o valor
-							 * dos débitos cobrados por categoria e item
-							 * contábil para tipo de financiamento igual doações
-							 * e gera o resumo da arrecadação caso o valor
+							 * anteriores classificados no mï¿½s acumula o valor
+							 * dos dï¿½bitos cobrados por categoria e item
+							 * contï¿½bil para tipo de financiamento igual doaï¿½ï¿½es
+							 * e gera o resumo da arrecadaï¿½ï¿½o caso o valor
 							 * acumulado seja maior que 0(zero)
 							 */
 							BigDecimal somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoDoacoes = repositorioArrecadacao
@@ -21347,11 +21348,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							// [FS0005] - Verificar valor acumulado igual a zero
 							if (somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoDoacoes != null
 									&& somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoDoacoes.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoDoacoes);
 
-								// Seqüêncial de Tipo de Lançamento 5000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoDoacoes);
 
@@ -21380,13 +21381,13 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 4300 Para os
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4300 Para os
 							 * pagamentos de contas efetuados em meses
-							 * anteriores classificados no mês acumula o valor
-							 * dos créditos realizados por categoria e item
-							 * contábil para origem do crédito igual a valores
+							 * anteriores classificados no mï¿½s acumula o valor
+							 * dos crï¿½ditos realizados por categoria e item
+							 * contï¿½bil para origem do crï¿½dito igual a valores
 							 * cobrados indevidamente e gera o resumo da
-							 * arrecadação caso o valor acumulado seja maior que
+							 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
 							 * 0(zero)
 							 */
 							BigDecimal somaValorCreditoRealizadoPagamentosContasEfetuadosEmMesesAnterioresClassificadosNoMesOrigemCreditoValoresCobradosIndevidamente = repositorioArrecadacao
@@ -21424,12 +21425,12 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 5200 Para os
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5200 Para os
 							 * pagamentos de guias de pagamento efetuados em
-							 * meses anteriores classificados no mês acumula o
+							 * meses anteriores classificados no mï¿½s acumula o
 							 * valor das guias de pagamento por categoria e item
-							 * contábil para tipo de financiamento serviço e
-							 * gera o resumo da arrecadação caso o valor
+							 * contï¿½bil para tipo de financiamento serviï¿½o e
+							 * gera o resumo da arrecadaï¿½ï¿½o caso o valor
 							 * acumulado seja maior que 0(zero)
 							 */
 							BigDecimal somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoServico = repositorioArrecadacao
@@ -21440,7 +21441,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							if (somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoServico != null
 									&& somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoServico
 											.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 										.add(somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosEmMesesAnterioresClassificadosNoMesFinanciamentoTipoServico);
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -21468,13 +21469,13 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/*
-							 * Seqüêncial de Tipo de Lançamento 5300 Para os
-							 * pagamentos de débitos a cobrar efetuados em meses
-							 * anteriores classificados no mês acumula o valor
-							 * que falta ser cobrado dos débitos a cobrar por
-							 * categoria e item contábil e para tipo de
-							 * financiamento igual a serviço e gera o resumo da
-							 * arrecadação caso o valor acumulado seja maior que
+							 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5300 Para os
+							 * pagamentos de dï¿½bitos a cobrar efetuados em meses
+							 * anteriores classificados no mï¿½s acumula o valor
+							 * que falta ser cobrado dos dï¿½bitos a cobrar por
+							 * categoria e item contï¿½bil e para tipo de
+							 * financiamento igual a serviï¿½o e gera o resumo da
+							 * arrecadaï¿½ï¿½o caso o valor acumulado seja maior que
 							 * 0(zero)
 							 */
 							BigDecimal somaValorQueFaltaSerCobradoPagamentosDebitoACobrarEfetuadosEmMesesAnteriores = repositorioArrecadacao
@@ -21484,7 +21485,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							// [FS0005] - Verificar valor acumulado igual a zero
 							if (somaValorQueFaltaSerCobradoPagamentosDebitoACobrarEfetuadosEmMesesAnteriores != null
 									&& somaValorQueFaltaSerCobradoPagamentosDebitoACobrarEfetuadosEmMesesAnteriores.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 										.add(somaValorQueFaltaSerCobradoPagamentosDebitoACobrarEfetuadosEmMesesAnteriores);
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -21511,8 +21512,8 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 
 							/**
-							 * Alterações para contabilizar em contas diferentes
-							 * valores arrecadados até 31/12/2012
+							 * Alteraï¿½ï¿½es para contabilizar em contas diferentes
+							 * valores arrecadados atï¿½ 31/12/2012
 							 * 
 							 * @author: Wellington Rocha
 							 */
@@ -21524,11 +21525,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							// [FS0005] - Verificar valor acumulado igual a zero
 							if (somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoServico != null
 									&& somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoServico.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5410
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoServico);
 
-								// Seqüêncial de Tipo de Lançamento 5010
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoServico);
 
@@ -21565,11 +21566,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							if (somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoDiferenteJurosCobrados != null
 									&& somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoDiferenteJurosCobrados
 											.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5410
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoDiferenteJurosCobrados);
 
-								// Seqüêncial de Tipo de Lançamento 5010
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoParcelamentoServicoGrupoParcelamentoDiferenteJurosCobrados);
 
@@ -21605,11 +21606,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							// [FS0005] - Verificar valor acumulado igual a zero
 							if (somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoDoacoes != null
 									&& somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoDoacoes.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5410
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoDoacoes);
 
-								// Seqüêncial de Tipo de Lançamento 5010
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 										.add(somaValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoDoacoes);
 
@@ -21681,7 +21682,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							if (somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoServico != null
 									&& somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoServico
 											.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 										.add(somaValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoServico);
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -21716,7 +21717,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							// [FS0005] - Verificar valor acumulado igual a zero
 							if (somaValorQueFaltaSerCobradoPagamentosDebitoACobrarEfetuadosAte122012 != null
 									&& somaValorQueFaltaSerCobradoPagamentosDebitoACobrarEfetuadosAte122012.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 										.add(somaValorQueFaltaSerCobradoPagamentosDebitoACobrarEfetuadosAte122012);
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -21741,7 +21742,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								resumoArrecadacaoTemp.setValorItemArrecadacao(somaValorQueFaltaSerCobradoPagamentosDebitoACobrarEfetuadosAte122012);
 								colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 							}
-						}// FIM LANÇAMENTO ITEM CONTÁBIL
+						}// FIM LANï¿½AMENTO ITEM CONTï¿½BIL
 
 						// ***************************************************************************
 						// Fim do novo recebimento tipo/
@@ -21821,17 +21822,17 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 2100 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2100 Caso o map onde
 						 * foi armazenado o valor do pagamento por categoria do
-						 * grupo de pagamentos classificados do mês, com
-						 * situação atual igual a pagamento em duplicidade não
-						 * estiver vazio, gera o resumo da arrecadação para cada
-						 * categoria retornada pelo imóvel com seu respectivo
+						 * grupo de pagamentos classificados do mï¿½s, com
+						 * situaï¿½ï¿½o atual igual a pagamento em duplicidade nï¿½o
+						 * estiver vazio, gera o resumo da arrecadaï¿½ï¿½o para cada
+						 * categoria retornada pelo imï¿½vel com seu respectivo
 						 * valor.
 						 */
 						if (mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorPagamentoEmDuplicidade.containsKey(idCategoria)) {
 							if (mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorPagamentoEmDuplicidade.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 2400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2400
 								valorAcumuladoSequenciaTipoLancamentoEntre2100e2399 = valorAcumuladoSequenciaTipoLancamentoEntre2100e2399
 										.add(mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorPagamentoEmDuplicidade.get(idCategoria));
 
@@ -21845,15 +21846,15 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 2440 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2440 Caso o map onde
 						 * foi armazenado o valor do descontos por pagamento a
-						 * vista não estiver vazio, gera o resumo da arrecadação
-						 * para cada categoria retornada pelo imóvel com seu
+						 * vista nï¿½o estiver vazio, gera o resumo da arrecadaï¿½ï¿½o
+						 * para cada categoria retornada pelo imï¿½vel com seu
 						 * respectivo valor.
 						 */
 						if (mapValorDevolucaoDescontosPagamentoAVista.containsKey(idCategoria)) {
 							if (mapValorDevolucaoDescontosPagamentoAVista.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 2440
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2440
 								valorAcumuladoSequenciaTipoLancamentoIgual2440e2470 = valorAcumuladoSequenciaTipoLancamentoIgual2440e2470
 										.add(mapValorDevolucaoDescontosPagamentoAVista.get(idCategoria));
 								valorDiferencaSequenciaTipoLancamentoIgual2440e2450 = valorDiferencaSequenciaTipoLancamentoIgual2440e2450
@@ -21862,11 +21863,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 2450 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2450 Caso o map onde
 						 * foi armazenado o valor do descontos por pagamento a
-						 * vista pela campanha da criança não estiver vazio,
-						 * gera o resumo da arrecadação para cada categoria
-						 * retornada pelo imóvel com seu respectivo valor.
+						 * vista pela campanha da crianï¿½a nï¿½o estiver vazio,
+						 * gera o resumo da arrecadaï¿½ï¿½o para cada categoria
+						 * retornada pelo imï¿½vel com seu respectivo valor.
 						 */
 
 						if (mapValorDevolucaoDescontosPagamentoAVistaCampanhaCrianca.containsKey(idCategoria)) {
@@ -21901,15 +21902,15 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 2465 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2465 Caso o map onde
 						 * foi armazenado o valor do descontos por pagamento a
-						 * vista não estiver vazio, gera o resumo da arrecadação
-						 * para cada categoria retornada pelo imóvel com seu
+						 * vista nï¿½o estiver vazio, gera o resumo da arrecadaï¿½ï¿½o
+						 * para cada categoria retornada pelo imï¿½vel com seu
 						 * respectivo valor.
 						 */
 						if (mapValorDevolucaoDescontosPagamentoAVista.containsKey(idCategoria)) {
 							if (mapValorDevolucaoDescontosPagamentoAVista.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 2465
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2465
 
 								recebimentoTipoTemp = new RecebimentoTipo();
 								lancamentoTipoTemp = new LancamentoTipo();
@@ -21937,15 +21938,15 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 2470 Caso o map onde
-						 * foi armazenado o valor do descontos por creditos não
-						 * estiver vazio, gera o resumo da arrecadação para cada
-						 * categoria retornada pelo imóvel com seu respectivo
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2470 Caso o map onde
+						 * foi armazenado o valor do descontos por creditos nï¿½o
+						 * estiver vazio, gera o resumo da arrecadaï¿½ï¿½o para cada
+						 * categoria retornada pelo imï¿½vel com seu respectivo
 						 * valor.
 						 */
 						if (mapValorDevolucaoDescontosCreditosARealizar.containsKey(idCategoria)) {
 							if (mapValorDevolucaoDescontosCreditosARealizar.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 2470
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2470
 								valorAcumuladoSequenciaTipoLancamentoIgual2440e2470 = valorAcumuladoSequenciaTipoLancamentoIgual2440e2470
 										.add(mapValorDevolucaoDescontosCreditosARealizar.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -21973,21 +21974,21 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 2200 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2200 Caso o map onde
 						 * foi armazenado o valor do pagamento por categoria do
-						 * grupo de pagamentos classificados do mês, com
-						 * situação atual igual a pagamento em duplicidade não
-						 * estiver vazio, gera o resumo da arrecadação para cada
-						 * categoria retornada pelo imóvel com seu respectivo
+						 * grupo de pagamentos classificados do mï¿½s, com
+						 * situaï¿½ï¿½o atual igual a pagamento em duplicidade nï¿½o
+						 * estiver vazio, gera o resumo da arrecadaï¿½ï¿½o para cada
+						 * categoria retornada pelo imï¿½vel com seu respectivo
 						 * valor.
 						 */
 						/**
 						 * 
 						 * 
-						 * Detalhar contabilização de documentos inexistentes
+						 * Detalhar contabilizaï¿½ï¿½o de documentos inexistentes
 						 * 
 						 * Retorna o resumo arrecadacao por RecebimentoTipo,
-						 * LancamentoTipo, LancamentoItem e Sequência.
+						 * LancamentoTipo, LancamentoItem e Sequï¿½ncia.
 						 * 
 						 * @author Wellington Rocha
 						 * @author Felipe Santos
@@ -21997,7 +21998,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						if (mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistente.containsKey(idCategoria)) {
 
 							if (mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistente.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 2400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2400
 								valorAcumuladoSequenciaTipoLancamentoEntre2100e2399 = valorAcumuladoSequenciaTipoLancamentoEntre2100e2399
 										.add(mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistente.get(idCategoria));
 
@@ -22024,7 +22025,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteDebitoPrescrito.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 2400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2400
 								valorAcumuladoSequenciaTipoLancamentoEntre2100e2399 = valorAcumuladoSequenciaTipoLancamentoEntre2100e2399
 										.add(mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteDebitoPrescrito
 												.get(idCategoria));
@@ -22044,7 +22045,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteContaParcelada.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 2400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2400
 								valorAcumuladoSequenciaTipoLancamentoEntre2100e2399 = valorAcumuladoSequenciaTipoLancamentoEntre2100e2399
 										.add(mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteContaParcelada
 												.get(idCategoria));
@@ -22064,7 +22065,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteContaCancelada.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 2400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2400
 								valorAcumuladoSequenciaTipoLancamentoEntre2100e2399 = valorAcumuladoSequenciaTipoLancamentoEntre2100e2399
 										.add(mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteContaCancelada
 												.get(idCategoria));
@@ -22084,7 +22085,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteErroProcessamento.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 2400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2400
 								valorAcumuladoSequenciaTipoLancamentoEntre2100e2399 = valorAcumuladoSequenciaTipoLancamentoEntre2100e2399
 										.add(mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteErroProcessamento
 												.get(idCategoria));
@@ -22102,20 +22103,20 @@ public class ControladorArrecadacao extends ControladorComum {
 						// ****************************************************************
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 2300 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2300 Caso o map onde
 						 * foi armazenado o valor do pagamento por categoria do
-						 * grupo de pagamentos classificados do mês, com
-						 * situação atual igual a valor não confere e e para os
-						 * pagamentos não classificados do mês com situação
-						 * anterior igual a valor não confere, acumulou neste
-						 * caso o valor do pagamento excedente, não estiver
-						 * vazio, gera o resumo da arrecadação para cada
-						 * categoria retornada pelo imóvel com seu respectivo
+						 * grupo de pagamentos classificados do mï¿½s, com
+						 * situaï¿½ï¿½o atual igual a valor nï¿½o confere e e para os
+						 * pagamentos nï¿½o classificados do mï¿½s com situaï¿½ï¿½o
+						 * anterior igual a valor nï¿½o confere, acumulou neste
+						 * caso o valor do pagamento excedente, nï¿½o estiver
+						 * vazio, gera o resumo da arrecadaï¿½ï¿½o para cada
+						 * categoria retornada pelo imï¿½vel com seu respectivo
 						 * valor.
 						 */
 						if (mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorValorNaoConfere.containsKey(idCategoria)) {
 							if (mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorValorNaoConfere.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 2400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2400
 								valorAcumuladoSequenciaTipoLancamentoEntre2100e2399 = valorAcumuladoSequenciaTipoLancamentoEntre2100e2399
 										.add(mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorValorNaoConfere.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -22145,17 +22146,17 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 2600 Caso o map onde
-						 * foi armazenado o valor das devoluções por categoria
-						 * com situação atual igual a devolução classificada não
-						 * estiver vazio, gera o resumo da arrecadação para cada
-						 * categoria retornada pelo imóvel com seu respectivo
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2600 Caso o map onde
+						 * foi armazenado o valor das devoluï¿½ï¿½es por categoria
+						 * com situaï¿½ï¿½o atual igual a devoluï¿½ï¿½o classificada nï¿½o
+						 * estiver vazio, gera o resumo da arrecadaï¿½ï¿½o para cada
+						 * categoria retornada pelo imï¿½vel com seu respectivo
 						 * valor.
 						 */
 						if (mapValorDevolucaoSituacaoAtualDevolucaoClassificada.containsKey(idCategoria)) {
 
 							if (mapValorDevolucaoSituacaoAtualDevolucaoClassificada.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 2800
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2800
 								valorAcumuladoSequenciaTipoLancamentoEntre2600e2799 = valorAcumuladoSequenciaTipoLancamentoEntre2600e2799
 										.add(mapValorDevolucaoSituacaoAtualDevolucaoClassificada.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -22183,18 +22184,18 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 2900 Caso o map onde
-						 * foi armazenado os maps com o valor das devoluções por
-						 * categoria com situação atual igual a pagamento em
-						 * duplicidade não encontrado não estiver vazio, gera
-						 * para cada map armazenado o resumo da arrecadação para
-						 * cada categoria retornada pelo imóvel com seu
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2900 Caso o map onde
+						 * foi armazenado os maps com o valor das devoluï¿½ï¿½es por
+						 * categoria com situaï¿½ï¿½o atual igual a pagamento em
+						 * duplicidade nï¿½o encontrado nï¿½o estiver vazio, gera
+						 * para cada map armazenado o resumo da arrecadaï¿½ï¿½o para
+						 * cada categoria retornada pelo imï¿½vel com seu
 						 * respectivo valor.
 						 */
 						if (mapValorDevolucaoNaoClassificadaSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado.containsKey(idCategoria)) {
 
 							if (mapValorDevolucaoNaoClassificadaSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 3200
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3200
 								valorAcumuladoSequenciaTipoLancamentoEntre2900e3199 = valorAcumuladoSequenciaTipoLancamentoEntre2900e3199
 										.add(mapValorDevolucaoNaoClassificadaSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -22223,18 +22224,18 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 3000 Caso o map onde
-						 * foi armazenado o valor das devoluções não
-						 * classificadas do mês por categoria com situação atual
-						 * igual a guia de devolução não informada não estiver
-						 * vazio, gera o resumo da arrecadação para cada
-						 * categoria retornada pelo imóvel com seu respectivo
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3000 Caso o map onde
+						 * foi armazenado o valor das devoluï¿½ï¿½es nï¿½o
+						 * classificadas do mï¿½s por categoria com situaï¿½ï¿½o atual
+						 * igual a guia de devoluï¿½ï¿½o nï¿½o informada nï¿½o estiver
+						 * vazio, gera o resumo da arrecadaï¿½ï¿½o para cada
+						 * categoria retornada pelo imï¿½vel com seu respectivo
 						 * valor.
 						 */
 						if (mapValorDevolucaoNaoClassificadaSituacaoAtualGuiaDevolucaoNaoInformada.containsKey(idCategoria)) {
 
 							if (mapValorDevolucaoNaoClassificadaSituacaoAtualGuiaDevolucaoNaoInformada.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 3200
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3200
 								valorAcumuladoSequenciaTipoLancamentoEntre2900e3199 = valorAcumuladoSequenciaTipoLancamentoEntre2900e3199
 										.add(mapValorDevolucaoNaoClassificadaSituacaoAtualGuiaDevolucaoNaoInformada.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -22263,17 +22264,17 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 3100 Caso o map onde
-						 * foi armazenado o valor das devoluções não
-						 * classificadas do mês por categoria com situação atual
-						 * igual a valor não confere não estiver vazio, gera o
-						 * resumo da arrecadação para cada categoria retornada
-						 * pelo imóvel com seu respectivo valor.
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3100 Caso o map onde
+						 * foi armazenado o valor das devoluï¿½ï¿½es nï¿½o
+						 * classificadas do mï¿½s por categoria com situaï¿½ï¿½o atual
+						 * igual a valor nï¿½o confere nï¿½o estiver vazio, gera o
+						 * resumo da arrecadaï¿½ï¿½o para cada categoria retornada
+						 * pelo imï¿½vel com seu respectivo valor.
 						 */
 						if (mapValorDevolucaoNaoClassificadaSituacaoAtualValorNaoConfere.containsKey(idCategoria)) {
 
 							if (mapValorDevolucaoNaoClassificadaSituacaoAtualValorNaoConfere.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 3200
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3200
 								valorAcumuladoSequenciaTipoLancamentoEntre2900e3199 = valorAcumuladoSequenciaTipoLancamentoEntre2900e3199
 										.add(mapValorDevolucaoNaoClassificadaSituacaoAtualValorNaoConfere.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -22301,21 +22302,21 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 4600 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4600 Caso o map onde
 						 * foi armazenado o valor do IR(imposto de renda) por
 						 * categoria do grupo de pagamentos de contas efetuados
-						 * em meses anteriores classificados no mês, não estiver
-						 * vazio, gera o resumo da arrecadação para cada
-						 * categoria retornada pelo imóvel com seu respectivo
+						 * em meses anteriores classificados no mï¿½s, nï¿½o estiver
+						 * vazio, gera o resumo da arrecadaï¿½ï¿½o para cada
+						 * categoria retornada pelo imï¿½vel com seu respectivo
 						 * valor.
 						 */
 						if (mapValorIRPagamentosContasEfetuadosMesesAterioresClassificadosMes.containsKey(idCategoria)) {
 							if (mapValorIRPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 										.subtract(mapValorIRPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria));
 
-								// Seqüêncial de Tipo de Lançamento 5000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 										.subtract(mapValorIRPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria));
 
@@ -22345,20 +22346,20 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 4700 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4700 Caso o map onde
 						 * foi armazenado o valor do CSLL por categoria do grupo
 						 * de pagamentos de contas efetuados em meses anteriores
-						 * classificados no mês, não estiver vazio, gera o
-						 * resumo da arrecadação para cada categoria retornada
-						 * pelo imóvel com seu respectivo valor.
+						 * classificados no mï¿½s, nï¿½o estiver vazio, gera o
+						 * resumo da arrecadaï¿½ï¿½o para cada categoria retornada
+						 * pelo imï¿½vel com seu respectivo valor.
 						 */
 						if (mapValorCSLLPagamentosContasEfetuadosMesesAterioresClassificadosMes.containsKey(idCategoria)) {
 							if (mapValorCSLLPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 										.subtract(mapValorCSLLPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria));
 
-								// Seqüêncial de Tipo de Lançamento 5000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 										.subtract(mapValorCSLLPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria));
 
@@ -22388,20 +22389,20 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 4800 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4800 Caso o map onde
 						 * foi armazenado o valor do COFINS por categoria do
 						 * grupo de pagamentos de contas efetuados em meses
-						 * anteriores classificados no mês, não estiver vazio,
-						 * gera o resumo da arrecadação para cada categoria
-						 * retornada pelo imóvel com seu respectivo valor.
+						 * anteriores classificados no mï¿½s, nï¿½o estiver vazio,
+						 * gera o resumo da arrecadaï¿½ï¿½o para cada categoria
+						 * retornada pelo imï¿½vel com seu respectivo valor.
 						 */
 						if (mapValorCOFINSPagamentosContasEfetuadosMesesAterioresClassificadosMes.containsKey(idCategoria)) {
 							if (mapValorCOFINSPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 										.subtract(mapValorCOFINSPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria));
 
-								// Seqüêncial de Tipo de Lançamento 5000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 										.subtract(mapValorCOFINSPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria));
 
@@ -22431,21 +22432,21 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 4900 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4900 Caso o map onde
 						 * foi armazenado o valor do PIS/PASEP por categoria do
 						 * grupo de pagamentos de contas efetuados em meses
-						 * anteriores classificados no mês, não estiver vazio,
-						 * gera o resumo da arrecadação para cada categoria
-						 * retornada pelo imóvel com seu respectivo valor.
+						 * anteriores classificados no mï¿½s, nï¿½o estiver vazio,
+						 * gera o resumo da arrecadaï¿½ï¿½o para cada categoria
+						 * retornada pelo imï¿½vel com seu respectivo valor.
 						 */
 						if (mapValorPISPASEPPagamentosContasEfetuadosMesesAterioresClassificadosMes.containsKey(idCategoria)) {
 							if (mapValorPISPASEPPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria).doubleValue() > 0.00) {
 
-								// Seqüêncial de Tipo de Lançamento 5400
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 										.subtract(mapValorPISPASEPPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria));
 
-								// Seqüêncial de Tipo de Lançamento 5000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 								valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 										.subtract(mapValorPISPASEPPagamentosContasEfetuadosMesesAterioresClassificadosMes.get(idCategoria));
 
@@ -22477,7 +22478,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						/**
 						 * 
 						 * Contabilizar em contas diferentes valores arrecadados
-						 * até 31/12/2012
+						 * atï¿½ 31/12/2012
 						 * 
 						 * @author Wellington Rocha
 						 * 
@@ -22486,11 +22487,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						// 4610
 						if (mapValorIRPagamentosContasEfetuadosAte122012ClassificadosMes.containsKey(idCategoria)) {
 							if (mapValorIRPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5410
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 										.subtract(mapValorIRPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria));
 
-								// Seqüêncial de Tipo de Lançamento 5010
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 										.subtract(mapValorIRPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria));
 
@@ -22521,11 +22522,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						// 4710
 						if (mapValorCSLLPagamentosContasEfetuadosAte122012ClassificadosMes.containsKey(idCategoria)) {
 							if (mapValorCSLLPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5410
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 										.subtract(mapValorCSLLPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria));
 
-								// Seqüêncial de Tipo de Lançamento 5010
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 										.subtract(mapValorCSLLPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria));
 
@@ -22556,11 +22557,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						// 4810
 						if (mapValorCOFINSPagamentosContasEfetuadosAte122012ClassificadosMes.containsKey(idCategoria)) {
 							if (mapValorCOFINSPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5410
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 										.subtract(mapValorCOFINSPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria));
 
-								// Seqüêncial de Tipo de Lançamento 5010
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 										.subtract(mapValorCOFINSPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria));
 
@@ -22593,11 +22594,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						if (mapValorPISPASEPPagamentosContasEfetuadosAte122012ClassificadosMes.containsKey(idCategoria)) {
 							if (mapValorPISPASEPPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria).doubleValue() > 0.00) {
 
-								// Seqüêncial de Tipo de Lançamento 5410
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 										.subtract(mapValorPISPASEPPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria));
 
-								// Seqüêncial de Tipo de Lançamento 5010
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 								valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 										.subtract(mapValorPISPASEPPagamentosContasEfetuadosAte122012ClassificadosMes.get(idCategoria));
 
@@ -22628,18 +22629,18 @@ public class ControladorArrecadacao extends ControladorComum {
 
 						// ****Fim Impostos**********************
 						/*
-						 * Seqüêncial de Tipo de Lançamento 5500 Caso o map onde
-						 * foi armazenado o valor das devoluções por categoria
-						 * do grupo de devoluções efetuadas em meses anteriores
-						 * classificadas no mês, com situação atual igual a
-						 * devolução classificada não estiver vazio, gera o
-						 * resumo da arrecadação para cada categoria retornada
-						 * pelo imóvel com seu respectivo valor.
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5500 Caso o map onde
+						 * foi armazenado o valor das devoluï¿½ï¿½es por categoria
+						 * do grupo de devoluï¿½ï¿½es efetuadas em meses anteriores
+						 * classificadas no mï¿½s, com situaï¿½ï¿½o atual igual a
+						 * devoluï¿½ï¿½o classificada nï¿½o estiver vazio, gera o
+						 * resumo da arrecadaï¿½ï¿½o para cada categoria retornada
+						 * pelo imï¿½vel com seu respectivo valor.
 						 */
 						if (mapValorDevolucaoEfetuadaEmMesesAnterioresClassificadasNoMesSituacaoAtualDevolucaoClassificada.containsKey(idCategoria)) {
 
 							if (mapValorDevolucaoEfetuadaEmMesesAnterioresClassificadasNoMesSituacaoAtualDevolucaoClassificada.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 5700
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5700
 								valorAcumuladoSequenciaTipoLancamentoEntre5500e5699 = valorAcumuladoSequenciaTipoLancamentoEntre5500e5699
 										.add(mapValorDevolucaoEfetuadaEmMesesAnterioresClassificadasNoMesSituacaoAtualDevolucaoClassificada.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -22669,19 +22670,19 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 5800 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5800 Caso o map onde
 						 * foi armazenado o valor excedente dos pagamentos por
-						 * categoria do grupo de pagamentos não classificados
-						 * com baixa comandada, com situação anterior igual a
-						 * pagamento em duplicidade não estiver vazio, gera o
-						 * resumo da arrecadação para cada categoria retornada
-						 * pelo imóvel com seu respectivo valor.
+						 * categoria do grupo de pagamentos nï¿½o classificados
+						 * com baixa comandada, com situaï¿½ï¿½o anterior igual a
+						 * pagamento em duplicidade nï¿½o estiver vazio, gera o
+						 * resumo da arrecadaï¿½ï¿½o para cada categoria retornada
+						 * pelo imï¿½vel com seu respectivo valor.
 						 */
 						if (mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorPagamentoEmDuplicidade.containsKey(idCategoria)) {
 
 							if (mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorPagamentoEmDuplicidade.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6100
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6100
 								valorAcumuladoSequenciaTipoLancamentoEntre5800e6099 = valorAcumuladoSequenciaTipoLancamentoEntre5800e6099
 										.add(mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorPagamentoEmDuplicidade.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -22711,21 +22712,21 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 5900 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5900 Caso o map onde
 						 * foi armazenado o valor excedente dos pagamentos por
-						 * categoria do grupo de pagamentos não classificados
-						 * com baixa comandada, com situação anterior igual a
-						 * documento inexistente não estiver vazio, gera o
-						 * resumo da arrecadação para cada categoria retornada
-						 * pelo imóvel com seu respectivo valor.
+						 * categoria do grupo de pagamentos nï¿½o classificados
+						 * com baixa comandada, com situaï¿½ï¿½o anterior igual a
+						 * documento inexistente nï¿½o estiver vazio, gera o
+						 * resumo da arrecadaï¿½ï¿½o para cada categoria retornada
+						 * pelo imï¿½vel com seu respectivo valor.
 						 */
 						/**
 						 * 
 						 * 
-						 * Detalhar contabilização de documentos inexistentes
+						 * Detalhar contabilizaï¿½ï¿½o de documentos inexistentes
 						 * 
 						 * Retorna o resumo arrecadacao por RecebimentoTipo,
-						 * LancamentoTipo, LancamentoItem e Sequência.
+						 * LancamentoTipo, LancamentoItem e Sequï¿½ncia.
 						 * 
 						 * @author Wellington Rocha
 						 * @author Felipe Santos
@@ -22736,7 +22737,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						if (mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistente.containsKey(idCategoria)) {
 
 							if (mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistente.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6100
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6100
 								valorAcumuladoSequenciaTipoLancamentoEntre5800e6099 = valorAcumuladoSequenciaTipoLancamentoEntre5800e6099
 										.add(mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistente.get(idCategoria));
 
@@ -22756,7 +22757,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteDebitoPrescrito.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6100
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6100
 								valorAcumuladoSequenciaTipoLancamentoEntre5800e6099 = valorAcumuladoSequenciaTipoLancamentoEntre5800e6099
 										.add(mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteDebitoPrescrito
 												.get(idCategoria));
@@ -22777,7 +22778,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteContaParcelada.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6100
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6100
 								valorAcumuladoSequenciaTipoLancamentoEntre5800e6099 = valorAcumuladoSequenciaTipoLancamentoEntre5800e6099
 										.add(mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteContaParcelada
 												.get(idCategoria));
@@ -22798,7 +22799,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteContaCancelada.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6100
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6100
 								valorAcumuladoSequenciaTipoLancamentoEntre5800e6099 = valorAcumuladoSequenciaTipoLancamentoEntre5800e6099
 										.add(mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteContaCancelada
 												.get(idCategoria));
@@ -22819,7 +22820,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteErroProcessamento.get(
 									idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6100
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6100
 								valorAcumuladoSequenciaTipoLancamentoEntre5800e6099 = valorAcumuladoSequenciaTipoLancamentoEntre5800e6099
 										.add(mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteErroProcessamento
 												.get(idCategoria));
@@ -22835,18 +22836,18 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 6000 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6000 Caso o map onde
 						 * foi armazenado o valor excedente dos pagamentos por
-						 * categoria do grupo de pagamentos não classificados
-						 * com baixa comandada, com situação anterior igual a
-						 * valor não confere não estiver vazio, gera o resumo da
-						 * arrecadação para cada categoria retornada pelo imóvel
+						 * categoria do grupo de pagamentos nï¿½o classificados
+						 * com baixa comandada, com situaï¿½ï¿½o anterior igual a
+						 * valor nï¿½o confere nï¿½o estiver vazio, gera o resumo da
+						 * arrecadaï¿½ï¿½o para cada categoria retornada pelo imï¿½vel
 						 * com seu respectivo valor.
 						 */
 						if (mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorValorNaoConfere.containsKey(idCategoria)) {
 
 							if (mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorValorNaoConfere.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6100
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6100
 								valorAcumuladoSequenciaTipoLancamentoEntre5800e6099 = valorAcumuladoSequenciaTipoLancamentoEntre5800e6099
 										.add(mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorValorNaoConfere.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -22875,14 +22876,14 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 						}
 
-						// Seqüêncial de Tipo de Lançamento 6200
-						// O sequência 6200 acumula os valores dos sequências
-						// 100 à 700
-						// de 3500 à 4100
-						// e acumula negativamente os valores dos sequências de
-						// 8000 à
-						// 1000, de 1200 à 1500,
-						// de 4200 à 4400 e de 4600 à 4900.
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6200
+						// O sequï¿½ncia 6200 acumula os valores dos sequï¿½ncias
+						// 100 ï¿½ 700
+						// de 3500 ï¿½ 4100
+						// e acumula negativamente os valores dos sequï¿½ncias de
+						// 8000 ï¿½
+						// 1000, de 1200 ï¿½ 1500,
+						// de 4200 ï¿½ 4400 e de 4600 ï¿½ 4900.
 						BigDecimal valorSequencial_100_200_3500_3600 = repositorioArrecadacao
 								.acumularValorAgua_EsgotoPagamentosClassificadosNoMes_EfetuadosEmMesesAnterioresContaContabilizadasComoPerdas(idLocalidade,
 										anoMesReferenciaArrecadacao, idCategoria);
@@ -22918,21 +22919,21 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoContasContabilizadasComoPerdas = valorAcumuladoContasContabilizadasComoPerdas
 									.subtract(valorSequencial_1200_1300_1400_1500_4600_4700_4800_4900);
 						}
-						// fim do acumulador do sequêncial 6200
+						// fim do acumulador do sequï¿½ncial 6200
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 6300 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6300 Caso o map onde
 						 * foi armazenado o valor excedente dos pagamentos por
-						 * categoria do grupo de pagamentos não classificados ,
-						 * com situação atual igual a pagamento em duplicidade
-						 * não estiver vazio, gera o resumo da arrecadação para
-						 * cada categoria retornada pelo imóvel com seu
+						 * categoria do grupo de pagamentos nï¿½o classificados ,
+						 * com situaï¿½ï¿½o atual igual a pagamento em duplicidade
+						 * nï¿½o estiver vazio, gera o resumo da arrecadaï¿½ï¿½o para
+						 * cada categoria retornada pelo imï¿½vel com seu
 						 * respectivo valor.
 						 */
 						if (mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualPagamentoEmDuplicidade.containsKey(idCategoria)) {
 
 							if (mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualPagamentoEmDuplicidade.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6600
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6600
 								valorAcumuladoSequenciaTipoLancamentoEntre6300e6599 = valorAcumuladoSequenciaTipoLancamentoEntre6300e6599
 										.add(mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualPagamentoEmDuplicidade.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -22962,16 +22963,16 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 6350 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6350 Caso o map onde
 						 * foi armazenado o valor dos pagamentos da campanha
-						 * Solidariedade da Criança , não estiver vazio, gera o
-						 * resumo da arrecadação para cada categoria retornada
-						 * pelo imóvel com seu respectivo valor.
+						 * Solidariedade da Crianï¿½a , nï¿½o estiver vazio, gera o
+						 * resumo da arrecadaï¿½ï¿½o para cada categoria retornada
+						 * pelo imï¿½vel com seu respectivo valor.
 						 */
 						if (mapValorPagamentoNoMesEMesesAnterioresCampanhaSolidariedadeCrianca.containsKey(idCategoria)) {
 
 							if (mapValorPagamentoNoMesEMesesAnterioresCampanhaSolidariedadeCrianca.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6350
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6350
 								// valorAcumuladoSequenciaTipoLancamentoEntre6300e6599
 								// =
 								// valorAcumuladoSequenciaTipoLancamentoEntre6300e6599.add(mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistente.get(idCategoria));
@@ -23000,7 +23001,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								// Vivianne Sousa - 05/07/2009
 								// Diminuir do valor acumulado o valor do
 								// sequencial 2450(Desconto pela campanha da
-								// criança)
+								// crianï¿½a)
 								if (mapValorDevolucaoDescontosPagamentoAVistaCampanhaCrianca.containsKey(idCategoria)) {
 									if (mapValorDevolucaoDescontosPagamentoAVistaCampanhaCrianca.get(idCategoria).doubleValue() > 0.00) {
 										resumoArrecadacaoTemp.setValorItemArrecadacao(mapValorPagamentoNoMesEMesesAnterioresCampanhaSolidariedadeCrianca.get(
@@ -23020,11 +23021,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 						// mapValorDevolucaoDescontosPagamentoAVistaCampanhaCriancaComDireitoDesconto
 						/*
-						 * Seqüêncial de Tipo de Lançamento 6360 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6360 Caso o map onde
 						 * foi armazenado o valor dos pagamentos da campanha
-						 * Solidariedade da Criança com Direito ao Desconto, não
-						 * estiver vazio, gera o resumo da arrecadação para cada
-						 * categoria retornada pelo imóvel com seu respectivo
+						 * Solidariedade da Crianï¿½a com Direito ao Desconto, nï¿½o
+						 * estiver vazio, gera o resumo da arrecadaï¿½ï¿½o para cada
+						 * categoria retornada pelo imï¿½vel com seu respectivo
 						 * valor.
 						 */
 
@@ -23045,14 +23046,14 @@ public class ControladorArrecadacao extends ControladorComum {
 									BigDecimal valorDevolucaoDesconto = mapValorDevolucaoDescontosPagamentoAVistaCampanhaCrianca.get(idCategoria);
 									// [SB0009] - Calcula o valor com Direito ao
 									// Desconto
-									// O valor com direito ao desconto será
-									// o devl_vldevolucao da tabela DEVOLUÇÃO x
+									// O valor com direito ao desconto serï¿½
+									// o devl_vldevolucao da tabela DEVOLUï¿½ï¿½O x
 									// 100 / PCPF_PCDESCONTOPAGAMENTOAVISTA da
 									// tabela PARCELAMENTO_PERFIL.
 									BigDecimal valorDevolucaoComDireitoDesconto = (valorDevolucaoDesconto.multiply(valorCem)).divide(parcentualDescontoAVista);
 									valorDevolucaoComDireitoDesconto.setScale(2, BigDecimal.ROUND_DOWN);
 
-									// Seqüêncial de Tipo de Lançamento 6360
+									// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6360
 									recebimentoTipoTemp = new RecebimentoTipo();
 									lancamentoTipoTemp = new LancamentoTipo();
 									lancamentoItemTemp = new LancamentoItem();
@@ -23082,26 +23083,26 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 6400 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6400 Caso o map onde
 						 * foi armazenado o valor excedente dos pagamentos por
-						 * categoria do grupo de pagamentos não classificados ,
-						 * com situação atual igual a documento inexistente não
-						 * estiver vazio, gera o resumo da arrecadação para cada
-						 * categoria retornada pelo imóvel com seu respectivo
+						 * categoria do grupo de pagamentos nï¿½o classificados ,
+						 * com situaï¿½ï¿½o atual igual a documento inexistente nï¿½o
+						 * estiver vazio, gera o resumo da arrecadaï¿½ï¿½o para cada
+						 * categoria retornada pelo imï¿½vel com seu respectivo
 						 * valor.
 						 */
 						/**
-						 * Detalhar contabilização de documentos inexistentes
+						 * Detalhar contabilizaï¿½ï¿½o de documentos inexistentes
 						 * 
 						 * Retorna o resumo arrecadacao por RecebimentoTipo,
-						 * LancamentoTipo, LancamentoItem e Sequência.
+						 * LancamentoTipo, LancamentoItem e Sequï¿½ncia.
 						 */
 
 						// DOCUMENTO_INEXISTENTE
 						if (mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistente.containsKey(idCategoria)) {
 
 							if (mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistente.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6600
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6600
 								valorAcumuladoSequenciaTipoLancamentoEntre6300e6599 = valorAcumuladoSequenciaTipoLancamentoEntre6300e6599
 										.add(mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistente.get(idCategoria));
 
@@ -23120,7 +23121,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteDebitoPrescrito.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6600
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6600
 								valorAcumuladoSequenciaTipoLancamentoEntre6300e6599 = valorAcumuladoSequenciaTipoLancamentoEntre6300e6599
 										.add(mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteDebitoPrescrito
 												.get(idCategoria));
@@ -23140,7 +23141,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteContaParcelada.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6600
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6600
 								valorAcumuladoSequenciaTipoLancamentoEntre6300e6599 = valorAcumuladoSequenciaTipoLancamentoEntre6300e6599
 										.add(mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteContaParcelada
 												.get(idCategoria));
@@ -23160,7 +23161,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteContaCancelada.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6600
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6600
 								valorAcumuladoSequenciaTipoLancamentoEntre6300e6599 = valorAcumuladoSequenciaTipoLancamentoEntre6300e6599
 										.add(mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteContaCancelada
 												.get(idCategoria));
@@ -23180,7 +23181,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 							if (mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteErroProcessamento.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6600
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6600
 								valorAcumuladoSequenciaTipoLancamentoEntre6300e6599 = valorAcumuladoSequenciaTipoLancamentoEntre6300e6599
 										.add(mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteErroProcessamento
 												.get(idCategoria));
@@ -23196,18 +23197,18 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 6500 Caso o map onde
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6500 Caso o map onde
 						 * foi armazenado o valor excedente dos pagamentos por
-						 * categoria do grupo de pagamentos não classificados ,
-						 * com situação atual igual a valor não confere não
-						 * estiver vazio, gera o resumo da arrecadação para cada
-						 * categoria retornada pelo imóvel com seu respectivo
+						 * categoria do grupo de pagamentos nï¿½o classificados ,
+						 * com situaï¿½ï¿½o atual igual a valor nï¿½o confere nï¿½o
+						 * estiver vazio, gera o resumo da arrecadaï¿½ï¿½o para cada
+						 * categoria retornada pelo imï¿½vel com seu respectivo
 						 * valor.
 						 */
 						if (mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualValorNaoConfere.containsKey(idCategoria)) {
 
 							if (mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualValorNaoConfere.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 6600
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6600
 								valorAcumuladoSequenciaTipoLancamentoEntre6300e6599 = valorAcumuladoSequenciaTipoLancamentoEntre6300e6599
 										.add(mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualValorNaoConfere.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -23236,19 +23237,19 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 6700 Caso o map onde
-						 * foi armazenado o valor da devolução por categoria do
-						 * grupo de devoluções não classificadas , com situação
-						 * atual igual a pagamento em duplicidade não encontrado
-						 * não estiver vazio, gera o resumo da arrecadação para
-						 * cada categoria retornada pelo imóvel com seu
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6700 Caso o map onde
+						 * foi armazenado o valor da devoluï¿½ï¿½o por categoria do
+						 * grupo de devoluï¿½ï¿½es nï¿½o classificadas , com situaï¿½ï¿½o
+						 * atual igual a pagamento em duplicidade nï¿½o encontrado
+						 * nï¿½o estiver vazio, gera o resumo da arrecadaï¿½ï¿½o para
+						 * cada categoria retornada pelo imï¿½vel com seu
 						 * respectivo valor.
 						 */
 						if (mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado.containsKey(idCategoria)) {
 
 							if (mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado.get(idCategoria)
 									.doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 7000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 7000
 								valorAcumuladoSequenciaTipoLancamentoEntre6700e6999 = valorAcumuladoSequenciaTipoLancamentoEntre6700e6999
 										.add(mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado
 												.get(idCategoria));
@@ -23279,18 +23280,18 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 6800 Caso o map onde
-						 * foi armazenado o valor da devolução por categoria do
-						 * grupo de devoluções não classificadas , com situação
-						 * atual igual a guia de devolução não informada não
-						 * estiver vazio, gera o resumo da arrecadação para cada
-						 * categoria retornada pelo imóvel com seu respectivo
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6800 Caso o map onde
+						 * foi armazenado o valor da devoluï¿½ï¿½o por categoria do
+						 * grupo de devoluï¿½ï¿½es nï¿½o classificadas , com situaï¿½ï¿½o
+						 * atual igual a guia de devoluï¿½ï¿½o nï¿½o informada nï¿½o
+						 * estiver vazio, gera o resumo da arrecadaï¿½ï¿½o para cada
+						 * categoria retornada pelo imï¿½vel com seu respectivo
 						 * valor.
 						 */
 						if (mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualGuiaDevolucaoNaoInformada.containsKey(idCategoria)) {
 
 							if (mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualGuiaDevolucaoNaoInformada.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 7000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 7000
 								valorAcumuladoSequenciaTipoLancamentoEntre6700e6999 = valorAcumuladoSequenciaTipoLancamentoEntre6700e6999
 										.add(mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualGuiaDevolucaoNaoInformada.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -23320,17 +23321,17 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/*
-						 * Seqüêncial de Tipo de Lançamento 6900 Caso o map onde
-						 * foi armazenado o valor da devolução por categoria do
-						 * grupo de devoluções não classificadas , com situação
-						 * atual igual a valor não confere não estiver vazio,
-						 * gera o resumo da arrecadação para cada categoria
-						 * retornada pelo imóvel com seu respectivo valor.
+						 * Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6900 Caso o map onde
+						 * foi armazenado o valor da devoluï¿½ï¿½o por categoria do
+						 * grupo de devoluï¿½ï¿½es nï¿½o classificadas , com situaï¿½ï¿½o
+						 * atual igual a valor nï¿½o confere nï¿½o estiver vazio,
+						 * gera o resumo da arrecadaï¿½ï¿½o para cada categoria
+						 * retornada pelo imï¿½vel com seu respectivo valor.
 						 */
 						if (mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualValorNaoConfere.containsKey(idCategoria)) {
 
 							if (mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualValorNaoConfere.get(idCategoria).doubleValue() > 0.00) {
-								// Seqüêncial de Tipo de Lançamento 7000
+								// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 7000
 								valorAcumuladoSequenciaTipoLancamentoEntre6700e6999 = valorAcumuladoSequenciaTipoLancamentoEntre6700e6999
 										.add(mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualValorNaoConfere.get(idCategoria));
 								recebimentoTipoTemp = new RecebimentoTipo();
@@ -23377,8 +23378,8 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 2000 (Seqüêncial de
-						// Tipo de Lançamento 1600 + 1700 a 1999)
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2000 (Seqï¿½ï¿½ncial de
+						// Tipo de Lanï¿½amento 1600 + 1700 a 1999)
 						valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999 = valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999
 								.add(valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599);
 
@@ -23416,13 +23417,13 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 2500 (Seqüêncial de
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2500 (Seqï¿½ï¿½ncial de
 						// Tipo de
-						// Lançamento 2000 e 2400)
+						// Lanï¿½amento 2000 e 2400)
 						valorAcumuladoSequenciaTipoLancamentoIgual2000e2400 = valorAcumuladoSequenciaTipoLancamentoIgual2000e2400
 								.add(valorAcumuladoSequenciaTipoLancamentoEntre2100e2399);
 
-						// Seqüêncial de Tipo de Lançamento 2400
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2400
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre2100e2399 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre2100e2399.doubleValue() > 0.00) {
@@ -23452,7 +23453,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						// Vivianne Sousa - 02/06/2009
-						// Seqüêncial de Tipo de Lançamento 2460
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2460
 						if (valorDiferencaSequenciaTipoLancamentoIgual2440e2450 != null
 								&& valorDiferencaSequenciaTipoLancamentoIgual2440e2450.doubleValue() > 0.00) {
 
@@ -23481,9 +23482,9 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorDiferencaSequenciaTipoLancamentoIgual2440e2450 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 3400 (Seqüêncial de
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3400 (Seqï¿½ï¿½ncial de
 						// Tipo de
-						// Lançamento 2500 e 3300)
+						// Lanï¿½amento 2500 e 3300)
 
 						valorAcumuladoSequenciaTipoLancamentoIgual2000e2400 = valorAcumuladoSequenciaTipoLancamentoIgual2000e2400
 								.subtract(valorAcumuladoSequenciaTipoLancamentoIgual2440e2470);
@@ -23491,7 +23492,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						diferencaEntreSequencialTipoIgual2500e3300 = diferencaEntreSequencialTipoIgual2500e3300
 								.add(valorAcumuladoSequenciaTipoLancamentoIgual2000e2400);
 
-						// Seqüêncial de Tipo de Lançamento 2485
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2485
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoIgual2440e2470 != null
 								&& valorAcumuladoSequenciaTipoLancamentoIgual2440e2470.doubleValue() > 0.00) {
@@ -23520,7 +23521,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoIgual2440e2470 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 2500
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2500
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoIgual2000e2400 != null) {
 
@@ -23552,14 +23553,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 						}
 
-						// Seqüêncial de Tipo de Lançamento 3300 = (Seqüêncial
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3300 = (Seqï¿½ï¿½ncial
 						// de Tipo
-						// de Lançamento 2800 + Seqüêncial de Tipo de Lançamento
+						// de Lanï¿½amento 2800 + Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento
 						// 3200)
 						valorAcumuladoSequenciaTipoLancamentoIgual2800e3200 = valorAcumuladoSequenciaTipoLancamentoIgual2800e3200
 								.add(valorAcumuladoSequenciaTipoLancamentoEntre2600e2799);
 
-						// Seqüêncial de Tipo de Lançamento 2800
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2800
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre2600e2799 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre2600e2799.doubleValue() > 0.00) {
@@ -23588,14 +23589,14 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoEntre2600e2799 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 3300 = (Seqüêncial
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3300 = (Seqï¿½ï¿½ncial
 						// de Tipo
-						// de Lançamento 2800 + Seqüêncial de Tipo de Lançamento
+						// de Lanï¿½amento 2800 + Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento
 						// 3200)
 						valorAcumuladoSequenciaTipoLancamentoIgual2800e3200 = valorAcumuladoSequenciaTipoLancamentoIgual2800e3200
 								.add(valorAcumuladoSequenciaTipoLancamentoEntre2900e3199);
 
-						// Seqüêncial de Tipo de Lançamento 3200
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3200
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre2900e3199 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre2900e3199.doubleValue() > 0.00) {
@@ -23624,11 +23625,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoEntre2900e3199 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 3400
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3400
 						diferencaEntreSequencialTipoIgual2500e3300 = diferencaEntreSequencialTipoIgual2500e3300
 								.subtract(valorAcumuladoSequenciaTipoLancamentoIgual2800e3200);
 
-						// Seqüêncial de Tipo de Lançamento 3300
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3300
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoIgual2800e3200 != null
 								&& valorAcumuladoSequenciaTipoLancamentoIgual2800e3200.doubleValue() > 0.00) {
@@ -23657,10 +23658,10 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoIgual2800e3200 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 3400
-						// Neste caso não tem verificação do valor menor ou
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3400
+						// Neste caso nï¿½o tem verificaï¿½ï¿½o do valor menor ou
 						// igula a zero
-						// porque , a diferença
+						// porque , a diferenï¿½a
 						// pode ser negativa ou zero.
 						if (diferencaEntreSequencialTipoIgual2500e3300 != null) {
 							recebimentoTipoTemp = new RecebimentoTipo();
@@ -23688,16 +23689,16 @@ public class ControladorArrecadacao extends ControladorComum {
 							diferencaEntreSequencialTipoIgual2500e3300 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 4500
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4500
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre4200e4499.doubleValue() > 0.00) {
 
-							// Seqüêncial de Tipo de Lançamento 5400
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 							valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399
 									.subtract(valorAcumuladoSequenciaTipoLancamentoEntre4200e4499);
 
-							// Seqüêncial de Tipo de Lançamento 5000
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 							valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999
 									.subtract(valorAcumuladoSequenciaTipoLancamentoEntre4200e4499);
 
@@ -23726,7 +23727,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoEntre4200e4499 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 5000
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999.doubleValue() > 0.00) {
@@ -23755,7 +23756,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 5400
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399.doubleValue() > 0.00) {
@@ -23786,22 +23787,22 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						/**
-						 * Alterações para contabilizar em contas diferentes
-						 * valores arrecadados até 31/12/12
+						 * Alteraï¿½ï¿½es para contabilizar em contas diferentes
+						 * valores arrecadados atï¿½ 31/12/12
 						 * 
 						 * @author Wellington Rocha
 						 */
 
-						// Seqüêncial de Tipo de Lançamento 4510
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4510
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre4210e4499 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre4210e4499.doubleValue() > 0.00) {
 
-							// Seqüêncial de Tipo de Lançamento 5400
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5400
 							valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399
 									.subtract(valorAcumuladoSequenciaTipoLancamentoEntre4210e4499);
 
-							// Seqüêncial de Tipo de Lançamento 5000
+							// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5000
 							valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999
 									.subtract(valorAcumuladoSequenciaTipoLancamentoEntre4210e4499);
 
@@ -23830,7 +23831,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoEntre4210e4499 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 5010
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5010
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999.doubleValue() > 0.00) {
@@ -23859,7 +23860,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 5410
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5410
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399.doubleValue() > 0.00) {
@@ -23889,9 +23890,9 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoEntre3510e4199Subtraindo4510eEntre4610e4999SomandoSequenciaEntre5110e5399 = BigDecimal.ZERO;
 						}
 
-						/********************** Fim Alteração **************************************/
+						/********************** Fim Alteraï¿½ï¿½o **************************************/
 
-						// Seqüêncial de Tipo de Lançamento 5700
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5700
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre5500e5699 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre5500e5699.doubleValue() > 0.00) {
@@ -23920,7 +23921,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoEntre5500e5699 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 6100
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6100
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre5800e6099 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre5800e6099.doubleValue() > 0.00) {
@@ -23949,7 +23950,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoSequenciaTipoLancamentoEntre5800e6099 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 6200
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6200
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoContasContabilizadasComoPerdas != null && valorAcumuladoContasContabilizadasComoPerdas.doubleValue() > 0.00) {
 							recebimentoTipoTemp = new RecebimentoTipo();
@@ -23977,7 +23978,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorAcumuladoContasContabilizadasComoPerdas = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 6600
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6600
 						// [FS0005] - Verificar valor acumulado igual a zero
 						if (valorAcumuladoSequenciaTipoLancamentoEntre6300e6599 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre6300e6599.doubleValue() > 0.00) {
@@ -24027,97 +24028,97 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						// Reseta os valores dentro dos maps
-						// Seqüêncial de Tipo de Lançamento 1200
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1200
 						mapValorIRPagamentosClassificadosConta.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 1300
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1300
 						mapValorCSLLPagamentosClassificadosConta.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 1400
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1400
 						mapValorCOFINSPagamentosClassificadosConta.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 1500
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 1500
 						mapValorPISPASEPPagamentosClassificadosConta.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 2100
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2100
 						mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorPagamentoEmDuplicidade.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 2200
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2200
 						mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistente.put(categoria.getId(), BigDecimal.ZERO);
 
-						// Seqüêncial de Tipo de Lançamento 2210
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2210
 						mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteDebitoPrescrito.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 2220
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2220
 						mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteContaParcelada.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 2230
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2230
 						mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteContaCancelada.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 2240
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2240
 						mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteErroProcessamento.put(categoria.getId(), BigDecimal.ZERO);
 
 
-						// Seqüêncial de Tipo de Lançamento 2300
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2300
 						mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorValorNaoConfere.put(categoria.getId(), BigDecimal.ZERO);
 						mapValorDevolucaoDescontosPagamentoAVista.put(categoria.getId(), BigDecimal.ZERO);
 						mapValorDevolucaoDescontosCreditosARealizar.put(categoria.getId(), BigDecimal.ZERO);
 
-						// Seqüêncial de Tipo de Lançamento 2600
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2600
 						mapValorDevolucaoSituacaoAtualDevolucaoClassificada.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 2900
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 2900
 						mapValorDevolucaoNaoClassificadaSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 3000
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3000
 						mapValorDevolucaoNaoClassificadaSituacaoAtualGuiaDevolucaoNaoInformada.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 3100
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 3100
 						mapValorDevolucaoNaoClassificadaSituacaoAtualValorNaoConfere.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 4600
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4600
 						mapValorIRPagamentosContasEfetuadosMesesAterioresClassificadosMes.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 4700
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4700
 						mapValorCSLLPagamentosContasEfetuadosMesesAterioresClassificadosMes.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 4800
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4800
 						mapValorCOFINSPagamentosContasEfetuadosMesesAterioresClassificadosMes.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 4900
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4900
 						mapValorPISPASEPPagamentosContasEfetuadosMesesAterioresClassificadosMes.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 4610
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4610
 						mapValorIRPagamentosContasEfetuadosAte122012ClassificadosMes.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 4710
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4710
 						mapValorCSLLPagamentosContasEfetuadosAte122012ClassificadosMes.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 4810
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4810
 						mapValorCOFINSPagamentosContasEfetuadosAte122012ClassificadosMes.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 4910
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 4910
 						mapValorPISPASEPPagamentosContasEfetuadosAte122012ClassificadosMes.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 5800
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5800
 						mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorPagamentoEmDuplicidade.put(categoria.getId(),BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 5900
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5900
 						mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistente.put(categoria.getId(), BigDecimal.ZERO);
 
-						// Seqüêncial de Tipo de Lançamento 5910
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5910
 						mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteDebitoPrescrito.put(categoria.getId(),BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 5920
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5920
 						mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteContaParcelada.put(categoria.getId(),BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 5930
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5930
 						mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteContaCancelada.put(categoria.getId(),BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 5940
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 5940
 						mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteErroProcessamento.put(categoria.getId(),BigDecimal.ZERO);
 
-						// Seqüêncial de Tipo de Lançamento 6000
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6000
 						mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorValorNaoConfere.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 6200
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6200
 						mapValorImpostosPagamentosContaClassificadosNoMes_EfetuadosEmMesesAnteriores.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 6300
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6300
 						mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualPagamentoEmDuplicidade.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 6400
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6400
 						mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistente.put(categoria.getId(), BigDecimal.ZERO);
 
-						// Seqüêncial de Tipo de Lançamento 6410
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6410
 						mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteDebitoPrescrito.put(categoria.getId(),BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 6420
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6420
 						mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteContaParcelada.put(categoria.getId(),BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 6430
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6430
 						mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteContaCancelada.put(categoria.getId(),BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 6440
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6440
 						mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteErroProcessamento.put(categoria.getId(),BigDecimal.ZERO);
 
-						// Seqüêncial de Tipo de Lançamento 6500
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6500
 						mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualValorNaoConfere.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 6700
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6700
 						mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualPagamentoEmDuplicidadeNaoEncontrado.put(categoria.getId(),BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 6800
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6800
 						mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualGuiaDevolucaoNaoInformada.put(categoria.getId(), BigDecimal.ZERO);
-						// Seqüêncial de Tipo de Lançamento 6900
+						// Seqï¿½ï¿½ncial de Tipo de Lanï¿½amento 6900
 						mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualValorNaoConfere.put(categoria.getId(), BigDecimal.ZERO);
 
 						mapValorDevolucaoDescontosPagamentoAVistaCampanhaCrianca.put(categoria.getId(), BigDecimal.ZERO);
@@ -24541,8 +24542,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 
 	/**
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * Metodo responsável pela transferência das contas, guias de pagamento, pagamentos e devoluções para o histórico.
+	 * [UC0276] Encerrar Arrecadaï¿½ï¿½o do Mï¿½s
+	 * Metodo responsï¿½vel pela transferï¿½ncia das contas, guias de pagamento, pagamentos e devoluï¿½ï¿½es para o histï¿½rico.
 	 */
 	public void gerarHistoricoParaEncerrarArrecadacaoMes(Integer anoMesReferenciaArrecadacao, Integer idLocalidade,int idFuncionalidadeIniciada)
 			throws ControladorException {
@@ -24731,7 +24732,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 *
 	 * <Identificador e nome do caso de uso>
 	 *
@@ -24751,7 +24752,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		// -------------------------
 		//
-		// Registrar o início do processamento da Unidade de
+		// Registrar o inï¿½cio do processamento da Unidade de
 		// Processamento
 		// do Batch
 		//
@@ -24780,7 +24781,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 *
 	 * <Identificador e nome do caso de uso>
 	 *
@@ -24835,7 +24836,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			devolucoesClassificadas = null;
 		}
-		/** Fim Devoluções Classificadas */
+		/** Fim Devoluï¿½ï¿½es Classificadas */
 	}
 
 	protected void gerarHistoricoParaEncerrarArrecadacaoPagamento(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws ErroRepositorioException,
@@ -24870,7 +24871,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer idSetorComercial) throws ErroRepositorioException,
 			ControladorException {
 		/** Contas */
-		// Variáveis para a paginação
+		// Variï¿½veis para a paginaï¿½ï¿½o
 		boolean flagTerminou = false;
 		final int quantidadeRegistros = 100;
 		int numeroIndice = 0; // O indice nao esta sendo incrementado por que os objetos estao
@@ -24914,9 +24915,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Envia coleção de guias de pagamento para o histórico
+	 * Envia coleï¿½ï¿½o de guias de pagamento para o histï¿½rico
 	 *
-	 * [UC0276] Encerrar Arrecadação do Mês
+	 * [UC0276] Encerrar Arrecadaï¿½ï¿½o do Mï¿½s
 	 *
 	 * @author Pedro Alexandre
 	 * @date 12/02/2008
@@ -24969,7 +24970,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 *
 	 * <Identificador e nome do caso de uso>
 	 *
@@ -25025,13 +25026,13 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do Imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do Imï¿½vel pesquisarPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 12/12/06
 	 * 
 	 * @param FiltroPagamento
@@ -25095,12 +25096,12 @@ public class ControladorArrecadacao extends ControladorComum {
 						conta.setId((Integer) dadosPagamento[1]);
 					}
 
-					// Ano Mês Referência da Conta
+					// Ano Mï¿½s Referï¿½ncia da Conta
 					if (dadosPagamento[2] != null) {
 						conta.setReferencia((Integer) dadosPagamento[2]);
 					}
 
-					// Valor da Água da Conta
+					// Valor da ï¿½gua da Conta
 					if (dadosPagamento[3] != null) {
 						conta.setValorAgua((BigDecimal) dadosPagamento[3]);
 					}
@@ -25110,12 +25111,12 @@ public class ControladorArrecadacao extends ControladorComum {
 						conta.setValorEsgoto((BigDecimal) dadosPagamento[4]);
 					}
 
-					// Valor de Débitos
+					// Valor de Dï¿½bitos
 					if (dadosPagamento[5] != null) {
 						conta.setDebitos((BigDecimal) dadosPagamento[5]);
 					}
 
-					// Valor dos Créditos
+					// Valor dos Crï¿½ditos
 					if (dadosPagamento[6] != null) {
 						conta.setValorCreditos((BigDecimal) dadosPagamento[6]);
 					}
@@ -25132,7 +25133,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamento.setDataPagamento((Date) dadosPagamento[7]);
 					}
 
-					// Ano Mês do Pagamento
+					// Ano Mï¿½s do Pagamento
 					if (dadosPagamento[8] != null) {
 						pagamento
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[8]);
@@ -25146,14 +25147,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAtual = null;
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[10] != null) {
 						pagamentoSituacaoAtual = new PagamentoSituacao();
 						pagamentoSituacaoAtual
 								.setId((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[11] != null) {
 						pagamentoSituacaoAtual
 								.setDescricaoAbreviada((String) dadosPagamento[11]);
@@ -25163,14 +25164,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAnterior = null;
 
-					// Id da Situação Anterior do Pagamento
+					// Id da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[12] != null) {
 						pagamentoSituacaoAnterior = new PagamentoSituacao();
 						pagamentoSituacaoAnterior
 								.setId((Integer) dadosPagamento[12]);
 					}
 
-					// Descrição da Situação Anterior do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[13] != null) {
 						pagamentoSituacaoAnterior
 								.setDescricaoAbreviada((String) dadosPagamento[13]);
@@ -25186,7 +25187,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamento.setDocumentoTipo(documentoTipo);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[15] != null) {
 						Imovel imovel = new Imovel();
 						imovel.setId((Integer) dadosPagamento[15]);
@@ -25208,13 +25209,13 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do Imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do Imï¿½vel pesquisarPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 12/12/06
 	 * 
 	 * @param FiltroPagamento
@@ -25316,13 +25317,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					DebitoTipo debitoTipoPagamento = null;
 
-					// Id do Tipo de Débito do Pagamento
+					// Id do Tipo de Dï¿½bito do Pagamento
 					if (dadosPagamento[8] != null) {
 						debitoTipoPagamento = new DebitoTipo();
 						debitoTipoPagamento.setId((Integer) dadosPagamento[8]);
 					}
 
-					// Descrição do Tipo de Débito do Pagamento
+					// Descriï¿½ï¿½o do Tipo de Dï¿½bito do Pagamento
 					if (dadosPagamento[9] != null) {
 						debitoTipoPagamento
 								.setDescricao((String) dadosPagamento[9]);
@@ -25338,14 +25339,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAtual = null;
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[11] != null) {
 						pagamentoSituacaoAtual = new PagamentoSituacao();
 						pagamentoSituacaoAtual
 								.setId((Integer) dadosPagamento[11]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[12] != null) {
 						pagamentoSituacaoAtual
 								.setDescricaoAbreviada((String) dadosPagamento[12]);
@@ -25355,14 +25356,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAnterior = null;
 
-					// Id da Situação Anterior do Pagamento
+					// Id da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[13] != null) {
 						pagamentoSituacaoAnterior = new PagamentoSituacao();
 						pagamentoSituacaoAnterior
 								.setId((Integer) dadosPagamento[13]);
 					}
 
-					// Descrição da Situação Anterior do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[14] != null) {
 						pagamentoSituacaoAnterior
 								.setDescricaoAbreviada((String) dadosPagamento[14]);
@@ -25378,7 +25379,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamento.setDocumentoTipo(documentoTipo);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[16] != null) {
 						Imovel imovel = new Imovel();
 						imovel.setId((Integer) dadosPagamento[16]);
@@ -25400,13 +25401,13 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do Imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do Imï¿½vel pesquisarPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 12/12/06
 	 * 
 	 * @param FiltroPagamento
@@ -25465,32 +25466,32 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					DebitoACobrar debitoACobrar = null;
 
-					// Id do Imóvel do Pagamento
+					// Id do Imï¿½vel do Pagamento
 					if (dadosPagamento[1] != null) {
 						Imovel imovelPagamento = new Imovel();
 						imovelPagamento.setId((Integer) dadosPagamento[1]);
 						pagamento.setImovel(imovelPagamento);
 					}
 
-					// Id do Débito a Cobrar
+					// Id do Dï¿½bito a Cobrar
 					if (dadosPagamento[2] != null) {
 						debitoACobrar = new DebitoACobrar();
 						debitoACobrar.setId((Integer) dadosPagamento[2]);
 					}
 
-					// Valor do Débito
+					// Valor do Dï¿½bito
 					if (dadosPagamento[3] != null) {
 						debitoACobrar
 								.setValorDebito((BigDecimal) dadosPagamento[3]);
 					}
 
-					// Número de Prestações Cobradas
+					// Nï¿½mero de Prestaï¿½ï¿½es Cobradas
 					if (dadosPagamento[4] != null) {
 						debitoACobrar
 								.setNumeroPrestacaoCobradas((Short) dadosPagamento[4]);
 					}
 
-					// Número de Prestações Débito
+					// Nï¿½mero de Prestaï¿½ï¿½es Dï¿½bito
 					if (dadosPagamento[5] != null) {
 						debitoACobrar
 								.setNumeroPrestacaoDebito((Short) dadosPagamento[5]);
@@ -25501,7 +25502,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamento.setDataPagamento((Date) dadosPagamento[6]);
 					}
 
-					// Ano Mês do Pagamento
+					// Ano Mï¿½s do Pagamento
 					if (dadosPagamento[7] != null) {
 						pagamento
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[7]);
@@ -25509,13 +25510,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					DebitoTipo debitoTipoDebito = null;
 
-					// Id do Tipo de Débito do Débito a Cobrar
+					// Id do Tipo de Dï¿½bito do Dï¿½bito a Cobrar
 					if (dadosPagamento[8] != null) {
 						debitoTipoDebito = new DebitoTipo();
 						debitoTipoDebito.setId((Integer) dadosPagamento[8]);
 					}
 
-					// Descrição do Tipo de Débito do Débito a Cobrar
+					// Descriï¿½ï¿½o do Tipo de Dï¿½bito do Dï¿½bito a Cobrar
 					if (dadosPagamento[9] != null) {
 						debitoTipoDebito
 								.setDescricao((String) dadosPagamento[9]);
@@ -25525,13 +25526,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					DebitoTipo debitoTipoPagamento = null;
 
-					// Id do Tipo de Débito do Pagamento
+					// Id do Tipo de Dï¿½bito do Pagamento
 					if (dadosPagamento[10] != null) {
 						debitoTipoPagamento = new DebitoTipo();
 						debitoTipoPagamento.setId((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição do Tipo de Débito do Pagamento
+					// Descriï¿½ï¿½o do Tipo de Dï¿½bito do Pagamento
 					if (dadosPagamento[11] != null) {
 						debitoTipoPagamento
 								.setDescricao((String) dadosPagamento[11]);
@@ -25547,14 +25548,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAtual = null;
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[13] != null) {
 						pagamentoSituacaoAtual = new PagamentoSituacao();
 						pagamentoSituacaoAtual
 								.setId((Integer) dadosPagamento[13]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[14] != null) {
 						pagamentoSituacaoAtual
 								.setDescricaoAbreviada((String) dadosPagamento[14]);
@@ -25564,14 +25565,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAnterior = null;
 
-					// Id da Situação Anterior do Pagamento
+					// Id da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[15] != null) {
 						pagamentoSituacaoAnterior = new PagamentoSituacao();
 						pagamentoSituacaoAnterior
 								.setId((Integer) dadosPagamento[15]);
 					}
 
-					// Descrição da Situação Anterior do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[16] != null) {
 						pagamentoSituacaoAnterior
 								.setDescricaoAbreviada((String) dadosPagamento[16]);
@@ -25587,7 +25588,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamento.setDocumentoTipo(documentoTipo);
 					}
 
-					// Id do Imóvel do Débito a Cobrar
+					// Id do Imï¿½vel do Dï¿½bito a Cobrar
 					if (dadosPagamento[18] != null) {
 						Imovel imovelDebito = new Imovel();
 						imovelDebito.setId((Integer) dadosPagamento[18]);
@@ -25627,11 +25628,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do Imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do Imï¿½vel pesquisarPagamento
 	 * 
 	 * @author Roberta Costa
 	 * @date 12/06/06
@@ -25670,11 +25671,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do Imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do Imï¿½vel pesquisarPagamento
 	 * 
 	 * @author Roberta Costa
 	 * @date 12/06/06
@@ -25713,11 +25714,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do Imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do Imï¿½vel pesquisarPagamento
 	 * 
 	 * @author Roberta Costa
 	 * @date 12/06/06
@@ -25779,7 +25780,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					.iterator();
 			while (iteratorColecaoArrecadacaoDadosDiarios.hasNext()) {
 
-				// Obtém os dados do crédito realizado
+				// Obtï¿½m os dados do crï¿½dito realizado
 				Object[] guiaArray = (Object[]) iteratorColecaoArrecadacaoDadosDiarios
 						.next();
 
@@ -25804,7 +25805,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					if ((Integer) guiaArray[2] != null) {
-						// Ano Mês referencia
+						// Ano Mï¿½s referencia
 						arrecadacaoDadosDiarios
 								.setAnoMesReferenciaArrecadacao((Integer) guiaArray[2]);
 					}
@@ -25826,7 +25827,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorPagamentos((BigDecimal) guiaArray[1]);
 					}
 					if ((Integer) guiaArray[2] != null) {
-						// Ano Mês referencia
+						// Ano Mï¿½s referencia
 						arrecadacaoDadosDiarios
 								.setAnoMesReferenciaArrecadacao((Integer) guiaArray[2]);
 					}
@@ -25843,7 +25844,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					if ((Integer) guiaArray[2] != null) {
-						// Ano Mês referencia
+						// Ano Mï¿½s referencia
 						arrecadacaoDadosDiarios
 								.setAnoMesReferenciaArrecadacao((Integer) guiaArray[2]);
 					}
@@ -25860,7 +25861,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						arrecadacaoDadosDiarios.setLocalidade(localidade);
 					}
 					if ((BigDecimal) guiaArray[1] != null) {
-						// Ano Mês referencia
+						// Ano Mï¿½s referencia
 						arrecadacaoDadosDiarios
 								.setValorPagamentos((BigDecimal) guiaArray[1]);
 					}
@@ -25872,7 +25873,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setGerenciaRegional(gerenciaRegional);
 					}
 					if ((Integer) guiaArray[5] != null) {
-						// Ano Mês referencia
+						// Ano Mï¿½s referencia
 						arrecadacaoDadosDiarios
 								.setAnoMesReferenciaArrecadacao((Integer) guiaArray[5]);
 					}
@@ -25891,7 +25892,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * [UC0319] Filtrar Aviso Bancario
 	 * 
 	 * @param avisoBancarioHelper
-	 * @return Coleção de DebitoAutomaticoMovimento
+	 * @return Coleï¿½ï¿½o de DebitoAutomaticoMovimento
 	 * @throws ErroRepositorioException
 	 */
 
@@ -26064,13 +26065,13 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
 	 * Pesquisa os pagamentos do Cliente
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 21/12/06
 	 * 
 	 * @return Collection<Pagamento>
@@ -26127,7 +26128,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamento.setId((Integer) dadosPagamento[0]);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[1] != null) {
 						Imovel imovel = new Imovel();
 						imovel.setId((Integer) dadosPagamento[1]);
@@ -26143,7 +26144,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					Arrecadador arrecadador = null;
 
-					// Código Agente do Arrecadador
+					// Cï¿½digo Agente do Arrecadador
 					if (dadosPagamento[3] != null) {
 						arrecadador = new Arrecadador();
 						arrecadador.setCodigoAgente((Short) dadosPagamento[3]);
@@ -26151,13 +26152,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					AvisoBancario avisoBancario = new AvisoBancario();
 
-					// Data do Lançamento do Aviso Bancário
+					// Data do Lanï¿½amento do Aviso Bancï¿½rio
 					if (dadosPagamento[4] != null) {
 						avisoBancario
 								.setDataLancamento((Date) dadosPagamento[4]);
 					}
 
-					// Número Sequencial do Aviso Bancário
+					// Nï¿½mero Sequencial do Aviso Bancï¿½rio
 					if (dadosPagamento[5] != null) {
 						avisoBancario
 								.setNumeroSequencial((Short) dadosPagamento[5]);
@@ -26174,7 +26175,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						documentoTipo.setId((Integer) dadosPagamento[6]);
 					}
 
-					// Descrição do Tipo de Documento
+					// Descriï¿½ï¿½o do Tipo de Documento
 					if (dadosPagamento[7] != null) {
 						documentoTipo
 								.setDescricaoDocumentoTipo((String) dadosPagamento[7]);
@@ -26195,14 +26196,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAtual = null;
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[10] != null) {
 						pagamentoSituacaoAtual = new PagamentoSituacao();
 						pagamentoSituacaoAtual
 								.setId((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[11] != null) {
 						pagamentoSituacaoAtual
 								.setDescricaoAbreviada((String) dadosPagamento[11]);
@@ -26212,14 +26213,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAnterior = null;
 
-					// Id da Situação Anterior do Pagamento
+					// Id da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[12] != null) {
 						pagamentoSituacaoAnterior = new PagamentoSituacao();
 						pagamentoSituacaoAnterior
 								.setId((Integer) dadosPagamento[12]);
 					}
 
-					// Descrição da Situação Anterior do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[13] != null) {
 						pagamentoSituacaoAnterior
 								.setDescricaoAbreviada((String) dadosPagamento[13]);
@@ -26247,7 +26248,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * 
 	 * Pesquisa os pagamentos do Cliente
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 21/12/06
 	 * 
 	 * @return Collection<Pagamento>
@@ -26469,10 +26470,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/2006
 	 * 
 	 * @param FiltroPagamento
@@ -26521,7 +26522,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoRelatorioHelper pagamentoRelatorioHelper = new PagamentoRelatorioHelper();
 
-					// Id e Descrição da Localidade
+					// Id e Descriï¿½ï¿½o da Localidade
 					if (dadosPagamento[1] != null) { // 1,2
 						pagamentoRelatorioHelper
 								.setIdLocalidade((Integer) dadosPagamento[1]);
@@ -26529,7 +26530,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDescricaoLocalidade((String) dadosPagamento[2]);
 					}
 
-					// Id e Nome da Gerência Regional
+					// Id e Nome da Gerï¿½ncia Regional
 					if (dadosPagamento[3] != null) { // 3,4
 						pagamentoRelatorioHelper
 								.setIdGerenciaRegional((Integer) dadosPagamento[3]);
@@ -26537,7 +26538,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setNomeGerenciaRegional((String) dadosPagamento[4]);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[5] != null) { // 5
 						pagamentoRelatorioHelper
 								.setIdImovel((Integer) dadosPagamento[5]);
@@ -26563,19 +26564,19 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDataPagamento((Date) dadosPagamento[9]);
 					}
 
-					// Ano Mês Referência do Pagamento
+					// Ano Mï¿½s Referï¿½ncia do Pagamento
 					if (dadosPagamento[10] != null) { // 10
 						pagamentoRelatorioHelper
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição Tipo Débito
+					// Descriï¿½ï¿½o Tipo Dï¿½bito
 					if (dadosPagamento[11] != null) { // 11
 						pagamentoRelatorioHelper
 								.setDescricaoTipoDebito((String) dadosPagamento[11]);
 					}
 
-					// Valor de Água da Conta
+					// Valor de ï¿½gua da Conta
 					if (dadosPagamento[12] != null) { // 12
 						pagamentoRelatorioHelper
 								.setValorAgua((BigDecimal) dadosPagamento[12]);
@@ -26587,31 +26588,31 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorEsgoto((BigDecimal) dadosPagamento[13]);
 					}
 
-					// Valor dos Débitos da Conta
+					// Valor dos Dï¿½bitos da Conta
 					if (dadosPagamento[14] != null) { // 14
 						pagamentoRelatorioHelper
 								.setDebitos((BigDecimal) dadosPagamento[14]);
 					}
 
-					// Valor dos Créditos da Conta
+					// Valor dos Crï¿½ditos da Conta
 					if (dadosPagamento[15] != null) { // 15
 						pagamentoRelatorioHelper
 								.setDebitos((BigDecimal) dadosPagamento[15]);
 					}
 
-					// Valor do Débito do Débito a Cobrar
+					// Valor do Dï¿½bito do Dï¿½bito a Cobrar
 					if (dadosPagamento[16] != null) { // 16
 						pagamentoRelatorioHelper
 								.setValorDebito((BigDecimal) dadosPagamento[16]);
 					}
 
-					// Número de Prestações do Débito
+					// Nï¿½mero de Prestaï¿½ï¿½es do Dï¿½bito
 					if (dadosPagamento[17] != null) { // 17
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoDebito((Short) dadosPagamento[17]);
 					}
 
-					// Número de Prestações Cobradas
+					// Nï¿½mero de Prestaï¿½ï¿½es Cobradas
 					if (dadosPagamento[18] != null) { // 18
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoCobradas((Short) dadosPagamento[18]);
@@ -26629,13 +26630,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorPagamento((BigDecimal) dadosPagamento[20]);
 					}
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[21] != null) { // 21
 						pagamentoRelatorioHelper
 								.setIdSituacaoPagamentoAtual((Integer) dadosPagamento[21]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[22] != null) { // 22
 						pagamentoRelatorioHelper
 								.setDescricaoSituacaoPagamentoAtual((String) dadosPagamento[22]);
@@ -26663,10 +26664,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/2006
 	 * 
 	 * @param FiltroPagamento
@@ -26697,7 +26698,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoRelatorioHelper pagamentoRelatorioHelper = new PagamentoRelatorioHelper();
 
-					// Id e Descrição da Localidade
+					// Id e Descriï¿½ï¿½o da Localidade
 					if (dadosPagamento[1] != null) { // 1,2
 						pagamentoRelatorioHelper
 								.setIdLocalidade((Integer) dadosPagamento[1]);
@@ -26705,7 +26706,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDescricaoLocalidade((String) dadosPagamento[2]);
 					}
 
-					// Id e Nome da Gerência Regional
+					// Id e Nome da Gerï¿½ncia Regional
 					if (dadosPagamento[3] != null) { // 3,4
 						pagamentoRelatorioHelper
 								.setIdGerenciaRegional((Integer) dadosPagamento[3]);
@@ -26713,7 +26714,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setNomeGerenciaRegional((String) dadosPagamento[4]);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[5] != null) { // 5
 						pagamentoRelatorioHelper
 								.setIdImovel((Integer) dadosPagamento[5]);
@@ -26739,19 +26740,19 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDataPagamento((Date) dadosPagamento[9]);
 					}
 
-					// Ano Mês Referência do Pagamento
+					// Ano Mï¿½s Referï¿½ncia do Pagamento
 					if (dadosPagamento[10] != null) { // 10
 						pagamentoRelatorioHelper
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição Tipo Débito
+					// Descriï¿½ï¿½o Tipo Dï¿½bito
 					if (dadosPagamento[11] != null) { // 11
 						pagamentoRelatorioHelper
 								.setDescricaoTipoDebito((String) dadosPagamento[11]);
 					}
 
-					// Valor de Água da Conta
+					// Valor de ï¿½gua da Conta
 					if (dadosPagamento[12] != null) { // 12
 						pagamentoRelatorioHelper
 								.setValorAgua((BigDecimal) dadosPagamento[12]);
@@ -26763,31 +26764,31 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorEsgoto((BigDecimal) dadosPagamento[13]);
 					}
 
-					// Valor dos Débitos da Conta
+					// Valor dos Dï¿½bitos da Conta
 					if (dadosPagamento[14] != null) { // 14
 						pagamentoRelatorioHelper
 								.setDebitos((BigDecimal) dadosPagamento[14]);
 					}
 
-					// Valor dos Créditos da Conta
+					// Valor dos Crï¿½ditos da Conta
 					if (dadosPagamento[15] != null) { // 15
 						pagamentoRelatorioHelper
 								.setValorCreditos((BigDecimal) dadosPagamento[15]);
 					}
 
-					// Valor do Débito do Débito a Cobrar
+					// Valor do Dï¿½bito do Dï¿½bito a Cobrar
 					if (dadosPagamento[16] != null) { // 16
 						pagamentoRelatorioHelper
 								.setValorDebito((BigDecimal) dadosPagamento[16]);
 					}
 
-					// Número de Prestações do Débito
+					// Nï¿½mero de Prestaï¿½ï¿½es do Dï¿½bito
 					if (dadosPagamento[17] != null) { // 17
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoDebito((Short) dadosPagamento[17]);
 					}
 
-					// Número de Prestações Cobradas
+					// Nï¿½mero de Prestaï¿½ï¿½es Cobradas
 					if (dadosPagamento[18] != null) { // 18
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoCobradas((Short) dadosPagamento[18]);
@@ -26805,13 +26806,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorPagamento((BigDecimal) dadosPagamento[20]);
 					}
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[21] != null) { // 21
 						pagamentoRelatorioHelper
 								.setIdSituacaoPagamentoAtual((Integer) dadosPagamento[21]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[22] != null) { // 22
 						pagamentoRelatorioHelper
 								.setDescricaoSituacaoPagamentoAtual((String) dadosPagamento[22]);
@@ -26823,13 +26824,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setIdDocumentoTipo((Integer) dadosPagamento[23]);
 					}
 
-					// Descrição do Tipo de Documento
+					// Descriï¿½ï¿½o do Tipo de Documento
 					if (dadosPagamento[24] != null) { // 24
 						pagamentoRelatorioHelper
 								.setDescricaoDocumentoTipo((String) dadosPagamento[24]);
 					}
 
-					// Descrição da Situação Anterior do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[25] != null) { // 25
 						pagamentoRelatorioHelper
 								.setDescricaoSituacaoPagamentoAnterior((String) dadosPagamento[25]);
@@ -26856,10 +26857,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * Este caso de uso cria um sql que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um sql que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 12/12/2006
 	 * 
 	 * @param FiltroPagamento
@@ -26909,7 +26910,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoRelatorioHelper pagamentoRelatorioHelper = new PagamentoRelatorioHelper();
 
-					// Id e Descrição da Localidade
+					// Id e Descriï¿½ï¿½o da Localidade
 					if (dadosPagamento[1] != null) { // 1,2
 						pagamentoRelatorioHelper
 								.setIdLocalidade((Integer) dadosPagamento[1]);
@@ -26917,7 +26918,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDescricaoLocalidade((String) dadosPagamento[2]);
 					}
 
-					// Id e Nome da Gerência Regional
+					// Id e Nome da Gerï¿½ncia Regional
 					if (dadosPagamento[3] != null) { // 3,4
 						pagamentoRelatorioHelper
 								.setIdGerenciaRegional((Integer) dadosPagamento[3]);
@@ -26925,7 +26926,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setNomeGerenciaRegional((String) dadosPagamento[4]);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[5] != null) { // 5
 						pagamentoRelatorioHelper
 								.setIdImovel((Integer) dadosPagamento[5]);
@@ -26951,13 +26952,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDataPagamento((Date) dadosPagamento[9]);
 					}
 
-					// Ano Mês Referência do Pagamento
+					// Ano Mï¿½s Referï¿½ncia do Pagamento
 					if (dadosPagamento[10] != null) { // 10
 						pagamentoRelatorioHelper
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição Tipo Débito
+					// Descriï¿½ï¿½o Tipo Dï¿½bito
 					if (dadosPagamento[11] != null) { // 11
 						pagamentoRelatorioHelper
 								.setDescricaoTipoDebito((String) dadosPagamento[11]);
@@ -26975,13 +26976,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorPagamento((BigDecimal) dadosPagamento[13]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[14] != null) { // 14
 						pagamentoRelatorioHelper
 								.setIdSituacaoPagamentoAtual((Integer) dadosPagamento[14]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[15] != null) { // 15
 						pagamentoRelatorioHelper
 								.setDescricaoSituacaoPagamentoAtual((String) dadosPagamento[15]);
@@ -27009,10 +27010,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/2006
 	 * 
 	 * @param FiltroPagamento
@@ -27062,7 +27063,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoRelatorioHelper pagamentoRelatorioHelper = new PagamentoRelatorioHelper();
 
-					// Id e Descrição da Localidade
+					// Id e Descriï¿½ï¿½o da Localidade
 					if (dadosPagamento[1] != null) { // 1,2
 						pagamentoRelatorioHelper
 								.setIdLocalidade((Integer) dadosPagamento[1]);
@@ -27070,7 +27071,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDescricaoLocalidade((String) dadosPagamento[2]);
 					}
 
-					// Id e Nome da Gerência Regional
+					// Id e Nome da Gerï¿½ncia Regional
 					if (dadosPagamento[3] != null) { // 3,4
 						pagamentoRelatorioHelper
 								.setIdGerenciaRegional((Integer) dadosPagamento[3]);
@@ -27078,7 +27079,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setNomeGerenciaRegional((String) dadosPagamento[4]);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[5] != null) { // 5
 						pagamentoRelatorioHelper
 								.setIdImovel((Integer) dadosPagamento[5]);
@@ -27104,19 +27105,19 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDataPagamento((Date) dadosPagamento[9]);
 					}
 
-					// Ano Mês Referência do Pagamento
+					// Ano Mï¿½s Referï¿½ncia do Pagamento
 					if (dadosPagamento[10] != null) { // 10
 						pagamentoRelatorioHelper
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição Tipo Débito
+					// Descriï¿½ï¿½o Tipo Dï¿½bito
 					if (dadosPagamento[11] != null) { // 11
 						pagamentoRelatorioHelper
 								.setDescricaoTipoDebito((String) dadosPagamento[11]);
 					}
 
-					// Valor de Água da Conta
+					// Valor de ï¿½gua da Conta
 					if (dadosPagamento[12] != null) { // 12
 						pagamentoRelatorioHelper
 								.setValorAgua((BigDecimal) dadosPagamento[12]);
@@ -27128,31 +27129,31 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorEsgoto((BigDecimal) dadosPagamento[13]);
 					}
 
-					// Valor dos Débitos da Conta
+					// Valor dos Dï¿½bitos da Conta
 					if (dadosPagamento[14] != null) { // 14
 						pagamentoRelatorioHelper
 								.setDebitos((BigDecimal) dadosPagamento[14]);
 					}
 
-					// Valor dos Créditos da Conta
+					// Valor dos Crï¿½ditos da Conta
 					if (dadosPagamento[15] != null) { // 15
 						pagamentoRelatorioHelper
 								.setValorCreditos((BigDecimal) dadosPagamento[15]);
 					}
 
-					// Valor do Débito do Débito a Cobrar
+					// Valor do Dï¿½bito do Dï¿½bito a Cobrar
 					if (dadosPagamento[16] != null) { // 16
 						pagamentoRelatorioHelper
 								.setValorDebito((BigDecimal) dadosPagamento[16]);
 					}
 
-					// Número de Prestações do Débito
+					// Nï¿½mero de Prestaï¿½ï¿½es do Dï¿½bito
 					if (dadosPagamento[17] != null) { // 17
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoDebito((Short) dadosPagamento[17]);
 					}
 
-					// Número de Prestações Cobradas
+					// Nï¿½mero de Prestaï¿½ï¿½es Cobradas
 					if (dadosPagamento[18] != null) { // 18
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoCobradas((Short) dadosPagamento[18]);
@@ -27170,13 +27171,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorPagamento((BigDecimal) dadosPagamento[20]);
 					}
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[21] != null) { // 21
 						pagamentoRelatorioHelper
 								.setIdSituacaoPagamentoAtual((Integer) dadosPagamento[21]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[22] != null) { // 22
 						pagamentoRelatorioHelper
 								.setDescricaoSituacaoPagamentoAtual((String) dadosPagamento[22]);
@@ -27204,10 +27205,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/2006
 	 * 
 	 * @param FiltroPagamento
@@ -27258,7 +27259,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoRelatorioHelper pagamentoRelatorioHelper = new PagamentoRelatorioHelper();
 
-					// Id e Descrição da Localidade
+					// Id e Descriï¿½ï¿½o da Localidade
 					if (dadosPagamento[1] != null) { // 1,2
 						pagamentoRelatorioHelper
 								.setIdLocalidade((Integer) dadosPagamento[1]);
@@ -27266,7 +27267,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDescricaoLocalidade((String) dadosPagamento[2]);
 					}
 
-					// Id e Nome da Gerência Regional
+					// Id e Nome da Gerï¿½ncia Regional
 					if (dadosPagamento[3] != null) { // 3,4
 						pagamentoRelatorioHelper
 								.setIdGerenciaRegional((Integer) dadosPagamento[3]);
@@ -27274,7 +27275,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setNomeGerenciaRegional((String) dadosPagamento[4]);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[5] != null) { // 5
 						pagamentoRelatorioHelper
 								.setIdImovel((Integer) dadosPagamento[5]);
@@ -27300,19 +27301,19 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDataPagamento((Date) dadosPagamento[9]);
 					}
 
-					// Ano Mês Referência do Pagamento
+					// Ano Mï¿½s Referï¿½ncia do Pagamento
 					if (dadosPagamento[10] != null) { // 10
 						pagamentoRelatorioHelper
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição Tipo Débito
+					// Descriï¿½ï¿½o Tipo Dï¿½bito
 					if (dadosPagamento[11] != null) { // 11
 						pagamentoRelatorioHelper
 								.setDescricaoTipoDebito((String) dadosPagamento[11]);
 					}
 
-					// Valor de Água da Conta
+					// Valor de ï¿½gua da Conta
 					if (dadosPagamento[12] != null) { // 12
 						pagamentoRelatorioHelper
 								.setValorAgua((BigDecimal) dadosPagamento[12]);
@@ -27324,31 +27325,31 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorEsgoto((BigDecimal) dadosPagamento[13]);
 					}
 
-					// Valor dos Débitos da Conta
+					// Valor dos Dï¿½bitos da Conta
 					if (dadosPagamento[14] != null) { // 14
 						pagamentoRelatorioHelper
 								.setDebitos((BigDecimal) dadosPagamento[14]);
 					}
 
-					// Valor dos Créditos da Conta
+					// Valor dos Crï¿½ditos da Conta
 					if (dadosPagamento[15] != null) { // 15
 						pagamentoRelatorioHelper
 								.setDebitos((BigDecimal) dadosPagamento[15]);
 					}
 
-					// Valor do Débito do Débito a Cobrar
+					// Valor do Dï¿½bito do Dï¿½bito a Cobrar
 					if (dadosPagamento[16] != null) { // 16
 						pagamentoRelatorioHelper
 								.setValorDebito((BigDecimal) dadosPagamento[16]);
 					}
 
-					// Número de Prestações do Débito
+					// Nï¿½mero de Prestaï¿½ï¿½es do Dï¿½bito
 					if (dadosPagamento[17] != null) { // 17
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoDebito((Short) dadosPagamento[17]);
 					}
 
-					// Número de Prestações Cobradas
+					// Nï¿½mero de Prestaï¿½ï¿½es Cobradas
 					if (dadosPagamento[18] != null) { // 18
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoCobradas((Short) dadosPagamento[18]);
@@ -27366,13 +27367,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorPagamento((BigDecimal) dadosPagamento[20]);
 					}
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[21] != null) { // 21
 						pagamentoRelatorioHelper
 								.setIdSituacaoPagamentoAtual((Integer) dadosPagamento[21]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[22] != null) { // 22
 						pagamentoRelatorioHelper
 								.setDescricaoSituacaoPagamentoAtual((String) dadosPagamento[22]);
@@ -27400,10 +27401,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 12/12/2006
 	 * 
 	 * @return Collection
@@ -27452,7 +27453,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoRelatorioHelper pagamentoRelatorioHelper = new PagamentoRelatorioHelper();
 
-					// Id e Descrição da Localidade
+					// Id e Descriï¿½ï¿½o da Localidade
 					if (dadosPagamento[1] != null) { // 1,2
 						pagamentoRelatorioHelper
 								.setIdLocalidade((Integer) dadosPagamento[1]);
@@ -27460,7 +27461,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDescricaoLocalidade((String) dadosPagamento[2]);
 					}
 
-					// Id e Nome da Gerência Regional
+					// Id e Nome da Gerï¿½ncia Regional
 					if (dadosPagamento[3] != null) { // 3,4
 						pagamentoRelatorioHelper
 								.setIdGerenciaRegional((Integer) dadosPagamento[3]);
@@ -27468,7 +27469,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setNomeGerenciaRegional((String) dadosPagamento[4]);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[5] != null) { // 5
 						pagamentoRelatorioHelper
 								.setIdImovel((Integer) dadosPagamento[5]);
@@ -27494,19 +27495,19 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDataPagamento((Date) dadosPagamento[9]);
 					}
 
-					// Ano Mês Referência do Pagamento
+					// Ano Mï¿½s Referï¿½ncia do Pagamento
 					if (dadosPagamento[10] != null) { // 10
 						pagamentoRelatorioHelper
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição Tipo Débito
+					// Descriï¿½ï¿½o Tipo Dï¿½bito
 					if (dadosPagamento[11] != null) { // 11
 						pagamentoRelatorioHelper
 								.setDescricaoTipoDebito((String) dadosPagamento[11]);
 					}
 
-					// Valor de Água da Conta
+					// Valor de ï¿½gua da Conta
 					if (dadosPagamento[12] != null) { // 12
 						pagamentoRelatorioHelper
 								.setValorAgua((BigDecimal) dadosPagamento[12]);
@@ -27518,31 +27519,31 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorEsgoto((BigDecimal) dadosPagamento[13]);
 					}
 
-					// Valor dos Débitos da Conta
+					// Valor dos Dï¿½bitos da Conta
 					if (dadosPagamento[14] != null) { // 14
 						pagamentoRelatorioHelper
 								.setDebitos((BigDecimal) dadosPagamento[14]);
 					}
 
-					// Valor dos Créditos da Conta
+					// Valor dos Crï¿½ditos da Conta
 					if (dadosPagamento[15] != null) { // 15
 						pagamentoRelatorioHelper
 								.setValorCreditos((BigDecimal) dadosPagamento[15]);
 					}
 
-					// Valor do Débito do Débito a Cobrar
+					// Valor do Dï¿½bito do Dï¿½bito a Cobrar
 					if (dadosPagamento[16] != null) { // 16
 						pagamentoRelatorioHelper
 								.setValorDebito((BigDecimal) dadosPagamento[16]);
 					}
 
-					// Número de Prestações do Débito
+					// Nï¿½mero de Prestaï¿½ï¿½es do Dï¿½bito
 					if (dadosPagamento[17] != null) { // 17
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoDebito((Short) dadosPagamento[17]);
 					}
 
-					// Número de Prestações Cobradas
+					// Nï¿½mero de Prestaï¿½ï¿½es Cobradas
 					if (dadosPagamento[18] != null) { // 18
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoCobradas((Short) dadosPagamento[18]);
@@ -27560,13 +27561,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorPagamento((BigDecimal) dadosPagamento[20]);
 					}
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[21] != null) { // 21
 						pagamentoRelatorioHelper
 								.setIdSituacaoPagamentoAtual((Integer) dadosPagamento[21]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[22] != null) { // 22
 						pagamentoRelatorioHelper
 								.setDescricaoSituacaoPagamentoAtual((String) dadosPagamento[22]);
@@ -27603,7 +27604,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * 
 	 * Pesquisa os pagamentos do Imovel pesquisarPagamentoImovelParaPaginacao
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/06
 	 * 
 	 * @return Collection<Pagamento>
@@ -27644,7 +27645,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * 
 	 * Pesquisa os pagamentos do Imovel pesquisarPagamentoImovelParaPaginacao
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/06
 	 * 
 	 * @return Collection<Pagamento>
@@ -27682,7 +27683,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	public Integer verificarExistenciaGuiaDevolucao(Integer idGuiaDevolucao)
 			throws ControladorException {
 
-		// Retorna o cliente encontrado ou vazio se não existir
+		// Retorna o cliente encontrado ou vazio se nï¿½o existir
 		try {
 			return repositorioArrecadacao
 					.verificarExistenciaGuiaDevolucao(idGuiaDevolucao);
@@ -27693,10 +27694,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os avisos bancários para o relatório através das opções
-	 * selecionadas no Filtrar Aviso Bancário
+	 * Pesquisa os avisos bancï¿½rios para o relatï¿½rio atravï¿½s das opï¿½ï¿½es
+	 * selecionadas no Filtrar Aviso Bancï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 04/09/06
 	 * 
 	 * @return Collection<AvisoBancarioRelatorioHelper>
@@ -27791,11 +27792,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 						AvisoBancarioRelatorioHelper avisoBancarioRelatorioHelper = new AvisoBancarioRelatorioHelper();
 
-						// Obtém os dados do crédito realizado
+						// Obtï¿½m os dados do crï¿½dito realizado
 						Object[] dadosArray = (Object[]) colecaoDadosAvisosBancariosIterator
 								.next();
 
-						// Id do Aviso Bancário
+						// Id do Aviso Bancï¿½rio
 						if (dadosArray[0] != null) {
 							avisoBancarioRelatorioHelper
 									.setIdAvisoBancario((Integer) dadosArray[0]);
@@ -27807,7 +27808,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									.setNomeArrecadador((String) dadosArray[1]);
 						}
 
-						// Data Lançamento
+						// Data Lanï¿½amento
 						if (dadosArray[2] != null) {
 							avisoBancarioRelatorioHelper
 									.setDataLancamento((Date) dadosArray[2]);
@@ -27819,13 +27820,13 @@ public class ControladorArrecadacao extends ControladorComum {
 									.setSequencial((Short) dadosArray[3]);
 						}
 
-						// Indicador Crédito/Débito
+						// Indicador Crï¿½dito/Dï¿½bito
 						if (dadosArray[4] != null) {
 							avisoBancarioRelatorioHelper
 									.setTipo((Short) dadosArray[4]);
 						}
 
-						// Número Documento
+						// Nï¿½mero Documento
 						if (dadosArray[5] != null) {
 							avisoBancarioRelatorioHelper
 									.setNumeroDocumento((Integer) dadosArray[5]);
@@ -27837,31 +27838,31 @@ public class ControladorArrecadacao extends ControladorComum {
 									.setBanco((String) dadosArray[6]);
 						}
 
-						// Agência
+						// Agï¿½ncia
 						if (dadosArray[7] != null) {
 							avisoBancarioRelatorioHelper
 									.setAgencia((String) dadosArray[7]);
 						}
 
-						// Número Conta
+						// Nï¿½mero Conta
 						if (dadosArray[8] != null) {
 							avisoBancarioRelatorioHelper
 									.setNumeroConta((String) dadosArray[8]);
 						}
 
-						// Data Realização
+						// Data Realizaï¿½ï¿½o
 						if (dadosArray[9] != null) {
 							avisoBancarioRelatorioHelper
 									.setDataRealizacao((Date) dadosArray[9]);
 						}
 
-						// Total Arrecadação
+						// Total Arrecadaï¿½ï¿½o
 						if (dadosArray[10] != null) {
 							avisoBancarioRelatorioHelper
 									.setTotalArrecadacao((BigDecimal) dadosArray[10]);
 						}
 
-						// Total Devolução
+						// Total Devoluï¿½ï¿½o
 						if (dadosArray[11] != null) {
 							avisoBancarioRelatorioHelper
 									.setTotalDevolucao((BigDecimal) dadosArray[11]);
@@ -27886,10 +27887,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os avisos deduções de um aviso bancário para o relatório através
-	 * do id do aviso bancário
+	 * Pesquisa os avisos deduï¿½ï¿½es de um aviso bancï¿½rio para o relatï¿½rio atravï¿½s
+	 * do id do aviso bancï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 05/09/06
 	 * 
 	 * @return Collection<DeducoesRelatorioHelper>
@@ -27910,7 +27911,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				DeducoesRelatorioHelper deducoesRelatorioHelper = new DeducoesRelatorioHelper();
 
-				// Obtém os dados do crédito realizado
+				// Obtï¿½m os dados do crï¿½dito realizado
 				Object[] dadosArray = (Object[]) colecaoDadosDeducoesIterator
 						.next();
 
@@ -27919,7 +27920,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					deducoesRelatorioHelper.setTipo((String) dadosArray[0]);
 				}
 
-				// Valor Dedução
+				// Valor Deduï¿½ï¿½o
 				if (dadosArray[1] != null) {
 					deducoesRelatorioHelper
 							.setValorDeducao((BigDecimal) dadosArray[1]);
@@ -27937,10 +27938,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os avisos acertos de um aviso bancário para o relatório através
-	 * do id do aviso bancário
+	 * Pesquisa os avisos acertos de um aviso bancï¿½rio para o relatï¿½rio atravï¿½s
+	 * do id do aviso bancï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 05/09/06
 	 * 
 	 * @return Collection<AcertosRelatorioHelper>
@@ -27961,7 +27962,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				AcertosRelatorioHelper acertosRelatorioHelper = new AcertosRelatorioHelper();
 
-				// Obtém os dados do crédito realizado
+				// Obtï¿½m os dados do crï¿½dito realizado
 				Object[] dadosArray = (Object[]) colecaoDadosAcertosIterator
 						.next();
 
@@ -27970,18 +27971,18 @@ public class ControladorArrecadacao extends ControladorComum {
 					acertosRelatorioHelper.setBanco((String) dadosArray[0]);
 				}
 
-				// Agência
+				// Agï¿½ncia
 				if (dadosArray[1] != null) {
 					acertosRelatorioHelper.setAgencia((Integer) dadosArray[1]);
 				}
 
-				// Número Conta
+				// Nï¿½mero Conta
 				if (dadosArray[2] != null) {
 					acertosRelatorioHelper
 							.setNumeroConta((String) dadosArray[2]);
 				}
 
-				// Indicador Crédito/Débito
+				// Indicador Crï¿½dito/Dï¿½bito
 				if (dadosArray[3] != null) {
 					acertosRelatorioHelper.setTipo(((Integer) dadosArray[3])
 							.shortValue());
@@ -28011,9 +28012,9 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * Pesquisa dos dados diários da arrecadação
+	 * Pesquisa dos dados diï¿½rios da arrecadaï¿½ï¿½o
 	 * 
-	 * [UC0333] Filtrar Dados Diários da Arrecadação
+	 * [UC0333] Filtrar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 * 
 	 * @author Rafael Santos
 	 * @date 05/09/2006
@@ -28054,11 +28055,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				arrecadacaoDadosDiarios = new ArrecadacaoDadosDiarios();
 
-				// Obtém os dados
+				// Obtï¿½m os dados
 				Object[] dadosArray = (Object[]) colecaoDadosDiariosIterator
 						.next();
 
-				// Ano Mês
+				// Ano Mï¿½s
 				if (dadosArray[0] != null) {
 					arrecadacaoDadosDiarios
 							.setAnoMesReferenciaArrecadacao((Integer) dadosArray[0]);
@@ -28238,11 +28239,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				devolucaoDadosDiarios = new DevolucaoDadosDiarios();
 
-				// Obtém os dados
+				// Obtï¿½m os dados
 				Object[] dadosArray = (Object[]) colecaoDadosDiariosIterator
 						.next();
 
-				// Ano Mês
+				// Ano Mï¿½s
 				if (dadosArray[0] != null) {
 					devolucaoDadosDiarios
 							.setAnoMesReferencia((Integer) dadosArray[0]);
@@ -28360,7 +28361,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						ArrecadacaoDadosDiariosValoresDiariosHelper helper = 
 								(ArrecadacaoDadosDiariosValoresDiariosHelper) iterDados.next();
 						/*
-						@TODO este agrupamento está errado, uma devolucao tá cobrindo a outra
+						@TODO este agrupamento estï¿½ errado, uma devolucao tï¿½ cobrindo a outra
 						*/
 						if (helper.equalsAgrupamento(devolucaoDadosDiarios)){
 							helper.setDevolucaoDadosDiarios(devolucaoDadosDiarios);
@@ -28383,9 +28384,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa dos dados diários da arrecadação pela Gerencia
+	 * Pesquisa dos dados diï¿½rios da arrecadaï¿½ï¿½o pela Gerencia
 	 * 
-	 * [UC0333] Filtrar Dados Diários da Arrecadação
+	 * [UC0333] Filtrar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 * 
 	 * @author Rafael Santos
 	 * @date 05/09/2006
@@ -28461,9 +28462,9 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	
 	/**
-	 * [UC0333] Consultar Dados Diários da Arrecadação
+	 * [UC0333] Consultar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 * 
-	 * Método para filtrar os dados diários para qualquer aba da funcionalidade
+	 * Mï¿½todo para filtrar os dados diï¿½rios para qualquer aba da funcionalidade
 	 * 
 	 * @author Francisco do Nascimento
 	 * @date 12/11/2008
@@ -28525,14 +28526,14 @@ public class ControladorArrecadacao extends ControladorComum {
 						valorTotal = valorTotal.add(helper.getValorArrecadacaoLiquida());
 						
 						/**
-						 * Relatório Analitico dos valores diários da arrecadação
+						 * Relatï¿½rio Analitico dos valores diï¿½rios da arrecadaï¿½ï¿½o
 						 * 
 						 * @author Adriana Muniz
 						 * data: 05/09/2012
 						 * 
-						 * Atende o relatório analitico da consuta de dados diarios
+						 * Atende o relatï¿½rio analitico da consuta de dados diarios
 						 * 
-						 * Verifica se o agrupamento é por data e se é relatorio analitico
+						 * Verifica se o agrupamento ï¿½ por data e se ï¿½ relatorio analitico
 						 */
 						if(filtro.getAgrupamento().equals(GROUP_BY.DATA) && filtro.isRelatorioValoresDiariosAnalitico()) {
 							Collection<FormasArrecadacaoDadosDiariosHelper> colecaoFormasDeArrecadacaoPorDia = 
@@ -28665,7 +28666,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				if(itemAgrupado == null){
 					ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
 					arrecadacaoForma.setId(0);
-					arrecadacaoForma.setDescricao("Sem forma de arrecadação");
+					arrecadacaoForma.setDescricao("Sem forma de arrecadaï¿½ï¿½o");
 					itemAgrupado = arrecadacaoForma;
 				}				
 								
@@ -28728,7 +28729,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	/**
 	 * 
-	 * [UC0333] Consultar Dados Diários da Arrecadação
+	 * [UC0333] Consultar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 *
 	 * Verificar se existe dados diarios da arrecadacao de acordo com o filtro 
 	 * passado
@@ -28781,8 +28782,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * 
 	 * @param filtroArrecadadorMovimento
 	 * @param numero
-	 *            de páginas para paginação
-	 * @return Uma coleçao com os movimentos selecionados
+	 *            de pï¿½ginas para paginaï¿½ï¿½o
+	 * @return Uma coleï¿½ao com os movimentos selecionados
 	 * @throws ControladorException
 	 */
 	public Collection<ArrecadadorMovimento> retornarColecaoMovimentoArrecadadores(
@@ -28794,7 +28795,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		Collection<ArrecadadorMovimento> colecaoMovimentoArrecadadoresTotal = null;
 
 		/*
-		 * Coleção com os movimentos abertos e fechados
+		 * Coleï¿½ï¿½o com os movimentos abertos e fechados
 		 */
 		try {
 
@@ -28810,12 +28811,12 @@ public class ControladorArrecadacao extends ControladorComum {
 		 * Movimento aberto / fechado
 		 * 
 		 * Caso seja selecionado "ABERTOS", selecionar os movimentos com valor
-		 * total diferente do valor da soma das arrecadações dos avisos
-		 * bancários relacionados (ARMV_VLTOTALMOVIMENTO seja diferente da soma
+		 * total diferente do valor da soma das arrecadaï¿½ï¿½es dos avisos
+		 * bancï¿½rios relacionados (ARMV_VLTOTALMOVIMENTO seja diferente da soma
 		 * dos AVBC_VLARRECADACAO da tabela AVISO_BANCARIO com ARMV_ID = ARMV_ID
 		 * da tabela ARRECADADOR_MOVIMENTO), caso seja selecionado "FECHADOS",
 		 * selecionar os movimentos com valor total igual ao valor da soma das
-		 * arrecadações dos avisos bancários relacionados (ARMV_VLTOTALMOVIMENTO
+		 * arrecadaï¿½ï¿½es dos avisos bancï¿½rios relacionados (ARMV_VLTOTALMOVIMENTO
 		 * seja igual da soma dos AVBC_VLARRECADACAO da tabela AVISO_BANCARIO
 		 * com ARMV_ID = ARMV_ID da tabela ARRECADADOR_MOVIMENTO)
 		 */
@@ -28851,7 +28852,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				/*
 				 * Selecionar os movimentos com valor total diferente do valor
-				 * da soma das arrecadações dos avisos bancários relacionados
+				 * da soma das arrecadaï¿½ï¿½es dos avisos bancï¿½rios relacionados
 				 */
 				if (movimentoAbertoFechado.equalsIgnoreCase(""
 						+ ConstantesSistema.MOVIMENTO_ABERTO)) {
@@ -28876,7 +28877,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 				/*
 				 * Selecionar os movimentos com valor total igual ao valor da
-				 * soma das arrecadações dos avisos bancários relacionados
+				 * soma das arrecadaï¿½ï¿½es dos avisos bancï¿½rios relacionados
 				 */
 				// else if (movimentoAbertoFechado.equalsIgnoreCase(""
 				// + ConstantesSistema.MOVIMENTO_FECHADO)
@@ -28912,8 +28913,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os dados da Guia de Pagamento necessários para o relatório
-	 * através do id da Guia de Pagamento
+	 * Pesquisa os dados da Guia de Pagamento necessï¿½rios para o relatï¿½rio
+	 * atravï¿½s do id da Guia de Pagamento
 	 * 
 	 * @author Vivianne Sousa, Mariana Victor
 	 * @date 03/10/06, 02/03/2011
@@ -29002,16 +29003,16 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 				if (guiaPagamentoRelatorioHelper.getIdImovel() == null) {
-					// código do cliente
+					// cï¿½digo do cliente
 					matricula = "" + idCliente;
 					
-					// Inscrição do imóvel
-					// caso imov_id = null, imprimir código da localidade
+					// Inscriï¿½ï¿½o do imï¿½vel
+					// caso imov_id = null, imprimir cï¿½digo da localidade
 					// (loca_id)
 					inscricao = ""
 							+ guiaPagamentoRelatorioHelper.getIdLocalidade();
 
-					// recupera endereço de correspondencia do cliente
+					// recupera endereï¿½o de correspondencia do cliente
 					// [UC0085]Obter Endereco
 					String enderecoClienteResponsavel = "";
 					enderecoClienteResponsavel = this.getControladorEndereco()
@@ -29020,11 +29021,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							.setEnderecoClienteResponsavel(enderecoClienteResponsavel);
 
 					sacadoParte01 = nomeCliente;
-					sacadoParte02 = "     Cód.Responsável: ";
+					sacadoParte02 = "     Cï¿½d.Responsï¿½vel: ";
 					
 				} else {
 					idImovel = guiaPagamentoRelatorioHelper.getIdImovel();
-					// matrícula do imóvel
+					// matrï¿½cula do imï¿½vel
 					matricula = "" + idImovel;
 					
 					// try {
@@ -29034,11 +29035,11 @@ public class ControladorArrecadacao extends ControladorComum {
 					// e.printStackTrace();
 					// }
 
-					// Inscrição do imóvel
+					// Inscriï¿½ï¿½o do imï¿½vel
 					inscricao = getControladorImovel()
 							.pesquisarInscricaoImovel(idImovel);
 
-					// recupera endereco do imóvel
+					// recupera endereco do imï¿½vel
 					String enderecoImovel = "";
 					try {
 						enderecoImovel = this.getControladorEndereco()
@@ -29077,7 +29078,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.getDataEmissao());
 
 				// caso imov_id da guia de pagamento esteja preenchido,
-				// atribuir o valor 1 , caso contrário atribuir o valor 9
+				// atribuir o valor 1 , caso contrï¿½rio atribuir o valor 9
 				Integer tipoPagamento = 1;
 				if (guiaPagamentoRelatorioHelper.getIdImovel() == null
 						|| guiaPagamentoRelatorioHelper.getIdImovel()
@@ -29096,7 +29097,7 @@ public class ControladorArrecadacao extends ControladorComum {
 //						&& guiaPagamentoRelatorioHelper.getValorDebito().compareTo(getSistemaParametro().getValorGuiaFichaComp()) >= 0
 //						&& !guiaPagamentoRelatorioHelper.getIdTipoDebito().equals(DebitoTipo.ENTRADA_PARCELAMENTO)){
 //						//){
-//					// [UC0716 – Obter Representação Numérica do Código de Barras da Ficha de Compensação]
+//					// [UC0716 ï¿½ Obter Representaï¿½ï¿½o Numï¿½rica do Cï¿½digo de Barras da Ficha de Compensaï¿½ï¿½o]
 //					
 //					StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(
 //							DocumentoTipo.GUIA_PAGAMENTO.toString(),guiaPagamentoRelatorioHelper.getIdGuiaPagamento().toString()) ;
@@ -29117,7 +29118,7 @@ public class ControladorArrecadacao extends ControladorComum {
 //
 //					//guiaPagamentoRelatorioHelper.setSubRelatorio("relatorioEmitirGuiaPagamentoFichaCompensacao.jasper");
 //				} else {
-//					// [UC0229] - Obter Representação Numérica do Código de Barras
+//					// [UC0229] - Obter Representaï¿½ï¿½o Numï¿½rica do Cï¿½digo de Barras
 //					representacaoNumericaCodBarra = obterRepresentacaoNumericaCodigoBarra(tipoPagamento, 
 //							guiaPagamentoRelatorioHelper.getValorDebito(),
 //							guiaPagamentoRelatorioHelper.getIdLocalidade(),
@@ -29187,8 +29188,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os dados da Guia de Devolução necessários para o relatório
-	 * através do id da Guia de Devolução
+	 * Pesquisa os dados da Guia de Devoluï¿½ï¿½o necessï¿½rios para o relatï¿½rio
+	 * atravï¿½s do id da Guia de Devoluï¿½ï¿½o
 	 * 
 	 * @author Ana Maria
 	 * @date 05/10/06
@@ -29225,9 +29226,9 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 				if (guiaDevolucaoRelatorioHelper.getIdMatriculaImovel() != null) {
-					// Imóvel
+					// Imï¿½vel
 
-					// recupera endereco do imóvel
+					// recupera endereco do imï¿½vel
 					String enderecoImovel = "";
 					try {
 						enderecoImovel = this.getControladorEndereco()
@@ -29296,12 +29297,12 @@ public class ControladorArrecadacao extends ControladorComum {
 					dadosContaAgencia = repositorioArrecadacao
 							.pesquisarContaAgenciaSistemaParametro();
 
-					// Número da conta corrente para débito
+					// Nï¿½mero da conta corrente para dï¿½bito
 					if (dadosContaAgencia[0] != null) {
 						guiaDevolucaoRelatorioHelper
 								.setConta((String) dadosContaAgencia[0]);
 					}
-					// Código da agência para débito
+					// Cï¿½digo da agï¿½ncia para dï¿½bito
 					if (dadosContaAgencia[1] != null) {
 						guiaDevolucaoRelatorioHelper
 								.setAgencia((Integer) dadosContaAgencia[1]);
@@ -29322,12 +29323,12 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	// /////////////////////////////////////////////////////////////////
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * para pesquisar os pagamento historicos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos historicos do Imóvel
+	 * Pesquisa os pagamentos historicos do Imï¿½vel
 	 * 
 	 * @author Rafael Santos
 	 * @date 06/10/2006
@@ -29402,7 +29403,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Filtra os pagamento historicos do Imovel para paginação
+	 * Filtra os pagamento historicos do Imovel para paginaï¿½ï¿½o
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
@@ -29507,13 +29508,13 @@ public class ControladorArrecadacao extends ControladorComum {
 						conta.setId((Integer) dadosPagamento[1]);
 					}
 
-					// Ano Mês Referência da Conta
+					// Ano Mï¿½s Referï¿½ncia da Conta
 					if (dadosPagamento[2] != null) {
 						conta
 								.setReferencia((Integer) dadosPagamento[2]);
 					}
 
-					// Valor da Água da Conta
+					// Valor da ï¿½gua da Conta
 					if (dadosPagamento[3] != null) {
 						conta.setValorAgua((BigDecimal) dadosPagamento[3]);
 					}
@@ -29523,12 +29524,12 @@ public class ControladorArrecadacao extends ControladorComum {
 						conta.setValorEsgoto((BigDecimal) dadosPagamento[4]);
 					}
 
-					// Valor de Débitos
+					// Valor de Dï¿½bitos
 					if (dadosPagamento[5] != null) {
 						conta.setDebitos((BigDecimal) dadosPagamento[5]);
 					}
 
-					// Valor dos Créditos
+					// Valor dos Crï¿½ditos
 					if (dadosPagamento[6] != null) {
 						conta.setValorCreditos((BigDecimal) dadosPagamento[6]);
 					}
@@ -29543,7 +29544,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDataPagamento((Date) dadosPagamento[7]);
 					}
 
-					// Ano Mês do Pagamento
+					// Ano Mï¿½s do Pagamento
 					if (dadosPagamento[8] != null) {
 						pagamentoHistorico
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[8]);
@@ -29557,14 +29558,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAtual = null;
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[10] != null) {
 						pagamentoSituacaoAtual = new PagamentoSituacao();
 						pagamentoSituacaoAtual
 								.setId((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[11] != null) {
 						pagamentoSituacaoAtual
 								.setDescricaoAbreviada((String) dadosPagamento[11]);
@@ -29575,14 +29576,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAnterior = null;
 
-					// Id da Situação Anterior do Pagamento
+					// Id da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[12] != null) {
 						pagamentoSituacaoAnterior = new PagamentoSituacao();
 						pagamentoSituacaoAnterior
 								.setId((Integer) dadosPagamento[12]);
 					}
 
-					// Descrição da Situação Anterior do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[13] != null) {
 						pagamentoSituacaoAnterior
 								.setDescricaoAbreviada((String) dadosPagamento[13]);
@@ -29598,7 +29599,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamentoHistorico.setDocumentoTipo(documentoTipo);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[15] != null) {
 						Imovel imovel = new Imovel();
 						imovel.setId((Integer) dadosPagamento[15]);
@@ -29625,7 +29626,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 06/10/06
 	 * 
 	 * @param FiltroPagamento
@@ -29704,20 +29705,20 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamentoHistorico.setDataPagamento((Date) dadosPagamento[4]);
 					}
 
-					// Ano Mês do Pagamento
+					// Ano Mï¿½s do Pagamento
 					if (dadosPagamento[5] != null) {
 						pagamentoHistorico.setAnoMesReferenciaPagamento((Integer) dadosPagamento[5]);
 					}
 
 					DebitoTipo debitoTipoGuia = null;
 
-					// Id do Tipo de Débito da Guia de Pagamento
+					// Id do Tipo de Dï¿½bito da Guia de Pagamento
 					if (dadosPagamento[6] != null) {
 						debitoTipoGuia = new DebitoTipo();
 						debitoTipoGuia.setId((Integer) dadosPagamento[6]);
 					}
 
-					// Descrição do Tipo de Débito da Guia de Pagamento
+					// Descriï¿½ï¿½o do Tipo de Dï¿½bito da Guia de Pagamento
 					if (dadosPagamento[7] != null) {
 						debitoTipoGuia.setDescricao((String) dadosPagamento[7]);
 					}
@@ -29731,13 +29732,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					DebitoTipo debitoTipoPagamento = null;
 
-					// Id do Tipo de Débito do Pagamento
+					// Id do Tipo de Dï¿½bito do Pagamento
 					if (dadosPagamento[8] != null) {
 						debitoTipoPagamento = new DebitoTipo();
 						debitoTipoPagamento.setId((Integer) dadosPagamento[8]);
 					}
 
-					// Descrição do Tipo de Débito do Pagamento
+					// Descriï¿½ï¿½o do Tipo de Dï¿½bito do Pagamento
 					if (dadosPagamento[9] != null) {
 						debitoTipoPagamento
 								.setDescricao((String) dadosPagamento[9]);
@@ -29753,14 +29754,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAtual = null;
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[11] != null) {
 						pagamentoSituacaoAtual = new PagamentoSituacao();
 						pagamentoSituacaoAtual
 								.setId((Integer) dadosPagamento[11]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[12] != null) {
 						pagamentoSituacaoAtual
 								.setDescricaoAbreviada((String) dadosPagamento[12]);
@@ -29771,14 +29772,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAnterior = null;
 
-					// Id da Situação Anterior do Pagamento
+					// Id da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[13] != null) {
 						pagamentoSituacaoAnterior = new PagamentoSituacao();
 						pagamentoSituacaoAnterior
 								.setId((Integer) dadosPagamento[13]);
 					}
 
-					// Descrição da Situação Anterior do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[14] != null) {
 						pagamentoSituacaoAnterior
 								.setDescricaoAbreviada((String) dadosPagamento[14]);
@@ -29794,7 +29795,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamentoHistorico.setDocumentoTipo(documentoTipo);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[16] != null) {
 						Imovel imovel = new Imovel();
 						imovel.setId((Integer) dadosPagamento[16]);
@@ -29875,32 +29876,32 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					DebitoACobrar debitoACobrar = null;
 
-					// Id do Imóvel do Pagamento
+					// Id do Imï¿½vel do Pagamento
 					if (dadosPagamento[1] != null) {
 						Imovel imovelPagamento = new Imovel();
 						imovelPagamento.setId((Integer) dadosPagamento[1]);
 						pagamentoHistorico.setImovel(imovelPagamento);
 					}
 
-					// Id do Débito a Cobrar
+					// Id do Dï¿½bito a Cobrar
 					if (dadosPagamento[2] != null) {
 						debitoACobrar = new DebitoACobrar();
 						debitoACobrar.setId((Integer) dadosPagamento[2]);
 					}
 
-					// Valor do Débito
+					// Valor do Dï¿½bito
 					if (dadosPagamento[3] != null) {
 						debitoACobrar
 								.setValorDebito((BigDecimal) dadosPagamento[3]);
 					}
 
-					// Número de Prestações Cobradas
+					// Nï¿½mero de Prestaï¿½ï¿½es Cobradas
 					if (dadosPagamento[4] != null) {
 						debitoACobrar
 								.setNumeroPrestacaoCobradas((Short) dadosPagamento[4]);
 					}
 
-					// Número de Prestações Débito
+					// Nï¿½mero de Prestaï¿½ï¿½es Dï¿½bito
 					if (dadosPagamento[5] != null) {
 						debitoACobrar
 								.setNumeroPrestacaoDebito((Short) dadosPagamento[5]);
@@ -29912,7 +29913,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDataPagamento((Date) dadosPagamento[6]);
 					}
 
-					// Ano Mês do Pagamento
+					// Ano Mï¿½s do Pagamento
 					if (dadosPagamento[7] != null) {
 						pagamentoHistorico
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[7]);
@@ -29920,13 +29921,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					DebitoTipo debitoTipoDebito = null;
 
-					// Id do Tipo de Débito do Débito a Cobrar
+					// Id do Tipo de Dï¿½bito do Dï¿½bito a Cobrar
 					if (dadosPagamento[8] != null) {
 						debitoTipoDebito = new DebitoTipo();
 						debitoTipoDebito.setId((Integer) dadosPagamento[8]);
 					}
 
-					// Descrição do Tipo de Débito do Débito a Cobrar
+					// Descriï¿½ï¿½o do Tipo de Dï¿½bito do Dï¿½bito a Cobrar
 					if (dadosPagamento[9] != null) {
 						debitoTipoDebito
 								.setDescricao((String) dadosPagamento[9]);
@@ -29936,13 +29937,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					DebitoTipo debitoTipoPagamento = null;
 
-					// Id do Tipo de Débito do Pagamento
+					// Id do Tipo de Dï¿½bito do Pagamento
 					if (dadosPagamento[10] != null) {
 						debitoTipoPagamento = new DebitoTipo();
 						debitoTipoPagamento.setId((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição do Tipo de Débito do Pagamento
+					// Descriï¿½ï¿½o do Tipo de Dï¿½bito do Pagamento
 					if (dadosPagamento[11] != null) {
 						debitoTipoPagamento
 								.setDescricao((String) dadosPagamento[11]);
@@ -29958,14 +29959,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAtual = null;
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[13] != null) {
 						pagamentoSituacaoAtual = new PagamentoSituacao();
 						pagamentoSituacaoAtual
 								.setId((Integer) dadosPagamento[13]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[14] != null) {
 						pagamentoSituacaoAtual
 								.setDescricaoAbreviada((String) dadosPagamento[14]);
@@ -29976,14 +29977,14 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoSituacao pagamentoSituacaoAnterior = null;
 
-					// Id da Situação Anterior do Pagamento
+					// Id da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[15] != null) {
 						pagamentoSituacaoAnterior = new PagamentoSituacao();
 						pagamentoSituacaoAnterior
 								.setId((Integer) dadosPagamento[15]);
 					}
 
-					// Descrição da Situação Anterior do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Anterior do Pagamento
 					if (dadosPagamento[16] != null) {
 						pagamentoSituacaoAnterior
 								.setDescricaoAbreviada((String) dadosPagamento[16]);
@@ -29999,7 +30000,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						pagamentoHistorico.setDocumentoTipo(documentoTipo);
 					}
 
-					// Id do Imóvel do Débito a Cobrar
+					// Id do Imï¿½vel do Dï¿½bito a Cobrar
 					if (dadosPagamento[18] != null) {
 						Imovel imovelDebito = new Imovel();
 						imovelDebito.setId((Integer) dadosPagamento[18]);
@@ -30007,7 +30008,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
                     
-					// Número de Parcela bonus
+					// Nï¿½mero de Parcela bonus
                     if (dadosPagamento[20] != null) {
                         debitoACobrar
                                 .setNumeroParcelaBonus((Short) dadosPagamento[20]);
@@ -30267,7 +30268,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Filtra os pagamento historicos do aviso bancario para paginação
+	 * Filtra os pagamento historicos do aviso bancario para paginaï¿½ï¿½o
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
@@ -30345,7 +30346,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Faz a pesquisa de devoluçãoHistorico fazendo os carregamentos de
+	 * Faz a pesquisa de devoluï¿½ï¿½oHistorico fazendo os carregamentos de
 	 * clienteContas, clienteImoveis, clientesGuiaPagamento
 	 * 
 	 * @author Vivianne Sousa
@@ -30368,14 +30369,14 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * histórico para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * histï¿½rico para o Relatï¿½rio
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos histórico do tipo Debito a Cobrar do Cliente
+	 * Pesquisa os pagamentos histï¿½rico do tipo Debito a Cobrar do Cliente
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 17/12/06
 	 * 
 	 * @return Collection<PagamentoHistorico>
@@ -30424,7 +30425,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoRelatorioHelper pagamentoRelatorioHelper = new PagamentoRelatorioHelper();
 
-					// Id e Descrição da Localidade
+					// Id e Descriï¿½ï¿½o da Localidade
 					if (dadosPagamento[1] != null) { // 1,2
 						pagamentoRelatorioHelper
 								.setIdLocalidade((Integer) dadosPagamento[1]);
@@ -30432,7 +30433,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDescricaoLocalidade((String) dadosPagamento[2]);
 					}
 
-					// Id e Nome da Gerência Regional
+					// Id e Nome da Gerï¿½ncia Regional
 					if (dadosPagamento[3] != null) { // 3,4
 						pagamentoRelatorioHelper
 								.setIdGerenciaRegional((Integer) dadosPagamento[3]);
@@ -30440,7 +30441,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setNomeGerenciaRegional((String) dadosPagamento[4]);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[5] != null) { // 5
 						pagamentoRelatorioHelper
 								.setIdImovel((Integer) dadosPagamento[5]);
@@ -30466,19 +30467,19 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDataPagamento((Date) dadosPagamento[9]);
 					}
 
-					// Ano Mês Referência do Pagamento
+					// Ano Mï¿½s Referï¿½ncia do Pagamento
 					if (dadosPagamento[10] != null) { // 10
 						pagamentoRelatorioHelper
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição Tipo Débito
+					// Descriï¿½ï¿½o Tipo Dï¿½bito
 					if (dadosPagamento[11] != null) { // 11
 						pagamentoRelatorioHelper
 								.setDescricaoTipoDebito((String) dadosPagamento[11]);
 					}
 
-					// Valor de Água da Conta
+					// Valor de ï¿½gua da Conta
 					if (dadosPagamento[12] != null) { // 12
 						pagamentoRelatorioHelper
 								.setValorAgua((BigDecimal) dadosPagamento[12]);
@@ -30490,31 +30491,31 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorEsgoto((BigDecimal) dadosPagamento[13]);
 					}
 
-					// Valor dos Débitos da Conta
+					// Valor dos Dï¿½bitos da Conta
 					if (dadosPagamento[14] != null) { // 14
 						pagamentoRelatorioHelper
 								.setDebitos((BigDecimal) dadosPagamento[14]);
 					}
 
-					// Valor dos Créditos da Conta
+					// Valor dos Crï¿½ditos da Conta
 					if (dadosPagamento[15] != null) { // 15
 						pagamentoRelatorioHelper
 								.setValorCreditos((BigDecimal) dadosPagamento[15]);
 					}
 
-					// Valor do Débito do Débito a Cobrar
+					// Valor do Dï¿½bito do Dï¿½bito a Cobrar
 					if (dadosPagamento[16] != null) { // 16
 						pagamentoRelatorioHelper
 								.setValorDebito((BigDecimal) dadosPagamento[16]);
 					}
 
-					// Número de Prestações do Débito
+					// Nï¿½mero de Prestaï¿½ï¿½es do Dï¿½bito
 					if (dadosPagamento[17] != null) { // 17
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoDebito((Short) dadosPagamento[17]);
 					}
 
-					// Número de Prestações Cobradas
+					// Nï¿½mero de Prestaï¿½ï¿½es Cobradas
 					if (dadosPagamento[18] != null) { // 18
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoCobradas((Short) dadosPagamento[18]);
@@ -30532,13 +30533,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorPagamento((BigDecimal) dadosPagamento[20]);
 					}
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[21] != null) { // 21
 						pagamentoRelatorioHelper
 								.setIdSituacaoPagamentoAtual((Integer) dadosPagamento[21]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[22] != null) { // 22
 						pagamentoRelatorioHelper
 								.setDescricaoSituacaoPagamentoAtual((String) dadosPagamento[22]);
@@ -30636,8 +30637,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * inserir guia de devolução no momento da exibição.
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * inserir guia de devoluï¿½ï¿½o no momento da exibiï¿½ï¿½o.
 	 * 
 	 * [FS0002] Validar registro de atendimento [FS0004] Validar ordem de
 	 * servico.
@@ -30655,8 +30656,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			Imovel imovel = ra.getImovel();
 
-			// Caso o Registro Atendimento não esteja associado a um imóvel e
-			// não esteja associado um cliente
+			// Caso o Registro Atendimento nï¿½o esteja associado a um imï¿½vel e
+			// nï¿½o esteja associado um cliente
 			FiltroRegistroAtendimentoSolicitante filtro = new FiltroRegistroAtendimentoSolicitante();
 
 			filtro
@@ -30693,14 +30694,14 @@ public class ControladorArrecadacao extends ControladorComum {
 						null, "" + ra.getId());
 			}
 
-			// Caso a situação do Registro de Atendimento não seja encerrada
+			// Caso a situaï¿½ï¿½o do Registro de Atendimento nï¿½o seja encerrada
 			if (ra.getAtendimentoMotivoEncerramento() != null) {
 				throw new ControladorException(
 						"atencao.registro_atendimento.esta.encerrado");
 			}
 
-			// Caso o tipo de solicitação do registro atendimento
-			// não permita a geração de guia de devolução
+			// Caso o tipo de solicitaï¿½ï¿½o do registro atendimento
+			// nï¿½o permita a geraï¿½ï¿½o de guia de devoluï¿½ï¿½o
 			if (ra.getSolicitacaoTipoEspecificacao()
 					.getIndicadorGeracaoCredito().intValue() == ConstantesSistema.NAO
 					.intValue()) {
@@ -30711,7 +30712,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			// [FS0007] Validar ordem de servico.
 		} else if (ordemServico != null) {
 
-			// Caso a Ordem de Serviço não esteja associada a um Registro de
+			// Caso a Ordem de Serviï¿½o nï¿½o esteja associada a um Registro de
 			// Atendimento
 			if (ordemServico.getRegistroAtendimento() == null) {
 				throw new ControladorException(
@@ -30723,10 +30724,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			Imovel imovel = registroAtendimento.getImovel();
 
-			// Caso a Ordem de Serviço esteja associada a um Registro
+			// Caso a Ordem de Serviï¿½o esteja associada a um Registro
 			// Atendimento,
-			// porém o Registro Atendimento não esteja associado a um imóvel e
-			// não esteja associado um cliente
+			// porï¿½m o Registro Atendimento nï¿½o esteja associado a um imï¿½vel e
+			// nï¿½o esteja associado um cliente
 			FiltroRegistroAtendimentoSolicitante filtro = new FiltroRegistroAtendimentoSolicitante();
 
 			filtro
@@ -30767,7 +30768,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Metodo responsável pela remoção das guias de devolução
+	 * Metodo responsï¿½vel pela remoï¿½ï¿½o das guias de devoluï¿½ï¿½o
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -30792,8 +30793,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		imovel.setId(new Integer(idImovel));
 
 		/**
-		 * alterado por pedro alexandre dia 24/11/2006 alteração feita para
-		 * acoplar o controle de abrangência de usuário
+		 * alterado por pedro alexandre dia 24/11/2006 alteraï¿½ï¿½o feita para
+		 * acoplar o controle de abrangï¿½ncia de usuï¿½rio
 		 */
 		// ------------ CONTROLE DE ABRANGENCIA ----------------
 		Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
@@ -30918,7 +30919,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (arrecadadorMovimento[2] != null) {// 2
-				// descrição indentificação do serviço
+				// descriï¿½ï¿½o indentificaï¿½ï¿½o do serviï¿½o
 				arrecadadorMovimentoRetorno
 						.setDescricaoIdentificacaoServico(arrecadadorMovimento[2]
 								.toString());
@@ -30938,7 +30939,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (arrecadadorMovimento[5] != null) {// 5
-				// data de geração
+				// data de geraï¿½ï¿½o
 				arrecadadorMovimentoRetorno
 						.setDataGeracao((Date) arrecadadorMovimento[5]);
 			}
@@ -30958,7 +30959,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (arrecadadorMovimento[8] != null) {// 8
-				// ultima alteração
+				// ultima alteraï¿½ï¿½o
 				arrecadadorMovimentoRetorno
 						.setUltimaAlteracao((Date) arrecadadorMovimento[8]);
 			}
@@ -31000,7 +31001,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	/**
 	 * Pesquisar os ids das localidades que possuem pagamentos
 	 * 
-	 * [UC0301] Gerar Dados Diários da Arrecadação
+	 * [UC0301] Gerar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 04/12/2006
@@ -31020,9 +31021,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Classifica os pagamentos para tipo de documento igual a débito a cobrar.
+	 * Classifica os pagamentos para tipo de documento igual a dï¿½bito a cobrar.
 	 * 
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * @author Pedro Alexandre, Pedro Alexandre
 	 * @date 29/11/2006, 05/06/2007
@@ -31039,7 +31040,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer anoMesFaturamento) throws ControladorException {
 
 		/**
-		 * Declaração de variáveis.
+		 * Declaraï¿½ï¿½o de variï¿½veis.
 		 */
 		Object[] retorno = new Object[6];
 		Object[] arrayDadosPagamentoDebitoACobrar = null;
@@ -31068,7 +31069,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		/*
 		 * ==============================================================================================
 		 * Para os pagamentos com tipo de documento (DOPT_ID) com o valor
-		 * correspondente a DÉBITO A COBRAR:
+		 * correspondente a Dï¿½BITO A COBRAR:
 		 * ==============================================================================================
 		 */
 		if ((colecaoPagamentosDebitoACobrarPreenchido != null && !colecaoPagamentosDebitoACobrarPreenchido
@@ -31076,12 +31077,12 @@ public class ControladorArrecadacao extends ControladorComum {
 				|| (colecaoPagamentosDebitoACobrarNaoPreenchido != null && !colecaoPagamentosDebitoACobrarNaoPreenchido
 						.isEmpty())) {
 
-			// Para os pagamentos com débito a cobrar preenchido
+			// Para os pagamentos com dï¿½bito a cobrar preenchido
 			// (DBAC_ID diferente de nulo)
 			if (!colecaoPagamentosDebitoACobrarPreenchido.isEmpty()) {
 
 				// Para cada conjunto de pagamentos com mesmo
-				// débito a
+				// dï¿½bito a
 				// cobrar (DBAC_ID):
 				Iterator iteratorcolecaoPagamentosDebitoACobrarPreenchido = colecaoPagamentosDebitoACobrarPreenchido
 						.iterator();
@@ -31093,8 +31094,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				colecaoConjuntoPagamentos.clear();
 
 				/**
-				 * Laço para criar os conjuntos de pagamentos para o mesmo
-				 * débito a cobrar.
+				 * Laï¿½o para criar os conjuntos de pagamentos para o mesmo
+				 * dï¿½bito a cobrar.
 				 */
 				while (iteratorcolecaoPagamentosDebitoACobrarPreenchido
 						.hasNext()) {
@@ -31200,7 +31201,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					if (conjuntoFechado) {
 
-						// [SF0006] Processar Pagamento de Débito a Cobrar
+						// [SF0006] Processar Pagamento de Dï¿½bito a Cobrar
 						arrayDadosPagamentoDebitoACobrar = this
 								.processarPagamentoDebitoACobrar(
 										debitoACobrarAnterior,
@@ -31249,11 +31250,11 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 				/*
-				 * Último registro
+				 * ï¿½ltimo registro
 				 */
 				if (!colecaoConjuntoPagamentos.isEmpty()) {
 
-					// [SF0006] Processar Pagamento de Débito a Cobrar
+					// [SF0006] Processar Pagamento de Dï¿½bito a Cobrar
 					arrayDadosPagamentoDebitoACobrar = this
 							.processarPagamentoDebitoACobrar(
 									debitoACobrarAnterior,
@@ -31298,13 +31299,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			}
 
-			// Para os pagamentos sem débito a cobrar preenchido
+			// Para os pagamentos sem dï¿½bito a cobrar preenchido
 			// (DBAC_ID igual a nulo)
 			if (!colecaoPagamentosDebitoACobrarNaoPreenchido.isEmpty()) {
 
 				/*
 				 * Para cada conjunto de pagamentos com mesma localidade, mesma
-				 * matrícula do imóvel, e mesmo tipo de débito:
+				 * matrï¿½cula do imï¿½vel, e mesmo tipo de dï¿½bito:
 				 */
 				Iterator iteratorColecaoPagamentosDebitoACobrarNaoPreenchido = colecaoPagamentosDebitoACobrarNaoPreenchido
 						.iterator();
@@ -31405,8 +31406,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					if (conjuntoFechado) {
 
 						/*
-						 * [SF0005] Selecionar Débito a Cobrar pela Localidade,
-						 * Imóvel e Tipo de Débito
+						 * [SF0005] Selecionar Dï¿½bito a Cobrar pela Localidade,
+						 * Imï¿½vel e Tipo de Dï¿½bito
 						 */
 						debitoACobrarConjunto = this
 								.selecionarDebitoACobrarPelaLocalidadeImovelDebitoTipo(
@@ -31414,10 +31415,10 @@ public class ControladorArrecadacao extends ControladorComum {
 										anoMesFaturamento);
 
 						/*
-						 * Caso o débito a cobrar não seja encontrado (retorno
-						 * nulo do [SB0005]) e a situação atual (PGST_IDATUAL)
-						 * não corresponda a baixar valor excedente (tabela
-						 * PAGAMENTO_SITUACAO), atualizar a situação atual dos
+						 * Caso o dï¿½bito a cobrar nï¿½o seja encontrado (retorno
+						 * nulo do [SB0005]) e a situaï¿½ï¿½o atual (PGST_IDATUAL)
+						 * nï¿½o corresponda a baixar valor excedente (tabela
+						 * PAGAMENTO_SITUACAO), atualizar a situaï¿½ï¿½o atual dos
 						 * pagamentos (PGST_IDATUAL) com valor correspondente a
 						 * documento inexistente (tabela PAGAMENTO_SITUACAO) e o
 						 * valor excedente (PGMT_VLEXCEDENTE) com o valor do
@@ -31447,12 +31448,12 @@ public class ControladorArrecadacao extends ControladorComum {
 							iteratorColecaoConjuntoPagamentos = colecaoConjuntoPagamentos
 									.iterator();
 							/*
-							 * Caso o ano/mês de referência contábil do débito a
-							 * cobrar seja maior ou igual ao ano/mês de
-							 * referência do faturamento atualizar a situação
+							 * Caso o ano/mï¿½s de referï¿½ncia contï¿½bil do dï¿½bito a
+							 * cobrar seja maior ou igual ao ano/mï¿½s de
+							 * referï¿½ncia do faturamento atualizar a situaï¿½ï¿½o
 							 * atual dos pagamentos com o valor correspondente a
 							 * documento inexistente ,o valor excedente com o
-							 * valor do pagamento e a identificação do débito a
+							 * valor do pagamento e a identificaï¿½ï¿½o do dï¿½bito a
 							 * cobrar no pagamento.
 							 */
 							if (!(debitoACobrarConjunto
@@ -31479,7 +31480,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								}
 							} else {
 
-								// [SF0006] Processar Pagamento de Débito a
+								// [SF0006] Processar Pagamento de Dï¿½bito a
 								// Cobrar
 								arrayDadosPagamentoDebitoACobrar = this
 										.processarPagamentoDebitoACobrar(
@@ -31534,13 +31535,13 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 				/*
-				 * Último registro
+				 * ï¿½ltimo registro
 				 */
 				if (!colecaoConjuntoPagamentos.isEmpty()) {
 
 					/*
-					 * [SF0005] Selecionar Débito a Cobrar pela Localidade,
-					 * Imóvel e Tipo de Débito
+					 * [SF0005] Selecionar Dï¿½bito a Cobrar pela Localidade,
+					 * Imï¿½vel e Tipo de Dï¿½bito
 					 */
 					debitoACobrarConjunto = this
 							.selecionarDebitoACobrarPelaLocalidadeImovelDebitoTipo(
@@ -31548,10 +31549,10 @@ public class ControladorArrecadacao extends ControladorComum {
 									anoMesFaturamento);
 
 					/*
-					 * Caso o débito a cobrar não seja encontrado (retorno nulo
-					 * do [SB0005]) e a situação atual (PGST_IDATUAL) não
+					 * Caso o dï¿½bito a cobrar nï¿½o seja encontrado (retorno nulo
+					 * do [SB0005]) e a situaï¿½ï¿½o atual (PGST_IDATUAL) nï¿½o
 					 * corresponda a baixar valor excedente (tabela
-					 * PAGAMENTO_SITUACAO), atualizar a situação atual dos
+					 * PAGAMENTO_SITUACAO), atualizar a situaï¿½ï¿½o atual dos
 					 * pagamentos (PGST_IDATUAL) com valor correspondente a
 					 * documento inexistente (tabela PAGAMENTO_SITUACAO) e o
 					 * valor excedente (PGMT_VLEXCEDENTE) com o valor do
@@ -31581,12 +31582,12 @@ public class ControladorArrecadacao extends ControladorComum {
 						iteratorColecaoConjuntoPagamentos = colecaoConjuntoPagamentos
 								.iterator();
 						/*
-						 * Caso o ano/mês de referência contábil do débito a
-						 * cobrar seja maior ou igual ao ano/mês de referência
-						 * do faturamento atualizar a situação atual dos
+						 * Caso o ano/mï¿½s de referï¿½ncia contï¿½bil do dï¿½bito a
+						 * cobrar seja maior ou igual ao ano/mï¿½s de referï¿½ncia
+						 * do faturamento atualizar a situaï¿½ï¿½o atual dos
 						 * pagamentos com o valor correspondente a documento
 						 * inexistente ,o valor excedente com o valor do
-						 * pagamento e a identificação do débito a cobrar no
+						 * pagamento e a identificaï¿½ï¿½o do dï¿½bito a cobrar no
 						 * pagamento.
 						 */
 						if (!(debitoACobrarConjunto
@@ -31612,7 +31613,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 						} else {
 
-							// [SF0006] Processar Pagamento de Débito a Cobrar
+							// [SF0006] Processar Pagamento de Dï¿½bito a Cobrar
 							arrayDadosPagamentoDebitoACobrar = this
 									.processarPagamentoDebitoACobrar(
 											debitoACobrarConjunto,
@@ -31660,8 +31661,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 
 		/**
-		 * Caso a coleção de pagamentos para atualizar não esteja vazia
-		 * atualizar a situação e o valor excedente do pagamento.
+		 * Caso a coleï¿½ï¿½o de pagamentos para atualizar nï¿½o esteja vazia
+		 * atualizar a situaï¿½ï¿½o e o valor excedente do pagamento.
 		 */
 		if (colecaoPagamentosAtualizar != null
 				&& !colecaoPagamentosAtualizar.isEmpty()) {
@@ -31678,11 +31679,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		/**
 		 * Retorna o array contendo : 0 - Map de pagamentos para processar com
-		 * seu respectivo débito a cobrar. 1 - Map de pagamentos para atualizar
-		 * a situação com valor igual a valor não confere. 2 - Coleção de
-		 * pagamentos para atualizar a situação com valor igual a pagamento
-		 * classificado. 3 - Coleção de pagamentos para atualizar a situação com
-		 * valor igual a em duplicidade. 4 - Coleção de pagamentos para
+		 * seu respectivo dï¿½bito a cobrar. 1 - Map de pagamentos para atualizar
+		 * a situaï¿½ï¿½o com valor igual a valor nï¿½o confere. 2 - Coleï¿½ï¿½o de
+		 * pagamentos para atualizar a situaï¿½ï¿½o com valor igual a pagamento
+		 * classificado. 3 - Coleï¿½ï¿½o de pagamentos para atualizar a situaï¿½ï¿½o com
+		 * valor igual a em duplicidade. 4 - Coleï¿½ï¿½o de pagamentos para
 		 * atualizar o valor excedente.
 		 */
 		retorno[0] = mapDebitoACobrarProcessar;
@@ -31698,16 +31699,16 @@ public class ControladorArrecadacao extends ControladorComum {
 		 * ==============================================================================================
 		 * ==============================================================================================
 		 * FIM pagamentos com tipo de documento (DOPT_ID) com valor
-		 * correspondente a DÉBITO A COBRAR:
+		 * correspondente a Dï¿½BITO A COBRAR:
 		 * ==============================================================================================
 		 */
 	}
 
 	/**
 	 * Classifica os pagamentos para tipo de documento igual a guia de pagamento
-	 * para guia preenchida ou não preenchida.
+	 * para guia preenchida ou nï¿½o preenchida.
 	 * 
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * @author Pedro Alexandre, Pedro Alexandre
 	 * @date 29/11/2006, 02/10/2007
@@ -31724,7 +31725,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer anoMesFaturamento) throws ControladorException {
 
 		/**
-		 * Declaração de variáveis
+		 * Declaraï¿½ï¿½o de variï¿½veis
 		 */
 		Object[] retorno = new Object[6];
 		Object[] arrayDadosPagamentoGuia = null;
@@ -31791,7 +31792,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				colecaoConjuntoPagamentos = new ArrayList();
 
 				/**
-				 * Laço para criar os pagamentos e classificar por conjuntos.
+				 * Laï¿½o para criar os pagamentos e classificar por conjuntos.
 				 */
 				while (iteratorColecaoPagamentosGuiaPagamentoPreenchida
 						.hasNext()) {
@@ -31967,7 +31968,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 				/*
-				 * Último registro
+				 * ï¿½ltimo registro
 				 */
 				if (!colecaoConjuntoPagamentos.isEmpty()) {
 
@@ -32023,8 +32024,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				/*
 				 * Para cada conjunto de pagamentos com mesma localidade, mesma
-				 * matrícula do imóvel, mesmo código de cliente e mesmo tipo de
-				 * débito:
+				 * matrï¿½cula do imï¿½vel, mesmo cï¿½digo de cliente e mesmo tipo de
+				 * dï¿½bito:
 				 */
 				Iterator iteratorColecaoPagamentosGuiaPagamentoNaoPreenchida = colecaoPagamentosGuiaPagamentoNaoPreenchida
 						.iterator();
@@ -32181,16 +32182,16 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					if (conjuntoFechado) {
 
-						//[SF0003] Selecionar Guia de Pagamento pela Localidade, Imóvel, Cliente, Tipo de Débito
+						//[SF0003] Selecionar Guia de Pagamento pela Localidade, Imï¿½vel, Cliente, Tipo de Dï¿½bito
 						guiaPagamentoConjunto = this.selecionarGuiaPagamentoPelaLocalidadeImovelClienteDebitoTipo(
 										imovelAnterior, clienteAnterior,
 										debitoTipoAnterior, anoMesFaturamento);
 
 						/*
-						 * Caso a guia de pagamento não seja encontrada (retorno
-						 * nulo do [SB0003]) e a situação atual (PGST_IDATUAL)
-						 * não corresponda a baixar valor excedente (tabela
-						 * PAGAMENTO_SITUACAO), atualizar a situação atual dos
+						 * Caso a guia de pagamento nï¿½o seja encontrada (retorno
+						 * nulo do [SB0003]) e a situaï¿½ï¿½o atual (PGST_IDATUAL)
+						 * nï¿½o corresponda a baixar valor excedente (tabela
+						 * PAGAMENTO_SITUACAO), atualizar a situaï¿½ï¿½o atual dos
 						 * pagamentos (PGST_IDATUAL) com valor correspondente a
 						 * documento inexistente (tabela PAGAMENTO_SITUACAO) e o
 						 * valor excedente (PGMT_VLEXCEDENTE) com o valor do
@@ -32211,12 +32212,12 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 						} else {
 							/*
-							 * Caso o ano/mês de referência contábil da guia de
-							 * pagamento seja maior ou igual ao ano/mês de
-							 * referência do faturamento atualizar a situação
+							 * Caso o ano/mï¿½s de referï¿½ncia contï¿½bil da guia de
+							 * pagamento seja maior ou igual ao ano/mï¿½s de
+							 * referï¿½ncia do faturamento atualizar a situaï¿½ï¿½o
 							 * atual dos pagamentos com o valor correspondente a
 							 * documento inexistente, o valor excedente com o
-							 * valor do pagamento e a identificação da guia de
+							 * valor do pagamento e a identificaï¿½ï¿½o da guia de
 							 * pagamento no pagamento.
 							 */
 							if (!(guiaPagamentoConjunto.getAnoMesReferenciaContabil().compareTo(anoMesFaturamento) == -1)) {
@@ -32281,13 +32282,13 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 				/*
-				 * Último registro
+				 * ï¿½ltimo registro
 				 */
 				if (!colecaoConjuntoPagamentos.isEmpty()) {
 
 					/*
 					 * [SF0003] Selecionar Guia de Pagamento pela Localidade,
-					 * Imóvel, Cliente, Tipo de Débito
+					 * Imï¿½vel, Cliente, Tipo de Dï¿½bito
 					 */
 					guiaPagamentoConjunto = this
 							.selecionarGuiaPagamentoPelaLocalidadeImovelClienteDebitoTipo(
@@ -32295,10 +32296,10 @@ public class ControladorArrecadacao extends ControladorComum {
 									debitoTipoAnterior, anoMesFaturamento);
 
 					/*
-					 * Caso a guia de pagamento não seja encontrada (retorno
-					 * nulo do [SB0003]) e a situação atual (PGST_IDATUAL) não
+					 * Caso a guia de pagamento nï¿½o seja encontrada (retorno
+					 * nulo do [SB0003]) e a situaï¿½ï¿½o atual (PGST_IDATUAL) nï¿½o
 					 * corresponda a baixar valor excedente (tabela
-					 * PAGAMENTO_SITUACAO), atualizar a situação atual dos
+					 * PAGAMENTO_SITUACAO), atualizar a situaï¿½ï¿½o atual dos
 					 * pagamentos (PGST_IDATUAL) com valor correspondente a
 					 * documento inexistente (tabela PAGAMENTO_SITUACAO) e o
 					 * valor excedente (PGMT_VLEXCEDENTE) com o valor do
@@ -32325,12 +32326,12 @@ public class ControladorArrecadacao extends ControladorComum {
 					} else {
 
 						/*
-						 * Caso o ano/mês de referência contábil da guia de
-						 * pagamento seja maior ou igual ao ano/mês de
-						 * referência do faturamento atualizar a situação atual
+						 * Caso o ano/mï¿½s de referï¿½ncia contï¿½bil da guia de
+						 * pagamento seja maior ou igual ao ano/mï¿½s de
+						 * referï¿½ncia do faturamento atualizar a situaï¿½ï¿½o atual
 						 * dos pagamentos com o valor correspondente a documento
 						 * inexistente, o valor excedente com o valor do
-						 * pagamento e a identificação da guia de pagamento no
+						 * pagamento e a identificaï¿½ï¿½o da guia de pagamento no
 						 * pagamento.
 						 */
 						if (!(guiaPagamentoConjunto
@@ -32395,8 +32396,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 
 		/**
-		 * Caso a coleção de pagamentos para atualizar não esteja nula nem
-		 * esteja vazia Atualiza a situação e o valor excedente do pagamento.
+		 * Caso a coleï¿½ï¿½o de pagamentos para atualizar nï¿½o esteja nula nem
+		 * esteja vazia Atualiza a situaï¿½ï¿½o e o valor excedente do pagamento.
 		 */
 		if (colecaoPagamentosAtualizar != null
 				&& !colecaoPagamentosAtualizar.isEmpty()) {
@@ -32410,7 +32411,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 		}
         
-		// Caso seja necessário atualizar pagamentos com documentos a contabilizar
+		// Caso seja necessï¿½rio atualizar pagamentos com documentos a contabilizar
         // Realiza o update
         if (colecaoPagamentosAtualizarDocumentoAContabilizar != null
                 && !colecaoPagamentosAtualizarDocumentoAContabilizar.isEmpty()) {
@@ -32427,11 +32428,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		/**
 		 * Monta o array de retorno com : 0 - Map de pagamentos de guia de
-		 * pagamento para processar. 1 - Coleção de pagamentos para atualizar a
-		 * situação igual a valor não confere. 2 - Coleção de pagamentos para
-		 * atualizar a situação igual a pagamento classificado. 3 - Coleção de
-		 * pagamentos para atualizar a situação igual a pagamento em
-		 * duplicidade. 4 - Coleção de pagamentos para atualizar o valor
+		 * pagamento para processar. 1 - Coleï¿½ï¿½o de pagamentos para atualizar a
+		 * situaï¿½ï¿½o igual a valor nï¿½o confere. 2 - Coleï¿½ï¿½o de pagamentos para
+		 * atualizar a situaï¿½ï¿½o igual a pagamento classificado. 3 - Coleï¿½ï¿½o de
+		 * pagamentos para atualizar a situaï¿½ï¿½o igual a pagamento em
+		 * duplicidade. 4 - Coleï¿½ï¿½o de pagamentos para atualizar o valor
 		 * excedente.
 		 */
 		retorno[0] = mapGuiaPagamentoProcessar;
@@ -32452,9 +32453,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Classifica as devoluções em duplicidade ou excesso.
+	 * Classifica as devoluï¿½ï¿½es em duplicidade ou excesso.
 	 * 
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 29/11/2006
@@ -32467,7 +32468,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			throws ControladorException {
 
 		/**
-		 * Declaração de variáveis.
+		 * Declaraï¿½ï¿½o de variï¿½veis.
 		 */
 		Devolucao devolucao = null;
 		Collection colecaoConjuntoDevolucoes = new ArrayList();
@@ -32485,15 +32486,15 @@ public class ControladorArrecadacao extends ControladorComum {
 		GuiaDevolucao guiaDevolucao = null;
 
 		/*
-		 * Para as devoluções de contas pagas em duplicidade ou em excesso, ou
-		 * seja, aquelas com ano/mês de referência preenchidos
+		 * Para as devoluï¿½ï¿½es de contas pagas em duplicidade ou em excesso, ou
+		 * seja, aquelas com ano/mï¿½s de referï¿½ncia preenchidos
 		 * (DEVL_AMREFERENCIADEVOLUCAO com valor diferente de nulo)
 		 */
 		if (!colecaoDevolucoesDuplicidadeExcesso.isEmpty()) {
 
 			/*
-			 * Para cada conjunto de devoluções com mesma localidade, mesma
-			 * matrícula do imóvel, e mesmo ano/mês de referência da devolução
+			 * Para cada conjunto de devoluï¿½ï¿½es com mesma localidade, mesma
+			 * matrï¿½cula do imï¿½vel, e mesmo ano/mï¿½s de referï¿½ncia da devoluï¿½ï¿½o
 			 */
 			Iterator iteratorColecaoDevolucoesDuplicidadeExcesso = colecaoDevolucoesDuplicidadeExcesso
 					.iterator();
@@ -32591,7 +32592,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			/*
-			 * Último registro
+			 * ï¿½ltimo registro
 			 */
 			if (!colecaoConjuntoDevolucoes.isEmpty()) {
 				processarDevolucoesDuplicidadeExcesso(colecaoConjuntoDevolucoes, imovelAnterior, anoMesReferenciaDevolucaoAnterior);
@@ -32600,9 +32601,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Clasifica as devoluções cobradas indevidamente.
+	 * Clasifica as devoluï¿½ï¿½es cobradas indevidamente.
 	 * 
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 29/11/2006
@@ -32756,7 +32757,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			/*
-			 * Último registro
+			 * ï¿½ltimo registro
 			 */
 			if (!colecaoConjuntoDevolucoes.isEmpty()) {
 				processarDevolucoesCobradasIndevidamente(colecaoConjuntoDevolucoes, imovelAnterior, debitoTipoAnterior, clienteAnterior);
@@ -32765,9 +32766,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Classifica a coleção de pagamentos para contas.
+	 * Classifica a coleï¿½ï¿½o de pagamentos para contas.
 	 * 
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * @author Raphael Rossiter, Pedro Alexandre, Pedro Alexandre
 	 * @date 18/04/2006, 06/12/2006, 15/01/2008
@@ -32803,7 +32804,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			/*
 			 * Para cada conjunto de pagamentos com mesma localidade, mesma
-			 * matrícula do imóvel e mesmo ano/mês de referência do pagamento:
+			 * matrï¿½cula do imï¿½vel e mesmo ano/mï¿½s de referï¿½ncia do pagamento:
 			 */
 			Iterator iteratorColecaoPagamentosConta = colecaoPagamentosConta.iterator();
 			
@@ -32879,8 +32880,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					Boolean processarPagamentoConta = false;
 					
 					/*
-					 * Caso o ano/mês de referência contábil da conta seja maior ou igual ao ano/mês de referência do faturamento atualizar a situação atual 
-					 * dos pagamentos com o valor correspondente a documento inexistente, o valor excedente com o valor do pagamento e a identificação 
+					 * Caso o ano/mï¿½s de referï¿½ncia contï¿½bil da conta seja maior ou igual ao ano/mï¿½s de referï¿½ncia do faturamento atualizar a situaï¿½ï¿½o atual 
+					 * dos pagamentos com o valor correspondente a documento inexistente, o valor excedente com o valor do pagamento e a identificaï¿½ï¿½o 
 					 * da conta no pagamento.
 					 */
 					if (conta.getReferenciaContabil().compareTo(anoMesFaturamento) > -1) {
@@ -32903,7 +32904,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									repositorioArrecadacao.atualizarSituacaoAnteriorAtualEValorExcedentePagamento(colecaoPagamentosAtualizarSituacaoAnterior,
 																													PagamentoSituacao.DOCUMENTO_A_CONTABILIZAR);
 								} catch (ErroRepositorioException e) {
-									Logger.getLogger(ControladorArrecadacao.class).error("Erro ao atualizar situação anterior atual e valor excedente do pagamento.");
+									Logger.getLogger(ControladorArrecadacao.class).error("Erro ao atualizar situaï¿½ï¿½o anterior atual e valor excedente do pagamento.");
 								}
 								colecaoPagamentosAtualizarSituacaoAnterior.remove(pagamentoConjunto);
 								processarPagamentoConta = true;
@@ -32936,11 +32937,11 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		
 		/**
-		 * 0 - Coleção de pagamentos para atualizar a situação 
+		 * 0 - Coleï¿½ï¿½o de pagamentos para atualizar a situaï¿½ï¿½o 
 		 * 1 - Map para processar os pagamentos da conta. 
-		 * 2 - Array de coleções de pagamentos para atualizar a situação.
-		 * 3 - Coleção de pagamentos em duplicidade
-		 * 4 - Coleção de pagamentos para atualizar as situações anterior e atual
+		 * 2 - Array de coleï¿½ï¿½es de pagamentos para atualizar a situaï¿½ï¿½o.
+		 * 3 - Coleï¿½ï¿½o de pagamentos em duplicidade
+		 * 4 - Coleï¿½ï¿½o de pagamentos para atualizar as situaï¿½ï¿½es anterior e atual
 		 */
 		Object[] retorno = new Object[9];
 
@@ -32954,8 +32955,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 
 		/**
-		 * Caso os dados de processamento dos pagamentos para conta não esteja
-		 * vazio, adiciona o map e o array de coleções no array de retorno.
+		 * Caso os dados de processamento dos pagamentos para conta nï¿½o esteja
+		 * vazio, adiciona o map e o array de coleï¿½ï¿½es no array de retorno.
 		 */
 		if (arrayDadosProcessarPagamentosConta != null) {
 			retorno[1] = arrayDadosProcessarPagamentosConta[0];
@@ -32975,7 +32976,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0268] - Apresentar Análise do Aviso Bancário
+	 * [UC0268] - Apresentar Anï¿½lise do Aviso Bancï¿½rio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/12/2006
@@ -32998,7 +32999,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				DeducoesHelper deducoesHelper = new DeducoesHelper();
 
-				// Obtém os dados do crédito realizado
+				// Obtï¿½m os dados do crï¿½dito realizado
 				Object[] dadosArray = (Object[]) colecaoDadosDeducoesIterator
 						.next();
 
@@ -33007,7 +33008,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					deducoesHelper.setTipo((String) dadosArray[0]);
 				}
 
-				// Valor Dedução
+				// Valor Deduï¿½ï¿½o
 				if (dadosArray[1] != null) {
 					deducoesHelper.setValorDeducao(Util
 							.formatarMoedaReal((BigDecimal) dadosArray[1]));
@@ -33025,7 +33026,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0268] - Apresentar Análise do Aviso Bancário
+	 * [UC0268] - Apresentar Anï¿½lise do Aviso Bancï¿½rio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/12/2006
@@ -33058,7 +33059,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					AcertosAvisoBancarioHelper.setIdbanco(""
 							+ dadosArray[0]);
 				}
-				// código da Agência
+				// cï¿½digo da Agï¿½ncia
 				if (dadosArray[1] != null) {
 					AcertosAvisoBancarioHelper.setCodigoAgencia(""
 							+ dadosArray[1]);
@@ -33106,10 +33107,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 12/12/2006
 	 * 
 	 * @return Collection
@@ -33159,7 +33160,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoRelatorioHelper pagamentoRelatorioHelper = new PagamentoRelatorioHelper();
 
-					// Id e Descrição da Localidade
+					// Id e Descriï¿½ï¿½o da Localidade
 					if (dadosPagamento[1] != null) { // 1,2
 						pagamentoRelatorioHelper
 								.setIdLocalidade((Integer) dadosPagamento[1]);
@@ -33167,7 +33168,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDescricaoLocalidade((String) dadosPagamento[2]);
 					}
 
-					// Id e Nome da Gerência Regional
+					// Id e Nome da Gerï¿½ncia Regional
 					if (dadosPagamento[3] != null) { // 3,4
 						pagamentoRelatorioHelper
 								.setIdGerenciaRegional((Integer) dadosPagamento[3]);
@@ -33175,7 +33176,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setNomeGerenciaRegional((String) dadosPagamento[4]);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[5] != null) { // 5
 						pagamentoRelatorioHelper
 								.setIdImovel((Integer) dadosPagamento[5]);
@@ -33201,19 +33202,19 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDataPagamento((Date) dadosPagamento[9]);
 					}
 
-					// Ano Mês Referência do Pagamento
+					// Ano Mï¿½s Referï¿½ncia do Pagamento
 					if (dadosPagamento[10] != null) { // 10
 						pagamentoRelatorioHelper
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição Tipo Débito
+					// Descriï¿½ï¿½o Tipo Dï¿½bito
 					if (dadosPagamento[11] != null) { // 11
 						pagamentoRelatorioHelper
 								.setDescricaoTipoDebito((String) dadosPagamento[11]);
 					}
 
-					// Valor de Água da Conta
+					// Valor de ï¿½gua da Conta
 					if (dadosPagamento[12] != null) { // 12
 						pagamentoRelatorioHelper
 								.setValorAgua((BigDecimal) dadosPagamento[12]);
@@ -33225,31 +33226,31 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorEsgoto((BigDecimal) dadosPagamento[13]);
 					}
 
-					// Valor dos Débitos da Conta
+					// Valor dos Dï¿½bitos da Conta
 					if (dadosPagamento[14] != null) { // 14
 						pagamentoRelatorioHelper
 								.setDebitos((BigDecimal) dadosPagamento[14]);
 					}
 
-					// Valor dos Créditos da Conta
+					// Valor dos Crï¿½ditos da Conta
 					if (dadosPagamento[15] != null) { // 15
 						pagamentoRelatorioHelper
 								.setValorCreditos((BigDecimal) dadosPagamento[15]);
 					}
 
-					// Valor do Débito do Débito a Cobrar
+					// Valor do Dï¿½bito do Dï¿½bito a Cobrar
 					if (dadosPagamento[16] != null) { // 16
 						pagamentoRelatorioHelper
 								.setValorDebito((BigDecimal) dadosPagamento[16]);
 					}
 
-					// Número de Prestações do Débito
+					// Nï¿½mero de Prestaï¿½ï¿½es do Dï¿½bito
 					if (dadosPagamento[17] != null) { // 17
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoDebito((Short) dadosPagamento[17]);
 					}
 
-					// Número de Prestações Cobradas
+					// Nï¿½mero de Prestaï¿½ï¿½es Cobradas
 					if (dadosPagamento[18] != null) { // 18
 						pagamentoRelatorioHelper
 								.setNumeroPrestacaoCobradas((Short) dadosPagamento[18]);
@@ -33267,13 +33268,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorPagamento((BigDecimal) dadosPagamento[20]);
 					}
 
-					// Id da Situação Atual do Pagamento
+					// Id da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[21] != null) { // 21
 						pagamentoRelatorioHelper
 								.setIdSituacaoPagamentoAtual((Integer) dadosPagamento[21]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[22] != null) { // 22
 						pagamentoRelatorioHelper
 								.setDescricaoSituacaoPagamentoAtual((String) dadosPagamento[22]);
@@ -33306,11 +33307,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa o imóvel pelo id fazendo os carregamentos necessários
+	 * Pesquisa o imï¿½vel pelo id fazendo os carregamentos necessï¿½rios
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 16/12/06
 	 * 
 	 * @return Imovel
@@ -33327,11 +33328,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa o cliente pelo id fazendo os carregamentos necessários
+	 * Pesquisa o cliente pelo id fazendo os carregamentos necessï¿½rios
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 16/12/06
 	 * 
 	 * @return Cliente
@@ -33348,12 +33349,12 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa o endereço de correspondência do cliente pelo seu id fazendo os
-	 * carregamentos necessários
+	 * Pesquisa o endereï¿½o de correspondï¿½ncia do cliente pelo seu id fazendo os
+	 * carregamentos necessï¿½rios
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 16/12/06
 	 * 
 	 * @return ClienteEndereco
@@ -33371,12 +33372,12 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa o telefone padrão do cliente pelo seu id fazendo os
-	 * carregamentos necessários
+	 * Pesquisa o telefone padrï¿½o do cliente pelo seu id fazendo os
+	 * carregamentos necessï¿½rios
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 16/12/06
 	 * 
 	 * @return ClienteFone
@@ -33394,12 +33395,12 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os clientes do imóvel pelo seu id do imóvel fazendo os
-	 * carregamentos necessários
+	 * Pesquisa os clientes do imï¿½vel pelo seu id do imï¿½vel fazendo os
+	 * carregamentos necessï¿½rios
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 16/12/06
 	 * 
 	 * @return Collection<ClienteImovel>
@@ -33417,14 +33418,14 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
 	 * Pesquisa os pagamentos do tipo Debito a Cobrar do Cliente
 	 * pesquisarPagamentoLocalidade
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 21/12/06
 	 * 
 	 * @return Collection<Pagamento>
@@ -33531,7 +33532,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (arrecadadorMovimento[2] != null) {// 2
-				// descrição indentificação do serviço
+				// descriï¿½ï¿½o indentificaï¿½ï¿½o do serviï¿½o
 				arrecadadorMovimentoRetorno
 						.setDescricaoIdentificacaoServico(arrecadadorMovimento[2]
 								.toString());
@@ -33551,7 +33552,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (arrecadadorMovimento[5] != null) {// 5
-				// data de geração
+				// data de geraï¿½ï¿½o
 				arrecadadorMovimentoRetorno
 						.setDataGeracao((Date) arrecadadorMovimento[5]);
 			}
@@ -33571,7 +33572,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (arrecadadorMovimento[8] != null) {// 8
-				// ultima alteração
+				// ultima alteraï¿½ï¿½o
 				arrecadadorMovimentoRetorno
 						.setUltimaAlteracao((Date) arrecadadorMovimento[8]);
 			}
@@ -33637,9 +33638,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0276] Encerrar Arrecadação do Mês
+	 * [UC0276] Encerrar Arrecadaï¿½ï¿½o do Mï¿½s
 	 * 
-	 * Transfere para o histórico as guias de pagamentos e os relacionamentos
+	 * Transfere para o histï¿½rico as guias de pagamentos e os relacionamentos
 	 * ligados a ela.
 	 * 
 	 * @author Pedro Alexandre
@@ -33704,10 +33705,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	    }
 	  }
 	/**
-	 * [UC0276] Encerrar Arrecadação do Mês
+	 * [UC0276] Encerrar Arrecadaï¿½ï¿½o do Mï¿½s
 	 * 
-	 * Para cada guia de pagamento transferida para o histórico atualiza o
-	 * indicador de que a guia de pagamento está no histórico.
+	 * Para cada guia de pagamento transferida para o histï¿½rico atualiza o
+	 * indicador de que a guia de pagamento estï¿½ no histï¿½rico.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 09/01/2007
@@ -33759,7 +33760,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		Iterator<PagamentoHistorico> iteratorPagamentos = pagamentosComGuias.keySet().iterator();
 		
-		System.out.println("Inserindo histórico de pagamentos com guias...");
+		System.out.println("Inserindo histï¿½rico de pagamentos com guias...");
 		try {
 			while (iteratorPagamentos.hasNext()) {
 				
@@ -33781,9 +33782,9 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 	}
 	/**
-	 * [UC0276] Encerrar Arrecadação do Mês
+	 * [UC0276] Encerrar Arrecadaï¿½ï¿½o do Mï¿½s
 	 * 
-	 * Transfere para o histórico as devoluções informadas.
+	 * Transfere para o histï¿½rico as devoluï¿½ï¿½es informadas.
 	 * 
 	 * @author Administrador
 	 * @date 09/01/2007
@@ -33859,9 +33860,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0276] Encerrar Arrecadação do Mês
+	 * [UC0276] Encerrar Arrecadaï¿½ï¿½o do Mï¿½s
 	 * 
-	 * Atualiza o ano/mês de referência da arrecadação.
+	 * Atualiza o ano/mï¿½s de referï¿½ncia da arrecadaï¿½ï¿½o.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 09/01/2007
@@ -33885,7 +33886,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	/**
 	 * [UC0506] Inserir Arrecadador
 	 * 
-	 * Inclusão de um novo arrecadador.
+	 * Inclusï¿½o de um novo arrecadador.
 	 * 
 	 * @author Marcio Roberto
 	 * @date 29/01/2007
@@ -33901,7 +33902,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		Arrecadador arrecadador = new Arrecadador();
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------------------
+		// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_ARRECADADOR_INSERIR,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -33917,7 +33918,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		arrecadador.adicionarUsuario(usuarioLogado,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(arrecadador);
-		// ------------ REGISTRAR TRANSAÇÃO ----------------------------
+		// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------------------
 
 		// preenche objeto arrecadador
 		// seta o atributo de Agente no objeto arrecadador
@@ -33936,7 +33937,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			arrecadador.setImovel(imovel);
 		}
 
-		// seta o atributo de Inscrição Estadual no objeto arrecadador
+		// seta o atributo de Inscriï¿½ï¿½o Estadual no objeto arrecadador
 		arrecadador.setNumeroInscricaoEstadual(inscricaoEstadual);
 
 		arrecadador.setIndicadorUso((short) 1);
@@ -33961,11 +33962,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Permite inserir uma Agência Bancaria
+	 * Permite inserir uma Agï¿½ncia Bancaria
 	 * 
-	 * [UC0217] Inserir Agência Bancaria
+	 * [UC0217] Inserir Agï¿½ncia Bancaria
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 30/03/2006
 	 * 
 	 */
@@ -33998,11 +33999,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0298] Manter Agência bancária [] Atualizar Agência Bancária Metodo que
-	 * atualiza a Agência Bancária
+	 * [UC0298] Manter Agï¿½ncia bancï¿½ria [] Atualizar Agï¿½ncia Bancï¿½ria Metodo que
+	 * atualiza a Agï¿½ncia Bancï¿½ria
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 25/05/2006
 	 * 
 	 * 
@@ -34032,21 +34033,21 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		}
 
-		// Verifica se o campo Código da Agência foi preenchido
+		// Verifica se o campo Cï¿½digo da Agï¿½ncia foi preenchido
 
 		if (agencia.getCodigoAgencia() == null
 				|| agencia.getCodigoAgencia().equals(
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException("atencao.Informe_entidade", null,
-					" Código da Agência");
+					" Cï¿½digo da Agï¿½ncia");
 		}
-		// Verifica se o campo Nome da Agência foi preenchido
+		// Verifica se o campo Nome da Agï¿½ncia foi preenchido
 
 		if (agencia.getNomeAgencia() == null
 				|| agencia.getNomeAgencia().equals(
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException("atencao.Informe_entidade", null,
-					" Nome da Agência");
+					" Nome da Agï¿½ncia");
 		}
 
 		// Verifica se o campo Banco foi preenchido
@@ -34065,7 +34066,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					" Telefone");
 		}
 
-		// [FS0003] - Atualização realizada por outro usuário
+		// [FS0003] - Atualizaï¿½ï¿½o realizada por outro usuï¿½rio
 		FiltroAgencia filtroAgencia = new FiltroAgencia();
 		filtroAgencia.adicionarParametro(new ParametroSimples(FiltroAgencia.ID,
 				agencia.getId()));
@@ -34097,7 +34098,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * 
 	 * [UC0217] Inserir Conta Bancaria
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 30/03/2006
 	 * 
 	 */
@@ -34136,11 +34137,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0298] Manter Agência bancária [] Atualizar Agência Bancária Metodo que
-	 * atualiza a Agência Bancária
+	 * [UC0298] Manter Agï¿½ncia bancï¿½ria [] Atualizar Agï¿½ncia Bancï¿½ria Metodo que
+	 * atualiza a Agï¿½ncia Bancï¿½ria
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 25/05/2006
 	 * 
 	 * 
@@ -34182,7 +34183,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				|| contaBancaria.getAgencia().equals(
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException("atencao.Informe_entidade", null,
-					" Agência");
+					" Agï¿½ncia");
 		}
 
 		// Verifica se o campo Banco foi preenchido
@@ -34193,7 +34194,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					" Numero da Conta");
 		}
 
-		// [FS0003] - Atualização realizada por outro usuário
+		// [FS0003] - Atualizaï¿½ï¿½o realizada por outro usuï¿½rio
 		FiltroContaBancaria filtroContaBancaria = new FiltroContaBancaria();
 		filtroContaBancaria.adicionarParametro(new ParametroSimples(
 				FiltroContaBancaria.ID, contaBancaria.getId()));
@@ -34255,7 +34256,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	public boolean verificarExistenciaAgente(Integer codigoAgente)
 			throws ControladorException {
 
-		// [FS0003] - Verificando a existência do Agente
+		// [FS0003] - Verificando a existï¿½ncia do Agente
 		boolean retorno = true;
 
 		FiltroArrecadador filtroArrecadador = new FiltroArrecadador();
@@ -34287,7 +34288,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	public void removerArrecadador(String[] ids, Usuario usuarioLogado)
 			throws ControladorException {
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 		Operacao operacao = new Operacao();
 		// operacao.setId(Operacao.OPERACAO_ARRECADADOR_REMOVER);
 
@@ -34298,7 +34299,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		Collection<UsuarioAcaoUsuarioHelper> colecaoUsuarios = new ArrayList();
 		colecaoUsuarios.add(usuarioAcaoUsuarioHelper);
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 
 		// [SB0002]
 		this.getControladorUtil().remover(ids, Arrecadador.class.getName(),
@@ -34319,8 +34320,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		arrecadador.setUltimaAlteracao(new Date());
 
-		// [UC0107] - Registrar Transação
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
+		// [UC0107] - Registrar Transaï¿½ï¿½o
+		// ------------ REGISTRAR TRANSAï¿½ï¿½O----------------------------
 
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_ARRECADADOR_ATUALIZAR,
@@ -34338,8 +34339,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		arrecadador.adicionarUsuario(usuarioLogado,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(arrecadador);
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
-		// [FS0002] - Atualização realizada por outro usuário
+		// ------------ REGISTRAR TRANSAï¿½ï¿½O----------------------------
+		// [FS0002] - Atualizaï¿½ï¿½o realizada por outro usuï¿½rio
 		FiltroArrecadador filtroArrecadador = new FiltroArrecadador();
 		// Seta o filtro para buscar o arrecadador na base
 		filtroArrecadador.adicionarParametro(new ParametroSimples(
@@ -34358,8 +34359,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					"atencao.registro_remocao_nao_existente");
 		}
 
-		// Verificar se o arrecadador já foi atualizado por outro usuário
-		// durante esta atualização
+		// Verificar se o arrecadador jï¿½ foi atualizado por outro usuï¿½rio
+		// durante esta atualizaï¿½ï¿½o
 
 		if (arrecadadorNaBase.getUltimaAlteracao().after(
 				arrecadador.getUltimaAlteracao())) {
@@ -34374,7 +34375,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Atualiza logradouroCep de um ou mais imóveis
+	 * Atualiza logradouroCep de um ou mais imï¿½veis
 	 * 
 	 * [UC0] Atualizar Logradouro
 	 * 
@@ -34400,7 +34401,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Atualiza logradouroBairro de um ou mais imóveis
+	 * Atualiza logradouroBairro de um ou mais imï¿½veis
 	 * 
 	 * [UC0] Atualizar Logradouro
 	 * 
@@ -34478,11 +34479,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os movimentos dos arrecadores para a geração do relatório
+	 * Pesquisa os movimentos dos arrecadores para a geraï¿½ï¿½o do relatï¿½rio
 	 * 
 	 * [UCXXXX] Acompanhar Movimento dos Arrecadadores
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 02/04/2007
 	 * 
 	 * @return
@@ -34565,9 +34566,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Relatório para acompanhar o movimento dos arrecadadores
+	 * Relatï¿½rio para acompanhar o movimento dos arrecadadores
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 02/04/2007
 	 * 
 	 * @param idDebitoACobrar
@@ -34581,8 +34582,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		EnvioEmail envioEmail = getControladorCadastro()
 				.pesquisarEnvioEmail(
 						EnvioEmail.GERAR_RELATORIO_ACOMPANHAMENTO_MOVIMENTO_ARRECADADORES);
-		// Parte que gera o relatório e envia por email
-		// cria uma instância da classe do relatório
+		// Parte que gera o relatï¿½rio e envia por email
+		// cria uma instï¿½ncia da classe do relatï¿½rio
 		RelatorioAcompanhamentoMovimentoArrecadadores relatorioAcompanhamentoMovimentoArrecadadores = new RelatorioAcompanhamentoMovimentoArrecadadores(
 				usuario);
 
@@ -34631,7 +34632,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -34703,7 +34704,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -34796,7 +34797,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @data 28/04/2007
 	 * 
 	 * @param idConta
@@ -34814,7 +34815,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	/**
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @data 28/04/2007
 	 * 
 	 * @param idConta
@@ -34833,7 +34834,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	/**
 	 * [UC0509] Inserir Contrato Arrecadador
 	 * 
-	 * Inclusão de um novo Contrato de arrecadador.
+	 * Inclusï¿½o de um novo Contrato de arrecadador.
 	 * 
 	 * @author Marcio Roberto
 	 * @date 22/03/2007
@@ -34845,7 +34846,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			Collection<ArrecadadorContratoTarifa> colecaoArrecadadorContratoTarifa, 
 			Usuario usuarioLogado) throws ControladorException {
 
-		// // ------------ REGISTRAR TRANSAÇÃO ----------------------------
+		// // ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------------------
 		// RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 		// Operacao.OPERACAO_ARRECADADOR_CONTRATO_INSERIR,
 		// new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -34861,7 +34862,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		// arrecadador.adicionarUsuario(usuarioLogado,
 		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		// registradorOperacao.registrarOperacao(arrecadador);
-		// ------------ REGISTRAR TRANSAÇÃO ----------------------------
+		// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------------------
 
 		contrato.setUltimaAlteracao(new Date());
 
@@ -34899,7 +34900,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	public boolean verificarExistenciaArrecadador(Integer codigoArrecadador)
 			throws ControladorException {
 
-		// [FS0003] - Verificando a existência do Agente
+		// [FS0003] - Verificando a existï¿½ncia do Agente
 		boolean retorno = true;
 
 		FiltroArrecadador filtroArrecadador = new FiltroArrecadador();
@@ -34962,8 +34963,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		arrecadadorContrato.setUltimaAlteracao(new Date());
 
-		// [UC0107] - Registrar Transação
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
+		// [UC0107] - Registrar Transaï¿½ï¿½o
+		// ------------ REGISTRAR TRANSAï¿½ï¿½O----------------------------
 
 		/*RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_ARRECADADOR_CONTRATO_ATUALIZAR,
@@ -34981,9 +34982,9 @@ public class ControladorArrecadacao extends ControladorComum {
 		// arrecadador.adicionarUsuario(usuarioLogado,
 		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		// registradorOperacao.registrarOperacao(arrecadador);
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
+		// ------------ REGISTRAR TRANSAï¿½ï¿½O----------------------------
 
-		// [FS0002] - Atualização realizada por outro usuário
+		// [FS0002] - Atualizaï¿½ï¿½o realizada por outro usuï¿½rio
 		FiltroArrecadadorContrato filtroArrecadadorContrato = new FiltroArrecadadorContrato();
 		// Seta o filtro para buscar o arrecadador na base
 		filtroArrecadadorContrato.adicionarParametro(new ParametroSimples(
@@ -35003,8 +35004,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					"atencao.registro_remocao_nao_existente");
 		}
 
-		// Verificar se o arrecadador já foi atualizado por outro usuário
-		// durante esta atualização
+		// Verificar se o arrecadador jï¿½ foi atualizado por outro usuï¿½rio
+		// durante esta atualizaï¿½ï¿½o
 
 		if (arrecadadorContratoNaBase.getUltimaAlteracao().after(
 				arrecadadorContrato.getUltimaAlteracao())) {
@@ -35018,7 +35019,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		getControladorUtil().atualizar(arrecadadorContrato);
 		
 		//Faz um filtro para recuperar todas os contratos de tarifa na base
-		// associadas àquele Arrecadador Contrato e remove todas para em seguida inserir
+		// associadas ï¿½quele Arrecadador Contrato e remove todas para em seguida inserir
 		// apenas as que o usuario selecionou no Atualizar Arrecadador Contrato
 		FiltroArrecadadorContratoTarifa filtroArrecadadorContratoTarifa = new FiltroArrecadadorContratoTarifa();
 		filtroArrecadadorContratoTarifa.adicionarParametro(new ParametroSimples(
@@ -35081,7 +35082,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	public void removerContratoArrecadador(String[] ids, Usuario usuarioLogado)
 			throws ControladorException {
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 		Operacao operacao = new Operacao();
 		// operacao.setId(Operacao.OPERACAO_ARRECADADOR_REMOVER);
 
@@ -35092,7 +35093,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		Collection<UsuarioAcaoUsuarioHelper> colecaoUsuarios = new ArrayList();
 		colecaoUsuarios.add(usuarioAcaoUsuarioHelper);
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 
 		// [SB0002]
 		this.getControladorUtil().remover(ids,
@@ -35100,7 +35101,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Retorna uma coleção de ids de categoria
+	 * Retorna uma coleï¿½ï¿½o de ids de categoria
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 13/06/2007
@@ -35121,8 +35122,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	// //////////////////////////////////////////////////////////////////
 	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo Arrecadacao' de acordo com a opção de totalização.
+	 * Consulta ResumoArrecadacao para a geraï¿½ï¿½o do relatï¿½rio '[UC0345] Gerar
+	 * Relatï¿½rio de Resumo Arrecadacao' de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 19/06/2007
@@ -35149,7 +35150,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		Iterator iterator = colecaoResumoArrecadacaoRelatorioEstadoPorUnidadeNegocio
 				.iterator();
 
-		// Prepara cada linha do relatório
+		// Prepara cada linha do relatï¿½rio
 		String recebimentoTipo = null;
 		String tipoLancamento = null;
 		String itemLancamento = null;
@@ -35191,8 +35192,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lançamento
-			// e mesmo item de lançamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+			// e mesmo item de lanï¿½amento do registro anterior
 			if (recebimentoTipo.equals(tempRecebimentoTipo)
 					&& tipoLancamento.equals(tempTipoLancamento)
 					&& itemLancamento.equals(tempItemLancamento)) {
@@ -35232,7 +35233,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			if (!condicaoIgual) {
 
-				// adiciona uma linha no relátorio
+				// adiciona uma linha no relï¿½torio
 				ResumoArrecadacaoRelatorioHelper resumoArrecadacaoRelatorioHelper = new ResumoArrecadacaoRelatorioHelper(
 						arrayValores,
 						(String) elementAnterior[1],
@@ -35328,8 +35329,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo Arrecadacao' de acordo com a opção de totalização.
+	 * Consulta ResumoArrecadacao para a geraï¿½ï¿½o do relatï¿½rio '[UC0345] Gerar
+	 * Relatï¿½rio de Resumo Arrecadacao' de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 19/06/2007
@@ -35358,7 +35359,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		Iterator iteratorResumoArrecadacaoRelatorioPorGerenciaRegional = colecaoResumoArrecadacaoRelatorioPorGerenciaRegional
 				.iterator();
 
-		// Prepara cada linha do relatório
+		// Prepara cada linha do relatï¿½rio
 		String recebimentoTipo = null;
 		String tipoLancamento = null;
 		String itemLancamento = null;
@@ -35404,8 +35405,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lançamento
-			// e mesmo item de lançamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+			// e mesmo item de lanï¿½amento do registro anterior
 			if (recebimentoTipo.equals(tempRecebimentoTipo)
 					&& tipoLancamento.equals(tempTipoLancamento)
 					&& itemLancamento.equals(tempItemLancamento)) {
@@ -35456,7 +35457,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			if (!condicaoIgual) {
 
-				// adiciona uma linha no relátorio
+				// adiciona uma linha no relï¿½torio
 				ResumoArrecadacaoRelatorioHelper resumoArrecadacaoRelatorioHelper = new ResumoArrecadacaoRelatorioHelper(
 						arrayValores,
 						(String) elementAnterior[1],
@@ -35535,7 +35536,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisar pagamentos pelo aviso bancário
+	 * Pesquisar pagamentos pelo aviso bancï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 11/06/2007
@@ -35562,7 +35563,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisar devoluções pelo aviso bancário
+	 * Pesquisar devoluï¿½ï¿½es pelo aviso bancï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 11/06/2007
@@ -35589,7 +35590,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisar valores de arrecadação e devolução do aviso bancário
+	 * Pesquisar valores de arrecadaï¿½ï¿½o e devoluï¿½ï¿½o do aviso bancï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 14/06/2007
@@ -35616,7 +35617,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Atualizar Pagamentos e Aviso Bancário
+	 * Atualizar Pagamentos e Aviso Bancï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 15/06/2007
@@ -35654,7 +35655,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Atualizar Devoluções e Aviso Bancário
+	 * Atualizar Devoluï¿½ï¿½es e Aviso Bancï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 15/06/2007
@@ -35693,8 +35694,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	// //////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo Arrecadacao' de acordo com a opção de totalização.
+	 * Consulta ResumoArrecadacao para a geraï¿½ï¿½o do relatï¿½rio '[UC0345] Gerar
+	 * Relatï¿½rio de Resumo Arrecadacao' de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/06/2007
@@ -35722,7 +35723,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				Iterator iterator = colecaoResumoArrecadacaoRelatorioEstadoPorLocalidade
 						.iterator();
 
-				// Prepara cada linha do relatório
+				// Prepara cada linha do relatï¿½rio
 				String recebimentoTipo = null;
 				String tipoLancamento = null;
 				String itemLancamento = null;
@@ -35766,8 +35767,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					boolean condicaoIgual = true;
 					// compara se o registro atual eh do
-					// mesmo tipo de Recebimento, mesmo tipo de lançamento
-					// e mesmo item de lançamento do registro anterior
+					// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+					// e mesmo item de lanï¿½amento do registro anterior
 					if (recebimentoTipo.equals(tempRecebimentoTipo)
 							&& tipoLancamento.equals(tempTipoLancamento)
 							&& itemLancamento.equals(tempItemLancamento)) {
@@ -35809,7 +35810,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					if (!condicaoIgual) {
 
-						// adiciona uma linha no relátorio
+						// adiciona uma linha no relï¿½torio
 						ResumoArrecadacaoRelatorioHelper resumoArrecadacaoRelatorioHelper = new ResumoArrecadacaoRelatorioHelper(
 								arrayValores,
 								(String) elementAnterior[1],
@@ -35935,15 +35936,15 @@ public class ControladorArrecadacao extends ControladorComum {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
-		System.out.println("Contador Unidade de Negócio: " + contadorUnidade);
-		System.out.println("Contador Gerência Regional: " + contadorGerencia);
+		System.out.println("Contador Unidade de Negï¿½cio: " + contadorUnidade);
+		System.out.println("Contador Gerï¿½ncia Regional: " + contadorGerencia);
 		return retorno;
 
 	}
 
 	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo Arrecadacao' de acordo com a opção de totalização.
+	 * Consulta ResumoArrecadacao para a geraï¿½ï¿½o do relatï¿½rio '[UC0345] Gerar
+	 * Relatï¿½rio de Resumo Arrecadacao' de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 20/04/2011
@@ -35964,7 +35965,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 				Iterator iterator = colecaoResuArrecRelatEstadoPorMuni.iterator();
 
-				// Prepara cada linha do relatório
+				// Prepara cada linha do relatï¿½rio
 				String recebimentoTipo = null;
 				String tipoLancamento = null;
 				String itemLancamento = null;
@@ -36007,8 +36008,8 @@ public class ControladorArrecadacao extends ControladorComum {
                     
 					boolean condicaoIgual = true;
 					// compara se o registro atual eh do
-					// mesmo tipo de Recebimento, mesmo tipo de lançamento
-					// e mesmo item de lançamento do registro anterior
+					// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+					// e mesmo item de lanï¿½amento do registro anterior
 					if (recebimentoTipo.equals(tempRecebimentoTipo) && tipoLancamento.equals(tempTipoLancamento) 
 							&& itemLancamento.equals(tempItemLancamento)) {
 
@@ -36041,7 +36042,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					if (!condicaoIgual) {
 
-						// adiciona uma linha no relátorio
+						// adiciona uma linha no relï¿½torio
 						ResumoArrecadacaoRelatorioHelper resumoArrecadacaoRelatorioHelper = new ResumoArrecadacaoRelatorioHelper(
 								arrayValores,
 								(String) elementAnterior[1],
@@ -36082,7 +36083,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 
 					if(idMunicipioAnterior != null && !idMunicipioAnterior.equals(String.valueOf((Integer) element[13]))){
-						// quebra por Município Associado a Localidade
+						// quebra por Municï¿½pio Associado a Localidade
 						retorno = consultarResumoArrecadacaoRelatorioPorMunicipio(
 								anoMesReferencia, new Integer(idMunicipioAnterior), retorno);
 					}
@@ -36143,8 +36144,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo Arrecadacao' de acordo com a opção de totalização.
+	 * Consulta ResumoArrecadacao para a geraï¿½ï¿½o do relatï¿½rio '[UC0345] Gerar
+	 * Relatï¿½rio de Resumo Arrecadacao' de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 20/04/2011
@@ -36169,7 +36170,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		Iterator iterator = colecaoResuArrecRelPorMunicipio.iterator();
 
-		// Prepara cada linha do relatório
+		// Prepara cada linha do relatï¿½rio
 		String recebimentoTipo = null;
 		String tipoLancamento = null;
 		String itemLancamento = null;
@@ -36205,8 +36206,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lançamento
-			// e mesmo item de lançamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+			// e mesmo item de lanï¿½amento do registro anterior
 			if (recebimentoTipo.equals(tempRecebimentoTipo)
 					&& tipoLancamento.equals(tempTipoLancamento)
 					&& itemLancamento.equals(tempItemLancamento)) {
@@ -36238,7 +36239,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (!condicaoIgual) {
-				// adiciona uma linha no relátorio
+				// adiciona uma linha no relï¿½torio
 				ResumoArrecadacaoRelatorioHelper resumoArrecadacaoRelatorioHelper = new ResumoArrecadacaoRelatorioHelper(
 						arrayValores, (String) elementAnterior[1], (String) elementAnterior[2], (String) elementAnterior[3],
 						(String) elementAnterior[4], (Short) elementAnterior[5], (Short) elementAnterior[6],
@@ -36300,8 +36301,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo Arrecadacao' de acordo com a opção de totalização.
+	 * Consulta ResumoArrecadacao para a geraï¿½ï¿½o do relatï¿½rio '[UC0345] Gerar
+	 * Relatï¿½rio de Resumo Arrecadacao' de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/06/2007
@@ -36330,7 +36331,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		Iterator iterator = colecaoResumoArrecadacaoRelatorioPorUnidadeNegocio
 				.iterator();
 
-		// Prepara cada linha do relatório
+		// Prepara cada linha do relatï¿½rio
 
 		String recebimentoTipo = null;
 		String tipoLancamento = null;
@@ -36373,8 +36374,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lançamento
-			// e mesmo item de lançamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+			// e mesmo item de lanï¿½amento do registro anterior
 			if (recebimentoTipo.equals(tempRecebimentoTipo)
 					&& tipoLancamento.equals(tempTipoLancamento)
 					&& itemLancamento.equals(tempItemLancamento)) {
@@ -36414,7 +36415,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			if (!condicaoIgual) {
 
-				// adiciona uma linha no relátorio
+				// adiciona uma linha no relï¿½torio
 				ResumoArrecadacaoRelatorioHelper resumoArrecadacaoRelatorioHelper = new ResumoArrecadacaoRelatorioHelper(
 						arrayValores,
 						(String) elementAnterior[1],
@@ -36496,8 +36497,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo Arrecadacao' de acordo com a opção de totalização.
+	 * Consulta ResumoArrecadacao para a geraï¿½ï¿½o do relatï¿½rio '[UC0345] Gerar
+	 * Relatï¿½rio de Resumo Arrecadacao' de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/06/2007
@@ -36565,8 +36566,8 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lançamento
-			// e mesmo item de lançamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+			// e mesmo item de lanï¿½amento do registro anterior
 			if (recebimentoTipo.equals(tempRecebimentoTipo)
 					&& tipoLancamento.equals(tempTipoLancamento)
 					&& itemLancamento.equals(tempItemLancamento)) {
@@ -36606,7 +36607,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			if (!condicaoIgual) {
 
-				// adiciona uma linha no relátorio
+				// adiciona uma linha no relï¿½torio
 				ResumoArrecadacaoRelatorioHelper resumoArrecadacaoRelatorioHelper = new ResumoArrecadacaoRelatorioHelper(
 						arrayValores,
 						(String) elementAnterior[1],
@@ -36681,7 +36682,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0263] Filtrar Movimento dos Arrecadadores - Relatório
+	 * [UC0263] Filtrar Movimento dos Arrecadadores - Relatï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 13/07/07
@@ -36730,7 +36731,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0619] Gerar Relação de Acompanhamento dos Movimentos Arrecadadores por NSA
+	 * [UC0619] Gerar Relaï¿½ï¿½o de Acompanhamento dos Movimentos Arrecadadores por NSA
 	 */
 	public Collection<MovimentoArrecadadoresPorNSAHelper> gerarMovimentoArrecadadoresNSA(
 			Collection<Integer> idsArrecadadorMovimento,
@@ -36751,7 +36752,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com código de Barras
+	 * [UC0259] - Processar Pagamento com cï¿½digo de Barras
 	 * [SB0012] - Verifica Pagamento de Debito a Cobrar de Parcelamento 
 	 */
 	public void verificaPagamentoDebitoACobrarParcelamento(Integer idDebitoACobrar, Integer numeroParcelasAntecipadas) throws ControladorException {
@@ -36792,10 +36793,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Obtém a representação númerica do código de barras de um pagamento de
-	 * acordo com os parâmetros informados
+	 * Obtï¿½m a representaï¿½ï¿½o nï¿½merica do cï¿½digo de barras de um pagamento de
+	 * acordo com os parï¿½metros informados
 	 * 
-	 * [UC0229] Obter Representação Numérica do Código de Barras
+	 * [UC0229] Obter Representaï¿½ï¿½o Numï¿½rica do Cï¿½digo de Barras
 	 */
 	public String obterRepresentacaoNumericaCodigoBarra(Integer tipoPagamento,
 			BigDecimal valorCodigoBarra, Integer idLocalidade,
@@ -36817,12 +36818,12 @@ public class ControladorArrecadacao extends ControladorComum {
 		// Caso o tipo de pagamento seja referente a conta
 		if (tipoPagamento.intValue() == 3) {
 
-			// Caso o código da localidade ou a matrícula do imóvel ou o
-			// mês/ano da referência da conta ou o dígito verificador da
-			// referência da conta no módulo 10
-			// não forem informados levanta uma exceção para o usuário
-			// indicando que os parâmetros para geração do código de barras
-			// está incompleto.
+			// Caso o cï¿½digo da localidade ou a matrï¿½cula do imï¿½vel ou o
+			// mï¿½s/ano da referï¿½ncia da conta ou o dï¿½gito verificador da
+			// referï¿½ncia da conta no mï¿½dulo 10
+			// nï¿½o forem informados levanta uma exceï¿½ï¿½o para o usuï¿½rio
+			// indicando que os parï¿½metros para geraï¿½ï¿½o do cï¿½digo de barras
+			// estï¿½ incompleto.
 			if (idLocalidade == null || matriculaImovel == null || mesAnoReferenciaConta == null || digitoVerificadorRefContaModulo10 == null) {
 				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
@@ -36830,77 +36831,77 @@ public class ControladorArrecadacao extends ControladorComum {
 			// Caso o tipo de pagamento seja referente a guia de pagamento
 		} else if (tipoPagamento.intValue() == 4) {
 
-			// Caso o código da localidade ou a matrícula do imóvel ou o
-			// tipo de débito ou o ano da emissão da guia de pagamento
-			// não forem informados levanta uma exceção para o usuário
-			// indicando que os parâmetros para geração do código de barras
-			// está incompleto.
+			// Caso o cï¿½digo da localidade ou a matrï¿½cula do imï¿½vel ou o
+			// tipo de dï¿½bito ou o ano da emissï¿½o da guia de pagamento
+			// nï¿½o forem informados levanta uma exceï¿½ï¿½o para o usuï¿½rio
+			// indicando que os parï¿½metros para geraï¿½ï¿½o do cï¿½digo de barras
+			// estï¿½ incompleto.
 			if (idLocalidade == null || matriculaImovel == null || idTipoDebito == null
 					|| anoEmissaoGuiaPagamento == null) {
 				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 
 			// Caso a tipo de pagamento seja referente a documento de
-			// cobrança
+			// cobranï¿½a
 		} else if (tipoPagamento.intValue() == 5) {
 
-			// Caso o código da localidade ou a matrícula do imóvel ou o
-			// sequencial do documento de cobrança ou o tipo de documento
-			// não forem informados levanta uma exceção para o usuário
-			// indicando que os parâmetros para geração do código de barras
-			// está incompleto.
+			// Caso o cï¿½digo da localidade ou a matrï¿½cula do imï¿½vel ou o
+			// sequencial do documento de cobranï¿½a ou o tipo de documento
+			// nï¿½o forem informados levanta uma exceï¿½ï¿½o para o usuï¿½rio
+			// indicando que os parï¿½metros para geraï¿½ï¿½o do cï¿½digo de barras
+			// estï¿½ incompleto.
 			if (idLocalidade == null || matriculaImovel == null || sequencialDocumentoCobranca == null
 					|| idTipoDocumento == null) {
 				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 
 			// Caso o tipo de pagamento seja referente a fatura do cliente
-			// responsável
+			// responsï¿½vel
 		} else if (tipoPagamento.intValue() == 7) {
-			// Caso o código do cliente ou o mês/ano da referência da conta
-			// ou o sequencial da fatura do cliente responsável
-			// não forem informados levanta uma exceção para o usuário
-			// indicando que os parâmetros para geração do código de barras
-			// está incompleto.
+			// Caso o cï¿½digo do cliente ou o mï¿½s/ano da referï¿½ncia da conta
+			// ou o sequencial da fatura do cliente responsï¿½vel
+			// nï¿½o forem informados levanta uma exceï¿½ï¿½o para o usuï¿½rio
+			// indicando que os parï¿½metros para geraï¿½ï¿½o do cï¿½digo de barras
+			// estï¿½ incompleto.
 			if (idCliente == null || mesAnoReferenciaConta == null || seqFaturaClienteResponsavel == null) {
 				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 
 			// Caso a tipo de pagamento seja referente a guia de pagamento
 		} else if (tipoPagamento.intValue() == 6) {
-			// Caso o código da localidade ou id do cliente ou o
-			// tipo de débito ou o ano da emissão da guia de pagamento
-			// não forem informados levanta uma exceção para o usuário
-			// indicando que os parâmetros para geração do código de barras
-			// está incompleto.
+			// Caso o cï¿½digo da localidade ou id do cliente ou o
+			// tipo de dï¿½bito ou o ano da emissï¿½o da guia de pagamento
+			// nï¿½o forem informados levanta uma exceï¿½ï¿½o para o usuï¿½rio
+			// indicando que os parï¿½metros para geraï¿½ï¿½o do cï¿½digo de barras
+			// estï¿½ incompleto.
 			if (idLocalidade == null || idCliente == null || idTipoDebito == null || anoEmissaoGuiaPagamento == null) {
 				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 		} else if (tipoPagamento.intValue() == 8) {
 
-			// Caso o código do cliente ou o
-			// sequencial do documento de cobrança ou o tipo de documento
-			// não forem informados levanta uma exceção para o usuário
-			// indicando que os parâmetros para geração do código de barras
-			// está incompleto.
+			// Caso o cï¿½digo do cliente ou o
+			// sequencial do documento de cobranï¿½a ou o tipo de documento
+			// nï¿½o forem informados levanta uma exceï¿½ï¿½o para o usuï¿½rio
+			// indicando que os parï¿½metros para geraï¿½ï¿½o do cï¿½digo de barras
+			// estï¿½ incompleto.
 			if (idCliente == null || sequencialDocumentoCobranca == null || idTipoDocumento == null) {
 				throw new ControladorException("atencao.parametros.incompletos.codigobarra");
 			}
 		}
 
-		// Cria a variável que vai armazenar a representação númerica do código
+		// Cria a variï¿½vel que vai armazenar a representaï¿½ï¿½o nï¿½merica do cï¿½digo
 		// de barras
 		String representacaoNumericaCodigoBarra = "";
 
-		// G.05.1 - Identificação do produto
+		// G.05.1 - Identificaï¿½ï¿½o do produto
 		String identificacaoProduto = "8";
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoProduto;
 
-		// G.05.2 - Identificação do segmento
+		// G.05.2 - Identificaï¿½ï¿½o do segmento
 		String identificacaoSegmento = "2";
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoSegmento;
 
-		// G.05.3 - Identificação dovalor real ou referência
+		// G.05.3 - Identificaï¿½ï¿½o dovalor real ou referï¿½ncia
 
 		// MODULO 10
 		Short moduloVerificador = ConstantesSistema.MODULO_VERIFICADOR_10;
@@ -36915,39 +36916,39 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoValorRealOuReferencia;
 
-		// G.05.5 - Valor do código de barras
+		// G.05.5 - Valor do cï¿½digo de barras
 		String valorCodigoBarraFormatado = Util.adicionarZerosEsquedaNumero(11,
 				valorCodigoBarra.setScale(2).toString().replace(".", ""));
 		valorCodigoBarraFormatado = valorCodigoBarraFormatado.replace("-", "");
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + valorCodigoBarraFormatado;
 
-		// G.05.6 - Identificação da empresa
+		// G.05.6 - Identificaï¿½ï¿½o da empresa
 		String identificacaoEmpresa = getSistemaParametro().getCodigoEmpresaFebraban().toString();
 		identificacaoEmpresa = Util.adicionarZerosEsquedaNumero(4, identificacaoEmpresa);
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoEmpresa;
 
-		// G.05.7 Identificação do pagamento
-		// [SB0001] Obter Identificação do Pagamento
+		// G.05.7 Identificaï¿½ï¿½o do pagamento
+		// [SB0001] Obter Identificaï¿½ï¿½o do Pagamento
 		String identificacaoPagamento = obterIdentificacaoPagamento(tipoPagamento, idLocalidade, matriculaImovel,
 				mesAnoReferenciaConta, digitoVerificadorRefContaModulo10, idTipoDebito, anoEmissaoGuiaPagamento,
 				sequencialDocumentoCobranca, idTipoDocumento, idCliente, seqFaturaClienteResponsavel, idGuiaPagamento);
 
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoPagamento + tipoPagamento.toString();
 
-		// G.05.4 - Dígito verificador geral
-		// [SB0002] Obter Dígito verificador geral
+		// G.05.4 - Dï¿½gito verificador geral
+		// [SB0002] Obter Dï¿½gito verificador geral
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra.replace(".", "");
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra.replace("-", "");
 		String digitoVerificadorGeral = (Util.obterDigitoVerificadorGeral(representacaoNumericaCodigoBarra, moduloVerificador)).toString();
 
-		// Monta a representaçaõ númerica com todos os campos informados
+		// Monta a representaï¿½aï¿½ nï¿½merica com todos os campos informados
 		representacaoNumericaCodigoBarra = identificacaoProduto + identificacaoSegmento
 				+ identificacaoValorRealOuReferencia + digitoVerificadorGeral + valorCodigoBarraFormatado
 				+ identificacaoEmpresa + identificacaoPagamento + tipoPagamento.toString();
 
-		// Cria as variáveis que vão armazenar o código de barra separado por
+		// Cria as variï¿½veis que vï¿½o armazenar o cï¿½digo de barra separado por
 		// campos
-		// e seus respectivos dígitos verificadores se existirem
+		// e seus respectivos dï¿½gitos verificadores se existirem
 		String codigoBarraCampo1 = null;
 		String codigoBarraDigitoVerificadorCampo1 = null;
 		String codigoBarraCampo2 = null;
@@ -36957,9 +36958,9 @@ public class ControladorArrecadacao extends ControladorComum {
 		String codigoBarraCampo4 = null;
 		String codigoBarraDigitoVerificadorCampo4 = null;
 
-		// Separa as 44 posições do código de barras em 4 grupos de onze
-		// posições
-		// e para cada um dos grupos calcula o dígito verificador do módulo 11
+		// Separa as 44 posiï¿½ï¿½es do cï¿½digo de barras em 4 grupos de onze
+		// posiï¿½ï¿½es
+		// e para cada um dos grupos calcula o dï¿½gito verificador do mï¿½dulo 11
 		codigoBarraCampo1 = representacaoNumericaCodigoBarra.substring(0, 11);
 
 		codigoBarraDigitoVerificadorCampo1 = (Util.obterDigitoVerificador(new Long(codigoBarraCampo1), moduloVerificador)).toString();
@@ -36973,13 +36974,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		codigoBarraDigitoVerificadorCampo4 = (Util.obterDigitoVerificador(new Long(codigoBarraCampo4), moduloVerificador)).toString();
 
-		// Monta a representação númerica do código de barras com os dígitos
+		// Monta a representaï¿½ï¿½o nï¿½merica do cï¿½digo de barras com os dï¿½gitos
 		// verificadores
 		representacaoNumericaCodigoBarra = codigoBarraCampo1 + codigoBarraDigitoVerificadorCampo1 + codigoBarraCampo2
 				+ codigoBarraDigitoVerificadorCampo2 + codigoBarraCampo3 + codigoBarraDigitoVerificadorCampo3
 				+ codigoBarraCampo4 + codigoBarraDigitoVerificadorCampo4;
 
-		// Retorna a representação númerica do código de barras
+		// Retorna a representaï¿½ï¿½o nï¿½merica do cï¿½digo de barras
 		return representacaoNumericaCodigoBarra;
 	}
 
@@ -36991,7 +36992,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer idTipoDocumento, Integer idCliente,
 			Integer seqFaturaClienteResponsavel,String idGuiaPagamento) throws ControladorException {
 
-		// Cria a variável que vai armazenar o identificador do pagamento formatado
+		// Cria a variï¿½vel que vai armazenar o identificador do pagamento formatado
 		String identificacaoPagamento = "";
 
 		// Caso o tipo de pagamento seja referente a conta
@@ -37003,7 +37004,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			//FIXO
 			identificacaoPagamento = identificacaoPagamento + "0";
 			
-			//Identifica o tamanho da matrícula do imóvel
+			//Identifica o tamanho da matrï¿½cula do imï¿½vel
 			identificacaoPagamento = identificacaoPagamento + "1";
 			
 			identificacaoPagamento = identificacaoPagamento + mesAnoReferenciaConta;
@@ -37012,7 +37013,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			identificacaoPagamento = identificacaoPagamento + "000";
 	
 		}
-		//Caso o tipo de pagamento seja referente a guia de pagamento (Imóvel)
+		//Caso o tipo de pagamento seja referente a guia de pagamento (Imï¿½vel)
 		else if (tipoPagamento.intValue() == 4) {
 			
 			identificacaoPagamento = identificacaoPagamento + Util.adicionarZerosEsquedaNumero(3, "" + idLocalidade);
@@ -37021,7 +37022,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			//FIXO
 			identificacaoPagamento = identificacaoPagamento + "0";
 			
-			//Identifica o tamanho da matrícula do imóvel
+			//Identifica o tamanho da matrï¿½cula do imï¿½vel
 			identificacaoPagamento = identificacaoPagamento + "1";
 			
 			identificacaoPagamento = identificacaoPagamento + (Util.adicionarZerosEsquedaNumero(3, idTipoDebito.toString()));
@@ -37030,7 +37031,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			identificacaoPagamento = identificacaoPagamento + "000";
 	
 		}
-		//Caso a tipo de pagamento seja referente a documento de cobrança
+		//Caso a tipo de pagamento seja referente a documento de cobranï¿½a
 		else if (tipoPagamento.intValue() == 5) {
 			
 			identificacaoPagamento = identificacaoPagamento + Util.adicionarZerosEsquedaNumero(3, "" + idLocalidade);
@@ -37038,7 +37039,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			identificacaoPagamento = identificacaoPagamento + (Util.adicionarZerosEsquedaNumero(9, sequencialDocumentoCobranca));
 			identificacaoPagamento = identificacaoPagamento + (Util.adicionarZerosEsquedaNumero(2, idTipoDocumento.toString()));
 			
-			//Identifica o tamanho da matrícula do imóvel
+			//Identifica o tamanho da matrï¿½cula do imï¿½vel
 			identificacaoPagamento = identificacaoPagamento + "1";
 
 			// Caso o tipo de pagamento seja referente a guia de pagamento (Cliente)
@@ -37055,7 +37056,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			identificacaoPagamento = identificacaoPagamento + "000";
 			
 		}
-		//Caso o tipo de pagamento seja referente a fatura do cliente responsável
+		//Caso o tipo de pagamento seja referente a fatura do cliente responsï¿½vel
 		else if (tipoPagamento.intValue() == 7) {
 			
 			identificacaoPagamento = identificacaoPagamento + (Util.adicionarZerosEsquedaNumero(9, idCliente.toString()));
@@ -37067,7 +37068,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			identificacaoPagamento = identificacaoPagamento + (Util.adicionarZerosEsquedaNumero(6, seqFaturaClienteResponsavel.toString()));
 			
 		}
-		//Caso a tipo de pagamento seja referente a documento de cobrança cliente
+		//Caso a tipo de pagamento seja referente a documento de cobranï¿½a cliente
 		else if (tipoPagamento.intValue() == 8) {
 			
 			identificacaoPagamento = identificacaoPagamento + "000";
@@ -37092,7 +37093,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				//FIXO
 				identificacaoPagamento = identificacaoPagamento + "00";
 				
-				//Identifica o tamanho da matrícula do imóvel
+				//Identifica o tamanho da matrï¿½cula do imï¿½vel
 				identificacaoPagamento = identificacaoPagamento + "1";
 			}
 			else if(tipoPagamento.intValue() == 9){
@@ -37104,7 +37105,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				//FIXO
 				identificacaoPagamento = identificacaoPagamento + "00";
 				
-				//Identifica o tamanho da matrícula do imóvel
+				//Identifica o tamanho da matrï¿½cula do imï¿½vel
 				identificacaoPagamento = identificacaoPagamento + "1";
 			}
 		}
@@ -37114,7 +37115,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Processamento Rápido
+	 * Processamento Rï¿½pido
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 17/08/2007
@@ -37135,12 +37136,12 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0270] Apresentar Análise do Movimento dos Arrecadadores
+	 * [UC0270] Apresentar Anï¿½lise do Movimento dos Arrecadadores
 	 * 
 	 * O sistema seleciona os itens do movimento do arrecadador com os seguintes
-	 * dados: 1 - Código do Registro 2 - Identificação do Imóvel/Cliente 3 -
-	 * Ocorrência 4 - Indicador de Aceitação 5 - Descrição do Indicador de
-	 * Aceitação
+	 * dados: 1 - Cï¿½digo do Registro 2 - Identificaï¿½ï¿½o do Imï¿½vel/Cliente 3 -
+	 * Ocorrï¿½ncia 4 - Indicador de Aceitaï¿½ï¿½o 5 - Descriï¿½ï¿½o do Indicador de
+	 * Aceitaï¿½ï¿½o
 	 * 
 	 * [SF0001] Consultar os Itens do Movimento do Arrecadador
 	 * 
@@ -37208,8 +37209,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 				/*
-				 * Caso o código do registro corresponda a "B", "C", "E" ou "F",
-				 * exibir a identificação do cliente na empresa retornada pelo
+				 * Caso o cï¿½digo do registro corresponda a "B", "C", "E" ou "F",
+				 * exibir a identificaï¿½ï¿½o do cliente na empresa retornada pelo
 				 * [UC0262]
 				 */
 				if (arrecadadorMovimentoItemHelper.getCodigoRegistro() != null
@@ -37293,15 +37294,15 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 				/*
-				 * Caso o código do registro corresponda a "G"
+				 * Caso o cï¿½digo do registro corresponda a "G"
 				 * 
-				 * Distribui os dados do código de barras [UC0264] - Distribuir
-				 * Dados co Código de Barras passando o código de barras
+				 * Distribui os dados do cï¿½digo de barras [UC0264] - Distribuir
+				 * Dados co Cï¿½digo de Barras passando o cï¿½digo de barras
 				 * retornado pelo [UC0262]- Distribuir Dados do Registro de
 				 * Movimento do Arrecadador.
 				 * 
 				 * Exibir o tipo de pagamento retornado pelo [UC0262] -
-				 * Distribuir Dados co Código de Barras
+				 * Distribuir Dados co Cï¿½digo de Barras
 				 */
 				else if (arrecadadorMovimentoItemHelper.getCodigoRegistro() != null
 						&& arrecadadorMovimentoItemHelper.getCodigoRegistro()
@@ -37336,7 +37337,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
                 
                 /*
-                 * Caso o código do registro corresponda a "W"
+                 * Caso o cï¿½digo do registro corresponda a "W"
                  */
                 else if (arrecadadorMovimentoItemHelper.getCodigoRegistro() != null
                         && arrecadadorMovimentoItemHelper.getCodigoRegistro()
@@ -37431,12 +37432,12 @@ public class ControladorArrecadacao extends ControladorComum {
 				arrecadadorMovimentoItemHelper.setVlPagamento(Util
 						.formatarMoedaReal(valorPagamento));
 				
-				// Verificamos se o filtro de relatorio a diferença entre o valor pago e o valor movimentado foi informado
+				// Verificamos se o filtro de relatorio a diferenï¿½a entre o valor pago e o valor movimentado foi informado
 				if ( indicadorDiferencaValorMovimentoValorPagamento != null &&
 					 indicadorDiferencaValorMovimentoValorPagamento != 1 &&
 					 // Indicador de todos
 					 indicadorDiferencaValorMovimentoValorPagamento != 3 ){
-					// Sem diferença
+					// Sem diferenï¿½a
 					if ( indicadorDiferencaValorMovimentoValorPagamento == 1 ){
 						if ( arrecadadorMovimentoItemHelper.getVlPagamento().equals( arrecadadorMovimentoItemHelper.getVlMovimento() ) ){
 							retorno.add(arrecadadorMovimentoItemHelper);
@@ -37463,7 +37464,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0270] Apresentar Análise do Movimento dos Arrecadadores
+	 * [UC0270] Apresentar Anï¿½lise do Movimento dos Arrecadadores
 	 *
 	 * @author Raphael Rossiter
 	 * @date 08/11/2008
@@ -37547,7 +37548,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Inserir uma coleção de pagamentos informados manualmente
+	 * Inserir uma coleï¿½ï¿½o de pagamentos informados manualmente
 	 */
 	public Integer inserirPagamentos(Collection<Pagamento> colecaoPagamento, Usuario usuarioLogado, AvisoBancario avisoBancario) throws ControladorException {
 		try {
@@ -37592,7 +37593,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * Inserir uma coleção de pagamentos informados manualmente
+	 * Inserir uma coleï¿½ï¿½o de pagamentos informados manualmente
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 26/09/2007
@@ -37627,10 +37628,10 @@ public class ControladorArrecadacao extends ControladorComum {
 			pagamento.setUltimaAlteracao(new Date());
 			
 				
-			// Chama o metódo de inserir pagamento da fachada
+			// Chama o metï¿½do de inserir pagamento da fachada
 			this.getControladorUtil().inserir(pagamento);
 			
-			// Alterado por Francisco - 26/05/08, por conta do Resumo de Ações de cobrança
+			// Alterado por Francisco - 26/05/08, por conta do Resumo de Aï¿½ï¿½es de cobranï¿½a
 			// Analista: Ana Breda
 			getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(pagamento,
 					CobrancaDebitoSituacao.PAGO);			
@@ -37651,7 +37652,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * Inserir Pagamentos por código de barras
+	 * Inserir Pagamentos por cï¿½digo de barras
 	 */
 	public Integer inserirPagamentosCodigoBarras(
 			Collection<Pagamento> pagamentos,
@@ -37666,7 +37667,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Inserir devoluções para os pagamentos efetuados a partir do código de
+	 * Inserir devoluï¿½ï¿½es para os pagamentos efetuados a partir do cï¿½digo de
 	 * barras
 	 * 
 	 * @author Raphael Rossiter
@@ -37681,7 +37682,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		if (colecaoDevolucoes != null && !colecaoDevolucoes.isEmpty()) {
 
-			// ------------ REGISTRAR TRANSAÇÃO ----------------
+			// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 					Operacao.OPERACAO_DEVOLUCOES_INSERIR,
 					new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -37692,12 +37693,12 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
 			operacaoEfetuada.setOperacao(operacao);
-			// ------------ REGISTRAR TRANSAÇÃO ----------------
+			// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 
 			Integer idGuiaDevolucao = null;
 			
 			/*
-			 * Cria a variável que vai acumular os valores das devoluções
+			 * Cria a variï¿½vel que vai acumular os valores das devoluï¿½ï¿½es
 			 */			 
 			BigDecimal valorDevolucaoAcumulado = new BigDecimal("0.00");
 
@@ -37719,29 +37720,29 @@ public class ControladorArrecadacao extends ControladorComum {
 				devolucao.setAvisoBancario(avisoBancario);
 				devolucao.setUltimaAlteracao(new Date());
 
-				// ------------ REGISTRAR TRANSAÇÃO ----------------
+				// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 				devolucao.setOperacaoEfetuada(operacaoEfetuada);
 				devolucao.adicionarUsuario(usuarioLogado,
 						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 				registradorOperacao.registrarOperacao(devolucao);
-				// ------------ REGISTRAR TRANSAÇÃO ----------------
+				// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 
 				// INSERINDO DEVOLUCAO
 				this.getControladorUtil().inserir(devolucao);
 			}
 			
-			// Atualiza o valor da devolução do aviso bancário
+			// Atualiza o valor da devoluï¿½ï¿½o do aviso bancï¿½rio
 			avisoBancario.setValorDevolucaoCalculado(avisoBancario
 			.getValorDevolucaoCalculado()
 			.add(valorDevolucaoAcumulado));
 			avisoBancario.setUltimaAlteracao(new Date());
 
-			// ------------ REGISTRAR TRANSAÇÃO ----------------
+			// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 			avisoBancario.setOperacaoEfetuada(operacaoEfetuada);
 			avisoBancario.adicionarUsuario(usuarioLogado,
 					UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 			registradorOperacao.registrarOperacao(avisoBancario);
-			// ------------ REGISTRAR TRANSAÇÃO ----------------
+			// ------------ REGISTRAR TRANSAï¿½ï¿½O ----------------
 
 			this.getControladorUtil().atualizar(avisoBancario);
 		}
@@ -37758,7 +37759,7 @@ public class ControladorArrecadacao extends ControladorComum {
 // ************************************************************************************
     
     /**
-     * [UC0721] - Distribuir dados do Registro de Movimento do Arrecadador da Ficha de Compensação
+     * [UC0721] - Distribuir dados do Registro de Movimento do Arrecadador da Ficha de Compensaï¿½ï¿½o
      * Autor: Vivianne Sousa
      * Data: 23/11/2007
      * 
@@ -38074,7 +38075,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
     
     /**
-     * [UC0724] - Processar Pagamento com Ficha de Compensação
+     * [UC0724] - Processar Pagamento com Ficha de Compensaï¿½ï¿½o
      * 
      * Autor: Vivianne Sousa
      * Data: 26/11/2007
@@ -38098,10 +38099,10 @@ public class ControladorArrecadacao extends ControladorComum {
         filtroDocumentoTipo.adicionarParametro(new ParametroSimples(FiltroDocumentoTipo.ID, tipoDocumento));
         Collection colecaoDocumentoTipo = getControladorUtil().pesquisar(filtroDocumentoTipo,DocumentoTipo.class.getName());
         
-        //Caso o tipo de documento não esteja na tabela COBRANCA.DOCUMENTO_TIPO
+        //Caso o tipo de documento nï¿½o esteja na tabela COBRANCA.DOCUMENTO_TIPO
         if (colecaoDocumentoTipo == null || colecaoDocumentoTipo.isEmpty()){
             indicadorAceitacaoRegistro = "2";
-            descricaoOcorrencia  = "TIPO DE DOCUMENTO INVÁLIDO";
+            descricaoOcorrencia  = "TIPO DE DOCUMENTO INVï¿½LIDO";
         }else{
           
             if(tipoDocumento.equals(DocumentoTipo.CONTA)){
@@ -38136,7 +38137,7 @@ public class ControladorArrecadacao extends ControladorComum {
                     
                     /*
                      * Caso o ano mes da data de dedito seja maior que o ano mes de
-                     * arrecadação da tabela sistema parametro então seta o ano mes da
+                     * arrecadaï¿½ï¿½o da tabela sistema parametro entï¿½o seta o ano mes da
                      * data de debito
                      */
                     if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
@@ -38146,7 +38147,7 @@ public class ControladorArrecadacao extends ControladorComum {
                     } else {
 
                         /*
-                         * caso contrario seta o o ano mes arrecadação da tabela sistema
+                         * caso contrario seta o o ano mes arrecadaï¿½ï¿½o da tabela sistema
                          * parametro
                          */
                         pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
@@ -38207,7 +38208,7 @@ public class ControladorArrecadacao extends ControladorComum {
             		tipoDocumento.equals(DocumentoTipo.VISITA_COBRANCA) ||
             		tipoDocumento.equals(DocumentoTipo.ORDEM_CORTE)){
             	
-            	//[SB0002] – Processar Pagamento de Extrato de Débitos.
+            	//[SB0002] ï¿½ Processar Pagamento de Extrato de Dï¿½bitos.
             	CobrancaDocumento cobrancaDocumento = null ;
                 
             	try {
@@ -38217,7 +38218,7 @@ public class ControladorArrecadacao extends ControladorComum {
                     throw new ControladorException("erro.sistema", e);
                 }
             	
-            	//[FS0002 – Validar documento de cobrança]
+            	//[FS0002 ï¿½ Validar documento de cobranï¿½a]
             	if (cobrancaDocumento == null){
             		descricaoOcorrencia = "DOCUMENTO INEXISTENTE";
             		indicadorAceitacaoRegistro = "2";
@@ -38241,7 +38242,7 @@ public class ControladorArrecadacao extends ControladorComum {
             				registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(cobrancaDocumento.getImovel().getLocalidade().getId().toString());
             			}
             			
-            			//IMÓVEL
+            			//IMï¿½VEL
             			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(cobrancaDocumento.getImovel().getId().toString());
         				
             			//SEQUENCIAL DO DOCUMENTO
@@ -38253,8 +38254,8 @@ public class ControladorArrecadacao extends ControladorComum {
         				registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
         				
             			/*
-            			 * [UC0259] - Processar Pagamento com Código de Barras
-            			 * [SB0003] – Processar Pagamento de Documento de Cobrança - IMÓVEL
+            			 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
+            			 * [SB0003] ï¿½ Processar Pagamento de Documento de Cobranï¿½a - IMï¿½VEL
             			 */
         				retorno = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo5(registroHelperCodigoBarras, getSistemaParametro(),
             			dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), valorPagamento, idFormaArrecadacao, usuarioLogado);
@@ -38277,8 +38278,8 @@ public class ControladorArrecadacao extends ControladorComum {
         				registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
         				
             			/*
-            			 * [UC0259] - Processar Pagamento com Código de Barras
-            			 * [SB0003] – Processar Pagamento de Documento de Cobrança - CLIENTE
+            			 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
+            			 * [SB0003] ï¿½ Processar Pagamento de Documento de Cobranï¿½a - CLIENTE
             			 */
         				retorno = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo8(registroHelperCodigoBarras, getSistemaParametro(),
             			dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), valorPagamento, idFormaArrecadacao);
@@ -38301,7 +38302,7 @@ public class ControladorArrecadacao extends ControladorComum {
                     throw new ControladorException("erro.sistema", e);
                 }
             	
-            	// [FS0002 ? Validar documento de cobrança]
+            	// [FS0002 ? Validar documento de cobranï¿½a]
             	if (cobrancaDocumentoItem == null){
             		descricaoOcorrencia = "DOCUMENTO ITEM INEXISTENTE";
             	}
@@ -38369,14 +38370,14 @@ public class ControladorArrecadacao extends ControladorComum {
         			
         			if (guiaPagamento.getImovel() != null){
     					
-    					//IMÓVEL
+    					//IMï¿½VEL
             			registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(String.valueOf(guiaPagamento.getImovel().getId().toString()));
             			
             			//ADICIONANDO AO HELPER
             			registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
             			
             			/*
-            			 * [UC0259] - Processar Pagamento com Código de Barras
+            			 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
             			 */
         				retorno = this.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoMatricula(
         						registroHelperCodigoBarras, getSistemaParametro(), dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), 
@@ -38392,7 +38393,7 @@ public class ControladorArrecadacao extends ControladorComum {
             			registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
             			
             			/*
-            			 * [UC0259] - Processar Pagamento com Código de Barras
+            			 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
             			 */
         				retorno = this.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoCliente(
         						registroHelperCodigoBarras, getSistemaParametro(), dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), 
@@ -38407,11 +38408,11 @@ public class ControladorArrecadacao extends ControladorComum {
             else{
                 //6.2
                 indicadorAceitacaoRegistro = "2";
-                descricaoOcorrencia = "FICHA DE COMPENS. COM TIPO DE PAGAMENTO INVÁLIDO";
+                descricaoOcorrencia = "FICHA DE COMPENS. COM TIPO DE PAGAMENTO INVï¿½LIDO";
             }
         }
         
-        //Seta os parametros que serão retornados
+        //Seta os parametros que serï¿½o retornados
         pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamnetos);
         pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
         pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
@@ -38437,7 +38438,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		if (colecaoDocumentoTipo == null || colecaoDocumentoTipo.isEmpty()) {
 			indicadorAceitacaoRegistro = "2";
-			descricaoOcorrencia = "TIPO DE DOCUMENTO INVÁLIDO";
+			descricaoOcorrencia = "TIPO DE DOCUMENTO INVï¿½LIDO";
 			
 			pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 			pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
@@ -38547,7 +38548,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(cobrancaDocumento.getImovel().getLocalidade().getId().toString());
 						}
 
-						// IMÓVEL
+						// IMï¿½VEL
 						registroHelperCodigoBarrasTipoPagamento.setIdPagamento2(cobrancaDocumento.getImovel().getId().toString());
 						// SEQUENCIAL DO DOCUMENTO
 						registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(String.valueOf(cobrancaDocumento.getNumeroSequenciaDocumento()));
@@ -38556,8 +38557,8 @@ public class ControladorArrecadacao extends ControladorComum {
 						registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
 
 						/*
-						 * [UC0259] - Processar Pagamento com Código de Barras
-						 * [SB0003] - Processar Pagamento de Documento de Cobrança - IMÓVEL
+						 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
+						 * [SB0003] - Processar Pagamento de Documento de Cobranï¿½a - IMï¿½VEL
 						 */
 						pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo5Novo(registroHelperCodigoBarras, registroTipo7, idFormaArrecadacao, usuarioLogado);
 					} else {
@@ -38574,9 +38575,9 @@ public class ControladorArrecadacao extends ControladorComum {
 						registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
 
 						/*
-						 * [UC0259] - Processar Pagamento com Código de Barras
+						 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 						 * [SB0003] - Processar Pagamento de Documento de
-						 * Cobrança - CLIENTE
+						 * Cobranï¿½a - CLIENTE
 						 */
 						pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo8Novo(registroHelperCodigoBarras, registroTipo7, idFormaArrecadacao);
 					}
@@ -38599,7 +38600,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					throw new ControladorException("erro.sistema", e);
 				}
 
-				// [FS0002 - Validar documento de cobrança]
+				// [FS0002 - Validar documento de cobranï¿½a]
 				if (cobrancaDocumentoItem == null) {
 					indicadorAceitacaoRegistro = "2";
 					descricaoOcorrencia = "DOCUMENTO ITEM INEXISTENTE";
@@ -38689,7 +38690,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 			} else {
 				indicadorAceitacaoRegistro = "2";
-				descricaoOcorrencia = "FICHA DE COMPENS. COM TIPO DE PAGAMENTO INVÁLIDO";
+				descricaoOcorrencia = "FICHA DE COMPENS. COM TIPO DE PAGAMENTO INVï¿½LIDO";
 				
 				pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 				pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
@@ -38702,7 +38703,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
     /**
      * [UC0242] - Registrar Movimento dos Arrecadadores 
-     * [SF0013] - Inserir o movimento do arrecadador da Ficha de Compensação
+     * [SF0013] - Inserir o movimento do arrecadador da Ficha de Compensaï¿½ï¿½o
      * Autor: Vivianne Sousa
      * Data: 27/11/2007
      */
@@ -38714,7 +38715,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
         Integer idMovimento = null;
         ArrecadadorMovimento arrecadadorMovimento = new ArrecadadorMovimento();
-        // cria o objeto de arrecadador movimento para a inserção
+        // cria o objeto de arrecadador movimento para a inserï¿½ï¿½o
         arrecadadorMovimento.setCodigoRemessa(new Short(registroHelperCodigo0.getCodigoRemessaRetorno()));
         arrecadadorMovimento.setCodigoConvenio(registroHelperCodigo0.getCodigoConvenioBanco().trim());
         arrecadadorMovimento.setNomeEmpresa(registroHelperCodigo0.getNomeEmpresa().trim());
@@ -38802,7 +38803,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
     /**
      * [UC0242] - Registrar Movimento dos Arrecadadores 
-     * [SB0016] - Inserir o item de movimento do arrecadador da Ficha de Compensação
+     * [SB0016] - Inserir o item de movimento do arrecadador da Ficha de Compensaï¿½ï¿½o
      * Autor: Vivianne Sousa
      * Data: 27/11/2007
      */
@@ -38860,7 +38861,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		AvisoBancario avisoBancario = new AvisoBancario();
 
 		Integer codigoBancoInteger = Integer.valueOf(registroHeader.getIdCodigoBanco());
-		// seta os campos no aviso bancário
+		// seta os campos no aviso bancï¿½rio
 		Arrecadador arrecadador = new Arrecadador();
 		arrecadador.setId(codigoBancoInteger);
 		avisoBancario.setArrecadador(arrecadador);
@@ -38905,7 +38906,7 @@ public class ControladorArrecadacao extends ControladorComum {
     
     /**
      * [UC0242] - Registrar Movimento dos Arrecadadores 
-     * [SF0015] - Gerar Ocorrência da ficha na coleção de Avisos Bancários 
+     * [SF0015] - Gerar Ocorrï¿½ncia da ficha na coleï¿½ï¿½o de Avisos Bancï¿½rios 
      * Autor: Vivianne Sousa
      * Data: 27/11/2007
      */
@@ -38916,10 +38917,10 @@ public class ControladorArrecadacao extends ControladorComum {
             BigDecimal valorDevolucaoCalc, BigDecimal valorDevolucaoInf,
             Short numeroSequencialAvisoBancario) throws ControladorException {
 
-        // instância o aviso bancário
+        // instï¿½ncia o aviso bancï¿½rio
         AvisoBancario avisoBancario = new AvisoBancario();
 
-        // seta os campos no aviso bancário
+        // seta os campos no aviso bancï¿½rio
         Arrecadador arrecadador = new Arrecadador();
         arrecadador.setId(new Integer(registroHelperCodigo0.getCodigoBancoCompensacao()));
         avisoBancario.setArrecadador(arrecadador);
@@ -38971,8 +38972,8 @@ public class ControladorArrecadacao extends ControladorComum {
     }
     
     /**
-     * [UC0739] - Informar Situação de Expurgo do Pagamento
-     * Autor: Sávio Luiz
+     * [UC0739] - Informar Situaï¿½ï¿½o de Expurgo do Pagamento
+     * Autor: Sï¿½vio Luiz
      * Data: 02/01/2008
      */
     public Object[] gerarColecaoDadosPagamentoPelaData(String dataPagamento,Integer idCliente,Integer anoMesArrecadacao) throws ControladorException {
@@ -38981,7 +38982,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		Collection dadosPagamentoHistorico = null;
 		
-		// cria um object com 2 coleções, uma com o indicador de expurgado com 1
+		// cria um object com 2 coleï¿½ï¿½es, uma com o indicador de expurgado com 1
 		// e outra com o indicador de expurgado 2
 		Object[] colecaoDadosPagamento = new Object[2];
 
@@ -39013,7 +39014,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				if(dadoPagamento[1] != null){
 					pagamento.setValorPagamento((BigDecimal)dadoPagamento[1]);
 				}
-				//seta o indicador de pagamento para sim porque é um pagamento
+				//seta o indicador de pagamento para sim porque ï¿½ um pagamento
 				pagamento.setIndicadorPagamento(Pagamento.INDICADOR_PAGAMENTO_SIM);
 				
 				if(dadoPagamento[2] != null){
@@ -39042,7 +39043,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				if(dadoPagamento[1] != null){
 					pagamento.setValorPagamento((BigDecimal)dadoPagamento[1]);
 				}
-				//seta o indicador de pagamento para não porque é um pagamento_historico e não um pagamento
+				//seta o indicador de pagamento para nï¿½o porque ï¿½ um pagamento_historico e nï¿½o um pagamento
 				pagamento.setIndicadorPagamento(Pagamento.INDICADOR_PAGAMENTO_NAO);
 				
 				if(dadoPagamento[2] != null){
@@ -39072,7 +39073,7 @@ public class ControladorArrecadacao extends ControladorComum {
     }
     
     /**
-	 * [UC0739] - Informar Situação de Expurgo do Pagamento Autor: Sávio Luiz
+	 * [UC0739] - Informar Situaï¿½ï¿½o de Expurgo do Pagamento Autor: Sï¿½vio Luiz
 	 * Data: 02/01/2008
 	 */
 	public void atualizarSituacaoExpurgoPagamento(Collection colecaoPagamento)
@@ -39087,9 +39088,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadação e Expurgo
+	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadaï¿½ï¿½o e Expurgo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @data 10/01/2008
 	 * 
 	 * @param idConta
@@ -39135,9 +39136,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadação e Expurgo
+	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadaï¿½ï¿½o e Expurgo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @data 10/01/2008
 	 * 
 	 * @param idConta
@@ -39149,10 +39150,10 @@ public class ControladorArrecadacao extends ControladorComum {
 			throws ControladorException, ErroRepositorioException{
 		
 		Collection<RelatorioComparativoFatArrecExpurgoBean> colecaoComparativoFatArrecExpurgoBean = new ArrayList();
-		// se a coleção de parâmetros da analise não for vazia
+		// se a coleï¿½ï¿½o de parï¿½metros da analise nï¿½o for vazia
 		if (colecaoDadosComparativos != null && !colecaoDadosComparativos.isEmpty()) {
 
-			// coloca a coleção de parâmetros da analise no iterator
+			// coloca a coleï¿½ï¿½o de parï¿½metros da analise no iterator
 			ListIterator colecaoIterator = colecaoDadosComparativos.listIterator();
 			
 			String nomeUnidadeNegocioAnterior = "";
@@ -39201,7 +39202,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 			boolean primeiraVez = true;
 
-			// laço para criar a coleção de parâmetros da analise
+			// laï¿½o para criar a coleï¿½ï¿½o de parï¿½metros da analise
 			while (colecaoIterator.hasNext()) {
 
 				Object[] dadosComparativos = (Object[]) colecaoIterator.next();
@@ -39226,8 +39227,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				BigDecimal percentualFaturadoArrecadado = null;
 				BigDecimal percentualFaturadoEmContaArrecadado = null;
 				if (dadosComparativos != null) {
-					// verifica se os valores estão nulos
-					// caso estejam então ignora a linha
+					// verifica se os valores estï¿½o nulos
+					// caso estejam entï¿½o ignora a linha
 					if (dadosComparativos[7] == null
 							&& dadosComparativos[8] == null 
 								&& dadosComparativos[9] == null) {
@@ -39241,7 +39242,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							nomeUnidadeNegocioRelatorio = (String) dadosComparativos[1];
 								
 						}
-						// recupera o nome da gerência regional inicial
+						// recupera o nome da gerï¿½ncia regional inicial
 						if (dadosComparativos[0] != null) {
 							nomeGerenciaRegionalAnterior = (String) dadosComparativos[0];
 							nomeGerenciaRegionalRelatorio = (String) dadosComparativos[0];
@@ -39255,13 +39256,13 @@ public class ControladorArrecadacao extends ControladorComum {
 					if (dadosComparativos[1] != null) {
 						nomeUnidadeNegocio = (String) dadosComparativos[1];
 					}
-					// recupera o nome da gerência regional
+					// recupera o nome da gerï¿½ncia regional
 					if (dadosComparativos[0] != null) {
 						nomeGerenciaRegional = (String) dadosComparativos[0];
 					}
 					
 					
-					//UNIDADE DE NEGÓCIO
+					//UNIDADE DE NEGï¿½CIO
 					//se a unidade de negocio for diferente da anterior
 					if(!nomeUnidadeNegocioAnterior.equals(nomeUnidadeNegocio)){
 						//cria uma linha com os acumulativos de unidade de negocio
@@ -39296,7 +39297,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 						
 						
-						// adiciona no bean a coleção
+						// adiciona no bean a coleï¿½ï¿½o
 						colecaoComparativoFatArrecExpurgoBean.add(relatorioComparativoFatArrecExpurgoBean);
 						
 						
@@ -39321,11 +39322,11 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 						
 
-						//GERÊNCIA REGIONAL
-						// se a gerência regional for diferente da anterior
+						//GERï¿½NCIA REGIONAL
+						// se a gerï¿½ncia regional for diferente da anterior
 						if (!nomeGerenciaRegionalAnterior
 								.equals(nomeGerenciaRegional)) {
-							// cria uma linha com os acumulativos da gerência regional
+							// cria uma linha com os acumulativos da gerï¿½ncia regional
 
 							relatorioComparativoFatArrecExpurgoBean = new RelatorioComparativoFatArrecExpurgoBean(
 									"",
@@ -39357,7 +39358,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								relatorioComparativoFatArrecExpurgoBean.setPercentualArrecadadoFaturamentoEmConta("");
 							}
 							
-							// adiciona no bean a coleção
+							// adiciona no bean a coleï¿½ï¿½o
 							colecaoComparativoFatArrecExpurgoBean
 									.add(relatorioComparativoFatArrecExpurgoBean);
 							
@@ -39374,9 +39375,9 @@ public class ControladorArrecadacao extends ControladorComum {
 							valorPagamentoExpurgadoGR = new BigDecimal("0.00");
 							valorArrecadacaoPagamentoGR = new BigDecimal("0.00");
 
-							// recupera o nome da gerência regional atual e
+							// recupera o nome da gerï¿½ncia regional atual e
 							// seta
-							// para a gerência regional anterior
+							// para a gerï¿½ncia regional anterior
 							if (dadosComparativos[0] != null) {
 								nomeGerenciaRegionalAnterior = (String) dadosComparativos[0];
 								nomeGerenciaRegionalRelatorio = (String) dadosComparativos[0];
@@ -39391,8 +39392,8 @@ public class ControladorArrecadacao extends ControladorComum {
 					}
 					
 
-					// GERÊNCIA REGIONAL
-					// se a gerência regional for diferente da anterior
+					// GERï¿½NCIA REGIONAL
+					// se a gerï¿½ncia regional for diferente da anterior
 					if (!nomeGerenciaRegionalAnterior
 							.equals(nomeGerenciaRegional)) {
 						
@@ -39426,7 +39427,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							relatorioComparativoFatArrecExpurgoBean.setPercentualArrecadadoFaturamentoEmConta("");
 						}
 						
-						// adiciona no bean a coleção
+						// adiciona no bean a coleï¿½ï¿½o
 						colecaoComparativoFatArrecExpurgoBean.add(relatorioComparativoFatArrecExpurgoBean);
 						
 						qtdeItemFaturadoUN = 0;
@@ -39448,11 +39449,11 @@ public class ControladorArrecadacao extends ControladorComum {
 							nomeUnidadeNegocioRelatorio = (String) dadosComparativos[1];
 						}
 						
-						// cria uma linha com os acumulativos da gerência
+						// cria uma linha com os acumulativos da gerï¿½ncia
 						// regional
 						relatorioComparativoFatArrecExpurgoBean = new RelatorioComparativoFatArrecExpurgoBean(
 								"",
-								"TOTAL DA GERÊNCIA",
+								"TOTAL DA GERï¿½NCIA",
 								"",
 								"",
 								valorItemFaturadoGR.compareTo(new BigDecimal("0.00")) == 0 ?"":Util.formatarMoedaReal(valorItemFaturadoGR),
@@ -39480,7 +39481,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							relatorioComparativoFatArrecExpurgoBean.setPercentualArrecadadoFaturamentoEmConta("");
 						}
 						
-						// adiciona no bean a coleção
+						// adiciona no bean a coleï¿½ï¿½o
 						colecaoComparativoFatArrecExpurgoBean
 								.add(relatorioComparativoFatArrecExpurgoBean);
 						
@@ -39497,9 +39498,9 @@ public class ControladorArrecadacao extends ControladorComum {
 						valorPagamentoExpurgadoGR = new BigDecimal("0.00");
 						valorArrecadacaoPagamentoGR = new BigDecimal("0.00");
 
-						// recupera o nome da gerência regional atual e
+						// recupera o nome da gerï¿½ncia regional atual e
 						// seta
-						// para a gerência regional anterior
+						// para a gerï¿½ncia regional anterior
 						if (dadosComparativos[0] != null) {
 							nomeGerenciaRegionalAnterior = (String) dadosComparativos[0];
 							nomeGerenciaRegionalRelatorio = (String) dadosComparativos[0];
@@ -39513,7 +39514,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					}
 					
-					// recupera o codigo do centro de custo que está na localidade
+					// recupera o codigo do centro de custo que estï¿½ na localidade
 					if (dadosComparativos[2] != null) {
 						codigoCentroCusto = (String) dadosComparativos[2];
 					}
@@ -39537,10 +39538,10 @@ public class ControladorArrecadacao extends ControladorComum {
 						valorItemFaturadoGR = valorItemFaturadoGR.add((BigDecimal) dadosComparativos[7]);
 						valorItemFaturadoESTADO = valorItemFaturadoESTADO.add((BigDecimal) dadosComparativos[7]);
 					}
-					// recupera o valor do item arrecadação do resumo da arrecadação
+					// recupera o valor do item arrecadaï¿½ï¿½o do resumo da arrecadaï¿½ï¿½o
 					if (dadosComparativos[8] != null) {
 						valorItemArrecadacao = (BigDecimal) dadosComparativos[8];
-						//acumula os valores dos itens de arrecadação
+						//acumula os valores dos itens de arrecadaï¿½ï¿½o
 						valorItemArrecadacaoUN = valorItemArrecadacaoUN.add((BigDecimal) dadosComparativos[8]);
 						valorItemArrecadacaoGR = valorItemArrecadacaoGR.add((BigDecimal) dadosComparativos[8]);
 						valorItemArrecadacaoESTADO = valorItemArrecadacaoESTADO.add((BigDecimal) dadosComparativos[8]);
@@ -39631,12 +39632,12 @@ public class ControladorArrecadacao extends ControladorComum {
 						qtdeItemFaturadoESTADO = qtdeItemFaturadoESTADO
 								+ ((Integer) dadosComparativos[10]);
 					}
-					// recupera o quantidade do item arrecadação do resumo da
-					// arrecadação
+					// recupera o quantidade do item arrecadaï¿½ï¿½o do resumo da
+					// arrecadaï¿½ï¿½o
 					if (dadosComparativos[11] != null) {
 						qtdeItemArrecadacao = ((Integer) dadosComparativos[11])
 								.toString();
-						// acumula a quantidade dos itens de arrecadação
+						// acumula a quantidade dos itens de arrecadaï¿½ï¿½o
 						qtdeItemArrecadacaoUN = qtdeItemArrecadacaoUN
 								+ ((Integer) dadosComparativos[11]);
 						qtdeItemArrecadacaoGR = qtdeItemArrecadacaoGR
@@ -39644,12 +39645,12 @@ public class ControladorArrecadacao extends ControladorComum {
 						qtdeItemArrecadacaoESTADO = qtdeItemArrecadacaoESTADO
 								+ ((Integer) dadosComparativos[11]);
 					}
-					// recupera o quantidade do item arrecadação do resumo da
-					// arrecadação
+					// recupera o quantidade do item arrecadaï¿½ï¿½o do resumo da
+					// arrecadaï¿½ï¿½o
 					if (dadosComparativos[12] != null) {
 						qtdeItemFaturadoLiquido = ((Integer) dadosComparativos[11])
 								.toString();
-						// acumula a quantidade dos itens de arrecadação
+						// acumula a quantidade dos itens de arrecadaï¿½ï¿½o
 						qtdeItemFaturadoLiquidoUN = qtdeItemFaturadoLiquidoUN
 								+ ((Integer) dadosComparativos[12]);
 						qtdeItemFaturadoLiquidoGR = qtdeItemFaturadoLiquidoGR
@@ -39675,7 +39676,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					
 					//adiciona o valor de pagamento expurgado com o valor do pagamento historico expurgado
 					valorPagamentoExpurgado = valorPagamento.add(valorPagamentoHistorico);
-					// subtrai o valor dos itens de arrecadação com os valores de pagamnetos expurgados
+					// subtrai o valor dos itens de arrecadaï¿½ï¿½o com os valores de pagamnetos expurgados
 					valorArrecadacaoPagamento = valorItemArrecadacao.subtract(valorPagamentoExpurgado);
 					
 					// acumula os valores dos pagamentos e pagamentos historicos expurgados
@@ -39683,7 +39684,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					valorPagamentoExpurgadoGR = valorPagamentoExpurgadoGR.add(valorPagamentoExpurgado);
 					valorPagamentoExpurgadoESTADO = valorPagamentoExpurgadoESTADO.add(valorPagamentoExpurgado);
 					
-					// acumula os valores de arrecadação menos os pagamentos expurgados
+					// acumula os valores de arrecadaï¿½ï¿½o menos os pagamentos expurgados
 					valorArrecadacaoPagamentoUN = valorArrecadacaoPagamentoUN.add(valorArrecadacaoPagamento);
 					valorArrecadacaoPagamentoGR = valorArrecadacaoPagamentoGR.add(valorArrecadacaoPagamento);
 					valorArrecadacaoPagamentoESTADO = valorArrecadacaoPagamentoESTADO.add(valorArrecadacaoPagamento);
@@ -39736,11 +39737,11 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 				
 				
-				// adiciona no bean a coleção
+				// adiciona no bean a coleï¿½ï¿½o
 				colecaoComparativoFatArrecExpurgoBean.add(relatorioComparativoFatArrecExpurgoBean);
 			}
-			//UNIDADE DE NEGÓCIO
-			//cria uma linha com os acumulativos da gerência regional
+			//UNIDADE DE NEGï¿½CIO
+			//cria uma linha com os acumulativos da gerï¿½ncia regional
 			RelatorioComparativoFatArrecExpurgoBean relatorioComparativoFatArrecExpurgoBean = new RelatorioComparativoFatArrecExpurgoBean(
 					"TOTAL DA UNIDADE",
 					"","",
@@ -39774,17 +39775,17 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 			
 			
-			// adiciona no bean a coleção
+			// adiciona no bean a coleï¿½ï¿½o
 			colecaoComparativoFatArrecExpurgoBean.add(relatorioComparativoFatArrecExpurgoBean);
 			
 			if(idUnidadeNegocio == null || idUnidadeNegocio.equals("")){
 				
-				// GERÊNCIA REGIONAL
-				// cria uma linha com os acumulativos da gerência
+				// GERï¿½NCIA REGIONAL
+				// cria uma linha com os acumulativos da gerï¿½ncia
 				// regional
 				relatorioComparativoFatArrecExpurgoBean = new RelatorioComparativoFatArrecExpurgoBean(
 						"",
-						"TOTAL DA GERÊNCIA",
+						"TOTAL DA GERï¿½NCIA",
 						"",
 						"",
 						valorItemFaturadoGR.compareTo(new BigDecimal("0.00")) == 0 ?"":Util.formatarMoedaReal(valorItemFaturadoGR),
@@ -39813,7 +39814,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 				
 				
-				// adiciona no bean a coleção
+				// adiciona no bean a coleï¿½ï¿½o
 				colecaoComparativoFatArrecExpurgoBean
 						.add(relatorioComparativoFatArrecExpurgoBean);
 			}
@@ -39853,7 +39854,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					relatorioComparativoFatArrecExpurgoBean.setPercentualArrecadadoFaturamentoEmConta("");
 				}
 				
-				// adiciona no bean a coleção
+				// adiciona no bean a coleï¿½ï¿½o
 				colecaoComparativoFatArrecExpurgoBean
 						.add(relatorioComparativoFatArrecExpurgoBean);
 			}
@@ -39868,9 +39869,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadação e Expurgo
+	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadaï¿½ï¿½o e Expurgo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @data 14/01/2008
 	 * 
 	 * @param idConta
@@ -39894,7 +39895,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
      /**
-     * [UC0254] - Efetuar Análise do Movimento dos Arrecadadores
+     * [UC0254] - Efetuar Anï¿½lise do Movimento dos Arrecadadores
      * Autor: Vivianne Sousa
      * Data: 28/01/2008
      * 
@@ -39960,11 +39961,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
     
     /**
-     * [UC0270] Apresentar Análise do Movimento dos Arrecadadores
+     * [UC0270] Apresentar Anï¿½lise do Movimento dos Arrecadadores
      * 
-     * O sistema captura os dados referentes ao conteúdo do do código de barras
+     * O sistema captura os dados referentes ao conteï¿½do do do cï¿½digo de barras
      * 
-     * [SB0004] Apresentar Dados do Conteúdo do Código de Barras da Ficha de Compensação
+     * [SB0004] Apresentar Dados do Conteï¿½do do Cï¿½digo de Barras da Ficha de Compensaï¿½ï¿½o
      * 
      * @author Vivianne Sousa
      * @data 29/01/2008
@@ -39993,10 +39994,10 @@ public class ControladorArrecadacao extends ControladorComum {
                 //id da Localidade
                 retorno.setCodigoLocalidade(conta.getLocalidade().getId().toString());
 
-                //matrícula do imóvel
+                //matrï¿½cula do imï¿½vel
                 retorno.setMatriculaImovel(conta.getImovel().getId().toString());
 
-                //mês e ano de referência da conta
+                //mï¿½s e ano de referï¿½ncia da conta
                 retorno.setMesAnoReferenciaConta(conta.getReferenciaFormatada());
             }
             else{
@@ -40007,10 +40008,10 @@ public class ControladorArrecadacao extends ControladorComum {
                     //id da Localidade
                     retorno.setCodigoLocalidade(contaHistorico.getLocalidade().getId().toString());
 
-                    //matrícula do imóvel
+                    //matrï¿½cula do imï¿½vel
                     retorno.setMatriculaImovel(contaHistorico.getImovel().getId().toString());
 
-                    //mês e ano de referência da conta
+                    //mï¿½s e ano de referï¿½ncia da conta
                     retorno.setMesAnoReferenciaConta(contaHistorico.getFormatarAnoMesParaMesAno());
                 }
             }
@@ -40063,22 +40064,22 @@ public class ControladorArrecadacao extends ControladorComum {
         
         String digitoVerificador = especificacaoCodigoBarra.substring(4,5);
         
-        //código do banco
+        //cï¿½digo do banco
         retorno.setCodigoBanco(ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO);
         
-        //código da moeda
+        //cï¿½digo da moeda
         retorno.setCodigoMoeda(ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO);
         
-        //dígito verificador geral
+        //dï¿½gito verificador geral
         retorno.setDigitoVerificadorGeral(digitoVerificador);
         
         //fator de vencimento
         retorno.setFatorVencimento(fatorVencimento);
         
-        //valor do código de barras
+        //valor do cï¿½digo de barras
         retorno.setValorCodigoBarras(Util.formatarMoedaReal(valorPagamento));
         
-        //nosso número
+        //nosso nï¿½mero
         retorno.setNossoNumero(nossoNumeroSemDV);
         
         //tipo de carteira
@@ -40115,7 +40116,7 @@ public class ControladorArrecadacao extends ControladorComum {
     }
     
     /**
-     * [UC0737] Atualiza Quantidade de Parcela Paga Consecutiva e Parcela Bônus
+     * [UC0737] Atualiza Quantidade de Parcela Paga Consecutiva e Parcela Bï¿½nus
      * 
      * @author Vivianne Sousa
      * @data 01/02/2008
@@ -40135,9 +40136,9 @@ public class ControladorArrecadacao extends ControladorComum {
     }
     
     /**
-	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadação e Expurgo
+	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadaï¿½ï¿½o e Expurgo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @data 17/02/2008
 	 * 
 	 * @param idConta
@@ -40162,9 +40163,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
     /**
-	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadação e Expurgo
+	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadaï¿½ï¿½o e Expurgo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @data 17/02/2008
 	 * 
 	 * @param idConta
@@ -40190,10 +40191,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 *
-	 * Quando for verificar a existência da conta, pesquisar também  no respectivo histórico no fluxo secundário
-	 *  [FS0008 - Verificar existência da conta]
+	 * Quando for verificar a existï¿½ncia da conta, pesquisar tambï¿½m  no respectivo histï¿½rico no fluxo secundï¿½rio
+	 *  [FS0008 - Verificar existï¿½ncia da conta]
 	 *
 	 * @author Raphael Rossiter
 	 * @date 14/04/2008
@@ -40207,15 +40208,15 @@ public class ControladorArrecadacao extends ControladorComum {
 		ContaGeral contaGeral = null;
 		
 		/*
-		 * Caso a conta esteja cadastrada no sistema. Seta todas as informações da conta no form.
-		 * Caso contrário: Seta as informações da conta para nulo e indica ao usuário que não existe conta para 
-		 * o imóvel informado com a referência indicada. 
+		 * Caso a conta esteja cadastrada no sistema. Seta todas as informaï¿½ï¿½es da conta no form.
+		 * Caso contrï¿½rio: Seta as informaï¿½ï¿½es da conta para nulo e indica ao usuï¿½rio que nï¿½o existe conta para 
+		 * o imï¿½vel informado com a referï¿½ncia indicada. 
 		 */
 		if (colecaoConta != null && !colecaoConta.isEmpty()) {
 			
 			contaGeral = new ContaGeral();
 
-			//Recupera a conta do imóvel com a referência informada
+			//Recupera a conta do imï¿½vel com a referï¿½ncia informada
 			Object objetoConta = colecaoConta.iterator().next();
 			Localidade localidadeConta = null;
 			Imovel imovelConta = null;
@@ -40251,7 +40252,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 *
 	 * @author Raphael Rossiter
 	 * @date 14/04/2008
@@ -40263,10 +40264,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	public Collection pesquisarContaParaGuiaDevolucao(Imovel imovel, Integer anoMesReferencia) 
 		throws ControladorException{
 		
-		//Recupera a conta do imóvel com a referência informada
+		//Recupera a conta do imï¿½vel com a referï¿½ncia informada
 		FiltroConta filtroConta = new FiltroConta();
 		
-		//PARÂMETROS IMÓVEL E ANOMESREFERENCIA
+		//PARï¿½METROS IMï¿½VEL E ANOMESREFERENCIA
 		filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.IMOVEL_ID, imovel.getId()));
 		filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.REFERENCIA, anoMesReferencia));
 		
@@ -40277,10 +40278,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		if (colecaoConta == null || colecaoConta.isEmpty()){
 			
-			//Recupera a conta do imóvel com a referência informada na tabela de histórico
+			//Recupera a conta do imï¿½vel com a referï¿½ncia informada na tabela de histï¿½rico
 			FiltroContaHistorico filtroContaHistorico = new FiltroContaHistorico();
 			
-			//PARÂMETROS IMÓVEL E ANOMESREFERENCIA
+			//PARï¿½METROS IMï¿½VEL E ANOMESREFERENCIA
 			filtroContaHistorico.adicionarParametro(new ParametroSimples(
 			FiltroContaHistorico.IMOVEL_ID, imovel.getId()));
 			filtroContaHistorico.adicionarParametro(new ParametroSimples(
@@ -40302,9 +40303,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 *
-	 * [FS0018] - Verificar valor da devolução
+	 * [FS0018] - Verificar valor da devoluï¿½ï¿½o
 	 *
 	 * @author Raphael Rossiter
 	 * @date 14/04/2008
@@ -40320,7 +40321,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		/*
 		 * Faz uma pesquisa em pagamento para somar o valor de todos os pagamentos associados a conta,
-		 * depois subtraí-lo do valor total da conta. 
+		 * depois subtraï¿½-lo do valor total da conta. 
 		 */
 		
 		//PAGAMENTO
@@ -40530,7 +40531,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			if (debitoACobrarGeral != null){
 				
 				throw new ControladorException("atencao.tipo.documento.sem.pagamentos.associados",
-				null, "Débito a Cobrar " + debitoACobrarGeral.getId().toString() + " ");
+				null, "Dï¿½bito a Cobrar " + debitoACobrarGeral.getId().toString() + " ");
 				
 			}
 			
@@ -40548,7 +40549,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 *
 	 * @author Raphael Rossiter
 	 * @date 14/04/2008
@@ -40591,7 +40592,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		if (colecaoDebitoACobrar == null || colecaoDebitoACobrar.isEmpty()){
 			
-			throw new ControladorException("atencao.pesquisa_inexistente", null, "DÉBITO A COBRAR");
+			throw new ControladorException("atencao.pesquisa_inexistente", null, "Dï¿½BITO A COBRAR");
 		}
 		
 		return colecaoDebitoACobrar;
@@ -40599,11 +40600,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 * 
-	 * [FS0014] - Verificar imóvel do débito a cobrar
+	 * [FS0014] - Verificar imï¿½vel do dï¿½bito a cobrar
 	 * 
-	 * [FS0015] - Verificar localidade do débito a cobrar
+	 * [FS0015] - Verificar localidade do dï¿½bito a cobrar
 	 *
 	 * @author Raphael Rossiter
 	 * @date 14/04/2008
@@ -40646,14 +40647,14 @@ public class ControladorArrecadacao extends ControladorComum {
 				debitoTipo = debitoACobrarHistorico.getDebitoTipo();
 			}
 			
-			//[FS0014] - Verificar imóvel do débito a cobrar
+			//[FS0014] - Verificar imï¿½vel do dï¿½bito a cobrar
 			if (!idImovel.equals(imovelDebito.getId())) {
 				
 				throw new ControladorException("atencao.imovel.debito.a.cobrar.diferente.registro.atendimento.imovel",
 				null, imovelDebito.getId().toString(), idImovel.toString());
 			} 
 				
-			// [FS0015] - Verificar localidade do débito a cobrar
+			// [FS0015] - Verificar localidade do dï¿½bito a cobrar
 			if (!idLocalidade.equals(localidadeDebito.getId())) {
 					
 				throw new ControladorException("atencao.imovel.localidade.diferente.debito.a.cobrar.localidade",
@@ -40677,7 +40678,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 *
 	 * @author Raphael Rossiter
 	 * @date 15/04/2008
@@ -40694,10 +40695,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 		
 		/*
-		 * Caso o usuário tenha informado o imóvel, seta o código do imóvel no filtro.
-		 * Caso contrário, o usuário tenha informado o cliente seta o código do cliente no filtro.
-		 * Caso o usuário não tenha informado nem o imóvel nem o cliente levanta uma exceção
-		 * para o usuário informando que tem de informar o cliente ou o imóvel
+		 * Caso o usuï¿½rio tenha informado o imï¿½vel, seta o cï¿½digo do imï¿½vel no filtro.
+		 * Caso contrï¿½rio, o usuï¿½rio tenha informado o cliente seta o cï¿½digo do cliente no filtro.
+		 * Caso o usuï¿½rio nï¿½o tenha informado nem o imï¿½vel nem o cliente levanta uma exceï¿½ï¿½o
+		 * para o usuï¿½rio informando que tem de informar o cliente ou o imï¿½vel
 		 */
 		if (idImovel != null) {
 			
@@ -40711,7 +40712,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		} 
 		else {
 			throw new ControladorException("atencao.naoinformado", null,
-			"Imóvel ou Cliente");
+			"Imï¿½vel ou Cliente");
 		}
 		
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(
@@ -40731,10 +40732,10 @@ public class ControladorArrecadacao extends ControladorComum {
 			FiltroGuiaPagamentoHistorico filtroGuiaPagamentoHistorico = new FiltroGuiaPagamentoHistorico();
 			
 			/*
-			 * Caso o usuário tenha informado o imóvel, seta o código do imóvel no filtro.
-			 * Caso contrário, o usuário tenha informado o cliente seta o código do cliente no filtro.
-			 * Caso o usuário não tenha informado nem o imóvel nem o cliente levanta uma exceção
-			 * para o usuário informando que tem de informar o cliente ou o imóvel
+			 * Caso o usuï¿½rio tenha informado o imï¿½vel, seta o cï¿½digo do imï¿½vel no filtro.
+			 * Caso contrï¿½rio, o usuï¿½rio tenha informado o cliente seta o cï¿½digo do cliente no filtro.
+			 * Caso o usuï¿½rio nï¿½o tenha informado nem o imï¿½vel nem o cliente levanta uma exceï¿½ï¿½o
+			 * para o usuï¿½rio informando que tem de informar o cliente ou o imï¿½vel
 			 */
 			if (idImovel != null) {
 				
@@ -40748,7 +40749,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			} 
 			else {
 				throw new ControladorException("atencao.naoinformado", null,
-				"Imóvel ou Cliente");
+				"Imï¿½vel ou Cliente");
 			}
 			
 			filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(
@@ -40774,7 +40775,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 *
 	 * @author Raphael Rossiter
 	 * @date 15/04/2008
@@ -40824,7 +40825,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				debitoTipo = guiaPagamentoHistorico.getDebitoTipo();
 			}
 			
-			//[FS0011] - Verificar imóvel ou cliente da guia de pagamento
+			//[FS0011] - Verificar imï¿½vel ou cliente da guia de pagamento
 			if (registroAtendimento.getImovel() != null) {
 				
 				if (imovelGuia == null) {
@@ -40882,11 +40883,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	/**
 	 * [UC0352] Emitir Conta
 	 * 
-	 * pesquisa o nome do banco e código da agencia passando o id do imóvel
+	 * pesquisa o nome do banco e cï¿½digo da agencia passando o id do imï¿½vel
 	 * 
-	 * [SB0017] - Gerar Linhas das contas com Débito Automático
+	 * [SB0017] - Gerar Linhas das contas com Dï¿½bito Automï¿½tico
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 26/05/2006
 	 * 
 	 * @return String
@@ -40913,10 +40914,10 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	
 	/**
-	 * [UC0823] Atualiza Ligação de Água de Ligado em Análise para Ligado.
+	 * [UC0823] Atualiza Ligaï¿½ï¿½o de ï¿½gua de Ligado em Anï¿½lise para Ligado.
 	 * 
-	 *  Este caso de uso permite atualizar a situação de água de ligado em análise para ligado.
-	 * 	Este caso de uso deve ser processado após o encerramento da arrecadação.
+	 *  Este caso de uso permite atualizar a situaï¿½ï¿½o de ï¿½gua de ligado em anï¿½lise para ligado.
+	 * 	Este caso de uso deve ser processado apï¿½s o encerramento da arrecadaï¿½ï¿½o.
 	 * 
 	 * @author Yara Taciane
 	 * @date 04/06/2008
@@ -40937,10 +40938,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0823] Atualiza Ligação de Água de Ligado em Análise para Ligado.
+	 * [UC0823] Atualiza Ligaï¿½ï¿½o de ï¿½gua de Ligado em Anï¿½lise para Ligado.
 	 * 
-	 *  Este caso de uso permite atualizar a situação de água de ligado em análise para ligado.
-	 * 	Este caso de uso deve ser processado após o encerramento da arrecadação.
+	 *  Este caso de uso permite atualizar a situaï¿½ï¿½o de ï¿½gua de ligado em anï¿½lise para ligado.
+	 * 	Este caso de uso deve ser processado apï¿½s o encerramento da arrecadaï¿½ï¿½o.
 	 * 
 	 * @author Yara Taciane
 	 * @date 04/06/2008
@@ -40952,7 +40953,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 		// -------------------------
 		//
-		// Registrar o início do processamento da Unidade de
+		// Registrar o inï¿½cio do processamento da Unidade de
 		// Processamento
 		// do Batch
 		//
@@ -41032,7 +41033,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			Date dataParcelamento)
 			throws ControladorException {
 
-		// Cria a variável que vai armazenar o id da guia de pagamento, caso 
+		// Cria a variï¿½vel que vai armazenar o id da guia de pagamento, caso 
 		// a entrada tem sido via guia de pagmento
 		Integer idGuiaPagamento = null;
 		boolean entradaParcelamentoPaga = false;
@@ -41112,7 +41113,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0826] Gerar Relatório Análise da Arrecação
+	 * [UC0826] Gerar Relatï¿½rio Anï¿½lise da Arrecaï¿½ï¿½o
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 24/07/2008
@@ -41181,7 +41182,7 @@ public class ControladorArrecadacao extends ControladorComum {
     }
     
 	/**
-	 * [UC0827] Gerar Relatório Análise dos Avisos Bancarios
+	 * [UC0827] Gerar Relatï¿½rio Anï¿½lise dos Avisos Bancarios
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 30/07/2008
@@ -41250,7 +41251,7 @@ public class ControladorArrecadacao extends ControladorComum {
     }
     
     /**
-     * [UC0829] Gerar Relatório Avisos Bancarios Por Conta Corrente
+     * [UC0829] Gerar Relatï¿½rio Avisos Bancarios Por Conta Corrente
      * 
      * @author Victor Cisneiros
      * @date 21/08/2008
@@ -41261,8 +41262,8 @@ public class ControladorArrecadacao extends ControladorComum {
     		List<RelatorioAvisoBancarioPorContaCorrenteBean> pesquisa = null;
     		
     		/* 
-    		 * Pesquisar todos os avisos bancários e acertos de acordo com o helper
-    		 * Se um bean é acerto entao seu getIdAviso() é igual a 0
+    		 * Pesquisar todos os avisos bancï¿½rios e acertos de acordo com o helper
+    		 * Se um bean ï¿½ acerto entao seu getIdAviso() ï¿½ igual a 0
     		 */
     		pesquisa = repositorioArrecadacao.pesquisarAvisoBancarioPorContaCorrente(helper);
     		
@@ -41374,7 +41375,7 @@ public class ControladorArrecadacao extends ControladorComum {
     }
     
     /**
-     * [UC0828] Atualizar Diferença Acumulada no Mês
+     * [UC0828] Atualizar Diferenï¿½a Acumulada no Mï¿½s
      * 
      * @author Victor Cisneiros
      * @date 01/09/2008
@@ -41433,7 +41434,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 *
 	 * <Identificador e nome do caso de uso>
 	 *
@@ -41490,11 +41491,11 @@ public class ControladorArrecadacao extends ControladorComum {
     
     /**
      * 
-     * [UC0818] - Gerar Histórico do Encerramento da Arrecadação
+     * [UC0818] - Gerar Histï¿½rico do Encerramento da Arrecadaï¿½ï¿½o
      *
      * Fluxo Principal
      *
-     * [FS0001] - Verifica existencia resumo arrecadação   
+     * [FS0001] - Verifica existencia resumo arrecadaï¿½ï¿½o   
      *
      * @author bruno
      * @date 24/10/2008
@@ -41515,15 +41516,15 @@ public class ControladorArrecadacao extends ControladorComum {
     }
     
     /**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Pesquisa o débito a cobrar do imóvel informado pelo usuário
+	 * Pesquisa o dï¿½bito a cobrar do imï¿½vel informado pelo usuï¿½rio
 	 * 
-	 * [FS0024] - Verificar existência do débito a cobrar
+	 * [FS0024] - Verificar existï¿½ncia do dï¿½bito a cobrar
 	 * 
-	 * @author Rômulo Aurélio 
+	 * @author Rï¿½mulo Aurï¿½lio 
 	 * @date 30/01/2009
 	 * 
 	 * @param idImovel
@@ -41534,11 +41535,11 @@ public class ControladorArrecadacao extends ControladorComum {
     public DebitoACobrarGeral pesquisarDebitoACobrarGeralDigitado(String idImovel,
 			String idDebitoACobrar) throws ControladorException {
     	
-    	// Cria a variável que vai armazenar o débito a cobrar pesquisado
+    	// Cria a variï¿½vel que vai armazenar o dï¿½bito a cobrar pesquisado
 		DebitoACobrarGeral debitoACobrarGeralDigitado = null;
 
-		// Cria o filtro de débito a cobrar e seta todos os parâmetros para
-		// pesquisar o débito a cobrar do imóvel
+		// Cria o filtro de dï¿½bito a cobrar e seta todos os parï¿½metros para
+		// pesquisar o dï¿½bito a cobrar do imï¿½vel
 		FiltroDebitoACobrar filtroDebitoACobrar = new FiltroDebitoACobrar();
 		filtroDebitoACobrar.adicionarParametro(new ParametroSimples(
 				FiltroDebitoACobrar.IMOVEL_ID, idImovel));
@@ -41552,18 +41553,18 @@ public class ControladorArrecadacao extends ControladorComum {
 		Collection colecaoDebitoACobrar = getControladorUtil().pesquisar(
 				filtroDebitoACobrar, DebitoACobrar.class.getName());
 
-		// Caso exista o débito a cobrar para o imóvel informado cadastrado no
+		// Caso exista o dï¿½bito a cobrar para o imï¿½vel informado cadastrado no
 		// sistema
-		// Retorna para o usuário o débito a cobrar retornado pela pesquisa
-		// Caso contrário retorna um objeto nulo
+		// Retorna para o usuï¿½rio o dï¿½bito a cobrar retornado pela pesquisa
+		// Caso contrï¿½rio retorna um objeto nulo
 		if (colecaoDebitoACobrar == null || colecaoDebitoACobrar.isEmpty()) {
 			/*
 			 * throw new ControladorException("atencao.pesquisa_inexistente",
-			 * null, "Débito a Cobrar");
+			 * null, "Dï¿½bito a Cobrar");
 			 */
 			
-			// Cria o filtro de débito a cobrar e seta todos os parâmetros para
-			// pesquisar o débito a cobrar do imóvel
+			// Cria o filtro de dï¿½bito a cobrar e seta todos os parï¿½metros para
+			// pesquisar o dï¿½bito a cobrar do imï¿½vel
 			FiltroDebitoACobrarHistorico filtroDebitoACobrarHistorico = new FiltroDebitoACobrarHistorico();
 			filtroDebitoACobrarHistorico.adicionarParametro(new ParametroSimples(
 					FiltroDebitoACobrarHistorico.IMOVEL_ID, idImovel));
@@ -41577,14 +41578,14 @@ public class ControladorArrecadacao extends ControladorComum {
 			Collection colecaoDebitoACobrarHistorico = getControladorUtil().pesquisar(
 					filtroDebitoACobrarHistorico, DebitoACobrarHistorico.class.getName());
 
-			// Caso exista o débito a cobrar para o imóvel informado cadastrado
+			// Caso exista o dï¿½bito a cobrar para o imï¿½vel informado cadastrado
 			// no
 			// sistema
-			// Retorna para o usuário o débito a cobrar retornado pela pesquisa
-			// Caso contrário retorna um objeto nulo
+			// Retorna para o usuï¿½rio o dï¿½bito a cobrar retornado pela pesquisa
+			// Caso contrï¿½rio retorna um objeto nulo
 			if (colecaoDebitoACobrarHistorico == null || colecaoDebitoACobrarHistorico.isEmpty()) {
 				throw new ControladorException("atencao.pesquisa_inexistente",
-						null, "Débito a Cobrar");
+						null, "Dï¿½bito a Cobrar");
 			}
 			debitoACobrarGeralDigitado = new DebitoACobrarGeral();
 			
@@ -41599,22 +41600,22 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 		}
 
-		// Retorna o débito a cobrar encontrado ou nulo se não existir o débito
+		// Retorna o dï¿½bito a cobrar encontrado ou nulo se nï¿½o existir o dï¿½bito
 		// a cobrar
 		return debitoACobrarGeralDigitado;
 	}
 
     
     /**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Pesquisa o débito a cobrar do imóvel informado pelo usuário
+	 * Pesquisa o dï¿½bito a cobrar do imï¿½vel informado pelo usuï¿½rio
 	 * 
-	 * [FS0024] - Verificar existência do débito a cobrar
+	 * [FS0024] - Verificar existï¿½ncia do dï¿½bito a cobrar
 	 * 
-	 * @author Rômulo Aurélio 
+	 * @author Rï¿½mulo Aurï¿½lio 
 	 * @date 30/01/2009
 	 * 
 	 * @param idImovel
@@ -41627,41 +41628,41 @@ public class ControladorArrecadacao extends ControladorComum {
 			DebitoACobrarGeral debitoACobrarGeral, String idLocalidade)
 			throws ControladorException {
 
-		// Caso o usuário tenha informado a localidade
+		// Caso o usuï¿½rio tenha informado a localidade
 		if (idLocalidade != null && !idLocalidade.trim().equalsIgnoreCase("")) {
 
 			if (debitoACobrarGeral.getDebitoACobrar() != null) {
 
-				// Caso a localidade do débito a cobrar seja diferente da
+				// Caso a localidade do dï¿½bito a cobrar seja diferente da
 				// localidade
 				// informada
 				if (!debitoACobrarGeral.getDebitoACobrar().getLocalidade()
 						.getId().equals(new Integer(idLocalidade))) {
 
-					// Cria a mensagem que vai ser exibida ao usuário
-					// e levanta a exceção
-					String mensagem = "A Localidade do Débito a Cobrar "
+					// Cria a mensagem que vai ser exibida ao usuï¿½rio
+					// e levanta a exceï¿½ï¿½o
+					String mensagem = "A Localidade do Dï¿½bito a Cobrar "
 							+ debitoACobrarGeral.getDebitoACobrar()
 									.getLocalidade().getId()
-							+ " é diferente da Localidade informada "
+							+ " ï¿½ diferente da Localidade informada "
 							+ idLocalidade;
 					throw new ControladorException(
 							"atencao.localidade_debito_a_cobrar_diferente",
 							null, mensagem);
 				}
 			} else {
-				// Caso a localidade do débito a cobrar seja diferente da
+				// Caso a localidade do dï¿½bito a cobrar seja diferente da
 				// localidade
 				// informada
 				if (!debitoACobrarGeral.getDebitoACobrarHistorico().getLocalidade()
 						.getId().equals(new Integer(idLocalidade))) {
 
-					// Cria a mensagem que vai ser exibida ao usuário
-					// e levanta a exceção
-					String mensagem = "A Localidade do Débito a Cobrar "
+					// Cria a mensagem que vai ser exibida ao usuï¿½rio
+					// e levanta a exceï¿½ï¿½o
+					String mensagem = "A Localidade do Dï¿½bito a Cobrar "
 							+ debitoACobrarGeral.getDebitoACobrarHistorico()
 									.getLocalidade().getId()
-							+ " é diferente da Localidade informada "
+							+ " ï¿½ diferente da Localidade informada "
 							+ idLocalidade;
 					throw new ControladorException(
 							"atencao.localidade_debito_a_cobrar_diferente",
@@ -41672,17 +41673,17 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
     
     /**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica a existência de débito a cobrar com o tipo de débito e o imóvel
+	 * Verifica a existï¿½ncia de dï¿½bito a cobrar com o tipo de dï¿½bito e o imï¿½vel
 	 * informados
 	 * 
-	 * [FS0016] Verificar existência de débito a cobrar com tipo de débito
+	 * [FS0016] Verificar existï¿½ncia de dï¿½bito a cobrar com tipo de dï¿½bito
 	 * informado
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 30/01/2009
 	 * 
 	 * @param tipoDebito
@@ -41693,7 +41694,7 @@ public class ControladorArrecadacao extends ControladorComum {
     public DebitoACobrarGeral verificarExistenciaDebitoACobrarGeralComTipoDebito(
 			DebitoTipo tipoDebito, String idImovel, BigDecimal valorInformado) throws ControladorException {
 
-		// Cria a variável que vai armazenar o débito a cobrar pesquisado
+		// Cria a variï¿½vel que vai armazenar o dï¿½bito a cobrar pesquisado
 		
 		DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 		
@@ -41701,7 +41702,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		DebitoACobrar debitoACobrar = null;
 
-		// Cria o filtro de débito a cobrar, e seta os parâmetros para pesquisar
+		// Cria o filtro de dï¿½bito a cobrar, e seta os parï¿½metros para pesquisar
 		FiltroDebitoACobrar filtroDebitoACobrar = new FiltroDebitoACobrar();
 		filtroDebitoACobrar.adicionarParametro(new ParametroSimples(
 				FiltroDebitoACobrar.DEBITO_TIPO_ID, tipoDebito.getId()));
@@ -41711,18 +41712,18 @@ public class ControladorArrecadacao extends ControladorComum {
 				FiltroDebitoACobrar.DEBITO_CREDITO_SITUACAO_ATUAL_ID,
 				DebitoCreditoSituacao.NORMAL));
 
-		// Pesquisa o débito a cobrar no sistema
+		// Pesquisa o dï¿½bito a cobrar no sistema
 		Collection colecaoDebitoACobrar = getControladorUtil().pesquisar(
 				filtroDebitoACobrar, DebitoACobrar.class.getName());
 		
 		Collection colecaoComValor = new ArrayList();
 
-		// Caso exista débito a cobrar cadastrado com o tipo de débito informado
+		// Caso exista dï¿½bito a cobrar cadastrado com o tipo de dï¿½bito informado
 		if (colecaoDebitoACobrar != null && !colecaoDebitoACobrar.isEmpty()) {
 
-			// Caso exista mais que um débito a cobrar cadastrado para o tipo de
-			// débito
-			// Monta a mensagem para o usuário e levanta a exceção
+			// Caso exista mais que um dï¿½bito a cobrar cadastrado para o tipo de
+			// dï¿½bito
+			// Monta a mensagem para o usuï¿½rio e levanta a exceï¿½ï¿½o
 			if (colecaoDebitoACobrar.size() > 1) {
 				Iterator iteratorColecao = colecaoDebitoACobrar.iterator();
 				
@@ -41750,9 +41751,9 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 				
 				if(colecaoComValor.size() > 1){
-					String mensagem = "Há mais de um Débito a Cobrar com o tipo de débito "
+					String mensagem = "Hï¿½ mais de um Dï¿½bito a Cobrar com o tipo de dï¿½bito "
 						+ tipoDebito.getDescricao()
-						+ " para o Imóvel "
+						+ " para o Imï¿½vel "
 						+ idImovel;
 					throw new ControladorException("atencao.descricao_concatenada",
 						null, mensagem);
@@ -41760,8 +41761,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				debitoACobrar = (DebitoACobrar) Util
 				.retonarObjetoDeColecao(colecaoComValor);
 			} else {
-				// Caso só exista apenas um débito a cobrar cadastrado para o
-				// tipo de débito
+				// Caso sï¿½ exista apenas um dï¿½bito a cobrar cadastrado para o
+				// tipo de dï¿½bito
 				debitoACobrar = (DebitoACobrar) Util
 						.retonarObjetoDeColecao(colecaoDebitoACobrar);
 				
@@ -41789,7 +41790,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		DebitoACobrarHistorico debitoACobrarHistorico = null;
 
-		// Cria o filtro de débito a cobrar, e seta os parâmetros para pesquisar
+		// Cria o filtro de dï¿½bito a cobrar, e seta os parï¿½metros para pesquisar
 		FiltroDebitoACobrarHistorico filtroDebitoACobrarHistorico = new FiltroDebitoACobrarHistorico();
 		filtroDebitoACobrarHistorico.adicionarParametro(new ParametroSimples(
 				FiltroDebitoACobrarHistorico.DEBITO_TIPO_ID, tipoDebito.getId()));
@@ -41799,16 +41800,16 @@ public class ControladorArrecadacao extends ControladorComum {
 				FiltroDebitoACobrarHistorico.DEBITO_CREDITO_SITUACAO_ATUAL_ID,
 				DebitoCreditoSituacao.NORMAL));
 
-		// Pesquisa o débito a cobrar no sistema
+		// Pesquisa o dï¿½bito a cobrar no sistema
 		Collection colecaoDebitoACobrarHistorico = getControladorUtil().pesquisar(
 				filtroDebitoACobrarHistorico, DebitoACobrarHistorico.class.getName());
 		
-		// Caso exista débito a cobrar historico cadastrado com o tipo de débito informado
+		// Caso exista dï¿½bito a cobrar historico cadastrado com o tipo de dï¿½bito informado
 		if (colecaoDebitoACobrarHistorico != null && !colecaoDebitoACobrarHistorico.isEmpty()) {
 
-			// Caso exista mais que um débito a cobrar historico cadastrado para o tipo de
-			// débito
-			// Monta a mensagem para o usuário e levanta a exceção
+			// Caso exista mais que um dï¿½bito a cobrar historico cadastrado para o tipo de
+			// dï¿½bito
+			// Monta a mensagem para o usuï¿½rio e levanta a exceï¿½ï¿½o
 			if (colecaoDebitoACobrarHistorico.size() > 1) {
 				Iterator iteratorColecao = colecaoDebitoACobrarHistorico.iterator();
 				
@@ -41836,9 +41837,9 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 				
 				if(colecaoComValor.size() > 1){
-					String mensagem = "Há mais de um Débito a Cobrar com o tipo de débito "
+					String mensagem = "Hï¿½ mais de um Dï¿½bito a Cobrar com o tipo de dï¿½bito "
 						+ tipoDebito.getDescricao()
-						+ " para o Imóvel "
+						+ " para o Imï¿½vel "
 						+ idImovel;
 					throw new ControladorException("atencao.descricao_concatenada",
 						null, mensagem);
@@ -41846,8 +41847,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				debitoACobrar = (DebitoACobrar) Util
 				.retonarObjetoDeColecao(colecaoComValor);
 			} else {
-				// Caso só exista apenas um débito a cobrar cadastrado para o
-				// tipo de débito
+				// Caso sï¿½ exista apenas um dï¿½bito a cobrar cadastrado para o
+				// tipo de dï¿½bito
 				debitoACobrarHistorico = (DebitoACobrarHistorico) Util
 						.retonarObjetoDeColecao(colecaoDebitoACobrarHistorico);
 				
@@ -41881,7 +41882,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		debitoACobrarGeral.setDebitoACobrarHistorico(debitoACobrarHistorico);
 		
-		// Retorna o débito a cobrar encontrado ou nulo se não existir o débito
+		// Retorna o dï¿½bito a cobrar encontrado ou nulo se nï¿½o existir o dï¿½bito
 		// a cobrar
 		return debitoACobrarGeral;
 	}
@@ -41930,7 +41931,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	/**
 	  * [UC0146] Manter Conta
 	  * 
-	  * FS0028 - Verificar parâmetro consulta e débito automático
+	  * FS0028 - Verificar parï¿½metro consulta e dï¿½bito automï¿½tico
 	  * @return
 	  * @throws ErroRepositorioException
 	  */
@@ -41953,7 +41954,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		/**
 		  * [UC0146] Manter Conta
 		  * 
-		  * FS0028 - Verificar parâmetro consulta e débito automático
+		  * FS0028 - Verificar parï¿½metro consulta e dï¿½bito automï¿½tico
 		  * @return
 		  * @throws ErroRepositorioException
 		  */
@@ -42030,7 +42031,7 @@ public class ControladorArrecadacao extends ControladorComum {
     
     /**
 	 * Inseri na tabela ARRECADADOR_CONTRATO_TARIFA todos os arrecadadores contratos tarifas 
-	 * selecionados pelo usuário para um determinado Arrecadador de contrato.
+	 * selecionados pelo usuï¿½rio para um determinado Arrecadador de contrato.
 	 * 
 	 * @author Arthur Carvalho
 	 * @date 27/05/2009
@@ -42066,7 +42067,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
     
     /**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 *
 	 * [SB0014] - Processar Pagamento Legado COSANPA - CONTA
 	 *
@@ -42113,7 +42114,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 *
 	 * [SB0014] - Processar Pagamento Legado COSANPA - EXTRATO
 	 *
@@ -42179,7 +42180,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 *
 	 * [SB0014] - Processar Pagamento Legado COSANPA - GUIA DE PAGAMENTO
 	 *
@@ -42221,7 +42222,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0264] - Distribuir Dados do Código de Barras
+	 * [UC0264] - Distribuir Dados do Cï¿½digo de Barras
 	 * 
 	 * [SB0008] - Distribuir Pagamento Legado COSANPA LEGADO FATURA
 	 * 
@@ -42260,7 +42261,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 * 
 	 * [SB0016] - Processar Pagamento Antecipado de Conta
 	 * 
@@ -42272,7 +42273,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		ProcessarPagamentoParcialContaHelper helper = new ProcessarPagamentoParcialContaHelper();
 		
-		//Conta que será retificada
+		//Conta que serï¿½ retificada
 		helper.setConta(conta);
 		
 		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
@@ -42293,58 +42294,58 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		helper.setColecaoCategoriaOUSubcategoria(colecaoCategoriaOUSubcategoria);
 		
-		//Motivo da retificação (CMRT_IDANTECIPADO da tabela SISTEMA_PARAMETRO);
+		//Motivo da retificaï¿½ï¿½o (CMRT_IDANTECIPADO da tabela SISTEMA_PARAMETRO);
 		helper.setContaMotivoRetificacao(getSistemaParametro().getContaMotivoRetificacaoPagamentoAntecipado());
 		
-		//DÉBITOS
+		//Dï¿½BITOS
 		Collection colecaoDebitoCobrado = this.getControladorFaturamento().obterDebitosCobradosConta(conta);
 		helper.setColecaoDebitoCobrado(colecaoDebitoCobrado);
 		
-		//CRÉDITOS
+		//CRï¿½DITOS
 		Collection colecaoCreditoRealizado = this.getControladorFaturamento().obterCreditosRealizadosConta(conta);
 
 		/*
-		 * Gerando um crédito realizado de acordo com as especificações abaixo:
+		 * Gerando um crï¿½dito realizado de acordo com as especificaï¿½ï¿½es abaixo:
 		 */
 		CreditoRealizado creditoRealizado = new CreditoRealizado();
 		
-		//1. Tipo do Crédito (DBTP_ID da tabela DEBITO_TIPO com valor associado a “Pagamento Antecipado”;
+		//1. Tipo do Crï¿½dito (DBTP_ID da tabela DEBITO_TIPO com valor associado a ï¿½Pagamento Antecipadoï¿½;
 		CreditoTipo creditoTipo = new CreditoTipo();
 		creditoTipo.setId(CreditoTipo.PAGAMENTO_PARCIAL);
 		
 		creditoRealizado.setCreditoTipo(creditoTipo);
 		
 		/*
-		 * 2. Mês e ano de referência do crédito (CNTA_AMREFERENCIACONTA  da tabela CONTA com CNTA_ID = 
+		 * 2. Mï¿½s e ano de referï¿½ncia do crï¿½dito (CNTA_AMREFERENCIACONTA  da tabela CONTA com CNTA_ID = 
 		 * CNTA_ID da conta selecionada);
 		 */
 		creditoRealizado.setAnoMesReferenciaCredito(conta.getReferencia());
 		
 		/*
-		 * 3. Mês e ano de referência da cobrança (Mês/Ano de referencia da arrecadação 
+		 * 3. Mï¿½s e ano de referï¿½ncia da cobranï¿½a (Mï¿½s/Ano de referencia da arrecadaï¿½ï¿½o 
 		 * (PARM_AMREFERENCIAARRECADACAO  da tabela SISTEMA_PARAMETRO));
 		 */
 		creditoRealizado.setAnoMesCobrancaCredito(getSistemaParametro().getAnoMesArrecadacao());
 		
-		//4. Valor do crédito realizado (Valor da guia de pagamento (GPAG_VLDEBITO da tabela GUIA_PAGAMENTO);
+		//4. Valor do crï¿½dito realizado (Valor da guia de pagamento (GPAG_VLDEBITO da tabela GUIA_PAGAMENTO);
 		creditoRealizado.setValorCredito(valorGuiaPagamento);
 		
-		//5. Número total de prestações do crédito realizado (1(um));
+		//5. Nï¿½mero total de prestaï¿½ï¿½es do crï¿½dito realizado (1(um));
 		creditoRealizado.setNumeroPrestacaoCredito(new Short("1"));
 		
-		//6. Número da prestação do crédito realizado (1(um));
+		//6. Nï¿½mero da prestaï¿½ï¿½o do crï¿½dito realizado (1(um));
 		creditoRealizado.setNumeroPrestacao(new Short("1"));
 		
 		/*
-		 * 7. Origem do crédito realizado (CROR_ID  da tabela CREDITO_ORIGEM com valor igual a 
-		 * “DESCONTOS CONCEDIDOS”);
+		 * 7. Origem do crï¿½dito realizado (CROR_ID  da tabela CREDITO_ORIGEM com valor igual a 
+		 * ï¿½DESCONTOS CONCEDIDOSï¿½);
 		 */
 		CreditoOrigem creditoOrigem = new CreditoOrigem();
 		creditoOrigem.setId(CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 		
 		creditoRealizado.setCreditoOrigem(creditoOrigem);
 		
-		//ACRESCENTANDO UM CRÉDITO REALIZADO NA CONTA COM O VALOR DA GUIA DE PAGAMENTO
+		//ACRESCENTANDO UM CRï¿½DITO REALIZADO NA CONTA COM O VALOR DA GUIA DE PAGAMENTO
 		colecaoCreditoRealizado.add(creditoRealizado);
 		helper.setColecaoCreditoRealizado(colecaoCreditoRealizado);
 		
@@ -42358,7 +42359,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		if (conta.getConsumoEsgoto() != null){
 			volumeEsgoto = conta.getConsumoEsgoto();
 		}
-		//[UC0120] - Calcular Valores de Água e/ou Esgoto
+		//[UC0120] - Calcular Valores de ï¿½gua e/ou Esgoto
 		Collection<CalcularValoresAguaEsgotoHelper> valoresConta = this.getControladorFaturamento()
 		.calcularValoresConta(Util.formatarAnoMesParaMesAno(conta.getReferencia()), 
 		conta.getImovel().getId().toString(),conta.getLigacaoAguaSituacao().getId(), 
@@ -42373,7 +42374,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0264] - Distribuir Dados do Código de Barras
+	 * [UC0264] - Distribuir Dados do Cï¿½digo de Barras
 	 * 
 	 * [SB0008] - Distribuir Pagamento Legado COSANPA LEGADO FATURA
 	 * 
@@ -42475,7 +42476,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			this.getControladorFaturamento().inserirGuiaPagamentoCodigoBarras(guiaPagamento,debitoTipo.getId());
 		
 		
-		//Verifica se o imovel ja é cadastrado na tabela imovel doação
+		//Verifica se o imovel ja ï¿½ cadastrado na tabela imovel doaï¿½ï¿½o
 		FiltroImovelDoacao filtroImovelDoacao = new FiltroImovelDoacao();
 		filtroImovelDoacao.adicionarParametro( 
 			new ParametroSimples (FiltroImovelDoacao.ID_IMOVEL, idImovel));
@@ -42486,7 +42487,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			getControladorUtil().pesquisar(filtroImovelDoacao,ImovelDoacao.class.getName());
 		
 		if ( colecaoImovelDoacao == null || colecaoImovelDoacao.isEmpty() ) {
-			//Incluir o imovel doação
+			//Incluir o imovel doaï¿½ï¿½o
 			ImovelDoacao imovelDoacao = new ImovelDoacao();
 			imovelDoacao.setImovel(imovel);
 			
@@ -42550,29 +42551,29 @@ public class ControladorArrecadacao extends ControladorComum {
 		boolean setaRetorno = true;
 		
 		/*
-		 * Recupera o objeto registroHelperCodigoBarras passando a string do código de barras.
+		 * Recupera o objeto registroHelperCodigoBarras passando a string do cï¿½digo de barras.
 		 */
 		RegistroHelperCodigoBarras registroHelperCodigoBarras = distribuirDadosCodigoBarras(codigoBarras);
 
 		Short identificadorEmpresaCodigoBarras = new Short(registroHelperCodigoBarras.getIdEmpresa());
 
 		/*
-		 * Caso o identificador da empresa no txt não seja igual ao código da
+		 * Caso o identificador da empresa no txt nï¿½o seja igual ao cï¿½digo da
 		 * empresa no sistemas parametro.
 		 */
 		if (!identificadorEmpresaCodigoBarras.equals(getSistemaParametro().getCodigoEmpresaFebraban())) {
 
-			// Atribui o valor 2(NÃO) ao indicador aceitação registro
+			// Atribui o valor 2(Nï¿½O) ao indicador aceitaï¿½ï¿½o registro
 			indicadorAceitacaoRegistro = "2";
 
-			descricaoOcorrencia = "CÓDIGO DE BARRAS NÃO PERTENCE A "+ getSistemaParametro().getNomeEmpresa();
+			descricaoOcorrencia = "Cï¿½DIGO DE BARRAS Nï¿½O PERTENCE A "+ getSistemaParametro().getNomeEmpresa();
 
 		} 
 		else {
 			
 			int tipoPagamento = Integer.parseInt(registroHelperCodigoBarras.getTipoPagamento());
 			
-			//FATURA DO CLIENTE RESPONSÁVEL
+			//FATURA DO CLIENTE RESPONSï¿½VEL
 			if(tipoPagamento == 7){
 				
 				pagamentoHelperCodigoBarras = this.processarFaturaDoClienteResponsavel(
@@ -42582,14 +42583,14 @@ public class ControladorArrecadacao extends ControladorComum {
 			}else{
 				
 				indicadorAceitacaoRegistro = "2";
-				descricaoOcorrencia = "CÓDIGO DE BARRAS COM TIPO DE PAGAMENTO INVÁLIDO";
+				descricaoOcorrencia = "Cï¿½DIGO DE BARRAS COM TIPO DE PAGAMENTO INVï¿½LIDO";
 				
 			}
 
 		}
 		
 		if(setaRetorno){
-			// Seta os parametros que serão retornados
+			// Seta os parametros que serï¿½o retornados
 			pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 			pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 		}
@@ -42614,13 +42615,13 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		boolean anoMesReferencia = false;
 
-		// valida a matricula do imóvel
+		// valida a matricula do imï¿½vel
 		boolean idClienteInvalido = Util.validarValorNaoNumerico(registroHelperCodigoBarras
 					.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento2());
 		Integer idClienteNaBase = null;
 
 		if (idClienteInvalido) {
-			descricaoOcorrencia = "CÓDIGO DO CLIENTE NÃO NUMÉRICO";
+			descricaoOcorrencia = "Cï¿½DIGO DO CLIENTE Nï¿½O NUMï¿½RICO";
 		} else {
 			// verifica se existe o id do cliente na base
 			Integer idCliente = new Integer(registroHelperCodigoBarras
@@ -42635,7 +42636,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (idClienteNaBase == null) {
-				descricaoOcorrencia = "CLIENTE RESPONSÁVEL NÂO CADASTRADO";
+				descricaoOcorrencia = "CLIENTE RESPONSï¿½VEL Nï¿½O CADASTRADO";
 			}
 		}
 
@@ -42644,7 +42645,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				.getRegistroHelperCodigoBarrasTipoPagamento().getIdPagamento4()));
 		anoMesReferencia = Util.validarAnoMesSemBarra("" + anoMes);
 		if (anoMesReferencia) {
-			descricaoOcorrencia = "ANO/MÊS DE REFERÊNCIA DA CONTA INVÁLIDO";
+			descricaoOcorrencia = "ANO/Mï¿½S DE REFERï¿½NCIA DA CONTA INVï¿½LIDO";
 		}
 		
 		if (descricaoOcorrencia.equals("OK")) {
@@ -42664,19 +42665,19 @@ public class ControladorArrecadacao extends ControladorComum {
 				throw new ControladorException("erro.sistema", e);
 			}
 
-			// verifica se a coleção é diferente de nula
+			// verifica se a coleï¿½ï¿½o ï¿½ diferente de nula
 			if (fatura == null) {
 				
-				descricaoOcorrencia = "FATURA DO CLIENTE RESPONSÁVEL INEXISTENTE";
+				descricaoOcorrencia = "FATURA DO CLIENTE RESPONSï¿½VEL INEXISTENTE";
 				indicadorAceitacaoRegistro = "2";
 			}
 			
 		} else {
-			// atribui o valor 2(NÃO) ao indicador aceitacao registro
+			// atribui o valor 2(Nï¿½O) ao indicador aceitacao registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
-		// Seta os parametros que serão retornados
+		// Seta os parametros que serï¿½o retornados
 		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 		pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
 
@@ -42754,7 +42755,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								numeroIndice,
 								quantidadeRegistros);
 
-						// verifica se a coleção é diferente de nula
+						// verifica se a coleï¿½ï¿½o ï¿½ diferente de nula
 						if (faturaItens != null && !faturaItens.isEmpty()) {
 							
 							if (faturaItens.size() < quantidadeRegistros) {
@@ -42789,12 +42790,12 @@ public class ControladorArrecadacao extends ControladorComum {
 								if (faturaItem[3] != null) {
 									idImovelPesquisa = (Integer) faturaItem[3];
 								}
-								// verifica o id da localidade de Conta Histórico
+								// verifica o id da localidade de Conta Histï¿½rico
 								if (faturaItem[4] != null) {
 									idLocalidadePesquisa = (Integer) faturaItem[4];
 								}
 								
-								// verifica o id do imovel de Conta Histórico
+								// verifica o id do imovel de Conta Histï¿½rico
 								if (faturaItem[5] != null) {
 									idImovelPesquisa = (Integer) faturaItem[5];
 								}
@@ -42806,14 +42807,14 @@ public class ControladorArrecadacao extends ControladorComum {
 								// cria o objeto pagamento para setar os dados
 								Pagamento pagamento = new Pagamento();
 								pagamento.setAnoMesReferenciaPagamento(anoMes);
-								// caso o ano mes da data de pagamento seja maior que o ano mes de arrecadação da
-								// tabela sistema parametro então seta o ano mes da data de pagamento
+								// caso o ano mes da data de pagamento seja maior que o ano mes de arrecadaï¿½ï¿½o da
+								// tabela sistema parametro entï¿½o seta o ano mes da data de pagamento
 								Integer anoMesPagamento = Util.recuperaAnoMesDaData(dataPagamento);
 								if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 									pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 								} else {
 									// caso contrario seta o o ano mes
-									// arrecadação da tabela sistema parametro
+									// arrecadaï¿½ï¿½o da tabela sistema parametro
 									pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 								}
 								pagamento.setValorPagamento(valorConta);
@@ -42821,7 +42822,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								pagamento.setPagamentoSituacaoAtual(null);
 								pagamento.setPagamentoSituacaoAnterior(null);
 								pagamento.setDebitoTipo(null);
-								// verifica se o id da conta é diferente de nulo
+								// verifica se o id da conta ï¿½ diferente de nulo
 								if (idContaPesquisa != null) {
 									Conta conta = new Conta();
 									conta.setId(idContaPesquisa);
@@ -42901,7 +42902,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 				
 			
-			// Atualiza o valor do aviso bancário
+			// Atualiza o valor do aviso bancï¿½rio
 			avisoBancario.setValorArrecadacaoCalculado(
 				avisoBancario.getValorArrecadacaoCalculado().add(valorPagamentoAcumulado));
 			
@@ -42920,8 +42921,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0264] - Distribuir Dados do Código de Barras
-	 * [SB0010] - Distribuir Pagamento de Guia de Pagamento com Identificação
+	 * [UC0264] - Distribuir Dados do Cï¿½digo de Barras
+	 * [SB0010] - Distribuir Pagamento de Guia de Pagamento com Identificaï¿½ï¿½o
 	 * @author Hugo Amorim
 	 * @date 11/01/2010
 	 *
@@ -42932,13 +42933,13 @@ public class ControladorArrecadacao extends ControladorComum {
 	public RegistroHelperCodigoBarrasTipoPagamento distribuirDadosCodigoBarrasPorTipoPagamento_GUIA_PAGAMENTO_COM_IDENTIFICACAO(
 			RegistroHelperCodigoBarrasTipoPagamento registroHelperCodigoBarrasTipoPagamento, String idPagamento) {
 		
-		// Seta o código da localidade
+		// Seta o cï¿½digo da localidade
 		registroHelperCodigoBarrasTipoPagamento.setIdPagamento1(idPagamento.substring(0, 3).trim());
 		
 		/*
-		 * Identifica se a matrícula ou o id do cliente foram formatados com 8 ou 9 dígitos
-		 * 0 = 8 dígitos
-		 * 1 = 9 dígitos
+		 * Identifica se a matrï¿½cula ou o id do cliente foram formatados com 8 ou 9 dï¿½gitos
+		 * 0 = 8 dï¿½gitos
+		 * 1 = 9 dï¿½gitos
 		 */
 		String indicadorTamanhoIdentificacao = idPagamento.substring(23, 24).trim();
 		
@@ -42951,7 +42952,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			//Seta Identificador da guia de pagamento
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(idPagamento.substring(11, 20).trim());
 			
-			// Não está sendo utilizado
+			// Nï¿½o estï¿½ sendo utilizado
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(idPagamento.substring(20, 24).trim());
 		}
 		else{
@@ -42963,7 +42964,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			//Seta Identificador da guia de pagamento
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento3(idPagamento.substring(12, 21).trim());
 			
-			// Não está sendo utilizado
+			// Nï¿½o estï¿½ sendo utilizado
 			registroHelperCodigoBarrasTipoPagamento.setIdPagamento4(idPagamento.substring(21, 24).trim());
 		}
 		
@@ -42972,9 +42973,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 * 
-	 * [SB0017] -  Processar Pagamento de Guia de Pagamento com Identificação Matrícula
+	 * [SB0017] -  Processar Pagamento de Guia de Pagamento com Identificaï¿½ï¿½o Matrï¿½cula
 	 * 
 	 * @autor: Hugo Amorim
 	 * @data: 11/01/2010
@@ -43010,7 +43011,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento1());
 
 		if (idLocalidadeInvalida) {
-			descricaoOcorrencia = "CÓDIGO DA LOCALIDADE NÃO NUMÉRICA";
+			descricaoOcorrencia = "Cï¿½DIGO DA LOCALIDADE Nï¿½O NUMï¿½RICA";
 		}else{
 			idLocalidade = new Integer(registroHelperCodigoBarras
 					.getRegistroHelperCodigoBarrasTipoPagamento()
@@ -43025,10 +43026,10 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento2());
 
 		if (matriculaImovelInvalida) {
-			descricaoOcorrencia = "MÁTRICULA DO IMÓVEL INVÁLIDA";
+			descricaoOcorrencia = "Mï¿½TRICULA DO IMï¿½VEL INVï¿½LIDA";
 		} else {
 
-			// Verifica se existe a matricula do imóvel na base
+			// Verifica se existe a matricula do imï¿½vel na base
 			matriculaImovel = new Integer(registroHelperCodigoBarras
 					.getRegistroHelperCodigoBarrasTipoPagamento()
 					.getIdPagamento2());
@@ -43042,7 +43043,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 
 			if (idImovelNaBase == null) {
-				descricaoOcorrencia = "MATRÍCULA DO IMÓVEL NÃO CADASTRADA";
+				descricaoOcorrencia = "MATRï¿½CULA DO IMï¿½VEL Nï¿½O CADASTRADA";
 			}
 		}
 
@@ -43082,9 +43083,9 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 			
 			/*
-             * Alterado por Hugo Amorim/Rômulo Aurélio/Raphael Rossiter em 02/02/2010 - 
-             * OBJ: Gerar os pagamentos associados com a localidade da guia de pagamento e NÃO com
-             * a localidade do imóvel.
+             * Alterado por Hugo Amorim/Rï¿½mulo Aurï¿½lio/Raphael Rossiter em 02/02/2010 - 
+             * OBJ: Gerar os pagamentos associados com a localidade da guia de pagamento e Nï¿½O com
+             * a localidade do imï¿½vel.
              */
             if (idGuiaPagamento != null) {
 
@@ -43115,7 +43116,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			/*
 			 * Caso o ano mes da data de dedito seja maior que o ano mes de
-			 * arrecadação da tabela sistema parametro então seta o ano mes da
+			 * arrecadaï¿½ï¿½o da tabela sistema parametro entï¿½o seta o ano mes da
 			 * data de debito
 			 */
 			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
@@ -43125,7 +43126,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			} else {
 
 				/*
-				 * caso contrario seta o o ano mes arrecadação da tabela sistema
+				 * caso contrario seta o o ano mes arrecadaï¿½ï¿½o da tabela sistema
 				 * parametro
 				 */
 				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
@@ -43162,8 +43163,8 @@ public class ControladorArrecadacao extends ControladorComum {
 			localidade.setId(idLocalidade);
 			pagamento.setLocalidade(localidade);
 
-			// Alterado por Rômulo Aurélio Data: 15/07/2010, Analista Rosana/Aryed
-			// quando o tipo de debito for Entrada de Guia é pra inserir 
+			// Alterado por Rï¿½mulo Aurï¿½lio Data: 15/07/2010, Analista Rosana/Aryed
+			// quando o tipo de debito for Entrada de Guia ï¿½ pra inserir 
 			// o tipo de documento como guia de Parcelamento
 			documentoTipo.setId(DocumentoTipo.GUIA_PAGAMENTO);
 			
@@ -43198,7 +43199,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			colecaoPagamentos.add(pagamento);
 			
 			/*
-			 * Caso o pagamento tenha sido incluído para uma guia existente e que tenha uma conta 
+			 * Caso o pagamento tenha sido incluï¿½do para uma guia existente e que tenha uma conta 
 			 * associada (CNTA_ID da tabela GUIA_PAGAMENTO_ITEM com valor diferente de nulo)
 			 */
 			if (idGuiaPagamento != null){
@@ -43225,11 +43226,11 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 		} else {
 
-			// Atribui o valor 2(NÃO) ao indicador aceitacao registro
+			// Atribui o valor 2(Nï¿½O) ao indicador aceitacao registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
-		// Seta os parametros que serão retornados
+		// Seta os parametros que serï¿½o retornados
 		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
 		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 		pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
@@ -43239,9 +43240,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0259] - Processar Pagamento com Código de Barras
+	 * [UC0259] - Processar Pagamento com Cï¿½digo de Barras
 	 * 
-	 * [SB0018] -  Processar Pagamento de Guia de Pagamento com Identificação Cliente
+	 * [SB0018] -  Processar Pagamento de Guia de Pagamento com Identificaï¿½ï¿½o Cliente
 	 * 
 	 * @autor: Hugo Amorim
 	 * @data: 11/01/2010
@@ -43268,7 +43269,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		Integer idCliente = null;
 		
 		/**
-		 * Guia de pagamento não vinha sendo preenchida no momento do processamento
+		 * Guia de pagamento nï¿½o vinha sendo preenchida no momento do processamento
 		 * do pagamento
 		 * 
 		 * @author Wellington Rocha
@@ -43285,7 +43286,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento1());
 
 		if (idLocalidadeInvalida) {
-			descricaoOcorrencia = "CÓDIGO DA LOCALIDADE NÃO NUMÉRICA";
+			descricaoOcorrencia = "Cï¿½DIGO DA LOCALIDADE Nï¿½O NUMï¿½RICA";
 		}
 		else{
 			idLocalidade = new Integer(registroHelperCodigoBarras
@@ -43299,7 +43300,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						.getIdPagamento2());
 
 		if (clienteInvalido) {
-			descricaoOcorrencia = "CÓDIGO DO CLIENTE NÃO NUMÉRICO";
+			descricaoOcorrencia = "Cï¿½DIGO DO CLIENTE Nï¿½O NUMï¿½RICO";
 		}
 		else{
 			idCliente = new Integer(registroHelperCodigoBarras
@@ -43323,7 +43324,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				
 				descricaoOcorrencia = "GUIA PAGAMENTO INEXISTENTE";
 				
-				//CARREGANDO O CLIENTE QUE ESTA VINDO NO CÓDIGO DE BARRAS
+				//CARREGANDO O CLIENTE QUE ESTA VINDO NO Cï¿½DIGO DE BARRAS
 				FiltroCliente filtroCliente = new FiltroCliente();
 				
 				filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, idCliente));
@@ -43341,7 +43342,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				
 				if (!clienteInvalido){
 					
-					//CARREGANDO A LOCALIDADE QUE ESTA VINDO NO CÓDIGO DE BARRAS
+					//CARREGANDO A LOCALIDADE QUE ESTA VINDO NO Cï¿½DIGO DE BARRAS
 					FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
 
 					filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, idLocalidade));
@@ -43437,17 +43438,17 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 			else{
 				
-				//Atribui o valor 2(NÃO) ao indicador aceitacao registro
+				//Atribui o valor 2(Nï¿½O) ao indicador aceitacao registro
 				indicadorAceitacaoRegistro = "2";
 			}
 		} 
 		else {
 
-			// Atribui o valor 2(NÃO) ao indicador aceitacao registro
+			// Atribui o valor 2(Nï¿½O) ao indicador aceitacao registro
 			indicadorAceitacaoRegistro = "2";
 		}
 
-		// Seta os parametros que serão retornados
+		// Seta os parametros que serï¿½o retornados
 		pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
 		pagamentoHelperCodigoBarras.setDescricaoOcorrencia(descricaoOcorrencia);
 		pagamentoHelperCodigoBarras.setIndicadorAceitacaoRegistro(indicadorAceitacaoRegistro);
@@ -43457,7 +43458,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0927] – Confirmar Cartão de Crédito/Débito
+	 * [UC0927] ï¿½ Confirmar Cartï¿½o de Crï¿½dito/Dï¿½bito
 	 *
 	 * @author Raphael Rossiter
 	 * @date 18/01/2010
@@ -43485,10 +43486,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [FS0001 – Verificar existência do arrecadador]
-	 * [FS0002 – Verificar arrecadação forma cartão crédito]
+	 * [FS0001 ï¿½ Verificar existï¿½ncia do arrecadador]
+	 * [FS0002 ï¿½ Verificar arrecadaï¿½ï¿½o forma cartï¿½o crï¿½dito]
 	 *
 	 * @author Raphael Rossiter
 	 * @date 26/01/2010
@@ -43512,7 +43513,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		if (arrecadadorEncontrado == null || arrecadadorEncontrado.isEmpty()) {
 			
-			//[FS0001 – Verificar existência do arrecadador]
+			//[FS0001 ï¿½ Verificar existï¿½ncia do arrecadador]
 			throw new ControladorException("atencao.pesquisa_inexistente", null, "Arrecadador");
 		}
 		
@@ -43523,7 +43524,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		if (arrecadadorContratoTarifa == null){
 			
-			//[FS0002 – Verificar arrecadação forma cartão crédito];
+			//[FS0002 ï¿½ Verificar arrecadaï¿½ï¿½o forma cartï¿½o crï¿½dito];
 			throw new ControladorException("atencao.arrecadador_nao_cartao_credito");
 		}
 		
@@ -43533,7 +43534,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 *
 	 * @author Raphael Rossiter
 	 * @date 29/01/2010
@@ -43570,23 +43571,23 @@ public class ControladorArrecadacao extends ControladorComum {
             //TRAILLER
             RegistroCartaoCreditoTraillerHelper trailler = null;
             
-            //Para guardar o código do registro no momento do processamento
+            //Para guardar o cï¿½digo do registro no momento do processamento
             Short codigoRegistro = null;
 
-            // cria uma coleção com as linhas do txt
+            // cria uma coleï¿½ï¿½o com as linhas do txt
             Collection linhas = new ArrayList();
-            // cria uma coleção de avisos bancarios
+            // cria uma coleï¿½ï¿½o de avisos bancarios
             Collection avisosBancarios = new ArrayList();
-            // cria uma coleção de pagamentos
+            // cria uma coleï¿½ï¿½o de pagamentos
             Collection pagamentos = new ArrayList(); 
 
             /*
-             * A quantidade de registros do movimento será a quantidade total menos os registros
+             * A quantidade de registros do movimento serï¿½ a quantidade total menos os registros
              * de header e trailler.
              */
             Integer quantidadeRegistrosDeMovimento = quantidadeRegistros - 2;
 
-            // cria um boolean que verifica se é a primeira linha
+            // cria um boolean que verifica se ï¿½ a primeira linha
             boolean primeiraLinha = true;
 
             
@@ -43597,22 +43598,22 @@ public class ControladorArrecadacao extends ControladorComum {
                 String linha = stringBuilderTxt.substring(inicioLinha, inicioLinha + tamanhoLinha);
                 
                 /*
-                 * Incrementa a primeira linha.O +1 é para tirar o
+                 * Incrementa a primeira linha.O +1 ï¿½ para tirar o
                  * System.getProperty("line.separator")
                  */
                 inicioLinha = inicioLinha + tamanhoLinha + 1;
 
-                //Recupera o código do registro
+                //Recupera o cï¿½digo do registro
                 codigoRegistro = Short.valueOf(linha.substring(0, 1));
 
                 
-                //VERIFICANDO SE O SISTEMA JÁ PROCESSOU A PRIMEIRA LINHA
+                //VERIFICANDO SE O SISTEMA Jï¿½ PROCESSOU A PRIMEIRA LINHA
                 if (primeiraLinha) {
                     
                     
                     /*
                      * PROCESSANDO PRIMEIRA LINHA
-                     * [SB0001 – Inserir o movimento do arrecadador]
+                     * [SB0001 ï¿½ Inserir o movimento do arrecadador]
                      */
                 	header = this.validarArquivoMovimentoCartaoCreditoHeader(arrecadador, codigoRegistro, linha);
                 	
@@ -43626,13 +43627,13 @@ public class ControladorArrecadacao extends ControladorComum {
                 	/*
                      * VALIDANDO O MOVIMENTO LINHA POR LINHA
                      * 
-                     * [SB0001 – Inserir o movimento do arrecadador]
-                     * [FS0005 – Verificar a existência do registro código “9”]
+                     * [SB0001 ï¿½ Inserir o movimento do arrecadador]
+                     * [FS0005 ï¿½ Verificar a existï¿½ncia do registro cï¿½digo ï¿½9ï¿½]
                      * 
-                     * O sistema lê o arquivo de movimento de arrecadador seqüencialmente até encontrar o registro 
-                	 * código “9”, contando a quantidade total registros retirando os registros códigos “0” e “9”, 
-                	 * guardando os registros lidos em uma coleção. [FS0005 – Verificar a existência do 
-                	 * registro código “9”].
+                     * O sistema lï¿½ o arquivo de movimento de arrecadador seqï¿½encialmente atï¿½ encontrar o registro 
+                	 * cï¿½digo ï¿½9ï¿½, contando a quantidade total registros retirando os registros cï¿½digos ï¿½0ï¿½ e ï¿½9ï¿½, 
+                	 * guardando os registros lidos em uma coleï¿½ï¿½o. [FS0005 ï¿½ Verificar a existï¿½ncia do 
+                	 * registro cï¿½digo ï¿½9ï¿½].
                      */
                 	trailler = this.validarArquivoMovimentoCartaoCreditoTrailler(codigoRegistro, linha,
                 	quantidadeRegistrosDeMovimento);
@@ -43648,8 +43649,8 @@ public class ControladorArrecadacao extends ControladorComum {
             /*
              * VALIDANDO O MOVIMENTO LINHA POR LINHA
              * 
-             * [SB0001 – Inserir o movimento do arrecadador]
-             * [FS0005 – Verificar a existência do registro código “9”]
+             * [SB0001 ï¿½ Inserir o movimento do arrecadador]
+             * [FS0005 ï¿½ Verificar a existï¿½ncia do registro cï¿½digo ï¿½9ï¿½]
              */
             if (trailler == null) {
                 
@@ -43657,7 +43658,7 @@ public class ControladorArrecadacao extends ControladorComum {
             }
             
             
-            //[SB0001 – Inserir o movimento do arrecadador]
+            //[SB0001 ï¿½ Inserir o movimento do arrecadador]
             ArrecadadorMovimento arrecadadorMovimento = this.inserirArrecadadorMovimentoCartaoCredito(
             arrecadador, header, trailler);
             
@@ -43665,17 +43666,17 @@ public class ControladorArrecadacao extends ControladorComum {
             BigDecimal valorTotalPagamentos = BigDecimal.ZERO;
             
             /*
-             * Para cada registro guardado na coleção, o sistema:
+             * Para cada registro guardado na coleï¿½ï¿½o, o sistema:
              * 
-             * 4.1.	Atribui o valor “OK” ao campo Descrição da Ocorrência do Movimento;
-             * 4.2.	Atribui o valor 1 (SIM) ao Indicador de Aceitação do Registro do Movimento;
+             * 4.1.	Atribui o valor ï¿½OKï¿½ ao campo Descriï¿½ï¿½o da Ocorrï¿½ncia do Movimento;
+             * 4.2.	Atribui o valor 1 (SIM) ao Indicador de Aceitaï¿½ï¿½o do Registro do Movimento;
 
              */
             String descricaoOcorrenciaMovimento = "OK";
             Short indicadorAceitacaoRegistroMovimento = ConstantesSistema.SIM;
             MovimentoCartaoRejeita movimentoCartaoRejeita = null;
             
-            //OBTENDO OS PARÂMETROS DO SISTEMA
+            //OBTENDO OS PARï¿½METROS DO SISTEMA
             SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
             
             Iterator linhaIterator = linhas.iterator();
@@ -43690,22 +43691,22 @@ public class ControladorArrecadacao extends ControladorComum {
                 
                 movimentoCartaoRejeita = null;
 
-                // Recupera a linha da coleção
+                // Recupera a linha da coleï¿½ï¿½o
                 String linhaRegistro = (String) linhaIterator.next();
                 
-                //Recupera o código do registro
+                //Recupera o cï¿½digo do registro
                 codigoRegistro = Short.valueOf(linhaRegistro.substring(0, 1));
                 
                 /*
-                 * Caso o tipo de registro = 1 (C01 = 1), o sistema distribui os dados do conteúdo do registro 
+                 * Caso o tipo de registro = 1 (C01 = 1), o sistema distribui os dados do conteï¿½do do registro 
                  * de movimento do arrecadador, 
                  * 
-                 * [SB0002– Distribuir Dados do Registro de Movimento do Arrecadador.
+                 * [SB0002ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador.
                  * 
-                 * Caso o tipo de registro = 2 (C01 = 2), o sistema distribui os dados do conteúdo do registro 
+                 * Caso o tipo de registro = 2 (C01 = 2), o sistema distribui os dados do conteï¿½do do registro 
                  * de movimento do arrecadador, 
                  * 
-                 * [SB0006– Distribuir Dados do Registro de Movimento do Arrecadador.
+                 * [SB0006ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador.
                  */
                 if (codigoRegistro.equals(RegistroCartaoCreditoTipo1Helper.CODIGO_MOVIMENTO_TIPO_1) ||
                 	codigoRegistro.equals(RegistroCartaoCreditoTipo2Helper.CODIGO_MOVIMENTO_TIPO_2)){
@@ -43720,7 +43721,7 @@ public class ControladorArrecadacao extends ControladorComum {
                 		//DISTRIBUINDO OS DADOS DO MOVIMENTO PARA O TIPO 1
                     	movimentoTipo1 = this.distribuirDadosArquivoMovimentoCartaoCreditoTipo1(codigoRegistro, linhaRegistro); 
                     	
-                    	//[SB0005] – Processar Pagamento Cartão de Crédito
+                    	//[SB0005] ï¿½ Processar Pagamento Cartï¿½o de Crï¿½dito
                     	pagamentoHelperCodigoBarras = this.processarPagamentosCartaoCreditoTipo1(
                     	arrecadador, header, movimentoTipo1, getSistemaParametro(), usuarioLogado);
                     	
@@ -43733,7 +43734,7 @@ public class ControladorArrecadacao extends ControladorComum {
                 		//DISTRIBUINDO OS DADOS DO MOVIMENTO PARA O TIPO 2
                     	movimentoTipo2 = this.distribuirDadosArquivoMovimentoCartaoCreditoTipo2(codigoRegistro, linhaRegistro); 
                     	
-                    	//[SB0005] – Processar Pagamento Cartão de Crédito
+                    	//[SB0005] ï¿½ Processar Pagamento Cartï¿½o de Crï¿½dito
                     	pagamentoHelperCodigoBarras = this.processarPagamentosCartaoCreditoTipo2(
                     	arrecadador, header, movimentoTipo2, getSistemaParametro(), usuarioLogado);
                     	
@@ -43746,12 +43747,12 @@ public class ControladorArrecadacao extends ControladorComum {
                 	
                 	
                     
-                    //[SB0004] – Inserir o item de movimento do arrecadador
+                    //[SB0004] ï¿½ Inserir o item de movimento do arrecadador
                     ArrecadadorMovimentoItem arrecadadorMovimentoItem = this.inserirArrecadadorMovimentoItemCartaoCredito(arrecadadorMovimento, linhaRegistro, 
                     descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, movimentoCartaoRejeita);
                     
                     
-                    //APENAS OS REGISTROS DO TIPO 1 IRÃO GERAR PAGAMENTOS
+                    //APENAS OS REGISTROS DO TIPO 1 IRï¿½O GERAR PAGAMENTOS
                     if (codigoRegistro.equals(RegistroCartaoCreditoTipo1Helper.CODIGO_MOVIMENTO_TIPO_1) && 
                        (descricaoOcorrenciaMovimento.equals("OK") || descricaoOcorrenciaMovimento.equals("CARTAO DE DEBITO"))){
                         
@@ -43760,13 +43761,13 @@ public class ControladorArrecadacao extends ControladorComum {
                     	if (descricaoOcorrenciaMovimento.equals("CARTAO DE DEBITO")){
                     		
                     		/*
-                    		 * [SB0007] – Processar Pagamento Cartão de Débito
+                    		 * [SB0007] ï¿½ Processar Pagamento Cartï¿½o de Dï¿½bito
                     		 * 
-                    		 * Caso já exista o aviso bancário o sistema atualiza o valor da arrecadação e da devolução do aviso bancário 
-                    		 * (tabela AVISO_BANCARIO) conforme descrito abaixo (a partir da tabela AVISO_BANCÁRIO com ARRC_ID=Campo A05, 
-                    		 * AVBC_DTLANCAMENTO=Campo C10 e ARFM_ID que tenha o ARFM_CDARRECADACAOFORMA= “Cartão de Débito” 
-                    		 * (AVBC_DTPREVISTA=Data Prevista para o crédito ou AVBC_DTREALIZADA=Data Prevista para o crédito) e 
-                    		 * (AVBC_VLARRECADACAOCALCULADO com o valor zero ou com ARMV_ID com o id do movimento que está sendo processado))
+                    		 * Caso jï¿½ exista o aviso bancï¿½rio o sistema atualiza o valor da arrecadaï¿½ï¿½o e da devoluï¿½ï¿½o do aviso bancï¿½rio 
+                    		 * (tabela AVISO_BANCARIO) conforme descrito abaixo (a partir da tabela AVISO_BANCï¿½RIO com ARRC_ID=Campo A05, 
+                    		 * AVBC_DTLANCAMENTO=Campo C10 e ARFM_ID que tenha o ARFM_CDARRECADACAOFORMA= ï¿½Cartï¿½o de Dï¿½bitoï¿½ 
+                    		 * (AVBC_DTPREVISTA=Data Prevista para o crï¿½dito ou AVBC_DTREALIZADA=Data Prevista para o crï¿½dito) e 
+                    		 * (AVBC_VLARRECADACAOCALCULADO com o valor zero ou com ARMV_ID com o id do movimento que estï¿½ sendo processado))
                     		 */
                     		try {
                                 
@@ -43783,17 +43784,17 @@ public class ControladorArrecadacao extends ControladorComum {
                             
                             if (avisoBancario != null){
                             	
-                            	//ACUMULANDO O VALOR DA ARRECADAÇÃO DO AVISO BANCÁRIO
+                            	//ACUMULANDO O VALOR DA ARRECADAï¿½ï¿½O DO AVISO BANCï¿½RIO
                             	avisoBancario = this.acumularValorArrecadacaoAvisoBancarioCartaoDebito(avisoBancario,
                             	movimentoTipo1.getValorBruto());
                             	
                             	//ARRECADADOR MOVIMENTO
                                 avisoBancario.setArrecadadorMovimento(arrecadadorMovimento);
                                 
-                                //ÚLTIMA ALTERAÇÃO
+                                //ï¿½LTIMA ALTERAï¿½ï¿½O
                                 avisoBancario.setUltimaAlteracao(new Date());
                                 
-                                //ATUALIZANDO O AVISO BANCÁRIO
+                                //ATUALIZANDO O AVISO BANCï¿½RIO
                                 this.getControladorUtil().atualizar(avisoBancario);
                                 
                             }
@@ -43810,12 +43811,12 @@ public class ControladorArrecadacao extends ControladorComum {
                     	else{
                     		
                     		/*
-                        	 * Caso já exista o aviso bancário o sistema atualiza o valor da arrecadação e da devolução 
-                        	 * do aviso bancário (tabela AVISO_BANCARIO) conforme descrito abaixo (a partir da tabela 
-                        	 * AVISO_BANCÁRIO com ARRC_ID=Campo A05, AVBC_DTLANCAMENTO=Campo C10 e ARFM_ID que tenha o 
-                        	 * ARFM_CDARRECADACAOFORMA= “Cartão de Crédito” (AVBC_DTPREVISTA=Data Prevista para o 
-                        	 * crédito ou AVBC_DTREALIZADA=Data Prevista para o crédito) e (AVBC_VLARRECADACAOCALCULADO 
-                        	 * com o valor zero ou com ARMV_ID com o id do movimento que está sendo processado)).
+                        	 * Caso jï¿½ exista o aviso bancï¿½rio o sistema atualiza o valor da arrecadaï¿½ï¿½o e da devoluï¿½ï¿½o 
+                        	 * do aviso bancï¿½rio (tabela AVISO_BANCARIO) conforme descrito abaixo (a partir da tabela 
+                        	 * AVISO_BANCï¿½RIO com ARRC_ID=Campo A05, AVBC_DTLANCAMENTO=Campo C10 e ARFM_ID que tenha o 
+                        	 * ARFM_CDARRECADACAOFORMA= ï¿½Cartï¿½o de Crï¿½ditoï¿½ (AVBC_DTPREVISTA=Data Prevista para o 
+                        	 * crï¿½dito ou AVBC_DTREALIZADA=Data Prevista para o crï¿½dito) e (AVBC_VLARRECADACAOCALCULADO 
+                        	 * com o valor zero ou com ARMV_ID com o id do movimento que estï¿½ sendo processado)).
                         	 */
                     		try {
                                 
@@ -43829,57 +43830,57 @@ public class ControladorArrecadacao extends ControladorComum {
                                         "erro.sistema", e);
                             }
                             
-                            //SEMPRE VIRÁ APENAS UM PAGAMENTO 
+                            //SEMPRE VIRï¿½ APENAS UM PAGAMENTO 
                         	Collection pagamentosCodigoBarras = pagamentoHelperCodigoBarras
                             .getColecaoPagamentos();
                             
                         	Pagamento pagamento = (Pagamento) Util.retonarObjetoDeColecao(pagamentosCodigoBarras);
                         	
-                        	//AVISO BANCÁRIO
+                        	//AVISO BANCï¿½RIO
                         	pagamento.setAvisoBancario(avisoBancario);
 
-                        	//ARRECADADOR MOVIMENTO ÍTEM
+                        	//ARRECADADOR MOVIMENTO ï¿½TEM
                             pagamento.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
                             
                         	
-                            //O sistema atualiza o valor da arrecadação do aviso bancário
+                            //O sistema atualiza o valor da arrecadaï¿½ï¿½o do aviso bancï¿½rio
                             if (avisoBancario != null) {
                             	
-                            	//ACUMULANDO O VALOR DA ARRECADAÇÃO DO AVISO BANCÁRIO
+                            	//ACUMULANDO O VALOR DA ARRECADAï¿½ï¿½O DO AVISO BANCï¿½RIO
                             	avisoBancario = this.acumularValorArrecadacaoAvisoBancarioCartaoCredito(avisoBancario,
                             	pagamento.getValorPagamento());
                             	
                                 //ARRECADADOR MOVIMENTO
                                 avisoBancario.setArrecadadorMovimento(arrecadadorMovimento);
                                 
-                                //ÚLTIMA ALTERAÇÃO
+                                //ï¿½LTIMA ALTERAï¿½ï¿½O
                                 avisoBancario.setUltimaAlteracao(new Date());
                                 
-                                //ATUALIZANDO O AVISO BANCÁRIO
+                                //ATUALIZANDO O AVISO BANCï¿½RIO
                                 this.getControladorUtil().atualizar(avisoBancario);
                                 
-                                //CALCULANDO O VALOR DA DEDUÇÃO DO AVISO BANCÁRIO
+                                //CALCULANDO O VALOR DA DEDUï¿½ï¿½O DO AVISO BANCï¿½RIO
                                 BigDecimal valorDeducao = this.getControladorCobranca().calcularValorDeducao(
                                 arrecadador.getId(), pagamento.getValorPagamento(),
                                 ArrecadacaoForma.CARTAO_CREDITO);
                                 
-                                //GERAR/ATUALIZAR VALOR DA DEDUÇÃO DO AVISO BANCÁRIO
+                                //GERAR/ATUALIZAR VALOR DA DEDUï¿½ï¿½O DO AVISO BANCï¿½RIO
                                 this.getControladorCobranca().gerarAtualizarAvisoDeducoes(avisoBancario, valorDeducao);
                             } 
                             else {
                                 
                             	/*
                                  * Seta o valor da data prevista para quando for inserir o
-                                 * pagamento saber de que aviso bancário o pagamento está
+                                 * pagamento saber de que aviso bancï¿½rio o pagamento estï¿½
                                  * relacionado.
                                  */
                                  pagamento.setDataPrevistaCreditoHelper(movimentoTipo1.getDataPrevistaPagamento());
                                  
                                  
                                  /*
-                                  * Caso já exista na coleção de avisos bancários para o movimento ocorrência com a 
-                                  * data prevista para o crédito, o sistema atualiza o valor da arrecadação e 
-                                  * da devolução do aviso bancário na ocorrência da coleção de avisos bancários.
+                                  * Caso jï¿½ exista na coleï¿½ï¿½o de avisos bancï¿½rios para o movimento ocorrï¿½ncia com a 
+                                  * data prevista para o crï¿½dito, o sistema atualiza o valor da arrecadaï¿½ï¿½o e 
+                                  * da devoluï¿½ï¿½o do aviso bancï¿½rio na ocorrï¿½ncia da coleï¿½ï¿½o de avisos bancï¿½rios.
                                   */
                                  Iterator avisosBancarioIterator = avisosBancarios.iterator();
                                  
@@ -43890,7 +43891,7 @@ public class ControladorArrecadacao extends ControladorComum {
     		                    	 AvisoBancario avisoBancarioDaColecao = (AvisoBancario) avisosBancarioIterator.next();
     		                         
     		                    	 /*
-    		                    	  * 1º CONDIÇÃO
+    		                    	  * 1ï¿½ CONDIï¿½ï¿½O
     		                    	  * 
     		                    	  * A data prevista do aviso tem que ser igual a data prevista do pagamento
     		                    	  */
@@ -43898,16 +43899,16 @@ public class ControladorArrecadacao extends ControladorComum {
     		                         .getDataPrevista(), movimentoTipo1.getDataPrevistaPagamento());
     		                         
     		                    	 /*
-    		                    	  * 2º CONDIÇÃO
+    		                    	  * 2ï¿½ CONDIï¿½ï¿½O
     		                    	  * 
-    		                    	  * A forma de arrecadação tem que ser igual a cartão de crédito.
+    		                    	  * A forma de arrecadaï¿½ï¿½o tem que ser igual a cartï¿½o de crï¿½dito.
     		                    	  */
     		                         boolean formasArrecadacaoIguais = avisoBancarioDaColecao
     		                         .getArrecadacaoForma().getId().intValue() == ArrecadacaoForma.CARTAO_CREDITO;
     		                         
     		                         if (comparaDataIguais && formasArrecadacaoIguais) {
     		
-    		                        	 //ACUMULANDO O VALOR DA ARRECADAÇÃO DO AVISO BANCÁRIO
+    		                        	 //ACUMULANDO O VALOR DA ARRECADAï¿½ï¿½O DO AVISO BANCï¿½RIO
     		                         	 avisoBancario = this.acumularValorArrecadacaoAvisoBancarioCartaoCredito(avisoBancarioDaColecao,
     		                         	 pagamento.getValorPagamento());
     		                        	 
@@ -43918,10 +43919,10 @@ public class ControladorArrecadacao extends ControladorComum {
     		                     
     		                     if (!achou) {
     		                     	
-    		                    	 //A data de lançamento do aviso será a data atual.
+    		                    	 //A data de lanï¿½amento do aviso serï¿½ a data atual.
     		                    	 RegistroHelperCodigoA registroHelperCodigoA = new RegistroHelperCodigoA();
     		                    	 
-    		                    	 //UTLIZADO PARA SETAR A DATA DE LANÇAMENTO DO AVISO BANCÁRIO
+    		                    	 //UTLIZADO PARA SETAR A DATA DE LANï¿½AMENTO DO AVISO BANCï¿½RIO
     		                    	 registroHelperCodigoA.setDataGeracaoArquivo(Util.formatarDataAAAAMMDD(new Date()));
     		                    	 
     		                    	 //UTILIZADO PARA OBTER OS DADOS DO ARRECADADOR
@@ -43929,7 +43930,7 @@ public class ControladorArrecadacao extends ControladorComum {
     		                    	 
     		                    	 /*
     		                    	  * [UC0242] - Registrar Movimento dos Arrecadadores 
-    		                    	  * [SF0008] - Gerar Ocorrência na coleção de Avisos Bancários
+    		                    	  * [SF0008] - Gerar Ocorrï¿½ncia na coleï¿½ï¿½o de Avisos Bancï¿½rios
     		                    	  */
     		                         avisoBancario = gerarOcorrenciaAvisoBancario(arrecadadorMovimento.getId(),
     		                         registroHelperCodigoA, 
@@ -43947,20 +43948,20 @@ public class ControladorArrecadacao extends ControladorComum {
     		                         null);
     		
     		                         
-    		                         //AVISOS BANCÁRIOS QUE SERÃO INSERIDOS
+    		                         //AVISOS BANCï¿½RIOS QUE SERï¿½O INSERIDOS
     		                         avisosBancarios.add(avisoBancario);
     		                     }
                             }
                             
                             
-                            //PAGAMENTOS QUE SERÃO INSERIDOS
+                            //PAGAMENTOS QUE SERï¿½O INSERIDOS
                             pagamentos.add(pagamento);
                     	}
                     }
                 }
                 else{
                 	
-                	descricaoOcorrenciaMovimento = "MOVIMENTO NÃO É DO TIPO 1 e 2";
+                	descricaoOcorrenciaMovimento = "MOVIMENTO Nï¿½O ï¿½ DO TIPO 1 e 2";
                 	indicadorAceitacaoRegistroMovimento = ConstantesSistema.NAO;
 
                     // INSERINDO O ITEM DO MOVIMENTO DO ARRECADADOR
@@ -43971,7 +43972,7 @@ public class ControladorArrecadacao extends ControladorComum {
             
             
             
-            //INSERINDO OS AVISOS BANCÁRIOS GERADOS
+            //INSERINDO OS AVISOS BANCï¿½RIOS GERADOS
             if (avisosBancarios != null && !avisosBancarios.isEmpty()) {
                 
             	Iterator avisosBancarioIterator = avisosBancarios.iterator();
@@ -43984,17 +43985,17 @@ public class ControladorArrecadacao extends ControladorComum {
 
                     avisoBancario.setId(idAvisoBancario);
                     
-                    //CALCULANDO O VALOR DA DEDUÇÃO DO AVISO BANCÁRIO
+                    //CALCULANDO O VALOR DA DEDUï¿½ï¿½O DO AVISO BANCï¿½RIO
                     BigDecimal valorDeducao = this.getControladorCobranca().calcularValorDeducao(
                     arrecadador.getId(), avisoBancario.getValorArrecadacaoCalculado(),
                     ArrecadacaoForma.CARTAO_CREDITO);
                     
-                    //GERAR/ATUALIZAR VALOR DA DEDUÇÃO DO AVISO BANCÁRIO
+                    //GERAR/ATUALIZAR VALOR DA DEDUï¿½ï¿½O DO AVISO BANCï¿½RIO
                     this.getControladorCobranca().gerarAtualizarAvisoDeducoes(avisoBancario, valorDeducao);
                 }
             }
 
-            //PREPARANDO A INSERÇÃO DOS PAGAMENTOS
+            //PREPARANDO A INSERï¿½ï¿½O DOS PAGAMENTOS
             if (pagamentos != null && !pagamentos.isEmpty()) {
 
                 Collection colecaoPagamentos = new ArrayList();
@@ -44005,12 +44006,12 @@ public class ControladorArrecadacao extends ControladorComum {
                     
                 	Pagamento pagamento = (Pagamento) pagamentoIterator.next();
                 	
-                	//Somatório dos pagamentos recebidos para atualizar no movimento
+                	//Somatï¿½rio dos pagamentos recebidos para atualizar no movimento
                 	valorTotalPagamentos = valorTotalPagamentos.add(pagamento.getValorPagamento());
                     
                     /*
-                     * Verifica se existe o aviso bancário no pagamento,
-                     * se não existe então seta o aviso bancário no pagamento
+                     * Verifica se existe o aviso bancï¿½rio no pagamento,
+                     * se nï¿½o existe entï¿½o seta o aviso bancï¿½rio no pagamento
                      */
                 	if (pagamento.getAvisoBancario() == null) {
                         
@@ -44022,8 +44023,8 @@ public class ControladorArrecadacao extends ControladorComum {
                 			avisosBancarioIterator.next();
                             
                 			/*
-                			 * Caso a data prevista seja a mesma então seta o aviso
-                			 * bancário no pagamento.
+                			 * Caso a data prevista seja a mesma entï¿½o seta o aviso
+                			 * bancï¿½rio no pagamento.
                 			 */
                 			boolean comparaDataIguais = Util.datasIguais(
                             avisoBancario.getDataPrevista(),
@@ -44041,7 +44042,7 @@ public class ControladorArrecadacao extends ControladorComum {
                         }
                     }
                 	
-                	//PAGAMENTOS QUE SERÃO INSERIDOS
+                	//PAGAMENTOS QUE SERï¿½O INSERIDOS
                     colecaoPagamentos.add(pagamento);
                 }
 
@@ -44063,7 +44064,7 @@ public class ControladorArrecadacao extends ControladorComum {
             //ATUALIZANDO O VALOR TOTAL DO MOVIMENTO COM O VALOR TOTAL DOS PAGAMENTOS RECEBIDOS
             this.atualizarValorMovimentoArrecadadorMovimento(arrecadadorMovimento.getId(), valorTotalPagamentos);
             
-            //INSERINDO O NÚMERO DO NSA DO MOVIMENTO
+            //INSERINDO O Nï¿½MERO DO NSA DO MOVIMENTO
             this.inserirNumeroNsaCartaoCredito(arrecadador, Integer.valueOf(header.getSequencia()),
             header.getOpcaoExtrato());
             
@@ -44074,7 +44075,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			System.out.println( "Deu erro na linha: " + aux );
             e.printStackTrace();
 
-            //PREPARANDO A MENSAGEM DE ERRO QUE IRÁ COMPOR O EMAIL
+            //PREPARANDO A MENSAGEM DE ERRO QUE IRï¿½ COMPOR O EMAIL
             String mensagem = e.getMessage();
             if (mensagem != null) {
                 
@@ -44109,7 +44110,7 @@ public class ControladorArrecadacao extends ControladorComum {
             	System.out.println("Problemas no envio do email para mensagem de ERRO");
             }
             
-            //APENAS ROLLBACK PARA ERROS QUE NÃO FOREM PROVENIENTES DE ENVIO DE EMAIL
+            //APENAS ROLLBACK PARA ERROS QUE Nï¿½O FOREM PROVENIENTES DE ENVIO DE EMAIL
             if(!(e instanceof SendFailedException)) {
             	sessionContext.setRollbackOnly();
                 sucesso = false;
@@ -44157,9 +44158,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0001] – Inserir Movimento do Arrecadador
+	 * [SB0001] ï¿½ Inserir Movimento do Arrecadador
 	 *
 	 * @author Raphael Rossiter
 	 * @date 28/01/2010
@@ -44176,8 +44177,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		RegistroCartaoCreditoHeaderHelper header = null;
 
 		/*
-		 * Caso o código do registro (campo A01) não corresponda a “0”, exibir a mensagem “Arquivo de Movimento 
-		 * de Arrecadador sem Header” e encerrar o caso de uso.
+		 * Caso o cï¿½digo do registro (campo A01) nï¿½o corresponda a ï¿½0ï¿½, exibir a mensagem ï¿½Arquivo de Movimento 
+		 * de Arrecadador sem Headerï¿½ e encerrar o caso de uso.
 		 */
 		if (!codigoRegistro.equals(RegistroCartaoCreditoHeaderHelper.CODIGO_HEADER)) {
 			
@@ -44189,16 +44190,16 @@ public class ControladorArrecadacao extends ControladorComum {
 		codigoRegistro, linha);
 		
 		/*
-		 * Caso o estabelecimento matriz não corresponda ao da empresa que está recebendo o arquivo 
+		 * Caso o estabelecimento matriz nï¿½o corresponda ao da empresa que estï¿½ recebendo o arquivo 
 		 * (A(02) = ARCT_NNCONTRATO da tabela ARRECADADOR_CONTRATO com ARRC_ID = ARRC_ID do arrecadador 
-		 * selecionado com tipo de arrecadação = ‘Cartão de Crédito’).
+		 * selecionado com tipo de arrecadaï¿½ï¿½o = ï¿½Cartï¿½o de Crï¿½ditoï¿½).
 		 */
 		ArrecadadorContratoTarifa arrecadadorContratoTarifa = this.getControladorCobranca()
 		.pesquisarArrecadadorContratoTarifa(arrecadador.getId(), ArrecadacaoForma.CARTAO_CREDITO);
 		
 		if (arrecadadorContratoTarifa == null){
 			
-			//[FS0002 – Verificar arrecadação forma cartão crédito];
+			//[FS0002 ï¿½ Verificar arrecadaï¿½ï¿½o forma cartï¿½o crï¿½dito];
 			throw new ControladorException("atencao.arrecadador_nao_cartao_credito");
 		}
 		
@@ -44209,7 +44210,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 		
 		/*
-		 * Verificando se o arquivo já foi registrado a partir do seu número de sequencia
+		 * Verificando se o arquivo jï¿½ foi registrado a partir do seu nï¿½mero de sequencia
 		 */
 		Integer numeroNsa = null;
 		
@@ -44234,9 +44235,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0001] – Inserir Movimento do Arrecadador 
+	 * [SB0001] ï¿½ Inserir Movimento do Arrecadador 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 28/01/2010
@@ -44261,10 +44262,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		//DATA PROCESSAMENTO
 		header.setDataProcessamento(Util.converteStringInvertidaSemBarraParaDate(linha.substring(11, 19)));
 		
-		//PERÍODO INICIAL
+		//PERï¿½ODO INICIAL
 		header.setDataPeriodoInicial(Util.converteStringInvertidaSemBarraParaDate(linha.substring(19, 27)));
 		
-		//PERÍODO FINAL
+		//PERï¿½ODO FINAL
 		header.setDataPeriodoFinal(Util.converteStringInvertidaSemBarraParaDate(linha.substring(27, 35)));
 		
 		//PRODUTO
@@ -44276,13 +44277,13 @@ public class ControladorArrecadacao extends ControladorComum {
 		//EMPRESA
 		header.setEmpresa(linha.substring(45, 52));
 		
-		//OPÇÃO EXTRATO
+		//OPï¿½ï¿½O EXTRATO
 		header.setOpcaoExtrato(linha.substring(52, 53));
 		
-		//TRANSMISSÃO
+		//TRANSMISSï¿½O
 		header.setTransmissao(linha.substring(53, 54));
 		
-		//DESCRIÇÃO OPÇÃO DO EXTRATO
+		//DESCRIï¿½ï¿½O OPï¿½ï¿½O DO EXTRATO
 		header.setDescricaoOpcaoExtrato(linha.substring(54, 124));
 		
 		
@@ -44291,9 +44292,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0001] – Inserir Movimento do Arrecadador 
+	 * [SB0001] ï¿½ Inserir Movimento do Arrecadador 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 28/01/2010
@@ -44310,7 +44311,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		RegistroCartaoCreditoTraillerHelper trailler = null;
 		
-		//[FS0005 – Verificar a existência do registro código “9”]
+		//[FS0005 ï¿½ Verificar a existï¿½ncia do registro cï¿½digo ï¿½9ï¿½]
 		if (codigoRegistro.equals(RegistroCartaoCreditoHeaderHelper.CODIGO_HEADER)) {
             throw new ControladorException("atencao.arquivo.movimento.nao.codigo.nove");
         }
@@ -44325,14 +44326,14 @@ public class ControladorArrecadacao extends ControladorComum {
         }
 
         
-		//O sistema distribui os dados do conteúdo do registro “9” do movimento do arrecadador
+		//O sistema distribui os dados do conteï¿½do do registro ï¿½9ï¿½ do movimento do arrecadador
         if (codigoRegistro.equals(RegistroCartaoCreditoTraillerHelper.CODIGO_TRAILLER)) {
 
         	trailler = this.distribuirDadosArquivoMovimentoCartaoCreditoTrailler(codigoRegistro, linha);
             
         	/*
-        	 * Caso a quantidade total de registros não seja igual ao total de registros do arquivo 
-        	 * (campo Z(02)) exibir a mensagem “Total de registros do arquivo de movimento inválido” e 
+        	 * Caso a quantidade total de registros nï¿½o seja igual ao total de registros do arquivo 
+        	 * (campo Z(02)) exibir a mensagem ï¿½Total de registros do arquivo de movimento invï¿½lidoï¿½ e 
         	 * encerrar o caso de uso.
         	 */
         	if (trailler.getTotalRegistros().intValue() != quantidadeRegistrosDeMovimento.intValue()) {
@@ -44347,9 +44348,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0001] – Inserir Movimento do Arrecadador
+	 * [SB0001] ï¿½ Inserir Movimento do Arrecadador
 	 *
 	 * @author Raphael Rossiter
 	 * @date 28/01/2010
@@ -44376,9 +44377,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0001] – Inserir Movimento do Arrecadador 
+	 * [SB0001] ï¿½ Inserir Movimento do Arrecadador 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 29/01/2010
@@ -44399,7 +44400,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		//NSA
 		arrecadadorMovimento.setNumeroSequencialArquivo(Integer.valueOf(header.getSequencia()));
 		
-		//CÓDIGO DA REMESSA
+		//Cï¿½DIGO DA REMESSA
 		if (header.getOpcaoExtrato().equals("A")){
 			arrecadadorMovimento.setCodigoRemessa(new Short("1"));
 		}
@@ -44414,22 +44415,22 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 		
 		
-		//CÓDIGO DO CONVÊNIO
+		//Cï¿½DIGO DO CONVï¿½NIO
 		arrecadadorMovimento.setCodigoConvenio(header.getEstabelecimentoMatriz().trim());
 		
-		//CÓDIGO DO BANCO
+		//Cï¿½DIGO DO BANCO
 		arrecadadorMovimento.setCodigoBanco(arrecadador.getCodigoAgente());
 		
 		//NOME DO BANCO
 		arrecadadorMovimento.setNomeBanco(arrecadador.getCliente().getNome());
 		
-		//DATA DA GERAÇÃO
+		//DATA DA GERAï¿½ï¿½O
 		arrecadadorMovimento.setDataGeracao(new Date());
 		
-		//VERSÃO LAYOUT
+		//VERSï¿½O LAYOUT
 		arrecadadorMovimento.setNumeroVersaoLayout(1);
 		
-		//DESCRIÇÃO DA IDENTIFICAÇÃO DO SERVIÇO
+		//DESCRIï¿½ï¿½O DA IDENTIFICAï¿½ï¿½O DO SERVIï¿½O
 		arrecadadorMovimento.setDescricaoIdentificacaoServico(
 		Util.completaString(header.getDescricaoOpcaoExtrato().trim(), 17));
 		
@@ -44439,7 +44440,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		//VALOR TOTAL DO MOVIMENTO
 		arrecadadorMovimento.setValorTotalMovimento(BigDecimal.ZERO);
 		
-		//ULTIMA ALTERAÇÃO
+		//ULTIMA ALTERAï¿½ï¿½O
 		arrecadadorMovimento.setUltimaAlteracao(new Date());
 
 		Integer idMovimento = (Integer) this.getControladorUtil().inserir(arrecadadorMovimento);
@@ -44451,7 +44452,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 *
 	 * @author Raphael Rossiter
 	 * @date 29/01/2010
@@ -44468,11 +44469,11 @@ public class ControladorArrecadacao extends ControladorComum {
 			String linhaRegistro, String descricaoOcorrencia, Short indicadorAceitacaoRegistro, MovimentoCartaoRejeita movimentoCartaoRejeita) 
 		throws ControladorException {
 
-		//Recupera o código do registro de cada linha
+		//Recupera o cï¿½digo do registro de cada linha
 		String codigoRegistro = linhaRegistro.substring(0, 1);
 
 		/*
-		 * Recupera o id do registro da tabela REGSITRO_CÓDIGO passando o código
+		 * Recupera o id do registro da tabela REGSITRO_Cï¿½DIGO passando o cï¿½digo
 		 * do registro.
 		 */
 		Integer idRegistroCodigo = null;
@@ -44485,7 +44486,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}
 
-		//Seta os campos para a inserção em arrecadador movimento item
+		//Seta os campos para a inserï¿½ï¿½o em arrecadador movimento item
 		ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
 
 		RegistroCodigo registroCodigo = new RegistroCodigo();
@@ -44498,35 +44499,35 @@ public class ControladorArrecadacao extends ControladorComum {
 			completaLinhaRegistro = completaLinhaRegistro.concat("*");
 		}
 
-		//CÓDIGO DO REGISTRO
+		//Cï¿½DIGO DO REGISTRO
 		arrecadadorMovimentoItem.setRegistroCodigo(registroCodigo);
 		
-		//CONTEÚDO DO REGISTRO
+		//CONTEï¿½DO DO REGISTRO
 		arrecadadorMovimentoItem.setConteudoRegistro(completaLinhaRegistro);
 		
 		//ARRECADADOR
 		arrecadadorMovimentoItem.setArrecadadorMovimento(arrecadadorMovimento);
 		
-		//DESCRIÇÃO DA OCORRÊNCIA
+		//DESCRIï¿½ï¿½O DA OCORRï¿½NCIA
 		arrecadadorMovimentoItem.setDescricaoOcorrencia(descricaoOcorrencia);
 		
-		//INDICADOR DE ACEITAÇÃO
+		//INDICADOR DE ACEITAï¿½ï¿½O
 		arrecadadorMovimentoItem.setIndicadorAceitacao(indicadorAceitacaoRegistro);
 		
-		//ÚLTIMA ALTERAÇÃO
+		//ï¿½LTIMA ALTERAï¿½ï¿½O
 		arrecadadorMovimentoItem.setUltimaAlteracao(new Date());
 		
 
-		//INSERINDO ARRECADADOR MOVIMENTO ÍTEM
+		//INSERINDO ARRECADADOR MOVIMENTO ï¿½TEM
 		Integer idArrecadadorMovimentoItem = (Integer) this.getControladorUtil().inserir(arrecadadorMovimentoItem);
 		arrecadadorMovimentoItem.setId(idArrecadadorMovimentoItem);
 
 		if (movimentoCartaoRejeita != null){
 			
-			//ASSOCIANDO O ÍTEM AOS DADOS DO MOVIMENTO QUE ESTA SENDO REJEITADO
+			//ASSOCIANDO O ï¿½TEM AOS DADOS DO MOVIMENTO QUE ESTA SENDO REJEITADO
 			movimentoCartaoRejeita.setArrecadadorMovimentoItem(arrecadadorMovimentoItem);
 			
-			//ÚLTIMA ALTERAÇÃO
+			//ï¿½LTIMA ALTERAï¿½ï¿½O
 			movimentoCartaoRejeita.setUltimaAlteracao(new Date());
 			
 			//INSERINDO
@@ -44537,9 +44538,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0002– Distribuir Dados do Registro de Movimento do Arrecadador]
+	 * [SB0002ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador]
 	 *
 	 * @author Raphael Rossiter
 	 * @date 29/01/2010
@@ -44561,7 +44562,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			//ESTABELECIMENTO SUBMISSOR
 			movimentoTipo1.setEstabelecimentoSubmissor(linha.substring(1, 11));
 			
-			//NÚMERO DO RO
+			//Nï¿½MERO DO RO
 			movimentoTipo1.setNumeroResumoOperacao(linha.substring(11, 18));
 			
 			//PARCELA
@@ -44573,13 +44574,13 @@ public class ControladorArrecadacao extends ControladorComum {
 			//PLANO
 			movimentoTipo1.setPlano(linha.substring(21, 23));
 			
-			//SITUAÇÃO
+			//SITUAï¿½ï¿½O
 			movimentoTipo1.setSituacao(linha.substring(23, 36));
 			
 			//STATUS
 			movimentoTipo1.setStatus(linha.substring(36, 38));
 			
-			//DATA DE DEPÓSITO
+			//DATA DE DEPï¿½SITO
 			String dataDeposito = linha.substring(38, 44);
 			if (!dataDeposito.trim().equals("") && !dataDeposito.trim().equals("000000")){
 				
@@ -44610,10 +44611,10 @@ public class ControladorArrecadacao extends ControladorComum {
 			movimentoTipo1.setValorBruto(Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(
 			linha.substring(57, 70)));
 			
-			//SINAL DA COMISSÃO
+			//SINAL DA COMISSï¿½O
 			movimentoTipo1.setSinalComissao(linha.substring(70, 71));
 			
-			//VALOR COMISSÃO
+			//VALOR COMISSï¿½O
 			movimentoTipo1.setValorComissao(Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(
 			linha.substring(71, 84)));
 			
@@ -44624,17 +44625,17 @@ public class ControladorArrecadacao extends ControladorComum {
 			movimentoTipo1.setValorRejeitado(Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(
 			linha.substring(85, 98)));
 			
-			//SINAL DO VALOR LÍQUIDO
+			//SINAL DO VALOR Lï¿½QUIDO
 			movimentoTipo1.setSinalValorLiguido(linha.substring(98, 99));
 			
-			//VALOR LÍQUIDO
+			//VALOR Lï¿½QUIDO
 			movimentoTipo1.setValorLiquido(Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(
 			linha.substring(99, 112)));
 			
 			//BANCO
 			movimentoTipo1.setCodigoBanco(linha.substring(112, 116));
 			
-			//AGÊNCIA
+			//AGï¿½NCIA
 			movimentoTipo1.setCodigoAgencia(linha.substring(116, 121));
 			
 			//CONTA CORRENTE
@@ -44649,13 +44650,13 @@ public class ControladorArrecadacao extends ControladorComum {
 			//QUANTIDADE DE VENDAS REJEITADAS
 			movimentoTipo1.setQuantidadeVendasRejeitadas(Integer.valueOf(linha.substring(142, 148)));
 			
-			//IDENTIFICADOR DE REVENDA/ACELERAÇÃO
+			//IDENTIFICADOR DE REVENDA/ACELERAï¿½ï¿½O
 			movimentoTipo1.setIdentificadorRevendaAceleracao(linha.substring(148, 149));
 			
-			//IDENTIFICADOR DA OPÇÃO DE EXTRATO
+			//IDENTIFICADOR DA OPï¿½ï¿½O DE EXTRATO
 			movimentoTipo1.setIdentificadorOpcaoExtrato(linha.substring(149, 150));
 			
-			//DATA DA CAPTURA DA TRANSAÇÃO
+			//DATA DA CAPTURA DA TRANSAï¿½ï¿½O
 			String dataCapturaTransacao = linha.substring(150, 156);
 			if (!dataCapturaTransacao.trim().equals("") && !dataCapturaTransacao.trim().equals("000000")){
 				
@@ -44666,7 +44667,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			//ORIGEM DO AJUSTE
 			movimentoTipo1.setOrigemAjuste(linha.substring(156, 158));
 			
-			//VALOR TROCO FÁCIL
+			//VALOR TROCO Fï¿½CIL
 			String valorTrocoFacil = linha.substring(159, 172);
 			if (!valorTrocoFacil.trim().equals("")){
 				
@@ -44679,10 +44680,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0002] – Distribuir Dados do Registro de Movimento do Arrecadador
-	 * [SB0005] – Processar Pagamento Cartão de Crédito
+	 * [SB0002] ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador
+	 * [SB0005] ï¿½ Processar Pagamento Cartï¿½o de Crï¿½dito
 	 *
 	 * @author Raphael Rossiter
 	 * @date 30/01/2010
@@ -44709,10 +44710,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		Collection colecaoPagamentos = new ArrayList();
 		
 		/*
-		 * [SB0002] – Distribuir Dados do Registro de Movimento do Arrecadador
+		 * [SB0002] ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador
 		 * 
-		 * 1.1 - Caso a data prevista para o pagamento seja maior que a data atual, o sistema deverá
-		 * lê outro registro e continua o processamento
+		 * 1.1 - Caso a data prevista para o pagamento seja maior que a data atual, o sistema deverï¿½
+		 * lï¿½ outro registro e continua o processamento
 		 */
 		if (movimentoTipo1.getDataPrevistaPagamento().compareTo(new Date()) > 0){
 			
@@ -44720,11 +44721,11 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 		
 		/*
-		 * [SB0002] – Distribuir Dados do Registro de Movimento do Arrecadador
+		 * [SB0002] ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador
 		 * 
-		 * 1.2 - Caso a data da transação de cartão de crédito não seja válida para o sistema de arrecadação atual (Campo C(09) 
-		 * menor que constante de data de implantação do  sistema GSAN), o sistema não deverá registrar o pagamento e informar o 
-		 * motivo da rejeição (“Transação efetuado no sistema anterior”).
+		 * 1.2 - Caso a data da transaï¿½ï¿½o de cartï¿½o de crï¿½dito nï¿½o seja vï¿½lida para o sistema de arrecadaï¿½ï¿½o atual (Campo C(09) 
+		 * menor que constante de data de implantaï¿½ï¿½o do  sistema GSAN), o sistema nï¿½o deverï¿½ registrar o pagamento e informar o 
+		 * motivo da rejeiï¿½ï¿½o (ï¿½Transaï¿½ï¿½o efetuado no sistema anteriorï¿½).
 		 */
 		if (descricaoOcorrencia.equalsIgnoreCase("OK") && 
 			movimentoTipo1.getDataDeposito().compareTo(getSistemaParametro().getDataImplantacaoSistema()) < 0){
@@ -44733,11 +44734,11 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 		
 		/*
-		 * [SB0002] – Distribuir Dados do Registro de Movimento do Arrecadador
+		 * [SB0002] ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador
 		 * 
-		 * 1.3 - Caso o campo de valor de rejeição(C(17) esteja com valor diferente de zeros, o sistema não deverá aceitar o registro e 
-		 * informar o motivo da rejeição (C(29)  ‘01’ – cancelamento solicitado pelo Estabelecimento, ‘02’ – cancelamento solicitado pelo  
-		 * portador do cartão, ‘00’ – outros motivos ).
+		 * 1.3 - Caso o campo de valor de rejeiï¿½ï¿½o(C(17) esteja com valor diferente de zeros, o sistema nï¿½o deverï¿½ aceitar o registro e 
+		 * informar o motivo da rejeiï¿½ï¿½o (C(29)  ï¿½01ï¿½ ï¿½ cancelamento solicitado pelo Estabelecimento, ï¿½02ï¿½ ï¿½ cancelamento solicitado pelo  
+		 * portador do cartï¿½o, ï¿½00ï¿½ ï¿½ outros motivos ).
 		 */
 		if (descricaoOcorrencia.equalsIgnoreCase("OK") && movimentoTipo1.getValorRejeitado().compareTo(new BigDecimal("0.00")) > 0){
 			
@@ -44755,18 +44756,18 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 		}
 		
-		//Só serão recebidos os arquivos que estejam com o status de liquidação
+		//Sï¿½ serï¿½o recebidos os arquivos que estejam com o status de liquidaï¿½ï¿½o
 		if (descricaoOcorrencia.equalsIgnoreCase("OK") && !movimentoTipo1.getStatus().equals(RegistroCartaoCreditoTipo1Helper.STATUS_LIGUIDACAO)){
 			
 			descricaoOcorrencia = "MOVIMENTO DIFERENTE DE LIQUIDACAO";
 		}
 		
 		/*
-		 * [SB0002] – Distribuir Dados do Registro de Movimento do Arrecadador
+		 * [SB0002] ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador
 		 * 
-		 * 1.4 - Caso o tipo de recebimento não seja cartão de crédito (C(24)) com valor diferente de espaços, 
-		 * o sistema deverá atualizar as informações de recebimento no aviso bancário correspondente 
-		 * [SB0007 – Processar Pagamento Cartão de Débito].
+		 * 1.4 - Caso o tipo de recebimento nï¿½o seja cartï¿½o de crï¿½dito (C(24)) com valor diferente de espaï¿½os, 
+		 * o sistema deverï¿½ atualizar as informaï¿½ï¿½es de recebimento no aviso bancï¿½rio correspondente 
+		 * [SB0007 ï¿½ Processar Pagamento Cartï¿½o de Dï¿½bito].
 		 */
 		if (descricaoOcorrencia.equalsIgnoreCase("OK") && !movimentoTipo1.getIdentificadorProduto().trim().equals("")){
 			
@@ -44774,24 +44775,24 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 		
 		
-		//Caso a Descrição da Ocorrência do Movimento corresponda a “OK”, o sistema:
+		//Caso a Descriï¿½ï¿½o da Ocorrï¿½ncia do Movimento corresponda a ï¿½OKï¿½, o sistema:
 		if (descricaoOcorrencia.equals("OK")) {
 			
 			/*
-			 * [SB0002] – Distribuir Dados do Registro de Movimento do Arrecadador
+			 * [SB0002] ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador
 			 * 
-			 * O sistema verifica se existe a guia de pagamento referente ao dia de crédito (tabela 
-			 * GUIA_PAGAMENTO com GPAG_DTVENCIMENTO = data do crédito (C (09), CLIE_ID = CLIE_ID da 
+			 * O sistema verifica se existe a guia de pagamento referente ao dia de crï¿½dito (tabela 
+			 * GUIA_PAGAMENTO com GPAG_DTVENCIMENTO = data do crï¿½dito (C (09), CLIE_ID = CLIE_ID da 
 			 * tabela ARRECADADOR).
 			 */
 			GuiaPagamento guiaPagamento = this.getControladorCobranca().pesquisarGuiaPagamentoCartaoCredito(
 			arrecadador.getCliente().getId(), movimentoTipo1.getDataPrevistaPagamento());
 			
 			/*
-			 * [SB0002] – Distribuir Dados do Registro de Movimento do Arrecadador
+			 * [SB0002] ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador
 			 * 
-			 * Caso não exista a guia de pagamento, o sistema deverá incluir a guia para processar o 
-			 * pagamento <Inclui>> [UC0927 – Confirmar Cartão de Crédito/Débito. 
+			 * Caso nï¿½o exista a guia de pagamento, o sistema deverï¿½ incluir a guia para processar o 
+			 * pagamento <Inclui>> [UC0927 ï¿½ Confirmar Cartï¿½o de Crï¿½dito/Dï¿½bito. 
 			 */
 			
 			if (guiaPagamento == null){
@@ -44802,8 +44803,8 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 			
 			/*
-			 * Caso a guia de pagamento tenha sido gerada através do registrar movimento cartão de
-			 * crédito, será necessário atualizar o valor da guia.
+			 * Caso a guia de pagamento tenha sido gerada atravï¿½s do registrar movimento cartï¿½o de
+			 * crï¿½dito, serï¿½ necessï¿½rio atualizar o valor da guia.
 			 */
 			else if (guiaPagamento.getDebitoTipo() != null && guiaPagamento.getDebitoTipo().getId().equals(DebitoTipo.MOVIMENTO_CARTAO_CREDITO)){
 				
@@ -44816,22 +44817,22 @@ public class ControladorArrecadacao extends ControladorComum {
 				this.getControladorCobranca().atualizarGuiaPagamentoCartaoCredito(guiaPagamento);
 			}
 			
-			//[SB0005] – Processar Pagamento Cartão de Crédito
+			//[SB0005] ï¿½ Processar Pagamento Cartï¿½o de Crï¿½dito
 			Pagamento pagamento = this.gerarPagamentoGuiaPagamentoCartaoCredito(guiaPagamento, movimentoTipo1, getSistemaParametro());
 			
 			colecaoPagamentos.add(pagamento);
 		}
 		else {
 			
-			//ATRIBUI O INDICADOR DE ACEITAÇÃO PARA NÃO ACEITO
+			//ATRIBUI O INDICADOR DE ACEITAï¿½ï¿½O PARA Nï¿½O ACEITO
 			indicadorAceitacaoRegistro = ConstantesSistema.NAO;
 		}
 
-		//[SB0007 – Processar Pagamento Cartão de Débito]
+		//[SB0007 ï¿½ Processar Pagamento Cartï¿½o de Dï¿½bito]
 		if (descricaoOcorrencia.equalsIgnoreCase("CARTAO DE DEBITO")){
 			
 			
-			//ATRIBUI O INDICADOR DE ACEITAÇÃO PARA ACEITO
+			//ATRIBUI O INDICADOR DE ACEITAï¿½ï¿½O PARA ACEITO
 			indicadorAceitacaoRegistro = ConstantesSistema.SIM;
 		}
 		
@@ -44846,9 +44847,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0005] – Processar Pagamento Cartão de Crédito
+	 * [SB0005] ï¿½ Processar Pagamento Cartï¿½o de Crï¿½dito
 	 *
 	 * @author Raphael Rossiter
 	 * @date 30/01/2010
@@ -44902,9 +44903,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0002] – Distribuir Dados do Registro de Movimento do Arrecadador
+	 * [SB0002] ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador
 	 *
 	 * @author Raphael Rossiter
 	 * @date 01/02/2010
@@ -44919,7 +44920,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		AvisoBancario avisoBancarioSituacaoAtualizado = avisoBancarioSituacaoAtual;
 		
-		//VALOR ARRECADAÇÃO CALCULADO
+		//VALOR ARRECADAï¿½ï¿½O CALCULADO
         if (avisoBancarioSituacaoAtual.getValorArrecadacaoCalculado() != null) {
     		
     		//Adiciona o valor do pagamento
@@ -44954,7 +44955,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito 
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 03/02/2010
@@ -44972,22 +44973,22 @@ public class ControladorArrecadacao extends ControladorComum {
 		//ARRECADADOR
 		sequenciaCartao.setArrecadador(arrecadador);
 		
-		//NÚMERO NSA
+		//Nï¿½MERO NSA
 		sequenciaCartao.setNumeroNsa(numeroNsa);
 		
-		//OPÇÃO EXTRATO
+		//OPï¿½ï¿½O EXTRATO
 		sequenciaCartao.setCodigoOpcaoExtrato(codigoOpcaoExtrato);
 		
-		//ÚLTIMA ALTERAÇÃO
+		//ï¿½LTIMA ALTERAï¿½ï¿½O
 		sequenciaCartao.setUltimaAlteracao(new Date());
 		
-		//INSERINDO O NSA DO CARTÃO DE CRÉDITO
+		//INSERINDO O NSA DO CARTï¿½O DE CRï¿½DITO
 		this.getControladorUtil().inserir(sequenciaCartao);
 	}
 
 	/**
-	 * Pesquisa PagamentoEntidadesBeneficentes para a geração do relatório '[UC0978] Gerar
-	 * Relatório de Pagamento para Entidades beneficentes Analítico' de acordo com a opção de totalização.
+	 * Pesquisa PagamentoEntidadesBeneficentes para a geraï¿½ï¿½o do relatï¿½rio '[UC0978] Gerar
+	 * Relatï¿½rio de Pagamento para Entidades beneficentes Analï¿½tico' de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Daniel Alves
 	 * @created 26/01/2010
@@ -45072,8 +45073,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * Pesquisa PagamentoEntidadesBeneficentes para a geração do relatório '[UC0978] Gerar
-	 * Relatório de Pagamento para Entidades beneficentes Sintético' de acordo com a opção de totalização.
+	 * Pesquisa PagamentoEntidadesBeneficentes para a geraï¿½ï¿½o do relatï¿½rio '[UC0978] Gerar
+	 * Relatï¿½rio de Pagamento para Entidades beneficentes Sintï¿½tico' de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Daniel Alves
 	 * @created 26/01/2010
@@ -45147,7 +45148,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 							break;
 						case 2:
-							//TIPO 2 - Resumo do Estado por Gerência
+							//TIPO 2 - Resumo do Estado por Gerï¿½ncia
 							
 							quantidadeEstado += 1;
 							valorEstado = valorEstado.add(new BigDecimal(dados[9].toString()));
@@ -45178,7 +45179,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								//zera os totalizadores
 								quantidadeGerencia = 0;
 								valorGerencia = new BigDecimal(0);
-								//totaliza os da próxima/atual
+								//totaliza os da prï¿½xima/atual
 								quantidadeGerencia += 1;
 								valorGerencia = valorGerencia.add(new BigDecimal(dados[9].toString()));
 							}
@@ -45197,7 +45198,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							
 							break;
 						case 3:
-							//TIPO 3 - Resumo por Gerência Específica
+							//TIPO 3 - Resumo por Gerï¿½ncia Especï¿½fica
 							//para preencher as gerencias
 							quantidadeGerencia += 1;
 							valorGerencia = valorGerencia.add(new BigDecimal(dados[9].toString()));
@@ -45214,8 +45215,8 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 							break;
 						case 4:
-							//TIPO 4 - Resumo do Estado por Gerência por Unidade de Negócio
-							//para preencher as unidades de negócio
+							//TIPO 4 - Resumo do Estado por Gerï¿½ncia por Unidade de Negï¿½cio
+							//para preencher as unidades de negï¿½cio
 							if (dadosAnterior == null || dados[4].toString().equals(dadosAnterior[4].toString())){
 								quantidadeUnidade += 1;
 								valorUnidade = valorUnidade.add(new BigDecimal(dados[9].toString()));
@@ -45231,7 +45232,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								//zera os totalizadores
 								quantidadeUnidade = 0;
 								valorUnidade = new BigDecimal(0);
-								//totaliza os da próxima/atual
+								//totaliza os da prï¿½xima/atual
 								quantidadeUnidade += 1;
 								valorUnidade = valorUnidade.add(new BigDecimal(dados[9].toString()));
 								//atualiza o indexe dos beans
@@ -45257,7 +45258,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								totalBeansPorGerencia = 0;
 								quantidadeGerencia = 0;
 								valorGerencia = new BigDecimal(0);
-								//totaliza os da próxima/atual
+								//totaliza os da prï¿½xima/atual
 								quantidadeGerencia += 1;
 								valorGerencia = valorGerencia.add(new BigDecimal(dados[9].toString()));
 							}
@@ -45301,7 +45302,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 							break;
 						case 5:
-							//TIPO 5 - Resumo por Unidade de Negócio Específica
+							//TIPO 5 - Resumo por Unidade de Negï¿½cio Especï¿½fica
 							//para totaliza as Unidades 
 							quantidadeUnidade += 1;
 							valorUnidade = valorUnidade.add(new BigDecimal(dados[9].toString()));
@@ -45318,7 +45319,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 							break;
 						case 6:
-							//TIPO 6 - Resumo do Estado por Gerência por Unidade de Negócio por Localidade
+							//TIPO 6 - Resumo do Estado por Gerï¿½ncia por Unidade de Negï¿½cio por Localidade
 							//para preencher as localidades
 							if (dadosAnterior == null || dados[2].toString().equals(dadosAnterior[2].toString())){
 								quantidadeLocalidade += 1;
@@ -45335,7 +45336,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								//zera os totalizadores
 								quantidadeLocalidade = 0;
 								valorLocalidade = new BigDecimal(0);
-								//totaliza os da próxima/atual
+								//totaliza os da prï¿½xima/atual
 								quantidadeLocalidade += 1;
 								valorLocalidade = valorLocalidade.add(new BigDecimal(dados[9].toString()));
 								//atualiza o indexe dos beans
@@ -45363,7 +45364,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								totalBeansPorUnidade = 0;
 								quantidadeUnidade = 0;
 								valorUnidade = new BigDecimal(0);
-								//totaliza os da próxima/atual
+								//totaliza os da prï¿½xima/atual
 								quantidadeUnidade += 1;
 								valorUnidade = valorUnidade.add(new BigDecimal(dados[9].toString()));
 							}
@@ -45387,7 +45388,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								totalBeansPorGerencia = 0;
 								quantidadeGerencia = 0;
 								valorGerencia = new BigDecimal(0);
-								//totaliza os da próxima/atual
+								//totaliza os da prï¿½xima/atual
 								quantidadeGerencia += 1;
 								valorGerencia = valorGerencia.add(new BigDecimal(dados[9].toString()));
 							}
@@ -45444,7 +45445,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							
 							break;
 						case 7:
-							//TIPO 7 - Resumo por Localidade Específica
+							//TIPO 7 - Resumo por Localidade Especï¿½fica
 							//para totalizar a localidade
 							quantidadeLocalidade += 1;
 							valorLocalidade = valorLocalidade.add(new BigDecimal(dados[9].toString()));
@@ -45461,7 +45462,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 							break;
 						case 8:
-							//TIPO 8 - Gerência Especifica por Unidade de Negócio
+							//TIPO 8 - Gerï¿½ncia Especifica por Unidade de Negï¿½cio
 							quantidadeGerencia += 1;
 							valorGerencia = valorGerencia.add(new BigDecimal(dados[9].toString()));
 							
@@ -45492,7 +45493,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								//zera os totalizadores
 								quantidadeUnidade = 0;
 								valorUnidade = new BigDecimal(0);
-								//totaliza os da próxima/atual
+								//totaliza os da prï¿½xima/atual
 								quantidadeUnidade += 1;
 								valorUnidade = valorUnidade.add(new BigDecimal(dados[9].toString()));
 							}
@@ -45510,7 +45511,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							}
 							break;
 						case 9:
-							//TIPO 9 - Gerências Especificas por Unidade de Negócio por Localidade
+							//TIPO 9 - Gerï¿½ncias Especificas por Unidade de Negï¿½cio por Localidade
 							//para preencher as localidades
 							if (dadosAnterior == null || dados[2].toString().equals(dadosAnterior[2].toString())){
 								quantidadeLocalidade += 1;
@@ -45527,7 +45528,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								//zera os totalizadores
 								quantidadeLocalidade = 0;
 								valorLocalidade = new BigDecimal(0);
-								//totaliza os da próxima/atual
+								//totaliza os da prï¿½xima/atual
 								quantidadeLocalidade += 1;
 								valorLocalidade = valorLocalidade.add(new BigDecimal(dados[9].toString()));
 								//atualiza o indexe dos beans
@@ -45554,7 +45555,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								totalBeansPorUnidade = 0;
 								quantidadeUnidade = 0;
 								valorUnidade = new BigDecimal(0);
-								//totaliza os da próxima/atual
+								//totaliza os da prï¿½xima/atual
 								quantidadeUnidade += 1;
 								valorUnidade = valorUnidade.add(new BigDecimal(dados[9].toString()));
 							}
@@ -45599,7 +45600,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							
 							break;
 						case 10:
-							//TIPO 10 - Unidade de Negócio Específica por Localidade
+							//TIPO 10 - Unidade de Negï¿½cio Especï¿½fica por Localidade
 							quantidadeUnidade += 1;
 							valorUnidade = valorUnidade.add(new BigDecimal(dados[9].toString()));
 							if (i == (objetosEncontrados.size() - 1)){
@@ -45629,7 +45630,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								//zera os totalizadores
 								quantidadeLocalidade = 0;
 								valorLocalidade = new BigDecimal(0);
-								//totaliza os da próxima/atual
+								//totaliza os da prï¿½xima/atual
 								quantidadeLocalidade += 1;
 								valorLocalidade = valorLocalidade.add(new BigDecimal(dados[9].toString()));
 							}
@@ -45662,7 +45663,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0978] Count para Relatório de Pagamento para Entidades Beneficentes
+	 * [UC0978] Count para Relatï¿½rio de Pagamento para Entidades Beneficentes
 	 * 
 	 * @author Daniel Alves
 	 * @data   26/01/2010
@@ -45707,9 +45708,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0259] - Processar Pagamento com código de Barras
+	 * [UC0259] - Processar Pagamento com cï¿½digo de Barras
 	 * 
-	 * [SB0019] – Gerar Débitos/Créditos Parcelas Antecipadas 
+	 * [SB0019] ï¿½ Gerar Dï¿½bitos/Crï¿½ditos Parcelas Antecipadas 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 12/04/2010
@@ -45752,31 +45753,31 @@ public class ControladorArrecadacao extends ControladorComum {
 			DebitoACobrar debitoACobrar = (DebitoACobrar) Util.retonarObjetoDeColecao(colecaoDebitoACobrar);
 			
 			/*
-			 * Atualiza o número de prestações cobradas na tabela DEBITO_A_COBRAR (DBAC_NNPRESTACAOCOBRADAS=DBAC_NNPRESTACAOCOBRADAS + 
-			 * quantidade de parcelas antecipadas) e atualiza o número de parcelas antecipadas na tabela DEBITO_A_COBRAR 
+			 * Atualiza o nï¿½mero de prestaï¿½ï¿½es cobradas na tabela DEBITO_A_COBRAR (DBAC_NNPRESTACAOCOBRADAS=DBAC_NNPRESTACAOCOBRADAS + 
+			 * quantidade de parcelas antecipadas) e atualiza o nï¿½mero de parcelas antecipadas na tabela DEBITO_A_COBRAR 
 			 * (DBAC_NNPARCELASANTECIPADAS=DBAC_ NNPARCELASANTECIPADAS + quantidade de parcelas antecipadas) 
-			 * e o ano/mês de referencia da conta em que foi cobrada a prestação corrente (DBAC_AMREFERENCIAPRESTACAO=Ano/mês de referência)
+			 * e o ano/mï¿½s de referencia da conta em que foi cobrada a prestaï¿½ï¿½o corrente (DBAC_AMREFERENCIAPRESTACAO=Ano/mï¿½s de referï¿½ncia)
 			 */
 			this.atualizarNumeroPrestacoesAntecipadasECobradas(debitoACobrar, cobrancaDocumentoItem.getNumeroParcelasAntecipadas());
 			
 			/*
-			 * Para cada um dos débitos a cobrar com parcelas antecipadas, o sistema deverá gerar outro débito a cobrar com as mesmas 
-			 * características para que sejam associados aos pagamentos que deverão ser gerados.
+			 * Para cada um dos dï¿½bitos a cobrar com parcelas antecipadas, o sistema deverï¿½ gerar outro dï¿½bito a cobrar com as mesmas 
+			 * caracterï¿½sticas para que sejam associados aos pagamentos que deverï¿½o ser gerados.
 			 */
 			debitoACobrar.setId(null);
 			debitoACobrar.setDebitoACobrarCategorias(null);
 			
-			//GERAÇÃO DO DÉBITO
+			//GERAï¿½ï¿½O DO Dï¿½BITO
 			debitoACobrar.setGeracaoDebito(new Date());
 			
-			//NÚMERO DE PRESTAÇÕES DO DÉBITO E NÚMERO DE PRESTAÇÕES COBRADAS
+			//Nï¿½MERO DE PRESTAï¿½ï¿½ES DO Dï¿½BITO E Nï¿½MERO DE PRESTAï¿½ï¿½ES COBRADAS
 			debitoACobrar.setNumeroPrestacaoCobradas(new Short("0"));
 			debitoACobrar.setNumeroPrestacaoDebito(Short.valueOf(cobrancaDocumentoItem.getNumeroParcelasAntecipadas().toString()));
 			
-			//VALOR DO DÉBITO
+			//VALOR DO Dï¿½BITO
 			debitoACobrar.setValorDebito(cobrancaDocumentoItem.getValorItemCobrado());
 			
-			//ÚLTIMA ALTERAÇÃO
+			//ï¿½LTIMA ALTERAï¿½ï¿½O
 			debitoACobrar.setUltimaAlteracao(new Date());
 			
 			/*********************************************************
@@ -45788,7 +45789,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			//Debito a Cobrar Origem
 			debitoACobrar.setDebitoACobrarGeralOrigem(cobrancaDocumentoItem.getDebitoACobrarGeral());
 			
-			//[UC0183 - Inserir Débito A Cobrar]
+			//[UC0183 - Inserir Dï¿½bito A Cobrar]
 			Integer idDebitoACobrar = this.getControladorFaturamento().inserirDebitoACobrar(cobrancaDocumentoItem.getNumeroParcelasAntecipadas(),
 			debitoACobrar, cobrancaDocumentoItem.getValorItemCobrado(), imovel, null, null, usuarioLogado, true);
 			
@@ -45821,42 +45822,42 @@ public class ControladorArrecadacao extends ControladorComum {
 			CreditoARealizar creditoARealizar = (CreditoARealizar) Util.retonarObjetoDeColecao(colecaoCreditoARealizar);
 			
 			/*
-			 * Atualiza o número de prestações realizadas na tabela CREDITO_A_REALIZAR (CRAR_NNPRESTACAOREALIZADAS = CRAR_NNPRESTACAOREALIZADAS + 
-			 * quantidade de parcelas antecipadas) e atualiza o número de parcelas antecipadas na tabela 
+			 * Atualiza o nï¿½mero de prestaï¿½ï¿½es realizadas na tabela CREDITO_A_REALIZAR (CRAR_NNPRESTACAOREALIZADAS = CRAR_NNPRESTACAOREALIZADAS + 
+			 * quantidade de parcelas antecipadas) e atualiza o nï¿½mero de parcelas antecipadas na tabela 
 			 * CREDITO_A_REALIZAR (CRAC_NNPARCELASANTECIPADAS=CRAC_ NNPARCELASANTECIPADAS + quantidade de parcelas antecipadas) 
-			 * e o ano/mês de referencia da conta em que foi cobrada a prestação corrente (CRAC_AMREFERENCIAPRESTACAO=Ano/mês de referência);
+			 * e o ano/mï¿½s de referencia da conta em que foi cobrada a prestaï¿½ï¿½o corrente (CRAC_AMREFERENCIAPRESTACAO=Ano/mï¿½s de referï¿½ncia);
 			 */
 			this.atualizarNumeroPrestacoesAntecipadasERealizadas(creditoARealizar, cobrancaDocumentoItem.getNumeroParcelasAntecipadas());
 			
 			/*
-			 * Para cada um dos créditos a realizar com parcelas antecipadas, o sistema deverá gerar outro crédito a realizar com as mesmas 
-			 * características para que sejam associados as devoluções que deverão ser geradas.
+			 * Para cada um dos crï¿½ditos a realizar com parcelas antecipadas, o sistema deverï¿½ gerar outro crï¿½dito a realizar com as mesmas 
+			 * caracterï¿½sticas para que sejam associados as devoluï¿½ï¿½es que deverï¿½o ser geradas.
 			 */
 			creditoARealizar.setId(null);
 			creditoARealizar.setCreditoARealizarCategoria(null);
 			
-			//GERAÇÃO DO CRÉDITO
+			//GERAï¿½ï¿½O DO CRï¿½DITO
 			creditoARealizar.setGeracaoCredito(new Date());
 			
-			//VALOR DO CRÉDITO
+			//VALOR DO CRï¿½DITO
 			creditoARealizar.setValorCredito(cobrancaDocumentoItem.getValorItemCobrado());
 			
-			//NÚMERO DE PRESTAÇÕES DO CRÉDITO E NÚMERO DE PRESTAÇÕES REALIZADAS
+			//Nï¿½MERO DE PRESTAï¿½ï¿½ES DO CRï¿½DITO E Nï¿½MERO DE PRESTAï¿½ï¿½ES REALIZADAS
 			creditoARealizar.setNumeroPrestacaoRealizada(new Short("0"));
 			creditoARealizar.setNumeroPrestacaoCredito(Short.valueOf(cobrancaDocumentoItem.getNumeroParcelasAntecipadas().toString()));
 			
-			//REGISTRO DE ATENDIMENTO E ORDEM DE SERVIÇO NULOS
+			//REGISTRO DE ATENDIMENTO E ORDEM DE SERVIï¿½O NULOS
 			creditoARealizar.setRegistroAtendimento(null);
 			creditoARealizar.setOrdemServico(null);
 			
-			//ÚLTIMA ALTERAÇÃO E USUÁRIO LOGADO
+			//ï¿½LTIMA ALTERAï¿½ï¿½O E USUï¿½RIO LOGADO
 			creditoARealizar.setUltimaAlteracao(new Date());
 			creditoARealizar.setUsuario(usuarioLogado);
 			
 			//Debito a Cobrar Origem
 			creditoARealizar.setCreditoARealizarGeral(cobrancaDocumentoItem.getCreditoARealizarGeral());
 			
-			//[UC0194] - Inserir Crédito a Realizar
+			//[UC0194] - Inserir Crï¿½dito a Realizar
 			Integer idCreditoARealizar = this.getControladorFaturamento().gerarCreditoARealizar(creditoARealizar, imovel, usuarioLogado);
 			creditoARealizar.setId(idCreditoARealizar);
 			
@@ -45869,9 +45870,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0259] - Processar Pagamento com código de Barras
+	 * [UC0259] - Processar Pagamento com cï¿½digo de Barras
 	 * 
-	 * [SB0019] – Gerar Débitos/Créditos Parcelas Antecipadas 
+	 * [SB0019] ï¿½ Gerar Dï¿½bitos/Crï¿½ditos Parcelas Antecipadas 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 14/04/2010
@@ -45904,9 +45905,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0259] - Processar Pagamento com código de Barras
+	 * [UC0259] - Processar Pagamento com cï¿½digo de Barras
 	 * 
-	 * [SB0019] – Gerar Débitos/Créditos Parcelas Antecipadas 
+	 * [SB0019] ï¿½ Gerar Dï¿½bitos/Crï¿½ditos Parcelas Antecipadas 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 14/04/2010
@@ -45940,9 +45941,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0259] – Processar Pagamento com Código de Barras
+	 * [UC0259] ï¿½ Processar Pagamento com Cï¿½digo de Barras
 	 * 
-	 * [SB0019] – Gerar Débitos/Créditos Parcelas Antecipadas.
+	 * [SB0019] ï¿½ Gerar Dï¿½bitos/Crï¿½ditos Parcelas Antecipadas.
 	 *
 	 * @author Raphael Rossiter
 	 * @date 19/04/2010
@@ -45971,9 +45972,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0259] – Processar Pagamento com Código de Barras
+	 * [UC0259] ï¿½ Processar Pagamento com Cï¿½digo de Barras
 	 * 
-	 * [SB0019] – Gerar Débitos/Créditos Parcelas Antecipadas. 
+	 * [SB0019] ï¿½ Gerar Dï¿½bitos/Crï¿½ditos Parcelas Antecipadas. 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 19/04/2010
@@ -46035,10 +46036,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	/**
 	 * [UC0322] Inserir Guia Devolucao.
-	 * 		[FS0023] Verificar crédito a realizar. –Verificarasds 
+	 * 		[FS0023] Verificar crï¿½dito a realizar. ï¿½Verificarasds 
 	 *
-	 * [UC0194] Inserir Crédito a realizar.
-	 * 		[FS0013] Verificar crédito a realizar. –Verificarasds 
+	 * [UC0194] Inserir Crï¿½dito a realizar.
+	 * 		[FS0013] Verificar crï¿½dito a realizar. ï¿½Verificarasds 
 	 *
 	 * @author Hugo Leonardo
 	 * @date 26/05/2010
@@ -46049,7 +46050,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	public Integer verificarExistenciaCreditoARealizar(Integer idImovel, Integer anoMesReferenciaConta)
 		throws ControladorException {
 
-	    // Retorna a "1" se existir Guia Devolucao ou vazio se não existir.
+	    // Retorna a "1" se existir Guia Devolucao ou vazio se nï¿½o existir.
 		try {
 			return repositorioArrecadacao
 					.verificarExistenciaCreditoARealizar(idImovel, anoMesReferenciaConta);
@@ -46060,10 +46061,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	/**
 	 * [UC0322] Inserir Guia Devolucao.
-	 * 		[FS0023] Verificar crédito a realizar histórico.–Verificara
+	 * 		[FS0023] Verificar crï¿½dito a realizar histï¿½rico.ï¿½Verificara
 	 *
-	 *	[UC0194] Inserir Crédito a realizar.
-	 * 		[FS0013] Verificar crédito a realizar histórico.
+	 *	[UC0194] Inserir Crï¿½dito a realizar.
+	 * 		[FS0013] Verificar crï¿½dito a realizar histï¿½rico.
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 26/05/2010
@@ -46074,7 +46075,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	public Integer verificarExistenciaCreditoARealizarHistorico(Integer idImovel, Integer anoMesReferenciaConta)
 		throws ControladorException {
 
-	    // Retorna a "1" se existir Guia Devolucao ou vazio se não existir.
+	    // Retorna a "1" se existir Guia Devolucao ou vazio se nï¿½o existir.
 		try {
 			return repositorioArrecadacao
 					.verificarExistenciaCreditoARealizarHistorico(idImovel, anoMesReferenciaConta);
@@ -46084,8 +46085,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0194] Inserir Crédito a realizar.
-	 * 		[FS0013] Verificar Guia devolução. –Verificarasds 
+	 * [UC0194] Inserir Crï¿½dito a realizar.
+	 * 		[FS0013] Verificar Guia devoluï¿½ï¿½o. ï¿½Verificarasds 
 	 *
 	 * @author Hugo Leonardo
 	 * @date 27/05/2010
@@ -46096,7 +46097,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	public Integer verificarExistenciaGuiaDevolucao(Integer idImovel, Integer anoMesReferenciaGuiaDevolucao)
 		throws ControladorException {
 
-	    // Retorna a "1" se existir Guia Devolucao ou vazio se não existir.
+	    // Retorna a "1" se existir Guia Devolucao ou vazio se nï¿½o existir.
 		try {
 			return repositorioArrecadacao
 					.verificarExistenciaGuiaDevolucao(idImovel, anoMesReferenciaGuiaDevolucao);
@@ -46333,9 +46334,9 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0006– Distribuir Dados do Registro de Movimento do Arrecadador]
+	 * [SB0006ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador]
 	 *
 	 * @author Raphael Rossiter
 	 * @date 04/06/2010
@@ -46357,10 +46358,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		//ESTABELECIMENTO SUBMISSOR
 		movimentoTipo2.setEstabelecimentoSubmissor(linha.substring(1, 11));
 			
-		//NÚMERO DO RO
+		//Nï¿½MERO DO RO
 		movimentoTipo2.setNumeroResumoOperacao(linha.substring(11, 18));
 			
-		//NÚMERO DO CARTÃO
+		//Nï¿½MERO DO CARTï¿½O
 		movimentoTipo2.setNumeroCartao(linha.substring(18, 37));
 			
 		//DATA DA COMPRA/AJUSTE
@@ -46389,32 +46390,32 @@ public class ControladorArrecadacao extends ControladorComum {
 			movimentoTipo2.setTotalParcelas(Integer.valueOf(linha.substring(61, 63)));
 		}
 			
-		//MOTIVO DA REJEIÇÃO
+		//MOTIVO DA REJEIï¿½ï¿½O
 		movimentoTipo2.setMotivoRejeicao(linha.substring(63, 93));
 			
-		//CÓDIGO DE AUTORIZAÇÃO
+		//Cï¿½DIGO DE AUTORIZAï¿½ï¿½O
 		movimentoTipo2.setCodigoAutorizacao(linha.substring(93, 99));
 			
-		//IDENTIFICAÇÃO DA TRANSAÇÃO PARA COMÉRCIO ELETRÔNICO - TID
+		//IDENTIFICAï¿½ï¿½O DA TRANSAï¿½ï¿½O PARA COMï¿½RCIO ELETRï¿½NICO - TID
 		movimentoTipo2.setTid(linha.substring(99, 139));
 			
-		//REFERÊNCIA ORIGINAL DA TRANSAÇÃO - NSU
+		//REFERï¿½NCIA ORIGINAL DA TRANSAï¿½ï¿½O - NSU
 		movimentoTipo2.setNsu(linha.substring(139, 145));
 			
-		//VALOR TROCO FÁCIL
+		//VALOR TROCO Fï¿½CIL
 		movimentoTipo2.setValorTrocoFacil(Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(
 		linha.substring(145, 158)));
 			
-		//NÚMERO DE DÍGITOS DO CARTÃO
+		//Nï¿½MERO DE Dï¿½GITOS DO CARTï¿½O
 		movimentoTipo2.setNumeroDigitosCartao(linha.substring(158, 160));
 			
-		//NÚMERO DA NOTA FISCAL
+		//Nï¿½MERO DA NOTA FISCAL
 		movimentoTipo2.setNumeroNotaFiscal(linha.substring(186, 195));
 			
-		//CÓDIGO DO PAÍS EMISSOR DO CARTÃO
+		//Cï¿½DIGO DO PAï¿½S EMISSOR DO CARTï¿½O
 		movimentoTipo2.setCodigoPaisEmissorCartao(linha.substring(195, 199));
 			
-		//NÚMERO LÓGICO DO TERMINAL
+		//Nï¿½MERO Lï¿½GICO DO TERMINAL
 		movimentoTipo2.setNumeroLogicoTerminal(linha.substring(199, 207));
 			
 		//IDENTIFICADOR DE TAXE DE EMBARQUE OU VALOR DE ENTRADA
@@ -46426,9 +46427,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0006– Distribuir Dados do Registro de Movimento do Arrecadador] 
+	 * [SB0006ï¿½ Distribuir Dados do Registro de Movimento do Arrecadador] 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 08/06/2010
@@ -46458,10 +46459,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		Collection colecaoPagamentos = new ArrayList();
 		
 		/*
-		 * [SB0006] – Distribuir Dados do Registro de Movimento de Cartão.
+		 * [SB0006] ï¿½ Distribuir Dados do Registro de Movimento de Cartï¿½o.
 		 * 
-		 * 2.1.	Caso o número do cartão não esteja informado (Campo D(04) com valor igual a zeros ou espaços), o sistema deverá desprezar o 
-		 * registro atribuindo à descrição da ocorrência a informação: (“Número do cartão não informado”).
+		 * 2.1.	Caso o nï¿½mero do cartï¿½o nï¿½o esteja informado (Campo D(04) com valor igual a zeros ou espaï¿½os), o sistema deverï¿½ desprezar o 
+		 * registro atribuindo ï¿½ descriï¿½ï¿½o da ocorrï¿½ncia a informaï¿½ï¿½o: (ï¿½Nï¿½mero do cartï¿½o nï¿½o informadoï¿½).
 		 */
 		if (movimentoTipo2.getNumeroCartao().equalsIgnoreCase("0000000000000000000") ){
 			
@@ -46469,11 +46470,11 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 		
 		/*
-		 * [SB0006] – Distribuir Dados do Registro de Movimento de Cartão.
+		 * [SB0006] ï¿½ Distribuir Dados do Registro de Movimento de Cartï¿½o.
 		 * 
-		 * 2.2.	Caso a data da transação de cartão de crédito não seja válida para o sistema de arrecadação atual (Campo D(05) menor que 
-		 * constante de data de implantação do  sistema GSAN), o sistema não deverá registrar o registro e atribuir à descrição da 
-		 * ocorrência a informação: (“Transação efetuado no sistema anterior”).
+		 * 2.2.	Caso a data da transaï¿½ï¿½o de cartï¿½o de crï¿½dito nï¿½o seja vï¿½lida para o sistema de arrecadaï¿½ï¿½o atual (Campo D(05) menor que 
+		 * constante de data de implantaï¿½ï¿½o do  sistema GSAN), o sistema nï¿½o deverï¿½ registrar o registro e atribuir ï¿½ descriï¿½ï¿½o da 
+		 * ocorrï¿½ncia a informaï¿½ï¿½o: (ï¿½Transaï¿½ï¿½o efetuado no sistema anteriorï¿½).
 		 */
 		if (descricaoOcorrencia.equalsIgnoreCase("OK") && 
 			movimentoTipo2.getDataCompraAjuste().compareTo(getSistemaParametro().getDataImplantacaoSistema()) < 0){
@@ -46482,10 +46483,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 		
 		/*
-		 * [SB0006] – Distribuir Dados do Registro de Movimento de Cartão.
+		 * [SB0006] ï¿½ Distribuir Dados do Registro de Movimento de Cartï¿½o.
 		 * 
-		 * 2.3.	Caso o motivo da rejeição esteja informado (Campo D(10) com valor diferente de nulo ou espaços), o sistema deverá desprezar 
-		 * o registro e atribuir à descrição da ocorrência  o valor do conteúdo do campo.
+		 * 2.3.	Caso o motivo da rejeiï¿½ï¿½o esteja informado (Campo D(10) com valor diferente de nulo ou espaï¿½os), o sistema deverï¿½ desprezar 
+		 * o registro e atribuir ï¿½ descriï¿½ï¿½o da ocorrï¿½ncia  o valor do conteï¿½do do campo.
 		 */
 		if (descricaoOcorrencia.equalsIgnoreCase("OK") && 
 			movimentoTipo2.getMotivoRejeicao() != null && !movimentoTipo2.getMotivoRejeicao().trim().equalsIgnoreCase("")){
@@ -46494,12 +46495,12 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 		
 		
-		//Caso a Descrição da Ocorrência do Movimento corresponda a “OK”, o sistema:
+		//Caso a Descriï¿½ï¿½o da Ocorrï¿½ncia do Movimento corresponda a ï¿½OKï¿½, o sistema:
 		if (descricaoOcorrencia.equals("OK")) {
 			
 			/*
-			 * 2.4.1. Comparar o campo com a numeração do cartão de crédito (Campo D(04)), após a criptografia do mesmo, com o valor do cartão 
-			 * informado na confirmação do parcelamento por cartão de crédito (PACC_NNDOCTOCARTAOCREDITO da tabela 
+			 * 2.4.1. Comparar o campo com a numeraï¿½ï¿½o do cartï¿½o de crï¿½dito (Campo D(04)), apï¿½s a criptografia do mesmo, com o valor do cartï¿½o 
+			 * informado na confirmaï¿½ï¿½o do parcelamento por cartï¿½o de crï¿½dito (PACC_NNDOCTOCARTAOCREDITO da tabela 
 			 * PARCELAMENTO_PAGAMENTO_CARTAO_CREDITO).
 			 */
 			String numeroCartaoCriptografado = Util.encrypt(movimentoTipo2.getNumeroCartao().trim());
@@ -46537,7 +46538,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				//PACC_ICCONFIRMADOOPERADORA = 1
 				parcelamentoPagamentoCartaoCredito.setIndicadorConfirmadoOperadora(ConstantesSistema.SIM);
 				
-				//PACC_DTCONFIRMADOOPERADORA = Data da Confirmação (Campo D(05))
+				//PACC_DTCONFIRMADOOPERADORA = Data da Confirmaï¿½ï¿½o (Campo D(05))
 				parcelamentoPagamentoCartaoCredito.setDataConfirmadoOperadora(movimentoTipo2.getDataCompraAjuste());
 				
 				//PACC_VLCONFIRMADOOPERADORA = Valor informado pela operadora (Campo D(07))
@@ -46545,7 +46546,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				
 				parcelamentoPagamentoCartaoCredito.setUltimaAlteracao(new Date());
 				
-				//CONFIRMANDO RECEBIMENTO VIA CARTÃO DE CRÉDITO
+				//CONFIRMANDO RECEBIMENTO VIA CARTï¿½O DE CRï¿½DITO
 				try {
 					
 					repositorioArrecadacao.confirmarPagamentoCartaoCreditoOperadora(parcelamentoPagamentoCartaoCredito);
@@ -46557,8 +46558,8 @@ public class ControladorArrecadacao extends ControladorComum {
 			else{
 				
 				/*
-				 * 1.1.1. Caso contrário, o sistema deverá comparar o campo com a numeração do cartão de débito (Campo D(04)), após a 
-				 * criptografia do mesmo, com o valor do cartão informado na confirmação do pagamento por cartão de débito 
+				 * 1.1.1. Caso contrï¿½rio, o sistema deverï¿½ comparar o campo com a numeraï¿½ï¿½o do cartï¿½o de dï¿½bito (Campo D(04)), apï¿½s a 
+				 * criptografia do mesmo, com o valor do cartï¿½o informado na confirmaï¿½ï¿½o do pagamento por cartï¿½o de dï¿½bito 
 				 * (PACD_NNDOCTOCARTAODEBITO da tabela PAGAMENTO_CARTAO_DEBITO)
 				 */
 				FiltroPagamentoCartaoDebito filtroCartaoDebito = new FiltroPagamentoCartaoDebito();
@@ -46583,7 +46584,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					//PACD_ICCONFIRMADOOPERADORA = 1
 					pagamentoCartaoDebito.setIndicadorConfirmadoOperadora(ConstantesSistema.SIM);
 					
-					//PACD_DTCONFIRMADOOPERADORA = Data da Confirmação (Campo D(05))
+					//PACD_DTCONFIRMADOOPERADORA = Data da Confirmaï¿½ï¿½o (Campo D(05))
 					pagamentoCartaoDebito.setDataConfirmadoOperadora(movimentoTipo2.getDataCompraAjuste());
 					
 					//PACD_VLCONFIRMADOOPERADORA = Valor informado pela operadora (Campo D(07))
@@ -46591,7 +46592,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					
 					pagamentoCartaoDebito.setUltimaAlteracao(new Date());
 					
-					//CONFIRMANDO RECEBIMENTO VIA CARTÃO DE DÉBITO
+					//CONFIRMANDO RECEBIMENTO VIA CARTï¿½O DE Dï¿½BITO
 					try {
 						
 						repositorioArrecadacao.confirmarPagamentoCartaoDebitoOperadora(pagamentoCartaoDebito);
@@ -46603,12 +46604,12 @@ public class ControladorArrecadacao extends ControladorComum {
 				else{
 					
 					/*
-					 * 1.1.2. Caso Contrário, o número não tenha sido encontrado e atribuir à descrição da ocorrência a informação: 
-					 * “Número do cartão de crédito não localizado” e não aceitar o registro.
+					 * 1.1.2. Caso Contrï¿½rio, o nï¿½mero nï¿½o tenha sido encontrado e atribuir ï¿½ descriï¿½ï¿½o da ocorrï¿½ncia a informaï¿½ï¿½o: 
+					 * ï¿½Nï¿½mero do cartï¿½o de crï¿½dito nï¿½o localizadoï¿½ e nï¿½o aceitar o registro.
 					 */
 					descricaoOcorrencia = "NUMERO DO CARTAO NAO LOCALIZADO";
 					
-					//ATRIBUI O INDICADOR DE ACEITAÇÃO PARA NÃO ACEITO
+					//ATRIBUI O INDICADOR DE ACEITAï¿½ï¿½O PARA Nï¿½O ACEITO
 					indicadorAceitacaoRegistro = ConstantesSistema.NAO;
 					
 					movimentoCartaoRejeita = this.gerarMovimentoCartaoRejeita(movimentoTipo2);
@@ -46617,7 +46618,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 		else {
 			
-			//ATRIBUI O INDICADOR DE ACEITAÇÃO PARA NÃO ACEITO
+			//ATRIBUI O INDICADOR DE ACEITAï¿½ï¿½O PARA Nï¿½O ACEITO
 			indicadorAceitacaoRegistro = ConstantesSistema.NAO;
 		}
 
@@ -46633,9 +46634,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [SB0007] – Processar Pagamento Cartão de Débito.
+	 * [SB0007] ï¿½ Processar Pagamento Cartï¿½o de Dï¿½bito.
 	 *
 	 * @author Raphael Rossiter
 	 * @date 09/06/2010
@@ -46670,7 +46671,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0339] Consultar Dados Diários da Arrecadação
+	 * [UC0339] Consultar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 *
 	 * @author Hugo Amorim
 	 * @date 29/06/2010
@@ -46694,7 +46695,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 *
 	 *
 	 * @author Fernando Fontelles
@@ -46708,15 +46709,15 @@ public class ControladorArrecadacao extends ControladorComum {
 		ContaGeral contaGeral = null;
 		
 		/*
-		 * Caso a conta esteja cadastrada no sistema. Seta todas as informações da conta no form.
-		 * Caso contrário: Seta as informações da conta para nulo e indica ao usuário que não existe conta para 
-		 * o imóvel informado com a referência indicada. 
+		 * Caso a conta esteja cadastrada no sistema. Seta todas as informaï¿½ï¿½es da conta no form.
+		 * Caso contrï¿½rio: Seta as informaï¿½ï¿½es da conta para nulo e indica ao usuï¿½rio que nï¿½o existe conta para 
+		 * o imï¿½vel informado com a referï¿½ncia indicada. 
 		 */
 		if (colecaoConta != null && !colecaoConta.isEmpty()) {
 			
 			contaGeral = new ContaGeral();
 
-			//Recupera a conta do imóvel com a referência informada
+			//Recupera a conta do imï¿½vel com a referï¿½ncia informada
 			Object objetoConta = colecaoConta.iterator().next();
 			
 			
@@ -46742,7 +46743,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito 
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 07/07/2010
@@ -46753,10 +46754,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	 */
 	public MovimentoCartaoRejeita gerarMovimentoCartaoRejeita(RegistroCartaoCreditoTipo2Helper movimentoTipo2) throws ControladorException {
 		
-		//PREPARANDO PARA REGISTRAR OS DADOS DA TRANSAÇÃO QUE NÃO FOI CONFIRMADA NO SISTEMA
+		//PREPARANDO PARA REGISTRAR OS DADOS DA TRANSAï¿½ï¿½O QUE Nï¿½O FOI CONFIRMADA NO SISTEMA
 		MovimentoCartaoRejeita movimentoCartaoRejeita = new MovimentoCartaoRejeita();
 		
-		//NÚMERO DO CARTÃO
+		//Nï¿½MERO DO CARTï¿½O
 		movimentoCartaoRejeita.setNumeroCartao(Util.encrypt(movimentoTipo2.getNumeroCartao()));
 		
 		//DATA DA COMPRA
@@ -46765,10 +46766,10 @@ public class ControladorArrecadacao extends ControladorComum {
 		//VALOR DA PARCELA OU DA COMPRA
 		movimentoCartaoRejeita.setValorVenda(movimentoTipo2.getValorCompraParcela());
 		
-		//NÚMERO DA PARCELA
+		//Nï¿½MERO DA PARCELA
 		movimentoCartaoRejeita.setNumeroParcela(movimentoTipo2.getParcela().shortValue());
 		
-		//NÚMERO TOTAL PARCELA
+		//Nï¿½MERO TOTAL PARCELA
 		movimentoCartaoRejeita.setNumeroParcelaDebito(movimentoTipo2.getTotalParcelas().shortValue());
 		
 		
@@ -46777,9 +46778,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	/**
 	 * 
-	 * [UC1043] Gerar Relatório Análise Pagamento Cartão Débito
+	 * [UC1043] Gerar Relatï¿½rio Anï¿½lise Pagamento Cartï¿½o Dï¿½bito
 	 * 
-	 * 			-Validações
+	 * 			-Validaï¿½ï¿½es
 	 * 
 	 * @author Hugo Amorim
 	 * @since 21/07/2010
@@ -46788,11 +46789,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	public void validarGerarRelatorioAnalisePagamentoCartaoDebito(
 			ConsultarRelatorioAnalisePagamentoCartaoDebitoHelper helper) throws ControladorException{
 		
-		// [FS0002] - Validar datas do período	
-		//Período de Confirmação do Pagamento.
+		// [FS0002] - Validar datas do perï¿½odo	
+		//Perï¿½odo de Confirmaï¿½ï¿½o do Pagamento.
 		
-		//. Caso a data inicial esteja inválida ou maior que a data corrente, exibir a mensagem 
-		//'Data inicial informada inválida' 
+		//. Caso a data inicial esteja invï¿½lida ou maior que a data corrente, exibir a mensagem 
+		//'Data inicial informada invï¿½lida' 
 		if(helper.getDataConfirmacaoPagamentoInicial()!=null
 				&& !helper.getDataConfirmacaoPagamentoInicial().equals("")){
 			
@@ -46809,8 +46810,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				throw new ControladorException("atencao.data_pagamento_maior_data_atual",null,"inicial");
 			}
 		}
-		//. Caso a data final esteja inválida ou maior que a data corrente, exibir a mensagem 
-		//'Data final informada inválida' 
+		//. Caso a data final esteja invï¿½lida ou maior que a data corrente, exibir a mensagem 
+		//'Data final informada invï¿½lida' 
 		//e retornar para o passo correspondente no fluxo principal.
 		if(helper.getDataConfirmacaoPagamentoFinal()!=null
 				&& !helper.getDataConfirmacaoPagamentoFinal().equals("")){
@@ -46850,10 +46851,10 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 		}
 		
-		//Período de Confirmação da Operadora.
+		//Perï¿½odo de Confirmaï¿½ï¿½o da Operadora.
 		
-		//. Caso a data inicial esteja inválida ou maior que a data corrente, exibir a mensagem 
-		//'Data inicial informada inválida' 
+		//. Caso a data inicial esteja invï¿½lida ou maior que a data corrente, exibir a mensagem 
+		//'Data inicial informada invï¿½lida' 
 		if(helper.getDataConfirmacaoOperadoraInicial()!=null
 				&& !helper.getDataConfirmacaoOperadoraInicial().equals("")){
 			
@@ -46870,8 +46871,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				throw new ControladorException("atencao.data_operadora_maior_data_atual",null,"inicial");
 			}
 		}
-		//. Caso a data final esteja inválida ou maior que a data corrente, exibir a mensagem 
-		//'Data final informada inválida' 
+		//. Caso a data final esteja invï¿½lida ou maior que a data corrente, exibir a mensagem 
+		//'Data final informada invï¿½lida' 
 		//e retornar para o passo correspondente no fluxo principal.
 		if(helper.getDataConfirmacaoOperadoraFinal()!=null
 				&& !helper.getDataConfirmacaoOperadoraFinal().equals("")){
@@ -46912,7 +46913,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC1043] Gerar Relatório Análise Pagamento Cartão Débito
+	 * [UC1043] Gerar Relatï¿½rio Anï¿½lise Pagamento Cartï¿½o Dï¿½bito
 	 *
 	 * @author Hugo Amorim
 	 * @date 21/06/2010
@@ -46932,7 +46933,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	/**
 	 * 
-	 * [UC1043] Gerar Relatório Análise Pagamento Cartão Débito
+	 * [UC1043] Gerar Relatï¿½rio Anï¿½lise Pagamento Cartï¿½o Dï¿½bito
 	 * 
 	 * 			-Pesquisa
 	 * 
@@ -46978,7 +46979,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							tipo	 =	"Guia Pagamento";
 							break;
 						case 3:
-							tipo 	=	"Débito a Cobrar";
+							tipo 	=	"Dï¿½bito a Cobrar";
 							break;
 						default:
 							break;
@@ -47111,34 +47112,34 @@ public class ControladorArrecadacao extends ControladorComum {
 		//CODIGO MOEDA
 		retorno.setCodigoMoeda(codigoBarras.substring(3, 4));
 		
-		//NÃO UTILIZADO CAMPO 1
+		//Nï¿½O UTILIZADO CAMPO 1
 		retorno.setNaoUtilizadoCampo1(codigoBarras.substring(4, 9));
 		
-		//DÍGITO VERIFICADOR MÓDULO 10 CAMPO 1
+		//Dï¿½GITO VERIFICADOR Mï¿½DULO 10 CAMPO 1
 		retorno.setDigitoVerificadorModulo10Campo1(codigoBarras.substring(9, 10));
 		
-		//NÃO UTILIZADO CAMPO 2
+		//Nï¿½O UTILIZADO CAMPO 2
 		retorno.setNaoUtilizadoCampo2(codigoBarras.substring(10, 11));
 		
-		//CONVÊNIO
+		//CONVï¿½NIO
 		retorno.setConvenio(codigoBarras.substring(11, 18));
 		
 		//DOCUMENTO TIPO
 		retorno.setIdDocumentoTipo(codigoBarras.substring(18, 20));
 		
-		//DÍGITO VERIFICADOR MÓDULO 10 CAMPO 2
+		//Dï¿½GITO VERIFICADOR Mï¿½DULO 10 CAMPO 2
 		retorno.setDigitoVerificadorModulo10Campo2(codigoBarras.substring(20, 21));
 		
-		//DOCUMENTO COBRANÇA
+		//DOCUMENTO COBRANï¿½A
 		retorno.setIdCobrancaDocumento(codigoBarras.substring(21, 29));
 		
 		//CARTEIRA
 		retorno.setCarteira(codigoBarras.substring(29, 31));
 		
-		//DÍGITO VERIFICADOR MÓDULO 10 CAMPO 3
+		//Dï¿½GITO VERIFICADOR Mï¿½DULO 10 CAMPO 3
 		retorno.setDigitoVerificadorModulo10Campo3(codigoBarras.substring(31, 32));
 		
-		//DÍGITO VERIFICADOR MÓDULO 11
+		//Dï¿½GITO VERIFICADOR Mï¿½DULO 11
 		retorno.setDigitoVerificadorModulo11(codigoBarras.substring(32, 33));
 		
 		//FATOR DE VENCIMENTO
@@ -47152,7 +47153,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * [UC0339] Consultar Dados Diários da Arrecadação
+	 * [UC0339] Consultar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 *
 	 * @author Mariana Victor
 	 * @date 01/02/2011
@@ -47171,7 +47172,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC0339] Consultar Dados Diários da Arrecadação
+	 * [UC0339] Consultar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 *
 	 * @author Arthur Carvalho
 	 * @date 22/03/2011
@@ -47193,7 +47194,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	/**
 	 * [UC0188] Manter Guia de Pagamento
 	 *
-	 * [FS0019] – Verificar bloqueio de guia de pagamento
+	 * [FS0019] ï¿½ Verificar bloqueio de guia de pagamento
 	 * 
 	 * @author Mariana Victor
 	 * @date 27/04/2011
@@ -47214,7 +47215,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	/**
 	 * 
-	 * [UC0300] Classificar Pagamentos e Devoluções
+	 * [UC0300] Classificar Pagamentos e Devoluï¿½ï¿½es
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 01/06/2011
@@ -47247,7 +47248,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC 1215] – Gerar Relatório de Documentos não Aceitos
+	 * [UC 1215] ï¿½ Gerar Relatï¿½rio de Documentos nï¿½o Aceitos
 	 * 
 	 * @author Raimundo Martins
 	 *
@@ -47280,7 +47281,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 
 	/**
-	 * [UC 1217] – Gerar Relatório de Transferencia de Pagamento
+	 * [UC 1217] ï¿½ Gerar Relatï¿½rio de Transferencia de Pagamento
 	 * 
 	 * @author Raimundo Martins
 	 *
@@ -47306,7 +47307,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	/**
 	 * [UC0242] - Registrar Movimento dos Arrecadadores
 	 * 
-	 * [SB0019] - Inserir pagamento para cliente fictício 
+	 * [SB0019] - Inserir pagamento para cliente fictï¿½cio 
 	 * 
 	 * @author Mariana Victor
 	 * @param idFormaArrecadacao 
@@ -47330,16 +47331,16 @@ public class ControladorArrecadacao extends ControladorComum {
 		Integer anoMes = Util.formataAnoMes(
 				Util.converteStringSemBarraParaDate(dataPagamento));
 		
-		// 1.1.	O sistema armazena o pagamento para posterior inserção 
+		// 1.1.	O sistema armazena o pagamento para posterior inserï¿½ï¿½o 
 		//   na tabela PAGAMENTO com os seguintes valores:
 
-		// Caso o ano/mês da data do pagamento seja maior que a PARM_AMREFERENCIAARRECADACAO da tabela SISTEMA_PARAMETROS
+		// Caso o ano/mï¿½s da data do pagamento seja maior que a PARM_AMREFERENCIAARRECADACAO da tabela SISTEMA_PARAMETROS
 		if (anoMes.compareTo(getSistemaParametro().getAnoMesArrecadacao()) > 0) {
-			// atribuir ano/mês da data do pagamento
+			// atribuir ano/mï¿½s da data do pagamento
 			pagamento.setAnoMesReferenciaArrecadacao(
 					anoMes);
 		} else {
-			// caso contrário atribuir o PARM_AMREFERENCIAARRECADACAO
+			// caso contrï¿½rio atribuir o PARM_AMREFERENCIAARRECADACAO
 			pagamento.setAnoMesReferenciaArrecadacao(
 					getSistemaParametro().getAnoMesArrecadacao());
 		}
@@ -47350,7 +47351,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		// Data do Pagamento
 		pagamento.setDataPagamento(Util.converteStringSemBarraParaDate(dataPagamento));
 		
-		// Id do tipo de débito referente a ?Documento não aceito? da tabela DEBITO_TIPO
+		// Id do tipo de dï¿½bito referente a ?Documento nï¿½o aceito? da tabela DEBITO_TIPO
 		DebitoTipo debitoTipo = this.repositorioArrecadacao
 			.obterDebitoTipoCodigoConstante(DebitoTipo.DOCUMENTO_NAO_ACEITO);
 		pagamento.setDebitoTipo(debitoTipo);
@@ -47364,7 +47365,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		documentoTipo.setId(DocumentoTipo.GUIA_PAGAMENTO);
 		pagamento.setDocumentoTipo(documentoTipo);
 		
-		// Id da forma de arrecadação
+		// Id da forma de arrecadaï¿½ï¿½o
 		ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
 		arrecadacaoForma.setId(idFormaArrecadacao);
 		pagamento.setArrecadacaoForma(arrecadacaoForma);
@@ -47389,11 +47390,11 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-     * [UC1214] Informar Acerto Documentos Não Aceitos
+     * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
-	 * 3. O sistema identifica os pagamentos com documentos não aceitos 
-	 * 	 que foram gerados para um cliente fictício e
-	 *   junto com o filtro selecionado pelo usuário.
+	 * 3. O sistema identifica os pagamentos com documentos nï¿½o aceitos 
+	 * 	 que foram gerados para um cliente fictï¿½cio e
+	 *   junto com o filtro selecionado pelo usuï¿½rio.
 	 * 
 	 * @author Mariana Victor
 	 * @date 19/08/2011
@@ -47452,9 +47453,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-     * [UC1214] Informar Acerto Documentos Não Aceitos
+     * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
-	 *  7.2.1. Total do Pagamento (PGMT _VLPAGAMENTO do pagamento doc. não aceito).
+	 *  7.2.1. Total do Pagamento (PGMT _VLPAGAMENTO do pagamento doc. nï¿½o aceito).
 	 * 
 	 * @author Mariana Victor
 	 * @date 22/08/2011
@@ -47480,11 +47481,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 	
 	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
+	 * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
-	 * Pesquisa a guia de pagamento do imóvel informado pelo usuário
+	 * Pesquisa a guia de pagamento do imï¿½vel informado pelo usuï¿½rio
 	 * 
-	 * [FS0009] ? Verificar existência da guia de pagamento
+	 * [FS0009] ? Verificar existï¿½ncia da guia de pagamento
 	 * 
 	 * @author Mariana Victor
 	 * @date 23/08/2011
@@ -47509,7 +47510,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 			filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.IMOVEL_ID, idImovel));
 		} else {
-			throw new ControladorException("atencao.naoinformado", null, "Imóvel");
+			throw new ControladorException("atencao.naoinformado", null, "Imï¿½vel");
 		}
 
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idGuiaPagamento));
@@ -47557,18 +47558,18 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 		}
 
-		// Retorna a guia de pagamento encontrada ou nulo se não existir aa guia
+		// Retorna a guia de pagamento encontrada ou nulo se nï¿½o existir aa guia
 		// de pagamento
 		return helper;
 	}
 	
 	
 	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
+	 * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
-	 * Pesquisa o débito a cobrar do imóvel informado pelo usuário
+	 * Pesquisa o dï¿½bito a cobrar do imï¿½vel informado pelo usuï¿½rio
 	 * 
-	 * [FS0012] - Verificar existência do débito.
+	 * [FS0012] - Verificar existï¿½ncia do dï¿½bito.
 	 * 
 	 * @author Mariana Victor
 	 * @date 23/08/2011
@@ -47583,11 +47584,11 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		DebitoACobrarValoresHelper helper = null;
 		
-		// Cria a variável que vai armazenar o débito a cobrar pesquisado
+		// Cria a variï¿½vel que vai armazenar o dï¿½bito a cobrar pesquisado
 		DebitoACobrar debitoACobrarDigitado = null;
 
-		// Cria o filtro de débito a cobrar e seta todos os parâmetros para
-		// pesquisar o débito a cobrar do imóvel
+		// Cria o filtro de dï¿½bito a cobrar e seta todos os parï¿½metros para
+		// pesquisar o dï¿½bito a cobrar do imï¿½vel
 		FiltroDebitoACobrar filtroDebitoACobrar = new FiltroDebitoACobrar();
 		filtroDebitoACobrar.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.IMOVEL_ID, idImovel));
 		filtroDebitoACobrar.adicionarParametro(new ParametroSimples(FiltroDebitoACobrar.ID, idDebitoACobrar));
@@ -47604,7 +47605,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			helper.setDebitoACobrar(debitoACobrarDigitado);
 			helper.setIndicadorDebitoPago(ConstantesSistema.NAO);
 		} else {
-			// Caso não exista o débito 
+			// Caso nï¿½o exista o dï¿½bito 
 			
 			FiltroDebitoACobrarHistorico filtroDebitoACobrarHistorico = new FiltroDebitoACobrarHistorico();
 			filtroDebitoACobrarHistorico.adicionarParametro(new ParametroSimples(FiltroDebitoACobrarHistorico.IMOVEL_ID, idImovel));
@@ -47635,16 +47636,16 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 		}
 
-		// Retorna o débito a cobrar encontrado ou nulo se não existir o débito
+		// Retorna o dï¿½bito a cobrar encontrado ou nulo se nï¿½o existir o dï¿½bito
 		// a cobrar
 		return helper;
 	}
 	
 	
 	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
+	 * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
-	 * 10.	O usuário conclui o acerto dos pagamentos 
+	 * 10.	O usuï¿½rio conclui o acerto dos pagamentos 
 	 * 
 	 * @author Mariana Victor
 	 * @date 24/08/2011
@@ -47676,7 +47677,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		Pagamento pagamento = (Pagamento) Util.retonarObjetoDeColecao(colecaoPagamento);
 		
 		try {
-			// 10.1. Para cada débito selecionado:
+			// 10.1. Para cada dï¿½bito selecionado:
 			
 			if (colecaoContaValores != null && !colecaoContaValores.isEmpty()) {
 				Iterator iterator = colecaoContaValores.iterator();
@@ -47715,16 +47716,16 @@ public class ControladorArrecadacao extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}
 		
-		// 10.2. Caso o Total do Pagamento seja igual ao Total dos Débitos:
+		// 10.2. Caso o Total do Pagamento seja igual ao Total dos Dï¿½bitos:
 		if (valorTotalDebitos.compareTo(valorPagamento) == 0) {
 			
-			// 10.2.1. Remover o pagamento doc. não aceito (Exclui o pagamento na tabela PAGAMENTO).
+			// 10.2.1. Remover o pagamento doc. nï¿½o aceito (Exclui o pagamento na tabela PAGAMENTO).
 			getControladorUtil().remover(pagamento);
 			
 		} else {
 			
-			// 10.3. Caso Contrário, ou seja, o Total do Pagamento é maior que o Total dos Débitos
-			// 10.3.1. Atualizar o pagamento doc. não aceito na tabela de PAGAMENTO.
+			// 10.3. Caso Contrï¿½rio, ou seja, o Total do Pagamento ï¿½ maior que o Total dos Dï¿½bitos
+			// 10.3.1. Atualizar o pagamento doc. nï¿½o aceito na tabela de PAGAMENTO.
 			pagamento.setValorPagamento(valorPagamento.subtract(valorTotalDebitos));
 			this.getControladorUtil().atualizar(pagamento);
 			
@@ -47733,7 +47734,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
+	 * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
 	 * [SB0004] - Inclui Pagamento
 	 * 
@@ -47832,15 +47833,15 @@ public class ControladorArrecadacao extends ControladorComum {
 					obterNegativadorMovimentoRegItemAssociadosAGuiaPagamento(
 							guiaPagamento.getId());
 			
-			// 1.2.4. Caso existam itens de negativação associados a esta guia de pagamento:
+			// 1.2.4. Caso existam itens de negativaï¿½ï¿½o associados a esta guia de pagamento:
 			if(colecaoNegativadorMovimentoRegItem != null && !colecaoNegativadorMovimentoRegItem.isEmpty()){
-				// 1.2.4.1.	Para cada item de negativação retornado, o sistema atualiza o item de negativação com os dados do pagamento
+				// 1.2.4.1.	Para cada item de negativaï¿½ï¿½o retornado, o sistema atualiza o item de negativaï¿½ï¿½o com os dados do pagamento
 				Iterator iterNmri = colecaoNegativadorMovimentoRegItem.iterator();
 				
 				while (iterNmri.hasNext()) {
 					Integer idItemNegativacao = (Integer) iterNmri.next();
 
-					// [SB0005 - Atualizar Item da Negativação]
+					// [SB0005 - Atualizar Item da Negativaï¿½ï¿½o]
 					this.repositorioSpcSerasa.atualizarNegativadorMovimentoRegItem(
 							idItemNegativacao, pagamento.getValorPagamento(),
 							pagamento.getDataPagamento(),CobrancaDebitoSituacao.PAGO);
@@ -47849,7 +47850,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			
 		} else if (debitoACobrarValoresHelper != null 
 				&& debitoACobrarValoresHelper.getDebitoACobrar() != null){
-			// 1.3.	Tipo do Documento correspondente a Débito A Cobrar:
+			// 1.3.	Tipo do Documento correspondente a Dï¿½bito A Cobrar:
 			
 			DebitoACobrar debitoACobrar = debitoACobrarValoresHelper.getDebitoACobrar();
 			
@@ -47858,13 +47859,13 @@ public class ControladorArrecadacao extends ControladorComum {
 			// Valor do Pagamento.
 			pagamento.setValorPagamento(debitoACobrar.getValorDebito());
 			
-			// Data do pagamento doc. não aceito.
+			// Data do pagamento doc. nï¿½o aceito.
 			pagamento.setDataPagamento(pagamentoNaoAceito.getDataPagamento());
 			
 			//  
 			pagamento.setDebitoTipo(debitoACobrar.getDebitoTipo());
 			
-			// Caso exista pagamento para débito a cobrar (indicador de débito pago = 1),
+			// Caso exista pagamento para dï¿½bito a cobrar (indicador de dï¿½bito pago = 1),
 			if (debitoACobrarValoresHelper.getIndicadorDebitoPago() != null 
 					&& debitoACobrarValoresHelper.getIndicadorDebitoPago().compareTo(ConstantesSistema.SIM) == 0) {
 				// atribuir o valor nulo
@@ -47872,36 +47873,36 @@ public class ControladorArrecadacao extends ControladorComum {
 			} else {
 				DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 				debitoACobrarGeral.setId(debitoACobrar.getId());
-				// caso contrário, atribuir o id da Guia de Pagamento.
+				// caso contrï¿½rio, atribuir o id da Guia de Pagamento.
 				pagamento.setDebitoACobrarGeral(debitoACobrarGeral);
 			}
 			
-			// LOCA_ID da tabela débito a dobrar
+			// LOCA_ID da tabela dï¿½bito a dobrar
 			pagamento.setLocalidade(debitoACobrar.getLocalidade());
 			
-			// Com o valor correspondente a débito a cobrar da tabela DOCUMENTO_TIPO.
+			// Com o valor correspondente a dï¿½bito a cobrar da tabela DOCUMENTO_TIPO.
 			DocumentoTipo documentoTipo = new DocumentoTipo();
 			documentoTipo.setId(DocumentoTipo.DEBITO_A_COBRAR);
 			pagamento.setDocumentoTipo(documentoTipo);
 			
-			// AVBC_ID do pagamento doc. não aceito.
+			// AVBC_ID do pagamento doc. nï¿½o aceito.
 			pagamento.setAvisoBancario(pagamentoNaoAceito.getAvisoBancario());
 			
 			// IMOV_ID da tabela IMOVEL
 			pagamento.setImovel(imovel);
 
-			// AMIT_ID do pagamento doc. não aceito.
+			// AMIT_ID do pagamento doc. nï¿½o aceito.
 			pagamento.setArrecadadorMovimentoItem(pagamentoNaoAceito.getArrecadadorMovimentoItem());
 			
-			// ARFM_ID do pagamento doc. não aceito.
+			// ARFM_ID do pagamento doc. nï¿½o aceito.
 			pagamento.setArrecadacaoForma(pagamentoNaoAceito.getArrecadacaoForma());
 			
 			// Data e hora correntes.
 			pagamento.setUltimaAlteracao(new Date());
 
 			this.getControladorUtil().inserir(pagamento);
-			// 1.3.1. O sistema verifica se existe item de documento de cobrança associado a este débito a cobrar. 
-			// 1.3.2. O Sistema atualiza a situação do item do documento de cobrança referente ao Débito a cobrar.
+			// 1.3.1. O sistema verifica se existe item de documento de cobranï¿½a associado a este dï¿½bito a cobrar. 
+			// 1.3.2. O Sistema atualiza a situaï¿½ï¿½o do item do documento de cobranï¿½a referente ao Dï¿½bito a cobrar.
 	        getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(pagamento,
 	              CobrancaDebitoSituacao.PAGO, pagamento.getDataPagamento());
 	        
@@ -47910,7 +47911,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-     * [UC1214] Informar Acerto Documentos Não Aceitos
+     * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
 	 * @author Mariana Victor
 	 * @date 24/08/2011
@@ -47934,7 +47935,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-     * [UC1214] Informar Acerto Documentos Não Aceitos
+     * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
 	 * @author Mariana Victor
 	 * @date 24/08/2011
@@ -47958,7 +47959,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/**
-     * [UC1214] Informar Acerto Documentos Não Aceitos
+     * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
 	 * @author Mariana Victor
 	 * @date 24/08/2011
@@ -48043,8 +48044,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	
 	/**
 	 * 
-	 * Este caso de uso cria um sql que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um sql que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
 	 * @author Rodrigo Cabral
 	 * @date 16/09/2011
@@ -48096,7 +48097,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 					PagamentoRelatorioHelper pagamentoRelatorioHelper = new PagamentoRelatorioHelper();
 
-					// Id e Descrição da Localidade
+					// Id e Descriï¿½ï¿½o da Localidade
 					if (dadosPagamento[1] != null) { // 1,2
 						pagamentoRelatorioHelper
 								.setIdLocalidade((Integer) dadosPagamento[1]);
@@ -48104,7 +48105,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDescricaoLocalidade((String) dadosPagamento[2]);
 					}
 
-					// Id e Nome da Gerência Regional
+					// Id e Nome da Gerï¿½ncia Regional
 					if (dadosPagamento[3] != null) { // 3,4
 						pagamentoRelatorioHelper
 								.setIdGerenciaRegional((Integer) dadosPagamento[3]);
@@ -48112,7 +48113,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setNomeGerenciaRegional((String) dadosPagamento[4]);
 					}
 
-					// Id do Imóvel
+					// Id do Imï¿½vel
 					if (dadosPagamento[5] != null) { // 5
 						pagamentoRelatorioHelper
 								.setIdImovel((Integer) dadosPagamento[5]);
@@ -48138,13 +48139,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setDataPagamento((Date) dadosPagamento[9]);
 					}
 
-					// Ano Mês Referência do Pagamento
+					// Ano Mï¿½s Referï¿½ncia do Pagamento
 					if (dadosPagamento[10] != null) { // 10
 						pagamentoRelatorioHelper
 								.setAnoMesReferenciaPagamento((Integer) dadosPagamento[10]);
 					}
 
-					// Descrição Tipo Débito
+					// Descriï¿½ï¿½o Tipo Dï¿½bito
 					if (dadosPagamento[11] != null) { // 11
 						pagamentoRelatorioHelper
 								.setDescricaoTipoDebito((String) dadosPagamento[11]);
@@ -48162,13 +48163,13 @@ public class ControladorArrecadacao extends ControladorComum {
 								.setValorPagamento((BigDecimal) dadosPagamento[13]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[14] != null) { // 14
 						pagamentoRelatorioHelper
 								.setIdSituacaoPagamentoAtual((Integer) dadosPagamento[14]);
 					}
 
-					// Descrição da Situação Atual do Pagamento
+					// Descriï¿½ï¿½o da Situaï¿½ï¿½o Atual do Pagamento
 					if (dadosPagamento[15] != null) { // 15
 						pagamentoRelatorioHelper
 								.setDescricaoSituacaoPagamentoAtual((String) dadosPagamento[15]);
@@ -48195,15 +48196,15 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 	
 	/*
-	 * Criado para a consulta, de manter conta por conjunto de imóveis, pelo id do banco
+	 * Criado para a consulta, de manter conta por conjunto de imï¿½veis, pelo id do banco
 	 * e pelo grupo de faturamento
 	 * 
 	 * */
 	/** @author Adriana Muniz
 	  * @date: 08/04/2011
-	  * [UC0146] Manter Conta(por conjunto de imóveis)
+	  * [UC0146] Manter Conta(por conjunto de imï¿½veis)
 	  * 
-	  * FS0028 - Verificar parâmetro consulta e débito automático
+	  * FS0028 - Verificar parï¿½metro consulta e dï¿½bito automï¿½tico
 	  * @return
 	  * @throws ErroRepositorioException
 	  */
@@ -48227,7 +48228,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	/*
 	 * autor: Adriana Muniz
 	 * 
-	 * Alteração para a conta considerar como filtro grupo de faturamento, quando o mesmo estiver preenchido
+	 * Alteraï¿½ï¿½o para a conta considerar como filtro grupo de faturamento, quando o mesmo estiver preenchido
 	 */
 	/**
 	 * @autor: Adriana Muniz
@@ -48235,10 +48236,10 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * 
 	 * [UC0146] Manter Conta
 	 * 
-	 * FS0028 - Verificar parâmetro consulta e débito automático
+	 * FS0028 - Verificar parï¿½metro consulta e dï¿½bito automï¿½tico
 	 * 
-	 * Método para retornar a quantidade de contas a partir dos imóveis com débito automático - 
-	 * Manter Contas de um Conjunto de imóveis. 
+	 * Mï¿½todo para retornar a quantidade de contas a partir dos imï¿½veis com dï¿½bito automï¿½tico - 
+	 * Manter Contas de um Conjunto de imï¿½veis. 
 	 * 
 	 * @return
      * @throws ErroRepositorioException
@@ -48307,12 +48308,12 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 			
 	/**
-	 * Detalhar contabilização de documentos
+	 * Detalhar contabilizaï¿½ï¿½o de documentos
 	 * inexistentes
 	 * 
 	 * Retorna os pagamentos nao classificados por situacao atual
 	 * 
-	 * Refatoração de parte do método @encerrarArrecadacaoMes()
+	 * Refatoraï¿½ï¿½o de parte do mï¿½todo @encerrarArrecadacaoMes()
 	 * 
 	 * @author Wellington Rocha
 	 * @author Felipe Santos
@@ -48380,12 +48381,12 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 
 	/**
-	 * Detalhar contabilização de documentos
+	 * Detalhar contabilizaï¿½ï¿½o de documentos
 	 * inexistentes
 	 * 
 	 * Retorna os pagamentos nao classificados por situacao anterior
 	 * 
-	 * Refatoração de parte do método @encerrarArrecadacaoMes()
+	 * Refatoraï¿½ï¿½o de parte do mï¿½todo @encerrarArrecadacaoMes()
 	 * 
 	 * @author Wellington Rocha
 	 * @author Felipe Santos
@@ -48457,9 +48458,9 @@ public class ControladorArrecadacao extends ControladorComum {
 	/**
 	 *
 	 * 
-	 * Detalhar contabilização de documentos inexistentes
+	 * Detalhar contabilizaï¿½ï¿½o de documentos inexistentes
 	 * 
-	 * Refatoração de parte do método @encerrarArrecadacaoMes()
+	 * Refatoraï¿½ï¿½o de parte do mï¿½todo @encerrarArrecadacaoMes()
 	 * 
 	 * @author Wellington Rocha
 	 * @author Felipe Santos
@@ -48499,12 +48500,12 @@ public class ControladorArrecadacao extends ControladorComum {
 	}
 		
 	/**
-	 * Relatório Analitico dos valores diários da arrecadação
+	 * Relatï¿½rio Analitico dos valores diï¿½rios da arrecadaï¿½ï¿½o
 	 * 
 	 * @author Adriana Muniz
 	 * data: 05/09/2012
 	 * 
-	 * Obtém as formas de arrecadação por dia
+	 * Obtï¿½m as formas de arrecadaï¿½ï¿½o por dia
 	 * 
 	 * @param helper
 	 * @param filtro
@@ -48664,7 +48665,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * @author Adriana Muniz
 	 * data: 02/10/2012
 	 * 
-	 * Obtém as formas de arrecadação com tarifa por dia
+	 * Obtï¿½m as formas de arrecadaï¿½ï¿½o com tarifa por dia
 	 * 
 	 * @param helper
 	 * @param filtro
@@ -48722,7 +48723,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * @Data: 05/12/2012
 	 * @author Adriana Muniz
 	 * 
-	 * Gera os dados diários da arrecadação acumulando a quantidade e o valor
+	 * Gera os dados diï¿½rios da arrecadaï¿½ï¿½o acumulando a quantidade e o valor
 	 * dos pagamentos
 	 * 
 	 * @throws ControladorException
@@ -49079,7 +49080,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	/**
 	 * data: 11/12/2012
 	 * 
-	 * Recupera os dados diarios da arrecadação auxiliar
+	 * Recupera os dados diarios da arrecadaï¿½ï¿½o auxiliar
 	 * 
 	 * @param anoMesInicial
 	 * @param anoMesFinal
@@ -49261,7 +49262,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				if(itemAgrupado == null){
 					ArrecadacaoForma arrecadacaoForma = new ArrecadacaoForma();
 					arrecadacaoForma.setId(0);
-					arrecadacaoForma.setDescricao("Sem forma de arrecadação");
+					arrecadacaoForma.setDescricao("Sem forma de arrecadaï¿½ï¿½o");
 					itemAgrupado = arrecadacaoForma;
 				}				
 								
@@ -49325,7 +49326,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * @author Adriana Muniz
 	 * @date 10/12/2012
 	 * 
-	 * Consultar Dados Diários da Arrecadação da tabela arrecadacao_dados_diarios_auxiliar
+	 * Consultar Dados Diï¿½rios da Arrecadaï¿½ï¿½o da tabela arrecadacao_dados_diarios_auxiliar
 	 *
 	 * Verificar se existe dados diarios da arrecadacao de acordo com o filtro 
 	 * passado
@@ -49370,8 +49371,8 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * @author Adriana Muniz 
 	 * @data: 19/12/2012
 	 * 
-	 * Consulta para retornar os dados diários arrecadação auxiliar
-	 * agrupados por formas de arrecadação com tarifa
+	 * Consulta para retornar os dados diï¿½rios arrecadaï¿½ï¿½o auxiliar
+	 * agrupados por formas de arrecadaï¿½ï¿½o com tarifa
 	 * 
 	 * @param anoMesInicial
 	 * @param anoMesFinal
@@ -49495,7 +49496,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	 * @author Adriana Muniz
 	 * data: 19/12/2012
 	 * 
-	 * Obtém as formas de arrecadação com tarifa por dia
+	 * Obtï¿½m as formas de arrecadaï¿½ï¿½o com tarifa por dia
 	 * 
 	 * @param helper
 	 * @param filtro
@@ -49551,7 +49552,7 @@ public class ControladorArrecadacao extends ControladorComum {
 	/**
 	 * Felipe Santos - 25/10/2013
 	 * 
-	 * Método que gera os dados para o Relatório BIG
+	 * Mï¿½todo que gera os dados para o Relatï¿½rio BIG
 	 * 
 	 * @param anoMesReferencia
 	 * @param localidades
@@ -50328,10 +50329,10 @@ public class ControladorArrecadacao extends ControladorComum {
                 //id da Localidade
                 retorno.setCodigoLocalidade(conta.getLocalidade().getId().toString());
 
-                //matrícula do imóvel
+                //matrï¿½cula do imï¿½vel
                 retorno.setMatriculaImovel(conta.getImovel().getId().toString());
 
-                //mês e ano de referência da conta
+                //mï¿½s e ano de referï¿½ncia da conta
                 retorno.setMesAnoReferenciaConta(conta.getReferenciaFormatada());
             }
             else{
@@ -50342,10 +50343,10 @@ public class ControladorArrecadacao extends ControladorComum {
                     //id da Localidade
                     retorno.setCodigoLocalidade(contaHistorico.getLocalidade().getId().toString());
 
-                    //matrícula do imóvel
+                    //matrï¿½cula do imï¿½vel
                     retorno.setMatriculaImovel(contaHistorico.getImovel().getId().toString());
 
-                    //mês e ano de referência da conta
+                    //mï¿½s e ano de referï¿½ncia da conta
                     retorno.setMesAnoReferenciaConta(contaHistorico.getFormatarAnoMesParaMesAno());
                 }
             }
@@ -50398,22 +50399,22 @@ public class ControladorArrecadacao extends ControladorComum {
         
         String digitoVerificador = especificacaoCodigoBarra.substring(4,5);
         
-        //código do banco
+        //cï¿½digo do banco
         retorno.setCodigoBanco(ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO);
         
-        //código da moeda
+        //cï¿½digo da moeda
         retorno.setCodigoMoeda(ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO);
         
-        //dígito verificador geral
+        //dï¿½gito verificador geral
         retorno.setDigitoVerificadorGeral(digitoVerificador);
         
         //fator de vencimento
         retorno.setFatorVencimento(fatorVencimento);
         
-        //valor do código de barras
+        //valor do cï¿½digo de barras
         retorno.setValorCodigoBarras(Util.formatarMoedaReal(valorPagamento));
         
-        //nosso número
+        //nosso nï¿½mero
         retorno.setNossoNumero(nossoNumeroSemDV);
         
         //tipo de carteira
@@ -50519,8 +50520,8 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Erro ao refaturar conta para recuperação de crédito.", e);
-			throw new ControladorException("Erro ao refaturar conta para recuperação de crédito.", e);
+			logger.error("Erro ao refaturar conta para recuperaï¿½ï¿½o de crï¿½dito.", e);
+			throw new ControladorException("Erro ao refaturar conta para recuperaï¿½ï¿½o de crï¿½dito.", e);
 		}
 	}
 	
@@ -50638,7 +50639,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			/**
 			 * @autor Adriana Muniz e Wellington Rocha
 			 * @data 04/11/2013
-			 * Correção do valor inserido no valor informado
+			 * Correï¿½ï¿½o do valor inserido no valor informado
 			 * */
 			avisoBancario.setValorArrecadacaoInformado(valorArrecadacaoInf);
 		}else{
