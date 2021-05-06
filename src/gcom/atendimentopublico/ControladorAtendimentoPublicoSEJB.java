@@ -1001,8 +1001,9 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 			// [FS0001] Validar Ordem de Servico
 			// Caso 2
 			int servicoTipo = ordemServico.getServicoTipo().getId().intValue();
-
-			if (servicoTipo != ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO) {
+			
+			if (servicoTipo != ServicoTipo.TIPO_EFETUAR_SUBSTITUICAO_HIDROMETRO 
+					&& servicoTipo != ServicoTipo.TIPO_SUBSTITUICAO_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS ) {
 
 				throw new ControladorException(
 						"atencao.servico_associado_substituicao_hidrometro_invalida");
