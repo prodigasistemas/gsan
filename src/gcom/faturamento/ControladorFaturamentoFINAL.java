@@ -583,19 +583,27 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					Rota rotaInserir = null;
 					FaturamentoAtivCronRotaPK faturamentoAtivCronRotaPKInserir = null;
 					FaturamentoAtivCronRota faturamentoAtivCronRotaInserir = null;
+					boolean inserir = false;
 					while (iteratorAtividadesInserir.hasNext()) {
 						rotaInserir = (Rota) iteratorAtividadesInserir.next();
 
-						faturamentoAtivCronRotaPKInserir = new FaturamentoAtivCronRotaPK();
-						faturamentoAtivCronRotaPKInserir
-								.setFaturamentoAtividadeCronogramaId(faturamentoAtividadeCronograma
-										.getId());
-						faturamentoAtivCronRotaPKInserir.setRotaId(rotaInserir
-								.getId());
+						faturamentoAtivCronRotaInserir = pesquisarRotasDoCronogramaPorAtividade(
+								faturamentoAtividadeCronograma.getId(), rotaInserir.getId());
+						
+						if (faturamentoAtivCronRotaInserir == null) {
+							faturamentoAtivCronRotaPKInserir = new FaturamentoAtivCronRotaPK();
+							faturamentoAtivCronRotaPKInserir
+									.setFaturamentoAtividadeCronogramaId(faturamentoAtividadeCronograma
+											.getId());
+							faturamentoAtivCronRotaPKInserir.setRotaId(rotaInserir
+									.getId());
 
-						faturamentoAtivCronRotaInserir = new FaturamentoAtivCronRota();
-						faturamentoAtivCronRotaInserir
-								.setComp_id(faturamentoAtivCronRotaPKInserir);
+							faturamentoAtivCronRotaInserir = new FaturamentoAtivCronRota();
+							faturamentoAtivCronRotaInserir
+									.setComp_id(faturamentoAtivCronRotaPKInserir);		
+							inserir = true;
+						}
+
 						faturamentoAtivCronRotaInserir
 								.setUltimaAlteracao(new Date());
 
@@ -635,8 +643,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						registradorOperacao
 								.registrarOperacao(faturamentoAtivCronRotaInserir);
 						// ------------ REGISTRAR TRANSAÇÃO ----------------
-						getControladorUtil().inserir(
-								faturamentoAtivCronRotaInserir);
+						
+						if (inserir) {
+							getControladorUtil().inserir(faturamentoAtivCronRotaInserir);
+							inserir = false;
+						} else {
+							getControladorUtil().atualizar(faturamentoAtivCronRotaInserir);
+						}
+						
 					}
 				} else {
 					sessionContext.setRollbackOnly();
@@ -647,6 +661,26 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 		}
 
+	}
+	
+	
+	private FaturamentoAtivCronRota pesquisarRotasDoCronogramaPorAtividade(Integer idFaturamentoAtividade, Integer idRota) 
+			throws ControladorException {
+		FiltroFaturamentoAtivCronRota filtro = new FiltroFaturamentoAtivCronRota();
+
+		filtro.adicionarParametro(new ParametroSimples(
+				FiltroFaturamentoAtivCronRota.COMP_ID_FATURAMENTO_ATIVIDADE_CRONOGRAMA_FATURAMENTO_ATIVIDADE_ID, idFaturamentoAtividade));
+		filtro.adicionarParametro(new ParametroSimples(
+				FiltroFaturamentoAtivCronRota.COMP_ID_ROTA_ID, idRota));
+		
+		Collection colecaoRotasCronograma = getControladorUtil()
+				.pesquisar(filtro, FaturamentoAtivCronRota.class.getName());
+		
+		if (colecaoRotasCronograma == null || colecaoRotasCronograma.isEmpty()) {
+			return null;
+		} else {
+			return (FaturamentoAtivCronRota) colecaoRotasCronograma.iterator().next();
+		}
 	}
 
 	/**
