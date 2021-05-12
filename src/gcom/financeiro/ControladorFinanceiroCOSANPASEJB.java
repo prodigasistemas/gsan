@@ -452,11 +452,13 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 			}
 			
 			//Gerando o arquivo zip
+			String caminho = getControladorUtil().getCaminhoDownloadArquivos("contabilidade");
+			
 			String nomeZip = "CONTABILIDADE_" + descricaoLancamento + "_" + (data.replace("/","_"));
 			BufferedWriter out = null;
 			ZipOutputStream zos = null;
-			File compactadoTipo = new File(nomeZip + ".zip");
-			File leituraTipo = new File(nomeZip + ".txt");
+			File compactadoTipo = new File(caminho, nomeZip + ".zip");
+			File leituraTipo = new File(caminho, nomeZip + ".txt");
 
 			if (gerarIntegracaoTxt != null && gerarIntegracaoTxt.length() != 0) {
 				try {
