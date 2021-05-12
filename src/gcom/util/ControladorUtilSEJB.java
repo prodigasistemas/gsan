@@ -635,10 +635,15 @@ public class ControladorUtilSEJB implements SessionBean {
 
 		Collection parametros = Fachada.getInstancia().pesquisar(filtro, SegurancaParametro.class.getName());
 
-		SegurancaParametro caminho = (SegurancaParametro) parametros.iterator().next();
+		SegurancaParametro parametro = (SegurancaParametro) parametros.iterator().next();
 		
-		return caminho.getValor() + "/" + modulo + "/";
-
+		String caminho = parametro.getValor() + "/";
+		
+		if (modulo != null) {
+			caminho += modulo + "/";
+		}
+		
+		return caminho;
 	}
 	
 	public Collection listar(Class tipo) throws ControladorException{

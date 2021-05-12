@@ -52,16 +52,18 @@ public class RequisicaoFotosOrdemServico {
 			OrdemServicoFoto ordemServicoFoto,
 			byte[] arquivoEmBytes) {
 		
-		File diretorioArquivo = null;
+		File diretorioFinal = null;
 		String nomeArquivo = ordemServicoFoto.getNomeFoto();
 
 		try {
-			diretorioArquivo = criarDiretorio(ordemServicoFoto.getOrdemServico().getImovel().getId());
-			escreverBytesNoArquivo(arquivoEmBytes, diretorioArquivo, nomeArquivo);
-			ordemServicoFoto.setCaminhoFoto(diretorioArquivo.getAbsolutePath());
+			String diretorioArquivos = fachada.getCaminhoDownloadArquivos(null);
+			String subdiretorio = montarSubdiretorio(ordemServicoFoto.getOrdemServico().getImovel().getId());
+			diretorioFinal = criarDiretorio(diretorioArquivos + subdiretorio);
+			escreverBytesNoArquivo(arquivoEmBytes, diretorioFinal, nomeArquivo);
+			ordemServicoFoto.setCaminhoFoto(subdiretorio + nomeArquivo);
 			fachada.inserir(ordemServicoFoto);
 		} catch (Exception e) {
-			File arquivo = new File(diretorioArquivo, nomeArquivo);
+			File arquivo = new File(diretorioFinal, nomeArquivo);
 			if (arquivo.exists()) {
 				arquivo.delete();
 			}
@@ -70,19 +72,14 @@ public class RequisicaoFotosOrdemServico {
 		}
 	}
 	
-	private File criarDiretorio(Integer idImovel) throws ControladorException {
-		String diretorioModulo = fachada.getCaminhoDownloadArquivos("atendimento");
-		String diretorioTabela = "ordem_servico_foto/";
-		String subdiretorio = montarSubdiretorio(idImovel);		
-		String diretorioFinal = diretorioModulo + diretorioTabela + subdiretorio;
+	private File criarDiretorio(String diretorio) throws ControladorException {
+		File diretorioFinal = new File(diretorio.replace("//", "/"));
 
-		File diretorio = new File(diretorioFinal);
-
-		if (!diretorio.exists()) {
-			diretorio.mkdirs();
+		if (!diretorioFinal.exists()) {
+			diretorioFinal.mkdirs();
 		}
 
-		return diretorio;
+		return diretorioFinal;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -96,18 +93,20 @@ public class RequisicaoFotosOrdemServico {
 
 		Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(fachada.pesquisar(filtro, Imovel.class.getName()));
 
-		return Util.completaStringComZeroAEsquerda(imovel.getLocalidade().getId() + "", 3) + "_" + 
-			   Util.completaStringComZeroAEsquerda(imovel.getSetorComercial().getCodigo() + "", 3) + "_" +
-			   Util.completaStringComZeroAEsquerda(imovel.getQuadra().getRota().getCodigo() + "", 2);
+		String diretorioRota =  Util.completaStringComZeroAEsquerda(imovel.getLocalidade().getId() + "", 3) + "_" +
+								Util.completaStringComZeroAEsquerda(imovel.getSetorComercial().getCodigo() + "", 3) + "_" +
+								Util.completaStringComZeroAEsquerda(imovel.getQuadra().getRota().getCodigo() + "", 2);
+		
+		return "/atendimento/ordem_servico_foto/" + diretorioRota + "/";
 	}
 	
 	private void escreverBytesNoArquivo(
 			byte[] arquivoEmBytes, 
-			File diretorioArquivo, 
+			File diretorioFinal, 
 			String nomeArquivo) throws IOException {
 		
-		File arquivo = new File(diretorioArquivo, nomeArquivo);
+		File arquivo = new File(diretorioFinal, nomeArquivo);
 		BufferedImage img = ImageIO.read(new ByteArrayInputStream(arquivoEmBytes));
 		ImageIO.write(img, TipoImagem.JPEG.name(), arquivo);
-	}	
+	}
 }
