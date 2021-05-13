@@ -267,8 +267,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 			registradorOperacao.registrarOperacao(ligacaoAgua);
 			// ------------ REGISTRAR TRANSAO----------------------------
-			//Alterao feita por Svio Luiz
-			//Data: 25/05/2011
+			
 			if (!colecaoLigacaoAguaBase.isEmpty()) {
 				getControladorUtil().atualizar(ligacaoAgua);
 			}else{
@@ -3342,7 +3341,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		OrdemServico ordemServico = integracaoComercialHelper.getOrdemServico();
 
 		// Caso 1
-		Imovel imovel = ordemServico.getRegistroAtendimento().getImovel();
+		Imovel imovel = ordemServico.getImovel();
 
 		this.getControladorMicromedicao().validarImovelEmCampo(imovel.getId());
 		/*
@@ -3405,8 +3404,7 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 
 		// Caso 2
 		LigacaoAgua ligacaoAgua = imovel.getLigacaoAgua();
-		ligacaoAgua.setDataRestabelecimentoAgua(ordemServico
-				.getDataEncerramento());
+		ligacaoAgua.setDataRestabelecimentoAgua(ordemServico.getDataEncerramento());
 
 		this.verificarLigacaoAguaControleConcorrencia(ligacaoAgua);
 

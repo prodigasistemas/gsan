@@ -259,6 +259,10 @@ public class RequisicaoEncerrarOrdemServico {
 			ligacaoAgua.setPavimentoCalcada(ligacaoAguaDTO.getPavimentoCalcada());
 			ligacaoAgua.setLigacaoOrigem(ligacaoAguaDTO.getOrigem());
 			ligacaoAgua.setNumeroLacre(ligacaoAguaDTO.getLacre());
+			
+			if (possuiHidrometroInstalado()) {				
+				ligacaoAgua.setHidrometroInstalacaoHistorico(imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico());
+			}
 
 			helper.setLigacaoAgua(ligacaoAgua);
 
@@ -267,7 +271,7 @@ public class RequisicaoEncerrarOrdemServico {
 			resposta.put("msg", e.getMessage());
 		}
 	}
-	
+
 	private void executarEncerramentoLigacaoAguaComInstalacaoHidrometro() {
 		try {
 			LigacaoAgua ligacaoAgua = montarDadosLigacaoAgua();
@@ -659,7 +663,8 @@ public class RequisicaoEncerrarOrdemServico {
 	}
 	
 	private boolean possuiHidrometroInstalado() {
-		return imovel.getLigacaoAgua() != null &&
+		return imovel != null &&
+			   imovel.getLigacaoAgua() != null &&
 			   imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null;
 	}
 }
