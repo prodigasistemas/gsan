@@ -60952,7 +60952,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		} else {
 			conta.setConsumoEsgoto(0);
 			conta.setConsumoRateioEsgoto(0);
-		}
+		} 
 
 		try {
 			System.out.println("----> " + imovel.getId());
@@ -61225,6 +61225,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @param colecaoCalcularValoresAguaEsgotoHelper
 	 * @return GerarContaCategoriaHelper
 	 * @throws ControladorException
+	 * @throws ErroRepositorioException 
 	 */
 	public GerarContaCategoriaHelper gerarContaCategoriaPorCategoria(
 			Conta conta, Collection colecaoCategorias,
@@ -61236,13 +61237,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoContaCategoria = null;
 		Collection colecaoContaCategoriaConsumoFaixa = null;
 
-		BigDecimal[] valoresAguaEsgotoRateioPorEconomia = new BigDecimal[2];
-
+		BigDecimal[] valoresAguaEsgotoRateio = new BigDecimal[2];
+		
+		BigDecimal valorRateioAgua = new BigDecimal("0.00");
+		BigDecimal valorRateioEsgoto = new BigDecimal("0.00");
+		
 		if (conta.getImovel().isImovelCondominio()) {
-			valoresAguaEsgotoRateioPorEconomia = this
-					.calcularValorRateioPorEconomia(conta.getImovel()
-							.getImovelCondominio().getId(),
-							conta.getFaturamentoGrupo());
+			try {
+				//valoresAguaEsgotoRateioPorEconomia = this.calcularValorRateioPorEconomia(conta.getImovel().getImovelCondominio().getId(),conta.getFaturamentoGrupo());
+				valoresAguaEsgotoRateio = this.calcularValorRateioImovel(conta.getImovel(), conta.getFaturamentoGrupo()) ;
+						
+				valorRateioAgua = valoresAguaEsgotoRateio[0];
+				valorRateioEsgoto = valoresAguaEsgotoRateio[1];
+			} catch (ErroRepositorioException e) {
+				e.printStackTrace();
+			}
+		
 		}
 
 		if ((colecaoCategorias != null && !colecaoCategorias.isEmpty())
@@ -61279,25 +61289,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				contaCategoria.setComp_id(contaCategoriaPK);
 				contaCategoria.setQuantidadeEconomia(categoria
 						.getQuantidadeEconomiasCategoria().shortValue());
-				BigDecimal valorRateioAgua = new BigDecimal("0.00");
-				BigDecimal valorRateioEsgoto = new BigDecimal("0.00");
-
-				if (conta.getImovel().isImovelCondominio()) {
-					valorRateioAgua = valoresAguaEsgotoRateioPorEconomia[0]
-							.multiply(new BigDecimal(categoria
-									.getQuantidadeEconomiasCategoria()));
-
-					valorRateioEsgoto = valoresAguaEsgotoRateioPorEconomia[1]
-							.multiply(new BigDecimal(categoria
-									.getQuantidadeEconomiasCategoria()));
-
-				}
+			
 
 				BigDecimal valorAgua = valorRateioAgua;
-				if (calcularValoresAguaEsgotoHelper
-						.getValorFaturadoAguaCategoria() != null)
-					valorAgua = calcularValoresAguaEsgotoHelper
-							.getValorFaturadoAguaCategoria().add(valorAgua);
+				if (calcularValoresAguaEsgotoHelper.getValorFaturadoAguaCategoria() != null)
+					valorAgua = calcularValoresAguaEsgotoHelper.getValorFaturadoAguaCategoria().add(valorAgua);
 
 				BigDecimal valorEsgoto = valorRateioEsgoto;
 				if (calcularValoresAguaEsgotoHelper
@@ -61389,15 +61385,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			helper = this.gerarContaCategoriaValoresZeradosPorCategoria(conta,
 					colecaoCategorias);
 			
-			if (valoresAguaEsgotoRateioPorEconomia != null ) {
+			if (valoresAguaEsgotoRateio != null ) {
 
 				ContaCategoria contaCategoria = (ContaCategoria) helper.getColecaoContaCategoria().iterator().next();
-				if (valoresAguaEsgotoRateioPorEconomia[0] != null) {
-					contaCategoria.setValorAgua(valoresAguaEsgotoRateioPorEconomia[0]);
+				if (valoresAguaEsgotoRateio[0] != null) {
+					contaCategoria.setValorAgua(valoresAguaEsgotoRateio[0]);
 				}
 				
-				if (valoresAguaEsgotoRateioPorEconomia[1] != null ) {
-					contaCategoria.setValorEsgoto(valoresAguaEsgotoRateioPorEconomia[1]);
+				if (valoresAguaEsgotoRateio[1] != null ) {
+					contaCategoria.setValorEsgoto(valoresAguaEsgotoRateio[1]);
 				}
 			}
 			
@@ -68862,8 +68858,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		BigDecimal valorRateioImovelEsgoto = new BigDecimal("0.00");
 		BigDecimal[] valoresRateioImovel = new BigDecimal[2];
 
-		imovel = this.getControladorImovel().pesquisarImovel(imovel.getId());
-
+		imovel = this.getControladorImovel().pesquisarImovel(imovel.getId()); 
+		
 		valoresRateioImovel = this.calcularValorRateioPorEconomia(imovel.getImovelCondominio().getId(), faturamentoGrupo);
 
 		if (valoresRateioImovel[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
