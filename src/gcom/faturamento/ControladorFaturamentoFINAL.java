@@ -669,7 +669,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		FiltroFaturamentoAtivCronRota filtro = new FiltroFaturamentoAtivCronRota();
 
 		filtro.adicionarParametro(new ParametroSimples(
-				FiltroFaturamentoAtivCronRota.COMP_ID_FATURAMENTO_ATIVIDADE_CRONOGRAMA_FATURAMENTO_ATIVIDADE_ID, idFaturamentoAtividade));
+				FiltroFaturamentoAtivCronRota.COMP_ID_FATURAMENTO_ATIVIDADE_CRONOGRAMA_ID, idFaturamentoAtividade));
 		filtro.adicionarParametro(new ParametroSimples(
 				FiltroFaturamentoAtivCronRota.COMP_ID_ROTA_ID, idRota));
 		
