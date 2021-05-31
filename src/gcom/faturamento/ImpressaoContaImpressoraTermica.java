@@ -66,8 +66,8 @@ public class ImpressaoContaImpressoraTermica {
 	private SessionContext sessionContext;
 	private static ImpressaoContaImpressoraTermica instancia;
 
-	private ImpressaoContaImpressoraTermica(IRepositorioFaturamento repositorioFaturamento, IRepositorioClienteImovel repositorioClienteImovel,
-			SessionContext sessionContext) {
+	private ImpressaoContaImpressoraTermica(IRepositorioFaturamento repositorioFaturamento,
+			IRepositorioClienteImovel repositorioClienteImovel, SessionContext sessionContext) {
 
 		this.repositorioClienteImovel = repositorioClienteImovel;
 		this.repositorioFaturamento = repositorioFaturamento;
@@ -78,29 +78,30 @@ public class ImpressaoContaImpressoraTermica {
 			IRepositorioClienteImovel repositorioClienteImovel, SessionContext sessionContext) {
 
 		if (instancia == null) {
-			instancia = new ImpressaoContaImpressoraTermica(repositorioFaturamento, repositorioClienteImovel, sessionContext);
+			instancia = new ImpressaoContaImpressoraTermica(repositorioFaturamento, repositorioClienteImovel,
+					sessionContext);
 		}
 		return instancia;
 	}
-	
+
 	protected ControladorUtilLocal getControladorUtil() {
 
-	    ControladorUtilLocalHome localHome = null;
-	    ControladorUtilLocal local = null;
+		ControladorUtilLocalHome localHome = null;
+		ControladorUtilLocal local = null;
 
-	    ServiceLocator locator = null;
-	    try {
-	      locator = ServiceLocator.getInstancia();
-	      localHome = (ControladorUtilLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-	      local = localHome.create();
+		ServiceLocator locator = null;
+		try {
+			locator = ServiceLocator.getInstancia();
+			localHome = (ControladorUtilLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
+			local = localHome.create();
 
-	      return local;
-	    } catch (CreateException e) {
-	      throw new SistemaException(e);
-	    } catch (ServiceLocatorException e) {
-	      throw new SistemaException(e);
-	    }
-	  }
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
 
 	protected ControladorClienteLocal getControladorCliente() {
 		ControladorClienteLocalHome localHome = null;
@@ -119,7 +120,7 @@ public class ImpressaoContaImpressoraTermica {
 			throw new SistemaException(e);
 		}
 	}
-	
+
 	private ControladorFaturamentoLocal getControladorFaturamento() {
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
@@ -129,7 +130,8 @@ public class ImpressaoContaImpressoraTermica {
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
+			localHome = (ControladorFaturamentoLocalHome) locator
+					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -148,7 +150,8 @@ public class ImpressaoContaImpressoraTermica {
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorArrecadacaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_ARRECADACAO_SEJB);
+			localHome = (ControladorArrecadacaoLocalHome) locator
+					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_ARRECADACAO_SEJB);
 
 			local = localHome.create();
 
@@ -209,7 +212,8 @@ public class ImpressaoContaImpressoraTermica {
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorMicromedicaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
+			localHome = (ControladorMicromedicaoLocalHome) locator
+					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -220,20 +224,25 @@ public class ImpressaoContaImpressoraTermica {
 		}
 	}
 
-	private String formarLinha(int font, int tamanhoFonte, int x, int y, String texto, int adicionarColuna, int adicionarLinha) {
-		return "T " + font + " " + tamanhoFonte + " " + (x + adicionarColuna) + " " + (y + adicionarLinha) + " " + texto + "\n";
+	private String formarLinha(int font, int tamanhoFonte, int x, int y, String texto, int adicionarColuna,
+			int adicionarLinha) {
+		return "T " + font + " " + tamanhoFonte + " " + (x + adicionarColuna) + " " + (y + adicionarLinha) + " "
+				+ texto + "\n";
 	}
 
-	private static String dividirLinha(int fonte, int tamanhoFonte, int x, int y, String texto, int tamanhoLinha, int deslocarPorLinha) {
+	private static String dividirLinha(int fonte, int tamanhoFonte, int x, int y, String texto, int tamanhoLinha,
+			int deslocarPorLinha) {
 		String retorno = "";
 		int contador = 0;
 		int i;
 		for (i = 0; i < texto.length(); i += tamanhoLinha) {
 			contador += tamanhoLinha;
 			if (contador > texto.length()) {
-				retorno += "T " + fonte + " " + tamanhoFonte + " " + x + " " + y + " " + texto.substring(i, texto.length()).trim() + "\n";
+				retorno += "T " + fonte + " " + tamanhoFonte + " " + x + " " + y + " "
+						+ texto.substring(i, texto.length()).trim() + "\n";
 			} else {
-				retorno += "T " + fonte + " " + tamanhoFonte + " " + x + " " + y + " " + texto.substring(i, contador).trim() + "\n";
+				retorno += "T " + fonte + " " + tamanhoFonte + " " + x + " " + y + " "
+						+ texto.substring(i, contador).trim() + "\n";
 			}
 			y += deslocarPorLinha;
 		}
@@ -316,7 +325,8 @@ public class ImpressaoContaImpressoraTermica {
 		Collection colecaoParmsImpostosDeduzidos = null;
 
 		try {
-			colecaoParmsImpostosDeduzidos = repositorioFaturamento.pesquisarParmsContaImpostosDeduzidos(emitirContaHelper.getIdConta());
+			colecaoParmsImpostosDeduzidos = repositorioFaturamento
+					.pesquisarParmsContaImpostosDeduzidos(emitirContaHelper.getIdConta());
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 		}
@@ -389,7 +399,8 @@ public class ImpressaoContaImpressoraTermica {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private int retornaIndicadorDiscriminar(int quantidadeMaximaLinhas, int quantidadeLinhasAtual, char servicos, EmitirContaHelper emitirContaHelper) {
+	private int retornaIndicadorDiscriminar(int quantidadeMaximaLinhas, int quantidadeLinhasAtual, char servicos,
+			EmitirContaHelper emitirContaHelper) {
 		int indicadorDiscriminarDescricao = 1;
 		int linhasRestantesDescricao = 0;
 
@@ -441,8 +452,8 @@ public class ImpressaoContaImpressoraTermica {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Vector gerarLinhasTarifaAguaIS(ConsumoHistorico consumoAgua, SistemaParametro sistemaParametro, Imovel imovelEmitido,
-			EmitirContaHelper emitirContaHelper) {
+	private Vector gerarLinhasTarifaAguaIS(ConsumoHistorico consumoAgua, SistemaParametro sistemaParametro,
+			Imovel imovelEmitido, EmitirContaHelper emitirContaHelper) {
 		String linhas = "";
 		boolean tipoTarifaPorCategoria = false;
 
@@ -458,14 +469,16 @@ public class ImpressaoContaImpressoraTermica {
 			if (cContaCategoria != null) {
 				for (IContaCategoria contaCategoria : cContaCategoria) {
 					if (contaCategoria.getConsumoAgua() == null
-							|| (contaCategoria.getConsumoAgua() == 0 && (contaCategoria.getValorAgua() == null || contaCategoria.getValorAgua().equals(
-									new BigDecimal("0.00"))))) {
+							|| (contaCategoria.getConsumoAgua() == 0 && (contaCategoria.getValorAgua() == null || contaCategoria
+									.getValorAgua().equals(new BigDecimal("0.00"))))) {
 						continue;
 					}
 					qtdLinhas++;
 
 					if (linhas.equals("")) {
-						linhas += formarLinha(7, 0, 53, 733, "AGUA", 0, 0);
+
+						linhas += formarLinha(7, 0, 200, 788, "AGUA", 0, 0);
+
 					}
 
 					int quantidaEconomias = 0;
@@ -477,50 +490,67 @@ public class ImpressaoContaImpressoraTermica {
 					if (tipoTarifaPorCategoria) {
 						descricao = contaCategoria.getDescricao() + " " + quantidaEconomias + " " + "UNIDADE(S)";
 						if (descricao.length() > 40) {
-							linhas += formarLinha(7, 0, 63, 733, descricao.substring(0, 40), 0, qtdLinhas * 34);
+
+							linhas += formarLinha(7, 0, 63, 813, descricao.substring(0, 40), 0, qtdLinhas * 25);
 						} else {
-							linhas += formarLinha(7, 0, 63, 733, descricao, 0, qtdLinhas * 34);
+							linhas += formarLinha(7, 0, 63, 813, descricao, 0, qtdLinhas * 25);
 						}
 					} else {
 						descricao = contaCategoria.getDescricao() + " " + quantidaEconomias + " " + "UNIDADE(S)";
 						if (descricao.length() > 40) {
-							linhas += formarLinha(7, 0, 63, 733, descricao.substring(0, 40), 0, qtdLinhas * 34);
+
+							linhas += formarLinha(7, 0, 63, 813, descricao.substring(0, 40), 0, qtdLinhas * 25);
 						} else {
-							linhas += formarLinha(7, 0, 63, 733, descricao, 0, qtdLinhas * 34);
+							linhas += formarLinha(7, 0, 63, 813, descricao, 0, qtdLinhas * 25);
+
 						}
 					}
 
 					int consumoMinimo = 0;
-					if (consumoAgua != null && consumoAgua.getConsumoMinimo() != null && contaCategoria.getConsumoMinimoAgua() != null
+					if (consumoAgua != null && consumoAgua.getConsumoMinimo() != null
+							&& contaCategoria.getConsumoMinimoAgua() != null
 							&& consumoAgua.getConsumoMinimo() > contaCategoria.getConsumoMinimoAgua()) {
 						consumoMinimo = consumoAgua.getConsumoMinimo();
 					} else if (contaCategoria.getConsumoMinimoAgua() != null) {
 						consumoMinimo = contaCategoria.getConsumoMinimoAgua();
 					}
 
-					if (consumoAgua == null && contaCategoria.getConsumoAgua() != null && contaCategoria.getConsumoAgua() <= consumoMinimo) {
+					if (consumoAgua == null && contaCategoria.getConsumoAgua() != null
+							&& contaCategoria.getConsumoAgua() <= consumoMinimo) {
 						qtdLinhas++;
 						descricao = "";
 						descricao = "TARIFA MINIMA "
-								+ Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua().divide(new BigDecimal(quantidaEconomias), 2, BigDecimal.ROUND_DOWN)) + " POR UNIDADE ";
-						linhas += formarLinha(7, 0, 63, 733, descricao, 0, qtdLinhas * 34);
+								+ Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua().divide(
+										new BigDecimal(quantidaEconomias), 2, BigDecimal.ROUND_DOWN)) + " POR UNIDADE ";
+
+						linhas += formarLinha(7, 0, 63, 813, descricao, 0, qtdLinhas * 25);
 						descricao = consumoMinimo + " m3";
-						linhas += formarLinha(7, 0, 571, 733, descricao, 0, qtdLinhas * 34);
-						linhas += formarLinha(7, 0, 697, 733, Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua()), 0, qtdLinhas * 34);
+						linhas += formarLinha(7, 0, 571, 813, descricao, 0, qtdLinhas * 25);
+						linhas += formarLinha(7, 0, 697, 813,
+								Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua()), 0, qtdLinhas * 25);
+
 					} else {
 
 						Collection<ContaCategoriaConsumoFaixa> cContaCategoriaConsumoFaixa = repositorioFaturamento
 								.pesquisarContaCategoriaConsumoFaixa(emitirContaHelper.getIdConta());
 
 						System.out.println("---> " + emitirContaHelper.getIdConta());
-						if (contaCategoria.getConsumoAgua() != null && cContaCategoriaConsumoFaixa != null && cContaCategoriaConsumoFaixa.size() > 0) {
+						if (contaCategoria.getConsumoAgua() != null && cContaCategoriaConsumoFaixa != null
+								&& cContaCategoriaConsumoFaixa.size() > 0) {
 							qtdLinhas++;
-							descricao = "ATE " + ((int) contaCategoria.getConsumoMinimoAgua() / quantidaEconomias) + " m3 - "
-									+ Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua().divide(new BigDecimal(quantidaEconomias), 2, BigDecimal.ROUND_DOWN))
+							descricao = "ATE "
+									+ ((int) contaCategoria.getConsumoMinimoAgua() / quantidaEconomias)
+									+ " m3 - "
+									+ Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua().divide(
+											new BigDecimal(quantidaEconomias), 2, BigDecimal.ROUND_DOWN))
 									+ " POR UNIDADE";
-							linhas += formarLinha(7, 0, 73, 733, descricao, 0, qtdLinhas * 34);
-							linhas += formarLinha(7, 0, 571, 733, contaCategoria.getConsumoMinimoAgua() + " m3", 0, qtdLinhas * 34);
-							linhas += formarLinha(7, 0, 697, 733, Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua()), 0, qtdLinhas * 34);
+
+							linhas += formarLinha(7, 0, 73, 813, descricao, 0, qtdLinhas * 25);
+							linhas += formarLinha(7, 0, 571, 813, contaCategoria.getConsumoMinimoAgua() + " m3", 0,
+									qtdLinhas * 25);
+							linhas += formarLinha(7, 0, 697, 813,
+									Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua()), 0,
+									qtdLinhas * 25);
 
 							for (ContaCategoriaConsumoFaixa faixa : cContaCategoriaConsumoFaixa) {
 								qtdLinhas++;
@@ -528,33 +558,52 @@ public class ImpressaoContaImpressoraTermica {
 								if (faixa.getConsumoFaixaFim() == 51) {
 									descricao = "ACIMA DE " + (faixa.getConsumoFaixaInicio() - 1) + " m3 - R$ "
 											+ Util.formatarMoedaReal(faixa.getValorTarifaFaixa()) + " POR m3";
-									linhas += formarLinha(7, 0, 73, 733, descricao, 0, qtdLinhas * 34);
-									linhas += formarLinha(7, 0, 571, 733, faixa.getConsumoAgua() * quantidaEconomias + " m3 ", 0, qtdLinhas * 34);
-									linhas += formarLinha(7, 0, 697, 733,
-											Util.formatarMoedaReal(faixa.getValorAgua().multiply(new BigDecimal(quantidaEconomias))), 0, qtdLinhas * 34);
+
+									linhas += formarLinha(7, 0, 73, 813, descricao, 0, qtdLinhas * 25);
+									linhas += formarLinha(7, 0, 571, 813, faixa.getConsumoAgua() * quantidaEconomias
+											+ " m3 ", 0, qtdLinhas * 25);
+									linhas += formarLinha(
+											7,
+											0,
+											697,
+											813,
+											Util.formatarMoedaReal(faixa.getValorAgua().multiply(
+													new BigDecimal(quantidaEconomias))), 0, qtdLinhas * 25);
 								} else {
-									descricao = faixa.getConsumoFaixaInicio() + " m3 A " + faixa.getConsumoFaixaFim() + " m3 - R$ "
-											+ Util.formatarMoedaReal(faixa.getValorTarifaFaixa()) + " POR M3 ";
-									linhas += formarLinha(7, 0, 73, 733, descricao, 0, qtdLinhas * 34);
-									linhas += formarLinha(7, 0, 571, 733, faixa.getConsumoAgua() * quantidaEconomias + " m3 ", 0, qtdLinhas * 34);
-									linhas += formarLinha(7, 0, 697, 733,
-											Util.formatarMoedaReal(faixa.getValorAgua().multiply(new BigDecimal(quantidaEconomias))), 0, qtdLinhas * 34);
+									descricao = faixa.getConsumoFaixaInicio() + " m3 A " + faixa.getConsumoFaixaFim()
+											+ " m3 - R$ " + Util.formatarMoedaReal(faixa.getValorTarifaFaixa())
+											+ " POR M3 ";
+									linhas += formarLinha(7, 0, 73, 813, descricao, 0, qtdLinhas * 25);
+									linhas += formarLinha(7, 0, 571, 813, faixa.getConsumoAgua() * quantidaEconomias
+											+ " m3 ", 0, qtdLinhas * 25);
+									linhas += formarLinha(
+											7,
+											0,
+											697,
+											813,
+											Util.formatarMoedaReal(faixa.getValorAgua().multiply(
+													new BigDecimal(quantidaEconomias))), 0, qtdLinhas * 25);
+
 								}
 							}
 						} else {
 							if (contaCategoria.getConsumoAgua() != null) {
 								qtdLinhas++;
 								descricao = "CONSUMO DE AGUA";
-								linhas += formarLinha(7, 0, 73, 733, descricao, 0, qtdLinhas * 34);
-								linhas += formarLinha(7, 0, 571, 733, ((int) contaCategoria.getConsumoAgua()) + " m3", 0, qtdLinhas * 34);
-								linhas += formarLinha(7, 0, 697, 733, Util.formatarMoedaReal(contaCategoria.getValorAgua()), 0, qtdLinhas * 34);
+
+								linhas += formarLinha(7, 0, 73, 813, descricao, 0, qtdLinhas * 25);
+								linhas += formarLinha(7, 0, 571, 813, ((int) contaCategoria.getConsumoAgua()) + " m3",
+										0, qtdLinhas * 25);
+								linhas += formarLinha(7, 0, 697, 813,
+										Util.formatarMoedaReal(contaCategoria.getValorAgua()), 0, qtdLinhas * 25);
+
 							}
 						}
 					}
 
 				}
-
 			}
+
 		} catch (ErroRepositorioException e) {
 
 			e.printStackTrace();
@@ -570,28 +619,26 @@ public class ImpressaoContaImpressoraTermica {
 	private Vector gerarLinhasRateioAguaEsgotoCobrados(EmitirContaHelper emitirContaHelper) {
 		Vector retorno = new Vector();
 		String[] dados = new String[2];
-		
+
 		// Valor do rateio de Água
-		if (emitirContaHelper.getConsumoAgua() != null 
-				&& emitirContaHelper.getValorRateioAgua() != null
+		if (emitirContaHelper.getConsumoAgua() != null && emitirContaHelper.getValorRateioAgua() != null
 				&& emitirContaHelper.getValorRateioAgua().compareTo(BigDecimal.ZERO) > 0) {
-		    dados = new String[2];
-		    dados[0] = "RATEIO DE AGUA DO CONDOMINIO";
-		    dados[1] = Util.formatarMoedaReal(emitirContaHelper.getValorRateioAgua());
-		    retorno.add(dados);
+			dados = new String[2];
+			dados[0] = "RATEIO DE AGUA DO CONDOMINIO";
+			dados[1] = Util.formatarMoedaReal(emitirContaHelper.getValorRateioAgua());
+			retorno.add(dados);
 		}
 		// Valor do rateio de Esgoto
-		if (emitirContaHelper.getConsumoEsgoto() != null 
-				&& emitirContaHelper.getValorRateioEsgoto() != null
+		if (emitirContaHelper.getConsumoEsgoto() != null && emitirContaHelper.getValorRateioEsgoto() != null
 				&& emitirContaHelper.getValorRateioEsgoto().compareTo(BigDecimal.ZERO) > 0) {
-		    dados = new String[2];
-		    dados[0] = "RATEIO DE ESGOTO DO CONDOMINIO";
-		    dados[1] = Util.formatarMoedaReal(emitirContaHelper.getValorRateioEsgoto());
-		    retorno.add(dados);
+			dados = new String[2];
+			dados[0] = "RATEIO DE ESGOTO DO CONDOMINIO";
+			dados[1] = Util.formatarMoedaReal(emitirContaHelper.getValorRateioEsgoto());
+			retorno.add(dados);
 		}
 		return retorno;
-    }
-	
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Vector gerarLinhasDebitosCobrados(int indicadorDiscriminarDescricao, EmitirContaHelper emitirContaHelper) {
 		Vector retorno = new Vector();
@@ -609,7 +656,8 @@ public class ImpressaoContaImpressoraTermica {
 					for (DebitoCobrado debitoCobrado : dbcb) {
 						dados = new String[3];
 						dados[0] = debitoCobrado.getDescricao();
-						dados[0] = dados[0] + " " + debitoCobrado.getNumeroPrestacaoDebito() + "/" + debitoCobrado.getNumeroPrestacao();
+						dados[0] = dados[0] + " " + debitoCobrado.getNumeroPrestacaoDebito() + "/"
+								+ debitoCobrado.getNumeroPrestacao();
 						dados[2] = Util.formatarMoedaReal(debitoCobrado.getValorPrestacao());
 						retorno.addElement(dados);
 					}
@@ -664,14 +712,14 @@ public class ImpressaoContaImpressoraTermica {
 		return retorno;
 	}
 
-	public String gerarArquivoFormatadoImpressaoTermica(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro, 
-			String[] qualidadeAgua, int contador, List<Integer> idsCondominios) {
+	public String gerarArquivoFormatadoImpressaoTermica(EmitirContaHelper emitirContaHelper,
+			SistemaParametro sistemaParametro, String[] qualidadeAgua, int contador, List<Integer> idsCondominios) {
 
 		StringBuilder retorno = new StringBuilder("");
 		Imovel imovelEmitido;
 		try {
 			imovelEmitido = getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
-			
+
 			LigacaoTipo lta = new LigacaoTipo();
 			lta.setId(LigacaoTipo.LIGACAO_AGUA);
 			LigacaoTipo lte = new LigacaoTipo();
@@ -680,44 +728,55 @@ public class ImpressaoContaImpressoraTermica {
 			try {
 				ConsumoHistorico consumoAgua;
 				ConsumoHistorico consumoEsgoto;
-				
-				if (imovelEmitido.pertenceACondominio() && !idsCondominios.contains(imovelEmitido.getImovelCondominio().getId())) {
-					Imovel imovelCondominio = getControladorImovel().pesquisarImovel(imovelEmitido.getImovelCondominio().getId());
-					
-					consumoAgua = getControladorMicromedicao().obterConsumoHistorico(imovelCondominio, lta, emitirContaHelper.getAmReferencia());
-					consumoEsgoto = getControladorMicromedicao().obterConsumoHistorico(imovelCondominio, lte, emitirContaHelper.getAmReferencia());
+
+				if (imovelEmitido.pertenceACondominio()
+						&& !idsCondominios.contains(imovelEmitido.getImovelCondominio().getId())) {
+					Imovel imovelCondominio = getControladorImovel().pesquisarImovel(
+							imovelEmitido.getImovelCondominio().getId());
+
+					consumoAgua = getControladorMicromedicao().obterConsumoHistorico(imovelCondominio, lta,
+							emitirContaHelper.getAmReferencia());
+					consumoEsgoto = getControladorMicromedicao().obterConsumoHistorico(imovelCondominio, lte,
+							emitirContaHelper.getAmReferencia());
 					System.out.println("Imovel condominio: " + imovelCondominio.getId());
-					gerarDadosComuns(emitirContaHelper, sistemaParametro, retorno, imovelCondominio, consumoAgua, consumoEsgoto);
+					gerarDadosComuns(emitirContaHelper, sistemaParametro, retorno, imovelCondominio, consumoAgua,
+							consumoEsgoto);
 					gerarDadosQualidadeAgua(emitirContaHelper, qualidadeAgua, retorno);
 					gerarInformativoMacroCondominio(emitirContaHelper, retorno, imovelEmitido);
 					idsCondominios.add(imovelEmitido.getImovelCondominio().getId());
-				} 
-				
-				consumoAgua = getControladorMicromedicao().obterConsumoHistorico(imovelEmitido, lta, emitirContaHelper.getAmReferencia());
-				consumoEsgoto = getControladorMicromedicao().obterConsumoHistorico(imovelEmitido, lte, emitirContaHelper.getAmReferencia());
-				
-				gerarDadosComuns(emitirContaHelper, sistemaParametro, retorno, imovelEmitido, consumoAgua, consumoEsgoto);
-				
+				}
+
+				consumoAgua = getControladorMicromedicao().obterConsumoHistorico(imovelEmitido, lta,
+						emitirContaHelper.getAmReferencia());
+				consumoEsgoto = getControladorMicromedicao().obterConsumoHistorico(imovelEmitido, lte,
+						emitirContaHelper.getAmReferencia());
+
+				gerarDadosComuns(emitirContaHelper, sistemaParametro, retorno, imovelEmitido, consumoAgua,
+						consumoEsgoto);
+
 				gerarDadosQualidadeAgua(emitirContaHelper, qualidadeAgua, retorno);
-				retorno.append(formarLinha(7, 0, 53, 708, "DESCRICAO", 0, 0) + formarLinha(7, 0, 571, 708, "CONSUMO", 0, 0) + formarLinha(7, 0, 687, 708, "TOTAL(R$)", 0, 0));
+
+				retorno.append(formarLinha(7, 0, 53, 788, "DESCRICAO", 0, 0)
+						+ formarLinha(7, 0, 571, 788, "CONSUMO", 0, 0) + formarLinha(7, 0, 687, 788, "TOTAL(R$)", 0, 0));
 
 				int ultimaLinhaAgua = 0;
 				int ultimaLinhaPoco = 0;
 				int quantidadeLinhasAtual = 0;
 				int quantidadeMaximaLinhas = 18;
 
-				Vector linhaAgua = this.gerarLinhasTarifaAguaIS(consumoAgua, sistemaParametro, imovelEmitido, emitirContaHelper);
+				Vector linhaAgua = this.gerarLinhasTarifaAguaIS(consumoAgua, sistemaParametro, imovelEmitido,
+						emitirContaHelper);
 				retorno.append(linhaAgua.elementAt(0));
 				ultimaLinhaAgua = (((Integer) linhaAgua.elementAt(1)).intValue());
 				if (ultimaLinhaAgua != 0) {
 					quantidadeLinhasAtual = quantidadeLinhasAtual + ultimaLinhaAgua + 1;
 				}
-				ultimaLinhaAgua *= 34;
+				ultimaLinhaAgua *= 25;
 				Vector tarifasPoco = this.gerarLinhasTarifaPocoIS(emitirContaHelper);
 				ultimaLinhaPoco = ultimaLinhaAgua;
 				for (int i = 0; i < tarifasPoco.size(); i++) {
 					String[] tarifaPoco = (String[]) tarifasPoco.elementAt(i);
-					ultimaLinhaPoco = ultimaLinhaAgua + ((i + 1) * 34);
+					ultimaLinhaPoco = ultimaLinhaAgua + ((i + 1) * 25);
 					quantidadeLinhasAtual++;
 					int deslocaDireitaColuna;
 					if (i == 0 || i == 1 || i == 2) {
@@ -726,63 +785,74 @@ public class ImpressaoContaImpressoraTermica {
 						deslocaDireitaColuna = 2;
 					}
 					if (tarifaPoco[0] != null) {
-						retorno.append(formarLinha(7, 0, 53, 733, tarifaPoco[0], deslocaDireitaColuna * 10, (i + 1) * 34 + ultimaLinhaAgua));
+
+						retorno.append(formarLinha(7, 0, 53, 813, tarifaPoco[0], deslocaDireitaColuna * 10, (i + 1)
+								* 25 + ultimaLinhaAgua));
 					}
 					if (tarifaPoco[1] != null) {
-						retorno.append(formarLinha(7, 0, 571, 733, tarifaPoco[1], 0, (i + 1) * 34 + ultimaLinhaAgua));
+						retorno.append(formarLinha(7, 0, 571, 813, tarifaPoco[1], 0, (i + 1) * 25 + ultimaLinhaAgua));
 					}
 					if (tarifaPoco[2] != null) {
-						retorno.append(formarLinha(7, 0, 697, 733, tarifaPoco[2], 0, (i + 1) * 34 + ultimaLinhaAgua));
+						retorno.append(formarLinha(7, 0, 697, 813, tarifaPoco[2], 0, (i + 1) * 25 + ultimaLinhaAgua));
+
 					}
 				}
-				
+
 				// Dados dos Valores de Rateio de Água e Esgoto
 				Vector rateios = gerarLinhasRateioAguaEsgotoCobrados(emitirContaHelper);
-			    int ultimaLinhaRateio = ultimaLinhaPoco;
-			    for (int i = 0; i < rateios.size(); i++) {
+				int ultimaLinhaRateio = ultimaLinhaPoco;
+				for (int i = 0; i < rateios.size(); i++) {
 					String[] debito = (String[]) rateios.get(i);
-					ultimaLinhaRateio = ultimaLinhaPoco + ((i + 1) * 34);
+					ultimaLinhaRateio = ultimaLinhaPoco + ((i + 1) * 25);
 					quantidadeLinhasAtual++;
 					if (debito[0] != null) {
-						retorno.append(formarLinha(7, 0, 53, 733, debito[0], 0, (i + 1) * 34 + ultimaLinhaPoco));
+
+						retorno.append(formarLinha(7, 0, 53, 813, debito[0], 0, (i + 1) * 25 + ultimaLinhaPoco));
 					}
 					if (debito[1] != null) {
-						retorno.append(formarLinha(7, 0, 697, 733, debito[1], 0, (i + 1) * 34 + ultimaLinhaPoco));
+						retorno.append(formarLinha(7, 0, 697, 813, debito[1], 0, (i + 1) * 25 + ultimaLinhaPoco));
+
 					}
-			    }
-			    
-				int indicadorDiscriminarDescricao = retornaIndicadorDiscriminar(quantidadeMaximaLinhas, quantidadeLinhasAtual, 'd', emitirContaHelper);
+				}
+
+				int indicadorDiscriminarDescricao = retornaIndicadorDiscriminar(quantidadeMaximaLinhas,
+						quantidadeLinhasAtual, 'd', emitirContaHelper);
 				Vector debitos = this.gerarLinhasDebitosCobrados(indicadorDiscriminarDescricao, emitirContaHelper);
 				int ultimaLinhaDebito = ultimaLinhaRateio;
 				for (int i = 0; i < debitos.size(); i++) {
 					String[] debito = (String[]) debitos.elementAt(i);
-					ultimaLinhaDebito = ultimaLinhaRateio + ((i + 1) * 34);
+					ultimaLinhaDebito = ultimaLinhaRateio + ((i + 1) * 25);
 					quantidadeLinhasAtual++;
 					if (debito[0] != null) {
-						retorno.append(formarLinha(7, 0, 53, 733, debito[0], 0, (i + 1) * 34 + ultimaLinhaRateio));
+
+						retorno.append(formarLinha(7, 0, 53, 813, debito[0], 0, (i + 1) * 25 + ultimaLinhaRateio));
 					}
 					if (debito[1] != null) {
-						retorno.append(formarLinha(7, 0, 571, 733, debito[1], 0, (i + 1) * 34 + ultimaLinhaRateio));
+						retorno.append(formarLinha(7, 0, 571, 813, debito[1], 0, (i + 1) * 25 + ultimaLinhaRateio));
 					}
 					if (debito[2] != null) {
-						retorno.append(formarLinha(7, 0, 697, 733, debito[2], 0, (i + 1) * 34 + ultimaLinhaRateio));
+						retorno.append(formarLinha(7, 0, 697, 813, debito[2], 0, (i + 1) * 25 + ultimaLinhaRateio));
+
 					}
 				}
 
-				indicadorDiscriminarDescricao = retornaIndicadorDiscriminar(quantidadeMaximaLinhas, quantidadeLinhasAtual, 'c', emitirContaHelper);
+				indicadorDiscriminarDescricao = retornaIndicadorDiscriminar(quantidadeMaximaLinhas,
+						quantidadeLinhasAtual, 'c', emitirContaHelper);
 				Vector creditos = this.gerarLinhasCreditosRealizados(indicadorDiscriminarDescricao, emitirContaHelper);
 				int ultimaLinhaCredito = ultimaLinhaDebito;
 				for (int i = 0; i < creditos.size(); i++) {
 					String[] credito = (String[]) creditos.elementAt(i);
-					ultimaLinhaCredito = ultimaLinhaDebito + ((i + 1) * 34);
+					ultimaLinhaCredito = ultimaLinhaDebito + ((i + 1) * 25);
 					if (credito[0] != null) {
-						retorno.append(formarLinha(7, 0, 53, 733, credito[0], 0, (i + 1) * 34 + ultimaLinhaDebito));
+
+						retorno.append(formarLinha(7, 0, 53, 813, credito[0], 0, (i + 1) * 25 + ultimaLinhaDebito));
 					}
 					if (credito[1] != null) {
-						retorno.append(formarLinha(7, 0, 571, 733, credito[1], 0, (i + 1) * 34 + ultimaLinhaDebito));
+						retorno.append(formarLinha(7, 0, 571, 813, credito[1], 0, (i + 1) * 25 + ultimaLinhaDebito));
 					}
 					if (credito[2] != null) {
-						retorno.append(formarLinha(7, 0, 697, 733, credito[2], 0, (i + 1) * 34 + ultimaLinhaDebito));
+						retorno.append(formarLinha(7, 0, 697, 813, credito[2], 0, (i + 1) * 25 + ultimaLinhaDebito));
+
 					}
 				}
 				Vector impostos = this.gerarLinhasImpostosRetidosIS(emitirContaHelper);
@@ -795,42 +865,52 @@ public class ImpressaoContaImpressoraTermica {
 						deslocaDireitaColuna = 1;
 					}
 					if (imposto[0] != null) {
-						retorno.append(formarLinha(7, 0, 53, 733, imposto[0], deslocaDireitaColuna * 10, (i + 1) * 34 + ultimaLinhaCredito));
+
+						retorno.append(formarLinha(7, 0, 53, 813, imposto[0], deslocaDireitaColuna * 10, (i + 1) * 25
+								+ ultimaLinhaCredito));
 					}
 					if (imposto[1] != null) {
-						retorno.append(formarLinha(7, 0, 571, 733, imposto[1], 0, (i + 1) * 34 + ultimaLinhaCredito));
+						retorno.append(formarLinha(7, 0, 571, 813, imposto[1], 0, (i + 1) * 25 + ultimaLinhaCredito));
 					}
 					if (imposto[2] != null) {
-						retorno.append(formarLinha(7, 0, 697, 733, imposto[2], 0, (i + 1) * 34 + ultimaLinhaCredito));
+						retorno.append(formarLinha(7, 0, 697, 813, imposto[2], 0, (i + 1) * 25 + ultimaLinhaCredito));
+
 					}
 				}
-				retorno.append(formarLinha(7, 1, 160, 1210, Util.formatarData(emitirContaHelper.getDataVencimentoConta()), 0, 0));
-				
-				retorno.append(formarLinha(4, 0, 640, 1210, Util.formatarMoedaReal(emitirContaHelper.getValorConta()), 0, 0));
-				retorno.append(formarLinha(0, 2, 424, 1265, "OPCAO PELO DEB. AUTOMATICO: ", 0, 0)
-						+ formarLinha(5, 0, 649, 1266, (imovelEmitido.getIndicadorDebitoConta() == null ? "" : imovelEmitido.getId() + ""), 0, 0));
+				retorno.append(formarLinha(7, 1, 20, 1115,
+						Util.formatarData(emitirContaHelper.getDataVencimentoConta()), 0, 0));
+
+				retorno.append(formarLinha(4, 0, 640, 1115, Util.formatarMoedaReal(emitirContaHelper.getValorConta()),
+						0, 0));
+				retorno.append(formarLinha(0, 2, 424, 1270, "OPCAO PELO DEB. AUTOMATICO: ", 0, 0)
+						+ formarLinha(5, 0, 649, 1270, (imovelEmitido.getIndicadorDebitoConta() == null ? ""
+								: imovelEmitido.getId() + ""), 0, 0));
 
 				gerarDadosMensagensConta(emitirContaHelper, retorno);
 
-				retorno.append(formarLinha(0, 2, 344, 1456, emitirContaHelper.getIdImovel() + "", 0, 0)
-						+ formarLinha(0, 2, 443, 1456, Util.formatarAnoMesParaMesAno(emitirContaHelper.getAmReferencia()), 0, 0)
-						+ formarLinha(0, 2, 558, 1456, Util.formatarData(emitirContaHelper.getDataVencimentoConta()), 0, 0)
-						+ formarLinha(0, 2, 694, 1456, Util.formatarMoedaReal(emitirContaHelper.getValorConta()), 0, 0));
-				
+				retorno.append(formarLinha(7, 0, 404, 2606, emitirContaHelper.getIdImovel() + "", 0, 0)
+						+ formarLinha(7, 0, 505, 2606,
+								Util.formatarAnoMesParaMesAno(emitirContaHelper.getAmReferencia()), 0, 0)
+						+ formarLinha(7, 0, 598, 2606, Util.formatarData(emitirContaHelper.getDataVencimentoConta()),
+								0, 0)
+						+ formarLinha(7, 0, 730, 2606, Util.formatarMoedaReal(emitirContaHelper.getValorConta()), 0, 0));
+
 				gerarDadosCodigoDeBarras(emitirContaHelper, retorno, imovelEmitido);
-				
-				retorno.append(formarLinha(5, 0, 109, 1661, emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
-				retorno.append(formarLinha(5, 0, 352, 1661, "4", 0, 0));
-				retorno.append(formarLinha(5, 0, 615, 1661, "" + contador, 0, 0));
+
+				retorno.append(formarLinha(5, 0, 79, 3010, "GRUPO", 0, 0));
+				retorno.append(formarLinha(5, 0, 109, 3035, emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
+				retorno.append(formarLinha(5, 0, 352, 3035, "4", 0, 0));
+				retorno.append(formarLinha(5, 0, 615, 3035, "" + contador, 0, 0));
+				retorno.append(formarLinha(5, 0, 615, 1661, "" + 1, 0, 0));
 				
 				Object[] dadosAgenciaReguladora = getControladorFaturamento().obterDadosAgenciaReguladora();
-						
+
 				this.gerarLinhasAliquotasImpostos(emitirContaHelper, sistemaParametro, dadosAgenciaReguladora, retorno);
-				
+
 				this.gerarLinhaTelefoneAgenciaReguladora(retorno);
 
 				retorno.append("FORM\n" + "PRINT\n");
-			
+
 				return retorno.toString();
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -841,15 +921,18 @@ public class ImpressaoContaImpressoraTermica {
 		return retorno.toString();
 
 	}
-	
-	private void gerarDadosComuns(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro, StringBuilder retorno, Imovel imovelEmitido,
-			ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto) throws ControladorException {
-		
-		MedicaoHistorico medicaoHistoricoAgua = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(imovelEmitido.getId(),
-				emitirContaHelper.getAmReferencia());
-		MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(imovelEmitido.getId(),
-				emitirContaHelper.getAmReferencia());
-		
+
+	private void gerarDadosComuns(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro,
+			StringBuilder retorno, Imovel imovelEmitido, ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto)
+			throws ControladorException {
+
+		MedicaoHistorico medicaoHistoricoAgua = getControladorMicromedicao()
+				.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(imovelEmitido.getId(),
+						emitirContaHelper.getAmReferencia());
+		MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao()
+				.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(imovelEmitido.getId(),
+						emitirContaHelper.getAmReferencia());
+
 		String endereco = "";
 		String municipioEntrega = "";
 		String bairroEntrega = "";
@@ -861,13 +944,14 @@ public class ImpressaoContaImpressoraTermica {
 
 		Collection colecaoClienteImovel;
 		try {
-			colecaoClienteImovel = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(imovelEmitido.getId());
+			colecaoClienteImovel = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(imovelEmitido
+					.getId());
 			if (colecaoClienteImovel != null && !colecaoClienteImovel.isEmpty()) {
 				ClienteImovel clienteImovelRespConta = (ClienteImovel) colecaoClienteImovel.iterator().next();
-				
+
 				if (clienteImovelRespConta != null) {
 					Cliente cliente = clienteImovelRespConta.getCliente();
-					
+
 					if (cliente != null) {
 						if (cliente.getCnpjFormatado() != null) {
 							cpfCnpjFormatado = cliente.getCnpjFormatado();
@@ -875,92 +959,115 @@ public class ImpressaoContaImpressoraTermica {
 							cpfCnpjFormatado = cliente.getCpfFormatado();
 						}
 					}
-					
-					if (cliente != null && imovelEmitido.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)) {
-						
-						String[] enderecoCliente = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDivididoCosanpa(cliente.getId());
+
+					if (cliente != null
+							&& imovelEmitido.getImovelContaEnvio().getId()
+									.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)) {
+
+						String[] enderecoCliente = getControladorEndereco()
+								.pesquisarEnderecoClienteAbreviadoDivididoCosanpa(cliente.getId());
 						bairroEntrega = enderecoCliente[3];
 						municipioEntrega = enderecoCliente[1];
 						ufEntrega = enderecoCliente[2];
 						cepEntrega = enderecoCliente[4];
 						logCepClie = enderecoCliente[5];
 						logBairroClie = enderecoCliente[6];
-						
-						endereco = enderecoCliente[0] + " - " + bairroEntrega + " " + municipioEntrega + " " + ufEntrega + " " + cepEntrega;
-						
+
+						endereco = enderecoCliente[0] + " - " + bairroEntrega + " " + municipioEntrega + " "
+								+ ufEntrega + " " + cepEntrega;
+
 					}
 				}
 			}
-			
-			String[] enderecoImovel2 = getControladorEndereco().pesquisarEnderecoFormatadoDivididoCosanpa(imovelEmitido.getId());
-			
+
+			String[] enderecoImovel2 = getControladorEndereco().pesquisarEnderecoFormatadoDivididoCosanpa(
+					imovelEmitido.getId());
+
 			String municipioImovel = enderecoImovel2[1];
 			String logCepImovel = "";
 			String logBairroImovel = "";
-			
+
 			logCepImovel = enderecoImovel2[5];
 			logBairroImovel = enderecoImovel2[6];
-			
+
 			if (municipioEntrega.equalsIgnoreCase("")) {
 				municipioEntrega = municipioImovel;
 			}
-			
+
 			if (logCepClie.trim().equalsIgnoreCase("")) {
 				logCepClie = logCepImovel;
 			}
-			
+
 			if (logBairroClie.trim().equalsIgnoreCase("")) {
 				logBairroClie = logBairroImovel;
 			}
-			
+
 			if (endereco == null || endereco.trim().equalsIgnoreCase("") || endereco.trim().equalsIgnoreCase("-")) {
 				endereco = getControladorEndereco().pesquisarEnderecoFormatado(imovelEmitido.getId());
 			}
-			
-			gerarInformacoesBasicas(emitirContaHelper, sistemaParametro, retorno, imovelEmitido, endereco, cpfCnpjFormatado);
-			
-			String diasConsumo = obterDiasConsumo(emitirContaHelper, medicaoHistoricoAgua, medicaoHistoricoPoco, consumoAgua, consumoEsgoto);
-			
-			retorno.append(formarLinha(7, 0, 48, 301, obterNumeroHidrometro(imovelEmitido), 0, 0));
-			retorno.append(formarLinha(7, 0, 248, 301, obterDataInstalacaoHidroemtro(imovelEmitido), 0, 0));
-			retorno.append(formarLinha(7, 0, 446, 301, obterSituacaoAgua(emitirContaHelper.getDescricaoLigacaoAguaSituacao()), 0, 0));
-			retorno.append(formarLinha(7, 0, 627, 301, emitirContaHelper.getDescricaoLigacaoEsgotoSituacao(), 0, 0));
-			
+
+			gerarInformacoesBasicas(emitirContaHelper, sistemaParametro, retorno, imovelEmitido, endereco,
+					cpfCnpjFormatado);
+
+			String diasConsumo = obterDiasConsumo(emitirContaHelper, medicaoHistoricoAgua, medicaoHistoricoPoco,
+					consumoAgua, consumoEsgoto);
+
+			retorno.append(formarLinha(7, 0, 20, 300, obterNumeroHidrometro(imovelEmitido), 0, 0));
+			retorno.append(formarLinha(7, 0, 255, 300, obterDataInstalacaoHidroemtro(imovelEmitido), 0, 0));
+			retorno.append(formarLinha(7, 0, 500, 300,
+					obterSituacaoAgua(emitirContaHelper.getDescricaoLigacaoAguaSituacao()), 0, 0));
+			retorno.append(formarLinha(7, 0, 688, 310, emitirContaHelper.getDescricaoLigacaoEsgotoSituacao(), 0, 0));
+
 			// Leitura Anterior
 			String leituraAnteriorInformada = obterLeituraAnteriorInformada(medicaoHistoricoAgua, medicaoHistoricoPoco);
 			String leituraAtualInformada = obterLeituraAtualInformada(medicaoHistoricoAgua, medicaoHistoricoPoco);
-			retorno.append(formarLinha(7, 0, 188, 330, "LEITURA", 0, 0) + formarLinha(7, 0, 190, 354, leituraAnteriorInformada, 0, 0) + formarLinha(7, 0, 190, 378, leituraAtualInformada, 0, 0));
-			
-			String dataLeituraAnteriorInformada = obterDataLeituraAnteriorInformada(medicaoHistoricoAgua, medicaoHistoricoPoco, emitirContaHelper, imovelEmitido.getId());
-			String dataLeituraAtualInformada = obterDataLeituraAtualInformada(medicaoHistoricoAgua, medicaoHistoricoPoco);
-			retorno.append(formarLinha(7, 0, 320, 330, "DATA", 0, 0) + formarLinha(7, 0, 298, 354, dataLeituraAnteriorInformada, 0, 0) + formarLinha(7, 0, 298, 378, dataLeituraAtualInformada, 0, 0));
-			
+			// retorno.append(formarLinha(7, 0, 188, 330, "LEITURA", 0, 0) +
+			// formarLinha(7, 0, 190, 354, leituraAnteriorInformada, 0, 0) +
+			// formarLinha(7, 0, 190, 378, leituraAtualInformada, 0, 0));
+
+			String dataLeituraAnteriorInformada = obterDataLeituraAnteriorInformada(medicaoHistoricoAgua,
+					medicaoHistoricoPoco, emitirContaHelper, imovelEmitido.getId());
+			String dataLeituraAtualInformada = obterDataLeituraAtualInformada(medicaoHistoricoAgua,
+					medicaoHistoricoPoco);
+			// retorno.append(formarLinha(7, 0, 320, 330, "DATA", 0, 0) +
+			// formarLinha(7, 0, 298, 354, dataLeituraAnteriorInformada, 0, 0) +
+			// formarLinha(7, 0, 298, 378, dataLeituraAtualInformada, 0, 0));
+
 			// Leitura Atual
-			retorno.append(formarLinha(7, 0, 37, 354, "ANTERIOR", 0, 0) + formarLinha(7, 0, 37, 378, "ATUAL", 0, 0));
-			
+			// retorno.append(formarLinha(7, 0, 37, 354, "ANTERIOR", 0, 0) +
+			// formarLinha(7, 0, 37, 378, "ATUAL", 0, 0));
+
 			if (medicaoHistoricoAgua != null) {
 				if (medicaoHistoricoAgua.getLeituraAnormalidadeFaturamento() != null) {
-					retorno.append(formarLinha(0, 2, 460, 374, "ANORM. LEITURA: " + medicaoHistoricoAgua.getLeituraAnormalidadeFaturamento().getDescricao(), 0, 0));
+					retorno.append(formarLinha(0, 2, 430, 374, "ANORM. LEITURA: "
+							+ medicaoHistoricoAgua.getLeituraAnormalidadeFaturamento().getDescricao(), 0, 0));
 				}
 			}
-			
+
 			// Leitura Anterior
 			String leituraAnteriorFaturada = obterLeituraAnteriorFaturada(medicaoHistoricoAgua, medicaoHistoricoPoco);
-			String leituraAtualFaturada = obterLeituraAtualFaturada(medicaoHistoricoAgua, medicaoHistoricoPoco, consumoAgua);
-			retorno.append(formarLinha(7, 0, 163, 412, "FATURADO", 0, 0) + formarLinha(7, 0, 190, 436, leituraAnteriorFaturada, 0, 0)
-					+ formarLinha(7, 0, 190, 460, leituraAtualFaturada, 0, 0));
-			
+			String leituraAtualFaturada = obterLeituraAtualFaturada(medicaoHistoricoAgua, medicaoHistoricoPoco,
+					consumoAgua);
+			retorno.append(formarLinha(7, 0, 163, 352, "LEITURA", 0, 0) + formarLinha(7, 0, 163, 372, "FATURADA", 0, 0)
+					+ formarLinha(7, 0, 190, 396, leituraAnteriorFaturada, 0, 0)
+					+ formarLinha(7, 0, 190, 420, leituraAtualFaturada, 0, 0));
+
 			// Leitura Atual
-			String dataLeituraAnteriorFaturada = obterDataLeituraAnteriorFaturada(medicaoHistoricoAgua, medicaoHistoricoPoco);
+			String dataLeituraAnteriorFaturada = obterDataLeituraAnteriorFaturada(medicaoHistoricoAgua,
+					medicaoHistoricoPoco);
 			String dataLeituraAtualFaturada = obterDataLeituraAtualFaturada(medicaoHistoricoAgua, medicaoHistoricoPoco);
-			retorno.append(formarLinha(7, 0, 313, 412, "DATA", 0, 0) + formarLinha(7, 0, 285, 436, dataLeituraAnteriorFaturada, 0, 0)
-					+ formarLinha(7, 0, 285, 460, dataLeituraAtualFaturada, 0, 0));
-			
-			gerarDadosConsumoTotal(retorno, imovelEmitido, consumoAgua, consumoEsgoto, medicaoHistoricoAgua, medicaoHistoricoPoco);
-			
+
+			retorno.append(formarLinha(7, 0, 313, 372, "DATA", 0, 0)
+					+ formarLinha(7, 0, 285, 396, dataLeituraAnteriorFaturada, 0, 0)
+
+					+ formarLinha(7, 0, 285, 420, dataLeituraAtualFaturada, 0, 0));
+
+			gerarDadosConsumoTotal(retorno, imovelEmitido, consumoAgua, consumoEsgoto, medicaoHistoricoAgua,
+					medicaoHistoricoPoco);
+
 			// Numero de dias
-			retorno.append(formarLinha(7, 0, 745, 412, "DIAS", 0, 0) + formarLinha(7, 0, 760, 436, diasConsumo, 0, 0));
-			
+			retorno.append(formarLinha(7, 0, 745, 372, "DIAS", 0, 0) + formarLinha(7, 0, 760, 396, diasConsumo, 0, 0));
+
 			String anormalidadeConsumo = null;
 			if (consumoAgua != null) {
 				if (consumoAgua.getConsumoAnormalidade() != null) {
@@ -969,40 +1076,44 @@ public class ImpressaoContaImpressoraTermica {
 					}
 				}
 				if (anormalidadeConsumo != null) {
-					retorno.append(formarLinha(0, 2, 460, 460, "ANORM. CONSUMO: " + anormalidadeConsumo, 0, 0));
+					retorno.append(formarLinha(0, 2, 430, 460, "ANORM. CONSUMO: " + anormalidadeConsumo, 0, 0));
 				}
 			}
-			
-			retorno.append(formarLinha(7, 0, 37, 436, "ANTERIOR", 0, 0) + formarLinha(7, 0, 37, 460, "ATUAL", 0, 0));
-			
-			retorno.append(formarLinha(7, 0, 50, 499, "ULTIMOS CONSUMOS", 0, 0));
-			retorno.append("LINE 115 525 115 665 1\n");
-			
+
+			retorno.append(formarLinha(7, 0, 37, 396, "ANTERIOR", 0, 0) + formarLinha(7, 0, 37, 420, "ATUAL", 0, 0));
+
+			retorno.append(formarLinha(7, 0, 50, 579, "ULTIMOS CONSUMOS", 0, 0));
+			retorno.append("LINE 115 605 115 745 1\n");
+
 			// Ultimos Consumos
-			
+
 			int flag = 0;
 			int soma = 0;
 			int mesesDeConsumo = 0;
-			
-			
+
 			for (int i = 0; i < 6; i++) {
-				
-				Object[] consumoAnterior = obterConsumoAnteriorIS(imovelEmitido.getId(), emitirContaHelper.getAmReferencia(), i + 1, 1, 1);
-				MedicaoHistorico medicaoAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(
-						imovelEmitido.getId(), Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), i + 1));
-				retorno.append(formarLinha(0, 2, 44, 520,
-						Util.formatarAnoMesParaMesAno(Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), i + 1)) + "", 0, i * 25));
-				
+
+				Object[] consumoAnterior = obterConsumoAnteriorIS(imovelEmitido.getId(),
+						emitirContaHelper.getAmReferencia(), i + 1, 1, 1);
+				MedicaoHistorico medicaoAnterior = getControladorMicromedicao()
+						.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(imovelEmitido.getId(),
+								Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), i + 1));
+
+				retorno.append(formarLinha(0, 2, 44, 602,
+
+				Util.formatarAnoMesParaMesAno(Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), i + 1))
+						+ "", 0, i * 25));
+
 				String anormalidade = "";
 				String consumoMesAnterior = "";
-				
+
 				if (medicaoAnterior != null) {
 					if (medicaoAnterior.getLeituraAnormalidadeFaturamento() != null) {
 						anormalidade = "A. Leit.:" + medicaoAnterior.getLeituraAnormalidadeFaturamento().getId() + "";
 						flag++;
 					}
 				}
-				
+
 				if (consumoAnterior != null) {
 					if (consumoAnterior[0] != null) {
 						if (medicaoHistoricoAgua == null && medicaoHistoricoPoco == null) {
@@ -1011,24 +1122,28 @@ public class ImpressaoContaImpressoraTermica {
 						}
 						consumoMesAnterior = consumoAnterior[0] + " m3 ";
 					}
-					
+
 					if (consumoAnterior[1] != null && anormalidade.equals("")) {
 						anormalidade = "A. Cons.:" + consumoAnterior[2] + "";
 					}
-					
+
 					flag++;
 				}
-				retorno.append(formarLinha(0, 2, 127, 520, consumoMesAnterior + anormalidade, 0, i * 25));
+
+				retorno.append(formarLinha(0, 2, 127, 602, consumoMesAnterior + anormalidade, 0, i * 25));
+
 			}
 			if (flag == 0) {
-				retorno.append(formarLinha(7, 0, 50, 499, "HISTORICO DE CONSUMO", 0, 0) + formarLinha(7, 0, 50, 520, "INEXISTENTE", 0, 0));
+				retorno.append(formarLinha(7, 0, 50, 484, "HISTORICO DE CONSUMO", 0, 0)
+						+ formarLinha(7, 0, 50, 505, "INEXISTENTE", 0, 0));
 			}
-			
-			gerarDadosMedia(retorno, medicaoHistoricoAgua, medicaoHistoricoPoco, consumoAgua, consumoEsgoto, soma, mesesDeConsumo);
+
+			gerarDadosMedia(retorno, medicaoHistoricoAgua, medicaoHistoricoPoco, consumoAgua, consumoEsgoto, soma,
+					mesesDeConsumo);
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void gerarDadosMensagensConta(EmitirContaHelper emitirContaHelper, StringBuilder retorno) {
@@ -1047,28 +1162,29 @@ public class ImpressaoContaImpressoraTermica {
 		}
 
 		if (msgConta.length() > 60) {
-			retorno.append(formarLinha(7, 0, 35, 1300, msgConta.substring(0, 60), 0, 0));
+			retorno.append(formarLinha(7, 0, 35, 1815, msgConta.substring(0, 60), 0, 0));
 			if (msgConta.length() > 120) {
-				retorno.append(formarLinha(7, 0, 35, 1320, msgConta.substring(60, 120), 0, 0));
+				retorno.append(formarLinha(7, 0, 35, 1835, msgConta.substring(60, 120), 0, 0));
 				if (msgConta.length() > 180) {
-					retorno.append(formarLinha(7, 0, 35, 1340, msgConta.substring(120, 180), 0, 0));
+					retorno.append(formarLinha(7, 0, 35, 1855, msgConta.substring(120, 180), 0, 0));
 					if (msgConta.length() > 240) {
-						retorno.append(formarLinha(7, 0, 35, 1360, msgConta.substring(180, 240), 0, 0));
+						retorno.append(formarLinha(7, 0, 35, 1875, msgConta.substring(180, 240), 0, 0));
 					} else {
-						retorno.append(formarLinha(7, 0, 35, 1360, msgConta.substring(180), 0, 0));
+						retorno.append(formarLinha(7, 0, 35, 1875, msgConta.substring(180), 0, 0));
 					}
 				} else {
-					retorno.append(formarLinha(7, 0, 35, 1340, msgConta.substring(120), 0, 0));
+					retorno.append(formarLinha(7, 0, 35, 1855, msgConta.substring(120), 0, 0));
 				}
 			} else {
-				retorno.append(formarLinha(7, 0, 35, 1320, msgConta.substring(60), 0, 0));
+				retorno.append(formarLinha(7, 0, 35, 1835, msgConta.substring(60), 0, 0));
 			}
 		} else {
-			retorno.append(formarLinha(7, 0, 35, 1300, msgConta, 0, 0));
+			retorno.append(formarLinha(7, 0, 35, 1815, msgConta, 0, 0));
 		}
 	}
 
-	private void gerarDadosCodigoDeBarras(EmitirContaHelper emitirContaHelper, StringBuilder retorno, Imovel imovelEmitido) throws ControladorException {
+	private void gerarDadosCodigoDeBarras(EmitirContaHelper emitirContaHelper, StringBuilder retorno,
+			Imovel imovelEmitido) throws ControladorException {
 		if (!imovelEmitido.getIndicadorDebitoConta().equals(Imovel.INDICADOR_DEBITO_AUTOMATICO)) {
 			Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
 			// formata ano mes para mes ano
@@ -1082,92 +1198,111 @@ public class ImpressaoContaImpressoraTermica {
 
 			if (emitirContaHelper.getValorConta() != null) {
 				if (emitirContaHelper.getValorConta().compareTo(new BigDecimal("0.00")) != 0) {
-					representacaoNumericaCodBarra = this.getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(3,
-							emitirContaHelper.getValorConta(), emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAno,
-							digitoVerificadorConta, null, null, null, null, null, null, null);
+					representacaoNumericaCodBarra = this.getControladorArrecadacao()
+							.obterRepresentacaoNumericaCodigoBarra(3, emitirContaHelper.getValorConta(),
+									emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAno,
+									digitoVerificadorConta, null, null, null, null, null, null, null);
 
 					// Linha 24
 					// Formata a representação númerica do código de
 					// barras
-					String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11) + "-"
-							+ representacaoNumericaCodBarra.substring(11, 12) + " " + representacaoNumericaCodBarra.substring(12, 23) + "-"
-							+ representacaoNumericaCodBarra.substring(23, 24) + " " + representacaoNumericaCodBarra.substring(24, 35) + "-"
-							+ representacaoNumericaCodBarra.substring(35, 36) + " " + representacaoNumericaCodBarra.substring(36, 47) + "-"
+					String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11)
+							+ "-" + representacaoNumericaCodBarra.substring(11, 12) + " "
+							+ representacaoNumericaCodBarra.substring(12, 23) + "-"
+							+ representacaoNumericaCodBarra.substring(23, 24) + " "
+							+ representacaoNumericaCodBarra.substring(24, 35) + "-"
+							+ representacaoNumericaCodBarra.substring(35, 36) + " "
+							+ representacaoNumericaCodBarra.substring(36, 47) + "-"
 							+ representacaoNumericaCodBarra.substring(47, 48);
 					emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
 
 					// Linha 25
 					String representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11)
-							+ representacaoNumericaCodBarra.substring(12, 23) + representacaoNumericaCodBarra.substring(24, 35)
+							+ representacaoNumericaCodBarra.substring(12, 23)
+							+ representacaoNumericaCodBarra.substring(24, 35)
 							+ representacaoNumericaCodBarra.substring(36, 47);
 					emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
 				}
 
-				String representacaoNumericaCodBarraFormatada = emitirContaHelper.getRepresentacaoNumericaCodBarraFormatada();
+				String representacaoNumericaCodBarraFormatada = emitirContaHelper
+						.getRepresentacaoNumericaCodBarraFormatada();
 				if (representacaoNumericaCodBarraFormatada != null) {
-					retorno.append(formarLinha(5, 0, 66, 1515, representacaoNumericaCodBarraFormatada, 0, 0));
-					String representacaoCodigoBarrasSemDigitoVerificador = emitirContaHelper.getRepresentacaoNumericaCodBarraSemDigito();
-					retorno.append("B I2OF5 1 2 90 35 1538 " + representacaoCodigoBarrasSemDigitoVerificador + "\n");
+
+					retorno.append(formarLinha(5, 0, 66, 2840, representacaoNumericaCodBarraFormatada, 0, 0));
+					String representacaoCodigoBarrasSemDigitoVerificador = emitirContaHelper
+							.getRepresentacaoNumericaCodBarraSemDigito();
+					retorno.append("B I2OF5 1 2 120 35 2863 " + representacaoCodigoBarrasSemDigitoVerificador + "\n");
 				}
 			}
 		} else {
-			retorno.append(formarLinha(4, 0, 182, 1538, "DEBITO AUTOMATICO", 0, 0));
+			retorno.append(formarLinha(4, 0, 182, 2863, "DEBITO AUTOMATICO", 0, 0));
+
 		}
 	}
 
-	private void gerarDadosMedia(StringBuilder retorno, MedicaoHistorico medicaoHistoricoAgua, MedicaoHistorico medicaoHistoricoPoco,
-			ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto, int soma, int mesesDeConsumo) {
+	private void gerarDadosMedia(StringBuilder retorno, MedicaoHistorico medicaoHistoricoAgua,
+			MedicaoHistorico medicaoHistoricoPoco, ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto,
+			int soma, int mesesDeConsumo) {
 		String media = obterMedia(medicaoHistoricoAgua, medicaoHistoricoPoco, consumoAgua, consumoEsgoto);
 		if (medicaoHistoricoAgua == null && medicaoHistoricoPoco == null && mesesDeConsumo != 0) {
 			media = (soma / mesesDeConsumo) + "";
 		}
-		retorno.append(formarLinha(7, 0, 75, 672, "MEDIA(m3):", 0, 0) + formarLinha(7, 0, 195, 672, media, 0, 0));
+
+		retorno.append(formarLinha(7, 0, 75, 742, "MEDIA(m3):", 0, 0) + formarLinha(7, 0, 195, 742, media, 0, 0));
+
 	}
 
-	private void gerarDadosQualidadeAgua(EmitirContaHelper emitirContaHelper, String[] qualidadeAgua, StringBuilder retorno) {
-		retorno.append(formarLinha(7, 0, 448, 496, "QUALIDADE DA AGUA", 0, 0));
-		retorno.append(formarLinha(0, 0, 672, 505, "Ref: ", 0, 0)+ formarLinha(0, 0, 705, 505, Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + ""), 0, 0));
-		retorno.append(formarLinha(7, 0, 287, 520, "PARAMETROS", 0, 0) + formarLinha(7, 0, 439, 520, "Port. 518", 0, 0)
-				+ formarLinha(7, 0, 540, 520, "ANALISADO", 0, 0) + formarLinha(7, 0, 672, 520, "CONFORME", 0, 0));
+	private void gerarDadosQualidadeAgua(EmitirContaHelper emitirContaHelper, String[] qualidadeAgua,
+			StringBuilder retorno) {
+
+		retorno.append(formarLinha(7, 0, 425, 565, "QUALIDADE DA AGUA", 0, 0));
+		retorno.append(formarLinha(7, 0, 645, 565, "Ref: ", 0, 0)
+				+ formarLinha(7, 0, 690, 565,
+						Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + ""), 0, 0));
+		retorno.append(formarLinha(7, 0, 287, 590, "PARAMETROS", 0, 0) + formarLinha(7, 0, 418, 590, "Port. 518", 0, 0)
+				+ formarLinha(7, 0, 540, 590, "ANALISADO", 0, 0) + formarLinha(7, 0, 672, 590, "CONFORME", 0, 0));
 
 		// Daniel - Parametro
-		retorno.append(formarLinha(0, 0, 287, 552, "COR(uH)", 0, 0));
-		retorno.append(formarLinha(0, 0, 287, 571, "TURBIDEZ(UT)", 0, 0));
-		retorno.append(formarLinha(0, 0, 287, 590, "CLORO(mg/L)", 0, 0));
-		retorno.append(formarLinha(0, 0, 287, 609, "FLUOR(mg/L)", 0, 0));
-		retorno.append(formarLinha(0, 0, 287, 628, "COLIFORME TOTAL", 0, 0) + formarLinha(0, 0, 287, 640, "Pres/Aus)", 0, 0));
-		retorno.append(formarLinha(0, 0, 287, 657, "COLIFORME TERMO", 0, 0) + formarLinha(0, 0, 287, 671, "TOLER.(Pres/Aus)", 0, 0));
+		retorno.append(formarLinha(7, 0, 287, 620, "COR(uH)", 0, 0));
+		retorno.append(formarLinha(7, 0, 287, 640, "TURBIDEZ(UT)", 0, 0));
+		retorno.append(formarLinha(7, 0, 287, 660, "CLORO(mg/L)", 0, 0));
+		retorno.append(formarLinha(7, 0, 287, 680, "FLUOR(mg/L)", 0, 0));
+		retorno.append(formarLinha(7, 0, 287, 700, "COLIFORME TOTAL", 0, 0)
+				+ formarLinha(7, 0, 287, 720, "Pres/Aus)", 0, 0));
+		retorno.append(formarLinha(7, 0, 287, 740, "COLIFORME TERMO", 0, 0)
+				+ formarLinha(7, 0, 287, 760, "TOLER.(Pres/Aus)", 0, 0));
 		// Qualidade da agua
 		// Daniel - Exigido !=Alterar
-		retorno.append(formarLinha(0, 0, 440, 552, qualidadeAgua[6], 0, 0));
-		retorno.append(formarLinha(0, 0, 440, 571, qualidadeAgua[7], 0, 0));
-		retorno.append(formarLinha(0, 0, 440, 590, qualidadeAgua[9], 0, 0));
-		retorno.append(formarLinha(0, 0, 440, 609, qualidadeAgua[8], 0, 0));
-		retorno.append(formarLinha(0, 0, 440, 628, qualidadeAgua[10], 0, 0));
-		retorno.append(formarLinha(0, 0, 440, 657, qualidadeAgua[11], 0, 0));
+		retorno.append(formarLinha(7, 0, 469, 620, qualidadeAgua[6], 0, 0));
+		retorno.append(formarLinha(7, 0, 469, 640, qualidadeAgua[7], 0, 0));
+		retorno.append(formarLinha(7, 0, 469, 660, qualidadeAgua[9], 0, 0));
+		retorno.append(formarLinha(7, 0, 469, 680, qualidadeAgua[8], 0, 0));
+		retorno.append(formarLinha(7, 0, 469, 700, qualidadeAgua[10], 0, 0));
+		retorno.append(formarLinha(7, 0, 469, 740, qualidadeAgua[11], 0, 0));
 
 		// Daniel - Analisado
-		retorno.append(formarLinha(0, 0, 582, 552, qualidadeAgua[12], 0, 0));
-		retorno.append(formarLinha(0, 0, 582, 571, qualidadeAgua[13], 0, 0));
-		retorno.append(formarLinha(0, 0, 582, 590, qualidadeAgua[15], 0, 0));
-		retorno.append(formarLinha(0, 0, 582, 609, qualidadeAgua[14], 0, 0));
-		retorno.append(formarLinha(0, 0, 582, 628, qualidadeAgua[16], 0, 0));
-		retorno.append(formarLinha(0, 0, 582, 657, qualidadeAgua[17], 0, 0));
+		retorno.append(formarLinha(7, 0, 582, 620, qualidadeAgua[12], 0, 0));
+		retorno.append(formarLinha(7, 0, 582, 640, qualidadeAgua[13], 0, 0));
+		retorno.append(formarLinha(7, 0, 582, 660, qualidadeAgua[15], 0, 0));
+		retorno.append(formarLinha(7, 0, 582, 680, qualidadeAgua[14], 0, 0));
+		retorno.append(formarLinha(7, 0, 582, 700, qualidadeAgua[16], 0, 0));
+		retorno.append(formarLinha(7, 0, 582, 740, qualidadeAgua[17], 0, 0));
 
 		// daniel - Conforme
-		retorno.append(formarLinha(0, 0, 726, 552, qualidadeAgua[18], 0, 0));
-		retorno.append(formarLinha(0, 0, 726, 571, qualidadeAgua[19], 0, 0));
-		retorno.append(formarLinha(0, 0, 726, 590, qualidadeAgua[21], 0, 0));
-		retorno.append(formarLinha(0, 0, 726, 609, qualidadeAgua[20], 0, 0));
-		retorno.append(formarLinha(0, 0, 726, 628, qualidadeAgua[22], 0, 0));
-		retorno.append(formarLinha(0, 0, 726, 657, qualidadeAgua[23], 0, 0));
+		retorno.append(formarLinha(7, 0, 726, 620, qualidadeAgua[18], 0, 0));
+		retorno.append(formarLinha(7, 0, 726, 640, qualidadeAgua[19], 0, 0));
+		retorno.append(formarLinha(7, 0, 726, 660, qualidadeAgua[21], 0, 0));
+		retorno.append(formarLinha(7, 0, 726, 680, qualidadeAgua[20], 0, 0));
+		retorno.append(formarLinha(7, 0, 726, 700, qualidadeAgua[22], 0, 0));
+		retorno.append(formarLinha(7, 0, 726, 740, qualidadeAgua[23], 0, 0));
+
 	}
 
-	private void gerarDadosConsumoTotal(StringBuilder retorno, Imovel imovelEmitido, ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto,
-			MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco)
+	private void gerarDadosConsumoTotal(StringBuilder retorno, Imovel imovelEmitido, ConsumoHistorico consumoAgua,
+			ConsumoHistorico consumoEsgoto, MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco)
 			throws ControladorException {
 		String consumo = obterConsumo(medicaoAgua, medicaoPoco, consumoAgua, consumoEsgoto);
-		
+
 		// Consumo
 		if (imovelPossuiConsumo(imovelEmitido)) {
 			if (imovelEmitido.getLigacaoAguaSituacao().getId() == LigacaoAguaSituacao.LIGADO) {
@@ -1176,42 +1311,50 @@ public class ImpressaoContaImpressoraTermica {
 				consumo += "/" + consumoEsgoto.getConsumoRateio();
 			}
 
-			retorno.append(formarLinha(7, 0, 414, 412, "CONSUMO/RATEIO (m3)", 0, 0) + formarLinha(7, 0, 511, 436, consumo, 0, 0));
+			retorno.append(formarLinha(7, 0, 412, 372, "CONSUMO/RATEIO (m3)", 0, 0)
+					+ formarLinha(7, 0, 511, 396, consumo, 0, 0));
 		} else if (consumoAgua != null) {
-			ConsumoTipo consumoTipoAgua = getControladorMicromedicao().consultarDadosConsumoTipoConsumoHistorico(consumoAgua);
+			ConsumoTipo consumoTipoAgua = getControladorMicromedicao().consultarDadosConsumoTipoConsumoHistorico(
+					consumoAgua);
 			if (consumoTipoAgua != null) {
 				if (consumoTipoAgua.getId() != null) {
-					retorno.append(formarLinha(7, 0, 412, 412, getTipoConsumoToPrint(consumoTipoAgua.getId()), 0, 0));
+					retorno.append(formarLinha(7, 0, 412, 372, getTipoConsumoToPrint(consumoTipoAgua.getId()), 0, 0));
 				}
 			}
-			retorno.append(formarLinha(7, 0, 511, 436, consumo, 0, 0));
+			retorno.append(formarLinha(7, 0, 511, 396, consumo, 0, 0));
 		} else if (consumoEsgoto != null) {
-			ConsumoTipo consumoTipoEsgoto = getControladorMicromedicao().consultarDadosConsumoTipoConsumoHistorico(consumoEsgoto);
+			ConsumoTipo consumoTipoEsgoto = getControladorMicromedicao().consultarDadosConsumoTipoConsumoHistorico(
+					consumoEsgoto);
 			if (consumoTipoEsgoto != null) {
 				if (consumoTipoEsgoto.getDescricao() != null) {
-					retorno.append(formarLinha(7, 0, 412, 412, consumoTipoEsgoto.getDescricao(), 0, 0));
+					retorno.append(formarLinha(7, 0, 412, 372, consumoTipoEsgoto.getDescricao(), 0, 0));
 				}
 			}
-			retorno.append(formarLinha(7, 0, 511, 436, consumo, 0, 0));
+			retorno.append(formarLinha(7, 0, 511, 396, consumo, 0, 0));
 		}
 	}
 
 	private boolean imovelPossuiConsumo(Imovel imovelEmitido) {
-		return (imovelEmitido.getLigacaoAguaSituacao().getId() == LigacaoAguaSituacao.LIGADO || imovelEmitido.getLigacaoEsgotoSituacao().getId() == LigacaoEsgotoSituacao.LIGADO)
+		return (imovelEmitido.getLigacaoAguaSituacao().getId() == LigacaoAguaSituacao.LIGADO || imovelEmitido
+				.getLigacaoEsgotoSituacao().getId() == LigacaoEsgotoSituacao.LIGADO)
 				&& imovelEmitido.getImovelCondominio() != null;
 	}
 
-	private String obterDiasConsumo(EmitirContaHelper emitirContaHelper, MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco,
-			ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto) {
+	private String obterDiasConsumo(EmitirContaHelper emitirContaHelper, MedicaoHistorico medicaoAgua,
+			MedicaoHistorico medicaoPoco, ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto) {
 		String diasConsumo = "";
-		
+
 		if (medicaoAgua != null) {
 
 			if (consumoAgua != null) {
 				if (medicaoAgua.getLeituraAtualFaturamento() != 0) {
-					diasConsumo = Util.obterQuantidadeDiasEntreDuasDatas(medicaoAgua.getDataLeituraAnteriorFaturamento(), medicaoAgua.getDataLeituraAtualFaturamento()) + "";
+					diasConsumo = Util.obterQuantidadeDiasEntreDuasDatas(
+							medicaoAgua.getDataLeituraAnteriorFaturamento(),
+							medicaoAgua.getDataLeituraAtualFaturamento())
+							+ "";
 				} else {
-					diasConsumo = Util.obterQuantidadeDiasEntreDuasDatas(medicaoAgua.getDataLeituraAtualFaturamento(), medicaoAgua.getDataLeituraAnteriorFaturamento()) + "";
+					diasConsumo = Util.obterQuantidadeDiasEntreDuasDatas(medicaoAgua.getDataLeituraAtualFaturamento(),
+							medicaoAgua.getDataLeituraAnteriorFaturamento()) + "";
 				}
 			}
 
@@ -1219,9 +1362,11 @@ public class ImpressaoContaImpressoraTermica {
 			if (consumoEsgoto != null) {
 
 				if (medicaoPoco.getLeituraAtualFaturamento() != 0) {
-					diasConsumo = Util.obterQuantidadeDiasEntreDuasDatas(medicaoPoco.getDataLeituraAtualFaturamento(), medicaoPoco.getDataLeituraAnteriorFaturamento()) + "";
+					diasConsumo = Util.obterQuantidadeDiasEntreDuasDatas(medicaoPoco.getDataLeituraAtualFaturamento(),
+							medicaoPoco.getDataLeituraAnteriorFaturamento()) + "";
 				} else {
-					diasConsumo = Util.obterQuantidadeDiasEntreDuasDatas(medicaoPoco.getDataLeituraAtualFaturamento(), medicaoPoco.getDataLeituraAnteriorFaturamento()) + "";
+					diasConsumo = Util.obterQuantidadeDiasEntreDuasDatas(medicaoPoco.getDataLeituraAtualFaturamento(),
+							medicaoPoco.getDataLeituraAnteriorFaturamento()) + "";
 				}
 			}
 		} else if (medicaoAgua == null && medicaoPoco == null) {
@@ -1237,20 +1382,21 @@ public class ImpressaoContaImpressoraTermica {
 	private String obterSituacaoAgua(String situacaoAgua) {
 		String situacao = "";
 		if (situacaoAgua.length() > 13) {
-			situacao =  situacaoAgua.substring(0, 13);
+			situacao = situacaoAgua.substring(0, 13);
 		} else {
 			situacao = situacaoAgua;
 		}
-		
+
 		return situacao;
 	}
 
 	private String obterDataInstalacaoHidroemtro(Imovel imovelEmitido) {
 		String dataInstalacao = "";
-		
+
 		if (imovelEmitido.getLigacaoAgua() != null) {
 			if (imovelEmitido.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
-				dataInstalacao = Util.formatarData(imovelEmitido.getLigacaoAgua().getHidrometroInstalacaoHistorico().getDataInstalacao());
+				dataInstalacao = Util.formatarData(imovelEmitido.getLigacaoAgua().getHidrometroInstalacaoHistorico()
+						.getDataInstalacao());
 			}
 		}
 		return dataInstalacao;
@@ -1258,18 +1404,19 @@ public class ImpressaoContaImpressoraTermica {
 
 	private String obterNumeroHidrometro(Imovel imovelEmitido) {
 		String hidrometro = "NAO MEDIDO";
-		
+
 		if (imovelEmitido.getLigacaoAgua() != null) {
 			if (imovelEmitido.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
-				hidrometro = imovelEmitido.getLigacaoAgua().getHidrometroInstalacaoHistorico().getHidrometro().getNumero();
+				hidrometro = imovelEmitido.getLigacaoAgua().getHidrometroInstalacaoHistorico().getHidrometro()
+						.getNumero();
 			}
 		}
 		return hidrometro;
 	}
-	
+
 	private String obterLeituraAnteriorInformada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco) {
 		String leituraAnteriorInformada = "";
-		
+
 		if (medicaoAgua != null) {
 			if (medicaoAgua.getLeituraAnteriorInformada() != null) {
 				leituraAnteriorInformada = medicaoAgua.getLeituraAnteriorInformada() + "";
@@ -1279,13 +1426,13 @@ public class ImpressaoContaImpressoraTermica {
 			if (medicaoPoco.getLeituraAnteriorInformada() != null) {
 				leituraAnteriorInformada = medicaoPoco.getLeituraAnteriorInformada() + "";
 			}
-		} 
+		}
 		return leituraAnteriorInformada;
 	}
-	
+
 	private String obterLeituraAnteriorFaturada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco) {
 		String leituraAnteriorFaturada = "";
-		
+
 		if (medicaoAgua != null) {
 			if (medicaoAgua.getLeituraAnteriorFaturamento() != 0) {
 				leituraAnteriorFaturada = medicaoAgua.getLeituraAnteriorFaturamento() + "";
@@ -1295,18 +1442,19 @@ public class ImpressaoContaImpressoraTermica {
 			if (medicaoPoco.getLeituraAnteriorFaturamento() != 0) {
 				leituraAnteriorFaturada = medicaoPoco.getLeituraAnteriorFaturamento() + "";
 			}
-		} 
+		}
 		return leituraAnteriorFaturada;
 	}
-	
-	private String obterLeituraAtualFaturada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco, ConsumoHistorico consumo) {
+
+	private String obterLeituraAtualFaturada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco,
+			ConsumoHistorico consumo) {
 		String leituraAtualFaturada = "";
-		
+
 		if (medicaoAgua != null) {
 			if (medicaoAgua.getLeituraAtualFaturamento() != 0) {
 				leituraAtualFaturada = medicaoAgua.getLeituraAtualFaturamento() + "";
 			}
-			
+
 			if (consumo != null) {
 				if (medicaoAgua.getLeituraAtualFaturamento() != 0) {
 					leituraAtualFaturada = medicaoAgua.getLeituraAtualFaturamento() + "";
@@ -1317,13 +1465,13 @@ public class ImpressaoContaImpressoraTermica {
 			if (medicaoPoco.getLeituraAtualFaturamento() != 0) {
 				leituraAtualFaturada = medicaoPoco.getLeituraAtualFaturamento() + "";
 			}
-		} 
+		}
 		return leituraAtualFaturada;
 	}
-	
+
 	private String obterLeituraAtualInformada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco) {
 		String leituraAtualInformada = "";
-		
+
 		if (medicaoAgua != null) {
 			if (medicaoAgua.getLeituraAtualInformada() != null) {
 				leituraAtualInformada = medicaoAgua.getLeituraAtualInformada() + "";
@@ -1332,13 +1480,13 @@ public class ImpressaoContaImpressoraTermica {
 			if (medicaoPoco.getLeituraAtualInformada() != null) {
 				leituraAtualInformada = medicaoPoco.getLeituraAtualInformada() + "";
 			}
-		} 
+		}
 		return leituraAtualInformada;
 	}
-	
+
 	private String obterDataLeituraAnteriorFaturada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco) {
 		String dataLeituraAnteriorFaturada = "";
-		
+
 		if (medicaoAgua != null) {
 			if (medicaoAgua.getDataLeituraAnteriorFaturamento() != null) {
 				dataLeituraAnteriorFaturada = Util.formatarData(medicaoAgua.getDataLeituraAnteriorFaturamento());
@@ -1347,13 +1495,13 @@ public class ImpressaoContaImpressoraTermica {
 			if (medicaoPoco.getDataLeituraAnteriorFaturamento() != null) {
 				dataLeituraAnteriorFaturada = Util.formatarData(medicaoPoco.getDataLeituraAnteriorFaturamento());
 			}
-		} 
+		}
 		return dataLeituraAnteriorFaturada;
 	}
-	
+
 	private String obterDataLeituraAtualInformada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco) {
 		String dataLeituraAtualInformada = "";
-		
+
 		if (medicaoAgua != null) {
 			if (medicaoAgua.getDataLeituraAtualInformada() != null) {
 				dataLeituraAtualInformada = Util.formatarData(medicaoAgua.getDataLeituraAtualInformada());
@@ -1362,13 +1510,13 @@ public class ImpressaoContaImpressoraTermica {
 			if (medicaoPoco.getDataLeituraAtualInformada() != null) {
 				dataLeituraAtualInformada = Util.formatarData(medicaoPoco.getDataLeituraAtualInformada());
 			}
-		} 
+		}
 		return dataLeituraAtualInformada;
 	}
-	
+
 	private String obterDataLeituraAtualFaturada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco) {
 		String dataLeituraAtualFaturada = "";
-		
+
 		if (medicaoAgua != null) {
 			if (medicaoAgua.getDataLeituraAtualFaturamento() != null) {
 				dataLeituraAtualFaturada = Util.formatarData(medicaoAgua.getDataLeituraAtualFaturamento());
@@ -1377,13 +1525,14 @@ public class ImpressaoContaImpressoraTermica {
 			if (medicaoPoco.getDataLeituraAtualFaturamento() != null) {
 				dataLeituraAtualFaturada = Util.formatarData(medicaoPoco.getDataLeituraAtualFaturamento());
 			}
-		} 
+		}
 		return dataLeituraAtualFaturada;
 	}
-	
-	private String obterMedia(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco, ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto) {
+
+	private String obterMedia(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco, ConsumoHistorico consumoAgua,
+			ConsumoHistorico consumoEsgoto) {
 		String media = "0";
-		
+
 		if (medicaoAgua != null) {
 			if (consumoAgua != null) {
 				media = String.valueOf(consumoAgua.getConsumoMedio());
@@ -1391,14 +1540,15 @@ public class ImpressaoContaImpressoraTermica {
 		} else if (medicaoPoco != null) {
 			if (consumoEsgoto != null) {
 				media = String.valueOf(consumoEsgoto.getConsumoMedio());
-			}				
-		} 
+			}
+		}
 		return media;
 	}
-	
-	private int obterTipoConsumo(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco, ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto) {
+
+	private int obterTipoConsumo(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco,
+			ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto) {
 		int tipoConsumo = 0;
-		
+
 		if (medicaoAgua != null) {
 			if (consumoAgua != null) {
 				tipoConsumo = consumoAgua.getConsumoTipo().getId();
@@ -1406,14 +1556,15 @@ public class ImpressaoContaImpressoraTermica {
 		} else if (medicaoPoco != null) {
 			if (consumoEsgoto != null) {
 				tipoConsumo = consumoEsgoto.getConsumoTipo().getId();
-			}				
-		} 
+			}
+		}
 		return tipoConsumo;
 	}
-	
-	private String obterConsumo(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco, ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto) {
+
+	private String obterConsumo(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco,
+			ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto) {
 		String consumo = "";
-		
+
 		if (medicaoAgua != null) {
 			if (consumoAgua != null) {
 				if (medicaoAgua.getLeituraAtualFaturamento() != 0) {
@@ -1429,7 +1580,7 @@ public class ImpressaoContaImpressoraTermica {
 				} else {
 					consumo = consumoEsgoto.getNumeroConsumoFaturadoMes() + "";
 				}
-			}				
+			}
 		} else if (medicaoAgua == null && medicaoPoco == null) {
 			if (consumoAgua != null) {
 				consumo = consumoAgua.getNumeroConsumoFaturadoMes() + "";
@@ -1437,93 +1588,112 @@ public class ImpressaoContaImpressoraTermica {
 		}
 		return consumo;
 	}
-	
+
 	@SuppressWarnings("unused")
-	private String obterDataLeituraAnteriorInformada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco, 
+	private String obterDataLeituraAnteriorInformada(MedicaoHistorico medicaoAgua, MedicaoHistorico medicaoPoco,
 			EmitirContaHelper helper, Integer idImovelEmitido) throws ControladorException {
 		String dataLeituraAnteriorInformada = "";
 
 		int mesAnterior = Util.subtrairMesDoAnoMes(helper.getAmReferencia(), 1);
-		MedicaoHistorico medicaoAguaAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(idImovelEmitido, mesAnterior);
-		MedicaoHistorico medicaoPocoAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(idImovelEmitido, mesAnterior);
-		
+		MedicaoHistorico medicaoAguaAnterior = getControladorMicromedicao()
+				.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(idImovelEmitido, mesAnterior);
+		MedicaoHistorico medicaoPocoAnterior = getControladorMicromedicao()
+				.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(idImovelEmitido, mesAnterior);
+
 		if (medicaoAgua != null) {
 			if (medicaoAguaAnterior != null) {
 				if (medicaoAguaAnterior.getDataLeituraAtualInformada() != null) {
-					dataLeituraAnteriorInformada = Util.formatarData(medicaoAguaAnterior.getDataLeituraAtualInformada());
+					dataLeituraAnteriorInformada = Util
+							.formatarData(medicaoAguaAnterior.getDataLeituraAtualInformada());
 				}
 			}
-			
+
 		} else if (medicaoPoco != null) {
 			if (medicaoPocoAnterior.getDataLeituraAtualInformada() != null) {
 				dataLeituraAnteriorInformada = Util.formatarData(medicaoPocoAnterior.getDataLeituraAtualInformada());
 			}
-		} 
+		}
 		return dataLeituraAnteriorInformada;
 	}
-	
-	
-	private void gerarInformacoesBasicas(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro, StringBuilder retorno, Imovel imovelEmitido,
-			String endereco, String cpfCnpjFormatado) {
-		retorno.append("! 0 816 0 1720 1\n");
-		retorno.append("BOX 32 435 802 482 1\n" + "LINE 720 415 720 455 1\n" + "LINE 403 415 403 477 1\n" + "BOX 32 411 802 435 1\n"
-				+ "LINE 278 415 278 477 1\n" + "BOX 283 518 802 545 1\n" + "BOX 283 545 802 692 1\n" + "LINE 656 518 656 692 1\n"
-				+ "LINE 425 518 425 692 1\n" + "LINE 535 518 535 692 1\n");
 
-		retorno.append("T 0 2 138 121 " + "Data de Emissao: " + Util.formatarDataComHora(new Date()) + "\n");
-		retorno.append("T 7 1 464 90 " + imovelEmitido.getId() + "\n");
-		retorno.append("T 7 1 669 90 " + Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + "") + "\n");
-		retorno.append("T 0 0 201 47 " + Util.formatarCnpj(sistemaParametro.getCnpjEmpresa().trim()) + "\n");
-		retorno.append("T 0 0 285 64 " + sistemaParametro.getInscricaoEstadual().trim() + "\n");
-		retorno.append(formarLinha(0, 0, 222, 81, emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
-		retorno.append(formarLinha(0, 2, 52, 172, obterNomeCliente(emitirContaHelper, imovelEmitido), 0, 0) 
-					+ formarLinha(0, 2, 52, 199, cpfCnpjFormatado, 0, 0) 
-					+ dividirLinha(0, 2, 434, 169, endereco.trim(), 40, 27));
-		retorno.append(formarLinha(7, 0, 15, 250, imovelEmitido.getInscricaoFormatada(), 0, 0));
-		retorno.append(formarLinha(7, 0, 315, 250, imovelEmitido.getQuadra().getRota().getCodigo() + "", 0, 0));
-		retorno.append(formarLinha(7, 0, 415, 250, imovelEmitido.getNumeroSequencialRota() + "", 0, 0));
-		
+	private void gerarInformacoesBasicas(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro,
+			StringBuilder retorno, Imovel imovelEmitido, String endereco, String cpfCnpjFormatado) {
+		retorno.append("! 0 200 200 3100 1\n");
+
+		retorno.append("BOX 32 395 802 442 1\n" + 
+					   "LINE 720 375 720 415 1\n" + 
+					   "LINE 403 375 403 437 1\n" +
+
+					   "BOX 32 351 802 395 1\n" + 
+					   "LINE 278 375 278 437 1\n" +
+
+					   "BOX 283 588 802 615 1\n" + 
+					   "BOX 283 615 802 782 1\n" + 
+					   "LINE 656 588 656 782 1\n" + 
+					   "LINE 415 588 425 615 1\n" + 
+					   "LINE 535 588 535 782 1\n");
+
+		retorno.append("T 7 0 50 51 " + "Data de Emissao: " + Util.formatarDataComHora(new Date()) + "\n");
+		retorno.append("T 7 1 70 105 " + imovelEmitido.getId() + "\n");
+		retorno.append("T 7 1 640 105 " + Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + "")
+				+ "\n");
+		// retorno.append("T 0 0 201 47 " +
+		// Util.formatarCnpj(sistemaParametro.getCnpjEmpresa().trim()) + "\n");
+		// retorno.append("T 0 0 285 64 " +
+		// sistemaParametro.getInscricaoEstadual().trim() + "\n");
+		// retorno.append(formarLinha(0, 0, 222, 81,
+		// emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
+
+		retorno.append(formarLinha(7, 0, 20, 180, obterNomeCliente(emitirContaHelper, imovelEmitido), 0, 0)
+				+ formarLinha(7, 0, 20, 205, cpfCnpjFormatado, 0, 0)
+				+ dividirLinha(0, 2, 400, 185, endereco.trim(), 35, 22));
+		retorno.append(formarLinha(7, 0, 20, 250, imovelEmitido.getInscricaoFormatada(), 0, 0));
+		retorno.append(formarLinha(7, 0, 350, 250, imovelEmitido.getQuadra().getRota().getCodigo() + "", 0, 0));
+		retorno.append(formarLinha(7, 0, 445, 250, imovelEmitido.getNumeroSequencialRota() + "", 0, 0));
+
 		gerarDadosQtdEconomias(retorno, imovelEmitido);
 	}
-	
+
 	private String obterNomeCliente(EmitirContaHelper emitirContaHelper, Imovel imovel) {
 		String nome = "";
 		try {
 			if (imovel.isCondominio()) {
-					nome =  getControladorCliente().obterNomeCliente(imovel.getId()).trim();
+				nome = getControladorCliente().obterNomeCliente(imovel.getId()).trim();
 			} else {
 				nome = emitirContaHelper.getNomeCliente().trim();
 			}
 		} catch (ControladorException e) {
 			e.printStackTrace();
-		} 
-		
+		}
+
 		return nome;
 	}
 
 	private void gerarDadosQtdEconomias(StringBuilder retorno, Imovel imovelEmitido) {
 		Vector quantidadeEconomias = retornarDescricaoCategoriasQuantidadeEconomias(imovelEmitido);
-		
+
 		for (int i = 0; i < quantidadeEconomias.size(); i++) {
 			Object[] dadosCategoria = (Object[]) quantidadeEconomias.elementAt(i);
-			retorno.append(formarLinha(0, 0, 470, 254, dadosCategoria[0] + "", i * 85, 0));
-			retorno.append(formarLinha(7, 0, 539, 250, dadosCategoria[1] + "", i * 85, 0));
+			retorno.append(formarLinha(0, 0, 464, 250, dadosCategoria[0] + "", i * 85, 0));
+			retorno.append(formarLinha(7, 0, 710, 250, dadosCategoria[1] + "", i * 85, 0));
 		}
 	}
 
-	private void gerarInformativoMacroCondominio(EmitirContaHelper emitirContaHelper, StringBuilder retorno, Imovel imovelEmitido) {
+	private void gerarInformativoMacroCondominio(EmitirContaHelper emitirContaHelper, StringBuilder retorno,
+			Imovel imovelEmitido) {
 		retorno.append("T 7 0 200 700 EXTRATO DE CONSUMO DO MACROMEDIDOR \n");
 		retorno.append("T 7 0 53 725 CONSUMO DO IMOVEL CONDOMINIO \n");
-		retorno.append("T 7 0 571 725 "+ emitirContaHelper.getConsumoMacro() + "\n");
+		retorno.append("T 7 0 571 725 " + emitirContaHelper.getConsumoMacro() + "\n");
 		retorno.append("T 7 0 53 750 SOMA DOS CONSUMOS DOS IMOVEIS VINCULADOS \n");
-		retorno.append("T 7 0 571 750 "+ emitirContaHelper.getSomaConsumosImoveisMicro() + "\n");
+		retorno.append("T 7 0 571 750 " + emitirContaHelper.getSomaConsumosImoveisMicro() + "\n");
 		retorno.append("T 7 0 53 775 QUANTIDADE IMOVEIS VINCULADOS \n");
-		retorno.append("T 7 0 571 775 "+ emitirContaHelper.getQuantidadeImoveisMicro() + "\n");
+		retorno.append("T 7 0 571 775 " + emitirContaHelper.getQuantidadeImoveisMicro() + "\n");
 		retorno.append("T 7 0 53 800 VALOR RATEADO \n");
-		retorno.append("T 7 0 571 800  R$ "+ Util.formatarMoedaReal(emitirContaHelper.getValorTotalASerrateado()) + "\n");
+		retorno.append("T 7 0 571 800  R$ " + Util.formatarMoedaReal(emitirContaHelper.getValorTotalASerrateado())
+				+ "\n");
 		retorno.append("T 7 0 53 825 VALOR RATEADO POR UNIDADE \n");
-		retorno.append("T 7 0 571 825 R$ "+ Util.formatarMoedaReal(emitirContaHelper.getValorRateioAgua()) + "\n");
-		                    
+		retorno.append("T 7 0 571 825 R$ " + Util.formatarMoedaReal(emitirContaHelper.getValorRateioAgua()) + "\n");
+
 		retorno.append("T 7 0 367 850 IMPORTANTE \n");
 		retorno.append("T 7 0 53 900 CASO O VALOR DO RATEIO ESTEJA ELEVADO \n");
 		retorno.append("T 7 0 63 925 1. Confirme a leitura do macro \n");
@@ -1533,10 +1703,10 @@ public class ImpressaoContaImpressoraTermica {
 		retorno.append("T 7 0 53 1050 SETOR DE ATENDIMENTO \n");
 		retorno.append("T 7 0 53 1075 RATEIO: Obtido atraves da diferenca do consumo entre \n");
 		retorno.append("T 7 0 53 1100 o macromedidor e os consumos dos apartamentos \n");
-		retorno.append("T 0 2 344 1456 "+ imovelEmitido.getMatriculaFormatada() + "\n");
-		retorno.append("T 5 0 109 1661 "+ emitirContaHelper.getIdFaturamentoGrupo() + "\n");
+		retorno.append("T 0 2 344 1456 " + imovelEmitido.getMatriculaFormatada() + "\n");
+		retorno.append("T 5 0 109 1661 " + emitirContaHelper.getIdFaturamentoGrupo() + "\n");
 		retorno.append("T 5 0 352 1661 4\n");
-		
+
 		retorno.append("FORM\n" + "PRINT\n");
 	}
 
@@ -1566,25 +1736,29 @@ public class ImpressaoContaImpressoraTermica {
 		return resultado;
 	}
 
-	public Object[] obterConsumoAnteriorIS(Integer idImovel, int anoMes, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao) throws ControladorException {
+	public Object[] obterConsumoAnteriorIS(Integer idImovel, int anoMes, int qtdMeses, Integer tipoLigacao,
+			Integer tipoMedicao) throws ControladorException {
 
 		int anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMes, qtdMeses);
 
 		Object[] parmsConsumoHistorico = null;
 		if (tipoLigacao != null && tipoMedicao != null) {
 
-			parmsConsumoHistorico = getControladorMicromedicao().obterConsumoAnteriorAnormalidadeDoImovel(idImovel, anoMesSubtraido, tipoLigacao);
+			parmsConsumoHistorico = getControladorMicromedicao().obterConsumoAnteriorAnormalidadeDoImovel(idImovel,
+					anoMesSubtraido, tipoLigacao);
 		}
 		return parmsConsumoHistorico;
 	}
-	
-	private void gerarLinhasAliquotasImpostos(EmitirContaHelper helper, SistemaParametro sistemaParametro, Object[] dadosAgenciaReguladora, StringBuilder retorno) {
+
+	private void gerarLinhasAliquotasImpostos(EmitirContaHelper helper, SistemaParametro sistemaParametro,
+			Object[] dadosAgenciaReguladora, StringBuilder retorno) {
 		try {
 
 			String linha = "";
 			int coluna = 30;
 
-			BigDecimal valorBaseCalculo = helper.getValorAgua().add(helper.getValorEsgoto()).add(helper.getDebitos()).subtract(obterValorPrestacao(helper));
+			BigDecimal valorBaseCalculo = helper.getValorAgua().add(helper.getValorEsgoto()).add(helper.getDebitos())
+					.subtract(obterValorPrestacao(helper));
 
 			// Tributo PIS/Pasep
 			BigDecimal percentualAliquota = sistemaParametro.getValorAliquotaImposto().divide(new BigDecimal(100));
@@ -1592,34 +1766,39 @@ public class ImpressaoContaImpressoraTermica {
 
 			// Tributo Agencia Reguladora
 			String nomeAgenciaReguladora = (String) dadosAgenciaReguladora[0];
-			
+
 			BigDecimal aliquotaAgenciaReguladora = (BigDecimal) dadosAgenciaReguladora[1];
 			BigDecimal percentualAliquotaAgenciaReguladora = aliquotaAgenciaReguladora.divide(new BigDecimal(100));
 			BigDecimal valorImpostoAgenciaReguladora = valorBaseCalculo.multiply(percentualAliquotaAgenciaReguladora);
-			
+
 			int municipioAgenciaReguladora = (Integer) dadosAgenciaReguladora[2];
-			
+
 			Localidade localidade = getControladorFaturamento().pesquisarLocalidadeConta(helper.getIdLocalidade());
-						
+
 			int municipio = localidade != null ? localidade.getMunicipio().getId() : -1;
-			
+
 			// Linha do cabecalho
-			linha += formarLinha(0, 2, 30, 1140, "Tributos", coluna, 0);
-			linha += formarLinha(0, 2, 200, 1140, "(%)", coluna, 0);
-			linha += formarLinha(0, 2, 260, 1140, "Base calculo", coluna, 0);
-			linha += formarLinha(0, 2, 380, 1140, "Valor (R$)", coluna, 0);
+
+			linha += formarLinha(0, 2, 140, 1100, "Tributos", coluna, 0);
+			linha += formarLinha(0, 2, 340, 1100, "(%)", coluna, 0);
+			linha += formarLinha(0, 2, 400, 1100, "Base calculo", coluna, 0);
+			linha += formarLinha(0, 2, 520, 1100, "Valor (R$)", coluna, 0);
 			// Linha dos valores
-			linha += formarLinha(0, 2, 30, 1165, sistemaParametro.getDescricaoAliquotaImposto(), coluna, 0);
-			linha += formarLinha(0, 2, 200, 1165, String.format("%.2f", sistemaParametro.getValorAliquotaImposto()), coluna, 0);
-			linha += formarLinha(0, 2, 260, 1165, String.format("R$%.2f", valorBaseCalculo.doubleValue()), coluna, 0);
-			linha += formarLinha(0, 2, 380, 1165, String.format("R$%.2f", valorImposto.doubleValue()), coluna, 0);
-			
+			linha += formarLinha(0, 2, 140, 1125, sistemaParametro.getDescricaoAliquotaImposto(), coluna, 0);
+			linha += formarLinha(0, 2, 340, 1125, String.format("%.2f", sistemaParametro.getValorAliquotaImposto()),
+					coluna, 0);
+			linha += formarLinha(0, 2, 400, 1125, String.format("R$%.2f", valorBaseCalculo.doubleValue()), coluna, 0);
+			linha += formarLinha(0, 2, 520, 1125, String.format("R$%.2f", valorImposto.doubleValue()), coluna, 0);
+
 			if (municipio == municipioAgenciaReguladora) {
 				// Linha dos valores da Agencia Reguladora
-				linha += formarLinha(0, 2, 30, 1190, nomeAgenciaReguladora, coluna, 0);
-				linha += formarLinha(0, 2, 200, 1190, String.format("%.2f", aliquotaAgenciaReguladora), coluna, 0);
-				linha += formarLinha(0, 2, 260, 1190, String.format("R$%.2f", valorBaseCalculo.doubleValue()), coluna, 0);
-				linha += formarLinha(0, 2, 380, 1190, String.format("R$%.2f", valorImpostoAgenciaReguladora.doubleValue()), coluna, 0);
+				linha += formarLinha(0, 2, 140, 1145, nomeAgenciaReguladora, coluna, 0);
+				linha += formarLinha(0, 2, 340, 1145, String.format("%.2f", aliquotaAgenciaReguladora), coluna, 0);
+				linha += formarLinha(0, 2, 400, 1145, String.format("R$%.2f", valorBaseCalculo.doubleValue()), coluna,
+						0);
+				linha += formarLinha(0, 2, 520, 1145,
+						String.format("R$%.2f", valorImpostoAgenciaReguladora.doubleValue()), coluna, 0);
+
 			}
 
 			retorno.append(linha);
@@ -1628,11 +1807,11 @@ public class ImpressaoContaImpressoraTermica {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
 	private BigDecimal obterValorPrestacao(EmitirContaHelper helper) throws ControladorException {
-		// Tipos de financiamento que nao sao utilizados para calculo de demonstrativo de imposto
+		// Tipos de financiamento que nao sao utilizados para calculo de
+		// demonstrativo de imposto
 		Collection<Integer> tipos = new ArrayList<Integer>();
 		tipos.add(FinanciamentoTipo.PARCELAMENTO_AGUA);
 		tipos.add(FinanciamentoTipo.PARCELAMENTO_ESGOTO);
@@ -1643,22 +1822,28 @@ public class ImpressaoContaImpressoraTermica {
 		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoCobrado.CONTA_ID, helper.getIdConta()));
 		filtro.adicionarParametro(new ParametroSimplesIn(FiltroDebitoCobrado.FINANCIAMENTO_TIPO_ID, tipos));
 
-		Collection<DebitoCobrado> debitosParcelamento = getControladorUtil().pesquisar(filtro, DebitoCobrado.class.getName());
+		Collection<DebitoCobrado> debitosParcelamento = getControladorUtil().pesquisar(filtro,
+				DebitoCobrado.class.getName());
 
 		BigDecimal valorPrestacao = new BigDecimal(0.00);
 		for (Iterator<DebitoCobrado> iterator = debitosParcelamento.iterator(); iterator.hasNext();) {
 			DebitoCobrado debito = (DebitoCobrado) iterator.next();
 			valorPrestacao = valorPrestacao.add(debito.getValorPrestacao());
 		}
-		
+
 		return valorPrestacao;
 	}
-	
+
 	private void gerarLinhaTelefoneAgenciaReguladora(StringBuilder retorno) {
-    	String linha = formarLinha(0, 2, 450, 31, String.format("Ag. reguladora (%s)", ConstantesSistema.NOME_AGENCIA_REGULADORA), 0, 0);
-    	linha += formarLinha(0, 2, 450, 51, String.format("Telefone: %s", ConstantesSistema.NUMERO_AGENCIA_REGULADORA), 0, 0);
-    	linha += formarLinha(0, 2, 450, 66, String.format("Email: %s", ConstantesSistema.EMAIL_AGENCIA_REGULADORA), 0, 0);    	
-    	
-    	retorno.append(linha);
-    }
+
+		String linha = formarLinha(7, 0, 278, 100,
+				String.format("Ag. reguladora (%s)", ConstantesSistema.NOME_AGENCIA_REGULADORA), 0, 0);
+		linha += formarLinha(7, 0, 278, 120,
+				String.format("Telefone: %s", ConstantesSistema.NUMERO_AGENCIA_REGULADORA), 0, 0);
+
+		linha += formarLinha(7, 0, 278, 140, 
+				String.format("Email: %s", ConstantesSistema.EMAIL_AGENCIA_REGULADORA), 0, 0);
+
+		retorno.append(linha);
+	}
 }
