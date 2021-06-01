@@ -901,7 +901,7 @@ public class ImpressaoContaImpressoraTermica {
 				retorno.append(formarLinha(5, 0, 109, 3035, emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
 				retorno.append(formarLinha(5, 0, 352, 3035, "4", 0, 0));
 				retorno.append(formarLinha(5, 0, 615, 3035, "" + contador, 0, 0));
-				retorno.append(formarLinha(5, 0, 615, 1661, "" + 1, 0, 0));
+				retorno.append(formarLinha(5, 0, 615, 1661, "" + contador, 0, 0));
 				
 				Object[] dadosAgenciaReguladora = getControladorFaturamento().obterDadosAgenciaReguladora();
 
