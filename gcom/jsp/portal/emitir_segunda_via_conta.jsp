@@ -99,7 +99,7 @@
 									<tr>
 										<td><bean:write name="helper" property="formatarAnoMesParaMesAno" /></td>
 										<td><bean:write name="helper" property="vencimentoConta" /></td>
-										<td><bean:write name="helper" property="valorTotalConta" formatKey="money.format" /></td>
+										<td><bean:write name="helper" property="valorTotalContaFormatado" /></td>
 										<td>
 											<a href="gerarRelatorio2ViaContaAction.do?cobrarTaxaEmissaoConta=N&idConta=<%="" + helper.getConta().getId()%>" title="Imprimir">
 												<i class="fa fa-print"></i>

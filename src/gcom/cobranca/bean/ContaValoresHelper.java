@@ -154,7 +154,7 @@ public class ContaValoresHelper implements Serializable {
 
 		return retorno.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
-
+	
 	public BigDecimal getValorTotalComValorAtualizacaoMonetaria() {
 		BigDecimal valorTotalConta = new BigDecimal("0.00");
 
