@@ -277,9 +277,8 @@ public class ExibirEfetuarLigacaoAguaAction extends GcomAction {
 				ligacaoAguaActionForm.setIdOrdemServico(idOrdemServico);
 				ligacaoAguaActionForm.setNomeOrdemServico(ordemServico
 						.getServicoTipo().getDescricao());
-
-				Imovel imovel = ordemServico.getRegistroAtendimento()
-						.getImovel();
+				
+				Imovel imovel = ordemServico.getImovel();
 				ServicoTipo servicoTipo = ordemServico.getServicoTipo();
 
 				if (servicoTipo != null && servicoTipo.getDebitoTipo() != null) {
@@ -389,8 +388,7 @@ public class ExibirEfetuarLigacaoAguaAction extends GcomAction {
 
 				/*-------------- Início dados do Imóvel---------------*/
 
-				sessao.setAttribute("imovel", ordemServico
-						.getRegistroAtendimento().getImovel());
+				sessao.setAttribute("imovel", ordemServico.getImovel());
 
 				if (imovel != null) {
 

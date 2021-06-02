@@ -401,13 +401,13 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		this.getControladorOrdemServico().validaOrdemServicoDiasAditivoPrazo(ordem,veioEncerrarOS);
 		
 		// Caso 4
-		if (ordem.getRegistroAtendimento().getImovel() == null) {
+		if (ordem.getImovel() == null && ordem.getRegistroAtendimento().getImovel() == null) {
 			throw new ControladorException(
 					"atencao.ordem_servico_ra_imovel_invalida", null, ""
 							+ ordem.getRegistroAtendimento().getId());
 		}
 
-		Imovel imovel = ordem.getRegistroAtendimento().getImovel();
+		Imovel imovel = ordem.getImovel();
 
 		// [FS0002] Validar Situao de gua do Imvel.
 		

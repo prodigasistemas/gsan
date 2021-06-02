@@ -509,7 +509,7 @@ public class EfetuarSubstituicaoHidrometroActionForm extends ValidatorActionForm
 		//data instalação
 		hidrometroInstalacaoHistorico.setDataInstalacao(Util.converteStringParaDate(getDataInstalacao()));
 		
-		if (tipoMedicao.equals(""+MedicaoTipo.POCO)) {
+		if (tipoMedicao != null && tipoMedicao.equals(""+MedicaoTipo.POCO)) {
 
 		  Imovel imovel = new Imovel();
 		  imovel.setId(new Integer(matriculaImovel));
@@ -517,7 +517,7 @@ public class EfetuarSubstituicaoHidrometroActionForm extends ValidatorActionForm
 		  hidrometroInstalacaoHistorico.setImovel(imovel);
 		  hidrometroInstalacaoHistorico.setLigacaoAgua(null);
 					
-		} else if (tipoMedicao.equals(""+MedicaoTipo.LIGACAO_AGUA)) {
+		} else if (tipoMedicao != null && tipoMedicao.equals(""+MedicaoTipo.LIGACAO_AGUA)) {
 
 		  LigacaoAgua ligacaoAgua = new LigacaoAgua();
 		  ligacaoAgua.setId(new Integer(matriculaImovel));
