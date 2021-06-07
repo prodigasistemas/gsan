@@ -275,6 +275,7 @@ import javax.ejb.SessionContext;
 import javax.mail.SendFailedException;
 
 import org.apache.log4j.Logger;
+import org.jfree.util.Log;
 
 public class ControladorArrecadacao extends ControladorComum {
 
@@ -49563,6 +49564,9 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer idFuncionalidadeIniciada) throws ControladorException {
 		
 		Integer idLocalidade = localidade.getId();
+		
+		Log.info("[RELATORIO BIG] Processando LOCALIDADE: " + idLocalidade + " - " + localidade.getDescricao());
+		
 		Date dataInicial = Util.gerarDataInicialApartirAnoMesRefencia(anoMesReferencia);
 		Date dataFinal = Util.gerarDataApartirAnoMesRefencia(anoMesReferencia);
 		
@@ -49608,9 +49612,6 @@ public class ControladorArrecadacao extends ControladorComum {
 						anoMesReferencia, idLocalidade, dataInicial);
 				big.setIndicadorQuantidadeInadimplenciaMaior90(inadimplenciaMaior90[0]); // [O]
 				big.setIndicadorValorInadimplenciaMaior90(inadimplenciaMaior90[1]); // [P]
-				
-				System.out.println("inadimplenciaAte30: " + inadimplenciaAte30 + "; inadimplenciaAte90: "
-						+ inadimplenciaAte90 + "; inadimplenciaMaior90: " + inadimplenciaMaior90);
 				
 				big = this.setQuantidadeFaturamentosComprometidosRelatorioBIG(big, inadimplenciaAte30,
 						inadimplenciaAte90, inadimplenciaMaior90); // [Q]
@@ -50013,17 +50014,24 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer anoMesReferencia, Integer idLocalidade,
 			BoletimInformacoesGerenciais big) throws ErroRepositorioException {
 		
+		Log.info("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG}");
+		
 		Object[] recebimentoMedio = repositorioArrecadacao.pesquisarPrazoMedioRecebimentoContasRelatorioBIG(
 				anoMesReferencia, idLocalidade);
 		
 		BigDecimal diferencaDatas = BigDecimal.valueOf((Integer) recebimentoMedio[0]);
 		BigDecimal quantidadePagamentos = BigDecimal.valueOf((Integer) recebimentoMedio[1]);
 		
+		Log.info("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - diferencaDatas: " + diferencaDatas);
+		Log.info("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - quantidadePagamentos: " + quantidadePagamentos);
+		
 		BigDecimal indicadorRecebimentoMedio = diferencaDatas.divide(
 				quantidadePagamentos, 10, BigDecimal.ROUND_HALF_UP)
 				.setScale(2, BigDecimal.ROUND_HALF_UP);
 		
 		big.setIndicadorRecebimentoMedio(indicadorRecebimentoMedio);
+		
+		Log.info("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - FIM");
 		
 		return big;
 	}
