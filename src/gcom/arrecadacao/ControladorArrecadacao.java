@@ -49565,7 +49565,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		Integer idLocalidade = localidade.getId();
 		
-		Log.info("[RELATORIO BIG] Processando LOCALIDADE: " + idLocalidade + " - " + localidade.getDescricao());
+		System.out.println("[RELATORIO BIG] Processando LOCALIDADE: " + idLocalidade + " - " + localidade.getDescricao());
 		
 		Date dataInicial = Util.gerarDataInicialApartirAnoMesRefencia(anoMesReferencia);
 		Date dataFinal = Util.gerarDataApartirAnoMesRefencia(anoMesReferencia);
@@ -50014,7 +50014,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer anoMesReferencia, Integer idLocalidade,
 			BoletimInformacoesGerenciais big) throws ErroRepositorioException {
 		
-		Log.info("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG}");
+		System.out.println("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG}");
 		
 		Object[] recebimentoMedio = repositorioArrecadacao.pesquisarPrazoMedioRecebimentoContasRelatorioBIG(
 				anoMesReferencia, idLocalidade);
@@ -50022,8 +50022,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		BigDecimal diferencaDatas = BigDecimal.valueOf((Integer) recebimentoMedio[0]);
 		BigDecimal quantidadePagamentos = BigDecimal.valueOf((Integer) recebimentoMedio[1]);
 		
-		Log.info("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - diferencaDatas: " + diferencaDatas);
-		Log.info("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - quantidadePagamentos: " + quantidadePagamentos);
+		System.out.println("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - diferencaDatas: " + diferencaDatas);
+		System.out.println("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - quantidadePagamentos: " + quantidadePagamentos);
 		
 		BigDecimal indicadorRecebimentoMedio = diferencaDatas.divide(
 				quantidadePagamentos, 10, BigDecimal.ROUND_HALF_UP)
@@ -50031,7 +50031,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		big.setIndicadorRecebimentoMedio(indicadorRecebimentoMedio);
 		
-		Log.info("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - FIM");
+		System.out.println("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - FIM");
 		
 		return big;
 	}
