@@ -1,5 +1,35 @@
 package gcom.arrecadacao;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionContext;
+import javax.mail.SendFailedException;
+
+import org.apache.log4j.Logger;
+
 import gcom.arrecadacao.FiltroConsultarDadosDiariosArrecadacao.GROUP_BY;
 import gcom.arrecadacao.FiltroConsultarDadosDiariosArrecadacaoAuxiliar.GROUP_BY_AUX;
 import gcom.arrecadacao.aviso.AvisoAcerto;
@@ -245,37 +275,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesColecao;
 import gcom.util.filtro.ParametroSimplesColecaoDiferenteDe;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionContext;
-import javax.mail.SendFailedException;
-
-import org.apache.log4j.Logger;
-import org.jfree.util.Log;
 
 public class ControladorArrecadacao extends ControladorComum {
 
@@ -50025,9 +50024,13 @@ public class ControladorArrecadacao extends ControladorComum {
 		System.out.println("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - diferencaDatas: " + diferencaDatas);
 		System.out.println("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - quantidadePagamentos: " + quantidadePagamentos);
 		
-		BigDecimal indicadorRecebimentoMedio = diferencaDatas.divide(
-				quantidadePagamentos, 10, BigDecimal.ROUND_HALF_UP)
-				.setScale(2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal indicadorRecebimentoMedio = new BigDecimal(0);
+		if (diferencaDatas.intValue() != 0 && quantidadePagamentos.intValue() != 0) {
+			indicadorRecebimentoMedio = diferencaDatas.divide(
+					quantidadePagamentos, 10, BigDecimal.ROUND_HALF_UP)
+					.setScale(2, BigDecimal.ROUND_HALF_UP);
+		}
+		
 		
 		big.setIndicadorRecebimentoMedio(indicadorRecebimentoMedio);
 		
