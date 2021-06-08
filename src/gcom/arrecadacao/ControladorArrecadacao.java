@@ -1,5 +1,35 @@
 package gcom.arrecadacao;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionContext;
+import javax.mail.SendFailedException;
+
+import org.apache.log4j.Logger;
+
 import gcom.arrecadacao.FiltroConsultarDadosDiariosArrecadacao.GROUP_BY;
 import gcom.arrecadacao.FiltroConsultarDadosDiariosArrecadacaoAuxiliar.GROUP_BY_AUX;
 import gcom.arrecadacao.aviso.AvisoAcerto;
@@ -245,36 +275,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesColecao;
 import gcom.util.filtro.ParametroSimplesColecaoDiferenteDe;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionContext;
-import javax.mail.SendFailedException;
-
-import org.apache.log4j.Logger;
 
 public class ControladorArrecadacao extends ControladorComum {
 
@@ -49563,6 +49563,9 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer idFuncionalidadeIniciada) throws ControladorException {
 		
 		Integer idLocalidade = localidade.getId();
+		
+		System.out.println("[RELATORIO BIG] Processando LOCALIDADE: " + idLocalidade + " - " + localidade.getDescricao());
+		
 		Date dataInicial = Util.gerarDataInicialApartirAnoMesRefencia(anoMesReferencia);
 		Date dataFinal = Util.gerarDataApartirAnoMesRefencia(anoMesReferencia);
 		
@@ -49608,9 +49611,6 @@ public class ControladorArrecadacao extends ControladorComum {
 						anoMesReferencia, idLocalidade, dataInicial);
 				big.setIndicadorQuantidadeInadimplenciaMaior90(inadimplenciaMaior90[0]); // [O]
 				big.setIndicadorValorInadimplenciaMaior90(inadimplenciaMaior90[1]); // [P]
-				
-				System.out.println("inadimplenciaAte30: " + inadimplenciaAte30 + "; inadimplenciaAte90: "
-						+ inadimplenciaAte90 + "; inadimplenciaMaior90: " + inadimplenciaMaior90);
 				
 				big = this.setQuantidadeFaturamentosComprometidosRelatorioBIG(big, inadimplenciaAte30,
 						inadimplenciaAte90, inadimplenciaMaior90); // [Q]
@@ -50013,17 +50013,28 @@ public class ControladorArrecadacao extends ControladorComum {
 			Integer anoMesReferencia, Integer idLocalidade,
 			BoletimInformacoesGerenciais big) throws ErroRepositorioException {
 		
+		System.out.println("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG}");
+		
 		Object[] recebimentoMedio = repositorioArrecadacao.pesquisarPrazoMedioRecebimentoContasRelatorioBIG(
 				anoMesReferencia, idLocalidade);
 		
 		BigDecimal diferencaDatas = BigDecimal.valueOf((Integer) recebimentoMedio[0]);
 		BigDecimal quantidadePagamentos = BigDecimal.valueOf((Integer) recebimentoMedio[1]);
 		
-		BigDecimal indicadorRecebimentoMedio = diferencaDatas.divide(
-				quantidadePagamentos, 10, BigDecimal.ROUND_HALF_UP)
-				.setScale(2, BigDecimal.ROUND_HALF_UP);
+		System.out.println("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - diferencaDatas: " + diferencaDatas);
+		System.out.println("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - quantidadePagamentos: " + quantidadePagamentos);
+		
+		BigDecimal indicadorRecebimentoMedio = new BigDecimal(0);
+		if (diferencaDatas.intValue() != 0 && quantidadePagamentos.intValue() != 0) {
+			indicadorRecebimentoMedio = diferencaDatas.divide(
+					quantidadePagamentos, 10, BigDecimal.ROUND_HALF_UP)
+					.setScale(2, BigDecimal.ROUND_HALF_UP);
+		}
+		
 		
 		big.setIndicadorRecebimentoMedio(indicadorRecebimentoMedio);
+		
+		System.out.println("[RELATORIO BIG]{setRecebimentoMedioRelatorioBIG} - FIM");
 		
 		return big;
 	}

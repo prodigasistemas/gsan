@@ -491,17 +491,17 @@ public class ImpressaoContaImpressoraTermica {
 						descricao = contaCategoria.getDescricao() + " " + quantidaEconomias + " " + "UNIDADE(S)";
 						if (descricao.length() > 40) {
 
-							linhas += formarLinha(7, 0, 63, 813, descricao.substring(0, 40), 0, qtdLinhas * 25);
+							linhas += formarLinha(7, 0, 53, 813, descricao.substring(0, 40), 0, qtdLinhas * 25);
 						} else {
-							linhas += formarLinha(7, 0, 63, 813, descricao, 0, qtdLinhas * 25);
+							linhas += formarLinha(7, 0, 53, 813, descricao, 0, qtdLinhas * 25);
 						}
 					} else {
 						descricao = contaCategoria.getDescricao() + " " + quantidaEconomias + " " + "UNIDADE(S)";
 						if (descricao.length() > 40) {
 
-							linhas += formarLinha(7, 0, 63, 813, descricao.substring(0, 40), 0, qtdLinhas * 25);
+							linhas += formarLinha(7, 0, 53, 813, descricao.substring(0, 40), 0, qtdLinhas * 25);
 						} else {
-							linhas += formarLinha(7, 0, 63, 813, descricao, 0, qtdLinhas * 25);
+							linhas += formarLinha(7, 0, 53, 813, descricao, 0, qtdLinhas * 25);
 
 						}
 					}
@@ -523,7 +523,7 @@ public class ImpressaoContaImpressoraTermica {
 								+ Util.formatarMoedaReal(contaCategoria.getValorTarifaMinimaAgua().divide(
 										new BigDecimal(quantidaEconomias), 2, BigDecimal.ROUND_DOWN)) + " POR UNIDADE ";
 
-						linhas += formarLinha(7, 0, 63, 813, descricao, 0, qtdLinhas * 25);
+						linhas += formarLinha(7, 0, 53, 813, descricao, 0, qtdLinhas * 25);
 						descricao = consumoMinimo + " m3";
 						linhas += formarLinha(7, 0, 571, 813, descricao, 0, qtdLinhas * 25);
 						linhas += formarLinha(7, 0, 697, 813,
@@ -1012,9 +1012,9 @@ public class ImpressaoContaImpressoraTermica {
 			String diasConsumo = obterDiasConsumo(emitirContaHelper, medicaoHistoricoAgua, medicaoHistoricoPoco,
 					consumoAgua, consumoEsgoto);
 
-			retorno.append(formarLinha(7, 0, 20, 300, obterNumeroHidrometro(imovelEmitido), 0, 0));
-			retorno.append(formarLinha(7, 0, 255, 300, obterDataInstalacaoHidroemtro(imovelEmitido), 0, 0));
-			retorno.append(formarLinha(7, 0, 500, 300,
+			retorno.append(formarLinha(7, 0, 20, 310, obterNumeroHidrometro(imovelEmitido), 0, 0));
+			retorno.append(formarLinha(7, 0, 255, 310, obterDataInstalacaoHidroemtro(imovelEmitido), 0, 0));
+			retorno.append(formarLinha(7, 0, 500, 310,
 					obterSituacaoAgua(emitirContaHelper.getDescricaoLigacaoAguaSituacao()), 0, 0));
 			retorno.append(formarLinha(7, 0, 688, 310, emitirContaHelper.getDescricaoLigacaoEsgotoSituacao(), 0, 0));
 
@@ -1048,25 +1048,25 @@ public class ImpressaoContaImpressoraTermica {
 			String leituraAnteriorFaturada = obterLeituraAnteriorFaturada(medicaoHistoricoAgua, medicaoHistoricoPoco);
 			String leituraAtualFaturada = obterLeituraAtualFaturada(medicaoHistoricoAgua, medicaoHistoricoPoco,
 					consumoAgua);
-			retorno.append(formarLinha(7, 0, 163, 352, "LEITURA", 0, 0) + formarLinha(7, 0, 163, 372, "FATURADA", 0, 0)
-					+ formarLinha(7, 0, 190, 396, leituraAnteriorFaturada, 0, 0)
-					+ formarLinha(7, 0, 190, 420, leituraAtualFaturada, 0, 0));
+			retorno.append(formarLinha(7, 0, 163, 362, "LEITURA", 0, 0) + formarLinha(7, 0, 163, 382, "FATURADA", 0, 0)
+					+ formarLinha(7, 0, 190, 406, leituraAnteriorFaturada, 0, 0)
+					+ formarLinha(7, 0, 190, 430, leituraAtualFaturada, 0, 0));
 
 			// Leitura Atual
 			String dataLeituraAnteriorFaturada = obterDataLeituraAnteriorFaturada(medicaoHistoricoAgua,
 					medicaoHistoricoPoco);
 			String dataLeituraAtualFaturada = obterDataLeituraAtualFaturada(medicaoHistoricoAgua, medicaoHistoricoPoco);
 
-			retorno.append(formarLinha(7, 0, 313, 372, "DATA", 0, 0)
-					+ formarLinha(7, 0, 285, 396, dataLeituraAnteriorFaturada, 0, 0)
+			retorno.append(formarLinha(7, 0, 313, 382, "DATA", 0, 0)
+					+ formarLinha(7, 0, 285, 406, dataLeituraAnteriorFaturada, 0, 0)
 
-					+ formarLinha(7, 0, 285, 420, dataLeituraAtualFaturada, 0, 0));
+					+ formarLinha(7, 0, 285, 430, dataLeituraAtualFaturada, 0, 0));
 
 			gerarDadosConsumoTotal(retorno, imovelEmitido, consumoAgua, consumoEsgoto, medicaoHistoricoAgua,
 					medicaoHistoricoPoco);
 
 			// Numero de dias
-			retorno.append(formarLinha(7, 0, 745, 372, "DIAS", 0, 0) + formarLinha(7, 0, 760, 396, diasConsumo, 0, 0));
+			retorno.append(formarLinha(7, 0, 745, 382, "DIAS", 0, 0) + formarLinha(7, 0, 760, 406, diasConsumo, 0, 0));
 
 			String anormalidadeConsumo = null;
 			if (consumoAgua != null) {
@@ -1080,7 +1080,7 @@ public class ImpressaoContaImpressoraTermica {
 				}
 			}
 
-			retorno.append(formarLinha(7, 0, 37, 396, "ANTERIOR", 0, 0) + formarLinha(7, 0, 37, 420, "ATUAL", 0, 0));
+			retorno.append(formarLinha(7, 0, 37, 406, "ANTERIOR", 0, 0) + formarLinha(7, 0, 37, 430, "ATUAL", 0, 0));
 
 			retorno.append(formarLinha(7, 0, 50, 579, "ULTIMOS CONSUMOS", 0, 0));
 			retorno.append("LINE 115 605 115 745 1\n");
@@ -1620,22 +1620,22 @@ public class ImpressaoContaImpressoraTermica {
 			StringBuilder retorno, Imovel imovelEmitido, String endereco, String cpfCnpjFormatado) {
 		retorno.append("! 0 200 200 3100 1\n");
 
-		retorno.append("BOX 32 395 802 442 1\n" + 
-					   "LINE 720 375 720 415 1\n" + 
-					   "LINE 403 375 403 437 1\n" +
+		retorno.append("BOX 32 405 802 452 1\n" + 
+					   "LINE 720 385 720 425 1\n" + 
+					   "LINE 403 385 403 447 1\n" +
 
-					   "BOX 32 351 802 395 1\n" + 
-					   "LINE 278 375 278 437 1\n" +
+					   "BOX 32 361 802 405 1\n" + 
+					   "LINE 278 385 278 447 1\n" +
 
 					   "BOX 283 588 802 615 1\n" + 
 					   "BOX 283 615 802 782 1\n" + 
 					   "LINE 656 588 656 782 1\n" + 
-					   "LINE 415 588 425 615 1\n" + 
+					   "LINE 415 588 415 615 1\n" + 
 					   "LINE 535 588 535 782 1\n");
 
 		retorno.append("T 7 0 50 51 " + "Data de Emissao: " + Util.formatarDataComHora(new Date()) + "\n");
-		retorno.append("T 7 1 70 105 " + imovelEmitido.getId() + "\n");
-		retorno.append("T 7 1 640 105 " + Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + "")
+		retorno.append("T 7 1 70 115 " + imovelEmitido.getId() + "\n");
+		retorno.append("T 7 1 640 115 " + Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + "")
 				+ "\n");
 		// retorno.append("T 0 0 201 47 " +
 		// Util.formatarCnpj(sistemaParametro.getCnpjEmpresa().trim()) + "\n");
@@ -1644,12 +1644,12 @@ public class ImpressaoContaImpressoraTermica {
 		// retorno.append(formarLinha(0, 0, 222, 81,
 		// emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
 
-		retorno.append(formarLinha(7, 0, 20, 180, obterNomeCliente(emitirContaHelper, imovelEmitido), 0, 0)
-				+ formarLinha(7, 0, 20, 205, cpfCnpjFormatado, 0, 0)
-				+ dividirLinha(0, 2, 400, 185, endereco.trim(), 35, 22));
-		retorno.append(formarLinha(7, 0, 20, 250, imovelEmitido.getInscricaoFormatada(), 0, 0));
-		retorno.append(formarLinha(7, 0, 350, 250, imovelEmitido.getQuadra().getRota().getCodigo() + "", 0, 0));
-		retorno.append(formarLinha(7, 0, 445, 250, imovelEmitido.getNumeroSequencialRota() + "", 0, 0));
+		retorno.append(formarLinha(0, 2, 20, 200, obterNomeCliente(emitirContaHelper, imovelEmitido), 0, 0)
+				+ formarLinha(0, 2, 20, 222, cpfCnpjFormatado, 0, 0)
+				+ dividirLinha(0, 2, 350, 200, endereco.trim(), 55, 22));
+		retorno.append(formarLinha(7, 0, 20, 260, imovelEmitido.getInscricaoFormatada(), 0, 0));
+		retorno.append(formarLinha(7, 0, 350, 260, imovelEmitido.getQuadra().getRota().getCodigo() + "", 0, 0));
+		retorno.append(formarLinha(7, 0, 445, 260, imovelEmitido.getNumeroSequencialRota() + "", 0, 0));
 
 		gerarDadosQtdEconomias(retorno, imovelEmitido);
 	}
@@ -1674,8 +1674,8 @@ public class ImpressaoContaImpressoraTermica {
 
 		for (int i = 0; i < quantidadeEconomias.size(); i++) {
 			Object[] dadosCategoria = (Object[]) quantidadeEconomias.elementAt(i);
-			retorno.append(formarLinha(0, 0, 464, 250, dadosCategoria[0] + "", i * 85, 0));
-			retorno.append(formarLinha(7, 0, 710, 250, dadosCategoria[1] + "", i * 85, 0));
+			retorno.append(formarLinha(0, 0, 464, 260, dadosCategoria[0] + "", i * 85, 0));
+			retorno.append(formarLinha(7, 0, 710, 260, dadosCategoria[1] + "", i * 85, 0));
 		}
 	}
 
@@ -1836,12 +1836,12 @@ public class ImpressaoContaImpressoraTermica {
 
 	private void gerarLinhaTelefoneAgenciaReguladora(StringBuilder retorno) {
 
-		String linha = formarLinha(7, 0, 278, 100,
+		String linha = formarLinha(7, 0, 243, 100,
 				String.format("Ag. reguladora (%s)", ConstantesSistema.NOME_AGENCIA_REGULADORA), 0, 0);
-		linha += formarLinha(7, 0, 278, 120,
+		linha += formarLinha(7, 0, 243, 120,
 				String.format("Telefone: %s", ConstantesSistema.NUMERO_AGENCIA_REGULADORA), 0, 0);
 
-		linha += formarLinha(7, 0, 278, 140, 
+		linha += formarLinha(7, 0, 243, 140, 
 				String.format("Email: %s", ConstantesSistema.EMAIL_AGENCIA_REGULADORA), 0, 0);
 
 		retorno.append(linha);
