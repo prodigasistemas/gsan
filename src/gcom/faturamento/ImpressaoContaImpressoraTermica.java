@@ -15,7 +15,6 @@ import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
-import gcom.cadastro.ControladorCadastro;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ControladorClienteLocal;
@@ -28,7 +27,6 @@ import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.bean.ImovelSubcategoriaHelper;
-import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.faturamento.bean.EmitirContaHelper;
@@ -46,7 +44,6 @@ import gcom.micromedicao.consumo.ConsumoTipo;
 import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.util.ConstantesJNDI;
-import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -907,7 +904,7 @@ public class ImpressaoContaImpressoraTermica {
 
 				this.gerarLinhasAliquotasImpostos(emitirContaHelper, sistemaParametro, dadosAgenciaReguladora, retorno);
 
-				this.gerarLinhaTelefoneAgenciaReguladora(retorno);
+				this.gerarLinhaDadosAgenciaReguladora(emitirContaHelper, retorno);
 
 				retorno.append("FORM\n" + "PRINT\n");
 
@@ -1834,16 +1831,15 @@ public class ImpressaoContaImpressoraTermica {
 		return valorPrestacao;
 	}
 
-	private void gerarLinhaTelefoneAgenciaReguladora(StringBuilder retorno) {
+	private void gerarLinhaDadosAgenciaReguladora(EmitirContaHelper emitirContaHelper, StringBuilder retorno) throws ErroRepositorioException, ControladorException {
+		Object[] dados = getControladorFaturamento().pesquisarContatosAgenciaReguladora(emitirContaHelper);
 
-		String linha = formarLinha(7, 0, 243, 100,
-				String.format("Ag. reguladora (%s)", ConstantesSistema.NOME_AGENCIA_REGULADORA), 0, 0);
-		linha += formarLinha(7, 0, 243, 120,
-				String.format("Telefone: %s", ConstantesSistema.NUMERO_AGENCIA_REGULADORA), 0, 0);
-
-		linha += formarLinha(7, 0, 243, 140, 
-				String.format("Email: %s", ConstantesSistema.EMAIL_AGENCIA_REGULADORA), 0, 0);
-
-		retorno.append(linha);
+		if (dados != null && dados.length > 0) {
+			String linha = formarLinha(7, 0, 243, 100, String.format("Ag. reguladora (%s)", (String) dados[0]), 0, 0);
+			linha += formarLinha(7, 0, 243, 120, String.format("Telefone: %s", (String) dados[1]), 0, 0);
+			linha += formarLinha(7, 0, 243, 140, String.format("Email: %s", (String) dados[2]), 0, 0);
+			
+			retorno.append(linha);
+		}
 	}
 }

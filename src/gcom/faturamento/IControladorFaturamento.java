@@ -1289,4 +1289,5 @@ public interface IControladorFaturamento {
 	
 	public Localidade pesquisarLocalidadeConta(Integer parametro) throws ControladorException;
 
+	public Object[] pesquisarContatosAgenciaReguladora(EmitirContaHelper emitirContaHelper) throws ErroRepositorioException, ControladorException;
 }
