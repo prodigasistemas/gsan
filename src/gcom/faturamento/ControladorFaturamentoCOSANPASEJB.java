@@ -3706,20 +3706,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return colecaoDebitosACobrarCategorias;
 	}
 	
-	public Object[] pesquisarContatosAgenciaReguladora(EmitirContaHelper emitirContaHelper) throws ErroRepositorioException, ControladorException {
-		FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
-		filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID, emitirContaHelper.getIdSetorComercial()));
-		
-		SetorComercial setorComercial = (SetorComercial) getControladorUtil().pesquisar(filtroSetorComercial, SetorComercial.class.getName()).iterator().next();
-		
-		FiltroMunicipio filtroMunicipio = new FiltroMunicipio();
-		filtroMunicipio.adicionarParametro(new ParametroSimples(FiltroMunicipio.ID, setorComercial.getMunicipio().getId()));
-		
-		Municipio municipio = (Municipio) getControladorUtil().pesquisar(filtroMunicipio, Municipio.class.getName()).iterator().next();
-		
-		return repositorioFaturamento.pesquisarContatosAgenciaReguladora(municipio.getId());
-	}
-
 	public StringBuilder preencherDadosAliquotaImposto(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
 		Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, false);
 		
