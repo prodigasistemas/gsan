@@ -16,6 +16,7 @@ public class EfetuarLigacaoAguaActionForm extends ActionForm{
     private String situacaoLigacaoEsgoto;
    
     //Dados da Ligação
+    private String hidrometroInstalacaoHistorico;
     private String diametroLigacao;
     private String dataLigacao;
     private String materialLigacao;
@@ -177,6 +178,14 @@ public class EfetuarLigacaoAguaActionForm extends ActionForm{
 
 	public void setSituacaoLigacaoAgua(String situacaoLigacaoAgua) {
 		this.situacaoLigacaoAgua = situacaoLigacaoAgua;
+	}
+
+	public String getHidrometroInstalacaoHistorico() {
+		return hidrometroInstalacaoHistorico;
+	}
+
+	public void setHidrometroInstalacaoHistorico(String hidrometroInstalacaoHistorico) {
+		this.hidrometroInstalacaoHistorico = hidrometroInstalacaoHistorico;
 	}
 
 	public String getSituacaoLigacaoEsgoto() {

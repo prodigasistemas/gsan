@@ -406,6 +406,9 @@ public class ExibirEfetuarLigacaoAguaAction extends GcomAction {
 							.getLigacaoAguaSituacao().getDescricao();
 					ligacaoAguaActionForm
 							.setSituacaoLigacaoAgua(situacaoLigacaoAgua);
+					if(imovel.getLigacaoAgua() != null && imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
+						ligacaoAguaActionForm.setHidrometroInstalacaoHistorico(imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico().getId().toString());
+					} 
 
 					// Situação da Ligação de Esgoto
 					String situacaoLigacaoEsgoto = imovel

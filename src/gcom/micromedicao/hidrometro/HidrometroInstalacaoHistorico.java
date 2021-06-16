@@ -152,6 +152,10 @@ public class HidrometroInstalacaoHistorico extends ObjetoTransacao {
 			funcionalidade={ATRIBUTOS_EFETUAR_INSTALACAO_HIDROMETRO, ATRIBUTOS_EFETUAR_SUBSTITUICAO_HIDROMETRO,
 			ATRIBUTOS_ATUALIZAR_INSTALACAO_HIDROMETRO})
 	private MedicaoTipo medicaoTipo;
+	
+	public HidrometroInstalacaoHistorico(Integer id) {
+		this.id = id;
+	}
 
 	/** full constructor */
 	public HidrometroInstalacaoHistorico(
