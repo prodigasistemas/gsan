@@ -54,6 +54,7 @@ import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.bean.DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.atualizacaocadastral.Visita;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.arquivo.GeradorRegistroAcessoHidrometro;
 import gcom.cadastro.arquivo.GeradorRegistroClasseSocial;
@@ -6761,7 +6762,7 @@ public class ControladorCadastro extends ControladorComum {
 		arquivo.setArquivoTexto(IoUtil.transformarObjetoParaBytes(new StringBuilder()));
 
 		Integer idArquivoTexto = (Integer) getControladorUtil().inserir(arquivo);
-		StringBuilder arquivoTexto = gerarArquivoTxt(idsImoveis, idArquivoTexto, leiturista, rota);
+		StringBuilder arquivoTexto = gerarArquivoTxt(idsImoveis, idArquivoTexto, leiturista.getEmpresa().getId(), rota);
 
 		arquivo.setArquivoTexto(IoUtil.transformarObjetoParaBytes(arquivoTexto));
 		getControladorUtil().atualizar(arquivo);
@@ -6790,11 +6791,11 @@ public class ControladorCadastro extends ControladorComum {
 
 		return descricao;
 	}
-
+	
 	/**
 	 * Gerar Arquivo Texto para Atualizacao Cadastral
 	 */
-	private StringBuilder gerarArquivoTxt(Collection colecaoImovelFiltrado, Integer idArquivoTexto, Leiturista leiturista, Rota rota) throws ControladorException {
+	public StringBuilder gerarArquivoTxt(Collection colecaoImovelFiltrado, Integer idArquivoTexto, Integer idEmpresa, Rota rota) throws ControladorException {
 		try {
 			StringBuilder arquivoTexto = new StringBuilder();
 			Iterator imovelFiltradoIterator = colecaoImovelFiltrado.iterator();
@@ -6802,9 +6803,9 @@ public class ControladorCadastro extends ControladorComum {
 			Integer qtdRegistro = 0;
 
 			while (imovelFiltradoIterator.hasNext()) {
-
 				Integer idImovel = (Integer) imovelFiltradoIterator.next();
 				Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
+				ImovelControleAtualizacaoCadastral imovelControle = getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(idImovel);
 
 				Collection colecaoClienteImovel = repositorioClienteImovel.pesquisarClienteImovelAtualizacaoCadastral(idImovel);
 
@@ -6813,7 +6814,11 @@ public class ControladorCadastro extends ControladorComum {
 				qtdRegistro = qtdRegistro + 1;
 
 				// REGISTRO_TIPO_02(Dados do imovel)
-				arquivoTexto.append(this.gerarArquivoTextoRegistroTipoImovel(idImovel, null));
+				if (imovelControle != null) {
+					arquivoTexto.append(this.gerarArquivoTextoRegistroTipoImovel(idImovel, imovelControle.getInformativo()));
+				} else {
+					arquivoTexto.append(this.gerarArquivoTextoRegistroTipoImovel(idImovel, null));
+				}
 				qtdRegistro = qtdRegistro + 1;
 
 				Collection<ImovelRamoAtividade> colecaoImovelRamoAtividade = getControladorImovel().pesquisarRamoAtividadeDoImovel(idImovel);
@@ -6838,14 +6843,23 @@ public class ControladorCadastro extends ControladorComum {
 				// Registro_Tipo_06 (Localização)
 				arquivoTexto.append(new GeradorRegistroLocalizacao(idImovel).build());
 				qtdRegistro = qtdRegistro + 1;
-
-				getControladorImovel().atualizarImovelAtualizacaoCadastralSituacaoAtualizacaoCadastral(idImovel, SituacaoAtualizacaoCadastral.EM_CAMPO, null);
-				getControladorImovel().atualizarIdArquivoTextoImovelAtualizacaoCadastral(idArquivoTexto, idImovel);
+				
+				if (idArquivoTexto != null && !idArquivoTexto.equals("")) {
+					getControladorImovel().atualizarImovelAtualizacaoCadastralSituacaoAtualizacaoCadastral(idImovel, SituacaoAtualizacaoCadastral.EM_CAMPO, null);
+					getControladorImovel().atualizarIdArquivoTextoImovelAtualizacaoCadastral(idArquivoTexto, idImovel);
+				}			
 			}
 
 			// Trailer
-			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, rota,
-					ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO, leiturista.getEmpresa().getId(), idArquivoTexto);
+			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = null;
+			
+			if (idArquivoTexto != null && !idArquivoTexto.equals("")) {
+				arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, rota,
+					ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TRANSMISSAO, idEmpresa, idArquivoTexto);
+			} else {
+				arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, rota,
+						ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TODOS, idEmpresa, idArquivoTexto);
+			}
 			arquivoTexto.append((StringBuilder) arquivoTrailerEQuantidadeTotalDeLinhas[0]);
 
 			StringBuilder arquivoTextoFinal = new StringBuilder();
@@ -6897,7 +6911,7 @@ public class ControladorCadastro extends ControladorComum {
 				}
 
 				ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(idImovel);
-				if (imovelControle != null && ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA.equalsIgnoreCase(tipoArquivo)) {
+				if (imovelControle != null && isArquivoRevisita(tipoArquivo)) {
 					imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.REVISITA));
 					getControladorUtil().atualizar(imovelControle);
 				}
@@ -6938,21 +6952,22 @@ public class ControladorCadastro extends ControladorComum {
 		}
 	}
 	
-	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastralComObjetos(List<ImovelControleAtualizacaoCadastral> imoveisControle, 
+	public ArquivoTextoAtualizacaoCadastral regerarArquivoTextoAtualizacaoCadastralComObjetos(List<ImovelControleAtualizacaoCadastral> controles, 
 			Integer idArquivoTexto, String tipoArquivo, Integer idEmpresa) throws ControladorException {
 		try {
 			StringBuilder builder = new StringBuilder();
 			int qtdRegistro = 0;
-
+			
 			ArquivoTextoAtualizacaoCadastral arquivo = pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTexto);
+			
 
-			for (ImovelControleAtualizacaoCadastral imovelControle : imoveisControle) {
-				Integer idImovel = imovelControle.getImovel().getId();
+			for (ImovelControleAtualizacaoCadastral controle : controles) {
+				Integer idImovel = controle.getImovel().getId();
 				Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
 				builder.append(this.gerarArquivoTextoRegistroTipoCliente(repositorioClienteImovel.pesquisarClienteImovelAtualizacaoCadastral(idImovel), imovel));
 				qtdRegistro += 1;
 
-				builder.append(this.gerarArquivoTextoRegistroTipoImovel(idImovel, imovelControle.getInformativo()));
+				builder.append(this.gerarArquivoTextoRegistroTipoImovel(idImovel, controle.getInformativo()));
 				qtdRegistro += 1;
 
 				Collection<ImovelRamoAtividade> colecaoImovelRamoAtividade = getControladorImovel().pesquisarRamoAtividadeDoImovel(idImovel);
@@ -6961,17 +6976,14 @@ public class ControladorCadastro extends ControladorComum {
 					qtdRegistro += colecaoImovelRamoAtividade.size();
 				}
 
-				ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = imovelControle.getImovelAtualizacaoCadastral();
+				ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = controle.getImovelAtualizacaoCadastral();
 				if (imovelAtualizacaoCadastral == null) {
 					imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(idImovel);
 				}
-				if (imovelControle != null 
-						&& ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA.equalsIgnoreCase(tipoArquivo)
-						&& !imovelControle.ehInformativo()) {
-					imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.REVISITA));
-					getControladorUtil().atualizar(imovelControle);
-				}
-
+				
+				if (!controle.ehInformativo())
+					atualizarControleParaRevisita(controle, tipoArquivo);
+				
 				builder.append(new GeradorRegistroServicos(imovelAtualizacaoCadastral, imovel).build());
 				qtdRegistro += 1;
 
@@ -6981,8 +6993,8 @@ public class ControladorCadastro extends ControladorComum {
 				builder.append(new GeradorRegistroLocalizacao(idImovel).build());
 				qtdRegistro += 1;
 			}
-
-			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota(), tipoArquivo, idEmpresa, idArquivoTexto);
+			
+			Object[] trailler = gerarArquivoTextoRegistroTipoTrailer(qtdRegistro, arquivo.getRota(), tipoArquivo, idEmpresa, idArquivoTexto);		
 			builder.append((StringBuilder) trailler[0]);
 
 			StringBuilder arquivoTexto = new StringBuilder();
@@ -7006,6 +7018,27 @@ public class ControladorCadastro extends ControladorComum {
 		} catch (IOException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
+	}
+
+	private void atualizarControleParaRevisita(ImovelControleAtualizacaoCadastral controle, String tipoArquivo) throws ControladorException {
+		if (isArquivoRevisita(tipoArquivo) ||
+		   (isArquivoTodos(tipoArquivo) && imovelPermiteRevisita(controle))) {
+			controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.REVISITA));
+			getControladorUtil().atualizar(controle);
+		}
+	}
+
+	private boolean isArquivoRevisita(String tipoArquivo) {
+		return ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA.equalsIgnoreCase(tipoArquivo);
+	}
+	
+	private boolean isArquivoTodos(String tipoArquivo) {
+		return ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TODOS.equalsIgnoreCase(tipoArquivo);
+	}
+	
+	private boolean imovelPermiteRevisita(ImovelControleAtualizacaoCadastral controle) {
+		return (controle.isTransmitido() || controle.isRevisita()) && 
+				controle.getQuantidadeVisitaNaoExcluidas() < Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO;
 	}
 
 	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(
@@ -7127,8 +7160,7 @@ public class ControladorCadastro extends ControladorComum {
 					ImovelControleAtualizacaoCadastral controle = 
 							getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(atualizacao.getImovelAtual().getMatricula());
 					
-					if (atualizacao.getArquivoTexto().isArquivoRetornoTransmissao()
-							&& controle != null) {
+					if (atualizacao.getArquivoTexto().isArquivoRetornoTransmissao() && controle != null) {
 						getControladorAtualizacaoCadastral().apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
 					}
 					
@@ -8173,7 +8205,7 @@ public class ControladorCadastro extends ControladorComum {
 		
 		// ID ARQUIVO TEXTO
 		arquivoTexto.append(Util.adicionarZerosEsquedaNumero(11, String.valueOf(idArquivoTexto)));
-
+		
 		arquivoTexto.append(System.getProperty("line.separator"));
 
 		return arquivoTexto;
@@ -14556,4 +14588,13 @@ public class ControladorCadastro extends ControladorComum {
 		
 		return (UnidadeOrganizacional) getControladorUtil().pesquisar(filtro, UnidadeOrganizacional.class.getName()).iterator().next();
 	}
+	
+	public Collection pesquisarRotaArquivoTextoAtualizacaoCadastroPorIdArquivo(String[] idsArquivoTxt) throws ControladorException {
+		try {
+			return repositorioCadastro.pesquisarRotaArquivoTextoAtualizacaoCadastroPorIdArquivo(idsArquivoTxt);
+		} catch(ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	} 
+	
 }

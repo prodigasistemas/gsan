@@ -268,4 +268,8 @@ public interface IRepositorioAtualizacaoCadastral {
      * @throws ErroRepositorioException
      */
     public Collection<Integer> pesquisarRotasComImoveisAprovados() throws ErroRepositorioException;
+    
+    public Collection<Integer> pesquisarIdsArquivoTextoPorRotaTodasSituacoes(Integer idRota, String[] idsArquivos) throws ErroRepositorioException;
+    
+    public List<ImovelControleAtualizacaoCadastral> obterImoveisPorArquivoTodasSituacoes(Integer idArquivo, Date dataUltimaTransmissao) throws ErroRepositorioException;
 }

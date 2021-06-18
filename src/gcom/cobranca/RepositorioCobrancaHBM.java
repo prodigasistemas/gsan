@@ -26712,4 +26712,37 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		// retorna a coleção do resultado da pesquisa
 		return retorno;
 	}
+
+	public Collection pesquisarNumeroQuadraPorAtividadeComando(Integer idAtividadeComando) throws ErroRepositorioException {
+		
+		Collection retorno = new ArrayList();
+
+		Session session = HibernateUtil.getSession();
+
+		String consulta;
+		
+		try {
+			
+			consulta = "Select DISTINCT cdoc.cbdo_nnquadra as numeroQuadra "
+					 + "FROM cobranca.cobranca_documento AS cdoc "
+					 + "WHERE cdoc.cacm_id = :idAtividadeComando";
+					 
+			retorno = session.createSQLQuery(consulta)
+					 .addScalar("numeroQuadra", Hibernate.INTEGER)
+					 .setInteger("idAtividadeComando", idAtividadeComando)
+					 .list();
+			
+			
+			
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+		
+	}
 }

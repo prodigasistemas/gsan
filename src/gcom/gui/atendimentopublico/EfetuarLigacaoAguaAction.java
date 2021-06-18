@@ -17,6 +17,7 @@ import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.FiltroConsumoTarifa;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
@@ -107,6 +108,11 @@ public class EfetuarLigacaoAguaAction extends GcomAction {
 			imovel = new Imovel(new Integer(idImovel));
 			imovel.setUltimaAlteracao(new Date());
 			ligacaoAgua.setImovel(imovel);
+			
+			if (form.getHidrometroInstalacaoHistorico() != null && !form.getHidrometroInstalacaoHistorico().trim().equals("")) {
+				HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = new HidrometroInstalacaoHistorico(new Integer(form.getHidrometroInstalacaoHistorico()));
+				ligacaoAgua.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
+			}
 			
 			if (form.getDataLigacao() != null && !form.getDataLigacao().equals("")) {
 				

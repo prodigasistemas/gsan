@@ -104,7 +104,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 		
 		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, imovelAtualizacaoCadastralBase, imovelTxt, 
-				matriculaImovel, tipoOperacao, atualizacaoCadastralImovel.getImovelControle().getId());
+				matriculaImovel, tipoOperacao);
 		
 		salvarRamoAtividade();
 		salvarImovelSubcategoria();
@@ -123,7 +123,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 				int tipoOperacao = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOperacao"));
 				
 				salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, new ImovelRamoAtividadeAtualizacaoCadastral(),
-						ramoAtividadeTxt, matriculaImovel, tipoOperacao, atualizacaoCadastralImovel.getImovelControle().getId());
+						ramoAtividadeTxt, matriculaImovel, tipoOperacao);
 			}
 		}
 	}
@@ -142,7 +142,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 			}
 
 			salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, imovelSubcategoriaAtualizacaoCadastral, subcategoria, 
-					matriculaImovel, tipoOperacao, atualizacaoCadastralImovel.getImovelControle().getId());
+					matriculaImovel, tipoOperacao);
 		}
 	}
 	
@@ -168,8 +168,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	        valorTxt.setQuantidade(qtd);
 	        valorTxt.setTipoOcupante(tipo);
 	        
-	        salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, valorBase, valorTxt, matriculaImovel, 
-	        		tipoOperacao, atualizacaoCadastralImovel.getImovelControle().getId());
+	        salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, valorBase, valorTxt, matriculaImovel, tipoOperacao);
 	    }
 	}
 	
@@ -275,7 +274,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 		
 		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteAtualizacaoCadastralBase, clienteTxt, 
-				matriculaImovel, tipoOperacao, atualizacaoCadastralImovel.getImovelControle().getId());
+				matriculaImovel, tipoOperacao);
 	}
 
 	private void salvarClienteFoneAtualizacaoCadastral(String ddd, String telefone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente) {
@@ -289,12 +288,12 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 								Integer.valueOf(clienteRelacaoTipo), null).iterator().next();
 
 				salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, 
-						matriculaImovel, tipoOperacao, atualizacaoCadastralImovel.getImovelControle().getId());
+						matriculaImovel, tipoOperacao);
 			} catch (NoSuchElementException e) {
 				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = new ClienteFoneAtualizacaoCadastral();
 				try {
 					salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, 
-							matriculaImovel, tipoOperacao, atualizacaoCadastralImovel.getImovelControle().getId());
+							matriculaImovel, tipoOperacao);
 				} catch (ControladorException e1) {
 					e1.printStackTrace();
 				}
@@ -335,7 +334,8 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 			controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO));
 		}
 		
-		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTransmissao())
+		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTransmissao() ||
+				(atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTodasSituacoes() && controle.isEmCampo()))
 			controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO));
 		
 		controle.setDataRetorno(new Date());

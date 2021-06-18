@@ -1,5 +1,11 @@
 package gcom.cadastro;
 
+import java.io.BufferedReader;
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado;
@@ -68,12 +74,6 @@ import gcom.relatorio.cadastro.micromedicao.RelatorioColetaMedidorEnergiaHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
-
-import java.io.BufferedReader;
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 public interface IControladorCadastro {
 
@@ -526,4 +526,8 @@ public interface IControladorCadastro {
 	public UnidadeOrganizacional obterUnidadePorLocalidade(Integer idImovel) throws ControladorException;
 	
 	public Hidrometro obterHidrometroAtualmenteInstalado(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection pesquisarRotaArquivoTextoAtualizacaoCadastroPorIdArquivo(String[] idsArquivoTxt) throws ControladorException;
+	
+	public StringBuilder gerarArquivoTxt(Collection colecaoImovelFiltrado, Integer idArquivoTexto, Integer idEmpresa, Rota rota) throws ControladorException;
 }

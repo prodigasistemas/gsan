@@ -162,6 +162,23 @@
 		}
 	}
 
+	function gerarZipTodasSituacoes(url) {
+		var form = document.forms[0];
+
+		var dataUltimaTransmissao = trim(form.dataUltimaTransmissao.value);
+
+		if(CheckboxNaoVazio(document.forms[0].idsRegistros)) {
+			 if (dataUltimaTransmissao == null || dataUltimaTransmissao == '') {
+				alert('Informe a Data da Última Transmissão.');
+				return false;
+			} else {
+				form.action = url;
+				form.submit();
+			}
+		
+		}
+	}
+
     function listarLeiturista(){
 		 var form = document.forms[0];
 		 form.action = 'exibirConsultarArquivoTextoAtualizacaoCadastralAction.do';
@@ -487,15 +504,16 @@
 						</tr>
 						
 						<tr>
-							<td colspan="2">
+							<td colspan="3">
 								<gsan:controleAcessoBotao name="Button" value="Rota(s) para Revisão" onclick="javascript:gerarZip('retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
 								<gsan:controleAcessoBotao name="Button" value="Rota(s) para Fiscalização" onclick="javascript:gerarZipFiscalizacao('retornarArquivosImoveisAFiscalizarAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisARevisarAtualizacaoCadastralAction.do" tabindex="15" />
+								<gsan:controleAcessoBotao name="Button" value="Rota(s) com Todas as Situações" onclick="javascript:gerarZipTodasSituacoes('retornarArquivosImoveisTodasSituacoesAtualizacaoCadastralAction.do');" url="retornarArquivosImoveisTodasSituacoesAtualizacaoCadastralAction.do" tabindex="15" />
 							</td>
 						</tr>
-
+						
 						<tr>
 							<td colspan="3"><hr></td>
-						</tr>
+						</tr>					
 
 						<tr>
 							<td><strong>Resumo da seleção:</strong></td>

@@ -406,4 +406,6 @@ public interface IRepositorioCadastro {
     public void removerQuantidadesOcupantesImovel(Integer idImovel) throws ErroRepositorioException;
     
     public Date buscarUltimadataAlteracaoNoImovel(Integer idImovel) throws ErroRepositorioException;
+    
+    public Collection pesquisarRotaArquivoTextoAtualizacaoCadastroPorIdArquivo(String[] idsArquivoTxt) throws ErroRepositorioException; 
 }

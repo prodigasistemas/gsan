@@ -1,5 +1,7 @@
 package gcom.gui.cadastro;
 
+import gcom.micromedicao.Rota;
+
 import javax.servlet.ServletRequest;
 
 import org.apache.struts.action.ActionForm;
@@ -34,6 +36,8 @@ public class ConsultarArquivoTextoAtualizacaoCadastralActionForm extends ActionF
 	private String lote;
 
 	private String dataUltimaTransmissao;
+	
+	private String[] idsRotas;
 
 	@Override
 	public void reset(ActionMapping mapping, ServletRequest request) {
@@ -150,4 +154,14 @@ public class ConsultarArquivoTextoAtualizacaoCadastralActionForm extends ActionF
 	public void setDataUltimaTransmissao(String dataUltimaTransmissao) {
 		this.dataUltimaTransmissao = dataUltimaTransmissao;
 	}
+
+	public String[] getIdsRotas() {
+		return idsRotas;
+	}
+
+	public void setIdsRotas(String[] idsRotas) {
+		this.idsRotas = idsRotas;
+	}
+	
+	
 }

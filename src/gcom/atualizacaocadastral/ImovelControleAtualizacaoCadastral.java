@@ -1,11 +1,13 @@
 package gcom.atualizacaocadastral;
 
+import java.util.Date;
+
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
-
-import java.util.Date;
+import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 
 public class ImovelControleAtualizacaoCadastral {
 
@@ -166,12 +168,25 @@ public class ImovelControleAtualizacaoCadastral {
 		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.ATUALIZADO);
 	}
 	
+	public boolean isEmCampo() {
+		return SituacaoAtualizacaoCadastral.EM_CAMPO.equals(this.situacaoAtualizacaoCadastral.getId());
+	}
+	
 	public boolean isTransmitido() {
 		return SituacaoAtualizacaoCadastral.TRANSMITIDO.equals(this.situacaoAtualizacaoCadastral.getId());
 	}
 
 	public boolean isRevisita() {
 		return SituacaoAtualizacaoCadastral.REVISITA.equals(this.situacaoAtualizacaoCadastral.getId());
+	}
+	
+	public boolean isEmRevisao() {
+		return SituacaoAtualizacaoCadastral.EM_REVISAO.equals(this.situacaoAtualizacaoCadastral.getId());
+	}
+	
+	public boolean isTransmitidoOuRevisita() {
+		return SituacaoAtualizacaoCadastral.TRANSMITIDO.equals(this.situacaoAtualizacaoCadastral.getId()) || 
+			   SituacaoAtualizacaoCadastral.REVISITA.equals(this.situacaoAtualizacaoCadastral.getId());
 	}
 
 	public boolean isProntoParaAprovacao() {
@@ -243,5 +258,39 @@ public class ImovelControleAtualizacaoCadastral {
 
 	public void setQuantidadeVisitaNaoExcluidas(Integer quantidadeVisitaNaoExcluidas) {
 		this.quantidadeVisitaNaoExcluidas = quantidadeVisitaNaoExcluidas;
+	}
+	
+	public boolean fazParteArquivoTodasSituacoes() {
+		return this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.EM_CAMPO) || 
+			   this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.TRANSMITIDO) ||
+			   this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.REVISITA) ||
+			   this.situacaoAtualizacaoCadastral.getId().equals(SituacaoAtualizacaoCadastral.EM_REVISAO);
+	}
+	
+
+	public boolean quantidadeVisitasMenorQuePermitido() {
+		return this.quantidadeVisitas.intValue() < Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO.intValue();
+	}
+	
+	public void verificarInformativoArquivoTodasSituacoes(Date dataUltimaTransmissao) {
+		this.informativo = ConstantesSistema.SIM.intValue();
+
+		if (fazParteArquivoTodasSituacoes() && quantidadeVisitasMenorQuePermitido()) {
+			if (isEmCampo() || isEmRevisao()) {
+				this.informativo = ConstantesSistema.NAO.intValue();
+
+			} else if (isTransmitidoOuRevisita() && permiteRevisita() && dataRetornoMenorOuIgual(dataUltimaTransmissao)) {
+				this.informativo = ConstantesSistema.NAO.intValue();
+			}
+		}
+	}
+
+	private boolean permiteRevisita() {
+		return this.cadastroOcorrencia.getIndicadorVisita().intValue() == ConstantesSistema.SIM.intValue();
+	}
+	
+	private boolean dataRetornoMenorOuIgual(Date dataUltimaTransmissao) {
+		return Util.formatarDataInicial(this.dataRetorno).before(Util.formatarDataFinal(dataUltimaTransmissao)) ||
+			   Util.formatarDataInicial(this.dataRetorno).equals(Util.formatarDataFinal(dataUltimaTransmissao));
 	}
 }

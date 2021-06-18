@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -68,6 +69,8 @@ import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.Subcategoria;
+import gcom.cadastro.localidade.Localidade;
+import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.fachada.Fachada;
@@ -75,6 +78,7 @@ import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarGerarLoteAtualizacaoCadastralActionHelper;
+import gcom.micromedicao.Rota;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaBean;
 import gcom.seguranca.IRepositorioSeguranca;
@@ -102,7 +106,7 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 	private static final long serialVersionUID = -3792912776769033056L;
 
 	private static Logger logger = Logger.getLogger(ControladorAtualizacaoCadastral.class);
-
+	
 	private IRepositorioAtualizacaoCadastral repositorioAtualizacaoCadastral = null;
 	private IRepositorioCadastro             repositorioCadastro = null;
 	private IRepositorioSeguranca            repositorioSeguranca;
@@ -2713,4 +2717,59 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		}
 	}
 	
+	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosAtualizacaoCadastralTodasSituacoes(
+			String[] idsArquivos, String tipoArquivo, Date dataUltimaTransmissao, Integer idEmpresa) throws ControladorException {
+
+		try {
+			List<ArquivoTextoAtualizacaoCadastral> arquivos = new ArrayList<ArquivoTextoAtualizacaoCadastral>();
+			
+			List<Integer> idsRotas = getIdsRotas(idsArquivos);
+			
+			ArquivoTextoAtualizacaoCadastral arquivoTexto = null;
+			
+			for (Integer idRota : idsRotas) {
+
+				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
+
+				Object[] idsArquivosDeRota =  (Object[]) repositorioAtualizacaoCadastral.pesquisarIdsArquivoTextoPorRotaTodasSituacoes(
+						rota.getId(), idsArquivos).toArray();
+
+				List<ImovelControleAtualizacaoCadastral> imoveisControle = new ArrayList<ImovelControleAtualizacaoCadastral>();
+				
+				for (int i = 0; i < idsArquivosDeRota.length; i++) {	
+					imoveisControle.addAll(repositorioAtualizacaoCadastral.obterImoveisPorArquivoTodasSituacoes(
+							(Integer) idsArquivosDeRota[i], dataUltimaTransmissao));
+				}		
+
+				if (CollectionUtil.naoEhVazia(imoveisControle)) {				
+					arquivoTexto = getControladorCadastro().regerarArquivoTextoAtualizacaoCadastralComObjetos(imoveisControle, (Integer) idsArquivosDeRota[0], tipoArquivo, idEmpresa);
+					arquivoTexto.setDescricaoArquivo(getDescricaoArquivo(rota, rota.getSetorComercial(), rota.getSetorComercial().getLocalidade()));
+					arquivos.add(arquivoTexto);
+				}
+			}
+			
+			return arquivos;
+		} catch (Exception e) {
+			throw new ControladorException("Erro ao regerar Arquivo de Atualizacao Cadastral", e);
+		}
+	}
+	
+	private String getDescricaoArquivo(Rota rota, SetorComercial setor, Localidade localidade) throws ControladorException {
+		String descricao = Util.adicionarZerosEsquedaNumero(3, localidade.getId() + "")
+				+ "_" + Util.adicionarZerosEsquedaNumero(3, setor.getCodigo() + "")
+				+ "_" + Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + "");
+		
+		return descricao;
+	}
+	
+	@SuppressWarnings({ "unchecked" })
+	private List<Integer> getIdsRotas(String[] idsArquivos) throws ControladorException {
+	
+		List<Integer> ids = (List<Integer>) getControladorCadastro().pesquisarRotaArquivoTextoAtualizacaoCadastroPorIdArquivo(idsArquivos);
+		
+		List<Integer> idsRotas = new ArrayList<Integer>(new LinkedHashSet<Integer>(ids));
+
+		return idsRotas;
+	}
+
 }

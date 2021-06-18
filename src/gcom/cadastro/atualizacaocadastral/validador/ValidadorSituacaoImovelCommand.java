@@ -33,6 +33,9 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 
 		if (arquivoTexto.isArquivoRetornoFiscalizacao() && !imovelValidoFiscalizacao(controle))
 			cadastroImovel.addMensagemErro("Imóvel não está em fiscalização.");
+		
+		if (arquivoTexto.isArquivoRetornoTodasSituacoes() && !situacaoValidaArquivoTodasSituacoes(controle))
+			cadastroImovel.addMensagemErro("Imóvel não está em campo, em revisão ou em revisita.");
 
 		if (imovelSuperouLimiteVisitas(controle))
 			cadastroImovel.addMensagemErro(String.format("Imóvel não pode ter mais de %d visitas", Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO));
@@ -59,6 +62,12 @@ public class ValidadorSituacaoImovelCommand extends ValidadorCommand {
 	private boolean imovelSuperouLimiteVisitas(ImovelControleAtualizacaoCadastral controle) throws ControladorException {
 		Integer quantidadeVisitas = controle.getQuantidadeVisitaNaoExcluidas();
 
-		return arquivoTexto.isArquivoRetornoRevisita() && quantidadeVisitas >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO;
+		return (arquivoTexto.isArquivoRetornoRevisita() || arquivoTexto.isArquivoRetornoTodasSituacoes() && controle.isRevisita()) && quantidadeVisitas >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO;
+	}
+	
+	private boolean situacaoValidaArquivoTodasSituacoes(ImovelControleAtualizacaoCadastral controle) {
+		return controle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.EM_CAMPO) || 
+			   controle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.EM_REVISAO) || 
+			   controle.isImovelNovoOuNaSituacao(SituacaoAtualizacaoCadastral.REVISITA);
 	}
 }

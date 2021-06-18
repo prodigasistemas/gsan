@@ -1964,4 +1964,6 @@ public interface IRepositorioCobranca {
 	public Parcelamento obterUltimoParcelamento(Integer idImovel) throws ErroRepositorioException;
 	
 	public Collection<CobrancaAcaoAtividadeComando> obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes() throws ErroRepositorioException;
+	
+	public Collection pesquisarNumeroQuadraPorAtividadeComando (Integer idAtividadeComando) throws ErroRepositorioException;
 }
