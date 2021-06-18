@@ -562,7 +562,7 @@ public class ExibirInserirComandoAcaoCobrancaEventualCriterioRotaAction extends 
 		Filtro filtro = new FiltroLocalidade();
 		filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, idLocalidade));
 
-		Collection<Localidade> colecao = getFachada().pesquisar(filtro, SetorComercial.class.getName());
+		Collection<Localidade> colecao = getFachada().pesquisar(filtro, Localidade.class.getName());
 
 		Localidade localidade = (Localidade) colecao.iterator().next();
 
