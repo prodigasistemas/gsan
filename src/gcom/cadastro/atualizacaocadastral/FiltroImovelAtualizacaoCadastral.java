@@ -15,7 +15,7 @@ public class FiltroImovelAtualizacaoCadastral extends Filtro implements Serializ
 		this.campoOrderBy = campoOrderBy;
 	}
 
-	public final static String ID = "idImovel";
+	public final static String ID_IMOVEL = "idImovel";
 	public final static String ID_SITUACAO_ATUALIZACAO_CADASTRAL = "idSituacaoAtualizacaoCadastral";
 	public final static String ID_ARQUIVO_TEXTO = "idArquivoTexto";
 }

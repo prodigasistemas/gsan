@@ -19,6 +19,7 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable, Conversiv
 	public static final String TIPO_ARQUIVO_REVISAO = "R";
 	public static final String TIPO_ARQUIVO_FISCALIZACAO = "F";
 	public static final String TIPO_ARQUIVO_REVISITA = "V";
+	public static final String TIPO_ARQUIVO_TODOS = "T";
 
 	private Integer id;
 
@@ -263,6 +264,10 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable, Conversiv
 		return tipoRetorno.equals(null) || tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_REVISITA);
 	}
 	
+	public boolean isArquivoRetornoTodasSituacoes() {
+		return !tipoRetorno.equals(null) && tipoRetorno.equals(ArquivoTextoAtualizacaoCadastral.TIPO_ARQUIVO_TODOS);
+	}
+	
 	public String getDescricaoTipoRetorno() {
 		String descricao = "";
 		if (!tipoRetorno.equals(null)) 
@@ -279,10 +284,10 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable, Conversiv
 	}
 	
 	public Integer getQuantidadeImoveisSemBloqueados() {
-			if (getQuantidadeEmCampo() > 0 ) {
-				return getQuantidadeEmCampo() + getQuantidadeImoveisTransmitidos();
-				}else {
-				return getQuantidadeDisponivel();
-				}
+		if (getQuantidadeEmCampo() > 0) {
+			return getQuantidadeEmCampo() + getQuantidadeImoveisTransmitidos();
+		} else {
+			return getQuantidadeDisponivel();
 		}
+	}
 }

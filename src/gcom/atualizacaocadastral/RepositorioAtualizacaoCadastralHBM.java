@@ -19,6 +19,7 @@ import org.jboss.logging.Logger;
 
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.IClienteFone;
+import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.IImovelTipoOcupanteQuantidade;
@@ -1307,15 +1308,15 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<ImovelControleAtualizacaoCadastral> obterImoveisPorArquivoSituacaoLoteTrazendoInformativos(
-			Integer idArquivo, List<Integer> situacoes, Date dataUltimaTransmissao, List<Integer> idsImoveis)
-					throws ErroRepositorioException {
+			Integer idArquivo, List<Integer> situacoes, Date dataUltimaTransmissao, List<Integer> idsImoveis) throws ErroRepositorioException {
+		
 		List<ImovelControleAtualizacaoCadastral> retorno = null;
         Session session = HibernateUtil.getSession();
 
         try {
-        	String consulta = 
-        			montarQueryParaObterImoveisPorArquivoSituacaoLoteTrazendoInformativos(
+        	String consulta = montarQueryParaObterImoveisPorArquivoSituacaoLoteTrazendoInformativos(
         					idArquivo, situacoes, dataUltimaTransmissao, idsImoveis);
+        	
             Query query = session.createSQLQuery(consulta)
             		.addEntity("imc", ImovelControleAtualizacaoCadastral.class)
             		.addJoin("atualizacao", "imc.imovelAtualizacaoCadastral")
@@ -1341,10 +1342,10 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					controle.setQuantidadeVisitas((Integer) array[1]);
 					controle.setInformativo((Integer) array[0]);
 					
-					if (dataUltimaTransmissao != null && 
-							controle.getQuantidadeVisitas().intValue() >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO) {
+					if (dataUltimaTransmissao != null && controle.getQuantidadeVisitas().intValue() >= Visita.QUANTIDADE_MAXIMA_SEM_PRE_AGENDAMENTO) {
 						controle.setInformativo(1);
 					}
+					
 					retorno.add(controle);
 				}
 			}
@@ -2943,4 +2944,90 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+    
+    @SuppressWarnings("unchecked")
+	public Collection<Integer> pesquisarIdsArquivoTextoPorRotaTodasSituacoes(Integer idRota, String[] idsArquivos)
+			throws ErroRepositorioException {
+
+		Collection<Integer> retorno = null;
+		Session session = HibernateUtil.getSession();
+
+		try {
+			String consulta = "SELECT txac.txac_id AS idArquivo " +
+							  "FROM cadastro.arquivo_texto_atlz_cad txac " +
+							  "WHERE txac.rota_id = :idRota " + 
+							  "AND txac.txac_id in (:idsArquivos)";
+
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("idArquivo", Hibernate.INTEGER)
+					.setInteger("idRota", idRota)
+					.setParameterList("idsArquivos", idsArquivos)
+					.list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<ImovelControleAtualizacaoCadastral> obterImoveisPorArquivoTodasSituacoes(
+    		Integer idArquivo, Date dataUltimaTransmissao) throws ErroRepositorioException {
+    	
+    	List<ImovelControleAtualizacaoCadastral> retorno = null;
+        Session session = HibernateUtil.getSession();
+
+        try {
+        	StringBuilder consulta = new StringBuilder();
+        	consulta.append("SELECT {controle.*}, ");
+        	consulta.append("       {atualizacao.*}, ");
+        	consulta.append("       {ocorrencia.*}, ");
+        	consulta.append("       (SELECT count(vist_id) FROM atualizacaocadastral.visita v WHERE v.icac_id = controle.icac_id and v.vist_icexclusao = 'f') AS visitas ");
+        	consulta.append("FROM atualizacaocadastral.imovel_controle_atlz_cad controle ");
+        	consulta.append("LEFT JOIN cadastro.cadastro_ocorrencia ocorrencia ON ocorrencia.cocr_id = controle.cocr_id ");
+        	consulta.append("INNER JOIN cadastro.imovel imov ON imov.imov_id = controle.imov_id ");
+        	consulta.append("INNER JOIN cadastro.imovel_atlz_cadastral atualizacao ON atualizacao.imov_id = controle.imov_id ");
+        	consulta.append("WHERE controle.imov_id IN (SELECT distinct imov_id FROM ( ");
+        	consulta.append("SELECT controle.imov_id AS imov_id ");
+        	consulta.append("FROM atualizacaocadastral.imovel_controle_atlz_cad controle ");
+        	consulta.append("INNER JOIN cadastro.imovel_atlz_cadastral atlz ON atlz.imov_id = controle.imov_id ");
+        	consulta.append("INNER JOIN cadastro.arquivo_texto_atlz_cad arquivo ON arquivo.txac_id = atlz.txac_id ");
+        	consulta.append("INNER JOIN cadastro.imovel imovel ON imovel.imov_id = controle.imov_id ");
+        	consulta.append("INNER JOIN cadastro.quadra quadra ON quadra.rota_id = arquivo.rota_id ");
+        	consulta.append("WHERE arquivo.txac_id = :idArquivo ");
+        	consulta.append("ORDER BY quadra.qdra_id, imovel.imov_nnlote, imovel.imov_nnsublote) AS imoveis) ");
+        	
+            Query query = session.createSQLQuery(consulta.toString())
+            		.addEntity("controle", ImovelControleAtualizacaoCadastral.class)
+            		.addJoin("atualizacao", "controle.imovelAtualizacaoCadastral")
+            		.addJoin("ocorrencia", "controle.cadastroOcorrencia")
+            		.addScalar("visitas", Hibernate.INTEGER)
+            		.setInteger("idArquivo", idArquivo);
+            
+			List<Object[]> resultado = query.list();
+            
+			if (CollectionUtil.naoEhVazia(resultado)) {
+				retorno = new ArrayList(resultado.size());
+				
+				for (Object[] array : resultado) {
+					ImovelControleAtualizacaoCadastral controle = (ImovelControleAtualizacaoCadastral) array[1];
+					controle.setImovelAtualizacaoCadastral((ImovelAtualizacaoCadastral) array[2]);
+					controle.setCadastroOcorrencia((CadastroOcorrencia) array[3]);
+					controle.setQuantidadeVisitas((Integer) array[0]);
+					controle.verificarInformativoArquivoTodasSituacoes(dataUltimaTransmissao);
+					
+					retorno.add(controle);
+				}
+			}
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis da rota com todas as situações e informativos.");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+        
+        return retorno;
+    }
 }

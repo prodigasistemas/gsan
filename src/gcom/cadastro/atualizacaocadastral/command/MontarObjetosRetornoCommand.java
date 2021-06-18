@@ -91,7 +91,10 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	}
 
 	public void salvarObjetosRetorno() throws Exception {
-		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTransmissao() || atualizacaoCadastralImovel.isImovelNovo()) {
+		if (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTransmissao() || 
+		   (atualizacaoCadastral.getArquivoTexto().isArquivoRetornoTodasSituacoes() && atualizacaoCadastralImovel.getImovelControle().isTransmitido()) ||
+			atualizacaoCadastralImovel.isImovelNovo()) {
+			
 			salvarImovelRetorno();
 			salvarClienteUsuario();
 			salvarClienteProprietario();

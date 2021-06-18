@@ -1,5 +1,6 @@
 package gcom.atualizacaocadastral;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelTipoOcupanteQuantidadeAtualizacaoCadastral;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarGerarLoteAtualizacaoCadastralActionHelper;
+import gcom.micromedicao.Rota;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaBean;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -181,4 +183,7 @@ public interface IControladorAtualizacaoCadastral {
      * @throws ControladorException
      */
     public Collection<Integer> pesquisarRotasComImoveisAprovados() throws ControladorException;
+        
+    public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosAtualizacaoCadastralTodasSituacoes(String[] idsArquivos, String tipoArquivo, Date dataUltimaTransmissao, Integer idEmpresa)throws ControladorException;
+   
 }

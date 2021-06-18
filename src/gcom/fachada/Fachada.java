@@ -40531,4 +40531,11 @@ public class Fachada {
 		}
 	}
 	
+	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosAtualizacaoCadastralTodasSituacoes(String[] idsArquivos, String tipoArquivo, Date dataUltimaTransmissao, Integer idEmpresa) throws ErroRepositorioException, IOException {
+		try {
+			return this.getControladorAtualizacaoCadastral().gerarArquivosAtualizacaoCadastralTodasSituacoes(idsArquivos, tipoArquivo, dataUltimaTransmissao, idEmpresa);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }

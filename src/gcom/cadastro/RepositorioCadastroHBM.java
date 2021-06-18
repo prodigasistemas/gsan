@@ -9014,4 +9014,30 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
         return retorno;
     }
+    
+    public Collection pesquisarRotaArquivoTextoAtualizacaoCadastroPorIdArquivo(
+    		String[] idsArquivoTxt) throws ErroRepositorioException {
+
+    	Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+
+		try {
+			consulta = " SELECT atac.rota_id as idRota"// 2
+					+ " FROM cadastro.arquivo_texto_atlz_cad AS atac"
+					+ " where atac.txac_id in (:ids)";
+
+			retorno = session.createSQLQuery(consulta)
+					 .addScalar("idRota", Hibernate.INTEGER)
+					 .setParameterList("ids", idsArquivoTxt)
+					 .list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+    }
 }
