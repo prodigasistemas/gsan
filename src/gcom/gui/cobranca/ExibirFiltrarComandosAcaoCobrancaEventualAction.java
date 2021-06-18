@@ -37,7 +37,7 @@ public class ExibirFiltrarComandosAcaoCobrancaEventualAction extends GcomAction 
 		Fachada fachada = Fachada.getInstancia();
 
 		FiltrarComandosAcaoCobrancaEventualActionForm form = (FiltrarComandosAcaoCobrancaEventualActionForm) actionForm;
-
+		
 		String situacaoComando = form.getSituacaoComando();
 
 		if (situacaoComando == null) {

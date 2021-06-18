@@ -16,6 +16,7 @@ import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
 import gcom.cobranca.bean.CalcularValorDataVencimentoAnteriorHelper;
+import gcom.cobranca.bean.CancelarDocumentosCobrancaHelper;
 import gcom.cobranca.bean.CobrancaAcaoHelper;
 import gcom.cobranca.bean.CobrancaCronogramaHelper;
 import gcom.cobranca.bean.CobrancaDocumentoHelper;
@@ -725,7 +726,7 @@ public interface IControladorCobranca {
 	public void cancelarDocumentosCobrancaDoCronogramaOuEventual(Usuario usuarioLogado, Integer idCobrancaAcaoAtividadeCronograma,
 			Integer idCobrancaAcaoAtividadeComando) throws ControladorException;
 
-	public boolean verificarCancelamentoDocumentosCobranca(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando)
+	public boolean verificarCancelamentoDocumentosCobranca(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando, CancelarDocumentosCobrancaHelper helper)
 			throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
@@ -1095,4 +1096,5 @@ public interface IControladorCobranca {
 	public Collection obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes() throws ControladorException;
 	
 	public List<OrdemSuspensaoFornecimentoDTO> gerarOrdemSuspensaoFornecimento(Integer idAcaoCronograma, Integer idAcaoComando) throws ControladorException;
+	
 }

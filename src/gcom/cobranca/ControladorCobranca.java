@@ -43391,82 +43391,87 @@ public class ControladorCobranca extends ControladorComum {
 	 * Cancela os Documentos de Cobranças Gerados do Cronograma ou Eventual
 	 * 
 	 * @author Victor Cisneiros
+	 * @throws ErroRepositorioException 
 	 * @date 19/12/2008
 	 */
 	public void cancelarDocumentosCobrancaDoCronogramaOuEventual(Usuario usuarioLogado, Integer idCobrancaAcaoAtividadeCronograma,
-			Integer idCobrancaAcaoAtividadeComando) throws ControladorException {
+			Integer idCobrancaAcaoAtividadeComando) throws ControladorException, ErroRepositorioException {
 
 		// System.out.println("idCobrancaAcaoAtividadeCronograma: " +
 		// idCobrancaAcaoAtividadeCronograma);
 		// System.out.println("idCobrancaAcaoAtividadeComando: " +
 		// idCobrancaAcaoAtividadeComando);
-
-		// Verifica se é possível realizar esse cancelamento
-		this.verificarCancelamentoDocumentosCobranca(idCobrancaAcaoAtividadeCronograma, idCobrancaAcaoAtividadeComando);
-
-		CancelarDocumentosCobrancaHelper helper = pesquisarIdsDocumentosCobranca(idCobrancaAcaoAtividadeCronograma,
-				idCobrancaAcaoAtividadeComando);
-		CobrancaAcao cobrancaAcao = helper.getCobrancaAcao();
-		CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma = helper.getCobrancaAcaoAtividadeCronograma();
-		CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando = helper.getCobrancaAcaoAtividadeComando();
-		ArrayList<Integer> idsCobrancaDocumento = (ArrayList<Integer>) helper.getIdsDocumentosCobranca();
-
-		try {
-
-			cancelarDocumentosCobrancaDoCronogramaOuEventual(idsCobrancaDocumento, cobrancaAcao, null, null);
-
-			if (cobrancaAcaoAtividadeCronograma != null) {
-
-				repositorioCobranca.removerImoveisNaoGerados(cobrancaAcaoAtividadeCronograma.getId(), null);
-
-				// ------------ REGISTRAR TRANSAÇÃO----------------------------
-				RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CANCELAR_DOCUMENTOS_COBRANCA,
-						idCobrancaAcaoAtividadeCronograma, idCobrancaAcaoAtividadeCronograma, new UsuarioAcaoUsuarioHelper(usuarioLogado,
-								UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-				registradorOperacao.registrarOperacao(cobrancaAcaoAtividadeCronograma);
-				// ------------ REGISTRAR TRANSAÇÃO----------------------------
-
-				cobrancaAcaoAtividadeCronograma.setRealizacao(null);
-				cobrancaAcaoAtividadeCronograma.setQuantidadeDocumentos(0);
-				cobrancaAcaoAtividadeCronograma.setValorDocumentos(new BigDecimal("0"));
-				cobrancaAcaoAtividadeCronograma.setQuantidadeItensCobrados(0);
-				cobrancaAcaoAtividadeCronograma.setUltimaAlteracao(new Date());
-				repositorioUtil.atualizar(cobrancaAcaoAtividadeCronograma);
-
-				// Vivianne Sousa - 19/04/2010
-				// zerar os valores da tabela CobrancaDocumentoControleGeracao
-				repositorioCobranca.atualizarCobrancaDocumentoControleGeracao(0, 0, new BigDecimal("0"), null,
-						cobrancaAcaoAtividadeCronograma.getId());
+		
+		Collection numerosQuadra = repositorioCobranca.pesquisarNumeroQuadraPorAtividadeComando(idCobrancaAcaoAtividadeComando);
+		Iterator it = numerosQuadra.iterator();		
+		
+		while(it.hasNext()) {
+			CancelarDocumentosCobrancaHelper helper = this.pesquisarIdsDocumentosCobranca(idCobrancaAcaoAtividadeCronograma,
+					idCobrancaAcaoAtividadeComando, (Integer) it.next());
+			// Verifica se é possível realizar esse cancelamento por Id Quadra
+			this.verificarCancelamentoDocumentosCobranca(idCobrancaAcaoAtividadeCronograma, idCobrancaAcaoAtividadeComando, helper);
+			CobrancaAcao cobrancaAcao = helper.getCobrancaAcao();
+			CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma = helper.getCobrancaAcaoAtividadeCronograma();
+			CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando = helper.getCobrancaAcaoAtividadeComando();
+			ArrayList<Integer> idsCobrancaDocumento = (ArrayList<Integer>) helper.getIdsDocumentosCobranca();
+	
+			try {
+	
+				cancelarDocumentosCobrancaDoCronogramaOuEventual(idsCobrancaDocumento, cobrancaAcao, null, null);
+	
+				if (cobrancaAcaoAtividadeCronograma != null) {
+	
+					repositorioCobranca.removerImoveisNaoGerados(cobrancaAcaoAtividadeCronograma.getId(), null);
+	
+					// ------------ REGISTRAR TRANSAÇÃO----------------------------
+					RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CANCELAR_DOCUMENTOS_COBRANCA,
+							idCobrancaAcaoAtividadeCronograma, idCobrancaAcaoAtividadeCronograma, new UsuarioAcaoUsuarioHelper(usuarioLogado,
+									UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+					registradorOperacao.registrarOperacao(cobrancaAcaoAtividadeCronograma);
+					// ------------ REGISTRAR TRANSAÇÃO----------------------------
+	
+					cobrancaAcaoAtividadeCronograma.setRealizacao(null);
+					cobrancaAcaoAtividadeCronograma.setQuantidadeDocumentos(0);
+					cobrancaAcaoAtividadeCronograma.setValorDocumentos(new BigDecimal("0"));
+					cobrancaAcaoAtividadeCronograma.setQuantidadeItensCobrados(0);
+					cobrancaAcaoAtividadeCronograma.setUltimaAlteracao(new Date());
+					repositorioUtil.atualizar(cobrancaAcaoAtividadeCronograma);
+	
+					// Vivianne Sousa - 19/04/2010
+					// zerar os valores da tabela CobrancaDocumentoControleGeracao
+					repositorioCobranca.atualizarCobrancaDocumentoControleGeracao(0, 0, new BigDecimal("0"), null,
+							cobrancaAcaoAtividadeCronograma.getId());
+				}
+	
+				if (cobrancaAcaoAtividadeComando != null) {
+	
+					repositorioCobranca.removerImoveisNaoGerados(null, cobrancaAcaoAtividadeComando.getId());
+	
+					// ------------ REGISTRAR TRANSAÇÃO----------------------------
+					RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CANCELAR_DOCUMENTOS_COBRANCA,
+							idCobrancaAcaoAtividadeComando, idCobrancaAcaoAtividadeComando, new UsuarioAcaoUsuarioHelper(usuarioLogado,
+									UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+					registradorOperacao.registrarOperacao(cobrancaAcaoAtividadeComando);
+					// ------------ REGISTRAR TRANSAÇÃO----------------------------
+	
+					cobrancaAcaoAtividadeComando.setRealizacao(null);
+					cobrancaAcaoAtividadeComando.setQuantidadeDocumentos(0);
+					cobrancaAcaoAtividadeComando.setValorDocumentos(new BigDecimal("0"));
+					cobrancaAcaoAtividadeComando.setQuantidadeItensCobrados(0);
+					cobrancaAcaoAtividadeComando.setUltimaAlteracao(new Date());
+					repositorioUtil.atualizar(cobrancaAcaoAtividadeComando);
+	
+					// Vivianne Sousa - 19/04/2010
+					// zerar os valores da tabela CobrancaDocumentoControleGeracao
+					repositorioCobranca.atualizarCobrancaDocumentoControleGeracao(0, 0, new BigDecimal("0"),
+							cobrancaAcaoAtividadeComando.getId(), null);
+	
+				}
+	
+			} catch (Exception ex) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException(ex.getMessage(), ex);
 			}
-
-			if (cobrancaAcaoAtividadeComando != null) {
-
-				repositorioCobranca.removerImoveisNaoGerados(null, cobrancaAcaoAtividadeComando.getId());
-
-				// ------------ REGISTRAR TRANSAÇÃO----------------------------
-				RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CANCELAR_DOCUMENTOS_COBRANCA,
-						idCobrancaAcaoAtividadeComando, idCobrancaAcaoAtividadeComando, new UsuarioAcaoUsuarioHelper(usuarioLogado,
-								UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-				registradorOperacao.registrarOperacao(cobrancaAcaoAtividadeComando);
-				// ------------ REGISTRAR TRANSAÇÃO----------------------------
-
-				cobrancaAcaoAtividadeComando.setRealizacao(null);
-				cobrancaAcaoAtividadeComando.setQuantidadeDocumentos(0);
-				cobrancaAcaoAtividadeComando.setValorDocumentos(new BigDecimal("0"));
-				cobrancaAcaoAtividadeComando.setQuantidadeItensCobrados(0);
-				cobrancaAcaoAtividadeComando.setUltimaAlteracao(new Date());
-				repositorioUtil.atualizar(cobrancaAcaoAtividadeComando);
-
-				// Vivianne Sousa - 19/04/2010
-				// zerar os valores da tabela CobrancaDocumentoControleGeracao
-				repositorioCobranca.atualizarCobrancaDocumentoControleGeracao(0, 0, new BigDecimal("0"),
-						cobrancaAcaoAtividadeComando.getId(), null);
-
-			}
-
-		} catch (Exception ex) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException(ex.getMessage(), ex);
 		}
 	}
 
@@ -43563,11 +43568,9 @@ public class ControladorCobranca extends ControladorComum {
 	 * @author Victor Cisneiros
 	 * @date 19/12/2008
 	 */
-	public boolean verificarCancelamentoDocumentosCobranca(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando)
+	public boolean verificarCancelamentoDocumentosCobranca(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando, CancelarDocumentosCobrancaHelper helper)
 			throws ControladorException {
 		try {
-			CancelarDocumentosCobrancaHelper helper = pesquisarIdsDocumentosCobranca(idCobrancaAcaoAtividadeCronograma,
-					idCobrancaAcaoAtividadeComando);
 			CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando = helper.getCobrancaAcaoAtividadeComando();
 			CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma = helper.getCobrancaAcaoAtividadeCronograma();
 
@@ -43656,6 +43659,7 @@ public class ControladorCobranca extends ControladorComum {
 			}
 
 			return true;
+			
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
@@ -43663,7 +43667,7 @@ public class ControladorCobranca extends ControladorComum {
 	}
 
 	private CancelarDocumentosCobrancaHelper pesquisarIdsDocumentosCobranca(Integer idCobrancaAcaoAtividadeCronograma,
-			Integer idCobrancaAcaoAtividadeComando) throws ControladorException {
+			Integer idCobrancaAcaoAtividadeComando, Integer numeroQuadra) throws ControladorException {
 
 		CancelarDocumentosCobrancaHelper retorno = new CancelarDocumentosCobrancaHelper();
 
@@ -43707,6 +43711,7 @@ public class ControladorCobranca extends ControladorComum {
 			FiltroCobrancaDocumento filtroCobrancaDocumento = new FiltroCobrancaDocumento();
 			filtroCobrancaDocumento.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.ATIVIDADE_CRONOGRAMA_ID,
 					cobrancaAcaoAtividadeCronograma.getId()));
+			filtroCobrancaDocumento.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.QUADRA_NM, numeroQuadra));
 			filtroCobrancaDocumento.setCampoOrderBy(FiltroCobrancaDocumento.ID);
 
 			Collection colecaoCobrancaDocumento = fachada.pesquisar(filtroCobrancaDocumento, CobrancaDocumento.class.getName());
@@ -43735,6 +43740,7 @@ public class ControladorCobranca extends ControladorComum {
 			FiltroCobrancaDocumento filtroCobrancaDocumento = new FiltroCobrancaDocumento();
 			filtroCobrancaDocumento.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.ATIVIDADE_COMANDO_ID,
 					cobrancaAcaoAtividadeComando.getId()));
+			filtroCobrancaDocumento.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.QUADRA_NM, numeroQuadra));
 			filtroCobrancaDocumento.setCampoOrderBy(FiltroCobrancaDocumento.ID);
 
 			Collection colecaoCobrancaDocumento = fachada.pesquisar(filtroCobrancaDocumento, CobrancaDocumento.class.getName());
@@ -62166,7 +62172,7 @@ public class ControladorCobranca extends ControladorComum {
 		filtro.adicionarParametro(new ParametroNaoNulo(FiltroCobrancaAcaoAtividadeComando.COMANDO));
 
 		filtro.adicionarParametro(new ParametroNulo(FiltroCobrancaAcaoAtividadeComando.DATA_ENCERRAMENTO_REALIZADA));
-
+		
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaAcaoAtividadeComando.COBRANCA_ACAO);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaAcaoAtividadeComando.COBRANCA_ATIVIDADE);
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCobrancaAcaoAtividadeComando.COBRANCA_CRITERIO);

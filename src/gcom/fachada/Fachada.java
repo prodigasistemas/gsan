@@ -310,6 +310,7 @@ import gcom.cobranca.ResolucaoDiretoria;
 import gcom.cobranca.RotaAcaoCriterioHelper;
 import gcom.cobranca.UnidadeOrganizacionalTestemunha;
 import gcom.cobranca.bean.CalcularValorDataVencimentoAnteriorHelper;
+import gcom.cobranca.bean.CancelarDocumentosCobrancaHelper;
 import gcom.cobranca.bean.CancelarParcelamentoHelper;
 import gcom.cobranca.bean.CobrancaAcaoHelper;
 import gcom.cobranca.bean.CobrancaCronogramaHelper;
@@ -27847,9 +27848,9 @@ public class Fachada {
 	 * @author Victor Cisneiros
 	 * @date 19/12/2008
 	 */
-	public boolean verificarCancelamentoDocumentosCobranca(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando) {
+	public boolean verificarCancelamentoDocumentosCobranca(Integer idCobrancaAcaoAtividadeCronograma, Integer idCobrancaAcaoAtividadeComando, CancelarDocumentosCobrancaHelper helper) {
 		try {
-			return this.getControladorCobranca().verificarCancelamentoDocumentosCobranca(idCobrancaAcaoAtividadeCronograma, idCobrancaAcaoAtividadeComando);
+			return this.getControladorCobranca().verificarCancelamentoDocumentosCobranca(idCobrancaAcaoAtividadeCronograma, idCobrancaAcaoAtividadeComando, helper);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
