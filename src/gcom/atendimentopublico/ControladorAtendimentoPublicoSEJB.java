@@ -5404,99 +5404,59 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 	 * @param imovel
 	 * @throws ControladorException
 	 */
-	public void validarLigacaoAguaComInstalacaoHidrometroExibir(
-			OrdemServico ordem, boolean veioEncerrarOS)
-			throws ControladorException {
+	public void validarLigacaoAguaComInstalacaoHidrometroExibir(OrdemServico ordem, boolean veioEncerrarOS) throws ControladorException {
 
 		/*
-		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a
-		 * operao EFETUAR LIGACAO AGUA COM INSTALACAO HIDROMETRO, no ser
-		 * necessrio realizar as validaes abaixo.
-		 * 
-		 * Autor: Raphael Rossiter Data: 26/04/2007
-		 * 
+		 * Caso o SERVICO_TIPO da ordem de servio recebida esteja associado a operao
+		 * EFETUAR LIGACAO AGUA COM INSTALACAO HIDROMETRO, no ser necessrio realizar as
+		 * validaes abaixo.
 		 */
 		Integer idOperacao = this.getControladorOrdemServico()
 				.pesquisarServicoTipoOperacao(ordem.getServicoTipo().getId());
 
-		if (idOperacao == null
-				|| idOperacao.intValue() != Operacao.OPERACAO_EFETUAR_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT) {
+		if (idOperacao == null || idOperacao.intValue() != Operacao.OPERACAO_EFETUAR_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT) {
 
 			// [FS0001] Validar Ordem de Servico
 			// Caso 2
 			if (ordem.getServicoTipo().getId().intValue() != ServicoTipo.TIPO_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO) {
-				throw new ControladorException(
-						"atencao.servico_associado_ligacao_agua_instalacao_hidrometro_invalida");
+				throw new ControladorException("atencao.servico_associado_ligacao_agua_instalacao_hidrometro_invalida");
 			}
 		}
 
-		/*
-		 * Validaes j contidas no mtodo anteriormente Autor: Raphael
-		 * Rossiter Data: 26/04/2007
-		 * 
-		 * ===============================================================================
-		 */
-
 		// Caso 3
-		this.getControladorOrdemServico().validaOrdemServico(ordem,
-				veioEncerrarOS);
+		this.getControladorOrdemServico().validaOrdemServico(ordem, veioEncerrarOS);
+		
+		Imovel imovel = ordem.getImovel();
+		
 		// Caso 4
-		if (ordem.getRegistroAtendimento().getImovel() == null) {
-			throw new ControladorException(
-					"atencao.ordem_servico_ra_imovel_invalida", null, ""
-							+ ordem.getRegistroAtendimento().getId());
+		if (imovel == null) {
+			throw new ControladorException("atencao.ordem_servico_ra_imovel_invalida", null, "" + ordem.getRegistroAtendimento().getId());
 		}
 
-		Imovel imovel = ordem.getRegistroAtendimento().getImovel();
+		// [FS0002] Validar Situcao de agua do Imovel
+		if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.LIGADO.intValue() &&
+			imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.POTENCIAL.intValue() &&
+			imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.FACTIVEL.intValue() &&
+			imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.EM_FISCALIZACAO.intValue()) {
 
-		// [FS0002] Validar Situao de gua do Imvel.
-		if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.POTENCIAL
-				.intValue()
-				&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.FACTIVEL
-						.intValue()
-				&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.EM_FISCALIZACAO
-						.intValue()) {
-
-			throw new ControladorException(
-					"atencao.situacao_validar_ligacao_agua_invalida_exibir",
-					null, imovel.getLigacaoAguaSituacao().getDescricao());
+			throw new ControladorException("atencao.situacao_validar_ligacao_agua_invalida_exibir", null, imovel.getLigacaoAguaSituacao().getDescricao());
 		}
 
-		/*
-		 * [FS0007] Verificar Situao Rede de gua na Quadra
-		 * 
-		 * Integrao com o conceito de face da quadra Raphael Rossiter em
-		 * 21/05/2009
-		 */
-		IntegracaoQuadraFaceHelper integracao = this.getControladorLocalidade()
-				.integracaoQuadraFace(imovel.getId());
-
-		if ((integracao.getIndicadorRedeAgua()).equals(Quadra.SEM_REDE)) {
-
-			throw new ControladorException(
-					"atencao.seituacao_rede_agua_quadra", null, imovel.getId()
-							+ "");
+		// [FS0007] Verificar Situao Rede de gua na Quadra - Integrao com o conceito de face da quadra
+		IntegracaoQuadraFaceHelper integracao = this.getControladorLocalidade().integracaoQuadraFace(imovel.getId());
+		if (integracao.getIndicadorRedeAgua().equals(Quadra.SEM_REDE)) {
+			throw new ControladorException("atencao.seituacao_rede_agua_quadra", null, imovel.getId() + "");
 		}
 
 		// [FS0006] Verificar Situao do Imovel
 		if (imovel.getIndicadorExclusao() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
-			throw new ControladorException(
-					"atencao.situacao_imovel_indicador_exclusao", null, imovel
-							.getId()
-							+ "");
+			throw new ControladorException("atencao.situacao_imovel_indicador_exclusao", null, imovel.getId() + "");
 		}
 
 		// [FS0014] - Verificar existncia de hidrmetro na Ligao de gua
-		if (imovel.getLigacaoAgua() != null
-				&& imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
-			throw new ControladorException(
-					"atencao.hidrometro_instalado_ligacao_agua", null, ""
-							+ imovel.getId());
+		if (imovel.getLigacaoAgua() != null && imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
+			throw new ControladorException("atencao.hidrometro_instalado_ligacao_agua", null, "" + imovel.getId());
 		}
-
-		/*
-		 * ===================================================================================
-		 */
 	}
 
 	/**
