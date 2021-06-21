@@ -309,8 +309,7 @@ public class ExibirEfetuarLigacaoAguaComInstalacaoHidrometroAction extends
 						.setNomeOrdemServico(ordemServico.getServicoTipo()
 								.getDescricao());
 
-				Imovel imovel = ordemServico.getRegistroAtendimento()
-						.getImovel();
+				Imovel imovel = ordemServico.getImovel();
 
 				ServicoTipo servicoTipo = ordemServico.getServicoTipo();
 
@@ -369,8 +368,7 @@ public class ExibirEfetuarLigacaoAguaComInstalacaoHidrometroAction extends
 
 				/*-------------- Início dados do Imóvel---------------*/
 
-				sessao.setAttribute("imovel", ordemServico
-						.getRegistroAtendimento().getImovel());
+				sessao.setAttribute("imovel", imovel);
 
 				if (imovel != null) {
 
