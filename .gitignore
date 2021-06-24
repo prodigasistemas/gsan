@@ -26,3 +26,4 @@ migrations/comercial/environments/local.properties
 src/gcom/properties/version.properties
 .vscode/
 scripts/*.sh
+.gradle/
