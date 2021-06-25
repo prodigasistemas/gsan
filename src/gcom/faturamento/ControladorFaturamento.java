@@ -15897,7 +15897,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return repositorioFaturamento.pesquisarContatosAgenciaReguladora(municipio.getId());
 	}
 	
-	public void envioEmailVencimentoFatura (Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao)
+	public void envioEmailVencimentoFatura (Integer idFuncionalidadeIniciada, Integer idRota)
 			throws ControladorException {
 
 		// -------------------------
@@ -15908,7 +15908,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		//
 		// -------------------------
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-				UnidadeProcessamento.REFERENCIA, (referenciaArrecadacao));
+				UnidadeProcessamento.ROTA, (idRota));
 
 		try {
 

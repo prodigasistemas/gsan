@@ -1291,5 +1291,5 @@ public interface IControladorFaturamento {
 
 	public Object[] pesquisarContatosAgenciaReguladora(EmitirContaHelper emitirContaHelper) throws ErroRepositorioException, ControladorException;
 	
-	public void envioEmailVencimentoFatura (Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException;
+	public void envioEmailVencimentoFatura (Integer idFuncionalidadeIniciada, Integer idRota) throws ControladorException;
 }
