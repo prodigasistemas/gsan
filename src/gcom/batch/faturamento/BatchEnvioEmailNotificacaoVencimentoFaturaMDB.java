@@ -43,33 +43,21 @@ MessageListener{
 		if (message instanceof ObjectMessage) {
 
 			ObjectMessage objectMessage = (ObjectMessage) message;
-			
 			try {
-				Integer arg0 = (Integer) ((Object[])
-						  objectMessage.getObject())[0];
-				Integer arg1 = (Integer) ((Object[])
-						  objectMessage.getObject())[1];
-				
-				System.out.print(arg0 + " " + arg1);
+				this.getControladorFaturamento().envioEmailVencimentoFatura(
+						(Integer) ((Object[]) objectMessage.getObject())[0],
+						(Integer) ((Object[]) objectMessage.getObject())[1]);
+
 			} catch (JMSException e) {
-				// TODO Auto-generated catch block
+				System.out.println("Erro no MDB");
+				e.printStackTrace();
+			} catch (ControladorException e) {
+				System.out.println("Erro no MDB");
 				e.printStackTrace();
 			}
-			/*
-			 * try { this.getControladorFaturamento().faturarGrupoFaturamento( (Collection)
-			 * ((Object[]) objectMessage.getObject())[0], (FaturamentoGrupo) ((Object[])
-			 * objectMessage.getObject())[1], (Integer) ((Object[])
-			 * objectMessage.getObject())[2], (Integer) ((Object[])
-			 * objectMessage.getObject())[3]);
-			 * 
-			 * } catch (JMSException e) { System.out.println("Erro no MDB");
-			 * e.printStackTrace(); } catch (ControladorException e) {
-			 * System.out.println("Erro no MDB"); e.printStackTrace(); }
-			 */
 		}
-		
+
 	}
-	
 	
 	/**
 	 * Retorna o valor de controladorMicromedicao

@@ -51,7 +51,7 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 
 	@Override
 	public void agendarTarefaBatch() {
-		AgendadorTarefas.agendarTarefa("FaturarGrupoFaturamentoBatch", this);
+		AgendadorTarefas.agendarTarefa("EnvioEmailNotificacaoVencimentoFaturaBatch", this);
 	}
 
 }

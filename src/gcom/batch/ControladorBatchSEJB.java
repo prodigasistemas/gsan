@@ -84,6 +84,7 @@ import gcom.batch.faturamento.TarefaBatchEmitirContasOrgaoPublico;
 import gcom.batch.faturamento.TarefaBatchEmitirExtratoConsumoImovelCondominio;
 import gcom.batch.faturamento.TarefaBatchEncerrarFaturamentoMes;
 import gcom.batch.faturamento.TarefaBatchEnvioEmailContaParaCliente;
+import gcom.batch.faturamento.TarefaBatchEnvioEmailNotificacaoVencimentoFatura;
 import gcom.batch.faturamento.TarefaBatchFaturarGrupoFaturamento;
 import gcom.batch.faturamento.TarefaBatchGerarArquivoTextoContasProjetosEspeciais;
 import gcom.batch.faturamento.TarefaBatchGerarArquivoTextoDeclaracaoQuitacaoAnualDebitos;
@@ -2550,6 +2551,18 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
+					} 
+					case Funcionalidade.ENVIO_EMAIL_NOTIFICACAO_VENCIMENTO_FATURA: {
+						TarefaBatchEnvioEmailNotificacaoVencimentoFatura batch = new TarefaBatchEnvioEmailNotificacaoVencimentoFatura(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						batch.addParametro("anoMesReferenciaArrecadacao", sistemaParametros.getAnoMesArrecadacao());
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
 					}
 
 					case Funcionalidade.DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA:
@@ -2578,7 +2591,7 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
-
+						
 					default:
 					}
 				} catch (IOException e) {

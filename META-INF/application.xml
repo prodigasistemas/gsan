@@ -927,6 +927,10 @@
 	</module>
 	
 	<module>
+		<ejb>BatchEnvioEmailNotificacaoVencimentoFaturaMDB.jar</ejb>
+	</module>
+	
+	<module>
 		<java>gcom.jar</java>
 	</module>
 	

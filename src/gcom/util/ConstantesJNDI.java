@@ -278,6 +278,7 @@ public class ConstantesJNDI {
 	public static String BATCH_GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS = "";
 	public static String BATCH_DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA_MDB = "";
 	public static String BATCH_EMITIR_TERMO_ALTERACAO_CADASTRAL = "";
+	public static String BATCH_ENVIO_EMAIL_NOTIFICACAO_VENCIMENTO_FATURA = "";
 	
 	static {
 		inicializarPropriedades();
@@ -584,6 +585,8 @@ public class ConstantesJNDI {
 			BATCH_GERAR_DADOS_DOCUMENTOS_NAO_IDENTIFICADOS = propriedades.getProperty("QueueBatchGerarDadosDocumentosNaoIdentificadosMDB");
 			BATCH_DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA_MDB = propriedades.getProperty("QueueBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferenciaMDB");
 			BATCH_EMITIR_TERMO_ALTERACAO_CADASTRAL = propriedades.getProperty("QueueBatchEmitirTermoAlteracaoCadastralMDB");
+			
+			BATCH_ENVIO_EMAIL_NOTIFICACAO_VENCIMENTO_FATURA = propriedades.getProperty("QueueBatchEnvioEmailNotificacaoVencimentoFaturaMDB");
 
 			stream.close();
 

@@ -15896,4 +15896,36 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 		return repositorioFaturamento.pesquisarContatosAgenciaReguladora(municipio.getId());
 	}
+	
+	public void envioEmailVencimentoFatura (Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao)
+			throws ControladorException {
+
+		// -------------------------
+		//
+		// Registrar o início do processamento da Unidade de
+		// Processamento
+		// do Batch
+		//
+		// -------------------------
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+				UnidadeProcessamento.REFERENCIA, (referenciaArrecadacao));
+
+		try {
+
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
+					idUnidadeIniciada, false);
+
+		} catch (Exception e) {
+
+			/*
+			 * Este catch serve para interceptar qualquer exceção que o processo
+			 * batch venha a lançar e garantir que a unidade de processamento do
+			 * batch será atualizada com o erro ocorrido.
+			 */
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
+					idUnidadeIniciada, true);
+			throw new EJBException(e);
+		}
+
+	}
 }
