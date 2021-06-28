@@ -413,17 +413,14 @@ public class ControladorAtendimentoPublicoSEJB extends ControladorComum {
 		
 		
 		if (idOperacao == null || idOperacao.intValue() != Operacao.OPERACAO_SUBSTITUIR_RAMAL_DE_AGUA_EFETUAR) {
-			
-			if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.POTENCIAL
-					.intValue()
-					&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.FACTIVEL
-							.intValue()
-					&& imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.EM_FISCALIZACAO
-							.intValue()) {
-	
-				throw new ControladorException(
-						"atencao.situacao_validar_ligacao_agua_invalida_exibir",
-						null, imovel.getLigacaoAguaSituacao().getDescricao());
+
+			if (imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.LIGADO.intValue() &&
+				imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.POTENCIAL.intValue() &&
+				imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.FACTIVEL.intValue() &&
+				imovel.getLigacaoAguaSituacao().getId().intValue() != LigacaoAguaSituacao.EM_FISCALIZACAO.intValue()) {
+
+				throw new ControladorException("atencao.situacao_validar_ligacao_agua_invalida_exibir", null,
+						imovel.getLigacaoAguaSituacao().getDescricao());
 			}
 		}
 		/*
