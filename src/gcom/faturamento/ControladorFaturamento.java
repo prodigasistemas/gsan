@@ -15911,7 +15911,39 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				UnidadeProcessamento.ROTA, (idRota));
 
 		try {
-
+			
+//			SistemaParametro sistemaParametro = this.getControladorUtil()
+//					.pesquisarParametrosDoSistema();
+//			try {
+//
+//				String emailReceptor = "";
+//				
+//				// Envia de Arquivo por email
+//				EnvioEmail envioEmail = this
+//						.getControladorCadastro()
+//						.pesquisarEnvioEmail(
+//								EnvioEmail.ENVIO_EMAIL_CONTA_PARA_CLIENTE);
+//
+//				String emailRemetente = envioEmail.getEmailRemetente();
+//				String tituloMensagem = envioEmail.getTituloMensagem();
+//				String corpoMensagem = "A ";
+////						+ sistemaParametro.getNomeEmpresa()
+////						+ " informa que a conta do imóvel de matrícula "
+////						+ idImovel
+////						+ " está disponível para acessá-la na página da internet "
+////						+ sistemaParametro.getUrlAcessoInternet()
+////						+
+////						// +sistemaParametro.getUrl2ViaConta()+"&idImovel="+idImovel
+////						"/gerarRelatorio2ViaContaAction.do?cobrarTaxaEmissaoConta=N&idConta="
+////						+ conta.getId();
+//
+//				ServicosEmail.enviarMensagem(emailRemetente,
+//						emailReceptor, tituloMensagem, corpoMensagem);
+//
+//			} catch (Exception e) {
+//				System.out.println("Erro ao enviar email.");
+//			}
+//			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
 					idUnidadeIniciada, false);
 
