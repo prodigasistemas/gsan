@@ -60215,7 +60215,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = "select c.imov_id as imovelId, c.cnta_id as id , c.cnta_dtvencimentoconta as vencimento , cli.clie_dsemail as email  "
 					+ " from faturamento.conta c  inner join cadastro.cliente_conta clct on c.cnta_id = clct.cnta_id "
 					+ " inner join cadastro.cliente cli on clct.clie_id = cli.clie_id "
-					+ " where and rota_id = :idRota " + " and cnta_dtvencimentoconta = :dataVencimento "
+					+ " where rota_id = :idRota " 
+					+ " and cnta_dtvencimentoconta = :dataVencimento "
+					+ " and clie_dsemail != '' "
 					+ " and (dcst_idatual = " + DebitoCreditoSituacao.NORMAL + " or dcst_idatual = "
 					+ DebitoCreditoSituacao.RETIFICADA + " or dcst_idatual = " + DebitoCreditoSituacao.INCLUIDA
 					+ " or dcst_idatual = " + DebitoCreditoSituacao.PARCELADA + ")";
