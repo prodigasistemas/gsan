@@ -15911,9 +15911,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				UnidadeProcessamento.ROTA, (idRota));
 
 		try {
+			Integer quantidadeDiasVencimentoFatura = Integer.valueOf(getFaturamentoParametro(
+					FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA.toString()));
+			
+			Date dataVencimentoParametro = Util.subtrairNumeroDiasDeUmaData(new Date(), quantidadeDiasVencimentoFatura);
 
 			Collection contasVencidas = repositorioFaturamento.pesquisarContasVencimentoParaEnvioEmail(idRota,
-					new Date());
+					dataVencimentoParametro);
 
 			SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
@@ -15942,7 +15946,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								+ " informa que a conta do imóvel de matrícula "
 								+ idImovel
 								+ " está está com atraso em seu pagamento há "
-								
+								+ quantidadeDiasVencimentoFatura
 								+ " dias. "
 								+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
 
