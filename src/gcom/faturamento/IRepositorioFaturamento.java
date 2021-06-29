@@ -3065,4 +3065,6 @@ public interface IRepositorioFaturamento {
 	public ComunicadoEmitirConta pesquisarUltimoComunicadoGerado(Integer idImovel, Integer tipoComunicado) throws ErroRepositorioException;
 	
 	public boolean possuiComunicadoNaoEmitido(Integer idImovel, Integer referencia, Integer tipoComunicado) throws ErroRepositorioException;
+	
+	public Collection pesquisarContasVencimentoParaEnvioEmail(Integer idRota, Date dataVencimento) throws ErroRepositorioException;
 }
