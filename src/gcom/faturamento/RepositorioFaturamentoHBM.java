@@ -60204,4 +60204,32 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	
+	public Collection pesquisarContasVencimentoParaEnvioEmail(Integer idRota, Date dataVencimento)
+			throws ErroRepositorioException {
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta;
+		try {
+			consulta = "select c.imov_id as imovelId, c.cnta_id as id , c.cnta_dtvencimentoconta as vencimento , cli.clie_dsemail as email  "
+					+ " from faturamento.conta c  inner join cadastro.cliente_conta clct on c.cnta_id = clct.cnta_id "
+					+ " inner join cadastro.cliente cli on clct.clie_id = cli.clie_id "
+					+ " where and rota_id = :idRota " + " and cnta_dtvencimentoconta = :dataVencimento "
+					+ " and (dcst_idatual = " + DebitoCreditoSituacao.NORMAL + " or dcst_idatual = "
+					+ DebitoCreditoSituacao.RETIFICADA + " or dcst_idatual = " + DebitoCreditoSituacao.INCLUIDA
+					+ " or dcst_idatual = " + DebitoCreditoSituacao.PARCELADA + ")";
+			retorno = session.createSQLQuery(consulta).addScalar("id", Hibernate.INTEGER)
+					.addScalar("vencimento", Hibernate.DATE).setDate("dataVencimento", dataVencimento)
+					.setInteger("idRota", idRota).list();
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+
 }
