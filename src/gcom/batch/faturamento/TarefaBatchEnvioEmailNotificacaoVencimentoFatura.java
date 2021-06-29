@@ -39,22 +39,16 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 
 	@Override
 	public Object executar() throws TarefaException {
-		Integer anoMesReferenciaArrecadacao = (Integer) getParametro("anoMesReferenciaArrecadacao");
-		try {
-			Collection colecaoRota = getControladorMicromedicao().pesquisarListaRotas();
+		
+		Collection colecaoRota = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
 
-			Iterator iteratorRotas = colecaoRota.iterator();
+		Iterator iteratorRotas = colecaoRota.iterator();
 
-			while (iteratorRotas.hasNext()) {
-				Rota rota = (Rota) iteratorRotas.next();
+		while (iteratorRotas.hasNext()) {
+			Rota rota = (Rota) iteratorRotas.next();
 
-				enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENVIO_EMAIL_NOTIFICACAO_VENCIMENTO_FATURA,
-						new Object[] { this.getIdFuncionalidadeIniciada(), rota.getId() });
-			}
-
-		} catch (ControladorException e) {
-			System.out.println("Erro no MDB");
-			e.printStackTrace();
+			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENVIO_EMAIL_NOTIFICACAO_VENCIMENTO_FATURA,
+					new Object[] { this.getIdFuncionalidadeIniciada(), rota.getId() });
 		}
 
 		return null;
