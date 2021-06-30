@@ -60221,8 +60221,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " and (dcst_idatual = " + DebitoCreditoSituacao.NORMAL + " or dcst_idatual = "
 					+ DebitoCreditoSituacao.RETIFICADA + " or dcst_idatual = " + DebitoCreditoSituacao.INCLUIDA
 					+ " or dcst_idatual = " + DebitoCreditoSituacao.PARCELADA + ")";
-			retorno = session.createSQLQuery(consulta).addScalar("id", Hibernate.INTEGER)
-					.addScalar("vencimento", Hibernate.DATE).setDate("dataVencimento", dataVencimento)
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("imovelId", Hibernate.INTEGER)
+					.addScalar("id", Hibernate.INTEGER)
+					.addScalar("vencimento", Hibernate.DATE)
+					.addScalar("email", Hibernate.STRING)
+					.setDate("dataVencimento", dataVencimento)
 					.setInteger("idRota", idRota).list();
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
