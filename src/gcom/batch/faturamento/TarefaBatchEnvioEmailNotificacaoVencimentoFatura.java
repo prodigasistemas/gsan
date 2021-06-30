@@ -40,15 +40,15 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 	@Override
 	public Object executar() throws TarefaException {
 		
-		Collection colecaoRota = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
+		Collection colecaoLocalidade = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
+		
+        Iterator iterator = colecaoLocalidade.iterator();
 
-		Iterator iteratorRotas = colecaoRota.iterator();
+        while (iterator.hasNext()) {
 
-		while (iteratorRotas.hasNext()) {
-			Rota rota = (Rota) iteratorRotas.next();
-
+            Integer idLocalidade = (Integer) iterator.next();
 			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENVIO_EMAIL_NOTIFICACAO_VENCIMENTO_FATURA,
-					new Object[] { this.getIdFuncionalidadeIniciada(), rota.getId() });
+					new Object[] { this.getIdFuncionalidadeIniciada(), Collections.singletonList(idLocalidade) });
 		}
 
 		return null;

@@ -2556,7 +2556,13 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						TarefaBatchEnvioEmailNotificacaoVencimentoFatura batch = new TarefaBatchEnvioEmailNotificacaoVencimentoFatura(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-						batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, getControladorMicromedicao().pesquisarListaRotas());
+						FiltroLocalidade filtroLocalidadeNotificacaoEmail = new FiltroLocalidade();
+						filtroLocalidadeNotificacaoEmail
+								.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+
+						batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								Fachada.getInstancia().pesquisar(filtroLocalidadeNotificacaoEmail,
+										Localidade.class.getName()));
 						
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
 
