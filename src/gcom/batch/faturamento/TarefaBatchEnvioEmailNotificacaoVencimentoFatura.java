@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import javax.ejb.CreateException;
 
+import gcom.cadastro.localidade.Localidade;
 import gcom.faturamento.FaturamentoAtivCronRota;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
@@ -46,9 +47,9 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 
         while (iterator.hasNext()) {
 
-            Integer idLocalidade = (Integer) iterator.next();
+            Localidade localidade = (Localidade) iterator.next();
 			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENVIO_EMAIL_NOTIFICACAO_VENCIMENTO_FATURA,
-					new Object[] { this.getIdFuncionalidadeIniciada(), Collections.singletonList(idLocalidade) });
+					new Object[] { this.getIdFuncionalidadeIniciada(), Collections.singletonList(localidade.getId()) });
 		}
 
 		return null;

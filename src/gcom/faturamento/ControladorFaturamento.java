@@ -15910,33 +15910,34 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
 				UnidadeProcessamento.LOCALIDADE, ((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
 
-		if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
+		try {
+			if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
 
-			for (Integer idLocalidade : colecaoIdsLocalidades) {
-				FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
-				filtroSetorComercial
-						.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, idLocalidade));
+				for (Integer idLocalidade : colecaoIdsLocalidades) {
+					FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
+					filtroSetorComercial
+							.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, idLocalidade));
 
-				Collection setoresComercial = Fachada.getInstancia().pesquisar(filtroSetorComercial,
-						SetorComercial.class.getName());
+					Collection setoresComercial = Fachada.getInstancia().pesquisar(filtroSetorComercial,
+							SetorComercial.class.getName());
 
-				if (setoresComercial != null && !setoresComercial.isEmpty()) {
-					Iterator iteratorSetorComercial = setoresComercial.iterator();
-					while (iteratorSetorComercial.hasNext()) {
-						SetorComercial setorComercial = (SetorComercial) iteratorSetorComercial.next();
-						FiltroRota filtroRota = new FiltroRota();
-						filtroRota.adicionarParametro(
-								new ParametroSimples(FiltroRota.SETOR_COMERCIAL_ID, setorComercial.getId()));
+					if (setoresComercial != null && !setoresComercial.isEmpty()) {
+						Iterator iteratorSetorComercial = setoresComercial.iterator();
+						while (iteratorSetorComercial.hasNext()) {
+							SetorComercial setorComercial = (SetorComercial) iteratorSetorComercial.next();
+							FiltroRota filtroRota = new FiltroRota();
+							filtroRota.adicionarParametro(
+									new ParametroSimples(FiltroRota.SETOR_COMERCIAL_ID, setorComercial.getId()));
 
-						Collection colecaoRotas = Fachada.getInstancia().pesquisar(filtroRota, Rota.class.getName());
+							Collection colecaoRotas = Fachada.getInstancia().pesquisar(filtroRota,
+									Rota.class.getName());
 
-						if (colecaoRotas != null && !colecaoRotas.isEmpty()) {
-							Iterator iteratorRota = colecaoRotas.iterator();
+							if (colecaoRotas != null && !colecaoRotas.isEmpty()) {
+								Iterator iteratorRota = colecaoRotas.iterator();
 
-							while (iteratorRota.hasNext()) {
-								Rota rota = (Rota) iteratorRota.next();
+								while (iteratorRota.hasNext()) {
+									Rota rota = (Rota) iteratorRota.next();
 
-								try {
 									Integer quantidadeDiasVencimentoFatura = Integer.valueOf(getFaturamentoParametro(
 											FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA
 													.toString()));
@@ -15985,25 +15986,23 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 									}
 
-									getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada,
-											false);
-
-								} catch (Exception e) {
-
-									/*
-									 * Este catch serve para interceptar qualquer exceção que o processo batch venha
-									 * a lançar e garantir que a unidade de processamento do batch será atualizada
-									 * com o erro ocorrido.
-									 */
-									getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
-									throw new EJBException(e);
 								}
 							}
 						}
 					}
 				}
 			}
-		}
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
+		} catch (Exception e) {
+
+			/*
+			 * Este catch serve para interceptar qualquer exceção que o processo batch venha
+			 * a lançar e garantir que a unidade de processamento do batch será atualizada
+			 * com o erro ocorrido.
+			 */
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+			throw new EJBException(e);
+		}
 	}
 }
