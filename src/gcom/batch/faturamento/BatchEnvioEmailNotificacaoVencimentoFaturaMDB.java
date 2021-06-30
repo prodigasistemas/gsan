@@ -46,7 +46,7 @@ MessageListener{
 			try {
 				this.getControladorFaturamento().envioEmailVencimentoFatura(
 						(Integer) ((Object[]) objectMessage.getObject())[0],
-						(Integer) ((Object[]) objectMessage.getObject())[1]);
+						(Collection<Integer>) ((Object[]) objectMessage.getObject())[1]);
 
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");

@@ -15897,7 +15897,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return repositorioFaturamento.pesquisarContatosAgenciaReguladora(municipio.getId());
 	}
 	
-	public void envioEmailVencimentoFatura (Integer idFuncionalidadeIniciada, Integer idRota)
+	public void envioEmailVencimentoFatura(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
 			throws ControladorException {
 
 		// -------------------------
@@ -15908,71 +15908,101 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		//
 		// -------------------------
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-				UnidadeProcessamento.ROTA, (idRota));
+				UnidadeProcessamento.LOCALIDADE, ((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
 
-		try {
-			Integer quantidadeDiasVencimentoFatura = Integer.valueOf(getFaturamentoParametro(
-					FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA.toString()));
-			
-			Date dataVencimentoParametro = Util.subtrairNumeroDiasDeUmaData(new Date(), quantidadeDiasVencimentoFatura);
+		if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
 
-			Collection contasVencidas = repositorioFaturamento.pesquisarContasVencimentoParaEnvioEmail(idRota,
-					dataVencimentoParametro);
+			for (Integer idLocalidade : colecaoIdsLocalidades) {
+				FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
+				filtroSetorComercial
+						.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, idLocalidade));
 
-			SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
+				Collection setoresComercial = Fachada.getInstancia().pesquisar(filtroSetorComercial,
+						SetorComercial.class.getName());
 
-			if (contasVencidas != null && !contasVencidas.isEmpty()) {
-				
-				Iterator colecaoContasVencidas = contasVencidas
-						.iterator();
-				
-				while (colecaoContasVencidas.hasNext()) {
-					try {
-						
-						Object[] contasEmail = (Object[]) colecaoContasVencidas
-								.next();
-						
-						Integer idImovel = (Integer) contasEmail[0];
-						String emailReceptor = (String) contasEmail[3];
+				if (setoresComercial != null && !setoresComercial.isEmpty()) {
+					Iterator iteratorSetorComercial = setoresComercial.iterator();
+					while (iteratorSetorComercial.hasNext()) {
+						SetorComercial setorComercial = (SetorComercial) iteratorSetorComercial.next();
+						FiltroRota filtroRota = new FiltroRota();
+						filtroRota.adicionarParametro(
+								new ParametroSimples(FiltroRota.SETOR_COMERCIAL_ID, setorComercial.getId()));
 
-						// Envia de Arquivo por email
-						EnvioEmail envioEmail = this.getControladorCadastro()
-								.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
+						Collection colecaoRotas = Fachada.getInstancia().pesquisar(filtroRota, Rota.class.getName());
 
-						String emailRemetente = envioEmail.getEmailRemetente();
-						String tituloMensagem = envioEmail.getTituloMensagem();
-						String corpoMensagem = "A "
-								+ sistemaParametro.getNomeEmpresa()
-								+ " informa que a conta do imóvel de matrícula "
-								+ idImovel
-								+ " está está com atraso em seu pagamento há "
-								+ quantidadeDiasVencimentoFatura
-								+ " dias. "
-								+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
+						if (colecaoRotas != null && !colecaoRotas.isEmpty()) {
+							Iterator iteratorRota = colecaoRotas.iterator();
 
+							while (iteratorRota.hasNext()) {
+								Rota rota = (Rota) iteratorRota.next();
 
-						ServicosEmail.enviarMensagem(emailRemetente, emailReceptor, tituloMensagem, corpoMensagem);
+								try {
+									Integer quantidadeDiasVencimentoFatura = Integer.valueOf(getFaturamentoParametro(
+											FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA
+													.toString()));
 
-					} catch (Exception e) {
-						System.out.println("Erro ao enviar email.");
+									Date dataVencimentoParametro = Util.subtrairNumeroDiasDeUmaData(new Date(),
+											quantidadeDiasVencimentoFatura);
+
+									Collection contasVencidas = repositorioFaturamento
+											.pesquisarContasVencimentoParaEnvioEmail(rota.getId(),
+													dataVencimentoParametro);
+
+									SistemaParametro sistemaParametro = this.getControladorUtil()
+											.pesquisarParametrosDoSistema();
+
+									if (contasVencidas != null && !contasVencidas.isEmpty()) {
+
+										Iterator colecaoContasVencidas = contasVencidas.iterator();
+
+										while (colecaoContasVencidas.hasNext()) {
+											try {
+
+												Object[] contasEmail = (Object[]) colecaoContasVencidas.next();
+
+												Integer idImovel = (Integer) contasEmail[0];
+												String emailReceptor = (String) contasEmail[3];
+
+												// Envia de Arquivo por email
+												EnvioEmail envioEmail = this.getControladorCadastro()
+														.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
+
+												String emailRemetente = envioEmail.getEmailRemetente();
+												String tituloMensagem = envioEmail.getTituloMensagem();
+												String corpoMensagem = "A " + sistemaParametro.getNomeEmpresa()
+														+ " informa que a conta do imóvel de matrícula " + idImovel
+														+ " está está com atraso em seu pagamento há "
+														+ quantidadeDiasVencimentoFatura + " dias. "
+														+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
+
+												ServicosEmail.enviarMensagem(emailRemetente, emailReceptor,
+														tituloMensagem, corpoMensagem);
+
+											} catch (Exception e) {
+												System.out.println("Erro ao enviar email.");
+											}
+										}
+
+									}
+
+									getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada,
+											false);
+
+								} catch (Exception e) {
+
+									/*
+									 * Este catch serve para interceptar qualquer exceção que o processo batch venha
+									 * a lançar e garantir que a unidade de processamento do batch será atualizada
+									 * com o erro ocorrido.
+									 */
+									getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+									throw new EJBException(e);
+								}
+							}
+						}
 					}
 				}
-
 			}
-			
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
-
-		} catch (Exception e) {
-
-			/*
-			 * Este catch serve para interceptar qualquer exceção que o processo
-			 * batch venha a lançar e garantir que a unidade de processamento do
-			 * batch será atualizada com o erro ocorrido.
-			 */
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
-					idUnidadeIniciada, true);
-			throw new EJBException(e);
 		}
 
 	}
