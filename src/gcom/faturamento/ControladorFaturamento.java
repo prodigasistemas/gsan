@@ -15962,8 +15962,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												+ quantidadeDiasVencimentoFatura + " dias. "
 												+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
 
-										// ServicosEmail.enviarMensagem(emailRemetente, emailReceptor,
-										// tituloMensagem, corpoMensagem);
+										 ServicosEmail.enviarMensagem(emailRemetente, emailReceptor,
+										 tituloMensagem, corpoMensagem);
 
 									} catch (Exception e) {
 										System.out.println("Erro ao enviar email.");

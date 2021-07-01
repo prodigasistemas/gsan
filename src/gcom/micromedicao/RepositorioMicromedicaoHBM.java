@@ -23910,10 +23910,10 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		try {
 
-			consulta = " select rota.rota_id from cadastro.localidade loca "
-					+ " inner join cadastro.setor_comercial seco on loca.loca_id = seco.loca_id "
-					+ " inner join micromedicao.rota rota on seco.stcm_id = rota.stcm_id "
-					+ " where loca.loca_id = :idLocalidade and loca.loca_icuso = 1";
+			consulta = " select rota.id from Rota rota "
+					+ " inner join fetch rota.setorComercial seco "
+					+ " inner join fetch seco.localidade loca "
+					+ " where loca.id = :idLocalidade and loca.indicadorUso = 1";
 
 			retorno = (Collection<Integer>) session.createQuery(consulta).setInteger("idLocalidade", idLocalidade)
 					.list();
