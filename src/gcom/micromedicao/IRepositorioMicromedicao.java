@@ -4152,4 +4152,6 @@ public interface IRepositorioMicromedicao {
      public Collection<ImovelPorRotaHelper> buscarImoveisFaturamentoSeletivo(Integer matriculaImovel, Integer idRota, Integer anoMesFaturamento) throws ErroRepositorioException;
 	
      public LigacaoAgua obterLigacaoAgua(Integer idLigacao) throws ErroRepositorioException;
+     
+     public Collection<Integer> obterIdsRotasPelaLocalidade(Integer idLocalidade) throws ErroRepositorioException;
 }

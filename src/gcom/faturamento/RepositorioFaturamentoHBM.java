@@ -60218,9 +60218,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " where rota_id = :idRota " 
 					+ " and cnta_dtvencimentoconta = :dataVencimento "
 					+ " and clie_dsemail != '' "
-					+ " and (dcst_idatual = " + DebitoCreditoSituacao.NORMAL + " or dcst_idatual = "
-					+ DebitoCreditoSituacao.RETIFICADA + " or dcst_idatual = " + DebitoCreditoSituacao.INCLUIDA
-					+ " or dcst_idatual = " + DebitoCreditoSituacao.PARCELADA + ")";
+					+ " and dcst_idatual in (" + DebitoCreditoSituacao.NORMAL + ","
+					+ DebitoCreditoSituacao.RETIFICADA + "," + DebitoCreditoSituacao.INCLUIDA + ")";
 			retorno = session.createSQLQuery(consulta)
 					.addScalar("imovelId", Hibernate.INTEGER)
 					.addScalar("id", Hibernate.INTEGER)
