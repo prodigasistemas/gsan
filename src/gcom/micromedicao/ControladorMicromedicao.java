@@ -40099,4 +40099,11 @@ public class ControladorMicromedicao extends ControladorComum {
 		}
 	}
 	
+	public Collection<Integer> obterIdsRotasPelaLocalidade(Integer idLocalidade) throws ControladorException {
+		try {
+			return repositorioMicromedicao.obterIdsRotasPelaLocalidade(idLocalidade);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 }

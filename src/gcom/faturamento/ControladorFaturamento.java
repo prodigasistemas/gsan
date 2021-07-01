@@ -15912,85 +15912,70 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		try {
 			if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
-
+				
+				Integer quantidadeDiasVencimentoFatura = Integer.valueOf(getFaturamentoParametro(
+						FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA
+								.toString()));
+				
 				for (Integer idLocalidade : colecaoIdsLocalidades) {
-					FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
-					filtroSetorComercial
-							.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, idLocalidade));
 
-					Collection setoresComercial = Fachada.getInstancia().pesquisar(filtroSetorComercial,
-							SetorComercial.class.getName());
+					Collection<Integer> idsRotas = this.getControladorMicromedicao()
+							.obterIdsRotasPelaLocalidade(idLocalidade);
 
-					if (setoresComercial != null && !setoresComercial.isEmpty()) {
-						Iterator iteratorSetorComercial = setoresComercial.iterator();
-						while (iteratorSetorComercial.hasNext()) {
-							SetorComercial setorComercial = (SetorComercial) iteratorSetorComercial.next();
-							FiltroRota filtroRota = new FiltroRota();
-							filtroRota.adicionarParametro(
-									new ParametroSimples(FiltroRota.SETOR_COMERCIAL_ID, setorComercial.getId()));
+					if (idsRotas != null && !idsRotas.isEmpty()) {
 
-							Collection colecaoRotas = Fachada.getInstancia().pesquisar(filtroRota,
-									Rota.class.getName());
+						for (Integer idRota : idsRotas) {
 
-							if (colecaoRotas != null && !colecaoRotas.isEmpty()) {
-								Iterator iteratorRota = colecaoRotas.iterator();
 
-								while (iteratorRota.hasNext()) {
-									Rota rota = (Rota) iteratorRota.next();
 
-									Integer quantidadeDiasVencimentoFatura = Integer.valueOf(getFaturamentoParametro(
-											FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA
-													.toString()));
+							Date dataVencimentoParametro = Util.adicionarNumeroDiasDeUmaData(new Date(),
+									quantidadeDiasVencimentoFatura);
 
-									Date dataVencimentoParametro = Util.subtrairNumeroDiasDeUmaData(new Date(),
-											quantidadeDiasVencimentoFatura);
+							Collection contasVencidas = repositorioFaturamento
+									.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimentoParametro);
 
-									Collection contasVencidas = repositorioFaturamento
-											.pesquisarContasVencimentoParaEnvioEmail(rota.getId(),
-													dataVencimentoParametro);
+							SistemaParametro sistemaParametro = this.getControladorUtil()
+									.pesquisarParametrosDoSistema();
 
-									SistemaParametro sistemaParametro = this.getControladorUtil()
-											.pesquisarParametrosDoSistema();
+							if (contasVencidas != null && !contasVencidas.isEmpty()) {
 
-									if (contasVencidas != null && !contasVencidas.isEmpty()) {
+								Iterator colecaoContasVencidas = contasVencidas.iterator();
 
-										Iterator colecaoContasVencidas = contasVencidas.iterator();
+								while (colecaoContasVencidas.hasNext()) {
+									try {
 
-										while (colecaoContasVencidas.hasNext()) {
-											try {
+										Object[] contasEmail = (Object[]) colecaoContasVencidas.next();
 
-												Object[] contasEmail = (Object[]) colecaoContasVencidas.next();
+										Integer idImovel = (Integer) contasEmail[0];
+										String emailReceptor = "pamela@prodigasistemas.com.br";
 
-												Integer idImovel = (Integer) contasEmail[0];
-												String emailReceptor = (String) contasEmail[3];
+										// Envia de Arquivo por email
+										EnvioEmail envioEmail = this.getControladorCadastro()
+												.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
 
-												// Envia de Arquivo por email
-												EnvioEmail envioEmail = this.getControladorCadastro()
-														.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
+										String emailRemetente = envioEmail.getEmailRemetente();
+										String tituloMensagem = envioEmail.getTituloMensagem();
+										String corpoMensagem = "Caro Cliente, " +
+												"A " + sistemaParametro.getNomeEmpresa()
+												+ " informa que a conta do imóvel de matrícula " + idImovel
+												+ " vence em "
+												+ quantidadeDiasVencimentoFatura + " dias. "
+												+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
 
-												String emailRemetente = envioEmail.getEmailRemetente();
-												String tituloMensagem = envioEmail.getTituloMensagem();
-												String corpoMensagem = "A " + sistemaParametro.getNomeEmpresa()
-														+ " informa que a conta do imóvel de matrícula " + idImovel
-														+ " está está com atraso em seu pagamento há "
-														+ quantidadeDiasVencimentoFatura + " dias. "
-														+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
+										// ServicosEmail.enviarMensagem(emailRemetente, emailReceptor,
+										// tituloMensagem, corpoMensagem);
 
-												ServicosEmail.enviarMensagem(emailRemetente, emailReceptor,
-														tituloMensagem, corpoMensagem);
-
-											} catch (Exception e) {
-												System.out.println("Erro ao enviar email.");
-											}
-										}
-
+									} catch (Exception e) {
+										System.out.println("Erro ao enviar email.");
 									}
-
 								}
+
 							}
+
 						}
 					}
 				}
+
 			}
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
