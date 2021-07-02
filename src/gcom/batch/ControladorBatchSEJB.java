@@ -2560,9 +2560,13 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						filtroLocalidadeNotificacaoEmail
 								.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
+						Collection colecaoLocalidadeNotificacaoEmail = Fachada.getInstancia().pesquisar(filtroLocalidadeNotificacaoEmail,
+								Localidade.class.getName());
+								
 						batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-								Fachada.getInstancia().pesquisar(filtroLocalidadeNotificacaoEmail,
-										Localidade.class.getName()));
+								colecaoLocalidadeNotificacaoEmail);
+						
+						System.out.println("\nQUANTIDADE LOCALIDADE: " + colecaoLocalidadeNotificacaoEmail.size());
 						
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
 
