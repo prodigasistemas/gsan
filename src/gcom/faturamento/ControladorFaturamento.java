@@ -15896,4 +15896,98 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 		return repositorioFaturamento.pesquisarContatosAgenciaReguladora(municipio.getId());
 	}
+	
+	public void envioEmailVencimentoFatura(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
+			throws ControladorException {
+
+		// -------------------------
+		//
+		// Registrar o início do processamento da Unidade de
+		// Processamento
+		// do Batch
+		//
+		// -------------------------
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+				UnidadeProcessamento.LOCALIDADE, ((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
+
+		try {
+			if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
+				
+				Integer quantidadeDiasVencimentoFatura = Integer.valueOf(getFaturamentoParametro(
+						FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA
+								.toString()));
+				
+				for (Integer idLocalidade : colecaoIdsLocalidades) {
+
+					Collection<Integer> idsRotas = this.getControladorMicromedicao()
+							.obterIdsRotasPelaLocalidade(idLocalidade);
+
+					if (idsRotas != null && !idsRotas.isEmpty()) {
+
+						for (Integer idRota : idsRotas) {
+
+
+
+							Date dataVencimentoParametro = Util.adicionarNumeroDiasDeUmaData(new Date(),
+									quantidadeDiasVencimentoFatura);
+
+							Collection contasVencidas = repositorioFaturamento
+									.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimentoParametro);
+
+							SistemaParametro sistemaParametro = this.getControladorUtil()
+									.pesquisarParametrosDoSistema();
+
+							if (contasVencidas != null && !contasVencidas.isEmpty()) {
+
+								Iterator colecaoContasVencidas = contasVencidas.iterator();
+
+								while (colecaoContasVencidas.hasNext()) {
+									try {
+
+										Object[] contasEmail = (Object[]) colecaoContasVencidas.next();
+
+										Integer idImovel = (Integer) contasEmail[0];
+										String emailReceptor = "pamela@prodigasistemas.com.br";
+
+										// Envia de Arquivo por email
+										EnvioEmail envioEmail = this.getControladorCadastro()
+												.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
+
+										String emailRemetente = envioEmail.getEmailRemetente();
+										String tituloMensagem = envioEmail.getTituloMensagem();
+										String corpoMensagem = "Caro Cliente, " +
+												"A " + sistemaParametro.getNomeEmpresa()
+												+ " informa que a conta do imóvel de matrícula " + idImovel
+												+ " vence em "
+												+ quantidadeDiasVencimentoFatura + " dias. "
+												+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
+
+										 ServicosEmail.enviarMensagem(emailRemetente, emailReceptor,
+										 tituloMensagem, corpoMensagem);
+
+									} catch (Exception e) {
+										System.out.println("Erro ao enviar email.");
+									}
+								}
+
+							}
+
+						}
+					}
+				}
+
+			}
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+
+		} catch (Exception e) {
+
+			/*
+			 * Este catch serve para interceptar qualquer exceção que o processo batch venha
+			 * a lançar e garantir que a unidade de processamento do batch será atualizada
+			 * com o erro ocorrido.
+			 */
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+			throw new EJBException(e);
+		}
+	}
 }

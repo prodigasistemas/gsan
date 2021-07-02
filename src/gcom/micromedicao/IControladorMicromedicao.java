@@ -2684,4 +2684,6 @@ public interface IControladorMicromedicao {
 	public int obterConsumoLigacaoImoveisVinculados(Integer idImovelCondominio, Integer anoMesFaturamento, Integer ligacaoTipo) throws ControladorException;
 	
 	public void atualizarConsumosCondominios(Rota rota, LigacaoTipo ligacaoTipo) throws ControladorException;
+	
+	public Collection<Integer> obterIdsRotasPelaLocalidade(Integer idLocalidade) throws ControladorException;
 }

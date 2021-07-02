@@ -23901,4 +23901,29 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
  		return retorno;
  	}
+     
+     
+	public Collection<Integer> obterIdsRotasPelaLocalidade(Integer idLocalidade) throws ErroRepositorioException {
+		Collection<Integer> retorno = new ArrayList<Integer>();
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+
+			consulta = " select rota.id from Rota rota "
+					+ " inner join fetch rota.setorComercial seco "
+					+ " inner join fetch seco.localidade loca "
+					+ " where loca.id = :idLocalidade and loca.indicadorUso = 1";
+
+			retorno = (Collection<Integer>) session.createQuery(consulta).setInteger("idLocalidade", idLocalidade)
+					.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }

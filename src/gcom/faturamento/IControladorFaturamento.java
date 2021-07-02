@@ -1290,4 +1290,6 @@ public interface IControladorFaturamento {
 	public Localidade pesquisarLocalidadeConta(Integer parametro) throws ControladorException;
 
 	public Object[] pesquisarContatosAgenciaReguladora(EmitirContaHelper emitirContaHelper) throws ErroRepositorioException, ControladorException;
+	
+	public void envioEmailVencimentoFatura (Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades) throws ControladorException;
 }
