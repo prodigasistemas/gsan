@@ -45,9 +45,15 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 		
         Iterator iterator = colecaoLocalidade.iterator();
 
+        
+        System.out.println("\nTAREFA BATCH QUANTIDADE LOCALIDADE: " + colecaoLocalidade.size());
+        
         while (iterator.hasNext()) {
 
             Localidade localidade = (Localidade) iterator.next();
+            
+            System.out.println("\nLOCALIDADE: " + localidade.getDescricao());
+            
 			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENVIO_EMAIL_NOTIFICACAO_VENCIMENTO_FATURA,
 					new Object[] { this.getIdFuncionalidadeIniciada(), Collections.singletonList(localidade.getId()) });
 		}

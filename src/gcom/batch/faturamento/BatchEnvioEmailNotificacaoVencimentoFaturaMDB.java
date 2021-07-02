@@ -40,8 +40,12 @@ MessageListener{
 
 
 	public void onMessage(Message message) {
+		
+		System.out.println("\nENTRADA NO BATCH");
+		
 		if (message instanceof ObjectMessage) {
-
+			System.out.println("\nENTRADA NA MESSAGEM");
+			
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
 				this.getControladorFaturamento().envioEmailVencimentoFatura(
