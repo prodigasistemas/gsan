@@ -15908,7 +15908,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		//
 		// -------------------------
 		
-		System.out.println("\nENTRADA NO METODO CONTROLADOR");
+
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
 				UnidadeProcessamento.LOCALIDADE, ((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
 
@@ -15923,7 +15923,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 					Collection<Integer> idsRotas = this.getControladorMicromedicao()
 							.obterIdsRotasPelaLocalidade(idLocalidade);
-					System.out.println("\nNÚMERO ROTAS: " + idsRotas.size());
+
 					if (idsRotas != null && !idsRotas.isEmpty()) {
 
 						for (Integer idRota : idsRotas) {
@@ -15942,14 +15942,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							if (contasVencidas != null && !contasVencidas.isEmpty()) {
 
 								Iterator colecaoContasVencidas = contasVencidas.iterator();
-								System.out.println("\nEXISTE CONTAS VENCIDAS");
+
 								while (colecaoContasVencidas.hasNext()) {
 									try {
 
 										Object[] contasEmail = (Object[]) colecaoContasVencidas.next();
 
 										Integer idImovel = (Integer) contasEmail[0];
-										String emailReceptor = "pamela@prodigasistemas.com.br";
+										String emailReceptor = (String) contasEmail[3];
 
 										// Envia de Arquivo por email
 										EnvioEmail envioEmail = this.getControladorCadastro()
