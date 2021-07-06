@@ -15928,8 +15928,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						for (Integer idRota : idsRotas) {
 
-
-
 							Date dataVencimentoParametro = Util.adicionarNumeroDiasDeUmaData(new Date(),
 									quantidadeDiasVencimentoFatura);
 
@@ -15948,8 +15946,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										Object[] contasEmail = (Object[]) colecaoContasVencidas.next();
 
-										Integer idImovel = (Integer) contasEmail[0];
-										String emailReceptor = (String) contasEmail[3];
+										Conta conta = (Conta) contasEmail[1];
+										Imovel imovel = (Imovel) contasEmail[2];
+										String emailReceptor = (String) contasEmail[0];
 
 										// Envia de Arquivo por email
 										EnvioEmail envioEmail = this.getControladorCadastro()
@@ -15959,7 +15958,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										String tituloMensagem = envioEmail.getTituloMensagem();
 										String corpoMensagem = "Caro Cliente, " +
 												"A " + sistemaParametro.getNomeEmpresa()
-												+ " informa que a conta do imóvel de matrícula " + idImovel
+												+ " informa que a conta do imóvel de matrícula " + imovel.getId()
 												+ " vence em "
 												+ quantidadeDiasVencimentoFatura + " dias. "
 												+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
