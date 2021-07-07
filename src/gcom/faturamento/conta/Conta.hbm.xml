@@ -240,7 +240,7 @@
 				<column name="cmrt_id"/>
 			</many-to-one>
 			<!-- bi-directional many-to-one association to DebitoCreditoSituacao -->
-			<many-to-one name="debitoCreditoSituacaoAtual" class="gcom.faturamento.debito.DebitoCreditoSituacao" not-null="true">
+			<many-to-one name="debitoCreditoSituacaoAtual" class="gcom.faturamento.debito.DebitoCreditoSituacao" not-null="true" lazy="false">
 				<column name="dcst_idatual"/>
 			</many-to-one>
 			<!-- bi-directional many-to-one association to DebitoCreditoSituacao -->

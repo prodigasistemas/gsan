@@ -15916,6 +15916,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				GsanApi api = new GsanApi(url);
 				api.invoke(helper);
 				return api.salvar(helper.getNomeArquivo());
+				
 			} else {
 				throw new ActionServletException("atencao.conta_segunda_via_sem_dados");
 			}
@@ -15957,7 +15958,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						for (Integer idRota : idsRotas) {
 
 							Date dataVencimentoParametro = Util.adicionarNumeroDiasDeUmaData(new Date(),
-									quantidadeDiasVencimentoFatura);
+								quantidadeDiasVencimentoFatura);
+							
 
 							Collection contasVencidas = repositorioFaturamento
 									.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimentoParametro);
@@ -15980,6 +15982,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 									File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
 										
+									
 										// Envia de Arquivo por email
 										EnvioEmail envioEmail = this.getControladorCadastro()
 												.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
