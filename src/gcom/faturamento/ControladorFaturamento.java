@@ -15958,8 +15958,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						for (Integer idRota : idsRotas) {
 
 							Date dataVencimentoParametro = Util.adicionarNumeroDiasDeUmaData(new Date(),
-								quantidadeDiasVencimentoFatura);
-							
+								quantidadeDiasVencimentoFatura);							
 
 							Collection contasVencidas = repositorioFaturamento
 									.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimentoParametro);
@@ -15996,8 +15995,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												+ quantidadeDiasVencimentoFatura + " dias. "
 												+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
 
-										 ServicosEmail.enviarMensagem(emailRemetente, emailReceptor,
-										 tituloMensagem, corpoMensagem);
+										 ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente,
+										tituloMensagem, corpoMensagem, contaSegundaVia);
 
 									} catch (Exception e) {
 										System.out.println("Erro ao enviar email.");
