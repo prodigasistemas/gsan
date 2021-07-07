@@ -35,6 +35,7 @@ import org.apache.commons.beanutils.BeanComparator;
 import org.hibernate.LazyInitializationException;
 import org.jboss.logging.Logger;
 
+import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
@@ -85,6 +86,7 @@ import gcom.faturamento.autoinfracao.AutosInfracao;
 import gcom.faturamento.bean.ApagarDadosFaturamentoHelper;
 import gcom.faturamento.bean.AtualizarContaPreFaturadaHelper;
 import gcom.faturamento.bean.CalcularValoresAguaEsgotoHelper;
+import gcom.faturamento.bean.ContaSegundaViaHelper;
 import gcom.faturamento.bean.DebitoCobradoAgrupadoHelper;
 import gcom.faturamento.bean.DeclaracaoQuitacaoAnualDebitosHelper;
 import gcom.faturamento.bean.DeclaracaoQuitacaoAnualDebitosItemHelper;
@@ -98,6 +100,7 @@ import gcom.faturamento.bean.PrescreverDebitosImovelHelper;
 import gcom.faturamento.bean.RemoverImovesJaProcessadorImpressaoSimultaneaHelper;
 import gcom.faturamento.bean.RemoverImovesJaProcessadorImpressaoSimultaneaHelper.DadosImovelRemoverImovesJaProcessadorImpressaoSimultanea;
 import gcom.faturamento.bean.RetornoAtualizarFaturamentoMovimentoCelularHelper;
+import gcom.faturamento.bo.ContaSegundaViaBO;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
@@ -212,6 +215,7 @@ import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoS
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean;
 import gcom.relatorio.faturamento.ValorAFaturarHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
@@ -15897,6 +15901,30 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return repositorioFaturamento.pesquisarContatosAgenciaReguladora(municipio.getId());
 	}
 	
+	public File faturaEnvioEmailVencimentoFatura(Conta conta, Imovel imovel)
+			throws ControladorException {
+	
+		try {
+			Collection<Integer> idsContas = new ArrayList<Integer>();
+			idsContas.add(conta.getId());
+			ContaSegundaViaBO bo = new ContaSegundaViaBO(null, idsContas, false, new Short("1"));
+			ContaSegundaViaHelper helper = bo.criar(imovel, null, conta.getDebitoCreditoSituacaoAtual().getDescricaoDebitoCreditoSituacao());
+
+			if (helper != null) {
+				String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_SEGUNDA_VIA.toString());
+
+				GsanApi api = new GsanApi(url);
+				api.invoke(helper);
+				return api.salvar(helper.getNomeArquivo());
+			} else {
+				throw new ActionServletException("atencao.conta_segunda_via_sem_dados");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ActionServletException("atencao.erro_baixar_conta_segunda_via");
+		}		
+	}
+	
 	public void envioEmailVencimentoFatura(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
 			throws ControladorException {
 
@@ -15950,6 +15978,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										Imovel imovel = (Imovel) contasEmail[2];
 										String emailReceptor = (String) contasEmail[0];
 
+									File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
+										
 										// Envia de Arquivo por email
 										EnvioEmail envioEmail = this.getControladorCadastro()
 												.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
