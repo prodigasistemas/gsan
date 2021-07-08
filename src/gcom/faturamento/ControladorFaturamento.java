@@ -15958,7 +15958,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						for (Integer idRota : idsRotas) {
 
 							Date dataVencimentoParametro = Util.adicionarNumeroDiasDeUmaData(new Date(),
-								quantidadeDiasVencimentoFatura);							
+								quantidadeDiasVencimentoFatura);
 
 							Collection contasVencidas = repositorioFaturamento
 									.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimentoParametro);
@@ -15977,7 +15977,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										Conta conta = (Conta) contasEmail[1];
 										Imovel imovel = (Imovel) contasEmail[2];
-										String emailReceptor = (String) contasEmail[0];
+										String emailReceptor = "pamela@prodigasistemas.com.br";
 
 									File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
 										
