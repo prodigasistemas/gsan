@@ -229,6 +229,7 @@ import gcom.util.IoUtil;
 import gcom.util.MergeProperties;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
+import gcom.util.email.ModeloEmailVencimento;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNaoNulo;
@@ -15978,6 +15979,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										Conta conta = (Conta) contasEmail[1];
 										Imovel imovel = (Imovel) contasEmail[2];
 										String emailReceptor = "pamela@prodigasistemas.com.br";
+										String nomeCliente = (String) contasEmail[4];
 
 									File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
 										
@@ -15997,6 +15999,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										 ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente,
 										tituloMensagem, corpoMensagem, contaSegundaVia);
+										 
+										 Collection<String> destinatarios = new ArrayList<String>();
+										 destinatarios.add(emailReceptor);
+										 
+										 ServicosEmail.enviarMensagemHTML(destinatarios, emailRemetente, "COSANPA", tituloMensagem, ModeloEmailVencimento.getMensagem(nomeCliente));
 
 									} catch (Exception e) {
 										System.out.println("Erro ao enviar email.");
