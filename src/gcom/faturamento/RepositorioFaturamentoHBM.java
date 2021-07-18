@@ -60212,19 +60212,20 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Session session = HibernateUtil.getSession();
 		String consulta;
 		try {
-			consulta = "select c.imov_id as imovelId, c.cnta_id as id , c.cnta_dtvencimentoconta as vencimento , cli.clie_dsemail as email  "
+			consulta = "select distinct(c.*), imov.*, cli.clie_dsemail as email, cli.clie_nmcliente as nomeCliente  "
 					+ " from faturamento.conta c  inner join cadastro.cliente_conta clct on c.cnta_id = clct.cnta_id "
 					+ " inner join cadastro.cliente cli on clct.clie_id = cli.clie_id "
+					+ " inner join cadastro.imovel imov on c.imov_id = imov.imov_id "
 					+ " where rota_id = :idRota " 
 					+ " and cnta_dtvencimentoconta = :dataVencimento "
 					+ " and clie_dsemail != '' "
 					+ " and dcst_idatual in (" + DebitoCreditoSituacao.NORMAL + ","
 					+ DebitoCreditoSituacao.RETIFICADA + "," + DebitoCreditoSituacao.INCLUIDA + ")";
 			retorno = session.createSQLQuery(consulta)
-					.addScalar("imovelId", Hibernate.INTEGER)
-					.addScalar("id", Hibernate.INTEGER)
-					.addScalar("vencimento", Hibernate.DATE)
+					.addEntity("c", Conta.class)
+					.addEntity("imov", Imovel.class)
 					.addScalar("email", Hibernate.STRING)
+					.addScalar("nomeCliente", Hibernate.STRING)
 					.setDate("dataVencimento", dataVencimento)
 					.setInteger("idRota", idRota).list();
 		} catch (HibernateException e) {
