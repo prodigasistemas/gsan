@@ -8034,6 +8034,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						this.getControladorUtil().atualizar(c);
 
 					} catch (Exception e) {
+						e.printStackTrace();
 						System.out.println("Erro ao enviar email.");
 					}
 
@@ -16006,6 +16007,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										 ServicosEmail.enviarMensagemHTML(destinatarios, emailRemetente, "COSANPA", tituloMensagem, ModeloEmailVencimento.getMensagem(nomeCliente));
 
 									} catch (Exception e) {
+										e.printStackTrace();
 										System.out.println("Erro ao enviar email.");
 									}
 								}
