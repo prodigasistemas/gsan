@@ -15977,10 +15977,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										Object[] contasEmail = (Object[]) colecaoContasVencidas.next();
 
-										Conta conta = (Conta) contasEmail[1];
-										Imovel imovel = (Imovel) contasEmail[2];
+										Conta conta = (Conta) contasEmail[0];
+										Imovel imovel = (Imovel) contasEmail[1];
 										String emailReceptor = "pamela@prodigasistemas.com.br";
-										String nomeCliente = (String) contasEmail[4];
+										String nomeCliente = (String) contasEmail[3];
 
 									File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
 										
