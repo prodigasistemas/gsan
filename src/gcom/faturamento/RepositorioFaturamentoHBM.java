@@ -60212,7 +60212,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Session session = HibernateUtil.getSession();
 		String consulta;
 		try {
-			consulta = "select distinct(c.*), imov.*, cli.clie_dsemail as email, cli.clie_nmcliente as nomeCliente  "
+			consulta = "select distinct(c.cnta_id) as idconta, c.dcst_idatual as situacao, cli.clie_dsemail as email, cli.clie_nmcliente as nomeCliente  "
 					+ " from faturamento.conta c  inner join cadastro.cliente_conta clct on c.cnta_id = clct.cnta_id "
 					+ " inner join cadastro.cliente cli on clct.clie_id = cli.clie_id "
 					+ " inner join cadastro.imovel imov on c.imov_id = imov.imov_id "
@@ -60222,8 +60222,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " and dcst_idatual in (" + DebitoCreditoSituacao.NORMAL + ","
 					+ DebitoCreditoSituacao.RETIFICADA + "," + DebitoCreditoSituacao.INCLUIDA + ")";
 			retorno = session.createSQLQuery(consulta)
-					.addEntity("c", Conta.class)
-					.addEntity("imov", Imovel.class)
+					.addScalar("idconta", Hibernate.INTEGER)
+					.addScalar("situacao", Hibernate.INTEGER)
 					.addScalar("email", Hibernate.STRING)
 					.addScalar("nomeCliente", Hibernate.STRING)
 					.setDate("dataVencimento", dataVencimento)
