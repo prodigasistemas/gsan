@@ -15931,22 +15931,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	public void envioEmailVencimentoFatura(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
 			throws ControladorException {
 
-		// -------------------------
-		//
-		// Registrar o início do processamento da Unidade de
-		// Processamento
-		// do Batch
-		//
-		// -------------------------
-		
-
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
 				UnidadeProcessamento.LOCALIDADE, ((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
 
 		try {
 			if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
 				
-				Integer quantidadeDiasVencimentoFatura = Integer.valueOf(getFaturamentoParametro(
+				Integer qtdDiasVencimento = Integer.valueOf(getFaturamentoParametro(
 						FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA
 								.toString()));
 				
@@ -15959,53 +15950,35 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						for (Integer idRota : idsRotas) {
 
-							Date dataVencimentoParametro = Util.adicionarNumeroDiasDeUmaData(new Date(),
-								quantidadeDiasVencimentoFatura);
+							Date dataVencimento = Util.adicionarNumeroDiasDeUmaData(new Date(), qtdDiasVencimento);
 
-							Collection contasVencidas = repositorioFaturamento
-									.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimentoParametro);
+							Collection contas = repositorioFaturamento.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimento);
 
-							SistemaParametro sistemaParametro = this.getControladorUtil()
-									.pesquisarParametrosDoSistema();
+							if (contas != null && !contas.isEmpty()) {
 
-							if (contasVencidas != null && !contasVencidas.isEmpty()) {
+								Iterator iteratosContas = contas.iterator();
 
-								Iterator colecaoContasVencidas = contasVencidas.iterator();
-
-								while (colecaoContasVencidas.hasNext()) {
+								while (iteratosContas.hasNext()) {
 									try {
 
-										Object[] contasEmail = (Object[]) colecaoContasVencidas.next();
+										Object[] contasEmail = (Object[]) iteratosContas.next();
 
 										Conta conta = new Conta((Integer) contasEmail[0]);
 										conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
-										//Imovel imovel = (Imovel) contasEmail[1];
 										String emailReceptor = "pamela@prodigasistemas.com.br";
 										String nomeCliente = (String) contasEmail[3];
-
-									//File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
+										Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 										
+										File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
 									
-										// Envia de Arquivo por email
 										EnvioEmail envioEmail = this.getControladorCadastro()
 												.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
 
-										String emailRemetente = envioEmail.getEmailRemetente();
-										String tituloMensagem = envioEmail.getTituloMensagem();
-										String corpoMensagem = "Caro Cliente, " +
-												"A " + sistemaParametro.getNomeEmpresa()
-												+ " informa que a conta do imóvel de matrícula " //+ imovel.getId()
-												+ " vence em "
-												+ quantidadeDiasVencimentoFatura + " dias. "
-												+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
-
-										// ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente,
-										//tituloMensagem, corpoMensagem, contaSegundaVia);
-										 
-										 Collection<String> destinatarios = new ArrayList<String>();
-										 destinatarios.add(emailReceptor);
-										 
-										 ServicosEmail.enviarMensagemHTML(destinatarios, emailRemetente, "COSANPA", tituloMensagem, ModeloEmailVencimento.getMensagem(nomeCliente));
+										 ServicosEmail.enviarMensagemHTMLComAnexo(emailReceptor, 
+												 envioEmail.getEmailRemetente(), 
+												 "COSANPA", 
+												 envioEmail.getTituloMensagem(), 
+												 ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento), contaSegundaVia);
 
 									} catch (Exception e) {
 										e.printStackTrace();
@@ -16023,12 +15996,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
 		} catch (Exception e) {
-
-			/*
-			 * Este catch serve para interceptar qualquer exceção que o processo batch venha
-			 * a lançar e garantir que a unidade de processamento do batch será atualizada
-			 * com o erro ocorrido.
-			 */
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}

@@ -3,6 +3,7 @@ package gcom.util.email;
 public class ModeloEmailVencimento {
 
 	private static String NOME_CLIENTE = "NOME_CLIENTE";
+	private static String QTD_DIAS_VENCIMENTO = "QTD_DIAS_VENCIMENTO";
 	
 	private static String CABECALHO_PAGINA = "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">"
 			+ "<html>" 
@@ -20,17 +21,17 @@ public class ModeloEmailVencimento {
 			"			<br><br>\r\n" + 
 			"			</div>\r\n" + 
 			"\r\n" + 
-			"			<h1>Sua fatura est&aacute; pr&oacute;xima do vencimento. </h1><br>\r\n" + 
+			"			<h1 style='color: MidnightBlue;\">Sua fatura est&aacute; pr&oacute;xima do vencimento. </h1><br>\r\n" + 
 			"			<h2>Ol&aacute; <b>NOME_CLIENTE</b></h2>\r\n" + 
-			"			<p style=\"font-size: 24px;\">Faltam 15 dias para o vencimento da sua fatura. Voc&ecirc; pode efetuar o pagamento utilizando o boleto que anexamos nesse email.</p>\r\n" + 
+			"			<p style=\"color: MidnightBlue; font-size: 20px;\">Faltam QTD_DIAS_VENCIMENTO dias para o vencimento da sua fatura. Voc&ecirc; pode efetuar o pagamento utilizando o boleto que anexamos nesse email.</p>\r\n" + 
 			"			<br>\r\n" + 
-			"			<p><b>Se voc&ecirc; j&aacute; efetuou o pagamento, \r\n" + 
+			"			<p style=\"color: MidnightBlue; font-size: 20px;\"><b>Se voc&ecirc; j&aacute; efetuou o pagamento, \r\n" + 
 			"			 por favor, desconsidere essa mensagem.</b></p> \r\n" + 
 			"			 <br>\r\n" + 
-			"			 <p>Voc&ecirc; pode pagar o boleto no seu internet banking, em lot&eacute;ricas, ag&ecirc;ncias banc&aacute;rias ou em caixas eletr&ocirc;nicos. Se voc&ecirc; tiver o DDA (D&eacute;bito Direto Autorizado) cadastrado em seu banco, poder&aacute; \r\n" + 
+			"			 <p style=\"color: MidnightBlue; font-size: 20px;\">Voc&ecirc; pode pagar o boleto no seu internet banking, em lot&eacute;ricas, ag&ecirc;ncias banc&aacute;rias ou em caixas eletr&ocirc;nicos. Se voc&ecirc; tiver o DDA (D&eacute;bito Direto Autorizado) cadastrado em seu banco, poder&aacute; \r\n" + 
 			"			 consultar, agendar e pagar este boleto utilizando esse servi&ccedil;o.</p>\r\n" + 
 			"			 <br>\r\n" + 
-			"			<p>A COSANPA agradece sua aten&ccedil;&atilde;o!</p>\r\n" + 
+			"			<p style=\"color: MidnightBlue; font-size: 20px;\">A COSANPA agradece sua aten&ccedil;&atilde;o!</p>\r\n" + 
 			"			<br>";
 	
 	private static String RODAPE_EMAIL = "<div><p>\"Esta &eacute; uma mensagem autom&aacute;tica, este email n&atilde;o deve ser respondido.\"</p></div>";
@@ -52,7 +53,7 @@ public class ModeloEmailVencimento {
 			"</body>\r\n" + 
 			"</html:html>";
 	
-	public static String getMensagem(String nomeCliente) {
+	public static String getMensagem(String nomeCliente, Integer qtdDiasVencimento) {
 		StringBuilder texto = new StringBuilder();
 		
 		texto.append(CABECALHO_PAGINA)
@@ -60,6 +61,6 @@ public class ModeloEmailVencimento {
 			.append(RODAPE_EMAIL)
 			.append(RODAPE_PAGINA);
 		
-		return texto.toString().replace(NOME_CLIENTE, nomeCliente);
+		return texto.toString().replace(NOME_CLIENTE, nomeCliente).replace(QTD_DIAS_VENCIMENTO, qtdDiasVencimento.toString());
 	}
 }
