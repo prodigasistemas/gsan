@@ -2566,8 +2566,6 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
 								colecaoLocalidadeNotificacaoEmail);
 						
-						System.out.println("\nQUANTIDADE LOCALIDADE: " + colecaoLocalidadeNotificacaoEmail.size());
-						
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);

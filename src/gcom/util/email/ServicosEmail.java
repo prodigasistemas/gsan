@@ -257,7 +257,7 @@ public final class ServicosEmail implements Serializable {
 	 * Método que envia mensagens em html
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void enviarMensagemHTML(Collection destinatarios, String from, String nameFrom, String subject, String body, String codigoHtml) throws ErroEmailException {
+	public static void enviarMensagemHTML(Collection destinatarios, String from, String nameFrom, String subject, String codigoHtml) throws ErroEmailException {
 		try {
 			if (servidorSMTP != null && !servidorSMTP.equals(ConstantesSistema.SMTP_INVALIDO)) {
 				Properties properties = System.getProperties();

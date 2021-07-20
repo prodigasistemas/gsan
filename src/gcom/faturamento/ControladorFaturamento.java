@@ -35,6 +35,7 @@ import org.apache.commons.beanutils.BeanComparator;
 import org.hibernate.LazyInitializationException;
 import org.jboss.logging.Logger;
 
+import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
@@ -85,6 +86,7 @@ import gcom.faturamento.autoinfracao.AutosInfracao;
 import gcom.faturamento.bean.ApagarDadosFaturamentoHelper;
 import gcom.faturamento.bean.AtualizarContaPreFaturadaHelper;
 import gcom.faturamento.bean.CalcularValoresAguaEsgotoHelper;
+import gcom.faturamento.bean.ContaSegundaViaHelper;
 import gcom.faturamento.bean.DebitoCobradoAgrupadoHelper;
 import gcom.faturamento.bean.DeclaracaoQuitacaoAnualDebitosHelper;
 import gcom.faturamento.bean.DeclaracaoQuitacaoAnualDebitosItemHelper;
@@ -98,6 +100,7 @@ import gcom.faturamento.bean.PrescreverDebitosImovelHelper;
 import gcom.faturamento.bean.RemoverImovesJaProcessadorImpressaoSimultaneaHelper;
 import gcom.faturamento.bean.RemoverImovesJaProcessadorImpressaoSimultaneaHelper.DadosImovelRemoverImovesJaProcessadorImpressaoSimultanea;
 import gcom.faturamento.bean.RetornoAtualizarFaturamentoMovimentoCelularHelper;
+import gcom.faturamento.bo.ContaSegundaViaBO;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
@@ -212,6 +215,7 @@ import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoS
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean;
 import gcom.relatorio.faturamento.ValorAFaturarHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
@@ -225,6 +229,7 @@ import gcom.util.IoUtil;
 import gcom.util.MergeProperties;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
+import gcom.util.email.ModeloEmailVencimento;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNaoNulo;
@@ -8029,6 +8034,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						this.getControladorUtil().atualizar(c);
 
 					} catch (Exception e) {
+						e.printStackTrace();
 						System.out.println("Erro ao enviar email.");
 					}
 
@@ -15897,6 +15903,31 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return repositorioFaturamento.pesquisarContatosAgenciaReguladora(municipio.getId());
 	}
 	
+	public File faturaEnvioEmailVencimentoFatura(Conta conta, Imovel imovel)
+			throws ControladorException {
+	
+		try {
+			Collection<Integer> idsContas = new ArrayList<Integer>();
+			idsContas.add(conta.getId());
+			ContaSegundaViaBO bo = new ContaSegundaViaBO(null, idsContas, false, new Short("1"));
+			ContaSegundaViaHelper helper = bo.criar(imovel, null, conta.getDebitoCreditoSituacaoAtual().getDescricaoDebitoCreditoSituacao());
+
+			if (helper != null) {
+				String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_SEGUNDA_VIA.toString());
+
+				GsanApi api = new GsanApi(url);
+				api.invoke(helper);
+				return api.salvar(helper.getNomeArquivo());
+				
+			} else {
+				throw new ActionServletException("atencao.conta_segunda_via_sem_dados");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ActionServletException("atencao.erro_baixar_conta_segunda_via");
+		}		
+	}
+	
 	public void envioEmailVencimentoFatura(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
 			throws ControladorException {
 
@@ -15908,7 +15939,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		//
 		// -------------------------
 		
-		System.out.println("\nENTRADA NO METODO CONTROLADOR");
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
 				UnidadeProcessamento.LOCALIDADE, ((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
 
@@ -15928,10 +15958,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						for (Integer idRota : idsRotas) {
 
-
-
 							Date dataVencimentoParametro = Util.adicionarNumeroDiasDeUmaData(new Date(),
-									quantidadeDiasVencimentoFatura);
+								quantidadeDiasVencimentoFatura);
 
 							Collection contasVencidas = repositorioFaturamento
 									.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimentoParametro);
@@ -15948,9 +15976,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										Object[] contasEmail = (Object[]) colecaoContasVencidas.next();
 
-										Integer idImovel = (Integer) contasEmail[0];
+										Conta conta = new Conta((Integer) contasEmail[0]);
+										conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
+										//Imovel imovel = (Imovel) contasEmail[1];
 										String emailReceptor = "pamela@prodigasistemas.com.br";
+										String nomeCliente = (String) contasEmail[3];
 
+									//File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
+										
+									
 										// Envia de Arquivo por email
 										EnvioEmail envioEmail = this.getControladorCadastro()
 												.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
@@ -15959,15 +15993,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										String tituloMensagem = envioEmail.getTituloMensagem();
 										String corpoMensagem = "Caro Cliente, " +
 												"A " + sistemaParametro.getNomeEmpresa()
-												+ " informa que a conta do imóvel de matrícula " + idImovel
+												+ " informa que a conta do imóvel de matrícula " //+ imovel.getId()
 												+ " vence em "
 												+ quantidadeDiasVencimentoFatura + " dias. "
 												+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
 
-										 ServicosEmail.enviarMensagem(emailRemetente, emailReceptor,
-										 tituloMensagem, corpoMensagem);
+										// ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente,
+										//tituloMensagem, corpoMensagem, contaSegundaVia);
+										 
+										 Collection<String> destinatarios = new ArrayList<String>();
+										 destinatarios.add(emailReceptor);
+										 
+										 ServicosEmail.enviarMensagemHTML(destinatarios, emailRemetente, "COSANPA", tituloMensagem, ModeloEmailVencimento.getMensagem(nomeCliente));
 
 									} catch (Exception e) {
+										e.printStackTrace();
 										System.out.println("Erro ao enviar email.");
 									}
 								}

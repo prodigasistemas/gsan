@@ -44,9 +44,7 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 		Collection colecaoLocalidade = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
 		
         Iterator iterator = colecaoLocalidade.iterator();
-
         
-        System.out.println("\nTAREFA BATCH QUANTIDADE LOCALIDADE: " + colecaoLocalidade.size());
         
         while (iterator.hasNext()) {
 
