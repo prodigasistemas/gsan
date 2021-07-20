@@ -15976,12 +15976,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										Object[] contasEmail = (Object[]) colecaoContasVencidas.next();
 
-										Conta conta = (Conta) contasEmail[0];
-										Imovel imovel = (Imovel) contasEmail[1];
+										Conta conta = new Conta((Integer) contasEmail[0]);
+										conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
+										//Imovel imovel = (Imovel) contasEmail[1];
 										String emailReceptor = "pamela@prodigasistemas.com.br";
 										String nomeCliente = (String) contasEmail[3];
 
-									File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
+									//File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
 										
 									
 										// Envia de Arquivo por email
@@ -15992,13 +15993,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										String tituloMensagem = envioEmail.getTituloMensagem();
 										String corpoMensagem = "Caro Cliente, " +
 												"A " + sistemaParametro.getNomeEmpresa()
-												+ " informa que a conta do imóvel de matrícula " + imovel.getId()
+												+ " informa que a conta do imóvel de matrícula " //+ imovel.getId()
 												+ " vence em "
 												+ quantidadeDiasVencimentoFatura + " dias. "
 												+ " Caso já tenha efetuado o pagamento, favor desconsiderar esse aviso. ";
 
-										 ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente,
-										tituloMensagem, corpoMensagem, contaSegundaVia);
+										// ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente,
+										//tituloMensagem, corpoMensagem, contaSegundaVia);
 										 
 										 Collection<String> destinatarios = new ArrayList<String>();
 										 destinatarios.add(emailReceptor);
