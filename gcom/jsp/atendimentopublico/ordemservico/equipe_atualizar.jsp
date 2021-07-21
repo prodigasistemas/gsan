@@ -373,10 +373,10 @@
 								border="0" title="Apagar" /></a></td>
 						</tr>
 						
-						 <!-- Começo usuário responsável pela execussão do serviço -->
+						 <!-- Começo usuário responsável pela Execução do serviço -->
                         
                         <tr>
-							<td><strong>Usuario Responsavel Pela Execussão do Serviço:</strong></td>
+							<td><strong>Usuario Responsavel Pela Execução do Serviço:</strong></td>
 					
 							<td colspan="4">						
 								<html:text maxlength="11" 
@@ -422,7 +422,7 @@
 								</a>
 							</td>
 							
-						</tr><!-- fim usuário responsável pela execussão do serviço -->	
+						</tr><!-- fim usuário responsável pela Execução do serviço -->	
 						<tr>
 							<td><strong>Indicador de Uso:</strong></td>
 							<td align="right" colspan="2">
