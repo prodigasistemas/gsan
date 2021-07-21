@@ -15974,11 +15974,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										EnvioEmail envioEmail = this.getControladorCadastro()
 												.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
 
-										 ServicosEmail.enviarMensagemHTMLComAnexo(emailReceptor, 
+										Collection<String> emails = new ArrayList<String>();
+										emails.add(emailReceptor);
+										 ServicosEmail.enviarMensagemHTML(emails, 
 												 envioEmail.getEmailRemetente(), 
 												 "COSANPA", 
 												 envioEmail.getTituloMensagem(), 
-												 ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento), contaSegundaVia);
+												 ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento));
 
 									} catch (Exception e) {
 										e.printStackTrace();
