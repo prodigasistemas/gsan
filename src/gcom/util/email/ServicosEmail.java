@@ -411,7 +411,8 @@ public final class ServicosEmail implements Serializable {
 	 * Método que envia mensagens em html
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void enviarMensagemHTMLComAnexo(String destinatario, String from, String nameFrom, String subject, String codigoHtml, File arquivo) throws ErroEmailException {
+	public static void enviarMensagemHTMLComAnexo(String destinatario, String from, String nameFrom, String subject, String codigoHtml, File arquivo) 
+			throws ErroEmailException {
 		try {
 			if (servidorSMTP != null && !servidorSMTP.equals(ConstantesSistema.SMTP_INVALIDO)) {
 				Properties properties = System.getProperties();
@@ -421,11 +422,7 @@ public final class ServicosEmail implements Serializable {
 
 				Message msg = new MimeMessage(session);
 				msg.setFrom(new InternetAddress(from, nameFrom));
-
-				Address[] enderecos = new Address[1];
-				enderecos[0] = new InternetAddress((String) destinatario);
-
-				msg.setRecipients(Message.RecipientType.TO, enderecos);
+				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario, false));
 				msg.setSubject(subject);
 
 				BodyPart messageBodyPart = new MimeBodyPart();
@@ -435,7 +432,10 @@ public final class ServicosEmail implements Serializable {
 				multipart.addBodyPart(messageBodyPart);
 				messageBodyPart = new MimeBodyPart();
 				messageBodyPart.setContent(TEXTO_EMAIL, "text/html");
-
+				multipart.addBodyPart(messageBodyPart);
+				msg.setContent(multipart);
+				msg.setSentDate(new Date());
+				
 				DataSource source = new FileDataSource(arquivo);
 
 				messageBodyPart.setDataHandler(new DataHandler(source));
