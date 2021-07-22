@@ -11,9 +11,8 @@ public class ModeloEmailVencimento {
 			+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">" 
 			+ "</head>"; 
 	
-	private static String CORPO_EMAIL = "<body >" + 
-			"	" + 
-			"	<div >" + 
+	private static String CORPO_EMAIL = "<body>" + 
+			"	<div>" + 
 			"		<div style='font-size: 20px; font-family: Helvetica; color: MidnightBlue; repeat-y 0 0; display:table; margin:35px auto 0; padding:0 5px; width:950px	'>" + 
 			"		" + 
 			"			<div style=' background-color:MidnightBlue; color: white'; width:100 px; height:100 px;'><br><br>" + 
@@ -38,7 +37,7 @@ public class ModeloEmailVencimento {
 	
 	private static String RODAPE_PAGINA = "<footer>" + 
 			"			<div style='background-color:MidnightBlue; color: white'; width:100 px; height:100 px; align=\"center\" '><br><br>" + 
-			"					<img  src=\"http://www.cosanpa.pa.gov.br/wp-content/themes/cosanpa2019/img/logo-governo-branco.png\" alt=\"GOVERNO DO PARÁ\" width=\"25%\" height=\"25%\">	" + 
+			"					<img src=\"http://www.cosanpa.pa.gov.br/wp-content/themes/cosanpa2019/img/logo-governo-branco.png\" alt=\"GOVERNO DO PARÁ\" width=\"25%\" height=\"25%\">	" + 
 			"					  " + 
 			"						<div class=\"col-sm-4\">" + 
 			"							<h5>Companhia de Saneamento do Par&aacute;<br>" + 
