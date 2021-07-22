@@ -15,7 +15,7 @@ public class ModeloEmailVencimento {
 			"<div>" + 
 			"	<div style='font-size: 20px; font-family: Helvetica; color: MidnightBlue; repeat-y 0 0; display:table; margin:35px auto 0; padding:0 5px; width:950px	'>" + 
 			"		<div style=' background-color:MidnightBlue; color: white'; width:100 px; height:100 px;'><br><br>" + 
-			"			<img src=\"http://www.cosanpa.pa.gov.br/wp-content/themes/cosanpa2019/img/logo-cosanpa.png\" class=\"img-fluid\" alt=\"COSANPA\" width=\"50%\" height=\"50%\">" + 
+			"			<img src='http://www.cosanpa.pa.gov.br/wp-content/themes/cosanpa2019/img/logo-cosanpa.png' width='50%' height='50%'>" + 
 			"		<br><br>" + 
 			"		</div> " + 
 			"		<h1 style=\"color: MidnightBlue\">Sua fatura est&aacute; pr&oacute;xima do vencimento. </h1><br>" + 
@@ -35,7 +35,7 @@ public class ModeloEmailVencimento {
 	
 	private static String RODAPE_PAGINA = "<footer>" + 
 			"		<div style='background-color:MidnightBlue; color: white'; width:100 px; height:100 px; align=\"center\"><br><br>" + 
-			"				<img src=\"http://www.cosanpa.pa.gov.br/wp-content/themes/cosanpa2019/img/logo-governo-branco.png\" alt=\"GOVERNO DO PARÁ\" width=\"25%\" height=\"25%\">" + 
+			"			<img src='http://www.cosanpa.pa.gov.br/wp-content/themes/cosanpa2019/img/logo-governo-branco.png' width='25%' height='25%'>	" + 
 			"					<div class=\"col-sm-4\">" + 
 			"						<h5>Companhia de Saneamento do Par&aacute;<br>" + 
 			"						 <b>Endere&ccedil;o:</b> Av. Magalh&atilde;es Barata, 1201 - S&atilde;o Br&aacute;s. CEP: 66060-901 - Beleacute;m - Par&aacute;<br>" + 
