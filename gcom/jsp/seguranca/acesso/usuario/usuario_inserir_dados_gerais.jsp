@@ -251,6 +251,16 @@
 				 	form.idLotacao.disabled = false;
 				 	form.empresa.value = form.idEmpresaFuncionario.value;
 				 	form.empresa.disabled = true;
+				 	
+				}else if(form.usuarioTipo.value == form.indicadorTerceirizado.value){
+					form.nome.disabled = false;
+		 		 	form.cpf.disabled = false;
+		 		 	form.dataNascimento.disabled = false;
+				 	form.idFuncionario.disabled = false;
+				 	form.idLotacao.disabled = false;
+				 	//form.empresa.value = form.idEmpresaFuncionario.value;
+				 	form.empresa.disabled = false;				 		
+				  	
 			 	}else{
 			   		if(form.indicadorFuncionario.value != form.indicadorFuncionarioSIM.value){
 				    	
@@ -468,14 +478,11 @@ function desabilitaCPFeNasc(){
 			<table border="0" width="100%">
 				<tr>
 					<td colspan="2">Para adicionar o usuário, informe os dados abaixo:
-					<input type="hidden" name="indicadorFuncionarioSIM"
-						value="<%=UsuarioTipo.INDICADOR_FUNCIONARIO%>" /> <input
-						type="hidden" name="administrador"
-						value="<%=UsuarioTipo.USUARIO_TIPO_ADMINISTRADOR%>" /> <input
-						type="hidden" name="idEmpresaFuncionario"
-						value="<%=Empresa.INDICADOR_EMPRESA_PRINCIPAL%>" /> <html:hidden
-						property="indicadorFuncionario" /> <html:hidden
-						property="usuarioTipo" /></td>
+					<input type="hidden" name="indicadorFuncionarioSIM"	value="<%=UsuarioTipo.INDICADOR_FUNCIONARIO%>" /> 
+					<input type="hidden" name="indicadorTerceirizado"	value="<%=UsuarioTipo.INDICADOR_TERCEIRIZADO%>" /> 
+					<input type="hidden" name="administrador" value="<%=UsuarioTipo.USUARIO_TIPO_ADMINISTRADOR%>" /> 
+					<input type="hidden" name="idEmpresaFuncionario" value="<%=Empresa.INDICADOR_EMPRESA_PRINCIPAL%>" />
+					<html:hidden property="indicadorFuncionario" /> <html:hidden property="usuarioTipo" /></td>
 				</tr>
 				<tr>
 					<td width="26%"><strong>Tipo de Usuário:<font color="#ff0000">*</font></strong></td>

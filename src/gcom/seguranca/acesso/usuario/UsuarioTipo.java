@@ -21,6 +21,7 @@ public class UsuarioTipo extends ObjetoTransacao implements Serializable {
 	public static final Integer USUARIO_TIPO_ADMINISTRADOR = new Integer(1);
 	
 	public static final short INDICADOR_FUNCIONARIO = new Short("1");
+	public static final short INDICADOR_TERCEIRIZADO = new Short("6");
 	
 	/** identifier field */
 	private Integer id;
