@@ -1,7 +1,5 @@
 package gcom.util;
 
-import gcom.fachada.Fachada;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -20,7 +18,9 @@ import javax.jms.Session;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.rmi.PortableRemoteObject;
+import javax.rmi.*;
+
+import gcom.fachada.Fachada;
 
 /**
  * Efetua a localização, instanciamento e cache de serviços
