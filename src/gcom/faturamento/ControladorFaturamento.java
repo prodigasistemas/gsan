@@ -229,6 +229,7 @@ import gcom.util.IoUtil;
 import gcom.util.MergeProperties;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
+import gcom.util.email.ErroEmailException;
 import gcom.util.email.ModeloEmailVencimento;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.Filtro;
@@ -237,6 +238,7 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
+import gcom.util.sms.ServicoSMS;
 
 public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
@@ -1597,7 +1599,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
         	 * vai achar a anormalidade e vai indicar erro de anormalidade inexistente, só
         	 * que é o caso de não ter anormalidade no imóvel, e não de ser um código inexistente.
         	 */
-            if ( helperLaco.getAnormalidadeLeitura() != null && !helperLaco.getAnormalidadeLeitura().equals(new Integer(0))  ){
+			if ( helperLaco.getAnormalidadeLeitura() != null && !helperLaco.getAnormalidadeLeitura().equals(new Integer(0))  ){
 				FiltroLeituraAnormalidade filtroLeituraAnormalidade = new FiltroLeituraAnormalidade();
 				filtroLeituraAnormalidade
 						.adicionarParametro(new ParametroSimples(
@@ -1607,6 +1609,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						.getControladorUtil().pesquisar(
 								filtroLeituraAnormalidade,
 								LeituraAnormalidade.class.getName());
+
 
 				if (colAnormalidade == null || colAnormalidade.size() == 0) {
 					errors.add(ConstantesAplicacao.get(
@@ -15928,18 +15931,18 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}		
 	}
 	
-	public void envioEmailVencimentoFatura(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
+	public void envioNotificacaoVencimentoFatura(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
 			throws ControladorException {
 
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
 				UnidadeProcessamento.LOCALIDADE, ((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
 
+		Integer qtdDiasVencimento = Integer.valueOf(getFaturamentoParametro(
+				FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA
+				.toString()));
+
 		try {
 			if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
-				
-				Integer qtdDiasVencimento = Integer.valueOf(getFaturamentoParametro(
-						FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA
-								.toString()));
 				
 				for (Integer idLocalidade : colecaoIdsLocalidades) {
 
@@ -15963,28 +15966,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										Object[] contasEmail = (Object[]) iteratosContas.next();
 
-										Conta conta = new Conta((Integer) contasEmail[0]);
-										conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
-										String emailReceptor = "pamela@prodigasistemas.com.br";
-										String nomeCliente = (String) contasEmail[3];
-										Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
-										
-										File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
-									
-										EnvioEmail envioEmail = this.getControladorCadastro()
-												.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
-
-										Collection<String> emails = new ArrayList<String>();
-										emails.add(emailReceptor);
-										 ServicosEmail.enviarMensagemHTML(emails, 
-												 envioEmail.getEmailRemetente(), 
-												 "COSANPA", 
-												 envioEmail.getTituloMensagem(), 
-												 ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento));
-
+										envioEmailVencimentoFatura(contasEmail, qtdDiasVencimento);
+										envioSMSVencimentoFatura(contasEmail);
 									} catch (Exception e) {
 										e.printStackTrace();
-										System.out.println("Erro ao enviar email.");
+										System.out.println("erro.notificacao.vencimento.fatura");
 									}
 								}
 
@@ -16000,6 +15986,66 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (Exception e) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
+		}
+	}
+	
+	private void envioEmailVencimentoFatura(Object[] contasEmail, Integer qtdDiasVencimento)
+			throws ControladorException {
+
+		try {
+			Conta conta = new Conta((Integer) contasEmail[0]);
+			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
+			String emailReceptor = "pamela@prodigasistemas.com.br";
+			String nomeCliente = (String) contasEmail[3];
+			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
+			
+			File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
+		
+			EnvioEmail envioEmail = this.getControladorCadastro()
+					.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
+		
+			Collection<String> emails = new ArrayList<String>();
+			emails.add(emailReceptor);
+			
+			ServicosEmail.enviarMensagemHTML(emails, 
+						 envioEmail.getEmailRemetente(), 
+						 "COSANPA", 
+						 envioEmail.getTituloMensagem(), 
+						 ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento));
+		} catch (ErroEmailException e) {
+			throw new ActionServletException("erro.email.vencimento.fatura");
+		}
+	}
+	
+	private void envioSMSVencimentoFatura(Object[] contasEmail)
+			throws ControladorException {
+
+		try {
+			Integer idImovel = (Integer) contasEmail[4];
+			String ddd = (String) contasEmail[5];
+			String telefone = (String) contasEmail[6];
+			Integer idLocalidade = (Integer) contasEmail[7];
+			Integer digitoVerificador = (Integer) contasEmail[8];
+			Integer referencia = (Integer) contasEmail[9];
+			BigDecimal valorConta = (BigDecimal) contasEmail[10];
+			
+					if (ddd != null && telefone != null) {
+				String celular = ddd.concat(telefone);
+				celular.trim();
+				
+				this
+				.getControladorArrecadacao()
+				.obterRepresentacaoNumericaCodigoBarra(3, valorConta,
+						idLocalidade,
+						idImovel, referencia.toString(),
+						digitoVerificador, null, null, null, null,
+						null, null, null);
+				
+				//ServicoSMS.enviarSMS(celular, ServicoSMS.MSG_VENCIMENTO);
+				System.out.println("ENVIANDO SMS PARA " + celular);
+			}
+		} catch (Exception e) {
+			throw new ActionServletException("erro.sms.vencimento.fatura");
 		}
 	}
 }

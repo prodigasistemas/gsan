@@ -1,4 +1,4 @@
-package gcom.batch.faturamento;
+package gcom.batch.cobranca;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -23,9 +23,9 @@ import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
 import gcom.util.agendadortarefas.AgendadorTarefas;
 
-public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatch{
+public class TarefaBatchEnvioNotificacaoVencimentoFatura extends TarefaBatch{
 
-	public TarefaBatchEnvioEmailNotificacaoVencimentoFatura(Usuario usuario,
+	public TarefaBatchEnvioNotificacaoVencimentoFatura(Usuario usuario,
 			int idFuncionalidadeIniciada) {
 
 		super(usuario, idFuncionalidadeIniciada);
@@ -34,7 +34,7 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 	private static final long serialVersionUID = 1L;
 	
 	@Deprecated
-	public TarefaBatchEnvioEmailNotificacaoVencimentoFatura() {
+	public TarefaBatchEnvioNotificacaoVencimentoFatura() {
 		super(null, 0);
 	}
 
@@ -49,7 +49,7 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 
             Localidade localidade = (Localidade) iterator.next();
             
-			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENVIO_EMAIL_NOTIFICACAO_VENCIMENTO_FATURA,
+			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENVIO_NOTIFICACAO_VENCIMENTO_FATURA,
 					new Object[] { this.getIdFuncionalidadeIniciada(), Collections.singletonList(localidade.getId()) });
 		}
 
@@ -69,7 +69,7 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 
 	@Override
 	public void agendarTarefaBatch() {
-		AgendadorTarefas.agendarTarefa("EnvioEmailNotificacaoVencimentoFaturaBatch", this);
+		AgendadorTarefas.agendarTarefa("EnvioNotificacaoVencimentoFaturaBatch", this);
 	}
 	
 	

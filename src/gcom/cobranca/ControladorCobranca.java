@@ -207,6 +207,7 @@ import gcom.cobranca.cobrancaporresultado.ArquivoTextoPagamentoContasCobrancaEmp
 import gcom.cobranca.cobrancaporresultado.RegistrarArquivoTxtEncerramentoOSCobrancaHelper;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamento;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamentoItem;
+import gcom.cobranca.dto.CobrancaDocumentoDTO;
 import gcom.cobranca.parcelamento.FiltroParcDesctoInativVista;
 import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.FiltroParcelamentoDescontoAntiguidade;
@@ -239,6 +240,7 @@ import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoAtividade;
 import gcom.faturamento.FaturamentoGrupo;
+import gcom.faturamento.FaturamentoParametro;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.QualidadeAgua;
@@ -377,6 +379,7 @@ import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
+import gcom.util.email.ModeloEmailVencimento;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.ComparacaoTexto;
 import gcom.util.filtro.ConectorOr;
@@ -62249,6 +62252,107 @@ public class ControladorCobranca extends ControladorComum {
 			return (HidrometroInstalacaoHistorico) colecao.iterator().next();
 		} else {
 			return null;
+		}
+	}
+	
+	public void envioNotificacaoAvisoCorte(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
+			throws ControladorException {
+
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+				UnidadeProcessamento.LOCALIDADE, ((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
+
+		Integer qtdDiasVencimento = Integer.valueOf(getControladorFaturamento().getFaturamentoParametro(
+				FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA
+				.toString()));
+
+		try {
+			if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
+				
+				for (Integer idLocalidade : colecaoIdsLocalidades) {
+
+					Collection<Integer> idsRotas = this.getControladorMicromedicao()
+							.obterIdsRotasPelaLocalidade(idLocalidade);
+
+					if (idsRotas != null && !idsRotas.isEmpty()) {
+
+						for (Integer idRota : idsRotas) {
+
+							Date dataVencimento = Util.adicionarNumeroDiasDeUmaData(new Date(), qtdDiasVencimento);
+
+							Collection<CobrancaDocumentoDTO> avisos = null; //repositorioFaturamento.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimento);
+
+							if (avisos != null && !avisos.isEmpty()) {
+
+								Iterator iteratosAvisos = avisos.iterator();
+
+								while (iteratosAvisos.hasNext()) {
+									try {
+
+										CobrancaDocumentoDTO aviso = (CobrancaDocumentoDTO) iteratosAvisos.next();
+
+										envioEmailAvisoCorte(aviso, qtdDiasVencimento);
+										envioSMSAvisoCorte(aviso);
+									} catch (Exception e) {
+										e.printStackTrace();
+										System.out.println("erro.notificacao.vencimento.fatura");
+									}
+								}
+
+							}
+
+						}
+					}
+				}
+
+			}
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+
+		} catch (Exception e) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+			throw new EJBException(e);
+		}
+	}
+	
+	private void envioEmailAvisoCorte(CobrancaDocumentoDTO dto, Integer qtdDiasVencimento)
+			throws ControladorException {
+
+		try {
+			String emailReceptor = "pamela@prodigasistemas.com.br";
+			//String emailReceptor = aviso.getCliente().getEmail();
+			String nomeCliente = dto.getDocumento().getCliente().getNome();
+			
+			EnvioEmail envioEmail = this.getControladorCadastro()
+					.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
+		
+			Collection<String> emails = new ArrayList<String>();
+			emails.add(emailReceptor);
+			
+			ServicosEmail.enviarMensagemHTML(emails, 
+						 envioEmail.getEmailRemetente(), 
+						 "COSANPA", 
+						 envioEmail.getTituloMensagem(), 
+						 ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento));
+		} catch (ErroEmailException e) {
+			throw new ActionServletException("erro.email.vencimento.fatura");
+		}
+	}
+	
+	private void envioSMSAvisoCorte(CobrancaDocumentoDTO dto)
+			throws ControladorException {
+
+		try {
+			String ddd = dto.getTelefone().getDdd();
+			String telefone = dto.getTelefone().getTelefone();
+			
+			if (ddd != null && telefone != null) {
+				String celular = ddd.concat(telefone);
+				celular.trim();
+				
+				//ServicoSMS.enviarSMS(celular, ServicoSMS.MSG_VENCIMENTO);
+				System.out.println("ENVIANDO SMS PARA " + celular);
+			}
+		} catch (Exception e) {
+			throw new ActionServletException("erro.sms.vencimento.fatura");
 		}
 	}
 }

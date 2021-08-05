@@ -208,6 +208,8 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	
 	public static final int ENVIO_NOTIFICACAO_VENCIMENTO_FATURA = 16078;
 	
+	public static final int ENVIO_NOTIFICACAO_AVISO_CORTE = 16079;
+	
 	private Integer id;
 
 	private String descricao;

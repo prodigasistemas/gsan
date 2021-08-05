@@ -1097,4 +1097,6 @@ public interface IControladorCobranca {
 	
 	public List<OrdemSuspensaoFornecimentoDTO> gerarOrdemSuspensaoFornecimento(Integer idAcaoCronograma, Integer idAcaoComando) throws ControladorException;
 	
+	public void envioNotificacaoAvisoCorte(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
+			throws ControladorException; 
 }
