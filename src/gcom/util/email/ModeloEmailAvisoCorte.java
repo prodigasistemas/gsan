@@ -1,7 +1,7 @@
 package gcom.util.email;
 
-public class ModeloEmailVencimento {
-
+public class ModeloEmailAvisoCorte {
+	
 	private static String NOME_CLIENTE = "NOME_CLIENTE";
 	private static String QTD_DIAS_VENCIMENTO = "QTD_DIAS_VENCIMENTO";
 	
@@ -9,7 +9,7 @@ public class ModeloEmailVencimento {
 			"<html>" + 
 			"<head> " + 
 			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">" + 
-			"</head>"; 
+			"</head>";
 	
 	private static String CORPO_EMAIL = "<body>" + 
 			"<div>" + 
@@ -18,9 +18,9 @@ public class ModeloEmailVencimento {
 			"			<img src=\"http://www.cosanpa.pa.gov.br/wp-content/themes/cosanpa2019/img/logo-cosanpa.png\" width=\"50%\" height=\"50%\">" + 
 			"		<br><br>" + 
 			"		</div> " + 
-			"		<h1 style=\"color: MidnightBlue\">Sua fatura est&aacute; pr&oacute;xima do vencimento. </h1><br>" + 
-			"		<h2 style=\"color: MidnightBlue\">Ol&aacute; <b>NOME_CLIENTE</b></h2><br>" + 
-			"		<p style=\"color: MidnightBlue; font-size: 20px;\">Faltam QTD_DIAS_VENCIMENTO dias para o vencimento da sua fatura. Voc&ecirc; pode efetuar o pagamento utilizando o boleto que anexamos nesse email.</p>" + 
+			"		<h1>Este &eacute; um Aviso de Corte. </h1><br>" + 
+			"		<h2>Ol&aacute; <b>NOME_CLIENTE</b></h2><br>" + 
+			"		<p style=\"font-size: 24px;\">Evite que o abastecimento para sua resid&ecirc;ncia ou com&eacute;rcio seja interrompido. Voc&ecirc; pode efetuar o pagamento utilizando o boleto que anexamos nesse email.</p><br>" + 
 			"		<br>" + 
 			"		<p style=\"color: MidnightBlue; font-size: 20px;\"><b>Se voc&ecirc; j&aacute; efetuou o pagamento,  " + 
 			"		 por favor, desconsidere essa mensagem.</b></p>" + 
@@ -31,7 +31,7 @@ public class ModeloEmailVencimento {
 			"		<p style=\"color: MidnightBlue; font-size: 20px;\">A COSANPA agradece sua aten&ccedil;&atilde;o!</p>" + 
 			"		<br>" + 
 			"	" + 
-			"	<div><p style=\"color: MidnightBlue;\" >\"Esta &eacute; uma mensagem autom&aacute;tica, este email n&atilde;o deve ser respondido.\"</p></div>";
+			"	<div><p>\"Esta &eacute; uma mensagem autom&aacute;tica, este email n&atilde;o deve ser respondido.\"</p></div>";
 	
 	private static String RODAPE_PAGINA = "<footer>" + 
 			"		<div style='background-color:MidnightBlue; color: white'; width:100 px; height:100 px; align=\"center\"><br><br>" + 
@@ -55,6 +55,6 @@ public class ModeloEmailVencimento {
 			.append(CORPO_EMAIL)
 			.append(RODAPE_PAGINA);
 		
-		return texto.toString().replace(NOME_CLIENTE, nomeCliente).replace(QTD_DIAS_VENCIMENTO, qtdDiasVencimento.toString());
+		return texto.toString().replace(NOME_CLIENTE, nomeCliente);
 	}
 }
