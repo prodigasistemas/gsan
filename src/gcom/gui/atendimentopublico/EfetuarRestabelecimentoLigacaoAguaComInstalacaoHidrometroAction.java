@@ -312,7 +312,14 @@ public class EfetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroAction ext
 		/*
 		 * Campos opcionais
 		 */
-
+		// indicador de troca protecao
+		if(hidrometroInstalacaoHistorico.getIndicadorTrocaProtecao() == null || hidrometroInstalacaoHistorico.getIndicadorTrocaProtecao().equals("") ) {
+			hidrometroInstalacaoHistorico.setIndicadorTrocaProtecao((short) 2);
+		}
+		// indicador de troca registro
+		if(hidrometroInstalacaoHistorico.getIndicadorTrocaRegistro() == null || hidrometroInstalacaoHistorico.getIndicadorTrocaRegistro().equals("") ) {
+			hidrometroInstalacaoHistorico.setIndicadorTrocaRegistro((short) 2);
+		}
 		// data da retirada
 		hidrometroInstalacaoHistorico.setDataRetirada(null);
 		// leitura retirada

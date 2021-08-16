@@ -6,6 +6,7 @@ import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.micromedicao.RateioTipo;
 import gcom.micromedicao.medicao.MedicaoTipo;
+import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
@@ -29,7 +30,10 @@ public class HidrometroInstalacaoHistorico extends ObjetoTransacao {
 		// Operacao.OPERACAO_INSTALACAO_HIDROMETRO_EFETUAR
 	
 	public static final int ATRIBUTOS_EFETUAR_SUBSTITUICAO_HIDROMETRO = 335;
-		// Operacao.OPERACAO_SUBSTITUICAO_HIDROMETRO_EFETUAR
+	//	 Operacao.OPERACAO_SUBSTITUICAO_HIDROMETRO_EFETUAR
+		 
+	public static final int	ATRIBUTOS_EFETUAR_RESTABELECIMENTO_LIGACAO_AGUA_INSTALACAO_HIDROMETRO = 879;
+	//Operacao.OPERACAO_RESTABELECIMENTO_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT 879
 	
 	public static final int ATRIBUTOS_ATUALIZAR_TIPO_RATEIO = 313;
 		// Operacao.OPERACAO_ATUALIZAR_TIPO_RATEIO
@@ -104,7 +108,7 @@ public class HidrometroInstalacaoHistorico extends ObjetoTransacao {
 	private Date ultimaAlteracao;
     
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_EFETUAR_INSTALACAO_HIDROMETRO, 
-			ATRIBUTOS_EFETUAR_SUBSTITUICAO_HIDROMETRO})
+			ATRIBUTOS_EFETUAR_SUBSTITUICAO_HIDROMETRO, ATRIBUTOS_EFETUAR_RESTABELECIMENTO_LIGACAO_AGUA_INSTALACAO_HIDROMETRO})
     private Short indicadorTrocaProtecao;
 	
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_EFETUAR_INSTALACAO_HIDROMETRO, 
