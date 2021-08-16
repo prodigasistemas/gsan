@@ -60252,7 +60252,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
 					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
 					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
-					.setBoolean("ativo", Boolean.TRUE)
+					.setShort("ativo", ConstantesSistema.INDICADOR_USO_ATIVO)
 					.setInteger("tipoCelular", FoneTipo.CELULAR).list();
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada

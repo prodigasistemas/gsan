@@ -62279,16 +62279,16 @@ public class ControladorCobranca extends ControladorComum {
 
 							Date dataVencimento = Util.adicionarNumeroDiasDeUmaData(new Date(), qtdDiasVencimento);
 
-							Collection<CobrancaDocumentoDTO> avisos = null; //repositorioFaturamento.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimento);
+							Collection<CobrancaDocumento> avisos = repositorioCobranca.pesquisarAvisosParaNotificacao(idRota); 
 
 							if (avisos != null && !avisos.isEmpty()) {
 
-								Iterator iteratosAvisos = avisos.iterator();
+								Iterator<CobrancaDocumento> iteratosAvisos = avisos.iterator();
 
 								while (iteratosAvisos.hasNext()) {
 									try {
 
-										CobrancaDocumentoDTO aviso = (CobrancaDocumentoDTO) iteratosAvisos.next();
+										CobrancaDocumento aviso = (CobrancaDocumento) iteratosAvisos.next();
 
 										envioEmailAvisoCorte(aviso, qtdDiasVencimento);
 										envioSMSAvisoCorte(aviso);
@@ -62313,19 +62313,21 @@ public class ControladorCobranca extends ControladorComum {
 		}
 	}
 	
-	private void envioEmailAvisoCorte(CobrancaDocumentoDTO dto, Integer qtdDiasVencimento)
+	private void envioEmailAvisoCorte(CobrancaDocumento aviso, Integer qtdDiasVencimento)
 			throws ControladorException {
 
 		try {
 			String emailReceptor = "pamela@prodigasistemas.com.br";
 			//String emailReceptor = aviso.getCliente().getEmail();
-			String nomeCliente = dto.getDocumento().getCliente().getNome();
+			String nomeCliente = aviso.getCliente().getNome();
 			
 			EnvioEmail envioEmail = this.getControladorCadastro()
 					.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
 		
 			Collection<String> emails = new ArrayList<String>();
 			emails.add(emailReceptor);
+			
+			System.out.println("ENVIANDO EMAIL PARA " + aviso.getCliente().getEmail());
 			
 			ServicosEmail.enviarMensagemHTML(emails, 
 						 envioEmail.getEmailRemetente(), 
@@ -62337,22 +62339,42 @@ public class ControladorCobranca extends ControladorComum {
 		}
 	}
 	
-	private void envioSMSAvisoCorte(CobrancaDocumentoDTO dto)
+	private void envioSMSAvisoCorte(CobrancaDocumento aviso)
 			throws ControladorException {
 
 		try {
-			String ddd = dto.getTelefone().getDdd();
-			String telefone = dto.getTelefone().getTelefone();
 			
-			if (ddd != null && telefone != null) {
-				String celular = ddd.concat(telefone);
-				celular.trim();
+			Collection<ClienteFone> colecaoFones = aviso.getCliente().getClienteFones();
+			
+			for (ClienteFone fone : colecaoFones) {
+				String ddd = fone.getDdd();
+				String telefone = fone.getTelefone();
 				
-				//ServicoSMS.enviarSMS(celular, ServicoSMS.MSG_VENCIMENTO);
-				System.out.println("ENVIANDO SMS PARA " + celular);
+				if (ddd != null && telefone != null) {
+					String celular = ddd.concat(telefone);
+					celular.trim();
+					
+					//ServicoSMS.enviarSMS(celular, ServicoSMS.MSG_VENCIMENTO);
+					System.out.println("ENVIANDO SMS PARA " + celular);
+				}
 			}
 		} catch (Exception e) {
 			throw new ActionServletException("erro.sms.vencimento.fatura");
+		}
+	}
+	
+	private Collection obterAvisosParaNotificacao() {
+		try {
+			FiltroCobrancaDocumento filtro = new FiltroCobrancaDocumento();
+			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.DOCUMENTO_TIPO_ID,
+					DocumentoTipo.AVISO_CORTE));
+			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.DATA_EMISSAO, new Date()));
+			filtro.setCampoOrderBy(FiltroCobrancaDocumento.ID);
+		
+			return getControladorUtil().pesquisar(filtro, CobrancaDocumento.class.getName());
+		} catch (ControladorException e) {
+			e.printStackTrace();
+			throw new ActionServletException("erro.notificacao.aviso.corte.consultar.avisos");
 		}
 	}
 }

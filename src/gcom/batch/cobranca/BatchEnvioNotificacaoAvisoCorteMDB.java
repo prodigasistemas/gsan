@@ -57,6 +57,7 @@ public class BatchEnvioNotificacaoAvisoCorteMDB implements MessageDrivenBean, Me
 	}
 	
 	private ControladorCobrancaLocal getControladorCobranca() {
+
 		ControladorCobrancaLocalHome localHome = null;
 		ControladorCobrancaLocal local = null;
 
@@ -66,7 +67,8 @@ public class BatchEnvioNotificacaoAvisoCorteMDB implements MessageDrivenBean, Me
 			locator = ServiceLocator.getInstancia();
 
 			localHome = (ControladorCobrancaLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
+					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
+
 			local = localHome.create();
 
 			return local;

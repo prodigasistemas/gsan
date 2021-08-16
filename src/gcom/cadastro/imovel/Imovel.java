@@ -339,6 +339,8 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
     @ControleAlteracao (funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
 	private Integer individualizacao;
     
+    private Short indicadorEnvioContaFisica;
+    
     private Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes;
 
 	public final static Short INDICADOR_CONTA_RESPONSAVEL = new Short("1");
@@ -2605,4 +2607,13 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public boolean isLigadoEsgoto() {
 		return this.ligacaoEsgotoSituacao != null && this.ligacaoEsgotoSituacao.getId().equals(LigacaoEsgotoSituacao.LIGADO);
 	}
+
+	public Short getIndicadorEnvioContaFisica() {
+		return indicadorEnvioContaFisica;
+	}
+
+	public void setIndicadorEnvioContaFisica(Short indicadorEnvioContaFisica) {
+		this.indicadorEnvioContaFisica = indicadorEnvioContaFisica;
+	}
+	
 }

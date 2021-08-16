@@ -28,7 +28,7 @@ public class ServicoSMS {
 		Client client = Client.create();
 		
 		String endereco = propriedades.getProperty(URL);
-		WebResource webResource = client.resource("https://api.smsdev.com.br/v1/send");
+		WebResource webResource = client.resource("http://api.smsdev.com.br/v1/send");
 		
 		ClientResponse response = webResource.type("application/json").post(ClientResponse.class, json);
 		

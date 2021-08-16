@@ -70,6 +70,7 @@ import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaH
 import gcom.cobranca.cobrancaporresultado.NegociacaoCobrancaEmpresa;
 import gcom.cobranca.cobrancaporresultado.NegociacaoContaCobrancaEmpresa;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamento;
+import gcom.cobranca.dto.CobrancaDocumentoDTO;
 import gcom.cobranca.parcelamento.ParcDesctoInativVista;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
@@ -86,6 +87,7 @@ import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.financeiro.FinanciamentoTipo;
+import gcom.gui.ActionServletException;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoGerarOSHelper;
 import gcom.gui.relatorio.cobranca.FaixaHelper;
 import gcom.gui.relatorio.cobranca.FiltroRelatorioDocumentosAReceberHelper;
@@ -105,6 +107,7 @@ import gcom.util.HibernateUtil;
 import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.GeradorHQLCondicional;
+import gcom.util.filtro.ParametroSimples;
 
 public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
@@ -26744,5 +26747,37 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		
 		return retorno;
 		
+	}
+	
+	public Collection<CobrancaDocumento> pesquisarAvisosParaNotificacao(Integer idRota) throws ErroRepositorioException {
+		Collection<CobrancaDocumento> retorno = new ArrayList();
+
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("select aviso from CobrancaDocumento aviso ")
+					.append(" inner join fetch aviso.cliente cliente ")
+					.append(" inner join fetch aviso.quadra quadra ")
+					.append(" left join cliente.clienteFones clienteFone with(clienteFone.foneTipo = 3) ")
+					.append(" where 1 = 1 ")
+					//.append(" aviso.emissao >= :dataEmissao")
+					.append(" and aviso.id in (16889181, 16889198, 16889202, 16889180, 16889206)")
+					.append(" and aviso.documentoTipo.id = :avisoCorte ")
+					.append(" and quadra.rota.id = :idRota ");
+
+			retorno = (Collection<CobrancaDocumento>) session.createQuery(consulta.toString())
+	    			//.setDate("dataEmissao", new Date())
+	    			.setInteger("avisoCorte", DocumentoTipo.AVISO_CORTE)
+	    			//.setInteger("idRota", idRota)
+	    			.list();
+
+		} catch (HibernateException e) {
+		  throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+		  HibernateUtil.closeSession(session);
+		}
+		return retorno;
+
 	}
 }

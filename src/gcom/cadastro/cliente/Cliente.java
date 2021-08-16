@@ -118,6 +118,12 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
     private Short indicadorNegativacaoPeriodo;
 
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
+    private Short indicadorAutorizacaoEnvioEmail;
+    
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
+    private Short indicadorAutorizacaoEnvioSMS;
+    
 	public static final Short GERA_ARQUIVO_TEXTO_SIM = 1;
 
 	public Cliente(String nome, String nomeAbreviado, String cpf, String rg, Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
@@ -679,6 +685,22 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 	
 	public boolean isClienteFederal() {
 		return this.getClienteTipo() != null && this.getClienteTipo().getEsferaPoder()!=null && this.getClienteTipo().getEsferaPoder().getId().compareTo(EsferaPoder.FEDERAL.intValue())==0;
+	}
+
+	public Short getIndicadorAutorizacaoEnvioEmail() {
+		return indicadorAutorizacaoEnvioEmail;
+	}
+
+	public void setIndicadorAutorizacaoEnvioEmail(Short indicadorAutorizacaoEnvioEmail) {
+		this.indicadorAutorizacaoEnvioEmail = indicadorAutorizacaoEnvioEmail;
+	}
+
+	public Short getIndicadorAutorizacaoEnvioSMS() {
+		return indicadorAutorizacaoEnvioSMS;
+	}
+
+	public void setIndicadorAutorizacaoEnvioSMS(Short indicadorAutorizacaoEnvioSMS) {
+		this.indicadorAutorizacaoEnvioSMS = indicadorAutorizacaoEnvioSMS;
 	}
 
 	public Class getClasseOrigem() {
