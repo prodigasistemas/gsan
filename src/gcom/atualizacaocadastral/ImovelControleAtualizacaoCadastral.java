@@ -275,10 +275,13 @@ public class ImovelControleAtualizacaoCadastral {
 	public void verificarInformativoArquivoTodasSituacoes(Date dataUltimaTransmissao) {
 		this.informativo = ConstantesSistema.SIM.intValue();
 
-		if (fazParteArquivoTodasSituacoes() && quantidadeVisitasMenorQuePermitido()) {
-			if (isEmCampo() || isEmRevisao()) {
+		if (fazParteArquivoTodasSituacoes()) {
+			if (isEmRevisao()) {
 				this.informativo = ConstantesSistema.NAO.intValue();
 
+			} else if (isEmCampo() && quantidadeVisitasMenorQuePermitido()) { 
+				this.informativo = ConstantesSistema.NAO.intValue();
+				
 			} else if (isTransmitidoOuRevisita() && permiteRevisita() && dataRetornoMenorOuIgual(dataUltimaTransmissao)) {
 				this.informativo = ConstantesSistema.NAO.intValue();
 			}
