@@ -16033,7 +16033,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				String celular = ddd.concat(telefone);
 				celular.trim();
 				
-				this
+				String codigoBarras = this
 				.getControladorArrecadacao()
 				.obterRepresentacaoNumericaCodigoBarra(3, valorConta,
 						idLocalidade,
@@ -16043,6 +16043,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				
 				//ServicoSMS.enviarSMS(celular, ServicoSMS.MSG_VENCIMENTO);
 				System.out.println("ENVIANDO SMS PARA " + celular);
+				System.out.println(" ---> cod de barras " + codigoBarras);
 			}
 		} catch (Exception e) {
 			throw new ActionServletException("erro.sms.vencimento.fatura");

@@ -20,6 +20,10 @@ public class ServicoSMS {
 	public static String MSG_VENCIMENTO = "MSG_VENCIMENTO";
 	public static String MSG_CORTE = "MSG_CORTE";
 	
+	public ServicoSMS() {
+		propriedades = inicializarPropriedades();
+	}
+ 	
 	public static Properties propriedades;
 	
 	public static void enviarSMS(String telefone, String tipoMensagem) {
@@ -61,7 +65,7 @@ public class ServicoSMS {
 		ServicoSMS.enviarSMS("91988436943", ServicoSMS.MSG_CORTE);
 	}
 	
-	public static Properties inicializarPropriedades() throws IOException {
+	public Properties inicializarPropriedades() throws IOException {
 		Properties propriedades = new Properties();
         
 		try {
