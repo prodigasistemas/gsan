@@ -46,6 +46,7 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.EsferaPoder;
+import gcom.cadastro.cliente.FoneTipo;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.CategoriaTipo;
@@ -26749,26 +26750,50 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		
 	}
 	
-	public Collection<CobrancaDocumento> pesquisarAvisosParaNotificacao(Integer idRota) throws ErroRepositorioException {
-		Collection<CobrancaDocumento> retorno = new ArrayList();
+	public Collection pesquisarAvisosParaNotificacao(Integer idRota) throws ErroRepositorioException {
+		Collection retorno = new ArrayList();
 
 		Session session = HibernateUtil.getSession();
 		StringBuilder consulta = new StringBuilder();
 
 		try {
-			consulta.append("select aviso from CobrancaDocumento aviso ")
-					.append(" inner join fetch aviso.cliente cliente ")
-					.append(" inner join fetch aviso.quadra quadra ")
-					.append(" left join cliente.clienteFones clienteFone with(clienteFone.foneTipo = 3) ")
-					.append(" where 1 = 1 ")
-					//.append(" aviso.emissao >= :dataEmissao")
-					.append(" and aviso.id in (16889181, 16889198, 16889202, 16889180, 16889206)")
-					.append(" and aviso.documentoTipo.id = :avisoCorte ")
-					.append(" and quadra.rota.id = :idRota ");
+			consulta.append("select cd.cbdo_id as idAviso,") //0
+					.append(" c.clie_id as idCliente, ") //1
+					.append(" c.clie_nmcliente as nomeCliente, ") //2
+					.append(" c.clie_dsemail as email, ") //3
+					.append(" cf.cfon_cdddd as ddd, ") //4
+					.append(" cf.cfon_nnfone as celular ") //5
+					.append(" from cobranca.cobranca_documento cd ")
+					.append(" inner join cadastro.imovel i on i.imov_id = cd.imov_id ")
+					.append(" inner join cadastro.cliente_imovel ci on ci.imov_id = i.imov_id  ")
+					.append(" inner join cadastro.cliente c on c.clie_id = ci.clie_id ")
+					.append(" inner join cadastro.quadra q on q.qdra_id = i.qdra_id ")
+					.append(" inner join cadastro.cliente_fone cf on cf.clie_id = c.clie_id  and cf.fnet_id = :celular and cf.cfon_icfonepadrao = :sim ")
+					.append(" where cd.dotp_id = :avisoCorte ")
+					.append(" and cd.cbdo_id in (12654427) ")
+					.append(" and ci.clim_dtrelacaofim is null and ci.clim_icnomeconta = 1 ");
+//			
+					//consulta.append("select aviso from CobrancaDocumento aviso ")
+//					.append(" inner join fetch aviso.imovel imovel ")
+//					.append(" inner join fetch aviso.quadra quadra ")
+//					.append(" left join cliente.clienteFones clienteFone with(clienteFone.foneTipo = 3) ")
+//					.append(" where 1 = 1 ")
+//					//.append(" aviso.emissao >= :dataEmissao")
+//					.append(" and aviso.id in (16889181, 16889198, 16889202, 16889180, 16889206)")
+//					.append(" and aviso.documentoTipo.id = :avisoCorte ");
+//					//.append(" and quadra.rota.id = :idRota ");
 
-			retorno = (Collection<CobrancaDocumento>) session.createQuery(consulta.toString())
+			retorno = session.createSQLQuery(consulta.toString())
+					.addScalar("idAviso", Hibernate.INTEGER)
+					.addScalar("idCliente", Hibernate.INTEGER)
+					.addScalar("nomeCliente", Hibernate.STRING)
+					.addScalar("email", Hibernate.STRING)
+					.addScalar("ddd", Hibernate.STRING)
+					.addScalar("celular", Hibernate.STRING)
 	    			//.setDate("dataEmissao", new Date())
 	    			.setInteger("avisoCorte", DocumentoTipo.AVISO_CORTE)
+	    			.setInteger("celular", FoneTipo.CELULAR)
+	    			.setShort("sim", ConstantesSistema.SIM)
 	    			//.setInteger("idRota", idRota)
 	    			.list();
 

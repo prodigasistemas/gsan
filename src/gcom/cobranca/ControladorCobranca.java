@@ -207,7 +207,6 @@ import gcom.cobranca.cobrancaporresultado.ArquivoTextoPagamentoContasCobrancaEmp
 import gcom.cobranca.cobrancaporresultado.RegistrarArquivoTxtEncerramentoOSCobrancaHelper;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamento;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamentoItem;
-import gcom.cobranca.dto.CobrancaDocumentoDTO;
 import gcom.cobranca.parcelamento.FiltroParcDesctoInativVista;
 import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.FiltroParcelamentoDescontoAntiguidade;
@@ -379,7 +378,6 @@ import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
-import gcom.util.email.ModeloEmailVencimento;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.ComparacaoTexto;
 import gcom.util.filtro.ConectorOr;
@@ -394,6 +392,7 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
+import gcom.util.sms.ServicoSMS;
 
 public class ControladorCobranca extends ControladorComum {
 
@@ -62279,16 +62278,16 @@ public class ControladorCobranca extends ControladorComum {
 
 							Date dataVencimento = Util.adicionarNumeroDiasDeUmaData(new Date(), qtdDiasVencimento);
 
-							Collection<CobrancaDocumento> avisos = repositorioCobranca.pesquisarAvisosParaNotificacao(idRota); 
+							Collection avisos = repositorioCobranca.pesquisarAvisosParaNotificacao(idRota); 
 
 							if (avisos != null && !avisos.isEmpty()) {
 
-								Iterator<CobrancaDocumento> iteratosAvisos = avisos.iterator();
+								Iterator iteratosAvisos = avisos.iterator();
 
 								while (iteratosAvisos.hasNext()) {
 									try {
 
-										CobrancaDocumento aviso = (CobrancaDocumento) iteratosAvisos.next();
+										Object[] aviso = (Object[]) iteratosAvisos.next();
 
 										envioEmailAvisoCorte(aviso, qtdDiasVencimento);
 										envioSMSAvisoCorte(aviso);
@@ -62313,52 +62312,53 @@ public class ControladorCobranca extends ControladorComum {
 		}
 	}
 	
-	private void envioEmailAvisoCorte(CobrancaDocumento aviso, Integer qtdDiasVencimento)
+	private void envioEmailAvisoCorte(Object[] aviso, Integer qtdDiasVencimento)
 			throws ControladorException {
 
-		try {
+	//	try {
 			String emailReceptor = "pamela@prodigasistemas.com.br";
 			//String emailReceptor = aviso.getCliente().getEmail();
-			String nomeCliente = aviso.getCliente().getNome();
+			String nomeCliente = (String) aviso[2];
 			
 			EnvioEmail envioEmail = this.getControladorCadastro()
 					.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
 		
-			Collection<String> emails = new ArrayList<String>();
-			emails.add(emailReceptor);
-			
-			System.out.println("ENVIANDO EMAIL PARA " + aviso.getCliente().getEmail());
-			
-			ServicosEmail.enviarMensagemHTML(emails, 
-						 envioEmail.getEmailRemetente(), 
-						 "COSANPA", 
-						 envioEmail.getTituloMensagem(), 
-						 ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento));
-		} catch (ErroEmailException e) {
-			throw new ActionServletException("erro.email.vencimento.fatura");
-		}
+			if (emailReceptor != null) {
+				Collection<String> emails = new ArrayList<String>();
+				emails.add(emailReceptor);
+				
+				System.out.println("ENVIANDO EMAIL PARA " + (String)aviso[3]);
+				
+//				ServicosEmail.enviarMensagemHTML(emails, 
+//						envioEmail.getEmailRemetente(), 
+//						"COSANPA", 
+//						envioEmail.getTituloMensagem(), 
+//						ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento));
+			} else {
+				System.out.println("SEM EMAIL" + (Integer)aviso[1]);
+			}
+//		} catch (ErroEmailException e) {
+//			throw new ActionServletException("erro.email.vencimento.fatura");
+//		}
 	}
 	
-	private void envioSMSAvisoCorte(CobrancaDocumento aviso)
+	private void envioSMSAvisoCorte(Object[] aviso)
 			throws ControladorException {
 
 		try {
 			
-			Collection<ClienteFone> colecaoFones = aviso.getCliente().getClienteFones();
+			String ddd = (String) aviso[4];
+			String telefone = (String) aviso[5];
 			
-			for (ClienteFone fone : colecaoFones) {
-				String ddd = fone.getDdd();
-				String telefone = fone.getTelefone();
+			if (ddd != null && telefone != null) {
+				String celular = ddd.concat(telefone);
+				celular.trim();
 				
-				if (ddd != null && telefone != null) {
-					String celular = ddd.concat(telefone);
-					celular.trim();
-					
-					//ServicoSMS.enviarSMS(celular, ServicoSMS.MSG_VENCIMENTO);
-					System.out.println("ENVIANDO SMS PARA " + celular);
-				}
+				ServicoSMS.enviarSMS("91988436943", ServicoSMS.MSG_VENCIMENTO);
+				System.out.println("ENVIANDO SMS PARA " + celular);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ActionServletException("erro.sms.vencimento.fatura");
 		}
 	}

@@ -15954,7 +15954,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						for (Integer idRota : idsRotas) {
 
 							Date dataVencimento = Util.adicionarNumeroDiasDeUmaData(new Date(), qtdDiasVencimento);
-
+							System.out.println("Data de vencimento: " + dataVencimento);
 							Collection contas = repositorioFaturamento.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimento);
 
 							if (contas != null && !contas.isEmpty()) {
