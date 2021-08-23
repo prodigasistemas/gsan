@@ -378,6 +378,8 @@ import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
+import gcom.util.email.ModeloEmailAvisoCorte;
+import gcom.util.email.ModeloEmailVencimento;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.ComparacaoTexto;
 import gcom.util.filtro.ConectorOr;
@@ -392,7 +394,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
-import gcom.util.sms.ServicoSMS;
 
 public class ControladorCobranca extends ControladorComum {
 
@@ -62260,10 +62261,6 @@ public class ControladorCobranca extends ControladorComum {
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
 				UnidadeProcessamento.LOCALIDADE, ((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
 
-		Integer qtdDiasVencimento = Integer.valueOf(getControladorFaturamento().getFaturamentoParametro(
-				FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.QUANTIDADE_DIAS_FATURA_VENCIDA
-				.toString()));
-
 		try {
 			if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
 				
@@ -62276,8 +62273,6 @@ public class ControladorCobranca extends ControladorComum {
 
 						for (Integer idRota : idsRotas) {
 
-							Date dataVencimento = Util.adicionarNumeroDiasDeUmaData(new Date(), qtdDiasVencimento);
-
 							Collection avisos = repositorioCobranca.pesquisarAvisosParaNotificacao(idRota); 
 
 							if (avisos != null && !avisos.isEmpty()) {
@@ -62289,7 +62284,7 @@ public class ControladorCobranca extends ControladorComum {
 
 										Object[] aviso = (Object[]) iteratosAvisos.next();
 
-										envioEmailAvisoCorte(aviso, qtdDiasVencimento);
+										envioEmailAvisoCorte(aviso);
 										envioSMSAvisoCorte(aviso);
 									} catch (Exception e) {
 										e.printStackTrace();
@@ -62312,10 +62307,10 @@ public class ControladorCobranca extends ControladorComum {
 		}
 	}
 	
-	private void envioEmailAvisoCorte(Object[] aviso, Integer qtdDiasVencimento)
+	private void envioEmailAvisoCorte(Object[] aviso)
 			throws ControladorException {
 
-	//	try {
+		try {
 			String emailReceptor = "pamela@prodigasistemas.com.br";
 			//String emailReceptor = aviso.getCliente().getEmail();
 			String nomeCliente = (String) aviso[2];
@@ -62329,17 +62324,15 @@ public class ControladorCobranca extends ControladorComum {
 				
 				System.out.println("ENVIANDO EMAIL PARA " + (String)aviso[3]);
 				
-//				ServicosEmail.enviarMensagemHTML(emails, 
-//						envioEmail.getEmailRemetente(), 
-//						"COSANPA", 
-//						envioEmail.getTituloMensagem(), 
-//						ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento));
-			} else {
-				System.out.println("SEM EMAIL" + (Integer)aviso[1]);
-			}
-//		} catch (ErroEmailException e) {
-//			throw new ActionServletException("erro.email.vencimento.fatura");
-//		}
+				ServicosEmail.enviarMensagemHTML(emails, 
+						envioEmail.getEmailRemetente(), 
+						"COSANPA", 
+						envioEmail.getTituloMensagem(), 
+						ModeloEmailAvisoCorte.getMensagem(nomeCliente));
+			} 
+		} catch (ErroEmailException e) {
+			throw new ActionServletException("erro.email.vencimento.fatura");
+		}
 	}
 	
 	private void envioSMSAvisoCorte(Object[] aviso)
@@ -62354,7 +62347,7 @@ public class ControladorCobranca extends ControladorComum {
 				String celular = ddd.concat(telefone);
 				celular.trim();
 				
-				ServicoSMS.enviarSMS("91988436943", ServicoSMS.MSG_VENCIMENTO);
+				//ServicoSMS.enviarSMS(celular, ServicoSMS.MSG_CORTE);
 				System.out.println("ENVIANDO SMS PARA " + celular);
 			}
 		} catch (Exception e) {

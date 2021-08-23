@@ -15954,7 +15954,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						for (Integer idRota : idsRotas) {
 
 							Date dataVencimento = Util.adicionarNumeroDiasDeUmaData(new Date(), qtdDiasVencimento);
-							System.out.println("Data de vencimento: " + dataVencimento);
 							Collection contas = repositorioFaturamento.pesquisarContasVencimentoParaEnvioEmail(idRota, dataVencimento);
 
 							if (contas != null && !contas.isEmpty()) {
@@ -15969,7 +15968,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										envioEmailVencimentoFatura(contasEmail, qtdDiasVencimento);
 										envioSMSVencimentoFatura(contasEmail);
 									} catch (Exception e) {
-										e.printStackTrace();
 										System.out.println("erro.notificacao.vencimento.fatura");
 									}
 								}
@@ -16025,7 +16023,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			String ddd = (String) contasEmail[5];
 			String telefone = (String) contasEmail[6];
 			Integer idLocalidade = (Integer) contasEmail[7];
-			Integer digitoVerificador = (Integer) contasEmail[8];
+			Short digitoVerificador = (Short) contasEmail[8];
 			Integer referencia = (Integer) contasEmail[9];
 			BigDecimal valorConta = (BigDecimal) contasEmail[10];
 			
@@ -16038,14 +16036,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				.obterRepresentacaoNumericaCodigoBarra(3, valorConta,
 						idLocalidade,
 						idImovel, referencia.toString(),
-						digitoVerificador, null, null, null, null,
+						digitoVerificador.intValue(), null, null, null, null,
 						null, null, null);
 				
 				//ServicoSMS.enviarSMS(celular, ServicoSMS.MSG_VENCIMENTO);
-				System.out.println("ENVIANDO SMS PARA " + celular);
-				System.out.println(" ---> cod de barras " + codigoBarras);
+				System.out.println("ENVIANDO SMS PARA " + celular + " ---> cod de barras:" + codigoBarras);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ActionServletException("erro.sms.vencimento.fatura");
 		}
 	}

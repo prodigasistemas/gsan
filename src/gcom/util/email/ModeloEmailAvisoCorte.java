@@ -3,7 +3,6 @@ package gcom.util.email;
 public class ModeloEmailAvisoCorte {
 	
 	private static String NOME_CLIENTE = "NOME_CLIENTE";
-	private static String QTD_DIAS_VENCIMENTO = "QTD_DIAS_VENCIMENTO";
 	
 	private static String CABECALHO_PAGINA = "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">" + 
 			"<html>" + 
@@ -48,7 +47,7 @@ public class ModeloEmailAvisoCorte {
 			"</body>" + 
 			"</html:html>";
 	
-	public static String getMensagem(String nomeCliente, Integer qtdDiasVencimento) {
+	public static String getMensagem(String nomeCliente) {
 		StringBuilder texto = new StringBuilder();
 		
 		texto.append(CABECALHO_PAGINA)

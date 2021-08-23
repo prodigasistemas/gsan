@@ -26770,18 +26770,9 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					.append(" inner join cadastro.quadra q on q.qdra_id = i.qdra_id ")
 					.append(" inner join cadastro.cliente_fone cf on cf.clie_id = c.clie_id  and cf.fnet_id = :celular and cf.cfon_icfonepadrao = :sim ")
 					.append(" where cd.dotp_id = :avisoCorte ")
-					.append(" and cd.cbdo_id in (12654427) ")
-					.append(" and ci.clim_dtrelacaofim is null and ci.clim_icnomeconta = 1 ");
-//			
-					//consulta.append("select aviso from CobrancaDocumento aviso ")
-//					.append(" inner join fetch aviso.imovel imovel ")
-//					.append(" inner join fetch aviso.quadra quadra ")
-//					.append(" left join cliente.clienteFones clienteFone with(clienteFone.foneTipo = 3) ")
-//					.append(" where 1 = 1 ")
-//					//.append(" aviso.emissao >= :dataEmissao")
-//					.append(" and aviso.id in (16889181, 16889198, 16889202, 16889180, 16889206)")
-//					.append(" and aviso.documentoTipo.id = :avisoCorte ");
-//					//.append(" and quadra.rota.id = :idRota ");
+					.append(" and aviso.cbdo_tmemissao >= :dataEmissao")
+					.append(" and ci.clim_dtrelacaofim is null and ci.clim_icnomeconta = :sim ")
+					.append(" and q.rota_id = :idRota ");
 
 			retorno = session.createSQLQuery(consulta.toString())
 					.addScalar("idAviso", Hibernate.INTEGER)
@@ -26790,11 +26781,11 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					.addScalar("email", Hibernate.STRING)
 					.addScalar("ddd", Hibernate.STRING)
 					.addScalar("celular", Hibernate.STRING)
-	    			//.setDate("dataEmissao", new Date())
+	    			.setDate("dataEmissao", new Date())
 	    			.setInteger("avisoCorte", DocumentoTipo.AVISO_CORTE)
 	    			.setInteger("celular", FoneTipo.CELULAR)
 	    			.setShort("sim", ConstantesSistema.SIM)
-	    			//.setInteger("idRota", idRota)
+	    			.setInteger("idRota", idRota)
 	    			.list();
 
 		} catch (HibernateException e) {
