@@ -268,31 +268,31 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 		return consulta.toString();
 	}
 	
-	public boolean isContasPagas(Integer idImovel, Integer idComando) throws ErroRepositorioException {
+	@SuppressWarnings("unchecked")
+	public List<Integer> obterContasPagas(List<Integer> imoveis, Integer idComando) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		int quantidade;
+		List<Integer> retorno;
 
 		try {
 			StringBuilder consulta = new StringBuilder();
-			consulta.append("SELECT count(*) as quantidade ")
+			consulta.append("SELECT imov_id as idImovel ")
 					.append("FROM cobranca.empresa_cobranca_conta ")
-			        .append("WHERE imov_id = :idImovel ")
-			        .append("AND cecc_id = :idComando ")
-			        .append("AND ecco_id NOT IN (SELECT ecco_id FROM cobranca.empr_cobr_conta_pagto)");
+			        .append("WHERE cecc_id = :idComando ")
+			        .append("AND ecco_id NOT IN (SELECT ecco_id FROM cobranca.empr_cobr_conta_pagto)")
+			        .append(" AND imov_id in (:ids)");
 				
-			quantidade = (Integer) session.createSQLQuery(consulta.toString())
+			retorno = (List<Integer>) session.createSQLQuery(consulta.toString())
 					.addScalar("quantidade", Hibernate.INTEGER)
-					.setInteger("idImovel", idImovel)
 					.setInteger("idComando", idComando)
-					.setMaxResults(1)
-					.uniqueResult();
+					.setParameterList("ids",imoveis, Hibernate.INTEGER)
+					.list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 
-		return quantidade == 0;
+		return retorno;
 	}
 	
 	public EmpresaCobrancaConta pesquisarEmpresaCobrancaConta(Integer idConta) throws ErroRepositorioException {

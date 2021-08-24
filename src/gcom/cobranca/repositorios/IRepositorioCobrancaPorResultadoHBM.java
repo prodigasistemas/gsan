@@ -16,7 +16,7 @@ public interface IRepositorioCobrancaPorResultadoHBM {
 
 	public List<Integer> pesquisarImoveis(ComandoEmpresaCobrancaContaHelper helper, boolean percentualInformado, Integer referenciaAtual) throws ErroRepositorioException;
 
-	public boolean isContasPagas(Integer idImovel, Integer idComando) throws ErroRepositorioException;
+	public List<Integer> obterContasPagas(List<Integer> imoveis, Integer idComando) throws ErroRepositorioException;
 
 	public EmpresaCobrancaConta pesquisarEmpresaCobrancaConta(Integer idConta) throws ErroRepositorioException;
 

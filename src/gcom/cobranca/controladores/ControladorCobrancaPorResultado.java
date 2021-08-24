@@ -1,5 +1,21 @@
 package gcom.cobranca.controladores;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import org.apache.log4j.Logger;
+
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento;
@@ -40,6 +56,7 @@ import gcom.cobranca.ComandoEmpresaCobrancaContaUnidadeNegocioPK;
 import gcom.cobranca.EmpresaCobrancaConta;
 import gcom.cobranca.EmpresaCobrancaContaPagamentos;
 import gcom.cobranca.ExtensaoComandoContasCobrancaEmpresaHelper;
+import gcom.cobranca.FiltroCobrancaAcaoAtividadeComando;
 import gcom.cobranca.FiltroCobrancaSituacaoHistorico;
 import gcom.cobranca.FiltroComandoEmpresaCobrancaConta;
 import gcom.cobranca.FiltroEmpresaCobrancaConta;
@@ -90,22 +107,7 @@ import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-
-import org.apache.log4j.Logger;
+import gcom.util.filtro.ParametroSimplesIn;
 
 
 public class ControladorCobrancaPorResultado extends ControladorComum {
@@ -774,13 +776,26 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 		
 		Map<String, EmpresaCobrancaContaPagamentos> mapPagamentos = new HashMap<String, EmpresaCobrancaContaPagamentos>();
 		try {
+			Map<Integer, List<Integer>> mapImovelPagamento = new HashMap<Integer, List<Integer>>();
+			
 			Collection<EmpresaCobrancaContaPagamentos> pagamentos = obterPagamentosEmpresa(idLocalidade, anoMesArrecadacao);
-			for (EmpresaCobrancaContaPagamentos pagamento : pagamentos) {
-				System.out.println("Imovel:" + pagamento.getIdImovel());
-				if (!isPagamentoDuplicado(pagamento, mapPagamentos)) {
-					getControladorUtil().inserir(pagamento);
-					atualizarSituacaoCobranca(pagamento.getIdImovel(), pagamento.getEmpresaCobrancaConta().getComandoEmpresaCobrancaConta().getId());
+			
+			Map<Integer, List<EmpresaCobrancaContaPagamentos>> mapPagamentosEmpresa = obterHashPagamentosPorEmpresa(pagamentos);
+			
+			List<EmpresaCobrancaContaPagamentos> pagamentosParaInserir = new ArrayList<EmpresaCobrancaContaPagamentos>();
+			for (Integer idEmpresa : mapPagamentosEmpresa.keySet()) {
+				List<EmpresaCobrancaContaPagamentos> pagamentosPorEmpresa = mapPagamentosEmpresa.get(idEmpresa);
+				
+				for (EmpresaCobrancaContaPagamentos pagamento : pagamentos) {
+					System.out.println("Imovel:" + pagamento.getIdImovel());
+					if (!isPagamentoDuplicado(pagamento, mapPagamentos)) {
+						getControladorUtil().inserir(pagamento);
+						pagamentosParaInserir.add(pagamento);
+					}
 				}
+				
+			atualizarSituacaoCobranca(pagamentosParaInserir, idEmpresa);
+
 			}
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
@@ -816,67 +831,85 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 	
 	
 
-	private void atualizarSituacaoCobranca(Integer idImovel, Integer idComando) throws ErroRepositorioException {
-		if (repositorio.isContasPagas(idImovel, idComando)) {
-			try {
-				SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
-				System.out.println("Atualizando Imovel:" + idImovel);
-				atualizarSituacaoCobrancaImovel(idImovel);
-				atualizarImovelCobrancaSituacao(idImovel, new Date());
-				atualizarCobrancaSituacaoHistorico(idImovel, parametros.getAnoMesFaturamento(), "TODAS AS CONTAS FORAM PAGAS", new Date(), null);
-			} catch (ControladorException e) {
-				e.printStackTrace();
-			}
+	private void atualizarSituacaoCobranca(List<EmpresaCobrancaContaPagamentos> pagamentos, Integer idComando) throws ErroRepositorioException {
+		List<Integer> idsImoveis = obterImoveisPagamentos(pagamentos);
+		
+		List<Integer> imoveisContasPagas = repositorio.obterContasPagas(idsImoveis, idComando); 
+		try {
+			SistemaParametro parametros = getControladorUtil().pesquisarParametrosDoSistema();
+			atualizarSituacaoCobrancaImovel(imoveisContasPagas);
+			atualizarImovelCobrancaSituacao(imoveisContasPagas, new Date());
+			atualizarCobrancaSituacaoHistorico(imoveisContasPagas, parametros.getAnoMesFaturamento(), "TODAS AS CONTAS FORAM PAGAS", new Date(), null);
+		} catch (ControladorException e) {
+			e.printStackTrace();
 		}
+	}
+	
+	private List<Integer> obterImoveisPagamentos(List<EmpresaCobrancaContaPagamentos> pagamentos) {
+		List<Integer> ids = new ArrayList<Integer>();
+		
+		for (EmpresaCobrancaContaPagamentos pagamento : pagamentos) {
+			ids.add(pagamento.getIdImovel());
+		}
+		
+		return ids;
 	}
 
 	@SuppressWarnings("unchecked")
-	private void atualizarImovelCobrancaSituacao(Integer idImovel, Date dataRetirada) throws ControladorException {
+	private void atualizarImovelCobrancaSituacao(List<Integer> idsImoveis, Date dataRetirada) throws ControladorException {
 		Filtro filtro = new FiltroImovelCobrancaSituacao();
-		filtro.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID, idImovel));
+		
+		filtro.adicionarParametro(new ParametroSimplesIn(FiltroImovelCobrancaSituacao.IMOVEL_ID,
+				idsImoveis));
 		filtro.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.ID_COBRANCA_SITUACAO, CobrancaSituacao.COBRANCA_EMPRESA_TERCEIRIZADA));
 		filtro.adicionarParametro(new ParametroNulo(FiltroImovelCobrancaSituacao.DATA_RETIRADA_COBRANCA));
 		
+		List<ImovelCobrancaSituacao> imoveis = new ArrayList<ImovelCobrancaSituacao>();
+		
 		Collection<ImovelCobrancaSituacao> colecao = getControladorUtil().pesquisar(filtro, ImovelCobrancaSituacao.class.getName());
-		System.out.println("atualizarImovelCobrancaSituacao :" + idImovel + " [" + colecao.size() + "]");
+		
 		if (colecao != null && !colecao.isEmpty()) {
 			for (ImovelCobrancaSituacao imovelCobranca : colecao) {
 				imovelCobranca.setDataRetiradaCobranca(new Date());
 				imovelCobranca.setUltimaAlteracao(new Date());
-				System.out.println("atualizando imovel cobranca OK");
-				getControladorUtil().atualizar(imovelCobranca);
+
+				imoveis.add(imovelCobranca);
+			}
+			
+			getControladorBatch().atualizarColecaoObjetoParaBatch(imoveis);
+		}
+	}
+	
+	private void atualizarSituacaoCobrancaImovel(List<Integer> idImoveis) throws ControladorException {
+		List<Imovel> imoveis = new ArrayList<Imovel>();
+		
+		for (Integer idImovel : idImoveis) {
+			Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
+			if (imovel != null ) {
+				imovel.setCobrancaSituacao(null);
+				imovel.setCobrancaSituacaoTipo(null);
+				imovel.setUltimaAlteracao(new Date());
 				
+				imoveis.add(imovel);
 			}
 		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void atualizarSituacaoCobrancaImovel(Integer idImovel) throws ControladorException {
-		Filtro filtro = new FiltroImovel();
-		filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
-		
-		Collection<Imovel> colecao = getControladorUtil().pesquisar(filtro, Imovel.class.getName());
-		System.out.println("atualizarSituacaoCobrancaImovel :" + idImovel + " [" + colecao.size() + "]");
-		if (colecao != null && !colecao.isEmpty()) {
-			Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(colecao);
-			imovel.setCobrancaSituacao(null);
-			imovel.setCobrancaSituacaoTipo(null);
-			imovel.setUltimaAlteracao(new Date());
-			System.out.println(" atualizando situacao OK");
-			getControladorUtil().atualizar(imovel);
-		}
+		getControladorBatch().atualizarColecaoObjetoParaBatch(imoveis);
 	}
 	
 	
 	@SuppressWarnings("unchecked")
-	private void atualizarCobrancaSituacaoHistorico(Integer idImovel, Integer anoMesRetirada, String observacaoRetirada, Date dataFim, Usuario usuario) throws ControladorException {
+	private void atualizarCobrancaSituacaoHistorico(List<Integer> idsImoveis, Integer anoMesRetirada, String observacaoRetirada, Date dataFim, Usuario usuario) throws ControladorException {
 		Filtro filtro = new FiltroCobrancaSituacaoHistorico();
-		filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.IMOVEL_ID, idImovel));
+		
+		filtro.adicionarParametro(new ParametroSimplesIn(FiltroCobrancaSituacaoHistorico.IMOVEL_ID,
+				idsImoveis));
 		filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaSituacaoHistorico.COBRANCA_TIPO_ID, CobrancaSituacaoTipo.COBRANCA_EMPRESA_TERCEIRIZADA));
 		filtro.adicionarParametro(new ParametroNulo(FiltroCobrancaSituacaoHistorico.ANO_MES_COBRANCA_RETIRADA));
 		
 		Collection<CobrancaSituacaoHistorico> colecao = getControladorUtil().pesquisar(filtro, CobrancaSituacaoHistorico.class.getName());
-		System.out.println("atualizarCobrancaSituacaoHistorico :" + idImovel + " [" + colecao.size() + "]");
+
+		List<CobrancaSituacaoHistorico> historicos = new ArrayList<CobrancaSituacaoHistorico>();
+		
 		if (colecao != null && !colecao.isEmpty()) {
 			for (CobrancaSituacaoHistorico historico : colecao) {
 				historico.setAnoMesCobrancaRetirada(Util.formataAnoMes(new Date()));
@@ -884,9 +917,11 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				historico.setUsuarioRetira(usuario);
 				historico.setDataFimSituacao(new Date());
 				historico.setUltimaAlteracao(new Date());
-				System.out.println("atualizando Cobranca Situacao Historico OK");
-				getControladorUtil().atualizar(historico);
+				
+				historicos.add(historico);
 			}
+			
+			getControladorBatch().atualizarColecaoObjetoParaBatch(historicos);
 		}
 	}
 	
@@ -926,6 +961,24 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 			e.printStackTrace();
 		}
 		return pagamentosEmpresa;
+	}
+	
+	private Map<Integer, List<EmpresaCobrancaContaPagamentos>> obterHashPagamentosPorEmpresa(Collection<EmpresaCobrancaContaPagamentos> pagamentosEmpresa) {
+		Map<Integer, List<EmpresaCobrancaContaPagamentos>> mapPagamentos = new HashMap<Integer, List<EmpresaCobrancaContaPagamentos>>();
+		
+		for (EmpresaCobrancaContaPagamentos pagamento : pagamentosEmpresa) {
+			if (mapPagamentos.containsKey(pagamento.getEmpresaCobrancaConta().getComandoEmpresaCobrancaConta().getId())) {
+				List<EmpresaCobrancaContaPagamentos> lista = mapPagamentos.get(pagamento.getEmpresaCobrancaConta().getComandoEmpresaCobrancaConta().getId());
+				lista.add(pagamento);
+			} else {
+				List<EmpresaCobrancaContaPagamentos> lista = new ArrayList<EmpresaCobrancaContaPagamentos>();
+				lista.add(pagamento);
+				mapPagamentos.put(pagamento.getEmpresaCobrancaConta().getComandoEmpresaCobrancaConta().getId(), lista);
+			}
+		}
+		
+		return mapPagamentos;
+		
 	}
 	
 	private boolean categoriaPermiteGerarPagamento(Pagamento pagamento) throws ControladorException {
@@ -1572,8 +1625,11 @@ public class ControladorCobrancaPorResultado extends ControladorComum {
 				Date data = Util.converteStringParaDate(dados[1]);
 				String motivo = dados[2].toUpperCase();
 				
-				atualizarImovelCobrancaSituacao(idImovel, data);
-				atualizarCobrancaSituacaoHistorico(idImovel, Util.formataAnoMes(data), "RETIRADA MANUAL - " + motivo, data, usuario);
+				List<Integer> imoveis = new ArrayList<Integer>();
+				imoveis.add(idImovel);
+				
+				atualizarImovelCobrancaSituacao(imoveis, data);
+				atualizarCobrancaSituacaoHistorico(imoveis, Util.formataAnoMes(data), "RETIRADA MANUAL - " + motivo, data, usuario);
 				retirarCobrancaConta(idImovel);
 				
 				total++;
