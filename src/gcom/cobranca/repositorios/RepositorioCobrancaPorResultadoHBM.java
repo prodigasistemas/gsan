@@ -282,7 +282,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 			        .append(" AND imov_id in (:ids)");
 				
 			retorno = (List<Integer>) session.createSQLQuery(consulta.toString())
-					.addScalar("quantidade", Hibernate.INTEGER)
+					.addScalar("idImovel", Hibernate.INTEGER)
 					.setInteger("idComando", idComando)
 					.setParameterList("ids",imoveis, Hibernate.INTEGER)
 					.list();
