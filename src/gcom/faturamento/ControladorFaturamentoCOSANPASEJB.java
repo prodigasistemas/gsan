@@ -185,6 +185,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 						emitirContaHelper = (EmitirContaHelper) iteratorConta.next();
 						
+						Imovel imovelFlag = getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
+												
+						if (Short.valueOf(imovelFlag.getIndicadorEnvioContaFisica()) == Short.valueOf(Imovel.INDICADOR_NAO_ENVIO_CONTA_FISICA)) {
+							emitirContaHelper = (EmitirContaHelper) iteratorConta.next();					
+						}
+						
 						sequencialImpressao += 1;
 
 						quantidadeContas++;

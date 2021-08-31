@@ -352,7 +352,8 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public final static Short INDICADOR_JARDIM_SIM = new Short("1");
 	public final static Short INDICADOR_DEBITO_AUTOMATICO = new Short("1");
 	public final static Short INDICADOR_NAO_DEBITO_AUTOMATICO = new Short("2");
-
+	public final static Short INDICADOR_NAO_ENVIO_CONTA_FISICA = new Short ("2");
+	
 	public Imovel(
 			short lote,
 			short subLote,
@@ -379,6 +380,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 			Short indicadorEmissaoExtratoFaturamento,
 			Short indicadorDebitoConta,
 			Short indicadorExclusao,
+			Short indicadorEnvioContaFisica,
 			String coordenadaX,
 			String coordenadaY,
 			LigacaoEsgoto ligacaoEsgoto,
@@ -433,6 +435,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 		this.indicadorEmissaoExtratoFaturamento = indicadorEmissaoExtratoFaturamento;
 		this.indicadorDebitoConta = indicadorDebitoConta;
 		this.indicadorExclusao = indicadorExclusao;
+		this.indicadorEnvioContaFisica = indicadorEnvioContaFisica;
 		this.coordenadaX = coordenadaX;
 		this.coordenadaY = coordenadaY;
 		this.ligacaoEsgoto = ligacaoEsgoto;
