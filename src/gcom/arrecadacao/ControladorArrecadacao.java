@@ -777,13 +777,15 @@ public class ControladorArrecadacao extends ControladorComum {
 									// na base
 									Integer idImovelNaBase = null;
 
-									boolean codigoDebitoAutomaticoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoF.getIdClienteEmpresa());
+									String codClienteEmpresa = retornarCodCliente(registroHelperCodigoF.getIdClienteEmpresa());
+									
+									boolean codigoDebitoAutomaticoInvalido = Util.validarValorNaoNumerico(codClienteEmpresa);
 
 									if (codigoDebitoAutomaticoInvalido) {
 										descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
 									}
 
-									Integer codigoDebitoAutomatico = retornarCodCliente(registroHelperCodigoF.getIdClienteEmpresa());
+									Integer codigoDebitoAutomatico = new Integer(codClienteEmpresa);
 
 									FiltroImovel filtroImovel = new FiltroImovel();
 
@@ -2762,15 +2764,40 @@ public class ControladorArrecadacao extends ControladorComum {
 		return null;
 	}
     
-    private Integer retornarCodCliente(String linha) {
-		String codCliente = linha.substring(0, 11);
-		String finalCodigo = linha.substring(11, linha.length());
-		
-		codCliente.concat(finalCodigo.contentEquals("00000000000000") ? "" : finalCodigo);
-	
-		return new Integer(codCliente);
+    private String retornarCodCliente(String linha) {
+    	
+    	String codCliente = "";
+    	
+    	if (linha.length() == 25) {
+    		if (linha.startsWith("0000")) {
+    			codCliente = linha.substring(0, 11);
+    			String finalCodigo = linha.substring(11, linha.length());
+    			
+    			codCliente.concat(finalCodigo.contentEquals("00000000000000") ? "" : finalCodigo);
+    		} else {
+    			codCliente = linha.substring(0, 7);
+    		}
+    	}
+		return codCliente;
 	}
 
+    public static void main(String[] args) {
+        	String linha = "6710913000000000000000000";
+
+			String codCliente = "";
+        	
+        	if (linha.length() == 25) {
+        		if (linha.startsWith("0000")) {
+        			codCliente = linha.substring(0, 11);
+        			String finalCodigo = linha.substring(11, linha.length());
+        			
+        			codCliente.concat(finalCodigo.contentEquals("00000000000000") ? "" : finalCodigo);
+        		} else {
+        			codCliente = linha.substring(0, 7);
+        		}
+        	}
+    		System.out.println(codCliente);
+	}
 	private SistemaParametro getSistemaParametro() throws ControladorException {
 		try {
 			sistemaParametro = repositorioUtil.pesquisarParametrosDoSistema();
