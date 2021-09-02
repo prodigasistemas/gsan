@@ -783,7 +783,7 @@ public class ControladorArrecadacao extends ControladorComum {
 										descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
 									}
 
-									Integer codigoDebitoAutomatico = new Integer(registroHelperCodigoF.getIdClienteEmpresa());
+									Integer codigoDebitoAutomatico = retornarCodCliente(registroHelperCodigoF.getIdClienteEmpresa());
 
 									FiltroImovel filtroImovel = new FiltroImovel();
 
@@ -2760,6 +2760,15 @@ public class ControladorArrecadacao extends ControladorComum {
 
 		}
 		return null;
+	}
+    
+    private Integer retornarCodCliente(String linha) {
+		String codCliente = linha.substring(0, 11);
+		String finalCodigo = linha.substring(11, linha.length());
+		
+		codCliente.concat(finalCodigo.contentEquals("00000000000000") ? "" : finalCodigo);
+	
+		return new Integer(codCliente);
 	}
 
 	private SistemaParametro getSistemaParametro() throws ControladorException {
