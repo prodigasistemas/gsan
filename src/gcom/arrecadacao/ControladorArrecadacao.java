@@ -783,7 +783,7 @@ public class ControladorArrecadacao extends ControladorComum {
 										descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
 									}
 
-									Integer codigoDebitoAutomatico = retornarCodCliente(registroHelperCodigoF.getIdClienteEmpresa());
+									Integer codigoDebitoAutomatico = new Integer(registroHelperCodigoF.getIdClienteEmpresa());
 
 									FiltroImovel filtroImovel = new FiltroImovel();
 
@@ -2762,13 +2762,21 @@ public class ControladorArrecadacao extends ControladorComum {
 		return null;
 	}
     
-    private Integer retornarCodCliente(String linha) {
-		String codCliente = linha.substring(0, 11);
-		String finalCodigo = linha.substring(11, linha.length());
-		
-		codCliente.concat(finalCodigo.contentEquals("00000000000000") ? "" : finalCodigo);
-	
-		return new Integer(codCliente);
+    private String retornarCodCliente(String linha) {
+    	
+    	String codCliente = "";
+    	
+    	if (linha.length() == 25) {
+    		if (linha.startsWith("0000")) {
+    			codCliente = linha.substring(0, 11);
+    			String finalCodigo = linha.substring(11, linha.length());
+    			
+    			codCliente.concat(finalCodigo.contentEquals("00000000000000") ? "" : finalCodigo);
+    		} else {
+    			codCliente = linha.substring(0, 7);
+    		}
+    	}
+		return codCliente;
 	}
 
 	private SistemaParametro getSistemaParametro() throws ControladorException {
@@ -9653,7 +9661,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			// recupera o codigo do registro
 			registroHelperCodigoB.setCodigoRegistro("" + codigoRegistro);
 			// recupera a identificação do cliente na empresa
-			registroHelperCodigoB.setIdClienteEmpresa(linha.substring(1, 26).trim());
+			registroHelperCodigoB.setIdClienteEmpresa(retornarCodCliente(linha.substring(1, 26).trim()));
 			// recupera a agencia para debito
 			registroHelperCodigoB.setAgenciaDebito(linha.substring(26, 30).trim());
 			// recupera o identificação do cliente no banco
@@ -9872,7 +9880,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		registroHelperCodigoF.setCodigoRegistro("" + codigoRegistro);
 		
 		// IDENTIFICAÇÃO DO CLIENTE NA EMPRESA
-		registroHelperCodigoF.setIdClienteEmpresa(linha.substring(1, 26).trim());
+		registroHelperCodigoF.setIdClienteEmpresa(retornarCodCliente(linha.substring(1, 26).trim()));
 		
 		// AGÊNCIA PARA DÉBITO
 		registroHelperCodigoF.setAgenciaDebito(linha.substring(26, 30).trim());
