@@ -780,6 +780,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									boolean codigoDebitoAutomaticoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoF.getIdClienteEmpresa());
 
 									if (codigoDebitoAutomaticoInvalido) {
+										System.out.println("Linha 783");
 										descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
 									}
 
@@ -2912,6 +2913,7 @@ public class ControladorArrecadacao extends ControladorComum {
         codigoDebitoAutomaticoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoB.getIdClienteEmpresa());
         
         if(codigoDebitoAutomaticoInvalido){
+        	System.out.println("Linha 2916");
         	descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
         }
         
@@ -2990,7 +2992,7 @@ public class ControladorArrecadacao extends ControladorComum {
                     .inserirDebitoAutomatico(matriculaImovel.toString(), codigoBanco, codigoAgencia, identificacaoCliente, dataExcluso);
          		}
          		else{
-         			
+         			System.out.println("Linha 2993");
          			descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
          		}
             }
