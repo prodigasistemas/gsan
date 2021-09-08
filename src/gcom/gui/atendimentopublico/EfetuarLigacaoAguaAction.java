@@ -60,7 +60,7 @@ public class EfetuarLigacaoAguaAction extends GcomAction {
 		String valorPercentual = form.getPercentualCobranca();
 		String numeroLacre = form.getNumeroLacre();
 		String idLigacaoOrigem = form.getIdLigacaoOrigem();
-		String idImovel = form.getIdImovel();
+		String idImovel = form.getIdImovel() == null ? form.getMatriculaImovel() : form.getIdImovel();
 		String idPavimentoRua = form.getIdPavimentoRua();
 		String idPavimentoCalcada = form.getIdPavimentoCalcada();
 		
