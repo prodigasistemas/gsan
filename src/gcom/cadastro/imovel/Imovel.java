@@ -352,6 +352,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public final static Short INDICADOR_JARDIM_SIM = new Short("1");
 	public final static Short INDICADOR_DEBITO_AUTOMATICO = new Short("1");
 	public final static Short INDICADOR_NAO_DEBITO_AUTOMATICO = new Short("2");
+	public final static Short INDICADOR_ENVIO_CONTA_FISICA = new Short ("1");
 	public final static Short INDICADOR_NAO_ENVIO_CONTA_FISICA = new Short ("2");
 	
 	public Imovel(
