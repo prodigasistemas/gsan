@@ -777,7 +777,9 @@ public class ControladorArrecadacao extends ControladorComum {
 									// na base
 									Integer idImovelNaBase = null;
 
-									boolean codigoDebitoAutomaticoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoF.getIdClienteEmpresa());
+									String codClienteEmpresa = retornarCodCliente(registroHelperCodigoF.getIdClienteEmpresa());
+									
+									boolean codigoDebitoAutomaticoInvalido = Util.validarValorNaoNumerico(codClienteEmpresa);
 
 									if (codigoDebitoAutomaticoInvalido) {
 										System.out.println("Linha 783");
@@ -2782,6 +2784,23 @@ public class ControladorArrecadacao extends ControladorComum {
 		return codCliente;
 	}
 
+    public static void main(String[] args) {
+        	String linha = "6710913000000000000000000";
+
+			String codCliente = "";
+        	
+        	if (linha.length() == 25) {
+        		if (linha.startsWith("0000")) {
+        			codCliente = linha.substring(0, 11);
+        			String finalCodigo = linha.substring(11, linha.length());
+        			
+        			codCliente.concat(finalCodigo.contentEquals("00000000000000") ? "" : finalCodigo);
+        		} else {
+        			codCliente = linha.substring(0, 7);
+        		}
+        	}
+    		System.out.println(codCliente);
+	}
 	private SistemaParametro getSistemaParametro() throws ControladorException {
 		try {
 			sistemaParametro = repositorioUtil.pesquisarParametrosDoSistema();
