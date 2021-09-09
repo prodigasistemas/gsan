@@ -2776,6 +2776,8 @@ public class ControladorArrecadacao extends ControladorComum {
     		} else {
     			codCliente = linha.substring(0, 7);
     		}
+    	} else {
+    		codCliente = linha;
     	}
 		return codCliente;
 	}
