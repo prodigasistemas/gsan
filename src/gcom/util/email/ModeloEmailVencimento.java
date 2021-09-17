@@ -13,34 +13,36 @@ public class ModeloEmailVencimento {
 	
 	private static String CORPO_EMAIL = "<body>" + 
 			"<div>" + 
-			"	<div style='font-size: 20px; font-family: Helvetica; color: MidnightBlue; repeat-y 0 0; display:table; margin:35px auto 0; padding:0 5px; width:950px	'>" + 
-			"		<div style=' background-color:MidnightBlue; color: white'; width:100 px; height:100 px;'><br><br>" + 
-			"			<img src=\"http://www.cosanpa.pa.gov.br/wp-content/themes/cosanpa2019/img/logo-cosanpa.png\" width=\"50%\" height=\"50%\">" + 
-			"		<br><br>" + 
-			"		</div> " + 
-			"		<h1 style=\"color: MidnightBlue\">Sua fatura est&aacute; pr&oacute;xima do vencimento. </h1><br>" + 
-			"		<h2 style=\"color: MidnightBlue\">Ol&aacute; <b>NOME_CLIENTE</b></h2><br>" + 
-			"		<p style=\"color: MidnightBlue; font-size: 20px;\">Faltam QTD_DIAS_VENCIMENTO dias para o vencimento da sua fatura. Voc&ecirc; pode efetuar o pagamento utilizando o boleto que anexamos nesse email.</p>" + 
-			"		<br>" + 
-			"		<p style=\"color: MidnightBlue; font-size: 20px;\"><b>Se voc&ecirc; j&aacute; efetuou o pagamento,  " + 
-			"		 por favor, desconsidere essa mensagem.</b></p>" + 
-			"		 <br>" + 
-			"		 <p style=\"color: MidnightBlue; font-size: 20px;\">Voc&ecirc; pode pagar o boleto no seu internet banking, em lot&eacute;ricas, ag&ecirc;ncias banc&aacute;rias ou em caixas eletr&ocirc;nicos. Se voc&ecirc; tiver o DDA (D&eacute;bito Direto Autorizado) cadastrado em seu banco, poder&aacute;" + 
-			"		 consultar, agendar e pagar este boleto utilizando esse servi&ccedil;o.</p>" + 
-			"		 <br>" + 
-			"		<p style=\"color: MidnightBlue; font-size: 20px;\">A COSANPA agradece sua aten&ccedil;&atilde;o!</p>" + 
-			"		<br>" + 
+			"	<div style='font-size: 20px; font-family: Helvetica, sans-serif; color: #293483; repeat-y 0 0; display:table; margin:35px auto 0; padding:0 5px; width:950px	'>" + 
+			"		<header>" +
+			"         <div>" +
+			"			<img src=\"http://www.cosanpa.pa.gov.br/wp-content/uploads/2021/09/cosanpa_header.jpg\" width=\"50%\" height=\"50%\">" +
+			"		    <br><br>" +
+			"         </div>" + 
+			"       </header>" +
+			"	<div> " + 
+			"		<h3>Ol&aacute;, <b>NOME_CLIENTE</b></h3>" + 
+			"		<p>" +		
+			"			Esta mensagem &eacute; para lembrar que o vencimento da sua fatura est&aacute; bem perto!<br>" +
+			"			Falta apenas <b>DATA_VENCIMENTO</b> dia(s) at&eacute; a data limite de pagamento .<br>" +
+			"			Para facilitar, enviamos em anexo o boleto para pagamento e voc&ecirc; pode pag&aacute;-lo" +
+			"			por meio de internet banking ou em lot&eacute;ricas, ag&ecirc;ncias banc&aacute;rias e nos caixas" +
+			"			eletr&ocirc;nicos. Se voc&ecirc; tiver o DDA (D&eacute;bito Direto Autorizado) cadastrado em seu" +
+			"			banco, poder&aacute; consultar, agendar e pagar este boleto utilizando este servi&ccedil;o" +
+			"			tamb&eacute;m.<br>" +
+			"			Caso o pagamento tenha sido efetuado, por favor, desconsidere esta mensagem." +
+			"			A Cosanpa agradece a sua aten&ccedil;&atilde;o e est&aacute; &agrave; disposi&ccedil;&atilde;o de voc&ecirc;, sempre!" +
+			"			Se precisar entrar em contato conosco,<br>" +
+			"			acesse o site <b>www.cosanpa.pa.gov.br</b> ou ligue para 0800 70 71 195." +
+			"	    </p>" +
+			"       <br>" +
+			"    </div>" +  
 			"	" + 
-			"	<div><p style=\"color: MidnightBlue;\" >\"Esta &eacute; uma mensagem autom&aacute;tica, este email n&atilde;o deve ser respondido.\"</p></div>";
+			"	<div><p><b>\"Esta &eacute; uma mensagem autom&aacute;tica, este email n&atilde;o deve ser respondido.\"</b></p></div>";
 	
 	private static String RODAPE_PAGINA = "<footer>" + 
-			"		<div style='background-color:MidnightBlue; color: white'; width:100 px; height:100 px; align=\"center\"><br><br>" + 
-			"			<img src=\"http://www.cosanpa.pa.gov.br/wp-content/themes/cosanpa2019/img/logo-governo-branco.png\" width=\"25%\" height=\"25%\">	" + 
-			"					<div class=\"col-sm-4\">" + 
-			"						<h5>Companhia de Saneamento do Par&aacute;<br>" + 
-			"						 <b>Endere&ccedil;o:</b> Av. Magalh&atilde;es Barata, 1201 - S&atilde;o Br&aacute;s. CEP: 66060-901 - Bel&eacute;m - Par&aacute;<br>" + 
-			"						<b>Telefone:</b> (91) 3202-8400 / <b>Fax:</b> (91) 3236-2199</h5>" + 
-			"					</div>" + 
+			"		<div>" + 
+			"			<img src=\"http://www.cosanpa.pa.gov.br/wp-content/uploads/2021/09/cosanpa_footer.jpg\" class=\"img-fluid\" alt=\"COSANPA\" width=\"100%\" height=\"100%\">" + 
 			"		</div> " + 
 			"		</footer> <br><br>" + 
 			"	</div>			" + 
