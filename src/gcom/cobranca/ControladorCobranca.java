@@ -62285,7 +62285,7 @@ public class ControladorCobranca extends ControladorComum {
 										Object[] aviso = (Object[]) iteratosAvisos.next();
 
 										envioEmailAvisoCorte(aviso);
-										envioSMSAvisoCorte(aviso);
+										//envioSMSAvisoCorte(aviso);
 									} catch (Exception e) {
 										e.printStackTrace();
 										System.out.println("erro.notificacao.vencimento.fatura");
@@ -62311,9 +62311,8 @@ public class ControladorCobranca extends ControladorComum {
 			throws ControladorException {
 
 		try {
-			String emailReceptor = "pamela@prodigasistemas.com.br";
-			//String emailReceptor = aviso.getCliente().getEmail();
 			String nomeCliente = (String) aviso[2];
+			String emailReceptor = (String) aviso[3];
 			
 			EnvioEmail envioEmail = this.getControladorCadastro()
 					.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
@@ -62322,8 +62321,6 @@ public class ControladorCobranca extends ControladorComum {
 				Collection<String> emails = new ArrayList<String>();
 				emails.add(emailReceptor);
 				
-				System.out.println("ENVIANDO EMAIL PARA " + (String)aviso[3]);
-				
 				ServicosEmail.enviarMensagemHTML(emails, 
 						envioEmail.getEmailRemetente(), 
 						"COSANPA", 
@@ -62331,7 +62328,7 @@ public class ControladorCobranca extends ControladorComum {
 						ModeloEmailAvisoCorte.getMensagem(nomeCliente));
 			} 
 		} catch (ErroEmailException e) {
-			throw new ActionServletException("erro.email.vencimento.fatura");
+			throw new ActionServletException("erro.email.notificacao.aviso.corta");
 		}
 	}
 	

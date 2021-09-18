@@ -26768,11 +26768,12 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					.append(" inner join cadastro.cliente_imovel ci on ci.imov_id = i.imov_id  ")
 					.append(" inner join cadastro.cliente c on c.clie_id = ci.clie_id ")
 					.append(" inner join cadastro.quadra q on q.qdra_id = i.qdra_id ")
-					.append(" inner join cadastro.cliente_fone cf on cf.clie_id = c.clie_id  and cf.fnet_id = :celular and cf.cfon_icfonepadrao = :sim ")
+					.append(" left join cadastro.cliente_fone cf on cf.clie_id = c.clie_id  and cf.fnet_id = :celular and cf.cfon_icfonepadrao = :sim ")
 					.append(" where cd.dotp_id = :avisoCorte ")
 					.append(" and aviso.cbdo_tmemissao >= :dataEmissao")
 					.append(" and ci.clim_dtrelacaofim is null and ci.clim_icnomeconta = :sim ")
-					.append(" and q.rota_id = :idRota ");
+					.append(" and q.rota_id = :idRota ")
+					.append(" and c.clie_icenvioemail = :sim ");
 
 			retorno = session.createSQLQuery(consulta.toString())
 					.addScalar("idAviso", Hibernate.INTEGER)
