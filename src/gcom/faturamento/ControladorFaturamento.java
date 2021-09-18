@@ -15966,7 +15966,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										Object[] contasEmail = (Object[]) iteratosContas.next();
 
 										envioEmailVencimentoFatura(contasEmail, qtdDiasVencimento);
-										envioSMSVencimentoFatura(contasEmail);
+										//envioSMSVencimentoFatura(contasEmail);
 									} catch (Exception e) {
 										System.out.println("erro.notificacao.vencimento.fatura");
 									}
@@ -15993,7 +15993,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		try {
 			Conta conta = new Conta((Integer) contasEmail[0]);
 			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
-			String emailReceptor = "pamela@prodigasistemas.com.br";
+			String emailReceptor = (String) contasEmail[2];;
 			String nomeCliente = (String) contasEmail[3];
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 			
