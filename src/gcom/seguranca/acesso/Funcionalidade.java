@@ -206,7 +206,9 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	
 	public static final int EMITIR_COMUNICADO_ALTERACAO_CADASTRAL = 16067;
 	
-	public static final int ENVIO_EMAIL_NOTIFICACAO_VENCIMENTO_FATURA = 16078;
+	public static final int ENVIO_NOTIFICACAO_VENCIMENTO_FATURA = 16078;
+	
+	public static final int ENVIO_NOTIFICACAO_AVISO_CORTE = 16080;
 	
 	private Integer id;
 

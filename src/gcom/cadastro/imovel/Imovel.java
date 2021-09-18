@@ -339,6 +339,8 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
     @ControleAlteracao (funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
 	private Integer individualizacao;
     
+    private Short indicadorEnvioContaFisica;
+    
     private Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes;
 
 	public final static Short INDICADOR_CONTA_RESPONSAVEL = new Short("1");
@@ -350,7 +352,9 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public final static Short INDICADOR_JARDIM_SIM = new Short("1");
 	public final static Short INDICADOR_DEBITO_AUTOMATICO = new Short("1");
 	public final static Short INDICADOR_NAO_DEBITO_AUTOMATICO = new Short("2");
-
+	public final static Short INDICADOR_ENVIO_CONTA_FISICA = new Short ("1");
+	public final static Short INDICADOR_NAO_ENVIO_CONTA_FISICA = new Short ("2");
+	
 	public Imovel(
 			short lote,
 			short subLote,
@@ -377,6 +381,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 			Short indicadorEmissaoExtratoFaturamento,
 			Short indicadorDebitoConta,
 			Short indicadorExclusao,
+			Short indicadorEnvioContaFisica,
 			String coordenadaX,
 			String coordenadaY,
 			LigacaoEsgoto ligacaoEsgoto,
@@ -431,6 +436,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 		this.indicadorEmissaoExtratoFaturamento = indicadorEmissaoExtratoFaturamento;
 		this.indicadorDebitoConta = indicadorDebitoConta;
 		this.indicadorExclusao = indicadorExclusao;
+		this.indicadorEnvioContaFisica = indicadorEnvioContaFisica;
 		this.coordenadaX = coordenadaX;
 		this.coordenadaY = coordenadaY;
 		this.ligacaoEsgoto = ligacaoEsgoto;
@@ -2605,4 +2611,13 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public boolean isLigadoEsgoto() {
 		return this.ligacaoEsgotoSituacao != null && this.ligacaoEsgotoSituacao.getId().equals(LigacaoEsgotoSituacao.LIGADO);
 	}
+
+	public Short getIndicadorEnvioContaFisica() {
+		return indicadorEnvioContaFisica;
+	}
+
+	public void setIndicadorEnvioContaFisica(Short indicadorEnvioContaFisica) {
+		this.indicadorEnvioContaFisica = indicadorEnvioContaFisica;
+	}
+	
 }

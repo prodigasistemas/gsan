@@ -291,6 +291,7 @@ public final class ServicosEmail implements Serializable {
 				msg.setContent(multipart);
 				msg.setSentDate(new Date());
 
+				
 				Transport.send(msg);
 			}
 		} catch (Exception ex) {
@@ -405,4 +406,50 @@ public final class ServicosEmail implements Serializable {
 			IoUtil.fecharStream(out);
 		}
     }
+	
+	/**
+	 * Método que envia mensagens em html
+	 */
+	@SuppressWarnings("rawtypes")
+	public static void enviarMensagemHTMLComAnexo(String destinatario, String from, String nameFrom, String subject, String codigoHtml, File arquivo) 
+			throws ErroEmailException {
+		try {
+			if (servidorSMTP != null && !servidorSMTP.equals(ConstantesSistema.SMTP_INVALIDO)) {
+				Properties properties = System.getProperties();
+				properties.put("mail.smtp.host", servidorSMTP);
+
+				Session session = Session.getDefaultInstance(properties, null);
+
+				Message msg = new MimeMessage(session);
+				msg.setFrom(new InternetAddress(from, nameFrom));
+				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario, false));
+				msg.setSubject(subject);
+
+				BodyPart messageBodyPart = new MimeBodyPart();
+				messageBodyPart.setContent(codigoHtml, "text/html");
+
+				Multipart multipart = new MimeMultipart();
+				multipart.addBodyPart(messageBodyPart);
+				messageBodyPart = new MimeBodyPart();
+				messageBodyPart.setContent(TEXTO_EMAIL, "text/html");
+				multipart.addBodyPart(messageBodyPart);
+				msg.setContent(multipart);
+				msg.setSentDate(new Date());
+				
+				DataSource source = new FileDataSource(arquivo);
+
+				messageBodyPart.setDataHandler(new DataHandler(source));
+				messageBodyPart.setFileName(source.getName());
+				multipart.addBodyPart(messageBodyPart);
+
+				msg.setContent(multipart);
+				msg.setSentDate(new Date());
+				
+				Transport.send(msg);
+			}
+		} catch (Exception ex) {
+			throw new ErroEmailException("Erro ao Enviar Mensagem");
+		}
+	}
+	
 }

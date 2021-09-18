@@ -1,9 +1,8 @@
 package gcom.util.email;
 
-public class ModeloEmailVencimento {
+public class ModeloEmailAvisoCorte {
 
 	private static String NOME_CLIENTE = "NOME_CLIENTE";
-	private static String QTD_DIAS_VENCIMENTO = "QTD_DIAS_VENCIMENTO";
 	
 	private static String CABECALHO_PAGINA = "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">" + 
 			"<html>" + 
@@ -23,8 +22,9 @@ public class ModeloEmailVencimento {
 			"	<div> " + 
 			"		<h3>Ol&aacute;, <b>NOME_CLIENTE</b></h3>" + 
 			"		<p>" +		
-			"			Esta mensagem &eacute; para lembrar que o vencimento da sua fatura est&aacute; bem perto!<br>" +
-			"			Falta apenas <b>DATA_VENCIMENTO</b> dia(s) at&eacute; a data limite de pagamento .<br>" +
+			"			Esta mensagem &eacute; para informar que h&aacute; registro de d&eacute;bitos em sua matr&iacute;cula h&aacute;" +
+			"			mais de 30 dias em nosso sistema. Evite a suspens&atilde;o do abastecimento de &aacute;gua" +
+			"			efetuando o pagamento do boleto anexo neste e-mail.<br>" +
 			"			Para facilitar, enviamos em anexo o boleto para pagamento e voc&ecirc; pode pag&aacute;-lo" +
 			"			por meio de internet banking ou em lot&eacute;ricas, ag&ecirc;ncias banc&aacute;rias e nos caixas" +
 			"			eletr&ocirc;nicos. Se voc&ecirc; tiver o DDA (D&eacute;bito Direto Autorizado) cadastrado em seu" +
@@ -50,13 +50,13 @@ public class ModeloEmailVencimento {
 			"</body>" + 
 			"</html:html>";
 	
-	public static String getMensagem(String nomeCliente, Integer qtdDiasVencimento) {
+	public static String getMensagem(String nomeCliente) {
 		StringBuilder texto = new StringBuilder();
 		
 		texto.append(CABECALHO_PAGINA)
 			.append(CORPO_EMAIL)
 			.append(RODAPE_PAGINA);
 		
-		return texto.toString().replace(NOME_CLIENTE, nomeCliente).replace(QTD_DIAS_VENCIMENTO, qtdDiasVencimento.toString());
+		return texto.toString().replace(NOME_CLIENTE, nomeCliente);
 	}
 }

@@ -20,13 +20,13 @@ import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
 
-public class BatchEnvioEmailNotificacaoVencimentoFaturaMDB 		implements
+public class BatchEnvioNotificacaoVencimentoFaturaMDB 		implements
 MessageDrivenBean,
 MessageListener{
 	
 	private static final long serialVersionUID = 1L;
 	
-	public BatchEnvioEmailNotificacaoVencimentoFaturaMDB() {
+	public BatchEnvioNotificacaoVencimentoFaturaMDB() {
 		super();
 	}
 	
@@ -45,7 +45,7 @@ MessageListener{
 			
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
-				this.getControladorFaturamento().envioEmailVencimentoFatura(
+				this.getControladorFaturamento().envioNotificacaoVencimentoFatura(
 						(Integer) ((Object[]) objectMessage.getObject())[0],
 						(Collection<Integer>) ((Object[]) objectMessage.getObject())[1]);
 

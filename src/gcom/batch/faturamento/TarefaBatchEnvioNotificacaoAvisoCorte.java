@@ -23,9 +23,9 @@ import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
 import gcom.util.agendadortarefas.AgendadorTarefas;
 
-public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatch{
+public class TarefaBatchEnvioNotificacaoAvisoCorte extends TarefaBatch{
 
-	public TarefaBatchEnvioEmailNotificacaoVencimentoFatura(Usuario usuario,
+	public TarefaBatchEnvioNotificacaoAvisoCorte(Usuario usuario,
 			int idFuncionalidadeIniciada) {
 
 		super(usuario, idFuncionalidadeIniciada);
@@ -34,7 +34,7 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 	private static final long serialVersionUID = 1L;
 	
 	@Deprecated
-	public TarefaBatchEnvioEmailNotificacaoVencimentoFatura() {
+	public TarefaBatchEnvioNotificacaoAvisoCorte() {
 		super(null, 0);
 	}
 
@@ -45,14 +45,11 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 		
         Iterator iterator = colecaoLocalidade.iterator();
         
-        
         while (iterator.hasNext()) {
 
             Localidade localidade = (Localidade) iterator.next();
             
-            System.out.println("\nLOCALIDADE: " + localidade.getDescricao());
-            
-			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENVIO_EMAIL_NOTIFICACAO_VENCIMENTO_FATURA,
+			enviarMensagemControladorBatch(ConstantesJNDI.BATCH_ENVIO_NOTIFICACAO_AVISO_CORTE,
 					new Object[] { this.getIdFuncionalidadeIniciada(), Collections.singletonList(localidade.getId()) });
 		}
 
@@ -72,33 +69,7 @@ public class TarefaBatchEnvioEmailNotificacaoVencimentoFatura extends TarefaBatc
 
 	@Override
 	public void agendarTarefaBatch() {
-		AgendadorTarefas.agendarTarefa("EnvioEmailNotificacaoVencimentoFaturaBatch", this);
-	}
-	
-	
-	private ControladorMicromedicaoLocal getControladorMicromedicao() {
-		ControladorMicromedicaoLocalHome localHome = null;
-		ControladorMicromedicaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorMicromedicaoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
+		AgendadorTarefas.agendarTarefa("EnvioNotificacaoAvisoCorteBatch", this);
 	}
 
 }

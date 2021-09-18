@@ -1,5 +1,7 @@
 package gcom.cadastro.cliente;
 
+import java.util.Collection;
+
 import gcom.cadastro.cliente.bean.ClienteEmitirBoletimCadastroHelper;
 import gcom.cadastro.cliente.bean.PesquisarClienteResponsavelSuperiorHelper;
 import gcom.cadastro.endereco.LogradouroBairro;
@@ -7,8 +9,6 @@ import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.localidade.Localidade;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
-
-import java.util.Collection;
 
 public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 
@@ -195,4 +195,5 @@ public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 	public String obterEnderecoCorrespondencia(Integer idCliente) throws ControladorException;
 	
 	public String obterNomeClienteConta(Integer idImovel) throws ControladorException;
+	
 }

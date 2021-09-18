@@ -1966,4 +1966,6 @@ public interface IRepositorioCobranca {
 	public Collection<CobrancaAcaoAtividadeComando> obterListaAtividadesEventuaisAcaoCobrancaComandadasRecentes() throws ErroRepositorioException;
 	
 	public Collection pesquisarNumeroQuadraPorAtividadeComando (Integer idAtividadeComando) throws ErroRepositorioException;
+	
+	public Collection<CobrancaDocumento> pesquisarAvisosParaNotificacao(Integer idRota) throws ErroRepositorioException;
 }

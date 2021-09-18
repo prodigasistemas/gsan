@@ -78,6 +78,7 @@ import gcom.relatorio.cobranca.parcelamento.RelatorioRelacaoParcelamentoCartaoCr
 import gcom.relatorio.faturamento.conta.RelatorioContaBean;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
+import gcom.util.ErroRepositorioException;
 import gcom.util.filtro.Filtro;
 
 import java.math.BigDecimal;
@@ -1097,4 +1098,6 @@ public interface IControladorCobranca {
 	
 	public List<OrdemSuspensaoFornecimentoDTO> gerarOrdemSuspensaoFornecimento(Integer idAcaoCronograma, Integer idAcaoComando) throws ControladorException;
 	
+	public void envioNotificacaoAvisoCorte(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
+			throws ControladorException;
 }

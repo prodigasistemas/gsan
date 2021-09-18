@@ -931,6 +931,11 @@ public class UC0745GerarArquivoTextoFaturamento {
 				if (arrayImovel[69] != null) {
 					imovel.setIndicadorImovelAreaComum((Short) arrayImovel[69]);
 				}
+				
+				//INDICADOR DE ENVIO DE CONTA FÍSICA
+				if (arrayImovel[76] != null) {
+					imovel.setIndicadorEnvioContaFisica((Short) arrayImovel[76]);
+				}
 
 				boolean emitir = true;
 				
@@ -1916,6 +1921,12 @@ public class UC0745GerarArquivoTextoFaturamento {
 			arquivoTextoRegistroTipo01.append(Util.formatarDataAAAAMMDD(cobrancaDocumento.getEmissao()));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 8));
+		}
+		
+		if (imovel.getIndicadorEnvioContaFisica() != null && Short.valueOf(imovel.getIndicadorEnvioContaFisica()) == Short.valueOf(Imovel.INDICADOR_ENVIO_CONTA_FISICA)) {
+			arquivoTextoRegistroTipo01.append(Util.completaString(Imovel.INDICADOR_ENVIO_CONTA_FISICA + "", 1));
+		} else {
+			arquivoTextoRegistroTipo01.append(Util.completaString(Imovel.INDICADOR_NAO_ENVIO_CONTA_FISICA + "", 1));
 		}
 
 		arquivoTextoRegistroTipo01.append(System.getProperty("line.separator"));

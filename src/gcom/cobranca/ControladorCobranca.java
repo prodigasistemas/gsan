@@ -239,6 +239,7 @@ import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoAtividade;
 import gcom.faturamento.FaturamentoGrupo;
+import gcom.faturamento.FaturamentoParametro;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.QualidadeAgua;
@@ -377,6 +378,8 @@ import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
+import gcom.util.email.ModeloEmailAvisoCorte;
+import gcom.util.email.ModeloEmailVencimento;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.ComparacaoTexto;
 import gcom.util.filtro.ConectorOr;
@@ -62249,6 +62252,119 @@ public class ControladorCobranca extends ControladorComum {
 			return (HidrometroInstalacaoHistorico) colecao.iterator().next();
 		} else {
 			return null;
+		}
+	}
+	
+	public void envioNotificacaoAvisoCorte(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
+			throws ControladorException {
+
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+				UnidadeProcessamento.LOCALIDADE, ((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
+
+		try {
+			if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
+				
+				for (Integer idLocalidade : colecaoIdsLocalidades) {
+
+					Collection<Integer> idsRotas = this.getControladorMicromedicao()
+							.obterIdsRotasPelaLocalidade(idLocalidade);
+
+					if (idsRotas != null && !idsRotas.isEmpty()) {
+
+						for (Integer idRota : idsRotas) {
+
+							Collection avisos = repositorioCobranca.pesquisarAvisosParaNotificacao(idRota); 
+
+							if (avisos != null && !avisos.isEmpty()) {
+
+								Iterator iteratosAvisos = avisos.iterator();
+
+								while (iteratosAvisos.hasNext()) {
+									try {
+
+										Object[] aviso = (Object[]) iteratosAvisos.next();
+
+										envioEmailAvisoCorte(aviso);
+										//envioSMSAvisoCorte(aviso);
+									} catch (Exception e) {
+										e.printStackTrace();
+										System.out.println("erro.notificacao.vencimento.fatura");
+									}
+								}
+
+							}
+
+						}
+					}
+				}
+
+			}
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+
+		} catch (Exception e) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+			throw new EJBException(e);
+		}
+	}
+	
+	private void envioEmailAvisoCorte(Object[] aviso)
+			throws ControladorException {
+
+		try {
+			String nomeCliente = (String) aviso[2];
+			String emailReceptor = (String) aviso[3];
+			
+			EnvioEmail envioEmail = this.getControladorCadastro()
+					.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
+		
+			if (emailReceptor != null) {
+				Collection<String> emails = new ArrayList<String>();
+				emails.add(emailReceptor);
+				
+				ServicosEmail.enviarMensagemHTML(emails, 
+						envioEmail.getEmailRemetente(), 
+						"COSANPA", 
+						envioEmail.getTituloMensagem(), 
+						ModeloEmailAvisoCorte.getMensagem(nomeCliente));
+			} 
+		} catch (ErroEmailException e) {
+			throw new ActionServletException("erro.email.notificacao.aviso.corta");
+		}
+	}
+	
+	private void envioSMSAvisoCorte(Object[] aviso)
+			throws ControladorException {
+
+		try {
+			
+			String ddd = (String) aviso[4];
+			String telefone = (String) aviso[5];
+			
+			if (ddd != null && telefone != null) {
+				String celular = ddd.concat(telefone);
+				celular.trim();
+				
+				//ServicoSMS.enviarSMS(celular, ServicoSMS.MSG_CORTE);
+				System.out.println("ENVIANDO SMS PARA " + celular);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ActionServletException("erro.sms.vencimento.fatura");
+		}
+	}
+	
+	private Collection obterAvisosParaNotificacao() {
+		try {
+			FiltroCobrancaDocumento filtro = new FiltroCobrancaDocumento();
+			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.DOCUMENTO_TIPO_ID,
+					DocumentoTipo.AVISO_CORTE));
+			filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.DATA_EMISSAO, new Date()));
+			filtro.setCampoOrderBy(FiltroCobrancaDocumento.ID);
+		
+			return getControladorUtil().pesquisar(filtro, CobrancaDocumento.class.getName());
+		} catch (ControladorException e) {
+			e.printStackTrace();
+			throw new ActionServletException("erro.notificacao.aviso.corte.consultar.avisos");
 		}
 	}
 }

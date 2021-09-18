@@ -5,15 +5,15 @@
 		<message-driven>
 			<display-name>
 
-				BatchEnvioEmailNotificacaoVencimentoFaturaMDB
+				BatchEnvioNotificacaoAvisoCorteMDB
 
 			</display-name>
 
-			<ejb-name>BatchEnvioEmailNotificacaoVencimentoFaturaMDB</ejb-name>
+			<ejb-name>BatchEnvioNotificacaoAvisoCorteMDB</ejb-name>
 
 			<ejb-class>
 
-				gcom.batch.faturamento.BatchEnvioEmailNotificacaoVencimentoFaturaMDB
+				gcom.batch.cobranca.BatchEnvioNotificacaoAvisoCorteMDB
 
 
 			</ejb-class>
@@ -27,7 +27,7 @@
 		<container-transaction>
 			<method>
 
-				<ejb-name>BatchEnvioEmailNotificacaoVencimentoFaturaMDB</ejb-name>
+				<ejb-name>BatchEnvioNotificacaoAvisoCorteMDB</ejb-name>
 
 				<method-name>*</method-name>
 			</method>

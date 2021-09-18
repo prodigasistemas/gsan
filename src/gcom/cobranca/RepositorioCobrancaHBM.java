@@ -46,6 +46,7 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.EsferaPoder;
+import gcom.cadastro.cliente.FoneTipo;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.CategoriaTipo;
@@ -70,6 +71,7 @@ import gcom.cobranca.cobrancaporresultado.ArquivoTextoNegociacaoCobrancaEmpresaH
 import gcom.cobranca.cobrancaporresultado.NegociacaoCobrancaEmpresa;
 import gcom.cobranca.cobrancaporresultado.NegociacaoContaCobrancaEmpresa;
 import gcom.cobranca.contratoparcelamento.ContratoParcelamento;
+import gcom.cobranca.dto.CobrancaDocumentoDTO;
 import gcom.cobranca.parcelamento.ParcDesctoInativVista;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoDescontoInatividade;
@@ -86,6 +88,7 @@ import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.financeiro.FinanciamentoTipo;
+import gcom.gui.ActionServletException;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoGerarOSHelper;
 import gcom.gui.relatorio.cobranca.FaixaHelper;
 import gcom.gui.relatorio.cobranca.FiltroRelatorioDocumentosAReceberHelper;
@@ -105,6 +108,7 @@ import gcom.util.HibernateUtil;
 import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.GeradorHQLCondicional;
+import gcom.util.filtro.ParametroSimples;
 
 public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
@@ -26744,5 +26748,53 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		
 		return retorno;
 		
+	}
+	
+	public Collection pesquisarAvisosParaNotificacao(Integer idRota) throws ErroRepositorioException {
+		Collection retorno = new ArrayList();
+
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("select cd.cbdo_id as idAviso,") //0
+					.append(" c.clie_id as idCliente, ") //1
+					.append(" c.clie_nmcliente as nomeCliente, ") //2
+					.append(" c.clie_dsemail as email, ") //3
+					.append(" cf.cfon_cdddd as ddd, ") //4
+					.append(" cf.cfon_nnfone as celular ") //5
+					.append(" from cobranca.cobranca_documento cd ")
+					.append(" inner join cadastro.imovel i on i.imov_id = cd.imov_id ")
+					.append(" inner join cadastro.cliente_imovel ci on ci.imov_id = i.imov_id  ")
+					.append(" inner join cadastro.cliente c on c.clie_id = ci.clie_id ")
+					.append(" inner join cadastro.quadra q on q.qdra_id = i.qdra_id ")
+					.append(" left join cadastro.cliente_fone cf on cf.clie_id = c.clie_id  and cf.fnet_id = :celular and cf.cfon_icfonepadrao = :sim ")
+					.append(" where cd.dotp_id = :avisoCorte ")
+					.append(" and aviso.cbdo_tmemissao >= :dataEmissao")
+					.append(" and ci.clim_dtrelacaofim is null and ci.clim_icnomeconta = :sim ")
+					.append(" and q.rota_id = :idRota ")
+					.append(" and c.clie_icenvioemail = :sim ");
+
+			retorno = session.createSQLQuery(consulta.toString())
+					.addScalar("idAviso", Hibernate.INTEGER)
+					.addScalar("idCliente", Hibernate.INTEGER)
+					.addScalar("nomeCliente", Hibernate.STRING)
+					.addScalar("email", Hibernate.STRING)
+					.addScalar("ddd", Hibernate.STRING)
+					.addScalar("celular", Hibernate.STRING)
+	    			.setDate("dataEmissao", new Date())
+	    			.setInteger("avisoCorte", DocumentoTipo.AVISO_CORTE)
+	    			.setInteger("celular", FoneTipo.CELULAR)
+	    			.setShort("sim", ConstantesSistema.SIM)
+	    			.setInteger("idRota", idRota)
+	    			.list();
+
+		} catch (HibernateException e) {
+		  throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+		  HibernateUtil.closeSession(session);
+		}
+		return retorno;
+
 	}
 }

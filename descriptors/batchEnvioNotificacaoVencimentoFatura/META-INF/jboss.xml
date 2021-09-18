@@ -4,11 +4,11 @@
 	<enterprise-beans>
 		<message-driven>
 
-			<ejb-name>BatchEnvioEmailNotificacaoVencimentoFaturaMDB</ejb-name>
+			<ejb-name>BatchEnvioNotificacaoVencimentoFaturaMDB</ejb-name>
 
 		<destination-jndi-name>
 
-				BatchEnvioEmailNotificacaoVencimentoFaturaMDB
+				BatchEnvioNotificacaoVencimentoFaturaMDB
 
 			</destination-jndi-name>
 		</message-driven>

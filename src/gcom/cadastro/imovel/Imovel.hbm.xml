@@ -65,6 +65,8 @@
         <property name="quantidadeNosAltos" 		 type="java.lang.Integer"     column="imov_qtdnosaltos" 				 length="3"/>
         <property name="individualizacao" 			 type="java.lang.Integer"     column="imov_individualizacao" 			 length="3"/>
         
+        <property name="indicadorEnvioContaFisica"    type="java.lang.Short"    column="imov_icenviocontafisica"     length="2" not-null="true" />
+        
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to ImovelContaEnvio -->
 		<many-to-one name="imovelContaEnvio" class="gcom.cadastro.imovel.ImovelContaEnvio" not-null="true">
