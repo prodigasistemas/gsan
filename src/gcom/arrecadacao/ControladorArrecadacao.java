@@ -2019,24 +2019,25 @@ public class ControladorArrecadacao extends ControladorComum {
 								int contador = 1;
 								int total = colecaoPagamentos.size();
 								Iterator iter = colecaoPagamentos.iterator();
-
+								System.out.println(" >> MovArrec.Pagamentos - 1");
 								while (iter.hasNext()) {
-
+									System.out.println("    >> MovArrec.Pagamentos - 1.1");
 									if (contador++ % 500 == 0) {
 
 										System.out.println(" >> MovArrec.Atualizando itens de cobranca[" + contador++ + "/" + total + "]");
 
 									}
-
 									Pagamento pagamento = (Pagamento) iter.next();
+									System.out.println("    >> MovArrec.Pagamentos - 1.2 [" + pagamento.getId() + "]");
 
 									getControladorCobranca().atualizarSituacaoCobrancaDocumentoItemAPartirPagamento(pagamento, CobrancaDebitoSituacao.PAGO);
 									getControladorSpcSerasa().atualizarNegativadorMovimentoRegItemAPartirPagamento(pagamento);
+									System.out.println("    >> MovArrec.Pagamentos - 1.3" + pagamento.getId() + "]");
 								}
 
 								System.out.println(" >> MovArrec.Finalizou atualização dos itens");
 							}
-
+							System.out.println(" >> MovArrec.Pagamentos - 2");
 							// PREPARANDO A INSERÇÃO DAS DEVOLUÇÕES
 							if (devolucoes != null && !devolucoes.isEmpty()) {
 
@@ -2107,7 +2108,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								getControladorBatch().inserirColecaoObjetoParaBatchTransacao(colecaoDevolucao);
 
 							}
-
+							System.out.println(" >> MovArrec.Pagamentos - 3");
 							// PREPARANDO A RETIFICAÇÃO DAS CONTAS PARA DAR
 							// BAIXA NOS PAGAMENTOS PARCIAIS
 							if (pagamentosParciais != null && !pagamentosParciais.isEmpty()) {
@@ -2152,7 +2153,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								}
 
 							}
-
+							System.out.println(" >> MovArrec.Pagamentos - 4");
 							// o sistema atualiza o numero sequencial do
 							// arquivo(NSA)
 							// verifica o tipo de pagamento
@@ -2163,7 +2164,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								arrecadadorContrato.setNumeroSequecialArquivoRetornoCodigoBarras(numeroSequecialArquivoRetornoCodigoBarras);
 
 							}
-
+							System.out.println(" >> MovArrec.Pagamentos - 5");
 							// caso a coleção de registros c não está vazia
 							// então
 							// adiciona mais 1 para numero do
@@ -2173,7 +2174,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								flagEnvioDebitoAutomatico = true;
 								arrecadadorContrato.setNumeroSequencialArquivoEnvioDebitoAutomatico(numeroSequencialArquivoEnvioDebitoAutomatico);
 							}
-
+							System.out.println(" >> MovArrec.Pagamentos - 6");
 							// atualiza arrecadação contrato na base
 							try {
 								repositorioArrecadacao.atualizarDadosArrecadadorContrato(arrecadadorContrato, flagEnvioDebitoAutomatico, flagRetornoCodigoBarras,
@@ -2181,7 +2182,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							} catch (ErroRepositorioException e) {
 								throw new ControladorException("erro.sistema", e);
 							}
-
+							System.out.println(" >> MovArrec.Pagamentos - 7");
 							// -- PARTE QUE LIMPA OS CAMPOS PARA LER UM NOVO
 							// ARQUIVO(CASO EXISTA)--
 							linhas = new ArrayList();
@@ -2204,14 +2205,16 @@ public class ControladorArrecadacao extends ControladorComum {
 							countRegistros = 0;
 							devolucoes = new ArrayList();
 						}
-
+						System.out.println(" >> MovArrec.Pagamentos - 8");
 					}
+					System.out.println(" >> MovArrec.Pagamentos - 9");
 				}
+				System.out.println(" >> MovArrec.Pagamentos - 10");
 				// caso não exista o registro Z.
 				if (!verificaRegistroZ) {
 					throw new ControladorException("atencao.arquivo.movimento.nao.codigo.z");
 				}
-
+				System.out.println(" >> MovArrec.Pagamentos - 11");
 			} else {
 				tamanhoLinha = 400;
 
@@ -2623,7 +2626,7 @@ public class ControladorArrecadacao extends ControladorComum {
 				}
 
 			}
-
+			System.out.println(" >> MovArrec.Pagamentos - 12");
 		} catch (ControladorException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException(e.getMessage());
