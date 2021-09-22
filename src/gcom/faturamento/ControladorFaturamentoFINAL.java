@@ -9435,7 +9435,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.atualizarSituacaoCobrancaDocumentoItem(
 										CobrancaDebitoSituacao.CANCELADO,
 										new Date(), contaColecao.getId(), null,
-										null);
+										null, null);
 
 						// Alterado Bruno Barros - 05/05/2009,
 						// remover os conta id dos pagamentos cuja as contas
@@ -10689,7 +10689,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// cancelado
 				repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(
 						CobrancaDebitoSituacao.CANCELADO, new Date(), null,
-						null, debitoACobrar.getId());
+						null, debitoACobrar.getId(), null);
 
 			} catch (ErroRepositorioException ex) {
 				sessionContext.setRollbackOnly();
@@ -12817,7 +12817,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												CobrancaDebitoSituacao.CANCELADO,
 												new Date(), null,
 												guiaPagamentoManter.getId(),
-												null);
+												null, null);
 							} catch (ErroRepositorioException ex) {
 								sessionContext.setRollbackOnly();
 								new ControladorException("erro.sistema", ex);
@@ -23990,7 +23990,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// cancelado
 					repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(
 							CobrancaDebitoSituacao.PENDENTE, new Date(),
-							conta.getId(), null, null);
+							conta.getId(), null, null, null);
 				} catch (ErroRepositorioException ex) {
 					sessionContext.setRollbackOnly();
 					new ControladorException("erro.sistema", ex);
@@ -40067,7 +40067,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// cancelado
 					repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(
 							CobrancaDebitoSituacao.CANCELADO, new Date(),
-							contaColecao.getId(), null, null);
+							contaColecao.getId(), null, null, null);
 				} catch (ErroRepositorioException ex) {
 					sessionContext.setRollbackOnly();
 					new ControladorException("erro.sistema", ex);
@@ -43059,7 +43059,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// cancelado
 				repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(
 						CobrancaDebitoSituacao.CANCELADO, new Date(),
-						contaColecao.getId(), null, null);
+						contaColecao.getId(), null, null, null);
 			} catch (ErroRepositorioException ex) {
 				sessionContext.setRollbackOnly();
 				new ControladorException("erro.sistema", ex);
@@ -53080,7 +53080,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// cancelado
 				repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(
 						CobrancaDebitoSituacao.CANCELADO, new Date(),
-						contaColecao.getId(), null, null);
+						contaColecao.getId(), null, null, null);
 			} catch (ErroRepositorioException ex) {
 				sessionContext.setRollbackOnly();
 				new ControladorException("erro.sistema", ex);

@@ -9770,7 +9770,7 @@ public class ControladorCobranca extends ControladorComum {
 			// Atualizar documento de cobranca da conta, se houver, para
 			// parcelado
 			repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(CobrancaDebitoSituacao.PARCELADO, new Date(), conta.getId(), null,
-					null);
+					null, null);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			new ControladorException("erro.sistema", ex);
@@ -15963,7 +15963,7 @@ public class ControladorCobranca extends ControladorComum {
 
 						try {
 							// Atualizar documento de cobranca da conta, se houver, para cancelado
-							repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(CobrancaDebitoSituacao.PARCELADO, new Date(), null, guiaPagamento.getId(), null);
+							repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(CobrancaDebitoSituacao.PARCELADO, new Date(), null, guiaPagamento.getId(), null, null);
 						} catch (ErroRepositorioException ex) {
 							sessionContext.setRollbackOnly();
 							new ControladorException("erro.sistema", ex);
@@ -16028,7 +16028,7 @@ public class ControladorCobranca extends ControladorComum {
 
 						try {
 							// Atualizar documento de cobranca da conta, se houver, para cancelado
-							repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(CobrancaDebitoSituacao.PARCELADO, new Date(), null, null, debitoACobrarParaAtualizacao.getId());
+							repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(CobrancaDebitoSituacao.PARCELADO, new Date(), null, null, debitoACobrarParaAtualizacao.getId(), null);
 						} catch (ErroRepositorioException ex) {
 							sessionContext.setRollbackOnly();
 							new ControladorException("erro.sistema", ex);
@@ -16984,7 +16984,7 @@ public class ControladorCobranca extends ControladorComum {
 						// Atualizar item de documento de cobranca da conta, se
 						// houver, para pendente
 						repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(CobrancaDebitoSituacao.PENDENTE, new Date(),
-								conta.getId(), null, null);
+								conta.getId(), null, null, null);
 
 					}
 				}
@@ -17017,7 +17017,7 @@ public class ControladorCobranca extends ControladorComum {
 					// Atualizar item de documento de cobranca da conta, se
 					// houver, para pendente
 					repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(CobrancaDebitoSituacao.PENDENTE, new Date(), null,
-							guiaPagamento.getId(), null);
+							guiaPagamento.getId(), null, null);
 
 				}
 
@@ -17043,7 +17043,7 @@ public class ControladorCobranca extends ControladorComum {
 					// Atualizar item de documento de cobranca da conta, se
 					// houver, para pendente
 					repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(CobrancaDebitoSituacao.PENDENTE, new Date(), null, null,
-							debitoACobrar.getId());
+							debitoACobrar.getId(), null);
 
 				}
 
@@ -40478,17 +40478,20 @@ public class ControladorCobranca extends ControladorComum {
 		Integer idConta = pagamento.getContaGeral() != null ? pagamento.getContaGeral().getId() : null;
 		Integer idDebitoACobrar = pagamento.getDebitoACobrarGeral() != null ? pagamento.getDebitoACobrarGeral().getId() : null;
 		Integer idGuiaPagamento = pagamento.getGuiaPagamento() != null ? pagamento.getGuiaPagamento().getId() : null;
+		Integer idCobrancaDocumento = pagamento.getCobrancaDocumento() != null ? pagamento.getCobrancaDocumento().getId() : null;
 
 		try {
 			// Atualizar item documento de cobranca da conta, se houver, para
 			// canceladoSystem.out.println("  -> Consultando itens <-");
 			System.out.println("  -> CONSULTANDO ITENS DO DOCUMENTO: ");
-			System.out.println("    -> IdConta: " + pagamento.getContaGeral() != null ? pagamento.getContaGeral().getId() : null);
-			System.out.println("    -> idDebitoACobrar: " + pagamento.getDebitoACobrarGeral() != null ? pagamento.getDebitoACobrarGeral().getId() : null);
-			System.out.println("    -> idGuiaPagamento: " + pagamento.getGuiaPagamento() != null ? pagamento.getGuiaPagamento().getId() : null);
-			System.out.println("    -> CobrancaDocumento: " + pagamento.getCobrancaDocumento() != null ? pagamento.getCobrancaDocumento().getId() : null);
-			repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(idCobrancaDebitoSituacao, new Date(), idConta, idGuiaPagamento,
-					idDebitoACobrar);
+			System.out.println("    -> IdConta: " + idConta);
+			System.out.println("    -> idDebitoACobrar: " + idDebitoACobrar);
+			System.out.println("    -> idGuiaPagamento: " + idGuiaPagamento);
+			System.out.println("    -> CobrancaDocumento: " + idCobrancaDocumento);
+			if (idCobrancaDocumento != null) {
+				repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(idCobrancaDebitoSituacao, new Date(), idConta, idGuiaPagamento,
+						idDebitoACobrar, idCobrancaDocumento);
+			}
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			new ControladorException("erro.sistema", ex);
@@ -61341,7 +61344,7 @@ public class ControladorCobranca extends ControladorComum {
 			// Atualizar item documento de cobranca da conta, se houver, para
 			// cancelado
 			repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(idCobrancaDebitoSituacao, dataPagamneto, idConta, idGuiaPagamento,
-					idDebitoACobrar);
+					idDebitoACobrar, null);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			new ControladorException("erro.sistema", ex);

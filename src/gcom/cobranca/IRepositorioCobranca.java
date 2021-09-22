@@ -530,7 +530,7 @@ public interface IRepositorioCobranca {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCobrancaDocumentoResumoAcaoCobranca(int idCobrancaAtividadeAcaoCronograma, int idCobrancaAtividadeAcaoComando) throws ErroRepositorioException;
 
-	public void atualizarSituacaoCobrancaDocumentoItem(Integer situacaoDebito, Date dataSituacao, Integer idConta, Integer idGuiaPagamento, Integer idDebitoACobrar) throws ErroRepositorioException;
+	public void atualizarSituacaoCobrancaDocumentoItem(Integer situacaoDebito, Date dataSituacao, Integer idConta, Integer idGuiaPagamento, Integer idDebitoACobrar, Integer idCobrancDocumento) throws ErroRepositorioException;
 	
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosCobrancaDocumentoItemSituacaoJaAtualizada(Integer idDocumentoCobranca) throws ErroRepositorioException;

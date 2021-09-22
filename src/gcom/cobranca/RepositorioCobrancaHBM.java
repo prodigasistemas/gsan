@@ -12830,7 +12830,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * 
 	 */
 	public void atualizarSituacaoCobrancaDocumentoItem(Integer situacaoDebito, Date dataSituacao, Integer idConta, Integer idGuiaPagamento,
-			Integer idDebitoACobrar) throws ErroRepositorioException {
+			Integer idDebitoACobrar, Integer idCobrancaDocumento) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
@@ -12876,7 +12876,10 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			} else {
 				return;
 			}
-
+			
+			if (idCobrancaDocumento != null) {
+				queryConsultar = queryConsultar + " and cobrancado0_.cbdo_id = " + idCobrancaDocumento;
+			}
 			queryConsultar = queryConsultar + " order by cobrancado0_.cbdo_tmemissao desc ";
 
 			Collection pesquisa = session.createSQLQuery(queryConsultar).addScalar("idItem", Hibernate.INTEGER).setMaxResults(1).list();
