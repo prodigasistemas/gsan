@@ -40481,7 +40481,12 @@ public class ControladorCobranca extends ControladorComum {
 
 		try {
 			// Atualizar item documento de cobranca da conta, se houver, para
-			// cancelado
+			// canceladoSystem.out.println("  -> Consultando itens <-");
+			System.out.println("  -> CONSULTANDO ITENS DO DOCUMENTO: ");
+			System.out.println("    -> IdConta: " + pagamento.getContaGeral() != null ? pagamento.getContaGeral().getId() : null);
+			System.out.println("    -> idDebitoACobrar: " + pagamento.getDebitoACobrarGeral() != null ? pagamento.getDebitoACobrarGeral().getId() : null);
+			System.out.println("    -> idGuiaPagamento: " + pagamento.getGuiaPagamento() != null ? pagamento.getGuiaPagamento().getId() : null);
+			System.out.println("    -> CobrancaDocumento: " + pagamento.getCobrancaDocumento() != null ? pagamento.getCobrancaDocumento().getId() : null);
 			repositorioCobranca.atualizarSituacaoCobrancaDocumentoItem(idCobrancaDebitoSituacao, new Date(), idConta, idGuiaPagamento,
 					idDebitoACobrar);
 		} catch (ErroRepositorioException ex) {
