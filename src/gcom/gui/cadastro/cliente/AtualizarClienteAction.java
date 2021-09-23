@@ -1,5 +1,22 @@
 package gcom.gui.cadastro.cliente;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.validator.DynaValidatorForm;
+
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
@@ -32,22 +49,6 @@ import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.validator.DynaValidatorForm;
-
 /**
  * Description of the Class
  * 
@@ -77,13 +78,13 @@ public class AtualizarClienteAction extends GcomAction {
 		HttpSession sessao = httpServletRequest.getSession(false);
 
 		// Pega o form do cliente
-		DynaValidatorForm clienteActionForm = (DynaValidatorForm) actionForm;
+		DynaValidatorForm form = (DynaValidatorForm) actionForm;
 
 		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
 		       
 		Fachada fachada = Fachada.getInstancia();
 
-		Short tipoPessoa = (Short) clienteActionForm.get("tipoPessoa");
+		Short tipoPessoa = (Short) form.get("tipoPessoa");
 		
 		String tipoPessoaForm = tipoPessoa.toString();
 
@@ -97,10 +98,10 @@ public class AtualizarClienteAction extends GcomAction {
 
 		Short indicadorUsoNomeFantasiaConta = ConstantesSistema.NAO;
 
-		if (clienteActionForm.get("indicadorExibicaoNomeConta") != null) {
+		if (form.get("indicadorExibicaoNomeConta") != null) {
 			
 			String indicadorExibicaoNomeConta = null;
-			indicadorExibicaoNomeConta = (String) clienteActionForm.get(
+			indicadorExibicaoNomeConta = (String) form.get(
 					"indicadorExibicaoNomeConta").toString();
 
 			if (indicadorExibicaoNomeConta
@@ -116,14 +117,14 @@ public class AtualizarClienteAction extends GcomAction {
 		if (tipoPessoa != null
 				&& tipoPessoa.equals(ClienteTipo.INDICADOR_PESSOA_JURIDICA)) {
 			// Vai para Pessoa Juridica mas tem dados existentes em pessoa fisica
-			String cpf = (String) clienteActionForm.get("cpf");
-			String rg = (String) clienteActionForm.get("rg");
-			String dataEmissao = (String) clienteActionForm.get("dataEmissao");
-			Integer idOrgaoExpedidor = (Integer) clienteActionForm.get("idOrgaoExpedidor");
-			Integer idUnidadeFederacao = (Integer) clienteActionForm.get("idUnidadeFederacao");
-			String dataNascimento = (String) clienteActionForm.get("dataNascimento");
-			Integer idProfissao = (Integer) clienteActionForm.get("idProfissao");
-			Integer idPessoaSexo = (Integer) clienteActionForm.get("idPessoaSexo");
+			String cpf = (String) form.get("cpf");
+			String rg = (String) form.get("rg");
+			String dataEmissao = (String) form.get("dataEmissao");
+			Integer idOrgaoExpedidor = (Integer) form.get("idOrgaoExpedidor");
+			Integer idUnidadeFederacao = (Integer) form.get("idUnidadeFederacao");
+			String dataNascimento = (String) form.get("dataNascimento");
+			Integer idProfissao = (Integer) form.get("idProfissao");
+			Integer idPessoaSexo = (Integer) form.get("idPessoaSexo");
 
 			if( ( idPessoaSexo != null && idPessoaSexo != ConstantesSistema.NUMERO_NAO_INFORMADO )
 				|| ( cpf != null && !cpf.trim().equalsIgnoreCase("") )
@@ -135,31 +136,31 @@ public class AtualizarClienteAction extends GcomAction {
 										|| ( idProfissao != null && idProfissao != ConstantesSistema.NUMERO_NAO_INFORMADO ) ){
 
 				// Limpar todo o conteúdo da página de pessoa física
-				clienteActionForm.set("cpf", "");
-				clienteActionForm.set("rg", "");
-				clienteActionForm.set("dataEmissao", "");
-				clienteActionForm.set("idOrgaoExpedidor", new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO));
-				clienteActionForm.set("idUnidadeFederacao", new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO));
-				clienteActionForm.set("dataNascimento", "");
-				clienteActionForm.set("idProfissao", new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO));
-				clienteActionForm.set("idPessoaSexo", new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO));
+				form.set("cpf", "");
+				form.set("rg", "");
+				form.set("dataEmissao", "");
+				form.set("idOrgaoExpedidor", new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO));
+				form.set("idUnidadeFederacao", new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO));
+				form.set("dataNascimento", "");
+				form.set("idProfissao", new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO));
+				form.set("idPessoaSexo", new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO));
 			}
 		}else if (tipoPessoa != null
 			&& tipoPessoa.equals(ClienteTipo.INDICADOR_PESSOA_FISICA)) {
 			// Vai para Pessoa Fisica mas tem dados existentes em pessoa juridica
 
-			String cnpj = (String) clienteActionForm.get("cnpj");
-			Integer idRamoAtividade = (Integer) clienteActionForm.get("idRamoAtividade");
-			String codigoClienteResponsavel = (String) clienteActionForm.get("codigoClienteResponsavel");
+			String cnpj = (String) form.get("cnpj");
+			Integer idRamoAtividade = (Integer) form.get("idRamoAtividade");
+			String codigoClienteResponsavel = (String) form.get("codigoClienteResponsavel");
 
 			if( (cnpj != null && !cnpj.trim().equalsIgnoreCase("") )
 					|| (idRamoAtividade != null && idRamoAtividade != ConstantesSistema.NUMERO_NAO_INFORMADO)
 						|| (codigoClienteResponsavel != null && !codigoClienteResponsavel.trim().equalsIgnoreCase(""))) {
 				// Limpa os dados da página de pessoa jurídica
-				clienteActionForm.set("cnpj", "");
-				clienteActionForm.set("idRamoAtividade", new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO));
-				clienteActionForm.set("codigoClienteResponsavel", "");
-				clienteActionForm.set("nomeClienteResponsavel", "");
+				form.set("cnpj", "");
+				form.set("idRamoAtividade", new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO));
+				form.set("codigoClienteResponsavel", "");
+				form.set("nomeClienteResponsavel", "");
 			}
 		}
 
@@ -176,7 +177,7 @@ public class AtualizarClienteAction extends GcomAction {
 				.getAttribute("colecaoClienteFone");
 
 		// Cria o objeto do cliente para ser inserido
-		String nome = ((String) clienteActionForm.get("nome")).toUpperCase();
+		String nome = ((String) form.get("nome")).toUpperCase();
 		
 		/**
 		 * Autor: Paulo Diniz
@@ -323,34 +324,34 @@ public class AtualizarClienteAction extends GcomAction {
 			
 		}
 		
-		String nomeAbreviado = ((String) clienteActionForm.get("nomeAbreviado")).toUpperCase();
-		String rg = (String) clienteActionForm.get("rg");
-		String cpf = (String) clienteActionForm.get("cpf");
+		String nomeAbreviado = ((String) form.get("nomeAbreviado")).toUpperCase();
+		String rg = (String) form.get("rg");
+		String cpf = (String) form.get("cpf");
 		if(cpf != null && cpf.trim().equals("")){
 			cpf = null;
 		}
-		String dataEmissao = (String) clienteActionForm.get("dataEmissao");
-		String dataNascimento = (String) clienteActionForm.get("dataNascimento");
-		String cnpj = (String) clienteActionForm.get("cnpj");
+		String dataEmissao = (String) form.get("dataEmissao");
+		String dataNascimento = (String) form.get("dataNascimento");
+		String cnpj = (String) form.get("cnpj");
 		if(cnpj != null && cnpj.trim().equals("")){
 			cnpj = null;
 		}
-		String indicadorAcaoCobranca =  (String)clienteActionForm.get("indicadorAcaoCobranca");
+		String indicadorAcaoCobranca =  (String)form.get("indicadorAcaoCobranca");
 
-		String email = (String) clienteActionForm.get("email");
+		String email = (String) form.get("email");
 		
 		Short indicadorUso = null;
 		
-		if(clienteActionForm.get("indicadorUso") != null){
-			indicadorUso = new Short((String) clienteActionForm
+		if(form.get("indicadorUso") != null){
+			indicadorUso = new Short((String) form
 					.get("indicadorUso"));
 		}else{
 			indicadorUso = new Short("1");	
 		}
 		
 		Short indicadorAcrescimos = null;
-		if(clienteActionForm.get("indicadorAcrescimos") != null){
-			indicadorAcrescimos = new Short((String)clienteActionForm
+		if(form.get("indicadorAcrescimos") != null){
+			indicadorAcrescimos = new Short((String)form
 					.get("indicadorAcrescimos"));
 		} else {
 			indicadorAcrescimos = new Short("1");
@@ -359,9 +360,9 @@ public class AtualizarClienteAction extends GcomAction {
 		// Verificar se o usuário digitou os 4 campos relacionados com o RG de
 		// pessoa física ou se ele não digitou nenhum
 
-		Integer idOrgaoExpedidor = (Integer) clienteActionForm
+		Integer idOrgaoExpedidor = (Integer) form
 				.get("idOrgaoExpedidor");
-		Integer idUnidadeFederacao = (Integer) clienteActionForm
+		Integer idUnidadeFederacao = (Integer) form
 				.get("idUnidadeFederacao");
 
 		if( ! ( ( (rg != null && !rg.trim().equalsIgnoreCase(""))
@@ -375,56 +376,56 @@ public class AtualizarClienteAction extends GcomAction {
 		}
 
 		OrgaoExpedidorRg orgaoExpedidorRg = null;
-		if (clienteActionForm.get("idOrgaoExpedidor") != null
-				&& ((Integer) clienteActionForm.get("idOrgaoExpedidor")).intValue() > 0) {
+		if (form.get("idOrgaoExpedidor") != null
+				&& ((Integer) form.get("idOrgaoExpedidor")).intValue() > 0) {
 			orgaoExpedidorRg = new OrgaoExpedidorRg();
-			orgaoExpedidorRg.setId((Integer) clienteActionForm
+			orgaoExpedidorRg.setId((Integer) form
 					.get("idOrgaoExpedidor"));
 		}
 
 		PessoaSexo pessoaSexo = null;
-		if (clienteActionForm.get("idPessoaSexo") != null
-				&& ((Integer) clienteActionForm.get("idPessoaSexo")).intValue() > 0) {
+		if (form.get("idPessoaSexo") != null
+				&& ((Integer) form.get("idPessoaSexo")).intValue() > 0) {
 			pessoaSexo = new PessoaSexo();
-			pessoaSexo.setId((Integer) clienteActionForm.get("idPessoaSexo"));
+			pessoaSexo.setId((Integer) form.get("idPessoaSexo"));
 		}
 
 		Profissao profissao = null;
-		if (clienteActionForm.get("idProfissao") != null
-				&& ((Integer) clienteActionForm.get("idProfissao")).intValue() > 0) {
+		if (form.get("idProfissao") != null
+				&& ((Integer) form.get("idProfissao")).intValue() > 0) {
 			profissao = new Profissao();
-			profissao.setId((Integer) clienteActionForm.get("idProfissao"));
+			profissao.setId((Integer) form.get("idProfissao"));
 		}
 
 		UnidadeFederacao unidadeFederacao = null;
-		if (clienteActionForm.get("idUnidadeFederacao") != null
-				&& ((Integer) clienteActionForm.get("idUnidadeFederacao")).intValue() > 0) {
+		if (form.get("idUnidadeFederacao") != null
+				&& ((Integer) form.get("idUnidadeFederacao")).intValue() > 0) {
 			unidadeFederacao = new UnidadeFederacao();
-			unidadeFederacao.setId((Integer) clienteActionForm.get("idUnidadeFederacao"));
+			unidadeFederacao.setId((Integer) form.get("idUnidadeFederacao"));
 		}
 
 		ClienteTipo clienteTipo = new ClienteTipo();
-		clienteTipo.setId(new Integer(((Short) clienteActionForm.get("tipoPessoa")).intValue()));
+		clienteTipo.setId(new Integer(((Short) form.get("tipoPessoa")).intValue()));
 
 		RamoAtividade ramoAtividade = null;
-		if (clienteActionForm.get("idRamoAtividade") != null
-				&& ((Integer) clienteActionForm.get("idRamoAtividade")).intValue() > 0) {
+		if (form.get("idRamoAtividade") != null
+				&& ((Integer) form.get("idRamoAtividade")).intValue() > 0) {
 			ramoAtividade = new RamoAtividade();
-			ramoAtividade.setId((Integer) clienteActionForm
+			ramoAtividade.setId((Integer) form
 					.get("idRamoAtividade"));
 		}
  
 		Cliente clienteResponsavel = null;
-		if (clienteActionForm.get("codigoClienteResponsavel") != null
-				&& !((String) clienteActionForm.get("codigoClienteResponsavel")).trim().equalsIgnoreCase("")) {
+		if (form.get("codigoClienteResponsavel") != null
+				&& !((String) form.get("codigoClienteResponsavel")).trim().equalsIgnoreCase("")) {
 			// Cria o objeto do cliente responsável
 			clienteResponsavel = new Cliente();
-			clienteResponsavel.setId(new Integer((String) clienteActionForm
+			clienteResponsavel.setId(new Integer((String) form
 					.get("codigoClienteResponsavel")));
 		}
 
 		// Verifica se o usuário adicionou um endereço de correspondência
-		Long enderecoCorrespondenciaSelecao = (Long) clienteActionForm
+		Long enderecoCorrespondenciaSelecao = (Long) form
 				.get("enderecoCorrespondenciaSelecao");
 
 		if (enderecoCorrespondenciaSelecao == null
@@ -509,57 +510,65 @@ public class AtualizarClienteAction extends GcomAction {
 			// Seta o id do cliente atualizado para ser identificado no BD na atualização
 			cliente.setId(clienteAtualizacao.getId());
 			
+			// Numero do NIS
+			String numeroNIS = (String) form.get("numeroNIS");
+			if (StringUtils.isNumeric(numeroNIS)) {
+				cliente.setNumeroNIS(Integer.valueOf(numeroNIS));
+			}
+			
+			// Indicador Bolsa Familia
+			if (form.get("indicadorBolsaFamilia") != null && !form.get("indicadorBolsaFamilia").equals("")) {
+				cliente.setIndicadorBolsaFamilia(new Short((String) form.get("indicadorBolsaFamilia")));
+			} else {
+				cliente.setIndicadorBolsaFamilia(ConstantesSistema.NAO);
+			}
 			
 			cliente.setIndicadorAcaoCobranca(new Integer (indicadorAcaoCobranca).shortValue());
-			
 			
 			cliente.setIndicadorGeraArquivoTexto(clienteAtualizacao.getIndicadorGeraArquivoTexto());
 			
 			cliente.setDiaVencimento(clienteAtualizacao.getDiaVencimento());
-
 			
 //			 Permissao Especial Validar Acrescimos Impontualidade
-
-			boolean validarAcrescimoImpontualidade = Fachada.getInstancia()
-			.verificarPermissaoValAcrescimosImpontualidade(usuario);
+			boolean validarAcrescimoImpontualidade = Fachada.getInstancia().verificarPermissaoValAcrescimosImpontualidade(usuario);
 			
 			httpServletRequest.setAttribute("validarAcrescimoImpontualidade",validarAcrescimoImpontualidade);
 
             
-            if (clienteActionForm.get("diaVencimento") != null
-                    && !(clienteActionForm.get("diaVencimento").equals(""))){
-                String diaVencimento = (String)clienteActionForm.get("diaVencimento"); 
+            if (form.get("diaVencimento") != null
+                    && !(form.get("diaVencimento").equals(""))){
+                String diaVencimento = (String)form.get("diaVencimento"); 
                 cliente.setDataVencimento( new Short(diaVencimento));
             }else{
                 cliente.setDataVencimento(null);
             }
         
         	//Nome da Mãe	
-            if (clienteActionForm.get("nomeMae") != null
-                        && (!(clienteActionForm.get("nomeMae").equals("")))) {
-            	cliente.setNomeMae(((String)clienteActionForm.get("nomeMae")).toUpperCase());
+            if (form.get("nomeMae") != null
+                        && (!(form.get("nomeMae").equals("")))) {
+            	cliente.setNomeMae(((String)form.get("nomeMae")).toUpperCase());
              }
             
-			if (clienteActionForm.get("indicadorGeraFaturaAntecipada") != null && !clienteActionForm.get("indicadorGeraFaturaAntecipada").equals("")) {
-				cliente.setIndicadorGeraFaturaAntecipada(new Short((String) clienteActionForm.get("indicadorGeraFaturaAntecipada")));
+			if (form.get("indicadorGeraFaturaAntecipada") != null && !form.get("indicadorGeraFaturaAntecipada").equals("")) {
+				cliente.setIndicadorGeraFaturaAntecipada(new Short((String) form.get("indicadorGeraFaturaAntecipada")));
 			} else {
 				cliente.setIndicadorGeraFaturaAntecipada(ConstantesSistema.NAO);
 			}
 			
-			if (clienteActionForm.get("diaVencimento") != null && !(clienteActionForm.get("diaVencimento").equals("")) && 
-			   (clienteActionForm.get("indicadorVencimentoMesSeguinte") != null && !clienteActionForm.get("indicadorVencimentoMesSeguinte").equals(""))) {
-				cliente.setIndicadorVencimentoMesSeguinte(new Short((String) clienteActionForm.get("indicadorVencimentoMesSeguinte")));
+			if (form.get("diaVencimento") != null && !(form.get("diaVencimento").equals("")) && 
+			   (form.get("indicadorVencimentoMesSeguinte") != null && !form.get("indicadorVencimentoMesSeguinte").equals(""))) {
+				cliente.setIndicadorVencimentoMesSeguinte(new Short((String) form.get("indicadorVencimentoMesSeguinte")));
 			} else {
 				cliente.setIndicadorVencimentoMesSeguinte(ConstantesSistema.NAO);
 			}
 			
-			 if (clienteActionForm.get("indicadorAcaoCobranca") != null
-	                    && !(clienteActionForm.get("indicadorAcaoCobranca").equals(""))){
-				 cliente.setIndicadorAcaoCobranca(new Integer ((String)clienteActionForm.get("indicadorAcaoCobranca")).shortValue());
+			 if (form.get("indicadorAcaoCobranca") != null
+	                    && !(form.get("indicadorAcaoCobranca").equals(""))){
+				 cliente.setIndicadorAcaoCobranca(new Integer ((String)form.get("indicadorAcaoCobranca")).shortValue());
 			 }
 
-			 if (clienteActionForm.get("indicadorPermiteNegativacao") != null
-						&& clienteActionForm.get("indicadorPermiteNegativacao").equals(ConstantesSistema.SIM.toString())){
+			 if (form.get("indicadorPermiteNegativacao") != null
+						&& form.get("indicadorPermiteNegativacao").equals(ConstantesSistema.SIM.toString())){
 					
 					cliente.setIndicadorPermiteNegativacao(ConstantesSistema.NAO);
 				} else {
@@ -692,7 +701,7 @@ public class AtualizarClienteAction extends GcomAction {
 					
 					System.out.println("NOME RETORNADO CDL "+cpf+":"+clienteCadastradoNaReceita.getNomeCliente());
 					
-					clienteActionForm.set("nomeClienteReceitaFederal" , clienteCadastradoNaReceita.getNomeCliente());
+					form.set("nomeClienteReceitaFederal" , clienteCadastradoNaReceita.getNomeCliente());
 				
 				}else{
 					clienteCadastradoNaReceita.setNomeCliente(null);

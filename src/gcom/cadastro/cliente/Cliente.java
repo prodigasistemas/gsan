@@ -122,6 +122,10 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
     
     private Short indicadorAutorizacaoEnvioSMS;
     
+    private Integer numeroNIS;
+    
+    private Short indicadorBolsaFamilia;
+    
 	public static final Short GERA_ARQUIVO_TEXTO_SIM = 1;
 
 	public Cliente(String nome, String nomeAbreviado, String cpf, String rg, Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
@@ -699,6 +703,22 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 
 	public void setIndicadorAutorizacaoEnvioSMS(Short indicadorAutorizacaoEnvioSMS) {
 		this.indicadorAutorizacaoEnvioSMS = indicadorAutorizacaoEnvioSMS;
+	}
+
+	public Integer getNumeroNIS() {
+		return numeroNIS;
+	}
+
+	public void setNumeroNIS(Integer numeroNIS) {
+		this.numeroNIS = numeroNIS;
+	}
+
+	public Short getIndicadorBolsaFamilia() {
+		return indicadorBolsaFamilia;
+	}
+
+	public void setIndicadorBolsaFamilia(Short indicadorBolsaFamilia) {
+		this.indicadorBolsaFamilia = indicadorBolsaFamilia;
 	}
 
 	public Class getClasseOrigem() {

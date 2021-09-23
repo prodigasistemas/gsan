@@ -29,6 +29,8 @@
         <property name="indicadorNegativacaoPeriodo"    type="java.lang.Short"    column="clie_icnegativacaoperiodo"     length="2" not-null="true" />
 		<property name="indicadorAutorizacaoEnvioEmail" type="java.lang.Short"    column="clie_icenvioemail"     		 length="2" />
         <property name="indicadorAutorizacaoEnvioSMS"   type="java.lang.Short"    column="clie_icenviosms"     			 length="2" />
+        <property name="numeroNIS"   					type="java.lang.Integer"  column="clie_nnnis"     			 	 length="11" />
+        <property name="indicadorBolsaFamilia"   		type="java.lang.Short"    column="clie_icbolsafamilia"     		 length="2" />
         		
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to OrgaoExpedidorRg -->
