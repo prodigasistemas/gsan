@@ -117,11 +117,9 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 	
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
     private Short indicadorNegativacaoPeriodo;
-
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
+    
     private Short indicadorAutorizacaoEnvioEmail;
     
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
     private Short indicadorAutorizacaoEnvioSMS;
     
 	public static final Short GERA_ARQUIVO_TEXTO_SIM = 1;
