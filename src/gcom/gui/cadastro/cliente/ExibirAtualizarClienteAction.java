@@ -233,7 +233,10 @@ public class ExibirAtualizarClienteAction extends GcomAction {
 
 			clienteActionForm.set("email", formatarResultado(cliente.getEmail()));
 			
-			clienteActionForm.set("numeroNIS", String.valueOf(cliente.getNumeroNIS()));
+			if (cliente.getNumeroNIS() != null) {
+				clienteActionForm.set("numeroNIS", String.valueOf(cliente.getNumeroNIS()));
+			}
+			
 			clienteActionForm.set("indicadorBolsaFamilia", cliente.getIndicadorBolsaFamilia().toString());
 
 			if (cliente.getDataVencimento() != null) {
