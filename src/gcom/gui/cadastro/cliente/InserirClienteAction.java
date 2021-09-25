@@ -329,14 +329,7 @@ public class InserirClienteAction extends GcomAction {
 			// Numero do NIS
 			String numeroNIS = (String) form.get("numeroNIS");
 			if (numeroNIS != null && !numeroNIS.trim().equals("")) {
-				cliente.setNumeroNIS(Integer.valueOf(numeroNIS));
-			}
-			
-			// Indicador Bolsa Familia
-			if (form.get("indicadorBolsaFamilia") != null && !form.get("indicadorBolsaFamilia").equals("")) {
-				cliente.setIndicadorBolsaFamilia(new Short((String) form.get("indicadorBolsaFamilia")));
-			} else {
-				cliente.setIndicadorBolsaFamilia(ConstantesSistema.NAO);
+				cliente.setNumeroNIS(numeroNIS.trim());
 			}
 
 			// Insere o indicador para Cobranca Acrescimos

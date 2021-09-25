@@ -122,7 +122,7 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
     
     private Short indicadorAutorizacaoEnvioSMS;
     
-    private Integer numeroNIS;
+    private String numeroNIS;
     
     private Short indicadorBolsaFamilia;
     
@@ -705,11 +705,11 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 		this.indicadorAutorizacaoEnvioSMS = indicadorAutorizacaoEnvioSMS;
 	}
 
-	public Integer getNumeroNIS() {
+	public String getNumeroNIS() {
 		return numeroNIS;
 	}
 
-	public void setNumeroNIS(Integer numeroNIS) {
+	public void setNumeroNIS(String numeroNIS) {
 		this.numeroNIS = numeroNIS;
 	}
 

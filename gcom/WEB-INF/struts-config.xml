@@ -242,7 +242,6 @@
 			<form-property name="indicadorExibicaoNomeConta" type="java.lang.String" />
 			<form-property name="indicadorPermiteNegativacao" type="java.lang.String" />
 			<form-property name="numeroNIS" type="java.lang.String" />
-			<form-property name="indicadorBolsaFamilia" type="java.lang.String" />
 
 		</form-bean>
 		<!--Action Form Dinâmico que serve para alterar a inscrição do imovel-->

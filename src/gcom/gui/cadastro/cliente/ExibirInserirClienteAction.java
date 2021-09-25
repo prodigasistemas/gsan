@@ -72,7 +72,6 @@ public class ExibirInserirClienteAction extends GcomAction {
 
 		form.set("indicadorPessoaFisicaJuridica", ClienteTipo.INDICADOR_PESSOA_FISICA.toString());
 		form.set("indicadorGeraFaturaAntecipada", ConstantesSistema.NAO.toString());
-		form.set("indicadorBolsaFamilia", ConstantesSistema.NAO.toString());
 
 		if (request.getParameter("desfazer") != null) {
 			form.set("codigoCliente", null);

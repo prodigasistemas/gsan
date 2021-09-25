@@ -373,14 +373,6 @@ function disableAll(){
 					<td><html:text maxlength="11" property="numeroNIS" size="11" tabindex="10" style="text-transform: none;" /></td>
 				</tr>
 				
-				<tr>
-					<td><strong>Pertence ao Programa Bolsa Família?<font color="#FF0000">*</font></strong></td>
-					<td>
-						<html:radio property="indicadorBolsaFamilia" value="<%=ConstantesSistema.SIM.toString()%>" tabindex="11" /> <strong>Sim</strong>
-						<html:radio property="indicadorBolsaFamilia" value="<%=ConstantesSistema.NAO.toString()%>" tabindex="11" /> <strong>Não</strong>
-					</td>
-				</tr>
-				
 				<logic:equal name="temPermissaoVisualizarDiaVencimentoContaCliente"
 					value="true">
 					<tr>
