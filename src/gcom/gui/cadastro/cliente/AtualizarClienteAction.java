@@ -21,6 +21,7 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.FiltroCadastroUnico;
 import gcom.cadastro.cliente.FiltroClienteEndereco;
@@ -34,6 +35,7 @@ import gcom.cadastro.descricaogenerica.DescricaoGenerica;
 import gcom.cadastro.descricaogenerica.FiltroDescricaoGenerica;
 import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.integracao.webservice.spc.ConsultaWebServiceTest;
@@ -48,6 +50,7 @@ import gcom.seguranca.acesso.usuario.UsuarioPermissaoEspecial;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.Filtro;
+import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -375,10 +378,12 @@ public class AtualizarClienteAction extends GcomAction {
 
 		SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
 
-		// Verifica se o nome do Cliente é o mesmo encontrado na R. Federal de acordo
-		// com o CPF digitado
+		// Verifica se o nome do Cliente é o mesmo encontrado na R. Federal de acordo com o CPF digitado
 		ConsultaCdl clienteCadastradoNaReceita = new ConsultaCdl();
-		// String mensagemRetornoReceita = null;
+		
+		// Flag para determinar se foi atualizado perfil do imóvel relacionado ao cliente atualizado
+		boolean imovelPerfilAtualizado = false;
+		
 		try {
 
 			if (cpf != null && cpf.equals("")) {
@@ -417,7 +422,8 @@ public class AtualizarClienteAction extends GcomAction {
 			String numeroNIS = (String) form.get("numeroNIS");
 			if (numeroNIS != null && !numeroNIS.trim().equals("")) {
 				cliente.setNumeroNIS(numeroNIS.trim());
-//				validarCadastroUnico(cliente);
+				validarCadastroUnico(cliente);
+				imovelPerfilAtualizado = atualizarImovelPerfilBolsaAgua(cliente);
 			}
 
 			cliente.setIndicadorAcaoCobranca(new Integer(indicadorAcaoCobranca).shortValue());
@@ -595,12 +601,12 @@ public class AtualizarClienteAction extends GcomAction {
 			}
 
 			short codigoAcao = ConstantesSistema.NUMERO_NAO_INFORMADO;
-			boolean atualizaImovel = true;
+			boolean atualizaCliente = true;
 
 			// Caso o spc esteja fora, não realizar acao de atualizacao do cliente e dos dados do spc
 			if (clienteCadastradoNaReceita != null && clienteCadastradoNaReceita.getMensagemRetorno() != null) {
 
-				atualizaImovel = false;
+				atualizaCliente = false;
 				retorno = this.montaTelaAtencao(actionMapping, "atencao.cliente_nao_foi_atualizado_spc_fora", false);
 			}
 
@@ -646,12 +652,12 @@ public class AtualizarClienteAction extends GcomAction {
 				codigoAcao = 2;
 				clienteCadastradoNaReceita.setCodigoAcaoOperador(codigoAcao);
 
-				atualizaImovel = false;
+				atualizaCliente = false;
 
 				retorno = this.montaTelaAtencao(actionMapping, "atencao.cliente_nao_foi_atualizado", true);
 			}
 
-			if (atualizaImovel) {
+			if (atualizaCliente) {
 				this.getFachada().atualizarCliente(cliente, colecaoFones, colecaoEnderecos, usuario);
 			}
 
@@ -665,7 +671,7 @@ public class AtualizarClienteAction extends GcomAction {
 
 		boolean exibirTelaSucesso = verificarExibicaoTelaSucesso(actionMapping, clienteAtualizacao, nomeAbreviado, cpf, cnpj);
 		if (exibirTelaSucesso) {
-			montarTelaSucesso(request, retorno, clienteAtualizacao);
+			montarTelaSucesso(request, retorno, clienteAtualizacao, imovelPerfilAtualizado);
 		}
 
 		return retorno;
@@ -679,9 +685,32 @@ public class AtualizarClienteAction extends GcomAction {
 		
 		if (cadastroUnico != null && cadastroUnico.getCpf().equals(cliente.getCpf())) {
 			cliente.setIndicadorBolsaFamilia(ConstantesSistema.SIM);
-			
-			// TODO - alterar perfil do imovel
 		}
+	}
+
+	private boolean atualizarImovelPerfilBolsaAgua(Cliente cliente) {
+		Collection<ClienteImovel> clienteImoveis = pesquisarImoveisPorCliente(cliente);
+		
+		if (clienteImoveis != null && clienteImoveis.size() == 1) {
+			ClienteImovel clienteImovel = clienteImoveis.iterator().next();
+			Imovel imovel = clienteImovel.getImovel();
+			imovel.setImovelPerfil(new ImovelPerfil(ImovelPerfil.BOLSA_AGUA));
+			imovel.setUltimaAlteracao(new Date());
+			getFachada().atualizar(imovel);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private Collection<ClienteImovel> pesquisarImoveisPorCliente(Cliente cliente) {
+		Filtro filtro = new FiltroClienteImovel();
+		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_ID, cliente.getId()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO, ClienteRelacaoTipo.USUARIO));
+		filtro.adicionarParametro(new ParametroNulo(FiltroClienteImovel.DATA_FIM_RELACAO));
+		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.IMOVEL);
+
+		return getFachada().pesquisar(filtro, ClienteImovel.class.getName());
 	}
 
 	private void inserirClienteCadastradoNaReceita(
@@ -754,11 +783,17 @@ public class AtualizarClienteAction extends GcomAction {
 		return exibirTelaSucesso;
 	}
 
-	private void montarTelaSucesso(HttpServletRequest request, ActionForward retorno, Cliente clienteAtualizacao) {
+	private void montarTelaSucesso(HttpServletRequest request, ActionForward retorno, Cliente clienteAtualizacao, boolean imovelPerfilAtualizado) {
 		if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
 
 			String linkSucesso = (String) sessao.getAttribute("linkSucesso");
 			String mensagemSucesso = "Cliente de código " + clienteAtualizacao.getId() + " atualizado com sucesso.";
+			
+			if (imovelPerfilAtualizado) {
+				mensagemSucesso += " Perfil do Imóvel relacionado ao cliente atualizado para BOLSA ÁGUA.";
+			} else {
+				mensagemSucesso += " Não foi possível atualizar Perfil de Imóvel relacionado ao cliente. ";
+			}
 
 			if (linkSucesso != null && !linkSucesso.equals("")) {
 

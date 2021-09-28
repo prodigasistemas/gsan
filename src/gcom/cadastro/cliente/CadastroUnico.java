@@ -17,23 +17,19 @@ public class CadastroUnico implements Serializable {
 
 	private String ddd;
 
-	private String telefone;
-
-	private FoneTipo foneTipo;
-
-	private PessoaSexo pessoaSexo;
+	private String pessoaSexo;
 
 	private String cpf;
 
-	private Date dataCadastramento;
+	private String dataCadastramento;
 
-	private String municipio;
-
-	private Date ultimaAlteracao;
+	private String codigoIBGE;
 
 	private Date dataInclusao;
 
 	private Date dataExclusao;
+
+	private Date ultimaAlteracao;
 
 	public CadastroUnico() {
 		super();
@@ -79,27 +75,11 @@ public class CadastroUnico implements Serializable {
 		this.ddd = ddd;
 	}
 
-	public String getTelefone() {
-		return telefone;
-	}
-
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-
-	public FoneTipo getFoneTipo() {
-		return foneTipo;
-	}
-
-	public void setFoneTipo(FoneTipo foneTipo) {
-		this.foneTipo = foneTipo;
-	}
-
-	public PessoaSexo getPessoaSexo() {
+	public String getPessoaSexo() {
 		return pessoaSexo;
 	}
 
-	public void setPessoaSexo(PessoaSexo pessoaSexo) {
+	public void setPessoaSexo(String pessoaSexo) {
 		this.pessoaSexo = pessoaSexo;
 	}
 
@@ -111,28 +91,20 @@ public class CadastroUnico implements Serializable {
 		this.cpf = cpf;
 	}
 
-	public Date getDataCadastramento() {
+	public String getDataCadastramento() {
 		return dataCadastramento;
 	}
 
-	public void setDataCadastramento(Date dataCadastramento) {
+	public void setDataCadastramento(String dataCadastramento) {
 		this.dataCadastramento = dataCadastramento;
 	}
 
-	public String getMunicipio() {
-		return municipio;
+	public String getCodigoIBGE() {
+		return codigoIBGE;
 	}
 
-	public void setMunicipio(String municipio) {
-		this.municipio = municipio;
-	}
-
-	public Date getUltimaAlteracao() {
-		return ultimaAlteracao;
-	}
-
-	public void setUltimaAlteracao(Date ultimaAlteracao) {
-		this.ultimaAlteracao = ultimaAlteracao;
+	public void setCodigoIBGE(String codigoIBGE) {
+		this.codigoIBGE = codigoIBGE;
 	}
 
 	public Date getDataInclusao() {
@@ -149,5 +121,13 @@ public class CadastroUnico implements Serializable {
 
 	public void setDataExclusao(Date dataExclusao) {
 		this.dataExclusao = dataExclusao;
+	}
+
+	public Date getUltimaAlteracao() {
+		return ultimaAlteracao;
+	}
+
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
 	}
 }
