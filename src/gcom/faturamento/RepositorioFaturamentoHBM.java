@@ -2481,7 +2481,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "      or crar.crar_vlresidualmesanterior>0 "
 					+ "      or crar.crar_amreferenciaprestacao = :anoMesFaturamentoGrupo) "
 					+ "  and (parc.parc_id is null or crar.crar_nnprestacaorealizadas>0 or (parc.parc_id is not null "
-					+ "       and crar.crar_nnprestacaorealizadas=0 and parc.parc_amreferenciafaturamento< :anoMesFaturamentoSistemaParametro) ) ";
+					+ "       and crar.crar_nnprestacaorealizadas=0 and parc.parc_amreferenciafaturamento< :anoMesFaturamentoSistemaParametro) ) "
+					+ " order by crti.crti_id desc ";
 
 			retorno = session.createSQLQuery(consulta)
 					.addScalar("idCreditoARealizar", Hibernate.INTEGER)
