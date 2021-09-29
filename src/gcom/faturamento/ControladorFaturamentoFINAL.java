@@ -4066,64 +4066,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& indicadorFaturamentoAgua
 						.equals(ConsumoHistorico.FATURAR_AGUA)) {
 
-			if (colecaoConsumoTarifaVigenciaTodasDatas == null
-					|| colecaoConsumoTarifaVigenciaTodasDatas.isEmpty()) {
-				// A lista com as tarifas vigentes está nula ou vazia
-
-				System.out
-						.println(" %%% ERRO.calcularValoresAguaEsgoto.SemTarifaVigencia: "
-								+ "Tarifa: "
-								+ tarifaImovel
-								+ ", DataAnterior: "
-								+ dataLeituraAnterior
-								+ ", DataAtual: " + dataLeituraAtual);
-
-				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.nao_cadastrada_data_vigencia");
-
-			} else if (colecaoConsumoTarifaVigenciaTodasDatas.size() == 1) {
-
-				// [SF0001 - Cálculo Simples Para Uma Única Tarifa]
-				ConsumoTarifaVigencia consumoTarifaVigencia = (ConsumoTarifaVigencia) Util
-						.retonarObjetoDeColecao(colecaoConsumoTarifaVigenciaTodasDatas);
-
-				if (consumoTarifaVigencia.getDataVigencia() != null) {
-
-					if (consumoTarifa.getTarifaTipoCalculo().getId().intValue() == 4) {
-						colecaoValoresAgua = calculoConsumoDiretoNaFaixa(
-								consumoFaturadoAguaMes,
-								categoriasOuSubcategoriasImovel,
-								percentualEsgoto, consumoTarifaVigencia,
-								ConstantesSistema.CALCULAR_AGUA, consumoTarifa
-										.getTarifaTipoCalculo().getId());
-					} else {
-						colecaoValoresAgua = calculoSimplesUmaTarifa(
-								consumoFaturadoAguaMes,
-								categoriasOuSubcategoriasImovel,
-								percentualEsgoto, consumoTarifaVigencia,
-								ConstantesSistema.CALCULAR_AGUA, consumoTarifa
-										.getTarifaTipoCalculo().getId());
-					}
-				} else {
-					// A data de vigência da tarifa está nula
-
-					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.nao_cadastrada_data_vigencia");
-				}
-
-			} else {
-
-				// [SF0002 - Cálculo Proporcional Para Mais de Uma Tarifa]
-				colecaoValoresAgua = calculoProporcionalMaisDeUmaTarifa(
-						dataLeituraAtual, dataLeituraAnterior,
-						colecaoConsumoTarifaVigenciaTodasDatas,
-						consumoFaturadoAguaMes,
-						categoriasOuSubcategoriasImovel, percentualEsgoto,
-						ConstantesSistema.CALCULAR_AGUA, consumoTarifa
-								.getTarifaTipoCalculo().getId());
-			}
+			colecaoValoresAgua = calcularValoresAgua(categoriasOuSubcategoriasImovel, consumoFaturadoAguaMes,
+					dataLeituraAnterior, dataLeituraAtual, percentualEsgoto, tarifaImovel, consumoTarifa,
+					colecaoConsumoTarifaVigenciaTodasDatas, colecaoValoresAgua);
 		}
 
 		/*
@@ -4138,56 +4083,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& indicadorFaturamentoEsgoto
 						.equals(ConsumoHistorico.FATURAR_ESGOTO)) {
 
-			if (colecaoConsumoTarifaVigenciaTodasDatas == null
-					|| colecaoConsumoTarifaVigenciaTodasDatas.isEmpty()) {
-				// A lista com as tarifas vigentes está nula ou vazia
-
-				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.nao_cadastrada_data_vigencia");
-
-			} else if (colecaoConsumoTarifaVigenciaTodasDatas.size() == 1) {
-
-				// [SF0001 - Cálculo Simples Para Uma Única Tarifa]
-				ConsumoTarifaVigencia consumoTarifaVigencia = (ConsumoTarifaVigencia) Util
-						.retonarObjetoDeColecao(colecaoConsumoTarifaVigenciaTodasDatas);
-
-				if (consumoTarifaVigencia.getDataVigencia() != null) {
-
-					if (consumoTarifa.getTarifaTipoCalculo().getId().intValue() == 4) {
-						colecaoValoresEsgoto = calculoConsumoDiretoNaFaixa(
-								consumoFaturadoEsgotoMes,
-								categoriasOuSubcategoriasImovel,
-								percentualEsgoto, consumoTarifaVigencia,
-								ConstantesSistema.CALCULAR_ESGOTO,
-								consumoTarifa.getTarifaTipoCalculo().getId());
-					} else {
-						colecaoValoresEsgoto = calculoSimplesUmaTarifa(
-								consumoFaturadoEsgotoMes,
-								categoriasOuSubcategoriasImovel,
-								percentualEsgoto, consumoTarifaVigencia,
-								ConstantesSistema.CALCULAR_ESGOTO,
-								consumoTarifa.getTarifaTipoCalculo().getId());
-					}
-				} else {
-					// A data de vigência da tarifa está nula
-
-					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.nao_cadastrada_data_vigencia");
-				}
-
-			} else {
-
-				// [SF0002 - Cálculo Proporcional Para Mais de Uma Tarifa]
-				colecaoValoresEsgoto = calculoProporcionalMaisDeUmaTarifa(
-						dataLeituraAtual, dataLeituraAnterior,
-						colecaoConsumoTarifaVigenciaTodasDatas,
-						consumoFaturadoEsgotoMes,
-						categoriasOuSubcategoriasImovel, percentualEsgoto,
-						ConstantesSistema.CALCULAR_ESGOTO, consumoTarifa
-								.getTarifaTipoCalculo().getId());
-			}
+			colecaoValoresEsgoto = calcularValoresEsgoto(categoriasOuSubcategoriasImovel, consumoFaturadoEsgotoMes,
+					dataLeituraAnterior, dataLeituraAtual, percentualEsgoto, consumoTarifa,
+					colecaoConsumoTarifaVigenciaTodasDatas, colecaoValoresEsgoto);
 		}
 
 		// Unificando os valores de água e esgoto em apenas uma coleção
@@ -4196,6 +4094,130 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						colecaoValoresEsgoto);
 
 		return calcularValoresAguaEsgotoTotalizando(colecaoRetorno);
+	}
+
+	private Collection<CalcularValoresAguaEsgotoHelper> calcularValoresEsgoto(
+			Collection categoriasOuSubcategoriasImovel, Integer consumoFaturadoEsgotoMes, Date dataLeituraAnterior,
+			Date dataLeituraAtual, BigDecimal percentualEsgoto, ConsumoTarifa consumoTarifa,
+			Collection colecaoConsumoTarifaVigenciaTodasDatas,
+			Collection<CalcularValoresAguaEsgotoHelper> colecaoValoresEsgoto) throws ControladorException {
+		if (colecaoConsumoTarifaVigenciaTodasDatas == null
+				|| colecaoConsumoTarifaVigenciaTodasDatas.isEmpty()) {
+			// A lista com as tarifas vigentes está nula ou vazia
+
+			sessionContext.setRollbackOnly();
+			throw new ControladorException(
+					"atencao.nao_cadastrada_data_vigencia");
+
+		} else if (colecaoConsumoTarifaVigenciaTodasDatas.size() == 1) {
+
+			// [SF0001 - Cálculo Simples Para Uma Única Tarifa]
+			ConsumoTarifaVigencia consumoTarifaVigencia = (ConsumoTarifaVigencia) Util
+					.retonarObjetoDeColecao(colecaoConsumoTarifaVigenciaTodasDatas);
+
+			if (consumoTarifaVigencia.getDataVigencia() != null) {
+
+				if (consumoTarifa.getTarifaTipoCalculo().getId().intValue() == 4) {
+					colecaoValoresEsgoto = calculoConsumoDiretoNaFaixa(
+							consumoFaturadoEsgotoMes,
+							categoriasOuSubcategoriasImovel,
+							percentualEsgoto, consumoTarifaVigencia,
+							ConstantesSistema.CALCULAR_ESGOTO,
+							consumoTarifa.getTarifaTipoCalculo().getId());
+				} else {
+					colecaoValoresEsgoto = calculoSimplesUmaTarifa(
+							consumoFaturadoEsgotoMes,
+							categoriasOuSubcategoriasImovel,
+							percentualEsgoto, consumoTarifaVigencia,
+							ConstantesSistema.CALCULAR_ESGOTO,
+							consumoTarifa.getTarifaTipoCalculo().getId());
+				}
+			} else {
+				// A data de vigência da tarifa está nula
+
+				sessionContext.setRollbackOnly();
+				throw new ControladorException(
+						"atencao.nao_cadastrada_data_vigencia");
+			}
+
+		} else {
+
+			// [SF0002 - Cálculo Proporcional Para Mais de Uma Tarifa]
+			colecaoValoresEsgoto = calculoProporcionalMaisDeUmaTarifa(
+					dataLeituraAtual, dataLeituraAnterior,
+					colecaoConsumoTarifaVigenciaTodasDatas,
+					consumoFaturadoEsgotoMes,
+					categoriasOuSubcategoriasImovel, percentualEsgoto,
+					ConstantesSistema.CALCULAR_ESGOTO, consumoTarifa
+							.getTarifaTipoCalculo().getId());
+		}
+		return colecaoValoresEsgoto;
+	}
+
+	private Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAgua(Collection categoriasOuSubcategoriasImovel,
+			Integer consumoFaturadoAguaMes, Date dataLeituraAnterior, Date dataLeituraAtual,
+			BigDecimal percentualEsgoto, Integer tarifaImovel, ConsumoTarifa consumoTarifa,
+			Collection colecaoConsumoTarifaVigenciaTodasDatas,
+			Collection<CalcularValoresAguaEsgotoHelper> colecaoValoresAgua) throws ControladorException {
+		if (colecaoConsumoTarifaVigenciaTodasDatas == null
+				|| colecaoConsumoTarifaVigenciaTodasDatas.isEmpty()) {
+			// A lista com as tarifas vigentes está nula ou vazia
+
+			System.out
+					.println(" %%% ERRO.calcularValoresAguaEsgoto.SemTarifaVigencia: "
+							+ "Tarifa: "
+							+ tarifaImovel
+							+ ", DataAnterior: "
+							+ dataLeituraAnterior
+							+ ", DataAtual: " + dataLeituraAtual);
+
+			sessionContext.setRollbackOnly();
+			throw new ControladorException(
+					"atencao.nao_cadastrada_data_vigencia");
+
+		} else if (colecaoConsumoTarifaVigenciaTodasDatas.size() == 1) {
+
+			// [SF0001 - Cálculo Simples Para Uma Única Tarifa]
+			ConsumoTarifaVigencia consumoTarifaVigencia = (ConsumoTarifaVigencia) Util
+					.retonarObjetoDeColecao(colecaoConsumoTarifaVigenciaTodasDatas);
+
+			if (consumoTarifaVigencia.getDataVigencia() != null) {
+
+				if (consumoTarifa.getTarifaTipoCalculo().getId().intValue() == 4) {
+					colecaoValoresAgua = calculoConsumoDiretoNaFaixa(
+							consumoFaturadoAguaMes,
+							categoriasOuSubcategoriasImovel,
+							percentualEsgoto, consumoTarifaVigencia,
+							ConstantesSistema.CALCULAR_AGUA, consumoTarifa
+									.getTarifaTipoCalculo().getId());
+				} else {
+					colecaoValoresAgua = calculoSimplesUmaTarifa(
+							consumoFaturadoAguaMes,
+							categoriasOuSubcategoriasImovel,
+							percentualEsgoto, consumoTarifaVigencia,
+							ConstantesSistema.CALCULAR_AGUA, consumoTarifa
+									.getTarifaTipoCalculo().getId());
+				}
+			} else {
+				// A data de vigência da tarifa está nula
+
+				sessionContext.setRollbackOnly();
+				throw new ControladorException(
+						"atencao.nao_cadastrada_data_vigencia");
+			}
+
+		} else {
+
+			// [SF0002 - Cálculo Proporcional Para Mais de Uma Tarifa]
+			colecaoValoresAgua = calculoProporcionalMaisDeUmaTarifa(
+					dataLeituraAtual, dataLeituraAnterior,
+					colecaoConsumoTarifaVigenciaTodasDatas,
+					consumoFaturadoAguaMes,
+					categoriasOuSubcategoriasImovel, percentualEsgoto,
+					ConstantesSistema.CALCULAR_AGUA, consumoTarifa
+							.getTarifaTipoCalculo().getId());
+		}
+		return colecaoValoresAgua;
 	}
 
 	/**

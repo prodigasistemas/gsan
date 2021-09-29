@@ -72,6 +72,21 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 					break;
 
 				}
+				case (MetodosBatch.GERAR_BOLSA_AGUA):{
+		/*			this.getControladorRetificarConta().chamarGerarBolsaAgua(
+							(Collection) ((Object[]) objectMessage.getObject())[0],
+							(Integer) ((Object[]) objectMessage.getObject())[1],
+							(ContaMotivoRetificacao) ((Object[]) objectMessage.getObject())[2],
+							(Collection) ((Object[]) objectMessage.getObject())[3], 
+							(Usuario) ((Object[]) objectMessage.getObject())[4],
+							(Date) ((Object[]) objectMessage.getObject())[5], 
+							(Date) ((Object[]) objectMessage.getObject())[6],
+							(Integer) ((Object[]) objectMessage.getObject())[7],
+							(String) ((Object[]) objectMessage.getObject())[8]);
+					usuarioLogado = (Usuario) ((Object[]) objectMessage.getObject())[4];
+					assuntoEmail = 	"GERAR CREDITO BOLSA AGUA";  */
+					break;
+				}
 				case (MetodosBatch.GERAR_RELATORIO_MAPA_CONTROLE_CONTA): {
 					this.getControladorFaturamento()
 							.filtrarMapaControleContaRelatorio(

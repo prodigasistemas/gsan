@@ -63,6 +63,8 @@ public class ImovelPerfil extends ObjetoTransacao{
     
     public final static Integer CADASTRO_PROVISORIO = new Integer(9);
     
+    public final static Integer COLABORADORES = new Integer(10);
+    
     public final static Integer BOLSA_AGUA = new Integer(11);
     
     public final static Short SIM = new Short((short)1);

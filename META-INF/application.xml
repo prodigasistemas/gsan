@@ -933,6 +933,10 @@
 	<module>
 		<ejb>BatchEnvioNotificacaoAvisoCorteMDB.jar</ejb>
 	</module>
+	
+	<module>
+		<ejb>BatchGerarCreditoBolsaAguaMDB.jar</ejb>
+	</module>
 	<module>
 		<java>gcom.jar</java>
 	</module>

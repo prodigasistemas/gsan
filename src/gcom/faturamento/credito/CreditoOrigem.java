@@ -28,6 +28,7 @@ public class CreditoOrigem extends ObjetoTransacao {
 	public final static Integer DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA = new Integer(14);
 	public final static Integer DESCONTOS_CREDITOS_ANTERIORES_CURTO_PRAZO = new Integer(15);
 	public final static Integer DESCONTOS_CREDITOS_ANTERIORES_LONGO_PRAZO = new Integer(16);
+	public final static Integer BOLSA_AGUA = new Integer(17);
 
 	private Integer id;
 	
