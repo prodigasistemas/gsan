@@ -20340,7 +20340,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "INNER JOIN FETCH crrz.creditoTipo crtp "
 					+ "LEFT JOIN FETCH crrz.creditoARealizarGeral crgr "
 					+ "where cnta.id = :idConta "
-					+ "ORDER BY crtp.id, crrz.anoMesReferenciaCredito ";
+					+ "ORDER BY crtp.id, crrz.anoMesReferenciaCredito desc ";
 			retorno = session.createQuery(consulta)
 					.setInteger("idConta", idConta)
 					.list();

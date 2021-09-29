@@ -1,5 +1,25 @@
 package gcom.batch;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.ejb.CreateException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoCategoria;
@@ -90,6 +110,7 @@ import gcom.batch.faturamento.TarefaBatchFaturarGrupoFaturamento;
 import gcom.batch.faturamento.TarefaBatchGerarArquivoTextoContasProjetosEspeciais;
 import gcom.batch.faturamento.TarefaBatchGerarArquivoTextoDeclaracaoQuitacaoAnualDebitos;
 import gcom.batch.faturamento.TarefaBatchGerarBonusTarifaSocial;
+import gcom.batch.faturamento.TarefaBatchGerarCreditoBolsaAgua;
 import gcom.batch.faturamento.TarefaBatchGerarCreditoSituacaoEspecialFaturamento;
 import gcom.batch.faturamento.TarefaBatchGerarDadosDeclaracaoQuitacaoAnualDebitos;
 import gcom.batch.faturamento.TarefaBatchGerarDadosReceitasAFaturarResumo;
@@ -241,26 +262,6 @@ import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.ejb.CreateException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
 
 public class ControladorBatchSEJB extends ControladorComum implements SessionBean {
 
@@ -2592,6 +2593,32 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 
 						break;
 					}
+					case Funcionalidade.GERAR_CREDITO_BOLSA_AGUA:
+
+						TarefaBatchGerarCreditoBolsaAgua tarefaBatchGerarCreditoBolsaAgua = new TarefaBatchGerarCreditoBolsaAgua(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						FiltroFaturamentoGrupo filtroFaturamentoGrupo = new FiltroFaturamentoGrupo();
+						filtroFaturamentoGrupo.setCampoOrderBy(FiltroFaturamentoGrupo.ID);
+						filtroFaturamentoGrupo.adicionarParametro(new ParametroSimples(FiltroFaturamentoGrupo.INDICADOR_USO, ConstantesSistema.SIM));
+						//filtroFaturamentoGrupo.adicionarParametro(new ParametroSimples(FiltroFaturamentoGrupo.ID, 201));
+						
+						Collection<FaturamentoGrupo> colecaoFaturamentoGrupos = getControladorUtil().pesquisar(filtroFaturamentoGrupo,
+								FaturamentoGrupo.class.getName());
+						
+						FiltroRota filtroRota = new FiltroRota();
+						filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.FATURAMENTO_GRUPO_ID, 215));
+
+						Collection<Rota> rotasBolsaAgua = getControladorUtil().pesquisar(filtroRota, Rota.class.getName());
+												
+						tarefaBatchGerarCreditoBolsaAgua.addParametro("faturamentoGrupo", colecaoFaturamentoGrupos.iterator().next());
+						tarefaBatchGerarCreditoBolsaAgua.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,rotasBolsaAgua);
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarCreditoBolsaAgua));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
 
 					case Funcionalidade.DESFAZER_PARCELAMENTO_POR_ENTRADA_NAO_PAGA_SEM_ANO_MES_REFERENCIA:
 						TarefaBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferencia batch = new TarefaBatchDesfazerParcelamentoPorEntradaNaoPagaSemAnoMesReferencia(

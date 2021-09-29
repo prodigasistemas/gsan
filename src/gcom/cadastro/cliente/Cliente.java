@@ -117,12 +117,14 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 	
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
     private Short indicadorNegativacaoPeriodo;
-
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
+    
     private Short indicadorAutorizacaoEnvioEmail;
     
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
     private Short indicadorAutorizacaoEnvioSMS;
+    
+    private String numeroNIS;
+    
+    private Short indicadorBolsaFamilia;
     
 	public static final Short GERA_ARQUIVO_TEXTO_SIM = 1;
 
@@ -701,6 +703,22 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 
 	public void setIndicadorAutorizacaoEnvioSMS(Short indicadorAutorizacaoEnvioSMS) {
 		this.indicadorAutorizacaoEnvioSMS = indicadorAutorizacaoEnvioSMS;
+	}
+
+	public String getNumeroNIS() {
+		return numeroNIS;
+	}
+
+	public void setNumeroNIS(String numeroNIS) {
+		this.numeroNIS = numeroNIS;
+	}
+
+	public Short getIndicadorBolsaFamilia() {
+		return indicadorBolsaFamilia;
+	}
+
+	public void setIndicadorBolsaFamilia(Short indicadorBolsaFamilia) {
+		this.indicadorBolsaFamilia = indicadorBolsaFamilia;
 	}
 
 	public Class getClasseOrigem() {

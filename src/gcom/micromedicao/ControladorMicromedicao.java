@@ -25368,8 +25368,7 @@ public class ControladorMicromedicao extends ControladorComum {
 					.obterUltimosConsumosImovel(imovel.getId(),
 							LigacaoTipo.LIGACAO_AGUA);
 
-			if (colecaoArrayConsumoHistorico != null
-					&& !colecaoArrayConsumoHistorico.isEmpty()) {
+			if (colecaoArrayConsumoHistorico != null && !colecaoArrayConsumoHistorico.isEmpty()) {
 
 				colecaoConsumoHistorico = new ArrayList();
 				Iterator iterator = colecaoArrayConsumoHistorico.iterator();
@@ -25377,38 +25376,7 @@ public class ControladorMicromedicao extends ControladorComum {
 				while (iterator.hasNext()) {
 
 					Object[] arrayConsumoHistorico = (Object[]) iterator.next();
-					ConsumoHistorico consumoHistorico = new ConsumoHistorico();
-
-					// IMOVEL
-					consumoHistorico.setImovel(imovel);
-
-					// ID
-					consumoHistorico.setId((Integer) arrayConsumoHistorico[0]);
-
-					// ANO_MES_REFERENCIA
-					consumoHistorico
-							.setReferenciaFaturamento((Integer) arrayConsumoHistorico[1]);
-
-					// CONSUMO_FATURADO_MES
-					consumoHistorico
-							.setNumeroConsumoFaturadoMes((Integer) arrayConsumoHistorico[2]);
-
-					// CONSUMO_ANORMALIDADE
-					if (arrayConsumoHistorico[3] != null) {
-						ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade();
-						consumoAnormalidade
-								.setId((Integer) arrayConsumoHistorico[3]);
-
-						consumoHistorico
-								.setConsumoAnormalidade(consumoAnormalidade);
-					}
-
-					// LIGACAO_TIPO
-					LigacaoTipo ligacaoTipo = new LigacaoTipo();
-					ligacaoTipo.setId((Integer) arrayConsumoHistorico[4]);
-
-					consumoHistorico.setLigacaoTipo(ligacaoTipo);
-
+					ConsumoHistorico consumoHistorico = this.montarConsumoHistorico(imovel, arrayConsumoHistorico);
 					colecaoConsumoHistorico.add(consumoHistorico);
 				}
 			} else {
@@ -25429,41 +25397,8 @@ public class ControladorMicromedicao extends ControladorComum {
 
 					while (iterator.hasNext()) {
 
-						Object[] arrayConsumoHistorico = (Object[]) iterator
-								.next();
-						ConsumoHistorico consumoHistorico = new ConsumoHistorico();
-
-						// IMOVEL
-						consumoHistorico.setImovel(imovel);
-
-						// ID
-						consumoHistorico
-								.setId((Integer) arrayConsumoHistorico[0]);
-
-						// ANO_MES_REFERENCIA
-						consumoHistorico
-								.setReferenciaFaturamento((Integer) arrayConsumoHistorico[1]);
-
-						// CONSUMO_FATURADO_MES
-						consumoHistorico
-								.setNumeroConsumoFaturadoMes((Integer) arrayConsumoHistorico[2]);
-
-						// CONSUMO_ANORMALIDADE
-						if (arrayConsumoHistorico[3] != null) {
-							ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade();
-							consumoAnormalidade
-									.setId((Integer) arrayConsumoHistorico[3]);
-
-							consumoHistorico
-									.setConsumoAnormalidade(consumoAnormalidade);
-						}
-
-						// LIGACAO_TIPO
-						LigacaoTipo ligacaoTipo = new LigacaoTipo();
-						ligacaoTipo.setId((Integer) arrayConsumoHistorico[4]);
-
-						consumoHistorico.setLigacaoTipo(ligacaoTipo);
-
+						Object[] arrayConsumoHistorico = (Object[]) iterator.next();
+						ConsumoHistorico consumoHistorico = this.montarConsumoHistorico(imovel, arrayConsumoHistorico);
 						colecaoConsumoHistorico.add(consumoHistorico);
 					}
 				}
@@ -25477,6 +25412,64 @@ public class ControladorMicromedicao extends ControladorComum {
 		return colecaoConsumoHistorico;
 	}
 
+	public ConsumoHistorico obterUltimoConsumoImovel(Imovel imovel, Integer idLigacaoTipo) throws ControladorException {
+		ConsumoHistorico consumo = null;
+		
+		Collection colecaoArrayConsumoHistorico = null;
+		Collection colecaoConsumoHistorico = null;
+		try {
+
+			if (idLigacaoTipo.equals(LigacaoTipo.LIGACAO_AGUA)) {
+			
+				colecaoArrayConsumoHistorico = this.repositorioMicromedicao
+						.obterUltimosConsumosImovel(imovel.getId(),
+								LigacaoTipo.LIGACAO_AGUA);
+
+			} else if (idLigacaoTipo.equals(LigacaoTipo.LIGACAO_ESGOTO)) {
+				if (imovel.getHidrometroInstalacaoHistorico() != null
+						&& imovel.getHidrometroInstalacaoHistorico().getId() != null) {
+					colecaoArrayConsumoHistorico = this.repositorioMicromedicao
+							.obterUltimosConsumosImovel(imovel.getId(),
+									LigacaoTipo.LIGACAO_ESGOTO);
+				}
+			}
+				
+			if (colecaoArrayConsumoHistorico != null && !colecaoArrayConsumoHistorico.isEmpty()) {
+					
+				colecaoConsumoHistorico = new ArrayList();
+				Iterator iterator = colecaoArrayConsumoHistorico.iterator();
+				
+				Object[] arrayConsumoHistorico = (Object[]) iterator.next();
+				consumo = this.montarConsumoHistorico(imovel, arrayConsumoHistorico);
+			} 
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+
+		return consumo;
+	}
+	
+	private ConsumoHistorico montarConsumoHistorico(Imovel imovel, Object[] arrayConsumo) {
+		
+		ConsumoHistorico consumo = new ConsumoHistorico();
+
+		consumo.setImovel(imovel);
+		consumo.setId((Integer) arrayConsumo[0]);
+		consumo.setReferenciaFaturamento((Integer) arrayConsumo[1]);
+		consumo.setNumeroConsumoFaturadoMes((Integer) arrayConsumo[2]);
+
+		if (arrayConsumo[3] != null) {
+			ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade((Integer) arrayConsumo[3]);
+			consumo.setConsumoAnormalidade(consumoAnormalidade);
+		}
+
+		consumo.setLigacaoTipo(new LigacaoTipo((Integer) arrayConsumo[4]));
+		
+		return consumo;
+	}
+
+	
 	/**
 	 * [UC00083] Gerar Dados para Leitura
 	 * 

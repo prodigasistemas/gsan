@@ -11,6 +11,7 @@ import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
+import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
 import java.util.Collection;
 import java.util.List;
@@ -172,6 +173,7 @@ public class ExibirAdicionarCriterioCobrancaLinhaAction extends GcomAction {
 		filtroImovelPerfil.adicionarParametro(new ParametroSimples(
 				FiltroImovelPerfil.INDICADOR_USO,
 				ConstantesSistema.INDICADOR_USO_ATIVO));
+		filtroImovelPerfil.adicionarParametro(new ParametroSimplesDiferenteDe(FiltroImovelPerfil.ID, ImovelPerfil.BOLSA_AGUA));
 		Collection colecaoImovelPerfil = fachada.pesquisar(filtroImovelPerfil,
 				ImovelPerfil.class.getName());
 		if (colecaoImovelPerfil == null || colecaoImovelPerfil.isEmpty()) {

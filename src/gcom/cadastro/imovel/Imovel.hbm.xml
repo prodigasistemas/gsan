@@ -61,11 +61,10 @@
         <property name="quantidadeEconomiasOutra"    type="java.lang.Integer"    column="imov_qtd_economias_outra"           not-null="false"/>
         <property name="percentualAbastecimento"     type="java.lang.Short"      column="imov_percentual_abastecimento"      not-null="false"/>
 		<property name="observacaoCategoria" 		 type="java.lang.String"     column="imov_dsobservacaotegoria" 			 not-null="false"/>
-		<property name="quantidadeNosFundos" 		 type="java.lang.Integer"     column="imov_qtdnosfundos" 				 length="3"/>
-        <property name="quantidadeNosAltos" 		 type="java.lang.Integer"     column="imov_qtdnosaltos" 				 length="3"/>
-        <property name="individualizacao" 			 type="java.lang.Integer"     column="imov_individualizacao" 			 length="3"/>
-        
-        <property name="indicadorEnvioContaFisica"    type="java.lang.Short"    column="imov_icenviocontafisica"     length="2" not-null="true" />
+		<property name="quantidadeNosFundos" 		 type="java.lang.Integer"    column="imov_qtdnosfundos" 				 length="3"/>
+        <property name="quantidadeNosAltos" 		 type="java.lang.Integer"    column="imov_qtdnosaltos" 					 length="3"/>
+        <property name="individualizacao" 			 type="java.lang.Integer"    column="imov_individualizacao" 			 length="3"/>        
+        <property name="indicadorEnvioContaFisica"   type="java.lang.Short"      column="imov_icenviocontafisica"     		 length="2" />
         
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to ImovelContaEnvio -->

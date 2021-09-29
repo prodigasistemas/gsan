@@ -28,13 +28,7 @@
 <!--
 var bCancel = false;
 
-//******************************************************
-// Autor: Ivan Sergio
-// Data: 20/07/2009
-// CRC2103
-// Verifica se o Cliente foi inserido e retorna os dados
-// para o action de imovel.
-//******************************************************
+// Verifica se o Cliente foi inserido e retorna os dados para o action de imovel.
 if (<%=request.getParameter("concluir")%> != null) {
 	if (<%=request.getParameter("concluir")%> == true) {
 		opener.recuperarDadosClientePopUp(
@@ -69,7 +63,7 @@ function required () {
 }
 
 function email () {
-	this.aa = new Array("email", "E-Mail inválido.", new Function ("varName", " return this[varName];"));
+	this.aa = new Array("email", "Email inválido.", new Function ("varName", " return this[varName];"));
 }
 
 function IntegerValidations () {
@@ -346,10 +340,16 @@ function validarPermiteNegativacao() {
 					</html:select></td>
 				</tr>
 				<tr>
-					<td><strong>E-Mail:</strong></td>
+					<td><strong>Email:</strong></td>
 					<td><html:text maxlength="40" property="email" size="40"
 						tabindex="6" style="text-transform: none;" /></td>
 				</tr>
+				
+				<tr>
+					<td><strong>Número do NIS:</strong></td>
+					<td><html:text maxlength="11" property="numeroNIS" size="11" tabindex="10" style="text-transform: none;" /></td>
+				</tr>
+				
 				<logic:equal name="temPermissaoVisualizarDiaVencimentoContaCliente"
 					value="true">
 					<tr>
@@ -367,7 +367,7 @@ function validarPermiteNegativacao() {
 					</tr>
 				</logic:notEqual>
 				<tr>
-					<td><strong>Vencimento para Mês Seguinte?:</strong></td>
+					<td><strong>Vencimento para Mês Seguinte?</strong></td>
 					<td>
 					<html:radio property="indicadorVencimentoMesSeguinte"
 						value="<%=ConstantesSistema.SIM.toString()%>" tabindex="8" />
@@ -377,7 +377,7 @@ function validarPermiteNegativacao() {
 					</td>
 				</tr>
 				<tr>
-					<td><strong>Permite Geração de Fatura Antecipada?:<font color="#FF0000">*</font></strong></td>
+					<td><strong>Permite Geração de Fatura Antecipada?<font color="#FF0000">*</font></strong></td>
 					<td>
 					<html:radio property="indicadorGeraFaturaAntecipada"
 						value="<%=ConstantesSistema.SIM.toString()%>" tabindex="9" />
@@ -387,16 +387,15 @@ function validarPermiteNegativacao() {
 					</td>
 				</tr>
 				
-				
 				<tr>
 					<td><strong>Cliente bloqueado para negativação?</strong></td>
 					
 					<logic:present name="permissaoEspecial" scope="session">
 						<td>
 						<html:radio property="indicadorPermiteNegativacao"
-							value="<%=ConstantesSistema.SIM.toString()%>" tabindex="9"/>
+							value="<%=ConstantesSistema.SIM.toString()%>" tabindex="12"/>
 						<strong>Sim</strong> <html:radio property="indicadorPermiteNegativacao" 
-							value="<%=ConstantesSistema.NAO.toString()%>" tabindex="9" />
+							value="<%=ConstantesSistema.NAO.toString()%>" tabindex="12" />
 						<strong>Não</strong>
 						</td>
 					</logic:present>
@@ -404,9 +403,9 @@ function validarPermiteNegativacao() {
 					<logic:notPresent name="permissaoEspecial" scope="session">
 						<td>
 						<html:radio property="indicadorPermiteNegativacao"
-							value="<%=ConstantesSistema.SIM.toString()%>" tabindex="9" disabled="true"/>
+							value="<%=ConstantesSistema.SIM.toString()%>" tabindex="12" disabled="true"/>
 						<strong>Sim</strong> <html:radio property="indicadorPermiteNegativacao"
-							value="<%=ConstantesSistema.NAO.toString()%>" tabindex="9" />
+							value="<%=ConstantesSistema.NAO.toString()%>" tabindex="12" />
 						<strong>Não</strong>
 						</td>
 					</logic:notPresent>

@@ -769,5 +769,9 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public ContratoDTO obterContratoInstalacaoReservacao(int idContrato) throws ControladorException;
 
 	public void gerarContratoInstalacaoReservacao(Integer idImovel, Integer idCliente) throws ControladorException;
+	
+	public List<Imovel> pesquisarImoveisBolsaAgua(Rota rota) throws ControladorException;
+	
+	public Categoria obterCategoria(Integer idCategoria) throws ControladorException;
 
 }

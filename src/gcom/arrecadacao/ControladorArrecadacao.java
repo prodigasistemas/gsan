@@ -2021,7 +2021,7 @@ public class ControladorArrecadacao extends ControladorComum {
 								Iterator iter = colecaoPagamentos.iterator();
 								System.out.println(" >> MovArrec.Pagamentos - 1");
 								while (iter.hasNext()) {
-									System.out.println("    >> MovArrec.Pagamentos - 1.1 [cont: " + contador + "]");
+									System.out.println("    >> MovArrec.Pagamentos - 1.1");
 									if (contador++ % 500 == 0) {
 
 										System.out.println(" >> MovArrec.Atualizando itens de cobranca[" + contador++ + "/" + total + "]");
@@ -2205,7 +2205,9 @@ public class ControladorArrecadacao extends ControladorComum {
 							countRegistros = 0;
 							devolucoes = new ArrayList();
 						}
+						System.out.println(" >> MovArrec.Pagamentos - 8");
 					}
+					System.out.println(" >> MovArrec.Pagamentos - 9");
 				}
 				System.out.println(" >> MovArrec.Pagamentos - 10");
 				// caso não exista o registro Z.
@@ -2626,6 +2628,7 @@ public class ControladorArrecadacao extends ControladorComum {
 			}
 			System.out.println(" >> MovArrec.Pagamentos - 12");
 		} catch (ControladorException e) {
+			e.printStackTrace();
 			sessionContext.setRollbackOnly();
 			throw new ControladorException(e.getMessage());
 		} catch (Exception e) {

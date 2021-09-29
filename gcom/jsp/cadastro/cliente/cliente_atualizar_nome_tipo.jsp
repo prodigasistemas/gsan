@@ -71,7 +71,7 @@ function required () {
 }
 
 function email () {
-	this.aa = new Array("email", "E-Mail inválido.", new Function ("varName", " return this[varName];"));
+	this.aa = new Array("email", "Email inválido.", new Function ("varName", " return this[varName];"));
 }
 
 function IntegerValidations () {
@@ -363,14 +363,20 @@ function disableAll(){
 				</tr>
 				<tr>
 
-					<td><strong> E-Mail: </strong></td>
+					<td><strong>Email: </strong></td>
 					<td><html:text maxlength="40" property="email" size="40"
 						tabindex="6" style="text-transform: none;" /></td>
 				</tr>
+				
+				<tr>
+					<td><strong>Número do NIS:</strong></td>
+					<td><html:text maxlength="11" property="numeroNIS" size="11" tabindex="10" style="text-transform: none;" /></td>
+				</tr>
+				
 				<logic:equal name="temPermissaoVisualizarDiaVencimentoContaCliente"
 					value="true">
 					<tr>
-						<td><strong> Dia do Vencimento da Conta: </strong></td>
+						<td><strong>Dia do Vencimento da Conta: </strong></td>
 						<td><html:text maxlength="2" property="diaVencimento" size="2"
 							tabindex="7" onkeyup="validarDiaVencimentoTecla();" /></td>
 					</tr>
@@ -378,13 +384,13 @@ function disableAll(){
 				<logic:notEqual
 					name="temPermissaoVisualizarDiaVencimentoContaCliente" value="true">
 					<tr>
-						<td><strong> Dia do Vencimento da Conta: </strong></td>
+						<td><strong>Dia do Vencimento da Conta: </strong></td>
 						<td><html:text maxlength="2" property="diaVencimento" size="2"
 							tabindex="7" style="background-color:#EFEFEF; border:0; color: #000000" readonly="true" /></td>
 					</tr>
 				</logic:notEqual>
 				<tr>
-					<td><strong>Vencimento para Mês Seguinte?:</strong></td>
+					<td><strong>Vencimento para Mês Seguinte?</strong></td>
 					<td>
 					<html:radio property="indicadorVencimentoMesSeguinte"
 						value="<%=ConstantesSistema.SIM.toString()%>" tabindex="8" />
@@ -428,7 +434,7 @@ function disableAll(){
 				</logic:notEqual>
 
 				<tr>
-					<td><strong>Permite Geração de Fatura Antecipada?:<font color="#FF0000">*</font></strong></td>
+					<td><strong>Permite Geração de Fatura Antecipada?<font color="#FF0000">*</font></strong></td>
 					<td align="right">
 					<div align="left"><html:radio property="indicadorGeraFaturaAntecipada"
 						value="<%=ConstantesSistema.SIM.toString()%>" />

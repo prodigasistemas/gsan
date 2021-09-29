@@ -20,6 +20,7 @@ import gcom.fachada.Fachada;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoOrigem;
+import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.financeiro.FinanciamentoTipo;
@@ -333,6 +334,11 @@ public class ExibirEfetuarParcelamentoDebitosProcesso1Action extends GcomAction 
 					while (creditoARealizarValores.hasNext()) {
 						CreditoARealizar creditoARealizar = (CreditoARealizar) creditoARealizarValores.next();
 						if (verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(creditoARealizar.getGeracaoCredito()))) {
+							creditosRemovidos.add(creditoARealizar);
+							continue;
+						}
+						
+						if (creditoARealizar.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)){
 							creditosRemovidos.add(creditoARealizar);
 							continue;
 						}

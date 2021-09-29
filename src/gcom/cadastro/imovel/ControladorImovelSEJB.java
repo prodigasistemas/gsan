@@ -1075,6 +1075,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 				
 				Collection<ClienteImovel> colecaoClienteImovel = (Collection<ClienteImovel>) getControladorUtil().pesquisar(filtroClienteImovel,ClienteImovel.class.getName());
 				
+				excluirBolsaAgua(clienteImovel, inserirImovelHelper);
 				boolean existe = this.verificarExistenciaClienteImovel(colecaoClienteImovel, clienteImovel);
 					if (existe) {
 						registradorOperacao.registrarOperacao(clienteImovel);
@@ -1088,7 +1089,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 						if ((clienteImovel.isClienteResponsavel() || clienteImovel.isClienteUsuario()) 
 								&& !colecaoPossuiMesmoCliente(inserirImovelHelper.getClientes(), clienteImovel))
 							excluirDebitoAutomaticoClienteImovel(clienteImovel, inserirImovelHelper);
-						
+						    
 					}
 			}
 		}
@@ -16153,6 +16154,17 @@ public class ControladorImovelSEJB extends ControladorComum {
 		}
 	}
 	
+	public void excluirBolsaAgua(ClienteImovel clienteImovel, InserirImovelHelper inserirImovelHelper) throws ControladorException {
+			
+		Imovel imovel = this.pesquisarImovel(clienteImovel.getImovel().getId());
+		
+		if (imovel.getImovelPerfil().getId() == ImovelPerfil.BOLSA_AGUA){ 
+			imovel.getImovelPerfil().setId(ImovelPerfil.NORMAL);
+		
+		    inserirImovelHelper.setImovel(imovel);
+	   }  
+	}
+	
 	public ContratoDTO obterContratoAdesao(int idContrato) throws ControladorException {
 		ContratoAdesao contrato = pesquisarContratoAdesao(idContrato);
 		Imovel imovel = contrato.getClienteImovel().getImovel();
@@ -16459,5 +16471,23 @@ public class ControladorImovelSEJB extends ControladorComum {
 		
 		contratoInstalacaoReservacao.setContrato(contrato);
 		getControladorUtil().inserir(contratoInstalacaoReservacao);
+	}
+	
+	public List<Imovel> pesquisarImoveisBolsaAgua(Rota rota) throws ControladorException {
+		try {
+			return repositorioImovel.pesquisarImoveisBolsaAgua(rota);
+		} catch (ErroRepositorioException e) {
+		    throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	public Categoria obterCategoria(Integer idCategoria) throws ControladorException {
+		FiltroCategoria filtro = new FiltroCategoria();
+		
+		filtro.adicionarParametro(new ParametroSimples(FiltroCategoria.CODIGO,idCategoria));
+		
+		Collection colecaoCategoria = this.getControladorUtil().pesquisar(filtro,Categoria.class.getName());
+		
+		return (Categoria) colecaoCategoria.iterator().next();
 	}
 }

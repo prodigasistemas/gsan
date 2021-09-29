@@ -210,6 +210,10 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	
 	public static final int ENVIO_NOTIFICACAO_AVISO_CORTE = 16080;
 	
+	public static final int GERAR_CREDITO_BOLSA_AGUA = 16087;
+	
+	
+	
 	private Integer id;
 
 	private String descricao;

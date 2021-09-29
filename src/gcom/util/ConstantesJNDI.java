@@ -280,6 +280,7 @@ public class ConstantesJNDI {
 	public static String BATCH_EMITIR_TERMO_ALTERACAO_CADASTRAL = "";
 	public static String BATCH_ENVIO_NOTIFICACAO_VENCIMENTO_FATURA = "";
 	public static String BATCH_ENVIO_NOTIFICACAO_AVISO_CORTE = "";
+	public static String BATCH_GERAR_CREDITO_BOLSA_AGUA_MDB = "";
 	
 	static {
 		inicializarPropriedades();
@@ -589,7 +590,7 @@ public class ConstantesJNDI {
 			
 			BATCH_ENVIO_NOTIFICACAO_VENCIMENTO_FATURA = propriedades.getProperty("QueueBatchEnvioNotificacaoVencimentoFaturaMDB");
 			BATCH_ENVIO_NOTIFICACAO_AVISO_CORTE = propriedades.getProperty("QueueBatchEnvioNotificacaoAvisoCorteMDB");
-
+			BATCH_GERAR_CREDITO_BOLSA_AGUA_MDB= propriedades.getProperty("QueueBatchGerarCreditoBolsaAguaMDB");
 			stream.close();
 
 		} catch (Exception ex) {

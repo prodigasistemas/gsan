@@ -150,5 +150,10 @@ public class FiltroCreditoARealizar extends Filtro implements Serializable {
 	 */
 	public final static String ID_CREDITO_TIPO = "creditoTipo.id";
 	
+	/**
+	 * Description of the Field
+	 */
+	public final static String VALOR_RESIDUAL_MES_ANTERIOR = "valorResidualMesAnterior";
+	
 	
 }	
