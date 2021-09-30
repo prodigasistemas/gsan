@@ -2609,13 +2609,13 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						FiltroRota filtroRota = new FiltroRota();
 						filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.FATURAMENTO_GRUPO_ID, 215));
 
-						Collection<Rota> rotasBolsaAgua = getControladorUtil().pesquisar(filtroRota, Rota.class.getName());
+						//Collection<Rota> rotasBolsaAgua = getControladorUtil().pesquisar(filtroRota, Rota.class.getName());
 												
-						tarefaBatchGerarCreditoBolsaAgua.addParametro("faturamentoGrupo", colecaoFaturamentoGrupos.iterator().next());
-						tarefaBatchGerarCreditoBolsaAgua.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,rotasBolsaAgua);
-						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarCreditoBolsaAgua));
+						//tarefaBatchGerarCreditoBolsaAgua.addParametro("faturamentoGrupo", colecaoFaturamentoGrupos.iterator().next());
+						//tarefaBatchGerarCreditoBolsaAgua.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,rotasBolsaAgua);
+						//funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarCreditoBolsaAgua));
 
-						getControladorUtil().atualizar(funcionalidadeIniciada);
+						//getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
 
@@ -2780,6 +2780,28 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 
 					switch (funcionalidadeIniciada.getProcessoFuncionalidade().getFuncionalidade().getId()) {
 
+					case Funcionalidade.GERAR_CREDITO_BOLSA_AGUA:
+
+						TarefaBatchGerarCreditoBolsaAgua tarefaBatchGerarCreditoBolsaAgua = new TarefaBatchGerarCreditoBolsaAgua(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+						
+						FaturamentoGrupo grupoBolsaAgua = faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal().getFaturamentoGrupo();
+						
+						FiltroRota filtroRota = new FiltroRota();
+						filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.FATURAMENTO_GRUPO_ID, grupoBolsaAgua.getId()));
+						filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.INDICADOR_USO, ConstantesSistema.SIM));
+
+						Collection<Rota> rotasBolsaAgua = getControladorUtil().pesquisar(filtroRota, Rota.class.getName());
+												
+						tarefaBatchGerarCreditoBolsaAgua.addParametro("faturamentoGrupo", grupoBolsaAgua);
+						tarefaBatchGerarCreditoBolsaAgua.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,rotasBolsaAgua);
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarCreditoBolsaAgua));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+						
 					case Funcionalidade.GERAR_DADOS_PARA_LEITURA:
 
 						TarefaBatchGerarDadosParaLeitura dadosParaLeitura = new TarefaBatchGerarDadosParaLeitura(processoIniciado.getUsuario(),
