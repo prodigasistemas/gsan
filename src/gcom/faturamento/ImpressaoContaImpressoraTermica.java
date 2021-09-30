@@ -894,6 +894,11 @@ public class ImpressaoContaImpressoraTermica {
 
 				retorno.append(formarLinha(4, 0, 640, 1115, Util.formatarMoedaReal(emitirContaHelper.getValorConta()),
 						0, 0));
+				if (emitirContaHelper.getValorCreditoBolsaAgua() != null && Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.0) {
+					retorno.append(dividirLinha(7, 0, 30, 1270, "PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA", 28, 20));
+				} else if (emitirContaHelper.getValorCreditoBolsaAgua() != null && Double.valueOf(emitirContaHelper.getValorTotalConta()) >= 0.0) {
+					retorno.append(dividirLinha(7, 0, 30, 1270, "PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA", 28, 20));
+				}
 				retorno.append(formarLinha(0, 2, 424, 1270, "OPCAO PELO DEB. AUTOMATICO: ", 0, 0)
 						+ formarLinha(5, 0, 649, 1270, (imovelEmitido.getIndicadorDebitoConta() == null ? ""
 								: imovelEmitido.getId() + ""), 0, 0));
