@@ -34,6 +34,8 @@ public class ContaValoresHelper implements Serializable {
 	private BigDecimal valorCreditoConta;
 
 	private BigDecimal valorAtualConta;
+	
+	private BigDecimal valorBolsaAgua;
 
 	private Short indicadorDebitoPago;
 
@@ -142,13 +144,13 @@ public class ContaValoresHelper implements Serializable {
 
 		if (this.getConta().getValorEsgoto() != null) {
 			retorno = retorno.add(this.getConta().getValorEsgoto());
-		}
+		}	
 
 		if (this.getConta().getDebitos() != null) {
 			retorno = retorno.add(this.getConta().getDebitos());
 		}
 
-		if (this.getConta().getValorCreditos() != null) {
+		if (this.getConta().getValorCreditos() != null) {	
 			retorno = retorno.subtract(this.getConta().getValorCreditos());
 		}
 

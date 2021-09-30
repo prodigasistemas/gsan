@@ -3501,6 +3501,8 @@ public class ControladorCobranca extends ControladorComum {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
+		
+		
 		if (indicadorContas == null || indicadorContas) {
 
 			Collection<ContaValoresHelper> colecaoContasValores = this.pesquisarContasDebito(idCliente, clienteRelacaoTipo,
@@ -3844,6 +3846,15 @@ public class ControladorCobranca extends ControladorComum {
 
 	}
 	
+	private Imovel pesquisarImovelPorId(Integer idImovel) throws ControladorException{
+		
+		FiltroImovel filtroImovel = new FiltroImovel();
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
+		
+		Collection<Imovel> colecaoImovel = this.getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName());
+		return (Imovel) Util.retonarObjetoDeColecao(colecaoImovel);
+	}
+	
 	
 
 	/**
@@ -3885,11 +3896,14 @@ public class ControladorCobranca extends ControladorComum {
 		if (indicadorDebito == 1) {
 			// contas do imovel
 			try {
+				
+			   Imovel imovel = pesquisarImovelPorId(idImovel);
+				
 				contas = repositorioCobranca.pesquisarContasImovel(idImovel, indicadorPagamento, indicadorConta,
 						DebitoCreditoSituacao.NORMAL.toString(), DebitoCreditoSituacao.RETIFICADA.toString(),
 						DebitoCreditoSituacao.INCLUIDA.toString(), DebitoCreditoSituacao.PARCELADA.toString(),
 						anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito,
-						anoMesFinalVencimentoDebito, indicadorDividaAtiva, false);
+						anoMesFinalVencimentoDebito, indicadorDividaAtiva, false, imovel.getImovelPerfil().getId());
 				
 				indicadorAcrescimosCliente = this.obterIndicadorAcrescimosClienteResponsavel(idImovel);
 			} catch (ErroRepositorioException ex) {
@@ -4248,11 +4262,14 @@ public class ControladorCobranca extends ControladorComum {
 		if (indicadorDebito == 1) {
 			// contas do imovel
 			try {
-				contas = repositorioCobranca.pesquisarContasImovel(idImovel, indicadorPagamento, indicadorConta,
+				
+				Imovel imovel = pesquisarImovelPorId(idImovel);
+		
+			contas = repositorioCobranca.pesquisarContasImovel(idImovel, indicadorPagamento, indicadorConta,
 						DebitoCreditoSituacao.NORMAL.toString(), DebitoCreditoSituacao.RETIFICADA.toString(),
 						DebitoCreditoSituacao.INCLUIDA.toString(), DebitoCreditoSituacao.PARCELADA.toString(),
 						anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito,
-						anoMesFinalVencimentoDebito, indicadorDividaAtiva, true);
+						anoMesFinalVencimentoDebito, indicadorDividaAtiva, true, imovel.getImovelPerfil().getId());
 				
 				indicadorAcrescimosCliente = this.obterIndicadorAcrescimosClienteResponsavel(idImovel);
 
