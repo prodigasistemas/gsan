@@ -712,4 +712,8 @@ public class CreditoARealizar extends ObjetoTransacao {
 		
 		return valorCredito.subtract(valorConcedido).add(valorResidualMesAnterior);
 	}
+	
+	public boolean isCreditoBolsaAgua() {
+		return this.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA);
+	}
 }
