@@ -180,6 +180,7 @@ public class EmitirContaHelper implements Serializable {
 	private String mensagemAnormalidade;
 	private String mensagemDebitos;
 	private String mensagemQuitacao;
+	private String mensagemBolsaAgua;
 
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
@@ -1975,5 +1976,11 @@ public class EmitirContaHelper implements Serializable {
 		this.mensagemQuitacao = mensagemQuitacao;
 	}
 
-	
+	public String getMensagemBolsaAgua() {
+		return mensagemBolsaAgua;
+	}
+
+	public void setMensagemBolsaAgua(String mensagemBolsaAgua) {
+		this.mensagemBolsaAgua = mensagemBolsaAgua;
+	}	
 }
