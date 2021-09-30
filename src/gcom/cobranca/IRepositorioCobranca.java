@@ -71,7 +71,7 @@ public interface IRepositorioCobranca {
 
 	public Collection pesquisarContasImovel(Integer idImovel, int indicadorPagamento, int indicadorConta, String contaSituacaoNormal, String contaSituacaoRetificada, String contaSituacaoIncluida,
 			String contaSituacaoParcelada, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito, Date anoMesInicialVecimentoDebito, Date anoMesFinalVencimentoDebito,
-			int indicadorDividaAtiva, boolean contaComDebitoPreterito) throws ErroRepositorioException;
+			int indicadorDividaAtiva, boolean contaComDebitoPreterito, Integer idImovelPerfil) throws ErroRepositorioException;
 
 	public int pesquisarQuantidadeContasVencidasPorImovel(Integer idImovel, int indicadorPagamento, int indicadorConta, int indicadorDividaAtiva) throws ErroRepositorioException;
 

@@ -1414,32 +1414,51 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	private StringBuilder preencherMensagensConta(SistemaParametro sistemaParametro,
 			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
 			throws ControladorException {
-		String[] parmsPartesConta = obterMensagemDebitoConta3Partes(emitirContaHelper, sistemaParametro);
 		
-		ComunicadoEmitirConta comunicado = getControladorFaturamento().pesquisarComunicadoNaoEmitido(emitirContaHelper.getIdImovel(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
-		
-		if (comunicado != null) {
-			contaTxt.append(Util.completaString("Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.", 100));
+		if (emitirContaHelper.getValorCreditoBolsaAgua() != null && Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.0) {
+			contaTxt.append(Util.completaString("PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA", 100));
 			contaTxt.append(Util.completaString("", 100));
 			contaTxt.append(Util.completaString("", 100));
 			
-			emitirContaHelper.setMsgLinha1Conta("Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.");
+			emitirContaHelper.setMsgLinha1Conta("PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA");
 			emitirContaHelper.setMsgLinha2Conta("");
 			emitirContaHelper.setMsgLinha3Conta("");
-		
+		} else if (emitirContaHelper.getValorCreditoBolsaAgua() != null && Double.valueOf(emitirContaHelper.getValorTotalConta()) >= 0.0) {
+			contaTxt.append(Util.completaString("PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA", 100));
+			contaTxt.append(Util.completaString("", 100));
+			contaTxt.append(Util.completaString("", 100));
+			
+			emitirContaHelper.setMsgLinha1Conta("PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA");
+			emitirContaHelper.setMsgLinha2Conta("");
+			emitirContaHelper.setMsgLinha3Conta("");
 		} else { 
-			contaTxt.append(Util.completaString(parmsPartesConta[0], 100));
-			contaTxt.append(Util.completaString(parmsPartesConta[1], 100));
-			contaTxt.append(Util.completaString(parmsPartesConta[2], 100));
-
-			if (isImovelEmDebito) {
-				emitirContaHelper.setMsgLinha1Conta(parmsPartesConta[0]);
-				emitirContaHelper.setMsgLinha2Conta(parmsPartesConta[1]);
-				emitirContaHelper.setMsgLinha3Conta(parmsPartesConta[2]);
-			}
-
-		}
+			String[] parmsPartesConta = obterMensagemDebitoConta3Partes(emitirContaHelper, sistemaParametro);
 		
+		
+			ComunicadoEmitirConta comunicado = getControladorFaturamento().pesquisarComunicadoNaoEmitido(emitirContaHelper.getIdImovel(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
+			
+			if (comunicado != null) {
+				contaTxt.append(Util.completaString("Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.", 100));
+				contaTxt.append(Util.completaString("", 100));
+				contaTxt.append(Util.completaString("", 100));
+				
+				emitirContaHelper.setMsgLinha1Conta("Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.");
+				emitirContaHelper.setMsgLinha2Conta("");
+				emitirContaHelper.setMsgLinha3Conta("");
+			
+			} else { 
+				contaTxt.append(Util.completaString(parmsPartesConta[0], 100));
+				contaTxt.append(Util.completaString(parmsPartesConta[1], 100));
+				contaTxt.append(Util.completaString(parmsPartesConta[2], 100));
+	
+				if (isImovelEmDebito) {
+					emitirContaHelper.setMsgLinha1Conta(parmsPartesConta[0]);
+					emitirContaHelper.setMsgLinha2Conta(parmsPartesConta[1]);
+					emitirContaHelper.setMsgLinha3Conta(parmsPartesConta[2]);
+				}
+	
+			 }
+		}
 		
 		return contaTxt;
 	}

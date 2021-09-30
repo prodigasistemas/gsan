@@ -34,6 +34,7 @@ import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.credito.CreditoRealizado;
+import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.debito.DebitoCobrado;
 import gcom.faturamento.debito.FiltroDebitoCobrado;
 import gcom.financeiro.FinanciamentoTipo;
@@ -373,10 +374,13 @@ public class ImpressaoContaImpressoraTermica {
 				if (indicadorDiscriminarDescricao == 1) {
 
 					for (CreditoRealizado creditoRealizado : crrz) {
-						dados = new String[3];
-						dados[0] = creditoRealizado.getDescricao();
-						dados[2] = Util.formatarMoedaReal(creditoRealizado.getValorCredito());
-						retorno.addElement(dados);
+						
+						if(!creditoRealizado.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)){
+							dados = new String[3];
+							dados[0] = creditoRealizado.getDescricao();
+							dados[2] = Util.formatarMoedaReal(creditoRealizado.getValorCredito());
+							retorno.addElement(dados);
+						}
 					}
 
 				} else {
@@ -387,6 +391,17 @@ public class ImpressaoContaImpressoraTermica {
 					dados[2] = Util.formatarMoedaReal(soma);
 					retorno.addElement(dados);
 				}
+				
+				for (CreditoRealizado creditoRealizado : crrz) {
+					
+					if(creditoRealizado.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)){
+						dados = new String[3];
+						dados[0] = creditoRealizado.getDescricao();
+						dados[2] = Util.formatarMoedaReal(retornaCreditoBolsaAgua(creditoRealizado, emitirContaHelper));
+						retorno.addElement(dados);
+					}
+				}
+		
 			}
 		} catch (ControladorException e) {
 			e.printStackTrace();
@@ -879,6 +894,11 @@ public class ImpressaoContaImpressoraTermica {
 
 				retorno.append(formarLinha(4, 0, 640, 1115, Util.formatarMoedaReal(emitirContaHelper.getValorConta()),
 						0, 0));
+				if (emitirContaHelper.getValorCreditoBolsaAgua() != null && Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.0) {
+					retorno.append(dividirLinha(7, 0, 30, 1270, "PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA", 28, 20));
+				} else if (emitirContaHelper.getValorCreditoBolsaAgua() != null && Double.valueOf(emitirContaHelper.getValorTotalConta()) >= 0.0) {
+					retorno.append(dividirLinha(7, 0, 30, 1270, "PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA", 28, 20));
+				}
 				retorno.append(formarLinha(0, 2, 424, 1270, "OPCAO PELO DEB. AUTOMATICO: ", 0, 0)
 						+ formarLinha(5, 0, 649, 1270, (imovelEmitido.getIndicadorDebitoConta() == null ? ""
 								: imovelEmitido.getId() + ""), 0, 0));
@@ -1842,4 +1862,23 @@ public class ImpressaoContaImpressoraTermica {
 			retorno.append(linha);
 		}
 	}
+	
+	private BigDecimal retornaCreditoBolsaAgua (CreditoRealizado cr, EmitirContaHelper helper) {
+		BigDecimal valorAguaEsgoto = new BigDecimal("0.00");
+		BigDecimal valorCredito = cr.getValorCredito();
+		
+		valorAguaEsgoto.add(helper.getValorAgua()); 
+				
+		if (helper.getValorEsgoto() != null){
+				valorAguaEsgoto.add(helper.getValorEsgoto());
+		}
+				
+		if (valorAguaEsgoto.compareTo(valorCredito) > 0) {
+			return valorCredito;
+		} else {
+			return valorAguaEsgoto;
+		}
+			
+	}
+	
 }

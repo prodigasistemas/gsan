@@ -160,6 +160,8 @@ public class ServicoTipo extends ObjetoTransacao {
 	
 	public final static int TIPO_REFORMA_RAMAL_COM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS = 1434;
 	
+//	public final static int TIPO_RELIGACAO_SEM_SUBSTITUICAO_HDT_CONTROLE_DE_PERDAS = 1435;
+	
 	
 	
 	
