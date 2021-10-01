@@ -22,6 +22,8 @@ public class FiltroCreditoRealizado extends Filtro {
     
     public final static String CREDITO_TIPO  = "creditoTipo";
     
+    public final static String CREDITO_TIPO_ID  = "creditoTipo.id";
+    
     public final static String LANCAMENTO_ITEM_CONTABIL = "lancamentoItemContabil.id";
 
     /**

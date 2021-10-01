@@ -970,10 +970,20 @@ public class EmitirContaHelper implements Serializable {
 	}
 
 	public BigDecimal getValorCreditos() {
+		if (valorCreditoBolsaAgua == null) {
+			valorCreditoBolsaAgua = BigDecimal.ZERO;
+		}
+		
+		if (valorCreditos == null) {
+			valorCreditos = BigDecimal.ZERO;
+		}
+		
 		BigDecimal valorCreditoFinal = valorCreditos.subtract(valorCreditoBolsaAgua);
+		
 		if (valorCreditoFinal.doubleValue() < 0) {
 			valorCreditoFinal = valorCreditoFinal.multiply(new BigDecimal(-1));
 		} 
+		
 		return valorCreditoFinal;
 	}
 
