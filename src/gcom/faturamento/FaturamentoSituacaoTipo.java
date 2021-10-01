@@ -34,6 +34,7 @@ public class FaturamentoSituacaoTipo extends ObjetoTransacao implements Serializ
     
     public final static Integer FATURAMENTO_NORMAL = new Integer(0);
     public final static Short INDICADOR_PARALIZACAO_LEITURA_NAO_REALIZADA = new Short("1");
+    public final static Integer PARALISAR_EMISSAO_CONTAS = new Integer(1);
     public final static Integer PARALISAR_LEITURA_FATURAR_MEDIA = new Integer(2);
     public final static Integer PARALISAR_LEITURA_FATURAR_TAXA_MINIMA = new Integer(3);
     public final static Integer FATURAR_NORMAL = new Integer(5);
