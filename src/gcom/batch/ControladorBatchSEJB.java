@@ -2880,6 +2880,28 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
+						
+					case Funcionalidade.GERAR_CREDITO_BOLSA_AGUA:
+
+						TarefaBatchGerarCreditoBolsaAgua tarefaBatchGerarCreditoBolsaAgua = new TarefaBatchGerarCreditoBolsaAgua(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+						
+						FaturamentoGrupo grupoBolsaAgua = faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal().getFaturamentoGrupo();
+						
+						FiltroRota filtroRota = new FiltroRota();
+						filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.FATURAMENTO_GRUPO_ID, grupoBolsaAgua.getId()));
+						filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.INDICADOR_USO, ConstantesSistema.SIM));
+
+						Collection<Rota> rotasBolsaAgua = getControladorUtil().pesquisar(filtroRota, Rota.class.getName());
+												
+						tarefaBatchGerarCreditoBolsaAgua.addParametro("faturamentoGrupo", grupoBolsaAgua);
+						tarefaBatchGerarCreditoBolsaAgua.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,rotasBolsaAgua);
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarCreditoBolsaAgua));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
 					case Funcionalidade.EFETUAR_RATEIO_CONSUMO:
 						TarefaBatchEfetuarRateioConsumo rateioConsumo = new TarefaBatchEfetuarRateioConsumo(processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());

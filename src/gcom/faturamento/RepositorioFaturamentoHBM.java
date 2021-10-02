@@ -2481,7 +2481,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "      or crar.crar_vlresidualmesanterior>0 "
 					+ "      or crar.crar_amreferenciaprestacao = :anoMesFaturamentoGrupo) "
 					+ "  and (parc.parc_id is null or crar.crar_nnprestacaorealizadas>0 or (parc.parc_id is not null "
-					+ "       and crar.crar_nnprestacaorealizadas=0 and parc.parc_amreferenciafaturamento< :anoMesFaturamentoSistemaParametro) ) ";
+					+ "       and crar.crar_nnprestacaorealizadas=0 and parc.parc_amreferenciafaturamento< :anoMesFaturamentoSistemaParametro) ) "
+					+ " order by crti.crti_id desc ";
 
 			retorno = session.createSQLQuery(consulta)
 					.addScalar("idCreditoARealizar", Hibernate.INTEGER)
@@ -9819,6 +9820,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "cnt.cnta_pcesgoto as percentualEsgoto, "// 30
 					+ "contaImpressao.clie_idresponsavel as idClienteResponsavel, "// 31
 					+ "imovel.imov_nmimovel as nomeImovel "// 32
+					+ "crrz.crrz_vlcredito as valorCreditoBolsaAgua" //33
 					+ "from cadastro.cliente_conta cliCnt "
 					+ "inner join faturamento.conta cnt on cliCnt.cnta_id=cnt.cnta_id "
 					+ "inner join faturamento.conta_impressao contaImpressao on cnt.cnta_id = contaImpressao.cnta_id "
@@ -9834,6 +9836,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "inner join cadastro.imovel_perfil imovelPerfil on cnt.iper_id=imovelPerfil.iper_id "
 					+ "inner join cadastro.imovel imovel on cnt.imov_id=imovel.imov_id "
 					+ "inner join cadastro.cliente cli on cliCnt.clie_id=cli.clie_id "
+					+ "inner join faturamento.credito_realizado crrz ON crrz.cnta_id = cnt.cnta_id AND crrz.crti_id = :creditoTipoBolsaAgua"
 					+ "where "
 					+ "contaImpressao.cnti_amreferenciaconta = :referencia AND "
 					+ "contaImpressao.empr_id = :idEmpresa AND "
@@ -9882,10 +9885,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 										"descricaoLigEsgotoSit", Hibernate.STRING)
 								.addScalar("percentualEsgoto", Hibernate.BIG_DECIMAL)
 								.addScalar("idClienteResponsavel", Hibernate.INTEGER)
-								.addScalar("nomeImovel", Hibernate.STRING).setInteger(
+								.addScalar("nomeImovel", Hibernate.STRING).addScalar("valorCreditoBolsaAgua", Hibernate.BIG_DECIMAL).setInteger(
 										"idEmpresa", idEmpresa).setInteger("idUsuario",
 										ClienteRelacaoTipo.USUARIO).setInteger(
-										"referencia", anoMesReferencia)
+										"referencia", anoMesReferencia).setInteger("creditoTipoBolsaAgua", CreditoTipo.CREDITO_BOLSA_AGUA)
 											.setBigDecimal("valorLimite",valorContaFichaComp)
 										.setMaxResults(1000)
 								.setFirstResult(numeroPaginas).list();
@@ -9923,10 +9926,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 										"descricaoLigEsgotoSit", Hibernate.STRING)
 								.addScalar("percentualEsgoto", Hibernate.BIG_DECIMAL)
 								.addScalar("idClienteResponsavel", Hibernate.INTEGER)
-								.addScalar("nomeImovel", Hibernate.STRING).setInteger(
+								.addScalar("nomeImovel", Hibernate.STRING).addScalar("valorCreditoBolsaAgua", Hibernate.BIG_DECIMAL).setInteger(
 										"idEmpresa", idEmpresa).setInteger("idUsuario",
 										ClienteRelacaoTipo.USUARIO).setInteger(
-										"referencia", anoMesReferencia)
+										"referencia", anoMesReferencia).setInteger("creditoTipoBolsaAgua", CreditoTipo.CREDITO_BOLSA_AGUA)
 										.setMaxResults(1000)
 								.setFirstResult(numeroPaginas).list();
 					}

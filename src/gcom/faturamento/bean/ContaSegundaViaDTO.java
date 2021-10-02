@@ -1,11 +1,11 @@
 package gcom.faturamento.bean;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.relatorio.faturamento.conta.ContaLinhasDescricaoServicosTarifasTotalHelper;
 import gcom.util.Util;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 public class ContaSegundaViaDTO {
 
@@ -61,6 +61,7 @@ public class ContaSegundaViaDTO {
 	private String mensagemAnormalidade;
 	private String mensagemDebitos;
 	private String mensagemQuitacao;
+	private String mensagemBolsaAgua;
 
 	private List<ContaLinhasDescricaoServicosTarifasTotalHelper> servicos;
 	private String valorTotal;
@@ -76,7 +77,6 @@ public class ContaSegundaViaDTO {
 	
 	private String impostosDescricaoAgenciaReguladora;
 	private String impostosPercentualAgenciaReguladora;
-	//private String impostosValorBase;
 	private String impostosValorAgenciaReguladora;
 
 	private String padraoTurbidez;
@@ -187,6 +187,7 @@ public class ContaSegundaViaDTO {
 		this.mensagemAnormalidade = helper.getMensagemAnormalidade();
 		this.mensagemDebitos = helper.getMensagemDebitos();
 		this.mensagemQuitacao = helper.getMensagemQuitacao().equals("") ? null : helper.getMensagemQuitacao();
+		this.mensagemBolsaAgua = helper.getMensagemBolsaAgua().equals("") ? null : helper.getMensagemBolsaAgua();
 
 		this.setServicos(helper);
 		this.valorTotal = helper.getValorContaString();
@@ -466,6 +467,10 @@ public class ContaSegundaViaDTO {
 
 	public String getMensagemQuitacao() {
 		return mensagemQuitacao;
+	}
+
+	public String getMensagemBolsaAgua() {
+		return mensagemBolsaAgua;
 	}
 
 	public List<ContaLinhasDescricaoServicosTarifasTotalHelper> getServicos() {

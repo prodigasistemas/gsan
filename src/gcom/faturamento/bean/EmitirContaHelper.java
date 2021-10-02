@@ -94,6 +94,7 @@ public class EmitirContaHelper implements Serializable {
 	private String descricaoTipoConsumo;
 	private String numeroHidrometro;
 	private String nomeImovel;
+	private BigDecimal valorCreditoBolsaAgua;
 	private String contaSemCodigoBarras;
 	private Integer debitoCreditoSituacaoAtualConta;
 	private String contaPaga;
@@ -106,6 +107,7 @@ public class EmitirContaHelper implements Serializable {
 	private Integer idRotaEntrega;
 	private Integer numeroSequencialRotaEntrega;
 	private Integer idConsumoAnormalidade;
+	
 
 	// ---------------------------------------------------------
 	// Utilizado no Emitir Segunda Via de Conta Tipo 2 (CAER)
@@ -178,6 +180,7 @@ public class EmitirContaHelper implements Serializable {
 	private String mensagemAnormalidade;
 	private String mensagemDebitos;
 	private String mensagemQuitacao;
+	private String mensagemBolsaAgua;
 
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
@@ -967,7 +970,21 @@ public class EmitirContaHelper implements Serializable {
 	}
 
 	public BigDecimal getValorCreditos() {
-		return valorCreditos;
+		if (valorCreditoBolsaAgua == null) {
+			valorCreditoBolsaAgua = BigDecimal.ZERO;
+		}
+		
+		if (valorCreditos == null) {
+			valorCreditos = BigDecimal.ZERO;
+		}
+		
+		BigDecimal valorCreditoFinal = valorCreditos.subtract(valorCreditoBolsaAgua);
+		
+		if (valorCreditoFinal.doubleValue() < 0) {
+			valorCreditoFinal = valorCreditoFinal.multiply(new BigDecimal(-1));
+		} 
+		
+		return valorCreditoFinal;
 	}
 
 	public void setValorCreditos(BigDecimal valorCreditos) {
@@ -1362,6 +1379,23 @@ public class EmitirContaHelper implements Serializable {
 
 	public void setNomeImovel(String nomeImovel) {
 		this.nomeImovel = nomeImovel;
+	}
+	
+	public BigDecimal getValorCreditoBolsaAgua() {
+		BigDecimal valorAguaEsgoto = new BigDecimal("0.00");
+		valorAguaEsgoto.add(getValorAgua()); 		
+		if (getValorEsgoto() != null){
+				valorAguaEsgoto.add(getValorEsgoto());
+		}				
+		if (valorAguaEsgoto.compareTo(this.valorCreditoBolsaAgua) > 0) {
+			return this.valorCreditoBolsaAgua;
+		} else {
+			return valorAguaEsgoto;
+		}
+	}
+
+	public void setValorCreditoBolsaAgua(BigDecimal valorCreditoBolsaAgua) {
+		this.valorCreditoBolsaAgua = valorCreditoBolsaAgua;
 	}
 
 	public String getConsumoMedio() {
@@ -1780,10 +1814,14 @@ public class EmitirContaHelper implements Serializable {
 		if (this.getValorCreditos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
 		}
+		
+		if (this.getValorCreditoBolsaAgua() != null) {
+			valorTotalConta = valorTotalConta.subtract(this.getValorCreditoBolsaAgua());
+		}
 
 		if (this.getValorImpostos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorImpostos());
-		}
+		}		
 
 		return valorTotalConta.toString();
 	}
@@ -1948,5 +1986,11 @@ public class EmitirContaHelper implements Serializable {
 		this.mensagemQuitacao = mensagemQuitacao;
 	}
 
-	
+	public String getMensagemBolsaAgua() {
+		return mensagemBolsaAgua;
+	}
+
+	public void setMensagemBolsaAgua(String mensagemBolsaAgua) {
+		this.mensagemBolsaAgua = mensagemBolsaAgua;
+	}	
 }

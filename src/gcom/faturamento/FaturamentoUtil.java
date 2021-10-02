@@ -33,70 +33,123 @@ public class FaturamentoUtil {
             valorTotalACobrar = BigDecimal.ONE;
         }
         
-        Iterator<CreditoARealizar> iteratorColecaoCreditosARealizar = creditos.iterator();
+	        Iterator<CreditoARealizar> iteratorColecaoCreditosARealizar = creditos.iterator();
+	
+	        CreditoARealizar creditoARealizar = null;
+	        
+	        CreditoARealizar creditoBolsaAgua = obterCreditoBolsaAgua(creditos);
+	        
+	        if (creditoBolsaAgua != null) {
+	        	
+	        	logger.info("  BOLSA AGUA ANTES -----> " + creditoBolsaAgua.getId() + " : " 
+	                    + creditoBolsaAgua.getValorTotal() + " credito : "
+	                    + creditoBolsaAgua.getValorResidualMesAnterior() + " resíduo : " 
+	                    + creditoBolsaAgua.getAnoMesCobrancaCredito() + " cobranca : " 
+	                    + creditoBolsaAgua.getAnoMesReferenciaPrestacao() + " prestacao <-----      ");
+	        	
+	        	BigDecimal valorCreditoBolsaAgua = BigDecimal.ZERO;
+	        	
+	        	BigDecimal valorAguEsgoto = valorAgua.add(valorEsgoto);
+	        	
+	        	if (valorAguEsgoto.compareTo(creditoBolsaAgua.getValorCredito()) == 1) {
+	        		valorCreditoBolsaAgua = creditoBolsaAgua.getValorCredito();
+	        	} else {
+	        		valorCreditoBolsaAgua = valorAguEsgoto;
+	        	}
+	        	
+	        	creditoBolsaAgua.setValorCredito(valorCreditoBolsaAgua);
+	        	creditoBolsaAgua.setValorResidualMesAnterior(BigDecimal.ZERO);
 
-        CreditoARealizar creditoARealizar = null;
-        
-        while (iteratorColecaoCreditosARealizar.hasNext() && valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
-
-            creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
-            
-            logger.info("      ANTES -----> " + creditoARealizar.getId() + " : " + creditoARealizar.getNumeroPrestacaoRealizada() + " de " + creditoARealizar.getNumeroPrestacaoCredito() + " : "
-                    + creditoARealizar.getValorTotal() + " credito : "
-                    + creditoARealizar.getValorResidualMesAnterior() + " resíduo : " + creditoARealizar.getAnoMesCobrancaCredito() + " cobranca : " 
-                    + creditoARealizar.getAnoMesReferenciaPrestacao() + " prestacao <-----      ");
-            
-            BigDecimal valorCredito = creditoARealizar.calculaValorParcelaIntermediaria(preFaturamento).add(creditoARealizar.getValorResidualMesAnterior());
-            
-            if (creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue()) && creditoARealizar.isUltimaPrestacao()){
-                valorCredito = creditoARealizar.calculaCreditoOuResiduo();
-                logger.info("      DURANTE 1 -----> " + creditoARealizar.getId() + " |  valorCredito: " + valorCredito + " <-----      ");
-            }
-            logger.info("      DURANTE 2 -----> " + creditoARealizar.getId() + " |  valorCredito: " + valorCredito + " <-----      ");
-            
-            if (creditoARealizar.nuncaFoiConcedido() || !creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue())) {
-                creditoARealizar.incrementaPrestacoesRealizadas();
-                creditoARealizar.setValorResidualConcedidoMes(creditoARealizar.getValorResidualMesAnterior());
-                creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
-                logger.info("      DURANTE 3 -----> " + creditoARealizar.getId() + " |  valorCredito: " + valorCredito + " <-----      ");
-            }
-            
-            if (!preFaturamento) {
-                valorTotalACobrar = valorTotalACobrar.subtract(valorCredito);
-                logger.info("      DURANTE 4 -----> " + creditoARealizar.getId() + " |  ValorResidualMesAnterior: " + creditoARealizar.getValorResidualMesAnterior() + " <-----      ");
-            }
-
-            if (valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
-
-                creditoARealizar.setValorResidualMesAnterior(valorTotalACobrar.multiply(new BigDecimal("-1")));
-
-                valorCredito = valorCredito.subtract(creditoARealizar.getValorResidualMesAnterior());
-
-                valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
-                
-                logger.info("      DURANTE 5 -----> " + creditoARealizar.getId() + " |  ValorResidualMesAnterior: " + creditoARealizar.getValorResidualMesAnterior() + " <-----      ");
-
-            } else {
-
-                if (!preFaturamento) {
-                    creditoARealizar.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
-                    logger.info("      DURANTE 6 -----> " + creditoARealizar.getId() + " |  ValorResidualMesAnterior: " + creditoARealizar.getValorResidualMesAnterior() + " <-----      ");
-                }
-            }
-
-            valorTotalCreditos = valorTotalCreditos.add(valorCredito);
-
-            logger.info("      DEPOIS -----> " + creditoARealizar.getId() + " : " + creditoARealizar.getNumeroPrestacaoRealizada() + " de " + creditoARealizar.getNumeroPrestacaoCredito() + " : "
-                    + creditoARealizar.getValorTotal() + " credito : "
-                    + creditoARealizar.getValorResidualMesAnterior() + " resíduo : " + creditoARealizar.getAnoMesCobrancaCredito() + " cobranca : " 
-                    + creditoARealizar.getAnoMesReferenciaPrestacao() + " prestacao <-----      ");
-            
-            helper.addCreditoARealizar(valorCredito, creditoARealizar);
-        }
+	        	valorTotalCreditos = valorTotalCreditos.add(valorCreditoBolsaAgua);
+	        	helper.addCreditoARealizar(valorCreditoBolsaAgua, creditoBolsaAgua);
+	        	
+	        	logger.info("  BOLSA AGUA DEPOIS -----> " + creditoBolsaAgua.getId() + " : " 
+	                    + creditoBolsaAgua.getValorTotal() + " credito : "
+	                    + creditoBolsaAgua.getValorResidualMesAnterior() + " resíduo : " 
+	                    + creditoBolsaAgua.getAnoMesCobrancaCredito() + " cobranca : " 
+	                    + creditoBolsaAgua.getAnoMesReferenciaPrestacao() + " prestacao <-----      ");
+	        }
+	        
+	        while (iteratorColecaoCreditosARealizar.hasNext() && valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
+	
+	            creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
+	            
+	            if (creditoARealizar.isCreditoBolsaAgua()) {
+	            	continue;
+	            }
+	            
+	            logger.info("      ANTES -----> " + creditoARealizar.getId() + " : " 
+	            		+ creditoARealizar.getNumeroPrestacaoRealizada() + " de " + creditoARealizar.getNumeroPrestacaoCredito() + " : "
+	                    + creditoARealizar.getValorTotal() + " credito : "
+	                    + creditoARealizar.getValorResidualMesAnterior() + " resíduo : " 
+	                    + creditoARealizar.getAnoMesCobrancaCredito() + " cobranca : " 
+	                    + creditoARealizar.getAnoMesReferenciaPrestacao() + " prestacao <-----      ");
+	            
+	            BigDecimal valorCredito = creditoARealizar.calculaValorParcelaIntermediaria(preFaturamento).add(creditoARealizar.getValorResidualMesAnterior());
+	            
+	            if (creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue()) && creditoARealizar.isUltimaPrestacao()){
+	                valorCredito = creditoARealizar.calculaCreditoOuResiduo();
+	                logger.info("      DURANTE 1 -----> " + creditoARealizar.getId() + " |  valorCredito: " + valorCredito + " <-----      ");
+	            }
+	            logger.info("      DURANTE 2 -----> " + creditoARealizar.getId() + " |  valorCredito: " + valorCredito + " <-----      ");
+	            
+	            if (creditoARealizar.nuncaFoiConcedido() || !creditoARealizar.concedidoNaReferenciaAtual(anoMesFaturamento.intValue())) {
+	                creditoARealizar.incrementaPrestacoesRealizadas();
+	                creditoARealizar.setValorResidualConcedidoMes(creditoARealizar.getValorResidualMesAnterior());
+	                creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+	                logger.info("      DURANTE 3 -----> " + creditoARealizar.getId() + " |  valorCredito: " + valorCredito + " <-----      ");
+	            }
+	            
+	            if (!preFaturamento) {
+	                valorTotalACobrar = valorTotalACobrar.subtract(valorCredito);
+	                logger.info("      DURANTE 4 -----> " + creditoARealizar.getId() + " |  ValorResidualMesAnterior: " + creditoARealizar.getValorResidualMesAnterior() + " <-----      ");
+	            }
+	
+	            if (valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
+	
+	                creditoARealizar.setValorResidualMesAnterior(valorTotalACobrar.multiply(new BigDecimal("-1")));
+	
+	                valorCredito = valorCredito.subtract(creditoARealizar.getValorResidualMesAnterior());
+	
+	                valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+	                
+	                logger.info("      DURANTE 5 -----> " + creditoARealizar.getId() + " |  ValorResidualMesAnterior: " + creditoARealizar.getValorResidualMesAnterior() + " <-----      ");
+	
+	            } else {
+	
+	                if (!preFaturamento) {
+	                    creditoARealizar.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+	                    logger.info("      DURANTE 6 -----> " + creditoARealizar.getId() + " |  ValorResidualMesAnterior: " + creditoARealizar.getValorResidualMesAnterior() + " <-----      ");
+	                }
+	            }
+	
+	            valorTotalCreditos = valorTotalCreditos.add(valorCredito);
+	
+	            logger.info("      DEPOIS -----> " + creditoARealizar.getId() + " : " + creditoARealizar.getNumeroPrestacaoRealizada() + " de " + creditoARealizar.getNumeroPrestacaoCredito() + " : "
+	                    + creditoARealizar.getValorTotal() + " credito : "
+	                    + creditoARealizar.getValorResidualMesAnterior() + " resíduo : " + creditoARealizar.getAnoMesCobrancaCredito() + " cobranca : " 
+	                    + creditoARealizar.getAnoMesReferenciaPrestacao() + " prestacao <-----      ");
+	            
+	            helper.addCreditoARealizar(valorCredito, creditoARealizar);
+	        }
         
         helper.setValorTotalCreditos(valorTotalCreditos);
         helper.setValorTotalDebitos(valorTotalACobrar);
         
         return helper;
+    }
+    
+    private CreditoARealizar obterCreditoBolsaAgua(Collection<CreditoARealizar> collectionCreditos) {
+    	Iterator<CreditoARealizar> iteratorColecaoCreditosARealizar = collectionCreditos.iterator();
+
+        while (iteratorColecaoCreditosARealizar.hasNext()) {
+        	CreditoARealizar credito = iteratorColecaoCreditosARealizar.next();
+        	
+        	if (credito.isCreditoBolsaAgua()) {
+        		return credito;
+        	}
+        }
+        
+        return null;
     }
 }

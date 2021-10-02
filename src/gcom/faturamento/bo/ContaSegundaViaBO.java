@@ -1,5 +1,15 @@
 package gcom.faturamento.bo;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.ejb.CreateException;
+
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.imovel.Categoria;
@@ -24,16 +34,6 @@ import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.ejb.CreateException;
 
 public class ContaSegundaViaBO {
 
@@ -183,6 +183,10 @@ public class ContaSegundaViaBO {
 			contaHelper.setMensagemDebitos(obterMensagemDebitos());
 
 			contaHelper.setMensagemQuitacao(controlador.obterMsgQuitacaoDebitos(new Imovel(contaHelper.getIdImovel()), contaHelper.getAmReferencia()));
+
+			if (contaHelper.getValorConta().doubleValue() > 0 && contaHelper.getValorCreditoBolsaAgua().doubleValue() > 0)
+				contaHelper.setMensagemBolsaAgua("Programa Água Pará 20.000 litros quitados pelo Governo do Estado do Pará");
+
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		} catch (ControladorException e) {
