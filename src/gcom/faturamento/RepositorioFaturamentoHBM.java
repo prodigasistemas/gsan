@@ -9686,7 +9686,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     .append("imovel.imov_nnsequencialrotaentrega as seqRotaEntrega, ")// 41
 				     .append("imovel.imov_nnquadraentrega as numeroQuadraEntrega, ")// 42
 				     .append("cnt.cnta_vlrateioagua as valorRateioAgua, ") //43
-				     .append("cnt.cnta_vlrateioesgoto as valorRateioEsgoto ") //44
+				     .append("cnt.cnta_vlrateioesgoto as valorRateioEsgoto, ") //44
 				     .append("crrz.crrz_vlcredito as valorCreditoBolsaAgua ") //45
 				     .append("from cadastro.cliente_conta cliCnt ")
 				     .append("inner join faturamento.conta cnt on cliCnt.cnta_id=cnt.cnta_id ")
