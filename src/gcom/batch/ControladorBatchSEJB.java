@@ -2600,8 +2600,13 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 						
 						Collection<Integer> colecaoGrupos = new ArrayList<Integer>();
-						colecaoGrupos.add(330);
-						colecaoGrupos.add(310);
+						colecaoGrupos.add(311);
+						colecaoGrupos.add(331);
+						colecaoGrupos.add(302);
+						colecaoGrupos.add(312);
+						colecaoGrupos.add(322);
+						colecaoGrupos.add(332);
+						colecaoGrupos.add(304);
 						
 						FiltroRota filtroRota = new FiltroRota();
 						filtroRota.adicionarParametro(new ParametroSimplesIn(filtroRota.FATURAMENTO_GRUPO_ID, colecaoGrupos));
