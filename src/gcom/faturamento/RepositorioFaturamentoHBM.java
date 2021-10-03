@@ -9687,6 +9687,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     .append("imovel.imov_nnquadraentrega as numeroQuadraEntrega, ")// 42
 				     .append("cnt.cnta_vlrateioagua as valorRateioAgua, ") //43
 				     .append("cnt.cnta_vlrateioesgoto as valorRateioEsgoto ") //44
+				     .append("crrz.crrz_vlcredito as valorCreditoBolsaAgua ") //45
 				     .append("from cadastro.cliente_conta cliCnt ")
 				     .append("inner join faturamento.conta cnt on cliCnt.cnta_id=cnt.cnta_id ")
 				     .append("inner join faturamento.conta_impressao contaImpressao on cnt.cnta_id = contaImpressao.cnta_id ")
@@ -9704,6 +9705,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     .append("inner join cadastro.cliente cli on cliCnt.clie_id=cli.clie_id ")
 				     .append("inner join cadastro.quadra_face quadraFace on imovel.qdfa_id=quadraFace.qdfa_id ")
 				     .append("left join cadastro.funcionario func on imovel.func_id=func.func_id ")
+				     .append("left join faturamento.credito_realizado crrz ON crrz.cnta_id = cnt.cnta_id AND crrz.crti_id = :creditoTipoBolsaAgua")
 				     .append("where ")
 				     .append("contaImpressao.cnti_amreferenciaconta = :referencia AND ")
 				     .append("cnt.cnta_tmultimaalteracao > :data AND ")
@@ -9760,6 +9762,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.addScalar("numeroQuadraEntrega", Hibernate.INTEGER)
 					.addScalar("valorRateioAgua",Hibernate.BIG_DECIMAL)
 					.addScalar("valorRateioEsgoto",Hibernate.BIG_DECIMAL)
+					.addScalar("valorCreditoBolsaAgua", Hibernate.BIG_DECIMAL)
+					.setInteger("creditoTipoBolsaAgua", CreditoTipo.CREDITO_BOLSA_AGUA)
 					.setDate("data",Util.criarData(16, 05, 2007))
 					.setInteger("indicadorNomeConta", ConstantesSistema.SIM)
 					.setInteger("referencia", anoMesReferencia)

@@ -16118,14 +16118,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, rota.getId());
 
 		try {
-
+			Integer referencia = 202110;
+			
 			CreditoTipo creditoTipo = obterCreditoTipo(CreditoTipo.CREDITO_BOLSA_AGUA);
 
 			Collection<Imovel> colecaoImovel = getControladorImovel().pesquisarImoveisBolsaAgua(rota);
 
 			for (Imovel imovel: colecaoImovel) {
-				apagarDadosCreditoSocialInicioBatch(rota.getFaturamentoGrupo().getAnoMesReferencia(), creditoTipo, imovel);
-				atualizarValorCreditoBolsaAgua(rota.getFaturamentoGrupo().getAnoMesReferencia(), imovel);
+				apagarDadosCreditoSocialInicioBatch(referencia, creditoTipo, imovel);
+				atualizarValorCreditoBolsaAgua(referencia, imovel);
 				
 				//DeterminarValoresFaturamentoAguaEsgotoHelper valoresCreditos = obterValoresCreditosBolsaAgua(imovel, grupo);
 				BigDecimal valorCredito = BigDecimal.ZERO;
@@ -16138,7 +16139,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					valorCredito = valorCredito.add(new BigDecimal(42.84));  
 				}
 				
-				inserirCreditoBolsaAgua(imovel, valorCredito, rota.getFaturamentoGrupo().getAnoMesReferencia(), creditoTipo);
+				inserirCreditoBolsaAgua(imovel, valorCredito, referencia, creditoTipo);
 			}
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);

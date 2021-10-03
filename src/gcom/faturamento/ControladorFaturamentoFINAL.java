@@ -37023,9 +37023,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (parmsConta[32] != null) {
 						emitirContaHelper.setNomeImovel((String) parmsConta[32]);
 					}
-					if (parmsConta[33] != null) {
-						emitirContaHelper.setValorCreditoBolsaAgua((BigDecimal) parmsConta[33]);
-					} 
+					 
 
 					if (tam > 34) {
 						if (parmsConta[33] != null) {
@@ -37065,6 +37063,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 							if (parmsConta[44] != null) {
 								emitirContaHelper.setValorRateioEsgoto((BigDecimal) parmsConta[44]);
+							}
+							if (parmsConta[45] != null) {
+								emitirContaHelper.setValorCreditoBolsaAgua((BigDecimal) parmsConta[45]);
 							}
 						}
 
