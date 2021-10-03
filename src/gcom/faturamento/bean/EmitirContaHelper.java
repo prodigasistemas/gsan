@@ -1382,13 +1382,18 @@ public class EmitirContaHelper implements Serializable {
 	}
 	
 	public BigDecimal getValorCreditoBolsaAgua() {
-		BigDecimal valorAguaEsgoto = new BigDecimal("0.00");
-		valorAguaEsgoto.add(getValorAgua()); 		
-		if (getValorEsgoto() != null){
-				valorAguaEsgoto.add(getValorEsgoto());
-		}				
-		if (valorAguaEsgoto.compareTo(this.valorCreditoBolsaAgua) > 0) {
-			return this.valorCreditoBolsaAgua;
+		BigDecimal valorAguaEsgoto = BigDecimal.ZERO;
+
+		if (valorAgua != null && valorAgua.doubleValue() > 0) {
+			valorAguaEsgoto.add(valorAgua);
+		}
+				
+		if (valorEsgoto != null && valorEsgoto.doubleValue() > 0) {
+				valorAguaEsgoto.add(valorEsgoto);
+		}
+		
+		if (valorCreditoBolsaAgua != null && valorAguaEsgoto.doubleValue() > valorCreditoBolsaAgua.doubleValue()) {
+			return valorCreditoBolsaAgua;
 		} else {
 			return valorAguaEsgoto;
 		}
