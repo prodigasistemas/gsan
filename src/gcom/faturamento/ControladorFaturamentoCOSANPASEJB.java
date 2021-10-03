@@ -1415,7 +1415,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
 			throws ControladorException {
 		
-		if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) == 0) {
+		if (emitirContaHelper.getValorCreditoBolsaAgua() != null && emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
 			contaTxt.append(Util.completaString("PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA", 100));
 			contaTxt.append(Util.completaString("", 100));
 			contaTxt.append(Util.completaString("", 100));
@@ -1423,7 +1423,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			emitirContaHelper.setMsgLinha1Conta("PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA");
 			emitirContaHelper.setMsgLinha2Conta("");
 			emitirContaHelper.setMsgLinha3Conta("");
-		} else if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) >= 0) {
+		} else if (emitirContaHelper.getValorCreditoBolsaAgua() != null && emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) > 0.00) {
 			contaTxt.append(Util.completaString("PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA", 100));
 			contaTxt.append(Util.completaString("", 100));
 			contaTxt.append(Util.completaString("", 100));
