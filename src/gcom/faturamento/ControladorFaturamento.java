@@ -16113,8 +16113,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	public void gerarCreditosBolsaAgua(FaturamentoGrupo grupo,
-			Rota rota, int idFuncionalidadeIniciada) throws ControladorException {
+	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada) throws ControladorException {
 
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, rota.getId());
 
@@ -16125,8 +16124,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Collection<Imovel> colecaoImovel = getControladorImovel().pesquisarImoveisBolsaAgua(rota);
 
 			for (Imovel imovel: colecaoImovel) {
-				apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
-				atualizarValorCreditoBolsaAgua(grupo.getAnoMesReferencia(), imovel);
+				apagarDadosCreditoSocialInicioBatch(rota.getFaturamentoGrupo().getAnoMesReferencia(), creditoTipo, imovel);
+				atualizarValorCreditoBolsaAgua(rota.getFaturamentoGrupo().getAnoMesReferencia(), imovel);
 				
 				//DeterminarValoresFaturamentoAguaEsgotoHelper valoresCreditos = obterValoresCreditosBolsaAgua(imovel, grupo);
 				BigDecimal valorCredito = BigDecimal.ZERO;
@@ -16139,7 +16138,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					valorCredito = valorCredito.add(new BigDecimal(42.84));  
 				}
 				
-				inserirCreditoBolsaAgua(imovel, valorCredito, grupo, creditoTipo);
+				inserirCreditoBolsaAgua(imovel, valorCredito, rota.getFaturamentoGrupo().getAnoMesReferencia(), creditoTipo);
 			}
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
@@ -16188,11 +16187,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return valoresAguaEsgoto;
 	}
 
-	private void inserirCreditoBolsaAgua(Imovel imovel, BigDecimal valorCredito, FaturamentoGrupo grupo, CreditoTipo creditoTipo) throws ControladorException {
+	private void inserirCreditoBolsaAgua(Imovel imovel, BigDecimal valorCredito, Integer referencia, CreditoTipo creditoTipo) throws ControladorException {
 		CreditoOrigem creditoOrigem = new CreditoOrigem(CreditoOrigem.BOLSA_AGUA);
 		Short qtdPrestacoes = new Short("1");
 		
-		this.inserirCreditoARealizar(imovel, grupo.getAnoMesReferencia(), valorCredito, creditoTipo, creditoOrigem, qtdPrestacoes, Usuario.USUARIO_BATCH);
+		this.inserirCreditoARealizar(imovel, referencia, valorCredito, creditoTipo, creditoOrigem, qtdPrestacoes, Usuario.USUARIO_BATCH);
 	}
 	
 	private void inserirCreditoARealizar(Imovel imovel, Integer referencia, BigDecimal valorCredito, 
