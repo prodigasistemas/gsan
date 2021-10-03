@@ -16126,9 +16126,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			for (Imovel imovel: colecaoImovel) {
 				apagarDadosCreditoSocialInicioBatch(referencia, creditoTipo, imovel);
-				atualizarValorCreditoBolsaAgua(referencia, imovel);
+				//atualizarValorCreditoBolsaAgua(referencia, imovel);
 				
-				//DeterminarValoresFaturamentoAguaEsgotoHelper valoresCreditos = obterValoresCreditosBolsaAgua(imovel, grupo);
 				BigDecimal valorCredito = BigDecimal.ZERO;
 				
 				if (imovel.isLigadoAgua() ) {
