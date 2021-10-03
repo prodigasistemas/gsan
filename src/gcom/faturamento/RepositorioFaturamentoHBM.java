@@ -9705,7 +9705,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     .append("inner join cadastro.cliente cli on cliCnt.clie_id=cli.clie_id ")
 				     .append("inner join cadastro.quadra_face quadraFace on imovel.qdfa_id=quadraFace.qdfa_id ")
 				     .append("left join cadastro.funcionario func on imovel.func_id=func.func_id ")
-				     .append("left join faturamento.credito_realizado crrz ON crrz.cnta_id = cnt.cnta_id AND crrz.crti_id = :creditoTipoBolsaAgua")
+				     .append("left join faturamento.credito_realizado crrz ON crrz.cnta_id = cnt.cnta_id AND crrz.crti_id = :creditoTipoBolsaAgua ")
 				     .append("where ")
 				     .append("contaImpressao.cnti_amreferenciaconta = :referencia AND ")
 				     .append("cnt.cnta_tmultimaalteracao > :data AND ")
