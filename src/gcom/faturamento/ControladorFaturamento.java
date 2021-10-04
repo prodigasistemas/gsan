@@ -626,6 +626,23 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 MovimentoContaImpostoDeduzido.class
 	        						 .getName());
 	        				 
+	        				 BigDecimal valorCreditoBolsaAguaTotal = retornaValorCreditoBolsaAgua(helper);
+	        				 
+	        				 if (valorCreditoBolsaAguaTotal != null) {
+	        					 BigDecimal valorCreditos = contaAtualizacao.getValorCreditos().subtract(valorCreditoBolsaAguaTotal);
+	        					 contaAtualizacao.setValorCreditos(valorCreditos);
+	        					 
+	        					 BigDecimal valorBolsaAguaSemResiduo = null;
+	        					 BigDecimal valorAguaEsgoto = new BigDecimal(valorAgua.doubleValue() + valorEsgoto.doubleValue());
+	        					 if (valorAguaEsgoto.doubleValue() >  valorCreditoBolsaAguaTotal.doubleValue()) {
+	        						 valorBolsaAguaSemResiduo = valorCreditoBolsaAguaTotal;
+	        					 } else if (valorAguaEsgoto.doubleValue() < valorCreditoBolsaAguaTotal.doubleValue()){
+	        						 valorBolsaAguaSemResiduo = valorAguaEsgoto;
+	        				 }
+	        					 valorCreditos.add(valorBolsaAguaSemResiduo);
+	        					 contaAtualizacao.setValorCreditos(valorCreditos);
+	        			 }
+	        				 
 	        				 BigDecimal valorTotalMenosImposto = new BigDecimal(
 	        						 valorAgua.doubleValue()
 	        						 + valorEsgoto.doubleValue()
@@ -662,7 +679,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									}
 								}
 							}
-	        				 
+							
 	        				 contaAtualizacao.setConsumoAgua(consumoAgua);
 	        				 contaAtualizacao.setConsumoEsgoto(consumoEsgoto);
 	        				 contaAtualizacao.setConsumoRateioAgua(consumoRateioAgua);
@@ -16293,6 +16310,27 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 
 	}
+	
+	private BigDecimal retornaValorCreditoBolsaAgua (MovimentoContaPrefaturada helper) throws ControladorException {
+		 FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+		 filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.IMOVEL_ID,helper.getImovel().getId()));
+		 filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO,helper.getAnoMesReferenciaPreFaturamento()));
+		 filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.CREDITO_TIPO,CreditoTipo.CREDITO_BOLSA_AGUA));
+		 
+		 Collection<CreditoARealizar> colCreditoARealizar = this.getControladorUtil().pesquisar(filtroCreditoARealizar,CreditoARealizar.class.getName());
+		 
+		 if (colCreditoARealizar != null && colCreditoARealizar.size() > 0) {
+			 CreditoARealizar credito = (CreditoARealizar) Util.retonarObjetoDeColecao(colCreditoARealizar);
+			 BigDecimal valorBolsaAgua = credito.getValorCredito();
+			 
+			 return valorBolsaAgua;
+		 }
+		 
+		 return null;
+
+	}
+		
+	
 	
 	private SistemaParametro getSistemaParametro() throws ControladorException {
 		try {
