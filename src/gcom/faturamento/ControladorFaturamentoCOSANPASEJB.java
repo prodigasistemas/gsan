@@ -1415,6 +1415,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
 			throws ControladorException {
 		
+		System.out.println("[ID CONTA = " + emitirContaHelper.getIdConta() + "]");
+		System.out.println("[VALOR CREDITO BOLSA AGUA = " + emitirContaHelper.getValorCreditoBolsaAgua() + "]");
+		System.out.println("[VALOR TOTAL CONTA = " + Double.valueOf(emitirContaHelper.getValorTotalConta()) + "]");
+		System.out.println("---------------------------------------------------------------------------");
+		
 		if (emitirContaHelper.getValorCreditoBolsaAgua() != null && emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
 			contaTxt.append(Util.completaString("PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA", 100));
 			contaTxt.append(Util.completaString("", 100));
