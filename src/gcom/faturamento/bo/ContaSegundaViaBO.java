@@ -181,12 +181,10 @@ public class ContaSegundaViaBO {
 				contaHelper.setMensagemAnormalidade(mensagensAnormalidade[0] + mensagensAnormalidade[1]);
 
 			contaHelper.setMensagemDebitos(obterMensagemDebitos());
-
 			contaHelper.setMensagemQuitacao(controlador.obterMsgQuitacaoDebitos(new Imovel(contaHelper.getIdImovel()), contaHelper.getAmReferencia()));
-
-			if (contaHelper.getValorConta().doubleValue() > 0 && contaHelper.getValorCreditoBolsaAgua().doubleValue() > 0)
-				contaHelper.setMensagemBolsaAgua("Programa Água Pará 20.000 litros quitados pelo Governo do Estado do Pará");
-
+			
+			contaHelper.preencherMsgBolsaAgua();
+			
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		} catch (ControladorException e) {
