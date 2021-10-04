@@ -33199,12 +33199,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					emitirContaHelper
 							.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
 					
-					CreditoRealizado creditoRealizadoBolsaAgua = pesquisarCreditoRealizadoBolsaAgua(emitirContaHelper);
-					emitirContaHelper.setValorCreditoBolsaAgua(creditoRealizadoBolsaAgua.getValorCredito());
+					
 
 				}
 			}
-
+			
 			colecaoEmitirContaHelper.add(emitirContaHelper);
 
 			if (cobrarTaxaEmissaoConta) {
@@ -33218,7 +33217,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		return colecaoEmitirContaHelper;
 	}
 
-	private CreditoRealizado pesquisarCreditoRealizadoBolsaAgua(EmitirContaHelper emitirContaHelper) throws ControladorException {
+	protected CreditoRealizado pesquisarCreditoRealizadoBolsaAgua(EmitirContaHelper emitirContaHelper) throws ControladorException {
 		Filtro filtro = new FiltroCreditoRealizado();
 		filtro.adicionarParametro(new ParametroSimples(FiltroCreditoRealizado.CONTA_ID, emitirContaHelper.getIdConta()));
 		filtro.adicionarParametro(new ParametroSimples(FiltroCreditoRealizado.CREDITO_TIPO_ID, CreditoTipo.CREDITO_BOLSA_AGUA));

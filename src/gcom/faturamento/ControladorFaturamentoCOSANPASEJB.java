@@ -67,6 +67,7 @@ import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaTipo;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.IContaCategoria;
+import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarCategoria;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
@@ -3249,9 +3250,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			helper.setColecaoContaLinhasDescricaoServicosTarifasTotalHelper(linhasDescricaoServicosTarifasTotalHelper);
 
 			BigDecimal valorConta = obterValorConta2Via(helper);
-
 			helper.setValorContaString(Util.formatarMoedaReal(valorConta));
 			helper.setValorConta(valorConta);
+			
+			CreditoRealizado creditoRealizadoBolsaAgua = pesquisarCreditoRealizadoBolsaAgua(helper);
+			helper.setValorCreditoBolsaAgua(creditoRealizadoBolsaAgua.getValorCredito());
+			
 			helper = preencherDadosPagamento2Via(id, helper, valorConta);
 			helper = preencherInfoCodigoBarras2Via(helper, valorConta);
 			helper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(helper, 1)));
