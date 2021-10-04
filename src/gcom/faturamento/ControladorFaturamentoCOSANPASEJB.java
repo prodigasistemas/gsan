@@ -33,8 +33,6 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.EsferaPoder;
-import gcom.cadastro.geografico.FiltroMunicipio;
-import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
@@ -43,7 +41,6 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroQuadraFace;
-import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.QuadraFace;
@@ -3254,7 +3251,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			helper.setValorConta(valorConta);
 			
 			CreditoRealizado creditoRealizadoBolsaAgua = pesquisarCreditoRealizadoBolsaAgua(helper);
-			helper.setValorCreditoBolsaAgua(creditoRealizadoBolsaAgua.getValorCredito());
+			if (creditoRealizadoBolsaAgua != null) {
+				helper.setValorCreditoBolsaAgua(creditoRealizadoBolsaAgua.getValorCredito());
+			}
 			
 			helper = preencherDadosPagamento2Via(id, helper, valorConta);
 			helper = preencherInfoCodigoBarras2Via(helper, valorConta);
