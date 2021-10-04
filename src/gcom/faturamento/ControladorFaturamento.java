@@ -642,12 +642,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						}					
 	        						if (valorAguaEsgoto.doubleValue() > valorCreditoBolsaAguaTotal.doubleValue()) {
 	        							valorBolsaAguaAtlz = valorCreditoBolsaAguaTotal;
-	        						} else if (valorAguaEsgoto.doubleValue() > valorCreditoBolsaAguaTotal.doubleValue()){
+	        						} else if (valorAguaEsgoto.doubleValue() < valorCreditoBolsaAguaTotal.doubleValue()){
 	        							valorBolsaAguaAtlz = valorAguaEsgoto;
 	        						}
 	        					 valorCreditos.add(valorBolsaAguaAtlz);
 	        					 contaAtualizacao.setValorCreditos(valorCreditos);
-	        			 }
+	        				 }
 	        				 
 	        				 BigDecimal valorTotalMenosImposto = new BigDecimal(
 	        						 valorAgua.doubleValue()
