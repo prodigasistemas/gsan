@@ -626,29 +626,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 MovimentoContaImpostoDeduzido.class
 	        						 .getName());
 	        				 
-	        				 BigDecimal valorCreditoBolsaAguaTotal = retornaValorCreditoBolsaAgua(contaAtualizacao);
-	        				 
-	        				 if (valorCreditoBolsaAguaTotal != null && valorCreditoBolsaAguaTotal.doubleValue() > 0) {
-	        					 BigDecimal valorCreditos = contaAtualizacao.getValorCreditos().subtract(valorCreditoBolsaAguaTotal);
-	        					 contaAtualizacao.setValorCreditos(valorCreditos);
-	        					 
-	        					 BigDecimal valorBolsaAguaAtlz = BigDecimal.ZERO;
-	        					 BigDecimal valorAguaEsgoto = BigDecimal.ZERO;
-	        					 if (valorAgua != null && valorAgua.doubleValue() > 0) {
-	        							valorAguaEsgoto.add(valorAgua);
-	        						}        								
-	        						if (valorEsgoto != null && valorEsgoto.doubleValue() > 0) {
-	        								valorAguaEsgoto.add(valorEsgoto);
-	        						}					
-	        						if (valorAguaEsgoto.doubleValue() > valorCreditoBolsaAguaTotal.doubleValue()) {
-	        							valorBolsaAguaAtlz = valorCreditoBolsaAguaTotal;
-	        						} else if (valorAguaEsgoto.doubleValue() < valorCreditoBolsaAguaTotal.doubleValue()){
-	        							valorBolsaAguaAtlz = valorAguaEsgoto;
-	        						}
-	        					 valorCreditos.add(valorBolsaAguaAtlz);
-	        					 contaAtualizacao.setValorCreditos(valorCreditos);
-	        				 }
-	        				 
 	        				 BigDecimal valorTotalMenosImposto = new BigDecimal(
 	        						 valorAgua.doubleValue()
 	        						 + valorEsgoto.doubleValue()
@@ -685,7 +662,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									}
 								}
 							}
-							
+	        				 
 	        				 contaAtualizacao.setConsumoAgua(consumoAgua);
 	        				 contaAtualizacao.setConsumoEsgoto(consumoEsgoto);
 	        				 contaAtualizacao.setConsumoRateioAgua(consumoRateioAgua);
@@ -16315,21 +16292,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 
 	}
-	
-	private BigDecimal retornaValorCreditoBolsaAgua (Conta conta) throws ControladorException {
-		Collection<CreditoRealizado> crrz;
-		crrz = getControladorFaturamento().obterCreditosRealizadosConta(conta);				
-				for (CreditoRealizado creditoRealizado : crrz) {
-					
-					if(creditoRealizado.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)){
-						BigDecimal valorCreditoBolsaAgua = creditoRealizado.getValorCredito();
-						return valorCreditoBolsaAgua;
-					} 
-				}
-				return BigDecimal.ZERO; 
-	}
-		
-	
 	
 	private SistemaParametro getSistemaParametro() throws ControladorException {
 		try {
