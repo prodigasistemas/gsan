@@ -969,12 +969,26 @@ public class EmitirContaHelper implements Serializable {
 		this.valorAgua = valorAgua;
 	}
 
+//	public BigDecimal getValorCreditos() {
+//		if (valorCreditoBolsaAgua == null) {
+//			valorCreditoBolsaAgua = BigDecimal.ZERO;
+//		}
+//		
+//		if (valorCreditos == null) {
+//			valorCreditos = BigDecimal.ZERO;
+//		}
+//		
+//		BigDecimal valorCreditoFinal = valorCreditos.subtract(valorCreditoBolsaAgua);
+//		
+//		if (valorCreditoFinal.doubleValue() < 0) {
+//			valorCreditoFinal = valorCreditoFinal.multiply(new BigDecimal(-1));
+//		} 
+//		
+//		return valorCreditoFinal;
+//	}
+	
 	public BigDecimal getValorCreditos() {
-		BigDecimal valorCreditoFinal = valorCreditos.subtract(valorCreditoBolsaAgua);
-		if (valorCreditoFinal.doubleValue() < 0) {
-			valorCreditoFinal = valorCreditoFinal.multiply(new BigDecimal(-1));
-		} 
-		return valorCreditoFinal;
+		return this.valorCreditos;
 	}
 
 	public void setValorCreditos(BigDecimal valorCreditos) {
@@ -1372,13 +1386,18 @@ public class EmitirContaHelper implements Serializable {
 	}
 	
 	public BigDecimal getValorCreditoBolsaAgua() {
-		BigDecimal valorAguaEsgoto = new BigDecimal("0.00");
-		valorAguaEsgoto.add(getValorAgua()); 		
-		if (getValorEsgoto() != null){
-				valorAguaEsgoto.add(getValorEsgoto());
-		}				
-		if (valorAguaEsgoto.compareTo(this.valorCreditoBolsaAgua) > 0) {
-			return this.valorCreditoBolsaAgua;
+		BigDecimal valorAguaEsgoto = BigDecimal.ZERO;
+
+		if (valorAgua != null && valorAgua.doubleValue() > 0) {
+			valorAguaEsgoto.add(valorAgua);
+		}
+				
+		if (valorEsgoto != null && valorEsgoto.doubleValue() > 0) {
+				valorAguaEsgoto.add(valorEsgoto);
+		}
+		
+		if (valorCreditoBolsaAgua != null && valorAguaEsgoto.doubleValue() > valorCreditoBolsaAgua.doubleValue()) {
+			return valorCreditoBolsaAgua;
 		} else {
 			return valorAguaEsgoto;
 		}
@@ -1805,9 +1824,9 @@ public class EmitirContaHelper implements Serializable {
 			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
 		}
 		
-		if (this.getValorCreditoBolsaAgua() != null) {
-			valorTotalConta = valorTotalConta.subtract(this.getValorCreditoBolsaAgua());
-		}
+//		if (this.getValorCreditoBolsaAgua() != null) {
+//			valorTotalConta = valorTotalConta.subtract(this.getValorCreditoBolsaAgua());
+//		}
 
 		if (this.getValorImpostos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorImpostos());
@@ -1815,7 +1834,7 @@ public class EmitirContaHelper implements Serializable {
 
 		return valorTotalConta.toString();
 	}
-
+	
 	public Integer getQuantidadeImoveisMicro() {
 		return quantidadeImoveisMicro;
 	}

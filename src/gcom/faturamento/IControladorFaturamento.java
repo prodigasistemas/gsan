@@ -1293,6 +1293,5 @@ public interface IControladorFaturamento {
 	
 	public void envioNotificacaoVencimentoFatura (Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades) throws ControladorException;
 	
-	public void gerarCreditosBolsaAgua(FaturamentoGrupo grupo, Rota rota,
-			int idFuncionalidadeIniciada) throws ControladorException;
+	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada) throws ControladorException;
 }

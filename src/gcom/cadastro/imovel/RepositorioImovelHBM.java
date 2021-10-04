@@ -61,6 +61,7 @@ import gcom.cobranca.bean.EmitirDocumentoCobrancaBoletimCadastroHelper;
 import gcom.cobranca.bean.SituacaoEspecialCobrancaHelper;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FaturamentoGrupo;
+import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.bean.SituacaoEspecialFaturamentoHelper;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
@@ -29532,6 +29533,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	public List<Imovel> pesquisarImoveisBolsaAgua(Rota rota) throws ErroRepositorioException {
+
 		StringBuilder consulta = new StringBuilder();
 
 		Session session = HibernateUtil.getSession();
@@ -29545,11 +29547,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.append(" inner join fetch imovel.ligacaoEsgotoSituacao ligacaoEsgotoSituacao ")
 					.append(" where imovel.imovelPerfil.id = :perfilBolsaAgua  ")
 					.append(" and imovel.ligacaoAguaSituacao.id = :ligado ")
-					.append(" and rota.id = :idRota ");
+					.append(" and rota.id = :idRota ")
+					.append(" and (imovel.faturamentoSituacaoTipo.id is null or imovel.faturamentoSituacaoTipo.id <> :idFaturamentoSituacaoTipo)");
 
 			return (List<Imovel>) session.createQuery(consulta.toString())
 						.setInteger("perfilBolsaAgua",ImovelPerfil.BOLSA_AGUA)
 						.setInteger("ligado",LigacaoAguaSituacao.LIGADO)
+						.setInteger("idFaturamentoSituacaoTipo",FaturamentoSituacaoTipo.PARALISAR_EMISSAO_CONTAS)
 						.setInteger("idRota",rota.getId()).list();
 
 		} catch (HibernateException e) {

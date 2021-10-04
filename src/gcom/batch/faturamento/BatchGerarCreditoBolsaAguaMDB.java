@@ -42,9 +42,8 @@ public class BatchGerarCreditoBolsaAguaMDB implements MessageDrivenBean, Message
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
 				this.getControladorFaturamento().gerarCreditosBolsaAgua(
-						(FaturamentoGrupo) ((Object[]) objectMessage.getObject())[0],
-						(Rota) ((Object[]) objectMessage.getObject())[1],
-						(Integer) ((Object[]) objectMessage.getObject())[2]);
+						(Rota) ((Object[]) objectMessage.getObject())[0],
+						(Integer) ((Object[]) objectMessage.getObject())[1]);
 
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");

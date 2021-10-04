@@ -232,6 +232,7 @@ import gcom.faturamento.credito.CreditoRealizadoHistorico;
 import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.credito.FiltroCreditoARealizar;
 import gcom.faturamento.credito.FiltroCreditoARealizarGeral;
+import gcom.faturamento.credito.FiltroCreditoRealizado;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.credito.ICreditoRealizado;
 import gcom.faturamento.debito.DebitoACobrar;
@@ -33197,6 +33198,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							+ representacaoNumericaCodBarra.substring(36, 47);
 					emitirContaHelper
 							.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+					
+					CreditoRealizado creditoRealizadoBolsaAgua = pesquisarCreditoRealizadoBolsaAgua(emitirContaHelper);
+					emitirContaHelper.setValorCreditoBolsaAgua(creditoRealizadoBolsaAgua.getValorCredito());
 
 				}
 			}
@@ -33212,6 +33216,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		return colecaoEmitirContaHelper;
+	}
+
+	private CreditoRealizado pesquisarCreditoRealizadoBolsaAgua(EmitirContaHelper emitirContaHelper) throws ControladorException {
+		Filtro filtro = new FiltroCreditoRealizado();
+		filtro.adicionarParametro(new ParametroSimples(FiltroCreditoRealizado.CONTA_ID, emitirContaHelper.getIdConta()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroCreditoRealizado.CREDITO_TIPO_ID, CreditoTipo.CREDITO_BOLSA_AGUA));
+
+		return (CreditoRealizado) Util.retonarObjetoDeColecao(getControladorUtil().pesquisar(filtro, CreditoRealizado.class.getName()));
 	}
 
 	/**
@@ -37011,9 +37023,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (parmsConta[32] != null) {
 						emitirContaHelper.setNomeImovel((String) parmsConta[32]);
 					}
-					if (parmsConta[33] != null) {
-						emitirContaHelper.setValorCreditoBolsaAgua((BigDecimal) parmsConta[33]);
-					} 
+					 
 
 					if (tam > 34) {
 						if (parmsConta[33] != null) {
@@ -37053,6 +37063,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 							if (parmsConta[44] != null) {
 								emitirContaHelper.setValorRateioEsgoto((BigDecimal) parmsConta[44]);
+							}
+							if (parmsConta[45] != null) {
+								emitirContaHelper.setValorCreditoBolsaAgua((BigDecimal) parmsConta[45]);
 							}
 						}
 
