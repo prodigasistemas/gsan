@@ -332,6 +332,8 @@ public class InserirClienteAction extends GcomAction {
 				cliente.setNumeroNIS(numeroNIS.trim());
 			}
 
+			cliente.setIndicadorBolsaFamilia(ConstantesSistema.NAO);
+
 			// Insere o indicador para Cobranca Acrescimos
 			cliente.setIndicadorAcrescimos(new Short("1"));
 

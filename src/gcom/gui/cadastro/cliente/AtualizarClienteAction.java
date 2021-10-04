@@ -414,10 +414,12 @@ public class AtualizarClienteAction extends GcomAction {
 					clienteTipo,
 					ramoAtividade,
 					indicadorUsoNomeFantasiaConta);
-
+			
 			// Seta o id do cliente atualizado para ser identificado no BD na atualização
 			cliente.setId(clienteAtualizacao.getId());
 
+			cliente.setIndicadorBolsaFamilia(clienteAtualizacao.getIndicadorBolsaFamilia());
+			
 			// Numero do NIS
 			String numeroNIS = (String) form.get("numeroNIS");
 			if (numeroNIS != null && !numeroNIS.trim().equals("")) {
@@ -683,7 +685,7 @@ public class AtualizarClienteAction extends GcomAction {
 		
 		CadastroUnico cadastroUnico = (CadastroUnico) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtro, CadastroUnico.class.getName()));
 		
-		if (cadastroUnico != null && cadastroUnico.getCpf().equals(cliente.getCpf())) {
+		if (cadastroUnico != null) {
 			cliente.setIndicadorBolsaFamilia(ConstantesSistema.SIM);
 		}
 	}

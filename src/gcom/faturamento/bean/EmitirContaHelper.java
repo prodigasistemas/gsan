@@ -2006,9 +2006,9 @@ public class EmitirContaHelper implements Serializable {
 	public void preencherMsgBolsaAgua() {
 		if (this.valorConta.doubleValue() > 0 && this.valorCreditoBolsaAgua != null && this.valorCreditoBolsaAgua.doubleValue() > 0) {
 			this.mensagemBolsaAgua = "Programa Água Pará 20.000 litros quitados pelo Governo do Estado do Pará";
-		} else if(this.valorConta.doubleValue() == 0.0 && this.valorCreditoBolsaAgua != null && this.valorCreditoBolsaAgua.doubleValue() > 0){
+		} else if (this.valorConta.doubleValue() == 0.0 && this.valorCreditoBolsaAgua != null && this.valorCreditoBolsaAgua.doubleValue() > 0) {
 			this.mensagemBolsaAgua = "Programa Água Pará, quitado pelo Governo do Estado do Pará";
-		}else {
+		} else {
 			this.mensagemBolsaAgua = "";
 		}
 	}
