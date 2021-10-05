@@ -2600,7 +2600,6 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 						
 						Collection<Integer> colecaoGrupos = new ArrayList<Integer>();
-						colecaoGrupos.add(202);
 						colecaoGrupos.add(302);
 						colecaoGrupos.add(304);
 						colecaoGrupos.add(310);
