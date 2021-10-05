@@ -26,6 +26,8 @@ public class FiltroCreditoRealizado extends Filtro {
     
     public final static String LANCAMENTO_ITEM_CONTABIL = "lancamentoItemContabil.id";
 
+    public final static String ID_CREDITO_A_REALIZAR = "creditoARealizarGeral.id";
+    
     /**
      * Construtor da classe FiltroCreditoRealizado
      */
