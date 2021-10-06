@@ -2973,12 +2973,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.IMOVEL_ID, imovel.getId()));
 		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID_CREDITO_TIPO, creditoTipo.getId()));
 
+		FiltroCreditoRealizado filtroRealizado = null; 
+		
 		Collection colecaoCreditoARealizar = (Collection) this.getControladorUtil().pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
 
 		if (colecaoCreditoARealizar != null && !colecaoCreditoARealizar.isEmpty()) {
 
 			CreditoARealizar credito = (CreditoARealizar) colecaoCreditoARealizar.iterator().next();
-
+			
 			if (credito.getNumeroPrestacaoRealizada().compareTo(new Short("0")) == 0) {
 
 				FiltroCreditoARealizarCategoria filtroCreditoARealizarCategoria = new FiltroCreditoARealizarCategoria();
@@ -3000,8 +3002,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				CreditoARealizarGeral creditoARealizarGeral = (CreditoARealizarGeral) this.getControladorUtil()
 						.pesquisar(filtro, CreditoARealizarGeral.class.getName()).iterator().next();
 
-				this.getControladorUtil().remover(credito);
-				this.getControladorUtil().remover(creditoARealizarGeral);
+				if (creditoTipo.getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)) {
+					filtroRealizado = new FiltroCreditoRealizado();
+					filtroRealizado.adicionarParametro(new ParametroSimples(FiltroCreditoRealizado.ID_CREDITO_A_REALIZAR, credito.getId()));
+					
+					Collection colecaoCreditoRealizado = (Collection) this.getControladorUtil().pesquisar(filtroRealizado, CreditoRealizado.class.getName());
+					if (colecaoCreditoRealizado == null 
+							|| (colecaoCreditoRealizado != null && colecaoCreditoRealizado.isEmpty())) {
+						this.getControladorUtil().remover(credito);
+						this.getControladorUtil().remover(creditoARealizarGeral);
+					}
+				} else {
+					this.getControladorUtil().remover(credito);
+					this.getControladorUtil().remover(creditoARealizarGeral);
+				}
+				
 			}
 		}
 	}
@@ -16125,7 +16140,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Collection<Imovel> colecaoImovel = getControladorImovel().pesquisarImoveisBolsaAgua(rota);
 
 			for (Imovel imovel: colecaoImovel) {
-				apagarDadosCreditoSocialInicioBatch(referencia, creditoTipo, imovel);
+				//apagarDadosCreditoSocialInicioBatch(referencia, creditoTipo, imovel);
 				//atualizarValorCreditoBolsaAgua(referencia, imovel);
 				
 				BigDecimal valorCredito = BigDecimal.ZERO;
