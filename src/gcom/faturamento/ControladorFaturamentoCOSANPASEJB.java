@@ -33,8 +33,6 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.EsferaPoder;
-import gcom.cadastro.geografico.FiltroMunicipio;
-import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
@@ -43,7 +41,6 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroQuadraFace;
-import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.QuadraFace;
@@ -443,9 +440,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 								}
 
-								if (emitirContaHelper.getIdConta().equals(new Integer("80926132"))) {
-									System.out.println("Conta!!");
-								}
 								String diasConsumo = obterDiasConsumo(parmsMedicaoHistorico, dataLeituraAnterior, dataLeituraAtual);
 								String[] parmsConsumo = obterConsumoFaturadoConsumoMedioDiario(emitirContaHelper, tipoMedicao, diasConsumo);
 								String consumoFaturamento = parmsConsumo[0];
@@ -1416,25 +1410,22 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
 			throws ControladorException {
 		
-		System.out.println("[ID CONTA = " + emitirContaHelper.getIdConta() + "]");
-		System.out.println("[VALOR CREDITO BOLSA AGUA = " + emitirContaHelper.getValorCreditoBolsaAgua() + "]");
-		System.out.println("[VALOR TOTAL CONTA = " + Double.valueOf(emitirContaHelper.getValorTotalConta()) + "]");
-		System.out.println("---------------------------------------------------------------------------");
-		
-		if (emitirContaHelper.getValorCreditoBolsaAgua() != null && emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
-			contaTxt.append(Util.completaString("PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA", 100));
+		if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
+			String mensagem = "PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA";
+			contaTxt.append(Util.completaString(mensagem, 100));
 			contaTxt.append(Util.completaString("", 100));
 			contaTxt.append(Util.completaString("", 100));
 			
-			emitirContaHelper.setMsgLinha1Conta("PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA");
+			emitirContaHelper.setMsgLinha1Conta(mensagem);
 			emitirContaHelper.setMsgLinha2Conta("");
 			emitirContaHelper.setMsgLinha3Conta("");
-		} else if (emitirContaHelper.getValorCreditoBolsaAgua() != null && emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) > 0.00) {
-			contaTxt.append(Util.completaString("PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA", 100));
+		} else if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) > 0.00) {
+			String mensagem = "PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA";
+			contaTxt.append(Util.completaString(mensagem, 100));
 			contaTxt.append(Util.completaString("", 100));
 			contaTxt.append(Util.completaString("", 100));
 			
-			emitirContaHelper.setMsgLinha1Conta("PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA");
+			emitirContaHelper.setMsgLinha1Conta(mensagem);
 			emitirContaHelper.setMsgLinha2Conta("");
 			emitirContaHelper.setMsgLinha3Conta("");
 		} else { 
@@ -3254,7 +3245,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			helper.setValorConta(valorConta);
 			
 			CreditoRealizado creditoRealizadoBolsaAgua = pesquisarCreditoRealizadoBolsaAgua(helper);
-			helper.setValorCreditoBolsaAgua(creditoRealizadoBolsaAgua.getValorCredito());
+			if (creditoRealizadoBolsaAgua != null) {
+				helper.setValorCreditoBolsaAgua(creditoRealizadoBolsaAgua.getValorCredito());
+			}
 			
 			helper = preencherDadosPagamento2Via(id, helper, valorConta);
 			helper = preencherInfoCodigoBarras2Via(helper, valorConta);

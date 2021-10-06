@@ -1389,17 +1389,21 @@ public class EmitirContaHelper implements Serializable {
 		BigDecimal valorAguaEsgoto = BigDecimal.ZERO;
 
 		if (valorAgua != null && valorAgua.doubleValue() > 0) {
-			valorAguaEsgoto.add(valorAgua);
+			valorAguaEsgoto = valorAguaEsgoto.add(valorAgua);
 		}
 				
 		if (valorEsgoto != null && valorEsgoto.doubleValue() > 0) {
-				valorAguaEsgoto.add(valorEsgoto);
+			valorAguaEsgoto = valorAguaEsgoto.add(valorEsgoto);
 		}
 		
-		if (valorCreditoBolsaAgua != null && valorAguaEsgoto.doubleValue() > valorCreditoBolsaAgua.doubleValue()) {
-			return valorCreditoBolsaAgua;
+		if (possuiCreditoBolsaAgua()) {
+			if (valorAguaEsgoto.doubleValue() > valorCreditoBolsaAgua.doubleValue()) {
+				return valorCreditoBolsaAgua;
+			} else {
+				return valorAguaEsgoto;
+			}
 		} else {
-			return valorAguaEsgoto;
+			return BigDecimal.ZERO;
 		}
 	}
 
@@ -1407,6 +1411,10 @@ public class EmitirContaHelper implements Serializable {
 		this.valorCreditoBolsaAgua = valorCreditoBolsaAgua;
 	}
 
+	public boolean possuiCreditoBolsaAgua() {
+		return valorCreditoBolsaAgua != null && valorCreditoBolsaAgua.doubleValue() > 0;
+	}
+	
 	public String getConsumoMedio() {
 		return consumoMedio;
 	}
