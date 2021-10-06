@@ -17,6 +17,7 @@ import gcom.cobranca.bean.ObterOpcoesDeParcelamentoHelper;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.fachada.Fachada;
 import gcom.faturamento.credito.CreditoARealizar;
+import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.gui.ActionServletException;
@@ -32,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -365,7 +367,13 @@ public class ExibirConsultarDebitoImovelAction extends GcomAction {
 		
 
 		Collection<CreditoARealizar> colecaoCreditoARealizar = colecaoDebitoImovel.getColecaoCreditoARealizar();
-
+		Iterator<CreditoARealizar> iterator = colecaoCreditoARealizar.iterator();
+        while(iterator.hasNext()){
+        	CreditoARealizar credito = iterator.next();
+        	if(credito.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)) {
+				iterator.remove();
+			}
+        }
 		BigDecimal valorCreditoARealizar = new BigDecimal("0.00");
 		CreditoARealizar dadosCredito = null;
 
