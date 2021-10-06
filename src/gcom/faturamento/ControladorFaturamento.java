@@ -35,8 +35,6 @@ import org.apache.commons.beanutils.BeanComparator;
 import org.hibernate.LazyInitializationException;
 import org.jboss.logging.Logger;
 
-import com.sun.tools.javac.tree.Tree.Continue;
-
 import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
