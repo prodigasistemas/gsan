@@ -16140,7 +16140,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Collection<Imovel> colecaoImovel = getControladorImovel().pesquisarImoveisBolsaAgua(rota);
 
 			for (Imovel imovel: colecaoImovel) {
-				apagarDadosCreditoSocialInicioBatch(referencia, creditoTipo, imovel);
+				//apagarDadosCreditoSocialInicioBatch(referencia, creditoTipo, imovel);
 				//atualizarValorCreditoBolsaAgua(referencia, imovel);
 				
 				BigDecimal valorCredito = BigDecimal.ZERO;
