@@ -969,24 +969,6 @@ public class EmitirContaHelper implements Serializable {
 		this.valorAgua = valorAgua;
 	}
 
-//	public BigDecimal getValorCreditos() {
-//		if (valorCreditoBolsaAgua == null) {
-//			valorCreditoBolsaAgua = BigDecimal.ZERO;
-//		}
-//		
-//		if (valorCreditos == null) {
-//			valorCreditos = BigDecimal.ZERO;
-//		}
-//		
-//		BigDecimal valorCreditoFinal = valorCreditos.subtract(valorCreditoBolsaAgua);
-//		
-//		if (valorCreditoFinal.doubleValue() < 0) {
-//			valorCreditoFinal = valorCreditoFinal.multiply(new BigDecimal(-1));
-//		} 
-//		
-//		return valorCreditoFinal;
-//	}
-	
 	public BigDecimal getValorCreditos() {
 		return this.valorCreditos;
 	}
@@ -1831,10 +1813,6 @@ public class EmitirContaHelper implements Serializable {
 		if (this.getValorCreditos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
 		}
-		
-//		if (this.getValorCreditoBolsaAgua() != null) {
-//			valorTotalConta = valorTotalConta.subtract(this.getValorCreditoBolsaAgua());
-//		}
 
 		if (this.getValorImpostos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorImpostos());

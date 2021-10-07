@@ -34,7 +34,6 @@ import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.credito.CreditoRealizado;
-import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.debito.DebitoCobrado;
 import gcom.faturamento.debito.FiltroDebitoCobrado;
 import gcom.financeiro.FinanciamentoTipo;
@@ -361,26 +360,32 @@ public class ImpressaoContaImpressoraTermica {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Vector gerarLinhasCreditosRealizados(int indicadorDiscriminarDescricao, EmitirContaHelper emitirContaHelper) {
-		Vector retorno = new Vector();
+	private Vector<String[]> gerarLinhasCreditosRealizados(int indicadorDiscriminarDescricao, EmitirContaHelper emitirContaHelper) {
+		Vector<String[]> retorno = new Vector<String[]>();
 		String[] dados = new String[3];
-		Conta conta = new Conta();
-		conta.setId(emitirContaHelper.getIdConta());
-		Collection<CreditoRealizado> crrz;
-		try {
-			crrz = getControladorFaturamento().obterCreditosRealizadosConta(conta);
 
-			if (crrz != null) {
+		Conta conta = new Conta(emitirContaHelper.getIdConta());
+
+		Collection<CreditoRealizado> creditosRealizados;
+
+		try {
+			creditosRealizados = getControladorFaturamento().obterCreditosRealizadosConta(conta);
+
+			if (creditosRealizados != null) {
 				if (indicadorDiscriminarDescricao == 1) {
 
-					for (CreditoRealizado creditoRealizado : crrz) {
-						
-						if(!creditoRealizado.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)){
-							dados = new String[3];
-							dados[0] = creditoRealizado.getDescricao();
+					for (CreditoRealizado creditoRealizado : creditosRealizados) {
+
+						dados = new String[3];
+						dados[0] = creditoRealizado.getDescricao();
+
+						if (creditoRealizado.isCreditoBolsaAgua()) {
+							dados[2] = Util.formatarMoedaReal(emitirContaHelper.getValorCreditoBolsaAgua());
+						} else {
 							dados[2] = Util.formatarMoedaReal(creditoRealizado.getValorCredito());
-							retorno.addElement(dados);
 						}
+
+						retorno.addElement(dados);
 					}
 
 				} else {
@@ -391,17 +396,6 @@ public class ImpressaoContaImpressoraTermica {
 					dados[2] = Util.formatarMoedaReal(soma);
 					retorno.addElement(dados);
 				}
-				
-				for (CreditoRealizado creditoRealizado : crrz) {
-					
-					if(creditoRealizado.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)){
-						dados = new String[3];
-						dados[0] = creditoRealizado.getDescricao();
-						dados[2] = Util.formatarMoedaReal(retornaCreditoBolsaAgua(creditoRealizado, emitirContaHelper));
-						retorno.addElement(dados);
-					}
-				}
-		
 			}
 		} catch (ControladorException e) {
 			e.printStackTrace();
@@ -410,7 +404,7 @@ public class ImpressaoContaImpressoraTermica {
 		return retorno;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("rawtypes")
 	private int retornaIndicadorDiscriminar(int quantidadeMaximaLinhas, int quantidadeLinhasAtual, char servicos,
 			EmitirContaHelper emitirContaHelper) {
 		int indicadorDiscriminarDescricao = 1;

@@ -333,4 +333,7 @@ public class CreditoRealizado extends ObjetoTransacao implements ICreditoRealiza
     	return getCreditoARealizarGeral().getId();
     }
     
+	public boolean isCreditoBolsaAgua() {
+		return creditoTipo.getId().intValue() == CreditoTipo.CREDITO_BOLSA_AGUA.intValue();
+	}
 }
