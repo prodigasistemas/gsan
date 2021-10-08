@@ -46,20 +46,23 @@ public class FaturamentoUtil {
 	                    + creditoBolsaAgua.getValorResidualMesAnterior() + " resíduo : " 
 	                    + creditoBolsaAgua.getAnoMesCobrancaCredito() + " cobranca : " 
 	                    + creditoBolsaAgua.getAnoMesReferenciaPrestacao() + " prestacao <-----      ");
+	        	BigDecimal valorCreditoBolsaAgua = creditoBolsaAgua.getValorTotal();
 	        	
-	        	BigDecimal valorCreditoBolsaAgua = BigDecimal.ZERO;
-	        	
-	        	BigDecimal valorAguEsgoto = valorAgua.add(valorEsgoto);
-	        	
-	        	if (valorAguEsgoto.compareTo(creditoBolsaAgua.getValorCredito()) == 1) {
-	        		valorCreditoBolsaAgua = creditoBolsaAgua.getValorCredito();
-	        	} else {
-	        		valorCreditoBolsaAgua = valorAguEsgoto;
+	        	if (!preFaturamento) {
+	        		valorCreditoBolsaAgua = BigDecimal.ZERO;
+	        		
+	        		BigDecimal valorAguEsgoto = valorAgua.add(valorEsgoto);
+	        		
+	        		if (valorAguEsgoto.compareTo(creditoBolsaAgua.getValorCredito()) == 1) {
+	        			valorCreditoBolsaAgua = creditoBolsaAgua.getValorCredito();
+	        		} else {
+	        			valorCreditoBolsaAgua = valorAguEsgoto;
+	        		}
+	        		
+	        		creditoBolsaAgua.setValorCredito(valorCreditoBolsaAgua);
+	        		creditoBolsaAgua.setValorResidualMesAnterior(BigDecimal.ZERO);
 	        	}
 	        	
-	        	creditoBolsaAgua.setValorCredito(valorCreditoBolsaAgua);
-	        	creditoBolsaAgua.setValorResidualMesAnterior(BigDecimal.ZERO);
-
 	        	valorTotalCreditos = valorTotalCreditos.add(valorCreditoBolsaAgua);
 	        	helper.addCreditoARealizar(valorCreditoBolsaAgua, creditoBolsaAgua);
 	        	
