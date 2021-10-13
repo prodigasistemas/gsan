@@ -16066,7 +16066,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								anoMesFaturamento,
 								categoria,
 								localidade,
-								new LancamentoTipo(LancamentoTipo.SUBSIDIO_BOLSA_AGUA),
+								new LancamentoTipo(LancamentoTipo.SUBSIDIO_AGUA_PARA),
 								new LancamentoItem(LancamentoItem.AGUA), 
 								null, 
 								new Short("2160"), 

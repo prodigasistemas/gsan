@@ -173,7 +173,7 @@ public class LancamentoTipo implements Serializable {
 	public final static Integer IMPOSTOS_CANCELADOS = new Integer(111);
 	public final static Integer OUTROS_CREDITOS_CANCELADOS = new Integer(112);
 	
-	public final static Integer SUBSIDIO_BOLSA_AGUA  = new Integer(999);
+	public final static Integer SUBSIDIO_AGUA_PARA  = new Integer(999);
 	
 	
 	private Integer id;

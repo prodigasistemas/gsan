@@ -19903,6 +19903,16 @@ public class ControladorArrecadacao extends ControladorComum {
 									.getValorItemArrecadacao());
 						}
 						
+						resumoArrecadacaoTemp = this.contabilizarCreditosRealizadosRecuperacaoCredito(anoMesReferenciaArrecadacao, localidade, categoria,
+								CreditoOrigem.BOLSA_AGUA, LancamentoItem.SUBSIDIO_AGUA_PARA);
+
+						if (resumoArrecadacaoTemp != null) {
+							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099.add(resumoArrecadacaoTemp
+									.getValorItemArrecadacao());
+						}
+
+						
 						RecebimentosClassificadosRecuperacaoCredito recebimentos = contabilizarRecebimentosClassificadosRecuperacaoCredito(localidade, 
 								anoMesReferenciaArrecadacao, categoria, mapValoresRecuperacaoCreditoDuplicidade, mapValoresRecuperacaoCreditoCancelado,
 								mapValoresRecuperacaoCreditoDuplicidadeMesesAnteriores, mapValoresRecuperacaoCreditoCanceladoMesesAnteriores);
