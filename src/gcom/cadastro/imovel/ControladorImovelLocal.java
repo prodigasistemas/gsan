@@ -59,10 +59,13 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterColecaoImovelSubcategorias(Imovel imovel, Integer quantidadeMinimaEconomia) throws ControladorException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection obterQuantidadeEconomiasCategoria(Imovel imovel) throws ControladorException; 
 
 	@SuppressWarnings("rawtypes")
-	public Collection obterQuantidadeEconomiasCategoria(Imovel imovel) throws ControladorException;
-
+	public Collection obterQuantidadeEconomiasCategoria(Imovel imovel, Integer categoria) throws ControladorException; 
+	
 	@SuppressWarnings("rawtypes")
 	public Collection obterQuantidadeEconomiasContaCategoria(Conta conta) throws ControladorException;
 

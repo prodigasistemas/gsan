@@ -16316,8 +16316,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Object idCreditoARealizar = repositorioUtil.inserir(creditoARealizar);
 	
 			creditoARealizar.setId(new Integer(idCreditoARealizar.toString()));
-		
+			
 			this.inserirCreditoARealizarCategoria(creditoARealizar);
+				
+			
 		} catch (ControladorException e) {
 			throw new ControladorException("erro.credito.realizar.bolsa.agua");
 		} catch (ErroRepositorioException e) {
@@ -16328,8 +16330,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	private void inserirCreditoARealizarCategoria(CreditoARealizar creditoARealizar) throws ControladorException {
 		try {
 			Collection colecaoCategoriasImovel;
+			
+			if(creditoARealizar.isCreditoBolsaAgua()) {
+				colecaoCategoriasImovel = this.getControladorImovel().obterQuantidadeEconomiasCategoria(creditoARealizar.getImovel(), Categoria.RESIDENCIAL);
+			}else {
 				colecaoCategoriasImovel = this.getControladorImovel().obterQuantidadeEconomiasCategoria(creditoARealizar.getImovel());
-	
+					}
+				
 			Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel.iterator();
 	
 			Iterator iteratorColecaoValorPorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategoriasImovel,
@@ -16353,9 +16360,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				repositorioUtil.inserir(creditoARealizarCategoria);
 			}
 		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.credito.categoria.bolsa.agua");
+			throw new ControladorException("erro.credito.categoria");
 		} catch (ControladorException ex) {
-			throw new ControladorException("erro.credito.categoria.bolsa.agua");
+			throw new ControladorException("erro.credito.categoria");
 		}
 
 	}

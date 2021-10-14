@@ -1358,7 +1358,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 		}
 
 	}
-
+	
 	/**
 	 * < <Descrição do método>>
 	 * 
@@ -1371,6 +1371,25 @@ public class ControladorImovelSEJB extends ControladorComum {
 			throws ControladorException {
 		return obterQuantidadeEconomiasCategoria(imovel.getId());
 	}
+	
+	
+	
+
+	/**
+	 * < <Descrição do método>>
+	 * 
+	 * @param imovel
+	 *            Descrição do parâmetro
+	 * @return Descrição do retorno
+	 * @throws ControladorException
+	 */
+	public Collection obterQuantidadeEconomiasCategoria(Imovel imovel, Integer categoriaId)
+			throws ControladorException {
+		return obterQuantidadeEconomiasCategoria(imovel.getId(), categoriaId);
+	}
+	
+	
+	
 
 	/**
 	 * < <Descrição do método>>
@@ -1384,7 +1403,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 			throws ControladorException {
 		return obterQuantidadeEconomiasContaCategoria(conta.getId());
 	}
-
+	
 	/**
 	 * < <Descrição do método>>
 	 * 
@@ -1397,7 +1416,73 @@ public class ControladorImovelSEJB extends ControladorComum {
 		Collection colecaoImovelSubCategoriaArray = null;
 
 		try {
-			colecaoImovelSubCategoriaArray = repositorioImovel.pesquisarObterQuantidadeEconomiasCategoria(imovel);
+			colecaoImovelSubCategoriaArray = repositorioImovel.pesquisarObterQuantidadeEconomiasCategoria(imovel, null);
+		} catch (ErroRepositorioException ex) {
+			new ControladorException("erro.sistema", ex);
+		}
+
+		if (colecaoImovelSubCategoriaArray != null && !colecaoImovelSubCategoriaArray.isEmpty()) {
+
+			Iterator colecaoImovelSubCategoriaArrayIterator = colecaoImovelSubCategoriaArray.iterator();
+
+			while (colecaoImovelSubCategoriaArrayIterator.hasNext()) {
+
+				Object[] imovelSubcategoriaArray = (Object[]) colecaoImovelSubCategoriaArrayIterator.next();
+
+				Categoria categoria = new Categoria();
+				categoria.setId((Integer) imovelSubcategoriaArray[0]);
+				categoria.setDescricao(String.valueOf(imovelSubcategoriaArray[1]));
+				categoria.setConsumoEstouro((Integer) imovelSubcategoriaArray[2]);
+				categoria.setVezesMediaEstouro((BigDecimal) imovelSubcategoriaArray[3]);
+				categoria.setQuantidadeEconomiasCategoria(((Short) imovelSubcategoriaArray[4]).intValue());
+				categoria.setConsumoAlto((Integer) imovelSubcategoriaArray[6]);
+				categoria.setMediaBaixoConsumo((Integer) imovelSubcategoriaArray[7]);
+				categoria.setVezesMediaAltoConsumo((BigDecimal) imovelSubcategoriaArray[8]);
+				categoria.setPorcentagemMediaBaixoConsumo((BigDecimal) imovelSubcategoriaArray[9]);
+
+				if ((String) imovelSubcategoriaArray[10] != null) {
+					categoria.setDescricaoAbreviada((String) imovelSubcategoriaArray[10]);
+				}
+				categoria.setNumeroConsumoMaximoEc((Integer) imovelSubcategoriaArray[11]);
+				categoria.setIndicadorCobrancaAcrescimos((Short) imovelSubcategoriaArray[12]);
+				categoria.setFatorEconomias((Short) imovelSubcategoriaArray[13]);
+
+				CategoriaTipo categoriaTipo = new CategoriaTipo();
+				categoriaTipo.setId((Integer) imovelSubcategoriaArray[14]);
+				categoriaTipo.setDescricao((String) imovelSubcategoriaArray[15]);
+				
+				categoria.setCategoriaTipo(categoriaTipo);
+				
+				categoria.setNumeroConsumoMaximoEc( (Integer) imovelSubcategoriaArray[16] );
+
+				colecaoCategoria.add(categoria);
+			}
+
+		} else {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("atencao.nao_cadastrado.imovel_subcategoria", null);
+		}
+
+		return colecaoCategoria;
+	}
+
+	
+	
+	
+	
+	/**
+	 * < <Descrição do método>>
+	 * 
+	 * @param imovel Descrição do parâmetro
+	 * @return Descrição do retorno
+	 * @throws ControladorException
+	 */
+	public Collection obterQuantidadeEconomiasCategoria(Integer imovel, Integer categoriaId) throws ControladorException {
+		Collection colecaoCategoria = new ArrayList();
+		Collection colecaoImovelSubCategoriaArray = null;
+
+		try {
+			colecaoImovelSubCategoriaArray = repositorioImovel.pesquisarObterQuantidadeEconomiasCategoria(imovel, categoriaId);
 		} catch (ErroRepositorioException ex) {
 			new ControladorException("erro.sistema", ex);
 		}

@@ -68,7 +68,7 @@ public interface IRepositorioImovel {
 	public Short pesquisarObterQuantidadeEconomias(Imovel imovel, Categoria categoria) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarObterQuantidadeEconomiasCategoria(Integer idImovel) throws ErroRepositorioException;
+	public Collection pesquisarObterQuantidadeEconomiasCategoria(Integer idImovel, Integer categoria) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterQuantidadeEconomiasCategoria(Integer idConta) throws ErroRepositorioException;
