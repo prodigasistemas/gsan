@@ -36940,11 +36940,11 @@ public class ControladorArrecadacao extends ControladorComum {
 		// G.05.1 - Identificação do produto
 		String identificacaoProduto = "8";
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoProduto;
-
+		System.out.println("[" + matriculaImovel + "] [Tipo pg: " + idTipoDocumento + "] COD BARRAS: " + representacaoNumericaCodigoBarra);
 		// G.05.2 - Identificação do segmento
 		String identificacaoSegmento = "2";
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoSegmento;
-
+		System.out.println("[" + matriculaImovel + "] [Tipo pg: " + idTipoDocumento + "] COD BARRAS: " + representacaoNumericaCodigoBarra);
 		// G.05.3 - Identificação dovalor real ou referência
 
 		// MODULO 10
@@ -36959,18 +36959,20 @@ public class ControladorArrecadacao extends ControladorComum {
 		}
 
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoValorRealOuReferencia;
-
+		System.out.println("[" + matriculaImovel + "] [Tipo pg: " + idTipoDocumento + "] COD BARRAS: " + representacaoNumericaCodigoBarra);
 		// G.05.5 - Valor do código de barras
 		String valorCodigoBarraFormatado = Util.adicionarZerosEsquedaNumero(11,
 				valorCodigoBarra.setScale(2).toString().replace(".", ""));
 		valorCodigoBarraFormatado = valorCodigoBarraFormatado.replace("-", "");
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + valorCodigoBarraFormatado;
-
+		System.out.println("[" + matriculaImovel + "] [Tipo pg: " + idTipoDocumento + "] COD BARRAS: " + representacaoNumericaCodigoBarra);
+		
 		// G.05.6 - Identificação da empresa
 		String identificacaoEmpresa = getSistemaParametro().getCodigoEmpresaFebraban().toString();
 		identificacaoEmpresa = Util.adicionarZerosEsquedaNumero(4, identificacaoEmpresa);
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoEmpresa;
-
+		System.out.println("[" + matriculaImovel + "] [Tipo pg: " + idTipoDocumento + "] COD BARRAS: " + representacaoNumericaCodigoBarra);
+		
 		// G.05.7 Identificação do pagamento
 		// [SB0001] Obter Identificação do Pagamento
 		String identificacaoPagamento = obterIdentificacaoPagamento(tipoPagamento, idLocalidade, matriculaImovel,
@@ -36978,18 +36980,22 @@ public class ControladorArrecadacao extends ControladorComum {
 				sequencialDocumentoCobranca, idTipoDocumento, idCliente, seqFaturaClienteResponsavel, idGuiaPagamento);
 
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra + identificacaoPagamento + tipoPagamento.toString();
-
+		System.out.println("[" + matriculaImovel + "] [Tipo pg: " + idTipoDocumento + "] COD BARRAS: " + representacaoNumericaCodigoBarra);
+		
 		// G.05.4 - Dígito verificador geral
 		// [SB0002] Obter Dígito verificador geral
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra.replace(".", "");
 		representacaoNumericaCodigoBarra = representacaoNumericaCodigoBarra.replace("-", "");
+		System.out.println("[" + matriculaImovel + "] [Tipo pg: " + idTipoDocumento + "] COD BARRAS: " + representacaoNumericaCodigoBarra);
+		
 		String digitoVerificadorGeral = (Util.obterDigitoVerificadorGeral(representacaoNumericaCodigoBarra, moduloVerificador)).toString();
 
 		// Monta a representaçaõ númerica com todos os campos informados
 		representacaoNumericaCodigoBarra = identificacaoProduto + identificacaoSegmento
 				+ identificacaoValorRealOuReferencia + digitoVerificadorGeral + valorCodigoBarraFormatado
 				+ identificacaoEmpresa + identificacaoPagamento + tipoPagamento.toString();
-
+		System.out.println("[" + matriculaImovel + "] [Tipo pg: " + idTipoDocumento + "] COD BARRAS: " + representacaoNumericaCodigoBarra);
+		
 		// Cria as variáveis que vão armazenar o código de barra separado por
 		// campos
 		// e seus respectivos dígitos verificadores se existirem
