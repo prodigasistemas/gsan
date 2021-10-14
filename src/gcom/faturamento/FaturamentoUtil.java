@@ -48,6 +48,10 @@ public class FaturamentoUtil {
 	                    + creditoBolsaAgua.getAnoMesReferenciaPrestacao() + " prestacao <-----      ");
 	        	BigDecimal valorCreditoBolsaAgua = creditoBolsaAgua.getValorTotal();
 	        	
+	        	if (creditoBolsaAgua.getNumeroPrestacaoRealizada().intValue() < 1) {
+	        		creditoBolsaAgua.setNumeroPrestacaoRealizada(new Short("1"));
+	        	}
+	        	
 	        	if (!preFaturamento) {
 	        		valorCreditoBolsaAgua = BigDecimal.ZERO;
 	        		
