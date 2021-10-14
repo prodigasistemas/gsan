@@ -1,40 +1,5 @@
 package gcom.faturamento;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.EJBException;
-
-import org.apache.commons.beanutils.BeanComparator;
-import org.hibernate.LazyInitializationException;
-import org.jboss.logging.Logger;
-
 import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
@@ -142,6 +107,7 @@ import gcom.faturamento.credito.FiltroCreditoARealizar;
 import gcom.faturamento.credito.FiltroCreditoARealizarCategoria;
 import gcom.faturamento.credito.FiltroCreditoARealizarGeral;
 import gcom.faturamento.credito.FiltroCreditoRealizado;
+import gcom.faturamento.credito.FiltroCreditoRealizadoCategoria;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.credito.ICreditoRealizado;
 import gcom.faturamento.credito.ICreditoRealizadoCategoria;
@@ -238,6 +204,41 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.EJBException;
+
+import org.apache.commons.beanutils.BeanComparator;
+import org.hibernate.LazyInitializationException;
+import org.jboss.logging.Logger;
 
 public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
@@ -625,6 +626,30 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 filtroMovimentoContaImpostoDeduzido,
 	        						 MovimentoContaImpostoDeduzido.class
 	        						 .getName());
+	        				 
+	        				 BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
+	        				 
+	        				 if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
+	        				     BigDecimal valorCreditos = contaAtualizacao.getValorCreditos().subtract(valorBolsaAguaConcedido);
+	        				     contaAtualizacao.setValorCreditos(valorCreditos);
+	        				     
+	        				     BigDecimal valorBolsaAguaAtlz = new BigDecimal(0);
+	        				     BigDecimal valorAguaEsgoto = new BigDecimal(0);
+	        				     if (valorAgua != null && valorAgua.doubleValue() > 0) {
+	        				    	 valorAguaEsgoto = valorAguaEsgoto.add(valorAgua);
+	        				      	}                                       
+	        				     if (valorEsgoto != null && valorEsgoto.doubleValue() > 0) {
+	        				    	 valorAguaEsgoto = valorAguaEsgoto.add(valorEsgoto);
+	        				        }                   
+	        				     if (valorAguaEsgoto.doubleValue() > valorBolsaAguaConcedido.doubleValue()) {
+	        				            valorBolsaAguaAtlz = valorBolsaAguaConcedido;
+	        				     } else {
+	        				            valorBolsaAguaAtlz = valorAguaEsgoto;
+	        				        }
+	        				     valorCreditos = valorCreditos.add(valorBolsaAguaAtlz);
+	        				     contaAtualizacao.setValorCreditos(valorCreditos);
+	        				     atualizarValorCreditoBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel(), valorBolsaAguaAtlz, contaAtualizacao);
+	        				 }
 	        				 
 	        				 BigDecimal valorTotalMenosImposto = new BigDecimal(
 	        						 valorAgua.doubleValue()
@@ -3022,15 +3047,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void atualizarValorCreditoBolsaAgua(Integer anoMes, Imovel imovel) throws ControladorException {
+	public void atualizarValorCreditoBolsaAgua(Integer anoMes, Imovel imovel, BigDecimal valorBolsaAgua, Conta conta) throws ControladorException {
 		
 		FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
 
 		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO, anoMes));
 		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.IMOVEL_ID, imovel.getId()));
 		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID_CREDITO_TIPO, CreditoTipo.CREDITO_BOLSA_AGUA));
-		filtroCreditoARealizar.adicionarParametro(
-				new ParametroSimplesDiferenteDe(FiltroCreditoARealizar.VALOR_RESIDUAL_MES_ANTERIOR, 0));
 
 		Collection colecaoCreditoARealizar = (Collection) this.getControladorUtil().pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
 
@@ -3040,7 +3063,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			if (credito.getNumeroPrestacaoRealizada().compareTo(new Short("1")) == 0) {
 
-				BigDecimal novoValorCredito = credito.getValorCredito().subtract(credito.getValorNaoConcedido());
+				BigDecimal novoValorCredito = valorBolsaAgua;
 				
 				credito.setValorCredito(novoValorCredito);
 				credito.setValorResidualMesAnterior(BigDecimal.ZERO);
@@ -3057,9 +3080,38 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				CreditoARealizarCategoria creditoCategoria = (CreditoARealizarCategoria) iteratorCreditoCategoria.next();
 				creditoCategoria.setValorCategoria(novoValorCredito);
 				
-				this.getControladorUtil().atualizar(credito);
-				this.getControladorUtil().atualizar(creditoCategoria);
+								
+				getControladorUtil().atualizar(credito);
+				getControladorUtil().atualizar(creditoCategoria);
 			}
+			
+			FiltroCreditoRealizado filtroRealizado = new FiltroCreditoRealizado();
+			filtroRealizado.adicionarParametro(new ParametroSimples(FiltroCreditoRealizado.CONTA_ID, conta.getId()));
+			filtroRealizado.adicionarParametro(new ParametroSimples(FiltroCreditoRealizado.ANO_MES_REFERENCIA_CREDITO, anoMes));
+			filtroRealizado.adicionarParametro(new ParametroSimples(FiltroCreditoRealizado.CREDITO_TIPO_ID, CreditoTipo.CREDITO_BOLSA_AGUA));
+			
+			Collection colecaoRealizado = (Collection) this.getControladorUtil().pesquisar(filtroRealizado, CreditoRealizado.class.getName());
+			
+			if (colecaoRealizado != null && !colecaoRealizado.isEmpty()) {
+				CreditoRealizado realizado = (CreditoRealizado) colecaoRealizado.iterator().next();
+				BigDecimal valorAtualizado = valorBolsaAgua;
+				realizado.setValorCredito(valorAtualizado);
+				
+				FiltroCreditoRealizadoCategoria filtroRealizadoCategoria = new FiltroCreditoRealizadoCategoria();
+
+				filtroRealizadoCategoria.adicionarParametro(new ParametroSimples(
+						FiltroCreditoRealizadoCategoria.CREDITO_REALIZADO_ID, realizado.getId()));
+
+				Iterator<CreditoRealizadoCategoria> iteratorRealizadoCategoria = this.getControladorUtil()
+						.pesquisar(filtroRealizadoCategoria, CreditoRealizadoCategoria.class.getName()).iterator();
+
+				CreditoRealizadoCategoria realizadoCategoria = (CreditoRealizadoCategoria) iteratorRealizadoCategoria.next();
+				realizadoCategoria.setValorCategoria(valorAtualizado);
+				
+				getControladorUtil().atualizar(realizado);
+				getControladorUtil().atualizar(realizadoCategoria);
+			}		
+			
 		}
 	}
 
@@ -16306,6 +16358,25 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			throw new ControladorException("erro.credito.categoria.bolsa.agua");
 		}
 
+	}
+	
+	public BigDecimal retornaValorBolsaAgua (Integer anoMesReferencia, Imovel imovel) throws ControladorException {
+
+		FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+
+		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO, anoMesReferencia));
+		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.IMOVEL_ID, imovel.getId()));
+		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID_CREDITO_TIPO, CreditoTipo.CREDITO_BOLSA_AGUA));
+
+		Collection colecaoCreditoARealizar = (Collection) this.getControladorUtil().pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
+
+		if (colecaoCreditoARealizar != null && !colecaoCreditoARealizar.isEmpty()) {
+
+			CreditoARealizar credito = (CreditoARealizar) colecaoCreditoARealizar.iterator().next();
+			return credito.getValorCredito();
+		}
+
+		return BigDecimal.ZERO;
 	}
 	
 	private SistemaParametro getSistemaParametro() throws ControladorException {
