@@ -970,41 +970,52 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarObterQuantidadeEconomiasCategoria(Integer imovel) throws ErroRepositorioException {
+	public Collection pesquisarObterQuantidadeEconomiasCategoria(Integer imovel, Integer categoriaId) throws ErroRepositorioException {
 
 		Collection retorno = null;
 		Session session = HibernateUtil.getSession();
-		String consulta = null;
-
+		StringBuilder consulta = new StringBuilder();
+		
 		try {
-
-			consulta = "select c.id, c.descricao, c.consumoEstouro, "
-					+ "c.vezesMediaEstouro, sum(isb.quantidadeEconomias), "
-					+ "isb.comp_id.imovel.id, "
-					+ "c.consumoAlto, "
-					+ "c.mediaBaixoConsumo, "
-					+ "c.vezesMediaAltoConsumo, "
-					+ "c.porcentagemMediaBaixoConsumo,"
-					+ "c.descricaoAbreviada, "
-					+ "c.numeroConsumoMaximoEc, "
-					+ "c.indicadorCobrancaAcrescimos, "
-					+ "c.fatorEconomias, "
-					+ "c.categoriaTipo.id, "
-					+ "c.categoriaTipo.descricao, "
-					+ "c.numeroConsumoMaximoEc "
-					+ "from ImovelSubcategoria isb "
-					+ "inner join isb.comp_id.subcategoria sb "
-					+ "inner join sb.categoria c "
-					+ "inner join c.categoriaTipo ct "
-					+ "where isb.comp_id.imovel.id = :imovelId "
-					+ "group by c.id, c.descricao, c.consumoEstouro, c.vezesMediaEstouro, "
-					+ "isb.comp_id.imovel.id, c.consumoAlto, c.mediaBaixoConsumo, c.vezesMediaAltoConsumo, "
-					+ "c.porcentagemMediaBaixoConsumo,c.descricaoAbreviada,c.numeroConsumoMaximoEc, " 
-					+ "c.indicadorCobrancaAcrescimos, c.fatorEconomias, c.categoriaTipo.id, c.categoriaTipo.descricao "
-					+ "order by c.id ";
-
-			retorno = session.createQuery(consulta).setInteger("imovelId", imovel.intValue()).list();
-
+			  consulta.append( "select c.id, c.descricao, c.consumoEstouro, ")
+				      .append("c.vezesMediaEstouro, sum(isb.quantidadeEconomias), ")
+				      .append("isb.comp_id.imovel.id, ")
+				      .append("c.consumoAlto, ")
+				      .append("c.mediaBaixoConsumo, ")
+				      .append("c.vezesMediaAltoConsumo, ")
+				      .append("c.porcentagemMediaBaixoConsumo,")
+				      .append("c.descricaoAbreviada, ")
+				      .append("c.numeroConsumoMaximoEc, ")
+				      .append("c.indicadorCobrancaAcrescimos, ")
+				      .append("c.fatorEconomias, ")
+				      .append("c.categoriaTipo.id, ")
+				      .append("c.categoriaTipo.descricao, ")
+				      .append("c.numeroConsumoMaximoEc ")
+				      .append("from ImovelSubcategoria isb ")
+				      .append("inner join isb.comp_id.subcategoria sb ")
+				      .append("inner join sb.categoria c ")
+				      .append("inner join c.categoriaTipo ct ")
+				      .append("where isb.comp_id.imovel.id = :imovelId ");
+		      
+		      if(categoriaId != null) {
+		    	  consulta.append("and c.id = :categoriaId ");
+		      }
+		    		  
+		      consulta.append("group by c.id, c.descricao, c.consumoEstouro, c.vezesMediaEstouro, ")
+				      .append("isb.comp_id.imovel.id, c.consumoAlto, c.mediaBaixoConsumo, c.vezesMediaAltoConsumo, ")
+				      .append("c.porcentagemMediaBaixoConsumo,c.descricaoAbreviada,c.numeroConsumoMaximoEc, " )
+				      .append("c.indicadorCobrancaAcrescimos, c.fatorEconomias, c.categoriaTipo.id, c.categoriaTipo.descricao ")
+				      .append("order by c.id ");
+		  	
+		      Query query = session.createQuery(consulta.toString())
+					.setInteger("imovelId", imovel.intValue());
+					
+				if(categoriaId != null) {	
+					query.setInteger("categoriaId", Categoria.RESIDENCIAL_INT);
+				}
+		      
+				retorno = query.list();
+					
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

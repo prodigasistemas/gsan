@@ -1294,4 +1294,8 @@ public interface IControladorFaturamento {
 	public void envioNotificacaoVencimentoFatura (Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades) throws ControladorException;
 	
 	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada) throws ControladorException;
+	
+	public void atualizarValorCreditoBolsaAgua(Integer anoMes, Imovel imovel, BigDecimal valorBolsaAgua, Conta conta) throws ControladorException;
+	
+	public BigDecimal retornaValorBolsaAgua (Integer anoMesReferencia, Imovel imovel) throws ControladorException;
 }

@@ -1,42 +1,5 @@
 	package gcom.faturamento;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionContext;
-
-import org.apache.commons.fileupload.FileItem;
-import org.jboss.logging.Logger;
-
-import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.api.relatorio.ReportItemDTO;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.FiltroDevolucao;
@@ -349,6 +312,44 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionContext;
+
+import org.apache.commons.fileupload.FileItem;
+import org.jboss.logging.Logger;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 
 public class ControladorFaturamentoFINAL extends ControladorComum {
 
@@ -1679,7 +1680,29 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					this.inserirCreditoRealizado(gerarCreditoRealizadoHelper.getMapCreditoRealizado(), conta);
 
 					this.atualizarCreditoARealizar(gerarCreditoRealizadoHelper.getColecaoCreditoARealizar());
-
+					
+					BigDecimal valorBolsaAguaConcedido = getControladorFaturamento().retornaValorBolsaAgua(anoMesFaturamentoGrupo, imovel);
+					
+						if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
+	   				     
+							BigDecimal valorBolsaAguaAtlz = new BigDecimal(0);
+							BigDecimal valorAguaEsgoto = new BigDecimal(0);
+							
+							valorAguaEsgoto = valorAguaEsgoto.add(helperValoresAguaEsgoto.getValorTotalAgua());
+	   				                                      
+	   				    	if (helperValoresAguaEsgoto.getValorTotalEsgoto() != null && helperValoresAguaEsgoto.getValorTotalEsgoto().doubleValue() > 0) {
+	   				    		valorAguaEsgoto = valorAguaEsgoto.add(helperValoresAguaEsgoto.getValorTotalEsgoto());
+	   				    	}  
+	   				    	
+	   				    	if (valorAguaEsgoto.doubleValue() > valorBolsaAguaConcedido.doubleValue()) {
+	   				    		valorBolsaAguaAtlz = valorBolsaAguaConcedido;
+	   				    	} else {
+	   				    		valorBolsaAguaAtlz = valorAguaEsgoto;
+	   				    	}
+	
+	   				    	getControladorFaturamento().atualizarValorCreditoBolsaAgua(anoMesFaturamentoGrupo, imovel, valorBolsaAguaAtlz, conta);
+						}
+					
 					this.gerarContaImpressao(conta, faturamentoGrupo, imovel,faturamentoAtivCronRota.getRota());
 
 					if (imovel.getIndicadorDebitoConta().equals(ConstantesSistema.SIM) && conta.getContaMotivoRevisao() == null) {
@@ -60023,7 +60046,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				// ATUALIZANDO CREDITO_A_REALIZAR
 				this.atualizarCreditoARealizar(gerarCreditoRealizadoHelper.getColecaoCreditoARealizar());
-
+				
 				// -----------------------------------------------------------------------------------------------------
 
 				// [SF0008] - Gerar Movimento De Débito Automático
