@@ -16047,7 +16047,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					// fim Linha 74
 
-					// INICIO CONTABILIZACAO BOLSA AGUA
+// INICIO CONTABILIZACAO BOLSA AGUA
+					
 					idsCreditosOrigem = null;
 					idsCreditosOrigem = new Integer[1];
 					idsCreditosOrigem[0] = CreditoOrigem.BOLSA_AGUA;
@@ -16066,8 +16067,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								anoMesFaturamento,
 								categoria,
 								localidade,
-								new LancamentoTipo(LancamentoTipo.SUBSIDIO_AGUA_PARA),
-								new LancamentoItem(LancamentoItem.AGUA), 
+								new LancamentoTipo(LancamentoTipo.DEVOLUCAO__VALORES_EM_CONTA),
+								new LancamentoItem(LancamentoItem.SUBSIDIO_AGUA_PARA), 
 								null, 
 								new Short("2160"), 
 								new Short("10"));
@@ -16082,6 +16083,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						colecaoResumoFaturamento.add(resumoFaturamento);
 					}
+					
 					// FIM CONTABILIZACAO BOLSA AGUA
 					
 					
