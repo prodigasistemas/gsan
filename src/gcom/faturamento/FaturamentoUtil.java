@@ -65,6 +65,8 @@ public class FaturamentoUtil {
 	        		
 	        		creditoBolsaAgua.setValorCredito(valorCreditoBolsaAgua);
 	        		creditoBolsaAgua.setValorResidualMesAnterior(BigDecimal.ZERO);
+	        		
+	        		valorTotalACobrar = valorTotalACobrar.subtract(valorCreditoBolsaAgua);
 	        	}
 	        	
 	        	valorTotalCreditos = valorTotalCreditos.add(valorCreditoBolsaAgua);
