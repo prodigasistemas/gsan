@@ -2596,30 +2596,7 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 					}
 					case Funcionalidade.GERAR_CREDITO_BOLSA_AGUA:
 
-						TarefaBatchGerarCreditoBolsaAgua tarefaBatchGerarCreditoBolsaAgua = new TarefaBatchGerarCreditoBolsaAgua(
-								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 						
-						Collection<Integer> colecaoGrupos = new ArrayList<Integer>();
-						colecaoGrupos.add(302);
-						colecaoGrupos.add(304);
-						colecaoGrupos.add(310);
-						colecaoGrupos.add(311);
-						colecaoGrupos.add(312);
-						colecaoGrupos.add(322);
-						colecaoGrupos.add(330);
-						colecaoGrupos.add(331);
-						colecaoGrupos.add(332);
-						
-						FiltroRota filtroRota = new FiltroRota();
-						filtroRota.adicionarParametro(new ParametroSimplesIn(filtroRota.FATURAMENTO_GRUPO_ID, colecaoGrupos));
-
-						Collection<Rota> rotasBolsaAgua = getControladorUtil().pesquisar(filtroRota, Rota.class.getName());
-												
-						tarefaBatchGerarCreditoBolsaAgua.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,rotasBolsaAgua);
-						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchGerarCreditoBolsaAgua));
-
-						getControladorUtil().atualizar(funcionalidadeIniciada);
-
 						break;
 
 
