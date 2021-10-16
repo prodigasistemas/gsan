@@ -16070,6 +16070,46 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					// fim Linha 74
 
+// INICIO CONTABILIZACAO BOLSA AGUA
+					
+					idsCreditosOrigem = null;
+					idsCreditosOrigem = new Integer[1];
+					idsCreditosOrigem[0] = CreditoOrigem.BOLSA_AGUA;
+
+					valorItemFaturamento = null;
+					valorItemFaturamento = repositorioFaturamento
+							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
+									DebitoCreditoSituacao.NORMAL,
+									DebitoCreditoSituacao.NORMAL);
+
+					if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
+						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+								valorItemFaturamento,
+								anoMesFaturamento,
+								categoria,
+								localidade,
+								new LancamentoTipo(LancamentoTipo.DEVOLUCAO__VALORES_EM_CONTA),
+								new LancamentoItem(LancamentoItem.SUBSIDIO_AGUA_PARA), 
+								null, 
+								new Short("2160"), 
+								new Short("10"));
+						
+						// subtrai o sequência igual 2300 ao total cobrado nas contas
+						resumoTotalCobradoNasContas.setValorItemFaturamento(
+								resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
+
+						// adiciona o sequência igual 2200 ao total devolvidos nas contas
+						resumoValoresDevolvidosNasContas.setValorItemFaturamento(
+								resumoValoresDevolvidosNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
+
+						colecaoResumoFaturamento.add(resumoFaturamento);
+					}
+					
+					// FIM CONTABILIZACAO BOLSA AGUA
+					
+					
 					// Linha 75
 					idsCreditosOrigem = null;
 					idsCreditosOrigem = new Integer[1];
