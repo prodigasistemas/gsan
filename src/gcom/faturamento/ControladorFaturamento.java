@@ -627,14 +627,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 MovimentoContaImpostoDeduzido.class
 	        						 .getName());
 	        				 
+	        				 
 	        				 BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
 	        				 
 	        				 if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
-	        				     BigDecimal valorCreditos = contaAtualizacao.getValorCreditos().subtract(valorBolsaAguaConcedido);
-	        				     contaAtualizacao.setValorCreditos(valorCreditos);
-	        				     
 	        				     BigDecimal valorBolsaAguaAtlz = new BigDecimal(0);
 	        				     BigDecimal valorAguaEsgoto = new BigDecimal(0);
+	        				     
 	        				     if (valorAgua != null && valorAgua.doubleValue() > 0) {
 	        				    	 valorAguaEsgoto = valorAguaEsgoto.add(valorAgua);
 	        				      	}                                       
@@ -646,8 +645,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				     } else {
 	        				            valorBolsaAguaAtlz = valorAguaEsgoto;
 	        				        }
-	        				     valorCreditos = valorCreditos.add(valorBolsaAguaAtlz);
-	        				     contaAtualizacao.setValorCreditos(valorCreditos);
 	        				     atualizarValorCreditoBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel(), valorBolsaAguaAtlz, contaAtualizacao);
 	        				 }
 	        				 
