@@ -16182,8 +16182,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, rota.getId());
 
 		try {
-			Integer referencia = 202110;
-			
 			CreditoTipo creditoTipo = obterCreditoTipo(CreditoTipo.CREDITO_BOLSA_AGUA);
 
 			Collection<Imovel> colecaoImovel = getControladorImovel().pesquisarImoveisBolsaAgua(rota);
@@ -16202,7 +16200,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					valorCredito = valorCredito.add(new BigDecimal(42.84));  
 				}
 				
-				inserirCreditoBolsaAgua(imovel, valorCredito, referencia, creditoTipo);
+				inserirCreditoBolsaAgua(imovel, valorCredito, rota.getFaturamentoGrupo().getAnoMesReferencia(), creditoTipo);
 			}
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);

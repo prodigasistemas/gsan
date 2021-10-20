@@ -2770,7 +2770,8 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						FiltroRota filtroRota = new FiltroRota();
 						filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.FATURAMENTO_GRUPO_ID, grupoBolsaAgua.getId()));
 						filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.INDICADOR_USO, ConstantesSistema.SIM));
-
+						filtroRota.adicionarCaminhoParaCarregamentoEntidade(FiltroRota.FATURAMENTO_GRUPO);
+						
 						Collection<Rota> rotasBolsaAgua = getControladorUtil().pesquisar(filtroRota, Rota.class.getName());
 												
 						tarefaBatchGerarCreditoBolsaAgua.addParametro("faturamentoGrupo", grupoBolsaAgua);
