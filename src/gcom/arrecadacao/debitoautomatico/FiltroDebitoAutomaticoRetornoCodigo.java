@@ -15,6 +15,10 @@ public class FiltroDebitoAutomaticoRetornoCodigo extends Filtro implements Seria
 	
 	private static final long serialVersionUID = 1L;
 	
+	public static final String COD_BANCO = "codigoBanco";
+	
+	public static final String INDICADOR_USO = "indicadorUso";
+
 	
 	public FiltroDebitoAutomaticoRetornoCodigo() {}
 

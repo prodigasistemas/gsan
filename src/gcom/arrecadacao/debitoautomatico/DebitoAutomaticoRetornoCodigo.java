@@ -32,12 +32,15 @@ public class DebitoAutomaticoRetornoCodigo implements Serializable {
 
     /** nullable persistent field */
     private Date ultimaAlteracao;
+    
+    private String codigoBanco;
 
     /** full constructor */
-    public DebitoAutomaticoRetornoCodigo(String descricaoDebitoAutomaticoRetornoCodigo, Short indicadorUso, Date ultimaAlteracao) {
+    public DebitoAutomaticoRetornoCodigo(String descricaoDebitoAutomaticoRetornoCodigo, Short indicadorUso, Date ultimaAlteracao, String codigoBanco) {
         this.descricaoDebitoAutomaticoRetornoCodigo = descricaoDebitoAutomaticoRetornoCodigo;
         this.indicadorUso = indicadorUso;
         this.ultimaAlteracao = ultimaAlteracao;
+        this.codigoBanco= codigoBanco;
     }
 
     /** default constructor */
@@ -83,8 +86,16 @@ public class DebitoAutomaticoRetornoCodigo implements Serializable {
     public void setUltimaAlteracao(Date ultimaAlteracao) {
         this.ultimaAlteracao = ultimaAlteracao;
     }
+    
+    public String getCodigoBanco() {
+		return codigoBanco;
+	}
 
-    public String toString() {
+	public void setCodigoBanco(String codigoBanco) {
+		this.codigoBanco = codigoBanco;
+	}
+
+	public String toString() {
         return new ToStringBuilder(this)
             .append("id", getId())
             .toString();
