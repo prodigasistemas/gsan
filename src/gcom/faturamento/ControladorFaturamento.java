@@ -16316,8 +16316,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				
 			
 		} catch (ControladorException e) {
+			System.out.println("ERRO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
+			e.printStackTrace();
 			throw new ControladorException("erro.credito.realizar.bolsa.agua");
 		} catch (ErroRepositorioException e) {
+			System.out.println("ERRO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
+			e.printStackTrace();
 			throw new ControladorException("erro.credito.realizar.bolsa.agua");
 		}
 	}
@@ -16355,8 +16359,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				repositorioUtil.inserir(creditoARealizarCategoria);
 			}
 		} catch (ErroRepositorioException e) {
+			System.out.println("ERRO CREDITO CATEGORIA BOLSA AGUA PARA IMOVEL " + creditoARealizar.getImovel().getId());
+			e.printStackTrace();
 			throw new ControladorException("erro.credito.categoria");
 		} catch (ControladorException ex) {
+			System.out.println("ERRO CREDITO CATEGORIA BOLSA AGUA PARA IMOVEL " + creditoARealizar.getImovel().getId());
+			ex.printStackTrace();
 			throw new ControladorException("erro.credito.categoria");
 		}
 
