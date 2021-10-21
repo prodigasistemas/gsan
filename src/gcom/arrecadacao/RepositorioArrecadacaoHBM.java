@@ -15366,42 +15366,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 
 	/**
-	 * pesquisar descrição do Débito Automático
-	 * 
-	 * @author Sávio Luiz
-	 * @date 22/11/06
-	 * 
-	 * @return Integer
-	 * @throws ErroRepositorioException
-	 */
-	public String pesquisarDescricaoDebitoAutomatico(Integer codigoRetorno)
-			throws ErroRepositorioException {
-
-		String retorno = null;
-
-		Session session = HibernateUtil.getSession();
-
-		String consulta = "";
-
-		try {
-			consulta = " select debAutomaticoRetCod.descricaoDebitoAutomaticoRetornoCodigo "
-					+ " from DebitoAutomaticoRetornoCodigo debAutomaticoRetCod "
-					+ " where debAutomaticoRetCod.id = :codigoRetorno";
-
-			retorno = (String) session.createQuery(consulta).setInteger(
-					"codigoRetorno", codigoRetorno).setMaxResults(1)
-					.uniqueResult();
-
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-	}
-
-	/**
 	 * Pesquisa a lista de ano/mês de arrecadaçaõ menores e igual ao ano/mês de
 	 * arrecadação atual.
 	 * 

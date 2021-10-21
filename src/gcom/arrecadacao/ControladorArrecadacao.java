@@ -891,7 +891,7 @@ public class ControladorArrecadacao extends ControladorComum {
 											 */
 											BigDecimal valorDebitado = Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoF.getValorDebito());
 
-											Integer codigoDeRetorno = new Integer(registroHelperCodigoF.getCodigoRetorno());
+											String codigoDeRetorno = registroHelperCodigoF.getCodigoRetorno();
 											if (codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITADO)
 													|| codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITO_EFETUADO_DATA_DIFERENTE_DA_DATA_INFORMADA)) {
 
@@ -1186,13 +1186,8 @@ public class ControladorArrecadacao extends ControladorComum {
 												// 2(NÃO).
 												indicadorAceitacaoRegistroMovimento = 2;
 
-												try {
-													descricaoOcorrenciaMovimento = repositorioArrecadacao.pesquisarDescricaoDebitoAutomatico(new Integer(registroHelperCodigoF
-															.getCodigoRetorno()));
-
-												} catch (ErroRepositorioException e) {
-													throw new ControladorException("erro.sistema", e);
-												}
+												DebitoAutomaticoRetornoCodigo codRetorno = this.pesquisarCodRetorno(registroHelperCodigoF.getCodigoRetorno());
+												descricaoOcorrenciaMovimento = codRetorno.getDescricaoDebitoAutomaticoRetornoCodigo();
 
 												inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
 														indicadorAceitacaoRegistroMovimento, null, null, null, null);
@@ -10243,9 +10238,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			filtroDebitoAutomaticoRetornoCodigo
 			.adicionarParametro(new ParametroSimples(
-					FiltroDebitoAutomaticoRetornoCodigo.ID,
-					new Integer(registroHelperCodigoF
-							.getCodigoRetorno())));
+					FiltroDebitoAutomaticoRetornoCodigo.COD_BANCO,registroHelperCodigoF.getCodigoRetorno()));
 
 			Collection colecaoDebitoAutomaticoRetornoCodigo = getControladorUtil()
 					.pesquisar(filtroDebitoAutomaticoRetornoCodigo,
