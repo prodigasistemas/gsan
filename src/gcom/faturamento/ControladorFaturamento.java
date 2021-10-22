@@ -16187,6 +16187,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Collection<Imovel> colecaoImovel = getControladorImovel().pesquisarImoveisBolsaAgua(rota);
 
 			for (Imovel imovel: colecaoImovel) {
+				System.out.println("INSERINDO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
 				//apagarDadosCreditoSocialInicioBatch(referencia, creditoTipo, imovel);
 				//atualizarValorCreditoBolsaAgua(referencia, imovel);
 				
@@ -16205,6 +16206,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception e) {
+			System.out.println("ERRO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
 			e.printStackTrace();
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new ActionServletException("erro.credito.bolsa.agua");
