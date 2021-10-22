@@ -16,6 +16,7 @@
 		<property name="descricaoDebitoAutomaticoRetornoCodigo" type="java.lang.String" column="durc_dsdebitoautomatico" length="50"/>
 		<property name="indicadorUso" type="java.lang.Short" column="durc_icuso" length="2"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="durc_tmultimaalteracao" length="8"/>
+		<property name="codigoBanco" type="java.lang.String" column="durc_codbanco" length="2"/>
 		<!-- associations -->
 		<!-- bi-directional one-to-many association to DebitoAutomaticoMovimento -->
 		<!--

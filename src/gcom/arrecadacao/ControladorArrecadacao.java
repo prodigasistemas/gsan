@@ -859,8 +859,8 @@ public class ControladorArrecadacao extends ControladorComum {
 										// debitoAutomaticaMovimento
 										if (debitoAutomaticoMovimento != null) {
 
-											DebitoAutomaticoRetornoCodigo debitoAutomaticoRetornoCodigo = new DebitoAutomaticoRetornoCodigo();
-											debitoAutomaticoRetornoCodigo.setId(new Integer(registroHelperCodigoF.getCodigoRetorno()));
+											DebitoAutomaticoRetornoCodigo debitoAutomaticoRetornoCodigo = pesquisarCodRetorno(registroHelperCodigoF.getCodigoRetorno());
+
 											debitoAutomaticoMovimento.setDebitoAutomaticoRetornoCodigo(debitoAutomaticoRetornoCodigo);
 											debitoAutomaticoMovimento.setRetornoBanco(new Date());
 											debitoAutomaticoMovimento.setNumeroSequenciaArquivoRecebido(new Integer(registroHelperCodigoA.getNumeroSequencialArquivo()));
@@ -891,7 +891,7 @@ public class ControladorArrecadacao extends ControladorComum {
 											 */
 											BigDecimal valorDebitado = Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoF.getValorDebito());
 
-											Integer codigoDeRetorno = new Integer(registroHelperCodigoF.getCodigoRetorno());
+											String codigoDeRetorno = registroHelperCodigoF.getCodigoRetorno();
 											if (codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITADO)
 													|| codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITO_EFETUADO_DATA_DIFERENTE_DA_DATA_INFORMADA)) {
 
@@ -1186,13 +1186,8 @@ public class ControladorArrecadacao extends ControladorComum {
 												// 2(NÃO).
 												indicadorAceitacaoRegistroMovimento = 2;
 
-												try {
-													descricaoOcorrenciaMovimento = repositorioArrecadacao.pesquisarDescricaoDebitoAutomatico(new Integer(registroHelperCodigoF
-															.getCodigoRetorno()));
-
-												} catch (ErroRepositorioException e) {
-													throw new ControladorException("erro.sistema", e);
-												}
+												DebitoAutomaticoRetornoCodigo codRetorno = this.pesquisarCodRetorno(registroHelperCodigoF.getCodigoRetorno());
+												descricaoOcorrenciaMovimento = codRetorno.getDescricaoDebitoAutomaticoRetornoCodigo();
 
 												inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento,
 														indicadorAceitacaoRegistroMovimento, null, null, null, null);
@@ -10243,9 +10238,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 			filtroDebitoAutomaticoRetornoCodigo
 			.adicionarParametro(new ParametroSimples(
-					FiltroDebitoAutomaticoRetornoCodigo.ID,
-					new Integer(registroHelperCodigoF
-							.getCodigoRetorno())));
+					FiltroDebitoAutomaticoRetornoCodigo.COD_BANCO,registroHelperCodigoF.getCodigoRetorno()));
 
 			Collection colecaoDebitoAutomaticoRetornoCodigo = getControladorUtil()
 					.pesquisar(filtroDebitoAutomaticoRetornoCodigo,
@@ -51054,7 +51047,8 @@ public class ControladorArrecadacao extends ControladorComum {
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, parcelamento.getId()));
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
-		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		GuiaPagamento guiaPagamento = (GuiaPagamento) 
+				Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
 		
 		return guiaPagamento;
 	}
@@ -51063,8 +51057,19 @@ public class ControladorArrecadacao extends ControladorComum {
 		FiltroGuiaPagamentoHistorico filtroGuiaPagamentoHistorico = new FiltroGuiaPagamentoHistorico();
 		filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.PARCELAMENTO_ID, parcelamento.getId()));
 		filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
-		GuiaPagamentoHistorico guiaPagamentoHistorico = (GuiaPagamentoHistorico) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamentoHistorico, GuiaPagamentoHistorico.class.getName()));
+		GuiaPagamentoHistorico guiaPagamentoHistorico = (GuiaPagamentoHistorico) 
+				Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamentoHistorico, GuiaPagamentoHistorico.class.getName()));
 		
 		return guiaPagamentoHistorico;
+	}
+	
+	private DebitoAutomaticoRetornoCodigo pesquisarCodRetorno(String codRetorno) {
+		FiltroDebitoAutomaticoRetornoCodigo filtro = new FiltroDebitoAutomaticoRetornoCodigo();
+		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoAutomaticoRetornoCodigo.COD_BANCO, codRetorno));
+		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoAutomaticoRetornoCodigo.INDICADOR_USO, ConstantesSistema.SIM));
+		DebitoAutomaticoRetornoCodigo codigo = (DebitoAutomaticoRetornoCodigo) 
+				Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtro, DebitoAutomaticoRetornoCodigo.class.getName()));
+		
+		return codigo;
 	}
 }

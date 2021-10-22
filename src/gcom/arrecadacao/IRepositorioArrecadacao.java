@@ -623,8 +623,6 @@ public interface IRepositorioArrecadacao {
 
 	public Integer pesquisarIdLancamentoItemContabil(Integer idCreditoTipo) throws ErroRepositorioException;
 
-	public String pesquisarDescricaoDebitoAutomatico(Integer codigoRetorno) throws ErroRepositorioException;
-
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarAnoMesArrecadacaoMenorIgualAtual(Integer anoMesArrecadacaoAtual) throws ErroRepositorioException;
 
