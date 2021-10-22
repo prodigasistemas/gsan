@@ -16177,7 +16177,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada) throws ControladorException {
+	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada, FaturamentoGrupo grupo) throws ControladorException {
 
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, rota.getId());
 
@@ -16192,7 +16192,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				System.out.println("INSERINDO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
 				//apagarDadosCreditoSocialInicioBatch(referencia, creditoTipo, imovel);
 				//atualizarValorCreditoBolsaAgua(referencia, imovel);
-				
+
 				BigDecimal valorCredito = BigDecimal.ZERO;
 				
 				if (imovel.isLigadoAgua() ) {
@@ -16203,7 +16203,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					valorCredito = valorCredito.add(new BigDecimal(42.84));  
 				}
 				
-				inserirCreditoBolsaAgua(imovel, valorCredito, rota.getFaturamentoGrupo().getAnoMesReferencia(), creditoTipo);
+				inserirCreditoBolsaAgua(imovel, valorCredito, grupo.getAnoMesReferencia(), creditoTipo);
 			}
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);

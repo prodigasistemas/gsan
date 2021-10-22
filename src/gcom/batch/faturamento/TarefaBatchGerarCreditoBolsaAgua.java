@@ -36,12 +36,12 @@ public class TarefaBatchGerarCreditoBolsaAgua extends TarefaBatch{
 
 
 		Collection<Rota> colecaoRotas= (Collection<Rota>) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
+		FaturamentoGrupo grupo = (FaturamentoGrupo) getParametro("faturamentoGrupo");
 
 		for (Rota rota : colecaoRotas) {
 			enviarMensagemControladorBatch(
 					ConstantesJNDI.BATCH_GERAR_CREDITO_BOLSA_AGUA_MDB,
-					new Object[]{rota,
-							this.getIdFuncionalidadeIniciada()});
+					new Object[]{rota,this.getIdFuncionalidadeIniciada(), grupo});
 		}
 		return null;
 	}

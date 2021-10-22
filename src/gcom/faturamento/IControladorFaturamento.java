@@ -1293,7 +1293,7 @@ public interface IControladorFaturamento {
 	
 	public void envioNotificacaoVencimentoFatura (Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades) throws ControladorException;
 	
-	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada) throws ControladorException;
+	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada, FaturamentoGrupo grupo) throws ControladorException;
 	
 	public void atualizarValorCreditoBolsaAgua(Integer anoMes, Imovel imovel, BigDecimal valorBolsaAgua, Conta conta) throws ControladorException;
 	
