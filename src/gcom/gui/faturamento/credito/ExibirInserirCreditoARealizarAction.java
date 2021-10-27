@@ -25,6 +25,7 @@ import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
+import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
 import java.util.Collection;
 
@@ -58,6 +59,7 @@ public class ExibirInserirCreditoARealizarAction extends GcomAction {
 
 		FiltroCreditoOrigem filtroCreditoOrigem = new FiltroCreditoOrigem();
 		filtroCreditoOrigem.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.INDICADORUSO, ConstantesSistema.SIM.intValue()));
+		filtroCreditoOrigem.adicionarParametro(new ParametroSimplesDiferenteDe(FiltroCreditoOrigem.ID, CreditoOrigem.BOLSA_AGUA));
 		Collection<CreditoOrigem> collectionCreditoOrigem = fachada.pesquisar(filtroCreditoOrigem, CreditoOrigem.class.getName());
 
 		httpServletRequest.setAttribute("collectionCreditoOrigem",

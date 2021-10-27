@@ -3,15 +3,14 @@ package gcom.gui.faturamento.conta;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
-
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.credito.FiltroCreditoOrigem;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.debito.FiltroDebitoTipo;
-
 import gcom.util.ConstantesSistema;
 import gcom.util.filtro.ParametroSimples;
+import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
 import java.util.Collection;
 
@@ -85,6 +84,7 @@ public class ExibirAdicionarCreditoRealizadoContaAction extends GcomAction {
         if (sessao.getAttribute("colecaoAdicionarCreditoOrigem") == null){
         	
         	FiltroCreditoOrigem filtroCreditoOrigem = new FiltroCreditoOrigem(FiltroCreditoOrigem.DESCRICAO_ABREVIADA);
+        	filtroCreditoOrigem.adicionarParametro(new ParametroSimplesDiferenteDe(FiltroCreditoOrigem.ID, CreditoOrigem.BOLSA_AGUA));
         	
         	filtroCreditoOrigem.adicionarParametro(new ParametroSimples(FiltroCreditoOrigem.INDICADOR_USO,
         			ConstantesSistema.INDICADOR_USO_ATIVO));
