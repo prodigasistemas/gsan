@@ -303,6 +303,9 @@ public class InserirImovelAction extends GcomAction {
 			imovel.setImovelTipoCobertura(imovelTipoCobertura);
 		}
 		
+			imovel.setIndicadorEnvioContaFisica((short) Imovel.INDICADOR_ENVIO_CONTA_FISICA);
+		
+		
 		// ABA CONCLUSAO
 		ImovelAbaConclusaoHelper helperConclusao = new ImovelAbaConclusaoHelper();
 		helperConclusao.setSetorComercial(resultadoAbaLocalidade.getSetorComercial());
