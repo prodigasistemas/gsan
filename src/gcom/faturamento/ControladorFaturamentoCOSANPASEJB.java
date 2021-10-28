@@ -894,6 +894,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			contaTxt.append(Util.completaString(" ", 63));
 		}
 		
+		
 		if (emitirConta.getValorRateioEsgoto() != null && emitirConta.getValorRateioEsgoto().compareTo(BigDecimal.ZERO) == 1) {
 			contaTxt.append(Util.completaString("VALOR RATEIO ESGOTO", 50));
 			contaTxt.append(Util.completaString(emitirConta.getValorRateioEsgoto() + "", 13));

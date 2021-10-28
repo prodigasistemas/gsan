@@ -277,7 +277,6 @@ public class ContaSegundaViaDTO {
 		if (empresaCallcenter != null && empresaCallcenter.length() == 11 && empresaCallcenter.startsWith("0800")) {
 			this.empresaCallcenter = empresaCallcenter.substring(0, 4) + " " + empresaCallcenter.substring(4, 7) + " " + empresaCallcenter.substring(7, 11);
 		}
-
 	}
 
 	private void setConsumoMedia() {
