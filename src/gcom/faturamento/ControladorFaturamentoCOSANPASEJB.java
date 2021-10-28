@@ -538,7 +538,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								
 								contaTxt = preencherDadosAliquotaImposto(emitirContaHelper, contaTxt);
 								contaTxt = preencherContatosAgenciaReguladora(emitirContaHelper, contaTxt);
-								contaTxt = preencherDadosAliquotaAgenciaReguladora(emitirContaHelper, contaTxt);							
+								contaTxt = preencherDadosAliquotaAgenciaReguladora(emitirContaHelper, contaTxt);
+								contaTxt = preencherFlagCarimbo(emitirContaHelper, contaTxt);
 								
 								if (isEmitirImpressaoTermica(imovelEmitido, municipioEntrega, municipioImovel)) {
 
@@ -581,7 +582,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									mapAtualizaSequencial.put(emitirContaHelper.getIdConta(), sequencialImpressao);
 									cont++;
 								}		
-								contaTxt = preencherFlagCarimbo(emitirContaHelper, contaTxt);
 
 								contaTxt = null;
 								
