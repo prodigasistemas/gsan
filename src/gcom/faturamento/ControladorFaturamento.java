@@ -16190,17 +16190,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			for (Imovel imovel: colecaoImovel) {
 				idImovelAtual = imovel.getId();
 				System.out.println("INSERINDO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
-				//apagarDadosCreditoSocialInicioBatch(referencia, creditoTipo, imovel);
-				//atualizarValorCreditoBolsaAgua(referencia, imovel);
-
+				apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
+				DeterminarValoresFaturamentoAguaEsgotoHelper helper = obterValoresCreditosBolsaAgua(imovel, grupo);
+				
 				BigDecimal valorCredito = BigDecimal.ZERO;
 				
 				if (imovel.isLigadoAgua() ) {
-					valorCredito = valorCredito.add(new BigDecimal(71.40));  
+					valorCredito = valorCredito.add(helper.getValorTotalAgua());  
 				}
 				
 				if (imovel.isLigadoEsgoto() ) {
-					valorCredito = valorCredito.add(new BigDecimal(42.84));  
+					valorCredito = valorCredito.add(helper.getValorTotalEsgoto());  
 				}
 				
 				inserirCreditoBolsaAgua(imovel, valorCredito, grupo.getAnoMesReferencia(), creditoTipo);
@@ -16215,7 +16215,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private DeterminarValoresFaturamentoAguaEsgotoHelper obterValoresCreditosBolsaAgua(Imovel imovel, FaturamentoGrupo grupo ) {
+	public DeterminarValoresFaturamentoAguaEsgotoHelper obterValoresCreditosBolsaAgua(Imovel imovel, FaturamentoGrupo grupo ) {
 		LigacaoTipo ligacaoTipo = new LigacaoTipo();
 		DeterminarValoresFaturamentoAguaEsgotoHelper valoresAguaEsgoto = null;
 		
