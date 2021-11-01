@@ -16230,6 +16230,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				ligacaoTipo.setId(LigacaoTipo.LIGACAO_AGUA);
 	
 				consumoHistoricoAgua = this.getControladorMicromedicao().obterUltimoConsumoImovel(imovel, LigacaoTipo.LIGACAO_AGUA);
+				
+				if (consumoHistoricoAgua == null) {
+					consumoHistoricoAgua = new ConsumoHistorico();
+					consumoHistoricoAgua.setIndicadorFaturamento(ConstantesSistema.SIM));
+					consumoHistoricoAgua.setConsumoTipo(new ConsumoTipo(ConsumoTipo.SEM_CONSUMO)));
+				}
+				
 				consumoHistoricoAgua.setNumeroConsumoFaturadoMes(20);
 			}
 	
@@ -16239,6 +16246,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				ligacaoTipo.setId(LigacaoTipo.LIGACAO_ESGOTO);
 
 				consumoHistoricoEsgoto = this.getControladorMicromedicao().obterUltimoConsumoImovel(imovel, LigacaoTipo.LIGACAO_ESGOTO);
+				
+				if (consumoHistoricoEsgoto == null) {
+					consumoHistoricoEsgoto = new ConsumoHistorico();
+					consumoHistoricoEsgoto.setIndicadorFaturamento(ConstantesSistema.SIM));
+					consumoHistoricoEsgoto.setConsumoTipo(new ConsumoTipo(ConsumoTipo.SEM_CONSUMO)));
+				}
+				
 				consumoHistoricoEsgoto.setNumeroConsumoFaturadoMes(14);
 
 			}
