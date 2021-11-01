@@ -6288,6 +6288,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Collection colecaoCreditoRealizado = repositorioFaturamento.pesquisarCreditosRealizados(idConta);
 		//	System.out.println("Atualizar valor residual. Id imóvel: " + imovel != null ? imovel.getId():"");
 			
+			
 			/**
 			 * Autor: Adriana Muniz
 			 * Data: 20/07/2011
@@ -6301,30 +6302,66 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				boolean deletaCreditoRealizado = false;
 				CreditoRealizado creditoRealizado = null;
 				BigDecimal valorTotalACobrar = valorTotalContaSemCredito;
+				boolean verificouBolsaAgua = false;
 				
+				
+						
 				while (iteratorColecaoCreditosRealizados.hasNext()){
 					creditoRealizado = (CreditoRealizado) iteratorColecaoCreditosRealizados.next();
 					
 					Collection colecaoCreditosARealizar = this
 							.obterCreditoARealizarDadosCreditoRealizadoAntigo(imovel.getId(),
 							DebitoCreditoSituacao.NORMAL, anoMesFaturamento, 
-							creditoRealizado);
+							creditoRealizado);	
+					CreditoRealizado creditoBolsaAgua = obterCreditoBolsaAgua(colecaoCreditoRealizado);
+					
+					BigDecimal valorCorrespondenteParcelaMes = ConstantesSistema.VALOR_ZERO;
+					BigDecimal valorCredito = ConstantesSistema.VALOR_ZERO;
+					BigDecimal valorConta = ConstantesSistema.VALOR_ZERO;
+					
+					if (creditoBolsaAgua != null && !verificouBolsaAgua) {
+
+								valorTotalACobrar = valorTotalACobrar.subtract(creditoBolsaAgua.getValorCredito());														
+													
+									logger.info(" 0 - Credito a Realizar BOLSA ÁGUA: Imovel (atualizarCreditoResidual): " + (creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar().getImovel() != null ? creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar().getImovel().getId() : "NULL") 
+											+ " | Créditos: " + (creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar().getValorCredito() != null ? creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar().getValorCredito() : "NULL" )
+											+ " | Residual Concedido no Mês: " + (creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar().getValorResidualConcedidoMes() != null ? creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar().getValorResidualConcedidoMes() : "NULL") 
+											+ " | Residual Concedido no Mês Anterior: " + (creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar().getValorResidualMesAnterior() != null ? creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar().getValorResidualMesAnterior() : "NULL"));
+									
+									creditoBolsaAgua.setUltimaAlteracao(new Date());
+									getControladorUtil().atualizar(creditoRealizado);
+									
+									//atualiza o credito realizado categoria
+									this.atualizarCreditoRealizadoCategoria(creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar(), creditoBolsaAgua);	
+								
+									getControladorUtil().atualizar(creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar());	
+									
+									valorTotalCreditos = valorTotalCreditos.add(creditoBolsaAgua.getValorCredito());
+									
+									verificouBolsaAgua = true;
+																
+					}
 	
 					if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
 						
 						Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar.iterator();
+						
 						CreditoARealizar creditoARealizar = null;
-	
+						
 							while (iteratorColecaoCreditosARealizar.hasNext()) {
 								creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
+								
+								if (creditoARealizar.isCreditoBolsaAgua()) {
+									continue;
+								}
 	
 								if (!idCreditosARealizarVerificados.contains(creditoARealizar.getId())) {
 									idCreditosARealizarVerificados.add(creditoARealizar.getId());
 	
 									if (!deletaCreditoRealizado || idCreditosARealizarVerificados.contains(creditoARealizar.getId())) {
-										BigDecimal valorCorrespondenteParcelaMes = ConstantesSistema.VALOR_ZERO;
-										BigDecimal valorCredito = ConstantesSistema.VALOR_ZERO;
-										BigDecimal valorConta = ConstantesSistema.VALOR_ZERO;
+										valorCorrespondenteParcelaMes = ConstantesSistema.VALOR_ZERO;
+										valorCredito = ConstantesSistema.VALOR_ZERO;
+										valorConta = ConstantesSistema.VALOR_ZERO;
 	
 										/**
 										 * 
@@ -6570,7 +6607,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 									}
 									
-								}// fim laço que verifica se o credito a realizar já foi analisado
+								}/* fim laço que verifica se o credito a realizar já foi analisado
 								
 								if (creditoARealizar.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)) {
 									Filtro filtro = new FiltroCreditoARealizar();
@@ -6594,7 +6631,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 											+ " | Créditos: " + (creditoARealizar.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL" )
 											+ " | Residual Concedido no Mês: " + (creditoARealizar.getValorResidualConcedidoMes() != null ? creditoARealizar.getValorResidualConcedidoMes() : "NULL") 
 											+ " | Residual Concedido no Mês Anterior: " + (creditoARealizar.getValorResidualMesAnterior() != null ? creditoARealizar.getValorResidualMesAnterior() : "NULL"));
-								}
+								}*/
 							}// fim laço de credito a realizar
 					}
 							
@@ -16392,6 +16429,20 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		return BigDecimal.ZERO;
 	}
+	
+	private CreditoRealizado obterCreditoBolsaAgua(Collection<CreditoRealizado> collectionCreditos) {
+    	Iterator<CreditoRealizado> iteratorColecaoCreditosARealizar = collectionCreditos.iterator();
+
+        while (iteratorColecaoCreditosARealizar.hasNext()) {
+        	CreditoRealizado credito = iteratorColecaoCreditosARealizar.next();
+        	
+        	if (credito.isCreditoBolsaAgua()) {
+        		return credito;
+        	}
+        }
+        
+        return null;
+    }
 	
 	private SistemaParametro getSistemaParametro() throws ControladorException {
 		try {

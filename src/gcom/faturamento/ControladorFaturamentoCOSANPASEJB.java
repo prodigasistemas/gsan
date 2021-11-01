@@ -539,6 +539,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt = preencherDadosAliquotaImposto(emitirContaHelper, contaTxt);
 								contaTxt = preencherContatosAgenciaReguladora(emitirContaHelper, contaTxt);
 								contaTxt = preencherDadosAliquotaAgenciaReguladora(emitirContaHelper, contaTxt);
+								contaTxt = preencherFlagCarimbo(emitirContaHelper, contaTxt);
 								
 								if (isEmitirImpressaoTermica(imovelEmitido, municipioEntrega, municipioImovel)) {
 
@@ -580,7 +581,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									}
 									mapAtualizaSequencial.put(emitirContaHelper.getIdConta(), sequencialImpressao);
 									cont++;
-								}
+								}		
 
 								contaTxt = null;
 								
@@ -892,6 +893,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} else {
 			contaTxt.append(Util.completaString(" ", 63));
 		}
+		
 		
 		if (emitirConta.getValorRateioEsgoto() != null && emitirConta.getValorRateioEsgoto().compareTo(BigDecimal.ZERO) == 1) {
 			contaTxt.append(Util.completaString("VALOR RATEIO ESGOTO", 50));
@@ -1411,6 +1413,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			throws ControladorException {
 		
 		if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
+			
 			String mensagem = "PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA";
 			contaTxt.append(Util.completaString(mensagem, 100));
 			contaTxt.append(Util.completaString("", 100));
@@ -1420,6 +1423,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			emitirContaHelper.setMsgLinha2Conta("");
 			emitirContaHelper.setMsgLinha3Conta("");
 		} else if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) > 0.00) {
+		
 			String mensagem = "PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA";
 			contaTxt.append(Util.completaString(mensagem, 100));
 			contaTxt.append(Util.completaString("", 100));
@@ -1429,6 +1433,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			emitirContaHelper.setMsgLinha2Conta("");
 			emitirContaHelper.setMsgLinha3Conta("");
 		} else { 
+			
 			String[] parmsPartesConta = obterMensagemDebitoConta3Partes(emitirContaHelper, sistemaParametro);
 		
 		
@@ -1459,7 +1464,20 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 		return contaTxt;
 	}
-
+	private StringBuilder preencherFlagCarimbo(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
+			throws ControladorException {
+	    if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
+	       contaTxt.append(Conta.CARIMBO_QUITADO);
+		
+	    } else if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) > 0.00) {
+		   contaTxt.append(Conta.CARIMBO_20M);
+		
+	   } else { 
+		   contaTxt.append(Conta.SEM_CARIMBO);
+	 		
+	   }
+		return contaTxt;
+	}
 	@SuppressWarnings("unchecked")
 	private StringBuilder preencherDataPrevistaCronograma(FaturamentoGrupo faturamentoGrupo, EmitirContaHelper emitirContaHelper, 
 			StringBuilder contaTxt) throws ControladorException {

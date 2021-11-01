@@ -117,6 +117,8 @@ public class ContaSegundaViaDTO {
 	private String dataPagamento;
 	private String situacaoConta;
 
+	private Short indicadorMensagemBolsaAgua;
+
 	public ContaSegundaViaDTO() {
 		super();
 	}
@@ -188,6 +190,7 @@ public class ContaSegundaViaDTO {
 		this.mensagemDebitos = helper.getMensagemDebitos();
 		this.mensagemQuitacao = helper.getMensagemQuitacao().equals("") ? null : helper.getMensagemQuitacao();
 		this.mensagemBolsaAgua = helper.getMensagemBolsaAgua().equals("") ? null : helper.getMensagemBolsaAgua();
+		this.indicadorMensagemBolsaAgua = helper.getIndicadorMensagemBolsaAgua() != null ? helper.getIndicadorMensagemBolsaAgua() : null;
 
 		this.setServicos(helper);
 		this.valorTotal = helper.getValorContaString();
@@ -274,7 +277,6 @@ public class ContaSegundaViaDTO {
 		if (empresaCallcenter != null && empresaCallcenter.length() == 11 && empresaCallcenter.startsWith("0800")) {
 			this.empresaCallcenter = empresaCallcenter.substring(0, 4) + " " + empresaCallcenter.substring(4, 7) + " " + empresaCallcenter.substring(7, 11);
 		}
-
 	}
 
 	private void setConsumoMedia() {
@@ -471,6 +473,9 @@ public class ContaSegundaViaDTO {
 
 	public String getMensagemBolsaAgua() {
 		return mensagemBolsaAgua;
+	}
+	public Short getIndicadorMensagemBolsaAgua() {
+		return indicadorMensagemBolsaAgua;
 	}
 
 	public List<ContaLinhasDescricaoServicosTarifasTotalHelper> getServicos() {

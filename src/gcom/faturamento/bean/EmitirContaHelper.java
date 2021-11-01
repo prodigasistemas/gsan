@@ -1,5 +1,6 @@
 package gcom.faturamento.bean;
 
+import gcom.faturamento.conta.Conta;
 import gcom.util.Util;
 
 import java.io.Serializable;
@@ -181,6 +182,7 @@ public class EmitirContaHelper implements Serializable {
 	private String mensagemDebitos;
 	private String mensagemQuitacao;
 	private String mensagemBolsaAgua;
+	private Short indicadorMensagemBolsaAgua;
 
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
@@ -1988,13 +1990,22 @@ public class EmitirContaHelper implements Serializable {
 	public void setMensagemBolsaAgua(String mensagemBolsaAgua) {
 		this.mensagemBolsaAgua = mensagemBolsaAgua;
 	}	
+	public Short getIndicadorMensagemBolsaAgua() {
+		return indicadorMensagemBolsaAgua;
+	}
+
+	public void setIndicadorMensagemBolsaAgua(Short indicadorMensagemBolsaAgua) {
+		this.indicadorMensagemBolsaAgua = indicadorMensagemBolsaAgua;
+	}	
 	
 	public void preencherMsgBolsaAgua() {
 		if (this.valorConta.doubleValue() > 0 && this.valorCreditoBolsaAgua != null && this.valorCreditoBolsaAgua.doubleValue() > 0) {
 			this.mensagemBolsaAgua = "Programa Água Pará 20.000 litros quitados pelo Governo do Estado do Pará";
+			this.indicadorMensagemBolsaAgua = Conta.CARIMBO_20M;
 		} else if (this.valorConta.doubleValue() == 0.0 && this.valorCreditoBolsaAgua != null && this.valorCreditoBolsaAgua.doubleValue() > 0) {
+			this.indicadorMensagemBolsaAgua = Conta.CARIMBO_QUITADO;
 			this.mensagemBolsaAgua = "Programa Água Pará, quitado pelo Governo do Estado do Pará";
-		} else {
+		} else {			
 			this.mensagemBolsaAgua = "";
 		}
 	}

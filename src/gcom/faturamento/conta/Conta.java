@@ -43,6 +43,10 @@ public class Conta extends ObjetoTransacao implements IConta {
 	
 	public static final Short INDICADOR_ALTERACAO_VENCIMENTO_ATIVO = new Short("1");
 	public static final Short INDICADOR_DEBITO_CONTA_SIM = new Short("1");
+	
+	public static final Short SEM_CARIMBO = new Short("0");
+	public static final Short CARIMBO_20M = new Short("1");
+	public static final Short CARIMBO_QUITADO = new Short("2");
 		
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_CONTA,ATRIBUTOS_RETIFICAR_CONTA_CANCELAR})
 	private Integer id;
