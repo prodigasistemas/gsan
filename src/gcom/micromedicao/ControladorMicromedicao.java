@@ -25426,12 +25426,9 @@ public class ControladorMicromedicao extends ControladorComum {
 								LigacaoTipo.LIGACAO_AGUA);
 
 			} else if (idLigacaoTipo.equals(LigacaoTipo.LIGACAO_ESGOTO)) {
-				if (imovel.getHidrometroInstalacaoHistorico() != null
-						&& imovel.getHidrometroInstalacaoHistorico().getId() != null) {
-					colecaoArrayConsumoHistorico = this.repositorioMicromedicao
-							.obterUltimosConsumosImovel(imovel.getId(),
-									LigacaoTipo.LIGACAO_ESGOTO);
-				}
+				colecaoArrayConsumoHistorico = this.repositorioMicromedicao
+						.obterUltimosConsumosImovel(imovel.getId(),
+								LigacaoTipo.LIGACAO_ESGOTO);
 			}
 				
 			if (colecaoArrayConsumoHistorico != null && !colecaoArrayConsumoHistorico.isEmpty()) {
