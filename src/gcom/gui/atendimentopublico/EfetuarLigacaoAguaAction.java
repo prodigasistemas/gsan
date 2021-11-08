@@ -174,7 +174,7 @@ public class EfetuarLigacaoAguaAction extends GcomAction {
 			
 		}
 
-		if (ordemServicoId != null && !ordemServicoId.equals("") && (idImovel == null || idImovel.equals(""))) {
+		if (ordemServicoId != null && !ordemServicoId.equalsIgnoreCase("")) {
 
 				OrdemServico ordemServico = (OrdemServico)sessao.getAttribute("ordemServico");
 
