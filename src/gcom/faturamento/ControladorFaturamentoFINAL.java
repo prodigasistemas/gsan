@@ -68873,14 +68873,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		int consumoAguaASerRateado = 0;
 		int consumoEsgotoASerRateado = 0;
 		logger.info("obterValorConsumoASerRateado");
-		logger.info("Ligacao Agua: " + imovelCondominio.getLigacaoAgua() != null);
 		if (imovelCondominio.getLigacaoAgua() != null) {
+			logger.info("possui Ligacao Agua");
 			consumoAguaASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(imovelCondominio.getId(), faturamentoGrupo.getAnoMesReferencia(),
 					LigacaoTipo.LIGACAO_AGUA);
 		}
 
-		logger.info("Ligacao Esgoto: " + imovelCondominio.getLigacaoEsgoto() != null);
 		if (imovelCondominio.getLigacaoEsgoto() != null) {
+			logger.info("possui Ligacao Esgoto");
 			consumoEsgotoASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(imovelCondominio.getId(), faturamentoGrupo.getAnoMesReferencia(),
 					LigacaoTipo.LIGACAO_ESGOTO);
 		}
