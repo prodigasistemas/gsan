@@ -39546,6 +39546,7 @@ public class ControladorMicromedicao extends ControladorComum {
         Integer consumoImovelCondomino = new Integer(0);
 
         int consumoASerRateado = 0;
+        
         try {
             Object[] dadosConsumoLigacaoAguaImovelCondominio = (Object[]) this.repositorioMicromedicao
                     .obterConsumoLigacaoAguaOuEsgotoDoImovel(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
@@ -39553,6 +39554,8 @@ public class ControladorMicromedicao extends ControladorComum {
             if (dadosConsumoLigacaoAguaImovelCondominio!= null &&
             	dadosConsumoLigacaoAguaImovelCondominio[0] != null &&
             	dadosConsumoLigacaoAguaImovelCondominio[1] != null) {
+            	
+            	logger.info("Entrou no if do  obterConsumoASerRateado");
             	
             	Integer idConsumoHistoricoLigacao = (Integer) dadosConsumoLigacaoAguaImovelCondominio[0];
             	Integer consumoLigacaoImovelCondominio = (Integer) dadosConsumoLigacaoAguaImovelCondominio[1];
@@ -39570,6 +39573,8 @@ public class ControladorMicromedicao extends ControladorComum {
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}
+        
+        logger.info("consumoASerRateado = " + consumoASerRateado);
 
         return consumoASerRateado;
     }
