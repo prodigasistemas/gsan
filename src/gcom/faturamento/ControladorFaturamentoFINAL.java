@@ -37149,7 +37149,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		
 		if (imovel.pertenceACondominio()) {
 			
-			logger.info("	macro: " + imovel.getImovelCondominio().getId());
+			logger.info("macro: " + imovel.getImovelCondominio().getId());
+			logger.info("micro: " + imovel.getId());
 			Imovel imovelMacro = getControladorImovel().pesquisarImovel(imovel.getImovelCondominio().getId());
 			
 			Collection<Imovel> imoveisVinculados = getControladorMicromedicao().obterImoveisVinculadosDoCondominio(imovelMacro.getId());
@@ -61089,7 +61090,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		} 
 
 		try {
-			System.out.println("----> " + imovel.getId());
 			if (!preFaturamento && imovel.isImovelCondominio()) {
 				BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel, faturamentoGrupo);
 				
@@ -68872,15 +68872,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public BigDecimal[] obterValorConsumoASerRateado(Imovel imovelCondominio, FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 		int consumoAguaASerRateado = 0;
 		int consumoEsgotoASerRateado = 0;
-		logger.info("		obterValorConsumoASerRateado");
-		logger.info("Ligacao agua: " );
+		logger.info("obterValorConsumoASerRateado");
+		logger.info("Ligacao Agua: " + imovelCondominio.getLigacaoAgua() != null);
 		if (imovelCondominio.getLigacaoAgua() != null) {
-			logger.info("Ligacao agua: " );
 			consumoAguaASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(imovelCondominio.getId(), faturamentoGrupo.getAnoMesReferencia(),
 					LigacaoTipo.LIGACAO_AGUA);
 		}
 
-		logger.info("Ligacao esgoto: " + imovelCondominio.getLigacaoEsgoto() != null);
+		logger.info("Ligacao Esgoto: " + imovelCondominio.getLigacaoEsgoto() != null);
 		if (imovelCondominio.getLigacaoEsgoto() != null) {
 			consumoEsgotoASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(imovelCondominio.getId(), faturamentoGrupo.getAnoMesReferencia(),
 					LigacaoTipo.LIGACAO_ESGOTO);
