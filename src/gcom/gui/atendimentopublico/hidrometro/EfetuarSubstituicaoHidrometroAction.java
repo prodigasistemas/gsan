@@ -65,6 +65,7 @@ public class EfetuarSubstituicaoHidrometroAction extends GcomAction {
 		 //Usuario logado no sistema
 		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");		
 		
+		String ordemServicoId =  efetuarSubstituicaoHidrometroActionForm.getIdOrdemServico();
 		String matriculaImovel = efetuarSubstituicaoHidrometroActionForm.getMatriculaImovel();
 		String numeroHidrometro = efetuarSubstituicaoHidrometroActionForm.getNumeroHidrometro();
 		String tipoMedicaoAtual = efetuarSubstituicaoHidrometroActionForm.getTipoMedicaoAtual();		
@@ -84,16 +85,7 @@ public class EfetuarSubstituicaoHidrometroAction extends GcomAction {
 		String valorPercentual = efetuarSubstituicaoHidrometroActionForm.getPercentualCobranca();
 
 		HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = new HidrometroInstalacaoHistorico();
-		
-        //Constrói o filtro para pesquisa da Ordem de Serviço		
-		OrdemServico ordemServico = (OrdemServico) sessao.getAttribute("ordemServico");
-        
-        if(ordemServico.getImovel() != null){
-            matriculaImovel =  ordemServico.getImovel().getId().toString();
-        }else{
-            matriculaImovel =  ordemServico.getRegistroAtendimento().getImovel().getId().toString();
-        }
-			
+	       
 		if (numeroHidrometro != null) {
 
 			//Constrói o filtro para pesquisa do Hidrômetro
@@ -129,10 +121,8 @@ public class EfetuarSubstituicaoHidrometroAction extends GcomAction {
 			}
 			
 			hidrometroInstalacaoHistorico.setHidrometro(hidrometro);
-		}
-
-		//Atualiza a entidade com os valores do formulário
-		efetuarSubstituicaoHidrometroActionForm.setFormValues(hidrometroInstalacaoHistorico);
+			//Atualiza a entidade com os valores do formulário
+			efetuarSubstituicaoHidrometroActionForm.setFormValues(hidrometroInstalacaoHistorico);
 		
 		HidrometroInstalacaoHistorico hidrometroSubstituicaoHistorico = 
 			(HidrometroInstalacaoHistorico)sessao.getAttribute("hidrometroSubstituicaoHistorico");
@@ -147,23 +137,29 @@ public class EfetuarSubstituicaoHidrometroAction extends GcomAction {
 		}
 		
 		hidrometroSubstituicaoHistorico.setUltimaAlteracao(new Date());
-				
-		BigDecimal valorAtual = new BigDecimal(0);
-		
-		if(ordemServico != null 
-			 && efetuarSubstituicaoHidrometroActionForm.getIdTipoDebito() != null){
+
+		if(ordemServicoId != null && !ordemServicoId.equalsIgnoreCase("")){
+			   
+			   BigDecimal valorAtual = new BigDecimal(0);
+   	
+	        	//Constrói o filtro para pesquisa da Ordem de Serviço		
+	    		OrdemServico ordemServico = (OrdemServico) sessao.getAttribute("ordemServico");
+	    			if(ordemServico != null && !ordemServico.equals("")) {	
+	    				matriculaImovel =  ordemServico.getImovel().getId().toString();
+	    			}else{
+	    				matriculaImovel =  ordemServico.getRegistroAtendimento().getImovel().getId().toString();
+	    			}
+	
+		if(ordemServico != null && efetuarSubstituicaoHidrometroActionForm.getIdTipoDebito() != null){
 				
 			 ServicoNaoCobrancaMotivo servicoNaoCobrancaMotivo = null;
 				
 			 ordemServico.setIndicadorComercialAtualizado(ConstantesSistema.SIM);
 			
-				if (efetuarSubstituicaoHidrometroActionForm.getValorDebito() != null
-						&& !efetuarSubstituicaoHidrometroActionForm.getValorDebito().equals("")  ) {
-				    String valorDebito = efetuarSubstituicaoHidrometroActionForm
-				     	.getValorDebito().toString().replace(".", "");
+				if (efetuarSubstituicaoHidrometroActionForm.getValorDebito() != null && !efetuarSubstituicaoHidrometroActionForm.getValorDebito().equals("")  ) {
+				    String valorDebito = efetuarSubstituicaoHidrometroActionForm.getValorDebito().toString().replace(".", "");
 				    
 				    valorDebito = valorDebito.replace(",", ".");
-				    
 				    valorAtual = new BigDecimal(valorDebito);
 
 				    ordemServico.setValorAtual(valorAtual);
@@ -182,6 +178,7 @@ public class EfetuarSubstituicaoHidrometroAction extends GcomAction {
 			 ordemServico.setUltimaAlteracao(new Date());				
 		}
 		
+		
 		String qtdParcelas = efetuarSubstituicaoHidrometroActionForm.getQuantidadeParcelas();
 		IntegracaoComercialHelper integracaoComercialHelper = new IntegracaoComercialHelper();
 		
@@ -196,6 +193,7 @@ public class EfetuarSubstituicaoHidrometroAction extends GcomAction {
 		integracaoComercialHelper.setQtdParcelas(qtdParcelas);
 		integracaoComercialHelper.setUsuarioLogado(usuario);
 		
+		   
 		if(efetuarSubstituicaoHidrometroActionForm.getVeioEncerrarOS().equalsIgnoreCase("FALSE")){
 			integracaoComercialHelper.setVeioEncerrarOS(Boolean.FALSE);
 			
@@ -214,16 +212,25 @@ public class EfetuarSubstituicaoHidrometroAction extends GcomAction {
 			}
 			sessao.removeAttribute("caminhoRetornoIntegracaoComercial");
 		}
+		}
 			
 	   //Inserir na base de dados a instalação de hidrômetro e a atualização da substituição do hidrômetro
 /*		fachada.efetuarSubstituicaoHidrometro(hidrometroInstalacaoHistorico,matriculaImovel, hidrometroSubstituicaoHistorico, 
 					situacaoHidrometroSubstituido, new Integer(localArmazenagemHidrometro), ordemServico, efetuarSubstituicaoHidrometroActionForm.getVeioEncerrarOS().toString());	
 */		
+		}
 		if(retorno.getName().equalsIgnoreCase("telaSucesso")){
 		// Monta a página de sucesso
-		montarPaginaSucesso(httpServletRequest, "Substituição de Hidrômetro para "+ tipoMedicaoAtual +
-				" no imóvel "+matriculaImovel+ " efetuada com sucesso.", 
-				"Efetuar outra Substituição de Hidrômetro", "exibirEfetuarSubstituicaoHidrometroAction.do");
+			if(matriculaImovel != null && !matriculaImovel.equalsIgnoreCase(""))
+			{
+				montarPaginaSucesso(httpServletRequest, "Substituição de Hidrômetro para "+ tipoMedicaoAtual +
+						" no imóvel "+matriculaImovel+ " efetuada com sucesso.", 
+						"Efetuar outra Substituição de Hidrômetro", "exibirEfetuarSubstituicaoHidrometroAction.do");
+			}else{
+				montarPaginaSucesso(httpServletRequest, "Substituição de Hidrômetro efetuada com sucesso.", 
+						"Efetuar outra Substituição de Hidrômetro", "exibirEfetuarSubstituicaoHidrometroAction.do");
+				
+			}
 		}
         
 		sessao.removeAttribute("EfetuarSubstituicaoHidrometroActionForm");
