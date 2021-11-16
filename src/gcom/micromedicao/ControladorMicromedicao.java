@@ -39546,25 +39546,35 @@ public class ControladorMicromedicao extends ControladorComum {
         Integer consumoImovelCondomino = new Integer(0);
 
         int consumoASerRateado = 0;
+        
         try {
             Object[] dadosConsumoLigacaoAguaImovelCondominio = (Object[]) this.repositorioMicromedicao
                     .obterConsumoLigacaoAguaOuEsgotoDoImovel(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
-
-            Integer idConsumoHistoricoLigacao = (Integer) dadosConsumoLigacaoAguaImovelCondominio[0];
-            Integer consumoLigacaoImovelCondominio = (Integer) dadosConsumoLigacaoAguaImovelCondominio[1];
-
-            int consumoAguaImoveisVinculados = this.obterConsumoLigacaoImoveisVinculados(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
-
-            if (consumoLigacaoImovelCondominio != null) {
-                consumoImovelCondomino = consumoLigacaoImovelCondominio;
+            
+            if (dadosConsumoLigacaoAguaImovelCondominio!= null &&
+            	dadosConsumoLigacaoAguaImovelCondominio[0] != null &&
+            	dadosConsumoLigacaoAguaImovelCondominio[1] != null) {
+            	
+            	logger.info("Entrou no if do  obterConsumoASerRateado");
+            	
+            	Integer idConsumoHistoricoLigacao = (Integer) dadosConsumoLigacaoAguaImovelCondominio[0];
+            	Integer consumoLigacaoImovelCondominio = (Integer) dadosConsumoLigacaoAguaImovelCondominio[1];
+            	
+            	int consumoAguaImoveisVinculados = this.obterConsumoLigacaoImoveisVinculados(idImovelCondominio, anoMesFaturamento, ligacaoTipo);
+            	
+            	if (consumoLigacaoImovelCondominio != null) {
+            		consumoImovelCondomino = consumoLigacaoImovelCondominio;
+            	}
+            	
+            	consumoASerRateado = consumoImovelCondomino - consumoAguaImoveisVinculados;
             }
-
-            consumoASerRateado = consumoImovelCondomino - consumoAguaImoveisVinculados;
         } catch (ControladorException e) {
 			e.printStackTrace();
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}
+        
+        logger.info("consumoASerRateado = " + consumoASerRateado);
 
         return consumoASerRateado;
     }

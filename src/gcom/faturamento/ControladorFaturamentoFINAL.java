@@ -37149,7 +37149,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		
 		if (imovel.pertenceACondominio()) {
 			
-			logger.info("	macro: " + imovel.getImovelCondominio().getId());
+			logger.info("macro: " + imovel.getImovelCondominio().getId());
+			logger.info("micro: " + imovel.getId());
 			Imovel imovelMacro = getControladorImovel().pesquisarImovel(imovel.getImovelCondominio().getId());
 			
 			Collection<Imovel> imoveisVinculados = getControladorMicromedicao().obterImoveisVinculadosDoCondominio(imovelMacro.getId());
@@ -61089,7 +61090,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		} 
 
 		try {
-			System.out.println("----> " + imovel.getId());
 			if (!preFaturamento && imovel.isImovelCondominio()) {
 				BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel, faturamentoGrupo);
 				
@@ -68872,16 +68872,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public BigDecimal[] obterValorConsumoASerRateado(Imovel imovelCondominio, FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 		int consumoAguaASerRateado = 0;
 		int consumoEsgotoASerRateado = 0;
-		logger.info("		obterValorConsumoASerRateado");
-		logger.info("Ligacao agua: " );
+		logger.info("obterValorConsumoASerRateado");
 		if (imovelCondominio.getLigacaoAgua() != null) {
-			logger.info("Ligacao agua: " );
+			logger.info("possui Ligacao Agua");
 			consumoAguaASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(imovelCondominio.getId(), faturamentoGrupo.getAnoMesReferencia(),
 					LigacaoTipo.LIGACAO_AGUA);
 		}
 
-		logger.info("Ligacao esgoto: " + imovelCondominio.getLigacaoEsgoto() != null);
 		if (imovelCondominio.getLigacaoEsgoto() != null) {
+			logger.info("possui Ligacao Esgoto");
 			consumoEsgotoASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(imovelCondominio.getId(), faturamentoGrupo.getAnoMesReferencia(),
 					LigacaoTipo.LIGACAO_ESGOTO);
 		}
@@ -68920,8 +68919,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 
 		LigacaoTipo ligacaoTipo = new LigacaoTipo();
-
+		
+		if (imovelCondominio.getId().intValue() == 7068263) {
+			logger.info("Método calcularValorAguaEsgotoParaRateio");
+			logger.info("imovelCondominio = " + imovelCondominio.getId());
+		}
+		
 		Collection colecaoCategoriaOUSubcategoria = getControladorImovel().obterQuantidadeEconomiasCategoria(imovelCondominio);
+		
+		if (imovelCondominio.getId().intValue() == 7068263) {
+			logger.info("colecaoCategoriaOUSubcategoria = " + colecaoCategoriaOUSubcategoria.size());
+		}
 
 		BigDecimal[] valoresContaRateio = new BigDecimal[2];
 		valoresContaRateio[0] = new BigDecimal("0.00");
@@ -68934,6 +68942,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoCategorias = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovelCondominio);
 
 		int consumoMinimoLigacao = this.getControladorMicromedicao().obterConsumoMinimoLigacao(imovelCondominio, null);
+		
+		if (imovelCondominio.getId().intValue() == 7068263) {
+			logger.info("consumoMinimoLigacao = " + consumoMinimoLigacao);
+		}
 
 		if (consumoAguaASerRateado > 0 && consumoAguaASerRateado <= consumoMinimoLigacao) {
 			consumoAguaASerRateado = consumoMinimoLigacao;
@@ -68946,6 +68958,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		ConsumoHistorico consumoHistoricoAgua = null;
 
 		if (imovelCondominio.getLigacaoAgua() != null) {
+			if (imovelCondominio.getId().intValue() == 7068263) {
+				logger.info("entrou no if de ligacao de agua");
+			}
 			// Consultando o consumoHistorico de ÁGUA
 			ligacaoTipo.setId(LigacaoTipo.LIGACAO_AGUA);
 
@@ -68959,6 +68974,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		ConsumoHistorico consumoHistoricoEsgoto = null;
 
 		if (imovelCondominio.getLigacaoEsgoto() != null) {
+			if (imovelCondominio.getId().intValue() == 7068263) {
+				logger.info("entrou no if de ligacao de esgoto");
+			}
 			// Consultando o consumoHistorico de ESGOTO
 			ligacaoTipo.setId(LigacaoTipo.LIGACAO_ESGOTO);
 
@@ -68968,9 +68986,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			consumoHistoricoEsgoto.setNumeroConsumoFaturadoMes(consumoEsgotoASerRateado);
 
 		}
-
+		
 		helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
 				colecaoCategoriaOUSubcategoria, faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
+		
+		if (imovelCondominio.getId().intValue() == 7068263 && helperValoresAguaEsgoto != null) {
+			logger.info("existe helperValoresAguaEsgoto");
+		}
 
 		if (consumoAguaASerRateado > 0 && helperValoresAguaEsgoto.getValorTotalAgua() != null) {
 			valoresContaRateio[0] = helperValoresAguaEsgoto.getValorTotalAgua();

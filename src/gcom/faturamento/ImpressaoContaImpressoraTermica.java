@@ -540,7 +540,6 @@ public class ImpressaoContaImpressoraTermica {
 						Collection<ContaCategoriaConsumoFaixa> cContaCategoriaConsumoFaixa = repositorioFaturamento
 								.pesquisarContaCategoriaConsumoFaixa(emitirContaHelper.getIdConta());
 
-						System.out.println("---> " + emitirContaHelper.getIdConta());
 						if (contaCategoria.getConsumoAgua() != null && cContaCategoriaConsumoFaixa != null
 								&& cContaCategoriaConsumoFaixa.size() > 0) {
 							qtdLinhas++;
