@@ -880,20 +880,13 @@ public class ControladorArrecadacao extends ControladorComum {
 										}
 
 										if (!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")) {
-											/**
-											 * As contas em débito automático
-											 * que retornavam com o código 31
-											 * não tinham o seu pagamento
-											 * efetuado
-											 * 
-											 * @author Wellington Rocha
-											 * @date 25/01/2012
-											 */
+
 											BigDecimal valorDebitado = Util.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoF.getValorDebito());
 
 											String codigoDeRetorno = registroHelperCodigoF.getCodigoRetorno();
-											if (codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITADO)
-													|| codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITO_EFETUADO_DATA_DIFERENTE_DA_DATA_INFORMADA)) {
+											
+											if (codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITADO) || 
+												codigoDeRetorno.equals(DebitoAutomaticoRetornoCodigo.DEBITO_EFETUADO_DATA_DIFERENTE_DA_DATA_INFORMADA)) {
 
 												Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadador(linhaRegistro, arrecadadorMovimento.getId(),
 														descricaoOcorrenciaMovimento, indicadorAceitacaoRegistroMovimento, idImovelNaBase, DocumentoTipo.CONTA, idConta,

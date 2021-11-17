@@ -5,89 +5,71 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class DebitoAutomaticoRetornoCodigo implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * Inclusão de constantes a serem consideradas na inclusão dos pagamentos para contas
-	 * com débito automático.
-	 * 
-	 * @author Wellington Rocha
-	 * @date 25/01/2012*/
-	public static final Integer DEBITADO = new Integer(0);
-	public static final Integer DEBITO_EFETUADO_DATA_DIFERENTE_DA_DATA_INFORMADA = new Integer(31);
-	
 
-    /** identifier field */
-    private Integer id;
+	public static final String DEBITADO = new String("00");
+	public static final String DEBITO_EFETUADO_DATA_DIFERENTE_DA_DATA_INFORMADA = new String("31");
 
-    /** nullable persistent field */
-    private String descricaoDebitoAutomaticoRetornoCodigo;
+	private Integer id;
 
-    /** nullable persistent field */
-    private Short indicadorUso;
+	private String descricaoDebitoAutomaticoRetornoCodigo;
 
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
-    
-    private String codigoBanco;
+	private Short indicadorUso;
 
-    /** full constructor */
-    public DebitoAutomaticoRetornoCodigo(String descricaoDebitoAutomaticoRetornoCodigo, Short indicadorUso, Date ultimaAlteracao, String codigoBanco) {
-        this.descricaoDebitoAutomaticoRetornoCodigo = descricaoDebitoAutomaticoRetornoCodigo;
-        this.indicadorUso = indicadorUso;
-        this.ultimaAlteracao = ultimaAlteracao;
-        this.codigoBanco= codigoBanco;
-    }
+	private Date ultimaAlteracao;
 
-    /** default constructor */
-    public DebitoAutomaticoRetornoCodigo() {
-    }
+	private String codigoBanco;
 
-    public Integer getId() {
-        return this.id;
-    }
+	public DebitoAutomaticoRetornoCodigo(
+			String descricaoDebitoAutomaticoRetornoCodigo, 
+			Short indicadorUso,
+			Date ultimaAlteracao, 
+			String codigoBanco) {
+		
+		this.descricaoDebitoAutomaticoRetornoCodigo = descricaoDebitoAutomaticoRetornoCodigo;
+		this.indicadorUso = indicadorUso;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.codigoBanco = codigoBanco;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public DebitoAutomaticoRetornoCodigo() {
+	}
 
-    
-    /**
-	 * @return Returns the descricaoDebitoAutomaticoRetornoCodigo.
-	 */
+	public Integer getId() {
+		return this.id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getDescricaoDebitoAutomaticoRetornoCodigo() {
 		return descricaoDebitoAutomaticoRetornoCodigo;
 	}
 
-	/**
-	 * @param descricaoDebitoAutomaticoRetornoCodigo The descricaoDebitoAutomaticoRetornoCodigo to set.
-	 */
-	public void setDescricaoDebitoAutomaticoRetornoCodigo(
-			String descricaoDebitoAutomaticoRetornoCodigo) {
+	public void setDescricaoDebitoAutomaticoRetornoCodigo(String descricaoDebitoAutomaticoRetornoCodigo) {
 		this.descricaoDebitoAutomaticoRetornoCodigo = descricaoDebitoAutomaticoRetornoCodigo;
 	}
 
 	public Short getIndicadorUso() {
-        return this.indicadorUso;
-    }
+		return this.indicadorUso;
+	}
 
-    public void setIndicadorUso(Short indicadorUso) {
-        this.indicadorUso = indicadorUso;
-    }
+	public void setIndicadorUso(Short indicadorUso) {
+		this.indicadorUso = indicadorUso;
+	}
 
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
-    
-    public String getCodigoBanco() {
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
+
+	public String getCodigoBanco() {
 		return codigoBanco;
 	}
 
@@ -96,9 +78,6 @@ public class DebitoAutomaticoRetornoCodigo implements Serializable {
 	}
 
 	public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
-    }
-
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
 }
