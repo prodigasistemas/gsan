@@ -46,6 +46,7 @@ import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.faturamento.debito.FiltroDebitoACobrarHistorico;
+import gcom.gui.ActionServletException;
 import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.RepositorioMicromedicaoHBM;
@@ -114,6 +115,22 @@ public class ControladorRetificarConta extends ControladorComum {
 
 		try {
 			logger.info("Retificacao da conta do imovel: " + imovel.getId());
+			
+			BigDecimal valorTotalConta = new BigDecimal("0");
+			Collection<CalcularValoresAguaEsgotoHelper> valor = calcularValoresConta;			
+			for(CalcularValoresAguaEsgotoHelper valoresConta : valor){
+			valorTotalConta = valorTotalConta.add(contaAtual.getValorDebitos());
+			 if (valoresConta.getValorFaturadoAguaCategoria() != null){
+			valorTotalConta = valorTotalConta.add(valoresConta.getValorFaturadoAguaCategoria());
+			 }
+			 if (valoresConta.getValorFaturadoEsgotoCategoria() != null){
+        	valorTotalConta = valorTotalConta.add(valoresConta.getValorFaturadoEsgotoCategoria());
+			 }
+			valorTotalConta = valorTotalConta.subtract(contaAtual.getValorCreditos());
+			  if (valorTotalConta.compareTo(BigDecimal.ZERO) < 0 ){	
+				  throw new ControladorException("atencao.valor_conta_negativo_retificacao",null, contaAtual.getReferenciaFormatada().toString());
+		        }
+			}
 
 			validarContaParaRetificacao(contaAtual, imovel, dataVencimentoConta);
 

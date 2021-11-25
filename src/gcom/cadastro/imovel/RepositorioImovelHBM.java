@@ -29556,14 +29556,21 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.append(" inner join fetch quadra.rota rota ")
 					.append(" inner join fetch imovel.ligacaoAguaSituacao ligacaoAguaSituacao ")
 					.append(" inner join fetch imovel.ligacaoEsgotoSituacao ligacaoEsgotoSituacao ")
+					
+					.append(" inner join fetch imovel.imovelSubcategorias imovelSubcategorias ")
+					.append(" inner join fetch imovelSubcategorias.subcategoria subcategoria ")
+					.append(" inner join fetch subcategoria.categoria categoria ")
+					
 					.append(" where imovel.imovelPerfil.id = :perfilBolsaAgua  ")
 					.append(" and imovel.ligacaoAguaSituacao.id = :ligado ")
 					.append(" and rota.id = :idRota ")
+					.append(" and categoria.id = :idCategoria ")
 					.append(" and (imovel.faturamentoSituacaoTipo.id is null or imovel.faturamentoSituacaoTipo.id <> :idFaturamentoSituacaoTipo)");
 
 			return (List<Imovel>) session.createQuery(consulta.toString())
 						.setInteger("perfilBolsaAgua",ImovelPerfil.BOLSA_AGUA)
 						.setInteger("ligado",LigacaoAguaSituacao.LIGADO)
+						.setInteger("idCategoria",Categoria.RESIDENCIAL_INT)
 						.setInteger("idFaturamentoSituacaoTipo",FaturamentoSituacaoTipo.PARALISAR_EMISSAO_CONTAS)
 						.setInteger("idRota",rota.getId()).list();
 
