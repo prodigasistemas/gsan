@@ -37,7 +37,7 @@ public class FaturamentoUtil {
 	
 	        CreditoARealizar creditoARealizar = null;
 	        
-	        CreditoARealizar creditoBolsaAgua = obterCreditoBolsaAgua(creditos);
+	        CreditoARealizar creditoBolsaAgua = obterCreditoBolsaAgua(creditos, anoMesFaturamento);
 	        
 	        if (creditoBolsaAgua != null) {
 	        	
@@ -148,13 +148,13 @@ public class FaturamentoUtil {
         return helper;
     }
     
-    private CreditoARealizar obterCreditoBolsaAgua(Collection<CreditoARealizar> collectionCreditos) {
+    private CreditoARealizar obterCreditoBolsaAgua(Collection<CreditoARealizar> collectionCreditos, Integer anoMes) {
     	Iterator<CreditoARealizar> iteratorColecaoCreditosARealizar = collectionCreditos.iterator();
 
         while (iteratorColecaoCreditosARealizar.hasNext()) {
         	CreditoARealizar credito = iteratorColecaoCreditosARealizar.next();
         	
-        	if (credito.isCreditoBolsaAgua()) {
+        	if (credito.isCreditoBolsaAgua() && credito.getAnoMesReferenciaCredito().equals(anoMes)) {
         		return credito;
         	}
         }
