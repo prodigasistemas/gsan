@@ -16575,4 +16575,12 @@ public class ControladorImovelSEJB extends ControladorComum {
 		
 		return (Categoria) colecaoCategoria.iterator().next();
 	}
+	
+	public Collection pesquisarImoveisBolsaAguaPorClienteId(Integer idCliente) throws ControladorException {
+		try {
+			return repositorioImovel.pesquisarImoveisBolsaAguaPorClienteId(idCliente);
+		} catch (ErroRepositorioException e) {
+		    throw new ControladorException("erro.sistema", e);
+		}
+	}
 }

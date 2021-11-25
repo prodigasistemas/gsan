@@ -777,4 +777,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	
 	public Categoria obterCategoria(Integer idCategoria) throws ControladorException;
 
+	public Collection pesquisarImoveisBolsaAguaPorClienteId(Integer idCliente) throws ControladorException;
+
 }

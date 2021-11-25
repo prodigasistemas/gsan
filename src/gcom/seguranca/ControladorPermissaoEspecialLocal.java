@@ -71,7 +71,9 @@ public interface ControladorPermissaoEspecialLocal
 	public boolean verificarPermissaoAtualizarUsuarioTarifaSocial(Usuario usuario) 
 		throws ControladorException;
 	
-	
+	public boolean verificarPermissaoAtualizarUsuarioBolsaAgua(Usuario usuario) 
+			throws ControladorException;
+		
 	/**
 	 * Verifica permissão especial para atualizar um LOGRADOURO_BAIRRO
 	 * 

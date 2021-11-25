@@ -173,6 +173,16 @@ public class ExibirAtualizarClienteAction extends GcomAction {
 					throw new ActionServletException("atencao.usuario.sem.permissao.atualizar.usuario.tarifa_social");
 				}
 			}
+			
+			Collection colecaoClientesBolsaAgua = getFachada().pesquisarImoveisBolsaAguaPorClienteId(cliente.getId());
+			
+			if (colecaoClientesBolsaAgua != null && !colecaoClientesBolsaAgua.isEmpty()) {
+				
+				if (!getFachada().verificarPermissaoAtualizarUsuarioBolsaAgua(usuarioLogado)) {
+					throw new ActionServletException("atencao.usuario.sem.permissao.atualizar.usuario.bolsa_agua");
+				}
+				
+			}
 
 			/**
 			 * [UC0009] Manter Cliente [FS0008] - Verificar permissão especial para cliente de imóvel público

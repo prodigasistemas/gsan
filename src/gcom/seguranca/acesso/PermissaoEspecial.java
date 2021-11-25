@@ -205,7 +205,11 @@ public class PermissaoEspecial extends ObjetoTransacao {
 	public static final int CANCELAR_PARCELAMENTO = 201;
 	
 	public static final int MUDANCA_TITULARIDADE_RETROATIVA = 202;
-
+	
+	public static final int ATUALIZAR_IMOVEL_BOLSA_AGUA = 203;
+	
+	public static final int CLIENTE_USUARIO_BOLSA_AGUA = 204;
+	
     
 	/** identifier field */
 	private Integer id;

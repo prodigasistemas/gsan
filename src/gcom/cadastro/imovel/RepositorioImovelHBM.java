@@ -29573,5 +29573,29 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	public Collection pesquisarImoveisBolsaAguaPorClienteId(Integer idCliente) throws ErroRepositorioException {
+
+		String consulta = new String();
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			consulta = "select i.imov_id as imovel from cadastro.cliente_imovel ci " +
+					   " inner join cadastro.imovel i on i.imov_id = ci.imov_id " +
+					   " where iper_id = " + ImovelPerfil.BOLSA_AGUA +
+					   " and i.last_id = " + LigacaoAguaSituacao.LIGADO +
+					   " and (i.ftst_id is null or i.ftst_id <> " + FaturamentoSituacaoTipo.PARALISAR_EMISSAO_CONTAS + ")" +
+					   " and ci.clie_id = " + idCliente;
+
+			return session.createSQLQuery(consulta)
+					.addScalar("imovel", Hibernate.INTEGER).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 
 }

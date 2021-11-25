@@ -10,10 +10,12 @@ import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelRamoAtividade;
 import gcom.cadastro.imovel.FiltroImovelSubCategoria;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelRamoAtividade;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.fachada.Fachada;
+import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.gui.StatusWizard;
 import gcom.seguranca.acesso.PermissaoEspecial;
@@ -238,6 +240,13 @@ public class ExibirAtualizarImovelAction extends GcomAction {
         Iterator iteratorImovel = imoveis.iterator();
 
         Imovel imovel = (Imovel) iteratorImovel.next();
+        
+        boolean temPermissaoBolsaAgua = fachada.verificarPermissaoEspecial(PermissaoEspecial.ATUALIZAR_IMOVEL_BOLSA_AGUA,usuario);
+        
+        if (imovel.getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA) && !temPermissaoBolsaAgua) {
+				throw new ActionServletException("atencao.usuario.sem.permissao.atualizar.usuario.bolsa_agua");
+
+        }
 
         //HINT DO IMÓVEL
 		statusWizard.adicionarItemHint("Matrícula:", imovel.getId().toString());
