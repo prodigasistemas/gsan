@@ -256,6 +256,17 @@ public class ControladorPermissaoEspecialSEJB implements SessionBean {
 
 		return temPermissaoAtualizarUsuarioTarifaSocial;
 	}
+	
+	public boolean verificarPermissaoAtualizarUsuarioBolsaAgua(
+			Usuario usuario) throws ControladorException {
+
+		boolean temPermissaoAtualizarUsuarioBolsaAgua = this
+				.verificarPermissaoEspecial(
+						PermissaoEspecial.CLIENTE_USUARIO_BOLSA_AGUA,
+						usuario);
+
+		return temPermissaoAtualizarUsuarioBolsaAgua;
+	}
 
 	
 	

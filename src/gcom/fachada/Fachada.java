@@ -18349,6 +18349,14 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public boolean verificarPermissaoAtualizarUsuarioBolsaAgua(Usuario usuario) {
+		try {
+			return this.getControladorPermissaoEspecial().verificarPermissaoAtualizarUsuarioBolsaAgua(usuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 	/**
 	 * Verifica permissão especial para consultar os débitos do cliente indicado
@@ -40535,6 +40543,14 @@ public class Fachada {
 	public List<ArquivoTextoAtualizacaoCadastral> gerarArquivosAtualizacaoCadastralTodasSituacoes(String[] idsArquivos, String tipoArquivo, Date dataUltimaTransmissao, Integer idEmpresa) throws ErroRepositorioException, IOException {
 		try {
 			return this.getControladorAtualizacaoCadastral().gerarArquivosAtualizacaoCadastralTodasSituacoes(idsArquivos, tipoArquivo, dataUltimaTransmissao, idEmpresa);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Collection pesquisarImoveisBolsaAguaPorClienteId(Integer idCliente) {
+		try {
+			return getControladorImovel().pesquisarImoveisBolsaAguaPorClienteId(idCliente);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
