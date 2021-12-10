@@ -12,7 +12,8 @@ public class CobrancaParametro implements Serializable {
 
 	public enum NOME_PARAMETRO_COBRANCA {
 		DATA_INICIO_PARCELAMENTO_GSAN,
-		QUANTIDADE_DIAS_VENCIMENTO_GUIA;
+		QUANTIDADE_DIAS_VENCIMENTO_GUIA,
+		DIRETORIO_ARQUIVOS_BANCO;
 	}
 
 	public Integer getId() {
