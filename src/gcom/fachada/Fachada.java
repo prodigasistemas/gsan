@@ -19412,6 +19412,24 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	/**
+	 * Consulta o id e a situação da ordem de serviço associada ao documento de
+	 * cobrança passado como parâmetro
+	 * 
+	 * @author Sávio Luiz
+	 * @created 13/04/2007
+	 * 
+	 * @exception ErroRepositorioException
+	 *                Repositorio Exception
+	 */
+	public void carregarArquivosBanco() {
+		try {
+			getControladorArrecadacao().carregarArquivosBanco();
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 	/**
 	 * 

@@ -72,6 +72,23 @@ public class Util {
 
 		return dataCalendar.get(Calendar.DAY_OF_MONTH);
 	}
+	
+	/**
+	 * Método responsável por obter um valor pela posição.
+	 *
+	 * @param linha   A linha
+	 * @param posicao A posição inicial e final
+	 * @return Um texto recuperado
+	 */
+	public static String obterValorPosicao(String linha, int[] posicao) {
+
+		String retorno = null;
+		if (!StringUtils.isEmpty(linha)) {
+			retorno = linha.substring(posicao[0] - 1, posicao[1]);
+		}
+		return retorno;
+	}
+
 
 	/**
 	 * Método que retorn o ano mes como Integer

@@ -32418,4 +32418,82 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			HibernateUtil.closeSession(session);
 		}
 	}
+
+	public ArrecadadorContrato pesquisarIdArrecadadorContrato(Integer arrecadador) throws ErroRepositorioException {
+		ArrecadadorContrato retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		String consulta;
+
+		try {
+			consulta = "SELECT ac " + "FROM ArrecadadorContrato ac "
+					+ "WHERE ac.arrecadador = :arrecadador AND "
+					+ "ac.dataContratoEncerramento is null";
+
+			retorno = (ArrecadadorContrato) session.createQuery(consulta)
+					.setInteger("arrecadador", arrecadador).setMaxResults(1)
+					.uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	public ArrecadadorMovimento consultarMovimentoArrecadador(Short codigoAgente,  Integer numeroSequencialArquivo) throws ErroRepositorioException {
+		ArrecadadorMovimento retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		String consulta;
+
+		try {
+			consulta = "SELECT am " + "FROM ArrecadadorMovimento am "
+					+ "WHERE am.codigoBanco = :codigoAgente AND "
+					+ "am.numeroSequencialArquivo = :numeroSequencialArquivo";
+
+				retorno = (ArrecadadorMovimento) session.createQuery(consulta)
+						  .setShort("codigoAgente", codigoAgente)
+						  .setInteger("numeroSequencialArquivo", numeroSequencialArquivo)
+			              .uniqueResult();
+            
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public ArrecadadorMovimentoItem consultarItemMovimentoArrecadador(Integer idArrecadadorMovimento, String linhaRegistro) throws ErroRepositorioException {
+		ArrecadadorMovimentoItem retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		String consulta;
+
+		try {
+			consulta = "SELECT ami " + "FROM ArrecadadorMovimentoItem ami "
+					+ "WHERE ami.arrecadadorMovimento = :idArrecadadorMovimento AND "
+					+ "ami.conteudoRegistro = :linhaRegistro ";
+
+			retorno = (ArrecadadorMovimentoItem) session.createQuery(consulta)
+					.setInteger("idArrecadadorMovimento", idArrecadadorMovimento)
+					.setString("linhaRegistro", linhaRegistro).setMaxResults(1)
+					.uniqueResult();
+		
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }

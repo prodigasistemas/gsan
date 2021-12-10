@@ -1,5 +1,6 @@
 package gcom.gui.cadastro.imovel;
 
+import gcom.arrecadacao.ControladorArrecadacao;
 import gcom.arrecadacao.pagamento.FiltroPagamentoSituacao;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
@@ -32,6 +33,7 @@ import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesIn;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,14 +65,14 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+			HttpServletResponse httpServletResponse) throws IOException {
+		
 
 		// localiza o action no objeto actionmapping
 		ActionForward retorno = actionMapping.findForward("consultarImovelDebitos");
 
 		//cria uma instância da fachada
 		Fachada fachada = Fachada.getInstancia();
-
 		//cria uma instância da sessão
 		HttpSession sessao = getSessao(httpServletRequest);
 		ConsultarImovelActionForm consultarImovelActionForm = (ConsultarImovelActionForm) actionForm;

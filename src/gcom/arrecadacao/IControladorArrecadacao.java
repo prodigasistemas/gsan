@@ -80,6 +80,8 @@ public interface IControladorArrecadacao {
 	public Collection registrarMovimentoArrecadadores(StringBuilder stringBuilderTxt, Short codigoArrecadador, String nomeArrecadador, String idTipoMovimento, int quantidadeRegistros,
 			Usuario usuario, Integer idArrecadador, ArrecadadorContrato arrecadadorContrato) throws ControladorException;
 
+	public void carregarArquivosBanco() throws ControladorException;
+	
 	public Double pesquisarDeducoesAvisoBancario(String codigoAgente, Date dataLancamento, String numeroSequencial) throws ControladorException;
 
 	public Short pesquisarValorMaximoNumeroSequencial(Date dataLancamento, String idArrecadador) throws ControladorException;

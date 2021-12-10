@@ -47,7 +47,7 @@ public class ExibirRegistrarMovimentoArredadadoresAction extends GcomAction {
 		HttpSession sessao = httpServletRequest.getSession(false);
 
 		sessao.setAttribute("colecaoArrecadadorContrato", new ArrayList());
-
+		getFachada().carregarArquivosBanco();
 		// Parte que trata do código quando o usuário tecla enter
 		// caso seja o id do arrecadador
 

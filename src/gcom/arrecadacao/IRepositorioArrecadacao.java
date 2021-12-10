@@ -1324,4 +1324,11 @@ public interface IRepositorioArrecadacao {
 	public Collection<ArrecadadorMovimentoItem> pesquisarItensNaoIdentificados(Date dataPesquisa) throws ErroRepositorioException;
 	
 	public void deletarDadosDocumentosNaoIdentificados(Integer referenciaArrecadacao) throws ErroRepositorioException;
+
+	public ArrecadadorContrato pesquisarIdArrecadadorContrato(Integer arrecadador) throws ErroRepositorioException;
+
+	public ArrecadadorMovimentoItem consultarItemMovimentoArrecadador(Integer idArrecadadorMovimento, String linhaRegistro) throws ErroRepositorioException;
+
+	public ArrecadadorMovimento consultarMovimentoArrecadador(Short codigoArrecadador,
+			Integer numeroSequencialArquivo) throws ErroRepositorioException;
 }
