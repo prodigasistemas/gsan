@@ -32453,7 +32453,9 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		try {
 			consulta = "SELECT am " + "FROM ArrecadadorMovimento am "
 					+ "WHERE am.codigoBanco = :codigoAgente AND "
-					+ "am.numeroSequencialArquivo = :numeroSequencialArquivo";
+					+ "am.numeroSequencialArquivo = :numeroSequencialArquivo AND "
+					+ "am.descricaoIdentificacaoServico like \'DEBITO AUTOMATICO\' AND "
+					+ "am.codigoRemessa = 2 ";
 
 				retorno = (ArrecadadorMovimento) session.createQuery(consulta)
 						  .setShort("codigoAgente", codigoAgente)
