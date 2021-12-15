@@ -29,6 +29,7 @@ public class ConsultarClienteActionForm extends ValidatorActionForm {
 	private String profissaoCliente;
 	private String cnpjCliente;
 	private String ramoAtividadeCliente;
+	private String clienteNumeroNIS;
 
     /**
      * Description of the Method
@@ -168,6 +169,14 @@ public class ConsultarClienteActionForm extends ValidatorActionForm {
 
 	public void setIndicaorExecucao(String indicaorExecucao) {
 		this.indicaorExecucao = indicaorExecucao;
+	}
+	
+	public String getClienteNumeroNIS() {
+		return clienteNumeroNIS; 
+	}
+	
+	public void setClienteNumeroNIS(String clienteNumeroNIS) {
+		this.clienteNumeroNIS = clienteNumeroNIS;
 	}
 
 }
