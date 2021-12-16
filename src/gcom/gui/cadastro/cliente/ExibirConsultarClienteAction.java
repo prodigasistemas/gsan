@@ -122,6 +122,9 @@ public class ExibirConsultarClienteAction extends GcomAction {
                 //e-mail
                 consultarClienteActionForm.setEmail(cliente.getEmail());
                 
+                //NumeroNIS
+                consultarClienteActionForm.setClienteNumeroNIS(cliente.getNumeroNIS());
+                
                 //tipo de pessoa
                 if(cliente.getClienteTipo() != null && cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica() != null){
                 	//pessoa fisica

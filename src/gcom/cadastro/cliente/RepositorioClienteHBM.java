@@ -405,8 +405,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 					+ // 18
 					" clienteTipo.id, "
 					+ // 19
-					" cliente.id "
+					" cliente.id, "
 					+ // 20
+					" cliente.numeroNIS "
+					+ //21
 					"from Cliente cliente " + "left join cliente.clienteTipo clienteTipo " + "left join cliente.orgaoExpedidorRg orgaoExpedidorRg "
 					+ "left join cliente.unidadeFederacao unidadeFederacao " + "left join cliente.profissao profissao "
 					+ "left join cliente.pessoaSexo pessoaSexo " + "left join cliente.ramoAtividade ramoAtividade "

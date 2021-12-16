@@ -1094,6 +1094,11 @@ public class ControladorClienteSEJB extends ControladorComum {
 				clienteResponsavel.setNome((String) objetoCliente[18]);
 				cliente.setCliente(cliente);
 			}
+			
+			//21 - Número NIS
+			if (objetoCliente[21] != null) {
+				cliente.setNumeroNIS((String) objetoCliente[21]);
+			}
 
 		}
 

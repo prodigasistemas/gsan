@@ -16221,7 +16221,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Integer idImovelAtual = 0;
 		try {
 			CreditoTipo creditoTipo = obterCreditoTipo(CreditoTipo.CREDITO_BOLSA_AGUA);
-
+			
 			Collection<Imovel> colecaoImovel = getControladorImovel().pesquisarImoveisBolsaAgua(rota);
 
 			for (Imovel imovel: colecaoImovel) {
@@ -16236,8 +16236,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					valorCredito = valorCredito.add(helper.getValorTotalAgua());  
 				}
 				
-				if (imovel.isLigadoEsgoto() ) {
-					valorCredito = valorCredito.add(helper.getValorTotalEsgoto());  
+				if (imovel.isLigadoEsgoto()) {
+					if (helper.getPercentualEsgoto() != null && !helper.getPercentualEsgoto().equals("")) {
+						BigDecimal valor = helper.getValorTotalAgua();
+						BigDecimal percentualEsgoto = new BigDecimal("100");
+						helper.setValorTotalEsgoto(valor.multiply(helper.getPercentualEsgoto().divide(percentualEsgoto))
+								.setScale(2, BigDecimal.ROUND_HALF_UP));
+					}
+					valorCredito = valorCredito.add(helper.getValorTotalEsgoto());
 				}
 				
 				inserirCreditoBolsaAgua(imovel, valorCredito, grupo.getAnoMesReferencia(), creditoTipo);

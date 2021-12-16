@@ -18,6 +18,7 @@ import gcom.cadastro.imovel.FiltroSubCategoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
+import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelTipoCobertura;
 import gcom.cadastro.imovel.ImovelTipoConstrucao;
@@ -269,6 +270,27 @@ public class AtualizarImovelAction extends GcomAction {
 		helperCaracteristica.setIdSetorComercial(idSetorComercial);
 		helperCaracteristica.setIdQuadra(idQuadra);
 		helperCaracteristica.setIdNivelInstalacaoEsgoto(indicadorNivelInstalacaoEsgoto);
+		
+		Integer imovelPerfil = Integer.parseInt(helperCaracteristica.getIdImovelPerfil());
+		Integer perfilSubcategoria = null;
+		
+		Iterator<ImovelSubcategoria> iteratorSubcategoria = subcategorias.iterator();
+		while ((iteratorSubcategoria).hasNext()) {
+			ImovelSubcategoria subcategoria = iteratorSubcategoria.next();
+			if (imovelPerfil.equals(ImovelPerfil.BOLSA_AGUA) || imovelPerfil == ImovelPerfil.BOLSA_AGUA) {
+				perfilSubcategoria = 2;
+				if (subcategoria.getComp_id().getSubcategoria().getCategoria().getId().equals(Categoria.RESIDENCIAL)) {
+					perfilSubcategoria = 1;
+					break;
+				}
+			}
+		}
+		if(perfilSubcategoria != null) {
+			if(perfilSubcategoria.equals(2)) {
+				throw new ActionServletException("atencao.perfil_agua_para_sem_residencia");
+			}
+		}
+		
 		
 		ImovelAbaCaracteristicasRetornoHelper resultadoAbaCaracteristicas = 
 			fachada.validarImovelAbaCaracteristicas(helperCaracteristica);

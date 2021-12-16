@@ -715,11 +715,11 @@
     												
     												<html:textarea property="parecerEncerramento" 
     													cols="50" 
-    													rows="5" 
-    													onkeyup="limitTextArea(document.forms[0].parecerEncerramento, 400, document.getElementById('utilizado'), document.getElementById('limite'));"/><br>
+    													rows="8" 
+    													onkeyup="limitTextArea(document.forms[0].parecerEncerramento, 600, document.getElementById('utilizado'), document.getElementById('limite'));"/><br>
 													<strong>
 													
-													<span id="utilizado">0</span>/<span id="limite">400</span>
+													<span id="utilizado">0</span>/<span id="limite">600</span>
 													
 													</strong>
     												
