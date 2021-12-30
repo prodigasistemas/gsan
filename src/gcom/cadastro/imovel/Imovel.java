@@ -341,10 +341,13 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
     
     private Short indicadorEnvioContaFisica;
     
+    private Integer codigoConvenio;
+    
     private Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes;
 
 	public final static Short INDICADOR_CONTA_RESPONSAVEL = new Short("1");
 	public final static Short INDICADOR_CONTA_IMOVEL = new Short("2");
+
 	public final static Short INDICADOR_CONTA_NAO_PAGAVEL_PARA_IMOVEL_PAGAVEL_PARA_RESPONSAVEL = new Short("3");
 	public final static Short IMOVEL_CONDOMINIO = new Short("1");
 	public final static Short IMOVEL_NAO_CONDOMINIO = new Short("2");
@@ -2618,6 +2621,14 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 
 	public void setIndicadorEnvioContaFisica(Short indicadorEnvioContaFisica) {
 		this.indicadorEnvioContaFisica = indicadorEnvioContaFisica;
+	}
+	
+	public Integer getCodigoConvenio() {
+		return codigoConvenio;
+	}
+
+	public void setCodigoConvenio(Integer codigoConvenio) {
+		this.codigoConvenio = codigoConvenio;
 	}
 	
 }

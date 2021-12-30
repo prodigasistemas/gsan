@@ -936,7 +936,12 @@ public class UC0745GerarArquivoTextoFaturamento {
 				if (arrayImovel[76] != null) {
 					imovel.setIndicadorEnvioContaFisica((Short) arrayImovel[76]);
 				}
-
+				
+				//INDICADOR DE CODIGO CONVENIO
+				if (arrayImovel[77] != null) {
+					imovel.setCodigoConvenio((Integer) arrayImovel[77]);
+				}
+        
 				boolean emitir = true;
 				
 				if (!sistemaParametro.getCodigoEmpresaFebraban().equals(
@@ -1928,7 +1933,14 @@ public class UC0745GerarArquivoTextoFaturamento {
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString(Imovel.INDICADOR_NAO_ENVIO_CONTA_FISICA + "", 1));
 		}
-
+		
+		if (imovel.getCodigoConvenio() != null){
+	       arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(7, imovel.getCodigoConvenio().toString()));
+	    }else{
+	       arquivoTextoRegistroTipo01.append(Util.completaString("", 7));
+	    }
+    
+		
 		arquivoTextoRegistroTipo01.append(System.getProperty("line.separator"));
 
 		return arquivoTextoRegistroTipo01;

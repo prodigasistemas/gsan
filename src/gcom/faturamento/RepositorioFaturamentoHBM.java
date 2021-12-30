@@ -38283,7 +38283,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "clienteImoveisReposanvel.indicadorNomeConta, " //73
 					+ "clienteImoveisUsuario.cliente.id, " //74
 					+ "clienteImoveisUsuario.indicadorNomeConta, " //75
-					+ "imovel.indicadorEnvioContaFisica " //76
+					+ "imovel.indicadorEnvioContaFisica, " //76
+					+ "imovel.codigoConvenio " //77
 					+ "FROM Imovel imovel "
 					+ "INNER JOIN imovel.localidade localidade "
 					+ "INNER JOIN localidade.gerenciaRegional gerenciaRegional "
