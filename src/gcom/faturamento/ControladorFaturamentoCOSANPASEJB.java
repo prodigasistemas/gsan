@@ -79,6 +79,7 @@ import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.CodigoBarras;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
@@ -483,7 +484,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt = preencherMensagensConta(sistemaParametro, emitirContaHelper, contaTxt);
 								contaTxt = preencherMensagemAnormalidadeConsumo(contaTxt, mensagemContaAnormalidade);
 								contaTxt = preencherQuantidadeValorDebitos(sistemaParametro, emitirContaHelper, contaTxt);
-								contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
+								
+								//implementar verificação correta para fluxo.
+								if(imovelFlag.getCodigoConvenio().shortValue() != SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA) {
+									contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
+								}else {
+									contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
+								}
 								contaTxt.append(Util.completaString(cont + "", 8));
 
 								String[] qualidade = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper, imovelEmitido.getQuadraFace().getId());
@@ -976,14 +983,50 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		String anoMesString = "" + emitirContaHelper.getAmReferencia();
 		String mesAnoFormatado = anoMesString.substring(4, 6) + anoMesString.substring(0, 4);
 		Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
-
+				
 		String representacaoNumericaCodBarra = this.getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(3, valorConta,
 				emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAnoFormatado, digitoVerificadorConta, null, null, null, null, null,
 				null, null);
-
+		
 		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
 		return contaTxt;
 	}
+	
+	// [Obter código de barras Ficha de Compensação]
+	//  Paulo Almeida 30.12.2021
+	private StringBuilder preencherCodigoBarrasContaFichaCompensacao(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
+		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(), emitirContaHelper.getValorCreditos(),
+				emitirContaHelper.getDebitos(), emitirContaHelper.getValorImpostos());
+
+		if (emitirContaHelper.getValorRateioAgua() != null)
+			conta.setValorRateioAgua(emitirContaHelper.getValorRateioAgua());
+		if (emitirContaHelper.getValorRateioEsgoto() != null)
+			conta.setValorRateioEsgoto(emitirContaHelper.getValorRateioEsgoto());
+
+		BigDecimal valorConta = conta.getValorTotalContaComRateioBigDecimal();
+
+		emitirContaHelper.setValorConta(valorConta);
+
+		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString());
+		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
+
+			Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
+			String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
+
+			String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+							ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
+							ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+							valorConta,
+							nossoNumeroSemDV.toString(),
+							ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
+							fatorVencimento);
+
+		String representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+		
+		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
+		return contaTxt;
+	}
+	
 
 	@SuppressWarnings("rawtypes")
 	private StringBuilder preencherQuantidadeValorDebitos(SistemaParametro sistemaParametro, EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
@@ -3271,7 +3314,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			helper = preencherInfoCodigoBarras2Via(helper, valorConta);
 			helper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(helper, 1)));
 			helper = preencherDadosQualidadeAgua2Via(helper);
-			helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
+			
+			//implementar verificação correta para fluxo.
+			if(helper.getCodigoConvenio().shortValue() != SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA) {
+				helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
+			}else {
+				helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta, helper.getCodigoConvenio());
+			}
+					
 
 			Integer esferaPoder = null;
 			try {
@@ -3496,6 +3546,45 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 		return emitirContaHelper;
 	}
+	
+	
+	private EmitirContaHelper preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(EmitirContaHelper emitirContaHelper, BigDecimal valorConta, Integer codigoConvenio) throws ControladorException {
+
+			String representacaoNumericaCodBarra = "";
+		
+		Date dataValidade = obterDataValidade2ViaConta(emitirContaHelper);
+		emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
+
+		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
+
+			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString());
+			String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
+			
+				Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
+				String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
+
+				String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+								ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
+								ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+								valorConta,
+								nossoNumeroSemDV.toString(),
+								ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
+								fatorVencimento);
+
+			representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+	
+			String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra;
+			emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+
+			String representacaoNumericaCodBarraSemDigito = especificacaoCodigoBarra;
+			
+			emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+
+		}
+		
+		return emitirContaHelper;
+	}
+	
 
 	private EmitirContaHelper preencherDadosQualidadeAgua2Via(EmitirContaHelper emitirContaHelper) throws ControladorException {
 		Object[] parmsQualidadeAgua = null;
