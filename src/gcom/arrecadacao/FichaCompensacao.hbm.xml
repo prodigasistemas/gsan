@@ -26,8 +26,8 @@
 		<property name="indicadorPermissaoRecebimentoParcial" type="java.lang.String" column="fico_iprp" not-null="true" length="1"/>
 		<property name="numeroTituloCliente" type="java.lang.String" column="fico_nutc" not-null="true" length="20"/>		
 		
-		<many-to-one name="pagador" class="gcom.arrecadacao.Pagador" not-null="false">
-			<column name="paga_id"/>
+		<many-to-one name="idCliente" class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_id"/>
 		</many-to-one>
 
 		

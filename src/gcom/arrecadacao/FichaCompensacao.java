@@ -1,13 +1,7 @@
-package src.gcom.arrecadacao;
+package gcom.arrecadacao;
 
-import gcom.cobranca.parcelamento.Parcelamento;
-import gcom.interceptor.ControleAlteracao;
-import gcom.interceptor.ObjetoTransacao;
-import gcom.util.ConstantesSistema;
-import gcom.util.filtro.Filtro;
-import src.gcom.faturamento.StringBuilder;
+import gcom.faturamento.bean.PagadorDTO;
 
-import java.util.Date;
 
 public class FichaCompensacao {
 	
@@ -17,8 +11,8 @@ public class FichaCompensacao {
 	private Integer numeroCarteira;
 	private Integer numeroVariacaoCarteira;
 	private Short codigoModalidade;
-	private Date dataEmissao;
-	private Date dataVencimento; 
+	private String dataEmissao;
+	private String dataVencimento; 
 	private String valorOriginal;
 	private String codigoAceite;
 	private Short codigoTipoTitulo;
@@ -26,11 +20,17 @@ public class FichaCompensacao {
 	private String numeroTituloCliente; //nosso numero
 	
 	//Object pagador
-	private Pagador pagador;	
+	private Integer idCliente;
+	private Integer idImovel;
+	
+	private PagadorDTO pagadorDTO;
 	
     public FichaCompensacao() {}
-	
-	public FichaCompensacao() {
+
+	public FichaCompensacao(Integer idConta, Integer idConv, Integer numeroCarteira, Integer numeroVariacaoCarteira,
+			Short codigoModalidade, String dataEmissao, String dataVencimento, String valorOriginal,
+			String codigoAceite, Short codigoTipoTitulo, String indicadorPermissaoRecebimentoParcial,
+			String numeroTituloCliente, PagadorDTO pagadorDTO) {
 		super();
 		this.idConta = idConta;
 		this.idConv = idConv;
@@ -44,7 +44,27 @@ public class FichaCompensacao {
 		this.codigoTipoTitulo = codigoTipoTitulo;
 		this.indicadorPermissaoRecebimentoParcial = indicadorPermissaoRecebimentoParcial;
 		this.numeroTituloCliente = numeroTituloCliente;
-		this.pagador = pagador;
+		this.pagadorDTO = pagadorDTO;
+	}
+	
+	public FichaCompensacao(Integer idConta, Integer idConv, Integer numeroCarteira, Integer numeroVariacaoCarteira,
+			Short codigoModalidade, String dataEmissao, String dataVencimento, String valorOriginal,
+			String codigoAceite, Short codigoTipoTitulo, String indicadorPermissaoRecebimentoParcial,
+			String numeroTituloCliente, Integer idCliente) {
+		super();
+		this.idConta = idConta;
+		this.idConv = idConv;
+		this.numeroCarteira = numeroCarteira;
+		this.numeroVariacaoCarteira = numeroVariacaoCarteira;
+		this.codigoModalidade = codigoModalidade;
+		this.dataEmissao = dataEmissao;
+		this.dataVencimento = dataVencimento;
+		this.valorOriginal = valorOriginal;
+		this.codigoAceite = codigoAceite;
+		this.codigoTipoTitulo = codigoTipoTitulo;
+		this.indicadorPermissaoRecebimentoParcial = indicadorPermissaoRecebimentoParcial;
+		this.numeroTituloCliente = numeroTituloCliente;
+		this.idCliente = idCliente;
 	}
 
 	public Integer getId() {
@@ -95,19 +115,19 @@ public class FichaCompensacao {
 		this.codigoModalidade = codigoModalidade;
 	}
 
-	public Date getDataEmissao() {
+	public String getDataEmissao() {
 		return dataEmissao;
 	}
 
-	public void setDataEmissao(Date dataEmissao) {
+	public void setDataEmissao(String dataEmissao) {
 		this.dataEmissao = dataEmissao;
 	}
 
-	public Date getDataVencimento() {
+	public String getDataVencimento() {
 		return dataVencimento;
 	}
 
-	public void setDataVencimento(Date dataVencimento) {
+	public void setDataVencimento(String dataVencimento) {
 		this.dataVencimento = dataVencimento;
 	}
 
@@ -151,12 +171,20 @@ public class FichaCompensacao {
 		this.numeroTituloCliente = numeroTituloCliente;
 	}
 
-	public Pagador getPagador() {
-		return pagador;
+	public Integer getIdCliente() {
+		return idCliente;
 	}
 
-	public void setPagador(Pagador pagador) {
-		this.pagador = pagador;
+	public void setIdCliente(Integer idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public Integer getIdImovel() {
+		return idImovel;
+	}
+
+	public void setIdImovel(Integer idImovel) {
+		this.idImovel = idImovel;
 	}
 	
 }
