@@ -486,7 +486,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt = preencherQuantidadeValorDebitos(sistemaParametro, emitirContaHelper, contaTxt);
 								
 								//implementar verificação correta para fluxo.
-								if(imovelFlag.getCodigoConvenio().shortValue() != SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA) {
+								if(emitirContaHelper.getCodigoConvenio().shortValue() != SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA) {
 									contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
 								}else {
 									contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
