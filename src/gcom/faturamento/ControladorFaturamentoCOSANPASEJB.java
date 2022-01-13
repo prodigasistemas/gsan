@@ -25,7 +25,9 @@ import javax.ejb.SessionBean;
 
 import org.jboss.logging.Logger;
 
+import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
+import gcom.arrecadacao.FichaCompensacao;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
@@ -33,6 +35,7 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.EsferaPoder;
+import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
@@ -52,8 +55,10 @@ import gcom.cobranca.FiltroCobrancaDocumentoItem;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
+import gcom.fachada.Fachada;
 import gcom.faturamento.bean.DebitoCobradoAgrupadoHelper;
 import gcom.faturamento.bean.EmitirContaHelper;
+import gcom.faturamento.bean.PagadorDTO;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.FiltroConsumoTarifa;
 import gcom.faturamento.conta.ComunicadoEmitirConta;
@@ -69,6 +74,7 @@ import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarCategoria;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
+import gcom.gui.ActionServletException;
 import gcom.micromedicao.FiltroLeituraSituacao;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.consumo.ConsumoAnormalidade;
@@ -78,6 +84,7 @@ import gcom.micromedicao.consumo.FiltroComunicadoEmitirConta;
 import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.medicao.MedicaoHistorico;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.CodigoBarras;
 import gcom.util.ConstantesSistema;
@@ -3316,7 +3323,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			helper = preencherDadosQualidadeAgua2Via(helper);
 			
 			//implementar verificação correta para fluxo.
-			if(helper.getCodigoConvenio().shortValue() != SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA) {
+			if(helper.getCodigoConvenio().shortValue() == SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA) {
 				helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
 			}else {
 				helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta, helper.getCodigoConvenio());
@@ -3929,4 +3936,85 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 		return municipio == municipioAgenciaReguladora;
 	}
+	
+
+	public File registroFichaCompensacao(Integer idConta, BigDecimal valor)
+			throws ControladorException {
+		try {
+			FichaCompensacao fichaCompensacao = null;
+
+			fichaCompensacao = registrarBoleto(idConta, valor);
+				
+				String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_FICHA_COMPENSACAO_API_BB.toString());
+				
+				GsanApi api = new GsanApi(url);
+				api.invoke(fichaCompensacao);
+				return api.salvar(fichaCompensacao.getIdConta().toString());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ActionServletException("atencao.nao_foi_possivel_registrar_conta");
+		}		
+	}
+	
+	public FichaCompensacao registrarBoleto(Integer idConta,
+			BigDecimal valor) throws ControladorException, ErroRepositorioException {
+		FiltroCliente filtroCliente = new FiltroCliente();
+		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
+		
+		Conta conta = new Conta();		
+		Cliente cliente = new Cliente();
+		conta = repositorioFaturamento.contaFichaCompensacao(idConta);		
+		Imovel imovel = conta.getImovel();
+		Integer idImovel = imovel.getIdImovel();
+        cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
+        Integer idCliente = cliente.getIdCliente();
+		
+		Integer idConv = 315828; // Em produção, informar o número do convênio de cobrança, com 7 dígitos.
+		Integer numeroCarteira = 17; // Em produção, informar o número da carteira de cobrança.
+		Integer numeroVariacaoCarteira = 35; // Em produção, informar o número da variação da carteira de cobrança.
+		Short codigoModalidade = 1; // Código que identifica a característica dos boletos dentro das modalidades de
+									// cobrança existentes no BB. Domínio: 1 - Simples; 4 - Vinculada.
+		String dataEmissao =  conta.getDataEmissao().toString(); //Pegar da conta
+		String dataVencimento = conta.getDataVencimentoConta().toString(); //pegar da conta
+		String valorOriginal = valor.toString().replace(".", "").replace(",", "");
+		String codigoAceite = "A"; // Domínio: A - Aceito; N - Não aceito
+		Short codigoTipoTitulo = 2; // Código para identificar o tipo de boleto de cobrança. Verifique os domínios
+									// possíveis no swagger.
+		String indicadorPermissaoRecebimentoParcial = "N"; // Código para identificação da autorização de pagamento
+															// parcial do boleto. "S" ou "N"
+		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", conta.getId().toString());
+		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
+		String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
+		PagadorDTO pagadorDTO = new PagadorDTO(); // Identifica o pagador do boleto.
+		
+		if(cliente.getCpf() != null) { 
+		pagadorDTO.setTipoInscricao((short) 1);
+		pagadorDTO.setNumeroInscricao(cliente.getCpf());
+		}else {
+		pagadorDTO.setTipoInscricao((short) 2);	
+		pagadorDTO.setNumeroInscricao(cliente.getCnpj());
+		}
+		
+		pagadorDTO.setNome(cliente.getNome());
+		pagadorDTO.setEndereco(imovel.getEnderecoFormatado()); 
+		pagadorDTO.setCidade(imovel.getNomeMunicipio());
+		pagadorDTO.setBairro(imovel.getNomeBairro());
+		pagadorDTO.setUf("PA");		
+		
+		pagadorDTO.setCep(imovel.getCodigoCep());
+		
+		FichaCompensacao fichaCompensacaoApi = new FichaCompensacao(idConta, idConv, numeroCarteira,
+				numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
+				codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagadorDTO);
+		
+		FichaCompensacao fichaCompensacaoBanco = new FichaCompensacao(idConta, idConv, numeroCarteira,
+				numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
+				codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idCliente);
+
+		Fachada.getInstancia().inserir(fichaCompensacaoBanco);
+
+		return fichaCompensacaoApi;
+	}
+	
 }

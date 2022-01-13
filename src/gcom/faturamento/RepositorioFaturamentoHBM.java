@@ -60218,7 +60218,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 	}
 	
-	
 	public Collection pesquisarContasVencimentoParaEnvioEmail(Integer idRota, Date dataVencimento)
 			throws ErroRepositorioException {
 		Collection retorno = null;
@@ -60277,6 +60276,50 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+	}
+	
+	public Conta contaFichaCompensacao(Integer idConta) throws ErroRepositorioException {
+		Conta conta = null;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append(" select * from Conta conta ")
+					.append(" where conta.id = :idConta ");
+
+			conta = (Conta) session.createQuery(consulta.toString())
+					   .setInteger("idConta", idConta);
+
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return conta;
+	}
+	
+	public Cliente clienteFichaCompensacao(Integer idImovel) throws ErroRepositorioException {
+		Cliente cliente = new Cliente();
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta;
+			
+			consulta = "select * "
+					+ "from cadastro.cliente cli "
+					+ "inner join cadastro.cliente_imovel cliim on cliim.clie_id = cli.clie_id"
+					+ "where cliim.imov_id = :idImovel and cliim.clim_dtrelacaofim is null ";
+
+			cliente = (Cliente) session.createQuery(consulta.toString())
+					   .setInteger("idImovel", idImovel);
+
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return cliente;
 	}
 
 }
