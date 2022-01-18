@@ -9684,9 +9684,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     .append("contaImpressao.cttp_id as tipoConta, ")// 39
 				     .append("imovel.rota_identrega as rotaEntrega, ")// 40
 				     .append("imovel.imov_nnsequencialrotaentrega as seqRotaEntrega, ")// 41
-				     .append("imovel.imov_nnquadraentrega as numeroQuadraEntrega, ")// 42
-				     .append("cnt.cnta_vlrateioagua as valorRateioAgua, ") //43
-				     .append("cnt.cnta_vlrateioesgoto as valorRateioEsgoto, ") //44
+				     .append("imovel.cntt_copasa as codigoConvenio, ") //42
+				     .append("imovel.imov_nnquadraentrega as numeroQuadraEntrega, ")// 43
+				     .append("cnt.cnta_vlrateioagua as valorRateioAgua, ") //44
+				     .append("cnt.cnta_vlrateioesgoto as valorRateioEsgoto, ") //45
 				     .append("crrz.crrz_vlcredito as valorCreditoBolsaAgua ") //45
 				     .append("from cadastro.cliente_conta cliCnt ")
 				     .append("inner join faturamento.conta cnt on cliCnt.cnta_id=cnt.cnta_id ")
@@ -9759,6 +9760,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.addScalar("tipoConta", Hibernate.INTEGER)
 					.addScalar("rotaEntrega", Hibernate.INTEGER)
 					.addScalar("seqRotaEntrega", Hibernate.INTEGER)
+					.addScalar("codigoConvenio", Hibernate.INTEGER)
 					.addScalar("numeroQuadraEntrega", Hibernate.INTEGER)
 					.addScalar("valorRateioAgua",Hibernate.BIG_DECIMAL)
 					.addScalar("valorRateioEsgoto",Hibernate.BIG_DECIMAL)
@@ -26176,10 +26178,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceo para a prxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sesso
 			HibernateUtil.closeSession(session);
 		}
 
