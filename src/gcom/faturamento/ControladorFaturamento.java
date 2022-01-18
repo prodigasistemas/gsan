@@ -6339,10 +6339,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									valorTotalCreditos = valorTotalCreditos.add(creditoBolsaAgua.getValorCredito());
 									
 									verificouBolsaAgua = true;
+
+									if (valorTotalACobrar
+											.compareTo(ConstantesSistema.VALOR_ZERO) == 0) {
+										deletaCreditoRealizado = true;
+									}
 																
 					}
 	
-					if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
+					if (colecaoCreditosARealizar != null 
+							&& !colecaoCreditosARealizar.isEmpty() 
+							&& valorTotalACobrar.compareTo(BigDecimal.ZERO) == 1) {
 						
 						Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar.iterator();
 						
@@ -6635,7 +6642,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							}// fim laço de credito a realizar
 					}
 							
-					if (deletaCreditoRealizado) {
+					if (deletaCreditoRealizado && !creditoRealizado.isCreditoBolsaAgua()) {
 					 // deleta o credito realizado categoria
 					 repositorioFaturamento.deletarCreditoRealizadoCategoria(creditoRealizado.getId());
 	
