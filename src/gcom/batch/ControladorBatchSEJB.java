@@ -131,6 +131,7 @@ import gcom.batch.faturamento.TarefaBatchGerarTaxaPercentualTarifaMinimaCortado;
 import gcom.batch.faturamento.TarefaBatchGerarTxtImpressaoContasBraille;
 import gcom.batch.faturamento.TarefaBatchPrescreverDebitosImoveisPublicosAutomatico;
 import gcom.batch.faturamento.TarefaBatchPrescreverDebitosImoveisPublicosManual;
+import gcom.batch.faturamento.TarefaBatchRegistrarBoletos;
 import gcom.batch.faturamento.TarefaBatchReligarImoveisCortadosComConsumoReal;
 import gcom.batch.faturamento.TarefaBatchRetificarConjuntoContaConsumos;
 import gcom.batch.faturamento.TarefaBatchSuspenderLeituraParaImovelComConsumoRealNaoSuperiorA10;
@@ -2594,6 +2595,7 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 
 						break;
 					}
+					
 					case Funcionalidade.GERAR_CREDITO_BOLSA_AGUA:
 
 						
@@ -2954,6 +2956,28 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
+						
+					case Funcionalidade.REGISTRAR_BOLETOS:
+						TarefaBatchRegistrarBoletos registrarBoletos = new TarefaBatchRegistrarBoletos(processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						registrarBoletos.addParametro("anoMesFaturamentoGrupo", faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal()
+								.getFaturamentoGrupo().getAnoMesReferencia());
+
+						registrarBoletos.addParametro("faturamentoGrupo", faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal()
+								.getFaturamentoGrupo());
+						
+						Integer anoMesFaturamento = faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal().getFaturamentoGrupo().getAnoMesReferencia();
+						Integer idGrupoFaturamento = faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal().getFaturamentoGrupo().getId();
+
+						Collection colecaoContas = getControladorFaturamento().pesquisarIdContasGrupoFaturamentoRegistrarBoletos(anoMesFaturamento, idGrupoFaturamento);
+
+						registrarBoletos.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, colecaoContas);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(registrarBoletos));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;	
 
 					case Funcionalidade.GERAR_DEBITO_COBRAR_DOACAO:
 						TarefaBatchGerarDebitosACobrarDoacao gerarDebitoACobrarDoacao = new TarefaBatchGerarDebitosACobrarDoacao(processoIniciado.getUsuario(),

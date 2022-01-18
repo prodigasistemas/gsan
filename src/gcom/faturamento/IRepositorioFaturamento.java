@@ -3072,4 +3072,6 @@ public interface IRepositorioFaturamento {
 	
 	public Cliente clienteFichaCompensacao(Integer idImovel) throws ErroRepositorioException;
 	
+	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento)throws ErroRepositorioException;
+	
 }

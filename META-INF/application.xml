@@ -938,6 +938,9 @@
 		<ejb>BatchGerarCreditoBolsaAguaMDB.jar</ejb>
 	</module>
 	<module>
+		<ejb>BatchRegistrarBoletosMDB.jar</ejb>
+	</module>
+	<module>
 		<java>gcom.jar</java>
 	</module>
 	

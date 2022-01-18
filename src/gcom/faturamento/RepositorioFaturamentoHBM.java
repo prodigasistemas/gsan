@@ -26147,6 +26147,46 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
+	 * Recupera os ids das contas de um grupo de faturamento para Registrar Boletos
+	 * 
+	 * @author Guilherme Aguiar
+	 * @date 14/01/2022
+	 * 
+	 * @return Collection
+	 * @throws ErroRepositorioException
+	 */
+	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento,
+			Integer idGrupoFaturamento) throws ErroRepositorioException {
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = "SELECT cnta.id " + "FROM Conta cnta " + "INNER JOIN cnta.imovel imov "
+					+ "INNER JOIN imov.quadra quadra " + "INNER JOIN quadra.rota rota "
+					+ "INNER JOIN rota.faturamentoGrupo ftgr " + "INNER JOIN cnta.debitoCreditoSituacaoAtual dcst "
+					+ "WHERE cnta.referencia = :anoMesFaturamento " + "AND ftgr.id = :idGrupoFaturamento "
+					+ "AND cnta.debitoCreditoSituacaoAtual in(:normal, :incluida, :retificada)";
+
+			retorno = session.createQuery(consulta).setInteger("anoMesFaturamento", anoMesFaturamento)
+					.setInteger("idGrupoFaturamento", idGrupoFaturamento)
+					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
+					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA).list();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+
+	/**
 	 * Recupera os ids das contas de um grupo de faturamento
 	 * 
 	 * @author Raphael Rossiter
