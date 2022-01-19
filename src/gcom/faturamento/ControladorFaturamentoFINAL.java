@@ -1,9 +1,7 @@
 	package gcom.faturamento;
 
-import gcom.api.GsanApi;
 import gcom.api.relatorio.ReportItemDTO;
 import gcom.arrecadacao.Devolucao;
-import gcom.arrecadacao.FichaCompensacao;
 import gcom.arrecadacao.FiltroDevolucao;
 import gcom.arrecadacao.IRepositorioArrecadacao;
 import gcom.arrecadacao.RepositorioArrecadacaoHBM;
@@ -138,7 +136,6 @@ import gcom.faturamento.bean.GerarRelacaoAcompanhamentoFaturamentoHelper;
 import gcom.faturamento.bean.GerarRelatorioAnormalidadeConsumoHelper;
 import gcom.faturamento.bean.LeiturasNaoRegistradasHelper;
 import gcom.faturamento.bean.MapaControleContaRelatorioHelper;
-import gcom.faturamento.bean.PagadorDTO;
 import gcom.faturamento.bean.ResumoFaturamentoRelatorioHelper;
 import gcom.faturamento.bean.ResumoFaturamentoSimulacaoHelper;
 import gcom.faturamento.bean.SituacaoEspecialFaturamentoHelper;
@@ -277,7 +274,6 @@ import gcom.relatorio.faturamento.conta.ContasEmitidasRelatorioHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.relatorio.faturamento.conta.RelatorioMapaControleConta;
 import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
-import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.Abrangencia;
 import gcom.seguranca.acesso.Funcionalidade;
 import gcom.seguranca.acesso.Operacao;
@@ -37119,19 +37115,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						if (parmsConta[41] != null) {
 							emitirContaHelper.setNumeroSequencialRotaEntrega((Integer) parmsConta[41]);
 						}
+						if (parmsConta[42] != null) {
+							emitirContaHelper.setCodigoConvenio((Integer) parmsConta[42]);
+						}
 
-						if (tam > 42) {
-							if (parmsConta[42] != null) {
-								emitirContaHelper.setNumeroQuadraEntrega((Integer) parmsConta[42]);
-							}
+						if (tam > 43) {
 							if (parmsConta[43] != null) {
-								emitirContaHelper.setValorRateioAgua((BigDecimal) parmsConta[43]);
+								emitirContaHelper.setNumeroQuadraEntrega((Integer) parmsConta[43]);
 							}
 							if (parmsConta[44] != null) {
-								emitirContaHelper.setValorRateioEsgoto((BigDecimal) parmsConta[44]);
+								emitirContaHelper.setValorRateioAgua((BigDecimal) parmsConta[44]);
 							}
 							if (parmsConta[45] != null) {
-								emitirContaHelper.setValorCreditoBolsaAgua((BigDecimal) parmsConta[45]);
+								emitirContaHelper.setValorRateioEsgoto((BigDecimal) parmsConta[45]);
+							}
+							if (parmsConta[46] != null) {
+								emitirContaHelper.setValorCreditoBolsaAgua((BigDecimal) parmsConta[46]);
 							}
 						}
 
@@ -61092,10 +61091,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			conta.setConsumoEsgoto(0);
 			conta.setConsumoRateioEsgoto(0);
 		} 
-/*
+
 		try {
 			if (!preFaturamento && imovel.isImovelCondominio()) {
-				BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel, faturamentoGrupo);	 
+				BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel, faturamentoGrupo);
 				
 				BigDecimal valorRateioAgua = valoresRateioAguaEsgotoImovel[0];
 				BigDecimal valorFinalAgua = helperValoresAguaEsgoto.getValorTotalAgua().add(valorRateioAgua);
@@ -61114,7 +61113,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}
-*/
+
 		Date dataValidadeConta = Util.adcionarOuSubtrairMesesAData(conta.getDataVencimentoConta(), sistemaParametro.getNumeroMesesValidadeConta(), 0);
 
 		int mesDataValidadeConta = Util.getMes(dataValidadeConta);
@@ -61379,7 +61378,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		
 		BigDecimal valorRateioAgua = new BigDecimal("0.00");
 		BigDecimal valorRateioEsgoto = new BigDecimal("0.00");
-		/*
+		
 		if (conta.getImovel().isImovelCondominio()) {
 			try {
 				//valoresAguaEsgotoRateioPorEconomia = this.calcularValorRateioPorEconomia(conta.getImovel().getImovelCondominio().getId(),conta.getFaturamentoGrupo());
@@ -61392,7 +61391,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 		
 		}
-*/
+
 		if ((colecaoCategorias != null && !colecaoCategorias.isEmpty())
 				&& ( (colecaoCalcularValoresAguaEsgotoHelper != null && !colecaoCalcularValoresAguaEsgotoHelper.isEmpty())) ) {
 
@@ -69021,7 +69020,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		imovel = this.getControladorImovel().pesquisarImovel(imovel.getId()); 
 		
 		valoresRateioImovel = this.calcularValorRateioPorEconomia(imovel.getImovelCondominio().getId(), faturamentoGrupo);
-				
+
 		if (valoresRateioImovel[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
 			valorRateioImovelAgua = valoresRateioImovel[0].multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
 		}
@@ -69032,7 +69031,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		valoresRateioImovel[0] = valorRateioImovelAgua;
 		valoresRateioImovel[1] = valorRateioImovelEsgoto;
-		
+
 		return valoresRateioImovel;
 	}
 
@@ -69956,6 +69955,4 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 		return totalIRSituacaoCanceladaDiferencaPositiva;
 	}
-	
 }
-	

@@ -43,7 +43,9 @@ import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.ConsumoTipo;
 import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.medicao.MedicaoHistorico;
+import gcom.util.CodigoBarras;
 import gcom.util.ConstantesJNDI;
+import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -1200,15 +1202,18 @@ public class ImpressaoContaImpressoraTermica {
 	private void gerarDadosCodigoDeBarras(EmitirContaHelper emitirContaHelper, StringBuilder retorno,
 			Imovel imovelEmitido) throws ControladorException {
 		if (!imovelEmitido.getIndicadorDebitoConta().equals(Imovel.INDICADOR_DEBITO_AUTOMATICO)) {
+			
+			String representacaoNumericaCodBarraFormatada = null;
+			String representacaoNumericaCodBarra = "";
+			// Linha28
+			Date dataValidade = emitirContaHelper.getDataValidadeConta();
+			
+			if(emitirContaHelper.getCodigoConvenio().shortValue() != SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA) {
+			
 			Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
 			// formata ano mes para mes ano
 			String anoMes = "" + emitirContaHelper.getAmReferencia();
 			String mesAno = anoMes.substring(4, 6) + anoMes.substring(0, 4);
-
-			String representacaoNumericaCodBarra = "";
-
-			// Linha28
-			Date dataValidade = emitirContaHelper.getDataValidadeConta();
 
 			if (emitirContaHelper.getValorConta() != null) {
 				if (emitirContaHelper.getValorConta().compareTo(new BigDecimal("0.00")) != 0) {
@@ -1216,11 +1221,10 @@ public class ImpressaoContaImpressoraTermica {
 							.obterRepresentacaoNumericaCodigoBarra(3, emitirContaHelper.getValorConta(),
 									emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAno,
 									digitoVerificadorConta, null, null, null, null, null, null, null);
-
 					// Linha 24
 					// Formata a representação númerica do código de
 					// barras
-					String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11)
+					 representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11)
 							+ "-" + representacaoNumericaCodBarra.substring(11, 12) + " "
 							+ representacaoNumericaCodBarra.substring(12, 23) + "-"
 							+ representacaoNumericaCodBarra.substring(23, 24) + " "
@@ -1238,16 +1242,45 @@ public class ImpressaoContaImpressoraTermica {
 					emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
 				}
 
-				String representacaoNumericaCodBarraFormatada = emitirContaHelper
-						.getRepresentacaoNumericaCodBarraFormatada();
-				if (representacaoNumericaCodBarraFormatada != null) {
+				 representacaoNumericaCodBarraFormatada = emitirContaHelper.getRepresentacaoNumericaCodBarraFormatada();
+			}
+				
+			}else{
+				
+				emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
+
+					StringBuilder nossoNumero = this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString());
+					String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
+					
+						Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
+						String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
+
+						String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+										ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
+										ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+										emitirContaHelper.getValorConta(),
+										nossoNumeroSemDV.toString(),
+										ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
+										fatorVencimento);
+
+					representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+			
+					representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra;
+					emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+
+					String representacaoNumericaCodBarraSemDigito = especificacaoCodigoBarra;
+					
+					emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+					
+			}
+			if (representacaoNumericaCodBarraFormatada != null) {
 
 					retorno.append(formarLinha(5, 0, 66, 2840, representacaoNumericaCodBarraFormatada, 0, 0));
 					String representacaoCodigoBarrasSemDigitoVerificador = emitirContaHelper
 							.getRepresentacaoNumericaCodBarraSemDigito();
 					retorno.append("B I2OF5 1 2 120 35 2863 " + representacaoCodigoBarrasSemDigitoVerificador + "\n");
-				}
 			}
+			
 		} else {
 			retorno.append(formarLinha(4, 0, 182, 2863, "DEBITO AUTOMATICO", 0, 0));
 
