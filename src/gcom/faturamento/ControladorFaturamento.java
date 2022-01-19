@@ -16491,7 +16491,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return sistemaParametro;
 	}
 	
-	public File registroFichaCompensacao(Integer idConta, FaturamentoGrupo faturamentoGrupo, Integer anoMesFaturamento, Integer idGrupoFaturamento, BigDecimal valor)
+	public void registroFichaCompensacao(Integer idConta, FaturamentoGrupo faturamentoGrupo, Integer anoMesFaturamento, Integer idGrupoFaturamento, BigDecimal valor)
 			throws ControladorException {
 		try {
 			FichaCompensacao fichaCompensacao = null;
@@ -16502,8 +16502,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				
 				GsanApi api = new GsanApi(url);
 				api.invoke(fichaCompensacao);
-				return api.salvar(fichaCompensacao.getIdConta().toString());
-			
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ActionServletException("atencao.nao_foi_possivel_registrar_conta");
@@ -16528,8 +16527,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Integer numeroVariacaoCarteira = 35; // Em produção, informar o número da variação da carteira de cobrança.
 		Short codigoModalidade = 1; // Código que identifica a característica dos boletos dentro das modalidades de
 									// cobrança existentes no BB. Domínio: 1 - Simples; 4 - Vinculada.
-		String dataEmissao =  conta.getDataEmissao().toString(); //Pegar da conta
-		String dataVencimento = conta.getDataVencimentoConta().toString(); //pegar da conta
+		String dataEmissao =  Util.formatarDataComTracoDDMMAAAA(conta.getDataEmissao()).toString(); //Pegar da conta
+		String dataVencimento = Util.formatarDataComTracoDDMMAAAA(conta.getDataVencimentoConta()).toString(); //pegar da conta
 		String valorOriginal = valor.toString().replace(".", "").replace(",", "");
 		String codigoAceite = "A"; // Domínio: A - Aceito; N - Não aceito
 		Short codigoTipoTitulo = 2; // Código para identificar o tipo de boleto de cobrança. Verifique os domínios
