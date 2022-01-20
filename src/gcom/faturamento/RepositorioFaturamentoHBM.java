@@ -60325,16 +60325,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		try {
 			StringBuilder consulta = new StringBuilder();
 			
-			consulta.append(" select * from Conta conta ")
+			consulta.append(" select conta from Conta conta ")
 					.append(" where conta.id = :idConta ");
 
 			conta = (Conta) session.createQuery(consulta.toString())
-					   .setInteger("idConta", idConta);
+					   .setInteger("idConta", idConta).setMaxResults(1).uniqueResult();
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			HibernateUtil.closeSession(session);
+			//HibernateUtil.closeSession(session);
 		}
 		return conta;
 	}
@@ -60344,15 +60344,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Session session = HibernateUtil.getSession();
 		
 		try {
-			String consulta;
+			StringBuilder consulta = new StringBuilder();
 			
-			consulta = "select * "
-					+ "from cadastro.cliente cli "
-					+ "inner join cadastro.cliente_imovel cliim on cliim.clie_id = cli.clie_id"
-					+ "where cliim.imov_id = :idImovel and cliim.clim_dtrelacaofim is null ";
+			consulta.append("select cliim.cliente from ClienteImovel cliim ")
+					.append("where cliim.imovel.id = :idImovel and cliim.dataFimRelacao is null");
 
 			cliente = (Cliente) session.createQuery(consulta.toString())
-					   .setInteger("idImovel", idImovel);
+					   .setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

@@ -25,6 +25,8 @@ import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
+import gcom.faturamento.ControladorFaturamentoLocal;
+import gcom.faturamento.ControladorFaturamentoLocalHome;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -95,6 +97,8 @@ public class ExibirConsultarContaAction extends GcomAction {
 				idImovel = conta.getImovel().getId();
 				referenciaConta = conta.getReferenciaFormatada();
 				situacaoAtualConta = conta.getDebitoCreditoSituacaoAtual().getId();
+				
+				getFachada().registroFichaCompensacao(Integer.valueOf(idConta), null, null, null, conta.getValorTotal());
 				
 				// Colocando o objeto conta selecionado na sessão
 				sessao.setAttribute("conta", conta);
