@@ -55139,11 +55139,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		
 		if (sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue()) {
-			nossoNumero.append("2860143"); // Convenio do Banco do Brasil
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, "2860143")); // Convenio do Banco do Brasil
 		} else {
 			// é o numero do convênio fornecido pelo Banco
 			// número fixo e não pode ser alterado
-			nossoNumero.append("2502792");
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, "2502792"));
 		}
 
 		// id do documento tipo de acordo com o tipo de documento q esta sendo
