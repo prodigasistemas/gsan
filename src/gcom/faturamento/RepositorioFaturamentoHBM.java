@@ -17,6 +17,7 @@ import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FoneTipo;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
+import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.CategoriaTipo;
 import gcom.cadastro.imovel.ContratoTipo;
@@ -60379,6 +60380,27 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			HibernateUtil.closeSession(session);
 		}
 		return contas;
+	}
+	
+	public Municipio municipio(Integer idLocalidade) throws ErroRepositorioException {
+		Municipio idMunicipio = null;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append("select municipio from Localidade loca ")
+			        .append("inner join loca.municipio municipio ")
+			        .append("where  loca.id = :idLocalidade ");
+
+			idMunicipio = (Municipio) session.createQuery(consulta.toString())
+					      .setInteger("idLocalidade", idLocalidade).setMaxResults(1).uniqueResult();
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		}
+
+		return idMunicipio;
 	}
 
 }

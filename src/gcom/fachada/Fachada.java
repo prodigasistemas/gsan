@@ -40574,11 +40574,4 @@ public class Fachada {
 		}
 	}
 	
-	public void registroFichaCompensacao(Integer idConta, FaturamentoGrupo faturamentoGrupo, Integer anoMesFaturamento, Integer idGrupoFaturamento, BigDecimal valor) {
-		try {
-			this.getControladorFaturamento().registroFichaCompensacao(idConta,faturamentoGrupo,anoMesFaturamento,idGrupoFaturamento,valor);
-		} catch (ControladorException e) {
-			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
-		}
-	}
 }
