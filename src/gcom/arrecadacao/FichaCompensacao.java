@@ -1,38 +1,40 @@
 package gcom.arrecadacao;
 
+import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.imovel.Imovel;
 import gcom.faturamento.bean.PagadorDTO;
+import gcom.faturamento.conta.Conta;
+import gcom.interceptor.ControleAlteracao;
 
-
+@ControleAlteracao()
 public class FichaCompensacao {
 	
 	private Integer id;
-	private Integer idConta;
+	private Conta conta;
 	private Integer idConv;
 	private Integer numeroCarteira;
 	private Integer numeroVariacaoCarteira;
 	private Short codigoModalidade;
 	private String dataEmissao;
 	private String dataVencimento; 
-	private String valorOriginal;
+	private Double valorOriginal;
 	private String codigoAceite;
 	private Short codigoTipoTitulo;
 	private String indicadorPermissaoRecebimentoParcial;
 	private String numeroTituloCliente; //nosso numero
 	
 	//Object pagador
-	private Integer idCliente;
-	private Integer idImovel;
+	private Cliente cliente;
+	private Imovel imovel;
 	
 	private PagadorDTO pagadorDTO;
 	
-    public FichaCompensacao() {}
-
-	public FichaCompensacao(Integer idConta, Integer idConv, Integer numeroCarteira, Integer numeroVariacaoCarteira,
-			Short codigoModalidade, String dataEmissao, String dataVencimento, String valorOriginal,
+	public FichaCompensacao(Conta conta, Integer idConv, Integer numeroCarteira, Integer numeroVariacaoCarteira,
+			Short codigoModalidade, String dataEmissao, String dataVencimento, Double valorOriginal,
 			String codigoAceite, Short codigoTipoTitulo, String indicadorPermissaoRecebimentoParcial,
 			String numeroTituloCliente, PagadorDTO pagadorDTO) {
 		super();
-		this.idConta = idConta;
+		this.conta = conta;
 		this.idConv = idConv;
 		this.numeroCarteira = numeroCarteira;
 		this.numeroVariacaoCarteira = numeroVariacaoCarteira;
@@ -47,12 +49,11 @@ public class FichaCompensacao {
 		this.pagadorDTO = pagadorDTO;
 	}
 	
-	public FichaCompensacao(Integer idConta, Integer idConv, Integer numeroCarteira, Integer numeroVariacaoCarteira,
-			Short codigoModalidade, String dataEmissao, String dataVencimento, String valorOriginal,
+	public FichaCompensacao(Integer idConv, Integer numeroCarteira, Integer numeroVariacaoCarteira,
+			Short codigoModalidade, String dataEmissao, String dataVencimento, Double valorOriginal,
 			String codigoAceite, Short codigoTipoTitulo, String indicadorPermissaoRecebimentoParcial,
-			String numeroTituloCliente, Integer idImovel,Integer idCliente) {
+			String numeroTituloCliente, Imovel imovel, Cliente cliente, Conta conta) {
 		super();
-		this.idConta = idConta;
 		this.idConv = idConv;
 		this.numeroCarteira = numeroCarteira;
 		this.numeroVariacaoCarteira = numeroVariacaoCarteira;
@@ -64,8 +65,9 @@ public class FichaCompensacao {
 		this.codigoTipoTitulo = codigoTipoTitulo;
 		this.indicadorPermissaoRecebimentoParcial = indicadorPermissaoRecebimentoParcial;
 		this.numeroTituloCliente = numeroTituloCliente;
-        this.idImovel = idImovel;
-		this.idCliente = idCliente;
+        this.imovel = imovel;
+		this.cliente = cliente;
+		this.conta = conta;
 	}
 
 	public Integer getId() {
@@ -76,12 +78,12 @@ public class FichaCompensacao {
 		this.id = id;
 	}
 
-	public Integer getIdConta() {
-		return idConta;
+	public Conta getConta() {
+		return conta;
 	}
 
-	public void setIdConta(Integer idConta) {
-		this.idConta = idConta;
+	public void setConta(Conta conta) {
+		this.conta = conta;
 	}
 
 	public Integer getIdConv() {
@@ -132,11 +134,11 @@ public class FichaCompensacao {
 		this.dataVencimento = dataVencimento;
 	}
 
-	public String getValorOriginal() {
+	public Double getValorOriginal() {
 		return valorOriginal;
 	}
 
-	public void setValorOriginal(String valorOriginal) {
+	public void setValorOriginal(Double valorOriginal) {
 		this.valorOriginal = valorOriginal;
 	}
 
@@ -172,20 +174,20 @@ public class FichaCompensacao {
 		this.numeroTituloCliente = numeroTituloCliente;
 	}
 
-	public Integer getIdCliente() {
-		return idCliente;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setIdCliente(Integer idCliente) {
-		this.idCliente = idCliente;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
-	public Integer getIdImovel() {
-		return idImovel;
+	public Imovel getImovel() {
+		return imovel;
 	}
 
-	public void setIdImovel(Integer idImovel) {
-		this.idImovel = idImovel;
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
 	}
 	
 }

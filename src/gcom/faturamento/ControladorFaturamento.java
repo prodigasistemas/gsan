@@ -16537,7 +16537,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									// cobrança existentes no BB. Domínio: 1 - Simples; 4 - Vinculada.
 		String dataEmissao =  Util.formatarDataComTracoDDMMAAAA(conta.getDataEmissao()).toString(); //Pegar da conta
 		String dataVencimento = Util.formatarDataComTracoDDMMAAAA(conta.getDataVencimentoConta()).toString(); //pegar da conta
-		String valorOriginal = conta.getValorTotalConta().replace(".", "");
+		Double valorOriginal = Double.parseDouble(conta.getValorTotalConta());
 		String codigoAceite = "A"; // Domínio: A - Aceito; N - Não aceito
 		Short codigoTipoTitulo = 2; // Código para identificar o tipo de boleto de cobrança. Verifique os domínios
 									// possíveis no swagger.
@@ -16564,13 +16564,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 		pagadorDTO.setCep(imovel.getCodigoCep());
 		
-		FichaCompensacao fichaCompensacaoApi = new FichaCompensacao(idConta, idConv, numeroCarteira,
+		FichaCompensacao fichaCompensacaoApi = new FichaCompensacao(conta, idConv, numeroCarteira,
 				numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
 				codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagadorDTO);
 		
-		FichaCompensacao fichaCompensacaoBanco = new FichaCompensacao(idConta, idConv, numeroCarteira,
+		FichaCompensacao fichaCompensacaoBanco = new FichaCompensacao(idConv, numeroCarteira,
 				numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
-				codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idImovel, idCliente);
+				codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, imovel, cliente, conta);
 
 		Fachada.getInstancia().inserir(fichaCompensacaoBanco);
 

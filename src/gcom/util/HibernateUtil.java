@@ -19,6 +19,7 @@ import gcom.arrecadacao.DevolucaoDadosDiarios;
 import gcom.arrecadacao.DevolucaoDadosDiariosAuxiliar;
 import gcom.arrecadacao.DevolucaoHistorico;
 import gcom.arrecadacao.DevolucaoSituacao;
+import gcom.arrecadacao.FichaCompensacao;
 import gcom.arrecadacao.GuiaDevolucao;
 import gcom.arrecadacao.MetasArrecadacao;
 import gcom.arrecadacao.MovimentoCartaoRejeita;
@@ -1406,6 +1407,7 @@ public class HibernateUtil {
 					.addClass(DadosPagamentosNaoClassificados.class)
 					.addClass(DadosDocumentosNaoIdentificados.class)
 					.addClass(BoletoInfo.class)
+					.addClass(FichaCompensacao.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.operacional //
