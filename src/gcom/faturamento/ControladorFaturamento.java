@@ -16544,7 +16544,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		String indicadorPermissaoRecebimentoParcial = "N"; // Código para identificação da autorização de pagamento
 															// parcial do boleto. "S" ou "N"
 		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", conta.getId().toString());
-		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 19);
+		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 20);
 		String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
 		PagadorDTO pagadorDTO = new PagadorDTO(); // Identifica o pagador do boleto.
 		
