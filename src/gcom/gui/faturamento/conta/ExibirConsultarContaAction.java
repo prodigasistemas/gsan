@@ -98,7 +98,9 @@ public class ExibirConsultarContaAction extends GcomAction {
 				referenciaConta = conta.getReferenciaFormatada();
 				situacaoAtualConta = conta.getDebitoCreditoSituacaoAtual().getId();
 				
-				getFachada().registroFichaCompensacao(Integer.valueOf(idConta), null, null, null, conta.getValorTotal());
+				Integer fatGrupoId = getFachada().pesquisarFaturamentoGrupoImovel(idImovel);
+				
+				getFachada().registroFichaCompensacao(fatGrupoId, conta.getAnoMesReferenciaConta());
 				
 				// Colocando o objeto conta selecionado na sessão
 				sessao.setAttribute("conta", conta);

@@ -40574,9 +40574,17 @@ public class Fachada {
 		}
 	}
 	
-	public void registroFichaCompensacao(Integer idConta, FaturamentoGrupo faturamentoGrupo, Integer anoMesFaturamento, Integer idGrupoFaturamento, BigDecimal valor) {
+	public void registroFichaCompensacao(Integer idFaturamento, Integer anoMesReferencia) {
 		try {
-			this.getControladorFaturamento().registroFichaCompensacao(idConta,faturamentoGrupo,anoMesFaturamento,idGrupoFaturamento,valor);
+			this.getControladorFaturamento().registroFichaCompensacao(idFaturamento, anoMesReferencia);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public Integer pesquisarFaturamentoGrupoImovel(Integer idImovel) {
+		try {
+			return this.getControladorFaturamento().pesquisarFaturamentoGrupoImovel(idImovel);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
