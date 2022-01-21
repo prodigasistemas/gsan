@@ -50,7 +50,7 @@ public class FichaCompensacao {
 	public FichaCompensacao(Integer idConta, Integer idConv, Integer numeroCarteira, Integer numeroVariacaoCarteira,
 			Short codigoModalidade, String dataEmissao, String dataVencimento, String valorOriginal,
 			String codigoAceite, Short codigoTipoTitulo, String indicadorPermissaoRecebimentoParcial,
-			String numeroTituloCliente, Integer idCliente) {
+			String numeroTituloCliente, Integer idImovel,Integer idCliente) {
 		super();
 		this.idConta = idConta;
 		this.idConv = idConv;
@@ -64,6 +64,7 @@ public class FichaCompensacao {
 		this.codigoTipoTitulo = codigoTipoTitulo;
 		this.indicadorPermissaoRecebimentoParcial = indicadorPermissaoRecebimentoParcial;
 		this.numeroTituloCliente = numeroTituloCliente;
+        this.idImovel = idImovel;
 		this.idCliente = idCliente;
 	}
 

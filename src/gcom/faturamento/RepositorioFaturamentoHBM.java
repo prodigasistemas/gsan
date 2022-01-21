@@ -60333,8 +60333,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			//HibernateUtil.closeSession(session);
 		}
 		return conta;
 	}
@@ -60342,15 +60340,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public Cliente clienteFichaCompensacao(Integer idImovel) throws ErroRepositorioException {
 		Cliente cliente = new Cliente();
 		Session session = HibernateUtil.getSession();
-		
+
 		try {
 			StringBuilder consulta = new StringBuilder();
-			
-			consulta.append("select cliim.cliente from ClienteImovel cliim ")
-					.append("where cliim.imovel.id = :idImovel and cliim.dataFimRelacao is null");
 
-			cliente = (Cliente) session.createQuery(consulta.toString())
-					   .setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
+			consulta.append("select cliim.cliente from ClienteImovel cliim ")
+			.append("where cliim.imovel.id = :idImovel and cliim.dataFimRelacao is null");
+
+
+			cliente = (Cliente) session.createQuery(consulta.toString()).setInteger("idImovel", idImovel)
+					 .setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -60358,6 +60357,28 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			HibernateUtil.closeSession(session);
 		}
 		return cliente;
+	}
+	
+	public Collection idContasEmitidasFichaCompensacao(Integer idFaturamentoGrupo, Integer anoMesFaturamento) throws ErroRepositorioException {
+		Collection contas = null;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+
+			consulta.append("select conta.id from Conta conta ")
+			        .append("where conta.faturamentoGrupo.id = :idFaturamentoGrupo and conta.referencia = :anoMesFaturamento ");
+
+			contas =   session.createQuery(consulta.toString())
+					   .setInteger("idFaturamentoGrupo", idFaturamentoGrupo)
+					   .setInteger("anoMesFaturamento", anoMesFaturamento).list();
+
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return contas;
 	}
 
 }

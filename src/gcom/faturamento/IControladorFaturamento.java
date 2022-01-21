@@ -1302,7 +1302,7 @@ public interface IControladorFaturamento {
 	
 	public DeterminarValoresFaturamentoAguaEsgotoHelper obterValoresCreditosBolsaAgua(Imovel imovel, FaturamentoGrupo grupo );
 	
-	public File registroFichaCompensacao(Integer idConta, FaturamentoGrupo faturamentoGrupo, Integer anoMesFaturamento, Integer idGrupoFaturamento, BigDecimal valor) throws ControladorException;
+	public void registroFichaCompensacao(Integer idGrupoFaturamento, Integer anoMesReferencia) throws ControladorException;
 
 	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento) throws ControladorException;
 	
