@@ -16502,7 +16502,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			fichaCompensacao = registrarBoleto(idConta);
 				
 			String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
-				
+		
 				GsanApi api = new GsanApi(url);
 				api.invoke(fichaCompensacao);
 			}

@@ -60365,7 +60365,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		
 		try {
 			StringBuilder consulta = new StringBuilder();
-			
+
 			consulta.append("select conta.id from Conta conta ")
 			        .append("where conta.faturamentoGrupo.id = :idFaturamentoGrupo and conta.referencia = :anoMesFaturamento ");
 
