@@ -16491,26 +16491,30 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return sistemaParametro;
 	}
 	
-	public void registroFichaCompensacao(Integer idConta, FaturamentoGrupo faturamentoGrupo, Integer anoMesFaturamento, Integer idGrupoFaturamento, BigDecimal valor)
-			throws ControladorException {
+	public void registroFichaCompensacao(Integer idGrupoFaturamento, Integer anoMesReferencia)
+			throws ControladorException, ErroRepositorioException {
+		Collection<Integer> colecaoContas = repositorioFaturamento.idContasEmitidasFichaCompensacao(idGrupoFaturamento, anoMesReferencia);
 		try {
-			FichaCompensacao fichaCompensacao = null;
+			for(Integer conta : colecaoContas){
+			FichaCompensacao fichaCompensacao = null;			
 
-			fichaCompensacao = registrarBoleto(idConta, valor);
+			Integer idConta = conta;
+			fichaCompensacao = registrarBoleto(idConta);
 				
-				String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_FICHA_COMPENSACAO_API_BB.toString());
+			String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
 				
 				GsanApi api = new GsanApi(url);
 				api.invoke(fichaCompensacao);
+			}
 				
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ActionServletException("atencao.nao_foi_possivel_registrar_conta");
 		}		
+		
 	}
 	
-	public FichaCompensacao registrarBoleto(Integer idConta,
-			BigDecimal valor) throws ControladorException, ErroRepositorioException {
+	public FichaCompensacao registrarBoleto(Integer idConta) throws ControladorException, ErroRepositorioException {
 		FiltroCliente filtroCliente = new FiltroCliente();
 		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
 		
@@ -16518,9 +16522,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Cliente cliente = new Cliente();
 		conta = repositorioFaturamento.contaFichaCompensacao(idConta);		
 		Imovel imovel = conta.getImovel();
-		Integer idImovel = imovel.getIdImovel();
+		String municipio = imovel.getNomeMunicipio();
+		Integer idImovel = imovel.getId();
         cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
-        Integer idCliente = cliente.getIdCliente();
+        Integer idCliente = cliente.getId();
 		
 		Integer idConv = 2860143; // Em produção, informar o número do convênio de cobrança, com 7 dígitos.
 		Integer numeroCarteira = 17; // Em produção, informar o número da carteira de cobrança.
@@ -16529,7 +16534,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									// cobrança existentes no BB. Domínio: 1 - Simples; 4 - Vinculada.
 		String dataEmissao =  Util.formatarDataComTracoDDMMAAAA(conta.getDataEmissao()).toString(); //Pegar da conta
 		String dataVencimento = Util.formatarDataComTracoDDMMAAAA(conta.getDataVencimentoConta()).toString(); //pegar da conta
-		String valorOriginal = valor.toString().replace(".", "").replace(",", "");
+		String valorOriginal = conta.getValorTotalConta().replace(".", "").replace(",", "");
 		String codigoAceite = "A"; // Domínio: A - Aceito; N - Não aceito
 		Short codigoTipoTitulo = 2; // Código para identificar o tipo de boleto de cobrança. Verifique os domínios
 									// possíveis no swagger.
@@ -16550,9 +16555,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 		pagadorDTO.setNome(cliente.getNome());
 		pagadorDTO.setEndereco(imovel.getEnderecoFormatado()); 
-		pagadorDTO.setCidade(imovel.getNomeMunicipio());
+		pagadorDTO.setCidade(municipio);
 		pagadorDTO.setBairro(imovel.getNomeBairro());
-		pagadorDTO.setUf("PA");		
+		pagadorDTO.setUf("PA");			
 		
 		pagadorDTO.setCep(imovel.getCodigoCep());
 		
@@ -16562,12 +16567,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 		FichaCompensacao fichaCompensacaoBanco = new FichaCompensacao(idConta, idConv, numeroCarteira,
 				numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
-				codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idCliente);
+				codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idImovel, idCliente);
 
 		Fachada.getInstancia().inserir(fichaCompensacaoBanco);
 
 		return fichaCompensacaoApi;
 	}
-	
-	
+
 }

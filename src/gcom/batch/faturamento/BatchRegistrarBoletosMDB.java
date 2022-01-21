@@ -47,11 +47,7 @@ public class BatchRegistrarBoletosMDB
 			try {
 				this.getControladorFaturamento().registroFichaCompensacao(
 						(Integer) ((Object[]) objectMessage.getObject())[0],
-						(FaturamentoGrupo) ((Object[]) objectMessage
-								.getObject())[1],
-						(Integer) ((Object[]) objectMessage.getObject())[3],
-						(Integer) ((Object[]) objectMessage.getObject())[4],
-						(BigDecimal) ((Object[]) objectMessage.getObject())[5]);
+						(Integer) ((Object[]) objectMessage.getObject())[1]);
 
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");
