@@ -16522,7 +16522,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Cliente cliente = new Cliente();
 		conta = repositorioFaturamento.contaFichaCompensacao(idConta);		
 		Imovel imovel = conta.getImovel();
-		String municipio = imovel.getNomeMunicipio();
+		Integer idLocalidade = imovel.getIdLocalidade();
+		Municipio municipio = repositorioFaturamento.municipio(idLocalidade);
+		
+		String nomeMunicipio = municipio.getNome();
 		Integer idImovel = imovel.getId();
         cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
         Integer idCliente = cliente.getId();
@@ -16534,7 +16537,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									// cobrança existentes no BB. Domínio: 1 - Simples; 4 - Vinculada.
 		String dataEmissao =  Util.formatarDataComTracoDDMMAAAA(conta.getDataEmissao()).toString(); //Pegar da conta
 		String dataVencimento = Util.formatarDataComTracoDDMMAAAA(conta.getDataVencimentoConta()).toString(); //pegar da conta
-		String valorOriginal = conta.getValorTotalConta().replace(".", "").replace(",", "");
+		String valorOriginal = conta.getValorTotalConta().replace(".", "");
 		String codigoAceite = "A"; // Domínio: A - Aceito; N - Não aceito
 		Short codigoTipoTitulo = 2; // Código para identificar o tipo de boleto de cobrança. Verifique os domínios
 									// possíveis no swagger.
@@ -16555,7 +16558,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 		pagadorDTO.setNome(cliente.getNome());
 		pagadorDTO.setEndereco(imovel.getEnderecoFormatado()); 
-		pagadorDTO.setCidade(municipio);
+		pagadorDTO.setCidade(nomeMunicipio);
 		pagadorDTO.setBairro(imovel.getNomeBairro());
 		pagadorDTO.setUf("PA");			
 		

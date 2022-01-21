@@ -9,6 +9,7 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
+import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.Subcategoria;
@@ -3075,5 +3076,7 @@ public interface IRepositorioFaturamento {
 	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento)throws ErroRepositorioException;
 
 	public Collection idContasEmitidasFichaCompensacao(Integer idFaturamentoGrupo, Integer anoMesFaturamentoGrupo) throws ErroRepositorioException;
+	
+	public Municipio municipio(Integer idLocalidade) throws ErroRepositorioException;
 	
 }
