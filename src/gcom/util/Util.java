@@ -811,7 +811,7 @@ public class Util {
 		return retorno;
 	}
 	
-	public static String formatarDataComTracoDDMMAAAA(Date data) {
+	public static String formatarDataComPontoDDMMAAAA(Date data) {
 		String retorno = "";
 		if (data != null) { // 1
 			Calendar dataCalendar = new GregorianCalendar();
@@ -824,7 +824,7 @@ public class Util {
 				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH));
 			}
 
-			dataBD.append("-");
+			dataBD.append(".");
 
 			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1);
@@ -832,7 +832,7 @@ public class Util {
 				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH) + 1));
 			}
 			
-			dataBD.append("-");
+			dataBD.append(".");
 			dataBD.append(dataCalendar.get(Calendar.YEAR));
 
 			retorno = dataBD.toString();

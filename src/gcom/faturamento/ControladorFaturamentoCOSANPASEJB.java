@@ -27,7 +27,6 @@ import org.jboss.logging.Logger;
 
 import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
-import gcom.arrecadacao.FichaCompensacao;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;

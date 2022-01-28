@@ -15,7 +15,6 @@ import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.FiltroContaCategoria;
 import gcom.faturamento.conta.FiltroContaCategoriaHistorico;
-import gcom.faturamento.conta.FiltroContaHistorico;
 import gcom.faturamento.conta.FiltroContaImpostosDeduzidos;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.gui.ActionServletException;
@@ -25,8 +24,6 @@ import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
-import gcom.faturamento.ControladorFaturamentoLocal;
-import gcom.faturamento.ControladorFaturamentoLocalHome;
 
 import java.math.BigDecimal;
 import java.util.Collection;
