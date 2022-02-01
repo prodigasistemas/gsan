@@ -45,7 +45,7 @@ public class BatchRegistrarBoletosMDB
 
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
-				this.getControladorFaturamento().registroFichaCompensacao(
+				this.getControladorFaturamento().registrarFichaCompensacaoGrupo(
 						(Integer) ((Object[]) objectMessage.getObject())[0],
 						(Integer) ((Object[]) objectMessage.getObject())[1]);
 

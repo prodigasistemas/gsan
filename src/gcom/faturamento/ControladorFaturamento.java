@@ -866,6 +866,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 // pula de imóvel
 	        						 continue;
 	        					 }
+	        				 } else {
+	        					 registrarFichaCompensacao(contaAtualizacao.getId());
 	        				 }
 	        				 
 	        				 boolean contaNaoImpressa = false;
@@ -16490,30 +16492,43 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return sistemaParametro;
 	}
 	
-	public void registroFichaCompensacao(Integer idGrupoFaturamento, Integer anoMesReferencia)
+	public void registrarFichaCompensacaoGrupo(Integer idGrupoFaturamento, Integer anoMesReferencia)
 			throws ControladorException, ErroRepositorioException {
 		Collection<Integer> idContas = repositorioFaturamento.idContasEmitidasFichaCompensacao(idGrupoFaturamento, anoMesReferencia);
 
 		try {
-			
 			for(Integer idConta : idContas) {
-				FichaCompensacaoDTO ficha = registrarBoleto(idConta);
-	
-				String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
-	
-				GsanApi api = new GsanApi(url);
-				api.invoke(ficha);
+				registrarFichaCompensacao(idConta);
 			}
-						
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ActionServletException("atencao.nao_foi_possivel_registrar_conta");
+			throw new ActionServletException("atencao.erro_registrar_conta");
 		}		
 		
 	}
 	
-public FichaCompensacaoDTO registrarBoleto(Integer idConta) throws ControladorException, ErroRepositorioException {
+	private void registrarFichaCompensacao(Integer idConta) throws ControladorException {
+
+		try {
+			
+			FichaCompensacaoDTO ficha = registrarBoleto(idConta);
+
+			String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
+	
+			GsanApi api = new GsanApi(url);
+			api.invoke(ficha);
+						
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
+		}		
 		
+	}
+	
+	public FichaCompensacaoDTO registrarBoleto(Integer idConta) throws ControladorException {
+		
+		FichaCompensacaoDTO fichaCompensacaoApi = null;
+		try {
 			Conta conta = new Conta();
 			Cliente cliente = new Cliente();
 			conta = repositorioFaturamento.contaFichaCompensacao(idConta);
@@ -16560,10 +16575,14 @@ public FichaCompensacaoDTO registrarBoleto(Integer idConta) throws ControladorEx
 			
 			Fachada.getInstancia().inserir(fichaCompensacaoBanco);
 			
-			FichaCompensacaoDTO fichaCompensacaoApi = new FichaCompensacaoDTO(idConv, numeroCarteira, 
+			fichaCompensacaoApi = new FichaCompensacaoDTO(idConv, numeroCarteira, 
 					numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, 
 					codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagadorDTO);
-			
+		
+		} catch (ErroRepositorioException e) {
+			throw new ActionServletException("erro.erro_registrar_conta");
+		}
+	
 				
 		return fichaCompensacaoApi;
 	}

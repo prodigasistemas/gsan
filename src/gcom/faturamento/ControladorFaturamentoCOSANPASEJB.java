@@ -3434,6 +3434,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			helper.setLeituraAtualInformada(leituraAtualInformada);
 			helper.setDataLeituraAnteriorInformada(dataLeituraAnteriorInformada);
 			helper.setDataLeituraAtualInformada(dataLeituraAtualInformada);
+			
+			try {
+				registrarBoleto(id);
+			} catch (ControladorException e) {
+				throw new ActionServletException("atencao.erro_registrar_conta");
+			} 
 		}
 
 		return colecaoHelper;
