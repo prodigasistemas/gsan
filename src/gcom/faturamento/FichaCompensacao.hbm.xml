@@ -7,10 +7,10 @@
     http://boss.bekk.no/boss/middlegen/
     http://www.hibernate.org/
 -->
-	<class name="gcom.faturamento.FichaCompensacao" table="arrecadacao.ficha_compensacao">
+	<class name="gcom.faturamento.FichaCompensacao" table="faturamento.ficha_compensacao">
 		<id name="id" type="java.lang.Integer" column="fico_id">
 			<generator class="sequence">
-				<param name="sequence">arrecadacao.seq_ficha_compensacao</param>
+				<param name="sequence">faturamento.seq_ficha_compensacao</param>
 			</generator>
 		</id>
 		

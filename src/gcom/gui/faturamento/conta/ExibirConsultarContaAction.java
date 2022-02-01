@@ -38,7 +38,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * action responsável pela exibição da tela de consultar conta
+ * action responsï¿½vel pela exibiï¿½ï¿½o da tela de consultar conta
  * 
  * @author pedro alexandre
  * @created 04 de Janeiro de 2006
@@ -56,7 +56,7 @@ public class ExibirConsultarContaAction extends GcomAction {
 
 		String limparForm = httpServletRequest.getParameter("limparForm");
 
-		// Removendo coleções da sessão
+		// Removendo coleï¿½ï¿½es da sessï¿½o
 		if (limparForm != null && !limparForm.equalsIgnoreCase("")) {
 			sessao.removeAttribute("colecaoContaImovel");
 		}
@@ -74,7 +74,7 @@ public class ExibirConsultarContaAction extends GcomAction {
 
 			String idConta = httpServletRequest.getParameter("contaID");
 
-			// vai ser recuperado na geração do relatório 2ª Via da Conta
+			// vai ser recuperado na geraï¿½ï¿½o do relatï¿½rio 2ï¿½ Via da Conta
 			sessao.setAttribute("idConta", idConta);
 
 			Conta conta = null;
@@ -97,9 +97,7 @@ public class ExibirConsultarContaAction extends GcomAction {
 				
 				Integer fatGrupoId = getFachada().pesquisarFaturamentoGrupoImovel(idImovel);
 				
-				getFachada().registroFichaCompensacao(fatGrupoId, conta.getAnoMesReferenciaConta());
-				
-				// Colocando o objeto conta selecionado na sessão
+				// Colocando o objeto conta selecionado na sessï¿½o
 				sessao.setAttribute("conta", conta);
 				sessao.removeAttribute("contaHistorico");
 				sessao.removeAttribute("colecaoContaCategoriaHistorico");
@@ -114,7 +112,7 @@ public class ExibirConsultarContaAction extends GcomAction {
 
 			Collection colecaoContaCategoria, colecaoContaImpostosDeduzidos;
 
-			// Removendo coleções da sessão
+			// Removendo coleï¿½ï¿½es da sessï¿½o
 			if (idConta != null && !idConta.equalsIgnoreCase("")) {
 
 				sessao.removeAttribute("colecaoContaCategoria");
@@ -124,7 +122,7 @@ public class ExibirConsultarContaAction extends GcomAction {
 			}
 
 			/*
-			 * Categorias (Carregar coleção)
+			 * Categorias (Carregar coleï¿½ï¿½o)
 			 */
 			if (sessao.getAttribute("colecaoContaCategoria") == null) {
 
@@ -174,7 +172,7 @@ public class ExibirConsultarContaAction extends GcomAction {
 
 			String idContaHistorico = httpServletRequest.getParameter("contaID");
 			
-			//vai ser recuperado na geração do relatório 2ª Via da Conta
+			//vai ser recuperado na geraï¿½ï¿½o do relatï¿½rio 2ï¿½ Via da Conta
 			sessao.setAttribute("idContaHistorico",idContaHistorico);
 
 			/*
@@ -200,7 +198,7 @@ public class ExibirConsultarContaAction extends GcomAction {
 				referenciaConta = contaHistorico.getFormatarAnoMesParaMesAno();
 				situacaoAtualConta = contaHistorico.getDebitoCreditoSituacaoAtual().getId();
 				
-				// Colocando o objeto conta selecionado na sessão
+				// Colocando o objeto conta selecionado na sessï¿½o
 				sessao.setAttribute("contaHistorico", contaHistorico);
 	
 				sessao.removeAttribute("conta");
@@ -222,7 +220,7 @@ public class ExibirConsultarContaAction extends GcomAction {
 			}
 
 			/* 
-			 * Categorias (Carregar coleção)
+			 * Categorias (Carregar coleï¿½ï¿½o)
 			 */
 			if (sessao.getAttribute("colecaoContaCategoriaHistorico") == null) {
 			 
@@ -252,7 +250,7 @@ public class ExibirConsultarContaAction extends GcomAction {
 
 		}
 
-		// utilizado para saber se no emitir 2 via de conta, mostrará o código
+		// utilizado para saber se no emitir 2 via de conta, mostrarï¿½ o cï¿½digo
 		// de barras ou naum
 		if (httpServletRequest.getParameter("contaSemCodigoBarras") != null) {
 			httpServletRequest.setAttribute("contaSemCodigoBarras", 1);
@@ -260,15 +258,15 @@ public class ExibirConsultarContaAction extends GcomAction {
 
 		sessao.removeAttribute("contaSemCodigoBarras");
 		
-		// Verifica se deve ser cobrada taxa por emissão de 2 via
+		// Verifica se deve ser cobrada taxa por emissï¿½o de 2 via
 		SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
 		
 		if (sistemaParametro.getValorSegundaVia().equals(new BigDecimal("0.00"))) {
 			httpServletRequest.setAttribute("naoCobrarTaxa", true);
 		}
 			
-		// envia uma flag que será verificado no cliente_resultado_pesquisa.jsp
-		// para saber se irá usar o enviar dados ou o enviar dados parametros
+		// envia uma flag que serï¿½ verificado no cliente_resultado_pesquisa.jsp
+		// para saber se irï¿½ usar o enviar dados ou o enviar dados parametros
 		if (httpServletRequest.getParameter("caminhoRetornoTelaConsulta") != null) {
 			
 			sessao.setAttribute("caminhoRetornoTelaConsultaConta",
@@ -282,19 +280,19 @@ public class ExibirConsultarContaAction extends GcomAction {
 		
 		//adicionado por Vivianne Sousa 18/11/2010 - analista:Adriana Ribeiro
 		if(!situacaoAtualConta.equals(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)){
-			//pesquisar usuários que retificaram a conta 
+			//pesquisar usuï¿½rios que retificaram a conta 
 			Collection colecaoUsuariosContaRetificada =  fachada.pesquisarUsuario(
 					Operacao.OPERACAO_CONTA_RETIFICAR,idImovel,referenciaConta);
 			if(colecaoUsuariosContaRetificada != null && !colecaoUsuariosContaRetificada.isEmpty()){
 				sessao.setAttribute("colecaoUsuariosContaRetificada",colecaoUsuariosContaRetificada); 
 			}
-			//pesquisar usuários que colocaram a conta em revisão 
+			//pesquisar usuï¿½rios que colocaram a conta em revisï¿½o 
 			Collection colecaoUsuariosContaEmRevisao =  fachada.pesquisarUsuario(
 					Operacao.OPERACAO_COLOCAR_CONTA_REVISAO,idImovel,referenciaConta);
 			if(colecaoUsuariosContaEmRevisao != null && !colecaoUsuariosContaEmRevisao.isEmpty()){
 				sessao.setAttribute("colecaoUsuariosContaEmRevisao",colecaoUsuariosContaEmRevisao); 
 			}
-			//pesquisar usuários que cancelaram a conta 
+			//pesquisar usuï¿½rios que cancelaram a conta 
 			Collection colecaoUsuariosContaCancelada =  fachada.pesquisarUsuario(
 					Operacao.OPERACAO_CANCELAR_CONTA,idImovel,referenciaConta);
 			if(colecaoUsuariosContaCancelada != null && !colecaoUsuariosContaCancelada.isEmpty()){
@@ -321,7 +319,7 @@ public class ExibirConsultarContaAction extends GcomAction {
 	}
 	
 	/**
-	 * Verifica se emite 2º via
+	 * Verifica se emite 2ï¿½ via
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 06/07/2007
@@ -332,14 +330,14 @@ public class ExibirConsultarContaAction extends GcomAction {
 	private void verificarEmissao2Via(Integer situacaoAtualConta, Date dtRevisaoConta, ContaMotivoRevisao contaMotivoRevisao, Integer idImovel,
 			HttpServletRequest httpServletRequest) {
 
-		// Caso o imóvel não tenha sido excluído o usuario tem a opção de emitir a 2 via
+		// Caso o imï¿½vel nï¿½o tenha sido excluï¿½do o usuario tem a opï¿½ï¿½o de emitir a 2 via
 		String inscricao = Fachada.getInstancia().pesquisarInscricaoImovel(idImovel);
 		
 		if (inscricao != null) {
 		
-			//Caso a situação atual da conta corresponda a normal, incluirda ou retificada
+			//Caso a situaï¿½ï¿½o atual da conta corresponda a normal, incluirda ou retificada
 			// e a data de revisao esteja nula
-			// o usuário tem a opção de emitir a 2 via
+			// o usuï¿½rio tem a opï¿½ï¿½o de emitir a 2 via
 			if (situacaoAtualConta.equals(DebitoCreditoSituacao.NORMAL) || 
 				situacaoAtualConta.equals(DebitoCreditoSituacao.RETIFICADA) || 
 				situacaoAtualConta.equals(DebitoCreditoSituacao.INCLUIDA)){
