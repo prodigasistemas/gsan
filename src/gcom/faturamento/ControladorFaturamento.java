@@ -16553,20 +16553,20 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", conta.getId().toString());
 			String nossoNumeroSemDV = nossoNumero.toString().substring(0, 20);
 			String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
-			PagadorDTO pagadorDTO = new PagadorDTO(); // Identifica o pagador do boleto.
+			PagadorDTO pagador = new PagadorDTO(); // Identifica o pagador do boleto.
 			if (cliente.getCpf() != null) {
-				pagadorDTO.setTipoInscricao((short) 1);
-				pagadorDTO.setNumeroInscricao(cliente.getCpf());
+				pagador.setTipoInscricao((short) 1);
+				pagador.setNumeroInscricao(cliente.getCpf());
 			} else {
-				pagadorDTO.setTipoInscricao((short) 2);
-				pagadorDTO.setNumeroInscricao(cliente.getCnpj());
+				pagador.setTipoInscricao((short) 2);
+				pagador.setNumeroInscricao(cliente.getCnpj());
 			}
-			pagadorDTO.setNome(cliente.getNome());
-			pagadorDTO.setEndereco(imovel.getEnderecoFormatado());
-			pagadorDTO.setCidade(nomeMunicipio);
-			pagadorDTO.setBairro(imovel.getNomeBairro());
-			pagadorDTO.setUf("PA");
-			pagadorDTO.setCep(imovel.getCodigoCep());
+			pagador.setNome(cliente.getNome());
+			pagador.setEndereco(imovel.getEnderecoFormatado());
+			pagador.setCidade(nomeMunicipio);
+			pagador.setBairro(imovel.getNomeBairro());
+			pagador.setUf("PA");
+			pagador.setCep(imovel.getCodigoCep());
 			
 			FichaCompensacao fichaCompensacaoBanco = new FichaCompensacao(idConv, numeroCarteira,
 					numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
@@ -16576,7 +16576,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			
 			fichaCompensacaoApi = new FichaCompensacaoDTO(idConv, numeroCarteira, 
 					numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, 
-					codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagadorDTO);
+					codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagador);
 		
 		} catch (ErroRepositorioException e) {
 			throw new ActionServletException("erro.erro_registrar_conta");

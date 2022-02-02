@@ -24,7 +24,8 @@
 		<property name="codigoAceite" type="java.lang.String" column="fico_coac" not-null="true" />
 		<property name="codigoTipoTitulo" type="java.lang.Short" column="fico_cott" not-null="true" />
 		<property name="indicadorPermissaoRecebimentoParcial" type="java.lang.String" column="fico_iprp" not-null="true" />
-		<property name="numeroTituloCliente" type="java.lang.String" column="fico_nutc" not-null="true" />		
+		<property name="numeroTituloCliente" type="java.lang.String" column="fico_nutc" not-null="true" />
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fico_tmultimaalteracao"        length="8"/>		
 	 
 		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
 			<column name="imov_id"/>

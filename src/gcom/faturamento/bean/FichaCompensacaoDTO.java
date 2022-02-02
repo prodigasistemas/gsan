@@ -3,7 +3,7 @@ package gcom.faturamento.bean;
 
 public class FichaCompensacaoDTO {
 			
-		private Integer idConv;
+		private Integer numeroConvenio;
 		private Integer numeroCarteira;
 		private Integer numeroVariacaoCarteira;
 		private Short codigoModalidade;
@@ -15,16 +15,16 @@ public class FichaCompensacaoDTO {
 		private String indicadorPermissaoRecebimentoParcial;
 		private String numeroTituloCliente; //nosso numero
 		
-		private PagadorDTO pagadorDTO;
+		private PagadorDTO pagador;
 		
-		public FichaCompensacaoDTO(Integer idConv, Integer numeroCarteira, Integer numeroVariacaoCarteira,
+		public FichaCompensacaoDTO(Integer numeroConvenio, Integer numeroCarteira, Integer numeroVariacaoCarteira,
 			Short codigoModalidade, String dataEmissao, String dataVencimento, Double valorOriginal,
 			String codigoAceite, Short codigoTipoTitulo, String indicadorPermissaoRecebimentoParcial,
-			String numeroTituloCliente, PagadorDTO pagadorDTO) {
+			String numeroTituloCliente, PagadorDTO pagador) {
 			
 			super();
 			
-			this.idConv = idConv;
+			this.numeroConvenio = numeroConvenio;
 			this.numeroCarteira = numeroCarteira;
 			this.numeroVariacaoCarteira = numeroVariacaoCarteira;
 			this.codigoModalidade = codigoModalidade;
@@ -35,6 +35,6 @@ public class FichaCompensacaoDTO {
 			this.codigoTipoTitulo = codigoTipoTitulo;
 			this.indicadorPermissaoRecebimentoParcial = indicadorPermissaoRecebimentoParcial;
 			this.numeroTituloCliente = numeroTituloCliente;
-			this.pagadorDTO = pagadorDTO;
+			this.pagador = pagador;
 		}
 }

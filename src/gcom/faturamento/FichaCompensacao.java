@@ -1,5 +1,7 @@
 package gcom.faturamento;
 
+import java.util.Date;
+
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.imovel.Imovel;
 import gcom.faturamento.conta.Conta;
@@ -21,6 +23,7 @@ public class FichaCompensacao {
 	private Short codigoTipoTitulo;
 	private String indicadorPermissaoRecebimentoParcial;
 	private String numeroTituloCliente; //nosso numero
+	private Date ultimaAlteracao;
 	
 	//Object pagador
 	private Cliente cliente;
@@ -46,6 +49,7 @@ public class FichaCompensacao {
         this.imovel = imovel;
 		this.cliente = cliente;
 		this.conta = conta;
+		this.ultimaAlteracao = new Date();
 	}
 
 
@@ -198,6 +202,12 @@ public class FichaCompensacao {
 		this.imovel = imovel;
 	}
 	
-	
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
+
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 	
 }
