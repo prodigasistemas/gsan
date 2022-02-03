@@ -33460,10 +33460,10 @@ public class Fachada {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public StringBuilder obterNossoNumeroFichaCompensacao(String idDocumentoTipo, String idDocumentoEmitido) {
+	public StringBuilder obterNossoNumeroFichaCompensacao(String idDocumentoTipo, String idDocumentoEmitido, Integer codigoConvenio) {
 		try {
 
-			return this.getControladorFaturamento().obterNossoNumeroFichaCompensacao(idDocumentoTipo, idDocumentoEmitido);
+			return this.getControladorFaturamento().obterNossoNumeroFichaCompensacao(idDocumentoTipo, idDocumentoEmitido, codigoConvenio);
 
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());

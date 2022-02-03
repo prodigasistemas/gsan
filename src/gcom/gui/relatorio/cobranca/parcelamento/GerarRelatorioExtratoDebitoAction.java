@@ -245,7 +245,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 
 	private RelatorioExtratoDebito obterCodigoBarrasFichaCompensacao(Fachada fachada, CobrancaDocumento documentoCobranca, RelatorioExtratoDebito relatorioExtratoDebito) {
 
-		StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(DocumentoTipo.EXTRATO_DE_DEBITO.toString(), documentoCobranca.getId().toString());
+		StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(DocumentoTipo.EXTRATO_DE_DEBITO.toString(), documentoCobranca.getId().toString(), null);
 
 		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
 		relatorioExtratoDebito.addParametro("nossoNumero", nossoNumero.toString());

@@ -52133,16 +52133,16 @@ public class ControladorArrecadacao extends ControladorComum {
 		String mensagemLoja = null;
 		
 		if (guiaPagamento != null) {
-			refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamento.getId().toString()).toString();
+			refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamento.getId().toString(), null).toString();
 			dataVencimento = Util.formatarData(guiaPagamento.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA);
 			mensagemLoja = obterMensagemEntradaParcelamento(guiaPagamento.getId(), parcelamento.getId());
 		} else {
-			refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamentoHistorico.getId().toString()).toString();
+			refTran = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), guiaPagamentoHistorico.getId().toString(), null).toString();
 			dataVencimento = Util.formatarData(guiaPagamentoHistorico.getDataVencimento(), FormatoData.DIA_MES_ANO_SEM_BARRA);
 //			mensagemLoja = obterMensagemEntradaParcelamento(guiaPagamentoHistorico.getId(), idParcelamento);
 		}
 		
-		String idConv = "315828";
+		String idConv = "315828"; 
 		
 		Cliente cliente = (Cliente) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName()));
 		boolean isClientePF = cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().shortValue() == ConstantesSistema.SIM;
