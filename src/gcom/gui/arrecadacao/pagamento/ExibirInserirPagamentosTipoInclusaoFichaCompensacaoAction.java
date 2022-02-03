@@ -147,7 +147,7 @@ public class ExibirInserirPagamentosTipoInclusaoFichaCompensacaoAction extends G
 			if (codigoBarraRemocao == null || codigoBarraRemocao.trim().equalsIgnoreCase("")) {
 				RegistroHelperFichaCompensacao helper = getFachada().distribuirDadosFichaCompensacao(codigoBarra);
 
-				StringBuilder nossoNumero = getFachada().obterNossoNumeroFichaCompensacao(helper.getIdDocumentoTipo(), helper.getIdCobrancaDocumento());
+				StringBuilder nossoNumero = getFachada().obterNossoNumeroFichaCompensacao(helper.getIdDocumentoTipo(), helper.getIdCobrancaDocumento(), null);
 
 				String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
 

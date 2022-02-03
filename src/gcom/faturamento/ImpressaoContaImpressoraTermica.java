@@ -1198,9 +1198,32 @@ public class ImpressaoContaImpressoraTermica {
 			retorno.append(formarLinha(7, 0, 35, 1815, msgConta, 0, 0));
 		}
 	}
+	
+	private String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
+		String cnpjCpf = "";
+
+		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);
+
+		if (colecaoClienteImovel2 != null && !colecaoClienteImovel2.isEmpty()) {
+			ClienteImovel clienteImovelRespConta2 = (ClienteImovel) colecaoClienteImovel2.iterator().next();
+
+			if (clienteImovelRespConta2 != null) {
+				Cliente cliente2 = clienteImovelRespConta2.getCliente();
+
+				if (cliente2.getCnpjFormatado() != null && !cliente2.getCnpjFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCnpjFormatado();
+		 } else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCpfFormatado();
+				}
+
+			}
+		}
+		return cnpjCpf;
+	}
+	
 
 	private void gerarDadosCodigoDeBarras(EmitirContaHelper emitirContaHelper, StringBuilder retorno,
-			Imovel imovelEmitido) throws ControladorException {
+			Imovel imovelEmitido) throws ControladorException, ErroRepositorioException {
 		if (!imovelEmitido.getIndicadorDebitoConta().equals(Imovel.INDICADOR_DEBITO_AUTOMATICO)) {
 			
 			String representacaoNumericaCodBarraFormatada = null;
@@ -1208,7 +1231,9 @@ public class ImpressaoContaImpressoraTermica {
 			// Linha28
 			Date dataValidade = emitirContaHelper.getDataValidadeConta();
 			
-			if(emitirContaHelper.getCodigoConvenio().shortValue() != SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA) {
+			String cpfCnpf = consultarCpfCnpjCliente(imovelEmitido.getId());
+			
+			if(cpfCnpf.equalsIgnoreCase("")) {
 			
 			Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
 			// formata ano mes para mes ano
@@ -1245,11 +1270,12 @@ public class ImpressaoContaImpressoraTermica {
 				 representacaoNumericaCodBarraFormatada = emitirContaHelper.getRepresentacaoNumericaCodBarraFormatada();
 			}
 				
-			}else{
+			}else{ 
 				
 				emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
 
-					StringBuilder nossoNumero = this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString());
+					StringBuilder nossoNumero =
+							this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
 					String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
 					
 						Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);

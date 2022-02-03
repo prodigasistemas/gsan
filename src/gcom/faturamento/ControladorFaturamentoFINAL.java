@@ -33194,8 +33194,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// representação numérica do código de barras
 				// [SB0030 - Obter representação numérica do código de barras da
 				// Ficha de Compensação]
-				StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao(
-						"1", emitirContaHelper.getIdConta().toString());
+				StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
 				String nossoNumeroSemDV = nossoNumero.toString().substring(0,
 						17);
 
@@ -55131,19 +55130,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public StringBuilder obterNossoNumeroFichaCompensacao(
-			String idDocumentoTipo, String idDocumentoEmitido)
+	public StringBuilder obterNossoNumeroFichaCompensacao(String idDocumentoTipo, String idDocumentoEmitido, Integer codigoConvenio)
 			throws ControladorException {
 		StringBuilder nossoNumero = new StringBuilder();
 		
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		
-		if (sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue()) {
-			nossoNumero.append("2860143"); // Convenio do Banco do Brasil
+		if (codigoConvenio != null && idDocumentoTipo.trim().equals(DocumentoTipo.CONTA.toString())) { 
+			nossoNumero.append(codigoConvenio); // Convenio do Banco do Brasil
 		} else {
-			// é o numero do convênio fornecido pelo Banco
-			// número fixo e não pode ser alterado
-			nossoNumero.append("2502792");
+			nossoNumero.append("2860143"); // Convenio do Banco do Brasil padrão
 		}
 
 		// id do documento tipo de acordo com o tipo de documento q esta sendo
@@ -57866,8 +57862,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// de barras
 							// da Ficha de Compensação]
 							StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao(
-									"1", emitirContaHelper.getIdConta()
-											.toString());
+									"1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
 							String nossoNumeroSemDV = nossoNumero.toString()
 									.substring(0, 17);
 

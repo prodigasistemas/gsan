@@ -4046,7 +4046,7 @@ public class ControladorContratoParcelamentoSEJB implements SessionBean {
 						// [SB0004 - Obter Representação numérica do Nosso Número da Ficha de Compensação]
 						StringBuilder nossoNumero = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(
 								DocumentoTipo.EXTRATO_CONTRATO_PARCELAMENTO.toString(),
-								prestacao.getIdParcela().toString()) ;
+								prestacao.getIdParcela().toString(), null) ;
 						
 						String nossoNumeroSemDV = nossoNumero.toString().substring(0,nossoNumero.length() - 2);
 

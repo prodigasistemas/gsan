@@ -2760,7 +2760,7 @@ public class ControladorCobranca extends ControladorComum {
 				// [SB0004 – Obter Representação numérica do Nosso Número da
 				// Ficha de Compensação]
 				StringBuilder nossoNumero = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(
-						cobrancaDocumento.getDocumentoTipo().getId().toString(), cobrancaDocumento.getId().toString());
+						cobrancaDocumento.getDocumentoTipo().getId().toString(), cobrancaDocumento.getId().toString(), null);
 
 				String sacadoParte01;
 				if (cobrancaDocumento.getImovel().getNomeImovel() != null) {
@@ -59558,7 +59558,7 @@ public class ControladorCobranca extends ControladorComum {
 				// [SB0004 – Obter Representação numérica do Nosso Número da
 				// Ficha de Compensação]
 				StringBuilder nossoNumero = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(
-						cobrancaDocumento.getDocumentoTipo().getId().toString(), cobrancaDocumento.getId().toString());
+						cobrancaDocumento.getDocumentoTipo().getId().toString(), cobrancaDocumento.getId().toString(), null);
 
 				String sacadoParte01;
 				if (cobrancaDocumento.getImovel().getNomeImovel() != null) {
@@ -60228,7 +60228,7 @@ public class ControladorCobranca extends ControladorComum {
 		// [SB0005 – Obter Representação numérica do Nosso Número da Ficha de
 		// Compensação]
 		StringBuilder nossoNumero = Fachada.getInstancia().obterNossoNumeroFichaCompensacao(
-				cobrancaDocumento.getDocumentoTipo().getId().toString(), cobrancaDocumento.getId().toString());
+				cobrancaDocumento.getDocumentoTipo().getId().toString(), cobrancaDocumento.getId().toString(), null);
 		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
 
 		// [SB0006 – Obter Fator de Vencimento]

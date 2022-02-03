@@ -492,12 +492,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt = preencherMensagemAnormalidadeConsumo(contaTxt, mensagemContaAnormalidade);
 								contaTxt = preencherQuantidadeValorDebitos(sistemaParametro, emitirContaHelper, contaTxt);
 								
-								//implementar verificação correta para fluxo.
-								if(emitirContaHelper.getCodigoConvenio().shortValue() != SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA) {
-									contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
-								}else {
-									contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
-								}
+								//validação para trazer cfpCnpj caso exista. Paulo Almeida - 01.02.2022
+								String cpfCnpf = consultarCpfCnpjCliente(emitirContaHelper.getIdImovel());
+								
+								if(cpfCnpf.equalsIgnoreCase("")) {
+										contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
+									}else {
+											contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
+									}
 								contaTxt.append(Util.completaString(cont + "", 8));
 
 								String[] qualidade = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper, imovelEmitido.getQuadraFace().getId());
@@ -1014,7 +1016,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		emitirContaHelper.setValorConta(valorConta);
 
-		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString());
+		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
 		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
 
 			Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
@@ -1600,6 +1602,32 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 		return contaTxt;
 	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	private String consultarCpfCnpjCliente(Integer idImovel)
+			throws ErroRepositorioException {
+		String cnpjCpf = "";
+
+		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);
+
+		if (colecaoClienteImovel2 != null && !colecaoClienteImovel2.isEmpty()) {
+			ClienteImovel clienteImovelRespConta2 = (ClienteImovel) colecaoClienteImovel2.iterator().next();
+
+			if (clienteImovelRespConta2 != null) {
+				Cliente cliente2 = clienteImovelRespConta2.getCliente();
+
+				if (cliente2.getCnpjFormatado() != null && !cliente2.getCnpjFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCnpjFormatado();
+		 } else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCpfFormatado();
+				}
+
+			}
+		}
+		
+		return cnpjCpf;
+	}
 
 	@SuppressWarnings("rawtypes")
 	private StringBuilder preencherCpfCnpjCliente(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
@@ -1617,7 +1645,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 				if (cliente2.getCnpjFormatado() != null && !cliente2.getCnpjFormatado().equalsIgnoreCase("")) {
 					cnpjCpf = cliente2.getCnpjFormatado();
-				} else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
+		 } else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
 					cnpjCpf = cliente2.getCpfFormatado();
 				}
 
@@ -3322,14 +3350,24 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			helper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(helper, 1)));
 			helper = preencherDadosQualidadeAgua2Via(helper);
 			
-			//implementar verificação correta para fluxo.
-			if(helper.getCodigoConvenio().shortValue() == SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COSANPA) {
-				helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
-			}else {
-				helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta, helper.getCodigoConvenio());
+			
+			//validação para trazer cfpCnpj caso exista. Paulo Almeida - 01.02.2022
+			String cpfCnpj = null;
+			
+			try {
+				cpfCnpj = consultarCpfCnpjCliente(helper.getIdImovel());
+				
+			} catch (Exception e) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", e);
 			}
-					
-
+			
+				if(!cpfCnpj.equalsIgnoreCase("") && cpfCnpj != null) {
+					helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta);
+				}else { 
+					helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
+				}
+				
 			Integer esferaPoder = null;
 			try {
 				esferaPoder = repositorioFaturamento.pesquisarEsferaPoderImovelConta(id);
@@ -3555,7 +3593,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	}
 	
 	
-	private EmitirContaHelper preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(EmitirContaHelper emitirContaHelper, BigDecimal valorConta, Integer codigoConvenio) throws ControladorException {
+	private EmitirContaHelper preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(EmitirContaHelper emitirContaHelper, BigDecimal valorConta) throws ControladorException {
 
 			String representacaoNumericaCodBarra = "";
 		
@@ -3564,7 +3602,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 
-			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString());
+			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
 			String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
 			
 				Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
@@ -3983,7 +4021,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									// possíveis no swagger.
 		String indicadorPermissaoRecebimentoParcial = "N"; // Código para identificação da autorização de pagamento
 															// parcial do boleto. "S" ou "N"
-		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", conta.getId().toString());
+		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", conta.getId().toString(), idConv);
 		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
 		String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
 		PagadorDTO pagadorDTO = new PagadorDTO(); // Identifica o pagador do boleto.
