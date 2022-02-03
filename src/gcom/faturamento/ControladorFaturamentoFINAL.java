@@ -48099,14 +48099,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		StringBuilder nossoNumero = new StringBuilder();
 
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
-
-		if (codigoConvenio != null && idDocumentoTipo.trim().equals(DocumentoTipo.CONTA.toString())) {
-			nossoNumero.append(codigoConvenio); // Convenio do Banco do Brasil
-
-		} else if (sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue()
-				&& idDocumentoTipo.trim().equals(DocumentoTipo.GUIA_PAGAMENTO.toString())) {
-			nossoNumero.append("2860143"); // Convenio do Banco do Brasil
-											// padrão
+		
+		if (codigoConvenio != null && idDocumentoTipo.trim().equals(DocumentoTipo.CONTA.toString())) { 
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, codigoConvenio)); // Convenio do Banco do Brasil
+			
+		}else if(sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue() &&
+				idDocumentoTipo.trim().equals(DocumentoTipo.GUIA_PAGAMENTO.toString())){
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, "2860143")); // Convenio do Banco do Brasil padrao
 		} else {
 			// o numero do convenio fornecido pelo Banco
 			// numero fixo e nao pode ser alterado
