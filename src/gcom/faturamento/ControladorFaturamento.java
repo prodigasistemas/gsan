@@ -867,7 +867,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 continue;
 	        					 }
 	        				 } else {
+	        					 Imovel imovel = contaAtualizacao.getImovel();
+	        					 Integer idImovel = imovel.getId();
+	        					 String cpfCnpf = consultarCpfCnpjCliente(idImovel);								
+								if(!cpfCnpf.equalsIgnoreCase("")) {
 	        					 registrarFichaCompensacao(contaAtualizacao.getId());
+								}
 	        				 }
 	        				 
 	        				 boolean contaNaoImpressa = false;
@@ -16550,7 +16555,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			// poss�veis no swagger.
 			String indicadorPermissaoRecebimentoParcial = "N"; // C�digo para identifica��o da autoriza��o de pagamento
 			// parcial do boleto. "S" ou "N"
-			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", conta.getId().toString(), idConv);
+			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", conta.getId().toString());
 			String nossoNumeroSemDV = nossoNumero.toString().substring(0, 20);
 			String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
 			PagadorDTO pagador = new PagadorDTO(); // Identifica o pagador do boleto.
@@ -16585,5 +16590,28 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				
 		return fichaCompensacaoApi;
 	}
+	
+	private String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
+		String cnpjCpf = "";
+
+		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);
+
+		if (colecaoClienteImovel2 != null && !colecaoClienteImovel2.isEmpty()) {
+			ClienteImovel clienteImovelRespConta2 = (ClienteImovel) colecaoClienteImovel2.iterator().next();
+
+			if (clienteImovelRespConta2 != null) {
+				Cliente cliente2 = clienteImovelRespConta2.getCliente();
+
+				if (cliente2.getCnpjFormatado() != null && !cliente2.getCnpjFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCnpjFormatado();
+		 } else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCpfFormatado();
+				}
+
+			}
+		}
+		return cnpjCpf;
+	}
+
 
 }
