@@ -1601,6 +1601,31 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	}
 
 	@SuppressWarnings("rawtypes")
+	private String consultarCpfCnpjCliente(Integer idImovel)
+			throws ErroRepositorioException {
+		String cnpjCpf = "";
+
+		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);
+
+		if (colecaoClienteImovel2 != null && !colecaoClienteImovel2.isEmpty()) {
+			ClienteImovel clienteImovelRespConta2 = (ClienteImovel) colecaoClienteImovel2.iterator().next();
+
+			if (clienteImovelRespConta2 != null) {
+				Cliente cliente2 = clienteImovelRespConta2.getCliente();
+
+				if (cliente2.getCnpjFormatado() != null && !cliente2.getCnpjFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCnpjFormatado();
+		 } else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCpfFormatado();
+				}
+
+			}
+		}
+		
+		return cnpjCpf;
+	}
+
+	@SuppressWarnings("rawtypes")
 	private StringBuilder preencherCpfCnpjCliente(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
 			throws ErroRepositorioException {
 		String cnpjCpf = "";
@@ -3126,7 +3151,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return imovel;
 	}
 
-	public Collection<EmitirContaHelper> emitir2ViaContas(Collection<Integer> idsContaEP, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) throws ControladorException {
+	public Collection<EmitirContaHelper> emitir2ViaContas(Collection<Integer> idsContaEP, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) throws ControladorException, ErroRepositorioException {
 
 		Collection<EmitirContaHelper> colecaoHelper = new ArrayList<EmitirContaHelper>();
 		
@@ -3436,7 +3461,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			helper.setDataLeituraAtualInformada(dataLeituraAtualInformada);
 			
 			try {
-				registrarFichaCompensacao(id);
+				String cpfCnpf = consultarCpfCnpjCliente(helper.getIdImovel());
+				if (!cpfCnpf.equalsIgnoreCase("")) {
+					registrarFichaCompensacao(id);
+				}
 			} catch (ControladorException e) {
 				throw new ActionServletException("atencao.erro_registrar_conta");
 			} 
