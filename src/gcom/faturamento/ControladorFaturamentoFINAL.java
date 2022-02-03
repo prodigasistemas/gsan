@@ -398,7 +398,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Iterator colecaoConsumoMinimoParametroIterator = colecaoConsumoMinimoParametro
 				.iterator();
 
-		// ------------ REGISTRAR TRANSA«√O----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_CONSUMO_PARAMETRO_INFORMAR,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -409,7 +409,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
 		operacaoEfetuada.setOperacao(operacao);
-		// ------------ REGISTRAR TRANSA«√O----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 
 		if (!colecaoConsumoMinimoParametroBase.isEmpty()) {
 			Iterator colecaoConsumoMinimoParametroBaseIterator = colecaoConsumoMinimoParametroBase
@@ -517,9 +517,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			while (iteratorRotaRemover.hasNext()) {
 				faturamentoAtivCronRota = (FaturamentoAtivCronRota) iteratorRotaRemover
 						.next();
-				// ------------ REGISTRAR TRANSA«√O ----------------
+				// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 				registradorOperacao.registrarOperacao(faturamentoAtivCronRota);
-				// ------------ REGISTRAR TRANSA«√O ----------------
+				// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 				getControladorUtil().remover(faturamentoAtivCronRota);
 			}
 		} catch (ControladorException e) {
@@ -528,13 +528,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MÈtodo para auxiliar a inserÁ„o e atualizaÁ„o de faturamento cronograma
-	 * ele È respons·vel por carregar uma coleÁ„o com as rotas do grupo remove
+	 * M√©todo para auxiliar a inser√ß√£o e atualiza√ß√£o de faturamento cronograma
+	 * ele √© respons√°vel por carregar uma cole√ß√£o com as rotas do grupo remove
 	 * as rotas da tabela FATURAMENTO_ATIV_CRON_ROTA e depois inseri as rotas
 	 * habilitadas para cada atividade do grupo
 	 * 
-	 * Para carregar a coleÁ„o de rotas habilitadas para a atividade È chamdo o
-	 * mÈtodo VerificarSituacaoAtividadeRota() que retorna a coleÁ„o desejada.
+	 * Para carregar a cole√ß√£o de rotas habilitadas para a atividade √© chamdo o
+	 * m√©todo VerificarSituacaoAtividadeRota() que retorna a cole√ß√£o desejada.
 	 * 
 	 * @throws ControladorException
 	 */
@@ -555,7 +555,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		faturamentoGrupo = (FaturamentoGrupo) Util
 				.retonarObjetoDeColecao(colecaoFaturamentoGrupo);
 
-		// carrega todas as rotas do grupo em uma coleÁ„o
+		// carrega todas as rotas do grupo em uma cole√ß√£o
 		FiltroRota filtroRota = new FiltroRota();
 		filtroRota.setConsultaSemLimites(true);
 		filtroRota.adicionarParametro(new ParametroSimples(
@@ -563,7 +563,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoRotasFaturamentoGrupo = getControladorUtil()
 				.pesquisar(filtroRota, Rota.class.getName());
 
-		// intera a coleÁ„o de faturamentoAtividadeCronogramas para achar as
+		// intera a cole√ß√£o de faturamentoAtividadeCronogramas para achar as
 		// rotas habilitadas para cada atividade
 		Iterator iteratorAtividades = faturamentoAtividadeCronogramas
 				.iterator();
@@ -639,12 +639,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.setDataContaVencimento(dataVencimentoGrupo);
 						}
 
-						/** fim alteraÁ„o */
+						/** fim altera√ß√£o */
 
-						// ------------ REGISTRAR TRANSA«√O ----------------
+						// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 						registradorOperacao
 								.registrarOperacao(faturamentoAtivCronRotaInserir);
-						// ------------ REGISTRAR TRANSA«√O ----------------
+						// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 						
 						if (inserir) {
 							getControladorUtil().inserir(faturamentoAtivCronRotaInserir);
@@ -686,13 +686,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Metodo para validar: Caso usu·rio informe uma data prevista, de qualquer
-	 * atividade, com o mÍs/ano maior que o mÍs ]/ano do cronograma+1, exibir a
-	 * mensagem: "A data prevista da atividade n„ pode ser superior a <<mÍs/ano
+	 * Metodo para validar: Caso usu√°rio informe uma data prevista, de qualquer
+	 * atividade, com o m√™s/ano maior que o m√™s ]/ano do cronograma+1, exibir a
+	 * mensagem: "A data prevista da atividade n√£ pode ser superior a <<m√™s/ano
 	 * do cronograma+1>>"
 	 * 
 	 * @param faturamentoAtividadeCronogramas
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @param mesAno
 	 * @throws ControladorException
 	 */
@@ -735,33 +735,33 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * O mÈtodo recebe uma coleÁ„o de faturamento atividades acha as que tem
+	 * O m√©todo recebe uma cole√ß√£o de faturamento atividades acha as que tem
 	 * atividade predecessora e compara a data desta com a data da sua
 	 * predecessora.
 	 * 
 	 * @param faturamentoAtividadeCronogramas
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @param faturamentoGrupoCronogramaMensal
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @throws ControladorException
 	 */
 	public void validarFaturamentoCronograma(
 			Collection faturamentoAtividadeCronogramas)
 			throws ControladorException {
-		// ----------Parte de validaÁ„o de datas em seguÍncia -----------//
+		// ----------Parte de valida√ß√£o de datas em segu√™ncia -----------//
 		Iterator iteratorFaturamentoAtividadeSequencia = faturamentoAtividadeCronogramas
 				.iterator();
 		Collection colecaoDatasPreenchidas = new ArrayList();
 
 		FaturamentoAtividadeCronograma faturamentoAtividadeCronogramaSegundo = null;
 		FaturamentoAtividadeCronograma faturamentoAtividadeCronogramaPrimeiro = null;
-		// monta uma coleÁ„o com as datas obrigatorias e/ou n„o
+		// monta uma cole√ß√£o com as datas obrigatorias e/ou n√£o
 		// obrigatoria(essas quando preenchidas)
 		while (iteratorFaturamentoAtividadeSequencia.hasNext()) {
 			faturamentoAtividadeCronogramaPrimeiro = (FaturamentoAtividadeCronograma) iteratorFaturamentoAtividadeSequencia
 					.next();
-			// teste para saber se atividade È obrigatoria, se n„o for, se ela
-			// est· preenchida
+			// teste para saber se atividade √© obrigatoria, se n√£o for, se ela
+			// est√° preenchida
 			if (faturamentoAtividadeCronogramaPrimeiro
 					.getFaturamentoAtividade()
 					.getIndicadorObrigatoriedadeAtividade()
@@ -774,7 +774,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 		}
-		// Aqui comeÁa o teste se as datas est„o em seguencia
+		// Aqui come√ßa o teste se as datas est√£o em seguencia
 		Iterator iteratorTesteSeguenciaDatas = colecaoDatasPreenchidas
 				.iterator();
 
@@ -792,7 +792,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			faturamentoAtividadeCronogramaPrimeiro = faturamentoAtividadeCronogramaSegundo;
 		}
 
-		// -----------Parte de validaÁ„o de
+		// -----------Parte de valida√ß√£o de
 		// predecessora--------------------------//
 		// iterator principal em qual procuro se a atividade tem predecessora
 		Iterator iteratorFaturamentoAtividadeCronogramaPrincipal = faturamentoAtividadeCronogramas
@@ -810,15 +810,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.getFaturamentoAtividadePrecedente() != null) {
 				Iterator iteratorFaturamentoAtividadeCronogramaTestado = faturamentoAtividadeCronogramas
 						.iterator();
-				// roda a coleÁ„o a procura da predecessora da principal
+				// roda a cole√ß√£o a procura da predecessora da principal
 				while (iteratorFaturamentoAtividadeCronogramaTestado.hasNext()) {
 					faturamentoAtividadeCronogramaTeste = (FaturamentoAtividadeCronograma) iteratorFaturamentoAtividadeCronogramaTestado
 							.next();
-					// testa se o objeto corrente teste È o predecessor da
+					// testa se o objeto corrente teste √© o predecessor da
 					// principal
-					// caso seja testa se a atividade predecessora È inferior ou
+					// caso seja testa se a atividade predecessora √© inferior ou
 					// igual a principal
-					// se n„o for causa uma exceÁ„o
+					// se n√£o for causa uma exce√ß√£o
 					if (faturamentoAtividadeCronogramaPrincipal
 							.getFaturamentoAtividade()
 							.getFaturamentoAtividadePrecedente()
@@ -850,10 +850,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * < <DescriÁ„o do mÈtodo>>
+	 * < <Descri√ß√£o do m√©todo>>
 	 * 
-	 * @param atividadeCronogramas DescriÁ„o do par‚metro
-	 * @param cronogramaMensal DescriÁ„o do par‚metro
+	 * @param atividadeCronogramas Descri√ß√£o do par√¢metro
+	 * @param cronogramaMensal Descri√ß√£o do par√¢metro
 	 * @throws ControladorException
 	 */
 	public void inserirFaturamentoCronograma(
@@ -879,9 +879,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			atividadeCronograma.setUsuario(usuarioLogado);
 			atividadeCronograma.setUltimaAlteracao(new Date());
 
-			// ------------ REGISTRAR TRANSA«√O ----------------
+			// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 			registradorOperacao.registrarOperacao(atividadeCronograma);
-			// ------------ REGISTRAR TRANSA«√O ----------------
+			// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 			
 			if (atividadeCronograma.getId() != null && !atividadeCronograma.getId().toString().trim().equalsIgnoreCase("")) {				
 				getControladorUtil().atualizar(atividadeCronograma);
@@ -922,14 +922,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throws ControladorException {
 		Integer id = null;
 
-		// ------------ REGISTRAR TRANSA«√O ----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_ATUALIZAR_CRONOGRAMA_FATURAMENTO,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
 						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		// ------------ REGISTRAR TRANSA«√O ----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------------------
 
-		// Procura o ˙ltimo registro, do grupo informado, salvo na tabela.
+		// Procura o √∫ltimo registro, do grupo informado, salvo na tabela.
 		/* int idMaximo = */getControladorUtil().valorMaximo(
 				FaturamentoGrupoCronogramaMensal.class,
 				FiltroFaturamentoGrupoCronogramaMensal.ID,
@@ -971,7 +971,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 		// faz o controle de concorrencia
 
-		// Pega o ˙ltimo objeto FaturamentoGrupo para comparaÁ„o de datas.
+		// Pega o √∫ltimo objeto FaturamentoGrupo para compara√ß√£o de datas.
 		FiltroFaturamentoGrupo filtroFaturamentoGrupo = new FiltroFaturamentoGrupo();
 
 		filtroFaturamentoGrupo.adicionarParametro(new ParametroSimples(
@@ -985,7 +985,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			FaturamentoGrupo faturamentoGrupoNaBase = (FaturamentoGrupo) faturamentoGrupos
 					.iterator().next();
 
-			// Inicio teste de datas para validaÁ„o da inserÁao
+			// Inicio teste de datas para valida√ß√£o da inser√ßao
 			if (faturamentoGrupoNaBase.getAnoMesReferencia().compareTo(
 					faturamentoGrupoCronogramaMensal.getAnoMesReferencia()) == 1) {
 				// || faturamentoGrupoNaBase.getAnoMesReferencia().compareTo(
@@ -1004,9 +1004,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		faturamentoGrupoCronogramaMensal.setUsuario(usuarioLogado);
 		faturamentoGrupoCronogramaMensal.setUltimaAlteracao(new Date());
 
-		// ------------ REGISTRAR TRANSA«√O ----------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 		registradorOperacao.registrarOperacao(faturamentoGrupoCronogramaMensal);
-		// ------------ REGISTRAR TRANSA«√O ----------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
 		if (faturamentoGrupoCronogramaMensal.getId() == null) {
 			// Grave o faturamentoGrupoCronogramaMensal na base e retorna o
@@ -1028,10 +1028,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * < <DescriÁ„o do mÈtodo>>
+	 * < <Descri√ß√£o do m√©todo>>
 	 * 
 	 * @param localidade
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @throws ControladorException
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -1039,9 +1039,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			FaturamentoAtividadeCronograma faturamentoAtividadeCronograma)
 			throws ControladorException {
 
-		// -----VALIDA«√O DOS TIMESTAMP PARA ATUALIZA«√O DE CADASTRO
+		// -----VALIDA√á√ÉO DOS TIMESTAMP PARA ATUALIZA√á√ÉO DE CADASTRO
 
-		// ValidaÁ„o para Setor Comercial
+		// Valida√ß√£o para Setor Comercial
 		if (faturamentoAtividadeCronograma != null) {
 			// Cria o filtro
 			FiltroFaturamentoAtividadeCronograma filtroFaturamentoAtividadeCronograma = new FiltroFaturamentoAtividadeCronograma();
@@ -1055,7 +1055,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							FiltroFaturamentoAtividadeCronograma.ID,
 							faturamentoAtividadeCronograma.getId()));
 
-			// Pesquisa a coleÁ„o de acordo com o filtro passado
+			// Pesquisa a cole√ß√£o de acordo com o filtro passado
 			Collection faturamentoAtividadeCronogramas = getControladorUtil()
 					.pesquisar(filtroFaturamentoAtividadeCronograma,
 							nomePacoteObjeto);
@@ -1063,7 +1063,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			FaturamentoAtividadeCronograma faturamentoAtividadeCronogramaNaBase = (FaturamentoAtividadeCronograma) Util
 					.retonarObjetoDeColecao(faturamentoAtividadeCronogramas);
 
-			// Verifica se a data de alteraÁ„o do objeto gravado na base È
+			// Verifica se a data de altera√ß√£o do objeto gravado na base √©
 			// maior que a na instancia
 			if ((faturamentoAtividadeCronogramaNaBase.getUltimaAlteracao()
 					.after(faturamentoAtividadeCronograma.getUltimaAlteracao()))) {
@@ -1115,7 +1115,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			 * FATURAMENTO_ATIVIDADE_CRONOGRAMA para FTAT_ID=Id da Atividade e
 			 * FTCM_ID=FTCM_ID da tabela FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL
 			 * para FTGR_ID=Id do Grupo de Faturamento e
-			 * FTCM_AMREFERENCIA=ReferÍncia
+			 * FTCM_AMREFERENCIA=Refer√™ncia
 			 */
 
 			Iterator colecaoFaturamentoAtividadeCronogramaIterator = colecaoFaturamentoAtividadeCronograma
@@ -1143,12 +1143,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * < <DescriÁ„o do mÈtodo>>
+	 * < <Descri√ß√£o do m√©todo>>
 	 * 
 	 * @param faturamentoGrupoCronogramaMensal
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @param faturamentoAtividadeCronogramas
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @throws ControladorException
 	 */
 	public void inserirFaturamentoGrupoCronogramaMensal(
@@ -1158,14 +1158,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		// Integer id = null;
 
-		// ------------ REGISTRAR TRANSA«√O ----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_INSERIR_CRONOGRAMA_FATURAMENTO,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
 						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		// ------------ REGISTRAR TRANSA«√O ----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------------------
 
-		// Procura o ˙ltimo registro, do grupo informado, salvo na tabela.
+		// Procura o √∫ltimo registro, do grupo informado, salvo na tabela.
 		/* int idMaximo = */getControladorUtil().valorMaximo(
 				FaturamentoGrupoCronogramaMensal.class,
 				FiltroFaturamentoGrupoCronogramaMensal.ID,
@@ -1193,7 +1193,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						FaturamentoGrupoCronogramaMensal.class.getName());
 
 		if (faturamentoGrupoCronogramaMensais.isEmpty()) {
-			// Pega o ˙ltimo objeto FaturamentoGrupo para comparaÁ„o de
+			// Pega o √∫ltimo objeto FaturamentoGrupo para compara√ß√£o de
 			// datas.
 			FiltroFaturamentoGrupo filtroFaturamentoGrupo = new FiltroFaturamentoGrupo();
 
@@ -1210,7 +1210,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				FaturamentoGrupo faturamentoGrupoNaBase = (FaturamentoGrupo) faturamentoGrupos
 						.iterator().next();
 
-				// Inicio teste de datas para validaÁ„o da inserÁao
+				// Inicio teste de datas para valida√ß√£o da inser√ßao
 				if (faturamentoGrupoNaBase.getAnoMesReferencia().compareTo(
 						faturamentoGrupoCronogramaMensal.getAnoMesReferencia()) == 1) {
 					// criar um erro de data (data informada tem q ser
@@ -1229,10 +1229,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// id
 			Integer faturamentoGrupoCronogramaMensalid = null;
 
-			// ------------ REGISTRAR TRANSA«√O ----------------
+			// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 			registradorOperacao
 					.registrarOperacao(faturamentoGrupoCronogramaMensal);
-			// ------------ REGISTRAR TRANSA«√O ----------------
+			// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
 			if (faturamentoGrupoCronogramaMensal.getId() != null
 					&& !faturamentoGrupoCronogramaMensal.getId().toString()
@@ -1361,7 +1361,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 
 				
-				// ATUALIZA«√O DO SEQUENCIAL DE ROTA, BASEADO NA TABELA ROTA_ATUALIZACAO_SEQUENCIAL
+				// ATUALIZA√á√ÉO DO SEQUENCIAL DE ROTA, BASEADO NA TABELA ROTA_ATUALIZACAO_SEQUENCIAL
 				Integer idRota = ((FaturamentoAtivCronRota) Util
 						.retonarObjetoDeColecao(colecaoFaturamentoAtividadeCronogramaRota))
 						.getRota().getId();
@@ -1469,7 +1469,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] - Faturar Grupo de Faturamento
 	 * 
-	 * Determina o tipo de conta que ser· associado na impress„o da conta.
+	 * Determina o tipo de conta que ser√° associado na impress√£o da conta.
 	 * 
 	 * [SB0006 - ]
 	 * 
@@ -1502,7 +1502,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			contaTipo.setId(ContaTipo.CONTA_RETIDA_POR_BC);
 		}
 
-		// Comentado por Raphael Rossiter em 01/03/2007 (Analista Respons·vel:
+		// Comentado por Raphael Rossiter em 01/03/2007 (Analista Respons√°vel:
 		// Aryed)
 
 		/*
@@ -1511,7 +1511,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		 * contaTipo.setId(ContaTipo.CONTA_CLIENTE_RESPONSAVEL); }
 		 */
 
-		// Colocado por Raphael Rossiter em 01/03/2007 (Analista Respons·vel:
+		// Colocado por Raphael Rossiter em 01/03/2007 (Analista Respons√°vel:
 		// Aryed)
 		else if (idClienteResponsavel != null
 				&& imovel.getIndicadorDebitoConta().shortValue() == ConstantesSistema.NAO
@@ -1527,7 +1527,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			contaTipo.setId(ContaTipo.CONTA_DEBITO_AUTO_COM_CLIENTE_RESP);
 		}
 
-		// Colocado por Raphael Rossiter em 01/03/2007 (Analista Respons·vel:
+		// Colocado por Raphael Rossiter em 01/03/2007 (Analista Respons√°vel:
 		// Aryed)
 		else if (idClienteResponsavel == null
 				&& imovel.getIndicadorDebitoConta().shortValue() == ConstantesSistema.SIM
@@ -1752,7 +1752,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Integer anoMesFaturamento) throws ControladorException {
 		boolean faturar = true;
 
-		// Verificar se È para faturar pela situaÁ„o especial de faturamento
+		// Verificar se √© para faturar pela situa√ß√£o especial de faturamento
 		FiltroFaturamentoSituacaoHistorico filtroFaturamentoSituacaoHistorico = new FiltroFaturamentoSituacaoHistorico();
 		filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroSimples(FiltroFaturamentoSituacaoHistorico.ID_IMOVEL, imovel.getId()));
 		filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroNulo(FiltroFaturamentoSituacaoHistorico.ANO_MES_FATURAMENTO_RETIRADA));
@@ -1779,7 +1779,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] - Faturar Grupo de Faturamento
 	 * 
-	 * [SB0001 - Determinar Faturamento para o ImÛvel]
+	 * [SB0001 - Determinar Faturamento para o Im√≥vel]
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 04/06/2008
@@ -1800,9 +1800,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		ligacaoTipoAgua.setId(LigacaoTipo.LIGACAO_AGUA);
 
 		/*
-		 * Selecionar os imÛveis que far„o parte do faturamento de acordo com o
+		 * Selecionar os im√≥veis que far√£o parte do faturamento de acordo com o
 		 * INDICADOR_FATURAMENTO_SITUACAO e CONSUMO_MINIMO_FATURAMENTO que se
-		 * encontra na situaÁ„o da ligaÁ„o e ·gua e esgoto do imÛvel.
+		 * encontra na situa√ß√£o da liga√ß√£o e √°gua e esgoto do im√≥vel.
 		 */
 		if (ligacaoAguaSituacao.getIndicadorFaturamentoSituacao().equals(
 				LigacaoAguaSituacao.FATURAMENTO_ATIVO)
@@ -1814,9 +1814,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& ligacaoAguaSituacao.getConsumoMinimoFaturamento().intValue() > 0) {
 
 			/*
-			 * Para faturar: O valor do consumo mÌnimo da ligaÁ„o tem que ser
-			 * menor ou igual ao valor do consumo do imÛvel e o tipo de consumo
-			 * esteja associado a situaÁ„o da ligaÁ„o do imÛvel.
+			 * Para faturar: O valor do consumo m√≠nimo da liga√ß√£o tem que ser
+			 * menor ou igual ao valor do consumo do im√≥vel e o tipo de consumo
+			 * esteja associado a situa√ß√£o da liga√ß√£o do im√≥vel.
 			 */
 			if (consumoAgua != null
 					&& ligacaoAguaSituacao.getConsumoMinimoFaturamento()
@@ -1835,7 +1835,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				} else {
 
-					// Est· situaÁ„o ir· acontecer apenas para as
+					// Est√° situa√ß√£o ir√° acontecer apenas para as
 					// funcionalidades do online
 					permiteFaturar = true;
 				}
@@ -1848,7 +1848,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] - Faturar Grupo de Faturamento
 	 * 
-	 * [SB0001 - Determinar Faturamento para o ImÛvel]
+	 * [SB0001 - Determinar Faturamento para o Im√≥vel]
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 04/06/2008
@@ -1898,7 +1898,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					} else {
 
-						// Est· situaÁ„o ir· acontecer apenas para as
+						// Est√° situa√ß√£o ir√° acontecer apenas para as
 						// funcionalidades do online
 						permiteFaturar = true;
 					}
@@ -1912,7 +1912,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] - Faturar Grupo de Faturamento
 	 * 
-	 * [SB0001 - Determinar Faturamento para o ImÛvel]
+	 * [SB0001 - Determinar Faturamento para o Im√≥vel]
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 04/06/2008
@@ -1936,9 +1936,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		ligacaoTipoEsgoto.setId(LigacaoTipo.LIGACAO_ESGOTO);
 
 		/*
-		 * Selecionar os imÛveis que far„o parte do faturamento de acordo com o
+		 * Selecionar os im√≥veis que far√£o parte do faturamento de acordo com o
 		 * INDICADOR_FATURAMENTO_SITUACAO e CONSUMO_MINIMO_FATURAMENTO que se
-		 * encontra na situaÁ„o da ligaÁ„o e ·gua e esgoto do imÛvel.
+		 * encontra na situa√ß√£o da liga√ß√£o e √°gua e esgoto do im√≥vel.
 		 */
 		if (imovel.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao()
 				.equals(LigacaoAguaSituacao.FATURAMENTO_ATIVO)
@@ -1953,7 +1953,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.getConsumoMinimoFaturamento().intValue() > 0) {
 
 			/*
-			 * CONSUMO_HISTORICO para o imÛvel no anoMesFaturamento e com
+			 * CONSUMO_HISTORICO para o im√≥vel no anoMesFaturamento e com
 			 * ligacaoTipo igual a LIGACAO_AGUA: Inicializar o
 			 * indicadorFaturamentoAgua = 1 e o consumoFaturadoMesAgua = 0
 			 */
@@ -1965,9 +1965,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							ligacaoTipoAgua, anoMesFaturamento);
 
 			/*
-			 * Para faturar: O valor do consumo mÌnimo da ligaÁ„o tem que ser
-			 * menor ou igual ao valor do consumo do imÛvel e o tipo de consumo
-			 * esteja associado a situaÁ„o da ligaÁ„o do imÛvel.
+			 * Para faturar: O valor do consumo m√≠nimo da liga√ß√£o tem que ser
+			 * menor ou igual ao valor do consumo do im√≥vel e o tipo de consumo
+			 * esteja associado a situa√ß√£o da liga√ß√£o do im√≥vel.
 			 */
 			if (consumoHistoricoAgua != null
 					&& consumoHistoricoAgua.getNumeroConsumoFaturadoMes() != null
@@ -2009,9 +2009,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								ligacaoTipoEsgoto, anoMesFaturamento);
 
 				/*
-				 * Para faturar: O valor do consumo mÌnimo da ligaÁ„o tem que
-				 * ser menor ou igual ao valor do consumo do imÛvel e o tipo de
-				 * consumo esteja associado a situaÁ„o da ligaÁ„o do imÛvel.
+				 * Para faturar: O valor do consumo m√≠nimo da liga√ß√£o tem que
+				 * ser menor ou igual ao valor do consumo do im√≥vel e o tipo de
+				 * consumo esteja associado a situa√ß√£o da liga√ß√£o do im√≥vel.
 				 */
 				if (consumoHistoricoEsgoto != null
 						&& consumoHistoricoEsgoto.getNumeroConsumoFaturadoMes() != null
@@ -2222,11 +2222,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (iteratorColecaoDebitosCobrados.hasNext()) {
 
-				// DEBITO_COBRADO QUE SER¡ INSERIDO
+				// DEBITO_COBRADO QUE SER√Å INSERIDO
 				debitoCobrado = (DebitoCobrado) iteratorColecaoDebitosCobrados
 						.next();
 
-				// COLE«√O COM OS DEBITOS_COBRADOS POR CATEGORIA QUE SER√O
+				// COLE√á√ÉO COM OS DEBITOS_COBRADOS POR CATEGORIA QUE SER√ÉO
 				// INSERIDOS
 				colecaoDebitoCobradoCategoriaDebitoCobrado = mapDebitosCobrados
 						.get(debitoCobrado);
@@ -2337,8 +2337,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0113] - Fatuar Grupo Faturamento [SF009] - Adiconar na coleÁ„o para
-	 * gerar o resumo faturamento simulaÁ„o Author: Rafael Santos Data:
+	 * [UC0113] - Fatuar Grupo Faturamento [SF009] - Adiconar na cole√ß√£o para
+	 * gerar o resumo faturamento simula√ß√£o Author: Rafael Santos Data:
 	 * 17/02/2006
 	 * 
 	 * @param colecaoResumoFaturamentoSimulacao
@@ -2379,8 +2379,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		if (categoria != null && calcularValoresAguaEsgotoHelper != null) {
 
-			// SF009 - Adiconar na coleÁ„o para gerar o resumo faturamento
-			// simulaÁ„o
+			// SF009 - Adiconar na cole√ß√£o para gerar o resumo faturamento
+			// simula√ß√£o
 			boolean adcionar = true;
 			if (colecaoResumoFaturamentoSimulacao != null
 					&& !colecaoResumoFaturamentoSimulacao.isEmpty()) {
@@ -2392,7 +2392,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				while (iteratorColecaoResumoFaturamento.hasNext() && achou) {
 
-					// resumo faturamento simulÁao na coleÁ„o
+					// resumo faturamento simul√ßao na cole√ß√£o
 					resumoFaturamentoSimulacaoHelperNaColecao = (ResumoFaturamentoSimulacaoHelper) iteratorColecaoResumoFaturamento
 							.next();
 
@@ -2495,7 +2495,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 
-				// se È para acumular ou para inserir na coleÁ„o
+				// se √© para acumular ou para inserir na cole√ß√£o
 				// acumula se tiver algum igual
 				if (!adcionar) {
 
@@ -2769,9 +2769,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					colecaoResumoFaturamentoSimulacao.add(helper);
 
 				}
-				// se a coleÁ„o vazia
+				// se a cole√ß√£o vazia
 				// caso for a primeira vez e tenha os valores de agua e esgoto e
-				// categoria, ser· adicionado um resumo faturamento
+				// categoria, ser√° adicionado um resumo faturamento
 			} else {
 				adcionar = true;
 				ResumoFaturamentoSimulacao resumoFaturamentoSimulacao = criarObjetoResumoFaturamentoSimulacao(
@@ -2852,11 +2852,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				colecaoResumoFaturamentoSimulacao.add(helper);
 			}
 
-			// se so tiver categoria e n„o tiver valores de agua e esgoto
+			// se so tiver categoria e n√£o tiver valores de agua e esgoto
 		} else if (categoria != null) {
 
 			boolean adcionar = true;
-			// se existe dados na coleÁ„o
+			// se existe dados na cole√ß√£o
 			if (!colecaoResumoFaturamentoSimulacao.isEmpty()) {
 
 				Iterator iteratorColecaoResumoFaturamento = colecaoResumoFaturamentoSimulacao
@@ -2864,7 +2864,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				boolean achou = true;
 				while (iteratorColecaoResumoFaturamento.hasNext() && achou) {
 
-					// resumo faturamento simulÁao na coleÁ„o
+					// resumo faturamento simul√ßao na cole√ß√£o
 					resumoFaturamentoSimulacaoHelperNaColecao = (ResumoFaturamentoSimulacaoHelper) iteratorColecaoResumoFaturamento
 							.next();
 
@@ -2960,7 +2960,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 
-				// verifica se È para acumular ou para inserir na coleÁ„o
+				// verifica se √© para acumular ou para inserir na cole√ß√£o
 				if (!adcionar) {
 
 					int qtdEconomias = resumoFaturamentoSimulacaoNaColecao
@@ -2977,7 +2977,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										.intValue();
 					}
 
-					// caso necess·rio acumulado no faturamento simulaÁ„o
+					// caso necess√°rio acumulado no faturamento simula√ß√£o
 					// if (indicePosicaoParaAcumular != -1) {
 					// acumula os dados dos dados do resumo ja existente
 					resumoFaturamentoSimulacaoNaColecao
@@ -3177,9 +3177,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					colecaoResumoFaturamentoSimulacao.add(helper);
 				}
 
-				// se n„o tiver dados o primeiro resumo tem os valores zerados
+				// se n√£o tiver dados o primeiro resumo tem os valores zerados
 				// COLECAO VAZIA
-			} else {// adiciona se n„o tiver dados na coleÁ„o
+			} else {// adiciona se n√£o tiver dados na cole√ß√£o
 
 				adcionar = true;
 
@@ -3327,7 +3327,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		resumoFaturamentoSimulacao.setUltimaAlteracao(new Date());
 
-		// caso seja pre-faturamento, colocar o indicador de simulaÁ„o igual a 3
+		// caso seja pre-faturamento, colocar o indicador de simula√ß√£o igual a 3
 		// no retorno do processamente de pre-faturamento, altera para o
 		// indicador Real.
 		if (!preFaturar) {
@@ -3416,8 +3416,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0113] - Faturar Grupo de Faturamento
-	 * Verifica se o imÛvel gera conta ou n„o.
-	 * [SF0003] - Verificar N„o GeraÁ„o da Conta
+	 * Verifica se o im√≥vel gera conta ou n√£o.
+	 * [SF0003] - Verificar N√£o Gera√ß√£o da Conta
 	 */
 	@SuppressWarnings("rawtypes")
 	public boolean verificarNaoGeracaoConta(Imovel imovel,
@@ -3430,11 +3430,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		boolean segundaCondicaoNaoGerarConta = false;
 
 		/*
-		 *  AlteraÁ„o para gerar a rota com imÛveis ativos ou
-		 * inativos com dÈbitos
+		 *  Altera√ß√£o para gerar a rota com im√≥veis ativos ou
+		 * inativos com d√©bitos
 		 */
-		// 1.1 Caso o valor total da ·gua e o valor total do esgoto seja igual a
-		// zero. Satisfaz a primeira condiÁ„o.
+		// 1.1 Caso o valor total da √°gua e o valor total do esgoto seja igual a
+		// zero. Satisfaz a primeira condi√ß√£o.
 		if ((valorTotalAgua.compareTo(ConstantesSistema.VALOR_ZERO) == 0 && valorTotalEsgoto
 				.compareTo(ConstantesSistema.VALOR_ZERO) == 0)
 				|| (valorTotalAgua.compareTo(ConstantesSistema.VALOR_ZERO) != 0
@@ -3458,7 +3458,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		colecaoDebitosACobrar = this.obterDebitoACobrarImovel(imovel.getId(),
 				DebitoCreditoSituacao.NORMAL, anoMesFaturamentoGrupo);
 
-		// 1.2.1 Caso n„o existam Debitos a Cobrar.
+		// 1.2.1 Caso n√£o existam Debitos a Cobrar.
 		if (colecaoDebitosACobrar == null || colecaoDebitosACobrar.isEmpty()) {
 			segundaCondicaoNaoGerarConta = true;
 		}
@@ -3467,8 +3467,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		 * 
 		 * @author Adriana Muniz date: 28/06/2012
 		 * 
-		 *         CondiÁ„o para n„o gerar conta para imÛvel na situaÁ„o
-		 *         especial como o indicador de paralisaÁ„o do faturamento igual
+		 *         Condi√ß√£o para n√£o gerar conta para im√≥vel na situa√ß√£o
+		 *         especial como o indicador de paralisa√ß√£o do faturamento igual
 		 *         a 1
 		 * */
 		else if (imovel.getFaturamentoSituacaoTipo() != null
@@ -3594,7 +3594,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		/*
-		 * Caso as duas condiÁıes sejam verdadeiras n„o gera a conta.
+		 * Caso as duas condi√ß√µes sejam verdadeiras n√£o gera a conta.
 		 */
 		if (primeiraCondicaoNaoGerarConta && segundaCondicaoNaoGerarConta) {
 			retorno = false;
@@ -3606,9 +3606,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] - Faturar Grupo de Faturamento
 	 * 
-	 * Inclui o movimento de dÈbito autom·tico no sistema.
+	 * Inclui o movimento de d√©bito autom√°tico no sistema.
 	 * 
-	 * [SB0008] - Gerar Movimento de DÈbito Autom·tico
+	 * [SB0008] - Gerar Movimento de D√©bito Autom√°tico
 	 * 
 	 * @author Rafael Santos, Pedro Alexandre
 	 * @date 17/01/2006, 18/09/2006
@@ -3768,7 +3768,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Inserir o Resumo SimulÁ„o Faturamento
+	 * Inserir o Resumo Simul√ß√£o Faturamento
 	 * 
 	 * @param colecaoResumoSimulacaoFaturamento
 	 * @throws ControladorException
@@ -3787,7 +3787,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			ResumoFaturamentoSimulacao resumoFaturamentoSimulacao = resumoFaturamentoSimulacaoHelper
 					.getResumoFaturamentoSimulacao();
 
-			// pesquisar se ja existe um resumo faturamento simulaÁ„o
+			// pesquisar se ja existe um resumo faturamento simula√ß√£o
 			try {
 
 				resumoFaturamentoSimulacaoNaBase = repositorioFaturamento
@@ -3798,7 +3798,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				throw new ControladorException("erro.sistema", ex);
 			}
 
-			// se resumo faturamento simulaÁao
+			// se resumo faturamento simula√ßao
 			if (resumoFaturamentoSimulacaoNaBase != null) {
 
 				// acumula
@@ -3992,7 +3992,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/05/2008
@@ -4035,17 +4035,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		ConsumoTarifa consumoTarifa = (ConsumoTarifa) Util
 				.retonarObjetoDeColecao(colecaoConsumoTarifa);
 
-		// SELECIONANDO as tarifas vigentes para a tarifa do imÛvel
+		// SELECIONANDO as tarifas vigentes para a tarifa do im√≥vel
 		Collection colecaoConsumoTarifaVigenciaTodasDatas = this
 				.obterConsumoTarifaVigencia(consumoTarifa, anoMesReferencia,
 						dataLeituraAnterior, dataLeituraAtual);
 
 		/*
 		 * Alterado por Raphael Rossiter em 28/05/2008 OBJ: Calcular os consumos
-		 * de ·gua e esgoto a partir do INDICADOR_FATURAMENTO_SITUACAO que se
-		 * encontra na situaÁ„o da ligaÁ„o de ·gua e esgoto.
+		 * de √°gua e esgoto a partir do INDICADOR_FATURAMENTO_SITUACAO que se
+		 * encontra na situa√ß√£o da liga√ß√£o de √°gua e esgoto.
 		 */
-		// Carregando as informaÁıes da situaÁ„o da ligaÁ„o de ·gua
+		// Carregando as informa√ß√µes da situa√ß√£o da liga√ß√£o de √°gua
 		// ------------------------------------------------------------------------------------------
 		FiltroLigacaoAguaSituacao filtroLigacaoAguaSituacao = new FiltroLigacaoAguaSituacao();
 
@@ -4059,7 +4059,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		LigacaoAguaSituacao ligacaoAguaSituacao = (LigacaoAguaSituacao) Util
 				.retonarObjetoDeColecao(colecaoLigacaoAguaSituacao);
 
-		// Carregando as informaÁıes da situaÁ„o da ligaÁ„o de esgoto
+		// Carregando as informa√ß√µes da situa√ß√£o da liga√ß√£o de esgoto
 		// ------------------------------------------------------------------------------------------
 		LigacaoEsgotoSituacao ligacaoEsgotoSituacao = null;
 
@@ -4080,8 +4080,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		/*
-		 * Caso o INDICADOR_FATURAMENTO_SITUACAO que se encontra na situaÁ„o da
-		 * LIGA«√O DE ¡GUA estaja ATIVO e seja indicado que È para faturar ·gua
+		 * Caso o INDICADOR_FATURAMENTO_SITUACAO que se encontra na situa√ß√£o da
+		 * LIGA√á√ÉO DE √ÅGUA estaja ATIVO e seja indicado que √© para faturar √°gua
 		 */
 		Collection<CalcularValoresAguaEsgotoHelper> colecaoValoresAgua = null;
 
@@ -4096,8 +4096,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		/*
-		 * Caso o INDICADOR_FATURAMENTO_SITUACAO que se encontra na situaÁ„o da
-		 * LIGA«√O DE ESGOTO estaja ATIVO e seja indicado que È para faturar
+		 * Caso o INDICADOR_FATURAMENTO_SITUACAO que se encontra na situa√ß√£o da
+		 * LIGA√á√ÉO DE ESGOTO estaja ATIVO e seja indicado que √© para faturar
 		 * esgoto
 		 */
 		Collection<CalcularValoresAguaEsgotoHelper> colecaoValoresEsgoto = null;
@@ -4112,7 +4112,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					colecaoConsumoTarifaVigenciaTodasDatas, colecaoValoresEsgoto);
 		}
 
-		// Unificando os valores de ·gua e esgoto em apenas uma coleÁ„o
+		// Unificando os valores de √°gua e esgoto em apenas uma cole√ß√£o
 		Collection<CalcularValoresAguaEsgotoHelper> colecaoRetorno = this
 				.unificarValoresAguaEsgoto(colecaoValoresAgua,
 						colecaoValoresEsgoto);
@@ -4127,7 +4127,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection<CalcularValoresAguaEsgotoHelper> colecaoValoresEsgoto) throws ControladorException {
 		if (colecaoConsumoTarifaVigenciaTodasDatas == null
 				|| colecaoConsumoTarifaVigenciaTodasDatas.isEmpty()) {
-			// A lista com as tarifas vigentes est· nula ou vazia
+			// A lista com as tarifas vigentes est√° nula ou vazia
 
 			sessionContext.setRollbackOnly();
 			throw new ControladorException(
@@ -4135,7 +4135,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		} else if (colecaoConsumoTarifaVigenciaTodasDatas.size() == 1) {
 
-			// [SF0001 - C·lculo Simples Para Uma ⁄nica Tarifa]
+			// [SF0001 - C√°lculo Simples Para Uma √önica Tarifa]
 			ConsumoTarifaVigencia consumoTarifaVigencia = (ConsumoTarifaVigencia) Util
 					.retonarObjetoDeColecao(colecaoConsumoTarifaVigenciaTodasDatas);
 
@@ -4157,7 +4157,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							consumoTarifa.getTarifaTipoCalculo().getId());
 				}
 			} else {
-				// A data de vigÍncia da tarifa est· nula
+				// A data de vig√™ncia da tarifa est√° nula
 
 				sessionContext.setRollbackOnly();
 				throw new ControladorException(
@@ -4166,7 +4166,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		} else {
 
-			// [SF0002 - C·lculo Proporcional Para Mais de Uma Tarifa]
+			// [SF0002 - C√°lculo Proporcional Para Mais de Uma Tarifa]
 			colecaoValoresEsgoto = calculoProporcionalMaisDeUmaTarifa(
 					dataLeituraAtual, dataLeituraAnterior,
 					colecaoConsumoTarifaVigenciaTodasDatas,
@@ -4185,7 +4185,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection<CalcularValoresAguaEsgotoHelper> colecaoValoresAgua) throws ControladorException {
 		if (colecaoConsumoTarifaVigenciaTodasDatas == null
 				|| colecaoConsumoTarifaVigenciaTodasDatas.isEmpty()) {
-			// A lista com as tarifas vigentes est· nula ou vazia
+			// A lista com as tarifas vigentes est√° nula ou vazia
 
 			System.out
 					.println(" %%% ERRO.calcularValoresAguaEsgoto.SemTarifaVigencia: "
@@ -4201,7 +4201,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		} else if (colecaoConsumoTarifaVigenciaTodasDatas.size() == 1) {
 
-			// [SF0001 - C·lculo Simples Para Uma ⁄nica Tarifa]
+			// [SF0001 - C√°lculo Simples Para Uma √önica Tarifa]
 			ConsumoTarifaVigencia consumoTarifaVigencia = (ConsumoTarifaVigencia) Util
 					.retonarObjetoDeColecao(colecaoConsumoTarifaVigenciaTodasDatas);
 
@@ -4223,7 +4223,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.getTarifaTipoCalculo().getId());
 				}
 			} else {
-				// A data de vigÍncia da tarifa est· nula
+				// A data de vig√™ncia da tarifa est√° nula
 
 				sessionContext.setRollbackOnly();
 				throw new ControladorException(
@@ -4232,7 +4232,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		} else {
 
-			// [SF0002 - C·lculo Proporcional Para Mais de Uma Tarifa]
+			// [SF0002 - C√°lculo Proporcional Para Mais de Uma Tarifa]
 			colecaoValoresAgua = calculoProporcionalMaisDeUmaTarifa(
 					dataLeituraAtual, dataLeituraAnterior,
 					colecaoConsumoTarifaVigenciaTodasDatas,
@@ -4245,9 +4245,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto
 	 * 
-	 * Selecionar as tarifas vigentes para o imÛvel
+	 * Selecionar as tarifas vigentes para o im√≥vel
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/05/2008
@@ -4271,7 +4271,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			/*
 			 * Alterado por Raphael Rossiter em 28/03/2008 - Analista: Eduardo
-			 * Borges Utilizar a tarifa mais atual que tenha a data de vigÍncia
+			 * Borges Utilizar a tarifa mais atual que tenha a data de vig√™ncia
 			 * menor ou igual a data de faturamento.
 			 */
 			Date dataFaturamento = Util.criarData(1,
@@ -4287,8 +4287,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				try {
 					sessionContext.setRollbackOnly();
 				} catch (IllegalStateException e) {
-					// Nesse caso o metodo n„o esta usando transaÁ„o
-					// Por isso ele n„o consegue da roll back
+					// Nesse caso o metodo n√£o esta usando transa√ß√£o
+					// Por isso ele n√£o consegue da roll back
 				}
 
 				throw new ControladorException(
@@ -4303,9 +4303,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto
 	 * 
-	 * Selecionar as tarifas vigentes para o imÛvel
+	 * Selecionar as tarifas vigentes para o im√≥vel
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/05/2008
@@ -4328,18 +4328,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& dataLeituraAtual != null) {
 
 			/*
-			 * Seleciona todas as ocorrÍncias da tabela CONSUMO_TARIFA_VIGENCIA
-			 * com CSTF_ID=Id da tarifa para o imÛvel e com CSTV_DTVIGENCIA
+			 * Seleciona todas as ocorr√™ncias da tabela CONSUMO_TARIFA_VIGENCIA
+			 * com CSTF_ID=Id da tarifa para o im√≥vel e com CSTV_DTVIGENCIA
 			 * entre as datas de leitura anterior e atual
 			 */
 			Collection colecaoConsumoTarifaVigenciaEntreDatas = selecionaTarifasVigentesPeriodoLeituraImovel(
 					tarifaImovel, dataLeituraAnterior, dataLeituraAtual, true);
 
 			/*
-			 * Caso n„o seja selecionada nenhuma ocorrÍncia ou caso nenhuma
-			 * ocorrÍncia selecionada tenha CSTV_DTVIGENCIA = data de leitura
-			 * anterior, selecionar tambÈm a ocorrÍncia da tabela
-			 * CONSUMO_TARIFA_VIGENCIA com CSTF_ID= Id da tarifa para o imÛvel e
+			 * Caso n√£o seja selecionada nenhuma ocorr√™ncia ou caso nenhuma
+			 * ocorr√™ncia selecionada tenha CSTV_DTVIGENCIA = data de leitura
+			 * anterior, selecionar tamb√©m a ocorr√™ncia da tabela
+			 * CONSUMO_TARIFA_VIGENCIA com CSTF_ID= Id da tarifa para o im√≥vel e
 			 * com a maior CSTV_DTVIGENCIA que seja menor que a data de leitura
 			 * anterior.
 			 */
@@ -4368,8 +4368,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.next();
 
 					/*
-					 * Verifica se j· existe alguma ocorrÍncia onde a
-					 * dataVigencia È igual a dataLeituraAnterior
+					 * Verifica se j√° existe alguma ocorr√™ncia onde a
+					 * dataVigencia √© igual a dataLeituraAnterior
 					 */
 					if (consumoTarifaVigencia.getDataVigencia() != null
 							&& Util.datasIguais(
@@ -4391,13 +4391,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							dataLeituraAtual, false);
 
 					/*
-					 * As tarifas vigentes para o perÌodo de leitura ser„o as
-					 * ocorrÍncias selecionadas nas coleÁıes parcial e final
+					 * As tarifas vigentes para o per√≠odo de leitura ser√£o as
+					 * ocorr√™ncias selecionadas nas cole√ß√µes parcial e final
 					 */
 					colecaoConsumoTarifaVigenciaTodasDatas
 							.addAll(colecaoConsumoTarifaVigenciaMaiorData);
 
-					// Organizar a coleÁ„o
+					// Organizar a cole√ß√£o
 					Collections.sort(
 							(List) colecaoConsumoTarifaVigenciaTodasDatas,
 							new Comparator() {
@@ -4420,9 +4420,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto
 	 * 
-	 * Unificando os valores de ·gua e esgoto em apenas uma coleÁ„o
+	 * Unificando os valores de √°gua e esgoto em apenas uma cole√ß√£o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/05/2008
@@ -4437,10 +4437,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection<CalcularValoresAguaEsgotoHelper> colecaoValoresEsgoto)
 			throws ControladorException {
 
-		// Unificando os valores de ·gua e esgoto em apenas uma coleÁ„o
+		// Unificando os valores de √°gua e esgoto em apenas uma cole√ß√£o
 		Collection<CalcularValoresAguaEsgotoHelper> colecaoRetorno = new ArrayList();
 
-		// O calculo foi realizado apenas para ·gua
+		// O calculo foi realizado apenas para √°gua
 		if ((colecaoValoresAgua != null && !colecaoValoresAgua.isEmpty())
 				&& (colecaoValoresEsgoto == null || colecaoValoresEsgoto
 						.isEmpty())) {
@@ -4483,33 +4483,33 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					calcularValoresAguaEsgotoHelperEsgoto = (CalcularValoresAguaEsgotoHelper) colecaoValoresEsgotoIt
 							.next();
 
-					// Carregando os valores de esgoto na coleÁ„o que contÈm
-					// os valores calculados de ·gua
+					// Carregando os valores de esgoto na cole√ß√£o que cont√©m
+					// os valores calculados de √°gua
 					if (calcularValoresAguaEsgotoHelperAgua.getIdCategoria()
 							.equals(calcularValoresAguaEsgotoHelperEsgoto
 									.getIdCategoria())
 							&& esgotoParada == contadorEsgoto) {
 
-						// Carregando o valor faturado de esgoto na coleÁ„o
-						// de ·gua
+						// Carregando o valor faturado de esgoto na cole√ß√£o
+						// de √°gua
 						calcularValoresAguaEsgotoHelperAgua
 								.setValorFaturadoEsgotoCategoria(calcularValoresAguaEsgotoHelperEsgoto
 										.getValorFaturadoEsgotoCategoria());
 
 						// Carregando o consumo faturado de esgoto na
-						// coleÁ„o de ·gua
+						// cole√ß√£o de √°gua
 						calcularValoresAguaEsgotoHelperAgua
 								.setConsumoFaturadoEsgotoCategoria(calcularValoresAguaEsgotoHelperEsgoto
 										.getConsumoFaturadoEsgotoCategoria());
 
-						// Carregando o valor da tarifa mÌnima de esgoto na
-						// coleÁ„o de ·gua
+						// Carregando o valor da tarifa m√≠nima de esgoto na
+						// cole√ß√£o de √°gua
 						calcularValoresAguaEsgotoHelperAgua
 								.setValorTarifaMinimaEsgotoCategoria(calcularValoresAguaEsgotoHelperEsgoto
 										.getValorTarifaMinimaEsgotoCategoria());
 
-						// Carregando o consumo mÌnimo de esgoto na coleÁ„o
-						// de ·gua
+						// Carregando o consumo m√≠nimo de esgoto na cole√ß√£o
+						// de √°gua
 						calcularValoresAguaEsgotoHelperAgua
 								.setConsumoMinimoEsgotoCategoria(calcularValoresAguaEsgotoHelperEsgoto
 										.getConsumoMinimoEsgotoCategoria());
@@ -4546,13 +4546,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										&& faixaParada == contadorFaixa) {
 
 									// Carregando o valor faturado de esgoto
-									// na faixa para coleÁ„o de ·gua
+									// na faixa para cole√ß√£o de √°gua
 									calcularValoresAguaEsgotoFaixaHelperAgua
 											.setValorFaturadoEsgotoFaixa(calcularValoresAguaEsgotoFaixaHelperEsgoto
 													.getValorFaturadoEsgotoFaixa());
 
 									// Carregando o consumo faturado de
-									// esgoto na faixa para coleÁ„o de ·gua
+									// esgoto na faixa para cole√ß√£o de √°gua
 									calcularValoresAguaEsgotoFaixaHelperAgua
 											.setConsumoFaturadoEsgotoFaixa(calcularValoresAguaEsgotoFaixaHelperEsgoto
 													.getConsumoFaturadoEsgotoFaixa());
@@ -4582,9 +4582,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto
 	 * 
-	 * Totalizando os valores de ·gua e esgoto por categoria ou subcategoria
+	 * Totalizando os valores de √°gua e esgoto por categoria ou subcategoria
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/05/2008
@@ -4866,8 +4866,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/*
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto [SF0001] - C·lculo
-	 * Simples Para Uma ⁄nica Tarifa Autor: Raphael Rossiter Data: 21/12/2005
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto [SF0001] - C√°lculo
+	 * Simples Para Uma √önica Tarifa Autor: Raphael Rossiter Data: 21/12/2005
 	 */
 	@SuppressWarnings("unchecked")
 	protected Collection<CalcularValoresAguaEsgotoHelper> calculoSimplesUmaTarifa(
@@ -4878,8 +4878,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Integer idTarifaTipoCalculo) throws ControladorException {
 
 		/*
-		 * Para campos relacionados a consumo ser„o atribuÌdos valores inteiros,
-		 * j· com os campos monet·rios ser„o atribuÌdos valores com duas casas
+		 * Para campos relacionados a consumo ser√£o atribu√≠dos valores inteiros,
+		 * j√° com os campos monet√°rios ser√£o atribu√≠dos valores com duas casas
 		 * decimais (BigDecimal).
 		 * ------------------------------------------------
 		 * -------------------------
@@ -4912,7 +4912,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		// int excessoUsado = 0;
 
-		// Calcula a quantidade total de economias do imÛvel.
+		// Calcula a quantidade total de economias do im√≥vel.
 		// --------------------------------------------------------------------------
 		while (itCategoriasOuSubcategoriasImovel.hasNext()) {
 
@@ -4947,7 +4947,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									consumoTarifaVigencia,
 									subcategoria.getCategoria(), subcategoria);
 
-					// Quando ele n„o achar a subcategoria procurar mais
+					// Quando ele n√£o achar a subcategoria procurar mais
 					// acima
 					// por categoria
 					if (colecaoConsumoTarifaCategoria == null
@@ -4975,7 +4975,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			consumoTarifaCategoria = (ConsumoTarifaCategoria) Util
 					.retonarObjetoDeColecao(colecaoConsumoTarifaCategoria);
 
-			// ConsumoMinimoImovel = Para cada subcategoria do imÛvel
+			// ConsumoMinimoImovel = Para cada subcategoria do im√≥vel
 			// (onde n=quantidade de subcategorias do imovel)
 			// Somar (valor(1-n) = (CSTC_NNCONSUMOMINIMO(1-n) * quantidade
 			// de
@@ -4991,7 +4991,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// Calcula o consumo por economia (consumo faturado / quantidade total
 		// de economias).
 		System.out.println("quantTotalEconomia: " + quantTotalEconomia);
-		// Pega o menor valor da divis„o para o consumo de ·gua ser o menor
+		// Pega o menor valor da divis√£o para o consumo de √°gua ser o menor
 		// multiplo das economias
 		// Roberta Costa - 27/07/2006
 		if (quantTotalEconomia != 0) {
@@ -5000,13 +5000,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 		System.out.println("consumoFaturado: " + consumoFaturado);
 		System.out.println("consumoPorEconomia: " + consumoPorEconomia);
-		// C·lculo do Excesso do ImÛvel = Consumo faturado - Consumo Minimo do
+		// C√°lculo do Excesso do Im√≥vel = Consumo faturado - Consumo Minimo do
 		// imovel
 		int calculoExcessoImovel = consumoFaturado.intValue()
 				- consumoMinimoImovel.intValue();
 		System.out.println("calculoExcessoImovel: " + calculoExcessoImovel);
-		// C·lculo do Excesso por economia = Consumo Excedente / quantidade
-		// total de economias do imÛvel
+		// C√°lculo do Excesso por economia = Consumo Excedente / quantidade
+		// total de economias do im√≥vel
 		int calculoExcessoEconomia = calculoExcessoImovel / quantTotalEconomia;
 		System.out.println("calculoExcessoEconomia: " + calculoExcessoEconomia);
 		// --------------------------------------------------------------------------
@@ -5044,7 +5044,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									consumoTarifaVigencia,
 									subcategoria.getCategoria(), subcategoria);
 
-					// Quando ele n„o achar a subcategoria procurar mais acima
+					// Quando ele n√£o achar a subcategoria procurar mais acima
 					// por categoria
 					if (colecaoConsumoTarifaCategoria == null
 							|| colecaoConsumoTarifaCategoria.isEmpty()) {
@@ -5073,12 +5073,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.retonarObjetoDeColecao(colecaoConsumoTarifaCategoria);
 
 			/*
-			 * Para cada tarifa de consumo por categoria selecionada ser„o
-			 * calculados os valores (valor da tarifa mÌnima da categoria,
-			 * consumo mÌnimo da categoria, valor por economia da categoria,
+			 * Para cada tarifa de consumo por categoria selecionada ser√£o
+			 * calculados os valores (valor da tarifa m√≠nima da categoria,
+			 * consumo m√≠nimo da categoria, valor por economia da categoria,
 			 * consumo excedente da categoria)
 			 * 
-			 * OBS - Cada categoria sÛ possuir· uma tarifa de consumo (Analista
+			 * OBS - Cada categoria s√≥ possuir√° uma tarifa de consumo (Analista
 			 * 15/08/2005)
 			 * ------------------------------------------------------
 			 * -----------------
@@ -5112,8 +5112,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			/*
 			 * Caso o consumo por economia seja maior que o CSTC_NNCONSUMOMINIMO
-			 * ent„o consumo por economia da categoria = CSTC_NNCONSUMOMINIMO,
-			 * caso contr·rio consumo por economia da categoria = consumo por
+			 * ent√£o consumo por economia da categoria = CSTC_NNCONSUMOMINIMO,
+			 * caso contr√°rio consumo por economia da categoria = consumo por
 			 * economia
 			 */
 			if (calculoExcessoImovel > 0) {
@@ -5144,7 +5144,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// 1.4.1.5. Caso o consumo excedente do imovel seja maior que zero
 			if (calculoExcessoImovel > 0) {
 
-				// Consumo excendente da categoria = C·lculo do Excesso por
+				// Consumo excendente da categoria = C√°lculo do Excesso por
 				// economia * quantidade de economias da categoria
 				consumoExcedenteCategoriaOuSubcategoria = calculoExcessoEconomia;
 
@@ -5156,7 +5156,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			}
 
-			// Objeto que ir· armazenar os valores calculados referentes as
+			// Objeto que ir√° armazenar os valores calculados referentes as
 			// faixas
 			Collection<CalcularValoresAguaEsgotoFaixaHelper> colecaoCalcularValoresAguaEsgotoFaixaHelper = new ArrayList();
 			BigDecimal vlFaturadoFaixa = null;
@@ -5172,7 +5172,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 
 				/*
-				 * Seleciona as faixas para c·lculo do valor faturado,
+				 * Seleciona as faixas para c√°lculo do valor faturado,
 				 * classificadas pela faixa inicial de consumo
 				 * (CSTI_NNCONSUMOFAIXAINICIO), (a partir da tabela
 				 * CONSUMO_TARIFA_FAIXA com CSTC_ID=CSTC_ID da tabela
@@ -5363,8 +5363,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/*
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto [SF0001] - C·lculo
-	 * Simples Para Uma ⁄nica Tarifa Autor: Raphael Rossiter Data: 21/12/2005
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto [SF0001] - C√°lculo
+	 * Simples Para Uma √önica Tarifa Autor: Raphael Rossiter Data: 21/12/2005
 	 */
 	protected Collection<CalcularValoresAguaEsgotoHelper> calculoConsumoDiretoNaFaixa(
 			Integer consumoFaturado,
@@ -5374,8 +5374,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Integer idTarifaTipoCalculo) throws ControladorException {
 
 		/*
-		 * Para campos relacionados a consumo ser„o atribuÌdos valores inteiros,
-		 * j· com os campos monet·rios ser„o atribuÌdos valores com duas casas
+		 * Para campos relacionados a consumo ser√£o atribu√≠dos valores inteiros,
+		 * j√° com os campos monet√°rios ser√£o atribu√≠dos valores com duas casas
 		 * decimais (BigDecimal).
 		 * ------------------------------------------------
 		 * -------------------------
@@ -5404,7 +5404,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		ConsumoTarifaCategoria consumoTarifaCategoria;
 		Collection colecaoConsumoTarifaCategoria = null;
 
-		// Calcula a quantidade total de economias do imÛvel.
+		// Calcula a quantidade total de economias do im√≥vel.
 		// --------------------------------------------------------------------------
 		while (itCategoriasOuSubcategoriasImovel.hasNext()) {
 
@@ -5429,7 +5429,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// Calcula o consumo por economia (consumo faturado / quantidade total
 		// de economias).
 
-		// Pega o menor valor da divis„o para o consumo de ·gua ser o menor
+		// Pega o menor valor da divis√£o para o consumo de √°gua ser o menor
 		// multiplo das economias
 		// Roberta Costa - 27/07/2006
 		if (quantTotalEconomia != 0) {
@@ -5464,7 +5464,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									consumoTarifaVigencia,
 									subcategoria.getCategoria(), subcategoria);
 
-					// Quando ele n„o achar a subcategoria procurar mais acima
+					// Quando ele n√£o achar a subcategoria procurar mais acima
 					// por categoria
 					if (colecaoConsumoTarifaCategoria == null
 							|| colecaoConsumoTarifaCategoria.isEmpty()) {
@@ -5493,12 +5493,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.retonarObjetoDeColecao(colecaoConsumoTarifaCategoria);
 
 			/*
-			 * Para cada tarifa de consumo por categoria selecionada ser„o
-			 * calculados os valores (valor da tarifa mÌnima da categoria,
-			 * consumo mÌnimo da categoria, valor por economia da categoria,
+			 * Para cada tarifa de consumo por categoria selecionada ser√£o
+			 * calculados os valores (valor da tarifa m√≠nima da categoria,
+			 * consumo m√≠nimo da categoria, valor por economia da categoria,
 			 * consumo excedente da categoria)
 			 * 
-			 * OBS - Cada categoria sÛ possuir· uma tarifa de consumo (Analista
+			 * OBS - Cada categoria s√≥ possuir√° uma tarifa de consumo (Analista
 			 * 15/08/2005)
 			 * ------------------------------------------------------
 			 * -----------------
@@ -5544,7 +5544,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			consumoEconomiaCategoriaOuSubcategoria = consumoPorEconomia;
 
-			// Objeto que ir· armazenar os valores calculados referentes as
+			// Objeto que ir√° armazenar os valores calculados referentes as
 			// faixas
 			Collection<CalcularValoresAguaEsgotoFaixaHelper> colecaoCalcularValoresAguaEsgotoFaixaHelper = new ArrayList();
 
@@ -5688,7 +5688,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			vlFaturadoCategoriaOuSubcategoria = vlFaturadoCategoriaOuSubcategoria
 					.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-			// Valor da tarifa mÌnima de esgoto
+			// Valor da tarifa m√≠nima de esgoto
 			vlTarifaMinimaCategoriaOuSubcategoria = vlTarifaMinimaCategoriaOuSubcategoria
 					.multiply(result);
 			vlTarifaMinimaCategoriaOuSubcategoria = vlTarifaMinimaCategoriaOuSubcategoria
@@ -5705,7 +5705,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		// Carregando a coleÁ„o com os valores referentes as faixas
+		// Carregando a cole√ß√£o com os valores referentes as faixas
 		calcularValoresAguaEsgotoHelper
 				.setFaixaTarifaConsumo(colecaoCalcularValoresAguaEsgotoFaixaHelper);
 		return calcularValoresAguaEsgotoHelper;
@@ -5750,7 +5750,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/*
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto [SF0002] - C·lculo
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto [SF0002] - C√°lculo
 	 * Proporcional Para Mais de Uma Tarifa Autor: Raphael Rossiter Data:
 	 * 09/01/2006
 	 */
@@ -5777,10 +5777,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// soma 1 dia para contar o dia inicial da leitura
 		qtdDiasLeitura += 1;
 
-		// 2 - Data da vigÍncia inicial
+		// 2 - Data da vig√™ncia inicial
 		Date dataVigenciaInicial = dataLeituraAnterior;
 
-		// 3 - Para cada tarifa vigente para o perÌodo de leitura
+		// 3 - Para cada tarifa vigente para o per√≠odo de leitura
 		List colecaoConsumoTarifaVigenciaList = new ArrayList();
 		colecaoConsumoTarifaVigenciaList.addAll(colecaoConsumoTarifaVigencia);
 
@@ -5796,7 +5796,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			consumoTarifaVigenciaColecao = (ConsumoTarifaVigencia) colecaoConsumoTarifaVigenciaListIt.next();
 
-			// C·lculo Simples Para Uma ⁄nica Tarifa
+			// C√°lculo Simples Para Uma √önica Tarifa
 
 			if (tipoCalculo.equalsIgnoreCase(ConstantesSistema.CALCULAR_AGUA)) {
 
@@ -5819,8 +5819,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}
 			
-			// Caso exista prÛxima tarifa vigente ent„o data da vigÍncia final = CSTV_DTVIGENCIA da prÛxima tarifa vigente menos um dia,
-			// caso contr·rio, data da vigÍncia final = data de leitura atual
+			// Caso exista pr√≥xima tarifa vigente ent√£o data da vig√™ncia final = CSTV_DTVIGENCIA da pr√≥xima tarifa vigente menos um dia,
+			// caso contr√°rio, data da vig√™ncia final = data de leitura atual
 			if (colecaoConsumoTarifaVigenciaListIt.hasNext()) {
 
 				consumoTarifaVigenciaColecao = (ConsumoTarifaVigencia) colecaoConsumoTarifaVigenciaListIt.next();
@@ -5850,9 +5850,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                 }
 			}
 
-			// Calcula a quantidade de dias de vigÍncia da tarifa dentro do
-			// perÌdo de leitura =
-			// data da vigÍncia final - data da vigÍncia inicial + 1 dia
+			// Calcula a quantidade de dias de vig√™ncia da tarifa dentro do
+			// per√≠do de leitura =
+			// data da vig√™ncia final - data da vig√™ncia inicial + 1 dia
 			dataVigenciaInicial = Util.formatarDataSemHora(dataVigenciaInicial);
 			dataVigenciaFinal = Util.formatarDataSemHora(dataVigenciaFinal);
 			System.out.println("dataVigenciaInicial: " + dataVigenciaInicial);
@@ -5873,15 +5873,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}
 			
-			// Calcula o fator de vigÍncia da tarifa =
+			// Calcula o fator de vig√™ncia da tarifa =
 			// qtdDiasVigenciaDentroPeriodo / qtdDiasLeitura
-			// O BigDecimal ser· arredondado para 4 casas decimais
+			// O BigDecimal ser√° arredondado para 4 casas decimais
 			BigDecimal qtdDiasVigenciaDentroPeriodoBigDecimal = new BigDecimal(qtdDiasVigenciaDentroPeriodo);
 			BigDecimal qtdDiasLeituraBigDecimal = new BigDecimal(qtdDiasLeitura);
 
 			BigDecimal fatorVigenciaTarifa = qtdDiasVigenciaDentroPeriodoBigDecimal.divide(qtdDiasLeituraBigDecimal, 4, BigDecimal.ROUND_HALF_UP);
 
-			// Para cada Categoria, aplica o fator de vigÍncia da tarifa.
+			// Para cada Categoria, aplica o fator de vig√™ncia da tarifa.
 
 			Iterator calculoSimplesUmaTarifaColecaoIt = calculoSimplesUmaTarifaColecao.iterator();
 			CalcularValoresAguaEsgotoHelper calculoSimplesUmaTarifaColecaoObjeto;
@@ -5893,8 +5893,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				if (tipoCalculo.equalsIgnoreCase(ConstantesSistema.CALCULAR_AGUA)) {
 
-					// Aplicando o fator de vigÍncia da tarifa no valor faturado
-					// de ·gua da categoria
+					// Aplicando o fator de vig√™ncia da tarifa no valor faturado
+					// de √°gua da categoria
 					// -----------------------------------------------------------------------------------
 					valorFaturadoNew = calculoSimplesUmaTarifaColecaoObjeto.getValorFaturadoAguaCategoria().multiply(fatorVigenciaTarifa);
 
@@ -5904,8 +5904,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					calculoSimplesUmaTarifaColecaoObjeto.setValorFaturadoAguaCategoria(valorFaturadoNew);
 					// ------------------------------------------------------------------------------------
 
-					// Aplicando o fator de vigÍncia da tarifa no valor da
-					// tarifa mÌnima de ·gua da categoria
+					// Aplicando o fator de vig√™ncia da tarifa no valor da
+					// tarifa m√≠nima de √°gua da categoria
 					// ------------------------------------------------------------------------------------
 					valorTarifaMinimaNew = calculoSimplesUmaTarifaColecaoObjeto.getValorTarifaMinimaAguaCategoria().multiply(fatorVigenciaTarifa);
 
@@ -5926,8 +5926,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						calculoSimplesUmaTarifaFaixaColecaoObjeto = (CalcularValoresAguaEsgotoFaixaHelper) calculoSimplesUmaTarifaFaixaIt.next();
 
-						// Aplicando o fator de vigÍncia da tarifa no valor
-						// faturado de ·gua na faixa
+						// Aplicando o fator de vig√™ncia da tarifa no valor
+						// faturado de √°gua na faixa
 						// -----------------------------------------------------------------------------------
 						valorFaturadoFaixaNew = calculoSimplesUmaTarifaFaixaColecaoObjeto.getValorFaturadoAguaFaixa().multiply(fatorVigenciaTarifa);
 
@@ -5937,7 +5937,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						calculoSimplesUmaTarifaFaixaColecaoObjeto.setValorFaturadoAguaFaixa(valorFaturadoFaixaNew);
 						// ------------------------------------------------------------------------------------
 
-						// Aplicando o fator de vigÍncia da tarifa no valor da
+						// Aplicando o fator de vig√™ncia da tarifa no valor da
 						// tarifa na faixa
 						// ------------------------------------------------------------------------------------
 
@@ -5952,7 +5952,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				} else {
 
-					// Aplicando o fator de vigÍncia da tarifa no valor faturado
+					// Aplicando o fator de vig√™ncia da tarifa no valor faturado
 					// de esgoto da categoria
 					// -----------------------------------------------------------------------------------
 					valorFaturadoNew = calculoSimplesUmaTarifaColecaoObjeto.getValorFaturadoEsgotoCategoria().multiply(fatorVigenciaTarifa);
@@ -5963,8 +5963,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					calculoSimplesUmaTarifaColecaoObjeto.setValorFaturadoEsgotoCategoria(valorFaturadoNew);
 					// ------------------------------------------------------------------------------------
 
-					// Aplicando o fator de vigÍncia da tarifa no valor da
-					// tarifa mÌnima de esgoto da categoria
+					// Aplicando o fator de vig√™ncia da tarifa no valor da
+					// tarifa m√≠nima de esgoto da categoria
 					// ------------------------------------------------------------------------------------
 					valorTarifaMinimaNew = calculoSimplesUmaTarifaColecaoObjeto.getValorTarifaMinimaEsgotoCategoria().multiply(fatorVigenciaTarifa);
 
@@ -5985,7 +5985,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						calculoSimplesUmaTarifaFaixaColecaoObjeto = (CalcularValoresAguaEsgotoFaixaHelper) calculoSimplesUmaTarifaFaixaIt.next();
 
-						// Aplicando o fator de vigÍncia da tarifa no valor
+						// Aplicando o fator de vig√™ncia da tarifa no valor
 						// faturado de esgoto na faixa
 						// -----------------------------------------------------------------------------------
 						valorFaturadoFaixaNew = calculoSimplesUmaTarifaFaixaColecaoObjeto.getValorFaturadoEsgotoFaixa().multiply(fatorVigenciaTarifa);
@@ -5996,7 +5996,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						calculoSimplesUmaTarifaFaixaColecaoObjeto.setValorFaturadoEsgotoFaixa(valorFaturadoFaixaNew);
 						// ------------------------------------------------------------------------------------
 
-						// Aplicando o fator de vigÍncia da tarifa no valor da
+						// Aplicando o fator de vig√™ncia da tarifa no valor da
 						// tarifa na faixa
 						// ------------------------------------------------------------------------------------
 						valorTarifaFaixaNew = calculoSimplesUmaTarifaFaixaColecaoObjeto.getValorTarifaFaixa().multiply(fatorVigenciaTarifa);
@@ -6012,9 +6012,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			}
 
-			// Calcula data de vigÍncia inicial = data da vigÍncia final + 1 dia
+			// Calcula data de vig√™ncia inicial = data da vig√™ncia final + 1 dia
 
-			// Adicionando um dia para data da vigÍncia final
+			// Adicionando um dia para data da vig√™ncia final
 			Calendar dataVigenciaFinalMaisUmDia = new GregorianCalendar();
 			dataVigenciaFinalMaisUmDia.setTime(dataVigenciaFinal);
 			dataVigenciaFinalMaisUmDia.add(Calendar.DATE, 1);
@@ -6035,9 +6035,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto - CAER
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto - CAER
 	 * 
-	 * [SF0001] - C·lculo Simples Para Uma ⁄nica Tarifa
+	 * [SF0001] - C√°lculo Simples Para Uma √önica Tarifa
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 19/10/2006
@@ -6064,7 +6064,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			if (consumoFaturado <= 10) {
 				retorno = valorTarifaMinimaCategoria;
 			}
-			// NI(7x≤ + valorTarifaFaixa * x) / 10000
+			// NI(7x¬≤ + valorTarifaFaixa * x) / 10000
 			else {
 
 				BigDecimal parcial = new BigDecimal(consumoFaturado
@@ -6098,11 +6098,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MÈtodo utilizada para facilitar a implementaÁ„o do [UC0120 - Calcular
-	 * Valores de ¡gua e/ou Esgoto]. Seleciona as tarifas vigentes para o imÛvel
-	 * no perÌodo de leitura. OBS - O campo tipoConsulta ser· utilizada para
-	 * distinguir de que forma ser· realiza a consulta, ou seja, quais os
-	 * par‚metros que ser„o utilizados. Legenda: Parcial = true , Final = false
+	 * M√©todo utilizada para facilitar a implementa√ß√£o do [UC0120 - Calcular
+	 * Valores de √Ågua e/ou Esgoto]. Seleciona as tarifas vigentes para o im√≥vel
+	 * no per√≠odo de leitura. OBS - O campo tipoConsulta ser√° utilizada para
+	 * distinguir de que forma ser√° realiza a consulta, ou seja, quais os
+	 * par√¢metros que ser√£o utilizados. Legenda: Parcial = true , Final = false
 	 * 
 	 * @param tarifaImovel
 	 * @param dataLeituraAnterior
@@ -6121,15 +6121,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		consumoTarifa.setId(tarifaImovel);
 
 		/*
-		 * Seleciona todas as ocorrÍncias da tabela CONSUMO_TARIFA_VIGENCIA com
-		 * CSTF_ID=Id da tarifa para o imÛvel e com CSTV_DTVIGENCIA entre as
+		 * Seleciona todas as ocorr√™ncias da tabela CONSUMO_TARIFA_VIGENCIA com
+		 * CSTF_ID=Id da tarifa para o im√≥vel e com CSTV_DTVIGENCIA entre as
 		 * datas de leitura anterior e atual, inclusive
 		 */
 		if (tipoConsulta) {
 
 			try {
 
-				// Pesquisar pela data de vigÍncia ordenada com parametro
+				// Pesquisar pela data de vig√™ncia ordenada com parametro
 				// conforme descritivo acima
 				Collection colecaoConsumoTarifaVigencia = repositorioFaturamento
 						.pesquisarConsumoTarifaVigenciaEntreDataLeituraAnterioreDataLeituraAtual(
@@ -6143,8 +6143,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		/*
-		 * Seleciona a ocorrÍncia da tabela CONSUMO_TARIFA_VIGENCIA com
-		 * CSTF_ID=Id da tarifa para o imÛvel e com a maior CSTV_DTVIGENCIA que
+		 * Seleciona a ocorr√™ncia da tabela CONSUMO_TARIFA_VIGENCIA com
+		 * CSTF_ID=Id da tarifa para o im√≥vel e com a maior CSTV_DTVIGENCIA que
 		 * seja menor que a data de leitura anterior
 		 */
 		else {
@@ -6172,8 +6172,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/*
-	 * Recebe uma coleÁ„o e retorna o objeto ConsumoTarifaVigÍncia com id e data
-	 * de vigÍncia setados Autor: Leonardo Vieira Data: 27/12/2005
+	 * Recebe uma cole√ß√£o e retorna o objeto ConsumoTarifaVig√™ncia com id e data
+	 * de vig√™ncia setados Autor: Leonardo Vieira Data: 27/12/2005
 	 */
 
 	public ConsumoTarifaVigencia obterConsumoTarifaVigencia(
@@ -6188,14 +6188,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Object[] consumoTarifaVigenciaArray = (Object[]) Util
 					.retonarObjetoDeColecaoArray(colecaoConsumoTarifaVigencia);
 
-			// Seta o id do consumo tarifa vigÍncia
+			// Seta o id do consumo tarifa vig√™ncia
 			if (consumoTarifaVigenciaArray[0] != null) {
 				consumoTarifaVigencia
 						.setId((Integer) consumoTarifaVigenciaArray[0]);
 				parametrNulo = false;
 			}
 
-			// Seta a data de vigÍncia
+			// Seta a data de vig√™ncia
 			if (consumoTarifaVigenciaArray[1] != null) {
 				consumoTarifaVigencia
 						.setDataVigencia((Date) consumoTarifaVigenciaArray[1]);
@@ -6222,7 +6222,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		/*
 		 * Vai buscar o objeto FaturamentoGrupoCronogramaMensal com as
-		 * caracterÌsticas do imÛvel recebido e o anoMes da Conta - Fernanda
+		 * caracter√≠sticas do im√≥vel recebido e o anoMes da Conta - Fernanda
 		 * Paiva - 19/08/2006
 		 */
 		FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal = buscarFaturamentoGrupoCronogramaMensal(
@@ -6273,7 +6273,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * Realiza uma pesquisa na tabela Faturamento_Grupo_Cronograma_Mensal de
-	 * acordo com os dados recebidos (mÍs e ano de referencia anterior).
+	 * acordo com os dados recebidos (m√™s e ano de referencia anterior).
 	 * 
 	 * @param anoMesReferencia
 	 * @param rota
@@ -6288,13 +6288,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		FiltroFaturamentoGrupoCronogramaMensal filtroFaturamentoGrupoCronogramaMensal = new FiltroFaturamentoGrupoCronogramaMensal();
 
-		/* Passa como par‚metro o id do objeto FaturamentoGrupo que est· na Rota */
+		/* Passa como par√¢metro o id do objeto FaturamentoGrupo que est√° na Rota */
 		filtroFaturamentoGrupoCronogramaMensal
 				.adicionarParametro(new ParametroSimples(
 						FiltroFaturamentoGrupoCronogramaMensal.ID_FATURAMENTO_GRUPO,
 						rota.getFaturamentoGrupo().getId()));
 
-		// Ano e mÍs de referÍncia - 1 M S (Testar este mÈtodo)
+		// Ano e m√™s de refer√™ncia - 1 M√äS (Testar este m√©todo)
 		if (situacao) {
 			int anoMesReferenciaAnterior = Util.subtrairData(anoMesReferencia
 					.intValue());
@@ -6325,7 +6325,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0144] - Inserir Comando Atividade de Faturamento [FS0003] - Verificar
-	 * existÍncia do cronograma para o grupo Verifica a existÍncia de cronograma
+	 * exist√™ncia do cronograma para o grupo Verifica a exist√™ncia de cronograma
 	 * para o grupo de faturamento
 	 * 
 	 * @param faturamentoGrupo
@@ -6361,7 +6361,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0144] - Inserir Comando Atividade de Faturamento [FS0008] - Verificar
-	 * existÍncia da atividade no cronograma do grupo do mÍs corrente
+	 * exist√™ncia da atividade no cronograma do grupo do m√™s corrente
 	 * 
 	 * @param faturamentoGrupo
 	 * @throws ControladorException
@@ -6414,7 +6414,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * Atividade de Faturamento O sistema seleciona as atividades que podem ser
 	 * comandadas
 	 * 
-	 * @return uma coleÁ„o de atividades de faturamento
+	 * @return uma cole√ß√£o de atividades de faturamento
 	 * @throws ControladorException
 	 */
 	public Collection selecionarAtividadeFaturamentoQuePodeSerComandada(
@@ -6439,7 +6439,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				filtroFaturamentoAtividade,
 				FaturamentoAtividade.class.getName());
 
-		// [FS0001] - Verificar existÍncia de dados
+		// [FS0001] - Verificar exist√™ncia de dados
 		if (colecaoFaturamentoAtividade == null
 				|| colecaoFaturamentoAtividade.isEmpty()) {
 			sessionContext.setRollbackOnly();
@@ -6461,11 +6461,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				faturamentoAtividade = (FaturamentoAtividade) colecaoFaturamentoAtividadeIterator
 						.next();
 
-				// 1∫ Etapa
+				// 1¬∫ Etapa
 				// ==========================================================
 				/*
-				 * Possa ser repetida (FTAT_ICREPETICAO=1) ou n„o tenha sido
-				 * realizada no cronograma do mÍs de faturamento
+				 * Possa ser repetida (FTAT_ICREPETICAO=1) ou n√£o tenha sido
+				 * realizada no cronograma do m√™s de faturamento
 				 * (FTAC_DTREALIZADA com o valor nulo na tabela
 				 * FATURAMENTO_ATIVIDADE_CRONOGRAMA para FTAT_ID=FTAT_ID da
 				 * tabela FATURAMENTO_ATIVIDADE e FTCM_ID=FTCM_ID da tabela
@@ -6519,11 +6519,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.limparListaParametros();
 				}
 
-				// 2∫ Etapa
+				// 2¬∫ Etapa
 				// ==========================================================
 				/*
-				 * N„o tenha atividade predecessora
-				 * (FTAT_IDATIVIDADEPRECEDENTE=nulo) ou tenha predecessora j·
+				 * N√£o tenha atividade predecessora
+				 * (FTAT_IDATIVIDADEPRECEDENTE=nulo) ou tenha predecessora j√°
 				 * realizada (FTAC_DTREALIZADA com o valor preenchido na tabela
 				 * FATURAMENTO_ATIVIDADE_CRONOGRAMA para FTAT_ID=
 				 * FTAT_IDATIVIDADEPRECEDENTE e FTCM_ID=FTCM_ID da tabela
@@ -6582,11 +6582,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.limparListaParametros();
 					}
 
-					// 3∫ Etapa
+					// 3¬∫ Etapa
 					// ===================================================================
 					/*
 					 * A atividade de faturamento esteja no cronograma de
-					 * faturamento para o grupo no mÍs corrente (existe
+					 * faturamento para o grupo no m√™s corrente (existe
 					 * FATURAMENTO_ATIVIDADE_CRONOGRAMA para FTAT_ID = FTAT_ID
 					 * da tabela FATURAMENTO_ATIVIDADE e FTCM_ID = FTCM_ID da
 					 * tabela FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL)
@@ -6604,7 +6604,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 
 					/*
-					 * Adiciona o objeto do tipo FaturamentoAtividade na coleÁ„o
+					 * Adiciona o objeto do tipo FaturamentoAtividade na cole√ß√£o
 					 * de retorno, caso o mesmo tenha passado pelas duas etapas
 					 */
 					if (atividadeSelecao) {
@@ -6619,7 +6619,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		// [FS0002] - Verificar seleÁ„o de pelo menos uma Atividade de
+		// [FS0002] - Verificar sele√ß√£o de pelo menos uma Atividade de
 		// Faturamento
 		if (retorno == null || retorno.isEmpty()) {
 			sessionContext.setRollbackOnly();
@@ -6632,12 +6632,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0144] - Inserir Comando Atividade de Faturamento [FS0006] - Verificar
-	 * existÍncia de rotas para o grupo Verifica a existÍncia de rotas para o
+	 * exist√™ncia de rotas para o grupo Verifica a exist√™ncia de rotas para o
 	 * grupo de faturamento
 	 * 
 	 * @param faturamentoGrupo
 	 * 
-	 * @return uma coleÁ„o de rotas pertencentes ao grupo selecionado
+	 * @return uma cole√ß√£o de rotas pertencentes ao grupo selecionado
 	 * @throws ControladorException
 	 */
 	public Collection verificarExistenciaRotaGrupo(
@@ -6647,7 +6647,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		FiltroRota filtroRota = new FiltroRota();
 
-		// Retornar· todas as ocorrÍncias encontradas
+		// Retornar√° todas as ocorr√™ncias encontradas
 		filtroRota.setConsultaSemLimites(true);
 
 		filtroRota.setCampoOrderBy(FiltroRota.FATURAMENTO_GRUPO_ID,
@@ -6665,7 +6665,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		 * UNIDADE_NEGOCIO_NOME_ABREVIADO);
 		 */
 
-		// Objetos que ser„o retornados pelo hibernate
+		// Objetos que ser√£o retornados pelo hibernate
 		filtroRota
 				.adicionarCaminhoParaCarregamentoEntidade("setorComercial.localidade.gerenciaRegional");
 
@@ -6691,9 +6691,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0144] - Inserir Comando Atividade de Faturamento [SB0002] - Verificar
-	 * SituaÁ„o da Atividade para a Rota
+	 * Situa√ß√£o da Atividade para a Rota
 	 * 
-	 * @return uma coleÁ„o de rotas
+	 * @return uma cole√ß√£o de rotas
 	 */
 	public Collection verificarSituacaoAtividadeRota(
 			Collection colecaoRotasGrupo,
@@ -6729,11 +6729,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			rotaHabilitada = false;
 			rota = (Rota) colecaoRotasGrupoIterator.next();
 
-			// 1∫ Etapa
+			// 1¬∫ Etapa
 			// ==========================================================
 			/*
-			 * Caso a atividade possa ser repetida (FTAT_ICREPETICAO=1) ou n„o
-			 * tenha sido realizada no mÍs de faturamento para a rota (inexiste
+			 * Caso a atividade possa ser repetida (FTAT_ICREPETICAO=1) ou n√£o
+			 * tenha sido realizada no m√™s de faturamento para a rota (inexiste
 			 * ROTA_ID=rota selecionada na tabela FATURAMENTO_ATIV_CRON_ROTA
 			 * para FTAC_ID=FTAC_ID da tabela FATURAMENTO_ATIVIDADE_CRONOGRAMA
 			 * com FTAT_ID=Atividade a ser comandada para FTCM_ID=FTCM_ID da
@@ -6779,11 +6779,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			}
 
-			// 2∫ Etapa
+			// 2¬∫ Etapa
 			// ==========================================================
 			/*
-			 * N„o tenha atividade predecessora
-			 * (FTAT_IDATIVIDADEPRECEDENTE=nulo) ou tenha predecessora j·
+			 * N√£o tenha atividade predecessora
+			 * (FTAT_IDATIVIDADEPRECEDENTE=nulo) ou tenha predecessora j√°
 			 * realizada (FTAC_DTREALIZADA com o valor preenchido na tabela
 			 * FATURAMENTO_ATIVIDADE_CRONOGRAMA para FTAT_ID=
 			 * FTAT_IDATIVIDADEPRECEDENTE e FTCM_ID=FTCM_ID da tabela
@@ -6801,7 +6801,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					rotaHabilitada = true;
 				} else {
 
-					// Objeto que ser· retornado pelo hibernate
+					// Objeto que ser√° retornado pelo hibernate
 					filtroFaturamentoAtivCronRota
 							.adicionarCaminhoParaCarregamentoEntidade("faturamentoAtividadeCronograma");
 
@@ -6846,8 +6846,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 
 				/*
-				 * Adiciona o objeto do tipo Rota na coleÁ„o de retorno e de
-				 * acordo com a sua situaÁ„o
+				 * Adiciona o objeto do tipo Rota na cole√ß√£o de retorno e de
+				 * acordo com a sua situa√ß√£o
 				 */
 				if (rotaHabilitada) {
 					rotasHabilitadas.add(rota);
@@ -6855,14 +6855,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					rotasNaoHabilitadas.add(rota);
 				}
 			} else {
-				// Adiciona a rota na coleÁ„o das n„o habilitadas
+				// Adiciona a rota na cole√ß√£o das n√£o habilitadas
 				rotasNaoHabilitadas.add(rota);
 			}
 
 			// FIM DO LOOP
 		}
 
-		// Define a coleÁ„o de retorno (rotas habilitadas ou rotas n„o
+		// Define a cole√ß√£o de retorno (rotas habilitadas ou rotas n√£o
 		// habilitadas)
 		if (habilitada) {
 			retorno.addAll(rotasHabilitadas);
@@ -6956,12 +6956,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// ====================================================================
 
 			/*
-			 * Inclui as rotas ìhabilitadas do grupoî na tabela
+			 * Inclui as rotas ¬ìhabilitadas do grupo¬î na tabela
 			 * FATURAMENTO_ATIV_CRON_ROTA para FTAC_ID=FTAC_ID da tabela
 			 * FATURAMENTO_ATIVIDADE_CRONOGRAMA atualizada , ROTA_ID=Rota
 			 * selecionada e FACR_DTCONTAVENCIMENTO com a data de vencimento do
-			 * grupo caso a atividade de faturamento selecionada corresponda ‡
-			 * atividade faturar grupo; caso contr·rio, com o valor null.
+			 * grupo caso a atividade de faturamento selecionada corresponda √†
+			 * atividade faturar grupo; caso contr√°rio, com o valor null.
 			 */
 			FaturamentoAtivCronRotaPK faturamentoAtividadeCronogramaRotaPK = new FaturamentoAtivCronRotaPK();
 
@@ -7018,12 +7018,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// ====================================================================
 
 		/*
-		 * Inclui as rotas ìhabilitadas do grupoî na tabela
+		 * Inclui as rotas ¬ìhabilitadas do grupo¬î na tabela
 		 * FATURAMENTO_ATIV_CRON_ROTA para FTAC_ID=FTAC_ID da tabela
 		 * FATURAMENTO_ATIVIDADE_CRONOGRAMA atualizada , ROTA_ID=Rota
 		 * selecionada e FACR_DTCONTAVENCIMENTO com a data de vencimento do
-		 * grupo caso a atividade de faturamento selecionada corresponda ‡
-		 * atividade faturar grupo; caso contr·rio, com o valor null.
+		 * grupo caso a atividade de faturamento selecionada corresponda √†
+		 * atividade faturar grupo; caso contr√°rio, com o valor null.
 		 */
 
 		Iterator colecaoFaturamentoAtividadeCronogramaRotaIterator = colecaoFaturamentoAtividadeCronogramaRota
@@ -7044,7 +7044,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0104] Manter Comando Atividade de Faturamento
 	 * 
-	 * Retorna uma lista de atividades de faturamento comandadas e ainda n„o
+	 * Retorna uma lista de atividades de faturamento comandadas e ainda n√£o
 	 * realizadas
 	 * 
 	 * @return
@@ -7079,7 +7079,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * [UC0104] Manter Comando Atividade de Faturamento
 	 * 
 	 * Retorna o count do resultado da pesquisa de Faturamento Atividade
-	 * Cronograma n„o realizadas
+	 * Cronograma n√£o realizadas
 	 * 
 	 * buscarAtividadeComandadaNaoRealizadaCount
 	 * 
@@ -7185,7 +7185,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0183 - Inserir DÈbito A Cobrar]
+	 * [UC0183 - Inserir D√©bito A Cobrar]
 	 * 
 	 * @author Rafael Santos, Pedro Alexandre, Raphael Rossiter
 	 * @date 23/12/2005, 21/11/2006, 13/04/2010
@@ -7217,14 +7217,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.getControladorUtil().pesquisarParametrosDoSistema()
 						.getPercentualTaxaJurosFinanciamento();
 
-				// no caso de numero de prestacıes == 1 , permitir juros = 0
+				// no caso de numero de prestac√µes == 1 , permitir juros = 0
 				if (numeroPrestacoes.intValue() != 1
 						|| (debitoACobrar.getPercentualTaxaJurosFinanciamento()
 								.compareTo(BigDecimal.ZERO) != 0 && numeroPrestacoes
 								.intValue() == 1)) {
 					if (debitoACobrar.getPercentualTaxaJurosFinanciamento()
 							.compareTo(percentualTaxaJurosFinanciamento) == -1) {
-						logger.info("ImÛvel com taxa de juros n„o permitida: " + debitoACobrar.getImovel().getId());
+						logger.info("Im√≥vel com taxa de juros n√£o permitida: " + debitoACobrar.getImovel().getId());
 						throw new ControladorException(
 								"atencao.taxa_juros.nao.permitida", null,
 								(this.getControladorUtil()
@@ -7322,8 +7322,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		/*
-		 * Para geraÁ„o de dÈbitos relacionados com pagamento antecipado, o
-		 * sistema dever· manter as mesmas caracterÌsticas do dÈbito que esta
+		 * Para gera√ß√£o de d√©bitos relacionados com pagamento antecipado, o
+		 * sistema dever√° manter as mesmas caracter√≠sticas do d√©bito que esta
 		 * sendo recebido.
 		 */
 		if (!debitoParaPagamentoAntecipado) {
@@ -7360,8 +7360,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Integer idDebitoGerado = null;
 
 		/**
-		 * alterado por pedro alexandre dia 21/11/2006 alteraÁ„o feita para
-		 * acoplar o controle de abrangÍncia de usu·rio
+		 * alterado por pedro alexandre dia 21/11/2006 altera√ß√£o feita para
+		 * acoplar o controle de abrang√™ncia de usu√°rio
 		 */
 		Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
 
@@ -7390,7 +7390,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0186 - Calcular PrestaÁ„o] Author: Rafael Santos Data: 23/12/2005
+	 * [UC0186 - Calcular Presta√ß√£o] Author: Rafael Santos Data: 23/12/2005
 	 * 
 	 * @param taxaJurosFinanciamento
 	 *            Taxa de Juros do Financiamento
@@ -7411,7 +7411,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		ArrayList valores = new ArrayList();
 
 		// -----------------------------------------------------------
-		// Verificar permiss„o especial
+		// Verificar permiss√£o especial
 		boolean temPermissaoDebitoACobrar = getControladorPermissaoEspecial()
 				.verificarPermissaoInserirDebitoACobrarSemEntradaSemJuros(
 						usuario);
@@ -7463,13 +7463,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.getControladorUtil().pesquisarParametrosDoSistema()
 						.getPercentualTaxaJurosFinanciamento();
 
-				// no caso de numero de prestacıes == 1 , permitir juros = 0
+				// no caso de numero de prestac√µes == 1 , permitir juros = 0
 				if (numeroPrestacoes.intValue() != 1
 						|| (taxaJurosFinanciamento.compareTo(new BigDecimal(0)) != 0 && numeroPrestacoes
 								.intValue() == 1)) {
 					if (taxaJurosFinanciamento
 							.compareTo(percentualTaxaJurosFinanciamento) == -1) {
-						// Taxa de Juros mÌnima permitida È de 3 casas%
+						// Taxa de Juros m√≠nima permitida √© de 3 casas%
 						throw new ControladorException(
 								"atencao.taxa_juros.nao.permitida", null,
 								(this.getControladorUtil()
@@ -7543,7 +7543,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		valores.add(valorAParcelar.setScale(2, BigDecimal.ROUND_HALF_UP));
 
-		// [FS0010] - Validar valor total do serviÁo
+		// [FS0010] - Validar valor total do servi√ßo
 		FiltroDebitoTipo filtroDebitoTipo = new FiltroDebitoTipo();
 
 		filtroDebitoTipo.adicionarParametro(new ParametroSimples(
@@ -7565,7 +7565,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0186 - Calcular PrestaÁ„o] Author: Rafael Santos Data: 03/04/2006
+	 * [UC0186 - Calcular Presta√ß√£o] Author: Rafael Santos Data: 03/04/2006
 	 * 
 	 * @param taxaJurosFinanciamento
 	 *            Taxa de Juros do Financiamento
@@ -7618,7 +7618,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0183 - Inserir DÈbito A Cobrar] Author: Rafael Santos Data: 29/12/2005
+	 * [UC0183 - Inserir D√©bito A Cobrar] Author: Rafael Santos Data: 29/12/2005
 	 * Inserir Debito A Cobrar por Categoria
 	 * 
 	 * @param debitoACobrar
@@ -7658,7 +7658,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0183 - Inserir DÈbito A Cobrar] Author: Rafael CorrÍa e Leonardo
+	 * [UC0183 - Inserir D√©bito A Cobrar] Author: Rafael Corr√™a e Leonardo
 	 * Vieira Data: 29/12/2005 Inserir Debito A Cobrar por Categoria
 	 * 
 	 * @param debitoACobrar
@@ -7692,10 +7692,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Calcula os valores da conta de acordo com os par‚metros passados
+	 * Calcula os valores da conta de acordo com os par√¢metros passados
 	 * 
 	 * [UC0145] - Inserir Conta [SF0001] - Determinar Valores para Faturamento
-	 * de ¡gua e/ou Esgoto Author: Raphael Rossiter 05/12/2005
+	 * de √Ågua e/ou Esgoto Author: Raphael Rossiter 05/12/2005
 	 * 
 	 * @param mesAnoConta
 	 * @param imovelID
@@ -7745,8 +7745,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Integer mesAnoFaturamentoImovel = imovel.getQuadra().getRota().getFaturamentoGrupo().getAnoMesReferencia();
 
 		/*
-		 * [UC0157] - Simular C·lculo da Conta
-		 * [FS0003] - Verificar Consumo MÌnimo
+		 * [UC0157] - Simular C√°lculo da Conta
+		 * [FS0003] - Verificar Consumo M√≠nimo
 		 */
 		Integer idConsumoAgua = null;
 		if (consumoAgua != null && !consumoAgua.equalsIgnoreCase("")) {
@@ -7760,8 +7760,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		/*
-		 * [UC0157] - Simular C·lculo da Conta
-		 * [FS0004] - Verificar Volume MÌnimo
+		 * [UC0157] - Simular C√°lculo da Conta
+		 * [FS0004] - Verificar Volume M√≠nimo
 		 */
 		Integer idConsumoEsgoto = null;
 		if (consumoEsgoto != null && !consumoEsgoto.equalsIgnoreCase("")) {
@@ -7790,13 +7790,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			objPercentualEsgoto = Util.formatarMoedaRealparaBigDecimal(percentualEsgoto);
 		}
 
-		// [SF0001] - Determinar Valores para Faturamento de ¡gua e/ou Esgoto.
+		// [SF0001] - Determinar Valores para Faturamento de √Ågua e/ou Esgoto.
 		if (colecaoCategoriaOUSubcategoria != null && !colecaoCategoriaOUSubcategoria.isEmpty()) {
 
 			Short indicadorFaturamentoAgua = new Short("1");
 			Short indicadorFaturamentoEsgoto = new Short("1");
 
-			// [UC0105] - Obter Consumo MÌnimo da LigaÁ„o por Subcategoria
+			// [UC0105] - Obter Consumo M√≠nimo da Liga√ß√£o por Subcategoria
 			int consumoMinimoLigacao = this.getControladorMicromedicao().obterConsumoMinimoLigacao(imovel, colecaoCategoriaOUSubcategoria);
 
 			boolean temPermissaoFaturamentoAntecipado = this.getControladorPermissaoEspecial().verificarPermissaoInserirContaFaturamentoAntecipado(usuarioLogado);
@@ -7804,7 +7804,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Date dataLeituraAtual = null;
 			Date dataLeituraAnterior = null;
 
-			// Caso o usu·rio tenha permiss„o especial (FATURAMENTO ANTECIPADO) e o anoMes informado seja maior que o anoMes do faturamento do imÛvel
+			// Caso o usu√°rio tenha permiss√£o especial (FATURAMENTO ANTECIPADO) e o anoMes informado seja maior que o anoMes do faturamento do im√≥vel
 			if (temPermissaoFaturamentoAntecipado && Util.compararAnoMesReferencia(new Integer(mesAnoConta), mesAnoFaturamentoImovel, ">")) {
 				int mesConta = Util.obterMes(new Integer(mesAnoConta));
 				int anoConta = Util.obterAno(new Integer(mesAnoConta));
@@ -7824,7 +7824,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				dataLeituraAnterior = this.buscarDataLeituraCronograma(imovel, true, new Integer(mesAnoConta));
 				dataLeituraAtual = this.buscarDataLeituraCronograma(imovel, false, new Integer(mesAnoConta));
 
-				// Caso N√O existe cronograma para o anoMes informado
+				// Caso N√ÉO existe cronograma para o anoMes informado
 				if (dataLeituraAnterior == null || dataLeituraAtual == null) {
 
 					int mesConta = Util.obterMes(new Integer(mesAnoConta));
@@ -7839,7 +7839,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// Ajuste na Data de leitura anterior e atual.
 				Integer anoMesConta = new Integer(mesAnoConta);
 
-				// CASO O IM”VEL SEJA PARA FATURAR ¡GUA
+				// CASO O IM√ìVEL SEJA PARA FATURAR √ÅGUA
 				if (imovel.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoAguaSituacao.FATURAMENTO_ATIVO)) {
 					MedicaoHistorico medicaoHistoricoAgua = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAgua(imovel.getId(), anoMesConta);
 
@@ -7855,7 +7855,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 
-				// CASO O IM”VEL SEJA PARA FATURAR ESGOTO
+				// CASO O IM√ìVEL SEJA PARA FATURAR ESGOTO
 				if (imovel.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
 					MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPoco(imovel.getId(), anoMesConta);
 
@@ -7910,8 +7910,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 10/01/2006
-	 * C·lcula o valor total dos dÈbitos de uma conta de acordo com o informado
-	 * pelo usu·rio
+	 * C√°lcula o valor total dos d√©bitos de uma conta de acordo com o informado
+	 * pelo usu√°rio
 	 * 
 	 * @param colecaoDebitoCobrado
 	 * @param requestMap
@@ -7924,12 +7924,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		BigDecimal valorTotalDebitoConta = new BigDecimal("0");
 
-		// Calculando o valor total dos dÈbitos selecionados pelo usu·rio
+		// Calculando o valor total dos d√©bitos selecionados pelo usu√°rio
 		// ===============================================================
 		if (colecaoDebitoCobrado != null && !colecaoDebitoCobrado.isEmpty()) {
 
-			// Atualizando os valores dos dÈbitos de acordo com os dados
-			// informados pelo usu·rio
+			// Atualizando os valores dos d√©bitos de acordo com os dados
+			// informados pelo usu√°rio
 			DebitoCobrado debitoCobradoColecao;
 			Iterator colecaoDebitoCobradoIt = colecaoDebitoCobrado.iterator();
 			String valorDebitoColecao;
@@ -7951,7 +7951,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							|| valorDebitoColecao.equalsIgnoreCase("")) {
 						throw new ControladorException(
 								"atencao.campo_texto.obrigatorio", null,
-								"Valor do DÈbito");
+								"Valor do D√©bito");
 					}
 
 					debitoCobradoColecao
@@ -7970,8 +7970,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0150] - Retificar Conta Author: Raphael Rossiter Data: 10/01/2006
-	 * C·lcula o valor total dos crÈditos de uma conta de acordo com o informado
-	 * pelo usu·rio
+	 * C√°lcula o valor total dos cr√©ditos de uma conta de acordo com o informado
+	 * pelo usu√°rio
 	 * 
 	 * @param colecaoCreditoRealizado
 	 * @param requestMap
@@ -7984,13 +7984,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		BigDecimal valorTotalCreditoConta = new BigDecimal("0.00");
 
-		// Calculando o valor total dos dÈbitos selecionados pelo usu·rio
+		// Calculando o valor total dos d√©bitos selecionados pelo usu√°rio
 		// ===============================================================
 		if (colecaoCreditoRealizado != null
 				&& !colecaoCreditoRealizado.isEmpty()) {
 
-			// Atualizando os valores dos crÈditos de acordo com os dados
-			// informados pelo usu·rio
+			// Atualizando os valores dos cr√©ditos de acordo com os dados
+			// informados pelo usu√°rio
 			CreditoRealizado creditoRealizadoColecao;
 			Iterator colecaoCreditoRealizadoIt = colecaoCreditoRealizado
 					.iterator();
@@ -8014,7 +8014,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							|| valorCreditoColecao.equalsIgnoreCase("")) {
 						throw new ControladorException(
 								"atencao.campo_texto.obrigatorio", null,
-								"Valor do CrÈdito");
+								"Valor do Cr√©dito");
 					}
 
 					creditoRealizadoColecao
@@ -8033,8 +8033,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0150] - Retificar Conta Author: Raphael Rossiter Data: 10/01/2006
-	 * C·lcula o valor total dos crÈditos de uma conta de acordo com o informado
-	 * pelo usu·rio
+	 * C√°lcula o valor total dos cr√©ditos de uma conta de acordo com o informado
+	 * pelo usu√°rio
 	 * 
 	 * @param colecaoCreditoRealizado
 	 * @param requestMap
@@ -8047,13 +8047,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		BigDecimal valorTotalCreditoConta = new BigDecimal("0.00");
 
-		// Calculando o valor total dos dÈbitos selecionados pelo usu·rio
+		// Calculando o valor total dos d√©bitos selecionados pelo usu√°rio
 		// ===============================================================
 		if (colecaoCreditoRealizado != null
 				&& !colecaoCreditoRealizado.isEmpty()) {
 
-			// Atualizando os valores dos crÈditos de acordo com os dados
-			// informados pelo usu·rio
+			// Atualizando os valores dos cr√©ditos de acordo com os dados
+			// informados pelo usu√°rio
 			CreditoRealizado creditoRealizadoColecao;
 			Iterator colecaoCreditoRealizadoIt = colecaoCreditoRealizado
 					.iterator();
@@ -8073,8 +8073,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 10/01/2006
-	 * C·lcula o valor total dos dÈbitos de uma conta de acordo com o informado
-	 * pelo usu·rio
+	 * C√°lcula o valor total dos d√©bitos de uma conta de acordo com o informado
+	 * pelo usu√°rio
 	 * 
 	 * @param colecaoDebitoCobrado
 	 * @param requestMap
@@ -8087,12 +8087,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		BigDecimal valorTotalDebitoConta = new BigDecimal("0");
 
-		// Calculando o valor total dos dÈbitos selecionados pelo usu·rio
+		// Calculando o valor total dos d√©bitos selecionados pelo usu√°rio
 		// ===============================================================
 		if (colecaoDebitoCobrado != null && !colecaoDebitoCobrado.isEmpty()) {
 
-			// Atualizando os valores dos dÈbitos de acordo com os dados
-			// informados pelo usu·rio
+			// Atualizando os valores dos d√©bitos de acordo com os dados
+			// informados pelo usu√°rio
 			DebitoCobrado debitoCobradoColecao;
 			Iterator colecaoDebitoCobradoIt = colecaoDebitoCobrado.iterator();
 
@@ -8111,7 +8111,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 12/01/2006
-	 * C·lcula o valor total de ·gua ou esgoto
+	 * C√°lcula o valor total de √°gua ou esgoto
 	 * 
 	 * @param calcularValoresAguaEsgotoHelper
 	 * @param tipoRetorno
@@ -8145,7 +8145,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 12/01/2006
-	 * C·lcula o consumo total de ·gua ou esgoto
+	 * C√°lcula o consumo total de √°gua ou esgoto
 	 * 
 	 * @param calcularValoresAguaEsgotoHelper
 	 * @param tipoRetorno
@@ -8176,7 +8176,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0145] - Inserir Conta [SF002] - Gerar dados da conta [SF003] - Gerar os dÈbitos cobrados
+	 * [UC0145] - Inserir Conta [SF002] - Gerar dados da conta [SF003] - Gerar os d√©bitos cobrados
 	 * 
 	 * @param mesAnoConta
 	 * @param imovel
@@ -8226,7 +8226,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					|| conta.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)) {
 				throw new ControladorException("atencao.conta_ja_existente_cancelada", null, Util.formatarMesAnoReferencia(mesAnoConta));
 			} else {
-				throw new ControladorException("atencao.conta_ja_existente_imovel_anomesreferencia", null, imovel.getId() + " j· possui a conta com a referÍncia " + Util.formatarMesAnoReferencia(mesAnoConta) + ".");
+				throw new ControladorException("atencao.conta_ja_existente_imovel_anomesreferencia", null, imovel.getId() + " j√° possui a conta com a refer√™ncia " + Util.formatarMesAnoReferencia(mesAnoConta) + ".");
 			}
 		}
 
@@ -8374,10 +8374,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * Inclui, na tabela CONTA_CATEGORIA, a(s) categoria(s) e sua(s)
 	 * respectiva(s) quantidade(s) de economia da lista do passo 5.8 do fluxo
 	 * principal e os atributos retornados pelo [UC0120] para cada categoria,
-	 * caso o [UC0120] n„o tenha sido chamado, os valores correspondentes devem
+	 * caso o [UC0120] n√£o tenha sido chamado, os valores correspondentes devem
 	 * ser nulos.
 	 * 
-	 * Caso o [UC0120] n„o tenha sido chamado n„o gravar a tabela
+	 * Caso o [UC0120] n√£o tenha sido chamado n√£o gravar a tabela
 	 * CONTA_CATEGORIA_CONSUMO_FAIXA
 	 * 
 	 * @param calcularValoresConta
@@ -8401,7 +8401,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		ContaCategoria contaCategoriaInsert = null;
 		calcularValoresConta = calcularValoresAguaEsgotoTotalizando(calcularValoresConta);
 
-		// O [UC0120] n„o foi invocado, inserir apenas o ID da conta, ID da
+		// O [UC0120] n√£o foi invocado, inserir apenas o ID da conta, ID da
 		// categoria e qtd de economias da categoria
 		if (calcularValoresConta == null || calcularValoresConta.isEmpty()) {
 
@@ -8425,7 +8425,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.valueOf(categoria.getQuantidadeEconomiasCategoria()
 								.intValue())).shortValue());
 
-				// Ultima AlteraÁ„o
+				// Ultima Altera√ß√£o
 				contaCategoriaInsert.setUltimaAlteracao(new Date());
 
 				// Evitando que registre transacao
@@ -8472,7 +8472,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.getQuantidadeEconomiasCategoria().intValue()))
 						.shortValue());
 
-				// Valores relacionados aos c·lculos de ·gua
+				// Valores relacionados aos c√°lculos de √°gua
 
 				contaCategoriaInsert.setValorAgua(calcularValoresContaObjeto
 						.getValorFaturadoAguaCategoria());
@@ -8485,7 +8485,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.setConsumoMinimoAgua(calcularValoresContaObjeto
 								.getConsumoMinimoAguaCategoria());
 
-				// Valores relacionados aos c·lculos de esgoto
+				// Valores relacionados aos c√°lculos de esgoto
 
 				contaCategoriaInsert.setValorEsgoto(calcularValoresContaObjeto
 						.getValorFaturadoEsgotoCategoria());
@@ -8499,7 +8499,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.setConsumoMinimoEsgoto(calcularValoresContaObjeto
 								.getConsumoMinimoEsgotoCategoria());
 
-				// Ultima AlteraÁ„o
+				// Ultima Altera√ß√£o
 				contaCategoriaInsert.setUltimaAlteracao(new Date());
 
 				// Evitando registrar transacao
@@ -8521,8 +8521,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * 
 	 * Inclui a(s) faixa(s) de consumo por categoria na tabela
 	 * CONTA_CATEGORIA_CONSUMO_FAIXA com os atributos retornados pelo [UC0120]
-	 * por categoria e para cada faixa da categoria, caso o [UC0120] n„o tenha
-	 * sido chamado n„o gravar a tabela.
+	 * por categoria e para cada faixa da categoria, caso o [UC0120] n√£o tenha
+	 * sido chamado n√£o gravar a tabela.
 	 * 
 	 * @param contaCategoria
 	 * @param calcularValoresContaFaixa
@@ -8551,7 +8551,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				contaCategoriaConsumoFaixaInsert
 						.setContaCategoria(contaCategoria);
 
-				// Valores relacionados aos c·lculos de ·gua
+				// Valores relacionados aos c√°lculos de √°gua
 
 				contaCategoriaConsumoFaixaInsert
 						.setValorAgua(calcularValoresContaFaixaObjeto
@@ -8560,7 +8560,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.setConsumoAgua(calcularValoresContaFaixaObjeto
 								.getConsumoFaturadoAguaFaixa());
 
-				// Valores relacionados aos c·lculos de esgoto
+				// Valores relacionados aos c√°lculos de esgoto
 
 				contaCategoriaConsumoFaixaInsert
 						.setValorEsgoto(calcularValoresContaFaixaObjeto
@@ -8584,7 +8584,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.setValorTarifaFaixa(calcularValoresContaFaixaObjeto
 								.getValorTarifaFaixa());
 
-				// Ultima AlteraÁ„o
+				// Ultima Altera√ß√£o
 				contaCategoriaConsumoFaixaInsert.setUltimaAlteracao(new Date());
 
 				if (contaCategoriaConsumoFaixaInsert != null
@@ -8612,7 +8612,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoClienteImovel = null;
 
 		/*
-		 * Seleciona a partir da tabela CLIENTE_IMOVEL para IMOV_ID=Id do imÛvel
+		 * Seleciona a partir da tabela CLIENTE_IMOVEL para IMOV_ID=Id do im√≥vel
 		 * e CLIM_DTRELACAOFIM com o valor correspondente a nulo.
 		 */
 		try {
@@ -8719,7 +8719,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0150] - Retificar Conta Author: Raphael Rossiter Data: 13/01/2006
 	 * 
-	 * Inseri na tabela CREDITO_REALIZADO os dados referentes aos crÈditos da
+	 * Inseri na tabela CREDITO_REALIZADO os dados referentes aos cr√©ditos da
 	 * conta
 	 * 
 	 * @param conta
@@ -8793,7 +8793,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 13/01/2006
 	 * 
-	 * Inclui a quantidade de economias por categoria do dÈbito cobrado na
+	 * Inclui a quantidade de economias por categoria do d√©bito cobrado na
 	 * tabela DEBITO_COBRADO_CATEGORIA
 	 * 
 	 * @param debitoCobrado
@@ -8828,7 +8828,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 13/01/2006
 	 * 
-	 * Inclui a quantidade de economias por categoria do crÈdito realizado na
+	 * Inclui a quantidade de economias por categoria do cr√©dito realizado na
 	 * tabela CREDITO_REALIZADO_CATEGORIA
 	 * 
 	 * @param creditoRealizado
@@ -8861,7 +8861,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0145] Inserir Conta [FS0021] ñ Verificar valores de leitura anterior e
+	 * [UC0145] Inserir Conta [FS0021] ¬ñ Verificar valores de leitura anterior e
 	 * atual
 	 * 
 	 * @author Vivianne Sousa
@@ -8871,7 +8871,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Integer leituraAtual, Integer consumoAgua)
 			throws ControladorException {
 
-		// Caso a diferenÁa entre LEITURAANTERIOR e LEITURAATUAL seja diferente
+		// Caso a diferen√ßa entre LEITURAANTERIOR e LEITURAATUAL seja diferente
 		// do CONSUMOAGUA.
 		// Exibir a seguinte mensagem: Leitura fora da faixa
 		if (leituraAnterior != null && leituraAtual != null
@@ -8894,7 +8894,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0145] Inserir Conta [FS0021] ñ Verificar valores de leitura anterior e
+	 * [UC0145] Inserir Conta [FS0021] ¬ñ Verificar valores de leitura anterior e
 	 * atual
 	 * 
 	 * @author Vivianne Sousa
@@ -8904,9 +8904,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Integer leituraAtual, String retorno, Integer contaID, Integer idImovel,
 			Integer consumoAguaCalculado, Integer consumoAguaMedido) throws ControladorException {
 
-		// Caso a diferenÁa entre LEITURAANTERIOR e LEITURAATUAL seja diferente
+		// Caso a diferen√ßa entre LEITURAANTERIOR e LEITURAATUAL seja diferente
 		// do CONSUMOAGUA.
-		// Exibir a seguinte mensagem: ìLeitura fora da faixaî
+		// Exibir a seguinte mensagem: ¬ìLeitura fora da faixa¬î
 		if (leituraAnterior != null && leituraAtual != null && consumoAguaCalculado != null) {
 
 			int diferencaLeituraAnteriorELeituraAtual = 0;
@@ -8943,7 +8943,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	
 	/**
-	 * Monta uma coleÁ„o de contas categoria a partir de uma coleÁ„o de
+	 * Monta uma cole√ß√£o de contas categoria a partir de uma cole√ß√£o de
 	 * categoria recebida
 	 * 
 	 * @param colecaoCategoria
@@ -8981,7 +8981,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.valueOf(categoria.getQuantidadeEconomiasCategoria()
 							.intValue())).shortValue());
 
-			// Ultima AlteraÁ„o
+			// Ultima Altera√ß√£o
 			contaCategoriaInsert.setUltimaAlteracao(new Date());
 
 			colecaoContaCategoria.add(contaCategoriaInsert);
@@ -8990,7 +8990,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descriÁ„o sobre o caso de uso>
+	 * <Breve descri√ß√£o sobre o caso de uso>
 	 * 
 	 * [UC0147] - Cancelar Conta
 	 * 
@@ -9016,7 +9016,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		FiltroConta filtroConta = new FiltroConta();
 		Collection colecaoContaNaBase = null;
 
-		// Verificando permiss„o especial do usu·rio logado
+		// Verificando permiss√£o especial do usu√°rio logado
 		boolean usuarioPermissaoCancelarSemRA = this
 				.getControladorPermissaoEspecial()
 				.verificarPermissaoCancelarContaSemRA(usuarioLogado);
@@ -9024,7 +9024,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		while (colecaoContasIt.hasNext()) {
 			contaColecao = (Conta) colecaoContasIt.next();
 
-			// Carregando a conta que est· na base
+			// Carregando a conta que est√° na base
 			filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.ID,
 					contaColecao.getId()));
 
@@ -9041,11 +9041,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				String dadosConta = arrayIdentificadores[index];
 				String[] idUltimaAlteracao = dadosConta.split("-");
 
-				// Contas que ser„o canceladas pelo sistema
+				// Contas que ser√£o canceladas pelo sistema
 				if (contaColecao.getId().equals(
 						new Integer(idUltimaAlteracao[0]))) {
 
-					// Verificar atualizaÁ„o realizada por outro usu·rio
+					// Verificar atualiza√ß√£o realizada por outro usu√°rio
 					/*
 					 * if ((contaNaBase.getUltimaAlteracao().after(contaColecao
 					 * .getUltimaAlteracao()))) {
@@ -9054,12 +9054,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					 */
 
 					/**
-					 * Caso a situaÁ„o atual da conta corresponda a normal
+					 * Caso a situa√ß√£o atual da conta corresponda a normal
 					 * (DCST_IDATUAL com o valor correspondente a normal da
 					 * tabela DEBITO_CREDITO_SITUACAO) ou corresponda a
-					 * retificada ou incluÌda (DCST_IDATUAL com o valor
-					 * correspondente a retificada ou incluÌda, da tabela
-					 * DEBITO_CREDITO_SITUACAO) e a retificaÁ„o ou inclus„o j·
+					 * retificada ou inclu√≠da (DCST_IDATUAL com o valor
+					 * correspondente a retificada ou inclu√≠da, da tabela
+					 * DEBITO_CREDITO_SITUACAO) e a retifica√ß√£o ou inclus√£o j√°
 					 * tenha sido contabilizada (CNTA_AMREFERENCIACONTABIL menor
 					 * que PARM_AMREFERENCIAFATURAMENTO da tabela
 					 * SISTEMA_PARAMETROS), atualizar os seguintes atributos da
@@ -9079,15 +9079,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						contaColecao
 								.setContaMotivoCancelamento(contaMotivoCancelamento);
 
-						// SituaÁ„o Anterior
+						// Situa√ß√£o Anterior
 						/*
-						 * Caso a situaÁ„o atual da conta corresponda a normal
+						 * Caso a situa√ß√£o atual da conta corresponda a normal
 						 * (DCST_IDATUAL com o valor correspondente a normal da
 						 * tabela DEBITO_CREDITO_SITUACAO) e a conta tenha sido
-						 * faturada no mÍs de faturamento corrente
+						 * faturada no m√™s de faturamento corrente
 						 * (CNTA_AMREFERENCIACONTA= PARM_AMREFERENCIAFATURAMENTO
 						 * da tabela SISTEMA_PARAMETROS)
-						 * DCST_IDANTERIOR=DCST_IDATUAL, caso contr·rio
+						 * DCST_IDANTERIOR=DCST_IDATUAL, caso contr√°rio
 						 * DCST_IDANTERIOR=nulo)
 						 */
 						if (contaColecao.getDebitoCreditoSituacaoAtual()
@@ -9105,12 +9105,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							contaColecao.setDebitoCreditoSituacaoAnterior(null);
 						}
 
-						// SituaÁ„o Atual
+						// Situa√ß√£o Atual
 						DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
-						// SituaÁ„o Atual
+						// Situa√ß√£o Atual
 						/**
-						 * Caso motivo de retificaÁ„o seja dÈbito
-						 * prescrito, alterar a situaÁ„o da conta para 8.
+						 * Caso motivo de retifica√ß√£o seja d√©bito
+						 * prescrito, alterar a situa√ß√£o da conta para 8.
 						 * 
 						 * @author Wellington Rocha
 						 * @date 01/06/2012
@@ -9147,7 +9147,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							contaColecao
 									.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 
-							// ˙ltima alteraÁ„o
+							// √∫ltima altera√ß√£o
 							contaColecao.setUltimaAlteracao(new Date());
 
 							/*
@@ -9155,8 +9155,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							 * (Analista: Rosana Carvalho)
 							 * 
 							 * OBJETIVO: Quando o mes/ano de faturamento for
-							 * maior que o mes/ano de faturamento atual, n„o
-							 * alterar o mes/ano cont·bil
+							 * maior que o mes/ano de faturamento atual, n√£o
+							 * alterar o mes/ano cont√°bil
 							 */
 
 							// alterado por Vivianne Sousa 07/05/2008
@@ -9167,8 +9167,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							/*
 							 * Colocado por Raphael Rossiter em 09/08/2007
-							 * OBJETIVO: Gravar na tabela de conta o usu·rio que
-							 * est· logado no sistema
+							 * OBJETIVO: Gravar na tabela de conta o usu√°rio que
+							 * est√° logado no sistema
 							 */
 
 							// Usuario
@@ -9178,7 +9178,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							try {
 
 								// ------------ <REGISTRAR
-								// TRANSA«√O>----------------------------
+								// TRANSA√á√ÉO>----------------------------
 
 								RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 										Operacao.OPERACAO_CANCELAR_CONTA,
@@ -9195,7 +9195,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										contaColecao);
 
 								// ------------ </REGISTRAR
-								// TRANSA«√O>----------------------------
+								// TRANSA√á√ÉO>----------------------------
 
 								if (contaColecao
 										.getDebitoCreditoSituacaoAnterior() == null) {
@@ -9216,7 +9216,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// Analista: Roberto Souza
 								if (!usuarioPermissaoCancelarSemRA) {
 
-									// Verificar ExistÍncia de RA
+									// Verificar Exist√™ncia de RA
 									RegistroAtendimento registroAtendimento = this
 											.getControladorRegistroAtendimento()
 											.verificarExistenciaRegistroAtendimentoSemLevantarExcecao(
@@ -9226,7 +9226,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 									if (registroAtendimento != null) {
 										// Atualizando a conta com o registro de
-										// atendimento que autoriza esta aÁ„o
+										// atendimento que autoriza esta a√ß√£o
 										repositorioFaturamento
 												.atualizarContaCanceladaOuRetificada(
 														contaColecao,
@@ -9235,10 +9235,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								}
 
 								// CRC2725 - alterado por Vivianne Sousa -
-								// 17/09/2009 analista:F·tima
-								// 1.1.2.Verificar se h· relaÁ„o do cancelamento
+								// 17/09/2009 analista:F√°tima
+								// 1.1.2.Verificar se h√° rela√ß√£o do cancelamento
 								// com
-								// itens de negativaÁ„o
+								// itens de negativa√ß√£o
 								getControladorSpcSerasa()
 										.verificarRelacaoDoCancelamentoComItensNegativacao(
 												contaColecao, null);
@@ -9258,24 +9258,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					} else if (isContaIncluidaOuRetificadaEReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
 
-						// RemoÁ„o da conta no BD
+						// Remo√ß√£o da conta no BD
 						contaColecao
 								.setPercentualEsgoto(new BigDecimal("0.00"));
 
 						// CRC2725 - alterado por Vivianne Sousa - 17/09/2009
-						// analista:F·tima
-						// [FS0003 - Verificar existÍncia de itens de
-						// negativaÁ„o para a conta incluÌda]:
+						// analista:F√°tima
+						// [FS0003 - Verificar exist√™ncia de itens de
+						// negativa√ß√£o para a conta inclu√≠da]:
 						getControladorSpcSerasa()
 								.verificarExistenciaItensNegativacaoParaContaIncluida(
 										contaColecao);
-						// 1.2.4. Verificar se h· relaÁ„o do cancelamento com
-						// itens de negativaÁ„o:
-						// [UC0937 - Obter Itens de NegativaÁ„o Associados ‡
+						// 1.2.4. Verificar se h√° rela√ß√£o do cancelamento com
+						// itens de negativa√ß√£o:
+						// [UC0937 - Obter Itens de Negativa√ß√£o Associados √†
 						// Conta]
-						// passando o identificador do imÛvel (ImÛvel da Conta
+						// passando o identificador do im√≥vel (Im√≥vel da Conta
 						// Retificada e Cancelada)
-						// e a referÍncia (ReferÍncia da Conta Retificada e
+						// e a refer√™ncia (Refer√™ncia da Conta Retificada e
 						// Cancelada).
 						Collection colecaoNegativadorMovimentoRegItem = getControladorSpcSerasa()
 								.obterItensNegativacaoAssociadosAConta(
@@ -9294,8 +9294,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.getId()
 								.equals(DebitoCreditoSituacao.RETIFICADA)) {
 
-							// [FS0002] - Verificar existÍncia da conta
-							// cancelada por retificaÁ„o
+							// [FS0002] - Verificar exist√™ncia da conta
+							// cancelada por retifica√ß√£o
 
 							filtroConta
 									.adicionarParametro(new ParametroSimples(
@@ -9336,18 +9336,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							contaCanceladaPorRetificacao
 									.setContaMotivoCancelamento(contaMotivoCancelamento);
 
-							// SituaÁ„o Atual
+							// Situa√ß√£o Atual
 							DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 							debitoCreditoSituacao
 									.setId(DebitoCreditoSituacao.CANCELADA);
 							contaCanceladaPorRetificacao
 									.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 
-							// Data da retificaÁ„o = NULL
+							// Data da retifica√ß√£o = NULL
 							contaCanceladaPorRetificacao
 									.setDataRetificacao(null);
 
-							// Motivo da retificaÁ„o = NULL
+							// Motivo da retifica√ß√£o = NULL
 							contaCanceladaPorRetificacao
 									.setContaMotivoRetificacao(null);
 
@@ -9356,8 +9356,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							 * (Analista: Rosana Carvalho)
 							 * 
 							 * OBJETIVO: Quando o mes/ano de faturamento for
-							 * maior que o mes/ano de faturamento atual, n„o
-							 * alterar o mes/ano cont·bil
+							 * maior que o mes/ano de faturamento atual, n√£o
+							 * alterar o mes/ano cont√°bil
 							 */
 
 							// alterado por Vivianne Sousa 07/05/2008
@@ -9366,14 +9366,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							contaCanceladaPorRetificacao
 									.setReferenciaContabil(referenciaContabil);
 
-							// ˙ltima alteraÁ„o
+							// √∫ltima altera√ß√£o
 							contaCanceladaPorRetificacao
 									.setUltimaAlteracao(new Date());
 
 							/*
 							 * Colocado por Raphael Rossiter em 09/08/2007
-							 * OBJETIVO: Gravar na tabela de conta o usu·rio que
-							 * est· logado no sistema
+							 * OBJETIVO: Gravar na tabela de conta o usu√°rio que
+							 * est√° logado no sistema
 							 */
 
 							// Usuario
@@ -9381,7 +9381,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.setUsuario(usuarioLogado);
 
 							// ------------ <REGISTRAR
-							// TRANSA«√O>----------------------------
+							// TRANSA√á√ÉO>----------------------------
 
 							RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 									Operacao.OPERACAO_CANCELAR_CONTA,
@@ -9398,7 +9398,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									contaCanceladaPorRetificacao);
 
 							// ------------ </REGISTRAR
-							// TRANSA«√O>----------------------------
+							// TRANSA√á√ÉO>----------------------------
 
 							// UPDATE
 							try {
@@ -9409,7 +9409,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// Analista: Roberto Souza
 								if (!usuarioPermissaoCancelarSemRA) {
 
-									// Verificar ExistÍncia de RA
+									// Verificar Exist√™ncia de RA
 									RegistroAtendimento registroAtendimento = this
 											.getControladorRegistroAtendimento()
 											.verificarExistenciaRegistroAtendimentoSemLevantarExcecao(
@@ -9419,7 +9419,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 									if (registroAtendimento != null) {
 										// Atualizando a conta com o registro de
-										// atendimento que autoriza esta aÁ„o
+										// atendimento que autoriza esta a√ß√£o
 										repositorioFaturamento
 												.atualizarContaCanceladaOuRetificada(
 														contaColecao,
@@ -9428,21 +9428,21 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								}
 
 								// CRC2725 - alterado por Vivianne Sousa -
-								// 17/09/2009 analista:F·tima
-								// 1.2.6.5. Caso existam itens de negativaÁ„o
-								// associados ‡ conta (coleÁ„o de itens de
-								// negativaÁ„o n„o est· vazia):
+								// 17/09/2009 analista:F√°tima
+								// 1.2.6.5. Caso existam itens de negativa√ß√£o
+								// associados √† conta (cole√ß√£o de itens de
+								// negativa√ß√£o n√£o est√° vazia):
 								if (colecaoNegativadorMovimentoRegItem != null
 										&& !colecaoNegativadorMovimentoRegItem
 												.isEmpty()) {
-									// Caso existam itens de negativaÁ„o
-									// associados ‡ conta:
+									// Caso existam itens de negativa√ß√£o
+									// associados √† conta:
 									Iterator iterNmri = colecaoNegativadorMovimentoRegItem
 											.iterator();
 									while (iterNmri.hasNext()) {
 										Integer idNmri = (Integer) iterNmri
 												.next();
-										// [SB0002 - Atualizar Item NegativaÁ„o
+										// [SB0002 - Atualizar Item Negativa√ß√£o
 										// - Conta Retificada].
 										getControladorSpcSerasa()
 												.atualizarNegativadorMovimentoRegItem(
@@ -9472,7 +9472,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 
 					// Alterado por Francisco - 26/05/08, por conta do Resumo de
-					// AÁıes de cobranÁa
+					// A√ß√µes de cobran√ßa
 					// Analista: Ana Breda
 					try {
 						// Atualizar documento de cobranca da conta, se houver,
@@ -9509,9 +9509,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 */
 	public void atualizarConta(Conta conta) throws ControladorException {
 
-		// -----VALIDA«√O DOS TIMESTAMP PARA ATUALIZA«√O DE CADASTRO
+		// -----VALIDA√á√ÉO DOS TIMESTAMP PARA ATUALIZA√á√ÉO DE CADASTRO
 
-		// ValidaÁ„o para conta
+		// Valida√ß√£o para conta
 		if (conta != null) {
 			// Cria o filtro
 			FiltroConta filtroConta = new FiltroConta();
@@ -9522,12 +9522,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.ID,
 					conta.getId()));
 
-			// Pesquisa a coleÁ„o de acordo com o filtro passado
+			// Pesquisa a cole√ß√£o de acordo com o filtro passado
 			Collection contas = getControladorUtil().pesquisar(filtroConta,
 					nomePacoteObjeto);
 			Conta contaNaBase = (Conta) Util.retonarObjetoDeColecao(contas);
 
-			// Verifica se a data de alteraÁ„o do objeto gravado na base È
+			// Verifica se a data de altera√ß√£o do objeto gravado na base √©
 			// maior que a na instancia
 			if ((contaNaBase.getUltimaAlteracao().after(conta
 					.getUltimaAlteracao()))) {
@@ -9546,9 +9546,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descriÁ„o sobre o caso de uso>
+	 * <Breve descri√ß√£o sobre o caso de uso>
 	 * 
-	 * [UC0148] - Colocar Conta em Revis„o
+	 * [UC0148] - Colocar Conta em Revis√£o
 	 * 
 	 * @author Raphael Rossiter, Vivianne Sousa
 	 * @date 21/12/2005,19/10/2006
@@ -9567,8 +9567,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Conta contaNaBase;
 		String[] arrayIdentificadores = null;
 
-		// Verifica se retirar· todas ou uma seleÁ„o das contas da coleÁ„o de
-		// revis„o
+		// Verifica se retirar√° todas ou uma sele√ß√£o das contas da cole√ß√£o de
+		// revis√£o
 		if (identificadores != null) {
 			arrayIdentificadores = identificadores.split(",");
 		}
@@ -9583,35 +9583,35 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					String dadosConta = arrayIdentificadores[index];
 					String[] idUltimaAlteracao = dadosConta.split("-");
 
-					// Contas que ser„o colocadas em revis„o pelo sistema
+					// Contas que ser√£o colocadas em revis√£o pelo sistema
 					if (contaColecao.getId().equals(
 							new Integer(idUltimaAlteracao[0]))) {
 
-						// [FS0016] - Verificar contas que estejam em revis„o
+						// [FS0016] - Verificar contas que estejam em revis√£o
 						if (contaColecao.getDataRevisao() != null) {
 							throw new ControladorException(
 									"atencao.data_revisao_existente");
 						}
 
-						// Ultima alteraÁ„o
+						// Ultima altera√ß√£o
 						contaColecao.setUltimaAlteracao(new Date());
 
-						// Data da revis„o
+						// Data da revis√£o
 						contaColecao.setDataRevisao(new Date());
 
-						// Motivo da revis„o
+						// Motivo da revis√£o
 						contaColecao.setContaMotivoRevisao(contaMotivoRevisao);
 
 						/*
 						 * Colocado por Raphael Rossiter em 09/08/2007 OBJETIVO:
-						 * Gravar na tabela de conta o usu·rio que est· logado
+						 * Gravar na tabela de conta o usu√°rio que est√° logado
 						 * no sistema
 						 */
 
 						// Usuario
 						contaColecao.setUsuario(usuarioLogado);
 
-						// Verificar atualizaÁ„o realizada por outro usu·rio
+						// Verificar atualiza√ß√£o realizada por outro usu√°rio
 						if ((contaNaBase.getUltimaAlteracao()
 								.after(contaColecao.getUltimaAlteracao()))) {
 							sessionContext.setRollbackOnly();
@@ -9620,7 +9620,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 
 						// ------------ <REGISTRAR
-						// TRANSA«√O>----------------------------
+						// TRANSA√á√ÉO>----------------------------
 
 						RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 								Operacao.OPERACAO_COLOCAR_CONTA_REVISAO,
@@ -9636,7 +9636,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								contaColecao);
 
 						// ------------ </REGISTRAR
-						// TRANSA«√O>----------------------------
+						// TRANSA√á√ÉO>----------------------------
 
 						try {
 							repositorioFaturamento
@@ -9648,30 +9648,30 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 			} else {
-				// [FS0016] - Verificar contas que estejam em revis„o
+				// [FS0016] - Verificar contas que estejam em revis√£o
 				if (contaColecao.getDataRevisao() != null) {
 					throw new ControladorException(
 							"atencao.data_revisao_existente");
 				}
 
-				// Ultima alteraÁ„o
+				// Ultima altera√ß√£o
 				contaColecao.setUltimaAlteracao(new Date());
 
-				// Data da revis„o
+				// Data da revis√£o
 				contaColecao.setDataRevisao(new Date());
 
-				// Motivo da revis„o
+				// Motivo da revis√£o
 				contaColecao.setContaMotivoRevisao(contaMotivoRevisao);
 
 				/*
 				 * Colocado por Raphael Rossiter em 09/08/2007 OBJETIVO: Gravar
-				 * na tabela de conta o usu·rio que est· logado no sistema
+				 * na tabela de conta o usu√°rio que est√° logado no sistema
 				 */
 
 				// Usuario
 				contaColecao.setUsuario(usuarioLogado);
 
-				// Verificar atualizaÁ„o realizada por outro usu·rio
+				// Verificar atualiza√ß√£o realizada por outro usu√°rio
 				if ((contaNaBase.getUltimaAlteracao().after(contaColecao
 						.getUltimaAlteracao()))) {
 					sessionContext.setRollbackOnly();
@@ -9679,7 +9679,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 
 				// ------------ <REGISTRAR
-				// TRANSA«√O>----------------------------
+				// TRANSA√á√ÉO>----------------------------
 
 				RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 						Operacao.OPERACAO_CONTA_RETIFICAR, contaColecao
@@ -9692,7 +9692,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				getControladorTransacao().registrarTransacao(contaColecao);
 
 				// ------------ </REGISTRAR
-				// TRANSA«√O>----------------------------
+				// TRANSA√á√ÉO>----------------------------
 
 				try {
 					repositorioFaturamento.colocarContaRevisao(contaColecao);
@@ -9705,9 +9705,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descriÁ„o sobre o caso de uso>
+	 * <Breve descri√ß√£o sobre o caso de uso>
 	 * 
-	 * [UC0148] - Retirar Conta de Revis„o
+	 * [UC0148] - Retirar Conta de Revis√£o
 	 * 
 	 * @author Raphael Rossiter ,Vivianne Sousa, Mariana Victor
 	 * @date 22/12/2005, 19/10/2006, 27/04/2011
@@ -9730,15 +9730,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		String[] arrayIdentificadores = null;
 		FiltroConta filtroConta = new FiltroConta();
 
-		// Verifica se retirar· todas ou uma seleÁ„o das contas da coleÁ„o de
-		// revis„o
+		// Verifica se retirar√° todas ou uma sele√ß√£o das contas da cole√ß√£o de
+		// revis√£o
 		if (identificadores != null) {
 			arrayIdentificadores = identificadores.split(",");
 		}
 
 		/*
-		 * Verifica se o usu·rio possui permiss„o especial para retirar contas
-		 * que est„o em revis„o por antiguidade.
+		 * Verifica se o usu√°rio possui permiss√£o especial para retirar contas
+		 * que est√£o em revis√£o por antiguidade.
 		 */
 		boolean permEspecialRetirarRevisaoPorAntiguidade = true;
 
@@ -9757,7 +9757,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			contaColecao = (Conta) colecaoContasIt.next();
 
-			// Obtendo o motivo de revis„o da conta que ser· retirada de revis„o
+			// Obtendo o motivo de revis√£o da conta que ser√° retirada de revis√£o
 			try {
 				contaMotivoRevisaoAtual = this.repositorioFaturamento
 						.pesquisarContaMotivoRevisao(contaColecao.getId());
@@ -9766,7 +9766,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				throw new ControladorException("erro.sistema", ex);
 			}
 
-			// Carregando a conta que est· na base
+			// Carregando a conta que est√° na base
 			filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.ID,
 					contaColecao.getId()));
 
@@ -9784,23 +9784,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					String dadosConta = arrayIdentificadores[index];
 					String[] idUltimaAlteracao = dadosConta.split("-");
 
-					// Contas que ser„o retiradas de revis„o pelo sistema
+					// Contas que ser√£o retiradas de revis√£o pelo sistema
 					if (contaColecao.getId().equals(
 							new Integer(idUltimaAlteracao[0]))) {
 
-						// [FS0015] - Verificar contas que n„o estejam em
-						// revis„o
+						// [FS0015] - Verificar contas que n√£o estejam em
+						// revis√£o
 						if (contaColecao.getDataRevisao() == null) {
 							throw new ControladorException(
 									"atencao.data_revisao_nao_existente");
 						}
 
 						/*
-						 * [FS0002] - Verificar tipo de revis„o
+						 * [FS0002] - Verificar tipo de revis√£o
 						 * 
-						 * Caso o motivo de revis„o informado seja de
-						 * antiguidade e o usu·rio n„o tenha permiss„o especial
-						 * para retirar este motivo de revis„o
+						 * Caso o motivo de revis√£o informado seja de
+						 * antiguidade e o usu√°rio n√£o tenha permiss√£o especial
+						 * para retirar este motivo de revis√£o
 						 */
 						if (contaMotivoRevisaoAtual != null
 								&& contaMotivoRevisaoAtual
@@ -9813,13 +9813,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									"atencao.necessario_permissao_especial_motivo_antiguidade");
 						}
 
-						// Data da revis„o (NULL)
+						// Data da revis√£o (NULL)
 						contaColecao.setDataRevisao(null);
 
-						// Motivo da revis„o (NULL)
+						// Motivo da revis√£o (NULL)
 						contaColecao.setContaMotivoRevisao(null);
 
-						// Verificar atualizaÁ„o realizada por outro usu·rio
+						// Verificar atualiza√ß√£o realizada por outro usu√°rio
 						if ((contaNaBase.getUltimaAlteracao()
 								.after(contaColecao.getUltimaAlteracao()))) {
 							sessionContext.setRollbackOnly();
@@ -9827,11 +9827,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									"erro.atualizacao.timestamp");
 						}
 
-						// Ultima alteraÁ„o
+						// Ultima altera√ß√£o
 						contaColecao.setUltimaAlteracao(new Date());
 
 						// ------------ <REGISTRAR
-						// TRANSA«√O>----------------------------
+						// TRANSA√á√ÉO>----------------------------
 
 						RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 								Operacao.OPERACAO_RETIRAR_CONTA_REVISAO,
@@ -9847,7 +9847,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								contaColecao);
 
 						// ------------ </REGISTRAR
-						// TRANSA«√O>----------------------------
+						// TRANSA√á√ÉO>----------------------------
 
 						// UPDATE
 						try {
@@ -9861,18 +9861,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			} else {
 
-				// [FS0015] - Verificar contas que n„o estejam em revis„o
+				// [FS0015] - Verificar contas que n√£o estejam em revis√£o
 				if (contaColecao.getDataRevisao() == null) {
 					throw new ControladorException(
 							"atencao.data_revisao_nao_existente");
 				}
 
 				/*
-				 * [FS0002] - Verificar tipo de revis„o
+				 * [FS0002] - Verificar tipo de revis√£o
 				 * 
-				 * Caso o motivo de revis„o informado seja de antiguidade e o
-				 * usu·rio n„o tenha permiss„o especial para retirar este motivo
-				 * de revis„o
+				 * Caso o motivo de revis√£o informado seja de antiguidade e o
+				 * usu√°rio n√£o tenha permiss√£o especial para retirar este motivo
+				 * de revis√£o
 				 */
 				if (contaMotivoRevisaoAtual != null
 						&& contaMotivoRevisaoAtual.getId().equals(
@@ -9884,24 +9884,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							"atencao.necessario_permissao_especial_motivo_antiguidade");
 				}
 
-				// Data da revis„o (NULL)
+				// Data da revis√£o (NULL)
 				contaColecao.setDataRevisao(null);
 
-				// Motivo da revis„o (NULL)
+				// Motivo da revis√£o (NULL)
 				contaColecao.setContaMotivoRevisao(null);
 
-				// Verificar atualizaÁ„o realizada por outro usu·rio
+				// Verificar atualiza√ß√£o realizada por outro usu√°rio
 				if ((contaNaBase.getUltimaAlteracao().after(contaColecao
 						.getUltimaAlteracao()))) {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("erro.atualizacao.timestamp");
 				}
 
-				// Ultima alteraÁ„o
+				// Ultima altera√ß√£o
 				contaColecao.setUltimaAlteracao(new Date());
 
 				// ------------ <REGISTRAR
-				// TRANSA«√O>----------------------------
+				// TRANSA√á√ÉO>----------------------------
 
 				RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 						Operacao.OPERACAO_RETIRAR_CONTA_REVISAO, contaColecao
@@ -9914,7 +9914,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				getControladorTransacao().registrarTransacao(contaColecao);
 
 				// ------------ </REGISTRAR
-				// TRANSA«√O>----------------------------
+				// TRANSA√á√ÉO>----------------------------
 
 				// UPDATE
 				try {
@@ -9928,7 +9928,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descriÁ„o sobre o caso de uso>
+	 * <Breve descri√ß√£o sobre o caso de uso>
 	 * 
 	 * [UC0151] - Alterar Vencimento de Conta
 	 * 
@@ -9953,8 +9953,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// getControladorUtil().pesquisarParametrosDoSistema();
 
 		// ==============================================================================================================
-		// Verifica se retirar· todas ou uma seleÁ„o das contas da coleÁ„o de
-		// revis„o
+		// Verifica se retirar√° todas ou uma sele√ß√£o das contas da cole√ß√£o de
+		// revis√£o
 		if (identificadores != null) {
 			arrayIdentificadores = identificadores.split(",");
 		}
@@ -9967,7 +9967,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					String dadosConta = arrayIdentificadores[index];
 					String[] idUltimaAlteracao = dadosConta.split("-");
 
-					// Contas que sofrer„o alteraÁ„o na sua data de vencimento
+					// Contas que sofrer√£o altera√ß√£o na sua data de vencimento
 					if (contaColecao.getId().equals(
 							new Integer(idUltimaAlteracao[0]))) {
 
@@ -9976,7 +9976,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Analista : Aryed Lins
 						// -------------------------------------------------------------------------------------------
 
-						// E o usu·rio n„o tenha permiss„o especial.
+						// E o usu√°rio n√£o tenha permiss√£o especial.
 						boolean temPermissaoParaAlterarVencimentoJaAlterado = this
 								.getControladorPermissaoEspecial()
 								.verificarPermissaoEspecial(
@@ -9990,7 +9990,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.getIndicadorLimiteAlteracaoVencimento()
 									.equals(ConstantesSistema.SIM)) {
 
-								// Verifica a quantidade de alteralÁıes no
+								// Verifica a quantidade de alteral√ß√µes no
 								// vencimento de uma conta.
 								this.verificarQuantidadeAlteracoesVencimentoConta(contaNaBase
 										.getId());
@@ -10006,10 +10006,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						Date dataValidadeConta = this.retornaDataValidadeConta(dataVencimento);
 						contaColecao.setDataValidadeConta(dataValidadeConta);
 
-						// Indicador de alteraÁ„o de vencimento da conta
+						// Indicador de altera√ß√£o de vencimento da conta
 						contaColecao.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
 
-						// ⁄ltima alteraÁao
+						// √öltima altera√ßao
 						contaColecao.setUltimaAlteracao(new Date());
 
 						/*
@@ -10037,7 +10037,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						contaColecao.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
 						// ----------------------------------------------------------------------------------------
 
-						// Verificar atualizaÁ„o realizada por outro usu·rio
+						// Verificar atualiza√ß√£o realizada por outro usu√°rio
 						if ((contaNaBase.getUltimaAlteracao().after(contaColecao.getUltimaAlteracao()))) {
 							sessionContext.setRollbackOnly();
 							throw new ControladorException("erro.atualizacao.timestamp");
@@ -10080,13 +10080,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Date dataValidadeConta = this.retornaDataValidadeConta(dataVencimento);
 				contaColecao.setDataValidadeConta(dataValidadeConta);
 
-				// Indicador de alteraÁ„o de vencimento da conta
+				// Indicador de altera√ß√£o de vencimento da conta
 				contaColecao.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
 
-				// ⁄ltima alteraÁao
+				// √öltima altera√ßao
 				contaColecao.setUltimaAlteracao(new Date());
 
-				// Verificar atualizaÁ„o realizada por outro usu·rio
+				// Verificar atualiza√ß√£o realizada por outro usu√°rio
 				if ((contaNaBase.getUltimaAlteracao().after(contaColecao.getUltimaAlteracao()))) {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("erro.atualizacao.timestamp");
@@ -10099,7 +10099,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	public void atualizarColecaoComRegistrarTransacao(Conta contaColecao, Usuario usuarioLogado) throws ControladorException {
-		// ------------ <REGISTRAR TRANSA«√O>----------------------------
+		// ------------ <REGISTRAR TRANSA√á√ÉO>----------------------------
 
 		RegistradorOperacao registradorOperacao = null;
 		if (usuarioLogado != null) {
@@ -10111,7 +10111,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			getControladorTransacao().registrarTransacao(contaColecao);
 		}
-		// ------------ </REGISTRAR TRANSA«√O>----------------------------
+		// ------------ </REGISTRAR TRANSA√á√ÉO>----------------------------
 
 		// UPDATE
 		try {
@@ -10139,13 +10139,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Calendar dataValidadeConta = new GregorianCalendar();
 		dataValidadeConta.setTime(dataVencimento);
 
-		// ⁄ltimo dia do mÍs correspondente ao mÍs da data de vencimento da
+		// √öltimo dia do m√™s correspondente ao m√™s da data de vencimento da
 		// conta
 		dataValidadeConta.set(Calendar.DATE, 1);
 		dataValidadeConta.add(Calendar.MONTH, 1);
 		dataValidadeConta.add(Calendar.DATE, -1);
 
-		// Acrescenta o n˙mero de meses de validade da conta
+		// Acrescenta o n√∫mero de meses de validade da conta
 		dataValidadeConta.add(Calendar.MONTH, sistemaParametro
 				.getNumeroMesesValidadeConta().intValue());
 
@@ -10158,7 +10158,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * [UC0150] - Retificar Conta Author: Raphael Rossiter Data: 26/12/2005
 	 * 
 	 * @param conta
-	 * @return uma coleÁ„o com os dÈbitos cobrados de uma conta
+	 * @return uma cole√ß√£o com os d√©bitos cobrados de uma conta
 	 * @throws ControladorException
 	 * @throws
 	 */
@@ -10166,7 +10166,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throws ControladorException {
 		Collection retorno = new ArrayList();
 
-		// CriaÁ„o das coleÁıes
+		// Cria√ß√£o das cole√ß√µes
 		Collection colecaoDebitoCobradoArray = null;
 
 		try {
@@ -10187,16 +10187,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoDebitoCobradoArrayIterator.hasNext()) {
 
-				// ObtÈm os dados do dÈbito cobrado
+				// Obt√©m os dados do d√©bito cobrado
 				Object[] debitoCobradoArray = (Object[]) colecaoDebitoCobradoArrayIterator
 						.next();
 
 				DebitoCobrado debitoCobrado = new DebitoCobrado();
 
-				// ID do dÈbito
+				// ID do d√©bito
 				debitoCobrado.setId((Integer) debitoCobradoArray[0]);
 
-				// Tipo do dÈbito
+				// Tipo do d√©bito
 				FinanciamentoTipo financiamentoTipo = new FinanciamentoTipo();
 				financiamentoTipo.setId((Integer) debitoCobradoArray[10]);
 				LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
@@ -10213,34 +10213,34 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				debitoCobrado.setDebitoTipo(debitoTipo);
 
-				// Ano e MÍs do dÈbito
+				// Ano e M√™s do d√©bito
 				if (debitoCobradoArray[3] != null) {
 					debitoCobrado
 							.setAnoMesReferenciaDebito((Integer) debitoCobradoArray[3]);
 				}
 
-				// Ano e MÍs de cobranÁa do dÈbito
+				// Ano e M√™s de cobran√ßa do d√©bito
 				if (debitoCobradoArray[4] != null) {
 					debitoCobrado
 							.setAnoMesCobrancaDebito((Integer) debitoCobradoArray[4]);
 				}
 
-				// N˙mero de prestaÁıes
+				// N√∫mero de presta√ß√µes
 				debitoCobrado.setNumeroPrestacao((Short) debitoCobradoArray[5]);
 
-				// N˙mero da prestaÁ„o
+				// N√∫mero da presta√ß√£o
 				debitoCobrado
 						.setNumeroPrestacaoDebito((Short) debitoCobradoArray[6]);
 
-				// Valor do dÈbito
+				// Valor do d√©bito
 				debitoCobrado
 						.setValorPrestacao((BigDecimal) debitoCobradoArray[7]);
 
-				// N˙mero de parcela bonus
+				// N√∫mero de parcela bonus
 				debitoCobrado
 						.setNumeroParcelaBonus((Short) debitoCobradoArray[12]);
 
-				// Ultima alteraÁ„o
+				// Ultima altera√ß√£o
 				String ultimaAlteracao = String.valueOf(debitoCobradoArray[8]);
 
 				SimpleDateFormat formatoData = new SimpleDateFormat(
@@ -10274,7 +10274,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Conta conta) throws ControladorException {
 		Collection retorno = new ArrayList();
 
-		// CriaÁ„o das coleÁıes
+		// Cria√ß√£o das cole√ß√µes
 		Collection colecaoDebitoCobradoArray = null;
 
 		try {
@@ -10293,13 +10293,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoDebitoCobradoArrayIterator.hasNext()) {
 
-				// ObtÈm os dados do dÈbito cobrado
+				// Obt√©m os dados do d√©bito cobrado
 				Object[] debitoCobradoArray = (Object[]) colecaoDebitoCobradoArrayIterator
 						.next();
 
 				DebitoCobradoAgrupadoHelper debitoCobrado = new DebitoCobradoAgrupadoHelper();
 
-				// ID do dÈbito
+				// ID do d√©bito
 				debitoCobrado.setIdDebitoTipo((Integer) debitoCobradoArray[0]);
 
 				debitoCobrado
@@ -10321,7 +10321,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public Collection<CreditoRealizado> obterCreditosRealizadosConta(Conta conta) throws ControladorException {
 		Collection retorno = new ArrayList();
 
-		// CriaÁ„o das coleÁıes
+		// Cria√ß√£o das cole√ß√µes
 		Collection colecaoCreditoRealizadoArray = null;
 
 		try {
@@ -10340,16 +10340,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoCreditoRealizadoArrayIterator.hasNext()) {
 
-				// ObtÈm os dados do crÈdito realizado
+				// Obt√©m os dados do cr√©dito realizado
 				Object[] creditoRealizadoArray = (Object[]) colecaoCreditoRealizadoArrayIterator
 						.next();
 
 				CreditoRealizado creditoRealizado = new CreditoRealizado();
 
-				// ID do crÈdito
+				// ID do cr√©dito
 				creditoRealizado.setId((Integer) creditoRealizadoArray[0]);
 
-				// Tipo do crÈdito
+				// Tipo do cr√©dito
 				LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
 				lancamentoItemContabil
 						.setId((Integer) creditoRealizadoArray[10]);
@@ -10365,35 +10365,35 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				creditoRealizado.setCreditoTipo(creditoTipo);
 
-				// Ano e MÍs do crÈdito
+				// Ano e M√™s do cr√©dito
 				if (creditoRealizadoArray[4] != null) {
 					creditoRealizado
 							.setAnoMesReferenciaCredito((Integer) creditoRealizadoArray[4]);
 				}
 
-				// Ano e MÍs de cobranÁa do crÈdito
+				// Ano e M√™s de cobran√ßa do cr√©dito
 				if (creditoRealizadoArray[5] != null) {
 					creditoRealizado
 							.setAnoMesCobrancaCredito((Integer) creditoRealizadoArray[5]);
 				}
 
-				// N˙mero de prestaÁıes
+				// N√∫mero de presta√ß√µes
 				creditoRealizado
 						.setNumeroPrestacao((Short) creditoRealizadoArray[6]);
 
-				// N˙mero da prestaÁ„o
+				// N√∫mero da presta√ß√£o
 				creditoRealizado
 						.setNumeroPrestacaoCredito((Short) creditoRealizadoArray[7]);
 
-				// Valor do crÈdito
+				// Valor do cr√©dito
 				creditoRealizado
 						.setValorCredito((BigDecimal) creditoRealizadoArray[8]);
 
-				// Ultima alteraÁ„o
+				// Ultima altera√ß√£o
 				String ultimaAlteracao = String
 						.valueOf(creditoRealizadoArray[9]);
 
-				// Origem do CrÈdito
+				// Origem do Cr√©dito
 				if (creditoRealizadoArray[11] != null) {
 					CreditoOrigem creditoOrigem = new CreditoOrigem();
 					creditoOrigem.setId((Integer) creditoRealizadoArray[11]);
@@ -10419,7 +10419,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setNumeroParcelaBonus((Short) creditoRealizadoArray[12]);
 				}
 
-				// CrÈdito a Realizar
+				// Cr√©dito a Realizar
 				if (creditoRealizadoArray[13] != null) {
 					CreditoARealizarGeral creditoARealizar = new CreditoARealizarGeral();
 					creditoARealizar.setId((Integer) creditoRealizadoArray[13]);
@@ -10434,10 +10434,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [US0184] Manter DÈbito A Cobrar Author: Rafael Santos Data: 30/12/2005
+	 * [US0184] Manter D√©bito A Cobrar Author: Rafael Santos Data: 30/12/2005
 	 * 
 	 * @param idsLista
-	 *            de Id de DÈbito a Cobrar
+	 *            de Id de D√©bito a Cobrar
 	 * @throws ControladorException
 	 */
 	public void cancelarDebitoACobrar(String[] ids, Usuario usuarioLogado,
@@ -10530,7 +10530,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			/*
 			 * Alterado por Raphael Rossiter em 14/09/2007 (Analista: Rosana
-			 * Carvalho e Eduardo Borges) OBJ: N„o permitir que um dÈbito a
+			 * Carvalho e Eduardo Borges) OBJ: N√£o permitir que um d√©bito a
 			 * cobrar de parcelamento seja cancelado.
 			 */
 			if (debitoACobrar.getFinanciamentoTipo() != null
@@ -10549,7 +10549,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}
 
-			// ------------ REGISTRAR TRANSA«√O ----------------
+			// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 					Operacao.OPERACAO_DEBITO_A_COBRAR_CANCELAR,
 					matriculaImovel, debitoACobrar.getId(),
@@ -10559,7 +10559,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			registradorOperacao.registrarOperacao(debitoACobrar);
 			registradorOperacao.registrarOperacao(debitoACobrarGeral);
 
-			// ------------ REGISTRAR TRANSA«√O ----------------
+			// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
 			// 7.1.1
 			if ((debitoACobrar.getNumeroPrestacaoCobradas() == 0)
@@ -10570,8 +10570,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.equals(FinanciamentoTipo.SERVICO_NORMAL))) {
 
 				/**
-				 * alterado por pedro alexandre dia 21/11/2006 alteraÁ„o feita
-				 * para acoplar o controle de abrangÍncia de usu·rio
+				 * alterado por pedro alexandre dia 21/11/2006 altera√ß√£o feita
+				 * para acoplar o controle de abrang√™ncia de usu√°rio
 				 */
 				// ------------ CONTROLE DE ABRANGENCIA ----------------
 				Abrangencia abrangencia = new Abrangencia(usuarioLogado,
@@ -10644,8 +10644,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				debitoACobrar.setUltimaAlteracao(new Date());
 
 				/**
-				 * alterado por pedro alexandre dia 21/11/2006 alteraÁ„o feita
-				 * para acoplar o controle de abrangÍncia de usu·rio
+				 * alterado por pedro alexandre dia 21/11/2006 altera√ß√£o feita
+				 * para acoplar o controle de abrang√™ncia de usu√°rio
 				 */
 				// ------------ CONTROLE DE ABRANGENCIA ----------------
 				Abrangencia abrangencia = new Abrangencia(usuarioLogado,
@@ -10662,7 +10662,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					Interceptador.getInstancia().registrarExclusao(
 							debitoACobrar);
 
-					// Para nao registrar a alteracao tambÈm, setamos a operacao
+					// Para nao registrar a alteracao tamb√©m, setamos a operacao
 					// efetuada para nula.
 					debitoACobrar.setOperacaoEfetuada(null);
 					getControladorUtil().atualizar(debitoACobrar);
@@ -10679,10 +10679,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				// Autor: Bruno Barros
 				// Data : 12/05/2009
-				// Analista Respons·vel: Rosana Cavalho
-				// DescriÁ„o da alteraÁ„o: Gravar na coluna
+				// Analista Respons√°vel: Rosana Cavalho
+				// Descri√ß√£o da altera√ß√£o: Gravar na coluna
 				// DBAC_AMREFERENCIACONTABIL o maior valor entre o ano/mes
-				// da data corrente e o ano/mÍs da referÍncia do faturamento (
+				// da data corrente e o ano/m√™s da refer√™ncia do faturamento (
 				// PARM_AMREFERENCIAFATURAMENTO )
 				Date dataAtual = new Date();
 				Integer anoMesReferenciaAtual = Util
@@ -10698,11 +10698,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						: sistemaParametro.getAnoMesFaturamento())
 
 				);
-				// FIM ALTERA«√O BRUNO BARROS
+				// FIM ALTERA√á√ÉO BRUNO BARROS
 
 				/**
-				 * alterado por pedro alexandre dia 21/11/2006 alteraÁ„o feita
-				 * para acoplar o controle de abrangÍncia de usu·rio
+				 * alterado por pedro alexandre dia 21/11/2006 altera√ß√£o feita
+				 * para acoplar o controle de abrang√™ncia de usu√°rio
 				 */
 				// ------------ CONTROLE DE ABRANGENCIA ----------------
 				Abrangencia abrangencia = new Abrangencia(usuarioLogado,
@@ -10718,7 +10718,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// Esta alteracao sera registrada como exclusao
 					Interceptador.getInstancia().registrarExclusao(
 							debitoACobrar);
-					// Para nao registrar a alteracao tambÈm, setamos a operacao
+					// Para nao registrar a alteracao tamb√©m, setamos a operacao
 					// efetuada para nula.
 					debitoACobrar.setOperacaoEfetuada(null);
 					getControladorUtil().atualizar(debitoACobrar);
@@ -10726,8 +10726,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			}
 
-			// Alterado por Francisco - 26/05/08, por conta do Resumo de AÁıes
-			// de cobranÁa
+			// Alterado por Francisco - 26/05/08, por conta do Resumo de A√ß√µes
+			// de cobran√ßa
 			// Analista: Ana Breda
 			try {
 
@@ -10758,7 +10758,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 */
 	public void removerTarifaConsumo(String[] ids) throws ControladorException {
 
-		// recebe os ids das vigencias a ser excluÌdas do action e faz um
+		// recebe os ids das vigencias a ser exclu√≠das do action e faz um
 		// interator para fazer a verificacao de vigencia por vigencia
 		for (int i = 0; i < ids.length; i++) {
 			// monta o filtro pra recuperar a data da vigencia
@@ -10770,7 +10770,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.pesquisar(filtroConsumoTarifaVigencia,
 							ConsumoTarifaVigencia.class.getName());
 
-			// jogaa a data em nessa vari·vel
+			// jogaa a data em nessa vari√°vel
 			Date dataVigencia = colecaoConsumoTarifaVigencia.iterator().next()
 					.getDataVigencia();
 
@@ -10796,9 +10796,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.pesquisar(filtroFaturamentoAtividadeCronograma,
 							FaturamentoAtividadeCronograma.class.getName());
 
-			// verifica se h· dados na colecao e faz um iterator pra recuperar
+			// verifica se h√° dados na colecao e faz um iterator pra recuperar
 			// todos que tem o id da atividade igual a 5 que a data de
-			// realizaÁ„o
+			// realiza√ß√£o
 			// seja diferente de null e que o id do cronograma grupo mensal seja
 			// igual a da colecao de FatAtvCronograma vigente no iterator
 			// anterior
@@ -10834,7 +10834,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									FaturamentoAtividadeCronograma.class
 											.getName());
 
-					// se a colecao retornar dados, jogasse a excess„o
+					// se a colecao retornar dados, jogasse a excess√£o
 					if (colecaoRetornoFaturamentoAtividadeCronograma != null
 							&& !colecaoRetornoFaturamentoAtividadeCronograma
 									.isEmpty()) {
@@ -11019,10 +11019,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				.pesquisar(filtroConsumoTarifaVigencia,
 						ConsumoTarifaVigencia.class.getName()))).get(0);
 
-		// Verificar se o ConsumoTarifaVigencia j· foi atualizado por outro
-		// usu·rio
+		// Verificar se o ConsumoTarifaVigencia j√° foi atualizado por outro
+		// usu√°rio
 		// durante
-		// esta atualizaÁ„o
+		// esta atualiza√ß√£o
 		if (consumoTarifaVigenciaNaBase.getUltimaAlteracao().after(
 				consumoTarifaVigencia.getUltimaAlteracao())) {
 			sessionContext.setRollbackOnly();
@@ -11031,7 +11031,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		filtroConsumoTarifaVigencia.limparListaParametros();
 
-		// Verificar se j· existe uma tarifa com a mesma descricao informada
+		// Verificar se j√° existe uma tarifa com a mesma descricao informada
 
 		filtroConsumoTarifaVigencia
 				.adicionarParametro(new ParametroSimplesDiferenteDe(
@@ -11094,7 +11094,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 			Date dataVigenciaEmVigor = null;
-			// verifica se a data È maior que a data menor existente
+			// verifica se a data √© maior que a data menor existente
 			if (colecaoDataVigenciaEmVigorArray != null
 					&& !colecaoDataVigenciaEmVigorArray.isEmpty()) {
 				Iterator colecaoDataVigenciaEmVigorArrayIt = colecaoDataVigenciaEmVigorArray
@@ -11104,7 +11104,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 			Date dataVigenciaEmVigorMaior = null;
-			// verifica se a data È menor que a data informada da maior
+			// verifica se a data √© menor que a data informada da maior
 			// existente
 			if (colecaoDataVigenciaEmVigorArrayMaior != null
 					&& !colecaoDataVigenciaEmVigorArrayMaior.isEmpty()) {
@@ -11114,7 +11114,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.next());
 			}
 
-			// verifica se a data È maior que a data menor existente
+			// verifica se a data √© maior que a data menor existente
 			if (dataVigenciaEmVigor != null) {
 				Calendar dataVigenciaSerInserida = new GregorianCalendar();
 				dataVigenciaSerInserida.setTime(dataVigenciaEmVigor);
@@ -11126,7 +11126,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}
 
-			// verifica se a data È menor que a data informada da maior
+			// verifica se a data √© menor que a data informada da maior
 			// existente
 			if (dataVigenciaEmVigorMaior != null) {
 				Calendar dataVigenciaSerInserida = new GregorianCalendar();
@@ -11162,7 +11162,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.intValue()));
 			}
 
-			// verificar se a Data de Vigencia È mario que 90 dias
+			// verificar se a Data de Vigencia √© mario que 90 dias
 
 			Calendar dataCorrente = new GregorianCalendar();
 			dataCorrente.add(Calendar.DAY_OF_MONTH, 90);
@@ -11174,7 +11174,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		// Pesquisa o ConsumoTarifaVigencia por descriÁ„o e data
+		// Pesquisa o ConsumoTarifaVigencia por descri√ß√£o e data
 		filtroConsumoTarifaVigencia = new FiltroConsumoTarifaVigencia();
 		filtroConsumoTarifaVigencia.limparListaParametros();
 
@@ -11209,7 +11209,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				consumoTarifaVigenciaColecao.getConsumoTarifa());
 
 		// Remover todas Categorias e Faixas relacionadas com o Consumo Tarifa
-		// sendo atualizado, a remoÁ„o de Faixa acontece por cascata no banco
+		// sendo atualizado, a remo√ß√£o de Faixa acontece por cascata no banco
 		FiltroConsumoTarifaCategoria filtroConsumoTarifaCategoria = new FiltroConsumoTarifaCategoria();
 		filtroConsumoTarifaCategoria.setConsultaSemLimites(true);
 
@@ -11379,7 +11379,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection<ConsumoTarifaCategoria> colecaoConsumoTarifaCategoria)
 			throws ControladorException {
 
-		// Caso o objeto ConsumoTarifa j· exista na base
+		// Caso o objeto ConsumoTarifa j√° exista na base
 		if (consumoTarifa.getId() != null) {
 
 			FiltroConsumoTarifaVigencia filtroConsumoTarifaVigencia = new FiltroConsumoTarifaVigencia();
@@ -11395,9 +11395,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					&& !colecaoConsumoVigenciaExistente.isEmpty()) {
 				consumoTarifaVigencia.setConsumoTarifa(consumoTarifa);
 
-				// [FS0002] - Verificar data de vigÍncia
+				// [FS0002] - Verificar data de vig√™ncia
 
-				// Pesquisando a data de vigÍncia em vigor
+				// Pesquisando a data de vig√™ncia em vigor
 				Collection colecaoDataVigenciaEmVigorArray = null;
 
 				try {
@@ -11450,7 +11450,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.intValue()));
 				}
 
-				// verificar se a Data de Vigencia È mario que 90 dias
+				// verificar se a Data de Vigencia √© mario que 90 dias
 				Calendar dataHjNoventaDias = new GregorianCalendar();
 				dataHjNoventaDias.add(Calendar.DAY_OF_MONTH, 90);
 
@@ -11546,7 +11546,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0187] - Inserir Guia de Pagamento
 	 * 
-	 * @author Rafael CorrÍa, Pedro Alexandre, Ivan SÈrgio, Raphael Rossiter
+	 * @author Rafael Corr√™a, Pedro Alexandre, Ivan S√©rgio, Raphael Rossiter
 	 * @date 16/01/2006, 23/11/2006, 05/07/2007, 11/01/2010
 	 * 
 	 * @param guiaPagamento
@@ -11565,10 +11565,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throws ControladorException {
 
 		/*
-		 * Verifica se o usu·rio tem permiss„o especial para inserir Guia de
-		 * Pagamento sem RA(38). Caso o par‚metro de permiss„o especial n„o
-		 * estiver setado, o sistema n„o far· a checagem de permiss„o do usu·rio
-		 * para inserÁ„o sem RA.
+		 * Verifica se o usu√°rio tem permiss√£o especial para inserir Guia de
+		 * Pagamento sem RA(38). Caso o par√¢metro de permiss√£o especial n√£o
+		 * estiver setado, o sistema n√£o far√° a checagem de permiss√£o do usu√°rio
+		 * para inser√ß√£o sem RA.
 		 */
 
 		boolean inserirGuiaPagamentoSemRa;
@@ -11581,15 +11581,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			inserirGuiaPagamentoSemRa = true;
 		}
 
-		// MATRÕCULA DO IM”VEL
+		// MATR√çCULA DO IM√ìVEL
 		String idImovel = guiaPagamento.getImovel().getId() == null ? ""
 				: guiaPagamento.getImovel().getId().toString();
 
-		// C”DIGO DO CLIENTE
+		// C√ìDIGO DO CLIENTE
 		String codigoCliente = guiaPagamento.getCliente().getId() == null ? ""
 				: guiaPagamento.getCliente().getId().toString();
 
-		// O valor da guia È o somatorio de todos os valores das guias de
+		// O valor da guia √© o somatorio de todos os valores das guias de
 		// pagamento itens.
 		Iterator iteratorGuiaPagamentoItemValor = colecaoGuiaPagamentoItem
 				.iterator();
@@ -11614,7 +11614,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		String valorDebito = guiaPagamento.getValorDebito().toString();
 
 		/*
-		 * Alterado para o caso em que o usu·rio tem permiss„o especial para
+		 * Alterado para o caso em que o usu√°rio tem permiss√£o especial para
 		 * inserir Guia de Pagamento sem RA(38).
 		 * 
 		 * REGISTRO DE ATENDIMENTO
@@ -11623,17 +11623,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				.getId() == null ? "" : guiaPagamento.getRegistroAtendimento()
 				.getId().toString();
 
-		// OREDM DE SERVI«O
+		// OREDM DE SERVI√áO
 		String idOrdemServico = guiaPagamento.getOrdemServico().getId() == null ? ""
 				: guiaPagamento.getOrdemServico().getId().toString();
 
-		// TIPO DO D…BITO
+		// TIPO DO D√âBITO
 		String idDebitoTipo = guiaPagamento.getDebitoTipo().getId().toString();
 
 		// DATA DE VENCIMENTO DA GUIA
 		Date dataVencimentoFormatada = guiaPagamento.getDataVencimento();
 
-		// GERANDO OS OBJETOS PARA INSER«√O DA GUIA
+		// GERANDO OS OBJETOS PARA INSER√á√ÉO DA GUIA
 		GuiaPagamento guiaPagamentoInserir = new GuiaPagamento();
 		GuiaPagamentoGeral guiaPagamentoGeral = new GuiaPagamentoGeral();
 
@@ -11643,7 +11643,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Imovel imovel = null;
 
 		/*
-		 * VALIDA«’ES PARA GERA«√O DA GUIA A PARTIR DA MATRÕCULA DE UM IM”VEL
+		 * VALIDA√á√ïES PARA GERA√á√ÉO DA GUIA A PARTIR DA MATR√çCULA DE UM IM√ìVEL
 		 */
 		if (idImovel != null && !idImovel.trim().equals("")
 				&& Integer.parseInt(idImovel) > 0) {
@@ -11664,22 +11664,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection imovelEncontrado = getControladorUtil().pesquisar(
 					filtroImovel, Imovel.class.getName());
 
-			// Verifica a existÍncia do imÛvel
+			// Verifica a exist√™ncia do im√≥vel
 			if (imovelEncontrado != null && !imovelEncontrado.isEmpty()) {
 
 				imovel = (Imovel) imovelEncontrado.iterator().next();
 
-				// Verifica se o imÛvel foi excluÌdo
+				// Verifica se o im√≥vel foi exclu√≠do
 				if (imovel.getIndicadorExclusao() == null ? false : imovel
 						.getIndicadorExclusao().equals(Imovel.IMOVEL_EXCLUIDO)) {
 
 					throw new ControladorException("atencao.imovel.excluido");
 				}
 
-				// MATRÕCULA DO IM”VEL
+				// MATR√çCULA DO IM√ìVEL
 				guiaPagamentoInserir.setImovel(imovel);
 
-				// LOCALIDADE DO IM”VEL
+				// LOCALIDADE DO IM√ìVEL
 				guiaPagamentoInserir.setLocalidade(imovel.getLocalidade());
 
 				FiltroImovelCobrancaSituacao filtroImovelCobrancaSituacao = new FiltroImovelCobrancaSituacao();
@@ -11696,7 +11696,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.pesquisar(filtroImovelCobrancaSituacao,
 								ImovelCobrancaSituacao.class.getName());
 
-				// Verifica se o imÛvel tem dÈbito em cobranÁa administrativa
+				// Verifica se o im√≥vel tem d√©bito em cobran√ßa administrativa
 				if (imovelCobrancaSituacaoEncontrada != null
 						&& !imovelCobrancaSituacaoEncontrada.isEmpty()) {
 
@@ -11724,14 +11724,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		/*
-		 * Alterado para o caso em que o usu·rio tem permiss„o especial para
+		 * Alterado para o caso em que o usu√°rio tem permiss√£o especial para
 		 * inserir Guia de Pagamento sem RA(38).
 		 * 
 		 * Para os casos onde a guia de pagamento seja gerada a partir de um
-		 * cliente, a permiss„o especial para geraÁ„o de guia sem RA n„o ser·
-		 * levanda em consideraÁ„o. Para os casos onde a guia esteja sendo
-		 * gerada para dar baixa nos pagamentos por cart„o de crÈdito, ser·
-		 * necess·rio informar a localidade para a qual ser· gerada a guia.
+		 * cliente, a permiss√£o especial para gera√ß√£o de guia sem RA n√£o ser√°
+		 * levanda em considera√ß√£o. Para os casos onde a guia esteja sendo
+		 * gerada para dar baixa nos pagamentos por cart√£o de cr√©dito, ser√°
+		 * necess√°rio informar a localidade para a qual ser√° gerada a guia.
 		 */
 		RegistroAtendimento registroAtendimento = null;
 		if (localidadeParaCliente == null
@@ -11763,7 +11763,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		/*
-		 * VALIDA«’ES PARA GERA«√O DA GUIA A PARTIR DO C”DIGO DO CLIENTE
+		 * VALIDA√á√ïES PARA GERA√á√ÉO DA GUIA A PARTIR DO C√ìDIGO DO CLIENTE
 		 */
 		if (codigoCliente != null && !codigoCliente.trim().equals("")
 				&& Integer.parseInt(codigoCliente) > 0) {
@@ -11790,24 +11790,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.iterator().next());
 
 				/*
-				 * A localidade para o cliente ser· informada apenas quando a
-				 * geraÁ„o da guia de pagamento estiver relacionada com
-				 * parcelamento por cart„o de crÈdito
+				 * A localidade para o cliente ser√° informada apenas quando a
+				 * gera√ß√£o da guia de pagamento estiver relacionada com
+				 * parcelamento por cart√£o de cr√©dito
 				 */
 				if (localidadeParaCliente != null) {
 					guiaPagamentoInserir.setLocalidade(localidadeParaCliente);
 				}
 				/*
-				 * Caso contr·rio; a localidade ser· a mesma que estiver
+				 * Caso contr√°rio; a localidade ser√° a mesma que estiver
 				 * associada com o registro de atendimento que foi aberto para
-				 * geraÁ„o da guia de pagamento.
+				 * gera√ß√£o da guia de pagamento.
 				 */
 				else {
 					guiaPagamentoInserir.setLocalidade(registroAtendimento
 							.getLocalidade());
 				}
 
-				// Verifica se o cliente est· inativo
+				// Verifica se o cliente est√° inativo
 				if (((Cliente) ((List) clienteEncontrado).get(0))
 						.getIndicadorUso().equals(
 								ConstantesSistema.INDICADOR_USO_DESATIVO)) {
@@ -11824,7 +11824,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 		}
 
-		// CARREGANDO OS PAR¬METROS DO SISTEMA
+		// CARREGANDO OS PAR√ÇMETROS DO SISTEMA
 		SistemaParametro sistemaParametro = getControladorUtil()
 				.pesquisarParametrosDoSistema();
 
@@ -11838,7 +11838,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			int anoMesCorrente = Util.getAnoMesComoInt(new Date());
 
 			/*
-			 * Maior valor entre o ano/mÍs da data corrente e o ano/mÍs de
+			 * Maior valor entre o ano/m√™s da data corrente e o ano/m√™s de
 			 * referencia do faturamento (PARM_AMREFERENCIAFATURAMENTO da tabela
 			 * SISTEMA_PARAMETROS).
 			 */
@@ -11854,7 +11854,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		// TIPO DO D…BITO
+		// TIPO DO D√âBITO
 		FiltroDebitoTipo filtroDebitoTipo = new FiltroDebitoTipo();
 		filtroDebitoTipo
 				.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
@@ -11886,7 +11886,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.getLancamentoItemContabil());
 		}
 
-		// ORDEM DE SERVI«O
+		// ORDEM DE SERVI√áO
 		if (idOrdemServico != null && !idOrdemServico.equals("")) {
 
 			FiltroOrdemServico filtroOrdemServico = new FiltroOrdemServico();
@@ -11931,10 +11931,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// INDICADOR DE MULTA = 2
 		guiaPagamentoInserir.setIndicadoCobrancaMulta(new Short("2"));
 
-		// OBSERVA«√O
+		// OBSERVA√á√ÉO
 		guiaPagamentoInserir.setObservacao(guiaPagamento.getObservacao());
 
-		// INDICADOR EMITIR OBSERVA«√O
+		// INDICADOR EMITIR OBSERVA√á√ÉO
 		guiaPagamentoInserir.setIndicadorEmitirObservacao(guiaPagamento
 				.getIndicadorEmitirObservacao());
 		guiaPagamentoInserir.setUltimaAlteracao(new Date());
@@ -11943,7 +11943,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		String[] idsGuiaPagamentoGerado = null;
 		if (guiaPagamento.getNumeroPrestacaoTotal() != null) {
 
-			// [FS0015]-Validar n˙mero de prestaÁıes
+			// [FS0015]-Validar n√∫mero de presta√ß√µes
 			if (sistemaParametro.getNumeroMaximoParcelasFinanciamento() != null
 					&& sistemaParametro.getNumeroMaximoParcelasFinanciamento()
 							.compareTo(guiaPagamento.getNumeroPrestacaoTotal()) < 0) {
@@ -11984,12 +11984,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				guiaPagamentoInserir.setUsuario(usuarioLogado);
 
-				// ------------ REGISTRAR TRANSA«√O ----------------
+				// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
 				/*
-				 * Caso a guia depagamento seja para um imÛvel tem controle de
-				 * abrangÍcia. Caso seja para um cliente n„o tem controle de
-				 * abrangÍncia.
+				 * Caso a guia depagamento seja para um im√≥vel tem controle de
+				 * abrang√™cia. Caso seja para um cliente n√£o tem controle de
+				 * abrang√™ncia.
 				 */
 				Integer valorArgumento = null;
 				if (guiaPagamentoInserir.getImovel() != null) {
@@ -12006,14 +12006,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				registradorOperacao.registrarOperacao(guiaPagamentoInserir);
 
-				// ------------ REGISTRAR TRANSA«√O ----------------
+				// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 				Integer idGuiaPagamento = null;
 
 				if (guiaPagamentoInserir.getImovel() != null) {
 
 					/**
-					 * alterado por pedro alexandre dia 23/11/2006 alteraÁ„o
-					 * feita para acoplar o controle de abrangÍncia de usu·rio
+					 * alterado por pedro alexandre dia 23/11/2006 altera√ß√£o
+					 * feita para acoplar o controle de abrang√™ncia de usu√°rio
 					 */
 					// ------------ CONTROLE DE ABRANGENCIA ----------------
 					Abrangencia abrangencia = new Abrangencia(usuarioLogado,
@@ -12038,7 +12038,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				guiaPagamentoInserir.setId(idGuiaPagamento);
 
-				// INSERINDO GUIA DE PAGAMENTO ÕTEM
+				// INSERINDO GUIA DE PAGAMENTO √çTEM
 				Iterator iteratorGuiaPagamentoItem = colecaoGuiaPagamentoItem
 						.iterator();
 				while (iteratorGuiaPagamentoItem.hasNext()) {
@@ -12187,7 +12187,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						guiaPagamentoCategoria.setValorCategoria(valor);
 						guiaPagamentoCategoria.setUltimaAlteracao(new Date());
 
-						// INSERINDO GUIA DE PAGAMENTO CATEGORIA PARA IM”VEL
+						// INSERINDO GUIA DE PAGAMENTO CATEGORIA PARA IM√ìVEL
 						getControladorUtil().inserir(guiaPagamentoCategoria);
 					}
 
@@ -12241,11 +12241,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com CÛdigo de Barras
+	 * [UC0259] - Processar Pagamento com C√≥digo de Barras
 	 * 
 	 * [SB0005] - Processar Recebimento de Acrescimos por Impontualidade
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @since 07/10/2006
 	 * @param guiaPagamento
 	 *            GuiaPagamento
@@ -12273,7 +12273,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		guiaPagamentoGeral.setIndicadorHistorico(indicadorHistorico);
 
-		// Ultima AlteraÁ„o
+		// Ultima Altera√ß√£o
 		guiaPagamentoGeral.setUltimaAlteracao(new Date());
 
 		Integer idGuiaPagamentoGerado = (Integer) getControladorUtil().inserir(
@@ -12437,7 +12437,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0188] - Manter Guia de Pagamento
 	 * 
-	 * @author Rafael CorrÍa, Pedro Alexandre
+	 * @author Rafael Corr√™a, Pedro Alexandre
 	 * @since 16/01/2006, 23/11/2006
 	 * @param guiaPagamento
 	 *            guiaPagamento
@@ -12522,7 +12522,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						if (guiaPagamentoManter.getId().equals(
 								new Integer(registroRemocao))) {
 
-							// Verifica se o valor do dÈbito È maior que o valor
+							// Verifica se o valor do d√©bito √© maior que o valor
 							// limite
 							FiltroGuiaPagamentoItem filtroGuiaPagamentoItem = new FiltroGuiaPagamentoItem();
 							filtroGuiaPagamentoItem
@@ -12560,18 +12560,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							}
 
-							// 2.1.1 Caso a guia de pagamento n„o tenha sido
+							// 2.1.1 Caso a guia de pagamento n√£o tenha sido
 							// ainda
 							// contabilizada
-							// e n„o existam restriÁıes no sistema para
-							// exclus„o,
+							// e n√£o existam restri√ß√µes no sistema para
+							// exclus√£o,
 							// o sistema exclui a guia de pagamento das tabelas
 							// GUIA_PAGAMENTO_GERAL,
 							// GUIA_PAGAMENTO, GUIA_PAGAMENTO_CATEGORIA e
 							// CLIENTE_
 							// GUIA_PAGAMENTO
-							// e n„o existam restriÁıes no sistema para exclus„o
-							// caso contr·rio,
+							// e n√£o existam restri√ß√µes no sistema para exclus√£o
+							// caso contr√°rio,
 							// o sistema atualiza a guia de pagamento na tabela
 							// GUIA_PAGAMENTO
 
@@ -12581,7 +12581,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							Integer valorArgumento = !idImovel.equals("") ? new Integer(
 									idImovel) : new Integer(idCliente);
 
-							// ------------ REGISTRAR TRANSA«√O ----------------
+							// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 							RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 									Operacao.OPERACAO_GUIA_PAGAMENTO_CANCELAR,
 									valorArgumento,
@@ -12591,9 +12591,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 							registradorOperacao
 									.registrarOperacao(guiaPagamentoManter);
-							// ------------ REGISTRAR TRANSA«√O ----------------
+							// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
-							// Verificando se a guia de pagamento n„o foi
+							// Verificando se a guia de pagamento n√£o foi
 							// contabilizada.
 							if (!possuiRestricaoRemoverGuiaPagamento
 									&& (Util.compararAnoMesReferencia(
@@ -12682,7 +12682,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													FiltroGuiaPagamento.ID,
 													guiaPagamentoManter.getId()));
 
-									// Pesquisa a coleÁ„o de acordo com o filtro
+									// Pesquisa a cole√ß√£o de acordo com o filtro
 									// passado
 									Collection guiasPagamentosBase = getControladorUtil()
 											.pesquisar(
@@ -12696,10 +12696,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									if (guiasPagamentosBase != null
 											&& !guiasPagamentosBase.isEmpty()) {
 
-										// Verifica se a data de alteraÁ„o do
+										// Verifica se a data de altera√ß√£o do
 										// objeto
 										// gravado na base
-										// È
+										// √©
 										// maior que a na instancia
 										if ((guiaPagamentoBase
 												.getUltimaAlteracao()
@@ -12789,8 +12789,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 								/**
 								 * alterado por pedro alexandre dia 23/11/2006
-								 * alteraÁ„o feita para acoplar o controle de
-								 * abrangÍncia de usu·rio
+								 * altera√ß√£o feita para acoplar o controle de
+								 * abrang√™ncia de usu√°rio
 								 */
 								// ------------ CONTROLE DE ABRANGENCIA
 								// ----------------
@@ -12816,7 +12816,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												FiltroGuiaPagamentoGeral.ID,
 												guiaPagamentoManter.getId()));
 
-								// Pesquisa a coleÁ„o de acordo com o filtro
+								// Pesquisa a cole√ß√£o de acordo com o filtro
 								// passado
 								Collection guiasPagamentosGeralBase = getControladorUtil()
 										.pesquisar(
@@ -12853,7 +12853,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 
 							// Alterado por Francisco - 26/05/08, por conta do
-							// Resumo de AÁıes de cobranÁa
+							// Resumo de A√ß√µes de cobran√ßa
 							// Analista: Ana Breda
 							try {
 								// Atualizar documento de cobranca da conta, se
@@ -12888,7 +12888,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Verifica se o MÍs/Ano informado È inferior ao MÍs/Ano do Sistema
+	 * Verifica se o M√™s/Ano informado √© inferior ao M√™s/Ano do Sistema
 	 * 
 	 * @param anoMesFaturamento
 	 * @return
@@ -12939,8 +12939,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Rodrigo Silveira, Vivianne Sousa, Diogo Peixoto
 	 * @created 18/01/2006, 18/06/2007, 25/04/2011
@@ -13036,7 +13036,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Iterator iterator = colecaoResumoFaturamentoRelatorio
 						.iterator();
 
-				// Prepara cada linha do relatÛrio
+				// Prepara cada linha do relat√≥rio
 
 				String tipoLancamento = null;
 				String itemLancamento = null;
@@ -13105,8 +13105,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					boolean condicaoIgual = true;
 					// compara se o registro atual eh do
-					// mesmo tipo de Recebimento, mesmo tipo de lanÁamento
-					// e mesmo item de lanÁamento do registro anterior
+					// mesmo tipo de Recebimento, mesmo tipo de lan√ßamento
+					// e mesmo item de lan√ßamento do registro anterior
 					if (tipoLancamento.equals(tempTipoLancamento)
 							&& itemLancamento.equals(tempItemLancamento)) {
 
@@ -13209,9 +13209,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					elementAnterior[6] = element[6]; // lancamentoTipo
 					elementAnterior[7] = element[7]; // lancamentoTipoSuperior
 
-					// identifica pelo que vai ser "quebrado" o rel·torio
+					// identifica pelo que vai ser "quebrado" o rel√°torio
 					if (agrupaPorGerencia) {
-						// quebra p·gina por GerÍncia Regional e n„o mostra a
+						// quebra p√°gina por Ger√™ncia Regional e n√£o mostra a
 						// Localidade
 						descGerenciaRegionalAnterior = "" + element[9];
 						idGerenciaRegionalAnterior = "" + element[10];
@@ -13221,8 +13221,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.equalsIgnoreCase("estadoLocalidade")
 								|| opcaoTotalizacao
 										.equalsIgnoreCase("gerenciaRegionalLocalidade")) {
-							// quebra a p·gina por Localidade e mostra a
-							// GerÍncia
+							// quebra a p√°gina por Localidade e mostra a
+							// Ger√™ncia
 							// Regional
 							descGerenciaRegionalAnterior = "" + element[9];
 							idGerenciaRegionalAnterior = "" + element[10];
@@ -13230,8 +13230,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							idLocalidadeAnterior = "" + element[12];
 							codigoCentroCusto = "" + element[15];
 						} else {
-							// quebra a p·gina por Localidade e n„o mostra a
-							// GerÍncia
+							// quebra a p√°gina por Localidade e n√£o mostra a
+							// Ger√™ncia
 							// Regional
 							descLocalidadeAnterior = "" + element[9];
 							idLocalidadeAnterior = "" + element[10];
@@ -13283,7 +13283,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0194] - Inserir CrÈdito a Realizar
+	 * [UC0194] - Inserir Cr√©dito a Realizar
 	 * 
 	 * @author Roberta Costa
 	 * @since 12/01/2006
@@ -13297,7 +13297,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		creditoARealizar.setUsuario(usuarioLogado);
 
-		// [FS0010] - Verifica usu·rio com dÈbito em cobranÁa administrativa
+		// [FS0010] - Verifica usu√°rio com d√©bito em cobran√ßa administrativa
 		FiltroImovelCobrancaSituacao filtroImovelCobrancaSituacao = new FiltroImovelCobrancaSituacao();
 
 		filtroImovelCobrancaSituacao.adicionarParametro(new ParametroSimples(
@@ -13325,7 +13325,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 		}
 
-		// [FS0001] - Verifica ExistÍncia da MatrÌcula
+		// [FS0001] - Verifica Exist√™ncia da Matr√≠cula
 		FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
 
 		filtroClienteImovel.adicionarParametro(new ParametroSimples(
@@ -13343,16 +13343,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		// [FS0002] - Validar Registro de Atendimento
-		// Tabela ainda n„o est· completa
+		// Tabela ainda n√£o est√° completa
 
-		// [FS0003] - Verifica ExistÍncia do Registro de Atendimento
+		// [FS0003] - Verifica Exist√™ncia do Registro de Atendimento
 		FiltroRegistroAtendimento filtroRegistroAtendimento = new FiltroRegistroAtendimento();
 
 		filtroRegistroAtendimento.adicionarParametro(new ParametroSimples(
 				FiltroRegistroAtendimento.ID, creditoARealizar
 						.getRegistroAtendimento()));
 
-		// Por equanto sÛ tem o campo ID na tabela de Registro de Atentendimento
+		// Por equanto s√≥ tem o campo ID na tabela de Registro de Atentendimento
 		// filtroRegistroAtendimento.adicionarCaminhoParaCarregamentoEntidade(FiltroRegistroAtendimento.IMOVEL_ID);
 
 		Collection registrosAtendimentos = getControladorUtil().pesquisar(
@@ -13363,7 +13363,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					"atencao.registro_atendimento.inexistente");
 		}
 
-		// [FS0004] - Verifica ExistÍncia da Ordem de ServiÁo
+		// [FS0004] - Verifica Exist√™ncia da Ordem de Servi√ßo
 		if (creditoARealizar.getOrdemServico() != null) {
 			FiltroOrdemServico filtroOrdemServico = new FiltroOrdemServico();
 
@@ -13381,20 +13381,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						"atencao.ordem_servico.inexistente");
 			}
 
-			// [FS0005] - Validar Ordem de serviÁo
-			// Tabela ainda n„o est· completa
+			// [FS0005] - Validar Ordem de servi√ßo
+			// Tabela ainda n√£o est√° completa
 
 			creditoARealizar.setOrdemServico(ordemServico);
 		} else {
 			creditoARealizar.setOrdemServico(null);
 		}
 
-		// [FS0006] - Verificar existÍncia de crÈdito a realizar para o registro
+		// [FS0006] - Verificar exist√™ncia de cr√©dito a realizar para o registro
 		// de atendimento
-		// Tabela ainda n„o est· completa
+		// Tabela ainda n√£o est√° completa
 
-		// [FS0007] - Validar n˙mero de prestaÁıes
-		// Est· faltando verificar se o usu·rio possui senha especial - DEPOIS
+		// [FS0007] - Validar n√∫mero de presta√ß√µes
+		// Est√° faltando verificar se o usu√°rio possui senha especial - DEPOIS
 		boolean permissaoQuantidadeParcelas = getControladorPermissaoEspecial()
 				.verificarPermissaoIcluirCreditoARealizarQuantidadeParcelasMaximo(
 						usuarioLogado);
@@ -13426,7 +13426,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		creditoARealizar.setCreditoTipo(creditoTipo);
 
-		// [FS0008] - Validar valor do crÈdito
+		// [FS0008] - Validar valor do cr√©dito
 		boolean permissaoValorLimite = getControladorPermissaoEspecial()
 				.verificarPermissaoIcluirCreditoARealizarValorMaximo(
 						usuarioLogado);
@@ -13436,9 +13436,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				CreditoTipo creditoTipoValorNaBase = (CreditoTipo) ((List) creditoTiposValor)
 						.get(0);
 				if (creditoTipoValorNaBase.getValorLimite() != null) {
-					// Verifica se o valor do crÈdito È mairo que o valor limite
+					// Verifica se o valor do cr√©dito √© mairo que o valor limite
 					// da
-					// tabela crÈdito tipo
+					// tabela cr√©dito tipo
 					if (creditoARealizar.getValorCredito().compareTo(
 							creditoTipoValorNaBase.getValorLimite()) == 1) {
 						throw new ControladorException(
@@ -13455,7 +13455,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 		}
 
-		// [FS0011] - Validar ReferÍncia do CrÈdito
+		// [FS0011] - Validar Refer√™ncia do Cr√©dito
 		FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
 		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(
 				FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO,
@@ -13478,19 +13478,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					"atencao.referencia.credito_a_realizar.ja.existente");
 		}
 
-		// Data de GeraÁ„o do CrÈdito
+		// Data de Gera√ß√£o do Cr√©dito
 		creditoARealizar.setGeracaoCredito(new Date());
 
-		// Par‚metros do sistema
+		// Par√¢metros do sistema
 		SistemaParametro sistemaParametro = getControladorUtil()
 				.pesquisarParametrosDoSistema();
 
 		// Autor: Bruno Barros
 		// Data : 12/05/2009
-		// Analista Respons·vel: Rosana Cavalho
-		// DescriÁ„o da alteraÁ„o: Gravar na coluna DBAC_AMREFERENCIACONTABIL o
+		// Analista Respons√°vel: Rosana Cavalho
+		// Descri√ß√£o da altera√ß√£o: Gravar na coluna DBAC_AMREFERENCIACONTABIL o
 		// maior valor entre o ano/mes
-		// da data corrente e o ano/mÍs da referÍncia do faturamento (
+		// da data corrente e o ano/m√™s da refer√™ncia do faturamento (
 		// PARM_AMREFERENCIAFATURAMENTO )
 		Date dataAtual = new Date();
 		Integer anoMesReferenciaAtual = Util.recuperaAnoMesDaData(dataAtual);
@@ -13508,7 +13508,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// creditoARealizar.setAnoMesReferenciaContabil(sistemaParametro
 		// .getAnoMesFaturamento());
 
-		// FIM ALTERA«√O BRUNO BARROS
+		// FIM ALTERA√á√ÉO BRUNO BARROS
 
 		creditoARealizar.setAnoMesCobrancaCredito(sistemaParametro
 				.getAnoMesArrecadacao());
@@ -13541,10 +13541,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// Ordem de Servico
 		creditoARealizar.setOrdemServico(creditoARealizar.getOrdemServico());
 
-		// CrÈdito Tipo
+		// Cr√©dito Tipo
 		creditoARealizar.setCreditoTipo(creditoARealizar.getCreditoTipo());
 
-		// CrÈdito Origem
+		// Cr√©dito Origem
 		creditoARealizar.setCreditoOrigem(creditoARealizar.getCreditoOrigem());
 
 		// Lancamento Item Contabil
@@ -13583,8 +13583,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		/**
 		 * Alterado por Hugo Leonardo. Data: 27/05/2010 [UC0194] - Inserir
-		 * CrÈdito a realizar. [FS0013] - Verificar crÈdito a realizar,
-		 * histÛrico e a guia devoluÁ„o.
+		 * Cr√©dito a realizar. [FS0013] - Verificar cr√©dito a realizar,
+		 * hist√≥rico e a guia devolu√ß√£o.
 		 * 
 		 * Analista: Ana Cristina.
 		 */
@@ -13620,7 +13620,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					msgAnoMes, msgValor);
 		}
 		/**
-		 * Fim AlteraÁ„o realizada por: Hugo Leonardo. Data: 27/05/2010.
+		 * Fim Altera√ß√£o realizada por: Hugo Leonardo. Data: 27/05/2010.
 		 */
 
 		// GERANDO O CREDITO A REALIZAR
@@ -13628,7 +13628,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0195] - Manter CrÈdito a Realizar
+	 * [UC0195] - Manter Cr√©dito a Realizar
 	 */
 	public void cancelarCreditoARealizar(String[] ids, Imovel imovel, Usuario usuarioLogado) throws ControladorException {
 
@@ -13655,11 +13655,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			CreditoARealizar credito = (CreditoARealizar) colecaoCredito.iterator().next();
 			credito.setUsuario(usuarioLogado);
 
-			// ------------ REGISTRAR TRANSA«√O ----------------
+			// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CREDITO_A_REALIZAR_CANCELAR, imovel.getId(), Integer.parseInt(id), 
 					new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 			registradorOperacao.registrarOperacao(credito);
-			// ------------ REGISTRAR TRANSA«√O ----------------
+			// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
 			if ((credito.getNumeroPrestacaoRealizada() == 0) && (credito.getAnoMesReferenciaContabil() >= getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento())) {
 
@@ -13673,7 +13673,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				getControladorUtil().remover(credito);
 				getControladorUtil().remover(creditoARealizarGeral);
 			} else {
-				// [FS0003] - Verifica usu·rio com dÈbito em cobranÁa administrativa
+				// [FS0003] - Verifica usu√°rio com d√©bito em cobran√ßa administrativa
 				FiltroImovelCobrancaSituacao filtroImovelCobrancaSituacao = new FiltroImovelCobrancaSituacao();
 
 				filtroImovelCobrancaSituacao.adicionarParametro(new ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID, imovel.getId()));
@@ -13691,7 +13691,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 
-				// [FS0004] - Validar valor do crÈdito
+				// [FS0004] - Validar valor do cr√©dito
 				CreditoARealizar creditoARealizarPesquisado = (CreditoARealizar) colecaoCredito.iterator().next();
 
 				FiltroCreditoTipo filtroCreditoTipo = new FiltroCreditoTipo();
@@ -13702,7 +13702,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (creditoTiposValor != null && !(creditoTiposValor.isEmpty())) {
 					CreditoTipo creditoTipoValorNaBase = (CreditoTipo) ((List) creditoTiposValor).get(0);
 					if (creditoTipoValorNaBase.getValorLimite() != null) {
-						// Verifica se o valor do crÈdito È mairo que o valor limite da tabela crÈdito tipo
+						// Verifica se o valor do cr√©dito √© mairo que o valor limite da tabela cr√©dito tipo
 						if (creditoARealizarPesquisado.getValorCredito().compareTo(creditoTipoValorNaBase.getValorLimite()) == 1) {
 							throw new ControladorException("atencao.credito_a_realizar.valor_limite", null, "" + creditoTipoValorNaBase.getValorLimite());
 						}
@@ -13735,7 +13735,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0146] - Manter Conta Author: Raphael Rossiter Data: 21/01/2006
 	 * 
-	 * ObtÈm as contas de um imÛvel que poder„o ser mantidas
+	 * Obt√©m as contas de um im√≥vel que poder√£o ser mantidas
 	 */
 	public Collection obterContasImovelManter(Imovel imovel,
 			Integer situacaoNormal, Integer situacaoIncluida,
@@ -13764,7 +13764,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoContasManutencaoArrayIterator.hasNext()) {
 
-				// ObtÈm os dados do crÈdito realizado
+				// Obt√©m os dados do cr√©dito realizado
 				Object[] contaArray = (Object[]) colecaoContasManutencaoArrayIterator
 						.next();
 
@@ -13773,7 +13773,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// ID da conta
 				conta.setId((Integer) contaArray[0]);
 
-				// Ano MÍs referencia
+				// Ano M√™s referencia
 				conta.setReferencia((Integer) contaArray[1]);
 
 				// Data de vencimento
@@ -13792,19 +13792,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				conta.setDataVencimentoConta(dataVencimento);
 
-				// Valor de ·gua
+				// Valor de √°gua
 				conta.setValorAgua((BigDecimal) contaArray[3]);
 
 				// Valor de esgoto
 				conta.setValorEsgoto((BigDecimal) contaArray[4]);
 
-				// Valor dos dÈbitos
+				// Valor dos d√©bitos
 				conta.setDebitos((BigDecimal) contaArray[5]);
 
-				// Valor dos crÈditos
+				// Valor dos cr√©ditos
 				conta.setValorCreditos((BigDecimal) contaArray[6]);
 
-				// Consumo de ·gua
+				// Consumo de √°gua
 				conta.setConsumoAgua((Integer) contaArray[7]);
 
 				// Consumo de esgoto
@@ -13839,7 +13839,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// DebitoCreditoSituacaoAtual
 				conta.setDebitoCreditoSituacaoAtual((DebitoCreditoSituacao) contaArray[11]);
 
-				// Ano MÍs referencia cont·bil
+				// Ano M√™s referencia cont√°bil
 				conta.setReferenciaContabil((Integer) contaArray[12]);
 
 				// ultima Alteracao
@@ -13952,7 +13952,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					throw new ControladorException("atencao.resumofaturamento_ja_existente");
 				}
 
-				// declaraÁ„o das vari·veis que ser„o utilizadas nos sequencias 560 e 1050
+				// declara√ß√£o das vari√°veis que ser√£o utilizadas nos sequencias 560 e 1050
 				Collection<Object[]> colecaoDadosGuiaDevolucao = null;
 				Map<Integer, BigDecimal> mapValorGuiaDevolucaoPorCategoriaSequencial560 = null;
 				Map<Integer, BigDecimal> mapValorGuiaDevolucaoPorCategoriaSequencial1050 = null;
@@ -13969,7 +13969,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					colecaoDadosGuiaDevolucao = repositorioFaturamento.acumularValorGuiaDevolucaoPorLancamentoItemContabil(
 									anoMesFaturamento, idLocalidade,DebitoCreditoSituacao.CANCELADA,lancamentoItemContabilTemp.getId());
 
-					// caso a coleÁ„o de dados n„o esteja nula acumula o valor da guia pela principal categoria do imÛvel.
+					// caso a cole√ß√£o de dados n√£o esteja nula acumula o valor da guia pela principal categoria do im√≥vel.
 					if (colecaoDadosGuiaDevolucao != null && !colecaoDadosGuiaDevolucao.isEmpty()) {
 						mapValorGuiaDevolucaoPorCategoriaSequencial560 = obterMapValorGuiaDevolucaoPorCategoria(colecaoDadosGuiaDevolucao);
 					}
@@ -14207,10 +14207,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						idsCreditosOrigem = obterIdsCreditosOrigemParaEncerramentoFaturamentoMensal();
 
-						// acumula o valor por categoria do credito realizado com origem do credito igual a devoluÁ„o de tarifa de ·gua,
-						// devoluÁ„o de tarifa de esgoto, serviÁos indiretos pagos indevidamente ou devoluÁ„o de juros de
-						// parcelamento e com situaÁ„o atual da conta igual cancelada e com ano/mÍs de referÍncia cont·bil da conta igual ao
-						// ano/mÍs do faturamento de sistema par‚metro.
+						// acumula o valor por categoria do credito realizado com origem do credito igual a devolu√ß√£o de tarifa de √°gua,
+						// devolu√ß√£o de tarifa de esgoto, servi√ßos indiretos pagos indevidamente ou devolu√ß√£o de juros de
+						// parcelamento e com situa√ß√£o atual da conta igual cancelada e com ano/m√™s de refer√™ncia cont√°bil da conta igual ao
+						// ano/m√™s do faturamento de sistema par√¢metro.
 						BigDecimal valorCreditoRealizadoOrigemCreditoSituacaoCancelada = repositorioFaturamento
 								.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoLancamentoItemContabil(
 										anoMesFaturamento, idLocalidade,
@@ -14225,14 +14225,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										lancamentoItemContabilTemp.getId());
 
 						/*
-						 * Acumula o valores cancelados, a diferenÁa entre o
-						 * valor dos crÈditos realizados com origem do crÈdito
-						 * igual a devoluÁ„o de tarifa de ·gua, devoluÁ„o de
-						 * tarifa de esgoto, serviÁos indiretos pagos
-						 * indevidamente ou devoluÁ„o de juros de parcelamento e
-						 * situaÁ„o atual da conta igual a cancelada por
-						 * retificaÁ„o e o valor do crÈdito realizado com
-						 * situaÁ„o atual ou anterior da conta igual a
+						 * Acumula o valores cancelados, a diferen√ßa entre o
+						 * valor dos cr√©ditos realizados com origem do cr√©dito
+						 * igual a devolu√ß√£o de tarifa de √°gua, devolu√ß√£o de
+						 * tarifa de esgoto, servi√ßos indiretos pagos
+						 * indevidamente ou devolu√ß√£o de juros de parcelamento e
+						 * situa√ß√£o atual da conta igual a cancelada por
+						 * retifica√ß√£o e o valor do cr√©dito realizado com
+						 * situa√ß√£o atual ou anterior da conta igual a
 						 * retificada.
 						 */
 						valorCreditoRealizadoOrigemCreditoSituacaoCancelada = valorCreditoRealizadoOrigemCreditoSituacaoCancelada
@@ -14258,15 +14258,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 
 						// acumula o valor por categoria do credito realizado
-						// com origem do credito igual a devoluÁ„o de tarifa de
-						// ·gua,
-						// devoluÁ„o de tarifa de esgoto, serviÁos indiretos
-						// pagos indevidamente ou devoluÁ„o de juros de
+						// com origem do credito igual a devolu√ß√£o de tarifa de
+						// √°gua,
+						// devolu√ß√£o de tarifa de esgoto, servi√ßos indiretos
+						// pagos indevidamente ou devolu√ß√£o de juros de
 						// parcelamento e
-						// com situaÁ„o atual da conta igual incluÌda e com
-						// ano/mÍs de referÍncia cont·bil da conta igual ao
-						// ano/mÍs do
-						// faturamento de sistema par‚metro.
+						// com situa√ß√£o atual da conta igual inclu√≠da e com
+						// ano/m√™s de refer√™ncia cont√°bil da conta igual ao
+						// ano/m√™s do
+						// faturamento de sistema par√¢metro.
 						BigDecimal valorCreditoRealizadoOrigemCreditoSituacaoIncluida = repositorioFaturamento
 								.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoLancamentoItemContabil(
 										anoMesFaturamento, idLocalidade,
@@ -14275,14 +14275,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										lancamentoItemContabilTemp.getId());
 
 						/*
-						 * Acumula o valores incluidos, a diferenÁa entre o
-						 * valor dos crÈditos realizados com origem do crÈdito
-						 * igual a devoluÁ„o de tarifa de ·gua, devoluÁ„o de
-						 * tarifa de esgoto, serviÁos indiretos pagos
-						 * indevidamente ou devoluÁ„o de juros de parcelamento e
-						 * situaÁ„o atual da conta igual a cancelada por
-						 * retificaÁ„o e o valor do crÈdito realizado com
-						 * situaÁ„o atual ou anterior da conta igual a
+						 * Acumula o valores incluidos, a diferen√ßa entre o
+						 * valor dos cr√©ditos realizados com origem do cr√©dito
+						 * igual a devolu√ß√£o de tarifa de √°gua, devolu√ß√£o de
+						 * tarifa de esgoto, servi√ßos indiretos pagos
+						 * indevidamente ou devolu√ß√£o de juros de parcelamento e
+						 * situa√ß√£o atual da conta igual a cancelada por
+						 * retifica√ß√£o e o valor do cr√©dito realizado com
+						 * situa√ß√£o atual ou anterior da conta igual a
 						 * retificada.
 						 */
 						valorCreditoRealizadoOrigemCreditoSituacaoIncluida = valorCreditoRealizadoOrigemCreditoSituacaoIncluida
@@ -14305,8 +14305,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
 						}
 
-						// calcula a diferenÁa entre as contas canceladas por
-						// retificaÁ„o e retificadas
+						// calcula a diferen√ßa entre as contas canceladas por
+						// retifica√ß√£o e retificadas
 						colecaoFinanciamentoTipos = new ArrayList<Integer>();
 						colecaoFinanciamentoTipos.add(FinanciamentoTipo.SERVICO_NORMAL);
 						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ARRASTO_AGUA);
@@ -14333,8 +14333,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						resumoTotalReceitaCancelada = this.acumularValorResumoFaturamento(resumoTotalReceitaCancelada,resumoFaturamentoTemporario.getValorItemFaturamento());
 						incluirResumoNaColecao(resumoFaturamentoTemporario, colecaoResumoFaturamento);
 
-						// acumular o valor de dÈbito para tipo de financiamento
-						// igual a parcelamento de serviÁo e para situaÁ„o igual
+						// acumular o valor de d√©bito para tipo de financiamento
+						// igual a parcelamento de servi√ßo e para situa√ß√£o igual
 						// a cancelada
 
 						colecaoFinanciamentoTipos = new ArrayList<Integer>();
@@ -14433,9 +14433,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					// pesquisa os valores de curo e longo prazo de dÈbitos a
-					// cobrar com situaÁ„o cancelado e tipo de financiamento
-					// igual a serviÁo
+					// pesquisa os valores de curo e longo prazo de d√©bitos a
+					// cobrar com situa√ß√£o cancelado e tipo de financiamento
+					// igual a servi√ßo
 					colecaoDadosDebitoACobrar = null;
 					colecaoDadosDebitoACobrar = repositorioFaturamento
 							.pesquisarValorLongoECurtoPrazoDebitoACobrarPorTipoFinanciamentoAgrupandoPorLancamentoItemContabil(
@@ -14588,11 +14588,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					// acumula o valor por categoria do dÈbito cobrado com tipo
-					// de financiamento igual a parcelamento de serviÁo e
-					// situaÁ„o atual da conta
-					// igual a dÈbito prescrito e com ano/mÍs de referÍncia
-					// cont·bil da conta preenchido.
+					// acumula o valor por categoria do d√©bito cobrado com tipo
+					// de financiamento igual a parcelamento de servi√ßo e
+					// situa√ß√£o atual da conta
+					// igual a d√©bito prescrito e com ano/m√™s de refer√™ncia
+					// cont√°bil da conta preenchido.
 					idsTipoFinanciamento = null;
 					idsTipoFinanciamento = new Integer[1];
 					idsTipoFinanciamento[0] = FinanciamentoTipo.PARCELAMENTO_SERVICO;
@@ -14632,13 +14632,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					// acumula o valor por categoria do crÈdito realizado com
-					// origem do crÈdito igual a
-					// devoluÁ„o de tarifa de ·gua ou devoluÁ„o de tarifa de
-					// esgoto ou serviÁos indiretos pagos
-					// indevidamente ou devoluÁ„o de juros de parcelamento e
-					// situaÁ„o atual da conta igual a dÈbito prescrito
-					// com ano/mÍs da baixa cont·bil da conta preenchido
+					// acumula o valor por categoria do cr√©dito realizado com
+					// origem do cr√©dito igual a
+					// devolu√ß√£o de tarifa de √°gua ou devolu√ß√£o de tarifa de
+					// esgoto ou servi√ßos indiretos pagos
+					// indevidamente ou devolu√ß√£o de juros de parcelamento e
+					// situa√ß√£o atual da conta igual a d√©bito prescrito
+					// com ano/m√™s da baixa cont√°bil da conta preenchido
 					Integer[] idsOrigemCreditos = {
 							CreditoOrigem.DEVOLUCAO_TARIFA_AGUA,
 							CreditoOrigem.DEVOLUCAO_TARIFA_ESGOTO,
@@ -14681,8 +14681,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					// acumula o valor por categoria do dÈbito cobrado com tipo de financiamento igual a serviÁo e situaÁ„o atual da
-					// conta igual a dÈbito prescrito e com ano/mÍs de referÍncia cont·bil da conta n„o preenchido.
+					// acumula o valor por categoria do d√©bito cobrado com tipo de financiamento igual a servi√ßo e situa√ß√£o atual da
+					// conta igual a d√©bito prescrito e com ano/m√™s de refer√™ncia cont√°bil da conta n√£o preenchido.
 					idsTipoFinanciamento = null;
 					idsTipoFinanciamento = new Integer[4];
 					idsTipoFinanciamento[0] = FinanciamentoTipo.SERVICO_NORMAL;
@@ -14722,8 +14722,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					// acumula o valor por categoria do dÈbito cobrado com tipo de financiamento igual a parcelamento de serviÁo e
-					// situaÁ„o atual da conta igual a dÈbito prescrito e com ano/mÍs de referÍncia cont·bil da conta n„o preenchido.
+					// acumula o valor por categoria do d√©bito cobrado com tipo de financiamento igual a parcelamento de servi√ßo e
+					// situa√ß√£o atual da conta igual a d√©bito prescrito e com ano/m√™s de refer√™ncia cont√°bil da conta n√£o preenchido.
 					idsTipoFinanciamento = null;
 					idsTipoFinanciamento = new Integer[1];
 					idsTipoFinanciamento[0] = FinanciamentoTipo.PARCELAMENTO_SERVICO;
@@ -14764,13 +14764,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					idsOrigemCreditos = null;
 					idsOrigemCreditos = obterIdsCreditosOrigemParaEncerramentoFaturamentoMensal();
 
-					// acumula o valor por categoria do crÈdito realizado com
-					// origem do crÈdito igual a devoluÁ„o de tarifa de ·gua ou
-					// devoluÁ„o de
-					// tarifa de esgoto ou serviÁos indiretos pagos
-					// indevidamente ou devoluÁ„o de juros de parcelamento
-					// e situaÁ„o atual da conta igual a dÈbito prescrito com
-					// ano/mÍs da baixa cont·bil da conta n„o preenchido
+					// acumula o valor por categoria do cr√©dito realizado com
+					// origem do cr√©dito igual a devolu√ß√£o de tarifa de √°gua ou
+					// devolu√ß√£o de
+					// tarifa de esgoto ou servi√ßos indiretos pagos
+					// indevidamente ou devolu√ß√£o de juros de parcelamento
+					// e situa√ß√£o atual da conta igual a d√©bito prescrito com
+					// ano/m√™s da baixa cont√°bil da conta n√£o preenchido
 					colecaoDadosCreditoRealizado = null;
 					colecaoDadosCreditoRealizado = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilNaoPreenchidaAgrupandoPorLancamentoItemContabil(
@@ -14807,7 +14807,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					// acumular o valor de guia de pagamento para situaÁ„o normal e tipo de financiamento igual a serviÁo
+					// acumular o valor de guia de pagamento para situa√ß√£o normal e tipo de financiamento igual a servi√ßo
 					Collection<Object[]> colecaoDadosGuiaPagamento = null;
 					colecaoDadosGuiaPagamento = repositorioFaturamento
 							.acumularValorGuiaPagamentoPorTipoFinanciamentoAgrupandoPorLancamentoItemContabil(
@@ -14869,16 +14869,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// acumula o valor por categoria do credito realizado
 					// com origem do credito igual a
 					// descontos incondicionais
-					// com situaÁ„o atual da conta igual cancelada
-					// e com ano/mÍs de referÍncia cont·bil da conta
-					// igual ao ano/mÍs do faturamento de sistema par‚metro.
+					// com situa√ß√£o atual da conta igual cancelada
+					// e com ano/m√™s de refer√™ncia cont√°bil da conta
+					// igual ao ano/m√™s do faturamento de sistema par√¢metro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoDescontosIncondicionais = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
 									anoMesFaturamento, idLocalidade,
 									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.CANCELADA);
 
-					// [SB0003 - Obter diferenÁas de valores de crÈditos
+					// [SB0003 - Obter diferen√ßas de valores de cr√©ditos
 					// realizados de conta retificada]
 					BigDecimal[] diferencaCreditoOrigemDescontosIncondicionaisCanceladaPorRetificacaoeERetificada = this
 							.obterDiferencaValoresCreditosRealizadosContaRetificada(
@@ -14886,11 +14886,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									idCategoria, idsCreditosOrigem);
 
 					/*
-					 * Acumula os valores cancelados, a diferenÁa entre o valor
-					 * dos crÈditos realizados com origem do crÈdito igual a
-					 * descontos incondicionais e situaÁ„o atual da conta igual
-					 * a cancelada por retificaÁ„o e o valor do crÈdito
-					 * realizado com situaÁ„o atual ou anterior da conta igual a
+					 * Acumula os valores cancelados, a diferen√ßa entre o valor
+					 * dos cr√©ditos realizados com origem do cr√©dito igual a
+					 * descontos incondicionais e situa√ß√£o atual da conta igual
+					 * a cancelada por retifica√ß√£o e o valor do cr√©dito
+					 * realizado com situa√ß√£o atual ou anterior da conta igual a
 					 * retificada.
 					 */
 					valorCreditoRealizadoOrigemCreditoDescontosIncondicionais = valorCreditoRealizadoOrigemCreditoDescontosIncondicionais
@@ -15618,7 +15618,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					                new Short("1700"),
 					                sequenciaImpressao);
 							
-							// soma o sequÍncia igual 1700 ao total cobrado nas contas
+							// soma o sequ√™ncia igual 1700 ao total cobrado nas contas
 							resumoTotalCobradoNasContas.setValorItemFaturamento(
 									resumoTotalCobradoNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -15655,7 +15655,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							
 							colecaoResumoFaturamento.add(resumoFaturamento);
 
-							// soma o sequÍncia igual 1800 ao total cobrado nas contas
+							// soma o sequ√™ncia igual 1800 ao total cobrado nas contas
 							resumoTotalCobradoNasContas.setValorItemFaturamento(
 									resumoTotalCobradoNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 						}
@@ -15700,7 +15700,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					                new Short("1900"),
 					                sequenciaImpressao);
 							
-							// soma o sequÍncia igual 1900 ao total cobrado nas contas
+							// soma o sequ√™ncia igual 1900 ao total cobrado nas contas
 							resumoTotalCobradoNasContas.setValorItemFaturamento(
 									resumoTotalCobradoNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -15735,7 +15735,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					                new Short("2100"),
 					                sequenciaImpressao);
 							
-							// soma o sequÍncia igual 2100 ao total cobrado nas contas
+							// soma o sequ√™ncia igual 2100 ao total cobrado nas contas
 							resumoTotalCobradoNasContas.setValorItemFaturamento(
 									resumoTotalCobradoNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -15746,7 +15746,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					// Linha 64
 					/*
-					 * Incluir tambÈm a situaÁ„o de conta INCLUIDA
+					 * Incluir tamb√©m a situa√ß√£o de conta INCLUIDA
 					 */
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
@@ -15763,7 +15763,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									DebitoCreditoSituacao.INCLUIDA,
 									FinanciamentoTipo.PARCELAMENTO_AGUA);
 					
-					// se o objeto retornado n„o for nulo
+					// se o objeto retornado n√£o for nulo
 					if (valorItemFaturamento != null && valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
 						
 						if (valorParcelamentosIncluidos != null && valorParcelamentosIncluidos.compareTo(BigDecimal.ZERO) != 0) {
@@ -15781,7 +15781,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				                new Short("1900"),
 				                new Short("10"));
 						
-						// soma o sequÍncia igual 1900 ao total cobrado nas contas
+						// soma o sequ√™ncia igual 1900 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -15810,7 +15810,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				                new Short("1900"),
 				                new Short("20"));
 						
-						// soma o sequÍncia igual 1900 ao total cobrado nas contas
+						// soma o sequ√™ncia igual 1900 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -15839,7 +15839,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				                new Short("1900"),
 				                maxSequencialImpressaoMais10);
 						
-						// soma o sequÍncia igual 1900 ao total cobrado nas contas
+						// soma o sequ√™ncia igual 1900 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -15864,7 +15864,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									new LancamentoItemContabil(LancamentoItemContabil.ACRESCIMOS_POR_IMPONTUALIDADE), 
 									new Short("2000"), new Short("10"));
 
-							// soma o sequÍncia igual 1900 ao total cobrado nas contas
+							// soma o sequ√™ncia igual 1900 ao total cobrado nas contas
 							resumoTotalCobradoNasContas.setValorItemFaturamento(resumoTotalCobradoNasContas.getValorItemFaturamento().add(
 									resumoFaturamento.getValorItemFaturamento()));
 
@@ -15888,7 +15888,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new LancamentoItem(LancamentoItem.DESCONTOS_CONCEDIDOS_PARCELAMENTO_FAIXA_CONTA), 
 								null, new Short("2000"), new Short("20"));
 
-						// soma o sequÍncia igual 1900 ao total cobrado nas contas
+						// soma o sequ√™ncia igual 1900 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(resumoTotalCobradoNasContas.getValorItemFaturamento().add(
 								resumoFaturamento.getValorItemFaturamento()));
 
@@ -15917,7 +15917,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				                new Short("2100"),
 				                new Short("10"));
 						
-						// soma o sequÍncia igual 2100 ao total cobrado nas contas
+						// soma o sequ√™ncia igual 2100 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -15946,7 +15946,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				                new Short("2100"),
 				                new Short("20"));
 						
-						// soma o sequÍncia igual 1900 ao total cobrado nas contas
+						// soma o sequ√™ncia igual 1900 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -15977,7 +15977,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						
 						colecaoResumoFaturamento.add(resumoFaturamento);
 
-						// subtrai o sequÍncia igual 2150 ao total cobrado nas contas
+						// subtrai o sequ√™ncia igual 2150 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 					}
@@ -16004,7 +16004,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				                new Short("2150"),
 				                new Short("20"));
 
-						// subtrai o sequÍncia igual 2150 ao total cobrado nas contas
+						// subtrai o sequ√™ncia igual 2150 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
@@ -16033,7 +16033,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				                new Short("2150"),
 				                new Short("30"));
 						
-						// subtrai o sequÍncia igual 2150 ao total cobrado nas contas
+						// subtrai o sequ√™ncia igual 2150 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
@@ -16062,7 +16062,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				                new Short("2150"),
 				                new Short("40"));
 						
-						// subtrai o sequÍncia igual 2150 ao total cobrado nas contas
+						// subtrai o sequ√™ncia igual 2150 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
@@ -16096,11 +16096,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("2160"), 
 								new Short("10"));
 						
-						// subtrai o sequÍncia igual 2300 ao total cobrado nas contas
+						// subtrai o sequ√™ncia igual 2300 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
-						// adiciona o sequÍncia igual 2200 ao total devolvidos nas contas
+						// adiciona o sequ√™ncia igual 2200 ao total devolvidos nas contas
 						resumoValoresDevolvidosNasContas.setValorItemFaturamento(
 								resumoValoresDevolvidosNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -16138,7 +16138,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
-						// adiciona o sequÍncia igual 2200 ao total devolvidos nas contas
+						// adiciona o sequ√™ncia igual 2200 ao total devolvidos nas contas
 						resumoValoresDevolvidosNasContas.setValorItemFaturamento(
 								resumoValoresDevolvidosNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -16172,11 +16172,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("2225"),
 								new Short("10"));
 						
-						// subtrai o sequÍncia igual 2200 ao total cobrado nas contas
+						// subtrai o sequ√™ncia igual 2200 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
-						// adiciona o sequÍncia igual 2200 ao total devolvidos nas contas
+						// adiciona o sequ√™ncia igual 2200 ao total devolvidos nas contas
 						resumoValoresDevolvidosNasContas.setValorItemFaturamento(
 								resumoValoresDevolvidosNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -16348,11 +16348,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("2300"), 
 								new Short("10"));
 						
-						// subtrai o sequÍncia igual 2300 ao total cobrado nas contas
+						// subtrai o sequ√™ncia igual 2300 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
-						// adiciona o sequÍncia igual 2200 ao total devolvidos nas contas
+						// adiciona o sequ√™ncia igual 2200 ao total devolvidos nas contas
 						resumoValoresDevolvidosNasContas.setValorItemFaturamento(
 								resumoValoresDevolvidosNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -16385,11 +16385,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("2300"), 
 								new Short("20"));
 						
-						// subtrai o sequÍncia igual 2300 ao total cobrado nas contas
+						// subtrai o sequ√™ncia igual 2300 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
-						// adiciona o sequÍncia igual 2200 ao total devolvidos nas contas
+						// adiciona o sequ√™ncia igual 2200 ao total devolvidos nas contas
 						resumoValoresDevolvidosNasContas.setValorItemFaturamento(
 								resumoValoresDevolvidosNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -16430,11 +16430,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									new Short("2300"), 
 									sequenciaImpressao);
 							
-							// subtrai o sequÍncia igual 2300 ao total cobrado nas contas
+							// subtrai o sequ√™ncia igual 2300 ao total cobrado nas contas
 							resumoTotalCobradoNasContas.setValorItemFaturamento(
 									resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
-							// adiciona o sequÍncia igual 2200 ao total devolvidos nas contas
+							// adiciona o sequ√™ncia igual 2200 ao total devolvidos nas contas
 							resumoValoresDevolvidosNasContas.setValorItemFaturamento(
 									resumoValoresDevolvidosNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -16466,11 +16466,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("2300"), 
 								maxSequencialImpressaoMais10);
 						
-						// subtrai o sequÍncia igual 2300 ao total cobrado nas contas
+						// subtrai o sequ√™ncia igual 2300 ao total cobrado nas contas
 						resumoTotalCobradoNasContas.setValorItemFaturamento(
 								resumoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
-						// adiciona o sequÍncia igual 2200 ao total devolvidos nas contas
+						// adiciona o sequ√™ncia igual 2200 ao total devolvidos nas contas
 						resumoValoresDevolvidosNasContas.setValorItemFaturamento(
 								resumoValoresDevolvidosNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -16503,8 +16503,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					BigDecimal diferencaIRSituacaoCanceladaPorRetificacaoeERetificada = obterDiferencaIRSituacaoCanceladaPorRetificacaoeERetificada(
 															anoMesFaturamento, idLocalidade, idCategoria);
 					/*
-					 * Acumula, quando negativa, a diferenÁa entre o valor do imposto de renda com tipo de imposto igual a IR e
-					 * situaÁ„o atual da conta igual a cancelada por retificaÁ„o e o valor do imposto de renda com situaÁ„o atual ou
+					 * Acumula, quando negativa, a diferen√ßa entre o valor do imposto de renda com tipo de imposto igual a IR e
+					 * situa√ß√£o atual da conta igual a cancelada por retifica√ß√£o e o valor do imposto de renda com situa√ß√£o atual ou
 					 * anterior da conta igual a retificada.
 					 */
 					if (diferencaIRSituacaoCanceladaPorRetificacaoeERetificada.compareTo(BigDecimal.ZERO) == -1) {
@@ -16549,10 +16549,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					BigDecimal totalCOFINSSituacaoCanceladaDiferencaPositiva = BigDecimal.ZERO;
 
 					/*
-					 * Acumula, quando positiva, a diferenÁa entre o valor do
+					 * Acumula, quando positiva, a diferen√ßa entre o valor do
 					 * imposto de renda com tipo de imposto igual a COFINS e
-					 * situaÁ„o atual da conta igual a cancelada por retificaÁ„o
-					 * e o valor do imposto de renda com situaÁ„o atual ou
+					 * situa√ß√£o atual da conta igual a cancelada por retifica√ß√£o
+					 * e o valor do imposto de renda com situa√ß√£o atual ou
 					 * anterior da conta igual a retificada.
 					 */
 					if (diferencaCOFINSSituacaoCanceladaPorRetificacaoeERetificada.compareTo(BigDecimal.ZERO) != -1) {
@@ -16580,10 +16580,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					BigDecimal totalCOFINSSituacaoCanceladaDiferencaNegativa = BigDecimal.ZERO;
 
 					/*
-					 * Acumula, quando negativa, a diferenÁa entre o valor do
+					 * Acumula, quando negativa, a diferen√ßa entre o valor do
 					 * imposto de renda com tipo de imposto igual a COFINS e
-					 * situaÁ„o atual da conta igual a cancelada por retificaÁ„o
-					 * e o valor do imposto de renda com situaÁ„o atual ou
+					 * situa√ß√£o atual da conta igual a cancelada por retifica√ß√£o
+					 * e o valor do imposto de renda com situa√ß√£o atual ou
 					 * anterior da conta igual a retificada.
 					 */
 					if (diferencaCOFINSSituacaoCanceladaPorRetificacaoeERetificada.compareTo(BigDecimal.ZERO) == -1) {
@@ -16653,10 +16653,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					BigDecimal totalCSLLSituacaoCanceladaDiferencaNegativa = BigDecimal.ZERO;
 
 					/*
-					 * Acumula, quando negativa, a diferenÁa entre o valor do
+					 * Acumula, quando negativa, a diferen√ßa entre o valor do
 					 * imposto de renda com tipo de imposto igual a CSLL e
-					 * situaÁ„o atual da conta igual a cancelada por retificaÁ„o
-					 * e o valor do imposto de renda com situaÁ„o atual ou
+					 * situa√ß√£o atual da conta igual a cancelada por retifica√ß√£o
+					 * e o valor do imposto de renda com situa√ß√£o atual ou
 					 * anterior da conta igual a retificada.
 					 */
 					if (diferencaCSLLSituacaoCanceladaPorRetificacaoeERetificada.compareTo(BigDecimal.ZERO) == -1) {
@@ -17124,7 +17124,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									anoMesFaturamento, idLocalidade,
 									idCategoria, idsSituacaoAtual);
 
-					// adiciona o valor de ·gua e esgoto ao valor do dÈbito cobrado
+					// adiciona o valor de √°gua e esgoto ao valor do d√©bito cobrado
 					valorItemFaturamento = valorItemFaturamento.add(valorAgua)
 							.add(valorEsgoto);
 
@@ -17172,7 +17172,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									anoMesFaturamento, idLocalidade,
 									idCategoria, idsSituacaoAtual);
 
-					// adiciona o valor de ·gua e esgoto ao do dÈbito cobrado
+					// adiciona o valor de √°gua e esgoto ao do d√©bito cobrado
 					valorItemFaturamento = valorItemFaturamento.add(valorAgua).add(valorEsgoto);
 
 					if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
@@ -17225,7 +17225,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3400"), 
 								new Short("10"));
 						
-						// acumula o valor do sequencial 3400 ao total de dÈbitos cancelados por prescriÁ„o
+						// acumula o valor do sequencial 3400 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17244,7 +17244,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3400"), 
 								new Short("20"));
 						
-						// acumula o valor do sequencial 3400 ao total de dÈbitos cancelados por prescriÁ„o
+						// acumula o valor do sequencial 3400 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17286,7 +17286,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3800"), 
 								new Short("10"));
 						
-						// acumula o valor do sequencial 3800 ao total de dÈbitos cancelados por prescriÁ„o
+						// acumula o valor do sequencial 3800 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17305,7 +17305,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3800"), 
 								new Short("20"));
 						
-						// acumula o valor do sequencial 3800 ao total de dÈbitos cancelados por prescriÁ„o
+						// acumula o valor do sequencial 3800 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17362,7 +17362,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3500"), 
 								new Short("20"));
 						
-						// acumula o valor do sequencial 3500 ao total de dÈbitos cancelados por prescriÁ„o
+						// acumula o valor do sequencial 3500 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17391,7 +17391,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3500"), 
 								maxSequencialImpressaoMais10);
 						
-						// acumula o valor do sequencial 3500 ao total de dÈbitos cancelados por prescriÁ„o
+						// acumula o valor do sequencial 3500 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17535,7 +17535,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3700"), 
 								new Short("10"));
 						
-						// subtrai o valor do sequencial 3700 ao total de dÈbitos cancelados por prescriÁ„o
+						// subtrai o valor do sequencial 3700 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17564,7 +17564,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3700"), 
 								new Short("20"));
 						
-						// subtrai o valor do sequencial 3700 ao total de dÈbitos cancelados por prescriÁ„o
+						// subtrai o valor do sequencial 3700 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17592,7 +17592,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3700"), 
 								new Short("30"));
 						
-						// subtrai o valor do sequencial 3700 ao total de dÈbitos cancelados por prescriÁ„o
+						// subtrai o valor do sequencial 3700 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17621,7 +17621,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3700"), 
 								new Short("40"));
 						
-						// subtrai o valor do sequencial 3700 ao total de dÈbitos cancelados por prescriÁ„o
+						// subtrai o valor do sequencial 3700 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17650,7 +17650,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3900"), 
 								new Short("10"));
 						
-						// acumula o valor do sequencial 3900 ao total de dÈbitos cancelados por prescriÁ„o
+						// acumula o valor do sequencial 3900 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17680,7 +17680,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3900"), 
 								new Short("20"));
 						
-						// acumula o valor do sequencial 3900 ao total de dÈbitos cancelados por prescriÁ„o
+						// acumula o valor do sequencial 3900 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17710,7 +17710,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("3900"), 
 								maxSequencialImpressaoMais10);
 						
-						// acumula o valor do sequencial 3900 ao total de dÈbitos cancelados por prescriÁ„o
+						// acumula o valor do sequencial 3900 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17863,7 +17863,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("4100"), 
 								new Short("10"));
 						
-						// subtrai o valor do sequencial 4100 ao total de dÈbitos cancelados por prescriÁ„o
+						// subtrai o valor do sequencial 4100 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17892,11 +17892,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("4100"), 
 								new Short("20"));
 						
-						// subtrai o valor do sequencial 4100 ao total de dÈbitos cancelados por prescriÁ„o
+						// subtrai o valor do sequencial 4100 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
-						// inseri o resumo de faturamento a coleÁ„o principal
+						// inseri o resumo de faturamento a cole√ß√£o principal
 						colecaoResumoFaturamento.add(resumoFaturamento);
 					}
 					// fim Linha 133
@@ -17922,7 +17922,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("4100"), 
 								new Short("30"));
 						
-						// subtrai o valor do sequencial 4100 ao total de dÈbitos cancelados por prescriÁ„o
+						// subtrai o valor do sequencial 4100 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
@@ -17952,11 +17952,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								new Short("4100"), 
 								new Short("40"));
 						
-						// subtrai o valor do sequencial 4100 ao total de dÈbitos cancelados por prescriÁ„o
+						// subtrai o valor do sequencial 4100 ao total de d√©bitos cancelados por prescri√ß√£o
 						resumoTotalDebitosCanceladosPrescricao.setValorItemFaturamento(
 								resumoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
 
-						// inseri o resumo de faturamento a coleÁ„o principal
+						// inseri o resumo de faturamento a cole√ß√£o principal
 						colecaoResumoFaturamento.add(resumoFaturamento);
 					}
 					// fim Linha 135
@@ -18025,7 +18025,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						resumoFaturamentoReceitaBruta.setValorItemFaturamento(
 								resumoFaturamentoReceitaBruta.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
 
-						// inseri o resumo de faturamento a coleÁ„o principal
+						// inseri o resumo de faturamento a cole√ß√£o principal
 						colecaoResumoFaturamento.add(resumoFaturamento);
 					}
 
@@ -18738,7 +18738,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					lancamentoItemContabilTemp.getSequenciaImpressao());
 			resumo.setValorItemFaturamento(valor);
 			
-			// obtÈm o valor da guia de pagamento para situaÁ„o igual a cancelada
+			// obt√©m o valor da guia de pagamento para situa√ß√£o igual a cancelada
 			int[] idFinanciamentoTipo = new int[1];
 			idFinanciamentoTipo[0] = FinanciamentoTipo.SERVICO_NORMAL;
 			
@@ -19555,7 +19555,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			Collection colecaoResumoFaturamento = null;
 
-			// laÁo para construir os resumos de faturamento liquido
+			// la√ßo para construir os resumos de faturamento liquido
 			// Agua,Esgoto,Total
 			// por localidade
 			for (Integer idLocalidade : colecaoIdsLocalidades) {
@@ -19575,7 +19575,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Localidade localidade = new Localidade();
 				localidade.setId(idLocalidade);
 
-				// laÁo para construir os resumos de faturamento liquido
+				// la√ßo para construir os resumos de faturamento liquido
 				// Agua,Esgoto,Total
 				// por categoria
 				for (Categoria categoria : colecaoCategorias) {
@@ -19687,7 +19687,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}// fim CATEGORIA
 
 				/*
-				 * Caso a coleÁ„o de resumo de faturamento para inserÁ„o n„o
+				 * Caso a cole√ß√£o de resumo de faturamento para inser√ß√£o n√£o
 				 * esteja vazia manda inserir todos os resumo de faturamento.
 				 */
 				if (colecaoResumoFaturamento != null
@@ -19697,7 +19697,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}// fim LOCALIDADE
 
-			// laÁo para construir os resumos de faturamento liquido indireto
+			// la√ßo para construir os resumos de faturamento liquido indireto
 			// por localidade
 			for (Integer idLocalidade : colecaoIdsLocalidades) {
 
@@ -19716,7 +19716,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Localidade localidade = new Localidade();
 				localidade.setId(idLocalidade);
 
-				// laÁo para construir os resumos de faturamento liquido
+				// la√ßo para construir os resumos de faturamento liquido
 				// indireto
 				// por categoria
 				for (Categoria categoria : colecaoCategorias) {
@@ -19762,7 +19762,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}// fim CATEGORIA
 
 				/*
-				 * Caso a coleÁ„o de resumo de faturamento para inserÁ„o n„o
+				 * Caso a cole√ß√£o de resumo de faturamento para inser√ß√£o n√£o
 				 * esteja vazia manda inserir todos os resumo de faturamento.
 				 */
 				if (colecaoResumoFaturamento != null
@@ -19782,8 +19782,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0819] Gerar Historico do Encerramento do Faturamento
 	 * 
-	 * Metodo respons·vel pela transferÍncia das contas, dÈbito a cobrar e
-	 * crÈdito a realizar para o histÛrico, assim com a atualizaÁaı dos imÛveis.
+	 * Metodo respons√°vel pela transfer√™ncia das contas, d√©bito a cobrar e
+	 * cr√©dito a realizar para o hist√≥rico, assim com a atualiza√ßa√µ dos im√≥veis.
 	 * 
 	 * @author Pedro Alexandre, Raphael Rossiter
 	 * @date 06/02/2007, 10/02/2009
@@ -19941,11 +19941,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descriÁ„o sobre o caso de uso>
+	 * <Breve descri√ß√£o sobre o caso de uso>
 	 * 
-	 * <[UC0155] - Encerrar Faturamento do MÍs
+	 * <[UC0155] - Encerrar Faturamento do M√™s
 	 * 
-	 * [SB0002] - Obter DiferenÁas de Valores de Parcelamentos de Conta
+	 * [SB0002] - Obter Diferen√ßas de Valores de Parcelamentos de Conta
 	 * Retificada
 	 * 
 	 * @author Pedro Alexandre, Pedro Alexandre
@@ -19962,8 +19962,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer idTipoFinanciamento) throws ControladorException {
 
-		// cria as vari·veis para armazenar os valores do dÈbitos cobrados
-		// cancelados por retificaÁ„o e retificado
+		// cria as vari√°veis para armazenar os valores do d√©bitos cobrados
+		// cancelados por retifica√ß√£o e retificado
 		BigDecimal[] retorno = new BigDecimal[2];
 
 		BigDecimal valorDebitoCobradoSituacaoCanceladoPorRetificacao = null;
@@ -19973,13 +19973,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		localidade.setId(idLocalidade);
 
 		try {
-			// obtÈm o valor dos dÈbitos cobrados cancelados do retificaÁ„o
+			// obt√©m o valor dos d√©bitos cobrados cancelados do retifica√ß√£o
 			valorDebitoCobradoSituacaoCanceladoPorRetificacao = repositorioFaturamento
 					.acumularValorDebitoCobradoPorTipoFinanciamentoCanceladaPorRetificacao(
 							anoMesReferencia, idLocalidade, idCategoria,
 							idTipoFinanciamento);
 
-			// obtÈm o valor dos dÈbitos cobrados retificados
+			// obt√©m o valor dos d√©bitos cobrados retificados
 			valorDebitoCobradoSituacaoRetificado = repositorioFaturamento
 					.acumularValorDebitoCobradoPorTipoFinanciamentoRetificada(
 							anoMesReferencia, localidade, idCategoria,
@@ -20005,12 +20005,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// Valor Incluidos Cancelados
 		retorno[1] = valorDebitoCobradoSituacaoRetificado;
 
-		// retorna a diferenÁa entre os valores dos dÈbitos cobrados
+		// retorna a diferen√ßa entre os valores dos d√©bitos cobrados
 		return retorno;
 	}
 
 	/**
-	 * [SB0001] - Obter DiferenÁas de Valores de ServiÁos Indiretos de Conta
+	 * [SB0001] - Obter Diferen√ßas de Valores de Servi√ßos Indiretos de Conta
 	 * Retificada
 	 * 
 	 * <Identificador e nome do caso de uso>
@@ -20031,21 +20031,21 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection<Integer> tipoFinanciamento, Integer itemContabil)
 			throws ControladorException {
 
-		// cria as vari·veis para armazenar os valores do dÈbitos cobrados
-		// cancelados por retificaÁ„o e retificado
+		// cria as vari√°veis para armazenar os valores do d√©bitos cobrados
+		// cancelados por retifica√ß√£o e retificado
 		BigDecimal[] retorno = new BigDecimal[2];
 
 		BigDecimal valorDebitoCobradoSituacaoCanceladoPorRetificacao = BigDecimal.ZERO;
 		BigDecimal valorDebitoCobradoSituacaoRetificado = BigDecimal.ZERO;
 
 		try {
-			// obtÈm o valor dos dÈbitos cobrados cancelados do retificaÁ„o
+			// obt√©m o valor dos d√©bitos cobrados cancelados do retifica√ß√£o
 			valorDebitoCobradoSituacaoCanceladoPorRetificacao = repositorioFaturamento
 					.acumularValorDebitoCobradoPorTipoFinanciamentoSituacaoContaCanceladaPorRetificacao(
 							anoMesReferencia, idLocalidade, idCategoria,
 							tipoFinanciamento, itemContabil);
 
-			// obtÈm o valor dos dÈbitos cobrados retificados
+			// obt√©m o valor dos d√©bitos cobrados retificados
 			valorDebitoCobradoSituacaoRetificado = repositorioFaturamento
 					.acumularValorDebitoCobradoPorTipoFinanciamentoSituacaoContaRetificada(
 							anoMesReferencia, idLocalidade, idCategoria,
@@ -20069,7 +20069,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// Valor Acumulados Incluidos
 		retorno[1] = valorDebitoCobradoSituacaoRetificado;
 
-		// retorna a diferenÁa entre os valores dos dÈbitos cobrados
+		// retorna a diferen√ßa entre os valores dos d√©bitos cobrados
 		return retorno;
 	}
 
@@ -20079,8 +20079,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @param imovelID
 	 *            Id do Imovel
 	 * @param debitoCreditoSituacaoAtualID
-	 *            ID do Debito Credito SituaÁ„o
-	 * @return ColeÁ„o de Debitos a Cobrar
+	 *            ID do Debito Credito Situa√ß√£o
+	 * @return Cole√ß√£o de Debitos a Cobrar
 	 */
 	public Collection obterDebitoACobrarImovel(Integer imovelID,
 			Integer debitoCreditoSituacaoAtualID, int anoMesFaturamento)
@@ -20093,7 +20093,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection debitosACobrar = null;
 		Collection colecaoDebitosACobrar = null;
 
-		// Pesquisa dÈbitos a cobrar
+		// Pesquisa d√©bitos a cobrar
 		try {
 			colecaoDebitosACobrar = repositorioFaturamento
 					.pesquisarDebitosACobrar(imovelID,
@@ -20104,7 +20104,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		// Verifica se existe dÈbitos a cobrar
+		// Verifica se existe d√©bitos a cobrar
 		if (colecaoDebitosACobrar != null && !colecaoDebitosACobrar.isEmpty()) {
 
 			Iterator iteratorColecaoDebitosACobrar = colecaoDebitosACobrar
@@ -20145,13 +20145,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					debitoACobrar
 							.setValorDebito((BigDecimal) arrayDebitosACobrar[3]);
 				}
-				// numero de prestaÁıes de debito - item 4
+				// numero de presta√ß√µes de debito - item 4
 				if (arrayDebitosACobrar[4] != null) {
 					debitoACobrar
 							.setNumeroPrestacaoDebito(((Short) arrayDebitosACobrar[4])
 									.shortValue());
 				}
-				// numero de prestaÁıes cobradas - item 5
+				// numero de presta√ß√µes cobradas - item 5
 				if (arrayDebitosACobrar[5] != null) {
 					debitoACobrar
 							.setNumeroPrestacaoCobradas(((Short) arrayDebitosACobrar[5])
@@ -20185,33 +20185,33 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setCodigoSetorComercial((Integer) arrayDebitosACobrar[9]);
 				}
 
-				// N˙mero da Quadra - item 10
+				// N√∫mero da Quadra - item 10
 				if (arrayDebitosACobrar[10] != null) {
 					debitoACobrar
 							.setNumeroQuadra((Integer) arrayDebitosACobrar[10]);
 				}
 
-				// N˙mero do Lote - item 11
+				// N√∫mero do Lote - item 11
 				if (arrayDebitosACobrar[11] != null) {
 					debitoACobrar
 							.setNumeroLote(((Short) arrayDebitosACobrar[11])
 									.shortValue());
 				}
 
-				// N˙mero do Sub Lote - item 12
+				// N√∫mero do Sub Lote - item 12
 				if (arrayDebitosACobrar[12] != null) {
 					debitoACobrar
 							.setNumeroSubLote(((Short) arrayDebitosACobrar[12])
 									.shortValue());
 				}
 
-				// Ano MÍs Referencia Debito - item 13
+				// Ano M√™s Referencia Debito - item 13
 				if (arrayDebitosACobrar[13] != null) {
 					debitoACobrar
 							.setAnoMesReferenciaDebito((Integer) arrayDebitosACobrar[13]);
 				}
 
-				// Ano MÍs CobranÁa de Debito - item 14
+				// Ano M√™s Cobran√ßa de Debito - item 14
 				if (arrayDebitosACobrar[14] != null) {
 					debitoACobrar
 							.setAnoMesCobrancaDebito((Integer) arrayDebitosACobrar[14]);
@@ -20219,7 +20219,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				/*
 				 * Alterado por Vivianne Sousa em 20/12/2007 - Analista: Adriano
-				 * criaÁ„o do bonus para parcelamento com RD especial
+				 * cria√ß√£o do bonus para parcelamento com RD especial
 				 */
 				// numero de parcelas bonus - item 17
 				if (arrayDebitosACobrar[17] != null) {
@@ -20229,14 +20229,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				/*
 				 * [UC0113] - Faturar Grupo de Faturamento [FS0005] - Verificar
-				 * DÈbitos a cobrar de parcelamento
+				 * D√©bitos a cobrar de parcelamento
 				 */
 				if (!(arrayDebitosACobrar[16] != null
 						&& debitoACobrar.getNumeroPrestacaoCobradas() == 0 && (arrayDebitosACobrar[15] != null && ((Integer) arrayDebitosACobrar[15])
 						.intValue() >= sistemaParametro.getAnoMesFaturamento()))) {
 					/*
 					 * [UC0113] - Faturar Grupo de Faturamento [FS0007] -
-					 * Verificar pagamentos para dÈbitos a cobrar
+					 * Verificar pagamentos para d√©bitos a cobrar
 					 */
 					Integer qtdPagamentos = this.getControladorArrecadacao()
 							.pesquisarQuantidadePagamentosPorDebitoACobrar(
@@ -20257,7 +20257,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * 
 	 * @param debitoACobrarID
 	 *            Id do Debito A Cobrar
-	 * @return ColeÁ„o de Debitos a Cobrar Categoria
+	 * @return Cole√ß√£o de Debitos a Cobrar Categoria
 	 */
 	public Collection obterDebitoACobrarCategoria(Integer debitoACobrarID)
 			throws ControladorException {
@@ -20265,7 +20265,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection debitosACobrarCategoria = null;
 		Collection colecaoCreditosACobrarCategoria = null;
 
-		// Pesquisa crÈditos a cobrar categoria
+		// Pesquisa cr√©ditos a cobrar categoria
 		try {
 			colecaoCreditosACobrarCategoria = repositorioFaturamento
 					.pesquisarDebitosACobrarCategoria(debitoACobrarID);
@@ -20275,7 +20275,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		// Verifica se existe dÈbitos a cobrar
+		// Verifica se existe d√©bitos a cobrar
 		if (colecaoCreditosACobrarCategoria != null
 				&& !colecaoCreditosACobrarCategoria.isEmpty()) {
 
@@ -20316,8 +20316,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @param imovelID
 	 *            Id do Imovel
 	 * @param debitoCreditoSituacaoAtualID
-	 *            ID do Debito Credito SituaÁ„o
-	 * @return ColeÁ„o de Creditos a Realizar
+	 *            ID do Debito Credito Situa√ß√£o
+	 * @return Cole√ß√£o de Creditos a Realizar
 	 */
 	public Collection obterCreditoARealizarImovelPorSituacao(Integer imovelID,
 			Integer debitoCreditoSituacaoAtualID, int anoMesFaturamentoGrupo, boolean preFaturamento)
@@ -20332,7 +20332,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		 * @autor Adriana Muniz
 		 * @date 25/09/2013
 		 * 
-		 * Troca da referÍncia de faturamento do grupo para a referencia
+		 * Troca da refer√™ncia de faturamento do grupo para a referencia
 		 * de faturamento do sistema de parametro.
 		 */
 		
@@ -20451,7 +20451,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * 
 	 * @param creditoARealizarID
 	 *            Id do Creditoa A Realizar
-	 * @return ColeÁ„o de Creditos Realizados Categoria
+	 * @return Cole√ß√£o de Creditos Realizados Categoria
 	 */
 	public Collection obterCreditoRealizarCategoria(Integer creditoARealizarID)
 			throws ControladorException {
@@ -20518,7 +20518,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os dados dos imÛveis que ser„o faturados
+	 * Pesquisa os dados dos im√≥veis que ser√£o faturados
 	 * 
 	 * [UC0113] - Faturar Grupo Faturamento
 	 * 
@@ -20541,8 +20541,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		try {
 			/*
-			 * Caso a rota n„o esteja com o indicador de rota alternativa ativo;
-			 * a pesquisa dos imÛveis ser· feita a partir de sua quadra.
+			 * Caso a rota n√£o esteja com o indicador de rota alternativa ativo;
+			 * a pesquisa dos im√≥veis ser√° feita a partir de sua quadra.
 			 */
 			if (!rota.getIndicadorRotaAlternativa().equals(
 					ConstantesSistema.SIM)) {
@@ -20553,8 +20553,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			}
 			/*
-			 * Caso contr·rio; a pesquisa dos imÛveis ser· feita a partir da
-			 * rota alternativa que estar· associada ao mesmo.
+			 * Caso contr√°rio; a pesquisa dos im√≥veis ser√° feita a partir da
+			 * rota alternativa que estar√° associada ao mesmo.
 			 */
 			else {
 
@@ -20569,7 +20569,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		// Carregando os dados dos imÛveis selecionados
+		// Carregando os dados dos im√≥veis selecionados
 		if (imoveis != null && !imoveis.isEmpty()) {
 
 			Iterator iteratorImoveis = imoveis.iterator();
@@ -20593,11 +20593,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/*
-	 *  RefatoraÁ„o feita pela cosanpa, para melhorar a leitura do
-	 * cÛdigo.
+	 *  Refatora√ß√£o feita pela cosanpa, para melhorar a leitura do
+	 * c√≥digo.
 	 */
 	/**
-	 * Metodo que obtem um array, com informaÁıes de um imÛvel, e converte em um
+	 * Metodo que obtem um array, com informa√ß√µes de um im√≥vel, e converte em um
 	 * objeto Imovel.
 	 * 
 	 * @author Pamela Gatinho
@@ -20793,12 +20793,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
 		}
 
-		// indicador vencimento mÍs seguinte
+		// indicador vencimento m√™s seguinte
 		if (arrayImovel[25] != null) {
 			imovel.setIndicadorVencimentoMesSeguinte((Short) arrayImovel[25]);
 		}
 
-		// HidrÙmetro ¡gua
+		// Hidr√¥metro √Ågua
 		if (arrayImovel[29] != null) {
 			LigacaoAgua ligacaoAgua = new LigacaoAgua();
 			HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = new HidrometroInstalacaoHistorico();
@@ -20808,14 +20808,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			imovel.setLigacaoAgua(ligacaoAgua);
 		}
 
-		// HidrÙmetro PoÁo
+		// Hidr√¥metro Po√ßo
 		if (arrayImovel[30] != null) {
 			HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = new HidrometroInstalacaoHistorico();
 			hidrometroInstalacaoHistorico.setId((Integer) arrayImovel[30]);
 			imovel.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
 		}
 
-		// Id imÛvel condominio
+		// Id im√≥vel condominio
 		if (arrayImovel[31] != null) {
 			try {
 
@@ -20836,7 +20836,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		/**
 		 * data:08/08/2012 Adicionando parametros do array ao
-		 * objeto imovel Inclus„o para atender as alteraÁıes no calculo do
+		 * objeto imovel Inclus√£o para atender as altera√ß√µes no calculo do
 		 * condominio
 		 * */
 		if (arrayImovel[33] != null) {
@@ -20848,15 +20848,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	public void removerFaturamentoCronograma(String[] ids,
 			String pacoteNomeObjeto) throws ControladorException {
-		// se for selecionado alguma unidade executora pelo usu·rio
+		// se for selecionado alguma unidade executora pelo usu√°rio
 		if (ids != null && ids.length != 0) {
 
 			FiltroFaturamentoAtividadeCronograma filtroFaturamentoAtividadeCronograma = new FiltroFaturamentoAtividadeCronograma();
 			Collection colecaoFaturamentoAtividadeCronograma = null;
 			// remove todas as unidade executoras informadas
 			for (int i = 0; i < ids.length; i++) {
-				// atribui a vari·vel "id" o cÛdigo da unidade executora para
-				// remoÁ„o
+				// atribui a vari√°vel "id" o c√≥digo da unidade executora para
+				// remo√ß√£o
 				int id = Integer.parseInt(ids[i]);
 
 				filtroFaturamentoAtividadeCronograma
@@ -20875,7 +20875,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					throw new ControladorException(
 							"atencao.faturamento.exclusao_nao_permitida");
 				} else {
-					// chama o metÛdo de remover do util
+					// chama o met√≥do de remover do util
 					try {
 						repositorioFaturamento
 								.removerFaturamentoGrupoAtividades(id);
@@ -20901,13 +20901,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Inseri uma coleÁ„o de pagamentos no sistema
+	 * Inseri uma cole√ß√£o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Pesquisa a conta do imÛvel com a referÍncia informada pelo usu·rio
+	 * Pesquisa a conta do im√≥vel com a refer√™ncia informada pelo usu√°rio
 	 * 
-	 * [FS0012] - Verificar existÍncia da conta
+	 * [FS0012] - Verificar exist√™ncia da conta
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -20920,17 +20920,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public Conta pesquisarContaDigitada(String idImovel, String referenciaConta)
 			throws ControladorException {
 
-		// Vari·vel que vai armazenar a conta pesquisada
+		// Vari√°vel que vai armazenar a conta pesquisada
 		Conta contaDigitada = null;
 		Object[] dadosConta = null;
 
-		// Formata a referÍncia da conta informada para o formato (AAAAMM) sem a
+		// Formata a refer√™ncia da conta informada para o formato (AAAAMM) sem a
 		// barra
 		String anoMesConta = Util
 				.formatarMesAnoParaAnoMesSemBarra(referenciaConta);
 
-		// Cria o filtro de conta e seta todos os par‚metros para pesquisar a
-		// conta do imÛvel
+		// Cria o filtro de conta e seta todos os par√¢metros para pesquisar a
+		// conta do im√≥vel
 		// Pesquisa imovel
 		try {
 			dadosConta = repositorioFaturamento.pesquisarContaDigitada(
@@ -20950,12 +20950,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				contaDigitada.setId((Integer) dadosConta[0]);
 			}
 
-			// ReferÍncia
+			// Refer√™ncia
 			if (dadosConta[1] != null) {
 				contaDigitada.setReferencia((Integer) dadosConta[1]);
 			}
 
-			// Valor da ¡gua
+			// Valor da √Ågua
 			if (dadosConta[2] != null) {
 				contaDigitada.setValorAgua((BigDecimal) dadosConta[2]);
 			}
@@ -20965,12 +20965,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				contaDigitada.setValorEsgoto((BigDecimal) dadosConta[3]);
 			}
 
-			// DÈbitos
+			// D√©bitos
 			if (dadosConta[4] != null) {
 				contaDigitada.setDebitos((BigDecimal) dadosConta[4]);
 			}
 
-			// Valor CrÈditos
+			// Valor Cr√©ditos
 			if (dadosConta[5] != null) {
 				contaDigitada.setValorCreditos((BigDecimal) dadosConta[5]);
 			}
@@ -20987,7 +20987,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				contaDigitada.setLocalidade(localidade);
 			}
 
-			// DÈbito CrÈdito SituaÁ„o
+			// D√©bito Cr√©dito Situa√ß√£o
 			if (dadosConta[8] != null && dadosConta[9] != null) {
 				DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 				debitoCreditoSituacao.setId((Integer) dadosConta[8]);
@@ -21024,26 +21024,26 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// getControladorUtil().pesquisar(filtroConta,
 		// Conta.class.getName());
 		//
-		// // Caso exista a conta para a referÍncia informada cadastrada no
+		// // Caso exista a conta para a refer√™ncia informada cadastrada no
 		// sistema
-		// // Retorna para o usu·rio a conta retornada pela pesquisa
-		// // Caso contr·rio retorna um objeto nulo
+		// // Retorna para o usu√°rio a conta retornada pela pesquisa
+		// // Caso contr√°rio retorna um objeto nulo
 		// if (colecaoContas != null && !colecaoContas.isEmpty()) {
 		// contaDigitada = (Conta) Util.retonarObjetoDeColecao(colecaoContas);
 		// }
 
-		// Retorna a conta encontrada ou nulo se n„o existir a conta
+		// Retorna a conta encontrada ou nulo se n√£o existir a conta
 		return contaDigitada;
 	}
 
 	/**
-	 * Inseri uma coleÁ„o de pagamentos no sistema
+	 * Inseri uma cole√ß√£o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Pesquisa o tipo de dÈbito informado pelo usu·rio
+	 * Pesquisa o tipo de d√©bito informado pelo usu√°rio
 	 * 
-	 * [FS0020] - Verificar existÍncia do tipo de dÈbito
+	 * [FS0020] - Verificar exist√™ncia do tipo de d√©bito
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -21055,25 +21055,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public DebitoTipo pesquisarTipoDebitoDigitado(Integer idTipoDebitoDigitado)
 			throws ControladorException {
 
-		// Cria a vari·vel que vai armazenar o tipo de dÈbito pesquisado
+		// Cria a vari√°vel que vai armazenar o tipo de d√©bito pesquisado
 		DebitoTipo tipoDebitoDigitado = null;
 
-		// Pesquisa o tipo de dÈbito informado pelo usu·rio no sistema
+		// Pesquisa o tipo de d√©bito informado pelo usu√°rio no sistema
 		FiltroDebitoTipo filtroDebitoTipo = new FiltroDebitoTipo();
 		filtroDebitoTipo.adicionarParametro(new ParametroSimples(
 				FiltroDebitoTipo.ID, idTipoDebitoDigitado));
 		Collection<DebitoTipo> colecaoDebitoTipo = getControladorUtil()
 				.pesquisar(filtroDebitoTipo, DebitoTipo.class.getName());
 
-		// Caso exista o tipo de dÈbito no sistema
-		// Retorna para o usu·rio o tipo de dÈbito retornado pela pesquisa
-		// Caso contr·rio retorna um objeto nulo
+		// Caso exista o tipo de d√©bito no sistema
+		// Retorna para o usu√°rio o tipo de d√©bito retornado pela pesquisa
+		// Caso contr√°rio retorna um objeto nulo
 		if (colecaoDebitoTipo != null && !colecaoDebitoTipo.isEmpty()) {
 			tipoDebitoDigitado = (DebitoTipo) Util
 					.retonarObjetoDeColecao(colecaoDebitoTipo);
 		}
 
-		// Retorna o cliente encontrado ou nulo se n„o existir
+		// Retorna o cliente encontrado ou nulo se n√£o existir
 		return tipoDebitoDigitado;
 	}
 
@@ -21100,7 +21100,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		/*
 		 * 2. Para cada grupo de faturamento (a partir da tabela
 		 * FATURAMENTO_GRUPO) o sistema seleciona o cronograma de faturamento do
-		 * mÍs corrente (a partir da tabela FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL
+		 * m√™s corrente (a partir da tabela FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL
 		 * com FTCM_AMREFERENCIA = FTGR_AMREFERENCIA e FTGR_ID = FTGR_ID da
 		 * tabela FATURAMENTO_GRUPO)
 		 */
@@ -21111,14 +21111,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoFaturamentoGrupo = getControladorUtil().pesquisar(
 				filtroFaturamentoGrupo, FaturamentoGrupo.class.getName());
 
-		// [FS0001] - Verificar existÍncia de dados
+		// [FS0001] - Verificar exist√™ncia de dados
 		/*
 		 * if (colecaoFaturamentoGrupo == null ||
 		 * colecaoFaturamentoGrupo.isEmpty()) { throw new ControladorException(
 		 * "atencao.pesquisa.nenhum_registro_tabela", null,
 		 * "FATURAMENTO_GRUPO"); }
 		 */
-		// [FS0002] - Verificar existÍncia do cronograma
+		// [FS0002] - Verificar exist√™ncia do cronograma
 		if (colecaoFaturamentoGrupo == null
 				|| colecaoFaturamentoGrupo.isEmpty()) {
 			throw new ControladorException(
@@ -21139,7 +21139,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		// A partir da consulta montar a coleÁ„o de Atividades n„o realizadas
+		// A partir da consulta montar a cole√ß√£o de Atividades n√£o realizadas
 		if (colecaoFaturamentoAtividadeCronogramaComandadaNaoRealizada != null) {
 			existeAtividadeFaturamentoComandada = true;
 			Iterator iteratorColecaoFaturamentoAtividadeCronogramaComandadaNaoRealizada = colecaoFaturamentoAtividadeCronogramaComandadaNaoRealizada
@@ -21177,7 +21177,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 		}
 
-		// [FS0003] - Verificar existÍncia de atividade comandada
+		// [FS0003] - Verificar exist√™ncia de atividade comandada
 		if (!existeAtividadeFaturamentoComandada) {
 			throw new ControladorException(
 					"atencao.pesquisa.cronograma_atividade_mes_corrente_inexistente",
@@ -21307,10 +21307,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.retonarObjetoDeColecao(colecaoFaturamentoGrupoCronogramaMensal);
 						}
 
-						// 6.2. Chama o Caso de Uso respons·vel pela atividade e
-						// passando os par‚metros de
+						// 6.2. Chama o Caso de Uso respons√°vel pela atividade e
+						// passando os par√¢metros de
 						// acordo com as atividades abaixo, passando a lista de
-						// rotas selecionadas, ano/mÍs
+						// rotas selecionadas, ano/m√™s
 						// do faturamento corrente (FTCM_AMREFERENCIA), grupo de
 						// faturamento e atividade a
 						// ser executada
@@ -21342,7 +21342,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * 
 	 * [UC0111] Executar Atividade do Faturamento
 	 * 
-	 * Atualiza Data Hora da RealizaÁ„o da Atividade de Faturamento
+	 * Atualiza Data Hora da Realiza√ß√£o da Atividade de Faturamento
 	 * 
 	 * atualizarDataHoraRealizacaoAtividadeFaturamento
 	 * 
@@ -21405,7 +21405,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * O sistema seleciona os grupos de faturamento que possuem cronograma para
-	 * o mÍs corrente * [UC0144] Inserir Comando Atividade de Faturamento
+	 * o m√™s corrente * [UC0144] Inserir Comando Atividade de Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 03/03/2006
@@ -21431,7 +21431,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				.pesquisar(filtroFaturamentoGrupo,
 						FaturamentoGrupo.class.getName());
 
-		// [FS0001] - Verificar existÍncia de dados
+		// [FS0001] - Verificar exist√™ncia de dados
 		if (colecaoFaturamentoGrupo == null
 				|| colecaoFaturamentoGrupo.isEmpty()) {
 			throw new ControladorException(
@@ -21468,7 +21468,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		// [FS0003] - Verificar seleÁ„o de pelo menos um grupo de faturamento
+		// [FS0003] - Verificar sele√ß√£o de pelo menos um grupo de faturamento
 		if (retorno == null || retorno.isEmpty()) {
 			throw new ControladorException(
 					"atencao.pesquisa.nenhum.faturamento_grupo_com_cronograma_mensal");
@@ -21483,8 +21483,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * [UC0111] - Iniciar Processo
 	 * 
 	 * Este subfluxo tem o papel de iniciar um processo de faturamento
-	 * comandado, neste mÈtodo È feita uma busca para obter as atividades
-	 * comandadas e n„o realizadas
+	 * comandado, neste m√©todo √© feita uma busca para obter as atividades
+	 * comandadas e n√£o realizadas
 	 * 
 	 * [SB0001] - Iniciar Processo de Faturamento Comandado
 	 * 
@@ -21503,7 +21503,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			colecaoFaturamentoAtividadeCronogramas = this.repositorioFaturamento
 					.pesquisarFaturamentoAtividadeCronogramaComandadasNaoRealizadas(numeroPagina);
 
-			// [FS0003] - Verificar existÍncia de Atividade Comandada
+			// [FS0003] - Verificar exist√™ncia de Atividade Comandada
 			if (colecaoFaturamentoAtividadeCronogramas == null
 					|| colecaoFaturamentoAtividadeCronogramas.isEmpty()) {
 				throw new ControladorException(
@@ -21524,8 +21524,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * [UC0111] - Iniciar Processo
 	 * 
 	 * Este subfluxo tem o papel de iniciar um processo de faturamento
-	 * comandado, neste mÈtodo È feita uma busca para obter as atividades
-	 * comandadas e n„o realizadas
+	 * comandado, neste m√©todo √© feita uma busca para obter as atividades
+	 * comandadas e n√£o realizadas
 	 * 
 	 * [SB0001] - Iniciar Processo de Faturamento Comandado
 	 * 
@@ -21553,12 +21553,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * O sistema seleciona os grupos de faturamento que possuem cronograma para
-	 * o mÍs corrente
+	 * o m√™s corrente
 	 * 
 	 * [UC0104] Manter Comando Atividade de Faturamento
 	 * 
 	 * Caso esteja no atualizar pode escolher todos os grupos exceto o
-	 * selecionado para atualizaÁ„o
+	 * selecionado para atualiza√ß√£o
 	 * 
 	 * pesquisarFaturamentoGrupoComCronogramaMensalParaMesCorrenteSemGupoSelecionado
 	 * 
@@ -21590,7 +21590,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				.pesquisar(filtroFaturamentoGrupo,
 						FaturamentoGrupo.class.getName());
 
-		// [FS0001] - Verificar existÍncia de dados
+		// [FS0001] - Verificar exist√™ncia de dados
 		if (colecaoFaturamentoGrupo == null
 				|| colecaoFaturamentoGrupo.isEmpty()) {
 			throw new ControladorException(
@@ -21627,7 +21627,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		// [FS0003] - Verificar seleÁ„o de pelo menos um grupo de faturamento
+		// [FS0003] - Verificar sele√ß√£o de pelo menos um grupo de faturamento
 		if (retorno == null || retorno.isEmpty()) {
 			throw new ControladorException(
 					"atencao.pesquisa.nenhum.faturamento_grupo_com_cronograma_mensal");
@@ -21637,7 +21637,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0209] Gerar Taxa de Entrega de Conta em Outro EndereÁo
+	 * [UC0209] Gerar Taxa de Entrega de Conta em Outro Endere√ßo
 	 * 
 	 * @author Pedro Alexandre, Raphael Rossiter
 	 * @date 12/02/2007, 26/08/2009
@@ -21683,7 +21683,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		if (dados != null) {
 
-			// Id DÈbito Tipo
+			// Id D√©bito Tipo
 			if (dados[0] != null) { // 0
 				debitoTipo.setId(((Integer) dados[0]));
 			}
@@ -21695,7 +21695,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				debitoTipo.setFinanciamentoTipo(financiamentoTipo);
 			}
 
-			// Id LanÁamento Item Cont·bil
+			// Id Lan√ßamento Item Cont√°bil
 			if (dados[2] != null) { // 2
 				LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
 				lancamentoItemContabil.setId(((Integer) dados[2]));
@@ -21714,11 +21714,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * 
-	 * Este caso de uso permite gerar taxa de entrega de conta em outro endereÁo
-	 * para os imÛveis das quadras pertencentes ‡s rotas de um grupo de
+	 * Este caso de uso permite gerar taxa de entrega de conta em outro endere√ßo
+	 * para os im√≥veis das quadras pertencentes √†s rotas de um grupo de
 	 * faturamento.
 	 * 
-	 * [UC0209] Gerar Taxa de Entrega de Conta em Outro EndereÁo
+	 * [UC0209] Gerar Taxa de Entrega de Conta em Outro Endere√ßo
 	 * 
 	 * @author Thiago Toscano, Pedro Alexandre, Tiago Moreno
 	 * @date 03/04/2006, 30/08/2006, 22/12/2009
@@ -21739,7 +21739,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// Cria o iterator para rotas
 			Iterator colecaoRotaIterator = rotas.iterator();
 
-			// ObtÈm o valor da Tarifa Normal
+			// Obt√©m o valor da Tarifa Normal
 			BigDecimal valorMinimaTarifaNormal = this.repositorioFaturamento.obterValorTarifa(ConsumoTarifa.CONSUMO_NORMAL);
 
 			// Caso o valor da tarifa normal esteja nulo seta o valor para zero
@@ -21747,7 +21747,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				valorMinimaTarifaNormal = new BigDecimal("0");
 			}
 
-			// ObtÈm o valor da Tarifa Social
+			// Obt√©m o valor da Tarifa Social
 			BigDecimal valorMinimaTarifaSocial = this.repositorioFaturamento.obterValorTarifa(ConsumoTarifa.CONSUMO_SOCIAL);
 
 			// Caso o valor da tarifa social esteja nulo seta o valor para zero
@@ -21758,36 +21758,36 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// Recupera os parametros do sistema
 			SistemaParametro sistema = getControladorUtil().pesquisarParametrosDoSistema();
 
-			// Inst‚ncia a forma de cobranÁa para cobranÁa em conta
+			// Inst√¢ncia a forma de cobran√ßa para cobran√ßa em conta
 			CobrancaForma cobrancaForma = new CobrancaForma();
 			cobrancaForma.setId(CobrancaForma.COBRANCA_EM_CONTA);
 
-			// Inst‚ncia a situaÁ„o do dÈbito para normal
+			// Inst√¢ncia a situa√ß√£o do d√©bito para normal
 			DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 			debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
 
-			// Recupera o tipo de dÈbito referente a despesa postal
+			// Recupera o tipo de d√©bito referente a despesa postal
 			DebitoTipo debitoTipo = this.getDebitoTipoHql(DebitoTipo.DESPESA_POSTAL);
 
-			// Cria as coleÁıes que iram armazenar os dÈbitos a cobrar e os
-			// dÈbitos a cobrar por categoria
+			// Cria as cole√ß√µes que iram armazenar os d√©bitos a cobrar e os
+			// d√©bitos a cobrar por categoria
 			Collection colecaoDebitosACobrarAtualizar = new ArrayList();
 			Collection colecaoDebitosACobrarInserir = new ArrayList();
 			Collection colecaoDebitosACobrarCategoriasInserir = new ArrayList();
 
-			// LaÁo para recuperar todos os imÛveis de cada rota informada
+			// La√ßo para recuperar todos os im√≥veis de cada rota informada
 			while (colecaoRotaIterator.hasNext()) {
 
 				// Recupera a rota
 				Rota rota = (Rota) colecaoRotaIterator.next();
 				
-				// ObtÈm os imÛveis pertencentes a rota
+				// Obt√©m os im√≥veis pertencentes a rota
 				Collection<Imovel> colecaoImoveis = this.obterImoveisPorRotasComContaEntregaEmOutroEndereco(rota);
 
 				/*
-				 * Caso exista algum imÛvel com entrega em outro endereÁo
-				 * cadastrado para a rota cria o dÈbito para o imÛvel. Caso
-				 * contr·rio verifica a prÛxima rota.
+				 * Caso exista algum im√≥vel com entrega em outro endere√ßo
+				 * cadastrado para a rota cria o d√©bito para o im√≥vel. Caso
+				 * contr√°rio verifica a pr√≥xima rota.
 				 */
 				Date dataAtual = new Date(System.currentTimeMillis());
 
@@ -21837,7 +21837,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					// //////////////////////////////////////////////////////
 
-					// Verifica se j· existe dÈbito para este imÛvel
+					// Verifica se j√° existe d√©bito para este im√≥vel
 					Object[] dadoDebitoACobrar = this.repositorioFaturamento.pesquisarDebitoACobrar(imovel.getId(),	debitoTipo.getId(), anoMesFaturamento);
 
 					BigDecimal valorFinal = BigDecimal.ZERO;
@@ -21875,25 +21875,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					if (valorFinal != null && valorFinal.compareTo(BigDecimal.ZERO) == 1) {
 
-						// Cria uma inst‚ncia de dÈbito a cobrar
+						// Cria uma inst√¢ncia de d√©bito a cobrar
 						DebitoACobrar debitoACobrar = new DebitoACobrar();
 
-						// Seta o ImÛvel
+						// Seta o Im√≥vel
 						debitoACobrar.setImovel(imovel);
 
-						// Seta o DÈbito Tipo
+						// Seta o D√©bito Tipo
 						debitoACobrar.setDebitoTipo(debitoTipo);
 
 						// Seta Data e Hora Atual
 						debitoACobrar.setGeracaoDebito(dataAtual);
 
-						// Seta Ano/MÍs do Faturamento Corrente
+						// Seta Ano/M√™s do Faturamento Corrente
 						debitoACobrar.setAnoMesReferenciaDebito(anoMesFaturamento);
 
-						// Seta Ano/MÍs de CobranÁa
+						// Seta Ano/M√™s de Cobran√ßa
 						debitoACobrar.setAnoMesCobrancaDebito(sistema.getAnoMesArrecadacao());
 
-						// Seta Ano/MÍs ReferÍncia do Faturamento
+						// Seta Ano/M√™s Refer√™ncia do Faturamento
 						Integer anoMesAtual = Util.getAnoMesComoInteger(new Date());
 						Integer anoMesParametros = sistema.getAnoMesFaturamento();
 						if (anoMesParametros > anoMesAtual) {
@@ -21902,13 +21902,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							debitoACobrar.setAnoMesReferenciaContabil(anoMesAtual);
 						}
 
-						// Seta Valor do DÈbito
+						// Seta Valor do D√©bito
 						debitoACobrar.setValorDebito(valorFinal);
 
-						// Seta N˙mero de PrestaÁıes do DÈbito
+						// Seta N√∫mero de Presta√ß√µes do D√©bito
 						debitoACobrar.setNumeroPrestacaoDebito(new Short("1"));
 
-						// Seta N˙mero de PrestaÁıes Cobradas
+						// Seta N√∫mero de Presta√ß√µes Cobradas
 						debitoACobrar.setNumeroPrestacaoCobradas(new Short("0"));
 
 						// Seta Localidade
@@ -21917,10 +21917,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Seta Quadra
 						debitoACobrar.setQuadra(imovel.getQuadra());
 
-						// Seta CÛdigo do Setor Comercial
+						// Seta C√≥digo do Setor Comercial
 						debitoACobrar.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
 
-						// Seta N˙mero Quadra
+						// Seta N√∫mero Quadra
 						debitoACobrar.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
 
 						// Seta Lote
@@ -21935,24 +21935,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Seta Financiamento Tipo
 						debitoACobrar.setFinanciamentoTipo(debitoTipo.getFinanciamentoTipo());
 
-						// Seta LanÁamento Item Cont·bil
+						// Seta Lan√ßamento Item Cont√°bil
 						debitoACobrar.setLancamentoItemContabil(debitoTipo.getLancamentoItemContabil());
 
-						// Seta DÈbito CrÈdito SituaÁ„o
+						// Seta D√©bito Cr√©dito Situa√ß√£o
 						debitoACobrar.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 
-						// Seta CobranÁa Forma
+						// Seta Cobran√ßa Forma
 						debitoACobrar.setCobrancaForma(cobrancaForma);
 
-						// Seta a data de ultima alteraÁ„o
+						// Seta a data de ultima altera√ß√£o
 						debitoACobrar.setUltimaAlteracao(new Date());
 
 						/*
-						 * Caso j· exista o dÈbito a cobrar para o imÛvel
-						 * recupera o id do dÈbito a cobrar e deleta todos os
-						 * dÈbitos a cobrar por categoria e adiciona o dÈbito a
-						 * coleÁ„o de atualizaÁ„o Caso contr·rio adiciona o
-						 * dÈbito a cobrar geral e o dÈbito a cobrar a coleÁ„o
+						 * Caso j√° exista o d√©bito a cobrar para o im√≥vel
+						 * recupera o id do d√©bito a cobrar e deleta todos os
+						 * d√©bitos a cobrar por categoria e adiciona o d√©bito a
+						 * cole√ß√£o de atualiza√ß√£o Caso contr√°rio adiciona o
+						 * d√©bito a cobrar geral e o d√©bito a cobrar a cole√ß√£o
 						 * de inserir.
 						 */
 						if (dadoDebitoACobrar != null && dadoDebitoACobrar[0] != null) {
@@ -21966,8 +21966,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									inserirDebitoACobrarCategoriaBatch(debitoACobrar, debitoACobrar.getImovel()));
 						} else {
 							/*
-							 * Inserir o dÈbito a cobrar geral na base de dados
-							 * e recupera o id gerado para setar no dÈbito a
+							 * Inserir o d√©bito a cobrar geral na base de dados
+							 * e recupera o id gerado para setar no d√©bito a
 							 * cobrar.
 							 */
 							DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
@@ -21986,11 +21986,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 				}
-			}// laÁo rotas
+			}// la√ßo rotas
 
 			/*
-			 * Caso tenha gerado dÈbito a cobrar para inserir para algum imÛvel
-			 * cria os dÈbitos a cobrar por na base de dados.
+			 * Caso tenha gerado d√©bito a cobrar para inserir para algum im√≥vel
+			 * cria os d√©bitos a cobrar por na base de dados.
 			 */
 			if (colecaoDebitosACobrarInserir != null
 					&& !colecaoDebitosACobrarInserir.isEmpty()) {
@@ -21999,9 +21999,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 			/*
-			 * Caso tenha gerado dÈbito a cobrar para atualizar para algum
-			 * imÛvel atualiza os dados dos dÈbitos a cobrar na base de dados e
-			 * a data de ˙ltima alteraÁ„o do dÈbito a cobrar geral.
+			 * Caso tenha gerado d√©bito a cobrar para atualizar para algum
+			 * im√≥vel atualiza os dados dos d√©bitos a cobrar na base de dados e
+			 * a data de √∫ltima altera√ß√£o do d√©bito a cobrar geral.
 			 */
 			if (colecaoDebitosACobrarAtualizar != null
 					&& !colecaoDebitosACobrarAtualizar.isEmpty()) {
@@ -22010,7 +22010,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 			/*
-			 * Caso gere algum dÈbito a cobrar por categoria inserir todos de
+			 * Caso gere algum d√©bito a cobrar por categoria inserir todos de
 			 * uma vez na base de dados
 			 */
 			if (!colecaoDebitosACobrarCategoriasInserir.isEmpty()) {
@@ -22020,16 +22020,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// --------------------------------------------------------
 			//
-			// Registrar o fim da execuÁ„o da Unidade de Processamento
+			// Registrar o fim da execu√ß√£o da Unidade de Processamento
 			//
 			// --------------------------------------------------------
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
 					idUnidadeIniciada, false);
 
 		} catch (Exception e) {
-			// Este catch serve para interceptar qualquer exceÁ„o que o processo
-			// batch venha a lanÁar e garantir que a unidade de processamento do
-			// batch ser· atualizada com o erro ocorrido
+			// Este catch serve para interceptar qualquer exce√ß√£o que o processo
+			// batch venha a lan√ßar e garantir que a unidade de processamento do
+			// batch ser√° atualizada com o erro ocorrido
 			e.printStackTrace();
 			sessionContext.setRollbackOnly();
 
@@ -22044,7 +22044,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * [UC0302] - Gerar Debitos A Cobrar de Acrescimos por Impontualidade
 	 * Author: Fernanda Paiva Data: 24/04/2006
 	 * 
-	 * ObtÈm as contas de um imÛvel com ano/mes da data de vencimento menor ou
+	 * Obt√©m as contas de um im√≥vel com ano/mes da data de vencimento menor ou
 	 * igual ao ano/mes de referencia da arrecadacao corrente e com situacao
 	 * atual correspondente a normal, retificada ou incluida.
 	 * 
@@ -22062,7 +22062,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		Collection retorno = new ArrayList();
 
-		// CriaÁ„o das coleÁıes
+		// Cria√ß√£o das cole√ß√µes
 		Collection colecaoContasManutencaoArray = null;
 
 		try {
@@ -22085,7 +22085,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoContasManutencaoArrayIterator.hasNext()) {
 
-				// ObtÈm os dados do crÈdito realizado
+				// Obt√©m os dados do cr√©dito realizado
 				Object[] contaArray = (Object[]) colecaoContasManutencaoArrayIterator
 						.next();
 
@@ -22094,7 +22094,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// ID da conta
 				conta.setId((Integer) contaArray[0]);
 
-				// Ano MÍs referencia
+				// Ano M√™s referencia
 				conta.setReferencia((Integer) contaArray[1]);
 
 				// Data de vencimento
@@ -22113,19 +22113,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				conta.setDataVencimentoConta(dataVencimento);
 
-				// Valor de ·gua
+				// Valor de √°gua
 				conta.setValorAgua((BigDecimal) contaArray[3]);
 
 				// Valor de esgoto
 				conta.setValorEsgoto((BigDecimal) contaArray[4]);
 
-				// Valor dos dÈbitos
+				// Valor dos d√©bitos
 				conta.setDebitos((BigDecimal) contaArray[5]);
 
-				// Valor dos crÈditos
+				// Valor dos cr√©ditos
 				conta.setValorCreditos((BigDecimal) contaArray[6]);
 
-				// Consumo de ·gua
+				// Consumo de √°gua
 				conta.setConsumoAgua((Integer) contaArray[7]);
 
 				// Consumo de esgoto
@@ -22160,7 +22160,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// DebitoCreditoSituacaoAtual
 				conta.setDebitoCreditoSituacaoAtual((DebitoCreditoSituacao) contaArray[11]);
 
-				// Ano MÍs referencia cont·bil
+				// Ano M√™s referencia cont√°bil
 				conta.setReferenciaContabil((Integer) contaArray[12]);
 
 				// ultima Alteracao
@@ -22192,7 +22192,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * [UC0302] - Gerar Debitos A Cobrar de Acrescimos por Impontualidade
 	 * Author: Fernanda Paiva Data: 24/04/2006
 	 * 
-	 * ObtÈm as contas de um imÛvel com ano/mes da data de vencimento menor ou
+	 * Obt√©m as contas de um im√≥vel com ano/mes da data de vencimento menor ou
 	 * igual ao ano/mes de referencia da arrecadacao corrente e com situacao
 	 * atual correspondente a normal, retificada ou incluida.
 	 * 
@@ -22211,7 +22211,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		Collection retorno = new ArrayList();
 
-		// CriaÁ„o das coleÁıes
+		// Cria√ß√£o das cole√ß√µes
 		Collection colecaoGuiasManutencaoArray = null;
 
 		try {
@@ -22234,7 +22234,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoGuiasManutencaoArrayIterator.hasNext()) {
 
-				// ObtÈm os dados do crÈdito realizado
+				// Obt√©m os dados do cr√©dito realizado
 				Object[] guiaArray = (Object[]) colecaoGuiasManutencaoArrayIterator
 						.next();
 
@@ -22243,7 +22243,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// ID da conta
 				guiaPagamento.setId((Integer) guiaArray[0]);
 
-				// Ano MÍs referencia
+				// Ano M√™s referencia
 				guiaPagamento
 						.setAnoMesReferenciaContabil((Integer) guiaArray[1]);
 
@@ -22263,7 +22263,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				guiaPagamento.setDataVencimento(dataVencimento);
 
-				// Valor dos dÈbitos
+				// Valor dos d√©bitos
 				guiaPagamento.setValorDebito((BigDecimal) guiaArray[3]);
 
 				retorno.add(guiaPagamento);
@@ -22599,10 +22599,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	//
 	// }
 	/**
-	 * Gera as faturas das contas dos imÛveis para o cliente respons·vel pelo
-	 * imÛvel
+	 * Gera as faturas das contas dos im√≥veis para o cliente respons√°vel pelo
+	 * im√≥vel
 	 * 
-	 * [UC0320] Gerar Fatura de Cliente Respons·vel
+	 * [UC0320] Gerar Fatura de Cliente Respons√°vel
 	 * 
 	 * @author Pedro Alexandre, Pedro Alexandre
 	 * @date 25/04/2006, 03/01/2007
@@ -22618,17 +22618,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				.iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
 						UnidadeProcessamento.FUNCIONALIDADE, 0);
 		try {
-			// Recupera os par‚metros do sistema
+			// Recupera os par√¢metros do sistema
 			SistemaParametro sistemaParametro = getControladorUtil()
 					.pesquisarParametrosDoSistema();
 
-			// Recupera o ano/mÍs de faturamento corrente
+			// Recupera o ano/m√™s de faturamento corrente
 			Integer anoMesFaturamentoCorrente = sistemaParametro.getAnoMesFaturamento();
-			// Se o mÍs de faturamento for igual a 11 e o indicador
+			// Se o m√™s de faturamento for igual a 11 e o indicador
 			// faturamento
-			// antecipado for igual a 1, ent„o seta o mes de faturamento
+			// antecipado for igual a 1, ent√£o seta o mes de faturamento
 			// igual a
-			// 12 em conta impress„o,e imprime as contas no mes 12 tambÈm.
+			// 12 em conta impress√£o,e imprime as contas no mes 12 tamb√©m.
 
 			Integer anoMesFaturamentoAntecipado = null;
 			if (Util.obterMes(anoMesFaturamentoCorrente) == 11) {
@@ -22639,13 +22639,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}
 
-			// Cria a vari·vel que vai armazenar a coleÁ„o de faturas
+			// Cria a vari√°vel que vai armazenar a cole√ß√£o de faturas
 			Collection<Fatura> colecaoFatura = new ArrayList();
 			Collection<Fatura> colecaoFaturaDez = new ArrayList();
 			Collection colecaoFaturaItem = new ArrayList();
 
 			/**
-			 * Vari·veis da paginaÁ„o
+			 * Vari√°veis da pagina√ß√£o
 			 */
 			boolean flagTerminou = false;
 			boolean flagPrimeiraVez = true;
@@ -22658,8 +22658,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (!flagTerminou) {
 
-				// Pesquisa na base de dados os clientes respons·veis pelos
-				// imÛveis
+				// Pesquisa na base de dados os clientes respons√°veis pelos
+				// im√≥veis
 				// pesquisa os grupos de faturamentos
 				Collection<FaturamentoGrupo> colecaoFaturamentoGrupoNaoFaturados = this.repositorioFaturamento
 						.pesquisarGrupoFaturamentoNaoFaturados(anoMesFaturamentoCorrente);
@@ -22679,7 +22679,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (flagPrimeiraVez) {
 					flagPrimeiraVez = false;
 
-					// [FS0001] Verificar ExistÍncia de Cliente Respons·vel
+					// [FS0001] Verificar Exist√™ncia de Cliente Respons√°vel
 					if (colecaoClientesResponsaveis == null
 							|| colecaoClientesResponsaveis.isEmpty()) {
 						throw new ControladorException(
@@ -22687,16 +22687,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 
-				// Caso exista clientes respons·veis cadastrados gera as faturas
+				// Caso exista clientes respons√°veis cadastrados gera as faturas
 				// das
-				// contas dos imÛveis para cada cliente
-				// Caso contr·rio levanta uma exeÁ„o para o usu·rio informando
+				// contas dos im√≥veis para cada cliente
+				// Caso contr√°rio levanta uma exe√ß√£o para o usu√°rio informando
 				// que
-				// n„o existe clientes respons·veis
+				// n√£o existe clientes respons√°veis
 				if (colecaoClientesResponsaveis != null
 						&& !colecaoClientesResponsaveis.isEmpty()) {
 
-					// LaÁo para gerar as faturas das contas de cada cliente
+					// La√ßo para gerar as faturas das contas de cada cliente
 					// retornado
 					for (Integer idCliente : colecaoClientesResponsaveis) {
 
@@ -22704,55 +22704,55 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						cliente.setId(idCliente);
 
 						/**
-						 * Deleta as faturas existentes do cliente repons·vel
-						 * por ano/mÍs de referÍncia do faturamento e seus items
+						 * Deleta as faturas existentes do cliente repons√°vel
+						 * por ano/m√™s de refer√™ncia do faturamento e seus items
 						 * de fatura.
 						 */
 						// this.repositorioFaturamento
 						// .deletarFaturaClienteResponsavel(idCliente,
 						// anoMesFaturamentoCorrente,anoMesFaturamentoAntecipado);
 
-						// Pesquisa os imÛveis de responsabilidade do cliente
+						// Pesquisa os im√≥veis de responsabilidade do cliente
 						Collection<Integer> colecaoIdsImoveisPorClienteResponsavel = repositorioFaturamento
 								.pesquisarClienteImovelPorClienteResponsavel(idCliente);
 
-						// Caso exista imÛvel sobre a responsabilidade do
+						// Caso exista im√≥vel sobre a responsabilidade do
 						// cliente
 						if (colecaoIdsImoveisPorClienteResponsavel != null
 								&& !colecaoIdsImoveisPorClienteResponsavel
 										.isEmpty()) {
 
-							// Alterado por S·vio Luiz Data:19/11/2007
+							// Alterado por S√°vio Luiz Data:19/11/2007
 							// Analista:Aryed Lins
 							// O do...while foi feito para rodar os 2
-							// meses(11,12) no caso de o mÍs de
+							// meses(11,12) no caso de o m√™s de
 							// referencia for 11.
 							int quantidadeMeses = 1;
 							do {
 								Object[] resumoContas = null;
 								Collection<Conta> colecaoContas = null;
-								// caso o mes corrente seja 11, ent„o roda
-								// tambÈm o mÍs 12.
+								// caso o mes corrente seja 11, ent√£o roda
+								// tamb√©m o m√™s 12.
 								if (quantidadeMeses == 2) {
-									// Pesquisa o resumo das contas dos imÛveis
+									// Pesquisa o resumo das contas dos im√≥veis
 									// do
 									// cliente
-									// o metÛdo retorna um array de object
+									// o met√≥do retorna um array de object
 									// contendo
 									// na
-									// primeira posiÁ„o a soma do valor total
+									// primeira posi√ß√£o a soma do valor total
 									// das
 									// contas,
-									// na segunda posiÁ„o contÈm a maior data de
+									// na segunda posi√ß√£o cont√©m a maior data de
 									// vencimento
-									// e na terceira posiÁ„o a maior data de
+									// e na terceira posi√ß√£o a maior data de
 									// validade
 									resumoContas = (Object[]) repositorioFaturamento
 											.pesquisarResumoContasClienteResponsavel(
 													colecaoIdsImoveisPorClienteResponsavel,
 													anoMesFaturamentoAntecipado);
 
-									// Recupera todas as contas dos imÛveis
+									// Recupera todas as contas dos im√≥veis
 									// sobre
 									// responsabilidade do cliente
 									colecaoContas = repositorioFaturamento
@@ -22761,25 +22761,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													anoMesFaturamentoAntecipado);
 
 								} else {
-									// Pesquisa o resumo das contas dos imÛveis
+									// Pesquisa o resumo das contas dos im√≥veis
 									// do
 									// cliente
-									// o metÛdo retorna um array de object
+									// o met√≥do retorna um array de object
 									// contendo
 									// na
-									// primeira posiÁ„o a soma do valor total
+									// primeira posi√ß√£o a soma do valor total
 									// das
 									// contas,
-									// na segunda posiÁ„o contÈm a maior data de
+									// na segunda posi√ß√£o cont√©m a maior data de
 									// vencimento
-									// e na terceira posiÁ„o a maior data de
+									// e na terceira posi√ß√£o a maior data de
 									// validade
 									resumoContas = (Object[]) repositorioFaturamento
 											.pesquisarResumoContasClienteResponsavel(
 													colecaoIdsImoveisPorClienteResponsavel,
 													anoMesFaturamentoCorrente);
 
-									// Recupera todas as contas dos imÛveis
+									// Recupera todas as contas dos im√≥veis
 									// sobre
 									// responsabilidade do cliente
 									colecaoContas = repositorioFaturamento
@@ -22788,20 +22788,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													anoMesFaturamentoCorrente);
 								}
 
-								// Caso exista contas para os imÛveis sobre
+								// Caso exista contas para os im√≥veis sobre
 								// responsabilidade do cliente
 								// Gera a fatura e os items de fatura para cada
 								// conta
 								if (colecaoContas != null
 										&& !colecaoContas.isEmpty()) {
 
-									// Recupera as informaÁıes sobre o resumo
+									// Recupera as informa√ß√µes sobre o resumo
 									// das
 									// contas
-									// dos imÛveis
+									// dos im√≥veis
 									BigDecimal valorDebito = (BigDecimal) resumoContas[0];
 
-									// Caso o valor do dÈbito seja nulo atribuir
+									// Caso o valor do d√©bito seja nulo atribuir
 									// o
 									// valor
 									// zero
@@ -22817,10 +22817,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 									// Gera a fatura para o resumo das contas
 									// dos
-									// imÛveis sobre responsabilidade do cliente
+									// im√≥veis sobre responsabilidade do cliente
 									Fatura fatura = new Fatura();
-									// caso o mes corrente seja 11, ent„o roda
-									// tambÈm o mÍs 12.
+									// caso o mes corrente seja 11, ent√£o roda
+									// tamb√©m o m√™s 12.
 									if (quantidadeMeses == 2) {
 										fatura.setAnoMesReferencia(anoMesFaturamentoAntecipado);
 									} else {
@@ -22835,16 +22835,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									fatura.setCliente(cliente);
 									fatura.setUltimaAlteracao(new Date());
 
-									// Caso o valor do dÈbito da fatura seja
+									// Caso o valor do d√©bito da fatura seja
 									// menor
 									// que
 									// um centavo
-									// n„o gera a fatura
+									// n√£o gera a fatura
 									if (fatura.getDebito().compareTo(
 											new BigDecimal("0.01")) != -1) {
 
 										// Inseri a fatura na base e recupera o
-										// cÛdigo
+										// c√≥digo
 										// gerado
 										Integer idFatura = (Integer) getControladorUtil()
 												.inserir(fatura);
@@ -22853,33 +22853,33 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										// geradas
 										quantidadeFatura++;
 
-										// Atualiza o cÛdigo da fatura e o
-										// sequÍncial
-										// setndo o cÛdigoda fatura gerada
+										// Atualiza o c√≥digo da fatura e o
+										// sequ√™ncial
+										// setndo o c√≥digoda fatura gerada
 										fatura.setId(idFatura);
 										fatura.setSequencial(idFatura);
 										getControladorUtil().atualizar(fatura);
 
-										// caso o mes corrente seja 11, ent„o
-										// roda tambÈm o mÍs 12.
-										// e adiciona em outra coleÁ„o para
+										// caso o mes corrente seja 11, ent√£o
+										// roda tamb√©m o m√™s 12.
+										// e adiciona em outra cole√ß√£o para
 										// emitir separado
 										if (quantidadeMeses == 2) {
-											// Adiciona a fatura a coleÁ„o
+											// Adiciona a fatura a cole√ß√£o
 											colecaoFaturaDez.add(fatura);
 										} else {
-											// Adiciona a fatura a coleÁ„o
+											// Adiciona a fatura a cole√ß√£o
 											colecaoFatura.add(fatura);
 										}
 
 										// Gera os items da fatura para cada
 										// conta
-										// Cria a vari·vel que vai armazenar o
-										// sequÍncial do
+										// Cria a vari√°vel que vai armazenar o
+										// sequ√™ncial do
 										// item da fatura
 										Integer itemSequencial = 1;
 
-										// LaÁo para gerar os items da fatura
+										// La√ßo para gerar os items da fatura
 										// para
 										// cada
 										// conta
@@ -22889,28 +22889,28 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													.getLigacaoAguaSituacao()
 													.getIndicadorFaturamentoSituacao();
 
-											// Cria a var·vel que vai armazenar
+											// Cria a var√°vel que vai armazenar
 											// o
-											// n˙mero
+											// n√∫mero
 											// de
 											// consumo
 											Integer numeroConsumo = 0;
 
-											// Caso a situaÁ„o da ligaÁ„o de
-											// ·gua
+											// Caso a situa√ß√£o da liga√ß√£o de
+											// √°gua
 											// seja
 											// igual
-											// a ligado ou cortado o n∫ de
+											// a ligado ou cortado o n¬∫ de
 											// consumo
 											// vai
 											// ser o
-											// n∫
-											// de consumo da ·gua
-											// Caso contr·rio e caso a situaÁ„o
+											// n¬∫
+											// de consumo da √°gua
+											// Caso contr√°rio e caso a situa√ß√£o
 											// da
-											// ligaÁ„o
+											// liga√ß√£o
 											// de esgoto for igual a ligado
-											// o n∫ de consumo vai receber o n∫
+											// o n¬∫ de consumo vai receber o n¬∫
 											// de
 											// consumo
 											// de esgoto
@@ -22919,7 +22919,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											 * alterado por pedro alexandre dia
 											 * 12/12/2007 para ser feito agora
 											 * pelo indicador de faturamento.
-											 * AlteraÁ„o solicitada por leonardo
+											 * Altera√ß√£o solicitada por leonardo
 											 * vieira.
 											 */
 											/*
@@ -22959,7 +22959,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											faturaItem.setValorConta(conta
 													.getValorTotal());
 
-											// Alterado por S·vio Luiz
+											// Alterado por S√°vio Luiz
 											// Data:19/11/2007 Analista:Rosana
 											faturaItem.setValorImposto(conta
 													.getValorImposto());
@@ -22973,13 +22973,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											// getControladorUtil().inserir(faturaItem);
 											colecaoFaturaItem.add(faturaItem);
 
-											// Incrementa o sequÍncial do item
+											// Incrementa o sequ√™ncial do item
 											itemSequencial++;
 										}
 									}
 								}
 
-								// caso n exista mes ano antecipado ent„o n„o
+								// caso n exista mes ano antecipado ent√£o n√£o
 								// roda outra vez.
 								if (anoMesFaturamentoAntecipado == null) {
 									quantidadeMeses = 3;
@@ -22994,14 +22994,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 
 				/**
-				 * Incrementa o n∫ do indice da p·ginaÁ„o
+				 * Incrementa o n¬∫ do indice da p√°gina√ß√£o
 				 */
 				numeroIndice = numeroIndice + quantidadeRegistros;
 
 				/**
-				 * Caso a coleÁ„o de clientes respons·veis retornados for menor
+				 * Caso a cole√ß√£o de clientes respons√°veis retornados for menor
 				 * que a quantidade de registros seta a flag indicando que a
-				 * paginaÁ„o terminou.
+				 * pagina√ß√£o terminou.
 				 */
 				if (colecaoClientesResponsaveis != null
 						&& colecaoClientesResponsaveis.size() < quantidadeRegistros) {
@@ -23017,18 +23017,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				colecaoFaturaItem = null;
 				colecaoFaturaItem = new ArrayList();
 
-			}// while da paginaÁ„o
+			}// while da pagina√ß√£o
 
-			// [UC0321] Emitir Fatura de Cliente Respons·vel
+			// [UC0321] Emitir Fatura de Cliente Respons√°vel
 			if (colecaoFatura != null && !colecaoFatura.isEmpty()) {
 				this.emitirFaturaClienteResponsavel(colecaoFatura,
 						anoMesFaturamentoCorrente);
 			}
-			// caso o mes corrente seja 11, ent„o roda tambÈm o mÍs 12.
-			// Caso a coleÁ„o de dezembro tenha dados, ent„o chama o emitir
+			// caso o mes corrente seja 11, ent√£o roda tamb√©m o m√™s 12.
+			// Caso a cole√ß√£o de dezembro tenha dados, ent√£o chama o emitir
 			// passando os dados de dezembro
 			if (colecaoFaturaDez != null && !colecaoFaturaDez.isEmpty()) {
-				// [UC0321] Emitir Fatura de Cliente Respons·vel
+				// [UC0321] Emitir Fatura de Cliente Respons√°vel
 				this.emitirFaturaClienteResponsavel(colecaoFaturaDez,
 						anoMesFaturamentoAntecipado);
 			}
@@ -23036,7 +23036,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
 					idUnidadeIniciada, false);
 
-			// Erro no repositÛrio
+			// Erro no reposit√≥rio
 		} catch (Exception ex) {
 
 			ex.printStackTrace();
@@ -23049,9 +23049,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir as faturas geradas pelo [UC0320]
+	 * Met√≥do respons√°vel por emitir as faturas geradas pelo [UC0320]
 	 * 
-	 * [UC0321] Emitir Fatura de Cliente Respons·vel
+	 * [UC0321] Emitir Fatura de Cliente Respons√°vel
 	 * 
 	 * @author Pedro Alexandre, Pedro Alexandre, Pedro Alexandre
 	 * @date 27/04/2006, 03/01/2007, 15/03/2007
@@ -23063,7 +23063,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection<Fatura> colecaoFatura, Integer anoMesFaturamentoCorrente)
 			throws ControladorException, IOException {
 
-		// Ordena a coleÁ„o de faturas pelo cÛdigo do cliente respons·vel
+		// Ordena a cole√ß√£o de faturas pelo c√≥digo do cliente respons√°vel
 		Collections.sort((List) colecaoFatura, new Comparator() {
 			public int compare(Object a, Object b) {
 				Integer cliente1 = ((Fatura) a).getCliente().getId();
@@ -23073,27 +23073,27 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 		});
 
-		// Cria a vari·vel que vai armazenar o txt de fatura
+		// Cria a vari√°vel que vai armazenar o txt de fatura
 		StringBuilder arquivoFaturaTXT = new StringBuilder();
 
-		// Caso a coleÁ„o de faturas esteja preenchida
+		// Caso a cole√ß√£o de faturas esteja preenchida
 		// Emiti todas as faturas informadas
 		if (colecaoFatura != null) {
 
-			// Cria o sequÍncial da fatura
+			// Cria o sequ√™ncial da fatura
 			int sequencialFatura = 1;
 			int quantidadeFaturas = 0;
-			// LaÁo para emitir todas as faturas
+			// La√ßo para emitir todas as faturas
 			for (Fatura fatura : colecaoFatura) {
 				try {
 
 					quantidadeFaturas++;
 
-					// ObtÈm a coleÁ„o dos itens da fatura atual
+					// Obt√©m a cole√ß√£o dos itens da fatura atual
 					ArrayList<FaturaItem> colecaoFaturaItem = (ArrayList) repositorioFaturamento
 							.pesquisarItemsFatura(fatura.getId());
 
-					// Caso a coleÁ„o de itens da fatura estejam preenchidos
+					// Caso a cole√ß√£o de itens da fatura estejam preenchidos
 					if (colecaoFaturaItem != null
 							&& colecaoFaturaItem.size() > 0) {
 
@@ -23101,10 +23101,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						String quantidadeItemFatura = ""
 								+ colecaoFaturaItem.size();
 
-						// Armazena a quantidade limite de itens por p·gina
+						// Armazena a quantidade limite de itens por p√°gina
 						Integer quantidadeItemLimite = 100;
 
-						// Calcula a quantidade de p·ginas
+						// Calcula a quantidade de p√°ginas
 						Integer quantidadePaginas = ((Double) Math.ceil(Double
 								.parseDouble(quantidadeItemFatura)
 								/ quantidadeItemLimite)).intValue();
@@ -23114,25 +23114,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						FaturaItem[] colecaoFaturaItemColuna1 = null;
 						FaturaItem[] colecaoFaturaItemColuna2 = null;
 
-						// Cria o indice atual da coleÁ„o de itens
+						// Cria o indice atual da cole√ß√£o de itens
 						int indiceAtual = 0;
 
-						// LaÁo para gerar todas as p·ginas da fatura atual
+						// La√ßo para gerar todas as p√°ginas da fatura atual
 						for (int i = 1; i <= quantidadePaginas; i++) {
 
-							// Recupera o cliente respons·vel pela fatura
+							// Recupera o cliente respons√°vel pela fatura
 							Cliente cliente = getControladorCliente()
 									.pesquisarCliente(
 											fatura.getCliente().getId());
 
 							// Linha 1
-							// Linha 1 È composta sÛ pela canal=1
+							// Linha 1 √© composta s√≥ pela canal=1
 							arquivoFaturaTXT.append("1");
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
 							// Linha 2
-							// Linha 2 È composta pelo canal=- e fonte=1 e pelo
+							// Linha 2 √© composta pelo canal=- e fonte=1 e pelo
 							// nome do cliente
 							arquivoFaturaTXT.append("-");
 							arquivoFaturaTXT.append("1");
@@ -23141,8 +23141,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.getProperty("line.separator"));
 
 							// Linha 3
-							// Linha 3 È composta pelo cÛdigo do cliente e pelo
-							// mÍs/ano de referÍncia da conta
+							// Linha 3 √© composta pelo c√≥digo do cliente e pelo
+							// m√™s/ano de refer√™ncia da conta
 							String codigoClienteFormatado = Util
 									.adicionarZerosEsquedaNumero(8, ""
 											+ cliente.getId());
@@ -23175,7 +23175,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.getProperty("line.separator"));
 
 							// Linha 5
-							// Linha 5 È composta pelo sequÍncial da fatura
+							// Linha 5 √© composta pelo sequ√™ncial da fatura
 							arquivoFaturaTXT.append(" ");
 							arquivoFaturaTXT.append("1");
 							arquivoFaturaTXT
@@ -23187,12 +23187,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.getProperty("line.separator"));
 
 							// Linha 6
-							// Linha 6 È uma linha em branco
+							// Linha 6 √© uma linha em branco
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
 							// Linha 7
-							// Linha 7 È composta pela descriÁ„o do tipo do
+							// Linha 7 √© composta pela descri√ß√£o do tipo do
 							// cliente e pela quantidade de itens da fatura
 							arquivoFaturaTXT.append("-");
 							arquivoFaturaTXT.append("1");
@@ -23205,43 +23205,43 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.getProperty("line.separator"));
 
 							// Linha 8
-							// Linha 8 È uma linha em branco
+							// Linha 8 √© uma linha em branco
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
 							// Linha 9
-							// Linha 9 È composta sÛ pelo canal=-
+							// Linha 9 √© composta s√≥ pelo canal=-
 							arquivoFaturaTXT.append("-");
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
 							// Linha 10
-							// Linha 10 È composta pelos itens da fatura da
-							// p·gina atual
+							// Linha 10 √© composta pelos itens da fatura da
+							// p√°gina atual
 
-							// Caso seja a ˙ltima p·gina da fatura
+							// Caso seja a √∫ltima p√°gina da fatura
 							if (i == quantidadePaginas) {
-								// Calcula a quantidade de itens da ˙ltima
-								// p·gina
+								// Calcula a quantidade de itens da √∫ltima
+								// p√°gina
 								int quantidadeItemsUltimaPagina = Integer
 										.parseInt(quantidadeItemFatura)
 										- ((quantidadePaginas - 1) * 100);
 
-								// Caso a quantidade de itens da ˙ltima p·gina
+								// Caso a quantidade de itens da √∫ltima p√°gina
 								// seja maior que 50(cinquenta)
 								// Recupera os itens restantes para a primeira
 								// coluna
-								// Caso contr·rio recupera os 50 primeiros itens
+								// Caso contr√°rio recupera os 50 primeiros itens
 								// para a primeira coluna
 								// e os itens restantes para a segunda coluna
 								if (quantidadeItemsUltimaPagina <= 50) {
 									// Cria o array de itens da fatura da
 									// primeira coluna
 									// com o tamanho igual a quantidade de itens
-									// da ˙ltima p·gina
+									// da √∫ltima p√°gina
 									colecaoFaturaItemColuna1 = new FaturaItem[quantidadeItemsUltimaPagina];
 
-									// Recupera da coleÁ„o principal os itens da
+									// Recupera da cole√ß√£o principal os itens da
 									// fatura
 									// para os itens da primeira coluna
 									(colecaoFaturaItem
@@ -23261,7 +23261,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// com o tamanho igual a 50(cinquenta)
 									colecaoFaturaItemColuna1 = new FaturaItem[50];
 
-									// Recupera da coleÁ„o principal os itens da
+									// Recupera da cole√ß√£o principal os itens da
 									// fatura
 									// para os itens da primeira coluna
 									(colecaoFaturaItem.subList(indiceAtual,
@@ -23269,7 +23269,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.toArray(colecaoFaturaItemColuna1);
 
 									// Incrementa o indice atual em cinquenta
-									// posiÁıes
+									// posi√ß√µes
 									indiceAtual = indiceAtual + 50;
 
 									// Cria o array da segunda coluna com o
@@ -23317,8 +23317,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											colecaoFaturaItemColuna2));
 
 							// Linha 11
-							// Linha 11 È composta das datas de emiss„o
-							// ,vencimento e do valor do dÈbito da fatura
+							// Linha 11 √© composta das datas de emiss√£o
+							// ,vencimento e do valor do d√©bito da fatura
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 							arquivoFaturaTXT.append("1");
@@ -23339,19 +23339,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.getProperty("line.separator"));
 
 							// Linha 12
-							// Linha 12 È composta por apenas o canal=0
+							// Linha 12 √© composta por apenas o canal=0
 							arquivoFaturaTXT.append("0");
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
 							// Linha 13
-							// Linha 13 È composta por apenas o canal=-
+							// Linha 13 √© composta por apenas o canal=-
 							arquivoFaturaTXT.append("-");
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
 							// Linha 14
-							// Linha 14 È composta pelo sequÍncial da fatura
+							// Linha 14 √© composta pelo sequ√™ncial da fatura
 							String sequencialFaturaFormatado = Util
 									.adicionarZerosEsquedaNumero(6, ""
 											+ sequencialFatura);
@@ -23368,31 +23368,31 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.getProperty("line.separator"));
 
 							// Linha 15
-							// Linha 15 È composta pelo canal=1, fonte=1
-							// e pela representaÁ„o numÈrica do cÛdigo de barras
-							// Formata o ano/mÍs em mÍs/ano de referÍncia da
+							// Linha 15 √© composta pelo canal=1, fonte=1
+							// e pela representa√ß√£o num√©rica do c√≥digo de barras
+							// Formata o ano/m√™s em m√™s/ano de refer√™ncia da
 							// conta no formato MM/AAAA
 							String mesAnoReferenciaConta = Util
 									.formatarAnoMesParaMesAno(fatura
 											.getAnoMesReferencia());
 
-							// Formata o ano/mÍs em mÍs/ano de referÍncia da
+							// Formata o ano/m√™s em m√™s/ano de refer√™ncia da
 							// conta no formato MMAAAA(sem a barra)
 							String mesAnoReferenciaContaSemABarra = mesAnoReferenciaConta
 									.substring(0, 2)
 									+ mesAnoReferenciaConta.substring(3, 7);
 
-							// ObtÈmo dÌgito verificador da referÍncia da conta
+							// Obt√©mo d√≠gito verificador da refer√™ncia da conta
 							// no modulo 10(dez)
 							Integer digitoVerificadorReferenciaContaModulo10 = Util
 									.obterDigitoVerificadorModulo10(new Long(
 											mesAnoReferenciaContaSemABarra));
 
-							// Vari·vel que vai armazenar a representaÁ„o
-							// numÈrica do cÛdigo de barras
+							// Vari√°vel que vai armazenar a representa√ß√£o
+							// num√©rica do c√≥digo de barras
 							String representacaoNumericaCodBarra = "";
 
-							// ObtÈm a representaÁ„o numÈrica do cÛdigode
+							// Obt√©m a representa√ß√£o num√©rica do c√≥digode
 							// barra
 							representacaoNumericaCodBarra = this
 									.getControladorArrecadacao()
@@ -23407,7 +23407,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											cliente.getId(),
 											fatura.getSequencial(), null);
 
-							// Formata a representaÁ„o n˙merica do cÛdigo de
+							// Formata a representa√ß√£o n√∫merica do c√≥digo de
 							// barras
 							String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra
 									.substring(0, 11)
@@ -23442,20 +23442,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
-							// Linha 16 È composta por apenas o canal=1
+							// Linha 16 √© composta por apenas o canal=1
 							arquivoFaturaTXT.append("-");
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
-							// Linha 17 È composta pelo canal=1 pela fonte=2 e
-							// pela representaÁ„o do cÛdigo de barras em
+							// Linha 17 √© composta pelo canal=1 pela fonte=2 e
+							// pela representa√ß√£o do c√≥digo de barras em
 							// caracter
-							// Cria o objeto para gerar o cÛdigode barras no
-							// padr„o intercalado 2 de 5
+							// Cria o objeto para gerar o c√≥digode barras no
+							// padr√£o intercalado 2 de 5
 							Interleaved2of5 codigoBarraIntercalado2de5 = new Interleaved2of5();
 
-							// Recupera a representaÁ„o n˙merica do cÛdigo de
-							// barras sem os dÌgitos verificadores
+							// Recupera a representa√ß√£o n√∫merica do c√≥digo de
+							// barras sem os d√≠gitos verificadores
 							String representacaoCodigoBarrasSemDigitoVerificador = representacaoNumericaCodBarra
 									.substring(0, 11)
 									+ representacaoNumericaCodBarra.substring(
@@ -23475,15 +23475,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
-							// Linha 18 È composta por apenas o canal=0
+							// Linha 18 √© composta por apenas o canal=0
 							arquivoFaturaTXT.append("0");
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
-							// Linha 19 È composta pelo canal=- pela fonte=2,
+							// Linha 19 √© composta pelo canal=- pela fonte=2,
 							// pela data de validade,
-							// pelo cÛdigo do cliente pelo sequencial da fatura
-							// e pelo mÍs/ano de referÍncia
+							// pelo c√≥digo do cliente pelo sequencial da fatura
+							// e pelo m√™s/ano de refer√™ncia
 							arquivoFaturaTXT.append("-");
 							arquivoFaturaTXT.append("1");
 							arquivoFaturaTXT.append(Util.completaString("", 4));
@@ -23502,9 +23502,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
-							// Linha 20 È composta pelo canal=- pela fonte=1 e
-							// pelas datas de emiss„o e vencimento
-							// e pelo valor do dÈbito da fatura
+							// Linha 20 √© composta pelo canal=- pela fonte=1 e
+							// pelas datas de emiss√£o e vencimento
+							// e pelo valor do d√©bito da fatura
 							arquivoFaturaTXT.append("-");
 							arquivoFaturaTXT.append("1");
 							arquivoFaturaTXT.append(Util.completaString("", 8));
@@ -23522,18 +23522,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
-							// Linha 21 È composta somente pelo canal=-
+							// Linha 21 √© composta somente pelo canal=-
 							arquivoFaturaTXT.append("-");
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
-							// Linha 22 È composta somente pelo canal=-
+							// Linha 22 √© composta somente pelo canal=-
 							arquivoFaturaTXT.append("-");
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
-							// Linha 23 È composta somente pelo sequÍncial de
-							// impress„o da fatura
+							// Linha 23 √© composta somente pelo sequ√™ncial de
+							// impress√£o da fatura
 							arquivoFaturaTXT.append("-");
 							arquivoFaturaTXT.append("1");
 							arquivoFaturaTXT.append(Util
@@ -23542,15 +23542,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							arquivoFaturaTXT.append(System
 									.getProperty("line.separator"));
 
-							// Linha 24 È composta pela canal=0, fonte=1 e pela
-							// representaÁ„o do n˙mero de p·ginas
+							// Linha 24 √© composta pela canal=0, fonte=1 e pela
+							// representa√ß√£o do n√∫mero de p√°ginas
 							arquivoFaturaTXT.append("0");
 							arquivoFaturaTXT.append("1");
 
-							// Caso a p·gina atual n„o seja a ˙ltima p·gina
+							// Caso a p√°gina atual n√£o seja a √∫ltima p√°gina
 							if (i != quantidadePaginas.intValue()) {
-								// Imprime a menssagem que ocntinua a impress„o
-								// na prÛxima p·gina
+								// Imprime a menssagem que ocntinua a impress√£o
+								// na pr√≥xima p√°gina
 								arquivoFaturaTXT.append(Util.completaString("",
 										30));
 								arquivoFaturaTXT.append(Util.completaString(
@@ -23576,15 +23576,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					// Incrementa o sequÍncial da fatura para a nova fatura
+					// Incrementa o sequ√™ncial da fatura para a nova fatura
 					sequencialFatura++;
 
-					// Erro no repositÛrio
+					// Erro no reposit√≥rio
 				} catch (ErroRepositorioException ex) {
 					// Seta o roolback na base
 					// sessionContext.setRollbackOnly();
 
-					// Levanta a exceÁ„o para o usu·rio
+					// Levanta a exce√ß√£o para o usu√°rio
 					throw new ControladorException("erro.sistema", ex);
 				}
 			}
@@ -23635,11 +23635,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Este metÛdo È especifÌco para gerar a linha 10(dez) do txt de fatura ele
+	 * Este met√≥do √© especif√≠co para gerar a linha 10(dez) do txt de fatura ele
 	 * cria os itens da fatura em duas ou uma coluna dependendo da quantidade de
 	 * itens
 	 * 
-	 * [UC0321] Emitir Fatura de Cliente Respons·vel
+	 * [UC0321] Emitir Fatura de Cliente Respons√°vel
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 29/04/2006
@@ -23651,30 +23651,30 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	protected StringBuffer gerarLinha10FaturaClienteResponsavel(
 			FaturaItem[] colecaoFaturaItemColuna1,
 			FaturaItem[] colecaoFaturaItemColuna2) {
-		// Cria a vari·vel que vai armazenar a linha 10(dez) gerada
+		// Cria a vari√°vel que vai armazenar a linha 10(dez) gerada
 		StringBuffer linha10 = new StringBuffer();
 
-		// Cria as vari·veis que iram armazenar as colunas 1 e 2
+		// Cria as vari√°veis que iram armazenar as colunas 1 e 2
 		String coluna1 = new String();
 		String coluna2 = new String();
 
-		// LaÁo para gerar as colunas 1 e 2 dependendo da quantidade de itens
+		// La√ßo para gerar as colunas 1 e 2 dependendo da quantidade de itens
 		for (int i = 0; i < colecaoFaturaItemColuna1.length; i++) {
 
 			// Recupera o item de fatura da coluna 1 e 2
 			FaturaItem faturaItemColuna1 = colecaoFaturaItemColuna1[i];
 			FaturaItem faturaItemColuna2 = colecaoFaturaItemColuna2[i];
 
-			// Recupera a matrÌcula do imÛvel da coluna 1 e formata a matrÌcula
+			// Recupera a matr√≠cula do im√≥vel da coluna 1 e formata a matr√≠cula
 			// (ex:500000001 em 5000000.1)
 			String matriculaImovelFormatada = Util.adicionarZerosEsquedaNumero(
 					8, "" + faturaItemColuna1.getImovel().getId());
 			matriculaImovelFormatada = matriculaImovelFormatada.substring(0, 7)
 					+ "." + matriculaImovelFormatada.substring(7, 8);
 
-			// Caso o consumo do item da fatura n„o esteja nulo
+			// Caso o consumo do item da fatura n√£o esteja nulo
 			// Recupera o consumo do item da fatura
-			// Caso contr·rio atribui 0(zero)
+			// Caso contr√°rio atribui 0(zero)
 			String consumoFormatado = "";
 			if (faturaItemColuna1.getNumeroConsumo() != null) {
 				consumoFormatado = faturaItemColuna1.getNumeroConsumo() + " M3";
@@ -23696,8 +23696,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Caso exista o item da fatura para a coluna 2(dois)
 			if (faturaItemColuna2 != null) {
-				// Recupera a matrÌcula do imÛvel da coluna 2(dois) e formata a
-				// matrÌcula (ex:500000001 em 5000000.1)
+				// Recupera a matr√≠cula do im√≥vel da coluna 2(dois) e formata a
+				// matr√≠cula (ex:500000001 em 5000000.1)
 
 				String matriculaImovelFormatadaColuna2 = Util
 						.adicionarZerosEsquedaNumero(8, ""
@@ -23708,9 +23708,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						+ "."
 						+ matriculaImovelFormatadaColuna2.substring(7, 8);
 
-				// Caso o consumo do item da fatura n„o esteja nulo
+				// Caso o consumo do item da fatura n√£o esteja nulo
 				// Recupera o consumo do item da fatura
-				// Caso contr·rio atribui 0(zero)
+				// Caso contr√°rio atribui 0(zero)
 				if (faturaItemColuna2.getNumeroConsumo() != null) {
 					consumoFormatado = faturaItemColuna2.getNumeroConsumo()
 							+ " M3";
@@ -23745,7 +23745,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0329] - Restabelecer SituaÁ„o Anterior de Conta
+	 * [UC0329] - Restabelecer Situa√ß√£o Anterior de Conta
 	 * 
 	 * @author Fernanda Paiva
 	 * @date 05/05/2006
@@ -23765,7 +23765,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Conta conta = (Conta) iteratorContas.next();
 				Conta contaParaExcluir = null;
 				// ------------ <REGISTRAR
-				// TRANSA«√O>----------------------------
+				// TRANSA√á√ÉO>----------------------------
 
 				RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 						Operacao.OPERACAO_CANCELAMENTO_RETIFICACAO_CONTA_DESFAZER,
@@ -23776,19 +23776,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				registradorOperacao.registrarOperacao(conta);
 
 				// ------------ </REGISTRAR
-				// TRANSA«√O>----------------------------
+				// TRANSA√á√ÉO>----------------------------
 
 				Integer situacaoAtualConta = conta
 						.getDebitoCreditoSituacaoAtual().getId();
 				// CRC2725 - alterado por Vivianne Sousa - 21/09/2009
-				// analista:F·tima
-				// 1.2. Verificar se h· relaÁ„o do desfazer cancelamento ou
-				// retificaÁ„o com itens de negativaÁ„o:
-				// 1.2.1. Verificar se existem itens de negativaÁ„o associados ‡
+				// analista:F√°tima
+				// 1.2. Verificar se h√° rela√ß√£o do desfazer cancelamento ou
+				// retifica√ß√£o com itens de negativa√ß√£o:
+				// 1.2.1. Verificar se existem itens de negativa√ß√£o associados √†
 				// conta
-				// [UC0937 - Obter Itens de NegativaÁ„o Associados ‡ Conta]
-				// passando o identificador do imÛvel (IMOV_ID da tabela CONTA)
-				// e a referÍncia (CNTA_AMREFERENCIACONTA da tabela CONTA).
+				// [UC0937 - Obter Itens de Negativa√ß√£o Associados √† Conta]
+				// passando o identificador do im√≥vel (IMOV_ID da tabela CONTA)
+				// e a refer√™ncia (CNTA_AMREFERENCIACONTA da tabela CONTA).
 				Collection colecaoNegativadorMovimentoRegItem = getControladorSpcSerasa()
 						.obterItensNegativacaoAssociadosAConta(
 								conta.getImovel().getId(),
@@ -23807,9 +23807,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Conta contaNaBase = (Conta) ((List) (getControladorUtil()
 						.pesquisar(filtroConta, Conta.class.getName()))).get(0);
 
-				// Verificar se o conta j· foi atualizado por outro usu·rio
+				// Verificar se o conta j√° foi atualizado por outro usu√°rio
 				// durante
-				// esta atualizaÁ„o
+				// esta atualiza√ß√£o
 				if (contaNaBase.getUltimaAlteracao() != null) {
 					if (contaNaBase.getUltimaAlteracao().after(
 							conta.getUltimaAlteracao())) {
@@ -23837,7 +23837,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										.getId().toString());
 
 						// CRC2725 - alterado por Vivianne Sousa - 21/09/2009
-						// analista:F·tima
+						// analista:F√°tima
 						getControladorSpcSerasa()
 								.verificarRelacaoDoDesfazerCancelamentoOuRetificacaoComItensNegativacao(
 										colecaoNegativadorMovimentoRegItem,
@@ -23909,7 +23909,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						// -----------------------------------------------------------
 						// atualizar na tabela PAGAMENTO a coluna CNTA_ID
-						// com id da conta cancelada por retificaÁ„o
+						// com id da conta cancelada por retifica√ß√£o
 						// onde CNTA_ID=Id da conta retificada
 						Pagamento pagamento = null;
 
@@ -23932,7 +23932,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// -----------------------------------------------------------
 
 						// CRC2725 - alterado por Vivianne Sousa - 21/09/2009
-						// analista:F·tima
+						// analista:F√°tima
 						getControladorSpcSerasa()
 								.verificarRelacaoDoDesfazerCancelamentoOuRetificacaoComItensNegativacao(
 										colecaoNegativadorMovimentoRegItem,
@@ -23971,7 +23971,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 				if (conta.getDebitoCreditoSituacaoAnterior() != null) {
-					// altera as situaÁıes anterior e atual da conta
+					// altera as situa√ß√µes anterior e atual da conta
 					Integer situacaoAtual = conta
 							.getDebitoCreditoSituacaoAnterior().getId();
 					Integer situacaoAnterior = null;
@@ -24001,7 +24001,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				} else {
 					if (conta.getDataRetificacao() == null
 							&& conta.getDataInclusao() == null) {
-						// altera as situaÁıes anterior e atual da conta
+						// altera as situa√ß√µes anterior e atual da conta
 						try {
 							/*
 							 * Inicio: Registrar Transacao de Desfazer
@@ -24025,7 +24025,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					} else {
 						if (conta.getDataRetificacao() != null) {
-							// altera as situaÁıes anterior e atual da conta
+							// altera as situa√ß√µes anterior e atual da conta
 
 							try {
 
@@ -24053,7 +24053,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										e);
 							}
 						} else {
-							// altera as situaÁıes anterior e atual da conta
+							// altera as situa√ß√µes anterior e atual da conta
 
 							try {
 								repositorioFaturamento.alterarSituacaoConta(
@@ -24069,7 +24069,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 
 				// Alterado por Francisco - 26/05/08, por conta do Resumo de
-				// AÁıes de cobranÁa
+				// A√ß√µes de cobran√ßa
 				// Analista: Ana Breda
 				try {
 					// Atualizar documento de cobranca da conta, se houver, para
@@ -24123,7 +24123,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] - Faturar Grupo de Faturamento
 	 * 
-	 * Pesquisa o valor do percentual de esgoto para o imÛvel informado.
+	 * Pesquisa o valor do percentual de esgoto para o im√≥vel informado.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 18/09/2006
@@ -24146,11 +24146,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * @author S·vio Luiz, Pedro Alexandre,Vivianne Sousa, Ivan Sergio, Mariana
+	 * @author S√°vio Luiz, Pedro Alexandre,Vivianne Sousa, Ivan Sergio, Mariana
 	 *         Victor
 	 * @date 15/05/2006, 19/09/2006, 10/12/2007, 19/08/2009, 11/03/2011
 	 * 
@@ -24169,7 +24169,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		// -------------------------
 		//
-		// Registrar o inÌcio do processamento da Unidade de
+		// Registrar o in√≠cio do processamento da Unidade de
 		// Processamento
 		// do Batch
 		//
@@ -24196,12 +24196,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				sistemaParametro = getControladorUtil()
 						.pesquisarParametrosDoSistema();
 
-				// Alterado por S·vio Luiz Data:12/11/2007 Analista:Aryed Lins
-				// Se o mÍs de faturamento for igual a 11 e o indicador
+				// Alterado por S√°vio Luiz Data:12/11/2007 Analista:Aryed Lins
+				// Se o m√™s de faturamento for igual a 11 e o indicador
 				// faturamento
-				// antecipado for igual a 1, ent„o seta o mes de faturamento
+				// antecipado for igual a 1, ent√£o seta o mes de faturamento
 				// igual a
-				// 12 em conta impress„o,e imprime as contas no mes 12 tambÈm.
+				// 12 em conta impress√£o,e imprime as contas no mes 12 tamb√©m.
 
 				Integer anoMesReferenciaFaturamentoAntecipado = null;
 				if (Util.obterMes(anoMesReferenciaFaturamento) == 11) {
@@ -24212,14 +24212,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 
-				// i=0;ColeÁ„o de contas com estouros de consumo
-				// i=1;ColeÁ„o de contas com baixo consumo
-				// i=2;ColeÁ„o de contas com dÈbito autom·tico
-				// i=3;ColeÁ„o de contas com entrega para o cliente
-				// respons·vel
-				// i=4;ColeÁ„o de contas com entrega para o cliente
-				// respons·vel
-				// i=5;ColeÁ„o de contas normais
+				// i=0;Cole√ß√£o de contas com estouros de consumo
+				// i=1;Cole√ß√£o de contas com baixo consumo
+				// i=2;Cole√ß√£o de contas com d√©bito autom√°tico
+				// i=3;Cole√ß√£o de contas com entrega para o cliente
+				// respons√°vel
+				// i=4;Cole√ß√£o de contas com entrega para o cliente
+				// respons√°vel
+				// i=5;Cole√ß√£o de contas normais
 
 				ZipOutputStream zosCartas = null;
 				ZipOutputStream zosContas = null;
@@ -24677,7 +24677,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							System.out
 									.println("*********************************");
 							System.out
-									.println("PESQUISA CONTAS D…BITO AUTOM¡TICO E ENVIO BRAILLE");
+									.println("PESQUISA CONTAS D√âBITO AUTOM√ÅTICO E ENVIO BRAILLE");
 							System.out
 									.println("*********************************");
 
@@ -24700,7 +24700,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							System.out
 									.println("*********************************");
 							System.out
-									.println("PESQUISA CONTAS COM CLIENTE RESPONS¡VEL E ENVIO BRAILLE");
+									.println("PESQUISA CONTAS COM CLIENTE RESPONS√ÅVEL E ENVIO BRAILLE");
 							System.out
 									.println("*********************************");
 
@@ -24754,7 +24754,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							System.out
 									.println("*********************************");
 							System.out
-									.println("PESQUISA CONTAS DE D…BITO AUTOM¡TICO COM CLIENTE RESPONS¡VEL E ENVIO BRAILLE");
+									.println("PESQUISA CONTAS DE D√âBITO AUTOM√ÅTICO COM CLIENTE RESPONS√ÅVEL E ENVIO BRAILLE");
 							System.out
 									.println("*********************************");
 
@@ -24888,7 +24888,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											}
 
 											quantidadeContas++;
-											// SÛ para exibir no console
+											// S√≥ para exibir no console
 											// a
 											// quantidade de
 											// contas
@@ -24996,11 +24996,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// count = count + 1;
 												// caso o [FS0006 -
 												// Verificar
-												// espaÁos
+												// espa√ßos
 												// para
-												// descriÁ„o
+												// descri√ß√£o
 												// dos
-												// serviÁos e
+												// servi√ßos e
 												// tarifas totalmente
 												// preenchido]
 												StringBuilder parteInicialcontaTxt = new StringBuilder();
@@ -25039,15 +25039,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append("0");
 												// Fonte
 												contaTxt.append("2");
-												// matricula do imÛvel
-												// Recupera a matrÌcula
+												// matricula do im√≥vel
+												// Recupera a matr√≠cula
 												// do
-												// imÛvel da
+												// im√≥vel da
 												// coluna
 												// 1 e
 												// formata
 												// a
-												// matrÌcula
+												// matr√≠cula
 												// (ex:500000001 em
 												// 5000000.1)
 												String matriculaImovelFormatada = Util
@@ -25076,7 +25076,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// Fonte
 												contaTxt.append(Util
 														.completaString("1", 18));
-												// caso a coleÁ„o de
+												// caso a cole√ß√£o de
 												// contas
 												// seja
 												// de
@@ -25084,7 +25084,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// para
 												// o
 												// cliente
-												// respons·vel
+												// respons√°vel
 												if (tipoConta == 3
 														|| tipoConta == 4
 														|| tipoConta == 7
@@ -25138,7 +25138,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append(Util
 														.completaString("1", 22));
 												// recupera endereco do
-												// imÛvel
+												// im√≥vel
 												String enderecoImovel = getControladorEndereco()
 														.pesquisarEnderecoFormatado(
 																emitirContaHelper
@@ -25148,19 +25148,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																enderecoImovel == null ? ""
 																		: enderecoImovel,
 																50));
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
 														.completaString("", 6));
-												// MÍs/Ano referÍncia da
+												// M√™s/Ano refer√™ncia da
 												// conta
 												// digito
 												// verificador
 												String mesAnoReferencia = Util
 														.formatarAnoMesParaMesAno(emitirContaHelper
 																.getAmReferencia());
-												// DÌgito verificador da
+												// D√≠gito verificador da
 												// conta
 												String digitoVerificador = ""
 														+ emitirContaHelper
@@ -25208,7 +25208,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append("+");
 												// Fonte
 												contaTxt.append("7");
-												// inst‚ncia um imovel
+												// inst√¢ncia um imovel
 												// com
 												// os
 												// dados
@@ -25217,7 +25217,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// para
 												// recuperar
 												// a
-												// inscriÁ„o que est· np
+												// inscri√ß√£o que est√° np
 												// objeto
 												// imovel
 												Imovel imovel = new Imovel();
@@ -25239,7 +25239,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.getLoteConta());
 												imovel.setSubLote(emitirContaHelper
 														.getSubLoteConta());
-												// InscriÁ„o do imÛvel
+												// Inscri√ß√£o do im√≥vel
 												String inscricao = imovel
 														.getInscricaoFormatada();
 
@@ -25259,7 +25259,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append("-");
 												// Fonte
 												contaTxt.append("7");
-												// caso a coleÁ„o de
+												// caso a cole√ß√£o de
 												// contas
 												// seja
 												// de
@@ -25267,12 +25267,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// para
 												// o
 												// cliente
-												// respons·vel
+												// respons√°vel
 												String enderecoClienteResponsavel = null;
 
-												// Comentado por S·vio Luiz em
+												// Comentado por S√°vio Luiz em
 												// 08/01/2008 (Analista
-												// Respons·vel: Aryed)
+												// Respons√°vel: Aryed)
 												// o tipo da conta(igual a 3 ou
 												// 4)
 												if (emitirContaHelper
@@ -25297,7 +25297,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													if (enderecoClienteResponsavel != null) {
 														// endereco
 														// cliente
-														// respons·vel
+														// respons√°vel
 														contaTxt.append(Util
 																.completaString(
 																		enderecoClienteResponsavel,
@@ -25305,13 +25305,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													} else {
 														// endereco
 														// cliente
-														// respons·vel
+														// respons√°vel
 														contaTxt.append(Util
 																.completaString(
 																		"", 50));
 													}
 													// completa com
-													// espaÁos
+													// espa√ßos
 													// em
 													// branco
 													contaTxt.append(Util
@@ -25319,7 +25319,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																	9));
 												} else {
 													// completa com
-													// espaÁos
+													// espa√ßos
 													// em
 													// branco
 													contaTxt.append(Util
@@ -25327,7 +25327,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																	66));
 												}
 
-												// descriÁ„o da situaÁ„o
+												// descri√ß√£o da situa√ß√£o
 												// da
 												// agua
 												// na
@@ -25338,7 +25338,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaString(
 																descricaoAguaSituacao,
 																16));
-												// descriÁ„o da situaÁ„o
+												// descri√ß√£o da situa√ß√£o
 												// de
 												// esgoto
 												// na
@@ -25363,9 +25363,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													int quantidadePosicoes = enderecoClienteResponsavel
 															.length();
 													// Recupera o fim do
-													// endereÁo do
+													// endere√ßo do
 													// cliente
-													// respons·vel
+													// respons√°vel
 													contaTxt.append(Util.completaString(
 															enderecoClienteResponsavel
 																	.substring(
@@ -25373,7 +25373,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																			quantidadePosicoes),
 															60));
 													// compleca com
-													// espaÁos
+													// espa√ßos
 													// em
 													// brancos
 													contaTxt.append(Util
@@ -25382,7 +25382,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 												} else {
 													// compleca com
-													// espaÁos
+													// espa√ßos
 													// em
 													// brancos
 													contaTxt.append(Util
@@ -25398,7 +25398,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append(" ");
 												// Fonte
 												contaTxt.append("7");
-												// compleca com espaÁos
+												// compleca com espa√ßos
 												// em
 												// brancos
 												contaTxt.append(Util
@@ -25408,11 +25408,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 												// [SB0002] - Determinar
 												// tipo de
-												// ligaÁ„o
+												// liga√ß√£o
 												// e
 												// tipo
 												// de
-												// MediÁ„o
+												// Medi√ß√£o
 												Integer[] parmSituacao = determinarTipoLigacaoMedicao(emitirContaHelper);
 												Integer tipoLigacao = parmSituacao[0];
 												Integer tipoMedicao = parmSituacao[1];
@@ -25434,10 +25434,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// que
 												// vem
 												// como
-												// resultado È
+												// resultado √©
 												// de
 												// 20
-												// posiÁıes
+												// posi√ß√µes
 												StringBuilder obterDadosConsumoMedicaoAnterior = null;
 												// chama o [SB0004]
 												// -Obter
@@ -25445,7 +25445,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// do
 												// Consumo
 												// e
-												// MediÁ„o
+												// Medi√ß√£o
 												// Anterior
 												// passando a quantidade
 												// de
@@ -25455,8 +25455,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// e o
 												// tipo
 												// de
-												// ligaÁ„o
-												// e mediÁ„o
+												// liga√ß√£o
+												// e medi√ß√£o
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
@@ -25470,7 +25470,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// do
 												// Consumo
 												// e
-												// MediÁ„o
+												// Medi√ß√£o
 												// Anterior
 												// passando a quantidade
 												// de
@@ -25480,8 +25480,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// e o
 												// tipo
 												// de
-												// ligaÁ„o
-												// e mediÁ„o
+												// liga√ß√£o
+												// e medi√ß√£o
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
@@ -25489,7 +25489,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -25509,7 +25509,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// do
 												// Consumo
 												// e
-												// MediÁ„o
+												// Medi√ß√£o
 												// Anterior
 												// passando a quantidade
 												// de
@@ -25519,8 +25519,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// e o
 												// tipo
 												// de
-												// ligaÁ„o
-												// e mediÁ„o
+												// liga√ß√£o
+												// e medi√ß√£o
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
@@ -25534,7 +25534,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// do
 												// Consumo
 												// e
-												// MediÁ„o
+												// Medi√ß√£o
 												// Anterior
 												// passando a quantidade
 												// de
@@ -25544,8 +25544,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// e o
 												// tipo
 												// de
-												// ligaÁ„o
-												// e mediÁ„o
+												// liga√ß√£o
+												// e medi√ß√£o
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
@@ -25557,12 +25557,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// Sub-Fluxo
 												// recupera os
 												// parametros da
-												// mediÁ„o
+												// medi√ß√£o
 												// historico
 												// do
 												// [SB0005] - Obter
 												// Dados da
-												// MediÁ„o
+												// Medi√ß√£o
 												// da
 												// Conta
 												Object[] parmsMedicaoHistorico = obterDadosMedicaoConta(
@@ -25576,7 +25576,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												String dataLeituraAnterior = "";
 												// Leitura Anterior
 												String dataLeituraAtual = "";
-												// Leitura SituaÁ„o
+												// Leitura Situa√ß√£o
 												// Atual
 												String leituraSituacaoAtual = "";
 												// Leitura Anormalidade
@@ -25625,7 +25625,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													// dias
 													// de
 													// consumo
-													// que È
+													// que √©
 													// a
 													// quantidade de
 													// dias
@@ -25650,15 +25650,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// faturamento
 												// e
 												// consumo
-												// mÈdio
-												// di·rio
+												// m√©dio
+												// di√°rio
 												// [SB0005] - Obter
 												// Consumo
 												// Faturado
 												// e
 												// Consumo
-												// MÈdio
-												// Di·rio
+												// M√©dio
+												// Di√°rio
 												String[] parmsConsumo = obterConsumoFaturadoConsumoMedioDiario(
 														emitirContaHelper,
 														tipoMedicao,
@@ -25667,7 +25667,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												String consumoMedioDiario = parmsConsumo[1];
 												// Fim Chamar Sub-Fluxo
 												// completa com 3
-												// espaÁos em
+												// espa√ßos em
 												// branco
 												contaTxt.append(Util
 														.completaString("", 3));
@@ -25677,7 +25677,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																leituraAnterior,
 																7));
 												// completa com 6
-												// espaÁos em
+												// espa√ßos em
 												// branco
 												contaTxt.append(Util
 														.completaString("", 6));
@@ -25691,7 +25691,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																consumoFaturamento,
 																6));
 												// completa com 3
-												// espaÁos em
+												// espa√ßos em
 												// branco
 												contaTxt.append(Util
 														.completaString("", 3));
@@ -25699,13 +25699,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append(Util
 														.completaString(
 																diasConsumo, 2));
-												// Consumo mÈdio di·rio
+												// Consumo m√©dio di√°rio
 												contaTxt.append(Util
 														.completaStringComEspacoAEsquerda(
 																consumoMedioDiario,
 																8));
 												// completa com 47
-												// espaÁos
+												// espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -25724,7 +25724,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// do
 												// Consumo
 												// e
-												// MediÁ„o
+												// Medi√ß√£o
 												// Anterior
 												// passando a quantidade
 												// de
@@ -25734,8 +25734,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// e o
 												// tipo
 												// de
-												// ligaÁ„o
-												// e mediÁ„o
+												// liga√ß√£o
+												// e medi√ß√£o
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
@@ -25749,7 +25749,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// do
 												// Consumo
 												// e
-												// MediÁ„o
+												// Medi√ß√£o
 												// Anterior
 												// passando a quantidade
 												// de
@@ -25759,8 +25759,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// e o
 												// tipo
 												// de
-												// ligaÁ„o
-												// e mediÁ„o
+												// liga√ß√£o
+												// e medi√ß√£o
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
@@ -25769,7 +25769,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
 												// completa com 4
-												// espaÁos em
+												// espa√ßos em
 												// branco
 												contaTxt.append(Util
 														.completaString("", 2));
@@ -25779,7 +25779,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																dataLeituraAnterior,
 																10));
 												// completa com 3
-												// espaÁos em
+												// espa√ßos em
 												// branco
 												contaTxt.append(Util
 														.completaString("", 3));
@@ -25788,7 +25788,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaString(
 																dataLeituraAtual,
 																10));
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -25801,7 +25801,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append(" ");
 												// Fonte
 												contaTxt.append("1");
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -25852,7 +25852,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													}
 
 													if (parmsConsumoHistorico != null) {
-														// descriÁ„o
+														// descri√ß√£o
 														// abreviada
 														// tipo
 														// de
@@ -25860,18 +25860,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														if (parmsConsumoHistorico[0] != null) {
 															descricaoAbreviadaTipoConsumo = (String) parmsConsumoHistorico[0];
 														}
-														// descriÁ„o
+														// descri√ß√£o
 														// tipo de
 														// consumo
 														if (parmsConsumoHistorico[1] != null) {
 															descricaoTipoConsumo = (String) parmsConsumoHistorico[1];
 														}
-														// Consumo mÈdio
+														// Consumo m√©dio
 														if (parmsConsumoHistorico[2] != null) {
 															consumoMedio = ""
 																	+ (Integer) parmsConsumoHistorico[2];
 														}
-														// descriÁ„o
+														// descri√ß√£o
 														// abreviada
 														// anormalidade
 														// de
@@ -25879,14 +25879,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														if (parmsConsumoHistorico[3] != null) {
 															descricaoAbreviadaAnormalidadeConsumo = (String) parmsConsumoHistorico[3];
 														}
-														// descriÁ„o
+														// descri√ß√£o
 														// anormalidade
 														// de
 														// consumo
 														if (parmsConsumoHistorico[4] != null) {
 															descricaoAnormalidadeConsumo = (String) parmsConsumoHistorico[4];
 														}
-														// Consumo mÈdio
+														// Consumo m√©dio
 														if (parmsConsumoHistorico[5] != null) {
 															consumoRateio = ""
 																	+ (Integer) parmsConsumoHistorico[5];
@@ -25898,13 +25898,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// constante
 												contaTxt.append("CONSUMO ");
 
-												// descriÁ„o tipo
+												// descri√ß√£o tipo
 												// consumo
 												contaTxt.append(Util
 														.completaString(
 																descricaoTipoConsumo,
 																21));
-												// descriÁ„o da
+												// descri√ß√£o da
 												// Anormalidade
 												// de
 												// consumo
@@ -25912,7 +25912,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaString(
 																descricaoAnormalidadeConsumo,
 																25));
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -25935,7 +25935,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// contaCategoria
 												// [SB0007] - Obter
 												// Dados da
-												// MediÁ„o
+												// Medi√ß√£o
 												// da
 												// Conta
 												Short quantidadeEconomiaConta = 0;
@@ -25960,7 +25960,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																""
 																		+ quantidadeEconomiaConta,
 																4));
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26026,9 +26026,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// sub-fluxos
 												// anteriores
 												// [SB0009] - Obter
-												// CÛdigo auxiliar
+												// C√≥digo auxiliar
 												StringBuilder codigoAuxiliar = new StringBuilder();
-												// leitura situaÁ„o
+												// leitura situa√ß√£o
 												// atual
 												codigoAuxiliar
 														.append(Util
@@ -26060,7 +26060,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																.adicionarZerosEsquedaNumero(
 																		2,
 																		descricaoAbreviadaAnormalidadeConsumo));
-												// perfil do imÛvel
+												// perfil do im√≥vel
 												if (emitirContaHelper
 														.getIdImovelPerfil() != null) {
 													codigoAuxiliar
@@ -26084,14 +26084,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																		2,
 																		diasConsumo));
 												// Consumo medio do
-												// imÛvel
+												// im√≥vel
 												codigoAuxiliar
 														.append(Util
 																.adicionarZerosEsquedaNumero(
 																		6,
 																		consumoMedio));
 												// Fim Chamar Sub-Fluxo
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26099,7 +26099,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// codigo auxiliar
 												contaTxt.append(codigoAuxiliar);
 												codigoAuxiliar = null;
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26126,7 +26126,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// de
 												// esgoto
 												contaTxt.append(mesagemConsumo);
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26139,7 +26139,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append("0");
 												// Fonte
 												contaTxt.append("1");
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26152,7 +26152,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append(" ");
 												// Fonte
 												contaTxt.append("1");
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26161,7 +26161,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.getProperty("line.separator"));
 
 												// --Linha 16-- //
-												// o canal e a fonte È
+												// o canal e a fonte √©
 												// feito
 												// nos
 												// subFluxos
@@ -26169,9 +26169,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// Gerar
 												// Linhas
 												// da
-												// DescriÁ„o
+												// Descri√ß√£o
 												// dos
-												// SreviÁos
+												// Srevi√ßos
 												// e
 												// Tarifas
 												StringBuilder linhasDescricaoServicosTarifasTotal = gerarLinhasDescricaoServicoTarifas(
@@ -26200,10 +26200,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// igual a
 												// zero,pois
 												// na conta
-												// sÛ cabe 15 linhas,
+												// s√≥ cabe 15 linhas,
 												// passando
 												// isso
-												// È
+												// √©
 												// preciso
 												// gerar
 												// outra
@@ -26214,10 +26214,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													// caso esteja vazio
 													// o
 													// array
-													// ent„o
+													// ent√£o
 													// completa
 													// com
-													// espaÁos
+													// espa√ßos
 													// em
 													// branco
 													if (posicoesString.length == 0) {
@@ -26226,7 +26226,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														// Fonte
 														contaTxt.append("1");
 														// completa com
-														// espaÁos
+														// espa√ßos
 														// em
 														// branco
 														contaTxt.append(Util
@@ -26243,10 +26243,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													// caso contrario
 													// [FS0006 -
 													// Verificar
-													// espaÁos
+													// espa√ßos
 													// para
-													// descriÁ„o
-													// dos serviÁos e
+													// descri√ß√£o
+													// dos servi√ßos e
 													// tarifas
 													// totalmente
 													// preenchido]
@@ -26259,7 +26259,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														linhasDescricaoServicosTarifas
 																.append(posicoesString[posicaoInicial]);
 														// verifica se
-														// n„o È
+														// n√£o √©
 														// a
 														// ultima
 														// posicao do
@@ -26270,10 +26270,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																			.getProperty("line.separator"));
 														}
 													}
-													// posiÁ„o atual
+													// posi√ß√£o atual
 													// recebe
 													// a
-													// posiÁ„o
+													// posi√ß√£o
 													// inicial
 													posicaoAtual = posicaoInicial;
 												}
@@ -26286,7 +26286,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// array,
 												// significa
 												// que todas as strings
-												// j·
+												// j√°
 												// foram
 												// atualizadas
 												// na
@@ -26297,7 +26297,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													// mandar
 													// para
 													// o
-													// mÈtodo
+													// m√©todo
 													// que
 													// o
 													// chamou
@@ -26317,7 +26317,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append("1");
 												// Fonte
 												contaTxt.append("2");
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26349,7 +26349,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaStringComEspacoAEsquerda(
 																valorContaString,
 																17));
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26376,8 +26376,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												String terceiraParte = "";
 
 												/*
-												 * try{ //CondiÁ„o adicionada
-												 * para situaÁ„o estpecÌfica da
+												 * try{ //Condi√ß√£o adicionada
+												 * para situa√ß√£o estpec√≠fica da
 												 * COMPESA if
 												 * (emitirContaHelper.
 												 * getIdImovelPerfil().equals(
@@ -26493,7 +26493,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaString(
 																mesAnoFormatado,
 																7));
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26506,7 +26506,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append("0");
 												// Fonte
 												contaTxt.append("1");
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26547,7 +26547,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaStringComEspacoAEsquerda(
 																numeroIndiceTurbidez,
 																6));
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26556,7 +26556,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaStringComEspacoAEsquerda(
 																numeroCloroResidual,
 																6));
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26569,7 +26569,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												contaTxt.append("1");
 												// Fonte
 												contaTxt.append("1");
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26591,7 +26591,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// .println("***************************");
 												// caso seja conta do
 												// cliente
-												// respons·vel ent„o o
+												// respons√°vel ent√£o o
 												// sequencial
 												// fica nulo
 												if (tipoConta == 3
@@ -26688,7 +26688,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												 * sequencialEmpresaNormal;
 												 * break; }
 												 */
-												// sequencial impress„o
+												// sequencial impress√£o
 												String sequencialImpressaoFormatada = Util
 														.adicionarZerosEsquedaNumero(
 																6,
@@ -26708,7 +26708,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																""
 																		+ sequencialImpressaoFormatada,
 																7));
-												// completa com espaÁos
+												// completa com espa√ßos
 												// em
 												// branco
 												contaTxt.append(Util
@@ -26729,11 +26729,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// contas
 												// seja
 												// debito
-												// autom·tico
-												// i=2;ColeÁ„o de contas
+												// autom√°tico
+												// i=2;Cole√ß√£o de contas
 												// com
-												// dÈbito
-												// autom·tico
+												// d√©bito
+												// autom√°tico
 												StringBuilder[] linhasContas = null;
 												if (tipoConta == 2
 														|| tipoConta == 4
@@ -26744,8 +26744,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													// das
 													// Contas
 													// com
-													// DÈbito
-													// Autom·tico]
+													// D√©bito
+													// Autom√°tico]
 													linhasContas = gerarLinhasContaDebitoAutomatico(
 															emitirContaHelper,
 															sequencialEmpresa);
@@ -26769,8 +26769,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// vai
 												// depender
 												// da
-												// descriÁ„o de
-												// serviÁo
+												// descri√ß√£o de
+												// servi√ßo
 												// e tarifas
 												StringBuilder linhasConta = linhasContas[0];
 												// completa com as
@@ -26787,12 +26787,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// do
 												// while
 												StringBuilder todasPaginasContaTxt = new StringBuilder();
-												// se È a primeira vez
+												// se √© a primeira vez
 												// que
 												// entra
 												// no
 												// while
-												// ent„o
+												// ent√£o
 												// recupera o final da
 												// linha
 												// colocando o
@@ -26805,20 +26805,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// OUTRA
 												// PAGINA)--
 												// //
-												// respons·vel de criar
+												// respons√°vel de criar
 												// outra
 												// pagina
 												// para a
 												// conta
 												// caso a
-												// descriÁ„o dos
-												// serviÁos e
+												// descri√ß√£o dos
+												// servi√ßos e
 												// tarifas
 												// exceda
 												// as 15
 												// linhas
 												while (posicaoAtual != 0) {
-													// È criado para
+													// √© criado para
 													// criar a
 													// stringBuilder
 													// da
@@ -26833,7 +26833,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													// segunda
 													// vez em
 													// diante
-													// È
+													// √©
 													// criado
 													// para criar a
 													// proxima
@@ -26846,7 +26846,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														paginaTxt
 																.append(ultimaLinhasConta);
 														// completa com
-														// espaÁos
+														// espa√ßos
 														// em
 														// branco
 														paginaTxt
@@ -26857,11 +26857,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														// imprime o
 														// sequencial
 														// de
-														// impress„o
+														// impress√£o
 														paginaTxt
 																.append(sequencialImpressaoFormatada);
 														// completa com
-														// espaÁos
+														// espa√ßos
 														// em
 														// branco
 														paginaTxt
@@ -26879,11 +26879,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														// menor ou
 														// igual a
 														// zero,pois na
-														// conta sÛ
+														// conta s√≥
 														// cabe 15
 														// linhas,
 														// passando
-														// isso È
+														// isso √©
 														// preciso gerar
 														// outra
 														// folha
@@ -26897,24 +26897,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														// seja
 														// maior
 														// que a
-														// posiÁ„o
+														// posi√ß√£o
 														// atual + 15
 														// ex.
 														// tamanhoArray(TA)
-														// posiÁ„o
+														// posi√ß√£o
 														// Limite
 														// (PL)
 														// se PA = 15 e
 														// TA =
 														// 16
-														// ent„o PL
+														// ent√£o PL
 														// =
 														// 16(TA)
 														// senao PA = 15
 														// e
 														// TA =
 														// 32
-														// ent„o
+														// ent√£o
 														// PL
 														// =
 														// (15(PA) +
@@ -26930,7 +26930,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																	.append(posicoesString[posicaoInicial]);
 															// verifica
 															// se
-															// n„o È
+															// n√£o √©
 															// a
 															// ultima
 															// posicao
@@ -26942,10 +26942,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																				.getProperty("line.separator"));
 															}
 														}
-														// posiÁ„o atual
+														// posi√ß√£o atual
 														// recebe
 														// a
-														// posiÁ„o
+														// posi√ß√£o
 														// inicial
 														posicaoAtual = posicaoInicial;
 
@@ -26961,7 +26961,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														// significa
 														// que todas as
 														// strings
-														// j·
+														// j√°
 														// foram
 														// atualizadas
 														// na
@@ -26973,7 +26973,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															// mandar
 															// para
 															// o
-															// mÈtodo
+															// m√©todo
 															// que
 															// o
 															// chamou
@@ -27004,7 +27004,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																	.append("1");
 															// completa
 															// com
-															// espaÁos
+															// espa√ßos
 															// em
 															// branco
 															paginaTxt
@@ -27024,7 +27024,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														if (posicaoAtual != 0) {
 															// completa
 															// com
-															// espaÁos
+															// espa√ßos
 															// em
 															// branco
 															paginaTxt
@@ -27035,12 +27035,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															// imprime o
 															// sequencial
 															// de
-															// impress„o
+															// impress√£o
 															paginaTxt
 																	.append(sequencialImpressaoFormatada);
 															// completa
 															// com
-															// espaÁos
+															// espa√ßos
 															// em
 															// branco
 															paginaTxt
@@ -27055,7 +27055,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														} else {
 															// completa
 															// com
-															// espaÁos
+															// espa√ßos
 															// em
 															// branco
 															paginaTxt
@@ -27066,12 +27066,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															// imprime o
 															// sequencial
 															// de
-															// impress„o
+															// impress√£o
 															paginaTxt
 																	.append(sequencialImpressaoFormatada);
 															// completa
 															// com
-															// espaÁos
+															// espa√ßos
 															// em
 															// branco
 															paginaTxt
@@ -27101,9 +27101,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												// da
 												// conta(outra
 												// pagina caso a
-												// descriÁ„o
+												// descri√ß√£o
 												// de
-												// serviÁos e
+												// servi√ßos e
 												// tarifas
 												// exeda
 												// as 15
@@ -27118,7 +27118,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												} else {
 													contaTxt.append(ultimaLinhasConta);
 													// completa com
-													// espaÁos
+													// espa√ßos
 													// em
 													// branco
 													contaTxt.append(Util
@@ -27127,10 +27127,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													// imprime o
 													// sequencial
 													// de
-													// impress„o
+													// impress√£o
 													contaTxt.append(sequencialImpressaoFormatada);
 													// completa com
-													// espaÁos
+													// espa√ßos
 													// em
 													// branco
 													contaTxt.append(Util
@@ -27167,25 +27167,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																.getIdConta(),
 														sequencialImpressao);
 
-											}// fim do laÁo que
+											}// fim do la√ßo que
 												// verifica
 												// se o
-												// helper È diferente de
+												// helper √© diferente de
 												// nulo
-										}// fim do laÁo que verifica
+										}// fim do la√ßo que verifica
 											// as 2
 											// contas
-									}// fim laÁo while do iterator do
+									}// fim la√ßo while do iterator do
 										// objeto
 										// helper
 									countOrdem++;
 									mapContasDivididas = null;
 								}// fim do while que pega os Map
 									// ordenados
-							}// fim do laÁo que verifica se o Map
-								// est·
+							}// fim do la√ßo que verifica se o Map
+								// est√°
 								// nula
-								// fim do laÁo que verifica se a coleÁ„o È
+								// fim do la√ßo que verifica se a cole√ß√£o √©
 								// nula
 
 							if (colecaoConta.size() < quantidadeRegistros) {
@@ -27290,7 +27290,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.atualizarSequencialContaImpressao(mapAtualizaSequencial);
 						mapAtualizaSequencial = null;
 
-					}// fim laÁo if da paginaÁ„o
+					}// fim la√ßo if da pagina√ß√£o
 
 					if (outCartas != null) {
 						if (leituraTipoCarta.length() > 0) {
@@ -27389,7 +27389,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// --------------------------------------------------------
 			//
-			// Registrar o fim da execuÁ„o da Unidade de Processamento
+			// Registrar o fim da execu√ß√£o da Unidade de Processamento
 			//
 			// --------------------------------------------------------
 
@@ -27397,9 +27397,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					idUnidadeIniciada, false);
 
 		} catch (Exception e) {
-			// Este catch serve para interceptar qualquer exceÁ„o que o processo
-			// batch venha a lanÁar e garantir que a unidade de processamento do
-			// batch ser· atualizada com o erro ocorrido
+			// Este catch serve para interceptar qualquer exce√ß√£o que o processo
+			// batch venha a lan√ßar e garantir que a unidade de processamento do
+			// batch ser√° atualizada com o erro ocorrido
 
 			e.printStackTrace();
 			// sessionContext.setRollbackOnly();
@@ -27471,11 +27471,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo que separa a coleÁ„o de contas em 5 listas.
+	 * Met√≥do que separa a cole√ß√£o de contas em 5 listas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @param colecaoConta
@@ -27485,7 +27485,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 *             colecaoContas) throws ControladorException {
 	 * 
 	 *             Collection[] colecaoListas = new Collection[5]; // cria as
-	 *             coleÁıes para as divisıes das contas Collection
+	 *             cole√ß√µes para as divis√µes das contas Collection
 	 *             colecaoContaEstouroConsumo = new ArrayList(); Collection
 	 *             colecaoContaBaixoConsumo = new ArrayList(); Collection
 	 *             colecaoContaDebitoAutomatico = new ArrayList(); Collection
@@ -27522,14 +27522,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 *             List colecaoContasTemporaria = new ArrayList();
 	 *             colecaoContasTemporaria.addAll(colecaoTotalContas.subList(
 	 *             limiteInferior, limiteSuperior)); // vai adicionando as
-	 *             contas que j· foram inseridas nas coleÁıes // anteriores para
-	 *             n„o entrar // na prÛxima consulta(cada conta sÛ pode estar em
-	 *             umas dessas // coleÁıes // anteriores) Collection
+	 *             contas que j√° foram inseridas nas cole√ß√µes // anteriores para
+	 *             n√£o entrar // na pr√≥xima consulta(cada conta s√≥ pode estar em
+	 *             umas dessas // cole√ß√µes // anteriores) Collection
 	 *             idsContasJaUsadas = new ArrayList();
 	 * 
 	 *             try { // ********************** CONTAS ESTOURO CONSUMO //
 	 *             ************************************************** // recebe
-	 *             uma coleÁ„o de emitir contas helper com // estouros // de
+	 *             uma cole√ß√£o de emitir contas helper com // estouros // de
 	 *             consumo colecaoContaEstouroConsumoTemporaria =
 	 *             repositorioFaturamento .pesquisarContasEstouroOuBaixoConsumo(
 	 *             colecaoContasTemporaria,
@@ -27539,11 +27539,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 *             (iteratorEstouroConsumoAux.hasNext()) { EmitirContaHelper
 	 *             emitirContaHelper = (EmitirContaHelper)
 	 *             iteratorEstouroConsumoAux .next(); // inseri o id da conta
-	 *             para n„o entrar o id da conta na // proxima // consulta
+	 *             para n√£o entrar o id da conta na // proxima // consulta
 	 *             idsContasJaUsadas.add(emitirContaHelper.getIdConta()); }
 	 *             colecaoContaEstouroConsumo
 	 *             .addAll(colecaoContaEstouroConsumoTemporaria); // retira os
-	 *             ids da conta que j· foram inseridos na coleÁ„o de // contas
+	 *             ids da conta que j√° foram inseridos na cole√ß√£o de // contas
 	 *             com estouro de consumo
 	 *             colecaoContasTemporaria.removeAll(idsContasJaUsadas);
 	 *             idsContasJaUsadas = new ArrayList(); //
@@ -27551,7 +27551,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 *             ************************************************** //
 	 *             ********************** CONTAS BAIXO CONSUMO //
 	 *             ************************************************** // recebe
-	 *             uma coleÁ„o de parametros(Object[]) das contas com // baixo
+	 *             uma cole√ß√£o de parametros(Object[]) das contas com // baixo
 	 *             // consumo colecaoContaBaixoConsumoTemporaria =
 	 *             repositorioFaturamento .pesquisarContasEstouroOuBaixoConsumo(
 	 *             colecaoContasTemporaria,
@@ -27561,11 +27561,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 *             (iteratorBaixoConsumoAux.hasNext()) { EmitirContaHelper
 	 *             emitirContaHelper = (EmitirContaHelper)
 	 *             iteratorBaixoConsumoAux .next(); // inseri o id da conta para
-	 *             n„o entrar o id da conta na // proxima // consulta
+	 *             n√£o entrar o id da conta na // proxima // consulta
 	 *             idsContasJaUsadas.add(emitirContaHelper.getIdConta()); }
 	 *             colecaoContaBaixoConsumo
 	 *             .addAll(colecaoContaBaixoConsumoTemporaria); // retira os ids
-	 *             da conta que j· foram inseridos na coleÁ„o de // contas com
+	 *             da conta que j√° foram inseridos na cole√ß√£o de // contas com
 	 *             baixo de consumo
 	 *             colecaoContasTemporaria.removeAll(idsContasJaUsadas);
 	 *             idsContasJaUsadas = new ArrayList(); //
@@ -27573,8 +27573,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 *             ************************************************ //
 	 *             ********************** CONTAS DEBITO AUTOMATICO //
 	 *             ********************************************************** //
-	 *             recebe uma coleÁ„o de emitir contas helper com // DÈdito
-	 *             autom·tico colecaoContaDebitoAutomaticoTemporaria =
+	 *             recebe uma cole√ß√£o de emitir contas helper com // D√©dito
+	 *             autom√°tico colecaoContaDebitoAutomaticoTemporaria =
 	 *             repositorioFaturamento
 	 *             .pesquisarContasDebitoAutomatico(colecaoContasTemporaria);
 	 *             Iterator iteratorDebitoAutomaticoAux =
@@ -27582,20 +27582,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 *             (iteratorDebitoAutomaticoAux.hasNext()) { EmitirContaHelper
 	 *             emitirContaHelper = (EmitirContaHelper)
 	 *             iteratorDebitoAutomaticoAux .next(); // inseri o id da conta
-	 *             para n„o entrar o id da conta na // proxima // consulta
+	 *             para n√£o entrar o id da conta na // proxima // consulta
 	 *             idsContasJaUsadas.add(emitirContaHelper.getIdConta()); }
 	 *             colecaoContaDebitoAutomatico
 	 *             .addAll(colecaoContaDebitoAutomaticoTemporaria); // retira os
-	 *             ids da conta que j· foram inseridos na coleÁ„o de // contas
-	 *             com dÈbito autom·tico
+	 *             ids da conta que j√° foram inseridos na cole√ß√£o de // contas
+	 *             com d√©bito autom√°tico
 	 *             colecaoContasTemporaria.removeAll(idsContasJaUsadas);
 	 *             idsContasJaUsadas = new ArrayList(); //
 	 *             ********************** FIM CONTAS DEBITO AUTOMATICO //
 	 *             ********************************************************** //
 	 *             ********************** CONTAS ENTREGA CLIENTE RESPONSAVEL //
 	 *             ********************************************************** //
-	 *             recebe uma coleÁ„o de emitir contas helper com // entrega
-	 *             cliente respons·vel
+	 *             recebe uma cole√ß√£o de emitir contas helper com // entrega
+	 *             cliente respons√°vel
 	 *             colecaoContaEntregaClienteResponsavelTemporaria =
 	 *             repositorioFaturamento
 	 *             .pesquisarContasClienteResponsavel(colecaoContasTemporaria);
@@ -27604,20 +27604,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 *             while (iteratorEntregaClienteRespAux.hasNext()) {
 	 *             EmitirContaHelper emitirContaHelper = (EmitirContaHelper)
 	 *             iteratorEntregaClienteRespAux .next(); // inseri o id da
-	 *             conta para n„o entrar o id da conta na // proxima // consulta
+	 *             conta para n√£o entrar o id da conta na // proxima // consulta
 	 *             idsContasJaUsadas.add(emitirContaHelper.getIdConta()); }
 	 *             colecaoContaEntregaClienteResponsavel
 	 *             .addAll(colecaoContaEntregaClienteResponsavelTemporaria); //
-	 *             retira os ids da conta que j· foram inseridos na coleÁ„o de
-	 *             // contas com entrega para o cliente respons·vel
+	 *             retira os ids da conta que j√° foram inseridos na cole√ß√£o de
+	 *             // contas com entrega para o cliente respons√°vel
 	 *             colecaoContasTemporaria.removeAll(idsContasJaUsadas);
 	 *             idsContasJaUsadas = new ArrayList(); //
 	 *             ********************** FIM CONTAS ENTREGA CLIENTE RESPONSAVEL
 	 *             // ****************************************************** //
 	 *             ********************** CONTAS NORMAIS //
 	 *             ********************************************************** //
-	 *             recebe uma coleÁ„o de emitir contas helper normais(que // n„o
-	 *             atenderam a nenhuma condiÁ„o acima)
+	 *             recebe uma cole√ß√£o de emitir contas helper normais(que // n√£o
+	 *             atenderam a nenhuma condi√ß√£o acima)
 	 *             colecaoContaNormalTemporaria = repositorioFaturamento
 	 *             .pesquisarContasNormais(colecaoContasTemporaria);
 	 *             colecaoContaNormal.addAll(colecaoContaNormalTemporaria); //
@@ -27679,7 +27679,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		while (iteratorEstouroConsumoAux.hasNext()) {
 			EmitirContaHelper emitirContaHelper = (EmitirContaHelper) iteratorEstouroConsumoAux
 					.next();
-			// inseri o id da conta para n„o entrar o id da conta na
+			// inseri o id da conta para n√£o entrar o id da conta na
 			// proxima
 			// consulta
 			idsContasJaUsadas.add(emitirContaHelper.getIdConta());
@@ -27740,7 +27740,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// try {
 		// ********************** CONTAS BAIXO CONSUMO
 		// **************************************************
-		// recebe uma coleÁ„o de parametros(Object[]) das contas com
+		// recebe uma cole√ß√£o de parametros(Object[]) das contas com
 		// baixo
 		// consumo
 		/*
@@ -27752,7 +27752,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		while (iteratorBaixoConsumoAux.hasNext()) {
 			EmitirContaHelper emitirContaHelper = (EmitirContaHelper) iteratorBaixoConsumoAux
 					.next();
-			// inseri o id da conta para n„o entrar o id da conta na
+			// inseri o id da conta para n√£o entrar o id da conta na
 			// proxima
 			// consulta
 			idsContasJaUsadas.add(emitirContaHelper.getIdConta());
@@ -27814,8 +27814,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		try {
 			// ********************** CONTAS DEBITO AUTOMATICO
 			// **********************************************************
-			// recebe uma coleÁ„o de emitir contas helper com
-			// DÈdito autom·tico
+			// recebe uma cole√ß√£o de emitir contas helper com
+			// D√©dito autom√°tico
 			colecaoContaDebitoAutomatico = repositorioFaturamento
 					.pesquisarContasDebitoAutomatico(colecaoContas);
 			Iterator iteratorDebitoAutomaticoAux = colecaoContaDebitoAutomatico
@@ -27824,7 +27824,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				EmitirContaHelper emitirContaHelper = (EmitirContaHelper) iteratorDebitoAutomaticoAux
 						.next();
 
-				// inseri o id da conta para n„o entrar o id da conta na
+				// inseri o id da conta para n√£o entrar o id da conta na
 				// proxima
 				// consulta
 				idsContasJaUsadas.add(emitirContaHelper.getIdConta());
@@ -27884,15 +27884,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		/*
 		 * try { // ********************** CONTAS ENTREGA CLIENTE RESPONSAVEL //
 		 * ********************************************************** // recebe
-		 * uma coleÁ„o de emitir contas helper com // entrega cliente
-		 * respons·vel colecaoContaEntregaClienteResponsavel =
+		 * uma cole√ß√£o de emitir contas helper com // entrega cliente
+		 * respons√°vel colecaoContaEntregaClienteResponsavel =
 		 * repositorioFaturamento
 		 * .pesquisarContasClienteResponsavel(colecaoContas); Iterator
 		 * iteratorEntregaClienteRespAux = colecaoContaEntregaClienteResponsavel
 		 * .iterator(); while (iteratorEntregaClienteRespAux.hasNext()) {
 		 * EmitirContaHelper emitirContaHelper = (EmitirContaHelper)
 		 * iteratorEntregaClienteRespAux .next(); // inseri o id da conta para
-		 * n„o entrar o id da conta na // proxima // consulta
+		 * n√£o entrar o id da conta na // proxima // consulta
 		 * idsContasJaUsadas.add(emitirContaHelper.getIdConta()); } //
 		 * colecaoContaEntregaClienteResponsavel
 		 * .addAll(colecaoContaEntregaClienteResponsavelTemporaria); //
@@ -27943,8 +27943,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// ********************** CONTAS NORMAIS
 			// **********************************************************
-			// recebe uma coleÁ„o de emitir contas helper normais(que
-			// n„o atenderam a nenhuma condiÁ„o acima)
+			// recebe uma cole√ß√£o de emitir contas helper normais(que
+			// n√£o atenderam a nenhuma condi√ß√£o acima)
 			colecaoContaNormal = repositorioFaturamento
 					.pesquisarContasNormais(colecaoContas);
 			// colecaoContaNormal.addAll(colecaoContaNormalTemporaria);
@@ -27962,13 +27962,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0001] Determinar Mensagem de Acordo com o Tipo de Conta
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @param colecaoConta
@@ -27993,13 +27993,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB0002] Determinar tipo de ligaÁ„o e tipo de mediÁ„o
+	 * [SB0002] Determinar tipo de liga√ß√£o e tipo de medi√ß√£o
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @param colecaoConta
@@ -28012,7 +28012,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Integer tipoLigacao = null;
 		Integer tipoMedicao = null;
 
-		// se a situaÁ„o de agua da conta for ligado ou cortado
+		// se a situa√ß√£o de agua da conta for ligado ou cortado
 		if (emitirContaHelper.getIdLigacaoAguaSituacao().equals(
 				LigacaoAguaSituacao.LIGADO)
 				|| emitirContaHelper.getIdLigacaoAguaSituacao().equals(
@@ -28023,7 +28023,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			tipoLigacao = LigacaoTipo.LIGACAO_AGUA;
 			tipoMedicao = MedicaoTipo.LIGACAO_AGUA;
 		} else {
-			// caso contr·rio se ligaÁ„o esgoto situaÁ„o for iguaÁ a ligado
+			// caso contr√°rio se liga√ß√£o esgoto situa√ß√£o for igua√ß a ligado
 			if (emitirContaHelper.getIdLigacaoEsgotoSituacao().equals(
 					LigacaoEsgotoSituacao.LIGADO)) {
 				tipoLigacao = LigacaoTipo.LIGACAO_ESGOTO;
@@ -28037,13 +28037,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0003] Obter Dados do Consumo e Medicao Anterior
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 17/05/2006
 	 * 
 	 * @param colecaoConta
@@ -28060,9 +28060,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		String mesAnoFormatado = Util.formatarAnoMesParaMesAno(anoMesSubtraido)
 				+ " -";
 
-		// adiciona o mes/ano formatado com o traÁo
+		// adiciona o mes/ano formatado com o tra√ßo
 		dadosConsumoAnterior.append(Util.completaString(mesAnoFormatado, 9));
-		// caso o tipo de ligaÁ„o e mediÁ„o seja diferente de nulo
+		// caso o tipo de liga√ß√£o e medi√ß√£o seja diferente de nulo
 		if (tipoLigacao != null && tipoMedicao != null) {
 			Object[] parmsConsumoHistorico = null;
 			Integer idLeituraAnormalidade = null;
@@ -28082,13 +28082,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 			try {
 
-				// caso o tipo de mediÁ„o seja agua
+				// caso o tipo de medi√ß√£o seja agua
 				if (tipoLigacao.equals(MedicaoTipo.LIGACAO_AGUA)) {
 					idLeituraAnormalidade = repositorioMicromedicao
 							.pesquisarIdLeituraAnormalidadeTipoAgua(
 									emitirConta.getIdImovel(), anoMesSubtraido);
 				} else {
-					// sen„o caso o tipo de mediÁ„o seja poco
+					// sen√£o caso o tipo de medi√ß√£o seja poco
 					if (tipoMedicao.equals(MedicaoTipo.POCO)) {
 						idLeituraAnormalidade = repositorioMicromedicao
 								.pesquisarIdLeituraAnormalidadeTipoEsgoto(
@@ -28121,7 +28121,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}
 		} else {
-			// sen„o completa com espaÁos em branco
+			// sen√£o completa com espa√ßos em branco
 			dadosConsumoAnterior.append(Util.completaString("", 11));
 		}
 
@@ -28129,13 +28129,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB0004] Obter Dados da MediÁ„o da Conta
+	 * [SB0004] Obter Dados da Medi√ß√£o da Conta
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 17/05/2006
 	 * 
 	 * @param colecaoConta
@@ -28147,10 +28147,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		try {
 
 			/**
-			 * Inclusao de um campo no retorno do mÈtodo.
+			 * Inclusao de um campo no retorno do m√©todo.
 			 * Melhorias na 2 via da conta impressa.
 			 */
-			// caso o tipo de mediÁ„o seja agua
+			// caso o tipo de medi√ß√£o seja agua
 			if (tipoMedicao != null
 					&& tipoMedicao.equals(MedicaoTipo.LIGACAO_AGUA)) {
 				parmsMedicao = repositorioMicromedicao
@@ -28179,7 +28179,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 
 			} else {
-				// sen„o caso o tipo de mediÁ„o seja poco
+				// sen√£o caso o tipo de medi√ß√£o seja poco
 				if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.POCO)) {
 					parmsMedicao = repositorioMicromedicao
 							.obterDadosMedicaoContaTipoPoco(
@@ -28197,9 +28197,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * [UC0348] Emitir Contas
-	 * [SB0005] Obter Consumo Faturado e Consumo mÈdio Di·rio
+	 * [SB0005] Obter Consumo Faturado e Consumo m√©dio Di√°rio
 	 */
 	public String[] obterConsumoFaturadoConsumoMedioDiario(EmitirContaHelper helper, Integer tipoMedicao, String diasConsumo) throws ControladorException {
 		String[] parmsConsumo = new String[2];
@@ -28228,13 +28228,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0009] Obter Mensagem de Rateio de Consumo ou Consumo fixo de Esgoto
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * @param colecaoConta
@@ -28273,13 +28273,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00010] Gerar Linhas da DescriÁ„o dos ServiÁos e Tarifas
+	 * [SB00010] Gerar Linhas da Descri√ß√£o dos Servi√ßos e Tarifas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 26/05/2006
 	 * 
 	 * @param colecaoConta
@@ -28295,23 +28295,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		if (emitirContaHelper.getValorAgua() != null
 				&& emitirContaHelper.getValorAgua().compareTo(
 						new BigDecimal("0.00")) == 1) {
-			// [SB0011] - Gerar Linhas da Tarifa de ¡gua
+			// [SB0011] - Gerar Linhas da Tarifa de √Ågua
 			StringBuilder linhasTarifaAgua = gerarLinhasTarifaAgua(
 					emitirContaHelper, consumoRateio, parmsMedicaoHistorico,
 					tipoMedicao);
 			linhasDescricaoServicosTarifasTotal.append(linhasTarifaAgua);
 		}
-		// caso o valor de ·gua de esgoto seja maior que zero
+		// caso o valor de √°gua de esgoto seja maior que zero
 		if (emitirContaHelper.getValorEsgoto() != null
 				&& emitirContaHelper.getValorEsgoto().compareTo(
 						new BigDecimal("0.00")) == 1) {
 
 			// [SB0012] - Gerar Linhas da tarifa de Esgoto
 			StringBuilder linhasTarifaEsgoto = gerarLinhasTarifaEsgoto(emitirContaHelper);
-			// caso a stringBuilder j· esteja preenchida
+			// caso a stringBuilder j√° esteja preenchida
 			if (linhasDescricaoServicosTarifasTotal != null
 					&& linhasDescricaoServicosTarifasTotal.length() != 0) {
-				// caso a stringBuilder j· esteja preenchida
+				// caso a stringBuilder j√° esteja preenchida
 				if (linhasTarifaEsgoto != null
 						&& linhasTarifaEsgoto.length() != 0) {
 					linhasDescricaoServicosTarifasTotal.append(System
@@ -28328,12 +28328,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		if (emitirContaHelper.getDebitos() != null
 				&& emitirContaHelper.getDebitos().compareTo(
 						new BigDecimal("0.00")) == 1) {
-			// [SB0013] - Gerar Linhas de DÈbitos Cobrados
+			// [SB0013] - Gerar Linhas de D√©bitos Cobrados
 			StringBuilder linhasDebitoCobrados = gerarLinhasDebitoCobrados(emitirContaHelper);
-			// caso a stringBuilder j· esteja preenchida
+			// caso a stringBuilder j√° esteja preenchida
 			if (linhasDescricaoServicosTarifasTotal != null
 					&& linhasDescricaoServicosTarifasTotal.length() != 0) {
-				// caso a stringBuilder j· esteja preenchida
+				// caso a stringBuilder j√° esteja preenchida
 				if (linhasDebitoCobrados != null
 						&& linhasDebitoCobrados.length() != 0) {
 					linhasDescricaoServicosTarifasTotal.append(System
@@ -28347,14 +28347,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 		}
-		// caso o valor de crÈditos realizados seja maior que zero
+		// caso o valor de cr√©ditos realizados seja maior que zero
 		if (emitirContaHelper.getValorCreditos() != null
 				&& emitirContaHelper.getValorCreditos().compareTo(
 						new BigDecimal("0.00")) == 1) {
-			// [SB0014] - Gerar Linhas de CrÈdito Realizado
+			// [SB0014] - Gerar Linhas de Cr√©dito Realizado
 			StringBuilder linhasCreditoRealizados = gerarLinhasCreditosRealizados(emitirContaHelper);
 
-			// caso a stringBuilder j· esteja preenchida
+			// caso a stringBuilder j√° esteja preenchida
 			if (linhasDescricaoServicosTarifasTotal != null
 					&& linhasDescricaoServicosTarifasTotal.length() != 0) {
 				if (linhasCreditoRealizados != null
@@ -28377,10 +28377,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// [SB0015] - Gerar Linhas dos Impostos Retidos
 			StringBuilder linhasImpostosRetidos = gerarLinhasImpostosRetidos(emitirContaHelper);
 
-			// caso a stringBuilder j· esteja preenchida
+			// caso a stringBuilder j√° esteja preenchida
 			if (linhasDescricaoServicosTarifasTotal != null
 					&& linhasDescricaoServicosTarifasTotal.length() != 0) {
-				// caso a stringBuilder j· esteja preenchida
+				// caso a stringBuilder j√° esteja preenchida
 				if (linhasImpostosRetidos != null
 						&& linhasImpostosRetidos.length() != 0) {
 					linhasDescricaoServicosTarifasTotal.append(System
@@ -28400,13 +28400,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00011] Gerar Linhas da Tarifa de ¡gua
+	 * [SB00011] Gerar Linhas da Tarifa de √Ågua
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 22/05/2006
 	 * 
 	 * @param colecaoConta
@@ -28455,14 +28455,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// quantidade de economias
 				linhasTarifaAgua.append(Util.adicionarZerosEsquedaNumero(3, ""
 						+ contaCategoria.getQuantidadeEconomia()));
-				// completa com espaÁos em branco
+				// completa com espa√ßos em branco
 				linhasTarifaAgua.append(Util.completaString("", 2));
 				if (contaCategoria.getQuantidadeEconomia() == 1) {
 					linhasTarifaAgua.append("UNIDADE ");
 				} else {
 					linhasTarifaAgua.append("UNIDADES");
 				}
-				// completa com espaÁos em branco
+				// completa com espa√ßos em branco
 				linhasTarifaAgua.append(Util.completaString("", 102));
 				linhasTarifaAgua.append(System.getProperty("line.separator"));
 
@@ -28471,14 +28471,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				linhasTarifaAgua.append(" ");
 				// Fonte
 				linhasTarifaAgua.append("1");
-				// completa com espaÁos em branco
+				// completa com espa√ßos em branco
 				linhasTarifaAgua.append(" ");
-				// caso n„o existam dados de mediÁ„o
+				// caso n√£o existam dados de medi√ß√£o
 				if (parmsMedicaoHistorico == null) {
 					// Constante
-					linhasTarifaAgua.append("TARIFA MÕNIMA");
+					linhasTarifaAgua.append("TARIFA M√çNIMA");
 
-					// Valor da tarifa mÌnima de ·gua para a categoria por
+					// Valor da tarifa m√≠nima de √°gua para a categoria por
 					// economia
 					BigDecimal qtdEconomia = Util
 							.formatarMoedaRealparaBigDecimal(""
@@ -28496,25 +28496,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					linhasTarifaAgua.append(Util
 							.completaStringComEspacoAEsquerda(
 									valorTarifaMinima, 6));
-					// completa com espaÁos em branco
+					// completa com espa√ßos em branco
 					linhasTarifaAgua.append(" ");
 					// Constante
 					linhasTarifaAgua.append("POR UNIDADE");
-					// completa com espaÁos em branco
+					// completa com espa√ßos em branco
 					linhasTarifaAgua.append(Util.completaString("", 18));
 					// Constante
 					linhasTarifaAgua.append("MINIMO");
-					// completa com espaÁos em branco
+					// completa com espa√ßos em branco
 					linhasTarifaAgua.append(Util.completaString("", 11));
-					// valor da ·gua para categoria
+					// valor da √°gua para categoria
 					String valorAgua = Util.formatarMoedaReal(contaCategoria
 							.getValorAgua());
 					linhasTarifaAgua.append(Util
 							.completaStringComEspacoAEsquerda(valorAgua, 17));
-					// completa com espaÁos em branco
+					// completa com espa√ßos em branco
 					linhasTarifaAgua.append(Util.completaString("", 45));
 				} else {
-					// recupera a coleÁ„o de conta categoria consumo faixa
+					// recupera a cole√ß√£o de conta categoria consumo faixa
 					Collection colecaoContaCategoriaConsumoFaixa = null;
 					try {
 						colecaoContaCategoriaConsumoFaixa = repositorioFaturamento
@@ -28534,7 +28534,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						linhasTarifaAgua.append("ATE");
 						// Constante
 						linhasTarifaAgua.append(" ");
-						// Consumo mÌnimo de ·gua para a categoria por
+						// Consumo m√≠nimo de √°gua para a categoria por
 						// economia
 
 						BigDecimal qtdEconomia = Util
@@ -28563,11 +28563,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						linhasTarifaAgua.append(Util
 								.completaStringComEspacoAEsquerda(
 										consumoMinima, 2));
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(" ");
 						// Constante
 						linhasTarifaAgua.append("M3");
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(Util.completaString("", 7));
 						// Constante
 						linhasTarifaAgua.append("- R$");
@@ -28585,13 +28585,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						linhasTarifaAgua.append(Util
 								.completaStringComEspacoAEsquerda(
 										valorTarifaMinima, 6));
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(" ");
 						// Constante
 						linhasTarifaAgua.append(" (POR UNIDADE)");
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(Util.completaString("", 8));
-						// Consumo mÌnimo de ·gua
+						// Consumo m√≠nimo de √°gua
 						if (contaCategoria.getConsumoMinimoAgua() != null
 								&& !contaCategoria.getConsumoMinimoAgua()
 										.equals("")) {
@@ -28605,11 +28605,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							linhasTarifaAgua.append(Util
 									.completaStringComEspacoAEsquerda("", 4));
 						}
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(" ");
 						// Constante
 						linhasTarifaAgua.append("M3");
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(Util.completaString("", 10));
 						// valor agua para categoria
 						String valorAguaCategoria = "";
@@ -28621,7 +28621,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						linhasTarifaAgua.append(Util
 								.completaStringComEspacoAEsquerda(
 										valorAguaCategoria, 17));
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(Util.completaString("", 45));
 
 						Iterator iteratorContaCategoriaConsumoFaixa = colecaoContaCategoriaConsumoFaixa
@@ -28638,7 +28638,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							linhasTarifaAgua.append(" ");
 							// Fonte
 							linhasTarifaAgua.append("1");
-							// completa com espaÁos em branco
+							// completa com espa√ßos em branco
 							linhasTarifaAgua.append(" ");
 							// caso a faixa seja a ultima ta tarifa de consumo
 							if (contaCategoriaConsumoFaixa.getConsumoFaixaFim()
@@ -28663,7 +28663,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												valorTarifaFaixa, 6));
 								// Constante
 								linhasTarifaAgua.append(" POR M3");
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										14));
 
@@ -28679,7 +28679,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														6));
 								// Constante
 								linhasTarifaAgua.append(" M3");
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										10));
 								// valor da agua na faixa
@@ -28690,7 +28690,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								linhasTarifaAgua.append(Util
 										.completaStringComEspacoAEsquerda(
 												valorAguaFaixa, 17));
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										45));
 
@@ -28713,7 +28713,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												consumoFinalFaixa, 3));
 								// Constante
 								linhasTarifaAgua.append(" M3");
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										3));
 								// Constante
@@ -28727,7 +28727,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												valorTarifaFaixa, 6));
 								// Constante
 								linhasTarifaAgua.append(" POR M3");
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										14));
 								// consumo de Agua na faixa
@@ -28742,7 +28742,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														6));
 								// Constante
 								linhasTarifaAgua.append(" M3");
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										10));
 								// valor da agua na faixa
@@ -28753,14 +28753,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								linhasTarifaAgua.append(Util
 										.completaStringComEspacoAEsquerda(
 												valorAguaFaixa, 17));
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										45));
 
 							}
 						}
 					} else {
-						linhasTarifaAgua.append("CONSUMO DE ¡GUA");
+						linhasTarifaAgua.append("CONSUMO DE √ÅGUA");
 						linhasTarifaAgua.append(Util
 								.completaStringComEspacoAEsquerda(""
 										+ contaCategoria.getConsumoAgua(), 6)
@@ -28782,13 +28782,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB00012] Gerar Linhas da Tarifa de Esgoto
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 23/05/2006
 	 * 
 	 * @param colecaoConta
@@ -28816,33 +28816,33 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			linhasTarifaEsgoto.append(Util.completaStringComEspacoAEsquerda(
 					percentualEsgoto, 6));
 			// Constante
-			linhasTarifaEsgoto.append(" % DO VALOR DA ¡GUA");
-			// completa com espaÁos em branco
+			linhasTarifaEsgoto.append(" % DO VALOR DA √ÅGUA");
+			// completa com espa√ßos em branco
 			linhasTarifaEsgoto.append(Util.completaString("", 35));
 			// Percentual esgoto
 			String valorEsgoto = Util.formatarMoedaReal(emitirContaHelper
 					.getValorEsgoto());
 			linhasTarifaEsgoto.append(Util.completaStringComEspacoAEsquerda(
 					valorEsgoto, 17));
-			// completa com espaÁos em branco
+			// completa com espa√ßos em branco
 			linhasTarifaEsgoto.append(Util.completaString("", 45));
 
 		} else {
-			// completa com espaÁos em branco
+			// completa com espa√ßos em branco
 			linhasTarifaEsgoto.append(Util.completaString("", 42));
 			// Volume coletado de esgoto
 			linhasTarifaEsgoto.append(Util.completaStringComEspacoAEsquerda(""
 					+ emitirContaHelper.getConsumoEsgoto(), 6));
 			// Constante
 			linhasTarifaEsgoto.append(" M3");
-			// completa com espaÁos em branco
+			// completa com espa√ßos em branco
 			linhasTarifaEsgoto.append(Util.completaString("", 9));
 			// Percentual esgoto
 			String valorEsgoto = Util.formatarMoedaReal(emitirContaHelper
 					.getValorEsgoto());
 			linhasTarifaEsgoto.append(Util.completaStringComEspacoAEsquerda(
 					valorEsgoto, 17));
-			// completa com espaÁos em branco
+			// completa com espa√ßos em branco
 			linhasTarifaEsgoto.append(Util.completaString("", 45));
 		}
 
@@ -28850,13 +28850,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00013] Gerar Linhas de DÈbitos Cobrados
+	 * [SB00013] Gerar Linhas de D√©bitos Cobrados
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 23/05/2006
 	 * 
 	 * @param colecaoConta
@@ -28895,7 +28895,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						valorDebitosCobrados = Util
 								.formatarMoedaReal((BigDecimal) parmsDebitoAutomatico[0]);
 					}
-					// numero de prestaÁ„o do dÈbito
+					// numero de presta√ß√£o do d√©bito
 					if (parmsDebitoAutomatico[1] != null) {
 						numeroPrestacao = ""
 								+ ((Short) parmsDebitoAutomatico[1]);
@@ -28906,7 +28906,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					/*
 					 * Alterado por Vivianne Sousa em 11/02/2008 - Analista:
-					 * Adriano criaÁ„o do bonus para parcelamento com RD
+					 * Adriano cria√ß√£o do bonus para parcelamento com RD
 					 * especial
 					 */
 					// numero parcela bonus
@@ -28931,29 +28931,29 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Fonte
 						linhasDebitosCobrados.append("1");
 						// Constante
-						linhasDebitosCobrados.append("PARCELAMENTO DE D…BITOS");
-						// Completa com espaÁos em branco
+						linhasDebitosCobrados.append("PARCELAMENTO DE D√âBITOS");
+						// Completa com espa√ßos em branco
 						linhasDebitosCobrados
 								.append(Util.completaString("", 2));
 						// Constante
 						linhasDebitosCobrados.append("PARCELA ");
-						// numero da prestaÁ„o do dÈbito
+						// numero da presta√ß√£o do d√©bito
 						linhasDebitosCobrados.append(Util
 								.completaStringComEspacoAEsquerda(
 										numeroPrestacao, 3));
 						// Constante
 						linhasDebitosCobrados.append("/");
-						// numero total da prestaÁ„o do dÈbito
+						// numero total da presta√ß√£o do d√©bito
 						linhasDebitosCobrados.append(Util.completaString(
 								totalPrestacaoMenosBonus, 3));
-						// Completa com espaÁos em branco
+						// Completa com espa√ßos em branco
 						linhasDebitosCobrados.append(Util
 								.completaString("", 27));
-						// Completa com espaÁos em branco
+						// Completa com espa√ßos em branco
 						linhasDebitosCobrados.append(Util
 								.completaStringComEspacoAEsquerda(
 										valorDebitosCobrados, 17));
-						// Completa com espaÁos em branco
+						// Completa com espa√ßos em branco
 						linhasDebitosCobrados.append(Util
 								.completaString("", 45));
 					}
@@ -28978,60 +28978,60 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& !colecaoDebitoCobradoPorTipo.isEmpty()) {
 			ListIterator iteratorDebitoCobradoPorTipo = (ListIterator) colecaoDebitoCobradoPorTipo
 					.listIterator();
-			// vari·vel respons·vel para controle de mudanÁa do tipo de
-			// dÈbito
+			// vari√°vel respons√°vel para controle de mudan√ßa do tipo de
+			// d√©bito
 			boolean mudou = true;
-			// variavel que verifica se È a primeira vez,de cada tipo do
-			// dÈbito,que entra para ser escrito
-			// no txt sÛ uma vez a descriÁ„o do tipo do debito
+			// variavel que verifica se √© a primeira vez,de cada tipo do
+			// d√©bito,que entra para ser escrito
+			// no txt s√≥ uma vez a descri√ß√£o do tipo do debito
 			boolean primeiraVez = true;
 			boolean entrouPrimeiraVez = false;
 			Integer idDebitoTipoVerificador = null;
 			BigDecimal valorTotalPrestacoes = new BigDecimal("0.00");
 			String totalPrestacaoMenosBonus = "";
-			// valor da pretaÁ„o
+			// valor da preta√ß√£o
 			BigDecimal valorPrestacao = null;
-			// numero da pretaÁ„o atual
+			// numero da preta√ß√£o atual
 			Integer numeroPrestacaoDebito = null;
-			// numero total de prestaÁıes
+			// numero total de presta√ß√µes
 			Integer numeroPrestacaoTotal = null;
-			// colecao para guardar os ano/mes referencia do dÈbito cobrado
+			// colecao para guardar os ano/mes referencia do d√©bito cobrado
 			Collection colecaoAnoMesReferenciaDebito = new ArrayList();
 			// cria um int que vai ver o tamanho da string builder
 			// dependendo da quantidade
-			// de mes/ano referencia calcula os espaÁos em brancos
+			// de mes/ano referencia calcula os espa√ßos em brancos
 			// para o valor ficar no lugar certo
 			int tamanhoAnoMesReferencia = 0;
 			while (iteratorDebitoCobradoPorTipo.hasNext()) {
 				Object[] parmsDebitoCobradoPorTipo = (Object[]) iteratorDebitoCobradoPorTipo
 						.next();
 
-				// recupera os parametros da coleÁ„o
-				// valor da pretaÁ„o
+				// recupera os parametros da cole√ß√£o
+				// valor da preta√ß√£o
 				if (parmsDebitoCobradoPorTipo[0] != null) {
 					valorPrestacao = (BigDecimal) parmsDebitoCobradoPorTipo[0];
 				}
-				// numero da pretaÁ„o atual
+				// numero da preta√ß√£o atual
 				if (parmsDebitoCobradoPorTipo[1] != null) {
 					numeroPrestacaoDebito = new Integer(""
 							+ (Short) parmsDebitoCobradoPorTipo[1]);
 				}
-				// numero total de prestaÁıes
+				// numero total de presta√ß√µes
 				if (parmsDebitoCobradoPorTipo[2] != null) {
 					numeroPrestacaoTotal = new Integer(""
 							+ (Short) parmsDebitoCobradoPorTipo[2]);
 				}
-				// ano Mes ReferÍncia do dÈbito
+				// ano Mes Refer√™ncia do d√©bito
 				Integer anoMesReferencia = null;
 				if (parmsDebitoCobradoPorTipo[3] != null) {
 					anoMesReferencia = (Integer) parmsDebitoCobradoPorTipo[3];
 				}
-				// id do tipo do dÈbito
+				// id do tipo do d√©bito
 				Integer idDebitoTipo = null;
 				if (parmsDebitoCobradoPorTipo[4] != null) {
 					idDebitoTipo = (Integer) parmsDebitoCobradoPorTipo[4];
 				}
-				// descriÁ„o do tipo do dÈbito
+				// descri√ß√£o do tipo do d√©bito
 				String descricaoDebitoTipo = null;
 				if (parmsDebitoCobradoPorTipo[5] != null) {
 					descricaoDebitoTipo = (String) parmsDebitoCobradoPorTipo[5];
@@ -29039,7 +29039,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				/*
 				 * Alterado por Vivianne Sousa em 21/12/2007 - Analista: Adriano
-				 * criaÁ„o do bonus para parcelamento com RD especial
+				 * cria√ß√£o do bonus para parcelamento com RD especial
 				 */
 				Short numeroParcelaBonus = 0;
 				// numero parcela bonus
@@ -29050,7 +29050,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						+ (numeroPrestacaoTotal.intValue() - numeroParcelaBonus
 								.intValue());
 
-				// muda o estado do boolean e o valor do dÈbito tipo
+				// muda o estado do boolean e o valor do d√©bito tipo
 				// verificador
 				// na primeira vez ou quando mudar o tipo
 				if (mudou) {
@@ -29058,7 +29058,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					mudou = false;
 					tamanhoAnoMesReferencia = 0;
 				}
-				// caso seja o mesmo tipo dÈbito
+				// caso seja o mesmo tipo d√©bito
 				if (idDebitoTipo.equals(idDebitoTipoVerificador)) {
 					if (primeiraVez) {
 						if (linhasDebitosCobrados != null
@@ -29071,7 +29071,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						linhasDebitosCobrados.append(" ");
 						// Fonte
 						linhasDebitosCobrados.append("1");
-						// descriÁ„o do tipo de dÈbito
+						// descri√ß√£o do tipo de d√©bito
 						linhasDebitosCobrados.append(Util.completaString(
 								descricaoDebitoTipo, 30));
 						primeiraVez = false;
@@ -29079,10 +29079,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					} else {
 						entrouPrimeiraVez = false;
 					}
-					// adiciona o valor da prestaÁ„o ao total
+					// adiciona o valor da presta√ß√£o ao total
 					valorTotalPrestacoes = valorTotalPrestacoes
 							.add(valorPrestacao);
-					// adiciona o ano/mes referencia na coleÁ„o
+					// adiciona o ano/mes referencia na cole√ß√£o
 					if (anoMesReferencia != null) {
 						colecaoAnoMesReferenciaDebito.add(anoMesReferencia);
 					} else {
@@ -29098,38 +29098,38 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							linhasDebitosCobrados.append(" ");
 							// Fonte
 							linhasDebitosCobrados.append("1");
-							// descriÁ„o do tipo de dÈbito
+							// descri√ß√£o do tipo de d√©bito
 							linhasDebitosCobrados.append(Util.completaString(
 									descricaoDebitoTipo, 30));
 						}
 						// Constante
 						linhasDebitosCobrados.append("PARCELA ");
-						// numero da prestaÁ„o do dÈbito
+						// numero da presta√ß√£o do d√©bito
 						linhasDebitosCobrados.append(Util
 								.completaStringComEspacoAEsquerda(""
 										+ numeroPrestacaoDebito, 3));
 						// Constante
 						linhasDebitosCobrados.append("/");
-						// numero total da prestaÁ„o do dÈbito
+						// numero total da presta√ß√£o do d√©bito
 						linhasDebitosCobrados.append(Util.completaString(
 								totalPrestacaoMenosBonus, 3));
-						// Completa com espaÁos em branco
+						// Completa com espa√ßos em branco
 						linhasDebitosCobrados.append(Util
 								.completaString("", 22));
-						// Valor da pretaÁ„o
+						// Valor da preta√ß√£o
 						String valorPrestacaoString = Util
 								.formatarMoedaReal(valorPrestacao);
 						linhasDebitosCobrados.append(Util
 								.completaStringComEspacoAEsquerda(
 										valorPrestacaoString, 17));
-						// Completa com espaÁos em branco
+						// Completa com espa√ßos em branco
 						linhasDebitosCobrados.append(Util
 								.completaString("", 45));
 					}
 
 				} else {
-					// caso a coleÁ„o dos meses de referÍncia do grupo do
-					// tipo de dÈbito esteja preenchida
+					// caso a cole√ß√£o dos meses de refer√™ncia do grupo do
+					// tipo de d√©bito esteja preenchida
 					if (colecaoAnoMesReferenciaDebito != null
 							&& !colecaoAnoMesReferenciaDebito.isEmpty()) {
 						Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito
@@ -29140,7 +29140,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.next();
 							String anoMesReferenciaDebitoString = null;
 							if (i == 1) {
-								// mes/ano referencia do dÈbito
+								// mes/ano referencia do d√©bito
 								anoMesReferenciaDebitoString = Util
 										.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 								linhasDebitosCobrados
@@ -29151,27 +29151,27 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// caso exita somente um mes/ano de
 								// referencia na lista
 								if (colecaoAnoMesReferenciaDebito.size() == 1) {
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(Util
 											.completaString("", 30));
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalPrestacoes);
 									linhasDebitosCobrados.append(Util
 											.completaStringComEspacoAEsquerda(
 													valorAcumulado, 17));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(Util
 											.completaString("", 45));
 
 								} else {
 
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(Util
 											.completaString("", 92));
 								}
 							} else {
-								// caso i seja igual a 2 ent„o comeÁa a
+								// caso i seja igual a 2 ent√£o come√ßa a
 								// linha 3 do subFluxo
 								if (i == 2) {
 									linhasDebitosCobrados.append(System
@@ -29181,7 +29181,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									linhasDebitosCobrados.append(" ");
 									// Fonte
 									linhasDebitosCobrados.append("1");
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(" ");
 									// mes/ano referencia do debito
 									anoMesReferenciaDebitoString = Util
@@ -29191,7 +29191,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													.completaString(
 															anoMesReferenciaDebitoString,
 															7));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(" ");
 									// adiciona o tamanho do mes/ano
 									// referencia
@@ -29199,18 +29199,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// caso exita somente um mes/ano de
 									// referencia na lista
 									if (colecaoAnoMesReferenciaDebito.size() == 2) {
-										// o tamanho de espaÁos em
+										// o tamanho de espa√ßos em
 										// branco vai ser o tamanho sem
 										// os mes/ano - os meses/anos
 										// colocados na
 										// stringbuilder.ex.:76-15=61
-										// espaÁos em brancos
+										// espa√ßos em brancos
 										int tamanhoEspacosBrancos = 66 - tamanhoAnoMesReferencia;
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										linhasDebitosCobrados.append(Util
 												.completaString("",
 														tamanhoEspacosBrancos));
-										// valor acumulado do tipo do dÈbito
+										// valor acumulado do tipo do d√©bito
 										String valorAcumulado = Util
 												.formatarMoedaReal(valorTotalPrestacoes);
 										linhasDebitosCobrados
@@ -29218,18 +29218,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaStringComEspacoAEsquerda(
 																valorAcumulado,
 																17));
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										linhasDebitosCobrados.append(Util
 												.completaString("", 45));
 									} /*
-									 * else { // completa espaÁos em brancos
+									 * else { // completa espa√ßos em brancos
 									 * linhasDebitosCobrados.append(" "); }
 									 */
 
 								} else {
-									// caso exista atÈ mais 6 ocorrÍncias na
+									// caso exista at√© mais 6 ocorr√™ncias na
 									// lista de meses
-									// -1 pq j· foi colocado na string o
+									// -1 pq j√° foi colocado na string o
 									// ultimo anoMes
 									if ((colecaoAnoMesReferenciaDebito.size() - 1) <= 6) {
 
@@ -29241,31 +29241,31 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaString(
 																anoMesReferenciaDebitoString,
 																7));
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										linhasDebitosCobrados.append(" ");
 										// adiciona o tamanho do mes/ano
-										// referencia + o espaÁo em branco
+										// referencia + o espa√ßo em branco
 										tamanhoAnoMesReferencia = tamanhoAnoMesReferencia + 8;
 
-										// caso n„o tenha outro ano mes na
-										// coleÁ„o ent„o
+										// caso n√£o tenha outro ano mes na
+										// cole√ß√£o ent√£o
 										// completa a linha com o valor
 										if (!iteratorAnoMesReferenciaDebito
 												.hasNext()) {
-											// o tamanho de espaÁos em
+											// o tamanho de espa√ßos em
 											// branco vai ser o tamanho sem
 											// os mes/ano - os meses/anos
 											// colocados na
 											// stringbuilder.ex.:76-15=61
-											// espaÁos em brancos
+											// espa√ßos em brancos
 											int tamanhoEspacosBrancos = 66 - tamanhoAnoMesReferencia;
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasDebitosCobrados
 													.append(Util
 															.completaString("",
 																	tamanhoEspacosBrancos));
 											// valor acumulado do tipo do
-											// dÈbito
+											// d√©bito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalPrestacoes);
 											linhasDebitosCobrados
@@ -29273,17 +29273,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															.completaStringComEspacoAEsquerda(
 																	valorAcumulado,
 																	17));
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasDebitosCobrados.append(Util
 													.completaString("", 45));
 										}
 
 									} else {
 										// se existir mais de 6 ano/mes na
-										// coleÁ„oAnoMesReferenciaDebito
-										// ent„o sÛ mostra as 5 maiores
+										// cole√ß√£oAnoMesReferenciaDebito
+										// ent√£o s√≥ mostra as 5 maiores
 										if (i < 7) {
-											// mes/ano referencia do dÈbito
+											// mes/ano referencia do d√©bito
 											anoMesReferenciaDebitoString = Util
 													.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 											linhasDebitosCobrados
@@ -29291,15 +29291,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															.completaString(
 																	anoMesReferenciaDebitoString,
 																	7));
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasDebitosCobrados.append(" ");
 										} else {
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasDebitosCobrados.append(Util
 													.completaString("E OUTRAS",
 															18));
 											// valor acumulado do tipo do
-											// dÈbito
+											// d√©bito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalPrestacoes);
 											linhasDebitosCobrados
@@ -29307,7 +29307,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															.completaStringComEspacoAEsquerda(
 																	valorAcumulado,
 																	25));
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasDebitosCobrados.append(Util
 													.completaString("", 45));
 											break;
@@ -29317,19 +29317,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 							i = i + 1;
 						}
-						// caso a coleÁ„o de ano/mes esteja vazia
+						// caso a cole√ß√£o de ano/mes esteja vazia
 					} /*
-					 * else { // -- Linha 2 (CONTINUA«¬O)--// // Constante
+					 * else { // -- Linha 2 (CONTINUA√á√ÇO)--// // Constante
 					 * linhasDebitosCobrados.append("PARCELA "); // numero da
-					 * prestaÁ„o do dÈbito
+					 * presta√ß√£o do d√©bito
 					 * linhasDebitosCobrados.append(Util.completaString("" +
 					 * numeroPrestacaoDebito, 2)); // Constante
 					 * linhasDebitosCobrados.append("/"); // numero total da
-					 * prestaÁ„o do dÈbito
+					 * presta√ß√£o do d√©bito
 					 * linhasDebitosCobrados.append(Util.completaString("" +
-					 * numeroPrestacaoTotal, 2)); // Completa com espaÁos em
+					 * numeroPrestacaoTotal, 2)); // Completa com espa√ßos em
 					 * branco linhasDebitosCobrados.append(Util
-					 * .completaString("", 24)); // Valor da pretaÁ„o //
+					 * .completaString("", 24)); // Valor da preta√ß√£o //
 					 * Vivianne Sousa // String valorPrestacaoString = Util //
 					 * .formatarMoedaReal(valorPrestacao); String
 					 * valorPrestacaoString = Util
@@ -29337,7 +29337,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					 * 
 					 * linhasDebitosCobrados.append(Util
 					 * .completaStringComEspacoAEsquerda( valorPrestacaoString,
-					 * 17)); // Completa com espaÁos em branco
+					 * 17)); // Completa com espa√ßos em branco
 					 * linhasDebitosCobrados.append(Util .completaString("",
 					 * 45)); }
 					 */// limpa os campos
@@ -29346,15 +29346,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// caso contrario mada o estado do boolean
 					mudou = true;
 					primeiraVez = true;
-					// retorna uma posiÁ„o do iterator
+					// retorna uma posi√ß√£o do iterator
 					iteratorDebitoCobradoPorTipo.previous();
 				}
 			}
 
 			// no caso de ser o ultimo tipo
 
-			// caso a coleÁ„o dos meses de referÍncia do grupo do
-			// tipo de dÈbito esteja preenchida
+			// caso a cole√ß√£o dos meses de refer√™ncia do grupo do
+			// tipo de d√©bito esteja preenchida
 			if (colecaoAnoMesReferenciaDebito != null
 					&& !colecaoAnoMesReferenciaDebito.isEmpty()) {
 				Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito
@@ -29365,7 +29365,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.next();
 					String anoMesReferenciaDebitoString = null;
 					if (i == 1) {
-						// mes/ano referencia do dÈbito
+						// mes/ano referencia do d√©bito
 						anoMesReferenciaDebitoString = Util
 								.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 						linhasDebitosCobrados.append(Util.completaString(
@@ -29373,26 +29373,26 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// caso exita somente um mes/ano de
 						// referencia na lista
 						if (colecaoAnoMesReferenciaDebito.size() == 1) {
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasDebitosCobrados.append(Util.completaString(
 									"", 30));
-							// valor acumulado do tipo do dÈbito
+							// valor acumulado do tipo do d√©bito
 							String valorAcumulado = Util
 									.formatarMoedaReal(valorTotalPrestacoes);
 							linhasDebitosCobrados.append(Util
 									.completaStringComEspacoAEsquerda(
 											valorAcumulado, 17));
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasDebitosCobrados.append(Util.completaString(
 									"", 45));
 
 						} else {
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasDebitosCobrados.append(Util.completaString(
 									"", 92));
 						}
 					} else {
-						// caso i seja igual a 2 ent„o comeÁa a
+						// caso i seja igual a 2 ent√£o come√ßa a
 						// linha 3 do subFluxo
 						if (i == 2) {
 							// -- Linha 3 --//
@@ -29402,7 +29402,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							linhasDebitosCobrados.append(" ");
 							// Fonte
 							linhasDebitosCobrados.append("1");
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasDebitosCobrados.append(" ");
 							// mes/ano referencia do debito
 							anoMesReferenciaDebitoString = Util
@@ -29410,7 +29410,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							linhasDebitosCobrados.append(Util.completaString(
 									anoMesReferenciaDebitoString, 7));
 
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasDebitosCobrados.append(" ");
 
 							// adiciona o tamanho do mes/ano
@@ -29419,32 +29419,32 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// caso exita somente um mes/ano de
 							// referencia na lista
 							if (colecaoAnoMesReferenciaDebito.size() == 2) {
-								// o tamanho de espaÁos em
+								// o tamanho de espa√ßos em
 								// branco vai ser o tamanho sem
 								// os mes/ano - os meses/anos
 								// colocados na
 								// stringbuilder.ex.:76-15=61
-								// espaÁos em brancos
+								// espa√ßos em brancos
 								int tamanhoEspacosBrancos = 66 - tamanhoAnoMesReferencia;
-								// completa espaÁos em brancos
+								// completa espa√ßos em brancos
 								linhasDebitosCobrados.append(Util
 										.completaString("",
 												tamanhoEspacosBrancos));
-								// valor acumulado do tipo do dÈbito
+								// valor acumulado do tipo do d√©bito
 								String valorAcumulado = Util
 										.formatarMoedaReal(valorTotalPrestacoes);
 								linhasDebitosCobrados.append(Util
 										.completaStringComEspacoAEsquerda(
 												valorAcumulado, 17));
-								// completa espaÁos em brancos
+								// completa espa√ßos em brancos
 								linhasDebitosCobrados.append(Util
 										.completaString("", 45));
 
 							}
 						} else {
-							// caso exista atÈ mais 6 ocorrÍncias na
+							// caso exista at√© mais 6 ocorr√™ncias na
 							// lista de meses
-							// -1 pq j· foi colocado na string o
+							// -1 pq j√° foi colocado na string o
 							// ultimo anoMes
 							if ((colecaoAnoMesReferenciaDebito.size() - 1) <= 6) {
 
@@ -29456,44 +29456,44 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												.completaString(
 														anoMesReferenciaDebitoString,
 														7));
-								// completa espaÁos em brancos
+								// completa espa√ßos em brancos
 								linhasDebitosCobrados.append(" ");
 								// adiciona o tamanho do mes/ano
-								// referencia + o espaÁo em branco
+								// referencia + o espa√ßo em branco
 								tamanhoAnoMesReferencia = tamanhoAnoMesReferencia + 8;
-								// caso n„o tenha outro ano mes na
-								// coleÁ„o ent„o
+								// caso n√£o tenha outro ano mes na
+								// cole√ß√£o ent√£o
 								// completa a linha com o valor
 								if (!iteratorAnoMesReferenciaDebito.hasNext()) {
-									// o tamanho de espaÁos em
+									// o tamanho de espa√ßos em
 									// branco vai ser o tamanho sem
 									// os mes/ano - os meses/anos
 									// colocados na
 									// stringbuilder.ex.:76-15=61
-									// espaÁos em brancos
+									// espa√ßos em brancos
 									int tamanhoEspacosBrancos = 66 - tamanhoAnoMesReferencia;
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(Util
 											.completaString("",
 													tamanhoEspacosBrancos));
 									// valor acumulado do tipo do
-									// dÈbito
+									// d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalPrestacoes);
 									linhasDebitosCobrados.append(Util
 											.completaStringComEspacoAEsquerda(
 													valorAcumulado, 17));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(Util
 											.completaString("", 45));
 								}
 
 							} else {
 								// se existir mais de 6 ano/mes na
-								// coleÁ„oAnoMesReferenciaDebito
-								// ent„o sÛ mostra as 5 maiores
+								// cole√ß√£oAnoMesReferenciaDebito
+								// ent√£o s√≥ mostra as 5 maiores
 								if (i < 7) {
-									// mes/ano referencia do dÈbito
+									// mes/ano referencia do d√©bito
 									anoMesReferenciaDebitoString = Util
 											.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 									linhasDebitosCobrados
@@ -29501,20 +29501,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													.completaString(
 															anoMesReferenciaDebitoString,
 															7));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(" ");
 								} else {
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(Util
 											.completaString("E OUTRAS", 18));
 									// valor acumulado do tipo do
-									// dÈbito
+									// d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalPrestacoes);
 									linhasDebitosCobrados.append(Util
 											.completaStringComEspacoAEsquerda(
 													valorAcumulado, 25));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(Util
 											.completaString("", 45));
 
@@ -29525,7 +29525,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					i = i + 1;
 				}
-				// caso a coleÁ„o de ano/mes esteja vazia
+				// caso a cole√ß√£o de ano/mes esteja vazia
 			}
 
 		}
@@ -29534,13 +29534,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00014] Gerar Linhas de CrÈditos Realizados
+	 * [SB00014] Gerar Linhas de Cr√©ditos Realizados
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 24/05/2006
 	 * 
 	 * @param colecaoConta
@@ -29561,28 +29561,28 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& !colecaoCreditoRealizadoPorTipo.isEmpty()) {
 			ListIterator iteratorDebitoRealizadoPorTipo = (ListIterator) colecaoCreditoRealizadoPorTipo
 					.listIterator();
-			// vari·vel respons·vel para controle de mudanÁa do tipo de
+			// vari√°vel respons√°vel para controle de mudan√ßa do tipo de
 			// credito
 			boolean mudou = true;
-			// variavel que verifica se È a primeira vez,de cada tipo do
+			// variavel que verifica se √© a primeira vez,de cada tipo do
 			// credito,que entra para ser escrito
-			// no txt sÛ uma vez a descriÁ„o do tipo do credito
+			// no txt s√≥ uma vez a descri√ß√£o do tipo do credito
 			boolean primeiraVez = true;
 			boolean entrouPrimeiraVez = false;
 			Integer idCreditoTipoVerificador = null;
 			BigDecimal valorTotalCredito = new BigDecimal("0.00");
 			BigDecimal valorCredito = null;
 			Short numeroCredito = null;
-			// numero total de crÈditos
+			// numero total de cr√©ditos
 			Short numeroCreditoTotal = null;
 			String numeroCreditoTotalMenosBonus = "";
 			// cria um int que vai ver o tamanho da string builder
 			// dependendo da quantidade
-			// de mes/ano referencia calcula os espaÁos em brancos
+			// de mes/ano referencia calcula os espa√ßos em brancos
 			// para o valor ficar no lugar certo
 			int tamanhoAnoMesReferencia = 0;
-			// caso n„o seja a primeira vez que entre no boolean primeira
-			// vez(que nesse caso È quando troca o tipo de credito)
+			// caso n√£o seja a primeira vez que entre no boolean primeira
+			// vez(que nesse caso √© quando troca o tipo de credito)
 			boolean primeiraVezIndependenteTipo = false;
 			// colecao para guardar os ano/mes referencia do credito realizado
 			Collection colecaoAnoMesReferenciaCredito = new ArrayList();
@@ -29590,12 +29590,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Object[] parmsDebitoCobradoPorTipo = (Object[]) iteratorDebitoRealizadoPorTipo
 						.next();
 
-				// recupera os parametros da coleÁ„o
-				// valor do crÈdito
+				// recupera os parametros da cole√ß√£o
+				// valor do cr√©dito
 				if (parmsDebitoCobradoPorTipo[0] != null) {
 					valorCredito = (BigDecimal) parmsDebitoCobradoPorTipo[0];
 				}
-				// numero da pretaÁ„o atual
+				// numero da preta√ß√£o atual
 				if (parmsDebitoCobradoPorTipo[1] != null) {
 					numeroCredito = (Short) parmsDebitoCobradoPorTipo[1];
 				}
@@ -29603,24 +29603,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (parmsDebitoCobradoPorTipo[2] != null) {
 					numeroCreditoTotal = (Short) parmsDebitoCobradoPorTipo[2];
 				}
-				// ano Mes ReferÍncia do crÈdito
+				// ano Mes Refer√™ncia do cr√©dito
 				Integer anoMesReferencia = null;
 				if (parmsDebitoCobradoPorTipo[3] != null) {
 					anoMesReferencia = (Integer) parmsDebitoCobradoPorTipo[3];
 				}
-				// id do tipo do dÈbito
+				// id do tipo do d√©bito
 				Integer idCreditoTipo = null;
 				if (parmsDebitoCobradoPorTipo[4] != null) {
 					idCreditoTipo = (Integer) parmsDebitoCobradoPorTipo[4];
 				}
-				// descriÁ„o do tipo do credito
+				// descri√ß√£o do tipo do credito
 				String descricaoCreditoTipo = null;
 				if (parmsDebitoCobradoPorTipo[5] != null) {
 					descricaoCreditoTipo = (String) parmsDebitoCobradoPorTipo[5];
 				}
 				/*
 				 * Alterado por Vivianne Sousa em 21/12/2007 - Analista: Adriano
-				 * criaÁ„o do bonus para parcelamento com RD especial
+				 * cria√ß√£o do bonus para parcelamento com RD especial
 				 */
 				Short numeroParcelaBonus = 0;
 				// numero parcela bonus
@@ -29639,7 +29639,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					mudou = false;
 					tamanhoAnoMesReferencia = 0;
 				}
-				// caso seja o mesmo tipo dÈbito
+				// caso seja o mesmo tipo d√©bito
 				if (idCreditoTipo.equals(idCreditoTipoVerificador)) {
 					if (primeiraVez) {
 						// proxima linha
@@ -29652,7 +29652,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						linhasCreditosRealizados.append(" ");
 						// Fonte
 						linhasCreditosRealizados.append("1");
-						// descriÁ„o do tipo de credito
+						// descri√ß√£o do tipo de credito
 						linhasCreditosRealizados.append(Util.completaString(
 								descricaoCreditoTipo, 30));
 						primeiraVez = false;
@@ -29664,7 +29664,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					// adiciona o valor do credito ao total
 					valorTotalCredito = valorTotalCredito.add(valorCredito);
-					// adiciona o ano/mes referencia na coleÁ„o
+					// adiciona o ano/mes referencia na cole√ß√£o
 					if (anoMesReferencia != null) {
 						colecaoAnoMesReferenciaCredito.add(anoMesReferencia);
 					} else {
@@ -29679,39 +29679,39 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							linhasCreditosRealizados.append(" ");
 							// Fonte
 							linhasCreditosRealizados.append("1");
-							// descriÁ„o do tipo de credito
+							// descri√ß√£o do tipo de credito
 							linhasCreditosRealizados.append(Util
 									.completaString(descricaoCreditoTipo, 30));
 							primeiraVez = false;
 						}
 						// Constante
 						linhasCreditosRealizados.append("PARCELA ");
-						// numero da prestaÁ„o do dÈbito
+						// numero da presta√ß√£o do d√©bito
 						linhasCreditosRealizados.append(Util
 								.completaStringComEspacoAEsquerda(""
 										+ numeroCredito, 3));
 						// Constante
 						linhasCreditosRealizados.append("/");
-						// numero total da prestaÁ„o do dÈbito
+						// numero total da presta√ß√£o do d√©bito
 						linhasCreditosRealizados.append(Util.completaString(
 								numeroCreditoTotalMenosBonus, 3));
-						// Completa com espaÁos em branco
+						// Completa com espa√ßos em branco
 						linhasCreditosRealizados.append(Util.completaString("",
 								22));
-						// Valor da pretaÁ„o
+						// Valor da preta√ß√£o
 						String valorCreditoString = Util
 								.formatarMoedaReal(valorCredito);
 						linhasCreditosRealizados.append(Util
 								.completaStringComEspacoAEsquerda(
 										valorCreditoString, 17));
-						// Completa com espaÁos em branco
+						// Completa com espa√ßos em branco
 						linhasCreditosRealizados.append(Util.completaString("",
 								45));
 
 					}
 
 				} else {
-					// caso a coleÁ„o dos meses de referÍncia do grupo do
+					// caso a cole√ß√£o dos meses de refer√™ncia do grupo do
 					// tipo de credito esteja preenchida
 					if (colecaoAnoMesReferenciaCredito != null
 							&& !colecaoAnoMesReferenciaCredito.isEmpty()) {
@@ -29733,26 +29733,26 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// caso exita somente um mes/ano de
 								// referencia na lista
 								if (colecaoAnoMesReferenciaCredito.size() == 1) {
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(Util
 											.completaString("", 30));
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
 									linhasCreditosRealizados.append(Util
 											.completaStringComEspacoAEsquerda(
 													valorAcumulado, 17));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(Util
 											.completaString("", 45));
 
 								} else {
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(Util
 											.completaString("", 92));
 								}
 							} else {
-								// caso i seja igual a 2 ent„o comeÁa a
+								// caso i seja igual a 2 ent√£o come√ßa a
 								// linha 3 do subFluxo
 								if (i == 2) {
 									// -- Linha 3 --//
@@ -29762,7 +29762,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									linhasCreditosRealizados.append(" ");
 									// Fonte
 									linhasCreditosRealizados.append("1");
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(" ");
 									// mes/ano referencia do credito
 									anoMesReferenciaCreditoString = Util
@@ -29774,7 +29774,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															anoMesReferenciaCreditoString,
 															7));
 
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(" ");
 
 									// adiciona o tamanho do mes/ano
@@ -29783,18 +29783,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// caso exita somente um mes/ano de
 									// referencia na lista
 									if (colecaoAnoMesReferenciaCredito.size() == 2) {
-										// o tamanho de espaÁos em
+										// o tamanho de espa√ßos em
 										// branco vai ser o tamanho sem
 										// os mes/ano - os meses/anos
 										// colocados na
 										// stringbuilder.ex.:76-15=61
-										// espaÁos em brancos
+										// espa√ßos em brancos
 										int tamanhoEspacosBrancos = 66 - tamanhoAnoMesReferencia;
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										linhasCreditosRealizados.append(Util
 												.completaString("",
 														tamanhoEspacosBrancos));
-										// valor acumulado do tipo do dÈbito
+										// valor acumulado do tipo do d√©bito
 										String valorAcumulado = Util
 												.formatarMoedaReal(valorTotalCredito);
 										linhasCreditosRealizados
@@ -29802,18 +29802,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaStringComEspacoAEsquerda(
 																valorAcumulado,
 																17));
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										linhasCreditosRealizados.append(Util
 												.completaString("", 45));
 
 									} /*
-									 * else { // completa espaÁos em brancos
+									 * else { // completa espa√ßos em brancos
 									 * linhasCreditosRealizados.append(" "); }
 									 */
 								} else {
-									// caso exista atÈ mais 6 ocorrÍncias na
+									// caso exista at√© mais 6 ocorr√™ncias na
 									// lista de meses
-									// -1 pq j· foi colocado na string o
+									// -1 pq j√° foi colocado na string o
 									// ultimo anoMes
 									if ((colecaoAnoMesReferenciaCredito.size() - 1) <= 6) {
 
@@ -29825,29 +29825,29 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaString(
 																anoMesReferenciaCreditoString,
 																7));
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										linhasCreditosRealizados.append(" ");
 										// adiciona o tamanho do mes/ano
-										// referencia + o espaÁo em branco
+										// referencia + o espa√ßo em branco
 										tamanhoAnoMesReferencia = tamanhoAnoMesReferencia + 8;
-										// caso n„o tenha outro ano mes na
-										// coleÁ„o ent„o
+										// caso n√£o tenha outro ano mes na
+										// cole√ß√£o ent√£o
 										// completa a linha com o valor
 										if (!iteratorAnoMesReferenciaCredito
 												.hasNext()) {
-											// o tamanho de espaÁos em
+											// o tamanho de espa√ßos em
 											// branco vai ser o tamanho sem
 											// os mes/ano - os meses/anos
 											// colocados na
 											// stringbuilder.ex.:76-15=61
-											// espaÁos em brancos
+											// espa√ßos em brancos
 											int tamanhoEspacosBrancos = 66 - tamanhoAnoMesReferencia;
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasCreditosRealizados
 													.append(Util
 															.completaString("",
 																	tamanhoEspacosBrancos));
-											// valor acumulado do tipo do dÈbito
+											// valor acumulado do tipo do d√©bito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalCredito);
 											linhasCreditosRealizados
@@ -29855,7 +29855,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															.completaStringComEspacoAEsquerda(
 																	valorAcumulado,
 																	17));
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasCreditosRealizados
 													.append(Util
 															.completaString("",
@@ -29864,10 +29864,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 									} else {
 										// se existir mais de 6 ano/mes na
-										// coleÁ„oAnoMesReferenciaDebito
-										// ent„o sÛ mostra as 5 maiores
+										// cole√ß√£oAnoMesReferenciaDebito
+										// ent√£o s√≥ mostra as 5 maiores
 										if (i < 7) {
-											// mes/ano referencia do dÈbito
+											// mes/ano referencia do d√©bito
 											anoMesReferenciaCreditoString = Util
 													.formatarAnoMesParaMesAno(anoMesReferenciaCredito);
 											linhasCreditosRealizados
@@ -29875,18 +29875,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															.completaString(
 																	anoMesReferenciaCreditoString,
 																	7));
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasCreditosRealizados
 													.append(" ");
 										} else {
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasCreditosRealizados
 													.append(Util
 															.completaString(
 																	"E OUTRAS",
 																	18));
 											// valor acumulado do tipo do
-											// dÈbito
+											// d√©bito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalCredito);
 											linhasCreditosRealizados
@@ -29894,7 +29894,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															.completaStringComEspacoAEsquerda(
 																	valorAcumulado,
 																	25));
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasCreditosRealizados
 													.append(Util
 															.completaString("",
@@ -29906,7 +29906,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 							i = i + 1;
 						}
-						// caso a coleÁ„o de ano/mes esteja vazia
+						// caso a cole√ß√£o de ano/mes esteja vazia
 					}
 					// limpa os campos
 					valorTotalCredito = new BigDecimal("0.00");
@@ -29914,13 +29914,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// caso contrario mada o estado do boolean
 					mudou = true;
 					primeiraVez = true;
-					// retorna uma posiÁ„o do iterator
+					// retorna uma posi√ß√£o do iterator
 					iteratorDebitoRealizadoPorTipo.previous();
 				}
 			}
 			// No caso de ter o ultimo tipo
 
-			// caso a coleÁ„o dos meses de referÍncia do grupo do
+			// caso a cole√ß√£o dos meses de refer√™ncia do grupo do
 			// tipo de credito esteja preenchida
 			if (colecaoAnoMesReferenciaCredito != null
 					&& !colecaoAnoMesReferenciaCredito.isEmpty()) {
@@ -29940,26 +29940,26 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// caso exita somente um mes/ano de
 						// referencia na lista
 						if (colecaoAnoMesReferenciaCredito.size() == 1) {
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasCreditosRealizados.append(Util
 									.completaString("", 30));
-							// valor acumulado do tipo do dÈbito
+							// valor acumulado do tipo do d√©bito
 							String valorAcumulado = Util
 									.formatarMoedaReal(valorTotalCredito);
 							linhasCreditosRealizados.append(Util
 									.completaStringComEspacoAEsquerda(
 											valorAcumulado, 17));
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasCreditosRealizados.append(Util
 									.completaString("", 45));
 
 						} else {
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasCreditosRealizados.append(Util
 									.completaString("", 92));
 						}
 					} else {
-						// caso i seja igual a 2 ent„o comeÁa a
+						// caso i seja igual a 2 ent√£o come√ßa a
 						// linha 3 do subFluxo
 						if (i == 2) {
 							// -- Linha 3 --//
@@ -29969,7 +29969,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							linhasCreditosRealizados.append(" ");
 							// Fonte
 							linhasCreditosRealizados.append("1");
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasCreditosRealizados.append(" ");
 							// mes/ano referencia do credito
 							anoMesReferenciaCreditoString = Util
@@ -29978,7 +29978,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.completaString(
 											anoMesReferenciaCreditoString, 7));
 
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasCreditosRealizados.append(" ");
 							// adiciona o tamanho do mes/ano
 							// referencia
@@ -29986,35 +29986,35 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// caso exita somente um mes/ano de
 							// referencia na lista
 							if (colecaoAnoMesReferenciaCredito.size() == 2) {
-								// o tamanho de espaÁos em
+								// o tamanho de espa√ßos em
 								// branco vai ser o tamanho sem
 								// os mes/ano - os meses/anos
 								// colocados na
 								// stringbuilder.ex.:76-15=61
-								// espaÁos em brancos
+								// espa√ßos em brancos
 								int tamanhoEspacosBrancos = 66 - tamanhoAnoMesReferencia;
-								// completa espaÁos em brancos
+								// completa espa√ßos em brancos
 								linhasCreditosRealizados.append(Util
 										.completaString("",
 												tamanhoEspacosBrancos));
-								// valor acumulado do tipo do dÈbito
+								// valor acumulado do tipo do d√©bito
 								String valorAcumulado = Util
 										.formatarMoedaReal(valorTotalCredito);
 								linhasCreditosRealizados.append(Util
 										.completaStringComEspacoAEsquerda(
 												valorAcumulado, 17));
-								// completa espaÁos em brancos
+								// completa espa√ßos em brancos
 								linhasCreditosRealizados.append(Util
 										.completaString("", 45));
 
 							}/*
-							 * else { // completa espaÁos em brancos
+							 * else { // completa espa√ßos em brancos
 							 * linhasCreditosRealizados.append(" "); }
 							 */
 						} else {
-							// caso exista atÈ mais 6 ocorrÍncias na
+							// caso exista at√© mais 6 ocorr√™ncias na
 							// lista de meses
-							// -1 pq j· foi colocado na string o
+							// -1 pq j√° foi colocado na string o
 							// ultimo anoMes
 							if ((colecaoAnoMesReferenciaCredito.size() - 1) <= 6) {
 
@@ -30025,44 +30025,44 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										.completaString(
 												anoMesReferenciaCreditoString,
 												7));
-								// completa espaÁos em brancos
+								// completa espa√ßos em brancos
 								linhasCreditosRealizados.append(" ");
 								// adiciona o tamanho do mes/ano
-								// referencia + o espaÁo em branco
+								// referencia + o espa√ßo em branco
 								tamanhoAnoMesReferencia = tamanhoAnoMesReferencia + 8;
-								// caso n„o tenha outro ano mes na
-								// coleÁ„o ent„o
+								// caso n√£o tenha outro ano mes na
+								// cole√ß√£o ent√£o
 								// completa a linha com o valor
 								if (!iteratorAnoMesReferenciaCredito.hasNext()) {
-									// o tamanho de espaÁos em
+									// o tamanho de espa√ßos em
 									// branco vai ser o tamanho sem
 									// os mes/ano - os meses/anos
 									// colocados na
 									// stringbuilder.ex.:76-15=61
-									// espaÁos em brancos
+									// espa√ßos em brancos
 									int tamanhoEspacosBrancos = 66 - tamanhoAnoMesReferencia;
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(Util
 											.completaString("",
 													tamanhoEspacosBrancos));
 									// valor acumulado do tipo do
-									// dÈbito
+									// d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
 									linhasCreditosRealizados.append(Util
 											.completaStringComEspacoAEsquerda(
 													valorAcumulado, 17));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(Util
 											.completaString("", 45));
 								}
 
 							} else {
 								// se existir mais de 6 ano/mes na
-								// coleÁ„oAnoMesReferenciaDebito
-								// ent„o sÛ mostra as 5 maiores
+								// cole√ß√£oAnoMesReferenciaDebito
+								// ent√£o s√≥ mostra as 5 maiores
 								if (i < 7) {
-									// mes/ano referencia do dÈbito
+									// mes/ano referencia do d√©bito
 									anoMesReferenciaCreditoString = Util
 											.formatarAnoMesParaMesAno(anoMesReferenciaCredito);
 									linhasCreditosRealizados
@@ -30070,20 +30070,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													.completaString(
 															anoMesReferenciaCreditoString,
 															7));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(" ");
 								} else {
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(Util
 											.completaString(" E OUTRAS", 18));
 									// valor acumulado do tipo do
-									// dÈbito
+									// d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
 									linhasCreditosRealizados.append(Util
 											.completaStringComEspacoAEsquerda(
 													valorAcumulado, 25));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(Util
 											.completaString("", 45));
 									break;
@@ -30093,7 +30093,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					i = i + 1;
 				}
-				// caso a coleÁ„o de ano/mes esteja vazia
+				// caso a cole√ß√£o de ano/mes esteja vazia
 			}
 
 		}
@@ -30102,13 +30102,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0015] Gerar Linhas de Impostos Retidos
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 24/05/2006
 	 * 
 	 * @param colecaoConta
@@ -30126,7 +30126,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// Constante
 		linhasImpostosRetidos
 				.append("DEDUCAO IMPOSTOS LEI FEDERAL N.9430 DE 27/12/1996");
-		// Completa com espaÁos em branco
+		// Completa com espa√ßos em branco
 		linhasImpostosRetidos.append(Util.completaString("", 80));
 		linhasImpostosRetidos.append(System.getProperty("line.separator"));
 
@@ -30135,7 +30135,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasImpostosRetidos.append(" ");
 		// Fonte
 		linhasImpostosRetidos.append("1");
-		// Completa com espaÁos em branco
+		// Completa com espa√ßos em branco
 		linhasImpostosRetidos.append(Util.completaString("", 2));
 
 		Collection colecaoParmsImpostosDeduzidos = null;
@@ -30149,7 +30149,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 		StringBuilder descricaoAbreviadaImposto = new StringBuilder();
 		BigDecimal valorImpostosTotal = new BigDecimal("0.00");
-		// verifica se a coleÁ„o È diferente de nulo
+		// verifica se a cole√ß√£o √© diferente de nulo
 		if (colecaoParmsImpostosDeduzidos != null
 				&& !colecaoParmsImpostosDeduzidos.isEmpty()) {
 			Iterator iteratorParmsImpostosDeduzidos = colecaoParmsImpostosDeduzidos
@@ -30170,17 +30170,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (parmsImpostoDeduzido[2] != null) {
 					valorImpostos = (BigDecimal) parmsImpostoDeduzido[2];
 				}
-				// concatena a descriÁ„o abreviada do tipo de imposto com o
+				// concatena a descri√ß√£o abreviada do tipo de imposto com o
 				// precentual de aliquota
 				descricaoAbreviadaImposto.append(descricaoTipoImposto + "-"
 						+ percentualAliquota + "%");
-				// Completa com espaÁos em branco
+				// Completa com espa√ßos em branco
 				descricaoAbreviadaImposto.append(" ");
 				// adiciona o valor dos impostos
 				valorImpostosTotal = valorImpostosTotal.add(valorImpostos);
 			}
 		}
-		// recupera a descriÁ„o abreviada concatenada com a aliquota
+		// recupera a descri√ß√£o abreviada concatenada com a aliquota
 		String descricaoAbreviadaConcatenada = "";
 		if (descricaoAbreviadaImposto != null
 				&& !descricaoAbreviadaImposto.equals("")) {
@@ -30193,20 +30193,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				.formatarMoedaReal(valorImpostosTotal);
 		linhasImpostosRetidos.append(Util.completaStringComEspacoAEsquerda(
 				valorImpostosTotalString, 17));
-		// Completa com espaÁos em branco
+		// Completa com espa√ßos em branco
 		linhasImpostosRetidos.append(Util.completaString("", 45));
 
 		return linhasImpostosRetidos;
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB00016] Obter Mensagem da Conta em 3 Partes
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 24/05/2006
 	 * 
 	 * @param colecaoConta
@@ -30256,7 +30256,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							"" + emitirContaHelper.getIdImovel(), null, null,
 							"190001", "" + anoMesSubtraido, dataVencimento,
 							dataFinalDate, 1, 2, 2, 2, 2, 1, 2, null);
-			// se o imovel possua dÈbito(debitoImovelCobranÁa for diferente de
+			// se o imovel possua d√©bito(debitoImovelCobran√ßa for diferente de
 			// nulo)
 			if (debitoImovelClienteHelper != null
 					&& ((debitoImovelClienteHelper
@@ -30266,12 +30266,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.getColecaoContasValores().isEmpty()))) {
 				String dataVencimentoFinalString = Util
 						.formatarData(dataFinalDate);
-				linhasImpostosRetidos[0] = "SR. USU¡RIO: EM  "
+				linhasImpostosRetidos[0] = "SR. USU√ÅRIO: EM  "
 						+ dataVencimentoFinalString
-						+ ",    REGISTRAMOS QUE V.SA. ESTAVA EM D…BITO COM A "
+						+ ",    REGISTRAMOS QUE V.SA. ESTAVA EM D√âBITO COM A "
 						+ sistemaParametro.getNomeAbreviadoEmpresa() + ".";
-				linhasImpostosRetidos[1] = "COMPARE«A A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO.EVITE O CORTE.";
-				linhasImpostosRetidos[2] = "CASO O SEU D…BITO TENHA SIDO PAGO AP”S A DATA INDICADA,DESCONSIDERE ESTE AVISO.";
+				linhasImpostosRetidos[1] = "COMPARE√áA A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO.EVITE O CORTE.";
+				linhasImpostosRetidos[2] = "CASO O SEU D√âBITO TENHA SIDO PAGO AP√ìS A DATA INDICADA,DESCONSIDERE ESTE AVISO.";
 
 			} else {
 				Object[] mensagensConta = null;
@@ -30286,13 +30286,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// recupera o id do setor comercial da conta
 				Integer idSetorComercial = emitirContaHelper
 						.getIdSetorComercial();
-				// caso entre em alguma condiÁ„o ent„o n„o entra mais nas outras
+				// caso entre em alguma condi√ß√£o ent√£o n√£o entra mais nas outras
 				boolean achou = false;
 
 				try {
 
 					// o sistema obtem a mensagem para a conta
-					// Caso seja a condiÁ„o 1
+					// Caso seja a condi√ß√£o 1
 					// (FaturamentoGrupo =null, GerenciaRegional=parmConta,
 					// Localidade=parmConta, SetorComercial=parmConta)
 					mensagensConta = repositorioFaturamento
@@ -30323,7 +30323,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					if (!achou) {
 
-						// Caso seja a condiÁ„o 2
+						// Caso seja a condi√ß√£o 2
 						// (FaturamentoGrupo =null, GerenciaRegional=parmConta,
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
@@ -30353,7 +30353,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 					if (!achou) {
-						// Caso seja a condiÁ„o 3
+						// Caso seja a condi√ß√£o 3
 						// (FaturamentoGrupo =null, GerenciaRegional=parmConta,
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
@@ -30384,7 +30384,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 					if (!achou) {
-						// Caso seja a condiÁ„o 4
+						// Caso seja a condi√ß√£o 4
 						// (FaturamentoGrupo =parmConta, GerenciaRegional=null,
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
@@ -30414,7 +30414,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 					if (!achou) {
-						// Caso seja a condiÁ„o 5
+						// Caso seja a condi√ß√£o 5
 						// (FaturamentoGrupo =null, GerenciaRegional=null,
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
@@ -30442,8 +30442,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							achou = true;
 						}
 					}
-					// caso n„o tenha entrado em nenhuma das opÁıes acima
-					// ent„o completa a string com espaÁıs em branco
+					// caso n√£o tenha entrado em nenhuma das op√ß√µes acima
+					// ent√£o completa a string com espa√ß√µs em branco
 					if (!achou) {
 						linhasImpostosRetidos[0] = "";
 						linhasImpostosRetidos[1] = "";
@@ -30461,7 +30461,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel pra verificar se a Mensagem da Conta esta sendo
+	 * Met√≥do respons√°vel pra verificar se a Mensagem da Conta esta sendo
 	 * Faturada.
 	 * 
 	 * Manter Mensagem Conta
@@ -30481,13 +30481,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00017] Gerar Linhas das Contas com DÈbito Autom·tico
+	 * [SB00017] Gerar Linhas das Contas com D√©bito Autom√°tico
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 24/05/2006
 	 * 
 	 * @param colecaoConta
@@ -30498,8 +30498,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throws ControladorException {
 		StringBuilder[] linhasContaDebitoAutomaticoArray = new StringBuilder[2];
 		StringBuilder linhasContaDebitoAutomatico = new StringBuilder();
-		// ultima linha que pode ter o continua ou n„o dependendo da descriÁ„o
-		// de serviÁos e tarifas
+		// ultima linha que pode ter o continua ou n√£o dependendo da descri√ß√£o
+		// de servi√ßos e tarifas
 		StringBuilder ultimaLinhaContaDebitoAutomatico = new StringBuilder();
 		// -- Linha 24 --//
 		// Canal
@@ -30529,11 +30529,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				codigoAgencia = ((String) parmsDebitoAutomatico[1]);
 			}
 		}
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasContaDebitoAutomatico.append(Util.completaString("", 45));
 		// nome do banco
 		linhasContaDebitoAutomatico.append(Util.completaString(nomeBanco, 40));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasContaDebitoAutomatico.append(Util.completaString("", 44));
 		linhasContaDebitoAutomatico
 				.append(System.getProperty("line.separator"));
@@ -30543,12 +30543,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasContaDebitoAutomatico.append(" ");
 		// Fonte
 		linhasContaDebitoAutomatico.append("4");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasContaDebitoAutomatico.append(Util.completaString("", 13));
 		// codigo agencia
 		linhasContaDebitoAutomatico.append(Util.adicionarZerosEsquedaNumero(5,
 				codigoAgencia));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasContaDebitoAutomatico.append(Util.completaString("", 111));
 		linhasContaDebitoAutomatico
 				.append(System.getProperty("line.separator"));
@@ -30558,13 +30558,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasContaDebitoAutomatico.append("1");
 		// Fonte
 		linhasContaDebitoAutomatico.append("1");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasContaDebitoAutomatico.append(Util.completaString("", 23));
 		// Constante
 		linhasContaDebitoAutomatico.append(Util.completaString("MATRICULA - ",
 				15));
-		// matricula do imÛvel
-		// Recupera a matrÌcula do imÛvel da coluna 1 e formata a matrÌcula
+		// matricula do im√≥vel
+		// Recupera a matr√≠cula do im√≥vel da coluna 1 e formata a matr√≠cula
 		// (ex:500000001 em 5000000.1)
 		String matriculaImovelFormatada = Util.adicionarZerosEsquedaNumero(9,
 				"" + emitirContaHelper.getIdImovel());
@@ -30572,7 +30572,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				+ "." + matriculaImovelFormatada.substring(8, 9);
 		linhasContaDebitoAutomatico.append(Util.completaString(
 				matriculaImovelFormatada, 10));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasContaDebitoAutomatico.append(" ");
 		// Constante
 		linhasContaDebitoAutomatico
@@ -30586,7 +30586,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				+ emitirContaHelper.getDigitoVerificadorConta();
 		linhasContaDebitoAutomatico.append(Util.completaString(
 				("-" + digitoVerificador), 3));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasContaDebitoAutomatico.append(Util.completaString("", 55));
 		linhasContaDebitoAutomatico
 				.append(System.getProperty("line.separator"));
@@ -30596,12 +30596,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		ultimaLinhaContaDebitoAutomatico.append("1");
 		// Fonte
 		ultimaLinhaContaDebitoAutomatico.append("1");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		ultimaLinhaContaDebitoAutomatico.append(Util.completaString("", 13));
 		// id faturamento grupo
 		ultimaLinhaContaDebitoAutomatico.append(Util.completaString(""
 				+ emitirContaHelper.getIdFaturamentoGrupo(), 4));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		ultimaLinhaContaDebitoAutomatico.append(Util.completaString("", 27));
 		// codigo empresa
 		if (emitirContaHelper.getIdEmpresa() != null) {
@@ -30623,7 +30623,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			ultimaLinhaContaDebitoAutomatico.append(Util.completaString("", 8));
 		}
 
-		// na ultimaLinhaContaDebitoAutomatico falta ainda o continua ou n„o
+		// na ultimaLinhaContaDebitoAutomatico falta ainda o continua ou n√£o
 		// assim como o sequencial
 
 		linhasContaDebitoAutomaticoArray[0] = linhasContaDebitoAutomatico;
@@ -30633,13 +30633,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00018] Gerar Linhas das Contas com DÈbito Autom·tico
+	 * [SB00018] Gerar Linhas das Contas com D√©bito Autom√°tico
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 24/05/2006
 	 * 
 	 * @param colecaoConta
@@ -30650,8 +30650,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			BigDecimal valorConta) throws ControladorException {
 		StringBuilder[] linhasDemaisContaArray = new StringBuilder[2];
 		StringBuilder linhasDemaisConta = new StringBuilder();
-		// ultima linha que pode ter o continua ou n„o dependendo da descriÁ„o
-		// de serviÁos e tarifas
+		// ultima linha que pode ter o continua ou n√£o dependendo da descri√ß√£o
+		// de servi√ßos e tarifas
 		StringBuilder ultimaLinhaDemaisContas = new StringBuilder();
 
 		// -- Linha 24 --//
@@ -30659,7 +30659,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasDemaisConta.append("1");
 		// Fonte
 		linhasDemaisConta.append("1");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 12));
 		String anoMesString = "" + emitirContaHelper.getAmReferencia();
 		// formata ano mes para mes ano
@@ -30668,7 +30668,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Integer digitoVerificadorConta = new Integer(""
 				+ emitirContaHelper.getDigitoVerificadorConta());
 
-		// RepresentaÁ„o numÈrica cÛdigo de barras
+		// Representa√ß√£o num√©rica c√≥digo de barras
 		String representacaoNumericaCodBarra = null;
 
 		representacaoNumericaCodBarra = this.getControladorArrecadacao()
@@ -30681,7 +30681,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		String representacaoNumericaCodBarraSemDigito = "";
 		String representacaoNumericaCodBarraFormatada = "";
 		if (representacaoNumericaCodBarra != null) {
-			// Formata a representaÁ„o n˙merica do cÛdigo de
+			// Formata a representa√ß√£o n√∫merica do c√≥digo de
 			// barras
 			representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra
 					.substring(0, 11)
@@ -30710,14 +30710,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// adiciona a representacao codigoBarras
 		linhasDemaisConta.append(Util.completaString(
 				representacaoNumericaCodBarraFormatada, 55));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 62));
 		linhasDemaisConta.append(System.getProperty("line.separator"));
 
 		// -- Linha 25 --//
 		// Canal
 		linhasDemaisConta.append("-");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 130));
 		linhasDemaisConta.append(System.getProperty("line.separator"));
 
@@ -30726,14 +30726,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasDemaisConta.append("-");
 		// Fonte
 		linhasDemaisConta.append("3");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 13));
 
-		// Cria o objeto para gerar o cÛdigode barras no
-		// padr„o intercalado 2 de 5
+		// Cria o objeto para gerar o c√≥digode barras no
+		// padr√£o intercalado 2 de 5
 		Interleaved2of5 codigoBarraIntercalado2de5 = new Interleaved2of5();
-		// Recupera a representaÁ„o n˙merica do cÛdigo de
-		// barras sem os dÌgitos verificadores
+		// Recupera a representa√ß√£o n√∫merica do c√≥digo de
+		// barras sem os d√≠gitos verificadores
 		if (representacaoNumericaCodBarraSemDigito != null
 				&& !representacaoNumericaCodBarraSemDigito.equals("")) {
 			linhasDemaisConta
@@ -30751,10 +30751,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasDemaisConta.append("1");
 		// Fonte
 		linhasDemaisConta.append("2");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 4));
-		// matricula do imÛvel
-		// Recupera a matrÌcula do imÛvel da coluna 1 e formata a matrÌcula
+		// matricula do im√≥vel
+		// Recupera a matr√≠cula do im√≥vel da coluna 1 e formata a matr√≠cula
 		// (ex:500000001 em 5000000.1)
 		String matriculaImovelFormatada = Util.adicionarZerosEsquedaNumero(9,
 				"" + emitirContaHelper.getIdImovel());
@@ -30762,7 +30762,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				+ "." + matriculaImovelFormatada.substring(8, 9);
 		linhasDemaisConta.append(Util.completaString(matriculaImovelFormatada,
 				10));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 115));
 		linhasDemaisConta.append(System.getProperty("line.separator"));
 
@@ -30771,10 +30771,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasDemaisConta.append("+");
 		// Fonte
 		linhasDemaisConta.append("1");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 25));
-		// inst‚ncia um imovel com os dados da conta para recuperar a
-		// inscriÁ„o que est· np objeto imovel
+		// inst√¢ncia um imovel com os dados da conta para recuperar a
+		// inscri√ß√£o que est√° np objeto imovel
 		Imovel imovel = new Imovel();
 		Localidade localidade = new Localidade();
 		localidade.setId(emitirContaHelper.getIdLocalidade());
@@ -30788,10 +30788,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		imovel.setQuadra(quadra);
 		imovel.setLote(emitirContaHelper.getLoteConta());
 		imovel.setSubLote(emitirContaHelper.getSubLoteConta());
-		// InscriÁ„o do imÛvel
+		// Inscri√ß√£o do im√≥vel
 		String inscricao = imovel.getInscricaoFormatada();
 		linhasDemaisConta.append(Util.completaString(inscricao, 22));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 16));
 		String mesAnoString = Util.formatarAnoMesParaMesAno(emitirContaHelper
 				.getAmReferencia());
@@ -30801,13 +30801,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				+ emitirContaHelper.getDigitoVerificadorConta();
 		linhasDemaisConta.append(Util.completaString(("-" + digitoVerificador),
 				3));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 7));
 		// data de validade da conta
 		String dataValidade = Util.formatarData(emitirContaHelper
 				.getDataValidadeConta());
 		linhasDemaisConta.append(Util.completaString(dataValidade, 10));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 39));
 		linhasDemaisConta.append(System.getProperty("line.separator"));
 
@@ -30816,7 +30816,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasDemaisConta.append(" ");
 		// Fonte
 		linhasDemaisConta.append("1");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 129));
 		linhasDemaisConta.append(System.getProperty("line.separator"));
 
@@ -30825,35 +30825,35 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasDemaisConta.append("-");
 		// Fonte
 		linhasDemaisConta.append("2");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 15));
 		// data de vencimento da conta
 		String dataVencimento = Util.formatarData(emitirContaHelper
 				.getDataVencimentoConta());
 		linhasDemaisConta.append(Util.completaString(dataVencimento, 10));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 35));
 		// valor da conta
 		String valorContaString = Util.formatarMoedaReal(valorConta);
 		linhasDemaisConta.append(Util.completaStringComEspacoAEsquerda(
 				valorContaString, 17));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasDemaisConta.append(Util.completaString("", 52));
 		linhasDemaisConta.append(System.getProperty("line.separator"));
 
 		// -- Linha 31 --//
-		// ultima linha depende da quantidade linhas da descriÁ„o de serviÁos e
-		// tarifas(Para saber se vai colocar continua ou n„o)
+		// ultima linha depende da quantidade linhas da descri√ß√£o de servi√ßos e
+		// tarifas(Para saber se vai colocar continua ou n√£o)
 		// Canal
 		ultimaLinhaDemaisContas.append("-");
 		// Fonte
 		ultimaLinhaDemaisContas.append("1");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		ultimaLinhaDemaisContas.append(Util.completaString("", 13));
 		// id faturamento grupo
 		ultimaLinhaDemaisContas.append(Util.completaString(""
 				+ emitirContaHelper.getIdFaturamentoGrupo(), 4));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		ultimaLinhaDemaisContas.append(Util.completaString("", 27));
 		// codigo empresa
 		if (emitirContaHelper.getIdEmpresa() != null) {
@@ -30875,7 +30875,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		} else {
 			ultimaLinhaDemaisContas.append(Util.completaString("", 8));
 		}
-		// na ultimaLinhaContaDebitoAutomatico falta ainda o continua ou n„o
+		// na ultimaLinhaContaDebitoAutomatico falta ainda o continua ou n√£o
 		// assim como o sequencial
 
 		linhasDemaisContaArray[0] = linhasDemaisConta;
@@ -30888,7 +30888,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * Pesquisa todas as contas para testar o batch
 	 * 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 02/06/2006
 	 * 
 	 * 
@@ -30953,7 +30953,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoImoveis = null;
 
 		try {
-			// remove primeiro as linhas do critÈrio cobranÁa
+			// remove primeiro as linhas do crit√©rio cobran√ßa
 			colecaoImoveis = repositorioFaturamento
 					.gerarRelacaoAcompanhamentoFaturamento(idImovelCondominio,
 							idImovelPrincipal, idNomeConta,
@@ -31104,7 +31104,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setEsgotoFixado((String) contasDadosRelatorio[15]
 									.toString());
 				}
-				// Nome Usu·rio
+				// Nome Usu√°rio
 				if (contasDadosRelatorio[16] != null) { // 14
 					gerarRelacaoAcompanhamentoFaturamentoHelper
 							.setNomeClienteUsuario((String) contasDadosRelatorio[16]
@@ -31198,8 +31198,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.getCodigoImovel()))
 								.getDescricaoAbreviada());
 
-				// pega as colecoes do retorno do mÈtodo obter dÈbito e calcula
-				// o valor total do dÈbito
+				// pega as colecoes do retorno do m√©todo obter d√©bito e calcula
+				// o valor total do d√©bito
 				if (obterDebitoImovelOuClienteHelper.getColecaoContasValores() != null
 						&& !obterDebitoImovelOuClienteHelper
 								.getColecaoContasValores().isEmpty()) {
@@ -31265,7 +31265,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 				gerarRelacaoAcompanhamentoFaturamentoHelper.setValorDebito(Util
 						.formatarMoedaReal(valorTotalDebito));
-				// Pesquisa o consumo mÈdio de ·gua ou esgoto
+				// Pesquisa o consumo m√©dio de √°gua ou esgoto
 				Collection colecaoConsumoMedioAgua = null;
 				Collection colecaoConsumoMedioEsgoto = null;
 
@@ -31475,7 +31475,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									anoMesReferencia,
 									mesAnoFaturamentoDiferenca);
 
-					// Pesquisa o consumo de seis meses de ·gua ou esgoto
+					// Pesquisa o consumo de seis meses de √°gua ou esgoto
 					Collection colecaoConsumoSeisMesesAgua = null;
 					Collection colecaoConsumoSeisMesesEsgoto = null;
 
@@ -31667,7 +31667,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0169] Manter Taraifa de Consumo Prepara a VigÍncia para Ser reajustada
+	 * [UC0169] Manter Taraifa de Consumo Prepara a Vig√™ncia para Ser reajustada
 	 * 
 	 * @author Rafel Santos
 	 * @date 21/07/2006
@@ -31743,8 +31743,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			ConsumoTarifaVigencia consumoTarifaVigencia = iteratorTarifaVigencia2
 					.next();
 
-			// testar a data de vigÍncia se È posterior
-			// [FS0002] - Verificar data de vigÍncia
+			// testar a data de vig√™ncia se √© posterior
+			// [FS0002] - Verificar data de vig√™ncia
 			int idConsumoTarifa = consumoTarifaVigencia.getConsumoTarifa()
 					.getId();
 			// int idConsumoTarifaVigencia = consumoTarifaVigencia.getId();
@@ -31816,7 +31816,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.intValue()));
 				}
 
-				// verificar se a Data de Vigencia È mario que 90 dias
+				// verificar se a Data de Vigencia √© mario que 90 dias
 				Calendar dataCorrente = new GregorianCalendar();
 				dataCorrente.add(Calendar.DAY_OF_MONTH, 90);
 
@@ -31831,9 +31831,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso calcula a tarifa minÌma de ·gua para um imÛvel
+	 * Este caso de uso calcula a tarifa min√≠ma de √°gua para um im√≥vel
 	 * 
-	 * [UC0451] Obter Tarifa MinÌma de ¡gua para um ImÛvel
+	 * [UC0451] Obter Tarifa Min√≠ma de √Ågua para um Im√≥vel
 	 * 
 	 * @author Roberta Costa
 	 * @date 09/08/2006
@@ -31846,15 +31846,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public BigDecimal obterTarifaMinimaAguaImovel(Imovel imovel)
 			throws ControladorException {
 
-		// DeclaraÁ„o de vari·veis
+		// Declara√ß√£o de vari√°veis
 		BigDecimal tarifaMinimaAguaImovel = new BigDecimal("0.00");
 		BigDecimal resultadoTarifaMinimaAguaImovel = new BigDecimal("0.00");
 
-		// DeclaraÁ„o de objetos
+		// Declara√ß√£o de objetos
 		Collection colecaoDataVigencia = null;
 
-		// ObtÈm o id da tarifa vigÍncia da maior data de vigÍncia da tarifa do
-		// imÛvel
+		// Obt√©m o id da tarifa vig√™ncia da maior data de vig√™ncia da tarifa do
+		// im√≥vel
 		try {
 			colecaoDataVigencia = repositorioMicromedicao
 					.pesquisarMaiorDataVigenciaConsumoTarifaImovel(new Date(),
@@ -31864,7 +31864,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			new ControladorException("erro.sistema", ex);
 		}
 
-		// ObtÈm o id do array e atribui na vari·vel
+		// Obt√©m o id do array e atribui na vari√°vel
 		Object[] consumoTarifaVigenciaIdArray = (Object[]) Util
 				.retonarObjetoDeColecaoArray(colecaoDataVigencia);
 		Integer consumoTarifaVigenciaId = null;
@@ -31879,7 +31879,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			consumoTarifaVigenciaId = (Integer) consumoTarifaVigenciaIdArray[0];
 		}
 
-		// Cria o objeto consumo tarifa vigÍncia e seta o id
+		// Cria o objeto consumo tarifa vig√™ncia e seta o id
 		ConsumoTarifaVigencia consumoTarifaVigencia = new ConsumoTarifaVigencia();
 		consumoTarifaVigencia.setId(consumoTarifaVigenciaId);
 
@@ -31896,7 +31896,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Integer idSubCategoria = 0;
 
 			try {
-				// ObtÈm a tarifa mÌnima da categoria do imÛvel
+				// Obt√©m a tarifa m√≠nima da categoria do im√≥vel
 				tarifaMinimaAguaImovel = (BigDecimal) repositorioFaturamento
 						.pesquisarTarifaMinimaCategoriaVigencia(categoria,
 								consumoTarifaVigencia, idSubCategoria);
@@ -31906,14 +31906,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 			// Multiplica a quantidade de economias da categoria pelo consumo
-			// mÌnimo e acumula
+			// m√≠nimo e acumula
 			resultadoTarifaMinimaAguaImovel = resultadoTarifaMinimaAguaImovel
 					.add(tarifaMinimaAguaImovel.multiply(new BigDecimal(
 							categoria.getQuantidadeEconomiasCategoria())));
 
 		}
 
-		// Retorna o consumo mÌnimo da ligaÁ„o
+		// Retorna o consumo m√≠nimo da liga√ß√£o
 		return resultadoTarifaMinimaAguaImovel;
 	}
 
@@ -31922,9 +31922,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * alteracao
 	 * 
 	 * @param id
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @param ultimaAlteracao
-	 *            DescriÁ„o do par‚metro
+	 *            Descri√ß√£o do par√¢metro
 	 * @throws ControladorException
 	 */
 	public Integer pesquisarExistenciaContaParaConcorrencia(String idConta,
@@ -31945,7 +31945,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public Integer verificarExistenciaDebitoTipo(Integer idDebitoTipo)
 			throws ControladorException {
 
-		// Retorna o cliente encontrado ou vazio se n„o existir
+		// Retorna o cliente encontrado ou vazio se n√£o existir
 		try {
 			return repositorioFaturamento
 					.verificarExistenciaDebitoTipo(idDebitoTipo);
@@ -31957,7 +31957,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de ServiÁo
+	 * [UC0410] - Inserir Tipo de Servi√ßo
 	 * 
 	 * @author lms
 	 * @date 01/08/2006
@@ -31967,14 +31967,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		DebitoTipo debitoTipo = pesquisarDebitoTipo(idDebitoTipo.toString());
 		if (debitoTipo == null) {
 			throw new ControladorException("atencao.pesquisa_inexistente",
-					null, "Tipo de DÈbito");
+					null, "Tipo de D√©bito");
 		}
 		return debitoTipo;
 	}
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de ServiÁo
+	 * [UC0410] - Inserir Tipo de Servi√ßo
 	 * 
 	 * @author lms
 	 * @date 07/08/2006
@@ -31992,7 +31992,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				CreditoTipo.class.getName());
 		if (colecao == null || colecao.isEmpty()) {
 			throw new ControladorException("atencao.pesquisa_inexistente",
-					null, "CrÈdito Tipo");
+					null, "Cr√©dito Tipo");
 		} else {
 			creditoTipo = (CreditoTipo) colecao.iterator().next();
 		}
@@ -32046,12 +32046,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					conta.setReferencia((Integer) arrayConta[1]);
 				}
 
-				// debito credito situaÁ„o atual - Item [2]
+				// debito credito situa√ß√£o atual - Item [2]
 				if (arrayConta[2] != null) {
 					conta.setDebitoCreditoSituacaoAtual((DebitoCreditoSituacao) arrayConta[2]);
 				}
 
-				// ligaÁ„o de ·gua - Item 3
+				// liga√ß√£o de √°gua - Item 3
 				if (arrayConta[3] != null) {
 					conta.setLigacaoAguaSituacao((LigacaoAguaSituacao) arrayConta[3]);
 				}
@@ -32258,7 +32258,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					conta.setReferenciaBaixaContabil((Integer) arrayConta[46]);
 				}
 
-				// Usu·rio
+				// Usu√°rio
 				if (arrayConta[49] != null) {
 					Usuario usuario = new Usuario();
 					usuario.setNomeUsuario((String) arrayConta[49]);
@@ -32271,7 +32271,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					conta.setValorImposto((BigDecimal) arrayConta[50]);
 				}
 
-				// Ultima alteraÁ„o
+				// Ultima altera√ß√£o
 				if (arrayConta[51] != null) {
 
 					conta.setUltimaAlteracao((Date) arrayConta[51]);
@@ -32343,12 +32343,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					contaHistorico.setReferencia((Integer) arrayConta[1]);
 				}
 
-				// debito credito situaÔøΩÔøΩo atual - Item [2]
+				// debito credito situa√Ø¬ø¬Ω√Ø¬ø¬Ωo atual - Item [2]
 				if (arrayConta[2] != null) {
 					contaHistorico.setDebitoCreditoSituacaoAtual((DebitoCreditoSituacao) arrayConta[2]);
 				}
 
-				// ligaÔøΩÔøΩo de ÔøΩgua - Item 3
+				// liga√Ø¬ø¬Ω√Ø¬ø¬Ωo de √Ø¬ø¬Ωgua - Item 3
 				if (arrayConta[3] != null) {
 					contaHistorico.setLigacaoAguaSituacao((LigacaoAguaSituacao) arrayConta[3]);
 				}
@@ -32625,7 +32625,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * @author Vivianne Sousa, Mariana Victor
 	 * @date 15/09/2006, 11/03/2011
@@ -32683,7 +32683,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Linha 5
 			// --------------------------------------------------------------
-			// recupera endereco do imÛvel
+			// recupera endereco do im√≥vel
 			String enderecoImovel = "";
 			try {
 				enderecoImovel = getControladorEndereco()
@@ -32696,8 +32696,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Linha 6
 			// --------------------------------------------------------------
-			// inst‚ncia um imovel com os dados da conta para recuperar a
-			// inscriÁ„o que est· no objeto imovel
+			// inst√¢ncia um imovel com os dados da conta para recuperar a
+			// inscri√ß√£o que est√° no objeto imovel
 			Imovel imovel = new Imovel();
 			Localidade localidade = new Localidade();
 			localidade.setId(emitirContaHelper.getIdLocalidade());
@@ -32711,7 +32711,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			imovel.setQuadra(quadra);
 			imovel.setLote(emitirContaHelper.getLoteConta());
 			imovel.setSubLote(emitirContaHelper.getSubLoteConta());
-			// InscriÁ„o do imÛvel
+			// Inscri√ß√£o do im√≥vel
 			emitirContaHelper
 					.setInscricaoImovel(imovel.getInscricaoFormatada());
 
@@ -32721,8 +32721,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			String enderecoClienteResponsavel = "";
 			Integer idImovelContaEnvio = emitirContaHelper
 					.getIdImovelContaEnvio();
-			// caso a coleÁ„o de contas seja de entrega para o cliente
-			// respons·vel
+			// caso a cole√ß√£o de contas seja de entrega para o cliente
+			// respons√°vel
 			if (idImovelContaEnvio != null
 					&& (idImovelContaEnvio
 							.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL) || idImovelContaEnvio
@@ -32750,7 +32750,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// Linha 8
 			// --------------------------------------------------------------
 
-			// [SB0002] - Determinar tipo de ligaÁ„o e tipo de MediÁ„o
+			// [SB0002] - Determinar tipo de liga√ß√£o e tipo de Medi√ß√£o
 			Integer[] parmSituacao = determinarTipoLigacaoMedicao(emitirContaHelper);
 			Integer tipoLigacao = parmSituacao[0];
 			Integer tipoMedicao = parmSituacao[1];
@@ -32758,20 +32758,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// Linha 9
 			// --------------------------------------------------------------
 			// cria uma stringBuilder para recuperar o resultado do [SB0003]
-			// o tamanho da string que vem como resultado È de 20 posiÁıes
+			// o tamanho da string que vem como resultado √© de 20 posi√ß√µes
 			StringBuilder obterDadosConsumoMedicaoAnterior = null;
 
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 1
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 1, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes1(obterDadosConsumoMedicaoAnterior
 							.toString());
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 4
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 4, tipoLigacao, tipoMedicao);
 			emitirContaHelper
@@ -32780,25 +32780,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Linha 10
 			// --------------------------------------------------------------
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 2
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 2, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes2(obterDadosConsumoMedicaoAnterior
 							.toString());
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 5
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 5, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes5(obterDadosConsumoMedicaoAnterior
 							.toString());
 			// Inicio Chamar Sub-Fluxo
-			// recupera os parametros da mediÁ„o historico do
-			// [SB0004] - Obter Dados da MediÁ„o da Conta
+			// recupera os parametros da medi√ß√£o historico do
+			// [SB0004] - Obter Dados da Medi√ß√£o da Conta
 			Object[] parmsMedicaoHistorico = obterDadosMedicaoConta(
 					emitirContaHelper, tipoMedicao);
 			// Leitura Anterior
@@ -32809,7 +32809,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			String dataLeituraAnterior = "";
 			// Leitura Anterior
 			String dataLeituraAtual = "";
-			// Leitura SituaÁ„o Atual
+			// Leitura Situa√ß√£o Atual
 			// String leituraSituacaoAtual = "";
 			// Leitura Anormalidade Faturamento
 			String leituraAnormalidadeFaturamento = "";
@@ -32847,7 +32847,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			emitirContaHelper.setDataLeituraAtual(dataLeituraAtual);
 			String diasConsumo = "";
 			if (!dataLeituraAnterior.equals("") && !dataLeituraAtual.equals("")) {
-				// calcula a quantidade de dias de consumo que È a
+				// calcula a quantidade de dias de consumo que √© a
 				// quantidade de dias
 				// entre a data de leitura
 				// anterior(parmsMedicaoHistorico[2]) e a data de leitura
@@ -32857,9 +32857,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								(Date) parmsMedicaoHistorico[3],
 								(Date) parmsMedicaoHistorico[2]);
 			}
-			// recupera os parametros de consumo faturamento e consumo mÈdio
-			// di·rio
-			// [SB0005] - Obter Consumo Faturado e Consumo MÈdio Di·rio
+			// recupera os parametros de consumo faturamento e consumo m√©dio
+			// di√°rio
+			// [SB0005] - Obter Consumo Faturado e Consumo M√©dio Di√°rio
 			String[] parmsConsumo = obterConsumoFaturadoConsumoMedioDiario(
 					emitirContaHelper, tipoMedicao, diasConsumo);
 			String consumoFaturamento = parmsConsumo[0];
@@ -32880,17 +32880,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Linha 11
 			// --------------------------------------------------------------
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 3
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 3, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes3(obterDadosConsumoMedicaoAnterior
 							.toString());
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 6
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 6, tipoLigacao, tipoMedicao);
 			emitirContaHelper
@@ -32922,27 +32922,27 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 
 				if (parmsConsumoHistorico != null) {
-					// descriÁ„o abreviada tipo de consumo
+					// descri√ß√£o abreviada tipo de consumo
 					if (parmsConsumoHistorico[0] != null) {
 						descricaoAbreviadaTipoConsumo = (String) parmsConsumoHistorico[0];
 					}
-					// descriÁ„o tipo de consumo
+					// descri√ß√£o tipo de consumo
 					if (parmsConsumoHistorico[1] != null) {
 						descricaoTipoConsumo = (String) parmsConsumoHistorico[1];
 					}
-					// Consumo mÈdio
+					// Consumo m√©dio
 					if (parmsConsumoHistorico[2] != null) {
 						consumoMedio = "" + (Integer) parmsConsumoHistorico[2];
 					}
-					// descriÁ„o abreviada anormalidade de consumo
+					// descri√ß√£o abreviada anormalidade de consumo
 					if (parmsConsumoHistorico[3] != null) {
 						descricaoAbreviadaAnormalidadeConsumo = (String) parmsConsumoHistorico[3];
 					}
-					// descriÁ„o anormalidade de consumo
+					// descri√ß√£o anormalidade de consumo
 					if (parmsConsumoHistorico[4] != null) {
 						descricaoAnormalidadeConsumo = (String) parmsConsumoHistorico[4];
 					}
-					// Consumo mÈdio
+					// Consumo m√©dio
 					if (parmsConsumoHistorico[5] != null) {
 						consumoRateio = "" + (Integer) parmsConsumoHistorico[5];
 					}
@@ -32968,7 +32968,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Inicio Chamar Sub-Fluxo
 			// soma a quantidades de economias da tabela contaCategoria
-			// [SB0007] - Obter Dados da MediÁ„o da Conta
+			// [SB0007] - Obter Dados da Medi√ß√£o da Conta
 			Short quantidadeEconomiaConta = 0;
 			quantidadeEconomiaConta = obterQuantidadeEconomiasConta(
 					emitirContaHelper.getIdConta(), false);
@@ -33017,9 +33017,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Inicio Chamar Sub-Fluxo
 			// concatena os campos dos sub-fluxos anteriores
-			// [SB0008] - Obter Dados da MediÁ„o da Conta
+			// [SB0008] - Obter Dados da Medi√ß√£o da Conta
 			StringBuilder codigoAuxiliar = new StringBuilder();
-			// leitura situaÁ„o atual
+			// leitura situa√ß√£o atual
 			// tipo de consumo
 			codigoAuxiliar.append(Util.completaString(
 					descricaoAbreviadaTipoConsumo, 1));
@@ -33032,7 +33032,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			codigoAuxiliar.append(Util.completaString(
 					descricaoAbreviadaAnormalidadeConsumo, 2));
 
-			// perfil do imÛvel
+			// perfil do im√≥vel
 			if (emitirContaHelper.getIdImovelPerfil() != null) {
 				codigoAuxiliar.append(Util.completaString(""
 						+ emitirContaHelper.getIdImovelPerfil(), 1));
@@ -33041,7 +33041,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 			// dias do consumo
 			codigoAuxiliar.append(Util.completaString(diasConsumo, 2));
-			// Consumo medio do imÛvel
+			// Consumo medio do im√≥vel
 			codigoAuxiliar.append(Util.completaString(consumoMedio, 6));
 			// Fim Chamar Sub-Fluxo
 			emitirContaHelper
@@ -33058,7 +33058,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Linha 16
 			// --------------------------------------------------------------
-			// chama o [SB0010] - Gerar Linhas da DescriÁ„o dos ServiÁos e
+			// chama o [SB0010] - Gerar Linhas da Descri√ß√£o dos Servi√ßos e
 			// Tarifas
 
 			Collection colecaoContaLinhasDescricaoServicosTarifasTotalHelper = gerarLinhasDescricaoServicoTarifasRelatorio(
@@ -33172,7 +33172,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Linha 23
 			// --------------------------------------------------------------
-			// Considerar as contas do tipo dÈbito autom·tico como tipo de conta
+			// Considerar as contas do tipo d√©bito autom√°tico como tipo de conta
 			// normal
 			// [SB0018 - Gerar Linhas das DemaisContas]
 			Integer digitoVerificadorConta = new Integer(""
@@ -33188,12 +33188,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
 
 			// Se valor da conta maior que o valor limite
-			// emite uma Ficha de CompensaÁ„o(Boleto bancario)
+			// emite uma Ficha de Compensa√ß√£o(Boleto bancario)
 			if (valorConta
 					.compareTo(EmitirContaHelper.VALOR_LIMITE_FICHA_COMPENSACAO) == 1) {
-				// representaÁ„o numÈrica do cÛdigo de barras
-				// [SB0030 - Obter representaÁ„o numÈrica do cÛdigo de barras da
-				// Ficha de CompensaÁ„o]
+				// representa√ß√£o num√©rica do c√≥digo de barras
+				// [SB0030 - Obter representa√ß√£o num√©rica do c√≥digo de barras da
+				// Ficha de Compensa√ß√£o]
 				StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
 				String nossoNumeroSemDV = nossoNumero.toString().substring(0,
 						17);
@@ -33232,7 +33232,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									null, null, null, null);
 
 					// Linha 24
-					// Formata a representaÁ„o n˙merica do cÛdigo de barras
+					// Formata a representa√ß√£o n√∫merica do c√≥digo de barras
 					String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra
 							.substring(0, 11)
 							+ "-"
@@ -33288,11 +33288,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Recupera o id do cliente respons·vel pela conta
+	 * Recupera o id do cliente respons√°vel pela conta
 	 * 
-	 * [UC0348] - Emitir Contas [UC0482]Emitir 2™ Via de Conta
+	 * [UC0348] - Emitir Contas [UC0482]Emitir 2¬™ Via de Conta
 	 * 
-	 * @author S·vio Luiz, Vivianne Sousa
+	 * @author S√°vio Luiz, Vivianne Sousa
 	 * @date 15/05/2006 , 22/05/2007
 	 * 
 	 * @return
@@ -33346,13 +33346,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB00020] Gerar Arquivo TXT das Cartas
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 05/12/2006
 	 * 
 	 * @param colecaoConta
@@ -33367,11 +33367,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// cria uma stringBuilder para recuperar o resultado
 		// do
 		// [SB0004]
-		// o tamanho da string que vem como resultado È de
+		// o tamanho da string que vem como resultado √© de
 		// 20
-		// posiÁıes
+		// posi√ß√µes
 		StringBuilder obterDadosConsumoMedicaoAnterior = null;
-		// Caso a situaÁ„o da conta esteja na primeira parte(=1) e seja
+		// Caso a situa√ß√£o da conta esteja na primeira parte(=1) e seja
 		// diferente de 1
 		if (sequencial != 1 && (situacao == 1)) {
 			// gerar 2 linhas com canal 1
@@ -33395,11 +33395,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasArquivoTxtCartas.append(Util.completaString(
 				formatarMesAnoComDigito, 35));
 
-		// matricula do imÛvel
-		// Recupera a matrÌcula do imÛvel da coluna 1 e
+		// matricula do im√≥vel
+		// Recupera a matr√≠cula do im√≥vel da coluna 1 e
 		// formata
 		// a
-		// matrÌcula
+		// matr√≠cula
 		// (ex:500000001 em 5000000.1)
 		String matriculaImovelFormatada = Util.adicionarZerosEsquedaNumero(9,
 				"" + emitirContaHelper.getIdImovel());
@@ -33412,10 +33412,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// Canal
 		linhasArquivoTxtCartas.append("0");
 		// mes/ano referencia e o digito verificador
-		// inst‚ncia um imovel com os dados da conta para
+		// inst√¢ncia um imovel com os dados da conta para
 		// recuperar
 		// a
-		// inscriÁ„o que est· np objeto imovel
+		// inscri√ß√£o que est√° np objeto imovel
 		Imovel imovel = new Imovel();
 		Localidade localidade = new Localidade();
 		localidade.setId(emitirContaHelper.getIdLocalidade());
@@ -33429,7 +33429,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		imovel.setQuadra(quadra);
 		imovel.setLote(emitirContaHelper.getLoteConta());
 		imovel.setSubLote(emitirContaHelper.getSubLoteConta());
-		// InscriÁ„o do imÛvel
+		// Inscri√ß√£o do im√≥vel
 		String inscricao = imovel.getInscricaoFormatada();
 
 		imovel = null;
@@ -33458,7 +33458,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// --Linha 5-- //
 		// Canal
 		linhasArquivoTxtCartas.append("0");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaString("", 3));
 
 		Object[] parmsClienteResponsavel = null;
@@ -33494,7 +33494,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								codigoCliente.length()));
 			}
 		}
-		// seta o id do cliente respons·vel
+		// seta o id do cliente respons√°vel
 		linhasArquivoTxtCartas.append(Util.completaString(codigoCliente, 12));
 
 		linhasArquivoTxtCartas.append(Util.completaString(
@@ -33504,23 +33504,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// --Linha 6-- //
 		// Canal
 		linhasArquivoTxtCartas.append("0");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaString("", 3));
 		if (idClienteResponsavel != null) {
 			// [UC0085]Obter Endereco
 			String enderecoClienteResponsavel = getControladorEndereco()
 					.pesquisarEnderecoClienteAbreviado(idClienteResponsavel);
 			if (enderecoClienteResponsavel != null) {
-				// endereco cliente respons·vel
+				// endereco cliente respons√°vel
 				linhasArquivoTxtCartas.append(Util.completaString(
 						enderecoClienteResponsavel, 57));
 			} else {
-				// endereco cliente respons·vel
+				// endereco cliente respons√°vel
 				linhasArquivoTxtCartas.append(Util.completaString("", 57));
 			}
 
 		} else {
-			// completa com espaÁos em branco
+			// completa com espa√ßos em branco
 			linhasArquivoTxtCartas.append(Util.completaString("", 57));
 		}
 		linhasArquivoTxtCartas.append(System.getProperty("line.separator"));
@@ -33529,23 +33529,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// Canal
 		linhasArquivoTxtCartas.append("1");
 
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaString("", 5));
-		// [SB0002] - Determinar tipo de ligaÁ„o e tipo de
-		// MediÁ„o
+		// [SB0002] - Determinar tipo de liga√ß√£o e tipo de
+		// Medi√ß√£o
 		Integer[] parmSituacao = determinarTipoLigacaoMedicao(emitirContaHelper);
 		Integer tipoLigacao = parmSituacao[1];
 		Integer tipoMedicao = parmSituacao[1];
 
-		// recupera os parametros da mediÁ„o historico do
-		// [SB0005] - Obter Dados da MediÁ„o da Conta
+		// recupera os parametros da medi√ß√£o historico do
+		// [SB0005] - Obter Dados da Medi√ß√£o da Conta
 		Object[] parmsMedicaoHistorico = obterDadosMedicaoConta(
 				emitirContaHelper, tipoMedicao);
 		// Leitura Atual
 		String leituraAtual = "";
 		// Leitura Anterior
 		String dataLeituraAtual = "";
-		// consumo medido do mÍs
+		// consumo medido do m√™s
 		String consumoMedidoMes = "";
 		if (parmsMedicaoHistorico != null) {
 
@@ -33562,13 +33562,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				consumoMedidoMes = "" + (Integer) parmsMedicaoHistorico[6];
 			}
 		}
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas
 				.append(Util.completaString(dataLeituraAtual, 10));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaStringComEspacoAEsquerda(
 				leituraAtual, 39));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaString("", 6));
 
 		linhasArquivoTxtCartas.append(System.getProperty("line.separator"));
@@ -33577,10 +33577,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// Canal
 		linhasArquivoTxtCartas.append("1");
 
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaStringComEspacoAEsquerda(
 				consumoMedidoMes, 26));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaString("", 34));
 
 		linhasArquivoTxtCartas.append(System.getProperty("line.separator"));
@@ -33610,17 +33610,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 			if (parmsConsumoHistorico != null) {
-				// Consumo mÈdio
+				// Consumo m√©dio
 				if (parmsConsumoHistorico[2] != null) {
 					consumoMedio = "" + (Integer) parmsConsumoHistorico[2];
 				}
 			}
 
 		}
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaStringComEspacoAEsquerda(
 				consumoMedio, 42));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaString("", 18));
 
 		linhasArquivoTxtCartas.append(System.getProperty("line.separator"));
@@ -33629,9 +33629,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// Canal
 		linhasArquivoTxtCartas.append("1");
 
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaString("", 14));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaString(
 				emitirContaHelper.getDescricaoLocalidade(), 46));
 
@@ -33642,34 +33642,34 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasArquivoTxtCartas.append("1");
 
 		// chama o [SB0004] -Obter Dados do Consumo e
-		// MediÁ„o
+		// Medi√ß√£o
 		// Anterior
 		// passando a quantidade de Meses Igual a 6 e o tipo
 		// de
-		// ligaÁ„o
-		// e mediÁ„o
+		// liga√ß√£o
+		// e medi√ß√£o
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 				emitirContaHelper, 6, tipoLigacao, tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
-		// MediÁ„o
+		// Medi√ß√£o
 		// Anterior
 		// passando a quantidade de Meses Igual a 4 e o tipo
 		// de
-		// ligaÁ„o
-		// e mediÁ„o
+		// liga√ß√£o
+		// e medi√ß√£o
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 				emitirContaHelper, 4, tipoLigacao, tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
-		// MediÁ„o
+		// Medi√ß√£o
 		// Anterior
 		// passando a quantidade de Meses Igual a 2 e o tipo
 		// de
-		// ligaÁ„o
-		// e mediÁ„o
+		// liga√ß√£o
+		// e medi√ß√£o
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 				emitirContaHelper, 2, tipoLigacao, tipoMedicao);
@@ -33681,34 +33681,34 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		linhasArquivoTxtCartas.append(" ");
 
 		// chama o [SB0004] -Obter Dados do Consumo e
-		// MediÁ„o
+		// Medi√ß√£o
 		// Anterior
 		// passando a quantidade de Meses Igual a 5 e o tipo
 		// de
-		// ligaÁ„o
-		// e mediÁ„o
+		// liga√ß√£o
+		// e medi√ß√£o
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 				emitirContaHelper, 5, tipoLigacao, tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
-		// MediÁ„o
+		// Medi√ß√£o
 		// Anterior
 		// passando a quantidade de Meses Igual a 3 e o tipo
 		// de
-		// ligaÁ„o
-		// e mediÁ„o
+		// liga√ß√£o
+		// e medi√ß√£o
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 				emitirContaHelper, 3, tipoLigacao, tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
-		// MediÁ„o
+		// Medi√ß√£o
 		// Anterior
 		// passando a quantidade de Meses Igual a 1 e o tipo
 		// de
-		// ligaÁ„o
-		// e mediÁ„o
+		// liga√ß√£o
+		// e medi√ß√£o
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 				emitirContaHelper, 1, tipoLigacao, tipoMedicao);
@@ -33718,11 +33718,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// --Linha 13-- //
 		// Canal
 		linhasArquivoTxtCartas.append("0");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaString("", 42));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append("SEQ.  ");
-		// sequencial impress„o
+		// sequencial impress√£o
 		String sequencialImpressaoFormatada = Util.adicionarZerosEsquedaNumero(
 				6, "" + sequencial);
 		sequencialImpressaoFormatada = sequencialImpressaoFormatada.substring(
@@ -33735,12 +33735,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// --Linha 14-- //
 		// Canal
 		linhasArquivoTxtCartas.append(" ");
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaString("", 42));
 		linhasArquivoTxtCartas.append("GRUPO - ");
 		linhasArquivoTxtCartas.append(Util.completaStringComEspacoAEsquerda(""
 				+ emitirContaHelper.getIdFaturamentoGrupo(), 5));
-		// completa com espaÁos em branco
+		// completa com espa√ßos em branco
 		linhasArquivoTxtCartas.append(Util.completaString("", 5));
 
 		return linhasArquivoTxtCartas;
@@ -33775,8 +33775,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				/*
 				 * Determina a base de calculo dos impostos deduzido = (valor de
-				 * ·gua + valor de esgoto + valor dos dÈbitos cobrados - valor
-				 * dos crÈditos realizados).
+				 * √°gua + valor de esgoto + valor dos d√©bitos cobrados - valor
+				 * dos cr√©ditos realizados).
 				 */
 				baseCalculo = valorAgua.add(valorEsgoto);
 				baseCalculo = baseCalculo.add(valorDebito);
@@ -33809,8 +33809,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						percetagemTotalAliquota = percetagemTotalAliquota.add(impostoTipoAliquota.getPercentualAliquota());
 
 						/*
-						 * O valor do ˙ltimo imposto n„o ser· mais calculado,
-						 * ser· a diferenÁa entre o valor total do imposto com o
+						 * O valor do √∫ltimo imposto n√£o ser√° mais calculado,
+						 * ser√° a diferen√ßa entre o valor total do imposto com o
 						 * valor dos impostos calculados.
 						 */
 						if (iteratorImpostoTipo.hasNext()) {
@@ -33942,7 +33942,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// Cliente Relacao Tipo
 				clienteContaInserir.setIndicadorNomeConta((Short) array[2]);
 
-				// ⁄ltima alteraÁ„o
+				// √öltima altera√ß√£o
 				clienteContaInserir.setUltimaAlteracao(new Date());
 
 				// -------------------------------------------------------
@@ -34019,7 +34019,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.setPercentualAliquota(impostosDeduzidoColecao
 								.getPercentualAliquota());
 
-				// Base de c·lculo
+				// Base de c√°lculo
 				BigDecimal valorBase = contaAtual.getValorAgua().add(
 						contaAtual.getValorEsgoto());
 				valorBase = valorBase.add(contaAtual.getDebitos());
@@ -34038,9 +34038,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Tarnsfere para o histÛrico de contas
+	 * Tarnsfere para o hist√≥rico de contas
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 09/10/2006
@@ -34156,9 +34156,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Transfere para o histÛrico os dÈbitos a cobrar.
+	 * Transfere para o hist√≥rico os d√©bitos a cobrar.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 10/10/2006
@@ -34262,9 +34262,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Transfere para o histÛrico os crÈditos a realizar.
+	 * Transfere para o hist√≥rico os cr√©ditos a realizar.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 10/10/2006
@@ -34286,17 +34286,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection colecaoCreditoARealizarRemover = new ArrayList();
 			Collection colecaoCreditoARealizarCategoriaRemover = new ArrayList();
 
-			// cria o histÛrico de crÈdito a realizar
+			// cria o hist√≥rico de cr√©dito a realizar
 			CreditoARealizarHistorico creditoARealizarHistoricoTemp = null;
 
 			if (creditosARealizar != null && !creditosARealizar.isEmpty()) {
 
 				int cont = 0;
-				// laÁo para criar todos os histÛricos de crÈditos a realizar
+				// la√ßo para criar todos os hist√≥ricos de cr√©ditos a realizar
 				for (CreditoARealizar creditoARealizar : creditosARealizar) {
 					cont++;
 
-					// seta os dados do histÛrico de crÈdito a realizar
+					// seta os dados do hist√≥rico de cr√©dito a realizar
 					creditoARealizarHistoricoTemp = new CreditoARealizarHistorico();
 					creditoARealizarHistoricoTemp.setId(creditoARealizar
 							.getId());
@@ -34370,7 +34370,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					colecaoCreditoARealizarHistoricoInserir
 							.add(creditoARealizarHistoricoTemp);
 
-					// adicona o id do crÈdito a realizar para coleÁ„o
+					// adicona o id do cr√©dito a realizar para cole√ß√£o
 					colecaoIdsCreditoARealizar.add(creditoARealizar.getId());
 
 					Collection<CreditoARealizarCategoria> colecaoCreditoARealizarCategoria = this.repositorioFaturamento
@@ -34411,7 +34411,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 
-				// Inserindo no histÛrico
+				// Inserindo no hist√≥rico
 				colecaoCreditoARealizarRemover.addAll(creditosARealizar);
 				getControladorBatch().inserirColecaoObjetoParaBatch(
 						colecaoCreditoARealizarHistoricoInserir);
@@ -34425,7 +34425,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				getControladorBatch().removerColecaoCreditoARealizarParaBatch(
 						colecaoCreditoARealizarRemover);
 
-				// liberando a memÛria
+				// liberando a mem√≥ria
 				creditosARealizar = null;
 				colecaoCreditoARealizarCategoriaRemover = null;
 				colecaoCreditoARealizarRemover = null;
@@ -34440,10 +34440,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Para cada conta transferida para o histÛrico, atualiza o indicador de que
-	 * a conta est· no histÛrico na tabela ContaGeral.
+	 * Para cada conta transferida para o hist√≥rico, atualiza o indicador de que
+	 * a conta est√° no hist√≥rico na tabela ContaGeral.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 11/10/2006
@@ -34487,10 +34487,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Para cada dÈbito a cobrar transferido para o histÛrico, atualiza o
-	 * indicador de que o dÈbito a cobrar est· no histÛrico na tabela
+	 * Para cada d√©bito a cobrar transferido para o hist√≥rico, atualiza o
+	 * indicador de que o d√©bito a cobrar est√° no hist√≥rico na tabela
 	 * DebitoACobrarGeral.
 	 * 
 	 * @author Pedro Alexandre
@@ -34539,10 +34539,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Para cada crÈdito a realizar transferido para o histÛrico, atualiza o
-	 * indicador de que o crÈdito a realizar est· no histÛrico na tabela
+	 * Para cada cr√©dito a realizar transferido para o hist√≥rico, atualiza o
+	 * indicador de que o cr√©dito a realizar est√° no hist√≥rico na tabela
 	 * CreditoARealizarGeral.
 	 * 
 	 * @author Pedro Alexandre
@@ -34593,8 +34593,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * 
-	 * Este mÈtodo se destina a validar todas as situaÁıes e particularidades da
-	 * inserir guia de pagamento no momento da exibiÁ„o.
+	 * Este m√©todo se destina a validar todas as situa√ß√µes e particularidades da
+	 * inserir guia de pagamento no momento da exibi√ß√£o.
 	 * 
 	 * [FS0003] Validar registro de atendimento [FS0007] Validar ordem de
 	 * servico.
@@ -34614,16 +34614,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			Imovel imovel = ra.getImovel();
 
-			// Caso tenha informado o imÛvel e n„o exista imÛvel associado ao
+			// Caso tenha informado o im√≥vel e n√£o exista im√≥vel associado ao
 			// Registro Atendimento
 			if (idImovel != null && imovel == null) {
 				throw new ControladorException(
 						"atencao.registro_atendimento.nao.associado.imovel");
 			}
 
-			// Caso tenha informado o imÛvel e o imÛvel que esteja associado ao
+			// Caso tenha informado o im√≥vel e o im√≥vel que esteja associado ao
 			// Registro Atendimento
-			// seja diferente do imÛvel informado
+			// seja diferente do im√≥vel informado
 			if (idImovel != null && imovel != null
 					&& imovel.getId().intValue() != idImovel.intValue()) {
 				throw new ControladorException(
@@ -34631,8 +34631,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						"" + imovel.getId());
 			}
 
-			// Caso tenha informado o cliente e o cliente informado n„o conste
-			// na relaÁ„o
+			// Caso tenha informado o cliente e o cliente informado n√£o conste
+			// na rela√ß√£o
 			// de clientes do Registro Atendimento
 			if (idCliente != null) {
 
@@ -34646,26 +34646,26 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						FiltroRegistroAtendimentoSolicitante.REGISTRO_ATENDIMENTO_ID,
 						ra.getId()));
 
-				// Pesquisa de acordo com os par‚metros informados no filtro
+				// Pesquisa de acordo com os par√¢metros informados no filtro
 				Collection colecaoRegistros = this.getControladorUtil()
 						.pesquisar(filtro,
 								RegistroAtendimentoSolicitante.class.getName());
 
-				// Verifica se a pesquisa retornou algum objeto para a coleÁ„o
+				// Verifica se a pesquisa retornou algum objeto para a cole√ß√£o
 				if (colecaoRegistros == null || colecaoRegistros.isEmpty()) {
 					throw new ControladorException(
 							"atencao.registro_atendimento.associado.cliente");
 				}
 			}
 
-			// Caso a situaÁ„o do Registro de Atendimento n„o seja encerrada
+			// Caso a situa√ß√£o do Registro de Atendimento n√£o seja encerrada
 			if (ra.getAtendimentoMotivoEncerramento() != null) {
 				throw new ControladorException(
 						"atencao.registro_atendimento.esta.encerrado");
 			}
 
-			// Caso o tipo de solicitaÁ„o do registro atendimento
-			// n„o permita a geraÁ„o de dÈbito a cobrar
+			// Caso o tipo de solicita√ß√£o do registro atendimento
+			// n√£o permita a gera√ß√£o de d√©bito a cobrar
 			if (ra.getSolicitacaoTipoEspecificacao()
 					.getIndicadorGeracaoDebito().intValue() == ConstantesSistema.NAO
 					.intValue()) {
@@ -34676,7 +34676,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// [FS0007] Validar ordem de servico.
 		} else if (ordemServico != null) {
 
-			// Caso a Ordem de ServiÁo n„o esteja associada a um Registro de
+			// Caso a Ordem de Servi√ßo n√£o esteja associada a um Registro de
 			// Atendimento
 			if (ordemServico.getRegistroAtendimento() == null
 					|| ordemServico.getRegistroAtendimento().getId() == null) {
@@ -34688,17 +34688,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.getRegistroAtendimento();
 			Imovel imovel = registroAtendimento.getImovel();
 
-			// Caso a Ordem de ServiÁo esteja associada a um Registro
-			// Atendimento,o imÛvel tenha sido informado
-			// e n„o existe um imÛvel associado ao Registro Atendimento
+			// Caso a Ordem de Servi√ßo esteja associada a um Registro
+			// Atendimento,o im√≥vel tenha sido informado
+			// e n√£o existe um im√≥vel associado ao Registro Atendimento
 			if (idImovel != null && imovel == null) {
 				throw new ControladorException(
 						"atencao.ordem_servico.imovel.registro_atendimento.nao.associado");
 			}
 
-			// Caso tenha informado o imÛvel e o imÛvel que esteja associado ao
+			// Caso tenha informado o im√≥vel e o im√≥vel que esteja associado ao
 			// Registro Atendimento
-			// seja diferente do imÛvel informado
+			// seja diferente do im√≥vel informado
 			if (idImovel != null && imovel != null
 					&& imovel.getId().intValue() != idImovel.intValue()) {
 				throw new ControladorException(
@@ -34706,8 +34706,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						null, "" + imovel.getId());
 			}
 
-			// Caso tenha informado o cliente e o cliente informado n„o conste
-			// na relaÁ„o
+			// Caso tenha informado o cliente e o cliente informado n√£o conste
+			// na rela√ß√£o
 			// de clientes do Registro Atendimento
 			if (idCliente != null) {
 
@@ -34721,12 +34721,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						FiltroRegistroAtendimentoSolicitante.REGISTRO_ATENDIMENTO_ID,
 						registroAtendimento.getId()));
 
-				// Pesquisa de acordo com os par‚metros informados no filtro
+				// Pesquisa de acordo com os par√¢metros informados no filtro
 				Collection colecaoRegistros = this.getControladorUtil()
 						.pesquisar(filtro,
 								RegistroAtendimentoSolicitante.class.getName());
 
-				// Verifica se a pesquisa retornou algum objeto para a coleÁ„o
+				// Verifica se a pesquisa retornou algum objeto para a cole√ß√£o
 				if (colecaoRegistros == null || colecaoRegistros.isEmpty()) {
 					throw new ControladorException(
 							"atencao.os.registro_atendimento.associado.cliente");
@@ -34738,7 +34738,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0482] Emitir 2 Via de Contas
 	 * 
-	 * [SB00010] Gerar Linhas da DescriÁ„o dos ServiÁos e Tarifas
+	 * [SB00010] Gerar Linhas da Descri√ß√£o dos Servi√ßos e Tarifas
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/11/2006
@@ -34792,7 +34792,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0482] Emitir 2 Via de Contas
 	 * 
-	 * [SB00011] Gerar Linhas da Tarifa de ¡gua
+	 * [SB00011] Gerar Linhas da Tarifa de √Ågua
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/11/2006
@@ -34874,9 +34874,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				String consumoFaixa3 = "";
 				String valor3 = "";
 				if (parmsMedicaoHistorico == null) {
-					descricaoServicosTarifas3 = " TARIFA MÕNIMA";
+					descricaoServicosTarifas3 = " TARIFA M√çNIMA";
 
-					// Valor da tarifa mÌnima de ·gua para a categoria por
+					// Valor da tarifa m√≠nima de √°gua para a categoria por
 					// economia
 					BigDecimal qtdEconomia = null;
 
@@ -34911,7 +34911,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					consumoFaixa3 = "MINIMO";
 					consumoFaixa3 = consumoFaixa3 + Util.completaString("", 11);
 
-					// valor da ·gua para categoria
+					// valor da √°gua para categoria
 					String valorAgua = Util.formatarMoedaReal(contaCategoria
 							.getValorAgua());
 					valor3 = valorAgua;
@@ -34928,7 +34928,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				} else {
 
-					// recupera a coleÁ„o de conta categoria consumo faixa
+					// recupera a cole√ß√£o de conta categoria consumo faixa
 					Collection colecaoContaCategoriaConsumoFaixa = null;
 					try {
 						colecaoContaCategoriaConsumoFaixa = repositorioFaturamento
@@ -34945,7 +34945,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (colecaoContaCategoriaConsumoFaixa != null
 							&& !colecaoContaCategoriaConsumoFaixa.isEmpty()) {
 
-						// Consumo mÌnimo de ·gua para a categoria por economia
+						// Consumo m√≠nimo de √°gua para a categoria por economia
 						BigDecimal qtdEconomia = null;
 
 						if (contaCategoria.getComp_id().getCategoria()
@@ -35024,7 +35024,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							descricaoServicosTarifas3 = descricaoServicosTarifas3
 									+ valorTarifaMinima + " (POR UNIDADE)";
 
-							// Consumo mÌnimo de ·gua para a categoria
+							// Consumo m√≠nimo de √°gua para a categoria
 							if (contaCategoria.getConsumoMinimoAgua() != null
 									&& !contaCategoria.getConsumoMinimoAgua()
 											.equals("")) {
@@ -35040,7 +35040,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 							consumoFaixa3 = consumoFaixa3 + " M3";
 
-							// valor da tarifa mÌnima de agua para categoria
+							// valor da tarifa m√≠nima de agua para categoria
 							String valorAguaCategoria = "";
 							if (contaCategoria.getValorTarifaMinimaAgua() != null) {
 								valorAguaCategoria = Util
@@ -35216,13 +35216,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					} else {
 						// 2.3.2.
 
-						descricaoServicosTarifas3 = " CONSUMO DE ¡GUA";
+						descricaoServicosTarifas3 = " CONSUMO DE √ÅGUA";
 						consumoFaixa3 = Util.completaStringComEspacoAEsquerda(
 								"" + contaCategoria.getConsumoAgua(), 6)
 								+ " M3";
 						/**
 						 * Segunda via de conta com
-						 * rateio est· somando o valor de ·gua da categoria com
+						 * rateio est√° somando o valor de √°gua da categoria com
 						 * o valor do rateio.
 						 * 
 						 * @author Wellington Rocha
@@ -35296,7 +35296,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			descricaoServicosTarifas1 = descricaoServicosTarifas1
 					+ Util.completaStringComEspacoAEsquerda(percentualEsgoto, 6);
 			descricaoServicosTarifas1 = descricaoServicosTarifas1
-					+ " % DO VALOR DA ¡GUA";
+					+ " % DO VALOR DA √ÅGUA";
 
 		} else {
 			// Volume coletado de esgoto
@@ -35313,8 +35313,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		/**
 		 *  Pamela Gatinho - 02/08/2012
 		 * 
-		 * AlteraÁ„o para exibir somente o valor do esgoto, sem o ralor do
-		 * rateio, que ser· mostrado separadamente em outra linha do documento.
+		 * Altera√ß√£o para exibir somente o valor do esgoto, sem o ralor do
+		 * rateio, que ser√° mostrado separadamente em outra linha do documento.
 		 */
 		BigDecimal valorEsgotoSemRateio = new BigDecimal("0.00");
 		if (emitirContaHelper.getValorRateioEsgoto() != null) {
@@ -35374,7 +35374,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// -- Linha 2 --//
 		String descricaoServicosTarifas2 = "";
 		String valor2 = "";
-		// Completa com espaÁos em branco
+		// Completa com espa√ßos em branco
 		descricaoServicosTarifas2 = Util.completaString("", 2);
 		Collection colecaoParmsImpostosDeduzidos = null;
 		try {
@@ -35393,7 +35393,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 		StringBuilder descricaoAbreviadaImposto = new StringBuilder();
 		BigDecimal valorImpostosTotal = new BigDecimal("0.00");
-		// verifica se a coleÁ„o È diferente de nulo
+		// verifica se a cole√ß√£o √© diferente de nulo
 		if (colecaoParmsImpostosDeduzidos != null
 				&& !colecaoParmsImpostosDeduzidos.isEmpty()) {
 			Iterator iteratorParmsImpostosDeduzidos = colecaoParmsImpostosDeduzidos
@@ -35414,17 +35414,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (parmsImpostoDeduzido[2] != null) {
 					valorImpostos = (BigDecimal) parmsImpostoDeduzido[2];
 				}
-				// concatena a descriÁ„o abreviada do tipo de imposto com o
+				// concatena a descri√ß√£o abreviada do tipo de imposto com o
 				// precentual de aliquota
 				descricaoAbreviadaImposto.append(descricaoTipoImposto + "-"
 						+ percentualAliquota + "%");
-				// Completa com espaÁos em branco
+				// Completa com espa√ßos em branco
 				descricaoAbreviadaImposto.append(" ");
 				// adiciona o valor dos impostos
 				valorImpostosTotal = valorImpostosTotal.add(valorImpostos);
 			}
 		}
-		// recupera a descriÁ„o abreviada concatenada com a aliquota
+		// recupera a descri√ß√£o abreviada concatenada com a aliquota
 		String descricaoAbreviadaConcatenada = "";
 		if (descricaoAbreviadaImposto != null
 				&& !descricaoAbreviadaImposto.equals("")) {
@@ -35451,7 +35451,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0482] Emitir 2 Via de Contas
 	 * 
-	 * [SB00013] Gerar Linhas de DÈbitos Cobrados
+	 * [SB00013] Gerar Linhas de D√©bitos Cobrados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/11/2006
@@ -35501,7 +35501,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (parmsDebitoAutomatico[0] != null) {
 						valorDebitosCobrados = Util.formatarMoedaReal((BigDecimal) parmsDebitoAutomatico[0]);
 					}
-					// numero de prestaÁ„o do dÈbito
+					// numero de presta√ß√£o do d√©bito
 					if (parmsDebitoAutomatico[1] != null) {
 						numeroPrestacao = "" + ((Short) parmsDebitoAutomatico[1]);
 					}
@@ -35512,7 +35512,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					/*
 					 * Alterado por Vivianne Sousa em 21/12/2007 - Analista:
-					 * Adriano criaÁ„o do bonus para parcelamento com RD
+					 * Adriano cria√ß√£o do bonus para parcelamento com RD
 					 * especial
 					 */
 					// numero parcela bonus
@@ -35525,10 +35525,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						String descricaoServicosTarifas1 = "";
 						String valor1 = "";
 						// -- Linha 1 --//
-						descricaoServicosTarifas1 = "PARCELAMENTO DE D…BITOS" + Util.completaString("", 2) + "PARCELA ";
-						// numero da prestaÁ„o do dÈbito
+						descricaoServicosTarifas1 = "PARCELAMENTO DE D√âBITOS" + Util.completaString("", 2) + "PARCELA ";
+						// numero da presta√ß√£o do d√©bito
 						descricaoServicosTarifas1 = descricaoServicosTarifas1 + Util.completaStringComEspacoAEsquerda(numeroPrestacao, 3) + "/";
-						// numero total da prestaÁ„o do dÈbito
+						// numero total da presta√ß√£o do d√©bito
 						descricaoServicosTarifas1 = descricaoServicosTarifas1 + Util.completaString(totalPrestacaoMenosBonus, 3);
 						valor1 = valorDebitosCobrados;
 
@@ -35552,26 +35552,26 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 		if (colecaoDebitoCobradoPorTipo != null && !colecaoDebitoCobradoPorTipo.isEmpty()) {
 			ListIterator iteratorDebitoCobradoPorTipo = (ListIterator) colecaoDebitoCobradoPorTipo.listIterator();
-			// vari·vel respons·vel para controle de mudanÁa do tipo de dÈbito
+			// vari√°vel respons√°vel para controle de mudan√ßa do tipo de d√©bito
 			boolean mudou = true;
-			// variavel que verifica se È a primeira vez,de cada tipo do
-			// dÈbito,que entra para ser escrito no txt sÛ uma vez a
-			// descriÁ„o do tipo do debito
+			// variavel que verifica se √© a primeira vez,de cada tipo do
+			// d√©bito,que entra para ser escrito no txt s√≥ uma vez a
+			// descri√ß√£o do tipo do debito
 			boolean primeiraVez = true;
 			Integer idDebitoTipoVerificador = null;
 			BigDecimal valorTotalPrestacoes = new BigDecimal("0.00");
-			// valor da pretaÁ„o
+			// valor da preta√ß√£o
 			BigDecimal valorPrestacao = null;
-			// numero da pretaÁ„o atual
+			// numero da preta√ß√£o atual
 			Integer numeroPrestacaoDebito = null;
-			// numero total de prestaÁıes
+			// numero total de presta√ß√µes
 			Integer numeroPrestacaoTotal = null;
 			String totalPrestacaoMenosBonus = "";
-			// colecao para guardar os ano/mes referencia do dÈbito cobrado
+			// colecao para guardar os ano/mes referencia do d√©bito cobrado
 			Collection colecaoAnoMesReferenciaDebito = new ArrayList();
 			// cria um int que vai ver o tamanho da string builder
 			// dependendo da quantidade de mes/ano referencia calcula os
-			// espaÁos em brancos para o valor ficar no lugar certo
+			// espa√ßos em brancos para o valor ficar no lugar certo
 			// int tamanhoAnoMesReferencia = 0;
 			String descricaoServicosTarifas2 = "";
 			// String consumoFaixa2 = "";
@@ -35580,29 +35580,29 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			while (iteratorDebitoCobradoPorTipo.hasNext()) {
 				Object[] parmsDebitoCobradoPorTipo = (Object[]) iteratorDebitoCobradoPorTipo.next();
 
-				// recupera os parametros da coleÁ„o valor da pretaÁ„o
+				// recupera os parametros da cole√ß√£o valor da preta√ß√£o
 				if (parmsDebitoCobradoPorTipo[0] != null) {
 					valorPrestacao = (BigDecimal) parmsDebitoCobradoPorTipo[0];
 				}
-				// numero da pretaÁ„o atual
+				// numero da preta√ß√£o atual
 				if (parmsDebitoCobradoPorTipo[1] != null) {
 					numeroPrestacaoDebito = new Integer("" + (Short) parmsDebitoCobradoPorTipo[1]);
 				}
-				// numero total de prestaÁıes
+				// numero total de presta√ß√µes
 				if (parmsDebitoCobradoPorTipo[2] != null) {
 					numeroPrestacaoTotal = new Integer("" + (Short) parmsDebitoCobradoPorTipo[2]);
 				}
-				// ano Mes ReferÍncia do dÈbito
+				// ano Mes Refer√™ncia do d√©bito
 				Integer anoMesReferencia = null;
 				if (parmsDebitoCobradoPorTipo[3] != null) {
 					anoMesReferencia = (Integer) parmsDebitoCobradoPorTipo[3];
 				}
-				// id do tipo do dÈbito
+				// id do tipo do d√©bito
 				Integer idDebitoTipo = null;
 				if (parmsDebitoCobradoPorTipo[4] != null) {
 					idDebitoTipo = (Integer) parmsDebitoCobradoPorTipo[4];
 				}
-				// descriÁ„o do tipo do dÈbito
+				// descri√ß√£o do tipo do d√©bito
 				String descricaoDebitoTipo = null;
 				if (parmsDebitoCobradoPorTipo[5] != null) {
 					descricaoDebitoTipo = (String) parmsDebitoCobradoPorTipo[5];
@@ -35610,7 +35610,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				/*
 				 * Alterado por Vivianne Sousa em 21/12/2007 - Analista: Adriano
-				 * criaÁ„o do bonus para parcelamento com RD especial
+				 * cria√ß√£o do bonus para parcelamento com RD especial
 				 */
 				Short numeroParcelaBonus = 0;
 				// numero parcela bonus
@@ -35619,24 +35619,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 				totalPrestacaoMenosBonus = "" + (numeroPrestacaoTotal.intValue() - numeroParcelaBonus.intValue());
 
-				// muda o estado do boolean e o valor do dÈbito tipo
+				// muda o estado do boolean e o valor do d√©bito tipo
 				// verificador na primeira vez ou quando mudar o tipo
 				if (mudou) {
 					idDebitoTipoVerificador = idDebitoTipo;
 					mudou = false;
 					// tamanhoAnoMesReferencia = 0;
 				}
-				// caso seja o mesmo tipo dÈbito
+				// caso seja o mesmo tipo d√©bito
 				if (idDebitoTipo.equals(idDebitoTipoVerificador)) {
 					if (primeiraVez) {
 						// -- Linha 2 --//
-						// descriÁ„o do tipo de dÈbito
+						// descri√ß√£o do tipo de d√©bito
 						descricaoServicosTarifas2 = Util.completaString(descricaoDebitoTipo, 30);
 						primeiraVez = false;
 					}
-					// adiciona o valor da prestaÁ„o ao total
+					// adiciona o valor da presta√ß√£o ao total
 					valorTotalPrestacoes = valorTotalPrestacoes.add(valorPrestacao);
-					// adiciona o ano/mes referencia na coleÁ„o
+					// adiciona o ano/mes referencia na cole√ß√£o
 					if (anoMesReferencia != null) {
 						colecaoAnoMesReferenciaDebito.add(anoMesReferencia);
 					} else {
@@ -35644,7 +35644,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						descricaoServicosTarifas2 = descricaoServicosTarifas2 + Util.completaStringComEspacoAEsquerda("" + numeroPrestacaoDebito, 3);
 						descricaoServicosTarifas2 = descricaoServicosTarifas2 + "/" + Util.completaString(totalPrestacaoMenosBonus, 3);
 
-						// Valor da pretaÁ„o
+						// Valor da preta√ß√£o
 						String valorPrestacaoString = Util.formatarMoedaReal(valorTotalPrestacoes);
 						valor2 = valorPrestacaoString;
 
@@ -35656,8 +35656,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 
 				} else {
-					// 4.1.2. caso a coleÁ„o dos meses de referÍncia do
-					// grupo do tipo de dÈbito esteja preenchida
+					// 4.1.2. caso a cole√ß√£o dos meses de refer√™ncia do
+					// grupo do tipo de d√©bito esteja preenchida
 					if (colecaoAnoMesReferenciaDebito != null && !colecaoAnoMesReferenciaDebito.isEmpty()) {
 						Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito.iterator();
 						int i = 1;
@@ -35665,13 +35665,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							Integer anoMesReferenciaDebito = (Integer) iteratorAnoMesReferenciaDebito.next();
 							String anoMesReferenciaDebitoString = null;
 							if (i == 1) {
-								// mes/ano referencia do dÈbito
+								// mes/ano referencia do d√©bito
 								anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 								descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 								// caso exita somente um mes/ano de
 								// referencia na lista
 								if (colecaoAnoMesReferenciaDebito.size() == 1) {
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 									valor2 = valorAcumulado;
 
@@ -35683,11 +35683,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 								} 
 							} else {
-								// caso i seja igual a 2 ent„o comeÁa a
+								// caso i seja igual a 2 ent√£o come√ßa a
 								// linha 3 do subFluxo
 								if (i == 2) {
 									// -- Linha 3 --//
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									descricaoServicosTarifas2 = " ";
 									// mes/ano referencia do debito
 									anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
@@ -35696,7 +35696,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// caso exita somente um mes/ano de
 									// referencia na lista
 									if (colecaoAnoMesReferenciaDebito.size() == 2) {
-										// valor acumulado do tipo do dÈbito
+										// valor acumulado do tipo do d√©bito
 										String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 										valor2 = valorAcumulado;
 
@@ -35707,26 +35707,26 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 
 									} else {
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										descricaoServicosTarifas2 = descricaoServicosTarifas2 + " ";
 									}
 
 								} else {
-									// caso exista atÈ mais 6 ocorrÍncias na
+									// caso exista at√© mais 6 ocorr√™ncias na
 									// lista de meses
-									// -1 pq j· foi colocado na string o
+									// -1 pq j√° foi colocado na string o
 									// ultimo anoMes
 									if ((colecaoAnoMesReferenciaDebito.size() - 1) <= 2) {
 
 										// mes/ano referencia do credito
 										anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 										descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
-										// caso n„o tenha outro ano mes na
-										// coleÁ„o ent„o completa a linha
+										// caso n√£o tenha outro ano mes na
+										// cole√ß√£o ent√£o completa a linha
 										// com o valor
 										if (!iteratorAnoMesReferenciaDebito.hasNext()) {
 											// valor acumulado do tipo do
-											// dÈbito
+											// d√©bito
 											String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 											valor2 = valorAcumulado;
 
@@ -35739,17 +35739,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 									} else {
 										// se existir mais de 6 ano/mes na
-										// coleÁ„oAnoMesReferenciaDebito
-										// ent„o sÛ mostra as 5 maiores
+										// cole√ß√£oAnoMesReferenciaDebito
+										// ent√£o s√≥ mostra as 5 maiores
 										if (i < 3) {
-											// mes/ano referencia do dÈbito
+											// mes/ano referencia do d√©bito
 											anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 											descricaoServicosTarifas2 = descricaoServicosTarifas2 + anoMesReferenciaDebitoString + " ";
 										} else {
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											descricaoServicosTarifas2 = descricaoServicosTarifas2 + " E OUTRAS";
 											// valor acumulado do tipo do
-											// dÈbito
+											// d√©bito
 											String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 											valor2 = valorAcumulado;
 
@@ -35772,15 +35772,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// caso contrario mada o estado do boolean
 					mudou = true;
 					primeiraVez = true;
-					// retorna uma posiÁ„o do iterator
+					// retorna uma posi√ß√£o do iterator
 					iteratorDebitoCobradoPorTipo.previous();
 				}
 			}
 
 			// no caso de ser o ultimo tipo
 
-			// caso a coleÁ„o dos meses de referÍncia do grupo do
-			// tipo de dÈbito esteja preenchida
+			// caso a cole√ß√£o dos meses de refer√™ncia do grupo do
+			// tipo de d√©bito esteja preenchida
 			if (colecaoAnoMesReferenciaDebito != null && !colecaoAnoMesReferenciaDebito.isEmpty()) {
 				Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito.iterator();
 				int i = 1;
@@ -35788,12 +35788,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					Integer anoMesReferenciaDebito = (Integer) iteratorAnoMesReferenciaDebito.next();
 					String anoMesReferenciaDebitoString = null;
 					if (i == 1) {
-						// mes/ano referencia do dÈbito
+						// mes/ano referencia do d√©bito
 						anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 						descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 
 						if (colecaoAnoMesReferenciaDebito.size() == 1) {
-							// valor acumulado do tipo do dÈbito
+							// valor acumulado do tipo do d√©bito
 							String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 							valor2 = valorAcumulado;
 
@@ -35813,7 +35813,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// na lista
 							if (colecaoAnoMesReferenciaDebito.size() == 2) {
 
-								// valor acumulado do tipo do dÈbito
+								// valor acumulado do tipo do d√©bito
 								String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 								valor2 = valorAcumulado;
 
@@ -35824,9 +35824,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 							}
 						} else {
-							// caso exista atÈ mais 6 ocorrÍncias na lista
+							// caso exista at√© mais 6 ocorr√™ncias na lista
 							// de meses
-							// -1 pq j· foi colocado na string o ultimo
+							// -1 pq j√° foi colocado na string o ultimo
 							// anoMes
 							if ((colecaoAnoMesReferenciaDebito.size() - 1) <= 2) {
 
@@ -35834,12 +35834,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 								descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 
-								// caso n„o tenha outro ano mes na
-								// coleÁ„o ent„o completa a linha com o
+								// caso n√£o tenha outro ano mes na
+								// cole√ß√£o ent√£o completa a linha com o
 								// valor
 								if (!iteratorAnoMesReferenciaDebito.hasNext()) {
 									// valor acumulado do tipo do
-									// dÈbito
+									// d√©bito
 									String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 									valor2 = valorAcumulado;
 
@@ -35852,17 +35852,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							} else {
 								// se existir mais de 6 ano/mes na
-								// coleÁ„oAnoMesReferenciaDebito
-								// ent„o sÛ mostra as 5 maiores
+								// cole√ß√£oAnoMesReferenciaDebito
+								// ent√£o s√≥ mostra as 5 maiores
 								if (i < 3) {
-									// mes/ano referencia do dÈbito
+									// mes/ano referencia do d√©bito
 									anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 									descricaoServicosTarifas2 = descricaoServicosTarifas2 + anoMesReferenciaDebitoString + " ";
 								} else {
 									descricaoServicosTarifas2 = descricaoServicosTarifas2 + " E OUTRAS";
 
 									// valor acumulado do tipo do
-									// dÈbito
+									// d√©bito
 									String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 									valor2 = valorAcumulado;
 
@@ -35894,11 +35894,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				faturamentoGrupo.setAnoMesReferencia(emitirContaHelper.getAmReferencia());
 				//BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel, faturamentoGrupo);
 
-				// RATEIO DE ¡GUA
+				// RATEIO DE √ÅGUA
 				String descricaoServicosTarifas1 = "";
 
 				if (emitirContaHelper.getValorRateioAgua() != null) {
-					descricaoServicosTarifas1 = "RATEIO DE CONSUMO DE ¡GUA";
+					descricaoServicosTarifas1 = "RATEIO DE CONSUMO DE √ÅGUA";
 
 					contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 					contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas1);
@@ -35932,7 +35932,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0482] Emitir 2 Via de Contas
 	 * 
-	 * [SB00013] Gerar Linhas de DÈbitos Cobrados
+	 * [SB00013] Gerar Linhas de D√©bitos Cobrados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/11/2006
@@ -35969,27 +35969,27 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& !colecaoCreditoRealizadoPorTipo.isEmpty()) {
 			ListIterator iteratorDebitoRealizadoPorTipo = (ListIterator) colecaoCreditoRealizadoPorTipo
 					.listIterator();
-			// vari·vel respons·vel para controle de mudanÁa do tipo de
+			// vari√°vel respons√°vel para controle de mudan√ßa do tipo de
 			// credito
 			boolean mudou = true;
-			// variavel que verifica se È a primeira vez,de cada tipo do
+			// variavel que verifica se √© a primeira vez,de cada tipo do
 			// credito,que entra para ser escrito
-			// no txt sÛ uma vez a descriÁ„o do tipo do credito
+			// no txt s√≥ uma vez a descri√ß√£o do tipo do credito
 			boolean primeiraVez = true;
 			Integer idCreditoTipoVerificador = null;
 			BigDecimal valorTotalCredito = new BigDecimal("0.00");
 			BigDecimal valorCredito = null;
 			Short numeroCredito = null;
-			// numero total de crÈditos
+			// numero total de cr√©ditos
 			Short numeroCreditoTotal = null;
 			String numeroCreditoTotalMenosBonus = "";
 			// cria um int que vai ver o tamanho da string builder
 			// dependendo da quantidade
-			// de mes/ano referencia calcula os espaÁos em brancos
+			// de mes/ano referencia calcula os espa√ßos em brancos
 			// para o valor ficar no lugar certo
 			// int tamanhoAnoMesReferencia = 0;
-			// caso n„o seja a primeira vez que entre no boolean primeira
-			// vez(que nesse caso È quando troca o tipo de credito)
+			// caso n√£o seja a primeira vez que entre no boolean primeira
+			// vez(que nesse caso √© quando troca o tipo de credito)
 			// boolean primeiraVezIndependenteTipo = false;
 			// colecao para guardar os ano/mes referencia do credito realizado
 			Collection colecaoAnoMesReferenciaCredito = new ArrayList();
@@ -35997,12 +35997,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Object[] parmsDebitoCobradoPorTipo = (Object[]) iteratorDebitoRealizadoPorTipo
 						.next();
 
-				// recupera os parametros da coleÁ„o
-				// valor do crÈdito
+				// recupera os parametros da cole√ß√£o
+				// valor do cr√©dito
 				if (parmsDebitoCobradoPorTipo[0] != null) {
 					valorCredito = (BigDecimal) parmsDebitoCobradoPorTipo[0];
 				}
-				// numero da pretaÁ„o atual
+				// numero da preta√ß√£o atual
 				if (parmsDebitoCobradoPorTipo[1] != null) {
 					numeroCredito = (Short) parmsDebitoCobradoPorTipo[1];
 				}
@@ -36010,24 +36010,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (parmsDebitoCobradoPorTipo[2] != null) {
 					numeroCreditoTotal = (Short) parmsDebitoCobradoPorTipo[2];
 				}
-				// ano Mes ReferÍncia do crÈdito
+				// ano Mes Refer√™ncia do cr√©dito
 				Integer anoMesReferencia = null;
 				if (parmsDebitoCobradoPorTipo[3] != null) {
 					anoMesReferencia = (Integer) parmsDebitoCobradoPorTipo[3];
 				}
-				// id do tipo do dÈbito
+				// id do tipo do d√©bito
 				Integer idCreditoTipo = null;
 				if (parmsDebitoCobradoPorTipo[4] != null) {
 					idCreditoTipo = (Integer) parmsDebitoCobradoPorTipo[4];
 				}
-				// descriÁ„o do tipo do credito
+				// descri√ß√£o do tipo do credito
 				String descricaoCreditoTipo = null;
 				if (parmsDebitoCobradoPorTipo[5] != null) {
 					descricaoCreditoTipo = (String) parmsDebitoCobradoPorTipo[5];
 				}
 				/*
 				 * Alterado por Vivianne Sousa em 21/12/2007 - Analista: Adriano
-				 * criaÁ„o do bonus para parcelamento com RD especial
+				 * cria√ß√£o do bonus para parcelamento com RD especial
 				 */
 				Short numeroParcelaBonus = 0;
 				// numero parcela bonus
@@ -36045,7 +36045,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					mudou = false;
 					// tamanhoAnoMesReferencia = 0;
 				}
-				// caso seja o mesmo tipo dÈbito
+				// caso seja o mesmo tipo d√©bito
 				if (idCreditoTipo.equals(idCreditoTipoVerificador)) {
 					if (primeiraVez) {
 						// proxima linha
@@ -36055,7 +36055,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// }
 						// -- Linha 1 --//
 
-						// descriÁ„o do tipo de credito
+						// descri√ß√£o do tipo de credito
 						descricaoServicosTarifas = descricaoCreditoTipo;
 
 						primeiraVez = false;
@@ -36063,11 +36063,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					// adiciona o valor do credito ao total
 					valorTotalCredito = valorTotalCredito.add(valorCredito);
-					// adiciona o ano/mes referencia na coleÁ„o
+					// adiciona o ano/mes referencia na cole√ß√£o
 					if (anoMesReferencia != null) {
 						colecaoAnoMesReferenciaCredito.add(anoMesReferencia);
 					} else {
-						// -- Linha 1 (CONTINUA«¬O)--//
+						// -- Linha 1 (CONTINUA√á√ÇO)--//
 						// Constante
 						descricaoServicosTarifas = descricaoServicosTarifas
 								+ "PARCELA ";
@@ -36078,7 +36078,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								+ Util.completaString(
 										numeroCreditoTotalMenosBonus, 3);
 
-						// Valor da pretaÁ„o
+						// Valor da preta√ß√£o
 						String valorCreditoString = Util
 								.formatarMoedaReal(valorCredito);
 						valor = "-" + valorCreditoString;
@@ -36096,7 +36096,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 
 				} else {
-					// caso a coleÁ„o dos meses de referÍncia do grupo do
+					// caso a cole√ß√£o dos meses de refer√™ncia do grupo do
 					// tipo de credito esteja preenchida
 					if (colecaoAnoMesReferenciaCredito != null
 							&& !colecaoAnoMesReferenciaCredito.isEmpty()) {
@@ -36118,7 +36118,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// referencia na lista
 								if (colecaoAnoMesReferenciaCredito.size() == 1) {
 
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
 									valor = "-" +  valorAcumulado;
@@ -36134,7 +36134,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 
 								} else {
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 									contaLinhasDescricaoServicosTarifasTotalHelper
 											.setDescricaoServicosTarifas(descricaoServicosTarifas);
@@ -36146,7 +36146,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 								}
 							} else {
-								// caso i seja igual a 2 ent„o comeÁa a
+								// caso i seja igual a 2 ent√£o come√ßa a
 								// linha 3 do subFluxo
 								if (i == 2) {
 									// -- Linha 3 --//
@@ -36162,7 +36162,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// referencia na lista
 									if (colecaoAnoMesReferenciaCredito.size() == 2) {
 
-										// valor acumulado do tipo do dÈbito
+										// valor acumulado do tipo do d√©bito
 										String valorAcumulado = Util
 												.formatarMoedaReal(valorTotalCredito);
 										valor = "-" +  valorAcumulado;
@@ -36178,14 +36178,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 
 									} else {
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										descricaoServicosTarifas = descricaoServicosTarifas
 												+ " ";
 									}
 								} else {
-									// caso exista atÈ mais 6 ocorrÍncias na
+									// caso exista at√© mais 6 ocorr√™ncias na
 									// lista de meses
-									// -1 pq j· foi colocado na string o
+									// -1 pq j√° foi colocado na string o
 									// ultimo anoMes
 									if ((colecaoAnoMesReferenciaCredito.size() - 1) <= 6) {
 
@@ -36197,13 +36197,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												+ anoMesReferenciaCreditoString
 												+ " ";
 
-										// caso n„o tenha outro ano mes na
-										// coleÁ„o ent„o
+										// caso n√£o tenha outro ano mes na
+										// cole√ß√£o ent√£o
 										// completa a linha com o valor
 										if (!iteratorAnoMesReferenciaCredito
 												.hasNext()) {
 
-											// valor acumulado do tipo do dÈbito
+											// valor acumulado do tipo do d√©bito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalCredito);
 											valor = "-" +  valorAcumulado;
@@ -36222,10 +36222,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 									} else {
 										// se existir mais de 6 ano/mes na
-										// coleÁ„oAnoMesReferenciaDebito
-										// ent„o sÛ mostra as 5 maiores
+										// cole√ß√£oAnoMesReferenciaDebito
+										// ent√£o s√≥ mostra as 5 maiores
 										if (i < 7) {
-											// mes/ano referencia do dÈbito
+											// mes/ano referencia do d√©bito
 											anoMesReferenciaCreditoString = Util
 													.formatarAnoMesParaMesAno(anoMesReferenciaCredito);
 
@@ -36237,7 +36237,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											descricaoServicosTarifas = descricaoServicosTarifas
 													+ " E OUTRAS";
 
-											// valor acumulado do tipo do dÈbito
+											// valor acumulado do tipo do d√©bito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalCredito);
 											valor = "-" +  valorAcumulado;
@@ -36258,7 +36258,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 							i = i + 1;
 						}
-						// caso a coleÁ„o de ano/mes esteja vazia
+						// caso a cole√ß√£o de ano/mes esteja vazia
 					}
 					// limpa os campos
 					valorTotalCredito = new BigDecimal("0.00");
@@ -36266,13 +36266,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// caso contrario mada o estado do boolean
 					mudou = true;
 					primeiraVez = true;
-					// retorna uma posiÁ„o do iterator
+					// retorna uma posi√ß√£o do iterator
 					iteratorDebitoRealizadoPorTipo.previous();
 				}
 			}
 			// No caso de ter o ultimo tipo
 
-			// caso a coleÁ„o dos meses de referÍncia do grupo do
+			// caso a cole√ß√£o dos meses de refer√™ncia do grupo do
 			// tipo de credito esteja preenchida
 			if (colecaoAnoMesReferenciaCredito != null
 					&& !colecaoAnoMesReferenciaCredito.isEmpty()) {
@@ -36294,7 +36294,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// referencia na lista
 						if (colecaoAnoMesReferenciaCredito.size() == 1) {
 
-							// valor acumulado do tipo do dÈbito
+							// valor acumulado do tipo do d√©bito
 							String valorAcumulado = Util
 									.formatarMoedaReal(valorTotalCredito);
 							valor = "-" +  valorAcumulado;
@@ -36310,7 +36310,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 
 						} else {
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
 							contaLinhasDescricaoServicosTarifasTotalHelper
 									.setDescricaoServicosTarifas(descricaoServicosTarifas);
@@ -36322,7 +36322,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 						}
 					} else {
-						// caso i seja igual a 2 ent„o comeÁa a
+						// caso i seja igual a 2 ent√£o come√ßa a
 						// linha 3 do subFluxo
 						if (i == 2) {
 							// -- Linha 3 --//
@@ -36338,7 +36338,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// lista
 							if (colecaoAnoMesReferenciaCredito.size() == 2) {
 
-								// valor acumulado do tipo do dÈbito
+								// valor acumulado do tipo do d√©bito
 								String valorAcumulado = Util
 										.formatarMoedaReal(valorTotalCredito);
 								valor = "-" +  valorAcumulado;
@@ -36354,14 +36354,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 
 							} else {
-								// completa espaÁos em brancos
+								// completa espa√ßos em brancos
 								descricaoServicosTarifas = descricaoServicosTarifas
 										+ " ";
 							}
 						} else {
-							// caso exista atÈ mais 6 ocorrÍncias na lista de
+							// caso exista at√© mais 6 ocorr√™ncias na lista de
 							// meses
-							// -1 pq j· foi colocado na string o ultimo anoMes
+							// -1 pq j√° foi colocado na string o ultimo anoMes
 							if ((colecaoAnoMesReferenciaCredito.size() - 1) <= 6) {
 
 								// mes/ano referencia do credito
@@ -36370,12 +36370,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								descricaoServicosTarifas = descricaoServicosTarifas
 										+ anoMesReferenciaCreditoString + " ";
 
-								// caso n„o tenha outro ano mes na
-								// coleÁ„o ent„o
+								// caso n√£o tenha outro ano mes na
+								// cole√ß√£o ent√£o
 								// completa a linha com o valor
 								if (!iteratorAnoMesReferenciaCredito.hasNext()) {
 
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
 									valor = "-" +  valorAcumulado;
@@ -36393,10 +36393,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							} else {
 								// se existir mais de 6 ano/mes na
-								// coleÁ„oAnoMesReferenciaDebito
-								// ent„o sÛ mostra as 5 maiores
+								// cole√ß√£oAnoMesReferenciaDebito
+								// ent√£o s√≥ mostra as 5 maiores
 								if (i < 7) {
-									// mes/ano referencia do dÈbito
+									// mes/ano referencia do d√©bito
 									anoMesReferenciaCreditoString = Util
 											.formatarAnoMesParaMesAno(anoMesReferenciaCredito);
 									descricaoServicosTarifas = descricaoServicosTarifas
@@ -36406,7 +36406,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									descricaoServicosTarifas = descricaoServicosTarifas
 											+ " E OUTRAS";
 
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
 									valor = "-" +  valorAcumulado;
@@ -36427,7 +36427,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					i = i + 1;
 				}
-				// caso a coleÁ„o de ano/mes esteja vazia
+				// caso a cole√ß√£o de ano/mes esteja vazia
 			}
 		}
 
@@ -36435,7 +36435,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Seleciona as contas agrupando por imÛvel
+	 * Seleciona as contas agrupando por im√≥vel
 	 * 
 	 * [UC0485] - Gerar Resumo dos Devedores Duvidosos
 	 * 
@@ -36516,7 +36516,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descriÁ„o sobre o caso de uso>
+	 * <Breve descri√ß√£o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -36591,14 +36591,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Recupera a data de realizaÁ„o passando o id do imovel e a quantidade de
-	 * meses que quer subtrair,caso n„o queira subtrair colocar 0 [UC0488]
-	 * Informar Retorno Ordem de FiscalizaÁ„o
+	 * Recupera a data de realiza√ß√£o passando o id do imovel e a quantidade de
+	 * meses que quer subtrair,caso n√£o queira subtrair colocar 0 [UC0488]
+	 * Informar Retorno Ordem de Fiscaliza√ß√£o
 	 * 
-	 * [SB0004] - Calcular Valor de ¡gua e/ou Esgoto
+	 * [SB0004] - Calcular Valor de √Ågua e/ou Esgoto
 	 * 
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 04/12/2006
 	 * 
 	 * @param idOS
@@ -36631,7 +36631,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							anoMesFaturamentoGrupo, quantidadeMeses);
 				}
 				Integer idFaturamentoAtividade = FaturamentoAtividade.EFETUAR_LEITURA;
-				// pesquisa a data de realizaÁ„o
+				// pesquisa a data de realiza√ß√£o
 				dataRealizacao = repositorioFaturamento
 						.pesquisarDataRealizacaoFaturamentoAtividadeCronograma(
 								idFaturamentoGrupo, idFaturamentoAtividade,
@@ -36659,7 +36659,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		Collection retorno = new ArrayList();
 
-		// CriaÁ„o das coleÁıes
+		// Cria√ß√£o das cole√ß√µes
 		Collection colecaoContasManutencaoArray = null;
 
 		try {
@@ -36690,7 +36690,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoContasManutencaoArrayIterator.hasNext()) {
 
-				// ObtÈm os dados do crÈdito realizado
+				// Obt√©m os dados do cr√©dito realizado
 				Object[] contaArray = (Object[]) colecaoContasManutencaoArrayIterator
 						.next();
 
@@ -36699,7 +36699,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// ID da conta
 				conta.setId((Integer) contaArray[0]);
 
-				// Ano MÍs referencia
+				// Ano M√™s referencia
 				conta.setReferencia((Integer) contaArray[1]);
 
 				// Data de vencimento
@@ -36718,19 +36718,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				conta.setDataVencimentoConta(dataVencimento);
 
-				// Valor de ·gua
+				// Valor de √°gua
 				conta.setValorAgua((BigDecimal) contaArray[3]);
 
 				// Valor de esgoto
 				conta.setValorEsgoto((BigDecimal) contaArray[4]);
 
-				// Valor dos dÈbitos
+				// Valor dos d√©bitos
 				conta.setDebitos((BigDecimal) contaArray[5]);
 
-				// Valor dos crÈditos
+				// Valor dos cr√©ditos
 				conta.setValorCreditos((BigDecimal) contaArray[6]);
 
-				// Consumo de ·gua
+				// Consumo de √°gua
 				conta.setConsumoAgua((Integer) contaArray[7]);
 
 				// Consumo de esgoto
@@ -36765,7 +36765,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// DebitoCreditoSituacaoAtual
 				conta.setDebitoCreditoSituacaoAtual((DebitoCreditoSituacao) contaArray[11]);
 
-				// Ano MÍs referencia cont·bil
+				// Ano M√™s referencia cont√°bil
 				conta.setReferenciaContabil((Integer) contaArray[12]);
 
 				// ultima Alteracao
@@ -36800,9 +36800,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC113] Faturar Grupo Faturamento
 	 * 
-	 * Apaga todas as contas existentes para uma rota em um determinado anoMÍs
-	 * de referÍncia que estajam com a situaÁ„o atual igual a situaÁ„o recebida
-	 * pelo mÈtodo.
+	 * Apaga todas as contas existentes para uma rota em um determinado anoM√™s
+	 * de refer√™ncia que estajam com a situa√ß√£o atual igual a situa√ß√£o recebida
+	 * pelo m√©todo.
 	 * 
 	 * @author Rafael Santos, Raphael Rossiter
 	 * @date 02/01/2007, 24/03/2008
@@ -36866,9 +36866,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Atualiza o ano/mÍs de referÍncia do faturamento somando mais um mÍs.
+	 * Atualiza o ano/m√™s de refer√™ncia do faturamento somando mais um m√™s.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 08/01/2007
@@ -36881,8 +36881,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throws ControladorException {
 		try {
 			// item 12
-			// respons·vel por atualizar o ano/mÍs de
-			// faturamento da tabela de par‚metros do sistema
+			// respons√°vel por atualizar o ano/m√™s de
+			// faturamento da tabela de par√¢metros do sistema
 			repositorioFaturamento.atualizarAnoMesfaturamento(
 					anoMesFaturamentoSistemaParametro,
 					Util.somarData(anoMesFaturamentoSistemaParametro));
@@ -36894,9 +36894,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do MÍs
+	 * [UC0155] Encerrar Faturamento do M√™s
 	 * 
-	 * Pesquisar os ids das localidades para encerrar o faturamento do mÍs.
+	 * Pesquisar os ids das localidades para encerrar o faturamento do m√™s.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 08/01/2007
@@ -36918,7 +36918,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * Pesquisar os ids das localidades para gerar o resumo das
-	 * ligaÁıes/economias.
+	 * liga√ß√µes/economias.
 	 * 
 	 * @author Rodrigo Silveira
 	 * @date 17/01/2007
@@ -37176,10 +37176,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0532] Gerar RelatÛrio de Faturamento das LigaÁıes com MediÁ„o
+	 * [UC0532] Gerar Relat√≥rio de Faturamento das Liga√ß√µes com Medi√ß√£o
 	 * Individualizada
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 02/06/2008
 	 * 
 	 * @param colecaoLigacoesMedicao
@@ -37199,10 +37199,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Integer indicadorPoco = null;
 			indicadorQuebraImovelCondominio++;
 
-			// somatÛrio da qtde de economias dos imÛveis vinculados ao
-			// imÛvel condomÌnio
+			// somat√≥rio da qtde de economias dos im√≥veis vinculados ao
+			// im√≥vel condom√≠nio
 			int somaQtdeEconomias = 0;
-			// somatÛrio da qtde de imÛveis vinculados ao imÛvel condomÌnio
+			// somat√≥rio da qtde de im√≥veis vinculados ao im√≥vel condom√≠nio
 			// int somaQtdeImoveis = 0;
 
 			if (imovel.getPocoTipo() != null) {
@@ -37235,7 +37235,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0532] Gerar RelatÛrio de Faturamento das LigaÁıes com MediÁ„o
+	 * [UC0532] Gerar Relat√≥rio de Faturamento das Liga√ß√µes com Medi√ß√£o
 	 * Individualizada
 	 * 
 	 * @author Vivianne Sousa
@@ -37280,10 +37280,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Integer indicadorPoco = null;
 				indicadorQuebraImovelCondominio++;
 
-				// somatÛrio da qtde de economias dos imÛveis vinculados ao
-				// imÛvel condomÌnio
+				// somat√≥rio da qtde de economias dos im√≥veis vinculados ao
+				// im√≥vel condom√≠nio
 				int somaQtdeEconomias = 0;
-				// somatÛrio da qtde de imÛveis vinculados ao imÛvel condomÌnio
+				// somat√≥rio da qtde de im√≥veis vinculados ao im√≥vel condom√≠nio
 				// int somaQtdeImoveis = 0;
 
 				if (objetoCondominio[3] != null) {
@@ -37342,7 +37342,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.setNomeLocalidade(nomeLocalidade);
 
 			if (idImovel.equals(imovelLigacoesMedicaoIndividualizada[0])) {
-				// imÛvel CondomÌnio
+				// im√≥vel Condom√≠nio
 
 				if (indicadorPoco != null
 						&& !indicadorPoco.equals(PocoTipo.SEM_POCO)) {
@@ -37526,9 +37526,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0493] Emitir de Extrato de Consumo de ImÛvel CondomÌnio
+	 * [UC0493] Emitir de Extrato de Consumo de Im√≥vel Condom√≠nio
 	 * 
-	 * Fl·vio Cordeiro 08/01/2007
+	 * Fl√°vio Cordeiro 08/01/2007
 	 */
 	public void emitirExtratoConsumoImovelCondominio(String anoMesFaturamento,
 			String idFaturamento, int idFuncionalidadeIniciada)
@@ -37536,7 +37536,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		// -------------------------
 		//
-		// Registrar o inÌcio do processamento da Unidade de
+		// Registrar o in√≠cio do processamento da Unidade de
 		// Processamento
 		// do Batch
 		//
@@ -37853,7 +37853,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																(Integer) objetoEmitir[0]));
 
 										// endereco - [UC0085] Obter
-										// EndereÁo
+										// Endere√ßo
 										endereco = getControladorEndereco()
 												.pesquisarEnderecoFormatado(
 														(Integer) objetoEmitir[0]);
@@ -37995,9 +37995,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										int quantidadePosicoes = emitirConsumoImovelCondominimoHelper
 												.getEndereco().length();
 										// Recupera o fim do
-										// endereÁo do
+										// endere√ßo do
 										// cliente
-										// respons·vel
+										// respons√°vel
 										txt.append(Util
 												.completaString(
 														emitirConsumoImovelCondominimoHelper
@@ -38006,14 +38006,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																		quantidadePosicoes),
 														50));
 										// compleca com
-										// espaÁos
+										// espa√ßos
 										// em
 										// brancos
 										txt.append(Util.completaString("", 79));
 
 									} else {
 										// compleca com
-										// espaÁos
+										// espa√ßos
 										// em
 										// brancos
 										txt.append(Util.completaString("", 129));
@@ -38188,7 +38188,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.completaStringComEspacoAEsquerda(
 													"", 8));
 									// Constante
-									txt.append("IM”VEL CONDOMÕNIO ");
+									txt.append("IM√ìVEL CONDOM√çNIO ");
 									// pula para proxima linha
 									txt.append(System
 											.getProperty("line.separator"));
@@ -38211,7 +38211,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									txt.append("1");
 									// constante
 									txt.append(Util.completaString(
-											"  CONSUMO DO IM”VEL CONDOMÕNIO ",
+											"  CONSUMO DO IM√ìVEL CONDOM√çNIO ",
 											51));
 									// consumo faturado
 									txt.append(Util
@@ -38232,7 +38232,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// constante
 									txt.append(Util
 											.completaString(
-													"  SOMA DOS CONSUMOS DOS IM”VEIS VINCULADOS ",
+													"  SOMA DOS CONSUMOS DOS IM√ìVEIS VINCULADOS ",
 													51));
 									// soma dos consumos dos imoveis
 									// associados
@@ -38262,7 +38262,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// constante
 									txt.append(Util
 											.completaString(
-													"  QUANTIDADE DE IM”VEIS VINCULADOS ",
+													"  QUANTIDADE DE IM√ìVEIS VINCULADOS ",
 													51));
 									// Quantidade de imoveis associados
 									txt.append(Util.completaStringComEspacoAEsquerda(
@@ -38351,7 +38351,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				// --------------------------------------------------------
 				//
-				// Registrar o fim da execuÁ„o da Unidade de Processamento
+				// Registrar o fim da execu√ß√£o da Unidade de Processamento
 				//
 				// --------------------------------------------------------
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
@@ -38360,11 +38360,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 		} catch (Exception e) {
-			// Este catch serve para interceptar qualquer exceÁ„o que o
+			// Este catch serve para interceptar qualquer exce√ß√£o que o
 			// processo
-			// batch venha a lanÁar e garantir que a unidade de
+			// batch venha a lan√ßar e garantir que a unidade de
 			// processamento do
-			// batch ser· atualizada com o erro ocorrido
+			// batch ser√° atualizada com o erro ocorrido
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
 					idUnidadeIniciada, true);
@@ -38374,7 +38374,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0173] Gerar RelatÛrio de Resumo do Faturamento
+	 * [UC0173] Gerar Relat√≥rio de Resumo do Faturamento
 	 * 
 	 * @author Vivianne Sousa, Diogo Peixoto
 	 * @created 24/01/2007, 25/04/2011
@@ -38405,7 +38405,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0335] Gerar Resumo de PendÍncia
+	 * [UC0335] Gerar Resumo de Pend√™ncia
 	 * 
 	 * Pesquisar os ids das localidade
 	 * 
@@ -38447,7 +38447,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC] Gerar RelatÛrio de Contas Emitidas
+	 * [UC] Gerar Relat√≥rio de Contas Emitidas
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 30/01/2007
@@ -38464,7 +38464,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		try {
 
-			// IMPRESS√O SIMULT¬NEA
+			// IMPRESS√ÉO SIMULT√ÇNEA
 			if (tipoImpressao.equals("2")) {
 				colecaoContasEmitidas = repositorioFaturamento
 						.consultarContasEmitidasImpressaoSimultaneaRelatorio(
@@ -38501,7 +38501,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							+ objetoContasEmitidas[0]);
 				}
 
-				// id do cliente respons·vel
+				// id do cliente respons√°vel
 				if (objetoContasEmitidas[1] != null) {
 					contasEmitidasRelatorioHelper.setIdClienteResponsavel(""
 							+ objetoContasEmitidas[1]);
@@ -38513,7 +38513,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					contasEmitidasRelatorioHelper.setEndereco(endereco);
 				}
 
-				// nome do cliente respons·vel
+				// nome do cliente respons√°vel
 				if (objetoContasEmitidas[2] != null) {
 					contasEmitidasRelatorioHelper.setNomeClienteResponsavel(""
 							+ objetoContasEmitidas[2]);
@@ -38525,7 +38525,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							+ objetoContasEmitidas[3]);
 				}
 
-				// descriÁ„o da localidade
+				// descri√ß√£o da localidade
 				if (objetoContasEmitidas[4] != null) {
 					contasEmitidasRelatorioHelper.setDescLocalidade(""
 							+ objetoContasEmitidas[4]);
@@ -38537,7 +38537,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.formatarData((Date) objetoContasEmitidas[5]));
 				}
 
-				// id do imÛvel
+				// id do im√≥vel
 				if (objetoContasEmitidas[6] != null) {
 					contasEmitidasRelatorioHelper.setIdImovel(""
 							+ objetoContasEmitidas[6]);
@@ -38604,7 +38604,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							+ objetoContasEmitidas[16]);
 				}
 
-				// descriÁ„o da Esfera Poder
+				// descri√ß√£o da Esfera Poder
 				if (objetoContasEmitidas[17] != null) {
 					contasEmitidasRelatorioHelper.setDescEsferaPoder(""
 							+ objetoContasEmitidas[17]);
@@ -38620,7 +38620,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC] Gerar RelatÛrio de Contas Emitidas
+	 * [UC] Gerar Relat√≥rio de Contas Emitidas
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 02/02/2007
@@ -38641,7 +38641,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * retorna o anoMes do faturamento grupo do imÛvel passado
+	 * retorna o anoMes do faturamento grupo do im√≥vel passado
 	 */
 	public Integer retornaAnoMesFaturamentoGrupo(Integer idImovel)
 			throws ControladorException {
@@ -38661,7 +38661,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @author Eduardo Bianchi
 	 * @date 26/01/2007
 	 * 
-	 * @param Distrito Operaciona DescriÁ„o do par‚metro
+	 * @param Distrito Operaciona Descri√ß√£o do par√¢metro
 	 */
 	public Integer inserirContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) throws ControladorException {
 
@@ -38690,14 +38690,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * 
 	 * [SB0001] Atualizar Contrato de Demanda
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @param usuarioLogado
 	 * @date 28/06/2007
 	 * 
 	 */
 	public void atualizarContratoDemanda(Contrato contratoDemanda, Usuario usuarioLogado) throws ControladorException {
 
-		// [FS0003] - AtualizaÁ„o realizada por outro usu·rio
+		// [FS0003] - Atualiza√ß√£o realizada por outro usu√°rio
 		FiltroContrato filtroContratoDemanda = new FiltroContrato();
 		filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.ID, contratoDemanda.getId()));
 
@@ -38715,7 +38715,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throw new ControladorException("atencao.atualizacao.timestamp");
 		}
 
-		// [FS0007] - Verificar existÍncia do contrato de demanda
+		// [FS0007] - Verificar exist√™ncia do contrato de demanda
 		if (!contratoDemanda.getNumeroContrato().equals(contratoDemandaBase.getNumeroContrato())) {
 			filtroContratoDemanda.limparListaParametros();
 			filtroContratoDemanda.adicionarParametro(new ParametroSimples(FiltroContrato.MUMEROCONTRATO, contratoDemanda.getNumeroContrato()));
@@ -38729,7 +38729,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		contratoDemanda.setUltimaAlteracao(new Date());
 
-		// ------------ REGISTRAR TRANSA«√O----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTRATO_DEMANDA_ATUALIZAR, new UsuarioAcaoUsuarioHelper(
 				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
@@ -38742,7 +38742,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		contratoDemanda.setOperacaoEfetuada(operacaoEfetuada);
 		contratoDemanda.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(contratoDemanda);
-		// ------------ REGISTRAR TRANSA«√O----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 
 		getControladorUtil().atualizar(contratoDemanda);
 
@@ -38752,7 +38752,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * Monta a colecao de resultdos apartir da tbela conta impressao para
 	 * geracao do relatorio de MAPA DE CONTROLE DAS CONTAS EMITIDAS
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 13/02/2007
 	 * 
 	 * @param idGrupoFaturamento
@@ -38845,8 +38845,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					retorno.add(mapaControleContaRelatorioHelper);
 				}
 
-				// parte nova para o relatÛrio ter o processamento em batch
-				// cria uma inst‚ncia da classe do relatÛrio
+				// parte nova para o relat√≥rio ter o processamento em batch
+				// cria uma inst√¢ncia da classe do relat√≥rio
 				RelatorioMapaControleConta relatorioMapaControleConta = new RelatorioMapaControleConta(
 						usuarioLogado);
 
@@ -38862,7 +38862,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							"tipoFichaCompensacao", "CONTA");
 				} else if (indicadorFichaCompensacao.equals("2")) {
 					relatorioMapaControleConta.addParametro(
-							"tipoFichaCompensacao", "BOLETO BANC¡RIO");
+							"tipoFichaCompensacao", "BOLETO BANC√ÅRIO");
 				}
 
 				// Parte do codigo q gera a data de vencimento
@@ -38973,7 +38973,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * Monta a colecao de resultdos apartir da tabela conta impressao para
 	 * geracao do relatorio de RESUMO CONTAS EMITIDAS POR LOCALIDADE NO GRUPO
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 13/02/2007
 	 * 
 	 * @param idGrupoFaturamento
@@ -38991,7 +38991,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			Collection colecaoObjeto = null;
 
-			// Impress„o Simultanea
+			// Impress√£o Simultanea
 			if (tipoImpressao.equals("2")) {
 
 				colecaoObjeto = repositorioFaturamento
@@ -39085,41 +39085,41 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			SistemaParametro sistema = getControladorUtil()
 					.pesquisarParametrosDoSistema();
 
-			// Inst‚ncia a forma de cobranÁa para cobranÁa em conta
+			// Inst√¢ncia a forma de cobran√ßa para cobran√ßa em conta
 			CobrancaForma cobrancaForma = new CobrancaForma();
 			cobrancaForma.setId(CobrancaForma.COBRANCA_EM_CONTA);
 
-			// Inst‚ncia a situaÁ„o do dÈbito para normal
+			// Inst√¢ncia a situa√ß√£o do d√©bito para normal
 			DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 			debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
 
-			// Recupera o tipo de dÈbito referente a despesa postal
+			// Recupera o tipo de d√©bito referente a despesa postal
 			DebitoTipo debitoTipo = this
 					.getDebitoTipoHql(DebitoTipo.TAXA_2_VIA_CONTA);
 
 			// Recupera a data atual
 			Date dataAtual = new Date(System.currentTimeMillis());
 
-			// Verifica se j· existe dÈbito para este imÛvel
+			// Verifica se j√° existe d√©bito para este im√≥vel
 			/*
 			 * Object[] dadoDebitoACobrar = this.repositorioFaturamento
 			 * .pesquisarDebitoACobrar(imovel.getId(), debitoTipo.getId(),
 			 * sistema.getAnoMesFaturamento());
 			 */
 
-			// Cria a vari·vel que vai armazenar o valor do dÈbito
+			// Cria a vari√°vel que vai armazenar o valor do d√©bito
 			BigDecimal valor = new BigDecimal("0");
 
 			/*
-			 * Caso o perfil do imÛvel seja tarifa social o valor vai ser o
-			 * valor da tarifa social Caso contr·rio o valor da tarifa vai ser o
+			 * Caso o perfil do im√≥vel seja tarifa social o valor vai ser o
+			 * valor da tarifa social Caso contr√°rio o valor da tarifa vai ser o
 			 * normal.
 			 */
 			if (!imovel.getImovelPerfil().getId()
 					.equals(ImovelPerfil.TARIFA_SOCIAL)) {
-				// caso o imÛvel n„o seja enquadrado em tarifa social
+				// caso o im√≥vel n√£o seja enquadrado em tarifa social
 
-				// ObtÈm o valor da Tarifa Normal
+				// Obt√©m o valor da Tarifa Normal
 				BigDecimal valorMinimaTarifaNormal = this.repositorioFaturamento
 						.obterValorTarifa(ConsumoTarifa.CONSUMO_NORMAL);
 
@@ -39133,9 +39133,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			} else if (imovel.getImovelPerfil().getId()
 					.equals(ImovelPerfil.TARIFA_SOCIAL)) {
-				// caso o imÛvel seja enquadrado em tarifa social
+				// caso o im√≥vel seja enquadrado em tarifa social
 
-				// ObtÈm o valor da Tarifa Social
+				// Obt√©m o valor da Tarifa Social
 				BigDecimal valorMinimaTarifaSocial = this.repositorioFaturamento
 						.obterValorTarifa(ConsumoTarifa.CONSUMO_SOCIAL);
 
@@ -39148,7 +39148,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				valor = valorMinimaTarifaSocial;
 			}
 
-			// inclui DÈbito A Cobrar Geral
+			// inclui D√©bito A Cobrar Geral
 			DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 			debitoACobrarGeral
 					.setIndicadorHistorico(DebitoACobrarGeral.INDICADOR_NAO_POSSUI_HISTORICO);
@@ -39157,30 +39157,30 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.inserir(debitoACobrarGeral);
 			debitoACobrarGeral.setId(idDebitoACobrarGeral);
 
-			// Cria uma inst‚ncia de dÈbito a cobrar
+			// Cria uma inst√¢ncia de d√©bito a cobrar
 			DebitoACobrar debitoACobrar = new DebitoACobrar();
 			debitoACobrar.setId(debitoACobrarGeral.getId());
 			debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
 
-			// Seta o ImÛvel
+			// Seta o Im√≥vel
 			debitoACobrar.setImovel(imovel);
 
-			// Seta o DÈbito Tipo
+			// Seta o D√©bito Tipo
 			debitoACobrar.setDebitoTipo(debitoTipo);
 
 			// Seta Data e Hora Atual
 			debitoACobrar.setGeracaoDebito(dataAtual);
 
-			// Seta ano/mÍs da conta emitida como 2 via
+			// Seta ano/m√™s da conta emitida como 2 via
 			debitoACobrar.setAnoMesReferenciaDebito(anoMesReferencia);
 
-			// Seta Ano/MÍs de CobranÁa
+			// Seta Ano/M√™s de Cobran√ßa
 			debitoACobrar.setAnoMesCobrancaDebito(sistema
 					.getAnoMesArrecadacao());
 
-			// Seta Ano/MÍs ReferÍncia do Faturamento
+			// Seta Ano/M√™s Refer√™ncia do Faturamento
 			// Alteracao CRC1389 Data:09/03/2009
-			// Author: RÙmulo AurÈlio
+			// Author: R√¥mulo Aur√©lio
 			// Analista: Rosana Carvalho
 
 			int anoMesAtual = Util.getAnoMesComoInt(new Date());
@@ -39195,16 +39195,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 			// Fim Alteracao CRC1389 Data:09/03/2009
 
-			// Seta Valor do DÈbito
+			// Seta Valor do D√©bito
 			BigDecimal valorMultiplicado = valor.multiply(new BigDecimal("10"));
 			BigDecimal valorFinal = valorMultiplicado.divide(new BigDecimal(
 					"100"), 2, BigDecimal.ROUND_HALF_UP);
 			debitoACobrar.setValorDebito(valorFinal);
 
-			// Seta N˙mero de PrestaÁıes do DÈbito
+			// Seta N√∫mero de Presta√ß√µes do D√©bito
 			debitoACobrar.setNumeroPrestacaoDebito(new Short("1"));
 
-			// Seta N˙mero de PrestaÁıes Cobradas
+			// Seta N√∫mero de Presta√ß√µes Cobradas
 			debitoACobrar.setNumeroPrestacaoCobradas(new Short("0"));
 
 			// Seta Localidade
@@ -39213,11 +39213,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// Seta Quadra
 			debitoACobrar.setQuadra(imovel.getQuadra());
 
-			// Seta CÛdigo do Setor Comercial
+			// Seta C√≥digo do Setor Comercial
 			debitoACobrar.setCodigoSetorComercial(imovel.getSetorComercial()
 					.getCodigo());
 
-			// Seta N˙mero Quadra
+			// Seta N√∫mero Quadra
 			debitoACobrar.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
 
 			// Seta Lote
@@ -39234,17 +39234,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			debitoACobrar.setFinanciamentoTipo(debitoTipo
 					.getFinanciamentoTipo());
 
-			// Seta LanÁamento Item Cont·bil
+			// Seta Lan√ßamento Item Cont√°bil
 			debitoACobrar.setLancamentoItemContabil(debitoTipo
 					.getLancamentoItemContabil());
 
-			// Seta DÈbito CrÈdito SituaÁ„o
+			// Seta D√©bito Cr√©dito Situa√ß√£o
 			debitoACobrar.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 
-			// Seta CobranÁa Forma
+			// Seta Cobran√ßa Forma
 			debitoACobrar.setCobrancaForma(cobrancaForma);
 
-			// Seta a data de ultima alteraÁ„o
+			// Seta a data de ultima altera√ß√£o
 			debitoACobrar.setUltimaAlteracao(new Date());
 
 			Integer idDebitoACobrar = (Integer) this.getControladorUtil()
@@ -39252,7 +39252,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			debitoACobrar.setId(idDebitoACobrar);
 
-			// Recupera Categorias por ImÛvel
+			// Recupera Categorias por Im√≥vel
 			Collection<Categoria> colecaoCategoria = this
 					.getControladorImovel().obterQuantidadeEconomiasCategoria(
 							imovel);
@@ -39260,7 +39260,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection<BigDecimal> colecaoValoresCategorias = this
 					.getControladorImovel().obterValorPorCategoria(
 							colecaoCategoria, valorFinal);
-			// Insere dÈbito a cobrar por categoria
+			// Insere d√©bito a cobrar por categoria
 			inserirDebitoACobrarCategoria(colecaoCategoria,
 					colecaoValoresCategorias, debitoACobrar);
 
@@ -39340,16 +39340,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			if (guiaPagamentoManter.getAnoMesReferenciaContabil().intValue() >= sistemaParametro
 					.getAnoMesFaturamento().intValue()) {
 
-				// SITUA«√O ANTERIOR
+				// SITUA√á√ÉO ANTERIOR
 				guiaPagamentoManter
 						.setDebitoCreditoSituacaoAnterior(guiaPagamentoManter
 								.getDebitoCreditoSituacaoAtual());
 			} else {
 
-				// SITUA«√O ANTERIOR
+				// SITUA√á√ÉO ANTERIOR
 				guiaPagamentoManter.setDebitoCreditoSituacaoAnterior(null);
 
-				// REFER NCIA CONT¡BIL
+				// REFER√äNCIA CONT√ÅBIL
 				guiaPagamentoManter
 						.setAnoMesReferenciaContabil(sistemaParametro
 								.getAnoMesFaturamento());
@@ -39358,7 +39358,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 			debitoCreditoSituacao.setId(DebitoCreditoSituacao.CANCELADA);
 
-			// SITUA«√O ATUAL
+			// SITUA√á√ÉO ATUAL
 			guiaPagamentoManter
 					.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 
@@ -39368,7 +39368,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			filtroGuiaPagamentoBase.adicionarParametro(new ParametroSimples(
 					FiltroGuiaPagamento.ID, guiaPagamentoManter.getId()));
 
-			// Pesquisa a coleÁ„o de acordo com o filtro passado
+			// Pesquisa a cole√ß√£o de acordo com o filtro passado
 			Collection guiasPagamentosBase = getControladorUtil().pesquisar(
 					filtroGuiaPagamentoBase, GuiaPagamento.class.getName());
 
@@ -39377,8 +39377,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			if (guiasPagamentosBase != null && !guiasPagamentosBase.isEmpty()) {
 
-				// Verifica se a data de alteraÁ„o do objeto
-				// gravado na base È
+				// Verifica se a data de altera√ß√£o do objeto
+				// gravado na base √©
 				// maior que a na instancia
 				if ((guiaPagamentoBase.getUltimaAlteracao()
 						.after(guiaPagamentoManter.getUltimaAlteracao()))) {
@@ -39395,17 +39395,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			guiaPagamentoManter.setUltimaAlteracao(new Date());
 
-			// ------------ REGISTRAR TRANSA«√O ----------------
+			// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 			guiaPagamentoManter.setOperacaoEfetuada(operacaoEfetuada);
 			guiaPagamentoManter.adicionarUsuario(usuarioLogado,
 					UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 			registradorOperacao.registrarOperacao(guiaPagamentoManter);
-			// ------------ REGISTRAR TRANSA«√O ----------------
+			// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
 			guiaPagamentoManter.setUsuario(usuarioLogado);
 			/**
-			 * alterado por pedro alexandre dia 23/11/2006 alteraÁ„o feita para
-			 * acoplar o controle de abrangÍncia de usu·rio
+			 * alterado por pedro alexandre dia 23/11/2006 altera√ß√£o feita para
+			 * acoplar o controle de abrang√™ncia de usu√°rio
 			 */
 			// ------------ CONTROLE DE ABRANGENCIA
 			// ----------------
@@ -39423,9 +39423,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// ----------------
 
 			// CRC2725 - alterado por Vivianne Sousa - 23/09/2009
-			// analista:F·tima
-			// 2.1.2.2.Verificar se h· relaÁ„o do cancelamento com itens de
-			// negativaÁ„o
+			// analista:F√°tima
+			// 2.1.2.2.Verificar se h√° rela√ß√£o do cancelamento com itens de
+			// negativa√ß√£o
 			getControladorSpcSerasa()
 					.verificarRelacaoDoCancelamentoComItensNegativacao(
 							guiaPagamentoManter);
@@ -39441,7 +39441,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * verifica se h· restriÁıes em remover Guia de Pagamento
+	 * verifica se h√° restri√ß√µes em remover Guia de Pagamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 06/03/2007
@@ -39562,7 +39562,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection<ConsumoTarifaCategoria> colecaoConsumoTarifaCategoria)
 			throws ControladorException {
 
-		// Caso o objeto ConsumoTarifa j· exista na base
+		// Caso o objeto ConsumoTarifa j√° exista na base
 		if (consumoTarifa.getId() != null) {
 
 			FiltroConsumoTarifaVigencia filtroConsumoTarifaVigencia = new FiltroConsumoTarifaVigencia();
@@ -39716,7 +39716,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					&& !colecaoContasManutencao.isEmpty()) {
 
 				/**
-				 * [UC0407] Filtrar ImÛveis para Inserir ou Manter Conta 3. Caso
+				 * [UC0407] Filtrar Im√≥veis para Inserir ou Manter Conta 3. Caso
 				 * o indicador de bloqueio de contas vinculadas a contrato de
 				 * parcelamento no manter contas esteja ativo retirar da lista
 				 * de contas selecionadas as contas vinculadas a algum contrato
@@ -39735,7 +39735,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 				}
 				/**
-				 * FIM DA ALTERA«¬O
+				 * FIM DA ALTERA√á√ÇO
 				 * */
 
 				Iterator colecaoContasManutencaoIterator = colecaoContasManutencao
@@ -39743,18 +39743,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				while (colecaoContasManutencaoIterator.hasNext()) {
 
-					// ObtÈm os dados do crÈdito realizado
+					// Obt√©m os dados do cr√©dito realizado
 					Object[] contaArray = (Object[]) colecaoContasManutencaoIterator
 							.next();
 
 					Conta conta = new Conta();
 					// ID da conta
 					conta.setId((Integer) contaArray[0]);
-					// Ano MÍs referencia
+					// Ano M√™s referencia
 					conta.setReferencia((Integer) contaArray[1]);
 					// DebitoCreditoSituacaoAtual
 					conta.setDebitoCreditoSituacaoAtual((DebitoCreditoSituacao) contaArray[11]);
-					// Ano MÍs referencia cont·bil
+					// Ano M√™s referencia cont√°bil
 					conta.setReferenciaContabil((Integer) contaArray[12]);
 
 					// imovel
@@ -39779,21 +39779,21 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			while (colecaoContasIt.hasNext()) {
 				contaColecao = (Conta) colecaoContasIt.next();
 
-				// Usu·rio logado
+				// Usu√°rio logado
 				contaColecao.setUsuario(usuarioLogado);
 
-				// Carregando a conta que est· na base
+				// Carregando a conta que est√° na base
 				filtroConta.adicionarParametro(new ParametroSimples(
 						FiltroConta.ID, contaColecao.getId()));
 
 				filtroConta.limparListaParametros();
 				/**
-				 * Caso a situaÁ„o atual da conta corresponda a normal
+				 * Caso a situa√ß√£o atual da conta corresponda a normal
 				 * (DCST_IDATUAL com o valor correspondente a normal da tabela
 				 * DEBITO_CREDITO_SITUACAO) ou corresponda a retificada ou
-				 * incluÌda (DCST_IDATUAL com o valor correspondente a
-				 * retificada ou incluÌda, da tabela DEBITO_CREDITO_SITUACAO) e
-				 * a retificaÁ„o ou inclus„o j· tenha sido contabilizada
+				 * inclu√≠da (DCST_IDATUAL com o valor correspondente a
+				 * retificada ou inclu√≠da, da tabela DEBITO_CREDITO_SITUACAO) e
+				 * a retifica√ß√£o ou inclus√£o j√° tenha sido contabilizada
 				 * (CNTA_AMREFERENCIACONTABIL menor que
 				 * PARM_AMREFERENCIAFATURAMENTO da tabela SISTEMA_PARAMETROS),
 				 * atualizar os seguintes atributos da conta.
@@ -39808,15 +39808,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					contaColecao
 							.setContaMotivoCancelamento(contaMotivoCancelamento);
 
-					// SituaÁ„o Anterior
+					// Situa√ß√£o Anterior
 					/*
-					 * Caso a situaÁ„o atual da conta corresponda a normal
+					 * Caso a situa√ß√£o atual da conta corresponda a normal
 					 * (DCST_IDATUAL com o valor correspondente a normal da
 					 * tabela DEBITO_CREDITO_SITUACAO) e a conta tenha sido
-					 * faturada no mÍs de faturamento corrente
+					 * faturada no m√™s de faturamento corrente
 					 * (CNTA_AMREFERENCIACONTA= PARM_AMREFERENCIAFATURAMENTO da
 					 * tabela SISTEMA_PARAMETROS) DCST_IDANTERIOR=DCST_IDATUAL,
-					 * caso contr·rio DCST_IDANTERIOR=nulo)
+					 * caso contr√°rio DCST_IDANTERIOR=nulo)
 					 */
 					if (contaColecao.getDebitoCreditoSituacaoAtual().getId()
 							.equals(DebitoCreditoSituacao.NORMAL)
@@ -39832,11 +39832,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						contaColecao.setDebitoCreditoSituacaoAnterior(null);
 					}
 
-					// SituaÁ„o Atual
+					// Situa√ß√£o Atual
 					DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 					/**
-					 * Caso motivo de retificaÁ„o seja dÈbito
-					 * prescrito, alterar a situaÁ„o da conta para 8.
+					 * Caso motivo de retifica√ß√£o seja d√©bito
+					 * prescrito, alterar a situa√ß√£o da conta para 8.
 					 * 
 					 * @author Wellington Rocha
 					 * @date 01/06/2012
@@ -39884,7 +39884,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Usuario
 						contaColecao.setUsuario(usuarioLogado);
 
-						// ˙ltima alteraÁ„o
+						// √∫ltima altera√ß√£o
 						contaColecao.setUltimaAlteracao(new Date());
 
 						/*
@@ -39892,8 +39892,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						 * (Analista: Rosana Carvalho)
 						 * 
 						 * OBJETIVO: Quando o mes/ano de faturamento for maior
-						 * que o mes/ano de faturamento atual, n„o alterar o
-						 * mes/ano cont·bil
+						 * que o mes/ano de faturamento atual, n√£o alterar o
+						 * mes/ano cont√°bil
 						 */
 
 						// Ano Mes Referencia Contabil
@@ -39906,7 +39906,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						/*
 						 * Colocado por Raphael Rossiter em 09/08/2007 OBJETIVO:
-						 * Gravar na tabela de conta o usu·rio que est· logado
+						 * Gravar na tabela de conta o usu√°rio que est√° logado
 						 * no sistema
 						 */
 
@@ -39914,7 +39914,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						contaColecao.setUsuario(usuarioLogado);
 
 						// ------------ <REGISTRAR
-						// TRANSA«√O>----------------------------
+						// TRANSA√á√ÉO>----------------------------
 
 						RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 								Operacao.OPERACAO_CANCELAR_CONTA,
@@ -39932,7 +39932,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								contaColecao);
 
 						// ------------ </REGISTRAR
-						// TRANSA«√O>----------------------------
+						// TRANSA√á√ÉO>----------------------------
 
 						// UPDATE
 						try {
@@ -39953,9 +39953,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// CRC2725 - alterado por Vivianne Sousa -
 							// 30/03/2010
-							// analista:F·tima
-							// 1.1.2.Verificar se h· relaÁ„o do cancelamento com
-							// itens de negativaÁ„o
+							// analista:F√°tima
+							// 1.1.2.Verificar se h√° rela√ß√£o do cancelamento com
+							// itens de negativa√ß√£o
 							getControladorSpcSerasa()
 									.verificarRelacaoDoCancelamentoComItensNegativacao(
 											contaColecao, null);
@@ -39974,22 +39974,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				} else if (isContaIncluidaOuRetificadaEReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
 
-					// RemoÁ„o da conta no BD
+					// Remo√ß√£o da conta no BD
 					contaColecao.setPercentualEsgoto(new BigDecimal("0.00"));
 
 					// CRC2725 - alterado por Vivianne Sousa - 17/09/2009
-					// analista:F·tima
-					// [FS0003 - Verificar existÍncia de itens de negativaÁ„o
-					// para a conta incluÌda]:
+					// analista:F√°tima
+					// [FS0003 - Verificar exist√™ncia de itens de negativa√ß√£o
+					// para a conta inclu√≠da]:
 					getControladorSpcSerasa()
 							.verificarExistenciaItensNegativacaoParaContaIncluida(
 									contaColecao);
-					// 1.2.4. Verificar se h· relaÁ„o do cancelamento com itens
-					// de negativaÁ„o:
-					// [UC0937 - Obter Itens de NegativaÁ„o Associados ‡ Conta]
-					// passando o identificador do imÛvel (ImÛvel da Conta
+					// 1.2.4. Verificar se h√° rela√ß√£o do cancelamento com itens
+					// de negativa√ß√£o:
+					// [UC0937 - Obter Itens de Negativa√ß√£o Associados √† Conta]
+					// passando o identificador do im√≥vel (Im√≥vel da Conta
 					// Retificada e Cancelada)
-					// e a referÍncia (ReferÍncia da Conta Retificada e
+					// e a refer√™ncia (Refer√™ncia da Conta Retificada e
 					// Cancelada).
 					Collection colecaoNegativadorMovimentoRegItem = getControladorSpcSerasa()
 							.obterItensNegativacaoAssociadosAConta(
@@ -40003,8 +40003,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (contaColecao.getDebitoCreditoSituacaoAtual().getId()
 							.equals(DebitoCreditoSituacao.RETIFICADA)) {
 
-						// [FS0002] - Verificar existÍncia da conta
-						// cancelada por retificaÁ„o
+						// [FS0002] - Verificar exist√™ncia da conta
+						// cancelada por retifica√ß√£o
 
 						filtroConta.adicionarParametro(new ParametroSimples(
 								FiltroConta.REFERENCIA, contaColecao
@@ -40038,22 +40038,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						contaCanceladaPorRetificacao
 								.setContaMotivoCancelamento(contaMotivoCancelamento);
 
-						// SituaÁ„o Atual
+						// Situa√ß√£o Atual
 						DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 						debitoCreditoSituacao
 								.setId(DebitoCreditoSituacao.CANCELADA);
 						contaCanceladaPorRetificacao
 								.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 
-						// Data da retificaÁ„o = NULL
+						// Data da retifica√ß√£o = NULL
 						contaCanceladaPorRetificacao.setDataRetificacao(null);
 
-						// Motivo da retificaÁ„o = NULL
+						// Motivo da retifica√ß√£o = NULL
 						contaCanceladaPorRetificacao
 								.setContaMotivoRetificacao(null);
 
 						// Colocado por Raphael Rossiter em 27/02/2008
-						// Ano MÍs de referÍncia cont·bil
+						// Ano M√™s de refer√™ncia cont√°bil
 						if (contaCanceladaPorRetificacao.getReferencia() <= sistemaParametro
 								.getAnoMesFaturamento().intValue()) {
 
@@ -40067,11 +40067,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						 * (Analista: Rosana Carvalho)
 						 * 
 						 * OBJETIVO: Quando o mes/ano de faturamento for maior
-						 * que o mes/ano de faturamento atual, n„o alterar o
-						 * mes/ano cont·bil
+						 * que o mes/ano de faturamento atual, n√£o alterar o
+						 * mes/ano cont√°bil
 						 */
 
-						// Ano MÍs de referÍncia cont·bil do faturamento
+						// Ano M√™s de refer√™ncia cont√°bil do faturamento
 						if (contaCanceladaPorRetificacao.getReferencia() <= sistemaParametro
 								.getAnoMesFaturamento().intValue()) {
 
@@ -40080,13 +40080,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.getAnoMesComoInteger(new Date()));
 						}
 
-						// ˙ltima alteraÁ„o
+						// √∫ltima altera√ß√£o
 						contaCanceladaPorRetificacao
 								.setUltimaAlteracao(new Date());
 
 						/*
 						 * Colocado por Raphael Rossiter em 09/08/2007 OBJETIVO:
-						 * Gravar na tabela de conta o usu·rio que est· logado
+						 * Gravar na tabela de conta o usu√°rio que est√° logado
 						 * no sistema
 						 */
 
@@ -40094,7 +40094,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						contaCanceladaPorRetificacao.setUsuario(usuarioLogado);
 
 						// ------------ <REGISTRAR
-						// TRANSA«√O>----------------------------
+						// TRANSA√á√ÉO>----------------------------
 
 						RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 								Operacao.OPERACAO_CANCELAR_CONTA,
@@ -40113,7 +40113,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								contaCanceladaPorRetificacao);
 
 						// ------------ </REGISTRAR
-						// TRANSA«√O>----------------------------
+						// TRANSA√á√ÉO>----------------------------
 
 						// UPDATE
 						try {
@@ -40121,20 +40121,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.cancelarContaReferenciaContabilMaiorIgualSistemaParametro(contaCanceladaPorRetificacao);
 
 							// CRC2725 - alterado por Vivianne Sousa -
-							// 30/03/2010 analista:F·tima
-							// 1.2.6.5. Caso existam itens de negativaÁ„o
-							// associados ‡ conta (coleÁ„o de itens de
-							// negativaÁ„o n„o est· vazia):
+							// 30/03/2010 analista:F√°tima
+							// 1.2.6.5. Caso existam itens de negativa√ß√£o
+							// associados √† conta (cole√ß√£o de itens de
+							// negativa√ß√£o n√£o est√° vazia):
 							if (colecaoNegativadorMovimentoRegItem != null
 									&& !colecaoNegativadorMovimentoRegItem
 											.isEmpty()) {
-								// Caso existam itens de negativaÁ„o associados
-								// ‡ conta:
+								// Caso existam itens de negativa√ß√£o associados
+								// √† conta:
 								Iterator iterNmri = colecaoNegativadorMovimentoRegItem
 										.iterator();
 								while (iterNmri.hasNext()) {
 									Integer idNmri = (Integer) iterNmri.next();
-									// [SB0002 - Atualizar Item NegativaÁ„o -
+									// [SB0002 - Atualizar Item Negativa√ß√£o -
 									// Conta Retificada].
 									getControladorSpcSerasa()
 											.atualizarNegativadorMovimentoRegItem(
@@ -40163,7 +40163,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 
 				// Alterado por Francisco - 26/05/08, por conta do Resumo de
-				// AÁıes de cobranÁa
+				// A√ß√µes de cobran√ßa
 				// Analista: Ana Breda
 				try {
 					// Atualizar documento de cobranca da conta, se houver, para
@@ -40212,7 +40212,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoConta = new ArrayList();
 		List colecaoAuxiliar = new ArrayList();
 
-		// PAR¬METROS DO SISTEMA
+		// PAR√ÇMETROS DO SISTEMA
 		SistemaParametro sistemaParametro = this.getControladorUtil()
 				.pesquisarParametrosDoSistema();
 
@@ -40247,7 +40247,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							dataVencimentoContaFim, anoMesFim, indicadorContaPaga, dataVencimentoInformada, isDebitoAutomatico);
 					
 					/**
-					 * [UC0407] Filtrar ImÛveis para Inserir ou Manter Conta 3.
+					 * [UC0407] Filtrar Im√≥veis para Inserir ou Manter Conta 3.
 					 * Caso o indicador de bloqueio de contas vinculadas a
 					 * contrato de parcelamento no manter contas esteja ativo
 					 * retirar da lista de contas selecionadas as contas
@@ -40262,7 +40262,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						colecaoContasManutencao = getControladorRetificarConta().obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 					}
 					/**
-					 * FIM DA ALTERA«¬O
+					 * FIM DA ALTERA√á√ÇO
 					 * */
 
 				} catch (ErroRepositorioException ex) {
@@ -40277,7 +40277,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.iterator();
 					while (colecaoContasManutencaoIterator.hasNext()) {
 
-						// ObtÈm os dados do crÈdito realizado
+						// Obt√©m os dados do cr√©dito realizado
 						Object[] contaArray = (Object[]) colecaoContasManutencaoIterator
 								.next();
 
@@ -40316,7 +40316,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						/*
 						 * Colocado por Raphael Rossiter em 27/12/2007 OBJ:
-						 * Carregar o id do imÛvel para registrar a transaÁ„o
+						 * Carregar o id do im√≥vel para registrar a transa√ß√£o
 						 */
 						Imovel imovel = (Imovel) contaArray[14];
 						conta.setImovel(imovel);
@@ -40361,7 +40361,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection colecaoContasManutencao = new ArrayList();
 			Collection colecaoConta = new ArrayList();
 
-			// PAR¬METROS DO SISTEMA
+			// PAR√ÇMETROS DO SISTEMA
 			SistemaParametro sistemaParametro = this.getControladorUtil()
 					.pesquisarParametrosDoSistema();
 
@@ -40373,7 +40373,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								indicadorContaPaga);
 
 				/**
-				 * [UC0407] Filtrar ImÛveis para Inserir ou Manter Conta 3. Caso
+				 * [UC0407] Filtrar Im√≥veis para Inserir ou Manter Conta 3. Caso
 				 * o indicador de bloqueio de contas vinculadas a contrato de
 				 * parcelamento no manter contas esteja ativo retirar da lista
 				 * de contas selecionadas as contas vinculadas a algum contrato
@@ -40392,7 +40392,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 				}
 				/**
-				 * FIM DA ALTERA«¬O
+				 * FIM DA ALTERA√á√ÇO
 				 * */
 
 			} catch (ErroRepositorioException e1) {
@@ -40406,7 +40406,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.iterator();
 				while (colecaoContasManutencaoIterator.hasNext()) {
 
-					// ObtÈm os dados do crÈdito realizado
+					// Obt√©m os dados do cr√©dito realizado
 					Object[] contaArray = (Object[]) colecaoContasManutencaoIterator
 							.next();
 
@@ -40445,7 +40445,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					/*
 					 * Colocado por Raphael Rossiter em 27/12/2007 OBJ: Carregar
-					 * o id do imÛvel para registrar a transaÁ„o
+					 * o id do im√≥vel para registrar a transa√ß√£o
 					 */
 					Imovel imovel = (Imovel) contaArray[14];
 					conta.setImovel(imovel);
@@ -40463,7 +40463,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * 
 	 * [UC0544] - Gerar Arquivo Texto do Faturamento
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 23/03/2007
 	 * 
 	 * @param anoMes
@@ -40501,7 +40501,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * 
 	 * [UC0544] - Gerar Arquivo Texto do Faturamento
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 23/03/2007
 	 * 
 	 * @param anoMes
@@ -40553,7 +40553,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// CORRENTE
 				documentoTxt.append(Util.completaString("", 74));// CAMPO
 				// LIVRE -
-				// ESPA«OS
+				// ESPA√áOS
 				// CHAR(74)
 
 				// Quebra de Linha
@@ -40661,7 +40661,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					// leitura Atual
 					if (objeto[7] != null) {
-						// atualizado 29/10/2007 Fl·vio leonardo, solicitaÁ„o de
+						// atualizado 29/10/2007 Fl√°vio leonardo, solicita√ß√£o de
 						// Aryed
 						String leituraAtual = Util.adicionarZerosEsquedaNumero(
 								5, ((Integer) objeto[7]) + "");
@@ -40673,8 +40673,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						documentoTxt.append(Util.adicionarZerosEsquedaNumero(5,
 								""));// Leitura Atual - char(5)
 					}
-					// ************************AlteraÁ„o feita no dia 9/4/2007 ·
-					// pedido de Aryed - Fl·vio Cordeiro
+					// ************************Altera√ß√£o feita no dia 9/4/2007 √°
+					// pedido de Aryed - Fl√°vio Cordeiro
 					// nome cliente
 					if (objeto[8] != null) {
 						String nomeCliente = repositorioFaturamento
@@ -40792,7 +40792,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						documentoTxt.append(Util.completaString("", 30));// Campo
 						// livre
 						// -
-						// EspaÁos
+						// Espa√ßos
 						// char(1)
 
 						// Quebra de Linha
@@ -40893,7 +40893,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						documentoTxt.append(Util.completaString("", 30));// Campo
 						// livre
 						// -
-						// EspaÁos
+						// Espa√ßos
 						// char(1)
 
 						// Quebra de Linha
@@ -41007,7 +41007,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							documentoTxt.append(Util.completaString("", 30));// Campo
 							// livre
 							// -
-							// EspaÁos
+							// Espa√ßos
 							// char(1)
 
 							// Quebra de Linha
@@ -41119,7 +41119,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												((BigDecimal) credito[8])
 														.toString().replace(
 																".", "")));// Valor
-								// PrestaÁ„o
+								// Presta√ß√£o
 								// -
 								// crrz_VLPRESTACAO
 								// CHAR(10)
@@ -41140,7 +41140,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							documentoTxt.append(Util.completaString("", 30));// Campo
 							// livre
 							// -
-							// EspaÁos
+							// Espa√ßos
 							// char(1)
 
 							// Quebra de Linha
@@ -41249,7 +41249,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															.toString()
 															.replace(".", "")));// Total
 									// das
-									// retenÁıes
+									// reten√ß√µes
 									// -
 									// somaImpostos
 									// CHAR(10)
@@ -41272,7 +41272,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										.append(Util.completaString("", 30));// Campo
 								// livre
 								// -
-								// EspaÁos
+								// Espa√ßos
 								// char(30)
 
 								// Quebra de Linha
@@ -41297,7 +41297,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// - soma char(1)
 				documentoTxt.append(Util.completaString("", 110));// Campo
 				// livre -
-				// EspaÁos
+				// Espa√ßos
 				// char(112)
 				// Quebra de Linha
 				documentoTxt.append(System.getProperty("line.separator"));
@@ -41363,9 +41363,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0157] - Simular C·lculo da Conta
+	 * [UC0157] - Simular C√°lculo da Conta
 	 * 
-	 * [FS0003] - Verificar Consumo MÌnimo
+	 * [FS0003] - Verificar Consumo M√≠nimo
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 02/04/2007
@@ -41400,7 +41400,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						"atencao.informe.consumoFaturadoAgua");
 			}
 
-			// [FS0003] - Verificar Consumo MÌnimo
+			// [FS0003] - Verificar Consumo M√≠nimo
 			else if (consumoFaturado != null
 					&& consumoFaturado != 0
 					&& consumoFaturado <= ligacaoAguaSituacao
@@ -41416,9 +41416,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0157] - Simular C·lculo da Conta
+	 * [UC0157] - Simular C√°lculo da Conta
 	 * 
-	 * [FS0004] - Verificar Volume MÌnimo
+	 * [FS0004] - Verificar Volume M√≠nimo
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 02/04/2007
@@ -41454,7 +41454,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						"atencao.informe.consumoFaturadoEsgoto");
 			}
 
-			// [FS0004] - Verificar Volume MÌnimo
+			// [FS0004] - Verificar Volume M√≠nimo
 			else if (consumoFaturado != null
 					&& consumoFaturado != 0
 					&& consumoFaturado <= ligacaoEsgotoSituacao
@@ -41470,7 +41470,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Envia os cliente conta para o histÛrico.
+	 * Envia os cliente conta para o hist√≥rico.
 	 * 
 	 * [UC0000] Gerar Historico Encerrar Faturamento
 	 * 
@@ -41535,7 +41535,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Envia as contas imppostos deduzidos para o histÛrico.
+	 * Envia as contas imppostos deduzidos para o hist√≥rico.
 	 * 
 	 * [UC0000] Gerar Historico Encerrar Faturamento
 	 * 
@@ -41613,8 +41613,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Envia os crÈditos realizados e crÈditos realizados categoria para o
-	 * histÛrico.
+	 * Envia os cr√©ditos realizados e cr√©ditos realizados categoria para o
+	 * hist√≥rico.
 	 * 
 	 * [UC0000] Gerar Historico Encerrar Faturamento
 	 * 
@@ -41712,7 +41712,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Envia os dÈbitos cobrados e debitos cobrados categoria para o histÛrico.
+	 * Envia os d√©bitos cobrados e debitos cobrados categoria para o hist√≥rico.
 	 * 
 	 * [UC0000] Gerar Historico Encerrar Faturamento
 	 * 
@@ -41738,17 +41738,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection<IDebitoCobrado> debitosCobrados = repositorioFaturamento
 					.pesquisarDebitosCobrados(idConta);
 
-			// cria o objeto dÈbito cobrado histÛrico
+			// cria o objeto d√©bito cobrado hist√≥rico
 			DebitoCobradoHistorico debitoCobradoHistoricoTemp = null;
 
 			if (debitosCobrados != null && !debitosCobrados.isEmpty()) {
 
 				colecaoDebitoCobradoRemover.addAll(debitosCobrados);
 
-				// laÁo para criar o histÛrico dos dÈbitos cobrados da
+				// la√ßo para criar o hist√≥rico dos d√©bitos cobrados da
 				// conta
 				for (IDebitoCobrado debitoCobrado : debitosCobrados) {
-					// seta os dados do dÈbito cobrado histÛrico
+					// seta os dados do d√©bito cobrado hist√≥rico
 					debitoCobradoHistoricoTemp = new DebitoCobradoHistorico();
 					debitoCobradoHistoricoTemp.setId(debitoCobrado.getId());
 					debitoCobradoHistoricoTemp.setDebitoCobrado(debitoCobrado
@@ -41877,7 +41877,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * Envia as conta categoria e conta categoria consumo de faixa para o
-	 * histÛrico
+	 * hist√≥rico
 	 * 
 	 * [UC0000] Gerar Historico Encerrar Faturamento
 	 * 
@@ -42028,7 +42028,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				colecaoContaCategoriaConsumoFaixaHistoricoInserir = null;
 			}
 
-			// Remove a coleÁ„o de ContaCategoria
+			// Remove a cole√ß√£o de ContaCategoria
 			if (colecaoContaCategoriaRemover != null
 					&& !colecaoContaCategoriaRemover.isEmpty()) {
 				getControladorBatch().removerColecaoContaCategoriaParaBatch(
@@ -42042,10 +42042,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0XXX] Emitir Aviso de CobranÁa
+	 * [UC0XXX] Emitir Aviso de Cobran√ßa
 	 * 
 	 * 
-	 * @author S·vio LuizO
+	 * @author S√°vio LuizO
 	 * @date 09/04/2007
 	 * 
 	 */
@@ -42065,7 +42065,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * Pesquisa a soma dos valores das multas cobradas para a conta.
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 13/04/2007
 	 * 
 	 * @param idConta
@@ -42087,7 +42087,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * Pesquisa a soma dos valores das multas cobradas para a conta.
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 13/04/2007
 	 * 
 	 * @param idConta
@@ -42107,10 +42107,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso calcula a tarifa minÌma de ·gua para um imÛvel
+	 * Este caso de uso calcula a tarifa min√≠ma de √°gua para um im√≥vel
 	 * (SUBCATEGORIA)
 	 * 
-	 * [UC0451] Obter Tarifa MinÌma de ¡gua para um ImÛvel
+	 * [UC0451] Obter Tarifa Min√≠ma de √Ågua para um Im√≥vel
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 13/04/2006
@@ -42123,15 +42123,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public BigDecimal obterTarifaMinimaAguaImovelPorSubcategoria(Imovel imovel)
 			throws ControladorException {
 
-		// DeclaraÁ„o de vari·veis
+		// Declara√ß√£o de vari√°veis
 		BigDecimal tarifaMinimaAguaImovel = new BigDecimal("0.00");
 		BigDecimal resultadoTarifaMinimaAguaImovel = new BigDecimal("0.00");
 
-		// DeclaraÁ„o de objetos
+		// Declara√ß√£o de objetos
 		Collection colecaoDataVigencia = null;
 
-		// ObtÈm o id da tarifa vigÍncia da maior data de vigÍncia da tarifa do
-		// imÛvel
+		// Obt√©m o id da tarifa vig√™ncia da maior data de vig√™ncia da tarifa do
+		// im√≥vel
 		try {
 			colecaoDataVigencia = repositorioMicromedicao
 					.pesquisarMaiorDataVigenciaConsumoTarifaImovel(new Date(),
@@ -42141,7 +42141,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			new ControladorException("erro.sistema", ex);
 		}
 
-		// ObtÈm o id do array e atribui na vari·vel
+		// Obt√©m o id do array e atribui na vari√°vel
 		Object[] consumoTarifaVigenciaIdArray = (Object[]) Util
 				.retonarObjetoDeColecaoArray(colecaoDataVigencia);
 		Integer consumoTarifaVigenciaId = null;
@@ -42156,7 +42156,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			consumoTarifaVigenciaId = (Integer) consumoTarifaVigenciaIdArray[0];
 		}
 
-		// Cria o objeto consumo tarifa vigÍncia e seta o id
+		// Cria o objeto consumo tarifa vig√™ncia e seta o id
 		ConsumoTarifaVigencia consumoTarifaVigencia = new ConsumoTarifaVigencia();
 		consumoTarifaVigencia.setId(consumoTarifaVigenciaId);
 
@@ -42172,7 +42172,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.next();
 
 			try {
-				// ObtÈm a tarifa mÌnima da subcategoria do imÛvel
+				// Obt√©m a tarifa m√≠nima da subcategoria do im√≥vel
 				tarifaMinimaAguaImovel = (BigDecimal) repositorioFaturamento
 						.pesquisarTarifaMinimaCategoriaVigenciaPorSubcategoria(
 								consumoTarifaVigencia, subcategoria);
@@ -42183,7 +42183,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 			/*
-			 * Caso n„o exista tarifa cadastrada para a subcategoria em questao,
+			 * Caso n√£o exista tarifa cadastrada para a subcategoria em questao,
 			 * utilizar a tarifa da categoria
 			 */
 			if (tarifaMinimaAguaImovel == null) {
@@ -42201,22 +42201,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 			// Multiplica a quantidade de economias da categoria pelo consumo
-			// mÌnimo e acumula
+			// m√≠nimo e acumula
 			resultadoTarifaMinimaAguaImovel = resultadoTarifaMinimaAguaImovel
 					.add(tarifaMinimaAguaImovel.multiply(new BigDecimal(
 							subcategoria.getQuantidadeEconomias())));
 
 		}
 
-		// Retorna o consumo mÌnimo da ligaÁ„o
+		// Retorna o consumo m√≠nimo da liga√ß√£o
 		return resultadoTarifaMinimaAguaImovel;
 	}
 
 	/**
-	 * [UC0251] Gerar Atividade de AÁ„o de CobranÁa [SB0004] Verificar CritÈrio
-	 * de CobranÁa para ImÛvel Pesquisa a soma dos imoveis com parcelamento.
+	 * [UC0251] Gerar Atividade de A√ß√£o de Cobran√ßa [SB0004] Verificar Crit√©rio
+	 * de Cobran√ßa para Im√≥vel Pesquisa a soma dos imoveis com parcelamento.
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 13/04/2007
 	 * 
 	 * @param idConta
@@ -42237,7 +42237,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisar conjunto de contas p/ emiss„o da 2∞Via
+	 * Pesquisar conjunto de contas p/ emiss√£o da 2¬∞Via
 	 * 
 	 * @author Ana Maria
 	 * @date 19/04/2007
@@ -42295,11 +42295,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Gera credito a realizar para os imÛveis de determinados grupos
+	 * Gera credito a realizar para os im√≥veis de determinados grupos
 	 * 
-	 * BATCH PARA CORRE«√O DA BASE
+	 * BATCH PARA CORRE√á√ÉO DA BASE
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 02/05/2007
 	 * 
 	 */
@@ -42491,8 +42491,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0144] Inserir Comando Atividade Faturamento
 	 * 
-	 * A data de vencimento do grupo ser· formatada com o mÍs seguinte ao de
-	 * referÍncia do grupo
+	 * A data de vencimento do grupo ser√° formatada com o m√™s seguinte ao de
+	 * refer√™ncia do grupo
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 05/05/2007
@@ -42512,11 +42512,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0XXX] - Gerar RelatÛrio Tarifa de Consumo
+	 * [UC0XXX] - Gerar Relat√≥rio Tarifa de Consumo
 	 * 
-	 * Pesquisas as tarifas de consumo para o relatÛrio
+	 * Pesquisas as tarifas de consumo para o relat√≥rio
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 11/05/2007
 	 * 
 	 * @param descricao
@@ -42561,7 +42561,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setIdConsumoTarifa((Integer) dadosConsumoTarifa[0]);
 				}
 
-				// DescriÁ„o da Tarifa de Consumo
+				// Descri√ß√£o da Tarifa de Consumo
 				if (dadosConsumoTarifa[1] != null) {
 					consumoTarifaRelatorioHelper
 							.setDescricaoConsumoTarifa((String) dadosConsumoTarifa[1]);
@@ -42591,7 +42591,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setCusto((BigDecimal) dadosConsumoTarifa[5]);
 				}
 
-				// Tarifa MÌnima
+				// Tarifa M√≠nima
 				if (dadosConsumoTarifa[6] != null) {
 					consumoTarifaRelatorioHelper
 							.setTarifaMinima((BigDecimal) dadosConsumoTarifa[6]);
@@ -42603,7 +42603,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setDataValidadeInicial((Date) dadosConsumoTarifa[7]);
 				}
 
-				// Consumo MÌnimo
+				// Consumo M√≠nimo
 				if (dadosConsumoTarifa[8] != null) {
 					consumoTarifaRelatorioHelper
 							.setConsumoMinimo((Integer) dadosConsumoTarifa[8]);
@@ -42621,11 +42621,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0XXX] - Gerar RelatÛrio de Tarifa de Consumo
+	 * [UC0XXX] - Gerar Relat√≥rio de Tarifa de Consumo
 	 * 
 	 * Pesquisas a data final de validade de uma tarifa de consumo
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 11/05/2007
 	 * 
 	 * @param Integer
@@ -42681,7 +42681,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Recupera as contas do ImÛveis
+	 * Recupera as contas do Im√≥veis
 	 * 
 	 * @author Ana Maria
 	 * @date 19/03/2007
@@ -42719,7 +42719,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Recupera quantidade contas sem est· em revis„o dos ImÛveis
+	 * Recupera quantidade contas sem est√° em revis√£o dos Im√≥veis
 	 * 
 	 * @author Ana Maria
 	 * @date 19/03/2007
@@ -42795,18 +42795,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoContasManutencaoIterator.hasNext()) {
 
-				// ObtÈm os dados do crÈdito realizado
+				// Obt√©m os dados do cr√©dito realizado
 				Object[] contaArray = (Object[]) colecaoContasManutencaoIterator
 						.next();
 
 				Conta conta = new Conta();
 				// ID da conta
 				conta.setId((Integer) contaArray[0]);
-				// Ano MÍs referencia
+				// Ano M√™s referencia
 				conta.setReferencia((Integer) contaArray[1]);
 				// DebitoCreditoSituacaoAtual
 				conta.setDebitoCreditoSituacaoAtual((DebitoCreditoSituacao) contaArray[11]);
-				// Ano MÍs referencia cont·bil
+				// Ano M√™s referencia cont√°bil
 				conta.setReferenciaContabil((Integer) contaArray[12]);
 
 				// imovel
@@ -42831,21 +42831,21 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		while (colecaoContasIt.hasNext()) {
 			contaColecao = (Conta) colecaoContasIt.next();
 
-			// Usu·rio logado
+			// Usu√°rio logado
 			contaColecao.setUsuario(usuarioLogado);
 
-			// Carregando a conta que est· na base
+			// Carregando a conta que est√° na base
 			filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.ID,
 					contaColecao.getId()));
 
 			filtroConta.limparListaParametros();
 			/**
-			 * Caso a situaÁ„o atual da conta corresponda a normal (DCST_IDATUAL
+			 * Caso a situa√ß√£o atual da conta corresponda a normal (DCST_IDATUAL
 			 * com o valor correspondente a normal da tabela
-			 * DEBITO_CREDITO_SITUACAO) ou corresponda a retificada ou incluÌda
+			 * DEBITO_CREDITO_SITUACAO) ou corresponda a retificada ou inclu√≠da
 			 * (DCST_IDATUAL com o valor correspondente a retificada ou
-			 * incluÌda, da tabela DEBITO_CREDITO_SITUACAO) e a retificaÁ„o ou
-			 * inclus„o j· tenha sido contabilizada (CNTA_AMREFERENCIACONTABIL
+			 * inclu√≠da, da tabela DEBITO_CREDITO_SITUACAO) e a retifica√ß√£o ou
+			 * inclus√£o j√° tenha sido contabilizada (CNTA_AMREFERENCIACONTABIL
 			 * menor que PARM_AMREFERENCIAFATURAMENTO da tabela
 			 * SISTEMA_PARAMETROS), atualizar os seguintes atributos da conta.
 			 */
@@ -42862,14 +42862,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				contaColecao
 						.setContaMotivoCancelamento(contaMotivoCancelamento);
 
-				// SituaÁ„o Anterior
+				// Situa√ß√£o Anterior
 				/*
-				 * Caso a situaÁ„o atual da conta corresponda a normal
+				 * Caso a situa√ß√£o atual da conta corresponda a normal
 				 * (DCST_IDATUAL com o valor correspondente a normal da tabela
-				 * DEBITO_CREDITO_SITUACAO) e a conta tenha sido faturada no mÍs
+				 * DEBITO_CREDITO_SITUACAO) e a conta tenha sido faturada no m√™s
 				 * de faturamento corrente (CNTA_AMREFERENCIACONTA=
 				 * PARM_AMREFERENCIAFATURAMENTO da tabela SISTEMA_PARAMETROS)
-				 * DCST_IDANTERIOR=DCST_IDATUAL, caso contr·rio
+				 * DCST_IDANTERIOR=DCST_IDATUAL, caso contr√°rio
 				 * DCST_IDANTERIOR=nulo)
 				 */
 				if (contaColecao.getDebitoCreditoSituacaoAtual().getId()
@@ -42884,12 +42884,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					contaColecao.setDebitoCreditoSituacaoAnterior(null);
 				}
 
-				// SituaÁ„o Atual
+				// Situa√ß√£o Atual
 				DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 
 				/**
-				 * Caso motivo de retificaÁ„o seja dÈbito
-				 * prescrito, alterar a situaÁ„o da conta para 8.
+				 * Caso motivo de retifica√ß√£o seja d√©bito
+				 * prescrito, alterar a situa√ß√£o da conta para 8.
 				 * 
 				 * @author Wellington Rocha
 				 * @date 01/06/2012
@@ -42938,11 +42938,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// Usuario
 					contaColecao.setUsuario(usuarioLogado);
 
-					// ˙ltima alteraÁ„o
+					// √∫ltima altera√ß√£o
 					contaColecao.setUltimaAlteracao(new Date());
 
 					// ------------ <REGISTRAR
-					// TRANSA«√O>----------------------------
+					// TRANSA√á√ÉO>----------------------------
 
 					RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 							Operacao.OPERACAO_CANCELAR_CONTA,
@@ -42957,7 +42957,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					getControladorTransacao().registrarTransacao(contaColecao);
 
 					// ------------ </REGISTRAR
-					// TRANSA«√O>----------------------------
+					// TRANSA√á√ÉO>----------------------------
 
 					// UPDATE
 					try {
@@ -42977,10 +42977,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 
 						// CRC2725 - alterado por Vivianne Sousa - 30/03/2010
-						// analista:F·tima
-						// 1.1.2.Verificar se h· relaÁ„o do cancelamento com
+						// analista:F√°tima
+						// 1.1.2.Verificar se h√° rela√ß√£o do cancelamento com
 						// itens
-						// de negativaÁ„o
+						// de negativa√ß√£o
 						getControladorSpcSerasa()
 								.verificarRelacaoDoCancelamentoComItensNegativacao(
 										contaColecao, null);
@@ -42999,22 +42999,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			} else if (isContaIncluidaOuRetificadaEReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
 
-				// RemoÁ„o da conta no BD
+				// Remo√ß√£o da conta no BD
 				contaColecao.setPercentualEsgoto(new BigDecimal("0.00"));
 
 				// CRC2725 - alterado por Vivianne Sousa - 17/09/2009
-				// analista:F·tima
-				// [FS0003 - Verificar existÍncia de itens de negativaÁ„o para a
-				// conta incluÌda]:
+				// analista:F√°tima
+				// [FS0003 - Verificar exist√™ncia de itens de negativa√ß√£o para a
+				// conta inclu√≠da]:
 				getControladorSpcSerasa()
 						.verificarExistenciaItensNegativacaoParaContaIncluida(
 								contaColecao);
-				// 1.2.4. Verificar se h· relaÁ„o do cancelamento com itens de
-				// negativaÁ„o:
-				// [UC0937 - Obter Itens de NegativaÁ„o Associados ‡ Conta]
-				// passando o identificador do imÛvel (ImÛvel da Conta
+				// 1.2.4. Verificar se h√° rela√ß√£o do cancelamento com itens de
+				// negativa√ß√£o:
+				// [UC0937 - Obter Itens de Negativa√ß√£o Associados √† Conta]
+				// passando o identificador do im√≥vel (Im√≥vel da Conta
 				// Retificada e Cancelada)
-				// e a referÍncia (ReferÍncia da Conta Retificada e Cancelada).
+				// e a refer√™ncia (Refer√™ncia da Conta Retificada e Cancelada).
 				Collection colecaoNegativadorMovimentoRegItem = getControladorSpcSerasa()
 						.obterItensNegativacaoAssociadosAConta(
 								contaColecao.getImovel().getId(),
@@ -43027,8 +43027,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (contaColecao.getDebitoCreditoSituacaoAtual().getId()
 						.equals(DebitoCreditoSituacao.RETIFICADA)) {
 
-					// [FS0002] - Verificar existÍncia da conta
-					// cancelada por retificaÁ„o
+					// [FS0002] - Verificar exist√™ncia da conta
+					// cancelada por retifica√ß√£o
 
 					filtroConta.adicionarParametro(new ParametroSimples(
 							FiltroConta.REFERENCIA, contaColecao
@@ -43061,22 +43061,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					contaCanceladaPorRetificacao
 							.setContaMotivoCancelamento(contaMotivoCancelamento);
 
-					// SituaÁ„o Atual
+					// Situa√ß√£o Atual
 					DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 					debitoCreditoSituacao
 							.setId(DebitoCreditoSituacao.CANCELADA);
 					contaCanceladaPorRetificacao
 							.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 
-					// Data da retificaÁ„o = NULL
+					// Data da retifica√ß√£o = NULL
 					contaCanceladaPorRetificacao.setDataRetificacao(null);
 
-					// Motivo da retificaÁ„o = NULL
+					// Motivo da retifica√ß√£o = NULL
 					contaCanceladaPorRetificacao
 							.setContaMotivoRetificacao(null);
 
 					// Colocado por Raphael Rossiter em 27/02/2008
-					// Ano MÍs de referÍncia cont·bil
+					// Ano M√™s de refer√™ncia cont√°bil
 					if (contaCanceladaPorRetificacao.getReferencia() <= sistemaParametro
 							.getAnoMesFaturamento().intValue()) {
 
@@ -43084,14 +43084,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.getAnoMesComoInteger(new Date()));
 					}
 
-					// ˙ltima alteraÁ„o
+					// √∫ltima altera√ß√£o
 					contaCanceladaPorRetificacao.setUltimaAlteracao(new Date());
 
-					// Usu·rio logado
+					// Usu√°rio logado
 					contaCanceladaPorRetificacao.setUsuario(usuarioLogado);
 
 					// ------------ <REGISTRAR
-					// TRANSA«√O>----------------------------
+					// TRANSA√á√ÉO>----------------------------
 
 					RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 							Operacao.OPERACAO_CANCELAR_CONTA,
@@ -43108,27 +43108,27 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							contaCanceladaPorRetificacao);
 
 					// ------------ </REGISTRAR
-					// TRANSA«√O>----------------------------
+					// TRANSA√á√ÉO>----------------------------
 					// UPDATE
 					try {
 						repositorioFaturamento
 								.cancelarContaReferenciaContabilMaiorIgualSistemaParametro(contaCanceladaPorRetificacao);
 
 						// CRC2725 - alterado por Vivianne Sousa - 17/09/2009
-						// analista:F·tima
-						// 1.2.6.5. Caso existam itens de negativaÁ„o associados
-						// ‡ conta (coleÁ„o de itens de negativaÁ„o n„o est·
+						// analista:F√°tima
+						// 1.2.6.5. Caso existam itens de negativa√ß√£o associados
+						// √† conta (cole√ß√£o de itens de negativa√ß√£o n√£o est√°
 						// vazia):
 						if (colecaoNegativadorMovimentoRegItem != null
 								&& !colecaoNegativadorMovimentoRegItem
 										.isEmpty()) {
-							// Caso existam itens de negativaÁ„o associados ‡
+							// Caso existam itens de negativa√ß√£o associados √†
 							// conta:
 							Iterator iterNmri = colecaoNegativadorMovimentoRegItem
 									.iterator();
 							while (iterNmri.hasNext()) {
 								Integer idNmri = (Integer) iterNmri.next();
-								// [SB0002 - Atualizar Item NegativaÁ„o - Conta
+								// [SB0002 - Atualizar Item Negativa√ß√£o - Conta
 								// Retificada].
 								getControladorSpcSerasa()
 										.atualizarNegativadorMovimentoRegItem(
@@ -43154,8 +43154,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}
 
-			// Alterado por Francisco - 26/05/08, por conta do Resumo de AÁıes
-			// de cobranÁa
+			// Alterado por Francisco - 26/05/08, por conta do Resumo de A√ß√µes
+			// de cobran√ßa
 			// Analista: Ana Breda
 			try {
 				// Atualizar documento de cobranca da conta, se houver, para
@@ -43188,7 +43188,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoConta = new ArrayList();
 		Collection colecaoContasManutencao = new ArrayList();
 
-		// PAR¬METROS DO SISTEMA
+		// PAR√ÇMETROS DO SISTEMA
 		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
 		try {
@@ -43197,7 +43197,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					isDebitoAutomatico);
 			
 			/**
-			 * [UC0407] Filtrar ImÛveis para Inserir ou Manter Conta 3. Caso o
+			 * [UC0407] Filtrar Im√≥veis para Inserir ou Manter Conta 3. Caso o
 			 * indicador de bloqueio de contas vinculadas a contrato de
 			 * parcelamento no manter contas esteja ativo retirar da lista de
 			 * contas selecionadas as contas vinculadas a algum contrato de
@@ -43216,7 +43216,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 			}
 			/**
-			 * FIM DA ALTERA«¬O
+			 * FIM DA ALTERA√á√ÇO
 			 * */
 
 		} catch (ErroRepositorioException ex) {
@@ -43234,7 +43234,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoContasManutencaoIterator.hasNext()) {
 
-				// ObtÈm os dados do crÈdito realizado
+				// Obt√©m os dados do cr√©dito realizado
 				Object[] contaArray = (Object[]) colecaoContasManutencaoIterator
 						.next();
 
@@ -43273,7 +43273,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				/*
 				 * Colocado por Raphael Rossiter em 27/12/2007 OBJ: Carregar o
-				 * id do imÛvel para registrar a transaÁ„o
+				 * id do im√≥vel para registrar a transa√ß√£o
 				 */
 				Imovel imovel = (Imovel) contaArray[14];
 				conta.setImovel(imovel);
@@ -43293,7 +43293,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	
 	/**
-	 * Pesquisar conjunto de contas p/ emiss„o da 2∞Via
+	 * Pesquisar conjunto de contas p/ emiss√£o da 2¬∞Via
 	 * 
 	 * @author Ana Maria
 	 * @date 19/04/2007
@@ -43329,7 +43329,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Recupera id de conta(s) sem revis„o ou em revis„o por aÁ„o do usu·rio
+	 * Recupera id de conta(s) sem revis√£o ou em revis√£o por a√ß√£o do usu√°rio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 14/05/2007
@@ -43352,7 +43352,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Recupera id de contas que est„o em revis„o por ac„o do usuario
+	 * Recupera id de contas que est√£o em revis√£o por ac√£o do usuario
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 14/05/2007
@@ -43379,14 +43379,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * 
 	 * [UC0217] Inserir Tipo Credito
 	 * 
-	 * @author Thiago TenÛrio
+	 * @author Thiago Ten√≥rio
 	 * @date 30/03/2006
 	 * 
 	 */
 	public Integer inserirTipoCredito(CreditoTipo creditoTipo,
 			Usuario usuarioLogado) throws ControladorException {
 
-		// ------------ REGISTRAR TRANSA«√O----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_TIPO_CREDITO_INSERIR,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -43402,7 +43402,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		creditoTipo.adicionarUsuario(usuarioLogado,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(creditoTipo);
-		// ------------ REGISTRAR TRANSA«√O----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 
 		Integer id = (Integer) getControladorUtil().inserir(creditoTipo);
 
@@ -43411,11 +43411,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0513] Manter Tipo de CrÈdito
+	 * [UC0513] Manter Tipo de Cr√©dito
 	 * 
-	 * Remover Tipo de CrÈdito
+	 * Remover Tipo de Cr√©dito
 	 * 
-	 * @author Thiago TenÛrio
+	 * @author Thiago Ten√≥rio
 	 * @date 19/03/2007
 	 * 
 	 * @param
@@ -43424,7 +43424,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public void removerTipoCredito(String[] ids, Usuario usuarioLogado)
 			throws ControladorException {
 
-		// ------------ REGISTRAR TRANSA«√O ----------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 		Operacao operacao = new Operacao();
 		operacao.setId(Operacao.OPERACAO_TIPO_CREDITO_REMOVER);
 
@@ -43435,7 +43435,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		Collection<UsuarioAcaoUsuarioHelper> colecaoUsuarios = new ArrayList();
 		colecaoUsuarios.add(usuarioAcaoUsuarioHelper);
-		// ------------ REGISTRAR TRANSA«√O ----------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
 		this.getControladorUtil().remover(ids, CreditoTipo.class.getName(),
 				null, null);
@@ -43443,10 +43443,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * [UC0298] Manter Tipo de Credito[] Atualizar Tipo de Credito Metodo que
-	 * atualiza a SituaÁ„o Usuario
+	 * atualiza a Situa√ß√£o Usuario
 	 * 
 	 * 
-	 * @author Thiago TenÛrio
+	 * @author Thiago Ten√≥rio
 	 * @date 25/05/2006
 	 * 
 	 * @param Tipo
@@ -43479,49 +43479,49 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		// Verifica se o campo DescriÁ„o foi preenchido
+		// Verifica se o campo Descri√ß√£o foi preenchido
 
 		if (creditoTipo.getDescricao() == null
 				|| creditoTipo.getDescricao().equals(
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException("atencao.Informe_entidade", null,
-					" DescriÁ„o do Tipo de CrÈdito");
+					" Descri√ß√£o do Tipo de Cr√©dito");
 		}
 
-		// Verifica se o campo DescriÁ„o foi preenchido
+		// Verifica se o campo Descri√ß√£o foi preenchido
 
 		if (creditoTipo.getDescricaoAbreviada() == null
 				|| creditoTipo.getDescricaoAbreviada().equals(
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException("atencao.Informe_entidade", null,
-					" DescriÁ„o do Tipo de CrÈdito Abreviada");
+					" Descri√ß√£o do Tipo de Cr√©dito Abreviada");
 		}
 
-		// Verifica se o campo Tipo do LanÁamento do Item Cont·bil foi
+		// Verifica se o campo Tipo do Lan√ßamento do Item Cont√°bil foi
 		// preenchido
 
 		if (creditoTipo.getLancamentoItemContabil() == null
 				|| creditoTipo.getLancamentoItemContabil().equals(
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException("atencao.Informe_entidade", null,
-					" Tipo do LanÁamento do Item Cont·bil");
+					" Tipo do Lan√ßamento do Item Cont√°bil");
 		}
 
-		// Verifica se o campo ReferÍncia do Tipo de ServiÁo foi preenchido
+		// Verifica se o campo Refer√™ncia do Tipo de Servi√ßo foi preenchido
 		if (creditoTipo.getValorLimite() == null
 				|| creditoTipo.getValorLimite().equals(
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException("atencao.Informe_entidade", null,
-					" Valor Limite do CrÈdito");
+					" Valor Limite do Cr√©dito");
 		}
 
-		// Verifica se o campo ndicador de GeraÁ„o Autom·tica do CrÈdito foi
+		// Verifica se o campo ndicador de Gera√ß√£o Autom√°tica do Cr√©dito foi
 		// preenchido
 		if (creditoTipo.getIndicadorGeracaoAutomatica() == null
 				|| creditoTipo.getIndicadorGeracaoAutomatica().equals(
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException("atencao.Informe_entidade", null,
-					" Indicador de GeraÁ„o Autom·tica do CrÈdito");
+					" Indicador de Gera√ß√£o Autom√°tica do Cr√©dito");
 		}
 
 		// Verifica se o campo Indicador de Uso foi preenchido
@@ -43553,7 +43553,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throw new ControladorException("atencao.atualizacao.timestamp");
 		}
 
-		// ------------ REGISTRAR TRANSA«√O----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_TIPO_CREDITO_ATUALIZAR,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -43569,7 +43569,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		creditoTipo.adicionarUsuario(usuarioLogado,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(creditoTipo);
-		// ------------ REGISTRAR TRANSA«√O----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 
 		creditoTipo.setUltimaAlteracao(new Date());
 
@@ -43582,7 +43582,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * 
 	 * [UC0217] Informar Nao Entrega de Documentos
 	 * 
-	 * @author Thiago TenÛrio
+	 * @author Thiago Ten√≥rio
 	 * @date 04/04/2007
 	 * 
 	 */
@@ -43590,7 +43590,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Collection colecaoDocumentosNaoEntregues, Usuario usuarioLogado)
 			throws ControladorException {
 
-		// ------------ REGISTRAR TRANSA«√O----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_NAO_ENTREGA_DOCUMENTOS_INFORMAR,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -43608,7 +43608,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		documentoNaoEntregue.adicionarUsuario(usuarioLogado,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(documentoNaoEntregue);
-		// ------------ REGISTRAR TRANSA«√O----------------------------
+		// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 
 		Iterator iterator = colecaoDocumentosNaoEntregues.iterator();
 		Integer id = null;
@@ -43626,9 +43626,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * 
 	 * Este caso de uso permite gerar um ralatorio analitico do faturamento
 	 * 
-	 * [UC0xxx]Gerar RelatÛrio AnalÌtico do Faturamento
+	 * [UC0xxx]Gerar Relat√≥rio Anal√≠tico do Faturamento
 	 * 
-	 * @author Fl·vio Cordeiro
+	 * @author Fl√°vio Cordeiro
 	 * @date 18/05/2007
 	 * 
 	 * @param anoMesFaturamento
@@ -43760,8 +43760,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// parte nova para o relatÛrio ter o processamento em batch
-				// cria uma inst‚ncia da classe do relatÛrio
+				// parte nova para o relat√≥rio ter o processamento em batch
+				// cria uma inst√¢ncia da classe do relat√≥rio
 
 			}
 		} catch (ErroRepositorioException e) {
@@ -43772,7 +43772,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/05/2007
@@ -43808,7 +43808,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Linha 5
 			// --------------------------------------------------------------
-			// recupera endereco do imÛvel
+			// recupera endereco do im√≥vel
 			String enderecoImovel = "";
 			try {
 				enderecoImovel = getControladorEndereco()
@@ -43821,8 +43821,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Linha 6
 			// --------------------------------------------------------------
-			// inst‚ncia um imovel com os dados da conta para recuperar a
-			// inscriÁ„o que est· no objeto imovel
+			// inst√¢ncia um imovel com os dados da conta para recuperar a
+			// inscri√ß√£o que est√° no objeto imovel
 			Imovel imovel = new Imovel();
 			Localidade localidade = new Localidade();
 			localidade.setId(emitirContaHelper.getIdLocalidade());
@@ -43836,7 +43836,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			imovel.setQuadra(quadra);
 			imovel.setLote(emitirContaHelper.getLoteConta());
 			imovel.setSubLote(emitirContaHelper.getSubLoteConta());
-			// InscriÁ„o do imÛvel
+			// Inscri√ß√£o do im√≥vel
 			emitirContaHelper
 					.setInscricaoImovel(imovel.getInscricaoFormatada());
 
@@ -43846,8 +43846,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			String enderecoClienteResponsavel = "";
 			Integer idImovelContaEnvio = emitirContaHelper
 					.getIdImovelContaEnvio();
-			// caso a coleÁ„o de contas seja de entrega para o cliente
-			// respons·vel
+			// caso a cole√ß√£o de contas seja de entrega para o cliente
+			// respons√°vel
 			if (idImovelContaEnvio != null
 					&& (idImovelContaEnvio
 							.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL) || idImovelContaEnvio
@@ -43870,7 +43870,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 			/**
-			 * Emitir faturas agrupadas sem cÛdigo de barras
+			 * Emitir faturas agrupadas sem c√≥digo de barras
 			 * 
 			 * @author Wellington Rocha
 			 * @date 25/01/2012
@@ -43889,7 +43889,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// Linha 8
 			// --------------------------------------------------------------
 
-			// [SB0002] - Determinar tipo de ligaÁ„o e tipo de MediÁ„o
+			// [SB0002] - Determinar tipo de liga√ß√£o e tipo de Medi√ß√£o
 			Integer[] parmSituacao = determinarTipoLigacaoMedicao(emitirContaHelper);
 			Integer tipoLigacao = parmSituacao[0];
 			Integer tipoMedicao = parmSituacao[1];
@@ -43897,20 +43897,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// Linha 9
 			// --------------------------------------------------------------
 			// cria uma stringBuilder para recuperar o resultado do [SB0003]
-			// o tamanho da string que vem como resultado È de 20 posiÁıes
+			// o tamanho da string que vem como resultado √© de 20 posi√ß√µes
 			StringBuilder obterDadosConsumoMedicaoAnterior = null;
 
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 1
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 1, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes1(obterDadosConsumoMedicaoAnterior
 							.toString());
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 4
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 4, tipoLigacao, tipoMedicao);
 			emitirContaHelper
@@ -43919,25 +43919,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Linha 10
 			// --------------------------------------------------------------
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 2
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 2, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes2(obterDadosConsumoMedicaoAnterior
 							.toString());
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 5
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 5, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes5(obterDadosConsumoMedicaoAnterior
 							.toString());
 			// Inicio Chamar Sub-Fluxo
-			// recupera os parametros da mediÁ„o historico do
-			// [SB0004] - Obter Dados da MediÁ„o da Conta
+			// recupera os parametros da medi√ß√£o historico do
+			// [SB0004] - Obter Dados da Medi√ß√£o da Conta
 			Object[] parmsMedicaoHistorico = obterDadosMedicaoConta(
 					emitirContaHelper, tipoMedicao);
 			// Leitura Anterior
@@ -43948,7 +43948,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			String dataLeituraAnterior = "";
 			// Leitura Anterior
 			String dataLeituraAtual = "";
-			// Leitura SituaÁ„o Atual
+			// Leitura Situa√ß√£o Atual
 			// String leituraSituacaoAtual = "";
 			// Leitura Anormalidade Faturamento
 			String leituraAnormalidadeFaturamento = "";
@@ -43986,7 +43986,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			emitirContaHelper.setDataLeituraAtual(dataLeituraAtual);
 			String diasConsumo = "";
 			if (!dataLeituraAnterior.equals("") && !dataLeituraAtual.equals("")) {
-				// calcula a quantidade de dias de consumo que È a
+				// calcula a quantidade de dias de consumo que √© a
 				// quantidade de dias
 				// entre a data de leitura
 				// anterior(parmsMedicaoHistorico[2]) e a data de leitura
@@ -43996,9 +43996,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								(Date) parmsMedicaoHistorico[3],
 								(Date) parmsMedicaoHistorico[2]);
 			}
-			// recupera os parametros de consumo faturamento e consumo mÈdio
-			// di·rio
-			// [SB0005] - Obter Consumo Faturado e Consumo MÈdio Di·rio
+			// recupera os parametros de consumo faturamento e consumo m√©dio
+			// di√°rio
+			// [SB0005] - Obter Consumo Faturado e Consumo M√©dio Di√°rio
 			String[] parmsConsumo = obterConsumoFaturadoConsumoMedioDiario(
 					emitirContaHelper, tipoMedicao, diasConsumo);
 			String consumoFaturamento = parmsConsumo[0];
@@ -44019,17 +44019,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Linha 11
 			// --------------------------------------------------------------
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 3
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 3, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes3(obterDadosConsumoMedicaoAnterior
 							.toString());
-			// chama o [SB0003] -Obter Dados do Consumo e MediÁ„o Anterior
+			// chama o [SB0003] -Obter Dados do Consumo e Medi√ß√£o Anterior
 			// passando a quantidade de Meses Igual a 6
-			// e o tipo de ligaÁ„o e mediÁ„o recuperados anteriormente
+			// e o tipo de liga√ß√£o e medi√ß√£o recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 					emitirContaHelper, 6, tipoLigacao, tipoMedicao);
 			emitirContaHelper
@@ -44061,27 +44061,27 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 
 				if (parmsConsumoHistorico != null) {
-					// descriÁ„o abreviada tipo de consumo
+					// descri√ß√£o abreviada tipo de consumo
 					if (parmsConsumoHistorico[0] != null) {
 						descricaoAbreviadaTipoConsumo = (String) parmsConsumoHistorico[0];
 					}
-					// descriÁ„o tipo de consumo
+					// descri√ß√£o tipo de consumo
 					if (parmsConsumoHistorico[1] != null) {
 						descricaoTipoConsumo = (String) parmsConsumoHistorico[1];
 					}
-					// Consumo mÈdio
+					// Consumo m√©dio
 					if (parmsConsumoHistorico[2] != null) {
 						consumoMedio = "" + (Integer) parmsConsumoHistorico[2];
 					}
-					// descriÁ„o abreviada anormalidade de consumo
+					// descri√ß√£o abreviada anormalidade de consumo
 					if (parmsConsumoHistorico[3] != null) {
 						descricaoAbreviadaAnormalidadeConsumo = (String) parmsConsumoHistorico[3];
 					}
-					// descriÁ„o anormalidade de consumo
+					// descri√ß√£o anormalidade de consumo
 					if (parmsConsumoHistorico[4] != null) {
 						descricaoAnormalidadeConsumo = (String) parmsConsumoHistorico[4];
 					}
-					// Consumo mÈdio
+					// Consumo m√©dio
 					if (parmsConsumoHistorico[5] != null) {
 						consumoRateio = "" + (Integer) parmsConsumoHistorico[5];
 					}
@@ -44107,7 +44107,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Inicio Chamar Sub-Fluxo
 			// soma a quantidades de economias da tabela contaCategoria
-			// [SB0007] - Obter Dados da MediÁ„o da Conta
+			// [SB0007] - Obter Dados da Medi√ß√£o da Conta
 			Short quantidadeEconomiaConta = 0;
 			quantidadeEconomiaConta = obterQuantidadeEconomiasConta(
 					emitirContaHelper.getIdConta(), true);
@@ -44157,9 +44157,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Inicio Chamar Sub-Fluxo
 			// concatena os campos dos sub-fluxos anteriores
-			// [SB0008] - Obter Dados da MediÁ„o da Conta
+			// [SB0008] - Obter Dados da Medi√ß√£o da Conta
 			StringBuilder codigoAuxiliar = new StringBuilder();
-			// leitura situaÁ„o atual
+			// leitura situa√ß√£o atual
 			// tipo de consumo
 			codigoAuxiliar.append(Util.completaString(
 					descricaoAbreviadaTipoConsumo, 1));
@@ -44172,7 +44172,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			codigoAuxiliar.append(Util.completaString(
 					descricaoAbreviadaAnormalidadeConsumo, 2));
 
-			// perfil do imÛvel
+			// perfil do im√≥vel
 			if (emitirContaHelper.getIdImovelPerfil() != null) {
 				codigoAuxiliar.append(Util.completaString(""
 						+ emitirContaHelper.getIdImovelPerfil(), 1));
@@ -44181,7 +44181,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 			// dias do consumo
 			codigoAuxiliar.append(Util.completaString(diasConsumo, 2));
-			// Consumo medio do imÛvel
+			// Consumo medio do im√≥vel
 			codigoAuxiliar.append(Util.completaString(consumoMedio, 6));
 			// Fim Chamar Sub-Fluxo
 			emitirContaHelper
@@ -44198,7 +44198,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// Linha 16
 			// --------------------------------------------------------------
-			// chama o [SB0010] - Gerar Linhas da DescriÁ„o dos ServiÁos e
+			// chama o [SB0010] - Gerar Linhas da Descri√ß√£o dos Servi√ßos e
 			// Tarifas
 
 			Collection colecaoContaLinhasDescricaoServicosTarifasTotalHelper = gerarLinhasDescricaoServicoTarifasRelatorio(
@@ -44301,7 +44301,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
 
 			// Se valor da conta maior que o valor limite
-			// emite uma Ficha de CompensaÁ„o(Boleto bancario)
+			// emite uma Ficha de Compensa√ß√£o(Boleto bancario)
 			// if (valorConta
 			// .compareTo(EmitirContaHelper.VALOR_LIMITE_FICHA_COMPENSACAO) ==
 			// 1) {
@@ -44330,7 +44330,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								null, null, null);
 
 				// Linha 24
-				// Formata a representaÁ„o n˙merica do cÛdigo de barras
+				// Formata a representa√ß√£o n√∫merica do c√≥digo de barras
 				String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra
 						.substring(0, 11)
 						+ "-"
@@ -44361,7 +44361,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			}
 
-			/** AlteraÁıes para atendender mudanÁas na segunda via da conta */
+			/** Altera√ß√µes para atendender mudan√ßas na segunda via da conta */
 			String leituraAnteriorInformada = "";
 			String leituraAtualInformada = "";
 			String dataLeituraAnteriorInformada = "";
@@ -44451,7 +44451,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.obterDadosQualidadeAguaCosanpa(emitirContaHelper,
 							imovelQuadraFace.getQuadraFace().getId());
 
-			// Padr„o
+			// Padr√£o
 			emitirContaHelper.setPadraoCor(qualidadeAgua[0]);
 			emitirContaHelper.setPadraoTurbidez(qualidadeAgua[1]);
 			emitirContaHelper.setPadraoCloro(qualidadeAgua[3]);
@@ -44497,7 +44497,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0482] Emitir 2 Via de Contas
 	 * 
-	 * [SB00011] Gerar Linhas da Tarifa de ¡gua
+	 * [SB00011] Gerar Linhas da Tarifa de √Ågua
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/11/2006
@@ -44580,9 +44580,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				String consumoFaixa3 = "";
 				String valor3 = "";
 				if (parmsMedicaoHistorico == null) {
-					descricaoServicosTarifas3 = " TARIFA MÕNIMA";
+					descricaoServicosTarifas3 = " TARIFA M√çNIMA";
 
-					// Valor da tarifa mÌnima de ·gua para a categoria por
+					// Valor da tarifa m√≠nima de √°gua para a categoria por
 					// economia
 					BigDecimal qtdEconomia = Util
 							.formatarMoedaRealparaBigDecimal(""
@@ -44606,7 +44606,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					consumoFaixa3 = "MINIMO";
 					consumoFaixa3 = consumoFaixa3 + Util.completaString("", 11);
 
-					// valor da ·gua para categoria
+					// valor da √°gua para categoria
 					String valorAgua = Util.formatarMoedaReal(contaCategoria
 							.getValorAgua());
 					valor3 = valorAgua;
@@ -44623,7 +44623,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				} else {
 
-					// recupera a coleÁ„o de conta categoria consumo faixa
+					// recupera a cole√ß√£o de conta categoria consumo faixa
 					Collection colecaoContaCategoriaConsumoFaixa = null;
 					try {
 						colecaoContaCategoriaConsumoFaixa = repositorioFaturamento
@@ -44640,7 +44640,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (colecaoContaCategoriaConsumoFaixa != null
 							&& !colecaoContaCategoriaConsumoFaixa.isEmpty()) {
 
-						// Consumo mÌnimo de ·gua para a categoria por economia
+						// Consumo m√≠nimo de √°gua para a categoria por economia
 						BigDecimal qtdEconomia = Util
 								.formatarMoedaRealparaBigDecimal(""
 										+ contaCategoria
@@ -44707,7 +44707,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							descricaoServicosTarifas3 = descricaoServicosTarifas3
 									+ valorTarifaMinima + " (POR UNIDADE)";
 
-							// Consumo mÌnimo de ·gua para a categoria
+							// Consumo m√≠nimo de √°gua para a categoria
 							if (contaCategoria.getConsumoMinimoAgua() != null
 									&& !contaCategoria.getConsumoMinimoAgua()
 											.equals("")) {
@@ -44723,7 +44723,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 							consumoFaixa3 = consumoFaixa3 + " M3";
 
-							// valor da tarifa mÌnima de agua para categoria
+							// valor da tarifa m√≠nima de agua para categoria
 							String valorAguaCategoria = "";
 							if (contaCategoria.getValorTarifaMinimaAgua() != null) {
 								valorAguaCategoria = Util
@@ -44889,7 +44889,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					} else {
 						// 2.3.2.
 
-						descricaoServicosTarifas3 = " CONSUMO DE ¡GUA";
+						descricaoServicosTarifas3 = " CONSUMO DE √ÅGUA";
 						consumoFaixa3 = Util.completaStringComEspacoAEsquerda("" + contaCategoria.getConsumoAgua(), 6) + " M3";
 						BigDecimal valorRateioAgua = emitirContaHelper.getValorRateioAgua() == null ? new BigDecimal(0) : emitirContaHelper.getValorRateioAgua();
 						valor3 = Util.formatarMoedaReal(contaCategoria.getValorAgua().subtract(valorRateioAgua));
@@ -44909,7 +44909,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/06/2007
@@ -44975,25 +44975,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.pesquisarEmitirHistogramaAguaEstado(filtroClone));
 			break;
 
-		// GerÍncia Regional
+		// Ger√™ncia Regional
 		case 6:
 			colecaoEmitirHistogramaAgua = this
 					.emitirHistogramaAguaGerenciaRegional(filtro);
 			break;
 
-		// GerÍncia Regional por Unidade Negocio
+		// Ger√™ncia Regional por Unidade Negocio
 		case 7:
 			colecaoEmitirHistogramaAgua = this
 					.emitirHistogramaAguaUnidadeNegocioGerenciaRegional(filtro);
 			break;
 
-		// GerÍncia Regional por Elo
+		// Ger√™ncia Regional por Elo
 		case 8:
 			colecaoEmitirHistogramaAgua = this
 					.emitirHistogramaAguaEloUnidadeNegocioGerenciaRegional(filtro);
 			break;
 
-		// GerÍncia Regional por Localidade
+		// Ger√™ncia Regional por Localidade
 		case 9:
 			colecaoEmitirHistogramaAgua = this
 					.emitirHistogramaAguaLocalidadeEloUnidadeNegocioGerenciaRegional(filtro);
@@ -45077,7 +45077,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 06/06/2007
@@ -45167,7 +45167,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -45204,7 +45204,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua - Gerencia Regional
+	 * [UC0600] Emitir Histograma de √Ågua - Gerencia Regional
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/06/2007
@@ -45319,7 +45319,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -45356,7 +45356,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Unidade Negocio e Gerencia Regional
 	 * 
@@ -45502,7 +45502,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -45553,7 +45553,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua -
+	 * [UC0600] Emitir Histograma de √Ågua -
 	 * 
 	 * Elo e Unidade Negocio e Gerencia Regional
 	 * 
@@ -45744,7 +45744,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -45807,7 +45807,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Elo e Unidade Negocio
 	 * 
@@ -45972,7 +45972,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -46024,7 +46024,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Localidade Elo e Unidade Negocio
 	 * 
@@ -46216,7 +46216,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -46277,7 +46277,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Localidade Elo e Unidade Negocio e Gerencia Regional
 	 * 
@@ -46493,7 +46493,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -46565,7 +46565,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua -
+	 * [UC0600] Emitir Histograma de √Ågua -
 	 * 
 	 * Unidade Negocio
 	 * 
@@ -46694,7 +46694,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -46733,7 +46733,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua -
+	 * [UC0600] Emitir Histograma de √Ågua -
 	 * 
 	 * Elo Polo
 	 * 
@@ -46866,7 +46866,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -46903,7 +46903,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Localidade, Elo e Unidade Negocio
 	 * 
@@ -47069,7 +47069,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -47119,7 +47119,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Setor Comercial ,Localidade e Elo
 	 * 
@@ -47312,7 +47312,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -47374,7 +47374,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Setor Comercial ,Localidade e Elo
 	 * 
@@ -47519,7 +47519,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -47569,7 +47569,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Setor Comercial e Quadra
 	 * 
@@ -47717,7 +47717,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -47766,7 +47766,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Setor Comercial ,Localidade e Elo
 	 * 
@@ -47959,7 +47959,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -48020,7 +48020,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua -
+	 * [UC0600] Emitir Histograma de √Ågua -
 	 * 
 	 * Localidade
 	 * 
@@ -48137,7 +48137,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -48174,7 +48174,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua -
+	 * [UC0600] Emitir Histograma de √Ågua -
 	 * 
 	 * Setor Comercial
 	 * 
@@ -48297,7 +48297,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -48334,7 +48334,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua -
+	 * [UC0600] Emitir Histograma de √Ågua -
 	 * 
 	 * Quadra
 	 * 
@@ -48459,7 +48459,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 
-				// Vai gerar Faixa para N„o medido
+				// Vai gerar Faixa para N√£o medido
 				if (colecaoConsumoFaixaLigacaoNaoMedido != null
 						&& !colecaoConsumoFaixaLigacaoNaoMedido.isEmpty()) {
 
@@ -48496,7 +48496,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Total Geral
 	 * 
@@ -49053,7 +49053,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Total Geral Por Categoria
 	 * 
@@ -49094,7 +49094,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Gera as linhas Por Faixa de Consumo
 	 * 
@@ -49218,7 +49218,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de ¡gua
+	 * [UC0600] Emitir Histograma de √Ågua
 	 * 
 	 * Linha Faixa
 	 * 
@@ -49588,10 +49588,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * Inseri o tipo de debito na base
 	 * 
-	 * [UC0529] Inserir Tipo de DÈbito
+	 * [UC0529] Inserir Tipo de D√©bito
 	 * 
 	 * 
-	 * @author RÙmulo AurÈlio
+	 * @author R√¥mulo Aur√©lio
 	 * @date 09/03/2007
 	 * 
 	 * @param descricao
@@ -49620,7 +49620,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		if (descricao == null || descricao.equalsIgnoreCase("")) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"DescriÁ„o do Tipo de DÈbito");
+					"Descri√ß√£o do Tipo de D√©bito");
 		}
 
 		if (idTipoFinanciamento == null
@@ -49635,14 +49635,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				|| indicadorGeracaoDebitoAutomatica.equalsIgnoreCase("")) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"Indicador de GeraÁ„o do DÈbito Autom·tica");
+					"Indicador de Gera√ß√£o do D√©bito Autom√°tica");
 		}
 
 		if (indicadorGeracaoDebitoConta == null
 				|| indicadorGeracaoDebitoConta.equalsIgnoreCase("")) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"Indicador de GeraÁ„o do DÈbito em Conta");
+					"Indicador de Gera√ß√£o do D√©bito em Conta");
 		}
 
 		if (idLancamentoItemContabil == null
@@ -49650,20 +49650,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"Tipo do LanÁamento do Item Cont·bil");
+					"Tipo do Lan√ßamento do Item Cont√°bil");
 		}
 
 		if (valorLimiteDebito == null || valorLimiteDebito.equalsIgnoreCase("")) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"Valor Limite do DÈbito");
+					"Valor Limite do D√©bito");
 		}
 
 		if (indicadorDebitoCartaoCredito == null
 				|| indicadorDebitoCartaoCredito.equalsIgnoreCase("")) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"Indicador de Cart„o de CrÈdito");
+					"Indicador de Cart√£o de Cr√©dito");
 		}
 
 		if (indicadorJurosParCliente == null
@@ -49802,10 +49802,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * Atualizar o tipo de debito na base
 	 * 
-	 * [UC0530] Atualizar Tipo de DÈbito
+	 * [UC0530] Atualizar Tipo de D√©bito
 	 * 
 	 * 
-	 * @author RÙmulo AurÈlio
+	 * @author R√¥mulo Aur√©lio
 	 * @date 15/03/2007
 	 * 
 	 * @param id
@@ -49833,7 +49833,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		if (descricao == null || descricao.equalsIgnoreCase("")) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"DescriÁ„o do Tipo de DÈbito");
+					"Descri√ß√£o do Tipo de D√©bito");
 		}
 
 		if (idTipoFinanciamento == null
@@ -49848,14 +49848,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				|| indicadorGeracaoDebitoAutomatica.equalsIgnoreCase("")) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"Indicador de GeraÁ„o do DÈbito Autom·tica");
+					"Indicador de Gera√ß√£o do D√©bito Autom√°tica");
 		}
 
 		if (indicadorGeracaoDebitoConta == null
 				|| indicadorGeracaoDebitoConta.equalsIgnoreCase("")) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"Indicador de GeraÁ„o do DÈbito em Conta");
+					"Indicador de Gera√ß√£o do D√©bito em Conta");
 		}
 
 		if (idLancamentoItemContabil == null
@@ -49863,20 +49863,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"Tipo do LanÁamento do Item Cont·bil");
+					"Tipo do Lan√ßamento do Item Cont√°bil");
 		}
 
 		if (valorLimiteDebito == null || valorLimiteDebito.equalsIgnoreCase("")) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"Valor Limite do DÈbito");
+					"Valor Limite do D√©bito");
 		}
 
 		if (indicadorDebitoCartaoCredito == null
 				|| indicadorDebitoCartaoCredito.equalsIgnoreCase("")) {
 			throw new ControladorException(
 					"atencao.campo_selecionado.obrigatorio", null,
-					"Indicador de Cart„o de CrÈdito");
+					"Indicador de Cart√£o de Cr√©dito");
 		}
 
 		if (indicadorJurosParCliente == null
@@ -50019,7 +50019,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		debitoTipo.setUltimaAlteracao(new Date());
 
-		// Verifica AtualizaÁ„o realizada por outro usu·rio
+		// Verifica Atualiza√ß√£o realizada por outro usu√°rio
 
 		filtroDebitoTipo.limparListaParametros();
 
@@ -50045,7 +50045,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		debitoTipo.setUltimaAlteracao(new Date());
 
-		// ------------ REGISTRAR TRANSaÁ„o----------------------------
+		// ------------ REGISTRAR TRANSa√ß√£o----------------------------
 
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_TIPO_DEBITO_ATUALIZAR,
@@ -50063,13 +50063,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(debitoTipo);
 
-		// --------FIM---- REGISTRAR TRANSaÁ„o----------------------------
+		// --------FIM---- REGISTRAR TRANSa√ß√£o----------------------------
 		getControladorUtil().atualizar(debitoTipo);
 
 	}
 
 	/**
-	 * Determina qual a menor data de vencimento para uma coleÁ„o de contas
+	 * Determina qual a menor data de vencimento para uma cole√ß√£o de contas
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -50104,8 +50104,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/06/2007
@@ -50134,7 +50134,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Iterator iterator = colecaoResumoFaturamentoRelatorioEstadoPorUnidadeNegocio
 				.iterator();
 
-		// Prepara cada linha do relatÛrio
+		// Prepara cada linha do relat√≥rio
 		String tipoLancamento = null;
 		String itemLancamento = null;
 		String itemContabel = null;
@@ -50174,8 +50174,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lanÁamento
-			// e mesmo item de lanÁamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lan√ßamento
+			// e mesmo item de lan√ßamento do registro anterior
 			if (tipoLancamento.equals(tempTipoLancamento)
 					&& itemLancamento.equals(tempItemLancamento)) {
 
@@ -50317,8 +50317,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0173] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0173] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/06/2007
@@ -50348,7 +50348,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Iterator iteratorResumoFaturamentoRelatorioPorGerenciaRegional = colecaoResumoFaturamentoRelatorioPorGerenciaRegional
 				.iterator();
 
-		// Prepara cada linha do relatÛrio
+		// Prepara cada linha do relat√≥rio
 		String tipoLancamento = null;
 		String itemLancamento = null;
 		String itemContabel = null;
@@ -50391,8 +50391,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lanÁamento
-			// e mesmo item de lanÁamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lan√ßamento
+			// e mesmo item de lan√ßamento do registro anterior
 			if (tipoLancamento.equals(tempTipoLancamento)
 					&& itemLancamento.equals(tempItemLancamento)) {
 
@@ -50526,11 +50526,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Remove os contratos de demanda selecionados pelo usu·rio
+	 * Remove os contratos de demanda selecionados pelo usu√°rio
 	 * 
 	 * [UC0513] - Manter Contrato de Demanda
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 27/06/2007
 	 * 
 	 * @param idsContratosDemanda
@@ -50538,7 +50538,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 */
 	public void removerContratosDemanda(String[] idsContratosDemanda, Usuario usuarioLogado) throws ControladorException {
 
-		// ------------ REGISTRAR TRANSA«√O ----------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTRATO_DEMANDA_REMOVER, new UsuarioAcaoUsuarioHelper(
 				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
@@ -50547,7 +50547,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
 		operacaoEfetuada.setOperacao(operacao);
-		// ------------ REGISTRAR TRANSA«√O ----------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
 		if (idsContratosDemanda != null && idsContratosDemanda.length > 0) {
 			for (int i = 0; i < idsContratosDemanda.length; i++) {
@@ -50565,11 +50565,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					Contrato contratoDemanda = (Contrato) Util.retonarObjetoDeColecao(colecaoContratoDemanda);
 
-					// ------------ REGISTRAR TRANSA«√O ----------------
+					// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 					contratoDemanda.setOperacaoEfetuada(operacaoEfetuada);
 					contratoDemanda.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 					registradorOperacao.registrarOperacao(contratoDemanda);
-					// ------------ REGISTRAR TRANSA«√O ----------------
+					// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
 					getControladorUtil().remover(contratoDemanda);
 
@@ -50583,7 +50583,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Obter a data de vencimento de um grupo de faturamento, no mÍs de
+	 * Obter a data de vencimento de um grupo de faturamento, no m√™s de
 	 * faturamento corrente.
 	 * 
 	 * [UC0618] Obter data de vencimento do grupo
@@ -50611,18 +50611,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		Integer anoMesReferencia = null;
 
-		// Caso tenha sido chamado o este mÈtodo na funcionalidade de
+		// Caso tenha sido chamado o este m√©todo na funcionalidade de
 		// Inserir Cronograma do faturamento
 		if (anoMesInformado != null) {
 			anoMesReferencia = anoMesInformado;
 		}
 
 		/**
-		 * Caso o indicador de que o vencimento do grupo È igual ao ano/mÍs do
+		 * Caso o indicador de que o vencimento do grupo √© igual ao ano/m√™s do
 		 * faturamento corresponda a SIM, formatar a data de vencimento a partir
-		 * do ano/mÍs de referÍncia do faturamento e do dia de vencimento do
-		 * grupo. Caso contr·rio , formatar a apartir do mÍs seguinte ao mÍs de
-		 * referÍncia do faturamento e do dia de vencimento do grupo.
+		 * do ano/m√™s de refer√™ncia do faturamento e do dia de vencimento do
+		 * grupo. Caso contr√°rio , formatar a apartir do m√™s seguinte ao m√™s de
+		 * refer√™ncia do faturamento e do dia de vencimento do grupo.
 		 */
 		if (faturamentoGrupo.getIndicadorVencimentoMesFatura().equals(
 				ConstantesSistema.SIM)) {
@@ -50653,7 +50653,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 29/06/2007
@@ -50683,8 +50683,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0345] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0345] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/06/2007
@@ -50712,7 +50712,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Iterator iterator = colecaoResumoFaturamentoRelatorioEstadoPorLocalidade
 						.iterator();
 
-				// Prepara cada linha do relatÛrio
+				// Prepara cada linha do relat√≥rio
 
 				String tipoLancamento = null;
 				String itemLancamento = null;
@@ -50755,8 +50755,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					boolean condicaoIgual = true;
 					// compara se o registro atual eh do
-					// mesmo tipo de Recebimento, mesmo tipo de lanÁamento
-					// e mesmo item de lanÁamento do registro anterior
+					// mesmo tipo de Recebimento, mesmo tipo de lan√ßamento
+					// e mesmo item de lan√ßamento do registro anterior
 					if (tipoLancamento.equals(tempTipoLancamento)
 							&& itemLancamento.equals(tempItemLancamento)) {
 
@@ -50931,8 +50931,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0345] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0345] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 25/04/2011
@@ -50961,7 +50961,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Iterator iterator = colecaoResFatuRelatEstadoPorMunicipio
 						.iterator();
 
-				// Prepara cada linha do relatÛrio
+				// Prepara cada linha do relat√≥rio
 
 				String tipoLancamento = null;
 				String itemLancamento = null;
@@ -51001,8 +51001,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					boolean condicaoIgual = true;
 					// compara se o registro atual eh do
-					// mesmo tipo de Recebimento, mesmo tipo de lanÁamento
-					// e mesmo item de lanÁamento do registro anterior
+					// mesmo tipo de Recebimento, mesmo tipo de lan√ßamento
+					// e mesmo item de lan√ßamento do registro anterior
 					if (tipoLancamento.equals(tempTipoLancamento)
 							&& itemLancamento.equals(tempItemLancamento)) {
 
@@ -51152,8 +51152,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0345] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0345] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/06/2007
@@ -51221,8 +51221,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lanÁamento
-			// e mesmo item de lanÁamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lan√ßamento
+			// e mesmo item de lan√ßamento do registro anterior
 			if (tipoLancamento.equals(tempTipoLancamento)
 					&& itemLancamento.equals(tempItemLancamento)) {
 
@@ -51345,8 +51345,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0345] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0345] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 25/04/2011
@@ -51417,8 +51417,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lanÁamento
-			// e mesmo item de lanÁamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lan√ßamento
+			// e mesmo item de lan√ßamento do registro anterior
 			if (tipoLancamento.equals(tempTipoLancamento)
 					&& itemLancamento.equals(tempItemLancamento)) {
 
@@ -51534,8 +51534,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Consulta ResumoFaturamento para a geraÁ„o do relatÛrio '[UC0345] Gerar
-	 * RelatÛrio de Resumo Faturamento' de acordo com a opÁ„o de totalizaÁ„o.
+	 * Consulta ResumoFaturamento para a gera√ß√£o do relat√≥rio '[UC0345] Gerar
+	 * Relat√≥rio de Resumo Faturamento' de acordo com a op√ß√£o de totaliza√ß√£o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 27/06/2007
@@ -51603,8 +51603,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lanÁamento
-			// e mesmo item de lanÁamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lan√ßamento
+			// e mesmo item de lan√ßamento do registro anterior
 			if (tipoLancamento.equals(tempTipoLancamento)
 					&& itemLancamento.equals(tempItemLancamento)) {
 
@@ -51723,7 +51723,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * 
-	 * Metodo que retorna a data de revis„o da conta
+	 * Metodo que retorna a data de revis√£o da conta
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 06/07/2007
@@ -51784,7 +51784,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0146] - Manter Conta Author: Raphael Rossiter Data: 21/01/2006
 	 * 
-	 * ObtÈm as contas de um imÛvel que poder„o ser mantidas
+	 * Obt√©m as contas de um im√≥vel que poder√£o ser mantidas
 	 * 
 	 * @param imovel
 	 * @param situacaoNormal
@@ -51819,10 +51819,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S·vio Luiz Data:
+	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S√°vio Luiz Data:
 	 * 20/07/2007
 	 * 
-	 * ObtÈm as contas de um imÛvel que poder„o ser mantidas
+	 * Obt√©m as contas de um im√≥vel que poder√£o ser mantidas
 	 * 
 	 * @param imovel
 	 * @param situacaoNormal
@@ -51844,10 +51844,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S·vio Luiz Data:
+	 * [UC0623] - Gerar Resumo de Metas CAERN Author: S√°vio Luiz Data:
 	 * 20/07/2007
 	 * 
-	 * ObtÈm as contas de um imÛvel que poder„o ser mantidas
+	 * Obt√©m as contas de um im√≥vel que poder√£o ser mantidas
 	 * 
 	 * @param imovel
 	 * @param situacaoNormal
@@ -51922,9 +51922,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Metodo temporario para correÁ„o da base de dados
+	 * Metodo temporario para corre√ß√£o da base de dados
 	 * 
-	 * Gerar CrÈdito a Realizar para os imÛveis com contas com vencimento em
+	 * Gerar Cr√©dito a Realizar para os im√≥veis com contas com vencimento em
 	 * 14/08/2007 com multa da conta 06/2007 cobrada na conta 07/2007 e que
 	 * pagaram em 17/07/2007
 	 * 
@@ -51954,9 +51954,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Iterator iteDados = colecaoDadosImovelCreditoARealizar.iterator();
 			while (iteDados.hasNext()) {
 				/*
-				 * 0 - id do imÛvel 1 - valor da prestaÁ„o 2 - id da localidade
-				 * 3 - id da quadra 4 - cÛdigo do setor comercial 5 - n∫ da
-				 * quadra 6 - n∫ do lote 7 - n∫ do sublote
+				 * 0 - id do im√≥vel 1 - valor da presta√ß√£o 2 - id da localidade
+				 * 3 - id da quadra 4 - c√≥digo do setor comercial 5 - n¬∫ da
+				 * quadra 6 - n¬∫ do lote 7 - n¬∫ do sublote
 				 */
 				Object[] dadosImovelCreditoARealizar = (Object[]) iteDados
 						.next();
@@ -52149,7 +52149,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		ControladorTransacaoLocalHome localHome = null;
 		ControladorTransacaoLocal local = null;
 
-		// pega a inst‚ncia do ServiceLocator.
+		// pega a inst√¢ncia do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -52172,7 +52172,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0099] Emitir RelaÁ„o AnalÌtica de Faturas
+	 * [UC0099] Emitir Rela√ß√£o Anal√≠tica de Faturas
 	 * 
 	 * @author Rafael Pinto
 	 * @date 28/08/2007
@@ -52207,13 +52207,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					faturaHelper.setMesAno(Util
 							.formatarAnoMesParaMesAno(anoMes));
 
-					// ObtÈm a coleÁ„o dos itens da fatura atual
+					// Obt√©m a cole√ß√£o dos itens da fatura atual
 					List<FaturaItem> colecaoFaturaItem = (ArrayList) repositorioFaturamento
 							.pesquisarItemsFatura(fatura.getId());
 
 					Collection<FaturaItemClienteResponsavelHelper> colecaoFaturaItemHelper = new ArrayList();
 
-					// Caso a coleÁ„o de itens da fatura estejam preenchidos
+					// Caso a cole√ß√£o de itens da fatura estejam preenchidos
 					if (colecaoFaturaItem != null
 							&& colecaoFaturaItem.size() > 0) {
 
@@ -52262,7 +52262,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.setQtdEconomias(quantidadeEconomiaConta
 											+ "");
 
-							// EndereÁo
+							// Endere√ßo
 							faturaItemHelper.setEndereco(endereco);
 
 							EmitirContaHelper emitirContaHelper = new EmitirContaHelper();
@@ -52315,7 +52315,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 								if (parmsConsumoHistorico != null) {
 
-									// Consumo mÈdio
+									// Consumo m√©dio
 									if (parmsConsumoHistorico[2] != null) {
 										consumoMedio = ""
 												+ (Integer) parmsConsumoHistorico[2];
@@ -52370,7 +52370,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// Leitura Atual
 							faturaItemHelper.setLeituraAtual(leituraAtual);
 
-							// MÈdia
+							// M√©dia
 							faturaItemHelper.setMedia(consumoMedio);
 
 							// Consumo Faturado
@@ -52485,7 +52485,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					colecaoFaturaHelper.add(faturaHelper);
 
-					// Erro no repositÛrio
+					// Erro no reposit√≥rio
 				} catch (ErroRepositorioException ex) {
 					throw new ControladorException("erro.sistema", ex);
 				}
@@ -52526,7 +52526,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * Recupera o data prevista do faturamento atividade cronograma
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 28/08/2007
 	 * 
 	 * @return Integer
@@ -52552,7 +52552,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0596] Inserir Qualidade de Agua
 	 * 
-	 * @author K·ssia Albuquerque
+	 * @author K√°ssia Albuquerque
 	 * @date 06/08/2007
 	 * 
 	 * @return
@@ -52574,7 +52574,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				QualidadeAgua qualidadeAguaColecao = (QualidadeAgua) IteratorColecaoQualidadeAgua
 						.next();
 
-				// -------- REGISTRAR TRANSA«√O------------------
+				// -------- REGISTRAR TRANSA√á√ÉO------------------
 
 				RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 						Operacao.OPERACAO_QUALIDADE_AGUA_INSERIR,
@@ -52591,7 +52591,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				qualidadeAguaColecao.adicionarUsuario(usuarioLogado,
 						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 				registradorOperacao.registrarOperacao(qualidadeAguaColecao);
-				// ------------ REGISTRAR TRANSA«√O----------------------------
+				// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 
 				getControladorUtil().inserir(qualidadeAguaColecao);
 
@@ -52599,7 +52599,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		} else {
 
-			// [FS0005 - VERIFICAR EXIST NCIA DA QUALIDADE DE ¡GUA PARA
+			// [FS0005 - VERIFICAR EXIST√äNCIA DA QUALIDADE DE √ÅGUA PARA
 			// LOCALIDADE]
 			if ((qualidadeAgua.getSetorComercial() == null || qualidadeAgua
 					.getSetorComercial().equals(""))
@@ -52638,7 +52638,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					&& (qualidadeAgua.getLocalidade() != null && !qualidadeAgua
 							.getLocalidade().equals(""))) {
 
-				// [FS0006 - VERIFICAR EXIST NCIA DA QUALIDADE DE ¡GUA PARA
+				// [FS0006 - VERIFICAR EXIST√äNCIA DA QUALIDADE DE √ÅGUA PARA
 				// SETOR COMERCIAL]
 
 				FiltroQualidadeAgua filtroQualidadeAgua = new FiltroQualidadeAgua();
@@ -52681,7 +52681,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			qualidadeAgua.setUltimaAlteracao(new Date());
 
-			// ------------ REGISTRAR TRANSA«√O------------------
+			// ------------ REGISTRAR TRANSA√á√ÉO------------------
 
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 					Operacao.OPERACAO_QUALIDADE_AGUA_INSERIR,
@@ -52698,7 +52698,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			qualidadeAgua.adicionarUsuario(usuarioLogado,
 					UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 			registradorOperacao.registrarOperacao(qualidadeAgua);
-			// ------------ REGISTRAR TRANSA«√O----------------------------
+			// ------------ REGISTRAR TRANSA√á√ÉO----------------------------
 
 			getControladorUtil().inserir(qualidadeAgua);
 
@@ -52727,7 +52727,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoContasManutencao = new ArrayList();
 		Collection colecaoConta = new ArrayList();
 
-		// PAR¬METROS DO SISTEMA
+		// PAR√ÇMETROS DO SISTEMA
 		SistemaParametro sistemaParametro = this.getControladorUtil()
 				.pesquisarParametrosDoSistema();
 
@@ -52747,7 +52747,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& !colecaoContasManutencao.isEmpty()) {
 
 			/**
-			 * [UC0407] Filtrar ImÛveis para Inserir ou Manter Conta 3. Caso o
+			 * [UC0407] Filtrar Im√≥veis para Inserir ou Manter Conta 3. Caso o
 			 * indicador de bloqueio de contas vinculadas a contrato de
 			 * parcelamento no manter contas esteja ativo retirar da lista de
 			 * contas selecionadas as contas vinculadas a algum contrato de
@@ -52766,7 +52766,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 			}
 			/**
-			 * FIM DA ALTERA«¬O
+			 * FIM DA ALTERA√á√ÇO
 			 * */
 
 			Iterator colecaoContasManutencaoIterator = colecaoContasManutencao
@@ -52774,18 +52774,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoContasManutencaoIterator.hasNext()) {
 
-				// ObtÈm os dados do crÈdito realizado
+				// Obt√©m os dados do cr√©dito realizado
 				Object[] contaArray = (Object[]) colecaoContasManutencaoIterator
 						.next();
 
 				Conta conta = new Conta();
 				// ID da conta
 				conta.setId((Integer) contaArray[0]);
-				// Ano MÍs referencia
+				// Ano M√™s referencia
 				conta.setReferencia((Integer) contaArray[1]);
 				// DebitoCreditoSituacaoAtual
 				conta.setDebitoCreditoSituacaoAtual((DebitoCreditoSituacao) contaArray[11]);
-				// Ano MÍs referencia cont·bil
+				// Ano M√™s referencia cont√°bil
 				conta.setReferenciaContabil((Integer) contaArray[12]);
 
 				// imovel
@@ -52810,21 +52810,21 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		while (colecaoContasIt.hasNext()) {
 			contaColecao = (Conta) colecaoContasIt.next();
 
-			// Usu·rio Logado
+			// Usu√°rio Logado
 			contaColecao.setUsuario(usuarioLogado);
 
-			// Carregando a conta que est· na base
+			// Carregando a conta que est√° na base
 			filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.ID,
 					contaColecao.getId()));
 
 			filtroConta.limparListaParametros();
 			/**
-			 * Caso a situaÁ„o atual da conta corresponda a normal (DCST_IDATUAL
+			 * Caso a situa√ß√£o atual da conta corresponda a normal (DCST_IDATUAL
 			 * com o valor correspondente a normal da tabela
-			 * DEBITO_CREDITO_SITUACAO) ou corresponda a retificada ou incluÌda
+			 * DEBITO_CREDITO_SITUACAO) ou corresponda a retificada ou inclu√≠da
 			 * (DCST_IDATUAL com o valor correspondente a retificada ou
-			 * incluÌda, da tabela DEBITO_CREDITO_SITUACAO) e a retificaÁ„o ou
-			 * inclus„o j· tenha sido contabilizada (CNTA_AMREFERENCIACONTABIL
+			 * inclu√≠da, da tabela DEBITO_CREDITO_SITUACAO) e a retifica√ß√£o ou
+			 * inclus√£o j√° tenha sido contabilizada (CNTA_AMREFERENCIACONTABIL
 			 * menor que PARM_AMREFERENCIAFATURAMENTO da tabela
 			 * SISTEMA_PARAMETROS), atualizar os seguintes atributos da conta.
 			 */
@@ -52838,14 +52838,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				contaColecao
 						.setContaMotivoCancelamento(contaMotivoCancelamento);
 
-				// SituaÁ„o Anterior
+				// Situa√ß√£o Anterior
 				/*
-				 * Caso a situaÁ„o atual da conta corresponda a normal
+				 * Caso a situa√ß√£o atual da conta corresponda a normal
 				 * (DCST_IDATUAL com o valor correspondente a normal da tabela
-				 * DEBITO_CREDITO_SITUACAO) e a conta tenha sido faturada no mÍs
+				 * DEBITO_CREDITO_SITUACAO) e a conta tenha sido faturada no m√™s
 				 * de faturamento corrente (CNTA_AMREFERENCIACONTA=
 				 * PARM_AMREFERENCIAFATURAMENTO da tabela SISTEMA_PARAMETROS)
-				 * DCST_IDANTERIOR=DCST_IDATUAL, caso contr·rio
+				 * DCST_IDANTERIOR=DCST_IDATUAL, caso contr√°rio
 				 * DCST_IDANTERIOR=nulo)
 				 */
 				if (contaColecao.getDebitoCreditoSituacaoAtual().getId()
@@ -52860,11 +52860,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					contaColecao.setDebitoCreditoSituacaoAnterior(null);
 				}
 
-				// SituaÁ„o Atual
+				// Situa√ß√£o Atual
 				DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 				/**
-				 * Caso motivo de retificaÁ„o seja dÈbito
-				 * prescrito, alterar a situaÁ„o da conta para 8.
+				 * Caso motivo de retifica√ß√£o seja d√©bito
+				 * prescrito, alterar a situa√ß√£o da conta para 8.
 				 * 
 				 * @author Wellington Rocha
 				 * @date 01/06/2012
@@ -52910,7 +52910,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// Usuario
 					contaColecao.setUsuario(usuarioLogado);
 
-					// ˙ltima alteraÁ„o
+					// √∫ltima altera√ß√£o
 					contaColecao.setUltimaAlteracao(new Date());
 
 					/*
@@ -52918,8 +52918,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					 * Rosana Carvalho)
 					 * 
 					 * OBJETIVO: Quando o mes/ano de faturamento for maior que o
-					 * mes/ano de faturamento atual, n„o alterar o mes/ano
-					 * cont·bil
+					 * mes/ano de faturamento atual, n√£o alterar o mes/ano
+					 * cont√°bil
 					 */
 
 					// Ano Mes Referencia Contabil
@@ -52932,7 +52932,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					/*
 					 * Colocado por Raphael Rossiter em 09/08/2007 OBJETIVO:
-					 * Gravar na tabela de conta o usu·rio que est· logado no
+					 * Gravar na tabela de conta o usu√°rio que est√° logado no
 					 * sistema
 					 */
 
@@ -52940,7 +52940,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					contaColecao.setUsuario(usuarioLogado);
 
 					// ------------ <REGISTRAR
-					// TRANSA«√O>----------------------------
+					// TRANSA√á√ÉO>----------------------------
 
 					RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 							Operacao.OPERACAO_CANCELAR_CONTA,
@@ -52955,7 +52955,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					getControladorTransacao().registrarTransacao(contaColecao);
 
 					// ------------ </REGISTRAR
-					// TRANSA«√O>----------------------------
+					// TRANSA√á√ÉO>----------------------------
 
 					// UPDATE
 					try {
@@ -52975,10 +52975,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 
 						// CRC2725 - alterado por Vivianne Sousa - 30/03/2010
-						// analista:F·tima
-						// 1.1.2.Verificar se h· relaÁ„o do cancelamento com
+						// analista:F√°tima
+						// 1.1.2.Verificar se h√° rela√ß√£o do cancelamento com
 						// itens
-						// de negativaÁ„o
+						// de negativa√ß√£o
 						getControladorSpcSerasa()
 								.verificarRelacaoDoCancelamentoComItensNegativacao(
 										contaColecao, null);
@@ -52997,22 +52997,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			} else if (isContaIncluidaOuRetificadaEReferenciaContabilMaiorOuIgual(contaColecao, sistemaParametro)) {
 
-				// RemoÁ„o da conta no BD
+				// Remo√ß√£o da conta no BD
 				contaColecao.setPercentualEsgoto(new BigDecimal("0.00"));
 
 				// CRC2725 - alterado por Vivianne Sousa - 17/09/2009
-				// analista:F·tima
-				// [FS0003 - Verificar existÍncia de itens de negativaÁ„o para a
-				// conta incluÌda]:
+				// analista:F√°tima
+				// [FS0003 - Verificar exist√™ncia de itens de negativa√ß√£o para a
+				// conta inclu√≠da]:
 				getControladorSpcSerasa()
 						.verificarExistenciaItensNegativacaoParaContaIncluida(
 								contaColecao);
-				// 1.2.4. Verificar se h· relaÁ„o do cancelamento com itens de
-				// negativaÁ„o:
-				// [UC0937 - Obter Itens de NegativaÁ„o Associados ‡ Conta]
-				// passando o identificador do imÛvel (ImÛvel da Conta
+				// 1.2.4. Verificar se h√° rela√ß√£o do cancelamento com itens de
+				// negativa√ß√£o:
+				// [UC0937 - Obter Itens de Negativa√ß√£o Associados √† Conta]
+				// passando o identificador do im√≥vel (Im√≥vel da Conta
 				// Retificada e Cancelada)
-				// e a referÍncia (ReferÍncia da Conta Retificada e Cancelada).
+				// e a refer√™ncia (Refer√™ncia da Conta Retificada e Cancelada).
 				Collection colecaoNegativadorMovimentoRegItem = getControladorSpcSerasa()
 						.obterItensNegativacaoAssociadosAConta(
 								contaColecao.getImovel().getId(),
@@ -53025,8 +53025,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (contaColecao.getDebitoCreditoSituacaoAtual().getId()
 						.equals(DebitoCreditoSituacao.RETIFICADA)) {
 
-					// [FS0002] - Verificar existÍncia da conta
-					// cancelada por retificaÁ„o
+					// [FS0002] - Verificar exist√™ncia da conta
+					// cancelada por retifica√ß√£o
 
 					filtroConta.adicionarParametro(new ParametroSimples(
 							FiltroConta.REFERENCIA, contaColecao
@@ -53059,22 +53059,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					contaCanceladaPorRetificacao
 							.setContaMotivoCancelamento(contaMotivoCancelamento);
 
-					// SituaÁ„o Atual
+					// Situa√ß√£o Atual
 					DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 					debitoCreditoSituacao
 							.setId(DebitoCreditoSituacao.CANCELADA);
 					contaCanceladaPorRetificacao
 							.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 
-					// Data da retificaÁ„o = NULL
+					// Data da retifica√ß√£o = NULL
 					contaCanceladaPorRetificacao.setDataRetificacao(null);
 
-					// Motivo da retificaÁ„o = NULL
+					// Motivo da retifica√ß√£o = NULL
 					contaCanceladaPorRetificacao
 							.setContaMotivoRetificacao(null);
 
 					// Colocado por Raphael Rossiter em 27/02/2008
-					// Ano MÍs de referÍncia cont·bil
+					// Ano M√™s de refer√™ncia cont√°bil
 					if (contaCanceladaPorRetificacao.getReferencia() <= sistemaParametro
 							.getAnoMesFaturamento().intValue()) {
 
@@ -53087,11 +53087,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					 * Rosana Carvalho)
 					 * 
 					 * OBJETIVO: Quando o mes/ano de faturamento for maior que o
-					 * mes/ano de faturamento atual, n„o alterar o mes/ano
-					 * cont·bil
+					 * mes/ano de faturamento atual, n√£o alterar o mes/ano
+					 * cont√°bil
 					 */
 
-					// Ano MÍs de referÍncia cont·bil do faturamento
+					// Ano M√™s de refer√™ncia cont√°bil do faturamento
 					if (contaCanceladaPorRetificacao.getReferencia() <= sistemaParametro
 							.getAnoMesFaturamento().intValue()) {
 
@@ -53099,19 +53099,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.getAnoMesComoInteger(new Date()));
 					}
 
-					// ˙ltima alteraÁ„o
+					// √∫ltima altera√ß√£o
 					contaCanceladaPorRetificacao.setUltimaAlteracao(new Date());
 
 					/*
 					 * Colocado por Raphael Rossiter em 09/08/2007 OBJETIVO:
-					 * Gravar na tabela de conta o usu·rio que est· logado no
+					 * Gravar na tabela de conta o usu√°rio que est√° logado no
 					 * sistema
 					 */
 					// Usuario
 					contaCanceladaPorRetificacao.setUsuario(usuarioLogado);
 
 					// ------------ <REGISTRAR
-					// TRANSA«√O>----------------------------
+					// TRANSA√á√ÉO>----------------------------
 
 					RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 							Operacao.OPERACAO_CANCELAR_CONTA,
@@ -53128,7 +53128,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							contaCanceladaPorRetificacao);
 
 					// ------------ </REGISTRAR
-					// TRANSA«√O>----------------------------
+					// TRANSA√á√ÉO>----------------------------
 
 					// UPDATE
 					try {
@@ -53136,20 +53136,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.cancelarContaReferenciaContabilMaiorIgualSistemaParametro(contaCanceladaPorRetificacao);
 
 						// CRC2725 - alterado por Vivianne Sousa - 17/09/2009
-						// analista:F·tima
-						// 1.2.6.5. Caso existam itens de negativaÁ„o associados
-						// ‡ conta (coleÁ„o de itens de negativaÁ„o n„o est·
+						// analista:F√°tima
+						// 1.2.6.5. Caso existam itens de negativa√ß√£o associados
+						// √† conta (cole√ß√£o de itens de negativa√ß√£o n√£o est√°
 						// vazia):
 						if (colecaoNegativadorMovimentoRegItem != null
 								&& !colecaoNegativadorMovimentoRegItem
 										.isEmpty()) {
-							// Caso existam itens de negativaÁ„o associados ‡
+							// Caso existam itens de negativa√ß√£o associados √†
 							// conta:
 							Iterator iterNmri = colecaoNegativadorMovimentoRegItem
 									.iterator();
 							while (iterNmri.hasNext()) {
 								Integer idNmri = (Integer) iterNmri.next();
-								// [SB0002 - Atualizar Item NegativaÁ„o - Conta
+								// [SB0002 - Atualizar Item Negativa√ß√£o - Conta
 								// Retificada].
 								getControladorSpcSerasa()
 										.atualizarNegativadorMovimentoRegItem(
@@ -53175,8 +53175,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}
 
-			// Alterado por Francisco - 26/05/08, por conta do Resumo de AÁıes
-			// de cobranÁa
+			// Alterado por Francisco - 26/05/08, por conta do Resumo de A√ß√µes
+			// de cobran√ßa
 			// Analista: Ana Breda
 			try {
 				// Atualizar documento de cobranca da conta, se houver, para
@@ -53223,12 +53223,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 		} catch (ErroRepositorioException ex) {
-			String mensagem = "VENCIMENTO DE CONJUTO DE CONTAS N√O FOI ALTERADO DEVIDO A UM ERRO DE SISTEMA.";
+			String mensagem = "VENCIMENTO DE CONJUTO DE CONTAS N√ÉO FOI ALTERADO DEVIDO A UM ERRO DE SISTEMA.";
 			EnvioEmail envioEmail = getControladorCadastro().pesquisarEnvioEmail(EnvioEmail.GERAR_MOVIMENTO_AUTOMATICO_BANCO);
 
 			try {
 				ServicosEmail.enviarMensagem(envioEmail.getEmailRemetente(), usuarioLogado.getDescricaoEmail(), 
-						"CONTAS_N√O_ALTERADAS", mensagem);
+						"CONTAS_N√ÉO_ALTERADAS", mensagem);
 			} catch (ErroEmailException e) {
 				throw new ControladorException("erro.envio.mensagem");
 			}
@@ -53239,7 +53239,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	
 	/**
-	 * Pesquisar conjunto de contas p/ emiss„o da 2∞Via
+	 * Pesquisar conjunto de contas p/ emiss√£o da 2¬∞Via
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 21/08/2007
@@ -53365,7 +53365,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com CÛdigo de Barras
+	 * [UC0259] - Processar Pagamento com C√≥digo de Barras
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 30/09/2007
@@ -53407,8 +53407,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * obtem o consumo mÈdio faturado nos ultimos 6 meses [UC0214] Efetuar
-	 * Parcelamento de DÈbitos
+	 * obtem o consumo m√©dio faturado nos ultimos 6 meses [UC0214] Efetuar
+	 * Parcelamento de D√©bitos
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 05/09/2007
@@ -53445,7 +53445,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0214] Efetuar Parcelamento de DÈbitos
+	 * [UC0214] Efetuar Parcelamento de D√©bitos
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 05/09/2007
@@ -53459,7 +53459,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		int anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMes, qtdMeses);
 		Integer numeroConsumoFaturadoMes = 0;
 
-		// caso o tipo de ligaÁ„o e mediÁ„o seja diferente de nulo
+		// caso o tipo de liga√ß√£o e medi√ß√£o seja diferente de nulo
 		if (tipoLigacao != null) {
 			Object[] parmsConsumoHistorico = null;
 			parmsConsumoHistorico = getControladorMicromedicao()
@@ -53477,11 +53477,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os dados necess·rio para a geraÁ„o do relatÛrio
+	 * Pesquisa os dados necess√°rio para a gera√ß√£o do relat√≥rio
 	 * 
-	 * [UC0637] - Gerar RelatÛrios Volumes Faturados
+	 * [UC0637] - Gerar Relat√≥rios Volumes Faturados
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 11/09/2007
 	 * 
 	 * @throws ControladorException
@@ -53492,7 +53492,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Integer anoMes6) throws ControladorException {
 		Collection retorno = new ArrayList();
 
-		// CriaÁ„o das coleÁıes
+		// Cria√ß√£o das cole√ß√µes
 		Collection colecaoDadosVolumesFaturados = null;
 
 		try {
@@ -53513,13 +53513,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoDadosVolumesFaturadosIterator.hasNext()) {
 
-				// ObtÈm os dados do dÈbito cobrado
+				// Obt√©m os dados do d√©bito cobrado
 				Object[] dadosVolumesFaturados = (Object[]) colecaoDadosVolumesFaturadosIterator
 						.next();
 
 				VolumesFaturadosRelatorioHelper volumesFaturadosRelatorioHelper = new VolumesFaturadosRelatorioHelper();
 
-				// Id do ImÛvel
+				// Id do Im√≥vel
 				if (dadosVolumesFaturados[0] != null) {
 					volumesFaturadosRelatorioHelper
 							.setIdImovel((Integer) dadosVolumesFaturados[0]);
@@ -53543,7 +53543,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setIdSetorComercial((Integer) dadosVolumesFaturados[3]);
 				}
 
-				// CÛdigo do Setor Comercial
+				// C√≥digo do Setor Comercial
 				if (dadosVolumesFaturados[4] != null) {
 					volumesFaturadosRelatorioHelper
 							.setCodigoSetorComercial((Integer) dadosVolumesFaturados[4]);
@@ -53561,67 +53561,67 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setIdQuadra((Integer) dadosVolumesFaturados[6]);
 				}
 
-				// N˙mero da Quadra
+				// N√∫mero da Quadra
 				if (dadosVolumesFaturados[7] != null) {
 					volumesFaturadosRelatorioHelper
 							.setNumeroQuadra((Integer) dadosVolumesFaturados[7]);
 				}
 
-				// Nome do Usu·rio
+				// Nome do Usu√°rio
 				if (dadosVolumesFaturados[8] != null) {
 					volumesFaturadosRelatorioHelper
 							.setNomeUsuario((String) dadosVolumesFaturados[8]);
 				}
 
-				// Id da SituaÁ„o de ¡gua
+				// Id da Situa√ß√£o de √Ågua
 				if (dadosVolumesFaturados[9] != null) {
 					volumesFaturadosRelatorioHelper
 							.setIdSituacaoAgua((Integer) dadosVolumesFaturados[9]);
 				}
 
-				// Id da SituaÁ„o de Esgoto
+				// Id da Situa√ß√£o de Esgoto
 				if (dadosVolumesFaturados[10] != null) {
 					volumesFaturadosRelatorioHelper
 							.setIdSituacaoEsgoto((Integer) dadosVolumesFaturados[10]);
 				}
 
-				// Consumo MÈdio
+				// Consumo M√©dio
 				if (dadosVolumesFaturados[11] != null) {
 					volumesFaturadosRelatorioHelper
 							.setMediaConsumo((Integer) dadosVolumesFaturados[11]);
 				}
 
-				// Consumo MÍs/Ano 1
+				// Consumo M√™s/Ano 1
 				if (dadosVolumesFaturados[12] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno1((Integer) dadosVolumesFaturados[12]);
 				}
 
-				// Consumo MÍs/Ano 2
+				// Consumo M√™s/Ano 2
 				if (dadosVolumesFaturados[13] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno2((Integer) dadosVolumesFaturados[13]);
 				}
 
-				// Consumo MÍs/Ano 3
+				// Consumo M√™s/Ano 3
 				if (dadosVolumesFaturados[14] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno3((Integer) dadosVolumesFaturados[14]);
 				}
 
-				// Consumo MÍs/Ano 4
+				// Consumo M√™s/Ano 4
 				if (dadosVolumesFaturados[15] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno4((Integer) dadosVolumesFaturados[15]);
 				}
 
-				// Consumo MÍs/Ano 5
+				// Consumo M√™s/Ano 5
 				if (dadosVolumesFaturados[16] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno5((Integer) dadosVolumesFaturados[16]);
 				}
 
-				// Consumo MÍs/Ano 6
+				// Consumo M√™s/Ano 6
 				if (dadosVolumesFaturados[17] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno6((Integer) dadosVolumesFaturados[17]);
@@ -53635,11 +53635,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os dados necess·rio para a geraÁ„o do relatÛrio resumido
+	 * Pesquisa os dados necess√°rio para a gera√ß√£o do relat√≥rio resumido
 	 * 
-	 * [UC0637] - Gerar RelatÛrios Volumes Faturados
+	 * [UC0637] - Gerar Relat√≥rios Volumes Faturados
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 13/09/2007
 	 * 
 	 * @throws ControladorException
@@ -53650,7 +53650,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Integer anoMes6) throws ControladorException {
 		Collection retorno = new ArrayList();
 
-		// CriaÁ„o das coleÁıes
+		// Cria√ß√£o das cole√ß√µes
 		Collection colecaoDadosVolumesFaturados = null;
 
 		try {
@@ -53671,7 +53671,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoDadosVolumesFaturadosIterator.hasNext()) {
 
-				// ObtÈm os dados do dÈbito cobrado
+				// Obt√©m os dados do d√©bito cobrado
 				Object[] dadosVolumesFaturados = (Object[]) colecaoDadosVolumesFaturadosIterator
 						.next();
 
@@ -53695,7 +53695,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setIdSetorComercial((Integer) dadosVolumesFaturados[2]);
 				}
 
-				// CÛdigo do Setor Comercial
+				// C√≥digo do Setor Comercial
 				if (dadosVolumesFaturados[3] != null) {
 					volumesFaturadosRelatorioHelper
 							.setCodigoSetorComercial((Integer) dadosVolumesFaturados[3]);
@@ -53707,49 +53707,49 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setNomeSetorComercial((String) dadosVolumesFaturados[4]);
 				}
 
-				// N˙mero da Quadra
+				// N√∫mero da Quadra
 				if (dadosVolumesFaturados[5] != null) {
 					volumesFaturadosRelatorioHelper
 							.setNumeroQuadra((Integer) dadosVolumesFaturados[5]);
 				}
 
-				// Consumo MÈdio
+				// Consumo M√©dio
 				if (dadosVolumesFaturados[6] != null) {
 					volumesFaturadosRelatorioHelper
 							.setMediaConsumo((Integer) dadosVolumesFaturados[6]);
 				}
 
-				// Consumo MÍs/Ano 1
+				// Consumo M√™s/Ano 1
 				if (dadosVolumesFaturados[7] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno1((Integer) dadosVolumesFaturados[7]);
 				}
 
-				// Consumo MÍs/Ano 2
+				// Consumo M√™s/Ano 2
 				if (dadosVolumesFaturados[8] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno2((Integer) dadosVolumesFaturados[8]);
 				}
 
-				// Consumo MÍs/Ano 3
+				// Consumo M√™s/Ano 3
 				if (dadosVolumesFaturados[9] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno3((Integer) dadosVolumesFaturados[9]);
 				}
 
-				// Consumo MÍs/Ano 4
+				// Consumo M√™s/Ano 4
 				if (dadosVolumesFaturados[10] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno4((Integer) dadosVolumesFaturados[10]);
 				}
 
-				// Consumo MÍs/Ano 5
+				// Consumo M√™s/Ano 5
 				if (dadosVolumesFaturados[11] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno5((Integer) dadosVolumesFaturados[11]);
 				}
 
-				// Consumo MÍs/Ano 6
+				// Consumo M√™s/Ano 6
 				if (dadosVolumesFaturados[12] != null) {
 					volumesFaturadosRelatorioHelper
 							.setConsumoMesAno6((Integer) dadosVolumesFaturados[12]);
@@ -53763,11 +53763,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os dados necess·rio para a geraÁ„o do relatÛrio
+	 * Pesquisa os dados necess√°rio para a gera√ß√£o do relat√≥rio
 	 * 
-	 * [UC0635] - Gerar RelatÛrios de Contas em Revis„o
+	 * [UC0635] - Gerar Relat√≥rios de Contas em Revis√£o
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 20/09/2007
 	 * 
 	 * @throws ControladorException
@@ -53783,7 +53783,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throws ControladorException {
 		Collection retorno = new ArrayList();
 
-		// CriaÁ„o das coleÁıes
+		// Cria√ß√£o das cole√ß√µes
 		Collection colecaoDadosContasEmRevisao = null;
 
 		try {
@@ -53807,25 +53807,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoDadosContasEmRevisaoIterator.hasNext()) {
 
-				// ObtÈm os dados do dÈbito cobrado
+				// Obt√©m os dados do d√©bito cobrado
 				Object[] dadosContasEmRevisao = (Object[]) colecaoDadosContasEmRevisaoIterator
 						.next();
 
 				ContasEmRevisaoRelatorioHelper contasEmRevisaoRelatorioHelper = new ContasEmRevisaoRelatorioHelper();
 
-				// Id do ImÛvel
+				// Id do Im√≥vel
 				if (dadosContasEmRevisao[0] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setIdImovel((Integer) dadosContasEmRevisao[0]);
 				}
 
-				// Id da GerÍncia Regional
+				// Id da Ger√™ncia Regional
 				if (dadosContasEmRevisao[1] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setIdGerenciaRegional((Integer) dadosContasEmRevisao[1]);
 				}
 
-				// Nome da GerÍncia Regional
+				// Nome da Ger√™ncia Regional
 				if (dadosContasEmRevisao[2] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setNomeGerenciaRegional((String) dadosContasEmRevisao[2]);
@@ -53867,7 +53867,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setNomeLocalidade((String) dadosContasEmRevisao[8]);
 				}
 
-				// CÛdigo do Setor Comercial
+				// C√≥digo do Setor Comercial
 				if (dadosContasEmRevisao[9] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setCodigoSetorComercial((Integer) dadosContasEmRevisao[9]);
@@ -53879,7 +53879,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setNomeSetorComercial((String) dadosContasEmRevisao[10]);
 				}
 
-				// N˙mero da Quadra
+				// N√∫mero da Quadra
 				if (dadosContasEmRevisao[11] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setNumeroQuadra((Integer) dadosContasEmRevisao[11]);
@@ -53897,7 +53897,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setSublote((Short) dadosContasEmRevisao[13]);
 				}
 
-				// Nome do Usu·rio
+				// Nome do Usu√°rio
 				if (dadosContasEmRevisao[14] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setNomeUsuario((String) dadosContasEmRevisao[14]);
@@ -53909,7 +53909,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setDdd((String) dadosContasEmRevisao[15]);
 				}
 
-				// N˙mero do Telefone
+				// N√∫mero do Telefone
 				if (dadosContasEmRevisao[16] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setTelefone((String) dadosContasEmRevisao[16]);
@@ -53921,7 +53921,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setRamal((String) dadosContasEmRevisao[17]);
 				}
 
-				// MÍs/Ano de ReferÍncia da Conta
+				// M√™s/Ano de Refer√™ncia da Conta
 				if (dadosContasEmRevisao[18] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setAnoMesReferenciaConta((Integer) dadosContasEmRevisao[18]);
@@ -53933,19 +53933,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setValorConta((BigDecimal) dadosContasEmRevisao[19]);
 				}
 
-				// Data de Revis„o
+				// Data de Revis√£o
 				if (dadosContasEmRevisao[20] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setDataRevisao((Date) dadosContasEmRevisao[20]);
 				}
 
-				// Id do Motivo de Revis„o
+				// Id do Motivo de Revis√£o
 				if (dadosContasEmRevisao[21] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setIdMotivoRevisao((Integer) dadosContasEmRevisao[21]);
 				}
 
-				// DescriÁ„o do Motivo de Revis„o
+				// Descri√ß√£o do Motivo de Revis√£o
 				if (dadosContasEmRevisao[22] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setDescricaoMotivoRevisao((String) dadosContasEmRevisao[22]);
@@ -53959,11 +53959,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os dados necess·rio para a geraÁ„o do relatÛrio resumido
+	 * Pesquisa os dados necess√°rio para a gera√ß√£o do relat√≥rio resumido
 	 * 
-	 * [UC0635] - Gerar RelatÛrios de Contas em Revis„o
+	 * [UC0635] - Gerar Relat√≥rios de Contas em Revis√£o
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 20/09/2007
 	 * 
 	 * @throws ControladorException
@@ -53979,7 +53979,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throws ControladorException {
 		Collection retorno = new ArrayList();
 
-		// CriaÁ„o das coleÁıes
+		// Cria√ß√£o das cole√ß√µes
 		Collection colecaoDadosContasEmRevisao = null;
 
 		try {
@@ -54004,19 +54004,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoDadosContasEmRevisaoIterator.hasNext()) {
 
-				// ObtÈm os dados do dÈbito cobrado
+				// Obt√©m os dados do d√©bito cobrado
 				Object[] dadosContasEmRevisao = (Object[]) colecaoDadosContasEmRevisaoIterator
 						.next();
 
 				ContasEmRevisaoRelatorioHelper contasEmRevisaoRelatorioHelper = new ContasEmRevisaoRelatorioHelper();
 
-				// Id da GerÍncia Regional
+				// Id da Ger√™ncia Regional
 				if (dadosContasEmRevisao[0] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setIdGerenciaRegional((Integer) dadosContasEmRevisao[0]);
 				}
 
-				// Nome da GerÍncia Regional
+				// Nome da Ger√™ncia Regional
 				if (dadosContasEmRevisao[1] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setNomeGerenciaRegional((String) dadosContasEmRevisao[1]);
@@ -54046,19 +54046,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setNomeLocalidade((String) dadosContasEmRevisao[5]);
 				}
 
-				// MÍs/Ano de ReferÍncia da Conta
+				// M√™s/Ano de Refer√™ncia da Conta
 				if (dadosContasEmRevisao[6] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setAnoMesReferenciaConta((Integer) dadosContasEmRevisao[6]);
 				}
 
-				// Id do Motivo de Revis„o
+				// Id do Motivo de Revis√£o
 				if (dadosContasEmRevisao[7] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setIdMotivoRevisao((Integer) dadosContasEmRevisao[7]);
 				}
 
-				// DescriÁ„o do Motivo de Revis„o
+				// Descri√ß√£o do Motivo de Revis√£o
 				if (dadosContasEmRevisao[8] != null) {
 					contasEmRevisaoRelatorioHelper
 							.setDescricaoMotivoRevisao((String) dadosContasEmRevisao[8]);
@@ -54084,11 +54084,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os dados necess·rio para a geraÁ„o do relatÛrio
+	 * Pesquisa os dados necess√°rio para a gera√ß√£o do relat√≥rio
 	 * 
-	 * [UC0638] - Gerar RelatÛrios Anormalidade Consumo
+	 * [UC0638] - Gerar Relat√≥rios Anormalidade Consumo
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @created 15/10/2007
 	 * 
 	 * @throws ControladorException
@@ -54110,7 +54110,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		Collection retorno = new ArrayList();
 
-		// CriaÁ„o das coleÁıes
+		// Cria√ß√£o das cole√ß√µes
 		Collection colecaoDadosAnormalidadesConsumo = null;
 
 		try {
@@ -54140,7 +54140,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			while (colecaoDadosAnormalidadesConsumoIterator.hasNext()) {
 
-				// ObtÈm os dados do dÈbito cobrado
+				// Obt√©m os dados do d√©bito cobrado
 				Object[] dadosAnormalidadesConsumo = (Object[]) colecaoDadosAnormalidadesConsumoIterator
 						.next();
 
@@ -54158,25 +54158,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setNomeGrupo((String) dadosAnormalidadesConsumo[1]);
 				}
 
-				// Id da GerÍncia Regional
+				// Id da Ger√™ncia Regional
 				if (dadosAnormalidadesConsumo[2] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setIdGerenciaRegional((Integer) dadosAnormalidadesConsumo[2]);
 				}
 
-				// Nome da GerÍncia Regional
+				// Nome da Ger√™ncia Regional
 				if (dadosAnormalidadesConsumo[3] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setNomeGerenciaRegional((String) dadosAnormalidadesConsumo[3]);
 				}
 
-				// Id da Unidade de NegÛcio
+				// Id da Unidade de Neg√≥cio
 				if (dadosAnormalidadesConsumo[4] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setIdUnidadeNegocio((Integer) dadosAnormalidadesConsumo[4]);
 				}
 
-				// Nome da Unidade de NegÛcio
+				// Nome da Unidade de Neg√≥cio
 				if (dadosAnormalidadesConsumo[5] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setNomeUnidadeNegocio((String) dadosAnormalidadesConsumo[5]);
@@ -54206,49 +54206,49 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setNomeLocalidade((String) dadosAnormalidadesConsumo[9]);
 				}
 
-				// Id do ImÛvel
+				// Id do Im√≥vel
 				if (dadosAnormalidadesConsumo[10] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setIdImovel((Integer) dadosAnormalidadesConsumo[10]);
 				}
 
-				// Nome do Usu·rio
+				// Nome do Usu√°rio
 				if (dadosAnormalidadesConsumo[11] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setNomeUsuario((String) dadosAnormalidadesConsumo[11]);
 				}
 
-				// Id da SituaÁ„o de ¡gua
+				// Id da Situa√ß√£o de √Ågua
 				if (dadosAnormalidadesConsumo[12] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setSituacaoLigacaoAgua((Integer) dadosAnormalidadesConsumo[12]);
 				}
 
-				// Id da SituaÁ„o de Esgoto
+				// Id da Situa√ß√£o de Esgoto
 				if (dadosAnormalidadesConsumo[13] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setSituacaoLigacaoEsgoto((Integer) dadosAnormalidadesConsumo[13]);
 				}
 
-				// Indicador de DÈbito Autom·tico
+				// Indicador de D√©bito Autom√°tico
 				if (dadosAnormalidadesConsumo[14] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setIndicadorDebito((Short) dadosAnormalidadesConsumo[14]);
 				}
 
-				// Consumo MÈdio
+				// Consumo M√©dio
 				if (dadosAnormalidadesConsumo[15] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setConsumoMedio((Integer) dadosAnormalidadesConsumo[15]);
 				}
 
-				// Consumo do MÍs
+				// Consumo do M√™s
 				if (dadosAnormalidadesConsumo[16] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setConsumoMes((Integer) dadosAnormalidadesConsumo[16]);
 				}
 
-				// DescriÁ„o Abreviada da Anormalidade de Consumo
+				// Descri√ß√£o Abreviada da Anormalidade de Consumo
 				if (dadosAnormalidadesConsumo[17] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setDescricaoAbrevConsumoAnormalidade((String) dadosAnormalidadesConsumo[17]);
@@ -54266,7 +54266,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setQuantidadeEconomias((Short) dadosAnormalidadesConsumo[19]);
 				}
 
-				// Tipo de MediÁ„o
+				// Tipo de Medi√ß√£o
 				if (dadosAnormalidadesConsumo[20] != null) {
 
 					if (dadosAnormalidadesConsumo[20].equals(MedicaoTipo.POCO)) {
@@ -54281,15 +54281,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					gerarRelatorioAnormalidadeConsumoHelper.setTipoMedicao("");
 				}
 
-				// DescriÁ„o Abreviada da Capacidade do HidrÙmetro da
-				// LigaÁ„o de ¡gua
+				// Descri√ß√£o Abreviada da Capacidade do Hidr√¥metro da
+				// Liga√ß√£o de √Ågua
 				if (dadosAnormalidadesConsumo[21] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setCapacidadeHidrometro((String) dadosAnormalidadesConsumo[21]);
 				}
 
-				// DescriÁ„o Abreviada do Local de InstalaÁ„o do HidrÙmetro
-				// da LigaÁ„o de ¡gua
+				// Descri√ß√£o Abreviada do Local de Instala√ß√£o do Hidr√¥metro
+				// da Liga√ß√£o de √Ågua
 				if (dadosAnormalidadesConsumo[22] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setLocalInstalacaoHidrometro((String) dadosAnormalidadesConsumo[22]);
@@ -54301,13 +54301,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setIdSetorComercial((Integer) dadosAnormalidadesConsumo[23]);
 				}
 
-				// CÛdigo do Setor Comercial
+				// C√≥digo do Setor Comercial
 				if (dadosAnormalidadesConsumo[24] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setCodigoSetorComercial((Integer) dadosAnormalidadesConsumo[24]);
 				}
 
-				// N˙mero leitura atual informada
+				// N√∫mero leitura atual informada
 				if (dadosAnormalidadesConsumo[25] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setNnLeituraAtualInformada((Integer) dadosAnormalidadesConsumo[25]);
@@ -54325,7 +54325,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.setNomeEmpresa((String) dadosAnormalidadesConsumo[27]);
 				}
 
-				// inscriÁ„o do ImÛvel
+				// inscri√ß√£o do Im√≥vel
 				if (dadosAnormalidadesConsumo[28] != null) {
 					gerarRelatorioAnormalidadeConsumoHelper
 							.setInscricaoImovel((String) dadosAnormalidadesConsumo[28]);
@@ -54345,7 +54345,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] - Faturar Grupo de Faturamento
 	 * 
-	 * Gerar um perÌdo de leitura para faturamento
+	 * Gerar um per√≠do de leitura para faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @data 18/09/2007
@@ -54362,7 +54362,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			periodoFaturamento[1] = dataLeituraAtualFaturamento;
 
-			// Obter data Prevista do cronograma do mÍs anterior
+			// Obter data Prevista do cronograma do m√™s anterior
 			try {
 
 				dataLeituraAnteriorFaturamento = (Date) repositorioFaturamento
@@ -54378,7 +54378,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			/*
 			 * Caso a data prevista do cronograma anterior esteja nula, a data
-			 * de leitura anterior do faturamento ser·: a data de leitura atual
+			 * de leitura anterior do faturamento ser√°: a data de leitura atual
 			 * menos 30 dias
 			 */
 			if (dataLeituraAnteriorFaturamento == null) {
@@ -54395,8 +54395,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			periodoFaturamento[0] = dataLeituraAnteriorFaturamento;
 
 			/*
-			 * Caso a data de leitura anterior N√O esteja nula: a data de
-			 * leitura atual ser· a data de leitura anterior acrescida de mais
+			 * Caso a data de leitura anterior N√ÉO esteja nula: a data de
+			 * leitura atual ser√° a data de leitura anterior acrescida de mais
 			 * 30 dias.
 			 */
 			dataLeituraAtualFaturamento = Util.adicionarNumeroDiasDeUmaData(
@@ -54407,7 +54407,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			/*
 			 * Caso as datas de letira anterior e atual estejam nulas, o periodo
-			 * ser· gerado a partir do anoMes de referencia da conta.
+			 * ser√° gerado a partir do anoMes de referencia da conta.
 			 */
 			int mesConta = Util.obterMes(anoMesFaturamento);
 			int anoConta = Util.obterAno(anoMesFaturamento);
@@ -54565,9 +54565,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa os Valores das Faixas de DÈbitos
+	 * Pesquisa os Valores das Faixas de D√©bitos
 	 * 
-	 * @author Ivan SÈrgio
+	 * @author Ivan S√©rgio
 	 * @created 14/09/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -54593,7 +54593,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public void removerQualidadeAgua(String[] ids, Usuario usuarioLogado)
 			throws ControladorException {
 
-		// ------------ REGISTRAR TRANSA«√O ----------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 		Operacao operacao = new Operacao();
 		// operacao.setId(Operacao.OPERACAO_ARRECADADOR_REMOVER);
 
@@ -54604,7 +54604,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		Collection<UsuarioAcaoUsuarioHelper> colecaoUsuarios = new ArrayList();
 		colecaoUsuarios.add(usuarioAcaoUsuarioHelper);
-		// ------------ REGISTRAR TRANSA«√O ----------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
 		// [SB0002]
 		this.getControladorUtil().remover(ids, QualidadeAgua.class.getName(),
@@ -54612,8 +54612,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs [SB0003] - Obter DiferenÁas de
-	 * Valores de CrÈditos Realizados de Conta Retificada Author: Pedro
+	 * [UC0155] - Encerrar Faturamento do M√™s [SB0003] - Obter Diferen√ßas de
+	 * Valores de Cr√©ditos Realizados de Conta Retificada Author: Pedro
 	 * Alexandre Data: 27/10/2007
 	 * 
 	 * @param anoMesReferencia
@@ -54627,21 +54627,21 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer[] idsOrigemCredito) throws ControladorException {
 
-		// cria as vari·veis para armazenar os valores do dÈbitos cobrados
-		// cancelados por retificaÁ„o e retificado
+		// cria as vari√°veis para armazenar os valores do d√©bitos cobrados
+		// cancelados por retifica√ß√£o e retificado
 		BigDecimal[] retorno = new BigDecimal[2];
 
 		BigDecimal valorCreditoRealizadoSituacaoCanceladoPorRetificacao = null;
 		BigDecimal valorCreditoRealizadoSituacaoRetificada = null;
 
 		try {
-			// obtÈm o valor dos creditos realizados cancelados do retificaÁ„o
+			// obt√©m o valor dos creditos realizados cancelados do retifica√ß√£o
 			valorCreditoRealizadoSituacaoCanceladoPorRetificacao = repositorioFaturamento
 					.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoCanceladoPorRetificacao(
 							anoMesReferencia, idLocalidade, idCategoria,
 							idsOrigemCredito);
 
-			// obtÈm o valor dos creditos realizados retificados
+			// obt√©m o valor dos creditos realizados retificados
 			valorCreditoRealizadoSituacaoRetificada = repositorioFaturamento
 					.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoRetificada(
 							anoMesReferencia, idLocalidade, idCategoria,
@@ -54670,11 +54670,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descriÁ„o sobre o caso de uso>
+	 * <Breve descri√ß√£o sobre o caso de uso>
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
-	 * [SB0003] - Obter DiferenÁas de Valores de CrÈditos Realizados de Conta
+	 * [SB0003] - Obter Diferen√ßas de Valores de Cr√©ditos Realizados de Conta
 	 * Retificada
 	 * 
 	 * @author Pedro Alexandre, Pedro Alexandre
@@ -54693,8 +54693,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Integer[] idsOrigemCredito, Integer idLancamentoItemContabil)
 			throws ControladorException {
 
-		// cria as vari·veis para armazenar os valores do dÈbitos cobrados
-		// cancelados por retificaÁ„o e retificado (cancelados e incluido por
+		// cria as vari√°veis para armazenar os valores do d√©bitos cobrados
+		// cancelados por retifica√ß√£o e retificado (cancelados e incluido por
 		// refaturamento)
 		BigDecimal[] retorno = new BigDecimal[2];
 
@@ -54702,13 +54702,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		BigDecimal valorCreditoRealizadoSituacaoRetificada = null;
 
 		try {
-			// obtÈm o valor dos creditos realizados cancelados do retificaÁ„o
+			// obt√©m o valor dos creditos realizados cancelados do retifica√ß√£o
 			valorCreditoRealizadoSituacaoCanceladoPorRetificacao = repositorioFaturamento
 					.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoLancamentoItemContabilCanceladoPorRetificacao(
 							anoMesReferencia, idLocalidade, idCategoria,
 							idsOrigemCredito, idLancamentoItemContabil);
 
-			// obtÈm o valor dos creditos realizados retificados
+			// obt√©m o valor dos creditos realizados retificados
 			valorCreditoRealizadoSituacaoRetificada = repositorioFaturamento
 					.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoLancamentoItemContabilRetificada(
 							anoMesReferencia, idLocalidade, idCategoria,
@@ -54737,9 +54737,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0626] Gerar Resumo de Metas Acumulado no MÍs (CAERN)
+	 * [UC0626] Gerar Resumo de Metas Acumulado no M√™s (CAERN)
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @data 28/11/2007
 	 * 
 	 * @param idConta
@@ -54788,7 +54788,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0348] Emitir Contas
 	 * 
-	 * @author S·vio Luiz, Vivianne Sousa, Mariana Victor
+	 * @author S√°vio Luiz, Vivianne Sousa, Mariana Victor
 	 * @date 08/01/2007,29/11/2007, 11/03/2011
 	 * 
 	 * @return
@@ -55056,7 +55056,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
@@ -55079,11 +55079,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			mensagemConsumo.append(Util.completaStringComEspacoAEsquerda(
 					consumoRateio, 6));
 			mensagemConsumo.append("M3");
-			// sen„o completa com espaÁos em branco
+			// sen√£o completa com espa√ßos em branco
 			mensagemConsumo.append(Util.completaString("", 3));
 		} else {
-			// sen„o caso o tipo de mediÁ„o seja diferente de nulo e seja poÁo e
-			// n„o existam dados para a mediÁ„o
+			// sen√£o caso o tipo de medi√ß√£o seja diferente de nulo e seja po√ßo e
+			// n√£o existam dados para a medi√ß√£o
 			if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.POCO)
 					&& parmsMedicaoHistorico == null) {
 				mensagemConsumo.append("VOLUME FIXO DE ESGOTO - ");
@@ -55092,7 +55092,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				mensagemConsumo.append("M3");
 
 			} else {
-				// caso o tipo de mediÁ„o seja diferente de nulo e seja ligaÁ„o
+				// caso o tipo de medi√ß√£o seja diferente de nulo e seja liga√ß√£o
 				// de agua e
 				// o consumo de esgoto seja diferente de nulo d maior que o
 				// consumo de agua
@@ -55109,7 +55109,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					mensagemConsumo.append("M3");
 
 				} else {
-					// sen„o completa com espaÁos em branco
+					// sen√£o completa com espa√ßos em branco
 					mensagemConsumo.append(Util.completaString("", 31));
 				}
 			}
@@ -55121,8 +55121,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0352] Emitir Contas e Cartas
 	 * 
-	 * [SB0031] Obter RepresentaÁ„o numÈrica do Nosso N˙mero da Ficha de
-	 * CompensaÁ„o
+	 * [SB0031] Obter Representa√ß√£o num√©rica do Nosso N√∫mero da Ficha de
+	 * Compensa√ß√£o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/11/2007
@@ -55138,8 +55138,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		
 		if (codigoConvenio != null && idDocumentoTipo.trim().equals(DocumentoTipo.CONTA.toString())) { 
 			nossoNumero.append(codigoConvenio); // Convenio do Banco do Brasil
+			
+		}else if(sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue() &&
+				idDocumentoTipo.trim().equals(DocumentoTipo.GUIA_PAGAMENTO.toString())){
+			nossoNumero.append("2860143"); // Convenio do Banco do Brasil padr√£o
 		} else {
-			nossoNumero.append("2860143"); // Convenio do Banco do Brasil padr„o
+			// o numero do convenio fornecido pelo Banco
+			// numero fixo e nao pode ser alterado
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, "2502792"));
 		}
 
 		// id do documento tipo de acordo com o tipo de documento q esta sendo
@@ -55180,11 +55186,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00010] Gerar Linhas da DescriÁ„o dos ServiÁos e Tarifas
+	 * [SB00010] Gerar Linhas da Descri√ß√£o dos Servi√ßos e Tarifas
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 16/11/2007
@@ -55203,13 +55209,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& emitirContaHelper.getValorAgua().compareTo(
 						new BigDecimal("0.00")) == 1) {
 
-			// [SB0011] - Gerar Linhas da Tarifa de ¡gua
+			// [SB0011] - Gerar Linhas da Tarifa de √Ågua
 			StringBuilder linhasTarifaAgua = gerarLinhasTarifaAguaFichaCompensacao(
 					emitirContaHelper, consumoRateio, parmsMedicaoHistorico,
 					tipoMedicao);
 			linhasDescricaoServicosTarifasTotal.append(linhasTarifaAgua);
 		}
-		// caso o valor de ·gua de esgoto seja maior que zero
+		// caso o valor de √°gua de esgoto seja maior que zero
 		if (emitirContaHelper.getValorEsgoto() != null
 				&& emitirContaHelper.getValorEsgoto().compareTo(
 						new BigDecimal("0.00")) == 1) {
@@ -55224,17 +55230,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& emitirContaHelper.getDebitos().compareTo(
 						new BigDecimal("0.00")) == 1) {
 
-			// [SB0013] - Gerar Linhas de DÈbitos Cobrados
+			// [SB0013] - Gerar Linhas de D√©bitos Cobrados
 			StringBuilder linhasDebitoCobrados = gerarLinhasDebitoCobradosFichaCompensacao(emitirContaHelper);
 			linhasDescricaoServicosTarifasTotal.append(linhasDebitoCobrados);
 
 		}
-		// caso o valor de crÈditos realizados seja maior que zero
+		// caso o valor de cr√©ditos realizados seja maior que zero
 		if (emitirContaHelper.getValorCreditos() != null
 				&& emitirContaHelper.getValorCreditos().compareTo(
 						new BigDecimal("0.00")) == 1) {
 
-			// [SB0014] - Gerar Linhas de CrÈdito Realizado
+			// [SB0014] - Gerar Linhas de Cr√©dito Realizado
 			StringBuilder linhasCreditoRealizados = gerarLinhasCreditosRealizadosFichaCompensacao(emitirContaHelper);
 			linhasDescricaoServicosTarifasTotal.append(linhasCreditoRealizados);
 
@@ -55255,11 +55261,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00011] Gerar Linhas da Tarifa de ¡gua
+	 * [SB00011] Gerar Linhas da Tarifa de √Ågua
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 16/11/2007
@@ -55273,7 +55279,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throws ControladorException {
 
 		StringBuilder linhasTarifaAgua = new StringBuilder();
-		// descricao dos serviÁoes e tarifas (tam 50)
+		// descricao dos servi√ßoes e tarifas (tam 50)
 		linhasTarifaAgua.append(Util.completaString("AGUA", 50));
 
 		// consumo por faixa (tam 15) + valor (tam 14)
@@ -55296,14 +55302,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				ContaCategoria contaCategoria = (ContaCategoria) iteratorContaCategoriaComFaixas
 						.next();
 
-				// descricao dos serviÁoes e tarifas (tam 50)
+				// descricao dos servi√ßoes e tarifas (tam 50)
 				// descricao da categoria
 				linhasTarifaAgua.append(Util.completaString(contaCategoria
 						.getComp_id().getCategoria().getDescricao(), 13));
 				// quantidade de economias
 				linhasTarifaAgua.append(Util.adicionarZerosEsquedaNumero(3, ""
 						+ contaCategoria.getQuantidadeEconomia()));
-				// completa com espaÁos em branco
+				// completa com espa√ßos em branco
 				linhasTarifaAgua.append(Util.completaString("", 2));
 				if (contaCategoria.getQuantidadeEconomia() == 1) {
 					linhasTarifaAgua
@@ -55316,14 +55322,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				// consumo por faixa (tam 15) + valor (tam 14)
 				linhasTarifaAgua.append(Util.completaString("", 29));
 
-				// caso n„o existam dados de mediÁ„o
+				// caso n√£o existam dados de medi√ß√£o
 				if (parmsMedicaoHistorico == null) {
 
-					// descricao dos serviÁoes e tarifas (tam 50)
+					// descricao dos servi√ßoes e tarifas (tam 50)
 					// Constante
-					linhasTarifaAgua.append("TARIFA MÕNIMA");
+					linhasTarifaAgua.append("TARIFA M√çNIMA");
 
-					// Valor da tarifa mÌnima de ·gua para a categoria por
+					// Valor da tarifa m√≠nima de √°gua para a categoria por
 					// economia
 					BigDecimal qtdEconomia = Util
 							.formatarMoedaRealparaBigDecimal(""
@@ -55341,28 +55347,28 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					linhasTarifaAgua.append(Util
 							.completaStringComEspacoAEsquerda(
 									valorTarifaMinima, 6));
-					// completa com espaÁos em branco
+					// completa com espa√ßos em branco
 					linhasTarifaAgua.append(" ");
 					// Constante
 					linhasTarifaAgua.append("POR UNIDADE");
-					// completa com espaÁos em branco
+					// completa com espa√ßos em branco
 					linhasTarifaAgua.append(Util.completaString("", 19));
 
 					// consumo por faixa (tam 15)
 					// Constante
 					linhasTarifaAgua.append("MINIMO");
-					// completa com espaÁos em branco
+					// completa com espa√ßos em branco
 					linhasTarifaAgua.append(Util.completaString("", 9));
 
 					// valor (tam 14)
-					// valor da ·gua para categoria
+					// valor da √°gua para categoria
 					String valorAgua = Util.formatarMoedaReal(contaCategoria
 							.getValorAgua());
 					linhasTarifaAgua.append(Util
 							.completaStringComEspacoAEsquerda(valorAgua, 14));
 
 				} else {
-					// recupera a coleÁ„o de conta categoria consumo faixa
+					// recupera a cole√ß√£o de conta categoria consumo faixa
 					Collection colecaoContaCategoriaConsumoFaixa = null;
 					try {
 						colecaoContaCategoriaConsumoFaixa = repositorioFaturamento
@@ -55378,12 +55384,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (colecaoContaCategoriaConsumoFaixa != null
 							&& !colecaoContaCategoriaConsumoFaixa.isEmpty()) {
 
-						// descricao dos serviÁoes e tarifas (tam 50)
+						// descricao dos servi√ßoes e tarifas (tam 50)
 						// Constante
 						linhasTarifaAgua.append(" ATE");
 						// Constante
 						linhasTarifaAgua.append(" ");
-						// Consumo mÌnimo de ·gua para a categoria por economia
+						// Consumo m√≠nimo de √°gua para a categoria por economia
 
 						BigDecimal qtdEconomia = Util
 								.formatarMoedaRealparaBigDecimal(""
@@ -55414,11 +55420,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						linhasTarifaAgua.append(Util
 								.completaStringComEspacoAEsquerda(
 										consumoMinima, 6));
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(" ");
 						// Constante
 						linhasTarifaAgua.append("M3");
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						// CRC3001 - Por Ivan Sergio
 						// linhasTarifaAgua.append(Util.completaString("", 7));
 						linhasTarifaAgua.append(Util.completaString("", 3));
@@ -55441,18 +55447,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						linhasTarifaAgua.append(Util
 								.completaStringComEspacoAEsquerda(
 										valorTarifaMinima, 11));
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						// CRC3001 - Por Ivan Sergio
 						// linhasTarifaAgua.append(" ");
 						// Constante
 						linhasTarifaAgua.append(" (POR UNIDADE)");
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						// CRC3001 - Por Ivan Sergio
 						// linhasTarifaAgua.append(Util.completaString("", 8));
 						linhasTarifaAgua.append(Util.completaString("", 4));
 
 						// consumo por faixa (tam 15)
-						// Consumo mÌnimo de ·gua
+						// Consumo m√≠nimo de √°gua
 						if (contaCategoria.getConsumoMinimoAgua() != null
 								&& !contaCategoria.getConsumoMinimoAgua()
 										.equals("")) {
@@ -55466,11 +55472,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							linhasTarifaAgua.append(Util
 									.completaStringComEspacoAEsquerda("", 6));
 						}
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(" ");
 						// Constante
 						linhasTarifaAgua.append("M3");
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(Util.completaString("", 6));
 
 						// valor (tam 14)
@@ -55491,8 +55497,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							ContaCategoriaConsumoFaixa contaCategoriaConsumoFaixa = (ContaCategoriaConsumoFaixa) iteratorContaCategoriaConsumoFaixa
 									.next();
 
-							// descricao dos serviÁoes e tarifas (tam 50)
-							// completa com espaÁos em branco
+							// descricao dos servi√ßoes e tarifas (tam 50)
+							// completa com espa√ßos em branco
 							linhasTarifaAgua.append(" ");
 							// caso a faixa seja a ultima ta tarifa de consumo
 							if (contaCategoriaConsumoFaixa.getConsumoFaixaFim()
@@ -55517,7 +55523,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												valorTarifaFaixa, 6));
 								// Constante
 								linhasTarifaAgua.append(" POR M3");
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										15));
 
@@ -55534,7 +55540,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														6));
 								// Constante
 								linhasTarifaAgua.append(" M3");
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										6));
 
@@ -55567,7 +55573,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												consumoFinalFaixa, 6));
 								// Constante
 								linhasTarifaAgua.append(" M3");
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										3));
 								// Constante
@@ -55581,7 +55587,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												valorTarifaFaixa, 6));
 								// Constante
 								linhasTarifaAgua.append(" POR M3");
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										16));
 
@@ -55598,7 +55604,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														6));
 								// Constante
 								linhasTarifaAgua.append(" M3");
-								// completa com espaÁos em branco
+								// completa com espa√ßos em branco
 								linhasTarifaAgua.append(Util.completaString("",
 										3));
 
@@ -55615,9 +55621,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 						}
 					} else {
-						// descricao dos serviÁoes e tarifas (tam 50)
-						linhasTarifaAgua.append("CONSUMO DE ¡GUA");
-						// completa com espaÁos em branco
+						// descricao dos servi√ßoes e tarifas (tam 50)
+						linhasTarifaAgua.append("CONSUMO DE √ÅGUA");
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(Util.completaString("", 35));
 
 						// consumo por faixa (tam 15)
@@ -55625,7 +55631,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.completaStringComEspacoAEsquerda(""
 										+ contaCategoria.getConsumoAgua(), 6)
 								+ " M3");
-						// completa com espaÁos em branco
+						// completa com espa√ßos em branco
 						linhasTarifaAgua.append(Util.completaString("", 6));
 
 						// valor (tam 14)
@@ -55644,7 +55650,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
@@ -55660,7 +55666,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			EmitirContaHelper emitirContaHelper) throws ControladorException {
 		StringBuilder linhasTarifaEsgoto = new StringBuilder();
 
-		// descricao dos serviÁoes e tarifas (tam 50)
+		// descricao dos servi√ßoes e tarifas (tam 50)
 		// Constante
 		linhasTarifaEsgoto.append("ESGOTO ");
 
@@ -55677,12 +55683,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			linhasTarifaEsgoto.append(Util.completaStringComEspacoAEsquerda(
 					percentualEsgoto, 6));
 			// Constante
-			linhasTarifaEsgoto.append(" % DO VALOR DA ¡GUA");
-			// completa com espaÁos em branco
+			linhasTarifaEsgoto.append(" % DO VALOR DA √ÅGUA");
+			// completa com espa√ßos em branco
 			linhasTarifaEsgoto.append(Util.completaString("", 18));
 
 			// consumo por faixa (tam 15)
-			// completa com espaÁos em branco
+			// completa com espa√ßos em branco
 			linhasTarifaEsgoto.append(Util.completaString("", 15));
 
 			// valor (tam 14)
@@ -55693,7 +55699,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					valorEsgoto, 14));
 
 		} else {
-			// completa com espaÁos em branco
+			// completa com espa√ßos em branco
 			linhasTarifaEsgoto.append(Util.completaString("", 43));
 			// consumo por faixa (tam 15)
 			// Volume coletado de esgoto
@@ -55701,7 +55707,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					+ emitirContaHelper.getConsumoEsgoto(), 6));
 			// Constante
 			linhasTarifaEsgoto.append(" M3");
-			// completa com espaÁos em branco
+			// completa com espa√ßos em branco
 			linhasTarifaEsgoto.append(Util.completaString("", 6));
 
 			// valor (tam 14)
@@ -55716,11 +55722,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00013] Gerar Linhas de DÈbitos Cobrados
+	 * [SB00013] Gerar Linhas de D√©bitos Cobrados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 16/11/2007
@@ -55761,7 +55767,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						valorDebitosCobrados = Util
 								.formatarMoedaReal((BigDecimal) parmsDebitoAutomatico[0]);
 					}
-					// numero de prestaÁ„o do dÈbito
+					// numero de presta√ß√£o do d√©bito
 					if (parmsDebitoAutomatico[1] != null) {
 						numeroPrestacao = ""
 								+ ((Short) parmsDebitoAutomatico[1]);
@@ -55772,7 +55778,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					/*
 					 * Alterado por Vivianne Sousa em 21/12/2007 - Analista:
-					 * Adriano criaÁ„o do bonus para parcelamento com RD
+					 * Adriano cria√ß√£o do bonus para parcelamento com RD
 					 * especial
 					 */
 					// numero parcela bonus
@@ -55784,24 +55790,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.intValue());
 					if (!valorDebitosCobrados.equals("0,00")) {
 
-						// descricao dos serviÁoes e tarifas (tam 50)
+						// descricao dos servi√ßoes e tarifas (tam 50)
 						// Constante
-						linhasDebitosCobrados.append("PARCELAMENTO DE D…BITOS");
-						// Completa com espaÁos em branco
+						linhasDebitosCobrados.append("PARCELAMENTO DE D√âBITOS");
+						// Completa com espa√ßos em branco
 						linhasDebitosCobrados
 								.append(Util.completaString("", 2));
 						// Constante
 						linhasDebitosCobrados.append("PARCELA ");
-						// numero da prestaÁ„o do dÈbito
+						// numero da presta√ß√£o do d√©bito
 						linhasDebitosCobrados.append(Util
 								.completaStringComEspacoAEsquerda(
 										numeroPrestacao, 3));
 						// Constante
 						linhasDebitosCobrados.append("/");
-						// numero total da prestaÁ„o do dÈbito
+						// numero total da presta√ß√£o do d√©bito
 						linhasDebitosCobrados.append(Util.completaString(
 								totalPrestacaoMenosBonus, 3));
-						// Completa com espaÁos em branco
+						// Completa com espa√ßos em branco
 						linhasDebitosCobrados.append(Util
 								.completaString("", 10));
 
@@ -55810,7 +55816,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.completaString("", 15));
 
 						// valor (tam 14)
-						// Completa com espaÁos em branco
+						// Completa com espa√ßos em branco
 						linhasDebitosCobrados.append(Util
 								.completaStringComEspacoAEsquerda(
 										valorDebitosCobrados, 14));
@@ -55834,65 +55840,65 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& !colecaoDebitoCobradoPorTipo.isEmpty()) {
 			ListIterator iteratorDebitoCobradoPorTipo = (ListIterator) colecaoDebitoCobradoPorTipo
 					.listIterator();
-			// vari·vel respons·vel para controle de mudanÁa do tipo de dÈbito
+			// vari√°vel respons√°vel para controle de mudan√ßa do tipo de d√©bito
 			boolean mudou = true;
-			// variavel que verifica se È a primeira vez,de cada tipo do
-			// dÈbito,que entra para ser escrito no txt sÛ uma vez a descriÁ„o
+			// variavel que verifica se √© a primeira vez,de cada tipo do
+			// d√©bito,que entra para ser escrito no txt s√≥ uma vez a descri√ß√£o
 			// do tipo do debito
 			boolean primeiraVez = true;
 			boolean entrouPrimeiraVez = false;
 			Integer idDebitoTipoVerificador = null;
 			BigDecimal valorTotalPrestacoes = new BigDecimal("0.00");
-			// valor da pretaÁ„o
+			// valor da preta√ß√£o
 			BigDecimal valorPrestacao = null;
-			// numero da pretaÁ„o atual
+			// numero da preta√ß√£o atual
 			Integer numeroPrestacaoDebito = null;
-			// numero total de prestaÁıes
+			// numero total de presta√ß√µes
 			Integer numeroPrestacaoTotal = null;
 			String totalPrestacaoMenosBonus = "";
-			// colecao para guardar os ano/mes referencia do dÈbito cobrado
+			// colecao para guardar os ano/mes referencia do d√©bito cobrado
 			Collection colecaoAnoMesReferenciaDebito = new ArrayList();
 			// cria um int que vai ver o tamanho da string builder dependendo da
 			// quantidade
-			// de mes/ano referencia calcula os espaÁos em brancos para o valor
+			// de mes/ano referencia calcula os espa√ßos em brancos para o valor
 			// ficar no lugar certo
 			int tamanhoAnoMesReferencia = 0;
 			while (iteratorDebitoCobradoPorTipo.hasNext()) {
 				Object[] parmsDebitoCobradoPorTipo = (Object[]) iteratorDebitoCobradoPorTipo
 						.next();
 
-				// recupera os parametros da coleÁ„o valor da pretaÁ„o
+				// recupera os parametros da cole√ß√£o valor da preta√ß√£o
 				if (parmsDebitoCobradoPorTipo[0] != null) {
 					valorPrestacao = (BigDecimal) parmsDebitoCobradoPorTipo[0];
 				}
-				// numero da pretaÁ„o atual
+				// numero da preta√ß√£o atual
 				if (parmsDebitoCobradoPorTipo[1] != null) {
 					numeroPrestacaoDebito = new Integer(""
 							+ (Short) parmsDebitoCobradoPorTipo[1]);
 				}
-				// numero total de prestaÁıes
+				// numero total de presta√ß√µes
 				if (parmsDebitoCobradoPorTipo[2] != null) {
 					numeroPrestacaoTotal = new Integer(""
 							+ (Short) parmsDebitoCobradoPorTipo[2]);
 				}
-				// ano Mes ReferÍncia do dÈbito
+				// ano Mes Refer√™ncia do d√©bito
 				Integer anoMesReferencia = null;
 				if (parmsDebitoCobradoPorTipo[3] != null) {
 					anoMesReferencia = (Integer) parmsDebitoCobradoPorTipo[3];
 				}
-				// id do tipo do dÈbito
+				// id do tipo do d√©bito
 				Integer idDebitoTipo = null;
 				if (parmsDebitoCobradoPorTipo[4] != null) {
 					idDebitoTipo = (Integer) parmsDebitoCobradoPorTipo[4];
 				}
-				// descriÁ„o do tipo do dÈbito
+				// descri√ß√£o do tipo do d√©bito
 				String descricaoDebitoTipo = null;
 				if (parmsDebitoCobradoPorTipo[5] != null) {
 					descricaoDebitoTipo = (String) parmsDebitoCobradoPorTipo[5];
 				}
 				/*
 				 * Alterado por Vivianne Sousa em 21/12/2007 - Analista: Adriano
-				 * criaÁ„o do bonus para parcelamento com RD especial
+				 * cria√ß√£o do bonus para parcelamento com RD especial
 				 */
 				Short numeroParcelaBonus = 0;
 				// numero parcela bonus
@@ -55903,14 +55909,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						+ (numeroPrestacaoTotal.intValue() - numeroParcelaBonus
 								.intValue());
 
-				// muda o estado do boolean e o valor do dÈbito tipo
+				// muda o estado do boolean e o valor do d√©bito tipo
 				// verificador na primeira vez ou quando mudar o tipo
 				if (mudou) {
 					idDebitoTipoVerificador = idDebitoTipo;
 					mudou = false;
 					tamanhoAnoMesReferencia = 0;
 				}
-				// caso seja o mesmo tipo dÈbito
+				// caso seja o mesmo tipo d√©bito
 				if (idDebitoTipo.equals(idDebitoTipoVerificador)) {
 					if (primeiraVez) {
 						linhasDebitosCobrados.append(Util.completaString(
@@ -55920,30 +55926,30 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					} else {
 						entrouPrimeiraVez = false;
 					}
-					// adiciona o valor da prestaÁ„o ao total
+					// adiciona o valor da presta√ß√£o ao total
 					valorTotalPrestacoes = valorTotalPrestacoes
 							.add(valorPrestacao);
-					// adiciona o ano/mes referencia na coleÁ„o
+					// adiciona o ano/mes referencia na cole√ß√£o
 					if (anoMesReferencia != null) {
 						colecaoAnoMesReferenciaDebito.add(anoMesReferencia);
 					} else {
 						if (!entrouPrimeiraVez) {
-							// descriÁ„o do tipo de dÈbito
+							// descri√ß√£o do tipo de d√©bito
 							linhasDebitosCobrados.append(Util.completaString(
 									descricaoDebitoTipo, 30));
 						}
 						// Constante
 						linhasDebitosCobrados.append("PARCELA ");
-						// numero da prestaÁ„o do dÈbito
+						// numero da presta√ß√£o do d√©bito
 						linhasDebitosCobrados.append(Util
 								.completaStringComEspacoAEsquerda(""
 										+ numeroPrestacaoDebito, 3));
 						// Constante
 						linhasDebitosCobrados.append("/");
-						// numero total da prestaÁ„o do dÈbito
+						// numero total da presta√ß√£o do d√©bito
 						linhasDebitosCobrados.append(Util.completaString(
 								totalPrestacaoMenosBonus, 3));
-						// Completa com espaÁos em branco
+						// Completa com espa√ßos em branco
 						linhasDebitosCobrados
 								.append(Util.completaString("", 5));
 
@@ -55952,7 +55958,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.completaString("", 15));
 
 						// valor (tam 14)
-						// Valor da pretaÁ„o
+						// Valor da preta√ß√£o
 						String valorPrestacaoString = Util
 								.formatarMoedaReal(valorPrestacao);
 						linhasDebitosCobrados.append(Util
@@ -55962,8 +55968,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 
 				} else {
-					// caso a coleÁ„o dos meses de referÍncia do grupo do
-					// tipo de dÈbito esteja preenchida
+					// caso a cole√ß√£o dos meses de refer√™ncia do grupo do
+					// tipo de d√©bito esteja preenchida
 					if (colecaoAnoMesReferenciaDebito != null
 							&& !colecaoAnoMesReferenciaDebito.isEmpty()) {
 						Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito
@@ -55975,7 +55981,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							String anoMesReferenciaDebitoString = null;
 
 							if (i == 1) {
-								// mes/ano referencia do dÈbito
+								// mes/ano referencia do d√©bito
 								anoMesReferenciaDebitoString = Util
 										.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 								linhasDebitosCobrados
@@ -55987,7 +55993,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// na lista
 								if (colecaoAnoMesReferenciaDebito.size() == 1) {
 
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(Util
 											.completaString("", 13));
 
@@ -55996,7 +56002,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.completaString("", 15));
 
 									// valor (tam 14)
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalPrestacoes);
 									linhasDebitosCobrados.append(Util
@@ -56005,12 +56011,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 								} else {
 
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(Util
 											.completaString("", 42));
 								}
 							} else {
-								// caso i seja igual a 2 ent„o comeÁa a
+								// caso i seja igual a 2 ent√£o come√ßa a
 								// linha 3 do subFluxo
 								if (i == 2) {
 
@@ -56022,7 +56028,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													.completaString(
 															anoMesReferenciaDebitoString,
 															7));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(" ");
 									// adiciona o tamanho do mes/ano
 									// referencia
@@ -56030,14 +56036,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// caso exita somente um mes/ano de
 									// referencia na lista
 									if (colecaoAnoMesReferenciaDebito.size() == 2) {
-										// o tamanho de espaÁos em
+										// o tamanho de espa√ßos em
 										// branco vai ser o tamanho sem
 										// os mes/ano - os meses/anos
 										// colocados na
 										// stringbuilder.ex.:76-15=61
-										// espaÁos em brancos
+										// espa√ßos em brancos
 										int tamanhoEspacosBrancos = 50 - tamanhoAnoMesReferencia;
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										linhasDebitosCobrados.append(Util
 												.completaString("",
 														tamanhoEspacosBrancos));
@@ -56047,7 +56053,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												.completaString("", 15));
 
 										// valor (tam 14)
-										// valor acumulado do tipo do dÈbito
+										// valor acumulado do tipo do d√©bito
 										String valorAcumulado = Util
 												.formatarMoedaReal(valorTotalPrestacoes);
 										linhasDebitosCobrados
@@ -56058,9 +56064,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									}
 
 								} else {
-									// caso exista atÈ mais 6 ocorrÍncias na
+									// caso exista at√© mais 6 ocorr√™ncias na
 									// lista de meses
-									// -1 pq j· foi colocado na string o ultimo
+									// -1 pq j√° foi colocado na string o ultimo
 									// anoMes
 									if ((colecaoAnoMesReferenciaDebito.size() - 1) <= 2) {
 
@@ -56072,25 +56078,25 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaString(
 																anoMesReferenciaDebitoString,
 																7));
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										linhasDebitosCobrados.append(" ");
 										// adiciona o tamanho do mes/ano
-										// referencia + o espaÁo em branco
+										// referencia + o espa√ßo em branco
 										tamanhoAnoMesReferencia = tamanhoAnoMesReferencia + 8;
 
-										// caso n„o tenha outro ano mes na
-										// coleÁ„o ent„o
+										// caso n√£o tenha outro ano mes na
+										// cole√ß√£o ent√£o
 										// completa a linha com o valor
 										if (!iteratorAnoMesReferenciaDebito
 												.hasNext()) {
-											// o tamanho de espaÁos em branco
+											// o tamanho de espa√ßos em branco
 											// vai ser o tamanho sem
 											// os mes/ano - os meses/anos
 											// colocados na
 											// stringbuilder.ex.:76-15=61
-											// espaÁos em brancos
+											// espa√ßos em brancos
 											int tamanhoEspacosBrancos = 50 - tamanhoAnoMesReferencia;
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasDebitosCobrados
 													.append(Util
 															.completaString("",
@@ -56101,7 +56107,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													.completaString("", 15));
 
 											// valor (tam 14)
-											// valor acumulado do tipo do dÈbito
+											// valor acumulado do tipo do d√©bito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalPrestacoes);
 											linhasDebitosCobrados
@@ -56114,10 +56120,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 									} else {
 										// se existir mais de 6 ano/mes na
-										// coleÁ„oAnoMesReferenciaDebito
-										// ent„o sÛ mostra as 5 maiores
+										// cole√ß√£oAnoMesReferenciaDebito
+										// ent√£o s√≥ mostra as 5 maiores
 										if (i < 3) {
-											// mes/ano referencia do dÈbito
+											// mes/ano referencia do d√©bito
 											anoMesReferenciaDebitoString = Util
 													.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 											linhasDebitosCobrados
@@ -56125,10 +56131,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															.completaString(
 																	anoMesReferenciaDebitoString,
 																	7));
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasDebitosCobrados.append(" ");
 										} else {
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasDebitosCobrados.append(Util
 													.completaString("E OUTRAS",
 															10));
@@ -56138,7 +56144,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													.completaString("", 15));
 
 											// valor (tam 14)
-											// valor acumulado do tipo do dÈbito
+											// valor acumulado do tipo do d√©bito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalPrestacoes);
 											linhasDebitosCobrados
@@ -56154,21 +56160,21 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 							i = i + 1;
 						}
-						// caso a coleÁ„o de ano/mes esteja vazia
+						// caso a cole√ß√£o de ano/mes esteja vazia
 					} // limpa os campos
 					valorTotalPrestacoes = new BigDecimal("0.00");
 					colecaoAnoMesReferenciaDebito = new ArrayList();
 					// caso contrario mada o estado do boolean
 					mudou = true;
 					primeiraVez = true;
-					// retorna uma posiÁ„o do iterator
+					// retorna uma posi√ß√£o do iterator
 					iteratorDebitoCobradoPorTipo.previous();
 				}
 			}
 
 			// no caso de ser o ultimo tipo
 
-			// caso a coleÁ„o dos meses de referÍncia do grupo do tipo de dÈbito
+			// caso a cole√ß√£o dos meses de refer√™ncia do grupo do tipo de d√©bito
 			// esteja preenchida
 			if (colecaoAnoMesReferenciaDebito != null
 					&& !colecaoAnoMesReferenciaDebito.isEmpty()) {
@@ -56181,7 +56187,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					String anoMesReferenciaDebitoString = null;
 
 					if (i == 1) {
-						// mes/ano referencia do dÈbito
+						// mes/ano referencia do d√©bito
 						anoMesReferenciaDebitoString = Util
 								.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 						linhasDebitosCobrados.append(Util.completaString(
@@ -56189,7 +56195,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// caso exita somente um mes/ano de referencia na lista
 						if (colecaoAnoMesReferenciaDebito.size() == 1) {
 
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasDebitosCobrados.append(Util.completaString(
 									"", 13));
 
@@ -56198,7 +56204,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									"", 15));
 
 							// valor (tam 14)
-							// valor acumulado do tipo do dÈbito
+							// valor acumulado do tipo do d√©bito
 							String valorAcumulado = Util
 									.formatarMoedaReal(valorTotalPrestacoes);
 							linhasDebitosCobrados.append(Util
@@ -56206,12 +56212,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											valorAcumulado, 14));
 
 						} else {
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasDebitosCobrados.append(Util.completaString(
 									"", 42));
 						}
 					} else {
-						// caso i seja igual a 2 ent„o comeÁa a
+						// caso i seja igual a 2 ent√£o come√ßa a
 						// linha 3 do subFluxo
 						if (i == 2) {
 
@@ -56220,7 +56226,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 							linhasDebitosCobrados.append(Util.completaString(
 									anoMesReferenciaDebitoString, 7));
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasDebitosCobrados.append(" ");
 							// adiciona o tamanho do mes/ano
 							// referencia
@@ -56228,14 +56234,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// caso exita somente um mes/ano de
 							// referencia na lista
 							if (colecaoAnoMesReferenciaDebito.size() == 2) {
-								// o tamanho de espaÁos em
+								// o tamanho de espa√ßos em
 								// branco vai ser o tamanho sem
 								// os mes/ano - os meses/anos
 								// colocados na
 								// stringbuilder.ex.:76-15=61
-								// espaÁos em brancos
+								// espa√ßos em brancos
 								int tamanhoEspacosBrancos = 50 - tamanhoAnoMesReferencia;
-								// completa espaÁos em brancos
+								// completa espa√ßos em brancos
 								linhasDebitosCobrados.append(Util
 										.completaString("",
 												tamanhoEspacosBrancos));
@@ -56245,7 +56251,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										.completaString("", 15));
 
 								// valor (tam 14)
-								// valor acumulado do tipo do dÈbito
+								// valor acumulado do tipo do d√©bito
 								String valorAcumulado = Util
 										.formatarMoedaReal(valorTotalPrestacoes);
 								linhasDebitosCobrados.append(Util
@@ -56254,9 +56260,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 
 						} else {
-							// caso exista atÈ mais 6 ocorrÍncias na lista de
+							// caso exista at√© mais 6 ocorr√™ncias na lista de
 							// meses
-							// -1 pq j· foi colocado na string o ultimo anoMes
+							// -1 pq j√° foi colocado na string o ultimo anoMes
 							if ((colecaoAnoMesReferenciaDebito.size() - 1) <= 2) {
 
 								// mes/ano referencia do debito
@@ -56267,22 +56273,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												.completaString(
 														anoMesReferenciaDebitoString,
 														7));
-								// completa espaÁos em brancos
+								// completa espa√ßos em brancos
 								linhasDebitosCobrados.append(" ");
 								// adiciona o tamanho do mes/ano
-								// referencia + o espaÁo em branco
+								// referencia + o espa√ßo em branco
 								tamanhoAnoMesReferencia = tamanhoAnoMesReferencia + 8;
 
-								// caso n„o tenha outro ano mes na coleÁ„o ent„o
+								// caso n√£o tenha outro ano mes na cole√ß√£o ent√£o
 								// completa a linha com o valor
 								if (!iteratorAnoMesReferenciaDebito.hasNext()) {
-									// o tamanho de espaÁos em branco vai ser o
+									// o tamanho de espa√ßos em branco vai ser o
 									// tamanho sem
 									// os mes/ano - os meses/anos
 									// colocados na stringbuilder.ex.:76-15=61
-									// espaÁos em brancos
+									// espa√ßos em brancos
 									int tamanhoEspacosBrancos = 50 - tamanhoAnoMesReferencia;
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(Util
 											.completaString("",
 													tamanhoEspacosBrancos));
@@ -56292,7 +56298,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.completaString("", 15));
 
 									// valor (tam 14)
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalPrestacoes);
 									linhasDebitosCobrados.append(Util
@@ -56303,10 +56309,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							} else {
 								// se existir mais de 6 ano/mes na
-								// coleÁ„oAnoMesReferenciaDebito
-								// ent„o sÛ mostra as 5 maiores
+								// cole√ß√£oAnoMesReferenciaDebito
+								// ent√£o s√≥ mostra as 5 maiores
 								if (i < 3) {
-									// mes/ano referencia do dÈbito
+									// mes/ano referencia do d√©bito
 									anoMesReferenciaDebitoString = Util
 											.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
 									linhasDebitosCobrados
@@ -56314,10 +56320,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													.completaString(
 															anoMesReferenciaDebitoString,
 															7));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(" ");
 								} else {
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasDebitosCobrados.append(Util
 											.completaString("E OUTRAS", 10));
 
@@ -56326,7 +56332,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.completaString("", 15));
 
 									// valor (tam 14)
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalPrestacoes);
 									linhasDebitosCobrados.append(Util
@@ -56340,7 +56346,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					i = i + 1;
 				}
-				// caso a coleÁ„o de ano/mes esteja vazia
+				// caso a cole√ß√£o de ano/mes esteja vazia
 			}
 
 		}
@@ -56349,11 +56355,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00014] Gerar Linhas de CrÈditos Realizados
+	 * [SB00014] Gerar Linhas de Cr√©ditos Realizados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 19/11/2007
@@ -56376,10 +56382,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				&& !colecaoCreditoRealizadoPorTipo.isEmpty()) {
 			ListIterator iteratorDebitoRealizadoPorTipo = (ListIterator) colecaoCreditoRealizadoPorTipo
 					.listIterator();
-			// vari·vel respons·vel para controle de mudanÁa do tipo de credito
+			// vari√°vel respons√°vel para controle de mudan√ßa do tipo de credito
 			boolean mudou = true;
-			// variavel que verifica se È a primeira vez,de cada tipo do
-			// credito,que entra para ser escrito no txt sÛ uma vez a descriÁ„o
+			// variavel que verifica se √© a primeira vez,de cada tipo do
+			// credito,que entra para ser escrito no txt s√≥ uma vez a descri√ß√£o
 			// do tipo do credito
 			boolean primeiraVez = true;
 			boolean entrouPrimeiraVez = false;
@@ -56387,28 +56393,28 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			BigDecimal valorTotalCredito = new BigDecimal("0.00");
 			BigDecimal valorCredito = null;
 			Short numeroCredito = null;
-			// numero total de crÈditos
+			// numero total de cr√©ditos
 			Short numeroCreditoTotal = null;
 			String numeroCreditoTotalMenosBonus = "";
 			// cria um int que vai ver o tamanho da string builder dependendo da
 			// quantidade
-			// de mes/ano referencia calcula os espaÁos em brancos para o valor
+			// de mes/ano referencia calcula os espa√ßos em brancos para o valor
 			// ficar no lugar certo
 			int tamanhoAnoMesReferencia = 0;
-			// caso n„o seja a primeira vez que entre no boolean primeira
-			// vez(que nesse caso È quando troca o tipo de credito)
+			// caso n√£o seja a primeira vez que entre no boolean primeira
+			// vez(que nesse caso √© quando troca o tipo de credito)
 			// colecao para guardar os ano/mes referencia do credito realizado
 			Collection colecaoAnoMesReferenciaCredito = new ArrayList();
 			while (iteratorDebitoRealizadoPorTipo.hasNext()) {
 				Object[] parmsDebitoCobradoPorTipo = (Object[]) iteratorDebitoRealizadoPorTipo
 						.next();
 
-				// recupera os parametros da coleÁ„o
-				// valor do crÈdito
+				// recupera os parametros da cole√ß√£o
+				// valor do cr√©dito
 				if (parmsDebitoCobradoPorTipo[0] != null) {
 					valorCredito = (BigDecimal) parmsDebitoCobradoPorTipo[0];
 				}
-				// numero da pretaÁ„o atual
+				// numero da preta√ß√£o atual
 				if (parmsDebitoCobradoPorTipo[1] != null) {
 					numeroCredito = (Short) parmsDebitoCobradoPorTipo[1];
 				}
@@ -56416,24 +56422,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (parmsDebitoCobradoPorTipo[2] != null) {
 					numeroCreditoTotal = (Short) parmsDebitoCobradoPorTipo[2];
 				}
-				// ano Mes ReferÍncia do crÈdito
+				// ano Mes Refer√™ncia do cr√©dito
 				Integer anoMesReferencia = null;
 				if (parmsDebitoCobradoPorTipo[3] != null) {
 					anoMesReferencia = (Integer) parmsDebitoCobradoPorTipo[3];
 				}
-				// id do tipo do dÈbito
+				// id do tipo do d√©bito
 				Integer idCreditoTipo = null;
 				if (parmsDebitoCobradoPorTipo[4] != null) {
 					idCreditoTipo = (Integer) parmsDebitoCobradoPorTipo[4];
 				}
-				// descriÁ„o do tipo do credito
+				// descri√ß√£o do tipo do credito
 				String descricaoCreditoTipo = null;
 				if (parmsDebitoCobradoPorTipo[5] != null) {
 					descricaoCreditoTipo = (String) parmsDebitoCobradoPorTipo[5];
 				}
 				/*
 				 * Alterado por Vivianne Sousa em 21/12/2007 - Analista: Adriano
-				 * criaÁ„o do bonus para parcelamento com RD especial
+				 * cria√ß√£o do bonus para parcelamento com RD especial
 				 */
 				Short numeroParcelaBonus = 0;
 				// numero parcela bonus
@@ -56451,10 +56457,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					mudou = false;
 					tamanhoAnoMesReferencia = 0;
 				}
-				// caso seja o mesmo tipo dÈbito
+				// caso seja o mesmo tipo d√©bito
 				if (idCreditoTipo.equals(idCreditoTipoVerificador)) {
 					if (primeiraVez) {
-						// descriÁ„o do tipo de credito
+						// descri√ß√£o do tipo de credito
 						linhasCreditosRealizados.append(Util.completaString(
 								descricaoCreditoTipo, 30));
 						primeiraVez = false;
@@ -56466,28 +56472,28 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					// adiciona o valor do credito ao total
 					valorTotalCredito = valorTotalCredito.add(valorCredito);
-					// adiciona o ano/mes referencia na coleÁ„o
+					// adiciona o ano/mes referencia na cole√ß√£o
 					if (anoMesReferencia != null) {
 						colecaoAnoMesReferenciaCredito.add(anoMesReferencia);
 					} else {
 						if (!entrouPrimeiraVez) {
-							// descriÁ„o do tipo de credito
+							// descri√ß√£o do tipo de credito
 							linhasCreditosRealizados.append(Util
 									.completaString(descricaoCreditoTipo, 30));
 							primeiraVez = false;
 						}
 						// Constante
 						linhasCreditosRealizados.append("PARCELA ");
-						// numero da prestaÁ„o do dÈbito
+						// numero da presta√ß√£o do d√©bito
 						linhasCreditosRealizados.append(Util
 								.completaStringComEspacoAEsquerda(""
 										+ numeroCredito, 3));
 						// Constante
 						linhasCreditosRealizados.append("/");
-						// numero total da prestaÁ„o do dÈbito
+						// numero total da presta√ß√£o do d√©bito
 						linhasCreditosRealizados.append(Util.completaString(
 								numeroCreditoTotalMenosBonus, 3));
-						// Completa com espaÁos em branco
+						// Completa com espa√ßos em branco
 						linhasCreditosRealizados.append(Util.completaString("",
 								5));
 
@@ -56495,7 +56501,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						linhasCreditosRealizados.append(Util.completaString("",
 								15));
 
-						// Valor da pretaÁ„o
+						// Valor da preta√ß√£o
 						String valorCreditoString = Util
 								.formatarMoedaReal(valorCredito);
 						linhasCreditosRealizados.append(Util
@@ -56505,7 +56511,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 
 				} else {
-					// caso a coleÁ„o dos meses de referÍncia do grupo do
+					// caso a cole√ß√£o dos meses de refer√™ncia do grupo do
 					// tipo de credito esteja preenchida
 					if (colecaoAnoMesReferenciaCredito != null
 							&& !colecaoAnoMesReferenciaCredito.isEmpty()) {
@@ -56528,7 +56534,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// na lista
 								if (colecaoAnoMesReferenciaCredito.size() == 1) {
 
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(Util
 											.completaString("", 13));
 
@@ -56537,7 +56543,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.completaString("", 15));
 
 									// valor (tam 14)
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
 									linhasCreditosRealizados.append(Util
@@ -56545,12 +56551,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													valorAcumulado, 14));
 
 								} else {
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(Util
 											.completaString("", 42));
 								}
 							} else {
-								// caso i seja igual a 2 ent„o comeÁa a
+								// caso i seja igual a 2 ent√£o come√ßa a
 								// linha 3 do subFluxo
 								if (i == 2) {
 
@@ -56562,7 +56568,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													.completaString(
 															anoMesReferenciaCreditoString,
 															7));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(" ");
 									// adiciona o tamanho do mes/ano referencia
 									tamanhoAnoMesReferencia = tamanhoAnoMesReferencia + 8;
@@ -56570,14 +56576,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// caso exita somente um mes/ano de
 									// referencia na lista
 									if (colecaoAnoMesReferenciaCredito.size() == 2) {
-										// o tamanho de espaÁos em
+										// o tamanho de espa√ßos em
 										// branco vai ser o tamanho sem
 										// os mes/ano - os meses/anos
 										// colocados na
 										// stringbuilder.ex.:76-15=61
-										// espaÁos em brancos
+										// espa√ßos em brancos
 										int tamanhoEspacosBrancos = 50 - tamanhoAnoMesReferencia;
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										linhasCreditosRealizados.append(Util
 												.completaString("",
 														tamanhoEspacosBrancos));
@@ -56587,7 +56593,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 												.completaString("", 15));
 
 										// valor (tam 14)
-										// valor acumulado do tipo do dÈbito
+										// valor acumulado do tipo do d√©bito
 										String valorAcumulado = Util
 												.formatarMoedaReal(valorTotalCredito);
 										linhasCreditosRealizados
@@ -56598,9 +56604,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 									}
 								} else {
-									// caso exista atÈ mais 6 ocorrÍncias na
+									// caso exista at√© mais 6 ocorr√™ncias na
 									// lista de meses
-									// -1 pq j· foi colocado na string o ultimo
+									// -1 pq j√° foi colocado na string o ultimo
 									// anoMes
 									if ((colecaoAnoMesReferenciaCredito.size() - 1) <= 6) {
 
@@ -56612,24 +56618,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 														.completaString(
 																anoMesReferenciaCreditoString,
 																7));
-										// completa espaÁos em brancos
+										// completa espa√ßos em brancos
 										linhasCreditosRealizados.append(" ");
 										// adiciona o tamanho do mes/ano
-										// referencia + o espaÁo em branco
+										// referencia + o espa√ßo em branco
 										tamanhoAnoMesReferencia = tamanhoAnoMesReferencia + 8;
-										// caso n„o tenha outro ano mes na
-										// coleÁ„o ent„o completa a linha com o
+										// caso n√£o tenha outro ano mes na
+										// cole√ß√£o ent√£o completa a linha com o
 										// valor
 										if (!iteratorAnoMesReferenciaCredito
 												.hasNext()) {
-											// o tamanho de espaÁos em
+											// o tamanho de espa√ßos em
 											// branco vai ser o tamanho sem
 											// os mes/ano - os meses/anos
 											// colocados na
 											// stringbuilder.ex.:76-15=61
-											// espaÁos em brancos
+											// espa√ßos em brancos
 											int tamanhoEspacosBrancos = 50 - tamanhoAnoMesReferencia;
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasCreditosRealizados
 													.append(Util
 															.completaString("",
@@ -56642,7 +56648,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																	15));
 
 											// valor (tam 14)
-											// valor acumulado do tipo do dÈbito
+											// valor acumulado do tipo do d√©bito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalCredito);
 											linhasCreditosRealizados
@@ -56655,10 +56661,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 									} else {
 										// se existir mais de 6 ano/mes na
-										// coleÁ„oAnoMesReferenciaDebito
-										// ent„o sÛ mostra as 5 maiores
+										// cole√ß√£oAnoMesReferenciaDebito
+										// ent√£o s√≥ mostra as 5 maiores
 										if (i < 7) {
-											// mes/ano referencia do dÈbito
+											// mes/ano referencia do d√©bito
 											anoMesReferenciaCreditoString = Util
 													.formatarAnoMesParaMesAno(anoMesReferenciaCredito);
 											linhasCreditosRealizados
@@ -56666,11 +56672,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 															.completaString(
 																	anoMesReferenciaCreditoString,
 																	7));
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasCreditosRealizados
 													.append(" ");
 										} else {
-											// completa espaÁos em brancos
+											// completa espa√ßos em brancos
 											linhasCreditosRealizados
 													.append(Util
 															.completaString(
@@ -56684,7 +56690,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 																	15));
 
 											// valor (tam 14)
-											// valor acumulado do tipo do dÈbito
+											// valor acumulado do tipo do d√©bito
 											String valorAcumulado = Util
 													.formatarMoedaReal(valorTotalCredito);
 											linhasCreditosRealizados
@@ -56700,7 +56706,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 							i = i + 1;
 						}
-						// caso a coleÁ„o de ano/mes esteja vazia
+						// caso a cole√ß√£o de ano/mes esteja vazia
 					}
 					// limpa os campos
 					valorTotalCredito = new BigDecimal("0.00");
@@ -56708,13 +56714,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// caso contrario mada o estado do boolean
 					mudou = true;
 					primeiraVez = true;
-					// retorna uma posiÁ„o do iterator
+					// retorna uma posi√ß√£o do iterator
 					iteratorDebitoRealizadoPorTipo.previous();
 				}
 			}
 			// No caso de ter o ultimo tipo
 
-			// caso a coleÁ„o dos meses de referÍncia do grupo do
+			// caso a cole√ß√£o dos meses de refer√™ncia do grupo do
 			// tipo de credito esteja preenchida
 			if (colecaoAnoMesReferenciaCredito != null
 					&& !colecaoAnoMesReferenciaCredito.isEmpty()) {
@@ -56734,7 +56740,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// caso exita somente um mes/ano de referencia na lista
 						if (colecaoAnoMesReferenciaCredito.size() == 1) {
 
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasCreditosRealizados.append(Util
 									.completaString("", 13));
 
@@ -56743,7 +56749,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.completaString("", 15));
 
 							// valor (tam 14)
-							// valor acumulado do tipo do dÈbito
+							// valor acumulado do tipo do d√©bito
 							String valorAcumulado = Util
 									.formatarMoedaReal(valorTotalCredito);
 							linhasCreditosRealizados.append(Util
@@ -56751,12 +56757,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											valorAcumulado, 14));
 
 						} else {
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasCreditosRealizados.append(Util
 									.completaString("", 42));
 						}
 					} else {
-						// caso i seja igual a 2 ent„o comeÁa a
+						// caso i seja igual a 2 ent√£o come√ßa a
 						// linha 3 do subFluxo
 						if (i == 2) {
 							anoMesReferenciaCreditoString = Util
@@ -56764,7 +56770,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							linhasCreditosRealizados.append(Util
 									.completaString(
 											anoMesReferenciaCreditoString, 7));
-							// completa espaÁos em brancos
+							// completa espa√ßos em brancos
 							linhasCreditosRealizados.append(" ");
 							// adiciona o tamanho do mes/ano referencia
 							tamanhoAnoMesReferencia = tamanhoAnoMesReferencia + 8;
@@ -56772,14 +56778,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// caso exita somente um mes/ano de referencia na
 							// lista
 							if (colecaoAnoMesReferenciaCredito.size() == 2) {
-								// o tamanho de espaÁos em
+								// o tamanho de espa√ßos em
 								// branco vai ser o tamanho sem
 								// os mes/ano - os meses/anos
 								// colocados na
 								// stringbuilder.ex.:76-15=61
-								// espaÁos em brancos
+								// espa√ßos em brancos
 								int tamanhoEspacosBrancos = 50 - tamanhoAnoMesReferencia;
-								// completa espaÁos em brancos
+								// completa espa√ßos em brancos
 								linhasCreditosRealizados.append(Util
 										.completaString("",
 												tamanhoEspacosBrancos));
@@ -56789,7 +56795,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										.completaString("", 15));
 
 								// valor (tam 14)
-								// valor acumulado do tipo do dÈbito
+								// valor acumulado do tipo do d√©bito
 								String valorAcumulado = Util
 										.formatarMoedaReal(valorTotalCredito);
 								linhasCreditosRealizados.append(Util
@@ -56798,9 +56804,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							}
 						} else {
-							// caso exista atÈ mais 6 ocorrÍncias na
+							// caso exista at√© mais 6 ocorr√™ncias na
 							// lista de meses
-							// -1 pq j· foi colocado na string o
+							// -1 pq j√° foi colocado na string o
 							// ultimo anoMes
 							if ((colecaoAnoMesReferenciaCredito.size() - 1) <= 6) {
 
@@ -56811,22 +56817,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										.completaString(
 												anoMesReferenciaCreditoString,
 												7));
-								// completa espaÁos em brancos
+								// completa espa√ßos em brancos
 								linhasCreditosRealizados.append(" ");
 								// adiciona o tamanho do mes/ano
-								// referencia + o espaÁo em branco
+								// referencia + o espa√ßo em branco
 								tamanhoAnoMesReferencia = tamanhoAnoMesReferencia + 8;
-								// caso n„o tenha outro ano mes na
-								// coleÁ„o ent„o completa a linha com o valor
+								// caso n√£o tenha outro ano mes na
+								// cole√ß√£o ent√£o completa a linha com o valor
 								if (!iteratorAnoMesReferenciaCredito.hasNext()) {
-									// o tamanho de espaÁos em
+									// o tamanho de espa√ßos em
 									// branco vai ser o tamanho sem
 									// os mes/ano - os meses/anos
 									// colocados na
 									// stringbuilder.ex.:76-15=61
-									// espaÁos em brancos
+									// espa√ßos em brancos
 									int tamanhoEspacosBrancos = 50 - tamanhoAnoMesReferencia;
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(Util
 											.completaString("",
 													tamanhoEspacosBrancos));
@@ -56836,7 +56842,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.completaString("", 15));
 
 									// valor (tam 14)
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
 									linhasCreditosRealizados.append(Util
@@ -56847,10 +56853,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							} else {
 								// se existir mais de 6 ano/mes na
-								// coleÁ„oAnoMesReferenciaDebito
-								// ent„o sÛ mostra as 5 maiores
+								// cole√ß√£oAnoMesReferenciaDebito
+								// ent√£o s√≥ mostra as 5 maiores
 								if (i < 7) {
-									// mes/ano referencia do dÈbito
+									// mes/ano referencia do d√©bito
 									anoMesReferenciaCreditoString = Util
 											.formatarAnoMesParaMesAno(anoMesReferenciaCredito);
 									linhasCreditosRealizados
@@ -56858,10 +56864,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													.completaString(
 															anoMesReferenciaCreditoString,
 															7));
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(" ");
 								} else {
-									// completa espaÁos em brancos
+									// completa espa√ßos em brancos
 									linhasCreditosRealizados.append(Util
 											.completaString("E OUTRAS", 10));
 
@@ -56870,7 +56876,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.completaString("", 15));
 
 									// valor (tam 14)
-									// valor acumulado do tipo do dÈbito
+									// valor acumulado do tipo do d√©bito
 									String valorAcumulado = Util
 											.formatarMoedaReal(valorTotalCredito);
 									linhasCreditosRealizados.append(Util
@@ -56884,7 +56890,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 					i = i + 1;
 				}
-				// caso a coleÁ„o de ano/mes esteja vazia
+				// caso a cole√ß√£o de ano/mes esteja vazia
 			}
 
 		}
@@ -56893,7 +56899,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
@@ -56910,7 +56916,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		StringBuilder linhasImpostosRetidos = new StringBuilder();
 
-		// descricao dos serviÁoes e tarifas (tam 50)
+		// descricao dos servi√ßoes e tarifas (tam 50)
 		// Constante
 		linhasImpostosRetidos.append(Util.completaString(
 				"DEDUCAO IMPOSTOS LEI FEDERAL N.9430 DE 27/12/1996", 50));
@@ -56921,7 +56927,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// valor (tam 14)
 		linhasImpostosRetidos.append(Util.completaString("", 14));
 
-		// descricao dos serviÁoes e tarifas (tam 50)
+		// descricao dos servi√ßoes e tarifas (tam 50)
 		linhasImpostosRetidos.append(Util.completaString("", 2));
 
 		Collection colecaoParmsImpostosDeduzidos = null;
@@ -56935,7 +56941,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 		StringBuilder descricaoAbreviadaImposto = new StringBuilder();
 		BigDecimal valorImpostosTotal = new BigDecimal("0.00");
-		// verifica se a coleÁ„o È diferente de nulo
+		// verifica se a cole√ß√£o √© diferente de nulo
 		if (colecaoParmsImpostosDeduzidos != null
 				&& !colecaoParmsImpostosDeduzidos.isEmpty()) {
 			Iterator iteratorParmsImpostosDeduzidos = colecaoParmsImpostosDeduzidos
@@ -56956,17 +56962,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (parmsImpostoDeduzido[2] != null) {
 					valorImpostos = (BigDecimal) parmsImpostoDeduzido[2];
 				}
-				// concatena a descriÁ„o abreviada do tipo de imposto com o
+				// concatena a descri√ß√£o abreviada do tipo de imposto com o
 				// precentual de aliquota
 				descricaoAbreviadaImposto.append(descricaoTipoImposto + "-"
 						+ percentualAliquota + "%");
-				// Completa com espaÁos em branco
+				// Completa com espa√ßos em branco
 				descricaoAbreviadaImposto.append(" ");
 				// adiciona o valor dos impostos
 				valorImpostosTotal = valorImpostosTotal.add(valorImpostos);
 			}
 		}
-		// recupera a descriÁ„o abreviada concatenada com a aliquota
+		// recupera a descri√ß√£o abreviada concatenada com a aliquota
 		String descricaoAbreviadaConcatenada = "";
 		if (descricaoAbreviadaImposto != null
 				&& !descricaoAbreviadaImposto.equals("")) {
@@ -56991,7 +56997,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0352] Emitir Contas e Cartas
 	 * 
-	 * [SB0029] Gerar Arquivo TXT das fichas de CompensÁ„o
+	 * [SB0029] Gerar Arquivo TXT das fichas de Compens√ß√£o
 	 * 
 	 * @author Vivianne Sousa, Mariana Victor
 	 * @date 12/11/2007, 11/03/2011
@@ -57050,7 +57056,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 						sequencialImpressao += 1;
 						quantidadeContas++;
-						// SÛ para exibir no console a quantidade de contas
+						// S√≥ para exibir no console a quantidade de contas
 
 						if (emitirContaHelper != null) {
 
@@ -57066,9 +57072,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 
 							StringBuilder contaTxt = new StringBuilder();
-							// caso o [FS0006 - Verificar espaÁos para descriÁ„o
+							// caso o [FS0006 - Verificar espa√ßos para descri√ß√£o
 							// dos
-							// serviÁos e tarifas totalmente preenchido]
+							// servi√ßos e tarifas totalmente preenchido]
 							StringBuilder parteInicialcontaTxt = new StringBuilder();
 
 							// item 1
@@ -57085,9 +57091,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									descricaoLocalidade, 30));
 
 							// item 3
-							// matricula do imÛvel
-							// Recupera a matrÌcula do imÛvel da coluna 1 e
-							// formata a matrÌcula
+							// matricula do im√≥vel
+							// Recupera a matr√≠cula do im√≥vel da coluna 1 e
+							// formata a matr√≠cula
 							// (ex:500000001 em 5000000.1)
 							String matriculaImovelFormatada = Util
 									.retornaMatriculaImovelFormatada(emitirContaHelper
@@ -57096,8 +57102,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									matriculaImovelFormatada, 9));
 
 							// item 4
-							// caso a coleÁ„o de contas seja de entrega para o
-							// cliente respons·vel
+							// caso a cole√ß√£o de contas seja de entrega para o
+							// cliente respons√°vel
 							String nomeClienteUsuario = "";
 							if (tipoConta == 3 || tipoConta == 4) {
 								if (emitirContaHelper.getNomeImovel() != null
@@ -57138,9 +57144,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									10));
 
 							// item 6
-							// inst‚ncia um imovel com os dados da conta para
+							// inst√¢ncia um imovel com os dados da conta para
 							// recuperar
-							// a inscriÁ„o que est· no objeto imovel
+							// a inscri√ß√£o que est√° no objeto imovel
 							Imovel imovel = new Imovel();
 							Localidade localidade = new Localidade();
 							localidade.setId(emitirContaHelper
@@ -57157,7 +57163,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							imovel.setLote(emitirContaHelper.getLoteConta());
 							imovel.setSubLote(emitirContaHelper
 									.getSubLoteConta());
-							// InscriÁ„o do imÛvel
+							// Inscri√ß√£o do im√≥vel
 							String inscricao = imovel.getInscricaoFormatada();
 
 							imovel = null;
@@ -57168,7 +57174,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							contaTxt.append(Util.completaString(inscricao, 20));
 
 							// item 7
-							// recupera endereco do imÛvel
+							// recupera endereco do im√≥vel
 							String enderecoImovel = getControladorEndereco()
 									.pesquisarEnderecoFormatado(
 											emitirContaHelper.getIdImovel());
@@ -57178,11 +57184,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											: enderecoImovel, 50));
 
 							// item 8
-							// MÍs/Ano referÍncia da conta
+							// M√™s/Ano refer√™ncia da conta
 							String mesAnoReferencia = Util
 									.formatarAnoMesParaMesAno(emitirContaHelper
 											.getAmReferencia());
-							// DÌgito verificador da conta
+							// D√≠gito verificador da conta
 							String digitoVerificador = ""
 									+ emitirContaHelper
 											.getDigitoVerificadorConta();
@@ -57191,13 +57197,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									9));
 
 							// item 9 e item 10
-							// caso a coleÁ„o de contas seja de entrega para o
-							// cliente respons·vel
+							// caso a cole√ß√£o de contas seja de entrega para o
+							// cliente respons√°vel
 							String enderecoClienteResponsavel = "";
 							String enderecoClienteResponsavelSegundaLinha = "";
 
-							// Comentado por S·vio Luiz em 08/01/2008 (Analista
-							// Respons·vel: Aryed)
+							// Comentado por S√°vio Luiz em 08/01/2008 (Analista
+							// Respons√°vel: Aryed)
 							// o tipo da conta(igual a 3 ou 4)
 
 							if (emitirContaHelper.getIdClienteResponsavel() != null
@@ -57220,35 +57226,35 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										8));
 
 								if (enderecoClienteResponsavel != null) {
-									// endereco cliente respons·vel
+									// endereco cliente respons√°vel
 									contaTxt.append(Util.completaString(
 											enderecoClienteResponsavel, 50));
 									enderecoClienteResponsavelSegundaLinha = enderecoClienteResponsavel;
 								} else {
-									// endereco cliente respons·vel
+									// endereco cliente respons√°vel
 									contaTxt.append(Util.completaString("", 50));
 								}
 							} else {
-								// endereco cliente respons·vel
+								// endereco cliente respons√°vel
 								contaTxt.append(Util.completaString("", 58));
 							}
 
 							// item 11
-							// descriÁ„o da situaÁ„o da agua na conta
+							// descri√ß√£o da situa√ß√£o da agua na conta
 							String descricaoAguaSituacao = emitirContaHelper
 									.getDescricaoLigacaoAguaSituacao();
 							contaTxt.append(Util.completaString(
 									descricaoAguaSituacao, 20));
 
 							// item 12
-							// descriÁ„o da situaÁ„o de esgoto na conta
+							// descri√ß√£o da situa√ß√£o de esgoto na conta
 							String descricaoEsgotoSituacao = emitirContaHelper
 									.getDescricaoLigacaoEsgotoSituacao();
 							contaTxt.append(Util.completaString(
 									descricaoEsgotoSituacao, 20));
 
-							// [SB0002] - Determinar tipo de ligaÁ„o e tipo de
-							// MediÁ„o
+							// [SB0002] - Determinar tipo de liga√ß√£o e tipo de
+							// Medi√ß√£o
 							Integer[] parmSituacao = determinarTipoLigacaoMedicao(emitirContaHelper);
 							Integer tipoLigacao = parmSituacao[0];
 							Integer tipoMedicao = parmSituacao[1];
@@ -57259,8 +57265,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// item 13
 							// chama o [SB0004] - Obter Dados do Consumo e
-							// MediÁ„o Anterior passando a quantidade de Meses
-							// Igual a 1 e o tipo de ligaÁ„o e mediÁ„o
+							// Medi√ß√£o Anterior passando a quantidade de Meses
+							// Igual a 1 e o tipo de liga√ß√£o e medi√ß√£o
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 									emitirContaHelper, 1, tipoLigacao,
@@ -57271,8 +57277,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// item 14
 							// chama o [SB0004] -Obter Dados do Consumo e
-							// MediÁ„o Anterior passando a quantidade
-							// de Meses Igual a 4 e o tipo de ligaÁ„o e mediÁ„o
+							// Medi√ß√£o Anterior passando a quantidade
+							// de Meses Igual a 4 e o tipo de liga√ß√£o e medi√ß√£o
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 									emitirContaHelper, 4, tipoLigacao,
@@ -57283,8 +57289,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// item 15
 							// chama o [SB0004] -Obter Dados do Consumo e
-							// MediÁ„o Anterior passando a quantidade
-							// de Meses Igual a 2 e o tipo de ligaÁ„o e mediÁ„o
+							// Medi√ß√£o Anterior passando a quantidade
+							// de Meses Igual a 2 e o tipo de liga√ß√£o e medi√ß√£o
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 									emitirContaHelper, 2, tipoLigacao,
@@ -57295,8 +57301,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// item 16
 							// chama o [SB0004] -Obter Dados do Consumo e
-							// MediÁ„o Anterior passando a quantidade
-							// de Meses Igual a 5 e o tipode ligaÁ„o e mediÁ„o
+							// Medi√ß√£o Anterior passando a quantidade
+							// de Meses Igual a 5 e o tipode liga√ß√£o e medi√ß√£o
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 									emitirContaHelper, 5, tipoLigacao,
@@ -57307,8 +57313,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// item 17 e item 18
 							// Inicio Chamar Sub-Fluxo recupera os parametros da
-							// mediÁ„o
-							// historico do [SB0005] - Obter Dados da MediÁ„o da
+							// medi√ß√£o
+							// historico do [SB0005] - Obter Dados da Medi√ß√£o da
 							// Conta
 							Object[] parmsMedicaoHistorico = obterDadosMedicaoConta(
 									emitirContaHelper, tipoMedicao);
@@ -57320,7 +57326,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							String dataLeituraAnterior = "";
 							// Leitura Anterior
 							String dataLeituraAtual = "";
-							// Leitura SituaÁ„o Atual
+							// Leitura Situa√ß√£o Atual
 							String leituraSituacaoAtual = "";
 							// Leitura Anormalidade Faturamento
 							String leituraAnormalidadeFaturamento = "";
@@ -57359,7 +57365,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							String diasConsumo = "";
 							if (!dataLeituraAnterior.equals("")
 									&& !dataLeituraAtual.equals("")) {
-								// calcula a quantidade de dias de consumo que È
+								// calcula a quantidade de dias de consumo que √©
 								// a quantidade de
 								// dias entre a data de leitura
 								// anterior(parmsMedicaoHistorico[2])
@@ -57372,9 +57378,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 
 							// recupera os parametros de consumo faturamento e
-							// consumo mÈdio di·rio
-							// [SB0005] - Obter Consumo Faturado e Consumo MÈdio
-							// Di·rio
+							// consumo m√©dio di√°rio
+							// [SB0005] - Obter Consumo Faturado e Consumo M√©dio
+							// Di√°rio
 							String[] parmsConsumo = obterConsumoFaturadoConsumoMedioDiario(
 									emitirContaHelper, tipoMedicao, diasConsumo);
 							String consumoFaturamento = parmsConsumo[0];
@@ -57403,7 +57409,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							contaTxt.append(Util.completaString(diasConsumo, 2));
 
 							// item 21
-							// Consumo mÈdio di·rio
+							// Consumo m√©dio di√°rio
 							contaTxt.append((Util
 									.completaStringComEspacoAEsquerdaCondicaoTamanhoMaximo(
 											consumoMedioDiario.replace(".", ""),
@@ -57411,8 +57417,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// item 22
 							// chama o [SB0004] -Obter Dados do Consumo e
-							// MediÁ„o Anterior passando a quantidade de Meses
-							// Igual a 3 e o tipo de ligaÁ„o e mediÁ„o
+							// Medi√ß√£o Anterior passando a quantidade de Meses
+							// Igual a 3 e o tipo de liga√ß√£o e medi√ß√£o
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 									emitirContaHelper, 3, tipoLigacao,
@@ -57423,8 +57429,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// item 23
 							// chama o [SB0004] -Obter Dados do Consumo e
-							// MediÁ„o Anterior passando a quantidade
-							// de Meses Igual a 6 e o tipo de ligaÁ„o e mediÁ„o
+							// Medi√ß√£o Anterior passando a quantidade
+							// de Meses Igual a 6 e o tipo de liga√ß√£o e medi√ß√£o
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
 									emitirContaHelper, 6, tipoLigacao,
@@ -57472,29 +57478,29 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								}
 
 								if (parmsConsumoHistorico != null) {
-									// descriÁ„o abreviada tipo de consumo
+									// descri√ß√£o abreviada tipo de consumo
 									if (parmsConsumoHistorico[0] != null) {
 										descricaoAbreviadaTipoConsumo = (String) parmsConsumoHistorico[0];
 									}
-									// descriÁ„o tipo de consumo
+									// descri√ß√£o tipo de consumo
 									if (parmsConsumoHistorico[1] != null) {
 										descricaoTipoConsumo = (String) parmsConsumoHistorico[1];
 									}
-									// Consumo mÈdio
+									// Consumo m√©dio
 									if (parmsConsumoHistorico[2] != null) {
 										consumoMedio = ""
 												+ (Integer) parmsConsumoHistorico[2];
 									}
-									// descriÁ„o abreviada anormalidade de
+									// descri√ß√£o abreviada anormalidade de
 									// consumo
 									if (parmsConsumoHistorico[3] != null) {
 										descricaoAbreviadaAnormalidadeConsumo = (String) parmsConsumoHistorico[3];
 									}
-									// descriÁ„o anormalidade de consumo
+									// descri√ß√£o anormalidade de consumo
 									if (parmsConsumoHistorico[4] != null) {
 										descricaoAnormalidadeConsumo = (String) parmsConsumoHistorico[4];
 									}
-									// Consumo mÈdio
+									// Consumo m√©dio
 									if (parmsConsumoHistorico[5] != null) {
 										consumoRateio = ""
 												+ (Integer) parmsConsumoHistorico[5];
@@ -57508,19 +57514,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							contaTxt.append("CONSUMO ");
 
 							// item 27
-							// descriÁ„o tipo consumo
+							// descri√ß√£o tipo consumo
 							contaTxt.append(Util.completaString(
 									descricaoTipoConsumo, 20));
 
 							// item 28
-							// descriÁ„o da Anormalidade de consumo
+							// descri√ß√£o da Anormalidade de consumo
 							contaTxt.append(Util.completaString(
 									descricaoAnormalidadeConsumo, 25));
 
 							// Inicio Chamar Sub-Fluxo soma a quantidades de
 							// economias da
 							// tabela contaCategoria [SB0007] - Obter Dados da
-							// MediÁ„o da Conta
+							// Medi√ß√£o da Conta
 							Short quantidadeEconomiaConta = 0;
 							try {
 								quantidadeEconomiaConta = repositorioFaturamento
@@ -57582,9 +57588,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// Inicio Chamar Sub-Fluxo concatena os campos dos
 							// sub-fluxos anteriores
-							// [SB0009] - Obter CÛdigo auxiliar
+							// [SB0009] - Obter C√≥digo auxiliar
 							StringBuilder codigoAuxiliar = new StringBuilder();
-							// leitura situaÁ„o atual
+							// leitura situa√ß√£o atual
 							codigoAuxiliar.append(Util
 									.adicionarZerosEsquedaNumero(1,
 											leituraSituacaoAtual));
@@ -57604,7 +57610,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.append(Util
 											.adicionarZerosEsquedaNumero(2,
 													descricaoAbreviadaAnormalidadeConsumo));
-							// perfil do imÛvel
+							// perfil do im√≥vel
 							if (emitirContaHelper.getIdImovelPerfil() != null) {
 								codigoAuxiliar
 										.append(Util
@@ -57621,7 +57627,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							codigoAuxiliar
 									.append(Util.adicionarZerosEsquedaNumero(2,
 											diasConsumo));
-							// Consumo medio do imÛvel
+							// Consumo medio do im√≥vel
 							codigoAuxiliar.append(Util
 									.adicionarZerosEsquedaNumero(6,
 											consumoMedio));
@@ -57643,7 +57649,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// esgoto
 							contaTxt.append(mesagemConsumo);
 
-							// [SB0010] - Gerar Linhas da DescriÁ„o dos ServiÁos
+							// [SB0010] - Gerar Linhas da Descri√ß√£o dos Servi√ßos
 							// e Tarifas
 							StringBuilder linhasDescricaoServicosTarifasTotal = gerarLinhasDescricaoServicoTarifasFichaCompensacao(
 									emitirContaHelper, consumoRateio,
@@ -57658,13 +57664,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// caso a quantidade de linhas seja menor ou igual a
 							// zero,pois na conta
-							// sÛ cabe 15 linhas, passando isso È preciso gerar
+							// s√≥ cabe 15 linhas, passando isso √© preciso gerar
 							// outra folha para a conta
 							if (tamanhoString <= limite) {
-								// caso esteja vazio o array ent„o completa com
-								// espaÁos em branco
+								// caso esteja vazio o array ent√£o completa com
+								// espa√ßos em branco
 								if (tamanhoString == 0) {
-									// completa com espaÁos em branco
+									// completa com espa√ßos em branco
 									contaTxt.append(Util.completaString(
 											consumoEconomia, limite));
 
@@ -57673,16 +57679,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									linhasDescricaoServicosTarifas = linhasDescricaoServicosTarifasTotal;
 									linhasDescricaoServicosTarifasTotal = new StringBuilder();
 								}
-								// caso contrario [FS0006 - Verificar espaÁos
-								// para descriÁ„o
-								// dos serviÁos e tarifas totalmente preenchido]
+								// caso contrario [FS0006 - Verificar espa√ßos
+								// para descri√ß√£o
+								// dos servi√ßos e tarifas totalmente preenchido]
 							} else {
 								// alterado por Vivianne Sousa - 01/12/2009
 								linhasDescricaoServicosTarifas
 										.append(linhasDescricaoServicosTarifasTotal
 												.substring(0, limite));
 								// linhasDescricaoServicosTarifas.append(linhasDescricaoServicosTarifasTotal.substring(0,limite-1));
-								// posiÁ„o atual recebe a posiÁ„o inicial
+								// posi√ß√£o atual recebe a posi√ß√£o inicial
 								posicaoAtual = limite;
 
 								parteInicialcontaTxt = new StringBuilder(
@@ -57694,10 +57700,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// caso a posicao limite seja maior que o tamanho do
 							// array,
-							// significa que todas as strings j· foram
+							// significa que todas as strings j√° foram
 							// atualizadas na conta.
 							if (tamanhoString <= limite) {
-								// Limpa os campos para mandar para o mÈtodo que
+								// Limpa os campos para mandar para o m√©todo que
 								// o chamou
 								posicaoAtual = 0;
 								linhasDescricaoServicosTarifasTotal = null;
@@ -57824,7 +57830,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 
 							// item 88
-							// cÛdigo da empresa
+							// c√≥digo da empresa
 							if (emitirContaHelper.getIdEmpresa() != null) {
 								contaTxt.append(Util.completaStringComEspacoAEsquerda(
 										"" + emitirContaHelper.getIdEmpresa(),
@@ -57834,10 +57840,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							}
 
 							// incrementa o sequencial de impressao
-							// caso seja conta do cliente respons·vel ent„o o
+							// caso seja conta do cliente respons√°vel ent√£o o
 							// sequencial fica nulo
 
-							// sequencial impress„o
+							// sequencial impress√£o
 							String sequencialImpressaoFormatada = Util
 									.adicionarZerosEsquedaNumero(6, ""
 											+ sequencialImpressao);
@@ -57853,14 +57859,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									+ sequencialImpressaoFormatada, 7));
 
 							// item 90
-							// cÛdigo do banco
+							// c√≥digo do banco
 							contaTxt.append("001-9");
 
 							// item 91
-							// representaÁ„o numÈrica do cÛdigo de barras
-							// [SB0030 - Obter representaÁ„o numÈrica do cÛdigo
+							// representa√ß√£o num√©rica do c√≥digo de barras
+							// [SB0030 - Obter representa√ß√£o num√©rica do c√≥digo
 							// de barras
-							// da Ficha de CompensaÁ„o]
+							// da Ficha de Compensa√ß√£o]
 							StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao(
 									"1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
 							String nossoNumeroSemDV = nossoNumero.toString()
@@ -57887,13 +57893,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// local de pagamento
 							contaTxt.append(Util
 									.completaString(
-											"PAG¡VEL EM QUALQUER BANCO AT… O VENCIMENTO",
+											"PAG√ÅVEL EM QUALQUER BANCO AT√â O VENCIMENTO",
 											45));
 
 							// item 93
 							// vencimento
 							contaTxt.append(Util.completaString(
-									"Contra-apresentaÁ„o", 20));
+									"Contra-apresenta√ß√£o", 20));
 
 							// item 94
 							// cedente
@@ -57903,7 +57909,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											50));
 
 							// item 95
-							// agÍncia/cÛdigo cedente
+							// ag√™ncia/c√≥digo cedente
 							contaTxt.append("3234-4/2868-1");
 
 							// item 96
@@ -57911,12 +57917,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							contaTxt.append(Util.formatarData(new Date()));
 
 							// item 97
-							// n˙mero do documento
+							// n√∫mero do documento
 							contaTxt.append(Util.completaString(
 									matriculaImovelFormatada, 10));
 
 							// item 98
-							// espÈcie do documento
+							// esp√©cie do documento
 							contaTxt.append("FAT");
 
 							// item 99
@@ -57928,7 +57934,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							contaTxt.append(Util.formatarData(new Date()));
 
 							// item 101
-							// nosso n˙mero com DV
+							// nosso n√∫mero com DV
 							contaTxt.append(nossoNumero);
 
 							// item 102
@@ -57955,7 +57961,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// item 105
 							// Sacado - linha 1.b
 							contaTxt.append(Util.completaString(
-									"   MatrÌcula: ", 16));
+									"   Matr√≠cula: ", 16));
 
 							// item 106
 							// Sacado - linha 1.c
@@ -57979,11 +57985,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									50));
 
 							// item 110
-							// cÛdigo de barras
+							// c√≥digo de barras
 							if (especificacaoCodigoBarra != null
 									&& !especificacaoCodigoBarra.equals("")) {
-								// Cria o objeto para gerar o cÛdigode barras no
-								// padr„o intercalado 2 de 5
+								// Cria o objeto para gerar o c√≥digode barras no
+								// padr√£o intercalado 2 de 5
 								Interleaved2of5 codigoBarraIntercalado2de5 = new Interleaved2of5();
 
 								contaTxt.append(Util.completaString(
@@ -57999,7 +58005,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							// Adicionado mais uma linha no Endereco do Imovel
 							// e do Cliente Responsavel
 							// ****************************************************************************************
-							// 2∫ Linha do Endereco do Imovel
+							// 2¬∫ Linha do Endereco do Imovel
 							if (enderecoImovelSegundaLinha != null) {
 								if (enderecoImovelSegundaLinha.length() > 50) {
 									enderecoImovelSegundaLinha = enderecoImovelSegundaLinha
@@ -58012,7 +58018,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									enderecoImovelSegundaLinha == null ? ""
 											: enderecoImovelSegundaLinha, 50));
 
-							// 2∫ Linha do Endereco do Cliente Responsavel
+							// 2¬∫ Linha do Endereco do Cliente Responsavel
 							if (!enderecoClienteResponsavelSegundaLinha
 									.equals("")) {
 								if (enderecoClienteResponsavelSegundaLinha
@@ -58029,22 +58035,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// recupera todas as linhas do while
 							StringBuilder todasPaginasContaTxt = new StringBuilder();
-							// se È a primeira vez que entra no while ent„o
+							// se √© a primeira vez que entra no while ent√£o
 							// recupera o final da
 							// linha colocando o continua para depois criar as
 							// proximas paginas
 							boolean primeiraVez = true;
 							int posicaoLimite = 0;
 							espacosEmBranco = 0;
-							// respons·vel de criar outra pagina para a conta
+							// respons√°vel de criar outra pagina para a conta
 							// caso a
-							// descriÁ„o dos serviÁos e tarifas exceda as 15
+							// descri√ß√£o dos servi√ßos e tarifas exceda as 15
 							// linhas
 							while (posicaoAtual != 0) {
-								// È criado para criar a stringBuilder da ultima
+								// √© criado para criar a stringBuilder da ultima
 								// linha no caso
 								// da primeira vez,no caso da segunda vez em
-								// diante È criado
+								// diante √© criado
 								// para criar a proxima pagina da mesma conta
 								StringBuilder paginaTxt = new StringBuilder();
 								if (primeiraVez) {
@@ -58052,12 +58058,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								} else {
 									// caso a quantidade de linhas seja menor ou
 									// igual a zero,
-									// pois na conta sÛ cabe 15 linhas, passando
-									// isso È
+									// pois na conta s√≥ cabe 15 linhas, passando
+									// isso √©
 									// preciso gerar outra folha para a conta
 
 									// caso o tamanho do array seja maior que a
-									// posiÁ„o atual + 15
+									// posi√ß√£o atual + 15
 									if (tamanhoString <= posicaoAtual + limite) {
 										posicaoLimite = tamanhoString;
 									} else {
@@ -58070,16 +58076,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 													.substring(posicaoAtual,
 															posicaoLimite));
 
-									// posiÁ„o atual recebe a posiÁ„o inicial
+									// posi√ß√£o atual recebe a posi√ß√£o inicial
 									posicaoAtual = posicaoLimite;
 
 									// caso a posicao limite seja maior que o
 									// tamanho do array,
-									// significa que todas as strings j· foram
+									// significa que todas as strings j√° foram
 									// atualizadas na conta.
 									if (tamanhoString <= posicaoLimite) {
 										// Limpa os campos para mandar para o
-										// mÈtodo que o chamou
+										// m√©todo que o chamou
 										posicaoAtual = 0;
 										linhasDescricaoServicosTarifasTotal = null;
 										espacosEmBranco = posicaoLimite
@@ -58118,7 +58124,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							// coloca a ultima linha ou a outra(s) parte(s) da
 							// conta
-							// (outra pagina caso a descriÁ„o de serviÁos e
+							// (outra pagina caso a descri√ß√£o de servi√ßos e
 							// tarifas exceda as 15 linhas) no txt da conta
 							if (todasPaginasContaTxt != null
 									&& todasPaginasContaTxt.length() != 0) {
@@ -58146,12 +58152,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									emitirContaHelper.getIdConta(),
 									sequencialImpressao);
 
-						}// fim do laÁo que verifica se o
-							// helper È diferente de nulo
-					}// fim laÁo while do iterator do objeto helper
+						}// fim do la√ßo que verifica se o
+							// helper √© diferente de nulo
+					}// fim la√ßo while do iterator do objeto helper
 					countOrdem++;
 
-					// fim do laÁo que verifica se a coleÁ„o È nula
+					// fim do la√ßo que verifica se a cole√ß√£o √© nula
 				}
 
 				repositorioFaturamento
@@ -58319,7 +58325,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * [UC00113] - Faturar Grupo de Faturamento
 	 * 
 	 * Recupera o percentual alternativo e o numero de consumo do percentual
-	 * alternativo para o imÛvel informado.
+	 * alternativo para o im√≥vel informado.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 24/01/2008
@@ -58341,7 +58347,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0254] - Efetuar An·lise do Movimento dos Arrecadadores
+	 * [UC0254] - Efetuar An√°lise do Movimento dos Arrecadadores
 	 * 
 	 * obtem imovel, localidade e conta atraves do id da conta
 	 * 
@@ -58366,7 +58372,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0254] - Efetuar An·lise do Movimento dos Arrecadadores
+	 * [UC0254] - Efetuar An√°lise do Movimento dos Arrecadadores
 	 * 
 	 * obtem imovel, localidade e contaHistorico atraves do id da conta
 	 * historico
@@ -58392,10 +58398,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0737] Atualiza Quantidade de Parcela Paga Consecutiva e Parcela BÙnus
+	 * [UC0737] Atualiza Quantidade de Parcela Paga Consecutiva e Parcela B√¥nus
 	 * 
-	 * Retorna dados dos parcelamentos com RD = 8 que estejam com situaÁ„o
-	 * normal e que n„o exista outro parcelamento com data posterior
+	 * Retorna dados dos parcelamentos com RD = 8 que estejam com situa√ß√£o
+	 * normal e que n√£o exista outro parcelamento com data posterior
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 27/12/2007
@@ -58416,7 +58422,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		try {
 
 			// 1. o sistema seleciona a lista de parcelamento da RD = 8 que
-			// estejam com a situaÁ„ normal
+			// estejam com a situa√ß√£ normal
 			Collection colecaoParcelamento = getControladorCobranca()
 					.pesquisarParcelamentoRDEspecial(
 							ParcelamentoSituacao.NORMAL, idLocalidade);
@@ -58431,11 +58437,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					Parcelamento parcelamento = (Parcelamento) iteratorParcelamento
 							.next();
 
-					// 1.1 pega o ano/mÍs do parcelamento,
-					// soma-se o numero de prestaÁıes ao n˙mero de meses deste
-					// ano/mÍs
+					// 1.1 pega o ano/m√™s do parcelamento,
+					// soma-se o numero de presta√ß√µes ao n√∫mero de meses deste
+					// ano/m√™s
 					// e adiciona mais 2 meses
-					// o resultado, compara com o ano/mÍs da arrecadaÁ„o
+					// o resultado, compara com o ano/m√™s da arrecada√ß√£o
 
 					int anoMesParcelamento = Util.getAnoMesComoInt(parcelamento
 							.getParcelamento());
@@ -58447,9 +58453,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					if (anoMesParcelamento > anoMesArrecadacao) {
 
-						// 2. verifica se existe conta com ano/mÍs de referencia
-						// igual ao (ano/mÍs da arrecadaÁ„o - 1 mÍs) e
-						// que exista serviÁo de parcelamento cobrado na conta
+						// 2. verifica se existe conta com ano/m√™s de referencia
+						// igual ao (ano/m√™s da arrecada√ß√£o - 1 m√™s) e
+						// que exista servi√ßo de parcelamento cobrado na conta
 						Object[] contaArray = null;
 
 						contaArray = repositorioFaturamento
@@ -58474,7 +58480,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									.pesquisarDataPagamentoDeConta(idConta);
 
 							if (dataPagamento == null) {
-								// 2.1.1 caso n„o exista pagamento
+								// 2.1.1 caso n√£o exista pagamento
 
 								// zera o campo NNPARCELASPAGASCONSECUTIVAS da
 								// tabela PARCELAMENTO
@@ -58492,7 +58498,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// verifica se conta foi paga no vencimento
 								if (dataPagamento
 										.compareTo(dataVencimentoConta) == 1) {
-									// conta n„o foi paga no vencimento
+									// conta n√£o foi paga no vencimento
 
 									// zera o campo NNPARCELASPAGASCONSECUTIVAS
 									// da tabela PARCELAMENTO
@@ -58506,7 +58512,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// 2.1.2.1
 									// verifica se o campo
 									// NNPARCELASPAGASCONSECUTIVAS
-									// È diferente de nulo e igual a 2
+									// √© diferente de nulo e igual a 2
 									if (parcelamento
 											.getNumeroParcelasPagasConsecutivas() != null
 											&& parcelamento
@@ -58581,7 +58587,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0737] Atualiza Quantidade de Parcela Paga Consecutiva e Parcela BÙnus
+	 * [UC0737] Atualiza Quantidade de Parcela Paga Consecutiva e Parcela B√¥nus
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 07/02/2008
@@ -58604,7 +58610,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0737] Atualiza Quantidade de Parcela Paga Consecutiva e Parcela BÙnus
+	 * [UC0737] Atualiza Quantidade de Parcela Paga Consecutiva e Parcela B√¥nus
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 07/02/2008
@@ -58712,11 +58718,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0302] - Gerar DÈbito a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar D√©bito a Cobrar de Acr√©scimos por Impontualidade
 	 * 
-	 * [SB0001] - Gerar DÈbito a Cobrar
+	 * [SB0001] - Gerar D√©bito a Cobrar
 	 * 
-	 * Gera o dÈbito a cobrar de acrÈscimos por impontualidade para a conta.
+	 * Gera o d√©bito a cobrar de acr√©scimos por impontualidade para a conta.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 28/04/2008
@@ -58802,7 +58808,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throw new EJBException(e);
 		}
 
-		// retorna o dÈbito a cobrar gerado
+		// retorna o d√©bito a cobrar gerado
 		return debitoACobrar;
 	}
 
@@ -58819,7 +58825,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * retorna o maior valor entre o ano/mÍs da data corrente e o ano/mÍs de
+	 * retorna o maior valor entre o ano/m√™s da data corrente e o ano/m√™s de
 	 * referencia do faturamento (PARM_AMREFERENCIAFATURAMENTO da tabela
 	 * SISTEMA_PARAMETROS)
 	 * 
@@ -59095,7 +59101,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Cria a coleÁ„o de helper que ir· preencher o relatorio das contas
+	 * Cria a cole√ß√£o de helper que ir√° preencher o relatorio das contas
 	 * retificadas
 	 * 
 	 * @author Bruno Leonardo R. Barros,Vivianne Sousa
@@ -59136,12 +59142,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			RegistroAtendimento contaOriginalRegistroAtendimento = null;
 
 			// Verificamos se o faturamento ja foi fechado
-			// se sim, pegamos as contas de conta histÛrico
-			// se n„o, pegamos as contas de conta
-			// [SB0002] ñ Pesquisar Contas Retificadas.
+			// se sim, pegamos as contas de conta hist√≥rico
+			// se n√£o, pegamos as contas de conta
+			// [SB0002] ¬ñ Pesquisar Contas Retificadas.
 			if (anoMes < sistemaParametro.getAnoMesFaturamento()) {
 
-				// 1. Caso o ano/mÍs referÍncia informado esteja com o
+				// 1. Caso o ano/m√™s refer√™ncia informado esteja com o
 				// faturamento fechado
 				colContasOriginais = repositorioFaturamento
 						.pesquisarContasRetificadasFaturamentoFechado(helper);
@@ -59173,8 +59179,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						// MIN(CNTA_ID da pesquisa atual) > CNTA_ID da pesquisa
 						// anterior 1.1
-						// (ou seja, recuperar a prÛxima conta do imÛvel para a
-						// mesma referÍncia, com situaÁ„o 1,4 ou 5).
+						// (ou seja, recuperar a pr√≥xima conta do im√≥vel para a
+						// mesma refer√™ncia, com situa√ß√£o 1,4 ou 5).
 						if (colContasRetificadas != null
 								&& !colContasRetificadas.isEmpty()) {
 
@@ -59296,7 +59302,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							retorno.add(relatorioHelper);
 						}
-						// 1.3. Caso a pesquisa 1.2 n„o tenha resultado.
+						// 1.3. Caso a pesquisa 1.2 n√£o tenha resultado.
 						else {
 
 							// Pesquisamos em conta
@@ -59525,12 +59531,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0302] - Gerar DÈbitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar D√©bitos a Cobrar de Acr√©scimos por Impontualidade
 	 * 
-	 * Gera o dÈbito a cobrar por acrÈscimo de impontualidade para guia de
+	 * Gera o d√©bito a cobrar por acr√©scimo de impontualidade para guia de
 	 * pagamento.
 	 * 
-	 * [SB0001 - Gerar DÈbito a Cobrar]
+	 * [SB0001 - Gerar D√©bito a Cobrar]
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 29/04/2008
@@ -59556,7 +59562,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			GuiaPagamento guiaPagamento, BigDecimal valorDebito,
 			DebitoTipo debitoTipo, Usuario usuario) throws ControladorException {
 
-		// declaraÁ„o de vari·veis
+		// declara√ß√£o de vari√°veis
 		DebitoACobrar debitoACobrar;
 		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 		debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
@@ -59606,7 +59612,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			debitoACobrar.setValorDebito(valorDebito);
 			debitoACobrar.setUsuario(usuario);
 
-			// Inseri o dÈbito a cobrar geral e recupera o id
+			// Inseri o d√©bito a cobrar geral e recupera o id
 			DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 			Integer idDebitoACobrarGeral = (Integer) getControladorUtil()
 					.inserir(debitoACobrarGeral);
@@ -59623,9 +59629,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * <Breve descriÁ„o sobre o caso de uso>
+	 * <Breve descri√ß√£o sobre o caso de uso>
 	 * 
-	 * [UC0302] - Gerar DÈbitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar D√©bitos a Cobrar de Acr√©scimos por Impontualidade
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 05/05/2008
@@ -59672,7 +59678,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * Retorna as contas com o indicador de pagamento para a conta.
 	 * 
-	 * [UC0302] - Gerar DÈbitos a Cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302] - Gerar D√©bitos a Cobrar de Acr√©scimos por Impontualidade
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 08/05/2008
@@ -59715,9 +59721,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * pesquisa o indicado de acrÈscimo para o cliente do imÛvel.
+	 * pesquisa o indicado de acr√©scimo para o cliente do im√≥vel.
 	 * 
-	 * [UC0302]-Gerar DÈbito a cobrar de AcrÈscimos por Impontualidade
+	 * [UC0302]-Gerar D√©bito a cobrar de Acr√©scimos por Impontualidade
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 09/05/2008
@@ -59785,10 +59791,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso È respons·vel pelo prÈ-faturamento das contas que ser„o
-	 * emitidas no cliente (GeraÁ„o Simult‚nea)
+	 * Este caso de uso √© respons√°vel pelo pr√©-faturamento das contas que ser√£o
+	 * emitidas no cliente (Gera√ß√£o Simult√¢nea)
 	 * 
-	 * [UC0000] - PrÈ-Faturar Grupo de Faturamento
+	 * [UC0000] - Pr√©-Faturar Grupo de Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 09/04/2008
@@ -59820,7 +59826,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			helper.setRota(rota);
 			helper.setAnoMesFaturamento(anoMesFaturamento);
 
-			// Pesquisando o FaturamentoAtivCronRota para ser utilizando no momento de definiÁ„o do vencimento da conta.
+			// Pesquisando o FaturamentoAtivCronRota para ser utilizando no momento de defini√ß√£o do vencimento da conta.
 			FaturamentoAtivCronRota faturamentoAtivCronRota = this.pesquisarFaturamentoAtivCronRotaPara(rota.getId(), FaturamentoAtividade.GERAR_ARQUIVO_LEITURA, idFaturamentoGrupo, anoMesFaturamento);
 			faturamentoAtivCronRota.setRota(rota);
 
@@ -59828,7 +59834,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			this.apagarDadosGeradosFaturarGrupoFaturamento(helper, FaturamentoAtividade.FATURAR_GRUPO);
 
 
-			// Vari·veis para a paginaÁ„o da pesquisa de Imovel por Grupo Faturamento
+			// Vari√°veis para a pagina√ß√£o da pesquisa de Imovel por Grupo Faturamento
 			boolean flagTerminou = false;
 			final int quantidadeRegistros = 3000;
 			int numeroIndice = 0;
@@ -59849,10 +59855,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 
-				//Incrementa o n∫ do indice da p·ginaÁ„o
+				//Incrementa o n¬∫ do indice da p√°gina√ß√£o
 				numeroIndice = numeroIndice + quantidadeRegistros;
 
-				// Caso a coleÁ„o de imoveis retornados for menor que a quantidade de registros seta a flag indicando que a paginaÁ„o terminou.
+				// Caso a cole√ß√£o de imoveis retornados for menor que a quantidade de registros seta a flag indicando que a pagina√ß√£o terminou.
 				if (colecaoImovel == null || colecaoImovel.size() < quantidadeRegistros) {
 					flagTerminou = true;
 				}
@@ -59871,10 +59877,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0000] - PrÈ-Faturar Grupo de Faturamento
+	 * [UC0000] - Pr√©-Faturar Grupo de Faturamento
 	 * 
 	 * Obter o registro da tabela FaturamentoAtivCronRota referente a rota que
-	 * est· sendo prÈ-faturada
+	 * est√° sendo pr√©-faturada
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 09/04/2008
@@ -59908,10 +59914,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso È respons·vel pelo prÈ-faturamento das contas que ser„o
-	 * emitidas no cliente (GeraÁ„o Simult‚nea)
+	 * Este caso de uso √© respons√°vel pelo pr√©-faturamento das contas que ser√£o
+	 * emitidas no cliente (Gera√ß√£o Simult√¢nea)
 	 * 
-	 * [UC0113] - PrÈ-Faturar Grupo de Faturamento
+	 * [UC0113] - Pr√©-Faturar Grupo de Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 26/03/2008
@@ -59927,10 +59933,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	protected void preFaturarImovel(Integer anoMesFaturamento, SistemaParametro sistemaParametro, FaturamentoAtivCronRota faturamentoAtivCronRota,
 			Collection colecaoResumoFaturamento, Imovel imovel, boolean faturamentoAntecipado, FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 
-		// Verifica se existe conta para o imÛvel para o ano/mÍs de faturamento.
+		// Verifica se existe conta para o im√≥vel para o ano/m√™s de faturamento.
 		Integer existeImovelConta = (Integer) getControladorImovel().pesquisarImovelIdComConta(imovel.getId(), anoMesFaturamento);
 
-		// CASO N√O EXISTA CONTA PARA O IMOVEL NO ANO/MES DE REFERENCIA
+		// CASO N√ÉO EXISTA CONTA PARA O IMOVEL NO ANO/MES DE REFERENCIA
 		if (existeImovelConta == null) {
 			boolean gerarAtividadeGrupoFaturamento = true;
 			this.preDeterminarFaturamentoImovel(imovel, gerarAtividadeGrupoFaturamento, faturamentoAtivCronRota, colecaoResumoFaturamento, sistemaParametro,
@@ -59939,11 +59945,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Determina os dados do prÈ-faturamento do imÛvel.
+	 * Determina os dados do pr√©-faturamento do im√≥vel.
 	 * 
-	 * [UCXXXX] - PrÈ-Faturar Grupo de Faturamento
+	 * [UCXXXX] - Pr√©-Faturar Grupo de Faturamento
 	 * 
-	 * [SB0001 - Determinar Faturamento para o ImÛvel]
+	 * [SB0001 - Determinar Faturamento para o Im√≥vel]
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 27/03/2008
@@ -59972,11 +59978,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			temHidrometro = true;
 		}
 
-		//OBS: Selecionar os imÛveis que far„o parte do faturamento de acordo com o INDICADOR_FATURAMENTO_SITUACAO que se encontra na situaÁ„o da ligaÁ„o e ·gua e esgoto do imÛvel.
+		//OBS: Selecionar os im√≥veis que far√£o parte do faturamento de acordo com o INDICADOR_FATURAMENTO_SITUACAO que se encontra na situa√ß√£o da liga√ß√£o e √°gua e esgoto do im√≥vel.
 		if (imovel.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoAguaSituacao.FATURAMENTO_ATIVO)
 				|| imovel.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO) || temHidrometro) {
 
-			// Verificar se È para faturar pela situaÁ„o especial de faturamento
+			// Verificar se √© para faturar pela situa√ß√£o especial de faturamento
 			FiltroFaturamentoSituacaoHistorico filtroFaturamentoSituacaoHistorico = new FiltroFaturamentoSituacaoHistorico();
 			filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroSimples(FiltroFaturamentoSituacaoHistorico.ID_IMOVEL, imovel.getId()));
 			filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroNulo(FiltroFaturamentoSituacaoHistorico.ANO_MES_FATURAMENTO_RETIRADA));
@@ -59998,7 +60004,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}
 
-			// [SB0002] - Determinar Valores para Faturamento de ¡gua e/ou
+			// [SB0002] - Determinar Valores para Faturamento de √Ågua e/ou
 			// Esgoto
 			if (faturar) {
 				helperValoresAguaEsgoto.setValorTotalAgua(BigDecimal.ONE);
@@ -60018,23 +60024,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		// [SB0003] - Verificar N„o GeraÁ„o da Conta
+		// [SB0003] - Verificar N√£o Gera√ß√£o da Conta
 		boolean gerarConta = this.verificarNaoGeracaoConta(imovel, helperValoresAguaEsgoto.getValorTotalAgua(), helperValoresAguaEsgoto.getValorTotalEsgoto(),
 				anoMesFaturamento, true);
 
 		if (gerarConta) {
 
-			// RECOLOCAR OS VALORES ZERADOS PARA ¡GUA E ESGOTO
+			// RECOLOCAR OS VALORES ZERADOS PARA √ÅGUA E ESGOTO
 			helperValoresAguaEsgoto.setValorTotalAgua(BigDecimal.ZERO);
 			helperValoresAguaEsgoto.setValorTotalEsgoto(BigDecimal.ZERO);
 
 			boolean preFaturamento = true;
 
-			// [SB0004] - Gerar os DÈbitos Cobrados
+			// [SB0004] - Gerar os D√©bitos Cobrados
 			GerarDebitoCobradoHelper gerarDebitoCobradoHelper = this.gerarDebitoCobrado(imovel, anoMesFaturamento, sistemaParametro,
 					gerarAtividadeGrupoFaturamento);
 
-			// [SB0005] - Gerar os CrÈditos Realizados
+			// [SB0005] - Gerar os Cr√©ditos Realizados
 			GerarCreditoRealizadoHelper gerarCreditoRealizadoHelper = this.gerarCreditoRealizado(imovel, anoMesFaturamento, helperValoresAguaEsgoto,
 					gerarDebitoCobradoHelper.getValorTotalDebito(), gerarAtividadeGrupoFaturamento, preFaturamento);
 
@@ -60088,7 +60094,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				
 				// -----------------------------------------------------------------------------------------------------
 
-				// [SF0008] - Gerar Movimento De DÈbito Autom·tico
+				// [SF0008] - Gerar Movimento De D√©bito Autom√°tico
 				if (imovel.getIndicadorDebitoConta().equals(ConstantesSistema.SIM) && conta.getContaMotivoRevisao() == null) {
 					conta.setImovel(imovel);
 					conta.setFaturamentoGrupo(faturamentoGrupo);
@@ -60102,7 +60108,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				anoMesReferenciaResumoFaturamento = anoMesFaturamento;
 			}
 
-			// [SB0009] - Gerar Resumo da SimulaÁ„o do Faturamento
+			// [SB0009] - Gerar Resumo da Simula√ß√£o do Faturamento
 			this.gerarResumoFaturamentoSimulacao(colecaoCategorias, helperValoresAguaEsgoto.getColecaoCalcularValoresAguaEsgotoHelper(),
 					gerarDebitoCobradoHelper, gerarCreditoRealizadoHelper, colecaoResumoFaturamento, imovel, gerarAtividadeGrupoFaturamento,
 					faturamentoAtivCronRota, faturamentoGrupo, anoMesReferenciaResumoFaturamento, true);
@@ -60112,8 +60118,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC113] Faturar Grupo Faturamento
 	 * 
-	 * Exclui os dados do resumo da simulaÁ„o do faturamento para uma rota em um
-	 * determinado anoMÍs de referÍncia
+	 * Exclui os dados do resumo da simula√ß√£o do faturamento para uma rota em um
+	 * determinado anoM√™s de refer√™ncia
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 25/03/2008
@@ -60139,7 +60145,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Este caso de uso permite faturar um imÛvel de um grupo de faturamento de
+	 * Este caso de uso permite faturar um im√≥vel de um grupo de faturamento de
 	 * forma antecipada.
 	 * 
 	 * [UC0113] - Faturar Grupo de Faturamento
@@ -60162,8 +60168,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 
 		/*
-		 * Caso o mÍs de faturamento corresponda ao mÍs de novembro, o sistema
-		 * verifica se haver· faturamento antecipado
+		 * Caso o m√™s de faturamento corresponda ao m√™s de novembro, o sistema
+		 * verifica se haver√° faturamento antecipado
 		 */
 		if (Util.obterMes(anoMesFaturamento) == ConstantesSistema.NOVEMBRO
 				&& sistemaParametro.getIndicadorFaturamentoAntecipado().equals(
@@ -60176,12 +60182,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.pesquisarConsumoHistoricoAntecipado(imovel.getId(),
 							anoMesFaturamentoAntecipado);
 
-			// Alterado por RÙmulo AurÈlio
+			// Alterado por R√¥mulo Aur√©lio
 			// CRC 5036
 			// Data: 28/09/2010
 			// Analista: Aryed Lins
-			// Motivo: Antecipar tambÈm faturas onde o
-			// valor faturado È constituÌdo apenas de serviÁo (valor de ·gua e
+			// Motivo: Antecipar tamb√©m faturas onde o
+			// valor faturado √© constitu√≠do apenas de servi√ßo (valor de √°gua e
 			// esgoto = 0)
 			ClienteImovel clienteImovel = getControladorCadastro()
 					.pesquisarClienteResponsavelComEsferaPoderPublico(
@@ -60203,7 +60209,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] Faturar Grupo de Faturamento
 	 * 
-	 * [SB0002] - Determinar Valores para Faturamento de ¡gua e/ou Esgoto
+	 * [SB0002] - Determinar Valores para Faturamento de √Ågua e/ou Esgoto
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/03/2008
@@ -60275,7 +60281,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Date dataLeituraAtualFaturamento = obterDataLeituraAtualFaturarImovel(imovel, anoMesFaturamento, faturamentoGrupo);
 		helper.setDataLeituraAtual(dataLeituraAtualFaturamento);
 		
-		// CASO O IM”VEL SEJA PARA FATURAR ¡GUA
+		// CASO O IM√ìVEL SEJA PARA FATURAR √ÅGUA
 		if (imovel.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao()
 				.equals(LigacaoAguaSituacao.FATURAMENTO_ATIVO)) {
 
@@ -60291,7 +60297,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 		}
 
-		// CASO O IM”VEL SEJA PARA FATURAR ESGOTO
+		// CASO O IM√ìVEL SEJA PARA FATURAR ESGOTO
 		if (imovel.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao()
 				.equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
 
@@ -60333,7 +60339,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		/*
-		 * Caso N√O existe cronograma para o anoMes informado ou seja a
+		 * Caso N√ÉO existe cronograma para o anoMes informado ou seja a
 		 * dataLeituraAnteriorFaturamento ou a dataLeituraAtualFaturamento
 		 * estaja nula
 		 */
@@ -60352,7 +60358,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			helper.setDataLeituraAtual(periodoLeitura[1]);
 		}
 
-		// [UC0120] - Calcular Valores de ¡gua e/ou Esgoto
+		// [UC0120] - Calcular Valores de √Ågua e/ou Esgoto
 		Collection colecaoCalcularValoresAguaEsgotoHelper = calcularValoresAguaEsgoto(
 				anoMesFaturamento, imovel.getLigacaoAguaSituacao().getId(),
 				imovel.getLigacaoEsgotoSituacao().getId(),
@@ -60369,7 +60375,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		helper.setColecaoCalcularValoresAguaEsgotoHelper(colecaoCalcularValoresAguaEsgotoHelper);
 
-		// TOTALIZANDO OS VALORES DE ¡GUA E ESGOTO
+		// TOTALIZANDO OS VALORES DE √ÅGUA E ESGOTO
 		BigDecimal valorTotalAgua = ConstantesSistema.VALOR_ZERO;
 		BigDecimal valorTotalEsgoto = ConstantesSistema.VALOR_ZERO;
 
@@ -60385,8 +60391,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.next();
 
 				/*
-				 * Caso tenha valor de ·gua faturado para categoria adiciona o
-				 * valor de ·gua ao valor total de ·gua. Caso contr·rio soma
+				 * Caso tenha valor de √°gua faturado para categoria adiciona o
+				 * valor de √°gua ao valor total de √°gua. Caso contr√°rio soma
 				 * zero.
 				 */
 				if (calcularValoresAguaEsgotoHelper
@@ -60405,7 +60411,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				/*
 				 * Caso tenha valor de esgoto faturado para categoria adiciona o
-				 * valor de esgoto ao valor total de esgoto. Caso contr·rio soma
+				 * valor de esgoto ao valor total de esgoto. Caso contr√°rio soma
 				 * zero.
 				 */
 				if (calcularValoresAguaEsgotoHelper
@@ -60470,7 +60476,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 
 	/**
-	 * Verifica se o imÛvel tem um percentual de esgoto alternativo
+	 * Verifica se o im√≥vel tem um percentual de esgoto alternativo
 	 * 
 	 * [UC0113] - Faturar Grupo de Faturamento
 	 * 
@@ -60488,17 +60494,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		BigDecimal percentualEsgoto = ConstantesSistema.VALOR_ZERO;
 
 		/*
-		 * CASO O IM”VEL SEJA PARA FATURAR ESGOTO Essa verificaÁ„o se faz
-		 * necess·ria para o prÈ-faturamento.
+		 * CASO O IM√ìVEL SEJA PARA FATURAR ESGOTO Essa verifica√ß√£o se faz
+		 * necess√°ria para o pr√©-faturamento.
 		 */
 		if (imovel.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao()
 				.equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
 
-			// Recupera o percentual de esgoto do imÛvel.
+			// Recupera o percentual de esgoto do im√≥vel.
 			percentualEsgoto = this.obterPercentualLigacaoEsgotoImovel(imovel
 					.getId());
 
-			// CASO O IM”VEL SEJA PARA FATURAR ¡GUA
+			// CASO O IM√ìVEL SEJA PARA FATURAR √ÅGUA
 			if (imovel.getLigacaoAguaSituacao()
 					.getIndicadorFaturamentoSituacao()
 					.equals(LigacaoAguaSituacao.FATURAMENTO_ATIVO)
@@ -60554,7 +60560,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] Faturar Grupo de Faturamento
 	 * 
-	 * [SB0004] - Gerar os DÈbitos Cobrados
+	 * [SB0004] - Gerar os D√©bitos Cobrados
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/03/2008
@@ -60571,7 +60577,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		GerarDebitoCobradoHelper helper = new GerarDebitoCobradoHelper();
 
-		// Pesquisa os dÈbitos a cobrar do imÛvel.
+		// Pesquisa os d√©bitos a cobrar do im√≥vel.
 		Collection colecaoDebitosACobrar = this
 				.obterDebitoACobrarImovel(imovel.getId(),
 						DebitoCreditoSituacao.NORMAL, anoMesFaturamento);
@@ -60580,15 +60586,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		List colecaoDebitosACobrarUpdate = new ArrayList();
 		Collection colecaoDebitosCobradoCategoria = null;
 
-		// Cria o map para armazenar os dÈbitos cobrados junto com os dÈbitos
+		// Cria o map para armazenar os d√©bitos cobrados junto com os d√©bitos
 		// cobrados por categoria.
 		Map<DebitoCobrado, Collection<DebitoCobradoCategoria>> mapDebitosCobrados = null;
-		// Cria o map para armazenar os dÈbitos a cobradar junto com os valores
-		// por tipo dÈbito.
+		// Cria o map para armazenar os d√©bitos a cobradar junto com os valores
+		// por tipo d√©bito.
 		Map<DebitoTipo, BigDecimal> mapValoresPorTipoDebito = null;
 
 		/*
-		 * Caso o imÛvel tenha dÈbitos a cobrar gera os dÈbitos cobrados
+		 * Caso o im√≥vel tenha d√©bitos a cobrar gera os d√©bitos cobrados
 		 */
 		if (colecaoDebitosACobrar != null && !colecaoDebitosACobrar.isEmpty()) {
 
@@ -60600,14 +60606,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			DebitoACobrar debitoACobrar = null;
 			BigDecimal valorPrestacao = null;
 
-			// LA«O PARA GERAR OS D…BITOS COBRADOS E OS D…BITOS COBRADOS POR
+			// LA√áO PARA GERAR OS D√âBITOS COBRADOS E OS D√âBITOS COBRADOS POR
 			// CATEGORIA
 			while (iteratorColecaoDebitosACobrar.hasNext()) {
 
 				debitoACobrar = (DebitoACobrar) iteratorColecaoDebitosACobrar
 						.next();
 
-				// Calcula o valor da prestaÁ„o
+				// Calcula o valor da presta√ß√£o
 				valorPrestacao = debitoACobrar.getValorDebito()
 						.divide(new BigDecimal(
 								debitoACobrar.getNumeroPrestacaoDebito()), 2,
@@ -60615,43 +60621,43 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				/*
 				 * Alterado por Vivianne Sousa em 20/12/2007 - Analista: Adriano
-				 * criaÁ„o do bonus para parcelamento com RD especial
+				 * cria√ß√£o do bonus para parcelamento com RD especial
 				 */
 				Short numeroParcelaBonus = 0;
 				if (debitoACobrar.getNumeroParcelaBonus() != null) {
 					numeroParcelaBonus = debitoACobrar.getNumeroParcelaBonus();
 				}
 
-				// Caso seja a ˙ltima prestaÁ„o
+				// Caso seja a √∫ltima presta√ß√£o
 				if (debitoACobrar.getNumeroPrestacaoCobradas() == ((debitoACobrar
 						.getNumeroPrestacaoDebito() - numeroParcelaBonus) - 1)) {
 
-					// ObtÈm o n˙mero de prestaÁ„o dÈbito
+					// Obt√©m o n√∫mero de presta√ß√£o d√©bito
 					BigDecimal numeroPrestacaoDebito = new BigDecimal(
 							debitoACobrar.getNumeroPrestacaoDebito());
 
-					// Mutiplica o (valor da prestaÁ„o * n˙mero da prestaÁ„o
+					// Mutiplica o (valor da presta√ß√£o * n√∫mero da presta√ß√£o
 					// debito) - numeroParcelaBonus
 
 					BigDecimal multiplicacao = valorPrestacao.multiply(
 							numeroPrestacaoDebito).setScale(2);
 
-					// Subtrai o valor do dÈbito pelo resultado da multiplicaÁ„o
+					// Subtrai o valor do d√©bito pelo resultado da multiplica√ß√£o
 					BigDecimal parte1 = debitoACobrar.getValorDebito()
 							.subtract(multiplicacao).setScale(2);
 
-					// Calcula o valor da prestaÁ„o
+					// Calcula o valor da presta√ß√£o
 					valorPrestacao = valorPrestacao.add(parte1).setScale(2);
 				}
 
-				// Acumula o valor da prestaÁ„o no valor total dos debitos
+				// Acumula o valor da presta√ß√£o no valor total dos debitos
 				valorTotalDebitos = valorTotalDebitos.add(valorPrestacao);
 
-				// Se a atividade È faturar grupo de faturamento gera os dÈbitos
+				// Se a atividade √© faturar grupo de faturamento gera os d√©bitos
 				// cobrados
 				if (gerarAtividadeGrupoFaturamento) {
 
-					// GERANDO O D…BITO COBRADO
+					// GERANDO O D√âBITO COBRADO
 					// -----------------------------------------------------------------------------------------
 					DebitoCobrado debitoCobrado = new DebitoCobrado();
 
@@ -60684,7 +60690,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					debitoCobrado.setNumeroParcelaBonus(numeroParcelaBonus);
 
-					// Incrementa o n∫ de prestaÁ„o cobradas
+					// Incrementa o n¬∫ de presta√ß√£o cobradas
 					int numeroPrestacaoCobradas = debitoACobrar
 							.getNumeroPrestacaoCobradas() + 1;
 					debitoCobrado
@@ -60721,7 +60727,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.obterValorPorCategoria(
 									colecaoCategoriasObterValor, valorPrestacao);
 
-					// GERANDO O D…BITO COBRADO CATEGORIA
+					// GERANDO O D√âBITO COBRADO CATEGORIA
 					// -------------------------------------------------------------------------------------------
 					DebitoCobradoCategoria debitoCobradoCategoria = null;
 					DebitoCobradoCategoriaPK debitoCobradoCategoriaPK = null;
@@ -60733,12 +60739,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					colecaoDebitosCobradoCategoria = new ArrayList();
 
-					// LA«O PARA GERAR OS D…BITOS COBRADOS POR CATEGORIA
+					// LA√áO PARA GERAR OS D√âBITOS COBRADOS POR CATEGORIA
 					while (colecaoCategoriasCalculadasValorIterator.hasNext()
 							&& colecaoCategoriasObterValorIterator.hasNext()) {
 
-						// Cria o dÈbito a cobrar por categoria e adiciona a
-						// coleÁ„o.
+						// Cria o d√©bito a cobrar por categoria e adiciona a
+						// cole√ß√£o.
 						debitoCobradoCategoria = new DebitoCobradoCategoria();
 
 						// VALOR POR CATEGORIA
@@ -60765,46 +60771,46 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						debitoCobradoCategoria.setQuantidadeEconomia(categoria
 								.getQuantidadeEconomiasCategoria());
 
-						// INSERINDO O debitoCobradoCategoria NA COLE«√O DE
+						// INSERINDO O debitoCobradoCategoria NA COLE√á√ÉO DE
 						// RETORNO
 						colecaoDebitosCobradoCategoria
 								.add(debitoCobradoCategoria);
 					}
 
 					/*
-					 * Adiciona no map o relacionamento entre o dÈbito a cobrar
-					 * e os dÈbitos a cobrar por categoria.
+					 * Adiciona no map o relacionamento entre o d√©bito a cobrar
+					 * e os d√©bitos a cobrar por categoria.
 					 */
 					mapDebitosCobrados.put(debitoCobrado,
 							colecaoDebitosCobradoCategoria);
 
 					/*
-					 * Adiciona no map o relacionamento entre o dÈbito cobrado e
-					 * o auto de infraÁ„o
+					 * Adiciona no map o relacionamento entre o d√©bito cobrado e
+					 * o auto de infra√ß√£o
 					 */
 
 					/**
-					 * AlteraÁ„o feita por Bruno Barros dia 08 de Janeiro de
-					 * 2009 Solicitante: Nelson Carvalho DescriÁ„o da
-					 * solicitaÁ„o: N„o mais gerar o vinculo de debito cobrado a
-					 * um auto de infraÁ„o quando o dÈbito a cobrar de origem
+					 * Altera√ß√£o feita por Bruno Barros dia 08 de Janeiro de
+					 * 2009 Solicitante: Nelson Carvalho Descri√ß√£o da
+					 * solicita√ß√£o: N√£o mais gerar o vinculo de debito cobrado a
+					 * um auto de infra√ß√£o quando o d√©bito a cobrar de origem
 					 * estiver vinculado ao mesmo.
 					 */
 
 					/*
-					 * Atualiza o n∫ de prestaÁıes cobradas do dÈbito a cobrar e
-					 * adicona o objeto a coleÁ„o de dÈbitos a cobrar que vai
+					 * Atualiza o n¬∫ de presta√ß√µes cobradas do d√©bito a cobrar e
+					 * adicona o objeto a cole√ß√£o de d√©bitos a cobrar que vai
 					 * ser atualizados.
 					 */
 					debitoACobrar.setNumeroPrestacaoCobradas(new Integer(
 							debitoACobrar.getNumeroPrestacaoCobradas() + 1)
 							.shortValue());
 
-					// anoMes da prestaÁ„o ser· o anaMes de referÍncia da conta
+					// anoMes da presta√ß√£o ser√° o anaMes de refer√™ncia da conta
 					debitoACobrar
 							.setAnoMesReferenciaPrestacao(anoMesFaturamento);
 
-					// INSERINDO O debitoACobrar NA COLE«√O DE RETORNO
+					// INSERINDO O debitoACobrar NA COLE√á√ÉO DE RETORNO
 					colecaoDebitosACobrarUpdate.add(debitoACobrar);
 
 				}// fim se atividade grupo faturamento
@@ -60813,12 +60819,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				 * Desenvolvedor: Hugo Amorim Analista:Jeferson Pedrosa Data:
 				 * 29/07/2010
 				 * 
-				 * [CRC4457] Colecionar os valores que compıem os totais de
-				 * dÈbito e crÈditos nas tabelas
+				 * [CRC4457] Colecionar os valores que comp√µem os totais de
+				 * d√©bito e cr√©ditos nas tabelas
 				 * resumo_faturamento_simulado_detalhe_debito e
 				 * resumo_faturamento_simulado_detalhe_credito respectivamente.
 				 */
-				// Verifica se debito a cobrar j· foi inserido, caso sim
+				// Verifica se debito a cobrar j√° foi inserido, caso sim
 				// acumala os valores.
 				if (mapValoresPorTipoDebito.containsKey(debitoACobrar
 						.getDebitoTipo())) {
@@ -60827,13 +60833,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					mapValoresPorTipoDebito.put(debitoACobrar.getDebitoTipo(),
 							Util.somaBigDecimal(valor, valorPrestacao));
 				}
-				// Caso contrario inseri na coleÁ„o
+				// Caso contrario inseri na cole√ß√£o
 				// primeiro registro do tipo.
 				else {
 					mapValoresPorTipoDebito.put(debitoACobrar.getDebitoTipo(),
 							valorPrestacao);
 				}
-			}// fim do laÁo de debito a cobrar
+			}// fim do la√ßo de debito a cobrar
 		}// fim gerar debitos cobrados
 
 		helper.setColecaoDebitoACobrar(colecaoDebitosACobrarUpdate);
@@ -60847,7 +60853,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] Faturar Grupo de Faturamento
 	 * 
-	 * [SB0005] - Gerar os CrÈditos Realizados
+	 * [SB0005] - Gerar os Cr√©ditos Realizados
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/03/2008
@@ -60959,7 +60965,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			BigDecimal valorPorCategoria = (BigDecimal) colecaoCategoriasCalculadasValorIterator.next();
 			Categoria categoria = (Categoria) colecaoCategoriasObterValorIterator.next();
 
-			// Cria o crÈdito a ralizar por categoria
+			// Cria o cr√©dito a ralizar por categoria
 			creditoRealizadoCategoria = new CreditoRealizadoCategoria();
 			CreditoRealizadoCategoriaPK creditoRealizadoCategoriaPk = new CreditoRealizadoCategoriaPK();
 			creditoRealizadoCategoriaPk.setCategoria(categoria);
@@ -61865,7 +61871,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] Faturar Grupo de Faturamento
 	 * 
-	 * [SB0009] - Gerar Resumo da SimulaÁ„o do Faturamento
+	 * [SB0009] - Gerar Resumo da Simula√ß√£o do Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 02/04/2008
@@ -61904,11 +61910,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			/*
 			 * Colocado por Raphael Rossiter em 26/03/2007
 			 * 
-			 * OBJ: Gerar o resumo da simulaÁ„o do faturamento com os valores
-			 * por categoria e n„o com o valor total.
+			 * OBJ: Gerar o resumo da simula√ß√£o do faturamento com os valores
+			 * por categoria e n√£o com o valor total.
 			 */
 
-			// ColeÁ„o com os valores por Categoria (D…BITOS)
+			// Cole√ß√£o com os valores por Categoria (D√âBITOS)
 			Collection colecaoValoresDebitosCategorias = getControladorImovel()
 					.obterValorPorCategoria(colecaoCategorias,
 							helperDebito.getValorTotalDebito());
@@ -61929,7 +61935,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}
 
-			// ColeÁ„o com os valores por Categoria (CR…DITOS)
+			// Cole√ß√£o com os valores por Categoria (CR√âDITOS)
 			Collection colecaoValoresCreditosCategorias = getControladorImovel()
 					.obterValorPorCategoria(colecaoCategorias,
 							helperCredito.getValorTotalCredito());
@@ -61950,18 +61956,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 			}
 
-			// ColeÁ„o de categorias
+			// Cole√ß√£o de categorias
 			Iterator iteratorColecaoCategorias = colecaoCategorias.iterator();
 
 			// colecao com os valores para ser usados em conta categoria
 			Iterator iteratorColecaoCalcularValoresAguaEsgotoHelper = colecaoCalcularValoresAguaEsgotoHelper
 					.iterator();
 
-			// ColeÁ„o com os valores por Categoria (D…BITOS)
+			// Cole√ß√£o com os valores por Categoria (D√âBITOS)
 			Iterator iteratorColecaoValoresDebitosCategorias = colecaoValoresDebitosCategorias
 					.iterator();
 
-			// ColeÁ„o com os valores por Categoria (CR…DITOS)
+			// Cole√ß√£o com os valores por Categoria (CR√âDITOS)
 			Iterator iteratorColecaoValoresCreditosCategorias = colecaoValoresCreditosCategorias
 					.iterator();
 
@@ -62024,7 +62030,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.getValorTotalImposto();
 				}
 
-				// [SB0009] - Gerar Resumo da SimulaÁ„o do Faturamento
+				// [SB0009] - Gerar Resumo da Simula√ß√£o do Faturamento
 				this.adicionarColecaoResumoFaturamentoSimulacao(
 						colecaoResumoFaturamento, categoria,
 						Subcategoria.SUBCATEGORIA_ZERO,
@@ -62044,24 +62050,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			/*
 			 * Colocado por Raphael Rossiter em 26/03/2007
 			 * 
-			 * OBJ: Gerar o resumo da simulaÁ„o do faturamento com os valores
-			 * por categoria e n„o com o valor total
+			 * OBJ: Gerar o resumo da simula√ß√£o do faturamento com os valores
+			 * por categoria e n√£o com o valor total
 			 */
 
-			// ColeÁ„o com os valores por Categoria (D…BITOS)
+			// Cole√ß√£o com os valores por Categoria (D√âBITOS)
 			Collection colecaoValoresDebitosCategorias = getControladorImovel()
 					.obterValorPorCategoria(colecaoCategorias,
 							helperDebito.getValorTotalDebito());
 
-			// ColeÁ„o com os valores por Categoria (CR…DITOS)
+			// Cole√ß√£o com os valores por Categoria (CR√âDITOS)
 			Collection colecaoValoresCreditosCategorias = getControladorImovel()
 					.obterValorPorCategoria(colecaoCategorias,
 							helperCredito.getValorTotalCredito());
 
-			// ColeÁ„o de categorias
+			// Cole√ß√£o de categorias
 			Iterator iteratorColecaoCategorias = colecaoCategorias.iterator();
 
-			// ColeÁ„o com os valores por Categoria (D…BITOS)
+			// Cole√ß√£o com os valores por Categoria (D√âBITOS)
 			Iterator iteratorColecaoValoresDebitosCategorias = colecaoValoresDebitosCategorias
 					.iterator();
 
@@ -62083,7 +62089,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			}
 
-			// ColeÁ„o com os valores por Categoria (CR…DITOS)
+			// Cole√ß√£o com os valores por Categoria (CR√âDITOS)
 			Iterator iteratorColecaoValoresCreditosCategorias = colecaoValoresCreditosCategorias
 					.iterator();
 
@@ -62158,7 +62164,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.getValorTotalImposto();
 				}
 
-				// [SB0009] - Gerar Resumo da SimulaÁ„o do Faturamento
+				// [SB0009] - Gerar Resumo da Simula√ß√£o do Faturamento
 				this.adicionarColecaoResumoFaturamentoSimulacao(
 						colecaoResumoFaturamento, categoria,
 						Subcategoria.SUBCATEGORIA_ZERO, null, imovel,
@@ -62178,8 +62184,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] Faturar Grupo de Faturamento
 	 * 
-	 * Caso seja faturamento antecipado, a Data de Vencimento da Conta ser· o
-	 * ˙ltimo dia ˙til do ano e mÍs de referÍncia
+	 * Caso seja faturamento antecipado, a Data de Vencimento da Conta ser√° o
+	 * √∫ltimo dia √∫til do ano e m√™s de refer√™ncia
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 02/04/2008
@@ -62207,7 +62213,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		// ⁄LTIMO DIA DO M S
+		// √öLTIMO DIA DO M√äS
 		int mes = Util.obterMes(anoMesFaturamento);
 		int ano = Util.obterAno(anoMesFaturamento);
 
@@ -62298,13 +62304,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
         
 		Object[] dadosAgenciaReguladora = getControladorFaturamento().obterDadosAgenciaReguladora();
 		
-        // [FS0005] - Verificar existÍncia do arquivo texto por rota
+        // [FS0005] - Verificar exist√™ncia do arquivo texto por rota
         boolean gerarArquivoTexto = gerarArquivoTextoFaturamento.verificarExistenciaArquivoTextoRota(rota.getId(), anoMesFaturamento);
 
         if (gerarArquivoTexto || regerar) {
             /*
-             * Vari·veis para a paginaÁ„o da pesquisa de Imovel, acumulaÁ„o da
-             * quantidade de imÛveis por rota e geraÁ„o do arquivo txt.
+             * Vari√°veis para a pagina√ß√£o da pesquisa de Imovel, acumula√ß√£o da
+             * quantidade de im√≥veis por rota e gera√ß√£o do arquivo txt.
              */
             // ========================================================================
             boolean flagTerminou = false;
@@ -62337,14 +62343,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                 dadosImoveis = null;
 
                 /*
-                 * Caso exista ids de imÛveis para a rota atual determina a
-                 * geraÁ„o do arquivo texto para cada imÛvel retornado.
+                 * Caso exista ids de im√≥veis para a rota atual determina a
+                 * gera√ß√£o do arquivo texto para cada im√≥vel retornado.
                  */
                 if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
 
                     Iterator iteratorColecaoImoveis = colecaoImovel.iterator();
 
-                    // LA«O PARA DETERMINAR O ARQUIVO TEXTO DE TODOS OS IMOVEIS
+                    // LA√áO PARA DETERMINAR O ARQUIVO TEXTO DE TODOS OS IMOVEIS
                     // DA ROTA ATUAL
                     imovel = null;
                     while (iteratorColecaoImoveis.hasNext()) {
@@ -62373,11 +62379,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                                 tamanhoArquivoRetorno = (Integer) retornoArquivo[1];
                                 tamanhoArquivo = tamanhoArquivo + tamanhoArquivoRetorno;
 
-                                // verifica se existe n˙mero limite de imoveis
+                                // verifica se existe n√∫mero limite de imoveis
                                 // para a Rota.
                                 // se existir, divide o arquivo em partes
-                                // definidas pelo n˙mero limite de imoveis.
-                                // Sempre observando os CritÈrios da UC0745 no
+                                // definidas pelo n√∫mero limite de imoveis.
+                                // Sempre observando os Crit√©rios da UC0745 no
                                 // Fluxo 3.2
                                 if (rota.getNumeroLimiteImoveis() != null && !rota.getNumeroLimiteImoveis().equals("")) {
 
@@ -62393,7 +62399,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                                 }
                             }
 
-                            // inserir o id do imÛvel na coleÁ„o
+                            // inserir o id do im√≥vel na cole√ß√£o
                             if (tamanhoArquivoRetorno != 0) {
                                 colecaoImoveis.add(imovel);
 
@@ -62404,12 +62410,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
                             // ----------------------------------------------------------------------------------
 
-                            // Caso o imÛvel condomÌnio MACRO n„o seja n„o
+                            // Caso o im√≥vel condom√≠nio MACRO n√£o seja n√£o
                             // medido
                             if (imovel.getHidrometroInstalacaoHistorico() != null
                                     || (imovel.getLigacaoAgua() != null && imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null)) {
 
-                                // Recupera os imÛveis micro dos imÛveis Macro
+                                // Recupera os im√≥veis micro dos im√≥veis Macro
                                 Object[] dadosImoveisMicros = gerarArquivoTextoFaturamento.pesquisarImovelGerarArquivoTextoFaturamento(rota, numeroIndice,
                                         quantidadeRegistros, sistemaParametro, faturamentoGrupo, imovel.getId());
 
@@ -62421,17 +62427,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                                 dadosImoveisMicros = null;
 
                                 /*
-                                 * Caso exista ids de imÛveis para a rota atual
-                                 * determina a geraÁ„o do arquivo texto para
-                                 * cada imÛvel retornado.
+                                 * Caso exista ids de im√≥veis para a rota atual
+                                 * determina a gera√ß√£o do arquivo texto para
+                                 * cada im√≥vel retornado.
                                  */
                                 if (colecaoImovelMicro != null && !colecaoImovelMicro.isEmpty()) {
 
                                     /*
-                                     * Colocado por Raphael Rossiter e S·vio
+                                     * Colocado por Raphael Rossiter e S√°vio
                                      * Cavalcante em 30/08/2011 OBJ: Evitar que
                                      * o arquivo seja regerado com apenas uma
-                                     * parte dos imÛveis micros do condominio.
+                                     * parte dos im√≥veis micros do condominio.
                                      */
                                     boolean imovelMicroNAOProcessado = true;
 
@@ -62446,10 +62452,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                                         }
                                     }
 
-                                    // Verifica se os imÛveis micro tem conta,
-                                    // caso n„o tenha ent„o o imÛvel macro n„o
+                                    // Verifica se os im√≥veis micro tem conta,
+                                    // caso n√£o tenha ent√£o o im√≥vel macro n√£o
                                     // vai
-                                    // para o condomÌnio
+                                    // para o condom√≠nio
 
                                     Iterator iteratorColecaoImoveisMicroConta = colecaoImovelMicro.iterator();
 
@@ -62475,8 +62481,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
                                     if (imovelMicroComConta && imovelMicroNAOProcessado) {
 
-                                        // inserir o id do imÛvel na coleÁ„o
-                                        // IMOVEIS MACROS dos condomÌnios
+                                        // inserir o id do im√≥vel na cole√ß√£o
+                                        // IMOVEIS MACROS dos condom√≠nios
                                         colecaoImoveis.add(imovel);
 
                                         // GERAR ARQUIVO TEXTO
@@ -62491,12 +62497,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                                             int quantidadeRegistroArquivo = (Integer) registroArquivoTexto[1];
                                             tamanhoArquivo = tamanhoArquivo + quantidadeRegistroArquivo;
 
-                                            // verifica se existe n˙mero limite
+                                            // verifica se existe n√∫mero limite
                                             // de imoveis para a Rota.
                                             // se existir, divide o arquivo em
-                                            // partes definidas pelo n˙mero
+                                            // partes definidas pelo n√∫mero
                                             // limite de imoveis.
-                                            // Sempre observando os CritÈrios da
+                                            // Sempre observando os Crit√©rios da
                                             // UC0745 no Fluxo 3.2
                                             if (rota.getNumeroLimiteImoveis() != null && !rota.getNumeroLimiteImoveis().equals("")) {
 
@@ -62533,14 +62539,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                                                 tamanhoArquivoRetorno = (Integer) retornoArquivo[1];
                                                 tamanhoArquivo = tamanhoArquivo + tamanhoArquivoRetorno;
 
-                                                // verifica se existe n˙mero
+                                                // verifica se existe n√∫mero
                                                 // limite de imoveis para a
                                                 // Rota.
                                                 // se existir, divide o arquivo
                                                 // em partes definidas pelo
-                                                // n˙mero limite de imoveis.
+                                                // n√∫mero limite de imoveis.
                                                 // Sempre observando os
-                                                // CritÈrios da UC0745 no Fluxo
+                                                // Crit√©rios da UC0745 no Fluxo
                                                 // 3.2
                                                 if (rota.getNumeroLimiteImoveis() != null && !rota.getNumeroLimiteImoveis().equals("")) {
 
@@ -62555,14 +62561,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                                                 }
                                             }
 
-                                            // inserir o id do imÛvel na coleÁ„o
+                                            // inserir o id do im√≥vel na cole√ß√£o
                                             if (tamanhoArquivoRetorno != 0) {
                                                 colecaoImoveis.add(imovelMicro);
                                             }
                                         }
                                         // FIM ColecaoImoveisMicro
 
-                                    }// Fim imÛvel micro com conta
+                                    }// Fim im√≥vel micro com conta
                                 }
 
                                 // PERFORMANCE
@@ -62572,22 +62578,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
                         }// FIM do else
 
-                        // Caso exista n˙mero limite de imoveis para a Rota e
-                        // se o contador numeroImoveisDiv for maior que o n˙mero
+                        // Caso exista n√∫mero limite de imoveis para a Rota e
+                        // se o contador numeroImoveisDiv for maior que o n√∫mero
                         // definido
-                        // pelo n˙mero limite de imoveis da Rota. Ent„o,
+                        // pelo n√∫mero limite de imoveis da Rota. Ent√£o,
                         // finaliza o arquivoDividido,
                         // gera o ArquivoTextoRoteiroEmpresaDivisao e adiciona
-                        // na ColeÁ„o colecaoArquivoDivisao.
-                        // Em seguida reinicia as vari·veis Ultilizadas.
-                        // Sempre observando os CritÈrios da UC0745 no Fluxo 3.2
+                        // na Cole√ß√£o colecaoArquivoDivisao.
+                        // Em seguida reinicia as vari√°veis Ultilizadas.
+                        // Sempre observando os Crit√©rios da UC0745 no Fluxo 3.2
                         if (rota.getNumeroLimiteImoveis() != null) {
                             /**
                              * Alteracao para corrigir a finalizacao de rotas
                              * divididas - Salvar a qtd de imoveis com conta PF
-                             * nas rotas divididas, e n„o a quantidade de
-                             * imÛveis na rota - Finalizar a rota por parte do
-                             * arquivo e n„o pelo IMEI do celular
+                             * nas rotas divididas, e n√£o a quantidade de
+                             * im√≥veis na rota - Finalizar a rota por parte do
+                             * arquivo e n√£o pelo IMEI do celular
                              */
                             if (imoveisDivididos.size() >= rota.getNumeroLimiteImoveis().intValue()) {
 
@@ -62634,13 +62640,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                 }// FIM DO LOOP DE IMOVEIS
 
                 /**
-                 * Incrementa o n∫ do indice da p·ginaÁ„o
+                 * Incrementa o n¬∫ do indice da p√°gina√ß√£o
                  */
                 numeroIndice = numeroIndice + quantidadeRegistros;
 
                 /**
-                 * Caso a coleÁ„o de imoveis retornados for menor que a
-                 * quantidade de registros seta a flag indicando que a paginaÁ„o
+                 * Caso a cole√ß√£o de imoveis retornados for menor que a
+                 * quantidade de registros seta a flag indicando que a pagina√ß√£o
                  * terminou.
                  */
                 if (quantidadeImoveis == 0 || quantidadeImoveis < quantidadeRegistros) {
@@ -62653,16 +62659,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                     colecaoImovel = null;
                 }
 
-            }// FIM DO LOOP DA PAGINA«√O
+            }// FIM DO LOOP DA PAGINA√á√ÉO
 
-            // Se chegar ao final da coleÁ„o de imoveis e o n˙mero definido
-            // pelo n˙mero limite de imoveis da Rota ainda n„o tenha sido
-            // alcanÁado, ent„o:
+            // Se chegar ao final da cole√ß√£o de imoveis e o n√∫mero definido
+            // pelo n√∫mero limite de imoveis da Rota ainda n√£o tenha sido
+            // alcan√ßado, ent√£o:
             // finaliza o arquivoDividido, gera o
             // ArquivoTextoRoteiroEmpresaDivisao e adiciona
-            // na ColeÁ„o colecaoArquivoDivisao. Em seguida reinicia as
-            // vari·veis Ultilizadas.
-            // Sempre observando os CritÈrios da UC0745 no Fluxo 3.2
+            // na Cole√ß√£o colecaoArquivoDivisao. Em seguida reinicia as
+            // vari√°veis Ultilizadas.
+            // Sempre observando os Crit√©rios da UC0745 no Fluxo 3.2
             if (arquivoTextoDiv != null && arquivoTextoDiv.length() > 0) {
 
                 Integer qtdArquivosDividido = colecaoArquivoDivisao.size() + 1;
@@ -62723,9 +62729,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                 if (colecaoImoveis != null && colecaoImoveis.size() > 0) {
 
                     /*
-                     * AlteraÁ„o feita para salvar no arquivo texto somente a
-                     * quantidade de imÛveis que possuem conta prÈ-faturada, e
-                     * n„o a quantidade de imÛveis total da rota.
+                     * Altera√ß√£o feita para salvar no arquivo texto somente a
+                     * quantidade de im√≥veis que possuem conta pr√©-faturada, e
+                     * n√£o a quantidade de im√≥veis total da rota.
                      */
 
                     Collection imoveisComContaPF = repositorioFaturamento.obterImoveisComContaPF(anoMesFaturamento, rota);
@@ -62739,8 +62745,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                     }
 
                     /*
-                     * Verificar se todos os imÛveis da rota s„o apenas
-                     * informativos, se forem, gerar o arquivo j· finalizado
+                     * Verificar se todos os im√≥veis da rota s√£o apenas
+                     * informativos, se forem, gerar o arquivo j√° finalizado
                      */
                     if (qtdImoveiComContaPF > 0) {
                         rotaSoComImoveisInformativos = false;
@@ -62762,7 +62768,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                     int sequencialArquivo = 0;
                     while (iteratorcolecaoArquivoDivisao.hasNext()) {
 
-                        // adiciona o n˙mero sequencial ao objeto
+                        // adiciona o n√∫mero sequencial ao objeto
                         // ArquivoTextoRoteiroEmpresaDivisao.
                         arquivoTextoRoteiroEmpresaDivisao = (ArquivoTextoRoteiroEmpresaDivisao) iteratorcolecaoArquivoDivisao.next();
 
@@ -62788,9 +62794,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
                         Integer idLeituraTipo = rota.getLeituraTipo().getId();
 
                         /**
-                         * AlteraÁ„o feita para corrigir o problema de incluir
-                         * na tabela Movimento Roteiro Empresa os imÛveis
-                         * informativos, e n„o somente os imÛveis que geraram
+                         * Altera√ß√£o feita para corrigir o problema de incluir
+                         * na tabela Movimento Roteiro Empresa os im√≥veis
+                         * informativos, e n√£o somente os im√≥veis que geraram
                          * conta PF
                          */
                         Collection<Imovel> colecaoImoveisAGerar = getControladorMicromedicao().verificarImoveisProcessadosEmMovimentoRoteiroEmpresa(
@@ -62811,9 +62817,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
             }
 
             /*
-             * Colocado por Raphael Rossiter e S·vio Cavalcante em 30/08/2011
+             * Colocado por Raphael Rossiter e S√°vio Cavalcante em 30/08/2011
              * OBJ: Evitar que o arquivo seja regerado com apenas uma parte dos
-             * imÛveis micros do condominio.
+             * im√≥veis micros do condominio.
              */
             if (regerar && (colecaoImoveis == null || colecaoImoveis.size() == 0)) {
 
@@ -62835,7 +62841,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 03/07/2008
 	 * 
 	 * @param rota
@@ -62861,7 +62867,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							anoMesFaturamento, faturamentoGrupo.getId());
 
 			/*
-			 *  AlteraÁ„o feita para permitir que todos os imÛveis sejam gerados na rota de leitura e impress„o simultanea
+			 *  Altera√ß√£o feita para permitir que todos os im√≥veis sejam gerados na rota de leitura e impress√£o simultanea
 			 */
 			if (conta != null) {
 
@@ -62896,7 +62902,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0877] - EmitirGuiaPagamentoEmAtraso
 	 * 
-	 * @author Fl·vio Leonardo
+	 * @author Fl√°vio Leonardo
 	 * @date 27/01/2009
 	 */
 	public Collection pesquisarDadosRelatorioGuiaPagamentoEmAtraso(
@@ -62921,10 +62927,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * Inclui, na tabela CONTA_CATEGORIA, a(s) categoria(s) e sua(s)
 	 * respectiva(s) quantidade(s) de economia da lista do passo 5.8 do fluxo
 	 * principal e os atributos retornados pelo [UC0120] para cada categoria,
-	 * caso o [UC0120] n„o tenha sido chamado, os valores correspondentes devem
+	 * caso o [UC0120] n√£o tenha sido chamado, os valores correspondentes devem
 	 * ser nulos.
 	 * 
-	 * Caso o [UC0120] n„o tenha sido chamado n„o gravar a tabela
+	 * Caso o [UC0120] n√£o tenha sido chamado n√£o gravar a tabela
 	 * CONTA_CATEGORIA_CONSUMO_FAIXA
 	 * 
 	 * @param calcularValoresConta
@@ -62952,7 +62958,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 13/01/2006
 	 * 
-	 * Inclui a quantidade de economias por categoria do dÈbito cobrado na
+	 * Inclui a quantidade de economias por categoria do d√©bito cobrado na
 	 * tabela DEBITO_COBRADO_CATEGORIA
 	 * 
 	 * @param debitoCobrado
@@ -62972,7 +62978,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 13/01/2006
 	 * 
-	 * Inclui a quantidade de economias por categoria do crÈdito realizado na
+	 * Inclui a quantidade de economias por categoria do cr√©dito realizado na
 	 * tabela CREDITO_REALIZADO_CATEGORIA
 	 * 
 	 * @param creditoRealizado
@@ -62997,7 +63003,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Monta uma coleÁ„o de contas categoria a partir de uma coleÁ„o de
+	 * Monta uma cole√ß√£o de contas categoria a partir de uma cole√ß√£o de
 	 * categoria recebida
 	 * 
 	 * @param colecaoCategoria
@@ -63025,10 +63031,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * Inclui, na tabela CONTA_CATEGORIA, a(s) categoria(s) e sua(s)
 	 * respectiva(s) quantidade(s) de economia da lista do passo 5.8 do fluxo
 	 * principal e os atributos retornados pelo [UC0120] para cada categoria,
-	 * caso o [UC0120] n„o tenha sido chamado, os valores correspondentes devem
+	 * caso o [UC0120] n√£o tenha sido chamado, os valores correspondentes devem
 	 * ser nulos.
 	 * 
-	 * Caso o [UC0120] n„o tenha sido chamado n„o gravar a tabela
+	 * Caso o [UC0120] n√£o tenha sido chamado n√£o gravar a tabela
 	 * CONTA_CATEGORIA_CONSUMO_FAIXA
 	 * 
 	 * @param calcularValoresConta
@@ -63049,7 +63055,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		ContaCategoria contaCategoriaInsert = null;
 		calcularValoresConta = calcularValoresAguaEsgotoTotalizando(calcularValoresConta);
 
-		// O [UC0120] n„o foi invocado, inserir apenas o ID da conta, ID da
+		// O [UC0120] n√£o foi invocado, inserir apenas o ID da conta, ID da
 		// categoria e qtd de economias da categoria
 		if (calcularValoresConta == null || calcularValoresConta.isEmpty()) {
 
@@ -63076,7 +63082,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.valueOf(subCategoria.getQuantidadeEconomias()
 								.intValue())).shortValue());
 
-				// Ultima AlteraÁ„o
+				// Ultima Altera√ß√£o
 				contaCategoriaInsert.setUltimaAlteracao(new Date());
 
 				this.getControladorUtil().inserir(contaCategoriaInsert);
@@ -63096,7 +63102,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				calcularValoresContaObjeto = (CalcularValoresAguaEsgotoHelper) calcularValoresContaIt
 						.next();
 
-				// Esta situaÁ„o ir· retornar o id da subcategoria e n„o da
+				// Esta situa√ß√£o ir√° retornar o id da subcategoria e n√£o da
 				// categoria
 				subCategoria.setId(calcularValoresContaObjeto.getIdCategoria());
 
@@ -63135,7 +63141,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.getQuantidadeEconomiasCategoria().intValue()))
 						.shortValue());
 
-				// Valores relacionados aos c·lculos de ·gua
+				// Valores relacionados aos c√°lculos de √°gua
 
 				contaCategoriaInsert.setValorAgua(calcularValoresContaObjeto
 						.getValorFaturadoAguaCategoria());
@@ -63148,7 +63154,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.setConsumoMinimoAgua(calcularValoresContaObjeto
 								.getConsumoMinimoAguaCategoria());
 
-				// Valores relacionados aos c·lculos de esgoto
+				// Valores relacionados aos c√°lculos de esgoto
 
 				contaCategoriaInsert.setValorEsgoto(calcularValoresContaObjeto
 						.getValorFaturadoEsgotoCategoria());
@@ -63162,7 +63168,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						.setConsumoMinimoEsgoto(calcularValoresContaObjeto
 								.getConsumoMinimoEsgotoCategoria());
 
-				// Ultima AlteraÁ„o
+				// Ultima Altera√ß√£o
 				contaCategoriaInsert.setUltimaAlteracao(new Date());
 
 				this.getControladorUtil().inserir(contaCategoriaInsert);
@@ -63178,7 +63184,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 17/04/2007
 	 * 
-	 * Inclui a quantidade de economias por categoria do dÈbito cobrado na
+	 * Inclui a quantidade de economias por categoria do d√©bito cobrado na
 	 * tabela DEBITO_COBRADO_CATEGORIA
 	 * 
 	 * @param debitoCobrado
@@ -63220,7 +63226,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			debitoCobradoCategoriaPKInserir.setDebitoCobradoId(debitoCobrado
 					.getId());
 
-			// Gerando o objeto que ser· inserido no BD
+			// Gerando o objeto que ser√° inserido no BD
 			DebitoCobradoCategoria debitoCobradoCategoriaInserir = new DebitoCobradoCategoria();
 
 			// Comp_ID
@@ -63232,7 +63238,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.setQuantidadeEconomia(categoriaColecao
 							.getQuantidadeEconomiasCategoria());
 
-			// ⁄ltima alteraÁ„o
+			// √öltima altera√ß√£o
 			debitoCobradoCategoriaInserir.setUltimaAlteracao(new Date());
 
 			// Valor categoria
@@ -63248,7 +63254,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 17/04/2007
 	 * 
-	 * Inclui a quantidade de economias por categoria do crÈdito realizado na
+	 * Inclui a quantidade de economias por categoria do cr√©dito realizado na
 	 * tabela CREDITO_REALIZADO_CATEGORIA
 	 * 
 	 * @param creditoRealizado
@@ -63282,11 +63288,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			CreditoRealizadoCategoriaPK creditoRealizadoCategoriaPKInserir = new CreditoRealizadoCategoriaPK();
 			// Categoria
 			creditoRealizadoCategoriaPKInserir.setCategoria(categoriaColecao);
-			// CrÈdito Realizado
+			// Cr√©dito Realizado
 			creditoRealizadoCategoriaPKInserir
 					.setCreditoRealizado(creditoRealizado);
 
-			// Gerando o objeto que ser· inserido no BD
+			// Gerando o objeto que ser√° inserido no BD
 			CreditoRealizadoCategoria creditoRealizadoCategoriaInserir = new CreditoRealizadoCategoria();
 
 			// Comp_ID
@@ -63298,7 +63304,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.setQuantidadeEconomia(categoriaColecao
 							.getQuantidadeEconomiasCategoria());
 
-			// ⁄ltima alteraÁ„o
+			// √öltima altera√ß√£o
 			creditoRealizadoCategoriaInserir.setUltimaAlteracao(new Date());
 
 			// Valor categoria
@@ -63312,9 +63318,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons·vel
+	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons√°vel
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 10/07/2008
 	 * 
 	 * @throws ErroRepositorioException
@@ -63359,11 +63365,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				item = (FileItem) iter.next();
 
-				// verifica se n„o È diretorio
+				// verifica se n√£o √© diretorio
 				if (!item.isFormField()) {
 					// coloca o nome do item para maiusculo
 					nomeItem = item.getName().toUpperCase();
-					// compara o final do nome do arquivo È .txt
+					// compara o final do nome do arquivo √© .txt
 					if (nomeItem.endsWith(".TXT")) {
 
 						// abre o arquivo
@@ -63438,7 +63444,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										.setDataEmissao(linhaLida.substring(
 												291, 301).trim());
 
-								// 11-MÍs/Ano (Campo 4 do TXT)
+								// 11-M√™s/Ano (Campo 4 do TXT)
 								faturaClienteResponsavelHelper
 										.setMesAno(linhaLida
 												.substring(230, 237).trim());
@@ -63542,7 +63548,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								// 33-Vencimento Alternativo 5
 								// 34-Vencimento Alternativo 6
 
-								// S„o as data de vencimento
+								// S√£o as data de vencimento
 								String datasVencimentos = linhaLida.substring(
 										709, 719).trim()
 										+ " "
@@ -63562,7 +63568,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								Collection<FaturaItemClienteResponsavelHelper> colecaoFaturaItem = new ArrayList();
 
 								// 35-Nome do Usuario (Campo 13.1 do TXT)
-								// 36-MatrÌcula do ImÛvel (Campo 13.2 do TXT)
+								// 36-Matr√≠cula do Im√≥vel (Campo 13.2 do TXT)
 								// 37-Consumo (Campo 13.3 do TXT)
 								// 38-Valor da Conta (Campo 13.4 do TXT)
 								int quantidade = 0;
@@ -63610,7 +63616,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								faturaClienteResponsavelHelper
 										.setColecaoFaturaItemClienteResponsavelHelper(colecaoFaturaItem);
 
-								// SÛ gera codigo de barras se existir valor
+								// S√≥ gera codigo de barras se existir valor
 								// nesse campo
 
 								// 17-Codigo de Barras Formatado (Campo 11 do
@@ -63635,7 +63641,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									faturaClienteResponsavelHelper
 											.setRepresentacaoNumericaCodBarraFormatada(codigoBarraFormatado);
 
-									// RepresentaÁ„o numerica cod barra sem
+									// Representa√ß√£o numerica cod barra sem
 									// digito
 									String codigoBarra = codigoBarraFormatado
 											.substring(0, 11)
@@ -63693,9 +63699,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons·vel
+	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons√°vel
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 10/07/2008
 	 * 
 	 * @throws ErroRepositorioException
@@ -63713,7 +63719,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.pesquisarDadosRelatorioFaturasAgrupadas(anoMesReferencia,
 							cliente, idsClientes);
 
-			// Verifica se existe dÈbitos a realizar
+			// Verifica se existe d√©bitos a realizar
 			if (colecaoDadosRelatorio != null
 					&& !colecaoDadosRelatorio.isEmpty()) {
 
@@ -63735,7 +63741,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					// BigDecimal valorDebito = null;
 					Integer sequencialFatura = null;
 
-					// Id do Cliente Respons·vel
+					// Id do Cliente Respons√°vel
 					if (dadosRelatorio[0] != null) {
 						idResponsavel = (Integer) dadosRelatorio[0];
 						relatorioFaturasAgrupadasBean
@@ -63754,7 +63760,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											anoMesReferencia, idResponsavel);
 						}
 
-						// EndereÁo Respons·vel
+						// Endere√ßo Respons√°vel
 						String enderecoResponsavel = getControladorEndereco()
 								.pesquisarEnderecoClienteAbreviado(
 										idResponsavel);
@@ -63768,7 +63774,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					// Nome do Cliente Respons·vel
+					// Nome do Cliente Respons√°vel
 					if (dadosRelatorio[1] != null) {
 						relatorioFaturasAgrupadasBean
 								.setNomeResponsavel((String) dadosRelatorio[1]);
@@ -63779,14 +63785,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						idFatura = ((Integer) dadosRelatorio[2]);
 					}
 
-					// Ano/MÍs de ReferÍncia
+					// Ano/M√™s de Refer√™ncia
 					if (dadosRelatorio[3] != null) {
 						anoMes = (Integer) dadosRelatorio[3];
 						referencia = Util.formatarAnoMesParaMesAno(anoMes);
 						relatorioFaturasAgrupadasBean.setReferencia(referencia);
 					}
 
-					// Data de Emiss„o
+					// Data de Emiss√£o
 					if (dadosRelatorio[4] != null) {
 						relatorioFaturasAgrupadasBean.setEmissao(Util
 								.formatarData((Date) dadosRelatorio[4]));
@@ -63827,7 +63833,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.setPercentualAliquota(new BigDecimal("0.00"));
 					}
 
-					// Valor DÈbito
+					// Valor D√©bito
 					/*
 					 * if (dadosRelatorio[7] != null) { valorDebito =
 					 * ((BigDecimal) dadosRelatorio[7]); }
@@ -63838,23 +63844,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						sequencialFatura = ((Integer) dadosRelatorio[8]);
 					}
 
-					// Id do ImÛvel
+					// Id do Im√≥vel
 					if (dadosRelatorio[9] != null) {
 						Integer idImovel = (Integer) dadosRelatorio[9];
 						relatorioFaturasAgrupadasBean.setMatricula(idImovel
 								.toString());
 
-						// EndereÁo ImÛvel
+						// Endere√ßo Im√≥vel
 						String endereco = getControladorEndereco()
 								.pesquisarEndereco(idImovel);
 						relatorioFaturasAgrupadasBean
 								.setEnderecoUsuario(endereco);
 					}
 
-					// Nome do Cliente Usu·rio
+					// Nome do Cliente Usu√°rio
 
 					/**
-					 * Nome do imÛvel no relatÛrio de faturas agrupadas.
+					 * Nome do im√≥vel no relat√≥rio de faturas agrupadas.
 					 * 
 					 * @author Wellington Rocha
 					 * @date 26/11/2012
@@ -63874,7 +63880,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.setNomeUsuario((String) dadosRelatorio[10]);
 					}
 
-					// Id da Unidade de NegÛcio
+					// Id da Unidade de Neg√≥cio
 					if (dadosRelatorio[11] != null) {
 						relatorioFaturasAgrupadasBean
 								.setUnidade(((Integer) dadosRelatorio[11])
@@ -63890,7 +63896,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								+ " - " + descricaoLocalidade);
 					}
 
-					// HidrÙmetro
+					// Hidr√¥metro
 					if (dadosRelatorio[14] != null) {
 						relatorioFaturasAgrupadasBean
 								.setHidrometro((String) dadosRelatorio[14]);
@@ -63947,7 +63953,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.setIdFaturaItem((Integer) dadosRelatorio[20]);
 					}
 
-					// N˙mero Fatura
+					// N√∫mero Fatura
 					relatorioFaturasAgrupadasBean.setNumeroFatura(idResponsavel
 							+ " - " + referencia);
 
@@ -63956,7 +63962,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					relatorioFaturasAgrupadasBean.setControle(ano + " / "
 							+ idFatura);
 
-					// Total de Itens de Faturas do Respons·vel
+					// Total de Itens de Faturas do Respons√°vel
 					relatorioFaturasAgrupadasBean
 							.setTotalFaturasResponsavel(qtdFaturasResponsavel);
 
@@ -63965,7 +63971,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					relatorioFaturasAgrupadasBean.setValorTotalExtenso(Util
 							.valorExtenso(valorTotal));
 
-					// CÛdigo de Barras
+					// C√≥digo de Barras
 					Integer digitoVerificador = Util
 							.obterDigitoVerificadorModulo10(referencia.replace(
 									"/", ""));
@@ -63975,23 +63981,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 									// Tipo do Pagamento / Valor
 									7, valorTotal,
 
-									// Localidade / ImÛvel
+									// Localidade / Im√≥vel
 									null, null,
 
-									// ReferÍncia / DÌgito Verificador
+									// Refer√™ncia / D√≠gito Verificador
 									referencia.replace("/", ""),
 									digitoVerificador,
 
-									// Tipo do DÈbito / Ano Emiss„o Guia
+									// Tipo do D√©bito / Ano Emiss√£o Guia
 									null, null,
 
-									// Sequencial Documento de CobranÁa /
+									// Sequencial Documento de Cobran√ßa /
 									// Tipo
 									// do Documento
 									null, null,
 
 									// Cliente / Sequencial Fatura Cliente
-									// Respons·vel
+									// Respons√°vel
 									idResponsavel, sequencialFatura,
 
 									// Id Guia
@@ -64047,9 +64053,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons·vel
+	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons√°vel
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 10/07/2008
 	 * 
 	 * @throws ControladorException
@@ -64068,12 +64074,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons·vel
+	 * [UC0641] - Emitir TXT de Fatura de Cliente Respons√°vel
 	 * 
 	 * Pesquisa os clientes associados as faturas de uma determinada esfera de
 	 * porder
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 21/01/2009
 	 * 
 	 * @throws ControladorException
@@ -64090,11 +64096,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0352] - Emitir TXT de Fatura de Cliente Respons·vel
+	 * [UC0352] - Emitir TXT de Fatura de Cliente Respons√°vel
 	 * 
-	 * Pesquisa o percentual de retenÁ„o
+	 * Pesquisa o percentual de reten√ß√£o
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 12/07/2008
 	 * 
 	 * @throws ErroRepositorioException
@@ -64116,9 +64122,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UCXXXX] - RelatÛrio de Protocolo de Entrega de Faturas
+	 * [UCXXXX] - Relat√≥rio de Protocolo de Entrega de Faturas
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 12/11/2008
 	 * 
 	 * @throws ControladorException
@@ -64136,7 +64142,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.pesquisarDadosRelatorioProtocoloEntregaFatura(
 							anoMesReferencia, cliente, idsClientes);
 
-			// Verifica se existe dÈbitos a realizar
+			// Verifica se existe d√©bitos a realizar
 			if (colecaoDadosRelatorio != null
 					&& !colecaoDadosRelatorio.isEmpty()) {
 
@@ -64144,14 +64150,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					RelatorioProtocoloEntregaFaturaBean relatorioProtocoloEntregaFaturaBean = new RelatorioProtocoloEntregaFaturaBean();
 
-					// Id do Cliente Respons·vel
+					// Id do Cliente Respons√°vel
 					if (dadosRelatorio[0] != null) {
 						Integer idResponsavel = (Integer) dadosRelatorio[0];
 
 						relatorioProtocoloEntregaFaturaBean
 								.setCodigo(idResponsavel.toString());
 
-						// EndereÁo Respons·vel
+						// Endere√ßo Respons√°vel
 						String enderecoResponsavel = getControladorEndereco()
 								.pesquisarEnderecoClienteAbreviado(
 										idResponsavel);
@@ -64163,13 +64169,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 
-					// Nome do Cliente Respons·vel
+					// Nome do Cliente Respons√°vel
 					if (dadosRelatorio[1] != null) {
 						relatorioProtocoloEntregaFaturaBean
 								.setNome((String) dadosRelatorio[1]);
 					}
 
-					// ReferÍncia
+					// Refer√™ncia
 					if (dadosRelatorio[2] != null) {
 						Integer referencia = (Integer) dadosRelatorio[2];
 						relatorioProtocoloEntregaFaturaBean.setReferencia(Util
@@ -64196,11 +64202,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0153] - Apresentar Dados Para An·lise da MediÁ„o e Consumo
+	 * [UC0153] - Apresentar Dados Para An√°lise da Medi√ß√£o e Consumo
 	 * 
-	 * Pesquisa a situaÁ„o especial de faturamento vigente do mÍs/ano informada
+	 * Pesquisa a situa√ß√£o especial de faturamento vigente do m√™s/ano informada
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 11/08/2008
 	 * 
 	 * @param idImovel
@@ -64227,7 +64233,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = new FaturamentoSituacaoHistorico();
 
-					// Tipo da SituaÁ„o Especial de Faturamento
+					// Tipo da Situa√ß√£o Especial de Faturamento
 					if (dados[0] != null) {
 						FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
 						faturamentoSituacaoTipo.setDescricao((String) dados[0]);
@@ -64236,7 +64242,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
 					}
 
-					// Motivo da SituaÁ„o Especial de Faturamento
+					// Motivo da Situa√ß√£o Especial de Faturamento
 					if (dados[1] != null) {
 						FaturamentoSituacaoMotivo faturamentoSituacaoMotivo = new FaturamentoSituacaoMotivo();
 						faturamentoSituacaoMotivo
@@ -64246,19 +64252,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
 					}
 
-					// MÍs/Ano InÌcio
+					// M√™s/Ano In√≠cio
 					if (dados[2] != null) {
 						faturamentoSituacaoHistorico
 								.setAnoMesFaturamentoSituacaoInicio((Integer) dados[2]);
 					}
 
-					// MÍs/Ano Fim
+					// M√™s/Ano Fim
 					if (dados[3] != null) {
 						faturamentoSituacaoHistorico
 								.setAnoMesFaturamentoSituacaoFim((Integer) dados[3]);
 					}
 
-					// Usu·rio
+					// Usu√°rio
 					if (dados[4] != null) {
 						Usuario usuario = new Usuario();
 						usuario.setNomeUsuario((String) dados[4]);
@@ -64285,11 +64291,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0857] - Gerar RelatÛrio de ArrecadaÁ„o das Multas de Autos de InfraÁ„o
+	 * [UC0857] - Gerar Relat√≥rio de Arrecada√ß√£o das Multas de Autos de Infra√ß√£o
 	 * 
-	 * Pesquisa os dados necess·rios para geraÁ„o do relatÛrio
+	 * Pesquisa os dados necess√°rios para gera√ß√£o do relat√≥rio
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 10/09/2008
 	 * @param idUnidadeNegocio
 	 *            , idFuncionario, dataPagamentoInicial, dataPagamentoFinal
@@ -64317,7 +64323,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					RelatorioAutoInfracaoBean relatorioAutoInfracaoBean = new RelatorioAutoInfracaoBean();
 
-					// Unidade de NegÛcio
+					// Unidade de Neg√≥cio
 					if (dados[0] != null) {
 						Integer idUnidadeNegocioRelatorio = (Integer) dados[0];
 						String nomeUnidadeNegocio = (String) dados[1];
@@ -64329,7 +64335,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.setUnidadeNegocio(unidadeNegocio);
 					}
 
-					// Funcion·rio
+					// Funcion√°rio
 					if (dados[2] != null) {
 						Integer idFuncionarioRelatorio = (Integer) dados[2];
 						String nomeFuncionario = (String) dados[3];
@@ -64348,7 +64354,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.formatarData(dataPagamento));
 					}
 
-					// Auto de InfraÁ„o
+					// Auto de Infra√ß√£o
 					if (dados[5] != null) {
 						Integer autoInfracao = (Integer) dados[5];
 
@@ -64356,7 +64362,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.toString());
 					}
 
-					// DescriÁ„o do ServiÁo
+					// Descri√ß√£o do Servi√ßo
 					if (dados[6] != null) {
 						String descricaoServico = (String) dados[6];
 
@@ -64385,14 +64391,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.setValorParcelaPaga(valorPago);
 					}
 
-					// Valor do ServiÁo
+					// Valor do Servi√ßo
 					if (dados[7] != null) {
 						BigDecimal valorServico = (BigDecimal) dados[7];
 
 						relatorioAutoInfracaoBean.setValorServico(valorServico);
 					}
 
-					// Valor do Funcion·rio
+					// Valor do Funcion√°rio
 					if (dados[11] != null) {
 						BigDecimal valorFuncionario = (BigDecimal) dados[11];
 
@@ -64400,7 +64406,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.setValorFuncionario(valorFuncionario);
 					}
 
-					// MatrÌcula do ImÛvel
+					// Matr√≠cula do Im√≥vel
 					if (dados[12] != null) {
 						Integer idImovel = (Integer) dados[12];
 
@@ -64408,7 +64414,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								.toString());
 					}
 
-					// Nome do Cliente Usu·rio
+					// Nome do Cliente Usu√°rio
 					if (dados[13] != null) {
 						String nomeUsuario = (String) dados[13];
 
@@ -64431,10 +64437,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0194] Inserir Credito a Realizar
 	 * 
-	 * Pesquisa a quantidade de contas e contas histÛrico para um imÛvel em uma
-	 * referÍncia
+	 * Pesquisa a quantidade de contas e contas hist√≥rico para um im√≥vel em uma
+	 * refer√™ncia
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 14/08/2008
 	 * 
 	 * @param idImovel
@@ -64456,7 +64462,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Monta uma coleÁ„o de contas categoria a partir de uma coleÁ„o de
+	 * Monta uma cole√ß√£o de contas categoria a partir de uma cole√ß√£o de
 	 * categoria recebida
 	 * 
 	 * @param colecaoCategoria
@@ -64492,7 +64498,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.valueOf(subcategoria.getQuantidadeEconomias().intValue()))
 					.shortValue());
 
-			// Ultima AlteraÁ„o
+			// Ultima Altera√ß√£o
 			contaCategoriaInsert.setUltimaAlteracao(new Date());
 
 			colecaoContaCategoria.add(contaCategoriaInsert);
@@ -64501,7 +64507,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * retorna o maior valor entre o ano/mÍs da data corrente e o ano/mÍs de
+	 * retorna o maior valor entre o ano/m√™s da data corrente e o ano/m√™s de
 	 * referencia do faturamento (PARM_AMREFERENCIAFATURAMENTO da tabela
 	 * SISTEMA_PARAMETROS) e o ano/mes de referencia da conta
 	 * (CNTA_AMREFERENCIACONTA)
@@ -64527,7 +64533,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Verificar se esse grupo de Faturamento j· est· comandado
+	 * Verificar se esse grupo de Faturamento j√° est√° comandado
 	 * 
 	 * @author: Victor Cisneiros
 	 * @date: 30/09/2008
@@ -64546,7 +64552,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 19/09/2008
@@ -64603,7 +64609,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 */
 	public Collection obterDebitoACobrarImovel(Integer imovelID)
 			throws ControladorException {
@@ -64618,7 +64624,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 */
 	public Collection obterDebitoACobrarHistoricoImovel(Integer imovelID)
 			throws ControladorException {
@@ -64634,7 +64640,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -64654,7 +64660,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -64675,7 +64681,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 12/11/2008
@@ -64695,7 +64701,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0193] - Consultar HistÛrico de Faturamento
+	 * [UC0193] - Consultar Hist√≥rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 12/11/2008
@@ -64717,9 +64723,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * 
-	 * [UC0871] Manter Fatura de Cliente Respons·vel
+	 * [UC0871] Manter Fatura de Cliente Respons√°vel
 	 * 
-	 * Inserir Fatura Item e Fatura Item Historico Fl·vio Leonardo
+	 * Inserir Fatura Item e Fatura Item Historico Fl√°vio Leonardo
 	 * 
 	 */
 	public int inserirFaturaItemFaturaItemHistorico(
@@ -64787,9 +64793,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	/**
 	 * 
-	 * [UC0871] Manter Fatura de Cliente Respons·vel
+	 * [UC0871] Manter Fatura de Cliente Respons√°vel
 	 * 
-	 * Remover Fatura Item e Inserir Fatura Item Historico Fl·vio Leonardo
+	 * Remover Fatura Item e Inserir Fatura Item Historico Fl√°vio Leonardo
 	 * 
 	 */
 	public void removerFaturaItemFaturaItemHistorico(
@@ -64849,7 +64855,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Respons·vel
+	 * [UC0871] Manter Fatura de Cliente Respons√°vel
 	 */
 	public BigDecimal somarValorFaturasItemFatura(Fatura fatura)
 			throws ControladorException {
@@ -64862,7 +64868,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Respons·vel
+	 * [UC0871] Manter Fatura de Cliente Respons√°vel
 	 */
 	public Date vencimentoFaturasItemFatura(Fatura fatura)
 			throws ControladorException {
@@ -64875,7 +64881,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Respons·vel
+	 * [UC0871] Manter Fatura de Cliente Respons√°vel
 	 * 
 	 * @param fatura
 	 * @throws ErroRepositorioException
@@ -64978,7 +64984,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * Pesquisar categoria por tarifa consumo
 	 * 
-	 * @author RÙmulo AurÈlio
+	 * @author R√¥mulo Aur√©lio
 	 * @date 19/12/2008
 	 * 
 	 * @return Collection
@@ -65005,9 +65011,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0113] Faturar Grupo de Faturamento
 	 * 
-	 * … necess·rio colocar a query abaixo no processo de faturar grupo como uma
+	 * √â necess√°rio colocar a query abaixo no processo de faturar grupo como uma
 	 * funcionalidade (Antes de rodar o faturar), para atender uma necessidade
-	 * de uma localidade (Petrolina), onde existe uma cobranÁa diferenciada de
+	 * de uma localidade (Petrolina), onde existe uma cobran√ßa diferenciada de
 	 * esgoto. CRC771 - Socorro Oliveira
 	 * 
 	 * UPDATE atendimentopublico.ligacao_esgoto set lesg_pcalternativo = 50.00,
@@ -65032,7 +65038,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0876] - Gerar CrÈdito SituaÁ„o Especial Faturamento
+	 * [UC0876] - Gerar Cr√©dito Situa√ß√£o Especial Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 22/01/2009
@@ -65069,19 +65075,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.pesquisarParametrosDoSistema();
 
 			/*
-			 * Caso a coleÁ„o de atividade de faturamento de cronograma para
-			 * rota n„o esteja nula para cada rota informada seleciona as
-			 * quadras da rota e para cada quadra os imÛveis
+			 * Caso a cole√ß√£o de atividade de faturamento de cronograma para
+			 * rota n√£o esteja nula para cada rota informada seleciona as
+			 * quadras da rota e para cada quadra os im√≥veis
 			 */
 			if (colecaoFaturamentoAtividadeCronogramaRota != null
 					&& !colecaoFaturamentoAtividadeCronogramaRota.isEmpty()) {
 
-				// Objeto que armazenar· as informaÁıes para deleÁ„o dos
-				// crÈditos
+				// Objeto que armazenar√° as informa√ß√µes para dele√ß√£o dos
+				// cr√©ditos
 				ApagarDadosFaturamentoHelper helper = new ApagarDadosFaturamentoHelper();
 
-				// Caso a atividade seja de gerar dados para leitura, a situaÁ„o
-				// fica como prÈ-faturada
+				// Caso a atividade seja de gerar dados para leitura, a situa√ß√£o
+				// fica como pr√©-faturada
 				if (atividade == FaturamentoAtividade.GERAR_ARQUIVO_LEITURA) {
 					helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
 				} else {
@@ -65093,7 +65099,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Iterator iteratorColecaoFaturamentoAtividadeCronogramaRota = colecaoFaturamentoAtividadeCronogramaRota
 						.iterator();
 
-				// LA«O PARA GERAR CR…DITO PARA TODAS AS ROTAS
+				// LA√áO PARA GERAR CR√âDITO PARA TODAS AS ROTAS
 				while (iteratorColecaoFaturamentoAtividadeCronogramaRota
 						.hasNext()) {
 
@@ -65101,13 +65107,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.next();
 
 					/*
-					 * Processa sÛ as rotas de impress„o simult‚nea caso a
+					 * Processa s√≥ as rotas de impress√£o simult√¢nea caso a
 					 * atividade seja o de gerar dados para leitura.
 					 * 
-					 * Caso a atividade seja da faturar grupo, ent„o processa
+					 * Caso a atividade seja da faturar grupo, ent√£o processa
 					 * normalmente
 					 * 
-					 * Analista: S·vio Luiz em 10/06/2010
+					 * Analista: S√°vio Luiz em 10/06/2010
 					 */
 					if (atividade == FaturamentoAtividade.GERAR_ARQUIVO_LEITURA
 							.intValue()) {
@@ -65126,11 +65132,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.getAnoMesReferencia());
 
 					// APAGAR DADOS GERADOS PARA A ROTA NO ANO/MES DE REFERENCIA
-					// DA GERA«√O DOS CR…DITOS
+					// DA GERA√á√ÉO DOS CR√âDITOS
 					// =================================================================================================
 
-					// Caso a atividade n„o seja de gerar dados para leitura, a
-					// situaÁ„o fica como prÈ-faturada
+					// Caso a atividade n√£o seja de gerar dados para leitura, a
+					// situa√ß√£o fica como pr√©-faturada
 					if (atividade != FaturamentoAtividade.GERAR_ARQUIVO_LEITURA) {
 
 						helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
@@ -65151,7 +65157,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					// =================================================================================================
 
-					// Vari·veis para a paginaÁ„o da pesquisa de Imovel por
+					// Vari√°veis para a pagina√ß√£o da pesquisa de Imovel por
 					// Grupo Faturamento
 					// ========================================================================
 					boolean flagTerminou = false;
@@ -65168,8 +65174,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 										false, false);
 
 						/*
-						 * Caso exista ids de imÛveis para a rota atual
-						 * determina a geraÁ„o do crÈdito para cada imÛvel
+						 * Caso exista ids de im√≥veis para a rota atual
+						 * determina a gera√ß√£o do cr√©dito para cada im√≥vel
 						 * retornado.
 						 */
 						if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
@@ -65177,14 +65183,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							Iterator iteratorColecaoImoveis = colecaoImovel
 									.iterator();
 
-							// LA«O PARA GERAR O CR…DITO DE TODOS OS IMOVEIS DA
+							// LA√áO PARA GERAR O CR√âDITO DE TODOS OS IMOVEIS DA
 							// ROTA ATUAL
 							Imovel imovel = null;
 							while (iteratorColecaoImoveis.hasNext()) {
 
 								imovel = (Imovel) iteratorColecaoImoveis.next();
 
-								// GERA«√O CR…DITO
+								// GERA√á√ÉO CR√âDITO
 								// --------------------------------------------------------------------------------
 								gerarCreditoSituacaoEspecialFaturamento
 										.gerarCreditoSituacaoEspecialFaturamentoImovel(
@@ -65197,14 +65203,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}// FIM DO LOOP DE IMOVEIS
 
 						/**
-						 * Incrementa o n∫ do indice da p·ginaÁ„o
+						 * Incrementa o n¬∫ do indice da p√°gina√ß√£o
 						 */
 						numeroIndice = numeroIndice + quantidadeRegistros;
 
 						/**
-						 * Caso a coleÁ„o de imoveis retornados for menor que a
+						 * Caso a cole√ß√£o de imoveis retornados for menor que a
 						 * quantidade de registros seta a flag indicando que a
-						 * paginaÁ„o terminou.
+						 * pagina√ß√£o terminou.
 						 */
 						if (colecaoImovel == null
 								|| colecaoImovel.size() < quantidadeRegistros) {
@@ -65217,10 +65223,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							colecaoImovel = null;
 						}
 
-					}// FIM DO LOOP DA PAGINA«√O
+					}// FIM DO LOOP DA PAGINA√á√ÉO
 				}
 			} else {
-				// A LISTA COM AS ROTAS EST¡ NULA OU VAZIA
+				// A LISTA COM AS ROTAS EST√Å NULA OU VAZIA
 
 				throw new ControladorException(
 						"atencao.pesquisa.grupo_rota_vazio");
@@ -65228,7 +65234,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// --------------------------------------------------------
 			//
-			// Registrar o fim da execuÁ„o da Unidade de Processamento
+			// Registrar o fim da execu√ß√£o da Unidade de Processamento
 			//
 			// --------------------------------------------------------
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
@@ -65237,9 +65243,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		} catch (Exception e) {
 
 			/*
-			 * Este catch serve para interceptar qualquer exceÁ„o que o processo
-			 * batch venha a lanÁar e garantir que a unidade de processamento do
-			 * batch ser· atualizada com o erro ocorrido.
+			 * Este catch serve para interceptar qualquer exce√ß√£o que o processo
+			 * batch venha a lan√ßar e garantir que a unidade de processamento do
+			 * batch ser√° atualizada com o erro ocorrido.
 			 */
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
 					idUnidadeIniciada, true);
@@ -65248,11 +65254,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0157] - Simular C·lculo da Conta
+	 * [UC0157] - Simular C√°lculo da Conta
 	 * 
-	 * [SB0001] - Determinar consumo mÌnimo por ·rea
+	 * [SB0001] - Determinar consumo m√≠nimo por √°rea
 	 * 
-	 * @author Rafael CorrÍa, Mariana Victor
+	 * @author Rafael Corr√™a, Mariana Victor
 	 * @date 26/03/2009, 23/05/2011
 	 * 
 	 * @throws ControladorException
@@ -65270,7 +65276,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		if (qtdEconomias != null && qtdEconomias.intValue() != 0) {
 			if (areaTotal != null) {
-				// 1.2. Caso a ·rea tenha sido informada
+				// 1.2. Caso a √°rea tenha sido informada
 
 				BigDecimal area = areaTotal.divide(
 						new BigDecimal(qtdEconomias), 2, RoundingMode.HALF_UP);
@@ -65324,7 +65330,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				}
 			} else if (pontosUtilizacao != null) {
-				// 1.3. Caso os pontos de utilizaÁ„o do imÛvel tenha sido
+				// 1.3. Caso os pontos de utiliza√ß√£o do im√≥vel tenha sido
 				// informado
 
 				// 1.3.1. Caso as subcategorias tenham sido informadas
@@ -65352,7 +65358,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						retorno = retorno
 								+ (consumoSubcategoria * qtdEconomiasSubcategoria);
 					}
-				} else { // 1.3.2. Caso contr·rio; para cada categoria
+				} else { // 1.3.2. Caso contr√°rio; para cada categoria
 							// informada:
 					retorno = new Integer(0);
 
@@ -65377,7 +65383,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 			} else if (numeroMoradores != null) {
-				// 1.4. Caso o n˙mero de moradores do imÛvel tenha sido
+				// 1.4. Caso o n√∫mero de moradores do im√≥vel tenha sido
 				// informado
 				// 1.4.1. Caso as subcategorias tenham sido informadas
 				if (colecaoSubcategoria != null
@@ -65404,7 +65410,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						retorno = retorno
 								+ (consumoSubcategoria * qtdEconomiasSubcategoria);
 					}
-				} else { // 1.4.2. Caso contr·rio; para cada categoria informada
+				} else { // 1.4.2. Caso contr√°rio; para cada categoria informada
 					retorno = new Integer(0);
 
 					for (Categoria categoria : colecaoCategoria) {
@@ -65434,9 +65440,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0157] - Simular C·lculo da Conta
+	 * [UC0157] - Simular C√°lculo da Conta
 	 * 
-	 * @author Rafael CorrÍa
+	 * @author Rafael Corr√™a
 	 * @date 26/03/2009
 	 * 
 	 */
@@ -65471,7 +65477,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Consultar Leituras N„o Registradas
+	 * Consultar Leituras N√£o Registradas
 	 * 
 	 * @author Vinicius Medeiros
 	 * @date 11/03/2009
@@ -65541,7 +65547,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * [SB0005] - Obter Valor do Parcelamento Concedido como Bonus
 	 * 
@@ -65593,7 +65599,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0156] Informar Situacao Especial Faturamento
 	 * 
-	 * @author RÙmulo AurÈlio
+	 * @author R√¥mulo Aur√©lio
 	 * @created 18/01/2006
 	 * 
 	 */
@@ -65903,9 +65909,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0896] Manter Autos de InfraÁ„o
+	 * [UC0896] Manter Autos de Infra√ß√£o
 	 * 
-	 * @author RÙmulo AurÈlio
+	 * @author R√¥mulo Aur√©lio
 	 * @created 06/05/2009
 	 * 
 	 */
@@ -65954,7 +65960,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		// ------------ REGISTRAR TRANSA«√O ----------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 				Operacao.OPERACAO_ATUALIZAR_AUTO_INFRACAO,
 				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -65970,11 +65976,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		autosInfracao.adicionarUsuario(usuarioLogado,
 				UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
 		registradorOperacao.registrarOperacao(autosInfracao);
-		// ------------ REGISTRAR TRANSA«√O ----------------
+		// ------------ REGISTRAR TRANSA√á√ÉO ----------------
 
 		getControladorUtil().atualizar(autosInfracao);
 
-		// [SB0003]- Gerar DÈbito a Cobrar
+		// [SB0003]- Gerar D√©bito a Cobrar
 		if (autosInfracao.getAutoInfracaoSituacao().getIndicadorGerarDebito()
 				.toString().equals(ConstantesSistema.SIM.toString())) {
 			getControladorAtendimentoPublico().gerarDebitoACobrarAutoInfracao(
@@ -65989,7 +65995,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		if (dataEmissao.after(new Date())) {
 			throw new ControladorException("atencao.data.invalida", null,
-					"Data de Emiss„o");
+					"Data de Emiss√£o");
 		}
 
 		if (idAutoInfracaoSituacao.toString().equals(
@@ -66127,9 +66133,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Pesquisa o valor da ·gua da conta.
+	 * Pesquisa o valor da √°gua da conta.
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 11/05/2009
 	 * 
 	 * @param idConta
@@ -66151,7 +66157,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * Inserir Situacao Especial de Faturamento
 	 * 
-	 * @author RÙmulo AurÈlio
+	 * @author R√¥mulo Aur√©lio
 	 * @date 11/05/2009
 	 * 
 	 * @return
@@ -66191,7 +66197,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.pesquisarUltimaAlteracaoImovel(id);
 
 					if (ultimaAlteracaoImovel.after(ultimaAlteracao)) {
-						logger.error("Data da ultima alteracao do imovel È maior que a ultima alteracao enviada.");
+						logger.error("Data da ultima alteracao do imovel √© maior que a ultima alteracao enviada.");
 						throw new ControladorException(
 								"atencao.atualizacao.timestamp");
 					}
@@ -66258,7 +66264,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 			// ------------------------REGISTRAR
-			// TRANSA«√O---------------------FATURAMENTO HISTORICO-----
+			// TRANSA√á√ÉO---------------------FATURAMENTO HISTORICO-----
 			Iterator itera = collectionFaturmentoSituaoHistorico.iterator();
 			while (itera.hasNext()) {
 				FaturamentoSituacaoHistorico fsh = (FaturamentoSituacaoHistorico) itera
@@ -66275,7 +66281,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				registradorOperacao.registrarOperacao(fsh);
 			}
 			// ------------------------REGISTRAR
-			// TRANSA«√O---------------------FATURAMENTO HISTORICO-----
+			// TRANSA√á√ÉO---------------------FATURAMENTO HISTORICO-----
 			getControladorBatch().inserirColecaoObjetoParaBatch(
 					collectionFaturmentoSituaoHistorico);
 
@@ -66315,13 +66321,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0928] - Manter SituaÁ„o Especial de Faturamento [SB0001 e SB0002 ] -
-	 * Retirar FSC e Inserir FSC FSC = Faturamento SituaÁ„o Comando
+	 * [UC0928] - Manter Situa√ß√£o Especial de Faturamento [SB0001 e SB0002 ] -
+	 * Retirar FSC e Inserir FSC FSC = Faturamento Situa√ß√£o Comando
 	 * 
-	 * Para que uma SituaÁ„o Especial de Faturamento (SEF) seja atualizada na
-	 * verdade È preciso retirar a SEF atual e inserir uma nova.
+	 * Para que uma Situa√ß√£o Especial de Faturamento (SEF) seja atualizada na
+	 * verdade √© preciso retirar a SEF atual e inserir uma nova.
 	 * 
-	 * AlÈm disso, È preciso atualzar o historico da SEF antiga e inserir um
+	 * Al√©m disso, √© preciso atualzar o historico da SEF antiga e inserir um
 	 * novo historico para a nova SEF.
 	 * 
 	 * @since 14/08/2009
@@ -66357,11 +66363,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0928] - Manter SituaÁ„o Especial de Faturamento (SEF)
+	 * [UC0928] - Manter Situa√ß√£o Especial de Faturamento (SEF)
 	 * 
-	 * Para que a operaÁ„o seja registrada como uma ATUALIZA«√O foi necess·rio
-	 * inserir o novo Comando com os dados do antigo e em seguida atualiz·-lo,
-	 * dessa forma, na consulta de operaÁıes o usu·rio poder· ver o valor antigo
+	 * Para que a opera√ß√£o seja registrada como uma ATUALIZA√á√ÉO foi necess√°rio
+	 * inserir o novo Comando com os dados do antigo e em seguida atualiz√°-lo,
+	 * dessa forma, na consulta de opera√ß√µes o usu√°rio poder√° ver o valor antigo
 	 * e o novo.
 	 * 
 	 * @since 21/08/2009
@@ -66477,13 +66483,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Imovel imovel = new Imovel();
 		imovel.setId(emitirContaHelper.getIdImovel());
 		try {
-			// Pesquisa o consumo histÛrico para a ligaÁ„o de ·gua
+			// Pesquisa o consumo hist√≥rico para a liga√ß√£o de √°gua
 			Collection consumoHistoricoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, amReferencia);
 
-			// caso n„o exista
+			// caso n√£o exista
 			if (consumoHistoricoMesAnterior == null || consumoHistoricoMesAnterior.isEmpty()) {
 				ligacaoTipo.setId(LigacaoTipo.LIGACAO_ESGOTO);
-				// Pesquisa o consumo histÛrico para ligaÁ„o de esgoto
+				// Pesquisa o consumo hist√≥rico para liga√ß√£o de esgoto
 				consumoHistoricoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, amReferencia);
 			}
 			// caso exista consumo historico e anormalidade de consumo
@@ -66494,13 +66500,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (dadosConsumo[1] != null) {
 						idAnormalidadeConsumo = (Integer) dadosConsumo[1];
 					}
-					// verifica se a anormalidade de consumo È Baixo Consumo,
+					// verifica se a anormalidade de consumo √© Baixo Consumo,
 					// Alto Consumo ou Estou de Consumo
 					if (idAnormalidadeConsumo != null
 							&& (idAnormalidadeConsumo.equals(ConsumoAnormalidade.BAIXO_CONSUMO) || idAnormalidadeConsumo.equals(ConsumoAnormalidade.ALTO_CONSUMO) || idAnormalidadeConsumo
 									.equals(ConsumoAnormalidade.ESTOURO_CONSUMO))) {
 
-						// ObtÈm a quantidade de economias por categoria
+						// Obt√©m a quantidade de economias por categoria
 						Collection colecaoCategoria = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
 
 						Integer idCategoriaComMaisEconomias = null;
@@ -66512,8 +66518,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 							int qtdEconomias = categoria.getQuantidadeEconomiasCategoria().intValue();
 
-							// ObtÈm a maior quantidade de economias e a vezes
-							// mÈdia de estouro
+							// Obt√©m a maior quantidade de economias e a vezes
+							// m√©dia de estouro
 							if (maiorQuantidadeEconomia < qtdEconomias) {
 
 								idCategoriaComMaisEconomias = categoria.getId();
@@ -66522,49 +66528,49 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 
 						Integer idImovelPerfil = emitirContaHelper.getIdImovelPerfil();
-						// verifica se existe consumo anormalidade aÁ„o para a
+						// verifica se existe consumo anormalidade a√ß√£o para a
 						// anormalidade de consumo, a principal categoria e o
 						// perfil
 						ConsumoAnormalidadeAcao consumoAnormalidadeAcao = this.getControladorMicromedicao().verificaAcaoASerTomada(idAnormalidadeConsumo, idCategoriaComMaisEconomias, idImovelPerfil);
 						if (consumoAnormalidadeAcao != null) {
 							String mensagemContaAnormalidade = "";
 
-							// ObtÈm o ano e mÍs de referÍncia de faturamento
+							// Obt√©m o ano e m√™s de refer√™ncia de faturamento
 							int anoMesReferenciaAnterior = Util.subtrairData(amReferencia);
 
-							// Pesquisa o consumo histÛrico
+							// Pesquisa o consumo hist√≥rico
 							consumoHistoricoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, anoMesReferenciaAnterior, idAnormalidadeConsumo);
 
-							// 3.1.1. Caso n„o tenha ocorrido estouro,auto ou
-							// baixo consumo no mÍs anterior
+							// 3.1.1. Caso n√£o tenha ocorrido estouro,auto ou
+							// baixo consumo no m√™s anterior
 							// (CSAN_ID da tabela CONSUMO_HISTORICO com o valor
 							// diferente de estouro de consumo
-							// com IMOV_ID=matrÌcula do imÛvel, LGTI_ID com o
-							// valor correspondente a ligaÁ„o de ·gua
-							// ou com o valor correspondente a ligaÁ„o de esgoto
+							// com IMOV_ID=matr√≠cula do im√≥vel, LGTI_ID com o
+							// valor correspondente a liga√ß√£o de √°gua
+							// ou com o valor correspondente a liga√ß√£o de esgoto
 							// e
-							// CSHI_AMFATURAMENTO igual ao ano /mÍs de
-							// faturamento menos um mÍs),
-							// ent„o verifica a aÁ„o a ser tomada no primeiro
-							// mÍs (LACS_IDMES1):
+							// CSHI_AMFATURAMENTO igual ao ano /m√™s de
+							// faturamento menos um m√™s),
+							// ent√£o verifica a a√ß√£o a ser tomada no primeiro
+							// m√™s (LACS_IDMES1):
 							if (consumoHistoricoMesAnterior == null || consumoHistoricoMesAnterior.isEmpty()) {
 
 								mensagemContaAnormalidade = consumoAnormalidadeAcao.getDescricaoContaMensagemMes1();
 
 							} else {
 
-								// 3.1.2.Caso contr·rio, ou seja, tenha ocorrido
-								// estouro,auto ou baixo de consumo no mÍs
+								// 3.1.2.Caso contr√°rio, ou seja, tenha ocorrido
+								// estouro,auto ou baixo de consumo no m√™s
 								// anterior,
 								// o sistema verifica se tenha ocorrido estouro
-								// de consumo no segundo mÍs anterior
+								// de consumo no segundo m√™s anterior
 								// (CSAN_ID da tabela CONSUMO_HISTORICO com o
 								// valor diferente de estouro de consumo
-								// com IMOV_ID=matrÌcula do imÛvel, LGTI_ID com
-								// o valor correspondente a ligaÁ„o de ·gua
-								// ou com o valor correspondente a ligaÁ„o de
+								// com IMOV_ID=matr√≠cula do im√≥vel, LGTI_ID com
+								// o valor correspondente a liga√ß√£o de √°gua
+								// ou com o valor correspondente a liga√ß√£o de
 								// esgoto e
-								// CSHI_AMFATURAMENTO igual ao ano /mÍs de
+								// CSHI_AMFATURAMENTO igual ao ano /m√™s de
 								// faturamento menos dois meses)
 
 								Collection consumoHistoricoSegundoMesAnterior = repositorioMicromedicao.pesquisarConsumoHistoricoConsumoAnormalidade(imovel, ligacaoTipo, Util.subtrairData(anoMesReferenciaAnterior),
@@ -66607,9 +66613,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MetÛdo respons·vel por emitir os txts das contas.
+	 * Met√≥do respons√°vel por emitir os txts das contas.
 	 * 
-	 * Obter Dados da MediÁ„o da Conta
+	 * Obter Dados da Medi√ß√£o da Conta
 	 * 
 	 * @author TiagoMoreno
 	 * @date 25/02/2010
@@ -66635,7 +66641,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0194] - Inserir CrÈdito a Realizar
+	 * [UC0194] - Inserir Cr√©dito a Realizar
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 14/04/2010
@@ -66779,15 +66785,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object com a soma do valor dos debitos
+	 * M√©todo que retorna uma array de object com a soma do valor dos debitos
 	 * cobrados de parcelamento,o numero da prestacao e o numero total de
-	 * prestaÁıes
+	 * presta√ß√µes
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * 
@@ -66807,13 +66813,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object com a soma do valor dos debitos
+	 * M√©todo que retorna uma array de object com a soma do valor dos debitos
 	 * cobrados de parcelamento,o numero da prestacao e o numero total de
-	 * prestaÁıes
+	 * presta√ß√µes
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 16/05/2007
@@ -66835,15 +66841,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object do debito cobrado ordenado pelo
+	 * M√©todo que retorna uma array de object do debito cobrado ordenado pelo
 	 * tipo de debito
 	 * 
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
-	 * @author S·vio Luiz, Vivianne Sousa
+	 * @author S√°vio Luiz, Vivianne Sousa
 	 * @date 19/05/2006, 16/01/2007
 	 * 
 	 * 
@@ -66863,13 +66869,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * MÈtodo que retorna uma array de object do debito cobrado ordenado pelo
+	 * M√©todo que retorna uma array de object do debito cobrado ordenado pelo
 	 * tipo de debito
 	 * 
 	 * 
-	 * [UC0482]Emitir 2™ Via de Conta
+	 * [UC0482]Emitir 2¬™ Via de Conta
 	 * 
-	 * [SB0013] Gerar Linhas dos DÈbitos Cobrados
+	 * [SB0013] Gerar Linhas dos D√©bitos Cobrados
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 16/05/2007
@@ -66893,7 +66899,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * [SB0002] - Obter dados dos serviÁos de parcelamento
+	 * [SB0002] - Obter dados dos servi√ßos de parcelamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 25/04/2008
@@ -66916,7 +66922,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * [SB0002] - Obter dados dos serviÁos de parcelamento
+	 * [SB0002] - Obter dados dos servi√ßos de parcelamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 25/04/2008
@@ -66986,7 +66992,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throws ControladorException {
 
 		try {
-			// PAR¬METROS DO SISTEMA
+			// PAR√ÇMETROS DO SISTEMA
 			SistemaParametro sistemaParametro = this.getControladorUtil()
 					.pesquisarParametrosDoSistema();
 
@@ -67017,7 +67023,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * Metodo que retornar o grupo de faturamento a partir do id do Imovel
 	 * 
-	 * @author RÙmulo AurÈlio
+	 * @author R√¥mulo Aur√©lio
 	 * @date 24/08/2010
 	 * @param idImovel
 	 * @return
@@ -67039,7 +67045,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0352] Emitir Contas e Cartas [SB0005] - Obter Dados da MediÁ„o da
+	 * [UC0352] Emitir Contas e Cartas [SB0005] - Obter Dados da Medi√ß√£o da
 	 * Conta
 	 * 
 	 * @author Vivianne Sousa
@@ -67177,7 +67183,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0204] Consultar Conta
 	 * 
-	 * Pesquisa o consumo faturado do imÛvel
+	 * Pesquisa o consumo faturado do im√≥vel
 	 * 
 	 * @author Mariana Victor
 	 * @date 06/01/2011
@@ -67205,7 +67211,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0819] Gerar Historico do Encerramento do Faturamento
 	 * 
-	 * Metodo respons·vel pela transferÍncia das contas canceladas.
+	 * Metodo respons√°vel pela transfer√™ncia das contas canceladas.
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 08/02/2011
@@ -67236,7 +67242,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0819] Gerar Historico do Encerramento do Faturamento
 	 * 
-	 * Metodo respons·vel pela transferÍncia dos dÈbitos a cobrar cancelados
+	 * Metodo respons√°vel pela transfer√™ncia dos d√©bitos a cobrar cancelados
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 08/02/2011
@@ -67259,7 +67265,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0819] Gerar Historico do Encerramento do Faturamento
 	 * 
-	 * Metodo respons·vel pela transferÍncia dos crÈditos a realizar cancelados
+	 * Metodo respons√°vel pela transfer√™ncia dos cr√©ditos a realizar cancelados
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 08/02/2011
@@ -67289,9 +67295,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0473] Consultar Dados Complementares do ImÛvel
+	 * [UC0473] Consultar Dados Complementares do Im√≥vel
 	 * 
-	 * Pesquisa as matrÌculas associadas ‡ mesma tarifa de consumo do imÛvel.
+	 * Pesquisa as matr√≠culas associadas √† mesma tarifa de consumo do im√≥vel.
 	 * 
 	 * @author Mariana Victor
 	 * @date 06/01/2011
@@ -67320,8 +67326,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC1122] Automatizar Perfis de Grandes Consumidores
 	 * 
-	 * Metodo respons·vel pela identificaÁ„o dos grandes consumidores e
-	 * alteraÁ„o seus respectivos perfis.
+	 * Metodo respons√°vel pela identifica√ß√£o dos grandes consumidores e
+	 * altera√ß√£o seus respectivos perfis.
 	 * 
 	 * @author Mariana Victor
 	 * @date 07/02/2011
@@ -67337,7 +67343,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		// -------------------------
 		//
-		// Registrar o inÌcio do processamento da Unidade de
+		// Registrar o in√≠cio do processamento da Unidade de
 		// Processamento
 		// do Batch
 		//
@@ -67352,7 +67358,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			System.out.println("localidade: " + idLocalidade);
 
 			if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
-				System.out.println("quantidade de imÛveis: "
+				System.out.println("quantidade de im√≥veis: "
 						+ colecaoImovel.size());
 
 				Iterator iterator = colecaoImovel.iterator();
@@ -67402,7 +67408,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0352] Emitir Contas e Cartas
 	 * 
-	 * [SB0048] ñ Obter Nome do Cliente
+	 * [SB0048] ¬ñ Obter Nome do Cliente
 	 * 
 	 * @author Mariana Victor
 	 * @date 11/03/2011
@@ -67451,18 +67457,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		/*
 		 * Colocado por Raphael Rossiter em 04/03/2011 OBJ: Resolver o problema
-		 * na baixa dos boletos pois a numeraÁ„o que esta sendo gerada esta
-		 * ultrapassando o limite de 8 caracteres que nÛs temos no cÛdigo de
+		 * na baixa dos boletos pois a numera√ß√£o que esta sendo gerada esta
+		 * ultrapassando o limite de 8 caracteres que n√≥s temos no c√≥digo de
 		 * barras.
 		 * 
 		 * Caso o valor limite definido pela empresa para identificar se uma
-		 * conta ser· tratada como um boleto esteja nulo (PARM_VLCONTAFICHACOMP
+		 * conta ser√° tratada como um boleto esteja nulo (PARM_VLCONTAFICHACOMP
 		 * da tabela SISTEMA_PARAMETROS com valor NULO) ou esteja diferente de
 		 * NULO e seja MENOR que o valor total da conta ((CNTA_VLAGUA +
 		 * CNTA_VLESGOTO + CNTA_VLDEBITOS - CNTA_VLCREDITOS - CNTA_VLIMPOSTOS) <
 		 * PARM_VLCONTAFICHACOMP da tabela SISTEMA_PARAMETROS), atribuir NULO;
 		 * 
-		 * caso contr·rio, atribuir a ˙ltima numeraÁ„o gerada para boleto mais
+		 * caso contr√°rio, atribuir a √∫ltima numera√ß√£o gerada para boleto mais
 		 * um ( MAX (CNTA_NNBOLETO) + 1).
 		 */
 		if (sistemaParametro.getValorContaFichaComp() != null
@@ -67526,7 +67532,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0120] - Calcular Valores de ¡gua e/ou Esgoto
+	 * [UC0120] - Calcular Valores de √Ågua e/ou Esgoto
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 11/04/2011
@@ -67544,7 +67550,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		Collection colecaoConsumoTarifaVigenciaTodasDatas = null;
 
-		// SELECIONANDO as tarifas vigentes para a tarifa do imÛvel
+		// SELECIONANDO as tarifas vigentes para a tarifa do im√≥vel
 		if (consumoTarifa.getTarifaTipoCalculo().getId().intValue() == 3) {
 			colecaoConsumoTarifaVigenciaTodasDatas = this
 					.obterConsumoTarifaVigenciaCalcularAguaEsgotoPorMesAno(
@@ -67561,9 +67567,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de ServiÁo de CobranÁa por Resultado
+	 * [UC1169] Movimentar Ordens de Servi√ßo de Cobran√ßa por Resultado
 	 * 
-	 * Pesquisa a quantidade de contas, agrupando por imÛvel
+	 * Pesquisa a quantidade de contas, agrupando por im√≥vel
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 12/05/2011
@@ -67585,7 +67591,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de ServiÁo de CobranÁa por Resultado
+	 * [UC1169] Movimentar Ordens de Servi√ßo de Cobran√ßa por Resultado
 	 * 
 	 * Pesquisa a quantidade de contas
 	 * 
@@ -67609,9 +67615,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de ServiÁo de CobranÁa por Resultado
+	 * [UC1169] Movimentar Ordens de Servi√ßo de Cobran√ßa por Resultado
 	 * 
-	 * Pesquisa as ordens de serviÁo selecionadas
+	 * Pesquisa as ordens de servi√ßo selecionadas
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 19/05/2011
@@ -67633,9 +67639,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC1173] Informar Consumo por Par‚metros
+	 * [UC1173] Informar Consumo por Par√¢metros
 	 * 
-	 * [FS0005] ñ Validar mÍs ano maior ou igual
+	 * [FS0005] ¬ñ Validar m√™s ano maior ou igual
 	 * 
 	 * @author Mariana Victor
 	 * @date 20/05/2011
@@ -67662,8 +67668,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * [UC0146] - Manter Conta
 	 * 
-	 * Metodo respons·vel por percorrer a lista de contas e retornar apenas as
-	 * que n„o est„o ligadas a algum Contrato de Parcelamento por Cliente
+	 * Metodo respons√°vel por percorrer a lista de contas e retornar apenas as
+	 * que n√£o est√£o ligadas a algum Contrato de Parcelamento por Cliente
 	 * 
 	 * @author Mariana Victor
 	 * @date 14/07/2011
@@ -67701,10 +67707,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC0482] Emitir 2™ Via de Conta
+	 * [UC0482] Emitir 2¬™ Via de Conta
 	 * 
-	 * Metodo respons·vel por percorrer a lista de contas e retornar apenas as
-	 * que n„o est„o ligadas a algum Contrato de Parcelamento por Cliente
+	 * Metodo respons√°vel por percorrer a lista de contas e retornar apenas as
+	 * que n√£o est√£o ligadas a algum Contrato de Parcelamento por Cliente
 	 * 
 	 * @author Mariana Victor
 	 * @date 14/07/2011
@@ -67743,10 +67749,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	
 
 	/**
-	 * [UC1187] Colocar DÈbito a Cobrar em Revis„o
+	 * [UC1187] Colocar D√©bito a Cobrar em Revis√£o
 	 * 
-	 * Este caso de uso permite colocar uma lista de dÈbito a cobrar recebida em
-	 * revis„o.
+	 * Este caso de uso permite colocar uma lista de d√©bito a cobrar recebida em
+	 * revis√£o.
 	 * 
 	 * @author Mariana Victor
 	 * @date 21/07/2011
@@ -67763,18 +67769,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Iterator colecaoDebitosACobrarIt = colecaoDebitosACobrar.iterator();
 
 		while (colecaoDebitosACobrarIt.hasNext()) {
-			// 1. Para cada dÈbito a cobrar da lista recebida o sistema atualiza
+			// 1. Para cada d√©bito a cobrar da lista recebida o sistema atualiza
 			// os seguintes atributos da tabela faturamento.DEBITO_A_COBRAR:
 			DebitoACobrar debitoACobrar = (DebitoACobrar) colecaoDebitosACobrarIt
 					.next();
 
-			// 1.1. Data da revis„o
+			// 1.1. Data da revis√£o
 			debitoACobrar.setDataRevisao(new Date());
 
-			// 1.2. Motivo da revis„o
+			// 1.2. Motivo da revis√£o
 			debitoACobrar.setContaMotivoRevisao(contaMotivoRevisao);
 
-			// Ultima alteraÁ„o
+			// Ultima altera√ß√£o
 			debitoACobrar.setUltimaAlteracao(new Date());
 
 			// Usuario
@@ -67791,9 +67797,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC1188] Retirar DÈbito A Cobrar de Revis„o
+	 * [UC1188] Retirar D√©bito A Cobrar de Revis√£o
 	 * 
-	 * Este caso de uso permite retirar de revis„o uma lista de dÈbito a cobrar
+	 * Este caso de uso permite retirar de revis√£o uma lista de d√©bito a cobrar
 	 * recebida.
 	 * 
 	 * @author Mariana Victor
@@ -67810,18 +67816,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Iterator colecaoDebitosACobrarIt = colecaoDebitosACobrar.iterator();
 
 		while (colecaoDebitosACobrarIt.hasNext()) {
-			// 1. Para cada dÈbito a cobrar da lista recebida o sistema atualiza
+			// 1. Para cada d√©bito a cobrar da lista recebida o sistema atualiza
 			// os seguintes atributos da tabela faturamento.DEBITO_A_COBRAR:
 			DebitoACobrar debitoACobrar = (DebitoACobrar) colecaoDebitosACobrarIt
 					.next();
 
-			// 1.1. Data da revis„o (DBAC _DTREVISAO =nulo)
+			// 1.1. Data da revis√£o (DBAC _DTREVISAO =nulo)
 			debitoACobrar.setDataRevisao(null);
 
-			// 1.2. Motivo da revis„o (MRVC_ID =nulo)
+			// 1.2. Motivo da revis√£o (MRVC_ID =nulo)
 			debitoACobrar.setContaMotivoRevisao(null);
 
-			// Ultima alteraÁ„o
+			// Ultima altera√ß√£o
 			debitoACobrar.setUltimaAlteracao(new Date());
 
 			// Usuario
@@ -67905,9 +67911,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * [UC1214] Informar Acerto Documentos N„o Aceitos
+	 * [UC1214] Informar Acerto Documentos N√£o Aceitos
 	 * 
-	 * [SB0002] ? Selecionar DÈbitos Pagos
+	 * [SB0002] ? Selecionar D√©bitos Pagos
 	 * 
 	 * @author Mariana Victor
 	 * @date 23/08/2011
@@ -67920,17 +67926,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public Conta pesquisarContaOuContaHistoricoDigitada(String idImovel,
 			String referenciaConta) throws ControladorException {
 
-		// Vari·vel que vai armazenar a conta pesquisada
+		// Vari√°vel que vai armazenar a conta pesquisada
 		Conta contaDigitada = null;
 		Object[] dadosConta = null;
 
-		// Formata a referÍncia da conta informada para o formato (AAAAMM) sem a
+		// Formata a refer√™ncia da conta informada para o formato (AAAAMM) sem a
 		// barra
 		String anoMesConta = Util
 				.formatarMesAnoParaAnoMesSemBarra(referenciaConta);
 
-		// Cria o filtro de conta e seta todos os par‚metros para pesquisar a
-		// conta do imÛvel
+		// Cria o filtro de conta e seta todos os par√¢metros para pesquisar a
+		// conta do im√≥vel
 		// Pesquisa imovel
 		try {
 			dadosConta = repositorioFaturamento
@@ -67951,12 +67957,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				contaDigitada.setId((Integer) dadosConta[0]);
 			}
 
-			// ReferÍncia
+			// Refer√™ncia
 			if (dadosConta[1] != null) {
 				contaDigitada.setReferencia((Integer) dadosConta[1]);
 			}
 
-			// Valor da ¡gua
+			// Valor da √Ågua
 			if (dadosConta[2] != null) {
 				contaDigitada.setValorAgua((BigDecimal) dadosConta[2]);
 			}
@@ -67966,12 +67972,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				contaDigitada.setValorEsgoto((BigDecimal) dadosConta[3]);
 			}
 
-			// DÈbitos
+			// D√©bitos
 			if (dadosConta[4] != null) {
 				contaDigitada.setDebitos((BigDecimal) dadosConta[4]);
 			}
 
-			// Valor CrÈditos
+			// Valor Cr√©ditos
 			if (dadosConta[5] != null) {
 				contaDigitada.setValorCreditos((BigDecimal) dadosConta[5]);
 			}
@@ -67983,7 +67989,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		// Retorna a conta encontrada ou nulo se n„o existir a conta
+		// Retorna a conta encontrada ou nulo se n√£o existir a conta
 		return contaDigitada;
 	}
 
@@ -68046,14 +68052,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 *  CriaÁ„o do mÈtodo para converter um array com informaÁıes
-	 * de imÛveis em uma lista de objetos imÛveis.
+	 *  Cria√ß√£o do m√©todo para converter um array com informa√ß√µes
+	 * de im√≥veis em uma lista de objetos im√≥veis.
 	 */
 	/**
 	 * @author Pamela Gatinho
 	 * @date 21/02/2011
 	 * 
-	 * @return List<Imovel> lista de imÛveis convertidos
+	 * @return List<Imovel> lista de im√≥veis convertidos
 	 * @param imoveis
 	 * @param sistemaParametro
 	 * @param faturamentoGrupo
@@ -68066,7 +68072,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		List<Imovel> imoveisConvertidos = null;
 
-		// Carregando os dados dos imÛveis selecionados
+		// Carregando os dados dos im√≥veis selecionados
 		if (imoveis != null && !imoveis.isEmpty()) {
 
 			Iterator iteratorImoveis = imoveis.iterator();
@@ -68444,7 +68450,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					imovel.setComplementoEndereco((String) arrayImovel[52]);
 				}
 
-				// CODIGO D…BITO AUTOM¡TICO
+				// CODIGO D√âBITO AUTOM√ÅTICO
 				if (arrayImovel[62] != null) {
 					imovel.setCodigoDebitoAutomatico((Integer) arrayImovel[62]);
 				}
@@ -68481,7 +68487,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					emitir = true;
 				}
 
-				// caso seja para emtir ou seja medido de ·gua ou poÁo
+				// caso seja para emtir ou seja medido de √°gua ou po√ßo
 				if (emitir || existeHidrometroAgua || existeHidrometroPoco) {
 					imoveisConvertidos.add(imovel);
 				}
@@ -68494,7 +68500,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * Recupera a data realizada do faturamento atividade cronograma
 	 * 
-	 * @author S·vio Luiz
+	 * @author S√°vio Luiz
 	 * @date 28/08/2007
 	 * 
 	 * @return Integer
@@ -68520,12 +68526,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 *
 	 * 
-	 * MÈtodo para retornar uma coleÁ„o de debitos cobrados do parcelamento
+	 * M√©todo para retornar uma cole√ß√£o de debitos cobrados do parcelamento
 	 * */
 	/**
 	 * [UC0745] - Gerar Arquivo Texto para Faturamento
 	 * 
-	 * [SB0002] - Obter dados dos serviÁos de parcelamento
+	 * [SB0002] - Obter dados dos servi√ßos de parcelamento
 	 * 
 	 * @author Adriana Muniz
 	 * @date 13/05/2011
@@ -68548,7 +68554,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 * @TODO - COSANPA
 	 * 
-	 *       MÈtodo para obter imÛveis com conta PF
+	 *       M√©todo para obter im√≥veis com conta PF
 	 * 
 	 * @author Felipe Santos
 	 * @date 25/05/2011
@@ -68571,8 +68577,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 *
 	 * 
-	 * MÈtodo para obter todos os imÛveis que j· foram processados na
-	 * transmiss„o do arquivo de retorno do IS
+	 * M√©todo para obter todos os im√≥veis que j√° foram processados na
+	 * transmiss√£o do arquivo de retorno do IS
 	 * 
 	 * @author Felipe Santos
 	 * @date 22/08/2011
@@ -68599,8 +68605,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 *
 	 * 
-	 * MÈtodo para obter todos os imÛveis que faltam ser transmitidos na
-	 * transmiss„o do arquivo de retorno do IS
+	 * M√©todo para obter todos os im√≥veis que faltam ser transmitidos na
+	 * transmiss√£o do arquivo de retorno do IS
 	 * 
 	 * @author Felipe Santos
 	 * @date 24/08/2011
@@ -68630,7 +68636,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @author Pamela Gatinho
 	 * @date 04/08/2011
 	 * 
-	 *       Metodo que obtem a conta do imÛvel, so n„o retorna a conta que
+	 *       Metodo que obtem a conta do im√≥vel, so n√£o retorna a conta que
 	 *       estiver com a situacao CANCELADA POR RETIFICACAO
 	 * 
 	 * @return Conta
@@ -68803,7 +68809,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @author Pamela Gatinho
 	 * @date 24/02/2012
 	 * 
-	 *       Metodo que obtem o movimento do imÛvel lido pelo IS
+	 *       Metodo que obtem o movimento do im√≥vel lido pelo IS
 	 * 
 	 * @return MovimentoContaPreFaturada
 	 * @param anoMesReferencia
@@ -68859,7 +68865,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		System.out.println("Valor rateio ·gua: " + valoresAguaEsgotoContaRateio[0]);
+		System.out.println("Valor rateio √°gua: " + valoresAguaEsgotoContaRateio[0]);
 		System.out.println("Valor rateio esgoto: " + valoresAguaEsgotoContaRateio[1]);
 		valoresAguaEsgotoRateioPorEconomia[0] = valorAguaRateioPorEconomia;
 		valoresAguaEsgotoRateioPorEconomia[1] = valorEsgotoRateioPorEconomia;
@@ -68901,7 +68907,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @author Pamela Gatinho
 	 * @since 23/04/2012
 	 * 
-	 *        MÈtodo que calcula o VALOR a ser rateado, baseado no CONSUMO de
+	 *        M√©todo que calcula o VALOR a ser rateado, baseado no CONSUMO de
 	 *        rateio do macro.
 	 * 
 	 * @param imovelCondominio
@@ -68919,7 +68925,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		LigacaoTipo ligacaoTipo = new LigacaoTipo();
 		
 		if (imovelCondominio.getId().intValue() == 7068263) {
-			logger.info("MÈtodo calcularValorAguaEsgotoParaRateio");
+			logger.info("M√©todo calcularValorAguaEsgotoParaRateio");
 			logger.info("imovelCondominio = " + imovelCondominio.getId());
 		}
 		
@@ -68959,7 +68965,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			if (imovelCondominio.getId().intValue() == 7068263) {
 				logger.info("entrou no if de ligacao de agua");
 			}
-			// Consultando o consumoHistorico de ¡GUA
+			// Consultando o consumoHistorico de √ÅGUA
 			ligacaoTipo.setId(LigacaoTipo.LIGACAO_AGUA);
 
 			consumoHistoricoAgua = this.getControladorMicromedicao().obterConsumoHistoricoMedicaoIndividualizada(imovelCondominio, ligacaoTipo,
@@ -69369,8 +69375,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Verificar no momento em que o usu·rio est· fazendo a prescriÁ„o de uma conta,
-	 * se a mesma atende as condiÁıes necess·rias para que haja a prescriÁ„o
+	 * Verificar no momento em que o usu√°rio est√° fazendo a prescri√ß√£o de uma conta,
+	 * se a mesma atende as condi√ß√µes necess√°rias para que haja a prescri√ß√£o
 	 * 
 	 * @author Wellington Rocha
 	 * @date 01/06/2012
@@ -69427,21 +69433,21 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer[] idsOrigemCredito) throws ControladorException {
 
-		// cria as vari·veis para armazenar os valores do dÈbitos cobrados
-		// cancelados por retificaÁ„o e retificado
+		// cria as vari√°veis para armazenar os valores do d√©bitos cobrados
+		// cancelados por retifica√ß√£o e retificado
 		BigDecimal[] retorno = new BigDecimal[2];
 
 		BigDecimal valorCreditoRealizadoSituacaoCanceladoPorRetificacao = null;
 		BigDecimal valorCreditoRealizadoSituacaoRetificada = null;
 
 		try {
-			// obtÈm o valor dos creditos realizados cancelados do retificaÁ„o
+			// obt√©m o valor dos creditos realizados cancelados do retifica√ß√£o
 			valorCreditoRealizadoSituacaoCanceladoPorRetificacao = repositorioFaturamento
 					.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoCanceladoPorRetificacaoDuplicidadeAte201212(
 							anoMesReferencia, idLocalidade, idCategoria,
 							idsOrigemCredito);
 
-			// obtÈm o valor dos creditos realizados retificados
+			// obt√©m o valor dos creditos realizados retificados
 			valorCreditoRealizadoSituacaoRetificada = repositorioFaturamento
 					.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoRetificadaDuplicidadeAte201212(
 							anoMesReferencia, idLocalidade, idCategoria,
@@ -69472,10 +69478,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	/**
 	 *
 	 * 
-	 * AlteraÁ„o para contabilizar em contas diferentes valores arrecadados atÈ
+	 * Altera√ß√£o para contabilizar em contas diferentes valores arrecadados at√©
 	 * 31/12/2012
 	 * 
-	 * [UC0155] - Encerrar Faturamento do MÍs
+	 * [UC0155] - Encerrar Faturamento do M√™s
 	 * 
 	 * @author Wellington Rocha
 	 * 
@@ -69490,21 +69496,21 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			int anoMesReferencia, int idLocalidade, int idCategoria,
 			Integer[] idsOrigemCredito) throws ControladorException {
 
-		// cria as vari·veis para armazenar os valores do dÈbitos cobrados
-		// cancelados por retificaÁ„o e retificado
+		// cria as vari√°veis para armazenar os valores do d√©bitos cobrados
+		// cancelados por retifica√ß√£o e retificado
 		BigDecimal[] retorno = new BigDecimal[2];
 
 		BigDecimal valorCreditoRealizadoSituacaoCanceladoPorRetificacao = null;
 		BigDecimal valorCreditoRealizadoSituacaoRetificada = null;
 
 		try {
-			// obtÈm o valor dos creditos realizados cancelados do retificaÁ„o
+			// obt√©m o valor dos creditos realizados cancelados do retifica√ß√£o
 			valorCreditoRealizadoSituacaoCanceladoPorRetificacao = repositorioFaturamento
 					.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoCanceladoPorRetificacaoDuplicidade(
 							anoMesReferencia, idLocalidade, idCategoria,
 							idsOrigemCredito);
 
-			// obtÈm o valor dos creditos realizados retificados
+			// obt√©m o valor dos creditos realizados retificados
 			valorCreditoRealizadoSituacaoRetificada = repositorioFaturamento
 					.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoRetificadaDuplicidade(
 							anoMesReferencia, idLocalidade, idCategoria,
@@ -69533,7 +69539,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 
 	/**
-	 * Processar Pagamento com CÛdigo de Barras Por Cliente
+	 * Processar Pagamento com C√≥digo de Barras Por Cliente
 	 * 
 	 * [SB0005] - Processar Recebimento de Acrescimos por Impontualidade
 	 * 
@@ -69564,7 +69570,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		guiaPagamentoGeral.setIndicadorHistorico(indicadorHistorico);
 
-		// Ultima AlteraÁ„o
+		// Ultima Altera√ß√£o
 		guiaPagamentoGeral.setUltimaAlteracao(new Date());
 
 		Integer idGuiaPagamentoGerado = (Integer) getControladorUtil().inserir(
@@ -69942,8 +69948,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		BigDecimal totalIRSituacaoCanceladaDiferencaPositiva = BigDecimal.ZERO;
 		BigDecimal diferencaIRSituacaoCanceladaPorRetificacaoeERetificada = obterDiferencaIRSituacaoCanceladaPorRetificacaoeERetificada(anoMesFaturamento, idLocalidade, idCategoria);
 		/*
-		 * Acumula, quando positiva, a diferenÁa entre o valor do imposto de renda com tipo de imposto igual a IR e situaÁ„o atual
-		 * da conta igual a cancelada por retificaÁ„o e o valor do imposto de renda com situaÁ„o atual ou anterior da conta igual a retificada.
+		 * Acumula, quando positiva, a diferen√ßa entre o valor do imposto de renda com tipo de imposto igual a IR e situa√ß√£o atual
+		 * da conta igual a cancelada por retifica√ß√£o e o valor do imposto de renda com situa√ß√£o atual ou anterior da conta igual a retificada.
 		 */
 		if (diferencaIRSituacaoCanceladaPorRetificacaoeERetificada.compareTo(BigDecimal.ZERO) != -1) {
 			totalIRSituacaoCanceladaDiferencaPositiva = diferencaIRSituacaoCanceladaPorRetificacaoeERetificada;
