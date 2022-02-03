@@ -16555,7 +16555,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			// poss�veis no swagger.
 			String indicadorPermissaoRecebimentoParcial = "N"; // C�digo para identifica��o da autoriza��o de pagamento
 			// parcial do boleto. "S" ou "N"
-			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", conta.getId().toString());
+			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", conta.getId().toString(), idConv);
 			String nossoNumeroSemDV = nossoNumero.toString().substring(0, 20);
 			String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
 			PagadorDTO pagador = new PagadorDTO(); // Identifica o pagador do boleto.

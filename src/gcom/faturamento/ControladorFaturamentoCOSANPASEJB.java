@@ -1151,7 +1151,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 		emitirContaHelper.setValorConta(valorConta);
 
-		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString());
+		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(),
+				emitirContaHelper.getCodigoConvenio());
 		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
 
 		Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(), 90);
@@ -3735,7 +3736,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 
 			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1",
-					emitirContaHelper.getIdConta().toString());
+					emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
 			String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
 
 			Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(), 90);
