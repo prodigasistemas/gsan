@@ -627,27 +627,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 MovimentoContaImpostoDeduzido.class
 	        						 .getName());
 	        				 
-	        				 
-	        				 BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
-	        				 
-	        				 if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
-	        				     BigDecimal valorBolsaAguaAtlz = new BigDecimal(0);
-	        				     BigDecimal valorAguaEsgoto = new BigDecimal(0);
-	        				     
-	        				     if (valorAgua != null && valorAgua.doubleValue() > 0) {
-	        				    	 valorAguaEsgoto = valorAguaEsgoto.add(valorAgua);
-	        				      	}                                       
-	        				     if (valorEsgoto != null && valorEsgoto.doubleValue() > 0) {
-	        				    	 valorAguaEsgoto = valorAguaEsgoto.add(valorEsgoto);
-	        				        }                   
-	        				     if (valorAguaEsgoto.doubleValue() > valorBolsaAguaConcedido.doubleValue()) {
-	        				            valorBolsaAguaAtlz = valorBolsaAguaConcedido;
-	        				     } else {
-	        				            valorBolsaAguaAtlz = valorAguaEsgoto;
-	        				        }
-	        				     atualizarValorCreditoBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel(), valorBolsaAguaAtlz, contaAtualizacao);
-	        				 }
-	        				 
 	        				 BigDecimal valorTotalMenosImposto = new BigDecimal(
 	        						 valorAgua.doubleValue()
 	        						 + valorEsgoto.doubleValue()
@@ -732,6 +711,33 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 valorTotalContaSemCreditos = valorTotalContaSemCreditos.subtract(valorImposto);
 	        				 
 	        				 BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
+	        				 
+	        				 BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
+	        				 
+	        				 if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
+	        				     BigDecimal valorBolsaAguaAtlz = new BigDecimal(0);
+	        				     BigDecimal valorAguaEsgoto = new BigDecimal(0);
+	        				     
+	        				     if (valorAgua != null && valorAgua.doubleValue() > 0) {
+	        				    	 valorAguaEsgoto = valorAguaEsgoto.add(valorAgua);
+	        				      	}                                       
+	        				     if (valorEsgoto != null && valorEsgoto.doubleValue() > 0) {
+	        				    	 valorAguaEsgoto = valorAguaEsgoto.add(valorEsgoto);
+	        				        }                   
+	        				     if (valorAguaEsgoto.doubleValue() > valorBolsaAguaConcedido.doubleValue()) {
+	        				            valorBolsaAguaAtlz = valorBolsaAguaConcedido;
+	        				     } else {
+	        				            valorBolsaAguaAtlz = valorAguaEsgoto;
+	        				     }
+	        				     
+	        				     if (valorCreditos.compareTo(valorTotalContaSemCreditos) == -1) {
+	        				    	 valorCreditos = valorCreditos.subtract(valorBolsaAguaConcedido);
+	        				    	 valorCreditos = valorCreditos.add(valorBolsaAguaAtlz);
+	        				     	contaAtualizacao.setValorCreditos(valorCreditos);
+	        				     }
+	        				     
+	        				     atualizarValorCreditoBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel(), valorBolsaAguaAtlz, contaAtualizacao);
+	        				 }
 	        				 
 	        				 logger.info(" 1 - Credito a Realizar: Imovel: " + (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId() : "NULL") 
 										+ " | Valor creditos: " + contaAtualizacao.getValorCreditos());
