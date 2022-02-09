@@ -562,6 +562,12 @@ public interface ConstantesSistema {
     String CODIGO_BANCO_FICHA_COMPENSACAO = "001";
     String CODIGO_MOEDA_FICHA_COMPENSACAO = "9";
     
+   //Constantes usadas no Emitir Contas e 2via
+    //Author: Paulo Almeida
+    //Date: 09/02/2022
+    String CARTEIRA_CONTA = "17";
+    
+    
     //Fim de Constantes utilizadas no caso de uso [UC0352] Emitir Contas e Cartas
     
     //Constantes usadas no caso de uso [UC0677] Informar Dados para Consulta da Negativação
