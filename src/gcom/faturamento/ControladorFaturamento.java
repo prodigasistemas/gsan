@@ -730,13 +730,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				            valorBolsaAguaAtlz = valorAguaEsgoto;
 	        				     }
 	        				     
-	        				     if (valorCreditos.compareTo(valorTotalContaSemCreditos) == -1) {
-	        				    	 valorCreditos = valorCreditos.subtract(valorBolsaAguaConcedido);
-	        				    	 valorCreditos = valorCreditos.add(valorBolsaAguaAtlz);
-	        				     	contaAtualizacao.setValorCreditos(valorCreditos);
-	        				     }
-	        				     
-	        				     atualizarValorCreditoBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel(), valorBolsaAguaAtlz, contaAtualizacao);
+	        				    if (valorCreditos.compareTo(valorBolsaAguaAtlz) != 0) {
+									valorCreditos = valorCreditos.subtract(valorBolsaAguaConcedido);
+									valorCreditos = valorCreditos.add(valorBolsaAguaAtlz);
+									contaAtualizacao.setValorCreditos(valorCreditos);
+								}
+	        				    
+								atualizarValorCreditoBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel(), valorBolsaAguaAtlz, contaAtualizacao);
 	        				 }
 	        				 
 	        				 logger.info(" 1 - Credito a Realizar: Imovel: " + (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId() : "NULL") 
