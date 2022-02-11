@@ -27,6 +27,7 @@ import gcom.faturamento.bean.EmitirContaHelper;
 import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesJNDI;
+import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.ServiceLocator;
@@ -66,6 +67,27 @@ public class ContaSegundaViaBO {
 				try {
 					setMensagens();
 					
+					StringBuilder nossoNumero = null;
+					String nossoNumeroSemDV = null;
+					String numeroCarteira = null;
+					Integer tipoDocumento = null;
+					String banco = null;
+					String numeroReferencia = null;
+					if(conta.getCpf() != null || conta.getCnpj() != null) {
+					nossoNumero = this.controlador.obterNossoNumeroFichaCompensacao("1", conta.getIdConta().toString(), conta.getCodigoConvenio());
+					nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
+					}	
+					
+					if(nossoNumeroSemDV != null) {
+						banco = "Banco do Brasil";
+						numeroCarteira = ConstantesSistema.CARTEIRA_CONTA;
+						tipoDocumento = 1;
+						numeroReferencia = "0202201000588212";
+					} else {
+						tipoDocumento = 2;
+					}
+					
+					
 					ContaSegundaViaDTO dto = new ContaSegundaViaDTO(
 							contaHelper, 
 							parametros, 
@@ -73,16 +95,18 @@ public class ContaSegundaViaBO {
 							getEconomias(), 
 							getHidrometro(imovel), 
 							getEmissao(usuario), 
-							situacaoConta);
+							situacaoConta,
+							nossoNumeroSemDV,
+							numeroCarteira,
+							tipoDocumento,
+							banco,
+							numeroReferencia);
 					
 					listaDTO.add(dto);
 				} catch (ControladorException e) {
 					e.printStackTrace();
 				}
 			}
-			
-			helper = new ContaSegundaViaHelper(listaDTO);
-		}
 
 		return helper;
 	}

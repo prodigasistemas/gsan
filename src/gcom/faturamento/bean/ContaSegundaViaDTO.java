@@ -119,11 +119,22 @@ public class ContaSegundaViaDTO {
 
 	private Short indicadorMensagemBolsaAgua;
 
+	private String nossoNumeroSemDV;
+
+	private String numeroCarteira;
+
+	private Integer tipoDocumento;
+
+	private String banco;
+
+	private String numeroReferencia;
+
 	public ContaSegundaViaDTO() {
 		super();
 	}
 
-	public ContaSegundaViaDTO(EmitirContaHelper helper, SistemaParametro parametros, String clienteResponsavel, String economias, String hidrometro, String usuario, String situacaoConta) {
+	public ContaSegundaViaDTO(EmitirContaHelper helper, SistemaParametro parametros, String clienteResponsavel, String economias, String hidrometro, String usuario, String situacaoConta
+			, String nossoNumeroSemDV, String numeroCarteira, Integer tipoDocumento, String banco, String numeroReferencia) {
 		super();
 
 		this.setDadosEmpresa(parametros);
@@ -237,6 +248,12 @@ public class ContaSegundaViaDTO {
 		this.contaPaga = helper.getContaPaga().equals("1") ? true : false;
 		this.dataPagamento = helper.getDataPagamentoConta();
 		this.situacaoConta = situacaoConta;
+		
+		this.nossoNumeroSemDV = nossoNumeroSemDV;
+		this.numeroCarteira = numeroCarteira;
+		this.tipoDocumento = tipoDocumento;
+		this.banco = banco;
+		this.numeroReferencia = numeroReferencia;
 	}
 
 	private void setMensagensFixas(EmitirContaHelper helper) {
@@ -649,4 +666,25 @@ public class ContaSegundaViaDTO {
 	public String getSituacaoConta() {
 		return situacaoConta;
 	}
+
+	public String getNossoNumeroSemDV() {
+		return nossoNumeroSemDV;
+	}
+
+	public String getNumeroCarteira() {
+		return numeroCarteira;
+	}
+
+	public Integer getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+	public String getBanco() {
+		return banco;
+	}
+
+	public String getNumeroReferencia() {
+		return numeroReferencia;
+	}
+
 }
