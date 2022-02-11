@@ -129,6 +129,8 @@ public class ContaSegundaViaDTO {
 
 	private String numeroReferencia;
 
+	private String digitosIniciaisCodigoBarras;
+
 	public ContaSegundaViaDTO() {
 		super();
 	}
@@ -254,6 +256,7 @@ public class ContaSegundaViaDTO {
 		this.tipoDocumento = tipoDocumento;
 		this.banco = banco;
 		this.numeroReferencia = numeroReferencia;
+		this.digitosIniciaisCodigoBarras = helper.getRepresentacaoNumericaCodBarraFormatada().substring(0,4);
 	}
 
 	private void setMensagensFixas(EmitirContaHelper helper) {
@@ -685,6 +688,10 @@ public class ContaSegundaViaDTO {
 
 	public String getNumeroReferencia() {
 		return numeroReferencia;
+	}
+
+	public String getDigitosIniciaisCodigoBarras() {
+		return digitosIniciaisCodigoBarras;
 	}
 
 }
