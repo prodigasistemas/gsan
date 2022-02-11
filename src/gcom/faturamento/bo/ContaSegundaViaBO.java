@@ -65,7 +65,7 @@ public class ContaSegundaViaBO {
 				contaHelper = conta;
 				
 				try {
-					setMensagens();
+                setMensagens();
 					
 					StringBuilder nossoNumero = null;
 					String nossoNumeroSemDV = null;
@@ -107,6 +107,9 @@ public class ContaSegundaViaBO {
 					e.printStackTrace();
 				}
 			}
+			
+			helper = new ContaSegundaViaHelper(listaDTO);
+		}
 
 		return helper;
 	}
