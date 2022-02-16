@@ -495,11 +495,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								//validação para trazer cfpCnpj caso exista. Paulo Almeida - 01.02.2022
 								String cpfCnpf = consultarCpfCnpjCliente(emitirContaHelper.getIdImovel());
 								
-					/*			if(cpfCnpf.equalsIgnoreCase("")) {
+								if(cpfCnpf.equalsIgnoreCase("")) {
 										contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
-									}else { */
-											contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
-									//}
+									}else { 
+									    contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
+									}
 								contaTxt.append(Util.completaString(cont + "", 8));
 
 								String[] qualidade = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper, imovelEmitido.getQuadraFace().getId());
@@ -556,6 +556,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt = preencherContatosAgenciaReguladora(emitirContaHelper, contaTxt);
 								contaTxt = preencherDadosAliquotaAgenciaReguladora(emitirContaHelper, contaTxt);
 								contaTxt = preencherFlagCarimbo(emitirContaHelper, contaTxt);
+								
+								if(cpfCnpf.equalsIgnoreCase("")) {
+									    contaTxt.append(Util.completaString("", 240));
+										contaTxt.append(Util.completaString("Documento de Arrecadacao", 25));
+									}else {
+										contaTxt = preencherDadosEmissaoConta(emitirContaHelper, contaTxt);
+								}
 								
 								if (isEmitirImpressaoTermica(imovelEmitido, municipioEntrega, municipioImovel)) {
 
@@ -1026,7 +1033,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 							ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
 							ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
 							valorConta,
-							nossoNumeroSemDV,
+							nossoNumeroSemDV.toString(),
 							ConstantesSistema.CARTEIRA_CONTA,
 							fatorVencimento);
 
@@ -1530,6 +1537,23 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	   }
 		return contaTxt;
 	}
+	
+	private StringBuilder preencherDadosEmissaoConta(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ErroRepositorioException, ControladorException {
+		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+
+			contaTxt.append(Util.completaString("BANCO DO BRASIL", 15));
+			contaTxt.append(Util.completaString("Pagavel preferencialmente no Banco do Brasil", 60));
+			contaTxt.append(Util.completaString("0202201000588212", 16));
+			contaTxt.append(Util.completaString((nossoNumero.toString()), 15));
+			contaTxt.append(Util.completaString((String) ConstantesSistema.CARTEIRA_CONTA, 2));
+			contaTxt.append(Util.completaString("R$", 2));
+			contaTxt.append(Util.completaString("Pagavel em todas as instituicoes bancarias. Em caso de atrasos, multas, juros e correcao serao cobrados na proxima fatura.", 130));
+			contaTxt.append(Util.completaString("Ficha de Compensacao", 25));
+	
+		return contaTxt;
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	private StringBuilder preencherDataPrevistaCronograma(FaturamentoGrupo faturamentoGrupo, EmitirContaHelper emitirContaHelper, 
 			StringBuilder contaTxt) throws ControladorException {

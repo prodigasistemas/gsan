@@ -910,8 +910,10 @@ public class ImpressaoContaImpressoraTermica {
 						+ formarLinha(7, 0, 598, 2606, Util.formatarData(emitirContaHelper.getDataVencimentoConta()),
 								0, 0)
 						+ formarLinha(7, 0, 730, 2606, Util.formatarMoedaReal(emitirContaHelper.getValorConta()), 0, 0));
+				
+				String cpfCnpj = consultarCpfCnpjCliente(imovelEmitido.getId());
 
-				gerarDadosCodigoDeBarras(emitirContaHelper, retorno, imovelEmitido);
+				gerarDadosCodigoDeBarras(emitirContaHelper, retorno, imovelEmitido, cpfCnpj);
 
 				retorno.append(formarLinha(5, 0, 79, 3010, "GRUPO", 0, 0));
 				retorno.append(formarLinha(5, 0, 109, 3035, emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
@@ -924,7 +926,12 @@ public class ImpressaoContaImpressoraTermica {
 				this.gerarLinhasAliquotasImpostos(emitirContaHelper, sistemaParametro, dadosAgenciaReguladora, retorno);
 
 				this.gerarLinhaDadosAgenciaReguladora(emitirContaHelper, retorno);
-
+				
+				if(cpfCnpj.equalsIgnoreCase("")) {
+					this.gerarLinhaDadosEmissaoConta(emitirContaHelper, retorno);
+				}else {
+					//to DO linha com Documento de Arrecadacao
+				}
 				retorno.append("FORM\n" + "PRINT\n");
 
 				return retorno.toString();
@@ -936,6 +943,34 @@ public class ImpressaoContaImpressoraTermica {
 		}
 		return retorno.toString();
 
+	}
+
+	private void gerarLinhaDadosEmissaoConta(EmitirContaHelper emitirContaHelper, StringBuilder retorno) throws ControladorException {
+		StringBuilder nossoNumero = this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+
+		
+		String linha = formarLinha(7, 0, 243, 100, "BANCO DO BRASIL", 0, 0);
+			   linha += formarLinha(7, 0, 243, 100,"Pagavel preferencialmente no Banco do Brasil", 0, 0);
+		
+		/*
+		contaTxt.append(Util.completaString("BANCO DO BRASIL", 15));
+		contaTxt.append(Util.completaString("Pagavel preferencialmente no Banco do Brasil", 60));
+		contaTxt.append(Util.completaString("0202201000588212", 16));
+		contaTxt.append(Util.completaString((nossoNumero.toString()), 15));
+		contaTxt.append(Util.completaString((String) ConstantesSistema.CARTEIRA_CONTA, 2));
+		contaTxt.append(Util.completaString("R$", 2));
+		contaTxt.append(Util.completaString("Pagavel em todas as instituicoes bancarias. Em caso de atrasos, multas, juros e correcao serao cobrados na proxima fatura.", 130));
+		contaTxt.append(Util.completaString("Ficha de Compensacao", 25));
+
+	
+		String linha = formarLinha(7, 0, 243, 100, String.format("Ag. reguladora (%s)", (String) dados[0]), 0, 0);
+		linha += formarLinha(7, 0, 243, 120, String.format("Telefone: %s", (String) dados[1]), 0, 0);
+		linha += formarLinha(7, 0, 243, 140, String.format("Email: %s", (String) dados[2]), 0, 0);
+		
+		*/
+		retorno.append(linha);
+	
+	
 	}
 
 	private void gerarDadosComuns(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro,
@@ -1223,17 +1258,15 @@ public class ImpressaoContaImpressoraTermica {
 	
 
 	private void gerarDadosCodigoDeBarras(EmitirContaHelper emitirContaHelper, StringBuilder retorno,
-			Imovel imovelEmitido) throws ControladorException, ErroRepositorioException {
+			Imovel imovelEmitido, String cpfCnpj) throws ControladorException, ErroRepositorioException {
 		if (!imovelEmitido.getIndicadorDebitoConta().equals(Imovel.INDICADOR_DEBITO_AUTOMATICO)) {
 			
 			String representacaoNumericaCodBarraFormatada = null;
 			String representacaoNumericaCodBarra = "";
 			// Linha28
 			Date dataValidade = emitirContaHelper.getDataValidadeConta();
-			
-			String cpfCnpf = consultarCpfCnpjCliente(imovelEmitido.getId());
-			
-			if(cpfCnpf.equalsIgnoreCase("")) {
+					
+			if(cpfCnpj.equalsIgnoreCase("")) {
 			
 			Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
 			// formata ano mes para mes ano
