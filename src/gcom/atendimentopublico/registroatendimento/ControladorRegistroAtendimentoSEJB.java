@@ -13620,10 +13620,10 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 		 * @author Wellington Rocha
 		 * @date 20/07/2012*/
 		//O tamanho máximo para o arquivo será de 400kb
-		if (arquivoAnexo.getSize() > 409600){
+		if (arquivoAnexo.getSize() > 1048576){
 			
 			sessionContext.setRollbackOnly();
-			throw new ControladorException("atencao.imagem_tamanho_maximo");
+			throw new ControladorException("atencao.imagem_tamanho_maximo_1mb");
 		}
 	}
 	
