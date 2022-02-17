@@ -16542,7 +16542,18 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			String nomeMunicipio = municipio.getNome();
 			Integer idImovel = imovel.getId();
 			cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
-			Integer idConv = 3128557; // Em produï¿½ï¿½o, informar o nï¿½mero do convï¿½nio de cobranï¿½a, com 7 dï¿½gitos.
+			Integer idConv = imovel.getCodigoConvenio(); // Em produï¿½ï¿½o, informar o nï¿½mero do convï¿½nio de cobranï¿½a, com 7 dï¿½gitos.
+			
+			//verificação para se tivermos mais de um codigo convenio no futuro
+		/*	if(imovel.getCodigoConvenio().equals(3128557)) {
+			Integer numeroCarteira = 17; // Em produï¿½ï¿½o, informar o nï¿½mero da carteira de cobranï¿½a.
+			Integer numeroVariacaoCarteira = 35; // Em produï¿½ï¿½o, informar o nï¿½mero da variaï¿½ï¿½o da carteira de cobranï¿½a.
+			} else if(imovel.getCodigoConvenio().equals(?)){
+			Integer numeroCarteira = ?; // Em produï¿½ï¿½o, informar o nï¿½mero da carteira de cobranï¿½a.
+			Integer numeroVariacaoCarteira = ?; // Em produï¿½ï¿½o, informar o nï¿½mero da variaï¿½ï¿½o da carteira de cobranï¿½a.
+			
+			}
+		*/	
 			Integer numeroCarteira = 17; // Em produï¿½ï¿½o, informar o nï¿½mero da carteira de cobranï¿½a.
 			Integer numeroVariacaoCarteira = 35; // Em produï¿½ï¿½o, informar o nï¿½mero da variaï¿½ï¿½o da carteira de cobranï¿½a.
 			Short codigoModalidade = 1; // Cï¿½digo que identifica a caracterï¿½stica dos boletos dentro das modalidades de
