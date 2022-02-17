@@ -1161,15 +1161,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
 
 
-			String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
-							ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
-							ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
-							valorConta,
-							nossoNumeroSemDV,
-							ConstantesSistema.CARTEIRA_CONTA,
-							fatorVencimento);
+		String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+				ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
+				ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+				valorConta,
+				nossoNumeroSemDV,
+				ConstantesSistema.CARTEIRA_CONTA,
+				fatorVencimento);
 
-		String representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+        String representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+
 		
 		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
 		return contaTxt;
