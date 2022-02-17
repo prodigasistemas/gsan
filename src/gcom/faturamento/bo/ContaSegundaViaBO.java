@@ -79,10 +79,11 @@ public class ContaSegundaViaBO {
 					}	
 					
 					if(nossoNumeroSemDV != null) {
+						
 						banco = "Banco do Brasil";
 						numeroCarteira = ConstantesSistema.CARTEIRA_CONTA;
 						tipoDocumento = 1;
-						numeroReferencia = "0202201000588212";
+						numeroReferencia = String.valueOf(conta.getAmReferencia()) + conta.getIdConta().toString();
 					} else {
 						tipoDocumento = 2;
 					}
