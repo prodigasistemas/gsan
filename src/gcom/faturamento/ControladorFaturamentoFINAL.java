@@ -48105,9 +48105,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			nossoNumero.append(idDocumentoTipo); 
 			
 		}else if(sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue() &&
-			idDocumentoTipo.trim().equals(DocumentoTipo.GUIA_PAGAMENTO.toString())){			
+				idDocumentoTipo.trim().equals(DocumentoTipo.GUIA_PAGAMENTO.toString())){
+			
 			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, "2860143")); // Convenio do Banco do Brasil padrão
 			nossoNumero.append(Util.adicionarZerosEsquedaNumero(2, idDocumentoTipo));
+
 		} else {
 			// o numero do convenio fornecido pelo Banco
 			// numero fixo e nao pode ser alterado
