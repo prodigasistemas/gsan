@@ -16542,21 +16542,23 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			String nomeMunicipio = municipio.getNome();
 			Integer idImovel = imovel.getId();
 			cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
-			Integer idConv = 3128557; // Em produ��o, informar o n�mero do conv�nio de cobran�a, com 7 d�gitos.
+			Integer idConv = 3469663; // Em produ��o, informar o n�mero do conv�nio de cobran�a, com 7 d�gitos.
 			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
 			Integer numeroVariacaoCarteira = 35; // Em produ��o, informar o n�mero da varia��o da carteira de cobran�a.
 			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades de
 			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
-			String dataEmissao = Util.formatarDataComPontoDDMMAAAA(conta.getDataEmissao()).toString(); //Pegar da conta
-			String dataVencimento = Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString(); //pegar da conta
-			Double valorOriginal = Double.parseDouble(conta.getValorTotalConta());
+			String dataEmissao = "17.02.2022";
+			String dataVencimento = "16.03.2022";
+//			String dataEmissao = Util.formatarDataComPontoDDMMAAAA(conta.getDataEmissao()).toString(); //Pegar da conta
+//			String dataVencimento = Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString(); //pegar da conta
+			Double valorOriginal = 1.0;
 			String codigoAceite = "A"; // Dom�nio: A - Aceito; N - N�o aceito
 			Short codigoTipoTitulo = 2; // C�digo para identificar o tipo de boleto de cobran�a. Verifique os dom�nios
 			// poss�veis no swagger.
 			String indicadorPermissaoRecebimentoParcial = "N"; // C�digo para identifica��o da autoriza��o de pagamento
 			// parcial do boleto. "S" ou "N"
 			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", conta.getId().toString(), idConv);
-			String nossoNumeroSemDV = nossoNumero.toString().substring(0, 20);
+			String nossoNumeroSemDV = nossoNumero.toString();
 			String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
 			PagadorDTO pagador = new PagadorDTO(); // Identifica o pagador do boleto.
 			if (cliente.getCpf() != null) {

@@ -558,13 +558,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 								// validação para trazer cfpCnpj caso exista.
 								// Paulo Almeida - 01.02.2022
 								String cpfCnpf = consultarCpfCnpjCliente(emitirContaHelper.getIdImovel());
-
-								if (cpfCnpf.equalsIgnoreCase("")) {
-									contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
-								} else {
-									contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
-								}
-
+								
+					/*			if(cpfCnpf.equalsIgnoreCase("")) {
+										contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
+									}else { */
+											contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
+									//}
 								contaTxt.append(Util.completaString(cont + "", 8));
 
 								String[] qualidade = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper,
@@ -1151,20 +1150,21 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 		emitirContaHelper.setValorConta(valorConta);
 
-		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(),
-				emitirContaHelper.getCodigoConvenio());
-		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
+		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+		String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
 
 		Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(), 90);
 		String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
 
 		String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
-				ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
-				valorConta, nossoNumeroSemDV.toString(), ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
+							ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
+							ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+							valorConta,
+							nossoNumeroSemDV,
+							ConstantesSistema.CARTEIRA_CONTA,
+							fatorVencimento);
 
-		String representacaoNumericaCodBarra = CodigoBarras
-				.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
-
+		String representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
 		return contaTxt;
 	}
@@ -3456,6 +3456,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			helper.setColecaoContaLinhasDescricaoServicosTarifasTotalHelper(linhasDescricaoServicosTarifasTotalHelper);
 
 			BigDecimal valorConta = obterValorConta2Via(helper);
+			valorConta = BigDecimal.ONE;
 			helper.setValorContaString(Util.formatarMoedaReal(valorConta));
 			helper.setValorConta(valorConta);
 
@@ -3735,21 +3736,21 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 
-			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1",
-					emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
-			String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
+			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+			String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
+			
+				Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
+				String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
 
-			Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(), 90);
-			String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
+				String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+								ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
+								ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+								valorConta,
+								nossoNumeroSemDV.toString(),
+								ConstantesSistema.CARTEIRA_CONTA,
+								fatorVencimento);
 
-			String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
-					ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
-					valorConta, nossoNumeroSemDV.toString(), ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
-					fatorVencimento);
-
-			representacaoNumericaCodBarra = CodigoBarras
-					.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
-
+			representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 			String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra;
 			emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
 

@@ -48102,19 +48102,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		
 		if (codigoConvenio != null && idDocumentoTipo.trim().equals(DocumentoTipo.CONTA.toString())) { 
 			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, codigoConvenio)); // Convenio do Banco do Brasil
+			nossoNumero.append(idDocumentoTipo); 
 			
 		}else if(sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue() &&
-				idDocumentoTipo.trim().equals(DocumentoTipo.GUIA_PAGAMENTO.toString())){
-			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, "2860143")); // Convenio do Banco do Brasil padrao
+			idDocumentoTipo.trim().equals(DocumentoTipo.GUIA_PAGAMENTO.toString())){			
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, "2860143")); // Convenio do Banco do Brasil padrão
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(2, idDocumentoTipo));
 		} else {
 			// o numero do convenio fornecido pelo Banco
 			// numero fixo e nao pode ser alterado
 			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, "2502792"));
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(2, idDocumentoTipo));
 		}
 
 		// id do documento tipo de acordo com o tipo de documento q esta sendo
 		// emitido
-		nossoNumero.append(Util.adicionarZerosEsquedaNumero(2, idDocumentoTipo));
+
+		//nossoNumero.append(Util.adicionarZerosEsquedaNumero(2, idDocumentoTipo));
 
 		// id do documento q esta sendo emitido
 		Integer numeroBoletoDocumentoConta = null;
@@ -48125,11 +48129,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		if (numeroBoletoDocumentoConta != null) {
-
-			nossoNumero.append(Util.adicionarZerosEsquedaNumero(8, numeroBoletoDocumentoConta.toString()));
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(8,numeroBoletoDocumentoConta.toString()));
 		} else {
-
-			nossoNumero.append(Util.adicionarZerosEsquedaNumero(8, idDocumentoEmitido));
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(8,idDocumentoEmitido));
 		}
 
 		/*
