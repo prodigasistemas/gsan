@@ -915,23 +915,20 @@ public class ImpressaoContaImpressoraTermica {
 
 				gerarDadosCodigoDeBarras(emitirContaHelper, retorno, imovelEmitido, cpfCnpj);
 
-				retorno.append(formarLinha(5, 0, 79, 3010, "GRUPO", 0, 0));
-				retorno.append(formarLinha(5, 0, 109, 3035, emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
-				retorno.append(formarLinha(5, 0, 352, 3035, "4", 0, 0));
-				retorno.append(formarLinha(5, 0, 615, 3035, "" + contador, 0, 0));
-				retorno.append(formarLinha(5, 0, 615, 1661, "" + contador, 0, 0));
-				
+				retorno.append(formarLinha(5, 0, 37, 460, "GRUPO", 0, 0));
+				retorno.append(formarLinha(5, 0, 109, 485, emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
+				retorno.append(formarLinha(5, 0, 352, 485, "4", 0, 0));
+				retorno.append(formarLinha(5, 0, 680, 485, "" + contador, 0, 0));
+			//	retorno.append(formarLinha(5, 0, 615, 1661, "" + contador, 0, 0));
+		
 				Object[] dadosAgenciaReguladora = getControladorFaturamento().obterDadosAgenciaReguladora();
 
 				this.gerarLinhasAliquotasImpostos(emitirContaHelper, sistemaParametro, dadosAgenciaReguladora, retorno);
 
 				this.gerarLinhaDadosAgenciaReguladora(emitirContaHelper, retorno);
+							
+				this.gerarLinhaDadosEmissaoConta(emitirContaHelper, imovelEmitido, cpfCnpj, retorno);
 				
-				if(cpfCnpj.equalsIgnoreCase("")) {
-					this.gerarLinhaDadosEmissaoConta(emitirContaHelper, retorno);
-				}else {
-					//to DO linha com Documento de Arrecadacao
-				}
 				retorno.append("FORM\n" + "PRINT\n");
 
 				return retorno.toString();
@@ -945,29 +942,44 @@ public class ImpressaoContaImpressoraTermica {
 
 	}
 
-	private void gerarLinhaDadosEmissaoConta(EmitirContaHelper emitirContaHelper, StringBuilder retorno) throws ControladorException {
-		StringBuilder nossoNumero = this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
-
+	private void gerarLinhaDadosEmissaoConta(EmitirContaHelper emitirContaHelper, Imovel imovelEmitido, String cpfCnpj,  StringBuilder retorno) throws ControladorException {
 		
-		String linha = formarLinha(7, 0, 243, 100, "BANCO DO BRASIL", 0, 0);
-			   linha += formarLinha(7, 0, 243, 100,"Pagavel preferencialmente no Banco do Brasil", 0, 0);
+		String linha = null;
+		if(!cpfCnpj.equalsIgnoreCase("")) {
+			StringBuilder nossoNumero = this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+			String numDoc = Util.formatarAnoMesParaMesAnoSemBarra(emitirContaHelper.getAmReferencia()).concat(emitirContaHelper.getIdConta().toString());
 		
-		/*
-		contaTxt.append(Util.completaString("BANCO DO BRASIL", 15));
-		contaTxt.append(Util.completaString("Pagavel preferencialmente no Banco do Brasil", 60));
-		contaTxt.append(Util.completaString("0202201000588212", 16));
-		contaTxt.append(Util.completaString((nossoNumero.toString()), 15));
-		contaTxt.append(Util.completaString((String) ConstantesSistema.CARTEIRA_CONTA, 2));
-		contaTxt.append(Util.completaString("R$", 2));
-		contaTxt.append(Util.completaString("Pagavel em todas as instituicoes bancarias. Em caso de atrasos, multas, juros e correcao serao cobrados na proxima fatura.", 130));
-		contaTxt.append(Util.completaString("Ficha de Compensacao", 25));
-
-	
-		String linha = formarLinha(7, 0, 243, 100, String.format("Ag. reguladora (%s)", (String) dados[0]), 0, 0);
-		linha += formarLinha(7, 0, 243, 120, String.format("Telefone: %s", (String) dados[1]), 0, 0);
-		linha += formarLinha(7, 0, 243, 140, String.format("Email: %s", (String) dados[2]), 0, 0);
-		
-		*/
+				   linha =  formarLinha(7, 0, 32, 2821, "BANCO DO BRASIL", 0, 0);
+				   linha += formarLinha(7, 0, 230, 2821, "001-9", 0, 0);
+				   linha += formarLinha(7, 0, 243, 100,"QUALQUER BANCO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 2897, "PAGADOR: "+ obterNomeCliente(emitirContaHelper, imovelEmitido) , 0, 0);
+				   linha += formarLinha(7, 0, 516, 2897, cpfCnpj, 0, 0);
+				   linha += formarLinha(7, 0, 32, 2925,"NOSSO NUMERO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 2945, nossoNumero.toString() , 0, 0); 
+				   linha += formarLinha(7, 0, 251, 2925,"NUMERO DOCUMENTO", 0, 0);
+				   linha += formarLinha(7, 0, 251, 2945, numDoc, 0, 0);
+				   linha += formarLinha(7, 0, 450, 2925,"VENCIMENTO", 0, 0);
+				   linha += formarLinha(7, 0, 450, 2945,Util.formatarData(emitirContaHelper.getDataVencimentoConta()), 0, 0);
+				   linha += formarLinha(7, 0, 580, 2925,"VALOR DOCUMENTO", 0, 0);
+				   linha += formarLinha(7, 0, 580, 2945,Util.formatarMoedaReal(emitirContaHelper.getValorConta()), 0, 0);
+				   linha += formarLinha(7, 0, 32, 2970,"COMPANHIA DE SANEAMENTO DO PARA / CNPJ: 04.945.341/0001-90", 0, 0);
+				   linha += formarLinha(7, 0, 32, 2996,"INFORMACOES DE RESPONSABILIDADE DO BENEFICIARIO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 3016,"EM CASO DE ATRASO, MULTAS, JUROS E CORRECAO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 3036,"SERAO COBRADOS NA PROXIMA FATURA", 0, 0);
+			}else{
+				
+				   linha = formarLinha(7, 0, 32, 2897,"PAGADOR: " + obterNomeCliente(emitirContaHelper, imovelEmitido)  , 0, 0);
+				  // linha += formarLinha(7, 0, 32, 2925, cpfCnpj, 0, 0);
+				   linha += formarLinha(7, 0, 450, 2925,"VENCIMENTO", 0, 0);
+				   linha += formarLinha(7, 0, 450, 2945,Util.formatarData(emitirContaHelper.getDataVencimentoConta()), 0, 0);
+				   linha += formarLinha(7, 0, 580, 2925,"VALOR DOCUMENTO", 0, 0);
+				   linha += formarLinha(7, 0, 580, 2945,Util.formatarMoedaReal(emitirContaHelper.getValorConta()), 0, 0);
+				   linha += formarLinha(7, 0, 32, 2970,"COMPANHIA DE SANEAMENTO DO PARA / CNPJ: 04.945.341/0001-90", 0, 0);
+				   linha += formarLinha(7, 0, 32, 2996,"INFORMACOES DE RESPONSABILIDADE DO BENEFICIARIO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 3016,"EM CASO DE ATRASO, MULTAS, JUROS E CORRECAO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 3036,"SERAO COBRADOS NA PROXIMA FATURA", 0, 0);
+		}	   
+			
 		retorno.append(linha);
 	
 	
@@ -1332,16 +1344,16 @@ public class ImpressaoContaImpressoraTermica {
 					emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
 					
 			}
-			if (representacaoNumericaCodBarraFormatada != null) {
+			if (representacaoNumericaCodBarraFormatada != null) { 
 
-					retorno.append(formarLinha(5, 0, 66, 2840, representacaoNumericaCodBarraFormatada, 0, 0));
+					retorno.append(formarLinha(5, 1, 80, 2849, representacaoNumericaCodBarraFormatada, 0, 0));
 					String representacaoCodigoBarrasSemDigitoVerificador = emitirContaHelper
 							.getRepresentacaoNumericaCodBarraSemDigito();
-					retorno.append("B I2OF5 1 2 120 35 2863 " + representacaoCodigoBarrasSemDigitoVerificador + "\n");
+					retorno.append("B I2OF5 1 2 95 35 3076 " + representacaoCodigoBarrasSemDigitoVerificador + "\n");
 			}
 			
 		} else {
-			retorno.append(formarLinha(4, 0, 182, 2863, "DEBITO AUTOMATICO", 0, 0));
+			retorno.append(formarLinha(4, 0, 182, 3076, "DEBITO AUTOMATICO", 0, 0));
 
 		}
 	}
@@ -1724,35 +1736,41 @@ public class ImpressaoContaImpressoraTermica {
 
 	private void gerarInformacoesBasicas(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro,
 			StringBuilder retorno, Imovel imovelEmitido, String endereco, String cpfCnpjFormatado) {
-		retorno.append("! 0 200 200 3100 1\n");
+		retorno.append("! 0 200 200 3200 1\n");
 
 		retorno.append("BOX 32 405 802 452 1\n" + 
 					   "LINE 720 385 720 425 1\n" + 
 					   "LINE 403 385 403 447 1\n" +
-
 					   "BOX 32 361 802 405 1\n" + 
 					   "LINE 278 385 278 447 1\n" +
-
 					   "BOX 283 588 802 615 1\n" + 
 					   "BOX 283 615 802 782 1\n" + 
 					   "LINE 656 588 656 782 1\n" + 
-					   "LINE 415 588 415 615 1\n" + 
-					   "LINE 535 588 535 782 1\n");
-
-		retorno.append("T 7 0 50 51 " + "Data de Emissao: " + Util.formatarDataComHora(new Date()) + "\n");
+					   "LINE 415 588 415 615 1\n" +       
+					   "LINE 535 588 535 782 1\n" + 
+					   "LINE 32 2840 802 2840 1\n"+
+					   "LINE 224 2820 224 2840 2\n"+
+					   "LINE 293 2820 293 2840 2\n"+
+					   "LINE 32 2892 802 2892 1\n"+
+					   "LINE 32 2924 802 2924 1\n"+
+					   "LINE 241 2924 241 2968 2\n"+
+					   "LINE 446 2924 446 2968 2\n"+
+					   "LINE 575 2924 575 2968 2\n"+
+					   "LINE 32 2968 802 2968 1\n");
+		
 		retorno.append("T 7 1 70 115 " + imovelEmitido.getId() + "\n");
-		retorno.append("T 7 1 640 115 " + Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + "")
-				+ "\n");
+		retorno.append("T 7 0 50 51 " + "Data de Emissao: " + Util.formatarDataComHora(new Date()) + "\n");
+		retorno.append("T 7 1 640 115 " + Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + "")	+ "\n");
 		// retorno.append("T 0 0 201 47 " +
 		// Util.formatarCnpj(sistemaParametro.getCnpjEmpresa().trim()) + "\n");
 		// retorno.append("T 0 0 285 64 " +
 		// sistemaParametro.getInscricaoEstadual().trim() + "\n");
 		// retorno.append(formarLinha(0, 0, 222, 81,
 		// emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
-
-		retorno.append(formarLinha(0, 2, 20, 200, obterNomeCliente(emitirContaHelper, imovelEmitido), 0, 0)
-				+ formarLinha(0, 2, 20, 222, cpfCnpjFormatado, 0, 0)
-				+ dividirLinha(0, 2, 350, 200, endereco.trim(), 55, 22));
+			
+		retorno.append(formarLinha(7, 0, 20, 190, obterNomeCliente(emitirContaHelper, imovelEmitido), 0, 0)
+				+ formarLinha(7, 0, 20, 210, cpfCnpjFormatado, 0, 0)
+				+ dividirLinha(0, 2, 400, 200, endereco.trim(), 55, 22));
 		retorno.append(formarLinha(7, 0, 20, 260, imovelEmitido.getInscricaoFormatada(), 0, 0));
 		retorno.append(formarLinha(7, 0, 350, 260, imovelEmitido.getQuadra().getRota().getCodigo() + "", 0, 0));
 		retorno.append(formarLinha(7, 0, 445, 260, imovelEmitido.getNumeroSequencialRota() + "", 0, 0));

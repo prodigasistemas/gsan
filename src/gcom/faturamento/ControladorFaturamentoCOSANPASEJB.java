@@ -1540,10 +1540,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	
 	private StringBuilder preencherDadosEmissaoConta(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ErroRepositorioException, ControladorException {
 		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+		String numDoc = Util.formatarAnoMesParaMesAnoSemBarra(emitirContaHelper.getAmReferencia()).concat(emitirContaHelper.getIdConta().toString());
 
 			contaTxt.append(Util.completaString("BANCO DO BRASIL", 15));
 			contaTxt.append(Util.completaString("Pagavel preferencialmente no Banco do Brasil", 60));
-			contaTxt.append(Util.completaString("0202201000588212", 16));
+			contaTxt.append(Util.completaString("numDoc", 16));
 			contaTxt.append(Util.completaString((nossoNumero.toString()), 15));
 			contaTxt.append(Util.completaString((String) ConstantesSistema.CARTEIRA_CONTA, 2));
 			contaTxt.append(Util.completaString("R$", 2));
