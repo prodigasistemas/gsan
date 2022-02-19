@@ -62863,11 +62863,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Object[] retorno = null;
 
 		try {
-			
+			System.out.println("GERAR ARQUIVO TEXTO FATURAMENTO -- INICIO");
 			Conta conta = gerarArquivoTextoFaturamento
 					.pesquisarContaGerarArquivoTextoFaturamento(imovel,
 							anoMesFaturamento, faturamentoGrupo.getId());
-
+			System.out.println("GERAR ARQUIVO TEXTO FATURAMENTO -- FIM");
 			/*
 			 *  Alteração feita para permitir que todos os imóveis sejam gerados na rota de leitura e impressão simultanea
 			 */
@@ -62884,10 +62884,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// GERAR ARQUIVO TEXTO
 			// --------------------------------------------------------------
-
+			System.out.println("====> PESQUISANDO DOCUMENTO COBRANÇA ----INICIO");
 			Object[] registroArquivoTexto = gerarArquivoTextoFaturamento
 					.gerarArquivoTexto(imovel, conta, anoMesFaturamento, rota,
 							faturamentoGrupo, sistemaParametro, dataComando);
+			System.out.println("====> PESQUISANDO DOCUMENTO COBRANÇA ----FIM");
 			arquivoRetorno.append(registroArquivoTexto[0]);
 			int quantidadeRegistroArquivo = (Integer) registroArquivoTexto[1];
 
