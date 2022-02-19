@@ -1026,7 +1026,9 @@ public class UC0745GerarArquivoTextoFaturamento {
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
-		}
+		}		
+		System.out.println("====> Metodo pesquisarContaGerarArquivoTextoFaturamento id imovel: " + (imovel.getId() != null) );
+		System.out.println("====> Metodo pesquisarContaGerarArquivoTextoFaturamento conta: " + (arrayConta) );
 
 		if (arrayConta != null) {
 
