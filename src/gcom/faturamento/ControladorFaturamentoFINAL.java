@@ -62868,6 +62868,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					.pesquisarContaGerarArquivoTextoFaturamento(imovel,
 							anoMesFaturamento, faturamentoGrupo.getId());
 			System.out.println("GERAR ARQUIVO TEXTO FATURAMENTO -- FIM");
+			
+			System.out.println("====> GERANDO ARQUIVO[ id imovel: " + (conta.getImovel() != null ? conta.getImovel().getId() : null) 
+					+ " | id conta: " + (conta.getId() != null ? conta.getId() : null));
+			
 			/*
 			 *  Alteração feita para permitir que todos os imóveis sejam gerados na rota de leitura e impressão simultanea
 			 */
@@ -62875,9 +62879,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				conta.setImovel(imovel);
 			}
-
-			System.out.println("====> GERANDO ARQUIVO[ id imovel: " + (conta.getImovel() != null ? conta.getImovel().getId() : null) 
-					+ " | id conta: " + (conta.getId() != null ? conta.getId() : null));
 			
 			retorno = new Object[2];
 			arquivoRetorno = new StringBuilder();
