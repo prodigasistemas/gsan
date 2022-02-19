@@ -36833,8 +36833,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			if (quantidadeContas != null && quantidadeContas.intValue() > 0) {
 				
-				System.out.println("**============ 1 - apagarDadosGeradosFaturarGrupoFaturamento ===============**"
-									+ "\n Imovel: " + helper.getIdImovel());
+				if (helper.getIdImovel() != null) {
+					System.out.println("**======== 1 - apagarDadosGeradosFaturarGrupoFaturamento ========**"+ "\n Imovel: " + helper.getIdImovel());
+				} else if (helper.getRota() != null) { 
+					System.out.println("**======== 1 - apagarDadosGeradosFaturarGrupoFaturamento ========**"+ "\n Rota: " + helper.getRota().getId());
+				} else {
+					System.out.println("**======== 1 - apagarDadosGeradosFaturarGrupoFaturamento ========**"+ "\n Grupo: " + helper.getFaturamentoGrupo());
+				}
 
 				try {
 					repositorioFaturamento.apagarContaImpressao(helper);
@@ -62858,6 +62863,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Object[] retorno = null;
 
 		try {
+			
 			Conta conta = gerarArquivoTextoFaturamento
 					.pesquisarContaGerarArquivoTextoFaturamento(imovel,
 							anoMesFaturamento, faturamentoGrupo.getId());
@@ -62870,6 +62876,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				conta.setImovel(imovel);
 			}
 
+			System.out.println("====> GERANDO ARQUIVO[ id imovel: " + (conta.getImovel() != null ? conta.getImovel().getId() : null) 
+					+ " | id conta: " + (conta.getId() != null ? conta.getId() : null));
+			
 			retorno = new Object[2];
 			arquivoRetorno = new StringBuilder();
 
