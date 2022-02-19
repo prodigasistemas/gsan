@@ -62863,6 +62863,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Object[] retorno = null;
 
 		try {
+			System.out.println("====> GERANDO ARQUIVO[ id imovel: " + (imovel.getId() != null) );
 			System.out.println("GERAR ARQUIVO TEXTO FATURAMENTO -- INICIO");
 			Conta conta = gerarArquivoTextoFaturamento
 					.pesquisarContaGerarArquivoTextoFaturamento(imovel,
