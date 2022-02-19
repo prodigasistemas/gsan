@@ -1018,11 +1018,11 @@ public class UC0745GerarArquivoTextoFaturamento {
 		Object[] arrayConta = null;
 
 		try {
-
+			System.out.println("PESQUISANDO CONTA -- INICIO");
 			arrayConta = repositorioFaturamento
 					.pesquisarContaGerarArquivoTextoFaturamento(imovel.getId(),
 							anoMesReferencia, idFaturamentoGrupo);
-
+			System.out.println("PESQUISANDO CONTA -- FIM");
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
@@ -1184,11 +1184,11 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 		CobrancaDocumento cobrancaDocumento = null;
 		try {
-
+            System.out.println("====> PESQUISANDO DOCUMENTO COBRANÇA ----INICIO");
 			cobrancaDocumento = repositorioCobranca
 					.pesquisarCobrancaDocumentoImpressaoSimultanea(dataEmissao,
 							imovel.getId());
-
+			System.out.println("====> PESQUISANDO DOCUMENTO COBRANÇA ----FIM");
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
