@@ -1197,13 +1197,14 @@ public class UC0745GerarArquivoTextoFaturamento {
 		}
 
 		Object[] retorno = new Object[2];
-
+		System.out.println("-----> " + imovel.getId() + "GERANDO TIPO 01");
 		// REGISTRO_TIPO_01
 		arquivoTexto.append(this.gerarArquivoTextoRegistroTipo01(imovel, conta,
 				anoMesReferencia, rota, faturamentoGrupo, sistemaParametro,
 				cobrancaDocumento));
 		quantidadeLinhas = quantidadeLinhas + 1;
 
+		System.out.println("-----> " + imovel.getId() + "GERANDO TIPO 02");
 		// REGISTRO_TIPO_02
 		Object[] tipo2 = this.gerarArquivoTextoRegistroTipo02(imovel, conta,
 				sistemaParametro);
@@ -1211,6 +1212,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		int quantidadeTipo2 = (Integer) tipo2[1];
 		quantidadeLinhas = quantidadeLinhas + quantidadeTipo2;
 
+		System.out.println("-----> " + imovel.getId() + "GERANDO TIPO 03");
 		// REGISTRO_TIPO_03
 		Object[] tipo3 = this.gerarArquivoTextoRegistroTipo03(imovel,
 				anoMesReferencia);
@@ -1218,24 +1220,28 @@ public class UC0745GerarArquivoTextoFaturamento {
 		int quantidadeTipo3 = (Integer) tipo3[1];
 		quantidadeLinhas = quantidadeLinhas + quantidadeTipo3;
 
+		System.out.println("-----> " + imovel.getId() + "GERANDO TIPO 04");
 		// REGISTRO_TIPO_04
 		Object[] tipo4 = this.gerarArquivoTextoRegistroTipo04(conta);
 		arquivoTexto.append(tipo4[0]);
 		int quantidadeTipo4 = (Integer) tipo4[1];
 		quantidadeLinhas = quantidadeLinhas + quantidadeTipo4;
 
+		System.out.println("-----> " + imovel.getId() + "GERANDO TIPO 05");
 		// REGISTRO_TIPO_05
 		Object[] tipo5 = this.gerarArquivoTextoRegistroTipo05(conta);
 		arquivoTexto.append(tipo5[0]);
 		int quantidadeTipo5 = (Integer) tipo5[1];
 		quantidadeLinhas = quantidadeLinhas + quantidadeTipo5;
 
+		System.out.println("-----> " + imovel.getId() + "GERANDO TIPO 06");
 		// REGISTRO_TIPO_06
 		Object[] tipo6 = this.gerarArquivoTextoRegistroTipo06(conta);
 		arquivoTexto.append(tipo6[0]);
 		int quantidadeTipo6 = (Integer) tipo6[1];
 		quantidadeLinhas = quantidadeLinhas + quantidadeTipo6;
 
+		System.out.println("-----> " + imovel.getId() + "GERANDO TIPO 07");
 		// REGISTRO_TIPO_07
 		Object[] tipo7 = this.gerarArquivoTextoRegistroTipo07(imovel,
 				sistemaParametro, cobrancaDocumento);
@@ -1243,6 +1249,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		int quantidadeTipo7 = (Integer) tipo7[1];
 		quantidadeLinhas = quantidadeLinhas + quantidadeTipo7;
 
+		System.out.println("-----> " + imovel.getId() + "GERANDO TIPO 08");
 		// REGISTRO_TIPO_08
 		Object[] tipo8 = this.gerarArquivoTextoRegistroTipo08(imovel,
 				anoMesReferencia, sistemaParametro);
@@ -1250,6 +1257,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		int quantidadeTipo8 = (Integer) tipo8[1];
 		quantidadeLinhas = quantidadeLinhas + quantidadeTipo8;
 
+		System.out.println("-----> " + imovel.getId() + "GERANDO TIPO 09 E 10");
 		// Parte dos dados das tarifas e faixas
 		// REGISTRO_TIPO_09 e TIPO_10
 		Object[] registroTipo9e10 = gerarArquivoTextoRegistroDadosTarifa09(
