@@ -1306,6 +1306,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 		if (conta != null) {
 
+			System.out.println("====> IMOVEL CLIENTE: " + (imovel.getClienteImoveis() != null ? imovel.getClienteImoveis() : null));
 			nomeGerenciaRegional = conta.getLocalidade().getGerenciaRegional().getNome();
 			idGerenciaRegional = conta.getLocalidade().getGerenciaRegional().getId();
 			idLocalidade = conta.getLocalidade().getId();
