@@ -201,14 +201,14 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 
 		try {
 			String dialect = HibernateUtil.getDialect();
-			// verifica se o objeto é do tipo Imovel
+			// verifica se o objeto ï¿½ do tipo Imovel
 			if (objeto instanceof Imovel) {
 				if (dialect.toUpperCase().contains("ORACLE")) {
 					consulta = "select cadastro.seq_imovel.nextval as id from dual ";
 				} else {
 					consulta = "select nextval('cadastro.seq_imovel') as id ";
 				}
-				// verifica se o objeto é do tipo Cliente
+				// verifica se o objeto ï¿½ do tipo Cliente
 			} else if (objeto instanceof Cliente) {
 				if (dialect.toUpperCase().contains("ORACLE")) {
 					consulta = "select cadastro.seq_cliente.nextval as id from dual ";
@@ -411,7 +411,7 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 			return retorno;
 		} catch (HibernateException e) {
 			e.printStackTrace();
-			throw new ErroRepositorioException("Erro no Hibernate: " + objeto.getClass().getName() + " falhou na inserção");
+			throw new ErroRepositorioException("Erro no Hibernate: " + objeto.getClass().getName() + " falhou na inserï¿½ï¿½o");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}

@@ -86,6 +86,7 @@ import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1300,4 +1301,9 @@ public interface IControladorFaturamento {
 	public BigDecimal retornaValorBolsaAgua (Integer anoMesReferencia, Imovel imovel) throws ControladorException;
 	
 	public DeterminarValoresFaturamentoAguaEsgotoHelper obterValoresCreditosBolsaAgua(Imovel imovel, FaturamentoGrupo grupo );
+	
+	public void registrarFichaCompensacaoGrupo(Integer idGrupoFaturamento, Integer anoMesReferencia) throws ControladorException;
+
+	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento) throws ControladorException;
+	
 }

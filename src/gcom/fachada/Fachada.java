@@ -1,24 +1,5 @@
 package gcom.fachada;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Vector;
-
-import javax.ejb.CreateException;
-import javax.mail.SendFailedException;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.fileupload.FileItem;
-
 import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoForma;
@@ -678,7 +659,27 @@ import gcom.util.filtro.ParametroSimples;
 import gcom.util.tabelaauxiliar.ControladorTabelaAuxiliarLocal;
 import gcom.util.tabelaauxiliar.ControladorTabelaAuxiliarLocalHome;
 import gcom.util.tabelaauxiliar.TabelaAuxiliarAbstrata;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
+
+import javax.ejb.CreateException;
+import javax.mail.SendFailedException;
+import javax.servlet.http.HttpSession;
+
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import org.apache.commons.fileupload.FileItem;
 
 public class Fachada {
 
@@ -40571,6 +40572,22 @@ public class Fachada {
 			return getControladorImovel().pesquisarImoveisBolsaAguaPorClienteId(idCliente);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public void registrarFichaCompensacaoGrupo(Integer idFaturamento, Integer anoMesReferencia) {
+		try {
+			this.getControladorFaturamento().registrarFichaCompensacaoGrupo(idFaturamento, anoMesReferencia);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public Integer pesquisarFaturamentoGrupoImovel(Integer idImovel) {
+		try {
+			return this.getControladorFaturamento().pesquisarFaturamentoGrupoImovel(idImovel);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
 }

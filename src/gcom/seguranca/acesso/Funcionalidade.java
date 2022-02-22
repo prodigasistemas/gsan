@@ -212,6 +212,9 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	
 	public static final int GERAR_CREDITO_BOLSA_AGUA = 16087;
 	
+	public static final int REGISTRAR_BOLETOS = 16090;
+
+	
 	
 	
 	private Integer id;

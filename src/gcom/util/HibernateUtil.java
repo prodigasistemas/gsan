@@ -475,6 +475,7 @@ import gcom.faturamento.FaturamentoSituacaoHistorico;
 import gcom.faturamento.FaturamentoSituacaoMotivo;
 import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.FaturamentoTipo;
+import gcom.faturamento.FichaCompensacao;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.HistogramaAguaEconomia;
 import gcom.faturamento.HistogramaAguaEconomiaSemQuadra;
@@ -1291,6 +1292,7 @@ public class HibernateUtil {
 					.addClass(ContaImpressaoTermicaQtde.class)
 					.addClass(LancamentoAgenciaReguladora.class)
 					.addClass(FaturamentoParametro.class)
+					.addClass(FichaCompensacao.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.micromedicao //

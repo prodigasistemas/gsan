@@ -27,7 +27,6 @@ import org.jboss.logging.Logger;
 
 import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
-import gcom.arrecadacao.FichaCompensacao;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
@@ -98,25 +97,24 @@ import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
-public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
-		implements SessionBean {
+public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static Logger logger = Logger.getLogger(ControladorFaturamentoCOSANPASEJB.class);
-	
+
 	private boolean isImovelEmDebito = false;
 
-
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
-	public void emitirContas(Integer anoMesReferenciaFaturamento, FaturamentoGrupo faturamentoGrupo, int idFuncionalidadeIniciada, int tipoConta,
-			Integer idEmpresa, Short indicadorEmissaoExtratoFaturamento) throws ControladorException {
+	public void emitirContas(Integer anoMesReferenciaFaturamento, FaturamentoGrupo faturamentoGrupo,
+			int idFuncionalidadeIniciada, int tipoConta, Integer idEmpresa, Short indicadorEmissaoExtratoFaturamento)
+			throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
 		Integer anoMesReferenciaFaturamentoSemAntecipacao = new Integer(anoMesReferenciaFaturamento);
-		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE,
-				(idEmpresa == null ? 0 : idEmpresa));
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+				UnidadeProcessamento.FUNCIONALIDADE, (idEmpresa == null ? 0 : idEmpresa));
 		ImpressaoContaImpressoraTermica impressaoContaImpressoraTermica = null;
 		Collection<Object[]> stringFormatadaImpressaoTermica = new ArrayList<Object[]>();
 		Collection<String> colecaoLocalidadesArquivo = new ArrayList<String>();
@@ -125,7 +123,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		int qtdContasLocalidade = 0;
 
 		List<Integer> idsCondominios = new ArrayList<Integer>();
-		
+
 		try {
 			SistemaParametro sistemaParametro = null;
 
@@ -166,16 +164,19 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				mapAtualizaSequencial = new HashMap();
 				Collection colecaoContaParms = null;
 
-				if (anoMesReferenciaFaturamentoAntecipado != null && anoMesReferenciaFaturamento.intValue() == anoMesReferenciaFaturamentoAntecipado.intValue()) {
+				if (anoMesReferenciaFaturamentoAntecipado != null
+						&& anoMesReferenciaFaturamento.intValue() == anoMesReferenciaFaturamentoAntecipado.intValue()) {
 					logger.info("INDICE_ANTECIPADO_PESQUISA:" + numeroIndiceAntecipado);
 					numeroIndice = numeroIndiceAntecipado;
 				}
 
-				this.alterarVencimentoContasFaturarGrupo(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice, faturamentoGrupo);
-				
-				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(numeroIndice, anoMesReferenciaFaturamento, faturamentoGrupo.getId());
+				this.alterarVencimentoContasFaturarGrupo(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice,
+						faturamentoGrupo);
+
+				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(numeroIndice,
+						anoMesReferenciaFaturamento, faturamentoGrupo.getId());
 				colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
-				
+
 				this.gerarQuantidadeContasImpressaoTermica(anoMesReferenciaFaturamento, faturamentoGrupo.getId());
 
 				if (colecaoConta != null && !colecaoConta.isEmpty()) {
@@ -190,13 +191,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 					while (iteratorConta.hasNext()) {
 
 						emitirContaHelper = (EmitirContaHelper) iteratorConta.next();
-						
+
 						Imovel imovelFlag = getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
-												
-						if (Short.valueOf(imovelFlag.getIndicadorEnvioContaFisica()) == Short.valueOf(Imovel.INDICADOR_NAO_ENVIO_CONTA_FISICA)) {
-							emitirContaHelper = (EmitirContaHelper) iteratorConta.next();					
+
+						if (Short.valueOf(imovelFlag.getIndicadorEnvioContaFisica()) == Short
+								.valueOf(Imovel.INDICADOR_NAO_ENVIO_CONTA_FISICA)) {
+							emitirContaHelper = (EmitirContaHelper) iteratorConta.next();
 						}
-						
+
 						sequencialImpressao += 1;
 
 						quantidadeContas++;
@@ -205,26 +207,36 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 							StringBuilder contaTxt = new StringBuilder();
 
 							if (emitirContaHelper != null) {
-								
+
 								Localidade localidade = obterLocalidade(emitirContaHelper);
-								Imovel imovelEmitido = getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
-								
+								Imovel imovelEmitido = getControladorImovel().pesquisarImovel(
+										emitirContaHelper.getIdImovel());
+
 								contaTxt.append(Util.completaString(obterNumeroNota(emitirContaHelper), 16));
 								contaTxt.append(Util.completaString(Util.formatarData(new Date()), 10));
-								contaTxt.append(Util.completaString(localidade.getEnderecoFormatadoTituloAbreviado(), 120));
+								contaTxt.append(Util.completaString(localidade.getEnderecoFormatadoTituloAbreviado(),
+										120));
 								contaTxt.append(Util.completaString(localidade.getFone(), 9));
-								contaTxt.append(Util.completaString(Util.formatarCnpj(sistemaParametro.getCnpjEmpresa()), 18));
-								contaTxt.append(Util.completaString(Util.formatarInscricaoEstadual(sistemaParametro.getInscricaoEstadual()), 12));
+								contaTxt.append(Util.completaString(
+										Util.formatarCnpj(sistemaParametro.getCnpjEmpresa()), 18));
+								contaTxt.append(Util.completaString(
+										Util.formatarInscricaoEstadual(sistemaParametro.getInscricaoEstadual()), 12));
 								contaTxt = preencherUnidadeNegocio(contaTxt, localidade);
-								contaTxt.append(Util.adicionarZerosEsquedaNumero(4, emitirContaHelper.getCodigoSetorComercialConta().toString()));
-								contaTxt.append(Util.adicionarZerosEsquedaNumero(3, emitirContaHelper.getIdLocalidade().toString()));
-								contaTxt.append(Util.adicionarZerosEsquedaNumero(4, new Integer(imovelEmitido.getQuadra().getNumeroQuadra()).toString()));
-								contaTxt.append(Util.adicionarZerosEsquedaNumero(9, imovelEmitido.getNumeroSequencialRota().toString()));
-								contaTxt.append(Util.adicionarZerosEsquedaNumero(1, imovelEmitido.getIndicadorDebitoConta().toString()));
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(4, emitirContaHelper
+										.getCodigoSetorComercialConta().toString()));
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(3, emitirContaHelper.getIdLocalidade()
+										.toString()));
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(4, new Integer(imovelEmitido
+										.getQuadra().getNumeroQuadra()).toString()));
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(9, imovelEmitido
+										.getNumeroSequencialRota().toString()));
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(1, imovelEmitido
+										.getIndicadorDebitoConta().toString()));
 								contaTxt.append(Util.completaString(emitirContaHelper.getIdImovel().toString(), 9));
 								contaTxt = preencherNomeCliente(tipoConta, emitirContaHelper, contaTxt);
 
-								Collection colecaoClienteImovel = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(emitirContaHelper.getIdImovel());
+								Collection colecaoClienteImovel = repositorioClienteImovel
+										.pesquisarClienteImovelResponsavelConta(emitirContaHelper.getIdImovel());
 
 								String endereco = "";
 								String municipioEntrega = "";
@@ -236,13 +248,17 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								boolean enderecoAlternativo = false;
 
 								if (colecaoClienteImovel != null && !colecaoClienteImovel.isEmpty()) {
-									ClienteImovel clienteImovelRespConta = (ClienteImovel) colecaoClienteImovel.iterator().next();
+									ClienteImovel clienteImovelRespConta = (ClienteImovel) colecaoClienteImovel
+											.iterator().next();
 
 									if (clienteImovelRespConta != null) {
 										Cliente cliente = clienteImovelRespConta.getCliente();
 
-										if (cliente != null && imovelEmitido.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)) {
-											String[] enderecoCliente = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDivididoCosanpa(cliente.getId());
+										if (cliente != null
+												&& imovelEmitido.getImovelContaEnvio().getId()
+														.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)) {
+											String[] enderecoCliente = getControladorEndereco()
+													.pesquisarEnderecoClienteAbreviadoDivididoCosanpa(cliente.getId());
 											bairroEntrega = enderecoCliente[3];
 											municipioEntrega = enderecoCliente[1];
 											ufEntrega = enderecoCliente[2];
@@ -251,13 +267,15 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 											logBairroClie = enderecoCliente[6];
 											enderecoAlternativo = true;
 
-											endereco = enderecoCliente[0] + " - " + bairroEntrega + " " + municipioEntrega + " " + ufEntrega + " " + cepEntrega;
+											endereco = enderecoCliente[0] + " - " + bairroEntrega + " "
+													+ municipioEntrega + " " + ufEntrega + " " + cepEntrega;
 
 										}
 									}
 								}
 
-								String[] enderecoImovel2 = getControladorEndereco().pesquisarEnderecoFormatadoDivididoCosanpa(emitirContaHelper.getIdImovel());
+								String[] enderecoImovel2 = getControladorEndereco()
+										.pesquisarEnderecoFormatadoDivididoCosanpa(emitirContaHelper.getIdImovel());
 
 								String municipioImovel = enderecoImovel2[1];
 								String logCepImovel = "";
@@ -278,19 +296,23 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									logBairroClie = logBairroImovel;
 								}
 
-								if (endereco == null || endereco.trim().equalsIgnoreCase("") || endereco.trim().equalsIgnoreCase("-")) {
-									endereco = getControladorEndereco().pesquisarEnderecoFormatado(imovelEmitido.getId());
+								if (endereco == null || endereco.trim().equalsIgnoreCase("")
+										|| endereco.trim().equalsIgnoreCase("-")) {
+									endereco = getControladorEndereco().pesquisarEnderecoFormatado(
+											imovelEmitido.getId());
 								}
 
 								contaTxt.append(Util.completaString(endereco, 120));
 
-								Categoria categoriaImovel = (Categoria) getControladorImovel().obterPrincipalCategoriaImovel(emitirContaHelper.getIdImovel());
+								Categoria categoriaImovel = (Categoria) getControladorImovel()
+										.obterPrincipalCategoriaImovel(emitirContaHelper.getIdImovel());
 								contaTxt.append(Util.completaString(categoriaImovel.getDescricao(), 30));
 
 								contaTxt = preencherSubcategoriaImovel(contaTxt, imovelEmitido);
 								contaTxt = preencherQuantidadeEconomias(contaTxt, imovelEmitido);
 
-								String dataVencimentoConta = Util.formatarData(emitirContaHelper.getDataVencimentoConta());
+								String dataVencimentoConta = Util.formatarData(emitirContaHelper
+										.getDataVencimentoConta());
 								contaTxt.append(Util.completaString(dataVencimentoConta, 10));
 
 								contaTxt = preencherNumeroHidrometro(contaTxt, imovelEmitido);
@@ -337,8 +359,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								String consumoMedio = "0";
 								String mensagemContaAnormalidade = "";
 								if (tipoLigacao != null) {
-									parmsConsumoHistorico = repositorioMicromedicao.obterDadosConsumoConta(emitirContaHelper.getIdImovel(),
-											emitirContaHelper.getAmReferencia(), tipoLigacao);
+									parmsConsumoHistorico = repositorioMicromedicao.obterDadosConsumoConta(
+											emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(),
+											tipoLigacao);
 
 									if (parmsConsumoHistorico != null) {
 										if (parmsConsumoHistorico[2] != null) {
@@ -348,9 +371,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 										if (parmsConsumoHistorico[6] != null) {
 											mensagemContaAnormalidade = (String) parmsConsumoHistorico[6];
 										}
-										
+
 										if (parmsConsumoHistorico[7] != null) {
-											emitirContaHelper.setIdConsumoAnormalidade((Integer) parmsConsumoHistorico[7]);
+											emitirContaHelper
+													.setIdConsumoAnormalidade((Integer) parmsConsumoHistorico[7]);
 										}
 									}
 								}
@@ -363,9 +387,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 								Collection colecaoContaCategoriaConsumoFaixa = null;
 
-								colecaoContaCategoriaConsumoFaixa = repositorioFaturamento.pesquisarContaCategoriaConsumoFaixa(emitirContaHelper.getIdConta());
+								colecaoContaCategoriaConsumoFaixa = repositorioFaturamento
+										.pesquisarContaCategoriaConsumoFaixa(emitirContaHelper.getIdConta());
 
-								Collection colecaoSubCategoria = getControladorImovel().obterQuantidadeEconomiasSubCategoria(imovelEmitido.getId());
+								Collection colecaoSubCategoria = getControladorImovel()
+										.obterQuantidadeEconomiasSubCategoria(imovelEmitido.getId());
 
 								Integer consumoExcesso = 0;
 								Integer consumoMinimo = 0;
@@ -374,16 +400,19 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 								StringBuilder dadosContaCategoria = null;
 
-								Collection<IContaCategoria> cContaCategoria = repositorioFaturamento.pesquisarContaCategoria(emitirContaHelper.getIdConta());
-								
+								Collection<IContaCategoria> cContaCategoria = repositorioFaturamento
+										.pesquisarContaCategoria(emitirContaHelper.getIdConta());
+
 								// Caso tenha mais de uma categoria (misto)
 								if (cContaCategoria.size() > 1) {
 									dadosContaCategoria = obterDadosContaCategoriaMisto(cContaCategoria);
 								} else {
 
-									if (colecaoContaCategoriaConsumoFaixa == null || colecaoContaCategoriaConsumoFaixa.isEmpty()) {
+									if (colecaoContaCategoriaConsumoFaixa == null
+											|| colecaoContaCategoriaConsumoFaixa.isEmpty()) {
 
-										ContaCategoria contaCategoria = (ContaCategoria) cContaCategoria.iterator().next();
+										ContaCategoria contaCategoria = (ContaCategoria) cContaCategoria.iterator()
+												.next();
 
 										consumoMinimo = contaCategoria.getConsumoMinimoAgua();
 
@@ -395,34 +424,51 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 									} else {
 										if (!emitirContaHelper.getConsumoAgua().equals(0)) {
-											for (Iterator iter = colecaoContaCategoriaConsumoFaixa.iterator(); iter.hasNext();) {
+											for (Iterator iter = colecaoContaCategoriaConsumoFaixa.iterator(); iter
+													.hasNext();) {
 
-												ContaCategoriaConsumoFaixa contaCategoriaConsumoFaixa = (ContaCategoriaConsumoFaixa) iter.next();
+												ContaCategoriaConsumoFaixa contaCategoriaConsumoFaixa = (ContaCategoriaConsumoFaixa) iter
+														.next();
 												if (contaCategoriaConsumoFaixa.getConsumoAgua() != null) {
-													for (Iterator iteration = colecaoSubCategoria.iterator(); iteration.hasNext();) {
-														Subcategoria subCategoriaEmitir = (Subcategoria) iteration.next();
+													for (Iterator iteration = colecaoSubCategoria.iterator(); iteration
+															.hasNext();) {
+														Subcategoria subCategoriaEmitir = (Subcategoria) iteration
+																.next();
 
 														Integer fatorEconomias = null;
 														if (subCategoriaEmitir.getCategoria() != null) {
 															if (subCategoriaEmitir.getCategoria().getFatorEconomias() != null
-																	&& !subCategoriaEmitir.getCategoria().getFatorEconomias().equals("")) {
+																	&& !subCategoriaEmitir.getCategoria()
+																			.getFatorEconomias().equals("")) {
 
-																fatorEconomias = subCategoriaEmitir.getCategoria().getFatorEconomias().intValue();
+																fatorEconomias = subCategoriaEmitir.getCategoria()
+																		.getFatorEconomias().intValue();
 															}
 														}
 
-														if (contaCategoriaConsumoFaixa.getSubcategoria().getId().equals(subCategoriaEmitir.getId())) {
+														if (contaCategoriaConsumoFaixa.getSubcategoria().getId()
+																.equals(subCategoriaEmitir.getId())) {
 															if (fatorEconomias != null && !fatorEconomias.equals("")) {
-																consumoExcesso = consumoExcesso + contaCategoriaConsumoFaixa.getConsumoAgua() * fatorEconomias;
+																consumoExcesso = consumoExcesso
+																		+ contaCategoriaConsumoFaixa.getConsumoAgua()
+																		* fatorEconomias;
 
-																valorExcesso = valorExcesso.add(contaCategoriaConsumoFaixa.getValorAgua().multiply(
-																		new BigDecimal(fatorEconomias)));
+																valorExcesso = valorExcesso
+																		.add(contaCategoriaConsumoFaixa.getValorAgua()
+																				.multiply(
+																						new BigDecimal(fatorEconomias)));
 															} else {
-																consumoExcesso = consumoExcesso + contaCategoriaConsumoFaixa.getConsumoAgua()
+																consumoExcesso = consumoExcesso
+																		+ contaCategoriaConsumoFaixa.getConsumoAgua()
 																		* subCategoriaEmitir.getQuantidadeEconomias();
 
-																valorExcesso = valorExcesso.add(contaCategoriaConsumoFaixa.getValorAgua().multiply(
-																		new BigDecimal(subCategoriaEmitir.getQuantidadeEconomias())));
+																valorExcesso = valorExcesso
+																		.add(contaCategoriaConsumoFaixa
+																				.getValorAgua()
+																				.multiply(
+																						new BigDecimal(
+																								subCategoriaEmitir
+																										.getQuantidadeEconomias())));
 															}
 														}
 
@@ -437,8 +483,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									}
 
 									if (consumoMinimo != null && consumoMinimo == 0) {
-										ContaCategoria contaCategoria = (ContaCategoria) cContaCategoria.iterator().next();
-										
+										ContaCategoria contaCategoria = (ContaCategoria) cContaCategoria.iterator()
+												.next();
+
 										consumoMinimo = contaCategoria.getConsumoMinimoAgua();
 
 										if (consumoMinimo == null || consumoMinimo == 0) {
@@ -448,63 +495,83 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 								}
 
-								String diasConsumo = obterDiasConsumo(parmsMedicaoHistorico, dataLeituraAnterior, dataLeituraAtual);
-								String[] parmsConsumo = obterConsumoFaturadoConsumoMedioDiario(emitirContaHelper, tipoMedicao, diasConsumo);
+								String diasConsumo = obterDiasConsumo(parmsMedicaoHistorico, dataLeituraAnterior,
+										dataLeituraAtual);
+								String[] parmsConsumo = obterConsumoFaturadoConsumoMedioDiario(emitirContaHelper,
+										tipoMedicao, diasConsumo);
 								String consumoFaturamento = parmsConsumo[0];
 
 								String consumo = obterConsumo(consumoMinimo, consumoFaturamento);
-								
+
 								contaTxt.append(Util.adicionarZerosEsquedaNumero(6, consumo));
 								contaTxt.append(Util.adicionarZerosEsquedaNumero(6, consumoMedio));
 								contaTxt.append(Util.completaString(diasConsumo, 2));
-								contaTxt.append(Util.completaString(Util.formatarAnoMesParaMesAno(emitirContaHelper.getAmReferencia()), 7));
-								
-								contaTxt = preencherDadosConsumoFaixa(emitirContaHelper, contaTxt, consumoMinimo, valorMinimo, dadosContaCategoria);
+								contaTxt.append(Util.completaString(
+										Util.formatarAnoMesParaMesAno(emitirContaHelper.getAmReferencia()), 7));
+
+								contaTxt = preencherDadosConsumoFaixa(emitirContaHelper, contaTxt, consumoMinimo,
+										valorMinimo, dadosContaCategoria);
 								contaTxt = preencherDescricaoValorTotalAgua(emitirContaHelper, contaTxt);
 								contaTxt = preencherDescricaoValorEsgoto(emitirContaHelper, contaTxt);
 								contaTxt = preencherDescricaoTotalCreditos(emitirContaHelper, contaTxt);
 								contaTxt = preencherValorDescricaoServicos(emitirContaHelper, contaTxt);
-								
-								contaTxt.append(Util.completaString(emitirContaHelper.getValorTotalConta(), 13));
-								contaTxt.append(Util.completaString(obterMesConsumoAnteriorFormatado(emitirContaHelper, 1), 7));
-								contaTxt.append(Util.completaString(obterMesConsumoAnteriorFormatado(emitirContaHelper, 2), 7));
-								contaTxt.append(Util.completaString(obterMesConsumoAnteriorFormatado(emitirContaHelper, 3), 7));
-								contaTxt.append(Util.completaString(obterMesConsumoAnteriorFormatado(emitirContaHelper, 4), 7));
-								contaTxt.append(Util.completaString(obterMesConsumoAnteriorFormatado(emitirContaHelper, 5), 7));
-								contaTxt.append(Util.completaString(obterMesConsumoAnteriorFormatado(emitirContaHelper, 6), 7));
-								
 
-								String consumoMesAnterior1 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao, tipoMedicao, consumo, 1);
-								String consumoMesAnterior2 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao, tipoMedicao, consumo, 2);
-								String consumoMesAnterior3 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao, tipoMedicao, consumo, 3);
-								String consumoMesAnterior4 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao, tipoMedicao, consumo, 4);
-								String consumoMesAnterior5 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao, tipoMedicao, consumo, 5);
-								String consumoMesAnterior6 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao, tipoMedicao, consumo, 6);
+								contaTxt.append(Util.completaString(emitirContaHelper.getValorTotalConta(), 13));
+								contaTxt.append(Util.completaString(
+										obterMesConsumoAnteriorFormatado(emitirContaHelper, 1), 7));
+								contaTxt.append(Util.completaString(
+										obterMesConsumoAnteriorFormatado(emitirContaHelper, 2), 7));
+								contaTxt.append(Util.completaString(
+										obterMesConsumoAnteriorFormatado(emitirContaHelper, 3), 7));
+								contaTxt.append(Util.completaString(
+										obterMesConsumoAnteriorFormatado(emitirContaHelper, 4), 7));
+								contaTxt.append(Util.completaString(
+										obterMesConsumoAnteriorFormatado(emitirContaHelper, 5), 7));
+								contaTxt.append(Util.completaString(
+										obterMesConsumoAnteriorFormatado(emitirContaHelper, 6), 7));
+
+								String consumoMesAnterior1 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao,
+										tipoMedicao, consumo, 1);
+								String consumoMesAnterior2 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao,
+										tipoMedicao, consumo, 2);
+								String consumoMesAnterior3 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao,
+										tipoMedicao, consumo, 3);
+								String consumoMesAnterior4 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao,
+										tipoMedicao, consumo, 4);
+								String consumoMesAnterior5 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao,
+										tipoMedicao, consumo, 5);
+								String consumoMesAnterior6 = obterConsumoMesAnterior(emitirContaHelper, tipoLigacao,
+										tipoMedicao, consumo, 6);
 
 								contaTxt.append(Util.completaString(consumoMesAnterior1 + "", 7));
 								contaTxt.append(Util.completaString(consumoMesAnterior2 + "", 7));
-								contaTxt.append(Util.completaString(consumoMesAnterior3  + "", 7));
-								contaTxt.append(Util.completaString(consumoMesAnterior4  + "", 7));
-								contaTxt.append(Util.completaString(consumoMesAnterior5  + "", 7));
-								contaTxt.append(Util.completaString(consumoMesAnterior6  + "", 7));
-								
+								contaTxt.append(Util.completaString(consumoMesAnterior3 + "", 7));
+								contaTxt.append(Util.completaString(consumoMesAnterior4 + "", 7));
+								contaTxt.append(Util.completaString(consumoMesAnterior5 + "", 7));
+								contaTxt.append(Util.completaString(consumoMesAnterior6 + "", 7));
+
 								contaTxt = preencherMensagensConta(sistemaParametro, emitirContaHelper, contaTxt);
 								contaTxt = preencherMensagemAnormalidadeConsumo(contaTxt, mensagemContaAnormalidade);
-								contaTxt = preencherQuantidadeValorDebitos(sistemaParametro, emitirContaHelper, contaTxt);
-								
-								//validação para trazer cfpCnpj caso exista. Paulo Almeida - 01.02.2022
+								contaTxt = preencherQuantidadeValorDebitos(sistemaParametro, emitirContaHelper,
+										contaTxt);
+
+								// validação para trazer cfpCnpj caso exista.
+								// Paulo Almeida - 01.02.2022
 								String cpfCnpf = consultarCpfCnpjCliente(emitirContaHelper.getIdImovel());
-								
+			
 								if(cpfCnpf.equalsIgnoreCase("")) {
 										contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
 									}else { 
 									    contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
 									}
+
 								contaTxt.append(Util.completaString(cont + "", 8));
 
-								String[] qualidade = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper, imovelEmitido.getQuadraFace().getId());
-								contaTxt = preencherQualidadedaAgua(qualidade, anoMesReferenciaFaturamento, emitirContaHelper, contaTxt, localidade, imovelEmitido);
-								
+								String[] qualidade = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper,
+										imovelEmitido.getQuadraFace().getId());
+								contaTxt = preencherQualidadedaAgua(qualidade, anoMesReferenciaFaturamento,
+										emitirContaHelper, contaTxt, localidade, imovelEmitido);
+
 								contaTxt = preencherEnderecoImovel(emitirContaHelper, contaTxt);
 								contaTxt = preencherCpfCnpjCliente(emitirContaHelper, contaTxt);
 								contaTxt = preencherDescricaoTipoTarifaConsumo(contaTxt);
@@ -512,15 +579,19 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt = preencherAreaConstruidaImovel(contaTxt, imovelEmitido);
 								contaTxt.append(Util.completaString(emitirContaHelper.getIdLocalidade() + "", 10));
 								contaTxt.append(Util.completaString(endereco, 120));
-								contaTxt.append(Util.completaString(imovelEmitido.getQuadraFace().getNumeroQuadraFace() + "", 2));
-								contaTxt.append(Util.completaString(localidade.getUnidadeNegocio().getNomeAbreviado(), 6));
-								contaTxt = preencherDataPrevistaCronograma(faturamentoGrupo, emitirContaHelper, contaTxt);
+								contaTxt.append(Util.completaString(imovelEmitido.getQuadraFace().getNumeroQuadraFace()
+										+ "", 2));
+								contaTxt.append(Util.completaString(localidade.getUnidadeNegocio().getNomeAbreviado(),
+										6));
+								contaTxt = preencherDataPrevistaCronograma(faturamentoGrupo, emitirContaHelper,
+										contaTxt);
 								contaTxt = preencherDescricaoLeituraSituacao(contaTxt, idSituacaoLeituraAtual);
 								contaTxt = preencherTipoCaptacao(contaTxt, qualidade);
 								contaTxt = preencherMensagemTarifaSocial(contaTxt, imovelEmitido);
 								contaTxt = preencherEnderecoAlternativo(contaTxt, municipioEntrega, enderecoAlternativo);
 								contaTxt.append(Util.completaString(localidade.getUnidadeNegocio().getNome(), 30));
-								contaTxt = preencherMensagensInstitucionais(sistemaParametro, emitirContaHelper, contaTxt);
+								contaTxt = preencherMensagensInstitucionais(sistemaParametro, emitirContaHelper,
+										contaTxt);
 
 								String diasConsumoMes1 = obterDiasConsumoMesAnterior(emitirContaHelper, 1);
 								String diasConsumoMes2 = obterDiasConsumoMesAnterior(emitirContaHelper, 2);
@@ -529,29 +600,47 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								String diasConsumoMes5 = obterDiasConsumoMesAnterior(emitirContaHelper, 5);
 								String diasConsumoMes6 = obterDiasConsumoMesAnterior(emitirContaHelper, 6);
 
-								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 1), 2));
-								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 2), 2));
-								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 3), 2));
-								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 4), 2));
-								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 5), 2));
-								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 6), 2));
+								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 1),
+										2));
+								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 2),
+										2));
+								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 3),
+										2));
+								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 4),
+										2));
+								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 5),
+										2));
+								contaTxt.append(Util.completaString(obterDiasConsumoMesAnterior(emitirContaHelper, 6),
+										2));
 
-								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido, 1);
-								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido, 2);
-								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido, 3);
-								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido, 4);
-								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido, 5);
-								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido, 6);
+								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido,
+										1);
+								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido,
+										2);
+								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido,
+										3);
+								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido,
+										4);
+								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido,
+										5);
+								contaTxt = preencherConsumoTipoMesAnterior(emitirContaHelper, contaTxt, imovelEmitido,
+										6);
 
-								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior1, diasConsumoMes1);
-								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior2, diasConsumoMes2);
-								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior3, diasConsumoMes3);
-								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior4, diasConsumoMes4);
-								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior5, diasConsumoMes5);
-								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior6, diasConsumoMes6);
+								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior1,
+										diasConsumoMes1);
+								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior2,
+										diasConsumoMes2);
+								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior3,
+										diasConsumoMes3);
+								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior4,
+										diasConsumoMes4);
+								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior5,
+										diasConsumoMes5);
+								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior6,
+										diasConsumoMes6);
 
 								contaTxt = preencherDadosRateioAguaEsgoto(emitirContaHelper, contaTxt);
-								
+
 								contaTxt = preencherDadosAliquotaImposto(emitirContaHelper, contaTxt);
 								contaTxt = preencherContatosAgenciaReguladora(emitirContaHelper, contaTxt);
 								contaTxt = preencherDadosAliquotaAgenciaReguladora(emitirContaHelper, contaTxt);
@@ -563,15 +652,17 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									}else {
 										contaTxt = preencherDadosEmissaoConta(emitirContaHelper, contaTxt);
 								}
-								
+
 								if (isEmitirImpressaoTermica(imovelEmitido, municipioEntrega, municipioImovel)) {
 
-									String localidadeArquivo = imovelEmitido.getLocalidade().getId() + "parte" + qntArquivoLocalidadeImpressaoTermica;
+									String localidadeArquivo = imovelEmitido.getLocalidade().getId() + "parte"
+											+ qntArquivoLocalidadeImpressaoTermica;
 									if (!colecaoLocalidadesArquivo.contains(localidadeArquivo)) {
 										if (qtdImovelArquivoImpressaoTermica != 1000) {
 											qntArquivoLocalidadeImpressaoTermica = 1;
 											qtdContasLocalidade = 0;
-											localidadeArquivo = imovelEmitido.getLocalidade().getId() + "parte" + qntArquivoLocalidadeImpressaoTermica;
+											localidadeArquivo = imovelEmitido.getLocalidade().getId() + "parte"
+													+ qntArquivoLocalidadeImpressaoTermica;
 										}
 										colecaoLocalidadesArquivo.add(localidadeArquivo);
 										qtdImovelArquivoImpressaoTermica = 1;
@@ -583,33 +674,42 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 										qntArquivoLocalidadeImpressaoTermica++;
 									}
 									qtdContasLocalidade++;
-									stringFormatadaImpressaoTermica.add(obterDadosImpressaoTermica(qtdContasLocalidade, sistemaParametro, 
-											emitirContaHelper, qualidade, localidadeArquivo, idsCondominios));
+									stringFormatadaImpressaoTermica.add(obterDadosImpressaoTermica(qtdContasLocalidade,
+											sistemaParametro, emitirContaHelper, qualidade, localidadeArquivo,
+											idsCondominios));
 
 								} else {
-									
-//									if (getControladorAtualizacaoCadastral().existeComunicadoIrregularidadeCadastro(emitirContaHelper.getIdImovel())) {
-//										contasIrregularidadeCadadastro.append(contaTxt.toString());
-//										contasIrregularidadeCadadastro.append(gerarDadosComunicadoIrregularidadeCadastro(anoMesReferenciaFaturamento,emitirContaHelper));
-//										contasIrregularidadeCadadastro.append(System.getProperty("line.separator"));
-//									}
+
+									// if
+									// (getControladorAtualizacaoCadastral().existeComunicadoIrregularidadeCadastro(emitirContaHelper.getIdImovel()))
+									// {
+									// contasIrregularidadeCadadastro.append(contaTxt.toString());
+									// contasIrregularidadeCadadastro.append(gerarDadosComunicadoIrregularidadeCadastro(anoMesReferenciaFaturamento,emitirContaHelper));
+									// contasIrregularidadeCadadastro.append(System.getProperty("line.separator"));
+									// }
 									if (isEmitirComunicadoAltoConsumo(emitirContaHelper)) {
 										contasTxtAltoConsumo.append(contaTxt.toString());
 										contasTxtAltoConsumo.append(System.getProperty("line.separator"));
-										
-										getControladorUtil().inserir(new ComunicadoEmitirConta(emitirContaHelper.getIdImovel(), anoMesReferenciaFaturamento, ComunicadoEmitirConta.ALTO_CONSUMO));
+
+										getControladorUtil()
+												.inserir(
+														new ComunicadoEmitirConta(emitirContaHelper.getIdImovel(),
+																anoMesReferenciaFaturamento,
+																ComunicadoEmitirConta.ALTO_CONSUMO));
 									} else {
 										contasTxtLista.append(contaTxt.toString());
 										contasTxtLista.append(System.getProperty("line.separator"));
 									}
 									mapAtualizaSequencial.put(emitirContaHelper.getIdConta(), sequencialImpressao);
 									cont++;
-								}		
+								}
 
 								contaTxt = null;
-								
+
 								if (flagTerminou && ehFaturamentoAntecipado) {
-									if (anoMesReferenciaFaturamentoAntecipado != null && anoMesReferenciaFaturamento.intValue() != anoMesReferenciaFaturamentoAntecipado.intValue()) {
+									if (anoMesReferenciaFaturamentoAntecipado != null
+											&& anoMesReferenciaFaturamento.intValue() != anoMesReferenciaFaturamentoAntecipado
+													.intValue()) {
 										anoMesReferenciaFaturamento = anoMesReferenciaFaturamentoAntecipado;
 										flagTerminou = false;
 										numeroIndiceAntecipado = 0;
@@ -617,7 +717,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								}
 							}
 						} catch (Exception e) {
-							throw new EmitirContaException("Erro ao emitir conta com id = " + emitirContaHelper.getIdConta(), e);
+							throw new EmitirContaException("Erro ao emitir conta com id = "
+									+ emitirContaHelper.getIdConta(), e);
 						}
 					}
 
@@ -625,7 +726,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 					flagTerminou = true;
 					if (ehFaturamentoAntecipado) {
 						if (anoMesReferenciaFaturamentoAntecipado != null
-								&& anoMesReferenciaFaturamento.intValue() != anoMesReferenciaFaturamentoAntecipado.intValue()) {
+								&& anoMesReferenciaFaturamento.intValue() != anoMesReferenciaFaturamentoAntecipado
+										.intValue()) {
 
 							anoMesReferenciaFaturamento = anoMesReferenciaFaturamentoAntecipado;
 							flagTerminou = false;
@@ -646,21 +748,23 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				}
 				mapAtualizaSequencial = null;
 
-
 			}
 
 			String idGrupoFaturamento = "_G" + faturamentoGrupo.getId();
-			String mesReferencia = "_REF" + Util.formatarAnoMesParaMesAnoSemBarra(anoMesReferenciaFaturamentoSemAntecipacao);
+			String mesReferencia = "_REF"
+					+ Util.formatarAnoMesParaMesAnoSemBarra(anoMesReferenciaFaturamentoSemAntecipacao);
 
 			String nomeZip = "CONTA" + idGrupoFaturamento + mesReferencia;
-			String nomeZipAltoConsumo = "CONTA_ALTO_CONSUMO" + idGrupoFaturamento + mesReferencia ;
-			String nomeZipIrregularidadeCadastro = "CONTA_OCORRENCIA_IRREGULARIDADE_CADASTRO" + idGrupoFaturamento + mesReferencia ;
+			String nomeZipAltoConsumo = "CONTA_ALTO_CONSUMO" + idGrupoFaturamento + mesReferencia;
+			String nomeZipIrregularidadeCadastro = "CONTA_OCORRENCIA_IRREGULARIDADE_CADASTRO" + idGrupoFaturamento
+					+ mesReferencia;
 			String nomeArquivoImpressaoFormatada = "ArquivoImpressaoTermica" + idGrupoFaturamento + mesReferencia;
 
 			formatarArquivoContas(contasTxtLista, nomeZip);
 			formatarArquivoContas(contasTxtAltoConsumo, nomeZipAltoConsumo);
 			formatarArquivoContas(contasIrregularidadeCadadastro, nomeZipIrregularidadeCadastro);
-			formatarArquivoImpressoraTermica(stringFormatadaImpressaoTermica, colecaoLocalidadesArquivo, nomeArquivoImpressaoFormatada);
+			formatarArquivoImpressoraTermica(stringFormatadaImpressaoTermica, colecaoLocalidadesArquivo,
+					nomeArquivoImpressaoFormatada);
 
 			tipoConta++;
 
@@ -668,10 +772,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		} catch (BaseRuntimeException e) {
 			logger.error(e.getMessage(), e);
-			
+
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
-			
+
 		} catch (Exception e) {
 			logger.error(e);
 
@@ -680,92 +784,105 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 	}
 
-	private String gerarDadosComunicadoIrregularidadeCadastro(Integer referencia, EmitirContaHelper helper) throws ControladorException {
-		
+	private String gerarDadosComunicadoIrregularidadeCadastro(Integer referencia, EmitirContaHelper helper)
+			throws ControladorException {
+
 		StringBuilder retorno = new StringBuilder();
-		
-		
+
 		retorno.append(Util.completaString(helper.getIdImovel().toString(), 10))
 				.append(Util.completaString(helper.getNomeCliente().toString(), 50))
 				.append(Util.completaString(helper.getEnderecoClienteResponsavel().toString(), 100))
 				.append(Util.completaString(helper.getEnderecoClienteResponsavel().toString(), 100));
 		if (getControladorAtualizacaoCadastral().houveMudancaCategoria(helper.getIdImovel())) {
 			retorno.append(Util.completaString("CATEGORIA", 40));
-			
-			String categorias[] = getControladorAtualizacaoCadastral().getDescricaoMudancaCategoria(helper.getIdImovel());
-			
+
+			String categorias[] = getControladorAtualizacaoCadastral().getDescricaoMudancaCategoria(
+					helper.getIdImovel());
+
 			retorno.append(Util.completaString(categorias[0], 30)); // DE
 			retorno.append(Util.completaString(categorias[1], 30)); // PARA
-			
+
 		} else if (getControladorAtualizacaoCadastral().houveMudancaSubcategoria(helper.getIdImovel())) {
 			retorno.append(Util.completaString("SUBCATEGORIA", 40));
-			
-			String subcategorias[] = getControladorAtualizacaoCadastral().getDescricaoMudancaSubcategoria(helper.getIdImovel());
-			
+
+			String subcategorias[] = getControladorAtualizacaoCadastral().getDescricaoMudancaSubcategoria(
+					helper.getIdImovel());
+
 			retorno.append(Util.completaString(subcategorias[0], 30)); // DE
 			retorno.append(Util.completaString(subcategorias[1], 30)); // PARA
-			
+
 		} else {
 			retorno.append(Util.completaString("QUANTIDADE DE ECONOMIAS POR CATEGORIA", 40));
 
-			String economias[] = getControladorAtualizacaoCadastral().getDescricaoMudancaEconomiasPorSubcategoria(helper.getIdImovel());
-			
+			String economias[] = getControladorAtualizacaoCadastral().getDescricaoMudancaEconomiasPorSubcategoria(
+					helper.getIdImovel());
+
 			retorno.append(Util.completaString(economias[0], 30)); // DE
 			retorno.append(Util.completaString(economias[1], 30)); // PARA
 		}
-		
+
 		this.emitirComunicado(helper.getIdImovel(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
-		//getControladorUtil().inserir(new ComunicadoEmitirConta(helper.getIdImovel(), referencia, ComunicadoEmitirConta.ALTERACAO_CADASTRAL));
-		
+		// getControladorUtil().inserir(new
+		// ComunicadoEmitirConta(helper.getIdImovel(), referencia,
+		// ComunicadoEmitirConta.ALTERACAO_CADASTRAL));
+
 		return retorno.toString();
 	}
 
 	/*
-	 * Alteração conforme Redmind-2869
+	 * Alteraï¿½ï¿½o conforme Redmind-2869
 	 * 
-	 * Quando confirmado o CI e o resultado do calculo de consumo permaner nos parametro de alto consumo - Emitir Carta
+	 * Quando confirmado o CI e o resultado do calculo de consumo permaner nos
+	 * parametro de alto consumo - Emitir Carta
 	 */
 	private boolean isEmitirComunicadoAltoConsumo(EmitirContaHelper helper) throws ControladorException {
-		return isAltoConsumo(helper) 
+		return isAltoConsumo(helper)
 				&& !isImovelEmsituacaoEspecialFaturamento(helper.getIdImovel(), helper.getAmReferencia())
-				&& isImovelLeituraConfirmada(helper)
-				&& isImovelAnalisado(helper);
-		
+				&& isImovelLeituraConfirmada(helper) && isImovelAnalisado(helper);
+
 	}
-	
+
 	private boolean isImovelLeituraConfirmada(EmitirContaHelper helper) throws ControladorException {
-		ConsumoHistorico historico = getControladorMicromedicao().obterConsumoHistorico(new Imovel(helper.getIdImovel()), new LigacaoTipo(LigacaoTipo.LIGACAO_AGUA), helper.getAmReferencia());
+		ConsumoHistorico historico = getControladorMicromedicao().obterConsumoHistorico(
+				new Imovel(helper.getIdImovel()), new LigacaoTipo(LigacaoTipo.LIGACAO_AGUA), helper.getAmReferencia());
 		return historico.getConsumoTipo().getId().intValue() != ConsumoTipo.MEDIA_HIDROMETRO;
 	}
-	
+
 	private boolean isImovelAnalisado(EmitirContaHelper helper) throws ControladorException {
-		MedicaoHistorico medicao = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAgua(helper.getIdImovel(), helper.getAmReferencia());
+		MedicaoHistorico medicao = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAgua(helper.getIdImovel(),
+				helper.getAmReferencia());
 		return medicao != null && medicao.isAnalisado();
 	}
-	
+
 	private boolean isAltoConsumo(EmitirContaHelper helper) {
-		
-		return helper.getIdConsumoAnormalidade() != null 
+
+		return helper.getIdConsumoAnormalidade() != null
 				&& (helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ALTO_CONSUMO.intValue()
-				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ESTOURO_CONSUMO.intValue()
-				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ESTOURO_CONSUMO_COBRANCA_MEDIA.intValue()
-				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.HIDROMETRO_SUBSTITUIDO_NAO_INFORMADO.intValue()
-				|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.CONSUMO_INFORMADO.intValue()); 
+						|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ESTOURO_CONSUMO
+								.intValue()
+						|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.ESTOURO_CONSUMO_COBRANCA_MEDIA
+								.intValue()
+						|| helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.HIDROMETRO_SUBSTITUIDO_NAO_INFORMADO
+								.intValue() || helper.getIdConsumoAnormalidade().intValue() == ConsumoAnormalidade.CONSUMO_INFORMADO
+						.intValue());
 	}
 
 	private boolean isEmitirImpressaoTermica(Imovel imovelEmitido, String municipioEntrega, String municipioImovel) {
-		return imovelEmitido.getQuadra().getRota().getIndicadorImpressaoTermicaFinalGrupo().equals(ConstantesSistema.SIM)
+		return imovelEmitido.getQuadra().getRota().getIndicadorImpressaoTermicaFinalGrupo()
+				.equals(ConstantesSistema.SIM)
 				&& municipioEntrega.equals(municipioImovel);
 	}
 
-	private Object[] obterDadosImpressaoTermica(int qtdContasLocalidade, SistemaParametro sistemaParametro, EmitirContaHelper emitirContaHelper, 
-			String[] qualidade, String localidadeArquivo, List<Integer> idsCondominios) {
-		
+	private Object[] obterDadosImpressaoTermica(int qtdContasLocalidade, SistemaParametro sistemaParametro,
+			EmitirContaHelper emitirContaHelper, String[] qualidade, String localidadeArquivo,
+			List<Integer> idsCondominios) {
+
 		ImpressaoContaImpressoraTermica impressaoContaImpressoraTermica;
 		Object[] impressaoTermica = new Object[2];
-		impressaoContaImpressoraTermica = ImpressaoContaImpressoraTermica.getInstancia(repositorioFaturamento, repositorioClienteImovel, sessionContext);
-		impressaoTermica[0] = impressaoContaImpressoraTermica.gerarArquivoFormatadoImpressaoTermica(emitirContaHelper, sistemaParametro, qualidade,
-												qtdContasLocalidade, idsCondominios);
+		impressaoContaImpressoraTermica = ImpressaoContaImpressoraTermica.getInstancia(repositorioFaturamento,
+				repositorioClienteImovel, sessionContext);
+		impressaoTermica[0] = impressaoContaImpressoraTermica.gerarArquivoFormatadoImpressaoTermica(emitirContaHelper,
+				sistemaParametro, qualidade, qtdContasLocalidade, idsCondominios);
 		impressaoTermica[1] = localidadeArquivo;
 		return impressaoTermica;
 	}
@@ -773,7 +890,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	private String obterConsumo(Integer consumoMinimo, String consumoFaturamento) {
 		String consumo = "";
 
-		if (consumoFaturamento == null || consumoFaturamento.trim().equals("") || new Integer(consumoFaturamento).intValue() >= consumoMinimo.intValue()) {
+		if (consumoFaturamento == null || consumoFaturamento.trim().equals("")
+				|| new Integer(consumoFaturamento).intValue() >= consumoMinimo.intValue()) {
 
 			consumo = consumoFaturamento;
 		} else {
@@ -783,15 +901,17 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	}
 
 	@SuppressWarnings({ "unused", "rawtypes" })
-	private StringBuilder preencherDadosConsumoFaixa(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt, Integer consumoMinimo, 
-			BigDecimal valorMinimo, StringBuilder dadosContaCategoria) throws ErroRepositorioException {
-		
+	private StringBuilder preencherDadosConsumoFaixa(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt,
+			Integer consumoMinimo, BigDecimal valorMinimo, StringBuilder dadosContaCategoria)
+			throws ErroRepositorioException {
+
 		Collection colecaoContaCategoriaConsumoFaixa;
 		if (dadosContaCategoria != null) {
 			contaTxt.append(Util.completaString(dadosContaCategoria.toString(), 315));
 		} else {
 
-			if (emitirContaHelper.getValorAgua() != null && !emitirContaHelper.getValorAgua().equals(new BigDecimal("0.00"))) {
+			if (emitirContaHelper.getValorAgua() != null
+					&& !emitirContaHelper.getValorAgua().equals(new BigDecimal("0.00"))) {
 				contaTxt.append(Util.completaString("AGUA ", 31));
 				contaTxt.append(Util.completaString(consumoMinimo + "", 6));
 				contaTxt.append(Util.completaString(
@@ -801,12 +921,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				contaTxt.append(Util.completaString(" ", 63));
 			}
 
-			colecaoContaCategoriaConsumoFaixa = repositorioFaturamento.pesquisarContaCategoriaConsumoFaixa(emitirContaHelper
-					.getIdConta());
+			colecaoContaCategoriaConsumoFaixa = repositorioFaturamento
+					.pesquisarContaCategoriaConsumoFaixa(emitirContaHelper.getIdConta());
 
 			contaTxt.append(Util.completaString("", 63 * 4));
 		}
-		
+
 		return contaTxt;
 	}
 
@@ -814,7 +934,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		String diasConsumo = "30";
 
 		if (!dataLeituraAnterior.equals("") && !dataLeituraAtual.equals("")) {
-			diasConsumo = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) parmsMedicaoHistorico[3], (Date) parmsMedicaoHistorico[2]);
+			diasConsumo = ""
+					+ Util.obterQuantidadeDiasEntreDuasDatas((Date) parmsMedicaoHistorico[3],
+							(Date) parmsMedicaoHistorico[2]);
 		}
 		return diasConsumo;
 	}
@@ -827,15 +949,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 
 		contaTxt.append(Util.adicionarZerosEsquedaNumero(7, consumoMedido.toString()));
-		
+
 		return contaTxt;
 	}
 
-	private void formatarArquivoContas(StringBuilder contasTxtLista, String nomeZip)
-			throws FileNotFoundException, IOException {
-		
-		File compactadoTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".zip");
-		File leituraTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") +nomeZip + ".txt");
+	private void formatarArquivoContas(StringBuilder contasTxtLista, String nomeZip) throws FileNotFoundException,
+			IOException {
+
+		File compactadoTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip
+				+ ".zip");
+		File leituraTipo = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeZip + ".txt");
 		BufferedWriter out = null;
 		ZipOutputStream zos = null;
 
@@ -850,7 +973,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			leituraTipo.delete();
 			out.close();
 		}
-		
+
 		out = null;
 		zos = null;
 		nomeZip = null;
@@ -859,15 +982,15 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		contasTxtLista = null;
 	}
 
-	private void formatarArquivoImpressoraTermica(
-			Collection<Object[]> stringFormatadaImpressaoTermica,
-			Collection<String> localidadesArquivo,
-			String nomeArquivoImpressaoFormatada) throws FileNotFoundException,
+	private void formatarArquivoImpressoraTermica(Collection<Object[]> stringFormatadaImpressaoTermica,
+			Collection<String> localidadesArquivo, String nomeArquivoImpressaoFormatada) throws FileNotFoundException,
 			IOException {
 		ZipOutputStream zos;
 		if (stringFormatadaImpressaoTermica != null && stringFormatadaImpressaoTermica.size() > 0) {
 
-			File arquivoImpressaoTermicaCompactado = new File(getControladorUtil().getCaminhoDownloadArquivos("faturamento") + nomeArquivoImpressaoFormatada + ".zip");
+			File arquivoImpressaoTermicaCompactado = new File(getControladorUtil().getCaminhoDownloadArquivos(
+					"faturamento")
+					+ nomeArquivoImpressaoFormatada + ".zip");
 
 			zos = new ZipOutputStream(new FileOutputStream(arquivoImpressaoTermicaCompactado));
 			BufferedWriter[] buf = new BufferedWriter[localidadesArquivo.size()];
@@ -875,8 +998,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			int i = 0;
 
 			for (String localidade : localidadesArquivo) {
-				arquivoFormatadoImpressaoTermica[i] = new File(nomeArquivoImpressaoFormatada + "_L" + localidade + ".txt");
-				buf[i] = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(arquivoFormatadoImpressaoTermica[i].getAbsolutePath())));
+				arquivoFormatadoImpressaoTermica[i] = new File(nomeArquivoImpressaoFormatada + "_L" + localidade
+						+ ".txt");
+				buf[i] = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
+						arquivoFormatadoImpressaoTermica[i].getAbsolutePath())));
 
 				for (Object[] impressaoTermica : stringFormatadaImpressaoTermica) {
 					if (impressaoTermica != null) {
@@ -899,50 +1024,55 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 	}
 
-	private StringBuilder preencherMediaConsumoMesAnterior(StringBuilder contaTxt, String consumoMesAnterior, String diasConsumoMes) {
+	private StringBuilder preencherMediaConsumoMesAnterior(StringBuilder contaTxt, String consumoMesAnterior,
+			String diasConsumoMes) {
 		BigDecimal consumoDB = Util.formatarMoedaRealparaBigDecimal(consumoMesAnterior);
 		BigDecimal diasDB = Util.formatarMoedaRealparaBigDecimal(diasConsumoMes);
 		String mediaConsumo = Util.formatarMoedaReal(consumoDB.divide(diasDB, 2, BigDecimal.ROUND_DOWN));
 		contaTxt.append(Util.completaString(mediaConsumo, 6));
-		
+
 		return contaTxt;
 	}
-	
+
 	private StringBuilder preencherDadosRateioAguaEsgoto(EmitirContaHelper emitirConta, StringBuilder contaTxt) {
-		
-		if (emitirConta.getValorRateioAgua() != null && emitirConta.getValorRateioAgua().compareTo(BigDecimal.ZERO) == 1) {
-			contaTxt.append(Util.completaString("VALOR RATEIO ÁGUA", 50));
+
+		if (emitirConta.getValorRateioAgua() != null
+				&& emitirConta.getValorRateioAgua().compareTo(BigDecimal.ZERO) == 1) {
+			contaTxt.append(Util.completaString("VALOR RATEIO ï¿½GUA", 50));
 			contaTxt.append(Util.completaString(emitirConta.getValorRateioAgua() + "", 13));
 		} else {
 			contaTxt.append(Util.completaString(" ", 63));
 		}
-		
-		
-		if (emitirConta.getValorRateioEsgoto() != null && emitirConta.getValorRateioEsgoto().compareTo(BigDecimal.ZERO) == 1) {
+
+		if (emitirConta.getValorRateioEsgoto() != null
+				&& emitirConta.getValorRateioEsgoto().compareTo(BigDecimal.ZERO) == 1) {
 			contaTxt.append(Util.completaString("VALOR RATEIO ESGOTO", 50));
 			contaTxt.append(Util.completaString(emitirConta.getValorRateioEsgoto() + "", 13));
 		} else {
 			contaTxt.append(Util.completaString(" ", 63));
 		}
-		
+
 		return contaTxt;
 	}
 
-	private StringBuilder preencherConsumoTipoMesAnterior(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt, 
+	private StringBuilder preencherConsumoTipoMesAnterior(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt,
 			Imovel imovelEmitido, Integer qtdMeses) throws ControladorException {
-		String consumoTipo = getControladorMicromedicao().obterConsumoTipoImovel(imovelEmitido.getId(), obterMesConsumoAnterior(emitirContaHelper, qtdMeses), 1);
+		String consumoTipo = getControladorMicromedicao().obterConsumoTipoImovel(imovelEmitido.getId(),
+				obterMesConsumoAnterior(emitirContaHelper, qtdMeses), 1);
 		contaTxt.append(Util.completaString(consumoTipo, 2));
-		
+
 		return contaTxt;
 	}
 
-	private String obterDiasConsumoMesAnterior(EmitirContaHelper emitirContaHelper, Integer qtdMeses) throws ControladorException {
-		
+	private String obterDiasConsumoMesAnterior(EmitirContaHelper emitirContaHelper, Integer qtdMeses)
+			throws ControladorException {
+
 		String dataLeituraAnterior = "";
 		String dataLeituraAtual = "";
 		String diasConsumo = "30";
-		
-		Object[] parms1 = this.obterLeituraAnteriorEAtual(emitirContaHelper.getIdImovel(), obterMesConsumoAnterior(emitirContaHelper, qtdMeses));
+
+		Object[] parms1 = this.obterLeituraAnteriorEAtual(emitirContaHelper.getIdImovel(),
+				obterMesConsumoAnterior(emitirContaHelper, qtdMeses));
 
 		if (parms1 != null) {
 
@@ -963,13 +1093,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return diasConsumo;
 	}
 
-	private StringBuilder preencherEnderecoAlternativo(StringBuilder contaTxt, String municipioEntrega, boolean enderecoAlternativo) {
+	private StringBuilder preencherEnderecoAlternativo(StringBuilder contaTxt, String municipioEntrega,
+			boolean enderecoAlternativo) {
 		if (enderecoAlternativo) {
 			contaTxt.append(Util.completaString(municipioEntrega, 40));
 		} else {
 			contaTxt.append(Util.completaString("", 40));
 		}
-		
+
 		return contaTxt;
 	}
 
@@ -979,13 +1110,15 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} else {
 			contaTxt.append(Util.completaString("1", 1));
 		}
-		
+
 		return contaTxt;
 	}
 
-	private StringBuilder preencherCodigoBarrasConta(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
-		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(), emitirContaHelper.getValorCreditos(),
-				emitirContaHelper.getDebitos(), emitirContaHelper.getValorImpostos());
+	private StringBuilder preencherCodigoBarrasConta(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
+			throws ControladorException {
+		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(),
+				emitirContaHelper.getValorCreditos(), emitirContaHelper.getDebitos(),
+				emitirContaHelper.getValorImpostos());
 
 		if (emitirContaHelper.getValorRateioAgua() != null)
 			conta.setValorRateioAgua(emitirContaHelper.getValorRateioAgua());
@@ -999,20 +1132,22 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		String anoMesString = "" + emitirContaHelper.getAmReferencia();
 		String mesAnoFormatado = anoMesString.substring(4, 6) + anoMesString.substring(0, 4);
 		Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
-				
-		String representacaoNumericaCodBarra = this.getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(3, valorConta,
-				emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAnoFormatado, digitoVerificadorConta, null, null, null, null, null,
-				null, null);
-		
+
+		String representacaoNumericaCodBarra = this.getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(
+				3, valorConta, emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAnoFormatado,
+				digitoVerificadorConta, null, null, null, null, null, null, null);
+
 		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
 		return contaTxt;
 	}
-	
-	// [Obter código de barras Ficha de Compensação]
-	//  Paulo Almeida 30.12.2021
-	private StringBuilder preencherCodigoBarrasContaFichaCompensacao(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
-		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(), emitirContaHelper.getValorCreditos(),
-				emitirContaHelper.getDebitos(), emitirContaHelper.getValorImpostos());
+
+	// [Obter cï¿½digo de barras Ficha de Compensaï¿½ï¿½o]
+	// Paulo Almeida 30.12.2021
+	private StringBuilder preencherCodigoBarrasContaFichaCompensacao(EmitirContaHelper emitirContaHelper,
+			StringBuilder contaTxt) throws ControladorException {
+		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(),
+				emitirContaHelper.getValorCreditos(), emitirContaHelper.getDebitos(),
+				emitirContaHelper.getValorImpostos());
 
 		if (emitirContaHelper.getValorRateioAgua() != null)
 			conta.setValorRateioAgua(emitirContaHelper.getValorRateioAgua());
@@ -1022,12 +1157,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		BigDecimal valorConta = conta.getValorTotalContaComRateioBigDecimal();
 
 		emitirContaHelper.setValorConta(valorConta);
-
+		
 		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
 		String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
 
-			Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
-			String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
+		Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(), 90);
+		String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
 
 			String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
 							ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
@@ -1037,18 +1172,17 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 							ConstantesSistema.CARTEIRA_CONTA,
 							fatorVencimento);
 
-		String representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
-		
+        String representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+
 		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
 		return contaTxt;
 	}
-	
 
 	@SuppressWarnings("rawtypes")
-	private StringBuilder preencherQuantidadeValorDebitos(SistemaParametro sistemaParametro, EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
-			throws ControladorException {
-		ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper = this.obterDebitoImovelOuClienteHelper(emitirContaHelper,
-				sistemaParametro);
+	private StringBuilder preencherQuantidadeValorDebitos(SistemaParametro sistemaParametro,
+			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
+		ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper = this.obterDebitoImovelOuClienteHelper(
+				emitirContaHelper, sistemaParametro);
 
 		Collection colecaoContasValores = obterDebitoImovelOuClienteHelper.getColecaoContasValores();
 
@@ -1068,7 +1202,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} else {
 			contaTxt.append(Util.completaString(" ", 19));
 		}
-		
+
 		return contaTxt;
 	}
 
@@ -1078,7 +1212,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} else {
 			contaTxt.append(Util.completaString(" ", 100));
 		}
-		
+
 		return contaTxt;
 	}
 
@@ -1086,7 +1220,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		int mesConsumoAnterior = Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), qtdMeses);
 		return Util.formatarAnoMesParaMesAno(mesConsumoAnterior);
 	}
-	
+
 	private int obterMesConsumoAnterior(EmitirContaHelper emitirContaHelper, Integer qtdMeses) {
 		return Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), qtdMeses);
 	}
@@ -1114,7 +1248,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 					contaTxt.append(Util.completaString(debitoCobrado.getDescricaoDebitoTipo(), 30)); // 30
 					contaTxt.append(Util.completaString(
 							debitoCobrado.getNumeroPrestacaoDebito() + "/" + debitoCobrado.getNumeroPrestacao(), 20));
-					contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal(debitoCobrado.getValorDebito()), 13));
+					contaTxt.append(Util.completaStringComEspacoAEsquerda(
+							Util.formatarMoedaReal(debitoCobrado.getValorDebito()), 13));
 
 					i++;
 				}
@@ -1129,10 +1264,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 					if (quantidadeLinhasSobrando > contador) {
 						contaTxt.append(Util.completaString(debitoCobrado.getDescricaoDebitoTipo(), 30)); // 30
-						contaTxt.append(Util.completaString(
-								debitoCobrado.getNumeroPrestacaoDebito() + "/" + debitoCobrado.getNumeroPrestacao(), 20));
-						contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal(debitoCobrado.getValorDebito()),
-								13));
+						contaTxt.append(Util.completaString(debitoCobrado.getNumeroPrestacaoDebito() + "/"
+								+ debitoCobrado.getNumeroPrestacao(), 20));
+						contaTxt.append(Util.completaStringComEspacoAEsquerda(
+								Util.formatarMoedaReal(debitoCobrado.getValorDebito()), 13));
 						i++;
 					} else {
 
@@ -1151,10 +1286,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			}
 		}
 
-		if (emitirContaHelper.getValorImpostos() != null && !emitirContaHelper.getValorImpostos().equals(new BigDecimal("0.00"))) {
+		if (emitirContaHelper.getValorImpostos() != null
+				&& !emitirContaHelper.getValorImpostos().equals(new BigDecimal("0.00"))) {
 			contaTxt.append("TOTAL DE IMPOSTOS FEDERAIS "); // 27
 			contaTxt.append(Util.completaString(" ", 23));
-			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal(emitirContaHelper.getValorImpostos()), 13));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(
+					Util.formatarMoedaReal(emitirContaHelper.getValorImpostos()), 13));
 
 		} else {
 			contaTxt.append(Util.completaString(" ", 63));
@@ -1162,45 +1299,47 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		int quantidadeLinhasServicosSobraram = 9 - i;
 		contaTxt.append(Util.completaString(" ", quantidadeLinhasServicosSobraram * 63));
-		
+
 		return contaTxt;
 	}
 
 	private StringBuilder preencherDescricaoTotalCreditos(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) {
-		if (emitirContaHelper.getValorCreditos() != null && !emitirContaHelper.getValorCreditos().equals(new BigDecimal("0.00"))) {
+		if (emitirContaHelper.getValorCreditos() != null
+				&& !emitirContaHelper.getValorCreditos().equals(new BigDecimal("0.00"))) {
 			contaTxt.append(Util.completaString("TOTAL DE CREDITOS ", 50));
 			contaTxt.append(Util.completaString(emitirContaHelper.getValorCreditos() + "", 13));
 		} else {
 			contaTxt.append(Util.completaString(" ", 63));
 		}
-		
+
 		return contaTxt;
 	}
 
 	private StringBuilder preencherDescricaoValorEsgoto(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) {
-		if (emitirContaHelper.getValorEsgoto() != null && !emitirContaHelper.getValorEsgoto().equals(new BigDecimal("0.00"))) {
+		if (emitirContaHelper.getValorEsgoto() != null
+				&& !emitirContaHelper.getValorEsgoto().equals(new BigDecimal("0.00"))) {
 			contaTxt.append(Util.completaString("ESGOTO ", 50));
 			contaTxt.append(Util.completaString(emitirContaHelper.getValorEsgoto() + "", 13));
 
 			contaTxt.append(Util.completaString(" ", 63));
-			
+
 			contaTxt.append(Util.completaString(" ", 50));
 			contaTxt.append(Util.completaString(" ", 13));
 		} else {
 			contaTxt.append(Util.completaString(" ", 189));
 		}
-		
+
 		return contaTxt;
 	}
 
 	private StringBuilder preencherDescricaoValorTotalAgua(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) {
 		if (emitirContaHelper.getValorAgua() != null) {
-			contaTxt.append(Util.completaString("TOTAL ÁGUA ", 50));
+			contaTxt.append(Util.completaString("TOTAL ï¿½GUA ", 50));
 			contaTxt.append(Util.completaString(emitirContaHelper.getValorAgua() + "", 13));
 		} else {
 			contaTxt.append(Util.completaString(" ", 63));
 		}
-		
+
 		return contaTxt;
 	}
 
@@ -1211,8 +1350,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 				if (imovelEmitido.getLigacaoAgua().getHidrometroInstalacaoHistorico().getHidrometro() != null) {
 
-					contaTxt.append(Util.completaString(imovelEmitido.getLigacaoAgua().getHidrometroInstalacaoHistorico()
-							.getHidrometro().getNumero(), 12));
+					contaTxt.append(Util.completaString(imovelEmitido.getLigacaoAgua()
+							.getHidrometroInstalacaoHistorico().getHidrometro().getNumero(), 12));
 				} else {
 					contaTxt.append(Util.completaString(" ", 12));
 				}
@@ -1224,12 +1363,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} else {
 			contaTxt.append(Util.completaString(" ", 12));
 		}
-		
+
 		return contaTxt;
 	}
 
 	@SuppressWarnings("rawtypes")
-	private StringBuilder preencherQuantidadeEconomias(StringBuilder contaTxt, Imovel imovelEmitido) throws ControladorException {
+	private StringBuilder preencherQuantidadeEconomias(StringBuilder contaTxt, Imovel imovelEmitido)
+			throws ControladorException {
 		Collection cIS = getControladorImovel().pesquisarImovelSubcategoria(imovelEmitido);
 
 		boolean residencial = false;
@@ -1291,13 +1431,15 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		contaTxt.append(Util.completaString(economiaPorCategoria, 50));
 		contaTxt.append(Util.adicionarZerosEsquedaNumero(4, economiaTotal + ""));
-		
+
 		return contaTxt;
 	}
 
 	@SuppressWarnings("rawtypes")
-	private StringBuilder preencherSubcategoriaImovel(StringBuilder contaTxt, Imovel imovelEmitido) throws ControladorException {
-		Collection colecaoSubcategoria = getControladorImovel().obterQuantidadeEconomiasSubCategoria(imovelEmitido.getId());
+	private StringBuilder preencherSubcategoriaImovel(StringBuilder contaTxt, Imovel imovelEmitido)
+			throws ControladorException {
+		Collection colecaoSubcategoria = getControladorImovel().obterQuantidadeEconomiasSubCategoria(
+				imovelEmitido.getId());
 
 		String subCat = "";
 
@@ -1308,7 +1450,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 
 		contaTxt.append(Util.completaString(subCat, 30));
-		
+
 		return contaTxt;
 	}
 
@@ -1318,17 +1460,18 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} else {
 			contaTxt.append(Util.adicionarZerosEsquedaNumero(2, "00"));
 		}
-		
+
 		return contaTxt;
 	}
 
 	private String obterNumeroNota(EmitirContaHelper emitirContaHelper) {
-		return emitirContaHelper.getIdConta() + "/" + Util.formatarAnoMesParaMesAnoSemBarra(emitirContaHelper.getAmReferencia());
+		return emitirContaHelper.getIdConta() + "/"
+				+ Util.formatarAnoMesParaMesAnoSemBarra(emitirContaHelper.getAmReferencia());
 	}
 
 	@SuppressWarnings({ "rawtypes", "unused" })
 	private String obterEnderecoClienteResponsavel(Collection colecaoClienteImovel, Imovel imovel) {
-		
+
 		String endereco = "";
 		String municipioEntrega = "";
 		String bairroEntrega = "";
@@ -1339,29 +1482,31 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		boolean enderecoAlternativo = false;
 
 		try {
-		if (colecaoClienteImovel != null && !colecaoClienteImovel.isEmpty()) {
-			ClienteImovel clienteImovelRespConta = (ClienteImovel) colecaoClienteImovel.iterator().next();
+			if (colecaoClienteImovel != null && !colecaoClienteImovel.isEmpty()) {
+				ClienteImovel clienteImovelRespConta = (ClienteImovel) colecaoClienteImovel.iterator().next();
 
-			if (clienteImovelRespConta != null) {
-				Cliente cliente = clienteImovelRespConta.getCliente();
+				if (clienteImovelRespConta != null) {
+					Cliente cliente = clienteImovelRespConta.getCliente();
 
-				if (cliente != null && imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)) {
-					String[] enderecoCliente;
+					if (cliente != null
+							&& imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)) {
+						String[] enderecoCliente;
 						enderecoCliente = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDivididoCosanpa(
 								cliente.getId());
-					bairroEntrega = enderecoCliente[3];
-					municipioEntrega = enderecoCliente[1];
-					ufEntrega = enderecoCliente[2];
-					cepEntrega = enderecoCliente[4];
-					logCepClie = enderecoCliente[5];
-					logBairroClie = enderecoCliente[6];
-					enderecoAlternativo = true;
+						bairroEntrega = enderecoCliente[3];
+						municipioEntrega = enderecoCliente[1];
+						ufEntrega = enderecoCliente[2];
+						cepEntrega = enderecoCliente[4];
+						logCepClie = enderecoCliente[5];
+						logBairroClie = enderecoCliente[6];
+						enderecoAlternativo = true;
 
-					endereco = enderecoCliente[0] + " - " + bairroEntrega + " " + municipioEntrega + " " + ufEntrega + " " + cepEntrega;
+						endereco = enderecoCliente[0] + " - " + bairroEntrega + " " + municipioEntrega + " "
+								+ ufEntrega + " " + cepEntrega;
 
+					}
 				}
 			}
-		}
 		} catch (ControladorException e) {
 			logger.error(e);
 		}
@@ -1369,8 +1514,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return endereco;
 	}
 
-	private StringBuilder preencherNomeCliente(int tipoConta, EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
-			throws ErroRepositorioException {
+	private StringBuilder preencherNomeCliente(int tipoConta, EmitirContaHelper emitirContaHelper,
+			StringBuilder contaTxt) throws ErroRepositorioException {
 		if (tipoConta == 3 || tipoConta == 4) {
 			String nomeCliente = null;
 			if (emitirContaHelper.getNomeImovel() != null && !emitirContaHelper.getNomeImovel().equals("")) {
@@ -1384,16 +1529,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} else {
 			contaTxt.append(Util.completaString(emitirContaHelper.getNomeCliente(), 40));
 		}
-		
+
 		return contaTxt;
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Localidade obterLocalidade(EmitirContaHelper emitirContaHelper)
-			throws ControladorException {
+	private Localidade obterLocalidade(EmitirContaHelper emitirContaHelper) throws ControladorException {
 		FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
 
-		filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, emitirContaHelper.getIdLocalidade()));
+		filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, emitirContaHelper
+				.getIdLocalidade()));
 
 		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep");
 		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.cep");
@@ -1409,28 +1554,29 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("unidadeNegocio");
 
-		Collection cLocalidade = (Collection) getControladorUtil().pesquisar(filtroLocalidade, Localidade.class.getName());
+		Collection cLocalidade = (Collection) getControladorUtil().pesquisar(filtroLocalidade,
+				Localidade.class.getName());
 		Localidade localidade = (Localidade) cLocalidade.iterator().next();
 		return localidade;
 	}
 
 	private StringBuilder preencherMensagensInstitucionais(SistemaParametro sistemaParametro,
-			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
-			throws ControladorException {
-		
+			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
+
 		String[] parmsPartesContaMensagem = this.obterMensagemConta3Partes(emitirContaHelper, sistemaParametro);
-		
+
 		contaTxt.append(Util.completaString(parmsPartesContaMensagem[0], 100));
 		contaTxt.append(Util.completaString(parmsPartesContaMensagem[1], 100));
 		contaTxt.append(Util.completaString(parmsPartesContaMensagem[2], 100));
-		
-		// Caso o sistema preencha as mensagens com mensagens de debito, nao informar as mensagens institucionais
+
+		// Caso o sistema preencha as mensagens com mensagens de debito, nao
+		// informar as mensagens institucionais
 		if (!isImovelEmDebito) {
 			emitirContaHelper.setMsgLinha1Conta(parmsPartesContaMensagem[0]);
 			emitirContaHelper.setMsgLinha2Conta(parmsPartesContaMensagem[1]);
 			emitirContaHelper.setMsgLinha3Conta(parmsPartesContaMensagem[2]);
 		}
-		
+
 		return contaTxt;
 	}
 
@@ -1443,18 +1589,21 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} else {
 			contaTxt.append(Util.completaString("", 150));
 		}
-		
+
 		return contaTxt;
 	}
 
 	@SuppressWarnings("unchecked")
-	private StringBuilder preencherDescricaoLeituraSituacao(StringBuilder contaTxt, String idSituacaoLeituraAtual) throws ControladorException {
+	private StringBuilder preencherDescricaoLeituraSituacao(StringBuilder contaTxt, String idSituacaoLeituraAtual)
+			throws ControladorException {
 		String leituraSituacaoDescricao = "";
 
 		FiltroLeituraSituacao filtroLeituraSituacao = new FiltroLeituraSituacao();
-		filtroLeituraSituacao.adicionarParametro(new ParametroSimples(FiltroLeituraSituacao.ID, idSituacaoLeituraAtual));
+		filtroLeituraSituacao
+				.adicionarParametro(new ParametroSimples(FiltroLeituraSituacao.ID, idSituacaoLeituraAtual));
 
-		Collection<LeituraSituacao> colecaoLeituraSituacao = getControladorUtil().pesquisar(filtroLeituraSituacao, LeituraSituacao.class.getName());
+		Collection<LeituraSituacao> colecaoLeituraSituacao = getControladorUtil().pesquisar(filtroLeituraSituacao,
+				LeituraSituacao.class.getName());
 		if (colecaoLeituraSituacao != null && !colecaoLeituraSituacao.isEmpty()) {
 			LeituraSituacao LeituraSituacao = (LeituraSituacao) Util.retonarObjetoDeColecao(colecaoLeituraSituacao);
 			if (LeituraSituacao != null) {
@@ -1463,78 +1612,85 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 
 		contaTxt.append(Util.completaString(leituraSituacaoDescricao, 20));
-		
+
 		return contaTxt;
 	}
 
 	private StringBuilder preencherMensagensConta(SistemaParametro sistemaParametro,
-			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
-			throws ControladorException {
-		
-		if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
-			
+			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
+
+		if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0
+				&& Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
+
 			String mensagem = "PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA";
 			contaTxt.append(Util.completaString(mensagem, 100));
 			contaTxt.append(Util.completaString("", 100));
 			contaTxt.append(Util.completaString("", 100));
-			
+
 			emitirContaHelper.setMsgLinha1Conta(mensagem);
 			emitirContaHelper.setMsgLinha2Conta("");
 			emitirContaHelper.setMsgLinha3Conta("");
-		} else if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) > 0.00) {
-		
+		} else if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0
+				&& Double.valueOf(emitirContaHelper.getValorTotalConta()) > 0.00) {
+
 			String mensagem = "PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA";
 			contaTxt.append(Util.completaString(mensagem, 100));
 			contaTxt.append(Util.completaString("", 100));
 			contaTxt.append(Util.completaString("", 100));
-			
+
 			emitirContaHelper.setMsgLinha1Conta(mensagem);
 			emitirContaHelper.setMsgLinha2Conta("");
 			emitirContaHelper.setMsgLinha3Conta("");
-		} else { 
-			
+		} else {
+
 			String[] parmsPartesConta = obterMensagemDebitoConta3Partes(emitirContaHelper, sistemaParametro);
-		
-		
-			ComunicadoEmitirConta comunicado = getControladorFaturamento().pesquisarComunicadoNaoEmitido(emitirContaHelper.getIdImovel(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
-			
+
+			ComunicadoEmitirConta comunicado = getControladorFaturamento().pesquisarComunicadoNaoEmitido(
+					emitirContaHelper.getIdImovel(), ComunicadoEmitirConta.ALTERACAO_CADASTRAL);
+
 			if (comunicado != null) {
-				contaTxt.append(Util.completaString("Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.", 100));
+				contaTxt.append(Util.completaString(
+						"Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.",
+						100));
 				contaTxt.append(Util.completaString("", 100));
 				contaTxt.append(Util.completaString("", 100));
-				
-				emitirContaHelper.setMsgLinha1Conta("Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.");
+
+				emitirContaHelper
+						.setMsgLinha1Conta("Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.");
 				emitirContaHelper.setMsgLinha2Conta("");
 				emitirContaHelper.setMsgLinha3Conta("");
-			
-			} else { 
+
+			} else {
 				contaTxt.append(Util.completaString(parmsPartesConta[0], 100));
 				contaTxt.append(Util.completaString(parmsPartesConta[1], 100));
 				contaTxt.append(Util.completaString(parmsPartesConta[2], 100));
-	
+
 				if (isImovelEmDebito) {
 					emitirContaHelper.setMsgLinha1Conta(parmsPartesConta[0]);
 					emitirContaHelper.setMsgLinha2Conta(parmsPartesConta[1]);
 					emitirContaHelper.setMsgLinha3Conta(parmsPartesConta[2]);
 				}
-	
-			 }
+
+			}
 		}
-		
+
 		return contaTxt;
 	}
+
 	private StringBuilder preencherFlagCarimbo(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
 			throws ControladorException {
-	    if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
-	       contaTxt.append(Conta.CARIMBO_QUITADO);
-		
-	    } else if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0 && Double.valueOf(emitirContaHelper.getValorTotalConta()) > 0.00) {
-		   contaTxt.append(Conta.CARIMBO_20M);
-		
-	   } else { 
-		   contaTxt.append(Conta.SEM_CARIMBO);
-	 		
-	   }
+		if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0
+				&& Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
+			contaTxt.append(Conta.CARIMBO_QUITADO);
+
+		} else if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0
+				&& Double.valueOf(emitirContaHelper.getValorTotalConta()) > 0.00) {
+			contaTxt.append(Conta.CARIMBO_20M);
+
+		} else {
+			contaTxt.append(Conta.SEM_CARIMBO);
+
+		}
 		return contaTxt;
 	}
 	
@@ -1553,11 +1709,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	
 		return contaTxt;
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
-	private StringBuilder preencherDataPrevistaCronograma(FaturamentoGrupo faturamentoGrupo, EmitirContaHelper emitirContaHelper, 
-			StringBuilder contaTxt) throws ControladorException {
+	private StringBuilder preencherDataPrevistaCronograma(FaturamentoGrupo faturamentoGrupo,
+			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
 		Integer amRefMaisUm = Util.somaMesAnoMesReferencia(emitirContaHelper.getAmReferencia(), 1);
 
 		FiltroFaturamentoAtividadeCronograma filtroFaturamentoAtividadeCronograma = new FiltroFaturamentoAtividadeCronograma();
@@ -1565,13 +1720,15 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		filtroFaturamentoAtividadeCronograma.adicionarParametro(new ParametroSimples(
 				FiltroFaturamentoAtividadeCronograma.FATURAMENTO_ATIVIDADE_ID, "2"));
 		filtroFaturamentoAtividadeCronograma.adicionarParametro(new ParametroSimples(
-				FiltroFaturamentoAtividadeCronograma.FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL_ANO_MES_REFERENCIA, amRefMaisUm + ""));
+				FiltroFaturamentoAtividadeCronograma.FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL_ANO_MES_REFERENCIA,
+				amRefMaisUm + ""));
 		filtroFaturamentoAtividadeCronograma.adicionarParametro(new ParametroSimples(
-				FiltroFaturamentoAtividadeCronograma.FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL_FATURAMENTO_GRUPO_ID, faturamentoGrupo.getId()
-						+ ""));
+				FiltroFaturamentoAtividadeCronograma.FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL_FATURAMENTO_GRUPO_ID,
+				faturamentoGrupo.getId() + ""));
 
 		filtroFaturamentoAtividadeCronograma.adicionarCaminhoParaCarregamentoEntidade("faturamentoAtividade");
-		filtroFaturamentoAtividadeCronograma.adicionarCaminhoParaCarregamentoEntidade("faturamentoGrupoCronogramaMensal");
+		filtroFaturamentoAtividadeCronograma
+				.adicionarCaminhoParaCarregamentoEntidade("faturamentoGrupoCronogramaMensal");
 		filtroFaturamentoAtividadeCronograma
 				.adicionarCaminhoParaCarregamentoEntidade("faturamentoGrupoCronogramaMensal.faturamentoGrupo");
 
@@ -1587,12 +1744,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 
 		contaTxt.append(Util.completaString(dataPrevista, 10));
-		
+
 		return contaTxt;
 	}
 
-	private StringBuilder preencherAreaConstruidaImovel(StringBuilder contaTxt,
-			Imovel imovelEmitido) {
+	private StringBuilder preencherAreaConstruidaImovel(StringBuilder contaTxt, Imovel imovelEmitido) {
 		if (imovelEmitido.getAreaConstruida() != null) {
 			int area = imovelEmitido.getAreaConstruida().intValue();
 			contaTxt.append(Util.completaString(area + "", 5));
@@ -1600,20 +1756,22 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} else {
 			contaTxt.append(Util.completaString("", 5));
 		}
-		
+
 		return contaTxt;
 	}
 
-	private StringBuilder preencherDadosInscricaoImovel(
-			FaturamentoGrupo faturamentoGrupo, StringBuilder contaTxt,
+	private StringBuilder preencherDadosInscricaoImovel(FaturamentoGrupo faturamentoGrupo, StringBuilder contaTxt,
 			Imovel imovelEmitido) throws ControladorException {
-		Object[] dadosRota = getControladorMicromedicao().obterRotaESequencialRotaDoImovelSeparados(imovelEmitido.getId());
+		Object[] dadosRota = getControladorMicromedicao().obterRotaESequencialRotaDoImovelSeparados(
+				imovelEmitido.getId());
 
 		contaTxt.append(Util.completaString(Util.adicionarZerosEsquedaNumero(6, dadosRota[0].toString()) + "", 6));
-		contaTxt.append(Util.completaString(Util.adicionarZerosEsquedaNumero(3, faturamentoGrupo.getId().toString()) + "", 3));
+		contaTxt.append(Util.completaString(Util.adicionarZerosEsquedaNumero(3, faturamentoGrupo.getId().toString())
+				+ "", 3));
 		contaTxt.append(Util.completaString(Util.adicionarZerosEsquedaNumero(4, imovelEmitido.getLote() + "") + "", 4));
-		contaTxt.append(Util.completaString(Util.adicionarZerosEsquedaNumero(3, imovelEmitido.getSubLote() + "") + "", 3));
-		
+		contaTxt.append(Util.completaString(Util.adicionarZerosEsquedaNumero(3, imovelEmitido.getSubLote() + "") + "",
+				3));
+
 		return contaTxt;
 	}
 
@@ -1621,17 +1779,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	private StringBuilder preencherDescricaoTipoTarifaConsumo(StringBuilder contaTxt) throws ControladorException {
 		FiltroConsumoTarifa filtroConsumoTarifa = new FiltroConsumoTarifa();
 
-		Collection colecaoConsumoTarifa = getControladorUtil().pesquisar(filtroConsumoTarifa, ConsumoTarifa.class.getName());
+		Collection colecaoConsumoTarifa = getControladorUtil().pesquisar(filtroConsumoTarifa,
+				ConsumoTarifa.class.getName());
 		ConsumoTarifa consumoTarifa = (ConsumoTarifa) colecaoConsumoTarifa.iterator().next();
 		contaTxt.append(Util.completaString(consumoTarifa.getDescricao(), 25));
-		
+
 		return contaTxt;
 	}
-	
-	
+
 	@SuppressWarnings("rawtypes")
-	private String consultarCpfCnpjCliente(Integer idImovel)
-			throws ErroRepositorioException {
+	private String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
 		String cnpjCpf = "";
 
 		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);
@@ -1644,13 +1801,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 				if (cliente2.getCnpjFormatado() != null && !cliente2.getCnpjFormatado().equalsIgnoreCase("")) {
 					cnpjCpf = cliente2.getCnpjFormatado();
-		 } else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
+				} else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
 					cnpjCpf = cliente2.getCpfFormatado();
 				}
 
 			}
 		}
-		
+
 		return cnpjCpf;
 	}
 
@@ -1659,8 +1816,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			throws ErroRepositorioException {
 		String cnpjCpf = "";
 
-		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(emitirContaHelper
-				.getIdImovel());
+		Collection colecaoClienteImovel2 = repositorioClienteImovel
+				.pesquisarClienteImovelResponsavelConta(emitirContaHelper.getIdImovel());
 
 		if (colecaoClienteImovel2 != null && !colecaoClienteImovel2.isEmpty()) {
 			ClienteImovel clienteImovelRespConta2 = (ClienteImovel) colecaoClienteImovel2.iterator().next();
@@ -1670,34 +1827,36 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 				if (cliente2.getCnpjFormatado() != null && !cliente2.getCnpjFormatado().equalsIgnoreCase("")) {
 					cnpjCpf = cliente2.getCnpjFormatado();
-		 } else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
+				} else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
 					cnpjCpf = cliente2.getCpfFormatado();
 				}
 
 			}
 		}
-		
+
 		contaTxt.append(Util.completaString(cnpjCpf, 20));
-		
+
 		return contaTxt;
 	}
 
-	private StringBuilder preencherEnderecoImovel(EmitirContaHelper emitirContaHelper,
-			StringBuilder contaTxt) throws ControladorException {
-		String[] enderecoImovel = getControladorEndereco().pesquisarEnderecoFormatadoDividido(emitirContaHelper.getIdImovel());
+	private StringBuilder preencherEnderecoImovel(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
+			throws ControladorException {
+		String[] enderecoImovel = getControladorEndereco().pesquisarEnderecoFormatadoDividido(
+				emitirContaHelper.getIdImovel());
 
 		contaTxt.append(Util.completaString(enderecoImovel[1], 30));
 		contaTxt.append(Util.completaString(enderecoImovel[0], 78));
 		contaTxt.append(Util.completaString(enderecoImovel[3], 20));
 		contaTxt.append(Util.completaString(enderecoImovel[4], 9));
 		contaTxt.append(Util.completaString(enderecoImovel[2], 2));
-		
+
 		return contaTxt;
 	}
 
-	private StringBuilder preencherQualidadedaAgua(String[] qualidade, Integer anoMesReferenciaFaturamento, EmitirContaHelper emitirContaHelper, 
-			StringBuilder contaTxt, Localidade localidade, Imovel imovelEmitido) throws ControladorException {
-		
+	private StringBuilder preencherQualidadedaAgua(String[] qualidade, Integer anoMesReferenciaFaturamento,
+			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt, Localidade localidade, Imovel imovelEmitido)
+			throws ControladorException {
+
 		contaTxt.append(Util.completaString(qualidade[0], 10));
 		contaTxt.append(Util.completaString(qualidade[1], 10));
 		contaTxt.append(Util.completaString(qualidade[2], 10));
@@ -1722,60 +1881,63 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		contaTxt.append(Util.completaString(qualidade[21], 10));
 		contaTxt.append(Util.completaString(qualidade[22], 10));
 		contaTxt.append(Util.completaString(qualidade[23], 10));
-		
+
 		return contaTxt;
 	}
 
-	private String obterConsumoMesAnterior(EmitirContaHelper emitirContaHelper, Integer tipoLigacao, Integer tipoMedicao,
-			String consumo, Integer qtdMeses) throws ControladorException {
-		StringBuilder consumoAnterior = this.obterConsumoAnterior(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), qtdMeses, tipoLigacao, tipoMedicao);
+	private String obterConsumoMesAnterior(EmitirContaHelper emitirContaHelper, Integer tipoLigacao,
+			Integer tipoMedicao, String consumo, Integer qtdMeses) throws ControladorException {
+		StringBuilder consumoAnterior = this.obterConsumoAnterior(emitirContaHelper.getIdImovel(),
+				emitirContaHelper.getAmReferencia(), qtdMeses, tipoLigacao, tipoMedicao);
 
 		String consumoMesAnterior = consumoAnterior.toString();
 
 		if (consumo.equalsIgnoreCase("")) {
 			consumo = consumo + "0";
 		}
-		
+
 		if (consumoMesAnterior == null || consumoMesAnterior.trim().equalsIgnoreCase("")) {
 			consumoMesAnterior = consumo;
 		}
 
 		return consumoMesAnterior;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	private void alterarVencimentoContasFaturarGrupo(Integer contaTipo, Integer idEmpresa, Integer numeroIndice, FaturamentoGrupo faturamentoGrupo) {
+	private void alterarVencimentoContasFaturarGrupo(Integer contaTipo, Integer idEmpresa, Integer numeroIndice,
+			FaturamentoGrupo faturamentoGrupo) {
 		Collection<Conta> colecaoContasNovoVencimento = new ArrayList<Conta>();
 		try {
-			
-			Collection colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(numeroIndice, faturamentoGrupo.getAnoMesReferencia(), faturamentoGrupo.getId());
-			Collection<EmitirContaHelper> colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
+
+			Collection colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(numeroIndice,
+					faturamentoGrupo.getAnoMesReferencia(), faturamentoGrupo.getId());
+			Collection<EmitirContaHelper> colecaoConta = formatarEmitirContasHelper(colecaoContaParms,
+					ContaTipo.CONTA_NORMAL);
 
 			Date novaDataVencimento = repositorioFaturamento.obterDataVencimentoContasFaturarGrupo(faturamentoGrupo);
-			
+
 			for (EmitirContaHelper emitirConta : colecaoConta) {
-				
+
 				int comparacaoData = Util.compararData(emitirConta.getDataVencimentoConta(), novaDataVencimento);
 
 				if (comparacaoData == -1) {
 					Conta conta = (Conta) repositorioFaturamento.obterConta(emitirConta.getIdConta()).iterator().next();
 					conta.setDataVencimentoConta(novaDataVencimento);
 					conta.setUltimaAlteracao(new Date());
-					
+
 					colecaoContasNovoVencimento.add(conta);
 				}
-				
+
 			}
-			
+
 			getControladorBatch().atualizarColecaoObjetoParaBatch(colecaoContasNovoVencimento);
 		} catch (ErroRepositorioException e) {
 			logger.error("Erro ao atualizar nova data de vencimento para contas.");
 		} catch (ControladorException e) {
 			logger.error("Erro ao atualizar nova data de vencimento para contas.");
 		}
-		
+
 	}
-	
 
 	/**
 	 * Metodo utilizado para adicionar os dados das contas categorias no txt no
@@ -1805,12 +1967,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				retorno.append(Util.completaString(subcategoriaFormatada + " " + quantidadeEconomias, 31));
 
 				if (consumoAgua != null && consumoAgua != 0) {
-					retorno.append(Util.completaString(consumoAgua.toString(),
-							6));
+					retorno.append(Util.completaString(consumoAgua.toString(), 6));
 					retorno.append(Util.completaString(
-							valorAgua.divide(
-									new BigDecimal(consumoAgua.toString()), 2,
-									BigDecimal.ROUND_DOWN) + "", 13));
+							valorAgua.divide(new BigDecimal(consumoAgua.toString()), 2, BigDecimal.ROUND_DOWN) + "", 13));
 				} else {
 					retorno.append(Util.completaString("0", 6));
 					retorno.append(Util.completaString(valorAgua.toString(), 13));
@@ -1840,8 +1999,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return retorno;
 	}
 
-	public StringBuilder obterConsumoAnterior(Integer idImovel, int anoMes, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
-			throws ControladorException {
+	public StringBuilder obterConsumoAnterior(Integer idImovel, int anoMes, int qtdMeses, Integer tipoLigacao,
+			Integer tipoMedicao) throws ControladorException {
 
 		StringBuilder dadosConsumoAnterior = new StringBuilder();
 
@@ -1849,7 +2008,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		if (tipoLigacao != null && tipoMedicao != null) {
 			Object[] parmsConsumoHistorico = null;
-			parmsConsumoHistorico = getControladorMicromedicao().obterConsumoAnteriorAnormalidadeDoImovel(idImovel, anoMesSubtraido, tipoLigacao);
+			parmsConsumoHistorico = getControladorMicromedicao().obterConsumoAnteriorAnormalidadeDoImovel(idImovel,
+					anoMesSubtraido, tipoLigacao);
 			Integer numeroConsumoFaturadoMes = null;
 			if (parmsConsumoHistorico != null) {
 				if (parmsConsumoHistorico[0] != null) {
@@ -1857,8 +2017,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				}
 			}
 			if (numeroConsumoFaturadoMes != null) {
-				dadosConsumoAnterior.append(Util.completaString(""
-						+ numeroConsumoFaturadoMes, 7));
+				dadosConsumoAnterior.append(Util.completaString("" + numeroConsumoFaturadoMes, 7));
 			} else {
 				dadosConsumoAnterior.append(Util.completaString("", 7));
 			}
@@ -1870,12 +2029,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return dadosConsumoAnterior;
 	}
 
-	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro) throws ControladorException {
+	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper(EmitirContaHelper emitirContaHelper,
+			SistemaParametro sistemaParametro) throws ControladorException {
 
 		Integer anoMesReferenciaFinal = sistemaParametro.getAnoMesFaturamento();
 		Integer dataVencimentoFinalInteger = sistemaParametro.getAnoMesArrecadacao();
 
-		String anoMesSubtraidoString = ""+ Util.subtrairMesDoAnoMes(dataVencimentoFinalInteger, 1);
+		String anoMesSubtraidoString = "" + Util.subtrairMesDoAnoMes(dataVencimentoFinalInteger, 1);
 
 		int anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMesReferenciaFinal, 1);
 		int ano = Integer.parseInt(anoMesSubtraidoString.substring(0, 4));
@@ -1884,17 +2044,15 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		Calendar dataVencimentoFinal = GregorianCalendar.getInstance();
 		dataVencimentoFinal.set(Calendar.YEAR, ano);
 		dataVencimentoFinal.set(Calendar.MONTH, (mes - 1));
-		dataVencimentoFinal.set(Calendar.DAY_OF_MONTH,dataVencimentoFinal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		dataVencimentoFinal.set(Calendar.DAY_OF_MONTH, dataVencimentoFinal.getActualMaximum(Calendar.DAY_OF_MONTH));
 
 		Date dataFinalDate = dataVencimentoFinal.getTime();
 
 		Date dataVencimento = Util.converteStringParaDate("01/01/1900");
 
 		ObterDebitoImovelOuClienteHelper debitoImovelClienteHelper = getControladorCobranca()
-				.obterDebitoImovelOuCliente(1,
-						"" + emitirContaHelper.getIdImovel(), null, null,
-						"190001", "" + anoMesSubtraido, dataVencimento,
-						dataFinalDate, 1, 2, 2, 2, 2, 1, 2, null);
+				.obterDebitoImovelOuCliente(1, "" + emitirContaHelper.getIdImovel(), null, null, "190001",
+						"" + anoMesSubtraido, dataVencimento, dataFinalDate, 1, 2, 2, 2, 2, 1, 2, null);
 
 		return debitoImovelClienteHelper;
 	}
@@ -1937,7 +2095,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		FiltroQualidadeAguaPadrao filtroQualidadeAguaPadrao = new FiltroQualidadeAguaPadrao();
 
-		Collection colecaoQualidAguaPadrao = getControladorUtil().pesquisar(filtroQualidadeAguaPadrao, QualidadeAguaPadrao.class.getName());
+		Collection colecaoQualidAguaPadrao = getControladorUtil().pesquisar(filtroQualidadeAguaPadrao,
+				QualidadeAguaPadrao.class.getName());
 
 		if (colecaoQualidAguaPadrao != null && !colecaoQualidAguaPadrao.isEmpty()) {
 
@@ -1960,20 +2119,22 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		if (quadraFace.getDistritoOperacional() != null
 				&& quadraFace.getDistritoOperacional().getSetorAbastecimento() != null
-				&& quadraFace.getDistritoOperacional().getSetorAbastecimento()
-						.getSistemaAbastecimento() != null) {
+				&& quadraFace.getDistritoOperacional().getSetorAbastecimento().getSistemaAbastecimento() != null) {
 
-			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.SISTEMA_ABASTECIMENTO, quadraFace
-							.getDistritoOperacional().getSetorAbastecimento().getSistemaAbastecimento().getId()));
+			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.SISTEMA_ABASTECIMENTO,
+					quadraFace.getDistritoOperacional().getSetorAbastecimento().getSistemaAbastecimento().getId()));
 
-			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
+			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.ANO_MES_REFERENCIA,
+					emitirConta.getAmReferencia()));
 
-			if (quadraFace.getDistritoOperacional().getSetorAbastecimento()	.getSistemaAbastecimento().getFonteCaptacao() != null
+			if (quadraFace.getDistritoOperacional().getSetorAbastecimento().getSistemaAbastecimento()
+					.getFonteCaptacao() != null
 					&& quadraFace.getDistritoOperacional().getSetorAbastecimento().getSistemaAbastecimento()
 							.getFonteCaptacao().getTipoCaptacao() != null) {
 
 				tipoCaptacao = quadraFace.getDistritoOperacional().getSetorAbastecimento().getSistemaAbastecimento()
-						.getFonteCaptacao().getTipoCaptacao().getId()+ "";
+						.getFonteCaptacao().getTipoCaptacao().getId()
+						+ "";
 			}
 
 			filtroQualidadeAgua.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao");
@@ -1988,9 +2149,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 			filtroQualidadeAgua.limparListaParametros();
 
-			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta.getIdLocalidade()));
-			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.SETOR_COMERCIAL_ID, emitirConta.getIdSetorComercial()));
-			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
+			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta
+					.getIdLocalidade()));
+			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.SETOR_COMERCIAL_ID,
+					emitirConta.getIdSetorComercial()));
+			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.ANO_MES_REFERENCIA,
+					emitirConta.getAmReferencia()));
 			filtroQualidadeAgua.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao");
 			filtroQualidadeAgua.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao.tipoCaptacao");
 
@@ -2003,10 +2167,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			filtroQualidadeAgua.limparListaParametros();
 
 			colecaoQualidadeAgua = null;
-			
-			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta.getIdLocalidade()));
+
+			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta
+					.getIdLocalidade()));
 			filtroQualidadeAgua.adicionarParametro(new ParametroNulo(FiltroQualidadeAgua.SETOR_COMERCIAL_ID));
-			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
+			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.ANO_MES_REFERENCIA,
+					emitirConta.getAmReferencia()));
 			filtroQualidadeAgua.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao");
 			filtroQualidadeAgua.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao.tipoCaptacao");
 
@@ -2015,7 +2181,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		if (colecaoQualidadeAgua == null || colecaoQualidadeAgua.isEmpty()) {
 			filtroQualidadeAgua.limparListaParametros();
-			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
+			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(FiltroQualidadeAgua.ANO_MES_REFERENCIA,
+					emitirConta.getAmReferencia()));
 			filtroQualidadeAgua.adicionarParametro(new ParametroNulo(FiltroQualidadeAgua.LOCALIDADE_ID));
 			filtroQualidadeAgua.adicionarParametro(new ParametroNulo(FiltroQualidadeAgua.SETOR_COMERCIAL_ID));
 			filtroQualidadeAgua.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao");
@@ -2033,7 +2200,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			}
 
 			if (qualidadeAgua.getQuantidadeTurbidezExigidas() != null) {
-				exigidaTurbidez = qualidadeAgua.getQuantidadeTurbidezExigidas()	+ "";
+				exigidaTurbidez = qualidadeAgua.getQuantidadeTurbidezExigidas() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeFluorExigidas() != null) {
@@ -2061,11 +2228,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			}
 
 			if (qualidadeAgua.getQuantidadeFluorAnalisadas() != null) {
-				analisadaFluor = qualidadeAgua.getQuantidadeFluorAnalisadas()+ "";
+				analisadaFluor = qualidadeAgua.getQuantidadeFluorAnalisadas() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeCloroAnalisadas() != null) {
-				analisadaCloro = qualidadeAgua.getQuantidadeCloroAnalisadas()+ "";
+				analisadaCloro = qualidadeAgua.getQuantidadeCloroAnalisadas() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeColiformesTotaisAnalisadas() != null) {
@@ -2073,11 +2240,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			}
 
 			if (qualidadeAgua.getQuantidadeColiformesTermotolerantesAnalisadas() != null) {
-				analisadaColiformesTermotolerantes = qualidadeAgua.getQuantidadeColiformesTermotolerantesAnalisadas()+ "";
+				analisadaColiformesTermotolerantes = qualidadeAgua.getQuantidadeColiformesTermotolerantesAnalisadas()
+						+ "";
 			}
 
 			if (qualidadeAgua.getQuantidadeCorConforme() != null) {
-				emConformidadeCor = qualidadeAgua.getQuantidadeCorConforme()+ "";
+				emConformidadeCor = qualidadeAgua.getQuantidadeCorConforme() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeTurbidezConforme() != null) {
@@ -2097,12 +2265,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			}
 
 			if (qualidadeAgua.getQuantidadeColiformesTermotolerantesConforme() != null) {
-				emConformidadeColiformesTermotolerantes = qualidadeAgua.getQuantidadeColiformesTermotolerantesConforme() + "";
+				emConformidadeColiformesTermotolerantes = qualidadeAgua
+						.getQuantidadeColiformesTermotolerantesConforme() + "";
 			}
 
 			if (qualidadeAgua.getFonteCaptacao() != null && tipoCaptacao.trim().equalsIgnoreCase("")) {
 				if (qualidadeAgua.getFonteCaptacao().getTipoCaptacao() != null) {
-					tipoCaptacao = qualidadeAgua.getFonteCaptacao().getTipoCaptacao().getId()+ "";
+					tipoCaptacao = qualidadeAgua.getFonteCaptacao().getTipoCaptacao().getId() + "";
 				}
 			}
 
@@ -2148,9 +2317,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("distritoOperacional");
 		filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("distritoOperacional.setorAbastecimento");
-		filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("distritoOperacional.setorAbastecimento.sistemaAbastecimento");
-		filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("distritoOperacional.setorAbastecimento.sistemaAbastecimento.fonteCaptacao");
-		filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("distritoOperacional.setorAbastecimento.sistemaAbastecimento.fonteCaptacao.tipoCaptacao");
+		filtroQuadraFace
+				.adicionarCaminhoParaCarregamentoEntidade("distritoOperacional.setorAbastecimento.sistemaAbastecimento");
+		filtroQuadraFace
+				.adicionarCaminhoParaCarregamentoEntidade("distritoOperacional.setorAbastecimento.sistemaAbastecimento.fonteCaptacao");
+		filtroQuadraFace
+				.adicionarCaminhoParaCarregamentoEntidade("distritoOperacional.setorAbastecimento.sistemaAbastecimento.fonteCaptacao.tipoCaptacao");
 
 		Collection colecaoQudraFace = getControladorUtil().pesquisar(filtroQuadraFace, QuadraFace.class.getName());
 
@@ -2159,18 +2331,17 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Collection gerarDebitosACobrarDeAcrescimosPorImpontualidade(
-			Collection rotas, Short indicadorGeracaoMulta,
-			Short indicadorGeracaoJuros, Short indicadorGeracaoAtualizacao,
-			int idFuncionalidadeIniciada, boolean indicadorEncerrandoArrecadacao)
-			throws ControladorException {
+	public Collection gerarDebitosACobrarDeAcrescimosPorImpontualidade(Collection rotas, Short indicadorGeracaoMulta,
+			Short indicadorGeracaoJuros, Short indicadorGeracaoAtualizacao, int idFuncionalidadeIniciada,
+			boolean indicadorEncerrandoArrecadacao) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
 		try {
 			Rota rota = (Rota) Util.retonarObjetoDeColecao(rotas);
 
-			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.ROTA, rota.getId());
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+					UnidadeProcessamento.ROTA, rota.getId());
 
 			Collection imoveisPorRota = null;
 			Collection colecaoDebitoACobrarInserir = new ArrayList();
@@ -2186,7 +2357,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 			Iterator imovelPorRotaIterator = imoveisPorRota.iterator();
 
-			Map<Integer, Categoria> mapImovelPrincipalCategoria = this.pesquisarPrincipalCategoriaImovelPorRota(codigoEmpresaFebraban, rota);
+			Map<Integer, Categoria> mapImovelPrincipalCategoria = this.pesquisarPrincipalCategoriaImovelPorRota(
+					codigoEmpresaFebraban, rota);
 
 			Map<Integer, Short> mapIndicadorAcrescimoCliente = this.obterIndicadorGeracaoAcrescimosClienteImovel(rota);
 
@@ -2194,7 +2366,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				Object[] arrayImoveisPorRota = (Object[]) imovelPorRotaIterator.next();
 
 				Imovel imovel = new Imovel();
-				
+
 				if (arrayImoveisPorRota[0] != null) {
 					imovel.setId((Integer) arrayImoveisPorRota[0]);
 				}
@@ -2217,14 +2389,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 				if (arrayImoveisPorRota[2] != null) {
 					SetorComercial setor = new SetorComercial();
-					setor.setCodigo(((Integer)arrayImoveisPorRota[2]).intValue());
+					setor.setCodigo(((Integer) arrayImoveisPorRota[2]).intValue());
 					imovel.setSetorComercial(setor);
 				}
 
 				if (arrayImoveisPorRota[8] != null) {
 					imovel.setIndicadorDebitoConta((Short) arrayImoveisPorRota[8]);
 				}
-				
 
 				Categoria principalCategoria = mapImovelPrincipalCategoria.get(imovel.getId());
 
@@ -2234,46 +2405,43 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 					flagProximoImovel = true;
 				}
 
-				if ((principalCategoria != null && principalCategoria.getIndicadorCobrancaAcrescimos().equals(ConstantesSistema.ENCERRAMENTO_ARRECADACAO))
+				if ((principalCategoria != null && principalCategoria.getIndicadorCobrancaAcrescimos().equals(
+						ConstantesSistema.ENCERRAMENTO_ARRECADACAO))
 						&& !indicadorEncerrandoArrecadacao) {
 					flagProximoImovel = true;
 				}
 
 				Short indicadorCobrancaAcrescimos = mapIndicadorAcrescimoCliente.get(imovel.getId());
-				if (indicadorCobrancaAcrescimos != null	&& indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO)) {
+				if (indicadorCobrancaAcrescimos != null && indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO)) {
 					flagProximoImovel = true;
 				}
 
-				if (indicadorCobrancaAcrescimos != null && (indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO) && !indicadorEncerrandoArrecadacao)) {
+				if (indicadorCobrancaAcrescimos != null
+						&& (indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO) && !indicadorEncerrandoArrecadacao)) {
 					flagProximoImovel = true;
 				}
 
 				if (!flagProximoImovel) {
-					Date dataAnoMesReferenciaUltimoDia = Util.gerarDataApartirAnoMesRefencia(anoMesReferenciaArrecadacao);
+					Date dataAnoMesReferenciaUltimoDia = Util
+							.gerarDataApartirAnoMesRefencia(anoMesReferenciaArrecadacao);
 
 					Collection<Integer> colecaoIdsContasAtualizarIndicadorMulta = new ArrayList();
 
 					Collection colecaoContaImovel = null;
 
 					if (!indicadorEncerrandoArrecadacao) {
-						colecaoContaImovel = repositorioFaturamento
-								.obterContasImovel(imovel.getId(),
-										DebitoCreditoSituacao.NORMAL,
-										DebitoCreditoSituacao.INCLUIDA,
-										DebitoCreditoSituacao.RETIFICADA,
-										dataAnoMesReferenciaUltimoDia);
+						colecaoContaImovel = repositorioFaturamento.obterContasImovel(imovel.getId(),
+								DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.INCLUIDA,
+								DebitoCreditoSituacao.RETIFICADA, dataAnoMesReferenciaUltimoDia);
 					} else {
-						colecaoContaImovel = repositorioFaturamento
-								.obterContasImovelComPagamento(imovel.getId(),
-										DebitoCreditoSituacao.NORMAL,
-										DebitoCreditoSituacao.INCLUIDA,
-										DebitoCreditoSituacao.RETIFICADA,
-										dataAnoMesReferenciaUltimoDia,
-										anoMesReferenciaArrecadacao);
+						colecaoContaImovel = repositorioFaturamento.obterContasImovelComPagamento(imovel.getId(),
+								DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.INCLUIDA,
+								DebitoCreditoSituacao.RETIFICADA, dataAnoMesReferenciaUltimoDia,
+								anoMesReferenciaArrecadacao);
 					}
 
 					Map<Integer, Boolean> mapIndicadorExistePagamentoConta = this.pesquisarIndicadorPagamentoConta(
-									colecaoContaImovel,	anoMesReferenciaArrecadacao);
+							colecaoContaImovel, anoMesReferenciaArrecadacao);
 
 					Short numeroPrestacaoDebito = 1;
 					Short numeroPrestacaoCobradas = 0;
@@ -2317,7 +2485,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								}
 
 								conta.setImovel(imovel);
-								
+
 								Date pagamentoContasMenorData = null;
 								Integer idArrecadacaoForma = null;
 
@@ -2332,7 +2500,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								if (!isDebitoAutomatico(idArrecadacaoForma)) {
 
 									CobrancaDocumento documentoCobranca = null;
-											
+
 									boolean indicadorExistePagamentoClassificadoConta;
 									if (mapIndicadorExistePagamentoConta.containsKey(idConta)) {
 										documentoCobranca = obterDocumentoCobrancaPagamento(idConta);
@@ -2343,120 +2511,103 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 									CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = new CalcularAcrescimoPorImpontualidadeHelper();
 
-									BigDecimal valorConta = conta
-											.getValorAgua()
-											.add(conta.getValorEsgoto())
-											.add(conta.getDebitos())
-											.subtract(conta.getValorCreditos());
+									BigDecimal valorConta = conta.getValorAgua().add(conta.getValorEsgoto())
+											.add(conta.getDebitos()).subtract(conta.getValorCreditos());
 
-									BigDecimal valorMultasCobradas = repositorioFaturamento.pesquisarValorMultasCobradas(idConta);
-									
-									Date vencimentoConta = calculaVencimentoConta(conta, indicadorExistePagamentoClassificadoConta, documentoCobranca);
-									
+									BigDecimal valorMultasCobradas = repositorioFaturamento
+											.pesquisarValorMultasCobradas(idConta);
+
+									Date vencimentoConta = calculaVencimentoConta(conta,
+											indicadorExistePagamentoClassificadoConta, documentoCobranca);
+
 									calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
-											.calcularAcrescimoPorImpontualidade(
-													conta.getReferencia(),
-													vencimentoConta,
-													pagamentoContasMenorData,
-													valorConta,
-													valorMultasCobradas,
+											.calcularAcrescimoPorImpontualidade(conta.getReferencia(), vencimentoConta,
+													pagamentoContasMenorData, valorConta, valorMultasCobradas,
 													conta.getIndicadorCobrancaMulta(),
-													"" + anoMesReferenciaArrecadacao,
-													conta.getId(),
+													"" + anoMesReferenciaArrecadacao, conta.getId(),
 													ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
-									
+
 									DebitoTipo debitoTipo = null;
 
 									if (indicadorGeracaoMulta.equals(ConstantesSistema.SIM)
-											&& calcularAcrescimoPorImpontualidade.getValorMulta().compareTo(BigDecimal.ZERO) == 1
+											&& calcularAcrescimoPorImpontualidade.getValorMulta().compareTo(
+													BigDecimal.ZERO) == 1
 											&& indicadorExistePagamentoClassificadoConta
-											&& !isMultaJaCobrada(idConta, indicadorExistePagamentoClassificadoConta, documentoCobranca)) {
+											&& !isMultaJaCobrada(idConta, indicadorExistePagamentoClassificadoConta,
+													documentoCobranca)) {
 
 										debitoTipo = new DebitoTipo(DebitoTipo.MULTA_IMPONTUALIDADE);
 
-										DebitoACobrar debitoACobrar = this
-												.gerarDebitoACobrarParaConta(
-														anoMesReferenciaArrecadacao, imovel,
-														numeroPrestacaoDebito,
-														numeroPrestacaoCobradas,
-														conta,
-														calcularAcrescimoPorImpontualidade.getValorMulta(),
-														debitoTipo,
-														Usuario.USUARIO_BATCH);
-
-										colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
-
-										colecaoDebitoACobrarInserir.add(debitoACobrar);
-										colecaoDebitoACobrarCategoriaInserir.addAll(
-												this.inserirDebitoACobrarCategoriaBatch(
-														debitoACobrar,debitoACobrar.getImovel()));
-									}
-
-									if (indicadorGeracaoJuros.equals(ConstantesSistema.SIM)
-											&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(BigDecimal.ZERO) == 1
-											&& indicadorExistePagamentoClassificadoConta) {
-
-										debitoTipo = new DebitoTipo(DebitoTipo.JUROS_MORA);
-
-										DebitoACobrar debitoACobrar = this
-												.gerarDebitoACobrarParaConta(
-														anoMesReferenciaArrecadacao, imovel,
-														numeroPrestacaoDebito,
-														numeroPrestacaoCobradas,
-														conta,
-														calcularAcrescimoPorImpontualidade.getValorJurosMora(),
-														debitoTipo,
-														Usuario.USUARIO_BATCH);
-
-										colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
-
-										colecaoDebitoACobrarInserir.add(debitoACobrar);
-										colecaoDebitoACobrarCategoriaInserir.addAll(
-												this.inserirDebitoACobrarCategoriaBatch(
-														debitoACobrar,debitoACobrar.getImovel()));
-									}
-
-									if (indicadorGeracaoAtualizacao.equals(ConstantesSistema.SIM)
-											&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) == 1
-											&& indicadorExistePagamentoClassificadoConta) {
-
-										debitoTipo = new DebitoTipo(DebitoTipo.ATUALIZACAO_MONETARIA);
-
-										DebitoACobrar debitoACobrar = this
-												.gerarDebitoACobrarParaConta(
-														anoMesReferenciaArrecadacao, imovel,
-														numeroPrestacaoDebito,
-														numeroPrestacaoCobradas,
-														conta,
-														calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria(),
-														debitoTipo,
-														Usuario.USUARIO_BATCH);
+										DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
+												anoMesReferenciaArrecadacao, imovel, numeroPrestacaoDebito,
+												numeroPrestacaoCobradas, conta,
+												calcularAcrescimoPorImpontualidade.getValorMulta(), debitoTipo,
+												Usuario.USUARIO_BATCH);
 
 										colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
 
 										colecaoDebitoACobrarInserir.add(debitoACobrar);
 										colecaoDebitoACobrarCategoriaInserir.addAll(this
-												.inserirDebitoACobrarCategoriaBatch(
-														debitoACobrar,debitoACobrar.getImovel()));
+												.inserirDebitoACobrarCategoriaBatch(debitoACobrar,
+														debitoACobrar.getImovel()));
+									}
+
+									if (indicadorGeracaoJuros.equals(ConstantesSistema.SIM)
+											&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(
+													BigDecimal.ZERO) == 1 && indicadorExistePagamentoClassificadoConta) {
+
+										debitoTipo = new DebitoTipo(DebitoTipo.JUROS_MORA);
+
+										DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
+												anoMesReferenciaArrecadacao, imovel, numeroPrestacaoDebito,
+												numeroPrestacaoCobradas, conta,
+												calcularAcrescimoPorImpontualidade.getValorJurosMora(), debitoTipo,
+												Usuario.USUARIO_BATCH);
+
+										colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
+
+										colecaoDebitoACobrarInserir.add(debitoACobrar);
+										colecaoDebitoACobrarCategoriaInserir.addAll(this
+												.inserirDebitoACobrarCategoriaBatch(debitoACobrar,
+														debitoACobrar.getImovel()));
+									}
+
+									if (indicadorGeracaoAtualizacao.equals(ConstantesSistema.SIM)
+											&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria()
+													.compareTo(BigDecimal.ZERO) == 1
+											&& indicadorExistePagamentoClassificadoConta) {
+
+										debitoTipo = new DebitoTipo(DebitoTipo.ATUALIZACAO_MONETARIA);
+
+										DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
+												anoMesReferenciaArrecadacao, imovel, numeroPrestacaoDebito,
+												numeroPrestacaoCobradas, conta,
+												calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria(),
+												debitoTipo, Usuario.USUARIO_BATCH);
+
+										colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
+
+										colecaoDebitoACobrarInserir.add(debitoACobrar);
+										colecaoDebitoACobrarCategoriaInserir.addAll(this
+												.inserirDebitoACobrarCategoriaBatch(debitoACobrar,
+														debitoACobrar.getImovel()));
 									}
 								}
-							} 
-						} 
-					} 
+							}
+						}
+					}
 
-					if (colecaoIdsContasAtualizarIndicadorMulta != null && !colecaoIdsContasAtualizarIndicadorMulta.isEmpty()) {
+					if (colecaoIdsContasAtualizarIndicadorMulta != null
+							&& !colecaoIdsContasAtualizarIndicadorMulta.isEmpty()) {
 						repositorioFaturamento.atualizarIndicadorMultaDeConta(colecaoIdsContasAtualizarIndicadorMulta);
 					}
 
 					Collection colecaoGuiasPagamentoImovel = null;
 					Collection<Integer> colecaoIdsGuiasPagamentosAtualizarIndicadorMulta = new ArrayList();
 
-					colecaoGuiasPagamentoImovel = repositorioFaturamento
-							.obterGuiasPagamentoImovel(imovel.getId(),
-									DebitoCreditoSituacao.NORMAL,
-									DebitoCreditoSituacao.INCLUIDA,
-									DebitoCreditoSituacao.RETIFICADA,
-									anoMesReferenciaArrecadacao);
+					colecaoGuiasPagamentoImovel = repositorioFaturamento.obterGuiasPagamentoImovel(imovel.getId(),
+							DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.INCLUIDA,
+							DebitoCreditoSituacao.RETIFICADA, anoMesReferenciaArrecadacao);
 
 					if (!Util.isVazioOrNulo(colecaoGuiasPagamentoImovel)) {
 
@@ -2492,99 +2643,81 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									guiaPagamento.setDebitoTipo(debitoTipoGuiaPagamento);
 								}
 
-								Date menorDataPagamento = repositorioCobranca
-										.pesquisarMenorDataPagamentoGuiaPagamento(
-												guiaPagamento.getId(), imovel
-												.getId(), guiaPagamento.getDebitoTipo().getId());
+								Date menorDataPagamento = repositorioCobranca.pesquisarMenorDataPagamentoGuiaPagamento(
+										guiaPagamento.getId(), imovel.getId(), guiaPagamento.getDebitoTipo().getId());
 
 								boolean indicadorExistePagamentoClassificadoGuiaPagamento = repositorioFaturamento
 										.obterIndicadorPagamentosClassificadosGuiaPagamentoReferenciaMenorIgualAtual(
-												guiaPagamento.getId(), imovel
-														.getId(), guiaPagamento
-														.getDebitoTipo()
-														.getId(),
-												anoMesReferenciaArrecadacao);
+												guiaPagamento.getId(), imovel.getId(), guiaPagamento.getDebitoTipo()
+														.getId(), anoMesReferenciaArrecadacao);
 
 								CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = new CalcularAcrescimoPorImpontualidadeHelper();
-								calcularAcrescimoPorImpontualidade = this
-										.getControladorCobranca()
+								calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
 										.calcularAcrescimoPorImpontualidade(
 												guiaPagamento.getAnoMesReferenciaContabil(),
-												guiaPagamento.getDataVencimento(),
-												menorDataPagamento,
-												guiaPagamento.getValorDebito(),
-												BigDecimal.ZERO,
+												guiaPagamento.getDataVencimento(), menorDataPagamento,
+												guiaPagamento.getValorDebito(), BigDecimal.ZERO,
 												guiaPagamento.getIndicadoCobrancaMulta(),
-												""+ anoMesReferenciaArrecadacao,
-												null,
+												"" + anoMesReferenciaArrecadacao, null,
 												ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
 
 								DebitoTipo debitoTipo = null;
 
 								if (indicadorGeracaoMulta.equals(ConstantesSistema.SIM)
-										&& calcularAcrescimoPorImpontualidade.getValorMulta().compareTo(BigDecimal.ZERO) == 1
+										&& calcularAcrescimoPorImpontualidade.getValorMulta()
+												.compareTo(BigDecimal.ZERO) == 1
 										&& indicadorExistePagamentoClassificadoGuiaPagamento) {
 
 									debitoTipo = new DebitoTipo();
 									debitoTipo.setId(DebitoTipo.MULTA_IMPONTUALIDADE);
 
 									DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
-											anoMesReferenciaArrecadacao,
-											anoMesReferenciaFaturamento,
-											imovel, 
-											numeroPrestacaoDebito,
-											numeroPrestacaoCobradas,
-											guiaPagamento,
-											calcularAcrescimoPorImpontualidade.getValorMulta(),
-											debitoTipo, Usuario.USUARIO_BATCH);
+											anoMesReferenciaArrecadacao, anoMesReferenciaFaturamento, imovel,
+											numeroPrestacaoDebito, numeroPrestacaoCobradas, guiaPagamento,
+											calcularAcrescimoPorImpontualidade.getValorMulta(), debitoTipo,
+											Usuario.USUARIO_BATCH);
 
 									colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.add(guiaPagamento.getId());
 
 									colecaoDebitoACobrarInserir.add(debitoACobrar);
 									colecaoDebitoACobrarCategoriaInserir.addAll(this
-											.inserirDebitoACobrarCategoriaBatch(
-													debitoACobrar,debitoACobrar.getImovel()));
+											.inserirDebitoACobrarCategoriaBatch(debitoACobrar,
+													debitoACobrar.getImovel()));
 								}
 
 								if (indicadorGeracaoJuros.equals(ConstantesSistema.SIM)
-										&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(BigDecimal.ZERO) == 1
+										&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(
+												BigDecimal.ZERO) == 1
 										&& indicadorExistePagamentoClassificadoGuiaPagamento) {
 
 									debitoTipo = new DebitoTipo();
 									debitoTipo.setId(DebitoTipo.JUROS_MORA);
 
 									DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
-											anoMesReferenciaArrecadacao,
-											anoMesReferenciaFaturamento,
-											imovel, 
-											numeroPrestacaoDebito,
-											numeroPrestacaoCobradas,
-											guiaPagamento,
-											calcularAcrescimoPorImpontualidade.getValorJurosMora(),
-											debitoTipo, Usuario.USUARIO_BATCH);
+											anoMesReferenciaArrecadacao, anoMesReferenciaFaturamento, imovel,
+											numeroPrestacaoDebito, numeroPrestacaoCobradas, guiaPagamento,
+											calcularAcrescimoPorImpontualidade.getValorJurosMora(), debitoTipo,
+											Usuario.USUARIO_BATCH);
 
 									colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.add(guiaPagamento.getId());
 
 									colecaoDebitoACobrarInserir.add(debitoACobrar);
 									colecaoDebitoACobrarCategoriaInserir.addAll(this
-											.inserirDebitoACobrarCategoriaBatch(
-												debitoACobrar,debitoACobrar.getImovel()));
+											.inserirDebitoACobrarCategoriaBatch(debitoACobrar,
+													debitoACobrar.getImovel()));
 								}
 
 								if (indicadorGeracaoAtualizacao.equals(ConstantesSistema.SIM)
-										&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) == 1
+										&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(
+												BigDecimal.ZERO) == 1
 										&& indicadorExistePagamentoClassificadoGuiaPagamento) {
 
 									debitoTipo = new DebitoTipo();
 									debitoTipo.setId(DebitoTipo.ATUALIZACAO_MONETARIA);
 
 									DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
-											anoMesReferenciaArrecadacao,
-											anoMesReferenciaFaturamento,
-											imovel,
-											numeroPrestacaoDebito,
-											numeroPrestacaoCobradas,
-											guiaPagamento,
+											anoMesReferenciaArrecadacao, anoMesReferenciaFaturamento, imovel,
+											numeroPrestacaoDebito, numeroPrestacaoCobradas, guiaPagamento,
 											calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria(),
 											debitoTipo, Usuario.USUARIO_BATCH);
 
@@ -2592,8 +2725,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 									colecaoDebitoACobrarInserir.add(debitoACobrar);
 									colecaoDebitoACobrarCategoriaInserir.addAll(this
-											.inserirDebitoACobrarCategoriaBatch(
-												debitoACobrar,debitoACobrar.getImovel()));
+											.inserirDebitoACobrarCategoriaBatch(debitoACobrar,
+													debitoACobrar.getImovel()));
 								}
 							}
 						}
@@ -2601,7 +2734,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 					if (colecaoIdsGuiasPagamentosAtualizarIndicadorMulta != null
 							&& !colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.isEmpty()) {
-						repositorioFaturamento.atualizarIndicadorMultaDeGuiaPagamento(colecaoIdsGuiasPagamentosAtualizarIndicadorMulta);
+						repositorioFaturamento
+								.atualizarIndicadorMultaDeGuiaPagamento(colecaoIdsGuiasPagamentosAtualizarIndicadorMulta);
 					}
 				}
 			}
@@ -2614,52 +2748,57 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				this.getControladorBatch().inserirColecaoObjetoParaBatch(colecaoDebitoACobrarCategoriaInserir);
 			}
 
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
 			return null;
 
 		} catch (Exception e) {
 			logger.error(e);
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}
 
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	private boolean isMultaJaCobrada(Integer idConta, boolean indicadorExistePagamentoClassificadoConta, CobrancaDocumento documentoCobranca) throws ControladorException {
+	private boolean isMultaJaCobrada(Integer idConta, boolean indicadorExistePagamentoClassificadoConta,
+			CobrancaDocumento documentoCobranca) throws ControladorException {
 		boolean multaCobrada = false;
-		
+
 		logger.info("indicadorExistePagamentoClassificadoConta? " + indicadorExistePagamentoClassificadoConta);
 		if (indicadorExistePagamentoClassificadoConta && documentoCobranca != null) {
 			FiltroCobrancaDocumentoItem filtroItem = new FiltroCobrancaDocumentoItem();
-			
+
 			filtroItem.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumentoItem.CONTA_GERAL_ID, idConta));
-			filtroItem.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumentoItem.COBRANCA_DOCUMENTO_ID, documentoCobranca.getId()));
-			
-			Collection colecaoItem = getControladorUtil().pesquisar(filtroItem,CobrancaDocumentoItem.class.getSimpleName());
-			
-			logger.info("	achou algum item? " + (colecaoItem != null) );
+			filtroItem.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumentoItem.COBRANCA_DOCUMENTO_ID,
+					documentoCobranca.getId()));
+
+			Collection colecaoItem = getControladorUtil().pesquisar(filtroItem,
+					CobrancaDocumentoItem.class.getSimpleName());
+
+			logger.info("	achou algum item? " + (colecaoItem != null));
 			if (colecaoItem != null && !colecaoItem.isEmpty()) {
 				CobrancaDocumentoItem item = (CobrancaDocumentoItem) Util.retonarObjetoDeColecao(colecaoItem);
-				logger.info("	id do item: " + item.getId() );
+				logger.info("	id do item: " + item.getId());
 				if (item.getValorAcrescimos() != null) {
 					multaCobrada = true;
 				}
-			} 
+			}
 		}
 
-		logger.info("	multa cobrada? " + multaCobrada );
-		return multaCobrada;	
+		logger.info("	multa cobrada? " + multaCobrada);
+		return multaCobrada;
 	}
 
 	private boolean isDebitoAutomatico(Integer idArrecadacaoForma) {
-		return idArrecadacaoForma == null || (idArrecadacaoForma != null && idArrecadacaoForma.equals(ArrecadacaoForma.DEBITO_AUTOMATICO));
+		return idArrecadacaoForma == null
+				|| (idArrecadacaoForma != null && idArrecadacaoForma.equals(ArrecadacaoForma.DEBITO_AUTOMATICO));
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Collection gerarDebitosACobrarDeAcrescimosPorImpontualidadeRefatorado(Collection rotas, Short indicadorMulta, Short indicadorJuros, 
-			Short indicadorAtualizacao, int idFuncionalidadeIniciada, boolean indicadorEncerrandoArrecadacao) throws ControladorException {
+	public Collection gerarDebitosACobrarDeAcrescimosPorImpontualidadeRefatorado(Collection rotas,
+			Short indicadorMulta, Short indicadorJuros, Short indicadorAtualizacao, int idFuncionalidadeIniciada,
+			boolean indicadorEncerrandoArrecadacao) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
@@ -2667,116 +2806,118 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			Rota rota = (Rota) Util.retonarObjetoDeColecao(rotas);
 
 			if (rota.getId().intValue() == 571) {
-				
-				idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.ROTA, rota.getId());
-				
+
+				idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+						UnidadeProcessamento.ROTA, rota.getId());
+
 				Collection imoveisPorRota = this.pesquisarImovelGerarAcrescimosImpontualidade(rota);
 				Collection<DebitoACobrar> debitosACobrarInserir = new ArrayList<DebitoACobrar>();
 				Collection<DebitoACobrarCategoria> debitosACobrarCategoriaInserir = new ArrayList<DebitoACobrarCategoria>();
-				
+
 				SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 				Short codigoEmpresaFebraban = sistemaParametros.getCodigoEmpresaFebraban();
-				
+
 				Iterator imovelPorRotaIterator = imoveisPorRota.iterator();
-				
-				Map<Integer, Categoria> mapPrincipalCategoriaImoveis = this.pesquisarPrincipalCategoriaImovelPorRota(codigoEmpresaFebraban, rota);
-				
-				Map<Integer, Short> mapIndicadorAcrescimoCliente = this.obterIndicadorGeracaoAcrescimosClienteImovel(rota);
-				
-				logger.info("Rota em processamento de acréscimos: " + rota.getId());
-				
+
+				Map<Integer, Categoria> mapPrincipalCategoriaImoveis = this.pesquisarPrincipalCategoriaImovelPorRota(
+						codigoEmpresaFebraban, rota);
+
+				Map<Integer, Short> mapIndicadorAcrescimoCliente = this
+						.obterIndicadorGeracaoAcrescimosClienteImovel(rota);
+
+				logger.info("Rota em processamento de acrï¿½scimos: " + rota.getId());
+
 				while (imovelPorRotaIterator.hasNext()) {
 					Imovel imovel = buildImovelAcrescimoImpontualidade(imovelPorRotaIterator);
-					
-//				if (imovel.getId().equals(new Integer("2992361"))) {
+
+					// if (imovel.getId().equals(new Integer("2992361"))) {
 					Categoria principalCategoria = mapPrincipalCategoriaImoveis.get(imovel.getId());
-					
-					boolean cobrarAcrescimo = verificarCondicoesImovelCobrarAcrescimo(indicadorEncerrandoArrecadacao, mapIndicadorAcrescimoCliente, imovel, principalCategoria);
-					
+
+					boolean cobrarAcrescimo = verificarCondicoesImovelCobrarAcrescimo(indicadorEncerrandoArrecadacao,
+							mapIndicadorAcrescimoCliente, imovel, principalCategoria);
+
 					if (cobrarAcrescimo) {
-						
-						debitosACobrarInserir = gerarAcrescimosConta(indicadorMulta, indicadorJuros, indicadorAtualizacao, imovel, indicadorEncerrandoArrecadacao);
-						
-						
-						
-//					debitosACobrarCategoriaInserir.addAll(this.inserirDebitosACobrarCategoriaBatch(debitosACobrarInserir));
-						
-						Collection<DebitoACobrar> debitosGuias = gerarAcrescimosGuiaPagamento(indicadorMulta, indicadorJuros, indicadorAtualizacao, imovel); 
+
+						debitosACobrarInserir = gerarAcrescimosConta(indicadorMulta, indicadorJuros,
+								indicadorAtualizacao, imovel, indicadorEncerrandoArrecadacao);
+
+						// debitosACobrarCategoriaInserir.addAll(this.inserirDebitosACobrarCategoriaBatch(debitosACobrarInserir));
+
+						Collection<DebitoACobrar> debitosGuias = gerarAcrescimosGuiaPagamento(indicadorMulta,
+								indicadorJuros, indicadorAtualizacao, imovel);
 						debitosACobrarInserir.addAll(debitosGuias);
-						//debitosACobrarCategoriaInserir.addAll(this.inserirDebitosACobrarCategoriaBatch(debitosGuias));
-						
+						// debitosACobrarCategoriaInserir.addAll(this.inserirDebitosACobrarCategoriaBatch(debitosGuias));
+
 						for (DebitoACobrar debito : debitosACobrarInserir) {
-							debitosACobrarCategoriaInserir.addAll((Collection<DebitoACobrarCategoria>)inserirDebitoACobrarCategoriaBatch(debito, debito.getImovel()));
+							debitosACobrarCategoriaInserir
+									.addAll((Collection<DebitoACobrarCategoria>) inserirDebitoACobrarCategoriaBatch(
+											debito, debito.getImovel()));
 						}
 					}
-					
-//				}
-					
+
+					// }
+
 				}
-				
+
 				if (debitosACobrarInserir != null && !debitosACobrarInserir.isEmpty()) {
 					this.getControladorBatch().inserirColecaoObjetoParaBatch(debitosACobrarInserir);
 					for (DebitoACobrar debito : debitosACobrarInserir) {
-						logger.info("Debito a Cobrar - " + debito.getImovel() +  " ; " + debito); 
+						logger.info("Debito a Cobrar - " + debito.getImovel() + " ; " + debito);
 					}
-				}else{
+				} else {
 					logger.info("DebitosACobrarInserir em branco ##################");
 				}
-				
+
 				if (debitosACobrarCategoriaInserir != null && !debitosACobrarCategoriaInserir.isEmpty()) {
 					for (DebitoACobrarCategoria debito : debitosACobrarCategoriaInserir) {
-						logger.info("DebitoACobrarCategoria - " + debito.getComp_id().getDebitoACobrar().getImovel() +  " ; " + debito.getComp_id()); 
+						logger.info("DebitoACobrarCategoria - " + debito.getComp_id().getDebitoACobrar().getImovel()
+								+ " ; " + debito.getComp_id());
 					}
-					
+
 					this.getControladorBatch().inserirColecaoObjetoParaBatch(debitosACobrarCategoriaInserir);
 				}
-				
-				getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
+
+				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			}
 
 			return null;
 
 		} catch (Exception e) {
 			logger.error(e);
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}
 
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Collection<DebitoACobrar> gerarAcrescimosGuiaPagamento(Short indicadorMulta, Short indicadorJuros, Short indicadorAtualizacao,
-			Imovel imovel) throws ErroRepositorioException, ControladorException {
+	private Collection<DebitoACobrar> gerarAcrescimosGuiaPagamento(Short indicadorMulta, Short indicadorJuros,
+			Short indicadorAtualizacao, Imovel imovel) throws ErroRepositorioException, ControladorException {
 		Short numeroPrestacaoDebito = 1;
 		Short numeroPrestacaoCobradas = 0;
-		
+
 		SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 		Integer referenciaArrecadacao = sistemaParametros.getAnoMesArrecadacao();
 		Integer referenciaFaturamento = sistemaParametros.getAnoMesFaturamento();
-		
+
 		Collection<Integer> colecaoIdsGuiasPagamentosAtualizarIndicadorMulta = new ArrayList<Integer>();
 		Collection<DebitoACobrar> debitosACobrarInserir = new ArrayList<DebitoACobrar>();
 
-		Collection guiasPagamentoImovel = repositorioFaturamento
-				.obterGuiasPagamentoImovel(imovel.getId(),
-						DebitoCreditoSituacao.NORMAL,
-						DebitoCreditoSituacao.INCLUIDA,
-						DebitoCreditoSituacao.RETIFICADA,
-						referenciaArrecadacao);
-		
+		Collection guiasPagamentoImovel = repositorioFaturamento.obterGuiasPagamentoImovel(imovel.getId(),
+				DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.INCLUIDA, DebitoCreditoSituacao.RETIFICADA,
+				referenciaArrecadacao);
 
 		if (!Util.isVazioOrNulo(guiasPagamentoImovel)) {
 
-			
 			Iterator guiasPagamentoIterator = guiasPagamentoImovel.iterator();
-			
+
 			while (guiasPagamentoIterator.hasNext()) {
 				Object[] dadosGuiasPagamento = (Object[]) guiasPagamentoIterator.next();
-				
+
 				Integer anoMes = Util.recuperaAnoMesDaData((Date) dadosGuiasPagamento[2]);
-				
+
 				if (anoMes <= referenciaArrecadacao) {
-					
+
 					GuiaPagamento guiaPagamento = new GuiaPagamento();
 					if (dadosGuiasPagamento[0] != null) {
 						guiaPagamento.setId((Integer) dadosGuiasPagamento[0]);
@@ -2793,296 +2934,266 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 					if (dadosGuiasPagamento[4] != null) {
 						guiaPagamento.setIndicadoCobrancaMulta((Short) dadosGuiasPagamento[4]);
 					}
-					
+
 					DebitoTipo debitoTipoGuiaPagamento = new DebitoTipo();
 					if (dadosGuiasPagamento[5] != null) {
 						debitoTipoGuiaPagamento.setId((Integer) dadosGuiasPagamento[5]);
 						guiaPagamento.setDebitoTipo(debitoTipoGuiaPagamento);
 					}
-					
-					Date menorDataPagamento = repositorioCobranca
-							.pesquisarMenorDataPagamentoGuiaPagamento(
-									guiaPagamento.getId(), imovel
-									.getId(), guiaPagamento.getDebitoTipo().getId());
-					
+
+					Date menorDataPagamento = repositorioCobranca.pesquisarMenorDataPagamentoGuiaPagamento(
+							guiaPagamento.getId(), imovel.getId(), guiaPagamento.getDebitoTipo().getId());
+
 					boolean indicadorExistePagamentoClassificadoGuiaPagamento = repositorioFaturamento
 							.obterIndicadorPagamentosClassificadosGuiaPagamentoReferenciaMenorIgualAtual(
-									guiaPagamento.getId(), imovel
-									.getId(), guiaPagamento
-									.getDebitoTipo()
-									.getId(),
+									guiaPagamento.getId(), imovel.getId(), guiaPagamento.getDebitoTipo().getId(),
 									referenciaArrecadacao);
-					
+
 					CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = new CalcularAcrescimoPorImpontualidadeHelper();
-					calcularAcrescimoPorImpontualidade = this
-							.getControladorCobranca()
-							.calcularAcrescimoPorImpontualidade(
-									guiaPagamento.getAnoMesReferenciaContabil(),
-									guiaPagamento.getDataVencimento(),
-									menorDataPagamento,
-									guiaPagamento.getValorDebito(),
-									BigDecimal.ZERO,
-									guiaPagamento.getIndicadoCobrancaMulta(),
-									""+ referenciaArrecadacao,
-									null,
+					calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
+							.calcularAcrescimoPorImpontualidade(guiaPagamento.getAnoMesReferenciaContabil(),
+									guiaPagamento.getDataVencimento(), menorDataPagamento,
+									guiaPagamento.getValorDebito(), BigDecimal.ZERO,
+									guiaPagamento.getIndicadoCobrancaMulta(), "" + referenciaArrecadacao, null,
 									ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
-					
+
 					DebitoTipo debitoTipo = null;
 					BigDecimal valorDebito = new BigDecimal(0.00);
-					
+
 					if (indicadorMulta.equals(ConstantesSistema.SIM)
 							&& calcularAcrescimoPorImpontualidade.getValorMulta().compareTo(BigDecimal.ZERO) == 1
 							&& indicadorExistePagamentoClassificadoGuiaPagamento) {
-						
+
 						debitoTipo = new DebitoTipo(DebitoTipo.MULTA_IMPONTUALIDADE);
 						valorDebito = calcularAcrescimoPorImpontualidade.getValorMulta();
 					}
-					
+
 					if (indicadorJuros.equals(ConstantesSistema.SIM)
 							&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(BigDecimal.ZERO) == 1
 							&& indicadorExistePagamentoClassificadoGuiaPagamento) {
-						
+
 						debitoTipo = new DebitoTipo(DebitoTipo.JUROS_MORA);
 						valorDebito = calcularAcrescimoPorImpontualidade.getValorJurosMora();
 					}
-					
+
 					if (indicadorAtualizacao.equals(ConstantesSistema.SIM)
-							&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) == 1
-							&& indicadorExistePagamentoClassificadoGuiaPagamento) {
-						
+							&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(
+									BigDecimal.ZERO) == 1 && indicadorExistePagamentoClassificadoGuiaPagamento) {
+
 						debitoTipo = new DebitoTipo(DebitoTipo.ATUALIZACAO_MONETARIA);
 						valorDebito = calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria();
 					}
-					
+
 					if (valorDebito.intValue() > 0) {
-						DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
-								referenciaArrecadacao,
-								referenciaFaturamento,
-								imovel, 
-								numeroPrestacaoDebito,
-								numeroPrestacaoCobradas,
-								guiaPagamento,
-								valorDebito,
-								debitoTipo, Usuario.USUARIO_BATCH);
-						
+						DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(referenciaArrecadacao,
+								referenciaFaturamento, imovel, numeroPrestacaoDebito, numeroPrestacaoCobradas,
+								guiaPagamento, valorDebito, debitoTipo, Usuario.USUARIO_BATCH);
+
 						colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.add(guiaPagamento.getId());
-						
+
 						debitosACobrarInserir.add(debitoACobrar);
 					}
 				}
 			}
-			
-			if (colecaoIdsGuiasPagamentosAtualizarIndicadorMulta != null && !colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.isEmpty()) {
-				repositorioFaturamento.atualizarIndicadorMultaDeGuiaPagamento(colecaoIdsGuiasPagamentosAtualizarIndicadorMulta);
+
+			if (colecaoIdsGuiasPagamentosAtualizarIndicadorMulta != null
+					&& !colecaoIdsGuiasPagamentosAtualizarIndicadorMulta.isEmpty()) {
+				repositorioFaturamento
+						.atualizarIndicadorMultaDeGuiaPagamento(colecaoIdsGuiasPagamentosAtualizarIndicadorMulta);
 			}
 		}
 		return debitosACobrarInserir;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Collection<DebitoACobrar> gerarAcrescimosConta(Short indicadorGeracaoMulta, Short indicadorGeracaoJuros, Short indicadorGeracaoAtualizacao,
-			Imovel imovel, boolean indicadorEncerrandoArrecadacao) throws ErroRepositorioException, ControladorException {
-		
+	private Collection<DebitoACobrar> gerarAcrescimosConta(Short indicadorGeracaoMulta, Short indicadorGeracaoJuros,
+			Short indicadorGeracaoAtualizacao, Imovel imovel, boolean indicadorEncerrandoArrecadacao)
+			throws ErroRepositorioException, ControladorException {
+
 		SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 		Integer referenciaArrecadacao = sistemaParametros.getAnoMesArrecadacao();
 
-		Collection colecaoContaImovel = obterContasParaGerarAcrescimos(referenciaArrecadacao, imovel, indicadorEncerrandoArrecadacao);
-		
+		Collection colecaoContaImovel = obterContasParaGerarAcrescimos(referenciaArrecadacao, imovel,
+				indicadorEncerrandoArrecadacao);
+
 		Iterator contasIterator = colecaoContaImovel.iterator();
 
 		Collection<DebitoACobrar> colecaoDebitoACobrarInserir = new ArrayList<DebitoACobrar>();
-		
+
 		Collection<Integer> colecaoIdsContasAtualizarIndicadorMulta = new ArrayList<Integer>();
-		
-		
-		if (!Util.isVazioOrNulo(colecaoContaImovel)) { 
-			Map<Integer, Boolean> mapIndicadorExistePagamentoConta = this.pesquisarIndicadorPagamentoConta(colecaoContaImovel,	referenciaArrecadacao);
-			
+
+		if (!Util.isVazioOrNulo(colecaoContaImovel)) {
+			Map<Integer, Boolean> mapIndicadorExistePagamentoConta = this.pesquisarIndicadorPagamentoConta(
+					colecaoContaImovel, referenciaArrecadacao);
+
 			Short numeroPrestacaoDebito = 1;
 			Short numeroPrestacaoCobradas = 0;
-			
+
 			while (contasIterator.hasNext()) {
 				Object[] dadosConta = (Object[]) contasIterator.next();
-				
+
 				Integer anoMes = Util.recuperaAnoMesDaData((Date) dadosConta[2]);
-				
+
 				if (anoMes <= referenciaArrecadacao) {
 					Conta conta = buildContaAcrescimoImpontualidade(dadosConta, imovel);
-					
+
 					Date pagamentoContasMenorData = null;
 					Integer idArrecadacaoForma = null;
-					
-					Object[] arrayPagamentoContasMenorData = repositorioFaturamento.obterArrecadacaoFormaPagamentoContasMenorData(conta);
-					
+
+					Object[] arrayPagamentoContasMenorData = repositorioFaturamento
+							.obterArrecadacaoFormaPagamentoContasMenorData(conta);
+
 					if (arrayPagamentoContasMenorData != null) {
 						idArrecadacaoForma = (Integer) arrayPagamentoContasMenorData[0];
 						pagamentoContasMenorData = (Date) arrayPagamentoContasMenorData[1];
 					}
-					
+
 					if (!isDebitoAutomatico(idArrecadacaoForma)) {
-						
+
 						boolean existePagamentoClassificadoConta;
 						if (mapIndicadorExistePagamentoConta.containsKey(conta.getId())) {
 							existePagamentoClassificadoConta = true;
 						} else {
 							existePagamentoClassificadoConta = false;
 						}
-						
-						BigDecimal valorMultasCobradas = repositorioFaturamento.pesquisarValorMultasCobradas(conta.getId());
-						
+
+						BigDecimal valorMultasCobradas = repositorioFaturamento.pesquisarValorMultasCobradas(conta
+								.getId());
+
 						Date vencimentoConta = calculaVencimentoConta(conta, existePagamentoClassificadoConta, null);
-						
-						CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
-								.calcularAcrescimoPorImpontualidade(
+
+						CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = this
+								.getControladorCobranca().calcularAcrescimoPorImpontualidade(
 										conta.getReferencia(),
-										//conta.getDataVencimentoConta(),
-										vencimentoConta,
-										pagamentoContasMenorData,
-										conta.getValorTotalContaSemImposto(),
-										valorMultasCobradas,
-										conta.getIndicadorCobrancaMulta(),
-										"" + referenciaArrecadacao,
-										conta.getId(),
+										// conta.getDataVencimentoConta(),
+										vencimentoConta, pagamentoContasMenorData,
+										conta.getValorTotalContaSemImposto(), valorMultasCobradas,
+										conta.getIndicadorCobrancaMulta(), "" + referenciaArrecadacao, conta.getId(),
 										ConstantesSistema.INDICADOR_ARRECADACAO_ATIVO);
-						
+
 						DebitoTipo debitoTipo = null;
 						BigDecimal valorDebito = new BigDecimal(0.00);
-						
+
 						if (indicadorGeracaoMulta.equals(ConstantesSistema.SIM)
 								&& calcularAcrescimoPorImpontualidade.getValorMulta().compareTo(BigDecimal.ZERO) == 1
 								&& existePagamentoClassificadoConta) {
-							
+
 							debitoTipo = new DebitoTipo(DebitoTipo.MULTA_IMPONTUALIDADE);
 							valorDebito = calcularAcrescimoPorImpontualidade.getValorMulta();
-							
-							DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
-									referenciaArrecadacao, imovel,
-									numeroPrestacaoDebito,
-									numeroPrestacaoCobradas,
-									conta, valorDebito, debitoTipo,
-									Usuario.USUARIO_BATCH);
-							
+
+							DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(referenciaArrecadacao,
+									imovel, numeroPrestacaoDebito, numeroPrestacaoCobradas, conta, valorDebito,
+									debitoTipo, Usuario.USUARIO_BATCH);
+
 							colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
 							colecaoDebitoACobrarInserir.add(debitoACobrar);
 						}
-						
+
 						if (indicadorGeracaoJuros.equals(ConstantesSistema.SIM)
 								&& calcularAcrescimoPorImpontualidade.getValorJurosMora().compareTo(BigDecimal.ZERO) == 1
 								&& existePagamentoClassificadoConta) {
-							
+
 							debitoTipo = new DebitoTipo(DebitoTipo.JUROS_MORA);
 							valorDebito = calcularAcrescimoPorImpontualidade.getValorJurosMora();
-							
-							DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
-									referenciaArrecadacao, imovel,
-									numeroPrestacaoDebito,
-									numeroPrestacaoCobradas,
-									conta, valorDebito, debitoTipo,
-									Usuario.USUARIO_BATCH);
-							
+
+							DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(referenciaArrecadacao,
+									imovel, numeroPrestacaoDebito, numeroPrestacaoCobradas, conta, valorDebito,
+									debitoTipo, Usuario.USUARIO_BATCH);
+
 							colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
 							colecaoDebitoACobrarInserir.add(debitoACobrar);
 						}
-						
+
 						if (indicadorGeracaoAtualizacao.equals(ConstantesSistema.SIM)
-								&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(BigDecimal.ZERO) == 1
-								&& existePagamentoClassificadoConta) {
-							
+								&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria().compareTo(
+										BigDecimal.ZERO) == 1 && existePagamentoClassificadoConta) {
+
 							debitoTipo = new DebitoTipo(DebitoTipo.ATUALIZACAO_MONETARIA);
 							valorDebito = calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria();
-							
-							DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
-									referenciaArrecadacao, imovel,
-									numeroPrestacaoDebito,
-									numeroPrestacaoCobradas,
-									conta, valorDebito, debitoTipo,
-									Usuario.USUARIO_BATCH);
-							
+
+							DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(referenciaArrecadacao,
+									imovel, numeroPrestacaoDebito, numeroPrestacaoCobradas, conta, valorDebito,
+									debitoTipo, Usuario.USUARIO_BATCH);
+
 							colecaoIdsContasAtualizarIndicadorMulta.add(conta.getId());
 							colecaoDebitoACobrarInserir.add(debitoACobrar);
 						}
-						
-						
+
 					}
-				} 
+				}
 			}
-			
+
 			if (colecaoIdsContasAtualizarIndicadorMulta != null && !colecaoIdsContasAtualizarIndicadorMulta.isEmpty()) {
 				repositorioFaturamento.atualizarIndicadorMultaDeConta(colecaoIdsContasAtualizarIndicadorMulta);
 			}
 		}
-		
+
 		return colecaoDebitoACobrarInserir;
 	}
-	
-	private Date calculaVencimentoConta(Conta conta, boolean pagamentoClassificadoConta, CobrancaDocumento documento) throws ControladorException {
+
+	private Date calculaVencimentoConta(Conta conta, boolean pagamentoClassificadoConta, CobrancaDocumento documento)
+			throws ControladorException {
 		Date vencimento = conta.getDataVencimentoConta();
 
 		if (pagamentoClassificadoConta) {
 			Fatura fatura = pesquisarFaturaDeConta(conta.getId());
-			
-			if (fatura != null ) {
+
+			if (fatura != null) {
 				vencimento = fatura.getVencimento();
 			} else if (documento != null) {
 				vencimento = documento.getEmissao();
 			}
 		}
-		
+
 		return vencimento;
-		
+
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private CobrancaDocumento obterDocumentoCobrancaPagamento(Integer idConta) throws ControladorException {
 		FiltroPagamento filtroPagamento = new FiltroPagamento();
 		filtroPagamento.adicionarParametro(new ParametroSimples(FiltroPagamento.CONTA, idConta));
 		filtroPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroPagamento.COBRANCA_DOCUMENTO);
-		
-		Collection colecaoPagamento = getControladorUtil().pesquisar(filtroPagamento,Pagamento.class.getSimpleName());
+
+		Collection colecaoPagamento = getControladorUtil().pesquisar(filtroPagamento, Pagamento.class.getSimpleName());
 		if (!colecaoPagamento.isEmpty()) {
 			Pagamento pagamento = (Pagamento) Util.retonarObjetoDeColecao(colecaoPagamento);
-			
+
 			if (pagamento.getCobrancaDocumento() != null) {
 				logger.info("	Documento de cobranca: " + pagamento.getCobrancaDocumento().getId());
 				return pagamento.getCobrancaDocumento();
 			} else {
-				logger.info("	Não tem documento de cobranca.");
+				logger.info("	Nï¿½o tem documento de cobranca.");
 				return null;
 			}
 		} else {
-			logger.info("	Não tem documento de cobranca.");
+			logger.info("	Nï¿½o tem documento de cobranca.");
 			return null;
 		}
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	private Collection obterContasParaGerarAcrescimos(Integer referenciaArrecadacao, Imovel imovel, boolean indicadorEncerrandoArrecadacao) {
+	private Collection obterContasParaGerarAcrescimos(Integer referenciaArrecadacao, Imovel imovel,
+			boolean indicadorEncerrandoArrecadacao) {
 		Date dataAnoMesReferenciaUltimoDia = Util.gerarDataApartirAnoMesRefencia(referenciaArrecadacao);
 
 		Collection colecaoContaImovel = null;
 
 		try {
 			if (!indicadorEncerrandoArrecadacao) {
-					colecaoContaImovel = repositorioFaturamento
-							.obterContasImovel(imovel.getId(),
-									DebitoCreditoSituacao.NORMAL,
-									DebitoCreditoSituacao.INCLUIDA,
-									DebitoCreditoSituacao.RETIFICADA,
-									dataAnoMesReferenciaUltimoDia);
+				colecaoContaImovel = repositorioFaturamento.obterContasImovel(imovel.getId(),
+						DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.INCLUIDA, DebitoCreditoSituacao.RETIFICADA,
+						dataAnoMesReferenciaUltimoDia);
 			} else {
-				colecaoContaImovel = repositorioFaturamento
-						.obterContasImovelComPagamento(imovel.getId(),
-								DebitoCreditoSituacao.NORMAL,
-								DebitoCreditoSituacao.INCLUIDA,
-								DebitoCreditoSituacao.RETIFICADA,
-								dataAnoMesReferenciaUltimoDia,
-								referenciaArrecadacao);
+				colecaoContaImovel = repositorioFaturamento.obterContasImovelComPagamento(imovel.getId(),
+						DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.INCLUIDA, DebitoCreditoSituacao.RETIFICADA,
+						dataAnoMesReferenciaUltimoDia, referenciaArrecadacao);
 			}
 		} catch (ErroRepositorioException e) {
 			logger.error(e);
 			throw new EJBException(e);
 		}
-		
+
 		return colecaoContaImovel;
 
 	}
@@ -3113,14 +3224,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		if (dadosConta[7] != null) {
 			conta.setIndicadorCobrancaMulta((Short) dadosConta[7]);
 		}
-		
+
 		conta.setImovel(imovel);
-		
+
 		return conta;
 	}
 
-	private boolean verificarCondicoesImovelCobrarAcrescimo(boolean indicadorEncerrandoArrecadacao, Map<Integer, Short> mapIndicadorAcrescimoCliente,
-			Imovel imovel, Categoria principalCategoria) {
+	private boolean verificarCondicoesImovelCobrarAcrescimo(boolean indicadorEncerrandoArrecadacao,
+			Map<Integer, Short> mapIndicadorAcrescimoCliente, Imovel imovel, Categoria principalCategoria) {
 		boolean cobrar = true;
 
 		if (!principalCategoria.categoriaCobraAcrescimo()) {
@@ -3132,11 +3243,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 
 		Short indicadorCobrancaAcrescimos = mapIndicadorAcrescimoCliente.get(imovel.getId());
-		if (indicadorCobrancaAcrescimos != null	&& indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO)) {
+		if (indicadorCobrancaAcrescimos != null && indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO)) {
 			cobrar = false;
 		}
 
-		if (indicadorCobrancaAcrescimos != null && (indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO) && !indicadorEncerrandoArrecadacao)) {
+		if (indicadorCobrancaAcrescimos != null
+				&& (indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO) && !indicadorEncerrandoArrecadacao)) {
 			cobrar = false;
 		}
 		return cobrar;
@@ -3147,7 +3259,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		Object[] arrayImoveisPorRota = (Object[]) imovelPorRotaIterator.next();
 
 		Imovel imovel = new Imovel();
-			
+
 		if (arrayImoveisPorRota[0] != null) {
 			imovel.setId((Integer) arrayImoveisPorRota[0]);
 		}
@@ -3180,12 +3292,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return imovel;
 	}
 
-	public Collection<EmitirContaHelper> emitir2ViaContas(Collection<Integer> idsContaEP, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) throws ControladorException {
+	public Collection<EmitirContaHelper> emitir2ViaContas(Collection<Integer> idsContaEP,
+			boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) throws ControladorException,
+			ErroRepositorioException {
 
 		Collection<EmitirContaHelper> colecaoHelper = new ArrayList<EmitirContaHelper>();
-		
+
 		for (Integer id : idsContaEP) {
-			
+
 			EmitirContaHelper helper;
 			try {
 				helper = (EmitirContaHelper) repositorioFaturamento.pesquisarConta(id).iterator().next();
@@ -3199,7 +3313,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			helper = preencherInscricaoImovel2Via(helper);
 			helper = preencherDadosClienteResponsavel2Via(helper);
 
-			if (helper.getIdImovelContaEnvio() != null && helper.getIdImovelContaEnvio().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL_FINAL_GRUPO)) {
+			if (helper.getIdImovelContaEnvio() != null
+					&& helper.getIdImovelContaEnvio().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL_FINAL_GRUPO)) {
 				helper.setClienteComFaturaAgrupada(new Short("1"));
 			} else {
 				helper.setClienteComFaturaAgrupada(new Short("2"));
@@ -3224,28 +3339,28 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			String dataLeituraAtual = "";
 			String leituraAnormalidadeFaturamento = "";
 			String descricaoAbreviadaLeituraAnormalidade = "";
-			
+
 			if (medicaoHistorico != null) {
 				if (medicaoHistorico[0] != null) {
 					leituraAnterior = "" + (Integer) medicaoHistorico[0];
 				}
-				
+
 				if (medicaoHistorico[1] != null) {
 					leituraAtual = "" + (Integer) medicaoHistorico[1];
 				}
-				
+
 				if (medicaoHistorico[3] != null) {
 					dataLeituraAnterior = Util.formatarData((Date) medicaoHistorico[3]);
 				}
-				
+
 				if (medicaoHistorico[2] != null) {
 					dataLeituraAtual = Util.formatarData((Date) medicaoHistorico[2]);
 				}
-				
+
 				if (medicaoHistorico[5] != null) {
 					leituraAnormalidadeFaturamento = "" + (Integer) medicaoHistorico[5];
 				}
-				
+
 				if (medicaoHistorico[7] != null) {
 					descricaoAbreviadaLeituraAnormalidade = "" + (String) medicaoHistorico[7];
 				}
@@ -3258,7 +3373,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 			String diasConsumo = "";
 			if (!dataLeituraAnterior.equals("") && !dataLeituraAtual.equals("")) {
-				diasConsumo = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) medicaoHistorico[3], (Date) medicaoHistorico[2]);
+				diasConsumo = ""
+						+ Util.obterQuantidadeDiasEntreDuasDatas((Date) medicaoHistorico[3], (Date) medicaoHistorico[2]);
 			}
 
 			String[] consumo = obterConsumoFaturadoConsumoMedioDiario(helper, tipoMedicao, diasConsumo);
@@ -3277,10 +3393,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			String descricaoAbreviadaAnormalidadeConsumo = "";
 			String descricaoAnormalidadeConsumo = "";
 			String consumoRateio = "";
-			
+
 			if (tipoLigacao != null) {
 				try {
-					consumoHistorico = getControladorMicromedicao().obterDadosConsumoConta(helper.getIdImovel(), helper.getAmReferencia(), tipoLigacao);
+					consumoHistorico = getControladorMicromedicao().obterDadosConsumoConta(helper.getIdImovel(),
+							helper.getAmReferencia(), tipoLigacao);
 				} catch (ControladorException e) {
 					logger.error(e);
 				}
@@ -3289,23 +3406,23 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 					if (consumoHistorico[0] != null) {
 						descricaoAbreviadaTipoConsumo = (String) consumoHistorico[0];
 					}
-					
+
 					if (consumoHistorico[1] != null) {
 						descricaoTipoConsumo = (String) consumoHistorico[1];
 					}
-					
+
 					if (consumoHistorico[2] != null) {
 						consumoMedio = "" + (Integer) consumoHistorico[2];
 					}
-					
+
 					if (consumoHistorico[3] != null) {
 						descricaoAbreviadaAnormalidadeConsumo = (String) consumoHistorico[3];
 					}
-					
+
 					if (consumoHistorico[4] != null) {
 						descricaoAnormalidadeConsumo = (String) consumoHistorico[4];
 					}
-					
+
 					if (consumoHistorico[5] != null) {
 						consumoRateio = "" + (Integer) consumoHistorico[5];
 					}
@@ -3331,7 +3448,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 			String consumoEconomia = "";
 			if (consumoFaturadoBigDecimal != null && qtdEconomiasBigDecimal != null) {
-				BigDecimal consumoEconomiaBigDecimal = consumoFaturadoBigDecimal.divide(qtdEconomiasBigDecimal, 2, RoundingMode.UP);
+				BigDecimal consumoEconomiaBigDecimal = consumoFaturadoBigDecimal.divide(qtdEconomiasBigDecimal, 2,
+						RoundingMode.UP);
 				consumoEconomia = Util.formatarMoedaReal(consumoEconomiaBigDecimal);
 				helper.setConsumoEconomia(consumoEconomia.substring(0, (consumoEconomia.length() - 3)));
 			}
@@ -3353,46 +3471,47 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 			helper.setCodigoAuxiliarString(codigoAuxiliar.toString());
 
-			StringBuilder mesagemConsumo = obterMensagemRateioConsumo(helper, consumoRateio, medicaoHistorico, tipoMedicao);
+			StringBuilder mesagemConsumo = obterMensagemRateioConsumo(helper, consumoRateio, medicaoHistorico,
+					tipoMedicao);
 			helper.setMensagemConsumoString(mesagemConsumo.toString());
 
 			Collection<?> linhasDescricaoServicosTarifasTotalHelper = gerarLinhasDescricaoServicoTarifasRelatorio(
 					helper, consumoRateio, medicaoHistorico, tipoMedicao, false);
-			
+
 			helper.setColecaoContaLinhasDescricaoServicosTarifasTotalHelper(linhasDescricaoServicosTarifasTotalHelper);
 
 			BigDecimal valorConta = obterValorConta2Via(helper);
 			helper.setValorContaString(Util.formatarMoedaReal(valorConta));
 			helper.setValorConta(valorConta);
-			
+
 			CreditoRealizado creditoRealizadoBolsaAgua = pesquisarCreditoRealizadoBolsaAgua(helper);
 			if (creditoRealizadoBolsaAgua != null) {
 				helper.setValorCreditoBolsaAgua(creditoRealizadoBolsaAgua.getValorCredito());
 			}
-			
+
 			helper = preencherDadosPagamento2Via(id, helper, valorConta);
 			helper = preencherInfoCodigoBarras2Via(helper, valorConta);
 			helper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(helper, 1)));
 			helper = preencherDadosQualidadeAgua2Via(helper);
-			
-			
-			//validação para trazer cfpCnpj caso exista. Paulo Almeida - 01.02.2022
+
+			// validação para trazer cfpCnpj caso exista. Paulo Almeida -
+			// 01.02.2022
 			String cpfCnpj = null;
-			
+
 			try {
 				cpfCnpj = consultarCpfCnpjCliente(helper.getIdImovel());
-				
+
 			} catch (Exception e) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("erro.sistema", e);
 			}
-			
-				if(!cpfCnpj.equalsIgnoreCase("") && cpfCnpj != null) {
-					helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta);
-				}else { 
-					helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
-				}
-				
+
+			if (!cpfCnpj.equalsIgnoreCase("") && cpfCnpj != null) {
+				helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta);
+			} else {
+				helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
+			}
+
 			Integer esferaPoder = null;
 			try {
 				esferaPoder = repositorioFaturamento.pesquisarEsferaPoderImovelConta(id);
@@ -3401,7 +3520,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				throw new ControladorException("erro.sistema", e);
 			}
 
-			// Nao exibe demonstrativo de impostos para imoveis publicos federais
+			// Nao exibe demonstrativo de impostos para imoveis publicos
+			// federais
 			if (esferaPoder.shortValue() != EsferaPoder.FEDERAL) {
 				helper.setInformarImpostos(true);
 
@@ -3410,7 +3530,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				helper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
 				helper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
 				helper.setValorImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[3]);
-				
+
 				if (isMunipicioContaIgualMunicipioAgenciaReguladora(helper, dadosAliquotasImpostos)) {
 					helper.setDescricaoAgenciaReguladora((String) dadosAliquotasImpostos[4]);
 					helper.setPercentualAgenciaReguladora((BigDecimal) dadosAliquotasImpostos[5]);
@@ -3443,61 +3563,76 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			String dataLeituraAnteriorInformada = "";
 			String dataLeituraAtualInformada = "";
 
-			MedicaoHistorico medicaoHistoricoAgua = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(
-					helper.getIdImovel(),helper.getAmReferencia());
+			MedicaoHistorico medicaoHistoricoAgua = getControladorMicromedicao()
+					.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(helper.getIdImovel(),
+							helper.getAmReferencia());
 
-			MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(
-					helper.getIdImovel(), helper.getAmReferencia());
+			MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao()
+					.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(helper.getIdImovel(),
+							helper.getAmReferencia());
 
 			if (medicaoHistoricoAgua != null) {
 
-				MedicaoHistorico medicaoHistoricoAguaMesAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(
-						helper.getIdImovel(), Util.subtrairMesDoAnoMes(helper.getAmReferencia(), 1));
+				MedicaoHistorico medicaoHistoricoAguaMesAnterior = getControladorMicromedicao()
+						.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(helper.getIdImovel(),
+								Util.subtrairMesDoAnoMes(helper.getAmReferencia(), 1));
 
 				if (medicaoHistoricoAgua.getLeituraAnteriorInformada() != null) {
 					leituraAnteriorInformada = medicaoHistoricoAgua.getLeituraAnteriorInformada() + "";
 				}
-				
+
 				if (medicaoHistoricoAgua.getLeituraAtualInformada() != null) {
 					leituraAtualInformada = medicaoHistoricoAgua.getLeituraAtualInformada() + "";
 				}
-				
+
 				if (medicaoHistoricoAgua.getDataLeituraAtualInformada() != null) {
 					dataLeituraAtualInformada = Util.formatarData(medicaoHistoricoAgua.getDataLeituraAtualInformada());
 				}
-				
+
 				if (medicaoHistoricoAguaMesAnterior != null) {
 					if (medicaoHistoricoAguaMesAnterior.getDataLeituraAtualInformada() != null) {
-						dataLeituraAnteriorInformada = Util.formatarData(medicaoHistoricoAguaMesAnterior.getDataLeituraAtualInformada());
+						dataLeituraAnteriorInformada = Util.formatarData(medicaoHistoricoAguaMesAnterior
+								.getDataLeituraAtualInformada());
 					}
 				}
 
 			} else if (medicaoHistoricoPoco != null) {
 
-				MedicaoHistorico medicaoHistoricoPocoMesAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(
-						helper.getIdImovel(), Util.subtrairMesDoAnoMes(helper.getAmReferencia(), 1));
+				MedicaoHistorico medicaoHistoricoPocoMesAnterior = getControladorMicromedicao()
+						.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(helper.getIdImovel(),
+								Util.subtrairMesDoAnoMes(helper.getAmReferencia(), 1));
 
 				if (medicaoHistoricoPoco.getLeituraAnteriorInformada() != null) {
 					leituraAnteriorInformada = medicaoHistoricoPoco.getLeituraAnteriorInformada() + "";
 				}
-				
+
 				if (medicaoHistoricoPoco.getLeituraAtualInformada() != null) {
 					leituraAtualInformada = medicaoHistoricoPoco.getLeituraAtualInformada() + "";
 				}
-				
+
 				if (medicaoHistoricoPoco.getDataLeituraAtualInformada() != null) {
 					dataLeituraAtualInformada = Util.formatarData(medicaoHistoricoPoco.getDataLeituraAtualInformada());
 				}
-				
+
 				if (medicaoHistoricoPocoMesAnterior.getDataLeituraAtualInformada() != null) {
-					dataLeituraAnteriorInformada = Util.formatarData(medicaoHistoricoPocoMesAnterior.getDataLeituraAtualInformada());
+					dataLeituraAnteriorInformada = Util.formatarData(medicaoHistoricoPocoMesAnterior
+							.getDataLeituraAtualInformada());
 				}
 			}
-			
+
 			helper.setLeituraAnteriorInformada(leituraAnteriorInformada);
 			helper.setLeituraAtualInformada(leituraAtualInformada);
 			helper.setDataLeituraAnteriorInformada(dataLeituraAnteriorInformada);
 			helper.setDataLeituraAtualInformada(dataLeituraAtualInformada);
+
+			try {
+				String cpfCnpf = consultarCpfCnpjCliente(helper.getIdImovel());
+				if (!cpfCnpf.equalsIgnoreCase("")) {
+					registrarFichaCompensacao(id);
+				}
+			} catch (ControladorException e) {
+				throw new ActionServletException("atencao.erro_registrar_conta");
+			}
 		}
 
 		return colecaoHelper;
@@ -3514,14 +3649,15 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return emitirContaHelper;
 	}
 
-	private EmitirContaHelper preencherDadosClienteResponsavel2Via(EmitirContaHelper helper) throws ControladorException {
+	private EmitirContaHelper preencherDadosClienteResponsavel2Via(EmitirContaHelper helper)
+			throws ControladorException {
 		String idResponsavel = "";
 		String enderecoResponsavel = "";
 		Integer idImovelContaEnvio = helper.getIdImovelContaEnvio();
-		
+
 		if (idImovelContaEnvio != null
-				&& (idImovelContaEnvio.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL) 
-						|| idImovelContaEnvio.equals(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL))) {
+				&& (idImovelContaEnvio.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL) || idImovelContaEnvio
+						.equals(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL))) {
 
 			Integer id = pesquisarIdClienteResponsavelConta(helper.getIdConta(), false);
 
@@ -3531,24 +3667,25 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			}
 
 		}
-		
+
 		helper.setIdClienteResponsavel(idResponsavel);
 		helper.setEnderecoClienteResponsavel(enderecoResponsavel);
-		
+
 		return helper;
 	}
 
 	private EmitirContaHelper preencherInscricaoImovel2Via(EmitirContaHelper emitirContaHelper) {
 		Localidade localidade = new Localidade(emitirContaHelper.getIdLocalidade());
-		
+
 		SetorComercial setorComercial = new SetorComercial();
 		setorComercial.setCodigo(emitirContaHelper.getCodigoSetorComercialConta());
-		
+
 		Quadra quadra = new Quadra();
 		quadra.setNumeroQuadra(emitirContaHelper.getIdQuadraConta());
 
-		Imovel imovel = new Imovel(localidade, setorComercial, quadra, emitirContaHelper.getLoteConta(), emitirContaHelper.getSubLoteConta());
-		
+		Imovel imovel = new Imovel(localidade, setorComercial, quadra, emitirContaHelper.getLoteConta(),
+				emitirContaHelper.getSubLoteConta());
+
 		emitirContaHelper.setInscricaoImovel(imovel.getInscricaoFormatada());
 		return emitirContaHelper;
 	}
@@ -3567,61 +3704,57 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	}
 
 	private BigDecimal obterValorConta2Via(EmitirContaHelper emitirContaHelper) {
-		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(), emitirContaHelper.getValorCreditos(),
-				emitirContaHelper.getDebitos(), emitirContaHelper.getValorImpostos());
+		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(),
+				emitirContaHelper.getValorCreditos(), emitirContaHelper.getDebitos(),
+				emitirContaHelper.getValorImpostos());
 
 		BigDecimal valorConta = conta.getValorTotal();
 		return valorConta;
 	}
 
-	private EmitirContaHelper preencherRepresentacaoNumericaCodBarras2Via(EmitirContaHelper emitirContaHelper, BigDecimal valorConta) throws ControladorException {
-		Integer digitoVerificadorConta = new Integer(""+ emitirContaHelper.getDigitoVerificadorConta());
+	private EmitirContaHelper preencherRepresentacaoNumericaCodBarras2Via(EmitirContaHelper emitirContaHelper,
+			BigDecimal valorConta) throws ControladorException {
+		Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
 
 		String anoMes = "" + emitirContaHelper.getAmReferencia();
 		String mesAno = anoMes.substring(4, 6) + anoMes.substring(0, 4);
 
 		String representacaoNumericaCodBarra = "";
-		
+
 		Date dataValidade = obterDataValidade2ViaConta(emitirContaHelper);
 		emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
 
 		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 
-			representacaoNumericaCodBarra = this
-					.getControladorArrecadacao()
-					.obterRepresentacaoNumericaCodigoBarra(3, valorConta,
-							emitirContaHelper.getIdLocalidade(),
-							emitirContaHelper.getIdImovel(), mesAno,
-							digitoVerificadorConta, null, null, null, null,
-							null, null, null);
+			representacaoNumericaCodBarra = this.getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(3,
+					valorConta, emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAno,
+					digitoVerificadorConta, null, null, null, null, null, null, null);
 
-			String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11)
-					+ "-" + representacaoNumericaCodBarra.substring(11, 12)
-					+ " " + representacaoNumericaCodBarra.substring(12, 23)
-					+ "-" + representacaoNumericaCodBarra.substring(23, 24)
-					+ " " + representacaoNumericaCodBarra.substring(24, 35)
-					+ "-" + representacaoNumericaCodBarra.substring(35, 36)
-					+ " " + representacaoNumericaCodBarra.substring(36, 47)
-					+ "-" + representacaoNumericaCodBarra.substring(47, 48);
+			String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11) + "-"
+					+ representacaoNumericaCodBarra.substring(11, 12) + " "
+					+ representacaoNumericaCodBarra.substring(12, 23) + "-"
+					+ representacaoNumericaCodBarra.substring(23, 24) + " "
+					+ representacaoNumericaCodBarra.substring(24, 35) + "-"
+					+ representacaoNumericaCodBarra.substring(35, 36) + " "
+					+ representacaoNumericaCodBarra.substring(36, 47) + "-"
+					+ representacaoNumericaCodBarra.substring(47, 48);
 			emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
 
-			String representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra
-					.substring(0, 11)
-					+ representacaoNumericaCodBarra.substring(12, 23)
-					+ representacaoNumericaCodBarra.substring(24, 35)
+			String representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11)
+					+ representacaoNumericaCodBarra.substring(12, 23) + representacaoNumericaCodBarra.substring(24, 35)
 					+ representacaoNumericaCodBarra.substring(36, 47);
 			emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
 
 		}
-		
+
 		return emitirContaHelper;
 	}
-	
-	
-	private EmitirContaHelper preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(EmitirContaHelper emitirContaHelper, BigDecimal valorConta) throws ControladorException {
 
-			String representacaoNumericaCodBarra = "";
-		
+	private EmitirContaHelper preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(
+			EmitirContaHelper emitirContaHelper, BigDecimal valorConta) throws ControladorException {
+
+		String representacaoNumericaCodBarra = "";
+
 		Date dataValidade = obterDataValidade2ViaConta(emitirContaHelper);
 		emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
 
@@ -3642,25 +3775,26 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								fatorVencimento);
 
 			representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
-	
+
 			String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra;
 			emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
 
 			String representacaoNumericaCodBarraSemDigito = especificacaoCodigoBarra;
-			
+
 			emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
 
 		}
-		
+
 		return emitirContaHelper;
 	}
-	
 
-	private EmitirContaHelper preencherDadosQualidadeAgua2Via(EmitirContaHelper emitirContaHelper) throws ControladorException {
+	private EmitirContaHelper preencherDadosQualidadeAgua2Via(EmitirContaHelper emitirContaHelper)
+			throws ControladorException {
 		Object[] parmsQualidadeAgua = null;
 		parmsQualidadeAgua = pesquisarParmsQualidadeAgua(emitirContaHelper);
 		Imovel imovelQuadraFace = getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
-		String[] qualidadeAgua = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper, imovelQuadraFace.getQuadraFace().getId());
+		String[] qualidadeAgua = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper, imovelQuadraFace
+				.getQuadraFace().getId());
 
 		if (parmsQualidadeAgua != null) {
 			if (parmsQualidadeAgua[0] != null) {
@@ -3671,7 +3805,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 				emitirContaHelper.setNumeroCloroResidual(Util.formatarMoedaReal((BigDecimal) parmsQualidadeAgua[1]));
 			}
 		}
-		// Padrão
+		// Padrï¿½o
 		emitirContaHelper.setPadraoCor(qualidadeAgua[0]);
 		emitirContaHelper.setPadraoTurbidez(qualidadeAgua[1]);
 		emitirContaHelper.setPadraoCloro(qualidadeAgua[3]);
@@ -3714,14 +3848,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		} else {
 			emitirContaHelper.setContaSemCodigoBarras("2");
 		}
-		
+
 		return emitirContaHelper;
 	}
 
-	private EmitirContaHelper preencherDadosPagamento2Via(Integer idContaEP, EmitirContaHelper emitirContaHelper, BigDecimal valorConta)
-			throws ControladorException {
+	private EmitirContaHelper preencherDadosPagamento2Via(Integer idContaEP, EmitirContaHelper emitirContaHelper,
+			BigDecimal valorConta) throws ControladorException {
 		Pagamento pagamento = getControladorArrecadacao().pesquisarPagamentoDeConta(idContaEP);
-		
+
 		if (pagamento != null && pagamento.getValorPagamento().compareTo(valorConta) >= 0) {
 			emitirContaHelper.setContaPaga("1");
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -3730,16 +3864,17 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			emitirContaHelper.setContaPaga("2");
 			emitirContaHelper.setDataPagamentoConta("");
 		}
-		
+
 		return emitirContaHelper;
 	}
 
-	public String[] obterMensagemDebitoConta3Partes(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro) throws ControladorException {
+	public String[] obterMensagemDebitoConta3Partes(EmitirContaHelper emitirContaHelper,
+			SistemaParametro sistemaParametro) throws ControladorException {
 
 		String[] linhasImpostosRetidos = new String[3];
 		Integer anoMesReferenciaFinal = sistemaParametro.getAnoMesFaturamento();
 		Integer dataVencimentoFinalInteger = sistemaParametro.getAnoMesArrecadacao();
-		String anoMesSubtraidoString = ""+ Util.subtrairMesDoAnoMes(dataVencimentoFinalInteger, 1);
+		String anoMesSubtraidoString = "" + Util.subtrairMesDoAnoMes(dataVencimentoFinalInteger, 1);
 
 		int anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMesReferenciaFinal, 1);
 		int ano = Integer.parseInt(anoMesSubtraidoString.substring(0, 4));
@@ -3748,25 +3883,27 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		Calendar dataVencimentoFinal = GregorianCalendar.getInstance();
 		dataVencimentoFinal.set(Calendar.YEAR, ano);
 		dataVencimentoFinal.set(Calendar.MONTH, (mes - 1));
-		dataVencimentoFinal.set(Calendar.DAY_OF_MONTH,dataVencimentoFinal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		dataVencimentoFinal.set(Calendar.DAY_OF_MONTH, dataVencimentoFinal.getActualMaximum(Calendar.DAY_OF_MONTH));
 
 		Date dataFinalDate = dataVencimentoFinal.getTime();
 
 		Date dataVencimento = Util.converteStringParaDate("01/01/1900");
 
 		ObterDebitoImovelOuClienteHelper debitoImovelClienteHelper = getControladorCobranca()
-				.obterDebitoImovelOuCliente(1,
-						"" + emitirContaHelper.getIdImovel(), null, null,
-						"190001", "" + anoMesSubtraido, dataVencimento,
-						dataFinalDate, 1, 2, 2, 2, 2, 1, 2, null);
+				.obterDebitoImovelOuCliente(1, "" + emitirContaHelper.getIdImovel(), null, null, "190001",
+						"" + anoMesSubtraido, dataVencimento, dataFinalDate, 1, 2, 2, 2, 2, 1, 2, null);
 
 		if (debitoImovelClienteHelper != null
-				&& ((debitoImovelClienteHelper.getColecaoGuiasPagamentoValores() != null && !debitoImovelClienteHelper.getColecaoGuiasPagamentoValores().isEmpty()) 
-					|| (debitoImovelClienteHelper.getColecaoContasValores() != null && !debitoImovelClienteHelper.getColecaoContasValores().isEmpty()))) {
+				&& ((debitoImovelClienteHelper.getColecaoGuiasPagamentoValores() != null && !debitoImovelClienteHelper
+						.getColecaoGuiasPagamentoValores().isEmpty()) || (debitoImovelClienteHelper
+						.getColecaoContasValores() != null && !debitoImovelClienteHelper.getColecaoContasValores()
+						.isEmpty()))) {
 			String dataVencimentoFinalString = Util.formatarData(dataFinalDate);
-			linhasImpostosRetidos[0] = "SR(A). CLIENTE, EM  " + dataVencimentoFinalString + ", REGISTRAMOS QUE V.SA. ESTAVA EM DÉBITO COM A " + sistemaParametro.getNomeAbreviadoEmpresa().toUpperCase() + ".";
-			linhasImpostosRetidos[1] = "COMPAREÇA A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO. EVITE O CORTE.";
-			linhasImpostosRetidos[2] = "CASO O SEU DÉBITO TENHA SIDO PAGO APÓS A DATA INDICADA, DESCONSIDERE ESTE AVISO.";
+			linhasImpostosRetidos[0] = "SR(A). CLIENTE, EM  " + dataVencimentoFinalString
+					+ ", REGISTRAMOS QUE V.SA. ESTAVA EM Dï¿½BITO COM A "
+					+ sistemaParametro.getNomeAbreviadoEmpresa().toUpperCase() + ".";
+			linhasImpostosRetidos[1] = "COMPAREï¿½A A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO. EVITE O CORTE.";
+			linhasImpostosRetidos[2] = "CASO O SEU Dï¿½BITO TENHA SIDO PAGO APï¿½S A DATA INDICADA, DESCONSIDERE ESTE AVISO.";
 			isImovelEmDebito = true;
 		} else {
 			linhasImpostosRetidos[0] = "A COSANPA AGRADECE SUA PONTUALIDADE.";
@@ -3778,14 +3915,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		return linhasImpostosRetidos;
 	}
 
-	public String[] obterMensagemConta3Partes(EmitirContaHelper helper, SistemaParametro sistemaParametro) throws ControladorException {
+	public String[] obterMensagemConta3Partes(EmitirContaHelper helper, SistemaParametro sistemaParametro)
+			throws ControladorException {
 		String[] mensagens = new String[3];
 		mensagens = obterMensagemAnormalidadeConsumo(helper);
 
 		Imovel imovel = new Imovel();
 		imovel.setId(helper.getIdImovel());
 
-		String msgQuitacaoAnualDebitos = this.obterMsgQuitacaoDebitos(imovel, Integer.valueOf(helper.getAmReferencia()));
+		String msgQuitacaoAnualDebitos = this
+				.obterMsgQuitacaoDebitos(imovel, Integer.valueOf(helper.getAmReferencia()));
 
 		if (msgQuitacaoAnualDebitos != null && !msgQuitacaoAnualDebitos.equals("")) {
 			mensagens = new String[3];
@@ -3799,21 +3938,24 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 			boolean existeMensagem = false;
 			try {
-				mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null, helper.getIdGerenciaRegional(), helper.getIdLocalidade(), helper.getIdSetorComercial());
+				mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null,
+						helper.getIdGerenciaRegional(), helper.getIdLocalidade(), helper.getIdSetorComercial());
 				if (mensagensConta != null) {
 					mensagens = montarMensagensConta2Via(mensagensConta);
 					existeMensagem = true;
 				}
 
 				if (!existeMensagem) {
-					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null, helper.getIdGerenciaRegional(), helper.getIdLocalidade(), null);
+					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null,
+							helper.getIdGerenciaRegional(), helper.getIdLocalidade(), null);
 					if (mensagensConta != null) {
 						mensagens = montarMensagensConta2Via(mensagensConta);
 						existeMensagem = true;
 					}
 				}
 				if (!existeMensagem) {
-					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null, helper.getIdGerenciaRegional(), null, null);
+					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null,
+							helper.getIdGerenciaRegional(), null, null);
 
 					if (mensagensConta != null) {
 						mensagens = montarMensagensConta2Via(mensagensConta);
@@ -3821,7 +3963,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 					}
 				}
 				if (!existeMensagem) {
-					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, helper.getIdFaturamentoGrupo(), null, null, null);
+					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper,
+							helper.getIdFaturamentoGrupo(), null, null, null);
 
 					if (mensagensConta != null) {
 						mensagens = montarMensagensConta2Via(mensagensConta);
@@ -3847,10 +3990,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 		return mensagens;
 	}
-	
+
 	private String[] montarMensagensConta2Via(Object[] mensagensImpostosRetidos) {
 		String[] linhasImpostosRetidos = new String[3];
-		
+
 		if (mensagensImpostosRetidos[0] != null) {
 			linhasImpostosRetidos[0] = (String) mensagensImpostosRetidos[0];
 		} else {
@@ -3872,24 +4015,26 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void gerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo) throws ControladorException {
+	public void gerarQuantidadeContasImpressaoTermica(Integer referencia, Integer idFaturamentoGrupo)
+			throws ControladorException {
 		Collection colecaoQtde = new ArrayList();
 		Collection<ContaImpressaoTermicaQtde> colecaoContas = new ArrayList();
 		try {
-			colecaoQtde = repositorioFaturamento.pesquisarGerarQuantidadeContasImpressaoTermica(referencia, idFaturamentoGrupo);
-			if(colecaoQtde != null && !colecaoQtde.isEmpty()) {
+			colecaoQtde = repositorioFaturamento.pesquisarGerarQuantidadeContasImpressaoTermica(referencia,
+					idFaturamentoGrupo);
+			if (colecaoQtde != null && !colecaoQtde.isEmpty()) {
 				Iterator colecaoQtdeIterator = colecaoQtde.iterator();
-				while(colecaoQtdeIterator.hasNext()) {
+				while (colecaoQtdeIterator.hasNext()) {
 					Object[] arrayColecao = (Object[]) colecaoQtdeIterator.next();
-					
+
 					ContaImpressaoTermicaQtde contaImpressaoTermicaQtde = new ContaImpressaoTermicaQtde();
-					contaImpressaoTermicaQtde.setIdGrupoFaturamento((Integer)arrayColecao[0]);
-					contaImpressaoTermicaQtde.setReferencia((Integer)arrayColecao[1]);
-					contaImpressaoTermicaQtde.setIdLocalidade((Integer)arrayColecao[2]);
-					contaImpressaoTermicaQtde.setDescricaoLocalidade((String)arrayColecao[3]);
-					contaImpressaoTermicaQtde.setQtdeContas((Integer)arrayColecao[4]);
+					contaImpressaoTermicaQtde.setIdGrupoFaturamento((Integer) arrayColecao[0]);
+					contaImpressaoTermicaQtde.setReferencia((Integer) arrayColecao[1]);
+					contaImpressaoTermicaQtde.setIdLocalidade((Integer) arrayColecao[2]);
+					contaImpressaoTermicaQtde.setDescricaoLocalidade((String) arrayColecao[3]);
+					contaImpressaoTermicaQtde.setQtdeContas((Integer) arrayColecao[4]);
 					contaImpressaoTermicaQtde.setDataGeracao(new Date());
-					
+
 					colecaoContas.add(contaImpressaoTermicaQtde);
 				}
 				this.getControladorBatch().inserirColecaoObjetoParaBatch(colecaoContas);
@@ -3898,36 +4043,44 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			e.printStackTrace();
 		}
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Collection<DebitoACobrarCategoria> inserirDebitosACobrarCategoriaBatch(Collection<DebitoACobrar> debitos) throws ControladorException {
+	public Collection<DebitoACobrarCategoria> inserirDebitosACobrarCategoriaBatch(Collection<DebitoACobrar> debitos)
+			throws ControladorException {
 
 		Collection<DebitoACobrarCategoria> colecaoDebitosACobrarCategorias = new ArrayList();
 
 		for (DebitoACobrar debito : debitos) {
-			colecaoDebitosACobrarCategorias.addAll((Collection<DebitoACobrarCategoria>)inserirDebitoACobrarCategoriaBatch(debito, debito.getImovel()));
+			colecaoDebitosACobrarCategorias
+					.addAll((Collection<DebitoACobrarCategoria>) inserirDebitoACobrarCategoriaBatch(debito,
+							debito.getImovel()));
 		}
 		return colecaoDebitosACobrarCategorias;
 	}
-	
-	public StringBuilder preencherDadosAliquotaImposto(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
+
+	public StringBuilder preencherDadosAliquotaImposto(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
+			throws ControladorException {
 		Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(emitirContaHelper, false);
-		
+
 		if (dadosAliquotasImpostos.length > 0) {
 			contaTxt.append(Util.completaString("Tributos", 15));
 			contaTxt.append(Util.truncarString(Util.completaString((String) dadosAliquotasImpostos[0], 21), 21));
 			contaTxt.append(Util.completaString("(%)", 15));
-			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[1]), 13));
-			contaTxt.append(Util.completaString("Base de cálculo", 15));
-			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(
+					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[1]), 13));
+			contaTxt.append(Util.completaString("Base de cï¿½lculo", 15));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(
+					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
 			contaTxt.append(Util.completaString("Valor (R$)", 15));
-			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[3]), 13));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(
+					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[3]), 13));
 		}
-		
+
 		return contaTxt;
 	}
-	
-	private StringBuilder preencherContatosAgenciaReguladora(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ErroRepositorioException, ControladorException {
+
+	private StringBuilder preencherContatosAgenciaReguladora(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
+			throws ErroRepositorioException, ControladorException {
 		Object[] contatoAgenciaReguladora = this.pesquisarContatosAgenciaReguladora(emitirContaHelper);
 		if (contatoAgenciaReguladora != null && contatoAgenciaReguladora.length > 0) {
 			contaTxt.append(Util.completaString("Ag. reguladora", 14));
@@ -3939,19 +4092,24 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		}
 		return contaTxt;
 	}
-	
-	private StringBuilder preencherDadosAliquotaAgenciaReguladora(EmitirContaHelper helper, StringBuilder contaTxt) throws ControladorException {
+
+	private StringBuilder preencherDadosAliquotaAgenciaReguladora(EmitirContaHelper helper, StringBuilder contaTxt)
+			throws ControladorException {
 		Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(helper, false);
-		
-		if (dadosAliquotasImpostos.length > 0 && isMunipicioContaIgualMunicipioAgenciaReguladora(helper, dadosAliquotasImpostos)) {
+
+		if (dadosAliquotasImpostos.length > 0
+				&& isMunipicioContaIgualMunicipioAgenciaReguladora(helper, dadosAliquotasImpostos)) {
 			contaTxt.append(Util.truncarString(Util.completaString((String) dadosAliquotasImpostos[4], 21), 21));
-			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[5]), 13));
-			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
-			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[6]), 13));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(
+					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[5]), 13));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(
+					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
+			contaTxt.append(Util.completaStringComEspacoAEsquerda(
+					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[6]), 13));
 		} else {
 			contaTxt.append(Util.completaStringComEspacoAEsquerda("", 60));
 		}
-		
+
 		return contaTxt;
 	}
 
@@ -3967,18 +4125,20 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			return null;
 		}
 	}
-	
+
 	public void emitirComunicado(Integer idImovel, Integer tipoComunicado) {
-		
+
 		try {
 			FiltroComunicadoEmitirConta filtro = new FiltroComunicadoEmitirConta();
-			
+
 			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.IMOVEL_ID, idImovel));
-			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.INDICADOR_EMISSAO, ConstantesSistema.NAO));
-			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.TIPO_COMUNICADO, tipoComunicado));	
-			
-			ComunicadoEmitirConta comunicado = (ComunicadoEmitirConta) getControladorUtil().pesquisar(filtro, ComunicadoEmitirConta.class.getName()).iterator().next();
-			
+			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.INDICADOR_EMISSAO,
+					ConstantesSistema.NAO));
+			filtro.adicionarParametro(new ParametroSimples(FiltroComunicadoEmitirConta.TIPO_COMUNICADO, tipoComunicado));
+
+			ComunicadoEmitirConta comunicado = (ComunicadoEmitirConta) getControladorUtil()
+					.pesquisar(filtro, ComunicadoEmitirConta.class.getName()).iterator().next();
+
 			comunicado.setIndicadorEmitido(ConstantesSistema.SIM);
 			comunicado.setUltimaAlteracao(new Date());
 
@@ -3987,97 +4147,19 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			logger.error("Erro ao emitir comunicado.");
 		}
 	}
-	
-	private boolean isMunipicioContaIgualMunicipioAgenciaReguladora(EmitirContaHelper helper, Object[] dadosAliquotasImpostos)
-			throws NumberFormatException, ControladorException {
-		
-		int municipioAgenciaReguladora = new Integer(getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.AGENCIA_REGULADORA_MUNICIPIO.toString()));
-		
+
+	private boolean isMunipicioContaIgualMunicipioAgenciaReguladora(EmitirContaHelper helper,
+			Object[] dadosAliquotasImpostos) throws NumberFormatException, ControladorException {
+
+		int municipioAgenciaReguladora = new Integer(
+				getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.AGENCIA_REGULADORA_MUNICIPIO
+						.toString()));
+
 		Localidade localidade = pesquisarLocalidadeConta(helper);
-		
+
 		int municipio = localidade != null ? localidade.getMunicipio().getId() : -1;
-		
+
 		return municipio == municipioAgenciaReguladora;
 	}
-	
 
-	public File registroFichaCompensacao(Integer idConta, BigDecimal valor)
-			throws ControladorException {
-		try {
-			FichaCompensacao fichaCompensacao = null;
-
-			fichaCompensacao = registrarBoleto(idConta, valor);
-				
-				String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_FICHA_COMPENSACAO_API_BB.toString());
-				
-				GsanApi api = new GsanApi(url);
-				api.invoke(fichaCompensacao);
-				return api.salvar(fichaCompensacao.getIdConta().toString());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ActionServletException("atencao.nao_foi_possivel_registrar_conta");
-		}		
-	}
-	
-	public FichaCompensacao registrarBoleto(Integer idConta,
-			BigDecimal valor) throws ControladorException, ErroRepositorioException {
-		FiltroCliente filtroCliente = new FiltroCliente();
-		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
-		
-		Conta conta = new Conta();		
-		Cliente cliente = new Cliente();
-		conta = repositorioFaturamento.contaFichaCompensacao(idConta);		
-		Imovel imovel = conta.getImovel();
-		Integer idImovel = imovel.getIdImovel();
-        cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
-        Integer idCliente = cliente.getIdCliente();
-		
-		Integer idConv = 315828; // Em produção, informar o número do convênio de cobrança, com 7 dígitos.
-		Integer numeroCarteira = 17; // Em produção, informar o número da carteira de cobrança.
-		Integer numeroVariacaoCarteira = 35; // Em produção, informar o número da variação da carteira de cobrança.
-		Short codigoModalidade = 1; // Código que identifica a característica dos boletos dentro das modalidades de
-									// cobrança existentes no BB. Domínio: 1 - Simples; 4 - Vinculada.
-		String dataEmissao =  conta.getDataEmissao().toString(); //Pegar da conta
-		String dataVencimento = conta.getDataVencimentoConta().toString(); //pegar da conta
-		String valorOriginal = valor.toString().replace(".", "").replace(",", "");
-		String codigoAceite = "A"; // Domínio: A - Aceito; N - Não aceito
-		Short codigoTipoTitulo = 2; // Código para identificar o tipo de boleto de cobrança. Verifique os domínios
-									// possíveis no swagger.
-		String indicadorPermissaoRecebimentoParcial = "N"; // Código para identificação da autorização de pagamento
-															// parcial do boleto. "S" ou "N"
-		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", conta.getId().toString(), idConv);
-		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
-		String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
-		PagadorDTO pagadorDTO = new PagadorDTO(); // Identifica o pagador do boleto.
-		
-		if(cliente.getCpf() != null) { 
-		pagadorDTO.setTipoInscricao((short) 1);
-		pagadorDTO.setNumeroInscricao(cliente.getCpf());
-		}else {
-		pagadorDTO.setTipoInscricao((short) 2);	
-		pagadorDTO.setNumeroInscricao(cliente.getCnpj());
-		}
-		
-		pagadorDTO.setNome(cliente.getNome());
-		pagadorDTO.setEndereco(imovel.getEnderecoFormatado()); 
-		pagadorDTO.setCidade(imovel.getNomeMunicipio());
-		pagadorDTO.setBairro(imovel.getNomeBairro());
-		pagadorDTO.setUf("PA");		
-		
-		pagadorDTO.setCep(imovel.getCodigoCep());
-		
-		FichaCompensacao fichaCompensacaoApi = new FichaCompensacao(idConta, idConv, numeroCarteira,
-				numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
-				codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagadorDTO);
-		
-		FichaCompensacao fichaCompensacaoBanco = new FichaCompensacao(idConta, idConv, numeroCarteira,
-				numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
-				codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idCliente);
-
-		Fachada.getInstancia().inserir(fichaCompensacaoBanco);
-
-		return fichaCompensacaoApi;
-	}
-	
 }
