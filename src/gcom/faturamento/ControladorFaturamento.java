@@ -16557,10 +16557,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
 			Integer numeroVariacaoCarteira = 35; // Em produ��o, informar o n�mero da varia��o da carteira de cobran�a.
 			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades de
-			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
+//			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
+//			String dataEmissao = "18.02.2022";
+//			String dataVencimento = "17.03.2022";
 			String dataEmissao = Util.formatarDataComPontoDDMMAAAA(conta.getDataEmissao()).toString(); //Pegar da conta
 			String dataVencimento = Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString(); //pegar da conta
-			Double valorOriginal = 1.0;
+			Double valorOriginal = Double.valueOf(conta.getValorTotalConta());
 			String codigoAceite = "A"; // Dom�nio: A - Aceito; N - N�o aceito
 			Short codigoTipoTitulo = 2; // C�digo para identificar o tipo de boleto de cobran�a. Verifique os dom�nios
 			// poss�veis no swagger.

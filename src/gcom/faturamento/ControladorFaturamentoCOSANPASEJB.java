@@ -3459,7 +3459,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			helper.setColecaoContaLinhasDescricaoServicosTarifasTotalHelper(linhasDescricaoServicosTarifasTotalHelper);
 
 			BigDecimal valorConta = obterValorConta2Via(helper);
-			valorConta = BigDecimal.ONE;
 			helper.setValorContaString(Util.formatarMoedaReal(valorConta));
 			helper.setValorConta(valorConta);
 
