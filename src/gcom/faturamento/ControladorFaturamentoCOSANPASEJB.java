@@ -25,7 +25,9 @@ import javax.ejb.SessionBean;
 
 import org.jboss.logging.Logger;
 
+import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
+import gcom.arrecadacao.FichaCompensacao;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
@@ -33,6 +35,7 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.EsferaPoder;
+import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
@@ -52,8 +55,10 @@ import gcom.cobranca.FiltroCobrancaDocumentoItem;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
+import gcom.fachada.Fachada;
 import gcom.faturamento.bean.DebitoCobradoAgrupadoHelper;
 import gcom.faturamento.bean.EmitirContaHelper;
+import gcom.faturamento.bean.PagadorDTO;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.FiltroConsumoTarifa;
 import gcom.faturamento.conta.ComunicadoEmitirConta;
@@ -69,6 +74,7 @@ import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarCategoria;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
+import gcom.gui.ActionServletException;
 import gcom.micromedicao.FiltroLeituraSituacao;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.consumo.ConsumoAnormalidade;
@@ -78,7 +84,9 @@ import gcom.micromedicao.consumo.FiltroComunicadoEmitirConta;
 import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.medicao.MedicaoHistorico;
+import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.CodigoBarras;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
@@ -483,7 +491,15 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt = preencherMensagensConta(sistemaParametro, emitirContaHelper, contaTxt);
 								contaTxt = preencherMensagemAnormalidadeConsumo(contaTxt, mensagemContaAnormalidade);
 								contaTxt = preencherQuantidadeValorDebitos(sistemaParametro, emitirContaHelper, contaTxt);
-								contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
+								
+								//validação para trazer cfpCnpj caso exista. Paulo Almeida - 01.02.2022
+								String cpfCnpf = consultarCpfCnpjCliente(emitirContaHelper.getIdImovel());
+								
+								if(cpfCnpf.equalsIgnoreCase("")) {
+										contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
+									}else { 
+									    contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
+									}
 								contaTxt.append(Util.completaString(cont + "", 8));
 
 								String[] qualidade = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper, imovelEmitido.getQuadraFace().getId());
@@ -540,6 +556,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt = preencherContatosAgenciaReguladora(emitirContaHelper, contaTxt);
 								contaTxt = preencherDadosAliquotaAgenciaReguladora(emitirContaHelper, contaTxt);
 								contaTxt = preencherFlagCarimbo(emitirContaHelper, contaTxt);
+								
+								if(cpfCnpf.equalsIgnoreCase("")) {
+									    contaTxt.append(Util.completaString("", 240));
+										contaTxt.append(Util.completaString("Documento de Arrecadacao", 25));
+									}else {
+										contaTxt = preencherDadosEmissaoConta(emitirContaHelper, contaTxt);
+								}
 								
 								if (isEmitirImpressaoTermica(imovelEmitido, municipioEntrega, municipioImovel)) {
 
@@ -976,14 +999,50 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		String anoMesString = "" + emitirContaHelper.getAmReferencia();
 		String mesAnoFormatado = anoMesString.substring(4, 6) + anoMesString.substring(0, 4);
 		Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
-
+				
 		String representacaoNumericaCodBarra = this.getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(3, valorConta,
 				emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAnoFormatado, digitoVerificadorConta, null, null, null, null, null,
 				null, null);
-
+		
 		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
 		return contaTxt;
 	}
+	
+	// [Obter código de barras Ficha de Compensação]
+	//  Paulo Almeida 30.12.2021
+	private StringBuilder preencherCodigoBarrasContaFichaCompensacao(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
+		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(), emitirContaHelper.getValorCreditos(),
+				emitirContaHelper.getDebitos(), emitirContaHelper.getValorImpostos());
+
+		if (emitirContaHelper.getValorRateioAgua() != null)
+			conta.setValorRateioAgua(emitirContaHelper.getValorRateioAgua());
+		if (emitirContaHelper.getValorRateioEsgoto() != null)
+			conta.setValorRateioEsgoto(emitirContaHelper.getValorRateioEsgoto());
+
+		BigDecimal valorConta = conta.getValorTotalContaComRateioBigDecimal();
+
+		emitirContaHelper.setValorConta(valorConta);
+
+		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+		String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
+
+			Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
+			String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
+
+			String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+							ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
+							ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+							valorConta,
+							nossoNumeroSemDV.toString(),
+							ConstantesSistema.CARTEIRA_CONTA,
+							fatorVencimento);
+
+		String representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+		
+		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
+		return contaTxt;
+	}
+	
 
 	@SuppressWarnings("rawtypes")
 	private StringBuilder preencherQuantidadeValorDebitos(SistemaParametro sistemaParametro, EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
@@ -1478,6 +1537,24 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	   }
 		return contaTxt;
 	}
+	
+	private StringBuilder preencherDadosEmissaoConta(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ErroRepositorioException, ControladorException {
+		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+		String numDoc = Util.formatarAnoMesParaMesAnoSemBarra(emitirContaHelper.getAmReferencia()).concat(emitirContaHelper.getIdConta().toString());
+
+			contaTxt.append(Util.completaString("BANCO DO BRASIL", 15));
+			contaTxt.append(Util.completaString("Pagavel preferencialmente no Banco do Brasil", 60));
+			contaTxt.append(Util.completaString("numDoc", 16));
+			contaTxt.append(Util.completaString((nossoNumero.toString()), 15));
+			contaTxt.append(Util.completaString((String) ConstantesSistema.CARTEIRA_CONTA, 2));
+			contaTxt.append(Util.completaString("R$", 2));
+			contaTxt.append(Util.completaString("Pagavel em todas as instituicoes bancarias. Em caso de atrasos, multas, juros e correcao serao cobrados na proxima fatura.", 130));
+			contaTxt.append(Util.completaString("Ficha de Compensacao", 25));
+	
+		return contaTxt;
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	private StringBuilder preencherDataPrevistaCronograma(FaturamentoGrupo faturamentoGrupo, EmitirContaHelper emitirContaHelper, 
 			StringBuilder contaTxt) throws ControladorException {
@@ -1550,6 +1627,32 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 		return contaTxt;
 	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	private String consultarCpfCnpjCliente(Integer idImovel)
+			throws ErroRepositorioException {
+		String cnpjCpf = "";
+
+		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);
+
+		if (colecaoClienteImovel2 != null && !colecaoClienteImovel2.isEmpty()) {
+			ClienteImovel clienteImovelRespConta2 = (ClienteImovel) colecaoClienteImovel2.iterator().next();
+
+			if (clienteImovelRespConta2 != null) {
+				Cliente cliente2 = clienteImovelRespConta2.getCliente();
+
+				if (cliente2.getCnpjFormatado() != null && !cliente2.getCnpjFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCnpjFormatado();
+		 } else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCpfFormatado();
+				}
+
+			}
+		}
+		
+		return cnpjCpf;
+	}
 
 	@SuppressWarnings("rawtypes")
 	private StringBuilder preencherCpfCnpjCliente(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
@@ -1567,7 +1670,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 				if (cliente2.getCnpjFormatado() != null && !cliente2.getCnpjFormatado().equalsIgnoreCase("")) {
 					cnpjCpf = cliente2.getCnpjFormatado();
-				} else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
+		 } else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
 					cnpjCpf = cliente2.getCpfFormatado();
 				}
 
@@ -3271,8 +3374,25 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			helper = preencherInfoCodigoBarras2Via(helper, valorConta);
 			helper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(helper, 1)));
 			helper = preencherDadosQualidadeAgua2Via(helper);
-			helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
-
+			
+			
+			//validação para trazer cfpCnpj caso exista. Paulo Almeida - 01.02.2022
+			String cpfCnpj = null;
+			
+			try {
+				cpfCnpj = consultarCpfCnpjCliente(helper.getIdImovel());
+				
+			} catch (Exception e) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", e);
+			}
+			
+				if(!cpfCnpj.equalsIgnoreCase("") && cpfCnpj != null) {
+					helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta);
+				}else { 
+					helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
+				}
+				
 			Integer esferaPoder = null;
 			try {
 				esferaPoder = repositorioFaturamento.pesquisarEsferaPoderImovelConta(id);
@@ -3496,6 +3616,45 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 		return emitirContaHelper;
 	}
+	
+	
+	private EmitirContaHelper preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(EmitirContaHelper emitirContaHelper, BigDecimal valorConta) throws ControladorException {
+
+			String representacaoNumericaCodBarra = "";
+		
+		Date dataValidade = obterDataValidade2ViaConta(emitirContaHelper);
+		emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
+
+		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
+
+			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+			String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
+			
+				Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
+				String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
+
+				String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+								ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
+								ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+								valorConta,
+								nossoNumeroSemDV.toString(),
+								ConstantesSistema.CARTEIRA_CONTA,
+								fatorVencimento);
+
+			representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+	
+			String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra;
+			emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+
+			String representacaoNumericaCodBarraSemDigito = especificacaoCodigoBarra;
+			
+			emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+
+		}
+		
+		return emitirContaHelper;
+	}
+	
 
 	private EmitirContaHelper preencherDadosQualidadeAgua2Via(EmitirContaHelper emitirContaHelper) throws ControladorException {
 		Object[] parmsQualidadeAgua = null;
@@ -3840,4 +3999,85 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 		return municipio == municipioAgenciaReguladora;
 	}
+	
+
+	public File registroFichaCompensacao(Integer idConta, BigDecimal valor)
+			throws ControladorException {
+		try {
+			FichaCompensacao fichaCompensacao = null;
+
+			fichaCompensacao = registrarBoleto(idConta, valor);
+				
+				String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_FICHA_COMPENSACAO_API_BB.toString());
+				
+				GsanApi api = new GsanApi(url);
+				api.invoke(fichaCompensacao);
+				return api.salvar(fichaCompensacao.getIdConta().toString());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ActionServletException("atencao.nao_foi_possivel_registrar_conta");
+		}		
+	}
+	
+	public FichaCompensacao registrarBoleto(Integer idConta,
+			BigDecimal valor) throws ControladorException, ErroRepositorioException {
+		FiltroCliente filtroCliente = new FiltroCliente();
+		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
+		
+		Conta conta = new Conta();		
+		Cliente cliente = new Cliente();
+		conta = repositorioFaturamento.contaFichaCompensacao(idConta);		
+		Imovel imovel = conta.getImovel();
+		Integer idImovel = imovel.getIdImovel();
+        cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
+        Integer idCliente = cliente.getIdCliente();
+		
+		Integer idConv = 315828; // Em produção, informar o número do convênio de cobrança, com 7 dígitos.
+		Integer numeroCarteira = 17; // Em produção, informar o número da carteira de cobrança.
+		Integer numeroVariacaoCarteira = 35; // Em produção, informar o número da variação da carteira de cobrança.
+		Short codigoModalidade = 1; // Código que identifica a característica dos boletos dentro das modalidades de
+									// cobrança existentes no BB. Domínio: 1 - Simples; 4 - Vinculada.
+		String dataEmissao =  conta.getDataEmissao().toString(); //Pegar da conta
+		String dataVencimento = conta.getDataVencimentoConta().toString(); //pegar da conta
+		String valorOriginal = valor.toString().replace(".", "").replace(",", "");
+		String codigoAceite = "A"; // Domínio: A - Aceito; N - Não aceito
+		Short codigoTipoTitulo = 2; // Código para identificar o tipo de boleto de cobrança. Verifique os domínios
+									// possíveis no swagger.
+		String indicadorPermissaoRecebimentoParcial = "N"; // Código para identificação da autorização de pagamento
+															// parcial do boleto. "S" ou "N"
+		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", conta.getId().toString(), idConv);
+		String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
+		String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
+		PagadorDTO pagadorDTO = new PagadorDTO(); // Identifica o pagador do boleto.
+		
+		if(cliente.getCpf() != null) { 
+		pagadorDTO.setTipoInscricao((short) 1);
+		pagadorDTO.setNumeroInscricao(cliente.getCpf());
+		}else {
+		pagadorDTO.setTipoInscricao((short) 2);	
+		pagadorDTO.setNumeroInscricao(cliente.getCnpj());
+		}
+		
+		pagadorDTO.setNome(cliente.getNome());
+		pagadorDTO.setEndereco(imovel.getEnderecoFormatado()); 
+		pagadorDTO.setCidade(imovel.getNomeMunicipio());
+		pagadorDTO.setBairro(imovel.getNomeBairro());
+		pagadorDTO.setUf("PA");		
+		
+		pagadorDTO.setCep(imovel.getCodigoCep());
+		
+		FichaCompensacao fichaCompensacaoApi = new FichaCompensacao(idConta, idConv, numeroCarteira,
+				numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
+				codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagadorDTO);
+		
+		FichaCompensacao fichaCompensacaoBanco = new FichaCompensacao(idConta, idConv, numeroCarteira,
+				numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
+				codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idCliente);
+
+		Fachada.getInstancia().inserir(fichaCompensacaoBanco);
+
+		return fichaCompensacaoApi;
+	}
+	
 }

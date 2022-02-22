@@ -9684,9 +9684,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     .append("contaImpressao.cttp_id as tipoConta, ")// 39
 				     .append("imovel.rota_identrega as rotaEntrega, ")// 40
 				     .append("imovel.imov_nnsequencialrotaentrega as seqRotaEntrega, ")// 41
-				     .append("imovel.imov_nnquadraentrega as numeroQuadraEntrega, ")// 42
-				     .append("cnt.cnta_vlrateioagua as valorRateioAgua, ") //43
-				     .append("cnt.cnta_vlrateioesgoto as valorRateioEsgoto, ") //44
+				     .append("imovel.cntt_copasa as codigoConvenio, ") //42
+				     .append("imovel.imov_nnquadraentrega as numeroQuadraEntrega, ")// 43
+				     .append("cnt.cnta_vlrateioagua as valorRateioAgua, ") //44
+				     .append("cnt.cnta_vlrateioesgoto as valorRateioEsgoto, ") //45
 				     .append("crrz.crrz_vlcredito as valorCreditoBolsaAgua ") //45
 				     .append("from cadastro.cliente_conta cliCnt ")
 				     .append("inner join faturamento.conta cnt on cliCnt.cnta_id=cnt.cnta_id ")
@@ -9759,6 +9760,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.addScalar("tipoConta", Hibernate.INTEGER)
 					.addScalar("rotaEntrega", Hibernate.INTEGER)
 					.addScalar("seqRotaEntrega", Hibernate.INTEGER)
+					.addScalar("codigoConvenio", Hibernate.INTEGER)
 					.addScalar("numeroQuadraEntrega", Hibernate.INTEGER)
 					.addScalar("valorRateioAgua",Hibernate.BIG_DECIMAL)
 					.addScalar("valorRateioEsgoto",Hibernate.BIG_DECIMAL)
@@ -13736,7 +13738,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "imovel.codigoDebitoAutomatico, " 
 					+ "faturamentoGrupo.anoMesReferencia, "
 					+ "cnt.valorRateioAgua, " 
-					+ "cnt.valorRateioEsgoto) "
+					+ "cnt.valorRateioEsgoto,"
+					+ "imovel.codigoConvenio) "
 					+ "FROM ClienteConta cliCnt "
 					+ "RIGHT JOIN cliCnt.conta cnt "
 					+ "LEFT JOIN cliCnt.clienteRelacaoTipo crt "
@@ -38283,7 +38286,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "clienteImoveisReposanvel.indicadorNomeConta, " //73
 					+ "clienteImoveisUsuario.cliente.id, " //74
 					+ "clienteImoveisUsuario.indicadorNomeConta, " //75
-					+ "imovel.indicadorEnvioContaFisica " //76
+					+ "imovel.indicadorEnvioContaFisica, " //76
+					+ "imovel.codigoConvenio " //77
 					+ "FROM Imovel imovel "
 					+ "INNER JOIN imovel.localidade localidade "
 					+ "INNER JOIN localidade.gerenciaRegional gerenciaRegional "
@@ -60214,7 +60218,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 	}
 	
-	
 	public Collection pesquisarContasVencimentoParaEnvioEmail(Integer idRota, Date dataVencimento)
 			throws ErroRepositorioException {
 		Collection retorno = null;
@@ -60273,6 +60276,50 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+	}
+	
+	public Conta contaFichaCompensacao(Integer idConta) throws ErroRepositorioException {
+		Conta conta = null;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append(" select * from Conta conta ")
+					.append(" where conta.id = :idConta ");
+
+			conta = (Conta) session.createQuery(consulta.toString())
+					   .setInteger("idConta", idConta);
+
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return conta;
+	}
+	
+	public Cliente clienteFichaCompensacao(Integer idImovel) throws ErroRepositorioException {
+		Cliente cliente = new Cliente();
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta;
+			
+			consulta = "select * "
+					+ "from cadastro.cliente cli "
+					+ "inner join cadastro.cliente_imovel cliim on cliim.clie_id = cli.clie_id"
+					+ "where cliim.imov_id = :idImovel and cliim.clim_dtrelacaofim is null ";
+
+			cliente = (Cliente) session.createQuery(consulta.toString())
+					   .setInteger("idImovel", idImovel);
+
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return cliente;
 	}
 
 }

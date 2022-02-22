@@ -1001,7 +1001,7 @@ public interface IControladorFaturamento {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisaAutosInfracaoDebitoACobrar(Integer idAutoInfracao) throws ControladorException;
 
-	public StringBuilder obterNossoNumeroFichaCompensacao(String idDocumentoTipo, String idDocumentoEmitido) throws ControladorException;
+	public StringBuilder obterNossoNumeroFichaCompensacao(String idDocumentoTipo, String idDocumentoEmitido, Integer codigoConvenio) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarAnoImovelEmissao2ViaDeclaracaoAnualQuitacaoDebitos(String idImovel) throws ControladorException;

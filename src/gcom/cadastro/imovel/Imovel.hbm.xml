@@ -65,6 +65,7 @@
         <property name="quantidadeNosAltos" 		 type="java.lang.Integer"    column="imov_qtdnosaltos" 					 length="3"/>
         <property name="individualizacao" 			 type="java.lang.Integer"    column="imov_individualizacao" 			 length="3"/>        
         <property name="indicadorEnvioContaFisica"   type="java.lang.Short"      column="imov_icenviocontafisica"     		 length="2" />
+        <property name="codigoConvenio"   type="java.lang.Integer"      column="cntt_copasa"     		 length="7" />
         
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to ImovelContaEnvio -->

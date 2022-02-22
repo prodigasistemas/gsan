@@ -108,6 +108,7 @@ public class EmitirContaHelper implements Serializable {
 	private Integer idRotaEntrega;
 	private Integer numeroSequencialRotaEntrega;
 	private Integer idConsumoAnormalidade;
+	private Integer codigoConvenio;
 	
 
 	// ---------------------------------------------------------
@@ -414,7 +415,7 @@ public class EmitirContaHelper implements Serializable {
 		this.anoMesFaturamentoGrupo = anoMesFaturamentoGrupo;
 		this.valorRateioAgua = valorRateioAgua;
 		this.valorRateioEsgoto = valorRateioEsgoto;
-	}
+		}
 
 	// utilizado no Emitir Segunda Via de Conta Tipo 2 (CAER e CAERN)
 	public EmitirContaHelper(Integer idConta, String nomeCliente, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta, Integer idQuadraConta, Short loteConta,
@@ -596,7 +597,7 @@ public class EmitirContaHelper implements Serializable {
 			BigDecimal valorImpostos, Date dataValidadeConta, Integer idImovel, Integer idLocalidade, Integer idGerenciaRegional, String nomeGerenciaRegional, Integer idLigacaoAguaSituacao,
 			Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, Integer idSetorComercial, Integer idFaturamentoGrupo, Integer idEmpresa, String descricaoLocalidade, String descricaoLigacaoAguaSituacao,
 			String descricaoLigacaoEsgotoSituacao, Integer idImovelContaEnvio, BigDecimal percentualEsgotoConta, String nomeImovel, Integer codDebitoAutomatico, int referencia, BigDecimal valorRateioAgua,
-			BigDecimal valorRateioEsgoto) {
+			BigDecimal valorRateioEsgoto, Integer codigoConvenio) {
 
 		this.idConta = idConta;
 		this.nomeCliente = nomeCliente;
@@ -636,6 +637,7 @@ public class EmitirContaHelper implements Serializable {
 		this.codigoDebitoAutomatico = codDebitoAutomatico;
 		this.valorRateioAgua = valorRateioAgua;
 		this.valorRateioEsgoto = valorRateioEsgoto;
+		this.codigoConvenio = codigoConvenio;
 
 	}
 
@@ -2008,5 +2010,13 @@ public class EmitirContaHelper implements Serializable {
 		} else {			
 			this.mensagemBolsaAgua = "";
 		}
+	}
+
+	public Integer getCodigoConvenio() {
+		return codigoConvenio;
+	}
+
+	public void setCodigoConvenio(Integer codigoConvenio) {
+		this.codigoConvenio = codigoConvenio;
 	}
 }
