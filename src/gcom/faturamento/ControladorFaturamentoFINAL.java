@@ -29041,9 +29041,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			// emite uma Ficha de Compensa√ß√£o(Boleto bancario)
 			if (valorConta.compareTo(EmitirContaHelper.VALOR_LIMITE_FICHA_COMPENSACAO) == 1) {
 
-				// representaÁ„o numÈrica do cÛdigo de barras
-				// [SB0030 - Obter representaÁ„o numÈrica do cÛdigo de barras da
-				// Ficha de CompensaÁ„o]
+				// representaÔøΩÔøΩo numÔøΩrica do cÔøΩdigo de barras
+				// [SB0030 - Obter representaÔøΩÔøΩo numÔøΩrica do cÔøΩdigo de barras da
+				// Ficha de CompensaÔøΩÔøΩo]
 
 				StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta()
 						.toString(), emitirContaHelper.getCodigoConvenio());
@@ -32373,7 +32373,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 			if (quantidadeContas != null && quantidadeContas.intValue() > 0) {
-<<<<<<< HEAD
 				
 				if (helper.getIdImovel() != null) {
 					System.out.println("**======== 1 - apagarDadosGeradosFaturarGrupoFaturamento ========**"+ "\n Imovel: " + helper.getIdImovel());
@@ -32382,11 +32381,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				} else {
 					System.out.println("**======== 1 - apagarDadosGeradosFaturarGrupoFaturamento ========**"+ "\n Grupo: " + helper.getFaturamentoGrupo());
 				}
-=======
 
-				System.out.println("**============ 1 - apagarDadosGeradosFaturarGrupoFaturamento ===============**"
-						+ "\n Imovel: " + helper.getIdImovel());
->>>>>>> 81d1cecc916614dd010db32207561e8e9b871424
 
 				try {
 					repositorioFaturamento.apagarContaImpressao(helper);
@@ -48105,6 +48100,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
+	
+//	this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+
+	
 	public StringBuilder obterNossoNumeroFichaCompensacao(String idDocumentoTipo, String idDocumentoEmitido, Integer codigoConvenio)
 			throws ControladorException {
 		StringBuilder nossoNumero = new StringBuilder();
@@ -54916,7 +54915,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Object[] retorno = null;
 
 		try {
-<<<<<<< HEAD
+
 			System.out.println("====> ID IMOVEL: " + (imovel.getId() != null ? imovel.getId() : null));
 			System.out.println("GERAR ARQUIVO TEXTO FATURAMENTO -- INICIO");
 			Conta conta = gerarArquivoTextoFaturamento
@@ -54924,11 +54923,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							anoMesFaturamento, faturamentoGrupo.getId());
 			System.out.println("GERAR ARQUIVO TEXTO FATURAMENTO -- FIM");
 			
-=======
-			Conta conta = gerarArquivoTextoFaturamento.pesquisarContaGerarArquivoTextoFaturamento(imovel,
-					anoMesFaturamento, faturamentoGrupo.getId());
 
->>>>>>> 81d1cecc916614dd010db32207561e8e9b871424
 			/*
 			 * Altera√ß√£o feita para permitir que todos os im√≥veis sejam
 			 * gerados na rota de leitura e impress√£o simultanea
@@ -54943,17 +54938,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			// GERAR ARQUIVO TEXTO
 			// --------------------------------------------------------------
-<<<<<<< HEAD
-			System.out.println("====> PESQUISANDO DOCUMENTO COBRAN«A ----INICIO");
+			System.out.println("====> PESQUISANDO DOCUMENTO COBRANÔøΩA ----INICIO");
 			Object[] registroArquivoTexto = gerarArquivoTextoFaturamento
 					.gerarArquivoTexto(imovel, conta, anoMesFaturamento, rota,
 							faturamentoGrupo, sistemaParametro, dataComando);
-			System.out.println("====> PESQUISANDO DOCUMENTO COBRAN«A ----FIM");
-=======
+			System.out.println("====> PESQUISANDO DOCUMENTO COBRANÔøΩA ----FIM");
 
-			Object[] registroArquivoTexto = gerarArquivoTextoFaturamento.gerarArquivoTexto(imovel, conta,
-					anoMesFaturamento, rota, faturamentoGrupo, sistemaParametro, dataComando);
->>>>>>> 81d1cecc916614dd010db32207561e8e9b871424
 			arquivoRetorno.append(registroArquivoTexto[0]);
 			int quantidadeRegistroArquivo = (Integer) registroArquivoTexto[1];
 

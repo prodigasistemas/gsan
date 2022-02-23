@@ -1318,8 +1318,9 @@ public class ImpressaoContaImpressoraTermica {
 				
 				emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
 					StringBuilder nossoNumero =
-							this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
-					String nossoNumeroSemDV = nossoNumero.toString().substring(0, 17);
+							this.getControladorFaturamento().
+							obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+					String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
 					
 						Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
 						String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);

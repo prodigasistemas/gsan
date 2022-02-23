@@ -647,7 +647,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 								contaTxt = preencherFlagCarimbo(emitirContaHelper, contaTxt);
 								
 								if(cpfCnpf.equalsIgnoreCase("")) {
-									    contaTxt.append(Util.completaString("", 240));
+									    contaTxt.append(Util.completaString("", 242));
 										contaTxt.append(Util.completaString("Documento de Arrecadacao", 25));
 									}else {
 										contaTxt = preencherDadosEmissaoConta(emitirContaHelper, contaTxt);
@@ -1696,12 +1696,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 	
 	private StringBuilder preencherDadosEmissaoConta(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ErroRepositorioException, ControladorException {
 		StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+		String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
 		String numDoc = Util.formatarAnoMesParaMesAnoSemBarra(emitirContaHelper.getAmReferencia()).concat(emitirContaHelper.getIdConta().toString());
 
 			contaTxt.append(Util.completaString("BANCO DO BRASIL", 15));
 			contaTxt.append(Util.completaString("Pagavel preferencialmente no Banco do Brasil", 60));
-			contaTxt.append(Util.completaString("numDoc", 16));
-			contaTxt.append(Util.completaString((nossoNumero.toString()), 15));
+			contaTxt.append(Util.completaString(numDoc, 16));
+			contaTxt.append(Util.completaString(nossoNumeroSemDV, 17));
 			contaTxt.append(Util.completaString((String) ConstantesSistema.CARTEIRA_CONTA, 2));
 			contaTxt.append(Util.completaString("R$", 2));
 			contaTxt.append(Util.completaString("Pagavel em todas as instituicoes bancarias. Em caso de atrasos, multas, juros e correcao serao cobrados na proxima fatura.", 130));
