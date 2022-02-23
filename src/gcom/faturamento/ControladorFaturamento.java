@@ -16585,8 +16585,19 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				pagador.setTipoInscricao((short) 2);
 				pagador.setNumeroInscricao(cliente.getCnpj());
 			}
-			pagador.setNome(cliente.getNome());
-			pagador.setEndereco(imovel.getEnderecoFormatado());
+			
+			if(cliente.getNome().length() > 30) {
+				pagador.setNome(cliente.getNome().substring(0,30));
+
+			} else {
+				pagador.setNome(cliente.getNome());
+			}
+			
+			if(imovel.getEnderecoFormatado().length() > 30){
+				pagador.setEndereco(imovel.getEnderecoFormatado().substring(0,30));
+			}else {
+				pagador.setEndereco(imovel.getEnderecoFormatado());
+			}
 			pagador.setCidade(nomeMunicipio);
 			pagador.setBairro(imovel.getNomeBairro());
 			pagador.setUf("PA");
