@@ -958,7 +958,7 @@ public class ImpressaoContaImpressoraTermica {
 				   linha += formarLinha(7, 0, 32, 2897, "PAGADOR: "+ obterNomeCliente(emitirContaHelper, imovelEmitido) , 0, 0);
 				   linha += formarLinha(7, 0, 516, 2897, cpfCnpj, 0, 0);
 				   linha += formarLinha(7, 0, 32, 2925,"NOSSO NUMERO", 0, 0);
-				   linha += formarLinha(7, 0, 32, 2945, nossoNumero.toString() , 0, 0); 
+				   linha += formarLinha(7, 0, 32, 2945, nossoNumero.toString().substring(3, 20) , 0, 0); 
 				   linha += formarLinha(7, 0, 251, 2925,"NUMERO DOCUMENTO", 0, 0);
 				   linha += formarLinha(7, 0, 251, 2945, numDoc, 0, 0);
 				   linha += formarLinha(7, 0, 450, 2925,"VENCIMENTO", 0, 0);
