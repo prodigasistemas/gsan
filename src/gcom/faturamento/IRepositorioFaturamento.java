@@ -3079,4 +3079,7 @@ public interface IRepositorioFaturamento {
 	
 	public Municipio municipio(Integer idLocalidade) throws ErroRepositorioException;
 	
+	public Boolean fichaCompensacaoExistente(Integer idConta) throws ErroRepositorioException;
+
+	
 }

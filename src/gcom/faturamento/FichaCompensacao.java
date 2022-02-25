@@ -53,6 +53,11 @@ public class FichaCompensacao {
 	}
 
 
+	public FichaCompensacao() {
+		
+	}
+
+
 	public Integer getId() {
 		return id;
 	}

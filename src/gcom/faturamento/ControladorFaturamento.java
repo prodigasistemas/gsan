@@ -206,6 +206,7 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
+import gcom.util.sms.ServicoSMS;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16189,7 +16190,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		try {
 			Conta conta = new Conta((Integer) contasEmail[0]);
 			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
-			String emailReceptor = (String) contasEmail[2];;
+			//String emailReceptor = (String) contasEmail[2];
+			String emailReceptor = "emandrad@cosanpa.pa.gov.br"; //EMAIL DO EDUARDO
 			String nomeCliente = (String) contasEmail[3];
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 			
@@ -16224,9 +16226,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			BigDecimal valorConta = (BigDecimal) contasEmail[10];
 			
 					if (ddd != null && telefone != null) {
-				String celular = ddd.concat(telefone);
-				celular.trim();
+				//String celular = ddd.concat(telefone);
+				//celular.trim();
 				
+				String celular = "91999822276"; // CELULAR DO EDUARDO
 				String codigoBarras = this
 				.getControladorArrecadacao()
 				.obterRepresentacaoNumericaCodigoBarra(3, valorConta,
@@ -16235,7 +16238,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						digitoVerificador.intValue(), null, null, null, null,
 						null, null, null);
 				
-				//ServicoSMS.enviarSMS(celular, ServicoSMS.MSG_VENCIMENTO);
+				ServicoSMS.enviarSMS(celular, ServicoSMS.MSG_VENCIMENTO);
 				System.out.println("ENVIANDO SMS PARA " + celular + " ---> cod de barras:" + codigoBarras);
 			}
 		} catch (Exception e) {
@@ -16247,14 +16250,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, rota.getId());
 
-		Integer idImovelAtual = 0;
+		Integer idImovel = 0;
+
 		try {
 			CreditoTipo creditoTipo = obterCreditoTipo(CreditoTipo.CREDITO_BOLSA_AGUA);
 			
 			Collection<Imovel> colecaoImovel = getControladorImovel().pesquisarImoveisBolsaAgua(rota);
 
 			for (Imovel imovel: colecaoImovel) {
-				idImovelAtual = imovel.getId();
+				idImovel = imovel.getId();
+
+				apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
 				System.out.println("INSERINDO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
 				apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
 				DeterminarValoresFaturamentoAguaEsgotoHelper helper = obterValoresCreditosBolsaAgua(imovel, grupo);
@@ -16280,7 +16286,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception e) {
-			System.out.println("ERRO CREDITO BOLSA AGUA PARA IMOVEL " + idImovelAtual);
+			System.out.println("    === ERRO CREDITO BOLSA AGUA PARA IMOVEL: " + idImovel);
 			e.printStackTrace();
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new ActionServletException("erro.credito.bolsa.agua");
@@ -16505,7 +16511,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	public void registrarFichaCompensacaoGrupo(Integer idGrupoFaturamento, Integer anoMesReferencia)
 			throws ControladorException, ErroRepositorioException {
 		Collection<Integer> idContas = repositorioFaturamento.idContasEmitidasFichaCompensacao(idGrupoFaturamento, anoMesReferencia);
-
+		
+		
 		try {
 			for(Integer idConta : idContas) {
 				registrarFichaCompensacao(idConta);
@@ -16517,25 +16524,36 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 	}
 	
-	protected void registrarFichaCompensacao(Integer idConta) throws ControladorException {
+	protected void registrarFichaCompensacao(Integer idConta) throws ControladorException, ErroRepositorioException {
 
-		try {
-			 
-			FichaCompensacaoDTO ficha = registrarBoleto(idConta);
+		Conta conta = new Conta();
+		conta = repositorioFaturamento.contaFichaCompensacao(idConta);
+		Double valorOriginal = Double.valueOf(conta.getValorTotalConta());
+		if (valorOriginal != 0 || !valorOriginal.equals("0.00")) {
+			Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistente(idConta);
+			if (fichaExistente == false) {
 
-			String url = Fachada.getInstancia().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
-	
-			GsanApi api = new GsanApi(url);
-			api.invoke(ficha);
-						
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
-		}		
-		
+				try {
+
+					FichaCompensacaoDTO ficha = registrarBoletoBB(idConta);
+
+					String url = Fachada.getInstancia().getSegurancaParametro(
+							SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
+
+					GsanApi api = new GsanApi(url);
+					api.invoke(ficha);
+					
+					registrarBoletoBancoDeDados(idConta);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
+				}
+			}
+		}
 	}
 	
-	public FichaCompensacaoDTO registrarBoleto(Integer idConta) throws ControladorException {
+	public FichaCompensacaoDTO registrarBoletoBB(Integer idConta) throws ControladorException {
 		
 		FichaCompensacaoDTO fichaCompensacaoApi = null;
 		try {
@@ -16585,7 +16603,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				pagador.setTipoInscricao((short) 2);
 				pagador.setNumeroInscricao(cliente.getCnpj());
 			}
-			
 			if(cliente.getNome().length() > 30) {
 				pagador.setNome(cliente.getNome().substring(0,30));
 
@@ -16598,27 +16615,67 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}else {
 				pagador.setEndereco(imovel.getEnderecoFormatado());
 			}
+
 			pagador.setCidade(nomeMunicipio);
 			pagador.setBairro(imovel.getNomeBairro());
 			pagador.setUf("PA");
 			pagador.setCep(imovel.getCodigoCep());
 			
-			FichaCompensacao fichaCompensacaoBanco = new FichaCompensacao(idConv, numeroCarteira,
-					numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
-					codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, imovel, cliente, conta);
+				fichaCompensacaoApi = new FichaCompensacaoDTO(idConv, numeroCarteira, 
+						numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, 
+						codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagador);
 			
-			getControladorUtil().inserir(fichaCompensacaoBanco);
-			
-			fichaCompensacaoApi = new FichaCompensacaoDTO(idConv, numeroCarteira, 
-					numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, 
-					codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagador);
-		
 		} catch (ErroRepositorioException e) {
 			throw new ActionServletException("erro.erro_registrar_conta");
 		}
 	
 				
 		return fichaCompensacaoApi;
+	}
+	
+        public void registrarBoletoBancoDeDados(Integer idConta) throws ControladorException {
+		
+		FichaCompensacaoDTO fichaCompensacaoApi = null;
+		try {
+			Conta conta = new Conta();
+			Cliente cliente = new Cliente();
+			conta = repositorioFaturamento.contaFichaCompensacao(idConta);
+			Imovel imovel = conta.getImovel();
+			Integer idLocalidade = imovel.getIdLocalidade();
+			Municipio municipio = repositorioFaturamento.municipio(idLocalidade);
+			String nomeMunicipio = municipio.getNome();
+			Integer idImovel = imovel.getId();
+			cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
+			Integer idConv = imovel.getCodigoConvenio(); // Em produ��o, informar o n�mero do conv�nio de cobran�a, com 7 d�gitos.
+			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
+			Integer numeroVariacaoCarteira = 35; // Em produ��o, informar o n�mero da varia��o da carteira de cobran�a.
+			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades de
+//			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
+//			String dataEmissao = "18.02.2022";
+//			String dataVencimento = "17.03.2022";
+			String dataEmissao = Util.formatarDataComPontoDDMMAAAA(conta.getDataEmissao()).toString(); //Pegar da conta
+			String dataVencimento = Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString(); //pegar da conta
+			Double valorOriginal = Double.valueOf(conta.getValorTotalConta());
+			String codigoAceite = "A"; // Dom�nio: A - Aceito; N - N�o aceito
+			Short codigoTipoTitulo = 2; // C�digo para identificar o tipo de boleto de cobran�a. Verifique os dom�nios
+			// poss�veis no swagger.
+			String indicadorPermissaoRecebimentoParcial = "N"; // C�digo para identifica��o da autoriza��o de pagamento
+			// parcial do boleto. "S" ou "N"
+			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", conta.getId().toString(), idConv);
+			String nossoNumeroSemDV = nossoNumero.toString();
+			String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
+				
+				FichaCompensacao fichaCompensacaoBanco = new FichaCompensacao(idConv, numeroCarteira,
+						numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite,
+						codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente, imovel, cliente, conta);
+				
+				getControladorUtil().inserir(fichaCompensacaoBanco);
+		    
+			
+		} catch (ErroRepositorioException e) {
+			throw new ActionServletException("erro.erro_registrar_conta");
+		}
+
 	}
 	
 	private String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {

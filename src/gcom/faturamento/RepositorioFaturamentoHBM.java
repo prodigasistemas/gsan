@@ -60360,6 +60360,35 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return cliente;
 	}
 	
+	public Boolean fichaCompensacaoExistente(Integer idConta) throws ErroRepositorioException {
+		Integer fichaCompensacao = null;
+		Boolean registroExistente = false;
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder consulta = new StringBuilder();
+
+			consulta.append("select fico.id from FichaCompensacao fico ")
+			.append("where fico.conta.id = :idConta");
+
+			fichaCompensacao = (Integer) session.createQuery(consulta.toString()).setInteger("idConta", idConta)
+					.setInteger("idConta", idConta).setMaxResults(1).uniqueResult();
+
+			if (fichaCompensacao != null) {
+				registroExistente = true;
+			} else {
+				registroExistente = false;
+			}
+
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return registroExistente;
+	}
+	
+
+	
 	public Collection idContasEmitidasFichaCompensacao(Integer idFaturamentoGrupo, Integer anoMesFaturamento) throws ErroRepositorioException {
 		Collection contas = null;
 		Session session = HibernateUtil.getSession();
