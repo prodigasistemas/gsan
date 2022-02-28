@@ -16512,25 +16512,23 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return sistemaParametro;
 	}
 	
-	public void registrarFichaCompensacaoGrupo(Integer idGrupoFaturamento, Integer anoMesReferencia) throws Exception {
+	public void registrarFichaCompensacaoGrupo(Integer idGrupoFaturamento, Integer anoMesReferencia,
+			int idFuncionalidadeIniciada) throws Exception {
+		int idUnidadeIniciada = 0;
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+				UnidadeProcessamento.FUNCIONALIDADE, idGrupoFaturamento);
 		Collection<Integer> idContas = repositorioFaturamento.idContasEmitidasFichaCompensacao(idGrupoFaturamento,
 				anoMesReferencia);
 		try {
 
 			for (Integer idConta : idContas) {
-				Conta conta = new Conta();
-				Cliente cliente = new Cliente();
-				conta = repositorioFaturamento.contaFichaCompensacao(idConta);
-				Imovel imovel = conta.getImovel();
-				Integer idImovel = imovel.getId();
-				String cpfCnpf = consultarCpfCnpjCliente(idImovel);
-				if (!cpfCnpf.equalsIgnoreCase("")) {
-					Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistente(idConta);
-					if (fichaExistente == false) {
-						registrarFichaCompensacao(idConta);
-					}
+				Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistente(idConta);
+				if (fichaExistente == false) {
+					registrarFichaCompensacao(idConta);
 				}
 			}
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
@@ -16538,12 +16536,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	}
 	
-	protected void registrarFichaCompensacao(Integer idConta) throws IOException, Exception {
+	protected void registrarFichaCompensacao(Integer idConta) throws Exception {
 		try {
 			Conta conta = new Conta();
 			conta = repositorioFaturamento.contaFichaCompensacao(idConta);
 			Double valorOriginal = Double.valueOf(conta.getValorTotalConta());
-			if (valorOriginal != 0 || !valorOriginal.equals("0.00")) {
+			if(valorOriginal >= 0.1) {
 				registrarBoletoBancoDeDados(idConta);
 
 				FichaCompensacaoDTO ficha = registrarBoletoBB(idConta);

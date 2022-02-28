@@ -3633,6 +3633,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				}
 			} catch (ControladorException e) {
 				throw new ActionServletException("atencao.erro_registrar_conta");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 

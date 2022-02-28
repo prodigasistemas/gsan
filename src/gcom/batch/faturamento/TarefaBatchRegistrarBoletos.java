@@ -48,7 +48,7 @@ public class TarefaBatchRegistrarBoletos extends TarefaBatch{
 			
 		enviarMensagemControladorBatch(
 					ConstantesJNDI.BATCH_REGISTRAR_BOLETOS_MDB,
-					new Object[] {idFaturamentoGrupo, anoMesFaturamentoGrupo});
+					new Object[] {idFaturamentoGrupo, anoMesFaturamentoGrupo,this.getIdFuncionalidadeIniciada()});
 
 		return null;
 	}

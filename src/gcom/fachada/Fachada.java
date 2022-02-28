@@ -40575,9 +40575,9 @@ public class Fachada {
 		}
 	}
 	
-	public void registrarFichaCompensacaoGrupo(Integer idFaturamento, Integer anoMesReferencia) {
+	public void registrarFichaCompensacaoGrupo(Integer idFaturamento, Integer anoMesReferencia,int idFuncionalidadeIniciada) {
 		try {
-			this.getControladorFaturamento().registrarFichaCompensacaoGrupo(idFaturamento, anoMesReferencia);
+			this.getControladorFaturamento().registrarFichaCompensacaoGrupo(idFaturamento, anoMesReferencia, idFuncionalidadeIniciada);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
