@@ -60334,7 +60334,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		}
+		} 
 		return conta;
 	}
 	
@@ -60354,9 +60354,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
+		} 
 		return cliente;
 	}
 	
@@ -60381,9 +60379,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
+		} 
 		return registroExistente;
 	}
 	
@@ -60399,7 +60395,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta.append("select conta.id from Conta conta ")
 			        .append("inner join conta.clienteContas clienteContas ")
 			        .append("inner join clienteContas.cliente cliente ")
-			        .append("where conta.faturamentoGrupo.id = :idFaturamentoGrupo and conta.referencia = :anoMesFaturamento ")
+			        //.append
+			        .append("where 1=1 and conta.faturamentoGrupo.id = :idFaturamentoGrupo and conta.referencia = :anoMesFaturamento ")
 			        .append("and (cliente.cpf is not null or cliente.cnpj is not null) ");
 
 			contas =   session.createQuery(consulta.toString())
@@ -60408,11 +60405,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
+		} 
 		return contas;
-	}
+	} 
 	
 	public Municipio municipio(Integer idLocalidade) throws ErroRepositorioException {
 		Municipio idMunicipio = null;
@@ -60430,7 +60425,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		}
+		} 
 
 		return idMunicipio;
 	}
