@@ -3080,6 +3080,9 @@ public interface IRepositorioFaturamento {
 	public Municipio municipio(Integer idLocalidade) throws ErroRepositorioException;
 	
 	public Boolean fichaCompensacaoExistente(Integer idConta) throws ErroRepositorioException;
-
+	
+	public void inserirFichaCompensacao (Integer idConv,Integer numeroCarteira,Integer numeroVariacaoCarteira,Short
+			codigoModalidade,String dataEmissao,String dataVencimento,Double valorOriginal,String codigoAceite,Short codigoTipoTitulo,String
+			indicadorPermissaoRecebimentoParcial,String numeroTituloCliente,Integer imovel,Integer cliente, Integer conta) throws ErroRepositorioException;
 	
 }

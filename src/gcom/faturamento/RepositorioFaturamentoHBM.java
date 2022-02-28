@@ -114,6 +114,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60334,7 +60335,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} 
+		}  
 		return conta;
 	}
 	
@@ -60354,7 +60355,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} 
+		}  
 		return cliente;
 	}
 	
@@ -60379,7 +60380,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} 
+		}  
 		return registroExistente;
 	}
 	
@@ -60405,7 +60406,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} 
+		}
 		return contas;
 	} 
 	
@@ -60426,8 +60427,51 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} 
-
 		return idMunicipio;
+	}
+	
+	public void inserirFichaCompensacao(Integer idConv,Integer numeroCarteira,Integer numeroVariacaoCarteira,Short
+			codigoModalidade,String dataEmissao,String dataVencimento,Double valorOriginal,String codigoAceite,Short codigoTipoTitulo,String
+			indicadorPermissaoRecebimentoParcial,String numeroTituloCliente,Integer imovel,Integer cliente,Integer conta) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+		String insert;
+
+		Connection con = null;
+		Statement stmt = null;
+
+		try {
+
+			con = session.connection();
+			stmt = con.createStatement();
+			String sequence = Util
+					.obterNextValSequence("faturamento.seq_ficha_compensacao");
+			insert = "insert into faturamento.ficha_compensacao(fico_id, "
+					+ "fico_idconv, fico_nuca, fico_nuvc, "
+					+ "fico_como, fico_dtem, fico_dtve, fico_vlor, fico_coac, "
+					+ "fico_cott, fico_iprp, fico_nutc, fico_tmultimaalteracao, imov_id, "
+					+ "clie_id, cnta_id) " + "values ( " + sequence
+					+ ", " + idConv + ", " + numeroCarteira + ", " + numeroVariacaoCarteira + ", "
+					+ codigoModalidade + ", " + "'" + dataEmissao + "'"  + ", " + "'" + dataVencimento + "'" + ", "
+					+ valorOriginal + ", " + "'" + codigoAceite +"'" + ", " + codigoTipoTitulo + ", " 
+					+ "'" + indicadorPermissaoRecebimentoParcial + "'" + ", " + "'" + numeroTituloCliente + "'" + ", " 
+					+ Util.obterSQLDataAtual() + ", " + imovel + ", " + cliente + ", " + conta + " )";
+
+			stmt.executeUpdate(insert);
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} catch (SQLException e) {
+			throw new ErroRepositorioException(e, "Erro no Insert");
+		} finally {
+			HibernateUtil.closeSession(session);
+			try {
+				stmt.close();
+				con.close();
+			} catch (SQLException e) {
+				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
+			}
+		}
 	}
 
 }

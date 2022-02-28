@@ -38,7 +38,7 @@ public class GsanApi {
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntityInputStream()));
 		StringBuilder builder = montarRetorno(reader);
-		if (builder.length() == 0 || (response.getStatus() != 200 && response.getStatus() != 201)) {
+		if (builder.length() == 0 || (response.getStatus() != 200 && response.getStatus() != 201 && response.getStatus() != 400)) {
 			throw new Exception("Erro ao acessar servico");
 		}
 
