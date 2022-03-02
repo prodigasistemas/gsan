@@ -16540,8 +16540,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		try {
 			Conta conta = new Conta();
 			conta = repositorioFaturamento.contaFichaCompensacao(idConta);
-			Double valorOriginal = Double.valueOf(conta.getValorTotalConta());
-			if(valorOriginal >= 0.1) {
+			String valorOriginal = conta.getValorTotalConta();
+			if(!valorOriginal.equals("0.0")) {
 				registrarBoletoBancoDeDados(idConta);
 
 				FichaCompensacaoDTO ficha = registrarBoletoBB(idConta);
