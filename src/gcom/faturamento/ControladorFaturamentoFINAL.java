@@ -36833,8 +36833,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			if (quantidadeContas != null && quantidadeContas.intValue() > 0) {
 				
-				System.out.println("**============ 1 - apagarDadosGeradosFaturarGrupoFaturamento ===============**"
-									+ "\n Imovel: " + helper.getIdImovel());
+				if (helper.getIdImovel() != null) {
+					System.out.println("**======== 1 - apagarDadosGeradosFaturarGrupoFaturamento ========**"+ "\n Imovel: " + helper.getIdImovel());
+				} else if (helper.getRota() != null) { 
+					System.out.println("**======== 1 - apagarDadosGeradosFaturarGrupoFaturamento ========**"+ "\n Rota: " + helper.getRota().getId());
+				} else {
+					System.out.println("**======== 1 - apagarDadosGeradosFaturarGrupoFaturamento ========**"+ "\n Grupo: " + helper.getFaturamentoGrupo());
+				}
 
 				try {
 					repositorioFaturamento.apagarContaImpressao(helper);
@@ -62858,10 +62863,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Object[] retorno = null;
 
 		try {
+			System.out.println("====> ID IMOVEL: " + (imovel.getId() != null ? imovel.getId() : null));
+			System.out.println("GERAR ARQUIVO TEXTO FATURAMENTO -- INICIO");
 			Conta conta = gerarArquivoTextoFaturamento
 					.pesquisarContaGerarArquivoTextoFaturamento(imovel,
 							anoMesFaturamento, faturamentoGrupo.getId());
-
+			System.out.println("GERAR ARQUIVO TEXTO FATURAMENTO -- FIM");
+			
 			/*
 			 *  Alteração feita para permitir que todos os imóveis sejam gerados na rota de leitura e impressão simultanea
 			 */
@@ -62869,16 +62877,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				conta.setImovel(imovel);
 			}
-
+			
 			retorno = new Object[2];
 			arquivoRetorno = new StringBuilder();
 
 			// GERAR ARQUIVO TEXTO
 			// --------------------------------------------------------------
-
+			System.out.println("====> PESQUISANDO DOCUMENTO COBRANÇA ----INICIO");
 			Object[] registroArquivoTexto = gerarArquivoTextoFaturamento
 					.gerarArquivoTexto(imovel, conta, anoMesFaturamento, rota,
 							faturamentoGrupo, sistemaParametro, dataComando);
+			System.out.println("====> PESQUISANDO DOCUMENTO COBRANÇA ----FIM");
 			arquivoRetorno.append(registroArquivoTexto[0]);
 			int quantidadeRegistroArquivo = (Integer) registroArquivoTexto[1];
 

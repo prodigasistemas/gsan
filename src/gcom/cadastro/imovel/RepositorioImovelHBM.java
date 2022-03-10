@@ -29561,7 +29561,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.append(" inner join fetch imovelSubcategoria.comp_id.subcategoria subcategoria ")
 									
 					.append(" where imovel.imovelPerfil.id = :perfilBolsaAgua  ")
-					.append(" and imovel.ligacaoAguaSituacao.id = :ligado ")
+					.append(" and (imovel.ligacaoAguaSituacao.id = :ligado or imovel.ligacaoEsgotoSituacao.id = :ligado)")
 					.append(" and rota.id = :idRota ")
 					.append(" and subcategoria.categoria.id = :idCategoria ")
 					.append(" and (imovel.faturamentoSituacaoTipo.id is null or imovel.faturamentoSituacaoTipo.id <> :idFaturamentoSituacaoTipo)");

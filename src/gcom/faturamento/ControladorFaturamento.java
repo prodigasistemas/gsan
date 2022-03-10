@@ -3064,12 +3064,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			CreditoARealizar credito = (CreditoARealizar) colecaoCreditoARealizar.iterator().next();
 
-			if (credito.getNumeroPrestacaoRealizada().compareTo(new Short("1")) == 0) {
+			if (credito.getNumeroPrestacaoRealizada().compareTo(new Short("0")) == 0) {
 
 				BigDecimal novoValorCredito = valorBolsaAgua;
 				
 				credito.setValorCredito(novoValorCredito);
 				credito.setValorResidualMesAnterior(BigDecimal.ZERO);
+				credito.setNumeroPrestacaoRealizada(new Short("1"));
 				
 				FiltroCreditoARealizarCategoria filtroCreditoARealizarCategoria = new FiltroCreditoARealizarCategoria();
 
@@ -3099,6 +3100,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				CreditoRealizado realizado = (CreditoRealizado) colecaoRealizado.iterator().next();
 				BigDecimal valorAtualizado = valorBolsaAgua;
 				realizado.setValorCredito(valorAtualizado);
+				realizado.setNumeroPrestacaoCredito(new Short("1"));
 				
 				FiltroCreditoRealizadoCategoria filtroRealizadoCategoria = new FiltroCreditoRealizadoCategoria();
 

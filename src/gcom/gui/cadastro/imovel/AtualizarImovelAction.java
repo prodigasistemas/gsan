@@ -271,6 +271,8 @@ public class AtualizarImovelAction extends GcomAction {
 		helperCaracteristica.setIdQuadra(idQuadra);
 		helperCaracteristica.setIdNivelInstalacaoEsgoto(indicadorNivelInstalacaoEsgoto);
 		
+		Integer perfilAntigo = imovel.getImovelPerfil().getId();
+		
 		Integer imovelPerfil = Integer.parseInt(helperCaracteristica.getIdImovelPerfil());
 		Integer perfilSubcategoria = null;
 		
@@ -279,14 +281,26 @@ public class AtualizarImovelAction extends GcomAction {
 			ImovelSubcategoria subcategoria = iteratorSubcategoria.next();
 			if (imovelPerfil.equals(ImovelPerfil.BOLSA_AGUA) || imovelPerfil == ImovelPerfil.BOLSA_AGUA) {
 				perfilSubcategoria = 2;
-				if (subcategoria.getComp_id().getSubcategoria().getCategoria().getId().equals(Categoria.RESIDENCIAL)) {
-					perfilSubcategoria = 1;
-					break;
+				if ((subcategoria.getComp_id().getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R1)
+						|| subcategoria.getComp_id().getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R2)
+						|| subcategoria.getComp_id().getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R3)
+						|| subcategoria.getComp_id().getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R4))) {
+					if (imovel.getIndicadorImovelCondominio().equals(ConstantesSistema.SIM)
+							|| (perfilAntigo.equals(ImovelPerfil.CORPORATIVO_101)
+									|| perfilAntigo.equals(ImovelPerfil.GOVERNO_METRO_401)
+									|| perfilAntigo.equals(ImovelPerfil.GOVERNO_METRO_401)
+									|| perfilAntigo.equals(ImovelPerfil.CONDOMINIAL_101))) {
+						throw new ActionServletException("atencao.imovel_agua_para_e_um_condominio");
+					} else {
+						perfilSubcategoria = 1;
+						break;
+					}
 				}
 			}
 		}
+		
 		if(perfilSubcategoria != null) {
-			if(perfilSubcategoria.equals(2)) {
+			if(!perfilSubcategoria.equals(1)) {
 				throw new ActionServletException("atencao.perfil_agua_para_sem_residencia");
 			}
 		}

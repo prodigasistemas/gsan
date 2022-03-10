@@ -63,6 +63,14 @@ public class ImovelPerfil extends ObjetoTransacao{
     
     public final static Integer CADASTRO_PROVISORIO = new Integer(9);
     
+    public final static Integer GOVERNO_METRO_401 = new Integer(7);
+    
+    public final static Integer CORPORATIVO_101 = new Integer(6);
+    
+    public final static Integer GOVERNO_INT_501 = new Integer(8);
+    
+    public final static Integer CONDOMINIAL_101 = new Integer(9);
+    
     public final static Integer COLABORADORES = new Integer(10);
     
     public final static Integer BOLSA_AGUA = new Integer(11);

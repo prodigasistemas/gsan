@@ -1,5 +1,20 @@
 package gcom.gui.faturamento;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
+import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.Localidade;
 import gcom.fachada.Fachada;
@@ -15,20 +30,6 @@ import gcom.seguranca.acesso.usuario.UsuarioAbrangencia;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 public class ExibirFaturamentoSeletivoAction extends GcomAction {
 
@@ -55,67 +56,73 @@ public class ExibirFaturamentoSeletivoAction extends GcomAction {
 
         StringBuffer faixas = new StringBuffer();
         
+        ImovelFaturamentoSeletivo imovelSeletivo = new ImovelFaturamentoSeletivo();
+        imovelSeletivo.setIdImovel(5852544);
+        
+        fachada.faturarImovelSeletivo(imovelSeletivo);
         Integer matriculaImovel = null;
         if (form.getMatriculaImovel() != null && !form.getMatriculaImovel().equals("")) {
         	matriculaImovel = new Integer(form.getMatriculaImovel());
         }
         
-        verificarAbrangenciaUsuario(httpServletRequest, usuarioLogado, Util.converterStringParaInteger(form.getIdLocalidade()));
+        //verificarAbrangenciaUsuario(httpServletRequest, usuarioLogado, Util.converterStringParaInteger(form.getIdLocalidade()));
 
-        Rota rota = obterRota(form, fachada);
-        
-        if (rota != null) {
-            form.setDescricaoRota(getDescricaoRota(rota));
-
-            Collection<DadosMovimentacao> dados = fachada.buscarImoveisFaturamentoSeletivo(matriculaImovel, rota, form.getTipo().trim().equals("1"));
-
-            if (dados != null && !dados.isEmpty()) {
-
-                Vector<DadosMovimentacao> v = new Vector<DadosMovimentacao>();
-                v.addAll(dados);
-                
-                form.setDados(v);
-                form.setIndice(new Integer(1));
-                form.setTotal(obterQtdTotalPaginas(dados));
-                
-                Collection<DadosMovimentacao> dadosExibicao = new ArrayList<DadosMovimentacao>();
-                Iterator<DadosMovimentacao> it = dados.iterator();
-                char delimitador = '/';
-                char delimitador2 = ';';
-
-                List<ImovelFaturamentoSeletivo> imoveisFaturamentoSeletivo = new ArrayList<ImovelFaturamentoSeletivo>();
-                for (int i = 0; i < this.qtdRgistrosExibidos && it.hasNext(); i++) {
-                	
-                	ImovelFaturamentoSeletivo imovel = new ImovelFaturamentoSeletivo();
-                    DadosMovimentacao dado = it.next();
-                    dado.getInscricao();
-                    faixas.append(dado.getFaixaLeituraEsperadaInferior());
-                    faixas.append(delimitador2);
-                    faixas.append(dado.getFaixaLeituraEsperadaSuperior());
-                    if (i + 1 < this.qtdRgistrosExibidos && it.hasNext()) {
-                        faixas.append(delimitador);
-                    }
-                    dadosExibicao.add(dado);
-                    imovel.setDadoMovimentacao(dado);
-                    imovel.setIdImovel(dado.getMatriculaImovel());
-                    imoveisFaturamentoSeletivo.add(imovel);
-                }
-
-                form.setColecaoImoveisFaturamentoSeletivo(imoveisFaturamentoSeletivo);
-                sessao.setAttribute("colecaoLeituras", form.getColecaoImoveisFaturamentoSeletivo());
-                sessao.setAttribute("form", form);
-                httpServletRequest.setAttribute("qnt", "" + dadosExibicao.size());
-
-                listarAnormalidadesSessao(httpServletRequest, filtro,delimitador, delimitador2);
-                
-                httpServletRequest.setAttribute("faixa", faixas.toString());
-
-            } else {
-                throw new ActionServletException("atencao.rota_sem_imovel_para_leitura", form.getRota());
-            }
-
-        } else {
-            throw new ActionServletException("atencao.pesquisa.rota_inexistente");
+        if (form.getRota() != null) {
+        	Rota rota = obterRota(form, fachada);
+        	
+        	if (rota != null) {
+        		form.setDescricaoRota(getDescricaoRota(rota));
+        		
+        		Collection<DadosMovimentacao> dados = fachada.buscarImoveisFaturamentoSeletivo(matriculaImovel, rota, form.getTipo().trim().equals("1"));
+        		
+        		if (dados != null && !dados.isEmpty()) {
+        			
+        			Vector<DadosMovimentacao> v = new Vector<DadosMovimentacao>();
+        			v.addAll(dados);
+        			
+        			form.setDados(v);
+        			form.setIndice(new Integer(1));
+        			form.setTotal(obterQtdTotalPaginas(dados));
+        			
+        			Collection<DadosMovimentacao> dadosExibicao = new ArrayList<DadosMovimentacao>();
+        			Iterator<DadosMovimentacao> it = dados.iterator();
+        			char delimitador = '/';
+        			char delimitador2 = ';';
+        			
+        			List<ImovelFaturamentoSeletivo> imoveisFaturamentoSeletivo = new ArrayList<ImovelFaturamentoSeletivo>();
+        			for (int i = 0; i < this.qtdRgistrosExibidos && it.hasNext(); i++) {
+        				
+        				ImovelFaturamentoSeletivo imovel = new ImovelFaturamentoSeletivo();
+        				DadosMovimentacao dado = it.next();
+        				dado.getInscricao();
+        				faixas.append(dado.getFaixaLeituraEsperadaInferior());
+        				faixas.append(delimitador2);
+        				faixas.append(dado.getFaixaLeituraEsperadaSuperior());
+        				if (i + 1 < this.qtdRgistrosExibidos && it.hasNext()) {
+        					faixas.append(delimitador);
+        				}
+        				dadosExibicao.add(dado);
+        				imovel.setDadoMovimentacao(dado);
+        				imovel.setIdImovel(dado.getMatriculaImovel());
+        				imoveisFaturamentoSeletivo.add(imovel);
+        			}
+        			
+        			form.setColecaoImoveisFaturamentoSeletivo(imoveisFaturamentoSeletivo);
+        			sessao.setAttribute("colecaoLeituras", form.getColecaoImoveisFaturamentoSeletivo());
+        			sessao.setAttribute("form", form);
+        			httpServletRequest.setAttribute("qnt", "" + dadosExibicao.size());
+        			
+        			listarAnormalidadesSessao(httpServletRequest, filtro,delimitador, delimitador2);
+        			
+        			httpServletRequest.setAttribute("faixa", faixas.toString());
+        			
+        		} else {
+        			throw new ActionServletException("atencao.rota_sem_imovel_para_leitura", form.getRota());
+        		}
+        		
+        	} else {
+        		throw new ActionServletException("atencao.pesquisa.rota_inexistente");
+        	}
         }
 
         httpServletRequest.setAttribute("nomeCampo", "rota");
