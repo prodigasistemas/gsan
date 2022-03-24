@@ -30,6 +30,8 @@ public class ConsumoTipo implements Serializable {
     public final static short INDICADOR_CALCULO_MEDIA_CONSUMO_NAO = 2;
     
     public final static Integer FIXO_SITUACAO_ESPECIAL = new Integer(10);
+    public final static Integer CONSUMO_MINIMO_BOLSA_AGUA = new Integer(11);
+
     
     public ConsumoTipo(String descricao, String descricaoAbreviada, Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;
