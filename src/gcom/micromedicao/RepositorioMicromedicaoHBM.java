@@ -9312,7 +9312,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					 */
 					+ "li.dataLigacao, " // 34
 					+ "le.dataLigacao, " // 35
-					+ "li.numeroConsumoMinimoAgua " //36
+					+ "im.imovelPerfil.id " //36
 					+ "from Imovel im "
 					+ "inner join im.quadra.rota.faturamentoGrupo "
 					+ "inner join im.consumoTarifa ct "
@@ -11380,7 +11380,8 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					 *  Adicionando parametros da ligacao de agua
 					 */
 					+ "li.dataLigacao, " // 34
-					+ "le.dataLigacao " // 35
+					+ "le.dataLigacao, " // 35
+					+ "im.imovelPerfil.id " //36
 					+ "from Imovel im "
 					+ "inner join im.quadra.rota.faturamentoGrupo "
 					+ "inner join im.consumoTarifa ct "

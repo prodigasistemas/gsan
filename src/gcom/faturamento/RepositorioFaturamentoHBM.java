@@ -56560,7 +56560,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 									 */
 				+ "ligacaoagua.dataLigacao, " // 34
 				+ "ligacaoesgoto.dataLigacao, " // 35
-				+ "ligacaoagua.numeroConsumoMinimoAgua " //36
+				+ "imovel.imovelPerfil.id " //36
 				+ "FROM Conta conta "
 				+ "INNER JOIN conta.imovel imovel "	
 				+ "inner join imovel.quadra.rota.faturamentoGrupo "
