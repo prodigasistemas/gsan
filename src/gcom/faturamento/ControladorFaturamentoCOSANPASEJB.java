@@ -830,7 +830,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 	}
 
 	/*
-	 * Alteraï¿½ï¿½o conforme Redmind-2869
+	 * Alteracaoo conforme Redmind-2869
 	 * 
 	 * Quando confirmado o CI e o resultado do calculo de consumo permaner nos
 	 * parametro de alto consumo - Emitir Carta
@@ -1038,7 +1038,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 		if (emitirConta.getValorRateioAgua() != null
 				&& emitirConta.getValorRateioAgua().compareTo(BigDecimal.ZERO) == 1) {
-			contaTxt.append(Util.completaString("VALOR RATEIO ï¿½GUA", 50));
+			contaTxt.append(Util.completaString("VALOR RATEIO AGUA", 50));
 			contaTxt.append(Util.completaString(emitirConta.getValorRateioAgua() + "", 13));
 		} else {
 			contaTxt.append(Util.completaString(" ", 63));
@@ -1141,7 +1141,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		return contaTxt;
 	}
 
-	// [Obter cï¿½digo de barras Ficha de Compensaï¿½ï¿½o]
+	// [Obter código de barras Ficha de Compensação]
 	// Paulo Almeida 30.12.2021
 	private StringBuilder preencherCodigoBarrasContaFichaCompensacao(EmitirContaHelper emitirContaHelper,
 			StringBuilder contaTxt) throws ControladorException {
@@ -1334,7 +1334,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 	private StringBuilder preencherDescricaoValorTotalAgua(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) {
 		if (emitirContaHelper.getValorAgua() != null) {
-			contaTxt.append(Util.completaString("TOTAL ï¿½GUA ", 50));
+			contaTxt.append(Util.completaString("TOTAL AGUA ", 50));
 			contaTxt.append(Util.completaString(emitirContaHelper.getValorAgua() + "", 13));
 		} else {
 			contaTxt.append(Util.completaString(" ", 63));
@@ -2826,7 +2826,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				Map<Integer, Short> mapIndicadorAcrescimoCliente = this
 						.obterIndicadorGeracaoAcrescimosClienteImovel(rota);
 
-				logger.info("Rota em processamento de acrï¿½scimos: " + rota.getId());
+				logger.info("Rota em processamento de acréscimos: " + rota.getId());
 
 				while (imovelPorRotaIterator.hasNext()) {
 					Imovel imovel = buildImovelAcrescimoImpontualidade(imovelPorRotaIterator);
@@ -3164,11 +3164,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				logger.info("	Documento de cobranca: " + pagamento.getCobrancaDocumento().getId());
 				return pagamento.getCobrancaDocumento();
 			} else {
-				logger.info("	Nï¿½o tem documento de cobranca.");
+				logger.info("	Não tem documento de cobranca.");
 				return null;
 			}
 		} else {
-			logger.info("	Nï¿½o tem documento de cobranca.");
+			logger.info("	Não tem documento de cobranca.");
 			return null;
 		}
 	}
@@ -3809,7 +3809,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				emitirContaHelper.setNumeroCloroResidual(Util.formatarMoedaReal((BigDecimal) parmsQualidadeAgua[1]));
 			}
 		}
-		// Padrï¿½o
+		// Padrão
 		emitirContaHelper.setPadraoCor(qualidadeAgua[0]);
 		emitirContaHelper.setPadraoTurbidez(qualidadeAgua[1]);
 		emitirContaHelper.setPadraoCloro(qualidadeAgua[3]);
@@ -3904,10 +3904,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 						.isEmpty()))) {
 			String dataVencimentoFinalString = Util.formatarData(dataFinalDate);
 			linhasImpostosRetidos[0] = "SR(A). CLIENTE, EM  " + dataVencimentoFinalString
-					+ ", REGISTRAMOS QUE V.SA. ESTAVA EM Dï¿½BITO COM A "
+					+ ", REGISTRAMOS QUE V.SA. ESTAVA EM DÉBITO COM A "
 					+ sistemaParametro.getNomeAbreviadoEmpresa().toUpperCase() + ".";
-			linhasImpostosRetidos[1] = "COMPAREï¿½A A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO. EVITE O CORTE.";
-			linhasImpostosRetidos[2] = "CASO O SEU Dï¿½BITO TENHA SIDO PAGO APï¿½S A DATA INDICADA, DESCONSIDERE ESTE AVISO.";
+			linhasImpostosRetidos[1] = "COMPAREÇA A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO. EVITE O CORTE.";
+			linhasImpostosRetidos[2] = "CASO O SEU DÉBITO TENHA SIDO PAGO APÓS A DATA INDICADA, DESCONSIDERE ESTE AVISO.";
 			isImovelEmDebito = true;
 		} else {
 			linhasImpostosRetidos[0] = "A COSANPA AGRADECE SUA PONTUALIDADE.";
@@ -4072,7 +4072,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			contaTxt.append(Util.completaString("(%)", 15));
 			contaTxt.append(Util.completaStringComEspacoAEsquerda(
 					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[1]), 13));
-			contaTxt.append(Util.completaString("Base de cï¿½lculo", 15));
+			contaTxt.append(Util.completaString("Base de cálculo", 15));
 			contaTxt.append(Util.completaStringComEspacoAEsquerda(
 					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
 			contaTxt.append(Util.completaString("Valor (R$)", 15));
