@@ -5,8 +5,11 @@ import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.FiltroLigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.fachada.Fachada;
+import gcom.faturamento.FaturamentoParametro;
 import gcom.faturamento.bean.CalcularValoresAguaEsgotoHelper;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaMotivoRetificacao;
@@ -74,6 +77,22 @@ public class RetificarContaAction extends GcomAction {
 		String consumoAguaJSP = retificarContaActionForm.getConsumoAgua();
 		String consumoEsgotoJSP = retificarContaActionForm.getConsumoEsgoto();
 		String percentualEsgotoJSP = retificarContaActionForm.getPercentualEsgoto();
+		
+		String consumoMinimoBolsaAgua = Fachada.getInstancia().getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.CONSUMO_MINIMO_BOLSA_AGUA.toString());
+		
+		if (contaAtual.getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA)) {
+			
+			if (consumoAguaJSP != null && !consumoAguaJSP.equalsIgnoreCase("") && Integer.valueOf(consumoAguaJSP) < Integer.valueOf(consumoMinimoBolsaAgua)) {
+				consumoAguaJSP = consumoMinimoBolsaAgua;
+				retificarContaActionForm.setConsumoAgua(consumoAguaJSP);
+			} 
+			
+			if (consumoEsgotoJSP != null && !consumoEsgotoJSP.equalsIgnoreCase("") && Integer.valueOf(consumoEsgotoJSP) < Integer.valueOf(consumoMinimoBolsaAgua)) {
+				consumoEsgotoJSP = consumoMinimoBolsaAgua;
+				retificarContaActionForm.setConsumoEsgoto(consumoEsgotoJSP);
+			}
+			
+		}
 		
 		
 		/*
@@ -603,6 +622,10 @@ public class RetificarContaAction extends GcomAction {
 		
 		Integer consumoMedidoProporcional = obterConsumoMedidoProporcional(leituraAtual, leituraAnterior, retificarContaActionForm, 
 				colecaoCategoriaOUSubcategoriaInicial, idConsumoTarifa, usuarioLogado);
+		
+		if (contaAtual.getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA) && consumoMedidoProporcional < Integer.valueOf(consumoMinimoBolsaAgua)) { 
+			consumoMedidoProporcional = Integer.valueOf(consumoMinimoBolsaAgua);
+		}			
 		
         idConta = getFachada().retificarConta(new Integer(mesAnoContaJSP), 
         		contaAtual,
