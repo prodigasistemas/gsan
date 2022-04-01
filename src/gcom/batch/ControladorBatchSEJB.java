@@ -2707,9 +2707,9 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						while (iteratorRota.hasNext()) {
 							Rota rotaNaoTransmitida = (Rota) iteratorRota.next();
 							if (mensagemAlerta == null) {
-								mensagemAlerta = rotaNaoTransmitida.getId().toString();
+								mensagemAlerta = rotaNaoTransmitida.getCodigo().toString();
 							} else {
-								mensagemAlerta += "," + rotaNaoTransmitida.getId().toString();
+								mensagemAlerta += "," + rotaNaoTransmitida.getCodigo().toString();
 							}
 						}
 
