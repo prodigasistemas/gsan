@@ -1137,7 +1137,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				3, valorConta, emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAnoFormatado,
 				digitoVerificadorConta, null, null, null, null, null, null, null);
 
-		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
+		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 54));
 		return contaTxt;
 	}
 
@@ -1174,7 +1174,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
         String representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
 
-		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
+		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 54));
 		return contaTxt;
 	}
 
