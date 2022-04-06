@@ -225,11 +225,11 @@ function validarForm(form){
 		   var mensagem = 'deve ser diferente de zero.'
 		   var flag = true;
     
-   		   var faixaInicial = parseInt(form.faixaInicial.value, 11);
+   		   var faixaInicial = parseInt(form.faixaInicial.value, 10);
     
-		    var faixaFinal = parseInt(form.faixaFinal.value, 11);
+		    var faixaFinal = parseInt(form.faixaFinal.value, 10);
 		    
-		    var quantidadeHidrometro = (faixaFinal - faixaInicial) + 1;
+		    var quantidadeHidrometro = (faixaFinal - faixaInicial);
  
 		   if ((faixaInicial > 0) && (faixaFinal > 0)) {
   		       if (intervalo > 0) {
@@ -251,7 +251,7 @@ function validarForm(form){
 
 						if (flag == true)
 						{
-                  	       if (confirm(quantidadeHidrometro+' Hidrometro(s) serão inseridos?')) {
+                  	       if (confirm((quantidadeHidrometro+1)+' Hidrometro(s) serão inseridos?')) {
                   	          botaoAvancarTelaEspera('/gsan/inserirHidrometroAction.do');
                   	       }
                         }
