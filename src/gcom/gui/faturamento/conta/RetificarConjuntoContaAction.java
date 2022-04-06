@@ -5,6 +5,8 @@ import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.FiltroLigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.batch.Processo;
+import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.fachada.Fachada;
 import gcom.faturamento.bean.RetificarConjuntoContaConsumosHelper;
@@ -20,11 +22,13 @@ import gcom.util.filtro.ParametroSimples;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,16 +66,38 @@ public class RetificarConjuntoContaAction extends GcomAction {
         String identificadoresConta = retificarConjuntoContaActionForm.getContaSelected();
         
         //TODAS AS CONTAS
-        Collection<Conta> colecaoContaImovel = (Collection) sessao.getAttribute("colecaoContaImovel");
+        Collection<Conta> colecaoContaImovel = (Collection) sessao.getAttribute("colecaoContaImovel");    
+        Collection<Conta> colecaoContaImovelSemBolsaAgua = new ArrayList<Conta>();
         
-        
-        /*
+        if (colecaoContaImovel != null) {
+        	Iterator itColecaoConta = colecaoContaImovel.iterator();
+			while (itColecaoConta.hasNext()) {
+				Conta conta = (Conta) itColecaoConta.next();
+				if (conta != null && !conta.getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA)) {
+					colecaoContaImovelSemBolsaAgua.add(conta);
+				} else {
+					continue;
+				}
+			} 
+		}
+		/*
          * RECEBIMENTO DOS PARÂMETROS PARA QUANDO O RETIFICAR CONJUNTO DE CONTAS TIVER SIDO
          * CHAMADO PELO MANTER CONTA DE UM CONJUNTO DE IMÓVEIS
          */
         Collection colecaoImovel = (Collection) sessao.getAttribute("colecaoImovel");
+        Collection<Imovel> colecaoImovelSemBolsaAgua = new ArrayList<Imovel>();
         
-        
+        if (colecaoImovel != null) {
+			Iterator itColecaoImovel = colecaoImovel.iterator();
+			while (itColecaoImovel.hasNext()) {
+				Imovel imovel = Fachada.getInstancia().pesquisarImovel((Integer) itColecaoImovel.next());
+				if (imovel != null && !imovel.getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA)) {
+					colecaoImovelSemBolsaAgua.add(imovel);
+				} else {
+					continue;
+				}
+			} 
+		}        
         
         //RECEBENDO OS DADOS PARA RETIFICAÇÃO DA(S) CONTA(S)
         
@@ -166,9 +192,9 @@ public class RetificarConjuntoContaAction extends GcomAction {
         
         
         //RETIFICANDO AS CONTAS A PARTIR DO CASO DE USO MANTER CONTA
-        if (colecaoContaImovel != null){
+        if (colecaoContaImovelSemBolsaAgua != null && !colecaoContaImovelSemBolsaAgua.isEmpty()){
         	
-        	fachada.retificarConjuntoConta(colecaoContaImovel, identificadoresConta, ligacaoAguaSituacao, consumoAgua,
+        	fachada.retificarConjuntoConta(colecaoContaImovelSemBolsaAgua, identificadoresConta, ligacaoAguaSituacao, consumoAgua,
         	ligacaoEsgotoSituacao, consumoEsgoto, dataVencimentoConta, contaMotivoRetificacao, indicadorCategoriaEconomiaConta, usuarioLogado);
         	
         	//Realizar um reload na tela de manter conta
@@ -177,11 +203,11 @@ public class RetificarConjuntoContaAction extends GcomAction {
         }
         
         //RETIFICANDO AS CONTAS A PARTIR DO CASO DE USO MANTER CONTA DE UM CONJUNTO DE IMÓVEIS
-        else if (colecaoImovel != null){
+        else if (colecaoImovelSemBolsaAgua != null && !colecaoImovelSemBolsaAgua.isEmpty()){
         	
         	RetificarConjuntoContaConsumosHelper helper = 
         	this.carregarRetificarConjuntoContaConsumosHelper(sessao);
-        	helper.setColecaoImovel(colecaoImovel);
+        	helper.setColecaoImovel(colecaoImovelSemBolsaAgua);
         	helper.setDataVencimentoContaRetificacao(dataVencimentoConta);
         	helper.setContaMotivoRetificacao(contaMotivoRetificacao);
         	helper.setLigacaoAguaSituacao(ligacaoAguaSituacao);

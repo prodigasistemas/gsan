@@ -13869,6 +13869,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (contaArray[16] != null) {
 					conta.setValorImposto((BigDecimal) contaArray[16]);
 				}
+				
+				if (contaArray[17] != null) {
+					ImovelPerfil iper = new ImovelPerfil();
+					iper.setId((Integer) contaArray[17]);
+					conta.setImovelPerfil(iper);
+				}
 
 				retorno.add(conta);
 			}

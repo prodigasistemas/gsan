@@ -1793,7 +1793,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					"cnta.ultimaAlteracao, " + //13
 					"cnta.percentualEsgoto, " + //14
 					"cnta.consumoTarifa, " + //15
-					"cnta.valorImposto " //16
+					"cnta.valorImposto, " +//16
+					"cnta.imovelPerfil.id " //17
 					+ "FROM Conta cnta "
 					// + "INNER JOIN cnta.debitoCreditoSituacaoAtual dcst "
 					+ "WHERE imov_id = :idImovel AND "
