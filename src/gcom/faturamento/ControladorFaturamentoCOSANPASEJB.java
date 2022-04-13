@@ -557,12 +557,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 								// validação para trazer cfpCnpj caso exista.
 								// Paulo Almeida - 01.02.2022
-								String cpfCnpf = consultarCpfCnpjCliente(emitirContaHelper.getIdImovel());
+								String cpfCnpj = consultarCpfCnpjCliente(emitirContaHelper.getIdImovel());
 			
-								if(cpfCnpf.equalsIgnoreCase("")) {
-										contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
-									}else { 
+								if(!cpfCnpj.equalsIgnoreCase("") && emitirContaHelper.getCodigoConvenio() != null) {
 									    contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
+									}else { 
+										contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
+									    
 									}
 
 								contaTxt.append(Util.completaString(cont + "", 8));
@@ -646,11 +647,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 								contaTxt = preencherDadosAliquotaAgenciaReguladora(emitirContaHelper, contaTxt);
 								contaTxt = preencherFlagCarimbo(emitirContaHelper, contaTxt);
 								
-								if(cpfCnpf.equalsIgnoreCase("")) {
-									    contaTxt.append(Util.completaString("", 242));
-										contaTxt.append(Util.completaString("Documento de Arrecadacao", 25));
-									}else {
+								if(!cpfCnpj.equalsIgnoreCase("") && emitirContaHelper.getCodigoConvenio() != null) {
 										contaTxt = preencherDadosEmissaoConta(emitirContaHelper, contaTxt);
+									  }else {
+										contaTxt.append(Util.completaString("", 242));
+										contaTxt.append(Util.completaString("Documento de Arrecadacao", 25));
 								}
 
 								if (isEmitirImpressaoTermica(imovelEmitido, municipioEntrega, municipioImovel)) {
@@ -3507,7 +3508,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				throw new ControladorException("erro.sistema", e);
 			}
 
-			if (!cpfCnpj.equalsIgnoreCase("") && cpfCnpj != null) {
+			if (!cpfCnpj.equalsIgnoreCase("") && helper.getCodigoConvenio() != null) {
 				helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta);
 			} else {
 				helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
@@ -3627,8 +3628,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			helper.setDataLeituraAtualInformada(dataLeituraAtualInformada);
 
 			try {
-				String cpfCnpf = consultarCpfCnpjCliente(helper.getIdImovel());
-				if (!cpfCnpf.equalsIgnoreCase("")) {
+				
+				if (!cpfCnpj.equalsIgnoreCase("") && helper.getCodigoConvenio() != null) {
 					registrarFichaCompensacao(id);
 				}
 			} catch (ControladorException e) {

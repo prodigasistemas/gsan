@@ -948,7 +948,7 @@ public class ImpressaoContaImpressoraTermica {
 	private void gerarLinhaDadosEmissaoConta(EmitirContaHelper emitirContaHelper, Imovel imovelEmitido, String cpfCnpj,  StringBuilder retorno) throws ControladorException {
 		
 		String linha = null;
-		if(!cpfCnpj.equalsIgnoreCase("")) {
+		if(!cpfCnpj.equalsIgnoreCase("") && emitirContaHelper.getCodigoConvenio() != null ) {
 			StringBuilder nossoNumero = this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
 			String numDoc = Util.formatarAnoMesParaMesAnoSemBarra(emitirContaHelper.getAmReferencia()).concat(emitirContaHelper.getIdConta().toString());
 		
@@ -1280,66 +1280,66 @@ public class ImpressaoContaImpressoraTermica {
 			// Linha28
 			Date dataValidade = emitirContaHelper.getDataValidadeConta();
 					
-			if(cpfCnpj.equalsIgnoreCase("")) {
-			
-			Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
-			// formata ano mes para mes ano
-			String anoMes = "" + emitirContaHelper.getAmReferencia();
-			String mesAno = anoMes.substring(4, 6) + anoMes.substring(0, 4);
-			if (emitirContaHelper.getValorConta() != null) {
-				if (emitirContaHelper.getValorConta().compareTo(new BigDecimal("0.00")) != 0) {
-					representacaoNumericaCodBarra = this.getControladorArrecadacao()
-							.obterRepresentacaoNumericaCodigoBarra(3, emitirContaHelper.getValorConta(),
-									emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAno,
-									digitoVerificadorConta, null, null, null, null, null, null, null);
-					// Linha 24
-					// Formata a representação númerica do código de
-					// barras
-					 representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11)
-							+ "-" + representacaoNumericaCodBarra.substring(11, 12) + " "
-							+ representacaoNumericaCodBarra.substring(12, 23) + "-"
-							+ representacaoNumericaCodBarra.substring(23, 24) + " "
-							+ representacaoNumericaCodBarra.substring(24, 35) + "-"
-							+ representacaoNumericaCodBarra.substring(35, 36) + " "
-							+ representacaoNumericaCodBarra.substring(36, 47) + "-"
-							+ representacaoNumericaCodBarra.substring(47, 48);
-					emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
-					// Linha 25
-					String representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11)
-							+ representacaoNumericaCodBarra.substring(12, 23)
-							+ representacaoNumericaCodBarra.substring(24, 35)
-							+ representacaoNumericaCodBarra.substring(36, 47);
-					emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
-				}
-				 representacaoNumericaCodBarraFormatada = emitirContaHelper.getRepresentacaoNumericaCodBarraFormatada();
-			}
+			if(!cpfCnpj.equalsIgnoreCase("") && emitirContaHelper.getCodigoConvenio() != null ) {
+				
+				emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
+				StringBuilder nossoNumero =	this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+				String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
+				
+					Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
+					String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
+					String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+									ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
+									ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+									emitirContaHelper.getValorConta(),
+									nossoNumeroSemDV.toString(),
+									ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
+									fatorVencimento);
+				representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+		
+				representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra;
+				emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+				String representacaoNumericaCodBarraSemDigito = especificacaoCodigoBarra;
+				
+				emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
 				
 			}else{
 				
-				emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
-					StringBuilder nossoNumero =
-							this.getControladorFaturamento().
-							obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
-					String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
-					
-						Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
-						String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
-						String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
-										ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
-										ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
-										emitirContaHelper.getValorConta(),
-										nossoNumeroSemDV.toString(),
-										ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
-										fatorVencimento);
-					representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
-			
-					representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra;
-					emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
-					String representacaoNumericaCodBarraSemDigito = especificacaoCodigoBarra;
-					
-					emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+					Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
+					// formata ano mes para mes ano
+					String anoMes = "" + emitirContaHelper.getAmReferencia();
+					String mesAno = anoMes.substring(4, 6) + anoMes.substring(0, 4);
+					if (emitirContaHelper.getValorConta() != null) {
+						if (emitirContaHelper.getValorConta().compareTo(new BigDecimal("0.00")) != 0) {
+							representacaoNumericaCodBarra = this.getControladorArrecadacao()
+									.obterRepresentacaoNumericaCodigoBarra(3, emitirContaHelper.getValorConta(),
+											emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAno,
+											digitoVerificadorConta, null, null, null, null, null, null, null);
+							// Linha 24
+							// Formata a representação númerica do código de
+							// barras
+							 representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11)
+									+ "-" + representacaoNumericaCodBarra.substring(11, 12) + " "
+									+ representacaoNumericaCodBarra.substring(12, 23) + "-"
+									+ representacaoNumericaCodBarra.substring(23, 24) + " "
+									+ representacaoNumericaCodBarra.substring(24, 35) + "-"
+									+ representacaoNumericaCodBarra.substring(35, 36) + " "
+									+ representacaoNumericaCodBarra.substring(36, 47) + "-"
+									+ representacaoNumericaCodBarra.substring(47, 48);
+							emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+							// Linha 25
+							String representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11)
+									+ representacaoNumericaCodBarra.substring(12, 23)
+									+ representacaoNumericaCodBarra.substring(24, 35)
+									+ representacaoNumericaCodBarra.substring(36, 47);
+							emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+						}
+						 representacaoNumericaCodBarraFormatada = emitirContaHelper.getRepresentacaoNumericaCodBarraFormatada();
+					}
 					
 			}
+			
+			
 			if (representacaoNumericaCodBarraFormatada != null) {
 					retorno.append(formarLinha(5, 1, 80, 2849, representacaoNumericaCodBarraFormatada, 0, 0));
 					String representacaoCodigoBarrasSemDigitoVerificador = emitirContaHelper
