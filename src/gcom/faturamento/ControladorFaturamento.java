@@ -881,7 +881,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        					 Imovel imovel = contaAtualizacao.getImovel();
 	        					 Integer idImovel = imovel.getId();
 	        					 String cpfCnpf = consultarCpfCnpjCliente(idImovel);								
-								if(!cpfCnpf.equalsIgnoreCase("")) {
+								if(!cpfCnpf.equalsIgnoreCase("") && imovel.getCodigoConvenio() != null) {
 	        					 registrarFichaCompensacao(contaAtualizacao.getId());
 								}
 	        				 }
