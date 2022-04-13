@@ -341,10 +341,13 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
     
     private Short indicadorEnvioContaFisica;
     
+    private Integer codigoConvenio;
+    
     private Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes;
 
 	public final static Short INDICADOR_CONTA_RESPONSAVEL = new Short("1");
 	public final static Short INDICADOR_CONTA_IMOVEL = new Short("2");
+
 	public final static Short INDICADOR_CONTA_NAO_PAGAVEL_PARA_IMOVEL_PAGAVEL_PARA_RESPONSAVEL = new Short("3");
 	public final static Short IMOVEL_CONDOMINIO = new Short("1");
 	public final static Short IMOVEL_NAO_CONDOMINIO = new Short("2");
@@ -1222,13 +1225,13 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public String getEnderecoFormatado() {
 		String endereco = null;
 
-		// verifica se o logradouro do imovel é diferente de null
+		// verifica se o logradouro do imovel ï¿½ diferente de null
 		if (this.getLogradouroCep() != null
 				&& this.getLogradouroCep().getLogradouro() != null
 				&& !this.getLogradouroCep().getLogradouro().getId().equals(
 						new Integer("0"))) {
 
-			// verifica se o logradouro tipo do imovel é diferente de null
+			// verifica se o logradouro tipo do imovel ï¿½ diferente de null
 			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null
 					&& !this.getLogradouroCep().getLogradouro()
 							.getLogradouroTipo().equals("")) {
@@ -1236,7 +1239,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 				endereco = this.getLogradouroCep().getLogradouro()
 						.getLogradouroTipo().getDescricao().trim();
 			}
-			// verifica se o logradouro titulo do imovel é diferente de null
+			// verifica se o logradouro titulo do imovel ï¿½ diferente de null
 			if (this.getLogradouroCep().getLogradouro().getLogradouroTitulo() != null
 					&& !this.getLogradouroCep().getLogradouro()
 							.getLogradouroTitulo().equals("")) {
@@ -1307,7 +1310,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 
 			if (this.getLogradouroCep() != null
 					&& this.getLogradouroCep().getCep() != null) {
-				// concatena o cep formatado do imóvel
+				// concatena o cep formatado do imï¿½vel
 				endereco = endereco
 						+ " "
 						+ this.getLogradouroCep().getCep().getCepFormatado()
@@ -1327,13 +1330,13 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public String getEnderecoFormatadoAbreviado() {
 		String endereco = null;
 
-		// verifica se o logradouro do imovel é diferente de null
+		// verifica se o logradouro do imovel ï¿½ diferente de null
 		if (this.getLogradouroCep() != null
 				&& this.getLogradouroCep().getLogradouro() != null
 				&& !this.getLogradouroCep().getLogradouro().getId().equals(
 						new Integer("0"))) {
 
-			// verifica se o logradouro tipo do imovel é diferente de null
+			// verifica se o logradouro tipo do imovel ï¿½ diferente de null
 			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null
 					&& !this.getLogradouroCep().getLogradouro()
 							.getLogradouroTipo().equals("")) {
@@ -1347,7 +1350,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 							.getLogradouroTipo().getDescricaoAbreviada().trim();
 				}
 			}
-			// verifica se o logradouro titulo do imovel é diferente de null
+			// verifica se o logradouro titulo do imovel ï¿½ diferente de null
 			if (this.getLogradouroCep().getLogradouro().getLogradouroTitulo() != null
 					&& !this.getLogradouroCep().getLogradouro()
 							.getLogradouroTitulo().equals("")) {
@@ -1423,7 +1426,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 
 			if (this.getLogradouroCep() != null
 					&& this.getLogradouroCep().getCep() != null) {
-				// concatena o cep formatado do imóvel
+				// concatena o cep formatado do imï¿½vel
 				endereco = endereco
 						+ " "
 						+ this.getLogradouroCep().getCep().getCepFormatado()
@@ -1467,13 +1470,13 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public String getEnderecoTipoTituloLogradouro() {
 		String endereco = null;
 
-		// verifica se o logradouro do imovel é diferente de null
+		// verifica se o logradouro do imovel ï¿½ diferente de null
 		if (this.getLogradouroCep() != null
 				&& this.getLogradouroCep().getLogradouro() != null
 				&& !this.getLogradouroCep().getLogradouro().getId().equals(
 						new Integer("0"))) {
 			
-			// verifica se o logradouro tipo do imovel é diferente de null
+			// verifica se o logradouro tipo do imovel ï¿½ diferente de null
 			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null
 					&& !this.getLogradouroCep().getLogradouro()
 							.getLogradouroTipo().equals("")) {
@@ -1487,7 +1490,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 							.getLogradouroTipo().getDescricao().trim();
 				}
 			}
-			// verifica se o logradouro titulo do imovel é diferente de null
+			// verifica se o logradouro titulo do imovel ï¿½ diferente de null
 			if (this.getLogradouroCep().getLogradouro().getLogradouroTitulo() != null
 					&& !this.getLogradouroCep().getLogradouro()
 							.getLogradouroTitulo().equals("")) {
@@ -2618,6 +2621,14 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 
 	public void setIndicadorEnvioContaFisica(Short indicadorEnvioContaFisica) {
 		this.indicadorEnvioContaFisica = indicadorEnvioContaFisica;
+	}
+	
+	public Integer getCodigoConvenio() {
+		return codigoConvenio;
+	}
+
+	public void setCodigoConvenio(Integer codigoConvenio) {
+		this.codigoConvenio = codigoConvenio;
 	}
 	
 }

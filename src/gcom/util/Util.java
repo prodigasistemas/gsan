@@ -811,6 +811,35 @@ public class Util {
 		return retorno;
 	}
 	
+	public static String formatarDataComPontoDDMMAAAA(Date data) {
+		String retorno = "";
+		if (data != null) { // 1
+			Calendar dataCalendar = new GregorianCalendar();
+			StringBuffer dataBD = new StringBuffer();
+
+			dataCalendar.setTime(data);
+			if (dataCalendar.get(Calendar.DAY_OF_MONTH) > 9) {
+				dataBD.append(dataCalendar.get(Calendar.DAY_OF_MONTH));
+			} else {
+				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH));
+			}
+
+			dataBD.append(".");
+
+			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
+				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1);
+			} else {
+				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH) + 1));
+			}
+			
+			dataBD.append(".");
+			dataBD.append(dataCalendar.get(Calendar.YEAR));
+
+			retorno = dataBD.toString();
+		}
+		return retorno;
+	}
+	
 	public static String formatarDataComBarraDDMMAAAA(Date data) {
 		String retorno = "";
 		if (data != null) { // 1

@@ -213,7 +213,7 @@ public class ControladorUtilSEJB implements SessionBean {
 	}
 
 	/**
-	 * FAVOR NÃO USAR!!! Método para ser utilizada apenas em logradouro
+	 * FAVOR Nï¿½O USAR!!! Mï¿½todo para ser utilizada apenas em logradouro
 	 * (atualizar)
 	 */
 	public void verificaObjetoRemocao(int id, String pacoteNomeObjeto, OperacaoEfetuada operacaoEfetuada, Collection<UsuarioAcaoUsuarioHelper> acaoUsuarioHelper)

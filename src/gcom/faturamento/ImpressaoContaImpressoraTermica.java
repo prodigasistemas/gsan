@@ -43,7 +43,9 @@ import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.ConsumoTipo;
 import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.medicao.MedicaoHistorico;
+import gcom.util.CodigoBarras;
 import gcom.util.ConstantesJNDI;
+import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -360,7 +362,8 @@ public class ImpressaoContaImpressoraTermica {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Vector<String[]> gerarLinhasCreditosRealizados(int indicadorDiscriminarDescricao, EmitirContaHelper emitirContaHelper) {
+	private Vector<String[]> gerarLinhasCreditosRealizados(int indicadorDiscriminarDescricao,
+			EmitirContaHelper emitirContaHelper) {
 		Vector<String[]> retorno = new Vector<String[]>();
 		String[] dados = new String[3];
 
@@ -887,15 +890,17 @@ public class ImpressaoContaImpressoraTermica {
 
 				retorno.append(formarLinha(4, 0, 640, 1115, Util.formatarMoedaReal(emitirContaHelper.getValorConta()),
 						0, 0));
-				
+
 				if (emitirContaHelper.possuiCreditoBolsaAgua()) {
 					if (Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
-						retorno.append(dividirLinha(7, 0, 30, 1270, "PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA", 28, 20));
+						retorno.append(dividirLinha(7, 0, 30, 1270,
+								"PROGRAMA AGUA PARA QUITADO PELO GOVERNO DO ESTADO DO PARA", 28, 20));
 					} else if (Double.valueOf(emitirContaHelper.getValorTotalConta()) > 0.00) {
-						retorno.append(dividirLinha(7, 0, 30, 1270, "PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA", 28, 20));
+						retorno.append(dividirLinha(7, 0, 30, 1270,
+								"PROGRAMA AGUA PARA 20.000 LITROS QUITADOS PELO GOVERNO DO ESTADO DO PARA", 28, 20));
 					}
 				}
-				
+
 				retorno.append(formarLinha(0, 2, 424, 1270, "OPCAO PELO DEB. AUTOMATICO: ", 0, 0)
 						+ formarLinha(5, 0, 649, 1270, (imovelEmitido.getIndicadorDebitoConta() == null ? ""
 								: imovelEmitido.getId() + ""), 0, 0));
@@ -908,21 +913,25 @@ public class ImpressaoContaImpressoraTermica {
 						+ formarLinha(7, 0, 598, 2606, Util.formatarData(emitirContaHelper.getDataVencimentoConta()),
 								0, 0)
 						+ formarLinha(7, 0, 730, 2606, Util.formatarMoedaReal(emitirContaHelper.getValorConta()), 0, 0));
-
-				gerarDadosCodigoDeBarras(emitirContaHelper, retorno, imovelEmitido);
-
-				retorno.append(formarLinha(5, 0, 79, 3010, "GRUPO", 0, 0));
-				retorno.append(formarLinha(5, 0, 109, 3035, emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
-				retorno.append(formarLinha(5, 0, 352, 3035, "4", 0, 0));
-				retorno.append(formarLinha(5, 0, 615, 3035, "" + contador, 0, 0));
-				retorno.append(formarLinha(5, 0, 615, 1661, "" + contador, 0, 0));
 				
+				String cpfCnpj = consultarCpfCnpjCliente(imovelEmitido.getId());
+
+				gerarDadosCodigoDeBarras(emitirContaHelper, retorno, imovelEmitido, cpfCnpj);
+
+				retorno.append(formarLinha(5, 0, 37, 460, "GRUPO", 0, 0));
+				retorno.append(formarLinha(5, 0, 109, 485, emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
+				retorno.append(formarLinha(5, 0, 352, 485, "4", 0, 0));
+				retorno.append(formarLinha(5, 0, 680, 485, "" + contador, 0, 0));
+			//	retorno.append(formarLinha(5, 0, 615, 1661, "" + contador, 0, 0));
+
 				Object[] dadosAgenciaReguladora = getControladorFaturamento().obterDadosAgenciaReguladora();
 
 				this.gerarLinhasAliquotasImpostos(emitirContaHelper, sistemaParametro, dadosAgenciaReguladora, retorno);
 
 				this.gerarLinhaDadosAgenciaReguladora(emitirContaHelper, retorno);
-
+							
+				this.gerarLinhaDadosEmissaoConta(emitirContaHelper, imovelEmitido, cpfCnpj, retorno);
+				
 				retorno.append("FORM\n" + "PRINT\n");
 
 				return retorno.toString();
@@ -934,6 +943,49 @@ public class ImpressaoContaImpressoraTermica {
 		}
 		return retorno.toString();
 
+	}
+
+	private void gerarLinhaDadosEmissaoConta(EmitirContaHelper emitirContaHelper, Imovel imovelEmitido, String cpfCnpj,  StringBuilder retorno) throws ControladorException {
+		
+		String linha = null;
+		if(!cpfCnpj.equalsIgnoreCase("") && emitirContaHelper.getCodigoConvenio() != null ) {
+			StringBuilder nossoNumero = this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+			String numDoc = Util.formatarAnoMesParaMesAnoSemBarra(emitirContaHelper.getAmReferencia()).concat(emitirContaHelper.getIdConta().toString());
+		
+				   linha =  formarLinha(7, 0, 32, 2821, "BANCO DO BRASIL", 0, 0);
+				   linha += formarLinha(7, 0, 230, 2821, "001-9", 0, 0);
+				   linha += formarLinha(7, 0, 243, 100,"QUALQUER BANCO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 2897, "PAGADOR: "+ obterNomeCliente(emitirContaHelper, imovelEmitido) , 0, 0);
+				   linha += formarLinha(7, 0, 516, 2897, cpfCnpj, 0, 0);
+				   linha += formarLinha(7, 0, 32, 2925,"NOSSO NUMERO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 2945, nossoNumero.toString().substring(3, 20) , 0, 0); 
+				   linha += formarLinha(7, 0, 251, 2925,"NUMERO DOCUMENTO", 0, 0);
+				   linha += formarLinha(7, 0, 251, 2945, numDoc, 0, 0);
+				   linha += formarLinha(7, 0, 450, 2925,"VENCIMENTO", 0, 0);
+				   linha += formarLinha(7, 0, 450, 2945,Util.formatarData(emitirContaHelper.getDataVencimentoConta()), 0, 0);
+				   linha += formarLinha(7, 0, 580, 2925,"VALOR DOCUMENTO", 0, 0);
+				   linha += formarLinha(7, 0, 580, 2945,Util.formatarMoedaReal(emitirContaHelper.getValorConta()), 0, 0);
+				   linha += formarLinha(7, 0, 32, 2970,"COMPANHIA DE SANEAMENTO DO PARA / CNPJ: 04.945.341/0001-90", 0, 0);
+				   linha += formarLinha(7, 0, 32, 2996,"INFORMACOES DE RESPONSABILIDADE DO BENEFICIARIO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 3016,"EM CASO DE ATRASO, MULTAS, JUROS E CORRECAO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 3036,"SERAO COBRADOS NA PROXIMA FATURA", 0, 0);
+			}else{
+				
+				   linha = formarLinha(7, 0, 32, 2897,"PAGADOR: " + obterNomeCliente(emitirContaHelper, imovelEmitido)  , 0, 0);
+				  // linha += formarLinha(7, 0, 32, 2925, cpfCnpj, 0, 0);
+				   linha += formarLinha(7, 0, 450, 2925,"VENCIMENTO", 0, 0);
+				   linha += formarLinha(7, 0, 450, 2945,Util.formatarData(emitirContaHelper.getDataVencimentoConta()), 0, 0);
+				   linha += formarLinha(7, 0, 580, 2925,"VALOR DOCUMENTO", 0, 0);
+				   linha += formarLinha(7, 0, 580, 2945,Util.formatarMoedaReal(emitirContaHelper.getValorConta()), 0, 0);
+				   linha += formarLinha(7, 0, 32, 2970,"COMPANHIA DE SANEAMENTO DO PARA / CNPJ: 04.945.341/0001-90", 0, 0);
+				   linha += formarLinha(7, 0, 32, 2996,"INFORMACOES DE RESPONSABILIDADE DO BENEFICIARIO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 3016,"EM CASO DE ATRASO, MULTAS, JUROS E CORRECAO", 0, 0);
+				   linha += formarLinha(7, 0, 32, 3036,"SERAO COBRADOS NA PROXIMA FATURA", 0, 0);
+		}	   
+			
+		retorno.append(linha);
+	
+	
 	}
 
 	private void gerarDadosComuns(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro,
@@ -1197,63 +1249,108 @@ public class ImpressaoContaImpressoraTermica {
 		}
 	}
 
-	private void gerarDadosCodigoDeBarras(EmitirContaHelper emitirContaHelper, StringBuilder retorno,
-			Imovel imovelEmitido) throws ControladorException {
-		if (!imovelEmitido.getIndicadorDebitoConta().equals(Imovel.INDICADOR_DEBITO_AUTOMATICO)) {
-			Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
-			// formata ano mes para mes ano
-			String anoMes = "" + emitirContaHelper.getAmReferencia();
-			String mesAno = anoMes.substring(4, 6) + anoMes.substring(0, 4);
+	private String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
+		String cnpjCpf = "";
 
-			String representacaoNumericaCodBarra = "";
+		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);
 
-			// Linha28
-			Date dataValidade = emitirContaHelper.getDataValidadeConta();
+		if (colecaoClienteImovel2 != null && !colecaoClienteImovel2.isEmpty()) {
+			ClienteImovel clienteImovelRespConta2 = (ClienteImovel) colecaoClienteImovel2.iterator().next();
 
-			if (emitirContaHelper.getValorConta() != null) {
-				if (emitirContaHelper.getValorConta().compareTo(new BigDecimal("0.00")) != 0) {
-					representacaoNumericaCodBarra = this.getControladorArrecadacao()
-							.obterRepresentacaoNumericaCodigoBarra(3, emitirContaHelper.getValorConta(),
-									emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAno,
-									digitoVerificadorConta, null, null, null, null, null, null, null);
+			if (clienteImovelRespConta2 != null) {
+				Cliente cliente2 = clienteImovelRespConta2.getCliente();
 
-					// Linha 24
-					// Formata a representação númerica do código de
-					// barras
-					String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11)
-							+ "-" + representacaoNumericaCodBarra.substring(11, 12) + " "
-							+ representacaoNumericaCodBarra.substring(12, 23) + "-"
-							+ representacaoNumericaCodBarra.substring(23, 24) + " "
-							+ representacaoNumericaCodBarra.substring(24, 35) + "-"
-							+ representacaoNumericaCodBarra.substring(35, 36) + " "
-							+ representacaoNumericaCodBarra.substring(36, 47) + "-"
-							+ representacaoNumericaCodBarra.substring(47, 48);
-					emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
-
-					// Linha 25
-					String representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11)
-							+ representacaoNumericaCodBarra.substring(12, 23)
-							+ representacaoNumericaCodBarra.substring(24, 35)
-							+ representacaoNumericaCodBarra.substring(36, 47);
-					emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+				if (cliente2.getCnpjFormatado() != null && !cliente2.getCnpjFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCnpjFormatado();
+				} else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
+					cnpjCpf = cliente2.getCpfFormatado();
 				}
 
-				String representacaoNumericaCodBarraFormatada = emitirContaHelper
-						.getRepresentacaoNumericaCodBarraFormatada();
-				if (representacaoNumericaCodBarraFormatada != null) {
-
-					retorno.append(formarLinha(5, 0, 66, 2840, representacaoNumericaCodBarraFormatada, 0, 0));
-					String representacaoCodigoBarrasSemDigitoVerificador = emitirContaHelper
-							.getRepresentacaoNumericaCodBarraSemDigito();
-					retorno.append("B I2OF5 1 2 120 35 2863 " + representacaoCodigoBarrasSemDigitoVerificador + "\n");
-				}
 			}
-		} else {
-			retorno.append(formarLinha(4, 0, 182, 2863, "DEBITO AUTOMATICO", 0, 0));
-
 		}
+		return cnpjCpf;
 	}
 
+	private void gerarDadosCodigoDeBarras(EmitirContaHelper emitirContaHelper, StringBuilder retorno,
+			Imovel imovelEmitido, String cpfCnpj) throws ControladorException, ErroRepositorioException {
+		if (!imovelEmitido.getIndicadorDebitoConta().equals(Imovel.INDICADOR_DEBITO_AUTOMATICO)) {
+			
+			String representacaoNumericaCodBarraFormatada = null;
+			String representacaoNumericaCodBarra = "";
+			// Linha28
+			Date dataValidade = emitirContaHelper.getDataValidadeConta();
+					
+			if(!cpfCnpj.equalsIgnoreCase("") && emitirContaHelper.getCodigoConvenio() != null ) {
+				
+				emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
+				StringBuilder nossoNumero =	this.getControladorFaturamento().obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+				String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
+				
+					Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
+					String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
+					String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+									ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
+									ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+									emitirContaHelper.getValorConta(),
+									nossoNumeroSemDV.toString(),
+									ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO,
+									fatorVencimento);
+				representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+		
+				representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra;
+				emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+				String representacaoNumericaCodBarraSemDigito = especificacaoCodigoBarra;
+				
+				emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+				
+			}else{
+				
+					Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
+					// formata ano mes para mes ano
+					String anoMes = "" + emitirContaHelper.getAmReferencia();
+					String mesAno = anoMes.substring(4, 6) + anoMes.substring(0, 4);
+					if (emitirContaHelper.getValorConta() != null) {
+						if (emitirContaHelper.getValorConta().compareTo(new BigDecimal("0.00")) != 0) {
+							representacaoNumericaCodBarra = this.getControladorArrecadacao()
+									.obterRepresentacaoNumericaCodigoBarra(3, emitirContaHelper.getValorConta(),
+											emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAno,
+											digitoVerificadorConta, null, null, null, null, null, null, null);
+							// Linha 24
+							// Formata a representação númerica do código de
+							// barras
+							 representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra.substring(0, 11)
+									+ "-" + representacaoNumericaCodBarra.substring(11, 12) + " "
+									+ representacaoNumericaCodBarra.substring(12, 23) + "-"
+									+ representacaoNumericaCodBarra.substring(23, 24) + " "
+									+ representacaoNumericaCodBarra.substring(24, 35) + "-"
+									+ representacaoNumericaCodBarra.substring(35, 36) + " "
+									+ representacaoNumericaCodBarra.substring(36, 47) + "-"
+									+ representacaoNumericaCodBarra.substring(47, 48);
+							emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+							// Linha 25
+							String representacaoNumericaCodBarraSemDigito = representacaoNumericaCodBarra.substring(0, 11)
+									+ representacaoNumericaCodBarra.substring(12, 23)
+									+ representacaoNumericaCodBarra.substring(24, 35)
+									+ representacaoNumericaCodBarra.substring(36, 47);
+							emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+						}
+						 representacaoNumericaCodBarraFormatada = emitirContaHelper.getRepresentacaoNumericaCodBarraFormatada();
+					}
+					
+			}
+			
+			
+			if (representacaoNumericaCodBarraFormatada != null) {
+					retorno.append(formarLinha(5, 1, 80, 2849, representacaoNumericaCodBarraFormatada, 0, 0));
+					String representacaoCodigoBarrasSemDigitoVerificador = emitirContaHelper
+							.getRepresentacaoNumericaCodBarraSemDigito();
+					retorno.append("B I2OF5 1 2 95 35 3076 " + representacaoCodigoBarrasSemDigitoVerificador + "\n");
+			}
+			
+		} else {
+			retorno.append(formarLinha(4, 0, 182, 3076, "DEBITO AUTOMATICO", 0, 0));
+		}
+	}
 	private void gerarDadosMedia(StringBuilder retorno, MedicaoHistorico medicaoHistoricoAgua,
 			MedicaoHistorico medicaoHistoricoPoco, ConsumoHistorico consumoAgua, ConsumoHistorico consumoEsgoto,
 			int soma, int mesesDeConsumo) {
@@ -1632,39 +1729,43 @@ public class ImpressaoContaImpressoraTermica {
 
 	private void gerarInformacoesBasicas(EmitirContaHelper emitirContaHelper, SistemaParametro sistemaParametro,
 			StringBuilder retorno, Imovel imovelEmitido, String endereco, String cpfCnpjFormatado) {
-		retorno.append("! 0 200 200 3100 1\n");
-
-		retorno.append("BOX 32 405 802 452 1\n" + 
-					   "LINE 720 385 720 425 1\n" + 
+		retorno.append("! 0 200 200 3200 1\n");
+		retorno.append("BOX 32 405 802 452 1\n" +
+					   "LINE 720 385 720 425 1\n" +
 					   "LINE 403 385 403 447 1\n" +
-
-					   "BOX 32 361 802 405 1\n" + 
+					   "BOX 32 361 802 405 1\n" +
 					   "LINE 278 385 278 447 1\n" +
-
-					   "BOX 283 588 802 615 1\n" + 
-					   "BOX 283 615 802 782 1\n" + 
-					   "LINE 656 588 656 782 1\n" + 
-					   "LINE 415 588 415 615 1\n" + 
-					   "LINE 535 588 535 782 1\n");
-
-		retorno.append("T 7 0 50 51 " + "Data de Emissao: " + Util.formatarDataComHora(new Date()) + "\n");
+					   "BOX 283 588 802 615 1\n" +
+					   "BOX 283 615 802 782 1\n" +
+					   "LINE 656 588 656 782 1\n" +
+					   "LINE 415 588 415 615 1\n" +
+					   "LINE 535 588 535 782 1\n" +
+					   "LINE 32 2840 802 2840 1\n"+
+					   "LINE 224 2820 224 2840 2\n"+
+					   "LINE 293 2820 293 2840 2\n"+
+					   "LINE 32 2892 802 2892 1\n"+
+					   "LINE 32 2924 802 2924 1\n"+
+					   "LINE 241 2924 241 2968 2\n"+
+					   "LINE 446 2924 446 2968 2\n"+
+					   "LINE 575 2924 575 2968 2\n"+
+					   "LINE 32 2968 802 2968 1\n");
+		
 		retorno.append("T 7 1 70 115 " + imovelEmitido.getId() + "\n");
-		retorno.append("T 7 1 640 115 " + Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + "")
-				+ "\n");
+		retorno.append("T 7 0 50 51 " + "Data de Emissao: " + Util.formatarDataComHora(new Date()) + "\n");
+		retorno.append("T 7 1 640 115 " + Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + "")	+ "\n");
 		// retorno.append("T 0 0 201 47 " +
 		// Util.formatarCnpj(sistemaParametro.getCnpjEmpresa().trim()) + "\n");
 		// retorno.append("T 0 0 285 64 " +
 		// sistemaParametro.getInscricaoEstadual().trim() + "\n");
 		// retorno.append(formarLinha(0, 0, 222, 81,
 		// emitirContaHelper.getIdFaturamentoGrupo() + "", 0, 0));
-
-		retorno.append(formarLinha(0, 2, 20, 200, obterNomeCliente(emitirContaHelper, imovelEmitido), 0, 0)
-				+ formarLinha(0, 2, 20, 222, cpfCnpjFormatado, 0, 0)
-				+ dividirLinha(0, 2, 350, 200, endereco.trim(), 55, 22));
+			
+		retorno.append(formarLinha(7, 0, 20, 190, obterNomeCliente(emitirContaHelper, imovelEmitido), 0, 0)
+				+ formarLinha(7, 0, 20, 210, cpfCnpjFormatado, 0, 0)
+				+ dividirLinha(0, 2, 400, 200, endereco.trim(), 55, 22));
 		retorno.append(formarLinha(7, 0, 20, 260, imovelEmitido.getInscricaoFormatada(), 0, 0));
 		retorno.append(formarLinha(7, 0, 350, 260, imovelEmitido.getQuadra().getRota().getCodigo() + "", 0, 0));
 		retorno.append(formarLinha(7, 0, 445, 260, imovelEmitido.getNumeroSequencialRota() + "", 0, 0));
-
 		gerarDadosQtdEconomias(retorno, imovelEmitido);
 	}
 
@@ -1848,34 +1949,35 @@ public class ImpressaoContaImpressoraTermica {
 		return valorPrestacao;
 	}
 
-	private void gerarLinhaDadosAgenciaReguladora(EmitirContaHelper emitirContaHelper, StringBuilder retorno) throws ErroRepositorioException, ControladorException {
+	private void gerarLinhaDadosAgenciaReguladora(EmitirContaHelper emitirContaHelper, StringBuilder retorno)
+			throws ErroRepositorioException, ControladorException {
 		Object[] dados = getControladorFaturamento().pesquisarContatosAgenciaReguladora(emitirContaHelper);
 
 		if (dados != null && dados.length > 0) {
 			String linha = formarLinha(7, 0, 243, 100, String.format("Ag. reguladora (%s)", (String) dados[0]), 0, 0);
 			linha += formarLinha(7, 0, 243, 120, String.format("Telefone: %s", (String) dados[1]), 0, 0);
 			linha += formarLinha(7, 0, 243, 140, String.format("Email: %s", (String) dados[2]), 0, 0);
-			
+
 			retorno.append(linha);
 		}
 	}
-	
-	private BigDecimal retornaCreditoBolsaAgua (CreditoRealizado cr, EmitirContaHelper helper) {
+
+	private BigDecimal retornaCreditoBolsaAgua(CreditoRealizado cr, EmitirContaHelper helper) {
 		BigDecimal valorAguaEsgoto = new BigDecimal("0.00");
 		BigDecimal valorCredito = cr.getValorCredito();
-		
-		valorAguaEsgoto.add(helper.getValorAgua()); 
-				
-		if (helper.getValorEsgoto() != null){
-				valorAguaEsgoto.add(helper.getValorEsgoto());
+
+		valorAguaEsgoto.add(helper.getValorAgua());
+
+		if (helper.getValorEsgoto() != null) {
+			valorAguaEsgoto.add(helper.getValorEsgoto());
 		}
-				
+
 		if (valorAguaEsgoto.compareTo(valorCredito) > 0) {
 			return valorCredito;
 		} else {
 			return valorAguaEsgoto;
 		}
-			
+
 	}
-	
+
 }

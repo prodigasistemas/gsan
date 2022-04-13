@@ -9,6 +9,7 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
+import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.Subcategoria;
@@ -3067,4 +3068,21 @@ public interface IRepositorioFaturamento {
 	public boolean possuiComunicadoNaoEmitido(Integer idImovel, Integer referencia, Integer tipoComunicado) throws ErroRepositorioException;
 	
 	public Collection pesquisarContasVencimentoParaEnvioEmail(Integer idRota, Date dataVencimento) throws ErroRepositorioException;
+	
+	public Conta contaFichaCompensacao(Integer idConta) throws ErroRepositorioException;
+	
+	public Cliente clienteFichaCompensacao(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento)throws ErroRepositorioException;
+
+	public Collection idContasEmitidasFichaCompensacao(Integer idFaturamentoGrupo, Integer anoMesFaturamentoGrupo) throws ErroRepositorioException;
+	
+	public Municipio municipio(Integer idLocalidade) throws ErroRepositorioException;
+	
+	public Boolean fichaCompensacaoExistente(Integer idConta) throws ErroRepositorioException;
+	
+	public void inserirFichaCompensacao (Integer idConv,Integer numeroCarteira,Integer numeroVariacaoCarteira,Short
+			codigoModalidade,String dataEmissao,String dataVencimento,Double valorOriginal,String codigoAceite,Short codigoTipoTitulo,String
+			indicadorPermissaoRecebimentoParcial,String numeroTituloCliente,Integer imovel,Integer cliente, Integer conta) throws ErroRepositorioException;
+	
 }

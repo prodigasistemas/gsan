@@ -156,7 +156,7 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 				&& valorTotalContas.compareTo(sistemaParametro.getValorExtratoFichaComp()) >= 0){
 
 				StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(
-						DocumentoTipo.EXTRATO_DE_DEBITO.toString(),documentoCobranca.getId().toString()) ;
+						DocumentoTipo.EXTRATO_DE_DEBITO.toString(),documentoCobranca.getId().toString(), null) ;
 				String nossoNumeroSemDV = nossoNumero.toString().substring(0,17);
 				relatorioExtratoDebitoCliente.addParametro("nossoNumero",nossoNumero.toString());
 
@@ -264,7 +264,7 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 				&& valorTotalContas.compareTo(sistemaParametro.getValorExtratoFichaComp()) >= 0){
 
 			StringBuilder nossoNumero = fachada.obterNossoNumeroFichaCompensacao(
-					DocumentoTipo.EXTRATO_DE_DEBITO.toString(),documentoCobranca.getId().toString()) ;
+					DocumentoTipo.EXTRATO_DE_DEBITO.toString(),documentoCobranca.getId().toString(), null) ;
 			String nossoNumeroSemDV = nossoNumero.toString().substring(0,17);
 			relatorioExtratoDebitoCliente.addParametro("nossoNumero",nossoNumero.toString());
 
