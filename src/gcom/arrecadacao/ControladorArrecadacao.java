@@ -52100,8 +52100,10 @@ public class ControladorArrecadacao extends ControladorComum {
 			// para boletos que foram gerados e nao foram salvos no bd
 			if (boletoInfo != null) {
 				String linkBoleto = boletoInfo.getLinkBoleto().toString();
-				// Alterar tipo de pagamento para segunda via
-				linkBoleto = linkBoleto.replace("tpPagamento=2", "tpPagamento="+tpPagamento);
+				if(boletoInfo.getTpPagamento().equals('2')) {
+					// Alterar tipo de pagamento para segunda via
+					linkBoleto = linkBoleto.replace("tpPagamento=2", "tpPagamento="+tpPagamento);
+				}
 				return linkBoleto;
 			} else {
 				foiGerado = false;
