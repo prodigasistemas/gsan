@@ -2921,6 +2921,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								creditoARealizar.setNumeroSubLote(imovel.getSubLote());
 								creditoARealizar.setRegistroAtendimento(null);
 								creditoARealizar.setOrdemServico(null);
+								creditoARealizar.setLancamentoItemContabil(creditoTipo.getLancamentoItemContabil());
 								creditoARealizar.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
 								creditoARealizar.setDebitoCreditoSituacaoAnterior(null);
 								creditoARealizar.setCreditoARealizarGeral(creditoARealizarGeral);
@@ -16521,8 +16522,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				UnidadeProcessamento.FUNCIONALIDADE, idGrupoFaturamento);
 		Collection<Integer> idContas = repositorioFaturamento.idContasEmitidasFichaCompensacao(idGrupoFaturamento,
 				anoMesReferencia);
-		try {
+		
+		if(!idContas.isEmpty()) {
 
+		try {
+ 
 			for (Integer idConta : idContas) {
 				Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistente(idConta);
 				if (fichaExistente == false) {
@@ -16534,7 +16538,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
-		}
+		}		
+	  }else {
+		  getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+	  }
 
 	}
 	

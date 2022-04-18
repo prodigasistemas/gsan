@@ -60395,11 +60395,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			StringBuilder consulta = new StringBuilder();
 
 			consulta.append("select conta.id from Conta conta ")
-			        .append("inner join conta.clienteContas clienteContas ")
-			        .append("inner join clienteContas.cliente cliente ")
-			        //.append
-			        .append("where 1=1 and conta.faturamentoGrupo.id = :idFaturamentoGrupo and conta.referencia = :anoMesFaturamento ")
-			        .append("and (cliente.cpf is not null or cliente.cnpj is not null) and clienteContas.indicadorNomeConta = 1 ");
+	        .append("inner join conta.clienteContas clienteContas ")
+			.append("inner join clienteContas.cliente cliente ")
+			.append("inner join conta.imovel imovel ")
+			.append("where 1=1 and conta.faturamentoGrupo.id = :idFaturamentoGrupo and conta.referencia = :anoMesFaturamento ")
+			.append("and (cliente.cpf is not null or cliente.cnpj is not null) and imovel.codigoConvenio is not null"
+					+ " and clienteContas.indicadorNomeConta = 1 ");
 
 			contas =   session.createQuery(consulta.toString())
 					   .setInteger("idFaturamentoGrupo", idFaturamentoGrupo)
