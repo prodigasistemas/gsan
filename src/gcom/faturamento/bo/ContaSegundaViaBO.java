@@ -73,9 +73,9 @@ public class ContaSegundaViaBO {
 					Integer tipoDocumento = null;
 					String banco = null;
 					String numeroReferencia = null;
-					if(conta.getCpf() != null || conta.getCnpj() != null) {
-					nossoNumero = this.controlador.obterNossoNumeroFichaCompensacao("1", conta.getIdConta().toString(), conta.getCodigoConvenio());
-					nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
+					if((conta.getCpf() != null && conta.getCodigoConvenio() != null ) || (conta.getCpf() != null && conta.getCodigoConvenio() != null ) ) {
+						nossoNumero = this.controlador.obterNossoNumeroFichaCompensacao("1", conta.getIdConta().toString(), conta.getCodigoConvenio());
+						nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
 					}	
 					
 					if(nossoNumeroSemDV != null) {
