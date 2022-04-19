@@ -14997,7 +14997,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		ExtratoQuitacao extratoQuitacao = this.obterExtratoQuitacaoImovel(imovel.getId(), anoAnterior);
 		
 		if (extratoQuitacao != null && extratoQuitacao.getIndicadorImpressaoNaConta() != null && extratoQuitacao.getIndicadorImpressaoNaConta().equals(new Integer(ConstantesSistema.NAO))) {
-			mensagem = "Em cumprimento a lei 12.007/2009, declaramos quitados os dï¿½bitos de consumo de ï¿½gua e/ou esgoto do ano de " + anoAnterior +  ".";
+			mensagem = "Em cumprimento a lei 12.007/2009, declaramos quitados os débitos de consumo de água e/ou esgoto do ano de " + anoAnterior +  ".";
 		} 
 		return mensagem;
 	}
@@ -16198,7 +16198,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Conta conta = new Conta((Integer) contasEmail[0]);
 			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
 			//String emailReceptor = (String) contasEmail[2];
-			String emailReceptor = "emandrad@cosanpa.pa.gov.br"; //EMAIL DO EDUARDO
+			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL 
 			String nomeCliente = (String) contasEmail[3];
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 			
