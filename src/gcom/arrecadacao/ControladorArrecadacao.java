@@ -52088,6 +52088,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		BoletoInfo boletoInfo = null;
 		boolean foiGerado = true;
 		String tpPagamento = (primeiraVia ? "2" : "21");
+		String segundoCiclo = "2";
 		
 		if (!primeiraVia) {
 			FiltroBancoInfo filtro = new FiltroBancoInfo();
@@ -52100,9 +52101,12 @@ public class ControladorArrecadacao extends ControladorComum {
 			// para boletos que foram gerados e nao foram salvos no bd
 			if (boletoInfo != null) {
 				String linkBoleto = boletoInfo.getLinkBoleto().toString();
-				if(boletoInfo.getTpPagamento().equals('2')) {
+				if(boletoInfo.getTpPagamento().equals(segundoCiclo)) {
 					// Alterar tipo de pagamento para segunda via
 					linkBoleto = linkBoleto.replace("tpPagamento=2", "tpPagamento="+tpPagamento);
+					boletoInfo.setLinkBoleto(linkBoleto);
+					boletoInfo.setTpPagamento(tpPagamento);
+					getControladorUtil().atualizar(boletoInfo);
 				}
 				return linkBoleto;
 			} else {
