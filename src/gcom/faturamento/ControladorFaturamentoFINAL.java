@@ -32660,23 +32660,24 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						if (parmsConta[41] != null) {
 							emitirContaHelper.setNumeroSequencialRotaEntrega((Integer) parmsConta[41]);
 						}
-						if (parmsConta[42] != null) {
-							emitirContaHelper.setCodigoConvenio((Integer) parmsConta[42]);
-						}
 
-						if (tam > 43) {
+						if (tam > 42) {
+							if (parmsConta[42] != null) {
+								emitirContaHelper.setNumeroQuadraEntrega((Integer) parmsConta[42]);
+							}
 							if (parmsConta[43] != null) {
-								emitirContaHelper.setNumeroQuadraEntrega((Integer) parmsConta[43]);
+								emitirContaHelper.setValorRateioAgua((BigDecimal) parmsConta[43]);
 							}
 							if (parmsConta[44] != null) {
-								emitirContaHelper.setValorRateioAgua((BigDecimal) parmsConta[44]);
+								emitirContaHelper.setValorRateioEsgoto((BigDecimal) parmsConta[44]);
 							}
 							if (parmsConta[45] != null) {
-								emitirContaHelper.setValorRateioEsgoto((BigDecimal) parmsConta[45]);
+								emitirContaHelper.setValorCreditoBolsaAgua((BigDecimal) parmsConta[45]);
 							}
-							if (parmsConta[46] != null) {
-								emitirContaHelper.setValorCreditoBolsaAgua((BigDecimal) parmsConta[46]);
-							}
+						}
+						
+						if (parmsConta[46] != null) {
+							emitirContaHelper.setCodigoConvenio((Integer) parmsConta[46]);
 						}
 
 					}
