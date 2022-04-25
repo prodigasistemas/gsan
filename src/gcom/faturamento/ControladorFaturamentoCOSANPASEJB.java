@@ -122,6 +122,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		int qtdImovelArquivoImpressaoTermica = 0;
 		int qtdContasLocalidade = 0;
 
+		Boolean isNovoLayoutImpressao = Boolean.valueOf(getFaturamentoParametro(
+				FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.NOVO_LAYOUT_IMPRESSAO
+				.toString()));
+		
 		List<Integer> idsCondominios = new ArrayList<Integer>();
 
 		try {
@@ -561,10 +565,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			
 								if(!cpfCnpj.equalsIgnoreCase("") && emitirContaHelper.getCodigoConvenio() != null) {
 									    contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
-									}else { 
-										contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt);
-									    
-									}
+								}else { 
+										contaTxt = preencherCodigoBarrasConta(emitirContaHelper, contaTxt, isNovoLayoutImpressao);
+								}
 
 								contaTxt.append(Util.completaString(cont + "", 8));
 
@@ -647,12 +650,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 								contaTxt = preencherDadosAliquotaAgenciaReguladora(emitirContaHelper, contaTxt);
 								contaTxt = preencherFlagCarimbo(emitirContaHelper, contaTxt);
 								
-								if(!cpfCnpj.equalsIgnoreCase("") && emitirContaHelper.getCodigoConvenio() != null) {
+								if (isNovoLayoutImpressao) {
+									if(!cpfCnpj.equalsIgnoreCase("") && emitirContaHelper.getCodigoConvenio() != null) {
 										contaTxt = preencherDadosEmissaoConta(emitirContaHelper, contaTxt);
-									  }else {
+									}else {
 										contaTxt.append(Util.completaString("", 242));
 										contaTxt.append(Util.completaString("Documento de Arrecadacao", 25));
-								}
+									}
+								} 
 
 								if (isEmitirImpressaoTermica(imovelEmitido, municipioEntrega, municipioImovel)) {
 
@@ -1115,7 +1120,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		return contaTxt;
 	}
 
-	private StringBuilder preencherCodigoBarrasConta(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
+	private StringBuilder preencherCodigoBarrasConta(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt, Boolean isNovoLayout)
 			throws ControladorException {
 		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(),
 				emitirContaHelper.getValorCreditos(), emitirContaHelper.getDebitos(),
@@ -1138,7 +1143,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				3, valorConta, emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAnoFormatado,
 				digitoVerificadorConta, null, null, null, null, null, null, null);
 
-		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 54));
+		if (isNovoLayout) {
+			contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 54));
+		} else {
+			contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
+		}
 		return contaTxt;
 	}
 
