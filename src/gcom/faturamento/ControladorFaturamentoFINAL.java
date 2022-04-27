@@ -1642,7 +1642,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		 try {
 			if (contaCategoria.getCategoria().isResidencial()
 					&& getControladorImovel().isImovelBolsaAgua(contaCategoria.getConta().getImovel().getId())) {
-				 DeterminarValoresFaturamentoAguaEsgotoHelper helper = this.obterValoresCreditosBolsaAgua(conta.getImovel(), conta.getFaturamentoGrupo());
+				 DeterminarValoresFaturamentoAguaEsgotoHelper helper = this.obterValoresCreditosBolsaAgua(
+						 contaCategoria.getConta().getImovel(), contaCategoria.getConta().getFaturamentoGrupo());
 				 
 				 if (contaCategoria.getConta().getImovel().isLigadoAgua() ) {
 						contaCategoria.setValorAgua(helper.getValorTotalAgua());  
