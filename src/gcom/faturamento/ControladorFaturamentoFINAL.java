@@ -1617,7 +1617,97 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 		}
 	}
+	
+	public void atualizarValorContaBolsaAgua(Conta conta) throws ControladorException {
+		
+		 try {
+			if (getControladorImovel().isImovelBolsaAgua(conta.getImovel().getId())) {
+				 DeterminarValoresFaturamentoAguaEsgotoHelper helper = this.obterValoresCreditosBolsaAgua(conta.getImovel(), conta.getFaturamentoGrupo());
+				 
+				 if (conta.getImovel().isLigadoAgua() ) {
+						conta.setValorAgua(helper.getValorTotalAgua());  
+				}
+					
+				if (conta.getImovel().isLigadoEsgoto()) {
+					conta.setValorEsgoto(helper.getValorTotalEsgoto());
+				}
+			 }
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
+		}
+	}
+	
+	public void atualizarValorContaCategoriaBolsaAgua(ContaCategoria contaCategoria) throws ControladorException {
+		
+		 try {
+			if (contaCategoria.getCategoria().isResidencial()
+					&& getControladorImovel().isImovelBolsaAgua(contaCategoria.getConta().getImovel().getId())) {
+				 DeterminarValoresFaturamentoAguaEsgotoHelper helper = this.obterValoresCreditosBolsaAgua(conta.getImovel(), conta.getFaturamentoGrupo());
+				 
+				 if (contaCategoria.getConta().getImovel().isLigadoAgua() ) {
+						contaCategoria.setValorAgua(helper.getValorTotalAgua());  
+				}
+					
+				if (contaCategoria.getConta().getImovel().isLigadoEsgoto()) {
+					contaCategoria.setValorEsgoto(helper.getValorTotalEsgoto());
+				}
+			 }
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
+		}
+	}
 
+	public DeterminarValoresFaturamentoAguaEsgotoHelper obterValoresCreditosBolsaAgua(Imovel imovel, FaturamentoGrupo grupo ) {
+		LigacaoTipo ligacaoTipo = new LigacaoTipo();
+		DeterminarValoresFaturamentoAguaEsgotoHelper valoresAguaEsgoto = null;
+		
+		try {
+			Categoria categoria = getControladorImovel().obterCategoria(Categoria.RESIDENCIAL);
+			categoria.setQuantidadeEconomiasCategoria(1);
+			Collection colecaoCategorias = new ArrayList();
+			colecaoCategorias.add(categoria);
+			
+			ConsumoHistorico consumoHistoricoAgua = null;
+			if (imovel.getLigacaoAgua() != null) {
+				ligacaoTipo.setId(LigacaoTipo.LIGACAO_AGUA);
+	
+				consumoHistoricoAgua = this.getControladorMicromedicao().obterUltimoConsumoImovel(imovel, LigacaoTipo.LIGACAO_AGUA);
+				
+				if (consumoHistoricoAgua == null) {
+					consumoHistoricoAgua = new ConsumoHistorico();
+					consumoHistoricoAgua.setIndicadorFaturamento(ConstantesSistema.SIM);
+					consumoHistoricoAgua.setConsumoTipo(new ConsumoTipo(ConsumoTipo.SEM_CONSUMO));
+				}
+				
+				consumoHistoricoAgua.setNumeroConsumoFaturadoMes(20);
+			}
+	
+			ConsumoHistorico consumoHistoricoEsgoto = null;
+	
+			if (imovel.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
+				ligacaoTipo.setId(LigacaoTipo.LIGACAO_ESGOTO);
+
+				consumoHistoricoEsgoto = this.getControladorMicromedicao().obterUltimoConsumoImovel(imovel, LigacaoTipo.LIGACAO_ESGOTO);
+				
+				if (consumoHistoricoEsgoto == null) {
+					consumoHistoricoEsgoto = new ConsumoHistorico();
+					consumoHistoricoEsgoto.setIndicadorFaturamento(ConstantesSistema.SIM);
+					consumoHistoricoEsgoto.setConsumoTipo(new ConsumoTipo(ConsumoTipo.SEM_CONSUMO));
+				}
+				
+				consumoHistoricoEsgoto.setNumeroConsumoFaturadoMes(14);
+
+			}
+		
+			valoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imovel, grupo.getAnoMesReferencia(),
+					colecaoCategorias, grupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
+		
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+
+		return valoresAguaEsgoto;
+	}
 	private boolean permiteFaturarSituacaoEspecialFaturamento(Imovel imovel, Integer anoMesFaturamento)
 			throws ControladorException {
 		boolean faturar = true;
@@ -53385,6 +53475,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		conta.setNumeroBoleto(this.verificarGeracaoBoleto(sistemaParametro, conta));
 
+		atualizarValorContaBolsaAgua(conta);
+		
 		this.getControladorUtil().inserir(conta);
 
 		return conta;
@@ -53611,9 +53703,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					valorEsgoto = calcularValoresAguaEsgotoHelper.getValorFaturadoEsgotoCategoria().add(valorEsgoto);
 
 				contaCategoria.setValorAgua(valorAgua);
-
-				contaCategoria.setConsumoAgua(calcularValoresAguaEsgotoHelper.getConsumoFaturadoAguaCategoria());
 				contaCategoria.setValorEsgoto(valorEsgoto);
+
+				atualizarValorContaCategoriaBolsaAgua(contaCategoria);
+				
+				contaCategoria.setConsumoAgua(calcularValoresAguaEsgotoHelper.getConsumoFaturadoAguaCategoria());
 				contaCategoria.setConsumoEsgoto(calcularValoresAguaEsgotoHelper.getConsumoFaturadoEsgotoCategoria());
 				contaCategoria.setValorTarifaMinimaAgua(calcularValoresAguaEsgotoHelper
 						.getValorTarifaMinimaAguaCategoria());

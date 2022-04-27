@@ -568,6 +568,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									contaCategoria.setConsumoMinimoEsgoto(helperCategoria.getConsumoMinimoEsgoto());
 									contaCategoria.setUltimaAlteracao(new Date());
 
+									atualizarValorContaCategoriaBolsaAgua(contaCategoria);
 									try {
 										repositorioFaturamento.atualizarContaCategoriaProcessoMOBILE(contaCategoria);
 									} catch (ErroRepositorioException e) {
@@ -679,6 +680,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 							}
 	        				 
+							
 	        				 contaAtualizacao.setConsumoAgua(consumoAgua);
 	        				 contaAtualizacao.setConsumoEsgoto(consumoEsgoto);
 	        				 contaAtualizacao.setConsumoRateioAgua(consumoRateioAgua);
@@ -693,7 +695,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 contaAtualizacao.setValorRateioAgua(helper.getValorRateioAgua());
 					         contaAtualizacao.setValorRateioEsgoto(helper.getValorRateioEsgoto());
 					            
-	        				 DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
+					         atualizarValorContaBolsaAgua(contaAtualizacao);
+
+					         DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 	        				 debitoCreditoSituacao.setId( DebitoCreditoSituacao.NORMAL );
 	        				 contaAtualizacao.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 	        				 
@@ -16279,12 +16283,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 				
 				if (imovel.isLigadoEsgoto()) {
-					if (helper.getPercentualEsgoto() != null && !helper.getPercentualEsgoto().equals("")) {
-						BigDecimal valor = helper.getValorTotalAgua();
-						BigDecimal percentualEsgoto = new BigDecimal("100");
-						helper.setValorTotalEsgoto(valor.multiply(helper.getPercentualEsgoto().divide(percentualEsgoto))
-								.setScale(2, BigDecimal.ROUND_HALF_UP));
-					}
 					valorCredito = valorCredito.add(helper.getValorTotalEsgoto());
 				}
 				
@@ -16300,58 +16298,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	public DeterminarValoresFaturamentoAguaEsgotoHelper obterValoresCreditosBolsaAgua(Imovel imovel, FaturamentoGrupo grupo ) {
-		LigacaoTipo ligacaoTipo = new LigacaoTipo();
-		DeterminarValoresFaturamentoAguaEsgotoHelper valoresAguaEsgoto = null;
-		
-		try {
-			Categoria categoria = getControladorImovel().obterCategoria(Categoria.RESIDENCIAL);
-			categoria.setQuantidadeEconomiasCategoria(1);
-			Collection colecaoCategorias = new ArrayList();
-			colecaoCategorias.add(categoria);
-			
-			ConsumoHistorico consumoHistoricoAgua = null;
-			if (imovel.getLigacaoAgua() != null) {
-				ligacaoTipo.setId(LigacaoTipo.LIGACAO_AGUA);
-	
-				consumoHistoricoAgua = this.getControladorMicromedicao().obterUltimoConsumoImovel(imovel, LigacaoTipo.LIGACAO_AGUA);
-				
-				if (consumoHistoricoAgua == null) {
-					consumoHistoricoAgua = new ConsumoHistorico();
-					consumoHistoricoAgua.setIndicadorFaturamento(ConstantesSistema.SIM);
-					consumoHistoricoAgua.setConsumoTipo(new ConsumoTipo(ConsumoTipo.SEM_CONSUMO));
-				}
-				
-				consumoHistoricoAgua.setNumeroConsumoFaturadoMes(20);
-			}
-	
-			ConsumoHistorico consumoHistoricoEsgoto = null;
-	
-			if (imovel.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
-				ligacaoTipo.setId(LigacaoTipo.LIGACAO_ESGOTO);
-
-				consumoHistoricoEsgoto = this.getControladorMicromedicao().obterUltimoConsumoImovel(imovel, LigacaoTipo.LIGACAO_ESGOTO);
-				
-				if (consumoHistoricoEsgoto == null) {
-					consumoHistoricoEsgoto = new ConsumoHistorico();
-					consumoHistoricoEsgoto.setIndicadorFaturamento(ConstantesSistema.SIM);
-					consumoHistoricoEsgoto.setConsumoTipo(new ConsumoTipo(ConsumoTipo.SEM_CONSUMO));
-				}
-				
-				consumoHistoricoEsgoto.setNumeroConsumoFaturadoMes(14);
-
-			}
-		
-			valoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imovel, grupo.getAnoMesReferencia(),
-					colecaoCategorias, grupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
-		
-		} catch (ControladorException e) {
-			e.printStackTrace();
-		}
-
-		return valoresAguaEsgoto;
-	}
-
 	private void inserirCreditoBolsaAgua(Imovel imovel, BigDecimal valorCredito, Integer referencia, CreditoTipo creditoTipo) throws ControladorException {
 		CreditoOrigem creditoOrigem = new CreditoOrigem(CreditoOrigem.BOLSA_AGUA);
 		Short qtdPrestacoes = new Short("1");

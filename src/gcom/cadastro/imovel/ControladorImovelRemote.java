@@ -1,5 +1,6 @@
 package gcom.cadastro.imovel;
 
+import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
 import java.rmi.RemoteException;
