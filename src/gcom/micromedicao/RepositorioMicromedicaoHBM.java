@@ -15853,7 +15853,8 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					 */
 					+ "li.dataLigacao, " // 34
 					+ "le.dataLigacao, " // 35
-					+ "li.numeroConsumoMinimoAgua " //36
+					+ "im.imovelPerfil.id, " //36
+					+ "li.numeroConsumoMinimoAgua " //37
 					+ "from Imovel im "
 					+ "inner join im.rotaAlternativa rotaAlternativa "
 					+ "inner join im.quadra.rota.faturamentoGrupo "
