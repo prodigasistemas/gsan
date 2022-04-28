@@ -1932,11 +1932,6 @@ public class ControladorMicromedicao extends ControladorComum {
 		// Seta a ligação de água
 		if (ligacaoAgua.getId() != null) {
 			imovel.setLigacaoAgua(ligacaoAgua);
-			
-			//Seta o conumo minimo da ligacao de agua 
-			if (arrayImovel[37] != null) {
-				imovel.getLigacaoAgua().setNumeroConsumoMinimoAgua((Integer) arrayImovel[37]);
-			}
 		}
 		// Seta a ligacao de esgoto
 		if (ligacaoEsgoto.getId() != null) {
