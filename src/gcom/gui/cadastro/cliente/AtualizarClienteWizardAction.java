@@ -1,6 +1,7 @@
 package gcom.gui.cadastro.cliente;
 
 import gcom.gui.WizardAction;
+import gcom.util.ErroRepositorioException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -214,10 +215,11 @@ public class AtualizarClienteWizardAction extends WizardAction {
      * @param httpServletResponse
      *            Descrição do parâmetro
      * @return Descrição do retorno
+     * @throws ErroRepositorioException 
      */
     public ActionForward atualizarClienteAction(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
+            HttpServletResponse httpServletResponse) throws ErroRepositorioException {
 
         return new AtualizarClienteAction().execute(actionMapping, actionForm,
                 httpServletRequest, httpServletResponse);

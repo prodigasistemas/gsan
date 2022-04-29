@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+import javax.ejb.CreateException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,14 +17,20 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.DynaValidatorForm;
 
+import gcom.atendimentopublico.ligacaoagua.FiltroLigacaoAguaSituacao;
+import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
+import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.cliente.CadastroUnico;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.FiltroCadastroUnico;
+import gcom.cadastro.cliente.FiltroClienteConta;
 import gcom.cadastro.cliente.FiltroClienteEndereco;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.FiltroClienteTipo;
@@ -31,14 +38,26 @@ import gcom.cadastro.cliente.OrgaoExpedidorRg;
 import gcom.cadastro.cliente.PessoaSexo;
 import gcom.cadastro.cliente.Profissao;
 import gcom.cadastro.cliente.RamoAtividade;
+import gcom.cadastro.cliente.RepositorioClienteImovelHBM;
 import gcom.cadastro.descricaogenerica.DescricaoGenerica;
 import gcom.cadastro.descricaogenerica.FiltroDescricaoGenerica;
+import gcom.cadastro.empresa.RepositorioEmpresaHBM;
 import gcom.cadastro.geografico.UnidadeFederacao;
+import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.ControladorImovelLocal;
+import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelPerfil;
+import gcom.cadastro.imovel.RepositorioImovelHBM;
+import gcom.cadastro.localidade.RepositorioSetorComercialHBM;
+import gcom.cobranca.RepositorioCobrancaHBM;
+import gcom.faturamento.RepositorioFaturamentoHBM;
+import gcom.faturamento.conta.Conta;
+import gcom.financeiro.ContaContabil;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.integracao.webservice.spc.ConsultaWebServiceTest;
+import gcom.micromedicao.RepositorioMicromedicaoHBM;
 import gcom.seguranca.AtributoGrupo;
 import gcom.seguranca.ConsultaCdl;
 import gcom.seguranca.FiltroConsultaCadastroCdl;
@@ -47,7 +66,12 @@ import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.FiltroUsuarioPemissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioPermissaoEspecial;
+import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ErroRepositorioException;
+import gcom.util.RepositorioUtilHBM;
+import gcom.util.ServiceLocatorException;
+import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNulo;
@@ -60,7 +84,7 @@ public class AtualizarClienteAction extends GcomAction {
 	private HttpServletRequest request;
 	private HttpSession sessao;
 
-	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) throws ErroRepositorioException {
 		this.retorno = actionMapping.findForward("telaSucesso");
 		this.request = request;
 		this.sessao = request.getSession(false);
@@ -384,6 +408,8 @@ public class AtualizarClienteAction extends GcomAction {
 		// Flag para determinar se foi atualizado perfil do imóvel relacionado ao cliente atualizado
 		boolean imovelPerfilAtualizado = false;
 		
+		Short indicadorbolsaFamilia = null;
+		
 		try {
 
 			if (cpf != null && cpf.equals("")) {
@@ -426,7 +452,7 @@ public class AtualizarClienteAction extends GcomAction {
 				cliente.setNumeroNIS(numeroNIS.trim());
 				validarCadastroUnico(cliente);
 				imovelPerfilAtualizado = atualizarImovelPerfilBolsaAgua(cliente);
-			}
+			} 
 
 			cliente.setIndicadorAcaoCobranca(new Integer(indicadorAcaoCobranca).shortValue());
 
@@ -662,6 +688,8 @@ public class AtualizarClienteAction extends GcomAction {
 			if (atualizaCliente) {
 				this.getFachada().atualizarCliente(cliente, colecaoFones, colecaoEnderecos, usuario);
 			}
+			
+			indicadorbolsaFamilia = cliente.getIndicadorBolsaFamilia();
 
 			inserirClienteCadastradoNaReceita(usuario, clienteCadastradoNaReceita, cliente, confirmado, consultaCdl, codigoAcao);
 
@@ -673,7 +701,7 @@ public class AtualizarClienteAction extends GcomAction {
 
 		boolean exibirTelaSucesso = verificarExibicaoTelaSucesso(actionMapping, clienteAtualizacao, nomeAbreviado, cpf, cnpj);
 		if (exibirTelaSucesso) {
-			montarTelaSucesso(request, retorno, clienteAtualizacao, imovelPerfilAtualizado);
+			montarTelaSucesso(request, retorno, clienteAtualizacao, imovelPerfilAtualizado, indicadorbolsaFamilia);
 		}
 
 		return retorno;
@@ -687,24 +715,108 @@ public class AtualizarClienteAction extends GcomAction {
 		
 		if (cadastroUnico != null) {
 			cliente.setIndicadorBolsaFamilia(ConstantesSistema.SIM);
+		}else {
+			cliente.setIndicadorBolsaFamilia(ConstantesSistema.NAO);
 		}
 	}
 
-	private boolean atualizarImovelPerfilBolsaAgua(Cliente cliente) {
+	private boolean atualizarImovelPerfilBolsaAgua(Cliente cliente) throws ErroRepositorioException {
 		Collection<ClienteImovel> clienteImoveis = pesquisarImoveisPorCliente(cliente);
-		
-		if (clienteImoveis != null && clienteImoveis.size() == 1) {
-			ClienteImovel clienteImovel = clienteImoveis.iterator().next();
-			Imovel imovel = clienteImovel.getImovel();
-			imovel.setImovelPerfil(new ImovelPerfil(ImovelPerfil.BOLSA_AGUA));
-			imovel.setUltimaAlteracao(new Date());
-			getFachada().atualizar(imovel);
-			return true;
+		Collection<ClienteImovel> clienteImovelOrdenado = ordenacaoSituacaoAgua(clienteImoveis);
+		Boolean imovelElegivel = true;
+		if (cliente.getIndicadorBolsaFamilia().equals(ConstantesSistema.SIM)) {
+			for (ClienteImovel clienteImovel : clienteImovelOrdenado) {
+				Integer idPerfil = clienteImovel.getImovel().getImovelPerfil().getId();
+				if (idPerfil.equals(ImovelPerfil.BOLSA_AGUA)) {
+					imovelElegivel = false;
+					break;
+				}
+			}
+			if (imovelElegivel == true) {
+				for (ClienteImovel clienteImovel : clienteImovelOrdenado) {
+					if (clienteImovel.getImovel().getImovelPerfil().getId().equals(ImovelPerfil.NORMAL)
+							&& clienteImovel.getImovel().getCategoriaPrincipalId().equals(Categoria.RESIDENCIAL_INT)
+							&& clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
+						Imovel imovel = clienteImovel.getImovel();
+						imovel.setImovelPerfil(new ImovelPerfil(ImovelPerfil.BOLSA_AGUA));
+						imovel.setUltimaAlteracao(new Date());
+						getFachada().atualizar(imovel);
+						return true;
+					}
+				}
+			}
+		} else {
+			for (ClienteImovel clienteImovel : clienteImovelOrdenado) {
+				Integer idPerfil = clienteImovel.getImovel().getImovelPerfil().getId();
+				if (idPerfil.equals(ImovelPerfil.BOLSA_AGUA)) {
+					imovelElegivel = false;
+					break;
+				}
+			}
+			if (imovelElegivel == false) {
+				for (ClienteImovel clienteImovel : clienteImovelOrdenado) {
+					if (clienteImovel.getImovel().getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA)
+							&& clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
+						Imovel imovel = clienteImovel.getImovel();
+						imovel.setImovelPerfil(new ImovelPerfil(ImovelPerfil.NORMAL));
+						imovel.setUltimaAlteracao(new Date());
+						getFachada().atualizar(imovel);
+						return true;
+					}
+				}
+			}
 		}
-		
 		return false;
 	}
 	
+	private Collection<ClienteImovel> ordenacaoSituacaoAgua(Collection<ClienteImovel> clienteImoveis) {
+		Collection<ClienteImovel> clienteImovelOrdenado = new ArrayList();
+		Collection<ClienteImovel> clienteImovelLigado = new ArrayList();
+		Collection<ClienteImovel> clienteImovelEmFiscalizacao = new ArrayList();
+		Collection<ClienteImovel> clienteImovelCortado = new ArrayList();		
+		Collection<ClienteImovel> clienteImovelSuprimido = new ArrayList();
+		Collection<ClienteImovel> clienteImovelSuprimidoParcial = new ArrayList();
+		Collection<ClienteImovel> clienteImovelSuprimidoParcialPedido = new ArrayList();
+		Collection<ClienteImovel> clienteImovelFactivel = new ArrayList();
+		Collection<ClienteImovel> clienteImovelPotencial = new ArrayList();
+		for (ClienteImovel clienteImovel : clienteImoveis) {
+			if (clienteImovel.getImovel().getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.LIGADO)) {
+				clienteImovelLigado.add(clienteImovel);
+			}
+			if (clienteImovel.getImovel().getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.EM_FISCALIZACAO)) {
+				clienteImovelEmFiscalizacao.add(clienteImovel);
+			}
+			if (clienteImovel.getImovel().getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.CORTADO)) {
+				clienteImovelCortado.add(clienteImovel);
+			}
+			if (clienteImovel.getImovel().getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.SUPRIMIDO)) {
+				clienteImovelSuprimido.add(clienteImovel);
+			}
+			if (clienteImovel.getImovel().getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.SUPR_PARC)) {
+				clienteImovelSuprimidoParcial.add(clienteImovel);
+			}
+			if (clienteImovel.getImovel().getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.SUPR_PARC_PEDIDO)) {
+				clienteImovelSuprimidoParcialPedido.add(clienteImovel);
+			}
+			if (clienteImovel.getImovel().getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.FACTIVEL)) {
+				clienteImovelFactivel.add(clienteImovel);
+			}	
+			if (clienteImovel.getImovel().getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.POTENCIAL)) {
+				clienteImovelPotencial.add(clienteImovel);
+			}								
+		}
+		clienteImovelOrdenado.addAll(clienteImovelLigado);
+		clienteImovelOrdenado.addAll(clienteImovelEmFiscalizacao);
+		clienteImovelOrdenado.addAll(clienteImovelCortado);
+		clienteImovelOrdenado.addAll(clienteImovelSuprimido);
+		clienteImovelOrdenado.addAll(clienteImovelSuprimidoParcial);
+		clienteImovelOrdenado.addAll(clienteImovelSuprimidoParcialPedido);
+		clienteImovelOrdenado.addAll(clienteImovelFactivel);
+		clienteImovelOrdenado.addAll(clienteImovelPotencial);
+	
+		return clienteImovelOrdenado;
+	}
+
 	private Collection<ClienteImovel> pesquisarImoveisPorCliente(Cliente cliente) {
 		Filtro filtro = new FiltroClienteImovel();
 		filtro.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_ID, cliente.getId()));
@@ -785,14 +897,18 @@ public class AtualizarClienteAction extends GcomAction {
 		return exibirTelaSucesso;
 	}
 
-	private void montarTelaSucesso(HttpServletRequest request, ActionForward retorno, Cliente clienteAtualizacao, boolean imovelPerfilAtualizado) {
+	private void montarTelaSucesso(HttpServletRequest request, ActionForward retorno, Cliente clienteAtualizacao, boolean imovelPerfilAtualizado, Short indicadorbolsaFamilia) {
 		if (retorno.getName().equalsIgnoreCase("telaSucesso")) {
 
 			String linkSucesso = (String) sessao.getAttribute("linkSucesso");
 			String mensagemSucesso = "Cliente de código " + clienteAtualizacao.getId() + " atualizado com sucesso.";
 			
 			if (imovelPerfilAtualizado) {
-				mensagemSucesso += " Perfil do Imóvel relacionado ao cliente atualizado para BOLSA ÁGUA.";
+				if(indicadorbolsaFamilia.equals(ConstantesSistema.SIM)) {
+					mensagemSucesso += " Perfil do Imóvel relacionado ao cliente atualizado para BOLSA ÁGUA.";
+				}else {
+					mensagemSucesso += " Perfil do Imóvel relacionado ao cliente atualizado para NORMAL.";
+				}					
 			} else {
 				mensagemSucesso += " Não foi possível atualizar Perfil de Imóvel relacionado ao cliente. ";
 			}

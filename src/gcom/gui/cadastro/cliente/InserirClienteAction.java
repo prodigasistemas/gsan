@@ -16,11 +16,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.DynaValidatorForm;
 
+import gcom.cadastro.cliente.CadastroUnico;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
+import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
+import gcom.cadastro.cliente.FiltroCadastroUnico;
 import gcom.cadastro.cliente.FiltroClienteEndereco;
+import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.FiltroClienteTipo;
 import gcom.cadastro.cliente.OrgaoExpedidorRg;
 import gcom.cadastro.cliente.PessoaSexo;
@@ -29,6 +34,9 @@ import gcom.cadastro.cliente.RamoAtividade;
 import gcom.cadastro.descricaogenerica.DescricaoGenerica;
 import gcom.cadastro.descricaogenerica.FiltroDescricaoGenerica;
 import gcom.cadastro.geografico.UnidadeFederacao;
+import gcom.cadastro.imovel.Categoria;
+import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.integracao.webservice.spc.ConsultaWebServiceTest;
@@ -40,6 +48,10 @@ import gcom.seguranca.acesso.usuario.FiltroUsuarioPemissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioPermissaoEspecial;
 import gcom.util.ConstantesSistema;
+import gcom.util.ErroRepositorioException;
+import gcom.util.Util;
+import gcom.util.filtro.Filtro;
+import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -294,6 +306,9 @@ public class InserirClienteAction extends GcomAction {
 		}
 
 		SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+		
+		// Flag para determinar se foi atualizado perfil do imóvel relacionado ao cliente atualizado
+		boolean imovelPerfilAtualizado = false;
 
 		ConsultaCdl clienteCadastradoNaReceita = new ConsultaCdl();
 		try {
@@ -330,9 +345,8 @@ public class InserirClienteAction extends GcomAction {
 			String numeroNIS = (String) form.get("numeroNIS");
 			if (numeroNIS != null && !numeroNIS.trim().equals("")) {
 				cliente.setNumeroNIS(numeroNIS.trim());
-			}
-
-			cliente.setIndicadorBolsaFamilia(ConstantesSistema.NAO);
+				validarCadastroUnico(cliente);
+			} 
 
 			// Insere o indicador para Cobranca Acrescimos
 			cliente.setIndicadorAcrescimos(new Short("1"));
@@ -582,6 +596,19 @@ public class InserirClienteAction extends GcomAction {
 		}
 
 		return retorno;
+	}
+	
+	private void validarCadastroUnico(Cliente cliente) {
+		Filtro filtro = new FiltroCadastroUnico();
+		filtro.adicionarParametro(new ParametroSimples(FiltroCadastroUnico.NUMERO_NIS, cliente.getNumeroNIS()));
+		
+		CadastroUnico cadastroUnico = (CadastroUnico) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtro, CadastroUnico.class.getName()));
+		
+		if (cadastroUnico != null) {
+			cliente.setIndicadorBolsaFamilia(ConstantesSistema.SIM);
+		}else {
+			cliente.setIndicadorBolsaFamilia(ConstantesSistema.NAO);
+		}
 	}
 
 	private Collection setaId2ClienteEnderecos(Collection colecaoEnderecos, Integer id2) {
