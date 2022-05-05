@@ -1618,18 +1618,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 	
-	public void atualizarValorContaBolsaAgua(Conta conta) throws ControladorException {
+	public void atualizarValorContaBolsaAgua(DeterminarValoresFaturamentoAguaEsgotoHelper helper, Imovel imovel, FaturamentoGrupo grupo) throws ControladorException {
 		
 		 try {
-			if (getControladorImovel().isImovelBolsaAgua(conta.getImovel().getId())) {
-				 DeterminarValoresFaturamentoAguaEsgotoHelper helper = this.obterValoresCreditosBolsaAgua(conta.getImovel(), conta.getFaturamentoGrupo());
+			if (getControladorImovel().isImovelBolsaAgua(imovel.getId())) {
+				 DeterminarValoresFaturamentoAguaEsgotoHelper helperBolsaAgua = this.obterValoresCreditosBolsaAgua(imovel, grupo);
 				 
-				 if (conta.getImovel().isLigadoAgua() ) {
-						conta.setValorAgua(helper.getValorTotalAgua());  
+				 if (imovel.isLigadoAgua() 
+						 && helper.getValorTotalAgua().compareTo(helperBolsaAgua.getValorTotalAgua())== -1 ) {
+					 helper.setValorTotalAgua(helperBolsaAgua.getValorTotalAgua());
 				}
 					
-				if (conta.getImovel().isLigadoEsgoto()) {
-					conta.setValorEsgoto(helper.getValorTotalEsgoto());
+				if (imovel.isLigadoEsgoto()
+						&& helper.getValorTotalEsgoto().compareTo(helperBolsaAgua.getValorTotalEsgoto())== -1 ) {
+					helper.setValorTotalEsgoto(helperBolsaAgua.getValorTotalEsgoto());
 				}
 			 }
 		} catch (ControladorException e) {
@@ -52755,6 +52757,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		helper.setValorTotalAgua(valorTotalAgua);
 		helper.setValorTotalEsgoto(valorTotalEsgoto);
 
+		atualizarValorContaBolsaAgua(helper, imovel, faturamentoGrupo);
+	
 		return helper;
 	}
 
@@ -53476,8 +53480,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		conta.setNumeroBoleto(this.verificarGeracaoBoleto(sistemaParametro, conta));
 
-		atualizarValorContaBolsaAgua(conta);
-		
 		this.getControladorUtil().inserir(conta);
 
 		return conta;

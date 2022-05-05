@@ -695,8 +695,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 contaAtualizacao.setValorRateioAgua(helper.getValorRateioAgua());
 					         contaAtualizacao.setValorRateioEsgoto(helper.getValorRateioEsgoto());
 					            
-					         atualizarValorContaBolsaAgua(contaAtualizacao);
-
 					         DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 	        				 debitoCreditoSituacao.setId( DebitoCreditoSituacao.NORMAL );
 	        				 contaAtualizacao.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
