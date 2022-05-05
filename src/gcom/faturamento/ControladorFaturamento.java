@@ -198,7 +198,9 @@ import gcom.util.MergeProperties;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
+import gcom.util.email.IModeloEmailHtml;
 import gcom.util.email.ModeloEmailVencimento;
+import gcom.util.email.ModeloFaturaPorEmail;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNaoNulo;
@@ -16135,6 +16137,59 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}		
 	}
 	
+	public void enviarFaturaPorEmail(Conta conta, IModeloEmailHtml modeloEmail)
+			throws ControladorException {
+
+		try {
+			Collection contas = repositorioFaturamento.pesquisarInformacoesContaParaEnvioEmail(conta.getId());
+
+			if (contas != null && !contas.isEmpty()) {
+	
+				Iterator iteratosContas = contas.iterator();
+	
+				while (iteratosContas.hasNext()) {
+					try {
+						Object[] contasEmail = (Object[]) iteratosContas.next();
+						String nomeCliente = (String) contasEmail[3];
+						
+						envioFaturaPorEmail(contasEmail, ModeloFaturaPorEmail.getMensagem(nomeCliente));
+					} catch (Exception e) {
+						System.out.println("erro.notificacao.vencimento.fatura");
+					}
+				}
+	
+			}
+
+		} catch (Exception e) {
+			throw new EJBException(e);
+		}
+	}
+	
+	private void envioFaturaPorEmail(Object[] contasEmail, String mensagem)
+			throws ControladorException {
+
+		try {
+			Conta conta = new Conta((Integer) contasEmail[0]);
+			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
+			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL 
+			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
+			
+			File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
+		
+			EnvioEmail envioEmail = this.getControladorCadastro()
+					.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
+		
+			ServicosEmail.enviarMensagemHTMLComAnexo(emailReceptor, 
+						 envioEmail.getEmailRemetente(), 
+						 "COSANPA", 
+						 envioEmail.getTituloMensagem(), 
+						 mensagem, 
+						 contaSegundaVia);
+		} catch (ErroEmailException e) {
+			throw new ActionServletException("erro.email.vencimento.fatura");
+		}
+	}
+	
 	public void envioNotificacaoVencimentoFatura(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
 			throws ControladorException {
 
@@ -16168,8 +16223,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									try {
 
 										Object[] contasEmail = (Object[]) iteratosContas.next();
-
-										envioEmailVencimentoFatura(contasEmail, qtdDiasVencimento);
+										String nomeCliente = (String) contasEmail[3];
+										
+										envioFaturaPorEmail(contasEmail, ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento));
 										//envioSMSVencimentoFatura(contasEmail);
 									} catch (Exception e) {
 										System.out.println("erro.notificacao.vencimento.fatura");
@@ -16188,35 +16244,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (Exception e) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
-		}
-	}
-	
-	private void envioEmailVencimentoFatura(Object[] contasEmail, Integer qtdDiasVencimento)
-			throws ControladorException {
-
-		try {
-			Conta conta = new Conta((Integer) contasEmail[0]);
-			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
-			//String emailReceptor = (String) contasEmail[2];
-			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL 
-			String nomeCliente = (String) contasEmail[3];
-			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
-			
-			File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
-		
-			EnvioEmail envioEmail = this.getControladorCadastro()
-					.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
-		
-			Collection<String> emails = new ArrayList<String>();
-			emails.add(emailReceptor);
-			
-			ServicosEmail.enviarMensagemHTML(emails, 
-						 envioEmail.getEmailRemetente(), 
-						 "COSANPA", 
-						 envioEmail.getTituloMensagem(), 
-						 ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento));
-		} catch (ErroEmailException e) {
-			throw new ActionServletException("erro.email.vencimento.fatura");
 		}
 	}
 	

@@ -1,6 +1,6 @@
 package gcom.util.email;
 
-public class ModeloEmailAvisoCorte implements IModeloEmailHtml {
+public class ModeloFaturaPorEmail {
 
 	private static String NOME_CLIENTE = "NOME_CLIENTE";
 	
@@ -22,15 +22,7 @@ public class ModeloEmailAvisoCorte implements IModeloEmailHtml {
 			"	<div> " + 
 			"		<h3>Ol&aacute;, <b>NOME_CLIENTE</b></h3>" + 
 			"		<p>" +		
-			"			Esta mensagem &eacute; para informar que h&aacute; registro de d&eacute;bitos em sua matr&iacute;cula h&aacute;" +
-			"			mais de 30 dias em nosso sistema. Evite a suspens&atilde;o do abastecimento de &aacute;gua" +
-			"			efetuando o pagamento do boleto anexo neste e-mail.<br>" +
-			"			Para facilitar, enviamos em anexo o boleto para pagamento e voc&ecirc; pode pag&aacute;-lo" +
-			"			por meio de internet banking ou em lot&eacute;ricas, ag&ecirc;ncias banc&aacute;rias e nos caixas" +
-			"			eletr&ocirc;nicos. Se voc&ecirc; tiver o DDA (D&eacute;bito Direto Autorizado) cadastrado em seu" +
-			"			banco, poder&aacute; consultar, agendar e pagar este boleto utilizando este servi&ccedil;o" +
-			"			tamb&eacute;m.<br>" +
-			"			Caso o pagamento tenha sido efetuado, por favor, desconsidere esta mensagem." +
+			"			Segue sua fatura por email.<br>" +
 			"			A Cosanpa agradece a sua aten&ccedil;&atilde;o e est&aacute; &agrave; disposi&ccedil;&atilde;o de voc&ecirc;, sempre!" +
 			"			Se precisar entrar em contato conosco,<br>" +
 			"			acesse o site <b>www.cosanpa.pa.gov.br</b> ou ligue para 0800 70 71 195." +
@@ -50,7 +42,7 @@ public class ModeloEmailAvisoCorte implements IModeloEmailHtml {
 			"</body>" + 
 			"</html:html>";
 	
-	public String getMensagem(String nomeCliente) {
+	public static String getMensagem(String nomeCliente) {
 		StringBuilder texto = new StringBuilder();
 		
 		texto.append(CABECALHO_PAGINA)

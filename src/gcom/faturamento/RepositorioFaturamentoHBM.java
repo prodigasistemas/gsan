@@ -60475,5 +60475,62 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			}
 		}
 	}
+	
+	public Collection pesquisarInformacoesContaParaEnvioEmail(Integer idConta) throws ErroRepositorioException {
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta;
+		try {
+			
+			consulta = "select distinct(c.cnta_id) as idconta, " 
+					+ " c.dcst_idatual as situacao, " 
+					+ " cli.clie_dsemail as email, " 
+					+ " cli.clie_nmcliente as nomeCliente, "
+					+ " c.imov_id as idImovel, "
+					+ " cf.cfon_cdddd as ddd, "
+					+ " cf.cfon_nnfone as celular, "
+					+ " c.loca_id as localidade, "
+					+ " c.cnta_dgverificadorconta as digitoVerificador, "
+					+ " c.cnta_amreferenciaconta as referencia, "
+					+ " coalesce(cnta_vlagua,0) + coalesce(cnta_vlesgoto,0) + " 
+					+ " coalesce(cnta_vlimpostos,0) + coalesce(cnta_vldebitos,0) - " 
+					+ " coalesce(cnta_vlcreditos,0) + coalesce(cnta_vlrateioagua, 0) + " 
+					+ " coalesce(cnta_vlrateioesgoto,0) as valorConta "
+					+ " from faturamento.conta c  inner join cadastro.cliente_conta clct on c.cnta_id = clct.cnta_id "
+					+ " inner join cadastro.cliente cli on clct.clie_id = cli.clie_id "
+					+ " inner join cadastro.imovel imov on c.imov_id = imov.imov_id "
+					+ " left join cadastro.cliente_fone cf on cf.clie_id = cli.clie_id and cf.fnet_id = :tipoCelular"
+					+ " where c.cnta_id = :idConta " 
+					+ " and clie_dsemail != '' "
+					+ " and dcst_idatual in (:normal, :retificada, :incluida) "
+					+ " and cli.clie_icenvioemail = :ativo " ;
+			
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("idconta", Hibernate.INTEGER)
+					.addScalar("situacao", Hibernate.INTEGER)
+					.addScalar("email", Hibernate.STRING)
+					.addScalar("nomeCliente", Hibernate.STRING)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("ddd", Hibernate.STRING)
+					.addScalar("celular", Hibernate.STRING)
+					.addScalar("localidade", Hibernate.INTEGER)
+					.addScalar("digitoVerificador", Hibernate.SHORT)
+					.addScalar("referencia", Hibernate.INTEGER)
+					.addScalar("valorConta", Hibernate.BIG_DECIMAL)
+					.setInteger("idConta", idConta)
+					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
+					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+					.setShort("ativo", ConstantesSistema.INDICADOR_USO_ATIVO)
+					.setInteger("tipoCelular", FoneTipo.CELULAR).list();
+		} catch (HibernateException e) {
+			// levanta a exce��o para a pr�xima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sess�o
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
 
 }

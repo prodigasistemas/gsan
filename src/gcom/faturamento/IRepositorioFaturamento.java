@@ -3085,4 +3085,5 @@ public interface IRepositorioFaturamento {
 			codigoModalidade,String dataEmissao,String dataVencimento,Double valorOriginal,String codigoAceite,Short codigoTipoTitulo,String
 			indicadorPermissaoRecebimentoParcial,String numeroTituloCliente,Integer imovel,Integer cliente, Integer conta) throws ErroRepositorioException;
 	
+	public Collection pesquisarInformacoesContaParaEnvioEmail(Integer idConta) throws ErroRepositorioException;
 }
