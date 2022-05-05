@@ -256,7 +256,10 @@ public class ContaSegundaViaDTO {
 		this.tipoDocumento = tipoDocumento;
 		this.banco = banco;
 		this.numeroReferencia = numeroReferencia;
-		this.digitosIniciaisCodigoBarras = helper.getRepresentacaoNumericaCodBarraFormatada().substring(0,4);
+		
+		if(helper.getRepresentacaoNumericaCodBarraFormatada() != null) {
+			this.digitosIniciaisCodigoBarras = helper.getRepresentacaoNumericaCodBarraFormatada().substring(0,4);
+		}
 	}
 
 	private void setMensagensFixas(EmitirContaHelper helper) {
