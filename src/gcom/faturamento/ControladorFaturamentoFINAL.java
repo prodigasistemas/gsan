@@ -1478,7 +1478,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					|| this.permiteFaturamentoParaEsgoto(imovel.getLigacaoEsgotoSituacao(), consumoEsgoto,
 							consumoTipoEsgoto)) {
 
-				helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imovel, anoMesFaturamentoGrupo,
+				helperValoresAguaEsgoto = this.determinarValoresFaturamento(imovel, anoMesFaturamentoGrupo,
 						colecaoCategoriaOUSubcategoria, faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
 			}
 
@@ -52571,6 +52571,33 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @return DeterminarValoresFaturamentoAguaEsgotoHelper
 	 * @throws ControladorException
 	 */
+	public DeterminarValoresFaturamentoAguaEsgotoHelper determinarValoresFaturamento(Imovel imovel,
+			Integer anoMesFaturamento, Collection colecaoCategoriasOUSubCategorias, FaturamentoGrupo faturamentoGrupo,
+			ConsumoHistorico consumoHistoricoAgua, ConsumoHistorico consumoHistoricoEsgoto) throws ControladorException {
+		
+		DeterminarValoresFaturamentoAguaEsgotoHelper helper = determinarValoresFaturamentoAguaEsgoto(imovel, 
+				anoMesFaturamento, colecaoCategoriasOUSubCategorias, faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
+		
+		atualizarValorContaBolsaAgua(helper, imovel, faturamentoGrupo);
+		
+		return helper;
+		
+	}
+	
+	/**
+	 * [UC0113] Faturar Grupo de Faturamento
+	 * 
+	 * [SB0002] - Determinar Valores para Faturamento de Água e/ou Esgoto
+	 * 
+	 * @author Raphael Rossiter
+	 * @date 28/03/2008
+	 * 
+	 * @param imovel
+	 * @param faturamentoGrupo
+	 * @param colecaoCategoriasOUSubCategorias
+	 * @return DeterminarValoresFaturamentoAguaEsgotoHelper
+	 * @throws ControladorException
+	 */
 	public DeterminarValoresFaturamentoAguaEsgotoHelper determinarValoresFaturamentoAguaEsgoto(Imovel imovel,
 			Integer anoMesFaturamento, Collection colecaoCategoriasOUSubCategorias, FaturamentoGrupo faturamentoGrupo,
 			ConsumoHistorico consumoHistoricoAgua, ConsumoHistorico consumoHistoricoEsgoto) throws ControladorException {
@@ -52757,8 +52784,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		helper.setValorTotalAgua(valorTotalAgua);
 		helper.setValorTotalEsgoto(valorTotalEsgoto);
 
-		atualizarValorContaBolsaAgua(helper, imovel, faturamentoGrupo);
-	
 		return helper;
 	}
 
@@ -60518,7 +60543,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		}
 
-		helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imovelCondominio,
+		helperValoresAguaEsgoto = this.determinarValoresFaturamento(imovelCondominio,
 				faturamentoGrupo.getAnoMesReferencia(), colecaoCategoriaOUSubcategoria, faturamentoGrupo,
 				consumoHistoricoAgua, consumoHistoricoEsgoto);
 

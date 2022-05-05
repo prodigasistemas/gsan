@@ -468,7 +468,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 
 	        			 }
 	        			 
-	        			 DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imo, 
+	        			 DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = this.determinarValoresFaturamento(imo, 
 	        					 helper.getFaturamentoGrupo().getAnoMesReferencia(),
 	        					 colecaoCategoriaOUSubcategoria, 
 	        					 imo.getQuadra().getRota().getFaturamentoGrupo(),
@@ -10123,7 +10123,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			 * Valores para Faturamento de �gua e/ou Esgoto
 			 */
 			helperValoresAguaEsgoto = this
-					.determinarValoresFaturamentoAguaEsgoto(imovel,
+					.determinarValoresFaturamento(imovel,
 							faturamentoGrupo.getAnoMesReferencia(),
 							colecaoCategoriaOUSubcategoria, faturamentoGrupo,
 							null, null);
