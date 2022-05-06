@@ -1,15 +1,15 @@
 package gcom.batch.faturamento;
 
-import gcom.cadastro.localidade.Localidade;
+import java.util.Collection;
+import java.util.Iterator;
+
+import gcom.micromedicao.Rota;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaException;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.agendadortarefas.AgendadorTarefas;
-
-import java.util.Collection;
-import java.util.Iterator;
 
 
 /**
@@ -38,31 +38,38 @@ public class TarefaBatchEnvioEmailContaParaCliente extends TarefaBatch {
 		super(null, 0);
 	}
 
+	@SuppressWarnings("rawtypes")
     public Object executar() throws TarefaException {
 
-    	Collection colecaoLocalidadesParaExecucao = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
+		Collection colecaoRotasExecucao = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
     	
-    	Iterator iterator = colecaoLocalidadesParaExecucao.iterator();
+    	Integer anoMesFaturamento = (Integer) getParametro("anoMesFaturamento");
+    	Integer idGrupo = (Integer) getParametro("grupo");
     	
-    	while(iterator.hasNext()){
-    		
-    		enviarMensagemControladorBatch(
+
+		Iterator iterator = colecaoRotasExecucao.iterator();
+
+		while (iterator.hasNext()) {
+
+			Object[] array = (Object[]) iterator.next();
+			Integer idRota = ((Rota) array[1]).getId();
+
+			enviarMensagemControladorBatch(
 					ConstantesJNDI.BATCH_ENVIO_EMAIL_CONTA_PARA_CLIENTE,
-					new Object[]{
-							(Localidade) iterator.next(),
-							this.getIdFuncionalidadeIniciada()});
-    		
-    	}
+					new Object[]{this.getIdFuncionalidadeIniciada(),anoMesFaturamento,idGrupo,idRota});
+		}
     	
     	return null;
     
     }
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Collection pesquisarTodasUnidadeProcessamentoBatch() {
 		return null;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Collection pesquisarTodasUnidadeProcessamentoReinicioBatch() {
 

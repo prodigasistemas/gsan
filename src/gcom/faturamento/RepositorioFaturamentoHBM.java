@@ -60476,7 +60476,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 	}
 	
-	public Collection pesquisarInformacoesContaParaEnvioEmail(Integer idConta) throws ErroRepositorioException {
+	public Collection pesquisarInformacoesContaParaEnvioEmailPorRota(Integer idRota) throws ErroRepositorioException {
 		Collection retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta;
@@ -60503,7 +60503,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " where c.cnta_id = :idConta " 
 					+ " and clie_dsemail != '' "
 					+ " and dcst_idatual in (:normal, :retificada, :incluida) "
-					+ " and cli.clie_icenvioemail = :ativo " ;
+					+ " and cli.clie_icenvioemail = :ativo " 
+					+ " and c.rota_id = :idRota ";
 			
 			retorno = session.createSQLQuery(consulta)
 					.addScalar("idconta", Hibernate.INTEGER)
@@ -60517,7 +60518,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.addScalar("digitoVerificador", Hibernate.SHORT)
 					.addScalar("referencia", Hibernate.INTEGER)
 					.addScalar("valorConta", Hibernate.BIG_DECIMAL)
-					.setInteger("idConta", idConta)
+					.setInteger("idRota", idRota)
 					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
 					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
 					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)

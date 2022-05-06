@@ -1,6 +1,6 @@
 package gcom.util.email;
 
-public class ModeloEmailAvisoCorte implements IModeloEmailHtml {
+public class ModeloEmailAvisoCorte  {
 
 	private static String NOME_CLIENTE = "NOME_CLIENTE";
 	
@@ -50,7 +50,7 @@ public class ModeloEmailAvisoCorte implements IModeloEmailHtml {
 			"</body>" + 
 			"</html:html>";
 	
-	public String getMensagem(String nomeCliente) {
+	public static String getMensagem(String nomeCliente) {
 		StringBuilder texto = new StringBuilder();
 		
 		texto.append(CABECALHO_PAGINA)

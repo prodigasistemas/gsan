@@ -24,21 +24,12 @@
       </TR>
     </TABLE>
 <%@ page import="javax.help.HelpSet,javax.help.NavigatorView" %>
-<%
-NavigatorView curNav = helpBroker.getCurrentNavigatorView();
-if (curNav != null) {
+<% NavigatorView curNav = helpBroker.getCurrentNavigatorView();
+	if (curNav != null) {
 %>
-<SCRIPT>
-     top.treeframe.location = "<%= curNav.getClass().getName() %>.jsp"
-</SCRIPT
-<%
-} else {
-%>
-<SCRIPT>
-    top.treeframe.location = "nonavigator.jsp"
-</SCRIPT>
-<%
-}
-%>
+	<SCRIPT> top.treeframe.location = "<%= curNav.getClass().getName()%>.jsp" </SCRIPT>
+<% } else { %>
+	<SCRIPT> top.treeframe.location = "nonavigator.jsp" </SCRIPT>
+<% } %>
 </BODY>
 </HTML>

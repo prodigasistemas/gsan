@@ -3186,7 +3186,32 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
+				
+					case Funcionalidade.ENVIO_EMAIL_CONTA_PARA_CLIENTE:
 
+						TarefaBatchEnvioEmailContaParaCliente tarefaBatchEmailConta = new TarefaBatchEnvioEmailContaParaCliente(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						tarefaBatchEmailConta.addParametro("anoMesFaturamento", faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal()
+								.getFaturamentoGrupo().getAnoMesReferencia());
+
+						tarefaBatchEmailConta.addParametro("grupo", faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal()
+								.getFaturamentoGrupo());
+						
+						tarefaBatchEmailConta.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoFaturamentoAtivCronRota);
+						
+						anoMesFaturamento = faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal().getFaturamentoGrupo().getAnoMesReferencia();
+						idGrupoFaturamento = faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal().getFaturamentoGrupo().getId();
+
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEmailConta));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+						
 					default:
 					}
 				}
