@@ -15272,7 +15272,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(imovel.getId());
 		
 		Collection<Integer> idsImoveis = new ArrayList<Integer>();
-		idsImoveis.add(imovelFaturamentoSeletivo.getIdImovel());
+		idsImoveis.add(imovel.getId());
 		
 		if (ligacaoAgua != null) {
 			

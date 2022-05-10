@@ -1622,17 +1622,26 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		
 		 try {
 			if (getControladorImovel().isImovelBolsaAgua(imovel.getId())) {
+				System.out.println("ATUALIZACAO BOLSA AGUA [" + imovel.getId() + "]");
 				 DeterminarValoresFaturamentoAguaEsgotoHelper helperBolsaAgua = this.obterValoresCreditosBolsaAgua(imovel, grupo);
-				 
 				 if (imovel.isLigadoAgua() 
 						 && helper.getValorTotalAgua().compareTo(helperBolsaAgua.getValorTotalAgua())== -1 ) {
+					 System.out.println("   ANTES agua[" + imovel.getId() + "]: " + helper.getValorTotalAgua());
 					 helper.setValorTotalAgua(helperBolsaAgua.getValorTotalAgua());
+					 System.out.println("   DEPOIS agua[" + imovel.getId() + "]: " + helper.getValorTotalAgua());
+				} else {
+					System.out.println("   MESMO VALOR AGUA[" + imovel.getId() + "]");
 				}
 					
 				if (imovel.isLigadoEsgoto()
 						&& helper.getValorTotalEsgoto().compareTo(helperBolsaAgua.getValorTotalEsgoto())== -1 ) {
+					System.out.println("   ANTES esgoto[" + imovel.getId() + "]: " + helper.getValorTotalEsgoto());
 					helper.setValorTotalEsgoto(helperBolsaAgua.getValorTotalEsgoto());
+					System.out.println("   DEPOIS esgoto[" + imovel.getId() + "]: " + helper.getValorTotalEsgoto());
+				} else {
+					System.out.println("   MESMO VALOR ESGOTO[" + imovel.getId() + "]");
 				}
+				System.out.println("FIM ATUALIZACAO BOLSA AGUA [" + imovel.getId() + "]");
 			 }
 		} catch (ControladorException e) {
 			throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
@@ -1644,6 +1653,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		 try {
 			if (contaCategoria.getCategoria().isResidencial()
 					&& getControladorImovel().isImovelBolsaAgua(contaCategoria.getConta().getImovel().getId())) {
+				
+				System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA [" + contaCategoria.getConta().getImovel().getId() + "]" );
 				 DeterminarValoresFaturamentoAguaEsgotoHelper helper = this.obterValoresCreditosBolsaAgua(
 						 contaCategoria.getConta().getImovel(), contaCategoria.getConta().getFaturamentoGrupo());
 				 
@@ -1654,6 +1665,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (contaCategoria.getConta().getImovel().isLigadoEsgoto()) {
 					contaCategoria.setValorEsgoto(helper.getValorTotalEsgoto());
 				}
+				System.out.println("FIM ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA [" + contaCategoria.getConta().getImovel().getId() + "]" );
 			 }
 		} catch (ControladorException e) {
 			throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
@@ -18465,6 +18477,16 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		 * */
 		if (arrayImovel[33] != null) {
 			imovel.setIndicadorImovelCondominio((Short) arrayImovel[33]);
+		}
+		
+		if (arrayImovel[34] != null) {
+			LigacaoAgua la = new LigacaoAgua((Integer) arrayImovel[34]);
+			imovel.setLigacaoAgua(la);
+		}
+		
+		if (arrayImovel[35] != null) {
+			LigacaoEsgoto le = new LigacaoEsgoto((Integer) arrayImovel[35]);
+			imovel.setLigacaoEsgoto(le);
 		}
 
 		return imovel;
