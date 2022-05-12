@@ -898,7 +898,7 @@ public interface IControladorFaturamento {
 
 	public Object[] obterLeituraAnteriorEAtual(Integer idImovel, Integer amReferencia) throws ControladorException;
 
-	public void envioEmailContaParaCliente(int idFuncionalidadeIniciada, Integer referencia, Integer idGrupo, Integer idRota) throws ControladorException;
+	public void envioEmailContaParaCliente(int idFuncionalidadeIniciada, Integer referencia, Integer idRota) throws ControladorException;
 
 	public Collection<FaturamentoImediatoAjuste> pesquisarFaturamentoImediatoAjuste(FaturamentoImediatoAjusteHelper helper, int qtd)
 			throws ControladorException;

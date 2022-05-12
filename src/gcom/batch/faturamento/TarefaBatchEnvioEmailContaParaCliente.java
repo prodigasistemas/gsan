@@ -3,6 +3,7 @@ package gcom.batch.faturamento;
 import java.util.Collection;
 import java.util.Iterator;
 
+import gcom.faturamento.FaturamentoGrupo;
 import gcom.micromedicao.Rota;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
@@ -44,8 +45,6 @@ public class TarefaBatchEnvioEmailContaParaCliente extends TarefaBatch {
 		Collection colecaoRotasExecucao = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
     	
     	Integer anoMesFaturamento = (Integer) getParametro("anoMesFaturamento");
-    	Integer idGrupo = (Integer) getParametro("grupo");
-    	
 
 		Iterator iterator = colecaoRotasExecucao.iterator();
 
@@ -56,7 +55,7 @@ public class TarefaBatchEnvioEmailContaParaCliente extends TarefaBatch {
 
 			enviarMensagemControladorBatch(
 					ConstantesJNDI.BATCH_ENVIO_EMAIL_CONTA_PARA_CLIENTE,
-					new Object[]{this.getIdFuncionalidadeIniciada(),anoMesFaturamento,idGrupo,idRota});
+					new Object[]{this.getIdFuncionalidadeIniciada(),anoMesFaturamento,idRota});
 		}
     	
     	return null;

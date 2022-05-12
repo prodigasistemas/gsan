@@ -60500,8 +60500,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " inner join cadastro.cliente cli on clct.clie_id = cli.clie_id "
 					+ " inner join cadastro.imovel imov on c.imov_id = imov.imov_id "
 					+ " left join cadastro.cliente_fone cf on cf.clie_id = cli.clie_id and cf.fnet_id = :tipoCelular"
-					+ " where c.cnta_id = :idConta " 
-					+ " and clie_dsemail != '' "
+					+ " where clie_dsemail != '' "
 					+ " and dcst_idatual in (:normal, :retificada, :incluida) "
 					+ " and cli.clie_icenvioemail = :ativo " 
 					+ " and c.rota_id = :idRota ";
@@ -60518,12 +60517,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.addScalar("digitoVerificador", Hibernate.SHORT)
 					.addScalar("referencia", Hibernate.INTEGER)
 					.addScalar("valorConta", Hibernate.BIG_DECIMAL)
-					.setInteger("idRota", idRota)
 					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
 					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
 					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
 					.setShort("ativo", ConstantesSistema.INDICADOR_USO_ATIVO)
-					.setInteger("tipoCelular", FoneTipo.CELULAR).list();
+					.setInteger("tipoCelular", FoneTipo.CELULAR)
+					.setInteger("idRota", idRota).list();
 		} catch (HibernateException e) {
 			// levanta a exce��o para a pr�xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

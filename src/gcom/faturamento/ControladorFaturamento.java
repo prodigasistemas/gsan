@@ -8144,7 +8144,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @throws ControladorException
 	 */
 	public void envioEmailContaParaCliente(int idFuncionalidade, 
-			Integer referencia, Integer idGrupo, Integer idRota) throws ControladorException {
+			Integer referencia, Integer idRota) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 		idUnidadeIniciada = getControladorBatch()
