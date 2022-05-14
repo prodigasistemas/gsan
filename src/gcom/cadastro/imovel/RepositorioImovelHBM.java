@@ -29604,4 +29604,41 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 	}
 
+	public Imovel consultarImovelBolsaAgua(Integer idImovel) throws ErroRepositorioException {
+
+		StringBuilder consulta = new StringBuilder();
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			consulta.append(" select imovel from Imovel imovel ")
+					.append(" inner join fetch imovel.quadra quadra ")
+					.append(" inner join fetch imovel.setorComercial setorComercial ")
+					.append(" inner join fetch quadra.rota rota ")
+					.append(" inner join fetch imovel.ligacaoAguaSituacao ligacaoAguaSituacao ")
+					.append(" inner join fetch imovel.ligacaoEsgotoSituacao ligacaoEsgotoSituacao ")
+		
+					.append(" inner join fetch imovel.imovelSubcategorias imovelSubcategoria ")
+					.append(" inner join fetch imovelSubcategoria.comp_id.subcategoria subcategoria ")
+									
+					.append(" where imovel.imovelPerfil.id = :perfilBolsaAgua  ")
+					.append(" and (imovel.ligacaoAguaSituacao.id = :ligado or imovel.ligacaoEsgotoSituacao.id = :ligado)")
+					.append(" and imovel.id = :idImovel ")
+					.append(" and subcategoria.categoria.id = :idCategoria ")
+					.append(" and (imovel.faturamentoSituacaoTipo.id is null or imovel.faturamentoSituacaoTipo.id <> :idFaturamentoSituacaoTipo)");
+
+			return (Imovel) session.createQuery(consulta.toString())
+						.setInteger("perfilBolsaAgua",ImovelPerfil.BOLSA_AGUA)
+						.setInteger("ligado",LigacaoAguaSituacao.LIGADO)
+						.setInteger("idCategoria",Categoria.RESIDENCIAL_INT)
+						.setInteger("idFaturamentoSituacaoTipo",FaturamentoSituacaoTipo.PARALISAR_EMISSAO_CONTAS)
+						.setInteger("idImovel",idImovel).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
 }

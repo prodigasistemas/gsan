@@ -49,16 +49,8 @@ public class FaturamentoUtil {
 	        	BigDecimal valorCreditoBolsaAgua = creditoBolsaAgua.getValorTotal();	        	
 	        	
 	        	if (!preFaturamento) {
-	        		valorCreditoBolsaAgua = BigDecimal.ZERO;
-	        		
-	        		BigDecimal valorAguEsgoto = valorAgua.add(valorEsgoto);
-	        		
-	        		if (valorAguEsgoto.compareTo(creditoBolsaAgua.getValorCredito()) == 1) {
-	        			valorCreditoBolsaAgua = creditoBolsaAgua.getValorCredito();
-	        		} else {
-	        			valorCreditoBolsaAgua = valorAguEsgoto;
-	        		}
-	        		
+	        		valorCreditoBolsaAgua = creditoBolsaAgua.getValorCredito();
+	        			        		        		
 	        		creditoBolsaAgua.setValorCredito(valorCreditoBolsaAgua);
 	        		creditoBolsaAgua.setValorResidualMesAnterior(BigDecimal.ZERO);
 	        		

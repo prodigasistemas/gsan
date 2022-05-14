@@ -147,6 +147,10 @@ public class LigacaoEsgoto extends ObjetoTransacao implements Serializable {
 	/** default constructor */
 	public LigacaoEsgoto() {
 	}
+	
+	public LigacaoEsgoto(Integer id) {
+		this.id = id;
+	}
 
 	/** minimal constructor */
 	public LigacaoEsgoto(
