@@ -16051,8 +16051,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		try {
 			Conta conta = new Conta((Integer) contasEmail[0]);
 			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
-			//String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
-			String emailReceptor = "pamelagatinho@gmail.com"; //EMAIL
+			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
+			//String emailReceptor = "pamelagatinho@gmail.com"; //EMAIL
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 			
 			File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
