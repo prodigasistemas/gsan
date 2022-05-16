@@ -3,6 +3,7 @@ package gcom.batch.faturamento;
 import gcom.cadastro.localidade.Localidade;
 import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
+import gcom.faturamento.FaturamentoGrupo;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;
 import gcom.util.ServiceLocator;
@@ -53,8 +54,9 @@ public class BatchEnvioEmailContaParaClienteMDB
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
 				this.getControladorFaturamento().envioEmailContaParaCliente(
-						(Localidade) ((Object[]) objectMessage.getObject())[0],
-						(Integer) ((Object[]) objectMessage.getObject())[1]);
+						(Integer) ((Object[]) objectMessage.getObject())[0],
+						(Integer) ((Object[]) objectMessage.getObject())[1],
+						(Integer) ((Object[]) objectMessage.getObject())[3]);
 
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");

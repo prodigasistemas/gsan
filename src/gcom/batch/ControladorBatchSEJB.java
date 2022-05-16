@@ -2332,18 +2332,17 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 
 					case Funcionalidade.ENVIO_EMAIL_CONTA_PARA_CLIENTE:
 
-						TarefaBatchEnvioEmailContaParaCliente tarefaBatchEnvioEmailContaParaCliente = new TarefaBatchEnvioEmailContaParaCliente(
+						Collection colecaoRotasEmail = getControladorMicromedicao().pesquisarRotaPorGrupoFaturamento(210);
+						
+						TarefaBatchEnvioEmailContaParaCliente tarefaBatchEmailConta = new TarefaBatchEnvioEmailContaParaCliente(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-						FiltroLocalidade filtroLocalidadeEnvioEmail = new FiltroLocalidade();
-						filtroLocalidadeEnvioEmail
-								.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+						tarefaBatchEmailConta.addParametro("anoMesFaturamento", 202205);
 
-						Collection<Localidade> collectionLocalidades = Fachada.getInstancia().pesquisar(filtroLocalidadeEnvioEmail, Localidade.class.getName());
-
-						tarefaBatchEnvioEmailContaParaCliente.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, collectionLocalidades);
-
-						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEnvioEmailContaParaCliente));
+						tarefaBatchEmailConta.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoRotasEmail);
+						
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEmailConta));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
@@ -3186,7 +3185,25 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
+				
+					case Funcionalidade.ENVIO_EMAIL_CONTA_PARA_CLIENTE:
 
+						TarefaBatchEnvioEmailContaParaCliente tarefaBatchEmailConta = new TarefaBatchEnvioEmailContaParaCliente(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+
+						tarefaBatchEmailConta.addParametro("anoMesFaturamento", faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal()
+								.getFaturamentoGrupo().getAnoMesReferencia());
+
+						tarefaBatchEmailConta.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoFaturamentoAtivCronRota);
+						
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEmailConta));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+
+						
 					default:
 					}
 				}

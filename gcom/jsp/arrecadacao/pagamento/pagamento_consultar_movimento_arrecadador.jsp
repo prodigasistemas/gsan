@@ -634,7 +634,7 @@ face: Verdana, Arial, Helvetica, sans-serif;
 												<logic:notEmpty name="pagamentoHistorico"
 													property="guiaPagamento.debitoTipo">
 													<a
-														href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamentoHistorico.getGuiaPagamento().getId() %>')"><font
+														href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamentoHistorico.getGuiaPagamentoGeral().getId() %>')"><font
 														color="#ff0000">${pagamentoHistorico.guiaPagamento.debitoTipo.descricao}</font></a>&nbsp;
 																	</logic:notEmpty>
 											</logic:notEmpty><logic:empty name="pagamentoHistorico"
@@ -771,7 +771,7 @@ face: Verdana, Arial, Helvetica, sans-serif;
 												<logic:notEmpty name="pagamentoHistorico"
 													property="guiaPagamento.debitoTipo">
 													<a
-														href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamentoHistorico.getGuiaPagamento().getId() %>')"><font
+														href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + pagamentoHistorico.getGuiaPagamentoGeral().getId() %>')"><font
 														color="#ff0000">${pagamentoHistorico.guiaPagamento.debitoTipo.descricao}</font></a>&nbsp;
 																	</logic:notEmpty>
 											</logic:notEmpty><logic:empty name="pagamentoHistorico"

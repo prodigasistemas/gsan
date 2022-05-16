@@ -198,7 +198,9 @@ import gcom.util.MergeProperties;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
+import gcom.util.email.IModeloEmailHtml;
 import gcom.util.email.ModeloEmailVencimento;
+import gcom.util.email.ModeloFaturaPorEmail;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroNaoNulo;
@@ -8140,133 +8142,41 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @param colecaoFaturamentoAtividadeCronogramaRota
 	 * @param localidade
 	 * @param atividade
-	 * @param idFuncionalidadeIniciada
+	 * @param idFuncionalidade
 	 * @throws ControladorException
 	 */
-	public void envioEmailContaParaCliente(Localidade localidade,
-			int idFuncionalidadeIniciada) throws ControladorException {
+	public void envioEmailContaParaCliente(int idFuncionalidade, 
+			Integer referencia, Integer idRota) throws ControladorException {
 
-		// -------------------------
-		//
-		// Registrar o in�cio do processamento da Unidade de
-		// Processamento
-		// do Batch
-		//
-		// -------------------------
 		int idUnidadeIniciada = 0;
 		idUnidadeIniciada = getControladorBatch()
-				.iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-						UnidadeProcessamento.LOCALIDADE, localidade.getId());
+				.iniciarUnidadeProcessamentoBatch(idFuncionalidade,UnidadeProcessamento.ROTA, idRota);
 
 		try {
 
-			SistemaParametro sistemaParametro = this.getControladorUtil()
-					.pesquisarParametrosDoSistema();
+			Collection contas = repositorioFaturamento.pesquisarInformacoesContaParaEnvioEmailPorRota(idRota);
 
-			Collection colecaoImoveisEmails = repositorioFaturamento
-					.pesquisarContasImpressasParaEnvioEmail(localidade.getId(),
-							sistemaParametro);
-
-			/*
-			 * Collection colecaoImoveisEmails = repositorioFaturamento
-			 * .pesquisarContasImpressasParaEnvioEmail(idRota,
-			 * faturamentoGrupo.getAnoMesReferencia());
-			 */
-
-			Collection colecaoImoveisEmailsPreFaturados = repositorioFaturamento
-					.pesquisarContasPrefaturadasParaEnvioEmail(
-							sistemaParametro, localidade.getId());
-
-			// Adiciona os imoveis PreFaturados a colecao de imoveis para envio
-			// de email
-			if (colecaoImoveisEmailsPreFaturados != null
-					&& !colecaoImoveisEmailsPreFaturados.isEmpty()) {
-
-				colecaoImoveisEmails.addAll(colecaoImoveisEmailsPreFaturados);
-
-			}
-
-			if (colecaoImoveisEmails != null && !colecaoImoveisEmails.isEmpty()) {
-
-				Iterator colecaoImoveisEmailsIterator = colecaoImoveisEmails
-						.iterator();
-
-				while (colecaoImoveisEmailsIterator.hasNext()) {
-
-					Object[] imoveisEmails = (Object[]) colecaoImoveisEmailsIterator
-							.next();
-
-					Integer idImovel = (Integer) imoveisEmails[0];
-					String emailReceptor = (String) imoveisEmails[1];
-
-					String mesAnoFormatado = Util
-							.formatarAnoMesParaMesAno(sistemaParametro
-									.getAnoMesArrecadacao());
-
-					Conta conta = this.pesquisarContaDigitada(
-							idImovel.toString(), mesAnoFormatado);
-
+			if (contas != null && !contas.isEmpty()) {
+	
+				Iterator iteratosContas = contas.iterator();
+	
+				while (iteratosContas.hasNext()) {
 					try {
-
-						// Envia de Arquivo por email
-						EnvioEmail envioEmail = this
-								.getControladorCadastro()
-								.pesquisarEnvioEmail(
-										EnvioEmail.ENVIO_EMAIL_CONTA_PARA_CLIENTE);
-
-						String emailRemetente = envioEmail.getEmailRemetente();
-						String tituloMensagem = envioEmail.getTituloMensagem();
-						String corpoMensagem = "A "
-								+ sistemaParametro.getNomeEmpresa()
-								+ " informa que a conta do im�vel de matr�cula "
-								+ idImovel
-								+ " est� dispon�vel para acess�-la na p�gina da internet "
-								+ sistemaParametro.getUrlAcessoInternet()
-								+
-								// +sistemaParametro.getUrl2ViaConta()+"&idImovel="+idImovel
-								"/gerarRelatorio2ViaContaAction.do?cobrarTaxaEmissaoConta=N&idConta="
-								+ conta.getId();
-
-						ServicosEmail.enviarMensagem(emailRemetente,
-								emailReceptor, tituloMensagem, corpoMensagem);
-
-						FiltroConta filtroConta = new FiltroConta();
-						filtroConta.adicionarParametro(new ParametroSimples(
-								FiltroConta.ID, conta.getId()));
-
-						Conta c = (Conta) Util.retonarObjetoDeColecao(Fachada
-								.getInstancia().pesquisar(filtroConta,
-										Conta.class.getName()));
-						c.setDataEnvioEmailConta(new Date());
-						c.setUltimaAlteracao(new Date());
-
-						this.getControladorUtil().atualizar(c);
-
+						Object[] contasEmail = (Object[]) iteratosContas.next();
+						String nomeCliente = (String) contasEmail[3];
+						
+						envioFaturaPorEmail(contasEmail, ModeloFaturaPorEmail.getMensagem(nomeCliente), EnvioEmail.ENVIO_EMAIL_CONTA_PARA_CLIENTE);
 					} catch (Exception e) {
-						e.printStackTrace();
-						System.out.println("Erro ao enviar email.");
+						System.out.println("erro.notificacao.vencimento.fatura");
 					}
-
 				}
-
+	
 			}
 
-			// --------------------------------------------------------
-			//
-			// Registrar o fim da execu��o da Unidade de Processamento
-			//
-			// --------------------------------------------------------
-
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
+		getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
 
 		} catch (Exception e) {
 
-			/*
-			 * Este catch serve para interceptar qualquer exce��o que o processo
-			 * batch venha a lan�ar e garantir que a unidade de processamento do
-			 * batch ser� atualizada com o erro ocorrido.
-			 */
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
 					idUnidadeIniciada, true);
 			throw new EJBException(e);
@@ -16137,6 +16047,33 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}		
 	}
 	
+	private void envioFaturaPorEmail(Object[] contasEmail, String mensagem, Integer idEnvioEmail)
+			throws ControladorException {
+
+		try {
+			Conta conta = new Conta((Integer) contasEmail[0]);
+			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
+			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
+			//String emailReceptor = "pamelagatinho@gmail.com"; //EMAIL
+			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
+			
+			File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
+		
+			EnvioEmail envioEmail = this.getControladorCadastro()
+					.pesquisarEnvioEmail(idEnvioEmail);
+		
+			System.out.println("ENVIANDO EMAIL PARA " + emailReceptor + " DA CONTA " + conta.getId());
+			ServicosEmail.enviarMensagemHTMLComAnexo(emailReceptor, 
+						 envioEmail.getEmailRemetente(), 
+						 "COSANPA", 
+						 envioEmail.getTituloMensagem(), 
+						 mensagem, 
+						 contaSegundaVia);
+		} catch (ErroEmailException e) {
+			throw new ActionServletException("erro.email.vencimento.fatura");
+		}
+	}
+	
 	public void envioNotificacaoVencimentoFatura(Integer idFuncionalidadeIniciada, Collection<Integer> colecaoIdsLocalidades)
 			throws ControladorException {
 
@@ -16170,8 +16107,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									try {
 
 										Object[] contasEmail = (Object[]) iteratosContas.next();
-
-										envioEmailVencimentoFatura(contasEmail, qtdDiasVencimento);
+										String nomeCliente = (String) contasEmail[3];
+										
+										envioFaturaPorEmail(contasEmail, ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento), EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
 										//envioSMSVencimentoFatura(contasEmail);
 									} catch (Exception e) {
 										System.out.println("erro.notificacao.vencimento.fatura");
@@ -16190,35 +16128,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (Exception e) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
-		}
-	}
-	
-	private void envioEmailVencimentoFatura(Object[] contasEmail, Integer qtdDiasVencimento)
-			throws ControladorException {
-
-		try {
-			Conta conta = new Conta((Integer) contasEmail[0]);
-			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
-			//String emailReceptor = (String) contasEmail[2];
-			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL 
-			String nomeCliente = (String) contasEmail[3];
-			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
-			
-			File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
-		
-			EnvioEmail envioEmail = this.getControladorCadastro()
-					.pesquisarEnvioEmail(EnvioEmail.ENVIO_EMAIL_VENCIMENTO);
-		
-			Collection<String> emails = new ArrayList<String>();
-			emails.add(emailReceptor);
-			
-			ServicosEmail.enviarMensagemHTML(emails, 
-						 envioEmail.getEmailRemetente(), 
-						 "COSANPA", 
-						 envioEmail.getTituloMensagem(), 
-						 ModeloEmailVencimento.getMensagem(nomeCliente, qtdDiasVencimento));
-		} catch (ErroEmailException e) {
-			throw new ActionServletException("erro.email.vencimento.fatura");
 		}
 	}
 	
