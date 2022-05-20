@@ -3122,10 +3122,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		 * */
 		else if (imovel.getFaturamentoSituacaoTipo() != null
 				&& imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento()
-						.equals(ConstantesSistema.SIM))
+						.equals(ConstantesSistema.SIM)) {
 			System.out.println(imovel.getId() + " NÃO GEROU CONTA : segundaCondicaoNaoGerarConta 2");
 			segundaCondicaoNaoGerarConta = true;
-		else {
+		} else {
 			// 1.2.2 OU, Caso existam Debitos a Cobrar E existam Pagamentos
 			boolean existeDebitoSemPagamento = false;
 			Iterator iColecaoDebitosACobrar = colecaoDebitosACobrar.iterator();
