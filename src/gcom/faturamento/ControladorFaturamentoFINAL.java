@@ -1745,8 +1745,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					&& anoMesFaturamento >= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoInicio() && anoMesFaturamento <= faturamentoSituacaoHistorico
 					.getAnoMesFaturamentoSituacaoFim())
 					&& (imovel.getFaturamentoSituacaoTipo() != null
-							&& imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento().intValue() == 1 && imovel
-							.getFaturamentoSituacaoTipo().getIndicadorValidoAgua().intValue() == 1)) {
+							&& (imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento().intValue() == 1
+							 && imovel.getFaturamentoSituacaoTipo().getId() != FaturamentoSituacaoTipo.SITUACAO_ESPECIAL_BOLSA_AGUA)
+							&& imovel.getFaturamentoSituacaoTipo().getIndicadorValidoAgua().intValue() == 1)) {
 				faturar = false;
 			}
 		}
