@@ -3093,7 +3093,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						&& !imovel.getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.LIGADO)
 						&& !imovel.getLigacaoEsgotoSituacao().getId().equals(LigacaoEsgotoSituacao.LIGADO) && (isPreFaturamento && imovel
 						.getImovelCondominio() == null))) {
-
+			System.out.println(imovel.getId() + " N√O GEROU CONTA : primeiraCondicaoNaoGerarConta");
 			primeiraCondicaoNaoGerarConta = true;
 		}
 
@@ -3108,6 +3108,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		// 1.2.1 Caso n√£o existam Debitos a Cobrar.
 		if (colecaoDebitosACobrar == null || colecaoDebitosACobrar.isEmpty()) {
+			System.out.println(imovel.getId() + " N√O GEROU CONTA : segundaCondicaoNaoGerarConta");
 			segundaCondicaoNaoGerarConta = true;
 		}
 		/**
@@ -3122,6 +3123,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		else if (imovel.getFaturamentoSituacaoTipo() != null
 				&& imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento()
 						.equals(ConstantesSistema.SIM))
+			System.out.println(imovel.getId() + " N√O GEROU CONTA : segundaCondicaoNaoGerarConta 2");
 			segundaCondicaoNaoGerarConta = true;
 		else {
 			// 1.2.2 OU, Caso existam Debitos a Cobrar E existam Pagamentos
@@ -3142,6 +3144,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 			/**************************************************************/
 			if (!existeDebitoSemPagamento) {
+				System.out.println(imovel.getId() + " N√O GEROU CONTA : segundaCondicaoNaoGerarConta 3");
 				segundaCondicaoNaoGerarConta = true;
 			} else {
 				// 1.2.3 OU, Caso existam Debitos a Cobrar E NAO existam
@@ -3188,6 +3191,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					DebitoACobrar debitoACobrar = null;
 					DebitoTipo debitoTipo = null;
 					// SubCondicao3
+					System.out.println(imovel.getId() + " N√O GEROU CONTA : segundaCondicaoNaoGerarConta 4");
 					segundaCondicaoNaoGerarConta = true;
 
 					while (iteratorColecaoDebitosACobrar.hasNext()) {
@@ -3205,10 +3209,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// a Tipo de Debito com o indicador de geracao de conta
 						// igual a NAO.
 						if (debitoTipo.getIndicadorGeracaoConta().shortValue() != 2) {
+							System.out.println(imovel.getId() + " N√O GEROU CONTA : segundaCondicaoNaoGerarConta false");
 							segundaCondicaoNaoGerarConta = false;
 						}
 					}
 				} else {
+					System.out.println(imovel.getId() + " N√O GEROU CONTA : segundaCondicaoNaoGerarConta false 2");
 					segundaCondicaoNaoGerarConta = false;
 				}
 			}
