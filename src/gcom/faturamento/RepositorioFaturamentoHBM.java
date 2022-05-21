@@ -42638,7 +42638,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					 */
 					+ "imovel.imovelCondominio.id, " //31 
 					+ "imovel.quantidadeEconomias, " // 32
-					+ "imovel.indicadorImovelCondominio " //33
+					+ "imovel.indicadorImovelCondominio, " //33
+					+ "imovel.ligacaoAgua.id, " //34
+					+ "imovel.ligacaoEsgoto.id " //35
 				//	+ "imovel.imovelCondominio.ligacaoEsgotoSituacao.id, " //34
 				//	+ "imovel.imovelCondominio.ligacaoEsgotoSituacao.indicadorFaturamentoSituacao, " //35
 				//	+ "imovel.imovelCondominio.ligacaoAguaSituacao.id, " //36
