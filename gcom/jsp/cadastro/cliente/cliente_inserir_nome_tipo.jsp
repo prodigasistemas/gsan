@@ -344,6 +344,13 @@ function validarPermiteNegativacao() {
 					<td><html:text maxlength="40" property="email" size="40"
 						tabindex="6" style="text-transform: none;" /></td>
 				</tr>
+				<tr>
+			     <td height="30"><p><strong>Autorização de Envio de Email:</strong></p></td>
+			      <td>
+					<strong><html:radio property="indicadorAutorizacaoEnvioEmail" value="1" />Sim</strong> 
+			    	<strong><html:radio property="indicadorAutorizacaoEnvioEmail" value="2" />Não</strong>
+			      </td>
+			    </tr>
 				
 				<tr>
 					<td><strong>Número do NIS:</strong></td>

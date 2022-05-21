@@ -118,8 +118,10 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
     private Short indicadorNegativacaoPeriodo;
     
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
     private Short indicadorAutorizacaoEnvioEmail;
     
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
     private Short indicadorAutorizacaoEnvioSMS;
     
     private String numeroNIS;
@@ -259,6 +261,9 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 		this.indicadorPermiteNegativacao = ConstantesSistema.NAO;
 		this.indicadorVencimentoMesSeguinte = ConstantesSistema.NAO;
 		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
+		this.indicadorAutorizacaoEnvioEmail = clienteCadastrado.getIndicadorAutorizacaoEnvioEmail();
+		this.indicadorAutorizacaoEnvioSMS = clienteCadastrado.getIndicadorAutorizacaoEnvioSMS();
+		
 	}
 
 	public Cliente(String nome) {

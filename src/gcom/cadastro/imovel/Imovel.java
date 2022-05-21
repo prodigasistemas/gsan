@@ -339,8 +339,10 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
     @ControleAlteracao (funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
 	private Integer individualizacao;
     
+    @ControleAlteracao (funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
     private Short indicadorEnvioContaFisica;
     
+    @ControleAlteracao (funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
     private Integer codigoConvenio;
     
     private Collection<ImovelTipoOcupanteQuantidade> quantidadesOcupantes;

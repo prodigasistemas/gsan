@@ -133,6 +133,7 @@ public class AtualizarImovelAction extends GcomAction {
 		
 		String pontoUtilizaco = (String) inserirImovelActionForm.get("numeroPontos");
 		String numeroMoradores = (String) inserirImovelActionForm.get("numeroMoradores");
+		String indicadorEnvioContaFisica = (String) inserirImovelActionForm.get("indicadorEnvioContaFisica");
 		String numeroIptu = (String) inserirImovelActionForm.get("numeroIptu");
 		String numeroContratoCelpe = (String) inserirImovelActionForm.get("numeroContratoCelpe");
 		String imovelContaEnvioForm = (String) inserirImovelActionForm.get("imovelContaEnvio");
@@ -340,6 +341,10 @@ public class AtualizarImovelAction extends GcomAction {
 		}
 		if (Util.verificarNaoVazio(jardim)) {
 			imovel.setIndicadorJardim(new Short(jardim));
+		}
+		
+		if (Util.verificarNaoVazio(indicadorEnvioContaFisica)) {
+			imovel.setIndicadorEnvioContaFisica(new Short(indicadorEnvioContaFisica));
 		}
 		
 		imovel.setPavimentoCalcada(resultadoAbaCaracteristicas.getPavimentoCalcada());

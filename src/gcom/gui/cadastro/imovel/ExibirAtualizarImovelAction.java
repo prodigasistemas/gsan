@@ -514,6 +514,14 @@ public class ExibirAtualizarImovelAction extends GcomAction {
         	numeroMoradores = "";
         }
         atualizarImovelActionForm.set("numeroMoradores", numeroMoradores);
+       
+        //verifica o tipo de conta fisica
+        if(imovel.getIndicadorEnvioContaFisica() != null){
+        	atualizarImovelActionForm.set("indicadorEnvioContaFisica", imovel.getIndicadorEnvioContaFisica().toString());
+       	}else{
+       		atualizarImovelActionForm.set("indicadorEnvioContaFisica", ConstantesSistema.NAO.toString());
+       	}
+                
         //verifica se o numero do iptu é nulo
         String numeroIptu = null;
         if(imovel.getNumeroIptu() != null){
@@ -541,7 +549,7 @@ public class ExibirAtualizarImovelAction extends GcomAction {
         if(imovel.getNumeroMedidorEnergia() != null){
         	numeroMedidorEnergia = imovel.getNumeroMedidorEnergia();
         }else{
-        	numeroMedidorEnergia = "";
+        	numeroMedidorEnergia = ""; 
         }
         atualizarImovelActionForm.set("numeroMedidorEnergia", numeroMedidorEnergia);
        

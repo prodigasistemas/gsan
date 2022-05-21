@@ -271,7 +271,8 @@
 					</tr>
 				</table>
 			<br>
-			<table width="100%" border="0">			    
+			<table width="100%" border="0">	
+						    
 				<tr>
 					<td width="21%" height="24"><strong>N&uacute;mero de Pontos:<font
 						color="#FF0000"></font></strong></td>
@@ -284,6 +285,13 @@
 					<td><html:text maxlength="4" size="4" property="numeroMoradores" 
 					onkeypress="return isCampoNumerico(event);" /></td>
 				</tr>
+				<tr>
+			     <td height="30"><p><strong>Envio Conta Física:</strong></p></td>
+			      <td>
+					<strong><html:radio property="indicadorEnvioContaFisica" value="1" />Sim</strong> 
+			    	<strong><html:radio property="indicadorEnvioContaFisica" value="2" />Não</strong>
+			      </td>
+			    </tr>
 				<tr>
 					<td height="24"><strong>N&uacute;mero de IPTU:</strong></td>
 					<td><logic:equal name="tarifaSocial" value="1">
@@ -324,7 +332,7 @@
 	
 					<logic:equal name="contaEnvioObrigatorio" value="obrigatorio">
 					<tr>
-						<td height="24"><strong>Envio da Conta:<font color="#FF0000">*</font></strong></td>
+						<td height="24"><strong>Envio da Conta para Responsável:<font color="#FF0000">*</font></strong></td>
 						<td><html:select property="imovelContaEnvio"
 							onchange="validarEnvioEmail();">
 							<html:option value="-1">&nbsp;</html:option>
@@ -335,7 +343,7 @@
 					</logic:equal>
 					<logic:equal name="contaEnvioObrigatorio" value="opcional">
 						<tr>
-							<td height="24"><strong>Envio da Conta:</strong></td>
+							<td height="24"><strong>Envio da Conta para Responsável:</strong></td>
 							<td><html:select property="imovelContaEnvio"
 								onchange="validarEnvioEmail();">
 								<html:option value="-1">&nbsp;</html:option>

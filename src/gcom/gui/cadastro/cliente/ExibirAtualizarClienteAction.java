@@ -243,6 +243,18 @@ public class ExibirAtualizarClienteAction extends GcomAction {
 
 			clienteActionForm.set("email", formatarResultado(cliente.getEmail()));
 			
+			 if(cliente.getIndicadorAutorizacaoEnvioEmail() != null){
+				 clienteActionForm.set("indicadorAutorizacaoEnvioEmail", cliente.getIndicadorAutorizacaoEnvioEmail().toString());
+		       	}else{
+		       		clienteActionForm.set("indicadorAutorizacaoEnvioEmail", ConstantesSistema.NAO);
+		       	}
+			 
+			 if (cliente.get("indicadorAutorizacaoEnvioSMS") != null && !cliente.get("indicadorAutorizacaoEnvioSMS").equals("")) {
+				    clienteActionForm.set("indicadorAutorizacaoEnvioSMS", cliente.getIndicadorAutorizacaoEnvioSMS().toString());
+				} else {
+					clienteActionForm.set("indicadorAutorizacaoEnvioSMS", ConstantesSistema.NAO.toString());
+				}
+			
 			if (cliente.getNumeroNIS() != null) {
 				clienteActionForm.set("numeroNIS", String.valueOf(cliente.getNumeroNIS()));
 			}

@@ -241,7 +241,9 @@
 			<form-property name="indicadorNomeReceita" type="java.lang.String" />
 			<form-property name="indicadorExibicaoNomeConta" type="java.lang.String" />
 			<form-property name="indicadorPermiteNegativacao" type="java.lang.String" />
-			<form-property name="numeroNIS" type="java.lang.String" />
+			<form-property name="numeroNIS" type="java.lang.String" />  
+			<form-property name="indicadorAutorizacaoEnvioEmail" type="java.lang.String" />
+			<form-property name="indicadorAutorizacaoEnvioSMS" type="java.lang.String" /> 
 
 		</form-bean>
 		<!--Action Form Dinâmico que serve para alterar a inscrição do imovel-->
@@ -391,6 +393,7 @@
 			<form-property name="idRamoAtividade" type="java.lang.String" />
 			<form-property name="numeroQuadraEntrega" type="java.lang.String" />
 			<form-property name="indicadorNivelInstalacaoEsgoto" type="java.lang.String" />
+			<form-property name="indicadorEnvioContaFisica" type="java.lang.String" />
 			
 		</form-bean>
 
@@ -507,6 +510,7 @@
 			<form-property name="numeroQuadraEntrega" type="java.lang.String" />
 			<form-property name="indicadorNivelInstalacaoEsgoto" type="java.lang.String" />
 			<form-property name="nomeDoImovel" type="java.lang.String" />
+			<form-property name="indicadorEnvioContaFisica" type="java.lang.String" />
 		</form-bean>
 
 		<!--Action Form Dinâmico que serve para informar a Tarifa Social -->

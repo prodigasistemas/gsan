@@ -108,6 +108,7 @@ public class InserirImovelAction extends GcomAction {
 		String tipoCobertura = (String) inserirImovelActionForm.get("imovelTipoCobertura");
 		String pontoUtilizaco = (String) inserirImovelActionForm.get("numeroPontos");
 		String numeroMoradores = (String) inserirImovelActionForm.get("numeroMoradores");
+		String indicadorEnvioContaFisica = (String) inserirImovelActionForm.get("indicadorEnvioContaFisica");
 		String numeroIptu = (String) inserirImovelActionForm.get("numeroIptu");
 		String numeroContratoCelpe = (String) inserirImovelActionForm.get("numeroContratoCelpe");
 		String imovelContaEnvioForm = (String) inserirImovelActionForm.get("imovelContaEnvio");
@@ -303,7 +304,11 @@ public class InserirImovelAction extends GcomAction {
 			imovel.setImovelTipoCobertura(imovelTipoCobertura);
 		}
 		
-			imovel.setIndicadorEnvioContaFisica((short) Imovel.INDICADOR_ENVIO_CONTA_FISICA);
+		if (naoVazio(indicadorEnvioContaFisica)) {
+			imovel.setIndicadorEnvioContaFisica(new Short(indicadorEnvioContaFisica));
+		}
+		
+			//imovel.setIndicadorEnvioContaFisica((short) Imovel.INDICADOR_ENVIO_CONTA_FISICA);
 		
 		
 		// ABA CONCLUSAO

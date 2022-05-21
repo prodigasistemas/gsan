@@ -387,6 +387,18 @@ public class InserirClienteAction extends GcomAction {
 			} else {
 				cliente.setIndicadorPermiteNegativacao(ConstantesSistema.SIM);
 			}
+			// Insere o Indicador de Autorização de EMAIL
+			if (form.get("indicadorAutorizacaoEnvioEmail") != null && !form.get("indicadorAutorizacaoEnvioEmail").equals("")) {
+				cliente.setIndicadorAutorizacaoEnvioEmail(new Short((String) form.get("indicadorAutorizacaoEnvioEmail")));
+			} else {
+				cliente.setIndicadorAutorizacaoEnvioEmail(ConstantesSistema.NAO);
+			}
+			// Insere o Indicador de Autorização de SMS
+			if (form.get("indicadorAutorizacaoEnvioSMS") != null && !form.get("indicadorAutorizacaoEnvioSMS").equals("")) {
+				cliente.setIndicadorAutorizacaoEnvioSMS(new Short((String) form.get("indicadorAutorizacaoEnvioSMS")));
+			} else {
+				cliente.setIndicadorAutorizacaoEnvioSMS(ConstantesSistema.NAO);
+			}
 
 			// Verifica se a funcionalidade esta sendo executada dentro de um popup
 			if (sessao.getAttribute("POPUP") != null) {

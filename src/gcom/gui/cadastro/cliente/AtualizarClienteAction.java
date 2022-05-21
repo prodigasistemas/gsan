@@ -329,6 +329,9 @@ public class AtualizarClienteAction extends GcomAction {
 		} else {
 			indicadorUso = new Short("1");
 		}
+		
+		
+		String indicadorAutorizacaoEnvioEmail = (String) form.get("indicadorAutorizacaoEnvioEmail");
 
 		Short indicadorAcrescimos = null;
 		if (form.get("indicadorAcrescimos") != null) {
@@ -498,6 +501,20 @@ public class AtualizarClienteAction extends GcomAction {
 				cliente.setIndicadorPermiteNegativacao(ConstantesSistema.NAO);
 			} else {
 				cliente.setIndicadorPermiteNegativacao(ConstantesSistema.SIM);
+			}
+			
+			// Indicador de Autorização de EMAIL
+			if (form.get("indicadorAutorizacaoEnvioEmail") != null && !form.get("indicadorAutorizacaoEnvioEmail").equals("")) {
+				cliente.setIndicadorAutorizacaoEnvioEmail(new Short((String) form.get("indicadorAutorizacaoEnvioEmail")));
+			} else {
+				cliente.setIndicadorAutorizacaoEnvioEmail(ConstantesSistema.NAO);
+			}
+
+			// Indicador de Autorização de EMAIL
+			if (form.get("indicadorAutorizacaoEnvioSMS") != null && !form.get("indicadorAutorizacaoEnvioSMS").equals("")) {
+				cliente.setIndicadorAutorizacaoEnvioSMS(new Short((String) form.get("indicadorAutorizacaoEnvioSMS")));
+			} else {
+				cliente.setIndicadorAutorizacaoEnvioSMS(ConstantesSistema.NAO);
 			}
 
 			// Verifica se a funcionalidade esta sendo executada dentro de um popup

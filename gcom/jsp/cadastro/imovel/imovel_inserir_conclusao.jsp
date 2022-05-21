@@ -295,6 +295,13 @@
 					onkeypress="return isCampoNumerico(event)"/></td>
 				</tr>
 				<tr>
+			     <td height="30"><p><strong>Envio Conta Física:</strong></p></td>
+			      <td>
+					<strong><html:radio property="indicadorEnvioContaFisica" value="1" />Sim</strong> 
+			    	<strong><html:radio property="indicadorEnvioContaFisica" value="2" />Não</strong>
+			      </td>
+			    </tr>
+				<tr>
 					<td height="24"><strong>N&uacute;mero de IPTU:</strong></td>
 					<td><html:text maxlength="20" size="20" property="numeroIptu" 
 					onkeypress="return isCampoNumerico(event)"/></td>

@@ -256,6 +256,13 @@ function remover(objeto){
 					</td>
 				</tr>
 				<tr>
+			     <td height="30"><p><strong>Autorização de Envio de SMS:</strong></p></td>
+			      <td>
+					<strong><html:radio property="indicadorAutorizacaoEnvioSMS" value="1" />Sim</strong> 
+			    	<strong><html:radio property="indicadorAutorizacaoEnvioSMS" value="2" />Não</strong>
+			      </td>
+			    </tr>
+				<tr>
 					<td height="24"><strong>Ramal:</strong></td>
 					<td>
 						<html:text maxlength="4" property="ramal" size="4" tabindex="5" />

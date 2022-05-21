@@ -67,6 +67,9 @@ public class ManterImovelActionForm extends ValidatorForm {
 	private String poco;
 	private String numeroPontos;
 	private String numeroMoradores;
+	
+	private String indicadorEnvioContaFisica;
+
 		
 	private String numeroIptu;
 	private String numeroContratoCelpe;
@@ -726,6 +729,7 @@ public class ManterImovelActionForm extends ValidatorForm {
 	public void setNumeroPontos(String numeroPontos) {
 		this.numeroPontos = numeroPontos;
 	}
+	
 	/**
 	 * @return Retorna o campo numeroPontoUtilizacao.
 	 */
@@ -1049,4 +1053,18 @@ public class ManterImovelActionForm extends ValidatorForm {
 			String indicadorImovelSubcategoriaNaoPodeSerAtualizado) {
 		this.indicadorImovelSubcategoriaNaoPodeSerAtualizado = indicadorImovelSubcategoriaNaoPodeSerAtualizado;
 	}
+	/**
+	 * @return Retorna o campo indicadorEnvioContaFisica.
+	 */
+	public String getIndicadorEnvioContaFisica() {
+		return indicadorEnvioContaFisica;
+	}
+	/**
+	 * @param indicadorEnvioContaFisica O indicadorEnvioContaFisica a ser setado.
+	 */
+	public void setIndicadorEnvioContaFisica(String indicadorEnvioContaFisica) {
+		this.indicadorEnvioContaFisica = indicadorEnvioContaFisica;
+	}
+	
 }
+
