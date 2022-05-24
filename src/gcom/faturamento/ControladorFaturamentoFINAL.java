@@ -17981,12 +17981,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 *            ID do Debito Credito Situação
 	 * @return Coleção de Creditos a Realizar
 	 */
-	public Collection obterCreditoARealizarImovelPorSituacao(Integer imovelID, Integer debitoCreditoSituacaoAtualID,
+	public Collection<CreditoARealizar> obterCreditoARealizarImovelPorSituacao(Integer imovelID, Integer debitoCreditoSituacaoAtualID,
 			int anoMesFaturamentoGrupo, boolean preFaturamento) throws ControladorException {
 
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-		Collection creditosARealizar = null;
+		Collection<CreditoARealizar> creditosARealizar = null;
 		Collection colecaoCreditosARealizar = null;
 
 		/**
@@ -18103,7 +18103,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				if (arrayCreditosACobrar[18] != null) {
 					creditoARealizar.setAnoMesReferenciaPrestacao((Integer) arrayCreditosACobrar[18]);
 				}
-				creditosARealizar.add(creditoARealizar);
+				
+				if (!creditoARealizar.isCreditoBolsaAgua() 
+						|| (creditoARealizar.isCreditoBolsaAgua() && getControladorImovel().isImovelBolsaAgua(creditoARealizar.getImovel().getId()))) {
+					creditosARealizar.add(creditoARealizar);
+				} else {
+					removerCreditoARealizar(creditoARealizar);
+				}
 			}
 		}
 		return creditosARealizar;
@@ -53255,14 +53261,23 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	private Collection obterTodosCreditosARealizarImovel(Imovel imovel, Integer anoMesFaturamentoGrupo,
 			boolean preFaturamento) throws ControladorException {
-		Collection colecaoCreditosARealizar = this.obterCreditoARealizarImovelPorSituacao(imovel.getId(),
+		Collection<CreditoARealizar> colecaoCreditosARealizar = this.obterCreditoARealizarImovelPorSituacao(imovel.getId(),
 				DebitoCreditoSituacao.NORMAL, anoMesFaturamentoGrupo, preFaturamento);
 
 		if (preFaturamento) {
 			colecaoCreditosARealizar = obterCreditosARealizarPFdoImovel(imovel, anoMesFaturamentoGrupo,
 					colecaoCreditosARealizar);
 		}
+		
 		return colecaoCreditosARealizar;
+	}
+	
+	private void removerCreditoARealizar(CreditoARealizar credito) 
+			throws ControladorException {
+		
+		Collection creditosCategoria = obterCreditoARealizarCategoria(credito);
+		getControladorUtil().remover(creditosCategoria);
+		getControladorUtil().remover(credito);
 	}
 
 	private Collection obterCreditosARealizarPFdoImovel(Imovel imovel, Integer anoMesFaturamento,
