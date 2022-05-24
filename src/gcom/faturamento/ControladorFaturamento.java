@@ -555,6 +555,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									idSubcategoria = helperCategoria.getComp_id().getSubcategoria().getId();
 								}
 								filtroContaCategoria.adicionarParametro(new ParametroSimples(FiltroContaCategoria.SUBCATEGORIA_ID, idSubcategoria));
+								filtroContaCategoria.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.CONTA);
 								Collection<ContaCategoria> colContaCategoria = this.getControladorUtil().pesquisar(filtroContaCategoria,ContaCategoria.class.getName());
 
 								ContaCategoria contaCategoria = (ContaCategoria) Util.retonarObjetoDeColecao(colContaCategoria);
