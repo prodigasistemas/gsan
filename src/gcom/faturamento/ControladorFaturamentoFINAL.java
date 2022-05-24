@@ -1567,10 +1567,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						if (valorAguaEsgoto.doubleValue() > valorBolsaAguaConcedido.doubleValue()) {
 							valorBolsaAguaAtlz = valorBolsaAguaConcedido;
-						} else {
-							valorBolsaAguaAtlz = valorAguaEsgoto;
-						}
-
+						} 
+						
 						getControladorFaturamento().atualizarValorCreditoBolsaAgua(anoMesFaturamentoGrupo, imovel,
 								valorBolsaAguaAtlz, conta);
 					}
