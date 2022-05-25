@@ -76,6 +76,7 @@ import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
+import gcom.faturamento.conta.ContaCategoriaPK;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaImpostosDeduzidos;
@@ -555,11 +556,22 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									idSubcategoria = helperCategoria.getComp_id().getSubcategoria().getId();
 								}
 								filtroContaCategoria.adicionarParametro(new ParametroSimples(FiltroContaCategoria.SUBCATEGORIA_ID, idSubcategoria));
+								filtroContaCategoria.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.CONTA);
+								filtroContaCategoria.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.IMOVEL);
+								filtroContaCategoria.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.CATEGORIA);
+
 								Collection<ContaCategoria> colContaCategoria = this.getControladorUtil().pesquisar(filtroContaCategoria,ContaCategoria.class.getName());
 
 								ContaCategoria contaCategoria = (ContaCategoria) Util.retonarObjetoDeColecao(colContaCategoria);
 
-								if (contaCategoria != null && !contaCategoria.equals("")) {
+								if (contaCategoria != null && !contaCategoria.equals("")) { 
+									
+									ContaCategoriaPK contaCategoriaPK = null;
+									contaCategoriaPK = new ContaCategoriaPK();
+									contaCategoriaPK.setConta(contaAtualizacao);
+									contaCategoriaPK.setCategoria(helperCategoria.getComp_id().getCategoria());
+									contaCategoriaPK.setSubcategoria(helperCategoria.getComp_id().getSubcategoria());
+									contaCategoria.setComp_id(contaCategoriaPK);
 									contaCategoria.setValorAgua(helperCategoria.getValorFaturadoAgua());
 									contaCategoria.setConsumoAgua(helperCategoria.getConsumoFaturadoAgua());
 									contaCategoria.setValorEsgoto(helperCategoria.getValorFaturadoEsgoto());

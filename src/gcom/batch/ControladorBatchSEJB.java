@@ -2332,19 +2332,29 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 
 					case Funcionalidade.ENVIO_EMAIL_CONTA_PARA_CLIENTE:
 
-						Collection colecaoRotasEmail = getControladorMicromedicao().pesquisarRotaPorGrupoFaturamento(210);
 						
+ 
 						TarefaBatchEnvioEmailContaParaCliente tarefaBatchEmailConta = new TarefaBatchEnvioEmailContaParaCliente(
 								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-						tarefaBatchEmailConta.addParametro("anoMesFaturamento", 202205);
+						try {
+							Collection colecaoFaturamentoAtivCronRota;
+							colecaoFaturamentoAtivCronRota = repositorioBatch
+									.pesquisarRotasProcessamentoBatchFaturamentoComandado(126553);
+							tarefaBatchEmailConta.addParametro("anoMesFaturamento", 202204);
+							
+							tarefaBatchEmailConta.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+									colecaoFaturamentoAtivCronRota);
+							
+							funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEmailConta));
+							
+							getControladorUtil().atualizar(funcionalidadeIniciada);
+						} catch (ErroRepositorioException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
-						tarefaBatchEmailConta.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-								colecaoRotasEmail);
-						
-						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefaBatchEmailConta));
 
-						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
 

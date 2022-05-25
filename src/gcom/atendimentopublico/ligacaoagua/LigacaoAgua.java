@@ -120,8 +120,7 @@ public class LigacaoAgua extends ObjetoTransacao {
 	public LigacaoAgua(Integer id) {
 		this.id = id;
 	}
-	
-		
+
 	public LigacaoAgua(
 			Date dataImplantacao,
 			Date dataLigacao,
