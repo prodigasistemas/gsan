@@ -194,6 +194,7 @@ import gcom.faturamento.credito.CreditoRealizadoCategoriaPK;
 import gcom.faturamento.credito.CreditoRealizadoHistorico;
 import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.credito.FiltroCreditoARealizar;
+import gcom.faturamento.credito.FiltroCreditoARealizarCategoria;
 import gcom.faturamento.credito.FiltroCreditoARealizarGeral;
 import gcom.faturamento.credito.FiltroCreditoRealizado;
 import gcom.faturamento.credito.FiltroCreditoTipo;
@@ -18105,7 +18106,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 				
 				if (!creditoARealizar.isCreditoBolsaAgua() 
-						|| (creditoARealizar.isCreditoBolsaAgua() && getControladorImovel().isImovelBolsaAgua(creditoARealizar.getImovel().getId()))) {
+						|| (creditoARealizar.isCreditoBolsaAgua() && getControladorImovel().isImovelBolsaAgua(imovelID))) {
 					creditosARealizar.add(creditoARealizar);
 				} else {
 					removerCreditoARealizar(creditoARealizar);
@@ -53275,8 +53276,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	private void removerCreditoARealizar(CreditoARealizar credito) 
 			throws ControladorException {
 		
-		Collection creditosCategoria = obterCreditoARealizarCategoria(credito);
-		getControladorUtil().remover(creditosCategoria);
+		
+		FiltroCreditoARealizarCategoria filtroCreditoARealizarCategoria = new FiltroCreditoARealizarCategoria();
+		
+		filtroCreditoARealizarCategoria.adicionarParametro(new ParametroSimples(FiltroCreditoARealizarCategoria.ID_CREDITO_A_REALIZAR, credito.getId()));
+			
+		filtroCreditoARealizarCategoria. adicionarCaminhoParaCarregamentoEntidade("comp_id");
+		filtroCreditoARealizarCategoria. adicionarCaminhoParaCarregamentoEntidade("creditoARealizar");
+		filtroCreditoARealizarCategoria. adicionarCaminhoParaCarregamentoEntidade("categoria");
+		
+		Collection<CreditoARealizarCategoria> colCreditoARealizarCategoria = this.getControladorUtil().pesquisar(filtroCreditoARealizarCategoria,CreditoARealizarCategoria.class.getName());
+		CreditoARealizarCategoria CreditoARealizarCategoria = (CreditoARealizarCategoria) Util.retonarObjetoDeColecao(colCreditoARealizarCategoria);
+		
+		getControladorUtil().remover(CreditoARealizarCategoria);
 		getControladorUtil().remover(credito);
 	}
 
