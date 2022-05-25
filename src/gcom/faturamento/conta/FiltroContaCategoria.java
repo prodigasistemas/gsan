@@ -37,6 +37,8 @@ public class FiltroContaCategoria extends Filtro {
     public final static String CONTA_ID = "comp_id.conta.id";
     
     public final static String QUANTIDADE_ECONOMIA = "quantidadeEconomia";
+    
+    public final static String IMOVEL = "comp_id.conta.imovel";
 
     /**
      * Construtor da classe FiltroContaCategoria
