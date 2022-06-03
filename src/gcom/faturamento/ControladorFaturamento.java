@@ -746,7 +746,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
 	        				 
 	        				 if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
-	        					 
+	        					/*
+	        					 Crédito Bolsa Água será validado antes de ser adicionado aos Créditos da Conta
+	        					 Author: Kurt Matheus Sampaio de Matos
+	        					 Date: 03/06/2022
+	        					 */	        					 
 	        					if (!validarCreditoConcedido(valorCreditos, valorBolsaAguaConcedido)) {
 	        						valorCreditos = valorCreditos.add(valorBolsaAguaConcedido);
 	        						contaAtualizacao.setValorCreditos(valorCreditos);
