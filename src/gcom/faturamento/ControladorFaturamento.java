@@ -747,9 +747,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 
 	        				 if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
 	        					 
-									valorCreditos = valorCreditos.add(valorBolsaAguaConcedido);
-									contaAtualizacao.setValorCreditos(valorCreditos);
-	        				    
+	        					if (!validarCreditoConcedido(valorCreditos, valorBolsaAguaConcedido)) {
+	        						valorCreditos = valorCreditos.add(valorBolsaAguaConcedido);
+	        						contaAtualizacao.setValorCreditos(valorCreditos);
+	        					}								        				    
 								atualizarValorCreditoBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel(), valorBolsaAguaConcedido, contaAtualizacao);
 	        				 }
 	        				 
@@ -1101,6 +1102,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 
 	}
+
+	
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Object[] incluirMovimentoContaPreFaturada( BufferedReader buffer, Integer idRota,
@@ -16572,6 +16575,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 		return cnpjCpf;
 	}
-
+	
+	private boolean validarCreditoConcedido(BigDecimal valorCreditos, BigDecimal valorBolsaAguaConcedido) {
+		BigDecimal creditosSemBolsaAgua = valorCreditos.subtract(valorBolsaAguaConcedido);
+		
+		if(creditosSemBolsaAgua.compareTo(BigDecimal.ZERO) == -1) {
+			return false;
+		} 		
+		return true;
+		
+	}
 
 }
