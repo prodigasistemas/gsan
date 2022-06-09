@@ -31,7 +31,7 @@
 			validarIndicadorGerarFiscalizacao();
 			validarIndicadorTransmissaoOffline();
 			validarIndicadorSequencialLeitura();
-			validarTipoLeituraComIndicadorImpressao();
+		//	validarTipoLeituraComIndicadorImpressao();
 			
 			if(validarLimiteImoveisRota()){
 				return false;
@@ -154,7 +154,7 @@
 		}
 
    }
-   
+   /*
    function validarTipoLeituraComIndicadorImpressao(){
 		var form = document.forms[0];
 		
@@ -168,7 +168,7 @@
 		}
 
 	}
-
+*/
 
 
    function validarIndicadorFiscalizarCortado(){
