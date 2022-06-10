@@ -38,7 +38,7 @@
 			validarIndicadorGerarFalsaFaixa();
 			validarIndicadorGerarFiscalizacao();
 			verificarindicadorSequencialLeitura();
-		//	validarTipoLeituraComIndicadorImpressao();
+			validarTipoLeituraComIndicadorImpressao();
 			
 			if(validarLimiteImoveisRota()){
 				return false;
@@ -158,21 +158,17 @@
    }
    
    
-/*   
+ 
    function validarTipoLeituraComIndicadorImpressao(){
 		var form = document.forms[0];
 		
-		var form = document.forms[0];
 		if(form.indicadorImpressaoTermicaFinalGrupo[0].checked && form.leituraTipo.value != '2'){
-			alert("Indicador de Impressao termica incopativel com Tipo de Leitura selecionado.");
-			form.indicadorImpressaoTermicaFinalGrupo.focus();
-		}else if(form.indicadorImpressaoTermicaFinalGrupo[1].checked && form.leituraTipo.value != '3'){
-			alert("Indicador de Impressao termica incopativel com Tipo de Leitura selecionado.");
+			alert("Indicador de Impressao termica incompativel com Tipo de Leitura selecionado.");
 			form.indicadorImpressaoTermicaFinalGrupo.focus();
 		}
 
 	}
-*/
+
    function validarIndicadorFiscalizarCortado(){
 
 	    var form = document.forms[0];
