@@ -446,6 +446,7 @@ public class ExibirAtualizarImovelConclusaoAction extends GcomAction {
 			sessao.setAttribute("bloquearExtratoParaResponsavel", "");
 		}
 		
+        inserirImovelConclusaoActionForm.set("indicadorEnvioContaFisica", "1");		
 		
 		return retorno;
 	}

@@ -356,7 +356,7 @@ public class ExibirInserirImovelConclusaoAction extends GcomAction {
         	}
         }
         
-        
+        inserirImovelConclusaoActionForm.set("indicadorEnvioContaFisica", "1");
         
         
         return retorno;
