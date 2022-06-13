@@ -199,6 +199,7 @@ import gcom.faturamento.credito.FiltroCreditoARealizarGeral;
 import gcom.faturamento.credito.FiltroCreditoRealizado;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.credito.ICreditoRealizado;
+import gcom.faturamento.credito.PercentualBolsaAgua;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarCategoria;
 import gcom.faturamento.debito.DebitoACobrarCategoriaHistorico;
@@ -1551,28 +1552,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					this.atualizarCreditoARealizar(gerarCreditoRealizadoHelper.getColecaoCreditoARealizar());
 
-					BigDecimal valorBolsaAguaConcedido = getControladorFaturamento().retornaValorBolsaAgua(
-							anoMesFaturamentoGrupo, imovel);
-
-					if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
-
-						BigDecimal valorBolsaAguaAtlz = new BigDecimal(0);
-						BigDecimal valorAguaEsgoto = new BigDecimal(0);
-
-						valorAguaEsgoto = valorAguaEsgoto.add(helperValoresAguaEsgoto.getValorTotalAgua());
-
-						if (helperValoresAguaEsgoto.getValorTotalEsgoto() != null
-								&& helperValoresAguaEsgoto.getValorTotalEsgoto().doubleValue() > 0) {
-							valorAguaEsgoto = valorAguaEsgoto.add(helperValoresAguaEsgoto.getValorTotalEsgoto());
-						}
-
-						if (valorAguaEsgoto.doubleValue() > valorBolsaAguaConcedido.doubleValue()) {
-							valorBolsaAguaAtlz = valorBolsaAguaConcedido;
-						} 
-						
-						getControladorFaturamento().atualizarValorCreditoBolsaAgua(anoMesFaturamentoGrupo, imovel,
-								valorBolsaAguaAtlz, conta);
-					}
+//					BigDecimal valorBolsaAguaConcedido = getControladorFaturamento().retornaValorBolsaAgua(
+//							anoMesFaturamentoGrupo, imovel);
+//
+//					if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
+//						BigDecimal valorAguaEsgoto = helperValoresAguaEsgoto.getValorTotalAgua().add(helperValoresAguaEsgoto.getValorTotalEsgoto());
+//						BigDecimal valorBolsaAguaAtlz = new BigDecimal(0);
+//						
+//						if (valorAguaEsgoto.doubleValue() >= valorBolsaAguaConcedido ) {
+//							valorBolsaAguaAtlz = valorBolsaAguaConcedido;
+//						}
+//						
+//						getControladorFaturamento().atualizarValorCreditoBolsaAgua(anoMesFaturamentoGrupo, imovel,
+//								valorBolsaAguaAtlz, conta);
+//					}
 
 					this.gerarContaImpressao(conta, faturamentoGrupo, imovel, faturamentoAtivCronRota.getRota());
 
@@ -1617,25 +1610,26 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 	
-	public void atualizarValorContaBolsaAgua(DeterminarValoresFaturamentoAguaEsgotoHelper helper, Imovel imovel, FaturamentoGrupo grupo) throws ControladorException {
+	public void atualizarValorContaBolsaAgua(DeterminarValoresFaturamentoAguaEsgotoHelper helper, Imovel imovel, FaturamentoGrupo grupo, Integer anoMesFaturamento) throws ControladorException {
 		
 		 try {
 			if (getControladorImovel().isImovelBolsaAgua(imovel.getId())) {
 				System.out.println("ATUALIZACAO BOLSA AGUA [" + imovel.getId() + "]");
-				 DeterminarValoresFaturamentoAguaEsgotoHelper helperBolsaAgua = this.obterValoresCreditosBolsaAgua(imovel, grupo);
+				 BigDecimal valorBolsaAguaConcedido = getControladorFaturamento().retornaValorBolsaAgua(anoMesFaturamento, imovel);
+				 BigDecimal valorAguaEsgoto = helper.getValorTotalAgua().add(helper.getValorTotalEsgoto());
 				 if (imovel.isLigadoAgua() 
-						 && helper.getValorTotalAgua().compareTo(helperBolsaAgua.getValorTotalAgua())== -1 ) {
+						 && valorAguaEsgoto.compareTo(valorBolsaAguaConcedido)== -1 ) {
 					 System.out.println("   ANTES agua[" + imovel.getId() + "]: " + helper.getValorTotalAgua());
-					 helper.setValorTotalAgua(helperBolsaAgua.getValorTotalAgua());
+					 helper.setValorTotalAgua(PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido, imovel));
 					 System.out.println("   DEPOIS agua[" + imovel.getId() + "]: " + helper.getValorTotalAgua());
 				} else {
 					System.out.println("   MESMO VALOR AGUA[" + imovel.getId() + "]");
 				}
 					
 				if (imovel.isLigadoEsgoto()
-						&& helper.getValorTotalEsgoto().compareTo(helperBolsaAgua.getValorTotalEsgoto())== -1 ) {
+						&& valorAguaEsgoto.compareTo(valorBolsaAguaConcedido)== -1 ) {
 					System.out.println("   ANTES esgoto[" + imovel.getId() + "]: " + helper.getValorTotalEsgoto());
-					helper.setValorTotalEsgoto(helperBolsaAgua.getValorTotalEsgoto());
+					helper.setValorTotalEsgoto(PercentualBolsaAgua.PERCENTUAL_ESGOTO.retornaValor(valorBolsaAguaConcedido, imovel));
 					System.out.println("   DEPOIS esgoto[" + imovel.getId() + "]: " + helper.getValorTotalEsgoto());
 				} else {
 					System.out.println("   MESMO VALOR ESGOTO[" + imovel.getId() + "]");
@@ -1654,15 +1648,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					&& getControladorImovel().isImovelBolsaAgua(contaCategoria.getConta().getImovel().getId())) {
 				
 				System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA [" + contaCategoria.getConta().getImovel().getId() + "]" );
-				 DeterminarValoresFaturamentoAguaEsgotoHelper helper = this.obterValoresCreditosBolsaAgua(
-						 contaCategoria.getConta().getImovel(), contaCategoria.getConta().getFaturamentoGrupo());
+				 BigDecimal valorBolsaAguaConcedido = getControladorFaturamento().retornaValorBolsaAgua(contaCategoria.getConta().getReferencia(), contaCategoria.getConta().getImovel());
 				 
 				 if (contaCategoria.getConta().getImovel().isLigadoAgua() ) {
-						contaCategoria.setValorAgua(helper.getValorTotalAgua());  
+						contaCategoria.setValorAgua(PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido, contaCategoria.getConta().getImovel()));  
 				}
 					
 				if (contaCategoria.getConta().getImovel().isLigadoEsgoto()) {
-					contaCategoria.setValorEsgoto(helper.getValorTotalEsgoto());
+					contaCategoria.setValorAgua(PercentualBolsaAgua.PERCENTUAL_ESGOTO.retornaValor(valorBolsaAguaConcedido, contaCategoria.getConta().getImovel()));
 				}
 				System.out.println("FIM ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA [" + contaCategoria.getConta().getImovel().getId() + "]" );
 			 }
@@ -52612,7 +52605,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		DeterminarValoresFaturamentoAguaEsgotoHelper helper = determinarValoresFaturamentoAguaEsgoto(imovel, 
 				anoMesFaturamento, colecaoCategoriasOUSubCategorias, faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
 		
-		atualizarValorContaBolsaAgua(helper, imovel, faturamentoGrupo);
+		atualizarValorContaBolsaAgua(helper, imovel, faturamentoGrupo, anoMesFaturamento);
 		
 		return helper;
 		

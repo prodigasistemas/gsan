@@ -114,6 +114,7 @@ import gcom.faturamento.credito.FiltroCreditoRealizadoCategoria;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.credito.ICreditoRealizado;
 import gcom.faturamento.credito.ICreditoRealizadoCategoria;
+import gcom.faturamento.credito.PercentualBolsaAgua;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarGeral;
 import gcom.faturamento.debito.DebitoCobrado;
@@ -511,6 +512,18 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 consumoEsgoto += helperCategoria.getConsumoFaturadoEsgoto();
 	        			 }
 	        			 
+	        			 BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
+	        			 
+	        			 if (imo.getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA)) {
+	        				 BigDecimal valorAguaEsgoto =  valorAgua.add(valorEsgoto);
+	        				 
+	        				 if(valorAguaEsgoto.compareTo(valorBolsaAguaConcedido) == -1) {
+	        					 valorAgua = PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido, imo);
+	        					 valorEsgoto = PercentualBolsaAgua.PERCENTUAL_ESGOTO.retornaValor(valorBolsaAguaConcedido, imo);
+	        				 }
+	        				 
+	        			 }
+	        		        			 
 	        			 BigDecimal diferencaValorAgua = valorAgua.subtract(valorTotalAguaCalculado);
 	        			 BigDecimal diferencaValorEsgoto = valorEsgoto.subtract(valorTotalEsgotoCalculado);
 	        			 
@@ -743,13 +756,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 
 	        				 BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
 	        				 
-	        				 BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
-	        				 
 	        				 if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
-	        					/*
-	        					 Crédito Bolsa Água será validado antes de ser adicionado aos Créditos da Conta
-	        					 Author: Kurt Matheus Sampaio de Matos
-	        					 Date: 03/06/2022
+	        					/**
+	        					 *Crédito Bolsa Água será validado antes de ser adicionado aos Créditos da Conta
+	        					 *@author: Kurt Matheus Sampaio de Matos
+	        					 *@date: 03/06/2022
 	        					 */	        					 
 	        					if (!validarCreditoConcedido(valorCreditos, valorBolsaAguaConcedido)) {
 	        						valorCreditos = valorCreditos.add(valorBolsaAguaConcedido);
