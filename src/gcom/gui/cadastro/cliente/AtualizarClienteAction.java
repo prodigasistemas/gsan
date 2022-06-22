@@ -731,9 +731,9 @@ public class AtualizarClienteAction extends GcomAction {
 		CadastroUnico cadastroUnico = (CadastroUnico) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtro, CadastroUnico.class.getName()));
 		
 		if (cadastroUnico != null) {
-			cliente.setIndicadorBolsaFamilia(ConstantesSistema.SIM);
+			cliente.setIndicadorBolsaFamilia(CadastroUnico.TEM_NIS);
 		}else {
-			cliente.setIndicadorBolsaFamilia(ConstantesSistema.NAO);
+			cliente.setIndicadorBolsaFamilia(CadastroUnico.NIS_SEM_REGISTRO_OFICIAL);
 		}
 	}
 
@@ -741,7 +741,7 @@ public class AtualizarClienteAction extends GcomAction {
 		Collection<ClienteImovel> clienteImoveis = pesquisarImoveisPorCliente(cliente);
 		Collection<ClienteImovel> clienteImovelOrdenado = ordenacaoSituacaoAgua(clienteImoveis);
 		Boolean imovelElegivel = true;
-		if (cliente.getIndicadorBolsaFamilia().equals(ConstantesSistema.SIM)) {
+		if (cliente.getIndicadorBolsaFamilia().equals(CadastroUnico.TEM_NIS)) {
 			for (ClienteImovel clienteImovel : clienteImovelOrdenado) {
 				Integer idPerfil = clienteImovel.getImovel().getImovelPerfil().getId();
 				if (idPerfil.equals(ImovelPerfil.BOLSA_AGUA)) {

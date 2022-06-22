@@ -617,9 +617,9 @@ public class InserirClienteAction extends GcomAction {
 		CadastroUnico cadastroUnico = (CadastroUnico) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtro, CadastroUnico.class.getName()));
 		
 		if (cadastroUnico != null) {
-			cliente.setIndicadorBolsaFamilia(ConstantesSistema.SIM);
+			cliente.setIndicadorBolsaFamilia(CadastroUnico.TEM_NIS);
 		}else {
-			cliente.setIndicadorBolsaFamilia(ConstantesSistema.NAO);
+			cliente.setIndicadorBolsaFamilia(CadastroUnico.NIS_SEM_REGISTRO_OFICIAL);
 		}
 	}
 

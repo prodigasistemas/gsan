@@ -377,7 +377,8 @@ function disableAll(){
 				
 				<tr>
 					<td><strong>Número do NIS:</strong></td>
-					<td><html:text maxlength="11" property="numeroNIS" size="11" tabindex="10" style="text-transform: none;" /></td>
+					<td><html:text maxlength="11" property="numeroNIS" size="11" tabindex="10" style="text-transform: none;" 
+					onkeypress="return isCampoNumerico(event);" /></td>
 				</tr>
 				
 				<logic:equal name="temPermissaoVisualizarDiaVencimentoContaCliente"
