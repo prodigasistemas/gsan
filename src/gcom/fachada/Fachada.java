@@ -18358,6 +18358,14 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public boolean verificarPermissaoConsultarCpfNis(Usuario usuario) {
+		try {
+			return this.getControladorPermissaoEspecial().verificarPermissaoConsultarCpfNis(usuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 	/**
 	 * Verifica permissão especial para consultar os débitos do cliente indicado

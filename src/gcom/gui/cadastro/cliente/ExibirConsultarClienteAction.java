@@ -5,7 +5,9 @@ import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.bean.ConsultarClienteHelper;
 import gcom.fachada.Fachada;
+import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 
@@ -40,8 +42,9 @@ public class ExibirConsultarClienteAction extends GcomAction {
 		
         //Obtendo uma instancia da sessao
         HttpSession sessao = httpServletRequest.getSession(false);
+        
+        Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
 		
-
 		ConsultarClienteActionForm consultarClienteActionForm  = (ConsultarClienteActionForm) actionForm;
 
 		String codigoCliente = null;
@@ -122,8 +125,17 @@ public class ExibirConsultarClienteAction extends GcomAction {
                 //e-mail
                 consultarClienteActionForm.setEmail(cliente.getEmail());
                 
-                //NumeroNIS
-                consultarClienteActionForm.setClienteNumeroNIS(cliente.getNumeroNIS());
+				// NumeroNIS
+				if (cliente.getNumeroNIS() != null) {
+					if (!getFachada().verificarPermissaoConsultarCpfNis(usuarioLogado)) {
+						consultarClienteActionForm.setClienteNumeroNIS("XXXXXXXXXXX");
+					} else {
+						consultarClienteActionForm.setClienteNumeroNIS(cliente.getNumeroNIS());
+					}
+				} else {
+					consultarClienteActionForm.setClienteNumeroNIS(cliente.getNumeroNIS());
+				}
+                
                 
                 //tipo de pessoa
                 if(cliente.getClienteTipo() != null && cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica() != null){
@@ -131,8 +143,16 @@ public class ExibirConsultarClienteAction extends GcomAction {
                 	if(cliente.getClienteTipo().getIndicadorPessoaFisicaJuridica().equals(ClienteTipo.INDICADOR_PESSOA_FISICA)){
                 		httpServletRequest.setAttribute("indicadorTipoCliente",ClienteTipo.INDICADOR_PESSOA_FISICA.shortValue());
                 		
-                		//cpf
-                		consultarClienteActionForm.setCpfCliente((cliente.getCpfFormatado()));
+						// cpf
+						if (cliente.getNumeroNIS() != null) {
+							if (!getFachada().verificarPermissaoConsultarCpfNis(usuarioLogado)) {
+								consultarClienteActionForm.setCpfCliente("XXX.XXX.XXX-XX");
+							} else {
+								consultarClienteActionForm.setCpfCliente((cliente.getCpfFormatado()));
+							}
+						} else {
+							consultarClienteActionForm.setCpfCliente((cliente.getCpfFormatado()));
+						}
                 		
                 		//rg
                 		if(cliente.getOrgaoExpedidorRg() != null && cliente.getOrgaoExpedidorRg().getDescricaoAbreviada() != null && cliente.getUnidadeFederacao() != null && cliente.getUnidadeFederacao().getSigla()!= null){

@@ -267,8 +267,17 @@ public class ControladorPermissaoEspecialSEJB implements SessionBean {
 
 		return temPermissaoAtualizarUsuarioBolsaAgua;
 	}
-
 	
+	public boolean verificarPermissaoConsultarCpfNis(
+			Usuario usuario) throws ControladorException {
+
+		boolean temPermissaoAtualizarUsuarioBolsaAgua = this
+				.verificarPermissaoEspecial(
+						PermissaoEspecial.CONSULTAR_IMOVEL_CPF_E_NIS,
+						usuario);
+
+		return temPermissaoAtualizarUsuarioBolsaAgua;
+	}
 	
 	/**
 	 * Verifica permissão especial para atualizar um LOGRADOURO_BAIRRO

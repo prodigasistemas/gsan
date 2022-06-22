@@ -210,6 +210,8 @@ public class PermissaoEspecial extends ObjetoTransacao {
 	
 	public static final int CLIENTE_USUARIO_BOLSA_AGUA = 204;
 	
+	public static final int CONSULTAR_IMOVEL_CPF_E_NIS = 206;
+	
     
 	/** identifier field */
 	private Integer id;
