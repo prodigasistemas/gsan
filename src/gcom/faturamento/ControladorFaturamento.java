@@ -514,7 +514,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        			 
 	        			 BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
 	        			 
-	        			 if (imo.getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA)) {
+	        			 if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > .01d) {
 	        				 BigDecimal valorAguaEsgoto =  valorAgua.add(valorEsgoto);
 	        				 
 	        				 if(valorAguaEsgoto.compareTo(valorBolsaAguaConcedido) == -1) {
