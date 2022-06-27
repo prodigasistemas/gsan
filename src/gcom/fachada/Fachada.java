@@ -40583,6 +40583,14 @@ public class Fachada {
 		}
 	}
 	
+	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia) {
+		try {
+			this.getControladorFaturamento().registrarEntradaParcelamento(parcelamento, primeiraVia);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
 	public Integer pesquisarFaturamentoGrupoImovel(Integer idImovel) {
 		try {
 			return this.getControladorFaturamento().pesquisarFaturamentoGrupoImovel(idImovel);
