@@ -72,7 +72,6 @@ public class AtualizarImovelConclusaoAction extends GcomAction {
 		String idRotaAlternativa = (String) inserirImovelConclusaoActionForm.get("idRotaAlternativa");
 		String numeroMedidorEnergia = (String) inserirImovelConclusaoActionForm.get("numeroMedidorEnergia");
 		String informacoesComplementares = (String) inserirImovelConclusaoActionForm.get("informacoesComplementares");
-		String indicadorEnvioContaFisica = (String) inserirImovelConclusaoActionForm.get("indicadorEnvioContaFisica");
 		//String dataVisitaComercialInformada  = (String) inserirImovelConclusaoActionForm.get("dataVisitaComercial");
 		
 		Imovel imovelAtualizar = (Imovel) sessao.getAttribute("imovelAtualizacao");
@@ -152,7 +151,6 @@ public class AtualizarImovelConclusaoAction extends GcomAction {
 		helperConclusao.setIdImovelAtualizar(imovelAtualizar.getId());
 		helperConclusao.setNumeroMedidorEnergia(numeroMedidorEnergia);
 		helperConclusao.setInformacoesComplementares(informacoesComplementares);
-		helperConclusao.setIndicadorEnvioContaFisica(indicadorEnvioContaFisica);
 		fachada.validarImovelAbaConclusao(helperConclusao);
         return retorno;
     }

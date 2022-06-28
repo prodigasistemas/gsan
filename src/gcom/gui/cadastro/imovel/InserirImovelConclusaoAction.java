@@ -52,7 +52,6 @@ public class InserirImovelConclusaoAction extends GcomAction {
 		String idRotaEntrega = (String) inserirImovelConclusaoActionForm.get("idRota");
 		String idRotaAlternativa = (String) inserirImovelConclusaoActionForm.get("idRotaAlternativa");
 		String numeroMedidorEnergia = (String) inserirImovelConclusaoActionForm.get("numeroMedidorEnergia");
-		String indicadorEnvioContaFisica = (String) inserirImovelConclusaoActionForm.get("indicadorEnvioContaFisica");
 
 		Collection clientes = (Collection) sessao.getAttribute("imovelClientesNovos");
 
@@ -124,7 +123,6 @@ public class InserirImovelConclusaoAction extends GcomAction {
 		helperConclusao.setIdRotaAlternativa(idRotaAlternativa);
 		helperConclusao.setImoveisClientes(clientes);
 		helperConclusao.setNumeroMedidorEnergia(numeroMedidorEnergia);
-		helperConclusao.setIndicadorEnvioContaFisica(indicadorEnvioContaFisica);
 		fachada.validarImovelAbaConclusao(helperConclusao);
 
         return retorno;

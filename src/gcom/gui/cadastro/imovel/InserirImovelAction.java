@@ -306,9 +306,9 @@ public class InserirImovelAction extends GcomAction {
 		
 		if (naoVazio(indicadorEnvioContaFisica)) {
 			imovel.setIndicadorEnvioContaFisica(new Short(indicadorEnvioContaFisica));
-		}
-		
-			//imovel.setIndicadorEnvioContaFisica((short) Imovel.INDICADOR_ENVIO_CONTA_FISICA);
+		} else {
+			imovel.setIndicadorEnvioContaFisica(new Short(Imovel.INDICADOR_ENVIO_CONTA_FISICA));
+		}			
 		
 		
 		// ABA CONCLUSAO

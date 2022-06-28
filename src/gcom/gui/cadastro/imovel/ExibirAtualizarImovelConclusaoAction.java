@@ -238,6 +238,8 @@ public class ExibirAtualizarImovelConclusaoAction extends GcomAction {
 			inserirImovelConclusaoActionForm.set("informacoesComplementares", "");
 		}
 		
+		inserirImovelConclusaoActionForm.set("indicadorEnvioContaFisica", imovel.getIndicadorEnvioContaFisica().toString());
+		
 		imovel = null;
 		
 		String pesquisar = httpServletRequest.getParameter("pesquisar");
@@ -444,9 +446,7 @@ public class ExibirAtualizarImovelConclusaoAction extends GcomAction {
 		} else {
 			
 			sessao.setAttribute("bloquearExtratoParaResponsavel", "");
-		}
-		
-        inserirImovelConclusaoActionForm.set("indicadorEnvioContaFisica", "1");		
+		}		
 		
 		return retorno;
 	}

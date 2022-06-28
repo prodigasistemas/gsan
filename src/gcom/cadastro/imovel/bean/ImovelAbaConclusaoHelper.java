@@ -23,7 +23,6 @@ public class ImovelAbaConclusaoHelper {
 	private String numeroMedidorEnergia;
 	private String informacoesComplementares;
 	private String numeroQuadraEntrega;
-	private String indicadorEnvioContaFisica;
 
 	public String getNumeroMedidorEnergia() {
 		return numeroMedidorEnergia;
@@ -224,13 +223,4 @@ public class ImovelAbaConclusaoHelper {
 	public void setNumeroQuadraEntrega(String numeroQuadraEntrega) {
 		this.numeroQuadraEntrega = numeroQuadraEntrega;
 	}
-
-	public String getIndicadorEnvioContaFisica() {
-		return indicadorEnvioContaFisica;
-	}
-
-	public void setIndicadorEnvioContaFisica(String indicadorEnvioContaFisica) {
-		this.indicadorEnvioContaFisica = indicadorEnvioContaFisica;
-	}
-
 }
