@@ -2001,6 +2001,7 @@ public class EmitirContaHelper implements Serializable {
 	}	
 	
 	public void preencherMsgBolsaAgua() {
+		/* Retirada do Carimbo por determinação da Diretoria 1.07.2022 - Paulo Almeida
 		if (this.valorConta.doubleValue() > 0 && this.valorCreditoBolsaAgua != null && this.valorCreditoBolsaAgua.doubleValue() > 0) {
 			this.mensagemBolsaAgua = "Programa Água Pará 20.000 litros quitados pelo Governo do Estado do Pará";
 			this.indicadorMensagemBolsaAgua = Conta.CARIMBO_20M;
@@ -2009,7 +2010,9 @@ public class EmitirContaHelper implements Serializable {
 			this.mensagemBolsaAgua = "Programa Água Pará, quitado pelo Governo do Estado do Pará";
 		} else {			
 			this.mensagemBolsaAgua = "";
-		}
+		}*/
+		this.mensagemBolsaAgua = "";
+		
 	}
 
 	public Integer getCodigoConvenio() {
