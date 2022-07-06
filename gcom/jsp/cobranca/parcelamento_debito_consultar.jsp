@@ -732,19 +732,32 @@
 				
 								</logic:present>
 								<logic:empty name="idsContaEP">
-									<logic:equal name="entradaPaga" value="false">
-										
-										<logic:equal name="geracaoBoletoBB" value="1" scope="request">
-											<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
-												onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'"
-												style="width:180px"/>											
-										</logic:equal>
-										<logic:notEqual name="geracaoBoletoBB" value="1" scope="request">
-											<input type="button" name="" value="Imprimir Guia Pagto Entrada" class="bottonRightCol" 
-												onclick="window.location.href='<html:rewrite page="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento.do"/>'"
-												style="width:180px" />
-										</logic:notEqual>
-									</logic:equal>
+											<logic:equal name="entradaPaga" value="false">
+												<logic:empty name="boletoParcelamento">
+													<logic:equal name="geracaoBoletoBB" value="1"
+														scope="request">
+														<input type="button" name=""
+															value="Imprimir Guia Pagto Entrada"
+															class="bottonRightCol"
+															onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'"
+															style="width: 180px" />
+													</logic:equal>
+													<logic:notEqual name="geracaoBoletoBB" value="1"
+														scope="request">
+														<input type="button" name=""
+															value="Imprimir Guia Pagto Entrada"
+															class="bottonRightCol"
+															onclick="window.location.href='<html:rewrite page="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento.do"/>'"
+															style="width: 180px" />
+													</logic:notEqual>
+												</logic:empty>
+												<logic:notEmpty name="boletoParcelamento">
+													<input type="button" name=""
+														value="Imprimir Guia Pagto Entrada" class="bottonRightCol"
+														onclick="window.location.href='<html:rewrite page="/gerarRelatorioBoletoParcelamentoAction.do?cobrarTaxaEmissaoConta=N"/>'"
+														style="width: 180px" />
+												</logic:notEmpty>
+											</logic:equal>
 								</logic:empty>
 								<logic:notEmpty name="idsContaEP">
 									<input type="button" name="" value="Imprimir Contas EP" class="bottonRightCol" 

@@ -475,7 +475,7 @@ import gcom.faturamento.FaturamentoSituacaoHistorico;
 import gcom.faturamento.FaturamentoSituacaoMotivo;
 import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.FaturamentoTipo;
-import gcom.faturamento.FichaCompensacao;
+import gcom.arrecadacao.FichaCompensacao;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.HistogramaAguaEconomia;
 import gcom.faturamento.HistogramaAguaEconomiaSemQuadra;

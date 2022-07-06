@@ -2,6 +2,7 @@ package gcom.faturamento;
 
 import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
+import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
@@ -60385,7 +60386,31 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return registroExistente;
 	}
 	
+	public Boolean fichaCompensacaoExistenteGuiaPagamento(Integer idParcelamento) throws ErroRepositorioException {
+		Integer fichaCompensacao = null;
+		Boolean registroExistente = false;
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta;
 
+			consulta = " select fico.fico_id as fico from arrecadacao.ficha_compensacao fico "
+					+ " inner join faturamento.guia_pagamento guia on guia.gpag_id = fico.gpag_id "
+			        + " where guia.parc_id = :idParcelamento ";
+
+			fichaCompensacao = (Integer) session.createSQLQuery(consulta.toString()).addScalar("fico", Hibernate.INTEGER)
+					.setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();
+
+			if (fichaCompensacao != null) {
+				registroExistente = true;
+			} else {
+				registroExistente = false;
+			}
+
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		}  
+		return registroExistente;
+	}
 	
 	public Collection idContasEmitidasFichaCompensacao(Integer idFaturamentoGrupo, Integer anoMesFaturamento) throws ErroRepositorioException {
 		Collection contas = null;
@@ -60447,8 +60472,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			con = session.connection();
 			stmt = con.createStatement();
 			String sequence = Util
-					.obterNextValSequence("faturamento.seq_ficha_compensacao");
-			insert = "insert into faturamento.ficha_compensacao(fico_id, "
+					.obterNextValSequence("arrecadacao.seq_ficha_compensacao");
+			insert = "insert into arrecadacao.ficha_compensacao(fico_id, "
 					+ "fico_idconv, fico_nuca, fico_nuvc, "
 					+ "fico_como, fico_dtem, fico_dtve, fico_vlor, fico_coac, "
 					+ "fico_cott, fico_iprp, fico_nutc, fico_tmultimaalteracao, imov_id, "
@@ -60458,6 +60483,50 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ valorOriginal + ", " + "'" + codigoAceite +"'" + ", " + codigoTipoTitulo + ", " 
 					+ "'" + indicadorPermissaoRecebimentoParcial + "'" + ", " + "'" + numeroTituloCliente + "'" + ", " 
 					+ Util.obterSQLDataAtual() + ", " + imovel + ", " + cliente + ", " + conta + " )";
+
+			stmt.executeUpdate(insert);
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} catch (SQLException e) {
+			throw new ErroRepositorioException(e, "Erro no Insert");
+		} finally {
+			HibernateUtil.closeSession(session);
+			try {
+				stmt.close();
+				con.close();
+			} catch (SQLException e) {
+				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
+			}
+		}
+	}
+	
+	public void inserirFichaCompensacaoGuiaPagamento(Integer idConv,Integer numeroCarteira,Integer numeroVariacaoCarteira,Short
+			codigoModalidade,String dataEmissao,String dataVencimento,Double valorOriginal,String codigoAceite,Short codigoTipoTitulo,String
+			indicadorPermissaoRecebimentoParcial,String numeroTituloCliente,Integer imovel,Integer cliente,Integer guiaPagamento) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+		String insert;
+
+		Connection con = null;
+		Statement stmt = null;
+
+		try {
+
+			con = session.connection();
+			stmt = con.createStatement();
+			String sequence = Util
+					.obterNextValSequence("arrecadacao.seq_ficha_compensacao");
+			insert = "insert into arrecadacao.ficha_compensacao(fico_id, "
+					+ "fico_idconv, fico_nuca, fico_nuvc, "
+					+ "fico_como, fico_dtem, fico_dtve, fico_vlor, fico_coac, "
+					+ "fico_cott, fico_iprp, fico_nutc, fico_tmultimaalteracao, imov_id, "
+					+ "clie_id, gpag_id) " + "values ( " + sequence
+					+ ", " + idConv + ", " + numeroCarteira + ", " + numeroVariacaoCarteira + ", "
+					+ codigoModalidade + ", " + "'" + dataEmissao + "'"  + ", " + "'" + dataVencimento + "'" + ", "
+					+ valorOriginal + ", " + "'" + codigoAceite +"'" + ", " + codigoTipoTitulo + ", " 
+					+ "'" + indicadorPermissaoRecebimentoParcial + "'" + ", " + "'" + numeroTituloCliente + "'" + ", " 
+					+ Util.obterSQLDataAtual() + ", " + imovel + ", " + cliente + ", " + guiaPagamento + " )";
 
 			stmt.executeUpdate(insert);
 
@@ -60531,6 +60600,25 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+	}
+	
+	public Imovel pesquisarImovel(Integer idImovel) throws ErroRepositorioException {
+		Imovel imovel = null;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append("select imovel from Imovel imovel ")
+			        .append("where  imovel.id = :idImovel ");
+
+			imovel = (Imovel) session.createQuery(consulta.toString())
+					      .setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} 
+		return imovel;
 	}
 
 }

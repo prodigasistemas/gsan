@@ -9,6 +9,7 @@ import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.atendimentopublico.ordemservico.ServicoCobrancaValor;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
@@ -1307,5 +1308,7 @@ public interface IControladorFaturamento {
 	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento) throws ControladorException;
 	
 	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia) throws ControladorException;
+	
+	public String consultarCpfCnpjCliente(Integer idImovel) throws ControladorException;
 
 }

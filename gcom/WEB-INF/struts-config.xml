@@ -4208,6 +4208,12 @@
 			type="gcom.gui.relatorio.faturamento.conta.GerarRelatorio2ViaContaAction"
 			validate="true" scope="session"
 			path="/gerarRelatorio2ViaContaAction" />
+			
+			<action
+			type="gcom.gui.relatorio.faturamento.conta.GerarRelatorioBoletoParcelamentoAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioBoletoParcelamentoAction" />
+			
 		<!-- FIM [UC0204] CONSULTAR CONTA -->
 
 		<!-- [UC0205] CONSULTAR DEBITO COBRADO -->

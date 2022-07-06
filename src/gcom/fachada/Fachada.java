@@ -40591,6 +40591,14 @@ public class Fachada {
 		}
 	}
 	
+	public String consultarCpfCnpjCliente(Integer idImovel) {
+		try {
+		   return this.getControladorFaturamento().consultarCpfCnpjCliente(idImovel);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
 	public Integer pesquisarFaturamentoGrupoImovel(Integer idImovel) {
 		try {
 			return this.getControladorFaturamento().pesquisarFaturamentoGrupoImovel(idImovel);

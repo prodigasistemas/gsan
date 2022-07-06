@@ -1799,7 +1799,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 	}
 
 	@SuppressWarnings("rawtypes")
-	private String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
+	public String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
 		String cnpjCpf = "";
 
 		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);

@@ -47,7 +47,12 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 			GuiaPagamento guia = pesquisarGuia(request, sessao, guiaId);
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
 			request.setAttribute("geracaoBoletoBB", sistemaParametro.getIndicadorGeracaoBoletoBB());
-			request.setAttribute("linkBoletoBB", obterLinkBoletoBB(guia.getId()));
+			String cpfCnpj = consultarCpfCnpjCliente(guia.getImovel().getId());
+			if (!cpfCnpj.equalsIgnoreCase("")) {
+				registrarEntradaParcelamento(guia.getId());
+			}else {
+				request.setAttribute("linkBoletoBB", obterLinkBoletoBB(guia.getId()));
+			}
 		}
 
 		if (request.getParameter("caminhoRetornoTelaConsultaGuiaPagamento") != null) {
@@ -159,6 +164,21 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 		Parcelamento parcelamento = guia.getParcelamento();
 		
 		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
+	}
+	
+	private void registrarEntradaParcelamento(Integer guiaPagamentoId) {
+		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoId));
+		
+		GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		Parcelamento parcelamento = guia.getParcelamento();
+		
+		  getFachada().registrarEntradaParcelamento(parcelamento, false);
+	}
+	
+	private String consultarCpfCnpjCliente(Integer idImovel) {
+		return getFachada().consultarCpfCnpjCliente(idImovel);
 	}
 	
 }
