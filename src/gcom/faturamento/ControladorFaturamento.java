@@ -16625,7 +16625,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Municipio municipio = repositorioFaturamento.municipio(idLocalidade);
 			String nomeMunicipio = municipio.getNome();
 			Integer idImovel = imovel.getId();
-			Cliente cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
+			Cliente cliente = getControladorCliente().pesquisarCliente(parcelamento.getCliente().getId());
 			Integer idConv = 3469663; // Em produ��o, informar o n�mero do conv�nio de
 															// cobran�a, com 7 d�gitos.
 
@@ -16785,7 +16785,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			return false;
 		} 		
 		return true;
-		
+	}
+	
+	public String pesquisarClienteCpfCnpj (Integer idCliente) throws ControladorException, ErroRepositorioException {
+		return repositorioFaturamento.pesquisarClienteCpfCnpj(idCliente);
 	}
 
 }

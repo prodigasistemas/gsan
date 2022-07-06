@@ -3096,4 +3096,6 @@ public interface IRepositorioFaturamento {
 	
 	public Imovel pesquisarImovel(Integer idImovel) throws ErroRepositorioException;
 	
+	public String pesquisarClienteCpfCnpj(Integer idCliente) throws ErroRepositorioException;
+	
 }

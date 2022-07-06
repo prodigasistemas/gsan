@@ -60620,5 +60620,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		} 
 		return imovel;
 	}
+	
+	public String pesquisarClienteCpfCnpj(Integer idCliente) throws ErroRepositorioException {
+		String cpfCnpj = null;
+        Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+			
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} 
+		return cpfCnpj;
+	}
 
 }

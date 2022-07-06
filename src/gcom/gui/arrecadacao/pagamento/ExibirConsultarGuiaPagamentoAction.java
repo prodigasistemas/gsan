@@ -5,8 +5,11 @@ import gcom.arrecadacao.pagamento.FiltroGuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
+import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.fachada.Fachada;
 import gcom.faturamento.FiltroGuiaPagamentoItem;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.gui.ActionServletException;
@@ -49,7 +52,7 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 			request.setAttribute("geracaoBoletoBB", sistemaParametro.getIndicadorGeracaoBoletoBB());
 			String cpfCnpj = consultarCpfCnpjCliente(guia.getImovel().getId());
 			if (!cpfCnpj.equalsIgnoreCase("")) {
-				registrarEntradaParcelamento(guia.getId());
+				request.setAttribute("boletoParcelamento", guia);
 			}else {
 				request.setAttribute("linkBoletoBB", obterLinkBoletoBB(guia.getId()));
 			}

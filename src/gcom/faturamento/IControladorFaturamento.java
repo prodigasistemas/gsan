@@ -1310,5 +1310,7 @@ public interface IControladorFaturamento {
 	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia) throws ControladorException;
 	
 	public String consultarCpfCnpjCliente(Integer idImovel) throws ControladorException;
+	
+	public String pesquisarClienteCpfCnpj (Integer idCliente) throws ControladorException;
 
 }

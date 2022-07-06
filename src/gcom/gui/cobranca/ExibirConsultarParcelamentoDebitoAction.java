@@ -118,7 +118,6 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 			if (geraBoletoBB && !entradaPaga) {
 				String cpfCnpj = consultarCpfCnpjCliente(Integer.parseInt(codigoImovel));
 				if (!cpfCnpj.equalsIgnoreCase("")) {
-					registrarEntradaParcelamento(parcelamento);
 					request.setAttribute("boletoParcelamento", parcelamento);
 				} else {
 					request.setAttribute("linkBoletoBB", obterLinkBoletoBB(parcelamento));

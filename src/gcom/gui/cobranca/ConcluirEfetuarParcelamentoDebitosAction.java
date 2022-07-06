@@ -4,6 +4,7 @@ import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
@@ -22,6 +23,7 @@ import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
+import gcom.util.ErroRepositorioException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
@@ -371,6 +373,12 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 		}
 		cliente.setId(idCliente);
 
+		try {
+		String	teste = pesquisarClienteCpfCnpj(cliente.getId());
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		
 		// O sistema verifica se o parcelamento é para ser incluído obrigatoriamente já confirmado
 		SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
 
@@ -482,11 +490,22 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 					String boleto = null;
 					if (sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue()) {
 						retorno = actionMapping.findForward("telaSucessoConcluirParcelamento");
-						String cpfCnpj = consultarCpfCnpjCliente(Integer.parseInt(codigoImovel));
-						if (!cpfCnpj.equalsIgnoreCase("")) {
+						String cpfCnpj = "";
+						try {
+							cpfCnpj = pesquisarClienteCpfCnpj(cliente.getId());
+						} catch (ErroRepositorioException e) {
+							e.printStackTrace();
+						}
+						if (!cpfCnpj.equalsIgnoreCase("") || !cpfClienteParcelamentoDigitado.equals("")) {
 							registrarEntradaParcelamento(guiaPagamento.getId());
+							boleto = "/gerarRelatorioBoletoParcelamentoAction.do?cobrarTaxaEmissaoConta=N";
 						}else {
+							if(!cpfClienteParcelamentoDigitado.equals("")) {
+								registrarEntradaParcelamento(guiaPagamento.getId());
+								boleto = "/gerarRelatorioBoletoParcelamentoAction.do?cobrarTaxaEmissaoConta=N";
+							}else {
 							boleto = obterLinkBoletoBB(idParcelamento); 
+							}
 						}					
 					} else {
 						boleto = "gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento;
@@ -589,10 +608,6 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 		return duplicado;
 	}
 	
-	private String consultarCpfCnpjCliente(Integer idImovel) {
-		return getFachada().consultarCpfCnpjCliente(idImovel);
-	}
-	
 	private void registrarEntradaParcelamento(Integer guiaPagamentoId) {
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
@@ -602,6 +617,14 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 		Parcelamento parcelamento = guia.getParcelamento();
 		
 		  getFachada().registrarEntradaParcelamento(parcelamento, true);
+	}
+	
+	public String pesquisarClienteCpfCnpj (Integer idCliente) throws ErroRepositorioException {
+		String cpfCnpj = null;
+		
+		 getFachada().pesquisarClienteCpfCnpj(idCliente);
+		
+		return cpfCnpj;
 	}
 	
 }

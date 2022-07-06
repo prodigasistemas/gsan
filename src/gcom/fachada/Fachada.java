@@ -40606,4 +40606,13 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
+	
+	public String pesquisarClienteCpfCnpj (Integer idCliente) {
+		try {
+		return this.getControladorFaturamento().pesquisarClienteCpfCnpj(idCliente);		
+		} catch(ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
 }
