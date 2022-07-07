@@ -372,12 +372,6 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 			idCliente = (Integer) sessao.getAttribute("idClienteImovel");
 		}
 		cliente.setId(idCliente);
-
-		try {
-		String	teste = pesquisarClienteCpfCnpj(cliente.getId());
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-		}
 		
 		// O sistema verifica se o parcelamento é para ser incluído obrigatoriamente já confirmado
 		SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
@@ -493,20 +487,15 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 						String cpfCnpj = "";
 						try {
 							cpfCnpj = pesquisarClienteCpfCnpj(cliente.getId());
+							if (!cpfCnpj.equalsIgnoreCase("") || !cpfClienteParcelamentoDigitado.equals("")) {
+								registrarEntradaParcelamento(guiaPagamento.getId());
+								boleto = "/gerarRelatorioBoletoParcelamentoAction.do?cobrarTaxaEmissaoConta=N";
+							} else {
+								boleto = obterLinkBoletoBB(idParcelamento);
+							}
 						} catch (ErroRepositorioException e) {
 							e.printStackTrace();
 						}
-						if (!cpfCnpj.equalsIgnoreCase("") || !cpfClienteParcelamentoDigitado.equals("")) {
-							registrarEntradaParcelamento(guiaPagamento.getId());
-							boleto = "/gerarRelatorioBoletoParcelamentoAction.do?cobrarTaxaEmissaoConta=N";
-						}else {
-							if(!cpfClienteParcelamentoDigitado.equals("")) {
-								registrarEntradaParcelamento(guiaPagamento.getId());
-								boleto = "/gerarRelatorioBoletoParcelamentoAction.do?cobrarTaxaEmissaoConta=N";
-							}else {
-							boleto = obterLinkBoletoBB(idParcelamento); 
-							}
-						}					
 					} else {
 						boleto = "gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento;
 					}
@@ -620,9 +609,9 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 	}
 	
 	public String pesquisarClienteCpfCnpj (Integer idCliente) throws ErroRepositorioException {
-		String cpfCnpj = null;
+		String cpfCnpj = "";
 		
-		 getFachada().pesquisarClienteCpfCnpj(idCliente);
+		cpfCnpj = getFachada().pesquisarClienteCpfCnpj(idCliente);
 		
 		return cpfCnpj;
 	}

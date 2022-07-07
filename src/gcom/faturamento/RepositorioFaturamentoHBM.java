@@ -60622,12 +60622,23 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	public String pesquisarClienteCpfCnpj(Integer idCliente) throws ErroRepositorioException {
-		String cpfCnpj = null;
+		Cliente cliente = null;
+		String cpfCnpj = "";
         Session session = HibernateUtil.getSession();
 		
 		try {
 			StringBuilder consulta = new StringBuilder();
 			
+			consulta.append("select cliente from Cliente cliente ")
+	        .append("where  cliente.id = :idCliente ");
+			
+			cliente = (Cliente) session.createQuery(consulta.toString())
+				      .setInteger("idCliente", idCliente).setMaxResults(1).uniqueResult();
+			if(!cliente.getCpf().equals("")) {
+				cpfCnpj = cliente.getCpf();
+			} else {
+				cpfCnpj = cliente.getCnpj();
+			}
 			
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

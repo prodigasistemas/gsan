@@ -16692,7 +16692,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
         Statement stmt = null;
 		try {
 			Imovel imovel = repositorioImovel.pesquisarImovel(guiaPagamento.getImovel().getId());
-			Cliente	cliente = parcelamento.getCliente();
+			
+			FiltroCliente filtroCliente = new FiltroCliente();
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, parcelamento.getCliente().getId()));
+			filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
+			Cliente	cliente = (Cliente) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName()));
 			
 			
 			Integer idLocalidade = imovel.getIdLocalidade();

@@ -754,7 +754,7 @@
 												<logic:notEmpty name="boletoParcelamento">
 													<input type="button" name=""
 														value="Imprimir Guia Pagto Entrada" class="bottonRightCol"
-														onclick="window.location.href='<html:rewrite page="/gerarRelatorioBoletoParcelamentoAction.do?cobrarTaxaEmissaoConta=N"/>'"
+														onclick="window.location.href='<html:rewrite page="/gerarRelatorioBoletoParcelamentoAction.do"/>'"
 														style="width: 180px" />
 												</logic:notEmpty>
 											</logic:equal>
