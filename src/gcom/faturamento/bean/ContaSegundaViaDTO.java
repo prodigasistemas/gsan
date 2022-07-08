@@ -203,6 +203,7 @@ public class ContaSegundaViaDTO {
 		this.mensagemDebitos = helper.getMensagemDebitos();
 		this.mensagemQuitacao = helper.getMensagemQuitacao().equals("") ? null : helper.getMensagemQuitacao();
 		this.mensagemBolsaAgua = helper.getMensagemBolsaAgua().equals("") ? null : helper.getMensagemBolsaAgua();
+		//this.indicadorMensagemBolsaAgua = null;
 		this.indicadorMensagemBolsaAgua = helper.getIndicadorMensagemBolsaAgua() != null ? helper.getIndicadorMensagemBolsaAgua() : null;
 
 		this.setServicos(helper);
