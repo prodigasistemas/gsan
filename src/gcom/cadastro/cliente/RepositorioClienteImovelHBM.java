@@ -1556,5 +1556,35 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 
 		return retorno;
 	}
+
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarClienteResponsavelContaPorCpfCnpj(String cpfCnpj) throws ErroRepositorioException {
+
+			Collection retorno = null;
+			Session session = HibernateUtil.getSession();
+			String consulta = null;
+
+			try {
+
+				consulta = "SELECT clienteImovel "
+						+ " FROM ClienteImovel clienteImovel "
+						+ " INNER JOIN FETCH clienteImovel.cliente cliente "
+						+ " INNER JOIN FETCH clienteImovel.imovel imov "
+						+ " WHERE (cliente.cpf = :cpfCnpj or cliente.cnpj = :cpfCnpj) AND clienteImovel.indicadorNomeConta = 1" 
+						+ " AND clienteImovel.dataFimRelacao is null ";
+
+				retorno = session.createQuery(consulta).setString("cpfCnpj",
+						cpfCnpj).list();
+
+			} catch (HibernateException e) {
+				// levanta a exceção para a próxima camada
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+			} finally {
+				// fecha a sessão
+				HibernateUtil.closeSession(session);
+			}
+
+			return retorno;
+	}
 }
 

@@ -390,4 +390,6 @@ public interface IRepositorioClienteImovel {
 	public Cliente pesquisarClienteImovelTipo(Integer idCliente, Integer idImovel, Integer idTipo) throws ErroRepositorioException;
 	
 	public Short pesquisarIndicadorNegativacaoPeriodoClienteResponsavel(Integer idImovel, Integer idClienteRelacaoTipo) throws ErroRepositorioException;
+	
+	public Collection pesquisarClienteResponsavelContaPorCpfCnpj(String cpfCnpj) throws ErroRepositorioException;
 }

@@ -24,6 +24,7 @@ public class GsanApi {
 
 	private String url;
 	private Gson gson;
+	private String token;
 
 	public GsanApi() {
 	}
@@ -31,8 +32,9 @@ public class GsanApi {
 	public GsanApi(String url) {
 		this.url = url;
 		this.gson = new Gson();
+		this.token = new String("Bearer bfIOYzIV9yqueZNBskx89RluCJ6bjRBtLc-Rp4vwLMs");
 	}
-
+	
 	public void invoke(Object objeto) throws IOException, Exception {
 		ClientResponse response = enviarJson(objeto);
 
@@ -83,7 +85,7 @@ public class GsanApi {
 		return new File(nome);
 	}
 
-	private StringBuilder montarRetorno(BufferedReader reader) throws IOException {
+	public StringBuilder montarRetorno(BufferedReader reader) throws IOException {
 		StringBuilder builder = new StringBuilder();
 		String linha = null;
 		while ((linha = reader.readLine()) != null) {
@@ -92,13 +94,12 @@ public class GsanApi {
 		return builder;
 	}
 
-	private ClientResponse enviarJson(Object objeto) {
+	public ClientResponse enviarJson(Object objeto) {
 		String json = gson.toJson(objeto);
 
 		Client client = Client.create();
 
 		WebResource webResource = client.resource(url);
 
-		return webResource.type("application/json").post(ClientResponse.class, json);
-	}
+		return webResource.header("Authorization", token).type("application/json").post(ClientResponse.class, json);	}
 }

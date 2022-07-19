@@ -16583,7 +16583,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 		    throw new ControladorException("erro.sistema", e);
 		}
 	}
-	
+
 	public boolean isImovelBolsaAgua(Integer idImovel) throws ControladorException {
 		try {
 			Imovel imovel = repositorioImovel.consultarImovelBolsaAgua(idImovel);

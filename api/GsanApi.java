@@ -24,6 +24,7 @@ public class GsanApi {
 
 	private String url;
 	private Gson gson;
+	private String token;
 
 	public GsanApi() {
 	}
@@ -31,6 +32,7 @@ public class GsanApi {
 	public GsanApi(String url) {
 		this.url = url;
 		this.gson = new Gson();
+		this.token = "Bearer bfIOYzIV9yqueZNBskx89RluCJ6bjRBtLc-Rp4vwLMs";
 	}
 
 	public void invoke(Object objeto) throws IOException, Exception {
@@ -83,7 +85,7 @@ public class GsanApi {
 
 		WebResource webResource = client.resource(url);
 
-		return webResource.type("application/json").post(ClientResponse.class, json);
+		return webResource.header("Authorization", token).type("application/json").post(ClientResponse.class, json);
 	}
 
 	private File salvar(final String url, final String name) throws IOException {

@@ -747,4 +747,13 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 			return "";
 	}
 	
+	public String getCpfOuCnpj() {
+		if (cpf != null && !cpf.trim().equals(""))
+			return this.getCpf();
+		else if (cnpj != null && !cnpj.trim().equals(""))
+			return this.getCnpj();
+		else
+			return "";
+	}
+	
 }

@@ -1,5 +1,42 @@
 package gcom.faturamento;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.EJBException;
+
+import org.apache.commons.beanutils.BeanComparator;
+import org.hibernate.LazyInitializationException;
+import org.jboss.logging.Logger;
+
 import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
@@ -211,45 +248,6 @@ import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
 import gcom.util.sms.ServicoSMS;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipOutputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import javax.ejb.EJBException;
-
-import org.apache.commons.beanutils.BeanComparator;
-import org.hibernate.LazyInitializationException;
-import org.jboss.logging.Logger;
 
 public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
@@ -16066,6 +16064,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		try {
 			Conta conta = new Conta((Integer) contasEmail[0]);
 			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
+
 			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
 			//String emailReceptor = "pamelagatinho@gmail.com"; //EMAIL
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
@@ -16381,6 +16380,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return sistemaParametro;
 	}
 	
+
 	public void registrarFichaCompensacaoGrupo(Integer idGrupoFaturamento, Integer anoMesReferencia,
 			int idFuncionalidadeIniciada) throws Exception {
 		int idUnidadeIniciada = 0;
@@ -16410,7 +16410,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	  }
 
 	}
-	
+
 	protected void registrarFichaCompensacao(Integer idConta) throws Exception {
 		try {
 			Conta conta = new Conta();
@@ -16515,6 +16515,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return fichaCompensacaoApi;
 	}
 	
+
 	public void registrarBoletoBancoDeDados(Integer idConta) throws ControladorException, ClassNotFoundException {
 
 		FichaCompensacao fichaCompensacaoBanco = null;
@@ -16551,7 +16552,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										// dom�nios
 			// poss�veis no swagger.
 			String indicadorPermissaoRecebimentoParcial = "N"; // C�digo para identifica��o da autoriza��o de
-																// pagamento
 			// parcial do boleto. "S" ou "N"
 			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", conta.getId().toString(), idConv);
 			String nossoNumeroSemDV = nossoNumero.toString();
@@ -16560,13 +16560,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			repositorioFaturamento.inserirFichaCompensacao(idConv, numeroCarteira, numeroVariacaoCarteira,
 					codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, codigoTipoTitulo,
 					indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idImovel, idCliente, idConta);
-			
+
 			
 		} catch (ErroRepositorioException e) {
 			throw new ActionServletException("erro.erro_registrar_conta");
 		}
-		
-       
 	}
 	
 	private String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
@@ -16591,6 +16589,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return cnpjCpf;
 	}
 	
+	public boolean fichaCompensacaoExistente (Integer idConta) throws ErroRepositorioException {
+		return repositorioFaturamento.fichaCompensacaoExistente(idConta);		
+	}
+
 	private boolean validarCreditoConcedido(BigDecimal valorCreditos, BigDecimal valorBolsaAguaConcedido) {
 		BigDecimal creditosSemBolsaAgua = valorCreditos.subtract(valorBolsaAguaConcedido);
 		
