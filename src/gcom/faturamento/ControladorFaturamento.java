@@ -16626,8 +16626,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			String nomeMunicipio = municipio.getNome();
 			Integer idImovel = imovel.getId();
 			Cliente cliente = getControladorCliente().pesquisarCliente(parcelamento.getCliente().getId());
-			Integer idConv = 3469663; // Em produ��o, informar o n�mero do conv�nio de
-															// cobran�a, com 7 d�gitos.
+			Integer idConv = 315828; 
 
 			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
 			Integer numeroVariacaoCarteira = 35; // Em produ��o, informar o n�mero da varia��o da carteira de
@@ -16704,7 +16703,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			String nomeMunicipio = municipio.getNome();
 			Integer idImovel = imovel.getId();
 			Integer idCliente = cliente.getId();
-			Integer idConv = 3469663; // Em produ��o, informar o n�mero do conv�nio de
+			Integer idConv = 315828; // Em produ��o, informar o n�mero do conv�nio de
 															// cobran�a, com 7 d�gitos.
 			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
 			Integer numeroVariacaoCarteira = 35; // Em produ��o, informar o n�mero da varia��o da carteira de

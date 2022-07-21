@@ -4,7 +4,8 @@ import gcom.api.GsanApi;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.faturamento.bean.ContaSegundaViaHelper;
-import gcom.faturamento.bo.ContaSegundaViaBO;
+import gcom.faturamento.bean.EntradaParcelamentoHelper;
+import gcom.faturamento.bo.EntradaParcelamentoBO;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaMotivoRevisao;
@@ -40,18 +41,24 @@ public class GerarRelatorioBoletoParcelamentoAction extends ExibidorProcessament
 		HttpSession sessao = request.getSession(false);
 
 		Integer idParcelamento = null;
+		Integer idGuiaPagamento = null;
 
 		if (sessao.getAttribute("idParcelamento") != null && !sessao.getAttribute("idParcelamento").equals("")) {
 			idParcelamento = new Integer("" + sessao.getAttribute("idParcelamento"));
 		} 
+		
+		if (sessao.getAttribute("idGuiaPagamento") != null && !sessao.getAttribute("idGuiaPagamento").equals("")) {
+			idGuiaPagamento = new Integer("" + sessao.getAttribute("idGuiaPagamento"));
+		} 
 
 		Imovel imovel = null;
+		String situacaoConta = "";
 
 		getFachada().verificarClienteSemDocumento(imovel.getId(), (Usuario) (request.getSession(false)).getAttribute("usuarioLogado"));
-/*
+
 		try {
-			ContaSegundaViaBO bo = new ContaSegundaViaBO(idContaHistorico, idsConta, cobrarTaxaEmissao, getContaSemCodigoBarras(request, sessao));
-			ContaSegundaViaHelper helper = bo.criar(imovel, (Usuario) sessao.getAttribute("usuarioLogado"), situacaoConta);
+			EntradaParcelamentoBO bo = new EntradaParcelamentoBO(idParcelamento, null, false, null);
+			EntradaParcelamentoHelper helper = bo.criar(imovel, (Usuario) sessao.getAttribute("usuarioLogado"), situacaoConta);
 
 			if (helper != null) {
 				String url = getFachada().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_SEGUNDA_VIA.toString());
@@ -66,7 +73,7 @@ public class GerarRelatorioBoletoParcelamentoAction extends ExibidorProcessament
 			e.printStackTrace();
 			throw new ActionServletException("atencao.erro_baixar_conta_segunda_via");
 		}
-*/
+
 		return null;
 	}
 	
