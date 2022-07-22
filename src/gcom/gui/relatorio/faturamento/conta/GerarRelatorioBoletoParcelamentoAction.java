@@ -45,11 +45,7 @@ public class GerarRelatorioBoletoParcelamentoAction extends ExibidorProcessament
 
 		if (sessao.getAttribute("idParcelamento") != null && !sessao.getAttribute("idParcelamento").equals("")) {
 			idParcelamento = new Integer("" + sessao.getAttribute("idParcelamento"));
-		} 
-		
-		if (sessao.getAttribute("idGuiaPagamento") != null && !sessao.getAttribute("idGuiaPagamento").equals("")) {
-			idGuiaPagamento = new Integer("" + sessao.getAttribute("idGuiaPagamento"));
-		} 
+		}  
 
 		Imovel imovel = null;
 		String situacaoConta = "";
@@ -57,7 +53,7 @@ public class GerarRelatorioBoletoParcelamentoAction extends ExibidorProcessament
 		getFachada().verificarClienteSemDocumento(imovel.getId(), (Usuario) (request.getSession(false)).getAttribute("usuarioLogado"));
 
 		try {
-			EntradaParcelamentoBO bo = new EntradaParcelamentoBO(idParcelamento, null, false, null);
+			EntradaParcelamentoBO bo = new EntradaParcelamentoBO(idParcelamento);
 			EntradaParcelamentoHelper helper = bo.criar(imovel, (Usuario) sessao.getAttribute("usuarioLogado"), situacaoConta);
 
 			if (helper != null) {

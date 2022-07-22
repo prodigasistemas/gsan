@@ -77,9 +77,9 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 			if (!cpfCnpj.equalsIgnoreCase("")) {
 				registrarEntradaParcelamento(parcelamento);
 			//	retorno = new ActionForward(emitirBoleto());
-			} else {
+			}/* else {
 				retorno = new ActionForward(obterLinkBoletoBB(guia.getId()), true);
-			}
+			}*/
 		} else {
 			
 			RelatorioEmitirGuiaPagamento relatorioEmitirGuiaPagamento = new RelatorioEmitirGuiaPagamento((Usuario) (request.getSession(false)).getAttribute("usuarioLogado"));

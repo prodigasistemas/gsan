@@ -3801,6 +3801,355 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 		return emitirContaHelper;
 	}
+	
+	public Collection<EmitirContaHelper> emitirGuiaPagamento(Collection<Integer> idsContaEP,
+			boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) throws ControladorException,
+			ErroRepositorioException {
+
+		Collection<EmitirContaHelper> colecaoHelper = new ArrayList<EmitirContaHelper>();
+
+		for (Integer id : idsContaEP) {
+
+			EmitirContaHelper helper;
+			try {
+				helper = (EmitirContaHelper) repositorioFaturamento.pesquisarConta(id).iterator().next();
+			} catch (ErroRepositorioException ex) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", ex);
+			}
+
+			helper = preencherNomeCliente2Via(helper);
+			helper = preencherDadosEnderecoImovel2Via(helper);
+			helper = preencherInscricaoImovel2Via(helper);
+			helper = preencherDadosClienteResponsavel2Via(helper);
+
+			if (helper.getIdImovelContaEnvio() != null
+					&& helper.getIdImovelContaEnvio().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL_FINAL_GRUPO)) {
+				helper.setClienteComFaturaAgrupada(new Short("1"));
+			} else {
+				helper.setClienteComFaturaAgrupada(new Short("2"));
+			}
+
+			Integer[] situacao = determinarTipoLigacaoMedicao(helper);
+			Integer tipoLigacao = situacao[0];
+			Integer tipoMedicao = situacao[1];
+
+			helper.setDadosConsumoMes1(obterDadosConsumoAnterior(helper, 1, tipoLigacao, tipoMedicao).toString());
+			helper.setDadosConsumoMes2(obterDadosConsumoAnterior(helper, 2, tipoLigacao, tipoMedicao).toString());
+			helper.setDadosConsumoMes3(obterDadosConsumoAnterior(helper, 3, tipoLigacao, tipoMedicao).toString());
+			helper.setDadosConsumoMes4(obterDadosConsumoAnterior(helper, 4, tipoLigacao, tipoMedicao).toString());
+			helper.setDadosConsumoMes5(obterDadosConsumoAnterior(helper, 5, tipoLigacao, tipoMedicao).toString());
+			helper.setDadosConsumoMes6(obterDadosConsumoAnterior(helper, 6, tipoLigacao, tipoMedicao).toString());
+
+			Object[] medicaoHistorico = obterDadosMedicaoConta(helper, tipoMedicao);
+
+			String leituraAnterior = "";
+			String leituraAtual = "";
+			String dataLeituraAnterior = "";
+			String dataLeituraAtual = "";
+			String leituraAnormalidadeFaturamento = "";
+			String descricaoAbreviadaLeituraAnormalidade = "";
+
+			if (medicaoHistorico != null) {
+				if (medicaoHistorico[0] != null) {
+					leituraAnterior = "" + (Integer) medicaoHistorico[0];
+				}
+
+				if (medicaoHistorico[1] != null) {
+					leituraAtual = "" + (Integer) medicaoHistorico[1];
+				}
+
+				if (medicaoHistorico[3] != null) {
+					dataLeituraAnterior = Util.formatarData((Date) medicaoHistorico[3]);
+				}
+
+				if (medicaoHistorico[2] != null) {
+					dataLeituraAtual = Util.formatarData((Date) medicaoHistorico[2]);
+				}
+
+				if (medicaoHistorico[5] != null) {
+					leituraAnormalidadeFaturamento = "" + (Integer) medicaoHistorico[5];
+				}
+
+				if (medicaoHistorico[7] != null) {
+					descricaoAbreviadaLeituraAnormalidade = "" + (String) medicaoHistorico[7];
+				}
+			}
+
+			helper.setDataLeituraAnterior(dataLeituraAnterior);
+			helper.setDataLeituraAtual(dataLeituraAtual);
+			helper.setDescricaoAbreviadaLeituraAnormalidade(descricaoAbreviadaLeituraAnormalidade);
+			helper.setLeituraAnormalidade(leituraAnormalidadeFaturamento);
+
+			String diasConsumo = "";
+			if (!dataLeituraAnterior.equals("") && !dataLeituraAtual.equals("")) {
+				diasConsumo = ""
+						+ Util.obterQuantidadeDiasEntreDuasDatas((Date) medicaoHistorico[3], (Date) medicaoHistorico[2]);
+			}
+
+			String[] consumo = obterConsumoFaturadoConsumoMedioDiario(helper, tipoMedicao, diasConsumo);
+			String consumoFaturamento = consumo[0];
+
+			helper.setConsumoFaturamento(consumo[0]);
+			helper.setConsumoMedioDiario(consumo[1]);
+			helper.setLeituraAnterior(Util.completaString(leituraAnterior, 7));
+			helper.setLeituraAtual(Util.completaString(leituraAtual, 7));
+			helper.setDiasConsumo(Util.completaString(diasConsumo, 2));
+
+			Object[] consumoHistorico = null;
+			String descricaoAbreviadaTipoConsumo = "";
+			String descricaoTipoConsumo = "";
+			String consumoMedio = "";
+			String descricaoAbreviadaAnormalidadeConsumo = "";
+			String descricaoAnormalidadeConsumo = "";
+			String consumoRateio = "";
+
+			if (tipoLigacao != null) {
+				try {
+					consumoHistorico = getControladorMicromedicao().obterDadosConsumoConta(helper.getIdImovel(),
+							helper.getAmReferencia(), tipoLigacao);
+				} catch (ControladorException e) {
+					logger.error(e);
+				}
+
+				if (consumoHistorico != null) {
+					if (consumoHistorico[0] != null) {
+						descricaoAbreviadaTipoConsumo = (String) consumoHistorico[0];
+					}
+
+					if (consumoHistorico[1] != null) {
+						descricaoTipoConsumo = (String) consumoHistorico[1];
+					}
+
+					if (consumoHistorico[2] != null) {
+						consumoMedio = "" + (Integer) consumoHistorico[2];
+					}
+
+					if (consumoHistorico[3] != null) {
+						descricaoAbreviadaAnormalidadeConsumo = (String) consumoHistorico[3];
+					}
+
+					if (consumoHistorico[4] != null) {
+						descricaoAnormalidadeConsumo = (String) consumoHistorico[4];
+					}
+
+					if (consumoHistorico[5] != null) {
+						consumoRateio = "" + (Integer) consumoHistorico[5];
+					}
+				}
+			}
+
+			helper.setDescricaoTipoConsumo(descricaoTipoConsumo);
+			helper.setDescricaoAnormalidadeConsumo(descricaoAnormalidadeConsumo);
+			helper.setConsumoAnormalidade(descricaoAbreviadaAnormalidadeConsumo);
+
+			Short quantidadeEconomiaConta = obterQuantidadeEconomiasConta(helper.getIdConta(), false);
+			helper.setQuantidadeEconomiaConta("" + quantidadeEconomiaConta);
+
+			BigDecimal consumoFaturadoBigDecimal = null;
+			if (consumoFaturamento != null && !consumoFaturamento.equals("")) {
+				consumoFaturadoBigDecimal = Util.formatarMoedaRealparaBigDecimal(consumoFaturamento);
+
+			}
+			BigDecimal qtdEconomiasBigDecimal = null;
+			if (quantidadeEconomiaConta != null && !quantidadeEconomiaConta.equals("")) {
+				qtdEconomiasBigDecimal = Util.formatarMoedaRealparaBigDecimal("" + quantidadeEconomiaConta);
+			}
+
+			String consumoEconomia = "";
+			if (consumoFaturadoBigDecimal != null && qtdEconomiasBigDecimal != null) {
+				BigDecimal consumoEconomiaBigDecimal = consumoFaturadoBigDecimal.divide(qtdEconomiasBigDecimal, 2,
+						RoundingMode.UP);
+				consumoEconomia = Util.formatarMoedaReal(consumoEconomiaBigDecimal);
+				helper.setConsumoEconomia(consumoEconomia.substring(0, (consumoEconomia.length() - 3)));
+			}
+
+			StringBuilder codigoAuxiliar = new StringBuilder();
+			codigoAuxiliar.append(Util.completaString(descricaoAbreviadaTipoConsumo, 1));
+			codigoAuxiliar.append(Util.completaString("", 1));
+			codigoAuxiliar.append(Util.completaString(leituraAnormalidadeFaturamento, 2));
+			codigoAuxiliar.append(Util.completaString(descricaoAbreviadaAnormalidadeConsumo, 2));
+
+			if (helper.getIdImovelPerfil() != null) {
+				codigoAuxiliar.append(Util.completaString("" + helper.getIdImovelPerfil(), 1));
+			} else {
+				codigoAuxiliar.append(Util.completaString("", 1));
+			}
+
+			codigoAuxiliar.append(Util.completaString(diasConsumo, 2));
+			codigoAuxiliar.append(Util.completaString(consumoMedio, 6));
+
+			helper.setCodigoAuxiliarString(codigoAuxiliar.toString());
+
+			StringBuilder mesagemConsumo = obterMensagemRateioConsumo(helper, consumoRateio, medicaoHistorico,
+					tipoMedicao);
+			helper.setMensagemConsumoString(mesagemConsumo.toString());
+
+			Collection<?> linhasDescricaoServicosTarifasTotalHelper = gerarLinhasDescricaoServicoTarifasRelatorio(
+					helper, consumoRateio, medicaoHistorico, tipoMedicao, false);
+
+			helper.setColecaoContaLinhasDescricaoServicosTarifasTotalHelper(linhasDescricaoServicosTarifasTotalHelper);
+
+			BigDecimal valorConta = obterValorConta2Via(helper);
+			helper.setValorContaString(Util.formatarMoedaReal(valorConta));
+			helper.setValorConta(valorConta);
+
+			CreditoRealizado creditoRealizadoBolsaAgua = pesquisarCreditoRealizadoBolsaAgua(helper);
+			if (creditoRealizadoBolsaAgua != null) {
+				helper.setValorCreditoBolsaAgua(creditoRealizadoBolsaAgua.getValorCredito());
+			}
+
+			helper = preencherDadosPagamento2Via(id, helper, valorConta);
+			helper = preencherInfoCodigoBarras2Via(helper, valorConta);
+			helper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(helper, 1)));
+			helper = preencherDadosQualidadeAgua2Via(helper);
+
+			// validação para trazer cfpCnpj caso exista. Paulo Almeida -
+			// 01.02.2022
+			String cpfCnpj = null;
+
+			try {
+				cpfCnpj = consultarCpfCnpjCliente(helper.getIdImovel());
+
+			} catch (Exception e) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", e);
+			}
+
+			if (!cpfCnpj.equalsIgnoreCase("") && helper.getCodigoConvenio() != null) {
+				helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta);
+			} else {
+				helper = preencherRepresentacaoNumericaCodBarras2Via(helper, valorConta);
+			}
+
+			Integer esferaPoder = null;
+			try {
+				esferaPoder = repositorioFaturamento.pesquisarEsferaPoderImovelConta(id);
+			} catch (Exception e) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", e);
+			}
+
+			// Nao exibe demonstrativo de impostos para imoveis publicos
+			// federais
+			if (esferaPoder.shortValue() != EsferaPoder.FEDERAL) {
+				helper.setInformarImpostos(true);
+
+				Object[] dadosAliquotasImpostos = gerarDadosAliquotasImpostos(helper, false);
+				helper.setDescricaoImpostosEAliquotas((String) dadosAliquotasImpostos[0]);
+				helper.setPercentualImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[1]);
+				helper.setValorBaseCalculoImpostos((BigDecimal) dadosAliquotasImpostos[2]);
+				helper.setValorImpostosEAliquotas((BigDecimal) dadosAliquotasImpostos[3]);
+
+				if (isMunipicioContaIgualMunicipioAgenciaReguladora(helper, dadosAliquotasImpostos)) {
+					helper.setDescricaoAgenciaReguladora((String) dadosAliquotasImpostos[4]);
+					helper.setPercentualAgenciaReguladora((BigDecimal) dadosAliquotasImpostos[5]);
+					helper.setValorAgenciaReguladora((BigDecimal) dadosAliquotasImpostos[6]);
+				}
+			}
+
+			Object[] contatoAgenciaReguladora = null;
+			try {
+				contatoAgenciaReguladora = this.pesquisarContatosAgenciaReguladora(helper);
+				if (contatoAgenciaReguladora != null && contatoAgenciaReguladora.length > 0) {
+					helper.setAgenciaReguladora((String) contatoAgenciaReguladora[0]);
+					helper.setTelefoneAgenciaReguladora((String) contatoAgenciaReguladora[1]);
+					helper.setEmailAgenciaReguladora((String) contatoAgenciaReguladora[2]);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", e);
+			}
+
+			colecaoHelper.add(helper);
+
+			if (cobrarTaxaEmissaoConta) {
+				this.gerarDebitoACobrarTaxaEmissaoConta(helper.getIdImovel(), helper.getAmReferencia());
+			}
+
+			String leituraAnteriorInformada = "";
+			String leituraAtualInformada = "";
+			String dataLeituraAnteriorInformada = "";
+			String dataLeituraAtualInformada = "";
+
+			MedicaoHistorico medicaoHistoricoAgua = getControladorMicromedicao()
+					.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(helper.getIdImovel(),
+							helper.getAmReferencia());
+
+			MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao()
+					.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(helper.getIdImovel(),
+							helper.getAmReferencia());
+
+			if (medicaoHistoricoAgua != null) {
+
+				MedicaoHistorico medicaoHistoricoAguaMesAnterior = getControladorMicromedicao()
+						.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(helper.getIdImovel(),
+								Util.subtrairMesDoAnoMes(helper.getAmReferencia(), 1));
+
+				if (medicaoHistoricoAgua.getLeituraAnteriorInformada() != null) {
+					leituraAnteriorInformada = medicaoHistoricoAgua.getLeituraAnteriorInformada() + "";
+				}
+
+				if (medicaoHistoricoAgua.getLeituraAtualInformada() != null) {
+					leituraAtualInformada = medicaoHistoricoAgua.getLeituraAtualInformada() + "";
+				}
+
+				if (medicaoHistoricoAgua.getDataLeituraAtualInformada() != null) {
+					dataLeituraAtualInformada = Util.formatarData(medicaoHistoricoAgua.getDataLeituraAtualInformada());
+				}
+
+				if (medicaoHistoricoAguaMesAnterior != null) {
+					if (medicaoHistoricoAguaMesAnterior.getDataLeituraAtualInformada() != null) {
+						dataLeituraAnteriorInformada = Util.formatarData(medicaoHistoricoAguaMesAnterior
+								.getDataLeituraAtualInformada());
+					}
+				}
+
+			} else if (medicaoHistoricoPoco != null) {
+
+				MedicaoHistorico medicaoHistoricoPocoMesAnterior = getControladorMicromedicao()
+						.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(helper.getIdImovel(),
+								Util.subtrairMesDoAnoMes(helper.getAmReferencia(), 1));
+
+				if (medicaoHistoricoPoco.getLeituraAnteriorInformada() != null) {
+					leituraAnteriorInformada = medicaoHistoricoPoco.getLeituraAnteriorInformada() + "";
+				}
+
+				if (medicaoHistoricoPoco.getLeituraAtualInformada() != null) {
+					leituraAtualInformada = medicaoHistoricoPoco.getLeituraAtualInformada() + "";
+				}
+
+				if (medicaoHistoricoPoco.getDataLeituraAtualInformada() != null) {
+					dataLeituraAtualInformada = Util.formatarData(medicaoHistoricoPoco.getDataLeituraAtualInformada());
+				}
+
+				if (medicaoHistoricoPocoMesAnterior.getDataLeituraAtualInformada() != null) {
+					dataLeituraAnteriorInformada = Util.formatarData(medicaoHistoricoPocoMesAnterior
+							.getDataLeituraAtualInformada());
+				}
+			}
+
+			helper.setLeituraAnteriorInformada(leituraAnteriorInformada);
+			helper.setLeituraAtualInformada(leituraAtualInformada);
+			helper.setDataLeituraAnteriorInformada(dataLeituraAnteriorInformada);
+			helper.setDataLeituraAtualInformada(dataLeituraAtualInformada);
+
+			try {
+				
+				if (!cpfCnpj.equalsIgnoreCase("") && helper.getCodigoConvenio() != null) {
+					registrarFichaCompensacao(id);
+				}
+			} catch (ControladorException e) {
+				throw new ActionServletException("atencao.erro_registrar_conta");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return colecaoHelper;
+	}
 
 	private EmitirContaHelper preencherDadosQualidadeAgua2Via(EmitirContaHelper emitirContaHelper)
 			throws ControladorException {

@@ -53,9 +53,9 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 			String cpfCnpj = consultarCpfCnpjCliente(guia.getImovel().getId());
 			if (!cpfCnpj.equalsIgnoreCase("")) {
 				request.setAttribute("boletoParcelamento", guia);
-			}else {
+			}/*else {
 				request.setAttribute("linkBoletoBB", obterLinkBoletoBB(guia.getId()));
-			}
+			}*/
 		}
 
 		if (request.getParameter("caminhoRetornoTelaConsultaGuiaPagamento") != null) {

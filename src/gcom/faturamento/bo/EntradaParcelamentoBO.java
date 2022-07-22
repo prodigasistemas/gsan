@@ -43,27 +43,27 @@ public class EntradaParcelamentoBO {
 	private ControladorFaturamentoLocal controlador;
 	private IRepositorioFaturamento repositorio;
 
-	private Collection<EmitirContaHelper> contas;
+	private Collection<EmitirContaHelper> guiaPagamentos;
 	private EmitirContaHelper contaHelper;
 
-	public EntradaParcelamentoBO(Integer idParcelamento, Collection<?> idsConta, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) {
+	public EntradaParcelamentoBO(Integer idParcelamento) {
 		super();
 
 		fachada = Fachada.getInstancia();
 		repositorio = RepositorioFaturamentoHBM.getInstancia();
 		controlador = getControlador();
-		contas = pesquisarContas(idParcelamento, idsConta, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
+	//	guiaPagamentos = pesquisarGuiaPagamento(idParcelamento);
 	}
 
 	public EntradaParcelamentoHelper criar(Imovel imovel, Usuario usuario, String situacaoConta) {
 		EntradaParcelamentoHelper helper = null;
 		
-		if (contas != null && !contas.isEmpty()) {
+		if (guiaPagamentos != null && !guiaPagamentos.isEmpty()) {
 			List<ContaSegundaViaDTO> listaDTO = new ArrayList<ContaSegundaViaDTO>();
 			SistemaParametro parametros = fachada.pesquisarParametrosDoSistema();
 			
-			for (EmitirContaHelper conta : contas) {
-				contaHelper = conta;
+			for (EmitirContaHelper guiaPagamento : guiaPagamentos) {
+				contaHelper = guiaPagamento;
 				
 				try {
                 setMensagens();
@@ -74,8 +74,8 @@ public class EntradaParcelamentoBO {
 					Integer tipoDocumento = null;
 					String banco = null;
 					String numeroReferencia = null;
-					if((conta.getCpf() != null && conta.getCodigoConvenio() != null ) || (conta.getCpf() != null && conta.getCodigoConvenio() != null ) ) {
-						nossoNumero = this.controlador.obterNossoNumeroFichaCompensacao("1", conta.getIdConta().toString(), conta.getCodigoConvenio());
+					if((guiaPagamento.getCpf() != null && guiaPagamento.getCodigoConvenio() != null ) || (guiaPagamento.getCpf() != null && guiaPagamento.getCodigoConvenio() != null ) ) {
+						nossoNumero = this.controlador.obterNossoNumeroFichaCompensacao("1", guiaPagamento.getIdConta().toString(), guiaPagamento.getCodigoConvenio());
 						nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
 					}	
 					
@@ -84,7 +84,7 @@ public class EntradaParcelamentoBO {
 						banco = "Banco do Brasil";
 						numeroCarteira = ConstantesSistema.CARTEIRA_CONTA;
 						tipoDocumento = 1;
-						numeroReferencia = String.valueOf(conta.getAmReferencia()) + conta.getIdConta().toString();
+						numeroReferencia = String.valueOf(guiaPagamento.getAmReferencia()) + guiaPagamento.getIdConta().toString();
 					} else {
 						tipoDocumento = 2;
 					}
@@ -186,16 +186,12 @@ public class EntradaParcelamentoBO {
 		}
 		return economias;
 	}
-
+/*
 	@SuppressWarnings("rawtypes")
-	private Collection<EmitirContaHelper> pesquisarContas(Integer idContaHistorico, Collection idsConta, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) {
-		if (idContaHistorico == null) {
-			return fachada.emitir2ViaContas(idsConta, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
-		} else {
-			return fachada.emitir2ViaContasHistorico(idsConta, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
-		}
+	private Collection<EmitirContaHelper> pesquisarGuiaPagamento(Integer idContaHistorico) {
+			return fachada.emitirGuiaPagamento(idContaHistorico);
 	}
-
+*/
 	private void setMensagens() throws ControladorException {
 		try {
 			contaHelper.setMensagensFixas(repositorio.pesquisarContaMensagemFixa());

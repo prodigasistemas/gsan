@@ -490,9 +490,9 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 							if (!cpfCnpj.equalsIgnoreCase("") || !cpfClienteParcelamentoDigitado.equals("")) {
 								registrarEntradaParcelamento(guiaPagamento.getId());
 								boleto = "/gerarRelatorioBoletoParcelamentoAction.do?cobrarTaxaEmissaoConta=N";
-							} else {
+							}/* else {
 								boleto = obterLinkBoletoBB(idParcelamento);
-							}
+							}*/
 						} catch (ErroRepositorioException e) {
 							e.printStackTrace();
 						}

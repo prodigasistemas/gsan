@@ -13648,6 +13648,15 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public Collection<EmitirContaHelper> emitirGuiaPagamento(Collection idsContaEP, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) {
+
+		try {
+			return this.getControladorFaturamento().emitir2ViaContas(idsContaEP, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 	public Integer pesquisarIdClienteResponsavelConta(Integer idConta, boolean contaHistorico) {
 
