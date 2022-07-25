@@ -13648,6 +13648,15 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public Collection<EmitirContaHelper> emitirGuiaPagamento(Integer idParcelamento) {
+
+		try {
+			return this.getControladorFaturamento().emitirGuiaPagamento(idParcelamento);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 	public Integer pesquisarIdClienteResponsavelConta(Integer idConta, boolean contaHistorico) {
 
@@ -40591,6 +40600,22 @@ public class Fachada {
 		}
 	}
 	
+	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia) {
+		try {
+			this.getControladorFaturamento().registrarEntradaParcelamento(parcelamento, primeiraVia);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public String consultarCpfCnpjCliente(Integer idImovel) {
+		try {
+		   return this.getControladorFaturamento().consultarCpfCnpjCliente(idImovel);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
 	public Integer pesquisarFaturamentoGrupoImovel(Integer idImovel) {
 		try {
 			return this.getControladorFaturamento().pesquisarFaturamentoGrupoImovel(idImovel);
@@ -40598,4 +40623,13 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
+	
+	public String pesquisarClienteCpfCnpj (Integer idCliente) {
+		try {
+		return this.getControladorFaturamento().pesquisarClienteCpfCnpj(idCliente);		
+		} catch(ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
 }

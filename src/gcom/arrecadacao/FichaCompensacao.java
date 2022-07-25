@@ -1,7 +1,8 @@
-package gcom.faturamento;
+package gcom.arrecadacao;
 
 import java.util.Date;
 
+import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.imovel.Imovel;
 import gcom.faturamento.conta.Conta;
@@ -12,6 +13,7 @@ public class FichaCompensacao {
 	
 	private Integer id;
 	private Conta conta;
+	private GuiaPagamento guiaPagamento;
 	private Integer idConv;
 	private Integer numeroCarteira;
 	private Integer numeroVariacaoCarteira;
@@ -213,6 +215,16 @@ public class FichaCompensacao {
 
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
+	}
+
+
+	public GuiaPagamento getGuiaPagamento() {
+		return guiaPagamento;
+	}
+
+
+	public void setGuiaPagamento(GuiaPagamento guiaPagamento) {
+		this.guiaPagamento = guiaPagamento;
 	}
 	
 }

@@ -54,6 +54,7 @@ import gcom.cobranca.FiltroCobrancaDocumentoItem;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.fachada.Fachada;
 import gcom.faturamento.bean.DebitoCobradoAgrupadoHelper;
 import gcom.faturamento.bean.EmitirContaHelper;
@@ -1802,7 +1803,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 	}
 
 	@SuppressWarnings("rawtypes")
-	private String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
+	public String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
 		String cnpjCpf = "";
 
 		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);
@@ -3803,6 +3804,29 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		}
 
 		return emitirContaHelper;
+	}
+	
+	public Collection<EmitirContaHelper> emitirGuiaPagamento(Integer idParcelamento) throws ControladorException,
+			ErroRepositorioException {
+		
+		Parcelamento parcelamento = repositorioFaturamento.pesquisarParcelamento(idParcelamento);
+		GuiaPagamento guiPagamento = repositorioFaturamento.pesquisarGuiaPagamento(idParcelamento);
+
+		Collection<EmitirContaHelper> colecaoHelper = new ArrayList<EmitirContaHelper>();
+
+			EmitirContaHelper helper = new EmitirContaHelper();
+
+			helper = preencherNomeCliente2Via(helper);
+			helper = preencherDadosEnderecoImovel2Via(helper);
+
+			BigDecimal valorConta = BigDecimal.ONE;
+			helper.setValorConta(valorConta);
+
+			helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta);
+				
+			colecaoHelper.add(helper);		
+
+		return colecaoHelper;
 	}
 
 	private EmitirContaHelper preencherDadosQualidadeAgua2Via(EmitirContaHelper emitirContaHelper)

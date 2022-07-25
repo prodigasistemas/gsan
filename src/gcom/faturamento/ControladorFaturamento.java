@@ -2,7 +2,13 @@ package gcom.faturamento;
 
 import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
+import gcom.arrecadacao.BoletoInfo;
+import gcom.arrecadacao.FichaCompensacao;
+import gcom.arrecadacao.FiltroBancoInfo;
+import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
+import gcom.arrecadacao.pagamento.FiltroGuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
+import gcom.arrecadacao.pagamento.GuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.atendimentopublico.ligacaoagua.FiltroLigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
@@ -15,6 +21,7 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.EsferaPoder;
+import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.geografico.FiltroMunicipio;
@@ -195,6 +202,7 @@ import gcom.util.ConstantesAplicacao;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
+import gcom.util.FormatoData;
 import gcom.util.IoUtil;
 import gcom.util.MergeProperties;
 import gcom.util.Util;
@@ -16392,12 +16400,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		if(!idContas.isEmpty()) {
 
 		try {
- 
-			for (Integer idConta : idContas) {
-				Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistente(idConta);
-				if (fichaExistente == false) {
+			for (Integer idConta : idContas) {				
 					registrarFichaCompensacao(idConta);
-				}
 			}
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
@@ -16413,20 +16417,22 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	
 	protected void registrarFichaCompensacao(Integer idConta) throws Exception {
 		try {
-			Conta conta = new Conta();
-			conta = repositorioFaturamento.contaFichaCompensacao(idConta);
-			String valorOriginal = conta.getValorTotalConta();
-			if(!valorOriginal.equals("0.0")) {
-				registrarBoletoBancoDeDados(idConta);
+			Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistente(idConta);
+			if (fichaExistente == false) {
+				Conta conta = new Conta();
+				conta = repositorioFaturamento.contaFichaCompensacao(idConta);
+				BigDecimal valorOriginal = BigDecimal.valueOf(Double.valueOf(conta.getValorTotalConta()));
+				if (valorOriginal.compareTo(BigDecimal.ZERO) == 1) {
+					registrarBoletoBancoDeDados(idConta);
 
-				FichaCompensacaoDTO ficha = registrarBoletoBB(idConta);
+					FichaCompensacaoDTO ficha = registrarBoletoBB(idConta);
 
-				String url = Fachada.getInstancia().getSegurancaParametro(
-						SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
+					String url = Fachada.getInstancia().getSegurancaParametro(
+							SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
 
-				GsanApi api = new GsanApi(url);
-				api.invoke(ficha);
-
+					GsanApi api = new GsanApi(url);
+					api.invoke(ficha);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -16435,7 +16441,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	}
 	
-	public FichaCompensacaoDTO registrarBoletoBB(Integer idConta) throws ControladorException {
+	protected FichaCompensacaoDTO registrarBoletoBB(Integer idConta) throws ControladorException {
 		
 		FichaCompensacaoDTO fichaCompensacaoApi = null;
 		try {
@@ -16515,7 +16521,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return fichaCompensacaoApi;
 	}
 	
-	public void registrarBoletoBancoDeDados(Integer idConta) throws ControladorException, ClassNotFoundException {
+	protected void registrarBoletoBancoDeDados(Integer idConta) throws ControladorException, ClassNotFoundException {
 
 		FichaCompensacao fichaCompensacaoBanco = null;
         Connection connection = null;
@@ -16565,11 +16571,175 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (ErroRepositorioException e) {
 			throw new ActionServletException("erro.erro_registrar_conta");
 		}
-		
-       
+	
 	}
 	
-	private String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
+	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia) throws Exception {
+		try {
+			FiltroBancoInfo filtro = new FiltroBancoInfo();
+            boolean foiGerado = true;
+            
+            Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistenteGuiaPagamento(parcelamento.getId());
+			if (fichaExistente == false) {
+				foiGerado = false;
+			}
+            
+			// Para boletos ja gerados antes da modificacao para gravacao na base de dados
+			//, ou seja, 
+			// para boletos que foram gerados e nao foram salvos no bd
+			
+			if (primeiraVia || !foiGerado) {
+				GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(parcelamento);
+				GuiaPagamentoHistorico guiaPagamentoHistorico = pesquisarGuiaPagamentoHistoricoParcelamento(
+						parcelamento);
+				BigDecimal valorOriginal = parcelamento.getValorEntrada();
+				if (valorOriginal.compareTo(BigDecimal.ZERO) == 1) {
+
+					registrarBoletoParcelamentoBancoDeDados(parcelamento, guiaPagamento);
+
+					FichaCompensacaoDTO ficha = registrarParcelamentoBoletoBB(parcelamento, guiaPagamento);
+
+					String url = Fachada.getInstancia().getSegurancaParametro(
+							SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
+
+					GsanApi api = new GsanApi(url);
+		//			api.invoke(ficha);
+
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
+		}
+
+	}
+	
+	protected FichaCompensacaoDTO registrarParcelamentoBoletoBB(Parcelamento parcelamento, GuiaPagamento guiaPagamento) throws ControladorException {
+
+		FichaCompensacaoDTO fichaCompensacaoApi = null;
+		try {
+			
+			Imovel	imovel = repositorioFaturamento.pesquisarImovel(guiaPagamento.getImovel().getId());	
+			
+			Integer idLocalidade = imovel.getIdLocalidade();
+			Municipio municipio = repositorioFaturamento.municipio(idLocalidade);
+			String nomeMunicipio = municipio.getNome();
+			Integer idImovel = imovel.getId();
+			Cliente cliente = getControladorCliente().pesquisarCliente(parcelamento.getCliente().getId());
+			Integer idConv = 315828; 
+
+			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
+			Integer numeroVariacaoCarteira = 35; // Em produ��o, informar o n�mero da varia��o da carteira de
+													// cobran�a.
+			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades
+										// de
+//			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
+			String dataEmissao = (guiaPagamento.getDataEmissao()).toString(); // Pegar da conta
+			String dataVencimento = (guiaPagamento.getDataVencimento()).toString(); // pegar da conta
+			Double valorOriginal = guiaPagamento.getValorDebito().doubleValue();
+			String codigoAceite = "A"; // Dom�nio: A - Aceito; N - N�o aceito
+			Short codigoTipoTitulo = 2; // C�digo para identificar o tipo de boleto de cobran�a. Verifique os
+										// dom�nios
+			// poss�veis no swagger.
+			String indicadorPermissaoRecebimentoParcial = "N"; // C�digo para identifica��o da autoriza��o de
+																// pagamento
+			// parcial do boleto. "S" ou "N"
+			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", guiaPagamento.getId().toString(), idConv);
+			String nossoNumeroSemDV = nossoNumero.toString();
+			String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
+			PagadorDTO pagador = new PagadorDTO(); // Identifica o pagador do boleto.
+			if (cliente.getCpf() != null) {
+				pagador.setTipoInscricao((short) 1);
+				pagador.setNumeroInscricao(cliente.getCpf());
+			} else {
+				pagador.setTipoInscricao((short) 2);
+				pagador.setNumeroInscricao(cliente.getCnpj());
+			}
+			if (cliente.getNome().length() > 30) {
+				pagador.setNome(cliente.getNome().substring(0, 30));
+
+			} else {
+				pagador.setNome(cliente.getNome());
+			}
+
+			if (imovel.getEnderecoFormatado().length() > 30) {
+				pagador.setEndereco(imovel.getEnderecoFormatado().substring(0, 30));
+			} else {
+				pagador.setEndereco(imovel.getEnderecoFormatado());
+			}
+
+			pagador.setCidade(nomeMunicipio);
+			pagador.setBairro(imovel.getNomeBairro());
+			pagador.setUf("PA");
+			pagador.setCep(imovel.getCodigoCep());
+
+			fichaCompensacaoApi = new FichaCompensacaoDTO(idConv, numeroCarteira, numeroVariacaoCarteira,
+					codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, codigoTipoTitulo,
+					indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagador);
+
+		} catch (ErroRepositorioException e) {
+			throw new ActionServletException("erro.erro_registrar_conta");
+		}
+
+		return fichaCompensacaoApi;
+	}
+	
+	protected void registrarBoletoParcelamentoBancoDeDados(Parcelamento parcelamento, GuiaPagamento guiaPagamento) throws ControladorException, ClassNotFoundException {
+
+		FichaCompensacao fichaCompensacaoBanco = null;
+        Connection connection = null;
+        Statement stmt = null;
+		try {
+			Imovel imovel = repositorioImovel.pesquisarImovel(guiaPagamento.getImovel().getId());
+			
+			FiltroCliente filtroCliente = new FiltroCliente();
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, parcelamento.getCliente().getId()));
+			filtroCliente.adicionarCaminhoParaCarregamentoEntidade("clienteTipo");
+			Cliente	cliente = (Cliente) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroCliente, Cliente.class.getName()));
+			
+			
+			Integer idLocalidade = imovel.getIdLocalidade();
+			Municipio municipio = repositorioFaturamento.municipio(idLocalidade);
+			String nomeMunicipio = municipio.getNome();
+			Integer idImovel = imovel.getId();
+			Integer idCliente = cliente.getId();
+			Integer idConv = 315828; // Em produ��o, informar o n�mero do conv�nio de
+															// cobran�a, com 7 d�gitos.
+			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
+			Integer numeroVariacaoCarteira = 35; // Em produ��o, informar o n�mero da varia��o da carteira de
+													// cobran�a.
+			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades
+										// de
+//			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
+
+			String dataEmissao = (guiaPagamento.getDataEmissao()).toString(); // Pegar da conta
+			String dataVencimento = (guiaPagamento.getDataVencimento()).toString(); // pegar
+																													// da
+																													// conta
+			double valorOriginal = guiaPagamento.getValorDebito().doubleValue();
+			String codigoAceite = "A"; // Dom�nio: A - Aceito; N - N�o aceito
+			Short codigoTipoTitulo = 2; // C�digo para identificar o tipo de boleto de cobran�a. Verifique os
+										// dom�nios
+			// poss�veis no swagger.
+			String indicadorPermissaoRecebimentoParcial = "N"; // C�digo para identifica��o da autoriza��o de
+																// pagamento
+			// parcial do boleto. "S" ou "N"
+			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", guiaPagamento.getId().toString(), idConv);
+			String nossoNumeroSemDV = nossoNumero.toString();
+			String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
+
+			repositorioFaturamento.inserirFichaCompensacaoGuiaPagamento(idConv, numeroCarteira, numeroVariacaoCarteira,
+					codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, codigoTipoTitulo,
+					indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idImovel, idCliente, guiaPagamento.getId());
+		
+			
+		} catch (ErroRepositorioException e) {
+			throw new ActionServletException("erro.erro_registrar_conta");
+		}
+	
+	}
+	
+	public String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
 		String cnpjCpf = "";
 
 		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);
@@ -16591,6 +16761,26 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return cnpjCpf;
 	}
 	
+	private GuiaPagamento pesquisarGuiaPagamentoParcelamento(Parcelamento parcelamento) {
+		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, parcelamento.getId()));
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		GuiaPagamento guiaPagamento = (GuiaPagamento) 
+				Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		
+		return guiaPagamento;
+	}
+	
+	private GuiaPagamentoHistorico pesquisarGuiaPagamentoHistoricoParcelamento(Parcelamento parcelamento) {
+		FiltroGuiaPagamentoHistorico filtroGuiaPagamentoHistorico = new FiltroGuiaPagamentoHistorico();
+		filtroGuiaPagamentoHistorico.adicionarParametro(new ParametroSimples(FiltroGuiaPagamentoHistorico.PARCELAMENTO_ID, parcelamento.getId()));
+		filtroGuiaPagamentoHistorico.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		GuiaPagamentoHistorico guiaPagamentoHistorico = (GuiaPagamentoHistorico) 
+				Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtroGuiaPagamentoHistorico, GuiaPagamentoHistorico.class.getName()));
+		
+		return guiaPagamentoHistorico;
+	}
+	
 	private boolean validarCreditoConcedido(BigDecimal valorCreditos, BigDecimal valorBolsaAguaConcedido) {
 		BigDecimal creditosSemBolsaAgua = valorCreditos.subtract(valorBolsaAguaConcedido);
 		
@@ -16598,7 +16788,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			return false;
 		} 		
 		return true;
-		
+	}
+	
+	public String pesquisarClienteCpfCnpj (Integer idCliente) throws ControladorException, ErroRepositorioException {
+		return repositorioFaturamento.pesquisarClienteCpfCnpj(idCliente);
 	}
 
 }

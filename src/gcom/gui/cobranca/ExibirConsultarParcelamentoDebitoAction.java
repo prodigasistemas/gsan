@@ -29,6 +29,7 @@ import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
+import gcom.util.ErroRepositorioException;
 import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
@@ -70,8 +71,9 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		
 		Parcelamento parcelamento = null;
 		boolean entradaPaga = false;
+		Collection<ClienteImovel>  clienteImovel = null;
 		if (codigoImovel != null && !codigoImovel.trim().equals("")) {
-			Collection<ClienteImovel> clienteImovel = pesquisarImovel(codigoImovel);
+			clienteImovel = pesquisarImovel(codigoImovel);
 			verificarImovel(clienteImovel);
 			setarDadosClienteImovel(clienteImovel);
 
@@ -114,7 +116,12 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 			request.setAttribute("isParcelamentoCancelado", verificarSituacao(parcelamento, ParcelamentoSituacao.CANCELADO));
 
 			if (geraBoletoBB && !entradaPaga) {
-				request.setAttribute("linkBoletoBB", obterLinkBoletoBB(parcelamento));
+				String cpfCnpj = consultarCpfCnpjCliente(Integer.parseInt(codigoImovel));
+				if (!cpfCnpj.equalsIgnoreCase("")) {
+					request.setAttribute("boletoParcelamento", parcelamento);
+				}/* else {
+					request.setAttribute("linkBoletoBB", obterLinkBoletoBB(parcelamento));
+				}*/
 			}
 		}
 		
@@ -137,6 +144,14 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 
 	private String obterLinkBoletoBB(Parcelamento parcelamento) {
 		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
+	}
+	
+	private void registrarEntradaParcelamento(Parcelamento parcelamento) {
+		  getFachada().registrarEntradaParcelamento(parcelamento, false);
+	}
+	
+	private String consultarCpfCnpjCliente(Integer codigoImovel) {
+		return getFachada().consultarCpfCnpjCliente(codigoImovel);
 	}
 
 	private void setarDadosParcelamento(Parcelamento parcelamento) {

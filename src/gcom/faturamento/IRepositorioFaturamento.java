@@ -2,6 +2,7 @@
 package gcom.faturamento;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
+import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ordemservico.ServicoCobrancaValor;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
@@ -17,6 +18,7 @@ import gcom.cadastro.imovel.bean.ImovelCobrarDoacaoHelper;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.bean.ContaValoresHelper;
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.faturamento.autoinfracao.AutosInfracao;
 import gcom.faturamento.bean.ApagarDadosFaturamentoHelper;
 import gcom.faturamento.bean.EmitirContaHelper;
@@ -3081,9 +3083,24 @@ public interface IRepositorioFaturamento {
 	
 	public Boolean fichaCompensacaoExistente(Integer idConta) throws ErroRepositorioException;
 	
+	public Boolean fichaCompensacaoExistenteGuiaPagamento(Integer idParcelamento) throws ErroRepositorioException;
+	
+	public void inserirFichaCompensacaoGuiaPagamento(Integer idConv,Integer numeroCarteira,Integer numeroVariacaoCarteira,Short
+			codigoModalidade,String dataEmissao,String dataVencimento,Double valorOriginal,String codigoAceite,Short codigoTipoTitulo,String
+			indicadorPermissaoRecebimentoParcial,String numeroTituloCliente,Integer imovel,Integer cliente,Integer guiaPagamento) throws ErroRepositorioException;
+	
 	public void inserirFichaCompensacao (Integer idConv,Integer numeroCarteira,Integer numeroVariacaoCarteira,Short
 			codigoModalidade,String dataEmissao,String dataVencimento,Double valorOriginal,String codigoAceite,Short codigoTipoTitulo,String
 			indicadorPermissaoRecebimentoParcial,String numeroTituloCliente,Integer imovel,Integer cliente, Integer conta) throws ErroRepositorioException;
 	
 	public Collection pesquisarInformacoesContaParaEnvioEmailPorRota(Integer idRota) throws ErroRepositorioException;
+	
+	public Imovel pesquisarImovel(Integer idImovel) throws ErroRepositorioException;
+	
+	public String pesquisarClienteCpfCnpj(Integer idCliente) throws ErroRepositorioException;
+	
+	public GuiaPagamento pesquisarGuiaPagamento (Integer idParcelamento) throws ErroRepositorioException;
+	
+	public Parcelamento pesquisarParcelamento (Integer idParcelamento) throws ErroRepositorioException;
+	
 }
