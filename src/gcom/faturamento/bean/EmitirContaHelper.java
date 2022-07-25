@@ -184,6 +184,14 @@ public class EmitirContaHelper implements Serializable {
 	private String mensagemQuitacao;
 	private String mensagemBolsaAgua;
 	private Short indicadorMensagemBolsaAgua;
+	
+	//Para guias de pagamentos
+	private Integer idGuiaPagamento;
+	private Double valorEntrada;
+	private Integer quantidadeParcelas;
+	private Double valorNegociado;
+	private Double valorAtualizado;
+	private Double valorParcelamento;
 
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
@@ -640,6 +648,26 @@ public class EmitirContaHelper implements Serializable {
 		this.codigoConvenio = codigoConvenio;
 
 	}
+	
+	// utilizado no Guia pagamento Cosanpa
+		public EmitirContaHelper(Integer idGuiaPagamento, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, Date dataValidadeConta, Integer idImovel
+				, Integer codigoConvenio,  Double valorEntrada,	Integer quantidadeParcelas, Double valorNegociado, Double valorAtualizado, Double valorParcelamento) {
+
+			this.idGuiaPagamento = idGuiaPagamento;
+			this.nomeCliente = nomeCliente;
+			this.cpf = cpf;
+			this.cnpj = cnpj;
+			this.dataVencimentoConta = dataVencimentoConta;
+			this.dataValidadeConta = dataValidadeConta;
+			this.idImovel = idImovel;
+			this.codigoConvenio = codigoConvenio;
+			this.valorEntrada = valorEntrada;	
+			this.quantidadeParcelas = quantidadeParcelas;
+			this.valorNegociado = valorNegociado; 
+			this.valorAtualizado = valorAtualizado;
+			this.valorParcelamento = valorParcelamento;
+
+		}
 
 	// utilizado no Emitir Segunda Via de Conta Compesa
 	public EmitirContaHelper(Integer idConta, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
@@ -2018,5 +2046,53 @@ public class EmitirContaHelper implements Serializable {
 
 	public void setCodigoConvenio(Integer codigoConvenio) {
 		this.codigoConvenio = codigoConvenio;
+	}
+
+	public Integer getIdGuiaPagamento() {
+		return idGuiaPagamento;
+	}
+
+	public void setIdGuiaPagamento(Integer idGuiaPagamento) {
+		this.idGuiaPagamento = idGuiaPagamento;
+	}
+
+	public Double getValorEntrada() {
+		return valorEntrada;
+	}
+
+	public void setValorEntrada(Double valorEntrada) {
+		this.valorEntrada = valorEntrada;
+	}
+
+	public Integer getQuantidadeParcelas() {
+		return quantidadeParcelas;
+	}
+
+	public void setQuantidadeParcelas(Integer quantidadeParcelas) {
+		this.quantidadeParcelas = quantidadeParcelas;
+	}
+
+	public Double getValorNegociado() {
+		return valorNegociado;
+	}
+
+	public void setValorNegociado(Double valorNegociado) {
+		this.valorNegociado = valorNegociado;
+	}
+
+	public Double getValorAtualizado() {
+		return valorAtualizado;
+	}
+
+	public void setValorAtualizado(Double valorAtualizado) {
+		this.valorAtualizado = valorAtualizado;
+	}
+
+	public Double getValorParcelamento() {
+		return valorParcelamento;
+	}
+
+	public void setValorParcelamento(Double valorParcelamento) {
+		this.valorParcelamento = valorParcelamento;
 	}
 }

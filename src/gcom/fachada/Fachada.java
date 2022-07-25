@@ -13649,10 +13649,10 @@ public class Fachada {
 		}
 	}
 	
-	public Collection<EmitirContaHelper> emitirGuiaPagamento(Collection idsContaEP, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) {
+	public Collection<EmitirContaHelper> emitirGuiaPagamento(Integer idParcelamento) {
 
 		try {
-			return this.getControladorFaturamento().emitir2ViaContas(idsContaEP, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
+			return this.getControladorFaturamento().emitirGuiaPagamento(idParcelamento);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

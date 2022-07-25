@@ -37,6 +37,7 @@ import gcom.cobranca.CobrancaSituacao;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
 import gcom.cobranca.ParcelamentoGrupo;
 import gcom.cobranca.bean.ContaValoresHelper;
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
 import gcom.faturamento.autoinfracao.AutosInfracao;
 import gcom.faturamento.bean.ApagarDadosFaturamentoHelper;
@@ -60644,6 +60645,48 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} 
 		return cpfCnpj;
+	}
+	
+	public Parcelamento pesquisarParcelamento (Integer idParcelamento) throws ErroRepositorioException {
+		Parcelamento parcelamento = null;
+        Session session = HibernateUtil.getSession();
+        
+        try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append("select parcelamento from Parcelamento parcelamento ")
+	        .append("where  parcelamento.id = :idParcelamento ");
+			
+			parcelamento = (Parcelamento) session.createQuery(consulta.toString())
+				      .setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();		
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} 
+        
+		return parcelamento;
+		
+	}
+	
+	public GuiaPagamento pesquisarGuiaPagamento (Integer idParcelamento) throws ErroRepositorioException {
+		GuiaPagamento guiaPagamento = null;
+        Session session = HibernateUtil.getSession();
+        
+        try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append("select guiaPagamento from GuiaPagamento guiaPagamento ")
+	        .append("where  guiaPagamento.parcelamento.id = :idParcelamento ");
+			
+			guiaPagamento = (GuiaPagamento) session.createQuery(consulta.toString())
+				      .setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} 
+		
+		return guiaPagamento;
+		
 	}
 
 }

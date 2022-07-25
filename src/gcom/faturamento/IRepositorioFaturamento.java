@@ -18,6 +18,7 @@ import gcom.cadastro.imovel.bean.ImovelCobrarDoacaoHelper;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.bean.ContaValoresHelper;
+import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.faturamento.autoinfracao.AutosInfracao;
 import gcom.faturamento.bean.ApagarDadosFaturamentoHelper;
 import gcom.faturamento.bean.EmitirContaHelper;
@@ -3097,5 +3098,9 @@ public interface IRepositorioFaturamento {
 	public Imovel pesquisarImovel(Integer idImovel) throws ErroRepositorioException;
 	
 	public String pesquisarClienteCpfCnpj(Integer idCliente) throws ErroRepositorioException;
+	
+	public GuiaPagamento pesquisarGuiaPagamento (Integer idParcelamento) throws ErroRepositorioException;
+	
+	public Parcelamento pesquisarParcelamento (Integer idParcelamento) throws ErroRepositorioException;
 	
 }

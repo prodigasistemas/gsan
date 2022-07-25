@@ -352,6 +352,8 @@ public interface IControladorFaturamento {
 
 	public Collection<EmitirContaHelper> emitir2ViaContas(Collection<Integer> idsContaEP, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) throws ControladorException;
 
+	public Collection<EmitirContaHelper> emitirGuiaPagamento(Integer idParcelamento) throws ControladorException;
+	
 	public Integer pesquisarIdClienteResponsavelConta(Integer idConta, boolean contaHistorico) throws ControladorException;
 
 	public Integer[] determinarTipoLigacaoMedicao(EmitirContaHelper emitirContaHelper) throws ControladorException;

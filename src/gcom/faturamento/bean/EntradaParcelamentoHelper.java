@@ -4,19 +4,19 @@ import java.util.List;
 
 public class EntradaParcelamentoHelper {
 
-	private List<ContaSegundaViaDTO> contas;
+	private List<EntradaParcelamentoDTO> entradaParcelamento;
 
 	private String nomeArquivo;
 
-	public EntradaParcelamentoHelper(List<ContaSegundaViaDTO> contas) {
+	public EntradaParcelamentoHelper(List<EntradaParcelamentoDTO> listaDTO) {
 		super();
 
-		this.contas = contas;
-		this.nomeArquivo = "ENTRADA_PARCELAMENTO_" + contas.get(0).getMatricula() + ".pdf";
+		this.entradaParcelamento = listaDTO;
+		this.nomeArquivo = "ENTRADA_PARCELAMENTO_" + listaDTO.get(0).getMatricula() + ".pdf";
 	}
 
-	public List<ContaSegundaViaDTO> getContas() {
-		return contas;
+	public List<EntradaParcelamentoDTO> getContas() {
+		return entradaParcelamento;
 	}
 
 	public String getNomeArquivo() {
