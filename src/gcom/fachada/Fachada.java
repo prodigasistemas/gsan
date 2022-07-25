@@ -40598,4 +40598,20 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
+	
+	public boolean fichaCompensacaoExistente(Integer idConta) {
+		try {
+			return this.getControladorFaturamento().fichaCompensacaoExistente(idConta);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public Collection<Cliente> pesquisarClientePorCpfCnpj(String cpfCnpj) throws Exception {
+		try {
+			return this.getControladorCliente().pesquisarClientePorCpfCnpj(cpfCnpj);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
 }

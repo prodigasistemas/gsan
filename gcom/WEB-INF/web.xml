@@ -982,6 +982,15 @@
 		<servlet-name>OrdemServicoAPI</servlet-name>
 		<url-pattern>/api/ordem-servico/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>PagamentoCreditoAPI</servlet-name>
+		<servlet-class>gcom.api.pagamentocredito.PagamentoCreditoAPI</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PagamentoCreditoAPI</servlet-name>
+		<url-pattern>/api/pagamentoCredito/*</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
