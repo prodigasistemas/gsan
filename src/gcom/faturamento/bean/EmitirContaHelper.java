@@ -187,11 +187,11 @@ public class EmitirContaHelper implements Serializable {
 	
 	//Para guias de pagamentos
 	private Integer idGuiaPagamento;
-	private Double valorEntrada;
-	private Integer quantidadeParcelas;
-	private Double valorNegociado;
-	private Double valorAtualizado;
-	private Double valorParcelamento;
+	private BigDecimal valorEntrada;
+	private Short quantidadeParcelas;
+	private BigDecimal valorNegociado;
+	private BigDecimal valorAtualizado;
+	private BigDecimal valorParcelamento;
 
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
@@ -650,15 +650,14 @@ public class EmitirContaHelper implements Serializable {
 	}
 	
 	// utilizado no Guia pagamento Cosanpa
-		public EmitirContaHelper(Integer idGuiaPagamento, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, Date dataValidadeConta, Integer idImovel
-				, Integer codigoConvenio,  Double valorEntrada,	Integer quantidadeParcelas, Double valorNegociado, Double valorAtualizado, Double valorParcelamento) {
+		public EmitirContaHelper(Integer idGuiaPagamento, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, Integer idImovel
+				, Integer codigoConvenio,  BigDecimal valorEntrada,	Short quantidadeParcelas, BigDecimal valorNegociado, BigDecimal valorAtualizado, BigDecimal valorParcelamento) {
 
 			this.idGuiaPagamento = idGuiaPagamento;
 			this.nomeCliente = nomeCliente;
 			this.cpf = cpf;
 			this.cnpj = cnpj;
 			this.dataVencimentoConta = dataVencimentoConta;
-			this.dataValidadeConta = dataValidadeConta;
 			this.idImovel = idImovel;
 			this.codigoConvenio = codigoConvenio;
 			this.valorEntrada = valorEntrada;	
@@ -2059,43 +2058,43 @@ public class EmitirContaHelper implements Serializable {
 		this.idGuiaPagamento = idGuiaPagamento;
 	}
 
-	public Double getValorEntrada() {
+	public BigDecimal getValorEntrada() {
 		return valorEntrada;
 	}
 
-	public void setValorEntrada(Double valorEntrada) {
+	public void setValorEntrada(BigDecimal valorEntrada) {
 		this.valorEntrada = valorEntrada;
 	}
 
-	public Integer getQuantidadeParcelas() {
+	public Short getQuantidadeParcelas() {
 		return quantidadeParcelas;
 	}
 
-	public void setQuantidadeParcelas(Integer quantidadeParcelas) {
+	public void setQuantidadeParcelas(Short quantidadeParcelas) {
 		this.quantidadeParcelas = quantidadeParcelas;
 	}
 
-	public Double getValorNegociado() {
+	public BigDecimal getValorNegociado() {
 		return valorNegociado;
 	}
 
-	public void setValorNegociado(Double valorNegociado) {
+	public void setValorNegociado(BigDecimal valorNegociado) {
 		this.valorNegociado = valorNegociado;
 	}
 
-	public Double getValorAtualizado() {
+	public BigDecimal getValorAtualizado() {
 		return valorAtualizado;
 	}
 
-	public void setValorAtualizado(Double valorAtualizado) {
+	public void setValorAtualizado(BigDecimal valorAtualizado) {
 		this.valorAtualizado = valorAtualizado;
 	}
 
-	public Double getValorParcelamento() {
+	public BigDecimal getValorParcelamento() {
 		return valorParcelamento;
 	}
 
-	public void setValorParcelamento(Double valorParcelamento) {
+	public void setValorParcelamento(BigDecimal valorParcelamento) {
 		this.valorParcelamento = valorParcelamento;
 	}
 }

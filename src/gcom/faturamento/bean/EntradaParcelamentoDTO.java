@@ -57,7 +57,7 @@ public class EntradaParcelamentoDTO {
 		super();
 	}
 
-	public EntradaParcelamentoDTO(EntradaParcelamentoHelper helper, SistemaParametro parametros, String clienteResponsavel, String usuario, 
+	public EntradaParcelamentoDTO(EmitirContaHelper helper, SistemaParametro parametros, String usuario, 
 			String nossoNumeroSemDV, String numeroCarteira, String banco, String numeroReferencia) {
 		super();
 
@@ -65,11 +65,12 @@ public class EntradaParcelamentoDTO {
 
 		this.matricula = helper.getIdImovel();
 		this.cliente = helper.getNomeCliente();
-		this.clienteResponsavel = clienteResponsavel;
-		this.cpfCnpj = helper;
+		if(helper.getCpf() != null) {
+			this.cpfCnpj = helper.getCpf();
+		}else {
+			this.cpfCnpj = helper.getCnpj();
+		}
 		this.vencimento = Util.formatarData(helper.getDataVencimentoConta());
-		this.grupo = helper.getIdFaturamentoGrupo();
-		this.inscricao = helper.getInscricaoImovel();
 
 		this.enderecoImovel = helper.getEnderecoImovel();
 

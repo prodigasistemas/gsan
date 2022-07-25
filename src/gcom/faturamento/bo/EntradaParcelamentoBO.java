@@ -57,7 +57,8 @@ public class EntradaParcelamentoBO {
 	}
 
 	public EntradaParcelamentoHelper criar(Imovel imovel, Usuario usuario, String situacaoConta) {
-		EntradaParcelamentoHelper helper = null;
+		EmitirContaHelper helper = null;
+		EntradaParcelamentoHelper entradaHelper = null;
 		
 		if (guiaPagamentos != null && !guiaPagamentos.isEmpty()) {
 			List<EntradaParcelamentoDTO> listaDTO = new ArrayList<EntradaParcelamentoDTO>();
@@ -93,7 +94,6 @@ public class EntradaParcelamentoBO {
 					EntradaParcelamentoDTO dto = new EntradaParcelamentoDTO(
 							helper,
 							parametros, 
-							getNomeResponsavel(), 
 							getEmissao(usuario), 
 							nossoNumeroSemDV,
 							numeroCarteira,
@@ -106,10 +106,10 @@ public class EntradaParcelamentoBO {
 				}
 			}
 			
-			helper = new EntradaParcelamentoHelper(listaDTO);
+			entradaHelper = new EntradaParcelamentoHelper(listaDTO);
 		}
 
-		return helper;
+		return entradaHelper;
 	}
 
 	private ControladorFaturamentoLocal getControlador() {

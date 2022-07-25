@@ -3779,8 +3779,13 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 
 			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+			if(emitirContaHelper.getIdGuiaPagamento() != null) {
+				String nossoNumeroSemDV = nossoNumero.toString();
+				
+			} else {
+				
 			String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
-			
+			}
 				Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
 				String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
 
@@ -3810,17 +3815,32 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			ErroRepositorioException {
 		
 		Parcelamento parcelamento = repositorioFaturamento.pesquisarParcelamento(idParcelamento);
-		GuiaPagamento guiPagamento = repositorioFaturamento.pesquisarGuiaPagamento(idParcelamento);
+		GuiaPagamento guiaPagamento = repositorioFaturamento.pesquisarGuiaPagamento(idParcelamento);
+		Cliente cliente = repositorioCliente.pesquisarCliente(parcelamento.getCliente().getId());
+		Imovel imovel = repositorioFaturamento.pesquisarImovel(parcelamento.getImovel().getId());
 
 		Collection<EmitirContaHelper> colecaoHelper = new ArrayList<EmitirContaHelper>();
 
 			EmitirContaHelper helper = new EmitirContaHelper();
+			
+			
+            helper.setIdImovel(imovel.getId());
+            helper.setIdGuiaPagamento(guiaPagamento.getId());
+            helper.setValorAtualizado(parcelamento.getValorDebitoAtualizado());
+            helper.setValorNegociado(parcelamento.getValorNegociado());
+            helper.setQuantidadeParcelas(parcelamento.getNumeroPrestacoes());
+            helper.setCnpj(cliente.getCnpj());
+            helper.setCpf(cliente.getCpf());
+            helper.setCodigoConvenio(315828);
+			helper.setNomeCliente(cliente.getNome());;
+			helper.setEnderecoImovel(imovel.getEnderecoFormatado());
+			helper.setDataVencimentoConta(guiaPagamento.getDataVencimento());
+			helper.setDataValidadeConta(guiaPagamento.getDataVencimento());
+			helper.setIdConta(guiaPagamento.getId());
 
-			helper = preencherNomeCliente2Via(helper);
-			helper = preencherDadosEnderecoImovel2Via(helper);
-
-			BigDecimal valorConta = BigDecimal.ONE;
-			helper.setValorConta(valorConta);
+			BigDecimal valorConta = guiaPagamento.getValorDebito();
+			helper.setValorEntrada(valorConta);
+			helper.setContaSemCodigoBarras("2");
 
 			helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta);
 				

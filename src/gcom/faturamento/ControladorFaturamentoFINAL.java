@@ -51,7 +51,9 @@ import gcom.cadastro.cliente.FiltroClienteGuiaPagamento;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.FiltroClienteTipo;
 import gcom.cadastro.cliente.IClienteConta;
+import gcom.cadastro.cliente.IRepositorioCliente;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
+import gcom.cadastro.cliente.RepositorioClienteHBM;
 import gcom.cadastro.cliente.RepositorioClienteImovelHBM;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.Logradouro;
@@ -359,6 +361,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	SessionContext sessionContext;
 
+	protected IRepositorioCliente repositorioCliente;
 	protected IRepositorioFaturamento repositorioFaturamento;
 	protected IRepositorioCobranca repositorioCobranca;
 	protected IRepositorioMicromedicao repositorioMicromedicao;
@@ -376,6 +379,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	final Short ZERO = 0;
 
 	public void ejbCreate() throws CreateException {
+		repositorioCliente = RepositorioClienteHBM.getInstancia();
 		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
 		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
 		repositorioMicromedicao = RepositorioMicromedicaoHBM.getInstancia();

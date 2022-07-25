@@ -50,7 +50,7 @@ public class GerarRelatorioBoletoParcelamentoAction extends ExibidorProcessament
 		Imovel imovel = null;
 		String situacaoConta = "";
 
-		getFachada().verificarClienteSemDocumento(imovel.getId(), (Usuario) (request.getSession(false)).getAttribute("usuarioLogado"));
+	//	getFachada().verificarClienteSemDocumento(imovel.getId(), (Usuario) (request.getSession(false)).getAttribute("usuarioLogado"));
 
 		try {
 			EntradaParcelamentoBO bo = new EntradaParcelamentoBO(idParcelamento);
