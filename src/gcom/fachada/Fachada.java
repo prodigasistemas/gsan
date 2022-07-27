@@ -13657,6 +13657,16 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public String obterMensagemEntradaParcelamento(Integer idGuiaPagamento, Integer idParcelamento) {
+		
+		try {
+			return this.getControladorArrecadacao().obterMensagemEntradaParcelamento(idGuiaPagamento, idParcelamento);
+		}catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+		
+	}
 
 	public Integer pesquisarIdClienteResponsavelConta(Integer idConta, boolean contaHistorico) {
 

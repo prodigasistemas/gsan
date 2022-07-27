@@ -187,11 +187,13 @@ public class EmitirContaHelper implements Serializable {
 	
 	//Para guias de pagamentos
 	private Integer idGuiaPagamento;
+	private Integer idParcelamento;
 	private BigDecimal valorEntrada;
 	private Short quantidadeParcelas;
 	private BigDecimal valorNegociado;
 	private BigDecimal valorAtualizado;
 	private BigDecimal valorParcelamento;
+	private String mensagemParcelamento;
 
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
@@ -650,9 +652,11 @@ public class EmitirContaHelper implements Serializable {
 	}
 	
 	// utilizado no Guia pagamento Cosanpa
-		public EmitirContaHelper(Integer idGuiaPagamento, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, Integer idImovel
-				, Integer codigoConvenio,  BigDecimal valorEntrada,	Short quantidadeParcelas, BigDecimal valorNegociado, BigDecimal valorAtualizado, BigDecimal valorParcelamento) {
+		public EmitirContaHelper(Integer idGuiaPagamento, Integer idParcelamento, Integer idConta,String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, Integer idImovel
+				, Integer codigoConvenio,  BigDecimal valorEntrada,	Short quantidadeParcelas, BigDecimal valorNegociado, BigDecimal valorAtualizado, BigDecimal valorParcelamento, String mensagemParcelamento) {
 
+			this.idConta = idConta;
+			this.idParcelamento = idParcelamento;
 			this.idGuiaPagamento = idGuiaPagamento;
 			this.nomeCliente = nomeCliente;
 			this.cpf = cpf;
@@ -665,6 +669,7 @@ public class EmitirContaHelper implements Serializable {
 			this.valorNegociado = valorNegociado; 
 			this.valorAtualizado = valorAtualizado;
 			this.valorParcelamento = valorParcelamento;
+			this.mensagemParcelamento = mensagemParcelamento;
 
 		}
 
@@ -2057,6 +2062,14 @@ public class EmitirContaHelper implements Serializable {
 	public void setIdGuiaPagamento(Integer idGuiaPagamento) {
 		this.idGuiaPagamento = idGuiaPagamento;
 	}
+	
+	public Integer getIdParcelamento() {
+		return idParcelamento;
+	}
+
+	public void setIdParcelamento(Integer idParcelamento) {
+		this.idParcelamento = idParcelamento;
+	}
 
 	public BigDecimal getValorEntrada() {
 		return valorEntrada;
@@ -2096,5 +2109,13 @@ public class EmitirContaHelper implements Serializable {
 
 	public void setValorParcelamento(BigDecimal valorParcelamento) {
 		this.valorParcelamento = valorParcelamento;
+	}
+
+	public String getMensagemParcelamento() {
+		return mensagemParcelamento;
+	}
+
+	public void setMensagemParcelamento(String mensagemParcelamento) {
+		this.mensagemParcelamento = mensagemParcelamento;
 	}
 }

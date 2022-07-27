@@ -57,17 +57,17 @@ public class GerarRelatorioBoletoParcelamentoAction extends ExibidorProcessament
 			EntradaParcelamentoHelper helper = bo.criar(imovel, (Usuario) sessao.getAttribute("usuarioLogado"), situacaoConta);
 
 			if (helper != null) {
-				String url = getFachada().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_SEGUNDA_VIA.toString());
+				String url = getFachada().getSegurancaParametro(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_ENTRADA_PARCELAMENTO.toString());
 
 				GsanApi api = new GsanApi(url);
 				api.invoke(helper);
 				api.download(helper.getNomeArquivo(), response);
 			} else {
-				throw new ActionServletException("atencao.conta_segunda_via_sem_dados");
+				throw new ActionServletException("atencao.entrada_parcelamento_sem_dados");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ActionServletException("atencao.erro_baixar_conta_segunda_via");
+			throw new ActionServletException("atencao.erro_baixar_entrada_parcelamento");
 		}
 
 		return null;

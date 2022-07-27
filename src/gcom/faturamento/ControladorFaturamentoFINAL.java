@@ -28676,6 +28676,44 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 		return valorMultasCobradas;
 	}
+	
+	public Collection<EmitirContaHelper> emitirGuiaPagamento(Integer idParcelamento)
+			throws ControladorException, ErroRepositorioException {
+
+		Parcelamento parcelamento = repositorioFaturamento.pesquisarParcelamento(idParcelamento);
+		GuiaPagamento guiaPagamento = repositorioFaturamento.pesquisarGuiaPagamento(idParcelamento);
+		Cliente cliente = repositorioCliente.pesquisarCliente(parcelamento.getCliente().getId());
+		Imovel imovel = repositorioFaturamento.pesquisarImovel(parcelamento.getImovel().getId());
+
+		Collection<EmitirContaHelper> colecaoHelper = new ArrayList<EmitirContaHelper>();
+
+		EmitirContaHelper helper = new EmitirContaHelper();
+
+		helper.setIdImovel(imovel.getId());
+		helper.setIdGuiaPagamento(guiaPagamento.getId());
+		helper.setValorAtualizado(parcelamento.getValorDebitoAtualizado());
+		helper.setValorNegociado(parcelamento.getValorNegociado());
+		helper.setQuantidadeParcelas(parcelamento.getNumeroPrestacoes());
+		helper.setCnpj(cliente.getCnpj());
+		helper.setCpf(cliente.getCpf());
+		helper.setCodigoConvenio(315828);
+		helper.setNomeCliente(cliente.getNome());
+		;
+		helper.setEnderecoImovel(imovel.getEnderecoFormatado());
+		helper.setDataVencimentoConta(guiaPagamento.getDataVencimento());
+		helper.setDataValidadeConta(guiaPagamento.getDataVencimento());
+		helper.setIdConta(guiaPagamento.getId());
+
+		BigDecimal valorConta = guiaPagamento.getValorDebito();
+		helper.setValorEntrada(valorConta);
+		helper.setContaSemCodigoBarras("2");
+
+	//	helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta);
+
+		colecaoHelper.add(helper);
+
+		return null;
+	}
 
 	/**
 	 * [UC0482]Emitir 2ª Via de Conta
@@ -48248,7 +48286,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}else if(sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue() &&
 				idDocumentoTipo.trim().equals(DocumentoTipo.GUIA_PAGAMENTO.toString())){
 			
-			nossoNumero.append(Util.adicionarZerosEsquedaNumero(7, "2860143")); // Convenio do Banco do Brasil padrão
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, "2860143")); // Convenio do Banco do Brasil padrão
 			nossoNumero.append(Util.adicionarZerosEsquedaNumero(2, idDocumentoTipo));
 
 		} else {

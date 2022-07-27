@@ -67,6 +67,7 @@ import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.util.ControladorException;
+import gcom.util.ErroRepositorioException;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -821,5 +822,7 @@ public interface IControladorArrecadacao {
 	public void gerarDadosDocumentosNaoIdentificados(Integer idFuncionalidadeIniciada, Integer referenciaArrecadacao) throws ControladorException;
 	
 	public Collection<Pagamento> validarRecuperacaoCreditoContaParcelada(Collection<Pagamento> pagamentos) throws ControladorException;
+	
+	public String obterMensagemEntradaParcelamento(Integer idGuiaPagamento, Integer idParcelamento) throws ControladorException;
 	
 }

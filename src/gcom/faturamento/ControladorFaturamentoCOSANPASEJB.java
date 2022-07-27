@@ -50,6 +50,7 @@ import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoItem;
+import gcom.cobranca.DocumentoTipo;
 import gcom.cobranca.FiltroCobrancaDocumentoItem;
 import gcom.cobranca.bean.CalcularAcrescimoPorImpontualidadeHelper;
 import gcom.cobranca.bean.ContaValoresHelper;
@@ -3767,6 +3768,45 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 		return emitirContaHelper;
 	}
+	
+	private EmitirContaHelper preencherRepresentacaoNumericaCodBarrasGuiaPagamento(
+			EmitirContaHelper emitirContaHelper, BigDecimal valorConta) throws ControladorException {
+
+		String representacaoNumericaCodBarra = "";
+
+		Date dataValidade = obterDataValidade2ViaConta(emitirContaHelper);
+		emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
+
+		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
+			String nossoNumeroSemDV;
+			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+			
+				nossoNumeroSemDV = Util.removeZerosAEsquerda(nossoNumero.toString());
+			
+				Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
+				String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
+
+				String especificacaoCodigoBarra = CodigoBarras.obterEspecificacaoCodigoBarraFichaCompensacao(
+								ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO,
+								ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO,
+								valorConta,
+								nossoNumeroSemDV.toString(),
+								ConstantesSistema.CARTEIRA_CONTA,
+								fatorVencimento);
+
+			representacaoNumericaCodBarra = CodigoBarras.obterRepresentacaoNumericaCodigoBarraFichaCompensacao(especificacaoCodigoBarra);
+
+			String representacaoNumericaCodBarraFormatada = representacaoNumericaCodBarra;
+			emitirContaHelper.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
+
+			String representacaoNumericaCodBarraSemDigito = especificacaoCodigoBarra;
+
+			emitirContaHelper.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
+
+		}
+
+		return emitirContaHelper;
+	}
 
 	private EmitirContaHelper preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(
 			EmitirContaHelper emitirContaHelper, BigDecimal valorConta) throws ControladorException {
@@ -3777,15 +3817,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
 
 		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
-
+			String nossoNumeroSemDV;
 			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
-			if(emitirContaHelper.getIdGuiaPagamento() != null) {
-				String nossoNumeroSemDV = nossoNumero.toString();
-				
-			} else {
-				
-			String nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
-			}
+
+				nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
+			
 				Date dataVencimentoMais90 = Util.adicionarNumeroDiasDeUmaData(new Date(),90);
 				String fatorVencimento = CodigoBarras.obterFatorVencimento(dataVencimentoMais90);
 
@@ -3811,9 +3847,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		return emitirContaHelper;
 	}
 	
-	public Collection<EmitirContaHelper> emitirGuiaPagamento(Integer idParcelamento) throws ControladorException,
-			ErroRepositorioException {
-		
+	public Collection<EmitirContaHelper> emitirGuiaPagamento(Integer idParcelamento)
+			throws ControladorException, ErroRepositorioException {
+
 		Parcelamento parcelamento = repositorioFaturamento.pesquisarParcelamento(idParcelamento);
 		GuiaPagamento guiaPagamento = repositorioFaturamento.pesquisarGuiaPagamento(idParcelamento);
 		Cliente cliente = repositorioCliente.pesquisarCliente(parcelamento.getCliente().getId());
@@ -3821,30 +3857,34 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 		Collection<EmitirContaHelper> colecaoHelper = new ArrayList<EmitirContaHelper>();
 
-			EmitirContaHelper helper = new EmitirContaHelper();
-			
-			
-            helper.setIdImovel(imovel.getId());
-            helper.setIdGuiaPagamento(guiaPagamento.getId());
-            helper.setValorAtualizado(parcelamento.getValorDebitoAtualizado());
-            helper.setValorNegociado(parcelamento.getValorNegociado());
-            helper.setQuantidadeParcelas(parcelamento.getNumeroPrestacoes());
-            helper.setCnpj(cliente.getCnpj());
-            helper.setCpf(cliente.getCpf());
-            helper.setCodigoConvenio(315828);
-			helper.setNomeCliente(cliente.getNome());;
-			helper.setEnderecoImovel(imovel.getEnderecoFormatado());
-			helper.setDataVencimentoConta(guiaPagamento.getDataVencimento());
-			helper.setDataValidadeConta(guiaPagamento.getDataVencimento());
-			helper.setIdConta(guiaPagamento.getId());
+		EmitirContaHelper helper = new EmitirContaHelper();
 
-			BigDecimal valorConta = guiaPagamento.getValorDebito();
-			helper.setValorEntrada(valorConta);
-			helper.setContaSemCodigoBarras("2");
+		helper.setIdImovel(imovel.getId());
+		helper.setIdGuiaPagamento(guiaPagamento.getId());
+		helper.setValorAtualizado(parcelamento.getValorDebitoAtualizado());
+		helper.setValorNegociado(parcelamento.getValorNegociado());
+		helper.setQuantidadeParcelas(parcelamento.getNumeroPrestacoes());
+		helper.setCnpj(cliente.getCnpj());
+		helper.setCpf(cliente.getCpf());
+		helper.setCodigoConvenio(2860143);
+		helper.setNomeCliente(cliente.getNome());
+		;
+		helper.setEnderecoImovel(imovel.getEnderecoFormatado());
+		helper.setDataVencimentoConta(guiaPagamento.getDataVencimento());
+		helper.setDataValidadeConta(guiaPagamento.getDataVencimento());
+		helper.setIdConta(parcelamento.getId());
+		helper.setIdParcelamento(parcelamento.getId());
 
-			helper = preencherRepresentacaoNumericaCodBarras2ViaFichaCompensacao(helper, valorConta);
-				
-			colecaoHelper.add(helper);		
+		BigDecimal valorConta = guiaPagamento.getValorDebito();
+		helper.setValorEntrada(valorConta);
+		helper.setContaSemCodigoBarras("2");
+		String mensagemLoja = Fachada.getInstancia().obterMensagemEntradaParcelamento(guiaPagamento.getId(), parcelamento.getId());
+		helper.setMensagemParcelamento(mensagemLoja);
+		
+
+		helper = preencherRepresentacaoNumericaCodBarrasGuiaPagamento(helper, valorConta);
+
+		colecaoHelper.add(helper);
 
 		return colecaoHelper;
 	}

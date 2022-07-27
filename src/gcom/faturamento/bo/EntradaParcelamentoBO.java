@@ -57,7 +57,6 @@ public class EntradaParcelamentoBO {
 	}
 
 	public EntradaParcelamentoHelper criar(Imovel imovel, Usuario usuario, String situacaoConta) {
-		EmitirContaHelper helper = null;
 		EntradaParcelamentoHelper entradaHelper = null;
 		
 		if (guiaPagamentos != null && !guiaPagamentos.isEmpty()) {
@@ -76,7 +75,7 @@ public class EntradaParcelamentoBO {
 					String banco = null;
 					String numeroReferencia = null;
 					if((guiaPagamento.getCpf() != null && guiaPagamento.getCodigoConvenio() != null ) || (guiaPagamento.getCpf() != null && guiaPagamento.getCodigoConvenio() != null ) ) {
-						nossoNumero = this.controlador.obterNossoNumeroFichaCompensacao("1", guiaPagamento.getIdConta().toString(), guiaPagamento.getCodigoConvenio());
+						nossoNumero = this.controlador.obterNossoNumeroFichaCompensacao("7", guiaPagamento.getIdParcelamento().toString(), guiaPagamento.getCodigoConvenio());
 						nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
 					}	
 					
@@ -85,20 +84,18 @@ public class EntradaParcelamentoBO {
 						banco = "Banco do Brasil";
 						numeroCarteira = ConstantesSistema.CARTEIRA_CONTA;
 						tipoDocumento = 1;
-						numeroReferencia = String.valueOf(guiaPagamento.getAmReferencia()) + guiaPagamento.getIdConta().toString();
-					} else {
-						tipoDocumento = 2;
-					}
-					
+						numeroReferencia = String.valueOf(guiaPagamento.getAmReferencia()) + guiaPagamento.getIdParcelamento().toString();
+					} 					
 					
 					EntradaParcelamentoDTO dto = new EntradaParcelamentoDTO(
-							helper,
+							contaHelper,
 							parametros, 
 							getEmissao(usuario), 
 							nossoNumeroSemDV,
 							numeroCarteira,
 							banco,
-							numeroReferencia);
+							numeroReferencia,
+							tipoDocumento);
 					
 					listaDTO.add(dto);
 				} catch (ControladorException e) {

@@ -11,22 +11,13 @@ public class EntradaParcelamentoDTO {
 
 	private Integer matricula;
 	private String cliente;
-	private String clienteResponsavel;
 	private String cpfCnpj;
-	private String referencia;
 	private String vencimento;
-	private Integer grupo;
+	private String mensagemParcelamento;
 
 	private String enderecoImovel;
-	private String enderecoEntrega;
-
-	private String inscricao;
 	
-	private String valorTotal;
-
-	private String agenciaNome;
-	private String agenciaTelefone;
-	private String agenciaEmail;
+	private BigDecimal valorTotal;
 
 	private String empresaNome;
 	private String empresaNomeAbreviado;
@@ -58,7 +49,7 @@ public class EntradaParcelamentoDTO {
 	}
 
 	public EntradaParcelamentoDTO(EmitirContaHelper helper, SistemaParametro parametros, String usuario, 
-			String nossoNumeroSemDV, String numeroCarteira, String banco, String numeroReferencia) {
+			String nossoNumeroSemDV, String numeroCarteira, String banco, String numeroReferencia, Integer tipoDocumento) {
 		super();
 
 		this.setDadosEmpresa(parametros);
@@ -74,18 +65,21 @@ public class EntradaParcelamentoDTO {
 
 		this.enderecoImovel = helper.getEnderecoImovel();
 
-		this.valorTotal = helper.getValorContaString();
-
-		this.agenciaNome = helper.getAgenciaReguladora();
-		this.agenciaTelefone = helper.getTelefoneAgenciaReguladora();
-		this.agenciaEmail = helper.getEmailAgenciaReguladora();
+		this.valorTotal = helper.getValorEntrada();
+		
+		this.mensagemParcelamento = helper.getMensagemParcelamento();
 
 		this.usuario = usuario;
+		
+		this.tipoDocumento = tipoDocumento;
 		
 		this.nossoNumeroSemDV = nossoNumeroSemDV;
 		this.numeroCarteira = numeroCarteira;
 		this.banco = banco;
 		this.numeroReferencia = numeroReferencia;
+		
+		this.codigoBarras = helper.getRepresentacaoNumericaCodBarraSemDigito();
+		this.codigoBarrasComDigitos = helper.getRepresentacaoNumericaCodBarraFormatada();
 		
 		if(helper.getRepresentacaoNumericaCodBarraFormatada() != null) {
 			this.digitosIniciaisCodigoBarras = helper.getRepresentacaoNumericaCodBarraFormatada().substring(0,4);
@@ -114,52 +108,20 @@ public class EntradaParcelamentoDTO {
 		return cliente;
 	}
 
-	public String getClienteResponsavel() {
-		return clienteResponsavel;
-	}
-
 	public String getCpfCnpj() {
 		return cpfCnpj;
-	}
-
-	public String getReferencia() {
-		return referencia;
 	}
 
 	public String getVencimento() {
 		return vencimento;
 	}
 
-	public Integer getGrupo() {
-		return grupo;
-	}
-
 	public String getEnderecoImovel() {
 		return enderecoImovel;
 	}
 
-	public String getEnderecoEntrega() {
-		return enderecoEntrega;
-	}
-
-	public String getInscricao() {
-		return inscricao;
-	}
-
-	public String getValorTotal() {
+	public BigDecimal getValorTotal() {
 		return valorTotal;
-	}
-
-	public String getAgenciaNome() {
-		return agenciaNome;
-	}
-
-	public String getAgenciaTelefone() {
-		return agenciaTelefone;
-	}
-
-	public String getAgenciaEmail() {
-		return agenciaEmail;
 	}
 
 	public String getEmpresaNome() {
@@ -224,6 +186,10 @@ public class EntradaParcelamentoDTO {
 
 	public String getDigitosIniciaisCodigoBarras() {
 		return digitosIniciaisCodigoBarras;
+	}
+
+	public String getMensagemParcelamento() {
+		return mensagemParcelamento;
 	}
 
 }
