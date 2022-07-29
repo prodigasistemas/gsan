@@ -52233,17 +52233,17 @@ public class ControladorArrecadacao extends ControladorComum {
 	    
 	    StringBuilder mensagemParcelamento = new StringBuilder(); 
 	    mensagemParcelamento.append(descricaoServicosTarifas + "     R$ " + valor);
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    mensagemParcelamento.append(" " + obterMensagemParcelamento());
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    mensagemParcelamento.append("     Matricula: " + parcelamento.getImovel().getId() + String.format("     Periodo do debito: %s - %s", Util.formatarAnoMesParaMesAno(inicioParcelamento),Util.formatarAnoMesParaMesAno(fimParcelamento))); 
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    mensagemParcelamento.append("     Valor atualizado: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorDebitoAtualizado()) + "     Valor negociado: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorNegociado()));
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    mensagemParcelamento.append("     Valor entrada: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorEntrada()) + "     Valor parcela: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorPrestacao())); 
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    mensagemParcelamento.append("     Quantidade de parcelas: " + parcelamento.getNumeroPrestacoes()); 
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    
 	    
 	    
