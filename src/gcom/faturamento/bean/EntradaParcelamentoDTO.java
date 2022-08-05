@@ -17,7 +17,7 @@ public class EntradaParcelamentoDTO {
 
 	private String enderecoImovel;
 	
-	private BigDecimal valorTotal;
+	private String valorTotal;
 
 	private String empresaNome;
 	private String empresaNomeAbreviado;
@@ -43,6 +43,8 @@ public class EntradaParcelamentoDTO {
 	private String numeroReferencia;
 
 	private String digitosIniciaisCodigoBarras;
+	
+	private Integer idGuiaPagamento;
 
 	public EntradaParcelamentoDTO() {
 		super();
@@ -65,7 +67,7 @@ public class EntradaParcelamentoDTO {
 
 		this.enderecoImovel = helper.getEnderecoImovel();
 
-		this.valorTotal = helper.getValorEntrada();
+		this.valorTotal = helper.getValorEntrada().toString().replace(".", ",");
 		
 		this.mensagemParcelamento = helper.getMensagemParcelamento();
 
@@ -82,8 +84,11 @@ public class EntradaParcelamentoDTO {
 		this.codigoBarrasComDigitos = helper.getRepresentacaoNumericaCodBarraFormatada();
 		
 		if(helper.getRepresentacaoNumericaCodBarraFormatada() != null) {
-			this.digitosIniciaisCodigoBarras = helper.getRepresentacaoNumericaCodBarraFormatada().substring(0,4);
+			this.digitosIniciaisCodigoBarras = helper.getRepresentacaoNumericaCodBarraFormatada().substring(0,3) + "-" + helper.getRepresentacaoNumericaCodBarraFormatada().substring(3,4);
 		}
+		
+		this.idGuiaPagamento = helper.getIdGuiaPagamento();
+		
 	}
 
 	private void setDadosEmpresa(SistemaParametro parametros) {
@@ -120,7 +125,7 @@ public class EntradaParcelamentoDTO {
 		return enderecoImovel;
 	}
 
-	public BigDecimal getValorTotal() {
+	public String getValorTotal() {
 		return valorTotal;
 	}
 
@@ -190,6 +195,10 @@ public class EntradaParcelamentoDTO {
 
 	public String getMensagemParcelamento() {
 		return mensagemParcelamento;
+	}
+
+	public Integer getIdGuiaPagamento() {
+		return idGuiaPagamento;
 	}
 
 }

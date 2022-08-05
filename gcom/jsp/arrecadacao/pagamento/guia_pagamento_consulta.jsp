@@ -652,14 +652,23 @@
 							
 							<td align="right">
 								<logic:present name="guiaPagamento" scope="request">
-								
+								 <logic:empty name="boletoParcelamento">
 									<logic:equal name="geracaoBoletoBB" value="1" scope="request">
 										<input type="button" name="" value="Imprimir Guia de Pagamento" class="bottonRightCol" 
 												onclick="javascript:window.location.href='${requestScope.linkBoletoBB}'" style="width:200px"/>
 									</logic:equal>
+									<logic:notEqual name="geracaoBoletoBB" value="1"
+														scope="request">
+														<input type="button" name=""
+															value="Imprimir Guia Pagto Entrada"
+															class="bottonRightCol"
+															onclick="window.location.href='<html:rewrite page="/gerarRelatorioEmitirGuiaPagamentoActionParcelamento.do"/>'"
+															style="width: 180px" />
+									</logic:notEqual>
+									</logic:empty>
 									<logic:notEqual name="geracaoBoletoBB" value="1" scope="request">
 										<input type="button" name="" value="Imprimir Guia de Pagamento" class="bottonRightCol" onclick="gerarGuia();" style="width:200px" />
-									</logic:notEqual>
+									</logic:notEqual>								
 									
 								</logic:present>
 								

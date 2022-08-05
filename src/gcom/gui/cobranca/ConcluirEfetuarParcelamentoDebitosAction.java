@@ -484,18 +484,17 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 					String boleto = null;
 					if (sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue()) {
 						retorno = actionMapping.findForward("telaSucessoConcluirParcelamento");
-						String cpfCnpj = "";
-						try {
-							cpfCnpj = pesquisarClienteCpfCnpj(cliente.getId());
-							if (!cpfCnpj.equalsIgnoreCase("") || !cpfClienteParcelamentoDigitado.equals("")) {
+					//	String cpfCnpj = "";						
+							//cpfCnpj = pesquisarClienteCpfCnpj(cliente.getId());
+							//if (!cpfCnpj.equalsIgnoreCase("") || !cpfClienteParcelamentoDigitado.equals("")) {
 								registrarEntradaParcelamento(guiaPagamento.getId());
-								boleto = "/gerarRelatorioBoletoParcelamentoAction.do?cobrarTaxaEmissaoConta=N";
-							}/* else {
+								request.setAttribute("boletoParcelamento", guiaPagamento.getId());
+								request.setAttribute("idParcelamento", idParcelamento);
+								boleto = "/gsan/gerarRelatorioBoletoParcelamentoAction.do";
+								/*	} else {
 								boleto = obterLinkBoletoBB(idParcelamento);
 							}*/
-						} catch (ErroRepositorioException e) {
-							e.printStackTrace();
-						}
+						
 					} else {
 						boleto = "gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento;
 					}
@@ -605,7 +604,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 		GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
 		Parcelamento parcelamento = guia.getParcelamento();
 		
-		  getFachada().registrarEntradaParcelamento(parcelamento, true);
+		  getFachada().registrarEntradaParcelamento(parcelamento, true);  
 	}
 	
 	public String pesquisarClienteCpfCnpj (Integer idCliente) throws ErroRepositorioException {

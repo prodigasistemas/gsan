@@ -46,6 +46,10 @@ public class GerarRelatorioBoletoParcelamentoAction extends ExibidorProcessament
 		if (sessao.getAttribute("idParcelamento") != null && !sessao.getAttribute("idParcelamento").equals("")) {
 			idParcelamento = new Integer("" + sessao.getAttribute("idParcelamento"));
 		}  
+		
+		if (sessao.getAttribute("idGuiaPagamento") != null && !sessao.getAttribute("idGuiaPagamento").equals("")) {
+			idGuiaPagamento = new Integer("" + sessao.getAttribute("idGuiaPagamento"));
+		}
 
 		Imovel imovel = null;
 		String situacaoConta = "";

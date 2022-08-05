@@ -107,27 +107,37 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		}
 
 		boolean geraBoletoBB = verificarGuiaEntrada(idParcelamento);
-		
+					
 		verificarPagamentoCartaoDeCredito(idParcelamento);
 		
 		if (parcelamento != null) {
 			verificarPermissaoParaCancelar(parcelamento);
 			pesquisarMotivosCancelamento();
 			request.setAttribute("isParcelamentoCancelado", verificarSituacao(parcelamento, ParcelamentoSituacao.CANCELADO));
-
+			            
 			if (geraBoletoBB && !entradaPaga) {
-				String cpfCnpj = consultarCpfCnpjCliente(Integer.parseInt(codigoImovel));
-				if (!cpfCnpj.equalsIgnoreCase("")) {
+			/*	String cpfCnpj = consultarCpfCnpjCliente(Integer.parseInt(codigoImovel));
+				if (!cpfCnpj.equalsIgnoreCase("")) {*/
+				    registrarEntradaParcelamento(parcelamento);
 					request.setAttribute("boletoParcelamento", parcelamento);
-				}/* else {
+			  /*} else {
 					request.setAttribute("linkBoletoBB", obterLinkBoletoBB(parcelamento));
 				}*/
 			}
+           
 		}
 		
 		request.setAttribute("geracaoBoletoBB", parametros.getIndicadorGeracaoBoletoBB());
 
 		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Collection<GuiaPagamento> pesquisarGuiaPagamento(Integer idParcelamento) {
+		Filtro filtro = new FiltroParcelamento();
+		filtro.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idParcelamento));
+
+		return getFachada().pesquisar(filtro, GuiaPagamento.class.getName());
 	}
 
 	private void verificarPermissaoParaDesfazer(Parcelamento parcelamento, boolean entradaPaga) {
@@ -372,4 +382,5 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 	private boolean verificarSituacao(Parcelamento parcelamento, Integer situacao) {
 		return parcelamento.getParcelamentoSituacao().getId().intValue() == situacao.intValue();
 	}
+	
 }

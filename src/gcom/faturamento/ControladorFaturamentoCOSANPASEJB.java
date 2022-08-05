@@ -3880,6 +3880,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		helper.setContaSemCodigoBarras("2");
 		String mensagemLoja = Fachada.getInstancia().obterMensagemEntradaParcelamento(guiaPagamento.getId(), parcelamento.getId());
 		helper.setMensagemParcelamento(mensagemLoja);
+		helper.setAmReferencia(parcelamento.getAnoMesReferenciaFaturamento());
 		
 
 		helper = preencherRepresentacaoNumericaCodBarrasGuiaPagamento(helper, valorConta);

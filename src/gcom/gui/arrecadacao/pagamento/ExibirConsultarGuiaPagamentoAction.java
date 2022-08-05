@@ -50,10 +50,11 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 			GuiaPagamento guia = pesquisarGuia(request, sessao, guiaId);
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
 			request.setAttribute("geracaoBoletoBB", sistemaParametro.getIndicadorGeracaoBoletoBB());
-			String cpfCnpj = consultarCpfCnpjCliente(guia.getImovel().getId());
-			if (!cpfCnpj.equalsIgnoreCase("")) {
-				request.setAttribute("boletoParcelamento", guia);
-			}/*else {
+		/*	String cpfCnpj = consultarCpfCnpjCliente(guia.getImovel().getId());
+			if (!cpfCnpj.equalsIgnoreCase("")) { */
+				registrarEntradaParcelamento(guia.getId());
+				request.setAttribute("boletoParcelamento", guiaId);
+		  /*}else {
 				request.setAttribute("linkBoletoBB", obterLinkBoletoBB(guia.getId()));
 			}*/
 		}
