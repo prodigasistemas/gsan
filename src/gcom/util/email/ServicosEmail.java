@@ -1,13 +1,5 @@
 package gcom.util.email;
 
-import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.cadastro.sistemaparametro.bean.DadosEnvioEmailHelper;
-import gcom.fachada.Fachada;
-import gcom.util.ConstantesSistema;
-import gcom.util.ControladorException;
-import gcom.util.IoUtil;
-import gcom.util.ZipUtil;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +24,14 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+
+import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.cadastro.sistemaparametro.bean.DadosEnvioEmailHelper;
+import gcom.fachada.Fachada;
+import gcom.util.ConstantesSistema;
+import gcom.util.ControladorException;
+import gcom.util.IoUtil;
+import gcom.util.ZipUtil;
 
 /**
  * Essa classe tem o papel de fornecer ao sistema serviços de e-mail

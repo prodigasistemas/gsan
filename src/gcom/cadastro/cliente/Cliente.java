@@ -129,6 +129,10 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
     private Short indicadorBolsaFamilia;
     
 	public static final Short GERA_ARQUIVO_TEXTO_SIM = 1;
+	public static final Integer INDICADOR_BOLSA_FAMILIA_SEASTER = 1;
+	public static final Integer INDICADOR_BOLSA_FAMILIA_SEM_CADASTRO = 2;
+	public static final Integer INDICADOR_BOLSA_FAMILIA_CADASTRO_CAIXA = 3;
+	
 
 	public Cliente(String nome, String nomeAbreviado, String cpf, String rg, Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
 			Short indicadorUso, Date ultimaAlteracao, gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg, gcom.cadastro.cliente.Cliente cliente,

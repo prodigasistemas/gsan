@@ -1,6 +1,7 @@
 package gcom.cadastro.cliente;
 
 import java.util.Collection;
+import java.util.List;
 
 import gcom.cadastro.cliente.bean.ClienteEmitirBoletimCadastroHelper;
 import gcom.cadastro.cliente.bean.PesquisarClienteResponsavelSuperiorHelper;
@@ -9,6 +10,7 @@ import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.localidade.Localidade;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
+import gcom.util.ErroRepositorioException;
 
 public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 
@@ -195,5 +197,11 @@ public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 	public String obterEnderecoCorrespondencia(Integer idCliente) throws ControladorException;
 	
 	public String obterNomeClienteConta(Integer idImovel) throws ControladorException;
+	
+	public List<Integer> pesquisarClientesPorCadastroUnico() throws ControladorException;
+	
+	public List<Integer> pesquisarClientesPorCadastroCaixa() throws ControladorException;
+	
+	public void atualizarNISCliente(Integer idCliente, Integer clie_icbolsafamilia) throws ControladorException;
 	
 }
