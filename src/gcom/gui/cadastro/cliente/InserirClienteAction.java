@@ -57,7 +57,7 @@ import gcom.util.filtro.ParametroSimples;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class InserirClienteAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
 		HttpSession sessao = request.getSession(false);
 
@@ -346,7 +346,9 @@ public class InserirClienteAction extends GcomAction {
 			if (numeroNIS != null && !numeroNIS.trim().equals("")) {
 				cliente.setNumeroNIS(numeroNIS.trim());
 				validarCadastroUnico(cliente);
-			} 
+			} else {
+				cliente.setIndicadorBolsaFamilia(CadastroUnico.NAO_TEM_NIS);
+			}
 
 			// Insere o indicador para Cobranca Acrescimos
 			cliente.setIndicadorAcrescimos(new Short("1"));
@@ -610,15 +612,18 @@ public class InserirClienteAction extends GcomAction {
 		return retorno;
 	}
 	
-	private void validarCadastroUnico(Cliente cliente) {
+	private void validarCadastroUnico(Cliente cliente) throws Exception {
 		Filtro filtro = new FiltroCadastroUnico();
 		filtro.adicionarParametro(new ParametroSimples(FiltroCadastroUnico.NUMERO_NIS, cliente.getNumeroNIS()));
 		
 		CadastroUnico cadastroUnico = (CadastroUnico) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtro, CadastroUnico.class.getName()));
+     //   Boolean cadastroCaixa = this.getFachada().nisCadastroCaixa(cliente.getNumeroNIS());
 		
 		if (cadastroUnico != null) {
 			cliente.setIndicadorBolsaFamilia(CadastroUnico.TEM_NIS);
-		}else {
+	//	} else if(cadastroCaixa == true) {
+	//		cliente.setIndicadorBolsaFamilia(CadastroUnico.NIS_CAIXA);
+	    } else if(cadastroUnico == null) { //&& cadastroCaixa == false) {
 			cliente.setIndicadorBolsaFamilia(CadastroUnico.NIS_SEM_REGISTRO_OFICIAL);
 		}
 	}

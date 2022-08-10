@@ -40615,9 +40615,18 @@ public class Fachada {
 		}
 	}
 	
+	public Boolean nisCadastroCaixa (String numeroNis) throws Exception {
+		try {
+			return this.getControladorCadastro().nisCadastroCaixa(numeroNis);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+			
 	public List<Integer> pesquisarClientesPorCadastroUnico() {
 		try {
 			return getControladorCliente().pesquisarClientesPorCadastroUnico();
+
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}

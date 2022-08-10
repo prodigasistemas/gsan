@@ -215,11 +215,11 @@ public class AtualizarClienteWizardAction extends WizardAction {
      * @param httpServletResponse
      *            Descrição do parâmetro
      * @return Descrição do retorno
-     * @throws ErroRepositorioException 
+     * @throws Exception 
      */
     public ActionForward atualizarClienteAction(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) throws ErroRepositorioException {
+            HttpServletResponse httpServletResponse) throws Exception {
 
         return new AtualizarClienteAction().execute(actionMapping, actionForm,
                 httpServletRequest, httpServletResponse);
