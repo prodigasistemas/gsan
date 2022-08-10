@@ -40614,4 +40614,61 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
+	
+	public Boolean nisCadastroCaixa (String numeroNis) throws Exception {
+		try {
+			return this.getControladorCadastro().nisCadastroCaixa(numeroNis);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+			
+	public List<Integer> pesquisarClientesPorCadastroUnico() {
+		try {
+			return getControladorCliente().pesquisarClientesPorCadastroUnico();
+
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public List<Integer> pesquisarClientesPorCadastroCaixa()  {
+		try {
+			return getControladorCliente().pesquisarClientesPorCadastroCaixa();
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public void atualizarNISCliente(Integer idCliente, Integer clie_icbolsafamilia) {
+		try {
+			getControladorCliente().atualizarNISCliente(idCliente, clie_icbolsafamilia);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public List<Integer> pesquisarImovelBolsaAguaPorRota(Integer idRota) throws ControladorException{
+		try {
+			return getControladorImovel().pesquisarImovelBolsaAguaPorRota(idRota);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public List<Integer> pesquisarImovelElegivelBolsaAguaPorRota(Integer idRota) throws ControladorException{
+		try {
+			return getControladorImovel().pesquisarImovelElegivelBolsaAguaPorRota(idRota);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public void atualizarPerfilImovel(Integer idImovel, Integer idPerfil) throws ControladorException{
+		try {
+			getControladorImovel().atualizarPerfilImovel(idImovel, idPerfil);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }

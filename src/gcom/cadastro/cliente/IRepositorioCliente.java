@@ -5,6 +5,7 @@ import gcom.util.ErroRepositorioException;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 public interface IRepositorioCliente {
 
@@ -139,5 +140,11 @@ public interface IRepositorioCliente {
 	public String obterNomeClienteConta(Integer idImovel) throws ErroRepositorioException;
 
 	public Cliente obterUsuarioImovelPorData(Integer idImovel, Integer idClienteRelacaoTipo, Date data) throws ErroRepositorioException;
+	
+	public List<Integer> pesquisarClientesPorCadastroUnico() throws ErroRepositorioException;
+	
+	public List<Integer> pesquisarClientesPorCadastroCaixa() throws ErroRepositorioException;
+	
+	public void atualizarNISCliente(Integer idCliente, Integer clie_icbolsafamilia) throws ErroRepositorioException;
 	
 }

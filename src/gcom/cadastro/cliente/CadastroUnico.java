@@ -7,6 +7,7 @@ public class CadastroUnico implements Serializable {
 	
 	public static Short TEM_NIS = new Short("1");
 	public static Short NAO_TEM_NIS = new Short("2");
+	public static Short NIS_CAIXA = new Short("3");
 	public static Short NIS_SEM_REGISTRO_OFICIAL = new Short("4");
 
 	private static final long serialVersionUID = 1L;

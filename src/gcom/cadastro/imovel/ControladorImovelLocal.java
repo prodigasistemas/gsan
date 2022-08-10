@@ -780,4 +780,10 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public Collection pesquisarImoveisBolsaAguaPorClienteId(Integer idCliente) throws ControladorException;
 
 	public boolean isImovelBolsaAgua(Integer idImovel) throws ControladorException;
+	
+    public List<Integer> pesquisarImovelBolsaAguaPorRota(Integer idRota) throws ControladorException;
+    
+    public List<Integer> pesquisarImovelElegivelBolsaAguaPorRota(Integer idRota) throws ControladorException;
+	
+	public void atualizarPerfilImovel(Integer idImovel, Integer idPerfil) throws ControladorException;
 }

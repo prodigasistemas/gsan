@@ -9040,4 +9040,34 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		
 		return retorno;
     }
+    
+    public Boolean nisCadastroCaixa (String numeroNis) throws ErroRepositorioException {
+    	Boolean retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		String resultado;
+    	
+		try {
+			consulta = " SELECT nis "// 2
+					+ " FROM  public.cadastro_caixa"
+					+ " where nis = (:numeroNis)";
+
+			resultado = (String) session.createQuery(consulta)
+					 .setString("numeroNis", numeroNis).uniqueResult();
+			
+			if(resultado != null && !resultado.equals("")) {
+				retorno = true;
+			}else {
+				retorno = false;
+			}
+				
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;	
+    }
+    
 }

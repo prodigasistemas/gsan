@@ -1308,4 +1308,6 @@ public interface IControladorFaturamento {
 	
 	public boolean fichaCompensacaoExistente (Integer idConta) throws ControladorException;
 	
+	public void validarDadosBolsaAgua(Integer idRota, int idFuncionalidade) throws ControladorException;
+	
 }

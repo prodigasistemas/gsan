@@ -324,6 +324,7 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 			session.update(objeto);
 			session.flush();
 		} catch (Exception e){
+			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro ao atualizar objeto");
 		} finally {
 			HibernateUtil.closeSession(session);

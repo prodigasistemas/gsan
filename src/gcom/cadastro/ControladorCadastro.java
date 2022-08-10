@@ -14597,4 +14597,12 @@ public class ControladorCadastro extends ControladorComum {
 		}
 	}
 	
+	 public Boolean nisCadastroCaixa (String numeroNis) throws ControladorException {
+		 try {
+			 return repositorioCadastro.nisCadastroCaixa(numeroNis);
+		 } catch(ErroRepositorioException e) {
+			 throw new ControladorException("erro.sistema", e);
+		 }
+	 }
+	
 }

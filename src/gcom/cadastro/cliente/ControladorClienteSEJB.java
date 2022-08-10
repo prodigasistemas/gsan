@@ -2552,9 +2552,33 @@ public class ControladorClienteSEJB extends ControladorComum {
 		}
 	}
 	
-	public Cliente obterUsuarioImovelPorData(Integer idImovel, Integer idClienteTipo, Date data) throws ControladorException{
+	public Cliente obterUsuarioImovelPorData(Integer idImovel, Integer idClienteTipo, Date data) throws ControladorException {
 		try {
 			return repositorioCliente.obterUsuarioImovelPorData(idImovel, idClienteTipo, data);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public List<Integer> pesquisarClientesPorCadastroUnico() throws ControladorException {
+		try {
+			return repositorioCliente.pesquisarClientesPorCadastroUnico();
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public List<Integer> pesquisarClientesPorCadastroCaixa() throws ControladorException {
+		try {
+			return repositorioCliente.pesquisarClientesPorCadastroCaixa();
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public void atualizarNISCliente(Integer idCliente, Integer clie_icbolsafamilia) throws ControladorException {
+		try {
+			repositorioCliente.atualizarNISCliente(idCliente, clie_icbolsafamilia);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}

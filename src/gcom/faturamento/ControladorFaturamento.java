@@ -228,6 +228,7 @@ import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.tarefa.TarefaRelatorio;
+import gcom.util.CollectionUtil;
 import gcom.util.ConstantesAplicacao;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
@@ -237,7 +238,6 @@ import gcom.util.MergeProperties;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
-import gcom.util.email.IModeloEmailHtml;
 import gcom.util.email.ModeloEmailVencimento;
 import gcom.util.email.ModeloFaturaPorEmail;
 import gcom.util.email.ServicosEmail;
@@ -16038,7 +16038,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	
 		try {
 			Collection<Integer> idsContas = new ArrayList<Integer>();
-			idsContas.add(conta.getId());
+
 			ContaSegundaViaBO bo = new ContaSegundaViaBO(null, idsContas, false, new Short("1"));
 			ContaSegundaViaHelper helper = bo.criar(imovel, null, conta.getDebitoCreditoSituacaoAtual().getDescricaoDebitoCreditoSituacao());
 
@@ -16601,6 +16601,66 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} 		
 		return true;
 		
+	}
+	
+	public void validarDadosBolsaAgua(Integer idRota, int idFuncionalidadeIniciada) throws ControladorException{
+		int idUnidadeIniciada = 0;
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
+				idFuncionalidadeIniciada,
+				UnidadeProcessamento.ROTA,
+				idRota);
+		
+		List<Integer> clientesCadUnico = Fachada.getInstancia().pesquisarClientesPorCadastroUnico();
+		List<Integer> clienteCadCaixa = Fachada.getInstancia().pesquisarClientesPorCadastroCaixa();
+		List<Integer> idsImoveisBolsaAgua = Fachada.getInstancia().pesquisarImovelBolsaAguaPorRota(idRota);
+		List<Integer> idsImoveisNormal = Fachada.getInstancia().pesquisarImovelElegivelBolsaAguaPorRota(idRota);
+		try {
+			if (!CollectionUtil.ehVazia(clientesCadUnico)) {
+				atualizarDadosClienteImoveisBolsaAgua(clientesCadUnico, Cliente.INDICADOR_BOLSA_FAMILIA_SEASTER, true);
+			}
+			
+			if (!CollectionUtil.ehVazia(clienteCadCaixa)) {
+				atualizarDadosClienteImoveisBolsaAgua(clienteCadCaixa, Cliente.INDICADOR_BOLSA_FAMILIA_CADASTRO_CAIXA, true);
+			}
+			
+			if (!CollectionUtil.ehVazia(idsImoveisBolsaAgua)) {
+				atualizarDadosClienteImoveisBolsaAgua(idsImoveisBolsaAgua, ImovelPerfil.NORMAL, false);
+			}
+			
+			if (!CollectionUtil.ehVazia(idsImoveisNormal)) {
+				atualizarDadosClienteImoveisBolsaAgua(idsImoveisNormal, ImovelPerfil.BOLSA_AGUA, false);
+			}
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			
+		} catch (ErroRepositorioException e) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+			throw new ActionServletException("erro.atualizar.dados.bolsa.agua");
+		}
+		
+	}
+	
+	private void atualizarDadosClienteImoveisBolsaAgua(List<Integer> ids, Integer indicadorBolsa, boolean indicadorAtualizador) throws ErroRepositorioException {
+		
+		Integer idErro = 0;
+		String entidadeErro = "";
+		try {			
+			for (Integer id : ids) {
+				
+				if (indicadorAtualizador) {
+					entidadeErro = "CLIENTE DE";
+					idErro = id;
+					Fachada.getInstancia().atualizarNISCliente(id, indicadorBolsa);
+				} else {
+					entidadeErro = "IMOVEL DE ";
+					idErro = id;
+					Fachada.getInstancia().atualizarPerfilImovel(id, indicadorBolsa);
+				}
+			}		
+		} catch (Exception e) {
+			System.out.println("=== ERRO AO ATUALIZAR" + entidadeErro + " ID: " + idErro);
+			e.printStackTrace();
+		}
 	}
 
 }
