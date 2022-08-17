@@ -20,6 +20,7 @@
 		<property name="dataInclusao" 		type="java.sql.Timestamp" 	column="cadu_tminclusao" 			length="8"  />
 		<property name="dataExclusao" 		type="java.sql.Timestamp" 	column="cadu_tmexclusao" 			length="8"  />
 		<property name="ultimaAlteracao" 	type="java.sql.Timestamp" 	column="cadu_tmultimaalteracao" 	length="8"  />
+		<property name="idSeaster"          type="java.lang.Short"      column="cadu_icseaster"             length="2"  />
 		
 	</class>
 </hibernate-mapping>
