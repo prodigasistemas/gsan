@@ -46,9 +46,12 @@ import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
+import gcom.cadastro.imovel.FiltroImovelSubCategoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelPerfil;
+import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
+import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.localidade.RepositorioSetorComercialHBM;
 import gcom.cobranca.RepositorioCobrancaHBM;
 import gcom.faturamento.RepositorioFaturamentoHBM;
@@ -762,14 +765,21 @@ public class AtualizarClienteAction extends GcomAction {
 			}
 			if (imovelElegivel == true) {
 				for (ClienteImovel clienteImovel : clienteImovelOrdenado) {
-					if (clienteImovel.getImovel().getImovelPerfil().getId().equals(ImovelPerfil.NORMAL)
-							&& clienteImovel.getImovel().getCategoriaPrincipalId().equals(Categoria.RESIDENCIAL_INT)
-							&& clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
-						Imovel imovel = clienteImovel.getImovel();
-						imovel.setImovelPerfil(new ImovelPerfil(ImovelPerfil.BOLSA_AGUA));
-						imovel.setUltimaAlteracao(new Date());
-						getFachada().atualizar(imovel);
-						return true;
+					Collection<ImovelSubcategoria> subCategorias = pesquisarCategoria(
+							clienteImovel.getImovel().getId());
+					for (ImovelSubcategoria subCategoria : subCategorias) {
+						if (clienteImovel.getImovel().getImovelPerfil().getId().equals(ImovelPerfil.NORMAL)
+								&& (subCategoria.getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R1) 
+								||	subCategoria.getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R2)
+								||  subCategoria.getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R3)
+								||  subCategoria.getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R4))
+								&& clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
+							Imovel imovel = clienteImovel.getImovel();
+							imovel.setImovelPerfil(new ImovelPerfil(ImovelPerfil.BOLSA_AGUA));
+							imovel.setUltimaAlteracao(new Date());
+							getFachada().atualizar(imovel);
+							return true;
+						}
 					}
 				}
 			}
@@ -854,6 +864,13 @@ public class AtualizarClienteAction extends GcomAction {
 
 		return getFachada().pesquisar(filtro, ClienteImovel.class.getName());
 	}
+	
+    private Collection <ImovelSubcategoria> pesquisarCategoria (Integer idImovel){
+         Filtro filtro = new FiltroImovelSubCategoria();
+         filtro.adicionarParametro(new ParametroSimples(FiltroImovelSubCategoria.IMOVEL_ID, idImovel));
+    	   	
+    	return getFachada().pesquisar(filtro, ImovelSubcategoria.class.getName());
+    }
 
 	private void inserirClienteCadastradoNaReceita(
 			Usuario usuario, 
