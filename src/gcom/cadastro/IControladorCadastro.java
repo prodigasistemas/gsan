@@ -531,5 +531,4 @@ public interface IControladorCadastro {
 	
 	public StringBuilder gerarArquivoTxt(Collection colecaoImovelFiltrado, Integer idArquivoTexto, Integer idEmpresa, Rota rota) throws ControladorException;
 	
-	public Boolean nisCadastroCaixa (String numeroNis) throws ControladorException;
 }

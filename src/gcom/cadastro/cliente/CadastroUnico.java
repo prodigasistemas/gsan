@@ -5,6 +5,9 @@ import java.util.Date;
 
 public class CadastroUnico implements Serializable {
 	
+	public static Short SIASTER = new Short("1");
+	public static Short CAIXA = new Short("2");
+	
 	public static Short TEM_NIS = new Short("1");
 	public static Short NAO_TEM_NIS = new Short("2");
 	public static Short NIS_CAIXA = new Short("3");
@@ -35,6 +38,8 @@ public class CadastroUnico implements Serializable {
 	private Date dataExclusao;
 
 	private Date ultimaAlteracao;
+	
+	private Short idSeaster;
 
 	public CadastroUnico() {
 		super();
@@ -134,5 +139,13 @@ public class CadastroUnico implements Serializable {
 
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
+	}
+
+	public Short getIdSeaster() {
+		return idSeaster;
+	}
+
+	public void setIdSeaster(Short idSeaster) {
+		this.idSeaster = idSeaster;
 	}
 }

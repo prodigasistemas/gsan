@@ -737,13 +737,14 @@ public class AtualizarClienteAction extends GcomAction {
 
 		CadastroUnico cadastroUnico = (CadastroUnico) Util
 				.retonarObjetoDeColecao(getFachada().pesquisar(filtro, CadastroUnico.class.getName()));
-//		Boolean cadastroCaixa = this.getFachada().nisCadastroCaixa(cliente.getNumeroNIS());
 
 		if (cadastroUnico != null) {
-			cliente.setIndicadorBolsaFamilia(CadastroUnico.TEM_NIS);
-	// } else if(cadastroCaixa == true) {
-		 // cliente.setIndicadorBolsaFamilia(CadastroUnico.NIS_CAIXA);
-		} else if (cadastroUnico == null) { // && cadastroCaixa == false) {
+			if (cadastroUnico.getIdSeaster().equals(CadastroUnico.SIASTER)) {
+				cliente.setIndicadorBolsaFamilia(CadastroUnico.TEM_NIS);
+			} else if (cadastroUnico.getIdSeaster().equals(CadastroUnico.CAIXA)) {
+				cliente.setIndicadorBolsaFamilia(CadastroUnico.NIS_CAIXA);
+			}
+		} else if (cadastroUnico == null) {
 			cliente.setIndicadorBolsaFamilia(CadastroUnico.NIS_SEM_REGISTRO_OFICIAL);
 		}
 	}
@@ -754,8 +755,7 @@ public class AtualizarClienteAction extends GcomAction {
 		Boolean imovelElegivel = true;
 		if (cliente.getIndicadorBolsaFamilia().equals(CadastroUnico.TEM_NIS) 
 				|| cliente.getIndicadorBolsaFamilia().equals(CadastroUnico.NIS_SEM_REGISTRO_OFICIAL)
-			//	|| cliente.getIndicadorBolsaFamilia().equals(CadastroUnico.NIS_CAIXA)
-				) {
+				|| cliente.getIndicadorBolsaFamilia().equals(CadastroUnico.NIS_CAIXA)) {
 			for (ClienteImovel clienteImovel : clienteImovelOrdenado) {
 				Integer idPerfil = clienteImovel.getImovel().getImovelPerfil().getId();
 				if (idPerfil.equals(ImovelPerfil.BOLSA_AGUA)) {
@@ -949,7 +949,7 @@ public class AtualizarClienteAction extends GcomAction {
 			String mensagemSucesso = "Cliente de código " + clienteAtualizacao.getId() + " atualizado com sucesso.";
 			
 			if (imovelPerfilAtualizado) {
-				if(indicadorbolsaFamilia.equals(ConstantesSistema.SIM)) {
+				if(!indicadorbolsaFamilia.equals(CadastroUnico.NAO_TEM_NIS)) {
 					mensagemSucesso += " Perfil do Imóvel relacionado ao cliente atualizado para BOLSA ÁGUA.";
 				}else {
 					mensagemSucesso += " Perfil do Imóvel relacionado ao cliente atualizado para NORMAL.";
