@@ -783,7 +783,7 @@ public class AtualizarClienteAction extends GcomAction {
 					}
 				}
 			}
-		} else {
+		} /* else {
 			for (ClienteImovel clienteImovel : clienteImovelOrdenado) {
 				Integer idPerfil = clienteImovel.getImovel().getImovelPerfil().getId();
 				if (idPerfil.equals(ImovelPerfil.BOLSA_AGUA)) {
@@ -803,7 +803,7 @@ public class AtualizarClienteAction extends GcomAction {
 					}
 				}
 			}
-		}
+		} */
 		return false;
 	}
 	
@@ -951,9 +951,9 @@ public class AtualizarClienteAction extends GcomAction {
 			if (imovelPerfilAtualizado) {
 				if(!indicadorbolsaFamilia.equals(CadastroUnico.NAO_TEM_NIS)) {
 					mensagemSucesso += " Perfil do Imóvel relacionado ao cliente atualizado para BOLSA ÁGUA.";
-				}else {
+				} /* else {
 					mensagemSucesso += " Perfil do Imóvel relacionado ao cliente atualizado para NORMAL.";
-				}					
+				}		*/			
 			} else {
 				mensagemSucesso += " Não foi possível atualizar Perfil de Imóvel relacionado ao cliente. ";
 			}
