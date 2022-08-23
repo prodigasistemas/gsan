@@ -16038,7 +16038,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	
 		try {
 			Collection<Integer> idsContas = new ArrayList<Integer>();
-
+			idsContas.add(conta.getId());
+			
 			ContaSegundaViaBO bo = new ContaSegundaViaBO(null, idsContas, false, new Short("1"));
 			ContaSegundaViaHelper helper = bo.criar(imovel, null, conta.getDebitoCreditoSituacaoAtual().getDescricaoDebitoCreditoSituacao());
 
@@ -16067,6 +16068,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
 			//String emailReceptor = "pamelagatinho@gmail.com"; //EMAIL
+			
+			
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 			
 			File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
