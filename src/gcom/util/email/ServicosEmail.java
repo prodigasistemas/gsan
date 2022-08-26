@@ -432,12 +432,11 @@ public final class ServicosEmail implements Serializable {
 				multipart.addBodyPart(messageBodyPart);
 				messageBodyPart = new MimeBodyPart();
 				messageBodyPart.setContent(TEXTO_EMAIL, "text/html");
-				multipart.addBodyPart(messageBodyPart);
-				msg.setContent(multipart);
-				msg.setSentDate(new Date());
+				//multipart.addBodyPart(messageBodyPart);
+				//msg.setContent(multipart);
+				//msg.setSentDate(new Date());
 				
 				DataSource source = new FileDataSource(arquivo);
-
 				messageBodyPart.setDataHandler(new DataHandler(source));
 				messageBodyPart.setFileName(source.getName());
 				multipart.addBodyPart(messageBodyPart);
@@ -451,5 +450,5 @@ public final class ServicosEmail implements Serializable {
 			throw new ErroEmailException("Erro ao Enviar Mensagem");
 		}
 	}
-	
 }
+

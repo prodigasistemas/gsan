@@ -8165,7 +8165,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		try {
 
-			Collection contas = repositorioFaturamento.pesquisarInformacoesContaParaEnvioEmailPorRota(idRota);
+			Collection contas = repositorioFaturamento.pesquisarInformacoesContaParaEnvioEmailPorRota(idRota, referencia);
 
 			if (contas != null && !contas.isEmpty()) {
 	
@@ -16038,7 +16038,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	
 		try {
 			Collection<Integer> idsContas = new ArrayList<Integer>();
-
+			idsContas.add(conta.getId());
+			
 			ContaSegundaViaBO bo = new ContaSegundaViaBO(null, idsContas, false, new Short("1"));
 			ContaSegundaViaHelper helper = bo.criar(imovel, null, conta.getDebitoCreditoSituacaoAtual().getDescricaoDebitoCreditoSituacao());
 
@@ -16065,16 +16066,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Conta conta = new Conta((Integer) contasEmail[0]);
 			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
 
-			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
-			//String emailReceptor = "pamelagatinho@gmail.com"; //EMAIL
+			//String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
+			String emailReceptor = (String) contasEmail[2]; //EMAIL
+			
+						
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 			
 			File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
 		
-			EnvioEmail envioEmail = this.getControladorCadastro()
-					.pesquisarEnvioEmail(idEnvioEmail);
+			EnvioEmail envioEmail = this.getControladorCadastro().pesquisarEnvioEmail(idEnvioEmail);
 		
-			System.out.println("ENVIANDO EMAIL PARA " + emailReceptor + " DA CONTA " + conta.getId());
+			System.out.println("ENVIANDO EMAIL PARA " + emailReceptor + " DA CONTA " + conta.getId() + "DO IMOVEL " + imovel.getId());
 			ServicosEmail.enviarMensagemHTMLComAnexo(emailReceptor, 
 						 envioEmail.getEmailRemetente(), 
 						 "COSANPA", 
