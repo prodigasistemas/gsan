@@ -3068,6 +3068,8 @@ public interface IRepositorioFaturamento {
 	public boolean possuiComunicadoNaoEmitido(Integer idImovel, Integer referencia, Integer tipoComunicado) throws ErroRepositorioException;
 	
 	public Collection pesquisarContasVencimentoParaEnvioEmail(Integer idRota, Date dataVencimento) throws ErroRepositorioException;
+
+	public Collection<DebitoACobrar> obterDebitoACobrarParcelamento(Integer idParcelamento) throws ErroRepositorioException;
 	
 	public Conta contaFichaCompensacao(Integer idConta) throws ErroRepositorioException;
 	
@@ -3086,4 +3088,5 @@ public interface IRepositorioFaturamento {
 			indicadorPermissaoRecebimentoParcial,String numeroTituloCliente,Integer imovel,Integer cliente, Integer conta) throws ErroRepositorioException;
 	
 	public Collection pesquisarInformacoesContaParaEnvioEmailPorRota(Integer idRota, Integer referencia) throws ErroRepositorioException;
+
 }

@@ -55480,6 +55480,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
+	public Collection<DebitoACobrar> obterDebitoACobrarParcelamento(Integer idParcelamento)
+			throws ErroRepositorioException {
+
+		Collection<DebitoACobrar> retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+		try {
+			consulta = "SELECT debitoACobrar " + "FROM DebitoACobrar debitoACobrar "
+					+ "WHERE debitoACobrar.parcelamento.id = :idParcelamento ";
+
+			retorno =        session.createQuery(consulta)
+							.setInteger("idParcelamento", idParcelamento).list();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
 	/**
 	 * [UC1216] Suspender Leitura para Imï¿½vel com Hidrï¿½metro Retirado
 	 * 
