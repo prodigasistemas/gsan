@@ -32498,4 +32498,27 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 		return retorno;
 	}
+	
+	public ArrecadadorContratoConvenio pesquisarParametrosConvenioPorId(Integer idConvenio) throws ErroRepositorioException {
+		ArrecadadorContratoConvenio retorno = null;
+		
+		Session session = HibernateUtil.getSession();
+		
+		String consulta;
+		
+		try {
+			consulta = "SELECT arcc FROM ArrecadadorContratoConvenio arcc"
+					+ "WHERE arcc.id = :idConvenio";
+			
+			retorno = (ArrecadadorContratoConvenio) session.createQuery(consulta)
+					.setInteger("idConvenio", idConvenio)
+					.setMaxResults(1).uniqueResult();
+		} catch (Exception e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
 }

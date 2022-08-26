@@ -52410,4 +52410,12 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		return codigo;
 	}
+	
+	public ArrecadadorContratoConvenio pesquisarParametrosConvenioPorId(Integer idConvenio) throws ControladorException {
+		try {
+			return repositorioArrecadacao.pesquisarParametrosConvenioPorId(idConvenio);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}		
+	}
 }

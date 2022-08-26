@@ -39,6 +39,7 @@ import org.jboss.logging.Logger;
 
 import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
+import gcom.arrecadacao.ArrecadadorContratoConvenio;
 import gcom.arrecadacao.BoletoInfo;
 import gcom.arrecadacao.FichaCompensacao;
 import gcom.arrecadacao.FiltroBancoInfo;
@@ -15492,25 +15493,20 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			String dataVencimento = null;
 			Double valorOriginal = null;
 			Integer idCliente = null;
-			Integer idConv = null;
 			Integer idLocalidade = null;
-			String codigoAceite = "A"; // Dom�nio: A - Aceito; N - N�o aceito
-			Short codigoTipoTitulo = 2; // C�digo para identificar o tipo de boleto de cobran�a. Verifique os
-										// dom�nios
-			// poss�veis no swagger.
-			String indicadorPermissaoRecebimentoParcial = "N"; // C�digo para identifica��o da autoriza��o de
-																// pagamento
-			// parcial do boleto. "S" ou "N"
-			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
-			Integer numeroVariacaoCarteira = null; // Em produ��o, informar o n�mero da varia��o da carteira
-													// de
-													// cobran�a.
-			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades
-										// de
-			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
-
+			String codigoAceite = "A";
+			String indicadorPermissaoRecebimentoParcial = "N";
+										
+			ArrecadadorContratoConvenio convenio = null;
+			Integer idConv = 0;
+			Integer numeroVariacaoCarteira = 0; 
+			Short codigoTipoTitulo = 0; 
+			Integer numeroCarteira = 0; 
+													
+													
+			Short codigoModalidade = 1; 
+										
 			if (tipoDocumento == DocumentoTipo.CONTA && tipoDocumento.equals(DocumentoTipo.CONTA)) {
-				numeroVariacaoCarteira = 35;
 				Conta conta = new Conta();
 				conta = repositorioFaturamento.contaFichaCompensacao(idConta);
 				imovel = conta.getImovel();
@@ -15520,8 +15516,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				idImovel = imovel.getId();
 				cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
 				idCliente = cliente.getId();
-				idConv = imovel.getCodigoConvenio(); // Em produ��o, informar o n�mero do conv�nio de
-														// cobran�a, com 7 d�gitos.
+				
+				convenio = retornaParametrosConvenio(imovel.getCodigoConvenio());
+				numeroCarteira = convenio.getNumeroCarteira(); 
+				idConv = convenio.getConvenio();
+				numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira(); 
+				codigoTipoTitulo = convenio.getCodigoTipoTitulo(); // cobran�a, com 7 d�gitos.
 
 				dataEmissao = Util.formatarDataComPontoDDMMAAAA(conta.getDataEmissao()).toString(); // Pegar da conta
 				dataVencimento = Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString(); // pegar
@@ -15532,7 +15532,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						idConv);
 			} else if (tipoDocumento == DocumentoTipo.GUIA_PAGAMENTO
 					&& tipoDocumento.equals(DocumentoTipo.GUIA_PAGAMENTO)) {
-				numeroVariacaoCarteira = 19;
 				imovel = repositorioFaturamento.pesquisarImovel(guiaPagamento.getImovel().getId());
 				idLocalidade = imovel.getIdLocalidade();
 				municipio = repositorioFaturamento.municipio(idLocalidade);
@@ -15540,7 +15539,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				idImovel = imovel.getId();
 				cliente = getControladorCliente().pesquisarCliente(parcelamento.getCliente().getId());
 				idCliente = cliente.getId();
-				idConv = 2860143;
+				
+				convenio = retornaParametrosConvenio(imovel.getCodigoConvenio());
+				numeroCarteira = convenio.getNumeroCarteira(); 
+				idConv = convenio.getConvenio();
+				numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira(); 
+				codigoTipoTitulo = convenio.getCodigoTipoTitulo(); 
 
 				dataEmissao = (guiaPagamento.getDataEmissao()).toString(); // Pegar da conta
 				dataVencimento = (guiaPagamento.getDataVencimento()).toString(); // pegar da conta
@@ -15584,25 +15588,26 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			String dataVencimento = null;
 			Double valorOriginal = null;
 			Integer idCliente = null;
-			Integer idConv = null;
 			Integer idLocalidade = null;
-			String codigoAceite = "A"; // Dom�nio: A - Aceito; N - N�o aceito
-			Short codigoTipoTitulo = 2; // C�digo para identificar o tipo de boleto de cobran�a. Verifique os
-										// dom�nios
-			// poss�veis no swagger.
-			String indicadorPermissaoRecebimentoParcial = "N"; // C�digo para identifica��o da autoriza��o de
-																// pagamento
-			// parcial do boleto. "S" ou "N"
-			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
-			Integer numeroVariacaoCarteira = null; // Em produ��o, informar o n�mero da varia��o da carteira
-													// de
-													// cobran�a.
-			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades
-										// de
-			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
+			String codigoAceite = "A";
+			Short codigoModalidade = 1; 
+			String indicadorPermissaoRecebimentoParcial = "N"; 
+										
+			ArrecadadorContratoConvenio convenio = null;
+			Integer idConv = 0;
+			Integer numeroVariacaoCarteira = 0; 
+			Short codigoTipoTitulo = 0; 
+			Integer numeroCarteira = 0;  
+										
+			
 
 			if (tipoDocumento == DocumentoTipo.CONTA && tipoDocumento.equals(DocumentoTipo.CONTA)) {
-				numeroVariacaoCarteira = 35;
+				convenio = retornaParametrosConvenio(imovel.getCodigoConvenio());
+				numeroCarteira = convenio.getNumeroCarteira(); 
+				idConv = convenio.getConvenio();
+				numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira(); 
+				codigoTipoTitulo = convenio.getCodigoTipoTitulo(); 
+				
 				Conta conta = new Conta();
 				conta = repositorioFaturamento.contaFichaCompensacao(idConta);
 				imovel = conta.getImovel();
@@ -15612,19 +15617,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				idImovel = imovel.getId();
 				cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
 				idCliente = cliente.getId();
-				idConv = imovel.getCodigoConvenio(); // Em produ��o, informar o n�mero do conv�nio de
-														// cobran�a, com 7 d�gitos.
 
-				dataEmissao = Util.formatarDataComPontoDDMMAAAA(conta.getDataEmissao()).toString(); // Pegar da conta
-				dataVencimento = Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString(); // pegar
-																												// da
-																												// conta
+				dataEmissao = Util.formatarDataComPontoDDMMAAAA(conta.getDataEmissao()).toString(); 
+				dataVencimento = Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString(); 
+																												
+																												
 				valorOriginal = Double.valueOf(conta.getValorTotalConta());
 				nossoNumero = this.obterNossoNumeroFichaCompensacao(tipoDocumento.toString(), conta.getId().toString(),
 						idConv);
 			} else if (tipoDocumento == DocumentoTipo.GUIA_PAGAMENTO
 					&& tipoDocumento.equals(DocumentoTipo.GUIA_PAGAMENTO)) {
-				numeroVariacaoCarteira = 19;
+				convenio = retornaParametrosConvenio(ArrecadadorContratoConvenio.GUIA_PARCELAMENTO); 
+				numeroCarteira = convenio.getNumeroCarteira(); 	
+				numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira(); 
+				codigoTipoTitulo = convenio.getCodigoTipoTitulo(); 
+				
 				imovel = repositorioFaturamento.pesquisarImovel(guiaPagamento.getImovel().getId());
 				idLocalidade = imovel.getIdLocalidade();
 				municipio = repositorioFaturamento.municipio(idLocalidade);
@@ -15632,7 +15639,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				idImovel = imovel.getId();
 				cliente = getControladorCliente().pesquisarCliente(parcelamento.getCliente().getId());
 				idCliente = cliente.getId();
-				idConv = 2860143;
 
 				dataEmissao = Util.formatarDataComPontoDDMMAAAA(guiaPagamento.getDataEmissao()); // Pegar da conta
 				dataVencimento = Util.formatarDataComPontoDDMMAAAA(guiaPagamento.getDataVencimento()); // pegar da conta
@@ -15684,6 +15690,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return fichaCompensacaoApi;
 	}
 
+	private ArrecadadorContratoConvenio retornaParametrosConvenio(Integer idConvenio) throws ControladorException {
+		
+		ArrecadadorContratoConvenio convenio = getControladorArrecadacao().pesquisarParametrosConvenioPorId(idConvenio);
+		
+		return convenio;
+	}
+
 	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia) throws Exception {
 
 		FiltroBancoInfo filtro = new FiltroBancoInfo();
@@ -15723,7 +15736,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
-	public void registrarBoletoBancoDeDados(Integer idConta) throws ControladorException, ClassNotFoundException {
+	public void registrarBoletoBancoDeDados(Integer idDocumento, ArrecadadorContratoConvenio convenio) throws ControladorException, ClassNotFoundException {
 
 		FichaCompensacao fichaCompensacaoBanco = null;
 		Connection connection = null;
@@ -15731,7 +15744,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		try {
 			Conta conta = new Conta();
 			Cliente cliente = new Cliente();
-			conta = repositorioFaturamento.contaFichaCompensacao(idConta);
+			conta = repositorioFaturamento.contaFichaCompensacao(idDocumento);
 			Imovel imovel = conta.getImovel();
 			Integer idLocalidade = imovel.getIdLocalidade();
 			Municipio municipio = repositorioFaturamento.municipio(idLocalidade);
@@ -15739,34 +15752,29 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Integer idImovel = imovel.getId();
 			cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
 			Integer idCliente = cliente.getId();
-			Integer idConv = imovel.getCodigoConvenio(); // Em produ��o, informar o n�mero do conv�nio de
-															// cobran�a, com 7 d�gitos.
-			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
-			Integer numeroVariacaoCarteira = 35; // Em produ��o, informar o n�mero da varia��o da carteira de
-													// cobran�a.
-			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades
-										// de
-//			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
-//			String dataEmissao = "18.02.2022";
-//			String dataVencimento = "17.03.2022";
-			String dataEmissao = (conta.getDataEmissao()).toString(); // Pegar da conta
-			String dataVencimento = (conta.getDataVencimentoConta()).toString(); // pegar
-																					// da
-																					// conta
+			
+			Integer idConv = convenio.getConvenio(); 
+			Integer numeroCarteira = convenio.getNumeroCarteira(); 
+			Integer numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira();
+												
+			Short codigoModalidade = 1; 
+			
+			String dataEmissao = (conta.getDataEmissao()).toString(); 
+			String dataVencimento = (conta.getDataVencimentoConta()).toString(); 
+																					
+																					
 			Double valorOriginal = Double.valueOf(conta.getValorTotalConta());
-			String codigoAceite = "A"; // Dom�nio: A - Aceito; N - N�o aceito
-			Short codigoTipoTitulo = 2; // C�digo para identificar o tipo de boleto de cobran�a. Verifique os
-										// dom�nios
-			// poss�veis no swagger.
-			String indicadorPermissaoRecebimentoParcial = "N"; // C�digo para identifica��o da autoriza��o de
-			// parcial do boleto. "S" ou "N"
+			String codigoAceite = "A"; 
+			Short codigoTipoTitulo = convenio.getCodigoTipoTitulo();
+										
+			String indicadorPermissaoRecebimentoParcial = "N"; 
 			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", conta.getId().toString(), idConv);
 			String nossoNumeroSemDV = nossoNumero.toString();
-			String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
+			String numeroTituloCliente = nossoNumeroSemDV; 
 
 			repositorioFaturamento.inserirFichaCompensacao(idConv, numeroCarteira, numeroVariacaoCarteira,
 					codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, codigoTipoTitulo,
-					indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idImovel, idCliente, idConta);
+					indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idImovel, idCliente, idDocumento);
 
 		} catch (ErroRepositorioException e) {
 			throw new ActionServletException("erro.erro_registrar_conta");
