@@ -1315,4 +1315,8 @@ public interface IControladorFaturamento {
 	
 	public String pesquisarClienteCpfCnpj (Integer idCliente) throws ControladorException;
 
+	public boolean fichaCompensacaoExistente (Integer idConta) throws ControladorException;
+	
+	public void validarDadosBolsaAgua(Integer idRota, int idFuncionalidade) throws ControladorException;
+	
 }

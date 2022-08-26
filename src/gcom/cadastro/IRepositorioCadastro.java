@@ -408,4 +408,5 @@ public interface IRepositorioCadastro {
     public Date buscarUltimadataAlteracaoNoImovel(Integer idImovel) throws ErroRepositorioException;
     
     public Collection pesquisarRotaArquivoTextoAtualizacaoCadastroPorIdArquivo(String[] idsArquivoTxt) throws ErroRepositorioException; 
+    
 }

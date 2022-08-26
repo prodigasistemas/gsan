@@ -750,4 +750,12 @@ public interface IRepositorioImovel {
 	public Collection pesquisarImoveisBolsaAguaPorClienteId(Integer idCliente) throws ErroRepositorioException;
 	
 	public Imovel consultarImovelBolsaAgua(Integer idImovel) throws ErroRepositorioException;
+	
+	public List<Integer> pesquisarImovelBolsaAguaPorRota(Integer idRota) throws ErroRepositorioException;
+	
+	public List<Integer> pesquisarImovelElegivelBolsaAguaPorRota(Integer idRota) throws ErroRepositorioException;
+	
+	public void atualizarPerfilImovel(Integer idImovel, Integer idPerfil) throws ErroRepositorioException;
+	
+	
 }

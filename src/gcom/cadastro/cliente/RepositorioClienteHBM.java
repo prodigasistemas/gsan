@@ -1049,6 +1049,78 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 		}
 
 	}
+	
+				
+	@SuppressWarnings({ "unchecked" })
+	public List<Integer> pesquisarClientesPorCadastroUnico() throws ErroRepositorioException {
+		List<Integer> idsClientes = new ArrayList<Integer>();
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+			consulta = " SELECT cli.clie_id as idCliente FROM cadastro.cliente cli "
+					+ " INNER JOIN cadastro.cadastro_unico cad ON cad.cadu_nnnis = cli.clie_nnnis "
+					+ " WHERE cli.clie_icbolsafamilia <> 1 ";
+		
+			idsClientes = session.createSQLQuery(consulta).addScalar("idCliente", Hibernate.INTEGER).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return idsClientes;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> pesquisarClientesPorCadastroCaixa() throws ErroRepositorioException {
+		List<Integer> idsClientes = new ArrayList<Integer>();
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+			consulta = " SELECT cli.clie_id as idCliente FROM cadastro.cliente cli "
+					+ "INNER JOIN public.cadastro_caixa cx ON cx.nis = cli.clie_nnnis "
+					+ "WHERE cli.clie_icbolsafamilia NOT IN (1,3) ";
+		
+			idsClientes = session.createSQLQuery(consulta).addScalar("idCliente", Hibernate.INTEGER).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return idsClientes;
+	}
+	
+		
+	
+	public void atualizarNISCliente(Integer idCliente, Integer clie_icbolsafamilia) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+		String update = null;
+		try {
+			System.out.println("ATUALIZANDO CLIENTE ID: " + idCliente);
+			update = "update gcom.cadastro.cliente.Cliente " 
+					+ "set clie_icbolsafamilia = :clie_icbolsafamilia, clie_tmultimaalteracao = :ultimaAlteracao "
+					+ "where clie_id = :idCliente";
+
+			session.createQuery(update).setInteger("idCliente", idCliente).setInteger("clie_icbolsafamilia", clie_icbolsafamilia).setTimestamp("ultimaAlteracao", new Date()).executeUpdate();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+		System.out.println("CLIENTE ID: " + idCliente +  " ATUALIZADO.");
+
+	}
+	
 
 	public Object[] obterDadosCliente(Integer idImovel, Short idClienteRelacaoTipo) throws ErroRepositorioException {
 
@@ -1150,11 +1222,11 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Collection obterDadosClienteFone(Integer idCliente) throws ErroRepositorioException {
+	public Collection<ClienteFoneAtualizacaoCadastral> obterDadosClienteFone(Integer idCliente) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 		String consulta;
-		Collection clienteFones = new ArrayList();
+		Collection<ClienteFoneAtualizacaoCadastral> clienteFones = new ArrayList<ClienteFoneAtualizacaoCadastral>();
 		Collection retornoConsulta = null;
 
 		try {
@@ -1574,9 +1646,9 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Collection pesquisarImoveisAssociadosCliente(Integer idCliente, Short relacaoTipo) throws ErroRepositorioException {
+	public Collection<ClienteImovel> pesquisarImoveisAssociadosCliente(Integer idCliente, Short relacaoTipo) throws ErroRepositorioException {
 
-		Collection<ClienteImovel> retorno = new ArrayList();
+		Collection<ClienteImovel> retorno = new ArrayList<ClienteImovel>();
 		Session session = HibernateUtil.getSession();
 
 		try {
@@ -1599,8 +1671,8 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Collection obterClienteImovelporRelacaoTipo(Integer idImovel, Integer idRelacaoTipo) throws ErroRepositorioException {
-		Collection<ClienteImovel> retorno = new ArrayList();
+	public Collection<ClienteImovel> obterClienteImovelporRelacaoTipo(Integer idImovel, Integer idRelacaoTipo) throws ErroRepositorioException {
+		Collection<ClienteImovel> retorno = new ArrayList<ClienteImovel>();
 		Session session = HibernateUtil.getSession();
 
 		try {

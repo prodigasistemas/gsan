@@ -46,9 +46,12 @@ import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
+import gcom.cadastro.imovel.FiltroImovelSubCategoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelPerfil;
+import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
+import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.localidade.RepositorioSetorComercialHBM;
 import gcom.cobranca.RepositorioCobrancaHBM;
 import gcom.faturamento.RepositorioFaturamentoHBM;
@@ -84,7 +87,7 @@ public class AtualizarClienteAction extends GcomAction {
 	private HttpServletRequest request;
 	private HttpSession sessao;
 
-	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) throws ErroRepositorioException {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		this.retorno = actionMapping.findForward("telaSucesso");
 		this.request = request;
 		this.sessao = request.getSession(false);
@@ -455,7 +458,11 @@ public class AtualizarClienteAction extends GcomAction {
 				cliente.setNumeroNIS(numeroNIS.trim());
 				validarCadastroUnico(cliente);
 				imovelPerfilAtualizado = atualizarImovelPerfilBolsaAgua(cliente);
-			} 
+			} else {
+				cliente.setIndicadorBolsaFamilia(CadastroUnico.NAO_TEM_NIS);
+				imovelPerfilAtualizado = atualizarImovelPerfilBolsaAgua(cliente);
+			}
+				
 
 			cliente.setIndicadorAcaoCobranca(new Integer(indicadorAcaoCobranca).shortValue());
 
@@ -724,15 +731,20 @@ public class AtualizarClienteAction extends GcomAction {
 		return retorno;
 	}
 
-	private void validarCadastroUnico(Cliente cliente) {
+	private void validarCadastroUnico(Cliente cliente) throws Exception {
 		Filtro filtro = new FiltroCadastroUnico();
 		filtro.adicionarParametro(new ParametroSimples(FiltroCadastroUnico.NUMERO_NIS, cliente.getNumeroNIS()));
-		
-		CadastroUnico cadastroUnico = (CadastroUnico) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtro, CadastroUnico.class.getName()));
-		
+
+		CadastroUnico cadastroUnico = (CadastroUnico) Util
+				.retonarObjetoDeColecao(getFachada().pesquisar(filtro, CadastroUnico.class.getName()));
+
 		if (cadastroUnico != null) {
-			cliente.setIndicadorBolsaFamilia(CadastroUnico.TEM_NIS);
-		}else {
+			if (cadastroUnico.getIdSeaster().equals(CadastroUnico.SIASTER)) {
+				cliente.setIndicadorBolsaFamilia(CadastroUnico.TEM_NIS);
+			} else if (cadastroUnico.getIdSeaster().equals(CadastroUnico.CAIXA)) {
+				cliente.setIndicadorBolsaFamilia(CadastroUnico.NIS_CAIXA);
+			}
+		} else if (cadastroUnico == null) {
 			cliente.setIndicadorBolsaFamilia(CadastroUnico.NIS_SEM_REGISTRO_OFICIAL);
 		}
 	}
@@ -741,7 +753,9 @@ public class AtualizarClienteAction extends GcomAction {
 		Collection<ClienteImovel> clienteImoveis = pesquisarImoveisPorCliente(cliente);
 		Collection<ClienteImovel> clienteImovelOrdenado = ordenacaoSituacaoAgua(clienteImoveis);
 		Boolean imovelElegivel = true;
-		if (cliente.getIndicadorBolsaFamilia().equals(CadastroUnico.TEM_NIS)) {
+		if (cliente.getIndicadorBolsaFamilia().equals(CadastroUnico.TEM_NIS) 
+				|| cliente.getIndicadorBolsaFamilia().equals(CadastroUnico.NIS_SEM_REGISTRO_OFICIAL)
+				|| cliente.getIndicadorBolsaFamilia().equals(CadastroUnico.NIS_CAIXA)) {
 			for (ClienteImovel clienteImovel : clienteImovelOrdenado) {
 				Integer idPerfil = clienteImovel.getImovel().getImovelPerfil().getId();
 				if (idPerfil.equals(ImovelPerfil.BOLSA_AGUA)) {
@@ -751,18 +765,25 @@ public class AtualizarClienteAction extends GcomAction {
 			}
 			if (imovelElegivel == true) {
 				for (ClienteImovel clienteImovel : clienteImovelOrdenado) {
-					if (clienteImovel.getImovel().getImovelPerfil().getId().equals(ImovelPerfil.NORMAL)
-							&& clienteImovel.getImovel().getCategoriaPrincipalId().equals(Categoria.RESIDENCIAL_INT)
-							&& clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
-						Imovel imovel = clienteImovel.getImovel();
-						imovel.setImovelPerfil(new ImovelPerfil(ImovelPerfil.BOLSA_AGUA));
-						imovel.setUltimaAlteracao(new Date());
-						getFachada().atualizar(imovel);
-						return true;
+					Collection<ImovelSubcategoria> subCategorias = pesquisarCategoria(
+							clienteImovel.getImovel().getId());
+					for (ImovelSubcategoria subCategoria : subCategorias) {
+						if (clienteImovel.getImovel().getImovelPerfil().getId().equals(ImovelPerfil.NORMAL)
+								&& (subCategoria.getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R1) 
+								||	subCategoria.getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R2)
+								||  subCategoria.getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R3)
+								||  subCategoria.getSubcategoria().getId().equals(Subcategoria.RESIDENCIAL_R4))
+								&& clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
+							Imovel imovel = clienteImovel.getImovel();
+							imovel.setImovelPerfil(new ImovelPerfil(ImovelPerfil.BOLSA_AGUA));
+							imovel.setUltimaAlteracao(new Date());
+							getFachada().atualizar(imovel);
+							return true;
+						}
 					}
 				}
 			}
-		} else {
+		} /* else {
 			for (ClienteImovel clienteImovel : clienteImovelOrdenado) {
 				Integer idPerfil = clienteImovel.getImovel().getImovelPerfil().getId();
 				if (idPerfil.equals(ImovelPerfil.BOLSA_AGUA)) {
@@ -782,7 +803,7 @@ public class AtualizarClienteAction extends GcomAction {
 					}
 				}
 			}
-		}
+		} */
 		return false;
 	}
 	
@@ -843,6 +864,13 @@ public class AtualizarClienteAction extends GcomAction {
 
 		return getFachada().pesquisar(filtro, ClienteImovel.class.getName());
 	}
+	
+    private Collection <ImovelSubcategoria> pesquisarCategoria (Integer idImovel){
+         Filtro filtro = new FiltroImovelSubCategoria();
+         filtro.adicionarParametro(new ParametroSimples(FiltroImovelSubCategoria.IMOVEL_ID, idImovel));
+    	   	
+    	return getFachada().pesquisar(filtro, ImovelSubcategoria.class.getName());
+    }
 
 	private void inserirClienteCadastradoNaReceita(
 			Usuario usuario, 
@@ -921,11 +949,11 @@ public class AtualizarClienteAction extends GcomAction {
 			String mensagemSucesso = "Cliente de código " + clienteAtualizacao.getId() + " atualizado com sucesso.";
 			
 			if (imovelPerfilAtualizado) {
-				if(indicadorbolsaFamilia.equals(ConstantesSistema.SIM)) {
+				if(!indicadorbolsaFamilia.equals(CadastroUnico.NAO_TEM_NIS)) {
 					mensagemSucesso += " Perfil do Imóvel relacionado ao cliente atualizado para BOLSA ÁGUA.";
-				}else {
+				} /* else {
 					mensagemSucesso += " Perfil do Imóvel relacionado ao cliente atualizado para NORMAL.";
-				}					
+				}		*/			
 			} else {
 				mensagemSucesso += " Não foi possível atualizar Perfil de Imóvel relacionado ao cliente. ";
 			}

@@ -29640,5 +29640,94 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	public List<Integer> pesquisarImovelBolsaAguaPorRota(Integer idRota) throws ErroRepositorioException {
+		List<Integer> idsImoveis = new ArrayList<Integer>();
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+			consulta = " SELECT i.imov_id as idImovel FROM cadastro.imovel i  "
+					+ " INNER JOIN cadastro.quadra q ON q.qdra_id = i.qdra_id  "
+					+ " INNER JOIN micromedicao.rota r ON r.rota_id = q.rota_id "
+					+ " WHERE imov_id NOT IN ( SELECT imov_id FROM cadastro.imovel_subcategoria isub WHERE isub.scat_id in (1, 2, 3, 4)) "
+					+ " AND i.iper_id = :perfilBolsaAgua "
+					+ " AND r.rota_id = :idRota";
+		
+			idsImoveis = (List<Integer>) session.createSQLQuery(consulta)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.setInteger("perfilBolsaAgua",ImovelPerfil.BOLSA_AGUA)
+					.setInteger("idRota",idRota)
+					.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return idsImoveis;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public List<Integer> pesquisarImovelElegivelBolsaAguaPorRota(Integer idRota) throws ErroRepositorioException {
+		List<Integer> idsImoveis = new ArrayList<Integer>();
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+			consulta = " Select distinct i.imov_id as idImovel from cadastro.imovel_subcategoria scat   "
+					+ " inner join cadastro.imovel i on i.imov_id = scat.imov_id "
+					+ " inner join cadastro.cliente_imovel clim on clim.imov_id = i.imov_id "
+					+ " inner join cadastro.cliente clie on clim.clie_id = clie.clie_id "
+					+ " inner join cadastro.localidade loca on loca.loca_id = i.loca_id "
+					+ " inner join cadastro.quadra q on q.qdra_id = i.qdra_id  "
+					+ " inner join micromedicao.rota r on r.rota_id = q.rota_id "
+					+ " where 1=1 and clie.clie_id not in (select distinct ci.clie_id from cadastro.imovel i  "
+							+ " inner join cadastro.cliente_imovel ci on ci.imov_id = i.imov_id "
+							+ " where i.iper_id = 11 and ci.clim_icnomeconta = 1 and clim_dtrelacaofim is null) "
+					+ " and scat_id in (1,2,3,4) and iper_id not in (6,7,8,9,11) "
+					+ " and clie_icbolsafamilia not in (2,5) and clie_nnnis is not null "
+					+ " and clim_dtrelacaofim is null and clim_icnomeconta = :clim_icnomeconta "
+					+ " and r.rota_id = :idRota";
+		
+			idsImoveis = (List<Integer>) session.createSQLQuery(consulta)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.setShort("clim_icnomeconta",ConstantesSistema.SIM)
+					.setInteger("idRota",idRota)
+					.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return idsImoveis;
+	}
+		
+	
+	public void atualizarPerfilImovel(Integer idImovel, Integer idPerfil) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		String update = null;
+		try { 
+			System.out.println("ATUALIZANDO IMOVEL ID: " + idImovel + " COM IMOVEL PERFIL: " + idPerfil);
+			update = "update gcom.cadastro.imovel.Imovel " 
+					+ "set iper_id = :idPerfil, imov_tmultimaalteracao = :ultimaAlteracao "
+					+ "where imov_id = :idImovel";
+
+			session.createQuery(update).setInteger("idImovel", idImovel).setInteger("idPerfil", idPerfil).setTimestamp("ultimaAlteracao", new Date()).executeUpdate();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+		System.out.println("IMOVEL ID: " + idImovel +  " ATUALIZADO.");
+	}
 
 }

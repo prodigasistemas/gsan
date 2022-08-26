@@ -9040,4 +9040,5 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		
 		return retorno;
     }
+    
 }

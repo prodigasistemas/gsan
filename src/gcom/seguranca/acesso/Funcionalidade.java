@@ -214,6 +214,8 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	
 	public static final int REGISTRAR_BOLETOS = 16090;
 
+	public static final int ATUALIZAR_DADOS_BOLSA_AGUA = 16107;
+
 	
 	
 	

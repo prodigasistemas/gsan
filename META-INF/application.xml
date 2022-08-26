@@ -941,6 +941,9 @@
 		<ejb>BatchRegistrarBoletosMDB.jar</ejb>
 	</module>
 	<module>
+		<ejb>BatchAtualizarDadosBolsaAguaMDB.jar</ejb>
+	</module>
+	<module>
 		<java>gcom.jar</java>
 	</module>
 	

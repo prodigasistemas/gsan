@@ -16583,7 +16583,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 		    throw new ControladorException("erro.sistema", e);
 		}
 	}
-	
+
 	public boolean isImovelBolsaAgua(Integer idImovel) throws ControladorException {
 		try {
 			Imovel imovel = repositorioImovel.consultarImovelBolsaAgua(idImovel);
@@ -16593,4 +16593,31 @@ public class ControladorImovelSEJB extends ControladorComum {
 		    throw new ControladorException("erro.sistema", e);
 		}
 	}
+	
+	public List<Integer> pesquisarImovelBolsaAguaPorRota(Integer idRota) throws ControladorException{
+		try {
+			return repositorioImovel.pesquisarImovelBolsaAguaPorRota(idRota);
+		} catch (ErroRepositorioException e) {
+		    throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	public List<Integer> pesquisarImovelElegivelBolsaAguaPorRota(Integer idRota) throws ControladorException{
+		try {
+			return repositorioImovel.pesquisarImovelElegivelBolsaAguaPorRota(idRota);
+		} catch (ErroRepositorioException e) {
+		    throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	public void atualizarPerfilImovel(Integer idImovel, Integer idPerfil) throws ControladorException{
+		try {
+			repositorioImovel.atualizarPerfilImovel(idImovel, idPerfil);
+		} catch (ErroRepositorioException e) {
+		    throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	
+	
 }

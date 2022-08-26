@@ -136,6 +136,7 @@ import gcom.batch.faturamento.TarefaBatchReligarImoveisCortadosComConsumoReal;
 import gcom.batch.faturamento.TarefaBatchRetificarConjuntoContaConsumos;
 import gcom.batch.faturamento.TarefaBatchSuspenderLeituraParaImovelComConsumoRealNaoSuperiorA10;
 import gcom.batch.faturamento.TarefaBatchSuspenderLeituraParaImovelComHidrometroRetirado;
+import gcom.batch.faturamento.TarefaBatchAtualizarDadosBolsaAgua;
 import gcom.batch.faturamento.TarefaBatchVerificarFaturamentoImoveisCortados;
 import gcom.batch.financeiro.TarefaBatchApagarResumoDevedoresDuvidosos;
 import gcom.batch.financeiro.TarefaBatchAtualizarResumoDevedoresDuvidosos;
@@ -3212,7 +3213,26 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
-
+						
+					case Funcionalidade.ATUALIZAR_DADOS_BOLSA_AGUA:
+						TarefaBatchAtualizarDadosBolsaAgua tarefa = new TarefaBatchAtualizarDadosBolsaAgua(processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+						
+						FaturamentoGrupo grupo = faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal().getFaturamentoGrupo();
+						
+						FiltroRota filtro = new FiltroRota();
+						filtro.adicionarParametro(new ParametroSimples(FiltroRota.FATURAMENTO_GRUPO_ID, grupo.getId()));
+						filtro.adicionarParametro(new ParametroSimples(FiltroRota.INDICADOR_USO, ConstantesSistema.SIM));
+						filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroRota.FATURAMENTO_GRUPO);
+						
+						Collection<Rota> rotas = getControladorUtil().pesquisar(filtro, Rota.class.getName());
+						
+						tarefa.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, rotas);
+						
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tarefa));
+						
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+						
+						break;
 						
 					default:
 					}

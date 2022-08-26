@@ -530,4 +530,5 @@ public interface IControladorCadastro {
 	public Collection pesquisarRotaArquivoTextoAtualizacaoCadastroPorIdArquivo(String[] idsArquivoTxt) throws ControladorException;
 	
 	public StringBuilder gerarArquivoTxt(Collection colecaoImovelFiltrado, Integer idArquivoTexto, Integer idEmpresa, Rota rota) throws ControladorException;
+	
 }

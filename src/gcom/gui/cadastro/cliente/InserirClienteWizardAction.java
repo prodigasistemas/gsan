@@ -214,10 +214,11 @@ public class InserirClienteWizardAction extends WizardAction {
      * @param httpServletResponse
      *            Descrição do parâmetro
      * @return Descrição do retorno
+     * @throws Exception 
      */
     public ActionForward inserirClienteAction(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
+            HttpServletResponse httpServletResponse) throws Exception {
         //recebe o parametros e consulta o objeto da sessao para chamar outro
         // metodo desta classe
         return new InserirClienteAction().execute(actionMapping, actionForm,
