@@ -16069,7 +16069,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			//String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
 			String emailReceptor = (String) contasEmail[2]; //EMAIL
 			
-						
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 			
 			File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
@@ -16463,7 +16462,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		*/	
 			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
-			Integer numeroVariacaoCarteira = 35; // Em produ��o, informar o n�mero da varia��o da carteira de cobran�a.
+			Integer numeroVariacaoCarteira = 19; // Em produ��o, informar o n�mero da varia��o da carteira de cobran�a.
 			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades de
 //			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
 //			String dataEmissao = "18.02.2022";
