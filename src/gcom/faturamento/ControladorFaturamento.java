@@ -16066,14 +16066,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Conta conta = new Conta((Integer) contasEmail[0]);
 			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
 
-<<<<<<< HEAD
-			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
-			//String emailReceptor = "pamelagatinho@gmail.com"; //EMAIL
-			
-=======
 			//String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
 			String emailReceptor = (String) contasEmail[2]; //EMAIL
->>>>>>> approved
+
 			
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 			
@@ -16309,7 +16304,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				colecaoCategoriasImovel = this.getControladorImovel().obterQuantidadeEconomiasCategoria(creditoARealizar.getImovel(), Categoria.RESIDENCIAL);
 			}else {
 				colecaoCategoriasImovel = this.getControladorImovel().obterQuantidadeEconomiasCategoria(creditoARealizar.getImovel());
-					}
+L					}
 				
 			Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel.iterator();
 	
