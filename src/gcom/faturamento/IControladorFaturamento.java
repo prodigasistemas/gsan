@@ -1301,7 +1301,9 @@ public interface IControladorFaturamento {
 	public BigDecimal retornaValorBolsaAgua (Integer anoMesReferencia, Imovel imovel) throws ControladorException;
 	
 	public DeterminarValoresFaturamentoAguaEsgotoHelper obterValoresCreditosBolsaAgua(Imovel imovel, FaturamentoGrupo grupo );
-	
+
+	public Collection<DebitoACobrar> obterDebitoACobrarParcelamento(Integer parcelamentoId) throws ControladorException;
+
 	public void registrarFichaCompensacaoGrupo(Integer idGrupoFaturamento, Integer anoMesReferencia, int idFuncionalidadeIniciada) throws ControladorException;
 
 	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento) throws ControladorException;

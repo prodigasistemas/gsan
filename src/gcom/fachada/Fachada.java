@@ -3142,7 +3142,7 @@ public class Fachada {
 	/**
 	 * [UC0146] - Manter Conta Author: Raphael Rossiter Data: 21/01/2006
 	 * 
-	 * Obtém as contas de um imóvel que poderão ser mantidas
+	 * Obtï¿½m as contas de um imï¿½vel que poderï¿½o ser mantidas
 	 * 
 	 * @param imovel
 	 * @param situacaoNormal
@@ -3164,7 +3164,7 @@ public class Fachada {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * [UC0150] - Retificar Conta
 	 * 
@@ -3211,14 +3211,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Consultar Historico Medição Individualizada Auhtor: Rafael Santos Data:
-	 * 23/01/2006 [UC001779] Consultar histórico Medição Individualizada
+	 * Consultar Historico Mediï¿½ï¿½o Individualizada Auhtor: Rafael Santos Data:
+	 * 23/01/2006 [UC001779] Consultar histï¿½rico Mediï¿½ï¿½o Individualizada
 	 * 
 	 * @param imovelCondominio
 	 *            Imovel Condominio
 	 * @param anoMesFaturamento
-	 *            Ano mês Fauramento
-	 * @return Dados do Historico Medição Individualizada
+	 *            Ano mï¿½s Fauramento
+	 * @return Dados do Historico Mediï¿½ï¿½o Individualizada
 	 * @throws ControladorException
 	 */
 	@SuppressWarnings("rawtypes")
@@ -3232,10 +3232,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0155] - Encerrar Faturamento do mês Author: Pedro Alexandre Data:
+	 * [UC0155] - Encerrar Faturamento do mï¿½s Author: Pedro Alexandre Data:
 	 * 09/01/2006
 	 * 
-	 * Encerra o faturamento do ano mês de referência
+	 * Encerra o faturamento do ano mï¿½s de referï¿½ncia
 	 * 
 	 * @throws ControladorException
 	 */
@@ -3264,7 +3264,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0242] - Registrar movimento dos Arrecadadores Author: Sávio Luiz Data:
+	 * [UC0242] - Registrar movimento dos Arrecadadores Author: Sï¿½vio Luiz Data:
 	 * 09/01/2006
 	 * 
 	 * registra movimento dos arrecadadores no sistema
@@ -3281,9 +3281,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Relatório para acompanhar o movimento dos arrecadadores
+	 * Relatï¿½rio para acompanhar o movimento dos arrecadadores
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 02/04/2007
 	 * 
 	 * @param idDebitoACobrar
@@ -3318,11 +3318,11 @@ public class Fachada {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
-	 * Retrona a quantidade de endereços que existem para o Cliente
+	 * Retrona a quantidade de endereï¿½os que existem para o Cliente
 	 * 
 	 * pesquisarClienteDadosClienteEnderecoCount
 	 * 
@@ -3353,10 +3353,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0155] - Executar Atividade de Ação de Cobrança Author: Pedro Alexandre
+	 * [UC0155] - Executar Atividade de Aï¿½ï¿½o de Cobranï¿½a Author: Pedro Alexandre
 	 * Data: 03/02/2006
 	 * 
-	 * Executa as atividades de ação de Cobrança
+	 * Executa as atividades de aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @throws ControladorException
 	 */
@@ -3370,7 +3370,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0246] Executar Atividade de Ação de Cobrança Pesquisa uma coleção de
+	 * [UC0246] Executar Atividade de Aï¿½ï¿½o de Cobranï¿½a Pesquisa uma coleï¿½ï¿½o de
 	 * CobrancaAcaoAtividadeCronograma
 	 * 
 	 * @author Pedro Alexandre
@@ -3388,7 +3388,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0246] Executar Atividade de Ação de Cobrança Pesquisa uma coleção de
+	 * [UC0246] Executar Atividade de Aï¿½ï¿½o de Cobranï¿½a Pesquisa uma coleï¿½ï¿½o de
 	 * CobrancaAcaoAtividadeComando
 	 * 
 	 * @author Pedro Alexandre
@@ -3406,7 +3406,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que registra uma operacao ao sistema
+	 * mï¿½todo que registra uma operacao ao sistema
 	 * 
 	 * @param operacaoEfetuada
 	 * @param tabelaLinhaAlteracao
@@ -3421,7 +3421,7 @@ public class Fachada {
 	 *             try { this.getControladorTransacao().inserirOperacaoEfetuada(
 	 *             usuario, usuarioAcao, operacaoEfetuada, tabelaLinhaAlteracao,
 	 *             tabelaLinhaColunaAlteracoes); } catch (ControladorException
-	 *             ex) { // levanta o erro para a próxima camada throw new
+	 *             ex) { // levanta o erro para a prï¿½xima camada throw new
 	 *             FachadaException(ex.getMessage(), ex, ex
 	 *             .getParametroMensagem()); } }
 	 */
@@ -3434,10 +3434,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Métodos para Inserir Aviso Bancário Rafael Corrêa
+	 * Mï¿½todos para Inserir Aviso Bancï¿½rio Rafael Corrï¿½a
 	 * 
-	 * [FS0003] Verificar existência de avisos bancários Não realizados [FS0004]
-	 * Verificar seleção de aviso Retorna o valor do maior número sequencial do
+	 * [FS0003] Verificar existï¿½ncia de avisos bancï¿½rios Nï¿½o realizados [FS0004]
+	 * Verificar seleï¿½ï¿½o de aviso Retorna o valor do maior nï¿½mero sequencial do
 	 * arrecadador selecionado
 	 * 
 	 * @throws ControladorException
@@ -3452,7 +3452,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Métodos para Filtrar Devoluções Rafael Corrêa
+	 * Mï¿½todos para Filtrar Devoluï¿½ï¿½es Rafael Corrï¿½a
 	 * 
 	 * @throws ControladorException
 	 */
@@ -3466,7 +3466,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que consulta os usuario alteracao de uma determinada operacao com
+	 * mï¿½todo que consulta os usuario alteracao de uma determinada operacao com
 	 * as restricoes passadas
 	 * 
 	 * @param idOperacao
@@ -3525,9 +3525,9 @@ public class Fachada {
 	 * Alexandre Data: 10/01/2006
 	 * 
 	 * @param numeroPrestacoes
-	 *            número de prestações
+	 *            nï¿½mero de prestaï¿½ï¿½es
 	 * @param numeroPrestacoesCobradas
-	 *            número de prestaçõeses cobradas
+	 *            nï¿½mero de prestaï¿½ï¿½eses cobradas
 	 * @param valorCategoria
 	 *            valor da categoria
 	 * @throws ControladorException
@@ -3550,8 +3550,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Consultar Imoveis com Medição Indiviualizada Auhtor: Sávio Luiz Data:
-	 * 06/02/2006 [UC0180] Consultar Imoveis com Medição Indiviualizada
+	 * Consultar Imoveis com Mediï¿½ï¿½o Indiviualizada Auhtor: Sï¿½vio Luiz Data:
+	 * 06/02/2006 [UC0180] Consultar Imoveis com Mediï¿½ï¿½o Indiviualizada
 	 * 
 	 */
 
@@ -3565,8 +3565,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Consultar Imoveis com Medição Indiviualizada Auhtor: Sávio Luiz Data:
-	 * 06/02/2006 [UC0180] Consultar Imoveis com Medição Indiviualizada
+	 * Consultar Imoveis com Mediï¿½ï¿½o Indiviualizada Auhtor: Sï¿½vio Luiz Data:
+	 * 06/02/2006 [UC0180] Consultar Imoveis com Mediï¿½ï¿½o Indiviualizada
 	 * 
 	 */
 
@@ -3581,7 +3581,7 @@ public class Fachada {
 	/**
 	 * [UC0177] Informar Situacao Especial de Cobranca
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @created 07/03/2006
 	 * 
 	 */
@@ -3607,8 +3607,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém o número de registros em ocorrência de um determinado movimento
-	 * (número de linhas da tabela ARRECADADOR_MOVIMENTO_ITEM com ARMV_ID =
+	 * Obtï¿½m o nï¿½mero de registros em ocorrï¿½ncia de um determinado movimento
+	 * (nï¿½mero de linhas da tabela ARRECADADOR_MOVIMENTO_ITEM com ARMV_ID =
 	 * ARMV_ID da tabela ARRECADADOR_MOVIMENTO e AMIT_DSOCORRENCIA diferente de
 	 * "OK")
 	 * 
@@ -3631,10 +3631,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém o número de registros que Não foram aceitos de um determinado
-	 * movimento (número de linhas da tabela ARRECADADOR_MOVIMENTO_ITEM com
+	 * Obtï¿½m o nï¿½mero de registros que Nï¿½o foram aceitos de um determinado
+	 * movimento (nï¿½mero de linhas da tabela ARRECADADOR_MOVIMENTO_ITEM com
 	 * ARMV_ID = ARMV_ID da tabela ARRECADADOR_MOVIMENTO e AMIT_ICACEITACAO
-	 * igual a 2 (Não))
+	 * igual a 2 (Nï¿½o))
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 08/03/2006
@@ -3655,7 +3655,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém o valor total dos avisos bancários de um determinado movimento
+	 * Obtï¿½m o valor total dos avisos bancï¿½rios de um determinado movimento
 	 * (Total da soma do campo AVBC_VALORARRECADACAO da tabela AVISO_BANCARIO
 	 * com ARMV_ID = ARMV_ID da tabela ARRECADADOR_MOVIMENTO
 	 * 
@@ -3663,7 +3663,7 @@ public class Fachada {
 	 * @date 08/03/2006
 	 * 
 	 * @param arrecadadorMovimento
-	 * @return Um BigDecimal que representa o total da soma dos avisos bancários
+	 * @return Um BigDecimal que representa o total da soma dos avisos bancï¿½rios
 	 * @throws ControladorException
 	 */
 	public BigDecimal obterTotalArrecadacaoAvisoBancarioPorMovimentoArrecadadores(ArrecadadorMovimento arrecadadorMovimento) {
@@ -3679,16 +3679,16 @@ public class Fachada {
 
 	/**
 	 * Caso o valor total do movimento (ARMV_VALORTOTALMOVIMENTO) seja diferente
-	 * do valor da soma das arrecadações dos avisos bancários relacionados
-	 * (ARMV_ID = ARMV_ID da tabela AVISO_BANCARIO e o campo para totalização
-	 * será AVBC_VLARRECADACAO), a situação do movimento será "ABERTO". Caso
-	 * contrário a situação do movimento será "FECHADO"
+	 * do valor da soma das arrecadaï¿½ï¿½es dos avisos bancï¿½rios relacionados
+	 * (ARMV_ID = ARMV_ID da tabela AVISO_BANCARIO e o campo para totalizaï¿½ï¿½o
+	 * serï¿½ AVBC_VLARRECADACAO), a situaï¿½ï¿½o do movimento serï¿½ "ABERTO". Caso
+	 * contrï¿½rio a situaï¿½ï¿½o do movimento serï¿½ "FECHADO"
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 08/03/2006
 	 * 
 	 * @param arrecadadorMovimento
-	 * @return Uma String que representa a situação do movimento
+	 * @return Uma String que representa a situaï¿½ï¿½o do movimento
 	 * @throws ControladorException
 	 */
 	public String obterSituacaoArrecadadorMovimento(ArrecadadorMovimento arrecadadorMovimento) {
@@ -3703,17 +3703,17 @@ public class Fachada {
 	}
 
 	/**
-	 * Lista os avisos bancários associados ao movimento com os seguintes dados:
-	 * Data do lançamento Sequencial do Aviso Tipo do Aviso Data do Crédito
-	 * Valor do Crédito Valor da Arrecadação Valor Total dos pagamentos
-	 * associados ao aviso Situação do Aviso
+	 * Lista os avisos bancï¿½rios associados ao movimento com os seguintes dados:
+	 * Data do lanï¿½amento Sequencial do Aviso Tipo do Aviso Data do Crï¿½dito
+	 * Valor do Crï¿½dito Valor da Arrecadaï¿½ï¿½o Valor Total dos pagamentos
+	 * associados ao aviso Situaï¿½ï¿½o do Aviso
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 08/03/2006
 	 * 
 	 * @param arrecadadorMovimento
 	 * @return Uma Collection<AvisoBancarioHelper> que representa a os avisos
-	 *         bancários selecionados
+	 *         bancï¿½rios selecionados
 	 * @throws ControladorException
 	 */
 	public Collection<AvisoBancarioHelper> obterColecaoAvisosBancariosPorArrecadadorMovimento(ArrecadadorMovimento arrecadadorMovimento) {
@@ -3728,16 +3728,16 @@ public class Fachada {
 	}
 
 	/**
-	 * Caso o valor total dos pagamentos seja igual ao valor da arrecadação
-	 * (AVBC_VLARRECADACAO) e o valor total das devoluções seja igual ao valor
-	 * da devolução (AVBC_VLDEVOLUCAO) a situação será "FECHADO"; Caso contrário
-	 * será "ABERTO"
+	 * Caso o valor total dos pagamentos seja igual ao valor da arrecadaï¿½ï¿½o
+	 * (AVBC_VLARRECADACAO) e o valor total das devoluï¿½ï¿½es seja igual ao valor
+	 * da devoluï¿½ï¿½o (AVBC_VLDEVOLUCAO) a situaï¿½ï¿½o serï¿½ "FECHADO"; Caso contrï¿½rio
+	 * serï¿½ "ABERTO"
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 09/03/2006
 	 * 
 	 * @param avisoBancario
-	 * @return Uma String que representa a situação do aviso
+	 * @return Uma String que representa a situaï¿½ï¿½o do aviso
 	 * @throws ControladorException
 	 */
 	public String obterSituacaoAvisoBancarioParaArrecadadorMovimento(AvisoBancario avisoBancario) {
@@ -3764,10 +3764,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso apresenta a análise do aviso bancário e os
-	 * pagamentos/devoluções associados.
+	 * Este caso de uso apresenta a anï¿½lise do aviso bancï¿½rio e os
+	 * pagamentos/devoluï¿½ï¿½es associados.
 	 * 
-	 * [UC0267] - Apresentar análise do Aviso bancário
+	 * [UC0267] - Apresentar anï¿½lise do Aviso bancï¿½rio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 23/03/2006
@@ -3829,8 +3829,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Metodo que atualiza uma medição histórico verificando a ultima alteracao
-	 * para o controle de concorrência
+	 * Metodo que atualiza uma mediï¿½ï¿½o histï¿½rico verificando a ultima alteracao
+	 * para o controle de concorrï¿½ncia
 	 * 
 	 * @param medicaoHistorico
 	 * @throws ControladorException
@@ -3844,7 +3844,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que verifica se o usuario esta cadastrado em outro imovel que
+	 * mï¿½todo que verifica se o usuario esta cadastrado em outro imovel que
 	 * esteja na tarifa social e verifica se ja esta cadastrado como usuario de
 	 * algum imovel economia,
 	 * 
@@ -3868,7 +3868,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que atualiza o aviso bancario, adiciona as deducoes e acertos
+	 * mï¿½todo que atualiza o aviso bancario, adiciona as deducoes e acertos
 	 * novas e remove as deducoes e os acertos que forma para remover
 	 * 
 	 * @author thiago
@@ -3892,7 +3892,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Filtrar Aviso bancário de acordo com a opção Aberto/Fechado
+	 * Filtrar Aviso bancï¿½rio de acordo com a opï¿½ï¿½o Aberto/Fechado
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 20/03/2006
@@ -3917,7 +3917,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Validar Filtrar Aviso Bancário
+	 * Validar Filtrar Aviso Bancï¿½rio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/03/2006
@@ -3956,9 +3956,9 @@ public class Fachada {
 	/**
 	 * Pesquisa o maior ano mes de referencia da tabela de faturamento grupo
 	 * 
-	 * [UC0177] Informar Situacao Especial de Cobrança
+	 * [UC0177] Informar Situacao Especial de Cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 18/03/2006
 	 * 
 	 * @param situacaoEspecialCobrancaHelper
@@ -3973,12 +3973,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Atualiza o id da Cobrança situação tipo da tabela imóvel com o id da
-	 * situação escolhido pelo usuario
+	 * Atualiza o id da Cobranï¿½a situaï¿½ï¿½o tipo da tabela imï¿½vel com o id da
+	 * situaï¿½ï¿½o escolhido pelo usuario
 	 * 
-	 * [UC0177] Informar Situacao Especial de Cobrança
+	 * [UC0177] Informar Situacao Especial de Cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 18/03/2006
 	 * 
 	 * @param situacaoEspecialCobrancaHelper
@@ -3994,11 +3994,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Seta para null o id da Cobrança situação tipo da tabela imóvel
+	 * Seta para null o id da Cobranï¿½a situaï¿½ï¿½o tipo da tabela imï¿½vel
 	 * 
-	 * [UC0177] Informar Situacao Especial de Cobrança
+	 * [UC0177] Informar Situacao Especial de Cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 18/03/2006
 	 * 
 	 * @param situacaoEspecialCobrancaHelper
@@ -4016,12 +4016,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri a Cobrança situação historico na base passando a coleção de
-	 * Cobrança situação historico
+	 * Inseri a Cobranï¿½a situaï¿½ï¿½o historico na base passando a coleï¿½ï¿½o de
+	 * Cobranï¿½a situaï¿½ï¿½o historico
 	 * 
-	 * [UC0177] Informar Situacao Especial de Cobrança
+	 * [UC0177] Informar Situacao Especial de Cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 20/03/2006
 	 * 
 	 * @param collectionCobrancaSituacaoHistorico
@@ -4037,7 +4037,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que recebe um array de Integer e remove os Avisos Bancarios dos
+	 * mï¿½todo que recebe um array de Integer e remove os Avisos Bancarios dos
 	 * ids passado, caso exista um Aviso Bancario que tenha um relacionamento
 	 * com outra tabela entao nao remove nenhum. Outra tabela fora aviso_deducao
 	 * e aviso_acerto
@@ -4059,12 +4059,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0270] Apresentar análise do Movimento dos Arrecadadores
+	 * [UC0270] Apresentar anï¿½lise do Movimento dos Arrecadadores
 	 * 
 	 * O sistema seleciona os itens do movimento do arrecadador com os seguintes
-	 * dados: 1 - Código do Registro 2 - Identificação do imóvel/Cliente 3 -
-	 * ocorrência 4 - Indicador de Aceitação 5 - Descrição do Indicador de
-	 * Aceitação
+	 * dados: 1 - Cï¿½digo do Registro 2 - Identificaï¿½ï¿½o do imï¿½vel/Cliente 3 -
+	 * ocorrï¿½ncia 4 - Indicador de Aceitaï¿½ï¿½o 5 - Descriï¿½ï¿½o do Indicador de
+	 * Aceitaï¿½ï¿½o
 	 * 
 	 * [SF0001] Consultar os Itens do Movimento do Arrecadador
 	 * 
@@ -4087,11 +4087,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
+	 * Permite efetuar o parcelamento dos dï¿½bitos de um imï¿½vel
 	 * 
-	 * [UC0214] Efetuar Parcelamento de débitos
+	 * [UC0214] Efetuar Parcelamento de dï¿½bitos
 	 * 
-	 * Atualiza a situação das Contas para Efetuar Parcelamento
+	 * Atualiza a situaï¿½ï¿½o das Contas para Efetuar Parcelamento
 	 * 
 	 * atualizarContaEfetuarParcelamentoDebito
 	 * 
@@ -4111,13 +4111,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
+	 * Permite efetuar o parcelamento dos dï¿½bitos de um imï¿½vel
 	 * 
-	 * [UC0214] Efetuar Parcelamento de débitos
+	 * [UC0214] Efetuar Parcelamento de dï¿½bitos
 	 * 
-	 * Verifica a existência de parcelamento no mês
+	 * Verifica a existï¿½ncia de parcelamento no mï¿½s
 	 * 
-	 * [FS0012] Verifica a existência de parcelamento no mês
+	 * [FS0012] Verifica a existï¿½ncia de parcelamento no mï¿½s
 	 * 
 	 * @author Roberta Costa
 	 * @date 21/03/2006
@@ -4134,12 +4134,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0270] Apresentar análise do Movimento dos Arrecadadores
+	 * [UC0270] Apresentar anï¿½lise do Movimento dos Arrecadadores
 	 * 
-	 * O sistema captura os dados referentes ao conteúdo do registro de
+	 * O sistema captura os dados referentes ao conteï¿½do do registro de
 	 * Movimento do arrecadador
 	 * 
-	 * [SF0002] Apresentar Dados do conteúdo do Registro de Movimento do
+	 * [SF0002] Apresentar Dados do conteï¿½do do Registro de Movimento do
 	 * Arrecadador
 	 * 
 	 * @author Raphael Rossiter
@@ -4160,17 +4160,17 @@ public class Fachada {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
-	 * <Breve descrição sobre o subfluxo>
+	 * <Breve descriï¿½ï¿½o sobre o subfluxo>
 	 * 
 	 * <Identificador e nome do subfluxo>
 	 * 
-	 * <Breve descrição sobre o fluxo secundário>
+	 * <Breve descriï¿½ï¿½o sobre o fluxo secundï¿½rio>
 	 * 
-	 * <Identificador e nome do fluxo secundário>
+	 * <Identificador e nome do fluxo secundï¿½rio>
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 22/03/2006
@@ -4188,7 +4188,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * método que consulta todas as TabelaColunas que estejam ligadas a uma
+	 * mï¿½todo que consulta todas as TabelaColunas que estejam ligadas a uma
 	 * Operacao
 	 * 
 	 * @author Thiago Toscano
@@ -4207,7 +4207,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que pesquisa todas as tabelas colunas que tem ligacao com operacao
+	 * mï¿½todo que pesquisa todas as tabelas colunas que tem ligacao com operacao
 	 * pela operacao tabela
 	 * 
 	 * @author thiago toscano
@@ -4228,14 +4228,14 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Obtem uma coleção com as listas de atividades de cronograma ação cobranca
-	 * que estão comandadas
+	 * Obtem uma coleï¿½ï¿½o com as listas de atividades de cronograma aï¿½ï¿½o cobranca
+	 * que estï¿½o comandadas
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Verificar Seleção de pelo menos uma atividade de Cobrança
+	 * Verificar Seleï¿½ï¿½o de pelo menos uma atividade de Cobranï¿½a
 	 * 
-	 * [FS0002] - Verificar Seleção de pelo menos uma atividade de Cobrança
+	 * [FS0002] - Verificar Seleï¿½ï¿½o de pelo menos uma atividade de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 23/03/2006
@@ -4254,14 +4254,14 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Obtem uma coleção com as listas de eventual de comando ação cobranca que
-	 * estão comandadas
+	 * Obtem uma coleï¿½ï¿½o com as listas de eventual de comando aï¿½ï¿½o cobranca que
+	 * estï¿½o comandadas
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Verificar Seleção de pelo menos uma atividade de Cobrança
+	 * Verificar Seleï¿½ï¿½o de pelo menos uma atividade de Cobranï¿½a
 	 * 
-	 * [FS0002] - Verificar Seleção de pelo menos uma atividade de Cobrança
+	 * [FS0002] - Verificar Seleï¿½ï¿½o de pelo menos uma atividade de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 23/03/2006
@@ -4279,14 +4279,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Este fluxo secundário tem como objetivo pesquisar a localidade digitada
-	 * pelo usuário
+	 * Este fluxo secundï¿½rio tem como objetivo pesquisar a localidade digitada
+	 * pelo usuï¿½rio
 	 * 
-	 * [FS0007] - Verificar existência da localidade
+	 * [FS0007] - Verificar existï¿½ncia da localidade
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -4303,14 +4303,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Este fluxo secundário tem como objetivo pesquisar o imóvel digitado pelo
-	 * usuário
+	 * Este fluxo secundï¿½rio tem como objetivo pesquisar o imï¿½vel digitado pelo
+	 * usuï¿½rio
 	 * 
-	 * [FS0008] - Verificar existência da matrícula do imóvel
+	 * [FS0008] - Verificar existï¿½ncia da matrï¿½cula do imï¿½vel
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -4328,13 +4328,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica se a localidade informada é a mesma do imóvel informado
+	 * Verifica se a localidade informada ï¿½ a mesma do imï¿½vel informado
 	 * 
-	 * [FS0009] - Verificar localidade da matrícula do imóvel
+	 * [FS0009] - Verificar localidade da matrï¿½cula do imï¿½vel
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -4352,14 +4352,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Este fluxo secundário tem como objetivo pesquisar o cliente digitado pelo
-	 * usuário
+	 * Este fluxo secundï¿½rio tem como objetivo pesquisar o cliente digitado pelo
+	 * usuï¿½rio
 	 * 
-	 * [FS0011] - Verificar existência do Código do cliente
+	 * [FS0011] - Verificar existï¿½ncia do Cï¿½digo do cliente
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -4376,13 +4376,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Pesquisa a conta do imóvel com a referência informada pelo usuário
+	 * Pesquisa a conta do imï¿½vel com a referï¿½ncia informada pelo usuï¿½rio
 	 * 
-	 * [FS0012] - Verificar existência da conta
+	 * [FS0012] - Verificar existï¿½ncia da conta
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -4400,13 +4400,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Pesquisa o tipo de débito informado pelo usuário
+	 * Pesquisa o tipo de dï¿½bito informado pelo usuï¿½rio
 	 * 
-	 * [FS0020] - Verificar existência do tipo de débito
+	 * [FS0020] - Verificar existï¿½ncia do tipo de dï¿½bito
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -4423,13 +4423,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Pesquisa o débito a cobrar do imóvel informado pelo usuário
+	 * Pesquisa o dï¿½bito a cobrar do imï¿½vel informado pelo usuï¿½rio
 	 * 
-	 * [FS0024] - Verificar existência do débito a cobrar
+	 * [FS0024] - Verificar existï¿½ncia do dï¿½bito a cobrar
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -4447,13 +4447,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Pesquisa a guia de pagamento do imóvel informado pelo usuário
+	 * Pesquisa a guia de pagamento do imï¿½vel informado pelo usuï¿½rio
 	 * 
-	 * [FS0022] - Verificar existência da guia de pagamento
+	 * [FS0022] - Verificar existï¿½ncia da guia de pagamento
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -4472,14 +4472,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica se o usuário informou o imóvel ou o cliente, Não pode existir os
+	 * Verifica se o usuï¿½rio informou o imï¿½vel ou o cliente, Nï¿½o pode existir os
 	 * doi nem nenhum
 	 * 
-	 * [FS0010] Verificar preenchimento do imóvel e do cliente
+	 * [FS0010] Verificar preenchimento do imï¿½vel e do cliente
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 24/03/2006
@@ -4496,14 +4496,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica se o usuário informou o Código da guia de pagamento e o tipo de
-	 * débito, só pode ser informado um dos dois
+	 * Verifica se o usuï¿½rio informou o Cï¿½digo da guia de pagamento e o tipo de
+	 * dï¿½bito, sï¿½ pode ser informado um dos dois
 	 * 
-	 * [FS0021] Verificar preenchimento da guia de pagamento e do tipo de débito
+	 * [FS0021] Verificar preenchimento da guia de pagamento e do tipo de dï¿½bito
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -4520,14 +4520,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica se o usuário informou o Código do débito a cobrar e o tipo de
-	 * débito, só pode ser informado um dos dois
+	 * Verifica se o usuï¿½rio informou o Cï¿½digo do dï¿½bito a cobrar e o tipo de
+	 * dï¿½bito, sï¿½ pode ser informado um dos dois
 	 * 
-	 * [FS0023] Verificar preenchimento do débito a cobrar e do tipo de débito
+	 * [FS0023] Verificar preenchimento do dï¿½bito a cobrar e do tipo de dï¿½bito
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -4544,11 +4544,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica se a localidade informada é a mesma da guia de pagamento
+	 * Verifica se a localidade informada ï¿½ a mesma da guia de pagamento
 	 * 
 	 * [FS0014] Verificar localidade da guia de pagamento
 	 * 
@@ -4567,13 +4567,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica se a localidade informada é a mesma do débito a cobrar
+	 * Verifica se a localidade informada ï¿½ a mesma do dï¿½bito a cobrar
 	 * 
-	 * [FS0017] Verificar localidade do débito a cobrar
+	 * [FS0017] Verificar localidade do dï¿½bito a cobrar
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 16/02/2006
@@ -4590,14 +4590,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica a existência de débito a cobrar com o tipo de débito e o imóvel
+	 * Verifica a existï¿½ncia de dï¿½bito a cobrar com o tipo de dï¿½bito e o imï¿½vel
 	 * informados
 	 * 
-	 * [FS0016] Verificar existência de débito a cobrar com tipo de débito
+	 * [FS0016] Verificar existï¿½ncia de dï¿½bito a cobrar com tipo de dï¿½bito
 	 * informado
 	 * 
 	 * @author Pedro Alexandre
@@ -4617,14 +4617,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma coleção de pagamentos no sistema
+	 * Inseri uma coleï¿½ï¿½o de pagamentos no sistema
 	 * 
 	 * [UC0265] Inserir Pagamentos
 	 * 
-	 * Verifica a existência de guia de pagamento com o tipo de débito e o
-	 * imóvel informados
+	 * Verifica a existï¿½ncia de guia de pagamento com o tipo de dï¿½bito e o
+	 * imï¿½vel informados
 	 * 
-	 * [FS0013] Verificar existência de guia de pagamento com tipo de débito
+	 * [FS0013] Verificar existï¿½ncia de guia de pagamento com tipo de dï¿½bito
 	 * informado
 	 * 
 	 * @author Pedro Alexandre
@@ -4646,13 +4646,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
+	 * Permite efetuar o parcelamento dos dï¿½bitos de um imï¿½vel
 	 * 
-	 * [UC0214] Efetuar Parcelamento de Débitos
+	 * [UC0214] Efetuar Parcelamento de Dï¿½bitos
 	 * 
-	 * Obtém as Opções de Parcelamento do Débito do Imóvel
+	 * Obtï¿½m as Opï¿½ï¿½es de Parcelamento do Dï¿½bito do Imï¿½vel
 	 * 
-	 * [SB0002] Obter Opções Parcelamento
+	 * [SB0002] Obter Opï¿½ï¿½es Parcelamento
 	 * 
 	 * @author Roberta Costa, Vivianne Sousa, Raphael Rossiter
 	 * @date 21/03/2006, 30/10/2006, 12/09/2008
@@ -4672,12 +4672,12 @@ public class Fachada {
 	}
 
 	/**
-	 * responsável pela manutenção das informAções de pagamento
+	 * responsï¿½vel pela manutenï¿½ï¿½o das informAï¿½ï¿½es de pagamento
 	 * 
 	 * [UC0266] Manter Pagamentos
 	 * 
-	 * Atualiza um pagamento no sistema, verificando se a atualização já foi
-	 * executada por outro usuário
+	 * Atualiza um pagamento no sistema, verificando se a atualizaï¿½ï¿½o jï¿½ foi
+	 * executada por outro usuï¿½rio
 	 * 
 	 * [SB0001] Atualizar Pagamento
 	 * 
@@ -4697,7 +4697,7 @@ public class Fachada {
 	/**
 	 * Obtem a Lista de Rotas
 	 * 
-	 * [UC0244] Manter Comando Ação Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 22/03/2006
@@ -4728,10 +4728,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * Executa o Comando Eventual
 	 * 
@@ -4759,14 +4759,14 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Exclui Comando de Atividade do Cronograma de Ação de Cobrança
+	 * Exclui Comando de Atividade do Cronograma de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [SB0001] - Excluir Comando de Atividade de Ação de Cobrança
+	 * [SB0001] - Excluir Comando de Atividade de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 24/03/2006
@@ -4784,14 +4784,14 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Exclui Comando de Atividade de Eventual de Ação de Cobrança
+	 * Exclui Comando de Atividade de Eventual de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [SB0003] - Excluir Comando de Atividade Eventual de Ação de Cobrança
+	 * [SB0003] - Excluir Comando de Atividade Eventual de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 24/03/2006
@@ -4807,10 +4807,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * Consultar Linhas do Criterios
 	 * 
@@ -4834,14 +4834,14 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Selecionar Critérios do Comando
+	 * Selecionar Critï¿½rios do Comando
 	 * 
-	 * [SB0004] - Selecionar Critérios do Comando
+	 * [SB0004] - Selecionar Critï¿½rios do Comando
 	 * 
 	 * @author Rafael Santos
 	 * @date 24/03/2006
@@ -4864,12 +4864,12 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Consultar O Periodo Final da Conta para usar em Cobranca Ação Atividade
+	 * Consultar O Periodo Final da Conta para usar em Cobranca Aï¿½ï¿½o Atividade
 	 * Comando
 	 * 
 	 * @author Rafael Santos
@@ -4888,12 +4888,12 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Consultar O Periodo Vencimento da Conta para usar em Cobranca Ação
+	 * Consultar O Periodo Vencimento da Conta para usar em Cobranca Aï¿½ï¿½o
 	 * Atividade Comando
 	 * 
 	 * @author Rafael Santos
@@ -4912,10 +4912,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * Consultar as Cobranca Grupo
 	 * 
@@ -4937,10 +4937,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * Consultar as Cobranca Atividade
 	 * 
@@ -4962,10 +4962,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * Consultar as Cobranca Acao
 	 * 
@@ -4986,10 +4986,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * Consultar as Gerencia Regionais
 	 * 
@@ -5010,10 +5010,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * Consultar as Unidade Negocio
 	 * 
@@ -5034,12 +5034,12 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Consultar as Relações Cliente Tipo
+	 * Consultar as Relaï¿½ï¿½es Cliente Tipo
 	 * 
 	 * @author Rafael Santos
 	 * @date 25/03/2006
@@ -5058,12 +5058,12 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Consultar as Cobrança Atividade pela Atividade
+	 * Consultar as Cobranï¿½a Atividade pela Atividade
 	 * 
 	 * @author Rafael Santos
 	 * @date 25/03/2006
@@ -5081,12 +5081,12 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Consultar as Coleção de Rotas do Setor Comercial
+	 * Consultar as Coleï¿½ï¿½o de Rotas do Setor Comercial
 	 * 
 	 * @author Rafael Santos
 	 * @date 25/03/2006
@@ -5104,11 +5104,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0038] Inserir Situação do imóvel
+	 * [UC0038] Inserir Situaï¿½ï¿½o do imï¿½vel
 	 * 
-	 * Validar Inserir Situação do imóvel
+	 * Validar Inserir Situaï¿½ï¿½o do imï¿½vel
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 29/03/2006
 	 * @param idImovelSituacaoTipo
 	 * @param idLigacaoAguaSituacao
@@ -5152,9 +5152,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Este método de pesquisa serve para localizar qualquer objeto no sistema.
-	 * Ele aceita como parâmetro um offset que indica a página desejada no
-	 * esquema de paginação. A paginação procura 10 registros de casa vez.
+	 * Este mï¿½todo de pesquisa serve para localizar qualquer objeto no sistema.
+	 * Ele aceita como parï¿½metro um offset que indica a pï¿½gina desejada no
+	 * esquema de paginaï¿½ï¿½o. A paginaï¿½ï¿½o procura 10 registros de casa vez.
 	 * 
 	 * @author Rodrigo Silveira
 	 * @date 30/03/2006
@@ -5162,10 +5162,10 @@ public class Fachada {
 	 * @param filtro
 	 *            Filtro da pesquisa
 	 * @param pageOffset
-	 *            Indicador da página desejada do esquema de paginação
+	 *            Indicador da pï¿½gina desejada do esquema de paginaï¿½ï¿½o
 	 * @param pacoteNomeObjeto
 	 *            Pacote do objeto
-	 * @return Coleção dos resultados da pesquisa
+	 * @return Coleï¿½ï¿½o dos resultados da pesquisa
 	 */
 
 	@SuppressWarnings("rawtypes")
@@ -5178,8 +5178,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Informa o número total de registros de uma pesquisa, auxiliando o esquema
-	 * de paginação
+	 * Informa o nï¿½mero total de registros de uma pesquisa, auxiliando o esquema
+	 * de paginaï¿½ï¿½o
 	 * 
 	 * @author Rodrigo Silveira
 	 * @date 30/03/2006
@@ -5188,7 +5188,7 @@ public class Fachada {
 	 *            da Pesquisa
 	 * @param Pacote
 	 *            do objeto pesquisado
-	 * @return número de registros da pesquisa
+	 * @return nï¿½mero de registros da pesquisa
 	 */
 
 	public int totalRegistrosPesquisa(Filtro filtro, String pacoteNomeObjeto) {
@@ -5201,11 +5201,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite inserir uma Resolução de Diretoria
+	 * Permite inserir uma Resoluï¿½ï¿½o de Diretoria
 	 * 
-	 * [UC0217] Inserir Resolução de Diretoria
+	 * [UC0217] Inserir Resoluï¿½ï¿½o de Diretoria
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 30/03/2006
 	 * 
 	 */
@@ -5220,9 +5220,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite inserir um Historico Alteração de Sistema
+	 * Permite inserir um Historico Alteraï¿½ï¿½o de Sistema
 	 * 
-	 * [UC0217] Inserir Historico AlterAções de Sistema
+	 * [UC0217] Inserir Historico AlterAï¿½ï¿½es de Sistema
 	 * 
 	 * @author Thiago Tenorio
 	 * @date 04/12/2006
@@ -5239,13 +5239,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite atualizar uma Resolução de Diretoria
+	 * Permite atualizar uma Resoluï¿½ï¿½o de Diretoria
 	 * 
-	 * [UC0218] Manter Resolução de Diretoria
+	 * [UC0218] Manter Resoluï¿½ï¿½o de Diretoria
 	 * 
-	 * [SB0001] - Atualizar Resolução de Diretoria
+	 * [SB0001] - Atualizar Resoluï¿½ï¿½o de Diretoria
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 10/04/2006
 	 * 
 	 */
@@ -5280,13 +5280,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
+	 * Permite efetuar o parcelamento dos dï¿½bitos de um imï¿½vel
 	 * 
-	 * [UC0214] Efetuar Parcelamento de débitos
+	 * [UC0214] Efetuar Parcelamento de dï¿½bitos
 	 * 
-	 * Gera os débitos a Cobrar dos Acréscimos por Impontualidade
+	 * Gera os dï¿½bitos a Cobrar dos Acrï¿½scimos por Impontualidade
 	 * 
-	 * [SB0004] - Gerar débitos a Cobrar dos Acréscimos por Impontualidade
+	 * [SB0004] - Gerar dï¿½bitos a Cobrar dos Acrï¿½scimos por Impontualidade
 	 * 
 	 * @author Roberta Costa
 	 * @date 03/02/2006
@@ -5309,13 +5309,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
+	 * Permite efetuar o parcelamento dos dï¿½bitos de um imï¿½vel
 	 * 
-	 * [UC0214] Efetuar Parcelamento de débitos
+	 * [UC0214] Efetuar Parcelamento de dï¿½bitos
 	 * 
-	 * Gera os débitos a Cobrar do Parcelamento
+	 * Gera os dï¿½bitos a Cobrar do Parcelamento
 	 * 
-	 * [SB0005] - Gerar débitos a Cobrar do Parcelamento
+	 * [SB0005] - Gerar dï¿½bitos a Cobrar do Parcelamento
 	 * 
 	 * @author Roberta Costa
 	 * @date 29/03/2006
@@ -5343,7 +5343,7 @@ public class Fachada {
 
 	/**
 	 * O sistema seleciona os grupos de faturamento que possuem cronograma para
-	 * o mês corrente * [UC0144] Inserir Comando Atividade de Faturamento
+	 * o mï¿½s corrente * [UC0144] Inserir Comando Atividade de Faturamento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 03/03/2006
@@ -5362,12 +5362,12 @@ public class Fachada {
 
 	/**
 	 * O sistema seleciona os grupos de faturamento que possuem cronograma para
-	 * o mês corrente
+	 * o mï¿½s corrente
 	 * 
 	 * [UC0104] Manter Comando Atividade de Faturamento
 	 * 
 	 * Caso esteja no atualizar pode escolher todos os grupos exceto o
-	 * selecionado para atualização
+	 * selecionado para atualizaï¿½ï¿½o
 	 * 
 	 * pesquisarFaturamentoGrupoComCronogramaMensalParaMesCorrenteSemGupoSelecionado
 	 * 
@@ -5388,17 +5388,17 @@ public class Fachada {
 
 	/**
 	 * 
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
-	 * <Breve descrição sobre o subfluxo>
+	 * <Breve descriï¿½ï¿½o sobre o subfluxo>
 	 * 
 	 * <Identificador e nome do subfluxo>
 	 * 
-	 * <Breve descrição sobre o fluxo secundário>
+	 * <Breve descriï¿½ï¿½o sobre o fluxo secundï¿½rio>
 	 * 
-	 * <Identificador e nome do fluxo secundário>
+	 * <Identificador e nome do fluxo secundï¿½rio>
 	 * 
 	 * @author Administrador
 	 * @date 03/04/2006
@@ -5412,13 +5412,13 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Inserir um comando de atividade de Cobrança eventual
+	 * Inserir um comando de atividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0243] - Inserir Comando Ação de Cobrança
+	 * [UC0243] - Inserir Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Verificar referência final menor que referência inicial
+	 * Verificar referï¿½ncia final menor que referï¿½ncia inicial
 	 * 
-	 * [FS0012] - Verificar referência final menor que referência inicial
+	 * [FS0012] - Verificar referï¿½ncia final menor que referï¿½ncia inicial
 	 * 
 	 * @author Rafael Santos
 	 * @throws ControladorException
@@ -5434,9 +5434,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Inserir um comando de atividade de Cobrança eventual
+	 * Inserir um comando de atividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0243] - Inserir Comando Ação de Cobrança
+	 * [UC0243] - Inserir Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * Verificar data final menos que data inicial
 	 * 
@@ -5456,15 +5456,15 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Este caso de uso permite a consulta de documentos de Cobrança
+	 * Este caso de uso permite a consulta de documentos de Cobranï¿½a
 	 * 
-	 * [UC0257] - Consultar Documentos de Cobrança
+	 * [UC0257] - Consultar Documentos de Cobranï¿½a
 	 * 
-	 * Apresenta os itens dos documentos de Cobrança
+	 * Apresenta os itens dos documentos de Cobranï¿½a
 	 * 
-	 * [SB0001] - Apresenta Itens do Documento de Cobrança
+	 * [SB0001] - Apresenta Itens do Documento de Cobranï¿½a
 	 * 
-	 * @author Rafael Corrêa & Raphael Rossiter
+	 * @author Rafael Corrï¿½a & Raphael Rossiter
 	 * @date 05/04/2006
 	 */
 	public CobrancaDocumentoHelper apresentaItensDocumentoCobranca(CobrancaDocumento cobrancaDocumento) {
@@ -5525,11 +5525,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Inserir Comando de Ação de Cobrança
+	 * Inserir Comando de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [UC0243] Inserir Comando Ação de Cobrança
+	 * [UC0243] Inserir Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Consultar Cobranca Ação
+	 * Consultar Cobranca Aï¿½ï¿½o
 	 * 
 	 * @author Rafael Santos
 	 * @date 04/04/2006
@@ -5549,9 +5549,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Inserir Comando de Ação de Cobrança
+	 * Inserir Comando de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [UC0243] Inserir Comando Ação de Cobrança
+	 * [UC0243] Inserir Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * Consultar CobrancaAtividade
 	 * 
@@ -5572,9 +5572,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Inserir Comando de Ação de Cobrança
+	 * Inserir Comando de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [UC0243] Inserir Comando Ação de Cobrança
+	 * [UC0243] Inserir Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * Atualizar Comando
 	 * 
@@ -5596,11 +5596,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Inserir Comando de Ação de Cobrança
+	 * Inserir Comando de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [UC0243] Inserir Comando Ação de Cobrança
+	 * [UC0243] Inserir Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Concluir Comando de Ação de Cobrança
+	 * Concluir Comando de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 05/04/2006
@@ -5631,12 +5631,12 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite excluir um comando de atividade de Cobrança do crongrama ou
-	 * alterar/excluir um comando deatividade de Cobrança eventual
+	 * Permite excluir um comando de atividade de Cobranï¿½a do crongrama ou
+	 * alterar/excluir um comando deatividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Consultar Cobranca Ação CAtividade Comando
+	 * Consultar Cobranca Aï¿½ï¿½o CAtividade Comando
 	 * 
 	 * @author Rafael Santos
 	 * @date 25/03/2006
@@ -5654,11 +5654,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Insere os aviso deduções no aviso bancário
+	 * Insere os aviso deduï¿½ï¿½es no aviso bancï¿½rio
 	 * 
-	 * [UC0000] Inserir Aviso bancário
+	 * [UC0000] Inserir Aviso bancï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 18/04/2006
 	 * 
 	 * @throws ControladorException
@@ -5697,7 +5697,7 @@ public class Fachada {
 	 * @date 20/04/2006
 	 * 
 	 * @param avisoBancarioHelper
-	 * @return Coleção de DebitoAutomaticoMovimento
+	 * @return Coleï¿½ï¿½o de DebitoAutomaticoMovimento
 	 * @throws ErroRepositorioException
 	 */
 	@SuppressWarnings("rawtypes")
@@ -5710,15 +5710,15 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
+	 * Permite efetuar o parcelamento dos dï¿½bitos de um imï¿½vel
 	 * 
-	 * [UC0214] Efetuar Parcelamento de débitos
+	 * [UC0214] Efetuar Parcelamento de dï¿½bitos
 	 * 
-	 * Obtém as Opções de Parcelamento do débito do imóvel
+	 * Obtï¿½m as Opï¿½ï¿½es de Parcelamento do dï¿½bito do imï¿½vel
 	 * 
-	 * [SF0002] Obter Opções Parcelamento
+	 * [SF0002] Obter Opï¿½ï¿½es Parcelamento
 	 * 
-	 * Obtém o perfil do imóvel
+	 * Obtï¿½m o perfil do imï¿½vel
 	 * 
 	 * @author Roberta Costa
 	 * @date 24/04/2006
@@ -5737,11 +5737,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
+	 * Permite efetuar o parcelamento dos dï¿½bitos de um imï¿½vel
 	 * 
-	 * [UC0214] Efetuar Parcelamento de débitos
+	 * [UC0214] Efetuar Parcelamento de dï¿½bitos
 	 * 
-	 * Obtém o Perfil do parcelamento para o imóvel
+	 * Obtï¿½m o Perfil do parcelamento para o imï¿½vel
 	 * 
 	 * @author Roberta Costa
 	 * @date 24/04/2006
@@ -5761,13 +5761,13 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0319] Gerar Movimento de débito automático para o banco
+	 * [UC0319] Gerar Movimento de dï¿½bito automï¿½tico para o banco
 	 * 
-	 * gera o movimento do débito automático e gera o txt para o banco
+	 * gera o movimento do dï¿½bito automï¿½tico e gera o txt para o banco
 	 * 
-	 * [SB0001] - Gerar Movimento para débito automático
+	 * [SB0001] - Gerar Movimento para dï¿½bito automï¿½tico
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 18/04/2006
 	 * 
 	 * @param debitosAutomaticoBancosMap
@@ -5779,8 +5779,8 @@ public class Fachada {
 				new Object[] { debitosAutomaticoBancosMap, usuario });
 	}
 
-	// Método usado apenas para gerar a lista dos clientes que estão em Devito automático
-	// Não existe o recurso no formulário
+	// Mï¿½todo usado apenas para gerar a lista dos clientes que estï¿½o em Devito automï¿½tico
+	// Nï¿½o existe o recurso no formulï¿½rio
 	// Para rodar em maquina local
 	public boolean gerarArquivodebitoAutomaticoBanco(Map<Banco, Collection<DebitoAutomaticoMovimento>> debitosAutomaticoBancosMap, Usuario usuario) {
 		try {
@@ -5791,15 +5791,15 @@ public class Fachada {
 	}
 	
 	/**
-	 * [UC0319] Gerar Movimento de débito automático para o banco
+	 * [UC0319] Gerar Movimento de dï¿½bito automï¿½tico para o banco
 	 * 
-	 * Cria uma linha de 150 posições com o registro tipo E.
+	 * Cria uma linha de 150 posiï¿½ï¿½es com o registro tipo E.
 	 * 
 	 * 
-	 * [SB0003] - Regerar arquivo TXT para um movimento de débito automático
+	 * [SB0003] - Regerar arquivo TXT para um movimento de dï¿½bito automï¿½tico
 	 * gerado anteriormente
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 25/04/2006
 	 * 
 	 * @param arrecadadorMovimento
@@ -5814,9 +5814,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Manter um comando de atividade de Cobrança eventual
+	 * Manter um comando de atividade de Cobranï¿½a eventual
 	 * 
-	 * [UC0244] - Manter Comando Ação de Cobrança
+	 * [UC0244] - Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * Manter cobranca acao atividade comando
 	 * 
@@ -5849,11 +5849,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Manter Comando de Ação de Cobrança
+	 * Manter Comando de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Executar Comando Concluir Comando de Ação de Cobrança
+	 * Executar Comando Concluir Comando de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 24/04/2006
@@ -5873,11 +5873,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Manter Comando de Ação de Cobrança
+	 * Manter Comando de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Concluir Comando de Ação de Cobrança
+	 * Concluir Comando de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 24/04/2006
@@ -5908,11 +5908,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
+	 * Permite efetuar o parcelamento dos dï¿½bitos de um imï¿½vel
 	 * 
-	 * [UC0214] Efetuar Parcelamento de Débitos
+	 * [UC0214] Efetuar Parcelamento de Dï¿½bitos
 	 * 
-	 * Faz as atualizações e inserções do parcelamento do débito
+	 * Faz as atualizaï¿½ï¿½es e inserï¿½ï¿½es do parcelamento do dï¿½bito
 	 * 
 	 * concluirParcelamentoDebitos
 	 * 
@@ -5933,11 +5933,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
+	 * Permite efetuar o parcelamento dos dï¿½bitos de um imï¿½vel
 	 * 
-	 * [UC0214] Efetuar Parcelamento de Débitos Portal
+	 * [UC0214] Efetuar Parcelamento de Dï¿½bitos Portal
 	 * 
-	 * Faz as atualizações e inserções do parcelamento do débito Este método é o
+	 * Faz as atualizaï¿½ï¿½es e inserï¿½ï¿½es do parcelamento do dï¿½bito Este mï¿½todo ï¿½ o
 	 * mesmo utilizado pelo GSAN
 	 * 
 	 * concluirParcelamentoDebitos
@@ -5966,7 +5966,7 @@ public class Fachada {
 	 * Metodo que verifica os dados da tabela e inseri a funcionalidade
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 28/04/2006
 	 * @param funcionalidade
 	 */
@@ -5986,7 +5986,7 @@ public class Fachada {
 	 * que atualiza a funcionalidade
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 17/05/2006
 	 * 
 	 * @param funcionalidade
@@ -6006,7 +6006,7 @@ public class Fachada {
 	 * 
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 15/06/2006
 	 * 
 	 * @param usuario
@@ -6023,12 +6023,12 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Inseri um Cornograma de Cobrança com as Ações de Cobranças e suas
+	 * Inseri um Cornograma de Cobranï¿½a com as Aï¿½ï¿½es de Cobranï¿½as e suas
 	 * Atividades
 	 * 
-	 * [UC0312] Inserir Cornograma de Cobrança
+	 * [UC0312] Inserir Cornograma de Cobranï¿½a
 	 * 
-	 * @author Flávio Cordeiro
+	 * @author Flï¿½vio Cordeiro
 	 * @data 25/04/2006
 	 * 
 	 * @param cobrancaGrupoCronogramaMes
@@ -6053,11 +6053,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0322] - Inserir Guia de Devolução
+	 * [UC0322] - Inserir Guia de Devoluï¿½ï¿½o
 	 * 
-	 * Insere uma Guia de Devolução
+	 * Insere uma Guia de Devoluï¿½ï¿½o
 	 * 
-	 * @author Rafael Corrêa, Pedro Alexandre
+	 * @author Rafael Corrï¿½a, Pedro Alexandre
 	 * @date 29/04/2006, 21/11/2006
 	 * 
 	 * @return Integer
@@ -6116,13 +6116,13 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0314] - Desfazer Parcelamentos por Entrada Não Paga Author: Fernanda
+	 * [UC0314] - Desfazer Parcelamentos por Entrada Nï¿½o Paga Author: Fernanda
 	 * Paiva
 	 * 
 	 * Data: 02/05/2006
 	 * 
-	 * desfaz os parcelamentos de débitos efetuados no mês de faturamento
-	 * corrente e que estejam com situação normal
+	 * desfaz os parcelamentos de dï¿½bitos efetuados no mï¿½s de faturamento
+	 * corrente e que estejam com situaï¿½ï¿½o normal
 	 * 
 	 * @param codigoImovel
 	 */
@@ -6136,11 +6136,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Desfazer Parcelamentos de débitos Author: Fernanda Paiva
+	 * Desfazer Parcelamentos de dï¿½bitos Author: Fernanda Paiva
 	 * 
 	 * Data: 02/05/2006
 	 * 
-	 * desfaz os parcelamentos de débitos
+	 * desfaz os parcelamentos de dï¿½bitos
 	 * 
 	 * @param codigoImovel
 	 */
@@ -6178,7 +6178,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém o CEP PADRão para um determinado Município
+	 * Obtï¿½m o CEP PADRï¿½o para um determinado Municï¿½pio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 04/05/2006
@@ -6198,12 +6198,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0316] Inserir Critério de Cobrança
+	 * [UC0316] Inserir Critï¿½rio de Cobranï¿½a
 	 * 
-	 * Este caso de uso inseri a Cobrança Critério e as linhas da Cobrança
-	 * Critério
+	 * Este caso de uso inseri a Cobranï¿½a Critï¿½rio e as linhas da Cobranï¿½a
+	 * Critï¿½rio
 	 * 
-	 * @author Sávio luiz
+	 * @author Sï¿½vio luiz
 	 * @created 04/05/2006
 	 * 
 	 * @throws ControladorException
@@ -6221,14 +6221,14 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0317] Manter Critério de Cobrança
+	 * [UC0317] Manter Critï¿½rio de Cobranï¿½a
 	 * 
-	 * Este caso de uso atualiza a Cobrança Critério e as linhas da Cobrança
-	 * Critério
+	 * Este caso de uso atualiza a Cobranï¿½a Critï¿½rio e as linhas da Cobranï¿½a
+	 * Critï¿½rio
 	 * 
-	 * [SB0001] Atualizar Critério de Cobrança
+	 * [SB0001] Atualizar Critï¿½rio de Cobranï¿½a
 	 * 
-	 * @author Sávio luiz
+	 * @author Sï¿½vio luiz
 	 * @created 11/05/2006
 	 * 
 	 * @throws ControladorException
@@ -6249,14 +6249,14 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0317] Manter Critério de Cobrança
+	 * [UC0317] Manter Critï¿½rio de Cobranï¿½a
 	 * 
-	 * Este caso de uso atualiza a Cobrança Critério e as linhas da Cobrança
-	 * Critério
+	 * Este caso de uso atualiza a Cobranï¿½a Critï¿½rio e as linhas da Cobranï¿½a
+	 * Critï¿½rio
 	 * 
-	 * [SB0001] Atualizar Critério de Cobrança
+	 * [SB0001] Atualizar Critï¿½rio de Cobranï¿½a
 	 * 
-	 * @author Sávio luiz
+	 * @author Sï¿½vio luiz
 	 * @created 11/05/2006
 	 * 
 	 * @throws ControladorException
@@ -6298,7 +6298,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0329] Restabelecer Situação Anterior Conta
+	 * [UC0329] Restabelecer Situaï¿½ï¿½o Anterior Conta
 	 * 
 	 * @author Fernanda Paiva
 	 * @date 05/05/2006
@@ -6316,10 +6316,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Faz a pesquisa de guia de devolução para o Relatório fazendo os
+	 * Faz a pesquisa de guia de devoluï¿½ï¿½o para o Relatï¿½rio fazendo os
 	 * carregamentos de clienteContas, clienteImoveis, clientesGuiaPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 04/05/2006
 	 * 
 	 * @param FiltroGuiaDevolucao
@@ -6338,12 +6338,12 @@ public class Fachada {
 	/**
 	 * [UC0324] - Filtrar Guia de Devolucao
 	 * 
-	 * [SF0001] - Seleciona Guias de Devolução do Cliente
+	 * [SF0001] - Seleciona Guias de Devoluï¿½ï¿½o do Cliente
 	 * 
-	 * Faz a pesquisa de guia de devolução fazendo os carregamentos de
+	 * Faz a pesquisa de guia de devoluï¿½ï¿½o fazendo os carregamentos de
 	 * clienteContas, clienteImoveis, clientesGuiaPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 04/05/2006
 	 * 
 	 * @param FiltroGuiaDevolucao
@@ -6362,12 +6362,12 @@ public class Fachada {
 	/**
 	 * [UC0324] - Filtrar Guia de Devolucao
 	 * 
-	 * [SF0001] - Seleciona Guias de Devolução do Cliente
+	 * [SF0001] - Seleciona Guias de Devoluï¿½ï¿½o do Cliente
 	 * 
-	 * Faz a pesquisa de guia de devolução fazendo os carregamentos de
+	 * Faz a pesquisa de guia de devoluï¿½ï¿½o fazendo os carregamentos de
 	 * clienteContas, clienteImoveis, clientesGuiaPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 04/05/2006
 	 * 
 	 * @param FiltroGuiaDevolucao
@@ -6385,12 +6385,12 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Manter - Atualizar um Cornograma de Cobrança com as Ações de Cobranças e
+	 * Manter - Atualizar um Cornograma de Cobranï¿½a com as Aï¿½ï¿½es de Cobranï¿½as e
 	 * suas Atividades
 	 * 
-	 * [UC0313] Manter Cornograma de Cobrança
+	 * [UC0313] Manter Cornograma de Cobranï¿½a
 	 * 
-	 * @author Flávio Cordeiro
+	 * @author Flï¿½vio Cordeiro
 	 * @data 05/05/2006
 	 * 
 	 * @param cobrancaGrupoCronogramaMes
@@ -6412,7 +6412,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que insere um grupo e suas funcionalidades com as operacoes
+	 * mï¿½todo que insere um grupo e suas funcionalidades com as operacoes
 	 * 
 	 * [UC0278] Inserir Grupo
 	 * 
@@ -6432,7 +6432,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que atualiza um grupo e suas funcionalidades com as operacoes
+	 * mï¿½todo que atualiza um grupo e suas funcionalidades com as operacoes
 	 * 
 	 * [UC0279] Atualiza Grupo
 	 * 
@@ -6472,12 +6472,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0297] Inserir Situação Usuario
+	 * [UC0297] Inserir Situaï¿½ï¿½o Usuario
 	 * 
-	 * Metodo que verifica os dados da tabela e inseri a Situacção usuário
+	 * Metodo que verifica os dados da tabela e inseri a Situacï¿½ï¿½o usuï¿½rio
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 28/04/2006
 	 * @param funcionalidade
 	 */
@@ -6492,13 +6492,13 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0266] - Manter Guia de Devolução
+	 * [UC0266] - Manter Guia de Devoluï¿½ï¿½o
 	 * 
-	 * [SB0001] - Atualizar Guia de Devolução
+	 * [SB0001] - Atualizar Guia de Devoluï¿½ï¿½o
 	 * 
-	 * Atualiza uma Guia de Devolução e as devoluções associadas a ela
+	 * Atualiza uma Guia de Devoluï¿½ï¿½o e as devoluï¿½ï¿½es associadas a ela
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 10/05/2006
 	 * 
 	 * @throws ControladorException
@@ -6512,9 +6512,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseri uma operação e seus relacionamentos com as tabelas se existir
+	 * Inseri uma operaï¿½ï¿½o e seus relacionamentos com as tabelas se existir
 	 * 
-	 * [UC0284]Inserir Operação
+	 * [UC0284]Inserir Operaï¿½ï¿½o
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 08/05/2006
@@ -6532,9 +6532,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0313] Manter Cronograma Cobrança
+	 * [UC0313] Manter Cronograma Cobranï¿½a
 	 * 
-	 * [SB0002] Excluir Cronograma de Cobrança
+	 * [SB0002] Excluir Cronograma de Cobranï¿½a
 	 * 
 	 * @param ids
 	 * @throws ControladorException
@@ -6548,9 +6548,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0313] Manter Cronograma Cobrança
+	 * [UC0313] Manter Cronograma Cobranï¿½a
 	 * 
-	 * [SB0002] Excluir Cronograma de Cobrança
+	 * [SB0002] Excluir Cronograma de Cobranï¿½a
 	 * 
 	 * @param ids
 	 * @throws ControladorException
@@ -6564,9 +6564,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0313] Manter Cronograma Cobrança
+	 * [UC0313] Manter Cronograma Cobranï¿½a
 	 * 
-	 * [SB0002] Excluir Cronograma de Cobrança
+	 * [SB0002] Excluir Cronograma de Cobranï¿½a
 	 * 
 	 * @param ids
 	 * @throws ControladorException
@@ -6662,7 +6662,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica se o CEP é único de Município
+	 * Verifica se o CEP ï¿½ ï¿½nico de Municï¿½pio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 10/05/2006
@@ -6682,7 +6682,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica se o Bairro é do tipo "BAIRRO NAO INFORMADO"
+	 * Verifica se o Bairro ï¿½ do tipo "BAIRRO NAO INFORMADO"
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 22/02/2007
@@ -6702,7 +6702,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica se o CEP inicial de Município
+	 * Verifica se o CEP inicial de Municï¿½pio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 10/05/2006
@@ -6722,7 +6722,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verificar se o CEP está associado a outro logradouro
+	 * Verificar se o CEP estï¿½ associado a outro logradouro
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 04/05/2006
@@ -6742,7 +6742,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Seleciona os bairros em que o logradouro está contido
+	 * Seleciona os bairros em que o logradouro estï¿½ contido
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 10/05/2006
@@ -6782,7 +6782,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica se o Município possui CEP por logradouro
+	 * Verifica se o Municï¿½pio possui CEP por logradouro
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 16/05/2006
@@ -6802,9 +6802,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0003] Informar endereço
+	 * [UC0003] Informar endereï¿½o
 	 * 
-	 * Pesquisar associação de LogradouroCep apenas por logradouro
+	 * Pesquisar associaï¿½ï¿½o de LogradouroCep apenas por logradouro
 	 * 
 	 * @author Raphael Rossiter
 	 * @data 12/05/2006
@@ -6824,7 +6824,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica se o logradouro já está associado a CEPs do tipo logradouro
+	 * Verifica se o logradouro jï¿½ estï¿½ associado a CEPs do tipo logradouro
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 17/05/2006
@@ -6887,15 +6887,15 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0297] Inserir abrangência Usuario
+	 * [UC0297] Inserir abrangï¿½ncia Usuario
 	 * 
-	 * Metodo que verifica os dados da tabela e inseri a abrangência
+	 * Metodo que verifica os dados da tabela e inseri a abrangï¿½ncia
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 28/04/2006
 	 * @param Usuario
-	 *            abrangência
+	 *            abrangï¿½ncia
 	 */
 
 	public Integer inserirAbrangenciaUsuario(UsuarioAbrangencia usuarioAbrangencia) {
@@ -6908,10 +6908,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Esta funcionalidade permite informar dados para geração de Relatórios ou
+	 * Esta funcionalidade permite informar dados para geraï¿½ï¿½o de Relatï¿½rios ou
 	 * consultas
 	 * 
-	 * [UC0304] - Informar Dados para Geração de Relatório ou Consulta
+	 * [UC0304] - Informar Dados para Geraï¿½ï¿½o de Relatï¿½rio ou Consulta
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 22/05/2006
@@ -6950,9 +6950,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Filtrar os Comandos de Ação de Cobrança tipo comando Cronograma
+	 * Filtrar os Comandos de Aï¿½ï¿½o de Cobranï¿½a tipo comando Cronograma
 	 * 
-	 * [UC0326] - Filtrar Comandos de Ação de Cobrança
+	 * [UC0326] - Filtrar Comandos de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 10/05/2006
@@ -6977,9 +6977,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Consultar Comando de Ação de Cobrança
+	 * Consultar Comando de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [UC0325] - Consultar Comandos de Ação de Cobrança
+	 * [UC0325] - Consultar Comandos de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 10/05/2006
@@ -6998,11 +6998,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0325] Consultar Comandos Ação de Cobrança
+	 * [UC0325] Consultar Comandos Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Consultar Comando Cobranca Ação Atividade CobrancaVerificar pelo ID
+	 * Consultar Comando Cobranca Aï¿½ï¿½o Atividade CobrancaVerificar pelo ID
 	 * 
-	 * [FS0002] - Verificar Seleção de pelo menos uma atividade de Cobrança
+	 * [FS0002] - Verificar Seleï¿½ï¿½o de pelo menos uma atividade de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 11/05/2006
@@ -7021,9 +7021,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Filtrar os Comandos de Ação de Cobrança tipo comando Eventual
+	 * Filtrar os Comandos de Aï¿½ï¿½o de Cobranï¿½a tipo comando Eventual
 	 * 
-	 * [UC0326] - Filtrar Comandos de Ação de Cobrança
+	 * [UC0326] - Filtrar Comandos de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 12/05/2006
@@ -7055,10 +7055,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Filtrar as Ordens de Serviço dos Comandos de Ação de Cobrança
+	 * Filtrar as Ordens de Serviï¿½o dos Comandos de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [UC1098] Informar Não Aceitação de Motivo de Encerramento Ordem de
-	 * Serviço
+	 * [UC1098] Informar Nï¿½o Aceitaï¿½ï¿½o de Motivo de Encerramento Ordem de
+	 * Serviï¿½o
 	 * 
 	 * @author Mariana Victor
 	 * @date 13/12/2010
@@ -7076,9 +7076,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Filtrar os Comandos de Ação de Cobrança tipo comando Eventual
+	 * Filtrar os Comandos de Aï¿½ï¿½o de Cobranï¿½a tipo comando Eventual
 	 * 
-	 * [UC0326] - Filtrar Comandos de Ação de Cobrança
+	 * [UC0326] - Filtrar Comandos de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 15/05/2006
@@ -7099,9 +7099,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Filtrar os Comandos de Ação de Cobrança tipo comando Eventual
+	 * Filtrar os Comandos de Aï¿½ï¿½o de Cobranï¿½a tipo comando Eventual
 	 * 
-	 * [UC0326] - Filtrar Comandos de Ação de Cobrança
+	 * [UC0326] - Filtrar Comandos de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 15/05/2006
@@ -7120,9 +7120,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Filtrar os Comandos de Ação de Cobrança tipo comando Eventual
+	 * Filtrar os Comandos de Aï¿½ï¿½o de Cobranï¿½a tipo comando Eventual
 	 * 
-	 * [UC0326] - Filtrar Comandos de Ação de Cobrança
+	 * [UC0326] - Filtrar Comandos de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 15/05/2006
@@ -7141,9 +7141,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Filtrar os Comandos de Ação de Cobrança tipo comando Eventual
+	 * Filtrar os Comandos de Aï¿½ï¿½o de Cobranï¿½a tipo comando Eventual
 	 * 
-	 * [UC0326] - Filtrar Comandos de Ação de Cobrança
+	 * [UC0326] - Filtrar Comandos de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Rafael Santos
 	 * @date 15/05/2006
@@ -7161,9 +7161,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Filtrar os Comandos de Ação de Cobrança tipo comando Eventual
+	 * Filtrar os Comandos de Aï¿½ï¿½o de Cobranï¿½a tipo comando Eventual
 	 * 
-	 * [UC0326] - Filtrar Comandos de Ação de Cobrança
+	 * [UC0326] - Filtrar Comandos de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * 
 	 * 
@@ -7183,9 +7183,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Consultar Comando de Ação de Cobrança
+	 * Consultar Comando de Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [UC0325] - Consultar Comandos de Ação de Cobrança - Tipo Eventual
+	 * [UC0325] - Consultar Comandos de Aï¿½ï¿½o de Cobranï¿½a - Tipo Eventual
 	 * 
 	 * @author Rafael Santos
 	 * @date 10/05/2006
@@ -7204,11 +7204,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0325] Consultar Comandos Ação de Cobrança
+	 * [UC0325] Consultar Comandos Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Consultar Comando Cobranca Ação Atividade Cobranca - Verificar pelo ID
+	 * Consultar Comando Cobranca Aï¿½ï¿½o Atividade Cobranca - Verificar pelo ID
 	 * 
-	 * [SB0004] - Consultar Dados do Comando de Ação de Cobrança Eventual
+	 * [SB0004] - Consultar Dados do Comando de Aï¿½ï¿½o de Cobranï¿½a Eventual
 	 * 
 	 * @author Rafael Santos
 	 * @date 11/05/2006
@@ -7228,10 +7228,10 @@ public class Fachada {
 	/**
 	 * [UC0339] - Consultar Dados Diarios da Arrecadacao
 	 * 
-	 * [SB0001] - Apresentar Dados Diarios da Arrecadacao por gerência
+	 * [SB0001] - Apresentar Dados Diarios da Arrecadacao por gerï¿½ncia
 	 * 
-	 * Acumula as gerências e os Valores do Pagamento de uma Colecao de Dados
-	 * Diarios da Arrecadação
+	 * Acumula as gerï¿½ncias e os Valores do Pagamento de uma Colecao de Dados
+	 * Diarios da Arrecadaï¿½ï¿½o
 	 * 
 	 * @author Fernanda Paiva
 	 * @date 23/05/2006
@@ -7267,9 +7267,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Gera lançamentos Contabeis do Faturamento
+	 * Gera lanï¿½amentos Contabeis do Faturamento
 	 * 
-	 * [UC000348] - Gerar lançamento Constábeis da Arrecadação
+	 * [UC000348] - Gerar lanï¿½amento Constï¿½beis da Arrecadaï¿½ï¿½o
 	 * 
 	 * @author Rafael Santos
 	 * @date 22/05/2006
@@ -7348,7 +7348,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém o CEP único para um determinado Município
+	 * Obtï¿½m o CEP ï¿½nico para um determinado Municï¿½pio
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 23/05/2006
@@ -7368,8 +7368,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo do Arrecadacao' de acordo com a opção de totalização.
+	 * Consulta ResumoArrecadacao para a geraï¿½ï¿½o do relatï¿½rio '[UC0345] Gerar
+	 * Relatï¿½rio de Resumo do Arrecadacao' de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa, Diogo Peixoto
 	 * @created 24/05/2006, 20/04/2011
@@ -7394,9 +7394,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0003] Informar endereço
+	 * [UC0003] Informar endereï¿½o
 	 * 
-	 * Pesquisar associação de LogradouroBairro já existente
+	 * Pesquisar associaï¿½ï¿½o de LogradouroBairro jï¿½ existente
 	 * 
 	 * @author Raphael Rossiter
 	 * @data 24/05/2006
@@ -7416,9 +7416,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0003] Informar endereço
+	 * [UC0003] Informar endereï¿½o
 	 * 
-	 * Pesquisar associação de LogradouroCep já existente
+	 * Pesquisar associaï¿½ï¿½o de LogradouroCep jï¿½ existente
 	 * 
 	 * @author Raphael Rossiter
 	 * @data 24/05/2006
@@ -7438,7 +7438,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método para auxilio de Casos de Uso de resumos
+	 * mï¿½todo para auxilio de Casos de Uso de resumos
 	 */
 	public Collection criarColecaoAgrupamentoResumos(InformarDadosGeracaoRelatorioConsultaHelper informarDadosGeracaoRelatorioConsultaHelper) {
 
@@ -7451,7 +7451,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método para auxilio de Casos de Uso de resumos
+	 * mï¿½todo para auxilio de Casos de Uso de resumos
 	 */
 	public Collection criarColecaoAgrupamentoResumosCobrancaAcao(InformarDadosGeracaoResumoAcaoConsultaHelper informarDadosGeracaoResumoAcaoConsultaHelper) {
 
@@ -7504,7 +7504,7 @@ public class Fachada {
 	 * 
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 25/05/2006
 	 * 
 	 * @param Situacao
@@ -7521,11 +7521,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso permite consultar o resumo da Pendência, com a opção de
-	 * impressão da consulta. Dependendo da opção de totalização sempre é gerado
-	 * o Relatório, sem a feração da consulta.
+	 * Este caso de uso permite consultar o resumo da Pendï¿½ncia, com a opï¿½ï¿½o de
+	 * impressï¿½o da consulta. Dependendo da opï¿½ï¿½o de totalizaï¿½ï¿½o sempre ï¿½ gerado
+	 * o Relatï¿½rio, sem a feraï¿½ï¿½o da consulta.
 	 * 
-	 * [UC0338] Consultar Resumo da Pendência
+	 * [UC0338] Consultar Resumo da Pendï¿½ncia
 	 * 
 	 * @author Roberta Costa
 	 * @date 26/05/2006
@@ -7542,11 +7542,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0294] Manter Situacao Usuario [] Atualizar abrangência do Usuario
+	 * [UC0294] Manter Situacao Usuario [] Atualizar abrangï¿½ncia do Usuario
 	 * 
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 25/05/2006
 	 * 
 	 * @param Situacao
@@ -7562,11 +7562,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso permite consultar o resumo da Pendência, com a opção de
-	 * impressão da consulta. Dependendo da opção de totalização sempre é gerado
-	 * o Relatório, sem a feração da consulta.
+	 * Este caso de uso permite consultar o resumo da Pendï¿½ncia, com a opï¿½ï¿½o de
+	 * impressï¿½o da consulta. Dependendo da opï¿½ï¿½o de totalizaï¿½ï¿½o sempre ï¿½ gerado
+	 * o Relatï¿½rio, sem a feraï¿½ï¿½o da consulta.
 	 * 
-	 * [UC0305] Consultar análise Faturamento
+	 * [UC0305] Consultar anï¿½lise Faturamento
 	 * 
 	 * @author Fernanda Paiva
 	 * @date 31/05/2006
@@ -7583,13 +7583,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso permite consultar o resumo da Pendência, com a opção de
-	 * impressão da consulta. Dependendo da opção de totalização sempre é gerado
-	 * o Relatório, sem a feração da consulta.
+	 * Este caso de uso permite consultar o resumo da Pendï¿½ncia, com a opï¿½ï¿½o de
+	 * impressï¿½o da consulta. Dependendo da opï¿½ï¿½o de totalizaï¿½ï¿½o sempre ï¿½ gerado
+	 * o Relatï¿½rio, sem a feraï¿½ï¿½o da consulta.
 	 * 
-	 * [UC0338] Consultar Resumo da Pendência
+	 * [UC0338] Consultar Resumo da Pendï¿½ncia
 	 * 
-	 * Retorna os registro de resumo Pendência dividindo em coleções de
+	 * Retorna os registro de resumo Pendï¿½ncia dividindo em coleï¿½ï¿½es de
 	 * categoria RESIDENCIAL, COMERCIAL, INDUSTRIAL e PUBLICA
 	 * 
 	 * retornaConsultaResumoPendencia
@@ -7610,9 +7610,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Consulta a qtde de registros ResumoArrecadacao para a geração do
-	 * Relatório '[UC0345] Gerar Relatório de Resumo do Arrecadacao' de acordo
-	 * com a opção de totalização.
+	 * Consulta a qtde de registros ResumoArrecadacao para a geraï¿½ï¿½o do
+	 * Relatï¿½rio '[UC0345] Gerar Relatï¿½rio de Resumo do Arrecadacao' de acordo
+	 * com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa, Diogo Peixoto
 	 * @created 02/06/2006, 20/04/2011
@@ -7623,7 +7623,7 @@ public class Fachada {
 	 * @param localidade
 	 * @param municipio
 	 * 
-	 * @return Quantidade de registros do relatório
+	 * @return Quantidade de registros do relatï¿½rio
 	 * @throws ControladorException
 	 */
 	public Integer consultarQtdeRegistrosResumoArrecadacaoRelatorio(String opcaoTotalizacao, int mesAnoReferencia, Integer gerenciaRegional, Integer localidade, Integer municipio) {
@@ -7674,7 +7674,7 @@ public class Fachada {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -7696,7 +7696,7 @@ public class Fachada {
 	 * Pesquisa o valor e a quantidade de contas do resumo da faturamento
 	 * 
 	 * [UC0350] - Consultar Comparativo entre os Resumos do Faturamento,
-	 * Arrecadação e da Pendência.
+	 * Arrecadaï¿½ï¿½o e da Pendï¿½ncia.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 09/06/2006
@@ -7713,10 +7713,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa o valor e a quantidade de contas do resumo da arrecadação
+	 * Pesquisa o valor e a quantidade de contas do resumo da arrecadaï¿½ï¿½o
 	 * 
 	 * [UC0350] - Consultar Comparativo entre os Resumos do Faturamento,
-	 * Arrecadação e da Pendência.
+	 * Arrecadaï¿½ï¿½o e da Pendï¿½ncia.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 10/06/2006
@@ -7734,10 +7734,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Pesquisa o valor e a quantidade de contas do resumo da Pendência.
+	 * Pesquisa o valor e a quantidade de contas do resumo da Pendï¿½ncia.
 	 * 
 	 * [UC0350] - Consultar Comparativo entre os Resumos do Faturamento,
-	 * Arrecadação e da Pendência.
+	 * Arrecadaï¿½ï¿½o e da Pendï¿½ncia.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 10/06/2006
@@ -7773,11 +7773,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do imï¿½vel pesquisarPagamento
 	 * 
 	 * @author Tiago Moreno, Roberta Costa
 	 * @date 12/06/06
@@ -7800,7 +7800,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
@@ -7828,7 +7828,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
@@ -7856,7 +7856,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
@@ -7884,7 +7884,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
@@ -7911,7 +7911,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
@@ -7938,7 +7938,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
@@ -8021,7 +8021,7 @@ public class Fachada {
 	/**
 	 * Retorna o count do resultado da pesquisa de Cobranca Cronograma
 	 * 
-	 * @author Flávio Cordeiro
+	 * @author Flï¿½vio Cordeiro
 	 * @date 14/06/2006
 	 * 
 	 * @return Integer retorno
@@ -8045,7 +8045,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Efetuar a Ligação da Água no imovel
+	 * Efetuar a Ligaï¿½ï¿½o da ï¿½gua no imovel
 	 * 
 	 * @author Leandro Cavalcanti
 	 * @date 15/06/2006
@@ -8067,7 +8067,7 @@ public class Fachada {
 	 }*/
 
 	/**
-	 * método que retorna o maior id de Localidade
+	 * mï¿½todo que retorna o maior id de Localidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 12/07/2006
@@ -8086,9 +8086,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Método que retorna o maior id do Município
+	 * Mï¿½todo que retorna o maior id do Municï¿½pio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 24/07/2008
 	 * 
 	 * @return
@@ -8104,11 +8104,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por atualizar as datas de expiração do login do
-	 * usuário assim como definir uma nova senha para o login
+	 * Mï¿½todo responsï¿½vel por atualizar as datas de expiraï¿½ï¿½o do login do
+	 * usuï¿½rio assim como definir uma nova senha para o login
 	 * 
 	 * 
-	 * [UC0289] Efetuar Alteração da Senha
+	 * [UC0289] Efetuar Alteraï¿½ï¿½o da Senha
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 13/07/2006
@@ -8132,13 +8132,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Retorna 2 coleções e um array ,com os valores que vão retornar
-	 * marcados,uma com as permissões do usuário que ele possa marcar/desmarcar
-	 * e a outra o usuário logado Não vai poder marcar/desmarcar
+	 * Retorna 2 coleï¿½ï¿½es e um array ,com os valores que vï¿½o retornar
+	 * marcados,uma com as permissï¿½es do usuï¿½rio que ele possa marcar/desmarcar
+	 * e a outra o usuï¿½rio logado Nï¿½o vai poder marcar/desmarcar
 	 * 
-	 * [UC0231] - Manter usuário [SB0010] - Selecionar permissões Especiais (n2)
+	 * [UC0231] - Manter usuï¿½rio [SB0010] - Selecionar permissï¿½es Especiais (n2)
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 13/07/2006
 	 */
 	public Object[] pesquisarPermissoesEspeciaisUsuarioEUsuarioLogado(Usuario usuarioAtualizar, Usuario usuarioLogado) {
@@ -8151,9 +8151,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Retorna um array com os ids dos objetos da coleção
+	 * Retorna um array com os ids dos objetos da coleï¿½ï¿½o
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 13/07/2006
 	 */
 	public String[] retornarPermissoesMarcadas(Collection permissoesEspeciais) {
@@ -8162,11 +8162,11 @@ public class Fachada {
 	}
 
 	/**
-	 * método que atualiza o controle de acesso do usuário
+	 * mï¿½todo que atualiza o controle de acesso do usuï¿½rio
 	 * 
-	 * [UC0231] - Manter usuário
+	 * [UC0231] - Manter usuï¿½rio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 14/07/2006
 	 * 
 	 * @param String
@@ -8186,8 +8186,8 @@ public class Fachada {
 	/**
 	 * [UC0287] - Efetuar Login
 	 * 
-	 * Método responsável por enviar uma nova senha para o e-mail do usuário com
-	 * situação pendente
+	 * Mï¿½todo responsï¿½vel por enviar uma nova senha para o e-mail do usuï¿½rio com
+	 * situaï¿½ï¿½o pendente
 	 * 
 	 * [SB0002] - Lembrar senha
 	 * 
@@ -8209,12 +8209,12 @@ public class Fachada {
 
 	/**
 	 * Retorna um map com o indicador dizendo se vai aparecer
-	 * marcado(1),desmarcado(2) ou desabilitado(3) para cada operação da
+	 * marcado(1),desmarcado(2) ou desabilitado(3) para cada operaï¿½ï¿½o da
 	 * funcionalidade escolhida
 	 * 
-	 * [UC0231] - Manter usuário [SB0008] - Selecionar Restrições (n2)
+	 * [UC0231] - Manter usuï¿½rio [SB0008] - Selecionar Restriï¿½ï¿½es (n2)
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 17/07/2006
 	 */
 	public Map<Integer, Map<Integer, Collection<Operacao>>> organizarOperacoesComValor(Integer codigoFuncionalidade, Map<Integer, Map<Integer, Collection<Operacao>>> funcionalidadesMap,
@@ -8229,13 +8229,13 @@ public class Fachada {
 
 	/**
 	 * Retorna um map com o indicador dizendo se vai aparecer
-	 * marcado(1),desmarcado(2) ou desabilitado(3) para cada operação da
-	 * funcionalidade escolhida e a coleção com as operAções e funcionalidades
+	 * marcado(1),desmarcado(2) ou desabilitado(3) para cada operaï¿½ï¿½o da
+	 * funcionalidade escolhida e a coleï¿½ï¿½o com as operAï¿½ï¿½es e funcionalidades
 	 * que que foram desmarcados
 	 * 
-	 * [UC0231] - Manter usuário [SB0008] - Selecionar Restrições (n2)
+	 * [UC0231] - Manter usuï¿½rio [SB0008] - Selecionar Restriï¿½ï¿½es (n2)
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 17/07/2006
 	 */
 	public Map<Integer, Map<Integer, Collection<Operacao>>> recuperaFuncionalidadeOperacaoRestrincao(Integer codigoFuncionalidade, String[] idsOperacoes,
@@ -8249,8 +8249,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica se uma url solicitada para o servidor é uma funcionalidade ou
-	 * uma operação
+	 * Verifica se uma url solicitada para o servidor ï¿½ uma funcionalidade ou
+	 * uma operaï¿½ï¿½o
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 18/07/2006
@@ -8267,11 +8267,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Método que verifica se o usuário tem permissão para acessar a
-	 * funcionalidade que está sendo requisitada (existe ocorrência na tabela
-	 * GrupoFuncionalidadeOperacao). Verifica se o(s) grupo(s) que o usuário
-	 * pertence tem acesso a funcionalidade e se todas as operAções desta
-	 * funcionalidade Não estão com restrições(existe ocorrência na tabela
+	 * Mï¿½todo que verifica se o usuï¿½rio tem permissï¿½o para acessar a
+	 * funcionalidade que estï¿½ sendo requisitada (existe ocorrï¿½ncia na tabela
+	 * GrupoFuncionalidadeOperacao). Verifica se o(s) grupo(s) que o usuï¿½rio
+	 * pertence tem acesso a funcionalidade e se todas as operAï¿½ï¿½es desta
+	 * funcionalidade Nï¿½o estï¿½o com restriï¿½ï¿½es(existe ocorrï¿½ncia na tabela
 	 * UsuarioGrupoRestricao)
 	 * 
 	 * @author Pedro Alexandre
@@ -8292,11 +8292,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Método que verifica se o usuário tem permissão para acessar a operação
-	 * que está sendo requisitada (existe ocorrência na tabela
-	 * GrupoFuncionalidadeOperacao). Verifica se o(s) grupo(s) que o usuário
-	 * pertence tem acesso a operação e se a operação desta funcionalidade Não
-	 * estão com restrição(existe ocorrência na tabela UsuarioGrupoRestricao)
+	 * Mï¿½todo que verifica se o usuï¿½rio tem permissï¿½o para acessar a operaï¿½ï¿½o
+	 * que estï¿½ sendo requisitada (existe ocorrï¿½ncia na tabela
+	 * GrupoFuncionalidadeOperacao). Verifica se o(s) grupo(s) que o usuï¿½rio
+	 * pertence tem acesso a operaï¿½ï¿½o e se a operaï¿½ï¿½o desta funcionalidade Nï¿½o
+	 * estï¿½o com restriï¿½ï¿½o(existe ocorrï¿½ncia na tabela UsuarioGrupoRestricao)
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 18/07/2006
@@ -8316,7 +8316,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0169] Manter Taraifa de Consumo Prepara a Vigência para Ser reajustada
+	 * [UC0169] Manter Taraifa de Consumo Prepara a Vigï¿½ncia para Ser reajustada
 	 * 
 	 * @author Rafel Santos
 	 * @date 21/07/2006
@@ -8333,9 +8333,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar Relatório de Imóveis Outros Critérios
+	 * Gerar Relatï¿½rio de Imï¿½veis Outros Critï¿½rios
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 25/07/2006
 	 * 
 	 * @param idImovelCondominio
@@ -8445,9 +8445,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa uma gerência regional pelo id
+	 * Pesquisa uma gerï¿½ncia regional pelo id
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 01/08/2006
 	 * 
 	 * @param idGerenciaRegional
@@ -8465,7 +8465,7 @@ public class Fachada {
 	/**
 	 * Pesquisa uma localidade pelo id
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 01/08/2006
 	 * 
 	 * @param idLocalidade
@@ -8481,9 +8481,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa um setor comercial pelo Código e pelo id da localidade
+	 * Pesquisa um setor comercial pelo Cï¿½digo e pelo id da localidade
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 01/08/2006
 	 * 
 	 * @param idLocalidade
@@ -8504,7 +8504,7 @@ public class Fachada {
 	 * 
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 01/11/2006
 	 * 
 	 * @param
@@ -8521,7 +8521,7 @@ public class Fachada {
 	/**
 	 * Pesquisa um cliente pelo id
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 01/08/2006
 	 * 
 	 * @param idCliente
@@ -8537,10 +8537,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa as quantidades de imóveis e as quantidades de economias
+	 * Pesquisa as quantidades de imï¿½veis e as quantidades de economias
 	 * associadas a um cliente
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 23/08/2007
 	 * 
 	 * @return Object[]
@@ -8555,9 +8555,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa um Município pelo id
+	 * Pesquisa um Municï¿½pio pelo id
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 01/08/2006
 	 * 
 	 * @param idMunicipio
@@ -8573,9 +8573,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa um bairro pelo Código e pelo id do Município
+	 * Pesquisa um bairro pelo Cï¿½digo e pelo id do Municï¿½pio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 01/08/2006
 	 * 
 	 * @return Bairro
@@ -8592,9 +8592,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar Relatório de Dados das Economias do imóvel
+	 * Gerar Relatï¿½rio de Dados das Economias do imï¿½vel
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 01/08/2006
 	 * 
 	 * @param idImovelCondominio
@@ -8682,12 +8682,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0285] - Manter Operação
+	 * [UC0285] - Manter Operaï¿½ï¿½o
 	 * 
-	 * Método responsável por atualizar uma operação no sistema e os
-	 * relacionamentos entre a tabela e a operação
+	 * Mï¿½todo responsï¿½vel por atualizar uma operaï¿½ï¿½o no sistema e os
+	 * relacionamentos entre a tabela e a operaï¿½ï¿½o
 	 * 
-	 * [SB0001] - Atualizar Operação
+	 * [SB0001] - Atualizar Operaï¿½ï¿½o
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 02/08/2006
@@ -8704,12 +8704,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0285] - Manter Operação
+	 * [UC0285] - Manter Operaï¿½ï¿½o
 	 * 
-	 * Método responsável por remover uma operação no sistema e os
-	 * relacionamentos entre a tabela e a operação
+	 * Mï¿½todo responsï¿½vel por remover uma operaï¿½ï¿½o no sistema e os
+	 * relacionamentos entre a tabela e a operaï¿½ï¿½o
 	 * 
-	 * [SB0002] - Excluir Operação
+	 * [SB0002] - Excluir Operaï¿½ï¿½o
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 02/08/2006
@@ -8734,7 +8734,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método para auxilio de Casos de Uso de resumos
+	 * mï¿½todo para auxilio de Casos de Uso de resumos
 	 */
 	public Boolean confirmarImovelExcluido(Integer idImovel) {
 
@@ -8744,11 +8744,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * método que apresenta os dados do imovel
+	 * mï¿½todo que apresenta os dados do imovel
 	 * 
-	 * [UC0153] Apresentar dados para Analise da medição e Consumo
+	 * [UC0153] Apresentar dados para Analise da mediï¿½ï¿½o e Consumo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 04/08/2006
 	 * 
 	 * @param idImovel
@@ -8764,11 +8764,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * método que apresenta os dados do imovel
+	 * mï¿½todo que apresenta os dados do imovel
 	 * 
-	 * [UC0153] Apresentar dados para Analise da medição e Consumo
+	 * [UC0153] Apresentar dados para Analise da mediï¿½ï¿½o e Consumo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 04/08/2006
 	 * 
 	 * @param idImovel
@@ -8784,11 +8784,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Método que apresenta os dados do imovel
+	 * Mï¿½todo que apresenta os dados do imovel
 	 * 
-	 * [UC0153] Apresentar dados para Analise da medição e Consumo
+	 * [UC0153] Apresentar dados para Analise da mediï¿½ï¿½o e Consumo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 04/08/2006
 	 * 
 	 * @param idImovel
@@ -8819,9 +8819,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Retorna uma coleção com os dados das medicoes para apresentação
+	 * Retorna uma coleï¿½ï¿½o com os dados das medicoes para apresentaï¿½ï¿½o
 	 * 
-	 * [UC0153] Apresentar dados para Analise da medição e Consumo
+	 * [UC0153] Apresentar dados para Analise da mediï¿½ï¿½o e Consumo
 	 */
 
 	public Collection carregarDadosMedicao(Integer idImovel, boolean ligacaoAgua) {
@@ -8836,9 +8836,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Retorna uma coleção com os dados das medicoes para apresentação
+	 * Retorna uma coleï¿½ï¿½o com os dados das medicoes para apresentaï¿½ï¿½o
 	 * 
-	 * [UC0153] Apresentar dados para Analise da medição e Consumo
+	 * [UC0153] Apresentar dados para Analise da mediï¿½ï¿½o e Consumo
 	 */
 	public Collection carregarDadosConsumo(Integer idImovel, int mesAno, boolean ligacaoAgua) {
 
@@ -8851,9 +8851,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso calcula a tarifa Miníma de Água para um imóvel
+	 * Este caso de uso calcula a tarifa Minï¿½ma de ï¿½gua para um imï¿½vel
 	 * 
-	 * [UC0451] Obter Tarifa Miníma de Água para um imóvel
+	 * [UC0451] Obter Tarifa Minï¿½ma de ï¿½gua para um imï¿½vel
 	 * 
 	 * @author Roberta Costa
 	 * @date 09/08/2006
@@ -8872,12 +8872,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar Relatório de Critério de Cobrança
+	 * Gerar Relatï¿½rio de Critï¿½rio de Cobranï¿½a
 	 * 
-	 * Pesquisa as linhas de Critério de Cobrança através do id do Critério de
-	 * Cobrança
+	 * Pesquisa as linhas de Critï¿½rio de Cobranï¿½a atravï¿½s do id do Critï¿½rio de
+	 * Cobranï¿½a
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @data 09/08/2006
 	 * 
 	 * @param CobrancaDocumento
@@ -8898,8 +8898,8 @@ public class Fachada {
 	 * [UC0111] - Iniciar Processo
 	 * 
 	 * Este subfluxo tem o papel de iniciar um processo de faturamento
-	 * comandado, neste método é feita uma busca para obter as atividades
-	 * comandadas e Não realizadas
+	 * comandado, neste mï¿½todo ï¿½ feita uma busca para obter as atividades
+	 * comandadas e Nï¿½o realizadas
 	 * 
 	 * [SB0001] - Iniciar Processo de Faturamento Comandado
 	 * 
@@ -8925,8 +8925,8 @@ public class Fachada {
 	 * [UC0111] - Iniciar Processo
 	 * 
 	 * Este subfluxo tem o papel de iniciar um processo de faturamento
-	 * comandado, neste método é feita uma busca para obter as atividades
-	 * comandadas e Não realizadas
+	 * comandado, neste mï¿½todo ï¿½ feita uma busca para obter as atividades
+	 * comandadas e Nï¿½o realizadas
 	 * 
 	 * [SB0001] - Iniciar Processo de Faturamento Comandado
 	 * 
@@ -8956,7 +8956,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * método utilizado para pesquisar os consumo historicos a serem
+	 * mï¿½todo utilizado para pesquisar os consumo historicos a serem
 	 * substituidos pelo caso de uso [UC0106] Substituir Consumos Anteriores
 	 * 
 	 */
@@ -8995,7 +8995,7 @@ public class Fachada {
 	 * @date 16/08/2006
 	 * 
 	 * @param avisoBancarioHelper
-	 * @return Coleção de DebitoAutomaticoMovimento
+	 * @return Coleï¿½ï¿½o de DebitoAutomaticoMovimento
 	 * @throws ErroRepositorioException
 	 */
 
@@ -9008,7 +9008,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
@@ -9115,12 +9115,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar Relatório de Perfil de Parcelamento
+	 * Gerar Relatï¿½rio de Perfil de Parcelamento
 	 * 
-	 * Pesquisa os Parcelamentos Desconto Antiguidade através do id de Perfil de
+	 * Pesquisa os Parcelamentos Desconto Antiguidade atravï¿½s do id de Perfil de
 	 * Parcelamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @data 22/08/2006
 	 */
 	@SuppressWarnings("rawtypes")
@@ -9133,12 +9133,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar Relatório de Perfil de Parcelamento
+	 * Gerar Relatï¿½rio de Perfil de Parcelamento
 	 * 
-	 * Pesquisa os Parcelamentos Desconto Inatividade através do id de Perfil de
+	 * Pesquisa os Parcelamentos Desconto Inatividade atravï¿½s do id de Perfil de
 	 * Parcelamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @data 22/08/2006
 	 */
 	@SuppressWarnings("rawtypes")
@@ -9151,12 +9151,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar Relatório de Perfil de Parcelamento
+	 * Gerar Relatï¿½rio de Perfil de Parcelamento
 	 * 
-	 * Pesquisa os Reparcelamentos Consecutivos através do id de Perfil de
+	 * Pesquisa os Reparcelamentos Consecutivos atravï¿½s do id de Perfil de
 	 * Parcelamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @data 22/08/2006
 	 */
 	@SuppressWarnings("rawtypes")
@@ -9219,16 +9219,16 @@ public class Fachada {
 	}
 
 	/**
-	 * método que Pesquisa a existencia de uma conta pelo id da conta e pela
+	 * mï¿½todo que Pesquisa a existencia de uma conta pelo id da conta e pela
 	 * data da ultima alteracao
 	 * 
 	 * @author Fernanda Paiva
 	 * @date 23/08/2006
 	 * 
 	 * @param id
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param ultimaAlteracao
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @return
 	 * @throws ControladorException
 	 */
@@ -9242,11 +9242,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite efetuar o parcelamento dos débitos de um imóvel
+	 * Permite efetuar o parcelamento dos dï¿½bitos de um imï¿½vel
 	 * 
-	 * [UC0214] Efetuar Parcelamento de débitos
+	 * [UC0214] Efetuar Parcelamento de dï¿½bitos
 	 * 
-	 * Pesquisa os débitos do imóvel a partir das informAções do formulário
+	 * Pesquisa os dï¿½bitos do imï¿½vel a partir das informAï¿½ï¿½es do formulï¿½rio
 	 * 
 	 * pesquisarDebitosImovel
 	 * 
@@ -9279,26 +9279,26 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite pesquisar imóvel doação [UC0389] Inserir Autorização para Doação
+	 * Permite pesquisar imï¿½vel doaï¿½ï¿½o [UC0389] Inserir Autorizaï¿½ï¿½o para Doaï¿½ï¿½o
 	 * Mensal
 	 * 
-	 * @author César Araújo
+	 * @author Cï¿½sar Araï¿½jo
 	 * @date 30/08/2006
 	 * @param filtroImoveldoacao
 	 *            - Filtro com os valores para pesquisa
-	 * @return Collection<ImovelDoacao> - Coleção de imóvei(s) doação
+	 * @return Collection<ImovelDoacao> - Coleï¿½ï¿½o de imï¿½vei(s) doaï¿½ï¿½o
 	 * @throws ErroRepositorioException
 	 */
 
 	/**
-	 * Permite pesquisar imóvel doação [UC0389] Inserir Autorização para Doação
+	 * Permite pesquisar imï¿½vel doaï¿½ï¿½o [UC0389] Inserir Autorizaï¿½ï¿½o para Doaï¿½ï¿½o
 	 * Mensal
 	 * 
-	 * @author César Araújo
+	 * @author Cï¿½sar Araï¿½jo
 	 * @date 30/08/2006
 	 * @param idImovelDoacao
-	 *            - Código do imóvel doação
-	 * @return Collection<ImovelDoacao> - Coleção de Imóveis doação
+	 *            - Cï¿½digo do imï¿½vel doaï¿½ï¿½o
+	 * @return Collection<ImovelDoacao> - Coleï¿½ï¿½o de Imï¿½veis doaï¿½ï¿½o
 	 * @throws FachadaException
 	 */
 	public Collection<ImovelDoacao> pesquisarImovelDoacao(FiltroImovelDoacao filtroImovelDoacao) {
@@ -9311,17 +9311,17 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite verificar a existência de um imóvel doação [UC0389] Inserir
-	 * Autorização para Doação Mensal
+	 * Permite verificar a existï¿½ncia de um imï¿½vel doaï¿½ï¿½o [UC0389] Inserir
+	 * Autorizaï¿½ï¿½o para Doaï¿½ï¿½o Mensal
 	 * 
-	 * @author César Araújo
+	 * @author Cï¿½sar Araï¿½jo
 	 * @date 31/08/2006
 	 * @param idImovel
-	 *            - Código do imóvel
+	 *            - Cï¿½digo do imï¿½vel
 	 * @param idEntidadeBeneficente
-	 *            - Código da entidade beneficente
-	 * @return ImovelDoacao - retorna o imóvel doação correspondente à 
-	 *         combinação de imóvel e entidade beneficente
+	 *            - Cï¿½digo da entidade beneficente
+	 * @return ImovelDoacao - retorna o imï¿½vel doaï¿½ï¿½o correspondente ï¿½
+	 *         combinaï¿½ï¿½o de imï¿½vel e entidade beneficente
 	 */
 	public ImovelDoacao verificarExistenciaImovelDoacao(Integer idImovel, Integer idEntidadeBeneficente) {
 		try {
@@ -9332,14 +9332,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite pesquisar entidades beneficentes [UC0389] Inserir Autorização
-	 * para Doação Mensal
+	 * Permite pesquisar entidades beneficentes [UC0389] Inserir Autorizaï¿½ï¿½o
+	 * para Doaï¿½ï¿½o Mensal
 	 * 
-	 * @author César Araújo
+	 * @author Cï¿½sar Araï¿½jo
 	 * @date 31/08/2006
 	 * @param idEntidadeBeneficente
-	 *            - Código da entidade beneficente
-	 * @return Collection<EntidadeBeneficente> - Coleção de entidades
+	 *            - Cï¿½digo da entidade beneficente
+	 * @return Collection<EntidadeBeneficente> - Coleï¿½ï¿½o de entidades
 	 *         beneficentes
 	 */
 	public Collection<EntidadeBeneficente> pesquisarEntidadeBeneficente(Integer idEntidadeBeneficente) {
@@ -9352,14 +9352,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do imï¿½vel pesquisarPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/06
 	 * 
 	 * @param FiltroPagamento
@@ -9381,14 +9381,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do imï¿½vel pesquisarPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/06
 	 * 
 	 * @param FiltroPagamento
@@ -9405,14 +9405,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do imï¿½vel pesquisarPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/06
 	 * 
 	 * @param FiltroPagamento
@@ -9434,14 +9434,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do imï¿½vel pesquisarPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/06
 	 * 
 	 * @param FiltroPagamento
@@ -9463,14 +9463,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do imï¿½vel pesquisarPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/06
 	 * 
 	 * @param FiltroPagamento
@@ -9492,14 +9492,14 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * para o Relatï¿½rio
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos do imóvel pesquisarPagamento
+	 * Pesquisa os pagamentos do imï¿½vel pesquisarPagamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 29/08/06
 	 * 
 	 * @param FiltroPagamento
@@ -9574,8 +9574,8 @@ public class Fachada {
 	 * Verifica a existencia do cliente
 	 * 
 	 * @param codigo
-	 *            cliente Descrição do parâmetro
-	 * @return Descrição do retorno
+	 *            cliente Descriï¿½ï¿½o do parï¿½metro
+	 * @return Descriï¿½ï¿½o do retorno
 	 */
 	public Integer verificarExistenciaCliente(Integer codigoCliente) {
 		try {
@@ -9590,8 +9590,8 @@ public class Fachada {
 	 * Verifica a existencia da localidade
 	 * 
 	 * @param id
-	 *            Localidade Descrição do parâmetro
-	 * @return Descrição do retorno
+	 *            Localidade Descriï¿½ï¿½o do parï¿½metro
+	 * @return Descriï¿½ï¿½o do retorno
 	 */
 	public Integer verificarExistenciaLocalidade(Integer idLocalidade) {
 		try {
@@ -9606,8 +9606,8 @@ public class Fachada {
 	 * Verifica a existencia da Guia Devolucao
 	 * 
 	 * @param id
-	 *            GuiaDevolucao Descrição do parâmetro
-	 * @return Descrição do retorno
+	 *            GuiaDevolucao Descriï¿½ï¿½o do parï¿½metro
+	 * @return Descriï¿½ï¿½o do retorno
 	 */
 	public Integer verificarExistenciaGuiaDevolucao(Integer idGuiaDevolucao) {
 		try {
@@ -9622,8 +9622,8 @@ public class Fachada {
 	 * Verifica a existencia da localidade
 	 * 
 	 * @param id
-	 *            GuiaDevolucao Descrição do parâmetro
-	 * @return Descrição do retorno
+	 *            GuiaDevolucao Descriï¿½ï¿½o do parï¿½metro
+	 * @return Descriï¿½ï¿½o do retorno
 	 */
 	public Integer verificarExistenciaDebitoTipo(Integer idDebitoTipo) {
 		try {
@@ -9635,9 +9635,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0367]Atualizar Ligação de Agua no sistema.
+	 * [UC0367]Atualizar Ligaï¿½ï¿½o de Agua no sistema.
 	 * 
-	 * [SB002] Atualiza ligação de agua.
+	 * [SB002] Atualiza ligaï¿½ï¿½o de agua.
 	 * 
 	 * @author Rafael Pinto
 	 * @date 20/07/2006
@@ -9656,11 +9656,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * ligação de agua do imóvel no momento da exibição.
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * ligaï¿½ï¿½o de agua do imï¿½vel no momento da exibiï¿½ï¿½o.
 	 * 
-	 * [FS0001] Verificar existência da matrícula do imóvel. [FS0002] Verificar
-	 * Situação do Imovel. [FS0003] Validar Situação de Esgoto do imóvel.
+	 * [FS0001] Verificar existï¿½ncia da matrï¿½cula do imï¿½vel. [FS0002] Verificar
+	 * Situaï¿½ï¿½o do Imovel. [FS0003] Validar Situaï¿½ï¿½o de Esgoto do imï¿½vel.
 	 * 
 	 * @author Rafael Pinto
 	 * @date 20/07/2006
@@ -9680,9 +9680,9 @@ public class Fachada {
 	/**
 	 * [UC0373] Inserir Unidade Organizacional
 	 * 
-	 * Metodo inserção da unidade organizacional
+	 * Metodo inserï¿½ï¿½o da unidade organizacional
 	 * 
-	 * [FS0001] é Verificar existência de unidade centralizadora
+	 * [FS0001] ï¿½ Verificar existï¿½ncia de unidade centralizadora
 	 * 
 	 * @author Raphael Pinto
 	 * @date 31/07/2006
@@ -9702,7 +9702,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Efetuar a Ligação da Esgoto no imovel
+	 * Efetuar a Ligaï¿½ï¿½o da Esgoto no imovel
 	 * 
 	 * @author Leandro Cavalcanti
 	 * @date 15/06/2006
@@ -9721,7 +9721,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Atualizar a Ligação da Esgoto no imovel
+	 * Atualizar a Ligaï¿½ï¿½o da Esgoto no imovel
 	 * 
 	 * @author Leonardo Regis
 	 * @date 18/07/2006
@@ -9740,11 +9740,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * ligação de esgoto no momento da exibição.
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * ligaï¿½ï¿½o de esgoto no momento da exibiï¿½ï¿½o.
 	 * 
-	 * [FS0001] Verificar existência da matrícula do imóvel. [FS0002] Verificar
-	 * Situação do Imovel. [FS0003] Validar Situação de Esgoto do imóvel.
+	 * [FS0001] Verificar existï¿½ncia da matrï¿½cula do imï¿½vel. [FS0002] Verificar
+	 * Situaï¿½ï¿½o do Imovel. [FS0003] Validar Situaï¿½ï¿½o de Esgoto do imï¿½vel.
 	 * 
 	 * @author Leonardo Regis
 	 * @date 20/07/2006
@@ -9761,10 +9761,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * ligação de esgoto no momento da atualização.
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * ligaï¿½ï¿½o de esgoto no momento da atualizaï¿½ï¿½o.
 	 * 
-	 * [FS0006] Validar Percentual de Coleta. [FS0007] Validar Volume Mínimo
+	 * [FS0006] Validar Percentual de Coleta. [FS0007] Validar Volume Mï¿½nimo
 	 * Fixado.
 	 * 
 	 * @author Leonardo Regis
@@ -9800,12 +9800,12 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * inserção de equipe.
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * inserï¿½ï¿½o de equipe.
 	 * 
-	 * [FS0001] Verificar existência da Unidade Organizacional. [FS0002]
-	 * Verificar existência do Tipo de Perfil do servirão. [FS0003] Verificar
-	 * Equipe Componente já Existente.
+	 * [FS0001] Verificar existï¿½ncia da Unidade Organizacional. [FS0002]
+	 * Verificar existï¿½ncia do Tipo de Perfil do servirï¿½o. [FS0003] Verificar
+	 * Equipe Componente jï¿½ Existente.
 	 * 
 	 * @author Leonardo Regis
 	 * @date 25/07/2006
@@ -9821,12 +9821,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * inserção da especificacao situacao criterio imovel.
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * inserï¿½ï¿½o da especificacao situacao criterio imovel.
 	 * 
-	 * [FS0001] Validar especificação da situaçãoo já existente [FS0002] Validar
-	 * existência de hidrômetro na ligação Água [FS0003] Validar existência de
-	 * hidrômetro no poão
+	 * [FS0001] Validar especificaï¿½ï¿½o da situaï¿½ï¿½oo jï¿½ existente [FS0002] Validar
+	 * existï¿½ncia de hidrï¿½metro na ligaï¿½ï¿½o ï¿½gua [FS0003] Validar existï¿½ncia de
+	 * hidrï¿½metro no poï¿½o
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/08/2006
@@ -9862,12 +9862,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * inserção de componentes da equipe.
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * inserï¿½ï¿½o de componentes da equipe.
 	 * 
-	 * [FS0003] Validar equipe componente já existente [FS0004] Verificar
-	 * existência do funcionário [FS0007] Verificar quantidade de indicador de
-	 * responsável
+	 * [FS0003] Validar equipe componente jï¿½ existente [FS0004] Verificar
+	 * existï¿½ncia do funcionï¿½rio [FS0007] Verificar quantidade de indicador de
+	 * responsï¿½vel
 	 * 
 	 * @author Leonardo Regis
 	 * @date 25/07/2006
@@ -9884,11 +9884,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * inserção de componentes da equipe.
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * inserï¿½ï¿½o de componentes da equipe.
 	 * 
 	 * [FS0006] Verificar quantidade de componentes da equipe em Tipo Perfil
-	 * serviço Validar se possui algum responsável
+	 * serviï¿½o Validar se possui algum responsï¿½vel
 	 * 
 	 * @author Leonardo Regis
 	 * @date 29/07/2006
@@ -9907,7 +9907,7 @@ public class Fachada {
 	/**
 	 * [UC0406] Filtrar Registro de Atendimento
 	 * 
-	 * [FS007] Verificar existência de unidades subordinadas
+	 * [FS007] Verificar existï¿½ncia de unidades subordinadas
 	 * 
 	 * @author Leonardo Regis
 	 * @date 05/08/2006
@@ -9959,8 +9959,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Constroi um menu de acesso de acordo com as permissões que o usuário que
-	 * está logado no sistema conteme monta o link de retorno com o link
+	 * Constroi um menu de acesso de acordo com as permissï¿½es que o usuï¿½rio que
+	 * estï¿½ logado no sistema conteme monta o link de retorno com o link
 	 * informado.
 	 * 
 	 * [UC0277] - Construir menu de acesso
@@ -10004,9 +10004,9 @@ public class Fachada {
 	}
 
 	/**
-	 * método que consulta os grupos do usuário
+	 * mï¿½todo que consulta os grupos do usuï¿½rio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 27/06/2006
 	 */
 	@SuppressWarnings("rawtypes")
@@ -10020,9 +10020,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Método que consulta os grupos do usuário da tabela grupoAcessos
+	 * Mï¿½todo que consulta os grupos do usuï¿½rio da tabela grupoAcessos
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 21/02/2007
 	 */
 	@SuppressWarnings("rawtypes")
@@ -10036,11 +10036,11 @@ public class Fachada {
 	}
 
 	/**
-	 * método que consulta as abrangências dos usuário pelos os ids das
-	 * abrangências superiores e com o id da abrangência diferente do id da
-	 * abrangência do usuário que está inserindo(usuário logado)
+	 * mï¿½todo que consulta as abrangï¿½ncias dos usuï¿½rio pelos os ids das
+	 * abrangï¿½ncias superiores e com o id da abrangï¿½ncia diferente do id da
+	 * abrangï¿½ncia do usuï¿½rio que estï¿½ inserindo(usuï¿½rio logado)
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 28/06/2006
 	 */
 	public Collection pesquisarUsuarioAbrangenciaPorSuperior(Collection colecaoUsuarioAbrangencia, Integer idUsuarioAbrangenciaLogado) {
@@ -10053,19 +10053,19 @@ public class Fachada {
 	}
 
 	/**
-	 * Informa o número total de registros de usuario grupo, auxiliando o
-	 * esquema de paginação
+	 * Informa o nï¿½mero total de registros de usuario grupo, auxiliando o
+	 * esquema de paginaï¿½ï¿½o
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 30/06/2006
 	 * 
 	 * @param Filtro
 	 *            da Pesquisa
 	 * @param Pacote
 	 *            do objeto pesquisado
-	 * @return número de registros da pesquisa
+	 * @return nï¿½mero de registros da pesquisa
 	 * @throws ErroRepositorioException
-	 *             Exceção do repositório
+	 *             Exceï¿½ï¿½o do repositï¿½rio
 	 */
 	public int totalRegistrosPesquisaUsuarioGrupo(FiltroUsuarioGrupo filtroUsuarioGrupo) {
 		try {
@@ -10101,19 +10101,19 @@ public class Fachada {
 	}
 
 	/**
-	 * Informa o número total de registros de usuario grupo, auxiliando o
-	 * esquema de paginação
+	 * Informa o nï¿½mero total de registros de usuario grupo, auxiliando o
+	 * esquema de paginaï¿½ï¿½o
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 30/06/2006
 	 * 
 	 * @param Filtro
 	 *            da Pesquisa
 	 * @param Pacote
 	 *            do objeto pesquisado
-	 * @return número de registros da pesquisa
+	 * @return nï¿½mero de registros da pesquisa
 	 * @throws ErroRepositorioException
-	 *             Exceção do repositório
+	 *             Exceï¿½ï¿½o do repositï¿½rio
 	 */
 	public Collection pesquisarUsuariosDosGruposUsuarios(FiltroUsuarioGrupo filtroUsuarioGrupo, Integer numeroPagina) {
 		try {
@@ -10136,7 +10136,7 @@ public class Fachada {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -10161,7 +10161,7 @@ public class Fachada {
 	 * 
 	 * [UC0231] Manter Usuario
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 07/07/2006
 	 * @param idsUsuario
 	 * @param usuario
@@ -10176,17 +10176,17 @@ public class Fachada {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
-	 * <Breve descrição sobre o subfluxo>
+	 * <Breve descriï¿½ï¿½o sobre o subfluxo>
 	 * 
 	 * <Identificador e nome do subfluxo>
 	 * 
-	 * <Breve descrição sobre o fluxo secundário>
+	 * <Breve descriï¿½ï¿½o sobre o fluxo secundï¿½rio>
 	 * 
-	 * <Identificador e nome do fluxo secundário>
+	 * <Identificador e nome do fluxo secundï¿½rio>
 	 * 
 	 * @author Administrador
 	 * @date 04/07/2006
@@ -10202,17 +10202,17 @@ public class Fachada {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
-	 * <Breve descrição sobre o subfluxo>
+	 * <Breve descriï¿½ï¿½o sobre o subfluxo>
 	 * 
 	 * <Identificador e nome do subfluxo>
 	 * 
-	 * <Breve descrição sobre o fluxo secundário>
+	 * <Breve descriï¿½ï¿½o sobre o fluxo secundï¿½rio>
 	 * 
-	 * <Identificador e nome do fluxo secundário>
+	 * <Identificador e nome do fluxo secundï¿½rio>
 	 * 
 	 * @author Administrador
 	 * @date 04/07/2006
@@ -10229,7 +10229,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0355] Efetuar Corte de Ligação de Água.
+	 * [UC0355] Efetuar Corte de Ligaï¿½ï¿½o de ï¿½gua.
 	 * 
 	 * @author Leonardo Regis.
 	 * @date 25/09/2006
@@ -10245,12 +10245,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0365] Efetuar Retirada de hidrômetro [SB0001] Atualizar Histórico de
-	 * instalação do hidrômetro
+	 * [UC0365] Efetuar Retirada de hidrï¿½metro [SB0001] Atualizar Histï¿½rico de
+	 * instalaï¿½ï¿½o do hidrï¿½metro
 	 * 
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 05/07/2006
 	 * 
 	 * @param hidrometroInstalacaoHistorico
@@ -10267,9 +10267,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0365] Efetuar Corte Administrativo da Ligação Agua
+	 * [UC0365] Efetuar Corte Administrativo da Ligaï¿½ï¿½o Agua
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 30/06/2006
 	 * 
 	 * @param ligacaoAgua
@@ -10286,10 +10286,10 @@ public class Fachada {
 	}
 
 	/**
-	 * método que consulta os grupos funcionários operAções passando os ids dos
+	 * mï¿½todo que consulta os grupos funcionï¿½rios operAï¿½ï¿½es passando os ids dos
 	 * grupos
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 11/07/2006
 	 */
 	@SuppressWarnings("rawtypes")
@@ -10303,10 +10303,10 @@ public class Fachada {
 	}
 
 	/**
-	 * método que consulta os grupos funcionários operAções passando os ids dos
+	 * mï¿½todo que consulta os grupos funcionï¿½rios operAï¿½ï¿½es passando os ids dos
 	 * grupos e o id da funcionalidade
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 11/07/2006
 	 */
 	@SuppressWarnings("rawtypes")
@@ -10320,10 +10320,10 @@ public class Fachada {
 	}
 
 	/**
-	 * método que consulta os usuários restrinção passando os ids dos grupos , o
-	 * id da funcionalidade e o id do usuário
+	 * mï¿½todo que consulta os usuï¿½rios restrinï¿½ï¿½o passando os ids dos grupos , o
+	 * id da funcionalidade e o id do usuï¿½rio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 11/07/2006
 	 */
 	public Collection pesquisarUsuarioRestrincao(Integer[] idsGrupos, Integer idFuncionalidade, Integer idUsuario) {
@@ -10344,9 +10344,9 @@ public class Fachada {
 	}
 	
 	/**
-	 * método que retorna o maior número da quadra de um setor comercial
+	 * mï¿½todo que retorna o maior nï¿½mero da quadra de um setor comercial
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 11/07/2006
 	 * 
 	 * @param idSetorComercial
@@ -10363,9 +10363,9 @@ public class Fachada {
 	}
 
 	/**
-	 * método que retorna o maior Código de setor comercial de uma localidade
+	 * mï¿½todo que retorna o maior Cï¿½digo de setor comercial de uma localidade
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 11/07/2006
 	 * 
 	 * @param idLocalidade
@@ -10382,7 +10382,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que retorna o maior Código de Rota de um Setor Comercial
+	 * mï¿½todo que retorna o maior Cï¿½digo de Rota de um Setor Comercial
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 12/07/2006
@@ -10403,10 +10403,10 @@ public class Fachada {
 	}
 
 	/**
-	 * método que consulta as funcionalidades da(s) funcionalidade(s)
+	 * mï¿½todo que consulta as funcionalidades da(s) funcionalidade(s)
 	 * princpial(is)
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 12/07/2006
 	 */
 	@SuppressWarnings("rawtypes")
@@ -10420,9 +10420,9 @@ public class Fachada {
 	}
 
 	/**
-	 * método que consulta as operAções da(s) funcionalidade(s)
+	 * mï¿½todo que consulta as operAï¿½ï¿½es da(s) funcionalidade(s)
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 12/07/2006
 	 */
 	@SuppressWarnings("rawtypes")
@@ -10436,10 +10436,10 @@ public class Fachada {
 	}
 
 	/**
-	 * método que consulta as operAções da(s) funcionalidade(s) e das
+	 * mï¿½todo que consulta as operAï¿½ï¿½es da(s) funcionalidade(s) e das
 	 * funcionalidades dependencia
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 12/07/2006
 	 */
 	public Collection recuperarOperacoesFuncionalidadesEDependentes(Integer idFuncionalidade) {
@@ -10452,13 +10452,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica a existência da matrícula do imóvel. Caso exista, verifica se o
-	 * imóvel está ativo.
+	 * Verifica a existï¿½ncia da matrï¿½cula do imï¿½vel. Caso exista, verifica se o
+	 * imï¿½vel estï¿½ ativo.
 	 * 
-	 * [UC0368] Atualizar Instalação do hidrômetro
+	 * [UC0368] Atualizar Instalaï¿½ï¿½o do hidrï¿½metro
 	 * 
-	 * [FS0001] - Verificar a existência da matrícula do imóvel [FS0002] -
-	 * Verificar a situação do imóvel
+	 * [FS0001] - Verificar a existï¿½ncia da matrï¿½cula do imï¿½vel [FS0002] -
+	 * Verificar a situaï¿½ï¿½o do imï¿½vel
 	 * 
 	 * @author lms
 	 * @created 19/07/2006
@@ -10474,12 +10474,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica a existência do hidrômetro de acordo com tipo de medição
+	 * Verifica a existï¿½ncia do hidrï¿½metro de acordo com tipo de mediï¿½ï¿½o
 	 * informado (MedicaoTipo.LIGACAO_AGUA ou MedicaoTipo.POCO).
 	 * 
-	 * [UC0368] Atualizar Instalação do hidrômetro
+	 * [UC0368] Atualizar Instalaï¿½ï¿½o do hidrï¿½metro
 	 * 
-	 * [FS0003] - Validar existência do hidrômetro
+	 * [FS0003] - Validar existï¿½ncia do hidrï¿½metro
 	 * 
 	 * @author lms
 	 * @created 24/07/2006
@@ -10495,9 +10495,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0362] Efetuar Instalacao de hidrômetro
+	 * [UC0362] Efetuar Instalacao de hidrï¿½metro
 	 * 
-	 * [SB0001] Gerar Histórico de instalação do hidrômetro
+	 * [SB0001] Gerar Histï¿½rico de instalaï¿½ï¿½o do hidrï¿½metro
 	 * 
 	 * @author Ana Maria
 	 * @date 12/07/2006
@@ -10518,11 +10518,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0356] Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto
+	 * [UC0356] Efetuar Mudanï¿½a de Situaï¿½ï¿½o de Faturamento da Ligaï¿½ï¿½o de Esgoto
 	 * 
-	 * Permite Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto .
+	 * Permite Efetuar Mudanï¿½a de Situaï¿½ï¿½o de Faturamento da Ligaï¿½ï¿½o de Esgoto .
 	 * 
-	 * [FS0001]- Validar Ordem de serviço [FS0002] Verificar Situação do Imovel
+	 * [FS0001]- Validar Ordem de serviï¿½o [FS0002] Verificar Situaï¿½ï¿½o do Imovel
 	 * 
 	 * @author Leandro Cavalcanti
 	 * @date 18/07/2006
@@ -10543,11 +10543,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0356]- Efetuar Mudança de Faturamento na Ligação de Água
-	 * [FS0006]-Atualizar Ligação de Esgoto
+	 * [UC0356]- Efetuar Mudanï¿½a de Faturamento na Ligaï¿½ï¿½o de ï¿½gua
+	 * [FS0006]-Atualizar Ligaï¿½ï¿½o de Esgoto
 	 * 
-	 * Permite atualizar a Tabele de Ligação Esdoto . Update LIGACAO_ESGOTO
-	 * LESG_NNCONSUMOMINIMOESGOTO (volume Mínimo fixado) LESG_TMULTIMAALTERADAO
+	 * Permite atualizar a Tabele de Ligaï¿½ï¿½o Esdoto . Update LIGACAO_ESGOTO
+	 * LESG_NNCONSUMOMINIMOESGOTO (volume Mï¿½nimo fixado) LESG_TMULTIMAALTERADAO
 	 * (data e hora correntes) Where LESG_ID=IMOV_ID da tabela IMOVEL
 	 * 
 	 * @author Leandro Cavalcanti
@@ -10569,9 +10569,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0356]- Efetuar Mudança de Faturamento na Ligação de Água
+	 * [UC0356]- Efetuar Mudanï¿½a de Faturamento na Ligaï¿½ï¿½o de ï¿½gua
 	 * 
-	 * [FS0007]- Validar Situação da Ligação de Água do imóvel
+	 * [FS0007]- Validar Situaï¿½ï¿½o da Ligaï¿½ï¿½o de ï¿½gua do imï¿½vel
 	 * 
 	 * @author Leandro Cavalcanti
 	 * @date 18/07/2006
@@ -10589,14 +10589,14 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0356] Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto
+	 * [UC0356] Efetuar Mudanï¿½a de Situaï¿½ï¿½o de Faturamento da Ligaï¿½ï¿½o de Esgoto
 	 * 
-	 * Permite Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto .
+	 * Permite Efetuar Mudanï¿½a de Situaï¿½ï¿½o de Faturamento da Ligaï¿½ï¿½o de Esgoto .
 	 * 
-	 * [FS0001]- Validar Ordem de serviço [FS0002] Verificar Situação do Imovel
-	 * [FS0002] Verificar Situação do Imovel [FS0003]- Validar Situação da
-	 * Ligação de Esgoto do imóvel [FS0007]- Validar Situação da Ligação de Água
-	 * do imóvel
+	 * [FS0001]- Validar Ordem de serviï¿½o [FS0002] Verificar Situaï¿½ï¿½o do Imovel
+	 * [FS0002] Verificar Situaï¿½ï¿½o do Imovel [FS0003]- Validar Situaï¿½ï¿½o da
+	 * Ligaï¿½ï¿½o de Esgoto do imï¿½vel [FS0007]- Validar Situaï¿½ï¿½o da Ligaï¿½ï¿½o de ï¿½gua
+	 * do imï¿½vel
 	 * 
 	 * @author Leandro Cavalcanti
 	 * @date 18/07/2006
@@ -10619,10 +10619,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0364] Efetuar Substituição de hidrômetro
+	 * [UC0364] Efetuar Substituiï¿½ï¿½o de hidrï¿½metro
 	 * 
-	 * [SB0001] Atualiza o histórico da instalação com os dados do hidrômetro
-	 * substituido [SB0002] Gerar Histórico de instalação do hidrômetro
+	 * [SB0001] Atualiza o histï¿½rico da instalaï¿½ï¿½o com os dados do hidrï¿½metro
+	 * substituido [SB0002] Gerar Histï¿½rico de instalaï¿½ï¿½o do hidrï¿½metro
 	 * 
 	 * @author Ana Maria
 	 * @date 24/07/2006
@@ -10645,12 +10645,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0360]- Efetuar Supressão da Ligação de Água
+	 * [UC0360]- Efetuar Supressï¿½o da Ligaï¿½ï¿½o de ï¿½gua
 	 * 
-	 * [SB0001]- Atualizar Ligação de Água [SB0002]- Atualizar imóvel [SB0004]-
-	 * Atualizar Histórico de Instalação de hidrômetro
+	 * [SB0001]- Atualizar Ligaï¿½ï¿½o de ï¿½gua [SB0002]- Atualizar imï¿½vel [SB0004]-
+	 * Atualizar Histï¿½rico de Instalaï¿½ï¿½o de hidrï¿½metro
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 28/07/2006
 	 * @param imovel
 	 * 
@@ -10669,9 +10669,9 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Obtém a unidade associada ao usuário que estiver efetuando o registro de
+	 * Obtï¿½m a unidade associada ao usuï¿½rio que estiver efetuando o registro de
 	 * atendimento (UNID_ID e UNID_DSUNIDADE da tabela UNIDADE_ORGANIZACIONAL
-	 * com UNID_ID=(UNID_ID da tabela USUARIO com USUR_NMLOGIN= Login do usuário
+	 * com UNID_ID=(UNID_ID da tabela USUARIO com USUR_NMLOGIN= Login do usuï¿½rio
 	 * que estiver efetuando o registro de atendimento) e UNID_ICABERTURARA=1)
 	 * 
 	 * @author Raphael Rossiter
@@ -10694,17 +10694,17 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Caso a unidade de atendimento Não tenha autorização para efetuar a
+	 * Caso a unidade de atendimento Nï¿½o tenha autorizaï¿½ï¿½o para efetuar a
 	 * abertura de registros de atendimento (UNID_ICABERTURARA com o valor
 	 * correspondente a dois na tabela UNIDADE_ORGANIZACIONAL com UNID_ID=Id da
 	 * Unidade de Atendimento), exibir a mensagem A unidade <<UNID_NMUNIDADE da
-	 * tabela UNIDADE_ORGANIZACIONAL>> Não tem autorização para efetuar a
+	 * tabela UNIDADE_ORGANIZACIONAL>> Nï¿½o tem autorizaï¿½ï¿½o para efetuar a
 	 * abertura de registro de atendimento e retornar para o passo
 	 * correspondente no fluxo principal.
 	 * 
-	 * [FS0004] é Verificar existência da unidade de atendimento
+	 * [FS0004] ï¿½ Verificar existï¿½ncia da unidade de atendimento
 	 * 
-	 * [FS0033] é Verificar autorização da unidade de atendimento para abertura
+	 * [FS0033] ï¿½ Verificar autorizaï¿½ï¿½o da unidade de atendimento para abertura
 	 * de registro de atendimento
 	 * 
 	 * @author Raphael Rossiter
@@ -10726,14 +10726,14 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0368] Atualizar Instalação do hidrômetro
+	 * [UC0368] Atualizar Instalaï¿½ï¿½o do hidrï¿½metro
 	 * 
-	 * [FS0001] - Verificar a existência da matrícula do imóvel [FS0002] -
-	 * Verificar a situação do imóvel [FS0003] - Validar existência do
-	 * hidrômetro [FS0004] - Validar leitura instalação hidrômetro [FS0005] -
-	 * Validar leitura retirada hidrômetro [FS0006] - Validar leitura retirada
-	 * corte [FS0007] - Validar Leitura Supressão [FS0009] - Verificar sucesso
-	 * da transação
+	 * [FS0001] - Verificar a existï¿½ncia da matrï¿½cula do imï¿½vel [FS0002] -
+	 * Verificar a situaï¿½ï¿½o do imï¿½vel [FS0003] - Validar existï¿½ncia do
+	 * hidrï¿½metro [FS0004] - Validar leitura instalaï¿½ï¿½o hidrï¿½metro [FS0005] -
+	 * Validar leitura retirada hidrï¿½metro [FS0006] - Validar leitura retirada
+	 * corte [FS0007] - Validar Leitura Supressï¿½o [FS0009] - Verificar sucesso
+	 * da transaï¿½ï¿½o
 	 * 
 	 * @author lms
 	 * @created 21/07/2006
@@ -10751,22 +10751,22 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Data Prevista = Data Válida obtida a partir da Data do Atendimento +
-	 * número de dias previstos para a especificação do tipo de solicitação
+	 * Data Prevista = Data Vï¿½lida obtida a partir da Data do Atendimento +
+	 * nï¿½mero de dias previstos para a especificaï¿½ï¿½o do tipo de solicitaï¿½ï¿½o
 	 * (STEP_NNDIAPRAZO da tabela SOLICITACAO_TIPO_ESPECIFICACAO).
 	 * 
 	 * Caso o sistema deva sugerir a unidade destino para o primeiro
 	 * encaminhamento do Registro de Atendimento (PARM_ICSUGESTAOTRAMITE=1 na
 	 * tabela SISTEMA_PARAMETROS)
 	 * 
-	 * Caso a Especificação esteja associada a uma unidade (UNID_ID da tabela
+	 * Caso a Especificaï¿½ï¿½o esteja associada a uma unidade (UNID_ID da tabela
 	 * SOLICITACAO_TIPO_ESPECIFICACAO com o valor diferente de nulo), definir a
-	 * unidade destino a partir da Especificação (UNID_ID e UNID_DSUNIDADE da
+	 * unidade destino a partir da Especificaï¿½ï¿½o (UNID_ID e UNID_DSUNIDADE da
 	 * tabela UNIDADE_ORGANIZACIONAL com UNID_ICTRAMITE=1 e UNID_ID=UNID_ID da
-	 * tabela SOLICITACAO_TIPO_ESPECIFICACAO com SETP_ID=Id da Especificação
+	 * tabela SOLICITACAO_TIPO_ESPECIFICACAO com SETP_ID=Id da Especificaï¿½ï¿½o
 	 * selecionada).
 	 * 
-	 * [SB0003] é Define Data Prevista e Unidade Destino da Especificação
+	 * [SB0003] ï¿½ Define Data Prevista e Unidade Destino da Especificaï¿½ï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 25/07/2006
@@ -10787,11 +10787,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0359] Efetuar Restabelecimento Ligação de Água
+	 * [UC0359] Efetuar Restabelecimento Ligaï¿½ï¿½o de ï¿½gua
 	 * 
-	 * [SB0001] Atualizar imóvel/Ligação de Água/Ligação de Esgoto
+	 * [SB0001] Atualizar imï¿½vel/Ligaï¿½ï¿½o de ï¿½gua/Ligaï¿½ï¿½o de Esgoto
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 12/07/2006
 	 * 
 	 * @param ordemServico
@@ -10838,9 +10838,9 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Caso a Especificação exija a matrícula do imóvel (STEP_ICMATRICULA com o
+	 * Caso a Especificaï¿½ï¿½o exija a matrï¿½cula do imï¿½vel (STEP_ICMATRICULA com o
 	 * valor correspondente a um na tabela SOLICITACAO_TIPO_ESPECIFICACAO),
-	 * obrigatório; caso contrário, opcional
+	 * obrigatï¿½rio; caso contrï¿½rio, opcional
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/07/2006
@@ -10861,13 +10861,13 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0354] Efetuar Ligação de Água.
+	 * [UC0354] Efetuar Ligaï¿½ï¿½o de ï¿½gua.
 	 * 
-	 * Permite validar ligação de Água Exibir ou pelo menu ou pela
-	 * funcionalidade encerrar a execução da ordem de serão.
+	 * Permite validar ligaï¿½ï¿½o de ï¿½gua Exibir ou pelo menu ou pela
+	 * funcionalidade encerrar a execuï¿½ï¿½o da ordem de serï¿½o.
 	 * 
-	 * [FS0008] Verificar Situação Rede de Água na Quadra. [FS0007] Verificar
-	 * Situação do Imovel. [FS0002] Validar Situação de Água do imóvel
+	 * [FS0008] Verificar Situaï¿½ï¿½o Rede de ï¿½gua na Quadra. [FS0007] Verificar
+	 * Situaï¿½ï¿½o do Imovel. [FS0002] Validar Situaï¿½ï¿½o de ï¿½gua do imï¿½vel
 	 * 
 	 * @author Leandro Cavalcanti.
 	 * @date 12/07/2006
@@ -10888,13 +10888,13 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0353] Efetuar Ligação de Esgoto.
+	 * [UC0353] Efetuar Ligaï¿½ï¿½o de Esgoto.
 	 * 
-	 * Permite validar ligação de esgoto Exibir ou pelo menu ou pela
-	 * funcionalidade encerrar a execução da ordem de serão.
+	 * Permite validar ligaï¿½ï¿½o de esgoto Exibir ou pelo menu ou pela
+	 * funcionalidade encerrar a execuï¿½ï¿½o da ordem de serï¿½o.
 	 * 
-	 * [FS0008] Verificar Situação Rede de Esgoto na Quadra. [FS0007] Verificar
-	 * Situação do Imovel. [FS0002] Validar Situação de Esgoto do imóvel
+	 * [FS0008] Verificar Situaï¿½ï¿½o Rede de Esgoto na Quadra. [FS0007] Verificar
+	 * Situaï¿½ï¿½o do Imovel. [FS0002] Validar Situaï¿½ï¿½o de Esgoto do imï¿½vel
 	 * 
 	 * @author Leandro Cavalcanti.
 	 * @date 12/07/2006
@@ -10917,8 +10917,8 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Obter e habilitar/desabilitar os Dados da Identificação do Local da
-	 * ocorrência de acordo com as situações abaixo descritas no caso de uso
+	 * Obter e habilitar/desabilitar os Dados da Identificaï¿½ï¿½o do Local da
+	 * ocorrï¿½ncia de acordo com as situaï¿½ï¿½es abaixo descritas no caso de uso
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/07/2006
@@ -10944,10 +10944,10 @@ public class Fachada {
 	/**
 	 * [UC0408] Atualizar Registro de Atendimento
 	 * 
-	 * Obter e habilitar/desabilitar os Dados da Identificação do Local da
-	 * ocorrência de acordo com as situações abaixo descritas no caso de uso
+	 * Obter e habilitar/desabilitar os Dados da Identificaï¿½ï¿½o do Local da
+	 * ocorrï¿½ncia de acordo com as situaï¿½ï¿½es abaixo descritas no caso de uso
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 21/08/2006
 	 * 
 	 * @param idImovel
@@ -10972,12 +10972,12 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Caso exista registro de atendimento pendente para o imóvel (existe
-	 * ocorrência na tabela REGISTRO_ATENDIMENTO com IMOV_ID=matrícula do imóvel
+	 * Caso exista registro de atendimento pendente para o imï¿½vel (existe
+	 * ocorrï¿½ncia na tabela REGISTRO_ATENDIMENTO com IMOV_ID=matrï¿½cula do imï¿½vel
 	 * e RGAT_CDSITUACAO=1)
 	 * 
-	 * [SB0021] Verifica existência de Registro de Atendimento Pendente para o
-	 * imóvel
+	 * [SB0021] Verifica existï¿½ncia de Registro de Atendimento Pendente para o
+	 * imï¿½vel
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 31/07/2006
@@ -11009,7 +11009,7 @@ public class Fachada {
 	 * 
 	 * 
 	 * 
-	 * @author Rômulo Aurélio, Diogo Peixoto
+	 * @author Rï¿½mulo Aurï¿½lio, Diogo Peixoto
 	 * @date 31/07/2006, 18/08/2011
 	 * 
 	 * @param codigoMaterial
@@ -11029,10 +11029,10 @@ public class Fachada {
 	}
 
 	/**
-	 * método que consulta uma coleção por filtro e valida se encontrou
+	 * mï¿½todo que consulta uma coleï¿½ï¿½o por filtro e valida se encontrou
 	 * registros.
 	 * 
-	 * [FS0001] - Verificar existência de dados
+	 * [FS0001] - Verificar existï¿½ncia de dados
 	 * 
 	 * @param filtro
 	 *            Filtro
@@ -11072,11 +11072,11 @@ public class Fachada {
 	/**
 	 * [UC0396] Inserir Tipo de Retorno da OS Referida
 	 * 
-	 * [FS0002] - Solicitar o indicador de troca de serviço, situação e motivo
+	 * [FS0002] - Solicitar o indicador de troca de serviï¿½o, situaï¿½ï¿½o e motivo
 	 * de encerramento [FS0003] - Validar atendimento do motivo de encerramento
 	 * [FS0005] - Validar indicador de deferimento [FS0006] - Validar indicador
-	 * de deferimento x indicador de troca de serviço [FS0007] - Verificar
-	 * sucesso da transação
+	 * de deferimento x indicador de troca de serviï¿½o [FS0007] - Verificar
+	 * sucesso da transaï¿½ï¿½o
 	 * 
 	 * @author lms
 	 * @created 21/07/2006
@@ -11092,7 +11092,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Inserir Tipo Perfil serviço
+	 * Inserir Tipo Perfil serviï¿½o
 	 * 
 	 * @author Ana Maria
 	 * @date 01/08/2006
@@ -11110,9 +11110,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0391] Inserir Valor de Cobrança de serviço.
+	 * [UC0391] Inserir Valor de Cobranï¿½a de serviï¿½o.
 	 * 
-	 * Permite a Inclusão de um novo valor de Cobrança de serviço na tabela
+	 * Permite a Inclusï¿½o de um novo valor de Cobranï¿½a de serviï¿½o na tabela
 	 * SERVICO_COBRANCA_VALOR.
 	 * 
 	 * @author Leonardo Regis
@@ -11129,12 +11129,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0391] Atualizar Valor de Cobrança de serviço.
+	 * [UC0391] Atualizar Valor de Cobranï¿½a de serviï¿½o.
 	 * 
-	 * Permite a atualização de um novo valor de Cobrança de serviço na tabela
+	 * Permite a atualizaï¿½ï¿½o de um novo valor de Cobranï¿½a de serviï¿½o na tabela
 	 * SERVICO_COBRANCA_VALOR.
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 01/11/2006
 	 * 
 	 * @param servicoCobrancaValor
@@ -11150,11 +11150,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0399] Inserir Tipo de Solicitação com Especificação
+	 * [UC0399] Inserir Tipo de Solicitaï¿½ï¿½o com Especificaï¿½ï¿½o
 	 * 
-	 * [SB0001] - Gerar Tipo Solicitação com EspecificAções
+	 * [SB0001] - Gerar Tipo Solicitaï¿½ï¿½o com EspecificAï¿½ï¿½es
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 01/08/2006
 	 * 
 	 * @param solicitacaoTipo
@@ -11175,8 +11175,8 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * [SB0002] é Habilita/Desabilita Município, Bairro, área do Bairro e
-	 * Divisão de Esgoto
+	 * [SB0002] ï¿½ Habilita/Desabilita Municï¿½pio, Bairro, ï¿½rea do Bairro e
+	 * Divisï¿½o de Esgoto
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 02/08/2006
@@ -11197,9 +11197,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
-	 * [FS0003] - Validar Tipo de débito
+	 * [FS0003] - Validar Tipo de dï¿½bito
 	 * 
 	 * @author lms
 	 * @date 01/08/2006
@@ -11214,9 +11214,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
-	 * [FS0004] - Validar Perfil do serviço
+	 * [FS0004] - Validar Perfil do serviï¿½o
 	 * 
 	 * @author lms
 	 * @date 01/08/2006
@@ -11231,9 +11231,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
-	 * [FS0005] - Validar Tipo de serviço de referência
+	 * [FS0005] - Validar Tipo de serviï¿½o de referï¿½ncia
 	 * 
 	 * @author lms
 	 * @date 02/08/2006
@@ -11248,7 +11248,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
 	 * [FS0009] - Validar Atividade
 	 * 
@@ -11265,7 +11265,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
 	 * [FS0010] - Validar Material
 	 * 
@@ -11282,9 +11282,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
-	 * [FS0006] - Validar Ordem de Execução
+	 * [FS0006] - Validar Ordem de Execuï¿½ï¿½o
 	 * 
 	 * @author lms
 	 * @date 05/08/2006
@@ -11299,7 +11299,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
 	 * @author lms
 	 * @date 07/08/2006
@@ -11322,7 +11322,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
 	 * @author lms
 	 * @date 01708/2006
@@ -11337,7 +11337,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
 	 * @author lms
 	 * @date 07/08/2006
@@ -11352,7 +11352,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
 	 * @author lms
 	 * @date 07/08/2006
@@ -11367,7 +11367,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
 	 * @author lms
 	 * @date 07/08/2006
@@ -11382,7 +11382,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0410] - Inserir Tipo de serviço
+	 * [UC0410] - Inserir Tipo de serviï¿½o
 	 * 
 	 * @author lms
 	 * @date 07/08/2006
@@ -11401,20 +11401,20 @@ public class Fachada {
 	 * Caso o sistema deva sugerir a unidade destino para o primeiro
 	 * encaminhamento do Registro de Atendimento (PARM_ICSUGESTAOTRAMITE=1 na
 	 * tabela SISTEMA_PARAMETROS), definir a Unidade Destino da Localidade de
-	 * acordo com as regras abaixo. Caso a Especificação Não esteja associada a
+	 * acordo com as regras abaixo. Caso a Especificaï¿½ï¿½o Nï¿½o esteja associada a
 	 * uma unidade (UNID_ID da tabela SOLICITACAO_TIPO_ESPECIFICACAO com o valor
-	 * nulo): Caso o Tipo de Solicitação Não seja relativo é área de esgoto
+	 * nulo): Caso o Tipo de Solicitaï¿½ï¿½o Nï¿½o seja relativo ï¿½ ï¿½rea de esgoto
 	 * (SOTG_ICESGOTO da tabela SOLICITACAO_TIPO_GRUPO com o valor
 	 * correspondente a dois para SOTG_ID=SOTG_ID da tabela SOLICITACAO_TIPO com
-	 * SOTP_ID=Id do Tipo de Solicitação selecionado), definir a unidade destino
+	 * SOTP_ID=Id do Tipo de Solicitaï¿½ï¿½o selecionado), definir a unidade destino
 	 * a partir da localidade informada/selecionada (UNID_ID e UNID_DSUNIDADE da
 	 * tabela UNIDADE_ORGANIZACIONAL com UNID_ICTRAMITE=1 e UNID_ID=UNID_ID da
 	 * tabela LOCALIDADE_SOLIC_TIPO_GRUPO com LOCA_ID=Id da Localidade e
 	 * SOTG_ID=SOTG_ID da tabela SOLICITACAO_TIPO com SOTP_ID=Id do Tipo de
-	 * Solicitação selecionado) [FS0018 é Verificar existência de unidade
+	 * Solicitaï¿½ï¿½o selecionado) [FS0018 ï¿½ Verificar existï¿½ncia de unidade
 	 * centralizadora].
 	 * 
-	 * [SB0005] é Define Unidade Destino da Localidade
+	 * [SB0005] ï¿½ Define Unidade Destino da Localidade
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 04/08/2006
@@ -11437,16 +11437,16 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Caso o Tipo de Solicitação seja relativo é área de esgoto (SOTG_ICESGOTO
+	 * Caso o Tipo de Solicitaï¿½ï¿½o seja relativo ï¿½ ï¿½rea de esgoto (SOTG_ICESGOTO
 	 * da tabela SOLICITACAO_TIPO_GRUPO com o valor correspondente a um para
 	 * SOTG_ID=SOTG_ID da tabela SOLICITACAO_TIPO com SOTP_ID=Id do Tipo de
-	 * Solicitação selecionado). Caso a quadra esteja preenchida, obter a
-	 * divisão de esgoto da quadra (DVES_ID e DVES_DSDIVISAOESGOTO da tabela
+	 * Solicitaï¿½ï¿½o selecionado). Caso a quadra esteja preenchida, obter a
+	 * divisï¿½o de esgoto da quadra (DVES_ID e DVES_DSDIVISAOESGOTO da tabela
 	 * DIVISAO_ESGOTO com DVES_ID=DVES_ID da tabela SISTEMA_ESGOTO com
 	 * SESG_ID=SESG_ID da tabela BACIA com BACI_ID=BACI_ID da tabela QUADRA com
 	 * QDRA_ID=Id da quadra informada/selecionada).
 	 * 
-	 * [SB0006] é Obtém Divisão de Esgoto
+	 * [SB0006] ï¿½ Obtï¿½m Divisï¿½o de Esgoto
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 07/08/2006
@@ -11467,13 +11467,13 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0436] Inserir Tipo de serviço de referência.
+	 * [UC0436] Inserir Tipo de serviï¿½o de referï¿½ncia.
 	 * 
-	 * Permite a Inclusão de um tipo de serviço de referência.
+	 * Permite a Inclusï¿½o de um tipo de serviï¿½o de referï¿½ncia.
 	 * 
-	 * [FS0003] Validar indicador de existencia x Situação da Os de referencia
+	 * [FS0003] Validar indicador de existencia x Situaï¿½ï¿½o da Os de referencia
 	 * 
-	 * @author Rômulo Aurélio.
+	 * @author Rï¿½mulo Aurï¿½lio.
 	 * @date 05/08/2006
 	 * 
 	 * 
@@ -11495,22 +11495,22 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Caso informe a divisão de esgoto: Caso tenha informado a quadra e a mesma
-	 * Não pertença a divisão de esgoto informada (Id da divisão de esgoto é
+	 * Caso informe a divisï¿½o de esgoto: Caso tenha informado a quadra e a mesma
+	 * Nï¿½o pertenï¿½a a divisï¿½o de esgoto informada (Id da divisï¿½o de esgoto ï¿½
 	 * diferente de DVES_ID da tabela QUADRA com QDRA_ID=Id da quadra
 	 * informada).
 	 * 
 	 * Caso tenha informado o setor comercial sem a quadra e o setor comercial
-	 * Não pertença é divisão de esgoto informada (Id da divisão de esgoto é
+	 * Nï¿½o pertenï¿½a ï¿½ divisï¿½o de esgoto informada (Id da divisï¿½o de esgoto ï¿½
 	 * diferente de todos os DVES_ID da tabela QUADRA com STCM_ID=Id do setor
 	 * comercial informado).
 	 * 
 	 * Caso tenha informado a localidade sem o setor comercial e a localidade
-	 * Não pertença é divisão de esgoto informada (Id da divisão de esgoto é
+	 * Nï¿½o pertenï¿½a ï¿½ divisï¿½o de esgoto informada (Id da divisï¿½o de esgoto ï¿½
 	 * diferente de todos os DVES_ID da tabela QUADRA com STCM_ID=STCM_ID da
 	 * tabela SETOR_COMERCIAL com LOCA_ID=Id da localidade informada).
 	 * 
-	 * [FS0013] é Verificar compatibilidade entre divisão de esgoto e
+	 * [FS0013] ï¿½ Verificar compatibilidade entre divisï¿½o de esgoto e
 	 * localidade/setor/quadra
 	 * 
 	 * @author Raphael Rossiter
@@ -11539,13 +11539,13 @@ public class Fachada {
 	 * encaminhamento do Registro de Atendimento (PARM_ICSUGESTAOTRAMITE=1 na
 	 * tabela SISTEMA_PARAMETROS).
 	 * 
-	 * Caso a Especificação Não esteja associada a uma unidade (UNID_ID da
+	 * Caso a Especificaï¿½ï¿½o Nï¿½o esteja associada a uma unidade (UNID_ID da
 	 * tabela SOLICITACAO_TIPO_ESPECIFICACAO com o valor nulo):
 	 * 
-	 * Caso o Tipo de Solicitação Não seja relativo é área de esgoto
+	 * Caso o Tipo de Solicitaï¿½ï¿½o Nï¿½o seja relativo ï¿½ ï¿½rea de esgoto
 	 * (SOTG_ICESGOTO da tabela SOLICITACAO_TIPO_GRUPO com o valor
 	 * correspondente a um para SOTG_ID=SOTG_ID da tabela SOLICITACAO_TIPO com
-	 * SOTP_ID=Id do Tipo de Solicitação selecionado).
+	 * SOTP_ID=Id do Tipo de Solicitaï¿½ï¿½o selecionado).
 	 * 
 	 * Caso a localidade informada/selecionada para o RA esteja associada ao
 	 * grupo de esgoto( existe ocorrencia na tabela LOCALIDADE_SOLIC_TIPO_GRUPO
@@ -11555,13 +11555,13 @@ public class Fachada {
 	 * UNID_DSUNIDADE da tabela UNIDADE_ORGANIZACIONAL com UNID_ICTRAMITE=1 e
 	 * UNID_ID=UNID_ID da tabela LOCALIDADE_SOLIC_TIPO_GRUPO)
 	 * 
-	 * Caso contrario, Definir a unidade destino a partir da divisão de esgoto
+	 * Caso contrario, Definir a unidade destino a partir da divisï¿½o de esgoto
 	 * informada/selecionada (UNID_ID e UNID_DSUNIDADE da tabela
 	 * UNIDADE_ORGANIZACIONAL com UNID_ICTRAMITE=1 e UNID_ID=UNID_ID da tabela
-	 * DIVISAO_ESGOTO com DVES_ID=Id da divisão selecionada) [FS0018 é Verificar
-	 * existência de unidade centralizadora].
+	 * DIVISAO_ESGOTO com DVES_ID=Id da divisï¿½o selecionada) [FS0018 ï¿½ Verificar
+	 * existï¿½ncia de unidade centralizadora].
 	 * 
-	 * [SB0007] é Define Unidade Destino da Divisão de Esgoto
+	 * [SB0007] ï¿½ Define Unidade Destino da Divisï¿½o de Esgoto
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 08/08/2006
@@ -11588,7 +11588,7 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Caso a unidade destino informada Não possa receber registros de
+	 * Caso a unidade destino informada Nï¿½o possa receber registros de
 	 * atendimento (UNID_ICTRAMITE=2 na tabela UNIDADE_ORGANIZACIONAL com
 	 * UNID_ID=Id da unidade destino informada). caso a unidade destino
 	 * informada nao esteja ATIVA (UNID_IUSO=2 na tabela UNIDADE_ORGANIZACIONAL
@@ -11616,14 +11616,14 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0399] Inserir Tipo de Solicitação com EspecificAções
+	 * [UC0399] Inserir Tipo de Solicitaï¿½ï¿½o com EspecificAï¿½ï¿½es
 	 * 
-	 * Verifica se o serviço tipo tem como srevião automatico geração
-	 * automática.
+	 * Verifica se o serviï¿½o tipo tem como sreviï¿½o automatico geraï¿½ï¿½o
+	 * automï¿½tica.
 	 * 
-	 * [SF0003] é Validar Tipo de serviço
+	 * [SF0003] ï¿½ Validar Tipo de serviï¿½o
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 08/08/2006
 	 * 
 	 * @param idServicoTipo
@@ -11641,13 +11641,13 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0399] Inserir Tipo de Solicitação com EspecificAções
+	 * [UC0399] Inserir Tipo de Solicitaï¿½ï¿½o com EspecificAï¿½ï¿½es
 	 * 
-	 * Verifica se na coleção existe algum ordem de execução .
+	 * Verifica se na coleï¿½ï¿½o existe algum ordem de execuï¿½ï¿½o .
 	 * 
-	 * [SF0004] é Validar valor ordem execução 1ª parte
+	 * [SF0004] ï¿½ Validar valor ordem execuï¿½ï¿½o 1ï¿½ parte
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 08/08/2006
 	 * 
 	 * @param colecaoEspecificacaoServicoTipo
@@ -11666,14 +11666,14 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0399] Inserir Tipo de Solicitação com Especificações
+	 * [UC0399] Inserir Tipo de Solicitaï¿½ï¿½o com Especificaï¿½ï¿½es
 	 * 
-	 * Verifica se na coleção existe algum ordem de execução fora da
-	 * ordem(1,2,3,4,5,6).Ex.:Não exista numero 2.
+	 * Verifica se na coleï¿½ï¿½o existe algum ordem de execuï¿½ï¿½o fora da
+	 * ordem(1,2,3,4,5,6).Ex.:Nï¿½o exista numero 2.
 	 * 
-	 * [SF0004] é Validar valor ordem execução 2ª parte
+	 * [SF0004] ï¿½ Validar valor ordem execuï¿½ï¿½o 2ï¿½ parte
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 08/08/2006
 	 * 
 	 * @param colecaoEspecificacaoServicoTipo
@@ -11690,9 +11690,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0420] Obter Descrição da situação da RA
+	 * [UC0420] Obter Descriï¿½ï¿½o da situaï¿½ï¿½o da RA
 	 * 
-	 * Este caso de uso permite obter a descrição de um registro de atendimento
+	 * Este caso de uso permite obter a descriï¿½ï¿½o de um registro de atendimento
 	 * 
 	 * @author Ana Maria
 	 * @date 04/08/2006
@@ -11733,13 +11733,13 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Caso exista registro de atendimento pendente para o imóvel com a mesma
-	 * especificação (existe ocorrência na tabela REGISTRO_ATENDIMENTO com
-	 * IMOV_ID=matrícula do imóvel e STEP_ID=Id da Especificação selecionada e
+	 * Caso exista registro de atendimento pendente para o imï¿½vel com a mesma
+	 * especificaï¿½ï¿½o (existe ocorrï¿½ncia na tabela REGISTRO_ATENDIMENTO com
+	 * IMOV_ID=matrï¿½cula do imï¿½vel e STEP_ID=Id da Especificaï¿½ï¿½o selecionada e
 	 * RGAT_CDSITUACAO=1).
 	 * 
-	 * [FS0020] - Verificar existência de registro de atendimento para o imóvel
-	 * com a mesma especificação
+	 * [FS0020] - Verificar existï¿½ncia de registro de atendimento para o imï¿½vel
+	 * com a mesma especificaï¿½ï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 31/07/2006
@@ -11829,9 +11829,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0422] Obter endereço da ocorrência do RA
+	 * [UC0422] Obter endereï¿½o da ocorrï¿½ncia do RA
 	 * 
-	 * Este caso de uso permite obter o endereço da ocorrência de um registro de
+	 * Este caso de uso permite obter o endereï¿½o da ocorrï¿½ncia de um registro de
 	 * atendimento
 	 * 
 	 * 
@@ -11854,9 +11854,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0423] Obter endereço do Solicitante do RA
+	 * [UC0423] Obter endereï¿½o do Solicitante do RA
 	 * 
-	 * Este caso de uso permite obter o endereço do solicitante de um registro
+	 * Este caso de uso permite obter o endereï¿½o do solicitante de um registro
 	 * de atendimento
 	 * 
 	 * 
@@ -11942,7 +11942,7 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * [SB0020] é Verifica Situação do imóvel e Especificação
+	 * [SB0020] ï¿½ Verifica Situaï¿½ï¿½o do imï¿½vel e Especificaï¿½ï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 11/08/2006
@@ -11963,12 +11963,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0449] Inserir Prioridade do Tipo de serviço
+	 * [UC0449] Inserir Prioridade do Tipo de serviï¿½o
 	 * 
-	 * Permite a Inclusão de uma prioridade do tipo de serviço.
+	 * Permite a Inclusï¿½o de uma prioridade do tipo de serviï¿½o.
 	 * 
 	 * 
-	 * @author Rômulo Aurélio.
+	 * @author Rï¿½mulo Aurï¿½lio.
 	 * @date 11/08/2006
 	 * 
 	 * 
@@ -11990,10 +11990,10 @@ public class Fachada {
 	/**
 	 * [UC0408] Atualizar Registro de Atendimento
 	 * 
-	 * Verificar existencia ordem de serviço para o registro atendimento
+	 * Verificar existencia ordem de serviï¿½o para o registro atendimento
 	 * pesquisado
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 11/08/2006
 	 * 
 	 * 
@@ -12014,9 +12014,9 @@ public class Fachada {
 	 * [UC0408] Atualizar Registro de Atendimento
 	 * 
 	 * Pesquisar os parametros para atualizar o registro atendimento escolhido
-	 * pelo usuário
+	 * pelo usuï¿½rio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 11/08/2006
 	 * 
 	 * 
@@ -12034,9 +12034,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0446] Consultar trâmites
+	 * [UC0446] Consultar trï¿½mites
 	 * 
-	 * Este caso de uso permite obter os trâmites de um registro de atendimento
+	 * Este caso de uso permite obter os trï¿½mites de um registro de atendimento
 	 * 
 	 * @author Leonardo Regis
 	 * @date 11/08/2006
@@ -12058,7 +12058,7 @@ public class Fachada {
 	/**
 	 * [UC0447] Consultar RA Solicitantes
 	 * 
-	 * Retorna a Coleção de registro de atendimento solicitantes
+	 * Retorna a Coleï¿½ï¿½o de registro de atendimento solicitantes
 	 * 
 	 * @author Rafael Pinto
 	 * @date 14/08/2006
@@ -12078,9 +12078,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0454] Obter Descrição da situação da OS
+	 * [UC0454] Obter Descriï¿½ï¿½o da situaï¿½ï¿½o da OS
 	 * 
-	 * Este caso de uso permite obter a descrição de uma ordem de serviço
+	 * Este caso de uso permite obter a descriï¿½ï¿½o de uma ordem de serviï¿½o
 	 * 
 	 * @author Leonardo Regis
 	 * @date 11/08/2006
@@ -12096,9 +12096,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0431] Consultar Ordens de serviço do Registro Atendimento
+	 * [UC0431] Consultar Ordens de serviï¿½o do Registro Atendimento
 	 * 
-	 * Retorna a Coleção de OS's do registro de atendimento
+	 * Retorna a Coleï¿½ï¿½o de OS's do registro de atendimento
 	 * 
 	 * @author Leonardo Regis
 	 * @date 11/08/2006
@@ -12116,10 +12116,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0419] Obter Indicador de Autorização para Manutenção do RA
+	 * [UC0419] Obter Indicador de Autorizaï¿½ï¿½o para Manutenï¿½ï¿½o do RA
 	 * 
-	 * Este caso de uso Obtém o indicador de autorização para manutenção do RA,
-	 * ou seja, se o usuário tem autorização para efetuar a manutenção do RA
+	 * Este caso de uso Obtï¿½m o indicador de autorizaï¿½ï¿½o para manutenï¿½ï¿½o do RA,
+	 * ou seja, se o usuï¿½rio tem autorizaï¿½ï¿½o para efetuar a manutenï¿½ï¿½o do RA
 	 * 
 	 * 
 	 * @author Ana Maria
@@ -12141,10 +12141,10 @@ public class Fachada {
 	/**
 	 * [UC0408] Atualizar Registro de Atendimento
 	 * 
-	 * [FS0012] - Verificar possibilidade de atualização do registro de
+	 * [FS0012] - Verificar possibilidade de atualizaï¿½ï¿½o do registro de
 	 * atendimento
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 14/08/2006
 	 * 
 	 * @param idRA
@@ -12163,10 +12163,10 @@ public class Fachada {
 	/**
 	 * [UC0408] Atualizar Registro de Atendimento
 	 * 
-	 * [SB0024] - Verificar registro de Atendimento Sem Identificação do Local
-	 * de ocorrência
+	 * [SB0024] - Verificar registro de Atendimento Sem Identificaï¿½ï¿½o do Local
+	 * de ocorrï¿½ncia
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 15/08/2006
 	 * 
 	 * @param idRA
@@ -12183,10 +12183,10 @@ public class Fachada {
 	}
 
 	/**
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
-	 * necessários para a criação da inscrição do imóvel para exibição.
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o do imï¿½vel para exibiï¿½ï¿½o.
 	 * 
-	 * aki é montada a inscrição
+	 * aki ï¿½ montada a inscriï¿½ï¿½o
 	 */
 	public String pesquisarInscricaoImovel(Integer idImovel) {
 		try {
@@ -12197,11 +12197,11 @@ public class Fachada {
 	}
 
 	/**
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
-	 * necessários para a criação da inscrição do imóvel para exibição,
-	 * independente do imóvel ter sido excluído ou não.
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o do imï¿½vel para exibiï¿½ï¿½o,
+	 * independente do imï¿½vel ter sido excluï¿½do ou nï¿½o.
 	 * 
-	 * aqui é montada a inscrição
+	 * aqui ï¿½ montada a inscriï¿½ï¿½o
 	 */
 	public String pesquisarInscricaoImovelExcluidoOuNao(Integer idImovel) {
 		try {
@@ -12212,9 +12212,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UCXXXX] Consultar Imóvel
+	 * [UCXXXX] Consultar Imï¿½vel
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 22/05/2009
 	 * 
 	 * @param idImovel
@@ -12233,13 +12233,13 @@ public class Fachada {
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
 	 * REGISTRO_ATENDIMENTO com IMOV_ID=nulo e RGAT_CDSITUACAO=1 e
-	 * LGBR_ID=LGBR_ID do endereço da ocorrência e LGCP_ID=LGCP_ID do endereço
-	 * da ocorrência e STEP_ID=Id da Especificação selecionada e STEP_ID=STEP_ID
+	 * LGBR_ID=LGBR_ID do endereï¿½o da ocorrï¿½ncia e LGCP_ID=LGCP_ID do endereï¿½o
+	 * da ocorrï¿½ncia e STEP_ID=Id da Especificaï¿½ï¿½o selecionada e STEP_ID=STEP_ID
 	 * da tabela SOLICITACAO_TIPO_ESPECIFICACAO com SOTP_ID=SOTP_ID da tabela
 	 * SOLICITACAO_TIPO para SOTP_ICFALTAAGUA com o valor correspondente a dois
 	 * 
-	 * [SB0008] é Verifica existência de Registro de Atendimento Pendente para o
-	 * Local da ocorrência
+	 * [SB0008] ï¿½ Verifica existï¿½ncia de Registro de Atendimento Pendente para o
+	 * Local da ocorrï¿½ncia
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/08/2006
@@ -12262,8 +12262,8 @@ public class Fachada {
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
 	 * REGISTRO_ATENDIMENTO com IMOV_ID=nulo e RGAT_CDSITUACAO=1 e
-	 * LGBR_ID=LGBR_ID do endereço da ocorrência e LGCP_ID=LGCP_ID do endereço
-	 * da ocorrência e STEP_ID=Id da Especificação selecionada e STEP_ID=STEP_ID
+	 * LGBR_ID=LGBR_ID do endereï¿½o da ocorrï¿½ncia e LGCP_ID=LGCP_ID do endereï¿½o
+	 * da ocorrï¿½ncia e STEP_ID=Id da Especificaï¿½ï¿½o selecionada e STEP_ID=STEP_ID
 	 * da tabela SOLICITACAO_TIPO_ESPECIFICACAO com SOTP_ID=SOTP_ID da tabela
 	 * SOLICITACAO_TIPO para SOTP_ICFALTAAGUA com o valor correspondente a dois
 	 * 
@@ -12285,7 +12285,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0441] Consultar Dados da Ordem de serviço
+	 * [UC0441] Consultar Dados da Ordem de serviï¿½o
 	 * 
 	 * @author Leonardo Regis
 	 * @date 15/08/2006
@@ -12305,11 +12305,11 @@ public class Fachada {
 	/**
 	 * [UC0450] Pesquisar Ordem de Servico
 	 * 
-	 * [SB001] Selecionar Ordem de Servico por Situação [SB002] Selecionar Ordem
-	 * de Servico por Situação da Programação [SB003] Selecionar Ordem de
+	 * [SB001] Selecionar Ordem de Servico por Situaï¿½ï¿½o [SB002] Selecionar Ordem
+	 * de Servico por Situaï¿½ï¿½o da Programaï¿½ï¿½o [SB003] Selecionar Ordem de
 	 * Servico por Matricula do Imovel [SB004] Selecionar Ordem de Servico por
 	 * Codigo do Cliente [SB005] Selecionar Ordem de Servico por Unidade
-	 * Superior [SB006] Selecionar Ordem de Servico por Município [SB007]
+	 * Superior [SB006] Selecionar Ordem de Servico por Municï¿½pio [SB007]
 	 * Selecionar Ordem de Servico por Bairro [SB008] Selecionar Ordem de
 	 * Servico por Bairro Logradouro
 	 * 
@@ -12330,8 +12330,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Obter o objeto de registro atendimento para recuperar endereço Autor:
-	 * Sávio Luiz
+	 * Obter o objeto de registro atendimento para recuperar endereï¿½o Autor:
+	 * Sï¿½vio Luiz
 	 */
 
 	public RegistroAtendimento pesquisarRegistroAtendimentoEndereco(Integer idRegistroAtendimento) {
@@ -12366,9 +12366,9 @@ public class Fachada {
 	/**
 	 * [UC0408] Atualizar Registro de Atendimento
 	 * 
-	 * [SB0017] - Verificar registro de Atendimento de falta de Água
+	 * [SB0017] - Verificar registro de Atendimento de falta de ï¿½gua
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 16/08/2006
 	 * 
 	 * @param idRA
@@ -12387,11 +12387,11 @@ public class Fachada {
 	/**
 	 * [UC0427] Tramitar Registro de Atendimento
 	 * 
-	 * Validar Tramitação
+	 * Validar Tramitaï¿½ï¿½o
 	 * 
-	 * [FS0001] Verificar se o RA está cancelado ou bloqueado. [FS0002]
-	 * Verificar situações das OS(ordem de servirão) associadas ao RA [FS0003]
-	 * Verificar se o tipo de solicitação Tarifa Social [FS0008] Validar Unidade
+	 * [FS0001] Verificar se o RA estï¿½ cancelado ou bloqueado. [FS0002]
+	 * Verificar situaï¿½ï¿½es das OS(ordem de servirï¿½o) associadas ao RA [FS0003]
+	 * Verificar se o tipo de solicitaï¿½ï¿½o Tarifa Social [FS0008] Validar Unidade
 	 * de Destino
 	 * 
 	 * @author Leonardo Regis
@@ -12429,9 +12429,9 @@ public class Fachada {
 	/**
 	 * [UC0408] Atualizar Registro de Atendimento
 	 * 
-	 * [SB0019] - Exibe Registros de Atendimentos de falta de Água no imóvel
+	 * [SB0019] - Exibe Registros de Atendimentos de falta de ï¿½gua no imï¿½vel
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 21/08/2006
 	 * 
 	 * @param idRA
@@ -13217,9 +13217,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Obter os parametros de logradouroCep para o endereço
+	 * Obter os parametros de logradouroCep para o endereï¿½o
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 05/09/2006
 	 * 
 	 * @return idLogradouroBairro
@@ -13659,13 +13659,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por emitir os txts das contas.
+	 * Mï¿½todo responsï¿½vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB0002] Determinar tipo de ligação e tipo de medição
+	 * [SB0002] Determinar tipo de ligaï¿½ï¿½o e tipo de mediï¿½ï¿½o
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 15/05/2006
 	 * 
 	 * @param colecaoConta
@@ -13680,13 +13680,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por emitir os txts das contas.
+	 * Mï¿½todo responsï¿½vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0003] Obter Dados do Consumo e Medicao Anterior
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 17/05/2006
 	 * 
 	 * @param colecaoConta
@@ -13702,13 +13702,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por emitir os txts das contas.
+	 * Mï¿½todo responsï¿½vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB0004] Obter Dados da Medição da Conta
+	 * [SB0004] Obter Dados da Mediï¿½ï¿½o da Conta
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 17/05/2006
 	 * 
 	 * @param colecaoConta
@@ -13724,13 +13724,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por emitir os txts das contas.
+	 * Mï¿½todo responsï¿½vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB0005] Obter Consumo Faturado e Consumo médio Diário
+	 * [SB0005] Obter Consumo Faturado e Consumo mï¿½dio Diï¿½rio
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 17/05/2006
 	 * 
 	 * @param colecaoConta
@@ -13745,13 +13745,13 @@ public class Fachada {
 	}
 
 	/**
-	 * método que retorna a soma de quantidade economia
+	 * mï¿½todo que retorna a soma de quantidade economia
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0007] Obter Quantidade de Economias da Conta
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * 
@@ -13768,13 +13768,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por emitir os txts das contas.
+	 * Mï¿½todo responsï¿½vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0009] Obter Mensagem de Rateio de Consumo ou Consumo fixo de Esgoto
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * @param colecaoConta
@@ -13789,13 +13789,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por emitir os txts das contas.
+	 * Mï¿½todo responsï¿½vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB00016] Obter Mensagem da Conta em 3 Partes
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 24/05/2006
 	 * 
 	 * @param colecaoConta
@@ -13810,12 +13810,12 @@ public class Fachada {
 	}
 
 	/**
-	 * método que retorna uma array de object de qualidade de agua
+	 * mï¿½todo que retorna uma array de object de qualidade de agua
 	 * 
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 25/05/2006
 	 * 
 	 * 
@@ -13832,13 +13832,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por emitir os txts das contas.
+	 * Mï¿½todo responsï¿½vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00018] Gerar Linhas das Contas com débito automático
+	 * [SB00018] Gerar Linhas das Contas com dï¿½bito automï¿½tico
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 24/05/2006
 	 * 
 	 * @param colecaoConta
@@ -13853,7 +13853,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0085] - Obter endereço Autor: Sávio Luiz Data: 14/06/2006
+	 * [UC0085] - Obter endereï¿½o Autor: Sï¿½vio Luiz Data: 14/06/2006
 	 */
 
 	public String pesquisarEnderecoClienteAbreviado(Integer idCliente) {
@@ -13865,14 +13865,14 @@ public class Fachada {
 	}
 
 	/**
-	 * método que retorna um arrey de Object com informações do histórico de
-	 * consumo com tipo de medição poco
+	 * mï¿½todo que retorna um arrey de Object com informaï¿½ï¿½es do histï¿½rico de
+	 * consumo com tipo de mediï¿½ï¿½o poco
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB0006] Obter Dados de consumo da conta
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 19/05/2006
 	 * 
 	 * 
@@ -13892,13 +13892,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por emitir os txts das contas.
+	 * Mï¿½todo responsï¿½vel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
-	 * [SB00010] Gerar Linhas da Descrição dos serviços e Tarifas
+	 * [SB00010] Gerar Linhas da Descriï¿½ï¿½o dos serviï¿½os e Tarifas
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 26/05/2006
 	 * 
 	 * @param colecaoConta
@@ -13930,8 +13930,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de serviço [FS0008]
-	 * - Verificar possibilidade da Inclusão da ordem de serviço
+	 * [UC0470] Acompanhar Roteiro de Programaï¿½ï¿½o de Ordens de serviï¿½o [FS0008]
+	 * - Verificar possibilidade da Inclusï¿½o da ordem de serviï¿½o
 	 * 
 	 * @author Rafael Pinto
 	 * @date 21/09/2006
@@ -13949,8 +13949,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de serviço [FS0012]
-	 * - Reordena Sequencial de Programação - Inclusão de Ordem de serviço
+	 * [UC0470] Acompanhar Roteiro de Programaï¿½ï¿½o de Ordens de serviï¿½o [FS0012]
+	 * - Reordena Sequencial de Programaï¿½ï¿½o - Inclusï¿½o de Ordem de serviï¿½o
 	 * 
 	 * @author Rafael Pinto
 	 * @date 21/09/2006
@@ -13969,9 +13969,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0455] Exibir Calendário para Elaboração ou Acompanhamento de Roteiro
+	 * [UC0455] Exibir Calendï¿½rio para Elaboraï¿½ï¿½o ou Acompanhamento de Roteiro
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 21/09/2006
 	 * 
 	 * @param mesAnoReferencia
@@ -14023,10 +14023,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0464] Atualizar Volume Mínimo de Ligação de Esgoto
+	 * [UC0464] Atualizar Volume Mï¿½nimo de Ligaï¿½ï¿½o de Esgoto
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * atualização do volume Mínimo da ligação de esgoto
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * atualizaï¿½ï¿½o do volume Mï¿½nimo da ligaï¿½ï¿½o de esgoto
 	 * 
 	 * @author Leonardo Regis
 	 * @date 22/09/2006
@@ -14043,9 +14043,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0464] Atualizar Volume Mínimo de Ligação de Esgoto
+	 * [UC0464] Atualizar Volume Mï¿½nimo de Ligaï¿½ï¿½o de Esgoto
 	 * 
-	 * [FS004] Validar Volume Mínimo
+	 * [FS004] Validar Volume Mï¿½nimo
 	 * 
 	 * @author Leonardo Regis
 	 * @date 22/09/2006
@@ -14061,9 +14061,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0464] Atualizar Volume Mínimo da Ligação de Esgoto
+	 * [UC0464] Atualizar Volume Mï¿½nimo da Ligaï¿½ï¿½o de Esgoto
 	 * 
-	 * [SB0001] Atualizar Ligação de Esgoto.
+	 * [SB0001] Atualizar Ligaï¿½ï¿½o de Esgoto.
 	 * 
 	 * @author Leonardo Regis
 	 * @date 22/09/2006
@@ -14097,7 +14097,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de serviço
+	 * [UC0470] Acompanhar Roteiro de Programaï¿½ï¿½o de Ordens de serviï¿½o
 	 * 
 	 * @author Rafael Pinto
 	 * @date 25/09/2006
@@ -14117,9 +14117,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de serviço
+	 * [UC0457] Encerrar Ordem de serviï¿½o
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 25/09/2006
 	 * 
 	 * @param numeroOS
@@ -14136,7 +14136,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que retorna o número da leitura de retirada do hidrômetro
+	 * mï¿½todo que retorna o nï¿½mero da leitura de retirada do hidrï¿½metro
 	 * 
 	 * @author Ana Maria
 	 * @date 25/09/2006
@@ -14154,7 +14154,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que retorna o número da leitura de retirada do hidrômetro
+	 * mï¿½todo que retorna o nï¿½mero da leitura de retirada do hidrï¿½metro
 	 * 
 	 * @author Ana Maria
 	 * @date 25/09/2006
@@ -14172,10 +14172,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os dados do parcelamentos necessários para o Relatório através
+	 * Pesquisa os dados do parcelamentos necessï¿½rios para o Relatï¿½rio atravï¿½s
 	 * do id do parcelamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 25/09/2006
 	 * 
 	 */
@@ -14188,9 +14188,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa a Unidade Organizacional do usuário Logado
+	 * Pesquisa a Unidade Organizacional do usuï¿½rio Logado
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 25/09/2006
 	 * 
 	 * @param id
@@ -14205,15 +14205,15 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite atualizar as informações do imóvel doação [UC0390] Manter
-	 * Autorização para Doação Mensal
+	 * Permite atualizar as informaï¿½ï¿½es do imï¿½vel doaï¿½ï¿½o [UC0390] Manter
+	 * Autorizaï¿½ï¿½o para Doaï¿½ï¿½o Mensal
 	 * 
-	 * @author César Araújo,Pedro Alexandre
+	 * @author Cï¿½sar Araï¿½jo,Pedro Alexandre
 	 * @date 30/08/2006, 17/11/2006
 	 * @param imovelDoacao
-	 *            - Código do Imóvel doação
+	 *            - Cï¿½digo do Imï¿½vel doaï¿½ï¿½o
 	 * @param usuarioLogado
-	 *            - usuário logado no sistema
+	 *            - usuï¿½rio logado no sistema
 	 */
 	public void atualizarImovelDoacao(ImovelDoacao imovelDoacao, Usuario usuarioLogado) {
 		try {
@@ -14225,7 +14225,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de serviço
+	 * [UC0470] Acompanhar Roteiro de Programaï¿½ï¿½o de Ordens de serviï¿½o
 	 * 
 	 * @author Rafael Pinto
 	 * @date 25/09/2006
@@ -14264,11 +14264,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0457] Encerra Ordem de serviço
+	 * [UC0457] Encerra Ordem de serviï¿½o
 	 * 
-	 * [SB0002] - Encerrar com execução e sem referência
+	 * [SB0002] - Encerrar com execuï¿½ï¿½o e sem referï¿½ncia
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 25/09/2006
 	 * 
 	 * @throws ControladorException
@@ -14290,11 +14290,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0457] Encerra Ordem de serviço
+	 * [UC0457] Encerra Ordem de serviï¿½o
 	 * 
-	 * [SB0003] - Encerrar com execução e com referência
+	 * [SB0003] - Encerrar com execuï¿½ï¿½o e com referï¿½ncia
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 27/09/2006
 	 * 
 	 * @throws ControladorException
@@ -14318,7 +14318,7 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * [SB0025] é Verifica Registro de Atendimento de Água Generalizada
+	 * [SB0025] ï¿½ Verifica Registro de Atendimento de ï¿½gua Generalizada
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/08/2006
@@ -14335,8 +14335,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de serviço [FS0012]
-	 * Reordena Sequencial de Programação - Nova Ordem para Ordem de serviço
+	 * [UC0470] Acompanhar Roteiro de Programaï¿½ï¿½o de Ordens de serviï¿½o [FS0012]
+	 * Reordena Sequencial de Programaï¿½ï¿½o - Nova Ordem para Ordem de serviï¿½o
 	 * 
 	 * @author Rafael Pinto
 	 * @date 21/09/2006
@@ -14355,12 +14355,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0000] - Efetuar Retirada de hidrômetro
+	 * [UC0000] - Efetuar Retirada de hidrï¿½metro
 	 * 
 	 * Pesquisa todos os campos do Hidrometro e seus relacionamentos
-	 * obrigatórios.
+	 * obrigatï¿½rios.
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 28/09/2006
 	 * 
 	 * @param idHidrometro
@@ -14375,8 +14375,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa um imóvel a partir do seu id.Retorna os dados que compõem a
-	 * inscrição e o endereço do mesmo
+	 * Pesquisa um imï¿½vel a partir do seu id.Retorna os dados que compï¿½em a
+	 * inscriï¿½ï¿½o e o endereï¿½o do mesmo
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 01/08/2006
@@ -14395,14 +14395,14 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0457] Encerra Ordem de serviço
+	 * [UC0457] Encerra Ordem de serviï¿½o
 	 * 
-	 * [FS0002] - Validar Tipo serviço [FS0004] - Verificar preenchimento dos
+	 * [FS0002] - Validar Tipo serviï¿½o [FS0004] - Verificar preenchimento dos
 	 * campos [FS0007] - Validar Data de Encerramento [FS0008] - Validar Data do
 	 * roteiro
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 29/09/2006
 	 * 
 	 * @throws ControladorException
@@ -14421,10 +14421,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os itens do parcelamento necessários para o Relatório através do
+	 * Pesquisa os itens do parcelamento necessï¿½rios para o Relatï¿½rio atravï¿½s do
 	 * id do parcelamento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 25/09/2006
 	 * 
 	 * @return Collection
@@ -14458,10 +14458,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0457] Encerra Ordem de Servirão
+	 * [UC0457] Encerra Ordem de Servirï¿½o
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 27/09/2006
 	 * 
 	 * @throws ControladorException
@@ -14475,8 +14475,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os dados da Guia de Pagamento necessários para o Relatório
-	 * através do id da Guia de Pagamento
+	 * Pesquisa os dados da Guia de Pagamento necessï¿½rios para o Relatï¿½rio
+	 * atravï¿½s do id da Guia de Pagamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 03/10/06
@@ -14495,7 +14495,7 @@ public class Fachada {
 	}
 
 	/**
-	 * método que pesquisa a quantidade de tarifa social
+	 * mï¿½todo que pesquisa a quantidade de tarifa social
 	 * 
 	 * @author Rafael Santos
 	 * @since 05/09/2006
@@ -14514,8 +14514,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os dados da Guia de Devolução necessários para o Relatório
-	 * através do id da Guia de Devolução
+	 * Pesquisa os dados da Guia de Devoluï¿½ï¿½o necessï¿½rios para o Relatï¿½rio
+	 * atravï¿½s do id da Guia de Devoluï¿½ï¿½o
 	 * 
 	 * @author Ana Maria
 	 * @date 05/10/06
@@ -14542,7 +14542,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0430] - Gerar Ordem de serviço
+	 * [UC0430] - Gerar Ordem de serviï¿½o
 	 * 
 	 * @author lms
 	 * @date 14/08/2006
@@ -14557,12 +14557,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
 	 * para pesquisar os pagamento historicos
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos historicos do imóvel
+	 * Pesquisa os pagamentos historicos do imï¿½vel
 	 * 
 	 * @author Rafael Santos
 	 * @date 06/10/2006
@@ -14610,7 +14610,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Filtra os pagamento historicos do Imovel para paginação
+	 * Filtra os pagamento historicos do Imovel para paginaï¿½ï¿½o
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
@@ -14864,7 +14864,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Filtra os pagamento historicos do aviso bancario para paginação
+	 * Filtra os pagamento historicos do aviso bancario para paginaï¿½ï¿½o
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
@@ -14914,7 +14914,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa todos as funcionalidades iniciadas que representam os Relatórios
+	 * Pesquisa todos as funcionalidades iniciadas que representam os Relatï¿½rios
 	 * batch do sistema
 	 * 
 	 * @author Rodrigo Silveira
@@ -14932,9 +14932,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Consulta os dados das ordens de serviço para a geração do Relatório
+	 * Consulta os dados das ordens de serviï¿½o para a geraï¿½ï¿½o do Relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @created 07/10/2006
 	 * 
 	 * @return
@@ -14951,8 +14951,8 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * [SB0015] é Verifica Registro de Atendimento Encerrado para o Local da
-	 * ocorrência
+	 * [SB0015] ï¿½ Verifica Registro de Atendimento Encerrado para o Local da
+	 * ocorrï¿½ncia
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 28/08/2006
@@ -14971,17 +14971,17 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite gerar os débitos de doações para os Imóveis contidos na coleção
-	 * [UC0394] Gerar débitos a Cobrar de doações
+	 * Permite gerar os dï¿½bitos de doaï¿½ï¿½es para os Imï¿½veis contidos na coleï¿½ï¿½o
+	 * [UC0394] Gerar dï¿½bitos a Cobrar de doaï¿½ï¿½es
 	 * 
-	 * @author César Araújo
+	 * @author Cï¿½sar Araï¿½jo
 	 * @date 05/08/2006
 	 * @param Collection
-	 *            <ImovelCobrarDoacaoHelper> imovelCobrarDoacaoHelpers - Coleção
+	 *            <ImovelCobrarDoacaoHelper> imovelCobrarDoacaoHelpers - Coleï¿½ï¿½o
 	 *            de imovelCobrarDoacaoHelpers
-	 * @return Collection<ImovelCobrarDoacaoHelper> - Coleção de
-	 *         ImovelCobrarDoacaoHelper já com as informações necessárias para
-	 *         registro da Cobrança
+	 * @return Collection<ImovelCobrarDoacaoHelper> - Coleï¿½ï¿½o de
+	 *         ImovelCobrarDoacaoHelper jï¿½ com as informaï¿½ï¿½es necessï¿½rias para
+	 *         registro da Cobranï¿½a
 	 * @throws ErroRepositorioException
 	 */
 	public void gerarDebitoACobrarDoacao(Collection<Rota> rotas) {
@@ -14993,7 +14993,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Faz a pesquisa de devoluçãoHistorico fazendo os carregamentos de
+	 * Faz a pesquisa de devoluï¿½ï¿½oHistorico fazendo os carregamentos de
 	 * clienteContas, clienteImoveis, clientesGuiaPagamento
 	 * 
 	 * @author Vivianne Sousa
@@ -15013,9 +15013,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0364] Efetuar Substituição de hidrômetro
+	 * [UC0364] Efetuar Substituiï¿½ï¿½o de hidrï¿½metro
 	 * 
-	 * Validar Substituição de hidrômetro
+	 * Validar Substituiï¿½ï¿½o de hidrï¿½metro
 	 * 
 	 * @author Ana Maria
 	 * @date 25/07/2006
@@ -15038,9 +15038,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0362] Efetuar Instalacao de hidrômetro
+	 * [UC0362] Efetuar Instalacao de hidrï¿½metro
 	 * 
-	 * Validar Instalacao de hidrômetro
+	 * Validar Instalacao de hidrï¿½metro
 	 * 
 	 * @author Ana Maria
 	 * @date 13/07/2006
@@ -15063,12 +15063,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso cria um filtro que será usado na pesquisa de pagamentos
-	 * histórico para o Relatório
+	 * Este caso de uso cria um filtro que serï¿½ usado na pesquisa de pagamentos
+	 * histï¿½rico para o Relatï¿½rio
 	 * 
 	 * [UC0255] Filtrar Pagamentos
 	 * 
-	 * Pesquisa os pagamentos histórico do tipo Debito a Cobrar do Cliente
+	 * Pesquisa os pagamentos histï¿½rico do tipo Debito a Cobrar do Cliente
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 17/10/06
@@ -15092,12 +15092,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0458] - Imprimir Ordem de serviço
+	 * [UC0458] - Imprimir Ordem de serviï¿½o
 	 * 
-	 * Pesquisa os campos da OS que serão impressos no Relatório de Ordem de
+	 * Pesquisa os campos da OS que serï¿½o impressos no Relatï¿½rio de Ordem de
 	 * Servico
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 17/10/2006
 	 * 
 	 * @param idOrdemServico
@@ -15113,11 +15113,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0482] - Obter endereço Abreviado da ocorrência do RA
+	 * [UC0482] - Obter endereï¿½o Abreviado da ocorrï¿½ncia do RA
 	 * 
-	 * Pesquisa o endereço abreviado da ocorrência do RA
+	 * Pesquisa o endereï¿½o abreviado da ocorrï¿½ncia do RA
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 17/10/2006
 	 * 
 	 * 
@@ -15133,11 +15133,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0482] - Obter endereço Abreviado da ocorrência do RA
+	 * [UC0482] - Obter endereï¿½o Abreviado da ocorrï¿½ncia do RA
 	 * 
 	 * Pesquisa o Endereco Abreviado da OS
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 19/10/2006
 	 * 
 	 * 
@@ -15154,7 +15154,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de serviï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/09/2006
@@ -15173,7 +15173,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de serviï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/09/2006
@@ -15202,8 +15202,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa todos as funcionalidades iniciadas que representam os Relatórios
-	 * batch do sistema por usuário
+	 * Pesquisa todos as funcionalidades iniciadas que representam os Relatï¿½rios
+	 * batch do sistema por usuï¿½rio
 	 * 
 	 * @author Rodrigo Silveira
 	 * @date 25/10/2006
@@ -15220,8 +15220,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Caso Não exista para o imóvel RA encerrada por execução com especificação
-	 * da solicitação que permita a manuntenção de imóvel
+	 * Caso Nï¿½o exista para o imï¿½vel RA encerrada por execuï¿½ï¿½o com especificaï¿½ï¿½o
+	 * da solicitaï¿½ï¿½o que permita a manuntenï¿½ï¿½o de imï¿½vel
 	 * 
 	 * @author Rafael Santos
 	 * @since 26/10/2006
@@ -15237,16 +15237,16 @@ public class Fachada {
 	}
 
 	/**
-	 * Caso Não exista para o imóvel RA encerrada por execução com especificação
-	 * da solicitação No caso de Tarifa Social
+	 * Caso Nï¿½o exista para o imï¿½vel RA encerrada por execuï¿½ï¿½o com especificaï¿½ï¿½o
+	 * da solicitaï¿½ï¿½o No caso de Tarifa Social
 	 * 
 	 * @author Rafael Santos
 	 * @since 26/10/2006
 	 * 
 	 */
 	/**
-	 * Caso Não exista para o imóvel RA encerrada por execução com especificação
-	 * da solicitação que permita a manuntenção de imóvel
+	 * Caso Nï¿½o exista para o imï¿½vel RA encerrada por execuï¿½ï¿½o com especificaï¿½ï¿½o
+	 * da solicitaï¿½ï¿½o que permita a manuntenï¿½ï¿½o de imï¿½vel
 	 * 
 	 * @author Rafael Santos
 	 * @since 26/10/2006
@@ -15264,10 +15264,10 @@ public class Fachada {
 	/**
 	 * Imprimir OS
 	 * 
-	 * Atualiza a data de emissão e a de última alteração de OS quando gerar o
-	 * Relatório
+	 * Atualiza a data de emissï¿½o e a de ï¿½ltima alteraï¿½ï¿½o de OS quando gerar o
+	 * Relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 26/10/2006
 	 * 
 	 * @param colecaoIdsOrdemServico
@@ -15283,11 +15283,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Este método valida os dados que são necessarios para a inserção do
-	 * serviço tipo referencia.
+	 * Este mï¿½todo valida os dados que sï¿½o necessarios para a inserï¿½ï¿½o do
+	 * serviï¿½o tipo referencia.
 	 * 
 	 * 
-	 * @author Flávio Leonardo
+	 * @author Flï¿½vio Leonardo
 	 * @date 31/10/2006
 	 * 
 	 * @param servicoTipoReferencia
@@ -15303,7 +15303,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0461] Manter Dados das Atividades da Ordem de serviço
+	 * [UC0461] Manter Dados das Atividades da Ordem de serviï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 26/10/2006
@@ -15344,14 +15344,14 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Este caso de uso permite gerar o resumo das ações de Cobrança com a
-	 * atividade emitir já realizada e a atividade encerrar ainda Não realizada
-	 * e realizar a atividade encerrar das ações que estejam comandadas.
+	 * Este caso de uso permite gerar o resumo das aï¿½ï¿½es de Cobranï¿½a com a
+	 * atividade emitir jï¿½ realizada e a atividade encerrar ainda Nï¿½o realizada
+	 * e realizar a atividade encerrar das aï¿½ï¿½es que estejam comandadas.
 	 * 
-	 * [UC0478] Gerar Resumo das ações de Cobrança do Cronograma
+	 * [UC0478] Gerar Resumo das aï¿½ï¿½es de Cobranï¿½a do Cronograma
 	 * 
-	 * Pós-condição: Resumo das ações de Cobrança gerado e atividade encerrar da
-	 * ação de Cobrança, se for o caso, realizada
+	 * Pï¿½s-condiï¿½ï¿½o: Resumo das aï¿½ï¿½es de Cobranï¿½a gerado e atividade encerrar da
+	 * aï¿½ï¿½o de Cobranï¿½a, se for o caso, realizada
 	 * 
 	 * @author Rafael Santos
 	 * @date 16/10/2006
@@ -15361,7 +15361,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0387] Manter Tipo Perfil Servico [SB0001]Atualizar Tipo Perfil serviço
+	 * [UC0387] Manter Tipo Perfil Servico [SB0001]Atualizar Tipo Perfil serviï¿½o
 	 * 
 	 * @author Kassia Albuquerque
 	 * @date 01/11/2006
@@ -15379,11 +15379,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Filtra o Pagamento Historico pelo seu id carregando os dados necessários
+	 * Filtra o Pagamento Historico pelo seu id carregando os dados necessï¿½rios
 	 * 
 	 * [UC0549] Consultar Dados do Pagamento
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * @date 12/07/2007
 	 * 
 	 * @throws ErroRepositorioException
@@ -15399,11 +15399,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Filtra o Pagamento pelo seu id carregando os dados necessários
+	 * Filtra o Pagamento pelo seu id carregando os dados necessï¿½rios
 	 * 
 	 * [UC0549] Consultar Dados do Pagamento
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * @date 12/07/2007
 	 * 
 	 * @throws ErroRepositorioException
@@ -15420,8 +15420,8 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * inserir guia de pagamento no momento da exibição.
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * inserir guia de pagamento no momento da exibiï¿½ï¿½o.
 	 * 
 	 * [FS0003] Validar registro de atendimento [FS0007] Validar ordem de
 	 * servico.
@@ -15444,7 +15444,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0461] - Manter Dados das Atividades da Ordem de serviço
+	 * [UC0461] - Manter Dados das Atividades da Ordem de serviï¿½o
 	 * 
 	 * Pesquisa os dados da OrdemServicoAtividade
 	 * 
@@ -15467,9 +15467,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0461] - Manter Dados das Atividades da Ordem de serviço
+	 * [UC0461] - Manter Dados das Atividades da Ordem de serviï¿½o
 	 * 
-	 * Pesquisa os dados da OsAtividadeMaterialExecucao associada à 
+	 * Pesquisa os dados da OsAtividadeMaterialExecucao associada ï¿½
 	 * OrdemServicoAtividade para a data informada
 	 * 
 	 * @author Raphael Rossiter
@@ -15491,7 +15491,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0494] Gerar Numeração de RA Manual
+	 * [UC0494] Gerar Numeraï¿½ï¿½o de RA Manual
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 06/11/2006
@@ -15511,8 +15511,8 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * inserir guia de devolução no momento da exibição.
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * inserir guia de devoluï¿½ï¿½o no momento da exibiï¿½ï¿½o.
 	 * 
 	 * [FS0002] Validar registro de atendimento [FS0004] Validar ordem de
 	 * servico.
@@ -15535,7 +15535,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica as permissões especiais do usuário por funcionalidade informada
+	 * Verifica as permissï¿½es especiais do usuï¿½rio por funcionalidade informada
 	 * no sistema
 	 * 
 	 * @author Rodrigo Silveira
@@ -15559,9 +15559,9 @@ public class Fachada {
 	/**
 	 * Retorna o resultado da pesquisa de OS
 	 * 
-	 * [UC0492] - Gerar Relatório Acompanhamento de Execução de Ordem de serviço
+	 * [UC0492] - Gerar Relatï¿½rio Acompanhamento de Execuï¿½ï¿½o de Ordem de serviï¿½o
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 01/11/06
 	 * 
 	 * @param origemServico
@@ -15596,7 +15596,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0387] Manter Tipo Perfil serviço [SB0002] Remover Tipo Perfil serviço
+	 * [UC0387] Manter Tipo Perfil serviï¿½o [SB0002] Remover Tipo Perfil serviï¿½o
 	 * 
 	 * @author Kassia Albuquerque
 	 * @date 08/11/2006
@@ -15615,9 +15615,9 @@ public class Fachada {
 	/**
 	 * Retorna a quantidade resultado da pesquisa de OS
 	 * 
-	 * [UC0492] - Gerar Relatório Acompanhamento de Execução de Ordem de serviço
+	 * [UC0492] - Gerar Relatï¿½rio Acompanhamento de Execuï¿½ï¿½o de Ordem de serviï¿½o
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 01/11/06
 	 * 
 	 * @param origemServico
@@ -15649,9 +15649,9 @@ public class Fachada {
 	}
 
 	/**
-	 * retorna o objeto ResolucaoDiretoria com a maior data Vigência inicial
+	 * retorna o objeto ResolucaoDiretoria com a maior data Vigï¿½ncia inicial
 	 * 
-	 * [UC0214] - Efetuar Parcelamento de débitos
+	 * [UC0214] - Efetuar Parcelamento de dï¿½bitos
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 08/11/2006
@@ -15671,11 +15671,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0404] Manter Especificação da Situação do Imovel
+	 * [UC0404] Manter Especificaï¿½ï¿½o da Situaï¿½ï¿½o do Imovel
 	 * 
-	 * Este caso de uso remove a especificação e os Critério
+	 * Este caso de uso remove a especificaï¿½ï¿½o e os Critï¿½rio
 	 * 
-	 * [SB0002] Remover Especificação da situacao
+	 * [SB0002] Remover Especificaï¿½ï¿½o da situacao
 	 * 
 	 * @author Rafael Pinto
 	 * @created 08/11/2006
@@ -15693,9 +15693,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0404] - Manter Especificação da Situação do imóvel
+	 * [UC0404] - Manter Especificaï¿½ï¿½o da Situaï¿½ï¿½o do imï¿½vel
 	 * 
-	 * [SB0001] Atualizar Critério de Cobrança
+	 * [SB0001] Atualizar Critï¿½rio de Cobranï¿½a
 	 * 
 	 * @author Rafael Pinto
 	 * @created 09/11/2006
@@ -15715,11 +15715,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa as equipes de acordo com os parâmetros informado pelo usuário
+	 * Pesquisa as equipes de acordo com os parï¿½metros informado pelo usuï¿½rio
 	 * 
 	 * [UC0370] - Filtrar Equipe
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 09/11/06
 	 * 
 	 * @param idEquipe
@@ -15751,7 +15751,7 @@ public class Fachada {
 	 * 
 	 * [UC0370] - Filtrar Equipe
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 09/11/06
 	 * 
 	 * @param idEquipe
@@ -15776,7 +15776,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica as permissões especiais do usuário por funcionalidade informada
+	 * Verifica as permissï¿½es especiais do usuï¿½rio por funcionalidade informada
 	 * no sistema
 	 * 
 	 * @author Vivianne Sousa
@@ -15796,12 +15796,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Remove as equipes selecionadas pelo usuário e as equipes componentes
+	 * Remove as equipes selecionadas pelo usuï¿½rio e as equipes componentes
 	 * associadas a ela
 	 * 
 	 * [UC0372] - Manter Equipe
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 09/11/06
 	 * 
 	 * @param idsEquipes
@@ -15815,11 +15815,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Remove os contratos de demanda selecionados pelo usuário
+	 * Remove os contratos de demanda selecionados pelo usuï¿½rio
 	 * 
 	 * [UC0513] - Manter Contrato de Demanda
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 27/06/2007
 	 * 
 	 * @param idsContratosDemanda
@@ -15834,11 +15834,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Valida a ordem de serviço
+	 * Valida a ordem de serviï¿½o
 	 * 
-	 * [UC0488] - Informar Retorno Ordem de Fiscalização
+	 * [UC0488] - Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 01/11/06
 	 * 
 	 * @return Integer
@@ -15852,11 +15852,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
-	 * Recupera os parâmetros necessários da OS
+	 * Recupera os parï¿½metros necessï¿½rios da OS
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 24/08/2006
 	 * 
 	 * @param idOS
@@ -15872,10 +15872,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por verificar se o usuário tem abrangência sobre a
-	 * operação e o nível de informação que estão sendo informados.
+	 * Mï¿½todo responsï¿½vel por verificar se o usuï¿½rio tem abrangï¿½ncia sobre a
+	 * operaï¿½ï¿½o e o nï¿½vel de informaï¿½ï¿½o que estï¿½o sendo informados.
 	 * 
-	 * [UC0XXX] Verificar Acesso abrangência
+	 * [UC0XXX] Verificar Acesso abrangï¿½ncia
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 13/11/2006
@@ -15896,7 +15896,7 @@ public class Fachada {
 	 * 
 	 * Atualiza a equipe e seus componentes na base
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 14/11/2006
 	 * 
 	 * @param equipe
@@ -15911,10 +15911,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Faz verificações da inserção de dados de tarifa social de um imóvel
+	 * Faz verificaï¿½ï¿½es da inserï¿½ï¿½o de dados de tarifa social de um imï¿½vel
 	 * 
 	 * @param idImovel
-	 *            Código do imóvel
+	 *            Cï¿½digo do imï¿½vel
 	 */
 	public void verificarProprietarioImovel(Integer idImovel) {
 		try {
@@ -15925,10 +15925,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Faz verificações da inserção de dados de tarifa social de um imóvel
+	 * Faz verificaï¿½ï¿½es da inserï¿½ï¿½o de dados de tarifa social de um imï¿½vel
 	 * 
 	 * @param idImovel
-	 *            Código do imóvel
+	 *            Cï¿½digo do imï¿½vel
 	 */
 	public Cliente verificarUsuarioImovel(Integer idImovel) {
 		try {
@@ -15939,11 +15939,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Verificar os pré-requisitos para o cadastramento de um imóvel na tarifa
+	 * Verificar os prï¿½-requisitos para o cadastramento de um imï¿½vel na tarifa
 	 * social
 	 * 
 	 * @param idImovel
-	 *            Código do imovel
+	 *            Cï¿½digo do imovel
 	 */
 	public String[] verificarPreRequisitosCadastramentoTarifaSocial(Integer idImovel) {
 		try {
@@ -15955,22 +15955,22 @@ public class Fachada {
 	}
 
 	/**
-	 * < <Descrição do método>>
+	 * < <Descriï¿½ï¿½o do mï¿½todo>>
 	 * 
 	 * @param clienteImovel
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param numeroCartaoSocial
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param dataValidadeCartaoSocial
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param numeroParcelasCartaoSocial
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param valorRendaFamiliar
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param tarifaSocialCartaoTipo
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param tipoRenda
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 */
 	public String[] verificarPreenchimentoInserirDadosTarifaSocial(Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU, Integer idImovel, String numeroCartaoSocial,
 			String dataValidadeCartaoSocial, String numeroParcelasCartaoSocial, Integer consumoMedio, BigDecimal valorRendaFamiliar, String tarifaSocialCartaoTipo, String tipoRenda) {
@@ -16006,7 +16006,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0489] - Consultar Resumo das ações de Cobrança
+	 * [UC0489] - Consultar Resumo das aï¿½ï¿½es de Cobranï¿½a
 	 * 
 	 * @author Ana Maria
 	 * @date 06/11/2006
@@ -16025,7 +16025,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0489] - Consultar Resumo das ações de Cobrança
+	 * [UC0489] - Consultar Resumo das aï¿½ï¿½es de Cobranï¿½a
 	 * 
 	 * @author Ana Maria
 	 * @date 06/11/2006
@@ -16047,8 +16047,8 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [SB0006] - Atualizar Programação de Abastecimento na Base de Dados
-	 * [SB0007] - Atualizar Programação de Manutenção na Base de Dados
+	 * [SB0006] - Atualizar Programaï¿½ï¿½o de Abastecimento na Base de Dados
+	 * [SB0007] - Atualizar Programaï¿½ï¿½o de Manutenï¿½ï¿½o na Base de Dados
 	 * 
 	 * @author Rafael Pinto @created 09/11/2006
 	 * 
@@ -16099,8 +16099,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por verificar se o usuário que está tentando remover
-	 * as quadras tem abrangência
+	 * Mï¿½todo responsï¿½vel por verificar se o usuï¿½rio que estï¿½ tentando remover
+	 * as quadras tem abrangï¿½ncia
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -16167,7 +16167,7 @@ public class Fachada {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -16188,11 +16188,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Atualizar hidrômetro
+	 * Atualizar hidrï¿½metro
 	 * 
-	 * Pesquisa o imóvel no qual o hidrômetro está instalado
+	 * Pesquisa o imï¿½vel no qual o hidrï¿½metro estï¿½ instalado
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 23/11/2006
 	 * 
 	 * @param idHidrometro
@@ -16209,11 +16209,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0401] Atualizar Tipo de Solicitação com Especificação
+	 * [UC0401] Atualizar Tipo de Solicitaï¿½ï¿½o com Especificaï¿½ï¿½o
 	 * 
-	 * [SB0001] - Atualizar Tipo Solicitação com Especificações
+	 * [SB0001] - Atualizar Tipo Solicitaï¿½ï¿½o com Especificaï¿½ï¿½es
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 01/08/2006
 	 * 
 	 * @param solicitacaoTipo
@@ -16235,7 +16235,7 @@ public class Fachada {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -16589,11 +16589,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
-	 * Recupera o id da situação da ligação de esgoto
+	 * Recupera o id da situaï¿½ï¿½o da ligaï¿½ï¿½o de esgoto
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 14/11/2006
 	 * 
 	 * @param idOS
@@ -16614,7 +16614,7 @@ public class Fachada {
 	 * [] Ligacoes Medicao Individualizada
 	 * 
 	 * 
-	 * @author Flávio Cordeiro
+	 * @author Flï¿½vio Cordeiro
 	 * @date 17/12/2006
 	 * 
 	 * @param colecaoLigacoesMedicao
@@ -16631,7 +16631,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0268] - Apresentar análise do Aviso bancário
+	 * [UC0268] - Apresentar anï¿½lise do Aviso bancï¿½rio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/12/2006
@@ -16650,7 +16650,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0268] - Apresentar análise do Aviso bancário
+	 * [UC0268] - Apresentar anï¿½lise do Aviso bancï¿½rio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/12/2006
@@ -16669,13 +16669,13 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0001] Inserir Município
+	 * [UC0001] Inserir Municï¿½pio
 	 * 
 	 * @author Kassia Albuquerque
 	 * @date 18/12/2006
 	 * 
 	 * @param municipio
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 */
 
 	public Integer inserirMunicipio(Municipio municipio, Usuario usuarioLogado) {
@@ -16688,11 +16688,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os Imóveis com determinada tarifa de consumo
+	 * Pesquisa os Imï¿½veis com determinada tarifa de consumo
 	 * 
-	 * [UC0378] Associar Tarifa de Consumo a Imóveis
+	 * [UC0378] Associar Tarifa de Consumo a Imï¿½veis
 	 * 
-	 * @author Rômulo Aurelio
+	 * @author Rï¿½mulo Aurelio
 	 * @created 19/12/2006
 	 * 
 	 * @param idLocalidadeInicial
@@ -16717,9 +16717,9 @@ public class Fachada {
 	/**
 	 * Atualiza a tarifa de consumo de um ou mais imoveis
 	 * 
-	 * [UC0378] Associar Tarifa de Consumo a Imóveis
+	 * [UC0378] Associar Tarifa de Consumo a Imï¿½veis
 	 * 
-	 * @author Rômulo Aurelio
+	 * @author Rï¿½mulo Aurelio
 	 * @created 19/12/2006
 	 * 
 	 * @param matricula
@@ -16741,11 +16741,11 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Pesquisa os Clientes Imóveis pelo id do Cliente, indicador de uso, motivo
-	 * do fim da relação, pelo perfil do imóvel e pelo tipo da relação do
-	 * cliente carregando o imóvel
+	 * Pesquisa os Clientes Imï¿½veis pelo id do Cliente, indicador de uso, motivo
+	 * do fim da relaï¿½ï¿½o, pelo perfil do imï¿½vel e pelo tipo da relaï¿½ï¿½o do
+	 * cliente carregando o imï¿½vel
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 27/12/2006
 	 */
@@ -16762,11 +16762,11 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Pesquisa os Clientes Imóveis pelo id do imóvel carregando o imóvel, o
-	 * cliente, o perfil do imóvel, o orgão expedidor do RG e a unidade da
-	 * federação
+	 * Pesquisa os Clientes Imï¿½veis pelo id do imï¿½vel carregando o imï¿½vel, o
+	 * cliente, o perfil do imï¿½vel, o orgï¿½o expedidor do RG e a unidade da
+	 * federaï¿½ï¿½o
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 27/12/2006
 	 */
@@ -16845,10 +16845,10 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Pesquisa os Clientes Imóveis pelo id do imóvel carregando os dados
-	 * necessários para retornar o seu endereço
+	 * Pesquisa os Clientes Imï¿½veis pelo id do imï¿½vel carregando os dados
+	 * necessï¿½rios para retornar o seu endereï¿½o
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 27/12/2006
 	 */
@@ -16866,10 +16866,10 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Pesquisa as Tarifas Sociais Dado Economia pelo id do imóvel carregando a
+	 * Pesquisa as Tarifas Sociais Dado Economia pelo id do imï¿½vel carregando a
 	 * Tarifa Social Revisao Motivo
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 27/12/2006
 	 */
@@ -16887,10 +16887,10 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Pesquisa as Tarifas Sociais Dado Economia pelo id do imóvel carregando a
+	 * Pesquisa as Tarifas Sociais Dado Economia pelo id do imï¿½vel carregando a
 	 * Tarifa Social Revisao Motivo
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 27/12/2006
 	 */
@@ -16939,10 +16939,10 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Verifica se o cliente usuário do imóvel já está relacionado em outro
-	 * imóvel na tarifa social
+	 * Verifica se o cliente usuï¿½rio do imï¿½vel jï¿½ estï¿½ relacionado em outro
+	 * imï¿½vel na tarifa social
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 02/01/2007
 	 */
@@ -16960,9 +16960,9 @@ public class Fachada {
 	/**
 	 * [UC0009] - Manter Cliente
 	 * 
-	 * Verifica se o cliente usuário está na tarifa social
+	 * Verifica se o cliente usuï¿½rio estï¿½ na tarifa social
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 16/02/2007
 	 */
@@ -16980,10 +16980,10 @@ public class Fachada {
 	/**
 	 * [UC0069] - Manter Dados Tarifa Social
 	 * 
-	 * Verifica se o cliente usuário do imóvel já está relacionado em outro
-	 * imóvel na tarifa social
+	 * Verifica se o cliente usuï¿½rio do imï¿½vel jï¿½ estï¿½ relacionado em outro
+	 * imï¿½vel na tarifa social
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 30/01/2007
 	 */
@@ -17001,10 +17001,10 @@ public class Fachada {
 	/**
 	 * [UC0069] - Manter Dados Tarifa Social
 	 * 
-	 * Verifica se o cliente usuário do imóvel já está relacionado em outro
-	 * imóvel na tarifa social
+	 * Verifica se o cliente usuï¿½rio do imï¿½vel jï¿½ estï¿½ relacionado em outro
+	 * imï¿½vel na tarifa social
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 30/01/2007
 	 */
@@ -17022,10 +17022,10 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Verifica se o mesmo cliente está vinculado a mais de uma economia como
-	 * usuário
+	 * Verifica se o mesmo cliente estï¿½ vinculado a mais de uma economia como
+	 * usuï¿½rio
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 03/01/2007
 	 */
@@ -17042,10 +17042,10 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Verifica se o mesmo cliente está vinculado a mais de uma economia como
-	 * usuário
+	 * Verifica se o mesmo cliente estï¿½ vinculado a mais de uma economia como
+	 * usuï¿½rio
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 03/01/2007
 	 */
@@ -17062,9 +17062,9 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Retorna os clientes usuários das economias do imóvel
+	 * Retorna os clientes usuï¿½rios das economias do imï¿½vel
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 03/01/2007
 	 */
@@ -17082,10 +17082,10 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Verifica se o cliente usuário está vinculado na tarifa social a outro
-	 * imóvel ou economia com motivo de revisão que permita recadastramento
+	 * Verifica se o cliente usuï¿½rio estï¿½ vinculado na tarifa social a outro
+	 * imï¿½vel ou economia com motivo de revisï¿½o que permita recadastramento
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 04/01/2007
 	 */
@@ -17136,13 +17136,13 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Atualiza o perfil do imóvel para o perfil normal
+	 * Atualiza o perfil do imï¿½vel para o perfil normal
 	 * 
 	 * @date 04/01/2007
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 */
 	/*
-	 * Método não utilizado fora da camada de negocio, logo nao necessario na
+	 * Mï¿½todo nï¿½o utilizado fora da camada de negocio, logo nao necessario na
 	 * fachada Francisco public void atualizarImovelPerfilNormal(Integer
 	 * idImovel) {
 	 * 
@@ -17190,10 +17190,10 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Verificar se existe um motivo de exclusão para o cliente que Não permite
+	 * Verificar se existe um motivo de exclusï¿½o para o cliente que Nï¿½o permite
 	 * recadastramento na tarifa social
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 05/01/2007
 	 */
@@ -17207,7 +17207,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite inserir uma gerência Regional
+	 * Permite inserir uma gerï¿½ncia Regional
 	 * 
 	 * [UC0217] Inserir Gerencia Regional
 	 * 
@@ -17230,7 +17230,7 @@ public class Fachada {
 	 * 
 	 * Retorna os cliente a partir do id do clienteImovelEconomia
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 08/01/2007
 	 */
@@ -17264,7 +17264,7 @@ public class Fachada {
 	/**
 	 * Informar Parametros do Sistema
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 09/01/2007
 	 * 
 	 */
@@ -17279,12 +17279,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0490] - Informar Situação de Cobrança
+	 * [UC0490] - Informar Situaï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * Pesquisa o imóvel com a situação da ligação de Água e a de esgoto
+	 * Pesquisa o imï¿½vel com a situaï¿½ï¿½o da ligaï¿½ï¿½o de ï¿½gua e a de esgoto
 	 * 
 	 * @date 13/01/2007
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @throws ControladorException
 	 */
 	public Imovel pesquisarImovelComSituacaoAguaEsgoto(Integer idImovel) {
@@ -17297,7 +17297,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0532] Gerar Relatório de Faturamento das Ligações com Medição
+	 * [UC0532] Gerar Relatï¿½rio de Faturamento das Ligaï¿½ï¿½es com Mediï¿½ï¿½o
 	 * Individualizada
 	 * 
 	 * @author Vivianne Sousa
@@ -17316,10 +17316,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0532] Gerar Relatório de Faturamento das Ligações com Medição
+	 * [UC0532] Gerar Relatï¿½rio de Faturamento das Ligaï¿½ï¿½es com Mediï¿½ï¿½o
 	 * Individualizada
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 02/06/2008
 	 * 
 	 * @param colecaoLigacoesMedicao
@@ -17338,9 +17338,9 @@ public class Fachada {
 	/**
 	 * [UC0069] - Manter Dados Tarifa Social
 	 * 
-	 * Pesquisa os dados da tarifa social e do cliente usuário
+	 * Pesquisa os dados da tarifa social e do cliente usuï¿½rio
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 15/01/2007
 	 */
@@ -17359,7 +17359,7 @@ public class Fachada {
 	 * 
 	 * Retorna a tarifa social a partir do seu id
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 16/01/2007
 	 */
@@ -17374,10 +17374,10 @@ public class Fachada {
 	/**
 	 * [UC0069] - Manter Dados Tarifa Social
 	 * 
-	 * Verifica se existe tarifa social para o imóvel que Não tenha sido
-	 * excluído
+	 * Verifica se existe tarifa social para o imï¿½vel que Nï¿½o tenha sido
+	 * excluï¿½do
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 16/01/2007
 	 */
@@ -17408,7 +17408,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa o nome do cliente a partir do imóvel Autor: Sávio Luiz Data:
+	 * Pesquisa o nome do cliente a partir do imï¿½vel Autor: Sï¿½vio Luiz Data:
 	 * 21/12/2005
 	 */
 	public String pesquisarNomeClientePorImovel(Integer idImovel) {
@@ -17461,8 +17461,8 @@ public class Fachada {
 	/**
 	 * [UC00503]Tramitar Conjunto de Registro de Atendimento
 	 * 
-	 * [FS0002] Verificar as situações das OS associadas ao RA [FS0003]
-	 * Verificar se o tipo de solicitação é Tarifa Social
+	 * [FS0002] Verificar as situaï¿½ï¿½es das OS associadas ao RA [FS0003]
+	 * Verificar se o tipo de solicitaï¿½ï¿½o ï¿½ Tarifa Social
 	 * 
 	 * @author Ana Maria
 	 * @date 16/01/2007
@@ -17480,13 +17480,13 @@ public class Fachada {
 	/**
 	 * [UC0069] - Manter Dados da Tarifa Social
 	 * 
-	 * [FS0006] - Verificar número de IPTU
+	 * [FS0006] - Verificar nï¿½mero de IPTU
 	 * 
-	 * Verifica se já existe outro imóvel ou economia com o mesmo número de IPTU
-	 * no mesmo Município
+	 * Verifica se jï¿½ existe outro imï¿½vel ou economia com o mesmo nï¿½mero de IPTU
+	 * no mesmo Municï¿½pio
 	 * 
 	 * @date 18/01/2007
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @throws ControladorException
 	 */
 	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel, Integer idImovelEconomia, Integer idMunicipio) {
@@ -17502,13 +17502,13 @@ public class Fachada {
 	/**
 	 * [UC0069] - Manter Dados da Tarifa Social
 	 * 
-	 * [FS0007] - Verificar número de contrato da companhia de energia elétrica
+	 * [FS0007] - Verificar nï¿½mero de contrato da companhia de energia elï¿½trica
 	 * 
-	 * Verifica se já existe outro imóvel ou economia com o mesmo número de
-	 * contrato da companhia elétrica
+	 * Verifica se jï¿½ existe outro imï¿½vel ou economia com o mesmo nï¿½mero de
+	 * contrato da companhia elï¿½trica
 	 * 
 	 * @date 18/01/2007
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @throws ControladorException
 	 */
 	public Integer verificarNumeroCompanhiaEletrica(Long numeroCompanhiaEletrica, Integer idImovel, Integer idImovelEconomia) {
@@ -17529,18 +17529,18 @@ public class Fachada {
 	 * Verificar o preenchimento dos campos para uma economia
 	 * 
 	 * @date 18/01/2007
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * 
 	 * @param clienteImovel
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param numeroCartaoSocial
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param dataValidadeCartaoSocial
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param numeroParcelasCartaoSocial
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param valorRendaFamiliar
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @throws ControladorException
 	 */
 	public void verificarPreenchimentoManterDadosTarifaSocial(Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU, Integer idImovel, String numeroCartaoSocial,
@@ -17560,22 +17560,22 @@ public class Fachada {
 	 * 
 	 * [FS0008] - Verificar Preenchimento dos Campos
 	 * 
-	 * Verificar o preenchimento dos campos para múltiplas economias
+	 * Verificar o preenchimento dos campos para mï¿½ltiplas economias
 	 * 
 	 * @date 18/01/2007
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @throws ControladorException
 	 * 
 	 * @param clienteImovel
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param numeroCartaoSocial
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param dataValidadeCartaoSocial
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param numeroParcelasCartaoSocial
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param valorRendaFamiliar
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @throws ControladorException
 	 */
 	public void verificarPreenchimentoManterDadosTarifaSocialMultiplasEconomias(Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU, Integer idImovelEconomia, String numeroCartaoSocial,
@@ -17593,9 +17593,9 @@ public class Fachada {
 	/**
 	 * [UC0069] - Manter Dados Tarifa Social
 	 * 
-	 * Retorna os clientes do imóvel
+	 * Retorna os clientes do imï¿½vel
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 19/01/2007
 	 */
@@ -17613,9 +17613,9 @@ public class Fachada {
 	/**
 	 * [UC0069] - Manter Dados Tarifa Social
 	 * 
-	 * Retorna os clientes do imóvel
+	 * Retorna os clientes do imï¿½vel
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 19/01/2007
 	 */
@@ -17636,7 +17636,7 @@ public class Fachada {
 	 * 
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 25/05/2006
 	 * 
 	 * @param ServicoTipoPrioridade
@@ -17657,7 +17657,7 @@ public class Fachada {
 	 * 
 	 * Pesquisa o cliente pelo seu id carregando o seu tipo
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 22/01/2007
 	 */
@@ -17672,7 +17672,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0173] Gerar Relatório de Resumo do Faturamento
+	 * [UC0173] Gerar Relatï¿½rio de Resumo do Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 24/01/2007
@@ -17693,7 +17693,7 @@ public class Fachada {
 	/**
 	 * Pesquisa os feriados(nacionais e municipais)
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * @date 22/01/2007
 	 * 
 	 */
@@ -17711,7 +17711,7 @@ public class Fachada {
 	/**
 	 * Pesquisa os feriados(nacionais e municipais)
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * @date 23/01/2007
 	 * 
 	 */
@@ -17728,9 +17728,9 @@ public class Fachada {
 	/**
 	 * [UC???] - ????????
 	 * 
-	 * @author Rômulo Aurélio Filho
+	 * @author Rï¿½mulo Aurï¿½lio Filho
 	 * @date 25/01/2007
-	 * @descricao O método retorna um objeto com a maior data de Implementacao
+	 * @descricao O mï¿½todo retorna um objeto com a maior data de Implementacao
 	 *            do Banco e sua ultima alteracao
 	 * 
 	 * @return
@@ -17748,7 +17748,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 25/01/2007
@@ -17775,8 +17775,8 @@ public class Fachada {
 	 * @param imovelID
 	 *            Id do Imovel
 	 * @param debitoCreditoSituacaoAtualID
-	 *            ID do Debito Credito Situação
-	 * @return Coleção de Debitos a Cobrar
+	 *            ID do Debito Credito Situaï¿½ï¿½o
+	 * @return Coleï¿½ï¿½o de Debitos a Cobrar
 	 */
 	@SuppressWarnings("rawtypes")
 	public Collection obterDebitoACobrarImovel(Integer imovelID, Integer debitoCreditoSituacaoAtualID, int anoMesFaturamento) {
@@ -17794,10 +17794,10 @@ public class Fachada {
 	/**
 	 * [UC0069] - Manter Dados Tarifa Social
 	 * 
-	 * Pesquisa os dados da tarifa social e do cliente usuário para cada
+	 * Pesquisa os dados da tarifa social e do cliente usuï¿½rio para cada
 	 * economia
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 25/01/2007
 	 */
@@ -17814,7 +17814,7 @@ public class Fachada {
 
 	/**
 	 * Pesquisa no sistema todos os processos que pararam na metade devido a uma
-	 * falha no servidor e marca com 'EXECUção INTERROMPIDA'
+	 * falha no servidor e marca com 'EXECUï¿½ï¿½o INTERROMPIDA'
 	 * 
 	 * @author Rodrigo Silveira
 	 * @date 27/01/2007
@@ -17837,7 +17837,7 @@ public class Fachada {
 	 * @date 26/01/2007
 	 * 
 	 * @param DistritoOperacional
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 */
 
 	public Integer inserirDistritoOperacional(String descricao, String descricaoAbreviada, String idSetorAbastecimento, Usuario usuarioLogado) {
@@ -17868,9 +17868,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
-	 * [FS0001] - Validar Ordem de Serviço
+	 * [FS0001] - Validar Ordem de Serviï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 29/01/2007
@@ -17893,7 +17893,7 @@ public class Fachada {
 	/**
 	 * [UC0506] Inserir Arrecadador
 	 * 
-	 * Inclusão de um novo arrecadador.
+	 * Inclusï¿½o de um novo arrecadador.
 	 * 
 	 * @author Marcio Roberto
 	 * @date 29/01/2007
@@ -17912,7 +17912,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite inserir uma Agência Bancária
+	 * Permite inserir uma Agï¿½ncia Bancï¿½ria
 	 * 
 	 * [UC0217] Inserir Agencia Bancaria
 	 * 
@@ -17949,12 +17949,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0391] Atualizar Agência Bancária.
+	 * [UC0391] Atualizar Agï¿½ncia Bancï¿½ria.
 	 * 
 	 * 
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 01/11/2006
 	 * 
 	 * @param
@@ -17969,12 +17969,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0016] Atualizar Gerência Regional.
+	 * [UC0016] Atualizar Gerï¿½ncia Regional.
 	 * 
 	 * 
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 01/11/2006
 	 * 
 	 * @param
@@ -17989,7 +17989,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC] Gerar Relatório de Contas Emitidas
+	 * [UC] Gerar Relatï¿½rio de Contas Emitidas
 	 * 
 	 * @author Vivianne Sousa
 	 * @param tipoImpressao
@@ -18011,9 +18011,9 @@ public class Fachada {
 	/**
 	 * [UC0069] - Manter Dados Tarifa Social
 	 * 
-	 * Pesquisa a economia do imóvel pelo seu id
+	 * Pesquisa a economia do imï¿½vel pelo seu id
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 01/02/2007
 	 */
@@ -18028,7 +18028,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC] Gerar Relatório de Contas Emitidas
+	 * [UC] Gerar Relatï¿½rio de Contas Emitidas
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 02/02/2007
@@ -18067,10 +18067,10 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Seta o indicador do nome da conta para 2 nos clientes proprietário e
-	 * usuários
+	 * Seta o indicador do nome da conta para 2 nos clientes proprietï¿½rio e
+	 * usuï¿½rios
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 01/02/2007
 	 */
@@ -18087,7 +18087,7 @@ public class Fachada {
 	 * 
 	 * [FS00001] Verificar Registro Atendimento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 05/02/2007
 	 * 
 	 * @param idRegistroAtendimento
@@ -18186,7 +18186,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0539] Manter Prioridade do Tipo de Serviço
+	 * [UC0539] Manter Prioridade do Tipo de Serviï¿½o
 	 * 
 	 * Remove um ou mais objeto do tipo ServicoTipoPrioridade no BD
 	 * 
@@ -18208,7 +18208,7 @@ public class Fachada {
 	 * 
 	 * Recadastrar, atualiza ou remove a tarifa social
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 13/02/2007
 	 */
@@ -18232,7 +18232,7 @@ public class Fachada {
 	 * 
 	 * Recadastrar ou insere a tarifa social
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 13/02/2007
 	 */
@@ -18253,7 +18253,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0455] Exibir Calendário para Elaboração ou Acompanhamento de Roteiro
+	 * [UC0455] Exibir Calendï¿½rio para Elaboraï¿½ï¿½o ou Acompanhamento de Roteiro
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 14/02/2007
@@ -18278,7 +18278,7 @@ public class Fachada {
 	 * Monta a colecao de resultdos apartir da tbela conta impressao para
 	 * geracao do relatorio de MAPA DE CONTROLE DAS CONTAS EMITIDAS
 	 * 
-	 * @author Flávio Cordeiro
+	 * @author Flï¿½vio Cordeiro
 	 * @date 13/02/2007
 	 * 
 	 * @param idGrupoFaturamento
@@ -18295,9 +18295,9 @@ public class Fachada {
 	/**
 	 * [UC0054] - Inserir Dados Tarifa Social
 	 * 
-	 * Retorna a economia do imóvel a partir do id do clienteImovelEconomia
+	 * Retorna a economia do imï¿½vel a partir do id do clienteImovelEconomia
 	 * 
-	 * Autor: Rafael Corrêa
+	 * Autor: Rafael Corrï¿½a
 	 * 
 	 * Data: 15/02/2007
 	 */
@@ -18314,7 +18314,7 @@ public class Fachada {
 	 * Monta a colecao de resultdos apartir da tabela conta impressao para
 	 * geracao do relatorio de RESUMO CONTAS EMITIDAS POR LOCALIDADE NO GRUPO
 	 * 
-	 * @author Flávio Cordeiro
+	 * @author Flï¿½vio Cordeiro
 	 * @date 13/02/2007
 	 * 
 	 * @param idGrupoFaturamento
@@ -18334,10 +18334,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica permissão especial para atualizar um cliente que seja usuário da
+	 * Verifica permissï¿½o especial para atualizar um cliente que seja usuï¿½rio da
 	 * tarifa social
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 16/02/2007
 	 * 
 	 * @param httpServletRequest
@@ -18368,10 +18368,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica permissão especial para consultar os débitos do cliente indicado
+	 * Verifica permissï¿½o especial para consultar os dï¿½bitos do cliente indicado
 	 * na conta
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 13/09/2007
 	 * 
 	 * @param httpServletRequest
@@ -18386,7 +18386,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0214] Efetuar Parcelamento Debito [SB0011] Verificar única Fatura
+	 * [UC0214] Efetuar Parcelamento Debito [SB0011] Verificar ï¿½nica Fatura
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 15/02/2007
@@ -18406,16 +18406,16 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Caso a especificação informada para o RA tem indicativo que é para
-	 * verificar débito (STEP_ICVERIFICADEBITO da tabela
+	 * Caso a especificaï¿½ï¿½o informada para o RA tem indicativo que ï¿½ para
+	 * verificar dï¿½bito (STEP_ICVERIFICADEBITO da tabela
 	 * SOLICITACAO_TIPO_ESPECIFICACAO com valor igual a SIM (1)), o sistema
-	 * deverá verificar se o imóvel informado tenha débito <<incluir>> [UC0067]
-	 * Obter Débito do Imóvel ou Cliente (passando o imóvel). [FS0043] -
-	 * Verifica imóvel com débito.
+	 * deverï¿½ verificar se o imï¿½vel informado tenha dï¿½bito <<incluir>> [UC0067]
+	 * Obter Dï¿½bito do Imï¿½vel ou Cliente (passando o imï¿½vel). [FS0043] -
+	 * Verifica imï¿½vel com dï¿½bito.
 	 * 
-	 * [SB0032] - Verifica se o imóvel informado tem débito.
+	 * [SB0032] - Verifica se o imï¿½vel informado tem dï¿½bito.
 	 * 
-	 * [FS0043] - Verifica imóvel com débito
+	 * [FS0043] - Verifica imï¿½vel com dï¿½bito
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 19/02/2006
@@ -18436,7 +18436,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0475] Obter Valor do Débito
+	 * [UC0475] Obter Valor do Dï¿½bito
 	 * 
 	 * @author Rafael Pinto
 	 * @date 22/02/2007
@@ -18446,7 +18446,7 @@ public class Fachada {
 	 * @param tipoMedicao
 	 * @param idHidrometroCapacidade
 	 * 
-	 * @return valor do Débito
+	 * @return valor do Dï¿½bito
 	 * 
 	 * @throws ControladorException
 	 */
@@ -18462,10 +18462,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica permissão especial para inserir Imovel com logradouro.municipio
+	 * Verifica permissï¿½o especial para inserir Imovel com logradouro.municipio
 	 * diferente de setorComercial.municipio
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 23/02/2007
 	 * 
 	 * @param httpServletRequest
@@ -18481,10 +18481,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica permissão especial para atualizar Imovel com
+	 * Verifica permissï¿½o especial para atualizar Imovel com
 	 * logradouro.municipio diferente de setorComercial.municipio
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 23/02/2007
 	 * 
 	 * @param httpServletRequest
@@ -18513,7 +18513,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica permissão especial para atualizar um LOGRADOURO_BAIRRO
+	 * Verifica permissï¿½o especial para atualizar um LOGRADOURO_BAIRRO
 	 * 
 	 * @author Raphael Rossiter, Romulo Aurelio
 	 * @date 24/02/2007
@@ -18530,7 +18530,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica permissão especial para atualizar um LOGRADOURO_BAIRRO
+	 * Verifica permissï¿½o especial para atualizar um LOGRADOURO_BAIRRO
 	 * 
 	 * @author Raphael Rossiter, Romulo Aurelio
 	 * @date 24/02/2007
@@ -18566,8 +18566,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica as permissões especiais do usuário para inserir motivo da não
-	 * cobrança
+	 * Verifica as permissï¿½es especiais do usuï¿½rio para inserir motivo da nï¿½o
+	 * cobranï¿½a
 	 * 
 	 * @author Ana Maraia
 	 * @date 03/03/2006
@@ -18588,7 +18588,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica permissão especial para informar nova data para vencimento
+	 * Verifica permissï¿½o especial para informar nova data para vencimento
 	 * alternativo
 	 * 
 	 * @author Vivianne Sousa
@@ -18607,7 +18607,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite inserir uma Conta Bancária
+	 * Permite inserir uma Conta Bancï¿½ria
 	 * 
 	 * [UC0217] Inserir Conta Bancaria
 	 * 
@@ -18626,12 +18626,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0391] Atualizar Conta Bancária.
+	 * [UC0391] Atualizar Conta Bancï¿½ria.
 	 * 
 	 * 
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 09/03/2007
 	 * 
 	 * @param
@@ -18646,7 +18646,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Obter a situação de cobrança para o imóvel passado
+	 * Obter a situaï¿½ï¿½o de cobranï¿½a para o imï¿½vel passado
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 07/03/2007
@@ -18684,7 +18684,7 @@ public class Fachada {
 	 * 
 	 * [SB0001] Atualizar Contrato de Demanda
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @param usuarioLogado
 	 * @date 28/06/2007
 	 * 
@@ -18698,8 +18698,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica permissão especial para informar nova data para vencimento
-	 * alternativo antes do periodo válido
+	 * Verifica permissï¿½o especial para informar nova data para vencimento
+	 * alternativo antes do periodo vï¿½lido
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 19/03/2007
@@ -18719,7 +18719,7 @@ public class Fachada {
 	/**
 	 * Pesquisa na tabela de envio email os dados do email
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 19/03/2007
 	 * 
 	 * @param httpServletRequest
@@ -18734,8 +18734,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0470] Acompanhar Roteiro de Programação de Ordens de Serviço [FS0012]
-	 * Reordena Sequencial de Programação
+	 * [UC0470] Acompanhar Roteiro de Programaï¿½ï¿½o de Ordens de Serviï¿½o [FS0012]
+	 * Reordena Sequencial de Programaï¿½ï¿½o
 	 * 
 	 * @author Rafael Pinto
 	 * @date 21/09/2006
@@ -18755,7 +18755,7 @@ public class Fachada {
 	 * 
 	 * [UC0544] - Gerar Arquivo Texto do Faturamento
 	 * 
-	 * @author Flávio Cordeiro
+	 * @author Flï¿½vio Cordeiro
 	 * @date 23/03/2007
 	 * 
 	 * @param anoMes
@@ -18770,7 +18770,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Pesquisar data e equipe da programação da ordem serviço
+	 * Pesquisar data e equipe da programaï¿½ï¿½o da ordem serviï¿½o
 	 * 
 	 * @author Ana Maria
 	 * @date 09/03/2007
@@ -18784,7 +18784,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa uma coleção de imóveis
+	 * Pesquisa uma coleï¿½ï¿½o de imï¿½veis
 	 * 
 	 * @author Ana Maria
 	 * @date 16/03/206
@@ -18800,7 +18800,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Pesquisa uma coleção de imóveis com perfil bloqueado
+	 * Pesquisa uma coleï¿½ï¿½o de imï¿½veis com perfil bloqueado
 	 * 
 	 * @return Boolean
 	 * @exception ErroRepositorioException
@@ -18835,7 +18835,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa uma coleção de imóveis do cliente
+	 * Pesquisa uma coleï¿½ï¿½o de imï¿½veis do cliente
 	 * 
 	 * @author Ana Maria
 	 * @date 20/03/2007
@@ -18850,7 +18850,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa quantidade de imóveis do cliente com perfil bloqueado
+	 * Pesquisa quantidade de imï¿½veis do cliente com perfil bloqueado
 	 * 
 	 * @author Ana Maria
 	 * @date 20/04/2009
@@ -18905,8 +18905,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica as permissões especiais do usuário para inserir motivo da não
-	 * cobrança
+	 * Verifica as permissï¿½es especiais do usuï¿½rio para inserir motivo da nï¿½o
+	 * cobranï¿½a
 	 * 
 	 * @author Ana Maraia
 	 * @date 03/03/2006
@@ -18974,12 +18974,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0489] - Consultar Resumo das Ações de Cobrança
+	 * [UC0489] - Consultar Resumo das Aï¿½ï¿½es de Cobranï¿½a
 	 * 
-	 * Pesquisa as situações de débito da situação da ação de acordo com o
+	 * Pesquisa as situaï¿½ï¿½es de dï¿½bito da situaï¿½ï¿½o da aï¿½ï¿½o de acordo com o
 	 * indicador antesApos
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 06/11/2006
 	 * 
 	 * @return Collection
@@ -18997,9 +18997,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Seleciona os pagamentos histórios de um aviso
+	 * Seleciona os pagamentos histï¿½rios de um aviso
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 23/04/2007
 	 * 
 	 * @return Collection
@@ -19019,7 +19019,7 @@ public class Fachada {
 	 * [UC0525] Manter Tipo Retorno OS Referida[SB0002] Remover Tipo Retorno OS
 	 * Referida
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 20/03/2007
 	 * 
 	 * @throws ErroRepositorioException
@@ -19050,9 +19050,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0157] - Simular Cálculo da Conta
+	 * [UC0157] - Simular Cï¿½lculo da Conta
 	 * 
-	 * [FS0004] - Verificar Volume Mínimo
+	 * [FS0004] - Verificar Volume Mï¿½nimo
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 02/04/2007
@@ -19073,9 +19073,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0157] - Simular Cálculo da Conta
+	 * [UC0157] - Simular Cï¿½lculo da Conta
 	 * 
-	 * [FS0003] - Verificar Consumo Mínimo
+	 * [FS0003] - Verificar Consumo Mï¿½nimo
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 02/04/2007
@@ -19096,11 +19096,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os movimentos dos arrecadores para a geração do relatório
+	 * Pesquisa os movimentos dos arrecadores para a geraï¿½ï¿½o do relatï¿½rio
 	 * 
 	 * [UCXXXX] Acompanhar Movimento dos Arrecadadores
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 02/04/2007
 	 * 
 	 * @return
@@ -19120,7 +19120,7 @@ public class Fachada {
 	 * 
 	 * Pesquisar ClienteImovel
 	 * 
-	 * @author Flávio Cordeiro
+	 * @author Flï¿½vio Cordeiro
 	 * @date 4/04/2006
 	 * 
 	 * 
@@ -19138,7 +19138,7 @@ public class Fachada {
 
 	/**
 	 * Verificar se os itens do parcelamento(Conta, Debito a cobrar e Credit a
-	 * realizar) já estão no historico
+	 * realizar) jï¿½ estï¿½o no historico
 	 * 
 	 * [UC0252] Desfazer Parcelamentos de Debito
 	 * 
@@ -19183,7 +19183,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0345] - Gerar Relatorio de Resumo da Arrecadação
+	 * [UC0345] - Gerar Relatorio de Resumo da Arrecadaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 10/04/2007
@@ -19261,11 +19261,11 @@ public class Fachada {
 	/**
 	 * [UC0082] - Registrar Leituras e Anormalidades
 	 * 
-	 * [SB0001] - Gerar Relatório Resumo das Leituras e Anormalidades
+	 * [SB0001] - Gerar Relatï¿½rio Resumo das Leituras e Anormalidades
 	 * 
 	 * Pesquisa as Anormalidades de Leitura e suas quantidades
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @param idRotaFinal
 	 * @param idRotaInicial
 	 * @date 13/04/2007
@@ -19287,11 +19287,11 @@ public class Fachada {
 	/**
 	 * [UC0082] - Registrar Leituras e Anormalidades
 	 * 
-	 * [SB0001] - Gerar Relatório Resumo das Leituras e Anormalidades
+	 * [SB0001] - Gerar Relatï¿½rio Resumo das Leituras e Anormalidades
 	 * 
-	 * Pesquisa os dados do relatório do comparativo de leituras e anormalidades
+	 * Pesquisa os dados do relatï¿½rio do comparativo de leituras e anormalidades
 	 * 
-	 * @author Rafael Corrêa - Hugo Leonardo - Magno Gouveia
+	 * @author Rafael Corrï¿½a - Hugo Leonardo - Magno Gouveia
 	 * @date 13/04/2007 - 19/03/2010 - 21/06/2011
 	 * 
 	 * @return Collection
@@ -19333,17 +19333,17 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0540] Efetuar Restabelecimento da Ligação de Água com Instalação de
-	 * hidrômetro.
+	 * [UC0540] Efetuar Restabelecimento da Ligaï¿½ï¿½o de ï¿½gua com Instalaï¿½ï¿½o de
+	 * hidrï¿½metro.
 	 * 
-	 * Permite validar o Efetuar Restabelecimento Ligação de Água com Instalação
-	 * de hidrômetro Exibir ou pelo menu ou pela funcionalidade encerrar a
-	 * Execução da ordem de serviço.
+	 * Permite validar o Efetuar Restabelecimento Ligaï¿½ï¿½o de ï¿½gua com Instalaï¿½ï¿½o
+	 * de hidrï¿½metro Exibir ou pelo menu ou pela funcionalidade encerrar a
+	 * Execuï¿½ï¿½o da ordem de serviï¿½o.
 	 * 
-	 * [FS0008] Verificar Situação Rede de Água na Quadra. [FS0007] Verificar
-	 * Situação do Imovel. [FS0002] Validar Situação de Água do Imóvel
+	 * [FS0008] Verificar Situaï¿½ï¿½o Rede de ï¿½gua na Quadra. [FS0007] Verificar
+	 * Situaï¿½ï¿½o do Imovel. [FS0002] Validar Situaï¿½ï¿½o de ï¿½gua do Imï¿½vel
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 18/04/2007
 	 * 
 	 * 
@@ -19362,14 +19362,14 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0540] Efetuar Restabelecimento da Ligação de Água com Instalação de
-	 * hidrômetro.
+	 * [UC0540] Efetuar Restabelecimento da Ligaï¿½ï¿½o de ï¿½gua com Instalaï¿½ï¿½o de
+	 * hidrï¿½metro.
 	 * 
-	 * Permite efetuar o Restabelecimento Ligação de Água com Instalação de
-	 * Hidrômetro ou pelo menu ou pela funcionalidade encerrar a Execução da
-	 * ordem de serviço.
+	 * Permite efetuar o Restabelecimento Ligaï¿½ï¿½o de ï¿½gua com Instalaï¿½ï¿½o de
+	 * Hidrï¿½metro ou pelo menu ou pela funcionalidade encerrar a Execuï¿½ï¿½o da
+	 * ordem de serviï¿½o.
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 19/04/2007
 	 * 
 	 * @param integracaoComercialHelper
@@ -19385,7 +19385,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisar conjunto de contas p/ emissão da 2ªVia
+	 * Pesquisar conjunto de contas p/ emissï¿½o da 2ï¿½Via
 	 * 
 	 * @author Ana Maria
 	 * @date 19/04/2007
@@ -19405,10 +19405,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Consulta o id e a situação da ordem de serviço associada ao documento de
-	 * cobrança passado como parâmetro
+	 * Consulta o id e a situaï¿½ï¿½o da ordem de serviï¿½o associada ao documento de
+	 * cobranï¿½a passado como parï¿½metro
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @created 13/04/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -19423,10 +19423,10 @@ public class Fachada {
 	}
 	
 	/**
-	 * Consulta o id e a situação da ordem de serviço associada ao documento de
-	 * cobrança passado como parâmetro
+	 * Consulta o id e a situaï¿½ï¿½o da ordem de serviï¿½o associada ao documento de
+	 * cobranï¿½a passado como parï¿½metro
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @created 13/04/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -19442,13 +19442,13 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Este cso de uso permite efetuar a ligação de água e eventualmente a
-	 * instalação de hidrômetro, sem informação de RA sendo chamado direto pelo
+	 * Este cso de uso permite efetuar a ligaï¿½ï¿½o de ï¿½gua e eventualmente a
+	 * instalaï¿½ï¿½o de hidrï¿½metro, sem informaï¿½ï¿½o de RA sendo chamado direto pelo
 	 * menu.
 	 * 
-	 * [UC0579] - Efetuar Ligação de Água com Intalação de Hidrômetro
+	 * [UC0579] - Efetuar Ligaï¿½ï¿½o de ï¿½gua com Intalaï¿½ï¿½o de Hidrï¿½metro
 	 * 
-	 * @author Flávio Leonardo
+	 * @author Flï¿½vio Leonardo
 	 * @date 25/04/2007
 	 * 
 	 * @param idImovel
@@ -19464,9 +19464,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0XXX] Gerar Contrato de Prestação de Serviço
+	 * [UC0XXX] Gerar Contrato de Prestaï¿½ï¿½o de Serviï¿½o
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 03/05/2007
 	 * 
 	 * @throws ControladorException
@@ -19537,11 +19537,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0XXX] - Gerar Relatório Tarifa de Consumo
+	 * [UC0XXX] - Gerar Relatï¿½rio Tarifa de Consumo
 	 * 
-	 * Pesquisas as tarifas de consumo para o relatório
+	 * Pesquisas as tarifas de consumo para o relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 11/05/2007
 	 * 
 	 * @param descricao
@@ -19561,11 +19561,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0XXX] - Gerar Relatório de Tarifa de Consumo
+	 * [UC0XXX] - Gerar Relatï¿½rio de Tarifa de Consumo
 	 * 
 	 * Pesquisas a data final de validade de uma tarifa de consumo
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 11/05/2007
 	 * 
 	 * @param Integer
@@ -19622,7 +19622,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Recupera quantidade contas sem está em revisão dos Imóveis
+	 * Recupera quantidade contas sem estï¿½ em revisï¿½o dos Imï¿½veis
 	 * 
 	 * @author Ana Maria
 	 * @date 19/03/2007
@@ -19698,7 +19698,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisar conjunto de contas p/ emissão da 2ªVia
+	 * Pesquisar conjunto de contas p/ emissï¿½o da 2ï¿½Via
 	 * 
 	 * @author Ana Maria
 	 * @date 19/04/2007
@@ -19718,7 +19718,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Recupera id de contas que estão em revisão por acão do usuario
+	 * Recupera id de contas que estï¿½o em revisï¿½o por acï¿½o do usuario
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 14/05/2007
@@ -19738,7 +19738,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Recupera id de conta(s) sem revisão ou em revisão por ação do usuário
+	 * Recupera id de conta(s) sem revisï¿½o ou em revisï¿½o por aï¿½ï¿½o do usuï¿½rio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 14/05/2007
@@ -19760,7 +19760,7 @@ public class Fachada {
 	/**
 	 * Inseri / Altera Leitura de Fiscalizacao
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 21/05/2007
 	 * 
 	 * @return
@@ -19777,8 +19777,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0259] - Processar Pagamento com código de Barras [SB0008] - Alterar
-	 * Vencimento dos Itens do documento de cobrança Autor: Sávio Luiz
+	 * [UC0259] - Processar Pagamento com cï¿½digo de Barras [SB0008] - Alterar
+	 * Vencimento dos Itens do documento de cobranï¿½a Autor: Sï¿½vio Luiz
 	 * Data:15/02/2006
 	 */
 
@@ -19805,12 +19805,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Esta funcionalidade permite informar dados para geração de relatórios ou
+	 * Esta funcionalidade permite informar dados para geraï¿½ï¿½o de relatï¿½rios ou
 	 * consultas
 	 * 
-	 * [UC0304] - Informar Dados para Geração de Relatório ou Consulta
+	 * [UC0304] - Informar Dados para Geraï¿½ï¿½o de Relatï¿½rio ou Consulta
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 22/05/2007
 	 * 
 	 */
@@ -19829,9 +19829,9 @@ public class Fachada {
 	 * 
 	 * Este caso de uso permite gerar um ralatorio analitico do faturamento
 	 * 
-	 * [UC0xxx]Gerar Relatório Analítico do Faturamento
+	 * [UC0xxx]Gerar Relatï¿½rio Analï¿½tico do Faturamento
 	 * 
-	 * @author Flávio Cordeiro
+	 * @author Flï¿½vio Cordeiro
 	 * @date 18/05/2007
 	 * 
 	 * @param anoMesFaturamento
@@ -19851,7 +19851,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisar relação de protocolos de documentos de cobrança do cronograma
+	 * Pesquisar relaï¿½ï¿½o de protocolos de documentos de cobranï¿½a do cronograma
 	 * 
 	 * @author Ana Maria
 	 * @date 15/05/2007
@@ -19871,7 +19871,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisar relação de protocolos de documentos de cobrança do eventual
+	 * Pesquisar relaï¿½ï¿½o de protocolos de documentos de cobranï¿½a do eventual
 	 * 
 	 * @author Ana Maria
 	 * @date 21/05/2007
@@ -19914,7 +19914,7 @@ public class Fachada {
 	 * 
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 01/11/2006
 	 * 
 	 * @param
@@ -19929,7 +19929,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite inserir uma Tipo de Crédito
+	 * Permite inserir uma Tipo de Crï¿½dito
 	 * 
 	 * [UC0217] Inserir tipo credito
 	 * 
@@ -19950,7 +19950,7 @@ public class Fachada {
 	/**
 	 * [UC0525] Manter Tipo de Credito [SB0002] Remover Sistema Esgoto
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 20/03/2007
 	 * 
 	 * @throws ErroRepositorioException
@@ -19964,7 +19964,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite atualizar um Tipo de Crédito
+	 * Permite atualizar um Tipo de Crï¿½dito
 	 * 
 	 * [UC0217] Atualizar tipo credito
 	 * 
@@ -19983,7 +19983,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite informar uma não entrega de documento
+	 * Permite informar uma nï¿½o entrega de documento
 	 * 
 	 * [UC0559] Informar Nao Entrega de Documentos
 	 * 
@@ -20002,11 +20002,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Gera credito a realizar para os imóveis de determinados grupos
+	 * Gera credito a realizar para os imï¿½veis de determinados grupos
 	 * 
-	 * BATCH PARA CORREÇÃO DA BASE
+	 * BATCH PARA CORREï¿½ï¿½O DA BASE
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 02/05/2007
 	 * 
 	 */
@@ -20019,7 +20019,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0482]Emitir 2ª Via de Conta
+	 * [UC0482]Emitir 2ï¿½ Via de Conta
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/05/2007
@@ -20107,7 +20107,7 @@ public class Fachada {
 	 * 
 	 * [UC0459] Informar Dados da Agencia Reguladora
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * @date 19/04/2007
 	 * 
 	 */
@@ -20208,11 +20208,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0591] - Gerar Relatório de Clientes Especiais
+	 * [UC0591] - Gerar Relatï¿½rio de Clientes Especiais
 	 * 
-	 * Pesquisas os imóveis de acordo com os parâmetros da pesquisa
+	 * Pesquisas os imï¿½veis de acordo com os parï¿½metros da pesquisa
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 31/05/2007
 	 */
 	@SuppressWarnings("rawtypes")
@@ -20268,7 +20268,7 @@ public class Fachada {
 	/**
 	 * [UC00609] Transferencia de Debitos/Creditos
 	 * 
-	 * Recupera a situação da ligação de esgoto
+	 * Recupera a situaï¿½ï¿½o da ligaï¿½ï¿½o de esgoto
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 07/06/2007
@@ -20291,7 +20291,7 @@ public class Fachada {
 	/**
 	 * [UC00609] Transferencia de Debitos/Creditos
 	 * 
-	 * Recupera a situação da ligação de agua
+	 * Recupera a situaï¿½ï¿½o da ligaï¿½ï¿½o de agua
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 07/06/2007
@@ -20335,9 +20335,9 @@ public class Fachada {
 	/**
 	 * [UC00609] Transferencia de Debitos/Creditos
 	 * 
-	 * [SB0001] - Apresentar Débitos/Créditos do Imóvel de Origem
+	 * [SB0001] - Apresentar Dï¿½bitos/Crï¿½ditos do Imï¿½vel de Origem
 	 * 
-	 * [FS0002] - Verificar existência de débitos/créditos no imóvel de origem
+	 * [FS0002] - Verificar existï¿½ncia de dï¿½bitos/crï¿½ditos no imï¿½vel de origem
 	 * 
 	 * @author Raphael Rossiter
 	 * @created 08/06/2007
@@ -20357,7 +20357,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Inseir Débito a cobrar sem RA
+	 * Inseir Dï¿½bito a cobrar sem RA
 	 * 
 	 * @author Ana Maria
 	 * @date 23/05/2007
@@ -20376,7 +20376,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0594] Gerar Relação de Parcelamento
+	 * [UC0594] Gerar Relaï¿½ï¿½o de Parcelamento
 	 * 
 	 * @author Ana Maria
 	 * 
@@ -20392,7 +20392,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0878] Gerar Relação de Parcelamento - Visão Analitica
+	 * [UC0878] Gerar Relaï¿½ï¿½o de Parcelamento - Visï¿½o Analitica
 	 * 
 	 * @author Bruno Barros
 	 * 
@@ -20408,7 +20408,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0600] Emitir Histograma de Água
+	 * [UC0600] Emitir Histograma de ï¿½gua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/06/2007
@@ -20428,9 +20428,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar Relatório de Imóveis Outros Critérios
+	 * Gerar Relatï¿½rio de Imï¿½veis Outros Critï¿½rios
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 25/07/2006
 	 * 
 	 * @return
@@ -20470,10 +20470,10 @@ public class Fachada {
 	/**
 	 * Inseri o tipo de debito na base
 	 * 
-	 * [UC0529] Inserir Tipo de Débito
+	 * [UC0529] Inserir Tipo de Dï¿½bito
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 09/03/2007
 	 * 
 	 * @param descricao
@@ -20500,10 +20500,10 @@ public class Fachada {
 	/**
 	 * Inseri o tipo de debito na base
 	 * 
-	 * [UC0529] Inserir Tipo de Débito
+	 * [UC0529] Inserir Tipo de Dï¿½bito
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 09/03/2007
 	 * 
 	 * @param descricao
@@ -20529,9 +20529,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0609] Transferência de Débitos/Créditos
+	 * [UC0609] Transferï¿½ncia de Dï¿½bitos/Crï¿½ditos
 	 * 
-	 * [SB00002] Transferência dos Débitos/Créditos selecionados para o imóvel
+	 * [SB00002] Transferï¿½ncia dos Dï¿½bitos/Crï¿½ditos selecionados para o imï¿½vel
 	 * destino
 	 * 
 	 * @author Vivianne Sousa
@@ -20561,9 +20561,9 @@ public class Fachada {
 	/**
 	 * [UC0613] - Registrar Leituras e Anormalidades
 	 * 
-	 * Pesquisa os imóveis com faixa falsa
+	 * Pesquisa os imï¿½veis com faixa falsa
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 18/06/2007
 	 * 
 	 * @return Collection
@@ -20583,9 +20583,9 @@ public class Fachada {
 	/**
 	 * [UC0613] - Registrar Leituras e Anormalidades
 	 * 
-	 * Retorna a quantidade de imóveis com faixa falsa
+	 * Retorna a quantidade de imï¿½veis com faixa falsa
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 18/06/2007
 	 * 
 	 * @return Collection
@@ -20604,11 +20604,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UCXXXX] Gerar Resumo das Ações de Cobrança Eventuais
+	 * [UCXXXX] Gerar Resumo das Aï¿½ï¿½es de Cobranï¿½a Eventuais
 	 * 
-	 * [SB0001] - Processar Documento de Cobrança
+	 * [SB0001] - Processar Documento de Cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 18/06/2007
 	 * 
 	 */
@@ -20617,11 +20617,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UCXXXX] Gerar Resumo das Ações de Cobrança Eventuais
+	 * [UCXXXX] Gerar Resumo das Aï¿½ï¿½es de Cobranï¿½a Eventuais
 	 * 
-	 * [SB0006] - Determinar Situação da Ordem de Serviço
+	 * [SB0006] - Determinar Situaï¿½ï¿½o da Ordem de Serviï¿½o
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 19/06/2007
 	 * 
 	 */
@@ -20657,11 +20657,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os dados necessário para a geração do relatório
+	 * Pesquisa os dados necessï¿½rio para a geraï¿½ï¿½o do relatï¿½rio
 	 * 
-	 * [UC0637] - Gerar Relatórios Volumes Faturados
+	 * [UC0637] - Gerar Relatï¿½rios Volumes Faturados
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @created 11/09/2007
 	 * 
 	 */
@@ -20675,11 +20675,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os dados necessário para a geração do relatório resumido
+	 * Pesquisa os dados necessï¿½rio para a geraï¿½ï¿½o do relatï¿½rio resumido
 	 * 
-	 * [UC0637] - Gerar Relatórios Volumes Faturados
+	 * [UC0637] - Gerar Relatï¿½rios Volumes Faturados
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @created 13/09/2007
 	 * 
 	 */
@@ -20693,11 +20693,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os dados necessário para a geração do relatório
+	 * Pesquisa os dados necessï¿½rio para a geraï¿½ï¿½o do relatï¿½rio
 	 * 
-	 * [UC0635] - Gerar Relatórios de Contas em Revisão
+	 * [UC0635] - Gerar Relatï¿½rios de Contas em Revisï¿½o
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @created 20/09/2007
 	 */
 	@SuppressWarnings("rawtypes")
@@ -20713,11 +20713,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os dados necessário para a geração do relatório resumido
+	 * Pesquisa os dados necessï¿½rio para a geraï¿½ï¿½o do relatï¿½rio resumido
 	 * 
-	 * [UC0635] - Gerar Relatórios de Contas em Revisão
+	 * [UC0635] - Gerar Relatï¿½rios de Contas em Revisï¿½o
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @created 20/09/2007
 	 * 
 	 * @throws ControladorException
@@ -20735,11 +20735,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os dados necessário para a geração do relatório
+	 * Pesquisa os dados necessï¿½rio para a geraï¿½ï¿½o do relatï¿½rio
 	 * 
-	 * [UC0638] - Gerar Relatórios Anormalidade Consumo
+	 * [UC0638] - Gerar Relatï¿½rios Anormalidade Consumo
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @created 15/10/2007
 	 */
 	public Collection<GerarRelatorioAnormalidadeConsumoHelper> pesquisarDadosRelatorioAnormalidadeConsumo(Integer idGrupoFaturamento, Short codigoRota, Integer idGerenciaRegional,
@@ -20797,7 +20797,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0604] Emitir Histograma de Água por Economia
+	 * [UC0604] Emitir Histograma de ï¿½gua por Economia
 	 * 
 	 * @author Rafael Pinto
 	 * @date 04/06/2007
@@ -20861,7 +20861,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisar pagamentos pelo aviso bancário
+	 * Pesquisar pagamentos pelo aviso bancï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 11/06/2007
@@ -20878,7 +20878,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisar devoluções pelo aviso bancário
+	 * Pesquisar devoluï¿½ï¿½es pelo aviso bancï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 11/06/2007
@@ -20895,7 +20895,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisar valores de arrecadação e devolução do aviso bancário
+	 * Pesquisar valores de arrecadaï¿½ï¿½o e devoluï¿½ï¿½o do aviso bancï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 14/06/2007
@@ -20912,7 +20912,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Atualizar Pagamentos e Aviso Bancário
+	 * Atualizar Pagamentos e Aviso Bancï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 15/06/2007
@@ -20931,7 +20931,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Atualizar Devolucões e Aviso Bancário
+	 * Atualizar Devolucï¿½es e Aviso Bancï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 15/06/2007
@@ -20967,13 +20967,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Esta funcionalidade permite informar dados para geração de relatórios ou
+	 * Esta funcionalidade permite informar dados para geraï¿½ï¿½o de relatï¿½rios ou
 	 * consultas
 	 * 
-	 * [UC0616] - Informar Dados para Consulta do Resumo das Ações de Cobrança
+	 * [UC0616] - Informar Dados para Consulta do Resumo das Aï¿½ï¿½es de Cobranï¿½a
 	 * Eventual
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 25/06/2007
 	 * 
 	 */
@@ -20991,11 +20991,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0617] Consultar Resumo das Ações de Cobrança Eventuais
+	 * [UC0617] Consultar Resumo das Aï¿½ï¿½es de Cobranï¿½a Eventuais
 	 * 
-	 * Pesquisa as ações de cobrança
+	 * Pesquisa as aï¿½ï¿½es de cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 26/06/2007
 	 * 
 	 * @return Collection
@@ -21010,7 +21010,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Obter a data de vencimento de um grupo de faturamento, no mês de
+	 * Obter a data de vencimento de um grupo de faturamento, no mï¿½s de
 	 * faturamento corrente.
 	 * 
 	 * [UC0618] Obter data de vencimento do grupo
@@ -21031,11 +21031,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0617] Consultar Resumo das Ações de Cobrança Eventuais
+	 * [UC0617] Consultar Resumo das Aï¿½ï¿½es de Cobranï¿½a Eventuais
 	 * 
-	 * Pesquisa as ações de cobrança
+	 * Pesquisa as aï¿½ï¿½es de cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 26/06/2007
 	 * 
 	 * @return Collection
@@ -21050,11 +21050,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0617] Consultar Resumo das Ações de Cobrança Eventuais
+	 * [UC0617] Consultar Resumo das Aï¿½ï¿½es de Cobranï¿½a Eventuais
 	 * 
-	 * Pesquisa as ações de cobrança
+	 * Pesquisa as aï¿½ï¿½es de cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 26/06/2007
 	 * 
 	 * @return Collection
@@ -21071,11 +21071,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0617] Consultar Resumo das Ações de Cobrança Eventuais
+	 * [UC0617] Consultar Resumo das Aï¿½ï¿½es de Cobranï¿½a Eventuais
 	 * 
-	 * Pesquisa as ações de cobrança
+	 * Pesquisa as aï¿½ï¿½es de cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 26/06/2007
 	 * 
 	 * @return Collection
@@ -21092,9 +21092,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar Relatório de Imóveis Outros Critérios
+	 * Gerar Relatï¿½rio de Imï¿½veis Outros Critï¿½rios
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 25/07/2006
 	 * 
 	 * @throws ControladorException
@@ -21127,11 +21127,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0458] - Imprimir Ordem de Serviço
+	 * [UC0458] - Imprimir Ordem de Serviï¿½o
 	 * 
-	 * Pesquisa o telefone principal do Cliente para o Relatório de OS
+	 * Pesquisa o telefone principal do Cliente para o Relatï¿½rio de OS
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 17/10/2006
 	 * 
 	 * 
@@ -21184,7 +21184,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Metodo que retorna a data de revisão da conta
+	 * Metodo que retorna a data de revisï¿½o da conta
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 06/07/2007
@@ -21244,7 +21244,7 @@ public class Fachada {
 	}
 
 	/**
-	 * relatório de extrato de debito
+	 * relatï¿½rio de extrato de debito
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 17/07/2007
@@ -21263,7 +21263,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0263] Filtrar Movimento dos Arrecadadores - Relatório
+	 * [UC0263] Filtrar Movimento dos Arrecadadores - Relatï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 13/07/07
@@ -21295,7 +21295,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0619] Gerar Relação de Acompanhamento dos Movimentos Arrecadadores por
+	 * [UC0619] Gerar Relaï¿½ï¿½o de Acompanhamento dos Movimentos Arrecadadores por
 	 * NSA
 	 * 
 	 * @author Ana Maria
@@ -21315,9 +21315,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Consulta ResumoDevedoresDuvidosos para a geração do relatório [UC0487]
-	 * Gerar Relatório de Resumo de Devedores Duvidosos de acordo com a opção de
-	 * totalização.
+	 * Consulta ResumoDevedoresDuvidosos para a geraï¿½ï¿½o do relatï¿½rio [UC0487]
+	 * Gerar Relatï¿½rio de Resumo de Devedores Duvidosos de acordo com a opï¿½ï¿½o de
+	 * totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 20/07/2007
@@ -21337,10 +21337,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0595] Gerar Histórico de Medicao
+	 * [UC0595] Gerar Histï¿½rico de Medicao
 	 * 
 	 * @param medicaoTipo
-	 *            Tipo de medição
+	 *            Tipo de mediï¿½ï¿½o
 	 * @param imovel
 	 *            Imovel a ter a medicao gerada
 	 * @param faturamentoGrupo
@@ -21358,11 +21358,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Método que gera o resumo de Metas da CAERN
+	 * Mï¿½todo que gera o resumo de Metas da CAERN
 	 * 
 	 * [UC0623] - Gerar Resumo de Metas
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 20/07/2007
 	 * 
 	 */
@@ -21376,11 +21376,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Método que gera o resumo de Metas da CAERN
+	 * Mï¿½todo que gera o resumo de Metas da CAERN
 	 * 
 	 * [UC0623] - Gerar Resumo de Metas
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 20/07/2007
 	 * 
 	 */
@@ -21394,7 +21394,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém a o 117º caracter de uma String
+	 * Obtï¿½m a o 117ï¿½ caracter de uma String
 	 * 
 	 * @author Kassia Albuquerque
 	 * @date 20/07/2007
@@ -21413,7 +21413,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa uma coleção de quadra com uma query especifica
+	 * Pesquisa uma coleï¿½ï¿½o de quadra com uma query especifica
 	 * 
 	 * @param idsSetorComercial
 	 * @param idFaturamentoGrupo
@@ -21432,10 +21432,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0928] - Manter Situação Especial de Faturamento [FS0004] - Verificar
-	 * Existência da Quadra
+	 * [UC0928] - Manter Situaï¿½ï¿½o Especial de Faturamento [FS0004] - Verificar
+	 * Existï¿½ncia da Quadra
 	 * 
-	 * Pesquisa uma coleção de quadra com filtrando também pelo setor comercial.
+	 * Pesquisa uma coleï¿½ï¿½o de quadra com filtrando tambï¿½m pelo setor comercial.
 	 * 
 	 */
 	public Quadra obterQuadraSetorComercial(int idSetor, int numeroQuadra) {
@@ -21466,7 +21466,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0214] Efetuar Parcelamento de Débitos
+	 * [UC0214] Efetuar Parcelamento de Dï¿½bitos
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 27/07/2007
@@ -21501,7 +21501,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Incluir Devolução
+	 * Incluir Devoluï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 30/07/2007
@@ -21579,10 +21579,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém a representação númerica do código de barras de um pagamento de
-	 * acordo com os parâmetros informados
+	 * Obtï¿½m a representaï¿½ï¿½o nï¿½merica do cï¿½digo de barras de um pagamento de
+	 * acordo com os parï¿½metros informados
 	 * 
-	 * [UC0229] Obter Representação Numérica do Código de Barras
+	 * [UC0229] Obter Representaï¿½ï¿½o Numï¿½rica do Cï¿½digo de Barras
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 20/04/2006
@@ -21617,7 +21617,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Processamento Rápido
+	 * Processamento Rï¿½pido
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 17/08/2007
@@ -21636,9 +21636,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do Mês
+	 * [UC0155] Encerrar Faturamento do Mï¿½s
 	 * 
-	 * Tarnsfere para o histórico de contas
+	 * Tarnsfere para o histï¿½rico de contas
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 09/10/2006
@@ -21658,10 +21658,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0155] Encerrar Faturamento do Mês
+	 * [UC0155] Encerrar Faturamento do Mï¿½s
 	 * 
-	 * Para cada conta transferida para o histórico, atualiza o indicador de que
-	 * a conta está no histórico na tabela ContaGeral.
+	 * Para cada conta transferida para o histï¿½rico, atualiza o indicador de que
+	 * a conta estï¿½ no histï¿½rico na tabela ContaGeral.
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 11/10/2006
@@ -21728,7 +21728,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisar conjunto de contas p/ emissão da 2ªVia
+	 * Pesquisar conjunto de contas p/ emissï¿½o da 2ï¿½Via
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 21/08/2007
@@ -21748,8 +21748,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0630] - Solicitar Emissão do Extrato de Débitos Apresentar
-	 * Débitos/Créditos do Imóvel
+	 * [UC0630] - Solicitar Emissï¿½o do Extrato de Dï¿½bitos Apresentar
+	 * Dï¿½bitos/Crï¿½ditos do Imï¿½vel
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 21/08/2007
@@ -21768,10 +21768,10 @@ public class Fachada {
 	}
 
 	/**
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
-	 * necessários para a criação da inscrição do imóvel para exibição.
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o do imï¿½vel para exibiï¿½ï¿½o.
 	 * 
-	 * aki é montada a inscrição
+	 * aki ï¿½ montada a inscriï¿½ï¿½o
 	 */
 	public Object[] pesquisarLocalidadeSetorImovel(Integer idImovel) {
 		try {
@@ -21784,7 +21784,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 24/08/2007
 	 * 
 	 * @return String
@@ -21802,9 +21802,9 @@ public class Fachada {
 	/**
 	 * [UC00083] Gerar Dados para Leitura
 	 * 
-	 * [SB0005] Gerar Relação(ROL) em TXT - CAER
+	 * [SB0005] Gerar Relaï¿½ï¿½o(ROL) em TXT - CAER
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 24/08/2007
 	 * 
 	 * @param idRota
@@ -21824,9 +21824,9 @@ public class Fachada {
 	/**
 	 * [UC00083] Gerar Dados para Leitura
 	 * 
-	 * [SB0005] Gerar Relação(ROL) em TXT - CAER
+	 * [SB0005] Gerar Relaï¿½ï¿½o(ROL) em TXT - CAER
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 24/08/2007
 	 * 
 	 * @param idRota
@@ -21844,9 +21844,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar Relatório de Imóveis Outros Critérios
+	 * Gerar Relatï¿½rio de Imï¿½veis Outros Critï¿½rios
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 25/07/2006
 	 * 
 	 * @param idImovelCondominio
@@ -21942,7 +21942,7 @@ public class Fachada {
 	/**
 	 * Recupera o data prevista do faturamento atividade cronograma
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 28/08/2007
 	 * 
 	 * @return Integer
@@ -21958,7 +21958,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0210] - Obter Endereço Autor: Sávio Luiz
+	 * [UC0210] - Obter Endereï¿½o Autor: Sï¿½vio Luiz
 	 */
 
 	public String pesquisarEnderecoAbreviadoCAER(Integer idImovel) {
@@ -21977,7 +21977,7 @@ public class Fachada {
 	 * [UC00082] Registrar Leituras e Anormalidades
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 29/08/2007
 	 * 
 	 * @param idRota
@@ -22000,7 +22000,7 @@ public class Fachada {
 	/**
 	 * [UC0596] Inserir Qualidade de Agua
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * @date 06/08/2007
 	 * 
 	 * @return
@@ -22017,12 +22017,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0270] Apresentar análise do Movimento dos Arrecadadores
+	 * [UC0270] Apresentar anï¿½lise do Movimento dos Arrecadadores
 	 * 
 	 * O sistema seleciona os itens do movimento do arrecadador com os seguintes
-	 * dados: 1 - Código do Registro 2 - Identificação do imóvel/Cliente 3 -
-	 * ocorrência 4 - Indicador de Aceitação 5 - Descrição do Indicador de
-	 * Aceitação
+	 * dados: 1 - Cï¿½digo do Registro 2 - Identificaï¿½ï¿½o do imï¿½vel/Cliente 3 -
+	 * ocorrï¿½ncia 4 - Indicador de Aceitaï¿½ï¿½o 5 - Descriï¿½ï¿½o do Indicador de
+	 * Aceitaï¿½ï¿½o
 	 * 
 	 * [SF0001] Consultar os Itens do Movimento do Arrecadador
 	 * 
@@ -22046,7 +22046,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0630] Solicitar Emissão do Extrato de Debitos
+	 * [UC0630] Solicitar Emissï¿½o do Extrato de Debitos
 	 * 
 	 * @author Vivianne Sousa
 	 * @since 30/08/2007
@@ -22063,7 +22063,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0630] Solicitar Emissão do Extrato de Debitos
+	 * [UC0630] Solicitar Emissï¿½o do Extrato de Debitos
 	 * 
 	 * @author Vivianne Sousa
 	 * @since 30/08/2007
@@ -22089,12 +22089,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa as roteiros empresa de acordo com os parâmetros informado pelo
-	 * usuário
+	 * Pesquisa as roteiros empresa de acordo com os parï¿½metros informado pelo
+	 * usuï¿½rio
 	 * 
 	 * [UC0370] - Filtrar Roteiro Empresa
 	 * 
-	 * @author Thiago tenó0rio
+	 * @author Thiago tenï¿½0rio
 	 * @date 29/08/2007
 	 * 
 	 * @param idEquipe
@@ -22124,7 +22124,7 @@ public class Fachada {
 	 * 
 	 * [UC0370] - Filtrar Roteiro Empresa
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 29/08/2007
 	 * 
 	 * @param empresa
@@ -22144,13 +22144,13 @@ public class Fachada {
 
 	/**
 	 * [UC0185] Obter VAlor por Categoria Author: Rafael Santos Data: 29/12/2005
-	 * Rateia um daterminado valore entre as categorias do imóvel
+	 * Rateia um daterminado valore entre as categorias do imï¿½vel
 	 * 
 	 * @param colecaoCategorias
-	 *            Coleção de Categorias
+	 *            Coleï¿½ï¿½o de Categorias
 	 * @param valor
 	 *            Valor
-	 * @return Coleção com os valores por categorias
+	 * @return Coleï¿½ï¿½o com os valores por categorias
 	 */
 	@SuppressWarnings("rawtypes")
 	public Collection obterValorPorCategoria(Collection<Categoria> colecaoCategorias, BigDecimal valor) {
@@ -22158,7 +22158,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0214] - Efetuar Parcelamento de Débitos
+	 * [UC0214] - Efetuar Parcelamento de Dï¿½bitos
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 01/09/2007
@@ -22175,7 +22175,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0214] Efetuar Parcelamento Debito [SB0011] Verificar única Fatura
+	 * [UC0214] Efetuar Parcelamento Debito [SB0011] Verificar ï¿½nica Fatura
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 01/09/2007
@@ -22193,7 +22193,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0631] Processar Requisições do Dispositivo Móvel.
+	 * [UC0631] Processar Requisiï¿½ï¿½es do Dispositivo Mï¿½vel.
 	 * 
 	 * [SB0001] Baixar Arquivo Texto para o Leiturista.
 	 * 
@@ -22214,7 +22214,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0810] Processar Requisições do Dispositivo Móvel.
+	 * [UC0810] Processar Requisiï¿½ï¿½es do Dispositivo Mï¿½vel.
 	 * 
 	 * [SB0001] ? Baixar Arquivo Texto para o Leiturista
 	 * 
@@ -22234,9 +22234,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0631] Processar Requisições do Dispositivo Móvel.
+	 * [UC0631] Processar Requisiï¿½ï¿½es do Dispositivo Mï¿½vel.
 	 * 
-	 * Atualizar Situação do Arquivo Texto.
+	 * Atualizar Situaï¿½ï¿½o do Arquivo Texto.
 	 * 
 	 * 
 	 * @author Thiago Nascimento
@@ -22257,9 +22257,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0631] Processar Requisições do Dispositivo Móvel.
+	 * [UC0631] Processar Requisiï¿½ï¿½es do Dispositivo Mï¿½vel.
 	 * 
-	 * Atualizar Situação do Arquivo Texto.
+	 * Atualizar Situaï¿½ï¿½o do Arquivo Texto.
 	 * 
 	 * 
 	 * @author Thiago Nascimento
@@ -22281,7 +22281,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Obter rota do imóvel através do código da rota do sequencial e da
+	 * Obter rota do imï¿½vel atravï¿½s do cï¿½digo da rota do sequencial e da
 	 * localidade .
 	 * 
 	 * @author Breno Santos
@@ -22301,12 +22301,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0631] Processar Requisições do Dispositivo Móvel.
+	 * [UC0631] Processar Requisiï¿½ï¿½es do Dispositivo Mï¿½vel.
 	 * 
-	 * Atualizar Situação do Arquivo Texto.
+	 * Atualizar Situaï¿½ï¿½o do Arquivo Texto.
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 05/04/2010
 	 * 
 	 * @param imei
@@ -22324,7 +22324,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0631] Processar Requisições do Dispositivo Móvel.
+	 * [UC0631] Processar Requisiï¿½ï¿½es do Dispositivo Mï¿½vel.
 	 * 
 	 * [SB0002] Atualizar o movimento roteiro empresa.
 	 * 
@@ -22344,8 +22344,8 @@ public class Fachada {
 	}
 
 	/**
-	 * obtem o consumo médio faturado nos ultimos 6 meses [UC0214] Efetuar
-	 * Parcelamento de Débitos
+	 * obtem o consumo mï¿½dio faturado nos ultimos 6 meses [UC0214] Efetuar
+	 * Parcelamento de Dï¿½bitos
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 05/09/2007
@@ -22362,9 +22362,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém a principal categoria do imóvel
+	 * Obtï¿½m a principal categoria do imï¿½vel
 	 * 
-	 * [UC0306] Obter Principal Categoria do Imóvel
+	 * [UC0306] Obter Principal Categoria do Imï¿½vel
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 18/04/2006
@@ -22382,15 +22382,15 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0475] Obter Valor do Débito
+	 * [UC0475] Obter Valor do Dï¿½bito
 	 * 
-	 * Verificar existência de hidrômetro na Ligação de Água.
+	 * Verificar existï¿½ncia de hidrï¿½metro na Ligaï¿½ï¿½o de ï¿½gua.
 	 * 
 	 * @author Leonardo Regis
 	 * @date 09/09/2006
 	 * 
 	 * @param imovelId
-	 * @return existencia de hidrometro ou não
+	 * @return existencia de hidrometro ou nï¿½o
 	 * @throws ErroRepositorioException
 	 */
 	public boolean verificarExistenciaHidrometroEmLigacaoAgua(Integer imovelId) {
@@ -22421,15 +22421,15 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0608] Efetuar Ligação de Esgoto sem RA.
+	 * [UC0608] Efetuar Ligaï¿½ï¿½o de Esgoto sem RA.
 	 * 
-	 * [FS0001] Verificar existência da matrícula do Imovel.
+	 * [FS0001] Verificar existï¿½ncia da matrï¿½cula do Imovel.
 	 * 
-	 * [FS0007] Verificar situação do imóvel.
+	 * [FS0007] Verificar situaï¿½ï¿½o do imï¿½vel.
 	 * 
-	 * [FS0008] Verificar Situação Rede de Esgoto da Quadra.
+	 * [FS0008] Verificar Situaï¿½ï¿½o Rede de Esgoto da Quadra.
 	 * 
-	 * @author Sávio Luiz.
+	 * @author Sï¿½vio Luiz.
 	 * @date 10/09/2007
 	 * 
 	 * 
@@ -22449,7 +22449,7 @@ public class Fachada {
 	 * 
 	 * [UC0621] Gerar Curva ABC de Debitos
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 07/08/2007
 	 * 
 	 */
@@ -22473,9 +22473,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os Valores das Faixas de Débitos
+	 * Pesquisa os Valores das Faixas de Dï¿½bitos
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @created 14/09/2007
 	 * 
 	 * @exception ErroRepositorioException
@@ -22511,7 +22511,7 @@ public class Fachada {
 	 * Pesquisar quadras de um roteiro empresa
 	 * 
 	 * @param idRoteiroEmpresa
-	 * @return coleção de quadras
+	 * @return coleï¿½ï¿½o de quadras
 	 * @throws ControladorException
 	 */
 	@SuppressWarnings("rawtypes")
@@ -22566,7 +22566,7 @@ public class Fachada {
 	 * 
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 18/09/2007
 	 * 
 	 * @param
@@ -22586,7 +22586,7 @@ public class Fachada {
 	 * 
 	 * 
 	 * 
-	 * @author Thiago Tenório
+	 * @author Thiago Tenï¿½rio
 	 * @date 01/11/2006
 	 * 
 	 * @param
@@ -22601,9 +22601,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0214] Inserir Ação de Cobrança
+	 * [UC0214] Inserir Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @created 14/09/2007
 	 * 
 	 * @param idImovel
@@ -22637,7 +22637,7 @@ public class Fachada {
 	}
 
 	/**
-	 * relatório de regitro atendimento
+	 * relatï¿½rio de regitro atendimento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 07/06/2007
@@ -22655,7 +22655,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Inserir uma coleção de pagamentos informados manualmente
+	 * Inserir uma coleï¿½ï¿½o de pagamentos informados manualmente
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 26/09/2007
@@ -22675,15 +22675,15 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0475] Obter Valor do Débito
+	 * [UC0475] Obter Valor do Dï¿½bito
 	 * 
-	 * Obter Capacidade de Hidrômetro pela Ligação de Água.
+	 * Obter Capacidade de Hidrï¿½metro pela Ligaï¿½ï¿½o de ï¿½gua.
 	 * 
 	 * @author Leonardo Regis
 	 * @date 09/09/2006
 	 * 
 	 * @param imovelId
-	 * @return existencia de hidrometro ou não
+	 * @return existencia de hidrometro ou nï¿½o
 	 * @throws ErroRepositorioException
 	 */
 	public HidrometroCapacidade obterHidrometroCapacidadeEmLigacaoAgua(Integer imovelId) {
@@ -22710,7 +22710,7 @@ public class Fachada {
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 06/10/2007
 	 * 
 	 * @param idsFuncionalidadesIniciadas
@@ -22727,7 +22727,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Inserir débito a cobrar - inserir debito a cobrar independente da
+	 * Inserir dï¿½bito a cobrar - inserir debito a cobrar independente da
 	 * situacao da ligacao de agua e esgoto do imovel
 	 * 
 	 * @author Raphael Rossiter
@@ -22746,7 +22746,7 @@ public class Fachada {
 	/**
 	 * Reiniciar um batch
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 06/11/2007
 	 * 
 	 * @param usuario
@@ -22761,14 +22761,14 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Permite Pesquisar as categorias do Imóvel [UC0394] Gerar Débitos a Cobrar
-	 * de Doações
+	 * Permite Pesquisar as categorias do Imï¿½vel [UC0394] Gerar Dï¿½bitos a Cobrar
+	 * de Doaï¿½ï¿½es
 	 * 
-	 * @author César Araújo
+	 * @author Cï¿½sar Araï¿½jo
 	 * @date 10/09/2006
 	 * @param Imovel
 	 *            imovel - objeto imovel
-	 * @return Collection<Categoria> - Coleção de categorias
+	 * @return Collection<Categoria> - Coleï¿½ï¿½o de categorias
 	 * @throws ErroRepositorioException
 	 */
 
@@ -22797,9 +22797,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0644] Filtrar Ação de Cobrança
+	 * [UC0644] Filtrar Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @created 10/10/2007
 	 * 
 	 * @param idImovel
@@ -22897,7 +22897,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Inserir Pagamentos por código de barras
+	 * Inserir Pagamentos por cï¿½digo de barras
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 30/10/2007
@@ -22917,9 +22917,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC 0653] Pesquisar Comando Negativação
+	 * [UC 0653] Pesquisar Comando Negativaï¿½ï¿½o
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * @date 29/10/2007
 	 * 
 	 * @return Collection
@@ -22937,10 +22937,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Método consuta os Negativadores que tenham movimento de Exclusão do spc
+	 * Mï¿½todo consuta os Negativadores que tenham movimento de Exclusï¿½o do spc
 	 * ou serasa
 	 * 
-	 * [UC0673] - Gerar Movimento da Exclusão de Negativação
+	 * [UC0673] - Gerar Movimento da Exclusï¿½o de Negativaï¿½ï¿½o
 	 * 
 	 * @author Thiago Toscano
 	 * @date 21/12/2007
@@ -22956,11 +22956,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Método consuta os Negativadores que tenham movimento de Exclusão do spc
+	 * Mï¿½todo consuta os Negativadores que tenham movimento de Exclusï¿½o do spc
 	 * ou serasa
 	 * 
-	 * [UC0673] - Gerar Movimento da Exclusão de Negativação [SB0001] - Gerar
-	 * Movimento da Exclusão de Negativação
+	 * [UC0673] - Gerar Movimento da Exclusï¿½o de Negativaï¿½ï¿½o [SB0001] - Gerar
+	 * Movimento da Exclusï¿½o de Negativaï¿½ï¿½o
 	 * 
 	 * @author Thiago Toscano
 	 * @date 26/12/2007
@@ -22977,11 +22977,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Método consuta os Negativadores que tenham movimento de Exclusão do spc
+	 * Mï¿½todo consuta os Negativadores que tenham movimento de Exclusï¿½o do spc
 	 * ou serasa
 	 * 
-	 * [UC0673] - Gerar Movimento da Exclusão de Negativação [SB0002] - Gerar
-	 * TxT de Movimento de Exclusão de Negativacao
+	 * [UC0673] - Gerar Movimento da Exclusï¿½o de Negativaï¿½ï¿½o [SB0002] - Gerar
+	 * TxT de Movimento de Exclusï¿½o de Negativacao
 	 * 
 	 * @author Thiago Toscano
 	 * @param idMovimento
@@ -23001,9 +23001,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC 0653] Pesquisar Comando Negativação
+	 * [UC 0653] Pesquisar Comando Negativaï¿½ï¿½o
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * @date 29/10/2007
 	 * 
 	 * @return Collection
@@ -23021,9 +23021,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC 0653] Pesquisar Comando Negativação
+	 * [UC 0653] Pesquisar Comando Negativaï¿½ï¿½o
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * @date 31/10/2007
 	 * 
 	 * @return Collection
@@ -23041,9 +23041,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC 0653] Pesquisar Comando Negativação
+	 * [UC 0653] Pesquisar Comando Negativaï¿½ï¿½o
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * @date 31/10/2007
 	 * 
 	 * @return Collection
@@ -23061,9 +23061,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0645] Manter Ação de Cobrança
+	 * [UC0645] Manter Aï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @created 06/11/2007
 	 * 
 	 * @param idImovel
@@ -23120,9 +23120,9 @@ public class Fachada {
 	}
 
 	/**
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
-	 * necessários para a criação da inscrição ,de rota e endereço para
-	 * exibição.
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o ,de rota e endereï¿½o para
+	 * exibiï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 06/11/2007
@@ -23138,9 +23138,9 @@ public class Fachada {
 	}
 
 	/**
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
-	 * necessários para a criação da inscrição ,de rota e endereço para
-	 * exibição.
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o ,de rota e endereï¿½o para
+	 * exibiï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 06/11/2007
@@ -23156,8 +23156,8 @@ public class Fachada {
 	}
 
 	/**
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
-	 * necessários para a criação da inscrição e de rota para exibição.
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o e de rota para exibiï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 06/11/2007
@@ -23174,7 +23174,7 @@ public class Fachada {
 	/**
 	 * [UC0711] Filtro para Emissao de Ordens Seletivas
 	 * 
-	 * @author Ivan Sérgio, Raphael Rossiter
+	 * @author Ivan Sï¿½rgio, Raphael Rossiter
 	 * @date 08/11/2007, 17/04/2009
 	 * 
 	 * @param helper
@@ -23192,9 +23192,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC 0653] Pesquisar Comando Negativação
+	 * [UC 0653] Pesquisar Comando Negativaï¿½ï¿½o
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * @date 09/11/2007
 	 * 
 	 * @return Collection
@@ -23210,8 +23210,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica permissão especial para informar nova data para vencimento
-	 * alternativo antes do periodo válido
+	 * Verifica permissï¿½o especial para informar nova data para vencimento
+	 * alternativo antes do periodo vï¿½lido
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 19/03/2007
@@ -23231,7 +23231,7 @@ public class Fachada {
 	/**
 	 * Pesquisa os valores necessarios na tabela un_resumo_faturamento
 	 * 
-	 * [UC0722] - Gerar Relatorio para Orçamento e SINP
+	 * [UC0722] - Gerar Relatorio para Orï¿½amento e SINP
 	 * 
 	 * @author Rafael Pinto
 	 * @date 20/11/2006
@@ -23256,7 +23256,7 @@ public class Fachada {
 	 * 
 	 * [UC 0275] Gerar resumo ligacoes economias
 	 * 
-	 * @author Bruno Barros, Ivan Sérgio
+	 * @author Bruno Barros, Ivan Sï¿½rgio
 	 * @date 27/04/2007, 10/11/2007
 	 * 
 	 * @return Cliente
@@ -23272,11 +23272,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Pesquisar o endereço abreviado a partir do id do imóvel
+	 * Pesquisar o endereï¿½o abreviado a partir do id do imï¿½vel
 	 * 
-	 * [UC0483] - Obter Endereço Abreviado
+	 * [UC0483] - Obter Endereï¿½o Abreviado
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 18/10/2006
 	 * 
 	 * @param idImovel
@@ -23294,11 +23294,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0430] - Gerar Ordem de Serviço
+	 * [UC0430] - Gerar Ordem de Serviï¿½o
 	 * 
-	 * Método que é chamado pelo [UC0713] Emitir Ordem de Servico Seletiva
+	 * Mï¿½todo que ï¿½ chamado pelo [UC0713] Emitir Ordem de Servico Seletiva
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 27/11/2007
 	 */
 	public Integer gerarOrdemServicoSeletiva(OrdemServico ordemServico, UnidadeOrganizacional unidadeOrganizacional, Imovel imovel, Usuario usuario) {
@@ -23328,7 +23328,7 @@ public class Fachada {
 		}
 	}
 
-	// Flávio Cordeiro
+	// Flï¿½vio Cordeiro
 	// caso de uso [UC0543] Associar Conjunto de Rotas a Criterio de Cobranca
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasIntervaloSetor(String codigoSetorComercialInicial, String codigoSetorComercialFinal, String idLocalidade, String idCobrancaAcao) {
@@ -23339,7 +23339,7 @@ public class Fachada {
 		}
 	}
 
-	// Flávio Cordeiro
+	// Flï¿½vio Cordeiro
 	// caso de uso [UC0543] Associar Conjunto de Rotas a Criterio de Cobranca
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotas(String codigoSetorComercial, String rotaInicial, String rotaFinal, String idLocalidade, String idCobrancaAcao) {
@@ -23369,7 +23369,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0725] Gerar Relatório de Imóveis por Situação da Ligação de Agua
+	 * [UC0725] Gerar Relatï¿½rio de Imï¿½veis por Situaï¿½ï¿½o da Ligaï¿½ï¿½o de Agua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 03/12/2007
@@ -23390,7 +23390,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0726] Gerar Relatório de Imóveis com Faturas Em Atraso
+	 * [UC0726] Gerar Relatï¿½rio de Imï¿½veis com Faturas Em Atraso
 	 * 
 	 * @author Bruno Barros
 	 * @date 06/12/2007
@@ -23411,7 +23411,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0726] - Gerar Relatório de Imóveis com Faturas em Atraso
+	 * [UC0726] - Gerar Relatï¿½rio de Imï¿½veis com Faturas em Atraso
 	 * 
 	 * @since 31/08/2009
 	 * @author Marlon Patrick
@@ -23427,7 +23427,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0729] Gerar Relatório de Imóveis por Tipo de Consumo
+	 * [UC0729] Gerar Relatï¿½rio de Imï¿½veis por Tipo de Consumo
 	 * 
 	 * @author Bruno Barros
 	 * @date 10/01/2008
@@ -23448,7 +23448,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0729] Gerar Relatório de Imóveis por Tipo de Consumo
+	 * [UC0729] Gerar Relatï¿½rio de Imï¿½veis por Tipo de Consumo
 	 * 
 	 * @author Bruno Barros
 	 * @date 10/01/2008
@@ -23469,7 +23469,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0725] Gerar Relatório de Imóveis por Situação da Ligação de Agua
+	 * [UC0725] Gerar Relatï¿½rio de Imï¿½veis por Situaï¿½ï¿½o da Ligaï¿½ï¿½o de Agua
 	 * 
 	 * Pesquisa o Total Registro
 	 * 
@@ -23493,7 +23493,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0726] Gerar Relatório de Imóveis com Faturas em Atraso
+	 * [UC0726] Gerar Relatï¿½rio de Imï¿½veis com Faturas em Atraso
 	 * 
 	 * Pesquisa o Total Registro
 	 * 
@@ -23516,7 +23516,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0726] Gerar Relatório de Imóveis com Faturas em Atraso
+	 * [UC0726] Gerar Relatï¿½rio de Imï¿½veis com Faturas em Atraso
 	 * 
 	 * @since 31/08/2009
 	 * @author Marlon Patrick
@@ -23541,11 +23541,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0067] Inserir Comando Negaivação
+	 * [UC0067] Inserir Comando Negaivaï¿½ï¿½o
 	 * 
 	 * @autor: Ana Maria
 	 * 
-	 *         [FS0019] Verificar existência de Parcelamento
+	 *         [FS0019] Verificar existï¿½ncia de Parcelamento
 	 * 
 	 * @param idImovel
 	 * @return Cliente
@@ -23570,8 +23570,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0651] Inserir Comando Negativação [FS0015] Verificar existência de
-	 * negativação para o imóvel no negativador
+	 * [UC0651] Inserir Comando Negativaï¿½ï¿½o [FS0015] Verificar existï¿½ncia de
+	 * negativaï¿½ï¿½o para o imï¿½vel no negativador
 	 * 
 	 * @author Ana Maria
 	 * @date 04/12/2007
@@ -23592,7 +23592,7 @@ public class Fachada {
 	/**
 	 * Permite Gerar OS Seletivas de Hidrometro
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 06/12/2007
 	 * 
 	 * @param usuario
@@ -23626,7 +23626,7 @@ public class Fachada {
 	 * 
 	 * [UC0732] - Gerar Relatorio Acompanhamento de Ordens de Servico Hidrometro
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 27/11/2007, 27/03/2008
 	 * @alteracao: Adicionado Motivo Encerramento; Setor Comercial;
 	 * 
@@ -23694,8 +23694,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Método que inicia o caso de uso de Gerar Movimento de Inclusao de
-	 * Negativacao [UC0671] Gerar Movimento de Inclusao de Nwegativação [Fluxo
+	 * Mï¿½todo que inicia o caso de uso de Gerar Movimento de Inclusao de
+	 * Negativacao [UC0671] Gerar Movimento de Inclusao de Nwegativaï¿½ï¿½o [Fluxo
 	 * Principal]
 	 * 
 	 * @author Thiago Toscano
@@ -23711,8 +23711,8 @@ public class Fachada {
 	 *            id do cliente da negativacao [2] String - cpf do cliente da
 	 *            negativacao [3] String - cnpj do cliente da negativaca [4]
 	 *            Collection - lista da contas e guias de pagamento do imovel
-	 *            [5] Intetger - quantidade de itens em débito do imovel [6]
-	 *            BigDecimal - valor total dos débitos do imovel
+	 *            [5] Intetger - quantidade de itens em dï¿½bito do imovel [6]
+	 *            BigDecimal - valor total dos dï¿½bitos do imovel
 	 * @param dataPrevista
 	 * 
 	 * @throws ControladorException
@@ -23774,7 +23774,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Relatório Analise de Consumo Flávio Leonardo 26/12/2007
+	 * Relatï¿½rio Analise de Consumo Flï¿½vio Leonardo 26/12/2007
 	 * 
 	 * @param idImovel
 	 * @param anomes
@@ -23791,7 +23791,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0731] Gerar Relatório de Imóveis com os Ultimos Consumos de Agua
+	 * [UC0731] Gerar Relatï¿½rio de Imï¿½veis com os Ultimos Consumos de Agua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 18/12/2007
@@ -23812,7 +23812,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0731] Gerar Relatório de Imóveis com os Ultimos Consumos de Agua
+	 * [UC0731] Gerar Relatï¿½rio de Imï¿½veis com os Ultimos Consumos de Agua
 	 * 
 	 * @author Rafael Pinto
 	 * @date 19/12/2007
@@ -23832,7 +23832,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0718] Gerar Relatório de Evolucao do Contas a Receber Contabil
+	 * [UC0718] Gerar Relatï¿½rio de Evolucao do Contas a Receber Contabil
 	 * 
 	 * @author Francisco Junior
 	 * @date 02/01/08
@@ -23857,7 +23857,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0739] - Informar Situação de Expurgo do Pagamento Autor: Sávio Luiz
+	 * [UC0739] - Informar Situaï¿½ï¿½o de Expurgo do Pagamento Autor: Sï¿½vio Luiz
 	 * Data: 02/01/2008
 	 */
 	public Object[] gerarColecaoDadosPagamentoPelaData(String dataPagamento, Integer idCliente, Integer anoMesArrecadacao) {
@@ -23870,7 +23870,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para consulta de comando de negativação (Helper) usado no
+	 * Mï¿½todo usado para consulta de comando de negativaï¿½ï¿½o (Helper) usado no
 	 * caso de uso [UC0655]
 	 * 
 	 * @author Thiago Vieira
@@ -23891,7 +23891,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0739] - Informar Situação de Expurgo do Pagamento Autor: Sávio Luiz
+	 * [UC0739] - Informar Situaï¿½ï¿½o de Expurgo do Pagamento Autor: Sï¿½vio Luiz
 	 * Data: 02/01/2008
 	 */
 	public void atualizarSituacaoExpurgoPagamento(Collection colecaoPagamento) {
@@ -23904,7 +23904,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC00728] Gerar Relatório de Imóveis Ativos e Não Medidos
+	 * [UC00728] Gerar Relatï¿½rio de Imï¿½veis Ativos e Nï¿½o Medidos
 	 * 
 	 * @author Rafael Pinto
 	 * @date 03/01/2008
@@ -23924,7 +23924,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC00728] Gerar Relatório de Imóveis Ativos e Não Medidos
+	 * [UC00728] Gerar Relatï¿½rio de Imï¿½veis Ativos e Nï¿½o Medidos
 	 * 
 	 * @author Rafael Pinto
 	 * @date 03/01/2008
@@ -23943,10 +23943,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso permite a exportação de ordem de serviço das
+	 * Este caso de uso permite a exportaï¿½ï¿½o de ordem de serviï¿½o das
 	 * prestadoras.
 	 * 
-	 * [UC0720] Exportar Ordem de Serviço Prestadoras
+	 * [UC0720] Exportar Ordem de Serviï¿½o Prestadoras
 	 * 
 	 * @author Pedro Alexandre
 	 * @date 28/12/2007
@@ -23965,7 +23965,7 @@ public class Fachada {
 	}
 
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -23986,7 +23986,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém Elo Pólo
+	 * Obtï¿½m Elo Pï¿½lo
 	 * 
 	 * @author Ana Maria
 	 * @date 10/12/2007
@@ -24003,8 +24003,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0651] Inserir Comando Negativação [SB0003] Determinar Data Prevista
-	 * para Execução do Comando
+	 * [UC0651] Inserir Comando Negativaï¿½ï¿½o [SB0003] Determinar Data Prevista
+	 * para Execuï¿½ï¿½o do Comando
 	 * 
 	 * @author Ana Maria
 	 * @date 11/12/2007
@@ -24022,9 +24022,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0365] Inserir Comando Negativação
+	 * [UC0365] Inserir Comando Negativaï¿½ï¿½o
 	 * 
-	 * [SB0004] Inclui Comando de Negativação por critério
+	 * [SB0004] Inclui Comando de Negativaï¿½ï¿½o por critï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 13/12/2007
@@ -24040,7 +24040,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC00730] Gerar Relatório de Imóveis com Faturas Recentes em Dia e
+	 * [UC00730] Gerar Relatï¿½rio de Imï¿½veis com Faturas Recentes em Dia e
 	 * Faturas Antigas em Atraso
 	 * 
 	 * @author Rafael Pinto
@@ -24064,7 +24064,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC00730] Gerar Relatório de Imóveis com Faturas Recentes em Dia e
+	 * [UC00730] Gerar Relatï¿½rio de Imï¿½veis com Faturas Recentes em Dia e
 	 * Faturas Antigas em Atraso
 	 * 
 	 * @author Rafael Pinto
@@ -24084,9 +24084,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Relatório Manter Hidrometro
+	 * Relatï¿½rio Manter Hidrometro
 	 * 
-	 * Flávio Leonardo
+	 * Flï¿½vio Leonardo
 	 * 
 	 * pesquisa o id do imovel do hidrometro instalado
 	 * 
@@ -24102,9 +24102,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadação e Expurgo
+	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadaï¿½ï¿½o e Expurgo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @data 10/01/2008
 	 * 
 	 * @param idConta
@@ -24122,7 +24122,7 @@ public class Fachada {
 	/**
 	 * Verifica se existe dados nas tabelas de resumo
 	 * 
-	 * [UC0722] - Gerar Relatorio para Orçamento e SINP
+	 * [UC0722] - Gerar Relatorio para Orï¿½amento e SINP
 	 * 
 	 * @author Rafael Pinto
 	 * @date 11/01/2007
@@ -24141,9 +24141,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadação e Expurgo
+	 * [UC0744] Gerar Comparativo do Faturamento, Arrecadaï¿½ï¿½o e Expurgo
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @data 14/01/2008
 	 * 
 	 * @param idConta
@@ -24160,7 +24160,7 @@ public class Fachada {
 	/**
 	 * [UC0734] Encerrar Ordem Servico Vencida
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 14/01/2008
 	 * 
 	 * @param idServicoTipo
@@ -24170,7 +24170,7 @@ public class Fachada {
 	public Integer encerrarOrdemServicoVencida(Integer idServicoTipo, Integer quantidadeDias, Usuario usuarioLogado) {
 		try {
 			/**
-			 * Correção de erro na execução da funcionalidade
+			 * Correï¿½ï¿½o de erro na execuï¿½ï¿½o da funcionalidade
 			 * 
 			 * @author Wellington Rocha
 			 * @date 19/11/2012
@@ -24186,7 +24186,7 @@ public class Fachada {
 	 * 
 	 * [UC0735] Comandar Encerramento de Registros de Atendimento
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @param usuarioLogado
 	 * @date 28/01/2008
 	 * 
@@ -24231,9 +24231,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0317] Manter Comando de Negativação por Critério
+	 * [UC0317] Manter Comando de Negativaï¿½ï¿½o por Critï¿½rio
 	 * 
-	 * [SB0001] Excluir Comando de Negativação por Critério
+	 * [SB0001] Excluir Comando de Negativaï¿½ï¿½o por Critï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @param ids
@@ -24252,9 +24252,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0652] Manter Comando de Negativação por Critério
+	 * [UC0652] Manter Comando de Negativaï¿½ï¿½o por Critï¿½rio
 	 * 
-	 * [SB0002] Atualizar Comando de Negativação por critério
+	 * [SB0002] Atualizar Comando de Negativaï¿½ï¿½o por critï¿½rio
 	 * 
 	 * @author Ana Maria
 	 * @date 24/01/2008
@@ -24270,8 +24270,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para consulta de comandos de negativação por tipo de comando
-	 * (nesse caso critério)usado no caso de uso [UC0691]
+	 * Mï¿½todo usado para consulta de comandos de negativaï¿½ï¿½o por tipo de comando
+	 * (nesse caso critï¿½rio)usado no caso de uso [UC0691]
 	 * 
 	 * @author Thiago Vieira
 	 * @date 16/01/2008
@@ -24291,7 +24291,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para consulta de comandos de negativação por tipo de comando
+	 * Mï¿½todo usado para consulta de comandos de negativaï¿½ï¿½o por tipo de comando
 	 * (nesse caso matricula)usado no caso de uso [UC0691]
 	 * 
 	 * @author Thiago Vieira
@@ -24355,7 +24355,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Busca a Empresa responsável pelo Imóvel de matrícula fornecida.
+	 * Busca a Empresa responsï¿½vel pelo Imï¿½vel de matrï¿½cula fornecida.
 	 * 
 	 * @param imovel
 	 * @return
@@ -24373,7 +24373,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Método que atualiza as leituras e Anormalidades do Celular caso não tenha
+	 * Mï¿½todo que atualiza as leituras e Anormalidades do Celular caso nï¿½o tenha
 	 * sido iniciado pelo Sistema.
 	 * 
 	 * [UC0712] Atualizar Leituras e Anormalidades do Celular
@@ -24394,13 +24394,13 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0543] Associar Conjunto de Rotas a Critério de Cobrança
+	 * [UC0543] Associar Conjunto de Rotas a Critï¿½rio de Cobranï¿½a
 	 * 
-	 * [FS0003] - Verificar existência da localidade [FS0004] - Verificar
-	 * existência do setor
+	 * [FS0003] - Verificar existï¿½ncia da localidade [FS0004] - Verificar
+	 * existï¿½ncia do setor
 	 * 
-	 * Verifica se a localidade inicial é maior que a localidade final Verifica
-	 * se o setor inicial é maior que o setor final
+	 * Verifica se a localidade inicial ï¿½ maior que a localidade final Verifica
+	 * se o setor inicial ï¿½ maior que o setor final
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 24/01/2008
@@ -24420,7 +24420,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0543] Associar Conjunto de Rotas a Critério de Cobrança
+	 * [UC0543] Associar Conjunto de Rotas a Critï¿½rio de Cobranï¿½a
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 24/01/2008
@@ -24440,7 +24440,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0543] Associar Conjunto de Rotas a Critério de Cobrança
+	 * [UC0543] Associar Conjunto de Rotas a Critï¿½rio de Cobranï¿½a
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 24/01/2008
@@ -24461,7 +24461,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0543] Associar Conjunto de Rotas a Critério de Cobrança
+	 * [UC0543] Associar Conjunto de Rotas a Critï¿½rio de Cobranï¿½a
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 24/01/2008
@@ -24485,7 +24485,7 @@ public class Fachada {
 	 * [UCXXX] - Pesquisa uma Guia de Devolucao
 	 * 
 	 * 
-	 * Faz a pesquisa de guia de devolução pelo id
+	 * Faz a pesquisa de guia de devoluï¿½ï¿½o pelo id
 	 * 
 	 * @author Roberto Barbalho
 	 * @date 25/01/2008
@@ -24503,7 +24503,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0726] Gerar Relatório de Imóveis com Faturas em Atraso
+	 * [UC0726] Gerar Relatï¿½rio de Imï¿½veis com Faturas em Atraso
 	 * 
 	 * @author Bruno Barros
 	 * @date 06/12/2007
@@ -24522,9 +24522,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os dados necessários para a geração do relatório
+	 * Pesquisa os dados necessï¿½rios para a geraï¿½ï¿½o do relatï¿½rio
 	 * 
-	 * [UC0864] Gerar Certidão Negativa por Cliente
+	 * [UC0864] Gerar Certidï¿½o Negativa por Cliente
 	 * 
 	 * @return
 	 * 
@@ -24539,7 +24539,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para consulta de comandos de negativação por tipo de comando
+	 * Mï¿½todo usado para consulta de comandos de negativaï¿½ï¿½o por tipo de comando
 	 * (nesse caso matricula)usado no caso de uso [UC0691]
 	 * 
 	 * @author Thiago Vieira
@@ -24559,7 +24559,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0543] Associar Conjunto de Rotas a Critério de Cobrança
+	 * [UC0543] Associar Conjunto de Rotas a Critï¿½rio de Cobranï¿½a
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 24/01/2008
@@ -24582,7 +24582,7 @@ public class Fachada {
 	/**
 	 * Permite Cancelar Conta Sem RA
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 28/01/2008
 	 * 
 	 * @param usuario
@@ -24596,7 +24596,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para consulta de comandos de negativação por tipo de comando
+	 * Mï¿½todo usado para consulta de comandos de negativaï¿½ï¿½o por tipo de comando
 	 * (nesse caso criterio)usado no caso de uso [UC0691]
 	 * 
 	 * @author Thiago Vieira
@@ -24617,7 +24617,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para consulta de comando de negativação (Helper) usado no
+	 * Mï¿½todo usado para consulta de comando de negativaï¿½ï¿½o (Helper) usado no
 	 * caso de uso [UC0655]
 	 * 
 	 * @author Yara Taciane
@@ -24638,8 +24638,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para consulta de comandos de negativação por tipo de comando
-	 * (nesse caso matrícula)usado no caso de uso [UC0691] (sem paginação)
+	 * Mï¿½todo usado para consulta de comandos de negativaï¿½ï¿½o por tipo de comando
+	 * (nesse caso matrï¿½cula)usado no caso de uso [UC0691] (sem paginaï¿½ï¿½o)
 	 * 
 	 * @author Yara Taciane ,Vivianne Sousa
 	 * @date 21/01/2008,14/12/2010
@@ -24659,7 +24659,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para contar a quantidade de ocorrências de
+	 * Mï¿½todo usado para contar a quantidade de ocorrï¿½ncias de
 	 * negativadorMovimento Registro aceitos usado no caso de uso [UC0681]
 	 * 
 	 * @author Yara Taciane
@@ -24680,7 +24680,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para apresentar os registros de negativadorMovimento
+	 * Mï¿½todo usado para apresentar os registros de negativadorMovimento
 	 * Registro aceitos usado no caso de uso [UC0681]
 	 * 
 	 * @author Yara Taciane
@@ -24701,15 +24701,15 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0747] Efetuar Religação de Água com Instalação de hidrômetro.
+	 * [UC0747] Efetuar Religaï¿½ï¿½o de ï¿½gua com Instalaï¿½ï¿½o de hidrï¿½metro.
 	 * 
-	 * Permite validar o efetuar religação de Água com Instalação de hidrômetro
-	 * Exibir ou pelo menu ou pela funcionalidade encerrar a Execução da ordem
-	 * de serviço.
+	 * Permite validar o efetuar religaï¿½ï¿½o de ï¿½gua com Instalaï¿½ï¿½o de hidrï¿½metro
+	 * Exibir ou pelo menu ou pela funcionalidade encerrar a Execuï¿½ï¿½o da ordem
+	 * de serviï¿½o.
 	 * 
-	 * [FS0002] Verificar Situação do Imovel. [FS0003] Validar Situação de Água
+	 * [FS0002] Verificar Situaï¿½ï¿½o do Imovel. [FS0003] Validar Situaï¿½ï¿½o de ï¿½gua
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 29/01/2008
 	 * 
 	 * 
@@ -24728,12 +24728,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0498] Efetuar Religação de Água com Instalação de hidrômetro.
+	 * [UC0498] Efetuar Religaï¿½ï¿½o de ï¿½gua com Instalaï¿½ï¿½o de hidrï¿½metro.
 	 * 
-	 * Permite efetuar religação de Água com Instalação de Hidrômetro ou pelo
-	 * menu ou pela funcionalidade encerrar a Execução da ordem de serviço.
+	 * Permite efetuar religaï¿½ï¿½o de ï¿½gua com Instalaï¿½ï¿½o de Hidrï¿½metro ou pelo
+	 * menu ou pela funcionalidade encerrar a Execuï¿½ï¿½o da ordem de serviï¿½o.
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 29/01/2008
 	 * 
 	 * @param integracaoComercialHelper
@@ -24750,7 +24750,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para consulta de comando de negativação (Helper) usado no
+	 * Mï¿½todo usado para consulta de comando de negativaï¿½ï¿½o (Helper) usado no
 	 * caso de uso [UC0655]
 	 * 
 	 * @author Yara Taciane
@@ -24771,7 +24771,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para apresentar os registros de negativadorMovimento
+	 * Mï¿½todo usado para apresentar os registros de negativadorMovimento
 	 * Registro aceitos usado no caso de uso [UC0681]
 	 * 
 	 * @author Yara Taciane
@@ -24794,7 +24794,7 @@ public class Fachada {
 	/**
 	 * [UC0629] Consultar Arquivo Texto Leitura.
 	 * 
-	 * Atualizar Situação do Arquivo Texto.
+	 * Atualizar Situaï¿½ï¿½o do Arquivo Texto.
 	 * 
 	 * 
 	 * @author Thiago Nascimento
@@ -24815,7 +24815,7 @@ public class Fachada {
 	/**
 	 * [UC0629] Consultar Arquivo Texto Leitura.
 	 * 
-	 * Atualizar Situação do Arquivo Texto.
+	 * Atualizar Situaï¿½ï¿½o do Arquivo Texto.
 	 * 
 	 * 
 	 * @author Thiago Nascimento
@@ -24836,11 +24836,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Retorna uma coleção com os dados das medicoes para apresentação sem
+	 * Retorna uma coleï¿½ï¿½o com os dados das medicoes para apresentaï¿½ï¿½o sem
 	 * informar o ano/mes para o caso em que o Imovel nao possui Hidrometro (Sem
 	 * Medicao).
 	 * 
-	 * [UC0153] Apresentar dados para Analise da medição e Consumo
+	 * [UC0153] Apresentar dados para Analise da mediï¿½ï¿½o e Consumo
 	 */
 	public Collection carregarDadosConsumo(Integer idImovel, boolean ligacaoAgua) {
 
@@ -24853,7 +24853,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0747] - Calcular Diferença de dias úteis entre duas datas
+	 * [UC0747] - Calcular Diferenï¿½a de dias ï¿½teis entre duas datas
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 12/02/2008
@@ -24876,11 +24876,11 @@ public class Fachada {
 
 	/**
 	 * Pesquisa todas as tabelas de resumo para o Orcamento sem a tabela de
-	 * resumo pendencia e arrecadação
+	 * resumo pendencia e arrecadaï¿½ï¿½o
 	 * 
-	 * [UC0750] - Gerar Arquivo Texto para Orçamento e SINP
+	 * [UC0750] - Gerar Arquivo Texto para Orï¿½amento e SINP
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 12/02/2008
 	 * 
 	 * @return anoMesReferencia
@@ -24899,7 +24899,7 @@ public class Fachada {
 	/**
 	 * Gera o Arquivo de Oracamento e SINP
 	 * 
-	 * [UC0750] - Gerar Arquivo Texto para Orçamento e SINP
+	 * [UC0750] - Gerar Arquivo Texto para Orï¿½amento e SINP
 	 * 
 	 * @author Tiago Moreno
 	 * @date 14/02/2008
@@ -24929,7 +24929,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Método que atualiza as leituras e Anormalidades sem utilizar o Celular.
+	 * Mï¿½todo que atualiza as leituras e Anormalidades sem utilizar o Celular.
 	 * 
 	 * [UC0712] Atualizar Leituras e Anormalidades do Celular
 	 * 
@@ -24967,7 +24967,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Método usado para Pesquisar se a inclusão do imóvel está com retorno ou
+	 * Mï¿½todo usado para Pesquisar se a inclusï¿½o do imï¿½vel estï¿½ com retorno ou
 	 * foi aceita. usado no caso de uso [0675]
 	 * 
 	 * @author Yara Taciane
@@ -24990,7 +24990,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Conta a quantidade de Clientes Negativados [UC0693] Gerar Relatório
+	 * Conta a quantidade de Clientes Negativados [UC0693] Gerar Relatï¿½rio
 	 * Acompanhamaneto de Clientes Negativados
 	 * 
 	 * @author Yara Taciane
@@ -25009,7 +25009,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Conta a quantidade de Clientes Negativados [UC0693] Gerar Relatório
+	 * Conta a quantidade de Clientes Negativados [UC0693] Gerar Relatï¿½rio
 	 * Acompanhamaneto de Clientes Negativados
 	 * 
 	 * @author Yara Taciane
@@ -25029,9 +25029,9 @@ public class Fachada {
 	/**
 	 * [UC0435] Encerrar Registro de Atendimento
 	 * 
-	 * Calcular valor da prestação
+	 * Calcular valor da prestaï¿½ï¿½o
 	 * 
-	 * Posição[0] = valorPrestacao Posição[1] = taxaJurosFinanciamento
+	 * Posiï¿½ï¿½o[0] = valorPrestacao Posiï¿½ï¿½o[1] = taxaJurosFinanciamento
 	 * 
 	 * autor: Raphael Rossiter data: 07/03/2008
 	 */
@@ -25048,8 +25048,8 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Retorna o somatório do valor do Débito do NegativadoMovimentoReg pela
-	 * CobrancaDebitoSituacao [UC0693] Gerar Relatório Acompanhamaneto de
+	 * Retorna o somatï¿½rio do valor do Dï¿½bito do NegativadoMovimentoReg pela
+	 * CobrancaDebitoSituacao [UC0693] Gerar Relatï¿½rio Acompanhamaneto de
 	 * Clientes Negativados
 	 * 
 	 * @author Yara Taciane
@@ -25072,7 +25072,7 @@ public class Fachada {
 	 * pesquisarQuantidadeImovel nao traz a mesma quantidade de imovel do metodo
 	 * pesquisarImovelInscricaoNew.
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 11/03/2008
 	 */
 	public Integer pesquisarQuantidadeImovelInscricao(String idImovel, String idLocalidade, String codigoSetorComercial, String numeroQuadra, String lote, String subLote, String codigoCliente,
@@ -25088,7 +25088,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Metodo que cria o relatorio de parcelamento de débitos default
+	 * Metodo que cria o relatorio de parcelamento de dï¿½bitos default
 	 * 
 	 * @author brunobarros
 	 * 
@@ -25110,7 +25110,7 @@ public class Fachada {
 	/***************************************************************************
 	 * [FS0753] Manter Ordem de Servico Concluida
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 26/03/2008
 	 * 
 	 * @param idOrdemServico
@@ -25129,7 +25129,7 @@ public class Fachada {
 	 * [UC0732] Gerar Relatorio Acompanhamento de Oredem de Servico de
 	 * Hidrometro RELATORIO: Relacao das Ordens de Servico Concluidas
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 04/04/2008
 	 * 
 	 * @param tipoOrdem
@@ -25159,7 +25159,7 @@ public class Fachada {
 	/**
 	 * 
 	 * Retorna o ImovelCobrancaSituacao pelo imovel do NegativadorMovimentoReg
-	 * [UC0693] Gerar Relatório Acompanhamaneto de Clientes Negativados
+	 * [UC0693] Gerar Relatï¿½rio Acompanhamaneto de Clientes Negativados
 	 * 
 	 * @author Yara Taciane
 	 * @date 17/03/2008
@@ -25176,7 +25176,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Conta a quantidade de Negativacoes [UC0693] Gerar Relatório Negativacoes
+	 * Conta a quantidade de Negativacoes [UC0693] Gerar Relatï¿½rio Negativacoes
 	 * Excluidas
 	 * 
 	 * @author Yara Taciane
@@ -25195,7 +25195,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Conta a quantidade de Neg [UC0693] Gerar Relatório Negativacoes Excluidas
+	 * Conta a quantidade de Neg [UC0693] Gerar Relatï¿½rio Negativacoes Excluidas
 	 * 
 	 * @author Yara Taciane
 	 * @date 17/03/2008
@@ -25213,7 +25213,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Pesquisar se a negativação do imóvel . [UC0675] Excluir Negativação
+	 * Pesquisar se a negativaï¿½ï¿½o do imï¿½vel . [UC0675] Excluir Negativaï¿½ï¿½o
 	 * Online.
 	 * 
 	 * @author Yara Taciane
@@ -25232,7 +25232,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Retorna o NegativadorMovimentoReg [UC0673] Excluir Negativação Online
+	 * Retorna o NegativadorMovimentoReg [UC0673] Excluir Negativaï¿½ï¿½o Online
 	 * 
 	 * @author Yara Taciane
 	 * @date 27/03/2008
@@ -25248,10 +25248,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 * 
-	 * Quando for verificar a existência da conta, pesquisar também no
-	 * respectivo histórico no fluxo secundário [FS0008 - Verificar existência
+	 * Quando for verificar a existï¿½ncia da conta, pesquisar tambï¿½m no
+	 * respectivo histï¿½rico no fluxo secundï¿½rio [FS0008 - Verificar existï¿½ncia
 	 * da conta]
 	 * 
 	 * @author Raphael Rossiter
@@ -25271,7 +25271,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 14/04/2008
@@ -25293,11 +25293,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 * 
-	 * [FS0014] - Verificar imóvel do débito a cobrar
+	 * [FS0014] - Verificar imï¿½vel do dï¿½bito a cobrar
 	 * 
-	 * [FS0015] - Verificar localidade do débito a cobrar
+	 * [FS0015] - Verificar localidade do dï¿½bito a cobrar
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 14/04/2008
@@ -25320,7 +25320,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 14/04/2008
@@ -25342,7 +25342,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/04/2008
@@ -25366,7 +25366,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/04/2008
@@ -25433,7 +25433,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Altera a relação entre rota e leiturista
+	 * Altera a relaï¿½ï¿½o entre rota e leiturista
 	 * 
 	 * @autor Thiago Nascimento
 	 * @date: 17/04/2008
@@ -25461,7 +25461,7 @@ public class Fachada {
 	/**
 	 * [UC0753] Manter Ordem Servico Concluida
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 09/04/2008
 	 * 
 	 * @param idOrdemServico
@@ -25487,7 +25487,7 @@ public class Fachada {
 	/**
 	 * Permite Atualizar os Dados da Fiscalizacao da OS
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 10/04/2008
 	 * 
 	 * @param usuario
@@ -25501,7 +25501,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Insere um processo batch ativado por um usuário através de uma
+	 * Insere um processo batch ativado por um usuï¿½rio atravï¿½s de uma
 	 * funcionalidade comum
 	 * 
 	 * @author Rodrigo Silveira
@@ -25522,7 +25522,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Retorno o valor máximo do Id do Leiturista.
+	 * Retorno o valor mï¿½ximo do Id do Leiturista.
 	 * 
 	 * @author Thiago Nascimento
 	 * @return
@@ -25539,7 +25539,7 @@ public class Fachada {
 	/**
 	 * Permite Visualizar Dia de Vencimento da Conta em Cliente
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 07/05/2008
 	 * 
 	 * @param usuario
@@ -25556,7 +25556,7 @@ public class Fachada {
 	/**
 	 * [UC0765] Gerar Boletim Ordens de Servico Concluidas
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 29/04/2008
 	 * 
 	 * @param idEmpresa
@@ -25579,7 +25579,7 @@ public class Fachada {
 	/**
 	 * [UC0765] Gerar Boletim Ordens de Servico Concluidas
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 02/05/2008
 	 * 
 	 * @param colecaoIdOrdemServico
@@ -25597,7 +25597,7 @@ public class Fachada {
 	/**
 	 * Permite Desfazer a Fiscalizacao do Boletim de OS Concluida
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 02/05/2008
 	 * 
 	 * @param usuario
@@ -25611,7 +25611,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0651] Inserir Comando Negativação [FS0026] Verificar existência de
+	 * [UC0651] Inserir Comando Negativaï¿½ï¿½o [FS0026] Verificar existï¿½ncia de
 	 * comando para o negativador na data
 	 * 
 	 * @author Ana Maria
@@ -25630,8 +25630,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0694] Relatório Negativação Excluídas Pesquisar data da Negativação
-	 * Excluída
+	 * [UC0694] Relatï¿½rio Negativaï¿½ï¿½o Excluï¿½das Pesquisar data da Negativaï¿½ï¿½o
+	 * Excluï¿½da
 	 * 
 	 * @author Yara Taciane
 	 * @date 09/05/2008
@@ -25649,11 +25649,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Informa as unidades de negócio testemunha
+	 * Informa as unidades de negï¿½cio testemunha
 	 * 
-	 * [UC0796] Informar Unidade Negócio Testemunha
+	 * [UC0796] Informar Unidade Negï¿½cio Testemunha
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @param usuarioLogado
 	 * @date 19/05/2008
 	 * 
@@ -25711,7 +25711,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0678] Relatório Negativador Resultado Simulacao pesquisar Negativador
+	 * [UC0678] Relatï¿½rio Negativador Resultado Simulacao pesquisar Negativador
 	 * Resultado Simulacao
 	 * 
 	 * @author Yara Taciane
@@ -25730,7 +25730,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0678] Relatório Negativador Resultado Simulacao pesquisar Negativador
+	 * [UC0678] Relatï¿½rio Negativador Resultado Simulacao pesquisar Negativador
 	 * Resultado Simulacao
 	 * 
 	 * @author Yara Taciane
@@ -25749,10 +25749,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0781] - Informar Consumo por Área
+	 * [UC0781] - Informar Consumo por ï¿½rea
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 21/05/2008
 	 * 
 	 * @param anoMesReferenciaInformado
@@ -25770,11 +25770,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0781] - Informar Consumo por Área
+	 * [UC0781] - Informar Consumo por ï¿½rea
 	 * 
 	 * Inserir/Atualizar consumoMinimoArea
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 26/05/2008
 	 * 
 	 * @param anoMesReferenciaInformado
@@ -25837,9 +25837,9 @@ public class Fachada {
 	/**
 	 * [UC0805] - Gerar Aviso de Anormalidade
 	 * 
-	 * Pesquisa os dados necessérios para a geração do relatório
+	 * Pesquisa os dados necessï¿½rios para a geraï¿½ï¿½o do relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 03/06/2008
 	 * 
 	 * @param colecaoImoveis
@@ -25857,9 +25857,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0800] - Obter Consumo Não Medido
+	 * [UC0800] - Obter Consumo Nï¿½o Medido
 	 * 
-	 * Obter o consumo mínimo associado à  faixa de área do imóvel e a categoria
+	 * Obter o consumo mï¿½nimo associado ï¿½ faixa de ï¿½rea do imï¿½vel e a categoria
 	 * ou subcategoria informada
 	 * 
 	 * @author Raphael Rossiter
@@ -25879,9 +25879,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0157] - Simular Cálculo da Conta
+	 * [UC0157] - Simular Cï¿½lculo da Conta
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 26/03/2009
 	 * 
 	 */
@@ -25897,9 +25897,9 @@ public class Fachada {
 	/**
 	 * [UC0805] - Gerar Aviso de Anormalidade
 	 * 
-	 * Pesquisa os dados necessérios para a geração do relatório
+	 * Pesquisa os dados necessï¿½rios para a geraï¿½ï¿½o do relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 03/06/2008
 	 * 
 	 * @param colecaoImoveis
@@ -25917,9 +25917,9 @@ public class Fachada {
 	/**
 	 * [UC0805] - Gerar Aviso de Anormalidade
 	 * 
-	 * Pesquisa a quantidade de registros do relatório
+	 * Pesquisa a quantidade de registros do relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 28/06/2008
 	 * 
 	 * @param gerarDadosLeituraHelper
@@ -25937,9 +25937,9 @@ public class Fachada {
 	/**
 	 * [UC0805] - Gerar Aviso de Anormalidade
 	 * 
-	 * Pesquisa os dados necessérios para a geração do relatório
+	 * Pesquisa os dados necessï¿½rios para a geraï¿½ï¿½o do relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 28/06/2008
 	 * 
 	 * @param gerarDadosLeituraHelper
@@ -25977,9 +25977,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa Ordens em Processo de Repavimentação
+	 * Pesquisa Ordens em Processo de Repavimentaï¿½ï¿½o
 	 * 
-	 * [UC0639] Filtrar Ordens em Processo de Repavimetação.
+	 * [UC0639] Filtrar Ordens em Processo de Repavimetaï¿½ï¿½o.
 	 * 
 	 * @author Yara Taciane
 	 * @date 02/06/2008
@@ -25998,9 +25998,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa Ordens em Processo de Repavimentação
+	 * Pesquisa Ordens em Processo de Repavimentaï¿½ï¿½o
 	 * 
-	 * [UC0639] Filtrar Ordens em Processo de Repavimetação.
+	 * [UC0639] Filtrar Ordens em Processo de Repavimetaï¿½ï¿½o.
 	 * 
 	 * @author Yara Taciane
 	 * @date 02/06/2008
@@ -26024,7 +26024,7 @@ public class Fachada {
 	/**
 	 * [UC0766] Gerar Relatorio Boletim de Ordens de Servico Concluidas
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 07/05/2008
 	 * 
 	 * @param idEmpresa
@@ -26046,7 +26046,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Retorno a quantidade leituras que ainda não foram registradas
+	 * Retorno a quantidade leituras que ainda nï¿½o foram registradas
 	 * 
 	 * @data 03/06/2008
 	 * @param grupo
@@ -26062,7 +26062,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Retorna as leituras que ainda não foram registradas
+	 * Retorna as leituras que ainda nï¿½o foram registradas
 	 * 
 	 * @data 03/06/2008
 	 * @param anoMes
@@ -26159,7 +26159,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0800] - Obter Consumo Não Medido
+	 * [UC0800] - Obter Consumo Nï¿½o Medido
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 22/05/2008
@@ -26179,9 +26179,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Responsável
+	 * [UC0641] - Emitir TXT de Fatura de Cliente Responsï¿½vel
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 10/07/2008
 	 * 
 	 */
@@ -26194,9 +26194,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Responsável
+	 * [UC0641] - Emitir TXT de Fatura de Cliente Responsï¿½vel
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 10/07/2008
 	 * 
 	 */
@@ -26209,11 +26209,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0352] - Emitir TXT de Fatura de Cliente Responsável
+	 * [UC0352] - Emitir TXT de Fatura de Cliente Responsï¿½vel
 	 * 
-	 * Pesquisa o percentual de retenção
+	 * Pesquisa o percentual de retenï¿½ï¿½o
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 12/07/2008
 	 * 
 	 * @throws ErroRepositorioException
@@ -26227,12 +26227,12 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0641] - Emitir TXT de Fatura de Cliente Responsável
+	 * [UC0641] - Emitir TXT de Fatura de Cliente Responsï¿½vel
 	 * 
 	 * Pesquisa os clientes associados as faturas de uma determinada esfera de
 	 * porder
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 21/01/2009
 	 */
 	@SuppressWarnings("rawtypes")
@@ -26245,9 +26245,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UCXXXX] - Relatório de Protocolo de Entrega de Faturas
+	 * [UCXXXX] - Relatï¿½rio de Protocolo de Entrega de Faturas
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 12/11/2008
 	 * 
 	 * @throws ControladorException
@@ -26261,7 +26261,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0489] - Consultar Resumo das Ações de Cobrança Popup de Motivo de
+	 * [UC0489] - Consultar Resumo das Aï¿½ï¿½es de Cobranï¿½a Popup de Motivo de
 	 * Encerramento
 	 * 
 	 * @author Francisco do Nascimento
@@ -26282,7 +26282,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0489] - Consultar Resumo das Ações de Cobrança Popup de Retorno de
+	 * [UC0489] - Consultar Resumo das Aï¿½ï¿½es de Cobranï¿½a Popup de Retorno de
 	 * fiscalizacao
 	 * 
 	 * @author Francisco do Nascimento
@@ -26302,7 +26302,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0617] - Consultar Resumo das Ações de Cobrança Eventual Popup de
+	 * [UC0617] - Consultar Resumo das Aï¿½ï¿½es de Cobranï¿½a Eventual Popup de
 	 * Motivo de Encerramento
 	 * 
 	 * @author Francisco do Nascimento
@@ -26323,7 +26323,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0617] - Consultar Resumo das Ações de Cobrança Eventual Popup de
+	 * [UC0617] - Consultar Resumo das Aï¿½ï¿½es de Cobranï¿½a Eventual Popup de
 	 * Retorno de fiscalizacao
 	 * 
 	 * @author Francisco do Nascimento
@@ -26343,7 +26343,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0146] - Pesquisa a quantidade de registros na tabela de Operação
+	 * [UC0146] - Pesquisa a quantidade de registros na tabela de Operaï¿½ï¿½o
 	 * Efetuada para os argumentos passados.
 	 * 
 	 * @author Yara Taciane
@@ -26362,7 +26362,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0146] - Pesquisa a quantidade de registros na tabela de Operação
+	 * [UC0146] - Pesquisa a quantidade de registros na tabela de Operaï¿½ï¿½o
 	 * Efetuada para os argumentos passados.
 	 * 
 	 * @author Yara Taciane
@@ -26381,7 +26381,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0824] Gerar Relatório dos Parâmetros Contábeis
+	 * [UC0824] Gerar Relatï¿½rio dos Parï¿½metros Contï¿½beis
 	 * 
 	 * @author Bruno Barros
 	 * @date 08/07/2008
@@ -26399,7 +26399,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0824] Gerar Relatório dos Parâmetros Contábeis
+	 * [UC0824] Gerar Relatï¿½rio dos Parï¿½metros Contï¿½beis
 	 * 
 	 * @author Bruno Barros
 	 * @date 08/07/2008
@@ -26417,11 +26417,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0778] Gerar Relatório Gestão de Serviços UPA<br>
-	 * [UC0497] Gerar Relatório Resumo de Solicitações de RA por Unidade
+	 * [UC0778] Gerar Relatï¿½rio Gestï¿½o de Serviï¿½os UPA<br>
+	 * [UC0497] Gerar Relatï¿½rio Resumo de Solicitaï¿½ï¿½es de RA por Unidade
 	 * <p>
 	 * Retorna todas as unidades filhas (direta ou indiretamente) da Unidade
-	 * Superior passada como parâmetro.
+	 * Superior passada como parï¿½metro.
 	 * 
 	 * @see gcom.atendimentopublico.ControladorAtendimentoPublicoSEJB#pesquisarUnidadesFilhas(int)
 	 * 
@@ -26467,7 +26467,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0822] Gerar Relatório do Valor Referente a Volumes Consumidos e Não
+	 * [UC0822] Gerar Relatï¿½rio do Valor Referente a Volumes Consumidos e Nï¿½o
 	 * Faturados
 	 * 
 	 * @author Victor Cisneiros
@@ -26482,11 +26482,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0153] - Apresentar Dados Para Análise da Medição e Consumo
+	 * [UC0153] - Apresentar Dados Para Anï¿½lise da Mediï¿½ï¿½o e Consumo
 	 * 
-	 * Pesquisa a situação especial de faturamento vigente do mês/ano informada
+	 * Pesquisa a situaï¿½ï¿½o especial de faturamento vigente do mï¿½s/ano informada
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 11/08/2008
 	 * 
 	 * @param idImovel
@@ -26502,9 +26502,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC399] Inserir Tipo de Solicitação com Especificações
+	 * [UC399] Inserir Tipo de Solicitaï¿½ï¿½o com Especificaï¿½ï¿½es
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @since 12/08/2008
 	 */
 	public boolean verificarPermissaoAlterarIndicadorUsoSistemaTipoSolicitacao(Usuario usuario) {
@@ -26516,9 +26516,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite emitir certidão negativa mesmo que o cliente tenha um superior.
+	 * Permite emitir certidï¿½o negativa mesmo que o cliente tenha um superior.
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 12/11/2008
 	 * 
 	 * @param usuario
@@ -26534,10 +26534,10 @@ public class Fachada {
 	/**
 	 * [UC0194] Inserir Credito a Realizar
 	 * 
-	 * Pesquisa a quantidade de contas e contas histórico para um imóvel em uma
-	 * referência
+	 * Pesquisa a quantidade de contas e contas histï¿½rico para um imï¿½vel em uma
+	 * referï¿½ncia
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 14/08/2008
 	 * 
 	 * @param idImovel
@@ -26555,7 +26555,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Informações Atualizadas em (maior data e hora da última execução
+	 * Informaï¿½ï¿½es Atualizadas em (maior data e hora da ï¿½ltima execuï¿½ï¿½o
 	 * 
 	 * @author Yara Taciane
 	 * @date 28/07/2008
@@ -26569,7 +26569,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0826] Gerar Relatório Análise da Arrecação
+	 * [UC0826] Gerar Relatï¿½rio Anï¿½lise da Arrecaï¿½ï¿½o
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 24/07/2008
@@ -26583,7 +26583,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0827] Gerar Relatório Análise dos Avisos Bancários
+	 * [UC0827] Gerar Relatï¿½rio Anï¿½lise dos Avisos Bancï¿½rios
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 30/07/2008
@@ -26611,9 +26611,9 @@ public class Fachada {
 	/**
 	 * Consulta as contas transferidas
 	 * 
-	 * [UC0204] - Consultar Transferências do Débito
+	 * [UC0204] - Consultar Transferï¿½ncias do Dï¿½bito
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 22/08/2008
 	 */
 	public Collection<TransferenciasDebitoHelper> consultarContasTransferidas(ConsultarTransferenciasDebitoHelper consultarTransferenciasDebitoHelper) {
@@ -26625,11 +26625,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Consulta os débitos a cobrar transferidos
+	 * Consulta os dï¿½bitos a cobrar transferidos
 	 * 
-	 * [UC0204] - Consultar Transferências do Débito
+	 * [UC0204] - Consultar Transferï¿½ncias do Dï¿½bito
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 22/08/2008
 	 */
 	public Collection<TransferenciasDebitoHelper> consultarDebitosACobrarTransferidos(ConsultarTransferenciasDebitoHelper consultarTransferenciasDebitoHelper) {
@@ -26643,9 +26643,9 @@ public class Fachada {
 	/**
 	 * Consulta as guias de pagamento transferidas
 	 * 
-	 * [UC0204] - Consultar Transferências do Débito
+	 * [UC0204] - Consultar Transferï¿½ncias do Dï¿½bito
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 22/08/2008
 	 */
 	public Collection<TransferenciasDebitoHelper> consultarGuiasDePagamentoTransferidas(ConsultarTransferenciasDebitoHelper consultarTransferenciasDebitoHelper) {
@@ -26657,11 +26657,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Consulta os créditos a realizar transferidos
+	 * Consulta os crï¿½ditos a realizar transferidos
 	 * 
-	 * [UC0204] - Consultar Transferências do Débito
+	 * [UC0204] - Consultar Transferï¿½ncias do Dï¿½bito
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 22/08/2008
 	 */
 	public Collection<TransferenciasDebitoHelper> consultarCreditosARealizarTransferidos(ConsultarTransferenciasDebitoHelper consultarTransferenciasDebitoHelper) {
@@ -26673,11 +26673,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0857] - Gerar Relatório de Arrecadação das Multas de Autos de Infração
+	 * [UC0857] - Gerar Relatï¿½rio de Arrecadaï¿½ï¿½o das Multas de Autos de Infraï¿½ï¿½o
 	 * 
-	 * Pesquisa os dados necessários para geração do relatório
+	 * Pesquisa os dados necessï¿½rios para geraï¿½ï¿½o do relatï¿½rio
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 10/09/2008
 	 * 
 	 * @param idUnidadeNegocio
@@ -26733,7 +26733,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Método que atualiza as leituras da telemetria *
+	 * Mï¿½todo que atualiza as leituras da telemetria *
 	 * 
 	 * @author Thiago Nascimento
 	 * @date 20/08/2008
@@ -26750,7 +26750,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0829] Gerar Relatório Avisos Bancarios Por Conta Corrente
+	 * [UC0829] Gerar Relatï¿½rio Avisos Bancarios Por Conta Corrente
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 21/08/2008
@@ -26764,7 +26764,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0831] Gerar Tabelas para Atualização Cadastral via celular
+	 * [UC0831] Gerar Tabelas para Atualizaï¿½ï¿½o Cadastral via celular
 	 * 
 	 * @author Vinicius Medeiros
 	 * @date 25/08/2008
@@ -26808,7 +26808,7 @@ public class Fachada {
 	 * Obter Perfil do Imovel
 	 * 
 	 * @param idImovel
-	 * @return Perfil do Imóvel
+	 * @return Perfil do Imï¿½vel
 	 * @exception ControladorException
 	 */
 	public ImovelPerfil obterImovelPerfil(Integer idImovel) {
@@ -26835,10 +26835,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
-	 * [FS0006] Verificar data de emissão [FS0007] Verificar data de início do
-	 * recurso [FS0008] Verificar data de término do recurso
+	 * [FS0006] Verificar data de emissï¿½o [FS0007] Verificar data de inï¿½cio do
+	 * recurso [FS0008] Verificar data de tï¿½rmino do recurso
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 05/09/2008
@@ -26871,7 +26871,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0726] Gerar Relatório de Imóveis com Faturas Em Atraso
+	 * [UC0726] Gerar Relatï¿½rio de Imï¿½veis com Faturas Em Atraso
 	 * 
 	 * @author Bruno Barros
 	 * @date 06/12/2007
@@ -26892,7 +26892,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0726] Gerar Relatório de Imóveis com Faturas Em Atraso
+	 * [UC0726] Gerar Relatï¿½rio de Imï¿½veis com Faturas Em Atraso
 	 * 
 	 * @since 02/09/2009
 	 * @author Marlon Patrick
@@ -26908,9 +26908,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0864] Gerar Certidão Negativa por Cliente
+	 * [UC0864] Gerar Certidï¿½o Negativa por Cliente
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 25/09/2008
 	 * 
 	 * @return
@@ -26927,7 +26927,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar e Emitir Extrato de Débito [UC0349] Emitir Documento de Cobrança
+	 * Gerar e Emitir Extrato de Dï¿½bito [UC0349] Emitir Documento de Cobranï¿½a
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 15/09/2008
@@ -26941,7 +26941,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0???] Informar Subdivisões de Rota
+	 * [UC0???] Informar Subdivisï¿½es de Rota
 	 * 
 	 * Atualiza o campo rota das quadras que pertencem ao intervalo de numero
 	 * informado e ao setor comercial
@@ -26958,7 +26958,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0???] Informar Subdivisões de Rota
+	 * [UC0???] Informar Subdivisï¿½es de Rota
 	 * 
 	 * @author: Victor Cisneiros
 	 * @date: 30/09/2008
@@ -26973,7 +26973,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0???] Informar Subdivisões de Rota
+	 * [UC0???] Informar Subdivisï¿½es de Rota
 	 * 
 	 * @author: Victor Cisneiros
 	 * @date: 30/09/2008
@@ -26987,9 +26987,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0???] Informar Subdivisões de Rota
+	 * [UC0???] Informar Subdivisï¿½es de Rota
 	 * 
-	 * Verificar se esse grupo de Faturamento já está comandado
+	 * Verificar se esse grupo de Faturamento jï¿½ estï¿½ comandado
 	 * 
 	 * @author: Victor Cisneiros
 	 * @date: 30/09/2008
@@ -27006,7 +27006,7 @@ public class Fachada {
 	 * [UC0xxx] Inserir Unidade de Negocio
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 29/09/2008
 	 * 
 	 * 
@@ -27025,7 +27025,7 @@ public class Fachada {
 	 * [UC0???] Atualizar Unidade de Negocio
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 29/09/2008
 	 * 
 	 * 
@@ -27043,7 +27043,7 @@ public class Fachada {
 	 * [UC0789] Inserir Empresa
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 29/09/2008
 	 * 
 	 * 
@@ -27062,7 +27062,7 @@ public class Fachada {
 	 * [UC0629] Retornar Arquivo Txt Leitura
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 06/10/2008
 	 * 
 	 * 
@@ -27081,7 +27081,7 @@ public class Fachada {
 	 * [UC0784] Manter Empresa
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 29/09/2008
 	 * 
 	 * 
@@ -27115,11 +27115,11 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0818] - Gerar Histórico do Encerramento da Arrecadação
+	 * [UC0818] - Gerar Histï¿½rico do Encerramento da Arrecadaï¿½ï¿½o
 	 * 
 	 * Fluxo Principal
 	 * 
-	 * [FS0001] - Verifica existencia resumo arrecadação
+	 * [FS0001] - Verifica existencia resumo arrecadaï¿½ï¿½o
 	 * 
 	 * @author bruno
 	 * @date 24/10/2008
@@ -27155,11 +27155,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite atualizar um perfil da ligação de esgoto
+	 * Permite atualizar um perfil da ligaï¿½ï¿½o de esgoto
 	 * 
 	 * [UC0861] Manter Perfil da ligacao de esgoto
 	 * 
-	 * [SB0001] - Atualizar Perfil da Ligação de Esgoto
+	 * [SB0001] - Atualizar Perfil da Ligaï¿½ï¿½o de Esgoto
 	 * 
 	 * @author Arthur Carvalho
 	 * @date 20/10/2008
@@ -27225,7 +27225,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0???] Informar Subdivisões de Rota
+	 * [UC0???] Informar Subdivisï¿½es de Rota
 	 * 
 	 * @author: Victor Cisneiros
 	 * @date: 27/10/2008
@@ -27269,9 +27269,9 @@ public class Fachada {
 	/**
 	 * [UC0541] Emitir 2a Via Conta Internet
 	 * 
-	 * [FS0003] - Verificar se documento é válido
+	 * [FS0003] - Verificar se documento ï¿½ vï¿½lido
 	 * 
-	 * [FS0004] - Cliente não associado ao documento
+	 * [FS0004] - Cliente nï¿½o associado ao documento
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 21/10/2008
@@ -27411,7 +27411,7 @@ public class Fachada {
 	 * [UC0242] - Registrar Movimento dos Arrecadadores
 	 * 
 	 * [SF0011] - Validar Arquivo de Movimento de Arrecadador da Ficha de
-	 * Compensação
+	 * Compensaï¿½ï¿½o
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 10/11/2008
@@ -27454,7 +27454,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0193] - Consultar Histórico de Faturamento
+	 * [UC0193] - Consultar Histï¿½rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -27469,9 +27469,27 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	/**
+	 * [UC0193] - Consultar Histï¿½rico de Faturamento
+	 * 
+	 * @author Guilherme Aguiar
+	 * @date 27/01/2022
+	 * 
+	 * @param imovelID
+	 */
+	@SuppressWarnings("rawtypes")
+	public Collection<DebitoACobrar> obterDebitoACobrarParcelamento(Integer parcelamentoId) {
+		try {
+			Collection<DebitoACobrar> debitoACobrar = this.getControladorFaturamento().obterDebitoACobrarParcelamento(parcelamentoId);
+			return debitoACobrar;
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 	/**
-	 * [UC0193] - Consultar Histórico de Faturamento
+	 * [UC0193] - Consultar Histï¿½rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -27504,7 +27522,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0193] - Consultar Histórico de Faturamento
+	 * [UC0193] - Consultar Histï¿½rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -27521,7 +27539,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0193] - Consultar Histórico de Faturamento
+	 * [UC0193] - Consultar Histï¿½rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -27538,7 +27556,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0193] - Consultar Histórico de Faturamento
+	 * [UC0193] - Consultar Histï¿½rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -27555,7 +27573,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0193] - Consultar Histórico de Faturamento
+	 * [UC0193] - Consultar Histï¿½rico de Faturamento
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/11/2008
@@ -27572,7 +27590,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0214] - Efetuar Parcelamento de Débitos
+	 * [UC0214] - Efetuar Parcelamento de Dï¿½bitos
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 13/11/2008
@@ -27591,10 +27609,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa a quantidade de clientes responsáveis superiores com os
+	 * Pesquisa a quantidade de clientes responsï¿½veis superiores com os
 	 * condicionais informados
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 18/11/08
 	 */
 	public Integer pesquisarClienteResponsavelSuperiorParaPaginacaoCount(PesquisarClienteResponsavelSuperiorHelper helper) {
@@ -27609,10 +27627,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os clientes responsáveis superiores com os condicionais
+	 * Pesquisa os clientes responsï¿½veis superiores com os condicionais
 	 * informados
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 18/11/08
 	 */
 	public Collection<Cliente> pesquisarClienteResponsavelSuperiorParaPaginacao(PesquisarClienteResponsavelSuperiorHelper helper, Integer numeroPagina) {
@@ -27627,7 +27645,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisar Imóvel Atualização Cadastral(Dados da Inscrição)
+	 * Pesquisar Imï¿½vel Atualizaï¿½ï¿½o Cadastral(Dados da Inscriï¿½ï¿½o)
 	 * 
 	 * @author Ana Maria
 	 * @date 17/09/2008
@@ -27642,13 +27660,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Consultar Imóveis Atualização Cadastral por Quadra
+	 * Consultar Imï¿½veis Atualizaï¿½ï¿½o Cadastral por Quadra
 	 * 
 	 * @param idSetorComercial
 	 * @param quadraInicial
 	 * @param quadraFinal
 	 * @param idEmpresa
-	 * @return Collection<Imovel> - Coleção de imóveis.
+	 * @return Collection<Imovel> - Coleï¿½ï¿½o de imï¿½veis.
 	 * 
 	 * @author Ana Maria
 	 * @date 18/09/2008
@@ -27663,9 +27681,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0333] Consultar Dados Diários da Arrecadação
+	 * [UC0333] Consultar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 * 
-	 * Método para filtrar os dados diários para qualquer aba da funcionalidade
+	 * Mï¿½todo para filtrar os dados diï¿½rios para qualquer aba da funcionalidade
 	 * 
 	 * @author Francisco do Nascimento
 	 * @date 12/11/2008
@@ -27686,7 +27704,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0333] Consultar Dados Diários da Arrecadação
+	 * [UC0333] Consultar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 * 
 	 * Verificar se existe dados diarios da arrecadacao de acordo com o filtro
 	 * passado
@@ -27765,7 +27783,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica se o processo está em execução
+	 * Verifica se o processo estï¿½ em execuï¿½ï¿½o
 	 * 
 	 * @author Ana Maria
 	 * @date 18/12/2008
@@ -27816,7 +27834,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica se o batch dos dados diários da arrecadação está rodando
+	 * Verifica se o batch dos dados diï¿½rios da arrecadaï¿½ï¿½o estï¿½ rodando
 	 * 
 	 * @author bruno
 	 * @date 12/12/2008
@@ -27848,7 +27866,7 @@ public class Fachada {
 	/**
 	 * Continua o processamento de um batch
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 03/12/2008
 	 * 
 	 * @param ids
@@ -27877,7 +27895,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica se é possível realizar o cancelamento dos Documentos de Cobrança
+	 * Verifica se ï¿½ possï¿½vel realizar o cancelamento dos Documentos de Cobranï¿½a
 	 * do Cronograma ou Comando
 	 * 
 	 * @author Victor Cisneiros
@@ -27892,7 +27910,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Cancela os Documentos de Cobranças Gerados do Cronograma ou Eventual
+	 * Cancela os Documentos de Cobranï¿½as Gerados do Cronograma ou Eventual
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 19/12/2008
@@ -27906,7 +27924,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar Relatório de Negativações Excluídas
+	 * Gerar Relatï¿½rio de Negativaï¿½ï¿½es Excluï¿½das
 	 * 
 	 * @author Yara T. Souza
 	 * @date 16/01/2009
@@ -27923,7 +27941,7 @@ public class Fachada {
 	/**
 	 * [UC0868] Gerar Relatorio de Pagamentos das Contas em Cobranca por Empresa
 	 * 
-	 * @author: Rômulo Aurélio
+	 * @author: Rï¿½mulo Aurï¿½lio
 	 * @date: 08/01/2009
 	 */
 	@SuppressWarnings("unchecked")
@@ -27947,7 +27965,7 @@ public class Fachada {
 	/**
 	 * [UC0868] Gerar Relatorio de Pagamentos das Contas em Cobranca por Empresa
 	 * 
-	 * @author: Rômulo Aurélio
+	 * @author: Rï¿½mulo Aurï¿½lio
 	 * @date: 08/01/2009
 	 */
 	public void inserirProcessoIniciadoRelatorioPagamentosContasCobranca(RelatorioPagamentosContasCobrancaEmpresaHelper helper, int opcaoRelatorio, Usuario usuario) {
@@ -27960,9 +27978,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0871] Manter Fatura de Cliente Responsável
+	 * [UC0871] Manter Fatura de Cliente Responsï¿½vel
 	 * 
-	 * Inserir Fatura Item e Fatura Item Historico Flávio Leonardo
+	 * Inserir Fatura Item e Fatura Item Historico Flï¿½vio Leonardo
 	 * 
 	 */
 	public int inserirFaturaItemFaturaItemHistorico(Collection<FaturaItem> colecaoFaturaItem, Usuario usuarioLogado) {
@@ -27975,9 +27993,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0871] Manter Fatura de Cliente Responsável
+	 * [UC0871] Manter Fatura de Cliente Responsï¿½vel
 	 * 
-	 * Remover Fatura Item e Inserir Fatura Item Historico Flávio Leonardo
+	 * Remover Fatura Item e Inserir Fatura Item Historico Flï¿½vio Leonardo
 	 * 
 	 */
 	public void removerFaturaItemFaturaItemHistorico(Collection<FaturaItem> colecaoFaturaItemRemover, Usuario usuarioLogado) {
@@ -27989,7 +28007,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Responsável
+	 * [UC0871] Manter Fatura de Cliente Responsï¿½vel
 	 */
 	public BigDecimal somarValorFaturasItemFatura(Fatura fatura) {
 		try {
@@ -28000,7 +28018,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Responsável
+	 * [UC0871] Manter Fatura de Cliente Responsï¿½vel
 	 */
 	public Date vencimentoFaturasItemFatura(Fatura fatura) {
 		try {
@@ -28011,7 +28029,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Responsável
+	 * [UC0871] Manter Fatura de Cliente Responsï¿½vel
 	 * 
 	 * @param fatura
 	 * @throws ErroRepositorioException
@@ -28025,7 +28043,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0871] Manter Fatura de Cliente Responsável
+	 * [UC0871] Manter Fatura de Cliente Responsï¿½vel
 	 * 
 	 * @param fatura
 	 * @throws ErroRepositorioException
@@ -28061,7 +28079,7 @@ public class Fachada {
 	/**
 	 * [UC0014] - ManterImovel
 	 * 
-	 * Verificar existência de negativação para o cliente-imóvel
+	 * Verificar existï¿½ncia de negativaï¿½ï¿½o para o cliente-imï¿½vel
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 12/01/2009
@@ -28075,9 +28093,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0011] Inserir Imóvel
+	 * [UC0011] Inserir Imï¿½vel
 	 * 
-	 * Validações do Imovel referente à  aba de Localidade
+	 * Validaï¿½ï¿½es do Imovel referente ï¿½ aba de Localidade
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 28/01/2009
@@ -28091,9 +28109,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0011] Inserir Imóvel
+	 * [UC0011] Inserir Imï¿½vel
 	 * 
-	 * Validações do Imovel referente à  aba de Endereco
+	 * Validaï¿½ï¿½es do Imovel referente ï¿½ aba de Endereco
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 28/01/2009
@@ -28107,9 +28125,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0011] Inserir Imóvel
+	 * [UC0011] Inserir Imï¿½vel
 	 * 
-	 * Validações do Imovel referente à  aba de Caracteristicas
+	 * Validaï¿½ï¿½es do Imovel referente ï¿½ aba de Caracteristicas
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 28/01/2009
@@ -28123,9 +28141,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0011] Inserir Imóvel
+	 * [UC0011] Inserir Imï¿½vel
 	 * 
-	 * Validações do Imovel referente à  aba de Caracteristicas
+	 * Validaï¿½ï¿½es do Imovel referente ï¿½ aba de Caracteristicas
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 28/01/2009
@@ -28139,9 +28157,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0011] Inserir Imóvel
+	 * [UC0011] Inserir Imï¿½vel
 	 * 
-	 * Validações do Imovel referente à  aba de Conclusao
+	 * Validaï¿½ï¿½es do Imovel referente ï¿½ aba de Conclusao
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 28/01/2009
@@ -28759,7 +28777,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0830] Gerar Tabelas para Atualização Cadastral via celular
+	 * [UC0830] Gerar Tabelas para Atualizaï¿½ï¿½o Cadastral via celular
 	 * 
 	 * @author Ana Maria
 	 * @date 22/06/2009
@@ -28777,7 +28795,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0912] Gerar Boletim de Custo Atualização Cadastral
+	 * [UC0912] Gerar Boletim de Custo Atualizaï¿½ï¿½o Cadastral
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 25/06/2009
@@ -28832,26 +28850,26 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Esse metodo está de acordo com o UC0919 - Gerar Relatorio de Impostos Por
-	 * Cliente Responsavel. Dessa forma, esse método realiza a pesquisa por
-	 * impostos por cliente responsável, agrupando os impostos a partir das
+	 * Esse metodo estï¿½ de acordo com o UC0919 - Gerar Relatorio de Impostos Por
+	 * Cliente Responsavel. Dessa forma, esse mï¿½todo realiza a pesquisa por
+	 * impostos por cliente responsï¿½vel, agrupando os impostos a partir das
 	 * faturas de cada cliente. Para esse caso de uso, todos os CLIENTES devem
-	 * ser FEDERAIS, dessa forma a pesquisa está sendo realizada por cliente
-	 * responsáveis federais, ou seja clientes que tem na tabela
+	 * ser FEDERAIS, dessa forma a pesquisa estï¿½ sendo realizada por cliente
+	 * responsï¿½veis federais, ou seja clientes que tem na tabela
 	 * cadastro.cliente_tipo EPOD_ID = 3. - continuar descricao -
 	 * 
 	 * @author Jose Guilherme Macedo Vieira
 	 * @date 08/07/2009
 	 * 
 	 * @param Integer
-	 *            anoMes - o ano/mes já formatado, sem barra, na forma de
+	 *            anoMes - o ano/mes jï¿½ formatado, sem barra, na forma de
 	 *            Integer
 	 * @param Integer
 	 *            clienteID - o id do cliente
 	 * @param String
 	 *            tipoRelatorio (SINTETICO ou ANALITICO)
 	 * @return Collection<RelatorioImpostosPorClienteResponsavelHelper> - a
-	 *         coleção de helpers do relatorio
+	 *         coleï¿½ï¿½o de helpers do relatorio
 	 * @throws ControladorException
 	 */
 	public Collection<ImpostoDeduzidoHelper> pesquisarImpostosPorClienteResponsavelFederal(Integer anoMes, Integer clienteID, String tipoRelatorio) {
@@ -28866,7 +28884,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0184] - Manter débito a Cobrar
+	 * [UC0184] - Manter dï¿½bito a Cobrar
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/07/2009
@@ -28881,7 +28899,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0184] - Manter débito a Cobrar
+	 * [UC0184] - Manter dï¿½bito a Cobrar
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/07/2009
@@ -28896,7 +28914,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0184] - Manter débito a Cobrar
+	 * [UC0184] - Manter dï¿½bito a Cobrar
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/07/2009
@@ -28911,7 +28929,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0184] - Manter débito a Cobrar
+	 * [UC0184] - Manter dï¿½bito a Cobrar
 	 * 
 	 * @author Hugo Amorim
 	 * @date 20/07/2009
@@ -28939,7 +28957,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0927] â€“ Confirmar Cartão de Crédito/Débito
+	 * [UC0927] â€“ Confirmar Cartï¿½o de Crï¿½dito/Dï¿½bito
 	 * 
 	 * @author Hugo Amorim, Raphael Rossiter
 	 * @date 30/07/2009, 14/01/2010
@@ -28961,7 +28979,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Atualiza Dados do Parcelamento para Cartão de Crédito
+	 * Atualiza Dados do Parcelamento para Cartï¿½o de Crï¿½dito
 	 * 
 	 * @author Hugo Amorim
 	 * @date 31/07/2009
@@ -28977,10 +28995,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0407]-Filtrar Imóveis para Inserir ou Manter Conta [FS0011]-Verificar
-	 * a abrangência do código do usuário
+	 * [UC0407]-Filtrar Imï¿½veis para Inserir ou Manter Conta [FS0011]-Verificar
+	 * a abrangï¿½ncia do cï¿½digo do usuï¿½rio
 	 * 
-	 * Verifica se existe localidade que esteja fora da abrangência do usuário
+	 * Verifica se existe localidade que esteja fora da abrangï¿½ncia do usuï¿½rio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 30/07/2009
@@ -28997,8 +29015,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0407]-Filtrar Imóveis para Inserir ou Manter Conta [FS0011]-Verificar
-	 * a abrangência do código do usuário
+	 * [UC0407]-Filtrar Imï¿½veis para Inserir ou Manter Conta [FS0011]-Verificar
+	 * a abrangï¿½ncia do cï¿½digo do usuï¿½rio
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 31/07/2009
@@ -29016,7 +29034,7 @@ public class Fachada {
 	/**
 	 * [UCXXXX] - Gerar Conta
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 22/07/2009
 	 * 
 	 * @param anoMes
@@ -29129,7 +29147,7 @@ public class Fachada {
 	/**
 	 * [UC0187] Inserir Guia de Pagamento
 	 * 
-	 * [FS0020] Imóvel não possui conta para pagamento parcial
+	 * [FS0020] Imï¿½vel nï¿½o possui conta para pagamento parcial
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 12/08/2009
@@ -29194,9 +29212,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UCXXXX] - Emitir Documento de Cobrança
+	 * [UCXXXX] - Emitir Documento de Cobranï¿½a
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 02/09/2009
 	 * 
 	 * @return
@@ -29262,7 +29280,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * UC0905 - Gerar Relatario Acompanhamento Acao Cobrança
+	 * UC0905 - Gerar Relatario Acompanhamento Acao Cobranï¿½a
 	 * 
 	 * 
 	 * @author Genival Barbosa
@@ -29283,8 +29301,8 @@ public class Fachada {
 	}
 
 	/**
-	 * retorna conjunto de CAAC_ID(ações do ciclo) selecionados [UC0258] Filtrar
-	 * Documentos de Cobrança
+	 * retorna conjunto de CAAC_ID(aï¿½ï¿½es do ciclo) selecionados [UC0258] Filtrar
+	 * Documentos de Cobranï¿½a
 	 * 
 	 * @author Anderson Italo
 	 * @data 03/08/2009
@@ -29301,8 +29319,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Este método está de acordo com o UC[0258]Filtrar Documento de Cobranca, é
-	 * utilizado pelo relatório filtrar documentos de cobrança
+	 * Este mï¿½todo estï¿½ de acordo com o UC[0258]Filtrar Documento de Cobranca, ï¿½
+	 * utilizado pelo relatï¿½rio filtrar documentos de cobranï¿½a
 	 * 
 	 * @author Anderson Italo
 	 * @date 19/08/2009
@@ -29321,8 +29339,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Este método está de acordo com o UC[0258]Filtrar Documento de Cobranca, é
-	 * utilizado pelo relatório filtrar documentos de cobrança para totalizar os
+	 * Este mï¿½todo estï¿½ de acordo com o UC[0258]Filtrar Documento de Cobranca, ï¿½
+	 * utilizado pelo relatï¿½rio filtrar documentos de cobranï¿½a para totalizar os
 	 * registros filtrados
 	 * 
 	 * @author Anderson Italo
@@ -29342,9 +29360,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Este método está de acordo com o [UC0906] Gerar Relatório de
-	 * Acompanhamento das Supressões, Religações e Reestabelecimentos. É
-	 * utilizado pelo relatório filtrar os registros do relatorio
+	 * Este mï¿½todo estï¿½ de acordo com o [UC0906] Gerar Relatï¿½rio de
+	 * Acompanhamento das Supressï¿½es, Religaï¿½ï¿½es e Reestabelecimentos. ï¿½
+	 * utilizado pelo relatï¿½rio filtrar os registros do relatorio
 	 * 
 	 * @author Anderson Italo
 	 * @date 28/08/2009
@@ -29363,7 +29381,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Este método está de acordo com o UC[0258]Filtrar Documento de Cobranca
+	 * Este mï¿½todo estï¿½ de acordo com o UC[0258]Filtrar Documento de Cobranca
 	 * 
 	 * @author Anderson Italo
 	 * @date 11/09/2009
@@ -29404,9 +29422,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite retificar conta do imóvel com o perfil bloqueado.
+	 * Permite retificar conta do imï¿½vel com o perfil bloqueado.
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 15/09/2009
 	 * 
 	 * @param usuario
@@ -29442,13 +29460,13 @@ public class Fachada {
 	}
 
 	/**
-	 * Método responsável por verificar se existe no banco um determinado ID na
-	 * tabela de faturamento_grupo - caso exista o id passado como parâmetro na
-	 * tabela, retorna true, caso contrário retorna false
+	 * Mï¿½todo responsï¿½vel por verificar se existe no banco um determinado ID na
+	 * tabela de faturamento_grupo - caso exista o id passado como parï¿½metro na
+	 * tabela, retorna true, caso contrï¿½rio retorna false
 	 * 
 	 * @param Integer
 	 *            id - id de um FaturamentoGrupo
-	 * @return boolean - true para existir o id na tabela, false para não
+	 * @return boolean - true para existir o id na tabela, false para nï¿½o
 	 *         existir
 	 * @exception ErroRepositorioException
 	 */
@@ -29463,9 +29481,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa a quantidade de dados do relatório
+	 * Pesquisa a quantidade de dados do relatï¿½rio
 	 * 
-	 * [UC0635] - Gerar Relatórios de Contas em Revisão
+	 * [UC0635] - Gerar Relatï¿½rios de Contas em Revisï¿½o
 	 * 
 	 * @author Arthur Carvalho
 	 * @created 14/09/2009
@@ -29500,7 +29518,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa a quantidade de dados do relatório
+	 * Pesquisa a quantidade de dados do relatï¿½rio
 	 * 
 	 * [UC0635] - Gerar Relacao Acompanhamento Faturamento
 	 * 
@@ -29582,7 +29600,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa as rotas que possuem validos para geração do relatorio de
+	 * Pesquisa as rotas que possuem validos para geraï¿½ï¿½o do relatorio de
 	 * acompanhamento de leiturista.
 	 * 
 	 * @author Hugo Amorim
@@ -29604,7 +29622,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC09572]Gerar Relatório de Acompanhamento de Leiturista
+	 * [UC09572]Gerar Relatï¿½rio de Acompanhamento de Leiturista
 	 * 
 	 * @author Hugo Amorim
 	 * @date 19/10/2009
@@ -29623,7 +29641,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0957]Gerar Relatório de Acompanhamento de Leiturista
+	 * [UC0957]Gerar Relatï¿½rio de Acompanhamento de Leiturista
 	 * 
 	 * @author Hugo Amorim
 	 * @date 19/10/2009
@@ -29642,7 +29660,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0958] - Gerar Relatório de juros, Multas e Débitos Cancelados
+	 * [UC0958] - Gerar Relatï¿½rio de juros, Multas e Dï¿½bitos Cancelados
 	 * 
 	 * @since 13/10/2009
 	 * @author Marlon Patrick
@@ -29659,9 +29677,9 @@ public class Fachada {
 
 	/**
 	 * [UC????] Relatorio Comando Documento Cobranca Alterado para verificar
-	 * tipo da ação a partir da tabela documento_tipo
+	 * tipo da aï¿½ï¿½o a partir da tabela documento_tipo
 	 * 
-	 * @author Rômulo Aurélio, Anderson Italo
+	 * @author Rï¿½mulo Aurï¿½lio, Anderson Italo
 	 * 
 	 * @data 20/10/2009, 04/05/2010
 	 */
@@ -29678,7 +29696,7 @@ public class Fachada {
 	/**
 	 * [UCXXXX] - Gerar Relatorio Comando Documento Cobranca
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 20/10/2009
 	 * 
 	 * @return
@@ -29694,7 +29712,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0965] - Relatório de Anormalidade de Leitura por Período
+	 * [UC0965] - Relatï¿½rio de Anormalidade de Leitura por Perï¿½odo
 	 * 
 	 * @since 03/11/2009
 	 * @author Marlon Patrick
@@ -29732,7 +29750,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Este método está de acordo com o [UC0901] Gerar Metas do Ciclo
+	 * Este mï¿½todo estï¿½ de acordo com o [UC0901] Gerar Metas do Ciclo
 	 * 
 	 * @author Anderson Italo
 	 * @date 21/09/2009
@@ -29758,7 +29776,7 @@ public class Fachada {
 	 * @date 25/09/2009
 	 * 
 	 * @param idsLast
-	 *            Colecao de ids de situacao de ligação de água
+	 *            Colecao de ids de situacao de ligaï¿½ï¿½o de ï¿½gua
 	 * @return Colecao no formato [idGrupo, idLocalidade, qtdImoveis]
 	 */
 	@SuppressWarnings("rawtypes")
@@ -29785,10 +29803,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0444] Gerar e Emitir Extrato de Débitos [UC0251] Gerar Atividade de
-	 * Ação de Cobranca
+	 * [UC0444] Gerar e Emitir Extrato de Dï¿½bitos [UC0251] Gerar Atividade de
+	 * Aï¿½ï¿½o de Cobranca
 	 * 
-	 * Recuparea o valor da taxa de cobrança para gerar o documento de cobrança
+	 * Recuparea o valor da taxa de cobranï¿½a para gerar o documento de cobranï¿½a
 	 * 
 	 * gerarDocumentoCobranca
 	 * 
@@ -29810,9 +29828,9 @@ public class Fachada {
 	/**
 	 * [UC0082] - Registrar Leituras e Anormalidades
 	 * 
-	 * [SB0001] - Gerar Relatório Resumo das Leituras e Anormalidades
+	 * [SB0001] - Gerar Relatï¿½rio Resumo das Leituras e Anormalidades
 	 * 
-	 * Pesquisa a quantidade dados do relatório do comparativo de leituras e
+	 * Pesquisa a quantidade dados do relatï¿½rio do comparativo de leituras e
 	 * anormalidades
 	 * 
 	 * @author Arthur Carvalho
@@ -29835,7 +29853,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0214] Efetuar Parcelamento de Débitos
+	 * [UC0214] Efetuar Parcelamento de Dï¿½bitos
 	 * 
 	 * pesquisa o documento de cobranca do imovel e do documento tipo passado
 	 * como parametro
@@ -29855,11 +29873,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0969] Importar arquivo de atualização cadastral simplificado
+	 * [UC0969] Importar arquivo de atualizaï¿½ï¿½o cadastral simplificado
 	 * 
 	 * @param arquivo
 	 *            Arquivo texto a ser importado
-	 * @return Id do arquivo texto recém-inserido
+	 * @return Id do arquivo texto recï¿½m-inserido
 	 * @throws FachadaException
 	 */
 	public Integer inserirArquivoAtualizacaoCadastralSimplificado(AtualizacaoCadastralSimplificado arquivo, AtualizacaoCadastralSimplificadoBinario arquivoBinario,
@@ -29872,11 +29890,11 @@ public class Fachada {
 	}
 
 	/**
-	 * Buscar críticas de um arquivo que tenha sido importado.
+	 * Buscar crï¿½ticas de um arquivo que tenha sido importado.
 	 * 
 	 * @param idArquivo
 	 *            Id do arquivo que foi importado
-	 * @return Coleçao de críticas existentes para aquele arquivo
+	 * @return Coleï¿½ao de crï¿½ticas existentes para aquele arquivo
 	 */
 	public Collection<AtualizacaoCadastralSimplificadoCritica> pesquisarAtualizacaoCadastralSimplificadoCritica(int idArquivo) {
 		try {
@@ -29963,7 +29981,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0958] - Count Relatório de juros, Multas e Débitos Cancelados
+	 * [UC0958] - Count Relatï¿½rio de juros, Multas e Dï¿½bitos Cancelados
 	 * 
 	 * @since 10/12/2009
 	 * @author Hugo Amorim
@@ -30019,8 +30037,8 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0973] Inserir Imóvel em Programa Especial [FS0004] Validar dados do
-	 * imóvel no programa especial
+	 * [UC0973] Inserir Imï¿½vel em Programa Especial [FS0004] Validar dados do
+	 * imï¿½vel no programa especial
 	 * 
 	 * @author Hugo Amorim
 	 * @since 17/12/2009
@@ -30036,8 +30054,8 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0976] Suspender Imóvel em Programa Especial [FS0004] Validar dados da
-	 * suspensão imóvel no programa especial
+	 * [UC0976] Suspender Imï¿½vel em Programa Especial [FS0004] Validar dados da
+	 * suspensï¿½o imï¿½vel no programa especial
 	 * 
 	 * @author Hugo Amorim
 	 * @since 21/12/2009
@@ -30052,8 +30070,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Identifica e obtém as informações necessárias para confirmar pagamento(s)
-	 * por cartão de crédito ou débito
+	 * Identifica e obtï¿½m as informaï¿½ï¿½es necessï¿½rias para confirmar pagamento(s)
+	 * por cartï¿½o de crï¿½dito ou dï¿½bito
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 05/01/2010
@@ -30074,7 +30092,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0927] â€“ Confirmar Cartão de Crédito/Débito
+	 * [UC0927] â€“ Confirmar Cartï¿½o de Crï¿½dito/Dï¿½bito
 	 * 
 	 * [FS0008] â€“ Verificar validade da data
 	 * 
@@ -30096,9 +30114,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0927] â€“ Confirmar Cartão de Crédito/Débito
+	 * [UC0927] â€“ Confirmar Cartï¿½o de Crï¿½dito/Dï¿½bito
 	 * 
-	 * [FS0007] â€“ Somatório Inválido [FS00010] â€“ Somatório Inválido
+	 * [FS0007] â€“ Somatï¿½rio Invï¿½lido [FS00010] â€“ Somatï¿½rio Invï¿½lido
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 08/01/2010
@@ -30119,7 +30137,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0927] â€“ Confirmar Cartão de Crédito/Débito
+	 * [UC0927] â€“ Confirmar Cartï¿½o de Crï¿½dito/Dï¿½bito
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 12/01/2010
@@ -30165,13 +30183,13 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * Caso o local da ocorrência seja um imóvel e o imóvel tenha um perfil de
+	 * Caso o local da ocorrï¿½ncia seja um imï¿½vel e o imï¿½vel tenha um perfil de
 	 * grande consumidor (IPER_ICGRANDECONSUMIDOR da tabela IMOVEL_PERFIL com
 	 * valor igual a 1 com IPER_ID= IPER_ID da tabela IMOVEL com IMOV_ID =
-	 * IMOV_ID informado) e a unidade de tramite automático para grandes
+	 * IMOV_ID informado) e a unidade de tramite automï¿½tico para grandes
 	 * consumidores esteja preenchida (UNID_IDTRAMITEGRANDECONSUMIDOR da tabela
-	 * SISTEMA_PARAMETRO) preencher a unidade de tramite automático com a
-	 * unidade informada e não permitir alterar.
+	 * SISTEMA_PARAMETRO) preencher a unidade de tramite automï¿½tico com a
+	 * unidade informada e nï¿½o permitir alterar.
 	 * 
 	 * [FS0046] â€“ Verificar Tramite de Grandes Consumidores.
 	 * 
@@ -30191,7 +30209,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica as permissões especiais do usuário
+	 * Verifica as permissï¿½es especiais do usuï¿½rio
 	 * 
 	 * @author Hugo Amorim
 	 * @date 30/12/2009
@@ -30212,11 +30230,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0927] â€“ Confirmar Cartão de Crédito/Débito
+	 * [UC0927] â€“ Confirmar Cartï¿½o de Crï¿½dito/Dï¿½bito
 	 * 
 	 * [FS0005 â€“ Alerta Parcelamento Com Parcela Paga] [FS0006 â€“
-	 * Parcelamento Sem Débito a Cobrar] [FS0007 â€“ Parcelamento Com Pagamento
-	 * de Cartão de Crédito Já Informado]
+	 * Parcelamento Sem Dï¿½bito a Cobrar] [FS0007 â€“ Parcelamento Com Pagamento
+	 * de Cartï¿½o de Crï¿½dito Jï¿½ Informado]
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 14/01/2010
@@ -30236,7 +30254,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0979] Gerar Relatório de Imóveis em Programas Especiais
+	 * [UC0979] Gerar Relatï¿½rio de Imï¿½veis em Programas Especiais
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 19/01/2010
@@ -30257,7 +30275,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0979] Gerar Relatório de Imóveis em Programas Especiais Analitico
+	 * [UC0979] Gerar Relatï¿½rio de Imï¿½veis em Programas Especiais Analitico
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 18/01/2010
@@ -30278,7 +30296,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0979] Gerar Relatório de Imóveis em Programas Especiais Sintetico Sem
+	 * [UC0979] Gerar Relatï¿½rio de Imï¿½veis em Programas Especiais Sintetico Sem
 	 * HIDR.
 	 * 
 	 * @author Hugo Leonardo
@@ -30301,9 +30319,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0457] Encerra Ordem de serviço
+	 * [UC0457] Encerra Ordem de serviï¿½o
 	 * 
-	 * [FS0002] - Validar Tipo serviço [FS0004] - Verificar preenchimento dos
+	 * [FS0002] - Validar Tipo serviï¿½o [FS0004] - Verificar preenchimento dos
 	 * campos [FS0007] - Validar Data de Encerramento [FS0008] - Validar Data do
 	 * roteiro
 	 * 
@@ -30330,7 +30348,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0976] Suspender Imóvel em Programa Especial Suspende Imóvel em
+	 * [UC0976] Suspender Imï¿½vel em Programa Especial Suspende Imï¿½vel em
 	 * Programa Especial
 	 * 
 	 * @author Hugo Amorim
@@ -30347,7 +30365,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0973] Inserir Imóvel em Programa Especial Inseri Imóvel em Programa
+	 * [UC0973] Inserir Imï¿½vel em Programa Especial Inseri Imï¿½vel em Programa
 	 * Especial
 	 * 
 	 * @author Hugo Amorim
@@ -30363,9 +30381,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0927] â€“ Confirmar Cartão de Crédito/Débito
+	 * [UC0927] â€“ Confirmar Cartï¿½o de Crï¿½dito/Dï¿½bito
 	 * 
-	 * [SB0004] â€“ Incluir Dados da Confirmação dos Pagamentos
+	 * [SB0004] â€“ Incluir Dados da Confirmaï¿½ï¿½o dos Pagamentos
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 29/04/2010
@@ -30394,10 +30412,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
-	 * [FS0001 â€“ Verificar existência do arrecadador] [FS0002 â€“ Verificar
-	 * arrecadação forma cartão crédito]
+	 * [FS0001 â€“ Verificar existï¿½ncia do arrecadador] [FS0002 â€“ Verificar
+	 * arrecadaï¿½ï¿½o forma cartï¿½o crï¿½dito]
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 26/01/2010
@@ -30417,7 +30435,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0977] - Registrar Movimento Cartão de Crédito
+	 * [UC0977] - Registrar Movimento Cartï¿½o de Crï¿½dito
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 29/01/2010
@@ -30439,8 +30457,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0978] Pesquisa Relatório de Pagamento para Entidades Beneficentes
-	 * Analítico
+	 * [UC0978] Pesquisa Relatï¿½rio de Pagamento para Entidades Beneficentes
+	 * Analï¿½tico
 	 * 
 	 * @author Daniel Alves
 	 * @data 26/01/2010
@@ -30461,8 +30479,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0978] Pesquisa Relatório de Pagamento para Entidades Beneficentes
-	 * Sintético
+	 * [UC0978] Pesquisa Relatï¿½rio de Pagamento para Entidades Beneficentes
+	 * Sintï¿½tico
 	 * 
 	 * @author Daniel Alves
 	 * @data 26/01/2010
@@ -30484,10 +30502,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Buscar Rota a partir da Matrícula de um Imóvel e anoMesFaturamentoGrupo.
+	 * Buscar Rota a partir da Matrï¿½cula de um Imï¿½vel e anoMesFaturamentoGrupo.
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 03/02/2010
 	 * 
 	 * @param dados
@@ -30503,7 +30521,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0978] Count Relatório de Pagamento para Entidades Beneficentes
+	 * [UC0978] Count Relatï¿½rio de Pagamento para Entidades Beneficentes
 	 * 
 	 * @author Daniel Alves
 	 * @data 26/01/2010
@@ -30525,7 +30543,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0973] Inserir Imóvel em Programa Especial
+	 * [UC0973] Inserir Imï¿½vel em Programa Especial
 	 * 
 	 * Verificar se existe parcelamento para o Imovel em Programa Especial.
 	 * 
@@ -30547,8 +30565,8 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Método que consulta o nome do usuário de uma guia de devolução, passando
-	 * por parâmetro o id da guia de devolucao
+	 * Mï¿½todo que consulta o nome do usuï¿½rio de uma guia de devoluï¿½ï¿½o, passando
+	 * por parï¿½metro o id da guia de devolucao
 	 * 
 	 * @author Daniel Alves
 	 * @param idGuiaDevolucao
@@ -30567,7 +30585,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0430] - Gerar Ordem de Serviço
+	 * [UC0430] - Gerar Ordem de Serviï¿½o
 	 * 
 	 * @author Hugo Amorim
 	 * @date 12/02/2010
@@ -30634,7 +30652,7 @@ public class Fachada {
 	 * 
 	 * [UC0987] Inserir Faixa de Dias Vencidos para Documentos a Receber
 	 * 
-	 * Verificar se existe Faixa inicial já cadastrada.
+	 * Verificar se existe Faixa inicial jï¿½ cadastrada.
 	 * 
 	 * @author Hugo Leonardo
 	 * @param valorInicialFaixa
@@ -30663,7 +30681,7 @@ public class Fachada {
 	 * 
 	 * [UC0987] Inserir Faixa de Dias Vencidos para Documentos a Receber
 	 * 
-	 * Verificar se existe Faixa final já cadastrada.
+	 * Verificar se existe Faixa final jï¿½ cadastrada.
 	 * 
 	 * @author Hugo Leonardo
 	 * @param valorFinalFaixa
@@ -30682,9 +30700,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa quantidade Ordens em Processo de Repavimentação
+	 * Pesquisa quantidade Ordens em Processo de Repavimentaï¿½ï¿½o
 	 * 
-	 * [UC0639] Filtrar Ordens em Processo de Repavimetação.
+	 * [UC0639] Filtrar Ordens em Processo de Repavimetaï¿½ï¿½o.
 	 * 
 	 * @author Arthur Carvalho
 	 * @date 22/02/2010
@@ -30705,7 +30723,7 @@ public class Fachada {
 	 * Inseri um nova Rota a partir da Rota pai. Utilizado na alteracao de
 	 * subdivisao de Rotas.
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 23/02/2010
 	 * 
 	 * @param idRotaOriginal
@@ -30725,7 +30743,7 @@ public class Fachada {
 	/**
 	 * Pesquisa o perfil do imovel do imovel informado
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 03/03/2010
 	 * @throws ControladorException
 	 */
@@ -30739,8 +30757,8 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0711] - Emitir Ordem de Servico Seletiva Relatório Ordem Seletiva
-	 * Analítico Pesquisa
+	 * [UC0711] - Emitir Ordem de Servico Seletiva Relatï¿½rio Ordem Seletiva
+	 * Analï¿½tico Pesquisa
 	 * 
 	 * @author Hugo Amorim
 	 * @date 03/03/2010
@@ -30770,8 +30788,8 @@ public class Fachada {
 			Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(colecaoImovel);
 
 			// SE ENCONTROU O IMOVEL PESQUISA OUTROS DADOS
-			// CASO CONTRARIO ATRIBUI NULL E NÃO ADICIONA O
-			// BEAN NA COLEÇÃO
+			// CASO CONTRARIO ATRIBUI NULL E Nï¿½O ADICIONA O
+			// BEAN NA COLEï¿½ï¿½O
 			if (imovel != null) {
 
 				retorno.setMatricula(imovel.getMatriculaFormatada());
@@ -30826,7 +30844,7 @@ public class Fachada {
 				retorno.setConsumo6(consumo6 != null ? consumo6.toString() : "0");
 
 				/**
-				 * Alterando o cálculo da média
+				 * Alterando o cï¿½lculo da mï¿½dia
 				 */
 				MedicaoTipo medicao = new MedicaoTipo();
 				medicao.setId(1);
@@ -30837,7 +30855,7 @@ public class Fachada {
 				int[] consumoMedio = getControladorMicromedicao().obterVolumeMedioAguaEsgoto(imovel.getId(), sistemaParametro.getAnoMesFaturamento(), idTipoLigacao, houveIntslacaoHidrometro);
 				retorno.setConsumoMedio(new Integer(consumoMedio[0]).toString());
 
-				// OBTEM DEMOSTRATIVO DO SALDO DA DÁVIDA
+				// OBTEM DEMOSTRATIVO DO SALDO DA Dï¿½VIDA
 
 				// OBTEM VALOR TOTAL
 				int indicadorDebito = 1;
@@ -30966,7 +30984,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0973] Inserir Imóvel em Programa Especial
+	 * [UC0973] Inserir Imï¿½vel em Programa Especial
 	 * 
 	 * Verificar se existe parcelamento para o Imovel em Programa Especial.
 	 * 
@@ -30989,9 +31007,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0995] Emitir Declaração Transferencia de Débitos/Dréditos
+	 * [UC0995] Emitir Declaraï¿½ï¿½o Transferencia de Dï¿½bitos/Drï¿½ditos
 	 * 
-	 * Prepara os beans para o relatório.
+	 * Prepara os beans para o relatï¿½rio.
 	 * 
 	 * @author Daniel Alves
 	 * @throws ControladorException
@@ -31009,7 +31027,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC990] Gerar Relatório de Documentos a Receber
+	 * [UC990] Gerar Relatï¿½rio de Documentos a Receber
 	 * 
 	 * @author Hugo Amorim
 	 * @date 24/02/2010
@@ -31026,7 +31044,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC990] Count Relatório de Documentos a Receber
+	 * [UC990] Count Relatï¿½rio de Documentos a Receber
 	 * 
 	 * @author Hugo Amorim
 	 * @date 22/02/2010
@@ -31042,7 +31060,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0630] Solicitar Emissão do Extrato de Débitos
+	 * [UC0630] Solicitar Emissï¿½o do Extrato de Dï¿½bitos
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 30/03/2010
@@ -31061,7 +31079,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0999] Gerar Relatório de Coleta de Medidor de Energia.
+	 * [UC0999] Gerar Relatï¿½rio de Coleta de Medidor de Energia.
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 08/03/2010
@@ -31082,7 +31100,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0999] Count Relatório de Coleta de Medidor de Energia.
+	 * [UC0999] Count Relatï¿½rio de Coleta de Medidor de Energia.
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 08/03/2010
@@ -31137,7 +31155,7 @@ public class Fachada {
 	/**
 	 * [UC1000] Informar Medidor de Energia por Rota.
 	 * 
-	 * Atualizar Número Medidor de Energia do Imóvel.
+	 * Atualizar Nï¿½mero Medidor de Energia do Imï¿½vel.
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 15/03/2010
@@ -31185,8 +31203,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço [SB0006] â€“ Obter Unidade
-	 * Repavimentadora do Município
+	 * [UC0457] Encerrar Ordem de Serviï¿½o [SB0006] â€“ Obter Unidade
+	 * Repavimentadora do Municï¿½pio
 	 * 
 	 * @author Arthur Carvalho
 	 * @date 12/04/2010
@@ -31198,11 +31216,11 @@ public class Fachada {
 
 			UnidadeOrganizacional unidadeOrganizacional = null;
 
-			// 1.1. Caso a ordem de serviço esteja associada a um registro de
+			// 1.1. Caso a ordem de serviï¿½o esteja associada a um registro de
 			// atendimento
 			if (os.getRegistroAtendimento() != null) {
 
-				// 1.1.1.Caso o endereço do local da ocorrência do registro de
+				// 1.1.1.Caso o endereï¿½o do local da ocorrï¿½ncia do registro de
 				// atendimento seja pelo CEP
 				if (os.getRegistroAtendimento().getLogradouroCep() != null) {
 					tipoPesquisa = ConstantesSistema.PESQUISA_PELO_CEP;
@@ -31225,8 +31243,8 @@ public class Fachada {
 
 	/**
 	 * @author Arthur Carvalho
-	 * @date 12/04/2010 [UC0457] Encerrar Ordem de Serviço [FS0011 â€“ Verificar
-	 *       existência da unidade repavimentadora];
+	 * @date 12/04/2010 [UC0457] Encerrar Ordem de Serviï¿½o [FS0011 â€“ Verificar
+	 *       existï¿½ncia da unidade repavimentadora];
 	 * @param idUnidadeRepavimentadora
 	 */
 	public void verificaUnidadeTipoRepavimentadora(String idUnidadeRepavimentadora) {
@@ -31241,7 +31259,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0997] Gerar Resumo de Ligações por Capacidade de Hidrômetro
+	 * [UC0997] Gerar Resumo de Ligaï¿½ï¿½es por Capacidade de Hidrï¿½metro
 	 * 
 	 * @author Hugo Leonardo
 	 * 
@@ -31259,7 +31277,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0997] Gerar Resumo de Ligações por Capacidade de Hidrômetro
+	 * [UC0997] Gerar Resumo de Ligaï¿½ï¿½es por Capacidade de Hidrï¿½metro
 	 * 
 	 * @author Hugo Leonardo
 	 * 
@@ -31276,7 +31294,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1010] Emitir 2ª via de declaração anual de quitação de débitos
+	 * [UC1010] Emitir 2ï¿½ via de declaraï¿½ï¿½o anual de quitaï¿½ï¿½o de dï¿½bitos
 	 * 
 	 * 
 	 * @author Hugo Amorim
@@ -31296,7 +31314,7 @@ public class Fachada {
 	 * 
 	 * [UC0091] Alterar Dados para Faturamento
 	 * 
-	 * [FS0015] Verificar Imóvel Impressão Simultânea
+	 * [FS0015] Verificar Imï¿½vel Impressï¿½o Simultï¿½nea
 	 * 
 	 * @author Hugo Amorim
 	 * @date 08/04/2010
@@ -31310,9 +31328,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [SB0002] â€“ Replicar os serviços existentes para uma nova vigência e
-	 * valor. Pesquisa a última vigência de cada tipo serviço, e retorna uma
-	 * coleção.
+	 * [SB0002] â€“ Replicar os serviï¿½os existentes para uma nova vigï¿½ncia e
+	 * valor. Pesquisa a ï¿½ltima vigï¿½ncia de cada tipo serviï¿½o, e retorna uma
+	 * coleï¿½ï¿½o.
 	 * 
 	 * @author Josenildo Neves
 	 * @date 03/02/2010
@@ -31328,8 +31346,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [SB0002] â€“ Replicar os serviços existentes para uma nova vigência e
-	 * valor. Pesquisa a última vigência de cada tipo serviço, e retorna o
+	 * [SB0002] â€“ Replicar os serviï¿½os existentes para uma nova vigï¿½ncia e
+	 * valor. Pesquisa a ï¿½ltima vigï¿½ncia de cada tipo serviï¿½o, e retorna o
 	 * total.
 	 * 
 	 * @author Josenildo Neves
@@ -31439,9 +31457,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [SB0002] â€“ Replicar os serviços existentes para uma nova vigência e
-	 * valor. Pesquisa a última vigência de cada tipo serviço, e retorna uma
-	 * coleção.
+	 * [SB0002] â€“ Replicar os serviï¿½os existentes para uma nova vigï¿½ncia e
+	 * valor. Pesquisa a ï¿½ltima vigï¿½ncia de cada tipo serviï¿½o, e retorna uma
+	 * coleï¿½ï¿½o.
 	 * 
 	 * @author Josenildo Neves
 	 * @date 04/02/2010
@@ -31456,9 +31474,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [SB0002] â€“ Replicar os débitos existentes para uma nova vigência e
-	 * valor. Pesquisa a última vigência de cada débito tipo, e retorna uma
-	 * coleção com limite de 10 registros.
+	 * [SB0002] â€“ Replicar os dï¿½bitos existentes para uma nova vigï¿½ncia e
+	 * valor. Pesquisa a ï¿½ltima vigï¿½ncia de cada dï¿½bito tipo, e retorna uma
+	 * coleï¿½ï¿½o com limite de 10 registros.
 	 * 
 	 * @author Josenildo Neves
 	 * @date 22/02/2010
@@ -31474,8 +31492,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [SB0002] â€“ Replicar os débitos existentes para uma nova vigência e
-	 * valor. Pesquisa a última vigência de cada tipo débito, e retorna o total.
+	 * [SB0002] â€“ Replicar os dï¿½bitos existentes para uma nova vigï¿½ncia e
+	 * valor. Pesquisa a ï¿½ltima vigï¿½ncia de cada tipo dï¿½bito, e retorna o total.
 	 * 
 	 * @author Josenildo Neves
 	 * @date 22/02/2010
@@ -31490,9 +31508,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [SB0002] â€“ Replicar os débitos existentes para uma nova vigência e
-	 * valor. Pesquisa a última vigência de cada tipo débito, e retorna uma
-	 * coleção.
+	 * [SB0002] â€“ Replicar os dï¿½bitos existentes para uma nova vigï¿½ncia e
+	 * valor. Pesquisa a ï¿½ltima vigï¿½ncia de cada tipo dï¿½bito, e retorna uma
+	 * coleï¿½ï¿½o.
 	 * 
 	 * @author Josenildo Neves
 	 * @date 22/02/2010
@@ -31507,9 +31525,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [SB0002] â€“ Replicar os débitos existentes para uma nova vigência e
-	 * valor. Pesquisa a última vigência de cada tipo débito, e retorna uma
-	 * coleção.
+	 * [SB0002] â€“ Replicar os dï¿½bitos existentes para uma nova vigï¿½ncia e
+	 * valor. Pesquisa a ï¿½ltima vigï¿½ncia de cada tipo dï¿½bito, e retorna uma
+	 * coleï¿½ï¿½o.
 	 * 
 	 * @author Josenildo Neves
 	 * @date 22/02/2010
@@ -31524,11 +31542,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1001] Emitir declaração de quitação anual de débitos
+	 * [UC1001] Emitir declaraï¿½ï¿½o de quitaï¿½ï¿½o anual de dï¿½bitos
 	 * 
 	 * Pequisa as contas do imovel e verifica se o mesmo esta de acordo com os
-	 * parametros do caso de uso, se sim retorno uma coleção de dados para
-	 * inserção.
+	 * parametros do caso de uso, se sim retorno uma coleï¿½ï¿½o de dados para
+	 * inserï¿½ï¿½o.
 	 * 
 	 * @author Hugo Amorim
 	 * @param indicadorCobrancaJudical
@@ -31600,7 +31618,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa o Resumo de Ligações Economias para o Resumo com Dados para o
+	 * Pesquisa o Resumo de Ligaï¿½ï¿½es Economias para o Resumo com Dados para o
 	 * CAS
 	 * 
 	 * [UC1017] - Gerar Resumo com Dados para o CAS
@@ -31696,7 +31714,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa o Resumo de Pendências para o Resumo com Dados para o CAS
+	 * Pesquisa o Resumo de Pendï¿½ncias para o Resumo com Dados para o CAS
 	 * 
 	 * [UC1017] - Gerar Resumo com Dados para o CAS
 	 * 
@@ -31715,9 +31733,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0982] Inserir tipo de Débito com Vigência.
+	 * [UC0982] Inserir tipo de Dï¿½bito com Vigï¿½ncia.
 	 * 
-	 * Verificar se existe vigência já cadastrada para o tipo de débito.
+	 * Verificar se existe vigï¿½ncia jï¿½ cadastrada para o tipo de dï¿½bito.
 	 * 
 	 * @author Hugo Leonardo
 	 * @param dataVigenciaInicial
@@ -31765,7 +31783,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0473] Consultar Dados Complementares do Imóvel
+	 * [UC0473] Consultar Dados Complementares do Imï¿½vel
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 04/05/2010
@@ -31780,9 +31798,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0391] Inserir valor cobrança Serviço.
+	 * [UC0391] Inserir valor cobranï¿½a Serviï¿½o.
 	 * 
-	 * Verificar se existe vigência já cadastrada para o Servico Tipo.
+	 * Verificar se existe vigï¿½ncia jï¿½ cadastrada para o Servico Tipo.
 	 * 
 	 * @author Hugo Leonardo
 	 * @param dataVigenciaInicial
@@ -31823,8 +31841,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0651] - Inserir Comando de Negativação [FS0030] - Verificar existência
-	 * de inclusão no negativador para o imóvel
+	 * [UC0651] - Inserir Comando de Negativaï¿½ï¿½o [FS0030] - Verificar existï¿½ncia
+	 * de inclusï¿½o no negativador para o imï¿½vel
 	 * 
 	 * @author Vivianne Sousa
 	 * @data 06/05/2010
@@ -31838,13 +31856,13 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0490] Informar Situação de Cobrança [SB0004] â€“ Selecionar Situações
-	 * de Cobrança
+	 * [UC0490] Informar Situaï¿½ï¿½o de Cobranï¿½a [SB0004] â€“ Selecionar Situaï¿½ï¿½es
+	 * de Cobranï¿½a
 	 * 
-	 * seleciona as situações de cobrança (a partir da tabela COBRANÇA_SITUACAO
-	 * com CBST_ICUSO=1 e CBST_ICBLOQUEIOINCLUSAO=2)retirando as ocorrências com
+	 * seleciona as situaï¿½ï¿½es de cobranï¿½a (a partir da tabela COBRANï¿½A_SITUACAO
+	 * com CBST_ICUSO=1 e CBST_ICBLOQUEIOINCLUSAO=2)retirando as ocorrï¿½ncias com
 	 * CBST_ID=CBST_ID da tabela IMOVEL_COBRANCA_SITUACAO para IMOV_ID=Id do
-	 * imóvel recebido e ISCB_DTRETIRADACOBRANCA com valor igual a nulo
+	 * imï¿½vel recebido e ISCB_DTRETIRADACOBRANCA com valor igual a nulo
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 12/05/2010
@@ -31859,8 +31877,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC????] Relatorio Comando Documento Cobranca Retorna a ação de cobrança
-	 * para exibição de parametros do relatório
+	 * [UC????] Relatorio Comando Documento Cobranca Retorna a aï¿½ï¿½o de cobranï¿½a
+	 * para exibiï¿½ï¿½o de parametros do relatï¿½rio
 	 * 
 	 * @author Anderson Italo
 	 * @data 04/05/2010
@@ -31876,7 +31894,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa os dados de Medicao e Consumo da Ligação de Esgoto do imóvel.
+	 * Pesquisa os dados de Medicao e Consumo da Ligaï¿½ï¿½o de Esgoto do imï¿½vel.
 	 * 
 	 * @author Arthur Carvalho
 	 * @date 07/05/2010
@@ -31918,7 +31936,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Metodo utilizado para gerar txt da declaração anual de debitos.
+	 * Metodo utilizado para gerar txt da declaraï¿½ï¿½o anual de debitos.
 	 * 
 	 * 
 	 * @author Hugo Amorim
@@ -31938,9 +31956,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa Ordens de Repavimentação em Processo de Aceite.
+	 * Pesquisa Ordens de Repavimentaï¿½ï¿½o em Processo de Aceite.
 	 * 
-	 * [UC1019] Filtrar Ordens de Repavimetação em Processo de Aceite.
+	 * [UC1019] Filtrar Ordens de Repavimetaï¿½ï¿½o em Processo de Aceite.
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 17/05/2010
@@ -31959,9 +31977,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa quantidade Ordens de Repavimentação em Processo de Aceite.
+	 * Pesquisa quantidade Ordens de Repavimentaï¿½ï¿½o em Processo de Aceite.
 	 * 
-	 * [UC1019] Filtrar Ordens de Repavimetação em Processo de Aceite.
+	 * [UC1019] Filtrar Ordens de Repavimetaï¿½ï¿½o em Processo de Aceite.
 	 * 
 	 * @author Hugo Leonardo.
 	 * @date 17/05/2010
@@ -31977,9 +31995,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1020] - Exibir Ordens de Repavimentação em Processo de Aceite.
+	 * [UC1020] - Exibir Ordens de Repavimentaï¿½ï¿½o em Processo de Aceite.
 	 * 
-	 * Verificar se existe Ordem de Repavimentação em Aceite entre as Ordens
+	 * Verificar se existe Ordem de Repavimentaï¿½ï¿½o em Aceite entre as Ordens
 	 * selecionadas.
 	 * 
 	 * @author Hugo Leonardo
@@ -32000,9 +32018,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1020] - Exibir Ordens de Repavimentação em Processo de Aceite.
+	 * [UC1020] - Exibir Ordens de Repavimentaï¿½ï¿½o em Processo de Aceite.
 	 * 
-	 * Aceitar as Ordens de Serviço em Processo de Repavimentacao Convergente.
+	 * Aceitar as Ordens de Serviï¿½o em Processo de Repavimentacao Convergente.
 	 * 
 	 * @author Hugo Leonardo
 	 * @param OrdemRepavimentacaoProcessoAceiteHelper
@@ -32021,7 +32039,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1022] Relatório de Notificação de Débitos para Impressão Simultânea
+	 * [UC1022] Relatï¿½rio de Notificaï¿½ï¿½o de Dï¿½bitos para Impressï¿½o Simultï¿½nea
 	 * 
 	 * @author Daniel Alves
 	 * @date 19/05/2010
@@ -32056,7 +32074,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0252] â€“ Consultar Parcelamentos de Débitos
+	 * [UC0252] â€“ Consultar Parcelamentos de Dï¿½bitos
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 20/05/2010
@@ -32077,7 +32095,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0252] â€“ Consultar Parcelamentos de Débitos
+	 * [UC0252] â€“ Consultar Parcelamentos de Dï¿½bitos
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 25/05/2010
@@ -32098,9 +32116,9 @@ public class Fachada {
 
 	/**
 	 * [UC0366] Inserir Registro de Atendimento [SB0034] â€“ Verificar RA de
-	 * urgência
+	 * urgï¿½ncia
 	 * 
-	 * Adicionar os Usuários da Unidade relacionada a RA, na tabela
+	 * Adicionar os Usuï¿½rios da Unidade relacionada a RA, na tabela
 	 * "VisualizacaoRaUrgencia"
 	 * 
 	 * @author Daniel Alves
@@ -32121,10 +32139,10 @@ public class Fachada {
 
 	/**
 	 * [UC0366] Inserir Registro de Atendimento [SB0034] â€“ Verificar RA de
-	 * urgência
+	 * urgï¿½ncia
 	 * 
 	 * Verifica se o Registro de Atendimento tem o nivel selecionado como
-	 * Urgência
+	 * Urgï¿½ncia
 	 * 
 	 * @author Daniel Alves
 	 * @param ID
@@ -32143,9 +32161,9 @@ public class Fachada {
 
 	/**
 	 * [UC0503] Tramitar Conjunto Registro Atendimento [SB0004] â€“ Verificar RA
-	 * de urgência
+	 * de urgï¿½ncia
 	 * 
-	 * Atualizar os Usuários da Unidade relacionada a RA, na tabela
+	 * Atualizar os Usuï¿½rios da Unidade relacionada a RA, na tabela
 	 * "VisualizacaoRaUrgencia"
 	 * 
 	 * @author Daniel Alves
@@ -32165,9 +32183,9 @@ public class Fachada {
 
 	/**
 	 * [UC0503] Tramitar Conjunto Registro Atendimento * [SB0004] â€“ Verificar
-	 * RA de urgência
+	 * RA de urgï¿½ncia
 	 * 
-	 * Verifica se o Registro de Atendimento já está relacionado a uma Unidade
+	 * Verifica se o Registro de Atendimento jï¿½ estï¿½ relacionado a uma Unidade
 	 * informada.
 	 * 
 	 * @author Daniel Alves
@@ -32188,7 +32206,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1028] Exibir Registro Atendimento Urgência
+	 * [UC1028] Exibir Registro Atendimento Urgï¿½ncia
 	 * 
 	 * Verifica se o Usuario possui algum Registro de Atendimento urgente.
 	 * 
@@ -32234,9 +32252,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0391] Inserir valor de cobrança de serviço.
+	 * [UC0391] Inserir valor de cobranï¿½a de serviï¿½o.
 	 * 
-	 * Verificar se existe valor de cobrança de serviço já cadastrada.
+	 * Verificar se existe valor de cobranï¿½a de serviï¿½o jï¿½ cadastrada.
 	 * 
 	 * @author Hugo Amorim
 	 * @throws ControladorException
@@ -32255,7 +32273,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
 	 * 
 	 * id localidade e codigo do setor
 	 * 
@@ -32280,7 +32298,7 @@ public class Fachada {
 	}
 
 	/**
-	 * UC1027 - Exibir Consultar Arquivo Texto Leitura Divisão.
+	 * UC1027 - Exibir Consultar Arquivo Texto Leitura Divisï¿½o.
 	 * 
 	 * @author Hugo Leonardo
 	 * @created 04/06/2010
@@ -32300,7 +32318,7 @@ public class Fachada {
 	}
 
 	/**
-	 * UC1027 - Exibir Consultar Arquivo Texto Leitura Divisão.
+	 * UC1027 - Exibir Consultar Arquivo Texto Leitura Divisï¿½o.
 	 * 
 	 * @author Hugo Leonardo
 	 * @created 04/06/2010
@@ -32319,8 +32337,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0391] Inserir valor de cobrança de serviço. Retorna o(s) processo(s)
-	 * que está em execução
+	 * [UC0391] Inserir valor de cobranï¿½a de serviï¿½o. Retorna o(s) processo(s)
+	 * que estï¿½ em execuï¿½ï¿½o
 	 * 
 	 * @author Arthur Carvalho
 	 * @date 04/06/2010
@@ -32344,9 +32362,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0998] Gerar Relação de Parcelamento - Visão Cartão de Crédito
+	 * [UC0998] Gerar Relaï¿½ï¿½o de Parcelamento - Visï¿½o Cartï¿½o de Crï¿½dito
 	 * 
-	 * Bean que preencherá o relatorio
+	 * Bean que preencherï¿½ o relatorio
 	 * 
 	 * @author Hugo Amorim
 	 * @date 11/06/2010
@@ -32362,11 +32380,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0651] Inserir Comando de Negativação [SB0005] â€“ Obter Débito do
-	 * Imóvel
+	 * [UC0651] Inserir Comando de Negativaï¿½ï¿½o [SB0005] â€“ Obter Dï¿½bito do
+	 * Imï¿½vel
 	 * 
-	 * [UC0671] Gerar Movimento de Inclusão de Negativação [SB0006] â€“
-	 * Verificar Critério de Negativação para o Imóvel
+	 * [UC0671] Gerar Movimento de Inclusï¿½o de Negativaï¿½ï¿½o [SB0006] â€“
+	 * Verificar Critï¿½rio de Negativaï¿½ï¿½o para o Imï¿½vel
 	 * 
 	 * @author Vivianne Sousa
 	 * @data 21/06/2010
@@ -32381,11 +32399,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0651] Inserir Comando de Negativação [SB0005] â€“ Obter Débito do
-	 * Imóvel
+	 * [UC0651] Inserir Comando de Negativaï¿½ï¿½o [SB0005] â€“ Obter Dï¿½bito do
+	 * Imï¿½vel
 	 * 
-	 * [UC0671] Gerar Movimento de Inclusão de Negativação [SB0006] â€“
-	 * Verificar Critério de Negativação para o Imóvel
+	 * [UC0671] Gerar Movimento de Inclusï¿½o de Negativaï¿½ï¿½o [SB0006] â€“
+	 * Verificar Critï¿½rio de Negativaï¿½ï¿½o para o Imï¿½vel
 	 * 
 	 * @author Vivianne Sousa
 	 * @data 21/06/2010
@@ -32400,9 +32418,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0811] Processar Requisições do Dispositivo Móvel Impressao Simultanea.
+	 * [UC0811] Processar Requisiï¿½ï¿½es do Dispositivo Mï¿½vel Impressao Simultanea.
 	 * 
-	 * Método que baixa a nova versão do JAD do mobile para o celular
+	 * Mï¿½todo que baixa a nova versï¿½o do JAD do mobile para o celular
 	 * 
 	 * @author Bruno Barros
 	 * @date 08/06/2010
@@ -32419,9 +32437,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0811] Processar Requisições do Dispositivo Móvel Impressao Simultanea.
+	 * [UC0811] Processar Requisiï¿½ï¿½es do Dispositivo Mï¿½vel Impressao Simultanea.
 	 * 
-	 * Método que baixa a nova versão do JAR do mobile para o celular
+	 * Mï¿½todo que baixa a nova versï¿½o do JAR do mobile para o celular
 	 * 
 	 * @author Bruno Barros
 	 * @date 08/06/2010
@@ -32438,7 +32456,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0339] Consultar Dados Diários da Arrecadação
+	 * [UC0339] Consultar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 * 
 	 * @author Hugo Amorim
 	 * @date 29/06/2010
@@ -32515,7 +32533,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0322] Inserir Guia de Devolução
+	 * [UC0322] Inserir Guia de Devoluï¿½ï¿½o
 	 * 
 	 * 
 	 * 
@@ -32622,9 +32640,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0014] Manter Imóvel
+	 * [UC0014] Manter Imï¿½vel
 	 * 
-	 * [FS0037] Verificar Imóvel em Processo de Faturamento
+	 * [FS0037] Verificar Imï¿½vel em Processo de Faturamento
 	 * 
 	 * @author Hugo Amorim
 	 * @param idImovel
@@ -32656,7 +32674,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1040] Gerar Relatório de Acessos por Usuário
+	 * [UC1040] Gerar Relatï¿½rio de Acessos por Usuï¿½rio
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 13/07/2010
@@ -32678,7 +32696,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1040] Gerar Relatório de Acessos por Usuário
+	 * [UC1040] Gerar Relatï¿½rio de Acessos por Usuï¿½rio
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 13/07/2010
@@ -32699,7 +32717,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1039] Gerar Relatório de Funcionalidades e Operações por Grupo
+	 * [UC1039] Gerar Relatï¿½rio de Funcionalidades e Operaï¿½ï¿½es por Grupo
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 15/07/2010
@@ -32721,7 +32739,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1039] Gerar Relatório de Funcionalidades e Operações por Grupo
+	 * [UC1039] Gerar Relatï¿½rio de Funcionalidades e Operaï¿½ï¿½es por Grupo
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 15/07/2010
@@ -32742,8 +32760,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Informa o número total de registros do grupo, auxiliando o esquema de
-	 * paginação
+	 * Informa o nï¿½mero total de registros do grupo, auxiliando o esquema de
+	 * paginaï¿½ï¿½o
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 15/07/2010
@@ -32752,9 +32770,9 @@ public class Fachada {
 	 *            da Pesquisa
 	 * @param Pacote
 	 *            do objeto pesquisado
-	 * @return número de registros da pesquisa
+	 * @return nï¿½mero de registros da pesquisa
 	 * @throws ErroRepositorioException
-	 *             Exceção do repositório
+	 *             Exceï¿½ï¿½o do repositï¿½rio
 	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGrupos(FiltroGrupo filtroGrupo, Integer numeroPagina) {
@@ -32768,7 +32786,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0244] Manter Comando Ação de Cobrança
+	 * [UC0244] Manter Comando Aï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * @author Hugo Amorim
 	 * @created 14/07/2010
@@ -32786,9 +32804,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC1043] Gerar Relatório Análise Pagamento Cartão Débito
+	 * [UC1043] Gerar Relatï¿½rio Anï¿½lise Pagamento Cartï¿½o Dï¿½bito
 	 * 
-	 * -Validações
+	 * -Validaï¿½ï¿½es
 	 * 
 	 * @author Hugo Amorim
 	 * @since 21/07/2010
@@ -32804,7 +32822,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC1043] Gerar Relatório Análise Pagamento Cartão Débito
+	 * [UC1043] Gerar Relatï¿½rio Anï¿½lise Pagamento Cartï¿½o Dï¿½bito
 	 * 
 	 * -Count
 	 * 
@@ -32824,7 +32842,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC1043] Gerar Relatório Análise Pagamento Cartão Débito
+	 * [UC1043] Gerar Relatï¿½rio Anï¿½lise Pagamento Cartï¿½o Dï¿½bito
 	 * 
 	 * -Pesquisa
 	 * 
@@ -32842,10 +32860,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0983] Emitir Ordem de Fiscalização
+	 * [UC0983] Emitir Ordem de Fiscalizaï¿½ï¿½o
 	 * 
-	 * Este Caso Uso permite realizar a emissão de Documentos de Ordem de
-	 * Fiscalização de forma individual para um determinado imóvel.
+	 * Este Caso Uso permite realizar a emissï¿½o de Documentos de Ordem de
+	 * Fiscalizaï¿½ï¿½o de forma individual para um determinado imï¿½vel.
 	 * 
 	 * @author Hugo Amorim
 	 * @data 08/02/2010
@@ -32877,7 +32895,7 @@ public class Fachada {
 	/**
 	 * [UC0820] - Atualizar Faturamento do Movimento Celular
 	 * 
-	 * Verifica se a quantidade de imóveis que chegaram é a esperada.
+	 * Verifica se a quantidade de imï¿½veis que chegaram ï¿½ a esperada.
 	 * 
 	 * @author bruno
 	 * @date 16/08/2010
@@ -32904,7 +32922,7 @@ public class Fachada {
 	}
 
 	/**
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @throws ControladorException
 	 * @data 22/06/2010
 	 */
@@ -32923,8 +32941,8 @@ public class Fachada {
 	/**
 	 * Pesquisa Conta Historico
 	 * 
-	 * Pesquisa a conta historico do imóvel com a referência informada pelo
-	 * usuário
+	 * Pesquisa a conta historico do imï¿½vel com a referï¿½ncia informada pelo
+	 * usuï¿½rio
 	 * 
 	 * 
 	 * @author Fernando Fontelles
@@ -32943,7 +32961,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0305] Consultar análise Faturamento
+	 * [UC0305] Consultar anï¿½lise Faturamento
 	 * 
 	 * @author Hugo Amorim
 	 * @date 06/08/2010
@@ -32958,7 +32976,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0305] Consultar análise Faturamento -Pesquisa para geração relatorio.
+	 * [UC0305] Consultar anï¿½lise Faturamento -Pesquisa para geraï¿½ï¿½o relatorio.
 	 * 
 	 * @author Hugo Amorim
 	 * @date 06/08/2010
@@ -32994,7 +33012,7 @@ public class Fachada {
 
 	/**
 	 * Pesquisa Dados do Contrato Empresa Servico [UC1055] - Informar Valor de
-	 * Item de Serviço Por Contrato
+	 * Item de Serviï¿½o Por Contrato
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 30/07/2010
@@ -33014,7 +33032,7 @@ public class Fachada {
 
 	/**
 	 * Remover todos os Itens de Servico do Contrato [UC1055] - Informar Valor
-	 * de Item de Serviço Por Contrato
+	 * de Item de Serviï¿½o Por Contrato
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 03/08/2010
@@ -33034,7 +33052,7 @@ public class Fachada {
 
 	/**
 	 * Remover todos os Aditivos do Contrato [UC1055] - Informar Valor de Item
-	 * de Serviço Por Contrato
+	 * de Serviï¿½o Por Contrato
 	 * 
 	 * @author Mariana Victor
 	 * @date 25/11/2010
@@ -33051,7 +33069,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1054] - Gerar Relatório Boletim de Medição
+	 * [UC1054] - Gerar Relatï¿½rio Boletim de Mediï¿½ï¿½o
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 05/08/2010
@@ -33073,7 +33091,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1054] - Gerar Relatório Boletim de Medição
+	 * [UC1054] - Gerar Relatï¿½rio Boletim de Mediï¿½ï¿½o
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 06/08/2010
@@ -33092,7 +33110,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1051] Gerar Relatório de Amostragem das Anormalidades Informadas
+	 * [UC1051] Gerar Relatï¿½rio de Amostragem das Anormalidades Informadas
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 09/08/2010
@@ -33143,7 +33161,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * Seleciona OSFS_DTFISCALIZACAOSITUACAO da tabela ORDEM_SERVICO_FISC_SIT
 	 * para ORSE_ID=ORSE_ID da tabela ORDEM_SERVICO
@@ -33162,7 +33180,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 29/07/2010
@@ -33177,7 +33195,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 30/07/2010
@@ -33192,7 +33210,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/08/2010
@@ -33208,7 +33226,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 03/08/2010
@@ -33224,7 +33242,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 09/08/2010
@@ -33240,7 +33258,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/08/2010
@@ -33257,7 +33275,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/08/2010
@@ -33275,7 +33293,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 24/08/2010
@@ -33294,7 +33312,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0441] Consultar Dados da Ordem de Serviço
+	 * [UC0441] Consultar Dados da Ordem de Serviï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 01/09/2010
@@ -33310,10 +33328,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1047] Inserir Controle de Liberação de Permissão Especial
+	 * [UC1047] Inserir Controle de Liberaï¿½ï¿½o de Permissï¿½o Especial
 	 * 
-	 * Metodo que verifica os dados da tabela e inseri um Controle de Liberação
-	 * de Permissão Especial
+	 * Metodo que verifica os dados da tabela e inseri um Controle de Liberaï¿½ï¿½o
+	 * de Permissï¿½o Especial
 	 * 
 	 * 
 	 * @author Daniel Alves
@@ -33336,8 +33354,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1048] Manter Controle de Liberação de Permissão Especial que atualiza
-	 * o Controle de Liberação de Permissão Especial
+	 * [UC1048] Manter Controle de Liberaï¿½ï¿½o de Permissï¿½o Especial que atualiza
+	 * o Controle de Liberaï¿½ï¿½o de Permissï¿½o Especial
 	 * 
 	 * 
 	 * @author Daniel Alves
@@ -33377,7 +33395,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Verifica se uma rota em questão está com os arquivos de impressão
+	 * Verifica se uma rota em questï¿½o estï¿½ com os arquivos de impressï¿½o
 	 * simultanea divididos
 	 * 
 	 * @autor Bruno Barros.
@@ -33386,7 +33404,7 @@ public class Fachada {
 	 * @param idRota
 	 *            - Id da rota a ser pesquisada
 	 * 
-	 * @return boolean - A rota está dividida
+	 * @return boolean - A rota estï¿½ dividida
 	 */
 	public boolean isRotaDividida(Integer idRota, Integer anoMesFaturamento) {
 		try {
@@ -33398,17 +33416,17 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Verifica se uma rota em questão está com os arquivos de impressão
-	 * simultanea divididos com a situação diferente da situação enviada como
-	 * parâmetro
+	 * Verifica se uma rota em questï¿½o estï¿½ com os arquivos de impressï¿½o
+	 * simultanea divididos com a situaï¿½ï¿½o diferente da situaï¿½ï¿½o enviada como
+	 * parï¿½metro
 	 * 
-	 * @autor Sávio Luiz.
+	 * @autor Sï¿½vio Luiz.
 	 * @date 30/09/2010
 	 * 
 	 * @param idRota
 	 *            - Id da rota a ser pesquisada
 	 * 
-	 * @return boolean - A rota está dividida
+	 * @return boolean - A rota estï¿½ dividida
 	 */
 	public boolean verificarExistenciaArquivosDivididosSituacaoDiferente(Integer idRota, Integer anoMesFaturamento, Integer[] idsSituacaoTransmissao) {
 		try {
@@ -33439,9 +33457,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica de imovel é medido ou não-medido
+	 * Verifica de imovel ï¿½ medido ou nï¿½o-medido
 	 * 
-	 * retorna true se medido false se não-medido
+	 * retorna true se medido false se nï¿½o-medido
 	 * 
 	 * @author Hugo Amorim
 	 * @date 26/08/2010
@@ -33459,8 +33477,8 @@ public class Fachada {
 	/**
 	 * [UC0352] Emitir Contas e Cartas
 	 * 
-	 * [SB0031] Obter Representação numérica do Nosso Número da Ficha de
-	 * Compensação
+	 * [SB0031] Obter Representaï¿½ï¿½o numï¿½rica do Nosso Nï¿½mero da Ficha de
+	 * Compensaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/11/2007
@@ -33479,7 +33497,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa se existe algum controle com permissão especial ativa para a
+	 * Pesquisa se existe algum controle com permissï¿½o especial ativa para a
 	 * funcionalidade.
 	 * 
 	 * @author: Daniel Alves
@@ -33514,14 +33532,14 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Atualiza telefone padrão
+	 * Atualiza telefone padrï¿½o
 	 * 
 	 * @author Daniel Alves
 	 * @date 06/09/2010
 	 * 
 	 * @param idCliente
 	 * @param idClienteFonePadrao
-	 *            (novo telefone padrão do cliente).
+	 *            (novo telefone padrï¿½o do cliente).
 	 * @throws ControladorException
 	 */
 	public void atualizarTelefonePadrao(String idCliente, String idClienteFonePadrao) {
@@ -33536,34 +33554,34 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0153] Apresentar Dados Para Análise da Medição e Consumo
+	 * [UC0153] Apresentar Dados Para Anï¿½lise da Mediï¿½ï¿½o e Consumo
 	 * 
-	 * [FS0004] ? Solicitar releitura .Caso o usuário solicite a releitura de
-	 * determinado imóvel, o sistema identifica o imóvel, grava os dados
+	 * [FS0004] ? Solicitar releitura .Caso o usuï¿½rio solicite a releitura de
+	 * determinado imï¿½vel, o sistema identifica o imï¿½vel, grava os dados
 	 * (REMO_ID, IMOV_ID, REMO_ICRELEITURA, USUR_ID, REMO_AMREFERENCIA
 	 * preenchido com o valor FTGR_AMREFERENCIA) na tabela RELEITURA_MOBILE e
-	 * envia a seguinte mensagem para o celular do leiturista responsável pela
+	 * envia a seguinte mensagem para o celular do leiturista responsï¿½vel pela
 	 * rota (LEIT_ID que esta na tabela rota em que o imovel pertence e
 	 * identificar o celular deste (LEIT_NNIMEI) para envio da mensagem):
-	 * ?Refazer leitura para o imóvel <IMOV_ID>. Ir para o imóvel??
+	 * ?Refazer leitura para o imï¿½vel <IMOV_ID>. Ir para o imï¿½vel??
 	 * 
-	 * .Caso o imóvel ainda não tenha tido leitura para o ano/mês de referência
-	 * (se não existir registro na tabela MOVIMENTO_CONTAPREFATURADA no ano/mês
-	 * de referencia), o sistema exibirá a seguinte mensagem: Leitura não
-	 * realizada para o imóvel em < FTGR_AMREFERENCIA >;
+	 * .Caso o imï¿½vel ainda nï¿½o tenha tido leitura para o ano/mï¿½s de referï¿½ncia
+	 * (se nï¿½o existir registro na tabela MOVIMENTO_CONTAPREFATURADA no ano/mï¿½s
+	 * de referencia), o sistema exibirï¿½ a seguinte mensagem: Leitura nï¿½o
+	 * realizada para o imï¿½vel em < FTGR_AMREFERENCIA >;
 	 * 
-	 * .Caso o leiturista já tenha finalizado a rota (verificar na tabela
-	 * ARQUIVO_TEXTO_ROTEIRO_EMPRESA se existem ocorrências para a rota
-	 * mencionada no ano/mês de referencia e o campo STIL_ID correspondente a
-	 * descrição "FINALIZADO" na tabela SITUACAO_TRANSMISSAO_LEITURA) será
-	 * enviada a seguinte mensagem para o operador: ?Rota já foi finalizada pelo
+	 * .Caso o leiturista jï¿½ tenha finalizado a rota (verificar na tabela
+	 * ARQUIVO_TEXTO_ROTEIRO_EMPRESA se existem ocorrï¿½ncias para a rota
+	 * mencionada no ano/mï¿½s de referencia e o campo STIL_ID correspondente a
+	 * descriï¿½ï¿½o "FINALIZADO" na tabela SITUACAO_TRANSMISSAO_LEITURA) serï¿½
+	 * enviada a seguinte mensagem para o operador: ?Rota jï¿½ foi finalizada pelo
 	 * leiturista? e retorna ao passo que chamou este fluxo.
 	 * 
 	 * @autor Bruno Barros
 	 * @date 31/08/2010
 	 * 
 	 * @param String
-	 *            matricula - Imovel cuja releitura será solicitada
+	 *            matricula - Imovel cuja releitura serï¿½ solicitada
 	 */
 	public void solicitarReleitura(String matricula, Usuario usuarioLogado) {
 		try {
@@ -33594,7 +33612,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Pesquisa Documentos de cobranças validos para imovel para determinado
+	 * Pesquisa Documentos de cobranï¿½as validos para imovel para determinado
 	 * tipo de documento
 	 * 
 	 * @author Hugo Amorim
@@ -33612,7 +33630,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Pesquisa os imóveis para a tela de Filtrar Imoveis para Releitura
+	 * Pesquisa os imï¿½veis para a tela de Filtrar Imoveis para Releitura
 	 * 
 	 * @author Bruno Barros
 	 * @date 14/09/2010
@@ -33634,7 +33652,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1010] Emitir 2ª via de declaração anual de quitação de débitos
+	 * [UC1010] Emitir 2ï¿½ via de declaraï¿½ï¿½o anual de quitaï¿½ï¿½o de dï¿½bitos
 	 * 
 	 * @Author Daniel Alves
 	 * @Date 14/09/2010
@@ -33653,7 +33671,7 @@ public class Fachada {
 	 * Remove todos os telefones de um determinado cliente
 	 * 
 	 * @param idCliente
-	 *            Código do cliente que terá seus telefones apagados
+	 *            Cï¿½digo do cliente que terï¿½ seus telefones apagados
 	 * @exception ErroRepositorioException
 	 *                Erro no BD
 	 */
@@ -33667,13 +33685,13 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Verifica se a releitura solicitada já foi realizada
+	 * Verifica se a releitura solicitada jï¿½ foi realizada
 	 * 
 	 * @author Bruno Barros
 	 * @date 13/09/2010
 	 * 
 	 * @param idImovel
-	 *            Imóvel a ser pesquisado
+	 *            Imï¿½vel a ser pesquisado
 	 * @param anoMesFaturamento
 	 *            Ano mes de faturamento a ser pesquisado
 	 * @return
@@ -33690,14 +33708,14 @@ public class Fachada {
 	 * @author Hugo Leonardo
 	 * @date 21/09/2010
 	 * 
-	 *       UC_0009 - Manter Cliente [FS0008] ? Verificar permissão especial
-	 *       para cliente de imóvel público
+	 *       UC_0009 - Manter Cliente [FS0008] ? Verificar permissï¿½o especial
+	 *       para cliente de imï¿½vel pï¿½blico
 	 * 
-	 *       Verifica se o Cliente possui algum imóvel, cujo o tipo da categoria
+	 *       Verifica se o Cliente possui algum imï¿½vel, cujo o tipo da categoria
 	 *       em subcategoria seja igual a PUBLICO.
 	 * 
-	 *       Caso o cliente possua algum imóvel, retornar a quantidade de
-	 *       imoveis nesta situação Caso contrário retorna zero.
+	 *       Caso o cliente possua algum imï¿½vel, retornar a quantidade de
+	 *       imoveis nesta situaï¿½ï¿½o Caso contrï¿½rio retorna zero.
 	 * 
 	 * @param idCliente
 	 * @return Boolean
@@ -33715,7 +33733,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1074] Gerar Relatório Alterações no Sistema por Coluna
+	 * [UC1074] Gerar Relatï¿½rio Alteraï¿½ï¿½es no Sistema por Coluna
 	 * 
 	 * @author Hugo Amorim
 	 * @date 08/09/2010
@@ -33766,7 +33784,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1074] Gerar Relatório Alterações no Sistema por Coluna
+	 * [UC1074] Gerar Relatï¿½rio Alteraï¿½ï¿½es no Sistema por Coluna
 	 * 
 	 * [FS0007]
 	 * 
@@ -33782,10 +33800,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1076] Gerar Relatório Atualizações Cadastrais Via Internet.
+	 * [UC1076] Gerar Relatï¿½rio Atualizaï¿½ï¿½es Cadastrais Via Internet.
 	 * 
 	 * @author Daniel Alves
-	 * @date 28/09/2010 Consulta do Relatório Analítico
+	 * @date 28/09/2010 Consulta do Relatï¿½rio Analï¿½tico
 	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioAtualizacaoCadastralViaInternet(GerarRelatorioAtualizacaoCadastralViaInternetHelper filtro) throws ControladorException {
@@ -33799,10 +33817,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1076] Gerar Relatório Atualizações Cadastrais Via Internet.
+	 * [UC1076] Gerar Relatï¿½rio Atualizaï¿½ï¿½es Cadastrais Via Internet.
 	 * 
 	 * @author Daniel Alves
-	 * @date 28/09/2010 Consulta do Relatório Resumo
+	 * @date 28/09/2010 Consulta do Relatï¿½rio Resumo
 	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioResumoAtualizacaoCadastralViaInternet(GerarRelatorioAtualizacaoCadastralViaInternetHelper filtro) throws ControladorException {
@@ -33863,7 +33881,7 @@ public class Fachada {
 	 * @param anoMesReferencia
 	 * @param indicadorContaImpressa
 	 * @param indicadorMedido
-	 * @return Colecao com as informações necessarias para o prenchimento da
+	 * @return Colecao com as informaï¿½ï¿½es necessarias para o prenchimento da
 	 *         tela.
 	 * 
 	 */
@@ -33970,10 +33988,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0014] Manter Imóvel -- [FS0039] â€“ Verificar Duplicidade de Inscrição
+	 * [UC0014] Manter Imï¿½vel -- [FS0039] â€“ Verificar Duplicidade de Inscriï¿½ï¿½o
 	 * 
-	 * [UC0074] Alterar Inscrição de Imóvel -- [FS0010] â€“ Verificar
-	 * Duplicidade de Inscrição
+	 * [UC0074] Alterar Inscriï¿½ï¿½o de Imï¿½vel -- [FS0010] â€“ Verificar
+	 * Duplicidade de Inscriï¿½ï¿½o
 	 * 
 	 * @author Arthur Carvalho
 	 * @date 19/09/2010
@@ -33997,7 +34015,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0995] Emitir Declaração Transferência de Débitos/Créditos
+	 * [UC0995] Emitir Declaraï¿½ï¿½o Transferï¿½ncia de Dï¿½bitos/Crï¿½ditos
 	 * 
 	 * @author Daniel Alves
 	 * @date 23/09/2010
@@ -34014,10 +34032,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0592] Filtrar Relação de Parcelamentos
+	 * [UC0592] Filtrar Relaï¿½ï¿½o de Parcelamentos
 	 * 
-	 * Método reponsável por retornar todos os municípios que possuem alguma
-	 * associação com uma localidade (localidade.muni_idprincipal != null)
+	 * Mï¿½todo reponsï¿½vel por retornar todos os municï¿½pios que possuem alguma
+	 * associaï¿½ï¿½o com uma localidade (localidade.muni_idprincipal != null)
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 26/04/2011
@@ -34035,7 +34053,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 19/08/2010
@@ -34049,11 +34067,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0811] Processar Requisições do Dispositivo Móvel Impressao Simultanea.
+	 * [UC0811] Processar Requisiï¿½ï¿½es do Dispositivo Mï¿½vel Impressao Simultanea.
 	 * 
-	 * Método criado para evitar o if "compesa" ou if "caern". Para todas as
-	 * empresas, o próximo arquivo do leiturista é disponibilizado assim que o
-	 * arquivo anterior é finalizado. Apenas na compesa, não permite.
+	 * Mï¿½todo criado para evitar o if "compesa" ou if "caern". Para todas as
+	 * empresas, o prï¿½ximo arquivo do leiturista ï¿½ disponibilizado assim que o
+	 * arquivo anterior ï¿½ finalizado. Apenas na compesa, nï¿½o permite.
 	 * 
 	 * @author Bruno Barros
 	 * @date 05/10/2010
@@ -34072,7 +34090,7 @@ public class Fachada {
 	/**
 	 * [UC0933] Alterar Leiturista do Arquivo Texto para Leitura
 	 * 
-	 * @author Tiago Nascimento, Rômulo Aurélio
+	 * @author Tiago Nascimento, Rï¿½mulo Aurï¿½lio
 	 * @Data ??/??/??, 27/10/2010
 	 * 
 	 */
@@ -34096,7 +34114,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1076] Gerar Relatório Atualizações Cadastrais Via Internet.
+	 * [UC1076] Gerar Relatï¿½rio Atualizaï¿½ï¿½es Cadastrais Via Internet.
 	 * 
 	 * @author Hugo Amorim de Lyra
 	 * @date 06/10/2010
@@ -34110,7 +34128,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1056] Gerar Relatório de Acompanhamento dos Registros de Atendimento
+	 * [UC1056] Gerar Relatï¿½rio de Acompanhamento dos Registros de Atendimento
 	 * Analitico
 	 * 
 	 * @author Hugo Leonardo
@@ -34133,7 +34151,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1056] Pesquisar Total de RA's do Relatório de Acompanhamento dos
+	 * [UC1056] Pesquisar Total de RA's do Relatï¿½rio de Acompanhamento dos
 	 * Registros de Atendimento
 	 * 
 	 * @author Hugo Leonardo
@@ -34155,7 +34173,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1056] Gerar Relatório de Acompanhamento dos Registros de Atendimento
+	 * [UC1056] Gerar Relatï¿½rio de Acompanhamento dos Registros de Atendimento
 	 * Sintetico Encerrado
 	 * 
 	 * @author Hugo Leonardo
@@ -34178,7 +34196,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1056] Gerar Relatório de Acompanhamento dos Registros de Atendimento
+	 * [UC1056] Gerar Relatï¿½rio de Acompanhamento dos Registros de Atendimento
 	 * Sintetico Aberto
 	 * 
 	 * @author Hugo Leonardo
@@ -34202,9 +34220,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC0630] Solicitar Emissão do Extrato de Débitos
+	 * [UC0630] Solicitar Emissï¿½o do Extrato de Dï¿½bitos
 	 * 
-	 * [SB0001] â€“ Calcular valor dos descontos pagamento à  vista.
+	 * [SB0001] â€“ Calcular valor dos descontos pagamento ï¿½ vista.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/10/2010
@@ -34222,9 +34240,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0630] Solicitar Emissão do Extrato de Débitos
+	 * [UC0630] Solicitar Emissï¿½o do Extrato de Dï¿½bitos
 	 * 
-	 * [SB0001] â€“ Calcular valor dos descontos pagamento à  vista.
+	 * [SB0001] â€“ Calcular valor dos descontos pagamento ï¿½ vista.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/10/2010
@@ -34240,7 +34258,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1083] Prescrever Débitos de Imóveis Públicos
+	 * [UC1083] Prescrever Dï¿½bitos de Imï¿½veis Pï¿½blicos
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 18/10/2010
@@ -34262,9 +34280,9 @@ public class Fachada {
 	 * 
 	 * [UC0091] Alterar Dados para Faturamento
 	 * 
-	 * [FS0015] Verificar Imóvel Impressão Simultânea
+	 * [FS0015] Verificar Imï¿½vel Impressï¿½o Simultï¿½nea
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 08/11/2010
 	 */
 	public boolean verificarExistenciaArquivoDeImpressaoRotaAlternativa(Integer idImovel, Integer tipoMedicao) {
@@ -34309,8 +34327,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Remover todos os Grupos Associados a Solicitação de Acesso. [UC1093] -
-	 * Manter Solicitação de Acesso
+	 * Remover todos os Grupos Associados a Solicitaï¿½ï¿½o de Acesso. [UC1093] -
+	 * Manter Solicitaï¿½ï¿½o de Acesso
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 18/11/2010
@@ -34348,7 +34366,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1093] Gerar Relatório Solicitação de Acesso
+	 * [UC1093] Gerar Relatï¿½rio Solicitaï¿½ï¿½o de Acesso
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 23/11/2010
@@ -34370,7 +34388,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0724] - Processar Pagamento com Ficha de Compensação
+	 * [UC0724] - Processar Pagamento com Ficha de Compensaï¿½ï¿½o
 	 * 
 	 * Autor: Vivianne Sousa Data: 26/11/2007
 	 */
@@ -34408,7 +34426,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0472] Consultar Imóvel
+	 * [UC0472] Consultar Imï¿½vel
 	 * 
 	 * @author Vivianne Sousa
 	 * @data 03/12/2010
@@ -34445,7 +34463,7 @@ public class Fachada {
 
 	/**
 	 * Remover todas as LocalidadeComEspecificacaoUnidade [UC1091] Informar
-	 * Associação de Localidade com Especificação e Unidade
+	 * Associaï¿½ï¿½o de Localidade com Especificaï¿½ï¿½o e Unidade
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 30/11/2010
@@ -34484,10 +34502,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Retificação de um conjunto de contas que foram pagas e que o pagamento
-	 * não estava o débito e/ou crédito (Conta paga via Impressão Simultânea)
+	 * Retificaï¿½ï¿½o de um conjunto de contas que foram pagas e que o pagamento
+	 * nï¿½o estava o dï¿½bito e/ou crï¿½dito (Conta paga via Impressï¿½o Simultï¿½nea)
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 27/12/2010
 	 * 
 	 * @throws ErroRepositorioException
@@ -34517,10 +34535,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Retificação de um conjunto de contas que foram pagas e que o pagamento
-	 * não estava o débito e/ou crédito (Conta paga via Impressão Simultânea)
+	 * Retificaï¿½ï¿½o de um conjunto de contas que foram pagas e que o pagamento
+	 * nï¿½o estava o dï¿½bito e/ou crï¿½dito (Conta paga via Impressï¿½o Simultï¿½nea)
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 27/12/2010
 	 * 
 	 * @throws ErroRepositorioException
@@ -34538,12 +34556,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Inserir Débitos para as contas impressas via Impressão Simultânea de
+	 * Inserir Dï¿½bitos para as contas impressas via Impressï¿½o Simultï¿½nea de
 	 * Contas que sairam com o valor da conta errada (Alguns grupos com tarifa
-	 * proporcional que não estava levando em consideração a quantidade de
+	 * proporcional que nï¿½o estava levando em consideraï¿½ï¿½o a quantidade de
 	 * economias)
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 12/01/2011
 	 * 
 	 * @throws ErroRepositorioException
@@ -34561,12 +34579,12 @@ public class Fachada {
 	}
 
 	/**
-	 * Inserir Débitos para as contas impressas via Impressão Simultânea de
+	 * Inserir Dï¿½bitos para as contas impressas via Impressï¿½o Simultï¿½nea de
 	 * Contas que sairam com o valor da conta errada (Alguns grupos com tarifa
-	 * proporcional que não estava levando em consideração a quantidade de
+	 * proporcional que nï¿½o estava levando em consideraï¿½ï¿½o a quantidade de
 	 * economias)
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @date 12/01/2011
 	 * 
 	 * @throws ErroRepositorioException
@@ -34578,8 +34596,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1098] Informar Não Aceitação de Motivo de Encerramento Ordem de
-	 * Serviço
+	 * [UC1098] Informar Nï¿½o Aceitaï¿½ï¿½o de Motivo de Encerramento Ordem de
+	 * Serviï¿½o
 	 * 
 	 * @author Mariana Victor
 	 * @date 23/12/2010
@@ -34600,7 +34618,7 @@ public class Fachada {
 	 * 
 	 * @param id
 	 *            , idRepavimentadora, idPavimento, dataInicio, dataFinal,
-	 *            indicadorPavimento: 1-Rua, 2-Calçada
+	 *            indicadorPavimento: 1-Rua, 2-Calï¿½ada
 	 * @return void
 	 */
 
@@ -34619,7 +34637,7 @@ public class Fachada {
 	/**
 	 * [UC0204] Consultar Conta
 	 * 
-	 * Pesquisa o consumo faturado do imóvel
+	 * Pesquisa o consumo faturado do imï¿½vel
 	 * 
 	 * @author Mariana Victor
 	 * @date 06/01/2011
@@ -34638,9 +34656,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0473] Consultar Dados Complementares do Imóvel
+	 * [UC0473] Consultar Dados Complementares do Imï¿½vel
 	 * 
-	 * Pesquisa as matrículas associadas à  mesma tarifa de consumo do imóvel.
+	 * Pesquisa as matrï¿½culas associadas ï¿½ mesma tarifa de consumo do imï¿½vel.
 	 * 
 	 * @author Mariana Victor
 	 * @date 06/01/2011
@@ -34665,7 +34683,7 @@ public class Fachada {
 	 * @date 27/12/2010
 	 * 
 	 * @param idRepavimentadora
-	 *            , idPavimento, indicadorPavimento: 1-Rua, 2-Calçada
+	 *            , idPavimento, indicadorPavimento: 1-Rua, 2-Calï¿½ada
 	 * @return boolean
 	 */
 
@@ -34679,7 +34697,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1109] Filtrar Dados para Geração Boletim de Custo de Repavimentação
+	 * [UC1109] Filtrar Dados para Geraï¿½ï¿½o Boletim de Custo de Repavimentaï¿½ï¿½o
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 01/01/2011
@@ -34700,7 +34718,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1110] Gerar Boletim de Custo de Repavimentação por Tipo de Pavimento
+	 * [UC1110] Gerar Boletim de Custo de Repavimentaï¿½ï¿½o por Tipo de Pavimento
 	 * 
 	 * Pesquisar Tipos de Pavimento
 	 * 
@@ -34723,7 +34741,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1110] Gerar Boletim de Custo de Repavimentação por Tipo de Pavimento
+	 * [UC1110] Gerar Boletim de Custo de Repavimentaï¿½ï¿½o por Tipo de Pavimento
 	 * 
 	 * Pesquisar Tipos de Pavimento
 	 * 
@@ -34755,7 +34773,7 @@ public class Fachada {
 	 * 
 	 * @param id
 	 *            , idRepavimentadora, idPavimento, dataInicio, dataFinal,
-	 *            indicadorPavimento: 1-Rua, 2-Calçada
+	 *            indicadorPavimento: 1-Rua, 2-Calï¿½ada
 	 * @throws ControladorException
 	 */
 	public Integer verificarExistenciDiasSemValorCustoPavimentoPorRepavimentadora(Integer idAtualizacao, Integer idRepavimentadora, Integer idPavimento, Date dataInicio, Date dataFinal,
@@ -34771,7 +34789,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC676] Consultar Resumo Negativação
+	 * [UC676] Consultar Resumo Negativaï¿½ï¿½o
 	 * 
 	 * @author Ivan Sergio
 	 * @date 14/01/2011
@@ -34792,7 +34810,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1121] Gerar Relatório de Imóveis com Alteração de Inscrição Via Batch
+	 * [UC1121] Gerar Relatï¿½rio de Imï¿½veis com Alteraï¿½ï¿½o de Inscriï¿½ï¿½o Via Batch
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 19/01/2011
@@ -34813,7 +34831,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1121] Gerar Relatório de Imóveis com Alteração de Inscrição Via Batch
+	 * [UC1121] Gerar Relatï¿½rio de Imï¿½veis com Alteraï¿½ï¿½o de Inscriï¿½ï¿½o Via Batch
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 19/01/2011
@@ -34835,8 +34853,8 @@ public class Fachada {
 	/**
 	 * [UC0424] Consultar Registro de Atendimento
 	 * 
-	 * verifica a unidade anterior do registro de atendimento pelo último
-	 * trâmite efetuado
+	 * verifica a unidade anterior do registro de atendimento pelo ï¿½ltimo
+	 * trï¿½mite efetuado
 	 * 
 	 * 
 	 * @author Vivianne Sousa
@@ -34913,7 +34931,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0489] - Consultar Resumo das Ações de Cobrança Popup de Motivo de
+	 * [UC0489] - Consultar Resumo das Aï¿½ï¿½es de Cobranï¿½a Popup de Motivo de
 	 * Encerramento
 	 * 
 	 * @author Ivan Sergio
@@ -34933,7 +34951,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Serviï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/01/2011
@@ -34947,7 +34965,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0457] Encerrar Ordem de Serviço
+	 * [UC0457] Encerrar Ordem de Serviï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/01/2011
@@ -34961,7 +34979,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1116] Atualizar Informações da OS para Boletim de Medição
+	 * [UC1116] Atualizar Informaï¿½ï¿½es da OS para Boletim de Mediï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/02/2011
@@ -34979,7 +34997,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1116] Atualizar Informações da OS para Boletim de Medição
+	 * [UC1116] Atualizar Informaï¿½ï¿½es da OS para Boletim de Mediï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/02/2011
@@ -34993,7 +35011,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0xxx] Emitir Documentos de Cobrança Em Lote
+	 * [UC0xxx] Emitir Documentos de Cobranï¿½a Em Lote
 	 * 
 	 * @author Mariana Vcitor
 	 * @date 17/01/2011
@@ -35012,7 +35030,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0xxx] Emitir Documentos de Cobrança Em Lote
+	 * [UC0xxx] Emitir Documentos de Cobranï¿½a Em Lote
 	 * 
 	 * @author Mariana Vcitor
 	 * @date 20/01/2011
@@ -35032,7 +35050,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0xxx] Emitir Documentos de Cobrança Em Lote
+	 * [UC0xxx] Emitir Documentos de Cobranï¿½a Em Lote
 	 * 
 	 * @author Mariana Victor
 	 * @date 25/01/2011
@@ -35052,7 +35070,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0xxx] Emitir Documentos de Cobrança Em Lote
+	 * [UC0xxx] Emitir Documentos de Cobranï¿½a Em Lote
 	 * 
 	 * @author Mariana Vcitor
 	 * @date 20/01/2011
@@ -35071,7 +35089,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0xxx] Emitir Documentos de Cobrança Em Lote
+	 * [UC0xxx] Emitir Documentos de Cobranï¿½a Em Lote
 	 * 
 	 * @author Mariana Victor
 	 * @created 26/01/2011
@@ -35087,7 +35105,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0339] Consultar Dados Diários da Arrecadação
+	 * [UC0339] Consultar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 * 
 	 * @author Mariana Victor
 	 * @date 01/02/2011
@@ -35108,7 +35126,7 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * [FS0048] â€“ Verificar existência da conta.
+	 * [FS0048] â€“ Verificar existï¿½ncia da conta.
 	 * 
 	 * @author Mariana Victor
 	 * @date 27/01/2011
@@ -35130,8 +35148,8 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Conta a quantidade de Clientes Negativados para a Unidade, Gerência e
-	 * Data de Envio [UC0693] Gerar Relatório Acompanhamaneto de Clientes
+	 * Conta a quantidade de Clientes Negativados para a Unidade, Gerï¿½ncia e
+	 * Data de Envio [UC0693] Gerar Relatï¿½rio Acompanhamaneto de Clientes
 	 * Negativados
 	 * 
 	 * @author Mariana Victor
@@ -35207,7 +35225,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0146] Manter Conta [FS0037]-Verificar ocorrências mesmo motivo no ano
+	 * [UC0146] Manter Conta [FS0037]-Verificar ocorrï¿½ncias mesmo motivo no ano
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/02/2011
@@ -35247,8 +35265,8 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Soma os valores de débitos dos Clientes Negativados para a Unidade,
-	 * Gerência e Data de Envio [UC0693] Gerar Relatório Acompanhamaneto de
+	 * Soma os valores de dï¿½bitos dos Clientes Negativados para a Unidade,
+	 * Gerï¿½ncia e Data de Envio [UC0693] Gerar Relatï¿½rio Acompanhamaneto de
 	 * Clientes Negativados
 	 * 
 	 * @author Mariana Victor
@@ -35266,8 +35284,8 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Soma os valores Pagos dos Clientes Negativados para a Unidade, Gerência e
-	 * Data de Envio [UC0693] Gerar Relatório Acompanhamaneto de Clientes
+	 * Soma os valores Pagos dos Clientes Negativados para a Unidade, Gerï¿½ncia e
+	 * Data de Envio [UC0693] Gerar Relatï¿½rio Acompanhamaneto de Clientes
 	 * Negativados
 	 * 
 	 * @author Mariana Victor
@@ -35286,7 +35304,7 @@ public class Fachada {
 	/**
 	 * 
 	 * Conta a quantidade de Clientes Negativados com contas pagas na Unidade,
-	 * Gerência e Data de Envio [UC0693] Gerar Relatório Acompanhamaneto de
+	 * Gerï¿½ncia e Data de Envio [UC0693] Gerar Relatï¿½rio Acompanhamaneto de
 	 * Clientes Negativados
 	 * 
 	 * @author Mariana Victor
@@ -35303,7 +35321,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1120] Gerar Relatório de religação de clientes inadimplentes
+	 * [UC1120] Gerar Relatï¿½rio de religaï¿½ï¿½o de clientes inadimplentes
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 25/01/2011
@@ -35322,7 +35340,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1120] Gerar Relatório de religação de clientes inadimplentes
+	 * [UC1120] Gerar Relatï¿½rio de religaï¿½ï¿½o de clientes inadimplentes
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 25/01/2011
@@ -35342,7 +35360,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0146] Manter Conta [SB0012] â€“ Determinar competência de retificação
+	 * [UC0146] Manter Conta [SB0012] â€“ Determinar competï¿½ncia de retificaï¿½ï¿½o
 	 * de consumo
 	 * 
 	 * @author Vivianne Sousa
@@ -35361,7 +35379,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0146] Manter Conta [SB0012] â€“ Determinar competência de retificação
+	 * [UC0146] Manter Conta [SB0012] â€“ Determinar competï¿½ncia de retificaï¿½ï¿½o
 	 * de consumo
 	 * 
 	 * @author Vivianne Sousa
@@ -35379,7 +35397,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1124] Gerar Relatório de Alterações de CPF/CNPJ
+	 * [UC1124] Gerar Relatï¿½rio de Alteraï¿½ï¿½es de CPF/CNPJ
 	 * 
 	 * @author Mariana Victor
 	 * @date 16/02/2011
@@ -35396,17 +35414,17 @@ public class Fachada {
 	}
 
 	/**
-	 * [UCXXXX] - Obter Volume Medio Agua ou Esgoto RM4548 Método para descobrir
-	 * o tipo de ligação do imóvel para poder chamar o método de
+	 * [UCXXXX] - Obter Volume Medio Agua ou Esgoto RM4548 Mï¿½todo para descobrir
+	 * o tipo de ligaï¿½ï¿½o do imï¿½vel para poder chamar o mï¿½todo de
 	 * obterVolumeMedioAguaEsgoto
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @data 23/02/2011
 	 * 
 	 * @param imovel
-	 *            (Precisa que a situação da Ligação de Água e Esgoto do imóvel
-	 *            esteja carregado. HidrometroInstalaçãoHistórico da ligação de
-	 *            água do imóvel também deve estar carregado)
+	 *            (Precisa que a situaï¿½ï¿½o da Ligaï¿½ï¿½o de ï¿½gua e Esgoto do imï¿½vel
+	 *            esteja carregado. HidrometroInstalaï¿½ï¿½oHistï¿½rico da ligaï¿½ï¿½o de
+	 *            ï¿½gua do imï¿½vel tambï¿½m deve estar carregado)
 	 * @return
 	 * @throws ControladorException
 	 */
@@ -35416,9 +35434,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Este caso de uso permite a emissão de boletins de medição em formato TXT
+	 * Este caso de uso permite a emissï¿½o de boletins de mediï¿½ï¿½o em formato TXT
 	 * 
-	 * [UC1054] Gerar Relatório Boletim de Medição
+	 * [UC1054] Gerar Relatï¿½rio Boletim de Mediï¿½ï¿½o
 	 * 
 	 * @author Mariana Victor
 	 * @date 22/02/2011
@@ -35438,8 +35456,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0230] Inserir Usuário [FS0020] Verificar existência de usuário batch
-	 * [FS0021] Verificar usuário batch
+	 * [UC0230] Inserir Usuï¿½rio [FS0020] Verificar existï¿½ncia de usuï¿½rio batch
+	 * [FS0021] Verificar usuï¿½rio batch
 	 * 
 	 * @author Paulo Diniz
 	 * @date 03/03/2011
@@ -35455,8 +35473,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0230] Inserir Usuário [FS0022] Verificar existência de usuário
-	 * internet [FS0023] Verificar usuário internet
+	 * [UC0230] Inserir Usuï¿½rio [FS0022] Verificar existï¿½ncia de usuï¿½rio
+	 * internet [FS0023] Verificar usuï¿½rio internet
 	 * 
 	 * @author Paulo Diniz
 	 * @date 03/03/2011
@@ -35491,7 +35509,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1129] Gerar Relatório Devolução dos Pagamentos em Duplicidade
+	 * [UC1129] Gerar Relatï¿½rio Devoluï¿½ï¿½o dos Pagamentos em Duplicidade
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 10/03/2011
@@ -35512,7 +35530,7 @@ public class Fachada {
 	}
 
 	/**
-	 * UC1130 â€“ Filtrar Registro Atendimento de Devolução de Valores
+	 * UC1130 â€“ Filtrar Registro Atendimento de Devoluï¿½ï¿½o de Valores
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/03/2011
@@ -35530,7 +35548,7 @@ public class Fachada {
 	}
 
 	/**
-	 * UC1130 â€“ Filtrar Registro Atendimento de Devolução de Valores
+	 * UC1130 â€“ Filtrar Registro Atendimento de Devoluï¿½ï¿½o de Valores
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 14/03/2011
@@ -35587,7 +35605,7 @@ public class Fachada {
 	/**
 	 * Pesquisa ContratoParcelamentoRD por numero
 	 * 
-	 * [UC1133] Inserir Resolução de Diretoria para Contratos de Parcelamento
+	 * [UC1133] Inserir Resoluï¿½ï¿½o de Diretoria para Contratos de Parcelamento
 	 * por Cliente
 	 * 
 	 * 
@@ -35606,7 +35624,7 @@ public class Fachada {
 	/**
 	 * Pesquisa ContratoParcelamentoRD por numero
 	 * 
-	 * [UC1133] Inserir Resolução de Diretoria para Contratos de Parcelamento
+	 * [UC1133] Inserir Resoluï¿½ï¿½o de Diretoria para Contratos de Parcelamento
 	 * por Cliente
 	 * 
 	 * 
@@ -35625,7 +35643,7 @@ public class Fachada {
 	/**
 	 * Insere ContratoParcelamentoRD
 	 * 
-	 * [UC1133] Inserir Resolução de Diretoria para Contratos de Parcelamento
+	 * [UC1133] Inserir Resoluï¿½ï¿½o de Diretoria para Contratos de Parcelamento
 	 * por Cliente
 	 * 
 	 * 
@@ -35644,7 +35662,7 @@ public class Fachada {
 	/**
 	 * Atualiza ContratoParcelamentoRD
 	 * 
-	 * [UC1134] Atualizar Resolução de Diretoria para Contratos de Parcelamento
+	 * [UC1134] Atualizar Resoluï¿½ï¿½o de Diretoria para Contratos de Parcelamento
 	 * por Cliente
 	 * 
 	 * 
@@ -35661,10 +35679,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Verifica Resolução de Diretoria associada a um Contrato Parcelamento não
+	 * Verifica Resoluï¿½ï¿½o de Diretoria associada a um Contrato Parcelamento nï¿½o
 	 * Encerrado
 	 * 
-	 * [UC1134] Atualizar Resolução de Diretoria para Contratos de Parcelamento
+	 * [UC1134] Atualizar Resoluï¿½ï¿½o de Diretoria para Contratos de Parcelamento
 	 * por Cliente
 	 * 
 	 * 
@@ -35684,7 +35702,7 @@ public class Fachada {
 	/**
 	 * Atualizar um ContratoParcelamento e suas QuantidadesPrestacoes associadas
 	 * 
-	 * [UC1134] Manter Resolução de Diretoria para Contratos de Parcelamento por
+	 * [UC1134] Manter Resoluï¿½ï¿½o de Diretoria para Contratos de Parcelamento por
 	 * Cliente
 	 * 
 	 * 
@@ -35706,7 +35724,7 @@ public class Fachada {
 	/**
 	 * Gerar Relatorio dos ContratoParcelamentoRD selecionados
 	 * 
-	 * [UC1134] Manter Resolução de Diretoria para Contratos de Parcelamento por
+	 * [UC1134] Manter Resoluï¿½ï¿½o de Diretoria para Contratos de Parcelamento por
 	 * Cliente
 	 * 
 	 * 
@@ -35727,7 +35745,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1131] Efetuar Devolução de Valores Pagos em Duplicidade [SB0001] â€“
+	 * [UC1131] Efetuar Devoluï¿½ï¿½o de Valores Pagos em Duplicidade [SB0001] â€“
 	 * Pesquisar os pagamentos associados ao RA
 	 * 
 	 * @author Vivianne Sousa
@@ -35748,7 +35766,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0194] - Inserir Crédito a Realizar
+	 * [UC0194] - Inserir Crï¿½dito a Realizar
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 14/04/2010
@@ -35771,7 +35789,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1131] Efetuar Devolução de Valores Pagos em Duplicidade [SB0007]
+	 * [UC1131] Efetuar Devoluï¿½ï¿½o de Valores Pagos em Duplicidade [SB0007]
 	 * Atualiza Pagamento Devolvido
 	 * 
 	 * @author Vivianne Sousa
@@ -35812,7 +35830,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1131] Efetuar Devolução de Valores Pagos em Duplicidade
+	 * [UC1131] Efetuar Devoluï¿½ï¿½o de Valores Pagos em Duplicidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/03/2011
@@ -35875,7 +35893,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0339] Consultar Dados Diários da Arrecadação
+	 * [UC0339] Consultar Dados Diï¿½rios da Arrecadaï¿½ï¿½o
 	 * 
 	 * @author Arthur Carvalho
 	 * @date 22/03/2011
@@ -35895,24 +35913,24 @@ public class Fachada {
 
 	/**
 	 * 
-	 * Esse metodo está de acordo com o UC0919 - Gerar Relatorio de Impostos Por
-	 * Cliente Responsavel. Dessa forma, esse método realiza a pesquisa por
-	 * impostos por cliente responsável, agrupando os impostos a partir das
+	 * Esse metodo estï¿½ de acordo com o UC0919 - Gerar Relatorio de Impostos Por
+	 * Cliente Responsavel. Dessa forma, esse mï¿½todo realiza a pesquisa por
+	 * impostos por cliente responsï¿½vel, agrupando os impostos a partir das
 	 * faturas de cada cliente. Para esse caso de uso, todos os CLIENTES devem
-	 * ser FEDERAIS, dessa forma a pesquisa está sendo realizada por cliente
-	 * responsáveis federais, ou seja clientes que tem na tabela
+	 * ser FEDERAIS, dessa forma a pesquisa estï¿½ sendo realizada por cliente
+	 * responsï¿½veis federais, ou seja clientes que tem na tabela
 	 * cadastro.cliente_tipo EPOD_ID = 3. - continuar descricao -
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 23/03/2011
 	 * 
 	 * @param Integer
-	 *            anoMes - o ano/mes já formatado, sem barra, na forma de
+	 *            anoMes - o ano/mes jï¿½ formatado, sem barra, na forma de
 	 *            Integer
 	 * @param Integer
-	 *            clienteID - o id do cliente pode ser null, pois o usuário pode
+	 *            clienteID - o id do cliente pode ser null, pois o usuï¿½rio pode
 	 *            querer pesquisar os impostos arrecadados de todos os clientes
-	 *            de um determinado mês/ano referência
+	 *            de um determinado mï¿½s/ano referï¿½ncia
 	 * @param String
 	 *            tipoRelatorio (SINTETICO ou ANALITICO)
 	 * @return Collection<ImpostoDeduzidoHelper>
@@ -35930,10 +35948,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1152] Emissão Boletim Medição Cobrança
+	 * [UC1152] Emissï¿½o Boletim Mediï¿½ï¿½o Cobranï¿½a
 	 * 
-	 * Pesquisa os Itens de Serviço relacionados ao boletim de medição de
-	 * cobrança selecionado
+	 * Pesquisa os Itens de Serviï¿½o relacionados ao boletim de mediï¿½ï¿½o de
+	 * cobranï¿½a selecionado
 	 * 
 	 * @author Mariana Victor
 	 * @date 21/03/2011
@@ -35954,9 +35972,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1153] Solicitar Geração/Emissão Boletim de Medição de Cobrança
+	 * [UC1153] Solicitar Geraï¿½ï¿½o/Emissï¿½o Boletim de Mediï¿½ï¿½o de Cobranï¿½a
 	 * 
-	 * [FS0002] â€“ Ações não encerradas no cronograma.
+	 * [FS0002] â€“ Aï¿½ï¿½es nï¿½o encerradas no cronograma.
 	 * 
 	 * @author Mariana Victor
 	 * @created 21/03/2011
@@ -35972,9 +35990,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1152] Emissão Boletim Medição Cobrança
+	 * [UC1152] Emissï¿½o Boletim Mediï¿½ï¿½o Cobranï¿½a
 	 * 
-	 * De acordo com o código da constate do item, pesquisa os valores do mesmo.
+	 * De acordo com o cï¿½digo da constate do item, pesquisa os valores do mesmo.
 	 * 
 	 * @author Mariana Victor
 	 * @created 22/03/2011
@@ -35990,9 +36008,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1152] Emissão Boletim Medição Cobrança
+	 * [UC1152] Emissï¿½o Boletim Mediï¿½ï¿½o Cobranï¿½a
 	 * 
-	 * De acordo com o código da constate do item, pesquisa os valores do mesmo.
+	 * De acordo com o cï¿½digo da constate do item, pesquisa os valores do mesmo.
 	 * 
 	 * @author Mariana Victor
 	 * @created 22/03/2011
@@ -36008,9 +36026,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1152] Emissão Boletim Medição Cobrança
+	 * [UC1152] Emissï¿½o Boletim Mediï¿½ï¿½o Cobranï¿½a
 	 * 
-	 * De acordo com o código da constate do item, pesquisa os valores do mesmo.
+	 * De acordo com o cï¿½digo da constate do item, pesquisa os valores do mesmo.
 	 * 
 	 * @author Mariana Victor
 	 * @created 23/03/2011
@@ -36026,9 +36044,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1152] Emissão Boletim Medição Cobrança
+	 * [UC1152] Emissï¿½o Boletim Mediï¿½ï¿½o Cobranï¿½a
 	 * 
-	 * Consulta os valores da totalização da taxa de sucesso.
+	 * Consulta os valores da totalizaï¿½ï¿½o da taxa de sucesso.
 	 * 
 	 * @author Mariana Victor
 	 * @created 23/03/2011
@@ -36044,9 +36062,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1152] Emissão Boletim Medição Cobrança
+	 * [UC1152] Emissï¿½o Boletim Mediï¿½ï¿½o Cobranï¿½a
 	 * 
-	 * Pesquisa dados da empresa e do contrado do boletim de cobrança
+	 * Pesquisa dados da empresa e do contrado do boletim de cobranï¿½a
 	 * 
 	 * @author Mariana Victor
 	 * @created 24/03/2011
@@ -36062,16 +36080,16 @@ public class Fachada {
 	}
 
 	/**
-	 * Gerar Relatório de Análise de Perdas com Crédito
+	 * Gerar Relatï¿½rio de Anï¿½lise de Perdas com Crï¿½dito
 	 * 
-	 * [UC1155] Gerar Relatório de Análise de Perdas com Crédito
+	 * [UC1155] Gerar Relatï¿½rio de Anï¿½lise de Perdas com Crï¿½dito
 	 * 
 	 * 
 	 * @author Paulo Diniz
 	 * @date 16/03/2011
 	 * 
 	 * @param mesAno
-	 *            para análise
+	 *            para anï¿½lise
 	 * @throws ControladorException
 	 */
 	public RelatorioAnalisePerdasCreditosBean gerarRelatorioAnalisePerdasCreditos(String mesAno) {
@@ -36086,14 +36104,14 @@ public class Fachada {
 	/**
 	 * Retorna o maior ano mesReferencia da tabela docs_a_rec_resumo
 	 * 
-	 * [UC1155] Gerar Relatório de Análise de Perdas com Crédito
+	 * [UC1155] Gerar Relatï¿½rio de Anï¿½lise de Perdas com Crï¿½dito
 	 * 
 	 * 
 	 * @author Paulo Diniz
 	 * @date 16/03/2011
 	 * 
 	 * @param mesAno
-	 *            para análise
+	 *            para anï¿½lise
 	 * @throws ControladorException
 	 */
 	public int maiorAnoMesReferenciaDocumentosAReceberResumo() {
@@ -36106,10 +36124,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1151] Gerar Boletim de Medição
+	 * [UC1151] Gerar Boletim de Mediï¿½ï¿½o
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * @throws ControladorException
 	 * @data 22/03/2011
 	 * 
@@ -36249,7 +36267,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Retorna Lista de Imóveis associados ao cliente
+	 * Retorna Lista de Imï¿½veis associados ao cliente
 	 * 
 	 * @author Paulo Diniz
 	 * @date 10/04/2011
@@ -36269,7 +36287,7 @@ public class Fachada {
 	}
 
 	/*
-	 * Insere um processo batch ativado por um usuário através de uma
+	 * Insere um processo batch ativado por um usuï¿½rio atravï¿½s de uma
 	 * funcionalidade comum
 	 * 
 	 * @author Vivianne Sousa
@@ -36295,7 +36313,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Imóvel da Tarifa Social
+	 * [UC1157] Seleciona Comando para Retirar Imï¿½vel da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 31/03/2011
@@ -36315,7 +36333,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Imóvel da Tarifa Social
+	 * [UC1157] Seleciona Comando para Retirar Imï¿½vel da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 31/03/2011
@@ -36334,7 +36352,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Imóvel da Tarifa Social [SB0003]
+	 * [UC1157] Seleciona Comando para Retirar Imï¿½vel da Tarifa Social [SB0003]
 	 * Excluir Comando Selecionado
 	 * 
 	 * @author Vivianne Sousa
@@ -36354,7 +36372,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Imóvel da Tarifa Social
+	 * [UC1157] Seleciona Comando para Retirar Imï¿½vel da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 05/04/2011
@@ -36373,7 +36391,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1164] Gerar Resumo dos Imóveis Excluídos da Tarifa Social
+	 * [UC1164] Gerar Resumo dos Imï¿½veis Excluï¿½dos da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 07/04/2011
@@ -36412,7 +36430,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0879] Gerar Extensão de Comando de Contas em Cobrança por Empresa -
+	 * [UC0879] Gerar Extensï¿½o de Comando de Contas em Cobranï¿½a por Empresa -
 	 * Pesquisa dados do popup
 	 * 
 	 * @author Mariana Victor
@@ -36427,7 +36445,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1163] Gerar Relatório de OS executadas por Prestadora de Serviço
+	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Serviï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/04/2011
@@ -36446,7 +36464,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1163] Gerar Relatório de OS executadas por Prestadora de Serviço
+	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Serviï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/04/2011
@@ -36464,8 +36482,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1163] Gerar Relatório de OS executadas por Prestadora de Serviço
-	 * [SB0003] â€“ Gerar Analítico TXT
+	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Serviï¿½o
+	 * [SB0003] â€“ Gerar Analï¿½tico TXT
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/04/2011
@@ -36485,7 +36503,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1163] Gerar Relatório de OS executadas por Prestadora de Serviço
+	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Serviï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/04/2011
@@ -36507,7 +36525,7 @@ public class Fachada {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * [SB0037] â€“ Define Unidade Destino por Situação de Cobrança.
+	 * [SB0037] â€“ Define Unidade Destino por Situaï¿½ï¿½o de Cobranï¿½a.
 	 * 
 	 * @author Mariana Victor
 	 * @date 04/04/2011
@@ -36528,7 +36546,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0879] Gerar Extensão de Comando de Contas em Cobrança por Empresa -
+	 * [UC0879] Gerar Extensï¿½o de Comando de Contas em Cobranï¿½a por Empresa -
 	 * Pesquisa dados do popup
 	 * 
 	 * @author Mariana Victor
@@ -36543,7 +36561,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0879] Gerar Extensão de Comando de Contas em Cobrança por Empresa -
+	 * [UC0879] Gerar Extensï¿½o de Comando de Contas em Cobranï¿½a por Empresa -
 	 * Pesquisa dados do popup
 	 * 
 	 * @author Mariana Victor
@@ -36559,7 +36577,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0869] Gerar Arquivo Texto das Contas em Cobrança por Empresa
+	 * [UC0869] Gerar Arquivo Texto das Contas em Cobranï¿½a por Empresa
 	 * 
 	 * @author Mariana Victor
 	 * @date 14/04/2011
@@ -36577,7 +36595,7 @@ public class Fachada {
 	/**
 	 * [UC0869] Gerar Arquivo Texto das Contas em Cobranca por Empresa
 	 * 
-	 * Pesquisa a Situação de cobrança a partir do código constante.
+	 * Pesquisa a Situaï¿½ï¿½o de cobranï¿½a a partir do cï¿½digo constante.
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 18/04/2011
@@ -36611,7 +36629,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite a inclusão de contrato de parcelamento por cliente.
+	 * Permite a inclusï¿½o de contrato de parcelamento por cliente.
 	 * 
 	 * [UC1136] Inserir Contrato de Parcelamento por Cliente
 	 * 
@@ -36632,7 +36650,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1163] Gerar Relatório de OS executadas por Prestadora de Serviço
+	 * [UC1163] Gerar Relatï¿½rio de OS executadas por Prestadora de Serviï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 04/05/2011
@@ -36710,7 +36728,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1170] Gerar Relatório Acesso ao SPC
+	 * [UC1170] Gerar Relatï¿½rio Acesso ao SPC
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 06/05/2011
@@ -36729,7 +36747,7 @@ public class Fachada {
 	/**
 	 * [UC1140] Cancelar Contrato de Parcelamento por Cliente
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @throws ErroRepositorioException
 	 * @date 12/05/2011
 	 */
@@ -36746,7 +36764,7 @@ public class Fachada {
 	 * Verificar possibilidade de cancelamento do contrato de parcelamento por
 	 * cliente
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @throws ErroRepositorioException
 	 * @date 12/05/2011
 	 */
@@ -36760,7 +36778,7 @@ public class Fachada {
 
 	/**
 	 * [UC0425] Reiterar Registro de Atendimento [FS0008] â€“ Verificar
-	 * reiteração do RA pelo cliente
+	 * reiteraï¿½ï¿½o do RA pelo cliente
 	 * 
 	 * @author Vivianne Sousa
 	 * @data 13/05/2011
@@ -36775,7 +36793,7 @@ public class Fachada {
 
 	/**
 	 * [UC0425] Reiterar Registro de Atendimento [FS0007] â€“ Verificar
-	 * reiteração do RA pela unidade
+	 * reiteraï¿½ï¿½o do RA pela unidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @data 13/05/2011
@@ -36804,7 +36822,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0085] Obter Endereço
+	 * [UC0085] Obter Endereï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @data 17/05/2011
@@ -36820,7 +36838,7 @@ public class Fachada {
 	}
 
 	/**
-	 * pesquisa quantidade de reiterações do RA
+	 * pesquisa quantidade de reiteraï¿½ï¿½es do RA
 	 * 
 	 * @author Vivianne Sousa
 	 * @data 18/05/2011
@@ -36836,7 +36854,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1167] Consultar Comandos de Cobrança por Empresa
+	 * [UC1167] Consultar Comandos de Cobranï¿½a por Empresa
 	 * 
 	 * Pesquisa os dados dos comandos
 	 * 
@@ -36853,7 +36871,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1167] Consultar Comandos de Cobrança por Empresa
+	 * [UC1167] Consultar Comandos de Cobranï¿½a por Empresa
 	 * 
 	 * Pesquisa os dados de um comando para exibir no popup
 	 * 
@@ -36869,9 +36887,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1167] Consultar Comandos de Cobrança por Empresa
+	 * [UC1167] Consultar Comandos de Cobranï¿½a por Empresa
 	 * 
-	 * Pesquisa a quantidade de contas, agrupando por imóvel
+	 * Pesquisa a quantidade de contas, agrupando por imï¿½vel
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 06/05/2011
@@ -36908,9 +36926,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado
+	 * [UC1169] Movimentar Ordens de Serviï¿½o de Cobranï¿½a por Resultado
 	 * 
-	 * Pesquisa a quantidade de contas, agrupando por imóvel
+	 * Pesquisa a quantidade de contas, agrupando por imï¿½vel
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 12/05/2011
@@ -36926,7 +36944,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado
+	 * [UC1169] Movimentar Ordens de Serviï¿½o de Cobranï¿½a por Resultado
 	 * 
 	 * Pesquisa a quantidade de contas
 	 * 
@@ -36944,9 +36962,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado
+	 * [UC1169] Movimentar Ordens de Serviï¿½o de Cobranï¿½a por Resultado
 	 * 
-	 * Encerrar ordem(ns) de serviço.
+	 * Encerrar ordem(ns) de serviï¿½o.
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 17/05/2011
@@ -36961,7 +36979,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado
+	 * [UC1169] Movimentar Ordens de Serviï¿½o de Cobranï¿½a por Resultado
 	 * 
 	 * Gerar OS
 	 * 
@@ -36977,7 +36995,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado
+	 * [UC1169] Movimentar Ordens de Serviï¿½o de Cobranï¿½a por Resultado
 	 * 
 	 * Emitir OS Gerada pela Empresa
 	 * 
@@ -36993,7 +37011,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado
+	 * [UC1169] Movimentar Ordens de Serviï¿½o de Cobranï¿½a por Resultado
 	 * 
 	 * Emitir OS de Registro de Atendimento
 	 * 
@@ -37009,9 +37027,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado
+	 * [UC1169] Movimentar Ordens de Serviï¿½o de Cobranï¿½a por Resultado
 	 * 
-	 * Emitir OS - emitir o documento de visita de cobrança
+	 * Emitir OS - emitir o documento de visita de cobranï¿½a
 	 * 
 	 * @author Mariana Victor
 	 * @data 18/05/2011
@@ -37027,9 +37045,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado
+	 * [UC1169] Movimentar Ordens de Serviï¿½o de Cobranï¿½a por Resultado
 	 * 
-	 * Emitir OS de Empresa de Cobrança -
+	 * Emitir OS de Empresa de Cobranï¿½a -
 	 * 
 	 * @author Mariana Victor
 	 * @data 18/05/2011
@@ -37045,10 +37063,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Atualiza o documento de cobrança da ordem de serviço que foi gerado pelo
-	 * "[UC0444 Gerar e Emitir Extrato de Débito]"
+	 * Atualiza o documento de cobranï¿½a da ordem de serviï¿½o que foi gerado pelo
+	 * "[UC0444 Gerar e Emitir Extrato de Dï¿½bito]"
 	 * 
-	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado
+	 * [UC1169] Movimentar Ordens de Serviï¿½o de Cobranï¿½a por Resultado
 	 * 
 	 * @author Mariana Victor
 	 * @date 19/05/2011
@@ -37064,9 +37082,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado
+	 * [UC1169] Movimentar Ordens de Serviï¿½o de Cobranï¿½a por Resultado
 	 * 
-	 * Pesquisa as ordens de serviço selecionadas
+	 * Pesquisa as ordens de serviï¿½o selecionadas
 	 * 
 	 * @author: Mariana Victor
 	 * @date: 19/05/2011
@@ -37082,9 +37100,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1174] Gerar Relatório Imóveis com Doações
+	 * [UC1174] Gerar Relatï¿½rio Imï¿½veis com Doaï¿½ï¿½es
 	 * 
-	 * Quantidade de imoveis com doações -
+	 * Quantidade de imoveis com doaï¿½ï¿½es -
 	 * 
 	 * @author Erivan Sousa
 	 * @data 13/06/2011
@@ -37100,9 +37118,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1174] Gerar Relatório Imóveis com Doações
+	 * [UC1174] Gerar Relatï¿½rio Imï¿½veis com Doaï¿½ï¿½es
 	 * 
-	 * Pesquisar Imoveis com Doações -
+	 * Pesquisar Imoveis com Doaï¿½ï¿½es -
 	 * 
 	 * @author Erivan Sousa
 	 * @data 13/06/2011
@@ -37121,7 +37139,7 @@ public class Fachada {
 	 * [UC1140] Cancelar Contrato de Parcelamento por Cliente [SB0001] â€“
 	 * Cancelar Contrato de Parcelamento Por Cliente
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @throws ControladorException
 	 * @date 12/05/2011
 	 */
@@ -37134,9 +37152,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
+	 * [UC1176] Gerar Ordem de Fiscalizaï¿½ï¿½o para Ordem de Serviï¿½o Encerrada
 	 * 
-	 * [FS0001] â€“ Validar Ordem de Serviço.
+	 * [FS0001] â€“ Validar Ordem de Serviï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 24/05/2011
@@ -37152,8 +37170,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
-	 * [SB0001] - Selecionar Ordens de Serviço
+	 * [UC1176] Gerar Ordem de Fiscalizaï¿½ï¿½o para Ordem de Serviï¿½o Encerrada
+	 * [SB0001] - Selecionar Ordens de Serviï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/05/2011
@@ -37171,8 +37189,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
-	 * [SB0002] â€“ Verificar Ordem Serviço
+	 * [UC1176] Gerar Ordem de Fiscalizaï¿½ï¿½o para Ordem de Serviï¿½o Encerrada
+	 * [SB0002] â€“ Verificar Ordem Serviï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/05/2011
@@ -37188,9 +37206,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1173] Informar Consumo por Parâmetros
+	 * [UC1173] Informar Consumo por Parï¿½metros
 	 * 
-	 * [FS0005] â€“ Validar mês ano maior ou igual
+	 * [FS0005] â€“ Validar mï¿½s ano maior ou igual
 	 * 
 	 * @author Mariana Victor
 	 * @date 20/05/2011
@@ -37211,9 +37229,9 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC1173] Informar Consumo por Parâmetros
+	 * [UC1173] Informar Consumo por Parï¿½metros
 	 * 
-	 * [SB0001] - Gerar Dados do consumo por parâmetro.
+	 * [SB0001] - Gerar Dados do consumo por parï¿½metro.
 	 * 
 	 * @author Mariana Victor
 	 * @date 20/05/2011
@@ -37229,8 +37247,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
-	 * [SB0003] - Gerar Várias Ordens de Fiscalização
+	 * [UC1176] Gerar Ordem de Fiscalizaï¿½ï¿½o para Ordem de Serviï¿½o Encerrada
+	 * [SB0003] - Gerar Vï¿½rias Ordens de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/05/2011
@@ -37248,8 +37266,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
-	 * [SB0004] â€“ Gerar Ordem de Serviço.
+	 * [UC1176] Gerar Ordem de Fiscalizaï¿½ï¿½o para Ordem de Serviï¿½o Encerrada
+	 * [SB0004] â€“ Gerar Ordem de Serviï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 27/05/2011
@@ -37284,8 +37302,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1176] Gerar Ordem de Fiscalização para Ordem de Serviço Encerrada
-	 * [SB0005] â€“ Gerar Formulário em formato pdf
+	 * [UC1176] Gerar Ordem de Fiscalizaï¿½ï¿½o para Ordem de Serviï¿½o Encerrada
+	 * [SB0005] â€“ Gerar Formulï¿½rio em formato pdf
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/05/2011
@@ -37397,18 +37415,18 @@ public class Fachada {
 	}
 
 	/**
-	 * <b>[UC1180] Relatório Imóveis com Leituristas</b>:
+	 * <b>[UC1180] Relatï¿½rio Imï¿½veis com Leituristas</b>:
 	 * 
 	 * <ul>
 	 * <li>
-	 * <b>[SB0001] Gerar Relatório do Tipo 1</b>: Quantitativo de imóveis com
-	 * leituras através da WEB</li>
+	 * <b>[SB0001] Gerar Relatï¿½rio do Tipo 1</b>: Quantitativo de imï¿½veis com
+	 * leituras atravï¿½s da WEB</li>
 	 * <li>
-	 * <b>[SB0002] Gerar Relatório do Tipo 2</b>: Quantitativo de imóveis sem
-	 * leituras através da ISC e WEB</li>
+	 * <b>[SB0002] Gerar Relatï¿½rio do Tipo 2</b>: Quantitativo de imï¿½veis sem
+	 * leituras atravï¿½s da ISC e WEB</li>
 	 * <li>
-	 * <b>[SB0003] Gerar Relatório do Tipo 3</b>: Quantitativo de imóveis que
-	 * estão na rota mas não foram recebidos através da ISC</p></li>
+	 * <b>[SB0003] Gerar Relatï¿½rio do Tipo 3</b>: Quantitativo de imï¿½veis que
+	 * estï¿½o na rota mas nï¿½o foram recebidos atravï¿½s da ISC</p></li>
 	 * </ul>
 	 * 
 	 * @author Magno Gouveia
@@ -37431,18 +37449,18 @@ public class Fachada {
 	}
 
 	/**
-	 * <b>[UC1180] Relatório Imóveis com Leituristas</b>:
+	 * <b>[UC1180] Relatï¿½rio Imï¿½veis com Leituristas</b>:
 	 * 
 	 * <ul>
 	 * <li>
-	 * <b>[SB0004] Gerar Relatório do Tipo 4</b>: Relação de imóveis com
-	 * leituras não recebidas através da ISC</b></li>
+	 * <b>[SB0004] Gerar Relatï¿½rio do Tipo 4</b>: Relaï¿½ï¿½o de imï¿½veis com
+	 * leituras nï¿½o recebidas atravï¿½s da ISC</b></li>
 	 * <li>
-	 * <b>[SB0005] Gerar Relatório do Tipo 5</b>: Relação de imóveis não medidos
-	 * que não estão na rota de ISC</b></li>
+	 * <b>[SB0005] Gerar Relatï¿½rio do Tipo 5</b>: Relaï¿½ï¿½o de imï¿½veis nï¿½o medidos
+	 * que nï¿½o estï¿½o na rota de ISC</b></li>
 	 * <li>
-	 * <b>[SB0006] Gerar Relatório do Tipo 6</b>: Relação de imóveis medidos que
-	 * não estão na rota de ISC</b></li>
+	 * <b>[SB0006] Gerar Relatï¿½rio do Tipo 6</b>: Relaï¿½ï¿½o de imï¿½veis medidos que
+	 * nï¿½o estï¿½o na rota de ISC</b></li>
 	 * </ul>
 	 * 
 	 * @author Magno Gouveia
@@ -37464,11 +37482,11 @@ public class Fachada {
 	}
 
 	/**
-	 * <b>[UC1180] Relatório Imóveis com Leituristas</b>:
+	 * <b>[UC1180] Relatï¿½rio Imï¿½veis com Leituristas</b>:
 	 * 
 	 * <ul>
 	 * <li>
-	 * <b>[SB0007] Gerar Relatório do Tipo 7</b>: Quantitativo de imóveis com
+	 * <b>[SB0007] Gerar Relatï¿½rio do Tipo 7</b>: Quantitativo de imï¿½veis com
 	 * leituras enviado e recebidos</b></li>
 	 * </ul>
 	 * 
@@ -37532,7 +37550,7 @@ public class Fachada {
 	 * [UC1146] Informar Pagamento Contrato de Parcelamento por Cliente
 	 * 
 	 * Pesquisa os dados do contrato de parcelamento por cliente [FS0005] â€“
-	 * Verificar existência de contratos para o cliente
+	 * Verificar existï¿½ncia de contratos para o cliente
 	 * 
 	 * @author Mariana Victor
 	 * @data 03/06/2011
@@ -37586,7 +37604,7 @@ public class Fachada {
 	/**
 	 * [UC1141] Emitir Contrato de Parcelamento por Cliente
 	 * 
-	 * Retorna os registros com os dados a serem impressos no relatório
+	 * Retorna os registros com os dados a serem impressos no relatï¿½rio
 	 * 
 	 * @author Mariana Victor
 	 * @since 10/06/2011
@@ -37601,7 +37619,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite a atualização de contrato de parcelamento por cliente.
+	 * Permite a atualizaï¿½ï¿½o de contrato de parcelamento por cliente.
 	 * 
 	 * [UC1139] Atualizar Contrato de Parcelamento por Cliente
 	 * 
@@ -37625,7 +37643,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém a coleção de categorias.
+	 * Obtï¿½m a coleï¿½ï¿½o de categorias.
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 22/06/2011
@@ -37642,7 +37660,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém a coleção de perfis de imóveis.
+	 * Obtï¿½m a coleï¿½ï¿½o de perfis de imï¿½veis.
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 22/06/2011
@@ -37659,7 +37677,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém a coleção de perfis de tipo de serviço para OS.
+	 * Obtï¿½m a coleï¿½ï¿½o de perfis de tipo de serviï¿½o para OS.
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 22/06/2011
@@ -37676,8 +37694,8 @@ public class Fachada {
 	}
 
 	/**
-	 * Obtém a coleção de OS a partir dos parâmetros passados pela
-	 * funcionalidade de Acompanhamento de Cobrança por Resultado.
+	 * Obtï¿½m a coleï¿½ï¿½o de OS a partir dos parï¿½metros passados pela
+	 * funcionalidade de Acompanhamento de Cobranï¿½a por Resultado.
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 27/06/2011
@@ -37741,7 +37759,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1177] Gerar Relatório de Ordens de Serviço por Situação
+	 * [UC1177] Gerar Relatï¿½rio de Ordens de Serviï¿½o por Situaï¿½ï¿½o
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 09/06/2011
@@ -37758,7 +37776,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1178] Gerar Relatório de Acompanhamento dos Boletins de Medição
+	 * [UC1178] Gerar Relatï¿½rio de Acompanhamento dos Boletins de Mediï¿½ï¿½o
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 17/06/2011
@@ -37776,7 +37794,7 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC1182] Recepcionar Arquivo TXT Encerramento OS Cobrança
+	 * [UC1182] Recepcionar Arquivo TXT Encerramento OS Cobranï¿½a
 	 * 
 	 * @author Mariana Victor
 	 * @date 17/06/2011
@@ -37813,9 +37831,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1186] Gerar Relatório Ordem de Serviço Cobrança p/Resultado
+	 * [UC1186] Gerar Relatï¿½rio Ordem de Serviï¿½o Cobranï¿½a p/Resultado
 	 * 
-	 * Pesquisar as Ordens de serviços a partir de seu imóvel e tipo de serviço
+	 * Pesquisar as Ordens de serviï¿½os a partir de seu imï¿½vel e tipo de serviï¿½o
 	 * 
 	 * @author Hugo Azevedo
 	 * @data 14/01/2011
@@ -37832,9 +37850,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1186] Gerar Relatório Ordem de Serviço Cobrança p/Resultado
+	 * [UC1186] Gerar Relatï¿½rio Ordem de Serviï¿½o Cobranï¿½a p/Resultado
 	 * 
-	 * Pesquisar EmpresaCobrancaConta a partir do imóvel
+	 * Pesquisar EmpresaCobrancaConta a partir do imï¿½vel
 	 * 
 	 * @author Hugo Azevedo
 	 * @data 02/07/2011
@@ -37851,7 +37869,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Permite a atualização do grau de importancia do logradouro.
+	 * Permite a atualizaï¿½ï¿½o do grau de importancia do logradouro.
 	 * 
 	 * [UC0033] Manter Logradouro
 	 * 
@@ -37890,10 +37908,10 @@ public class Fachada {
 	}
 
 	/**
-	 * Este método se destina a validar todas as situações e particularidades da
-	 * inserção de equipamentos especiais.
+	 * Este mï¿½todo se destina a validar todas as situaï¿½ï¿½es e particularidades da
+	 * inserï¿½ï¿½o de equipamentos especiais.
 	 * 
-	 * [FS0011] Validar equipe componente já existente
+	 * [FS0011] Validar equipe componente jï¿½ existente
 	 * 
 	 * @author Nathalia santos
 	 * @date 20/06/2011
@@ -37927,9 +37945,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0412] Manter Tipo de Serviço [SB0003] Atualizar Grau de Importância
+	 * [UC0412] Manter Tipo de Serviï¿½o [SB0003] Atualizar Grau de Importï¿½ncia
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thï¿½lio Araï¿½jo
 	 * @date 30/06/2011
 	 * 
 	 * @param servicoTipo
@@ -37961,7 +37979,7 @@ public class Fachada {
 	}
 
 	/**
-	 * UC 1198 - Relatório das Multas de Autos de Infração Pendentes
+	 * UC 1198 - Relatï¿½rio das Multas de Autos de Infraï¿½ï¿½o Pendentes
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 11/06/2011
@@ -37982,7 +38000,7 @@ public class Fachada {
 	}
 
 	/**
-	 * UC1198 - Relatório das Multas de Autos de Infração Pendentes
+	 * UC1198 - Relatï¿½rio das Multas de Autos de Infraï¿½ï¿½o Pendentes
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 11/06/2011
@@ -38004,10 +38022,10 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC1186] Gerar Relatório Ordem de Serviço Cobrança p/Resultado
+	 * [UC1186] Gerar Relatï¿½rio Ordem de Serviï¿½o Cobranï¿½a p/Resultado
 	 * 
-	 * Obtém a quantida de OS a partir dos parâmetros passados pela
-	 * funcionalidade de Acompanhamento de Cobrança por Resultado.
+	 * Obtï¿½m a quantida de OS a partir dos parï¿½metros passados pela
+	 * funcionalidade de Acompanhamento de Cobranï¿½a por Resultado.
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 27/06/2011
@@ -38098,11 +38116,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UCXXXX] Efetuar Parcelamento de Débitos Através da Loja Virtual
+	 * [UCXXXX] Efetuar Parcelamento de Dï¿½bitos Atravï¿½s da Loja Virtual
 	 * 
-	 * Caso o CPF do cliente passado no parâmetro seja do cliente proprietário
-	 * ou do cliente usuário do imóvel o método retorna o nome do cliente, caso
-	 * contrário o método retorna null.
+	 * Caso o CPF do cliente passado no parï¿½metro seja do cliente proprietï¿½rio
+	 * ou do cliente usuï¿½rio do imï¿½vel o mï¿½todo retorna o nome do cliente, caso
+	 * contrï¿½rio o mï¿½todo retorna null.
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 28/06/2011
@@ -38120,10 +38138,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UCXXXX] Efetuar Parcelamento de Débitos Através da Loja Virtual
+	 * [UCXXXX] Efetuar Parcelamento de Dï¿½bitos Atravï¿½s da Loja Virtual
 	 * 
-	 * Verifica se o imóvel possui parcelamento ativo, caso não possua a coleção
-	 * retornará vazia.
+	 * Verifica se o imï¿½vel possui parcelamento ativo, caso nï¿½o possua a coleï¿½ï¿½o
+	 * retornarï¿½ vazia.
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 28/06/2011
@@ -38141,7 +38159,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Metodo que cria o relatorio dos documentos do parcelamento de débitos
+	 * Metodo que cria o relatorio dos documentos do parcelamento de dï¿½bitos
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 08/07/2011
@@ -38180,10 +38198,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1194] Consultar Estrutura Tarifária Loja Virtual [SB0001] Pesquisar
-	 * Tarifa Social ou Tarifa Mínima
+	 * [UC1194] Consultar Estrutura Tarifï¿½ria Loja Virtual [SB0001] Pesquisar
+	 * Tarifa Social ou Tarifa Mï¿½nima
 	 * 
-	 * Método que vai retornar um Helper que possui o consumo da tarifa mínima e
+	 * Mï¿½todo que vai retornar um Helper que possui o consumo da tarifa mï¿½nima e
 	 * da tarifa social e seus respectivos valores.
 	 * 
 	 * @author Diogo Peixoto
@@ -38203,10 +38221,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1194] Consultar Estrutura Tarifária Loja Virtual
+	 * [UC1194] Consultar Estrutura Tarifï¿½ria Loja Virtual
 	 * 
-	 * Método que vai retornar um Helper que possui o consumo não medido de
-	 * chafariz público.
+	 * Mï¿½todo que vai retornar um Helper que possui o consumo nï¿½o medido de
+	 * chafariz pï¿½blico.
 	 * 
 	 * @author Diogo Peixoto
 	 * @since 06/09/2011
@@ -38222,10 +38240,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1194] Consultar Estrutura Tarifária Loja Virtual [SB0001] Pesquisar
-	 * Tarifa Social ou Tarifa Mínima
+	 * [UC1194] Consultar Estrutura Tarifï¿½ria Loja Virtual [SB0001] Pesquisar
+	 * Tarifa Social ou Tarifa Mï¿½nima
 	 * 
-	 * Método que vai retornar um Helper que possui o consumo da tarifa mínima e
+	 * Mï¿½todo que vai retornar um Helper que possui o consumo da tarifa mï¿½nima e
 	 * da tarifa social e seus respectivos valores.
 	 * 
 	 * @author Diogo Peixoto
@@ -38264,7 +38282,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeção de Anormalidade
+	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeï¿½ï¿½o de Anormalidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @since 11/07/2011
@@ -38278,7 +38296,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeção de Anormalidade
+	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeï¿½ï¿½o de Anormalidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @since 11/07/2011
@@ -38295,7 +38313,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeção de Anormalidade
+	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeï¿½ï¿½o de Anormalidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @since 12/07/2011
@@ -38309,7 +38327,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeção de Anormalidade
+	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeï¿½ï¿½o de Anormalidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @since 13/07/2011
@@ -38324,7 +38342,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeção de Anormalidade
+	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeï¿½ï¿½o de Anormalidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @since 13/07/2011
@@ -38339,7 +38357,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeção de Anormalidade
+	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeï¿½ï¿½o de Anormalidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @since 13/07/2011
@@ -38354,7 +38372,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeção de Anormalidade
+	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeï¿½ï¿½o de Anormalidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @since 15/07/2011
@@ -38368,7 +38386,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1192] Movimentar OS Seletiva de Inspeção de Anormalidade
+	 * [UC1192] Movimentar OS Seletiva de Inspeï¿½ï¿½o de Anormalidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/07/2011
@@ -38383,8 +38401,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1192] Movimentar OS Seletiva de Inspeção de Anormalidade [FS0001] -
-	 * Verificar se ordem de serviço faz parte do comando
+	 * [UC1192] Movimentar OS Seletiva de Inspeï¿½ï¿½o de Anormalidade [FS0001] -
+	 * Verificar se ordem de serviï¿½o faz parte do comando
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 19/07/2011
@@ -38398,8 +38416,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1192] Movimentar OS Seletiva de Inspeção de Anormalidade [FS0003] â€“
-	 * Verificar se imóvel faz parte do comando
+	 * [UC1192] Movimentar OS Seletiva de Inspeï¿½ï¿½o de Anormalidade [FS0003] â€“
+	 * Verificar se imï¿½vel faz parte do comando
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 19/07/2011
@@ -38413,9 +38431,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1192] Movimentar OS Seletiva de Inspeção de Anormalidade
+	 * [UC1192] Movimentar OS Seletiva de Inspeï¿½ï¿½o de Anormalidade
 	 * 
-	 * Encerrar ordem(ns) de serviço.
+	 * Encerrar ordem(ns) de serviï¿½o.
 	 * 
 	 * @author: Vivianne Sousa
 	 * @date: 20/07/2011
@@ -38431,7 +38449,7 @@ public class Fachada {
 	/**
 	 * [UC1139] Atualizar Contrato de Parcelamento por Cliente
 	 * 
-	 * [FS0008] ? Verificar existência do contrato anterior
+	 * [FS0008] ? Verificar existï¿½ncia do contrato anterior
 	 * 
 	 * @author Mariana Victor
 	 * @data 08/07/2011
@@ -38447,9 +38465,9 @@ public class Fachada {
 	/**
 	 * [UC1139] Atualizar Contrato de Parcelamento por Cliente
 	 * 
-	 * [FS0037] - Verificar situação do contrato anterior
+	 * [FS0037] - Verificar situaï¿½ï¿½o do contrato anterior
 	 * 
-	 * Retorna a situação de parcelamento do contrato
+	 * Retorna a situaï¿½ï¿½o de parcelamento do contrato
 	 * 
 	 * @author Mariana Victor
 	 * @data 08/07/2011
@@ -38517,9 +38535,9 @@ public class Fachada {
 	/**
 	 * [UC1199] â€“ Acompanhar Arquivos de Roteiro
 	 * 
-	 * Pesquisa o Arquivo Texto do Acompanhamento de Serviço
+	 * Pesquisa o Arquivo Texto do Acompanhamento de Serviï¿½o
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thï¿½lio Araï¿½jo
 	 * @date 19/07/2011
 	 * 
 	 * @param periodoProgramacaoInicial
@@ -38542,8 +38560,8 @@ public class Fachada {
 	/**
 	 * [UC0146] - Manter Conta
 	 * 
-	 * Metodo responsável por percorrer a lista de contas e retornar apenas as
-	 * que não estão ligadas a algum Contrato de Parcelamento por Cliente
+	 * Metodo responsï¿½vel por percorrer a lista de contas e retornar apenas as
+	 * que nï¿½o estï¿½o ligadas a algum Contrato de Parcelamento por Cliente
 	 * 
 	 * @author Mariana Victor
 	 * @date 14/07/2011
@@ -38562,10 +38580,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0482] Emitir 2ª Via de Conta
+	 * [UC0482] Emitir 2ï¿½ Via de Conta
 	 * 
-	 * Metodo responsável por percorrer a lista de contas e retornar apenas as
-	 * que não estão ligadas a algum Contrato de Parcelamento por Cliente
+	 * Metodo responsï¿½vel por percorrer a lista de contas e retornar apenas as
+	 * que nï¿½o estï¿½o ligadas a algum Contrato de Parcelamento por Cliente
 	 * 
 	 * @author Mariana Victor
 	 * @date 14/07/2011
@@ -38583,7 +38601,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeção de Anormalidade
+	 * [UC1193] Consultar Comandos de OS Seletiva de Inspeï¿½ï¿½o de Anormalidade
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 26/07/2011
@@ -38597,10 +38615,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0412] Manter Tipo de Serviço
+	 * [UC0412] Manter Tipo de Serviï¿½o
 	 * 
-	 * Metodo responsável por deletar motivos de encerramento a partir de um
-	 * tipo de serviço
+	 * Metodo responsï¿½vel por deletar motivos de encerramento a partir de um
+	 * tipo de serviï¿½o
 	 * 
 	 * @author Raimundo Martins
 	 * @date 26/07/2011
@@ -38617,10 +38635,10 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0412] Manter Tipo de Serviço
+	 * [UC0412] Manter Tipo de Serviï¿½o
 	 * 
-	 * Metodo responsável por inserir um motivo de encerramento para um tipo de
-	 * serviço
+	 * Metodo responsï¿½vel por inserir um motivo de encerramento para um tipo de
+	 * serviï¿½o
 	 * 
 	 * @author Raimundo Martins
 	 * @date 27/07/2011
@@ -38639,7 +38657,7 @@ public class Fachada {
 	/**
 	 * [UC1139] Atualizar Contrato de Parcelamento por Cliente
 	 * 
-	 * Consulta os dados dos débitos a cobrar vinculados ao contrato de
+	 * Consulta os dados dos dï¿½bitos a cobrar vinculados ao contrato de
 	 * parcelamento
 	 * 
 	 * @author Mariana Victor
@@ -38654,9 +38672,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC0184] Manter Débito A Cobrar
+	 * [UC0184] Manter Dï¿½bito A Cobrar
 	 * 
-	 * Verifica se o débito a cobrar está vinculado a um Contrato Parcelamento
+	 * Verifica se o dï¿½bito a cobrar estï¿½ vinculado a um Contrato Parcelamento
 	 * por Cliente
 	 * 
 	 * @author Mariana Victor
@@ -38675,7 +38693,7 @@ public class Fachada {
 	 * 
 	 * 
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thï¿½lio Araï¿½jo
 	 * @date 28/07/2011
 	 * 
 	 * @param ids
@@ -38692,7 +38710,7 @@ public class Fachada {
 	/**
 	 * [UC1201] Emitir Extrato de Contrato de Parcelamento por Cliente
 	 * 
-	 * 1. O sistema obtém os dados do contrato de parcelamento por cliente
+	 * 1. O sistema obtï¿½m os dados do contrato de parcelamento por cliente
 	 * 
 	 * @author Mariana Victor
 	 * @data 30/07/2011
@@ -38722,8 +38740,8 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1192] Movimentar OS Seletiva de Inspeção de Anormalidade Verificar se
-	 * ordem de serviço que faz parte do comando ja esta encerrada
+	 * [UC1192] Movimentar OS Seletiva de Inspeï¿½ï¿½o de Anormalidade Verificar se
+	 * ordem de serviï¿½o que faz parte do comando ja esta encerrada
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 02/08/2011
@@ -38739,7 +38757,7 @@ public class Fachada {
 	/**
 	 * [UC1201] Emitir Extrato de Contrato de Parcelamento por Cliente
 	 * 
-	 * Retorna os registros com os dados a serem impressos no relatório
+	 * Retorna os registros com os dados a serem impressos no relatï¿½rio
 	 * 
 	 * @author Mariana Victor
 	 * @throws ControladorException
@@ -38756,17 +38774,17 @@ public class Fachada {
 
 	/**
 	 * 
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviï¿½o do Roteiro Programado
 	 * 
 	 * @author Bruno Barros
 	 * @date 28/06/2011
 	 * 
 	 * @param idsEquipes
-	 *            - Id's das equipes que terão seus roteiros gerados. Caso esse
+	 *            - Id's das equipes que terï¿½o seus roteiros gerados. Caso esse
 	 *            parametro venha nulo, iremos gerar de todas as equipes que
 	 *            possuam OS programadas
 	 * @param dataServico
-	 *            - Data do serviço a ser gerado.
+	 *            - Data do serviï¿½o a ser gerado.
 	 * 
 	 * @throws ControladorException
 	 */
@@ -38782,7 +38800,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviï¿½o do Roteiro Programado
 	 * 
 	 * [SB0002] - Nome do arquivo texto
 	 * 
@@ -38792,7 +38810,7 @@ public class Fachada {
 	 * @param Equipe
 	 *            - equipe que teve seu arquivo gerado
 	 * 
-	 * @return String - retorna o nome do arquivo que será gerado
+	 * @return String - retorna o nome do arquivo que serï¿½ gerado
 	 * 
 	 * @throws ControladorException
 	 */
@@ -38805,7 +38823,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviço do Roteiro Programado
+	 * [UC1184] - Gerar Arquivo para Acompanhar o Serviï¿½o do Roteiro Programado
 	 * 
 	 * [SB0003] - Nome do arquivo texto
 	 * 
@@ -38830,7 +38848,7 @@ public class Fachada {
 	/**
 	 * [UC1136] Inserir Contrato de Parcelamento por Cliente
 	 * 
-	 * Retorna os dados do débito a cobrar caso exista algum pagamento para o
+	 * Retorna os dados do dï¿½bito a cobrar caso exista algum pagamento para o
 	 * mesmo.
 	 * 
 	 * @author Mariana Victor
@@ -38845,15 +38863,15 @@ public class Fachada {
 	}
 
 	/**
-	 * < <Descrição do método>>
+	 * < <Descriï¿½ï¿½o do mï¿½todo>>
 	 * 
 	 * @param fixo
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param faixaInicial
-	 *            Descrição do parâmetro
+	 *            Descriï¿½ï¿½o do parï¿½metro
 	 * @param faixaFinal
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
+	 *            Descriï¿½ï¿½o do parï¿½metro
+	 * @return Descriï¿½ï¿½o do retorno
 	 */
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNumeroHidrometroMovimentacaoPorFaixa(String faixaInicial, String faixaFinal) {
@@ -38970,11 +38988,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1203] Programação Automática do Roteiro para Acompanhamento das OS
+	 * [UC1203] Programaï¿½ï¿½o Automï¿½tica do Roteiro para Acompanhamento das OS
 	 * 
-	 * [SB0002] Inserir Ordem de Serviço na Programação
+	 * [SB0002] Inserir Ordem de Serviï¿½o na Programaï¿½ï¿½o
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thï¿½lio Araï¿½jo
 	 * @throws ControladorException
 	 * @date 19/07/2011
 	 */
@@ -38987,7 +39005,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1211] Inserir Ordem Programação Acompanhamento Serviço
+	 * [UC1211] Inserir Ordem Programaï¿½ï¿½o Acompanhamento Serviï¿½o
 	 * 
 	 * 
 	 * @author Bruno Barros
@@ -38996,7 +39014,7 @@ public class Fachada {
 	 * @param idEquipe
 	 *            - Id da equipe a ter as ordens incluidas
 	 * @param dataRoteiro
-	 *            - Data para a incluisão das OS
+	 *            - Data para a incluisï¿½o das OS
 	 * 
 	 * @return void...
 	 * 
@@ -39011,19 +39029,19 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1199] – Acompanhar Arquivos de Roteiro [SB0003] – Pesquisar Fotos da
+	 * [UC1199] ï¿½ Acompanhar Arquivos de Roteiro [SB0003] ï¿½ Pesquisar Fotos da
 	 * OS
 	 * 
-	 * Método que vai retornar as fotos de uma determinada ordem de serviço
-	 * passada no parâmetro.
+	 * Mï¿½todo que vai retornar as fotos de uma determinada ordem de serviï¿½o
+	 * passada no parï¿½metro.
 	 * 
 	 * @author Diogo Peixoto
 	 * @date 12/08/2011
 	 * 
 	 * @param Integer
-	 *            - ID da Foto da Ordem de Serviço
+	 *            - ID da Foto da Ordem de Serviï¿½o
 	 * 
-	 * @return Collection<OrdemServicoFoto> - Coleção das Fotos da OS
+	 * @return Collection<OrdemServicoFoto> - Coleï¿½ï¿½o das Fotos da OS
 	 * @throws ControladorException
 	 */
 	public Collection<OrdemServicoFoto> pesquisarFotosOrdemServico(Integer id, boolean idOS) {
@@ -39070,7 +39088,7 @@ public class Fachada {
 	 * 
 	 * [FS0007] Validar carga de trabalho da Equipe
 	 * 
-	 * @author Thúlio Araújo
+	 * @author Thï¿½lio Araï¿½jo
 	 * @date 22/08/2011 ---
 	 */
 	public boolean validarCargaTrabalhoEquipe(Integer idEquipeRemanejada, Integer idProgramacaoRoteiro, Integer idOrdemServico, Integer idUnidadeOrganizacional) {
@@ -39082,7 +39100,7 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC 1215] – Gerar Relatório de Documentos não Aceitos
+	 * [UC 1215] ï¿½ Gerar Relatï¿½rio de Documentos nï¿½o Aceitos
 	 * 
 	 * @author Raimundo Martins
 	 * 
@@ -39098,9 +39116,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Método que retorna o imóvel área comum
+	 * Mï¿½todo que retorna o imï¿½vel ï¿½rea comum
 	 * 
-	 * [UC0098] Manter Vínculos de Imóveis para Rateio de Consumo [SB0001]
+	 * [UC0098] Manter Vï¿½nculos de Imï¿½veis para Rateio de Consumo [SB0001]
 	 * Atualizar Tipo de Rateio
 	 * 
 	 * @author Magno Gouveia
@@ -39118,11 +39136,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
+	 * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
-	 * 3. O sistema identifica os pagamentos com documentos não aceitos que
-	 * foram gerados para um cliente fictício e junto com o filtro selecionado
-	 * pelo usuário.
+	 * 3. O sistema identifica os pagamentos com documentos nï¿½o aceitos que
+	 * foram gerados para um cliente fictï¿½cio e junto com o filtro selecionado
+	 * pelo usuï¿½rio.
 	 * 
 	 * @author Mariana Victor
 	 * @date 19/08/2011
@@ -39143,9 +39161,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
+	 * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
-	 * 7.2.1. Total do Pagamento (PGMT _VLPAGAMENTO do pagamento doc. não
+	 * 7.2.1. Total do Pagamento (PGMT _VLPAGAMENTO do pagamento doc. nï¿½o
 	 * aceito).
 	 * 
 	 * @author Mariana Victor
@@ -39167,11 +39185,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
+	 * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
-	 * Pesquisa a guia de pagamento do imóvel informado pelo usuário
+	 * Pesquisa a guia de pagamento do imï¿½vel informado pelo usuï¿½rio
 	 * 
-	 * [FS0009] ? Verificar existência da guia de pagamento
+	 * [FS0009] ? Verificar existï¿½ncia da guia de pagamento
 	 * 
 	 * @author Mariana Victor
 	 * @date 23/08/2011
@@ -39192,11 +39210,11 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
+	 * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
-	 * Pesquisa o débito a cobrar do imóvel informado pelo usuário
+	 * Pesquisa o dï¿½bito a cobrar do imï¿½vel informado pelo usuï¿½rio
 	 * 
-	 * [FS0012] - Verificar existência do débito.
+	 * [FS0012] - Verificar existï¿½ncia do dï¿½bito.
 	 * 
 	 * @author Mariana Victor
 	 * @date 23/08/2011
@@ -39217,9 +39235,9 @@ public class Fachada {
 	}
 
 	/**
-	 * [UC1214] Informar Acerto Documentos Não Aceitos
+	 * [UC1214] Informar Acerto Documentos Nï¿½o Aceitos
 	 * 
-	 * [SB0002] ? Selecionar Débitos Pagos
+	 * [SB0002] ? Selecionar Dï¿½bitos Pagos
 	 * 
 	 * @author Mariana Victor
 	 * @date 23/08/2011
@@ -39241,11 +39259,11 @@ public class Fachada {
 
 	/**
 	 * <p>
-	 * [UC0098] Manter Vínculos de Imóveis para Rateio Comum
+	 * [UC0098] Manter Vï¿½nculos de Imï¿½veis para Rateio Comum
 	 * </p>
 	 * <p>
-	 * [SB0001] - [FS0012] - Caso a matrícula do imóvel para área comum
-	 * informada não exista na tabela IMOVEL, exibir a mensagem "Matrícula
+	 * [SB0001] - [FS0012] - Caso a matrï¿½cula do imï¿½vel para ï¿½rea comum
+	 * informada nï¿½o exista na tabela IMOVEL, exibir a mensagem "Matrï¿½cula
 	 * inexistente no cadastro" e retornar para o passo correspondente no fluxo
 	 * principal
 	 * </p>
@@ -39264,9 +39282,9 @@ public class Fachada {
 	}
 
 	/**
-	 * Método que retorna o imóvel área comum
+	 * Mï¿½todo que retorna o imï¿½vel ï¿½rea comum
 	 * 
-	 * [UC0098] Manter Vínculos de Imóveis para Rateio de Consumo [SB0001]
+	 * [UC0098] Manter Vï¿½nculos de Imï¿½veis para Rateio de Consumo [SB0001]
 	 * Atualizar Tipo de Rateio
 	 * 
 	 * @author Magno Gouveia

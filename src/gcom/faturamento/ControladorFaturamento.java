@@ -8165,7 +8165,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		try {
 
-			Collection contas = repositorioFaturamento.pesquisarInformacoesContaParaEnvioEmailPorRota(idRota);
+			Collection contas = repositorioFaturamento.pesquisarInformacoesContaParaEnvioEmailPorRota(idRota, referencia);
 
 			if (contas != null && !contas.isEmpty()) {
 	
@@ -16066,18 +16066,22 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Conta conta = new Conta((Integer) contasEmail[0]);
 			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
 
+<<<<<<< HEAD
 			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
 			//String emailReceptor = "pamelagatinho@gmail.com"; //EMAIL
 			
+=======
+			//String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
+			String emailReceptor = (String) contasEmail[2]; //EMAIL
+>>>>>>> approved
 			
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 			
 			File contaSegundaVia = faturaEnvioEmailVencimentoFatura(conta, imovel);
 		
-			EnvioEmail envioEmail = this.getControladorCadastro()
-					.pesquisarEnvioEmail(idEnvioEmail);
+			EnvioEmail envioEmail = this.getControladorCadastro().pesquisarEnvioEmail(idEnvioEmail);
 		
-			System.out.println("ENVIANDO EMAIL PARA " + emailReceptor + " DA CONTA " + conta.getId());
+			System.out.println("ENVIANDO EMAIL PARA " + emailReceptor + " DA CONTA " + conta.getId() + "DO IMOVEL " + imovel.getId());
 			ServicosEmail.enviarMensagemHTMLComAnexo(emailReceptor, 
 						 envioEmail.getEmailRemetente(), 
 						 "COSANPA", 
@@ -16464,7 +16468,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		*/	
 			Integer numeroCarteira = 17; // Em produ��o, informar o n�mero da carteira de cobran�a.
-			Integer numeroVariacaoCarteira = 35; // Em produ��o, informar o n�mero da varia��o da carteira de cobran�a.
+			Integer numeroVariacaoCarteira = 19; // Em produ��o, informar o n�mero da varia��o da carteira de cobran�a.
 			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades de
 //			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
 //			String dataEmissao = "18.02.2022";
@@ -16543,8 +16547,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades
 										// de
 //			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
-//			String dataEmissao = "18.02.2022";
-//			String dataVencimento = "17.03.2022";
 			String dataEmissao = (conta.getDataEmissao()).toString(); // Pegar da conta
 			String dataVencimento = (conta.getDataVencimentoConta()).toString(); // pegar
 																													// da

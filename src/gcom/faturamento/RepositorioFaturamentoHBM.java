@@ -55480,6 +55480,29 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
+	public Collection<DebitoACobrar> obterDebitoACobrarParcelamento(Integer idParcelamento)
+			throws ErroRepositorioException {
+
+		Collection<DebitoACobrar> retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+		try {
+			consulta = "SELECT debitoACobrar " + "FROM DebitoACobrar debitoACobrar "
+					+ "WHERE debitoACobrar.parcelamento.id = :idParcelamento ";
+
+			retorno =        session.createQuery(consulta)
+							.setInteger("idParcelamento", idParcelamento).list();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
 	/**
 	 * [UC1216] Suspender Leitura para Imï¿½vel com Hidrï¿½metro Retirado
 	 * 
@@ -60476,7 +60499,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 	}
 	
-	public Collection pesquisarInformacoesContaParaEnvioEmailPorRota(Integer idRota) throws ErroRepositorioException {
+	public Collection pesquisarInformacoesContaParaEnvioEmailPorRota(Integer idRota, Integer referencia) throws ErroRepositorioException {
 		Collection retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta;
@@ -60501,6 +60524,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " inner join cadastro.imovel imov on c.imov_id = imov.imov_id "
 					+ " left join cadastro.cliente_fone cf on cf.clie_id = cli.clie_id and cf.fnet_id = :tipoCelular"
 					+ " where clie_dsemail != '' "
+					+ " and c.cnta_amreferenciaconta = :referencia "
 					+ " and dcst_idatual in (:normal, :retificada, :incluida) "
 					+ " and cli.clie_icenvioemail = :ativo " 
 					+ " and c.rota_id = :idRota ";
@@ -60522,6 +60546,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
 					.setShort("ativo", ConstantesSistema.INDICADOR_USO_ATIVO)
 					.setInteger("tipoCelular", FoneTipo.CELULAR)
+					.setInteger("referencia", referencia)
 					.setInteger("idRota", idRota).list();
 		} catch (HibernateException e) {
 			// levanta a exceï¿½ï¿½o para a prï¿½xima camada

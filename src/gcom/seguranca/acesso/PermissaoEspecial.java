@@ -210,8 +210,9 @@ public class PermissaoEspecial extends ObjetoTransacao {
 	
 	public static final int CLIENTE_USUARIO_BOLSA_AGUA = 204;
 	
-	public static final int CONSULTAR_IMOVEL_CPF_E_NIS = 206;
-	
+	public static final int CANCELAR_PARCELAMENTO_SEM_ENTRADA = 205;
+
+	public static final int CONSULTAR_IMOVEL_CPF_E_NIS = 206;	
     
 	/** identifier field */
 	private Integer id;
@@ -291,10 +292,10 @@ public class PermissaoEspecial extends ObjetoTransacao {
 	}
 
 	/**
-	 * < <Descrição do método>>
+	 * < <Descrição do metodo>>
 	 * 
 	 * @param other
-	 *            Descrição do parâmetro
+	 *            Descrição dos parametro
 	 * @return Descrição do retorno
 	 */
 	public boolean equals(Object other) {
