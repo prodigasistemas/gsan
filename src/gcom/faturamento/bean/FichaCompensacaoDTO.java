@@ -37,4 +37,54 @@ public class FichaCompensacaoDTO {
 			this.numeroTituloCliente = numeroTituloCliente;
 			this.pagador = pagador;
 		}
+
+		public Integer getNumeroConvenio() {
+			return numeroConvenio;
+		}
+
+		public Integer getNumeroCarteira() {
+			return numeroCarteira;
+		}
+
+		public Integer getNumeroVariacaoCarteira() {
+			return numeroVariacaoCarteira;
+		}
+
+		public Short getCodigoModalidade() {
+			return codigoModalidade;
+		}
+
+		public String getDataEmissao() {
+			return dataEmissao;
+		}
+
+		public String getDataVencimento() {
+			return dataVencimento;
+		}
+
+		public Double getValorOriginal() {
+			return valorOriginal;
+		}
+
+		public String getCodigoAceite() {
+			return codigoAceite;
+		}
+
+		public Short getCodigoTipoTitulo() {
+			return codigoTipoTitulo;
+		}
+
+		public String getIndicadorPermissaoRecebimentoParcial() {
+			return indicadorPermissaoRecebimentoParcial;
+		}
+
+		public String getNumeroTituloCliente() {
+			return numeroTituloCliente;
+		}
+
+		public PagadorDTO getPagador() {
+			return pagador;
+		}
+		
+		
 }

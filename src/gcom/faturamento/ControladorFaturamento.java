@@ -173,6 +173,8 @@ import gcom.faturamento.debito.FiltroDebitoCobradoHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
 import gcom.faturamento.debito.IDebitoCobrado;
 import gcom.faturamento.debito.IDebitoCobradoCategoria;
+import gcom.faturamento.registroBoletos.RegistroContaService;
+import gcom.faturamento.registroBoletos.RegistroEntradaParcelamentoService;
 import gcom.financeiro.FiltroFinanciamentoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.lancamento.FiltroLancamentoItemContabil;
@@ -15452,25 +15454,20 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	protected void registrarFichaCompensacao(Integer idConta) throws Exception {
-		FichaCompensacaoDTO ficha = null;
 		Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistente(idConta);
 		if (fichaExistente == false) {
-			Conta conta = new Conta();
-			conta = repositorioFaturamento.contaFichaCompensacao(idConta);
+			Conta conta = repositorioFaturamento.contaFichaCompensacao(idConta);
+			Cliente cliente = repositorioFaturamento.clienteFichaCompensacao(conta.getImovel().getId());
+
 			BigDecimal valorOriginal = BigDecimal.valueOf(Double.valueOf(conta.getValorTotalConta()));
 			if (valorOriginal.compareTo(BigDecimal.ZERO) == 1) {
 				System.out.println("Conta = " + idConta + " Imovel = " + conta.getImovel().getId());
-				salvarBoletoBB(idConta, null, null, DocumentoTipo.CONTA);
+				ArrecadadorContratoConvenio convenio = retornaParametrosConvenio(ArrecadadorContratoConvenio.REGISTRO_CONVENIO);
+				RegistroContaService registroContaService = new RegistroContaService(repositorioFaturamento, getControladorFaturamento());
 				try {
-
-					ficha = registrarBoletoBB(idConta, null, null, DocumentoTipo.CONTA);
-
-					String url = Fachada.getInstancia().getSegurancaParametro(
-							SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
-
-					GsanApi api = new GsanApi(url);
-					api.invoke(ficha);
-
+					FichaCompensacaoDTO fichaCompensacaoDTO = registroContaService.montaBoletoBB(idConta, DocumentoTipo.CONTA, convenio);
+					registroContaService.salvarFichaBB(fichaCompensacaoDTO, conta.getImovel().getId(), cliente.getId(), idConta);
+					registroContaService.registroFichaBB(fichaCompensacaoDTO);
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
@@ -15479,223 +15476,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
-	protected void salvarBoletoBB(Integer idConta, Parcelamento parcelamento, GuiaPagamento guiaPagamento,
-			Integer tipoDocumento) throws ControladorException {
-		FichaCompensacaoDTO fichaCompensacaoApi = null;
-		try {
-			Imovel imovel = new Imovel();
-			Cliente cliente = new Cliente();
-			Municipio municipio = new Municipio();
-			StringBuilder nossoNumero = null;
-			String nomeMunicipio = null;
-			Integer idImovel = null;
-			String dataEmissao = null;
-			String dataVencimento = null;
-			Double valorOriginal = null;
-			Integer idCliente = null;
-			Integer idLocalidade = null;
-			String codigoAceite = "A";
-			String indicadorPermissaoRecebimentoParcial = "N";
-										
-			ArrecadadorContratoConvenio convenio = null;
-			Integer idConv = 0;
-			Integer numeroVariacaoCarteira = 0; 
-			Short codigoTipoTitulo = 0; 
-			Integer numeroCarteira = 0; 
-													
-													
-			Short codigoModalidade = 1; 
-										
-			if (tipoDocumento == DocumentoTipo.CONTA && tipoDocumento.equals(DocumentoTipo.CONTA)) {
-				Conta conta = new Conta();
-				conta = repositorioFaturamento.contaFichaCompensacao(idConta);
-				imovel = conta.getImovel();
-				idLocalidade = imovel.getIdLocalidade();
-				municipio = repositorioFaturamento.municipio(idLocalidade);
-				nomeMunicipio = municipio.getNome();
-				idImovel = imovel.getId();
-				cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
-				idCliente = cliente.getId();
-				
-				convenio = retornaParametrosConvenio(imovel.getCodigoConvenio());
-				numeroCarteira = convenio.getNumeroCarteira(); 
-				idConv = convenio.getConvenio();
-				numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira(); 
-				codigoTipoTitulo = convenio.getCodigoTipoTitulo(); // cobran�a, com 7 d�gitos.
-
-				dataEmissao = Util.formatarDataComPontoDDMMAAAA(conta.getDataEmissao()).toString(); // Pegar da conta
-				dataVencimento = Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString(); // pegar
-																												// da
-																												// conta
-				valorOriginal = Double.valueOf(conta.getValorTotalConta());
-				nossoNumero = this.obterNossoNumeroFichaCompensacao(tipoDocumento.toString(), conta.getId().toString(),
-						idConv);
-			} else if (tipoDocumento == DocumentoTipo.GUIA_PAGAMENTO
-					&& tipoDocumento.equals(DocumentoTipo.GUIA_PAGAMENTO)) {
-				imovel = repositorioFaturamento.pesquisarImovel(guiaPagamento.getImovel().getId());
-				idLocalidade = imovel.getIdLocalidade();
-				municipio = repositorioFaturamento.municipio(idLocalidade);
-				nomeMunicipio = municipio.getNome();
-				idImovel = imovel.getId();
-				cliente = getControladorCliente().pesquisarCliente(parcelamento.getCliente().getId());
-				idCliente = cliente.getId();
-				
-				convenio = retornaParametrosConvenio(imovel.getCodigoConvenio());
-				numeroCarteira = convenio.getNumeroCarteira(); 
-				idConv = convenio.getConvenio();
-				numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira(); 
-				codigoTipoTitulo = convenio.getCodigoTipoTitulo(); 
-
-				dataEmissao = (guiaPagamento.getDataEmissao()).toString(); // Pegar da conta
-				dataVencimento = (guiaPagamento.getDataVencimento()).toString(); // pegar da conta
-				valorOriginal = guiaPagamento.getValorDebito().doubleValue();
-				nossoNumero = this.obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(),
-						parcelamento.getId().toString(), idConv);
-			}
-
-			String nossoNumeroSemDV = nossoNumero.toString();
-			String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
-
-			if (tipoDocumento == DocumentoTipo.CONTA && tipoDocumento.equals(DocumentoTipo.CONTA)) {
-
-				repositorioFaturamento.inserirFichaCompensacao(idConv, numeroCarteira, numeroVariacaoCarteira,
-						codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, codigoTipoTitulo,
-						indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idImovel, idCliente, idConta);
-			} else if (tipoDocumento == DocumentoTipo.GUIA_PAGAMENTO
-					&& tipoDocumento.equals(DocumentoTipo.GUIA_PAGAMENTO)) {
-
-				repositorioFaturamento.inserirFichaCompensacaoGuiaPagamento(idConv, numeroCarteira,
-						numeroVariacaoCarteira, codigoModalidade, dataEmissao, dataVencimento, valorOriginal,
-						codigoAceite, codigoTipoTitulo, indicadorPermissaoRecebimentoParcial, numeroTituloCliente,
-						idImovel, idCliente, guiaPagamento.getId());
-			}
-		} catch (ErroRepositorioException e) {
-			throw new ActionServletException("erro.erro_registrar_conta");
-		}
-	}
-
-	protected FichaCompensacaoDTO registrarBoletoBB(Integer idConta, Parcelamento parcelamento,
-			GuiaPagamento guiaPagamento, Integer tipoDocumento) throws ControladorException {
-		FichaCompensacaoDTO fichaCompensacaoApi = null;
-		try {
-			Imovel imovel = new Imovel();
-			Cliente cliente = new Cliente();
-			Municipio municipio = new Municipio();
-			StringBuilder nossoNumero = null;
-			String nomeMunicipio = null;
-			Integer idImovel = null;
-			String dataEmissao = null;
-			String dataVencimento = null;
-			Double valorOriginal = null;
-			Integer idCliente = null;
-			Integer idLocalidade = null;
-			String codigoAceite = "A";
-			Short codigoModalidade = 1; 
-			String indicadorPermissaoRecebimentoParcial = "N"; 
-										
-			ArrecadadorContratoConvenio convenio = null;
-			Integer idConv = 0;
-			Integer numeroVariacaoCarteira = 0; 
-			Short codigoTipoTitulo = 0; 
-			Integer numeroCarteira = 0;  
-										
-			
-
-			if (tipoDocumento == DocumentoTipo.CONTA && tipoDocumento.equals(DocumentoTipo.CONTA)) {
-				convenio = retornaParametrosConvenio(imovel.getCodigoConvenio());
-				numeroCarteira = convenio.getNumeroCarteira(); 
-				idConv = convenio.getConvenio();
-				numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira(); 
-				codigoTipoTitulo = convenio.getCodigoTipoTitulo(); 
-				
-				Conta conta = new Conta();
-				conta = repositorioFaturamento.contaFichaCompensacao(idConta);
-				imovel = conta.getImovel();
-				idLocalidade = imovel.getIdLocalidade();
-				municipio = repositorioFaturamento.municipio(idLocalidade);
-				nomeMunicipio = municipio.getNome();
-				idImovel = imovel.getId();
-				cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
-				idCliente = cliente.getId();
-
-				dataEmissao = Util.formatarDataComPontoDDMMAAAA(conta.getDataEmissao()).toString(); 
-				dataVencimento = Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString(); 
-																												
-																												
-				valorOriginal = Double.valueOf(conta.getValorTotalConta());
-				nossoNumero = this.obterNossoNumeroFichaCompensacao(tipoDocumento.toString(), conta.getId().toString(),
-						idConv);
-			} else if (tipoDocumento == DocumentoTipo.GUIA_PAGAMENTO
-					&& tipoDocumento.equals(DocumentoTipo.GUIA_PAGAMENTO)) {
-				convenio = retornaParametrosConvenio(ArrecadadorContratoConvenio.GUIA_PARCELAMENTO); 
-				numeroCarteira = convenio.getNumeroCarteira(); 	
-				numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira(); 
-				codigoTipoTitulo = convenio.getCodigoTipoTitulo(); 
-				
-				imovel = repositorioFaturamento.pesquisarImovel(guiaPagamento.getImovel().getId());
-				idLocalidade = imovel.getIdLocalidade();
-				municipio = repositorioFaturamento.municipio(idLocalidade);
-				nomeMunicipio = municipio.getNome();
-				idImovel = imovel.getId();
-				cliente = getControladorCliente().pesquisarCliente(parcelamento.getCliente().getId());
-				idCliente = cliente.getId();
-
-				dataEmissao = Util.formatarDataComPontoDDMMAAAA(guiaPagamento.getDataEmissao()); // Pegar da conta
-				dataVencimento = Util.formatarDataComPontoDDMMAAAA(guiaPagamento.getDataVencimento()); // pegar da conta
-				valorOriginal = guiaPagamento.getValorDebito().doubleValue();
-				nossoNumero = this.obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(),
-						parcelamento.getId().toString(), idConv);
-			}
-
-			String nossoNumeroSemDV = nossoNumero.toString();
-			String numeroTituloCliente = nossoNumeroSemDV; // pegar da conta (nosso numero)
-			PagadorDTO pagador = new PagadorDTO(); // Identifica o pagador do boleto.
-			if (cliente.getCpf() != null) {
-				pagador.setTipoInscricao((short) 1);
-				pagador.setNumeroInscricao(cliente.getCpf());
-			} else {
-				pagador.setTipoInscricao((short) 2);
-				pagador.setNumeroInscricao(cliente.getCnpj());
-			}
-			if (cliente.getNome().length() > 30) {
-				pagador.setNome(cliente.getNome().substring(0, 30));
-			} else {
-				pagador.setNome(cliente.getNome());
-			}
-			if (imovel.getEnderecoFormatado().length() > 30) {
-				pagador.setEndereco(imovel.getEnderecoFormatado().substring(0, 30));
-			} else {
-				pagador.setEndereco(imovel.getEnderecoFormatado());
-			}
-			pagador.setCidade(nomeMunicipio);
-			pagador.setBairro(imovel.getNomeBairro());
-			pagador.setUf("PA");
-			pagador.setCep(imovel.getCodigoCep());
-
-			if (tipoDocumento == DocumentoTipo.CONTA && tipoDocumento.equals(DocumentoTipo.CONTA)) {
-				fichaCompensacaoApi = new FichaCompensacaoDTO(idConv, numeroCarteira, numeroVariacaoCarteira,
-						codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, codigoTipoTitulo,
-						indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagador);
-
-			} else if (tipoDocumento == DocumentoTipo.GUIA_PAGAMENTO
-					&& tipoDocumento.equals(DocumentoTipo.GUIA_PAGAMENTO)) {
-				fichaCompensacaoApi = new FichaCompensacaoDTO(idConv, numeroCarteira, numeroVariacaoCarteira,
-						codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, codigoTipoTitulo,
-						indicadorPermissaoRecebimentoParcial, numeroTituloCliente, pagador);
-
-			}
-		} catch (ErroRepositorioException e) {
-			throw new ActionServletException("erro.erro_registrar_conta");
-		}
-		return fichaCompensacaoApi;
-	}
-
-	private ArrecadadorContratoConvenio retornaParametrosConvenio(Integer idConvenio) throws ControladorException {
-		
-		ArrecadadorContratoConvenio convenio = getControladorArrecadacao().pesquisarParametrosConvenioPorId(idConvenio);
-		
-		return convenio;
-	}
 
 	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia) throws Exception {
 
@@ -15706,27 +15486,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		if (fichaExistente == false) {
 			foiGerado = false;
 		}
-
 		// Para boletos ja gerados antes da modificacao para gravacao na base de dados
 		// , ou seja,
 		// para boletos que foram gerados e nao foram salvos no bd
 
 		if (primeiraVia || !foiGerado) {
-			GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(parcelamento);
 			BigDecimal valorOriginal = parcelamento.getValorEntrada();
 			if (valorOriginal.compareTo(BigDecimal.ZERO) == 1) {
 				System.out.println(
 						"Parcelamento = " + parcelamento.getId() + " Imovel = " + parcelamento.getImovel().getId());
-				salvarBoletoBB(null, parcelamento, guiaPagamento, DocumentoTipo.GUIA_PAGAMENTO);
+				ArrecadadorContratoConvenio convenio = retornaParametrosConvenio(ArrecadadorContratoConvenio.GUIA_PARCELAMENTO);
+				RegistroEntradaParcelamentoService registroEntradaParcelamentoService = new RegistroEntradaParcelamentoService(repositorioFaturamento, getControladorFaturamento());
 				try {
-					FichaCompensacaoDTO ficha = registrarBoletoBB(null, parcelamento, guiaPagamento,
-							DocumentoTipo.GUIA_PAGAMENTO);
-
-					String url = Fachada.getInstancia().getSegurancaParametro(
-							SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
-
-					GsanApi api = new GsanApi(url);
-					api.invoke(ficha);
+					FichaCompensacaoDTO fichaCompensacaoDTO = registroEntradaParcelamentoService.montaBoletoBB(parcelamento.getId(), DocumentoTipo.GUIA_PAGAMENTO, convenio );
+					registroEntradaParcelamentoService.salvarFichaBB(fichaCompensacaoDTO, parcelamento.getImovel().getId(), parcelamento.getCliente().getId(), parcelamento.getId());
+					registroEntradaParcelamentoService.registroFichaBB(fichaCompensacaoDTO);
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -15735,50 +15509,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		}
 	}
-
-	public void registrarBoletoBancoDeDados(Integer idDocumento, ArrecadadorContratoConvenio convenio) throws ControladorException, ClassNotFoundException {
-
-		FichaCompensacao fichaCompensacaoBanco = null;
-		Connection connection = null;
-		Statement stmt = null;
-		try {
-			Conta conta = new Conta();
-			Cliente cliente = new Cliente();
-			conta = repositorioFaturamento.contaFichaCompensacao(idDocumento);
-			Imovel imovel = conta.getImovel();
-			Integer idLocalidade = imovel.getIdLocalidade();
-			Municipio municipio = repositorioFaturamento.municipio(idLocalidade);
-			String nomeMunicipio = municipio.getNome();
-			Integer idImovel = imovel.getId();
-			cliente = repositorioFaturamento.clienteFichaCompensacao(idImovel);
-			Integer idCliente = cliente.getId();
-			
-			Integer idConv = convenio.getConvenio(); 
-			Integer numeroCarteira = convenio.getNumeroCarteira(); 
-			Integer numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira();
-												
-			Short codigoModalidade = 1; 
-			
-			String dataEmissao = (conta.getDataEmissao()).toString(); 
-			String dataVencimento = (conta.getDataVencimentoConta()).toString(); 
-																					
-																					
-			Double valorOriginal = Double.valueOf(conta.getValorTotalConta());
-			String codigoAceite = "A"; 
-			Short codigoTipoTitulo = convenio.getCodigoTipoTitulo();
-										
-			String indicadorPermissaoRecebimentoParcial = "N"; 
-			StringBuilder nossoNumero = this.obterNossoNumeroFichaCompensacao("1", conta.getId().toString(), idConv);
-			String nossoNumeroSemDV = nossoNumero.toString();
-			String numeroTituloCliente = nossoNumeroSemDV; 
-
-			repositorioFaturamento.inserirFichaCompensacao(idConv, numeroCarteira, numeroVariacaoCarteira,
-					codigoModalidade, dataEmissao, dataVencimento, valorOriginal, codigoAceite, codigoTipoTitulo,
-					indicadorPermissaoRecebimentoParcial, numeroTituloCliente, idImovel, idCliente, idDocumento);
-
-		} catch (ErroRepositorioException e) {
-			throw new ActionServletException("erro.erro_registrar_conta");
-		}
+	
+	private ArrecadadorContratoConvenio retornaParametrosConvenio(Integer idConvenio) throws ControladorException {
+		ArrecadadorContratoConvenio convenio = getControladorArrecadacao().pesquisarParametrosConvenioPorId(idConvenio);
+		return convenio;
 	}
 
 	public String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
@@ -15801,17 +15535,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		}
 		return cnpjCpf;
-	}
-
-	private GuiaPagamento pesquisarGuiaPagamentoParcelamento(Parcelamento parcelamento) {
-		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-		filtroGuiaPagamento
-				.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, parcelamento.getId()));
-		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
-		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(
-				Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
-
-		return guiaPagamento;
 	}
 
 	private GuiaPagamentoHistorico pesquisarGuiaPagamentoHistoricoParcelamento(Parcelamento parcelamento) {
