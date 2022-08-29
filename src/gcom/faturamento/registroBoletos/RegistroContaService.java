@@ -45,5 +45,14 @@ public class RegistroContaService extends Registro {
 				numeroTituloCliente, pagador);
 	}
 
+	@Override
+	public void salvarFichaBB(FichaCompensacaoDTO ficha, Integer idImovel, Integer idCliente, Integer idDocumento)
+			throws Exception {
+		repositorioFaturamento.inserirFichaCompensacao(ficha.getNumeroConvenio(), ficha.getNumeroCarteira(), ficha.getNumeroVariacaoCarteira(),
+				ficha.getCodigoModalidade(), ficha.getDataEmissao(), ficha.getDataVencimento(), ficha.getValorOriginal(), ficha.getCodigoAceite(), ficha.getCodigoTipoTitulo(),
+				ficha.getIndicadorPermissaoRecebimentoParcial(), ficha.getNumeroTituloCliente(), idImovel, idCliente, idDocumento);
+		
+	}
+
 
 }

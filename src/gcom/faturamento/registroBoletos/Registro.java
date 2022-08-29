@@ -25,11 +25,7 @@ public abstract class Registro {
 			ArrecadadorContratoConvenio convenio) throws Exception;	
 
 	
-	public void salvarFichaBB(FichaCompensacaoDTO ficha, Integer idImovel, Integer idCliente, Integer idDocumento) throws Exception {
-		repositorioFaturamento.inserirFichaCompensacao(ficha.getNumeroConvenio(), ficha.getNumeroCarteira(), ficha.getNumeroVariacaoCarteira(),
-				ficha.getCodigoModalidade(), ficha.getDataEmissao(), ficha.getDataVencimento(), ficha.getValorOriginal(), ficha.getCodigoAceite(), ficha.getCodigoTipoTitulo(),
-				ficha.getIndicadorPermissaoRecebimentoParcial(), ficha.getNumeroTituloCliente(), idImovel, idCliente, idDocumento);
-	}
+	abstract void salvarFichaBB(FichaCompensacaoDTO ficha, Integer idImovel, Integer idCliente, Integer idDocumento) throws Exception;
 
 	public void registroFichaBB(FichaCompensacaoDTO ficha) throws Exception {
 		String url = Fachada.getInstancia().getSegurancaParametro(

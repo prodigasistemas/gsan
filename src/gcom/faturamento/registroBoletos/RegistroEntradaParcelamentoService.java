@@ -61,4 +61,13 @@ public class RegistroEntradaParcelamentoService extends Registro {
 		return guiaPagamento;
 	}
 
+	@Override
+	public void salvarFichaBB(FichaCompensacaoDTO ficha, Integer idImovel, Integer idCliente, Integer idDocumento)
+			throws Exception {
+		repositorioFaturamento.inserirFichaCompensacaoGuiaPagamento(ficha.getNumeroConvenio(), ficha.getNumeroCarteira(), ficha.getNumeroVariacaoCarteira(),
+				ficha.getCodigoModalidade(), ficha.getDataEmissao(), ficha.getDataVencimento(), ficha.getValorOriginal(), ficha.getCodigoAceite(), ficha.getCodigoTipoTitulo(),
+				ficha.getIndicadorPermissaoRecebimentoParcial(), ficha.getNumeroTituloCliente(), idImovel, idCliente, idDocumento);
+		
+	}
+
 }
