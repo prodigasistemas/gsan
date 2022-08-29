@@ -16304,7 +16304,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				colecaoCategoriasImovel = this.getControladorImovel().obterQuantidadeEconomiasCategoria(creditoARealizar.getImovel(), Categoria.RESIDENCIAL);
 			}else {
 				colecaoCategoriasImovel = this.getControladorImovel().obterQuantidadeEconomiasCategoria(creditoARealizar.getImovel());
-L					}
+					}
 				
 			Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel.iterator();
 	
