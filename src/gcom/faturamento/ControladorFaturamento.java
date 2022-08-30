@@ -16068,6 +16068,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			//String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
 			String emailReceptor = (String) contasEmail[2]; //EMAIL
+
 			
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 			
@@ -16177,38 +16178,43 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada, FaturamentoGrupo grupo) throws ControladorException {
+	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada, FaturamentoGrupo grupo)
+			throws ControladorException {
 
-		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, rota.getId());
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+				UnidadeProcessamento.ROTA, rota.getId());
 
 		Integer idImovel = 0;
 
 		try {
 			CreditoTipo creditoTipo = obterCreditoTipo(CreditoTipo.CREDITO_BOLSA_AGUA);
-			
+
 			Collection<Imovel> colecaoImovel = getControladorImovel().pesquisarImoveisBolsaAgua(rota);
 
-			for (Imovel imovel: colecaoImovel) {
-				idImovel = imovel.getId();
+			for (Imovel imovel : colecaoImovel) {
+                CreditoARealizar credito = repositorioFaturamento.validarExistenciaCreditoARealizar(imovel.getId(), grupo.getAnoMesReferencia());
+				if (credito == null) {
+					idImovel = imovel.getId();
 
-				apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
-				System.out.println("INSERINDO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
-				apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
-				DeterminarValoresFaturamentoAguaEsgotoHelper helper = obterValoresCreditosBolsaAgua(imovel, grupo);
-				
-				BigDecimal valorCredito = BigDecimal.ZERO;
-				
-				if (imovel.isLigadoAgua() ) {
-					valorCredito = valorCredito.add(helper.getValorTotalAgua());  
+					apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
+					System.out.println("INSERINDO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
+					apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
+					DeterminarValoresFaturamentoAguaEsgotoHelper helper = obterValoresCreditosBolsaAgua(imovel, grupo);
+
+					BigDecimal valorCredito = BigDecimal.ZERO;
+
+					if (imovel.isLigadoAgua()) {
+						valorCredito = valorCredito.add(helper.getValorTotalAgua());
+					}
+
+					if (imovel.isLigadoEsgoto()) {
+						valorCredito = valorCredito.add(helper.getValorTotalEsgoto());
+					}
+
+					inserirCreditoBolsaAgua(imovel, valorCredito, grupo.getAnoMesReferencia(), creditoTipo);
 				}
-				
-				if (imovel.isLigadoEsgoto()) {
-					valorCredito = valorCredito.add(helper.getValorTotalEsgoto());
-				}
-				
-				inserirCreditoBolsaAgua(imovel, valorCredito, grupo.getAnoMesReferencia(), creditoTipo);
 			}
-			
+
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception e) {
 			System.out.println("    === ERRO CREDITO BOLSA AGUA PARA IMOVEL: " + idImovel);
@@ -16519,7 +16525,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	public void registrarBoletoBancoDeDados(Integer idConta) throws ControladorException, ClassNotFoundException {
 
-		FichaCompensacao fichaCompensacaoBanco = null;
         Connection connection = null;
         Statement stmt = null;
 		try {
@@ -16541,8 +16546,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Short codigoModalidade = 1; // C�digo que identifica a caracter�stica dos boletos dentro das modalidades
 										// de
 //			// cobran�a existentes no BB. Dom�nio: 1 - Simples; 4 - Vinculada.
-//			String dataEmissao = "18.02.2022";
-//			String dataVencimento = "17.03.2022";
 			String dataEmissao = (conta.getDataEmissao()).toString(); // Pegar da conta
 			String dataVencimento = (conta.getDataVencimentoConta()).toString(); // pegar
 																													// da

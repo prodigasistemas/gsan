@@ -3088,5 +3088,7 @@ public interface IRepositorioFaturamento {
 			indicadorPermissaoRecebimentoParcial,String numeroTituloCliente,Integer imovel,Integer cliente, Integer conta) throws ErroRepositorioException;
 	
 	public Collection pesquisarInformacoesContaParaEnvioEmailPorRota(Integer idRota, Integer referencia) throws ErroRepositorioException;
+	
+	public CreditoARealizar validarExistenciaCreditoARealizar(Integer idImovel, Integer anoMesReferencia) throws ErroRepositorioException;
 
 }
