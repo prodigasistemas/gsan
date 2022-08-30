@@ -9717,8 +9717,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     .append("cliCnt.clct_icnomeconta = :indicadorNomeConta AND ")
 				     .append("imovel.icte_id not in (4,9) ")
 				     .append(" AND cnt.dcst_idatual in ( :normal, :retificada ) ")
+				     //TODO
+				     //-------PARAMETRO A SER APAGADO
+				     .append(" AND imovel.imov_idparametrosconvenio = 1 ")
+				     //----------------
 				     .append("order by  loc.loca_id,cnt.cnta_cdsetorcomercial, ")
-				     .append("rota.rota_cdrota, quadraFace.qdfa_nnfacequadra, imovel.imov_nnlote ");
+				     .append("rota.rota_cdrota, quadraFace.qdfa_nnfacequadra, imovel.imov_nnlote ")
+				     ;
 			
 			retorno = session.createSQLQuery(consulta.toString())
 					.addScalar("idConta", Hibernate.INTEGER)
@@ -60716,11 +60721,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		
 		return guiaPagamento;
 		
-	}
-
-	public Collection pesquisarInformacoesContaParaEnvioEmailPorRota(Integer idRota) throws ErroRepositorioException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

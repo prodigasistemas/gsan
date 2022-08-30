@@ -1,17 +1,14 @@
 package gcom.faturamento.registroBoletos;
 
 import gcom.arrecadacao.ArrecadadorContratoConvenio;
-import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.imovel.Imovel;
-import gcom.fachada.Fachada;
 import gcom.faturamento.IControladorFaturamento;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.bean.FichaCompensacaoDTO;
 import gcom.faturamento.bean.PagadorDTO;
 import gcom.util.Util;
-import gcom.util.filtro.ParametroSimples;
 
 public class RegistroEntradaParcelamentoService extends Registro {
 

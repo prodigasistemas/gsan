@@ -142,15 +142,6 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		return retorno;
 	}
 	
-	@SuppressWarnings("unchecked")
-	private Collection<GuiaPagamento> pesquisarGuiaPagamento(Integer idParcelamento) {
-		Filtro filtro = new FiltroParcelamento();
-		filtro.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idParcelamento));
-
-		return getFachada().pesquisar(filtro, GuiaPagamento.class.getName());
-
-	}
-	
 	private Collection<DebitoACobrar> pesquisarDebitoACobrar(Integer parcelamentoId) {
 		Collection<DebitoACobrar> colecaoDebitoACobrar  = getFachada().obterDebitoACobrarParcelamento(parcelamentoId);
 		
