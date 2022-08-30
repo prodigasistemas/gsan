@@ -17,10 +17,12 @@ public class FichaCompensacaoDTO {
 		
 		private PagadorDTO pagador;
 		
+//		private String indicadorPix;
+		
 		public FichaCompensacaoDTO(Integer numeroConvenio, Integer numeroCarteira, Integer numeroVariacaoCarteira,
 			Short codigoModalidade, String dataEmissao, String dataVencimento, Double valorOriginal,
 			String codigoAceite, Short codigoTipoTitulo, String indicadorPermissaoRecebimentoParcial,
-			String numeroTituloCliente, PagadorDTO pagador) {
+			String numeroTituloCliente, PagadorDTO pagador) {//, String indicadorPix) {
 			
 			super();
 			
@@ -36,6 +38,7 @@ public class FichaCompensacaoDTO {
 			this.indicadorPermissaoRecebimentoParcial = indicadorPermissaoRecebimentoParcial;
 			this.numeroTituloCliente = numeroTituloCliente;
 			this.pagador = pagador;
+//			this.indicadorPix = indicadorPix;
 		}
 
 		public Integer getNumeroConvenio() {
@@ -81,6 +84,10 @@ public class FichaCompensacaoDTO {
 		public String getNumeroTituloCliente() {
 			return numeroTituloCliente;
 		}
+		
+//		public String getIndicadorPix() {
+//			return indicadorPix;
+//		}
 
 		public PagadorDTO getPagador() {
 			return pagador;

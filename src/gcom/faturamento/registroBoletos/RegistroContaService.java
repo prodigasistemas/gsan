@@ -23,6 +23,7 @@ public class RegistroContaService extends Registro {
 		Short codigoModalidade = 1;
 		String codigoAceite = "A";
 		String indicadorPermissaoRecebimentoParcial = "N";
+//		String indicadorPix = "N";
 		Integer idConv = convenio.getConvenio();
 		Integer numeroCarteira = convenio.getNumeroCarteira();
 		Integer numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira();
@@ -32,7 +33,8 @@ public class RegistroContaService extends Registro {
 		Cliente cliente = repositorioFaturamento.clienteFichaCompensacao(imovel.getId());
 		String nomeMunicipio = repositorioFaturamento.municipio(imovel.getIdLocalidade()).getNome();
 		String dataEmissao = Util.formatarDataComPontoDDMMAAAA(conta.getDataEmissao()).toString();
-		String dataVencimento = Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString();
+//		String dataVencimento = Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString();
+		String dataVencimento = "20.09.2022"; 
 		Double valorOriginal = Double.valueOf(conta.getValorTotalConta());
 		StringBuilder nossoNumero = controladorFaturamento.obterNossoNumeroFichaCompensacao(tipoDocumento.toString(),
 				conta.getId().toString(), idConv);
@@ -42,7 +44,7 @@ public class RegistroContaService extends Registro {
 
 		return new FichaCompensacaoDTO(idConv, numeroCarteira, numeroVariacaoCarteira, codigoModalidade, dataEmissao,
 				dataVencimento, valorOriginal, codigoAceite, codigoTipoTitulo, indicadorPermissaoRecebimentoParcial,
-				numeroTituloCliente, pagador);
+				numeroTituloCliente, pagador);//, indicadorPix);
 	}
 
 	@Override

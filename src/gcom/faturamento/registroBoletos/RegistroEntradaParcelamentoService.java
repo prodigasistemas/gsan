@@ -15,20 +15,22 @@ import gcom.util.filtro.ParametroSimples;
 
 public class RegistroEntradaParcelamentoService extends Registro {
 
+	private GuiaPagamento guiaPagamento;
+
 	public RegistroEntradaParcelamentoService(IRepositorioFaturamento repositorioFaturamento,
-			IControladorFaturamento controladorFaturamento) {
+			IControladorFaturamento controladorFaturamento, GuiaPagamento guiaPagamento) {
 		super(repositorioFaturamento, controladorFaturamento);
+		this.guiaPagamento = guiaPagamento;
 	}
 
 	@Override
 	public FichaCompensacaoDTO montaBoletoBB(Integer idDocumento, Integer tipoDocumento,
 			ArrecadadorContratoConvenio convenio) throws Exception {
-		
-		GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(idDocumento);
-		
+				
 		Short codigoModalidade = 1;
 		String codigoAceite = "A";
 		String indicadorPermissaoRecebimentoParcial = "N";
+//		String indicadorPix = "N";
 		Integer idConv = convenio.getConvenio();
 		Integer numeroCarteira = convenio.getNumeroCarteira();
 		Integer numeroVariacaoCarteira = convenio.getNumeroVariacaoCarteira();
@@ -46,19 +48,7 @@ public class RegistroEntradaParcelamentoService extends Registro {
 
 		return new FichaCompensacaoDTO(idConv, numeroCarteira, numeroVariacaoCarteira, codigoModalidade, dataEmissao,
 				dataVencimento, valorOriginal, codigoAceite, codigoTipoTitulo, indicadorPermissaoRecebimentoParcial,
-				numeroTituloCliente, pagador);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private GuiaPagamento pesquisarGuiaPagamentoParcelamento(Integer idParcelamento) {
-		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-		filtroGuiaPagamento
-				.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, idParcelamento));
-		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
-		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(
-				Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
-
-		return guiaPagamento;
+				numeroTituloCliente, pagador);//, indicadorPix);
 	}
 
 	@Override

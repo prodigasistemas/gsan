@@ -173,6 +173,7 @@ import gcom.faturamento.debito.FiltroDebitoCobradoHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
 import gcom.faturamento.debito.IDebitoCobrado;
 import gcom.faturamento.debito.IDebitoCobradoCategoria;
+import gcom.faturamento.registroBoletos.Registro;
 import gcom.faturamento.registroBoletos.RegistroContaService;
 import gcom.faturamento.registroBoletos.RegistroEntradaParcelamentoService;
 import gcom.financeiro.FiltroFinanciamentoTipo;
@@ -15454,7 +15455,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	protected void registrarFichaCompensacao(Integer idConta) throws Exception {
-		Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistente(idConta);
+		Boolean fichaExistente = getControladorFaturamento().fichaCompensacaoExistente(idConta);
 		if (fichaExistente == false) {
 			Conta conta = repositorioFaturamento.contaFichaCompensacao(idConta);
 			Cliente cliente = repositorioFaturamento.clienteFichaCompensacao(conta.getImovel().getId());
@@ -15462,12 +15463,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			BigDecimal valorOriginal = BigDecimal.valueOf(Double.valueOf(conta.getValorTotalConta()));
 			if (valorOriginal.compareTo(BigDecimal.ZERO) == 1) {
 				System.out.println("Conta = " + idConta + " Imovel = " + conta.getImovel().getId());
-				ArrecadadorContratoConvenio convenio = retornaParametrosConvenio(ArrecadadorContratoConvenio.REGISTRO_CONVENIO);
-				RegistroContaService registroContaService = new RegistroContaService(repositorioFaturamento, getControladorFaturamento());
+				ArrecadadorContratoConvenio convenio = retornaParametrosConvenio(conta.getImovel().getCodigoConvenio());
+				Registro registroContaService = new RegistroContaService(repositorioFaturamento, getControladorFaturamento());
 				try {
 					FichaCompensacaoDTO fichaCompensacaoDTO = registroContaService.montaBoletoBB(idConta, DocumentoTipo.CONTA, convenio);
 					registroContaService.salvarFichaBB(fichaCompensacaoDTO, conta.getImovel().getId(), cliente.getId(), idConta);
-					registroContaService.registroFichaBB(fichaCompensacaoDTO);
+					registroContaService.registroFichaTeste(fichaCompensacaoDTO);
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
@@ -15482,7 +15483,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		FiltroBancoInfo filtro = new FiltroBancoInfo();
 		boolean foiGerado = true;
 
-		Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistenteGuiaPagamento(parcelamento.getId());
+		Integer idParcelamento = parcelamento.getId();
+		Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistenteGuiaPagamento(idParcelamento);
 		if (fichaExistente == false) {
 			foiGerado = false;
 		}
@@ -15491,17 +15493,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		// para boletos que foram gerados e nao foram salvos no bd
 
 		if (primeiraVia || !foiGerado) {
+			GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(idParcelamento);
 			BigDecimal valorOriginal = parcelamento.getValorEntrada();
 			if (valorOriginal.compareTo(BigDecimal.ZERO) == 1) {
 				System.out.println(
-						"Parcelamento = " + parcelamento.getId() + " Imovel = " + parcelamento.getImovel().getId());
-				ArrecadadorContratoConvenio convenio = retornaParametrosConvenio(ArrecadadorContratoConvenio.GUIA_PARCELAMENTO);
-				RegistroEntradaParcelamentoService registroEntradaParcelamentoService = new RegistroEntradaParcelamentoService(repositorioFaturamento, getControladorFaturamento());
+						"Parcelamento = " + idParcelamento + " Imovel = " + parcelamento.getImovel().getId());
+				ArrecadadorContratoConvenio convenio = retornaParametrosConvenio(ArrecadadorContratoConvenio.REGISTRO_CONVENIO_TESTE);
+				Registro registroEntradaParcelamentoService = new RegistroEntradaParcelamentoService(repositorioFaturamento, getControladorFaturamento(), guiaPagamento);
 				try {
-					FichaCompensacaoDTO fichaCompensacaoDTO = registroEntradaParcelamentoService.montaBoletoBB(parcelamento.getId(), DocumentoTipo.GUIA_PAGAMENTO, convenio );
-					registroEntradaParcelamentoService.salvarFichaBB(fichaCompensacaoDTO, parcelamento.getImovel().getId(), parcelamento.getCliente().getId(), parcelamento.getId());
-					registroEntradaParcelamentoService.registroFichaBB(fichaCompensacaoDTO);
-
+					FichaCompensacaoDTO fichaCompensacaoDTO = registroEntradaParcelamentoService.montaBoletoBB(idParcelamento, DocumentoTipo.GUIA_PAGAMENTO, convenio );
+					registroEntradaParcelamentoService.salvarFichaBB(fichaCompensacaoDTO, parcelamento.getImovel().getId(), parcelamento.getCliente().getId(), guiaPagamento.getId());
+					registroEntradaParcelamentoService.registroFichaTeste(fichaCompensacaoDTO);
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
@@ -15510,9 +15512,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private ArrecadadorContratoConvenio retornaParametrosConvenio(Integer idConvenio) throws ControladorException {
+	public ArrecadadorContratoConvenio retornaParametrosConvenio(Integer idConvenio) throws ControladorException {
 		ArrecadadorContratoConvenio convenio = getControladorArrecadacao().pesquisarParametrosConvenioPorId(idConvenio);
 		return convenio;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private GuiaPagamento pesquisarGuiaPagamentoParcelamento(Integer idParcelamento) {
+		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+		filtroGuiaPagamento
+				.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.PARCELAMENTO_ID, idParcelamento));
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		GuiaPagamento guiaPagamento = (GuiaPagamento) Util.retonarObjetoDeColecao(
+				Fachada.getInstancia().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+
+		return guiaPagamento;
 	}
 
 	public String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {

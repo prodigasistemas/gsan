@@ -32507,8 +32507,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		String consulta;
 		
 		try {
-			consulta = "SELECT arcc FROM ArrecadadorContratoConvenio arcc"
-					+ "WHERE arcc.id = :idConvenio";
+			consulta = "SELECT arcc FROM ArrecadadorContratoConvenio arcc "
+					+ " WHERE arcc.id = :idConvenio ";
 			
 			retorno = (ArrecadadorContratoConvenio) session.createQuery(consulta)
 					.setInteger("idConvenio", idConvenio)

@@ -27,6 +27,7 @@ import org.jboss.logging.Logger;
 
 import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
+import gcom.arrecadacao.ArrecadadorContratoConvenio;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
@@ -3815,10 +3816,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 		Date dataValidade = obterDataValidade2ViaConta(emitirContaHelper);
 		emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
+		ArrecadadorContratoConvenio parametrosConvenio = retornaParametrosConvenio(emitirContaHelper.getCodigoConvenio());
 
 		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 			String nossoNumeroSemDV;
-			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao("1", emitirContaHelper.getIdConta().toString(), parametrosConvenio.getConvenio());
 
 				nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
 			

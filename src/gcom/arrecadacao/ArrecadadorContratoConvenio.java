@@ -2,7 +2,7 @@ package gcom.arrecadacao;
 
 import gcom.interceptor.ControleAlteracao;
 
-@ControleAlteracao
+@ControleAlteracao()
 public class ArrecadadorContratoConvenio {
 	
 	public static final Integer REGISTRO_CONVENIO_TESTE = 1;
@@ -14,7 +14,6 @@ public class ArrecadadorContratoConvenio {
 	private Integer numeroCarteira;
 	private Integer numeroVariacaoCarteira;
 	private Short codigoTipoTitulo;
-	
 	
 	public Integer getId() {
 		return id;

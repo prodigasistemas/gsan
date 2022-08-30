@@ -9691,7 +9691,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     .append("cnt.cnta_vlrateioagua as valorRateioAgua, ") //43
 				     .append("cnt.cnta_vlrateioesgoto as valorRateioEsgoto, ") //44
 				     .append("crrz.crrz_vlcredito as valorCreditoBolsaAgua, ") //45
-				     .append("imovel.cntt_copasa as codigoConvenio ")  //46
+				     .append("imovel.imov_idparametrosconvenio as codigoConvenio ")  //46
 				     .append("from cadastro.cliente_conta cliCnt ")
 				     .append("inner join faturamento.conta cnt on cliCnt.cnta_id=cnt.cnta_id ")
 				     .append("inner join faturamento.conta_impressao contaImpressao on cnt.cnta_id = contaImpressao.cnta_id ")
@@ -60383,7 +60383,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		}  
+		} 
+		finally {
+			HibernateUtil.closeSession(session);
+		}
 		return registroExistente;
 	}
 	
@@ -60455,6 +60458,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} 
+		
 		return idMunicipio;
 	}
 	
