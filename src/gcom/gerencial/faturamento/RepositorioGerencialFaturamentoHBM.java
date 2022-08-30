@@ -1531,7 +1531,6 @@ public String criarCondicionaisResumoAnaliseFaturamento(InformarDadosGeracaoRela
 			int indice, int qtRegistros) throws ErroRepositorioException {
 
 		List retorno = null;
-
 		Session session = HibernateUtil.getSession();
 		try {
 			/*
@@ -1649,6 +1648,7 @@ public String criarCondicionaisResumoAnaliseFaturamento(InformarDadosGeracaoRela
 				"	left join cnta.consumoTarifa conTar " +
 				"where " +
 				"	cnta.referencia = :anoMesReferencia " +
+				"   and cnta.debitoCreditoSituacaoAtual <> 3 " +
 				"	and ( cnta.debitoCreditoSituacaoAtual = 0 or cnta.debitoCreditoSituacaoAnterior = 0 ) " +
 				"	and seCo.id = :idSetor";				
 			

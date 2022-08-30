@@ -38,8 +38,8 @@ public class RegistroEntradaParcelamentoService extends Registro {
 		Imovel imovel = repositorioFaturamento.pesquisarImovel(guiaPagamento.getImovel().getId());
 		Cliente cliente = repositorioFaturamento.clienteFichaCompensacao(imovel.getId());
 		String nomeMunicipio = repositorioFaturamento.municipio(imovel.getIdLocalidade()).getNome();
-		String dataEmissao = (guiaPagamento.getDataEmissao()).toString();
-		String dataVencimento = (guiaPagamento.getDataVencimento()).toString();
+		String dataEmissao = Util.formatarDataComPontoDDMMAAAA(guiaPagamento.getDataEmissao()).toString();
+		String dataVencimento = Util.formatarDataComPontoDDMMAAAA(guiaPagamento.getDataVencimento()).toString();
 		Double valorOriginal = guiaPagamento.getValorDebito().doubleValue();
 		StringBuilder nossoNumero = controladorFaturamento.obterNossoNumeroFichaCompensacao(tipoDocumento.toString(), idDocumento.toString(), idConv);
 		String numeroTituloCliente = nossoNumero.toString();

@@ -7660,7 +7660,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		try {
 
-			Collection contas = repositorioFaturamento.pesquisarInformacoesContaParaEnvioEmailPorRota(idRota);
+			Collection contas = repositorioFaturamento.pesquisarInformacoesContaParaEnvioEmailPorRota(idRota, referencia);
 
 			if (contas != null && !contas.isEmpty()) {
 
@@ -15108,8 +15108,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Conta conta = new Conta((Integer) contasEmail[0]);
 			conta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao((Integer) contasEmail[1]));
 
-			String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; // EMAIL
-			// String emailReceptor = "pamelagatinho@gmail.com"; //EMAIL
+			//String emailReceptor = "contas.suprimidas@cosanpa.pa.gov.br"; //EMAIL
+			String emailReceptor = (String) contasEmail[2]; //EMAIL
 
 			Imovel imovel = getControladorImovel().pesquisarImovel((Integer) contasEmail[4]);
 
@@ -15117,9 +15117,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			EnvioEmail envioEmail = this.getControladorCadastro().pesquisarEnvioEmail(idEnvioEmail);
 
-			System.out.println("ENVIANDO EMAIL PARA " + emailReceptor + " DA CONTA " + conta.getId());
-			ServicosEmail.enviarMensagemHTMLComAnexo(emailReceptor, envioEmail.getEmailRemetente(), "COSANPA",
-					envioEmail.getTituloMensagem(), mensagem, contaSegundaVia);
+		
+			System.out.println("ENVIANDO EMAIL PARA " + emailReceptor + " DA CONTA " + conta.getId() + "DO IMOVEL " + imovel.getId());
+			ServicosEmail.enviarMensagemHTMLComAnexo(emailReceptor, 
+						 envioEmail.getEmailRemetente(), 
+						 "COSANPA", 
+						 envioEmail.getTituloMensagem(), 
+						 mensagem, 
+						 contaSegundaVia);
 		} catch (ErroEmailException e) {
 			throw new ActionServletException("erro.email.vencimento.fatura");
 		}
@@ -15508,9 +15513,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					e.printStackTrace();
 					throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
 				}
+			
 			}
 		}
 	}
+	
+	
 	
 	public ArrecadadorContratoConvenio retornaParametrosConvenio(Integer idConvenio) throws ControladorException {
 		ArrecadadorContratoConvenio convenio = getControladorArrecadacao().pesquisarParametrosConvenioPorId(idConvenio);

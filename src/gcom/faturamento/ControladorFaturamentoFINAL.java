@@ -59577,6 +59577,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		return retorno;
 	}
+	
+	public Collection<DebitoACobrar> obterDebitoACobrarParcelamento(Integer idParcelamento)
+			throws ControladorException {
+		Collection<DebitoACobrar> retorno = null;
+		try {
+			retorno = (Collection) repositorioFaturamento
+					.obterDebitoACobrarParcelamento(idParcelamento);
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			new ControladorException("erro.sistema", ex);
+		}
+
+		return retorno;
+	}
 
 	/**
 	 * @author Gustavo Amaral

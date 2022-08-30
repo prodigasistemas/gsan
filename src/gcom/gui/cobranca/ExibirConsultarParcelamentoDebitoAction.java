@@ -7,6 +7,7 @@ import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.imovel.Imovel;
+import gcom.fachada.Fachada;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaParametro;
 import gcom.cobranca.bean.CancelarParcelamentoHelper;
@@ -34,6 +35,7 @@ import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -60,7 +62,7 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		this.form = (ParcelamentoDebitoActionForm) actionForm;
 		this.sessao = request.getSession(false);
 		this.request = request;
-
+		
 		Collection<Integer> idsContaEP = new ArrayList<Integer>();
 
 		String codigoImovel = request.getParameter("codigoImovel");
@@ -78,7 +80,15 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 			setarDadosClienteImovel(clienteImovel);
 
 			Collection<Parcelamento> colecaoParcelamento = pesquisarParcelamento(idParcelamento);
-
+			Integer parcelamentoId = Integer.parseInt(idParcelamento);
+			Collection<DebitoACobrar> debitoACobrar = pesquisarDebitoACobrar(parcelamentoId);
+			Boolean parcelasCobradas = false;
+			for (DebitoACobrar parcelas : debitoACobrar) {
+				if(parcelas.getNumeroPrestacaoCobradas() != 0) {
+					parcelasCobradas = true;
+					break;
+				}
+			}
 			if (colecaoParcelamento != null && !colecaoParcelamento.isEmpty()) {
 				request.setAttribute("colecaoParcelamento", colecaoParcelamento);
 
@@ -99,7 +109,7 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 							&& !itensHistoricoParcelamento) {
 
 						pesquisarMotivosDesfazerParcelamento();
-						verificarPermissaoParaDesfazer(parcelamento, entradaPaga);
+						verificarPermissaoParaDesfazer(parcelamento, entradaPaga, parcelasCobradas);
 						verificarContas(idsContaEP, codigoImovel, idParcelamento);
 					}
 				}
@@ -138,11 +148,29 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		filtro.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, idParcelamento));
 
 		return getFachada().pesquisar(filtro, GuiaPagamento.class.getName());
+
+	}
+	
+	private Collection<DebitoACobrar> pesquisarDebitoACobrar(Integer parcelamentoId) {
+		Collection<DebitoACobrar> colecaoDebitoACobrar  = getFachada().obterDebitoACobrarParcelamento(parcelamentoId);
+		
+		return colecaoDebitoACobrar;
+		
 	}
 
-	private void verificarPermissaoParaDesfazer(Parcelamento parcelamento, boolean entradaPaga) {
+	private void verificarPermissaoParaDesfazer(Parcelamento parcelamento, boolean entradaPaga, Boolean parcelasCobradas) {
+		Fachada fachada = Fachada.getInstancia();
+		Usuario usuario = this.getUsuarioLogado(request);
 		boolean pagamentoCartaoCreditoConfirmado = getFachada().parcelamentoPagamentoCartaoCreditoJaConfirmado(parcelamento.getId());
+		BigDecimal valorEntrada = parcelamento.getValorEntrada();
+		BigDecimal zero = new BigDecimal("0.00");
 		boolean permiteDesfazer = !pagamentoCartaoCreditoConfirmado && !entradaPaga;
+		boolean temPermissaoCancelarParcelamentoSemEntrada = fachada.verificarPermissaoEspecial(PermissaoEspecial.CANCELAR_PARCELAMENTO_SEM_ENTRADA,usuario);
+		
+		if (valorEntrada.compareTo(zero) == 0 && !pagamentoCartaoCreditoConfirmado && !parcelasCobradas && temPermissaoCancelarParcelamentoSemEntrada) {
+				permiteDesfazer = true;
+		}
+		
 		request.setAttribute("permiteDesfazer", permiteDesfazer);
 	}
 	
