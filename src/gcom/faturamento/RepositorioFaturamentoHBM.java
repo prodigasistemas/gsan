@@ -9717,10 +9717,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				     .append("cliCnt.clct_icnomeconta = :indicadorNomeConta AND ")
 				     .append("imovel.icte_id not in (4,9) ")
 				     .append(" AND cnt.dcst_idatual in ( :normal, :retificada ) ")
-				     //TODO
-				     //-------PARAMETRO A SER APAGADO
-				     .append(" AND imovel.imov_idparametrosconvenio = 1 ")
-				     //----------------
 				     .append("order by  loc.loca_id,cnt.cnta_cdsetorcomercial, ")
 				     .append("rota.rota_cdrota, quadraFace.qdfa_nnfacequadra, imovel.imov_nnlote ")
 				     ;
@@ -60351,24 +60347,72 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
-	public Conta contaFichaCompensacao(Integer idConta) throws ErroRepositorioException {
+	/**
+	 * @author Kurt Matheus Sampaio de Matos
+	 * @date 31/08/2022
+	 * @return Retorna um Imovel com informações de endereço para utilização na ficha de compensação.	
+	 */
+	
+	public Imovel pesquisarImovelComEnderecoFichaCompensacaoPorId(Integer idImovel) throws ErroRepositorioException {
+		Imovel imovel = null;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append(" SELECT i FROM Imovel i ")
+					.append(" LEFT JOIN FETCH i.logradouroCep lc ")
+					.append(" LEFT JOIN FETCH lc.cep c ")
+					.append(" LEFT JOIN FETCH lc.logradouro lg ")
+					.append(" LEFT JOIN FETCH lg.logradouroTipo lt ")
+					.append(" LEFT JOIN FETCH i.logradouroBairro.bairro b ")
+					.append(" LEFT JOIN FETCH b.municipio m ")
+					.append(" LEFT JOIN FETCH m.unidadeFederacao uf ")
+					.append(" LEFT JOIN FETCH i.enderecoReferencia er ")
+					.append(" WHERE i.id = :idImovel ");
+
+			imovel = (Imovel) session.createQuery(consulta.toString())
+					   .setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
+
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		}finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return imovel;
+	}
+	
+	/**
+	 * @author Kurt Matheus Sampaio de Matos
+	 * @date 31/08/2022
+	 * @return Retorna uma conta para utilização na ficha de compensação.	
+	 */
+	
+	public Conta pesquisarContaFichaCompensacaoPorId(Integer idConta) throws ErroRepositorioException {
 		Conta conta = null;
 		Session session = HibernateUtil.getSession();
 		
 		try {
 			StringBuilder consulta = new StringBuilder();
 			
-			consulta.append(" select conta from Conta conta ")
-					.append(" where conta.id = :idConta ");
+			consulta.append(" SELECT c FROM Conta c ")
+					.append(" JOIN FETCH c.imovel ")
+					.append(" WHERE c.id = :idConta ");
 
 			conta = (Conta) session.createQuery(consulta.toString())
 					   .setInteger("idConta", idConta).setMaxResults(1).uniqueResult();
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		}  
+		}finally {
+			HibernateUtil.closeSession(session);
+		}
+		
 		return conta;
 	}
+
+	
 	
 	public Cliente clienteFichaCompensacao(Integer idImovel) throws ErroRepositorioException {
 		Cliente cliente = new Cliente();
@@ -60377,8 +60421,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		try {
 			StringBuilder consulta = new StringBuilder();
 
-			consulta.append("select cliim.cliente from ClienteImovel cliim ")
-			.append("where cliim.imovel.id = :idImovel and cliim.dataFimRelacao is null");
+			consulta.append(" SELECT cliim.cliente FROM ClienteImovel cliim "
+						  + " JOIN FETCH cliim.cliente c ")
+					.append(" where cliim.imovel.id = :idImovel AND cliim.dataFimRelacao is null AND cliim.indicadorNomeConta = 1");
 
 
 			cliente = (Cliente) session.createQuery(consulta.toString()).setInteger("idImovel", idImovel)
@@ -60386,7 +60431,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
 		}  
+		
 		return cliente;
 	}
 	
@@ -60440,7 +60488,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		}  
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		
 		return registroExistente;
 	}
 	
@@ -60465,30 +60517,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
 		}
 		return contas;
 	} 
-	
-	public Municipio municipio(Integer idLocalidade) throws ErroRepositorioException {
-		Municipio idMunicipio = null;
-		Session session = HibernateUtil.getSession();
-		
-		try {
-			StringBuilder consulta = new StringBuilder();
-			
-			consulta.append("select municipio from Localidade loca ")
-			        .append("inner join loca.municipio municipio ")
-			        .append("where  loca.id = :idLocalidade ");
-
-			idMunicipio = (Municipio) session.createQuery(consulta.toString())
-					      .setInteger("idLocalidade", idLocalidade).setMaxResults(1).uniqueResult();
-			
-		} catch (Exception e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} 
-		
-		return idMunicipio;
-	}
 	
 	public void inserirFichaCompensacao(Integer idConv,Integer numeroCarteira,Integer numeroVariacaoCarteira,Short
 			codigoModalidade,String dataEmissao,String dataVencimento,Double valorOriginal,String codigoAceite,Short codigoTipoTitulo,String
@@ -60652,33 +60685,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		}finally {
+			HibernateUtil.closeSession(session);
 		} 
-		return imovel;
-	}
-	
-	public String pesquisarClienteCpfCnpj(Integer idCliente) throws ErroRepositorioException {
-		Cliente cliente = null;
-		String cpfCnpj = "";
-        Session session = HibernateUtil.getSession();
 		
-		try {
-			StringBuilder consulta = new StringBuilder();
-			
-			consulta.append("select cliente from Cliente cliente ")
-	        .append("where  cliente.id = :idCliente ");
-			
-			cliente = (Cliente) session.createQuery(consulta.toString())
-				      .setInteger("idCliente", idCliente).setMaxResults(1).uniqueResult();
-			if(!cliente.getCpf().equals("")) {
-				cpfCnpj = cliente.getCpf();
-			} else {
-				cpfCnpj = cliente.getCnpj();
-			}
-			
-		} catch (Exception e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} 
-		return cpfCnpj;
+		return imovel;
 	}
 	
 	public Parcelamento pesquisarParcelamento (Integer idParcelamento) throws ErroRepositorioException {
@@ -60722,5 +60733,4 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return guiaPagamento;
 		
 	}
-
 }

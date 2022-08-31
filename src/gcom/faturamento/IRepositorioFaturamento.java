@@ -3073,15 +3073,15 @@ public interface IRepositorioFaturamento {
 
 	public Collection<DebitoACobrar> obterDebitoACobrarParcelamento(Integer idParcelamento) throws ErroRepositorioException;
 	
-	public Conta contaFichaCompensacao(Integer idConta) throws ErroRepositorioException;
+	public Conta pesquisarContaFichaCompensacaoPorId(Integer idConta) throws ErroRepositorioException;
+	
+	public Imovel pesquisarImovelComEnderecoFichaCompensacaoPorId(Integer idImovel) throws ErroRepositorioException;
 	
 	public Cliente clienteFichaCompensacao(Integer idImovel) throws ErroRepositorioException;
 	
 	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento)throws ErroRepositorioException;
 
 	public Collection idContasEmitidasFichaCompensacao(Integer idFaturamentoGrupo, Integer anoMesFaturamentoGrupo) throws ErroRepositorioException;
-	
-	public Municipio municipio(Integer idLocalidade) throws ErroRepositorioException;
 	
 	public Boolean fichaCompensacaoExistente(Integer idConta) throws ErroRepositorioException;
 	
@@ -3096,8 +3096,6 @@ public interface IRepositorioFaturamento {
 			indicadorPermissaoRecebimentoParcial,String numeroTituloCliente,Integer imovel,Integer cliente, Integer conta) throws ErroRepositorioException;
 	
 	public Imovel pesquisarImovel(Integer idImovel) throws ErroRepositorioException;
-	
-	public String pesquisarClienteCpfCnpj(Integer idCliente) throws ErroRepositorioException;
 	
 	public GuiaPagamento pesquisarGuiaPagamento (Integer idParcelamento) throws ErroRepositorioException;
 	

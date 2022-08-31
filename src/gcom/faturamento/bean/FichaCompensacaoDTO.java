@@ -41,57 +41,105 @@ public class FichaCompensacaoDTO {
 //			this.indicadorPix = indicadorPix;
 		}
 
+		public FichaCompensacaoDTO() {
+		}
+
 		public Integer getNumeroConvenio() {
 			return numeroConvenio;
+		}
+
+		public void setNumeroConvenio(Integer numeroConvenio) {
+			this.numeroConvenio = numeroConvenio;
 		}
 
 		public Integer getNumeroCarteira() {
 			return numeroCarteira;
 		}
 
+		public void setNumeroCarteira(Integer numeroCarteira) {
+			this.numeroCarteira = numeroCarteira;
+		}
+
 		public Integer getNumeroVariacaoCarteira() {
 			return numeroVariacaoCarteira;
+		}
+
+		public void setNumeroVariacaoCarteira(Integer numeroVariacaoCarteira) {
+			this.numeroVariacaoCarteira = numeroVariacaoCarteira;
 		}
 
 		public Short getCodigoModalidade() {
 			return codigoModalidade;
 		}
 
+		public void setCodigoModalidade(Short codigoModalidade) {
+			this.codigoModalidade = codigoModalidade;
+		}
+
 		public String getDataEmissao() {
 			return dataEmissao;
+		}
+
+		public void setDataEmissao(String dataEmissao) {
+			this.dataEmissao = dataEmissao;
 		}
 
 		public String getDataVencimento() {
 			return dataVencimento;
 		}
 
+		public void setDataVencimento(String dataVencimento) {
+			this.dataVencimento = dataVencimento;
+		}
+
 		public Double getValorOriginal() {
 			return valorOriginal;
+		}
+
+		public void setValorOriginal(Double valorOriginal) {
+			this.valorOriginal = valorOriginal;
 		}
 
 		public String getCodigoAceite() {
 			return codigoAceite;
 		}
 
+		public void setCodigoAceite(String codigoAceite) {
+			this.codigoAceite = codigoAceite;
+		}
+
 		public Short getCodigoTipoTitulo() {
 			return codigoTipoTitulo;
+		}
+
+		public void setCodigoTipoTitulo(Short codigoTipoTitulo) {
+			this.codigoTipoTitulo = codigoTipoTitulo;
 		}
 
 		public String getIndicadorPermissaoRecebimentoParcial() {
 			return indicadorPermissaoRecebimentoParcial;
 		}
 
+		public void setIndicadorPermissaoRecebimentoParcial(String indicadorPermissaoRecebimentoParcial) {
+			this.indicadorPermissaoRecebimentoParcial = indicadorPermissaoRecebimentoParcial;
+		}
+
 		public String getNumeroTituloCliente() {
 			return numeroTituloCliente;
 		}
-		
-//		public String getIndicadorPix() {
-//			return indicadorPix;
-//		}
+
+		public void setNumeroTituloCliente(String numeroTituloCliente) {
+			this.numeroTituloCliente = numeroTituloCliente;
+		}
 
 		public PagadorDTO getPagador() {
 			return pagador;
 		}
+
+		public void setPagador(PagadorDTO pagador) {
+			this.pagador = pagador;
+		}
+
 		
 		
 }

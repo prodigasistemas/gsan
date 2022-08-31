@@ -48286,7 +48286,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}else if(sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM.shortValue() &&
 				idDocumentoTipo.trim().equals(DocumentoTipo.GUIA_PAGAMENTO.toString())){
 			
-			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, "3128557")); // Convenio do Banco do Brasil padrão
+			nossoNumero.append(Util.adicionarZerosEsquedaNumero(10, "2860143")); // Convenio do Banco do Brasil padrão
 			nossoNumero.append(Util.adicionarZerosEsquedaNumero(2, idDocumentoTipo));
 
 		} else {

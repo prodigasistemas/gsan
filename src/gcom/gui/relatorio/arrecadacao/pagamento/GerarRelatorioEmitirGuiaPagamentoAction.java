@@ -73,11 +73,9 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		
 		if (this.isEntradaParcelamento(guia)) {
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
-			String cpfCnpj = consultarCpfCnpjCliente(guia.getImovel().getId());
-			if (!cpfCnpj.equalsIgnoreCase("")) {
 				registrarEntradaParcelamento(parcelamento);
 			//	retorno = new ActionForward(emitirBoleto());
-			}/* else {
+			/* else {
 				retorno = new ActionForward(obterLinkBoletoBB(guia.getId()), true);
 			}*/
 		} else {
@@ -102,7 +100,7 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 	}
 	
 	private void registrarEntradaParcelamento(Parcelamento parcelamento) {
-		  getFachada().registrarEntradaParcelamento(parcelamento, false);
+		  getFachada().registrarEntradaParcelamento(parcelamento, false, null);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -174,9 +172,6 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
 	}
 	
-	private String consultarCpfCnpjCliente(Integer codigoImovel) {
-		return getFachada().consultarCpfCnpjCliente(codigoImovel);
-	}
 	
 	@SuppressWarnings("unchecked")
 	public void emitirBoleto () {

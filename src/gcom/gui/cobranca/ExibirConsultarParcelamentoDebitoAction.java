@@ -128,7 +128,7 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 			if (geraBoletoBB && !entradaPaga) {
 			/*	String cpfCnpj = consultarCpfCnpjCliente(Integer.parseInt(codigoImovel));
 				if (!cpfCnpj.equalsIgnoreCase("")) {*/
-				    registrarEntradaParcelamento(parcelamento);
+				    registrarEntradaParcelamento(parcelamento, Integer.valueOf(codigoImovel));
 					request.setAttribute("boletoParcelamento", parcelamento);
 			  /*} else {
 					request.setAttribute("linkBoletoBB", obterLinkBoletoBB(parcelamento));
@@ -175,14 +175,10 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
 	}
 	
-	private void registrarEntradaParcelamento(Parcelamento parcelamento) {
-		  getFachada().registrarEntradaParcelamento(parcelamento, false);
+	private void registrarEntradaParcelamento(Parcelamento parcelamento, Integer idImovel) {
+		  getFachada().registrarEntradaParcelamento(parcelamento, false, idImovel);
 	}
 	
-	private String consultarCpfCnpjCliente(Integer codigoImovel) {
-		return getFachada().consultarCpfCnpjCliente(codigoImovel);
-	}
-
 	private void setarDadosParcelamento(Parcelamento parcelamento) {
 		if (parcelamento.getCliente() != null && parcelamento.getCliente().getNome() != null) {
 			form.setNomeClienteResponsavel(parcelamento.getCliente().getNome());

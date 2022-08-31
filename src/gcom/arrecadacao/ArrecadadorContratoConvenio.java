@@ -7,7 +7,7 @@ public class ArrecadadorContratoConvenio {
 	
 	public static final Integer REGISTRO_CONVENIO_TESTE = 1;
 	public static final Integer REGISTRO_CONVENIO = 2;
-	public static final Integer GUIA_PARCELAMENTO = 3;
+	public static final Integer PARCELAMENTO = 3;
 	
 	private Integer id;
 	private Integer convenio;

@@ -178,11 +178,8 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 		GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
 		Parcelamento parcelamento = guia.getParcelamento();
 		
-		  getFachada().registrarEntradaParcelamento(parcelamento, false);
+		  getFachada().registrarEntradaParcelamento(parcelamento, false, null);
 	}
-	
-	private String consultarCpfCnpjCliente(Integer idImovel) {
-		return getFachada().consultarCpfCnpjCliente(idImovel);
-	}
+
 	
 }

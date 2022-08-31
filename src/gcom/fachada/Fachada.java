@@ -5,6 +5,7 @@ import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContrato;
+import gcom.arrecadacao.ArrecadadorContratoConvenio;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
 import gcom.arrecadacao.ArrecadadorMovimento;
 import gcom.arrecadacao.ArrecadadorMovimentoItem;
@@ -40628,17 +40629,9 @@ public class Fachada {
 		}
 	}
 	
-	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia) {
+	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) {
 		try {
-			this.getControladorFaturamento().registrarEntradaParcelamento(parcelamento, primeiraVia);
-		} catch (ControladorException e) {
-			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
-		}
-	}
-	
-	public String consultarCpfCnpjCliente(Integer idImovel) {
-		try {
-		   return this.getControladorFaturamento().consultarCpfCnpjCliente(idImovel);
+			this.getControladorFaturamento().registrarEntradaParcelamento(parcelamento, primeiraVia, idImovel);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
@@ -40715,5 +40708,13 @@ public class Fachada {
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
+	}
+	
+	public ArrecadadorContratoConvenio pesquisarParametrosConvenioPorId(Integer idConvenio) throws ControladorException {
+		try {
+			return getControladorArrecadacao().pesquisarParametrosConvenioPorId(idConvenio);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}		
 	}
 }

@@ -3,9 +3,9 @@ package gcom.faturamento.registroBoletos;
 import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadadorContratoConvenio;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Imovel;
 import gcom.fachada.Fachada;
-import gcom.faturamento.IControladorFaturamento;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.bean.FichaCompensacaoDTO;
 import gcom.faturamento.bean.PagadorDTO;
@@ -13,20 +13,26 @@ import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.SegurancaParametro.NOME_PARAMETRO_SEGURANCA;
 
 public abstract class Registro {
-
-	protected IRepositorioFaturamento repositorioFaturamento;
-	protected IControladorFaturamento controladorFaturamento;
-
-	public Registro(IRepositorioFaturamento repositorioFaturamento, IControladorFaturamento controladorFaturamento) {
-		this.repositorioFaturamento = repositorioFaturamento;
-		this.controladorFaturamento = controladorFaturamento;
-	}
-
-	public abstract FichaCompensacaoDTO montaBoletoBB(Integer idDocumento, Integer tipoDocumento,
-			ArrecadadorContratoConvenio convenio) throws Exception;	
+	
+	protected FichaCompensacaoDTO montaBoletoBB(ArrecadadorContratoConvenio convenio) throws Exception {
+		
+		FichaCompensacaoDTO fichaCompensacaoDTO = new FichaCompensacaoDTO();
+		
+		fichaCompensacaoDTO.setCodigoModalidade((short) 1);
+		fichaCompensacaoDTO.setCodigoAceite("A");
+		fichaCompensacaoDTO.setIndicadorPermissaoRecebimentoParcial("N");
+//		fichaCOmpensacaoDTO.setIndicadorPix("N");
+		fichaCompensacaoDTO.setNumeroConvenio(convenio.getConvenio());
+		fichaCompensacaoDTO.setNumeroCarteira(convenio.getNumeroCarteira());
+		fichaCompensacaoDTO.setNumeroVariacaoCarteira(convenio.getNumeroVariacaoCarteira());
+		fichaCompensacaoDTO.setNumeroConvenio(convenio.getConvenio());
+		fichaCompensacaoDTO.setCodigoTipoTitulo(convenio.getCodigoTipoTitulo());
+		
+		return fichaCompensacaoDTO;
+	};	
 
 	
-	public abstract void salvarFichaBB(FichaCompensacaoDTO ficha, Integer idImovel, Integer idCliente, Integer idDocumento) throws Exception;
+	public abstract FichaCompensacaoDTO salvarFichaDeCompensacao(ArrecadadorContratoConvenio convenio, IRepositorioFaturamento repositorioFaturamento) throws Exception;
 	
 	public void registroFichaTeste(FichaCompensacaoDTO ficha) throws Exception {
 		String url = retornaUrlApi(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_REGISTRO_BB_TESTE);
@@ -49,8 +55,13 @@ public abstract class Registro {
 	}
 	
 
-	protected PagadorDTO retornaPagador(Cliente cliente, Imovel imovel, String nomeMunicipio) {
+	protected PagadorDTO retornaPagador(Cliente cliente, Imovel imovel) {
 		PagadorDTO pagador = new PagadorDTO(); // Identifica o pagador do boleto.
+		
+		Municipio municipio = imovel.getLogradouroBairro().getBairro().getMunicipio();
+		String nomeCidade = municipio.getNome();
+		String siglaUF = municipio.getUnidadeFederacao().getSigla();
+		
 		if (cliente.getCpf() != null) {
 			pagador.setTipoInscricao((short) 1);
 			pagador.setNumeroInscricao(cliente.getCpf());
@@ -68,9 +79,9 @@ public abstract class Registro {
 		} else {
 			pagador.setEndereco(imovel.getEnderecoFormatado());
 		}
-		pagador.setCidade(nomeMunicipio);
+		pagador.setCidade(nomeCidade);
 		pagador.setBairro(imovel.getNomeBairro());
-		pagador.setUf("PA");
+		pagador.setUf(siglaUF);
 		pagador.setCep(imovel.getCodigoCep());
 		
 		return pagador;

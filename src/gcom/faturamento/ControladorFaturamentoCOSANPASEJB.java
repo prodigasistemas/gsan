@@ -564,7 +564,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 								// validação para trazer cfpCnpj caso exista.
 								// Paulo Almeida - 01.02.2022
-								String cpfCnpj = consultarCpfCnpjCliente(emitirContaHelper.getIdImovel());
+								String cpfCnpj = consultarCpfCnpj(emitirContaHelper.getIdImovel());
 			
 								if(!cpfCnpj.equalsIgnoreCase("") && emitirContaHelper.getCodigoConvenio() != null) {
 									    contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
@@ -1805,7 +1805,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 	}
 
 	@SuppressWarnings("rawtypes")
-	public String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
+	public String consultarCpfCnpj(Integer idImovel) throws ErroRepositorioException {
 		String cnpjCpf = "";
 
 		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);
@@ -1824,7 +1824,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 			}
 		}
-
+		
+		if (Util.cpfCnpjInvalido(cnpjCpf)) {
+			return "";
+		}
+		
 		return cnpjCpf;
 	}
 
@@ -3516,7 +3520,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			String cpfCnpj = null;
 
 			try {
-				cpfCnpj = consultarCpfCnpjCliente(helper.getIdImovel());
+				cpfCnpj = consultarCpfCnpj(helper.getIdImovel());
 
 			} catch (Exception e) {
 				sessionContext.setRollbackOnly();
@@ -3644,7 +3648,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 			try {
 				
-				if (!cpfCnpj.equalsIgnoreCase("") && helper.getCodigoConvenio() != null) {
+				if (helper.getCodigoConvenio() != null) {
 					registrarFichaCompensacao(id);
 				}
 			} catch (ControladorException e) {
@@ -3816,7 +3820,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 		Date dataValidade = obterDataValidade2ViaConta(emitirContaHelper);
 		emitirContaHelper.setDataValidade(Util.formatarData(dataValidade));
-		ArrecadadorContratoConvenio parametrosConvenio = retornaParametrosConvenio(emitirContaHelper.getCodigoConvenio());
+		ArrecadadorContratoConvenio parametrosConvenio = Fachada.getInstancia().pesquisarParametrosConvenioPorId(emitirContaHelper.getCodigoConvenio());
 
 		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 			String nossoNumeroSemDV;

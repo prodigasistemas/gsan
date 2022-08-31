@@ -1311,12 +1311,8 @@ public interface IControladorFaturamento {
 
 	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento) throws ControladorException;
 	
-	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia) throws ControladorException;
+	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) throws ControladorException;
 	
-	public String consultarCpfCnpjCliente(Integer idImovel) throws ControladorException;
-	
-	public String pesquisarClienteCpfCnpj (Integer idCliente) throws ControladorException;
-
 	public boolean fichaCompensacaoExistente (Integer idConta) throws ControladorException;
 	
 	public void validarDadosBolsaAgua(Integer idRota, int idFuncionalidade) throws ControladorException;
