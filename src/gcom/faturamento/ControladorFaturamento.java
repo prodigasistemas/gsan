@@ -16178,38 +16178,43 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada, FaturamentoGrupo grupo) throws ControladorException {
+	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada, FaturamentoGrupo grupo)
+			throws ControladorException {
 
-		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, rota.getId());
+		int idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+				UnidadeProcessamento.ROTA, rota.getId());
 
 		Integer idImovel = 0;
 
 		try {
 			CreditoTipo creditoTipo = obterCreditoTipo(CreditoTipo.CREDITO_BOLSA_AGUA);
-			
+
 			Collection<Imovel> colecaoImovel = getControladorImovel().pesquisarImoveisBolsaAgua(rota);
 
-			for (Imovel imovel: colecaoImovel) {
-				idImovel = imovel.getId();
+			for (Imovel imovel : colecaoImovel) {
+                CreditoARealizar credito = repositorioFaturamento.validarExistenciaCreditoARealizar(imovel.getId(), grupo.getAnoMesReferencia());
+				if (credito == null) {
+					idImovel = imovel.getId();
 
-				apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
-				System.out.println("INSERINDO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
-				apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
-				DeterminarValoresFaturamentoAguaEsgotoHelper helper = obterValoresCreditosBolsaAgua(imovel, grupo);
-				
-				BigDecimal valorCredito = BigDecimal.ZERO;
-				
-				if (imovel.isLigadoAgua() ) {
-					valorCredito = valorCredito.add(helper.getValorTotalAgua());  
+					apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
+					System.out.println("INSERINDO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
+					apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
+					DeterminarValoresFaturamentoAguaEsgotoHelper helper = obterValoresCreditosBolsaAgua(imovel, grupo);
+
+					BigDecimal valorCredito = BigDecimal.ZERO;
+
+					if (imovel.isLigadoAgua()) {
+						valorCredito = valorCredito.add(helper.getValorTotalAgua());
+					}
+
+					if (imovel.isLigadoEsgoto()) {
+						valorCredito = valorCredito.add(helper.getValorTotalEsgoto());
+					}
+
+					inserirCreditoBolsaAgua(imovel, valorCredito, grupo.getAnoMesReferencia(), creditoTipo);
 				}
-				
-				if (imovel.isLigadoEsgoto()) {
-					valorCredito = valorCredito.add(helper.getValorTotalEsgoto());
-				}
-				
-				inserirCreditoBolsaAgua(imovel, valorCredito, grupo.getAnoMesReferencia(), creditoTipo);
 			}
-			
+
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception e) {
 			System.out.println("    === ERRO CREDITO BOLSA AGUA PARA IMOVEL: " + idImovel);
@@ -16520,7 +16525,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	public void registrarBoletoBancoDeDados(Integer idConta) throws ControladorException, ClassNotFoundException {
 
-		FichaCompensacao fichaCompensacaoBanco = null;
         Connection connection = null;
         Statement stmt = null;
 		try {

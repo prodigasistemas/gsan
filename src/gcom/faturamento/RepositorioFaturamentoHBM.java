@@ -60557,5 +60557,31 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 		return retorno;
 	}
+	
+	public CreditoARealizar validarExistenciaCreditoARealizar(Integer idImovel, Integer anoMesReferencia) throws ErroRepositorioException {
+		CreditoARealizar retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta;
+		Integer creditoTipoBolsaAgua = CreditoTipo.CREDITO_BOLSA_AGUA;
+		try {
+			
+			consulta = " select * from faturamento.credito_a_realizar as crar "
+					+ " where imov_id = :idImovel and crar_amreferenciacredito = :anoMesReferencia and crti_id = :creditoTipoBolsaAgua ";
+			retorno = (CreditoARealizar) session.createSQLQuery(consulta)
+					.addEntity(CreditoARealizar.class)
+					.setInteger("idImovel", idImovel)
+					.setInteger("anoMesReferencia", anoMesReferencia)
+					.setInteger("creditoTipoBolsaAgua", creditoTipoBolsaAgua)
+					.setMaxResults(1).uniqueResult();
+		}catch (HibernateException e) {
+			// levanta a exce��o para a pr�xima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sess�o
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
 
 }
