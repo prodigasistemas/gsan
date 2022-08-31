@@ -1020,7 +1020,6 @@ public class ControladorGerencialFaturamentoSEJB extends ControladorComum {
 		idUnidadeIniciada = getControladorBatch()
 				.iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
 						UnidadeProcessamento.SETOR_COMERCIAL, idSetor);
-		
 		try {
 			// Listas de Controle
 			List<ResumoFaturamentoAguaEsgotoHelper> listaSimplificadaFaturamentoAguaEsgoto = new ArrayList();

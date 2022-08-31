@@ -3102,5 +3102,7 @@ public interface IRepositorioFaturamento {
 	public Parcelamento pesquisarParcelamento (Integer idParcelamento) throws ErroRepositorioException;
 	
 	public Collection pesquisarInformacoesContaParaEnvioEmailPorRota(Integer idRota, Integer referencia) throws ErroRepositorioException;
+	
+	public CreditoARealizar validarExistenciaCreditoARealizar(Integer idImovel, Integer anoMesReferencia) throws ErroRepositorioException;
 
 }

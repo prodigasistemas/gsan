@@ -15214,6 +15214,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
+	
 	public void gerarCreditosBolsaAgua(Rota rota, int idFuncionalidadeIniciada, FaturamentoGrupo grupo)
 			throws ControladorException {
 
@@ -15228,24 +15229,28 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Collection<Imovel> colecaoImovel = getControladorImovel().pesquisarImoveisBolsaAgua(rota);
 
 			for (Imovel imovel : colecaoImovel) {
-				idImovel = imovel.getId();
 
-				apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
-				System.out.println("INSERINDO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
-				apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
-				DeterminarValoresFaturamentoAguaEsgotoHelper helper = obterValoresCreditosBolsaAgua(imovel, grupo);
+                CreditoARealizar credito = repositorioFaturamento.validarExistenciaCreditoARealizar(imovel.getId(), grupo.getAnoMesReferencia());
+				if (credito == null) {
+					idImovel = imovel.getId();
 
-				BigDecimal valorCredito = BigDecimal.ZERO;
+					apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
+					System.out.println("INSERINDO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
+					apagarDadosCreditoSocialInicioBatch(grupo.getAnoMesReferencia(), creditoTipo, imovel);
+					DeterminarValoresFaturamentoAguaEsgotoHelper helper = obterValoresCreditosBolsaAgua(imovel, grupo);
 
-				if (imovel.isLigadoAgua()) {
-					valorCredito = valorCredito.add(helper.getValorTotalAgua());
+					BigDecimal valorCredito = BigDecimal.ZERO;
+
+					if (imovel.isLigadoAgua()) {
+						valorCredito = valorCredito.add(helper.getValorTotalAgua());
+					}
+
+					if (imovel.isLigadoEsgoto()) {
+						valorCredito = valorCredito.add(helper.getValorTotalEsgoto());
+					}
+
+					inserirCreditoBolsaAgua(imovel, valorCredito, grupo.getAnoMesReferencia(), creditoTipo);
 				}
-
-				if (imovel.isLigadoEsgoto()) {
-					valorCredito = valorCredito.add(helper.getValorTotalEsgoto());
-				}
-
-				inserirCreditoBolsaAgua(imovel, valorCredito, grupo.getAnoMesReferencia(), creditoTipo);
 			}
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
