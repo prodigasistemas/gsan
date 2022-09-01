@@ -15481,6 +15481,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				FichaCompensacaoDTO fichaDeCompensacao = registroContaService.salvarFichaDeCompensacao(convenio, repositorioFaturamento);
 				try {
 					registroContaService.registroFichaDeCompensacao(fichaDeCompensacao, SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
+					System.out.println("Banco Do Brasil: Conta - " + idConta + " | Imovel - " + imovel.getId() + " registrada com sucesso!");
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
@@ -15520,6 +15521,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			try {
 				registroEntradaParcelamentoService.registroFichaDeCompensacao(fichaDeCompensacao,
 						SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
+				System.out.println("Banco Do Brasil: Guia do Parcelamento - " + idParcelamento + " | Imovel - " + imovel.getId() + " registrada com sucesso!");
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");

@@ -73,7 +73,7 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		
 		if (this.isEntradaParcelamento(guia)) {
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
-				registrarEntradaParcelamento(parcelamento);
+				registrarEntradaParcelamento(parcelamento, guia.getImovel().getId());
 			//	retorno = new ActionForward(emitirBoleto());
 			/* else {
 				retorno = new ActionForward(obterLinkBoletoBB(guia.getId()), true);
@@ -99,8 +99,8 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		return retorno;
 	}
 	
-	private void registrarEntradaParcelamento(Parcelamento parcelamento) {
-		  getFachada().registrarEntradaParcelamento(parcelamento, false, null);
+	private void registrarEntradaParcelamento(Parcelamento parcelamento, Integer idImovel) {
+		  getFachada().registrarEntradaParcelamento(parcelamento, false, idImovel);
 	}
 	
 	@SuppressWarnings("unchecked")

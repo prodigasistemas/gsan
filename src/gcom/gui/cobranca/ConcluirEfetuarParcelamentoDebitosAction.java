@@ -623,7 +623,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 				.retonarObjetoDeColecao(getFachada().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
 		Parcelamento parcelamento = guia.getParcelamento();
 
-		getFachada().registrarEntradaParcelamento(parcelamento, true, null);
+		getFachada().registrarEntradaParcelamento(parcelamento, true, guia.getImovel().getId());
 	}
 
 }
