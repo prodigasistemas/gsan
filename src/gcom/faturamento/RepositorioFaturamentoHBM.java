@@ -60365,10 +60365,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.append(" LEFT JOIN FETCH lc.cep c ")
 					.append(" LEFT JOIN FETCH lc.logradouro lg ")
 					.append(" LEFT JOIN FETCH lg.logradouroTipo lt ")
+					.append(" LEFT JOIN FETCH lg.logradouroTitulo ltt")
 					.append(" LEFT JOIN FETCH i.logradouroBairro.bairro b ")
 					.append(" LEFT JOIN FETCH b.municipio m ")
 					.append(" LEFT JOIN FETCH m.unidadeFederacao uf ")
 					.append(" LEFT JOIN FETCH i.enderecoReferencia er ")
+					.append(" LEFT JOIN FETCH i.perimetroInicial pi ")
+					.append(" LEFT JOIN FETCH i.perimetroFinal pf ")
 					.append(" WHERE i.id = :idImovel ");
 
 			imovel = (Imovel) session.createQuery(consulta.toString())

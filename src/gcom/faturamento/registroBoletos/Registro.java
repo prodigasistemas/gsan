@@ -9,8 +9,6 @@ import gcom.fachada.Fachada;
 import gcom.faturamento.IRepositorioFaturamento;
 import gcom.faturamento.bean.FichaCompensacaoDTO;
 import gcom.faturamento.bean.PagadorDTO;
-import gcom.seguranca.SegurancaParametro;
-import gcom.seguranca.SegurancaParametro.NOME_PARAMETRO_SEGURANCA;
 
 public abstract class Registro {
 	
@@ -34,26 +32,13 @@ public abstract class Registro {
 	
 	public abstract FichaCompensacaoDTO salvarFichaDeCompensacao(ArrecadadorContratoConvenio convenio, IRepositorioFaturamento repositorioFaturamento) throws Exception;
 	
-	public void registroFichaTeste(FichaCompensacaoDTO ficha) throws Exception {
-		String url = retornaUrlApi(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_REGISTRO_BB_TESTE);
+	public void registroFichaDeCompensacao(FichaCompensacaoDTO ficha, String segurancaParametro) throws Exception {
+		String url = Fachada.getInstancia().getSegurancaParametro(segurancaParametro);
 
 		GsanApi api = new GsanApi(url);
 		
 		api.invoke(ficha);
-	}
-	
-	public void registroFichaBB(FichaCompensacaoDTO ficha) throws Exception {
-		String url = retornaUrlApi(SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB);
-		
-		GsanApi api = new GsanApi(url);
-		
-		api.invoke(ficha);
-	}
-
-	private String retornaUrlApi(NOME_PARAMETRO_SEGURANCA urlApi) {
-		return Fachada.getInstancia().getSegurancaParametro(urlApi.toString());
-	}
-	
+	}	
 
 	protected PagadorDTO retornaPagador(Cliente cliente, Imovel imovel) {
 		PagadorDTO pagador = new PagadorDTO(); // Identifica o pagador do boleto.

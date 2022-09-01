@@ -11,7 +11,7 @@ public class UtilTest {
 	@Test
 	public void cpfOuCnpjDeveSerValido() {
 		
-		String cpf = "04945341000190";
+		String cpf = "75132834272";
 		boolean cpfCnpjInvalido = Util.cpfCnpjInvalido(cpf);
 		
 		Assert.assertFalse(cpfCnpjInvalido);

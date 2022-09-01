@@ -30,8 +30,7 @@ public class RegistroContaService extends Registro {
 		FichaCompensacaoDTO ficha = montaBoletoBB(convenio);
 
 		ficha.setDataEmissao(Util.formatarDataComPontoDDMMAAAA(conta.getDataEmissao()).toString());
-//		ficha.setDataVencimento(Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString();
-		ficha.setDataVencimento("20.09.2022");
+		ficha.setDataVencimento(Util.formatarDataComPontoDDMMAAAA(conta.getDataVencimentoConta()).toString());
 		ficha.setValorOriginal(Double.valueOf(conta.getValorTotalConta()));
 		ficha.setNumeroTituloCliente(nossoNumero.toString());
 		PagadorDTO pagador = retornaPagador(cliente, imovel);
