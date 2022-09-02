@@ -22,6 +22,8 @@ import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.FiltroConta;
+import gcom.faturamento.credito.CreditoARealizar;
+import gcom.faturamento.credito.FiltroCreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
@@ -143,14 +145,32 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 
 	private void verificarPermissaoParaDesfazer(Parcelamento parcelamento, boolean entradaPaga, Boolean parcelasCobradas) {
 		Fachada fachada = Fachada.getInstancia();
+		SistemaParametro parametro = fachada.pesquisarParametrosDoSistema();
+		boolean debitosECreditosPodemSerCancelados = true;
+		Collection<DebitoACobrar> debitos = pesquisarDebitoACobrar(parcelamento.getId());
+		Collection<CreditoARealizar> creditos = pesquisarCreditosARealizar(parcelamento.getId());
 		Usuario usuario = this.getUsuarioLogado(request);
 		boolean pagamentoCartaoCreditoConfirmado = getFachada().parcelamentoPagamentoCartaoCreditoJaConfirmado(parcelamento.getId());
 		BigDecimal valorEntrada = parcelamento.getValorEntrada();
 		BigDecimal zero = new BigDecimal("0.00");
 		boolean permiteDesfazer = !pagamentoCartaoCreditoConfirmado && !entradaPaga;
+		for(DebitoACobrar debito : debitos) {
+			if(debito.getAnoMesReferenciaContabil() < parametro.getAnoMesFaturamento()) {
+				debitosECreditosPodemSerCancelados = false;
+				break;
+			}
+		}
+        for(CreditoARealizar credito : creditos) {
+            if(credito.getAnoMesReferenciaContabil() < parametro.getAnoMesFaturamento()) {
+            	debitosECreditosPodemSerCancelados = false;
+            	break;
+			}
+		}
+				
 		boolean temPermissaoCancelarParcelamentoSemEntrada = fachada.verificarPermissaoEspecial(PermissaoEspecial.CANCELAR_PARCELAMENTO_SEM_ENTRADA,usuario);
 		
-		if (valorEntrada.compareTo(zero) == 0 && !pagamentoCartaoCreditoConfirmado && !parcelasCobradas && temPermissaoCancelarParcelamentoSemEntrada) {
+		if (valorEntrada.compareTo(zero) == 0 && !pagamentoCartaoCreditoConfirmado && !parcelasCobradas && temPermissaoCancelarParcelamentoSemEntrada && 
+				debitosECreditosPodemSerCancelados == true) {
 				permiteDesfazer = true;
 		}
 		
@@ -278,6 +298,17 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 			request.setAttribute("imovelPesquisado", imovel);
 			request.setAttribute("enderecoFormatado", pesquisarEnderecoFormatado(form.getCodigoImovel()));
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Collection pesquisarCreditosARealizar(Integer idParcelamento) {
+		
+		Filtro filtro = new FiltroCreditoARealizar();
+		filtro.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.PARCELAMENTO_ID, idParcelamento));
+
+		Collection<CreditoARealizar> colecaoCreditoARealizar = getFachada().pesquisar(filtro, CreditoARealizar.class.getName());
+
+		return getFachada().pesquisar(filtro, CreditoARealizar.class.getName());
 	}
 
 	@SuppressWarnings("unchecked")
