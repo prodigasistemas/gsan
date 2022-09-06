@@ -564,7 +564,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 								// validação para trazer cfpCnpj caso exista.
 								// Paulo Almeida - 01.02.2022
-								String cpfCnpj = consultarCpfCnpj(emitirContaHelper.getIdImovel());
+								String cpfCnpj = consultarCpfCnpjCliente(emitirContaHelper.getIdImovel());
 			
 								if(!cpfCnpj.equalsIgnoreCase("") && emitirContaHelper.getCodigoConvenio() != null) {
 									    contaTxt = preencherCodigoBarrasContaFichaCompensacao(emitirContaHelper, contaTxt);
@@ -1807,7 +1807,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 	}
 
 	@SuppressWarnings("rawtypes")
-	public String consultarCpfCnpj(Integer idImovel) throws ErroRepositorioException {
+	public String consultarCpfCnpjCliente(Integer idImovel) throws ErroRepositorioException {
 		String cnpjCpf = "";
 
 		Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(idImovel);
@@ -1825,10 +1825,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				}
 
 			}
-		}
-		
-		if (Util.cpfCnpjInvalido(cnpjCpf)) {
-			return "";
 		}
 		
 		return cnpjCpf;
@@ -3522,7 +3518,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			String cpfCnpj = null;
 
 			try {
-				cpfCnpj = consultarCpfCnpj(helper.getIdImovel());
+				cpfCnpj = consultarCpfCnpjCliente(helper.getIdImovel());
 
 			} catch (Exception e) {
 				sessionContext.setRollbackOnly();
