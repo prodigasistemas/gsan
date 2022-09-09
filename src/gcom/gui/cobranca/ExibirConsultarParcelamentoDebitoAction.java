@@ -32,6 +32,7 @@ import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
+import gcom.util.ErroRepositorioException;
 import gcom.util.Util;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
@@ -74,8 +75,9 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		
 		Parcelamento parcelamento = null;
 		boolean entradaPaga = false;
+		Collection<ClienteImovel>  clienteImovel = null;
 		if (codigoImovel != null && !codigoImovel.trim().equals("")) {
-			Collection<ClienteImovel> clienteImovel = pesquisarImovel(codigoImovel);
+			clienteImovel = pesquisarImovel(codigoImovel);
 			verificarImovel(clienteImovel);
 			setarDadosClienteImovel(clienteImovel);
 
@@ -117,17 +119,24 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		}
 
 		boolean geraBoletoBB = verificarGuiaEntrada(idParcelamento);
-		
+					
 		verificarPagamentoCartaoDeCredito(idParcelamento);
 		
 		if (parcelamento != null) {
 			verificarPermissaoParaCancelar(parcelamento);
 			pesquisarMotivosCancelamento();
 			request.setAttribute("isParcelamentoCancelado", verificarSituacao(parcelamento, ParcelamentoSituacao.CANCELADO));
-
+			            
 			if (geraBoletoBB && !entradaPaga) {
-				request.setAttribute("linkBoletoBB", obterLinkBoletoBB(parcelamento));
+			/*	String cpfCnpj = consultarCpfCnpjCliente(Integer.parseInt(codigoImovel));
+				if (!cpfCnpj.equalsIgnoreCase("")) {*/
+				    registrarEntradaParcelamento(parcelamento, Integer.valueOf(codigoImovel));
+					request.setAttribute("boletoParcelamento", parcelamento);
+			  /*} else {
+					request.setAttribute("linkBoletoBB", obterLinkBoletoBB(parcelamento));
+				}*/
 			}
+           
 		}
 		
 		request.setAttribute("geracaoBoletoBB", parametros.getIndicadorGeracaoBoletoBB());
@@ -135,7 +144,6 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		return retorno;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private Collection<DebitoACobrar> pesquisarDebitoACobrar(Integer parcelamentoId) {
 		Collection<DebitoACobrar> colecaoDebitoACobrar  = getFachada().obterDebitoACobrarParcelamento(parcelamentoId);
 		
@@ -186,7 +194,11 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 	private String obterLinkBoletoBB(Parcelamento parcelamento) {
 		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
 	}
-
+	
+	private void registrarEntradaParcelamento(Parcelamento parcelamento, Integer idImovel) {
+		  getFachada().registrarEntradaParcelamento(parcelamento, false, idImovel);
+	}
+	
 	private void setarDadosParcelamento(Parcelamento parcelamento) {
 		if (parcelamento.getCliente() != null && parcelamento.getCliente().getNome() != null) {
 			form.setNomeClienteResponsavel(parcelamento.getCliente().getNome());
@@ -416,4 +428,5 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 	private boolean verificarSituacao(Parcelamento parcelamento, Integer situacao) {
 		return parcelamento.getParcelamentoSituacao().getId().intValue() == situacao.intValue();
 	}
+	
 }

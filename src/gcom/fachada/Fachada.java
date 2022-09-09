@@ -5,6 +5,7 @@ import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContrato;
+import gcom.arrecadacao.ArrecadadorContratoConvenio;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
 import gcom.arrecadacao.ArrecadadorMovimento;
 import gcom.arrecadacao.ArrecadadorMovimentoItem;
@@ -13647,6 +13648,25 @@ public class Fachada {
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
+	}
+	
+	public Collection<EmitirContaHelper> emitirGuiaPagamento(Integer idParcelamento) {
+
+		try {
+			return this.getControladorFaturamento().emitirGuiaPagamento(idParcelamento);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public String obterMensagemEntradaParcelamento(Integer idGuiaPagamento, Integer idParcelamento) {
+		
+		try {
+			return this.getControladorArrecadacao().obterMensagemEntradaParcelamento(idGuiaPagamento, idParcelamento);
+		}catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+		
 	}
 
 	public Integer pesquisarIdClienteResponsavelConta(Integer idConta, boolean contaHistorico) {
@@ -40609,6 +40629,14 @@ public class Fachada {
 		}
 	}
 	
+	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) {
+		try {
+			this.getControladorFaturamento().registrarEntradaParcelamento(parcelamento, primeiraVia, idImovel);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
 	public Integer pesquisarFaturamentoGrupoImovel(Integer idImovel) {
 		try {
 			return this.getControladorFaturamento().pesquisarFaturamentoGrupoImovel(idImovel);
@@ -40624,7 +40652,7 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
-	
+
 	public Collection<Cliente> pesquisarClientePorCpfCnpj(String cpfCnpj) throws Exception {
 		try {
 			return this.getControladorCliente().pesquisarClientePorCpfCnpj(cpfCnpj);
@@ -40680,5 +40708,13 @@ public class Fachada {
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
+	}
+	
+	public ArrecadadorContratoConvenio pesquisarParametrosConvenioPorId(Integer idConvenio) throws ControladorException {
+		try {
+			return getControladorArrecadacao().pesquisarParametrosConvenioPorId(idConvenio);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}		
 	}
 }

@@ -6,6 +6,7 @@ import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FiltroGuiaPagamentoItem;
+import gcom.faturamento.bo.ContaSegundaViaBO;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.gui.cadastro.imovel.CategoriaActionForm;
 import gcom.gui.faturamento.ManterGuiaPagamentoActionForm;
@@ -68,12 +69,15 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		}
 
 		GuiaPagamento guia = this.obterGuiaPagamento(new Integer(ids[0]), fachada);
+		Parcelamento parcelamento = guia.getParcelamento();
 		
 		if (this.isEntradaParcelamento(guia)) {
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
-			
-			retorno = new ActionForward(obterLinkBoletoBB(guia.getId()),true);
-			
+				registrarEntradaParcelamento(parcelamento, guia.getImovel().getId());
+			//	retorno = new ActionForward(emitirBoleto());
+			/* else {
+				retorno = new ActionForward(obterLinkBoletoBB(guia.getId()), true);
+			}*/
 		} else {
 			
 			RelatorioEmitirGuiaPagamento relatorioEmitirGuiaPagamento = new RelatorioEmitirGuiaPagamento((Usuario) (request.getSession(false)).getAttribute("usuarioLogado"));
@@ -93,6 +97,10 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		}
 
 		return retorno;
+	}
+	
+	private void registrarEntradaParcelamento(Parcelamento parcelamento, Integer idImovel) {
+		  getFachada().registrarEntradaParcelamento(parcelamento, false, idImovel);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -163,4 +171,12 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		
 		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public void emitirBoleto () {
+		ContaSegundaViaBO parcelamento = new ContaSegundaViaBO(null, null, false, null);
+	//	return parcelamento;
+	}
+	
 }

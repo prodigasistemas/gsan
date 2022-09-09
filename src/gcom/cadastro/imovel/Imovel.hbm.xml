@@ -65,7 +65,7 @@
         <property name="quantidadeNosAltos" 		 type="java.lang.Integer"    column="imov_qtdnosaltos" 					 length="3"/>
         <property name="individualizacao" 			 type="java.lang.Integer"    column="imov_individualizacao" 			 length="3"/>        
         <property name="indicadorEnvioContaFisica"   type="java.lang.Short"      column="imov_icenviocontafisica"     		 length="2" />
-        <property name="codigoConvenio"   type="java.lang.Integer"      column="cntt_copasa"     		 length="7" />
+        <property name="codigoConvenio"   			 type="java.lang.Integer"    column="imov_idparametrosconvenio"   		 length="1" />
         
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to ImovelContaEnvio -->
@@ -275,6 +275,7 @@
                 <column name="imov_id" not-null="true" />
             </key>
             <one-to-many class="gcom.cadastro.imovel.ImovelTipoOcupanteQuantidade"/>
-        </set>		
+        </set>
+                		
 	</class>
 </hibernate-mapping>

@@ -184,6 +184,16 @@ public class EmitirContaHelper implements Serializable {
 	private String mensagemQuitacao;
 	private String mensagemBolsaAgua;
 	private Short indicadorMensagemBolsaAgua;
+	
+	//Para guias de pagamentos
+	private Integer idGuiaPagamento;
+	private Integer idParcelamento;
+	private BigDecimal valorEntrada;
+	private Short quantidadeParcelas;
+	private BigDecimal valorNegociado;
+	private BigDecimal valorAtualizado;
+	private BigDecimal valorParcelamento;
+	private String mensagemParcelamento;
 
 	public Short getClienteComFaturaAgrupada() {
 		return clienteComFaturaAgrupada;
@@ -640,6 +650,28 @@ public class EmitirContaHelper implements Serializable {
 		this.codigoConvenio = codigoConvenio;
 
 	}
+	
+	// utilizado no Guia pagamento Cosanpa
+		public EmitirContaHelper(Integer idGuiaPagamento, Integer idParcelamento, Integer idConta,String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, Integer idImovel
+				, Integer codigoConvenio,  BigDecimal valorEntrada,	Short quantidadeParcelas, BigDecimal valorNegociado, BigDecimal valorAtualizado, BigDecimal valorParcelamento, String mensagemParcelamento) {
+
+			this.idConta = idConta;
+			this.idParcelamento = idParcelamento;
+			this.idGuiaPagamento = idGuiaPagamento;
+			this.nomeCliente = nomeCliente;
+			this.cpf = cpf;
+			this.cnpj = cnpj;
+			this.dataVencimentoConta = dataVencimentoConta;
+			this.idImovel = idImovel;
+			this.codigoConvenio = codigoConvenio;
+			this.valorEntrada = valorEntrada;	
+			this.quantidadeParcelas = quantidadeParcelas;
+			this.valorNegociado = valorNegociado; 
+			this.valorAtualizado = valorAtualizado;
+			this.valorParcelamento = valorParcelamento;
+			this.mensagemParcelamento = mensagemParcelamento;
+
+		}
 
 	// utilizado no Emitir Segunda Via de Conta Compesa
 	public EmitirContaHelper(Integer idConta, String nomeCliente, String cpf, String cnpj, Date dataVencimentoConta, int amReferencia, short digitoVerificadorConta, Integer codigoSetorComercialConta,
@@ -2021,5 +2053,69 @@ public class EmitirContaHelper implements Serializable {
 
 	public void setCodigoConvenio(Integer codigoConvenio) {
 		this.codigoConvenio = codigoConvenio;
+	}
+
+	public Integer getIdGuiaPagamento() {
+		return idGuiaPagamento;
+	}
+
+	public void setIdGuiaPagamento(Integer idGuiaPagamento) {
+		this.idGuiaPagamento = idGuiaPagamento;
+	}
+	
+	public Integer getIdParcelamento() {
+		return idParcelamento;
+	}
+
+	public void setIdParcelamento(Integer idParcelamento) {
+		this.idParcelamento = idParcelamento;
+	}
+
+	public BigDecimal getValorEntrada() {
+		return valorEntrada;
+	}
+
+	public void setValorEntrada(BigDecimal valorEntrada) {
+		this.valorEntrada = valorEntrada;
+	}
+
+	public Short getQuantidadeParcelas() {
+		return quantidadeParcelas;
+	}
+
+	public void setQuantidadeParcelas(Short quantidadeParcelas) {
+		this.quantidadeParcelas = quantidadeParcelas;
+	}
+
+	public BigDecimal getValorNegociado() {
+		return valorNegociado;
+	}
+
+	public void setValorNegociado(BigDecimal valorNegociado) {
+		this.valorNegociado = valorNegociado;
+	}
+
+	public BigDecimal getValorAtualizado() {
+		return valorAtualizado;
+	}
+
+	public void setValorAtualizado(BigDecimal valorAtualizado) {
+		this.valorAtualizado = valorAtualizado;
+	}
+
+	public BigDecimal getValorParcelamento() {
+		return valorParcelamento;
+	}
+
+	public void setValorParcelamento(BigDecimal valorParcelamento) {
+		this.valorParcelamento = valorParcelamento;
+	}
+
+	public String getMensagemParcelamento() {
+		return mensagemParcelamento;
+	}
+
+	public void setMensagemParcelamento(String mensagemParcelamento) {
+		this.mensagemParcelamento = mensagemParcelamento;
 	}
 }

@@ -34,7 +34,7 @@ public class GsanApi {
 		this.gson = new Gson();
 		this.token = new String("Bearer bfIOYzIV9yqueZNBskx89RluCJ6bjRBtLc-Rp4vwLMs");
 	}
-	
+
 	public void invoke(Object objeto) throws IOException, Exception {
 		ClientResponse response = enviarJson(objeto);
 
@@ -68,7 +68,7 @@ public class GsanApi {
 			throw new ActionServletException("atencao.erro_baixar_relatorio");
 		}
 	}
-	
+
 	public File salvar(final String nome) throws IOException {
 		BufferedInputStream in = new BufferedInputStream(new URL(url + nome).openStream());
 		FileOutputStream out = new FileOutputStream(nome);
@@ -101,5 +101,6 @@ public class GsanApi {
 
 		WebResource webResource = client.resource(url);
 
-		return webResource.header("Authorization", token).type("application/json").post(ClientResponse.class, json);	}
+		return webResource.header("Authorization", token).type("application/json").post(ClientResponse.class, json);
+	}
 }

@@ -1331,4 +1331,6 @@ public interface IRepositorioArrecadacao {
 
 	public ArrecadadorMovimento consultarMovimentoArrecadador(Short codigoArrecadador,
 			Integer numeroSequencialArquivo) throws ErroRepositorioException;
+
+	public ArrecadadorContratoConvenio pesquisarParametrosConvenioPorId(Integer id) throws ErroRepositorioException;
 }
