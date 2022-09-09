@@ -28683,7 +28683,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Parcelamento parcelamento = repositorioFaturamento.pesquisarParcelamento(idParcelamento);
 		GuiaPagamento guiaPagamento = repositorioFaturamento.pesquisarGuiaPagamento(idParcelamento);
 		Cliente cliente = repositorioCliente.pesquisarCliente(parcelamento.getCliente().getId());
-		Imovel imovel = repositorioFaturamento.pesquisarImovel(parcelamento.getImovel().getId());
+		Imovel imovel = repositorioFaturamento.pesquisarImovelComEnderecoFichaCompensacaoPorId(parcelamento.getImovel().getId());
 
 		Collection<EmitirContaHelper> colecaoHelper = new ArrayList<EmitirContaHelper>();
 
@@ -28698,7 +28698,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		helper.setCpf(cliente.getCpf());
 		helper.setCodigoConvenio(315828);
 		helper.setNomeCliente(cliente.getNome());
-		;
+		
 		helper.setEnderecoImovel(imovel.getEnderecoFormatado());
 		helper.setDataVencimentoConta(guiaPagamento.getDataVencimento());
 		helper.setDataValidadeConta(guiaPagamento.getDataVencimento());

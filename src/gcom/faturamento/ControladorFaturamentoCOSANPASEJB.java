@@ -3857,7 +3857,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		Parcelamento parcelamento = repositorioFaturamento.pesquisarParcelamento(idParcelamento);
 		GuiaPagamento guiaPagamento = repositorioFaturamento.pesquisarGuiaPagamento(idParcelamento);
 		Cliente cliente = repositorioCliente.pesquisarCliente(parcelamento.getCliente().getId());
-		Imovel imovel = repositorioFaturamento.pesquisarImovel(parcelamento.getImovel().getId());
+		Imovel imovel = repositorioFaturamento.pesquisarImovelComEnderecoFichaCompensacaoPorId(parcelamento.getImovel().getId());
 
 		Collection<EmitirContaHelper> colecaoHelper = new ArrayList<EmitirContaHelper>();
 
@@ -3872,7 +3872,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		helper.setCpf(cliente.getCpf());
 		helper.setCodigoConvenio(2860143);
 		helper.setNomeCliente(cliente.getNome());
-		;
+		
 		helper.setEnderecoImovel(imovel.getEnderecoFormatado());
 		helper.setDataVencimentoConta(guiaPagamento.getDataVencimento());
 		helper.setDataValidadeConta(guiaPagamento.getDataVencimento());
