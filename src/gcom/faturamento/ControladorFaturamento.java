@@ -15506,7 +15506,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		if (primeiraVia || !foiGerado) {
 			Imovel imovel = repositorioFaturamento.pesquisarImovelComEnderecoFichaCompensacaoPorId(idImovel);
-			Cliente cliente = retornaClienteCpfCnpjValido(imovel.getId());
+			
+			Cliente cliente = retornaClienteResponsavelParcelamentoValido(idImovel);
+			
 			ArrecadadorContratoConvenio convenio = Fachada.getInstancia().pesquisarParametrosConvenioPorId(ArrecadadorContratoConvenio.PARCELAMENTO);
 			String nossoNumero = obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), 
 																	idParcelamento.toString(),
@@ -15527,6 +15529,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
 			}
 		}
+	}
+
+	private Cliente retornaClienteResponsavelParcelamentoValido(Integer idImovel) throws ErroRepositorioException, ControladorException {
+		Cliente cliente = repositorioCobranca.pesquisarClienteResponsavelParcelamento(idImovel);
+		String cpfOuCnpj = cliente.getCpfOuCnpj();
+		if(cliente != null && Util.cpfCnpjInvalido(cpfOuCnpj)) {
+			throw new ControladorException("INSCRIÇÃO(CPF/CNPJ) " + cliente.getCpfOuCnpj() + " INVÁLIDA");
+		}
+		return cliente;
 	}
 		
 	@SuppressWarnings("unchecked")
