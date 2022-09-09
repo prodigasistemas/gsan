@@ -52092,7 +52092,7 @@ public class ControladorArrecadacao extends ControladorComum {
 		
 		if (!primeiraVia) {
 			FiltroBancoInfo filtro = new FiltroBancoInfo();
-			filtro.adicionarParametro(new ParametroSimples(FiltroBancoInfo.PARCELAMENTO_ID, parcelamento.getId()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroBancoInfo.PARCELAMENTO_ID, parcelamento.getId()));			
 			
 			boletoInfo = (BoletoInfo) Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtro, BoletoInfo.class.getName()));
 			
@@ -52233,17 +52233,17 @@ public class ControladorArrecadacao extends ControladorComum {
 	    
 	    StringBuilder mensagemParcelamento = new StringBuilder(); 
 	    mensagemParcelamento.append(descricaoServicosTarifas + "     R$ " + valor);
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    mensagemParcelamento.append(" " + obterMensagemParcelamento());
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    mensagemParcelamento.append("     Matricula: " + parcelamento.getImovel().getId() + String.format("     Periodo do debito: %s - %s", Util.formatarAnoMesParaMesAno(inicioParcelamento),Util.formatarAnoMesParaMesAno(fimParcelamento))); 
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    mensagemParcelamento.append("     Valor atualizado: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorDebitoAtualizado()) + "     Valor negociado: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorNegociado()));
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    mensagemParcelamento.append("     Valor entrada: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorEntrada()) + "     Valor parcela: " + Util.formatarMoedaRealComCifrao(parcelamento.getValorPrestacao())); 
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    mensagemParcelamento.append("     Quantidade de parcelas: " + parcelamento.getNumeroPrestacoes()); 
-	    mensagemParcelamento.append("<br>");
+//	    mensagemParcelamento.append("<br>");
 	    
 	    
 	    
@@ -52409,5 +52409,13 @@ public class ControladorArrecadacao extends ControladorComum {
 				Util.retonarObjetoDeColecao(Fachada.getInstancia().pesquisar(filtro, DebitoAutomaticoRetornoCodigo.class.getName()));
 		
 		return codigo;
+	}
+	
+	public ArrecadadorContratoConvenio pesquisarParametrosConvenioPorId(Integer idConvenio) throws ControladorException {
+		try {
+			return repositorioArrecadacao.pesquisarParametrosConvenioPorId(idConvenio);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}		
 	}
 }

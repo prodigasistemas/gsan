@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.arrecadacao.ArrecadadorContratoConvenio" table="arrecadacao.arrecadador_contrato_convenio">
+		<id name="id" type="java.lang.Integer" column="arcc_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_arrecadador_contrato_convenio</param>
+			</generator>
+		</id>
+		<property name="convenio"  				 type="java.lang.Integer" column="arcc_nnconvenio" not-null="true" />
+		<property name="numeroCarteira" 		 type="java.lang.Integer" column="arcc_nncarteira" not-null="true" />
+		<property name="numeroVariacaoCarteira"  type="java.lang.Integer" column="arcc_nnvariacaocarteira" not-null="true" />
+		<property name="codigoTipoTitulo" 		 type="java.lang.Short"   column="arcc_cdtipotitulo" not-null="true" />
+	</class>
+</hibernate-mapping>

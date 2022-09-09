@@ -9,6 +9,7 @@ import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.atendimentopublico.ordemservico.ServicoCobrancaValor;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
@@ -351,6 +352,8 @@ public interface IControladorFaturamento {
 
 	public Collection<EmitirContaHelper> emitir2ViaContas(Collection<Integer> idsContaEP, boolean cobrarTaxaEmissaoConta, Short contaSemCodigoBarras) throws ControladorException;
 
+	public Collection<EmitirContaHelper> emitirGuiaPagamento(Integer idParcelamento) throws ControladorException;
+	
 	public Integer pesquisarIdClienteResponsavelConta(Integer idConta, boolean contaHistorico) throws ControladorException;
 
 	public Integer[] determinarTipoLigacaoMedicao(EmitirContaHelper emitirContaHelper) throws ControladorException;
@@ -1307,6 +1310,8 @@ public interface IControladorFaturamento {
 	public void registrarFichaCompensacaoGrupo(Integer idGrupoFaturamento, Integer anoMesReferencia, int idFuncionalidadeIniciada) throws ControladorException;
 
 	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento) throws ControladorException;
+	
+	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) throws ControladorException;
 	
 	public boolean fichaCompensacaoExistente (Integer idConta) throws ControladorException;
 	

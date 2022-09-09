@@ -7,7 +7,7 @@
     http://boss.bekk.no/boss/middlegen/
     http://www.hibernate.org/
 -->
-	<class name="gcom.faturamento.FichaCompensacao" table="faturamento.ficha_compensacao">
+	<class name="gcom.arrecadacao.FichaCompensacao" table="arrecadacao.ficha_compensacao">
 		<id name="id" type="java.lang.Integer" column="fico_id">
 			<generator class="sequence">
 				<param name="sequence">faturamento.seq_ficha_compensacao</param>
@@ -33,9 +33,11 @@
 		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
 			<column name="clie_id"/>
 		</many-to-one>
-		<many-to-one name="conta" class="gcom.faturamento.conta.Conta" not-null="true">
+		<many-to-one name="conta" class="gcom.faturamento.conta.Conta" not-null="false">
 			<column name="cnta_id"/>
-		</many-to-one>		
-		
+		</many-to-one>
+		<many-to-one name="guiaPagamento" class="gcom.arrecadacao.pagamento.GuiaPagamento" not-null="false">
+			<column name="gpag_id"/>
+		</many-to-one>
 	</class>
 </hibernate-mapping>

@@ -6,6 +6,7 @@ import gcom.arrecadacao.ArrecadacaoDadosDiariosAuxiliar;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContrato;
+import gcom.arrecadacao.ArrecadadorContratoConvenio;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
 import gcom.arrecadacao.ArrecadadorMovimento;
 import gcom.arrecadacao.ArrecadadorMovimentoItem;
@@ -475,7 +476,7 @@ import gcom.faturamento.FaturamentoSituacaoHistorico;
 import gcom.faturamento.FaturamentoSituacaoMotivo;
 import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.FaturamentoTipo;
-import gcom.faturamento.FichaCompensacao;
+import gcom.arrecadacao.FichaCompensacao;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.HistogramaAguaEconomia;
 import gcom.faturamento.HistogramaAguaEconomiaSemQuadra;
@@ -1293,6 +1294,7 @@ public class HibernateUtil {
 					.addClass(LancamentoAgenciaReguladora.class)
 					.addClass(FaturamentoParametro.class)
 					.addClass(FichaCompensacao.class)
+					.addClass(ArrecadadorContratoConvenio.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.micromedicao //

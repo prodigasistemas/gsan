@@ -26802,4 +26802,22 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		return retorno;
 
 	}
+
+	public void removerFichaCompensacao(Integer idGuiaPagamento) throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+
+		String delete;
+
+		try {
+			delete = "delete gcom.arrecadacao.FichaCompensacao f where f.guiaPagamento.id = :idGuiaPagamento ";
+
+			session.createQuery(delete).setInteger("idGuiaPagamento", idGuiaPagamento.intValue()).executeUpdate();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
 }
