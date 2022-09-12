@@ -40216,14 +40216,6 @@ public class Fachada {
 	public String obterCaminhoDownloadArquivos(String modulo) {
 		return this.getControladorUtil().getCaminhoDownloadArquivos(modulo);
 	}	
-	
-	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) {
-		try {
-			return this.getControladorArrecadacao().montarLinkBB(matricula, idParcelamento, clienteResponsavelParcelamento, valor, primeiraVia);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-	}
 
 	public Integer[] obterPeriodoContasParceladas(Integer idParcelamento) {
 		try {

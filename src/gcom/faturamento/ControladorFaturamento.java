@@ -15510,11 +15510,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			
 			Cliente cliente = retornaClienteResponsavelParcelamentoValido(idImovel);
 			
+			GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(idParcelamento);
+			
 			ArrecadadorContratoConvenio convenio = Fachada.getInstancia().pesquisarParametrosConvenioPorId(ArrecadadorContratoConvenio.PARCELAMENTO);
 			String nossoNumero = obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), 
-																	idParcelamento.toString(),
-																	convenio.getConvenio()).toString();		
-			GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(idParcelamento);
+					                                                guiaPagamento.getId().toString(),
+																	convenio.getConvenio()).toString();					
 			System.out.println("Banco do Brasil: Registrando Guia do Parcelamento - " + idParcelamento + " |  Imovel - "
 					+ imovel.getId());
 			Registro registroEntradaParcelamentoService = new RegistroEntradaParcelamentoService(guiaPagamento, imovel,

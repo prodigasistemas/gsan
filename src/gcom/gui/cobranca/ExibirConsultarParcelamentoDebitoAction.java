@@ -190,10 +190,6 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		request.setAttribute("entradaPaga", entradaPaga);
 		return entradaPaga;
 	}
-
-	private String obterLinkBoletoBB(Parcelamento parcelamento) {
-		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
-	}
 	
 	private void registrarEntradaParcelamento(Parcelamento parcelamento, Integer idImovel) {
 		  getFachada().registrarEntradaParcelamento(parcelamento, false, idImovel);

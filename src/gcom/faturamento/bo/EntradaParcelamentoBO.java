@@ -75,7 +75,7 @@ public class EntradaParcelamentoBO {
 					String banco = null;
 					String numeroReferencia = null;
 					if((guiaPagamento.getCpf() != null && guiaPagamento.getCodigoConvenio() != null ) || (guiaPagamento.getCpf() != null && guiaPagamento.getCodigoConvenio() != null ) ) {
-						nossoNumero = this.controlador.obterNossoNumeroFichaCompensacao("7", guiaPagamento.getIdParcelamento().toString(), guiaPagamento.getCodigoConvenio());
+						nossoNumero = this.controlador.obterNossoNumeroFichaCompensacao("7", guiaPagamento.getIdGuiaPagamento().toString(), guiaPagamento.getCodigoConvenio());
 						nossoNumeroSemDV = nossoNumero.toString().substring(3, 20);
 					}	
 					

@@ -28,7 +28,6 @@ public abstract class Registro {
 		
 		return fichaCompensacaoDTO;
 	};	
-
 	
 	public abstract FichaCompensacaoDTO salvarFichaDeCompensacao(ArrecadadorContratoConvenio convenio, IRepositorioFaturamento repositorioFaturamento) throws Exception;
 	
