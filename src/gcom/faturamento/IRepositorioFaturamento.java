@@ -3104,5 +3104,7 @@ public interface IRepositorioFaturamento {
 	public Collection pesquisarInformacoesContaParaEnvioEmailPorRota(Integer idRota, Integer referencia) throws ErroRepositorioException;
 	
 	public CreditoARealizar validarExistenciaCreditoARealizar(Integer idImovel, Integer anoMesReferencia) throws ErroRepositorioException;
+	
+	public Boolean boletoInfoExistente(Integer idParcelamento) throws ErroRepositorioException;
 
 }
