@@ -3782,7 +3782,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 		if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 			String nossoNumeroSemDV;
-			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), emitirContaHelper.getIdConta().toString(), emitirContaHelper.getCodigoConvenio());
+			StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), emitirContaHelper.getIdGuiaPagamento().toString(), emitirContaHelper.getCodigoConvenio());
 			
 				nossoNumeroSemDV = Util.removeZerosAEsquerda(nossoNumero.toString());
 			

@@ -546,20 +546,6 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 		}
 	}
 
-	public String obterLinkBoletoBB(Integer idParcelamento) {
-		FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
-		filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
-		filtroParcelamento.adicionarCaminhoParaCarregamentoEntidade("cliente");
-
-		Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(
-				Fachada.getInstancia().pesquisar(filtroParcelamento, Parcelamento.class.getName()));
-		// Primeira via
-		String linkBoletoBB = Fachada.getInstancia().montarLinkBB(parcelamento.getImovel().getId(),
-				parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), true);
-
-		return linkBoletoBB;
-	}
-
 	public boolean isParcelamentoValido(ConcluirParcelamentoDebitosHelper helper) {
 		boolean isParcelamentoValido = true;
 
