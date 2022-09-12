@@ -60372,6 +60372,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.append(" LEFT JOIN FETCH i.enderecoReferencia er ")
 					.append(" LEFT JOIN FETCH i.perimetroInicial pi ")
 					.append(" LEFT JOIN FETCH i.perimetroFinal pf ")
+					.append(" LEFT JOIN FETCH pi.logradouroTipo ")
+					.append(" LEFT JOIN FETCH pi.logradouroTitulo ")
+					.append(" LEFT JOIN FETCH pf.logradouroTipo ")
+					.append(" LEFT JOIN FETCH pf.logradouroTitulo ")
 					.append(" WHERE i.id = :idImovel ");
 
 			imovel = (Imovel) session.createQuery(consulta.toString())
@@ -60494,8 +60498,35 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-		
-		
+				
+		return registroExistente;
+	}
+	
+	public Boolean boletoInfoExistente(Integer idParcelamento) throws ErroRepositorioException {
+		Integer boletoInfo = null;
+		Boolean registroExistente = false;
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta;
+
+			consulta = " select boin.boin_id as boin from arrecadacao.boleto_info boin "
+			        + " where boin.parc_id = :idParcelamento ";
+
+			boletoInfo = (Integer) session.createSQLQuery(consulta.toString()).addScalar("boin", Hibernate.INTEGER)
+					.setInteger("idParcelamento", idParcelamento).setMaxResults(1).uniqueResult();
+
+			if (boletoInfo != null) {
+				registroExistente = true;
+			} else {
+				registroExistente = false;
+			}
+
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+				
 		return registroExistente;
 	}
 	
@@ -60757,6 +60788,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
 		} 
 		
 		return guiaPagamento;

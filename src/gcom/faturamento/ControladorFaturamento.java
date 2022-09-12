@@ -15493,12 +15493,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) throws Exception {
 
-		boolean foiGerado = true;
+		boolean foiGerado = false;
 		Integer idParcelamento = parcelamento.getId();
 		
 		Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistenteGuiaPagamento(idParcelamento);
-		if (fichaExistente == false) {
-			foiGerado = false;
+		Boolean boletoInfoExistente = repositorioFaturamento.boletoInfoExistente(idParcelamento);
+		if (fichaExistente == true || boletoInfoExistente == true) {
+			foiGerado = true;
 		}
 		// Para boletos ja gerados antes da modificacao para gravacao na base de dados
 		// , ou seja,
