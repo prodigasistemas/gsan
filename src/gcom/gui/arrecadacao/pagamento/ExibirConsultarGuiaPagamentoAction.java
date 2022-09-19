@@ -158,18 +158,6 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 		return guia;
 	}
 	
-	@SuppressWarnings("unchecked")
-	private String obterLinkBoletoBB(Integer guiaPagamentoId) {
-		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
-		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoId));
-		
-		GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
-		Parcelamento parcelamento = guia.getParcelamento();
-		
-		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
-	}
-	
 	private void registrarEntradaParcelamento(Integer guiaPagamentoId) {
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
