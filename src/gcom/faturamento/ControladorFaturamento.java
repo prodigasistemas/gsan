@@ -15613,17 +15613,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				UnidadeProcessamento.ROTA, idRota);
 
 		List<Integer> clientesCadUnico = Fachada.getInstancia().pesquisarClientesPorCadastroUnico();
-		List<Integer> clienteCadCaixa = Fachada.getInstancia().pesquisarClientesPorCadastroCaixa();
 		List<Integer> idsImoveisBolsaAgua = Fachada.getInstancia().pesquisarImovelBolsaAguaPorRota(idRota);
 		List<Integer> idsImoveisNormal = Fachada.getInstancia().pesquisarImovelElegivelBolsaAguaPorRota(idRota);
 		try {
 			if (!CollectionUtil.ehVazia(clientesCadUnico)) {
 				atualizarDadosClienteImoveisBolsaAgua(clientesCadUnico, Cliente.INDICADOR_BOLSA_FAMILIA_SEASTER, true);
-			}
-
-			if (!CollectionUtil.ehVazia(clienteCadCaixa)) {
-				atualizarDadosClienteImoveisBolsaAgua(clienteCadCaixa, Cliente.INDICADOR_BOLSA_FAMILIA_CADASTRO_CAIXA,
-						true);
 			}
 
 			if (!CollectionUtil.ehVazia(idsImoveisBolsaAgua)) {

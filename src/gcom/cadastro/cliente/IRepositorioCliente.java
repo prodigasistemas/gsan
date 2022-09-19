@@ -143,8 +143,6 @@ public interface IRepositorioCliente {
 	
 	public List<Integer> pesquisarClientesPorCadastroUnico() throws ErroRepositorioException;
 	
-	public List<Integer> pesquisarClientesPorCadastroCaixa() throws ErroRepositorioException;
-	
 	public void atualizarNISCliente(Integer idCliente, Integer clie_icbolsafamilia) throws ErroRepositorioException;
 	
 }
