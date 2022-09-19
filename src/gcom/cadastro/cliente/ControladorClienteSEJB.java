@@ -2568,14 +2568,6 @@ public class ControladorClienteSEJB extends ControladorComum {
 		}
 	}
 	
-	public List<Integer> pesquisarClientesPorCadastroCaixa() throws ControladorException {
-		try {
-			return repositorioCliente.pesquisarClientesPorCadastroCaixa();
-		} catch (ErroRepositorioException ex) {
-			throw new ControladorException("erro.sistema", ex);
-		}
-	}
-	
 	public void atualizarNISCliente(Integer idCliente, Integer clie_icbolsafamilia) throws ControladorException {
 		try {
 			repositorioCliente.atualizarNISCliente(idCliente, clie_icbolsafamilia);
