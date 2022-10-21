@@ -1038,6 +1038,12 @@ public class ControladorGerencialFaturamentoSEJB extends ControladorComum {
 	   		getControladorGerencialCadastro().excluirResumoGerencial( 
 	   				getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento(), 
 	   				UnResumoFaturamento.class.getName(), "referencia", idSetor );				
+	   		
+	   		// [SB0015 – Gerar Resumo Créditos a Realizar]
+	   		this.gerarResumoCreditoARealizar(idSetor, idFuncionalidadeIniciada);
+	   		
+	   		// [SB0017 – Gerar Resumo Guias de Devolução]
+	   		this.gerarResumoGuiasDevolucao(idSetor, idFuncionalidadeIniciada);
 			
 			// inicio do processamento
 			UnResumoFaturamento resumoFaturamentoAguaEsgotoGrava = null;
@@ -1072,12 +1078,6 @@ public class ControladorGerencialFaturamentoSEJB extends ControladorComum {
 					
 					listaSimplificadaFaturamentoCreditosSetores.add(listaSetores);
 				}
-				
-				// [SB0015 – Gerar Resumo Créditos a Realizar]
-				this.gerarResumoCreditoARealizar(idSetor, idFuncionalidadeIniciada);
-				
-				// [SB0017 – Gerar Resumo Guias de Devolução]
-				this.gerarResumoGuiasDevolucao(idSetor, idFuncionalidadeIniciada);
 				
 				//List resumoFaturamentoAguaEsgoto = this.repositorioGerencialFaturamento
 				//.getResumoFaturamentoAguaEsgoto( idSetor, anoMes, indice, qtRegistros);
