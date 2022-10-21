@@ -65,7 +65,7 @@ public class FiltrarPagamentosAClassificarAction extends GcomAction {
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado");
 
 		} else {
-			Collection<Pagamento> colecaoPagamentosAClassificar = filtrarPagamentosPorQuantidade(colecaoPagamentos);
+			Collection<Pagamento> colecaoPagamentosAClassificar = filtrarEObterPagamentos(colecaoPagamentos);
 
 			if (situacaoPagamento.equals(PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_PARCELADA))
 				return fachada.validarRecuperacaoCreditoContaParcelada(colecaoPagamentosAClassificar);
@@ -74,15 +74,15 @@ public class FiltrarPagamentosAClassificarAction extends GcomAction {
 		}
 	}
 
-	private Collection<Pagamento> filtrarPagamentosPorQuantidade(Collection<Pagamento> colecaoPagamentos) {
+	private Collection<Pagamento> filtrarEObterPagamentos(Collection<Pagamento> colecaoPagamentos) {
 		Collection<Pagamento> pagamentos = new ArrayList<Pagamento>();
 		Collection<Integer> ids = null;
 		Pagamento pagamento = new Pagamento();
-		int tamanhoColecao = colecaoPagamentos.size()-1;
+		int tamanhoColecao = colecaoPagamentos.size();
 		int paginacao = 0;
 		
-		if (tamanhoColecao > 1000 ) {
-			paginacao = 1000;
+		if (tamanhoColecao > 500 ) {
+			paginacao = 500;
 		} else {
 			paginacao = tamanhoColecao;
 		}

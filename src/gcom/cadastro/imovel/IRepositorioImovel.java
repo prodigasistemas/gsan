@@ -757,5 +757,4 @@ public interface IRepositorioImovel {
 	
 	public void atualizarPerfilImovel(Integer idImovel, Integer idPerfil) throws ErroRepositorioException;
 	
-	
 }

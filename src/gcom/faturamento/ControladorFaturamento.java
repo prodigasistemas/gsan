@@ -3093,6 +3093,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				credito.setValorCredito(novoValorCredito);
 				credito.setValorResidualMesAnterior(BigDecimal.ZERO);
 				credito.setNumeroPrestacaoRealizada(new Short("1"));
+				credito.setAnoMesReferenciaPrestacao(anoMes);
 
 				FiltroCreditoARealizarCategoria filtroCreditoARealizarCategoria = new FiltroCreditoARealizarCategoria();
 
@@ -5921,25 +5922,22 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						valorTotalACobrar = valorTotalACobrar.subtract(creditoBolsaAgua.getValorCredito());
 
+						CreditoARealizar creditoARealizar = creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar();
 						logger.info(
 								" 0 - Credito a Realizar BOLSA �GUA: Imovel (atualizarCreditoResidual): "
-										+ (creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar()
-												.getImovel() != null ? creditoBolsaAgua.getCreditoARealizarGeral()
-														.getCreditoARealizar().getImovel().getId() : "NULL")
+										+ (creditoARealizar
+												.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL")
 										+ " | Cr�ditos: "
-										+ (creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar()
-												.getValorCredito() != null ? creditoBolsaAgua.getCreditoARealizarGeral()
-														.getCreditoARealizar().getValorCredito() : "NULL")
+										+ (creditoARealizar
+												.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL")
 										+ " | Residual Concedido no M�s: "
-										+ (creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar()
-												.getValorResidualConcedidoMes() != null ? creditoBolsaAgua
-														.getCreditoARealizarGeral().getCreditoARealizar()
+										+ (creditoARealizar
+												.getValorResidualConcedidoMes() != null ? creditoARealizar
 														.getValorResidualConcedidoMes() : "NULL")
 										+ " | Residual Concedido no M�s Anterior: "
-										+ (creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar()
+										+ (creditoARealizar
 												.getValorResidualMesAnterior() != null
-														? creditoBolsaAgua.getCreditoARealizarGeral()
-																.getCreditoARealizar().getValorResidualMesAnterior()
+														? creditoARealizar.getValorResidualMesAnterior()
 														: "NULL"));
 
 						creditoBolsaAgua.setUltimaAlteracao(new Date());
@@ -5947,10 +5945,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						// atualiza o credito realizado categoria
 						this.atualizarCreditoRealizadoCategoria(
-								creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar(), creditoBolsaAgua);
+								creditoARealizar, creditoBolsaAgua);
+						
+						creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
 
 						getControladorUtil()
-								.atualizar(creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar());
+								.atualizar(creditoARealizar);
 
 						valorTotalCreditos = valorTotalCreditos.add(creditoBolsaAgua.getValorCredito());
 

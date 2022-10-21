@@ -16617,7 +16617,4 @@ public class ControladorImovelSEJB extends ControladorComum {
 		    throw new ControladorException("erro.sistema", e);
 		}
 	}
-	
-	
-	
 }
