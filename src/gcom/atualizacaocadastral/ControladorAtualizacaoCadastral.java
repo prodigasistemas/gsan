@@ -669,7 +669,16 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		try {
 			Collection<IImovel> imoveisAlteracao = this.obterImoveisParaAtualizar(AlteracaoTipo.ALTERACAO, idRota);
 			
-			for (IImovel imovelRetorno : imoveisAlteracao) {
+			Collection<IImovel> imoveisAlteracaoSemBolsaAgua = new ArrayList<IImovel>();
+			
+			for (IImovel iImovel : imoveisAlteracao) {
+				ImovelPerfil imovelPerfil = getControladorImovel().obterImovelPerfil(iImovel.getId());
+				if(imovelPerfil == null || !imovelPerfil.getId().equals(ImovelPerfil.BOLSA_AGUA)) {
+					imoveisAlteracaoSemBolsaAgua.add(iImovel);
+				}
+			}
+			
+			for (IImovel imovelRetorno : imoveisAlteracaoSemBolsaAgua) {
 				if (!isImovelEmCampo(imovelRetorno.getIdImovel())) {
 					idImovelRetorno = imovelRetorno.getId();
 

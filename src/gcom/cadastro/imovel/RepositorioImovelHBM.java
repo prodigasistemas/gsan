@@ -29728,6 +29728,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			HibernateUtil.closeSession(session);
 		}
 		System.out.println("IMOVEL ID: " + idImovel +  " ATUALIZADO.");
-	}
+	}	
 
 }
