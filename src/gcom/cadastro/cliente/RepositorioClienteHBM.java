@@ -1074,30 +1074,6 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
-	public List<Integer> pesquisarClientesPorCadastroCaixa() throws ErroRepositorioException {
-		List<Integer> idsClientes = new ArrayList<Integer>();
-		Session session = HibernateUtil.getSession();
-		String consulta = null;
-
-		try {
-			consulta = " SELECT cli.clie_id as idCliente FROM cadastro.cliente cli "
-					+ "INNER JOIN public.cadastro_caixa cx ON cx.nis = cli.clie_nnnis "
-					+ "WHERE cli.clie_icbolsafamilia NOT IN (1,3) ";
-		
-			idsClientes = session.createSQLQuery(consulta).addScalar("idCliente", Hibernate.INTEGER).list();
-
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-
-		return idsClientes;
-	}
-	
-		
-	
 	public void atualizarNISCliente(Integer idCliente, Integer clie_icbolsafamilia) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();

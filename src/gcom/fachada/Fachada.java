@@ -40662,14 +40662,6 @@ public class Fachada {
 		}
 	}
 	
-	public List<Integer> pesquisarClientesPorCadastroCaixa()  {
-		try {
-			return getControladorCliente().pesquisarClientesPorCadastroCaixa();
-		} catch (ControladorException e) {
-			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
-		}
-	}
-	
 	public void atualizarNISCliente(Integer idCliente, Integer clie_icbolsafamilia) {
 		try {
 			getControladorCliente().atualizarNISCliente(idCliente, clie_icbolsafamilia);
