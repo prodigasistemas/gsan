@@ -15516,20 +15516,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			String nossoNumero = obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), 
 					                                                guiaPagamento.getId().toString(),
 																	convenio.getConvenio()).toString();					
-			System.out.println("Banco do Brasil: Registrando Guia do Parcelamento - " + idParcelamento + " |  Imovel - "
-					+ imovel.getId());
-			Registro registroEntradaParcelamentoService = new RegistroEntradaParcelamentoService(guiaPagamento, imovel,
-					cliente, nossoNumero);
-			FichaCompensacaoDTO fichaDeCompensacao = registroEntradaParcelamentoService
-					.salvarFichaDeCompensacao(convenio, repositorioFaturamento);
-			try {
-				registroEntradaParcelamentoService.registroFichaDeCompensacao(fichaDeCompensacao,
-						SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
-				System.out.println("Banco Do Brasil: Guia do Parcelamento - " + idParcelamento + " | Imovel - " + imovel.getId() + " registrada com sucesso!");
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new ActionServletException("erro.nao_foi_possivel_registrar_conta");
-			}
+			System.out.println("Banco do Brasil: Registrando Guia do Parcelamento - " + idParcelamento + " |  Imovel - "+ imovel.getId());
+			
+			Registro registroEntradaParcelamentoService = new RegistroEntradaParcelamentoService(guiaPagamento, imovel,cliente, nossoNumero);
+			FichaCompensacaoDTO fichaDeCompensacao = registroEntradaParcelamentoService.salvarFichaDeCompensacao(convenio, repositorioFaturamento);
+			
+			registroEntradaParcelamentoService.registroFichaDeCompensacao(fichaDeCompensacao,SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
+			
+			System.out.println("Banco Do Brasil: Guia do Parcelamento - " + idParcelamento + " | Imovel - " + imovel.getId() + " registrada com sucesso!");
 		}
 	}
 

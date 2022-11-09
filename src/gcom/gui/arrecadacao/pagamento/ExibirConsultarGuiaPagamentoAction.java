@@ -1,23 +1,5 @@
 package gcom.gui.arrecadacao.pagamento;
 
-import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
-import gcom.arrecadacao.pagamento.FiltroGuiaPagamentoHistorico;
-import gcom.arrecadacao.pagamento.GuiaPagamento;
-import gcom.arrecadacao.pagamento.GuiaPagamentoHistorico;
-import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
-import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.cliente.FiltroCliente;
-import gcom.cadastro.sistemaparametro.SistemaParametro;
-import gcom.cobranca.parcelamento.Parcelamento;
-import gcom.fachada.Fachada;
-import gcom.faturamento.FiltroGuiaPagamentoItem;
-import gcom.faturamento.debito.DebitoTipo;
-import gcom.gui.ActionServletException;
-import gcom.gui.GcomAction;
-import gcom.util.Util;
-import gcom.util.filtro.Filtro;
-import gcom.util.filtro.ParametroSimples;
-
 import java.math.BigDecimal;
 import java.util.Collection;
 
@@ -28,6 +10,21 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
+import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
+import gcom.arrecadacao.pagamento.FiltroGuiaPagamentoHistorico;
+import gcom.arrecadacao.pagamento.GuiaPagamento;
+import gcom.arrecadacao.pagamento.GuiaPagamentoHistorico;
+import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
+import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.faturamento.FiltroGuiaPagamentoItem;
+import gcom.faturamento.debito.DebitoTipo;
+import gcom.gui.ActionServletException;
+import gcom.gui.GcomAction;
+import gcom.util.Util;
+import gcom.util.filtro.Filtro;
+import gcom.util.filtro.ParametroSimples;
 
 public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 
@@ -50,13 +47,15 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 			GuiaPagamento guia = pesquisarGuia(request, sessao, guiaId);
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
 			request.setAttribute("geracaoBoletoBB", sistemaParametro.getIndicadorGeracaoBoletoBB());
-		/*	String cpfCnpj = consultarCpfCnpjCliente(guia.getImovel().getId());
-			if (!cpfCnpj.equalsIgnoreCase("")) { */
-				registrarEntradaParcelamento(guia.getId());
-				request.setAttribute("boletoParcelamento", guiaId);
-		  /*}else {
-				request.setAttribute("linkBoletoBB", obterLinkBoletoBB(guia.getId()));
-			}*/
+				
+				try {
+					registrarEntradaParcelamento(guia.getId());
+					request.setAttribute("boletoParcelamento", guiaId);
+				} catch (Exception e) {
+					throw new ActionServletException("atencao.nao_foi_possivel_registrar_no_banco", e);
+				} finally {
+					request.setAttribute("linkBoletoBB", obterLinkBoletoBB(guia.getId()));
+				}
 		}
 
 		if (request.getParameter("caminhoRetornoTelaConsultaGuiaPagamento") != null) {
@@ -158,7 +157,7 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 		return guia;
 	}
 	
-	private void registrarEntradaParcelamento(Integer guiaPagamentoId) {
+	private void registrarEntradaParcelamento(Integer guiaPagamentoId) throws Exception{
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoId));
@@ -166,8 +165,21 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 		GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
 		Parcelamento parcelamento = guia.getParcelamento();
 		
-		  getFachada().registrarEntradaParcelamento(parcelamento, false, guia.getImovel().getId());
+		getFachada().registrarEntradaParcelamento(parcelamento, false, guia.getImovel().getId());
 	}
+	
+	@SuppressWarnings("unchecked")
+	private String obterLinkBoletoBB(Integer guiaPagamentoId) {
+		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoId));
+		
+		GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		Parcelamento parcelamento = guia.getParcelamento();
+		
+		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
+	}
+
 
 	
 }

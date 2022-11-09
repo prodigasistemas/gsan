@@ -1,5 +1,7 @@
 package gcom.faturamento.registroBoletos;
 
+import java.util.Date;
+
 import gcom.arrecadacao.ArrecadadorContratoConvenio;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.cadastro.cliente.Cliente;
@@ -29,9 +31,17 @@ public class RegistroEntradaParcelamentoService extends Registro {
 			IRepositorioFaturamento repositorioFaturamento) throws Exception {
 
 		FichaCompensacaoDTO ficha = montaBoletoBB(convenio);
-
-		ficha.setDataEmissao(Util.formatarDataComPontoDDMMAAAA(guia.getDataEmissao()).toString());
-		ficha.setDataVencimento(Util.formatarDataComPontoDDMMAAAA(guia.getDataVencimento()).toString());
+		
+		Date dataEmissao = guia.getDataEmissao();
+		Date dataVencimento = guia.getDataVencimento();
+		
+		if (Util.compararData(new Date(), dataEmissao) > 0) {
+			dataEmissao = new Date();
+			dataVencimento = Util.adicionarNumeroDiasDeUmaData(dataEmissao, 1);
+		}
+		
+		ficha.setDataEmissao(Util.formatarDataComPontoDDMMAAAA(dataEmissao).toString());
+		ficha.setDataVencimento(Util.formatarDataComPontoDDMMAAAA(dataVencimento).toString());
 		ficha.setValorOriginal(guia.getValorDebito().doubleValue());
 		ficha.setNumeroTituloCliente(nossoNumero.toString());
 		PagadorDTO pagador = retornaPagador(cliente, imovel);
