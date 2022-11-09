@@ -40621,7 +40621,7 @@ public class Fachada {
 		}
 	}
 	
-	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) {
+	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) throws Exception {
 		try {
 			this.getControladorFaturamento().registrarEntradaParcelamento(parcelamento, primeiraVia, idImovel);
 		} catch (ControladorException e) {
@@ -40701,4 +40701,13 @@ public class Fachada {
 			throw new ControladorException("erro.sistema", e);
 		}		
 	}
+	
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) {
+		try {
+			return this.getControladorArrecadacao().montarLinkBB(matricula, idParcelamento, clienteResponsavelParcelamento, valor, primeiraVia);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+
 }

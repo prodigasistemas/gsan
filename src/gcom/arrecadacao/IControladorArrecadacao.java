@@ -824,6 +824,8 @@ public interface IControladorArrecadacao {
 	public String obterMensagemEntradaParcelamento(Integer idGuiaPagamento, Integer idParcelamento) throws ControladorException;
 	
 	public ArrecadadorContratoConvenio pesquisarParametrosConvenioPorId(Integer idConvenio) throws ControladorException;
+	
+	public String montarLinkBB(Integer matricula, Integer idParcelamento, Cliente clienteResponsavelParcelamento, BigDecimal valor, boolean primeiraVia) throws ControladorException;
 
 	
 }

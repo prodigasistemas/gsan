@@ -27,6 +27,7 @@ import gcom.faturamento.credito.FiltroCreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
+import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -128,17 +129,19 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 			request.setAttribute("isParcelamentoCancelado", verificarSituacao(parcelamento, ParcelamentoSituacao.CANCELADO));
 			            
 			if (geraBoletoBB && !entradaPaga) {
-			/*	String cpfCnpj = consultarCpfCnpjCliente(Integer.parseInt(codigoImovel));
-				if (!cpfCnpj.equalsIgnoreCase("")) {*/
-				    registrarEntradaParcelamento(parcelamento, Integer.valueOf(codigoImovel));
+				
+				try {
+					registrarEntradaParcelamento(parcelamento, Integer.valueOf(codigoImovel));
 					request.setAttribute("boletoParcelamento", parcelamento);
-			  /*} else {
+				} catch(Exception e) {
+					throw new ActionServletException("atencao.nao_foi_possivel_registrar_no_banco", e);
+				}finally {
+					request.setAttribute("boletoParcelamento", "");
 					request.setAttribute("linkBoletoBB", obterLinkBoletoBB(parcelamento));
-				}*/
+				}
+			  } 
 			}
            
-		}
-		
 		request.setAttribute("geracaoBoletoBB", parametros.getIndicadorGeracaoBoletoBB());
 
 		return retorno;
@@ -191,8 +194,13 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		return entradaPaga;
 	}
 	
-	private void registrarEntradaParcelamento(Parcelamento parcelamento, Integer idImovel) {
-		  getFachada().registrarEntradaParcelamento(parcelamento, false, idImovel);
+	private String obterLinkBoletoBB(Parcelamento parcelamento) {
+		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
+	}
+
+	
+	private void registrarEntradaParcelamento(Parcelamento parcelamento, Integer idImovel) throws Exception{
+		getFachada().registrarEntradaParcelamento(parcelamento, false, idImovel);
 	}
 	
 	private void setarDadosParcelamento(Parcelamento parcelamento) {

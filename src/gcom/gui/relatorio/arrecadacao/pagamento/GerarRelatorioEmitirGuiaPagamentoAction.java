@@ -8,6 +8,7 @@ import gcom.fachada.Fachada;
 import gcom.faturamento.FiltroGuiaPagamentoItem;
 import gcom.faturamento.bo.ContaSegundaViaBO;
 import gcom.faturamento.debito.DebitoTipo;
+import gcom.gui.ActionServletException;
 import gcom.gui.cadastro.imovel.CategoriaActionForm;
 import gcom.gui.faturamento.ManterGuiaPagamentoActionForm;
 import gcom.relatorio.ExibidorProcessamentoTarefaRelatorio;
@@ -73,11 +74,17 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		
 		if (this.isEntradaParcelamento(guia)) {
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
+			
+			try {
 				registrarEntradaParcelamento(parcelamento, guia.getImovel().getId());
-			//	retorno = new ActionForward(emitirBoleto());
-			/* else {
-				retorno = new ActionForward(obterLinkBoletoBB(guia.getId()), true);
-			}*/
+			} catch (Exception e) {
+				throw new ActionServletException("atencao.nao_foi_possivel_registrar_no_banco", e);
+			} finally {
+				retorno = new ActionForward(obterLinkBoletoBB(guia.getId()),true);
+			}			
+			
+			
+			
 		} else {
 			
 			RelatorioEmitirGuiaPagamento relatorioEmitirGuiaPagamento = new RelatorioEmitirGuiaPagamento((Usuario) (request.getSession(false)).getAttribute("usuarioLogado"));
@@ -99,7 +106,7 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		return retorno;
 	}
 	
-	private void registrarEntradaParcelamento(Parcelamento parcelamento, Integer idImovel) {
+	private void registrarEntradaParcelamento(Parcelamento parcelamento, Integer idImovel) throws Exception{
 		  getFachada().registrarEntradaParcelamento(parcelamento, false, idImovel);
 	}
 	
@@ -158,12 +165,19 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtro, GuiaPagamento.class.getName()));
 
 		return guia;
-	}	
+	}
+	
 	
 	@SuppressWarnings("unchecked")
-	public void emitirBoleto () {
-		ContaSegundaViaBO parcelamento = new ContaSegundaViaBO(null, null, false, null);
-	//	return parcelamento;
+	private String obterLinkBoletoBB(Integer guiaPagamentoId) {
+		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
+		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
+		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoId));
+		
+		GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
+		Parcelamento parcelamento = guia.getParcelamento();
+		
+		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
 	}
 	
 }
