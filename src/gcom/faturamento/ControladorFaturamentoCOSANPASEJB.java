@@ -1688,7 +1688,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				}
 
 			}
-		//}
+	}
 
 		return contaTxt;
 	}
