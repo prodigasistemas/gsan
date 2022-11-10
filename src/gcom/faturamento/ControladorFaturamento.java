@@ -15491,40 +15491,47 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 
-	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) throws Exception {
+	public void registrarEntradaParcelamento(Integer idParcelamento,Integer idImovel) throws Exception {
 
 		boolean foiGerado = false;
-		Integer idParcelamento = parcelamento.getId();
 		
 		Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistenteGuiaPagamento(idParcelamento);
 		Boolean boletoInfoExistente = repositorioFaturamento.boletoInfoExistente(idParcelamento);
+		
 		if (fichaExistente == true || boletoInfoExistente == true) {
-			foiGerado = true;
+			throw new ControladorException("Boleto Gerado");
 		}
 		// Para boletos ja gerados antes da modificacao para gravacao na base de dados
 		// , ou seja,
 		// para boletos que foram gerados e nao foram salvos no bd
 
-		if (primeiraVia || !foiGerado) {
-			Imovel imovel = repositorioFaturamento.pesquisarImovelComEnderecoFichaCompensacaoPorId(idImovel);
-			
-			Cliente cliente = retornaClienteResponsavelParcelamentoValido(idImovel);
-			
-			GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(idParcelamento);
-			
-			ArrecadadorContratoConvenio convenio = Fachada.getInstancia().pesquisarParametrosConvenioPorId(ArrecadadorContratoConvenio.PARCELAMENTO);
-			String nossoNumero = obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), 
-					                                                guiaPagamento.getId().toString(),
-																	convenio.getConvenio()).toString();					
-			System.out.println("Banco do Brasil: Registrando Guia do Parcelamento - " + idParcelamento + " |  Imovel - "+ imovel.getId());
-			
-			Registro registroEntradaParcelamentoService = new RegistroEntradaParcelamentoService(guiaPagamento, imovel,cliente, nossoNumero);
-			FichaCompensacaoDTO fichaDeCompensacao = registroEntradaParcelamentoService.salvarFichaDeCompensacao(convenio, repositorioFaturamento);
-			
-			registroEntradaParcelamentoService.registroFichaDeCompensacao(fichaDeCompensacao,SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
-			
-			System.out.println("Banco Do Brasil: Guia do Parcelamento - " + idParcelamento + " | Imovel - " + imovel.getId() + " registrada com sucesso!");
+		Imovel imovel = repositorioFaturamento.pesquisarImovelComEnderecoFichaCompensacaoPorId(idImovel);
+
+		Cliente cliente = retornaClienteResponsavelParcelamentoValido(idImovel);
+
+		GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(idParcelamento);
+
+		ArrecadadorContratoConvenio convenio = Fachada.getInstancia()
+				.pesquisarParametrosConvenioPorId(ArrecadadorContratoConvenio.PARCELAMENTO);
+		String nossoNumero = obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(),
+				guiaPagamento.getId().toString(), convenio.getConvenio()).toString();
+		System.out.println("Banco do Brasil: Registrando Guia do Parcelamento - " + idParcelamento + " |  Imovel - "
+				+ imovel.getId());
+
+		Registro registroEntradaParcelamentoService = new RegistroEntradaParcelamentoService(guiaPagamento, imovel,
+				cliente, nossoNumero);
+		FichaCompensacaoDTO fichaDeCompensacao = registroEntradaParcelamentoService.salvarFichaDeCompensacao(convenio,
+				repositorioFaturamento);
+
+		try {
+			registroEntradaParcelamentoService.registroFichaDeCompensacao(fichaDeCompensacao,
+					SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
+		} catch (Exception e) {
+			throw new ControladorException("Erro ao ACESSAR API DO BB");
 		}
+
+		System.out.println("Banco Do Brasil: Guia do Parcelamento - " + idParcelamento + " | Imovel - " + imovel.getId()
+				+ " registrada com sucesso!");
 	}
 
 	private Cliente retornaClienteResponsavelParcelamentoValido(Integer idImovel) throws ErroRepositorioException, ControladorException {

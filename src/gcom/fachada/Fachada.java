@@ -40621,9 +40621,9 @@ public class Fachada {
 		}
 	}
 	
-	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) throws Exception {
+	public void registrarEntradaParcelamento(Integer idParcelamento, Integer idImovel) throws Exception {
 		try {
-			this.getControladorFaturamento().registrarEntradaParcelamento(parcelamento, primeiraVia, idImovel);
+			this.getControladorFaturamento().registrarEntradaParcelamento(idParcelamento, idImovel);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
