@@ -499,12 +499,26 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 					if (sistemaParametro.getIndicadorGeracaoBoletoBB().shortValue() == ConstantesSistema.SIM
 							.shortValue()) {
 						retorno = actionMapping.findForward("telaSucessoConcluirParcelamento");
-
-						registrarEntradaParcelamento(guiaPagamento.getId());
-						request.setAttribute("boletoParcelamento", guiaPagamento.getId());
-						request.setAttribute("idParcelamento", idParcelamento);
-						boleto = "/gsan/gerarRelatorioBoletoParcelamentoAction.do";
-
+						
+						try {
+							registrarEntradaParcelamento(guiaPagamento.getId());
+							request.setAttribute("boletoParcelamento", guiaPagamento.getId());
+							request.setAttribute("idParcelamento", idParcelamento);
+							boleto = "/gsan/gerarRelatorioBoletoParcelamentoAction.do";
+						} catch (Exception e) {
+							e.printStackTrace();
+							System.out.println("atencao.nao_foi_possivel_registrar_no_banco IMOVEL :" + codigoImovel);
+						} finally {
+							
+							boleto = obterLinkBoletoBB(idParcelamento); 
+							
+							montarPaginaSucesso(request,
+									"Parcelamento de Débitos do Imóvel " + codigoImovel + " efetuado com sucesso.",
+									"Efetuar outro Parcelamento de Débitos",
+									"exibirEfetuarParcelamentoDebitosAction.do?menu=sim", "gerarRelatorioParcelamentoAction.do",
+									"Imprimir Termo", "Imprimir Guia Pagto Entrada", boleto);
+						}
+						
 					} else {
 						boleto = "gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento;
 					}
@@ -545,6 +559,21 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 			}
 		}
 	}
+	
+	public String obterLinkBoletoBB(Integer idParcelamento) {
+		FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
+		filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
+		filtroParcelamento.adicionarCaminhoParaCarregamentoEntidade("cliente");
+
+		Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(
+				Fachada.getInstancia().pesquisar(filtroParcelamento, Parcelamento.class.getName()));
+		// Primeira via
+		String linkBoletoBB = Fachada.getInstancia().montarLinkBB(parcelamento.getImovel().getId(),
+				parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), true);
+
+		return linkBoletoBB;
+	}
+
 
 	public boolean isParcelamentoValido(ConcluirParcelamentoDebitosHelper helper) {
 		boolean isParcelamentoValido = true;
@@ -600,7 +629,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 		return duplicado;
 	}
 
-	private void registrarEntradaParcelamento(Integer guiaPagamentoId) {
+	private void registrarEntradaParcelamento(Integer guiaPagamentoId) throws Exception{
 		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
 		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
 		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoId));
