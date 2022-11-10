@@ -4,6 +4,8 @@ import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
 import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.cobranca.parcelamento.emissaoboleto.EmissaoAPIBB;
+import gcom.cobranca.parcelamento.emissaoboleto.EmissaoECommerceBB;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FiltroGuiaPagamentoItem;
 import gcom.faturamento.bo.ContaSegundaViaBO;
@@ -72,18 +74,18 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		GuiaPagamento guia = this.obterGuiaPagamento(new Integer(ids[0]), fachada);
 		Parcelamento parcelamento = guia.getParcelamento();
 		
+		String boleto = null;
+		
 		if (this.isEntradaParcelamento(guia)) {
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
 			
-			try {
-				registrarEntradaParcelamento(parcelamento, guia.getImovel().getId());
-			} catch (Exception e) {
-				throw new ActionServletException("atencao.nao_foi_possivel_registrar_no_banco", e);
-			} finally {
-				retorno = new ActionForward(obterLinkBoletoBB(guia.getId()),true);
-			}			
-			
-			
+			boleto = new EmissaoAPIBB
+					(new EmissaoECommerceBB(null))
+					.emitirBoleto(guia.getParcelamento().getId(), guia.getImovel().getId(), Fachada.getInstancia());
+
+			if (!boleto.contains("gerarRelatorioBoletoParcelamentoAction")) {
+				retorno = new ActionForward(boleto, true);
+			}
 			
 		} else {
 			
@@ -104,10 +106,6 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 		}
 
 		return retorno;
-	}
-	
-	private void registrarEntradaParcelamento(Parcelamento parcelamento, Integer idImovel) throws Exception{
-		  getFachada().registrarEntradaParcelamento(parcelamento, false, idImovel);
 	}
 	
 	@SuppressWarnings("unchecked")
