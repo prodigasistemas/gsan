@@ -418,6 +418,16 @@ function validarPermiteNegativacao() {
 						</td>
 					</logic:notPresent>
 				</tr>
+					<td><strong>Recusa de subsídio?</strong></td>
+					<td>
+						<html:radio property="indicadorRecusaSubsidio"
+							value="<%=ConstantesSistema.SIM.toString()%>" tabindex="13" />
+						<strong>Sim</strong> <html:radio property="indicadorRecusaSubsidio"
+							value="<%=ConstantesSistema.NAO.toString()%>" tabindex="13" />
+						<strong>Não</strong>
+					</td>
+				
+				<tr>
 				
 				<tr>
 					<td><strong></strong></td>

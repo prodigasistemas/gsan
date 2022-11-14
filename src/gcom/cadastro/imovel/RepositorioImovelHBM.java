@@ -187,7 +187,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * UC-0355] - Efetuar Corte de Ligaçã de Àgua [SB001] Atualizar Imóvel
+	 * UC-0355] - Efetuar Corte de Ligaï¿½ï¿½ de ï¿½gua [SB001] Atualizar Imï¿½vel
 	 * 
 	 * Campos LEST_ID e IMOV _ TMULTIMAALTERACAO
 	 * 
@@ -195,11 +195,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @param imovel
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
 	 * @exception ErroRepositorioExceptions
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 * 
 	 * 
@@ -267,11 +267,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @param imovel
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
 	 * @exception ErroRepositorioExceptions
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 * 
 	 * 
@@ -377,11 +377,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @param imovel
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 * 
 	 * 
@@ -463,7 +463,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -491,13 +491,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			session.flush();
 
-			// restrições no sistema
+			// restriï¿½ï¿½es no sistema
 
 		} catch (JDBCException e) {
 
 			// e.printStackTrace();
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new RemocaoInvalidaException(e);
 
@@ -507,13 +507,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			e.printStackTrace();
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate: ");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -522,25 +522,25 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 
 	/**
-	 * < <Descrição do método>>
+	 * < <Descriï¿½ï¿½o do mï¿½todo>>
 	 * 
 	 * 
 	 * 
 	 * @param objeto
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
 	 * @param condicional
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
 	 * @param id
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 */
 
@@ -548,7 +548,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -572,13 +572,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			session.flush();
 
-			// restrições no sistema
+			// restriï¿½ï¿½es no sistema
 
 		} catch (JDBCException e) {
 
 			// e.printStackTrace();
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new RemocaoInvalidaException(e);
 
@@ -588,13 +588,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			e.printStackTrace();
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate: ");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -604,7 +604,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Pesquisa uma coleção de imóveis com uma query especifica
+	 * Pesquisa uma coleï¿½ï¿½o de imï¿½veis com uma query especifica
 	 * 
 	 * 
 	 * 
@@ -622,13 +622,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @param lote
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
 	 * @return Description of the Return Value
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 */
 
@@ -638,7 +638,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	int indicadorExclusao) throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
@@ -646,13 +646,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
 		try {
 
-			// pesquisa a coleção de atividades e atribui a variável "retorno"
+			// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 
 			consulta = "SELECT imovel.id, imovel.localidade, "
 
@@ -732,19 +732,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -752,7 +752,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Atualiza apenas os dados (Localidade, Setor, Quadra e lote) do imóvel
+	 * Atualiza apenas os dados (Localidade, Setor, Quadra e lote) do imï¿½vel
 	 * 
 	 * 
 	 * 
@@ -762,7 +762,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 */
 
@@ -774,7 +774,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String update;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -782,7 +782,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			// Atualiza apenas os dados (Localidade, Setor, Quadra e lote) do
 
-			// imóvel
+			// imï¿½vel
 
 			update = "update gcom.cadastro.imovel.Imovel set "
 
@@ -814,13 +814,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -829,17 +829,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 
 	/**
-	 * < <Descrição do método>>
+	 * < <Descriï¿½ï¿½o do mï¿½todo>>
 	 * 
 	 * 
 	 * 
 	 * @param imovelSubcategoria
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 */
 
@@ -849,7 +849,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -861,13 +861,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -876,19 +876,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 
 	/**
-	 * < <Descrição do método>>
+	 * < <Descriï¿½ï¿½o do mï¿½todo>>
 	 * 
 	 * 
 	 * 
 	 * @param imovel
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
-	 * @return Descrição do retorno
+	 * @return Descriï¿½ï¿½o do retorno
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 */
 
@@ -921,11 +921,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Retorna o cep do imóvel
+	 * Retorna o cep do imï¿½vel
 	 * 
 	 * @param imovel
 	 * 
-	 * @return Descrição do retorno
+	 * @return Descriï¿½ï¿½o do retorno
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
@@ -953,13 +953,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -1080,13 +1080,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -1098,7 +1098,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Pesquisa uma coleção de imóveis com uma query especifica
+	 * Pesquisa uma coleï¿½ï¿½o de imï¿½veis com uma query especifica
 	 * 
 	 * 
 	 * 
@@ -1116,13 +1116,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @param lote
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
 	 * @return Description of the Return Value
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 */
 
@@ -1132,7 +1132,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	Short lote) throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
@@ -1140,13 +1140,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
 		try {
 
-			// pesquisa a coleção de atividades e atribui a variável "retorno"
+			// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 
 			consulta = "select new gcom.cadastro.imovel.Imovel(imovel.id, imovel.localidade,"
 
@@ -1211,38 +1211,38 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
 	}
 
 	/**
-	 * < <Descrição do método>>
+	 * < <Descriï¿½ï¿½o do mï¿½todo>>
 	 * 
 	 * 
 	 * 
 	 * @param imovel
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
-	 * @return Descrição do retorno
+	 * @return Descriï¿½ï¿½o do retorno
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 */
 
@@ -1318,13 +1318,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -1482,7 +1482,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 						+ "desp.descricaoAbreviada," // 37
 
-						// ---------Campos de poço tipo
+						// ---------Campos de poï¿½o tipo
 
 						+ " pt.descricao," // 38
 
@@ -1658,7 +1658,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 						+ " hih.indicadorExistenciaCavalete" // 9
 
-						// --------Continuação select
+						// --------Continuaï¿½ï¿½o select
 
 						+ " from LigacaoAgua la"
 
@@ -1796,13 +1796,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -2378,13 +2378,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -2638,13 +2638,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			} catch (HibernateException e) {
 
-				// levanta a exceção para a próxima camada
+				// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 				throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 			} finally {
 
-				// fecha a sessão
+				// fecha a sessï¿½o
 
 				HibernateUtil.closeSession(session);
 
@@ -2790,7 +2790,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 					imovelRelatorioHelper
 
-					.setIndicadorImovelCondominioDescricao("Não");
+					.setIndicadorImovelCondominioDescricao("Nï¿½o");
 
 				}
 
@@ -3212,7 +3212,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 				imovelRelatorioHelper
 
-				.setIndicadorExistenciaCavaletePocoDescricao("Não");
+				.setIndicadorExistenciaCavaletePocoDescricao("Nï¿½o");
 
 			}
 
@@ -3400,7 +3400,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 				imovelRelatorioHelper
 
-				.setIndicadorExistenciaCavaleteAguaDescricao("Não");
+				.setIndicadorExistenciaCavaleteAguaDescricao("Nï¿½o");
 
 			}
 
@@ -3819,11 +3819,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * [UC0177] Informar Situacao Especial de Cobrança
+	 * [UC0177] Informar Situacao Especial de Cobranï¿½a
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @created 07/03/2006
 	 * 
@@ -3841,7 +3841,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta = null;
 
-		// Escolha de que tipo de consulta será
+		// Escolha de que tipo de consulta serï¿½
 
 		if (valor.equals("COM")
 				&& (situacaoEspecialCobrancaHelper.getIdCategoria() == null 
@@ -4232,13 +4232,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -4272,13 +4272,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -4314,13 +4314,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -4331,12 +4331,12 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 
 	/**
-	 * [UC0457] - Encerrar Ordem de Serviço.
-	 * [SB0009] - Verificar Situação Especial de Faturamento.
+	 * [UC0457] - Encerrar Ordem de Serviï¿½o.
+	 * [SB0009] - Verificar Situaï¿½ï¿½o Especial de Faturamento.
 	 * 
-	 * Verifica se um imóvel está em situação especial de faturamento
+	 * Verifica se um imï¿½vel estï¿½ em situaï¿½ï¿½o especial de faturamento
 	 * para um dado imovel (idImovel). 
-	 * A situação especial de faturamento tem o ftst_id = 2
+	 * A situaï¿½ï¿½o especial de faturamento tem o ftst_id = 2
 	 * 
 	 * @param idImovel
 	 * @return Imovel
@@ -5075,7 +5075,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta = null;
 
-		// Escolha de que tipo de consulta será
+		// Escolha de que tipo de consulta serï¿½
 
 		if (helper != null
 
@@ -5158,11 +5158,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [UC0177] Informar Situacao Especial de Cobrança
+	 * [UC0177] Informar Situacao Especial de Cobranï¿½a
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @date 18/03/2006
 	 * 
@@ -5184,7 +5184,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta = null;
 
-		// Escolha de que tipo de consulta será
+		// Escolha de que tipo de consulta serï¿½
 
 		if (situacaoEspecialCobrancaHelper != null
 
@@ -5330,13 +5330,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -5346,7 +5346,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Atualiza os ids do faturamento situação tipo da tabela imóvel com o id do
+	 * Atualiza os ids do faturamento situaï¿½ï¿½o tipo da tabela imï¿½vel com o id do
 	 * 
 	 * faturamento escolhido pelo usuario
 	 * 
@@ -5356,7 +5356,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @date 18/03/2006
 	 * 
@@ -5417,17 +5417,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Atualiza o id da cobrança situação tipo da tabela imóvel com o id da
+	 * Atualiza o id da cobranï¿½a situaï¿½ï¿½o tipo da tabela imï¿½vel com o id da
 	 * 
-	 * situação escolhido pelo usuario
-	 * 
-	 * 
-	 * 
-	 * [UC0177] Informar Situacao Especial de Cobrança
+	 * situaï¿½ï¿½o escolhido pelo usuario
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * [UC0177] Informar Situacao Especial de Cobranï¿½a
+	 * 
+	 * 
+	 * 
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @date 18/03/2006
 	 * 
@@ -5467,13 +5467,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -5483,7 +5483,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Seta para null o id da cobrança situação tipo da tabela imóvel
+	 * Seta para null o id da cobranï¿½a situaï¿½ï¿½o tipo da tabela imï¿½vel
 	 * 
 	 * 
 	 * 
@@ -5491,7 +5491,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @date 18/03/2006
 	 * 
@@ -5528,15 +5528,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Seta para null o id da cobrança situação tipo da tabela imóvel
+	 * Seta para null o id da cobranï¿½a situaï¿½ï¿½o tipo da tabela imï¿½vel
 	 * 
 	 * 
 	 * 
-	 * [UC0177] Informar Situacao Especial de Cobrança
+	 * [UC0177] Informar Situacao Especial de Cobranï¿½a
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @date 18/03/2006
 	 * 
@@ -5574,13 +5574,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -5612,13 +5612,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -5654,13 +5654,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -5672,13 +5672,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Obtém o indicador de existência de hidrômetro para o imóvel, caso exista
+	 * Obtï¿½m o indicador de existï¿½ncia de hidrï¿½metro para o imï¿½vel, caso exista
 	 * 
-	 * retorna 1(um) indicando SIM caso contrário retorna 2(dois) indicando NÃO
+	 * retorna 1(um) indicando SIM caso contrï¿½rio retorna 2(dois) indicando Nï¿½O
 	 * 
 	 * 
 	 * 
-	 * [UC0307] Obter Indicador de Existência de Hidrômetro no Imóvel
+	 * [UC0307] Obter Indicador de Existï¿½ncia de Hidrï¿½metro no Imï¿½vel
 	 * 
 	 * 
 	 * 
@@ -5754,13 +5754,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -5774,11 +5774,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [UC0164]Gerar Relatório de Imóvel Outros Critérios
+	 * [UC0164]Gerar Relatï¿½rio de Imï¿½vel Outros Critï¿½rios
 	 * 
 	 * 
 	 * 
-	 * Monta a Condição do where do Filtrar Imoveis Outros Criterios
+	 * Monta a Condiï¿½ï¿½o do where do Filtrar Imoveis Outros Criterios
 	 * 
 	 * 
 	 * 
@@ -5851,7 +5851,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		String consulta = "";
 
 		/*
-		 * ## CONDIÇÕES ##
+		 * ## CONDIï¿½ï¿½ES ##
 		 * 
 		 */
 
@@ -6183,7 +6183,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// indicador medição
+		// indicador mediï¿½ï¿½o
 
 		if (indicadorMedicao != null && indicadorMedicao.equals("comMedicao")) {
 
@@ -6281,7 +6281,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		// }
 
-		// situação da ligação de agua
+		// situaï¿½ï¿½o da ligaï¿½ï¿½o de agua
 
 		if (idSituacaoLigacaoAgua != null
 
@@ -6299,7 +6299,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// situação ligação de esgoto
+		// situaï¿½ï¿½o ligaï¿½ï¿½o de esgoto
 
 		if (idSituacaoLigacaoEsgoto != null
 
@@ -6333,7 +6333,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// poço tipo
+		// poï¿½o tipo
 
 		if (idPocoTipo != null
 
@@ -6709,7 +6709,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [Uc0164]Gerar Relatório de Imóvel Outros Critérios
+	 * [Uc0164]Gerar Relatï¿½rio de Imï¿½vel Outros Critï¿½rios
 	 * 
 	 * 
 	 * 
@@ -6895,11 +6895,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 
 		/*
-		 * Alterado por Sávio Luiz Data: 14/09/2007 (Analista:Rosana) Inserir os
-		 * parametros de código de rota e sequencial de rota
+		 * Alterado por Sï¿½vio Luiz Data: 14/09/2007 (Analista:Rosana) Inserir os
+		 * parametros de cï¿½digo de rota e sequencial de rota
 		 */
 
-		// código de rota inicial e final
+		// cï¿½digo de rota inicial e final
 		if ((cdRotaInicial != null && !cdRotaInicial.equals("") && !cdRotaInicial
 
 		.trim().equalsIgnoreCase(
@@ -7216,7 +7216,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// situação ligação de esgoto
+		// situaï¿½ï¿½o ligaï¿½ï¿½o de esgoto
 
 		if (idSituacaoLigacaoEsgoto != null
 
@@ -7252,7 +7252,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// poço tipo
+		// poï¿½o tipo
 
 		if (idPocoTipo != null
 
@@ -7688,7 +7688,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 		
-		// poço tipo list 
+		// poï¿½o tipo list 
 		
 		if (pocoTipoListIds != null &&
 
@@ -7903,7 +7903,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					null, null , null);
 
 			/*
-			 * # COLOCANDO O VALOR NAS CONDIÇÕES#
+			 * # COLOCANDO O VALOR NAS CONDIï¿½ï¿½ES#
 			 */
 
 			SQLQuery query = session.createSQLQuery(consulta.substring(0, (consulta.length() - 5)));
@@ -7982,11 +7982,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [UC0164]Gerar Relatório de Imóvel Outros Critérios
+	 * [UC0164]Gerar Relatï¿½rio de Imï¿½vel Outros Critï¿½rios
 	 * 
 	 * 
 	 * 
-	 * Monta a Condição do where do Filtrar Imoveis Outros Criterios
+	 * Monta a Condiï¿½ï¿½o do where do Filtrar Imoveis Outros Criterios
 	 * 
 	 * 
 	 * 
@@ -8153,11 +8153,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 
 		/*
-		 * Alterado por Sávio Luiz Data: 14/09/2007 (Analista:Rosana) Inserir os
-		 * parametros de código de rota e sequencial de rota
+		 * Alterado por Sï¿½vio Luiz Data: 14/09/2007 (Analista:Rosana) Inserir os
+		 * parametros de cï¿½digo de rota e sequencial de rota
 		 */
 
-		// código de rota inicial e final
+		// cï¿½digo de rota inicial e final
 		if (((cdRotaInicial != null && !cdRotaInicial.equals("") 
 				&& !cdRotaInicial.trim()
 					.equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) 
@@ -8269,7 +8269,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// indicador medição
+		// indicador mediï¿½ï¿½o
 		if (indicadorMedicao != null && indicadorMedicao.equals("comMedicao")) {
 			// tipo medicao
 			if (idTipoMedicao != null && idTipoMedicao.equals(MedicaoTipo.LIGACAO_AGUA.toString())) {
@@ -8320,7 +8320,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// situação da ligação de agua
+		// situaï¿½ï¿½o da ligaï¿½ï¿½o de agua
 		if (idSituacaoLigacaoAgua != null && !idSituacaoLigacaoAgua.equals("")
 				&& !idSituacaoLigacaoAgua.trim().equalsIgnoreCase(
 						new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
@@ -8329,7 +8329,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// situação ligação de esgoto
+		// situaï¿½ï¿½o ligaï¿½ï¿½o de esgoto
 		if (idSituacaoLigacaoEsgoto != null	&& !idSituacaoLigacaoEsgoto.equals("")
 				&& !idSituacaoLigacaoEsgoto.trim().equalsIgnoreCase(
 							new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
@@ -8346,7 +8346,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// poço tipo
+		// poï¿½o tipo
 		if (idPocoTipo != null && !idPocoTipo.equals("")
 				&& !idPocoTipo.trim().equalsIgnoreCase(
 						new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
@@ -8590,7 +8590,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 		
-		// poço tipo lista
+		// poï¿½o tipo lista
 		if (pocoTipoListIds != null && ((
 				(pocoTipoListIds[0].equals("-1") && pocoTipoListIds.length > 1)) || 
 				( !pocoTipoListIds[0].equals("-1")))){
@@ -8628,11 +8628,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * Gerar Relatório de Imóvel Outros Critérios
+	 * Gerar Relatï¿½rio de Imï¿½vel Outros Critï¿½rios
 	 * 
 	 * 
 	 * 
-	 * @author Rafael Corrêa,Rafael Santos
+	 * @author Rafael Corrï¿½a,Rafael Santos
 	 * 
 	 * @date 24/07/2006,01/08/2006
 	 * 
@@ -8724,7 +8724,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					+ "ligacao_esgoto.lesg_pcesgoto, "
 					+ "ligacao_esgoto.lesg_dtligacao, "
 					+ "ligacao_agua.lagu_dtligacaoagua, "
-					// Informações do Cliente Usuasrio e Resposanvel
+					// Informaï¿½ï¿½es do Cliente Usuasrio e Resposanvel
 					+ "cliente_usuario.clie_id as idClienteUsuario, "
 					+ "cliente_usuario.clie_nmcliente as nomeClienteUsuario, "
 					+ "cliente_responsavel.clie_id as idClienteResponsavel, "
@@ -9122,13 +9122,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -9141,13 +9141,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
 	 * 
-	 * necessários para a criação da inscrição para exibição.
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o para exibiï¿½ï¿½o.
 	 * 
 	 * 
 	 * 
-	 * acima no controlador será montada a inscrição
+	 * acima no controlador serï¿½ montada a inscriï¿½ï¿½o
 	 * 
 	 */
 
@@ -9203,13 +9203,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -9220,11 +9220,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 
 	/**
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
-	 * necessários para a criação da inscrição para exibição, independente do
-	 * imóvel ter sido excluído ou não.
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o para exibiï¿½ï¿½o, independente do
+	 * imï¿½vel ter sido excluï¿½do ou nï¿½o.
 	 * 
-	 * acima no controlador será montada a inscrição
+	 * acima no controlador serï¿½ montada a inscriï¿½ï¿½o
 	 */
 	public Object[] pesquisarInscricaoImovelExcluidoOuNao(Integer idImovel)
 		throws ErroRepositorioException {
@@ -9258,10 +9258,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			retorno = (Object[]) Util.retonarObjetoDeColecao(colecaoConsulta);
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -9271,13 +9271,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	/**
 	 * 
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
 	 * 
-	 * necessários para a criação da inscrição para exibição.
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o para exibiï¿½ï¿½o.
 	 * 
 	 * 
 	 * 
-	 * acima no controlador será montada a inscrição
+	 * acima no controlador serï¿½ montada a inscriï¿½ï¿½o
 	 * 
 	 */
 
@@ -9323,13 +9323,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -9343,7 +9343,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * Gerar Relatório de Dados de Economias do Imóvel
+	 * Gerar Relatï¿½rio de Dados de Economias do Imï¿½vel
 	 * 
 	 * 
 	 * 
@@ -9672,7 +9672,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 							null, null, null, null, null, null , null);
 
 			/*
-			 * # COLOCANDO O VALOR NAS CONDIÇÕES#
+			 * # COLOCANDO O VALOR NAS CONDIï¿½ï¿½ES#
 			 * 
 			 */
 
@@ -9746,13 +9746,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -9830,13 +9830,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -9936,13 +9936,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -10036,13 +10036,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -10056,13 +10056,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * Esse método é usado para fzazer uma pesquisa na tabela imóvel e confirmar
+	 * Esse mï¿½todo ï¿½ usado para fzazer uma pesquisa na tabela imï¿½vel e confirmar
 	 * 
-	 * se o id passado é de um imóvel excluído(idExclusao)
+	 * se o id passado ï¿½ de um imï¿½vel excluï¿½do(idExclusao)
 	 * 
 	 * 
 	 * 
-	 * Flávio Cordeiro
+	 * Flï¿½vio Cordeiro
 	 * 
 	 */
 
@@ -10100,13 +10100,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -10417,13 +10417,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Permite pesquisar entidade beneficente [UC0389] Inserir Autorização para
+	 * Permite pesquisar entidade beneficente [UC0389] Inserir Autorizaï¿½ï¿½o para
 	 * 
-	 * Doação Mensal
+	 * Doaï¿½ï¿½o Mensal
 	 * 
 	 * 
 	 * 
-	 * @author César Araújo
+	 * @author Cï¿½sar Araï¿½jo
 	 * 
 	 * @date 30/08/2006
 	 * 
@@ -10431,7 +10431,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * Filtro com os valores para pesquisa
 	 * 
-	 * @return Collection<EntidadeBeneficente> - Coleção de entidade(s)
+	 * @return Collection<EntidadeBeneficente> - Coleï¿½ï¿½o de entidade(s)
 	 * 
 	 * beneficente(s)
 	 * 
@@ -10445,20 +10445,20 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		/** * Declara varáveis locais ** */
+		/** * Declara varï¿½veis locais ** */
 
 		Collection retorno = null;
 
 		Session session = null;
 
-		/** * Obtém a instância da sessão ** */
+		/** * Obtï¿½m a instï¿½ncia da sessï¿½o ** */
 
 		session = HibernateUtil.getSession();
 
 		try {
 
 			/**
-			 * * executa o método para pesquisa de pesquisa de Entidade
+			 * * executa o mï¿½todo para pesquisa de pesquisa de Entidade
 			 * 
 			 * Beneficente **
 			 * 
@@ -10486,13 +10486,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Permite pesquisar imóvel doação [UC0389] Inserir Autorização para Doação
+	 * Permite pesquisar imï¿½vel doaï¿½ï¿½o [UC0389] Inserir Autorizaï¿½ï¿½o para Doaï¿½ï¿½o
 	 * 
 	 * Mensal
 	 * 
 	 * 
 	 * 
-	 * @author César Araújo
+	 * @author Cï¿½sar Araï¿½jo
 	 * 
 	 * @date 30/08/2006
 	 * 
@@ -10500,7 +10500,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * Filtro com os valores para pesquisa
 	 * 
-	 * @return Collection<ImovelDoacao> - Coleção de imóvei(s) doação
+	 * @return Collection<ImovelDoacao> - Coleï¿½ï¿½o de imï¿½vei(s) doaï¿½ï¿½o
 	 * 
 	 * @throws ErroRepositorioException
 	 * 
@@ -10512,19 +10512,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		/** * Declara variáveis locais ** */
+		/** * Declara variï¿½veis locais ** */
 
 		Collection<ImovelDoacao> retorno = null;
 
 		Session session = null;
 
-		/** * Obtém a sessão ** */
+		/** * Obtï¿½m a sessï¿½o ** */
 
 		session = HibernateUtil.getSession();
 
 		try {
 
-			/** * executa o método para pesquisa de pesquisa de Imovel Doação ** */
+			/** * executa o mï¿½todo para pesquisa de pesquisa de Imovel Doaï¿½ï¿½o ** */
 
 			retorno = new ArrayList(
 
@@ -10558,21 +10558,21 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Permite atualizar as informações referentes ao imóvel doação [UC0390]
+	 * Permite atualizar as informaï¿½ï¿½es referentes ao imï¿½vel doaï¿½ï¿½o [UC0390]
 	 * 
-	 * Manter Autorização para Doação Mensal
+	 * Manter Autorizaï¿½ï¿½o para Doaï¿½ï¿½o Mensal
 	 * 
 	 * 
 	 * 
-	 * @author César Araújo
+	 * @author Cï¿½sar Araï¿½jo
 	 * 
 	 * @date 30/08/2006
 	 * 
 	 * @param imovelDoacao -
 	 * 
-	 * instância de imóvel doação que servirá de base para a
+	 * instï¿½ncia de imï¿½vel doaï¿½ï¿½o que servirï¿½ de base para a
 	 * 
-	 * atualição
+	 * atualiï¿½ï¿½o
 	 * 
 	 * @throws ErroRepositorioException
 	 * 
@@ -10582,17 +10582,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		/** * Declara a variável local ** */
+		/** * Declara a variï¿½vel local ** */
 
 		Session session = null;
 
-		/** * Obtém a sessão ** */
+		/** * Obtï¿½m a sessï¿½o ** */
 
 		session = HibernateUtil.getSession();
 
 		try {
 
-			/** * Atualiza as informações do imóvel doação ** */
+			/** * Atualiza as informaï¿½ï¿½es do imï¿½vel doaï¿½ï¿½o ** */
 
 			session.update(imovelDoacao);
 
@@ -10614,9 +10614,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Pesquisa um imóvel a partir do seu id.Retorna os dados que compõem a
+	 * Pesquisa um imï¿½vel a partir do seu id.Retorna os dados que compï¿½em a
 	 * 
-	 * inscrição e o endereço do mesmo
+	 * inscriï¿½ï¿½o e o endereï¿½o do mesmo
 	 * 
 	 * 
 	 * 
@@ -10886,13 +10886,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -10904,7 +10904,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Consutlar os Dados Cadastrais do Imovel [UC0472] Consultar Imóvel
+	 * Consutlar os Dados Cadastrais do Imovel [UC0472] Consultar Imï¿½vel
 	 * 
 	 * 
 	 * 
@@ -11147,13 +11147,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -11164,7 +11164,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 
 	/**
-	 * Pesquisa a coleção de clientes do imovel [UC0472] Consultar Imovel
+	 * Pesquisa a coleï¿½ï¿½o de clientes do imovel [UC0472] Consultar Imovel
 	 * 
 	 * @param filtroClienteImovel
 	 * parametros para a consulta
@@ -11174,15 +11174,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 */
 	public Collection pesquisarClientesImovel(Integer idImovel) throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 		Collection retorno = null;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 		Session session = HibernateUtil.getSession();
 
 		String consulta = null;
 
-		// pesquisa a coleção de atividades e atribui a variável "retorno"
+		// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 		try {
 
 			consulta = "SELECT cliente.id,"
@@ -11223,20 +11223,20 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 		return retorno;
 	}
 	
 	
 	/**
-	 * Pesquisa a coleção de clientes do imovel [UC0472] Consultar Imovel
+	 * Pesquisa a coleï¿½ï¿½o de clientes do imovel [UC0472] Consultar Imovel
 	 * 
 	 * @param filtroClienteImovel
 	 * parametros para a consulta
@@ -11246,15 +11246,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 */
 	public Collection pesquisarClientesImovelDataMax(Integer idImovel) throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 		Collection retorno = null;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 		Session session = HibernateUtil.getSession();
 
 		String consulta = null;
 
-		// pesquisa a coleção de atividades e atribui a variável "retorno"
+		// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 		try {
 
 			consulta = "SELECT cliente.id,"
@@ -11296,19 +11296,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 		return retorno;
 	}
 	
 	/**
-	 * Pesquisa a coleção de clientes do imovel mesmo que o imóvel já tenha sido excluído [UC0472] Consultar Imovel
+	 * Pesquisa a coleï¿½ï¿½o de clientes do imovel mesmo que o imï¿½vel jï¿½ tenha sido excluï¿½do [UC0472] Consultar Imovel
 	 * 
 	 * @param filtroClienteImovel
 	 * parametros para a consulta
@@ -11318,15 +11318,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 */
 	public Collection pesquisarClientesImovelExcluidoOuNao(Integer idImovel) throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 		Collection retorno = null;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 		Session session = HibernateUtil.getSession();
 
 		String consulta = null;
 
-		// pesquisa a coleção de atividades e atribui a variável "retorno"
+		// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 		try {
 
 			consulta = "SELECT cliente.id,"
@@ -11366,20 +11366,20 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 		return retorno;
 	}
 
 	/**
 	 * 
-	 * Pesquisa a coleção de categorias do imovel [UC0472] Consultar Imovel
+	 * Pesquisa a coleï¿½ï¿½o de categorias do imovel [UC0472] Consultar Imovel
 	 * 
 	 * 
 	 * 
@@ -11405,17 +11405,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
 		String consulta = null;
 
-		// pesquisa a coleção de atividades e atribui a variável "retorno"
+		// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 
 		try {
 
@@ -11455,19 +11455,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -11487,7 +11487,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @param idImovel
 	 * 
-	 * @return Perfil do Imóvel
+	 * @return Perfil do Imï¿½vel
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
@@ -11499,7 +11499,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		ImovelPerfil retorno = null;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -11519,19 +11519,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna o perfil do imóvel
+		// retorna o perfil do imï¿½vel
 
 		return retorno;
 
@@ -11541,7 +11541,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * Consultar os Dados Complementares do Imovel 
 	 * 
-	 * [UC0473] Consultar Imóvel
+	 * [UC0473] Consultar Imï¿½vel
 	 * 
 	 * @author Rafael Santos
 	 * @date 11/09/2006
@@ -11597,7 +11597,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Pesquisa a coleção de vencimento alternativos do imovel [UC0473]
+	 * Pesquisa a coleï¿½ï¿½o de vencimento alternativos do imovel [UC0473]
 	 * 
 	 * Consultar Imovel Dados Complementares
 	 * 
@@ -11619,17 +11619,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
 		String consulta = null;
 
-		// pesquisa a coleção de atividades e atribui a variável "retorno"
+		// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 
 		try {
 
@@ -11651,19 +11651,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -11671,7 +11671,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Pesquisa a coleção de Debitos Automaticos do imovel [UC0473] Consultar
+	 * Pesquisa a coleï¿½ï¿½o de Debitos Automaticos do imovel [UC0473] Consultar
 	 * 
 	 * Imovel Dados Complementares
 	 * 
@@ -11693,17 +11693,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
 		String consulta = null;
 
-		// pesquisa a coleção de atividades e atribui a variável "retorno"
+		// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 
 		try {
 
@@ -11735,19 +11735,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -11755,7 +11755,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Pesquisa a coleção de Faturamento Situação Historico do Imovel [UC0473]
+	 * Pesquisa a coleï¿½ï¿½o de Faturamento Situaï¿½ï¿½o Historico do Imovel [UC0473]
 	 * 
 	 * Consultar Imovel Dados Complementares
 	 * 
@@ -11777,17 +11777,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
 		String consulta = null;
 
-		// pesquisa a coleção de atividades e atribui a variável "retorno"
+		// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 
 		try {
 
@@ -11862,19 +11862,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -11882,7 +11882,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Pesquisa a coleção de cobranças Situação Historico do Imovel [UC0473]
+	 * Pesquisa a coleï¿½ï¿½o de cobranï¿½as Situaï¿½ï¿½o Historico do Imovel [UC0473]
 	 * 
 	 * Consultar Imovel Dados Complementares
 	 * 
@@ -11904,17 +11904,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
 		String consulta = null;
 
-		// pesquisa a coleção de atividades e atribui a variável "retorno"
+		// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 
 		try {
 
@@ -11964,19 +11964,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -11984,9 +11984,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Consutlar os Dados de Analise da Medição e Consumo do Imovel [UC0473]
+	 * Consutlar os Dados de Analise da Mediï¿½ï¿½o e Consumo do Imovel [UC0473]
 	 * 
-	 * Consultar Imóvel
+	 * Consultar Imï¿½vel
 	 * 
 	 * 
 	 * 
@@ -12085,13 +12085,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -12179,13 +12179,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			// } catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			// throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -12195,7 +12195,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Consutlar os Dados do Historico de Faturamento [UC0473] Consultar Imóvel
+	 * Consutlar os Dados do Historico de Faturamento [UC0473] Consultar Imï¿½vel
 	 * 
 	 * 
 	 * 
@@ -12259,13 +12259,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -12277,11 +12277,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Consutlar o cliente usuário do Imovel [UC0473] Consultar Imóvel
+	 * Consutlar o cliente usuï¿½rio do Imovel [UC0473] Consultar Imï¿½vel
 	 * 
 	 * 
 	 * 
-	 * @author Bruno Barros, Ivan Sérgio
+	 * @author Bruno Barros, Ivan Sï¿½rgio
 	 * 
 	 * @date 27/04/2007, 21/11/2007
 	 * 
@@ -12323,13 +12323,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -12341,7 +12341,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Consutlar o cliente usuário do Imovel [UC0473] Consultar Imóvel
+	 * Consutlar o cliente usuï¿½rio do Imovel [UC0473] Consultar Imï¿½vel
 	 * 
 	 * 
 	 * 
@@ -12396,7 +12396,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		return retorno;
 	}
 
-	// Alteração para não carregar contas na situação ERRO_PROCESSAMENTO
+	// Alteraï¿½ï¿½o para nï¿½o carregar contas na situaï¿½ï¿½o ERRO_PROCESSAMENTO
 	public Collection consultarContasImovel(Integer idImovel)
 
 	throws ErroRepositorioException {
@@ -12445,13 +12445,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -12463,7 +12463,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Consutlar as contas Historicos do Imovel [UC0473] Consultar Imóvel
+	 * Consutlar as contas Historicos do Imovel [UC0473] Consultar Imï¿½vel
 	 * 
 	 * 
 	 * 
@@ -12533,13 +12533,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -12551,7 +12551,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Consultar os dados de parcelamentos do Imovel [UC0473] Consultar Imóvel
+	 * Consultar os dados de parcelamentos do Imovel [UC0473] Consultar Imï¿½vel
 	 * 
 	 * 
 	 * 
@@ -12609,13 +12609,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -12679,7 +12679,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			e.printStackTrace();
 			
@@ -12687,7 +12687,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -12698,9 +12698,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UCXXXX] Consultar Imóvel
+	 * [UCXXXX] Consultar Imï¿½vel
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 22/05/2009
 	 * 
 	 * @param idImovel
@@ -12731,10 +12731,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			.setMaxResults(1).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -12745,7 +12745,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * Atualiza apenas os dados (numeroParcelamento,
 	 * 
-	 * numeroParcelamentoConsecutivo, numeroReparcelamentoConsecutivo) do imóvel
+	 * numeroParcelamentoConsecutivo, numeroReparcelamentoConsecutivo) do imï¿½vel
 	 * 
 	 * 
 	 * 
@@ -12761,7 +12761,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 */
 
@@ -12777,7 +12777,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String update;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -12809,13 +12809,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -12825,13 +12825,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Permite Pesquisar as categorias do Imóvel [UC0394] Gerar Débitos a Cobrar
+	 * Permite Pesquisar as categorias do Imï¿½vel [UC0394] Gerar Dï¿½bitos a Cobrar
 	 * 
-	 * de Doações
+	 * de Doaï¿½ï¿½es
 	 * 
 	 * 
 	 * 
-	 * @author César Araújo
+	 * @author Cï¿½sar Araï¿½jo
 	 * 
 	 * @date 10/09/2006
 	 * 
@@ -12839,7 +12839,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * imovel - objeto imovel
 	 * 
-	 * @return Collection<Categoria> - Coleção de categorias
+	 * @return Collection<Categoria> - Coleï¿½ï¿½o de categorias
 	 * 
 	 * @throws ErroRepositorioException
 	 * 
@@ -12849,17 +12849,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
 		String consulta = null;
 
-		// pesquisa a coleção de categorias e atribui a variável "retorno"
+		// pesquisa a coleï¿½ï¿½o de categorias e atribui a variï¿½vel "retorno"
 
 		try {
 
@@ -12887,19 +12887,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -12909,9 +12909,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [UC0488] - Informar Retorno Ordem de Fiscalização [SB0002] Atualizar
+	 * [UC0488] - Informar Retorno Ordem de Fiscalizaï¿½ï¿½o [SB0002] Atualizar
 	 * 
-	 * Imóvel/Ligação de Água
+	 * Imï¿½vel/Ligaï¿½ï¿½o de ï¿½gua
 	 * 
 	 * 
 	 * 
@@ -12919,7 +12919,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @date 14/11/2006
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @param imovel
 	 * 
@@ -12985,9 +12985,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [UC0488] - Informar Retorno Ordem de Fiscalização [SB0002] Atualizar
+	 * [UC0488] - Informar Retorno Ordem de Fiscalizaï¿½ï¿½o [SB0002] Atualizar
 	 * 
-	 * Imóvel/Ligação de Água
+	 * Imï¿½vel/Ligaï¿½ï¿½o de ï¿½gua
 	 * 
 	 * 
 	 * 
@@ -12995,7 +12995,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @date 14/11/2006
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @param imovel
 	 * 
@@ -13055,9 +13055,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [UC0488] - Informar Retorno Ordem de Fiscalização [SB0002] Atualizar
+	 * [UC0488] - Informar Retorno Ordem de Fiscalizaï¿½ï¿½o [SB0002] Atualizar
 	 * 
-	 * Imóvel/Ligação de Água
+	 * Imï¿½vel/Ligaï¿½ï¿½o de ï¿½gua
 	 * 
 	 * 
 	 * 
@@ -13065,7 +13065,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @date 14/11/2006
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @param imovel
 	 * 
@@ -13127,13 +13127,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [UC0488] - Informar Retorno Ordem de Fiscalização
+	 * [UC0488] - Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * 
 	 * 
 	 * @date 20/11/2006
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @param imovel
 	 * 
@@ -13167,13 +13167,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -13285,7 +13285,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					 * 
 					 */
 
-					// join necessários
+					// join necessï¿½rios
 			
 			+ "inner join cadastro.imovel imovel "
 			+ "on imovel.imov_id = clienteImovel.imov_id "
@@ -13382,7 +13382,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 
 			/*
-			 * ## CONDIÇÕES ##
+			 * ## CONDIï¿½ï¿½ES ##
 			 * 
 			 */
 
@@ -13684,7 +13684,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 //
 //			.length() - 5)));
 
-			// seta os valores na condição where
+			// seta os valores na condiï¿½ï¿½o where
 
 			// imovel principal
 
@@ -13872,13 +13872,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -13954,7 +13954,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			// join facultativos
 
-			// join necessários
+			// join necessï¿½rios
 
 			// cep
 
@@ -14117,7 +14117,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 
 			/*
-			 * ## CONDIÇÕES ##
+			 * ## CONDIï¿½ï¿½ES ##
 			 * 
 			 */
 
@@ -14321,7 +14321,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			.length() - 5))).addScalar("qtd", Hibernate.INTEGER);
 
-			// seta os valores na condição where
+			// seta os valores na condiï¿½ï¿½o where
 
 			// imovel principal
 
@@ -14506,23 +14506,23 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			/**
 			* autor: Adriana Muniz
 			* data: 17/09/2012
-			* tratamento de exceção, caso seja exceção devido a conversão de alfanumerico para numerico */
+			* tratamento de exceï¿½ï¿½o, caso seja exceï¿½ï¿½o devido a conversï¿½o de alfanumerico para numerico */
 			try {
 				retorno = query.uniqueResult();
 			}catch (DataException ex) {
-				//caso seja exceção devido a conversão de alfanumerico para numerico
-				//levanta a exceção para a próxima camada
+				//caso seja exceï¿½ï¿½o devido a conversï¿½o de alfanumerico para numerico
+				//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 				throw new ErroRepositorioException(ex, ex.getSQLState());
 			}
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -14538,7 +14538,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * Usado pelo Pesquisar Imovel Retorno o Imovel, com o Nome do Cliente,
 	 * 
-	 * Matricula e Endereço
+	 * Matricula e Endereï¿½o
 	 * 
 	 * 
 	 * 
@@ -14633,7 +14633,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					 * 
 					 */
 
-					// join necessários
+					// join necessï¿½rios
 					+ "inner join cadastro.imovel imovel "
 					+ "on imovel.imov_id = clienteImovel.imov_id "
 
@@ -14696,7 +14696,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 					+ "inner join cadastro.cliente_relacao_tipo clienteRelacaoTipo "
 					+ "on clienteRelacaoTipo.crtp_id = clienteImovel.crtp_id "
-					//	CRC 3928 -- Retirado por Rômulo Aurélio a pedido de Aryed Lins 05/03/2010
+					//	CRC 3928 -- Retirado por Rï¿½mulo Aurï¿½lio a pedido de Aryed Lins 05/03/2010
 					//+ "and clienteImovel.crtp_id = " + ClienteRelacaoTipo.USUARIO + " "
 					// Fim da Alteracao CRC 3928
 					+ "inner join cadastro.cliente clienteUsuario "
@@ -14787,7 +14787,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 //			}
 
 			/*
-			 * ## CONDIÇÕES ##
+			 * ## CONDIï¿½ï¿½ES ##
 			 * 
 			 */
 
@@ -15035,7 +15035,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.addScalar("logradouroTipoPerimetroFinal", Hibernate.STRING) // 38
 					.addScalar("logradouroTituloPerimetroFinal", Hibernate.STRING);  // 39
 			
-			// seta os valores na condição where
+			// seta os valores na condiï¿½ï¿½o where
 
 			// imovel principal
 
@@ -15221,16 +15221,16 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				retorno = query.setFirstResult(10 * numeroPagina).setMaxResults(10)
 				.list();
 			}catch (DataException ex) {
-				//caso seja exceção devido a conversão de alfanumerico para numerico
-				//levanta a exceção para a próxima camada
+				//caso seja exceï¿½ï¿½o devido a conversï¿½o de alfanumerico para numerico
+				//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 				throw new ErroRepositorioException(ex, ex.getSQLState());
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -15244,7 +15244,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * Usado pelo Pesquisar Imovel Retorno o Imovel, com o Nome do Cliente,
 	 * 
-	 * Matricula e Endereço
+	 * Matricula e Endereï¿½o
 	 * 
 	 * 
 	 * 
@@ -15417,7 +15417,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					 * 
 					 */
 
-					// join necessários
+					// join necessï¿½rios
 					+ "left join clienteImovel.imovel imovel "
 
 					+ "inner join imovel.quadra quadra "
@@ -15535,7 +15535,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 
 			/*
-			 * ## CONDIÇÕES ##
+			 * ## CONDIï¿½ï¿½ES ##
 			 * 
 			 */
 
@@ -15737,7 +15737,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			.length() - 5)));
 
-			// seta os valores na condição where
+			// seta os valores na condiï¿½ï¿½o where
 
 			// imovel principal
 
@@ -15925,13 +15925,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -15943,15 +15943,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * 
 	 * 
-	 * Recupera o id da situação da ligação de esgoto
+	 * Recupera o id da situaï¿½ï¿½o da ligaï¿½ï¿½o de esgoto
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @date 04/12/2006
 	 * 
@@ -15969,7 +15969,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Integer retorno = null;
 
@@ -15977,13 +15977,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
 		try {
 
-			// pesquisa a coleção de atividades e atribui a variável "retorno"
+			// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 
 			consulta = "SELECT ligEsgSit.id "
 
@@ -16001,19 +16001,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -16021,15 +16021,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * 
 	 * 
-	 * Recupera o id da situação da ligacao de agua
+	 * Recupera o id da situaï¿½ï¿½o da ligacao de agua
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @date 04/12/2006
 	 * 
@@ -16047,7 +16047,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Integer retorno = null;
 
@@ -16055,13 +16055,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
 		try {
 
-			// pesquisa a coleção de atividades e atribui a variável "retorno"
+			// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 
 			consulta = "SELECT ligAguaSit.id "
 
@@ -16079,19 +16079,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -16099,15 +16099,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * [UC0367] Informar Retorno Ordem de Fiscalização
+	 * [UC0367] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * 
 	 * 
-	 * Recupera o id da situação da ligacao de agua
+	 * Recupera o id da situaï¿½ï¿½o da ligacao de agua
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @date 04/12/2006
 	 * 
@@ -16125,7 +16125,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Integer retorno = null;
 
@@ -16133,7 +16133,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -16155,19 +16155,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -16175,13 +16175,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Pesquisa os imóveis do cliente de acordo com o tipo de relação
+	 * Pesquisa os imï¿½veis do cliente de acordo com o tipo de relaï¿½ï¿½o
 	 * 
 	 * 
 	 * 
-	 * [UC0251] Gerar Atividade de Ação de Cobrança [SB0001] Gerar Atividade de
+	 * [UC0251] Gerar Atividade de Aï¿½ï¿½o de Cobranï¿½a [SB0001] Gerar Atividade de
 	 * 
-	 * Ação de Cobrança para os Imóveis do Cliente
+	 * Aï¿½ï¿½o de Cobranï¿½a para os Imï¿½veis do Cliente
 	 * 
 	 * 
 	 * 
@@ -16207,7 +16207,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
@@ -16215,7 +16215,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -16285,19 +16285,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -16307,7 +16307,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	Integer idCategoria) throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Integer retorno = null;
 
@@ -16315,7 +16315,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -16345,19 +16345,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -16367,7 +16367,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
@@ -16375,7 +16375,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -16415,19 +16415,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -16440,7 +16440,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		
 		Integer idRota = rota.getId();
 		
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
@@ -16448,7 +16448,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -16514,19 +16514,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -16539,7 +16539,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		
 		Integer idRota = rota.getId();
 		
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
@@ -16547,7 +16547,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -16612,19 +16612,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -16634,11 +16634,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [UC0978] Associar Tarifa de Consumo a Imóveis
+	 * [UC0978] Associar Tarifa de Consumo a Imï¿½veis
 	 * 
 	 * 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * 
 	 * @created 19/12/2006
 	 * 
@@ -16764,7 +16764,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
@@ -16772,7 +16772,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta = "";
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -16806,19 +16806,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -16830,11 +16830,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [UC0378] Associar Tarifa de Consumo a Imóveis
+	 * [UC0378] Associar Tarifa de Consumo a Imï¿½veis
 	 * 
 	 * 
 	 * 
-	 * @author Rômulo Aurelio
+	 * @author Rï¿½mulo Aurelio
 	 * 
 	 * @created 19/12/2006
 	 * 
@@ -16902,13 +16902,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -16922,13 +16922,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * Atualiza o perfil do imóvel para o perfil normal
+	 * Atualiza o perfil do imï¿½vel para o perfil normal
 	 * 
 	 * 
 	 * 
 	 * @date 04/01/2007
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * 
 	 * @throws ErroRepositorioException
 	 * 
@@ -16974,17 +16974,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * [UC0490] - Informar Situação de Cobrança
+	 * [UC0490] - Informar Situaï¿½ï¿½o de Cobranï¿½a
 	 * 
 	 * 
 	 * 
-	 * Pesquisa o imóvel com a situação da ligação de água e a de esgoto
+	 * Pesquisa o imï¿½vel com a situaï¿½ï¿½o da ligaï¿½ï¿½o de ï¿½gua e a de esgoto
 	 * 
 	 * 
 	 * 
 	 * @date 13/01/2007
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * 
 	 * @throws ErroRepositorioException
 	 * 
@@ -16994,7 +16994,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Imovel imovel = null;
 
@@ -17002,7 +17002,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta = "";
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -17026,19 +17026,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna o imóvel
+		// retorna o imï¿½vel
 
 		return imovel;
 
@@ -17050,19 +17050,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [FS0006] - Verificar número de IPTU
+	 * [FS0006] - Verificar nï¿½mero de IPTU
 	 * 
 	 * 
 	 * 
-	 * Verifica se já existe outro imóvel ou economia com o mesmo número de IPTU
+	 * Verifica se jï¿½ existe outro imï¿½vel ou economia com o mesmo nï¿½mero de IPTU
 	 * 
-	 * no mesmo município
+	 * no mesmo municï¿½pio
 	 * 
 	 * 
 	 * 
 	 * @date 13/01/2007
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * 
 	 * @throws ErroRepositorioException
 	 * 
@@ -17074,7 +17074,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Integer idImovelRetorno = null;
 
@@ -17082,7 +17082,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta = "";
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -17180,19 +17180,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna o id do imóvel
+		// retorna o id do imï¿½vel
 
 		return idImovelRetorno;
 
@@ -17204,19 +17204,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * [FS0007] - Verificar número de contrato da companhia de energia elétrica
+	 * [FS0007] - Verificar nï¿½mero de contrato da companhia de energia elï¿½trica
 	 * 
 	 * 
 	 * 
-	 * Verifica se já existe outro imóvel ou economia com o mesmo número de
+	 * Verifica se jï¿½ existe outro imï¿½vel ou economia com o mesmo nï¿½mero de
 	 * 
-	 * contrato da companhia elétrica
+	 * contrato da companhia elï¿½trica
 	 * 
 	 * 
 	 * 
 	 * @date 18/01/2007
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * 
 	 * @throws ErroRepositorioException
 	 * 
@@ -17228,7 +17228,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	Integer idImovelEconomia) throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Integer idImovelRetorno = null;
 
@@ -17236,7 +17236,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta = "";
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -17289,19 +17289,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna o id do imóvel
+		// retorna o id do imï¿½vel
 
 		return idImovelRetorno;
 
@@ -17309,19 +17309,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Obtém o quantidade de economias da subCategoria por imovel
+	 * Obtï¿½m o quantidade de economias da subCategoria por imovel
 	 * 
 	 * 
 	 * 
 	 * @param idImovel
 	 * 
-	 * O identificador do imóvel
+	 * O identificador do imï¿½vel
 	 * 
-	 * @return Coleção de SubCategorias
+	 * @return Coleï¿½ï¿½o de SubCategorias
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 */
 
@@ -17411,21 +17411,21 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Obtém o quantidade de economias da subCategoria por imovel
+	 * Obtï¿½m o quantidade de economias da subCategoria por imovel
 	 * 
 	 * 
 	 * 
-	 * @autor Rômulo Aurélio
+	 * @autor Rï¿½mulo Aurï¿½lio
 	 * 
 	 * @param idImovel
 	 * 
-	 * O identificador do imóvel
+	 * O identificador do imï¿½vel
 	 * 
-	 * @return Coleção de imovelSubCategorias
+	 * @return Coleï¿½ï¿½o de imovelSubCategorias
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 * @date 08/02/2007
 	 * 
@@ -17635,7 +17635,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Atualiza logradouroBairro de um ou mais imóveis
+	 * Atualiza logradouroBairro de um ou mais imï¿½veis
 	 * 
 	 * 
 	 * 
@@ -17699,7 +17699,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Atualiza logradouroCep de um ou mais imóveis
+	 * Atualiza logradouroCep de um ou mais imï¿½veis
 	 * 
 	 * 
 	 * 
@@ -17757,13 +17757,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * [UC0302] Gerar Débitos a Cobrar de Acréscimos por Impontualidade
+	 * [UC0302] Gerar Dï¿½bitos a Cobrar de Acrï¿½scimos por Impontualidade
 	 * 
 	 * 
 	 * 
-	 * Pequisa o identificador de cobranca de acréscimo pro impontualidade para
+	 * Pequisa o identificador de cobranca de acrï¿½scimo pro impontualidade para
 	 * 
-	 * o imóvel do cliente responsável.
+	 * o imï¿½vel do cliente responsï¿½vel.
 	 * 
 	 * 
 	 * 
@@ -17811,13 +17811,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -17831,7 +17831,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 //
 //	throws ErroRepositorioException {
 //
-//		// cria a coleção de retorno
+//		// cria a coleï¿½ï¿½o de retorno
 //
 //		Integer retorno = null;
 //
@@ -17839,13 +17839,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 //
 //		String consulta;
 //
-//		// obtém a sessão
+//		// obtï¿½m a sessï¿½o
 //
 //		Session session = HibernateUtil.getSession();
 //
 //		try {
 //
-//			// pesquisa a coleção de atividades e atribui a variável "retorno"
+//			// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 //
 //			consulta = "select imov.id " + "from ClienteImovel clienteImovel "
 //
@@ -17873,19 +17873,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 //
 //		} catch (HibernateException e) {
 //
-//			// levanta a exceção para a próxima camada
+//			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 //
 //			throw new ErroRepositorioException(e, "Erro no Hibernate");
 //
 //		} finally {
 //
-//			// fecha a sessão
+//			// fecha a sessï¿½o
 //
 //			HibernateUtil.closeSession(session);
 //
 //		}
 //
-//		// retorna a coleção de atividades pesquisada(s)
+//		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 //
 //		return retorno;
 //
@@ -17893,11 +17893,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * [UC0488] - Informar Retorno Ordem de Fiscalização
+	 * [UC0488] - Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * 
 	 * 
-	 * Obter o consumo médio como não medido para o imóvel passado
+	 * Obter o consumo mï¿½dio como nï¿½o medido para o imï¿½vel passado
 	 * 
 	 * 
 	 * 
@@ -17945,13 +17945,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -17963,7 +17963,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Obter a situação de cobrança para o imóvel passado
+	 * Obter a situaï¿½ï¿½o de cobranï¿½a para o imï¿½vel passado
 	 * 
 	 * 
 	 * 
@@ -18001,13 +18001,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -18019,7 +18019,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Pesquisa uma coleção de imóveis
+	 * Pesquisa uma coleï¿½ï¿½o de imï¿½veis
 	 * 
 	 * 
 	 * 
@@ -18037,13 +18037,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * @param lote
 	 * 
-	 * Descrição do parâmetro
+	 * Descriï¿½ï¿½o do parï¿½metro
 	 * 
 	 * @return Description of the Return Value
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
-	 * Descrição da exceção
+	 * Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
 	 */
 
@@ -18096,15 +18096,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		 * 
 		 * 
 		 * 
-		 * OBJETIVO: Acrescentar o parâmetro grupo de faturamento para o filtro
+		 * OBJETIVO: Acrescentar o parï¿½metro grupo de faturamento para o filtro
 		 * 
-		 * de manutenção de várias contas.
+		 * de manutenï¿½ï¿½o de vï¿½rias contas.
 		 * 
 		 */
 
 		Integer idGrupoFaturamento = filtro.getIdGrupoFaturamento();
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
@@ -18112,14 +18112,14 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 		
 		/**
 		 * @autor: Adriana Muniz
 		 * @date: 24/11/2011
-		 * Acréscimo de atributo esfera de poder na consulta
+		 * Acrï¿½scimo de atributo esfera de poder na consulta
 		 * */
 		try {
 
@@ -18237,9 +18237,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			 * 
 			 * 
 			 * 
-			 * OBJETIVO: Acrescentar o parâmetro grupo de faturamento para o
+			 * OBJETIVO: Acrescentar o parï¿½metro grupo de faturamento para o
 			 * 
-			 * filtro de manutenção de várias contas.
+			 * filtro de manutenï¿½ï¿½o de vï¿½rias contas.
 			 * 
 			 */
 
@@ -18300,19 +18300,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -18320,7 +18320,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	/**
 	 * 
-	 * Pesquisa uma coleção de imóveis com perfil bloqueado
+	 * Pesquisa uma coleï¿½ï¿½o de imï¿½veis com perfil bloqueado
 	 * 
 	 * @return Boolean
 	 * @exception ErroRepositorioException
@@ -18417,7 +18417,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Pesquisa uma coleção de imóveis do cliente
+	 * Pesquisa uma coleï¿½ï¿½o de imï¿½veis do cliente
 	 * 
 	 * @author Ana Maria
 	 * @date 20/03/2007
@@ -18468,7 +18468,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Pesquisa quantidade de imóveis do cliente com perfil bloqueado
+	 * Pesquisa quantidade de imï¿½veis do cliente com perfil bloqueado
 	 * 
 	 * @author Ana Maria
 	 * @date 20/04/2009
@@ -18531,7 +18531,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -18553,19 +18553,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -18621,11 +18621,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * [UC0623] - GERAR RESUMO DE METAS EXECUTDO NO MÊS(CAERN)
+	 * [UC0623] - GERAR RESUMO DE METAS EXECUTDO NO Mï¿½S(CAERN)
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @date 08/08/2007
 	 * 
@@ -18747,13 +18747,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -18765,15 +18765,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * [UC0591] - Gerar Relatório de Clientes Especiais
+	 * [UC0591] - Gerar Relatï¿½rio de Clientes Especiais
 	 * 
 	 * 
 	 * 
-	 * Pesquisas os imóveis de acordo com os parâmetros da pesquisa
+	 * Pesquisas os imï¿½veis de acordo com os parï¿½metros da pesquisa
 	 * 
 	 * 
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * 
 	 * @date 31/05/2007
 	 * 
@@ -19078,8 +19078,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			
 			consulta = consulta + condicionais;			
-			//a ordenação está sendo feita através de comparator
-			//pois alguns campos só são obtidos após a consulta
+			//a ordenaï¿½ï¿½o estï¿½ sendo feita atravï¿½s de comparator
+			//pois alguns campos sï¿½ sï¿½o obtidos apï¿½s a consulta
 			
 			retorno = session.createSQLQuery(consulta).addScalar("idGerencia",
 
@@ -19156,7 +19156,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**  
-	 * [UC0591] - Gerar Relatório de Clientes Especiais
+	 * [UC0591] - Gerar Relatï¿½rio de Clientes Especiais
 	 * 
 	 * 					Count
 	 * 
@@ -19407,8 +19407,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 					
 					consulta = consulta + condicionais;			
-					//a ordenação está sendo feita através de comparator
-					//pois alguns campos só são obtidos após a consulta
+					//a ordenaï¿½ï¿½o estï¿½ sendo feita atravï¿½s de comparator
+					//pois alguns campos sï¿½ sï¿½o obtidos apï¿½s a consulta
 					
 					colecaoRetorno = session.createSQLQuery(consulta)
 						.addScalar("contador", Hibernate.INTEGER)
@@ -19575,14 +19575,14 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// Situação de Água
+		// Situaï¿½ï¿½o de ï¿½gua
 
 		if (Util.isCampoComboboxInformado(idSituacaoAgua)) {
 
 			sql = sql + " imov.last_id = " + idSituacaoAgua + " and ";
 		}
 
-		// Situação de Esgoto
+		// Situaï¿½ï¿½o de Esgoto
 
 		if (Util.isCampoComboboxInformado(idSituacaoEsgoto)) {
 
@@ -19598,7 +19598,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			+ " and " + qtdeEconomiasFinal + " and ";
 		}
 
-		// Intervalo de Consumo de Água
+		// Intervalo de Consumo de ï¿½gua
 
 		if (Util.verificarNaoVazio(intervaloConsumoAguaInicial)) {
 
@@ -19620,14 +19620,14 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			+ intervaloConsumoEsgotoFinal + " and ";
 		}
 
-		// Cliente Responsável
+		// Cliente Responsï¿½vel
 
 		if (Util.verificarNaoVazio(idClienteResponsavel)) {
 
 			sql = sql + " clieImovResponsavel.clie_id = " + idClienteResponsavel + " and ";
 		}
 
-		// Intervalo de Consumo por Responsável
+		// Intervalo de Consumo por Responsï¿½vel
 
 		if (Util.verificarNaoVazio(intervaloConsumoResponsavelInicial)) {
 
@@ -19733,7 +19733,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			sql = sql + " WHERE ";
 
-			// Unidade de Negócio
+			// Unidade de Negï¿½cio
 
 			if (idUnidadeNegocio != null
 
@@ -19747,7 +19747,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			}
 
-			// Gerência Regional
+			// Gerï¿½ncia Regional
 
 			if (idGerenciaRegional != null
 
@@ -19773,7 +19773,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			}
 
-			// Perfil do Imóvel
+			// Perfil do Imï¿½vel
 
 			if (idsPerfilImovel != null && !idsPerfilImovel.equals("")) {
 
@@ -19869,7 +19869,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			}
 
-			// Situação de Água
+			// Situaï¿½ï¿½o de ï¿½gua
 
 			if (idSituacaoAgua != null
 
@@ -19883,7 +19883,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			}
 
-			// Situação de Esgoto
+			// Situaï¿½ï¿½o de Esgoto
 
 			if (idSituacaoEsgoto != null
 
@@ -19911,7 +19911,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			}
 
-			// Intervalo de Consumo de Água
+			// Intervalo de Consumo de ï¿½gua
 
 			if (intervaloConsumoAguaInicial != null
 
@@ -19941,7 +19941,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			}
 
-			// Data Instalação do Hidrômetro
+			// Data Instalaï¿½ï¿½o do Hidrï¿½metro
 
 			if (dataInstalacaoHidrometroInicial != null) {
 
@@ -19973,7 +19973,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			}
 
-			// Capacidade do Hidrômetro
+			// Capacidade do Hidrï¿½metro
 
 			if (idsCapacidadesHidrometro != null
 
@@ -20119,7 +20119,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// Data Instalação do Hidrômetro
+		// Data Instalaï¿½ï¿½o do Hidrï¿½metro
 
 		if (dataInstalacaoHidrometroInicial != null) {
 
@@ -20149,7 +20149,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// Capacidade do Hidrômetro
+		// Capacidade do Hidrï¿½metro
 
 		if (idsCapacidadesHidrometro != null
 
@@ -20289,11 +20289,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Pesquisa todos os ids do perfil do imóvel.
+	 * Pesquisa todos os ids do perfil do imï¿½vel.
 	 * 
 	 * 
 	 * 
-	 * [UC0564 - Gerar Resumo das Instalações de Hidrômetros]
+	 * [UC0564 - Gerar Resumo das Instalaï¿½ï¿½es de Hidrï¿½metros]
 	 * 
 	 * 
 	 * 
@@ -20341,11 +20341,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Obtém a descrição de uma categoria
+	 * Obtï¿½m a descriï¿½ï¿½o de uma categoria
 	 * 
 	 * 
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * 
 	 * @date 04/06/2007
 	 * 
@@ -20367,7 +20367,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -20387,19 +20387,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return descricao;
 
@@ -20453,11 +20453,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * Gerar Relatório de Imóvel Outros Critérios
+	 * Gerar Relatï¿½rio de Imï¿½vel Outros Critï¿½rios
 	 * 
 	 * 
 	 * 
-	 * @author Rafael Corrêa,Rafael Santos
+	 * @author Rafael Corrï¿½a,Rafael Santos
 	 * 
 	 * @date 24/07/2006,01/08/2006
 	 * 
@@ -20546,7 +20546,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					/* 13 */+ "ligacao_esgoto.lesg_pcesgoto, "
 					/* 14 */+ "ligacao_esgoto.lesg_dtligacao, "
 					/* 15 */+ "ligacao_agua.lagu_dtligacaoagua, "
-					// Informações do Cliente Usuasrio e Resposanvel
+					// Informaï¿½ï¿½es do Cliente Usuasrio e Resposanvel
 					/* 16 */+ "cliente_usuario.clie_id as idClienteUsuario, "
 					/* 17 */+ "cliente_usuario.clie_nmcliente as nomeClienteUsuario, "
 					/* 18 */+ "cliente_responsavel.clie_id as idClienteResponsavel, "
@@ -20929,13 +20929,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -20951,7 +20951,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * Recupera a situação da ligação de esgoto
+	 * Recupera a situaï¿½ï¿½o da ligaï¿½ï¿½o de esgoto
 	 * 
 	 * 
 	 * 
@@ -21015,7 +21015,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * Recupera a situação da ligação de agua
+	 * Recupera a situaï¿½ï¿½o da ligaï¿½ï¿½o de agua
 	 * 
 	 * 
 	 * 
@@ -21077,11 +21077,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * Gerar Relatório de Imóvel Outros Critérios
+	 * Gerar Relatï¿½rio de Imï¿½vel Outros Critï¿½rios
 	 * 
 	 * 
 	 * 
-	 * @author Rafael Corrêa,Rafael Santos
+	 * @author Rafael Corrï¿½a,Rafael Santos
 	 * 
 	 * @date 24/07/2006,01/08/2006
 	 * 
@@ -21188,7 +21188,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 					
 
-					// Informações do Cliente Usuasrio e Resposanvel
+					// Informaï¿½ï¿½es do Cliente Usuasrio e Resposanvel
 
 					+ "cliente_usuario.clie_id as idClienteUsuario, "
 
@@ -21575,7 +21575,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					 * @autor Adriana Muniz
 					 * @date 06/08/2013
 					 * 
-					 * Correção da nomenclatura do hidrometro_instalacao_historic (anterior hidrometro_instalacao_historico_esgoto) 
+					 * Correï¿½ï¿½o da nomenclatura do hidrometro_instalacao_historic (anterior hidrometro_instalacao_historico_esgoto) 
 					 */
 					+ "left join micromedicao.hidrometro_protecao as hidrometro_protecao_esgoto on hidrometro_instalacao_historic.hipr_id = hidrometro_protecao_esgoto.hipr_id ";
 
@@ -21671,7 +21671,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			sequencialRotaFinal, pocoTipoListIds, null , null);
 
 			/*
-			 * # COLOCANDO O VALOR NAS CONDIÇÕES#
+			 * # COLOCANDO O VALOR NAS CONDIï¿½ï¿½ES#
 			 * 
 			 */
 
@@ -21969,13 +21969,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -21987,7 +21987,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Filtra o Pagamento Historico pelo seu id carregando os dados necessários
+	 * Filtra o Pagamento Historico pelo seu id carregando os dados necessï¿½rios
 	 * 
 	 * 
 	 * 
@@ -21995,7 +21995,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * 
 	 * @date 12/07/2007
 	 * 
@@ -22073,7 +22073,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Filtra o Pagamento pelo seu id carregando os dados necessários
+	 * Filtra o Pagamento pelo seu id carregando os dados necessï¿½rios
 	 * 
 	 * 
 	 * 
@@ -22081,7 +22081,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * @author Kássia Albuquerque
+	 * @author Kï¿½ssia Albuquerque
 	 * 
 	 * @date 12/07/2007
 	 * 
@@ -22162,7 +22162,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Obtém a o nome do cliente
+	 * Obtï¿½m a o nome do cliente
 	 * 
 	 * 
 	 * 
@@ -22224,7 +22224,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Obtém o nome do Arrecadador
+	 * Obtï¿½m o nome do Arrecadador
 	 * 
 	 * 
 	 * 
@@ -22280,7 +22280,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	/**
 	 * 
-	 * Obtém a o 117º caracter de uma String
+	 * Obtï¿½m a o 117ï¿½ caracter de uma String
 	 * 
 	 * 
 	 * 
@@ -22336,7 +22336,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @date 24/08/2007
 	 * 
@@ -22386,7 +22386,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * [UC0582] Emitir Boletim de Cadastro
 	 * 
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @data 16/05/2007
 	 * 
 	 * @return Collection<EmitirDocumentoCobrancaBoletimCadastroHelper>
@@ -22818,13 +22818,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -22875,13 +22875,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * < <Descrição do método>>
+	 * < <Descriï¿½ï¿½o do mï¿½todo>>
 	 * 
 	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
+	 *            Descriï¿½ï¿½o do parï¿½metro
+	 * @return Descriï¿½ï¿½o do retorno
 	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
+	 *                Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 */
 	public Short pesquisarObterQuantidadeEconomias(Imovel imovel, Categoria categoria)
 			throws ErroRepositorioException {
@@ -22904,10 +22904,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -22944,20 +22944,20 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
             // erro no hibernate
         } catch (HibernateException e) {
-            // levanta a exceção para a próxima camada
+            // levanta a exceï¿½ï¿½o para a prï¿½xima camada
             throw new ErroRepositorioException(e, "Erro no Hibernate");
         } finally {
-            // fecha a sessão
+            // fecha a sessï¿½o
             HibernateUtil.closeSession(session);
         }
 
-        // retorna o imóvel
+        // retorna o imï¿½vel
         return imovel;
     }
     
     /**
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
-	 * necessários para a criação da inscrição e de rota para exibição.
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o e de rota para exibiï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
      * @date 06/11/2007
@@ -23002,11 +23002,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23015,8 +23015,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
     /**
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
-	 * necessários para a criação da inscrição e de rota para exibição.
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o e de rota para exibiï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
      * @date 06/11/2007
@@ -23061,11 +23061,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23075,8 +23075,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 
     /**
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
-	 * necessários para a criação da inscrição e de rota para exibição.
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * necessï¿½rios para a criaï¿½ï¿½o da inscriï¿½ï¿½o e de rota para exibiï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
      * @date 06/11/2007
@@ -23222,11 +23222,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23592,17 +23592,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	/**
 	 * 
-	 * Pesquisa os imóveis do cliente de acordo com o tipo de relação
+	 * Pesquisa os imï¿½veis do cliente de acordo com o tipo de relaï¿½ï¿½o
 	 * 
 	 * 
 	 * 
-	 * [UC0251] Gerar Atividade de Ação de Cobrança [SB0001] Gerar Atividade de
+	 * [UC0251] Gerar Atividade de Aï¿½ï¿½o de Cobranï¿½a [SB0001] Gerar Atividade de
 	 * 
-	 * Ação de Cobrança para os Imóveis do Cliente
+	 * Aï¿½ï¿½o de Cobranï¿½a para os Imï¿½veis do Cliente
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @created 23/11/2007
 	 * 
@@ -23624,7 +23624,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
@@ -23632,7 +23632,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		String consulta;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
@@ -23687,19 +23687,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -23707,7 +23707,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	/**
 	 * 
-	 * Buscar Empresa apatir da Matrícula de um Imóvel .
+	 * Buscar Empresa apatir da Matrï¿½cula de um Imï¿½vel .
 	 * 
 	 * 
 	 * @author Thiago Nascimento
@@ -23734,13 +23734,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -23751,7 +23751,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	/**
 	 * 
-	 * Atualiza a situação de cobrança do imóvel
+	 * Atualiza a situaï¿½ï¿½o de cobranï¿½a do imï¿½vel
 	 * 
 	 */
 
@@ -23779,13 +23779,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -23799,7 +23799,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * Utilizado para corrigir o erro da listagem de Imoveis: o metodo pesquisarQuantidadeImovel nao
 	 * traz a mesma quantidade de imovel do metodo pesquisarImovelInscricaoNew.  
 	 * 
-	 * @author Ivan Sérgio
+	 * @author Ivan Sï¿½rgio
 	 * @date 11/03/2008
 	 * 
 	 * @param idImovel
@@ -23919,7 +23919,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 						/* * ## JOIN ## *  */
 
-						// join necessários
+						// join necessï¿½rios
 //						+ "left join clienteImovel.imovel imovel "
 //						+ "inner join imovel.quadra quadra "
 //						+ "inner join imovel.localidade localidade "
@@ -23975,7 +23975,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 //						+ "left join bairro.municipio municipio ";
 //				}
 
-				/* * ## CONDIÇÕES ## *  */
+				/* * ## CONDIï¿½ï¿½ES ## *  */
 
 				consulta = consulta
 
@@ -24180,7 +24180,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				}
 
 				Query query = session.createSQLQuery(consulta.substring(0, (consulta.length() - 5))).addScalar("qtd", Hibernate.INTEGER);
-				// seta os valores na condição where
+				// seta os valores na condiï¿½ï¿½o where
 				// imovel principal
 				if (idImovel != null && !idImovel.equals("") && !idImovel.trim().equalsIgnoreCase(
 					new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
@@ -24260,15 +24260,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				try{
 					retorno = query.uniqueResult();
 				}catch (DataException ex) {
-					//caso seja exceção devido a conversão de alfanumerico para numerico
-					//levanta a exceção para a próxima camada
+					//caso seja exceï¿½ï¿½o devido a conversï¿½o de alfanumerico para numerico
+					//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 					throw new ErroRepositorioException(ex, ex.getSQLState());
 				}
 			} catch (HibernateException e) {
-				// levanta a exceção para a próxima camada
+				// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 				throw new ErroRepositorioException(e, "Erro no Hibernate");
 			} finally {
-				// fecha a sessão
+				// fecha a sessï¿½o
 				HibernateUtil.closeSession(session);
 			}
 
@@ -24276,9 +24276,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
     
 	/**
-	 * [UC0800] - Obter Consumo Não Medido
+	 * [UC0800] - Obter Consumo Nï¿½o Medido
 	 *
-	 * [FS0001] - Verificar Área Não Informada 
+	 * [FS0001] - Verificar ï¿½rea Nï¿½o Informada 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 22/05/2008
@@ -24304,10 +24304,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -24315,7 +24315,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 
 	/**
-	 * Método para obter o id da esfera de poder de um imovel
+	 * Mï¿½todo para obter o id da esfera de poder de um imovel
 	 * @param idImovel
 	 * @return
 	 * 
@@ -24347,13 +24347,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				
 		} catch (HibernateException e) {
 	
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 	
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 	
 		} finally {
 	
-			// fecha a sessão
+			// fecha a sessï¿½o
 	
 			HibernateUtil.closeSession(session);
 	
@@ -24364,7 +24364,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 
 	/**
-	 * Consulta o ID da categoria principal, considerando que a categoria principal é a quem tem
+	 * Consulta o ID da categoria principal, considerando que a categoria principal ï¿½ a quem tem
 	 * maior soma de qtd de economias em suas subcategorias e tenha o 
 	 * idCategoria menor (ou maior caso exija ordemDecrescente seja true)
 	 * 
@@ -24402,13 +24402,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -24450,13 +24450,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
         } catch (HibernateException e) {
 
-            // levanta a exceção para a próxima camada
+            // levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
             throw new ErroRepositorioException(e, "Erro no Hibernate");
 
         } finally {
 
-            // fecha a sessão
+            // fecha a sessï¿½o
 
             HibernateUtil.closeSession(session);
 
@@ -24495,13 +24495,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
         } catch (HibernateException e) {
 
-            // levanta a exceção para a próxima camada
+            // levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
             throw new ErroRepositorioException(e, "Erro no Hibernate");
 
         } finally {
 
-            // fecha a sessão
+            // fecha a sessï¿½o
 
             HibernateUtil.closeSession(session);
 
@@ -24520,7 +24520,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	/**
 	 *
 	 * Consulta os Negativadores para a geracao do resumo diario da negativacao
-	 * [UC0688] Gerar Resumo Diário da Negativação
+	 * [UC0688] Gerar Resumo Diï¿½rio da Negativaï¿½ï¿½o
 	 * Fluxo principal Item 1.0
 	 *
 	 * @author Thiago Toscano
@@ -24542,10 +24542,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			retorno = (List) session.createQuery(hql).list();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -24557,8 +24557,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
     
     
     /**
-     * [UC0823] Atualiza Ligação de Água de Ligado em Análise para Ligado
-     * Seleciona a lista de imóveis que esteja com a situação de água ligado em análise.
+     * [UC0823] Atualiza Ligaï¿½ï¿½o de ï¿½gua de Ligado em Anï¿½lise para Ligado
+     * Seleciona a lista de imï¿½veis que esteja com a situaï¿½ï¿½o de ï¿½gua ligado em anï¿½lise.
      * @author Yara Taciane
      * @date 23/05/2008
      */
@@ -24592,10 +24592,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				}
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
     
@@ -24606,13 +24606,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
     
 	/**
-	 * [UC0823] Atualizar Situação Água Para Ligado Auhtor: Yara Taciane
+	 * [UC0823] Atualizar Situaï¿½ï¿½o ï¿½gua Para Ligado Auhtor: Yara Taciane
 	 * Data: 07/07/2008
 	 * 
 	 * @param id
 	 *            Matricula do Imovel
 	 * @param situacaoAguaLigado
-	 *            Situação Agua
+	 *            Situaï¿½ï¿½o Agua
 	 * 
 	 * @exception ErroRepositorioException
 	 *                Repositorio Exception
@@ -24638,7 +24638,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 			
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -24646,8 +24646,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	/**
 	 * [UC0101] - Consistir Leituras e Calcular Consumos
 	 *
-	 * Pesquisar as contas pertencentes ao imovel e anoMes informados que não estejam com a situação
-	 * atual igual a "PRÉ-FATURADA" 
+	 * Pesquisar as contas pertencentes ao imovel e anoMes informados que nï¿½o estejam com a situaï¿½ï¿½o
+	 * atual igual a "PRï¿½-FATURADA" 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 15/08/2008
@@ -24684,13 +24684,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -24703,8 +24703,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	/**
 	 * [UC0101] - Consistir Leituras e Calcular Consumos
 	 *
-	 * Pesquisar as contas pertencentes ao imovel e anoMes informados que não estejam com a situação
-	 * atual igual a "PRÉ-FATURADA" 
+	 * Pesquisar as contas pertencentes ao imovel e anoMes informados que nï¿½o estejam com a situaï¿½ï¿½o
+	 * atual igual a "PRï¿½-FATURADA" 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 15/08/2008
@@ -24741,13 +24741,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -24788,10 +24788,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.uniqueResult();		
 	
 	} catch (HibernateException e) {
-		// levanta a exceção para a próxima camada
+		// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 		throw new ErroRepositorioException(e, "Erro no Hibernate");
 	} finally {
-		// fecha a sessão
+		// fecha a sessï¿½o
 		HibernateUtil.closeSession(session);
 	}
 	
@@ -24799,7 +24799,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC0831] Gerar Tabelas para Atualização Cadastral via celular 
+	 * [UC0831] Gerar Tabelas para Atualizaï¿½ï¿½o Cadastral via celular 
 	 * 
 	 * @author Vinicius Medeiros
 	 * @date 22/09/2008
@@ -24837,7 +24837,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC0831] Gerar Tabelas para Atualização Cadastral via celular 
+	 * [UC0831] Gerar Tabelas para Atualizaï¿½ï¿½o Cadastral via celular 
 	 * 
 	 * @author Vinicius Medeiros
 	 * @date 22/09/2008
@@ -24890,7 +24890,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC0831] Gerar Tabelas para Atualização Cadastral via celular 
+	 * [UC0831] Gerar Tabelas para Atualizaï¿½ï¿½o Cadastral via celular 
 	 * 
 	 * @author Vinicius Medeiros
 	 * @date 26/09/2008
@@ -24965,10 +24965,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.list();
 	
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	
@@ -24976,7 +24976,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
     /**
-     * Pesquisar Imóvel Atualização Cadastral(Dados da Inscrição)
+     * Pesquisar Imï¿½vel Atualizaï¿½ï¿½o Cadastral(Dados da Inscriï¿½ï¿½o)
      * 
      * @author Ana Maria
      * @date 17/09/2008
@@ -25003,25 +25003,25 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
             // erro no hibernate
         } catch (HibernateException e) {
-            // levanta a exceção para a próxima camada
+            // levanta a exceï¿½ï¿½o para a prï¿½xima camada
             throw new ErroRepositorioException(e, "Erro no Hibernate");
         } finally {
-            // fecha a sessão
+            // fecha a sessï¿½o
             HibernateUtil.closeSession(session);
         }
 
-        // retorna o imóvel
+        // retorna o imï¿½vel
         return imovelAtualizacaoCadastral;
     }
 
 	/**
-	 * Consultar Imóveis Atualização Cadastral por Quadra
+	 * Consultar Imï¿½veis Atualizaï¿½ï¿½o Cadastral por Quadra
 	 * 
 	 * @param idSetorComercial
 	 * @param quadraInicial
 	 * @param quadraFinal
 	 * @param idEmpresa
-	 * @return Collection<Imovel> - Coleção de imóveis.
+	 * @return Collection<Imovel> - Coleï¿½ï¿½o de imï¿½veis.
 	 * 
 	 * @author Ana Maria
      * @date 18/09/2008
@@ -25059,10 +25059,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		    retorno = (Collection) session.createQuery(consulta).list();    
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -25070,7 +25070,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Pesquisar existência de imóvel economia
+	 * Pesquisar existï¿½ncia de imï¿½vel economia
 	 * 
 	 * @author Ana Maria
 	 * @date 05/12/2008
@@ -25107,10 +25107,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 	
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	
@@ -25122,7 +25122,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	/**
 	 * Validar a(s) categoria(s) do imovel com a(s) respectivas tarifas 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 19/12/2008
 	 * 
 	 * @return Boolean
@@ -25168,10 +25168,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 	
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	
@@ -25179,7 +25179,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Remover Imóvel Subcategoria
+	 * Remover Imï¿½vel Subcategoria
 	 *  
 	 * @author Ana Maria
 	 * @date 10/02/2009
@@ -25202,10 +25202,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -25226,15 +25226,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		
 
 	} catch (HibernateException e) {
-		// levanta a exceção para a próxima camada
+		// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 		throw new ErroRepositorioException(e, "Erro no Hibernate");
 	} finally {
-		// fecha a sessão
+		// fecha a sessï¿½o
 		HibernateUtil.closeSession(session);
 	}
 }
 	/**
-	 * [UC0011] Inserir Imóvel
+	 * [UC0011] Inserir Imï¿½vel
 	 * 
 	 * @author Victor Cisneiros
 	 * @date 18/02/2009
@@ -25269,7 +25269,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
     }
     
     /**
-	 * Consultar os dodos cliente usuário do Imovel 
+	 * Consultar os dodos cliente usuï¿½rio do Imovel 
 	 * 
 	 * dados[0] = Nome
 	 * dados[1] = Cpf
@@ -25313,9 +25313,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
     
 	/**
 	 * 
-	 * Atualiza a situação de cobrança e a situação do tipo de cobrança
+	 * Atualiza a situaï¿½ï¿½o de cobranï¿½a e a situaï¿½ï¿½o do tipo de cobranï¿½a
 	 * 
-	 * @author Sávio Luiz, Mariana Victor
+	 * @author Sï¿½vio Luiz, Mariana Victor
 	 * @date 18/02/2009, 03/05/2011
 	 */
 	public void atualizarSituacaoCobrancaETipoIdsImoveis(Integer idSituacaoCobranca,Integer idSituacaoCobrancaTipo, Collection<Integer> idsImovel)
@@ -25389,13 +25389,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -25412,11 +25412,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * Gerar Relatório de Imóvel Outros Critérios
+	 * Gerar Relatï¿½rio de Imï¿½vel Outros Critï¿½rios
 	 * 
 	 * 
 	 * 
-	 * @author Rafael Corrêa,Rafael Santos
+	 * @author Rafael Corrï¿½a,Rafael Santos
 	 * 
 	 * @date 24/07/2006,01/08/2006
 	 * 
@@ -25688,13 +25688,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -25709,11 +25709,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * 
 	 * 
-	 * Gerar Relatório de Imóvel Outros Critérios
+	 * Gerar Relatï¿½rio de Imï¿½vel Outros Critï¿½rios
 	 * 
 	 * 
 	 * 
-	 * @author Rafael Corrêa,Rafael Santos
+	 * @author Rafael Corrï¿½a,Rafael Santos
 	 * 
 	 * @date 24/07/2006,01/08/2006
 	 * 
@@ -25998,13 +25998,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -26015,7 +26015,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Verificar se o imóvel perfil está bloqueado
+	 * Verificar se o imï¿½vel perfil estï¿½ bloqueado
 	 * 
 	 * @author Ana Maria
 	 * @date 22/04/2009
@@ -26048,10 +26048,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 	
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	
@@ -26059,9 +26059,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Verificar se a ultima alteracao do imóvel 
+	 * Verificar se a ultima alteracao do imï¿½vel 
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 27/05/2009
 	 * 
 	 * @return Date
@@ -26087,10 +26087,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.setInteger("idImovel", idImovel).uniqueResult();		    
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -26099,9 +26099,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Verifica se existe imovel com número do Medidor de Energia informado
+	 * Verifica se existe imovel com nï¿½mero do Medidor de Energia informado
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 08/06/2009
 	 * 
 	 * @return Integer
@@ -26127,10 +26127,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.setString("numeroMedidorEnergia", numeroMedidorEnergia).uniqueResult();		    
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -26140,11 +26140,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	/**
 	 * 
-	 * Pesquisa a coleção de categorias do imovel [UC0472] Consultar Imovel
+	 * Pesquisa a coleï¿½ï¿½o de categorias do imovel [UC0472] Consultar Imovel
 	 * 
 	 * 
 	 * 
-	 * @author Sávio Luiz
+	 * @author Sï¿½vio Luiz
 	 * 
 	 * @since 07/09/2006
 	 * 
@@ -26166,17 +26166,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
+		// cria a coleï¿½ï¿½o de retorno
 
 		Collection retorno = null;
 
-		// obtém a sessão
+		// obtï¿½m a sessï¿½o
 
 		Session session = HibernateUtil.getSession();
 
 		String consulta = null;
 
-		// pesquisa a coleção de atividades e atribui a variável "retorno"
+		// pesquisa a coleï¿½ï¿½o de atividades e atribui a variï¿½vel "retorno"
 
 		try {
 
@@ -26201,19 +26201,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
 		}
 
-		// retorna a coleção de atividades pesquisada(s)
+		// retorna a coleï¿½ï¿½o de atividades pesquisada(s)
 
 		return retorno;
 
@@ -26252,10 +26252,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.uniqueResult();		    
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -26263,7 +26263,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Este método está de acordo com o [UC0979] Gerar Relatório de Imóveis em Programas Especiais.
+	 * Este mï¿½todo estï¿½ de acordo com o [UC0979] Gerar Relatï¿½rio de Imï¿½veis em Programas Especiais.
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 18/01/2010
@@ -26282,7 +26282,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			consulta = "";
 
-			// mês/Ano referência
+			// mï¿½s/Ano referï¿½ncia
 			if(filtro.getMesAnoReferencia() != null && filtro.getMesAnoReferencia().equals("")){
 				consulta += "" 
 					+ filtro.getMesAnoReferencia() 
@@ -26304,7 +26304,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 			*/
 			
-			// região de Desenvolvimento
+			// regiï¿½o de Desenvolvimento
 			if ( filtro.getIdRegiaoDesenvolvimento() !=null && !filtro.getIdRegiaoDesenvolvimento().equals("")){
 				consulta += "e.id = " 
 					+ filtro.getIdRegiaoDesenvolvimento() 
@@ -26335,10 +26335,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			retorno = session.createQuery(consulta).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26349,7 +26349,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 * Pesquisa qual foi o consumo faturado do imovel
 	 * 
-	 * @author Rômulo Aurélio
+	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 03/03/2010
 	 * @throws ControladorException
 	 */
@@ -26373,10 +26373,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.uniqueResult();		    
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -26386,7 +26386,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	/**
 	 * [UC0820] Atualizar Faturamento do Movimento Celular
      * 
-     * Método criado para atualizar apenas os campos necessários para
+     * Mï¿½todo criado para atualizar apenas os campos necessï¿½rios para
      * imovel.
      * 	 
      * @author Bruno Barros
@@ -26435,7 +26435,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	
 	/**
-	 * [UC1005] Determinar Confirmação da Negativação
+	 * [UC1005] Determinar Confirmaï¿½ï¿½o da Negativaï¿½ï¿½o
 	 *
 	 * @author Vivianne Sousa
 	 * @date 11/03/2010
@@ -26461,10 +26461,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -26495,10 +26495,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				   executeUpdate();
 	
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -26506,7 +26506,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	/** 
 	 * [UC1000] Informar Medidor de Energia por Rota.
 	 * 
-	 * Atualizar Número Medidor de Energia do Imóvel.
+	 * Atualizar Nï¿½mero Medidor de Energia do Imï¿½vel.
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 15/03/2010
@@ -26530,11 +26530,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		   		.executeUpdate();
 					
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -26559,10 +26559,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					"idsImovelCobrancaSituacao", idsImovelCobrancaSituacao).list();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26571,14 +26571,14 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	
 	/**
-	 * [UC0490] Informar Situação de Cobrança
-	 * [SB0004] – Selecionar Situações de Cobrança
+	 * [UC0490] Informar Situaï¿½ï¿½o de Cobranï¿½a
+	 * [SB0004] ï¿½ Selecionar Situaï¿½ï¿½es de Cobranï¿½a
 	 * 
-	 * seleciona as situações de cobrança 
-	 * (a partir da tabela COBRANÇA_SITUACAO com CBST_ICUSO=1 
-	 * e CBST_ICBLOQUEIOINCLUSAO=2)retirando as ocorrências 
+	 * seleciona as situaï¿½ï¿½es de cobranï¿½a 
+	 * (a partir da tabela COBRANï¿½A_SITUACAO com CBST_ICUSO=1 
+	 * e CBST_ICBLOQUEIOINCLUSAO=2)retirando as ocorrï¿½ncias 
 	 * com CBST_ID=CBST_ID da tabela IMOVEL_COBRANCA_SITUACAO 
-	 * para IMOV_ID=Id do imóvel recebido e 
+	 * para IMOV_ID=Id do imï¿½vel recebido e 
 	 * ISCB_DTRETIRADACOBRANCA com valor igual a nulo
 	 * 
 	 * @author Vivianne Sousa
@@ -26613,10 +26613,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			.list();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26625,7 +26625,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	/**
 	 * 
-	 * O método abaixo realiza uma pesquisa em imovel e retorna os campos
+	 * O mï¿½todo abaixo realiza uma pesquisa em imovel e retorna os campos
 	 * 
 	 * id localidade e codigo do setor
 	 * 
@@ -26655,13 +26655,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -26696,17 +26696,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		   session.createQuery(update).setInteger("idImovel", idImovel).executeUpdate();
 					
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 	
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
- 	 * @author Rômulo Aurélio
+ 	 * @author Rï¿½mulo Aurï¿½lio
 	 * @date 23/06/2010
 	 * @param idImovel
 	 * @return
@@ -26715,15 +26715,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	public Integer  pesquisarDebitoTipoImovelDoacao(
 			Integer idImovel) throws ErroRepositorioException {
 
-		/** * Declara variáveis locais ** */
+		/** * Declara variï¿½veis locais ** */
 		Session session = null;
 		Integer retorno = null;
 
 		session = HibernateUtil.getSession();
 
 		/**
-		 * * Script HQL que já monta uma coleção de ImovelCobrarDoacaoHelper com
-		 * tudo que é necessário **
+		 * * Script HQL que jï¿½ monta uma coleï¿½ï¿½o de ImovelCobrarDoacaoHelper com
+		 * tudo que ï¿½ necessï¿½rio **
 		 */
 		try {
 			String consulta = "select "
@@ -26738,10 +26738,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			/** * levanta a exceção para a próxima camada ** */
+			/** * levanta a exceï¿½ï¿½o para a prï¿½xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sessão ** */
+			/** * fecha a sessï¿½o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26759,7 +26759,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	public ImovelPerfil  pesquisarImovelPerfil(
 			Integer idImovelPerfil) throws ErroRepositorioException {
 
-		/** * Declara variáveis locais ** */
+		/** * Declara variï¿½veis locais ** */
 		Session session = null;
 		ImovelPerfil retorno = null;
 
@@ -26776,10 +26776,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.uniqueResult();
 
 		} catch (HibernateException e) {
-			/** * levanta a exceção para a próxima camada ** */
+			/** * levanta a exceï¿½ï¿½o para a prï¿½xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sessão ** */
+			/** * fecha a sessï¿½o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26861,12 +26861,12 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 
 		}
@@ -26876,8 +26876,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Caso o retorno seja TRUE, quer dizer que a alteração da inscrição acarretou na mudança do grupo de faturamento,
-	 * e este novo grupo do imóvel ja foi faturado.
+	 * Caso o retorno seja TRUE, quer dizer que a alteraï¿½ï¿½o da inscriï¿½ï¿½o acarretou na mudanï¿½a do grupo de faturamento,
+	 * e este novo grupo do imï¿½vel ja foi faturado.
 	 * 
 	 * 
 	 * @author Arthur Carvalho
@@ -26885,7 +26885,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 */
 	public FaturamentoGrupo[] verificaInscricaoAlteradaAcarretaMudancaDoGrupoFaturamento(Integer idQuadraAnterior, Integer idQuadraAtual) throws ErroRepositorioException {
 		
-		/** * Declara variáveis locais ** */
+		/** * Declara variï¿½veis locais ** */
 		Session session = null;
 		FaturamentoGrupo[] faturamentoGrupos = new FaturamentoGrupo[2];
 		FaturamentoGrupo faturamentoGrupoOrigem = new FaturamentoGrupo();
@@ -26920,10 +26920,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			faturamentoGrupos[1] = faturamentoGrupoDestino;
 			
 		} catch (HibernateException e) {
-			/** * levanta a exceção para a próxima camada ** */
+			/** * levanta a exceï¿½ï¿½o para a prï¿½xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sessão ** */
+			/** * fecha a sessï¿½o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26936,13 +26936,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 *  @date 21/09/2010
 	 *  
 	 * 	UC_0009 - Manter Cliente
-	 *  	[FS0008] ? Verificar permissão especial para cliente de imóvel público
+	 *  	[FS0008] ? Verificar permissï¿½o especial para cliente de imï¿½vel pï¿½blico
 	 *  
-	 * 	Verifica se o Cliente possui algum imóvel, cujo o tipo da categoria 
+	 * 	Verifica se o Cliente possui algum imï¿½vel, cujo o tipo da categoria 
 	 *  em subcategoria seja igual a PUBLICO.
 	 *  
-	 * 	Caso o cliente possua algum imóvel, retornar a quantidade de imoveis nesta situação
-	 * 	Caso contrário retorna zero. 
+	 * 	Caso o cliente possua algum imï¿½vel, retornar a quantidade de imoveis nesta situaï¿½ï¿½o
+	 * 	Caso contrï¿½rio retorna zero. 
 	 * 
 	 *  @param idCliente
 	 *  @return Integer
@@ -26973,10 +26973,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.setMaxResults(1).uniqueResult();
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -26988,7 +26988,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 */
 	public boolean verificaGeracaoDadosLeituraGrupoFaturamento(FaturamentoGrupo faturamentoGrupo) throws ErroRepositorioException {
 		
-		/** * Declara variáveis locais ** */
+		/** * Declara variï¿½veis locais ** */
 		Session session = null;
 		boolean retorno = false;
 		MovimentoRoteiroEmpresa movimentoRoteiroEmpresa = new MovimentoRoteiroEmpresa();
@@ -27013,10 +27013,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 			
 		} catch (HibernateException e) {
-			/** * levanta a exceção para a próxima camada ** */
+			/** * levanta a exceï¿½ï¿½o para a prï¿½xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sessão ** */
+			/** * fecha a sessï¿½o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27026,7 +27026,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	
 	/**
-	 * [UC0074] Alterar Inscrição de Imóvel
+	 * [UC0074] Alterar Inscriï¿½ï¿½o de Imï¿½vel
 	 * @author Arthur Carvalho
 	 * @date 19/09/2010
 	 * @param idLocalidade
@@ -27041,7 +27041,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	public ImovelInscricaoAlterada verificarDuplicidadeImovelInscricaoAlterada(Integer idLocalidade, Integer idSetorComercial, Integer idQuadra,
 			Integer idQuadraFace, Integer lote, Integer subLote ) throws ErroRepositorioException {
 		
-		/** * Declara variáveis locais ** */
+		/** * Declara variï¿½veis locais ** */
 		Session session = null;
 		ImovelInscricaoAlterada imovelInscricaoAlterada = new ImovelInscricaoAlterada();
 		session = HibernateUtil.getSession();
@@ -27092,10 +27092,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			
 			
 		} catch (HibernateException e) {
-			/** * levanta a exceção para a próxima camada ** */
+			/** * levanta a exceï¿½ï¿½o para a prï¿½xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sessão ** */
+			/** * fecha a sessï¿½o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27105,14 +27105,14 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	
 	/**
-	 * [UC0995] Emitir Declaração Transferência de Débitos/Créditos
+	 * [UC0995] Emitir Declaraï¿½ï¿½o Transferï¿½ncia de Dï¿½bitos/Crï¿½ditos
 	 * @author Daniel Alves
 	 * @date 23/09/2010
 	 * @return Municipio
 	 */
 	public Municipio pesquisarMunicipioImovel(Integer idImovel) throws ErroRepositorioException {
 		
-		/** * Declara variáveis locais ** */
+		/** * Declara variï¿½veis locais ** */
 		Session session = null;
 		Municipio retorno = new Municipio();
 		
@@ -27134,10 +27134,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.uniqueResult();	
 			
 		} catch (HibernateException e) {
-			/** * levanta a exceção para a próxima camada ** */
+			/** * levanta a exceï¿½ï¿½o para a prï¿½xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sessão ** */
+			/** * fecha a sessï¿½o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27147,9 +27147,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	/**
 	 * 
-	 * [UC0630] Solicitar Emissão do Extrato de Débitos
+	 * [UC0630] Solicitar Emissï¿½o do Extrato de Dï¿½bitos
 	 * 
-	 * [SB0001] – Calcular valor dos descontos pagamento à vista.
+	 * [SB0001] ï¿½ Calcular valor dos descontos pagamento ï¿½ vista.
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/10/2010
@@ -27184,8 +27184,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	/**
 	 * autor: Adriana Muniz
 	 * Data: 12/05/2011
-	 * Pesquisa o id da quadra pelo id do imóvel - Gerar
-	 * Arquivo da declaração de quitação anual de débito
+	 * Pesquisa o id da quadra pelo id do imï¿½vel - Gerar
+	 * Arquivo da declaraï¿½ï¿½o de quitaï¿½ï¿½o anual de dï¿½bito
 	 */
 	public Integer pesquisaIdQuadraImovel(Integer idImovel) throws ErroRepositorioException{
 		Integer retorno = null;
@@ -27219,7 +27219,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 */
 	public boolean verificaGeracaoDadosLeituraRota(FaturamentoGrupo faturamentoGrupo, Rota rota) throws ErroRepositorioException {
 		
-		/** * Declara variáveis locais ** */
+		/** * Declara variï¿½veis locais ** */
 		Session session = null;
 		boolean retorno = false;
 		MovimentoRoteiroEmpresa movimentoRoteiroEmpresa = new MovimentoRoteiroEmpresa();
@@ -27246,10 +27246,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 			
 		} catch (HibernateException e) {
-			/** * levanta a exceção para a próxima camada ** */
+			/** * levanta a exceï¿½ï¿½o para a prï¿½xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sessão ** */
+			/** * fecha a sessï¿½o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27261,7 +27261,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * @author Adriana Muniz
 	 * @date 06/12/2011
 	 * 
-	 * Pesquisa o perfil do imovel pelo id do imóvel
+	 * Pesquisa o perfil do imovel pelo id do imï¿½vel
 	 * 
 	 * @param idImovelPerfil
 	 * @return
@@ -27270,7 +27270,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	public ImovelPerfil  pesquisarImovelPerfilIdImovel(
 			Integer idImovel) throws ErroRepositorioException {
 
-		/** * Declara variáveis locais ** */
+		/** * Declara variï¿½veis locais ** */
 		Session session = null;
 		ImovelPerfil retorno = null;
 
@@ -27289,10 +27289,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.uniqueResult();
 
 		} catch (HibernateException e) {
-			/** * levanta a exceção para a próxima camada ** */
+			/** * levanta a exceï¿½ï¿½o para a prï¿½xima camada ** */
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			/** * fecha a sessão ** */
+			/** * fecha a sessï¿½o ** */
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27360,10 +27360,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				}
 			}
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27397,10 +27397,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27473,10 +27473,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			retorno = (Collection)query.list();
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27570,10 +27570,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			retorno = (Collection)query.list();
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27610,10 +27610,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.list();
 	
 	} catch (HibernateException e) {
-		// levanta a exceção para a próxima camada
+		// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 		throw new ErroRepositorioException(e, "Erro no Hibernate");
 	} finally {
-		// fecha a sessão
+		// fecha a sessï¿½o
 		HibernateUtil.closeSession(session);
 	}
 	
@@ -27649,10 +27649,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.setMaxResults(1).uniqueResult();	
 	
 	} catch (HibernateException e) {
-		// levanta a exceção para a próxima camada
+		// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 		throw new ErroRepositorioException(e, "Erro no Hibernate");
 	} finally {
-		// fecha a sessão
+		// fecha a sessï¿½o
 		HibernateUtil.closeSession(session);
 	}
 	
@@ -27692,10 +27692,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.setMaxResults(1).uniqueResult();	
 	
 	} catch (HibernateException e) {
-		// levanta a exceção para a próxima camada
+		// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 		throw new ErroRepositorioException(e, "Erro no Hibernate");
 	} finally {
-		// fecha a sessão
+		// fecha a sessï¿½o
 		HibernateUtil.closeSession(session);
 	}
 	
@@ -27732,10 +27732,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.setMaxResults(1).uniqueResult();	
 	
 	} catch (HibernateException e) {
-		// levanta a exceção para a próxima camada
+		// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 		throw new ErroRepositorioException(e, "Erro no Hibernate");
 	} finally {
-		// fecha a sessão
+		// fecha a sessï¿½o
 		HibernateUtil.closeSession(session);
 	}
 	
@@ -27770,10 +27770,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -27813,10 +27813,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.list();	
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -27854,10 +27854,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.setMaxResults(1).uniqueResult();	
 	
 	} catch (HibernateException e) {
-		// levanta a exceção para a próxima camada
+		// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 		throw new ErroRepositorioException(e, "Erro no Hibernate");
 	} finally {
-		// fecha a sessão
+		// fecha a sessï¿½o
 		HibernateUtil.closeSession(session);
 	}
 	
@@ -27866,7 +27866,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Imóvel da Tarifa Social
+	 * [UC1157] Seleciona Comando para Retirar Imï¿½vel da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 31/03/2011
@@ -27930,10 +27930,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -27941,7 +27941,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Imóvel da Tarifa Social
+	 * [UC1157] Seleciona Comando para Retirar Imï¿½vel da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 31/03/2011
@@ -27986,10 +27986,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -27997,7 +27997,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Imóvel da Tarifa Social
+	 * [UC1157] Seleciona Comando para Retirar Imï¿½vel da Tarifa Social
 	 * [SB0003] Excluir Comando Selecionado
 	 *  
 	 * @author Vivianne Sousa
@@ -28021,16 +28021,16 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			session.createQuery(remocaoTarifaSocialComandoCarta).setInteger("idTarifaSocialComandoCarta", idTarifaSocialComandoCarta).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	}
 	
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Imóvel da Tarifa Social
+	 * [UC1157] Seleciona Comando para Retirar Imï¿½vel da Tarifa Social
 	 * [SB0003] Excluir Comando Selecionado
 	 * 
 	 * @author Vivianne Sousa
@@ -28063,10 +28063,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.list();	
 	
 	} catch (HibernateException e) {
-		// levanta a exceção para a próxima camada
+		// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 		throw new ErroRepositorioException(e, "Erro no Hibernate");
 	} finally {
-		// fecha a sessão
+		// fecha a sessï¿½o
 		HibernateUtil.closeSession(session);
 	}
 	
@@ -28074,7 +28074,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Imóvel da Tarifa Social
+	 * [UC1157] Seleciona Comando para Retirar Imï¿½vel da Tarifa Social
 	 * [SB0003] Excluir Comando Selecionado 
 	 * 
 	 * @author Vivianne Sousa
@@ -28105,10 +28105,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.list();	
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -28116,7 +28116,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	/**
 	 * [UC1160] Processar Comando Gerado Carta Tarifa Social  
-	 * [SB0004]–Retirar Imóvel tarifa Social
+	 * [SB0004]ï¿½Retirar Imï¿½vel tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 04/04/2011
@@ -28163,10 +28163,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.executeUpdate();
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -28197,17 +28197,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.executeUpdate();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
 	}
 	
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Imóvel da Tarifa Social
+	 * [UC1157] Seleciona Comando para Retirar Imï¿½vel da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 01/04/2011
@@ -28241,10 +28241,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.list();	
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -28252,7 +28252,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Imóvel da Tarifa Social
+	 * [UC1157] Seleciona Comando para Retirar Imï¿½vel da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 05/04/2011
@@ -28279,10 +28279,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			.setMaxResults(1).uniqueResult();	
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -28290,7 +28290,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC1164] Gerar Resumo dos Imóveis Excluídos da Tarifa Social
+	 * [UC1164] Gerar Resumo dos Imï¿½veis Excluï¿½dos da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 07/04/2011
@@ -28377,10 +28377,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			retorno = (Collection)query.list();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -28388,7 +28388,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC1164] Gerar Resumo dos Imóveis Excluídos da Tarifa Social
+	 * [UC1164] Gerar Resumo dos Imï¿½veis Excluï¿½dos da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 07/04/2011
@@ -28432,10 +28432,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.setMaxResults(1).uniqueResult();	
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -28443,7 +28443,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC1164] Gerar Resumo dos Imóveis Excluídos da Tarifa Social
+	 * [UC1164] Gerar Resumo dos Imï¿½veis Excluï¿½dos da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 08/04/2011
@@ -28469,10 +28469,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.setMaxResults(1).uniqueResult();	
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -28565,10 +28565,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		retorno = (Collection)query.list();
 	
 	} catch (HibernateException e) {
-		// levanta a exceção para a próxima camada
+		// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 		throw new ErroRepositorioException(e, "Erro no Hibernate");
 	} finally {
-		// fecha a sessão
+		// fecha a sessï¿½o
 		HibernateUtil.closeSession(session);
 	}
 	
@@ -28576,7 +28576,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC1161] Retirar Imóvel da Tarifa Social
+	 * [UC1161] Retirar Imï¿½vel da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/04/2011
@@ -28608,17 +28608,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.executeUpdate();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
 	}
 	
 	/**
-	 * [UC1161] Retirar Imóvel da Tarifa Social
+	 * [UC1161] Retirar Imï¿½vel da Tarifa Social
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/04/2011
@@ -28647,10 +28647,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.executeUpdate();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -28701,17 +28701,17 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			.setInteger("idLocalidade", idLocalidade).executeUpdate();
 			
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	}
 
 	/**
 	 * [UC0352] Emitir Contas e Cartas
-	 * [SB0017] – Obter Mensagem da Conta em 3 Partes
+	 * [SB0017] ï¿½ Obter Mensagem da Conta em 3 Partes
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 29/04/2011
@@ -28737,10 +28737,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.setMaxResults(1).uniqueResult();	
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -28749,7 +28749,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	
 	/**
-	 *  [UC1168] Encerrar Comandos de Cobrança por Empresa
+	 *  [UC1168] Encerrar Comandos de Cobranï¿½a por Empresa
 	 *
 	 * @author Mariana Victor
 	 * @created 10/05/2011
@@ -28793,7 +28793,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.setInteger("imovel", idImovel)
 					.setInteger("idUsuario", usuario.getId())
 					.setInteger("idCobrancaSituacaoTipo", CobrancaSituacaoTipo.COBRANCA_EMPRESA_TERCEIRIZADA)
-					.setString("observacao", "FIM DO CICLO DE COBRANÇA POR EMPRESA.")
+					.setString("observacao", "FIM DO CICLO DE COBRANï¿½A POR EMPRESA.")
 					.executeUpdate();
 			
 		} catch (HibernateException e) {
@@ -28804,9 +28804,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 
 	/**
-	 * [UC1169] Movimentar Ordens de Serviço de Cobrança por Resultado
+	 * [UC1169] Movimentar Ordens de Serviï¿½o de Cobranï¿½a por Resultado
 	 * 
-	 * Emitir OS de Empresa de Cobrança - 
+	 * Emitir OS de Empresa de Cobranï¿½a - 
 	 * 
 	 * @author Mariana Victor
 	 * @data 18/05/2011
@@ -28826,7 +28826,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			for (int i = 0; i < idsOrdemServico.length; i++) {
 				consulta += idsOrdemServico[i] + ", ";
 			}
-			//remove a virgula do final e coloca o parêntese
+			//remove a virgula do final e coloca o parï¿½ntese
 			consulta = consulta.substring(0, consulta.length() - 2) + ")";
 			
 			consulta = consulta + " group by orse.orse_id, orse.imov_id";
@@ -28847,8 +28847,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 
 	/**
-	 * [UC0000] Obter Consumo Não Medido por Parâmetro
-	 * [FS0001] - Verificar "Pontos de Utilização" Não Informado.
+	 * [UC0000] Obter Consumo Nï¿½o Medido por Parï¿½metro
+	 * [FS0001] - Verificar "Pontos de Utilizaï¿½ï¿½o" Nï¿½o Informado.
 	 * 
 	 * @author Mariana Victor
 	 * @date 23/05/2011
@@ -28877,10 +28877,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.setMaxResults(1).uniqueResult();	
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -28889,8 +28889,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 
 	/**
-	 * [UC0000] Obter Consumo Não Medido por Parâmetro
-	 * [FS0002] - Verificar “Número de Moradores” Não Informado.
+	 * [UC0000] Obter Consumo Nï¿½o Medido por Parï¿½metro
+	 * [FS0002] - Verificar ï¿½Nï¿½mero de Moradoresï¿½ Nï¿½o Informado.
 	 * 
 	 * @author Mariana Victor
 	 * @date 23/05/2011
@@ -28917,10 +28917,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.setMaxResults(1).uniqueResult();	
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -28928,9 +28928,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC1174] Gerar Relatório Imóveis com Doações
+	 * [UC1174] Gerar Relatï¿½rio Imï¿½veis com Doaï¿½ï¿½es
 	 * 
-	 * Quantidade de imoveis com doações - 
+	 * Quantidade de imoveis com doaï¿½ï¿½es - 
 	 * 
 	 * @author Erivan Sousa	
 	 * @data 13/06/2011
@@ -28954,24 +28954,24 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				consulta += "and imov.entidadeBeneficente = :idEntidade " ; 
 				parametros.put("idEntidade", filtro.getIdEntidade());
 			}
-			//Identificador d Usuário de Adesão
+			//Identificador d Usuï¿½rio de Adesï¿½o
 			if(filtro.getLoginUsuarioAdesao() != null){
 				consulta += "and usuAdesao.login = :loginUsuarioAdesao ";
 				parametros.put("loginUsuarioAdesao", filtro.getLoginUsuarioAdesao());
 			}
-			//Identificador do Usuário de Cancelmaneto
+			//Identificador do Usuï¿½rio de Cancelmaneto
 			if(filtro.getLoginUsuarioCancelamento() != null){
 				consulta += "and usurCancel.login = :loginUsuarioCancelamento ";
 				parametros.put("loginUsuarioCancelamento", filtro.getLoginUsuarioCancelamento());
 			}
-			//Datas do período de adesão
+			//Datas do perï¿½odo de adesï¿½o
 			if(filtro.getDataAdesaoInicio() != null && filtro.getDataAdesaoFinal() != null){
 				consulta += "and imov.dataAdesao between :dataAdesaoInicio and :dataAdesaoFinal ";
 				
 				parametros.put("dataAdesaoInicio", filtro.getDataAdesaoInicio());
 				parametros.put("dataAdesaoFinal", filtro.getDataAdesaoFinal());
 			}
-			//Datas do período de cancelamento
+			//Datas do perï¿½odo de cancelamento
 			if(filtro.getDataCancelamentoInicio() != null && filtro.getDataCancelamentoFinal() != null){
 				consulta += "and imov.dataCancelamento between :dataCancelamentoInicio and :dataCancelamentoFinal ";
 				
@@ -28985,7 +28985,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				parametros.put("refInicioInicial", filtro.getRefInicioDoacaoInicio());
 				parametros.put("refInicioFinal", filtro.getRefInicioDoacaoFinal());
 			}
-			//Ano/Mes referencia fim da doação
+			//Ano/Mes referencia fim da doaï¿½ï¿½o
 			if(filtro.getRefFimDoacaoInicio() != null && filtro.getRefFimDoacaoFinal() != null){
 				consulta += "and imov.anoMesReferenciaFinal between :refFimInicial and :refFimFinal ";
 				
@@ -29026,9 +29026,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC1174] Gerar Relatório Imóveis com Doações
+	 * [UC1174] Gerar Relatï¿½rio Imï¿½veis com Doaï¿½ï¿½es
 	 * 
-	 * Pesquisar Imoveis com Doações - 
+	 * Pesquisar Imoveis com Doaï¿½ï¿½es - 
 	 * 
 	 * @author Erivan Sousa	
 	 * @data 13/06/2011
@@ -29070,24 +29070,24 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				consulta += "and imovelDoacao.entidadeBeneficente.id = :idEntidade " ; 
 				parametros.put("idEntidade", filtro.getIdEntidade());
 			}
-			//Identificador d Usuário de Adesão
+			//Identificador d Usuï¿½rio de Adesï¿½o
 			if(filtro.getLoginUsuarioAdesao() != null){
 				consulta += "and usuAdesao.login = :loginUsuarioAdesao ";
 				parametros.put("loginUsuarioAdesao", filtro.getLoginUsuarioAdesao());
 			}
-			//Identificador do Usuário de Cancelmaneto
+			//Identificador do Usuï¿½rio de Cancelmaneto
 			if(filtro.getLoginUsuarioCancelamento() != null){
 				consulta += "and usurCancel.login = :loginUsuarioCancelamento ";
 				parametros.put("loginUsuarioCancelamento", filtro.getLoginUsuarioCancelamento());
 			}
-			//Datas do período de adesão
+			//Datas do perï¿½odo de adesï¿½o
 			if(filtro.getDataAdesaoInicio() != null && filtro.getDataAdesaoFinal() != null){
 				consulta += "and imovelDoacao.dataAdesao between :dataAdesaoInicio and :dataAdesaoFinal ";
 				
 				parametros.put("dataAdesaoInicio", filtro.getDataAdesaoInicio());
 				parametros.put("dataAdesaoFinal", filtro.getDataAdesaoFinal());
 			}
-			//Datas do período de cancelamento
+			//Datas do perï¿½odo de cancelamento
 			if(filtro.getDataCancelamentoInicio() != null && filtro.getDataCancelamentoFinal() != null){
 				consulta += "and imovelDoacao.dataCancelamento between :dataCancelamentoInicio and :dataCancelamentoFinal ";
 				
@@ -29101,7 +29101,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				parametros.put("refInicioInicial", filtro.getRefInicioDoacaoInicio());
 				parametros.put("refInicioFinal", filtro.getRefInicioDoacaoFinal());
 			}
-			//Ano/Mes referencia fim da doação
+			//Ano/Mes referencia fim da doaï¿½ï¿½o
 			if(filtro.getRefFimDoacaoInicio() != null && filtro.getRefFimDoacaoFinal() != null){
 				consulta += "and imovelDoacao.anoMesReferenciaFinal between :refFimInicial and :refFimFinal ";
 				
@@ -29147,7 +29147,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscalização
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaï¿½ï¿½o
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 09/08/2011
@@ -29180,9 +29180,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Método que retorna o id do imóvel área comum
+	 * Mï¿½todo que retorna o id do imï¿½vel ï¿½rea comum
 	 * 
-	 * [UC0098] Manter Vínculos de Imóveis para Rateio de Consumo
+	 * [UC0098] Manter Vï¿½nculos de Imï¿½veis para Rateio de Consumo
 	 * [SB0001] Atualizar Tipo de Rateio
 	 * 
 	 * @author Magno Gouveia
@@ -29212,10 +29212,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					 				   .uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -29224,11 +29224,11 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	
 	/**
 	 * <p>
-	 * [UC0098] Manter Vínculos de Imóveis para Rateio Comum
+	 * [UC0098] Manter Vï¿½nculos de Imï¿½veis para Rateio Comum
 	 * </p>
 	 * <p>
-	 * [SB0001] - [FS0012] - Caso a matrícula do imóvel para área comum
-	 * informada não exista na tabela IMOVEL, exibir a mensagem "Matrícula
+	 * [SB0001] - [FS0012] - Caso a matrï¿½cula do imï¿½vel para ï¿½rea comum
+	 * informada nï¿½o exista na tabela IMOVEL, exibir a mensagem "Matrï¿½cula
 	 * inexistente no cadastro" e retornar para o passo correspondente no fluxo
 	 * principal
 	 * </p>
@@ -29266,9 +29266,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Método que retorna o id do imóvel condominio
+	 * Mï¿½todo que retorna o id do imï¿½vel condominio
 	 * 
-	 * [UC0098] Manter Vínculos de Imóveis para Rateio de Consumo
+	 * [UC0098] Manter Vï¿½nculos de Imï¿½veis para Rateio de Consumo
 	 * [SB0001] Atualizar Tipo de Rateio
 	 * 
 	 * @author Magno Gouveia
@@ -29295,10 +29295,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					 				   .uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		
@@ -29306,9 +29306,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Método que retorna o id do imóvel condominio
+	 * Mï¿½todo que retorna o id do imï¿½vel condominio
 	 * 
-	 * [UC0098] Manter Vínculos de Imóveis para Rateio de Consumo
+	 * [UC0098] Manter Vï¿½nculos de Imï¿½veis para Rateio de Consumo
 	 * [SB0001] Atualizar Tipo de Rateio
 	 * 
 	 * @author Magno Gouveia
@@ -29506,13 +29506,13 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		} catch (HibernateException e) {
 
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 
 		} finally {
 
-			// fecha a sessão
+			// fecha a sessï¿½o
 
 			HibernateUtil.closeSession(session);
 
@@ -29675,28 +29675,33 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	public List<Integer> pesquisarImovelElegivelBolsaAguaPorRota(Integer idRota) throws ErroRepositorioException {
 		List<Integer> idsImoveis = new ArrayList<Integer>();
 		Session session = HibernateUtil.getSession();
-		String consulta = null;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
-			consulta = " Select distinct i.imov_id as idImovel from cadastro.imovel_subcategoria scat   "
-					+ " inner join cadastro.imovel i on i.imov_id = scat.imov_id "
-					+ " inner join cadastro.cliente_imovel clim on clim.imov_id = i.imov_id "
-					+ " inner join cadastro.cliente clie on clim.clie_id = clie.clie_id "
-					+ " inner join cadastro.localidade loca on loca.loca_id = i.loca_id "
-					+ " inner join cadastro.quadra q on q.qdra_id = i.qdra_id  "
-					+ " inner join micromedicao.rota r on r.rota_id = q.rota_id "
-					+ " where 1=1 and clie.clie_id not in (select distinct ci.clie_id from cadastro.imovel i  "
-							+ " inner join cadastro.cliente_imovel ci on ci.imov_id = i.imov_id "
-							+ " where i.iper_id = 11 and ci.clim_icnomeconta = 1 and clim_dtrelacaofim is null) "
-					+ " and scat_id in (1,2,3,4) and iper_id not in (6,7,8,9,11) "
-					+ " and clie_icbolsafamilia not in (2,5) and clie_nnnis is not null "
-					+ " and clim_dtrelacaofim is null and clim_icnomeconta = :clim_icnomeconta "
-					+ " and r.rota_id = :idRota";
+			consulta.append(" Select distinct i.imov_id as idImovel from cadastro.imovel_subcategoria scat   ")
+					.append(" inner join cadastro.imovel i on i.imov_id = scat.imov_id ")
+					.append(" inner join cadastro.cliente_imovel clim on clim.imov_id = i.imov_id ")
+					.append(" inner join cadastro.cliente clie on clim.clie_id = clie.clie_id ")
+					.append(" inner join cadastro.localidade loca on loca.loca_id = i.loca_id ")
+					.append(" inner join cadastro.quadra q on q.qdra_id = i.qdra_id  ")
+					.append(" inner join micromedicao.rota r on r.rota_id = q.rota_id ")
+					.append(" where clie.clie_id not in (select distinct ci.clie_id from cadastro.imovel i  ")
+					.append("      inner join cadastro.cliente_imovel ci on ci.imov_id = i.imov_id ")
+					.append("      where i.iper_id = :perfilBolsaAgua ")
+					.append("      and ci.clim_icnomeconta = :sim ")
+					.append("      and clim_dtrelacaofim is null ) ")
+					.append(" and scat_id in (1,2,3,4) and iper_id not in (6,7,8,9,11) ")
+					.append(" and clie_icbolsafamilia not in (2,5) and clie_nnnis is not null ")
+					.append(" and clim_dtrelacaofim is null and clim_icnomeconta = :sim  ")
+					.append(" and clie_icrecusasubsidio = :nao ")
+					.append(" and r.rota_id = :idRota");
 		
-			idsImoveis = (List<Integer>) session.createSQLQuery(consulta)
+			idsImoveis = (List<Integer>) session.createSQLQuery(consulta.toString())
 					.addScalar("idImovel", Hibernate.INTEGER)
-					.setShort("clim_icnomeconta",ConstantesSistema.SIM)
+					.setShort("sim",ConstantesSistema.SIM)
+					.setShort("nao",ConstantesSistema.NAO)
 					.setInteger("idRota",idRota)
+					.setInteger("perfilBolsaAgua",ImovelPerfil.BOLSA_AGUA)
 					.list();
 
 		} catch (HibernateException e) {
@@ -29721,10 +29726,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			session.createQuery(update).setInteger("idImovel", idImovel).setInteger("idPerfil", idPerfil).setTimestamp("ultimaAlteracao", new Date()).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		System.out.println("IMOVEL ID: " + idImovel +  " ATUALIZADO.");

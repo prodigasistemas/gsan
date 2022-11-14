@@ -822,7 +822,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 							if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
 								/**
-								 * Crédito Bolsa Água será validado antes de ser adicionado aos Créditos da
+								 * Crï¿½dito Bolsa ï¿½gua serï¿½ validado antes de ser adicionado aos Crï¿½ditos da
 								 * Conta
 								 * 
 								 * @author: Kurt Matheus Sampaio de Matos
@@ -13848,7 +13848,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		if (extratoQuitacao != null && extratoQuitacao.getIndicadorImpressaoNaConta() != null
 				&& extratoQuitacao.getIndicadorImpressaoNaConta().equals(new Integer(ConstantesSistema.NAO))) {
-			mensagem = "Em cumprimento a lei 12.007/2009, declaramos quitados os débitos de consumo de água e/ou esgoto do ano de "
+			mensagem = "Em cumprimento a lei 12.007/2009, declaramos quitados os debitos de consumo de agua e/ou esgoto do ano de "
 					+ anoAnterior + ".";
 		}
 		return mensagem;
@@ -15538,7 +15538,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Cliente cliente = repositorioCobranca.pesquisarClienteResponsavelParcelamento(idImovel);
 		String cpfOuCnpj = cliente.getCpfOuCnpj();
 		if(cliente != null && Util.cpfCnpjInvalido(cpfOuCnpj)) {
-			throw new ControladorException("INSCRIÇÃO(CPF/CNPJ) " + cliente.getCpfOuCnpj() + " INVÁLIDA");
+			throw new ControladorException("INSCRICAO(CPF/CNPJ) " + cliente.getCpfOuCnpj() + " INVALIDA");
 		}
 		return cliente;
 	}
@@ -15577,7 +15577,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 		
 		if(Util.cpfCnpjInvalido(cnpjCpf)) {
-			System.out.println("INSCRIÇÃO(CPF/CNPJ) " + cliente.getCpfOuCnpj() + " INVÁLIDA");
+			System.out.println("INSCRICAO(CPF/CNPJ) " + cliente.getCpfOuCnpj() + " INVALIDA");
 			return null;
 		}
 		
@@ -15616,6 +15616,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		List<Integer> clientesCadUnico = Fachada.getInstancia().pesquisarClientesPorCadastroUnico();
 		List<Integer> idsImoveisBolsaAgua = Fachada.getInstancia().pesquisarImovelBolsaAguaPorRota(idRota);
 		List<Integer> idsImoveisNormal = Fachada.getInstancia().pesquisarImovelElegivelBolsaAguaPorRota(idRota);
+
 		try {
 			if (!CollectionUtil.ehVazia(clientesCadUnico)) {
 				atualizarDadosClienteImoveisBolsaAgua(clientesCadUnico, Cliente.INDICADOR_BOLSA_FAMILIA_SEASTER, true);
@@ -15641,23 +15642,20 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	private void atualizarDadosClienteImoveisBolsaAgua(List<Integer> ids, Integer indicadorBolsa,
 			boolean indicadorAtualizador) throws ErroRepositorioException {
 
-		Integer idErro = 0;
 		String entidadeErro = "";
 		try {
 			for (Integer id : ids) {
 
 				if (indicadorAtualizador) {
-					entidadeErro = "CLIENTE DE";
-					idErro = id;
-					Fachada.getInstancia().atualizarNISCliente(id, indicadorBolsa);
+					entidadeErro = "CLIENTE - ID: " + id;
+					getControladorCliente().atualizarNISCliente(id, indicadorBolsa);
 				} else {
-					entidadeErro = "IMOVEL DE ";
-					idErro = id;
-					Fachada.getInstancia().atualizarPerfilImovel(id, indicadorBolsa);
+					entidadeErro = "IMOVEL - ID: " + id;
+					getControladorImovel().atualizarPerfilImovel(id, indicadorBolsa);
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("=== ERRO AO ATUALIZAR" + entidadeErro + " ID: " + idErro);
+			System.out.println("=== ERRO AO ATUALIZAR: " + entidadeErro );
 			e.printStackTrace();
 		}
 	}

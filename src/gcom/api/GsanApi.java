@@ -93,7 +93,6 @@ public class GsanApi {
 		}
 		return builder;
 	}
-
 	public ClientResponse enviarJson(Object objeto) {
 		String json = gson.toJson(objeto);
 

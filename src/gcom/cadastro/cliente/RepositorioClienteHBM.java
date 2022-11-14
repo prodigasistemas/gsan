@@ -222,10 +222,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			retorno = (Integer) session.createQuery(consulta).setInteger("idCliente", idCliente.intValue()).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -251,11 +251,11 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 
 	@SuppressWarnings("rawtypes")
 	public Object[] pesquisarObjetoClienteRelatorio(Integer idCliente) throws ErroRepositorioException {
-		// cria a variável que vai armazenar a coleção pesquisada
+		// cria a variï¿½vel que vai armazenar a coleï¿½ï¿½o pesquisada
 
 		Object[] retorno = null;
 
-		// cria a sessão com o hibernate
+		// cria a sessï¿½o com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		try {
@@ -263,30 +263,30 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			String consulta = "select c.clie_id as id, " + "c.clie_nmcliente as nome " + "from cadastro.cliente c " + "where c.clie_id = "
 					+ idCliente.toString();
 
-			// pesquisa a coleção de acordo com o parâmetro informado
+			// pesquisa a coleï¿½ï¿½o de acordo com o parï¿½metro informado
 			Collection colecaoClientes = session.createSQLQuery(consulta).addScalar("id", Hibernate.INTEGER).addScalar("nome", Hibernate.STRING).list();
 
 			retorno = Util.retonarObjetoDeColecaoArray(colecaoClientes);
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleção pesquisada
+		// retorna a coleï¿½ï¿½o pesquisada
 		return retorno;
 	}
 
 	@SuppressWarnings("rawtypes")
 	public Object[] pesquisarQtdeImoveisEEconomiasCliente(Integer idCliente) throws ErroRepositorioException {
-		// cria a variável que vai armazenar a coleção pesquisada
+		// cria a variï¿½vel que vai armazenar a coleï¿½ï¿½o pesquisada
 
 		Object[] retorno = null;
 
-		// cria a sessão com o hibernate
+		// cria a sessï¿½o com o hibernate
 		Session session = HibernateUtil.getSession();
 
 		try {
@@ -295,7 +295,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 					+ " INNER JOIN cadastro.cliente_imovel clieImov " + " on imov.imov_id = clieImov.imov_id " + " where clieImov.clie_id = "
 					+ idCliente.toString();
 
-			// pesquisa a coleção de acordo com o parâmetro informado
+			// pesquisa a coleï¿½ï¿½o de acordo com o parï¿½metro informado
 			Collection colecaoClientes = session.createSQLQuery(consulta).addScalar("qtdeImoveis", Hibernate.INTEGER)
 					.addScalar("qtdeEconomias", Hibernate.INTEGER).list();
 
@@ -303,13 +303,13 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 
 			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleção pesquisada
+		// retorna a coleï¿½ï¿½o pesquisada
 		return retorno;
 	}
 
@@ -407,8 +407,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 					+ // 19
 					" cliente.id, "
 					+ // 20
-					" cliente.numeroNIS "
+					" cliente.numeroNIS, "
 					+ //21
+					" cliente.indicadorRecusaSubsidio "
+					+ //22
 					"from Cliente cliente " + "left join cliente.clienteTipo clienteTipo " + "left join cliente.orgaoExpedidorRg orgaoExpedidorRg "
 					+ "left join cliente.unidadeFederacao unidadeFederacao " + "left join cliente.profissao profissao "
 					+ "left join cliente.pessoaSexo pessoaSexo " + "left join cliente.ramoAtividade ramoAtividade "
@@ -587,7 +589,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			/*
 			 * ## JOIN ##
 			 */
-			// join necessários
+			// join necessï¿½rios
 			// join facultativos
 
 			// esfera poder
@@ -623,7 +625,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			}
 
 			/*
-			 * ## CONDIÇÕES ##
+			 * ## CONDIï¿½ï¿½ES ##
 			 */
 			consulta = consulta + " where   ";
 
@@ -707,7 +709,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 
 			Query query = session.createQuery(consulta);
 
-			// seta os valores na condição where
+			// seta os valores na condiï¿½ï¿½o where
 
 			// codigo
 			if (codigo != null && !codigo.equals("") && !codigo.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
@@ -768,10 +770,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			retorno = query.setFirstResult(10 * numeroPagina).setMaxResults(10).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -793,7 +795,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			/*
 			 * ## JOIN ##
 			 */
-			// join necessários
+			// join necessï¿½rios
 			// join facultativos
 
 			// esfera poder
@@ -829,7 +831,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			}
 
 			/*
-			 * ## CONDIÇÕES ##
+			 * ## CONDIï¿½ï¿½ES ##
 			 */
 			consulta = consulta + " where   ";
 
@@ -909,7 +911,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 
 			Query query = session.createQuery(consulta.substring(0, (consulta.length() - 5)));
 
-			// seta os valores na condição where
+			// seta os valores na condiï¿½ï¿½o where
 
 			// codigo
 			if (codigo != null && !codigo.equals("") && !codigo.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
@@ -969,10 +971,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			retorno = query.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -995,10 +997,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			retorno = session.createQuery(consulta).setInteger("idCliente", idCliente).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -1019,10 +1021,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			retorno = (Object[]) session.createQuery(consulta).setString("cpf", cpf).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -1041,10 +1043,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			session.createQuery(update).setString("cpf", cpf).setInteger("idCliente", idCliente).setTimestamp("ultimaAlteracao", new Date()).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -1055,14 +1057,14 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 	public List<Integer> pesquisarClientesPorCadastroUnico() throws ErroRepositorioException {
 		List<Integer> idsClientes = new ArrayList<Integer>();
 		Session session = HibernateUtil.getSession();
-		String consulta = null;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
-			consulta = " SELECT cli.clie_id as idCliente FROM cadastro.cliente cli "
-					+ " INNER JOIN cadastro.cadastro_unico cad ON cad.cadu_nnnis = cli.clie_nnnis "
-					+ " WHERE cli.clie_icbolsafamilia <> 1 ";
+			consulta.append(" SELECT cli.clie_id as idCliente FROM cadastro.cliente cli ")
+					.append(" INNER JOIN cadastro.cadastro_unico cad ON cad.cadu_nnnis = cli.clie_nnnis ")
+					.append(" WHERE cli.clie_icbolsafamilia <> 1 ");
 		
-			idsClientes = session.createSQLQuery(consulta).addScalar("idCliente", Hibernate.INTEGER).list();
+			idsClientes = session.createSQLQuery(consulta.toString()).addScalar("idCliente", Hibernate.INTEGER).list();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -1087,10 +1089,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			session.createQuery(update).setInteger("idCliente", idCliente).setInteger("clie_icbolsafamilia", clie_icbolsafamilia).setTimestamp("ultimaAlteracao", new Date()).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		System.out.println("CLIENTE ID: " + idCliente +  " ATUALIZADO.");
@@ -1488,10 +1490,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 
 	public Cliente pesquisarClienteUsuarioDoImovel(Integer idImovel) throws ErroRepositorioException {
 
-		// Cria uma sessão com ohibernate
+		// Cria uma sessï¿½o com ohibernate
 		Session session = HibernateUtil.getSession();
 
-		// Cria a variável que vai armazenar o cliente responsável
+		// Cria a variï¿½vel que vai armazenar o cliente responsï¿½vel
 		Cliente cliente = new Cliente();
 		String consulta = null;
 
@@ -1505,10 +1507,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 
 			// Erro no hibernate
 		} catch (HibernateException e) {
-			// Levanta a exceção para a próxima camada
+			// Levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// Fecha a sessão
+			// Fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 

@@ -85,11 +85,14 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 	@ControleAlteracao(value = FiltroCliente.RAMO_ATIVIDADE, funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL })
 	private gcom.cadastro.cliente.RamoAtividade ramoAtividade;
 
+	@SuppressWarnings("rawtypes")
 	@ControleAlteracao(value = FiltroCliente.CLIENTE_TELEFONES, funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, ATRIBUTOS_ATUALIZAR_DADOS_CLIENTE_PROMAIS, OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL })
 	private Set clienteFones;
 
+	@SuppressWarnings("rawtypes")
 	private Set clienteImoveis;
 
+	@SuppressWarnings("rawtypes")
 	@ControleAlteracao(value = FiltroCliente.CLIENTE_ENDERECOS, funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
 	private Set clienteEnderecos;
 
@@ -127,6 +130,8 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
     private String numeroNIS;
     
     private Short indicadorBolsaFamilia;
+    
+    private Short indicadorRecusaSubsidio;
     
 	public static final Short GERA_ARQUIVO_TEXTO_SIM = 1;
 	public static final Integer INDICADOR_BOLSA_FAMILIA_SEASTER = 1;
@@ -242,7 +247,7 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 	}
 
 	/**
-	 * full constructor para atualização cadastral
+	 * full constructor para atualizaï¿½ï¿½o cadastral
 	 */
 	public Cliente(Cliente clienteCadastrado) {
 		this.nome = clienteCadastrado.getNome();
@@ -517,26 +522,32 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 		return cnpjFormatado;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getClienteEnderecos() {
 		return clienteEnderecos;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setClienteEnderecos(Set clienteEnderecos) {
 		this.clienteEnderecos = clienteEnderecos;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getClienteFones() {
 		return clienteFones;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setClienteFones(Set clienteFones) {
 		this.clienteFones = clienteFones;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getClienteImoveis() {
 		return clienteImoveis;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setClienteImoveis(Set clienteImoveis) {
 		this.clienteImoveis = clienteImoveis;
 	}
@@ -730,10 +741,12 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 		this.indicadorBolsaFamilia = indicadorBolsaFamilia;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Class getClasseOrigem() {
 		return Cliente.class;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Class getClasseHistorico() {
 		return ClienteHistorico.class;
 	}
@@ -758,6 +771,14 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 			return this.getCnpj();
 		else
 			return "";
+	}
+
+	public Short getIndicadorRecusaSubsidio() {
+		return indicadorRecusaSubsidio;
+	}
+
+	public void setIndicadorRecusaSubsidio(Short indicadorRecusaSubsidio) {
+		this.indicadorRecusaSubsidio = indicadorRecusaSubsidio;
 	}
 	
 }
