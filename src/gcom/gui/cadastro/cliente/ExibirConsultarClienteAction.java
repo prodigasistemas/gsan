@@ -135,6 +135,16 @@ public class ExibirConsultarClienteAction extends GcomAction {
 				} else {
 					consultarClienteActionForm.setClienteNumeroNIS(cliente.getNumeroNIS());
 				}
+				
+				// Recusa do subsidio
+				if (cliente.getIndicadorRecusaSubsidio() != null) {
+					if(cliente.getIndicadorRecusaSubsidio() == 1) {
+						consultarClienteActionForm.setRecusaSubsidio("SIM");
+					}else {
+						consultarClienteActionForm.setRecusaSubsidio("NÃO");
+					}
+					
+				}
                 
                 
                 //tipo de pessoa

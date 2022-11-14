@@ -401,6 +401,13 @@ public class InserirClienteAction extends GcomAction {
 			} else {
 				cliente.setIndicadorAutorizacaoEnvioSMS(ConstantesSistema.NAO);
 			}
+			
+			// Insere o Indicador de recusa de subsidio
+			if (form.get("indicadorRecusaSubsidio") != null && !form.get("indicadorRecusaSubsidio").equals("")) {
+				cliente.setIndicadorRecusaSubsidio(new Short( (Short) form.get("indicadorRecusaSubsidio")));
+			} else {
+				cliente.setIndicadorRecusaSubsidio(ConstantesSistema.NAO);
+			}
 
 			// Verifica se a funcionalidade esta sendo executada dentro de um popup
 			if (sessao.getAttribute("POPUP") != null) {

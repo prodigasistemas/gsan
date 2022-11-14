@@ -1099,6 +1099,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 			if (objetoCliente[21] != null) {
 				cliente.setNumeroNIS((String) objetoCliente[21]);
 			}
+			//22 - Recusa subsidio
+			if (objetoCliente[22] != null) {
+				cliente.setIndicadorRecusaSubsidio((Short) objetoCliente[22]);
+			}
 
 		}
 

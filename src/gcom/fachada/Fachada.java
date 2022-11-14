@@ -40653,6 +40653,7 @@ public class Fachada {
 		}
 	}
 			
+
 	public List<Integer> pesquisarClientesPorCadastroUnico() {
 		try {
 			return getControladorCliente().pesquisarClientesPorCadastroUnico();
@@ -40693,7 +40694,7 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
-	
+
 	public ArrecadadorContratoConvenio pesquisarParametrosConvenioPorId(Integer idConvenio) throws ControladorException {
 		try {
 			return getControladorArrecadacao().pesquisarParametrosConvenioPorId(idConvenio);

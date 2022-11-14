@@ -30,6 +30,7 @@ public class ConsultarClienteActionForm extends ValidatorActionForm {
 	private String cnpjCliente;
 	private String ramoAtividadeCliente;
 	private String clienteNumeroNIS;
+	private String recusaSubsidio;
 
     /**
      * Description of the Method
@@ -177,6 +178,14 @@ public class ConsultarClienteActionForm extends ValidatorActionForm {
 	
 	public void setClienteNumeroNIS(String clienteNumeroNIS) {
 		this.clienteNumeroNIS = clienteNumeroNIS;
+	}
+
+	public String getRecusaSubsidio() {
+		return recusaSubsidio;
+	}
+
+	public void setRecusaSubsidio(String recusaSubsidio) {
+		this.recusaSubsidio = recusaSubsidio;
 	}
 
 }

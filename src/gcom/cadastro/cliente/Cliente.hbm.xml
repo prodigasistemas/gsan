@@ -31,6 +31,7 @@
         <property name="indicadorAutorizacaoEnvioSMS"   type="java.lang.Short"    column="clie_icenviosms"     			 length="2" />
         <property name="numeroNIS"   					type="java.lang.String"   column="clie_nnnis"     			 	 length="11" />
         <property name="indicadorBolsaFamilia"   		type="java.lang.Short"    column="clie_icbolsafamilia"     		 length="2" />
+        <property name="indicadorRecusaSubsidio"   		type="java.lang.Short"    column="clie_icrecusasubsidio"     	 length="2" />
         		
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to OrgaoExpedidorRg -->

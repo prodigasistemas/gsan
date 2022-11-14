@@ -274,6 +274,17 @@ function limparForm(){
 									style="background-color:#cbe5fe; border:0; color: #000000" /></div>
 								</td>
 							</tr>
+							<tr>
+								<td align="left" height="10">
+								<div class="style9"><strong>Recusa Subs&iacute;dio:&nbsp;&nbsp;
+								&nbsp;&nbsp;&nbsp; &nbsp;</strong></div>
+								</td>
+								<td colspan="3" rowspan="1">
+								<div class="style9"><html:text property="recusaSubsidio"
+									size="20" readonly="true"
+									style="background-color:#cbe5fe; border:0; color: #000000" /></div>
+								</td>
+							</tr>
 						</logic:equal>
 						<logic:notEqual name="indicadorTipoCliente" value="1"
 							scope="request">
