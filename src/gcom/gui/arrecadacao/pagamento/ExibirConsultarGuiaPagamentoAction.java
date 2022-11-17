@@ -55,7 +55,7 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 			
 			boleto = new EmissaoAPIBB(
 					new EmissaoECommerceBB(null))
-					.emitirBoleto(guia.getParcelamento().getId(), guia.getImovel().getId(), Fachada.getInstancia());
+					.emitirBoleto(guia.getParcelamento().getId(), guia.getImovel().getId(), Fachada.getInstancia(), false);
 			
 			if (boleto.contains("gerarRelatorioBoletoParcelamentoAction")) {
 				request.setAttribute("boletoParcelamento", guiaId);

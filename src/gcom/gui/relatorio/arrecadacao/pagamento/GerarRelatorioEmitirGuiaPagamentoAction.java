@@ -81,7 +81,7 @@ public class GerarRelatorioEmitirGuiaPagamentoAction extends ExibidorProcessamen
 			
 			boleto = new EmissaoAPIBB
 					(new EmissaoECommerceBB(null))
-					.emitirBoleto(guia.getParcelamento().getId(), guia.getImovel().getId(), Fachada.getInstancia());
+					.emitirBoleto(guia.getParcelamento().getId(), guia.getImovel().getId(), Fachada.getInstancia(), false);
 
 			if (!boleto.contains("gerarRelatorioBoletoParcelamentoAction")) {
 				retorno = new ActionForward(boleto, true);

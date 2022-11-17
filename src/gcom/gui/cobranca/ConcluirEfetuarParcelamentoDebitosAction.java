@@ -505,7 +505,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 						
 							boleto = new EmissaoAPIBB(
 									new EmissaoECommerceBB(null))
-									.emitirBoleto(idParcelamento, Integer.valueOf(codigoImovel), fachada);
+									.emitirBoleto(idParcelamento, Integer.valueOf(codigoImovel), fachada, true);
 							
 							if (boleto.contains("gerarRelatorioBoletoParcelamentoAction")) {
 								request.setAttribute("boletoParcelamento", guiaPagamento.getId());

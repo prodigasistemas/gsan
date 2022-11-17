@@ -134,8 +134,9 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 			String boleto = null;
 
 			if (geraBoletoBB && !entradaPaga) {
-				boleto = new EmissaoAPIBB(new EmissaoECommerceBB(null)).emitirBoleto(
-						Integer.valueOf(idParcelamento), Integer.valueOf(codigoImovel), Fachada.getInstancia());
+				boleto = new EmissaoAPIBB
+						(new EmissaoECommerceBB(null))
+						.emitirBoleto(Integer.valueOf(idParcelamento), Integer.valueOf(codigoImovel), Fachada.getInstancia(), true);
 
 				if (boleto.contains("gerarRelatorioBoletoParcelamentoAction")) {
 					request.setAttribute("boletoParcelamento", parcelamento);
