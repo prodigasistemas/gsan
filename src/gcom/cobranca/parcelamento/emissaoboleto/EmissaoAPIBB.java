@@ -9,7 +9,7 @@ public class EmissaoAPIBB extends Emissao {
 	}
 
 	@Override
-	public String emitirBoleto(Integer idParcelamento, Integer idImovel, Fachada fachada) {
+	public String emitirBoleto(Integer idParcelamento, Integer idImovel, Fachada fachada, boolean primeiraVia) {
 		try {
 			fachada.registrarEntradaParcelamento(idParcelamento, idImovel);
 			
@@ -19,7 +19,7 @@ public class EmissaoAPIBB extends Emissao {
 			System.out.println("ERRO AO REGISTRAR VIA API IMOVEL : " + idImovel + " " + e.getMessage());
 		}
 		
-		return proxima.emitirBoleto(idParcelamento, idImovel, fachada);	
+		return proxima.emitirBoleto(idParcelamento, idImovel, fachada, primeiraVia);	
 	}
 
 }

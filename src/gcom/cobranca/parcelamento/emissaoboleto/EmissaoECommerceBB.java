@@ -14,7 +14,7 @@ public class EmissaoECommerceBB extends Emissao{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String emitirBoleto(Integer idParcelamento, Integer idImovel, Fachada fachada) {
+	public String emitirBoleto(Integer idParcelamento, Integer idImovel, Fachada fachada, boolean primeiraVia) {
 		
 			FiltroParcelamento filtroParcelamento = new FiltroParcelamento();
 			filtroParcelamento.adicionarParametro(new ParametroSimples(FiltroParcelamento.ID, idParcelamento));
@@ -23,7 +23,7 @@ public class EmissaoECommerceBB extends Emissao{
 			Parcelamento parcelamento = (Parcelamento) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroParcelamento, Parcelamento.class.getName()));
 			// Primeira via
 			String linkBoletoBB = fachada.montarLinkBB(parcelamento.getImovel().getId(),
-					parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), true);
+					parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), primeiraVia);
 
 			return linkBoletoBB;
 	}

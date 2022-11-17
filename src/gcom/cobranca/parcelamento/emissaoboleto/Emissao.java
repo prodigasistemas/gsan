@@ -10,6 +10,6 @@ public abstract class Emissao {
 		this.proxima = proxima;
 	}
 	
-	public abstract String emitirBoleto(Integer idParcelamento, Integer idImovel, Fachada fachada);
+	public abstract String emitirBoleto(Integer idParcelamento, Integer idImovel, Fachada fachada, boolean primeiraVia);
 	
 }
