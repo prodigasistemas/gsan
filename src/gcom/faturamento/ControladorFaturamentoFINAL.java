@@ -1530,7 +1530,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					GerarContaCategoriaHelper gerarContaCategoriaHelper = this.gerarContaCategoria(conta,
 							colecaoCategoriaOUSubcategoria,
 							helperValoresAguaEsgoto.getColecaoCalcularValoresAguaEsgotoHelper(), sistemaParametro);
-
+					
+					atualizarValorContaCategoriaBolsaAgua(gerarContaCategoriaHelper.getColecaoContaCategoria(), conta,
+							gerarCreditoRealizadoHelper.getColecaoCreditoARealizar()
+							,gerarCreditoRealizadoHelper);
+					
 					// INSERINDO CONTA_CATEGORIA NA BASE
 					if (gerarContaCategoriaHelper.getColecaoContaCategoria() != null
 							&& !gerarContaCategoriaHelper.getColecaoContaCategoria().isEmpty()) {
@@ -1645,26 +1649,199 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 	
-	public void atualizarValorContaCategoriaBolsaAgua(ContaCategoria contaCategoria) throws ControladorException {
-		
-		 try {
-			if (contaCategoria.getCategoria().isResidencial()
-					&& getControladorImovel().isImovelBolsaAgua(contaCategoria.getConta().getImovel().getId())) {
-				
-				System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA [" + contaCategoria.getConta().getImovel().getId() + "]" );
-				 BigDecimal valorBolsaAguaConcedido = getControladorFaturamento().retornaValorBolsaAgua(contaCategoria.getConta().getReferencia(), contaCategoria.getConta().getImovel());
-				 
-				 if (contaCategoria.getConta().getImovel().isLigadoAgua() ) {
-						contaCategoria.setValorAgua(PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido, contaCategoria.getConta().getImovel()));  
+	public void atualizarValorContaCategoriaBolsaAguaMovimentoCelular(ContaCategoria contaCategoria, Conta conta)
+			throws ControladorException {
+		BigDecimal valorCredito = new BigDecimal("0");
+		BigDecimal valorCreditoAtualizado = new BigDecimal("0");
+		CreditoARealizar creditoARealizar = new CreditoARealizar();
+		CreditoRealizado creditoRealizado = new CreditoRealizado();
+		String nomePacoteObjeto = CreditoARealizar.class.getName();
+		FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+		filtroCreditoARealizar
+				.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.IMOVEL, conta.getImovel().getId()));
+		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(
+				FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO, conta.getAnoMesReferenciaConta()));
+		Collection<CreditoARealizar> creditosARealizar = getControladorUtil().pesquisar(filtroCreditoARealizar,
+				nomePacoteObjeto);
+		for (CreditoARealizar creditoRealizar : creditosARealizar) {
+			if (creditoRealizar.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)) {
+				try {
+					creditoARealizar = repositorioFaturamento.pesquisarCreditoARealizar(creditoRealizar.getId());
+					creditoRealizado = repositorioFaturamento.pesquisarCreditoRealizadoBolsaAgua(conta.getId());
+				} catch (ErroRepositorioException e1) {
+					e1.printStackTrace();
 				}
-					
-				if (contaCategoria.getConta().getImovel().isLigadoEsgoto()) {
-					contaCategoria.setValorAgua(PercentualBolsaAgua.PERCENTUAL_ESGOTO.retornaValor(valorBolsaAguaConcedido, contaCategoria.getConta().getImovel()));
+				try {
+					if (contaCategoria.getCategoria().isResidencial() && getControladorImovel()
+							.isImovelBolsaAgua(contaCategoria.getConta().getImovel().getId())) {
+						System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA ["
+								+ contaCategoria.getConta().getImovel().getId() + "]");
+						valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar, creditoRealizado,
+								creditoRealizar);
+						System.out.println("FIM ATUALIZANDO CREDITO A REALIZAR E CREDITO REALIZADO - BOLSA AGUA ["
+								+ contaCategoria.getConta().getImovel().getId() + "]");
+					}
+				} catch (ControladorException e) {
+					throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
+				}				
+			} else {
+				valorCredito.add(creditoRealizar.getValorCredito());
+			}
+			valorCreditoAtualizado = valorCreditoAtualizado.add(valorCredito);
+		}
+		conta.setValorCreditos(valorCreditoAtualizado);
+		atualizarCreditoConta(conta);
+		System.out.println("FIM ATUALIZANDO CONTA - BOLSA AGUA [" + conta.getImovel().getId() + "]");
+	}
+	
+	public void atualizarValorContaCategoriaBolsaAgua(Collection<ContaCategoria> contaCategoriaColecao, Conta conta,
+			Collection<CreditoARealizar> gerarCreditoRealizado
+			, GerarCreditoRealizadoHelper gerarCreditoRealizadoHelper
+			) throws ControladorException {
+		BigDecimal valorCreditoAtualizado = new BigDecimal("0");
+		BigDecimal valorCredito = new BigDecimal("0");
+		CreditoARealizar creditoARealizar = new CreditoARealizar();
+		CreditoRealizado creditoRealizado = new CreditoRealizado();		
+		for (CreditoARealizar creditoRealizar : gerarCreditoRealizado) {
+			if (creditoRealizar.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)) {
+				try {
+					creditoARealizar = repositorioFaturamento.pesquisarCreditoARealizar(creditoRealizar.getId());
+					creditoRealizado = repositorioFaturamento.pesquisarCreditoRealizadoBolsaAgua(conta.getId());					
+				} catch (ErroRepositorioException e1) {
+					e1.printStackTrace();
 				}
-				System.out.println("FIM ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA [" + contaCategoria.getConta().getImovel().getId() + "]" );
-			 }
+				for (ContaCategoria contaCategoria : contaCategoriaColecao) {
+					try {
+						if (contaCategoria.getCategoria().isResidencial() && getControladorImovel()
+								.isImovelBolsaAgua(contaCategoria.getConta().getImovel().getId())) {
+							System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA ["
+									+ contaCategoria.getConta().getImovel().getId() + "]");
+							valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar, creditoRealizado,
+									creditoRealizar);
+							atualizacaoCreditosARealizarECreditoARealizarCategoria(gerarCreditoRealizadoHelper, valorCredito);
+							System.out.println("FIM ATUALIZANDO CREDITO A REALIZAR E CREDITO REALIZADO - BOLSA AGUA ["
+									+ contaCategoria.getConta().getImovel().getId() + "]");
+						}						
+					} catch (ControladorException e) {
+						throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
+					}
+				}
+			} else {
+				valorCredito.add(creditoRealizar.getValorCredito());
+			}
+			valorCreditoAtualizado = valorCreditoAtualizado.add(valorCredito);
+		}
+		conta.setValorCreditos(valorCreditoAtualizado);
+		atualizarCreditoConta(conta);
+		System.out.println("FIM ATUALIZANDO CONTA - BOLSA AGUA [" + conta.getImovel().getId() + "]");
+	}
+	
+	public BigDecimal valorCreditoAtualizado(ContaCategoria contaCategoria, CreditoARealizar creditoARealizar,
+			CreditoRealizado creditoRealizado, CreditoARealizar creditoRealizar) throws ControladorException {
+		BigDecimal maximoEconomias = new BigDecimal("2");
+		BigDecimal percentualEsgoto = new BigDecimal("0.6");
+		BigDecimal valorAgua = new BigDecimal("0");
+		BigDecimal valorEsgoto = new BigDecimal("0");
+		try {
+			BigDecimal valorBolsaAguaConcedido = getControladorFaturamento().retornaValorBolsaAgua(
+					contaCategoria.getConta().getReferencia(), contaCategoria.getConta().getImovel());
+			if (contaCategoria.getConta().getImovel().isLigadoAgua()) {
+				if (contaCategoria.getQuantidadeEconomia() == 1) {
+					valorAgua = (PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido,
+							contaCategoria.getConta().getImovel()));
+				} else {
+					BigDecimal valorTarifaMinima = contaCategoria.getValorTarifaMinimaAgua()
+							.divide(new BigDecimal(contaCategoria.getQuantidadeEconomia()));
+					valorAgua = valorTarifaMinima.multiply(maximoEconomias);
+				}
+				if (contaCategoria.getValorAgua().compareTo(valorAgua) < 0) {
+					valorAgua = contaCategoria.getValorAgua();
+				}
+			}
+
+			if (contaCategoria.getConta().getImovel().isLigadoEsgoto()) {
+				if (contaCategoria.getQuantidadeEconomia() == 1) {
+					valorEsgoto = (PercentualBolsaAgua.PERCENTUAL_ESGOTO.retornaValor(valorBolsaAguaConcedido,
+							contaCategoria.getConta().getImovel()));
+				} else {
+					if (valorAgua.compareTo(BigDecimal.ZERO) > 0) {
+						valorEsgoto = valorAgua.multiply(percentualEsgoto);
+					} else {
+						valorEsgoto = (PercentualBolsaAgua.PERCENTUAL_ESGOTO.retornaValor(valorBolsaAguaConcedido,
+								contaCategoria.getConta().getImovel()));
+					}
+				}
+				if (contaCategoria.getValorEsgoto().compareTo(valorEsgoto) < 0) {
+					valorEsgoto = contaCategoria.getValorEsgoto();
+				}
+			}
+			creditoRealizar.setValorCredito(valorAgua.add(valorEsgoto));
+			creditoARealizar.setValorCredito(valorAgua.add(valorEsgoto));
+			atualizarCreditosARealizar(creditoARealizar);
+			if (creditoRealizado != null) {
+				creditoRealizado.setValorCredito(valorAgua.add(valorEsgoto));
+				atualizarCreditosRealizados(creditoRealizado);
+			}
 		} catch (ControladorException e) {
 			throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
+		}
+		return creditoARealizar.getValorCredito();
+	}
+	
+	public void atualizacaoCreditosARealizarECreditoARealizarCategoria (GerarCreditoRealizadoHelper gerarCreditoRealizadoHelper, BigDecimal valorCredito){
+		if (gerarCreditoRealizadoHelper.getMapCreditoRealizado() != null && !gerarCreditoRealizadoHelper.getMapCreditoRealizado().isEmpty()) {
+			Iterator iteratorColecaoCreditosRealizadosCreditosARealizar = gerarCreditoRealizadoHelper.getMapCreditoRealizado().keySet().iterator();
+			CreditoRealizado creditoRealizado = null;
+			while (iteratorColecaoCreditosRealizadosCreditosARealizar.hasNext()) {
+			creditoRealizado = (CreditoRealizado) iteratorColecaoCreditosRealizadosCreditosARealizar.next();
+				if(creditoRealizado.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)) {
+				    creditoRealizado.setValorCredito(valorCredito);
+				    Collection colecaoCreditosRealizadosCategoriaCreditoRealizado = gerarCreditoRealizadoHelper.getMapCreditoRealizado()
+							.get(creditoRealizado);
+				    Iterator iteratorColecaoCreditosRealizadosCategoriaCreditoRealizado = colecaoCreditosRealizadosCategoriaCreditoRealizado
+							.iterator();
+
+					CreditoRealizadoCategoria creditoRealizadoCategoria = null;
+
+					while (iteratorColecaoCreditosRealizadosCategoriaCreditoRealizado.hasNext()) {
+						creditoRealizadoCategoria = (CreditoRealizadoCategoria) iteratorColecaoCreditosRealizadosCategoriaCreditoRealizado
+								.next();
+						creditoRealizadoCategoria.setValorCategoria(valorCredito);
+					}
+				}
+			}
+		}
+	}
+
+	public void atualizarCreditosARealizar(CreditoARealizar creditoARealizar) {
+		try {
+			CreditoARealizarCategoria creditoARealizarCategoria = repositorioFaturamento
+					.pesquisarCreditoARealizarCategoria(creditoARealizar.getId());
+			creditoARealizarCategoria.setValorCategoria(creditoARealizar.getValorCredito());
+			repositorioUtil.atualizar(creditoARealizarCategoria);
+			repositorioUtil.atualizar(creditoARealizar);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void atualizarCreditosRealizados(CreditoRealizado creditoRealizado) {
+		try {
+			CreditoRealizadoCategoria creditoRealizadoCategoria = repositorioFaturamento
+					.pesquisaCreditoRealizadoCategoria(creditoRealizado.getId());
+			creditoRealizadoCategoria.setValorCategoria(creditoRealizado.getValorCredito());
+			repositorioUtil.atualizar(creditoRealizadoCategoria);
+			repositorioUtil.atualizar(creditoRealizado);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void atualizarCreditoConta(Conta conta) {
+		try {
+			repositorioUtil.atualizar(conta);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -3299,7 +3476,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		Cliente clienteResponsavel = null;
 		Short ultimoDiaMes = null;
-
+		
 		int diaDataVencimentoRota = Util.getDiaMes(faturamentoAtivCronRota.getDataContaVencimento());
 		int mesDataVencimentoRota = Util.getMes(faturamentoAtivCronRota.getDataContaVencimento());
 		int anoDataVencimentoRota = Util.getAno(faturamentoAtivCronRota.getDataContaVencimento());
@@ -53821,8 +53998,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 				contaCategoria.setValorAgua(valorAgua);
 				contaCategoria.setValorEsgoto(valorEsgoto);
-
-				atualizarValorContaCategoriaBolsaAgua(contaCategoria);
 				
 				contaCategoria.setConsumoAgua(calcularValoresAguaEsgotoHelper.getConsumoFaturadoAguaCategoria());
 				contaCategoria.setConsumoEsgoto(calcularValoresAguaEsgotoHelper.getConsumoFaturadoEsgotoCategoria());
