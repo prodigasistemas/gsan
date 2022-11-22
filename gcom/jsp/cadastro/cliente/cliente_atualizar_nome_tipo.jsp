@@ -487,6 +487,18 @@ function disableAll(){
 					</logic:notPresent>
 				</tr>
 				
+				</tr>
+					<td><strong>Recusa de subsídio?</strong></td>
+					<td>
+						<html:radio property="indicadorRecusaSubsidio"
+							value="<%=ConstantesSistema.SIM.toString()%>" tabindex="10" />
+						<strong>Sim</strong> <html:radio property="indicadorRecusaSubsidio"
+							value="<%=ConstantesSistema.NAO.toString()%>" tabindex="10" />
+						<strong>Não</strong>
+					</td>
+				
+				<tr>
+				
 				<tr>
 
 					<td><strong> </strong></td>

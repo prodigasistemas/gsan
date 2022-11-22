@@ -20,6 +20,8 @@ import gcom.cobranca.parcelamento.ParcelamentoMotivoCancelamento;
 import gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer;
 import gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
+import gcom.cobranca.parcelamento.emissaoboleto.EmissaoAPIBB;
+import gcom.cobranca.parcelamento.emissaoboleto.EmissaoECommerceBB;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.credito.CreditoARealizar;
@@ -120,28 +122,30 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		}
 
 		boolean geraBoletoBB = verificarGuiaEntrada(idParcelamento);
-					
+
 		verificarPagamentoCartaoDeCredito(idParcelamento);
-		
+
 		if (parcelamento != null) {
 			verificarPermissaoParaCancelar(parcelamento);
 			pesquisarMotivosCancelamento();
-			request.setAttribute("isParcelamentoCancelado", verificarSituacao(parcelamento, ParcelamentoSituacao.CANCELADO));
-			            
+			request.setAttribute("isParcelamentoCancelado",
+					verificarSituacao(parcelamento, ParcelamentoSituacao.CANCELADO));
+
+			String boleto = null;
+
 			if (geraBoletoBB && !entradaPaga) {
-				
-				try {
-					registrarEntradaParcelamento(parcelamento, Integer.valueOf(codigoImovel));
+				boleto = new EmissaoAPIBB
+						(new EmissaoECommerceBB(null))
+						.emitirBoleto(Integer.valueOf(idParcelamento), Integer.valueOf(codigoImovel), Fachada.getInstancia(), false);
+
+				if (boleto.contains("gerarRelatorioBoletoParcelamentoAction")) {
 					request.setAttribute("boletoParcelamento", parcelamento);
-				} catch(Exception e) {
-					throw new ActionServletException("atencao.nao_foi_possivel_registrar_no_banco", e);
-				}finally {
+				} else {
 					request.setAttribute("boletoParcelamento", "");
-					request.setAttribute("linkBoletoBB", obterLinkBoletoBB(parcelamento));
+					request.setAttribute("linkBoletoBB", boleto);
 				}
-			  } 
 			}
-           
+		}
 		request.setAttribute("geracaoBoletoBB", parametros.getIndicadorGeracaoBoletoBB());
 
 		return retorno;
@@ -192,15 +196,6 @@ public class ExibirConsultarParcelamentoDebitoAction extends GcomAction {
 		boolean entradaPaga = getFachada().isEntradaParcelamentoPaga(parcelamento);
 		request.setAttribute("entradaPaga", entradaPaga);
 		return entradaPaga;
-	}
-	
-	private String obterLinkBoletoBB(Parcelamento parcelamento) {
-		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
-	}
-
-	
-	private void registrarEntradaParcelamento(Parcelamento parcelamento, Integer idImovel) throws Exception{
-		getFachada().registrarEntradaParcelamento(parcelamento, false, idImovel);
 	}
 	
 	private void setarDadosParcelamento(Parcelamento parcelamento) {

@@ -1311,7 +1311,7 @@ public interface IControladorFaturamento {
 
 	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento) throws ControladorException;
 	
-	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) throws ControladorException;
+	public void registrarEntradaParcelamento(Integer idParcelamento, Integer idImovel) throws ControladorException;
 	
 	public boolean fichaCompensacaoExistente (Integer idConta) throws ControladorException;
 	

@@ -40621,9 +40621,9 @@ public class Fachada {
 		}
 	}
 	
-	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) throws Exception {
+	public void registrarEntradaParcelamento(Integer idParcelamento, Integer idImovel) throws Exception {
 		try {
-			this.getControladorFaturamento().registrarEntradaParcelamento(parcelamento, primeiraVia, idImovel);
+			this.getControladorFaturamento().registrarEntradaParcelamento(idParcelamento, idImovel);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
@@ -40653,6 +40653,7 @@ public class Fachada {
 		}
 	}
 			
+
 	public List<Integer> pesquisarClientesPorCadastroUnico() {
 		try {
 			return getControladorCliente().pesquisarClientesPorCadastroUnico();
@@ -40693,7 +40694,7 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
-	
+
 	public ArrecadadorContratoConvenio pesquisarParametrosConvenioPorId(Integer idConvenio) throws ControladorException {
 		try {
 			return getControladorArrecadacao().pesquisarParametrosConvenioPorId(idConvenio);

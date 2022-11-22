@@ -16,6 +16,9 @@ import gcom.cobranca.bean.OpcoesParcelamentoHelper;
 import gcom.cobranca.parcelamento.FiltroParcelamento;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoPerfil;
+import gcom.cobranca.parcelamento.emissaoboleto.Emissao;
+import gcom.cobranca.parcelamento.emissaoboleto.EmissaoAPIBB;
+import gcom.cobranca.parcelamento.emissaoboleto.EmissaoECommerceBB;
 import gcom.fachada.Fachada;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
@@ -500,25 +503,14 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 							.shortValue()) {
 						retorno = actionMapping.findForward("telaSucessoConcluirParcelamento");
 						
-						try {
-							registrarEntradaParcelamento(guiaPagamento.getId());
-							request.setAttribute("boletoParcelamento", guiaPagamento.getId());
-							request.setAttribute("idParcelamento", idParcelamento);
-							boleto = "/gsan/gerarRelatorioBoletoParcelamentoAction.do";
-						} catch (Exception e) {
-							e.printStackTrace();
-							System.out.println("atencao.nao_foi_possivel_registrar_no_banco IMOVEL :" + codigoImovel);
-						} finally {
+							boleto = new EmissaoAPIBB(
+									new EmissaoECommerceBB(null))
+									.emitirBoleto(idParcelamento, Integer.valueOf(codigoImovel), fachada, true);
 							
-							boleto = obterLinkBoletoBB(idParcelamento); 
-							
-							montarPaginaSucesso(request,
-									"Parcelamento de Débitos do Imóvel " + codigoImovel + " efetuado com sucesso.",
-									"Efetuar outro Parcelamento de Débitos",
-									"exibirEfetuarParcelamentoDebitosAction.do?menu=sim", "gerarRelatorioParcelamentoAction.do",
-									"Imprimir Termo", "Imprimir Guia Pagto Entrada", boleto);
-						}
-						
+							if (boleto.contains("gerarRelatorioBoletoParcelamentoAction")) {
+								request.setAttribute("boletoParcelamento", guiaPagamento.getId());
+								request.setAttribute("idParcelamento", idParcelamento);
+							}
 					} else {
 						boleto = "gerarRelatorioEmitirGuiaPagamentoActionInserir.do?idGuiaPagamento=" + idGuiaPagamento;
 					}
@@ -575,6 +567,7 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 	}
 
 
+
 	public boolean isParcelamentoValido(ConcluirParcelamentoDebitosHelper helper) {
 		boolean isParcelamentoValido = true;
 
@@ -627,18 +620,6 @@ public class ConcluirEfetuarParcelamentoDebitosAction extends GcomAction {
 		}
 
 		return duplicado;
-	}
-
-	private void registrarEntradaParcelamento(Integer guiaPagamentoId) throws Exception{
-		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
-		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoId));
-
-		GuiaPagamento guia = (GuiaPagamento) Util
-				.retonarObjetoDeColecao(getFachada().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
-		Parcelamento parcelamento = guia.getParcelamento();
-
-		getFachada().registrarEntradaParcelamento(parcelamento, true, guia.getImovel().getId());
 	}
 
 }

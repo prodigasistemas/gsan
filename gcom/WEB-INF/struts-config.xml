@@ -243,7 +243,8 @@
 			<form-property name="indicadorPermiteNegativacao" type="java.lang.String" />
 			<form-property name="numeroNIS" type="java.lang.String" />  
 			<form-property name="indicadorAutorizacaoEnvioEmail" type="java.lang.String" />
-			<form-property name="indicadorAutorizacaoEnvioSMS" type="java.lang.String" /> 
+			<form-property name="indicadorAutorizacaoEnvioSMS" type="java.lang.String" />
+			<form-property name="indicadorRecusaSubsidio" type="java.lang.Short" />
 
 		</form-bean>
 		<!--Action Form Dinâmico que serve para alterar a inscrição do imovel-->

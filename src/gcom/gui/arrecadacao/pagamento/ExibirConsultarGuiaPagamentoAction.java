@@ -18,6 +18,9 @@ import gcom.arrecadacao.pagamento.GuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.GuiaPagamentoItem;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.parcelamento.Parcelamento;
+import gcom.cobranca.parcelamento.emissaoboleto.EmissaoAPIBB;
+import gcom.cobranca.parcelamento.emissaoboleto.EmissaoECommerceBB;
+import gcom.fachada.Fachada;
 import gcom.faturamento.FiltroGuiaPagamentoItem;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.gui.ActionServletException;
@@ -40,6 +43,8 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 			throw new ActionServletException("erro.sistema");
 		}
 		
+		String boleto = null;
+		
 		if (guiaHistoricoId != null) {
 			GuiaPagamentoHistorico guia = pesquisarGuiaHistorico(request, sessao, guiaHistoricoId);
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
@@ -47,15 +52,16 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 			GuiaPagamento guia = pesquisarGuia(request, sessao, guiaId);
 			pesquisarItens(sessao, guia.getId(), guia.getDebitoTipo(), guia.getValorDebito());
 			request.setAttribute("geracaoBoletoBB", sistemaParametro.getIndicadorGeracaoBoletoBB());
-				
-				try {
-					registrarEntradaParcelamento(guia.getId());
-					request.setAttribute("boletoParcelamento", guiaId);
-				} catch (Exception e) {
-					throw new ActionServletException("atencao.nao_foi_possivel_registrar_no_banco", e);
-				} finally {
-					request.setAttribute("linkBoletoBB", obterLinkBoletoBB(guia.getId()));
-				}
+			
+			boleto = new EmissaoAPIBB(
+					new EmissaoECommerceBB(null))
+					.emitirBoleto(guia.getParcelamento().getId(), guia.getImovel().getId(), Fachada.getInstancia(), false);
+			
+			if (boleto.contains("gerarRelatorioBoletoParcelamentoAction")) {
+				request.setAttribute("boletoParcelamento", guiaId);
+			} else {
+				request.setAttribute("linkBoletoBB", boleto);
+			}
 		}
 
 		if (request.getParameter("caminhoRetornoTelaConsultaGuiaPagamento") != null) {
@@ -156,30 +162,5 @@ public class ExibirConsultarGuiaPagamentoAction extends GcomAction {
 
 		return guia;
 	}
-	
-	private void registrarEntradaParcelamento(Integer guiaPagamentoId) throws Exception{
-		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
-		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoId));
-		
-		GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
-		Parcelamento parcelamento = guia.getParcelamento();
-		
-		getFachada().registrarEntradaParcelamento(parcelamento, false, guia.getImovel().getId());
-	}
-	
-	@SuppressWarnings("unchecked")
-	private String obterLinkBoletoBB(Integer guiaPagamentoId) {
-		FiltroGuiaPagamento filtroGuiaPagamento = new FiltroGuiaPagamento();
-		filtroGuiaPagamento.adicionarCaminhoParaCarregamentoEntidade("parcelamento");
-		filtroGuiaPagamento.adicionarParametro(new ParametroSimples(FiltroGuiaPagamento.ID, guiaPagamentoId));
-		
-		GuiaPagamento guia = (GuiaPagamento) Util.retonarObjetoDeColecao(getFachada().pesquisar(filtroGuiaPagamento, GuiaPagamento.class.getName()));
-		Parcelamento parcelamento = guia.getParcelamento();
-		
-		return getFachada().montarLinkBB(parcelamento.getImovel().getId(), parcelamento.getId(), parcelamento.getCliente(), parcelamento.getValorEntrada(), false);
-	}
-
-
 	
 }

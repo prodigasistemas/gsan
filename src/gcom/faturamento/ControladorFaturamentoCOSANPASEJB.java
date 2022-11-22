@@ -1634,7 +1634,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 	private StringBuilder preencherMensagensConta(SistemaParametro sistemaParametro,
 			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
 		
-		/* Retirada do Carimbo por determinação da Diretoria 1.07.2022 - Paulo Almeida
+		 //Volta do Carimbo por determinação da Diretoria 10.11.2022 - Paulo Almeida
 		if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0
 				&& Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
 
@@ -1657,7 +1657,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			emitirContaHelper.setMsgLinha1Conta(mensagem);
 			emitirContaHelper.setMsgLinha2Conta("");
 			emitirContaHelper.setMsgLinha3Conta("");
-		} else {*/
+		} else {
 
 			String[] parmsPartesConta = obterMensagemDebitoConta3Partes(emitirContaHelper, sistemaParametro);
 
@@ -1688,14 +1688,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				}
 
 			}
-		//}
+	}
 
 		return contaTxt;
 	}
 
 	private StringBuilder preencherFlagCarimbo(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
 			throws ControladorException {
-		/* Retirada do Carimbo por determinação da Diretoria 1.07.2022 - Paulo Almeida
+		//Volta do Carimbo por determinação da Diretoria 10.11.2022 - Paulo Almeida
 		if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0
 				&& Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
 			contaTxt.append(Conta.CARIMBO_QUITADO);
@@ -1707,7 +1707,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		} else {
 			contaTxt.append(Conta.SEM_CARIMBO);
 
-		}*/
+		}
 		contaTxt.append(Conta.SEM_CARIMBO);
 		return contaTxt;
 	}

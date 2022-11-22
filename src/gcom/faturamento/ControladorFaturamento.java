@@ -822,7 +822,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 							if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
 								/**
-								 * Crédito Bolsa Água será validado antes de ser adicionado aos Créditos da
+								 * Crï¿½dito Bolsa ï¿½gua serï¿½ validado antes de ser adicionado aos Crï¿½ditos da
 								 * Conta
 								 * 
 								 * @author: Kurt Matheus Sampaio de Matos
@@ -13848,7 +13848,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		if (extratoQuitacao != null && extratoQuitacao.getIndicadorImpressaoNaConta() != null
 				&& extratoQuitacao.getIndicadorImpressaoNaConta().equals(new Integer(ConstantesSistema.NAO))) {
-			mensagem = "Em cumprimento a lei 12.007/2009, declaramos quitados os débitos de consumo de água e/ou esgoto do ano de "
+			mensagem = "Em cumprimento a lei 12.007/2009, declaramos quitados os debitos de consumo de agua e/ou esgoto do ano de "
 					+ anoAnterior + ".";
 		}
 		return mensagem;
@@ -15491,47 +15491,54 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 
-	public void registrarEntradaParcelamento(Parcelamento parcelamento, boolean primeiraVia, Integer idImovel) throws Exception {
+	public void registrarEntradaParcelamento(Integer idParcelamento,Integer idImovel) throws Exception {
 
 		boolean foiGerado = false;
-		Integer idParcelamento = parcelamento.getId();
 		
 		Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistenteGuiaPagamento(idParcelamento);
 		Boolean boletoInfoExistente = repositorioFaturamento.boletoInfoExistente(idParcelamento);
+		
 		if (fichaExistente == true || boletoInfoExistente == true) {
-			foiGerado = true;
+			throw new ControladorException("Boleto Gerado");
 		}
 		// Para boletos ja gerados antes da modificacao para gravacao na base de dados
 		// , ou seja,
 		// para boletos que foram gerados e nao foram salvos no bd
 
-		if (primeiraVia || !foiGerado) {
-			Imovel imovel = repositorioFaturamento.pesquisarImovelComEnderecoFichaCompensacaoPorId(idImovel);
-			
-			Cliente cliente = retornaClienteResponsavelParcelamentoValido(idImovel);
-			
-			GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(idParcelamento);
-			
-			ArrecadadorContratoConvenio convenio = Fachada.getInstancia().pesquisarParametrosConvenioPorId(ArrecadadorContratoConvenio.PARCELAMENTO);
-			String nossoNumero = obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(), 
-					                                                guiaPagamento.getId().toString(),
-																	convenio.getConvenio()).toString();					
-			System.out.println("Banco do Brasil: Registrando Guia do Parcelamento - " + idParcelamento + " |  Imovel - "+ imovel.getId());
-			
-			Registro registroEntradaParcelamentoService = new RegistroEntradaParcelamentoService(guiaPagamento, imovel,cliente, nossoNumero);
-			FichaCompensacaoDTO fichaDeCompensacao = registroEntradaParcelamentoService.salvarFichaDeCompensacao(convenio, repositorioFaturamento);
-			
-			registroEntradaParcelamentoService.registroFichaDeCompensacao(fichaDeCompensacao,SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
-			
-			System.out.println("Banco Do Brasil: Guia do Parcelamento - " + idParcelamento + " | Imovel - " + imovel.getId() + " registrada com sucesso!");
+		Imovel imovel = repositorioFaturamento.pesquisarImovelComEnderecoFichaCompensacaoPorId(idImovel);
+
+		Cliente cliente = retornaClienteResponsavelParcelamentoValido(idImovel);
+
+		GuiaPagamento guiaPagamento = pesquisarGuiaPagamentoParcelamento(idParcelamento);
+
+		ArrecadadorContratoConvenio convenio = Fachada.getInstancia()
+				.pesquisarParametrosConvenioPorId(ArrecadadorContratoConvenio.PARCELAMENTO);
+		String nossoNumero = obterNossoNumeroFichaCompensacao(DocumentoTipo.GUIA_PAGAMENTO.toString(),
+				guiaPagamento.getId().toString(), convenio.getConvenio()).toString();
+		System.out.println("Banco do Brasil: Registrando Guia do Parcelamento - " + idParcelamento + " |  Imovel - "
+				+ imovel.getId());
+
+		Registro registroEntradaParcelamentoService = new RegistroEntradaParcelamentoService(guiaPagamento, imovel,
+				cliente, nossoNumero);
+		FichaCompensacaoDTO fichaDeCompensacao = registroEntradaParcelamentoService.salvarFichaDeCompensacao(convenio,
+				repositorioFaturamento);
+
+		try {
+			registroEntradaParcelamentoService.registroFichaDeCompensacao(fichaDeCompensacao,
+					SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_API_REGISTRAR_BOLETO_BB.toString());
+		} catch (Exception e) {
+			throw new ControladorException("Erro ao ACESSAR API DO BB");
 		}
+
+		System.out.println("Banco Do Brasil: Guia do Parcelamento - " + idParcelamento + " | Imovel - " + imovel.getId()
+				+ " registrada com sucesso!");
 	}
 
 	private Cliente retornaClienteResponsavelParcelamentoValido(Integer idImovel) throws ErroRepositorioException, ControladorException {
 		Cliente cliente = repositorioCobranca.pesquisarClienteResponsavelParcelamento(idImovel);
 		String cpfOuCnpj = cliente.getCpfOuCnpj();
 		if(cliente != null && Util.cpfCnpjInvalido(cpfOuCnpj)) {
-			throw new ControladorException("INSCRIÇÃO(CPF/CNPJ) " + cliente.getCpfOuCnpj() + " INVÁLIDA");
+			throw new ControladorException("INSCRICAO(CPF/CNPJ) " + cliente.getCpfOuCnpj() + " INVALIDA");
 		}
 		return cliente;
 	}
@@ -15570,7 +15577,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 		
 		if(Util.cpfCnpjInvalido(cnpjCpf)) {
-			System.out.println("INSCRIÇÃO(CPF/CNPJ) " + cliente.getCpfOuCnpj() + " INVÁLIDA");
+			System.out.println("INSCRICAO(CPF/CNPJ) " + cliente.getCpfOuCnpj() + " INVALIDA");
 			return null;
 		}
 		
@@ -15609,6 +15616,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		List<Integer> clientesCadUnico = Fachada.getInstancia().pesquisarClientesPorCadastroUnico();
 		List<Integer> idsImoveisBolsaAgua = Fachada.getInstancia().pesquisarImovelBolsaAguaPorRota(idRota);
 		List<Integer> idsImoveisNormal = Fachada.getInstancia().pesquisarImovelElegivelBolsaAguaPorRota(idRota);
+
 		try {
 			if (!CollectionUtil.ehVazia(clientesCadUnico)) {
 				atualizarDadosClienteImoveisBolsaAgua(clientesCadUnico, Cliente.INDICADOR_BOLSA_FAMILIA_SEASTER, true);
@@ -15634,23 +15642,20 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	private void atualizarDadosClienteImoveisBolsaAgua(List<Integer> ids, Integer indicadorBolsa,
 			boolean indicadorAtualizador) throws ErroRepositorioException {
 
-		Integer idErro = 0;
 		String entidadeErro = "";
 		try {
 			for (Integer id : ids) {
 
 				if (indicadorAtualizador) {
-					entidadeErro = "CLIENTE DE";
-					idErro = id;
-					Fachada.getInstancia().atualizarNISCliente(id, indicadorBolsa);
+					entidadeErro = "CLIENTE - ID: " + id;
+					getControladorCliente().atualizarNISCliente(id, indicadorBolsa);
 				} else {
-					entidadeErro = "IMOVEL DE ";
-					idErro = id;
-					Fachada.getInstancia().atualizarPerfilImovel(id, indicadorBolsa);
+					entidadeErro = "IMOVEL - ID: " + id;
+					getControladorImovel().atualizarPerfilImovel(id, indicadorBolsa);
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("=== ERRO AO ATUALIZAR" + entidadeErro + " ID: " + idErro);
+			System.out.println("=== ERRO AO ATUALIZAR: " + entidadeErro );
 			e.printStackTrace();
 		}
 	}
