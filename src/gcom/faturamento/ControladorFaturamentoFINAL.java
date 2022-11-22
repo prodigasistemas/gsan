@@ -1761,14 +1761,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			if (contaCategoria.getConta().getImovel().isLigadoEsgoto()) {
 				if (contaCategoria.getQuantidadeEconomia() == 1) {
-					valorEsgoto = (PercentualBolsaAgua.PERCENTUAL_ESGOTO.retornaValor(valorBolsaAguaConcedido,
-							contaCategoria.getConta().getImovel()));
-				} else {
 					if (valorAgua.compareTo(BigDecimal.ZERO) > 0) {
 						valorEsgoto = valorAgua.multiply(percentualEsgoto);
 					} else {
 						valorEsgoto = (PercentualBolsaAgua.PERCENTUAL_ESGOTO.retornaValor(valorBolsaAguaConcedido,
 								contaCategoria.getConta().getImovel()));
+					}
+				} else {
+					if (valorAgua.compareTo(BigDecimal.ZERO) > 0) {
+						valorEsgoto = valorAgua.multiply(percentualEsgoto);
+					} else {
+						BigDecimal valorTarifaMinima = contaCategoria.getValorTarifaMinimaEsgoto()
+								.divide(new BigDecimal(contaCategoria.getQuantidadeEconomia()));
+						valorEsgoto = valorTarifaMinima.multiply(maximoEconomias);
+						;
 					}
 				}
 				if (contaCategoria.getValorEsgoto().compareTo(valorEsgoto) < 0) {
