@@ -63,8 +63,10 @@ import gcom.faturamento.conta.FaturaItem;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.conta.IContaImpostosDeduzidos;
 import gcom.faturamento.credito.CreditoARealizar;
+import gcom.faturamento.credito.CreditoARealizarCategoria;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoRealizado;
+import gcom.faturamento.credito.CreditoRealizadoCategoria;
 import gcom.faturamento.credito.CreditoRealizadoHistorico;
 import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.credito.ICreditoRealizado;
@@ -60775,8 +60777,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	
 	public GuiaPagamento pesquisarGuiaPagamento (Integer idParcelamento) throws ErroRepositorioException {
 		GuiaPagamento guiaPagamento = null;
-        Session session = HibernateUtil.getSession();
-        
+        Session session = HibernateUtil.getSession();       
         try {
 			StringBuilder consulta = new StringBuilder();
 			
@@ -60790,9 +60791,88 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
-		} 
-		
+		} 		
 		return guiaPagamento;
 		
 	}
+	
+	public CreditoARealizar pesquisarCreditoARealizar (Integer idCredito) throws ErroRepositorioException {
+		CreditoARealizar creditoARealizar = null;
+        Session session = HibernateUtil.getSession();       
+        try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append("select creditoARealizar from CreditoARealizar creditoARealizar ")
+	        .append("where creditoARealizar.id = :idCredito ");
+			
+			creditoARealizar = (CreditoARealizar) session.createQuery(consulta.toString())
+					.setInteger("idCredito", idCredito).setMaxResults(1).uniqueResult();
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		} 	
+		return creditoARealizar;		
+	}
+	
+	public CreditoRealizado pesquisarCreditoRealizadoBolsaAgua (Integer idConta) throws ErroRepositorioException {
+		CreditoRealizado creditoRealizado = null;
+        Session session = HibernateUtil.getSession();   
+        Integer bolsaAgua = CreditoTipo.CREDITO_BOLSA_AGUA;
+        try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append("select creditoRealizado from CreditoRealizado creditoRealizado ")
+	        .append("where creditoRealizado.id = :idConta and creditoRealizado.creditoTipo = :bolsaAgua ");
+			
+			creditoRealizado = (CreditoRealizado) session.createQuery(consulta.toString())
+					.setInteger("idConta", idConta).setInteger("bolsaAgua", bolsaAgua).setMaxResults(1).uniqueResult();
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		} 		
+		return creditoRealizado;		
+	}
+	
+	public CreditoARealizarCategoria pesquisarCreditoARealizarCategoria (Integer idCredito) throws ErroRepositorioException {
+		CreditoARealizarCategoria creditoARealizarCategoria = null;
+        Session session = HibernateUtil.getSession();       
+        try {
+			StringBuilder consulta = new StringBuilder();
+			
+			consulta.append("select * from faturamento.cred_a_realiz_catg ")
+	        .append("where crar_id = :idCredito ");
+			
+			creditoARealizarCategoria = (CreditoARealizarCategoria) session.createSQLQuery(consulta.toString()).addEntity(CreditoARealizarCategoria.class)
+					.setInteger("idCredito", idCredito).setMaxResults(1).uniqueResult();
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		} 	
+		return creditoARealizarCategoria;		
+	}
+	
+	public CreditoRealizadoCategoria pesquisaCreditoRealizadoCategoria (Integer idCredito) throws ErroRepositorioException {
+		CreditoRealizadoCategoria creditoRealizadoCategoria = null;
+        Session session = HibernateUtil.getSession();   
+        try {
+			StringBuilder consulta = new StringBuilder();			
+			consulta.append("select * from faturamento.cred_realizado_catg ")
+	        .append("where crrz_id = :idCredito ");			
+			creditoRealizadoCategoria = (CreditoRealizadoCategoria) session.createSQLQuery(consulta.toString()).addEntity(CreditoRealizadoCategoria.class)
+					.setInteger("idCredito", idCredito).setMaxResults(1).uniqueResult();
+			
+		} catch (Exception e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		} 		
+		return creditoRealizadoCategoria;		
+	}
+	
 }

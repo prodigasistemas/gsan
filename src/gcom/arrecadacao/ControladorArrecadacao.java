@@ -49620,8 +49620,7 @@ public class ControladorArrecadacao extends ControladorComum {
 					anoMesInicial, anoMesFinal, dataVencimentoInicial, dataVencimentoFinal, indicadorContaPaga, idGrupoFaturamento, somenteDebitoAutomatico);
 			
 		} catch (ErroRepositorioException e) {
-			
-			e.printStackTrace();
+			throw new ControladorException("atencao.pesquisa_conta_inexistente_parametros", null);			
 		}
 		
 		return retorno;

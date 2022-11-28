@@ -43,13 +43,16 @@ import gcom.faturamento.conta.FaturaItem;
 import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.conta.IContaImpostosDeduzidos;
 import gcom.faturamento.credito.CreditoARealizar;
+import gcom.faturamento.credito.CreditoARealizarCategoria;
 import gcom.faturamento.credito.CreditoRealizado;
+import gcom.faturamento.credito.CreditoRealizadoCategoria;
 import gcom.faturamento.credito.CreditoRealizadoHistorico;
 import gcom.faturamento.credito.ICreditoRealizado;
 import gcom.faturamento.credito.ICreditoRealizadoCategoria;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarGeral;
 import gcom.faturamento.debito.DebitoCobrado;
+import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.DebitoTipoVigencia;
 import gcom.faturamento.debito.IDebitoCobrado;
@@ -3106,5 +3109,13 @@ public interface IRepositorioFaturamento {
 	public CreditoARealizar validarExistenciaCreditoARealizar(Integer idImovel, Integer anoMesReferencia) throws ErroRepositorioException;
 	
 	public Boolean boletoInfoExistente(Integer idParcelamento) throws ErroRepositorioException;
+	
+	public CreditoARealizar pesquisarCreditoARealizar (Integer idCredito) throws ErroRepositorioException;
+	
+	public CreditoRealizado pesquisarCreditoRealizadoBolsaAgua (Integer idConta) throws ErroRepositorioException;
+	
+	public CreditoARealizarCategoria pesquisarCreditoARealizarCategoria (Integer idCredito) throws ErroRepositorioException;
+	
+	public CreditoRealizadoCategoria pesquisaCreditoRealizadoCategoria (Integer idCredito) throws ErroRepositorioException;
 
 }
