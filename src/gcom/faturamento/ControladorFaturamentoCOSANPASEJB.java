@@ -1708,7 +1708,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			contaTxt.append(Conta.SEM_CARIMBO);
 
 		}
-		contaTxt.append(Conta.SEM_CARIMBO);
 		return contaTxt;
 	}
 	
