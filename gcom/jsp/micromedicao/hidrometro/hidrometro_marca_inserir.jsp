@@ -135,7 +135,7 @@
 			<tr>
 			  <td  width="30%"class="style3"><strong>Código da Marca:<font color="#FF0000">*</font></strong></td>
 			  <td  width="70%" colspan="2"><strong><b><span class="style2"> 
-			  		<html:text  property="marcaHidrometro" size="1" maxlength="1" tabindex="4"/> </span></b></strong></td>			  
+			  		<html:text  property="marcaHidrometro" size="2" maxlength="2" tabindex="4"/> </span></b></strong></td>			  
 			</tr>				
 			<tr>
 				<td colspan=2>														
