@@ -1672,8 +1672,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					e1.printStackTrace();
 				}
 				try {
-					if (contaCategoria.getCategoria().isResidencial() && getControladorImovel()
-							.isImovelBolsaAgua(contaCategoria.getConta().getImovel().getId())) {
+					if (contaCategoria.getCategoria().isResidencial() && 
+							creditoARealizar.isCreditoBolsaAgua()) {
 						System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA ["
 								+ contaCategoria.getConta().getImovel().getId() + "]");
 						valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar, creditoRealizado,
@@ -1685,7 +1685,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
 				}				
 			} else {
-				valorCredito.add(creditoRealizar.getValorCredito());
+				valorCredito = creditoRealizar.getValorPrestacao();					
 			}
 			valorCreditoAtualizado = valorCreditoAtualizado.add(valorCredito);
 		}
@@ -1703,6 +1703,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		CreditoARealizar creditoARealizar = new CreditoARealizar();
 		CreditoRealizado creditoRealizado = new CreditoRealizado();		
 		for (CreditoARealizar creditoRealizar : gerarCreditoRealizado) {
+			valorCredito = new BigDecimal("0");
 			if (creditoRealizar.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)) {
 				try {
 					creditoARealizar = repositorioFaturamento.pesquisarCreditoARealizar(creditoRealizar.getId());
@@ -1712,8 +1713,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 				for (ContaCategoria contaCategoria : contaCategoriaColecao) {
 					try {
-						if (contaCategoria.getCategoria().isResidencial() && getControladorImovel()
-								.isImovelBolsaAgua(contaCategoria.getConta().getImovel().getId())) {
+						if (contaCategoria.getCategoria().isResidencial() && creditoARealizar.isCreditoBolsaAgua()) {
 							System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA ["
 									+ contaCategoria.getConta().getImovel().getId() + "]");
 							valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar, creditoRealizado,
@@ -1727,7 +1727,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 			} else {
-				valorCredito.add(creditoRealizar.getValorCredito());
+				valorCredito = creditoRealizar.getValorPrestacao();				
 			}
 			valorCreditoAtualizado = valorCreditoAtualizado.add(valorCredito);
 		}
@@ -1754,8 +1754,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.divide(new BigDecimal(contaCategoria.getQuantidadeEconomia()));
 					valorAgua = valorTarifaMinima.multiply(maximoEconomias);
 				}
-				if (contaCategoria.getValorAgua().compareTo(valorAgua) < 0) {
-					valorAgua = contaCategoria.getValorAgua();
+				try {
+					if (contaCategoria.getValorAgua().compareTo(valorAgua) < 0 
+								&& getControladorImovel().isImovelHidrometrado(creditoARealizar.getImovel().getId())) {
+						valorAgua = contaCategoria.getValorAgua();
+					}
+				} catch (ErroRepositorioException e) {
+					e.printStackTrace();
 				}
 			}
 
@@ -1777,8 +1782,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						;
 					}
 				}
-				if (contaCategoria.getValorEsgoto().compareTo(valorEsgoto) < 0) {
-					valorEsgoto = contaCategoria.getValorEsgoto();
+				try {
+					if (contaCategoria.getValorAgua().compareTo(valorEsgoto) < 0 
+								&& getControladorImovel().isImovelHidrometrado(creditoARealizar.getImovel().getId())) {
+						valorEsgoto = contaCategoria.getValorEsgoto();
+					}
+				} catch (ErroRepositorioException e) {
+					e.printStackTrace();
 				}
 			}
 			creditoRealizar.setValorCredito(valorAgua.add(valorEsgoto));
