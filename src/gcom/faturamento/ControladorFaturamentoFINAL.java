@@ -1685,10 +1685,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
 				}				
 			} else {
-				BigDecimal valorCreditoRealizar = creditoRealizar.getValorCredito();
-				BigDecimal prestacaoCredito = new BigDecimal(creditoRealizar.getNumeroPrestacaoCredito());
-				BigDecimal valorParcela = valorCreditoRealizar.divide(prestacaoCredito,2,RoundingMode.HALF_UP);
-				valorCredito.add(valorParcela);
+				valorCredito = creditoRealizar.getValorPrestacao();					
 			}
 			valorCreditoAtualizado = valorCreditoAtualizado.add(valorCredito);
 		}
@@ -1706,6 +1703,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		CreditoARealizar creditoARealizar = new CreditoARealizar();
 		CreditoRealizado creditoRealizado = new CreditoRealizado();		
 		for (CreditoARealizar creditoRealizar : gerarCreditoRealizado) {
+			valorCredito = new BigDecimal("0");
 			if (creditoRealizar.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)) {
 				try {
 					creditoARealizar = repositorioFaturamento.pesquisarCreditoARealizar(creditoRealizar.getId());
@@ -1715,8 +1713,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 				for (ContaCategoria contaCategoria : contaCategoriaColecao) {
 					try {
-						if (contaCategoria.getCategoria().isResidencial() && getControladorImovel()
-								.isImovelBolsaAgua(contaCategoria.getConta().getImovel().getId())) {
+						if (contaCategoria.getCategoria().isResidencial() && creditoARealizar.isCreditoBolsaAgua()) {
 							System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA ["
 									+ contaCategoria.getConta().getImovel().getId() + "]");
 							valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar, creditoRealizado,
@@ -1730,10 +1727,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 			} else {
-				BigDecimal valorCreditoRealizar = creditoRealizar.getValorCredito();
-				BigDecimal prestacaoCredito = new BigDecimal(creditoRealizar.getNumeroPrestacaoCredito());
-				BigDecimal valorParcela = valorCreditoRealizar.divide(prestacaoCredito,2,RoundingMode.HALF_UP);
-				valorCredito.add(valorParcela);
+				valorCredito = creditoRealizar.getValorPrestacao();				
 			}
 			valorCreditoAtualizado = valorCreditoAtualizado.add(valorCredito);
 		}
@@ -1762,7 +1756,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 				try {
 					if (contaCategoria.getValorAgua().compareTo(valorAgua) < 0 
-								&& getControladorImovel().isImovelHidrometrado(creditoRealizar.getImovel().getId())) {
+								&& getControladorImovel().isImovelHidrometrado(creditoARealizar.getImovel().getId())) {
 						valorAgua = contaCategoria.getValorAgua();
 					}
 				} catch (ErroRepositorioException e) {
@@ -1788,8 +1782,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						;
 					}
 				}
-				if (contaCategoria.getValorEsgoto().compareTo(valorEsgoto) < 0) {
-					valorEsgoto = contaCategoria.getValorEsgoto();
+				try {
+					if (contaCategoria.getValorAgua().compareTo(valorEsgoto) < 0 
+								&& getControladorImovel().isImovelHidrometrado(creditoARealizar.getImovel().getId())) {
+						valorEsgoto = contaCategoria.getValorEsgoto();
+					}
+				} catch (ErroRepositorioException e) {
+					e.printStackTrace();
 				}
 			}
 			creditoRealizar.setValorCredito(valorAgua.add(valorEsgoto));
@@ -1931,15 +1930,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		if (imovel.getFaturamentoSituacaoTipo() != null && !imovel.getFaturamentoSituacaoTipo().equals("")) {
 
-//			if ((faturamentoSituacaoHistorico != null
-//					&& anoMesFaturamento >= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoInicio() && anoMesFaturamento <= faturamentoSituacaoHistorico
-//					.getAnoMesFaturamentoSituacaoFim())
-//					&& (imovel.getFaturamentoSituacaoTipo() != null
-//							&& (imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento().intValue() == 1
-//							 && imovel.getFaturamentoSituacaoTipo().getId() != FaturamentoSituacaoTipo.SITUACAO_ESPECIAL_BOLSA_AGUA)
-//							&& imovel.getFaturamentoSituacaoTipo().getIndicadorValidoAgua().intValue() == 1)) {
-//				faturar = false;
-//			}
+			if ((faturamentoSituacaoHistorico != null
+					&& anoMesFaturamento >= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoInicio() && anoMesFaturamento <= faturamentoSituacaoHistorico
+					.getAnoMesFaturamentoSituacaoFim())
+					&& (imovel.getFaturamentoSituacaoTipo() != null
+							&& (imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento().intValue() == 1
+							 && imovel.getFaturamentoSituacaoTipo().getId() != FaturamentoSituacaoTipo.SITUACAO_ESPECIAL_BOLSA_AGUA)
+							&& imovel.getFaturamentoSituacaoTipo().getIndicadorValidoAgua().intValue() == 1)) {
+				faturar = false;
+			}
 		}
 		return faturar;
 	}
@@ -3301,21 +3300,21 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		if (colecaoDebitosACobrar == null || colecaoDebitosACobrar.isEmpty()) {
 			System.out.println(imovel.getId() + " N�O GEROU CONTA : segundaCondicaoNaoGerarConta");
 			segundaCondicaoNaoGerarConta = true;
-//		}
-//		/**
-//		 *
-//		 * 
-//		 * @author Adriana Muniz date: 28/06/2012
-//		 * 
-//		 *         Condição para não gerar conta para imóvel na situação
-//		 *         especial como o indicador de paralisação do faturamento
-//		 *         igual a 1
-//		 * */
-//		else if (imovel.getFaturamentoSituacaoTipo() != null
-//				&& imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento()
-//						.equals(ConstantesSistema.SIM)) {
-//			System.out.println(imovel.getId() + " N�O GEROU CONTA : segundaCondicaoNaoGerarConta 2");
-//			segundaCondicaoNaoGerarConta = true;
+		}
+		/**
+		 *
+		 * 
+		 * @author Adriana Muniz date: 28/06/2012
+		 * 
+		 *         Condição para não gerar conta para imóvel na situação
+		 *         especial como o indicador de paralisação do faturamento
+		 *         igual a 1
+		 * */
+		else if (imovel.getFaturamentoSituacaoTipo() != null
+				&& imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento()
+						.equals(ConstantesSistema.SIM)) {
+			System.out.println(imovel.getId() + " N�O GEROU CONTA : segundaCondicaoNaoGerarConta 2");
+			segundaCondicaoNaoGerarConta = true;
 		} else {
 			// 1.2.2 OU, Caso existam Debitos a Cobrar E existam Pagamentos
 			boolean existeDebitoSemPagamento = false;
