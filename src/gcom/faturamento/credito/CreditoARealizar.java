@@ -716,4 +716,12 @@ public class CreditoARealizar extends ObjetoTransacao {
 	public boolean isCreditoBolsaAgua() {
 		return this.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA);
 	}
+	
+	public String getDescricaoCredito() {
+		return this.id + " : " 
+                + this.getValorTotal() + " credito : "
+                + this.valorResidualMesAnterior + " resíduo : " 
+                + this.anoMesCobrancaCredito + " cobranca : " 
+                + this.anoMesReferenciaPrestacao + " prestacao";
+	}
 }
