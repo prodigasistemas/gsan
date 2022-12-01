@@ -171,6 +171,18 @@
 						</a>
 					</div>
 				</div>
+				<div class="col-md-3">
+					<a href="#">
+						<div class="panel-modulo">
+							<a href="extrato-debitos.do?action=resetar">
+								<div class="panel-link">
+									<i class="fa fa-money fa-3x" aria-hidden="true"></i>
+									<h3>Extrato de Debitos</h3>
+								</div>
+							</a>
+						</div>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -193,6 +193,7 @@ public class FiltroSegurancaAcesso extends HttpServlet implements Filter {
 				!enderecoURL.contains("processarRequisicaoDispositivoMovelRecadastramentoAction") &&
 				!enderecoURL.contains("portal") &&
 				!enderecoURL.contains("segunda-via-conta") &&
+				!enderecoURL.contains("extrato-debitos") &&
 				!enderecoURL.contains("certidao-negativa-imovel") &&
 				!enderecoURL.contains("certidao-negativa-cliente") &&
 				!enderecoURL.contains("lojas-de-atendimento") &&

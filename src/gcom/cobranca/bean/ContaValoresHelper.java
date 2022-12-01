@@ -16,7 +16,7 @@ public class ContaValoresHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Conta conta;
-
+	
 	private BigDecimal valorPago;
 
 	private BigDecimal valorMulta;
@@ -199,6 +199,7 @@ public class ContaValoresHelper implements Serializable {
 
 		return anoMesFormatado.toString();
 	}
+	
 
 	public BigDecimal getValorTotalContaValoresParcelamento() {
 	    BigDecimal retorno = new BigDecimal("0.00");
@@ -278,4 +279,5 @@ public class ContaValoresHelper implements Serializable {
 	public String getVencimentoConta() {
 		return Util.formatarData(conta.getDataVencimentoConta());
 	}
+
 }

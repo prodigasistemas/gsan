@@ -27,6 +27,7 @@
 		    <forward name="acessar-portal" path="/jsp/portal/acesso.jsp" />
 			<forward name="portal" path="/jsp/portal/loja_virtual.jsp" />
 			<forward name="segunda-via-conta" path="/segunda-via-conta.do" redirect="true" />
+			<forward name="extrato-debitos" path="/extrato-debitos.do" redirect="true" />
 		</action>
 		
 	</action-mappings>

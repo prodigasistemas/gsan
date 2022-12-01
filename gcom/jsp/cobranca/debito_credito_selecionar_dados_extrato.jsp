@@ -284,7 +284,6 @@
   	}
   	
 	function facilitador(objeto,nome){
-
 		if (objeto.value == "0" || objeto.id == undefined){
 	
 			objeto.value = "1";
@@ -301,6 +300,7 @@
 	function marcarTodosExtrato(nome){
 		
 		var objetoTotalDebitoSelecionado = document.getElementById("totalDebitoSelecionado");
+		
 		objetoTotalDebitoSelecionado.innerHTML = "0,00";
 		
 		var objetoTotalDebitoAtualizadoSelecionado = document.getElementById("totalDebitoAtualizadoSelecionado");
