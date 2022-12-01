@@ -64,6 +64,7 @@ public class FiltroSessaoExpirada extends HttpServlet implements Filter {
 							&& !enderecoURL.contains("inserirCadastroEmailClientePortalAction")
 							&& !enderecoURL.contains("exibirInserirCadastroEmailClientePortalAction") 
 							&& !enderecoURL.contains("segunda-via-conta")
+							&& !enderecoURL.contains("extrato-debitos")
 							&& !enderecoURL.contains("canais-de-atendimento") 
 							&& !enderecoURL.contains("exibirQuestionarioSatisfacaoAction")
 							&& !enderecoURL.contains("questionarioSatisfacaoAction") 
@@ -83,6 +84,8 @@ public class FiltroSessaoExpirada extends HttpServlet implements Filter {
 							&& !enderecoURL.contains("certidao-negativa-cliente")
 							&& !enderecoURL.contains("gerarCertidaoNegativaClientePortalAction")
 							&& !enderecoURL.contains("processarRequisicaoDispositivoMovelRecadastramentoAction")
+							&& !enderecoURL.contains("emissaoExtratoDebitoAction")
+							
 					)) {
 
 				RequestDispatcher rd = filterConfig.getServletContext().getRequestDispatcher("/jsp/util/sessao_expirada.jsp");

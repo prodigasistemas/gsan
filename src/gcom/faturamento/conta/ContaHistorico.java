@@ -106,6 +106,8 @@ public class ContaHistorico implements IConta {
     
     @SuppressWarnings("rawtypes")
     private Set parcelamentoItems;
+    
+    private BigDecimal valorTotalDaConta;
 	
     public Integer getNumeroLeituraAnteriorPoco() {
 		return numeroLeituraAnteriorPoco;
@@ -181,7 +183,9 @@ public class ContaHistorico implements IConta {
     		ContaMotivoRetificacao contaMotivoRetificacao, 
     		Funcionario funcionarioEntrega, 
     		Funcionario funcionarioLeitura, Set creditoRealizadoHistoricos, 
-    		Set debitoCobradoHistoricos, Set parcelamentoItems, Integer numeroRetificacoes) {
+    		Set debitoCobradoHistoricos, Set parcelamentoItems, Integer numeroRetificacoes,
+    		BigDecimal valorTotalDaConta
+			) {
         this.id = id;
         this.anoMesReferenciaConta = anoMesReferenciaConta;
         this.contaHistorico = contaHistorico;
@@ -236,6 +240,7 @@ public class ContaHistorico implements IConta {
         this.debitoCobradoHistoricos = debitoCobradoHistoricos;
         this.parcelamentoItems = parcelamentoItems;
         this.numeroRetificacoes = numeroRetificacoes;
+        this.valorTotalDaConta = valorTotalDaConta;
     }
 
     public ContaHistorico() {
@@ -939,5 +944,15 @@ public class ContaHistorico implements IConta {
 		}
 
 		return valorTotalConta;
+	}
+	
+
+	public BigDecimal getValorTotalDaConta() {
+		valorTotalDaConta  = getValorTotal();
+		return valorTotalDaConta;
+	}
+
+	public void setValorTotalDaConta(BigDecimal valorTotalDaConta) {
+		this.valorTotalDaConta = valorTotalDaConta;
 	}
 }

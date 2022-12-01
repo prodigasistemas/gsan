@@ -342,6 +342,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 import java.util.zip.ZipOutputStream;
@@ -1531,9 +1532,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							colecaoCategoriaOUSubcategoria,
 							helperValoresAguaEsgoto.getColecaoCalcularValoresAguaEsgotoHelper(), sistemaParametro);
 					
-					atualizarValorContaCategoriaBolsaAgua(gerarContaCategoriaHelper.getColecaoContaCategoria(), conta,
-							gerarCreditoRealizadoHelper.getColecaoCreditoARealizar()
-							,gerarCreditoRealizadoHelper);
+					atualizarValorContaCategoriaBolsaAgua(gerarContaCategoriaHelper.getColecaoContaCategoria(), conta, 
+							gerarCreditoRealizadoHelper);
 					
 					// INSERINDO CONTA_CATEGORIA NA BASE
 					if (gerarContaCategoriaHelper.getColecaoContaCategoria() != null
@@ -1652,83 +1652,76 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public void atualizarValorContaCategoriaBolsaAguaMovimentoCelular(ContaCategoria contaCategoria, Conta conta)
 			throws ControladorException {
 		if (getControladorImovel().isImovelBolsaAgua(conta.getImovel().getId())) {
-			BigDecimal valorCredito = new BigDecimal("0");
-			BigDecimal valorCreditoAtualizado = new BigDecimal("0");
-			CreditoARealizar creditoARealizar = new CreditoARealizar();
-			CreditoRealizado creditoRealizado = new CreditoRealizado();
-			String nomePacoteObjeto = CreditoARealizar.class.getName();
-			FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
-			filtroCreditoARealizar
-					.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.IMOVEL, conta.getImovel().getId()));
-			filtroCreditoARealizar.adicionarParametro(new ParametroSimples(
-					FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO, conta.getAnoMesReferenciaConta()));
-			Collection<CreditoARealizar> creditosARealizar = getControladorUtil().pesquisar(filtroCreditoARealizar,
-					nomePacoteObjeto);
-			for (CreditoARealizar creditoRealizar : creditosARealizar) {
-				if (creditoRealizar.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)) {
-					try {
-						creditoARealizar = repositorioFaturamento.pesquisarCreditoARealizar(creditoRealizar.getId());
-						creditoRealizado = repositorioFaturamento.pesquisarCreditoRealizadoBolsaAgua(conta.getId());
-					} catch (ErroRepositorioException e1) {
-						e1.printStackTrace();
-					}
-					try {
-						if (contaCategoria.getCategoria().isResidencial() && creditoARealizar.isCreditoBolsaAgua()) {
-							System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA ["
-									+ contaCategoria.getConta().getImovel().getId() + "]");
-							valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar, creditoRealizado,
-									creditoRealizar);
-							System.out.println("FIM ATUALIZANDO CREDITO A REALIZAR E CREDITO REALIZADO - BOLSA AGUA ["
-									+ contaCategoria.getConta().getImovel().getId() + "]");
+			if (contaCategoria.getCategoria().isResidencial()) {
+				BigDecimal valorCredito = new BigDecimal("0");
+				BigDecimal valorCreditoAtualizado = new BigDecimal("0");
+				CreditoARealizar creditoARealizar = new CreditoARealizar();
+				CreditoRealizado creditoRealizado = new CreditoRealizado();
+				String nomePacoteObjeto = CreditoRealizado.class.getName();
+				FiltroCreditoRealizado filtroCreditoRealizado = new FiltroCreditoRealizado();
+				filtroCreditoRealizado
+						.adicionarParametro(new ParametroSimples(FiltroCreditoRealizado.CONTA_ID, conta.getId()));
+				Collection<CreditoRealizado> creditosRealizados = getControladorUtil().pesquisar(filtroCreditoRealizado,
+						nomePacoteObjeto);
+				try {
+					for (CreditoRealizado realizado : creditosRealizados) {
+						valorCredito = new BigDecimal("0");
+						creditoARealizar = repositorioFaturamento
+								.pesquisarCreditoARealizar(realizado.getCreditoARealizarGeral().getId());
+						if (creditoARealizar.isCreditoBolsaAgua()) {
+							try {
+
+								System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA ["
+										+ contaCategoria.getConta().getImovel().getId() + "]");
+								valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar,
+										realizado, true);
+								System.out
+										.println("FIM ATUALIZANDO CREDITO A REALIZAR E CREDITO REALIZADO - BOLSA AGUA ["
+												+ contaCategoria.getConta().getImovel().getId() + "]");
+
+							} catch (ControladorException e) {
+								throw new ControladorException(
+										"Erro ao atualizar valor da conta para imoveis bolsa agua", e);
+							}
+						} else {
+							valorCredito = realizado.getValorCredito();
 						}
-					} catch (ControladorException e) {
-						throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
+						valorCreditoAtualizado = valorCreditoAtualizado.add(valorCredito);
 					}
-				} else {
-					if (creditoRealizar.concedidoNaReferenciaAtual(conta.getAnoMesReferenciaConta().intValue())
-							&& creditoRealizar.isUltimaPrestacao()) {
-						valorCredito = creditoRealizar.calculaCreditoOuResiduo();
-					} else {
-						valorCredito = creditoRealizar.getValorPrestacao();
-					}
+				} catch (ErroRepositorioException e1) {
+					throw new ControladorException("Erro ao calcular valor de creditos para imoveis bolsa agua", e1);
 				}
-				valorCreditoAtualizado = valorCreditoAtualizado.add(valorCredito);
+
+				conta.setValorCreditos(valorCreditoAtualizado);
+				atualizarCreditoConta(conta);
+				System.out.println("FIM ATUALIZANDO CONTA - BOLSA AGUA [" + conta.getImovel().getId() + "]");
 			}
-			conta.setValorCreditos(valorCreditoAtualizado);
-			atualizarCreditoConta(conta);
-			System.out.println("FIM ATUALIZANDO CONTA - BOLSA AGUA [" + conta.getImovel().getId() + "]");
 		}
 	}
 	
 	public void atualizarValorContaCategoriaBolsaAgua(Collection<ContaCategoria> contaCategoriaColecao, Conta conta,
-			Collection<CreditoARealizar> gerarCreditoRealizado, GerarCreditoRealizadoHelper gerarCreditoRealizadoHelper)
+			GerarCreditoRealizadoHelper creditoRealizadoHelper)
 			throws ControladorException {
 		if (getControladorImovel().isImovelBolsaAgua(conta.getImovel().getId())) {
 		BigDecimal valorCreditoAtualizado = new BigDecimal("0");
 		BigDecimal valorCredito = new BigDecimal("0");
 		CreditoARealizar creditoARealizar = new CreditoARealizar();
-		CreditoRealizado creditoRealizado = new CreditoRealizado();		
-			for (CreditoARealizar creditoRealizar : gerarCreditoRealizado) {
+		Set<CreditoRealizado> creditosRealizados = (Set<CreditoRealizado>) creditoRealizadoHelper.getMapCreditoRealizado().keySet();
+		
+		try {
+			for (CreditoRealizado realizado : creditosRealizados) {
 				valorCredito = new BigDecimal("0");
-				if (creditoRealizar.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_BOLSA_AGUA)) {
-					try {
-						creditoARealizar = repositorioFaturamento.pesquisarCreditoARealizar(creditoRealizar.getId());
-						creditoRealizado = repositorioFaturamento.pesquisarCreditoRealizadoBolsaAgua(conta.getId());
-					} catch (ErroRepositorioException e1) {
-						e1.printStackTrace();
-					}
+					creditoARealizar = repositorioFaturamento.pesquisarCreditoARealizar(realizado.getCreditoARealizarGeral().getId());
+				if (creditoARealizar.isCreditoBolsaAgua()) {					
 					for (ContaCategoria contaCategoria : contaCategoriaColecao) {
 						try {
-							if (contaCategoria.getCategoria().isResidencial()
-									&& creditoARealizar.isCreditoBolsaAgua()) {
+							if (contaCategoria.getCategoria().isResidencial()) {
 								System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA ["
 										+ contaCategoria.getConta().getImovel().getId() + "]");
-								valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar,
-										creditoRealizado, creditoRealizar);
-								atualizacaoCreditosARealizarECreditoARealizarCategoria(gerarCreditoRealizadoHelper,
-										valorCredito);
-								System.out
-										.println("FIM ATUALIZANDO CREDITO A REALIZAR E CREDITO REALIZADO - BOLSA AGUA ["
+							
+								valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar,realizado, false);
+								atualizacaoCreditosARealizarECreditoARealizarCategoria(creditoRealizadoHelper,valorCredito);
+								System.out.println("FIM ATUALIZANDO CREDITO A REALIZAR E CREDITO REALIZADO - BOLSA AGUA ["
 												+ contaCategoria.getConta().getImovel().getId() + "]");
 							}
 						} catch (ControladorException e) {
@@ -1737,14 +1730,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 					}
 				} else {
-					if (creditoRealizar.concedidoNaReferenciaAtual(conta.getAnoMesReferenciaConta().intValue()) && creditoRealizar.isUltimaPrestacao()){
-		                valorCredito = creditoRealizar.calculaCreditoOuResiduo();
-		            } else {
-						valorCredito = creditoRealizar.getValorPrestacao();
-		            }
+					valorCredito = realizado.getValorCredito();
 				}
 				valorCreditoAtualizado = valorCreditoAtualizado.add(valorCredito);
 			}
+		} catch (ErroRepositorioException e1) {
+			throw new ControladorException("Erro ao calcular valor de creditos para imoveis bolsa agua", e1);
+		}
 			conta.setValorCreditos(valorCreditoAtualizado);
 			atualizarCreditoConta(conta);
 			System.out.println("FIM ATUALIZANDO CONTA - BOLSA AGUA [" + conta.getImovel().getId() + "]");
@@ -1752,7 +1744,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	}
 	
 	public BigDecimal valorCreditoAtualizado(ContaCategoria contaCategoria, CreditoARealizar creditoARealizar,
-			CreditoRealizado creditoRealizado, CreditoARealizar creditoRealizar) throws ControladorException {
+			CreditoRealizado creditoRealizado, Boolean atualizarMovimentoCelular) throws ControladorException {
 		BigDecimal maximoEconomias = new BigDecimal("2");
 		BigDecimal percentualEsgoto = new BigDecimal("0.6");
 		BigDecimal valorAgua = new BigDecimal("0");
@@ -1806,10 +1798,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					e.printStackTrace();
 				}
 			}
-			creditoRealizar.setValorCredito(valorAgua.add(valorEsgoto));
 			creditoARealizar.setValorCredito(valorAgua.add(valorEsgoto));
 			atualizarCreditosARealizar(creditoARealizar);
-			if (creditoRealizado != null) {
+			if (creditoRealizado != null && atualizarMovimentoCelular) {
 				creditoRealizado.setValorCredito(valorAgua.add(valorEsgoto));
 				atualizarCreditosRealizados(creditoRealizado);
 			}
