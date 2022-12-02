@@ -53920,14 +53920,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		GerarContaCategoriaHelper helper = new GerarContaCategoriaHelper();
 
+		System.out.println("subcategoria 1"); 
 		// Verificando se a empresa fatura por CATEGORIA ou SUBCATEGORIA
 		if (sistemaParametro.getIndicadorTarifaCategoria().equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
-
+			System.out.println("subcategoria 2");
 			// GERANDO POR CATEGORIA
 			helper = this.gerarContaCategoriaPorCategoria(conta, colecaoCategoriaOUSubcategoria,
 					colecaoCalcularValoresAguaEsgotoHelper);
 		} else {
-
+			System.out.println("subcategoria 3");
 			// GERANDO POR SUBCATEGORIA
 			helper = this.gerarContaCategoriaPorSubcategoria(conta, colecaoCategoriaOUSubcategoria,
 					colecaoCalcularValoresAguaEsgotoHelper);
@@ -54122,16 +54123,17 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoContaCategoriaConsumoFaixa = null;
 
 		BigDecimal[] valoresAguaEsgotoRateioPorEconomia = new BigDecimal[2];
-
+		System.out.println("subcategoria 4");
 		if (conta.getImovel().isImovelCondominio()) {
-
+			System.out.println("subcategoria 5");
 			valoresAguaEsgotoRateioPorEconomia = this.calcularValorRateioPorEconomia(conta.getImovel()
 					.getImovelCondominio().getId(), conta.getFaturamentoGrupo());
 		}
 
+		System.out.println("subcategoria 6");
 		if ((colecaoSubCategorias != null && !colecaoSubCategorias.isEmpty())
 				&& (colecaoCalcularValoresAguaEsgotoHelper != null && !colecaoCalcularValoresAguaEsgotoHelper.isEmpty())) {
-
+			System.out.println("subcategoria 7");
 			ContaCategoria contaCategoria = null;
 			ContaCategoriaPK contaCategoriaPK = null;
 			Subcategoria subCategoria = null;
@@ -54143,9 +54145,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Iterator iteratorColecaoSubCategorias = colecaoSubCategorias.iterator();
 
 			Iterator iteratorColecaoCalcularValoresAguaEsgotoHelper = colecaoCalcularValoresAguaEsgotoHelper.iterator();
-
+			System.out.println("subcategoria 8");
 			while (iteratorColecaoSubCategorias.hasNext() && iteratorColecaoCalcularValoresAguaEsgotoHelper.hasNext()) {
-
+				System.out.println("subcategoria 9");
 				// SUBCATEGORIA
 				subCategoria = (Subcategoria) iteratorColecaoSubCategorias.next();
 
@@ -54227,15 +54229,18 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 			}
+			System.out.println("subcategoria 10");
 
 			helper.setColecaoContaCategoria(colecaoContaCategoria);
 			helper.setColecaoContaCategoriaConsumoFaixa(colecaoContaCategoriaConsumoFaixa);
 
 		} else if (colecaoSubCategorias != null && !colecaoSubCategorias.isEmpty()) {
+			System.out.println("subcategoria 11");
 
 			// GERAR CONTA CATEGORIA COM VALORES ZERADOS
 			helper = this.gerarContaCategoriaValoresZeradosPorSubcategoria(conta, colecaoSubCategorias);
 		}
+		System.out.println("subcategoria 12");
 
 		return helper;
 	}
