@@ -820,21 +820,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 							BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
 
-							if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
-								/**
-								 * Cr�dito Bolsa �gua ser� validado antes de ser adicionado aos Cr�ditos da
-								 * Conta
-								 * 
-								 * @author: Kurt Matheus Sampaio de Matos
-								 * @date: 03/06/2022
-								 */
-								if (!validarCreditoConcedido(valorCreditos, valorBolsaAguaConcedido)) {
-									valorCreditos = valorCreditos.add(valorBolsaAguaConcedido);
-									contaAtualizacao.setValorCreditos(valorCreditos);
-								}
-								atualizarValorCreditoBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(),
-										helper.getImovel(), valorBolsaAguaConcedido, contaAtualizacao);
-							}
+//							if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
+//								/**
+//								 * Cr�dito Bolsa �gua ser� validado antes de ser adicionado aos Cr�ditos da
+//								 * Conta
+//								 * 
+//								 * @author: Kurt Matheus Sampaio de Matos
+//								 * @date: 03/06/2022
+//								 */
+//								if (!validarCreditoConcedido(valorCreditos, valorBolsaAguaConcedido)) {
+//									valorCreditos = valorCreditos.add(valorBolsaAguaConcedido);
+//									contaAtualizacao.setValorCreditos(valorCreditos);
+//								}
+//								atualizarValorCreditoBolsaAgua(helper.getAnoMesReferenciaPreFaturamento(),
+//										helper.getImovel(), valorBolsaAguaConcedido, contaAtualizacao);
+//							}
 
 							logger.info(" 1 - Credito a Realizar: Imovel: "
 									+ (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId()
