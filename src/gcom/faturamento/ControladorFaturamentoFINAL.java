@@ -1702,13 +1702,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public void atualizarValorContaCategoriaBolsaAgua(Collection<ContaCategoria> contaCategoriaColecao, Conta conta,
 			GerarCreditoRealizadoHelper creditoRealizadoHelper)
 			throws ControladorException {
-		if (getControladorImovel().isImovelBolsaAgua(conta.getImovel().getId())) {
+		if (getControladorImovel().isImovelBolsaAgua(conta.getImovel().getId()) && creditoRealizadoHelper != null) {
 		BigDecimal valorCreditoAtualizado = new BigDecimal("0");
 		BigDecimal valorCredito = new BigDecimal("0");
 		CreditoARealizar creditoARealizar = new CreditoARealizar();
-		Set<CreditoRealizado> creditosRealizados = (Set<CreditoRealizado>) creditoRealizadoHelper.getMapCreditoRealizado().keySet();
 		
 		try {
+			Set<CreditoRealizado> creditosRealizados = (Set<CreditoRealizado>) creditoRealizadoHelper.getMapCreditoRealizado().keySet();
 			for (CreditoRealizado realizado : creditosRealizados) {
 				valorCredito = new BigDecimal("0");
 					creditoARealizar = repositorioFaturamento.pesquisarCreditoARealizar(realizado.getCreditoARealizarGeral().getId());
