@@ -174,6 +174,8 @@ public class Conta extends ObjetoTransacao implements IConta {
 	@SuppressWarnings("rawtypes")
 	private Set debitoAutomaticoMovimento;
 	
+	private BigDecimal valorTotalDaConta;
+	
 	public Conta() {}
 	
 	@SuppressWarnings("rawtypes")
@@ -227,7 +229,9 @@ public class Conta extends ObjetoTransacao implements IConta {
 			DebitoCreditoSituacao debitoCreditoSituacaoAnterior,
 			Funcionario funcionarioLeitura, Set contaCategorias,
 			Set debitoCobrados, Set creditoRealizados,
-			Parcelamento parcelamento, Date dataVencimentoOriginal, BigDecimal valorImposto, Integer numeroRetificacoes) {
+			Parcelamento parcelamento, Date dataVencimentoOriginal, BigDecimal valorImposto, Integer numeroRetificacoes,
+			BigDecimal valorTotalDaConta
+			) {
 		this.referenciaContabil = referenciaContabil;
 		this.referencia = referencia;
 		this.lote = lote;
@@ -283,6 +287,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.dataVencimentoOriginal = dataVencimentoOriginal;
 		this.valorImposto = valorImposto;
 		this.numeroRetificacoes = numeroRetificacoes;
+		this.valorTotalDaConta = valorTotalDaConta;
 	}
 
 	public Conta(Integer id) {
@@ -1353,5 +1358,14 @@ public class Conta extends ObjetoTransacao implements IConta {
 		} catch (Exception e) {
 			this.percentualEsgoto = BigDecimal.ZERO;
 		}
+	}
+
+	public BigDecimal getValorTotalDaConta() {
+		valorTotalDaConta =  getValorTotal();
+		return valorTotalDaConta;
+	}
+
+	public void setValorTotalDaConta(BigDecimal valorTotalDaConta) {
+		this.valorTotalDaConta = valorTotalDaConta;
 	}
 }

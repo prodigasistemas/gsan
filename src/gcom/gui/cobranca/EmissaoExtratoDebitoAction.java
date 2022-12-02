@@ -1,5 +1,21 @@
 package gcom.gui.cobranca;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
@@ -32,22 +48,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
 /**
  * Esta classe tem por finalidade a emissão do extrato de débitos do imóvel
  * 
@@ -71,7 +71,11 @@ public class EmissaoExtratoDebitoAction extends GcomAction {
 		HttpSession sessao = httpServletRequest.getSession(false);
 
 		String idImovel = form.getIdImovel();
+		
 		String indicadorIncluirAcrescimosImpontualidade = form.getIndicadorIncluirAcrescimosImpontualidade();
+		if (indicadorIncluirAcrescimosImpontualidade == null)
+			indicadorIncluirAcrescimosImpontualidade = CobrancaDocumento.INCLUIR_ACRESCIMOS;
+		
 		String indicadorTaxaCobranca = form.getIndicadorTaxaCobranca();
 		
 		Collection<ContaValoresHelper> colecaoContas =  null;

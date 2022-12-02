@@ -631,8 +631,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									contaCategoria
 											.setValorTarifaMinimaEsgoto(helperCategoria.getValorTarifaMinimaEsgoto());
 									contaCategoria.setConsumoMinimoEsgoto(helperCategoria.getConsumoMinimoEsgoto());
-									contaCategoria.setUltimaAlteracao(new Date());
-
+									contaCategoria.setUltimaAlteracao(new Date());							
+ 
 									atualizarValorContaCategoriaBolsaAguaMovimentoCelular(contaCategoria, contaAtualizacao);
 									try {
 										repositorioFaturamento.atualizarContaCategoriaProcessoMOBILE(contaCategoria);

@@ -931,7 +931,8 @@
 				/WEB-INF/relatorio/cadastro/struts-config-GerarDocumentoContrato.xml,
 				/WEB-INF/treinamentos/struts-config-ExibirTreinamentos.xml,
 				/WEB-INF/cadastro/atualizacaocadastral/struts-config-GerarLoteAtualizacaoCadastral.xml,
-				/WEB-INF/cadastro/atualizacaocadastral/struts-config-ProcessarRequisicaoDispositivoMovelRecadastramento.xml
+				/WEB-INF/cadastro/atualizacaocadastral/struts-config-ProcessarRequisicaoDispositivoMovelRecadastramento.xml,
+				/WEB-INF/portal/struts-config-EmitirExtratoDebitos.xml
 
 			</param-value>
 		</init-param>
