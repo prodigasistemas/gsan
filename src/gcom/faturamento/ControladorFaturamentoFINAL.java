@@ -1758,8 +1758,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					valorAgua = (PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido,
 							contaCategoria.getConta().getImovel()));
 				} else {
-					BigDecimal valorTarifaMinima = contaCategoria.getValorTarifaMinimaAgua()
-							.divide(new BigDecimal(contaCategoria.getQuantidadeEconomia()));
+					BigDecimal contaCategoriaTarifaMinima = contaCategoria.getValorTarifaMinimaAgua();
+					BigDecimal contaCategoriaQuantidadeCategoria = BigDecimal.valueOf(contaCategoria.getQuantidadeEconomia());
+					BigDecimal valorTarifaMinima = contaCategoriaTarifaMinima.divide(contaCategoriaQuantidadeCategoria, 2, RoundingMode.HALF_DOWN);
 					valorAgua = valorTarifaMinima.multiply(maximoEconomias);
 				}
 				try {
