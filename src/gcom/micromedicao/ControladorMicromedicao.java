@@ -28940,6 +28940,9 @@ public class ControladorMicromedicao extends ControladorComum {
 					boolean ligacaoPoco = false;
 
 					imovelParaSerGerado = (Imovel) imovelParaSerGeradoIterator.next();
+					
+					System.out.println("getIdImovel: " + imovelParaSerGerado.getIdImovel());
+					System.out.println("IdImovel: " + imovelParaSerGerado.getId());
 
 					// incrementa a quantidade de registros
 					quantidadeRegistros = quantidadeRegistros + 1;
