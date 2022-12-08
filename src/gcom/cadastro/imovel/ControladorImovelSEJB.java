@@ -310,6 +310,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 		try {
 			return repositorioImovel.pesquisarObterQuantidadeEconomias(imovel);
 		} catch (ErroRepositorioException ex) {
+			System.out.println("Id Imovel: " + imovel.getIdImovel());
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
