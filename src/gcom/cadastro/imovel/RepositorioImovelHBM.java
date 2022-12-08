@@ -911,7 +911,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			}
 
 		} catch (HibernateException e) {
-			System.out.println("Id imovel: " + imovel.getId());
 			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
