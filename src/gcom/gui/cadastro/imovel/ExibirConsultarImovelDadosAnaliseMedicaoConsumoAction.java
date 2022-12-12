@@ -10,7 +10,16 @@ import gcom.gui.GcomAction;
 import gcom.micromedicao.consumo.FiltroComunicadoEmitirConta;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
+import gcom.seguranca.ControladorPermissaoEspecialLocal;
+import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
+import gcom.seguranca.acesso.PermissaoEspecial;
+import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorException;
+import gcom.util.ServiceLocator;
+import gcom.util.ServiceLocatorException;
+import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
@@ -24,6 +33,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.ejb.CreateException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,10 +55,24 @@ public class ExibirConsultarImovelDadosAnaliseMedicaoConsumoAction extends GcomA
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
-
+		
 		HttpSession sessao = httpServletRequest.getSession(false);
 
 		ConsultarImovelActionForm consultarImovelActionForm = (ConsultarImovelActionForm) actionForm;
+		
+		 Boolean consultarRelatorioMicromedicaoAnalise = null;
+		 
+			try {
+				consultarRelatorioMicromedicaoAnalise = getControladorPermissaoEspecial().verificarPermissaoEspecial(PermissaoEspecial.CONSULTAR_HISTORICO_PARA_ANALISE_DE_CONSUMO, (Usuario)(httpServletRequest.getSession(false)).getAttribute("usuarioLogado"));
+			} catch (ControladorException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(consultarRelatorioMicromedicaoAnalise == false) {
+				consultarRelatorioMicromedicaoAnalise = null;
+			} 
+
+			sessao.setAttribute("permissao", consultarRelatorioMicromedicaoAnalise);;
 
 		if (isLimparDadosTela(httpServletRequest)) {
 
@@ -112,6 +136,37 @@ public class ExibirConsultarImovelDadosAnaliseMedicaoConsumoAction extends GcomA
 		
 			return actionMapping.findForward("consultarImovelAnaliseMedicaoConsumo");
 		}
+	
+	/**
+	 * Retorna o valor de controladorPermissaoEspecial
+	 * 
+	 * @return O valor de controladorPermissaoEspecial
+	 */
+	protected ControladorPermissaoEspecialLocal getControladorPermissaoEspecial() {
+
+		ControladorPermissaoEspecialLocalHome localHome = null;
+		ControladorPermissaoEspecialLocal local = null;
+
+		// pega a instância do ServiceLocator.
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorPermissaoEspecialLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
+			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// objetos remotamente
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+
+	}
 
 	/**
 	 * Esse método seta os dados necessários do Imovel

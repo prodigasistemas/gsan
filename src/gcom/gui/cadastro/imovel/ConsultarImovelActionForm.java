@@ -136,8 +136,6 @@ public class ConsultarImovelActionForm extends ValidatorActionForm {
 	private String ligacaoEsgotoSituacaoId;
 	private String leituraInstalacaoHidrometro;
 	
-	
-	
 	//dados do hidrometro da ligacao agua
 	private String tipoMedicao;
 	private String numeroHidrometro;
@@ -4079,5 +4077,4 @@ public class ConsultarImovelActionForm extends ValidatorActionForm {
 		this.dataEmissaoComunicadoIrregularidadeFaturamento = dataEmissaoComunicadoIrregularidadeFaturamento;
 	}
 
-	
 }

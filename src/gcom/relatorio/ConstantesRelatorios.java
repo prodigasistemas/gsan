@@ -205,6 +205,8 @@ public class ConstantesRelatorios {
 	public static final String RELATORIO_RESUMO_CONTA_LOCALIDADE = "/relatorioResumoContaLocalidade.jasper";
 
 	public static final String RELATORIO_RESUMO_IMOVEL_MICROMEDICAO = "/relatorioResumoImovelMicromedicao.jasper";
+	
+	public static final String RELATORIO_RESUMO_IMOVEL_MICROMEDICAO_SEM_LEITURA_INFORMADA = "/relatorioResumoImovelMicromedicaoSemLeituraInformada.jasper";
 
 	public static final String RELATORIO_2_VIA_CONTA_TIPO_2 = "/relatorio2ViaContaTipo2.jasper";
 

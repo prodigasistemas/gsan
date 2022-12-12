@@ -97,6 +97,10 @@
 			scope="session" path="/gerarRelatorioResumoImovelMicromedicaoAction" />
 			
 		<action name="ConsultarImovelActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioResumoImovelMicromedicaoAnaliseAction"
+			scope="session" path="/gerarRelatorioResumoImovelMicromedicaoAnaliseAction" />
+			
+		<action name="ConsultarImovelActionForm"
 			type="gcom.gui.relatorio.cobranca.GerarRelatorioDebitosConsultarAction"
 			scope="session" path="/gerarRelatorioDebitosConsultarAction" />
 			

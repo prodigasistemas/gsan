@@ -7,17 +7,10 @@ import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.relatorio.ConstantesRelatorios;
 import gcom.relatorio.RelatorioDataSource;
-import gcom.seguranca.ControladorPermissaoEspecialLocal;
-import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
-import gcom.seguranca.acesso.PermissaoEspecial;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaException;
 import gcom.tarefa.TarefaRelatorio;
-import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;
-import gcom.util.ServiceLocator;
-import gcom.util.ServiceLocatorException;
-import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.agendadortarefas.AgendadorTarefas;
 
@@ -28,30 +21,26 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.CreateException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 /**
- * @author Ana Maria
- * @date 14/02/2007
+ * @author Guilherme Aguiar
+ * @date 26/11/2022
  * 
  */
-public class RelatorioResumoImovelMicromedicao extends TarefaRelatorio {
+public class RelatorioResumoImovelMicromedicaoSemLeituraInformada extends TarefaRelatorio {
 	private static final long serialVersionUID = 1L;
-	public RelatorioResumoImovelMicromedicao(Usuario usuario) {
-		super(usuario, ConstantesRelatorios.RELATORIO_RESUMO_IMOVEL_MICROMEDICAO);
+	public RelatorioResumoImovelMicromedicaoSemLeituraInformada(Usuario usuario) {
+		super(usuario, ConstantesRelatorios.RELATORIO_RESUMO_IMOVEL_MICROMEDICAO_SEM_LEITURA_INFORMADA);
 	}
 	
 	@Deprecated
-	public RelatorioResumoImovelMicromedicao() {
+	public RelatorioResumoImovelMicromedicaoSemLeituraInformada() {
 		super(null, "");
 	}
 
-	private Collection<RelatorioResumoImovelMicromedicaoBean> inicializarBeanRelatorio(
+	private Collection<RelatorioResumoImovelMicromedicaoSemLeituraInformadaBean> inicializarBeanRelatorio(
 			Collection dadosRelatorio) {
 
-		Collection<RelatorioResumoImovelMicromedicaoBean> retorno = new ArrayList();
+		Collection<RelatorioResumoImovelMicromedicaoSemLeituraInformadaBean> retorno = new ArrayList();
 		
 		//Histórico Medição e Consumo
 		Iterator iterator = dadosRelatorio.iterator();
@@ -59,22 +48,12 @@ public class RelatorioResumoImovelMicromedicao extends TarefaRelatorio {
 			
 			ImovelMicromedicao imovelMicromedicao = (ImovelMicromedicao)iterator.next();
 			
-			String mesAnoMedicao = "";			
+			String mesAnoMedicao = "";
 			
 			if (imovelMicromedicao.getMedicaoHistorico().getMesAno() != null) {
 				mesAnoMedicao = ""+imovelMicromedicao.getMedicaoHistorico().getMesAno();
 			} else {
 				mesAnoMedicao = ""+imovelMicromedicao.getConsumoHistorico().getMesAno();
-			}
-			
-			String dataLeituraInformada =  "";
-			if(imovelMicromedicao.getMedicaoHistorico().getDataLeituraAtualInformada() != null){
-				dataLeituraInformada = Util.formatarData(imovelMicromedicao.getMedicaoHistorico().getDataLeituraAtualInformada());
-			}
-			
-			String leituraInformada = "";
-			if (imovelMicromedicao.getMedicaoHistorico().getLeituraAtualInformada() != null){
-				leituraInformada = ""+ imovelMicromedicao.getMedicaoHistorico().getLeituraAtualInformada();
 			}
 			
 			String dataLeituraFaturada = "" ;
@@ -113,45 +92,13 @@ public class RelatorioResumoImovelMicromedicao extends TarefaRelatorio {
 				sitLeituraAtual = "" + imovelMicromedicao.getMedicaoHistorico().getLeituraSituacaoAtual().getDescricao();
 			}
 			
-			RelatorioResumoImovelMicromedicaoBean bean = new RelatorioResumoImovelMicromedicaoBean(mesAnoMedicao, dataLeituraInformada,
-					leituraInformada, dataLeituraFaturada, leituraFaturada, consumo, media, anormalidadeConsumo, anormalidadeLeitura, sitLeituraAtual);
+			RelatorioResumoImovelMicromedicaoSemLeituraInformadaBean bean = new RelatorioResumoImovelMicromedicaoSemLeituraInformadaBean(mesAnoMedicao, dataLeituraFaturada, leituraFaturada, consumo, media, anormalidadeConsumo, anormalidadeLeitura, sitLeituraAtual);
 			 
 			retorno.add(bean);
 						
 		}
 		
 		return retorno;
-	}
-	
-	/**
-	 * Retorna o valor de controladorPermissaoEspecial
-	 * 
-	 * @return O valor de controladorPermissaoEspecial
-	 */
-	protected ControladorPermissaoEspecialLocal getControladorPermissaoEspecial() {
-
-		ControladorPermissaoEspecialLocalHome localHome = null;
-		ControladorPermissaoEspecialLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
-		ServiceLocator locator = null;
-
-		try {
-			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorPermissaoEspecialLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
-			local = localHome.create();
-
-			return local;
-		} catch (CreateException e) {
-			throw new SistemaException(e);
-		} catch (ServiceLocatorException e) {
-			throw new SistemaException(e);
-		}
-
 	}
 
 	/**
@@ -163,7 +110,8 @@ public class RelatorioResumoImovelMicromedicao extends TarefaRelatorio {
 		
 		// ------------------------------------
 		Integer idFuncionalidadeIniciada = this.getIdFuncionalidadeIniciada();
-		// ------------------------------------		
+		// ------------------------------------
+		
 		
 		int tipoFormatoRelatorio = (Integer) getParametro("tipoFormatoRelatorio");
 		String matricula = (String) getParametro("matricula");
@@ -176,16 +124,12 @@ public class RelatorioResumoImovelMicromedicao extends TarefaRelatorio {
 
 		Fachada fachada = Fachada.getInstancia();
 		
-	//	Usuario usuario =
-		
 		// Parâmetros do relatório
 		Map parametros = new HashMap();
 		
 		SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
 		
 		String matriculaFormatada = (matricula).substring(0, (matricula).length() - 1) + "." + (matricula).substring((matricula).length() - 1);
-		
-		Usuario usuarioLogado = this.getUsuario();
 		
 		parametros.put("imagem", sistemaParametro.getImagemRelatorio());
 		parametros.put("matricula", matriculaFormatada);
@@ -198,15 +142,14 @@ public class RelatorioResumoImovelMicromedicao extends TarefaRelatorio {
 		parametros.put("dataInstalacao",(String) getParametro("dataInstalacao"));
 		parametros.put("numeroRetirado",(String) getParametro("numeroRetirado"));
 		parametros.put("dataRetirada",(String) getParametro("dataRetirada"));
-		parametros.put("usuario", (String) usuarioLogado.getNomeUsuario());
 
-		Collection<RelatorioResumoImovelMicromedicaoBean> colecaoBean = null;
+		Collection<RelatorioResumoImovelMicromedicaoSemLeituraInformadaBean> colecaoBean = null;
 		
 		if (colecaoImovelMicromedicao != null && !colecaoImovelMicromedicao.isEmpty()) {
 			colecaoBean = this
 				.inicializarBeanRelatorio(colecaoImovelMicromedicao);
 		} else {
-			colecaoBean = new ArrayList<RelatorioResumoImovelMicromedicaoBean>();
+			colecaoBean = new ArrayList<RelatorioResumoImovelMicromedicaoSemLeituraInformadaBean>();
 		}
 
 		if (colecaoBean == null || colecaoBean.isEmpty()) {
@@ -217,7 +160,7 @@ public class RelatorioResumoImovelMicromedicao extends TarefaRelatorio {
 		RelatorioDataSource ds = new RelatorioDataSource((List) colecaoBean);
 
 		retorno = this.gerarRelatorio(
-				ConstantesRelatorios.RELATORIO_RESUMO_IMOVEL_MICROMEDICAO, parametros,
+				ConstantesRelatorios.RELATORIO_RESUMO_IMOVEL_MICROMEDICAO_SEM_LEITURA_INFORMADA, parametros,
 				ds, tipoFormatoRelatorio);
 		
 		// ------------------------------------

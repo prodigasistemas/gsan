@@ -34,8 +34,9 @@ import org.apache.struts.action.ActionMapping;
  * @author Ana Maria
  * @date 13/02/2007
  */
-public class GerarRelatorioResumoImovelMicromedicaoAction extends
+public class GerarRelatorioResumoImovelMicromedicaoAnaliseAction extends
 		ExibidorProcessamentoTarefaRelatorio {
+	
 
 	/**
 	 * < <Descrição do método>>
@@ -58,10 +59,10 @@ public class GerarRelatorioResumoImovelMicromedicaoAction extends
 		ActionForward retorno = null;
 		
 		Fachada fachada = Fachada.getInstancia();
-		
-		RelatorioResumoImovelMicromedicaoSemLeituraInformada relatorioResumoImovelMicromedicaoSemLeituraInformada = null;
 
-			relatorioResumoImovelMicromedicaoSemLeituraInformada = new RelatorioResumoImovelMicromedicaoSemLeituraInformada(
+		RelatorioResumoImovelMicromedicao relatorioResumoImovelMicromedicao = null;
+
+			relatorioResumoImovelMicromedicao = new RelatorioResumoImovelMicromedicao(
 					(Usuario) (httpServletRequest.getSession(false)).getAttribute("usuarioLogado"));
 		
 		ConsultarImovelActionForm consultarImovelActionForm = (ConsultarImovelActionForm) actionForm;
@@ -140,72 +141,75 @@ public class GerarRelatorioResumoImovelMicromedicaoAction extends
 		 String endereco = fachada.pesquisarEndereco(new Integer(consultarImovelActionForm.getIdImovelAnaliseMedicaoConsumo()));
 			
 		 Cliente cliente = fachada.pesquisarClienteUsuarioImovelExcluidoOuNao(new Integer(consultarImovelActionForm.getIdImovelAnaliseMedicaoConsumo()));
-			 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("matricula", consultarImovelActionForm.getIdImovelAnaliseMedicaoConsumo());
-			 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("inscricao", consultarImovelActionForm.getMatriculaImovelAnaliseMedicaoConsumo());
-			 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("sitLigacaoAgua", consultarImovelActionForm.getSituacaoAguaAnaliseMedicaoConsumo());
-			 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("sitLigacaoEsgoto", consultarImovelActionForm.getSituacaoEsgotoAnaliseMedicaoConsumo());
-			 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("numeroHidrometro",consultarImovelActionForm.getNumeroHidrometro());
-			 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("endereco", endereco);
-			 
 
-			 /** [MA2011061013] Incluir no cabeçalho o Número do Hidrômetro Retirado e a Data da Retirada
-			  *  Autor: Paulo Diniz
-			  *  Data: 13/07/2011
-			  * */
-			 List<HidrometroInstalacaoHistorico> hidrometrosHistorico = fachada.pesquisarHidrometroPeloIdImovel(new Integer(consultarImovelActionForm.getIdImovelAnaliseMedicaoConsumo()));
-			 
-			 if(hidrometrosHistorico != null && !hidrometrosHistorico.isEmpty()){
-				 
-				 Date dataInstalacao = hidrometrosHistorico.get(0).getDataInstalacao();
-				 String numeroRetirado = "";
-				 Date dataRetirada = hidrometrosHistorico.get(0).getDataRetirada();
-				 if(hidrometrosHistorico.get(0).getNumeroLeituraRetirada() != null){
-					 numeroRetirado = hidrometrosHistorico.get(0).getNumeroLeituraRetirada().intValue()+"";
-				 }
-				 
-				 for (HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico : hidrometrosHistorico) {
-					 
-					 if(dataInstalacao == null || (hidrometroInstalacaoHistorico.getDataInstalacao() != null && dataInstalacao.before(hidrometroInstalacaoHistorico.getDataInstalacao()))){
-						 dataInstalacao = hidrometroInstalacaoHistorico.getDataInstalacao();
-					 }
+//		 relatorioResumoImovelMicromedicao.addParametro("colecaoImovelMicromedicao", colecaoImovelMicromedicao);
+		 relatorioResumoImovelMicromedicao.addParametro("matricula", consultarImovelActionForm.getIdImovelAnaliseMedicaoConsumo());
+		 relatorioResumoImovelMicromedicao.addParametro("inscricao", consultarImovelActionForm.getMatriculaImovelAnaliseMedicaoConsumo());
+		 relatorioResumoImovelMicromedicao.addParametro("sitLigacaoAgua", consultarImovelActionForm.getSituacaoAguaAnaliseMedicaoConsumo());
+		 relatorioResumoImovelMicromedicao.addParametro("sitLigacaoEsgoto", consultarImovelActionForm.getSituacaoEsgotoAnaliseMedicaoConsumo());
+		 relatorioResumoImovelMicromedicao.addParametro("numeroHidrometro",consultarImovelActionForm.getNumeroHidrometro());
+		 relatorioResumoImovelMicromedicao.addParametro("endereco", endereco);
+		 
 
-					 if(dataRetirada == null || (hidrometroInstalacaoHistorico.getDataRetirada() != null && dataRetirada.before(hidrometroInstalacaoHistorico.getDataRetirada()))){
-						 dataRetirada = hidrometroInstalacaoHistorico.getDataRetirada();
-						 if(hidrometroInstalacaoHistorico.getNumeroLeituraRetirada() != null){
-							 numeroRetirado = hidrometroInstalacaoHistorico.getNumeroLeituraRetirada().intValue()+"";
-						 }else{
-							 numeroRetirado = "";
-						 }
-					 }
-				 }
-				 
-				 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("dataInstalacao",Util.formatarData(dataInstalacao));
-				 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("numeroRetirado",numeroRetirado);
-				 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("dataRetirada",Util.formatarData(dataRetirada));
-			 } else{
-				 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("dataInstalacao","");
-				 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("numeroRetirado","");
-				 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("dataRetirada","");
+		 /** [MA2011061013] Incluir no cabeçalho o Número do Hidrômetro Retirado e a Data da Retirada
+		  *  Autor: Paulo Diniz
+		  *  Data: 13/07/2011
+		  * */
+		 List<HidrometroInstalacaoHistorico> hidrometrosHistorico = fachada.pesquisarHidrometroPeloIdImovel(new Integer(consultarImovelActionForm.getIdImovelAnaliseMedicaoConsumo()));
+		 
+		 if(hidrometrosHistorico != null && !hidrometrosHistorico.isEmpty()){
+			 
+			 Date dataInstalacao = hidrometrosHistorico.get(0).getDataInstalacao();
+			 String numeroRetirado = "";
+			 Date dataRetirada = hidrometrosHistorico.get(0).getDataRetirada();
+			 if(hidrometrosHistorico.get(0).getNumeroLeituraRetirada() != null){
+				 numeroRetirado = hidrometrosHistorico.get(0).getNumeroLeituraRetirada().intValue()+"";
 			 }
 			 
-			 if (cliente != null) {
-				 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("clienteUsuario", cliente.getNome());
-			 } else {
-				 relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("clienteUsuario", "");
+			 for (HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico : hidrometrosHistorico) {
+				 
+				 if(dataInstalacao == null || (hidrometroInstalacaoHistorico.getDataInstalacao() != null && dataInstalacao.before(hidrometroInstalacaoHistorico.getDataInstalacao()))){
+					 dataInstalacao = hidrometroInstalacaoHistorico.getDataInstalacao();
+				 }
+
+				 if(dataRetirada == null || (hidrometroInstalacaoHistorico.getDataRetirada() != null && dataRetirada.before(hidrometroInstalacaoHistorico.getDataRetirada()))){
+					 dataRetirada = hidrometroInstalacaoHistorico.getDataRetirada();
+					 if(hidrometroInstalacaoHistorico.getNumeroLeituraRetirada() != null){
+						 numeroRetirado = hidrometroInstalacaoHistorico.getNumeroLeituraRetirada().intValue()+"";
+					 }else{
+						 numeroRetirado = "";
+					 }
+				 }
 			 }
-
-			String tipoRelatorio = httpServletRequest.getParameter("tipoRelatorio");
-			
-			if (tipoRelatorio == null) {
-				tipoRelatorio = TarefaRelatorio.TIPO_PDF + "";
-			}
-
-			relatorioResumoImovelMicromedicaoSemLeituraInformada.addParametro("tipoFormatoRelatorio",
-					Integer.parseInt(tipoRelatorio));
 			 
-			retorno = processarExibicaoRelatorio(relatorioResumoImovelMicromedicaoSemLeituraInformada,
-						tipoRelatorio, httpServletRequest, httpServletResponse,
-						actionMapping);	 
+			 relatorioResumoImovelMicromedicao.addParametro("dataInstalacao",Util.formatarData(dataInstalacao));
+			 relatorioResumoImovelMicromedicao.addParametro("numeroRetirado",numeroRetirado);
+			 relatorioResumoImovelMicromedicao.addParametro("dataRetirada",Util.formatarData(dataRetirada));
+		 } else{
+			 relatorioResumoImovelMicromedicao.addParametro("dataInstalacao","");
+			 relatorioResumoImovelMicromedicao.addParametro("numeroRetirado","");
+			 relatorioResumoImovelMicromedicao.addParametro("dataRetirada","");
+		 }
+		 
+		 if (cliente != null) {
+			 relatorioResumoImovelMicromedicao.addParametro("clienteUsuario", cliente.getNome());
+		 } else {
+			 relatorioResumoImovelMicromedicao.addParametro("clienteUsuario", "");
+		 }
+
+		String tipoRelatorio = httpServletRequest.getParameter("tipoRelatorio");
+		
+		if (tipoRelatorio == null) {
+			tipoRelatorio = TarefaRelatorio.TIPO_PDF + "";
+		}
+
+		relatorioResumoImovelMicromedicao.addParametro("tipoFormatoRelatorio",
+				Integer.parseInt(tipoRelatorio));
+		 
+		retorno = processarExibicaoRelatorio(relatorioResumoImovelMicromedicao,
+					tipoRelatorio, httpServletRequest, httpServletResponse,
+					actionMapping);
+		 
 		// devolve o mapeamento contido na variável retorno
 		return retorno;
 	}
