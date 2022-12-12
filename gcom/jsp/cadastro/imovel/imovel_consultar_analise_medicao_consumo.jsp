@@ -90,6 +90,18 @@ function verificarExibicaoRelatorio() {
 	} else {
 		alert('Informe Imóvel');
 	}
+}
+
+
+function verificarExibicaoRelatorioAnalise() {
+	var form = document.forms[0];
+	
+	if (form.idImovelAnaliseMedicaoConsumo.value.length > 0 && form.matriculaImovelAnaliseMedicaoConsumo.value.length > 0) {
+		toggleBoxCaminho('demodiv',1,'gerarRelatorioResumoImovelMicromedicaoAnaliseAction.do');
+	} else {
+		alert('Informe Imóvel');
+	}
+		
 	
 }
 
@@ -1010,18 +1022,31 @@ function exibirListaComunidadosAltoConsumo() {
 									</td>
 								</tr>
 								<tr>
-									<td colspan="7" align="right">
+								<td colspan="7" align="right">
 									<table>
-										<tr>
+										<tr>									
 											<td width="70%">&nbsp;</td>
 											<td><a href="javascript:verificarExibicaoRelatorio();"> <img
 												border="0"
 												src="<bean:message key='caminho.imagens'/>print.gif"
-												title="Imprimir Histórico de Medição e Consumo" /> </a></td>
+												title="Imprimir Histórico de Medição e Consumo" /> </a></td>																																		
+										</tr>
+									</table>
+									</td>								
+								<logic:notEmpty name="permissao" scope="session">
+									<td colspan="7" align="right">
+									<table>
+										<tr>									
+											<td width="70%">&nbsp;</td>									
+												<td><a href="javascript:verificarExibicaoRelatorioAnalise();"> <img
+												border="0"
+												src="<bean:message key='caminho.imagens'/>print.gif"
+												title="Imprimir Histórico de Medição e Consumo Analise" /> </a>
+											</td>												
 										</tr>
 									</table>
 									</td>
-
+									</logic:notEmpty>
 								</tr>
 							</table>
 							</td>
