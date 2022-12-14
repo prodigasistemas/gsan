@@ -613,7 +613,7 @@ public interface IRepositorioFaturamento {
 	public Object[] pesquisarParmsContaMensagem(
 			EmitirContaHelper emitirContaHelper, Integer idFaturamentoGrupo,
 			Integer idGerenciaRegional, Integer idLocalidade,
-			Integer idSetorComercial) throws ErroRepositorioException;
+			Integer idSetorComercial, Integer idQuadra) throws ErroRepositorioException;
 	
 	public Object[] pesquisarContaMensagemFixa() throws ErroRepositorioException;
 

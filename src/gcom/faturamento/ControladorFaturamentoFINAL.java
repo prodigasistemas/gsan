@@ -26815,11 +26815,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.getColecaoContasValores() != null && !debitoImovelClienteHelper.getColecaoContasValores()
 							.isEmpty()))) {
 				String dataVencimentoFinalString = Util.formatarData(dataFinalDate);
-				linhasImpostosRetidos[0] = "SR. USUÁRIO: EM  " + dataVencimentoFinalString
-						+ ",    REGISTRAMOS QUE V.SA. ESTAVA EM DÉBITO COM A "
+				linhasImpostosRetidos[0] = "SR. USU�RIO: EM  " + dataVencimentoFinalString
+						+ ",    REGISTRAMOS QUE V.SA. ESTAVA EM D�BITO COM A "
 						+ sistemaParametro.getNomeAbreviadoEmpresa() + ".";
-				linhasImpostosRetidos[1] = "COMPAREÇA A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO.EVITE O CORTE.";
-				linhasImpostosRetidos[2] = "CASO O SEU DÉBITO TENHA SIDO PAGO APÓS A DATA INDICADA,DESCONSIDERE ESTE AVISO.";
+				linhasImpostosRetidos[1] = "COMPARE�A A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO.EVITE O CORTE.";
+				linhasImpostosRetidos[2] = "CASO O SEU D�BITO TENHA SIDO PAGO AP�S A DATA INDICADA,DESCONSIDERE ESTE AVISO.";
 
 			} else {
 				Object[] mensagensConta = null;
@@ -26831,18 +26831,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Integer idLocalidade = emitirContaHelper.getIdLocalidade();
 				// recupera o id do setor comercial da conta
 				Integer idSetorComercial = emitirContaHelper.getIdSetorComercial();
+				//recupera id da quadra da conta
+				Integer idQuadra = emitirContaHelper.getIdQuadraConta();
 				// caso entre em alguma condição então não entra mais nas
 				// outras
 				boolean achou = false;
 
 				try {
-
+					
 					// o sistema obtem a mensagem para a conta
-					// Caso seja a condição 1
+					// Caso seja a condicao 0
 					// (FaturamentoGrupo =null, GerenciaRegional=parmConta,
-					// Localidade=parmConta, SetorComercial=parmConta)
+					// Localidade=parmConta, SetorComercial=parmConta, Quadra=parmConta)
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
-							idGerenciaRegional, idLocalidade, idSetorComercial);
+							idGerenciaRegional, idLocalidade, idSetorComercial,idQuadra);
 					if (mensagensConta != null) {
 						// Conta Mensagem 1
 						if (mensagensConta[0] != null) {
@@ -26864,7 +26866,36 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 						achou = true;
 					}
-
+								
+					if (!achou) {
+					// o sistema obtem a mensagem para a conta
+					// Caso seja a condição 1
+					// (FaturamentoGrupo =null, GerenciaRegional=parmConta,
+					// Localidade=parmConta, SetorComercial=parmConta)
+					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
+							idGerenciaRegional, idLocalidade, idSetorComercial, null);
+					if (mensagensConta != null) {
+						// Conta Mensagem 1
+						if (mensagensConta[0] != null) {
+							linhasImpostosRetidos[0] = (String) mensagensConta[0];
+						} else {
+							linhasImpostosRetidos[0] = "";
+						}
+						// Conta Mensagem 2
+						if (mensagensConta[1] != null) {
+							linhasImpostosRetidos[1] = (String) mensagensConta[1];
+						} else {
+							linhasImpostosRetidos[1] = "";
+						}
+						// Conta Mensagem 3
+						if (mensagensConta[2] != null) {
+							linhasImpostosRetidos[2] = (String) mensagensConta[2];
+						} else {
+							linhasImpostosRetidos[2] = "";
+						}
+						achou = true;
+					}
+					}
 					if (!achou) {
 
 						// Caso seja a condição 2
@@ -26872,7 +26903,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
 						mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
-								idGerenciaRegional, idLocalidade, null);
+								idGerenciaRegional, idLocalidade, null, null);
 						if (mensagensConta != null) {
 							if (mensagensConta[0] != null) {
 								linhasImpostosRetidos[0] = (String) mensagensConta[0];
@@ -26900,7 +26931,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
 						mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
-								idGerenciaRegional, null, null);
+								idGerenciaRegional, null, null, null);
 
 						if (mensagensConta != null) {
 
@@ -26930,7 +26961,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
 						mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper,
-								idFaturamentoGrupo, null, null, null);
+								idFaturamentoGrupo, null, null, null, null);
 
 						if (mensagensConta != null) {
 							if (mensagensConta[0] != null) {
@@ -26959,7 +26990,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
 						mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
-								null, null, null);
+								null, null, null, null);
 						if (mensagensConta != null) {
 							if (mensagensConta[0] != null) {
 								linhasImpostosRetidos[0] = (String) mensagensConta[0];

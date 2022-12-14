@@ -11089,7 +11089,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public Object[] pesquisarParmsContaMensagem(
 			EmitirContaHelper emitirContaHelper, Integer idFaturamentoGrupo,
 			Integer idGerenciaRegional, Integer idLocalidade,
-			Integer idSetorComercial) throws ErroRepositorioException {
+			Integer idSetorComercial, Integer idQuadra) throws ErroRepositorioException {
 
 		Object[] retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -11103,6 +11103,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "left join contaMensagem.localidade localidade "
 					+ "left join contaMensagem.setorComercial setorComercial "
 					+ "left join contaMensagem.faturamentoGrupo faturamentoGrupo "
+					+ "left join contaMensagem.quadra quadra "
 					+ "where contaMensagem.anoMesRreferenciaFaturamento = :amReferenciaConta ";
 			
 			if (idFaturamentoGrupo != null) {
@@ -11127,6 +11128,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				consulta += " AND setorComercial.id =" + idSetorComercial;
 			} else {
 				consulta += " AND setorComercial.id is null";
+			}
+			
+			if (idQuadra != null) {
+				consulta += " AND quadra.id =" + idQuadra;
+			} else {
+				consulta += " AND quadra.id is null";
 			}
 
 			retorno = (Object[]) session.createQuery(consulta)
