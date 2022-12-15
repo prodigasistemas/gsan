@@ -562,7 +562,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 								contaTxt = preencherQuantidadeValorDebitos(sistemaParametro, emitirContaHelper,
 										contaTxt);
 
-								// validação para trazer cfpCnpj caso exista.
+								// validaï¿½ï¿½o para trazer cfpCnpj caso exista.
 								// Paulo Almeida - 01.02.2022
 								String cpfCnpj = consultarCpfCnpjCliente(emitirContaHelper.getIdImovel());
 			
@@ -1154,7 +1154,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		return contaTxt;
 	}
 
-	// [Obter código de barras Ficha de Compensação]
+	// [Obter cï¿½digo de barras Ficha de Compensaï¿½ï¿½o]
 	// Paulo Almeida 30.12.2021
 	private StringBuilder preencherCodigoBarrasContaFichaCompensacao(EmitirContaHelper emitirContaHelper,
 			StringBuilder contaTxt) throws ControladorException {
@@ -1634,7 +1634,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 	private StringBuilder preencherMensagensConta(SistemaParametro sistemaParametro,
 			EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
 		
-		 //Volta do Carimbo por determinação da Diretoria 10.11.2022 - Paulo Almeida
+		 //Volta do Carimbo por determinaï¿½ï¿½o da Diretoria 10.11.2022 - Paulo Almeida
 		if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0
 				&& Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
 
@@ -1695,7 +1695,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 	private StringBuilder preencherFlagCarimbo(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt)
 			throws ControladorException {
-		//Volta do Carimbo por determinação da Diretoria 10.11.2022 - Paulo Almeida
+		//Volta do Carimbo por determinaï¿½ï¿½o da Diretoria 10.11.2022 - Paulo Almeida
 		if (emitirContaHelper.getValorCreditoBolsaAgua().doubleValue() > 0
 				&& Double.valueOf(emitirContaHelper.getValorTotalConta()) <= 0.00) {
 			contaTxt.append(Conta.CARIMBO_QUITADO);
@@ -2843,7 +2843,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				Map<Integer, Short> mapIndicadorAcrescimoCliente = this
 						.obterIndicadorGeracaoAcrescimosClienteImovel(rota);
 
-				logger.info("Rota em processamento de acréscimos: " + rota.getId());
+				logger.info("Rota em processamento de acrï¿½scimos: " + rota.getId());
 
 				while (imovelPorRotaIterator.hasNext()) {
 					Imovel imovel = buildImovelAcrescimoImpontualidade(imovelPorRotaIterator);
@@ -3181,11 +3181,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				logger.info("	Documento de cobranca: " + pagamento.getCobrancaDocumento().getId());
 				return pagamento.getCobrancaDocumento();
 			} else {
-				logger.info("	Não tem documento de cobranca.");
+				logger.info("	Nï¿½o tem documento de cobranca.");
 				return null;
 			}
 		} else {
-			logger.info("	Não tem documento de cobranca.");
+			logger.info("	Nï¿½o tem documento de cobranca.");
 			return null;
 		}
 	}
@@ -3512,7 +3512,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			helper.setMesAnoFormatado(Util.formatarAnoMesParaMesAno(obterMesConsumoAnteriorFormatado(helper, 1)));
 			helper = preencherDadosQualidadeAgua2Via(helper);
 
-			// validação para trazer cfpCnpj caso exista. Paulo Almeida -
+			// validaï¿½ï¿½o para trazer cfpCnpj caso exista. Paulo Almeida -
 			// 01.02.2022
 			String cpfCnpj = null;
 
@@ -3910,7 +3910,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				emitirContaHelper.setNumeroCloroResidual(Util.formatarMoedaReal((BigDecimal) parmsQualidadeAgua[1]));
 			}
 		}
-		// Padrão
+		// Padrï¿½o
 		emitirContaHelper.setPadraoCor(qualidadeAgua[0]);
 		emitirContaHelper.setPadraoTurbidez(qualidadeAgua[1]);
 		emitirContaHelper.setPadraoCloro(qualidadeAgua[3]);
@@ -4005,10 +4005,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 						.isEmpty()))) {
 			String dataVencimentoFinalString = Util.formatarData(dataFinalDate);
 			linhasImpostosRetidos[0] = "SR(A). CLIENTE, EM  " + dataVencimentoFinalString
-					+ ", REGISTRAMOS QUE V.SA. ESTAVA EM DÉBITO COM A "
+					+ ", REGISTRAMOS QUE V.SA. ESTAVA EM Dï¿½BITO COM A "
 					+ sistemaParametro.getNomeAbreviadoEmpresa().toUpperCase() + ".";
-			linhasImpostosRetidos[1] = "COMPAREÇA A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO. EVITE O CORTE.";
-			linhasImpostosRetidos[2] = "CASO O SEU DÉBITO TENHA SIDO PAGO APÓS A DATA INDICADA, DESCONSIDERE ESTE AVISO.";
+			linhasImpostosRetidos[1] = "COMPAREï¿½A A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO. EVITE O CORTE.";
+			linhasImpostosRetidos[2] = "CASO O SEU Dï¿½BITO TENHA SIDO PAGO APï¿½S A DATA INDICADA, DESCONSIDERE ESTE AVISO.";
 			isImovelEmDebito = true;
 		} else {
 			linhasImpostosRetidos[0] = "A COSANPA AGRADECE SUA PONTUALIDADE.";
@@ -4044,7 +4044,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			boolean existeMensagem = false;
 			try {
 				mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null,
-						helper.getIdGerenciaRegional(), helper.getIdLocalidade(), helper.getIdSetorComercial());
+						helper.getIdGerenciaRegional(), helper.getIdLocalidade(), helper.getIdSetorComercial(), helper.getIdQuadraConta());
 				if (mensagensConta != null) {
 					mensagens = montarMensagensConta2Via(mensagensConta);
 					existeMensagem = true;
@@ -4052,7 +4052,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 				if (!existeMensagem) {
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null,
-							helper.getIdGerenciaRegional(), helper.getIdLocalidade(), null);
+							helper.getIdGerenciaRegional(), helper.getIdLocalidade(), null, null);
 					if (mensagensConta != null) {
 						mensagens = montarMensagensConta2Via(mensagensConta);
 						existeMensagem = true;
@@ -4060,7 +4060,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				}
 				if (!existeMensagem) {
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null,
-							helper.getIdGerenciaRegional(), null, null);
+							helper.getIdGerenciaRegional(), null, null, null);
 
 					if (mensagensConta != null) {
 						mensagens = montarMensagensConta2Via(mensagensConta);
@@ -4069,7 +4069,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 				}
 				if (!existeMensagem) {
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper,
-							helper.getIdFaturamentoGrupo(), null, null, null);
+							helper.getIdFaturamentoGrupo(), null, null, null, null);
 
 					if (mensagensConta != null) {
 						mensagens = montarMensagensConta2Via(mensagensConta);
@@ -4077,7 +4077,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 					}
 				}
 				if (!existeMensagem) {
-					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null, null, null, null);
+					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null, null, null, null,  null);
 					if (mensagensConta != null) {
 						mensagens = montarMensagensConta2Via(mensagensConta);
 						existeMensagem = true;
@@ -4173,7 +4173,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			contaTxt.append(Util.completaString("(%)", 15));
 			contaTxt.append(Util.completaStringComEspacoAEsquerda(
 					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[1]), 13));
-			contaTxt.append(Util.completaString("Base de cálculo", 15));
+			contaTxt.append(Util.completaString("Base de cï¿½lculo", 15));
 			contaTxt.append(Util.completaStringComEspacoAEsquerda(
 					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
 			contaTxt.append(Util.completaString("Valor (R$)", 15));
