@@ -261,8 +261,8 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 				.append(" AND cbsh_amcobrancaretirada IS NULL ")
 				.append(" AND cbsp_id IN (")
 				.append(CobrancaSituacaoTipo.COBRANCA_EMPRESA_TERCEIRIZADA).append(",")
-				.append(CobrancaSituacaoTipo.PARALISAR_ACOES_DE_COBRANÇA).append(",")
-				.append(CobrancaSituacaoTipo.PARALISAR_ARRASTO_TODAS_AS_ACOES_DE_COBRANÇA).append(",")
+				.append(CobrancaSituacaoTipo.PARALISAR_ACOES_DE_COBRANCA).append(",")
+				.append(CobrancaSituacaoTipo.PARALISAR_ARRASTO_TODAS_AS_ACOES_DE_COBRANCA).append(",")
 				.append(CobrancaSituacaoTipo.PARALISAR_ACOES_DE_COBRANCA_E_ACRESCIMOS_IMPONT).append(") ");
 		
 		return consulta.toString();
@@ -780,7 +780,7 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 	}
 	
 	/**
-	 * [UC1167] Consultar Comandos de Cobrança por Empresa
+	 * [UC1167] Consultar Comandos de Cobranï¿½a por Empresa
 	 * 
 	 * Pesquisa os dados dos comandos
 	 * 
@@ -849,10 +849,10 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 					.setFirstResult(numeroIndice * quantidadeRegistros).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -860,9 +860,9 @@ public class RepositorioCobrancaPorResultadoHBM implements IRepositorioCobrancaP
 	}
 	
 	/**
-	 * [UC1168] Encerrar Comandos de Cobrança por Empresa
+	 * [UC1168] Encerrar Comandos de Cobranï¿½a por Empresa
 	 * 
-	 * Pesquisa os ids dos imóveis e das ordens de serviços geradas para um
+	 * Pesquisa os ids dos imï¿½veis e das ordens de serviï¿½os geradas para um
 	 * determinado comando
 	 * 
 	 * @author Mariana Victor

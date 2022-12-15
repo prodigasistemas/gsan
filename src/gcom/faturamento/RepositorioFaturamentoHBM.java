@@ -11149,6 +11149,69 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		return retorno;
 	}
+	
+	/**
+	 * Mï¿½todo que retorna uma array de object do conta mensagem ordenado pelo tipo de crï¿½dito
+	 * [UC0348] Emitir Contas
+	 * [SB0016] Obter Mensagem da Conta em 3 Partes
+	 */
+	public Object[] pesquisarParmsContaMensagem(
+			EmitirContaHelper emitirContaHelper, Integer idFaturamentoGrupo,
+			Integer idGerenciaRegional, Integer idLocalidade,
+			Integer idSetorComercial) throws ErroRepositorioException {
+
+		Object[] retorno = null;
+		Session session = HibernateUtil.getSession();
+
+		try {
+			String consulta = "select contaMensagem.descricaoContaMensagem01,"// 0
+					+ "contaMensagem.descricaoContaMensagem02," // 1
+					+ "contaMensagem.descricaoContaMensagem03 "// 2
+					+ "from ContaMensagem contaMensagem "
+					+ "left join contaMensagem.gerenciaRegional gerenciaRegional "
+					+ "left join contaMensagem.localidade localidade "
+					+ "left join contaMensagem.setorComercial setorComercial "
+					+ "left join contaMensagem.faturamentoGrupo faturamentoGrupo "
+					+ "left join contaMensagem.quadra quadra "
+					+ "where contaMensagem.anoMesRreferenciaFaturamento = :amReferenciaConta ";
+			
+			if (idFaturamentoGrupo != null) {
+				consulta += " AND faturamentoGrupo.id =" + idFaturamentoGrupo;
+			} else {
+				consulta += " AND faturamentoGrupo.id is null";
+			}
+			
+			if (idGerenciaRegional != null) {
+				consulta += " AND gerenciaRegional.id =" + idGerenciaRegional;
+			} else {
+				consulta += " AND gerenciaRegional.id is null";
+			}
+			
+			if (idLocalidade != null) {
+				consulta += " AND localidade.id =" + idLocalidade;
+			} else {
+				consulta += " AND localidade.id is null";
+			}
+			
+			if (idSetorComercial != null) {
+				consulta += " AND setorComercial.id =" + idSetorComercial;
+			} else {
+				consulta += " AND setorComercial.id is null";
+			}
+			
+			retorno = (Object[]) session.createQuery(consulta)
+					.setInteger("amReferenciaConta", emitirContaHelper.getAmReferencia())
+					.setMaxResults(1)
+					.uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 
 	public Object[] pesquisarContaMensagemFixa() throws ErroRepositorioException {
 		Object[] retorno = null;
@@ -38340,7 +38403,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "clienteImoveisUsuario.cliente.id, " //74
 					+ "clienteImoveisUsuario.indicadorNomeConta, " //75
 					+ "imovel.indicadorEnvioContaFisica, " //76
-					+ "imovel.codigoConvenio " //77
+					+ "imovel.codigoConvenio, " //77
+					+ "quadra.id " //78
 					+ "FROM Imovel imovel "
 					+ "INNER JOIN imovel.localidade localidade "
 					+ "INNER JOIN localidade.gerenciaRegional gerenciaRegional "
@@ -55506,10 +55570,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							.setInteger("idParcelamento", idParcelamento).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -60359,7 +60423,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * @author Kurt Matheus Sampaio de Matos
 	 * @date 31/08/2022
-	 * @return Retorna um Imovel com informações de endereço para utilização na ficha de compensação.	
+	 * @return Retorna um Imovel com informaï¿½ï¿½es de endereï¿½o para utilizaï¿½ï¿½o na ficha de compensaï¿½ï¿½o.	
 	 */
 	
 	public Imovel pesquisarImovelComEnderecoFichaCompensacaoPorId(Integer idImovel) throws ErroRepositorioException {
@@ -60402,7 +60466,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	/**
 	 * @author Kurt Matheus Sampaio de Matos
 	 * @date 31/08/2022
-	 * @return Retorna uma conta para utilização na ficha de compensação.	
+	 * @return Retorna uma conta para utilizaï¿½ï¿½o na ficha de compensaï¿½ï¿½o.	
 	 */
 	
 	public Conta pesquisarContaFichaCompensacaoPorId(Integer idConta) throws ErroRepositorioException {
@@ -60605,7 +60669,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				stmt.close();
 				con.close();
 			} catch (SQLException e) {
-				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
+				throw new ErroRepositorioException(e, "Erro ao fechar conexï¿½es");
 			}
 		}
 	}
@@ -60649,7 +60713,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				stmt.close();
 				con.close();
 			} catch (SQLException e) {
-				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
+				throw new ErroRepositorioException(e, "Erro ao fechar conexï¿½es");
 			}
 		}
 	}

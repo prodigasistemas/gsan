@@ -575,7 +575,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				Quadra quadra = new Quadra();
 				quadra.setNumeroQuadra((Integer) arrayImovel[6]);
 				quadra.setRota(rota);
-
+				quadra.setId((Integer) arrayImovel[78]);
 				imovel.setQuadra(quadra);
 
 				// QUADRA FACE
@@ -941,7 +941,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				if (arrayImovel[77] != null) {
 					imovel.setCodigoConvenio((Integer) arrayImovel[77]);
 				}
-        
+				
 				boolean emitir = true;
 				
 				if (!sistemaParametro.getCodigoEmpresaFebraban().equals(

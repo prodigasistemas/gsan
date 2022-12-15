@@ -860,7 +860,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 									// Item 26
 									if (emitirContaHelper.getValorAgua() != null) {
 										contaTxt.append(Util.completaString(
-												"TOTAL ÁGUA ", 50));
+												"TOTAL ï¿½GUA ", 50));
 										contaTxt.append(Util.completaString(
 												emitirContaHelper
 														.getValorAgua()
@@ -1564,7 +1564,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 										contaTxt.append(Util.completaString("",20));
 									}
 									// Perfil do Imovel CRC 3151 Analista: Claudio Lira
-									// Alterado por Rômulo Aurélio Data: 24/11/2009
+									// Alterado por Rï¿½mulo Aurï¿½lio Data: 24/11/2009
 									if (imovelEmitido.getImovelPerfil() != null) {
 										contaTxt.append(Util.adicionarZerosEsquedaNumeroTruncando(2,
 												imovelEmitido.getImovelPerfil().getId() + ""));
@@ -2149,7 +2149,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 				// Localidade=parmConta, SetorComercial=parmConta)
 				mensagensConta = repositorioFaturamento
 						.pesquisarParmsContaMensagem(emitirContaHelper, null,
-								idGerenciaRegional, idLocalidade, idSetorComercial);
+								idGerenciaRegional, idLocalidade, idSetorComercial, null);
 				if (mensagensConta != null) {
 					// Conta Mensagem 1
 					if (mensagensConta[0] != null) {
@@ -2180,7 +2180,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 					// Conta Mensagem 1
 					mensagensConta = repositorioFaturamento
 							.pesquisarParmsContaMensagem(emitirContaHelper, null,
-									idGerenciaRegional, idLocalidade, null);
+									idGerenciaRegional, idLocalidade, null, null);
 					if (mensagensConta != null) {
 						if (mensagensConta[0] != null) {
 							mensagemContaDivididas[0] = (String) mensagensConta[0];
@@ -2209,7 +2209,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 					// Conta Mensagem 1
 					mensagensConta = repositorioFaturamento
 							.pesquisarParmsContaMensagem(emitirContaHelper, null,
-									idGerenciaRegional, null, null);
+									idGerenciaRegional, null, null, null);
 	
 					if (mensagensConta != null) {
 	
@@ -2240,7 +2240,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 					// Conta Mensagem 1
 					mensagensConta = repositorioFaturamento
 							.pesquisarParmsContaMensagem(emitirContaHelper,
-									idFaturamentoGrupo, null, null, null);
+									idFaturamentoGrupo, null, null, null, null);
 	
 					if (mensagensConta != null) {
 						if (mensagensConta[0] != null) {
@@ -2270,7 +2270,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 					// Conta Mensagem 1
 					mensagensConta = repositorioFaturamento
 							.pesquisarParmsContaMensagem(emitirContaHelper, null,
-									null, idLocalidade, idSetorComercial);
+									null, idLocalidade, idSetorComercial, null);
 	
 					if (mensagensConta != null) {
 						if (mensagensConta[0] != null) {
@@ -2300,7 +2300,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 					// Conta Mensagem 1
 					mensagensConta = repositorioFaturamento
 							.pesquisarParmsContaMensagem(emitirContaHelper, null,
-									null, idLocalidade, null);
+									null, idLocalidade, null, null);
 	
 					if (mensagensConta != null) {
 						if (mensagensConta[0] != null) {
@@ -2330,7 +2330,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 					// Conta Mensagem 1
 					mensagensConta = repositorioFaturamento
 							.pesquisarParmsContaMensagem(emitirContaHelper, null,
-									null, null, null);
+									null, null, null, null);
 					if (mensagensConta != null) {
 						if (mensagensConta[0] != null) {
 							mensagemContaDivididas[0] = (String) mensagensConta[0];
@@ -2576,7 +2576,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 				// caso nao existam dados de medicao
 				if (parmsMedicaoHistorico == null) {
 					// Constante
-					linhasTarifaAgua.append("TARIFA MÍNIMA");
+					linhasTarifaAgua.append("TARIFA Mï¿½NIMA");
 
 					// Valor da tarifa mInima de Agua para a categoria por
 					// economia
@@ -2850,7 +2850,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 							}
 						}
 					} else {
-						linhasTarifaAgua.append("CONSUMO DE ÁGUA");
+						linhasTarifaAgua.append("CONSUMO DE ï¿½GUA");
 						linhasTarifaAgua.append(Util
 								.completaStringComEspacoAEsquerda(""
 										+ contaCategoria.getConsumoAgua(), 6)
