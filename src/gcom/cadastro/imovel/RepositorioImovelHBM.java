@@ -908,6 +908,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			
 			if (economias != null) {
 				retorno = economias.intValue();
+			} else {
+				System.out.println("getIdImovel: " + imovel.getIdImovel());
 			}
 
 		} catch (HibernateException e) {

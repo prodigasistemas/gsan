@@ -411,6 +411,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 							if (contaAtualizacao != null) {
 								contaAtualizacao.getConsumoAgua();
+							} else {
+								contaAtualizacao = repositorioFaturamento.pesquisarContaPreFaturada(
+										helper.getImovel().getId(), helper.getAnoMesReferenciaPreFaturamento(),
+										DebitoCreditoSituacao.PRE_FATURADA);
 							}
 						} catch (LazyInitializationException e) {
 							try {
@@ -4992,6 +4996,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade("conta.ligacaoAguaSituacao");
 		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade("conta.ligacaoEsgotoSituacao");
 		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade("imovel.imovelCondominio");
+		filtroMovimentoContaPrefaturada.setInitializeLazy(true);
 
 		filtroMovimentoContaPrefaturada.adicionarParametro(new ParametroSimples(
 				FiltroMovimentoContaPrefaturada.INDICADOR_ATUALIZAR_FATURAMENTO, ConstantesSistema.NAO));
@@ -11338,7 +11343,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				// (FaturamentoGrupo =null, GerenciaRegional=parmConta,
 				// Localidade=parmConta, SetorComercial=parmConta)
 				mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
-						idGerenciaRegional, idLocalidade, idSetorComercial);
+						idGerenciaRegional, idLocalidade, idSetorComercial, null);
 
 				if (mensagensConta != null) {
 
@@ -11372,7 +11377,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					// Localidade=null, SetorComercial=null)
 					// Conta Mensagem 1
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
-							idGerenciaRegional, idLocalidade, null);
+							idGerenciaRegional, idLocalidade, null, null);
 
 					if (mensagensConta != null) {
 
@@ -11405,7 +11410,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					// Localidade=null, SetorComercial=null)
 					// Conta Mensagem 1
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
-							idGerenciaRegional, null, null);
+							idGerenciaRegional, null, null, null);
 
 					if (mensagensConta != null) {
 
@@ -11438,7 +11443,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					// Localidade=null, SetorComercial=null)
 					// Conta Mensagem 1
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper,
-							idFaturamentoGrupo, null, null, null);
+							idFaturamentoGrupo, null, null, null, null);
 
 					if (mensagensConta != null) {
 
@@ -11471,7 +11476,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					// Localidade=null, SetorComercial=null)
 					// Conta Mensagem 1
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null, null,
-							null, null);
+							null, null, null);
 					if (mensagensConta != null) {
 						// Mensagem 3
 						if (mensagensConta[0] != null) {
@@ -14883,7 +14888,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Integer idLocalidade, Integer idSetor) throws ControladorException {
 		try {
 			return repositorioFaturamento.pesquisarParmsContaMensagem(helper, idGrupo, idGerencia, idLocalidade,
-					idSetor);
+					idSetor, null);
 		} catch (Exception e) {
 			throw new ControladorException("erro.sistema", e);
 		}

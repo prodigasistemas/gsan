@@ -1610,10 +1610,11 @@ public class ControladorImovelSEJB extends ControladorComum {
 			}
 
 		} else {
+			System.out.println("Conta sem economia: " + conta );
 			// Caso a coleção não tenha retornado objetos
 			sessionContext.setRollbackOnly();
 			throw new ControladorException(
-					"atencao.nao_cadastrado.imovel_subcategoria", null);
+					"atencao.nao_cadastrado.imovel_subcategoria", null);			
 		}
 
 		return colecaoCategoria;

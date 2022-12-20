@@ -1702,13 +1702,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public void atualizarValorContaCategoriaBolsaAgua(Collection<ContaCategoria> contaCategoriaColecao, Conta conta,
 			GerarCreditoRealizadoHelper creditoRealizadoHelper)
 			throws ControladorException {
-		if (getControladorImovel().isImovelBolsaAgua(conta.getImovel().getId())) {
+		if (getControladorImovel().isImovelBolsaAgua(conta.getImovel().getId()) && creditoRealizadoHelper != null 
+				&& creditoRealizadoHelper.getMapCreditoRealizado() != null) {
 		BigDecimal valorCreditoAtualizado = new BigDecimal("0");
 		BigDecimal valorCredito = new BigDecimal("0");
 		CreditoARealizar creditoARealizar = new CreditoARealizar();
-		Set<CreditoRealizado> creditosRealizados = (Set<CreditoRealizado>) creditoRealizadoHelper.getMapCreditoRealizado().keySet();
 		
 		try {
+			Set<CreditoRealizado> creditosRealizados = (Set<CreditoRealizado>) creditoRealizadoHelper.getMapCreditoRealizado().keySet();
 			for (CreditoRealizado realizado : creditosRealizados) {
 				valorCredito = new BigDecimal("0");
 					creditoARealizar = repositorioFaturamento.pesquisarCreditoARealizar(realizado.getCreditoARealizarGeral().getId());
@@ -1757,8 +1758,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					valorAgua = (PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido,
 							contaCategoria.getConta().getImovel()));
 				} else {
-					BigDecimal valorTarifaMinima = contaCategoria.getValorTarifaMinimaAgua()
-							.divide(new BigDecimal(contaCategoria.getQuantidadeEconomia()));
+					BigDecimal contaCategoriaTarifaMinima = contaCategoria.getValorTarifaMinimaAgua();
+					BigDecimal contaCategoriaQuantidadeCategoria = BigDecimal.valueOf(contaCategoria.getQuantidadeEconomia());
+					BigDecimal valorTarifaMinima = contaCategoriaTarifaMinima.divide(contaCategoriaQuantidadeCategoria, 2, RoundingMode.HALF_DOWN);
 					valorAgua = valorTarifaMinima.multiply(maximoEconomias);
 				}
 				try {
@@ -1790,7 +1792,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 				try {
-					if (contaCategoria.getValorAgua().compareTo(valorEsgoto) < 0 
+					if (contaCategoria.getValorEsgoto().compareTo(valorEsgoto) < 0 
 								&& getControladorImovel().isImovelHidrometrado(creditoARealizar.getImovel().getId())) {
 						valorEsgoto = contaCategoria.getValorEsgoto();
 					}
@@ -26813,11 +26815,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.getColecaoContasValores() != null && !debitoImovelClienteHelper.getColecaoContasValores()
 							.isEmpty()))) {
 				String dataVencimentoFinalString = Util.formatarData(dataFinalDate);
-				linhasImpostosRetidos[0] = "SR. USUÁRIO: EM  " + dataVencimentoFinalString
-						+ ",    REGISTRAMOS QUE V.SA. ESTAVA EM DÉBITO COM A "
+				linhasImpostosRetidos[0] = "SR. USU�RIO: EM  " + dataVencimentoFinalString
+						+ ",    REGISTRAMOS QUE V.SA. ESTAVA EM D�BITO COM A "
 						+ sistemaParametro.getNomeAbreviadoEmpresa() + ".";
-				linhasImpostosRetidos[1] = "COMPAREÇA A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO.EVITE O CORTE.";
-				linhasImpostosRetidos[2] = "CASO O SEU DÉBITO TENHA SIDO PAGO APÓS A DATA INDICADA,DESCONSIDERE ESTE AVISO.";
+				linhasImpostosRetidos[1] = "COMPARE�A A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO.EVITE O CORTE.";
+				linhasImpostosRetidos[2] = "CASO O SEU D�BITO TENHA SIDO PAGO AP�S A DATA INDICADA,DESCONSIDERE ESTE AVISO.";
 
 			} else {
 				Object[] mensagensConta = null;
@@ -26829,18 +26831,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				Integer idLocalidade = emitirContaHelper.getIdLocalidade();
 				// recupera o id do setor comercial da conta
 				Integer idSetorComercial = emitirContaHelper.getIdSetorComercial();
+				//recupera id da quadra da conta
+				Integer idQuadra = emitirContaHelper.getIdQuadraConta();
 				// caso entre em alguma condição então não entra mais nas
 				// outras
 				boolean achou = false;
 
 				try {
-
+					
 					// o sistema obtem a mensagem para a conta
-					// Caso seja a condição 1
+					// Caso seja a condicao 0
 					// (FaturamentoGrupo =null, GerenciaRegional=parmConta,
-					// Localidade=parmConta, SetorComercial=parmConta)
+					// Localidade=parmConta, SetorComercial=parmConta, Quadra=parmConta)
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
-							idGerenciaRegional, idLocalidade, idSetorComercial);
+							idGerenciaRegional, idLocalidade, idSetorComercial,idQuadra);
 					if (mensagensConta != null) {
 						// Conta Mensagem 1
 						if (mensagensConta[0] != null) {
@@ -26862,7 +26866,36 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						}
 						achou = true;
 					}
-
+								
+					if (!achou) {
+					// o sistema obtem a mensagem para a conta
+					// Caso seja a condição 1
+					// (FaturamentoGrupo =null, GerenciaRegional=parmConta,
+					// Localidade=parmConta, SetorComercial=parmConta)
+					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
+							idGerenciaRegional, idLocalidade, idSetorComercial, null);
+					if (mensagensConta != null) {
+						// Conta Mensagem 1
+						if (mensagensConta[0] != null) {
+							linhasImpostosRetidos[0] = (String) mensagensConta[0];
+						} else {
+							linhasImpostosRetidos[0] = "";
+						}
+						// Conta Mensagem 2
+						if (mensagensConta[1] != null) {
+							linhasImpostosRetidos[1] = (String) mensagensConta[1];
+						} else {
+							linhasImpostosRetidos[1] = "";
+						}
+						// Conta Mensagem 3
+						if (mensagensConta[2] != null) {
+							linhasImpostosRetidos[2] = (String) mensagensConta[2];
+						} else {
+							linhasImpostosRetidos[2] = "";
+						}
+						achou = true;
+					}
+					}
 					if (!achou) {
 
 						// Caso seja a condição 2
@@ -26870,7 +26903,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
 						mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
-								idGerenciaRegional, idLocalidade, null);
+								idGerenciaRegional, idLocalidade, null, null);
 						if (mensagensConta != null) {
 							if (mensagensConta[0] != null) {
 								linhasImpostosRetidos[0] = (String) mensagensConta[0];
@@ -26898,7 +26931,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
 						mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
-								idGerenciaRegional, null, null);
+								idGerenciaRegional, null, null, null);
 
 						if (mensagensConta != null) {
 
@@ -26928,7 +26961,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
 						mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper,
-								idFaturamentoGrupo, null, null, null);
+								idFaturamentoGrupo, null, null, null, null);
 
 						if (mensagensConta != null) {
 							if (mensagensConta[0] != null) {
@@ -26957,7 +26990,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						// Localidade=null, SetorComercial=null)
 						// Conta Mensagem 1
 						mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
-								null, null, null);
+								null, null, null, null);
 						if (mensagensConta != null) {
 							if (mensagensConta[0] != null) {
 								linhasImpostosRetidos[0] = (String) mensagensConta[0];
@@ -53919,14 +53952,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		GerarContaCategoriaHelper helper = new GerarContaCategoriaHelper();
 
+		System.out.println("subcategoria 1"); 
 		// Verificando se a empresa fatura por CATEGORIA ou SUBCATEGORIA
 		if (sistemaParametro.getIndicadorTarifaCategoria().equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
-
+			System.out.println("subcategoria 2");
 			// GERANDO POR CATEGORIA
 			helper = this.gerarContaCategoriaPorCategoria(conta, colecaoCategoriaOUSubcategoria,
 					colecaoCalcularValoresAguaEsgotoHelper);
 		} else {
-
+			System.out.println("subcategoria 3");
 			// GERANDO POR SUBCATEGORIA
 			helper = this.gerarContaCategoriaPorSubcategoria(conta, colecaoCategoriaOUSubcategoria,
 					colecaoCalcularValoresAguaEsgotoHelper);
@@ -53962,8 +53996,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		BigDecimal valorRateioAgua = new BigDecimal("0.00");
 		BigDecimal valorRateioEsgoto = new BigDecimal("0.00");
-
+		System.out.println("subcategoria 3");
 		if (conta.getImovel().isImovelCondominio()) {
+			System.out.println("subcategoria 4");
 			try {
 				// valoresAguaEsgotoRateioPorEconomia =
 				// this.calcularValorRateioPorEconomia(conta.getImovel().getImovelCondominio().getId(),conta.getFaturamentoGrupo());
@@ -53977,11 +54012,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 		}
-
+		System.out.println("subcategoria 5");
+		System.out.println((colecaoCategorias != null && !colecaoCategorias.isEmpty()));
+		System.out.println((colecaoCalcularValoresAguaEsgotoHelper != null && !colecaoCalcularValoresAguaEsgotoHelper
+				.isEmpty()));
 		if ((colecaoCategorias != null && !colecaoCategorias.isEmpty())
 				&& ((colecaoCalcularValoresAguaEsgotoHelper != null && !colecaoCalcularValoresAguaEsgotoHelper
 						.isEmpty()))) {
-
+			System.out.println("subcategoria 6");
 			ContaCategoria contaCategoria = null;
 			ContaCategoriaPK contaCategoriaPK = null;
 			Categoria categoria = null;
@@ -53992,7 +54030,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			Iterator iteratorColecaoCategorias = colecaoCategorias.iterator();
 			Iterator iteratorColecaoCalcularValoresAguaEsgotoHelper = colecaoCalcularValoresAguaEsgotoHelper.iterator();
-
+			System.out.println("subcategoria 7");
 			while (iteratorColecaoCategorias.hasNext() && iteratorColecaoCalcularValoresAguaEsgotoHelper.hasNext()) {
 
 				// CATEGORIA
@@ -54072,12 +54110,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 			}
-
+			System.out.println("subcategoria 8");
 			helper.setColecaoContaCategoria(colecaoContaCategoria);
 			helper.setColecaoContaCategoriaConsumoFaixa(colecaoContaCategoriaConsumoFaixa);
 
 		} else if (colecaoCategorias != null && !colecaoCategorias.isEmpty()) {
-
+			System.out.println("subcategoria 9");
 			// GERAR CONTA CATEGORIA COM VALORES ZERADOS
 			helper = this.gerarContaCategoriaValoresZeradosPorCategoria(conta, colecaoCategorias);
 
@@ -54094,7 +54132,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			}
 
 		}
-
+		System.out.println("subcategoria 10");
 		return helper;
 	}
 
@@ -54121,16 +54159,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoContaCategoriaConsumoFaixa = null;
 
 		BigDecimal[] valoresAguaEsgotoRateioPorEconomia = new BigDecimal[2];
-
 		if (conta.getImovel().isImovelCondominio()) {
-
 			valoresAguaEsgotoRateioPorEconomia = this.calcularValorRateioPorEconomia(conta.getImovel()
 					.getImovelCondominio().getId(), conta.getFaturamentoGrupo());
 		}
 
 		if ((colecaoSubCategorias != null && !colecaoSubCategorias.isEmpty())
 				&& (colecaoCalcularValoresAguaEsgotoHelper != null && !colecaoCalcularValoresAguaEsgotoHelper.isEmpty())) {
-
 			ContaCategoria contaCategoria = null;
 			ContaCategoriaPK contaCategoriaPK = null;
 			Subcategoria subCategoria = null;
@@ -54142,9 +54177,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Iterator iteratorColecaoSubCategorias = colecaoSubCategorias.iterator();
 
 			Iterator iteratorColecaoCalcularValoresAguaEsgotoHelper = colecaoCalcularValoresAguaEsgotoHelper.iterator();
-
 			while (iteratorColecaoSubCategorias.hasNext() && iteratorColecaoCalcularValoresAguaEsgotoHelper.hasNext()) {
-
 				// SUBCATEGORIA
 				subCategoria = (Subcategoria) iteratorColecaoSubCategorias.next();
 

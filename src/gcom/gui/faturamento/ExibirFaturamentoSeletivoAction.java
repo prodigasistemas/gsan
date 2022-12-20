@@ -57,7 +57,7 @@ public class ExibirFaturamentoSeletivoAction extends GcomAction {
         StringBuffer faixas = new StringBuffer();
         
         ImovelFaturamentoSeletivo imovelSeletivo = new ImovelFaturamentoSeletivo();
-        imovelSeletivo.setIdImovel(7929340);
+        imovelSeletivo.setIdImovel(2105551);
         
         fachada.faturarImovelSeletivo(imovelSeletivo);
         Integer matriculaImovel = null;
