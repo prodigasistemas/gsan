@@ -45064,7 +45064,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		try {
 			consulta = "SELECT ct "
 					+ "FROM Conta ct "
-					+ "inner join ct.imovel imov "
+					+ "inner join fetch ct.imovel imov "
+					+ "inner join fetch imov.ligacaoAguaSituacao ligacaoAguaSituacao "
+					+ "inner join fetch imov.ligacaoEsgotoSituacao ligacaoEsgotoSituacao "
 					+ "inner join ct.debitoCreditoSituacaoAtual debitoCredito "
 					+ "INNER JOIN FETCH ct.ligacaoAguaSituacao las "
 					+ "INNER JOIN FETCH ct.ligacaoEsgotoSituacao les "
