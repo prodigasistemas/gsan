@@ -411,6 +411,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 							if (contaAtualizacao != null) {
 								contaAtualizacao.getConsumoAgua();
+							} else {
+								contaAtualizacao = repositorioFaturamento.pesquisarContaPreFaturada(
+										helper.getImovel().getId(), helper.getAnoMesReferenciaPreFaturamento(),
+										DebitoCreditoSituacao.PRE_FATURADA);
 							}
 						} catch (LazyInitializationException e) {
 							try {
@@ -4992,6 +4996,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade("conta.ligacaoAguaSituacao");
 		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade("conta.ligacaoEsgotoSituacao");
 		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade("imovel.imovelCondominio");
+		filtroMovimentoContaPrefaturada.setInitializeLazy(true);
 
 		filtroMovimentoContaPrefaturada.adicionarParametro(new ParametroSimples(
 				FiltroMovimentoContaPrefaturada.INDICADOR_ATUALIZAR_FATURAMENTO, ConstantesSistema.NAO));

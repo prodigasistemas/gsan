@@ -1792,7 +1792,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 				}
 				try {
-					if (contaCategoria.getValorAgua().compareTo(valorEsgoto) < 0 
+					if (contaCategoria.getValorEsgoto().compareTo(valorEsgoto) < 0 
 								&& getControladorImovel().isImovelHidrometrado(creditoARealizar.getImovel().getId())) {
 						valorEsgoto = contaCategoria.getValorEsgoto();
 					}

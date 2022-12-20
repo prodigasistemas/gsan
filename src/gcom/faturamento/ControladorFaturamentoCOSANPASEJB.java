@@ -4005,10 +4005,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 						.isEmpty()))) {
 			String dataVencimentoFinalString = Util.formatarData(dataFinalDate);
 			linhasImpostosRetidos[0] = "SR(A). CLIENTE, EM  " + dataVencimentoFinalString
-					+ ", REGISTRAMOS QUE V.SA. ESTAVA EM D�BITO COM A "
+					+ ", REGISTRAMOS QUE V.SA. ESTAVA EM DEBITO COM A "
 					+ sistemaParametro.getNomeAbreviadoEmpresa().toUpperCase() + ".";
-			linhasImpostosRetidos[1] = "COMPARE�A A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO. EVITE O CORTE.";
-			linhasImpostosRetidos[2] = "CASO O SEU D�BITO TENHA SIDO PAGO AP�S A DATA INDICADA, DESCONSIDERE ESTE AVISO.";
+			linhasImpostosRetidos[1] = "COMPARECA A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO. EVITE O CORTE.";
+			linhasImpostosRetidos[2] = "CASO O SEU DEBITO TENHA SIDO PAGO APOS A DATA INDICADA, DESCONSIDERE ESTE AVISO.";
 			isImovelEmDebito = true;
 		} else {
 			linhasImpostosRetidos[0] = "A COSANPA AGRADECE SUA PONTUALIDADE.";
@@ -4183,7 +4183,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			contaTxt.append(Util.completaString("(%)", 15));
 			contaTxt.append(Util.completaStringComEspacoAEsquerda(
 					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[1]), 13));
-			contaTxt.append(Util.completaString("Base de c�lculo", 15));
+			contaTxt.append(Util.completaString("Base de calculo", 15));
 			contaTxt.append(Util.completaStringComEspacoAEsquerda(
 					Util.formatarMoedaReal((BigDecimal) dadosAliquotasImpostos[2]), 13));
 			contaTxt.append(Util.completaString("Valor (R$)", 15));
