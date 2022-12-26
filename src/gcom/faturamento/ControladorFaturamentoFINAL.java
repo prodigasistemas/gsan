@@ -1672,7 +1672,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							try {
 
 								System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA ["
-										+ contaCategoria.getConta().getImovel().getId() + "]");
+										+ contaCategoria.getConta().getImovel().getId() + "]");					
 								valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar,
 										realizado, true);
 								System.out
@@ -1785,10 +1785,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					if (valorAgua.compareTo(BigDecimal.ZERO) > 0) {
 						valorEsgoto = valorAgua.multiply(percentualEsgoto);
 					} else {
-						BigDecimal valorTarifaMinima = contaCategoria.getValorTarifaMinimaEsgoto()
-								.divide(new BigDecimal(contaCategoria.getQuantidadeEconomia()));
-						valorEsgoto = valorTarifaMinima.multiply(maximoEconomias);
-						;
+						BigDecimal contaCategoriaTarifaMinima = contaCategoria.getValorTarifaMinimaEsgoto();
+						BigDecimal contaCategoriaQuantidadeCategoria = BigDecimal.valueOf(contaCategoria.getQuantidadeEconomia());
+						BigDecimal valorTarifaMinima = contaCategoriaTarifaMinima.divide(contaCategoriaQuantidadeCategoria, 2, RoundingMode.HALF_DOWN);
+						valorEsgoto = valorTarifaMinima.multiply(maximoEconomias);						
 					}
 				}
 				try {
@@ -52879,7 +52879,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		DeterminarValoresFaturamentoAguaEsgotoHelper helper = determinarValoresFaturamentoAguaEsgoto(imovel, 
 				anoMesFaturamento, colecaoCategoriasOUSubCategorias, faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
 		
-		atualizarValorContaBolsaAgua(helper, imovel, faturamentoGrupo, anoMesFaturamento);
+		//atualizarValorContaBolsaAgua(helper, imovel, faturamentoGrupo, anoMesFaturamento);
 		
 		return helper;
 		
