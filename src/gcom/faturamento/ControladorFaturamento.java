@@ -392,7 +392,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				if (helper.getMovimentoContaPrefaturadaCategorias() != null
 						&& helper.getMovimentoContaPrefaturadaCategorias().size() > 0) {
-
+					
 					/**
 					 * Alteracao para quando a conta n�o tiver sido emitida pelo IS, n�o altera
 					 * nenhuma informa��o da conta, continua PRE FATURADA
