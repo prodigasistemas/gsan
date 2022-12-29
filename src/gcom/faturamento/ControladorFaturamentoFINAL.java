@@ -1760,7 +1760,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				} else {
 					BigDecimal contaCategoriaTarifaMinima = contaCategoria.getValorTarifaMinimaAgua();
 					BigDecimal contaCategoriaQuantidadeCategoria = BigDecimal.valueOf(contaCategoria.getQuantidadeEconomia());
-					BigDecimal valorTarifaMinima = contaCategoriaTarifaMinima.divide(contaCategoriaQuantidadeCategoria, 2, RoundingMode.HALF_DOWN);
+					BigDecimal valorTarifaMinima = contaCategoriaTarifaMinima.divide(contaCategoriaQuantidadeCategoria, 2, RoundingMode.HALF_UP);
 					valorAgua = valorTarifaMinima.multiply(maximoEconomias);
 				}
 				try {
@@ -1787,7 +1787,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					} else {
 						BigDecimal contaCategoriaTarifaMinima = contaCategoria.getValorTarifaMinimaEsgoto();
 						BigDecimal contaCategoriaQuantidadeCategoria = BigDecimal.valueOf(contaCategoria.getQuantidadeEconomia());
-						BigDecimal valorTarifaMinima = contaCategoriaTarifaMinima.divide(contaCategoriaQuantidadeCategoria, 2, RoundingMode.HALF_DOWN);
+						BigDecimal valorTarifaMinima = contaCategoriaTarifaMinima.divide(contaCategoriaQuantidadeCategoria, 2, RoundingMode.HALF_UP);
 						valorEsgoto = valorTarifaMinima.multiply(maximoEconomias);						
 					}
 				}
