@@ -392,8 +392,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				if (helper.getMovimentoContaPrefaturadaCategorias() != null
 						&& helper.getMovimentoContaPrefaturadaCategorias().size() > 0) {
-
-					/**
+								/**
 					 * Alteracao para quando a conta n�o tiver sido emitida pelo IS, n�o altera
 					 * nenhuma informa��o da conta, continua PRE FATURADA
 					 */
@@ -496,10 +495,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						}
 
+						boolean isImpressaoSimultanea = helper.isImpressaoSimultanea();
+						
 						DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = this
 								.determinarValoresFaturamento(imo, helper.getFaturamentoGrupo().getAnoMesReferencia(),
 										colecaoCategoriaOUSubcategoria, imo.getQuadra().getRota().getFaturamentoGrupo(),
-										consumoHistoricoAgua, consumoHistoricoEsgoto);
+										consumoHistoricoAgua, consumoHistoricoEsgoto, isImpressaoSimultanea);
 
 						Collection<CalcularValoresAguaEsgotoHelper> colecaoCalcularValoresAguaEsgotoHelper = helperValoresAguaEsgoto
 								.getColecaoCalcularValoresAguaEsgotoHelper();
@@ -9420,7 +9421,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			 * Faturamento de �gua e/ou Esgoto
 			 */
 			helperValoresAguaEsgoto = this.determinarValoresFaturamento(imovel, faturamentoGrupo.getAnoMesReferencia(),
-					colecaoCategoriaOUSubcategoria, faturamentoGrupo, null, null);
+					colecaoCategoriaOUSubcategoria, faturamentoGrupo, null, null, false);
 
 			// GERANDO O D�BITO
 			this.gerarDebitoACobrarDeTaxaPercentualTarifaMinimaCortado(imovel, debitoTipo,

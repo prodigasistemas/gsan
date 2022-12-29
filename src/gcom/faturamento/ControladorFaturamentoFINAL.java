@@ -1486,7 +1486,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							consumoTipoEsgoto)) {
 
 				helperValoresAguaEsgoto = this.determinarValoresFaturamento(imovel, anoMesFaturamentoGrupo,
-						colecaoCategoriaOUSubcategoria, faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
+						colecaoCategoriaOUSubcategoria, faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto, false);
 			}
 
 			boolean gerarConta = false;
@@ -52869,18 +52869,20 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 * @param imovel
 	 * @param faturamentoGrupo
 	 * @param colecaoCategoriasOUSubCategorias
+	 * @param isImpressaoSimultanea 
 	 * @return DeterminarValoresFaturamentoAguaEsgotoHelper
 	 * @throws ControladorException
 	 */
 	public DeterminarValoresFaturamentoAguaEsgotoHelper determinarValoresFaturamento(Imovel imovel,
 			Integer anoMesFaturamento, Collection colecaoCategoriasOUSubCategorias, FaturamentoGrupo faturamentoGrupo,
-			ConsumoHistorico consumoHistoricoAgua, ConsumoHistorico consumoHistoricoEsgoto) throws ControladorException {
+			ConsumoHistorico consumoHistoricoAgua, ConsumoHistorico consumoHistoricoEsgoto, boolean isImpressaoSimultanea) throws ControladorException {
 		
 		DeterminarValoresFaturamentoAguaEsgotoHelper helper = determinarValoresFaturamentoAguaEsgoto(imovel, 
 				anoMesFaturamento, colecaoCategoriasOUSubCategorias, faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
 		
-		atualizarValorContaBolsaAgua(helper, imovel, faturamentoGrupo, anoMesFaturamento);
-		
+		if(!isImpressaoSimultanea){
+			atualizarValorContaBolsaAgua(helper, imovel, faturamentoGrupo, anoMesFaturamento);
+		}
 		return helper;
 		
 	}
@@ -60878,7 +60880,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		helperValoresAguaEsgoto = this.determinarValoresFaturamento(imovelCondominio,
 				faturamentoGrupo.getAnoMesReferencia(), colecaoCategoriaOUSubcategoria, faturamentoGrupo,
-				consumoHistoricoAgua, consumoHistoricoEsgoto);
+				consumoHistoricoAgua, consumoHistoricoEsgoto, false);
 
 		if (imovelCondominio.getId().intValue() == 7068263 && helperValoresAguaEsgoto != null) {
 			logger.info("existe helperValoresAguaEsgoto");
