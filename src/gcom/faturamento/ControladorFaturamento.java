@@ -495,7 +495,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						}
 
-						boolean isImpressaoSimultanea = helper.isImpressaoSimultanea();
+						boolean isImpressaoSimultanea = true;
 						
 						DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = this
 								.determinarValoresFaturamento(imo, helper.getFaturamentoGrupo().getAnoMesReferencia(),
