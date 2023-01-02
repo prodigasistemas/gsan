@@ -52880,9 +52880,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		DeterminarValoresFaturamentoAguaEsgotoHelper helper = determinarValoresFaturamentoAguaEsgoto(imovel, 
 				anoMesFaturamento, colecaoCategoriasOUSubCategorias, faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
 		
-		if(!isImpressaoSimultanea){
-			atualizarValorContaBolsaAgua(helper, imovel, faturamentoGrupo, anoMesFaturamento);
-		}
+//		if(!isImpressaoSimultanea){
+//			atualizarValorContaBolsaAgua(helper, imovel, faturamentoGrupo, anoMesFaturamento);
+//		}
 		return helper;
 		
 	}
