@@ -1763,14 +1763,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					BigDecimal valorTarifaMinima = contaCategoriaTarifaMinima.divide(contaCategoriaQuantidadeCategoria, 2, RoundingMode.HALF_UP);
 					valorAgua = valorTarifaMinima.multiply(maximoEconomias);
 				}
-				try {
-					if (contaCategoria.getValorAgua().compareTo(valorAgua) < 0 
-								&& getControladorImovel().isImovelHidrometrado(creditoARealizar.getImovel().getId())) {
+					if (contaCategoria.getValorAgua().compareTo(valorAgua) < 0) {
 						valorAgua = contaCategoria.getValorAgua();
 					}
-				} catch (ErroRepositorioException e) {
-					e.printStackTrace();
-				}
 			}
 
 			if (contaCategoria.getConta().getImovel().isLigadoEsgoto()) {
@@ -1791,14 +1786,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						valorEsgoto = valorTarifaMinima.multiply(maximoEconomias);						
 					}
 				}
-				try {
-					if (contaCategoria.getValorEsgoto().compareTo(valorEsgoto) < 0 
-								&& getControladorImovel().isImovelHidrometrado(creditoARealizar.getImovel().getId())) {
+					if (contaCategoria.getValorEsgoto().compareTo(valorEsgoto) < 0) {
 						valorEsgoto = contaCategoria.getValorEsgoto();
 					}
-				} catch (ErroRepositorioException e) {
-					e.printStackTrace();
-				}
 			}
 			creditoARealizar.setValorCredito(valorAgua.add(valorEsgoto));
 			atualizarCreditosARealizar(creditoARealizar);
