@@ -539,20 +539,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							consumoEsgoto += helperCategoria.getConsumoFaturadoEsgoto();
 						}
 
-						BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(
-								helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
-
-						if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > .01d) {
-							BigDecimal valorAguaEsgoto = valorAgua.add(valorEsgoto);
-
-							if (valorAguaEsgoto.compareTo(valorBolsaAguaConcedido) == -1) {
-								valorAgua = PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido,
-										imo);
-								valorEsgoto = PercentualBolsaAgua.PERCENTUAL_ESGOTO
-										.retornaValor(valorBolsaAguaConcedido, imo);
-							}
-
-						}
+//                      metodo comentado pois estava gerando as diferenças entre conta e conta categoria
+//						BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(
+//								helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
+//
+//						if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > .01d) {
+//							BigDecimal valorAguaEsgoto = valorAgua.add(valorEsgoto);
+//
+//							if (valorAguaEsgoto.compareTo(valorBolsaAguaConcedido) == -1) {
+//								valorAgua = PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido,
+//										imo);
+//								valorEsgoto = PercentualBolsaAgua.PERCENTUAL_ESGOTO
+//										.retornaValor(valorBolsaAguaConcedido, imo);
+//							}
+//
+//						}
 
 						BigDecimal diferencaValorAgua = valorAgua.subtract(valorTotalAguaCalculado);
 						BigDecimal diferencaValorEsgoto = valorEsgoto.subtract(valorTotalEsgotoCalculado);
