@@ -15498,20 +15498,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 
-	public void registrarEntradaParcelamento(Integer idParcelamento,Integer idImovel) throws Exception {
+	public String registrarEntradaParcelamento(Integer idParcelamento,Integer idImovel) throws Exception {
 
 		boolean foiGerado = false;
 		
 		Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistenteGuiaPagamento(idParcelamento);
-		Boolean boletoInfoExistente = repositorioFaturamento.boletoInfoExistente(idParcelamento);
 		
-		if (fichaExistente == true || boletoInfoExistente == true) {
-			throw new ControladorException("Boleto Gerado");
+		if (fichaExistente) {
+			return "/gsan/gerarRelatorioBoletoParcelamentoAction.do";
 		}
-		// Para boletos ja gerados antes da modificacao para gravacao na base de dados
-		// , ou seja,
-		// para boletos que foram gerados e nao foram salvos no bd
-
+		
 		Imovel imovel = repositorioFaturamento.pesquisarImovelComEnderecoFichaCompensacaoPorId(idImovel);
 
 		Cliente cliente = retornaClienteResponsavelParcelamentoValido(idImovel);
@@ -15539,6 +15535,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		System.out.println("Banco Do Brasil: Guia do Parcelamento - " + idParcelamento + " | Imovel - " + imovel.getId()
 				+ " registrada com sucesso!");
+		
+		return "/gsan/gerarRelatorioBoletoParcelamentoAction.do";
 	}
 
 	private Cliente retornaClienteResponsavelParcelamentoValido(Integer idImovel) throws ErroRepositorioException, ControladorException {

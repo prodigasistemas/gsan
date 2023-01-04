@@ -11,9 +11,7 @@ public class EmissaoAPIBB extends Emissao {
 	@Override
 	public String emitirBoleto(Integer idParcelamento, Integer idImovel, Fachada fachada, boolean primeiraVia) {
 		try {
-			fachada.registrarEntradaParcelamento(idParcelamento, idImovel);
-			
-			return "/gsan/gerarRelatorioBoletoParcelamentoAction.do";
+			return fachada.registrarEntradaParcelamento(idParcelamento, idImovel);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ERRO AO REGISTRAR VIA API IMOVEL : " + idImovel + " " + e.getMessage());
