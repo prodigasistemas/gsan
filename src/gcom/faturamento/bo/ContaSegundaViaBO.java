@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.ejb.CreateException;
 
+import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.imovel.Categoria;
@@ -41,6 +43,7 @@ public class ContaSegundaViaBO {
 	private Fachada fachada;
 	private ControladorFaturamentoLocal controlador;
 	private IRepositorioFaturamento repositorio;
+	private IRepositorioCadastro repositorioCadastro;
 
 	private Collection<EmitirContaHelper> contas;
 	private EmitirContaHelper contaHelper;
@@ -50,6 +53,7 @@ public class ContaSegundaViaBO {
 
 		fachada = Fachada.getInstancia();
 		repositorio = RepositorioFaturamentoHBM.getInstancia();
+		repositorioCadastro = RepositorioCadastroHBM.getInstancia();
 		controlador = getControlador();
 		contas = pesquisarContas(idContaHistorico, idsConta, cobrarTaxaEmissaoConta, contaSemCodigoBarras);
 	}
@@ -231,10 +235,14 @@ public class ContaSegundaViaBO {
 				mensagens[0] = "Imovel recadastrado, carta de comunicacao anteriormente enviada ao usuario pelos correios.";
 				mensagens[1] = "";
 				mensagens[2] = "";
-				
+							
 			} else {
-				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), contaHelper.getIdLocalidade(), contaHelper.getIdSetorComercial());
+				Integer idQuadra = repositorioCadastro.pesquisarIdQuadraPorNumeroQuadraEIdSetor(contaHelper.getIdSetorComercial(), contaHelper.getIdQuadraConta());				
+				mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), contaHelper.getIdLocalidade(), contaHelper.getIdSetorComercial(), idQuadra);
 				
+				if(mensagens == null) {
+				   mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), contaHelper.getIdLocalidade(), contaHelper.getIdSetorComercial(), null);
+				}
 				if (mensagens == null)
 					mensagens = repositorio.pesquisarParmsContaMensagem(contaHelper, null, contaHelper.getIdGerenciaRegional(), contaHelper.getIdLocalidade(), null);
 				
