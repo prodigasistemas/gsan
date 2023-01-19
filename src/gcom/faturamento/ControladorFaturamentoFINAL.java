@@ -1,5 +1,42 @@
 package gcom.faturamento;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+import java.util.zip.ZipOutputStream;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionContext;
+
+import org.apache.commons.fileupload.FileItem;
+import org.jboss.logging.Logger;
+
+import br.com.danhil.BarCode.Interleaved2of5;
 import gcom.api.relatorio.ReportItemDTO;
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.FiltroDevolucao;
@@ -316,45 +353,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Vector;
-import java.util.zip.ZipOutputStream;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionContext;
-
-import org.apache.commons.fileupload.FileItem;
-import org.jboss.logging.Logger;
-
-import br.com.danhil.BarCode.Interleaved2of5;
 
 public class ControladorFaturamentoFINAL extends ControladorComum {
 
@@ -15139,6 +15137,27 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
 					}
+					
+					// INICIO - REFATURAMENTO BOLSA AGUA
+					idsCreditosOrigem = null;
+					idsCreditosOrigem = new Integer[1];
+					idsCreditosOrigem[0] = CreditoOrigem.BOLSA_AGUA;
+
+					BigDecimal[] diferencaCreditoBolsaAgua = this.obterDiferencaValoresCreditosRealizadosContaRetificada(
+							anoMesFaturamento, idLocalidade, idCategoria, idsCreditosOrigem);
+
+					if (diferencaCreditoBolsaAgua[0].compareTo(BigDecimal.ZERO) != 0) {
+
+						resumoFaturamentoTemporario = buildResumoFaturamento(diferencaCreditoBolsaAgua[0], anoMesFaturamento,
+								categoria, localidade, new LancamentoTipo(
+										LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_REFATURAMENTO),
+								new LancamentoItem(LancamentoItem.SUBSIDIO_AGUA_PARA), null,
+								new Short("3000"), new Short("70"));
+
+						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+					}
+					// FIM - REFATURAMENTO BOLSA AGUA
+					
 
 					// Linha 98
 					idsCreditosOrigem = null;
@@ -15322,6 +15341,29 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
 					}
+					
+					
+					// INICIO - REFATURAMENTO BOLSA AGUA PARTE 2
+					idsCreditosOrigem = null;
+					idsCreditosOrigem = new Integer[1];
+					idsCreditosOrigem[0] = CreditoOrigem.BOLSA_AGUA;
+
+					BigDecimal valorBolsaAguaContaIncluida = repositorioFaturamento
+							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(anoMesFaturamento,
+									idLocalidade, idCategoria, idsCreditosOrigem, DebitoCreditoSituacao.INCLUIDA);
+
+					valorBolsaAguaContaIncluida = valorBolsaAguaContaIncluida
+							.add(diferencaCreditoBolsaAgua[1]);
+
+					if (valorBolsaAguaContaIncluida.compareTo(BigDecimal.ZERO) != 0) {
+						ResumoFaturamento resumo = buildResumoFaturamento(valorBolsaAguaContaIncluida,
+								anoMesFaturamento, categoria, localidade, new LancamentoTipo(
+										LancamentoTipo.OUTROS_CREDITOS_CONCEDIDOS_POR_REFATURAMENTO),
+								new LancamentoItem(LancamentoItem.SUBSIDIO_AGUA_PARA), null,
+								new Short("3100"), new Short("70"));
+						colecaoResumoFaturamento.add(resumo);
+					}
+					// FIM - REFATURAMENTO BOLSA AGUA PARTE 2
 
 					BigDecimal valorParcelamentoConcedidoBonus = this.obterValorParcelamentoConcedidoBonus(
 							idLocalidade, idCategoria);
@@ -26806,11 +26848,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							.getColecaoContasValores() != null && !debitoImovelClienteHelper.getColecaoContasValores()
 							.isEmpty()))) {
 				String dataVencimentoFinalString = Util.formatarData(dataFinalDate);
-				linhasImpostosRetidos[0] = "SR. USUÃRIO: EM  " + dataVencimentoFinalString
-						+ ",    REGISTRAMOS QUE V.SA. ESTAVA EM DÉBITO COM A "
+				linhasImpostosRetidos[0] = "SR. USUï¿½RIO: EM  " + dataVencimentoFinalString
+						+ ",    REGISTRAMOS QUE V.SA. ESTAVA EM Dï¿½BITO COM A "
 						+ sistemaParametro.getNomeAbreviadoEmpresa() + ".";
-				linhasImpostosRetidos[1] = "COMPAREÇA A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO.EVITE O CORTE.";
-				linhasImpostosRetidos[2] = "CASO O SEU DÉBITO TENHA SIDO PAGO APÓS A DATA INDICADA,DESCONSIDERE ESTE AVISO.";
+				linhasImpostosRetidos[1] = "COMPAREï¿½A A UM DOS NOSSOS POSTOS DE ATENDIMENTO PARA REGULARIZAR SUA SITUACAO.EVITE O CORTE.";
+				linhasImpostosRetidos[2] = "CASO O SEU Dï¿½BITO TENHA SIDO PAGO APï¿½S A DATA INDICADA,DESCONSIDERE ESTE AVISO.";
 
 			} else {
 				Object[] mensagensConta = null;
