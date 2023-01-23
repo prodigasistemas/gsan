@@ -29295,7 +29295,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " inner join dam.contaGeral.conta conta "
 					+ " inner join da.agencia ag"
 					+ " inner join conta.debitoCreditoSituacaoAtual dcst "
-					+ " inner join conta c "
+//					+ " inner join conta c "
 					+ " left  join conta.debitoCreditoSituacaoAnterior dcsan "
 					+ " inner join conta.imovel imov "
 					+ " where ag.banco.id in (:idBanco) "
@@ -29306,7 +29306,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " and conta.faturamentoGrupo.id = :idGrupoFaturamento";
 
 			if (somenteDebitoAutomatico != null && somenteDebitoAutomatico == 1) {
-				select += " and c.indicadorDebitoConta = 1 ";
+				select += " and conta.indicadorDebitoConta = 1 ";
 			}
 			
 			if (dataVencimentoInicial != null) {
