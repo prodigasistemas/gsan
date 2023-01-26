@@ -16810,6 +16810,22 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		resumo.setValorItemFaturamento(valorLP);
 		acumularValorResumoFaturamento(resumoTotalizador, valorLP);
 		incluirResumoNaColecao(resumo, resumos);
+		
+		idsCreditosOrigem = null;
+		idsCreditosOrigem = new Integer[1];
+		idsCreditosOrigem[0] = CreditoOrigem.BOLSA_AGUA;
+
+		valor = BigDecimal.ZERO;
+		valor = repositorioFaturamento.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(resumoModelo
+				.getAnoMesReferencia(), resumoModelo.getLocalidade().getId(), resumoModelo.getCategoria().getId(),
+				idsCreditosOrigem, DebitoCreditoSituacao.CANCELADA);
+
+		resumo = buildResumoCancelamento(resumoModelo, new LancamentoTipo(LancamentoTipo.OUTROS_CREDITOS_CANCELADOS),
+				new LancamentoItem(LancamentoItem.SUBSIDIO_AGUA_PARA), null,
+				new Short("680"), new Short("70"));
+		resumo.setValorItemFaturamento(valor);
+		acumularValorResumoFaturamento(resumoTotalizador, valor);
+		incluirResumoNaColecao(resumo, resumos);
 
 		return resumos;
 	}
