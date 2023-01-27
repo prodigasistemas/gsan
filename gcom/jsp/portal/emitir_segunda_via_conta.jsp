@@ -79,7 +79,7 @@
 						<thead>
 							<tr>
 								<th style="width: 50%"><span>Quantidade de Contas: </span>${EmitirSegundaViaContaActionForm.quantidadeContas}</th>
-								<th style="width: 50%"><span>Total: </span>R$ ${EmitirSegundaViaContaActionForm.valorTotalContas}</th>
+								<th style="width: 50%"><span>Total: </span>R$ <FONT COLOR="#ffffff">$</FONT> ${EmitirSegundaViaContaActionForm.valorTotalContas} <FONT COLOR="#ffffff">#</FONT></th>
 							</tr>
 						</thead>
 					</table>
@@ -99,7 +99,7 @@
 									<tr>
 										<td><bean:write name="helper" property="formatarAnoMesParaMesAno" /></td>
 										<td><bean:write name="helper" property="vencimentoConta" /></td>
-										<td><bean:write name="helper" property="valorTotalContaFormatado" /></td>
+										<td> <FONT COLOR="#ffffff">$</FONT><bean:write name="helper" property="valorTotalContaFormatado" /><FONT COLOR="#ffffff">#</FONT></td>
 										<td>
 											<a href="gerarRelatorio2ViaContaAction.do?cobrarTaxaEmissaoConta=N&idConta=<%="" + helper.getConta().getId()%>" title="Imprimir">
 												<i class="fa fa-print"></i>
