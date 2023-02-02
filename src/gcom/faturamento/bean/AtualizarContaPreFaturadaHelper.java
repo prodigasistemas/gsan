@@ -137,7 +137,7 @@ public class AtualizarContaPreFaturadaHelper {
 	private String consumoFaturadoEsgoto;
 	private String valorTarifaMinimaEsgoto;
 	private String consumoMinimoEsgoto;
-	private String subsidio;
+	//private String subsidio;
 
 	// Tipo de registro 3
 	private String consumoFaturadoAguaFaixa;
@@ -494,11 +494,12 @@ public class AtualizarContaPreFaturadaHelper {
 				+ REGISTRO_TIPO_2_CONSUMO_MINIMO_ESGOTO);
 		index += REGISTRO_TIPO_2_CONSUMO_MINIMO_ESGOTO;
 		
-		// Consumo Minimo de esgoto
+		// Consumo Minimo de esgoto 
+		/*
 		retorno.subsidio = linha.substring(index + 2, index
 				+ REGISTRO_TIPO_2_SUBSIDIO_AGUA_PARA);
 		index += REGISTRO_TIPO_2_SUBSIDIO_AGUA_PARA;
-
+		*/
 		return retorno;
 	}
 
@@ -925,11 +926,11 @@ public class AtualizarContaPreFaturadaHelper {
 	public BigDecimal getValorRateioEsgoto() {
 		return verificarBigDecimal(valorRateioEsgoto);
 	}
-	
+	/*
 	public Integer getSubsidio() {
 		return Integer.valueOf(subsidio);
-	}
-
+	}*/
+	
 	/**
 	 *  Método criado para fazer o parser de inscrições com 16 e
 	 * 17 caracteres.
