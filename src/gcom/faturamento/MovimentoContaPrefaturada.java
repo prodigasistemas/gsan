@@ -8,6 +8,7 @@ import gcom.micromedicao.consumo.ConsumoAnormalidade;
 import gcom.micromedicao.consumo.ConsumoTipo;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.MedicaoTipo;
+import gcom.util.ConstantesSistema;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -478,6 +479,10 @@ public class MovimentoContaPrefaturada implements Serializable {
 
 	public void setIndicadorAlteracao(Short indicadorAlteracao) {
 		this.indicadorAlteracao = indicadorAlteracao;
-	}  
+	}
+	
+	public boolean isImpressaoSimultanea() {
+	    return this.getIndicadorEmissaoConta() == ConstantesSistema.SIM;
+	}
 
 }

@@ -392,7 +392,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				if (helper.getMovimentoContaPrefaturadaCategorias() != null
 						&& helper.getMovimentoContaPrefaturadaCategorias().size() > 0) {
-					
 					/**
 					 * Alteracao para quando a conta n�o tiver sido emitida pelo IS, n�o altera
 					 * nenhuma informa��o da conta, continua PRE FATURADA
@@ -496,10 +495,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						}
 
+						boolean isImpressaoSimultanea = true;
+						
 						DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = this
 								.determinarValoresFaturamento(imo, helper.getFaturamentoGrupo().getAnoMesReferencia(),
 										colecaoCategoriaOUSubcategoria, imo.getQuadra().getRota().getFaturamentoGrupo(),
-										consumoHistoricoAgua, consumoHistoricoEsgoto);
+										consumoHistoricoAgua, consumoHistoricoEsgoto, isImpressaoSimultanea);
 
 						Collection<CalcularValoresAguaEsgotoHelper> colecaoCalcularValoresAguaEsgotoHelper = helperValoresAguaEsgoto
 								.getColecaoCalcularValoresAguaEsgotoHelper();
@@ -538,20 +539,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							consumoEsgoto += helperCategoria.getConsumoFaturadoEsgoto();
 						}
 
-						BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(
-								helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
-
-						if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > .01d) {
-							BigDecimal valorAguaEsgoto = valorAgua.add(valorEsgoto);
-
-							if (valorAguaEsgoto.compareTo(valorBolsaAguaConcedido) == -1) {
-								valorAgua = PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido,
-										imo);
-								valorEsgoto = PercentualBolsaAgua.PERCENTUAL_ESGOTO
-										.retornaValor(valorBolsaAguaConcedido, imo);
-							}
-
-						}
+//                      metodo comentado pois estava gerando as diferen�as entre conta e conta categoria
+//						BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(
+//								helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
+//
+//						if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > .01d) {
+//							BigDecimal valorAguaEsgoto = valorAgua.add(valorEsgoto);
+//
+//							if (valorAguaEsgoto.compareTo(valorBolsaAguaConcedido) == -1) {
+//								valorAgua = PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido,
+//										imo);
+//								valorEsgoto = PercentualBolsaAgua.PERCENTUAL_ESGOTO
+//										.retornaValor(valorBolsaAguaConcedido, imo);
+//							}
+//
+//						}
 
 						BigDecimal diferencaValorAgua = valorAgua.subtract(valorTotalAguaCalculado);
 						BigDecimal diferencaValorEsgoto = valorEsgoto.subtract(valorTotalEsgotoCalculado);
@@ -9420,7 +9422,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			 * Faturamento de �gua e/ou Esgoto
 			 */
 			helperValoresAguaEsgoto = this.determinarValoresFaturamento(imovel, faturamentoGrupo.getAnoMesReferencia(),
-					colecaoCategoriaOUSubcategoria, faturamentoGrupo, null, null);
+					colecaoCategoriaOUSubcategoria, faturamentoGrupo, null, null, false);
 
 			// GERANDO O D�BITO
 			this.gerarDebitoACobrarDeTaxaPercentualTarifaMinimaCortado(imovel, debitoTipo,
@@ -15496,20 +15498,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 
-	public void registrarEntradaParcelamento(Integer idParcelamento,Integer idImovel) throws Exception {
+	public String registrarEntradaParcelamento(Integer idParcelamento,Integer idImovel) throws Exception {
 
 		boolean foiGerado = false;
 		
 		Boolean fichaExistente = repositorioFaturamento.fichaCompensacaoExistenteGuiaPagamento(idParcelamento);
-		Boolean boletoInfoExistente = repositorioFaturamento.boletoInfoExistente(idParcelamento);
 		
-		if (fichaExistente == true || boletoInfoExistente == true) {
-			throw new ControladorException("Boleto Gerado");
+		if (fichaExistente) {
+			return "/gsan/gerarRelatorioBoletoParcelamentoAction.do";
 		}
-		// Para boletos ja gerados antes da modificacao para gravacao na base de dados
-		// , ou seja,
-		// para boletos que foram gerados e nao foram salvos no bd
-
+		
 		Imovel imovel = repositorioFaturamento.pesquisarImovelComEnderecoFichaCompensacaoPorId(idImovel);
 
 		Cliente cliente = retornaClienteResponsavelParcelamentoValido(idImovel);
@@ -15537,6 +15535,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		System.out.println("Banco Do Brasil: Guia do Parcelamento - " + idParcelamento + " | Imovel - " + imovel.getId()
 				+ " registrada com sucesso!");
+		
+		return "/gsan/gerarRelatorioBoletoParcelamentoAction.do";
 	}
 
 	private Cliente retornaClienteResponsavelParcelamentoValido(Integer idImovel) throws ErroRepositorioException, ControladorException {
