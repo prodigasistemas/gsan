@@ -167,6 +167,36 @@ function disableAll(){
 	
 }
 
+function validarNIS(event) {
+	event.preventDefault();
+	var numeroNis = event.target.value;
+	var arrayNis = numeroNis.split("");
+	var peso1 = 3;
+	var peso2 = 9;
+	var soma = 0;
+	
+	for(var i = 0; i < 2; i++){
+		soma += peso1 * arrayNis[i];
+		peso1--;
+	}
+	
+	for(var i = 2; i < 10; i++){
+		soma += peso2 * arrayNis[i]
+		peso2--;
+	}
+	
+	var resultado = 11 - (soma % 11);
+	
+	if(resultado == 10 || resultado == 11) {
+		resultado = 0;
+	}
+	
+	if(!(resultado == arrayNis[10])) {
+		alert("Número NIS Inválido. Por Favor, verificar os dígitos.")
+	}
+		
+}
+
 
 -->
 </script>
@@ -378,7 +408,7 @@ function disableAll(){
 				<tr>
 					<td><strong>Número do NIS:</strong></td>
 					<td><html:text maxlength="11" property="numeroNIS" size="11" tabindex="10" style="text-transform: none;" 
-					onkeypress="return isCampoNumerico(event);" /></td>
+					onkeypress="return isCampoNumerico(event);" onblur="validarNIS(event)"/></td>
 				</tr>
 				
 				<logic:equal name="temPermissaoVisualizarDiaVencimentoContaCliente"
