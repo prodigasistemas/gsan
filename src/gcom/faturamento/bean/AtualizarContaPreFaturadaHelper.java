@@ -65,6 +65,7 @@ public class AtualizarContaPreFaturadaHelper {
 	private static final int REGISTRO_TIPO_2_CONSUMO_FATURADO_ESGOTO = 6;
 	private static final int REGISTRO_TIPO_2_VALOR_TARIFA_MINIMA_ESGOTO = 16;
 	private static final int REGISTRO_TIPO_2_CONSUMO_MINIMO_ESGOTO = 6;
+	private static final int REGISTRO_TIPO_2_SUBSIDIO_AGUA_PARA = 9;
 
 	// Constantes do registro tipo 3
 	private static final int REGISTRO_TIPO_3_CODIGO_CATEGORIA = 1;
@@ -136,6 +137,7 @@ public class AtualizarContaPreFaturadaHelper {
 	private String consumoFaturadoEsgoto;
 	private String valorTarifaMinimaEsgoto;
 	private String consumoMinimoEsgoto;
+	private String subsidio;
 
 	// Tipo de registro 3
 	private String consumoFaturadoAguaFaixa;
@@ -491,6 +493,11 @@ public class AtualizarContaPreFaturadaHelper {
 		retorno.consumoMinimoEsgoto = linha.substring(index, index
 				+ REGISTRO_TIPO_2_CONSUMO_MINIMO_ESGOTO);
 		index += REGISTRO_TIPO_2_CONSUMO_MINIMO_ESGOTO;
+		
+		// Consumo Minimo de esgoto
+		retorno.subsidio = linha.substring(index + 2, index
+				+ REGISTRO_TIPO_2_SUBSIDIO_AGUA_PARA);
+		index += REGISTRO_TIPO_2_SUBSIDIO_AGUA_PARA;
 
 		return retorno;
 	}
@@ -917,6 +924,10 @@ public class AtualizarContaPreFaturadaHelper {
 
 	public BigDecimal getValorRateioEsgoto() {
 		return verificarBigDecimal(valorRateioEsgoto);
+	}
+	
+	public Integer getSubsidio() {
+		return Integer.valueOf(subsidio);
 	}
 
 	/**

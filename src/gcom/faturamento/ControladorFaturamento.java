@@ -392,7 +392,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				if (helper.getMovimentoContaPrefaturadaCategorias() != null
 						&& helper.getMovimentoContaPrefaturadaCategorias().size() > 0) {
-								/**
+					/**
 					 * Alteracao para quando a conta nï¿½o tiver sido emitida pelo IS, nï¿½o altera
 					 * nenhuma informaï¿½ï¿½o da conta, continua PRE FATURADA
 					 */
@@ -539,7 +539,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							consumoEsgoto += helperCategoria.getConsumoFaturadoEsgoto();
 						}
 
-//                      metodo comentado pois estava gerando as diferenças entre conta e conta categoria
+//                      metodo comentado pois estava gerando as diferenï¿½as entre conta e conta categoria
 //						BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(
 //								helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
 //
