@@ -14518,9 +14518,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			Collection<ValorAFaturarHelper> valorAFaturarHelpers = ValorAFaturarHelper.getListaValoresAFaturarHelper(
 					repositorioFaturamento.pesquisarDadosRelatorioReceitasAFaturarValorAFaturar(idGrupo, anoMes));
-
+			System.out.println("Fechamento - grupo: " +  idGrupo);
 			for (ValorAFaturarHelper valorAFaturarHelper : valorAFaturarHelpers) {
 
+				System.out.println(idGrupo + " Fechamento - data prevista: " +  dataLeituraPrevistaHelper.getDataPrevista());
+				System.out.println(idGrupo + " Fechamento - data anterior: " +  dataLeituraAnteriorHelper.getDataAnterior());
 				RelatorioReceitasAFaturarHelper helper = new RelatorioReceitasAFaturarHelper();
 				helper.setIdGrupo(idGrupo);
 				helper.setDataLeituraAtual(dataLeituraPrevistaHelper.getDataPrevista());
@@ -14528,12 +14530,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				helper.setValorAgua(valorAFaturarHelper.getValorAgua());
 				helper.setValorEsgoto(valorAFaturarHelper.getValorEsgoto());
 				helper.setCategoria(valorAFaturarHelper.getCategoria());
-
+				System.out.println(idGrupo + " Fechamento - gerar? " +  helper.gerar());
 				if (helper.gerar()) {
 					Integer diferencaDias = Util.obterQuantidadeDiasEntreDuasDatasPositivo(helper.getDataLeituraAtual(),
 							helper.getDataLeituraAnterior());
 					helper.setDiferencaDias(diferencaDias);
-
 					int mes = Integer.parseInt(anoMes.toString().substring(4));
 					int ano = Integer.parseInt(anoMes.toString().substring(0, 4));
 					Date ultimoDiaMes = Util.obterUltimaDataMes(mes, ano);
@@ -14542,6 +14543,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					helper.setDiasNaoFaturados(diasNaoFaturados);
 
 					BigDecimal bdDiferencaDias = new BigDecimal(diferencaDias);
+					System.out.println(idGrupo + " Fechamento - diferenca dias: " +  diferencaDias);
+					System.out.println(idGrupo + " Fechamento - bdDiferencaDias: " +  bdDiferencaDias);
+					System.out.println(idGrupo + " Fechamento - valor agua: " +  helper.getValorAgua());
+
 					BigDecimal valorDiarioAgua = helper.getValorAgua().divide(bdDiferencaDias, 7, RoundingMode.HALF_UP);
 					BigDecimal valorDiarioEsgoto = helper.getValorEsgoto().divide(bdDiferencaDias, 7,
 							RoundingMode.HALF_UP);
