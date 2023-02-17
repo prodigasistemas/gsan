@@ -3265,7 +3265,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		boolean retorno = true;
 		boolean primeiraCondicaoNaoGerarConta = false;
 		boolean segundaCondicaoNaoGerarConta = false;
-
+		if(imovel.getId().equals(8316880)) {
+			System.out.println("Condominio teste");
+		}
 		/*
 		 * Alteração para gerar a rota com imóveis ativos ou inativos com
 		 * débitos
