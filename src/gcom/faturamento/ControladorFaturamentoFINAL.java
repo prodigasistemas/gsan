@@ -1792,9 +1792,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			atualizarCreditosARealizar(creditoARealizar);
 			if (creditoRealizado != null && atualizarMovimentoCelular) {
 				creditoRealizado.setValorCredito(valorAgua.add(valorEsgoto));
+				}
 				creditoRealizado.setNumeroPrestacaoCredito(ConstantesSistema.SIM);
 				atualizarCreditosRealizados(creditoRealizado);
-			}
 		} catch (ControladorException e) {
 			throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
 		}
