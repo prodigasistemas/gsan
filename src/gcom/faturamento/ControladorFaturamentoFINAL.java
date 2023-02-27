@@ -1649,7 +1649,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	
 	public void atualizarValorContaCategoriaBolsaAguaMovimentoCelular(ContaCategoria contaCategoria, Conta conta)
 			throws ControladorException {
-		if (getControladorImovel().isImovelBolsaAgua(conta.getImovel().getId())) {
+		if (getControladorImovel().isContaBolsaAgua(conta.getId())) {
 			if (contaCategoria.getCategoria().isResidencial()) {
 				BigDecimal valorCredito = new BigDecimal("0");
 				BigDecimal valorCreditoAtualizado = new BigDecimal("0");
@@ -1700,7 +1700,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public void atualizarValorContaCategoriaBolsaAgua(Collection<ContaCategoria> contaCategoriaColecao, Conta conta,
 			GerarCreditoRealizadoHelper creditoRealizadoHelper)
 			throws ControladorException {
-		if (getControladorImovel().isImovelBolsaAgua(conta.getImovel().getId()) && creditoRealizadoHelper != null 
+		if (getControladorImovel().isContaBolsaAgua(conta.getId()) && creditoRealizadoHelper != null 
 				&& creditoRealizadoHelper.getMapCreditoRealizado() != null) {
 		BigDecimal valorCreditoAtualizado = new BigDecimal("0");
 		BigDecimal valorCredito = new BigDecimal("0");

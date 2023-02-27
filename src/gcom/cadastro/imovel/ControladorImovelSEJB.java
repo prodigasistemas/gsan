@@ -16595,6 +16595,16 @@ public class ControladorImovelSEJB extends ControladorComum {
 		}
 	}
 	
+	public boolean isContaBolsaAgua(Integer idConta) throws ControladorException {
+		try {
+			Conta conta = repositorioImovel.consultarContaBolsaAgua(idConta);
+			
+			return conta != null;
+		} catch (ErroRepositorioException e) {
+		    throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
 	public List<Integer> pesquisarImovelBolsaAguaPorRota(Integer idRota) throws ControladorException{
 		try {
 			return repositorioImovel.pesquisarImovelBolsaAguaPorRota(idRota);

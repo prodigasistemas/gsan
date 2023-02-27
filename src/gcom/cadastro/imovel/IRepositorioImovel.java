@@ -30,6 +30,7 @@ import gcom.cobranca.bean.EmitirDocumentoCobrancaBoletimCadastroHelper;
 import gcom.cobranca.bean.SituacaoEspecialCobrancaHelper;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.bean.SituacaoEspecialFaturamentoHelper;
+import gcom.faturamento.conta.Conta;
 import gcom.gui.faturamento.bean.FiltrarImovelInserirManterContaHelper;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.medicao.MedicaoHistorico;
@@ -756,5 +757,7 @@ public interface IRepositorioImovel {
 	public List<Integer> pesquisarImovelElegivelBolsaAguaPorRota(Integer idRota) throws ErroRepositorioException;
 	
 	public void atualizarPerfilImovel(Integer idImovel, Integer idPerfil) throws ErroRepositorioException;
+	
+	public Conta consultarContaBolsaAgua(Integer idConta) throws ErroRepositorioException;
 	
 }

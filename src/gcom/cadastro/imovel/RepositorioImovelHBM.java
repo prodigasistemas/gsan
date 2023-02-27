@@ -64,6 +64,7 @@ import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.bean.SituacaoEspecialFaturamentoHelper;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
+import gcom.faturamento.conta.Conta;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.gui.faturamento.bean.FiltrarImovelInserirManterContaHelper;
 import gcom.micromedicao.MovimentoRoteiroEmpresa;
@@ -29644,6 +29645,28 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 	}
 	
+	public Conta consultarContaBolsaAgua(Integer idConta) throws ErroRepositorioException {
+
+		StringBuilder consulta = new StringBuilder();
+
+		Session session = HibernateUtil.getSession();
+
+		try {
+			consulta.append(" select conta from Conta conta ")
+									
+					.append(" where conta.imovelPerfil.id = :perfilBolsaAgua  ")
+					.append(" and conta.id = :idConta ");
+
+			return (Conta) session.createQuery(consulta.toString())
+						.setInteger("perfilBolsaAgua",ImovelPerfil.BOLSA_AGUA)
+						.setInteger("idConta",idConta).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 	
 	@SuppressWarnings("rawtypes")
 	public List<Integer> pesquisarImovelBolsaAguaPorRota(Integer idRota) throws ErroRepositorioException {
