@@ -3278,10 +3278,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				|| (valorTotalAgua.compareTo(ConstantesSistema.VALOR_ZERO) != 0
 						&& valorTotalEsgoto.compareTo(ConstantesSistema.VALOR_ZERO) != 0
 						&& !imovel.getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.LIGADO)
-						&& !imovel.getLigacaoEsgotoSituacao().getId().equals(LigacaoEsgotoSituacao.LIGADO) && (isPreFaturamento && imovel
-						.getImovelCondominio() == null))) {
-			System.out.println(imovel.getId() + " N�O GEROU CONTA : primeiraCondicaoNaoGerarConta");
-			primeiraCondicaoNaoGerarConta = true;
+						&& !imovel.getLigacaoEsgotoSituacao().getId().equals(LigacaoEsgotoSituacao.LIGADO) 
+						&& (isPreFaturamento && imovel.getImovelCondominio() == null))) {
+			
+			if (!imovel.isImovelCondominio()) {
+				System.out.println(imovel.getId() + " N�O GEROU CONTA : primeiraCondicaoNaoGerarConta");
+				primeiraCondicaoNaoGerarConta = true;
+			}
 		}
 
 		Collection colecaoDebitosACobrar = null;
@@ -3425,6 +3428,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		return retorno;
+	}
+	
+	private boolean gerarContaMicro(Imovel imovel) {
+		return (imovel.getImovelCondominio() != null);
 	}
 
 	/**
@@ -52679,7 +52686,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		if (imovel.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao()
 				.equals(LigacaoAguaSituacao.FATURAMENTO_ATIVO)
 				|| imovel.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao()
-						.equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO) || temHidrometro) {
+						.equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO) 
+				|| temHidrometro
+				|| imovel.isImovelCondominio()) {
 
 			// Verificar se é para faturar pela situação especial de
 			// faturamento
