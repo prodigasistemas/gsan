@@ -12,6 +12,7 @@ public class Processo extends ObjetoGcom {
 	private static final long serialVersionUID = 1L;
 
 	public static final int FATURAR_GRUPO_FATURAMENTO = 2;
+	public static final int GERAR_DADOS_LEITURA = 3;
 	public static final int GERAR_RELATORIO_MANTER_BAIRRO = 4;
 	public static final int GERAR_RELATORIO_MANTER_SETOR_COMERCIAL = 7;
 	public static final int GERAR_RELATORIO_MANTER_LOCALIDADE = 8;

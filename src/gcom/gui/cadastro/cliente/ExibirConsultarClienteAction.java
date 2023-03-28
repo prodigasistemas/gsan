@@ -126,15 +126,12 @@ public class ExibirConsultarClienteAction extends GcomAction {
                 consultarClienteActionForm.setEmail(cliente.getEmail());
                 
 				// NumeroNIS
-				if (cliente.getNumeroNIS() != null) {
-					if (!getFachada().verificarPermissaoConsultarCpfNis(usuarioLogado)) {
+				if (!getFachada().verificarPermissaoConsultarCpfNis(usuarioLogado)) {
 						consultarClienteActionForm.setClienteNumeroNIS("XXXXXXXXXXX");
-					} else {
-						consultarClienteActionForm.setClienteNumeroNIS(cliente.getNumeroNIS());
-					}
 				} else {
-					consultarClienteActionForm.setClienteNumeroNIS(cliente.getNumeroNIS());
+						consultarClienteActionForm.setClienteNumeroNIS(cliente.getNumeroNIS());
 				}
+
 				
 				// Recusa do subsidio
 				if (cliente.getIndicadorRecusaSubsidio() != null) {
@@ -154,15 +151,12 @@ public class ExibirConsultarClienteAction extends GcomAction {
                 		httpServletRequest.setAttribute("indicadorTipoCliente",ClienteTipo.INDICADOR_PESSOA_FISICA.shortValue());
                 		
 						// cpf
-						if (cliente.getNumeroNIS() != null) {
-							if (!getFachada().verificarPermissaoConsultarCpfNis(usuarioLogado)) {
+						if (!getFachada().verificarPermissaoConsultarCpfNis(usuarioLogado)) {
 								consultarClienteActionForm.setCpfCliente("XXX.XXX.XXX-XX");
-							} else {
-								consultarClienteActionForm.setCpfCliente((cliente.getCpfFormatado()));
-							}
 						} else {
-							consultarClienteActionForm.setCpfCliente((cliente.getCpfFormatado()));
+								consultarClienteActionForm.setCpfCliente((cliente.getCpfFormatado()));
 						}
+
                 		
                 		//rg
                 		if(cliente.getOrgaoExpedidorRg() != null && cliente.getOrgaoExpedidorRg().getDescricaoAbreviada() != null && cliente.getUnidadeFederacao() != null && cliente.getUnidadeFederacao().getSigla()!= null){
