@@ -51,8 +51,12 @@ import gcom.atendimentopublico.registroatendimento.FiltroSolicitacaoTipoEspecifi
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.batch.FiltroFuncionalidadeIniciada;
+import gcom.batch.FiltroProcessoIniciado;
 import gcom.batch.FuncionalidadeIniciada;
 import gcom.batch.FuncionalidadeSituacao;
+import gcom.batch.Processo;
+import gcom.batch.ProcessoIniciado;
+import gcom.batch.ProcessoSituacao;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.cliente.Cliente;
@@ -39954,11 +39958,27 @@ public class ControladorMicromedicao extends ControladorComum {
 	
 	public boolean isImovelEmCampo(Integer idImovel) throws Exception {
 		Rota rota = this.buscarRotaDoImovel(idImovel);
-
-		FaturamentoAtividadeCronograma faturamentoAtividadeCronograma = getControladorBatch().pesquisarProcessoIniciadoParaGrupo(rota.getFaturamentoGrupo().getId(), 
-				rota.getFaturamentoGrupo().getAnoMesReferencia(), FaturamentoAtividade.GERAR_ARQUIVO_LEITURA);
-
-		return (rota.isRotaImpressaoSimultanea() && faturamentoAtividadeCronograma != null && faturamentoAtividadeCronograma.getDataRealizacao() != null);
+		
+		FiltroProcessoIniciado filtro = new FiltroProcessoIniciado();
+		filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.CODIGO_GRUPO, rota.getFaturamentoGrupo().getId()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.ID_PROCESSO, Processo.GERAR_DADOS_LEITURA));
+		filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.PROCESSO_SITUACAO_ID, ProcessoSituacao.EM_PROCESSAMENTO));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("processo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("usuario");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("processoSituacao");
+		Collection colecao = this.getControladorUtil()
+				.pesquisar(filtro, ProcessoIniciado.class.getName());
+		
+		if(colecao.isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}
+		
+//		FaturamentoAtividadeCronograma faturamentoAtividadeCronograma = getControladorBatch().pesquisarProcessoIniciadoParaGrupo(rota.getFaturamentoGrupo().getId(), 
+//				rota.getFaturamentoGrupo().getAnoMesReferencia(), FaturamentoAtividade.GERAR_ARQUIVO_LEITURA);
+//		
+//		return (rota.isRotaImpressaoSimultanea() && faturamentoAtividadeCronograma != null && faturamentoAtividadeCronograma.getDataRealizacao() != null);
 	}
 	
 	/**

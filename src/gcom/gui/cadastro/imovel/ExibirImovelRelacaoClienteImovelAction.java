@@ -222,6 +222,7 @@ public class ExibirImovelRelacaoClienteImovelAction extends GcomAction {
 		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
 		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("clienteRelacaoTipo");
 		filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("clienteImovelFimRelacaoMotivo");
+		filtroClienteImovel.setCampoOrderBy("clienteRelacaoTipo", "dataInicioRelacao");
 
 		if (form.getIdClienteRelacaoTipo() != null && !"".equals(form.getIdClienteRelacaoTipo())) {
 			filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_RELACAO_TIPO, form.getIdClienteRelacaoTipo()));
@@ -250,6 +251,8 @@ public class ExibirImovelRelacaoClienteImovelAction extends GcomAction {
 			diFim.set(Calendar.HOUR, 0);
 			diFim.set(Calendar.MINUTE, 0);
 			diFim.set(Calendar.SECOND, 0);
+			
+			
 			
 			filtroClienteImovel.adicionarParametro(new Intervalo(FiltroClienteImovel.DATA_INICIO_RELACAO, diInicio.getTime(), diFim.getTime()));
 		}
