@@ -374,7 +374,7 @@
 						<div align="right">
 						<logic:notPresent name="idCobrancaAcaoAtividadeCronograma" scope="request">
 							<input name="Button2" type="button"
-								class="bottonRightCol" value="Todos - Emitir Informativo de Cobrança"
+								class="bottonRightCol" value="Todos - Emitir Aviso de Debito"
 								onclick="window.location.href='<html:rewrite page="/gerarRelatorioComandoDocumentoCobrancaAction.do?tipoEndRelatorio=4&idCobrancaAcaoAtividadeComando=${param.idCobrancaAcaoAtividadeEventual}"/>'"/>
 						</logic:notPresent></div>
 						

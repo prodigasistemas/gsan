@@ -234,7 +234,8 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 		imovel.setLigacaoAguaSituacao(situacaoAgua);
 		imovel.setLigacaoEsgotoSituacao(situacaoEsgoto);
 		imovel.setUsuarioParaHistorico(usuario);
-
+		imovel.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.DISPONIVEL));
+		
 		if (imovel.isCoordenadasZeradas()) {
 			imovel.setCoordenadaX(coordenadaX);
 			imovel.setCoordenadaY(coordenadaY);
