@@ -39959,26 +39959,9 @@ public class ControladorMicromedicao extends ControladorComum {
 	public boolean isImovelEmCampo(Integer idImovel) throws Exception {
 		Rota rota = this.buscarRotaDoImovel(idImovel);
 		
-		FiltroProcessoIniciado filtro = new FiltroProcessoIniciado();
-		filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.CODIGO_GRUPO, rota.getFaturamentoGrupo().getId()));
-		filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.ID_PROCESSO, Processo.GERAR_DADOS_LEITURA));
-		filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.PROCESSO_SITUACAO_ID, ProcessoSituacao.EM_PROCESSAMENTO));
-		filtro.adicionarCaminhoParaCarregamentoEntidade("processo");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("usuario");
-		filtro.adicionarCaminhoParaCarregamentoEntidade("processoSituacao");
-		Collection colecao = this.getControladorUtil()
-				.pesquisar(filtro, ProcessoIniciado.class.getName());
+		boolean isProcessoIniciado = getControladorBatch().isProcessoFaturamentoIniciado(rota.getFaturamentoGrupo());
 		
-		if(colecao.isEmpty()) {
-			return false;
-		} else {
-			return true;
-		}
-		
-//		FaturamentoAtividadeCronograma faturamentoAtividadeCronograma = getControladorBatch().pesquisarProcessoIniciadoParaGrupo(rota.getFaturamentoGrupo().getId(), 
-//				rota.getFaturamentoGrupo().getAnoMesReferencia(), FaturamentoAtividade.GERAR_ARQUIVO_LEITURA);
-//		
-//		return (rota.isRotaImpressaoSimultanea() && faturamentoAtividadeCronograma != null && faturamentoAtividadeCronograma.getDataRealizacao() != null);
+		return (rota.isRotaImpressaoSimultanea() && isProcessoIniciado);
 	}
 	
 	/**

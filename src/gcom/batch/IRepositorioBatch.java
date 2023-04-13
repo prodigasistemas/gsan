@@ -6,6 +6,7 @@ import gcom.arrecadacao.pagamento.GuiaPagamentoCategoria;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.faturamento.FaturamentoAtividadeCronograma;
+import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
@@ -139,4 +140,6 @@ public interface IRepositorioBatch {
 	public Usuario obterUsuarioQueDisparouProcesso(Integer idFuncionalidadeIniciada) throws ErroRepositorioException;
 	
 	public Short pesquisarQuantidadeBatchPorUsuario(int idUsuario) throws ErroRepositorioException;
+	
+	public Integer qtdAtividadesIniciadasDoProcessoParaGrupo(FaturamentoGrupo grupo, Integer idProcesso) throws ErroRepositorioException;
 }
