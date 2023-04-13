@@ -7,6 +7,7 @@ import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cobranca.RelatorioPagamentosContasCobrancaEmpresaHelper;
 import gcom.faturamento.FaturamentoAtividadeCronograma;
+import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
@@ -173,4 +174,6 @@ public interface ControladorBatchLocal extends javax.ejb.EJBLocalObject {
 	public boolean isProcessoEmEspera(Integer idProcesso) throws ControladorException;
 	
 	public void validarInclusaoProcessosNegativacao(Integer idFuncionalidade) throws ControladorException;
+	
+	public boolean isProcessoFaturamentoIniciado(FaturamentoGrupo grupo) throws ControladorException;
 }

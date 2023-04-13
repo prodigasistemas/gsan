@@ -1,12 +1,29 @@
 package gcom.batch;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.StatelessSession;
+
 import gcom.arrecadacao.Devolucao;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamentoCategoria;
-import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.faturamento.FaturamentoAtividadeCronograma;
+import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
@@ -24,23 +41,6 @@ import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 import gcom.util.Util;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.StatelessSession;
 
 public class RepositorioBatchHBM implements IRepositorioBatch {
 
@@ -2118,6 +2118,36 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 			
 		} catch (Exception e) {
 			throw new ErroRepositorioException(e, "Erro ao consultar quantidade de processo por situacao");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public Integer qtdAtividadesIniciadasDoProcessoParaGrupo(FaturamentoGrupo grupo, Integer idProcesso) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+		
+		Integer retorno = null;
+
+		try {
+			consulta.append(" select count(processo.id) from FaturamentoAtividadeCronograma faturamentoAtividadeCronograma ");
+			consulta.append(" inner join faturamentoAtividadeCronograma.faturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal ");
+			consulta.append(" inner join faturamentoAtividadeCronograma.faturamentoAtividade faturamentoAtividade ");
+			consulta.append(" inner join faturamentoAtividade.processo processo ");
+			consulta.append(" where faturamentoGrupoCronogramaMensal.faturamentoGrupo.id = :idGrupo ");
+			consulta.append(" and faturamentoGrupoCronogramaMensal.anoMesReferencia = :referencia ");
+			consulta.append(" and faturamentoAtividadeCronograma.dataRealizacao is not null ");
+			consulta.append(" and processo.id = :idProcesso ");
+			
+			retorno = (Integer)session.createQuery(consulta.toString())
+						.setInteger("idGrupo",grupo.getId())
+						.setInteger("referencia",grupo.getAnoMesReferencia())
+						.setInteger("idProcesso",idProcesso)
+						.uniqueResult();
+			
+			return retorno;
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}

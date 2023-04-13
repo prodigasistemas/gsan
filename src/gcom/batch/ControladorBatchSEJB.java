@@ -6375,4 +6375,17 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 			}
 		}
 	}
+	
+	public boolean isProcessoFaturamentoIniciado(FaturamentoGrupo grupo) throws ControladorException {
+		Integer qtdAtividades = obterQtdAtividadesIniciadasDoProcessoParaGrupo(grupo, Processo.GERAR_DADOS_LEITURA);
+		return qtdAtividades !=  null && qtdAtividades > 0;
+	}
+	
+	public Integer obterQtdAtividadesIniciadasDoProcessoParaGrupo(FaturamentoGrupo grupo, Integer idProcesso) throws ControladorException {
+		try {
+			return repositorioBatch.qtdAtividadesIniciadasDoProcessoParaGrupo(grupo, idProcesso);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("Erro ao obter usuario que disparou processo", e);
+		}
+	} 	
 }
