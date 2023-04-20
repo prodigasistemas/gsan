@@ -128,6 +128,9 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 
 	private ClienteRelacaoTipo clienteRelacaoTipo;
 	
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL })
+	private String numeroNIS;
+	
 	public ClienteAtualizacaoCadastral() {
 		clienteTipo = new ClienteTipo();
 		unidadeFederacao = new UnidadeFederacao();
@@ -629,5 +632,13 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 
 	public String getEnderecoCompleto() {
 		return null;
+	}
+
+	public String getNumeroNIS() {
+		return this.numeroNIS;
+	}
+
+	public void setNumeroNIS(String numeroNIS) {
+		this.numeroNIS = numeroNIS;
 	}
 }

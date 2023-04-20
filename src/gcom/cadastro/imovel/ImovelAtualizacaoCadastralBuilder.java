@@ -131,6 +131,7 @@ public class ImovelAtualizacaoCadastralBuilder {
 			imovelAtualizacaoCadastral.setIdMarcaHidrometro(Util.setValorInteiro(imovel.getLinhaMedidor("marcaHidrometro")));
 			imovelAtualizacaoCadastral.setIdCapacidadeHidrometro(Util.setValorInteiro(imovel.getLinhaMedidor("capacidadeHidrometro")));
 			imovelAtualizacaoCadastral.setIdProtecaoHidrometro(Util.setValorInteiro(imovel.getLinhaMedidor("tipoCaixaProtecaoHidrometro")));
+			imovelAtualizacaoCadastral.setLeituraHidrometro(imovel.getLinhaMedidor("leituraHidrometro"));
 		}
 
 		// Linha 6

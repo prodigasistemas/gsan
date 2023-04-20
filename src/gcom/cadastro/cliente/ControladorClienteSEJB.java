@@ -2254,6 +2254,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 				if (element[23] != null) {
 					cliente.setComplementoEndereco(trunk);
 				}
+				
+				if(element[26] != null) {
+					cliente.setNumeroNIS((String) element[26]);
+				}
 
 				cliente.setIdClienteRelacaoTipo(new Integer(idClienteRelacaoTipo));
 			}

@@ -16,7 +16,7 @@ public class ValidadorTamanhoLinhaAnormalidadeCommand extends ValidadorCommand {
 	@Override
 	public void execute() {
 		int tamanho = parser.getFonte().length();
-		if (tamanho != 358 && tamanho != 369) {
+		if (tamanho != 458 && tamanho != 469) {
 			cadastroImovel.addMensagemErroLayout("Linha Tipo 06 (Anormalidade) não compatível com o Layout");
 		}
 	}

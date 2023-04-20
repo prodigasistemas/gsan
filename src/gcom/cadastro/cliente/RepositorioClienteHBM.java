@@ -1158,8 +1158,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 					+ // 23
 					" ratv_id as idRamoAtividade, "
 					+ // 24
-					" cltp.cltp_icpessoafisicajuridica as indicadorPessoaFisicaJuridica"
+					" cltp.cltp_icpessoafisicajuridica as indicadorPessoaFisicaJuridica, "
 					+ // 25
+					" cliente.clie_nnnis as numeroNIS "
+					+ // 26
 					" from cadastro.cliente_imovel clienteImovel" + " inner join cadastro.cliente cliente on cliente.clie_id = clienteImovel.clie_id"
 					+ " inner join cadastro.cliente_tipo cltp on cliente.cltp_id = cltp.cltp_id"
 					+ " left join cadastro.cliente_endereco clienteEndereco on(clienteEndereco.clie_id = cliente.clie_id)"
@@ -1181,7 +1183,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 					.addScalar("bairroLogradouro", Hibernate.INTEGER).addScalar("codigoCep", Hibernate.INTEGER).addScalar("idBairro", Hibernate.INTEGER)
 					.addScalar("descricaoBairro", Hibernate.STRING).addScalar("idEnderecoReferencia", Hibernate.INTEGER).addScalar("numero", Hibernate.STRING)
 					.addScalar("complemento", Hibernate.STRING).addScalar("idRamoAtividade", Hibernate.INTEGER)
-					.addScalar("indicadorPessoaFisicaJuridica", Hibernate.SHORT).setInteger("idImovel", idImovel)
+					.addScalar("indicadorPessoaFisicaJuridica", Hibernate.SHORT).addScalar("numeroNIS", Hibernate.STRING).setInteger("idImovel", idImovel)
 					.setInteger("idClienteRelacaoTipo", idClienteRelacaoTipo).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {

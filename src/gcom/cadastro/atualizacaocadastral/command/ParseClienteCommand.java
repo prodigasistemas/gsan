@@ -105,6 +105,9 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 								
 			String emailUsuario = parser.obterDadoParser(30).trim();
 			linha.put("emailUsuario", emailUsuario);
+			
+			String numeroNisUsuario = parser.obterDadoParser(11).trim();
+			linha.put("numeroNisUsuario", numeroNisUsuario);
 
 			int matriculaProprietario = 0;
 			try {
@@ -173,6 +176,9 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 			String municipioProprietario = parser.obterDadoParser(15).trim();
 			linha.put("municipioProprietario", municipioProprietario);
+			
+			String numeroNisProprietario = parser.obterDadoParser(11).trim();
+			linha.put("numeroNisProprietario", numeroNisProprietario);
 
 			int matriculaResponsavel = 0;
 			try {
@@ -240,6 +246,9 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 			String municipioResponsavel = parser.obterDadoParser(15).trim();
 			linha.put("municipioResponsavel", municipioResponsavel);
+			
+			String numeroNisResponsavel = parser.obterDadoParser(11).trim();
+			linha.put("numeroNisResponsavel", numeroNisResponsavel);
 
 			String latitude = parser.obterDadoParser(20).trim();
 			linha.put("latitude", latitude);
