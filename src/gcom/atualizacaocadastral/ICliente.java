@@ -56,4 +56,8 @@ public interface ICliente {
 	
 	public abstract void setTipoOperacao(Integer tipoOperacao);
 	
+	public String getNumeroNIS();
+	
+	public void setNumeroNIS(String numeroNIS);
+	
 }

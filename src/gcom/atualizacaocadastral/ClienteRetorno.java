@@ -34,6 +34,7 @@ public class ClienteRetorno implements ICliente {
 	private Set<ClienteFone> clienteFones;
     private Set<ClienteImovel> clienteImoveis;
     private Set<ClienteEndereco> clienteEnderecos;
+	private String numeroNIS;
 	
 	public ClienteRetorno() {
 		
@@ -195,5 +196,13 @@ public class ClienteRetorno implements ICliente {
 
 	public void setIndicadorTransmissaoCpfCnpj(Short indicadorTransmissaoCpfCnpj) {
 		this.indicadorTransmissaoCpfCnpj = indicadorTransmissaoCpfCnpj;
+	}
+
+	public String getNumeroNIS() {
+		return this.numeroNIS;
+	}
+
+	public void setNumeroNIS(String numeroNIS) {
+		this.numeroNIS = numeroNIS;
 	}
 }

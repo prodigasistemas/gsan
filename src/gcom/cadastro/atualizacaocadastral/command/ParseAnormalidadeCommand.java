@@ -52,7 +52,7 @@ public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralComman
 			String codigoAnormalidade = parser.obterDadoParser(3).trim();
 			linha.put("codigoAnormalidade", codigoAnormalidade);
 
-			String comentario = parser.obterDadoParser(200).trim();
+			String comentario = parser.obterDadoParser(300).trim();
 			linha.put("comentario", comentario);
 
 			String pathFoto1 = parser.obterDadoParser(30).trim();

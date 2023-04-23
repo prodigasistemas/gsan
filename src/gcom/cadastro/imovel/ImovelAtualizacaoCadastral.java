@@ -241,7 +241,9 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer individualizacao;
-		
+	
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private String leituraHidrometro = "";
     
 	public ImovelAtualizacaoCadastral(Integer id, 
 			Integer idImovel,
@@ -1335,5 +1337,13 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	public void setImovelControleAtualizacaoCadastral(
 			ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral) {
 		this.imovelControleAtualizacaoCadastral = imovelControleAtualizacaoCadastral;
+	}
+	
+	public String getLeituraHidrometro() {
+		return leituraHidrometro;
+	}
+	
+	public void setLeituraHidrometro(String leituraHidrometro) {
+		this.leituraHidrometro = leituraHidrometro;
 	}
 }

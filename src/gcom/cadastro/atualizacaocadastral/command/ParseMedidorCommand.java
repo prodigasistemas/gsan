@@ -72,6 +72,9 @@ public class ParseMedidorCommand extends AbstractAtualizacaoCadastralCommand {
 
 				String dataServico = parser.obterDadoParser(26).trim();
 				linha.put("dataServico", dataServico);
+				
+				String leituraHidrometro = parser.obterDadoParser(10).trim();
+				linha.put("leituraHidrometro", leituraHidrometro);
 			} else {
 				indicadorImovelPossuiMedidor = ConstantesSistema.NAO;
 				parser.obterDadoParser(16).trim();

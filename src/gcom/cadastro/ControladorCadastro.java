@@ -7914,8 +7914,16 @@ public class ControladorCadastro extends ControladorComum {
 
 			// E-mail usuario
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getEmail(), 30));
+            
+            //Numero NIS
+            if(clienteUsuario.getNumeroNIS() != null) {
+            	arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteUsuario.getNumeroNIS(), 11));
+            } else {
+            	arquivoTextoRegistroTipoCliente.append(Util.completaString("", 11));
+            }
+            	
 		} else {
-			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 142));
+			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 153));
 		}
 
 		// Dados Cliente Proprietario
@@ -8011,8 +8019,15 @@ public class ControladorCadastro extends ControladorComum {
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNomeBairro() != null ? clienteProprietario.getNomeBairro() : "", 20));
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getCodigoCep() != null ? clienteProprietario.getCodigoCep().toString() : "", 8));
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNomeMunicipio() != null ? clienteProprietario.getNomeMunicipio() : "", 15));
+            
+            if(clienteUsuario.getNumeroNIS() != null) {
+            	arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteProprietario.getNumeroNIS(), 11));
+            } else {
+            	arquivoTextoRegistroTipoCliente.append(Util.completaString("", 11));
+            }
+            
         } else {
-			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 257));
+			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 268));
 		}
 
 		// Dados Cliente Responsavel
@@ -8101,8 +8116,15 @@ public class ControladorCadastro extends ControladorComum {
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNomeBairro() != null ? clienteResponsavel.getNomeBairro() : "", 20));
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getCodigoCep() != null ? clienteResponsavel.getCodigoCep().toString() : "", 8));
             arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNomeMunicipio() != null ? clienteResponsavel.getNomeMunicipio() : "", 15));
+            
+            if(clienteUsuario.getNumeroNIS() != null) {
+            	arquivoTextoRegistroTipoCliente.append(Util.completaString(clienteResponsavel.getNumeroNIS(), 11));
+            } else {
+            	arquivoTextoRegistroTipoCliente.append(Util.completaString("", 11));
+            }
+            
         } else {
-			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 257));
+			arquivoTextoRegistroTipoCliente.append(Util.completaString("", 268));
 		}
 
 		arquivoTextoRegistroTipoCliente.append(System.getProperty("line.separator"));

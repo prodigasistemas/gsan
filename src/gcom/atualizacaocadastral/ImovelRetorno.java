@@ -89,6 +89,8 @@ public class ImovelRetorno implements IImovel{
 	private Integer quantidadeNosAltos;
 	
 	private Integer individualizacao;
+	
+	private String leituraHidrometro;
 
 	public ImovelRetorno () {
 	}
@@ -595,5 +597,12 @@ public class ImovelRetorno implements IImovel{
 		this.individualizacao = individualizacao;
 	}
 
+	public String getLeituraHidrometro() {
+		return leituraHidrometro;
+	}
+	
+	public void setLeituraHidrometro(String leituraHidrometro) {
+		this.leituraHidrometro = leituraHidrometro;
+	}
 	
 }

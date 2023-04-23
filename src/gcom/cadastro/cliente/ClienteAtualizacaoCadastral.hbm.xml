@@ -49,5 +49,6 @@
 		<property name="dsAbreviadaOrgaoExpedidorRg" type="java.lang.String" column="clac_dsabreviadaoerg" length="6"/>
 		<property name="dsUFSiglaOrgaoExpedidorRg" type="java.lang.String" column="clac_dsufsiglaoerg" length="2"/>
 		<property name="idRamoAtividade" type="java.lang.Integer" column="ratv_id" length="4"/>
+		<property name="numeroNIS" type="java.lang.String" column="clac_nnnis" length="11"/>
 	</class>
 </hibernate-mapping>
