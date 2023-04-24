@@ -2676,8 +2676,7 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Integer inserirProcessoIniciadoFaturamentoComandado(Collection<Integer> idsFaturamentoAtividadeCronograma, Usuario usuario)
-			throws ControladorException {
-
+			throws ControladorException {		
 		Integer codigoProcessoIniciadoGerado = null;
 		try {
 
@@ -2707,7 +2706,7 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 								FaturamentoAtividadeCronograma.class.getName()));
 
 				Processo processo = faturamentoAtividadeCronograma.getFaturamentoAtividade().getProcesso();
-				FaturamentoGrupo faturamentoGrupo = faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal().getFaturamentoGrupo();
+				FaturamentoGrupo faturamentoGrupo = faturamentoAtividadeCronograma.getFaturamentoGrupoCronogramaMensal().getFaturamentoGrupo();				
 
 				if (processo.getId().intValue() == Processo.FATURAR_GRUPO_FATURAMENTO) {
 					Collection<Rota> colecaoRota = this.repositorioMicromedicao.pesquisaRotasNaoTransmitidas(faturamentoGrupo.getAnoMesReferencia(),
@@ -2742,17 +2741,17 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 				processoIniciado.setDataHoraAgendamento(new Date());
 				processoIniciado.setDataHoraInicio(new Date());
 				processoIniciado.setDataHoraComando(faturamentoAtividadeCronograma.getComando());
-
+				
 				codigoProcessoIniciadoGerado = (Integer) getControladorUtil().inserir(processoIniciado);
-
+				
 				FiltroProcessoFuncionalidade filtroProcessoFuncionalidade = new FiltroProcessoFuncionalidade();
 				filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.ID_PROCESSO, processoIniciado.getProcesso()
 						.getId()));
 				filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.INDICADOR_USO,
 						ConstantesSistema.INDICADOR_USO_ATIVO));
 
-				Collection processosFuncionaliadade = getControladorUtil().pesquisar(filtroProcessoFuncionalidade, ProcessoFuncionalidade.class.getName());
-
+				Collection processosFuncionaliadade = getControladorUtil().pesquisar(filtroProcessoFuncionalidade, ProcessoFuncionalidade.class.getName());		
+				
 				Iterator iterator = processosFuncionaliadade.iterator();
 				while (iterator.hasNext()) {
 
@@ -2795,7 +2794,6 @@ public class ControladorBatchSEJB extends ControladorComum implements SessionBea
 						break;
 						
 					case Funcionalidade.GERAR_DADOS_PARA_LEITURA:
-
 						TarefaBatchGerarDadosParaLeitura dadosParaLeitura = new TarefaBatchGerarDadosParaLeitura(processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 

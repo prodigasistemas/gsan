@@ -2688,4 +2688,6 @@ public interface IControladorMicromedicao {
 	public Collection<Integer> obterIdsRotasPelaLocalidade(Integer idLocalidade) throws ControladorException;
 	
 	public ConsumoHistorico obterUltimoConsumoImovel(Imovel imovel, Integer idLigacaoTipo) throws ControladorException;
+	
+	public boolean isProcessoGerarDadosEmProcessamento (FaturamentoGrupo faturamentoGrupo) throws Exception;
 }

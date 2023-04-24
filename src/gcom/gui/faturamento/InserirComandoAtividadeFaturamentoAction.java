@@ -7,6 +7,7 @@ import gcom.faturamento.FiltroFaturamentoAtividade;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
@@ -28,7 +29,7 @@ public class InserirComandoAtividadeFaturamentoAction extends GcomAction {
 
     public ActionForward execute(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
+            HttpServletResponse httpServletResponse) throws ControladorException {
 
         //Seta o mapeamento de retorno
         ActionForward retorno = actionMapping.findForward("telaSucesso");
@@ -202,6 +203,22 @@ public class InserirComandoAtividadeFaturamentoAction extends GcomAction {
                 }
             }
         }
+        
+        if (faturamentoAtividade.getId().equals(FaturamentoAtividade.GERAR_ARQUIVO_LEITURA)) {
+			try {
+				boolean processoMesConcluido = fachada.isProcessoFaturamentoIniciado(faturamentoGrupo);
+				boolean processoEmExecucao = fachada.isProcessoGerarDadosEmProcessamento(faturamentoGrupo);
+
+				if (processoMesConcluido || processoEmExecucao) {
+					throw new ControladorException("atencao.gerar_dados_faturamento", null,
+							faturamentoGrupo.getId().toString());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();				
+				throw new ActionServletException("atencao.gerar_dados_faturamento", null,
+						faturamentoGrupo.getId().toString() + " " + "Referencia:" + Util.formatarAnoMesParaMesAno(faturamentoGrupo.getAnoMesReferencia().toString()));
+			}
+		}
 
         // O sistema inclui o comando
         Integer faturamentoAtividadeCronogramaId = fachada.inserirComandoAtividadeFaturamento(faturamentoGrupo,

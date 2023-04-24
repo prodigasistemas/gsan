@@ -39958,10 +39958,28 @@ public class ControladorMicromedicao extends ControladorComum {
 	
 	public boolean isImovelEmCampo(Integer idImovel) throws Exception {
 		Rota rota = this.buscarRotaDoImovel(idImovel);
-		
 		boolean isProcessoIniciado = getControladorBatch().isProcessoFaturamentoIniciado(rota.getFaturamentoGrupo());
+		boolean isProcessoEmExecucao = isProcessoGerarDadosEmProcessamento(rota.getFaturamentoGrupo());
 		
-		return (rota.isRotaImpressaoSimultanea() && isProcessoIniciado);
+		return (rota.isRotaImpressaoSimultanea() && (isProcessoIniciado || isProcessoEmExecucao));
+	}
+	
+	public boolean isProcessoGerarDadosEmProcessamento (FaturamentoGrupo faturamentoGrupo) throws Exception {
+		FiltroProcessoIniciado filtro = new FiltroProcessoIniciado();
+		filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.CODIGO_GRUPO, faturamentoGrupo.getId()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.ID_PROCESSO, Processo.GERAR_DADOS_LEITURA));
+		filtro.adicionarParametro(new ParametroSimples(FiltroProcessoIniciado.PROCESSO_SITUACAO_ID, ProcessoSituacao.EM_PROCESSAMENTO));
+		filtro.adicionarCaminhoParaCarregamentoEntidade("processo");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("usuario");
+		filtro.adicionarCaminhoParaCarregamentoEntidade("processoSituacao");
+		Collection colecao = this.getControladorUtil()
+				.pesquisar(filtro, ProcessoIniciado.class.getName());
+		
+		if(colecao.isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}	
 	}
 	
 	/**

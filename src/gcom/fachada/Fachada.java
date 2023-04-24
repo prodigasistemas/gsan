@@ -8945,6 +8945,24 @@ public class Fachada {
 		}
 
 	}
+	
+	public boolean isProcessoFaturamentoIniciado(FaturamentoGrupo faturamentoGrupo) {
+		try {
+			return this.getControladorBatch().isProcessoFaturamentoIniciado(faturamentoGrupo);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+
+	}
+	
+	public boolean isProcessoGerarDadosEmProcessamento(FaturamentoGrupo faturamentoGrupo) throws Exception {
+		try {
+			return this.getControladorMicromedicao().isProcessoGerarDadosEmProcessamento(faturamentoGrupo);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+
+	}
 
 	public void inserirProcessoIniciadoFaturamentoComandado(Collection<Integer> idsFaturamentoAtividadeCronograma, Usuario usuario) {
 		try {
