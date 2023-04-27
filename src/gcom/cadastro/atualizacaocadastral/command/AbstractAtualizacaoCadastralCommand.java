@@ -395,6 +395,6 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 			return arquivoTextoDoImovel;
 		}
 
-		return null;
+		return arquivoTexto;
 	}
 }
