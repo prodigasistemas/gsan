@@ -23550,40 +23550,40 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		String consulta;
 		try {
 			consulta = "select txre_amreferencia as referencia, " //0
-					+ "re.ftgr_id as grupo, "  //1
-					+ "emp.empr_nmempresa as empresa, " //2
-					+ "re.loca_id as idLocalidade, " //3
-					+ "loca_nmlocalidade as localidade, " //4
-					+ "(select count(*) from micromedicao.arquivo_texto_roteiro_empresa re1 " //5
-						+ "where sitl_id = :situacaoEmCampo and txre_amreferencia = :anoMesReferencia and re1.ftgr_id = re.ftgr_id "
-						+ "and re1.loca_id = re.loca_id) as qtdRotasEmCampo, "
-					+ "(select count(*) from micromedicao.arquivo_texto_roteiro_empresa re1 " //6
-						+ "where txre_amreferencia = :anoMesReferencia and re1.ftgr_id = re.ftgr_id "
-						+ "and re1.loca_id = re.loca_id and sitl_id = :situacaoTransmitido) as qtdRotasTransmitidas, "
-					+ "(select count(*) from micromedicao.arquivo_texto_roteiro_empresa re1 " //7
-						+ "where txre_amreferencia = :anoMesReferencia and re1.ftgr_id = re.ftgr_id "
-						+ "and re1.loca_id = re.loca_id and sitl_id = :situacaoFinalizadoPeloUsuario) as qtdRotasFinalizadasPeloUsuario, " 
-					+ "count(*) as qtdTotalLocal, " //8
-					+ "(Select sum(txre_qtimovel) from micromedicao.arquivo_texto_roteiro_empresa re1 " //9
-						+ "where txre_amreferencia = :anoMesReferencia and re1.ftgr_id = re.ftgr_id "
-						+ "and re1.loca_id = re.loca_id and sitl_id = :situacaoEmCampo) as qtdImoveisEmCampo, "
-					+ "(select count(distinct(mcp.imov_id)) from faturamento.mov_conta_prefaturada mcp, cadastro.imovel i " //10
-						+ "where mcp.imov_id = i.imov_id and mcpf_ammovimento = re.txre_amreferencia and mcp.ftgr_id = re.ftgr_id "
-						+ "and i.loca_id = re.loca_id and mcp.rota_id in "
-								+ "(select rota_id from micromedicao.arquivo_texto_roteiro_empresa re2 "
-								+ "where txre_amreferencia = :anoMesReferencia "
-								+ "and re2.ftgr_id = re.ftgr_id "
-								+ "and sitl_id = :situacaoEmCampo)) as qtdImoveisTransmitidosRotasParcial "
-					+ "from micromedicao.arquivo_texto_roteiro_empresa re, "
-						+ "micromedicao.situacao_transmissao_leitura stl, "
-						+ "cadastro.localidade l, cadastro.empresa emp "
-					+ "where re.sitl_id = stl.sitl_id "
-						+ "and re.loca_id = l.loca_id "
-						+ "and emp.empr_id = re.empr_id "
-						+ "and txre_amreferencia = :anoMesReferencia "
-						+ "and re.ftgr_id = :idFaturamentoGrupo "  
-						+ "group by 1,2,3,4,5 " 
-						+ "order by 1,2,3,4,5 ";
+						+ "re.ftgr_id as grupo, "  //1
+						+ "emp.empr_nmempresa as empresa, " //2
+						+ "re.loca_id as idLocalidade, " //3
+						+ "loca_nmlocalidade as localidade, " //4
+						+ "(select count(*) from micromedicao.arquivo_texto_rot_empr re1 " //5
+							+ "where sitl_id = :situacaoEmCampo and txre_amreferencia = :anoMesReferencia and re1.ftgr_id = re.ftgr_id "
+							+ "and re1.loca_id = re.loca_id) as qtdRotasEmCampo, "
+						+ "(select count(*) from micromedicao.arquivo_texto_rot_empr re1 " //6
+							+ "where txre_amreferencia = :anoMesReferencia and re1.ftgr_id = re.ftgr_id "
+							+ "and re1.loca_id = re.loca_id and sitl_id = :situacaoTransmitido) as qtdRotasTransmitidas, "
+						+ "(select count(*) from micromedicao.arquivo_texto_rot_empr re1 " //7
+							+ "where txre_amreferencia = :anoMesReferencia and re1.ftgr_id = re.ftgr_id "
+							+ "and re1.loca_id = re.loca_id and sitl_id = :situacaoFinalizadoPeloUsuario) as qtdRotasFinalizadasPeloUsuario, " 
+						+ "count(*) as qtdTotalLocal, " //8
+						+ "(Select sum(txre_qtimovel) from micromedicao.arquivo_texto_rot_empr re1 " //9
+							+ "where txre_amreferencia = :anoMesReferencia and re1.ftgr_id = re.ftgr_id "
+							+ "and re1.loca_id = re.loca_id and sitl_id = :situacaoEmCampo) as qtdImoveisEmCampo, "
+						+ "(select count(distinct(mcp.imov_id)) from faturamento.mov_conta_prefaturada mcp, cadastro.imovel i " //10
+							+ "where mcp.imov_id = i.imov_id and mcpf_ammovimento = re.txre_amreferencia and mcp.ftgr_id = re.ftgr_id "
+							+ "and i.loca_id = re.loca_id and mcp.rota_id in "
+									+ "(select rota_id from micromedicao.arquivo_texto_rot_empr re2 "
+									+ "where txre_amreferencia = :anoMesReferencia "
+									+ "and re2.ftgr_id = re.ftgr_id "
+									+ "and sitl_id = :situacaoEmCampo)) as qtdImoveisTransmitidosRotasParcial "
+						+ "from micromedicao.arquivo_texto_rot_empr re, "
+							+ "micromedicao.situacao_transm_leitura stl, "
+							+ "cadastro.localidade l, cadastro.empresa emp "
+						+ "where re.sitl_id = stl.sitl_id "
+							+ "and re.loca_id = l.loca_id "
+							+ "and emp.empr_id = re.empr_id "
+							+ "and txre_amreferencia = :anoMesReferencia "
+							+ "and re.ftgr_id = :idFaturamentoGrupo "  
+							+ "group by 1,2,3,4,5 " 
+							+ "order by 1,2,3,4,5 ";
 
 			retorno = session.createSQLQuery(consulta)
 					.addScalar("referencia", Hibernate.STRING)

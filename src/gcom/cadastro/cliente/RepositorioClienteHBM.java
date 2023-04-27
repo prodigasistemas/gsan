@@ -1057,6 +1057,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 	public List<Integer> pesquisarClientesPorCadastroUnico() throws ErroRepositorioException {
 		List<Integer> idsClientes = new ArrayList<Integer>();
 		Session session = HibernateUtil.getSession();
+
 		StringBuilder consulta = new StringBuilder();
 
 		try {
