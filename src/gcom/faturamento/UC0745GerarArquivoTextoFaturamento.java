@@ -1947,6 +1947,13 @@ public class UC0745GerarArquivoTextoFaturamento {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 8));
 		}
 		
+		if (localidade.getMunicipio() != null) {
+			arquivoTextoRegistroTipo01.append(Util.completaString("" + localidade.getMunicipio().getId(), 2));
+		} else {
+			arquivoTextoRegistroTipo01.append(Util.completaString("", 2));
+		}
+		
+		
 		if (imovel.getIndicadorEnvioContaFisica() != null && Short.valueOf(imovel.getIndicadorEnvioContaFisica()) == Short.valueOf(Imovel.INDICADOR_ENVIO_CONTA_FISICA)) {
 			arquivoTextoRegistroTipo01.append(Util.completaString(Imovel.INDICADOR_ENVIO_CONTA_FISICA + "", 1));
 		} else {
