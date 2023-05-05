@@ -13934,7 +13934,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(somaValorCurtoPrazo,
 								anoMesFaturamento, categoria, localidade, new LancamentoTipo(
 										LancamentoTipo.PARCELAMENTOS_REALIZADOS_CURTO_PRAZO), new LancamentoItem(
-										LancamentoItem.DESCONTOS_CONCEDIDOS), new LancamentoItemContabil(null),
+										LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO), new LancamentoItemContabil(null),
 								new Short("1500"), new Short("90"));
 
 						colecaoResumoFaturamento.add(resumoFaturamento);
@@ -13946,7 +13946,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(somaValorLongoPrazo,
 								anoMesFaturamento, categoria, localidade, new LancamentoTipo(
 										LancamentoTipo.PARCELAMENTOS_REALIZADOS_LONGO_PRAZO), new LancamentoItem(
-										LancamentoItem.DESCONTOS_CONCEDIDOS), new LancamentoItemContabil(null),
+										LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO), new LancamentoItemContabil(null),
 								new Short("1600"), new Short("90"));
 
 						colecaoResumoFaturamento.add(resumoFaturamento);
@@ -14555,7 +14555,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(valorItemFaturamento,
 								anoMesFaturamento, categoria, localidade, new LancamentoTipo(
 										LancamentoTipo.DEVOLUCAO__VALORES_EM_CONTA), new LancamentoItem(
-										LancamentoItem.DESCONTOS_CONCEDIDOS), null, new Short("2200"), new Short("20"));
+										LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO), null, new Short("2200"), new Short("20"));
 
 						resumoTotalCobradoNasContas.setValorItemFaturamento(resumoTotalCobradoNasContas
 								.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
@@ -15680,7 +15680,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
 							DebitoCreditoSituacao.DEBITO_PRESCRITO,
 							LancamentoTipo.CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_JA_EXC_INADIMPLENCIA,
-							LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("3600"),
+							LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, new Short("3600"),
 							(short) (maxSequencialImpressaoMais10 + 30));
 
 					if (resumoFaturamentoTemporario != null) {
@@ -16012,7 +16012,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							idsCreditosOrigem,
 							DebitoCreditoSituacao.DEBITO_PRESCRITO,
 							LancamentoTipo.CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_NAO_EXC_INADIMPLENCIA,
-							LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("4000"),
+							LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, new Short("4000"),
 							(short) (maxSequencialImpressaoMais10 + 30));
 
 					if (resumoFaturamentoTemporario != null) {

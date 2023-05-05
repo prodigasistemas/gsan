@@ -21249,7 +21249,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						
 						
 						ResumoArrecadacao resumo = obterResumoDescontosConcedidosParcelamento(
-								anoMesReferenciaArrecadacao, localidade, categoria, LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("1000"), new Short("0"));
+								anoMesReferenciaArrecadacao, localidade, categoria, LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, new Short("1000"), new Short("0"));
 						
 						if (resumo != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
 							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099.add(resumo.getValorItemArrecadacao());
@@ -21733,7 +21733,7 @@ public class ControladorArrecadacao extends ControladorComum {
 						}
 
 						resumo = obterResumoDescontosConcedidosParcelamentoRecebimentoMesesAnterioresClassificados(anoMesReferenciaArrecadacao, localidade, categoria, 
-								 LancamentoItem.DESCONTOS_CONCEDIDOS, new Short("4400"), new Short("0"));
+								 LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, new Short("4400"), new Short("0"));
 						
 						if (resumo != null && resumo.getValorItemArrecadacao() != null && resumo.getValorItemArrecadacao().doubleValue() > 0.00) {
 							
@@ -22063,7 +22063,7 @@ public class ControladorArrecadacao extends ControladorComum {
 							resumoArrecadacaoTemp = new ResumoArrecadacao();
 							recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTO_MESES_ATE_31_12_2012_CLASSIFICADOS_NO_MES);
 							lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-							lancamentoItemTemp.setId(LancamentoItem.DESCONTOS_CONCEDIDOS);
+							lancamentoItemTemp.setId(LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 							resumoArrecadacaoTemp.setGerenciaRegional(gerenciaRegional);
 							resumoArrecadacaoTemp.setLocalidade(localidade);
 							resumoArrecadacaoTemp.setCategoria(categoria);
