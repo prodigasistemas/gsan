@@ -34,7 +34,7 @@ public class LancamentoItem implements Serializable {
 	public static final Integer FINANCIAMENTOS_COBRADOS = new Integer(23);
 	public static final Integer DOCUMENTOS_PAGOS_EM_DUPLICIDADE_EXCESSO = new Integer(24);
 	public static final Integer VALORES_COBRADOS_INDEVIDAMENTE = new Integer(25);
-	public static final Integer DESCONTOS_CONCEDIDOS = new Integer(26);
+	public static final Integer DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO = new Integer(26);
 	public static final Integer TOTAL_CREDITOS_REALIZADOS = new Integer(27);
 	public static final Integer ENTRADAS_PARCELAMENTO = new Integer(28);
 	public static final Integer VALOR_NAO_CONFERE = new Integer(29);
@@ -62,7 +62,7 @@ public class LancamentoItem implements Serializable {
 	public static final Integer CREDITOS_PARA_COBRANCA_INDEVIDA_INCLUIDOS = new Integer(51);
 	public static final Integer DESCONTOS_INCONDICIONAIS_INCLUIDOS = new Integer(52);
 	public static final Integer TOTAL_RECEITA_CANCELADA = new Integer(53);
-	public static final Integer DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO = new Integer(56);
+	//public static final Integer DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO = new Integer(56);
 	public final static Integer TOTAL_VALORES_DEVOLVIDOS_NAS_CONTAS = new Integer(57);
 	public static final Integer POR_REFATURAMENTO = new Integer(58);
 	public static final Integer POR_PARCELAMENTO = new Integer(59);
