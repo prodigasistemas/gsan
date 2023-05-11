@@ -639,7 +639,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									contaCategoria.setConsumoMinimoEsgoto(helperCategoria.getConsumoMinimoEsgoto());
 									contaCategoria.setUltimaAlteracao(new Date());							
  
-									atualizarValorContaCategoriaBolsaAguaMovimentoCelular(contaCategoria, contaAtualizacao);
+									atualizarValorCreditoBolsaAguaMovimentoCelular(contaCategoria, contaAtualizacao);
 									try {
 										repositorioFaturamento.atualizarContaCategoriaProcessoMOBILE(contaCategoria);
 									} catch (ErroRepositorioException e) {

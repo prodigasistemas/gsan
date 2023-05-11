@@ -1530,7 +1530,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							colecaoCategoriaOUSubcategoria,
 							helperValoresAguaEsgoto.getColecaoCalcularValoresAguaEsgotoHelper(), sistemaParametro);
 					
-					atualizarValorContaCategoriaBolsaAgua(gerarContaCategoriaHelper.getColecaoContaCategoria(), conta, 
+					atualizarValorCreditoBolsaAgua(gerarContaCategoriaHelper.getColecaoContaCategoria(), conta, 
 							gerarCreditoRealizadoHelper);
 					
 					// INSERINDO CONTA_CATEGORIA NA BASE
@@ -1647,14 +1647,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 	
-	public void atualizarValorContaCategoriaBolsaAguaMovimentoCelular(ContaCategoria contaCategoria, Conta conta)
+	public void atualizarValorCreditoBolsaAguaMovimentoCelular(ContaCategoria contaCategoria, Conta conta)
 			throws ControladorException {
 		if (getControladorImovel().isContaBolsaAgua(conta.getId())) {
 			if (contaCategoria.getCategoria().isResidencial()) {
 				BigDecimal valorCredito = new BigDecimal("0");
 				BigDecimal valorCreditoAtualizado = new BigDecimal("0");
 				CreditoARealizar creditoARealizar = new CreditoARealizar();
-				CreditoRealizado creditoRealizado = new CreditoRealizado();
 				String nomePacoteObjeto = CreditoRealizado.class.getName();
 				FiltroCreditoRealizado filtroCreditoRealizado = new FiltroCreditoRealizado();
 				filtroCreditoRealizado
@@ -1697,7 +1696,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 	}
 	
-	public void atualizarValorContaCategoriaBolsaAgua(Collection<ContaCategoria> contaCategoriaColecao, Conta conta,
+	public void atualizarValorCreditoBolsaAgua(Collection<ContaCategoria> contaCategoriaColecao, Conta conta,
 			GerarCreditoRealizadoHelper creditoRealizadoHelper)
 			throws ControladorException {
 		if (getControladorImovel().isContaBolsaAgua(conta.getId()) && creditoRealizadoHelper != null 
@@ -1789,12 +1788,15 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					}
 			}
 			creditoARealizar.setValorCredito(valorAgua.add(valorEsgoto));
+			creditoARealizar.setNumeroPrestacaoRealizada(ConstantesSistema.SIM);
 			atualizarCreditosARealizar(creditoARealizar);
 			if (creditoRealizado != null && atualizarMovimentoCelular) {
 				creditoRealizado.setValorCredito(valorAgua.add(valorEsgoto));
-				}
+			}
 				creditoRealizado.setNumeroPrestacaoCredito(ConstantesSistema.SIM);
+		    if(creditoRealizado.getConta() != null) {
 				atualizarCreditosRealizados(creditoRealizado);
+			}
 		} catch (ControladorException e) {
 			throw new ControladorException("Erro ao atualizar valor da conta para imoveis bolsa agua", e);
 		}
