@@ -23928,4 +23928,38 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		return retorno;
 	}
+	
+	public MedicaoHistorico obterDadosMedicaoPorUltimaDataMenorOuIgual(Integer idImovel, Date dataLeitura)
+			throws ErroRepositorioException {
+
+		MedicaoHistorico retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		String composicao = null;
+
+		try {
+			consulta = " SELECT mh "
+					+ " FROM MedicaoHistorico mh "
+					+ " WHERE ((mh.imovel.id = :idImovel AND mh.ligacaoAgua.id = :idImovel) OR mh.ligacaoAgua.id = :idImovel) " 
+					+ " AND mh.dataLeituraAtualFaturamento <= :dataLeitura "
+					+ " ORDER BY mh.dataLeituraAtualFaturamento DESC ";
+
+			retorno = (MedicaoHistorico) session.createQuery(consulta)
+					.setInteger("idImovel", idImovel)
+					.setDate("dataLeitura", dataLeitura)
+					.setMaxResults(1)
+					.uniqueResult();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }

@@ -31,6 +31,7 @@ import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.RamoAtividade;
+import gcom.cadastro.funcionario.Funcionario;
 import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Categoria;
@@ -9040,5 +9041,31 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		
 		return retorno;
     }
+
+	public Integer obterFuncionarioPorImovelRetornoId(Integer idImovelRetorno) throws ErroRepositorioException {
+		Integer retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		
+		try {
+			consulta = " SELECT f.func_id as idFuncionario from cadastro.funcionario f "
+					+ " INNER JOIN micromedicao.leiturista l on l.func_id = f.func_id "
+					+ " INNER JOIN cadastro.arquivo_texto_atlz_cad txac on txac.leit_id = l.leit_id "
+					+ " INNER JOIN seguranca.tab_atlz_cadastral tatc on tatc.txac_id = txac.txac_id "
+					+ " INNER JOIN atualizacaocadastral.imovel_controle_atlz_cad ctrl on ctrl.imov_id = tatc.tatc_cdimovel OR ctrl.icac_id = tatc.tatc_cdimovel "
+					+ " WHERE ctrl.imre_id = " + idImovelRetorno;
+			
+			retorno = (Integer) session.createSQLQuery(consulta)
+						.addScalar("idFuncionario", Hibernate.INTEGER)
+						.setMaxResults(1)
+						.uniqueResult();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
     
 }

@@ -91,6 +91,8 @@ public class ImovelRetorno implements IImovel{
 	private Integer individualizacao;
 	
 	private String leituraHidrometro;
+	
+	private Date dataLeituraHidrometro;
 
 	public ImovelRetorno () {
 	}
@@ -146,6 +148,8 @@ public class ImovelRetorno implements IImovel{
 		this.quantidadeNosFundos		  = imovelAtualizacaoCadastral.getQuantidadeNosFundos();
 		this.quantidadeNosAltos		  	  = imovelAtualizacaoCadastral.getQuantidadeNosAltos();
 		this.individualizacao			  = imovelAtualizacaoCadastral.getIndividualizacao();
+		this.leituraHidrometro			  = imovelAtualizacaoCadastral.getLeituraHidrometro();
+		this.dataLeituraHidrometro	 	  = imovelAtualizacaoCadastral.getDataLeituraHidrometro();
 	}
 
 	public Integer getId() {
@@ -603,6 +607,14 @@ public class ImovelRetorno implements IImovel{
 	
 	public void setLeituraHidrometro(String leituraHidrometro) {
 		this.leituraHidrometro = leituraHidrometro;
+	}
+	
+	public Date getDataLeituraHidrometro() {
+		return dataLeituraHidrometro;
+	}
+	
+	public void setDataLeituraHidrometro(Date dataLeituraHidrometro) {
+		this.dataLeituraHidrometro = dataLeituraHidrometro;
 	}
 	
 }

@@ -84,7 +84,8 @@
 		<property name="quantidadeNosFundos" 		 type="java.lang.Integer"    column="imac_qtd_nos_fundos" 				 length="3"/>
         <property name="quantidadeNosAltos" 		 type="java.lang.Integer"    column="imac_qtd_nos_altos" 				 length="3"/>
         <property name="individualizacao" 			 type="java.lang.Integer"    column="imac_individualizacao" 			 length="3"/>
-        <property name="leituraHidrometro"           type="java.lang.String"     column="imac_nnleiturahidrometro"           length="10"/> 
+        <property name="leituraHidrometro"           type="java.lang.String"     column="imac_nnleiturahidrometro"           length="10"/>
+        <property name="dataLeituraHidrometro"       type="java.util.Date"       column="imac_dtleiturahidrometro"           not-null="false"/> 
 		
 		<one-to-one name="imovelControleAtualizacaoCadastral" class="gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral" outer-join="auto" property-ref="imovel" />
 

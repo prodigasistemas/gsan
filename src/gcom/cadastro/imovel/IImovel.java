@@ -228,4 +228,8 @@ public interface IImovel {
 	public void setIndividualizacao(Integer individualizacao);
 	
 	public Integer getIndividualizacao();
+	
+	public String getLeituraHidrometro();
+
+	public Date getDataLeituraHidrometro();
 }

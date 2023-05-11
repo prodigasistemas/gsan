@@ -2632,5 +2632,13 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public void setCodigoConvenio(Integer codigoConvenio) {
 		this.codigoConvenio = codigoConvenio;
 	}
+
+	public String getLeituraHidrometro() {
+		return null;
+	}
+
+	public Date getDataLeituraHidrometro() {
+		return null;
+	}
 	
 }

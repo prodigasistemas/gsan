@@ -52,6 +52,7 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.IClienteFone;
+import gcom.cadastro.funcionario.Funcionario;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelImagem;
@@ -79,6 +80,8 @@ import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtuali
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarGerarLoteAtualizacaoCadastralActionHelper;
 import gcom.micromedicao.Rota;
+import gcom.micromedicao.leitura.LeituraFiscalizacao;
+import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaBean;
 import gcom.seguranca.IRepositorioSeguranca;
@@ -241,11 +244,43 @@ public class ControladorAtualizacaoCadastral extends ControladorComum implements
 			imovel.setCoordenadaY(coordenadaY);
 		}
 		
+		inserirLeituraFiscalizacao(imovelRetorno);
+		
 		getControladorAtualizacaoCadastro().atualizar(imovel);
 
 		logger.info(String.format("Imovel atualizado pelo processo de atualizacao cadastral: %s", imovel.getId()));
 
 		inserirImovelImagens(imovel.getId());
+	}
+
+	private void inserirLeituraFiscalizacao(IImovel imovelRetorno) throws ControladorException {
+		if(imovelRetorno.getLeituraHidrometro() != null && !imovelRetorno.getLeituraHidrometro().isEmpty()) {
+			Integer idImovel = imovelRetorno.getIdImovel();
+			Integer idImovelRetorno = imovelRetorno.getId();
+			Integer leituraHidrometro = Integer.parseInt(imovelRetorno.getLeituraHidrometro());
+			Date dataLeitura = imovelRetorno.getDataLeituraHidrometro();
+			
+			MedicaoHistorico medicaoHistorico = getControladorMicromedicao().obterDadosMedicaoPorUltimaDataMenorOuIgual(idImovel, dataLeitura);
+			
+			Integer idFuncionario = getControladorCadastro().obterFuncionarioPorImovelRetornoId(idImovelRetorno);
+						
+			LeituraFiscalizacao leituraFiscalizacao = new LeituraFiscalizacao();
+			
+			if(idFuncionario != null) {
+				Funcionario funcionario = new Funcionario();
+				funcionario.setId(idFuncionario);
+				leituraFiscalizacao.setFuncionario(funcionario);
+			}
+			
+			leituraFiscalizacao.setdataLeituraEmpresa(dataLeitura);
+			leituraFiscalizacao.setMedicaoHistorico(medicaoHistorico);
+			leituraFiscalizacao.setNumeroLeituraEmpresa(leituraHidrometro);
+			leituraFiscalizacao.setUltimaAlteracao(new Date());
+			
+			leituraFiscalizacao.setId(medicaoHistorico.getId());
+			
+			getControladorUtil().inserir(leituraFiscalizacao);;
+		}
 	}
 
 	private void inserirImovelImagens(Integer idImovel) throws ControladorException {

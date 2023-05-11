@@ -132,6 +132,7 @@ public class ImovelAtualizacaoCadastralBuilder {
 			imovelAtualizacaoCadastral.setIdCapacidadeHidrometro(Util.setValorInteiro(imovel.getLinhaMedidor("capacidadeHidrometro")));
 			imovelAtualizacaoCadastral.setIdProtecaoHidrometro(Util.setValorInteiro(imovel.getLinhaMedidor("tipoCaixaProtecaoHidrometro")));
 			imovelAtualizacaoCadastral.setLeituraHidrometro(imovel.getLinhaMedidor("leituraHidrometro"));
+			imovelAtualizacaoCadastral.setDataLeituraHidrometro(Util.converterStringParaData(imovel.getLinhaMedidor("dataServico"), "yyyy-MM-dd hh:mm:ss"));
 		}
 
 		// Linha 6

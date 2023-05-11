@@ -4154,4 +4154,6 @@ public interface IRepositorioMicromedicao {
      public LigacaoAgua obterLigacaoAgua(Integer idLigacao) throws ErroRepositorioException;
      
      public Collection<Integer> obterIdsRotasPelaLocalidade(Integer idLocalidade) throws ErroRepositorioException;
+     
+     public MedicaoHistorico obterDadosMedicaoPorUltimaDataMenorOuIgual(Integer idImovel, Date dataLeitura) throws ErroRepositorioException;
 }

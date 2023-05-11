@@ -63,6 +63,7 @@ import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
+import gcom.cadastro.funcionario.Funcionario;
 import gcom.cadastro.geografico.FiltroMunicipio;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
@@ -14150,11 +14151,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	public void faturarImovelSeletivo(ImovelFaturamentoSeletivo imovelFaturamentoSeletivo)
 			throws ControladorException, ParseException {
-
+		
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-		LigacaoAgua ligacaoAgua = getControladorMicromedicao()
-				.obterLigacaoAgua(imovelFaturamentoSeletivo.getIdImovel());
+		LigacaoAgua ligacaoAgua = getControladorMicromedicao().obterLigacaoAgua(imovelFaturamentoSeletivo.getIdImovel());
 		Imovel imovel = getControladorImovel().pesquisarImovel(imovelFaturamentoSeletivo.getIdImovel());
 
 		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(imovel.getId());

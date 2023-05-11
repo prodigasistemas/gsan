@@ -7,6 +7,7 @@ import java.util.List;
 
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.funcionario.Funcionario;
 import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Imovel;
@@ -408,6 +409,8 @@ public interface IRepositorioCadastro {
     public Date buscarUltimadataAlteracaoNoImovel(Integer idImovel) throws ErroRepositorioException;
     
     public Collection pesquisarRotaArquivoTextoAtualizacaoCadastroPorIdArquivo(String[] idsArquivoTxt) throws ErroRepositorioException;
+
+	public Integer obterFuncionarioPorImovelRetornoId(Integer idImovelRetorno) throws ErroRepositorioException;
     
     
     

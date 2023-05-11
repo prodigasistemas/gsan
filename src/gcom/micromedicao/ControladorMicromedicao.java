@@ -40180,4 +40180,13 @@ public class ControladorMicromedicao extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	public MedicaoHistorico obterDadosMedicaoPorUltimaDataMenorOuIgual(Integer idImovel, Date dataLeitura)
+			throws ControladorException {
+		try {
+			return repositorioMicromedicao.obterDadosMedicaoPorUltimaDataMenorOuIgual(idImovel, dataLeitura);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 }

@@ -50,6 +50,7 @@
         <property name="quantidadeNosAltos" 		 type="java.lang.Integer"    column="imre_qtd_nos_altos" 				 length="3"/>
         <property name="individualizacao" 			 type="java.lang.Integer"    column="imre_individualizacao" 			 length="3"/>
         <property name="leituraHidrometro" 			 type="java.lang.String"     column="imre_nnleiturahidrometro" 			 length="10"/>
+        <property name="dataLeituraHidrometro" 		 type="java.util.Date"	     column="imre_dtleiturahidrometro" 			 not-null="false"/>
         
 		
 

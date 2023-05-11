@@ -2690,4 +2690,6 @@ public interface IControladorMicromedicao {
 	public ConsumoHistorico obterUltimoConsumoImovel(Imovel imovel, Integer idLigacaoTipo) throws ControladorException;
 	
 	public boolean isProcessoGerarDadosEmProcessamento (FaturamentoGrupo faturamentoGrupo) throws Exception;
+	
+	public MedicaoHistorico obterDadosMedicaoPorUltimaDataMenorOuIgual(Integer idImovel, Date dataLeitura) throws ControladorException;
 }

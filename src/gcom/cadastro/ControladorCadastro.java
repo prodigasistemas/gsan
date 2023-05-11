@@ -14619,4 +14619,12 @@ public class ControladorCadastro extends ControladorComum {
 		}
 	}
 	
+	public Integer obterFuncionarioPorImovelRetornoId(Integer idImovelRetorno) throws ControladorException {
+		try {
+			return repositorioCadastro.obterFuncionarioPorImovelRetornoId(idImovelRetorno);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
 }
