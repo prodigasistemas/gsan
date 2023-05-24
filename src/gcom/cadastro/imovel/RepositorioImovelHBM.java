@@ -17558,6 +17558,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		      .append(" LEFT JOIN FETCH imov.quadra qu")
 		      .append(" LEFT JOIN FETCH imov.quadraFace qdfa")
 		      .append(" LEFT JOIN FETCH qu.rota rota")
+		      .append(" LEFT JOIN FETCH rota.faturamentoGrupo grupo")
 		      .append(" LEFT JOIN FETCH imov.logradouroBairro logBairro")
 		      .append(" LEFT JOIN FETCH logBairro.bairro bairro")
 		      .append(" LEFT JOIN FETCH bairro.municipio")

@@ -699,6 +699,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 			session.delete(objeto);
 
 		} catch (HibernateException e) {
+			e.printStackTrace();
 			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

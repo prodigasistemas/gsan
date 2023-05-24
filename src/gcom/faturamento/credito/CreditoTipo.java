@@ -29,6 +29,7 @@ public class CreditoTipo extends ObjetoTransacao {
 	public final static Integer DESCONTO_FAIXA_REFERENCIA_CONTA = new Integer(863);
 	public final static Integer CREDITOS_ANTERIORES_LONGO_PRAZO = new Integer(864);
 	public final static Integer CREDITO_BOLSA_AGUA = new Integer(871);
+	public final static Integer BAIXA_FATURAMENTO_INFERIOR_MINIMO = new Integer(872);
 	
 	private Integer id;
 	private String descricao;

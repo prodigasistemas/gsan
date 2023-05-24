@@ -15232,7 +15232,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			if (sistemaParametro.getIndicadorTarifaCategoria().equals(SistemaParametro.INDICADOR_TARIFA_SUBCATEGORIA)) {
 					colecaoCategoriaOUSubcategoria = getControladorImovel().obterQuantidadeEconomiasContaCategoriaPorSubcategoria(conta);
 			} else {
-				colecaoCategoriaOUSubcategoria = getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta);
+				colecaoCategoriaOUSubcategoria = getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta.getId());
 			}
 			
 			Collection colecaoDebitoCobrado = getControladorFaturamento().obterDebitosCobradosConta(conta);

@@ -70,6 +70,7 @@ public class ConstantesJNDI {
 	public static String CONTROLADOR_FATURAMENTO_COSANPA_SEJB = "";
 	public static String CONTROLADOR_FATURAMENTO_JUAZEIRO_SEJB = "";
 	public static String CONTROLADOR_FATURAMENTO_COSAMA_SEJB = "";
+	public static String CONTROLADOR_FATURAMENTO_IS_SEJB = "";
 
 	// =====================================================================================================
 
@@ -463,7 +464,7 @@ public class ConstantesJNDI {
 			CONTROLADOR_FATURAMENTO_COSANPA_SEJB = propriedades.getProperty("ControladorFaturamentoCOSANPA");
 			CONTROLADOR_FATURAMENTO_JUAZEIRO_SEJB = propriedades.getProperty("ControladorFaturamentoJUAZEIRO");
 			CONTROLADOR_FATURAMENTO_COSAMA_SEJB = propriedades.getProperty("ControladorFaturamentoCOSAMA");
-
+			CONTROLADOR_FATURAMENTO_IS_SEJB = propriedades.getProperty("ControladorFaturamentoIS");
 			// =====================================================================================================
 
 			CONTROLADOR_MICROMEDICAO_COMPESA_SEJB = propriedades.getProperty("ControladorMicromedicaoCOMPESA");

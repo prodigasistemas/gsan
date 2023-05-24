@@ -1000,7 +1000,7 @@ public class ControladorRetificarConta extends ControladorComum {
 
 						} else {
 
-							colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta);
+							colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta.getId());
 
 						}
 
@@ -1067,7 +1067,7 @@ public class ControladorRetificarConta extends ControladorComum {
 
 					Imovel imovel = (Imovel) contaArray[1];
 
-					Collection colecaoCategoria = getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta);
+					Collection colecaoCategoria = getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta.getId());
 
 					Collection colecaoCreditoRealizado = getControladorFaturamento().obterCreditosRealizadosConta(conta);
 
@@ -1144,7 +1144,7 @@ public class ControladorRetificarConta extends ControladorComum {
 
 					Imovel imovel = (Imovel) contaArray[1];
 
-					Collection colecaoCategoria = getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta);
+					Collection colecaoCategoria = getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta.getId());
 
 					Collection colecaoCreditoRealizado = getControladorFaturamento().obterCreditosRealizadosConta(conta);
 
@@ -1288,7 +1288,7 @@ public class ControladorRetificarConta extends ControladorComum {
 							} else {
 
 								if (helper.getIndicadorCategoriaEconomiaConta().equals(ConstantesSistema.SIM)) {
-									colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta);
+									colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta.getId());
 								} else {
 									colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasCategoria(conta.getImovel());
 								}
@@ -1483,7 +1483,7 @@ public class ControladorRetificarConta extends ControladorComum {
 
 						} else {
 							// [UC0108] - Quantidade de economias por categoria
-							colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta);
+							colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta.getId());
 
 						}
 

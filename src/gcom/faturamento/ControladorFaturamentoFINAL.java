@@ -375,6 +375,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 	private static Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
 
+	protected SistemaParametro sistemaParametro = null;
+	
 	final Short ZERO = 0;
 
 	public void ejbCreate() throws CreateException {
@@ -1583,6 +1585,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						this.gerarMovimentoDebitoAutomatico(conta);
 					}
 
+					System.out.println("ANTER AJUSTE");
+					this.ajustarCobrancaContasValoresAbaixoMinimoEmissao(conta, sistemaParametro.getValorMinimoEmissaoConta());
+					System.out.println("DEPOIS AJUSTE");
+					
 					try {
 						repositorioFaturamento.concluirFaturamentoConta(conta.getId());
 					} catch (ErroRepositorioException e) {
@@ -1670,7 +1676,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 								System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA ["
 										+ contaCategoria.getConta().getImovel().getId() + "]");					
-								valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar,
+								valorCredito = calcularValorCreditoBolsaAguaAtualizado(contaCategoria, creditoARealizar,
 										realizado, true);
 								System.out
 										.println("FIM ATUALIZANDO CREDITO A REALIZAR E CREDITO REALIZADO - BOLSA AGUA ["
@@ -1690,7 +1696,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				}
 
 				conta.setValorCreditos(valorCreditoAtualizado);
-				atualizarCreditoConta(conta);
+				getControladorUtil().atualizar(conta);
 				System.out.println("FIM ATUALIZANDO CONTA - BOLSA AGUA [" + conta.getImovel().getId() + "]");
 			}
 		}
@@ -1717,7 +1723,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								System.out.println("ATUALIZANDO CONTA CATEGORIA - BOLSA AGUA ["
 										+ contaCategoria.getConta().getImovel().getId() + "]");
 							
-								valorCredito = valorCreditoAtualizado(contaCategoria, creditoARealizar,realizado, false);
+								valorCredito = calcularValorCreditoBolsaAguaAtualizado(contaCategoria, creditoARealizar,realizado, false);
 								atualizacaoCreditosARealizarECreditoARealizarCategoria(creditoRealizadoHelper,valorCredito);
 								System.out.println("FIM ATUALIZANDO CREDITO A REALIZAR E CREDITO REALIZADO - BOLSA AGUA ["
 												+ contaCategoria.getConta().getImovel().getId() + "]");
@@ -1736,12 +1742,12 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			throw new ControladorException("Erro ao calcular valor de creditos para imoveis bolsa agua", e1);
 		}
 			conta.setValorCreditos(valorCreditoAtualizado);
-			atualizarCreditoConta(conta);
+			getControladorUtil().atualizar(conta);
 			System.out.println("FIM ATUALIZANDO CONTA - BOLSA AGUA [" + conta.getImovel().getId() + "]");
 		}
 	}
 	
-	public BigDecimal valorCreditoAtualizado(ContaCategoria contaCategoria, CreditoARealizar creditoARealizar,
+	public BigDecimal calcularValorCreditoBolsaAguaAtualizado(ContaCategoria contaCategoria, CreditoARealizar creditoARealizar,
 			CreditoRealizado creditoRealizado, Boolean atualizarMovimentoCelular) throws ControladorException {
 		BigDecimal maximoEconomias = new BigDecimal("2");
 		BigDecimal percentualEsgoto = new BigDecimal("0.6");
@@ -1847,14 +1853,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			creditoRealizadoCategoria.setValorCategoria(creditoRealizado.getValorCredito());
 			repositorioUtil.atualizar(creditoRealizadoCategoria);
 			repositorioUtil.atualizar(creditoRealizado);
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void atualizarCreditoConta(Conta conta) {
-		try {
-			repositorioUtil.atualizar(conta);
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}
@@ -3283,7 +3281,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						&& !imovel.getLigacaoEsgotoSituacao().getId().equals(LigacaoEsgotoSituacao.LIGADO) 
 						&& (isPreFaturamento && imovel.getImovelCondominio() == null))) {
 			
-			if (!imovel.isImovelCondominio()) {
+			if (!imovel.isImovelMicroCondominio()) {
 				System.out.println(imovel.getId() + " N�O GEROU CONTA : primeiraCondicaoNaoGerarConta");
 				primeiraCondicaoNaoGerarConta = true;
 			}
@@ -13029,6 +13027,33 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 					}
 
+					// INICIO CONTABILIZACAO FATURAMENTO_INFERIOR_AO_MINIMO
+
+					arrayValoresCurtoLongoPrazo = null;
+					arrayValoresCurtoLongoPrazo = repositorioFaturamento
+							.pesquisarValorLongoECurtoPrazoDebitoACobrarPorTipoFinanciamento(anoMesFaturamento,
+									idLocalidade, idCategoria, FinanciamentoTipo.FATURAMENTO_INFERIOR_MINIMO,
+									DebitoCreditoSituacao.NORMAL);
+
+					somaValorCurtoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[0];
+					somaValorLongoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[1];
+
+					if (somaValorCurtoPrazo != null && somaValorCurtoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+						ResumoFaturamento resumoFaturamentoDebitoACobrarCurtoPrazo = buildResumoFaturamento(
+								somaValorCurtoPrazo, anoMesFaturamento, categoria, localidade,
+								new LancamentoTipo(LancamentoTipo.FINANCIAMENTOS_INCLUIDOS_CURTO_PRAZO),
+								new LancamentoItem(LancamentoItem.FATURAMENTO_INFERIOR_MINIMO), null,
+								new Short("300"), new Short("10"));
+						
+							resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(
+								resumoFaturamentoReceitaBruta, somaValorCurtoPrazo);
+
+						colecaoResumoFaturamento.add(resumoFaturamentoDebitoACobrarCurtoPrazo);
+					}
+					
+
+					// FIM CONTABILIZACAO FATURAMENTO_INFERIOR_AO_MINIMO
+					
 					colecaoDadosDebitoACobrar = null;
 					colecaoDadosDebitoACobrar = repositorioFaturamento
 							.pesquisarValorLongoECurtoPrazoDebitoACobrarPorTipoFinanciamentoAgrupandoPorLancamentoItemContabil(
@@ -14654,6 +14679,38 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						colecaoResumoFaturamento.add(resumoFaturamento);
 					}
 					// fim Linha ccc
+					
+					// Linha FatIMin
+					idsCreditosOrigem = null;
+					idsCreditosOrigem = new Integer[1];
+					idsCreditosOrigem[0] = CreditoOrigem.BAIXA_FATURAMENTO_INF_MINIMO;
+
+					valorItemFaturamento = null;
+					valorItemFaturamento = repositorioFaturamento
+							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaContaDuplicidade(
+									anoMesFaturamento, idLocalidade, idCategoria, idsCreditosOrigem,
+									DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.NORMAL);
+
+					if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
+						ResumoFaturamento resumoFaturamento = buildResumoFaturamento(valorItemFaturamento,
+								anoMesFaturamento, categoria, localidade, new LancamentoTipo(
+										LancamentoTipo.DEVOLUCAO__VALORES_EM_CONTA), new LancamentoItem(
+										LancamentoItem.CRED_BAIXA_FATUR_INF_MINIMO), new LancamentoItemContabil(
+										null), new Short("2200"), new Short("70"));
+
+						resumoTotalCobradoNasContas.setValorItemFaturamento(resumoTotalCobradoNasContas
+								.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
+
+						// adiciona o sequência igual 2200 ao total devolvidos
+						// nas contas
+						resumoValoresDevolvidosNasContas.setValorItemFaturamento(resumoValoresDevolvidosNasContas
+								.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
+
+						colecaoResumoFaturamento.add(resumoFaturamento);
+					}
+
+					// fim Linha FatIMin
+					
 
 					// Linha 80
 					idsCreditosOrigem = null;
@@ -31967,7 +32024,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		Imovel imovel = this.getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
 
-		if (imovel.isImovelCondominio()) {
+		if (imovel.isImovelMicroCondominio()) {
 
 			// try {
 
@@ -32814,7 +32871,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	 *            helper
 	 * @param int atividade
 	 */
-	protected boolean apagarDadosGeradosFaturarGrupoFaturamento(ApagarDadosFaturamentoHelper helper, int atividade)
+	public boolean apagarDadosGeradosFaturarGrupoFaturamento(ApagarDadosFaturamentoHelper helper, int atividade)
 			throws ControladorException {
 
 		boolean existeContasApagadas = false;
@@ -51512,19 +51569,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		CobrancaForma cobrancaForma = new CobrancaForma();
 		cobrancaForma.setId(CobrancaForma.COBRANCA_EM_CONTA);
 
-		Object[] obterDebitoTipo;
 		try {
-			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
-
-			FinanciamentoTipo financiamentoTipo = new FinanciamentoTipo();
-			if (obterDebitoTipo[0] != null) {
-				financiamentoTipo.setId((Integer) obterDebitoTipo[0]);
-			}
-
-			LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
-			if (obterDebitoTipo[1] != null) {
-				lancamentoItemContabil.setId((Integer) obterDebitoTipo[1]);
-			}
+			debitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
 
 			debitoACobrar = new DebitoACobrar();
 			debitoACobrar.setAnoMesCobrancaDebito(anoMesReferenciaArrecadacao);
@@ -51553,8 +51599,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			debitoACobrar.setUltimaAlteracao(new Date());
 			debitoACobrar.setGeracaoDebito(new Date());
 			debitoACobrar.setAnoMesReferenciaDebito(anoMesReferenciaDebito);
-			debitoACobrar.setFinanciamentoTipo(financiamentoTipo);
-			debitoACobrar.setLancamentoItemContabil(lancamentoItemContabil);
+			debitoACobrar.setFinanciamentoTipo(debitoTipo.getFinanciamentoTipo());
+			debitoACobrar.setLancamentoItemContabil(debitoTipo.getLancamentoItemContabil());
 			debitoACobrar.setValorDebito(valorDebito);
 			debitoACobrar.setUsuario(usuario);
 
@@ -51614,17 +51660,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Object[] obterDebitoTipo;
 
 		try {
-			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
-
-			FinanciamentoTipo financiamentoTipo = new FinanciamentoTipo();
-			if (obterDebitoTipo[0] != null) {
-				financiamentoTipo.setId((Integer) obterDebitoTipo[0]);
-			}
-
-			LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
-			if (obterDebitoTipo[1] != null) {
-				lancamentoItemContabil.setId((Integer) obterDebitoTipo[1]);
-			}
+			debitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
 
 			debitoACobrar = new DebitoACobrar();
 			debitoACobrar.setImovel(imovel);
@@ -51649,8 +51685,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			debitoACobrar.setUltimaAlteracao(new Date());
 			debitoACobrar.setGeracaoDebito(new Date());
 			debitoACobrar.setAnoMesReferenciaDebito(conta.getReferencia());
-			debitoACobrar.setFinanciamentoTipo(financiamentoTipo);
-			debitoACobrar.setLancamentoItemContabil(lancamentoItemContabil);
+			debitoACobrar.setFinanciamentoTipo(debitoTipo.getFinanciamentoTipo());
+			debitoACobrar.setLancamentoItemContabil(debitoTipo.getLancamentoItemContabil());
 			debitoACobrar.setValorDebito(valorDebito);
 			debitoACobrar.setUsuario(usuario);
 
@@ -51671,7 +51707,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		return debitoACobrar;
 	}
 
-	private int getAnoMesReferenciaContabil() throws ControladorException {
+	protected int getAnoMesReferenciaContabil() throws ControladorException {
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		int anoMesReferenciaContabil = sistemaParametro.getAnoMesFaturamento();
 		int anoMesCorrente = Util.getAnoMesComoInt(new Date());
@@ -52247,26 +52283,14 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			Short numeroPrestacaoCobradas, GuiaPagamento guiaPagamento, BigDecimal valorDebito, DebitoTipo debitoTipo,
 			Usuario usuario) throws ControladorException {
 
-		// declaração de variáveis
 		DebitoACobrar debitoACobrar;
 		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 		debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
 		CobrancaForma cobrancaForma = new CobrancaForma();
 		cobrancaForma.setId(CobrancaForma.COBRANCA_EM_CONTA);
-		Object[] obterDebitoTipo;
 
 		try {
-			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
-
-			FinanciamentoTipo financiamentoTipo = new FinanciamentoTipo();
-			if (obterDebitoTipo[0] != null) {
-				financiamentoTipo.setId((Integer) obterDebitoTipo[0]);
-			}
-
-			LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
-			if (obterDebitoTipo[1] != null) {
-				lancamentoItemContabil.setId((Integer) obterDebitoTipo[1]);
-			}
+			debitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
 
 			debitoACobrar = new DebitoACobrar();
 			debitoACobrar.setImovel(imovel);
@@ -52291,8 +52315,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			debitoACobrar.setUltimaAlteracao(new Date());
 			debitoACobrar.setGeracaoDebito(new Date());
 			debitoACobrar.setAnoMesReferenciaDebito(guiaPagamento.getAnoMesReferenciaContabil());
-			debitoACobrar.setFinanciamentoTipo(financiamentoTipo);
-			debitoACobrar.setLancamentoItemContabil(lancamentoItemContabil);
+			debitoACobrar.setFinanciamentoTipo(debitoTipo.getFinanciamentoTipo());
+			debitoACobrar.setLancamentoItemContabil(debitoTipo.getLancamentoItemContabil());
 			debitoACobrar.setValorDebito(valorDebito);
 			debitoACobrar.setUsuario(usuario);
 
@@ -52690,7 +52714,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				|| imovel.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao()
 						.equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO) 
 				|| temHidrometro
-				|| imovel.isImovelCondominio()) {
+				|| imovel.isImovelMicroCondominio()) {
 
 			// Verificar se é para faturar pela situação especial de
 			// faturamento
@@ -53674,7 +53698,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		return colecaoCreditosRealizadoCategoria;
 	}
 
-	private Collection obterCreditoARealizarCategoria(CreditoARealizar creditoARealizar) throws ControladorException {
+	protected Collection obterCreditoARealizarCategoria(CreditoARealizar creditoARealizar) throws ControladorException {
 		Collection colecaoCategorias = new ArrayList();
 
 		CreditoARealizarCategoria creditoARealizarCategoria = null;
@@ -53780,7 +53804,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		try {
-			if (!preFaturamento && imovel.isImovelCondominio()) {
+			if (!preFaturamento && imovel.isImovelMicroCondominio()) {
 				BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel, faturamentoGrupo);
 
 				BigDecimal valorRateioAgua = valoresRateioAguaEsgotoImovel[0];
@@ -54059,7 +54083,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		BigDecimal valorRateioAgua = new BigDecimal("0.00");
 		BigDecimal valorRateioEsgoto = new BigDecimal("0.00");
 		System.out.println("subcategoria 3");
-		if (conta.getImovel().isImovelCondominio()) {
+		if (conta.getImovel().isImovelMicroCondominio()) {
 			System.out.println("subcategoria 4");
 			try {
 				// valoresAguaEsgotoRateioPorEconomia =
@@ -54221,7 +54245,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		Collection colecaoContaCategoriaConsumoFaixa = null;
 
 		BigDecimal[] valoresAguaEsgotoRateioPorEconomia = new BigDecimal[2];
-		if (conta.getImovel().isImovelCondominio()) {
+		if (conta.getImovel().isImovelMicroCondominio()) {
 			valoresAguaEsgotoRateioPorEconomia = this.calcularValorRateioPorEconomia(conta.getImovel()
 					.getImovelCondominio().getId(), conta.getFaturamentoGrupo());
 		}
@@ -61868,5 +61892,326 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			totalIRSituacaoCanceladaDiferencaPositiva = diferencaIRSituacaoCanceladaPorRetificacaoeERetificada;
 		}
 		return totalIRSituacaoCanceladaDiferencaPositiva;
+	}
+	
+	public void ajustarCobrancaContasValoresAbaixoMinimoEmissao(Conta contaAtualizacao, BigDecimal valorMinimoEmissao) throws ControladorException {
+		System.out.println("Conta:" + contaAtualizacao.getValorTotalConta());
+		System.out.println("valorMinimoEmissao:" + valorMinimoEmissao);
+		System.out.println("Diferen�a:" + contaAtualizacao.getValorTotal().compareTo(valorMinimoEmissao));
+		if (contaAtualizacao.isPerfilBolsaAgua() && contaAtualizacao.getValorTotal().compareTo(valorMinimoEmissao) < 0) {
+			
+			BigDecimal valorContaAjuste = contaAtualizacao.getValorTotal();
+			
+			this.gerarCreditoRealizadoBaixaFaturamentoInferiorMinimo(contaAtualizacao, valorContaAjuste);
+			this.gerarDebitoACobrarBaixaFaturamentoInferiorMinimo(contaAtualizacao, valorContaAjuste);
+		}
+	}
+	
+	private void gerarCreditoRealizadoBaixaFaturamentoInferiorMinimo(Conta conta, BigDecimal valorAjuste) {
+		CreditoTipo creditoTipo;
+		
+		try {
+			creditoTipo = obterCreditoTipo(CreditoTipo.BAIXA_FATURAMENTO_INFERIOR_MINIMO);
+			CreditoOrigem creditoOrigem = new CreditoOrigem(CreditoOrigem.BAIXA_FATURAMENTO_INF_MINIMO);
+			CreditoARealizar creditoARealizar =  inserirCreditoARealizar(conta.getImovel(), conta.getFaturamentoGrupo().getAnoMesReferencia(), 
+					valorAjuste, creditoTipo, creditoOrigem, (short) 1, Usuario.USUARIO_BATCH);
+
+			if (creditoARealizar != null) {
+				creditoARealizar.setNumeroPrestacaoRealizada((short) 1);
+				inserirCreditoRealizadoERealizadoCategoria(creditoARealizar, conta);
+				getControladorUtil().atualizar(creditoARealizar);
+				conta.setValorCreditos(conta.getValorCreditos().add(valorAjuste));
+				getControladorUtil().atualizar(conta);
+			}
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private DebitoACobrar gerarDebitoACobrarBaixaFaturamentoInferiorMinimo(Conta conta, BigDecimal valorAjuste) {
+		
+		Integer referenciaContabil = Util.somaMesAnoMesReferencia(conta.getAnoMesReferenciaConta(), 1);
+		
+		DebitoACobrar debitoACobrar = new DebitoACobrar();
+
+		try {
+			DebitoTipo debitoTipo = repositorioFaturamento.obterDebitoTipo(DebitoTipo.FATURAMENTO_INF_MINIMO);
+			
+			debitoACobrar.setAnoMesCobrancaDebito(conta.getAnoMesReferenciaConta());
+			debitoACobrar.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
+			debitoACobrar.setNumeroPrestacaoDebito(Short.valueOf("1"));
+			debitoACobrar.setNumeroPrestacaoCobradas(Short.valueOf("0"));
+			debitoACobrar.setImovel(conta.getImovel());
+			debitoACobrar.setLocalidade(conta.getImovel().getLocalidade());
+			debitoACobrar.setQuadra(conta.getImovel().getQuadra());
+			debitoACobrar.setNumeroLote(conta.getImovel().getLote());
+			debitoACobrar.setNumeroSubLote(conta.getImovel().getSubLote());
+			debitoACobrar.setPercentualTaxaJurosFinanciamento(BigDecimal.ZERO);
+			debitoACobrar.setRegistroAtendimento(null);
+			debitoACobrar.setOrdemServico(null);
+			debitoACobrar.setDebitoCreditoSituacaoAnterior(null);
+			debitoACobrar.setParcelamentoGrupo(null);
+			debitoACobrar.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
+			debitoACobrar.setCobrancaForma(new CobrancaForma(CobrancaForma.COBRANCA_EM_CONTA));
+			debitoACobrar.setDebitoTipo(debitoTipo);
+			debitoACobrar.setUltimaAlteracao(new Date());
+			debitoACobrar.setGeracaoDebito(new Date());
+			debitoACobrar.setAnoMesReferenciaDebito(referenciaContabil);
+			debitoACobrar.setFinanciamentoTipo(debitoTipo.getFinanciamentoTipo());
+			debitoACobrar.setLancamentoItemContabil(debitoTipo.getLancamentoItemContabil());
+			debitoACobrar.setValorDebito(valorAjuste);
+			debitoACobrar.setUsuario(Usuario.USUARIO_BATCH);
+	
+			if (conta.getImovel().getSetorComercial() != null) {
+				debitoACobrar
+						.setCodigoSetorComercial(conta.getImovel().getSetorComercial().getCodigo());
+			}
+			if (conta.getImovel().getQuadra() != null) {
+				debitoACobrar.setNumeroQuadra(conta.getImovel().getQuadra().getNumeroQuadra());
+			}
+			
+			DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
+			debitoACobrarGeral.setIndicadorHistorico(ConstantesSistema.NAO);
+			debitoACobrarGeral.setUltimaAlteracao(new Date());
+			
+			Integer idDebitoACobrarGeral = (Integer) getControladorUtil().inserir(debitoACobrarGeral);
+		
+			debitoACobrarGeral.setId(idDebitoACobrarGeral);
+			debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
+			debitoACobrar.setId(idDebitoACobrarGeral);
+			
+			getControladorUtil().inserir(debitoACobrar);
+	
+			inserirDebitoACobrarCategoria(debitoACobrar, conta.getImovel());
+		
+		} catch (ControladorException e) {
+			throw new ActionServletException("erro.gerarDebitoACobrarBaixaFaturamentoInferiorMinimo");
+		} catch (ErroRepositorioException e) {
+			throw new ActionServletException("erro.gerarDebitoACobrarBaixaFaturamentoInferiorMinimo");
+		}
+		
+		return debitoACobrar;
+	}
+	
+public void inserirCreditoRealizadoERealizadoCategoria (CreditoARealizar creditoARealizar, Conta conta) throws ControladorException {
+		
+		CreditoRealizado creditoRealizado;
+		
+		try {
+			creditoRealizado = new CreditoRealizado();
+
+			creditoRealizado.setCreditoTipo(creditoARealizar.getCreditoTipo());
+			creditoRealizado.setCreditoRealizado(creditoARealizar.getGeracaoCredito());
+			creditoRealizado.setLancamentoItemContabil(creditoARealizar.getLancamentoItemContabil());
+			creditoRealizado.setLocalidade(creditoARealizar.getLocalidade());
+			creditoRealizado.setQuadra(creditoARealizar.getQuadra());
+			creditoRealizado.setCodigoSetorComercial(creditoARealizar.getCodigoSetorComercial());
+			creditoRealizado.setNumeroQuadra(creditoARealizar.getNumeroQuadra());
+			creditoRealizado.setNumeroLote(creditoARealizar.getNumeroLote());
+			creditoRealizado.setNumeroSubLote(creditoARealizar.getNumeroSubLote());
+			creditoRealizado.setAnoMesReferenciaCredito(creditoARealizar.getAnoMesReferenciaCredito());
+			creditoRealizado.setAnoMesCobrancaCredito(creditoARealizar.getAnoMesCobrancaCredito());
+			creditoRealizado.setValorCredito(creditoARealizar.getValorCredito());
+			creditoRealizado.setCreditoOrigem(creditoARealizar.getCreditoOrigem());
+			creditoRealizado.setNumeroPrestacao(creditoARealizar.getNumeroPrestacaoCredito());
+			creditoRealizado.setNumeroParcelaBonus(creditoARealizar.numeroParcelaBonus());
+			creditoRealizado.setNumeroPrestacaoCredito(creditoARealizar.getNumeroPrestacaoRealizada());
+			creditoRealizado.setCreditoARealizarGeral(creditoARealizar.getCreditoARealizarGeral());
+			creditoRealizado.setConta(conta);
+			creditoRealizado.setUltimaAlteracao(new Date());
+
+
+			Object idCreditoARealizado = repositorioUtil.inserir(creditoRealizado);
+	
+			creditoRealizado.setId(new Integer(idCreditoARealizado.toString()));
+			
+			
+		} catch (ErroRepositorioException e) {
+			System.out.println("ERRO CREDITO REALIZADO PARA IMOVEL " + creditoARealizar.getImovel().getId());
+			e.printStackTrace();
+			throw new ControladorException("erro.inserir.credito.realizado");
+		} 
+		
+		try {
+			CreditoRealizadoCategoria creditoRealizadoCategoria = null;
+
+			Collection colecaoCategorias = obterCreditoARealizarCategoria(creditoARealizar);
+			
+			Collection colecaoCategoriasCalculadasValor = getControladorImovel().obterValorPorCategoria(colecaoCategorias,
+					creditoARealizar.getValorCredito());
+			Iterator colecaoCategoriasCalculadasValorIterator = colecaoCategoriasCalculadasValor.iterator();
+
+			Iterator colecaoCategoriasObterValorIterator = colecaoCategorias.iterator();
+
+			while (colecaoCategoriasCalculadasValorIterator.hasNext() && colecaoCategoriasObterValorIterator.hasNext()) {
+				BigDecimal valorPorCategoria = (BigDecimal) colecaoCategoriasCalculadasValorIterator.next();
+				Categoria categoria = (Categoria) colecaoCategoriasObterValorIterator.next();
+
+				// Cria o crédito a ralizar por categoria
+				creditoRealizadoCategoria = new CreditoRealizadoCategoria();
+				CreditoRealizadoCategoriaPK creditoRealizadoCategoriaPk = new CreditoRealizadoCategoriaPK();
+				creditoRealizadoCategoriaPk.setCategoria(categoria);
+				creditoRealizadoCategoriaPk.setCreditoRealizado(creditoRealizado);
+				creditoRealizadoCategoria.setComp_id(creditoRealizadoCategoriaPk);
+				creditoRealizadoCategoria.setValorCategoria(valorPorCategoria);
+				creditoRealizadoCategoria.setCreditoRealizado(creditoRealizado);
+				creditoRealizadoCategoria.setCategoria(categoria);
+				creditoRealizadoCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
+				creditoRealizadoCategoria.setUltimaAlteracao(new Date());
+				creditoRealizadoCategoria.getComp_id().setCreditoRealizado(creditoRealizado);
+				
+				repositorioUtil.inserir(creditoRealizadoCategoria);
+			}
+
+			if (colecaoCategoriasCalculadasValor != null) {
+				colecaoCategoriasCalculadasValor.clear();
+				colecaoCategoriasCalculadasValor = null;
+			}
+		} catch (ErroRepositorioException e) {
+			System.out.println("ERRO CREDITO REALIZADO CATEGORIA PARA IMOVEL " + creditoARealizar.getImovel().getId());
+			e.printStackTrace();
+			throw new ControladorException("erro.inserir.credito.realizado");
+		}
+	}
+	
+	protected CreditoTipo obterCreditoTipo(Integer id) throws ControladorException {
+		FiltroCreditoTipo filtroCreditoTipo = new FiltroCreditoTipo();
+		filtroCreditoTipo.adicionarParametro(new ParametroSimples(FiltroCreditoTipo.ID, id));
+		filtroCreditoTipo.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
+	
+		Collection colecaoTipoCredito = this.getControladorUtil().pesquisar(filtroCreditoTipo,
+				CreditoTipo.class.getName());
+	
+		CreditoTipo creditoTipo = (CreditoTipo) Util.retonarObjetoDeColecao(colecaoTipoCredito);
+		return creditoTipo;
+	}
+
+	protected CreditoARealizar inserirCreditoARealizar(Imovel imovel, Integer referencia, BigDecimal valorCredito,
+			CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, Short qtdPrestacoes, Usuario usuario)
+			throws ControladorException {
+		try {
+
+			Date dataAtual = new Date(System.currentTimeMillis());
+			System.out.println("yy 1");
+			CreditoARealizarGeral creditoARealizarGeral = new CreditoARealizarGeral();
+			creditoARealizarGeral.setIndicadorHistorico(new Short("2"));
+			creditoARealizarGeral.setUltimaAlteracao(dataAtual);
+			System.out.println("yy 2");
+			Object idCreditoARealizarGeral = repositorioUtil.inserir(creditoARealizarGeral);
+			creditoARealizarGeral.setId(new Integer(idCreditoARealizarGeral.toString()));
+			System.out.println("yy 3");
+			CreditoARealizar creditoARealizar = new CreditoARealizar();
+
+			creditoARealizar.setId(new Integer(idCreditoARealizarGeral.toString()));
+			creditoARealizar.setImovel(imovel);
+			creditoARealizar.setCreditoTipo(creditoTipo);
+			creditoARealizar.setGeracaoCredito(dataAtual);
+			creditoARealizar.setAnoMesReferenciaCredito(referencia);
+			creditoARealizar.setAnoMesCobrancaCredito(getSistemaParametro().getAnoMesArrecadacao());
+
+			// Seta AnoMesReferenciaContabil, com maior valor entre o ano/mes da data
+			// corrente e o ano/mes de referencia do faturamento.
+			Integer mesDataAtual = Util.getMes(dataAtual);
+			Integer mesArreacadao = new Integer(getSistemaParametro().getAnoMesFaturamento().toString().substring(4));
+
+			if (mesDataAtual.compareTo(mesArreacadao) > 0) {
+				creditoARealizar.setAnoMesReferenciaContabil(Util.recuperaAnoMesDaData(dataAtual));
+			} else {
+				creditoARealizar.setAnoMesReferenciaContabil(sistemaParametro.getAnoMesFaturamento());
+			}
+			System.out.println("yy 4");
+			creditoARealizar.setValorCredito(valorCredito);
+			creditoARealizar.setValorResidualMesAnterior(new BigDecimal("0.0"));
+			creditoARealizar.setNumeroPrestacaoCredito(qtdPrestacoes);
+			creditoARealizar.setNumeroPrestacaoRealizada(new Short("0"));
+			creditoARealizar.setLocalidade(imovel.getLocalidade());
+			creditoARealizar.setQuadra(imovel.getQuadra());
+			creditoARealizar.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
+			creditoARealizar.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
+			creditoARealizar.setNumeroLote(imovel.getLote());
+			creditoARealizar.setNumeroSubLote(imovel.getSubLote());
+			creditoARealizar.setRegistroAtendimento(null);
+			creditoARealizar.setOrdemServico(null);
+			creditoARealizar.setLancamentoItemContabil(creditoTipo.getLancamentoItemContabil());
+			creditoARealizar.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
+			creditoARealizar.setDebitoCreditoSituacaoAnterior(null);
+			creditoARealizar.setCreditoARealizarGeral(creditoARealizarGeral);
+			creditoARealizar.setCreditoOrigem(creditoOrigem);
+			creditoARealizar.setUltimaAlteracao(dataAtual);
+			creditoARealizar.setUsuario(usuario);
+			System.out.println("yy 5");
+			Object idCreditoARealizar = getControladorUtil().inserir(creditoARealizar);
+			System.out.println("yy 6");
+			creditoARealizar.setId(new Integer(idCreditoARealizar.toString()));
+			System.out.println("yy 7");
+			this.inserirCreditoARealizarCategoria(creditoARealizar);
+			System.out.println("yy 8");
+			return creditoARealizar;
+			
+		} catch (ControladorException e) {
+			System.out.println("ERRO CREDITO TIPO " + creditoTipo.getId() + " PARA IMOVEL " + imovel.getId());
+			e.printStackTrace();
+			throw new ControladorException("erro.credito.realizar.bolsa.agua");
+		} catch (ErroRepositorioException e) {
+			System.out.println("ERRO CREDITO TIPO " + creditoTipo.getId() + " PARA IMOVEL " + imovel.getId());
+			e.printStackTrace();
+			throw new ControladorException("erro.credito.realizar");
+		}
+		
+	}
+
+	private void inserirCreditoARealizarCategoria(CreditoARealizar creditoARealizar) throws ControladorException {
+		try {
+			Collection colecaoCategoriasImovel;
+
+			if (creditoARealizar.isCreditoBolsaAgua()) {
+				colecaoCategoriasImovel = this.getControladorImovel()
+						.obterQuantidadeEconomiasCategoria(creditoARealizar.getImovel(), Categoria.RESIDENCIAL);
+			} else {
+				colecaoCategoriasImovel = this.getControladorImovel()
+						.obterQuantidadeEconomiasCategoria(creditoARealizar.getImovel());
+			}
+
+			Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel.iterator();
+
+			Iterator iteratorColecaoValorPorCategoria = getControladorImovel()
+					.obterValorPorCategoria(colecaoCategoriasImovel, creditoARealizar.getValorCredito()).iterator();
+
+			while (iteratorColecaoCategoriasImovel.hasNext() && iteratorColecaoValorPorCategoria.hasNext()) {
+
+				Categoria categoria = (Categoria) iteratorColecaoCategoriasImovel.next();
+
+				BigDecimal valor = (BigDecimal) iteratorColecaoValorPorCategoria.next();
+
+				CreditoARealizarCategoria creditoARealizarCategoria = new CreditoARealizarCategoria();
+
+				creditoARealizarCategoria
+						.setComp_id(new CreditoARealizarCategoriaPK(creditoARealizar.getId(), categoria.getId()));
+				creditoARealizarCategoria.setCreditoARealizar(creditoARealizar);
+				creditoARealizarCategoria.setCategoria(categoria);
+				creditoARealizarCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
+				creditoARealizarCategoria.setValorCategoria(valor);
+				creditoARealizarCategoria.setUltimaAlteracao(new Date(System.currentTimeMillis()));
+
+				repositorioUtil.inserir(creditoARealizarCategoria);
+			}
+		} catch (ErroRepositorioException e) {
+			System.out.println("ERRO CREDITO CATEGORIA BOLSA AGUA PARA IMOVEL " + creditoARealizar.getImovel().getId());
+			e.printStackTrace();
+			throw new ControladorException("erro.credito.categoria");
+		} catch (ControladorException ex) {
+			System.out.println("ERRO CREDITO CATEGORIA BOLSA AGUA PARA IMOVEL " + creditoARealizar.getImovel().getId());
+			ex.printStackTrace();
+			throw new ControladorException("erro.credito.categoria");
+		}
+	}
+	
+	protected SistemaParametro getSistemaParametro() throws ControladorException {
+		try {
+			sistemaParametro = repositorioUtil.pesquisarParametrosDoSistema();
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+		return sistemaParametro;
 	}
 }

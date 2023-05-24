@@ -43652,7 +43652,7 @@ public class ControladorArrecadacao extends ControladorComum {
     		
     		// [UC0108] - Quantidade de economias por categoria
     		colecaoCategoriaOUSubcategoria = this.getControladorImovel()
-    		.obterQuantidadeEconomiasContaCategoria(conta);
+    		.obterQuantidadeEconomiasContaCategoria(conta.getId());
     	}
 		
 		helper.setColecaoCategoriaOUSubcategoria(colecaoCategoriaOUSubcategoria);

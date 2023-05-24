@@ -1,5 +1,24 @@
 package gcom.fachada;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
+
+import javax.ejb.CreateException;
+import javax.mail.SendFailedException;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+
 import gcom.api.ordemservico.dto.OrdemServicoDTO;
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoForma;
@@ -392,6 +411,8 @@ import gcom.faturamento.conta.FaturaItem;
 import gcom.faturamento.conta.ImpostoDeduzidoHelper;
 import gcom.faturamento.controladores.ControladorRetificarContaLocal;
 import gcom.faturamento.controladores.ControladorRetificarContaLocalHome;
+import gcom.faturamento.controladores.is.ControladorFaturamentoISLocal;
+import gcom.faturamento.controladores.is.ControladorFaturamentoISLocalHome;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoRealizado;
@@ -660,27 +681,7 @@ import gcom.util.filtro.ParametroSimples;
 import gcom.util.tabelaauxiliar.ControladorTabelaAuxiliarLocal;
 import gcom.util.tabelaauxiliar.ControladorTabelaAuxiliarLocalHome;
 import gcom.util.tabelaauxiliar.TabelaAuxiliarAbstrata;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Vector;
-
-import javax.ejb.CreateException;
-import javax.mail.SendFailedException;
-import javax.servlet.http.HttpSession;
-
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
-import org.apache.commons.fileupload.FileItem;
 
 public class Fachada {
 
@@ -1180,6 +1181,26 @@ public class Fachada {
 		}
 	}
 	
+	private ControladorFaturamentoISLocal getControladorFaturamentoIS() {
+		ControladorFaturamentoISLocalHome localHome = null;
+		ControladorFaturamentoISLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorFaturamentoISLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_FATURAMENTO_IS_SEJB);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
 	public String getFaturamentoParametro(String parametro) {
 		try {
 			return this.getControladorFaturamento().getFaturamentoParametro(parametro);
@@ -1628,7 +1649,7 @@ public class Fachada {
 	@SuppressWarnings("rawtypes")
 	public Collection obterQuantidadeEconomiasContaCategoria(Conta conta) {
 		try {
-			return this.getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta);
+			return this.getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta.getId());
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -28988,7 +29009,7 @@ public class Fachada {
 	public RetornoAtualizarFaturamentoMovimentoCelularHelper atualizarFaturamentoMovimentoCelular(BufferedReader buffer, boolean offLine, boolean finalizarArquivo, Integer idRota,
 			ArquivoTextoRetornoIS arquivoTextoRetortnoIS, BufferedReader bufferOriginal) {
 		try {
-			return this.getControladorFaturamento().atualizarFaturamentoMovimentoCelular(buffer, "teste.txt", offLine, finalizarArquivo, idRota, arquivoTextoRetortnoIS, bufferOriginal);
+			return this.getControladorFaturamentoIS().atualizarFaturamentoMovimentoCelular(buffer, "teste.txt", offLine, finalizarArquivo, idRota, arquivoTextoRetortnoIS, bufferOriginal);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

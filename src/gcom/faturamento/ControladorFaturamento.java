@@ -13,8 +13,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Connection;
-import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,7 +30,6 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.ejb.EJBException;
-import javax.transaction.Synchronization;
 
 import org.apache.commons.beanutils.BeanComparator;
 import org.hibernate.LazyInitializationException;
@@ -41,9 +38,6 @@ import org.jboss.logging.Logger;
 import gcom.api.GsanApi;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.ArrecadadorContratoConvenio;
-import gcom.arrecadacao.BoletoInfo;
-import gcom.arrecadacao.FichaCompensacao;
-import gcom.arrecadacao.FiltroBancoInfo;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamentoHistorico;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
@@ -60,7 +54,6 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.EsferaPoder;
-import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.funcionario.Funcionario;
@@ -109,7 +102,6 @@ import gcom.faturamento.bean.GerarCreditoRealizadoHelper;
 import gcom.faturamento.bean.GerarDebitoCobradoHelper;
 import gcom.faturamento.bean.GerarRelatorioAnormalidadePorAmostragemHelper;
 import gcom.faturamento.bean.GerarResumoSimulacaoFaturamentoHelper;
-import gcom.faturamento.bean.PagadorDTO;
 import gcom.faturamento.bean.PrescreverDebitosImovelHelper;
 import gcom.faturamento.bean.RemoverImovesJaProcessadorImpressaoSimultaneaHelper;
 import gcom.faturamento.bean.RemoverImovesJaProcessadorImpressaoSimultaneaHelper.DadosImovelRemoverImovesJaProcessadorImpressaoSimultanea;
@@ -151,6 +143,7 @@ import gcom.faturamento.credito.CreditoARealizarGeral;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.credito.CreditoRealizadoCategoria;
+import gcom.faturamento.credito.CreditoRealizadoCategoriaPK;
 import gcom.faturamento.credito.CreditoRealizadoHistorico;
 import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.credito.FiltroCreditoARealizar;
@@ -161,7 +154,6 @@ import gcom.faturamento.credito.FiltroCreditoRealizadoCategoria;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.credito.ICreditoRealizado;
 import gcom.faturamento.credito.ICreditoRealizadoCategoria;
-import gcom.faturamento.credito.PercentualBolsaAgua;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarGeral;
 import gcom.faturamento.debito.DebitoCobrado;
@@ -268,15 +260,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	private static Logger logger = Logger.getLogger(ControladorFaturamento.class);
 
-	private SistemaParametro sistemaParametro = null;
-
 	/**
-	 * M�todo respons�vel por verificar se existe no banco um determinado ID na
-	 * tabela de faturamento_grupo - caso exista o id passado como par�metro na
-	 * tabela, retorna true, caso contr�rio retorna false
+	 * Metodo responsevel por verificar se existe no banco um determinado ID na
+	 * tabela de faturamento_grupo - caso exista o id passado como paremetro na
+	 * tabela, retorna true, caso contrerio retorna false
 	 * 
 	 * @param Integer id - id de um FaturamentoGrupo
-	 * @return boolean - true para existir o id na tabela, false para n�o existir
+	 * @return boolean - true para existir o id na tabela, false para neo existir
 	 * @exception ErroRepositorioException
 	 */
 	public boolean verificarExistenciaIdGrupoFaturamento(Integer id) throws ControladorException {
@@ -299,7 +289,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0184] - Manter d�bito a Cobrar
+	 * [UC0184] - Manter debito a Cobrar
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/07/2009
@@ -316,7 +306,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0184] - Manter d�bito a Cobrar
+	 * [UC0184] - Manter debito a Cobrar
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/07/2009
@@ -333,7 +323,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0896] - Manter Autos de Infra��o
+	 * [UC0896] - Manter Autos de Infraeeo
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/07/2009
@@ -351,7 +341,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0896] - Manter Autos de Infra��o
+	 * [UC0896] - Manter Autos de Infraeeo
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/07/2009
@@ -368,6 +358,145 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	}
 
+	private Collection<CalcularValoresAguaEsgotoHelper> obterValoresAguaEsgotoAtualizarMovimentoCelular(MovimentoContaPrefaturada movimento, Conta conta) throws ControladorException {
+		
+		try {
+			ConsumoHistorico consumoHistoricoAgua = getControladorMicromedicao().
+					obterConsumoHistorico(movimento.getImovel(), new LigacaoTipo(LigacaoTipo.LIGACAO_AGUA), 
+							movimento.getFaturamentoGrupo().getAnoMesReferencia());
+		
+			ConsumoHistorico consumoHistoricoEsgoto = getControladorMicromedicao().
+					obterConsumoHistorico(movimento.getImovel(), new LigacaoTipo(LigacaoTipo.LIGACAO_ESGOTO), 
+							movimento.getFaturamentoGrupo().getAnoMesReferencia());
+			
+			@SuppressWarnings("rawtypes")
+			Collection colecaoCategoriaOUSubcategoria = getControladorImovel()
+					.obterColecaoCategoriaOuSubcategoriaDoImovel(movimento.getImovel());
+	
+			colecaoCategoriaOUSubcategoria = obterColecaoCategoriaConta(sistemaParametro, conta);
+	
+			boolean isImpressaoSimultanea = true;
+			
+			DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = this
+					.determinarValoresFaturamento(movimento.getImovel(), movimento.getFaturamentoGrupo().getAnoMesReferencia(),
+							colecaoCategoriaOUSubcategoria, movimento.getImovel().getQuadra().getRota().getFaturamentoGrupo(),
+							consumoHistoricoAgua, consumoHistoricoEsgoto, isImpressaoSimultanea);
+	
+			@SuppressWarnings("unchecked")
+			Collection<CalcularValoresAguaEsgotoHelper> colecaoCalcularValoresAguaEsgotoHelper = helperValoresAguaEsgoto
+					.getColecaoCalcularValoresAguaEsgotoHelper();
+	
+			return colecaoCalcularValoresAguaEsgotoHelper;
+		
+		} catch (ControladorException e) {
+			e.printStackTrace();
+			throw new ControladorException("Erro obterValoresAguaEsgotoAtualizarMovimentoCelular", e);
+		}
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void preencherValoresTotaisMovimentoContaPreFaturada(MovimentoContaPrefaturada movimento) {
+		Collection<MovimentoContaPrefaturadaCategoria> colMovimentoContaPrefaturadaCategoria = movimento
+				.getMovimentoContaPrefaturadaCategorias();
+
+		BigDecimal valorAgua = new BigDecimal(0);
+		BigDecimal valorEsgoto = new BigDecimal(0);
+
+		Integer consumoAgua = 0;
+		Integer consumoEsgoto = 0;
+
+		for (MovimentoContaPrefaturadaCategoria helperCategoria : colMovimentoContaPrefaturadaCategoria) {
+			valorAgua = valorAgua.add(helperCategoria.getValorFaturadoAgua());
+			valorEsgoto = valorEsgoto.add(helperCategoria.getValorFaturadoEsgoto());
+			consumoAgua += helperCategoria.getConsumoFaturadoAgua();
+			consumoEsgoto += helperCategoria.getConsumoFaturadoEsgoto();
+		}
+		
+		movimento.setValorTotalCategoriasAgua(valorAgua);
+		movimento.setValorTotalCategoriasEsgoto(valorEsgoto);
+		
+		movimento.setValorTotalConsumoAgua(consumoAgua);
+		movimento.setValorTotalConsumoEsgoto(consumoEsgoto);
+
+	}
+	@SuppressWarnings("unchecked")
+	private void executarFaturamentoAjusteMovimentoCelular(MovimentoContaPrefaturada movimento, boolean efetuarRateio,
+			BigDecimal valorTotalAguaCalculado, BigDecimal valorTotalEsgotoCalculado,
+			Integer consumoAguaCalculado, Integer consumoEsgotoCalculado, Conta conta) throws ControladorException {
+		Collection<MovimentoContaPrefaturadaCategoria> categoriasMovimento = movimento
+				.getMovimentoContaPrefaturadaCategorias();
+		
+
+		BigDecimal diferencaValorAgua = movimento.getValorTotalCategoriasAgua().subtract(valorTotalAguaCalculado);
+		BigDecimal diferencaValorEsgoto = movimento.getValorTotalCategoriasEsgoto().subtract(valorTotalEsgotoCalculado);
+
+		if (efetuarRateio && ((diferencaValorAgua.doubleValue() > .01d
+				|| diferencaValorAgua.doubleValue() < -.01d)
+				|| (diferencaValorEsgoto.doubleValue() > .01d
+						|| diferencaValorEsgoto.doubleValue() < -.01d)
+				|| consumoAguaCalculado.intValue() != movimento.getValorTotalConsumoAgua().intValue()
+				|| consumoEsgotoCalculado.intValue() != movimento.getValorTotalConsumoEsgoto().intValue())) {
+
+			FaturamentoImediatoAjuste faturamentoImediatoAjuste = new FaturamentoImediatoAjuste();
+			faturamentoImediatoAjuste.setConta(conta);
+			faturamentoImediatoAjuste.setNumeroConsumoAgua(movimento.getValorTotalConsumoAgua() - consumoAguaCalculado);
+			faturamentoImediatoAjuste.setNumeroConsumoEsgoto(movimento.getValorTotalConsumoEsgoto() - consumoEsgotoCalculado);
+			faturamentoImediatoAjuste.setValorCobradoAgua(diferencaValorAgua);
+			faturamentoImediatoAjuste.setValorCobradoEsgoto(diferencaValorEsgoto);
+			faturamentoImediatoAjuste.setUltimaAlteracao(new Date());
+
+			this.getControladorBatch().inserirObjetoParaBatch(faturamentoImediatoAjuste);
+			this.atualizarConsumoMovimentoCelular(conta, movimento.getValorTotalConsumoAgua(), consumoAguaCalculado,
+					movimento.getValorTotalConsumoEsgoto(), consumoEsgotoCalculado);
+		}
+
+	}
+	
+	private ContaCategoria obterContaCategoriaAtualizarMovimento(Conta conta, MovimentoContaPrefaturadaCategoria movimentoCategoria) throws ControladorException {
+		FiltroContaCategoria filtroContaCategoria = new FiltroContaCategoria();
+
+		filtroContaCategoria
+				.adicionarParametro(new ParametroSimples(FiltroContaCategoria.CATEGORIA_ID,
+						movimentoCategoria.getComp_id().getCategoria().getId()));
+		filtroContaCategoria.adicionarParametro(
+				new ParametroSimples(FiltroContaCategoria.CONTA_ID, conta.getId()));
+
+		Integer idSubcategoria = null;
+		if (sistemaParametro.getIndicadorTarifaCategoria()
+				.equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
+			idSubcategoria = 0;
+		} else {
+			idSubcategoria = movimentoCategoria.getComp_id().getSubcategoria().getId();
+		}
+		filtroContaCategoria.adicionarParametro(
+				new ParametroSimples(FiltroContaCategoria.SUBCATEGORIA_ID, idSubcategoria));
+		filtroContaCategoria
+				.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.CONTA);
+		filtroContaCategoria
+				.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.IMOVEL);
+		filtroContaCategoria
+				.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.CATEGORIA);
+
+		@SuppressWarnings("unchecked")
+		Collection<ContaCategoria> colContaCategoria = this.getControladorUtil()
+				.pesquisar(filtroContaCategoria, ContaCategoria.class.getName());
+
+		ContaCategoria contaCategoria = (ContaCategoria) Util
+				.retonarObjetoDeColecao(colContaCategoria);
+		
+		return contaCategoria;
+
+	}
+	
+	private Integer getIdSubcategoria(MovimentoContaPrefaturadaCategoria movimentoCategoria) {
+		if (sistemaParametro.getIndicadorTarifaCategoria()
+				.equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
+			return 0;
+		} else {
+			return movimentoCategoria.getComp_id().getSubcategoria().getId();
+		}
+	}
 	/**
 	 * 
 	 * [UC0840] - Atualizar Faturamento do Movimento Celular
@@ -377,10 +506,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * 
 	 * @param colHelper
 	 * @param atualizaSituacaoAtualConta - Caso seja chamado via a funcionalidade de
-	 *                                   ISC, n�o atualiza a situa��o atual da
-	 *                                   conta que n�o foi impressa. Caso seja
-	 *                                   chamado via a funcionalidade de consistir,
-	 *                                   atualiza a situa��o atual da conta.
+	 *    ISC, neo atualiza a situaeeo atual da conta que neo foi impressa. Caso seja
+	 *    chamado via a funcionalidade de consistir, atualiza a situaeeo atual da conta.
 	 */
 	private void atualizarMovimentoCelular(Collection<MovimentoContaPrefaturada> colMovimentoContaPrefaturada,
 			boolean efetuarRateio) throws ControladorException {
@@ -391,195 +518,57 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			for (MovimentoContaPrefaturada helper : colMovimentoContaPrefaturada) {
 
-				if (helper.getMovimentoContaPrefaturadaCategorias() != null
-						&& helper.getMovimentoContaPrefaturadaCategorias().size() > 0) {
-					/**
-					 * Alteracao para quando a conta n�o tiver sido emitida pelo IS, n�o altera
-					 * nenhuma informa��o da conta, continua PRE FATURADA
-					 */
-					if (helper.getIndicadorGeracaoConta().shortValue() == ConstantesSistema.SIM.shortValue()) {
+				if (helper.existeCategoria()) {
+
+					//Quando a conta nao tiver sido emitida pelo IS, nao altera a conta, continua PF
+					if (helper.isContaEmitidaPeloIS()) {
+						
 						// Caso o imovel seja o imovel condominio, pulamos
-						if (helper.getImovel().getIndicadorImovelCondominio().equals(ConstantesSistema.SIM)) {
+						if (helper.getImovel().isImovelMicroCondominio()) {
 							continue;
 						}
 
 						Conta contaAtualizacao = helper.getConta();
 
-						matriculaImovel = "" + helper.getImovel().getId();
+						contaAtualizacao = repositorioFaturamento.pesquisarContaPreFaturada(
+								helper.getImovel().getId(), helper.getAnoMesReferenciaPreFaturamento(),
+								DebitoCreditoSituacao.PRE_FATURADA);
 
-						try {
-
-							if (contaAtualizacao != null) {
-								contaAtualizacao.getConsumoAgua();
-							} else {
-								contaAtualizacao = repositorioFaturamento.pesquisarContaPreFaturada(
-										helper.getImovel().getId(), helper.getAnoMesReferenciaPreFaturamento(),
-										DebitoCreditoSituacao.PRE_FATURADA);
-							}
-						} catch (LazyInitializationException e) {
-							try {
-								contaAtualizacao = repositorioFaturamento.pesquisarContaPreFaturada(
-										helper.getImovel().getId(), helper.getAnoMesReferenciaPreFaturamento(),
-										DebitoCreditoSituacao.PRE_FATURADA);
-
-								if (contaAtualizacao == null || contaAtualizacao.getId() == null) {
-									continue;
-								}
-							} catch (ErroRepositorioException ex) {
-								throw new ControladorException("erro.sistema", ex);
-							}
+						if (contaAtualizacao == null || contaAtualizacao.getId() == null) {
+							continue;
 						}
-
-						// Para cada im�vel da tabela movimento conta pr�-faturada,
-						// realizar os seguintes procedimentos:
-						// O sistema calcula os valores de faturamento para o im�vel
-						// obtendo os valores faturados e de consumo de �gua e
-						// esgoto;
-						// [SB0001 - Determinar Valores para Faturamento de �gua
-						// e/ou Esgoto].
-
-						FiltroImovel filtro = new FiltroImovel();
-						filtro.adicionarCaminhoParaCarregamentoEntidade("quadra.rota.faturamentoGrupo");
-						filtro.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
-						filtro.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
-						filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, helper.getImovel()));
-						Collection<Imovel> colImo = Fachada.getInstancia().pesquisar(filtro, Imovel.class.getName());
-						Imovel imo = (Imovel) Util.retonarObjetoDeColecao(colImo);
-
-						FiltroConsumoHistorico filtroConsumoHistorico = new FiltroConsumoHistorico();
-						filtroConsumoHistorico.adicionarParametro(
-								new ParametroSimples(FiltroConsumoHistorico.IMOVEL_ID, helper.getImovel().getId()));
-						filtroConsumoHistorico.adicionarParametro(
-								new ParametroSimples(FiltroConsumoHistorico.LIGACAO_TIPO_ID, LigacaoTipo.LIGACAO_AGUA));
-						filtroConsumoHistorico
-								.adicionarParametro(new ParametroSimples(FiltroConsumoHistorico.ANO_MES_FATURAMENTO,
-										helper.getFaturamentoGrupo().getAnoMesReferencia()));
-						Collection<ConsumoHistorico> colConsumoHistorico = Fachada.getInstancia()
-								.pesquisar(filtroConsumoHistorico, ConsumoHistorico.class.getName());
-						ConsumoHistorico consumoHistoricoAgua = (ConsumoHistorico) Util
-								.retonarObjetoDeColecao(colConsumoHistorico);
-
-						filtroConsumoHistorico.limparListaParametros();
-						filtroConsumoHistorico.adicionarParametro(
-								new ParametroSimples(FiltroConsumoHistorico.IMOVEL_ID, helper.getImovel().getId()));
-						filtroConsumoHistorico.adicionarParametro(new ParametroSimples(
-								FiltroConsumoHistorico.LIGACAO_TIPO_ID, LigacaoTipo.LIGACAO_ESGOTO));
-						filtroConsumoHistorico
-								.adicionarParametro(new ParametroSimples(FiltroConsumoHistorico.ANO_MES_FATURAMENTO,
-										helper.getFaturamentoGrupo().getAnoMesReferencia()));
-						colConsumoHistorico = Fachada.getInstancia().pesquisar(filtroConsumoHistorico,
-								ConsumoHistorico.class.getName());
-						ConsumoHistorico consumoHistoricoEsgoto = (ConsumoHistorico) Util
-								.retonarObjetoDeColecao(colConsumoHistorico);
-
-						Collection colecaoCategoriaOUSubcategoria = getControladorImovel()
-								.obterColecaoCategoriaOuSubcategoriaDoImovel(imo);
-
-						if (sistemaParametro.getIndicadorTarifaCategoria()
-								.equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
-							if (contaAtualizacao != null) {
-								colecaoCategoriaOUSubcategoria = this.getControladorImovel()
-										.obterQuantidadeEconomiasContaCategoria(contaAtualizacao);
-							} else {
-								colecaoCategoriaOUSubcategoria = this.getControladorImovel()
-										.obterQuantidadeEconomiasCategoria(imo);
-							}
-						} else {
-							if (contaAtualizacao != null) {
-								colecaoCategoriaOUSubcategoria = this.getControladorImovel()
-										.obterQuantidadeEconomiasContaCategoriaPorSubcategoria(
-												contaAtualizacao.getId());
-							} else {
-								colecaoCategoriaOUSubcategoria = this.getControladorImovel()
-										.obterQuantidadeEconomiasSubCategoria(imo.getId());
-							}
-
-						}
-
-						boolean isImpressaoSimultanea = true;
 						
-						DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = this
-								.determinarValoresFaturamento(imo, helper.getFaturamentoGrupo().getAnoMesReferencia(),
-										colecaoCategoriaOUSubcategoria, imo.getQuadra().getRota().getFaturamentoGrupo(),
-										consumoHistoricoAgua, consumoHistoricoEsgoto, isImpressaoSimultanea);
-
-						Collection<CalcularValoresAguaEsgotoHelper> colecaoCalcularValoresAguaEsgotoHelper = helperValoresAguaEsgoto
-								.getColecaoCalcularValoresAguaEsgotoHelper();
-
+						matriculaImovel = helper.getImovel().getId().toString();
+						Imovel imo = getControladorImovel().pesquisarImovel(helper.getImovel().getId());
+						helper.setImovel(imo);
+						
+						Collection<CalcularValoresAguaEsgotoHelper> colecaoCalcularValoresAguaEsgotoHelper = 
+								obterValoresAguaEsgotoAtualizarMovimentoCelular(helper, contaAtualizacao);
+							
 						BigDecimal valorTotalAguaCalculado = this.calcularValorTotalAguaOuEsgotoPorCategoria(
 								colecaoCalcularValoresAguaEsgotoHelper, ConstantesSistema.CALCULAR_AGUA);
+						
 						BigDecimal valorTotalEsgotoCalculado = this.calcularValorTotalAguaOuEsgotoPorCategoria(
 								colecaoCalcularValoresAguaEsgotoHelper, ConstantesSistema.CALCULAR_ESGOTO);
 
 						Integer consumoAguaCalculado = null;
-
 						consumoAguaCalculado = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(
 								colecaoCalcularValoresAguaEsgotoHelper, ConstantesSistema.CALCULAR_AGUA);
 
 						Integer consumoEsgotoCalculado = null;
-
 						consumoEsgotoCalculado = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(
 								colecaoCalcularValoresAguaEsgotoHelper, ConstantesSistema.CALCULAR_ESGOTO);
 
+						@SuppressWarnings("unchecked")
 						Collection<MovimentoContaPrefaturadaCategoria> colMovimentoContaPrefaturadaCategoria = helper
 								.getMovimentoContaPrefaturadaCategorias();
 
-						BigDecimal valorAgua = new BigDecimal(0);
-						BigDecimal valorEsgoto = new BigDecimal(0);
+						this.preencherValoresTotaisMovimentoContaPreFaturada(helper);
 
-						Integer consumoAgua = 0;
-						Integer consumoEsgoto = 0;
-						Integer consumoRateioAgua = helper.getConsumoRateioAgua();
-						Integer consumoRateioEsgoto = helper.getConsumoRateioEsgoto();
-						BigDecimal valorImposto = new BigDecimal(0);
-
-						for (MovimentoContaPrefaturadaCategoria helperCategoria : colMovimentoContaPrefaturadaCategoria) {
-							valorAgua = valorAgua.add(helperCategoria.getValorFaturadoAgua());
-							valorEsgoto = valorEsgoto.add(helperCategoria.getValorFaturadoEsgoto());
-							consumoAgua += helperCategoria.getConsumoFaturadoAgua();
-							consumoEsgoto += helperCategoria.getConsumoFaturadoEsgoto();
-						}
-
-//                      metodo comentado pois estava gerando as diferen�as entre conta e conta categoria
-//						BigDecimal valorBolsaAguaConcedido = retornaValorBolsaAgua(
-//								helper.getAnoMesReferenciaPreFaturamento(), helper.getImovel());
-//
-//						if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > .01d) {
-//							BigDecimal valorAguaEsgoto = valorAgua.add(valorEsgoto);
-//
-//							if (valorAguaEsgoto.compareTo(valorBolsaAguaConcedido) == -1) {
-//								valorAgua = PercentualBolsaAgua.PERCENTUAL_AGUA.retornaValor(valorBolsaAguaConcedido,
-//										imo);
-//								valorEsgoto = PercentualBolsaAgua.PERCENTUAL_ESGOTO
-//										.retornaValor(valorBolsaAguaConcedido, imo);
-//							}
-//
-//						}
-
-						BigDecimal diferencaValorAgua = valorAgua.subtract(valorTotalAguaCalculado);
-						BigDecimal diferencaValorEsgoto = valorEsgoto.subtract(valorTotalEsgotoCalculado);
-
-						if (efetuarRateio && ((diferencaValorAgua.doubleValue() > .01d
-								|| diferencaValorAgua.doubleValue() < -.01d)
-								|| (diferencaValorEsgoto.doubleValue() > .01d
-										|| diferencaValorEsgoto.doubleValue() < -.01d)
-								|| consumoAguaCalculado.intValue() != consumoAgua.intValue()
-								|| consumoEsgotoCalculado.intValue() != consumoEsgoto.intValue())) {
-
-							FaturamentoImediatoAjuste faturamentoImediatoAjuste = new FaturamentoImediatoAjuste();
-							faturamentoImediatoAjuste.setConta(contaAtualizacao);
-							faturamentoImediatoAjuste.setNumeroConsumoAgua(consumoAgua - consumoAguaCalculado);
-							faturamentoImediatoAjuste.setNumeroConsumoEsgoto(consumoEsgoto - consumoEsgotoCalculado);
-							faturamentoImediatoAjuste.setValorCobradoAgua(valorAgua.subtract(valorTotalAguaCalculado));
-							faturamentoImediatoAjuste
-									.setValorCobradoEsgoto(valorEsgoto.subtract(valorTotalEsgotoCalculado));
-							faturamentoImediatoAjuste.setUltimaAlteracao(new Date());
-
-							this.getControladorBatch().inserirObjetoParaBatch(faturamentoImediatoAjuste);
-							this.atualizarConsumoMovimentoCelular(contaAtualizacao, consumoAgua, consumoAguaCalculado,
-									consumoEsgoto, consumoEsgotoCalculado);
-						}
-
+						this.executarFaturamentoAjusteMovimentoCelular(helper, efetuarRateio, 
+								valorTotalAguaCalculado, valorTotalEsgotoCalculado, consumoAguaCalculado, 
+								consumoEsgotoCalculado, contaAtualizacao);
+						
 						if (contaAtualizacao != null) {
 
 							helper.setConta(contaAtualizacao);
@@ -587,39 +576,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							/*
 							 * 2. Para cada registro do tipo 2, alterar na tabela CONTA_CATEGORIA o seu
 							 * correspondente (CNTA_ID = Conta do movimento em processamento e CATG_ID =
-							 * c�digo da categoria do movimento e SCAT_ID = c�digo da subcategoria do
+							 * cedigo da categoria do movimento e SCAT_ID = cedigo da subcategoria do
 							 * movimento) , com os seguintes dados
 							 */
 							for (MovimentoContaPrefaturadaCategoria helperCategoria : colMovimentoContaPrefaturadaCategoria) {
-								FiltroContaCategoria filtroContaCategoria = new FiltroContaCategoria();
-
-								filtroContaCategoria
-										.adicionarParametro(new ParametroSimples(FiltroContaCategoria.CATEGORIA_ID,
-												helperCategoria.getComp_id().getCategoria().getId()));
-								filtroContaCategoria.adicionarParametro(
-										new ParametroSimples(FiltroContaCategoria.CONTA_ID, contaAtualizacao.getId()));
-
-								Integer idSubcategoria = null;
-								if (sistemaParametro.getIndicadorTarifaCategoria()
-										.equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
-									idSubcategoria = 0;
-								} else {
-									idSubcategoria = helperCategoria.getComp_id().getSubcategoria().getId();
-								}
-								filtroContaCategoria.adicionarParametro(
-										new ParametroSimples(FiltroContaCategoria.SUBCATEGORIA_ID, idSubcategoria));
-								filtroContaCategoria
-										.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.CONTA);
-								filtroContaCategoria
-										.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.IMOVEL);
-								filtroContaCategoria
-										.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.CATEGORIA);
-
-								Collection<ContaCategoria> colContaCategoria = this.getControladorUtil()
-										.pesquisar(filtroContaCategoria, ContaCategoria.class.getName());
-
-								ContaCategoria contaCategoria = (ContaCategoria) Util
-										.retonarObjetoDeColecao(colContaCategoria);
+								ContaCategoria contaCategoria = obterContaCategoriaAtualizarMovimento(contaAtualizacao, helperCategoria);
 
 								if (contaCategoria != null && !contaCategoria.equals("")) {
 
@@ -650,8 +611,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									/*
 									 * 3. Para cada registro do tipo 3, alterar na tabela
 									 * CONTA_CATEGORIA_CONSUMO_FAIXA o seu correspondente (CNTA_ID = Conta do
-									 * movimento em processamento e CATG_ID = c�digo da categoria do movimento e
-									 * SCAT_ID = c�digo da subcategoria do movimento)
+									 * movimento em processamento e CATG_ID = cedigo da categoria do movimento e
+									 * SCAT_ID = cedigo da subcategoria do movimento)
 									 */
 									FiltroMovimentoContaCategoriaConsumoFaixa filtroMovimentoContaCategoriaConsumoFaixa = new FiltroMovimentoContaCategoriaConsumoFaixa();
 
@@ -664,7 +625,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 													helperCategoria.getComp_id().getCategoria().getId()));
 
 									filtroMovimentoContaCategoriaConsumoFaixa.adicionarParametro(new ParametroSimples(
-											FiltroMovimentoContaCategoriaConsumoFaixa.SUBCATEGORIA_ID, idSubcategoria));
+											FiltroMovimentoContaCategoriaConsumoFaixa.SUBCATEGORIA_ID, getIdSubcategoria(helperCategoria)));
 
 									Collection<MovimentoContaCategoriaConsumoFaixa> colMovimentoContaCategoriaConsumoFaixa = this
 											.getControladorUtil().pesquisar(filtroMovimentoContaCategoriaConsumoFaixa,
@@ -717,7 +678,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							 * 
 							 * Para cada registro do tipo 4, alterar na tabela CONTA_IMPOSTOS_DEDUZIDOS o
 							 * seu correspondente (CNTA_ID = Conta do movimento em processamento e IMTP_ID =
-							 * c�digo do imposto do movimento) , com os seguintes dados
+							 * cedigo do imposto do movimento) , com os seguintes dados
 							 */
 							FiltroMovimentoContaImpostoDeduzido filtroMovimentoContaImpostoDeduzido = new FiltroMovimentoContaImpostoDeduzido();
 
@@ -729,10 +690,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									.getControladorUtil().pesquisar(filtroMovimentoContaImpostoDeduzido,
 											MovimentoContaImpostoDeduzido.class.getName());
 
-							BigDecimal valorTotalMenosImposto = new BigDecimal(valorAgua.doubleValue()
-									+ valorEsgoto.doubleValue() + contaAtualizacao.getDebitos().doubleValue()
+							BigDecimal valorTotalMenosImposto = new BigDecimal(helper.getValorTotalCategoriasAgua().doubleValue()
+									+ helper.getValorTotalCategoriasEsgoto().doubleValue() + contaAtualizacao.getDebitos().doubleValue()
 									- contaAtualizacao.getValorCreditos().doubleValue());
 
+							BigDecimal valorImposto = new BigDecimal(0);
 							for (MovimentoContaImpostoDeduzido helperMovimentoContaImpostoDeduzido : colMovimentoContaImpostoDeduzido) {
 
 								FiltroContaImpostosDeduzidos filtroContaImpostosDeduzidos = new FiltroContaImpostosDeduzidos();
@@ -770,12 +732,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 							}
 
-							contaAtualizacao.setConsumoAgua(consumoAgua);
-							contaAtualizacao.setConsumoEsgoto(consumoEsgoto);
-							contaAtualizacao.setConsumoRateioAgua(consumoRateioAgua);
-							contaAtualizacao.setConsumoRateioEsgoto(consumoRateioEsgoto);
-							contaAtualizacao.setValorAgua(valorAgua);
-							contaAtualizacao.setValorEsgoto(valorEsgoto);
+							contaAtualizacao.setConsumoAgua(helper.getValorTotalConsumoAgua());
+							contaAtualizacao.setConsumoEsgoto(helper.getValorTotalConsumoEsgoto());
+							contaAtualizacao.setConsumoRateioAgua(helper.getConsumoRateioAgua());
+							contaAtualizacao.setConsumoRateioEsgoto(helper.getConsumoRateioEsgoto());
+							contaAtualizacao.setValorAgua(helper.getValorTotalCategoriasAgua());
+							contaAtualizacao.setValorEsgoto(helper.getValorTotalCategoriasEsgoto());
 							contaAtualizacao.setValorImposto(valorImposto);
 							contaAtualizacao.setDataEmissao(helper.getDataHoraLeitura());
 							contaAtualizacao.setUltimaAlteracao(new Date());
@@ -788,7 +750,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
 							contaAtualizacao.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 
-							// S� ir� atualizar o nitrato na conta caso o mesmo ainda nao tenha sido
+							// Se ire atualizar o nitrato na conta caso o mesmo ainda nao tenha sido
 							// atualizado
 							FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
 							filtroCreditoARealizar.adicionarParametro(
@@ -808,7 +770,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 								if (credito.getValorCredito() == null || credito.getValorCredito().floatValue() == 0) {
 									BigDecimal valorCreditoNitrato = this.atualizarCreditoARealizarNitrato(
-											helper.getImovel(), helper.getAnoMesReferenciaPreFaturamento(), valorAgua,
+											helper.getImovel(), helper.getAnoMesReferenciaPreFaturamento(), helper.getValorTotalCategoriasAgua(),
 											helper.getConta());
 
 									if (valorCreditoNitrato != null) {
@@ -819,9 +781,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 							}
 
-							// verifica se o valor cr�dito � maior que o valor da conta caso seja chamar
+							// verifica se o valor credito e maior que o valor da conta caso seja chamar
 							// atualizar os creditos a realizar e os creditos realizados
-							BigDecimal valorTotalContaSemCreditos = valorAgua.add(valorEsgoto);
+							BigDecimal valorTotalContaSemCreditos = helper.getValorTotalCategoriasAgua().add(helper.getValorTotalCategoriasEsgoto());
 							valorTotalContaSemCreditos = valorTotalContaSemCreditos.add(contaAtualizacao.getDebitos());
 							valorTotalContaSemCreditos = valorTotalContaSemCreditos.subtract(valorImposto);
 
@@ -829,7 +791,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 //							if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
 //								/**
-//								 * Cr�dito Bolsa �gua ser� validado antes de ser adicionado aos Cr�ditos da
+//								 * Credito Bolsa egua sere validado antes de ser adicionado aos Creditos da
 //								 * Conta
 //								 * 
 //								 * @author: Kurt Matheus Sampaio de Matos
@@ -873,7 +835,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								/**
 								 * Autor: Wellington Rocha Data: 30/08/2011
 								 * 
-								 * Caso a conta seja retransmitida o valor do cr�dito residual n�o ser�
+								 * Caso a conta seja retransmitida o valor do credito residual neo sere
 								 * atualizado novamente.
 								 */
 							} else if ((indicadorRetransmissao != null && indicadorRetransmissao.equals(2))
@@ -888,11 +850,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								/**
 								 * Autor: Adriana Muniz Data: 09/08/2011
 								 * 
-								 * Como os valores residuais dos cr�ditos a realizar n�o est�o mais sendo
-								 * zerados no momento de gera��o da rota, � necess�rio zerar, esse valor
+								 * Como os valores residuais dos creditos a realizar neo esteo mais sendo
+								 * zerados no momento de geraeeo da rota, e necesserio zerar, esse valor
 								 * caso seja diferente de zero, no retorno do IS
 								 */
-								// consulta todos os cr�ditos com valor residual diferente de zero
+								// consulta todos os creditos com valor residual diferente de zero
 								Collection colecaoCreditosARealizar = repositorioFaturamento
 										.buscarCreditoARealizarPorImovelValorResidualDiferenteZero(
 												contaAtualizacao.getImovel().getId());
@@ -903,7 +865,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 											+ (contaAtualizacao.getImovel() != null
 													? contaAtualizacao.getImovel().getId()
 													: "NULL")
-											+ " | Qtde de cr�ditos com valor residual diferente de zero: "
+											+ " | Qtde de creditos com valor residual diferente de zero: "
 											+ colecaoCreditosARealizar.size());
 
 									Iterator creditoIterator = colecaoCreditosARealizar.iterator();
@@ -915,14 +877,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										logger.info(" 5 - Credito a Realizar: Imovel: "
 												+ (credito.getImovel() != null ? credito.getImovel().getId() : "NULL")
-												+ " | Cr�ditos: "
+												+ " | Creditos: "
 												+ (credito.getValorCredito() != null ? credito.getValorCredito()
 														: "NULL")
-												+ " | Residual Concedido no M�s: "
+												+ " | Residual Concedido no Mes: "
 												+ (credito.getValorResidualConcedidoMes() != null
 														? credito.getValorResidualConcedidoMes()
 														: "NULL")
-												+ " | Residual do M�s Anterior: "
+												+ " | Residual do Mes Anterior: "
 												+ (credito.getValorResidualMesAnterior() != null
 														? credito.getValorResidualMesAnterior()
 														: "NULL"));
@@ -938,8 +900,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								throw new ControladorException("erro.sistema", e);
 							}
 
-							// Verfificar se o im�vel � para ser faturado ou n�o,
-							// caso n�o seja ent�o deletar a conta.
+							// Verfificar se o imevel e para ser faturado ou neo,
+							// caso neo seja enteo deletar a conta.
 							boolean faturar = true;
 							if (contaAtualizacao.getLigacaoAguaSituacao() != null
 									&& contaAtualizacao.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao()
@@ -952,13 +914,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							}
 
 							BigDecimal valorMinimoEmissao = sistemaParametro.getValorMinimoEmissaoConta();
-							// Caso o valor da conta seja menor que o valor m�nimo
-							// permitido para a dele��o da conta,
-							// ent�o deleta os dados da conta
+							// Caso o valor da conta seja menor que o valor menimo
+							// permitido para a deleeeo da conta,
+							// enteo deleta os dados da conta
 							if (contaAtualizacao.getValorTotal().compareTo(valorMinimoEmissao) < 0 || !faturar) {
 								if (contaAtualizacao.getValorCreditos().compareTo(BigDecimal.ZERO) == 0) {
-									// Objeto que armazenar� as informa��es para
-									// dele��o das contas
+									// Objeto que armazenare as informaeees para
+									// deleeeo das contas
 									ApagarDadosFaturamentoHelper helperApagarDadosFaturamento = new ApagarDadosFaturamentoHelper();
 									helperApagarDadosFaturamento
 											.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
@@ -969,7 +931,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									this.apagarDadosGeradosFaturarGrupoFaturamento(helperApagarDadosFaturamento,
 											FaturamentoAtividade.FATURAR_GRUPO.intValue());
 
-									// pula de im�vel
+									// pula de imevel
 									continue;
 								}
 							} else {
@@ -980,16 +942,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							}
 
 							boolean contaNaoImpressa = false;
-							// Caso o valor da conta seja zero e o im�vel n�o tenha
-							// cr�dito,
-							// ent�o n�o coloca em conta_impress�o
+							// Caso o valor da conta seja zero e o imevel neo tenha
+							// credito,
+							// enteo neo coloca em conta_impresseo
 							if (contaAtualizacao.getValorTotal().compareTo(BigDecimal.ZERO) == 0) {
 								if (contaAtualizacao.getValorCreditos().compareTo(BigDecimal.ZERO) == 0) {
 									contaNaoImpressa = true;
 								}
 							}
 
-							// Caso o indicador de emiss�o de conta seja igual � n�o
+							// Caso o indicador de emisseo de conta seja igual e neo
 							// emitida
 							if (helper.getIndicadorEmissaoConta().shortValue() == ConstantesSistema.NAO.shortValue()
 									&& !contaNaoImpressa) {
@@ -1006,15 +968,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 								/*
 								 * 
-								 * Caso esteja indicado no im�vel que a conta deve ser entregue ao
-								 * respons�vel (ICTE_ID da tabela IMOVEL seja igual a 1 ou 3), e o im�vel
-								 * n�o seja d�bito autom�tico( IMOV_ICDEBITOCONTA da tabela IMOVEL seja
+								 * Caso esteja indicado no imevel que a conta deve ser entregue ao
+								 * responsevel (ICTE_ID da tabela IMOVEL seja igual a 1 ou 3), e o imevel
+								 * neo seja debito autometico( IMOV_ICDEBITOCONTA da tabela IMOVEL seja
 								 * igual a 2), atribuir CLIE_ID da tabela CLIENTE_IMOVEL para IMOV_ID=Id da
-								 * matr�cula do im�vel e CLIM_DTRELACAOFIM com o valor correspondente a nulo
-								 * e CRTP_ID com o valor correspondente a respons�vel da tabela
-								 * CLIENTE_RELACAO_TIPO, caso contr�rio atribuir o valor nulo.
+								 * matrecula do imevel e CLIM_DTRELACAOFIM com o valor correspondente a nulo
+								 * e CRTP_ID com o valor correspondente a responsevel da tabela
+								 * CLIENTE_RELACAO_TIPO, caso contrerio atribuir o valor nulo.
 								 */
-								// CAERN s� vai imprimir quando for enviar para o
+								// CAERN se vai imprimir quando for enviar para o
 								// cliente responsavel no final do grupo
 								// helper.getImovel().getImovelContaEnvio().getId()
 								// == ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL ||
@@ -1061,15 +1023,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 
 								/*
-								 * 1.Caso id do cliente respons�vel esteja preenchido (CLIE_IDRESPONSAVEL)
-								 * atribuir o valor correspondente a conta de cliente respons�vel da tabela
+								 * 1.Caso id do cliente responsevel esteja preenchido (CLIE_IDRESPONSAVEL)
+								 * atribuir o valor correspondente a conta de cliente responsevel da tabela
 								 * CONTA_TIPO;
 								 * 
-								 * 2.Caso im�vel seja d�bito autom�tico (IMOV_ICDEBITOCONTA da tabela
-								 * IMOVEL seja igual a 1), atribuir o valor correspondente a conta d�bito
-								 * autom�tico da tabela CONTA_TIPO;
+								 * 2.Caso imevel seja debito autometico (IMOV_ICDEBITOCONTA da tabela
+								 * IMOVEL seja igual a 1), atribuir o valor correspondente a conta debito
+								 * autometico da tabela CONTA_TIPO;
 								 * 
-								 * Caso nenhuma das condi��es acima tenha sido verdadeira atribuir o valor
+								 * Caso nenhuma das condieees acima tenha sido verdadeira atribuir o valor
 								 * correspondente a conta normal da tabela CONTA_TIPO;
 								 */
 
@@ -1091,9 +1053,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								contaImpressao.setContaTipo(contaTipo);
 
 								/*
-								 * Caso a empresa seja a COMPESA e Caso id do cliente respons�vel esteja
-								 * preenchido (CLIE_IDRESPONSAVEL) atribuir o valor nulo, caso contr�rio
-								 * atribuir � empresa associada � rota (EMPR_ID da tabela ROTA);
+								 * Caso a empresa seja a COMPESA e Caso id do cliente responsevel esteja
+								 * preenchido (CLIE_IDRESPONSAVEL) atribuir o valor nulo, caso contrerio
+								 * atribuir e empresa associada e rota (EMPR_ID da tabela ROTA);
 								 */
 								if (sistemaParametro.getCodigoEmpresaFebraban()
 										.equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COMPESA)) {
@@ -1103,7 +1065,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									}
 								} else {
 									/*
-									 * Caso contr�rio, atribuir � empresa associada � rota (EMPR_ID da tabela
+									 * Caso contrerio, atribuir e empresa associada e rota (EMPR_ID da tabela
 									 * ROTA);
 									 */
 									if (!sistemaParametro.getCodigoEmpresaFebraban()
@@ -1114,8 +1076,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 								/*
 								 * 
-								 * Valor total da conta (Soma do valor da �gua + Soma do valor de esgoto +
-								 * Valor de d�bitos da conta ? Valor de cr�ditos da conta ? Soma do valor
+								 * Valor total da conta (Soma do valor da egua + Soma do valor de esgoto +
+								 * Valor de debitos da conta ? Valor de creditos da conta ? Soma do valor
 								 * dos impostos)
 								 */
 								BigDecimal valorTotalConta = BigDecimal.ZERO;
@@ -1129,7 +1091,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							}
 						}
 
-						// Atualiza a forma do documento de cobran�a se a conta foi
+						// Atualiza a forma do documento de cobranea se a conta foi
 						// impressa
 						if (helper.getIndicadorEmissaoConta().equals(ConstantesSistema.SIM)
 								&& helper.getCobrancaDocumento() != null
@@ -1148,6 +1110,33 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			throw new ControladorException("erro.sistema", e);
 		}
 
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Collection obterColecaoCategoriaConta(SistemaParametro sistemaParametro, Conta conta)
+			throws ControladorException {
+		Collection colecaoCategoriaOUSubcategoria;
+		if (sistemaParametro.getIndicadorTarifaCategoria()
+				.equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
+			if (conta!= null) {
+				colecaoCategoriaOUSubcategoria = this.getControladorImovel()
+						.obterQuantidadeEconomiasContaCategoria(conta.getId());
+			} else {
+				colecaoCategoriaOUSubcategoria = this.getControladorImovel()
+						.obterQuantidadeEconomiasCategoria(conta.getImovel());
+			}
+		} else {
+			if (conta!= null) {
+				colecaoCategoriaOUSubcategoria = this.getControladorImovel()
+						.obterQuantidadeEconomiasContaCategoriaPorSubcategoria(
+								conta.getId());
+			} else {
+				colecaoCategoriaOUSubcategoria = this.getControladorImovel()
+						.obterQuantidadeEconomiasSubCategoria(conta.getImovel().getId());
+			}
+
+		}
+		return colecaoCategoriaOUSubcategoria;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -1214,30 +1203,30 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
-	 * Verificar seq��ncia dos tipos de registros
+	 * Verificar seqeencia dos tipos de registros
 	 * 
-	 * N�o poder� vir um registro do tipo 1 depois de outro tipo 1 para o mesmo
-	 * im�vel, dever� retornar uma mensagem "Im�vel: <<n�mero do im�vel>>,
-	 * do arquivo, com seq�encial 1 depois de outro seq�encial 1";
+	 * Neo podere vir um registro do tipo 1 depois de outro tipo 1 para o mesmo
+	 * imevel, devere retornar uma mensagem "Imevel: <<nemero do imevel>>,
+	 * do arquivo, com seqeencial 1 depois de outro seqeencial 1";
 	 * 
-	 * N�o poder� vir um registro do tipo 2 sem que tenha um do tipo 1 para o
-	 * mesmo im�vel, dever� retornar uma mensagem "Im�vel: <<n�mero do
-	 * im�vel>>, do arquivo, com seq�encial 2 sem seq�encial 1.";
+	 * Neo podere vir um registro do tipo 2 sem que tenha um do tipo 1 para o
+	 * mesmo imevel, devere retornar uma mensagem "Imevel: <<nemero do
+	 * imevel>>, do arquivo, com seqeencial 2 sem seqeencial 1.";
 	 * 
-	 * N�o poder� vir um registro do tipo 3 sem que tenha um do tipo 2 para o
-	 * mesmo im�vel, dever� retornar uma mensagem "Im�vel: <<n�mero do
-	 * im�vel>> , do arquivo, com seq�encial 3 sem seq�encial 2.";
+	 * Neo podere vir um registro do tipo 3 sem que tenha um do tipo 2 para o
+	 * mesmo imevel, devere retornar uma mensagem "Imevel: <<nemero do
+	 * imevel>> , do arquivo, com seqeencial 3 sem seqeencial 2.";
 	 * 
-	 * N�o poder� vir um registro do tipo 4 sem que tenha um do tipo 1 para o
-	 * mesmo im�vel dever� retornar uma mensagem "Im�vel: <<n�mero do
-	 * im�vel>>, do arquivo, com seq�encial 4 sem seq�encial 1.";
+	 * Neo podere vir um registro do tipo 4 sem que tenha um do tipo 1 para o
+	 * mesmo imevel devere retornar uma mensagem "Imevel: <<nemero do
+	 * imevel>>, do arquivo, com seqeencial 4 sem seqeencial 1.";
 	 * 
-	 * [FS0008] - Verificar seq��ncia dos tipos de registros
+	 * [FS0008] - Verificar seqeencia dos tipos de registros
 	 * 
 	 * 
 	 * @author bruno
@@ -1258,7 +1247,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		for (AtualizarContaPreFaturadaHelper helperLaco : colHelper) {
 
 			if (helperLaco.getTipoRegistro() == AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_1) {
-				// N�o poder� vir um registro do tipo 1 depois de outro tipo 1
+				// Neo podere vir um registro do tipo 1 depois de outro tipo 1
 				if (registroAnterior != null && registroAnterior.equals(helperLaco.getTipoRegistro())) {
 					/*
 					 * errors.add( ConstantesAplicacao.get(
@@ -1267,11 +1256,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					 */
 				}
 
-				// Guardamos as informa��es necessarias ao registro tipo 1
+				// Guardamos as informaeees necessarias ao registro tipo 1
 				matriculaImovelRegistroTipo1Selecionado = helperLaco.getMatriculaImovel();
 			} else if (helperLaco.getTipoRegistro() == AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_2) {
-				// N�o poder� vir um registro do tipo 2 sem que tenha um do
-				// tipo 1 para o mesmo im�vel
+				// Neo podere vir um registro do tipo 2 sem que tenha um do
+				// tipo 1 para o mesmo imevel
 				if (matriculaImovelRegistroTipo1Selecionado == null
 						|| !matriculaImovelRegistroTipo1Selecionado.equals(helperLaco.getMatriculaImovel())) {
 
@@ -1281,11 +1270,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							helperLaco.getMatriculaImovel() + ""));
 				}
 
-				// Guardamos as informa��es necessarias ao registro tipo 2
+				// Guardamos as informaeees necessarias ao registro tipo 2
 				matriculaImovelRegistroTipo2Selecionado = helperLaco.getMatriculaImovel();
 			} else if (helperLaco.getTipoRegistro() == AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_3) {
-				// N�o poder� vir um registro do tipo 3 sem que tenha um do
-				// tipo 2 para o mesmo im�vel
+				// Neo podere vir um registro do tipo 3 sem que tenha um do
+				// tipo 2 para o mesmo imevel
 				if (matriculaImovelRegistroTipo2Selecionado == null
 						|| !matriculaImovelRegistroTipo2Selecionado.equals(helperLaco.getMatriculaImovel())) {
 					System.out.println("[IMOVEL: " + helperLaco.getMatriculaImovel()
@@ -1294,8 +1283,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							helperLaco.getMatriculaImovel() + ""));
 				}
 			} else if (helperLaco.getTipoRegistro() == AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_4) {
-				// N�o poder� vir um registro do tipo 4 sem que tenha um do
-				// tipo 1 para o mesmo im�vel
+				// Neo podere vir um registro do tipo 4 sem que tenha um do
+				// tipo 1 para o mesmo imevel
 				if (matriculaImovelRegistroTipo1Selecionado == null
 						|| !matriculaImovelRegistroTipo1Selecionado.equals(helperLaco.getMatriculaImovel())) {
 					System.out.println("[IMOVEL: " + helperLaco.getMatriculaImovel()
@@ -1313,14 +1302,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
 	 * Caso o tipo de registro possua valor <> 1, 2, 3 ou 4, gerar no log de
-	 * consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>> com Movimento
-	 * de pr�-faturamento com tipo de registro inv�lido".
+	 * consistencia a mensagem "Imevel: <<nemero do imevel>> com Movimento
+	 * de pre-faturamento com tipo de registro invelido".
 	 * 
 	 * [FS0009] - Verificar valor do tipo de registro
 	 * 
@@ -1349,16 +1338,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
-	 * Caso a matr�cula do im�vel n�o exista na tabela IMOVEL, gerar no log de
-	 * consist�ncia a mensagem "Matr�cula do im�vel inexistente: <<n�mero do
-	 * im�vel>>"
+	 * Caso a matrecula do imevel neo exista na tabela IMOVEL, gerar no log de
+	 * consistencia a mensagem "Matrecula do imevel inexistente: <<nemero do
+	 * imevel>>"
 	 * 
-	 * [FS0002] - Verificar exist�ncia da matr�cula do im�vel
+	 * [FS0002] - Verificar existencia da matrecula do imevel
 	 * 
 	 * @author bruno
 	 * @date 30/06/2009
@@ -1373,7 +1362,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		// Verificamos que:
 		if (helperLaco.getTipoRegistro().equals(AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_1)) {
-			// [FS0002] - Verificar exist�ncia da matr�cula do im�vel
+			// [FS0002] - Verificar existencia da matrecula do imevel
 			if (this.getControladorImovel().verificarExistenciaImovel(helperLaco.getMatriculaImovel()) == 0) {
 				errors.add(ConstantesAplicacao.get("atencao.imovel_matricula_inexistente",
 						helperLaco.getMatriculaImovel() + ""));
@@ -1387,43 +1376,43 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
-	 * Caso o tipo de medi��o seja diferente de zero e n�o exista na tabela
-	 * MEDICAO_TIPO, gerar no log de consist�ncia a mensagem "Im�vel: <<n�mero
-	 * do im�vel>> com Tipo de Medi��o inexistente <<tipo de medi��o>>".
+	 * Caso o tipo de medieeo seja diferente de zero e neo exista na tabela
+	 * MEDICAO_TIPO, gerar no log de consistencia a mensagem "Imevel: <<nemero
+	 * do imevel>> com Tipo de Medieeo inexistente <<tipo de medieeo>>".
 	 * 
-	 * Caso o tipo de medi��o corresponda � liga��o de �gua e n�o
-	 * exista hidr�metro instalado para a liga��o (LAGU_ID=matr�cula do
-	 * im�vel, HIDI_ID n�o preenchido na tabela LIGA��O_AGUA), gerar no log
-	 * de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>> com
-	 * Movimento para liga��o de �gua sem hidr�metro".
+	 * Caso o tipo de medieeo corresponda e ligaeeo de egua e neo
+	 * exista hidremetro instalado para a ligaeeo (LAGU_ID=matrecula do
+	 * imevel, HIDI_ID neo preenchido na tabela LIGAeeO_AGUA), gerar no log
+	 * de consistencia a mensagem "Imevel: <<nemero do imevel>> com
+	 * Movimento para ligaeeo de egua sem hidremetro".
 	 * 
-	 * Caso o tipo de medi��o corresponda a po�o e n�o exista hidr�metro
-	 * instalado para o po�o (IMOV_NNMATRICULA=matr�cula do im�vel, HIDI_ID
-	 * n�o preenchido na tabela IMOVEL), gerar no log de consist�ncia a mensagem
-	 * "Im�vel: <<n�mero do im�vel>> com Movimento para po�o sem
-	 * hidr�metro".
+	 * Caso o tipo de medieeo corresponda a poeo e neo exista hidremetro
+	 * instalado para o poeo (IMOV_NNMATRICULA=matrecula do imevel, HIDI_ID
+	 * neo preenchido na tabela IMOVEL), gerar no log de consistencia a mensagem
+	 * "Imevel: <<nemero do imevel>> com Movimento para poeo sem
+	 * hidremetro".
 	 * 
-	 * Caso o tipo de medi��o seja zero e a leitura seja informada e n�o
-	 * exista hidr�metro instalado para o im�vel (LAGU_ID=matr�cula do
-	 * im�vel, HIDI_ID n�o preenchido na tabela LIGA��O_AGUA e
-	 * IMOV_ID=matr�cula do im�vel, HIDI_ID n�o preenchido na tabela IMOVEL),
-	 * gerar no log de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>>
-	 * com Movimento para liga��o sem hidr�metro" e retornar para o passo 3 do
-	 * fluxo principal. Caso o tipo de medi��o seja zero e a anormalidade
-	 * informada n�o seja compat�vel com liga��o sem hidr�metro
-	 * (LTAN_ICIMOVELSEMHIDROMETRO=2) e n�o exista hidr�metro instalado para o
-	 * im�vel (LAGU_ID=matr�cula do im�vel, HIDI_ID n�o preenchido na tabela
-	 * LIGA��O_AGUA e IMOV_ID=matr�cula do im�vel, HIDI_ID n�o preenchido
-	 * na tabela IMOVEL), gerar no log de consist�ncia a mensagem "Im�vel:
-	 * <<n�mero do im�vel>> com Anormalidade n�o permitida para liga��o
-	 * sem hidr�metro".
+	 * Caso o tipo de medieeo seja zero e a leitura seja informada e neo
+	 * exista hidremetro instalado para o imevel (LAGU_ID=matrecula do
+	 * imevel, HIDI_ID neo preenchido na tabela LIGAeeO_AGUA e
+	 * IMOV_ID=matrecula do imevel, HIDI_ID neo preenchido na tabela IMOVEL),
+	 * gerar no log de consistencia a mensagem "Imevel: <<nemero do imevel>>
+	 * com Movimento para ligaeeo sem hidremetro" e retornar para o passo 3 do
+	 * fluxo principal. Caso o tipo de medieeo seja zero e a anormalidade
+	 * informada neo seja compatevel com ligaeeo sem hidremetro
+	 * (LTAN_ICIMOVELSEMHIDROMETRO=2) e neo exista hidremetro instalado para o
+	 * imevel (LAGU_ID=matrecula do imevel, HIDI_ID neo preenchido na tabela
+	 * LIGAeeO_AGUA e IMOV_ID=matrecula do imevel, HIDI_ID neo preenchido
+	 * na tabela IMOVEL), gerar no log de consistencia a mensagem "Imevel:
+	 * <<nemero do imevel>> com Anormalidade neo permitida para ligaeeo
+	 * sem hidremetro".
 	 * 
-	 * [FS0003] - Verificar tipo de medi��o
+	 * [FS0003] - Verificar tipo de medieeo
 	 * 
 	 * @author bruno
 	 * @date 30/06/2009
@@ -1437,10 +1426,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Collection<String> errors = new ArrayList();
 
 		// Verificamos que:
-		// Apenas testamos o tipo de medi��o para registros tipo 1
+		// Apenas testamos o tipo de medieeo para registros tipo 1
 		if (helperLaco.getTipoRegistro().equals(AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_1)) {
 
-			// Coletamos as informa��es necess�rias para as valida��es
+			// Coletamos as informaeees necesserias para as validaeees
 			FiltroLigacaoAgua filtroLigacaoAgua = new FiltroLigacaoAgua();
 			filtroLigacaoAgua
 					.adicionarParametro(new ParametroSimples(FiltroLigacaoAgua.ID, helperLaco.getMatriculaImovel()));
@@ -1455,9 +1444,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Collection<Imovel> colImovel = this.getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName());
 
 			/*
-			 * Caso o tipo de medi��o seja diferente de zero e n�o exista na tabela
-			 * MEDICAO_TIPO, gerar no log de consist�ncia a mensagem "Im�vel: <<n�mero
-			 * do im�vel>> com Tipo de Medi��o inexistente <<tipo de medi��o>>".
+			 * Caso o tipo de medieeo seja diferente de zero e neo exista na tabela
+			 * MEDICAO_TIPO, gerar no log de consistencia a mensagem "Imevel: <<nemero
+			 * do imevel>> com Tipo de Medieeo inexistente <<tipo de medieeo>>".
 			 */
 			if (!helperLaco.getTipoMedicao().equals(ConstantesSistema.ZERO)) {
 
@@ -1476,11 +1465,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					MedicaoTipo medicaoTipo = (MedicaoTipo) Util.retonarObjetoDeColecao(colMedicaoTipo);
 
 					/*
-					 * Caso o tipo de medi��o corresponda � liga��o de �gua e n�o
-					 * exista hidr�metro instalado para a liga��o (LAGU_ID=matr�cula do
-					 * im�vel, HIDI_ID n�o preenchido na tabela LIGA��O_AGUA), gerar no log
-					 * de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>> com
-					 * Movimento para liga��o de �gua sem hidr�metro".
+					 * Caso o tipo de medieeo corresponda e ligaeeo de egua e neo
+					 * exista hidremetro instalado para a ligaeeo (LAGU_ID=matrecula do
+					 * imevel, HIDI_ID neo preenchido na tabela LIGAeeO_AGUA), gerar no log
+					 * de consistencia a mensagem "Imevel: <<nemero do imevel>> com
+					 * Movimento para ligaeeo de egua sem hidremetro".
 					 */
 					if (medicaoTipo.getId() == MedicaoTipo.LIGACAO_AGUA) {
 						if (colLigacaoAgua == null || colLigacaoAgua.size() == 0) {
@@ -1490,11 +1479,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									+ "] atencao.imovel_movimento_ligacao_agua_sem_hidrometro");
 						}
 						/*
-						 * Caso o tipo de medi��o corresponda a po�o e n�o exista hidr�metro
-						 * instalado para o po�o (IMOV_NNMATRICULA=matr�cula do im�vel, HIDI_ID
-						 * n�o preenchido na tabela IMOVEL), gerar no log de consist�ncia a mensagem
-						 * "Im�vel: <<n�mero do im�vel>> com Movimento para po�o sem
-						 * hidr�metro".
+						 * Caso o tipo de medieeo corresponda a poeo e neo exista hidremetro
+						 * instalado para o poeo (IMOV_NNMATRICULA=matrecula do imevel, HIDI_ID
+						 * neo preenchido na tabela IMOVEL), gerar no log de consistencia a mensagem
+						 * "Imevel: <<nemero do imevel>> com Movimento para poeo sem
+						 * hidremetro".
 						 */
 					} else if (medicaoTipo.getId() == MedicaoTipo.POCO) {
 						if (colImovel == null || colImovel.size() == 0) {
@@ -1507,12 +1496,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 			} else {
 				/*
-				 * Caso o tipo de medi��o seja zero e a leitura seja informada e n�o
-				 * exista hidr�metro instalado para o im�vel (LAGU_ID=matr�cula do
-				 * im�vel, HIDI_ID n�o preenchido na tabela LIGA��O_AGUA e
-				 * IMOV_ID=matr�cula do im�vel, HIDI_ID n�o preenchido na tabela IMOVEL),
-				 * gerar no log de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>>
-				 * com Movimento para liga��o sem hidr�metro".
+				 * Caso o tipo de medieeo seja zero e a leitura seja informada e neo
+				 * exista hidremetro instalado para o imevel (LAGU_ID=matrecula do
+				 * imevel, HIDI_ID neo preenchido na tabela LIGAeeO_AGUA e
+				 * IMOV_ID=matrecula do imevel, HIDI_ID neo preenchido na tabela IMOVEL),
+				 * gerar no log de consistencia a mensagem "Imevel: <<nemero do imevel>>
+				 * com Movimento para ligaeeo sem hidremetro".
 				 */
 				if (helperLaco.getLeituraHidrometro() != null) {
 					if ((colLigacaoAgua == null || colLigacaoAgua.size() == 0)
@@ -1525,13 +1514,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 
 				/*
-				 * Caso o tipo de medi��o seja zero e a anormalidade informada n�o seja
-				 * compat�vel com liga��o sem hidr�metro (LTAN_ICIMOVELSEMHIDROMETRO=2)
-				 * e n�o exista hidr�metro instalado para o im�vel (LAGU_ID=matr�cula do
-				 * im�vel, HIDI_ID n�o preenchido na tabela LIGA��O_AGUA e
-				 * IMOV_ID=matr�cula do im�vel, HIDI_ID n�o preenchido na tabela IMOVEL),
-				 * gerar no log de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>>
-				 * com Anormalidade n�o permitida para liga��o sem hidr�metro".
+				 * Caso o tipo de medieeo seja zero e a anormalidade informada neo seja
+				 * compatevel com ligaeeo sem hidremetro (LTAN_ICIMOVELSEMHIDROMETRO=2)
+				 * e neo exista hidremetro instalado para o imevel (LAGU_ID=matrecula do
+				 * imevel, HIDI_ID neo preenchido na tabela LIGAeeO_AGUA e
+				 * IMOV_ID=matrecula do imevel, HIDI_ID neo preenchido na tabela IMOVEL),
+				 * gerar no log de consistencia a mensagem "Imevel: <<nemero do imevel>>
+				 * com Anormalidade neo permitida para ligaeeo sem hidremetro".
 				 */
 				FiltroLeituraAnormalidade filtroLeituraAnormalidade = new FiltroLeituraAnormalidade();
 				filtroLeituraAnormalidade.adicionarParametro(
@@ -1562,16 +1551,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
-	 * Caso o grupo de faturamento n�o exista na tabela FATURAMENTO_GRUPO, exibir
-	 * a mensagem "Grupo de faturamento inexistente" e cancelar a opera��o.
-	 * Lembrar que s� vir� um grupo por arquivo.
+	 * Caso o grupo de faturamento neo exista na tabela FATURAMENTO_GRUPO, exibir
+	 * a mensagem "Grupo de faturamento inexistente" e cancelar a operaeeo.
+	 * Lembrar que se vire um grupo por arquivo.
 	 * 
-	 * [FS0001] - Verificar exist�ncia do grupo de faturamento
+	 * [FS0001] - Verificar existencia do grupo de faturamento
 	 * 
 	 * @author bruno
 	 * @date 30/06/2009
@@ -1585,9 +1574,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		// Verificamos que:
 		/*
-		 * Caso o grupo de faturamento n�o exista na tabela FATURAMENTO_GRUPO, exibir
-		 * a mensagem "Grupo de faturamento inexistente" e cancelar a opera��o.
-		 * Lembrar que s� vir� um grupo por arquivo.
+		 * Caso o grupo de faturamento neo exista na tabela FATURAMENTO_GRUPO, exibir
+		 * a mensagem "Grupo de faturamento inexistente" e cancelar a operaeeo.
+		 * Lembrar que se vire um grupo por arquivo.
 		 */
 		if (helperLaco.getTipoRegistro().equals(AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_1)) {
 
@@ -1608,18 +1597,18 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
-	 * Caso o c�digo da anormalidade seja informado (diferente de zero e de
-	 * espa�os em branco) e n�o exista na tabela LEITURA_ANORMALIDADE, gerar no
-	 * log de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>> com
-	 * C�digo da Anormalidade de Leitura inexistente <<c�digo da
+	 * Caso o cedigo da anormalidade seja informado (diferente de zero e de
+	 * espaeos em branco) e neo exista na tabela LEITURA_ANORMALIDADE, gerar no
+	 * log de consistencia a mensagem "Imevel: <<nemero do imevel>> com
+	 * Cedigo da Anormalidade de Leitura inexistente <<cedigo da
 	 * anormalidade>>".
 	 * 
-	 * FS0008 - Verificar exist�ncia do c�digo da anormalidade de leitura]
+	 * FS0008 - Verificar existencia do cedigo da anormalidade de leitura]
 	 * 
 	 * @author bruno
 	 * @date 30/06/2009
@@ -1633,21 +1622,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		// Verificamos que:
 		/*
-		 * Caso o c�digo da anormalidade seja informado (diferente de zero e de
-		 * espa�os em branco) e n�o exista na tabela LEITURA_ANORMALIDADE, gerar no
-		 * log de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>> com
-		 * C�digo da Anormalidade de Leitura inexistente <<c�digo da
+		 * Caso o cedigo da anormalidade seja informado (diferente de zero e de
+		 * espaeos em branco) e neo exista na tabela LEITURA_ANORMALIDADE, gerar no
+		 * log de consistencia a mensagem "Imevel: <<nemero do imevel>> com
+		 * Cedigo da Anormalidade de Leitura inexistente <<cedigo da
 		 * anormalidade>>".
 		 */
 		if (helperLaco.getTipoRegistro().equals(AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_1)) {
 
 			/*
 			 *
-			 * Altera��o para verificar se o codigo de anormalida e igual a 0 (zero), ou
-			 * seja, se n�o existe anormalidade, pois caso seja 0, a consulta de
-			 * anormalidades n�o vai achar a anormalidade e vai indicar erro de
-			 * anormalidade inexistente, s� que � o caso de n�o ter anormalidade no
-			 * im�vel, e n�o de ser um c�digo inexistente.
+			 * Alteraeeo para verificar se o codigo de anormalida e igual a 0 (zero), ou
+			 * seja, se neo existe anormalidade, pois caso seja 0, a consulta de
+			 * anormalidades neo vai achar a anormalidade e vai indicar erro de
+			 * anormalidade inexistente, se que e o caso de neo ter anormalidade no
+			 * imevel, e neo de ser um cedigo inexistente.
 			 */
 			if (helperLaco.getAnormalidadeLeitura() != null
 					&& !helperLaco.getAnormalidadeLeitura().equals(new Integer(0))) {
@@ -1671,21 +1660,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
-	 * Caso a data e hora de leitura seja inv�lida ou maior que a data corrente,
-	 * gerar no log de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>>
-	 * com Data e hora de leitura inv�lida <<data da leitura>>".
+	 * Caso a data e hora de leitura seja invelida ou maior que a data corrente,
+	 * gerar no log de consistencia a mensagem "Imevel: <<nemero do imevel>>
+	 * com Data e hora de leitura invelida <<data da leitura>>".
 	 * 
-	 * Caso o ano/m�s da data de leitura n�o seja igual ao ano/m�s de
-	 * refer�ncia do faturamento do grupo (FTGR_AMREFERENCIA) e n�o seja igual
-	 * ao ano/m�s de refer�ncia do faturamento do grupo menos um m�s e n�o
-	 * seja igual ao ano/m�s de refer�ncia do faturamento do grupo mais um
-	 * m�s, gerar no log de consist�ncia a mensagem "Data de leitura
-	 * incompat�vel com o m�s/ano de faturamento".
+	 * Caso o ano/mes da data de leitura neo seja igual ao ano/mes de
+	 * referencia do faturamento do grupo (FTGR_AMREFERENCIA) e neo seja igual
+	 * ao ano/mes de referencia do faturamento do grupo menos um mes e neo
+	 * seja igual ao ano/mes de referencia do faturamento do grupo mais um
+	 * mes, gerar no log de consistencia a mensagem "Data de leitura
+	 * incompatevel com o mes/ano de faturamento".
 	 * 
 	 * [FS0004 - Verificar data e hora da leitura]
 	 * 
@@ -1701,10 +1690,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		// Verificamos que:
 		/*
-		 * Caso o c�digo da anormalidade seja informado (diferente de zero e de
-		 * espa�os em branco) e n�o exista na tabela LEITURA_ANORMALIDADE, gerar no
-		 * log de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>> com
-		 * C�digo da Anormalidade de Leitura inexistente <<c�digo da
+		 * Caso o cedigo da anormalidade seja informado (diferente de zero e de
+		 * espaeos em branco) e neo exista na tabela LEITURA_ANORMALIDADE, gerar no
+		 * log de consistencia a mensagem "Imevel: <<nemero do imevel>> com
+		 * Cedigo da Anormalidade de Leitura inexistente <<cedigo da
 		 * anormalidade>>".
 		 */
 		if (helperLaco.getTipoRegistro().equals(AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_1)) {
@@ -1720,12 +1709,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 
 				/*
-				 * Caso o ano/m�s da data de leitura n�o seja igual ao ano/m�s de
-				 * refer�ncia do faturamento do grupo (FTGR_AMREFERENCIA) e n�o seja igual
-				 * ao ano/m�s de refer�ncia do faturamento do grupo menos um m�s e n�o
-				 * seja igual ao ano/m�s de refer�ncia do faturamento do grupo mais um
-				 * m�s, gerar no log de consist�ncia a mensagem "Data de leitura
-				 * incompat�vel com o m�s/ano de faturamento" e retornar para o passo 3 do
+				 * Caso o ano/mes da data de leitura neo seja igual ao ano/mes de
+				 * referencia do faturamento do grupo (FTGR_AMREFERENCIA) e neo seja igual
+				 * ao ano/mes de referencia do faturamento do grupo menos um mes e neo
+				 * seja igual ao ano/mes de referencia do faturamento do grupo mais um
+				 * mes, gerar no log de consistencia a mensagem "Data de leitura
+				 * incompatevel com o mes/ano de faturamento" e retornar para o passo 3 do
 				 * fluxo principal.
 				 */
 
@@ -1759,17 +1748,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
-	 * Caso o Indicador de confirma��o de leitura n�o seja igual a 0 ou 1,
-	 * gerar no log de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>>
-	 * com Indicador de Confirma��o de Leitura inv�lido <<indicador de
-	 * confirma��o de leitura>>".
+	 * Caso o Indicador de confirmaeeo de leitura neo seja igual a 0 ou 1,
+	 * gerar no log de consistencia a mensagem "Imevel: <<nemero do imevel>>
+	 * com Indicador de Confirmaeeo de Leitura invelido <<indicador de
+	 * confirmaeeo de leitura>>".
 	 * 
-	 * [FS0006] - Validar indicador de confirma��o de leitura
+	 * [FS0006] - Validar indicador de confirmaeeo de leitura
 	 * 
 	 * @author bruno
 	 * @date 30/06/2009
@@ -1782,10 +1771,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		// Verificamos que:
 		/*
-		 * Caso o Indicador de confirma��o de leitura n�o seja igual a 0 ou 1,
-		 * gerar no log de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>>
-		 * com Indicador de Confirma��o de Leitura inv�lido <<indicador de
-		 * confirma��o de leitura>>" e retornar para o passo 3 do fluxo principal.
+		 * Caso o Indicador de confirmaeeo de leitura neo seja igual a 0 ou 1,
+		 * gerar no log de consistencia a mensagem "Imevel: <<nemero do imevel>>
+		 * com Indicador de Confirmaeeo de Leitura invelido <<indicador de
+		 * confirmaeeo de leitura>>" e retornar para o passo 3 do fluxo principal.
 		 */
 		if (helperLaco.getTipoRegistro().equals(AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_1)) {
 			if (helperLaco.getIndicadorConfirmacaoLeitura() != null) {
@@ -1804,18 +1793,18 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
-	 * Caso o c�digo da anormalidade seja informado (diferente de zero e de
-	 * espa�os em branco) e n�o exista na tabela CONSUMO_ANORMALIDADE, gerar no
-	 * log de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>> com
-	 * C�digo da Anormalidade de consumo inexistente <<c�digo da
+	 * Caso o cedigo da anormalidade seja informado (diferente de zero e de
+	 * espaeos em branco) e neo exista na tabela CONSUMO_ANORMALIDADE, gerar no
+	 * log de consistencia a mensagem "Imevel: <<nemero do imevel>> com
+	 * Cedigo da Anormalidade de consumo inexistente <<cedigo da
 	 * anormalidade>>".
 	 * 
-	 * [FS0012] - Verificar exist�ncia do c�digo da anormalidade de consumo
+	 * [FS0012] - Verificar existencia do cedigo da anormalidade de consumo
 	 * 
 	 * @author bruno
 	 * @date 30/06/2009
@@ -1829,10 +1818,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		// Verificamos que:
 		/*
-		 * Caso o Indicador de confirma��o de leitura n�o seja igual a 0 ou 1,
-		 * gerar no log de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>>
-		 * com Indicador de Confirma��o de Leitura inv�lido <<indicador de
-		 * confirma��o de leitura>>" e retornar para o passo 3 do fluxo principal.
+		 * Caso o Indicador de confirmaeeo de leitura neo seja igual a 0 ou 1,
+		 * gerar no log de consistencia a mensagem "Imevel: <<nemero do imevel>>
+		 * com Indicador de Confirmaeeo de Leitura invelido <<indicador de
+		 * confirmaeeo de leitura>>" e retornar para o passo 3 do fluxo principal.
 		 */
 		if (helperLaco.getTipoRegistro().equals(AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_1)) {
 
@@ -1857,16 +1846,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
-	 * Caso o c�digo da categoria n�o exista na tabela CATEGORIA, gerar no log
-	 * de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>> com
-	 * Categoria inexistente <<c�digo da categoria>>".
+	 * Caso o cedigo da categoria neo exista na tabela CATEGORIA, gerar no log
+	 * de consistencia a mensagem "Imevel: <<nemero do imevel>> com
+	 * Categoria inexistente <<cedigo da categoria>>".
 	 * 
-	 * [FS0012] - Verificar exist�ncia do c�digo da anormalidade de consumo
+	 * [FS0012] - Verificar existencia do cedigo da anormalidade de consumo
 	 * 
 	 * @author bruno
 	 * @date 30/06/2009
@@ -1880,9 +1869,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		// Verificamos que:
 		/*
-		 * Caso o c�digo da categoria n�o exista na tabela CATEGORIA, gerar no log
-		 * de consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>> com
-		 * Categoria inexistente <<c�digo da categoria>>".
+		 * Caso o cedigo da categoria neo exista na tabela CATEGORIA, gerar no log
+		 * de consistencia a mensagem "Imevel: <<nemero do imevel>> com
+		 * Categoria inexistente <<cedigo da categoria>>".
 		 */
 
 		if (helperLaco.getTipoRegistro().equals(AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_2)) {
@@ -1906,16 +1895,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
-	 * Caso o tipo do imposto n�o exista na tabela IMPOSTO_TIPO, gerar no log de
-	 * consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>> com Tipo do
+	 * Caso o tipo do imposto neo exista na tabela IMPOSTO_TIPO, gerar no log de
+	 * consistencia a mensagem "Imevel: <<nemero do imevel>> com Tipo do
 	 * Imposto inexistente <<tipo do imposto>>".
 	 * 
-	 * [FS0010] - Verificar exist�ncia do tipo do imposto
+	 * [FS0010] - Verificar existencia do tipo do imposto
 	 * 
 	 * @author bruno
 	 * @date 30/06/2009
@@ -1929,8 +1918,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		// Verificamos que:
 		/*
-		 * Caso o tipo do imposto n�o exista na tabela IMPOSTO_TIPO, gerar no log de
-		 * consist�ncia a mensagem "Im�vel: <<n�mero do im�vel>> com Tipo do
+		 * Caso o tipo do imposto neo exista na tabela IMPOSTO_TIPO, gerar no log de
+		 * consistencia a mensagem "Imevel: <<nemero do imevel>> com Tipo do
 		 * Imposto inexistente <<tipo do imposto>>".
 		 */
 		if (helperLaco.getTipoRegistro().equals(AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_4)) {
@@ -1954,32 +1943,32 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [UC0923] Incluir Movimento Conta Pr�-Faturada
+	 * [UC0923] Incluir Movimento Conta Pre-Faturada
 	 * 
 	 * 
 	 * Caso seja chamado por uma tela, o sistema gera uma tela de acordo com o
-	 * movimento, Caso contr�rio, o sistema gera um relat�rio e envia, por
+	 * movimento, Caso contrerio, o sistema gera um relaterio e envia, por
 	 * e-mail para o operador, registrado com os seguintes campos:
 	 * 
-	 * No cabe�alho imprimir o grupo de faturamento informado (FTGR_ID), o
-	 * c�digo e descri��o da empresa (EMPR_ID e EMPR_NMEMPRESA da tabela
+	 * No cabeealho imprimir o grupo de faturamento informado (FTGR_ID), o
+	 * cedigo e descrieeo da empresa (EMPR_ID e EMPR_NMEMPRESA da tabela
 	 * EMPRESA com EMPR_ID da tabela ROTA com ROTA_ID da tabela QUADRA com QDRA_ID
-	 * da tabela IMOVEL com IMOV_ID=matr�cula do im�vel do primeiro registro do
-	 * arquivo que exista na tabela IMOVEL), o c�digo da localidade e o t�tulo
-	 * fixo "MOVIMENTO CELULAR - IMPRESS�O SIMULT�NEA" quando processado o
+	 * da tabela IMOVEL com IMOV_ID=matrecula do imevel do primeiro registro do
+	 * arquivo que exista na tabela IMOVEL), o cedigo da localidade e o tetulo
+	 * fixo "MOVIMENTO CELULAR - IMPRESSeO SIMULTeNEA" quando processado o
 	 * arquivo de movimento;
 	 * 
-	 * Imprimir o erro correspondente encontrado no processamento do im�vel;
+	 * Imprimir o erro correspondente encontrado no processamento do imevel;
 	 * 
 	 * Caso seja chamado por uma tela, imprimir um texto "Arquivo processado com
-	 * problema e enviado para opera��o para processar o movimento. Localidade
-	 * <<C�digo da Localidade>>";
+	 * problema e enviado para operaeeo para processar o movimento. Localidade
+	 * <<Cedigo da Localidade>>";
 	 * 
-	 * [SB0001] - Gera Tela Resumo das leituras e anormalidades da impress�o
-	 * simult�nea com Problemas
+	 * [SB0001] - Gera Tela Resumo das leituras e anormalidades da impresseo
+	 * simultenea com Problemas
 	 * 
 	 * @author bruno
 	 * @date 30/06/2009
@@ -2011,17 +2000,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Rota rota = (Rota) Util.retonarObjetoDeColecao(colRota);
 		parametros.put("idLocalidade", helper.getLocalidade() + "");
 
-		// C�digo do setor Comercial
+		// Cedigo do setor Comercial
 		parametros.put("codigoSetorComercial", helper.getCodigoSetorComercial() + "");
 
-		// Id e descri��o de empresa
+		// Id e descrieeo de empresa
 		String descricaoRota = "";
 		if (rota != null && !rota.equals("")) {
 			descricaoRota = rota.getEmpresa().getId() + " - " + rota.getEmpresa().getDescricao();
 		}
 		parametros.put("idDescricaoEmpresa", descricaoRota);
 
-		// C�digo da localidade
+		// Cedigo da localidade
 		parametros.put("codigoLocalidade", helper.getLocalidade() + "");
 
 		// Criamos agora os beans do relatorio
@@ -2526,7 +2515,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0927] � Confirmar Cart�o de Cr�dito/D�bito
+	 * [UC0927] e Confirmar Carteo de Credito/Debito
 	 * 
 	 * @author Hugo Amorim, Raphael Rossiter
 	 * @date 30/07/2009, 14/01/2010
@@ -2565,7 +2554,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Atualiza Dados do Parcelamento para Cart�o de Cr�dito
+	 * Atualiza Dados do Parcelamento para Carteo de Credito
 	 * 
 	 * @author Hugo Amorim
 	 * @date 31/07/2009
@@ -2582,13 +2571,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				DebitoACobrar dAc = (DebitoACobrar) iterator.next();
 
-				// ------------ REGISTRAR TRANSA��O ----------------
+				// ------------ REGISTRAR TRANSAeeO ----------------
 				RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 						Operacao.OPERACAO_CONFIRMAR_PARCELAMENTO_CARTAO_CREDITO, dAc.getId(), dAc.getId(),
 						new UsuarioAcaoUsuarioHelper(usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 				registradorOperacao.registrarOperacao(dAc);
-				// ------------ REGISTRAR TRANSA��O ----------------
+				// ------------ REGISTRAR TRANSAeeO ----------------
 
 				getControladorUtil().atualizar(dAc);
 
@@ -2600,13 +2589,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				CreditoARealizar credito = (CreditoARealizar) iteratorCreditoAtualizar.next();
 
-				// ------------ REGISTRAR TRANSA��O ----------------
+				// ------------ REGISTRAR TRANSAeeO ----------------
 				RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 						Operacao.OPERACAO_CONFIRMAR_PARCELAMENTO_CARTAO_CREDITO, credito.getId(), credito.getId(),
 						new UsuarioAcaoUsuarioHelper(usuario, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 				registradorOperacao.registrarOperacao(credito);
-				// ------------ REGISTRAR TRANSA��O ----------------
+				// ------------ REGISTRAR TRANSAeeO ----------------
 
 				getControladorUtil().atualizar(credito);
 
@@ -2651,7 +2640,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0926] - Gerar B�nus de Tarifa Social
+	 * [UC0926] - Gerar Benus de Tarifa Social
 	 * 
 	 * @author Hugo Amorim
 	 * @date 25/08/2008
@@ -2687,7 +2676,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 					Rota rota = (Rota) iteratorRotas.next();
 
-					// Vari�veis para a pagina��o da pesquisa de Imovel por Grupo Faturamento
+					// Varieveis para a paginaeeo da pesquisa de Imovel por Grupo Faturamento
 					// ========================================================================
 					boolean flagTerminou = false;
 					final int quantidadeRegistros = 500;
@@ -2709,12 +2698,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 								apagarDadosCreditoSocialInicioBatch(anoMes, creditoTipo, imovel);
 
-								// Fluxo 4.1 - Verifica se o imovel tem perfil de Tarifa Social,caso n�o
-								// possua passa para o pr�ximo im�vel.
+								// Fluxo 4.1 - Verifica se o imovel tem perfil de Tarifa Social,caso neo
+								// possua passa para o preximo imevel.
 								if (!imovel.getImovelPerfil().getId().equals(ImovelPerfil.TARIFA_SOCIAL))
 									continue;
 
-								// Verifica se o im�vel pertence ao R1
+								// Verifica se o imevel pertence ao R1
 								Integer subcategoriaImovel = repositorioFaturamento
 										.pesquisarSubcategoriaImovel(imovel.getId());
 
@@ -2722,13 +2711,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									continue;
 
 								/*
-								 * autor: Adriana Muniz data: 02/05/2011 Verificar se o im�vel est� com a
-								 * situa��o da liga��o de agua como Ligado, antes de gerar o credito.
-								 * Obs.: Atende ao IS j� que mais abaixo verifica se o consumo de agua for
-								 * nulo, o cr�dito n�o � gerado, mas como o consumo para imoveis do IS
-								 * n�o � verificado no GSAN, imoveis suprimidos(e que atendam todas as
-								 * outras condi��es para concess�o do credito), por exemplo, recebem o
-								 * cr�dito.
+								 * autor: Adriana Muniz data: 02/05/2011 Verificar se o imevel este com a
+								 * situaeeo da ligaeeo de agua como Ligado, antes de gerar o credito.
+								 * Obs.: Atende ao IS je que mais abaixo verifica se o consumo de agua for
+								 * nulo, o credito neo e gerado, mas como o consumo para imoveis do IS
+								 * neo e verificado no GSAN, imoveis suprimidos(e que atendam todas as
+								 * outras condieees para concesseo do credito), por exemplo, recebem o
+								 * credito.
 								 */
 								if (!imovel.getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.LIGADO)) {
 									continue;
@@ -2736,34 +2725,34 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 								Collection collectionConta = this.pesquisarVencimentoConta(imovel.getId(), anoMes);
 
-								// Caso n�o exista conta com anoM�s selecionado, segue para o pr�ximo
-								// im�vel.
+								// Caso neo exista conta com anoMes selecionado, segue para o preximo
+								// imevel.
 								if (collectionConta == null || collectionConta.isEmpty()) {
 									continue;
 								}
 
-								// Gerenciamento dos dados retornados do m�todo pesquisarVencimentoConta().
+								// Gerenciamento dos dados retornados do metodo pesquisarVencimentoConta().
 								Object[] conta = (Object[]) collectionConta.iterator().next();
 								Integer idConta = new Integer(conta[0].toString());
 								Date dataVencimento = (Date) conta[1];
 
 								/*
-								 * autor: Adriana Muniz data: 17/06/2011 verificar se a conta est� cancelada,
-								 * se sim o b�nus � concedido sem executar outras verifica��es
+								 * autor: Adriana Muniz data: 17/06/2011 verificar se a conta este cancelada,
+								 * se sim o benus e concedido sem executar outras verificaeees
 								 */
 								if (!repositorioFaturamento.verificaContaCancelada(idConta)) {
 
 									/**
 									 * Data: 22/01/2011
 									 * 
-									 * Primeira condi��o Verifica��o se o dia do vencimento da conta �
-									 * maior que a data atual, se for procurar o pagamento do m�s anterior para
-									 * liberar ou n�o a gera��o do cr�dito
+									 * Primeira condieeo Verificaeeo se o dia do vencimento da conta e
+									 * maior que a data atual, se for procurar o pagamento do mes anterior para
+									 * liberar ou neo a geraeeo do credito
 									 * 
-									 * Segunda condi��o Devido o processamento de algumas contas n�o acontecer
+									 * Segunda condieeo Devido o processamento de algumas contas neo acontecer
 									 * no mesmo dia, foi estabelecido um prazo de cinco dias posterior ao
-									 * vencimento. Se a conta se encontrar nessa situa��o, o pagamento a ser
-									 * considerado ser� do m�s posterior.
+									 * vencimento. Se a conta se encontrar nessa situaeeo, o pagamento a ser
+									 * considerado sere do mes posterior.
 									 * 
 									 */
 
@@ -2779,13 +2768,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 										collectionConta = this.pesquisarVencimentoConta(imovel.getId(), anoMesConsumo);
 
-										// Caso n�o exista conta com anoM�s selecionado, segue para o pr�ximo
-										// im�vel.
+										// Caso neo exista conta com anoMes selecionado, segue para o preximo
+										// imevel.
 										if (collectionConta == null || collectionConta.isEmpty()) {
 											continue;
 										}
 
-										// Gerenciamento dos dados retornados do m�todo pesquisarVencimentoConta().
+										// Gerenciamento dos dados retornados do metodo pesquisarVencimentoConta().
 										conta = (Object[]) collectionConta.iterator().next();
 										idConta = new Integer(conta[0].toString());
 										dataVencimento = (Date) conta[1];
@@ -2798,13 +2787,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 											collectionConta = this.pesquisarVencimentoConta(imovel.getId(),
 													anoMesConsumo);
 
-											// FS0002 Caso n�o exista conta com anoM�s selecionado, segue para o
-											// pr�ximo im�vel.
+											// FS0002 Caso neo exista conta com anoMes selecionado, segue para o
+											// preximo imevel.
 											if (collectionConta == null || collectionConta.isEmpty()) {
 												continue;
 											}
 
-											// Gerenciamento dos dados retornados do m�todo
+											// Gerenciamento dos dados retornados do metodo
 											// pesquisarVencimentoConta().
 											conta = (Object[]) collectionConta.iterator().next();
 											idConta = new Integer(conta[0].toString());
@@ -2815,8 +2804,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 									Collection collectionDataPagamento = this.pesquisarDataPagamento(idConta);
 
-									// Fluxo 4.3.2 - Caso n�o seja localizado o pagamento, segue para o pr�ximo
-									// im�vel
+									// Fluxo 4.3.2 - Caso neo seja localizado o pagamento, segue para o preximo
+									// imevel
 									if (collectionDataPagamento == null || collectionDataPagamento.isEmpty()) {
 										continue;
 									}
@@ -2824,7 +2813,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									Object arrayDataPagamento = (Object) collectionDataPagamento.iterator().next();
 
 									// Fluxo 4.3.3 - Caso exista pegamento, Verifica quantidade de dias uteis em
-									// rela��o a data de vencimento
+									// relaeeo a data de vencimento
 									Date dataPagamento = (Date) arrayDataPagamento;
 
 									Municipio municipioImovel = (Municipio) this.getControladorGeografico()
@@ -2842,9 +2831,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									}
 
 									/*
-									 * Data: 22/01/2011 Verifica se o consumo dos im�veis, que n�o fazem parte
-									 * do impress�o simult�nea, � maior que 10. Se for maior que 10, n�o
-									 * gera o cr�dito
+									 * Data: 22/01/2011 Verifica se o consumo dos imeveis, que neo fazem parte
+									 * do impresseo simultenea, e maior que 10. Se for maior que 10, neo
+									 * gera o credito
 									 */
 									Integer consumoAgua = repositorioFaturamento
 											.pesquisarConsumoAguaImovel(imovel.getId(), anoMesConsumo);
@@ -2859,12 +2848,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 
 								// ******************************
-								// INICIO DA GERA��O DO CREDITO
+								// INICIO DA GERAeeO DO CREDITO
 								// ******************************
 
 								Date dataAtual = new Date(System.currentTimeMillis());
 
-								// Inclus�o do CreditoARealizarGeral
+								// Incluseo do CreditoARealizarGeral
 								CreditoARealizarGeral creditoARealizarGeral = new CreditoARealizarGeral();
 								creditoARealizarGeral.setIndicadorHistorico(new Short("2"));
 								creditoARealizarGeral.setUltimaAlteracao(dataAtual);
@@ -2874,7 +2863,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								creditoARealizarGeral.setId(new Integer(idCreditoARealizarGeral.toString()));
 								// *************Fim****************
 
-								// Inclus�o do CreditoARealizar
+								// Incluseo do CreditoARealizar
 								CreditoARealizar creditoARealizar = new CreditoARealizar();
 
 								creditoARealizar.setId(new Integer(idCreditoARealizarGeral.toString()));
@@ -2884,8 +2873,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								creditoARealizar.setAnoMesReferenciaCredito(anoMes);
 								creditoARealizar.setAnoMesCobrancaCredito(sistemaParametro.getAnoMesArrecadacao());
 
-								// Seta AnoMesReferenciaContabil, com maior valor entre o ano/M�s da data
-								// corrente e o ano/M�s de referencia do faturamento.
+								// Seta AnoMesReferenciaContabil, com maior valor entre o ano/Mes da data
+								// corrente e o ano/Mes de referencia do faturamento.
 								Integer mesDataAtual = Util.getMes(dataAtual);
 								Integer mesArreacadao = new Integer(
 										sistemaParametro.getAnoMesFaturamento().toString().substring(4));
@@ -2925,7 +2914,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								creditoARealizar.setId(new Integer(idCreditoARealizar.toString()));
 								// *************Fim****************
 
-								// Inclus�o do CreditoARealizarCategoria
+								// Incluseo do CreditoARealizarCategoria
 								// UC0108 - Obter Quantidade de Economias por
 								// Categoria
 								Collection colecaoCategoriasImovel = this.getControladorImovel()
@@ -2960,20 +2949,20 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								// *************Fim****************
 
 								// ******************************
-								// FIM DA GERA��O DO CREDITO
+								// FIM DA GERAeeO DO CREDITO
 								// ******************************
 
-							} // Fim da Itera��o dos imoveis
+							} // Fim da Iteraeeo dos imoveis
 						}
 
 						/**
-						 * Incrementa o n� do indice da p�gina��o
+						 * Incrementa o ne do indice da peginaeeo
 						 */
 						numeroIndice = numeroIndice + quantidadeRegistros;
 
 						/**
-						 * Caso a cole��o de imoveis retornados for menor que a quantidade de
-						 * registros seta a flag indicando que a pagina��o terminou.
+						 * Caso a coleeeo de imoveis retornados for menor que a quantidade de
+						 * registros seta a flag indicando que a paginaeeo terminou.
 						 */
 						if (colecaoImovel == null || colecaoImovel.size() < quantidadeRegistros) {
 
@@ -2984,23 +2973,23 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							colecaoImovel.clear();
 							colecaoImovel = null;
 						}
-					} // FIM DO LOOP DA PAGINA��O
+					} // FIM DO LOOP DA PAGINAeeO
 				}
 			} else {
-				// A LISTA COM AS ROTAS EST� NULA OU VAZIA
+				// A LISTA COM AS ROTAS ESTe NULA OU VAZIA
 				throw new ControladorException("atencao.pesquisa.grupo_rota_vazio");
 			}
 			// -----------------------------------------------------
 			//
-			// Registrar o fim da execu��o da Unidade de Processamento
+			// Registrar o fim da execueeo da Unidade de Processamento
 			//
 			// -----------------------------------------------------
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
 		} catch (Exception e) {
-			// Este catch serve para interceptar qualquer exce��o que o processo
-			// batch venha a lan�ar e garantir que a unidade de processamento do
-			// batch ser� atualizada com o erro ocorrido
+			// Este catch serve para interceptar qualquer exceeeo que o processo
+			// batch venha a lanear e garantir que a unidade de processamento do
+			// batch sere atualizada com o erro ocorrido
 			e.printStackTrace();
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new EJBException(e);
@@ -3154,18 +3143,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
-	private CreditoTipo obterCreditoTipo(Integer id) throws ControladorException {
-		FiltroCreditoTipo filtroCreditoTipo = new FiltroCreditoTipo();
-		filtroCreditoTipo.adicionarParametro(new ParametroSimples(FiltroCreditoTipo.ID, id));
-		filtroCreditoTipo.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
-
-		Collection colecaoTipoCredito = this.getControladorUtil().pesquisar(filtroCreditoTipo,
-				CreditoTipo.class.getName());
-
-		CreditoTipo creditoTipo = (CreditoTipo) Util.retonarObjetoDeColecao(colecaoTipoCredito);
-		return creditoTipo;
-	}
-
 	private BigDecimal calcularValorBonusSocial(FaturamentoGrupo faturamentoGrupo, SistemaParametro sistemaParametro)
 			throws ControladorException {
 		BigDecimal valorBonusSocial;
@@ -3193,7 +3170,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	/**
 	 * [UC0187] Inserir Guia de Pagamento
 	 * 
-	 * [FS0020] Im�vel n�o possui conta para pagamento parcial
+	 * [FS0020] Imevel neo possui conta para pagamento parcial
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 12/08/2009
@@ -3207,12 +3184,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		Collection colecaoRetorno = null;
 
-		// Caso o tipo de d�bito informado seja �Pagamento Antecipado de Conta�.
+		// Caso o tipo de debito informado seja ePagamento Antecipado de Contae.
 		if (idDebitoTipo != null && idDebitoTipo.equals(DebitoTipo.PAGAMENTO_PARCIAL_CONTA)) {
 
 			/*
-			 * N�o ser� permitido inserir guia de pagamento com tipo de d�bito igual a
-			 * pagamento parcial de conta quando o im�vel n�o tiver sido informado.
+			 * Neo sere permitido inserir guia de pagamento com tipo de debito igual a
+			 * pagamento parcial de conta quando o imevel neo tiver sido informado.
 			 */
 			if (idImovel == null) {
 
@@ -3224,19 +3201,19 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			imovel.setId(idImovel);
 
 			/*
-			 * O sistema dever� exibir as contas do im�vel selecionado que estejam na
-			 * situa��o de normal, inclu�da ou retificada e n�o esteja paga
-			 * (CNTA_AMREFERENCIACONTA da tabela CONTA com IMOV_ID = IMOV_ID do im�vel e
-			 * DCST_IDATUAL igual a 0, 1 ou 2 e CNTA_ID n�o existe na tabela PAGAMENTO).
+			 * O sistema devere exibir as contas do imevel selecionado que estejam na
+			 * situaeeo de normal, inclueda ou retificada e neo esteja paga
+			 * (CNTA_AMREFERENCIACONTA da tabela CONTA com IMOV_ID = IMOV_ID do imevel e
+			 * DCST_IDATUAL igual a 0, 1 ou 2 e CNTA_ID neo existe na tabela PAGAMENTO).
 			 */
 
-			// 1� Passo: Selecionado as contas
+			// 1e Passo: Selecionado as contas
 			Collection colecaoContaParaPagamentoParcial = this.obterContasImovelManter(imovel,
 					DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.INCLUIDA, DebitoCreditoSituacao.RETIFICADA);
 
 			if (colecaoContaParaPagamentoParcial == null || colecaoContaParaPagamentoParcial.isEmpty()) {
 
-				// [FS0020] Im�vel n�o possui conta para pagamento parcial
+				// [FS0020] Imevel neo possui conta para pagamento parcial
 				throw new ControladorException("atencao.imovel_sem_conta_pagamento_parcial");
 			} else {
 
@@ -3246,7 +3223,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 					Conta conta = (Conta) it.next();
 
-					// Verificando a exist�ncia de pagamento para a conta
+					// Verificando a existencia de pagamento para a conta
 					// selecionada
 					Pagamento pagamento = this.getControladorArrecadacao().pesquisarPagamentoDeConta(conta.getId());
 
@@ -3264,7 +3241,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				if (colecaoContaParaPagamentoParcial == null || colecaoContaParaPagamentoParcial.isEmpty()) {
 
-					// [FS0020] Im�vel n�o possui conta para pagamento parcial
+					// [FS0020] Imevel neo possui conta para pagamento parcial
 					throw new ControladorException("atencao.imovel_sem_conta_pagamento_parcial");
 				}
 			}
@@ -3298,12 +3275,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Conta conta = (Conta) Util.retonarObjetoDeColecao(colecaoConta);
 
 			/*
-			 * Caso o valor da guia de pagamento informado pelo usu�rio for maior que
+			 * Caso o valor da guia de pagamento informado pelo usuerio for maior que
 			 * valor da conta ((CNTA_VLAGUA + CNTA_VLESGOTO + CNTA_VLDEBITO - CNTA_VLCREDITO
 			 * - CNTA_VLIMPOSTOS da conta selecionada) menor ou igual que o valor informado)
-			 * , exibir a mensagem �O valor informado deve ser menor que o valor da conta
+			 * , exibir a mensagem eO valor informado deve ser menor que o valor da conta
 			 * <<((CNTA_VLAGUA + CNTA_VLESGOTO + CNTA_VLDEBITO - CNTA_VLCREDITO -
-			 * CNTA_VLIMPOSTOS>>� e retornar para o passo correspondente no fluxo
+			 * CNTA_VLIMPOSTOS>>e e retornar para o passo correspondente no fluxo
 			 * principal.
 			 */
 			if (valorTotalServico.compareTo(conta.getValorTotal()) >= 0) {
@@ -3317,10 +3294,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Este caso de uso gera os d�bitos a cobrar referentes aos acr�scimos por
-	 * impontualidade (multa, juros de mora e atualiza��o monet�ria)
+	 * Este caso de uso gera os debitos a cobrar referentes aos acrescimos por
+	 * impontualidade (multa, juros de mora e atualizaeeo moneteria)
 	 * 
-	 * [UC0302] - Gerar D�bitos a Cobrar de Acr�scimos por Impontualidade Autor:
+	 * [UC0302] - Gerar Debitos a Cobrar de Acrescimos por Impontualidade Autor:
 	 * 
 	 * @author Fernanda Paiva, Pedro Alexandre, Pedro Aexandre
 	 * @date 20/04/2006, 31/08/2006, 23/04/2008
@@ -3343,7 +3320,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			// -------------------------
 			//
-			// Registrar o in�cio do processamento da Unidade de
+			// Registrar o inecio do processamento da Unidade de
 			// Processamento
 			// do Batch
 			//
@@ -3351,12 +3328,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
 					UnidadeProcessamento.ROTA, rota.getId());
 
-			// cria uma cole��o de im�vel por rota
+			// cria uma coleeeo de imevel por rota
 			Collection imoveisPorRota = null;
 			Collection colecaoDebitoACobrarInserir = new ArrayList();
 			Collection colecaoDebitoACobrarCategoriaInserir = new ArrayList();
 
-			// recupera todos os im�veis da cole��o de rotas
+			// recupera todos os imeveis da coleeeo de rotas
 			imoveisPorRota = this.pesquisarImovelGerarAcrescimosImpontualidade(rota);
 
 			SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
@@ -3369,13 +3346,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			Iterator imovelPorRotaIterator = imoveisPorRota.iterator();
 
-			// Item 5.1 [UC0306] - Obter Principal Categoria do Im�vel
+			// Item 5.1 [UC0306] - Obter Principal Categoria do Imevel
 			Map<Integer, Categoria> mapImovelPrincipalCategoria = this
 					.pesquisarPrincipalCategoriaImovelPorRota(codigoEmpresaFebraban, rota);
 
 			/**
-			 * Item 5.4 Caso o im�vel possua cliente respons�vel, recupera o indicador
-			 * de cobran�a de acr�cimos do cliente respons�vel
+			 * Item 5.4 Caso o imevel possua cliente responsevel, recupera o indicador
+			 * de cobranea de acrecimos do cliente responsevel
 			 * (CLIE_ICCOBRANCAACRESCIMOS)
 			 */
 			Map<Integer, Short> mapIndicadorAcrescimoCliente = this.obterIndicadorGeracaoAcrescimosClienteImovel(rota);
@@ -3385,7 +3362,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				// retorno da pesquisa
 				Object[] arrayImoveisPorRota = (Object[]) imovelPorRotaIterator.next();
 
-				// instancia um im�vel
+				// instancia um imevel
 				Imovel imovel = new Imovel();
 				if (arrayImoveisPorRota[0] != null) {
 					// seta o id no imovel
@@ -3423,27 +3400,27 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					imovel.setIndicadorDebitoConta((Short) arrayImoveisPorRota[8]);
 				}
 
-				// Item 5.1 [UC0306] - Obter Principal Categoria do Im�vel
+				// Item 5.1 [UC0306] - Obter Principal Categoria do Imevel
 				Categoria principalCategoria = mapImovelPrincipalCategoria.get(imovel.getId());
 
 				boolean flagProximoImovel = false;
 
 				/**
-				 * Item 5.2 Caso a principal categoria do im�vel esteja indicando que somente
-				 * deve ser gerado acr�scimos por impontualidade para a categoria
-				 * (catg_icgeracaoacrescimos=NAO) da principal categoria do im�vel, passa para
-				 * o pr�ximo im�vel.
+				 * Item 5.2 Caso a principal categoria do imevel esteja indicando que somente
+				 * deve ser gerado acrescimos por impontualidade para a categoria
+				 * (catg_icgeracaoacrescimos=NAO) da principal categoria do imevel, passa para
+				 * o preximo imevel.
 				 */
 				if (principalCategoria.getIndicadorCobrancaAcrescimos().equals(ConstantesSistema.NAO)) {
 					flagProximoImovel = true;
 				}
 
 				/**
-				 * Item 5.3 Caso a principal categoria do im�vel esteja indicando que n�o
-				 * deve ser gerado acr�scimos por impontualidade para a categoria
+				 * Item 5.3 Caso a principal categoria do imevel esteja indicando que neo
+				 * deve ser gerado acrescimos por impontualidade para a categoria
 				 * (catg_icgeracaoacrescimos=ENCERRAMENTO_ARRECADACAO) da principal categoria do
-				 * im�vel e esteja indicando que n�o est� sendo encerrada a
-				 * arrecada��o , passa para o pr�ximo im�vel.
+				 * imevel e esteja indicando que neo este sendo encerrada a
+				 * arrecadaeeo , passa para o preximo imevel.
 				 */
 				if ((principalCategoria != null && principalCategoria.getIndicadorCobrancaAcrescimos()
 						.equals(ConstantesSistema.ENCERRAMENTO_ARRECADACAO)) && !indicadorEncerrandoArrecadacao) {
@@ -3451,16 +3428,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 
 				/**
-				 * Item 5.4 Caso o im�vel possua cliente respons�vel, recupera o indicador
-				 * de cobran�a de acr�cimos do cliente respons�vel
+				 * Item 5.4 Caso o imevel possua cliente responsevel, recupera o indicador
+				 * de cobranea de acrecimos do cliente responsevel
 				 * (CLIE_ICCOBRANCAACRESCIMOS)
 				 */
 				Short indicadorCobrancaAcrescimos = mapIndicadorAcrescimoCliente.get(imovel.getId());
 
 				/**
-				 * Item 5.4.1 Caso esteja indicado que n�o de ve ser gerado acr�cimos por
+				 * Item 5.4.1 Caso esteja indicado que neo de ve ser gerado acrecimos por
 				 * impontualidade para o cliente (CLIE_ICCOBRANCAACRESCIMOS=NAO) , passar para o
-				 * pr�ximo im�vel
+				 * preximo imevel
 				 */
 				if (indicadorCobrancaAcrescimos != null && indicadorCobrancaAcrescimos.equals(ConstantesSistema.NAO)) {
 					flagProximoImovel = true;
@@ -3478,25 +3455,25 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 					Collection<Integer> colecaoIdsContasAtualizarIndicadorMulta = new ArrayList();
 
-					// cria uma cole��o de contas do imovel
+					// cria uma coleeeo de contas do imovel
 					Collection colecaoContaImovel = null;
 
 					/*
-					 * Item 5.5 Caso esteja indicado que N�O esteja sendo encerrada a
-					 * arrecadac�o seleciona as contas do im�vel com ano/m�s da data de
-					 * vencimento menor ou igual ao ano/m�s de refer�ncia da arrecada��o
-					 * corrente e com situa��o atual correspondente a normal, retificada ou
-					 * inclu�da e que n�o estejam em revis�o e que ainda n�o tiveram
-					 * cobran�a de multa.
+					 * Item 5.5 Caso esteja indicado que NeO esteja sendo encerrada a
+					 * arrecadaceo seleciona as contas do imevel com ano/mes da data de
+					 * vencimento menor ou igual ao ano/mes de referencia da arrecadaeeo
+					 * corrente e com situaeeo atual correspondente a normal, retificada ou
+					 * inclueda e que neo estejam em reviseo e que ainda neo tiveram
+					 * cobranea de multa.
 					 */
 					if (!indicadorEncerrandoArrecadacao) {
-						// recupera todas as contas dos im�veis da cole��o
+						// recupera todas as contas dos imeveis da coleeeo
 						// de rotas
 						colecaoContaImovel = repositorioFaturamento.obterContasImovel(imovel.getId(),
 								DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.INCLUIDA,
 								DebitoCreditoSituacao.RETIFICADA, dataAnoMesReferenciaUltimoDia);
 					} else {
-						// recupera todas as contas dos im�veis da cole��o
+						// recupera todas as contas dos imeveis da coleeeo
 						// de rotas
 						colecaoContaImovel = repositorioFaturamento.obterContasImovelComPagamento(imovel.getId(),
 								DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.INCLUIDA,
@@ -3541,7 +3518,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									conta.setDataVencimentoConta((Date) dadosConta[2]);
 								}
 								if (dadosConta[3] != null) {
-									// seta o valor da �gua
+									// seta o valor da egua
 									conta.setValorAgua((BigDecimal) dadosConta[3]);
 								}
 								if (dadosConta[4] != null) {
@@ -3562,7 +3539,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									conta.setIndicadorCobrancaMulta((Short) dadosConta[7]);
 								}
 
-								// cria uma cole��o dos pagamentos da
+								// cria uma coleeeo dos pagamentos da
 								// conta com menor
 								// data de pagamento
 								Date pagamentoContasMenorData = null;
@@ -3579,15 +3556,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 
 								/*
-								 * Colocado por Raphael Rossiter em 19/05/2008 S� ir� calcular o acr�scimo
-								 * caso o imovel e o pagamento n�o sejam d�bito autom�tico
+								 * Colocado por Raphael Rossiter em 19/05/2008 Se ire calcular o acrescimo
+								 * caso o imovel e o pagamento neo sejam debito autometico
 								 */
 								if (idArrecadacaoForma == null || (idArrecadacaoForma != null
 										&& !idArrecadacaoForma.equals(ArrecadacaoForma.DEBITO_AUTOMATICO))) {
 
 									boolean indicadorExistePagamentoClassificadoConta;
 									// caso tenha o id da conta no map
-									// ent�o existe pagamento para a conta
+									// enteo existe pagamento para a conta
 									// atual.
 									if (mapIndicadorExistePagamentoConta.containsKey(idConta)) {
 										indicadorExistePagamentoClassificadoConta = true;
@@ -3618,8 +3595,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									DebitoTipo debitoTipo = null;
 
 									/**
-									 * Item 5.6.3 Caso o indicador de gera��o de multa corresponda a sim(1) e o
-									 * valor da multa seja maior que que zero. Gera o d�bito a cobrar referente a
+									 * Item 5.6.3 Caso o indicador de geraeeo de multa corresponda a sim(1) e o
+									 * valor da multa seja maior que que zero. Gera o debito a cobrar referente a
 									 * multa.
 									 */
 									if (indicadorGeracaoMulta.equals(ConstantesSistema.SIM)
@@ -3629,7 +3606,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										debitoTipo = new DebitoTipo();
 										debitoTipo.setId(DebitoTipo.MULTA_IMPONTUALIDADE);
 
-										// [SB0001 - Gerar D�bito a Cobrar]
+										// [SB0001 - Gerar Debito a Cobrar]
 										DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
 												anoMesReferenciaArrecadacao, imovel, numeroPrestacaoDebito,
 												numeroPrestacaoCobradas, conta,
@@ -3642,14 +3619,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										colecaoDebitoACobrarCategoriaInserir
 												.addAll(this.inserirDebitoACobrarCategoriaBatch(debitoACobrar,
 														debitoACobrar.getImovel()));
-									} // if indicador de gera��o de multa
+									} // if indicador de geraeeo de multa
 
 									/**
-									 * Item 5.6.4 Caso o indicador de gera��o dos juros de mora corresponda a
-									 * sim(1) e o valor dos juros de mora seja maior que zero Gera o d�bito a
+									 * Item 5.6.4 Caso o indicador de geraeeo dos juros de mora corresponda a
+									 * sim(1) e o valor dos juros de mora seja maior que zero Gera o debito a
 									 * cobrar referente a juros de mora e exista pagamento para a conta com data de
-									 * pagamento diferente de nulo e ano/m�s refer�ncia da arrecada��o do
-									 * pagamento seja menor ou igual ao ano/m�s de arrecada��o corente.
+									 * pagamento diferente de nulo e ano/mes referencia da arrecadaeeo do
+									 * pagamento seja menor ou igual ao ano/mes de arrecadaeeo corente.
 									 */
 									if (indicadorGeracaoJuros.equals(ConstantesSistema.SIM)
 											&& calcularAcrescimoPorImpontualidade.getValorJurosMora()
@@ -3659,7 +3636,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										debitoTipo = new DebitoTipo();
 										debitoTipo.setId(DebitoTipo.JUROS_MORA);
 
-										// [SB0001 - Gerar D�bito a Cobrar]
+										// [SB0001 - Gerar Debito a Cobrar]
 										DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
 												anoMesReferenciaArrecadacao, imovel, numeroPrestacaoDebito,
 												numeroPrestacaoCobradas, conta,
@@ -3675,9 +3652,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									}
 
 									/*
-									 * 5.6.5 Caso o indicador de gera��o de atualiza��o monet�ria
-									 * corresponda a sim(1) e o valor da atualiza��o monet�ria seja maior que
-									 * zero Gera o d�bito a cobrar referente a atualiza��o monet�ria e
+									 * 5.6.5 Caso o indicador de geraeeo de atualizaeeo moneteria
+									 * corresponda a sim(1) e o valor da atualizaeeo moneteria seja maior que
+									 * zero Gera o debito a cobrar referente a atualizaeeo moneteria e
 									 */
 									if (indicadorGeracaoAtualizacao.equals(ConstantesSistema.SIM)
 											&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria()
@@ -3687,7 +3664,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 										debitoTipo = new DebitoTipo();
 										debitoTipo.setId(DebitoTipo.ATUALIZACAO_MONETARIA);
 
-										// [SB0001 - Gerar D�bito a Cobrar]
+										// [SB0001 - Gerar Debito a Cobrar]
 										DebitoACobrar debitoACobrar = this.gerarDebitoACobrarParaConta(
 												anoMesReferenciaArrecadacao, imovel, numeroPrestacaoDebito,
 												numeroPrestacaoCobradas, conta,
@@ -3702,12 +3679,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 														debitoACobrar.getImovel()));
 									}
 								} // fim comparacao debito automatico
-							} // fim if da compara��o da data de pagamento
+							} // fim if da comparaeeo da data de pagamento
 						} // fim while contas iterator
-					} // fim if cole��o conta
+					} // fim if coleeeo conta
 
 					/*
-					 * Item 5.6.3.2 Atualiza o indicador de que j� cobrou multa da conta com o
+					 * Item 5.6.3.2 Atualiza o indicador de que je cobrou multa da conta com o
 					 * valor igual a SIM (CNTA_ICCOBRANCAMULTA=1)
 					 */
 					if (colecaoIdsContasAtualizarIndicadorMulta != null
@@ -3715,12 +3692,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						repositorioFaturamento.atualizarIndicadorMultaDeConta(colecaoIdsContasAtualizarIndicadorMulta);
 					}
 
-					// cria uma cole��o de guias do im�vel
+					// cria uma coleeeo de guias do imevel
 					Collection colecaoGuiasPagamentoImovel = null;
 
 					Collection<Integer> colecaoIdsGuiasPagamentosAtualizarIndicadorMulta = new ArrayList();
 
-					// recupera todas as guias dos im�veis da cole��o de rotas
+					// recupera todas as guias dos imeveis da coleeeo de rotas
 					colecaoGuiasPagamentoImovel = repositorioFaturamento.obterGuiasPagamentoImovel(imovel.getId(),
 							DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.INCLUIDA,
 							DebitoCreditoSituacao.RETIFICADA, anoMesReferenciaArrecadacao);
@@ -3777,7 +3754,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												guiaPagamento.getId(), imovel.getId(),
 												guiaPagamento.getDebitoTipo().getId(), anoMesReferenciaArrecadacao);
 
-								// [UC0216] Calcular Acr�scimos por
+								// [UC0216] Calcular Acrescimos por
 								// Impontualidade
 								CalcularAcrescimoPorImpontualidadeHelper calcularAcrescimoPorImpontualidade = new CalcularAcrescimoPorImpontualidadeHelper();
 								calcularAcrescimoPorImpontualidade = this.getControladorCobranca()
@@ -3791,8 +3768,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								DebitoTipo debitoTipo = null;
 
 								/*
-								 * Item 5.8.3 Caso o indicador de gera��o de multa corresponda a sim(1) e o
-								 * valor da multa seja maior que que zero. Gera o d�bito a cobrar referente a
+								 * Item 5.8.3 Caso o indicador de geraeeo de multa corresponda a sim(1) e o
+								 * valor da multa seja maior que que zero. Gera o debito a cobrar referente a
 								 * multa.
 								 */
 								if (indicadorGeracaoMulta.equals(ConstantesSistema.SIM)
@@ -3802,7 +3779,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									debitoTipo = new DebitoTipo();
 									debitoTipo.setId(DebitoTipo.MULTA_IMPONTUALIDADE);
 
-									// [SB0001 - Gerar D�bito a Cobrar]
+									// [SB0001 - Gerar Debito a Cobrar]
 									DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
 											anoMesReferenciaArrecadacao, anoMesReferenciaFaturamento, imovel,
 											numeroPrestacaoDebito, numeroPrestacaoCobradas, guiaPagamento,
@@ -3817,10 +3794,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 
 								/*
-								 * Item 5.8.4 Caso o indicador de gera��o dos juros de mora corresponda a
+								 * Item 5.8.4 Caso o indicador de geraeeo dos juros de mora corresponda a
 								 * sim(1) e o valor dos juros de mora seja maior que zero e exista pagamento
-								 * para a guia de pagamento com situa��o atual igual a classificado. Gera o
-								 * d�bito a cobrar referente a juros de mora.
+								 * para a guia de pagamento com situaeeo atual igual a classificado. Gera o
+								 * debito a cobrar referente a juros de mora.
 								 */
 								if (indicadorGeracaoJuros.equals(ConstantesSistema.SIM)
 										&& calcularAcrescimoPorImpontualidade.getValorJurosMora()
@@ -3830,7 +3807,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									debitoTipo = new DebitoTipo();
 									debitoTipo.setId(DebitoTipo.JUROS_MORA);
 
-									// [SB0001 - Gerar D�bito a Cobrar]
+									// [SB0001 - Gerar Debito a Cobrar]
 									DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
 											anoMesReferenciaArrecadacao, anoMesReferenciaFaturamento, imovel,
 											numeroPrestacaoDebito, numeroPrestacaoCobradas, guiaPagamento,
@@ -3845,11 +3822,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 
 								/*
-								 * Item 5.8.5 Caso o indicador de gera��o de atualiza��o monet�ria
-								 * corresponda a sim(1) e o valor da atualiza��o monet�ria seja maior que
-								 * zero e exista pagamento para a guia de pagamento com situa��o atual igual
-								 * a classificado. Gera o d�bito a cobrar referente a atualiza��o
-								 * monet�ria.
+								 * Item 5.8.5 Caso o indicador de geraeeo de atualizaeeo moneteria
+								 * corresponda a sim(1) e o valor da atualizaeeo moneteria seja maior que
+								 * zero e exista pagamento para a guia de pagamento com situaeeo atual igual
+								 * a classificado. Gera o debito a cobrar referente a atualizaeeo
+								 * moneteria.
 								 */
 								if (indicadorGeracaoAtualizacao.equals(ConstantesSistema.SIM)
 										&& calcularAcrescimoPorImpontualidade.getValorAtualizacaoMonetaria()
@@ -3859,7 +3836,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									debitoTipo = new DebitoTipo();
 									debitoTipo.setId(DebitoTipo.ATUALIZACAO_MONETARIA);
 
-									// [SB0001 - Gerar D�bito a Cobrar]
+									// [SB0001 - Gerar Debito a Cobrar]
 									DebitoACobrar debitoACobrar = gerarDebitoACobrarParaGuiaPagamento(
 											anoMesReferenciaArrecadacao, anoMesReferenciaFaturamento, imovel,
 											numeroPrestacaoDebito, numeroPrestacaoCobradas, guiaPagamento,
@@ -3885,19 +3862,19 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				} // fim if flagProximoImovel
 			} // fim while imovelporrotaiterator
 
-			// Inserir os d�bitos a cobrar
+			// Inserir os debitos a cobrar
 			if (colecaoDebitoACobrarInserir != null && !colecaoDebitoACobrarInserir.isEmpty()) {
 				this.getControladorBatch().inserirColecaoObjetoParaBatch(colecaoDebitoACobrarInserir);
 			}
 
-			// Inseri os d�bitos a cobrar por categoria
+			// Inseri os debitos a cobrar por categoria
 			if (colecaoDebitoACobrarCategoriaInserir != null && !colecaoDebitoACobrarCategoriaInserir.isEmpty()) {
 				this.getControladorBatch().inserirColecaoObjetoParaBatch(colecaoDebitoACobrarCategoriaInserir);
 			}
 
 			// --------------------------------------------------------
 			//
-			// Registrar o fim da execu��o da Unidade de Processamento
+			// Registrar o fim da execueeo da Unidade de Processamento
 			//
 			// --------------------------------------------------------
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
@@ -3905,9 +3882,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			return null;
 
 		} catch (Exception e) {
-			// Este catch serve para interceptar qualquer exce��o que o processo
-			// batch venha a lan�ar e garantir que a unidade de processamento do
-			// batch ser� atualizada com o erro ocorrido
+			// Este catch serve para interceptar qualquer exceeeo que o processo
+			// batch venha a lanear e garantir que a unidade de processamento do
+			// batch sere atualizada com o erro ocorrido
 			e.printStackTrace();
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
@@ -3918,9 +3895,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Metodo que retorna os im�veis das quadras pertencentes �s rotas
+	 * Metodo que retorna os imeveis das quadras pertencentes es rotas
 	 * 
-	 * Utilizado pelo [UC0302] Gerar D�bitos a Cobrar de Acr�scimos por
+	 * Utilizado pelo [UC0302] Gerar Debitos a Cobrar de Acrescimos por
 	 * Impontualidade
 	 * 
 	 * @author Raphael Rossiter
@@ -3948,10 +3925,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Permite gerar os d�bitos de doa��es para os im�veis contidos na
-	 * cole��o [UC0394] Gerar D�bitos a Cobrar de Doa��es
+	 * Permite gerar os debitos de doaeees para os imeveis contidos na
+	 * coleeeo [UC0394] Gerar Debitos a Cobrar de Doaeees
 	 * 
-	 * @author C�sar Ara�jo, Raphael Rossiter
+	 * @author Cesar Araejo, Raphael Rossiter
 	 * @date 05/08/2006, 26/08/2009
 	 * 
 	 * @param Collection <Rota> rotas
@@ -3964,7 +3941,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		// -------------------------
 		/*
-		 * Registrar o in�cio do processamento da Unidade de Processamento do Batch
+		 * Registrar o inecio do processamento da Unidade de Processamento do Batch
 		 * 
 		 * Colocado por Raphael Rossiter em 11/01/2007
 		 */
@@ -3978,7 +3955,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		try {
 
-			/** * Declara vari�veis locais ** */
+			/** * Declara varieveis locais ** */
 			Imovel imovel = null;
 			Quadra quadra = null;
 			DebitoTipo debitoTipo = null;
@@ -3993,13 +3970,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Collection<ImovelCobrarDoacaoHelper> colecaoImovelCobrarDoacaoHelper = null;
 
 			/**
-			 * Pesquisa Imoveis que tem doa��o a faturar baseando-se numa cole��o de
+			 * Pesquisa Imoveis que tem doaeeo a faturar baseando-se numa coleeeo de
 			 * rotas *
 			 */
 
-			// Parte Alterada por S�vio Luiz Data:09/05/2007
-			// Parte que remove os d�bitos a cobrar, do ano mes de faturamento
-			// para as rotas recebidas, caso j� exista na base.
+			// Parte Alterada por Sevio Luiz Data:09/05/2007
+			// Parte que remove os debitos a cobrar, do ano mes de faturamento
+			// para as rotas recebidas, caso je exista na base.
 			/*
 			 * SistemaParametro sistemaParametro = getControladorUtil()
 			 * .pesquisarParametrosDoSistema();
@@ -4028,11 +4005,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				/*
 				 * Colocado por Hugo Amorim em 07/04/2010
 				 * 
-				 * OBJ: Verificar a exist�ncia de d�bito a cobrar de doa��o ativo para o
-				 * im�vel.
+				 * OBJ: Verificar a existencia de debito a cobrar de doaeeo ativo para o
+				 * imevel.
 				 * 
-				 * Caso j� exista d�bito a cobrar de doa��o ativo para o im�vel o
-				 * sistema dever� passar para o pr�ximo im�vel
+				 * Caso je exista debito a cobrar de doaeeo ativo para o imevel o
+				 * sistema devere passar para o preximo imevel
 				 */
 
 				Collection colecaoDebitosACobrarDeDoacaoAtivos = repositorioFaturamento
@@ -4076,7 +4053,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					debitoACobrar.setAnoMesReferenciaDebito(null);
 					debitoACobrar.setAnoMesCobrancaDebito(null);
 
-					// alterado por: R�mulo Aur�lio CRC 4662 Data:21/06/2010
+					// alterado por: Remulo Aurelio CRC 4662 Data:21/06/2010
 					// analista responsavel: Eduardo Borges
 
 					int anoMesReferenciaContabil = anoMesFaturamentoGrupo;
@@ -4092,16 +4069,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 					debitoACobrar.setAnoMesReferenciaContabil(anoMesReferenciaContabil);
 
-					// Alterado por R�mulo Aur�lio
+					// Alterado por Remulo Aurelio
 					// Data: 05/10/2010
 					// Analista: Eduardo Borges
 					debitoACobrar.setAnoMesReferenciaDebito(anoMesFaturamentoGrupo);
 
 					/*
-					 * Caso exista m�s/ano de refer�ncia inicial e final da doa��o
+					 * Caso exista mes/ano de referencia inicial e final da doaeeo
 					 * (IMDO_AMREFERENCIAINICAL<> NULL e IMDO_AMREFERENCIAFINAL<>NULL), calcular a
-					 * quantidade de meses entre as refer�ncias mais um (DBAC_NNPRESTACAODEBITO=
-					 * IMDO_AMREFERENCIAFINAL - IMDO_AMREFERENCIAINICAL + 1) , caso contr�rio,
+					 * quantidade de meses entre as referencias mais um (DBAC_NNPRESTACAODEBITO=
+					 * IMDO_AMREFERENCIAFINAL - IMDO_AMREFERENCIAINICAL + 1) , caso contrerio,
 					 * mover um (DBAC_NNPRESTACAODEBITO=1)
 					 */
 					Short numeroPrestacaoDebito = ImovelCobrarDoacaoHelper.NUMERO_PRESTACAO_DEBITO;
@@ -4122,11 +4099,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							imovelCobrarDoacaoHelper.getValorDebito().multiply(new BigDecimal(numeroPrestacaoDebito)));
 
 					/*
-					 * Caso exista m�s/ano de refer�ncia inicial e final da doa��o
+					 * Caso exista mes/ano de referencia inicial e final da doaeeo
 					 * (IMDO_AMREFERENCIAINICAL<> NULL e IMDO_AMREFERENCIAFINAL<>NULL), calcular a
-					 * quantidade de meses entre a refer�ncia inicial e a referencia atual do
+					 * quantidade de meses entre a referencia inicial e a referencia atual do
 					 * grupo de faturamento da rota (DBAC_NNPRESTACAOCOBRADAS= FTGR_AMREFERENCIA -
-					 * IMDO_AMREFERENCIAINICAL), caso contr�rio, mover zero
+					 * IMDO_AMREFERENCIAINICAL), caso contrerio, mover zero
 					 * (DBAC_NNPRESTACAOCOBRADAS=0)
 					 */
 					Short numeroPrestacaoCobradas = ImovelCobrarDoacaoHelper.NUMERO_PRESTACAO_COBRADA;
@@ -4195,15 +4172,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 
 			// --------------------------------------------------------
-			// Registrar o fim da execu��o da Unidade de Processamento
+			// Registrar o fim da execueeo da Unidade de Processamento
 			// --------------------------------------------------------
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
 		} catch (Exception e) {
 
 			/*
-			 * Este catch serve para interceptar qualquer exce��o que o processo batch
-			 * venha a lan�ar e garantir que a unidade de processamento do batch ser�
+			 * Este catch serve para interceptar qualquer exceeeo que o processo batch
+			 * venha a lanear e garantir que a unidade de processamento do batch sere
 			 * atualizada com o erro ocorrido
 			 */
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
@@ -4213,16 +4190,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Permite pesquisar im�vel doa��o baseando-se em rotas [UC0394] Gerar
-	 * D�bitos a Cobrar de Doa��es
+	 * Permite pesquisar imevel doaeeo baseando-se em rotas [UC0394] Gerar
+	 * Debitos a Cobrar de Doaeees
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 26/08/2008
 	 * 
 	 * @param idRota
-	 * @return Collection<ImovelCobrarDoacaoHelper> - Cole��o de
-	 *         ImovelCobrarDoacaoHelper j� com as informa��es necess�rias
-	 *         para registro da cobran�a
+	 * @return Collection<ImovelCobrarDoacaoHelper> - Coleeeo de
+	 *         ImovelCobrarDoacaoHelper je com as informaeees necesserias
+	 *         para registro da cobranea
 	 * @throws ControladorException
 	 */
 	public Collection pesquisarImovelDoacaoPorRota(Rota rota) throws ControladorException {
@@ -4230,8 +4207,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Collection colecaoImoveis = null;
 
 		/*
-		 * Caso a rota n�o esteja com o indicador de rota alternativa ativo; a
-		 * pesquisa dos im�veis ser� feita a partir de sua quadra.
+		 * Caso a rota neo esteja com o indicador de rota alternativa ativo; a
+		 * pesquisa dos imeveis sere feita a partir de sua quadra.
 		 */
 		if (!rota.getIndicadorRotaAlternativa().equals(ConstantesSistema.SIM)) {
 
@@ -4245,8 +4222,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		}
 		/*
-		 * Caso contr�rio; a pesquisa dos im�veis ser� feita a partir da rota
-		 * alternativa que estar� associada ao mesmo.
+		 * Caso contrerio; a pesquisa dos imeveis sere feita a partir da rota
+		 * alternativa que estare associada ao mesmo.
 		 */
 		else {
 
@@ -4287,9 +4264,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Retorna a qualidade de �gua associada ao im�vel
+	 * Retorna a qualidade de egua associada ao imevel
 	 * 
-	 * @author Rafael Corr�a
+	 * @author Rafael Correa
 	 * @date 07/09/2009
 	 * @param imovel
 	 * @return QualidadeAgua
@@ -4382,8 +4359,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 
 		try {
-			// Verificamos se algum erro de comuni��o previsto aconteceu. Caso positivo,
-			// incluimos a mensagem retornada no retorno da fun��o.
+			// Verificamos se algum erro de comunieeo previsto aconteceu. Caso positivo,
+			// incluimos a mensagem retornada no retorno da funeeo.
 			retornoIncluirMovimento = this.incluirMovimentoContaPreFaturada(buffer, idRota, arquivoTextoRetornoIS,
 					bufferOriginal);
 		} catch (MobileComunicationException mce) {
@@ -4438,9 +4415,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				retorno.setRelatorioConsistenciaProcessamento(relatorio);
 			}
 
-			// Verificamos se j� foi enviado algum tipo de mensagem nessa requisi��o
+			// Verificamos se je foi enviado algum tipo de mensagem nessa requisieeo
 			if (rota != null) {
-				// Caso n�o seja finalizar a rota, ent�o verifica se tem releitura para a
+				// Caso neo seja finalizar a rota, enteo verifica se tem releitura para a
 				// rota
 				if (!finalizarArquivo) {
 					if (retorno.getMensagemComunicacaoServidorCelular() == null) {
@@ -4523,7 +4500,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * Atualiza um conjunto de leituras e anormalidades bem como seu consumo e suas
 	 * contas prefaturadas
 	 * 
-	 * @author S�vio Luiz @date 24/02/2010 @param buffer - BufferedReader com o
+	 * @author Sevio Luiz @date 24/02/2010 @param buffer - BufferedReader com o
 	 * arquivo selecionado @return void @throws ControladorException
 	 */
 	private Rota pesquisarRotaImpressaoSimultanea(AtualizarContaPreFaturadaHelper helperCabecalho)
@@ -4554,14 +4531,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					rota = movimentoRoteiroEmpresa.getRota();
 				}
 			}
-			// caso n�o tenha a rota em movimento_roteiro_empresa, pesquisar
-			// pelo im�vel
+			// caso neo tenha a rota em movimento_roteiro_empresa, pesquisar
+			// pelo imevel
 			if (rota == null || rota.equals("")) {
 
 				/*
 				 * 
 				 * Alteracao para, quando for rota alternativa, bucar a rota pela rota
-				 * alternativa do im�vel, e n�o pelo setor comercial
+				 * alternativa do imevel, e neo pelo setor comercial
 				 */
 				Imovel imovel = this.getControladorImovel().pesquisarImovel(helperCabecalho.getMatriculaImovel());
 
@@ -4595,7 +4572,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	/**
 	 * PesquisarDataPrevistaFaturamentoAtividadeCronograma
 	 * 
-	 * [SB0004] - Calcular Valor de �gua e/ou Esgoto
+	 * [SB0004] - Calcular Valor de egua e/ou Esgoto
 	 * 
 	 * 
 	 * @author Hugo Amorim
@@ -4628,7 +4605,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					anoMesFaturamentoGrupo = Util.subtrairMesDoAnoMes(anoMesFaturamentoGrupo, quantidadeMeses);
 				}
 				Integer idFaturamentoAtividade = FaturamentoAtividade.EFETUAR_LEITURA;
-				// pesquisa a data de realiza��o
+				// pesquisa a data de realizaeeo
 				dataRealizacao = repositorioFaturamento.pesquisarDataPrevistaFaturamentoAtividadeCronograma(
 						idFaturamentoGrupo, idFaturamentoAtividade, anoMesFaturamentoGrupo);
 			}
@@ -4865,17 +4842,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	/**
 	 * [UC0820] Atualizar Faturamento do Movimento Celular
 	 * 
-	 * FS0005 - Verificar Exist�ncia do hist�rico de Medi��o
+	 * FS0005 - Verificar Existencia do histerico de Medieeo
 	 * 
 	 * 
 	 * @param matricula matricula do imovel selecionado
-	 * @param anoMes    ano m�s do historico a ser consultado
+	 * @param anoMes    ano mes do historico a ser consultado
 	 */
 	private MedicaoHistorico verificarExistenciaHistoricoMedicao(MovimentoContaPrefaturada movimentoContaPreFaturada)
 			throws ErroRepositorioException, ControladorException {
 		FiltroMedicaoHistorico filtroMedicaoHistorico = new FiltroMedicaoHistorico();
 
-		// Caso o tipo de medi��o seja �gua
+		// Caso o tipo de medieeo seja egua
 		if (movimentoContaPreFaturada.getMedicaoTipo().getId().equals(MedicaoTipo.LIGACAO_AGUA)) {
 			filtroMedicaoHistorico.adicionarParametro(new ParametroSimples(FiltroMedicaoHistorico.LIGACAO_AGUA_ID,
 					movimentoContaPreFaturada.getImovel().getId()));
@@ -4981,7 +4958,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * Selecionamos os movimento para serem processados
 	 * 
 	 * @param helper Helper para pesquisa
-	 * @return Cole��o com os dados solicitados
+	 * @return Coleeeo com os dados solicitados
 	 * 
 	 * @throws ControladorException
 	 */
@@ -5025,11 +5002,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Este caso de uso permite a inser��o de dados na tabela movimento conta
-	 * pr�-faturada.
+	 * Este caso de uso permite a insereeo de dados na tabela movimento conta
+	 * pre-faturada.
 	 * 
-	 * [SB0001] - Gera Tela Resumo das leituras e anormalidades da impress�o
-	 * simult�nea registradas
+	 * [SB0001] - Gera Tela Resumo das leituras e anormalidades da impresseo
+	 * simultenea registradas
 	 * 
 	 * @author bruno
 	 * @date 21/09/2009
@@ -5360,7 +5337,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0958] - Gerar Relat�rio de juros, Multas e D�bitos Cancelados
+	 * [UC0958] - Gerar Relaterio de juros, Multas e Debitos Cancelados
 	 * 
 	 * @since 13/10/2009
 	 * @author Marlon Patrick
@@ -5418,31 +5395,31 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0958] - Relatorio de Juros, Multas e D�bitos Cancelados<br/>
-	 * [SB0003] - Pesquisar juros,multas e d�bitos cancelados.<br/>
+	 * [UC0958] - Relatorio de Juros, Multas e Debitos Cancelados<br/>
+	 * [SB0003] - Pesquisar juros,multas e debitos cancelados.<br/>
 	 * 
-	 * Esse m�todo define quais d�bitos foram cancelados comparando a conta
+	 * Esse metodo define quais debitos foram cancelados comparando a conta
 	 * original e a conta retificada.<br/>
-	 * Caso seja encontrado algum d�bito que N�O foi cancelado o mesmo �
-	 * removido da cole��o de d�bitos.<br/>
-	 * Caso a conta retificada n�o possua nenhum d�bito cancelado o m�todo
+	 * Caso seja encontrado algum debito que NeO foi cancelado o mesmo e
+	 * removido da coleeeo de debitos.<br/>
+	 * Caso a conta retificada neo possua nenhum debito cancelado o metodo
 	 * retorna FALSE.<br/>
 	 * 
 	 * Regras:<br/>
-	 * 0 - Se uma conta possui v�rios d�bitos do mesmo tipo, eles devem ser
-	 * somados(a retificada j� vem assim da consulta, a original � feito neste
-	 * m�todo)<br/>
-	 * 1 - Se n�o havia nenhum d�bito na conta original, ent�o, nenhum
-	 * d�bito foi cancelado.<br/>
-	 * 2 - Se a conta original tinha d�bitos e a retificada n�o, ent�o, todos
+	 * 0 - Se uma conta possui verios debitos do mesmo tipo, eles devem ser
+	 * somados(a retificada je vem assim da consulta, a original e feito neste
+	 * metodo)<br/>
+	 * 1 - Se neo havia nenhum debito na conta original, enteo, nenhum
+	 * debito foi cancelado.<br/>
+	 * 2 - Se a conta original tinha debitos e a retificada neo, enteo, todos
 	 * foram cancelados.<br/>
-	 * 3 - Se o d�bito existe apenas na conta retificada, ent�o, ele n�o foi
+	 * 3 - Se o debito existe apenas na conta retificada, enteo, ele neo foi
 	 * cancelado e sim adicionado.<br/>
-	 * 4 - Se o d�bito � maior ou igual na retificada, ent�o, na verdade houve
-	 * um aumento do d�bito ou continuou o mesmo.<br/>
-	 * 5 - Se o d�bito na original � maior que na retificada, ent�o, o valor
-	 * cancelado �: valor da original - valor da retificada.<br/>
-	 * 6 - Se o d�bito existe apenas na original, ent�o, ele foi cancelado.<br/>
+	 * 4 - Se o debito e maior ou igual na retificada, enteo, na verdade houve
+	 * um aumento do debito ou continuou o mesmo.<br/>
+	 * 5 - Se o debito na original e maior que na retificada, enteo, o valor
+	 * cancelado e: valor da original - valor da retificada.<br/>
+	 * 6 - Se o debito existe apenas na original, enteo, ele foi cancelado.<br/>
 	 * 
 	 * @since 19/10/2009
 	 * @author Marlon Patrick
@@ -5458,7 +5435,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		filtroDebitoCobradoHistorico.setCampoOrderBy(FiltroDebitoCobradoHistorico.DEBITO_TIPO_DESCRICAO);// ordem
 																											// influencia
 																											// na
-																											// l�gica
+																											// legica
 
 		Collection<DebitoCobradoHistorico> colecaoDebitosContaOriginal = getControladorUtil()
 				.pesquisar(filtroDebitoCobradoHistorico, DebitoCobradoHistorico.class.getName());
@@ -5587,31 +5564,31 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0958] - Relatorio de Juros, Multas e D�bitos Cancelados<br/>
-	 * [SB0003] - Pesquisar juros,multas e d�bitos cancelados.<br/>
+	 * [UC0958] - Relatorio de Juros, Multas e Debitos Cancelados<br/>
+	 * [SB0003] - Pesquisar juros,multas e debitos cancelados.<br/>
 	 * 
-	 * Esse m�todo define quais d�bitos foram cancelados comparando a conta
+	 * Esse metodo define quais debitos foram cancelados comparando a conta
 	 * original e a conta retificada.<br/>
-	 * Caso seja encontrado algum d�bito que N�O foi cancelado o mesmo �
-	 * removido da cole��o de d�bitos.<br/>
-	 * Caso a conta retificada n�o possua nenhum d�bito cancelado o m�todo
+	 * Caso seja encontrado algum debito que NeO foi cancelado o mesmo e
+	 * removido da coleeeo de debitos.<br/>
+	 * Caso a conta retificada neo possua nenhum debito cancelado o metodo
 	 * retorna FALSE.<br/>
 	 * 
 	 * Regras:<br/>
-	 * 0 - Se uma conta possui v�rios d�bitos do mesmo tipo, eles devem ser
-	 * somados(a retificada j� vem assim da consulta, a original � feito neste
-	 * m�todo)<br/>
-	 * 1 - Se n�o havia nenhum d�bito na conta original, ent�o, nenhum
-	 * d�bito foi cancelado.<br/>
-	 * 2 - Se a conta original tinha d�bitos e a retificada n�o, ent�o, todos
+	 * 0 - Se uma conta possui verios debitos do mesmo tipo, eles devem ser
+	 * somados(a retificada je vem assim da consulta, a original e feito neste
+	 * metodo)<br/>
+	 * 1 - Se neo havia nenhum debito na conta original, enteo, nenhum
+	 * debito foi cancelado.<br/>
+	 * 2 - Se a conta original tinha debitos e a retificada neo, enteo, todos
 	 * foram cancelados.<br/>
-	 * 3 - Se o d�bito existe apenas na conta retificada, ent�o, ele n�o foi
+	 * 3 - Se o debito existe apenas na conta retificada, enteo, ele neo foi
 	 * cancelado e sim adicionado.<br/>
-	 * 4 - Se o d�bito � maior ou igual na retificada, ent�o, na verdade houve
-	 * um aumento do d�bito ou continuou o mesmo.<br/>
-	 * 5 - Se o d�bito na original � maior que na retificada, ent�o, o valor
-	 * cancelado �: valor da original - valor da retificada.<br/>
-	 * 6 - Se o d�bito existe apenas na original, ent�o, ele foi cancelado.<br/>
+	 * 4 - Se o debito e maior ou igual na retificada, enteo, na verdade houve
+	 * um aumento do debito ou continuou o mesmo.<br/>
+	 * 5 - Se o debito na original e maior que na retificada, enteo, o valor
+	 * cancelado e: valor da original - valor da retificada.<br/>
+	 * 6 - Se o debito existe apenas na original, enteo, ele foi cancelado.<br/>
 	 * 
 	 * 
 	 * @since 19/10/2009
@@ -5744,10 +5721,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0958] - Relatorio de juros,Multas e D�bitos Cancelados<br/>
+	 * [UC0958] - Relatorio de juros,Multas e Debitos Cancelados<br/>
 	 * [SB0002] - Obter conta original<br/>
 	 * 
-	 * Este m�todo tenta obter a conta original de uma determinada conta
+	 * Este metodo tenta obter a conta original de uma determinada conta
 	 * retificada a partir da tabela de conta. O parametro relatorioHelper tem os
 	 * dados da conta retificada.
 	 * 
@@ -5776,11 +5753,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0958] - Relatorio de juros,Multas e D�bitos Cancelados<br/>
+	 * [UC0958] - Relatorio de juros,Multas e Debitos Cancelados<br/>
 	 * [SB0002] - Obter conta original<br/>
 	 * 
-	 * Este m�todo tenta obter a conta original de uma determinada conta
-	 * retificada a partir da tabela de conta hist�rico. O parametro
+	 * Este metodo tenta obter a conta original de uma determinada conta
+	 * retificada a partir da tabela de conta histerico. O parametro
 	 * relatorioHelper tem os dados da conta retificada.
 	 * 
 	 * @since 19/10/2009
@@ -5811,12 +5788,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0958] - Relatorio de Juros, Multas e D�bitos Cancelados.<br/>
+	 * [UC0958] - Relatorio de Juros, Multas e Debitos Cancelados.<br/>
 	 * 
-	 * Este m�todo cria uma cole��o de
+	 * Este metodo cria uma coleeeo de
 	 * RelatorioJurosMultasDebitosCanceladosHelper com base no retorno da consulta
-	 * realizada anteriormente. Al�m disso, ele agrupa as contas pelo seus
-	 * d�bitos (uma conta passa a ter uma cole��o de d�bitos).
+	 * realizada anteriormente. Alem disso, ele agrupa as contas pelo seus
+	 * debitos (uma conta passa a ter uma coleeeo de debitos).
 	 * 
 	 * @since 19/10/2009
 	 * @author Marlon Patrick
@@ -5879,9 +5856,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	/**
 	 * [UC0113] Faturar Grupo de Faturamento
 	 * 
-	 * [SB0005] - Gerar os Cr�ditos Realizados
+	 * [SB0005] - Gerar os Creditos Realizados
 	 * 
-	 * @author S�vio Luiz
+	 * @author Sevio Luiz
 	 * @date 27/10/2009
 	 * 
 	 * @param imovel
@@ -5898,13 +5875,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		try {
 			Collection colecaoCreditoRealizado = repositorioFaturamento.pesquisarCreditosRealizados(idConta);
-			// System.out.println("Atualizar valor residual. Id im�vel: " + imovel != null
+			// System.out.println("Atualizar valor residual. Id imevel: " + imovel != null
 			// ? imovel.getId():"");
 
 			/**
 			 * Autor: Adriana Muniz Data: 20/07/2011
 			 * 
-			 * Altera��o para atender cr�ditos com uma presta��o
+			 * Alteraeeo para atender creditos com uma prestaeeo
 			 */
 			List<Integer> idCreditosARealizarVerificados = new ArrayList<Integer>();
 
@@ -5932,17 +5909,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						CreditoARealizar creditoARealizar = creditoBolsaAgua.getCreditoARealizarGeral().getCreditoARealizar();
 						logger.info(
-								" 0 - Credito a Realizar BOLSA �GUA: Imovel (atualizarCreditoResidual): "
+								" 0 - Credito a Realizar BOLSA eGUA: Imovel (atualizarCreditoResidual): "
 										+ (creditoARealizar
 												.getImovel() != null ? creditoARealizar.getImovel().getId() : "NULL")
-										+ " | Cr�ditos: "
+										+ " | Creditos: "
 										+ (creditoARealizar
 												.getValorCredito() != null ? creditoARealizar.getValorCredito() : "NULL")
-										+ " | Residual Concedido no M�s: "
+										+ " | Residual Concedido no Mes: "
 										+ (creditoARealizar
 												.getValorResidualConcedidoMes() != null ? creditoARealizar
 														.getValorResidualConcedidoMes() : "NULL")
-										+ " | Residual Concedido no M�s Anterior: "
+										+ " | Residual Concedido no Mes Anterior: "
 										+ (creditoARealizar
 												.getValorResidualMesAnterior() != null
 														? creditoARealizar.getValorResidualMesAnterior()
@@ -5997,8 +5974,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									 * 
 									 * Data: 01/07/2011 autor: Adriana Muniz
 									 * 
-									 * Altera��o para atender casos de cr�ditos com apenas uma presta��o e
-									 * que s�o consumidos conforme o valor da conta a ate ser concedido totalmente
+									 * Alteraeeo para atender casos de creditos com apenas uma prestaeeo e
+									 * que seo consumidos conforme o valor da conta a ate ser concedido totalmente
 									 */
 									if (creditoARealizar.getNumeroPrestacaoCredito() == 1) {
 										BigDecimal valorResidual = ConstantesSistema.VALOR_ZERO;
@@ -6030,8 +6007,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 												/**
 												 * @author Adriana Muniz e Wellington Rocha
-												 * @date 30/08/2012 Atualiza��o da data da ultima altera��o do
-												 *       credito realizado e atualiza��o do credito realizado
+												 * @date 30/08/2012 Atualizaeeo da data da ultima alteraeeo do
+												 *       credito realizado e atualizaeeo do credito realizado
 												 *       categoria
 												 */
 												// atualiza o credito realizado
@@ -6046,7 +6023,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												// atualiza o credito a realizar
 												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 
-												// Acumula o valor do cr�dito
+												// Acumula o valor do credito
 												valorTotalCreditos = valorTotalCreditos.add(valorCreditoConcedido);
 
 												if (valorTotalCreditos.compareTo(valorTotalContaSemCredito) == 0) {
@@ -6077,17 +6054,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 																+ (creditoARealizar.getImovel() != null
 																		? creditoARealizar.getImovel().getId()
 																		: "NULL")
-																+ " | Cr�ditos: "
+																+ " | Creditos: "
 																+ (creditoARealizar.getValorCredito() != null
 																		? creditoARealizar.getValorCredito()
 																		: "NULL")
-																+ " | Residual Concedido no M�s: "
+																+ " | Residual Concedido no Mes: "
 																+ (creditoARealizar
 																		.getValorResidualConcedidoMes() != null
 																				? creditoARealizar
 																						.getValorResidualConcedidoMes()
 																				: "NULL")
-																+ " | Residual Concedido no M�s Anterior: "
+																+ " | Residual Concedido no Mes Anterior: "
 																+ (creditoARealizar
 																		.getValorResidualMesAnterior() != null
 																				? creditoARealizar
@@ -6095,13 +6072,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 																				: "NULL"));
 
 												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
-												// Acumula o valor do cr�dito
+												// Acumula o valor do credito
 												valorTotalCreditos = valorTotalCreditos.add(valorConcedido);
 
 												/**
 												 * @author Adriana Muniz e Wellington Rocha
-												 * @date 30/08/2012 Atualiza��o da data da ultima altera��o do
-												 *       credito realizado e atualiza��o do credito realizado
+												 * @date 30/08/2012 Atualizaeeo da data da ultima alteraeeo do
+												 *       credito realizado e atualizaeeo do credito realizado
 												 *       categoria
 												 */
 												// atualiza o credito realizado
@@ -6127,15 +6104,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 													+ (creditoARealizar.getImovel() != null
 															? creditoARealizar.getImovel().getId()
 															: "NULL")
-													+ " | Cr�ditos: "
+													+ " | Creditos: "
 													+ (creditoARealizar.getValorCredito() != null
 															? creditoARealizar.getValorCredito()
 															: "NULL")
-													+ " | Residual Concedido no M�s: "
+													+ " | Residual Concedido no Mes: "
 													+ (creditoARealizar.getValorResidualConcedidoMes() != null
 															? creditoARealizar.getValorResidualConcedidoMes()
 															: "NULL")
-													+ " | Residual Concedido no M�s Anterior: "
+													+ " | Residual Concedido no Mes Anterior: "
 													+ (creditoARealizar.getValorResidualMesAnterior() != null
 															? creditoARealizar.getValorResidualMesAnterior()
 															: "NULL"));
@@ -6197,16 +6174,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 											logger.info(
 													" 3 - Credito a Realizar: Imovel (atualizarCreditoResidual): "
 															+ (creditoARealizar.getImovel() != null ? creditoARealizar
-																	.getImovel().getId() : "SEM IM�VEL...")
-															+ " | Cr�ditos: "
+																	.getImovel().getId() : "SEM IMeVEL...")
+															+ " | Creditos: "
 															+ (creditoARealizar.getValorCredito() != null
 																	? creditoARealizar.getValorCredito()
 																	: "NULL")
-															+ " | Residual Concedido no M�s: "
+															+ " | Residual Concedido no Mes: "
 															+ (creditoARealizar.getValorResidualConcedidoMes() != null
 																	? creditoARealizar.getValorResidualConcedidoMes()
 																	: "NULL")
-															+ " | Residual Concedido no M�s Anterior: "
+															+ " | Residual Concedido no Mes Anterior: "
 															+ (creditoARealizar.getValorResidualMesAnterior() != null
 																	? creditoARealizar.getValorResidualMesAnterior()
 																	: "NULL"));
@@ -6216,8 +6193,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 											/**
 											 * @author Adriana Muniz e Wellington Rocha
-											 * @date 30/08/2012 Atualiza��o da data da ultima altera��o do
-											 *       credito realizado e atualiza��o do credito realizado categoria
+											 * @date 30/08/2012 Atualizaeeo da data da ultima alteraeeo do
+											 *       credito realizado e atualizaeeo do credito realizado categoria
 											 */
 											// atualiza o credito realizado
 											creditoRealizado.setValorCredito(valorCredito);
@@ -6234,15 +6211,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 													+ (creditoARealizar.getImovel() != null
 															? creditoARealizar.getImovel().getId()
 															: "NULL")
-													+ " | Cr�ditos: "
+													+ " | Creditos: "
 													+ (creditoARealizar.getValorCredito() != null
 															? creditoARealizar.getValorCredito()
 															: "NULL")
-													+ " | Residual Concedido no M�s: "
+													+ " | Residual Concedido no Mes: "
 													+ (creditoARealizar.getValorResidualConcedidoMes() != null
 															? creditoARealizar.getValorResidualConcedidoMes()
 															: "NULL")
-													+ " | Residual Concedido no M�s Anterior: "
+													+ " | Residual Concedido no Mes Anterior: "
 													+ (creditoARealizar.getValorResidualMesAnterior() != null
 															? creditoARealizar.getValorResidualMesAnterior()
 															: "NULL"));
@@ -6257,31 +6234,31 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 									/**
 									 * 
-									 * Para n�o subtrair a presta��o do cr�dito, caso o credito seja apenas
+									 * Para neo subtrair a prestaeeo do credito, caso o credito seja apenas
 									 * de uma parcela
 									 */
 									if (creditoARealizar.getNumeroPrestacaoCredito() != 1) {
-										// Atualiza o n� de presta��es realizadas
+										// Atualiza o ne de prestaeees realizadas
 										creditoARealizar.setNumeroPrestacaoRealizada(new Short(
 												(creditoARealizar.getNumeroPrestacaoRealizada().intValue() - 1) + ""));
 									}
-									// anoMes da presta��o ser� o anaMes de
-									// refer�ncia da conta
+									// anoMes da prestaeeo sere o anaMes de
+									// referencia da conta
 									creditoARealizar.setAnoMesReferenciaPrestacao(null);
 
 									logger.info(" 5 - Credito a Realizar: Imovel (atualizarCreditoResidual): "
 											+ (creditoARealizar.getImovel() != null
 													? creditoARealizar.getImovel().getId()
 													: "NULL")
-											+ " | Cr�ditos: "
+											+ " | Creditos: "
 											+ (creditoARealizar.getValorCredito() != null
 													? creditoARealizar.getValorCredito()
 													: "NULL")
-											+ " | Residual Concedido no M�s: "
+											+ " | Residual Concedido no Mes: "
 											+ (creditoARealizar.getValorResidualConcedidoMes() != null
 													? creditoARealizar.getValorResidualConcedidoMes()
 													: "NULL")
-											+ " | Residual Concedido no M�s Anterior: "
+											+ " | Residual Concedido no Mes Anterior: "
 											+ (creditoARealizar.getValorResidualMesAnterior() != null
 													? creditoARealizar.getValorResidualMesAnterior()
 													: "NULL"));
@@ -6290,7 +6267,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 
 							} /*
-								 * fim la�o que verifica se o credito a realizar j� foi analisado
+								 * fim laeo que verifica se o credito a realizar je foi analisado
 								 * 
 								 * if (creditoARealizar.getCreditoTipo().getId().equals(CreditoTipo.
 								 * CREDITO_BOLSA_AGUA)) { Filtro filtro = new FiltroCreditoARealizar();
@@ -6315,16 +6292,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								 * 
 								 * logger.info(" 6 - Credito a Realizar: Imovel (atualizarCreditoResidual): " +
 								 * (creditoARealizar.getImovel() != null ? creditoARealizar.getImovel().getId()
-								 * : "NULL") + " | Cr�ditos: " + (creditoARealizar.getValorCredito() != null ?
+								 * : "NULL") + " | Creditos: " + (creditoARealizar.getValorCredito() != null ?
 								 * creditoARealizar.getValorCredito() : "NULL" ) +
-								 * " | Residual Concedido no M�s: " +
+								 * " | Residual Concedido no Mes: " +
 								 * (creditoARealizar.getValorResidualConcedidoMes() != null ?
 								 * creditoARealizar.getValorResidualConcedidoMes() : "NULL") +
-								 * " | Residual Concedido no M�s Anterior: " +
+								 * " | Residual Concedido no Mes Anterior: " +
 								 * (creditoARealizar.getValorResidualMesAnterior() != null ?
 								 * creditoARealizar.getValorResidualMesAnterior() : "NULL")); }
 								 */
-						} // fim la�o de credito a realizar
+						} // fim laeo de credito a realizar
 					}
 
 					if (deletaCreditoRealizado && !creditoRealizado.isCreditoBolsaAgua()) {
@@ -6380,10 +6357,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				/**
 				 * Autor: Adriana Muniz Data: 01/09/2011
 				 * 
-				 * Adi��o de verifica��o da referencia do credito e da cobran�a,
+				 * Adieeo de verificaeeo da referencia do credito e da cobranea,
 				 * visando com isso trazer o credito a realizar referente ao credito realizado
 				 */
-				// selecionar o cr�dito a partir da refer�ncia do credito e da cobran�a
+				// selecionar o credito a partir da referencia do credito e da cobranea
 				Integer referenciaCredito = (Integer) arrayCreditosACobrar[13];
 				Integer cobrancacredito = (Integer) arrayCreditosACobrar[14];
 				if (referenciaCredito.equals(creditoRealizado.getAnoMesReferenciaCredito())
@@ -6465,7 +6442,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					}
 
 					/*
-					 * Alterado por Vivianne Sousa em 20/12/2007 - Analista: Adriano cria��o do
+					 * Alterado por Vivianne Sousa em 20/12/2007 - Analista: Adriano criaeeo do
 					 * bonus para parcelamento com RD especial
 					 */
 					// numero de parcelas bonus - item 16
@@ -6483,8 +6460,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * Obtem os Credito A Realizar do Imovel
 	 * 
 	 * @param imovelID                     Id do Imovel
-	 * @param debitoCreditoSituacaoAtualID ID do Debito Credito Situa��o
-	 * @return Cole��o de Creditos a Realizar
+	 * @param debitoCreditoSituacaoAtualID ID do Debito Credito Situaeeo
+	 * @return Coleeeo de Creditos a Realizar
 	 */
 	private Collection obterCreditoARealizarDadosCreditoRealizado(Integer IdCreditoARealizar, Integer anoMesFaturamento)
 			throws ControladorException {
@@ -6492,7 +6469,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		// lista de credito a realizar
 		Collection creditosARealizar = null;
 		Collection colecaoCreditosARealizar = null;
-		// Pesquisa cr�ditos a cobrar
+		// Pesquisa creditos a cobrar
 		try {
 			colecaoCreditosARealizar = repositorioFaturamento
 					.pesquisarCreditoARealizarPeloCreditoRealizado(IdCreditoARealizar, anoMesFaturamento);
@@ -6502,7 +6479,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		// Verifica se existe d�bitos a realizar
+		// Verifica se existe debitos a realizar
 		if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
 
 			creditosARealizar = new ArrayList();
@@ -6610,7 +6587,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 
 				/*
-				 * Alterado por Vivianne Sousa em 20/12/2007 - Analista: Adriano cria��o do
+				 * Alterado por Vivianne Sousa em 20/12/2007 - Analista: Adriano criaeeo do
 				 * bonus para parcelamento com RD especial
 				 */
 				// numero de parcelas bonus - item 16
@@ -6618,7 +6595,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					creditoARealizar.setNumeroParcelaBonus((Short) arrayCreditosACobrar[16]);
 				}
 
-				// valor residual concedido no m�s - item 17
+				// valor residual concedido no mes - item 17
 				if (arrayCreditosACobrar[17] != null) {
 					creditoARealizar.setValorResidualConcedidoMes((BigDecimal) arrayCreditosACobrar[17]);
 				}
@@ -6632,7 +6609,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0958] - Count Relat�rio de juros, Multas e D�bitos Cancelados
+	 * [UC0958] - Count Relaterio de juros, Multas e Debitos Cancelados
 	 * 
 	 * @since 10/12/2009
 	 * @author Hugo Amorim
@@ -6671,14 +6648,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		try {
 			// -------------------------
-			// Registrar o in�cio do processamento da Unidade de
+			// Registrar o inecio do processamento da Unidade de
 			// Processamento do Batch
 			// -------------------------
 
 			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
 					UnidadeProcessamento.FUNCIONALIDADE, 0);
 
-			// Vari�veis para a pagina��o da pesquisa
+			// Varieveis para a paginaeeo da pesquisa
 			// ========================================================================
 			boolean flagTerminou = false;
 			final int quantidadeRegistros = 5000;
@@ -6735,12 +6712,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					}
 				}
 
-				// Incrementa o n� do indice da p�gina��o
+				// Incrementa o ne do indice da peginaeeo
 				numeroIndice = numeroIndice + quantidadeRegistros;
 
 				/**
-				 * Caso a cole��o de dados retornados for menor que a quantidade de
-				 * registros seta a flag indicando que a pagina��o terminou.
+				 * Caso a coleeeo de dados retornados for menor que a quantidade de
+				 * registros seta a flag indicando que a paginaeeo terminou.
 				 */
 				if (colecaoDadosTxt == null || colecaoDadosTxt.size() < quantidadeRegistros) {
 
@@ -6775,7 +6752,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Montar Helper para facilitar na cria��o do txt das contas do projeto
+	 * Montar Helper para facilitar na criaeeo do txt das contas do projeto
 	 * especial
 	 * 
 	 * @author: Hugo Amorim
@@ -6958,10 +6935,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Este caso de uso permite gerar o resumo de simula��o em um conjunto de
+	 * Este caso de uso permite gerar o resumo de simulaeeo em um conjunto de
 	 * rotas de um grupo de faturamento.
 	 * 
-	 * [UC0980] - Gerar Resumo Simula��o do Faturamento
+	 * [UC0980] - Gerar Resumo Simulaeeo do Faturamento
 	 * 
 	 * @author Fernando Fontelles Filho
 	 * @date 19/01/2010
@@ -6979,7 +6956,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		// -------------------------
 		//
-		// Registrar o in�cio do processamento da Unidade de
+		// Registrar o inecio do processamento da Unidade de
 		// Processamento
 		// do Batch
 		//
@@ -6995,9 +6972,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
 			/*
-			 * Caso a cole��o de atividade de faturamento de cronograma para rota n�o
+			 * Caso a coleeeo de atividade de faturamento de cronograma para rota neo
 			 * esteja nula para cada rota informada seleciona as quadras da rota e para cada
-			 * quadra os im�veis
+			 * quadra os imeveis
 			 */
 			if (colecaoFaturamentoAtividadeCronogramaRota != null
 					&& !colecaoFaturamentoAtividadeCronogramaRota.isEmpty()) {
@@ -7005,10 +6982,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				Iterator iteratorColecaoFaturamentoAtividadeCronogramaRota = colecaoFaturamentoAtividadeCronogramaRota
 						.iterator();
 
-				// Objeto que armazenar� as informa��es para dele��o das contas
+				// Objeto que armazenare as informaeees para deleeeo das contas
 				ApagarDadosFaturamentoHelper helper = new ApagarDadosFaturamentoHelper();
 
-				// LA�O PARA FATURAR TODAS AS ROTAS
+				// LAeO PARA FATURAR TODAS AS ROTAS
 				while (iteratorColecaoFaturamentoAtividadeCronogramaRota.hasNext()) {
 
 					FaturamentoAtivCronRota faturamentoAtivCronRota = (FaturamentoAtivCronRota) iteratorColecaoFaturamentoAtividadeCronogramaRota
@@ -7018,27 +6995,27 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					helper.setAnoMesFaturamento(faturamentoGrupo.getAnoMesReferencia());
 					helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
 
-					// APAGAR DADOS GERADOS DO RESUMO DA SIMULA��O PARA A ROTA
+					// APAGAR DADOS GERADOS DO RESUMO DA SIMULAeeO PARA A ROTA
 					// NO ANO/MES DE REFERENCIA DO FATURAMENTO
 					// =================================================================================================
 					this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(faturamentoGrupo.getId(), helper);
 					this.apagarDadosGeradosResumoFaturamentoSimulacao(faturamentoGrupo.getId(), helper);
 
 					/*
-					 * Caso o m�s de faturamento corresponda ao m�s de novembro, o sistema
-					 * exclui tamb�m os dados do resumo da simula��o do faturamento do m�s
+					 * Caso o mes de faturamento corresponda ao mes de novembro, o sistema
+					 * exclui tambem os dados do resumo da simulaeeo do faturamento do mes
 					 * de dezembro.
 					 */
 					if (Util.obterMes(faturamentoGrupo.getAnoMesReferencia()) == ConstantesSistema.NOVEMBRO) {
 
 						helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
 
-						// Cria o ano/m�s de refer�ncia para dezembro do ano
+						// Cria o ano/mes de referencia para dezembro do ano
 						// informado
 						helper.setAnoMesFaturamento(
 								Util.somaUmMesAnoMesReferencia(faturamentoGrupo.getAnoMesReferencia()));
 
-						// APAGAR DADOS GERADOS DO RESUMO DA SIMULA��O PARA A
+						// APAGAR DADOS GERADOS DO RESUMO DA SIMULAeeO PARA A
 						// ROTA NO ANO/MES DE REFERENCIA DO FATURAMENTO
 						// =================================================================================================
 						this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(faturamentoGrupo.getId(), helper);
@@ -7046,7 +7023,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 					}
 
-					// Vari�veis para a pagina��o da pesquisa de Imovel por
+					// Varieveis para a paginaeeo da pesquisa de Imovel por
 					// Grupo Faturamento
 					// ========================================================================
 					boolean flagTerminou = false;
@@ -7059,18 +7036,18 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						Collection colecaoImovel = this.pesquisarImovelGrupoFaturamento(
 								faturamentoAtivCronRota.getRota(), numeroIndice, quantidadeRegistros, false, true);
 
-						// Resumos de faturamento para simula��o.
+						// Resumos de faturamento para simulaeeo.
 						Collection colecaoResumoFaturamento = new ArrayList();
 
 						/*
-						 * Caso exista ids de im�veis para a rota atual determina o faturamento para
-						 * cada im�vel retornado.
+						 * Caso exista ids de imeveis para a rota atual determina o faturamento para
+						 * cada imevel retornado.
 						 */
 						if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
 
 							Iterator iteratorColecaoImoveis = colecaoImovel.iterator();
 
-							// LA�O PARA DETERMINAR O FATURAMENTO DE TODOS OS
+							// LAeO PARA DETERMINAR O FATURAMENTO DE TODOS OS
 							// IMOVEIS DA ROTA ATUAL
 
 							int count = 1;
@@ -7099,7 +7076,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						} // FIM DO LOOP DE IMOVEIS
 
 						/*
-						 * Caso a cole��o de resumo de faturamento n�o esteja vazia ou nula inseri
+						 * Caso a coleeeo de resumo de faturamento neo esteja vazia ou nula inseri
 						 * os resumos na base de dados.
 						 */
 						if (colecaoResumoFaturamento != null && !colecaoResumoFaturamento.isEmpty()) {
@@ -7113,13 +7090,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						}
 
 						/**
-						 * Incrementa o n� do indice da p�gina��o
+						 * Incrementa o ne do indice da peginaeeo
 						 */
 						numeroIndice = numeroIndice + quantidadeRegistros;
 
 						/**
-						 * Caso a cole��o de imoveis retornados for menor que a quantidade de
-						 * registros seta a flag indicando que a pagina��o terminou.
+						 * Caso a coleeeo de imoveis retornados for menor que a quantidade de
+						 * registros seta a flag indicando que a paginaeeo terminou.
 						 */
 						if (colecaoImovel == null || colecaoImovel.size() < quantidadeRegistros) {
 
@@ -7131,17 +7108,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							colecaoImovel = null;
 						}
 
-					} // FIM DO LOOP DA PAGINA��O
+					} // FIM DO LOOP DA PAGINAeeO
 				}
 			} else {
-				// A LISTA COM AS ROTAS EST� NULA OU VAZIA
+				// A LISTA COM AS ROTAS ESTe NULA OU VAZIA
 
 				throw new ControladorException("atencao.pesquisa.grupo_rota_vazio");
 			}
 
 			// --------------------------------------------------------
 			//
-			// Registrar o fim da execu��o da Unidade de Processamento
+			// Registrar o fim da execueeo da Unidade de Processamento
 			//
 			// --------------------------------------------------------
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
@@ -7149,8 +7126,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (Exception e) {
 
 			/*
-			 * Este catch serve para interceptar qualquer exce��o que o processo batch
-			 * venha a lan�ar e garantir que a unidade de processamento do batch ser�
+			 * Este catch serve para interceptar qualquer exceeeo que o processo batch
+			 * venha a lanear e garantir que a unidade de processamento do batch sere
 			 * atualizada com o erro ocorrido.
 			 */
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
@@ -7160,9 +7137,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Recupera as contas dos im�veis selecionados que tenham o m�s ano de
-	 * refer�ncia e que estejam com a situa��o atual igual a normal ou
-	 * situa��o anterior igual a normal. E gera o resumo simula��o do
+	 * Recupera as contas dos imeveis selecionados que tenham o mes ano de
+	 * referencia e que estejam com a situaeeo atual igual a normal ou
+	 * situaeeo anterior igual a normal. E gera o resumo simulaeeo do
 	 * faturamento.
 	 * 
 	 * @author Fernando Fontelles Filho
@@ -7219,7 +7196,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							mapValoresPorTipoDebito.put(debitoCobrado.getDebitoTipo(),
 									Util.somaBigDecimal(valor, debitoCobrado.getValorPrestacao()));
 						}
-						// Caso contrario inseri na cole��o
+						// Caso contrario inseri na coleeeo
 						// primeiro registro do tipo.
 						else {
 							mapValoresPorTipoDebito.put(debitoCobrado.getDebitoTipo(),
@@ -7263,7 +7240,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							mapValoresPorTipoCredito.put(creditoRealizado.getCreditoTipo(),
 									Util.somaBigDecimal(valor, creditoRealizado.getValorCredito()));
 						}
-						// Caso contrario inseri na cole��o
+						// Caso contrario inseri na coleeeo
 						// primeiro registro do tipo.
 						else {
 							mapValoresPorTipoCredito.put(creditoRealizado.getCreditoTipo(),
@@ -7287,7 +7264,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				conta.setId(gerarResumoSimulacaoFaturamentoHelper.getIdConta());
 
 				Collection colecaoCategoriasConta = this.getControladorImovel()
-						.obterQuantidadeEconomiasContaCategoria(conta);
+						.obterQuantidadeEconomiasContaCategoria(conta.getId());
 
 				Collection colecaoCategoriasOrdenado = new ArrayList();
 
@@ -7351,7 +7328,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					anoMesReferenciaResumoFaturamento = anoMesReferencia;
 				}
 
-				// [SB0009] - Gerar Resumo da Simula��o do Faturamento
+				// [SB0009] - Gerar Resumo da Simulaeeo do Faturamento
 				this.gerarResumoFaturamentoSimulacao(colecaoCategoriasOrdenado,
 						helperValoresAguaEsgoto.getColecaoCalcularValoresAguaEsgotoHelper(), gerarDebitoCobradoHelper,
 						gerarCreditoRealizadoHelper, colecaoResumoFaturamento, imovel, true, faturamentoAtivCronRota,
@@ -7365,7 +7342,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Este caso de uso permite gerar resumo simulacao faturamento de um im�vel de
+	 * Este caso de uso permite gerar resumo simulacao faturamento de um imevel de
 	 * um grupo de faturamento de forma antecipada.
 	 * 
 	 * 
@@ -7386,8 +7363,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			throws ControladorException {
 
 		/*
-		 * Caso o m�s de faturamento corresponda ao m�s de novembro, o sistema
-		 * verifica se haver� faturamento antecipado
+		 * Caso o mes de faturamento corresponda ao mes de novembro, o sistema
+		 * verifica se havere faturamento antecipado
 		 */
 		if (Util.obterMes(anoMesReferencia) == ConstantesSistema.NOVEMBRO
 				&& sistemaParametro.getIndicadorFaturamentoAntecipado().equals(ConstantesSistema.SIM)) {
@@ -7407,10 +7384,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * [UC0394] Gerar D�bitos a Cobrar de Doa��es
+	 * [UC0394] Gerar Debitos a Cobrar de Doaeees
 	 * 
-	 * Efetua cancelamento do imovel caso ano/m�s final de ades�o seja menor ou
-	 * igual ano/m�s do grupo de faturamento da rota
+	 * Efetua cancelamento do imovel caso ano/mes final de adeseo seja menor ou
+	 * igual ano/mes do grupo de faturamento da rota
 	 * 
 	 * @author Hugo Amorim
 	 * @date 02/02/2010
@@ -7442,8 +7419,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			FaturamentoGrupo faturamentoGrupo = (FaturamentoGrupo) Util.retonarObjetoDeColecao(colecaoFaturamentoGrupo);
 
-			// Ano/m�s final da ades�o do im�vel seja diferente de nulo
-			// e que seja o menor ou igual o ano/m�s de refer�ncia do grupo de
+			// Ano/mes final da adeseo do imevel seja diferente de nulo
+			// e que seja o menor ou igual o ano/mes de referencia do grupo de
 			// faturamento da rota.
 			if (imovelDoacao.getAnoMesReferenciaFinal().compareTo(faturamentoGrupo.getAnoMesReferencia()) == 0
 					|| imovelDoacao.getAnoMesReferenciaFinal().compareTo(faturamentoGrupo.getAnoMesReferencia()) < 0) {
@@ -7460,7 +7437,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * Este caso de uso permite enviar email para cliente informando que sua conta
-	 * j� foi gerada. Retorno do celular
+	 * je foi gerada. Retorno do celular
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 03/03/2010
@@ -7469,10 +7446,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @param colContaPreFaturada
 	 * @param efetuarRateio
 	 * @param atualizaSituacaoAtualConta - Caso seja chamado via a funcionalidade de
-	 *                                   ISC, n�o atualiza a situa��o atual da
-	 *                                   conta que n�o foi impressa. Caso seja
+	 *                                   ISC, neo atualiza a situaeeo atual da
+	 *                                   conta que neo foi impressa. Caso seja
 	 *                                   chamado via a funcionalidade de consistir,
-	 *                                   atualiza a situa��o atual da conta.
+	 *                                   atualiza a situaeeo atual da conta.
 	 * @throws ControladorException
 	 */
 	public void processarMovimentoContaPrefaturada(Rota rota, Collection<MovimentoContaPrefaturada> colContaPreFaturada,
@@ -7616,9 +7593,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				this.atualizarMovimentoCelular(colContaPreFaturada, efetuarRateio);
 
-				// n�o atualizar o indicador de atualizacao de faturamento caso indicador de
-				// emissao de conta seja igual a 2 e o im�vel n�o
-				// esteja vinculado com nenhuma outra matr�cula (Im�vel micro) ou venha pela
+				// neo atualizar o indicador de atualizacao de faturamento caso indicador de
+				// emissao de conta seja igual a 2 e o imevel neo
+				// esteja vinculado com nenhuma outra matrecula (Imevel micro) ou venha pela
 				// funcionalidade de consistir
 				for (MovimentoContaPrefaturada movimentoContaPreFaturada : colContaPreFaturada) {
 
@@ -7727,7 +7704,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				Object[] objeto = (Object[]) iterator.next();
 
-				// Matricula do im�vel
+				// Matricula do imevel
 				if (objeto[0] != null) {
 					Integer imovelMatricula = (Integer) objeto[0];
 
@@ -7750,7 +7727,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					relatorioHelper.setRota(rota.toString());
 				}
 
-				// Dif. Valor da �gua
+				// Dif. Valor da egua
 				if (objeto[3] != null) {
 					BigDecimal valorAgua = (BigDecimal) objeto[3];
 
@@ -7759,7 +7736,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					relatorioHelper.setDifValorAgua("0,00");
 				}
 
-				// Dif. Consumo de �gua
+				// Dif. Consumo de egua
 				if (objeto[4] != null) {
 					Integer consumoAgua = (Integer) objeto[4];
 
@@ -7786,7 +7763,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					relatorioHelper.setDifConsumoEsgoto("0");
 				}
 
-				// anoMes refer�ncia
+				// anoMes referencia
 				if (objeto[7] != null) {
 					Integer anoMes = (Integer) objeto[7];
 
@@ -7832,10 +7809,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1001] Emitir declara��o de quita��o anual de d�bitos
+	 * [UC1001] Emitir declaraeeo de quitaeeo anual de debitos
 	 * 
-	 * Este caso de uso permite a gera��o de declara��o de quita��o de
-	 * d�bitos.
+	 * Este caso de uso permite a geraeeo de declaraeeo de quitaeeo de
+	 * debitos.
 	 * 
 	 * @author Hugo Amorim
 	 * @date 17/03/2010
@@ -7854,7 +7831,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			for (Integer ano : anos) {
 
-				// Vari�veis para a pagina��o da pesquisa
+				// Varieveis para a paginaeeo da pesquisa
 				// ========================================================================
 				boolean flagTerminou = false;
 				final int quantidadeMaxima = 500;
@@ -7871,15 +7848,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						for (Integer idImovel : colecaoIdsImoveis) {
 
-							// [FS0001] Declara��o j� gerada para o imovel no
+							// [FS0001] Declaraeeo je gerada para o imovel no
 							// ano de referencia
 							if (declaracaoJaGeradaParaAnoReferencia(idImovel, ano)) {
 								continue;
 							}
 
-							// O sistema dever� verificar para cada im�vel, se
+							// O sistema devere verificar para cada imevel, se
 							// todas as faturas foram pagas
-							// no ano de refer�ncia nos meses de janeiro a
+							// no ano de referencia nos meses de janeiro a
 							// dezembro.
 							DeclaracaoQuitacaoAnualDebitosHelper helper = this
 									.pesquisarDadosParaGeracaoDaDeclaracaodeQuitacaoDebitos(idImovel, ano,
@@ -7932,12 +7909,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 					}
 
-					// Incrementa o n� do indice da p�gina��o
+					// Incrementa o ne do indice da peginaeeo
 					quantidadeInicio = quantidadeInicio + quantidadeMaxima;
 
 					/**
-					 * Caso a cole��o de dados retornados for menor que a quantidade de
-					 * registros seta a flag indicando que a pagina��o terminou.
+					 * Caso a coleeeo de dados retornados for menor que a quantidade de
+					 * registros seta a flag indicando que a paginaeeo terminou.
 					 */
 					if (colecaoIdsImoveis == null || colecaoIdsImoveis.size() < quantidadeMaxima) {
 
@@ -7960,9 +7937,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			e.printStackTrace();
 
 			// Este catch serve para interceptar
-			// qualquer exce��o que o processo batch
-			// venha a lan�ar e garantir que a unidade
-			// de processamento do batch ser� atualizada
+			// qualquer exceeeo que o processo batch
+			// venha a lanear e garantir que a unidade
+			// de processamento do batch sere atualizada
 			// com o erro ocorrido
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 		}
@@ -7987,11 +7964,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1001] Emitir declara��o de quita��o anual de d�bitos
+	 * [UC1001] Emitir declaraeeo de quitaeeo anual de debitos
 	 * 
 	 * Pequisa as contas do imovel e verifica se o mesmo esta de acordo com os
-	 * parametros do caso de uso, se sim retorno uma cole��o de dados para
-	 * inser��o.
+	 * parametros do caso de uso, se sim retorno uma coleeeo de dados para
+	 * insereeo.
 	 * 
 	 * @author Hugo Amorim
 	 * @param indicadorCobrancaJudical
@@ -8027,7 +8004,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				Object[] dadosContasPagas = (Object[]) iteradadosContasPagas.next();
 
 				itemHelper = new DeclaracaoQuitacaoAnualDebitosItemHelper((Integer) dadosContasPagas[1], // Id da Conta
-						(Integer) dadosContasPagas[8], // AnoM�s Referencia
+						(Integer) dadosContasPagas[8], // AnoMes Referencia
 						(BigDecimal) dadosContasPagas[2], // Valor Agua
 						(BigDecimal) dadosContasPagas[3], // Valor Esgoto
 						(BigDecimal) dadosContasPagas[4], // Valor Debitos
@@ -8052,7 +8029,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				itemHelper = new DeclaracaoQuitacaoAnualDebitosItemHelper((Integer) dadosContasCanceladas[1], // Id da
 																												// Conta
-						(Integer) dadosContasCanceladas[8], // AnoM�s Referencia
+						(Integer) dadosContasCanceladas[8], // AnoMes Referencia
 						(BigDecimal) dadosContasCanceladas[2], // Valor Agua
 						(BigDecimal) dadosContasCanceladas[3], // Valor Esgoto
 						(BigDecimal) dadosContasCanceladas[4], // Valor Debitos
@@ -8095,7 +8072,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					itemHelper = new DeclaracaoQuitacaoAnualDebitosItemHelper((Integer) dadosContasParceladas[1], // Id
 																													// da
 																													// Conta
-							(Integer) dadosContasParceladas[8], // AnoM�s
+							(Integer) dadosContasParceladas[8], // AnoMes
 																// Referencia
 							(BigDecimal) dadosContasParceladas[2], // Valor
 																	// Agua
@@ -8131,9 +8108,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 			}
 
-			// Verifica Contas Em Cobran�a Judicial caso indicadorContaParcelada
+			// Verifica Contas Em Cobranea Judicial caso indicadorContaParcelada
 			// seja
-			// igual a sim para verificar Contas Em Cobran�a Judicia.
+			// igual a sim para verificar Contas Em Cobranea Judicia.
 			if (indicadorCobrancaJudical.compareTo(ConstantesSistema.SIM) == 0) {
 				colecaoDadosContasEmCobrancaJudicial = this.repositorioFaturamento
 						.pesquisarContasEmCobrancaJudicialGeracaoDeclaracaoQuitacao(idImovel, ano + "%",
@@ -8146,7 +8123,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					itemHelper = new DeclaracaoQuitacaoAnualDebitosItemHelper(
 							(Integer) dadosContasEmCobrancaJudicial[1], // Id da
 																		// Conta
-							(Integer) dadosContasEmCobrancaJudicial[7], // AnoM�s
+							(Integer) dadosContasEmCobrancaJudicial[7], // AnoMes
 																		// Referencia
 							(BigDecimal) dadosContasEmCobrancaJudicial[2], // Valor
 																			// Agua
@@ -8159,7 +8136,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							(BigDecimal) dadosContasEmCobrancaJudicial[6], // Valor
 																			// Impostos
 							(Date) dadosContasEmCobrancaJudicial[9], // Data
-																		// Revis�o
+																		// Reviseo
 							(String) dadosContasEmCobrancaJudicial[8]);// Situacao
 																		// Debito
 
@@ -8184,7 +8161,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			List colecaoItemHelperParaOrdenar = (List) colecaoItemHelper;
 
-			// ORDENA COLE��O POR ANO MES DE REFERENCIA DA CONTA
+			// ORDENA COLEeeO POR ANO MES DE REFERENCIA DA CONTA
 			Collections.sort(colecaoItemHelperParaOrdenar, new Comparator() {
 				public int compare(Object left, Object right) {
 					DeclaracaoQuitacaoAnualDebitosItemHelper leftKey = (DeclaracaoQuitacaoAnualDebitosItemHelper) left;
@@ -8206,10 +8183,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1008] Gerar TXT declara��o de quita��o anual de d�bitos
+	 * [UC1008] Gerar TXT declaraeeo de quitaeeo anual de debitos
 	 * 
-	 * Este caso de uso permite a gera��o do TXT da declara��o de
-	 * quita��o de d�bitos.
+	 * Este caso de uso permite a geraeeo do TXT da declaraeeo de
+	 * quitaeeo de debitos.
 	 * 
 	 * @author Hugo Amorim
 	 * @date 23/03/2010
@@ -8226,10 +8203,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1008] Gerar TXT declara��o de quita��o anual de d�bitos
+	 * [UC1008] Gerar TXT declaraeeo de quitaeeo anual de debitos
 	 * 
-	 * Este caso de uso permite a gera��o do TXT da declara��o de
-	 * quita��o de d�bitos.
+	 * Este caso de uso permite a geraeeo do TXT da declaraeeo de
+	 * quitaeeo de debitos.
 	 * 
 	 * @author Hugo Amorim
 	 * @date 23/03/2010
@@ -8240,7 +8217,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		int idUnidadeIniciada = 0;
 
 		// -------------------------
-		// Registrar o in�cio do processamento da Unidade de
+		// Registrar o inecio do processamento da Unidade de
 		// Processamento do Batch
 		// -------------------------
 
@@ -8254,7 +8231,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			for (Integer ano : anosParaGeracaoArquivoTexto) {
 
-				// Vari�veis para controle das partes dos arquivos de 3000 em
+				// Varieveis para controle das partes dos arquivos de 3000 em
 				// 3000 registros
 				// ========================================================================
 				int parte = 1;
@@ -8262,7 +8239,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				int contadorDosTresMil = 0;
 				// ========================================================================
 
-				// Vari�veis para a pagina��o da pesquisa
+				// Varieveis para a paginaeeo da pesquisa
 				// ========================================================================
 				boolean flagTerminou = false;
 				final int quantidadeMaxima = 500;
@@ -8274,7 +8251,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				while (!flagTerminou) {
 
-					// Cria��o do Arquivo
+					// Criaeeo do Arquivo
 					// ========================================================================
 					Date dataAtual = new Date();
 					String nomeZip = null;
@@ -8297,7 +8274,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 					while (!flagTerminouParte) {
 
-						// [SB0001 Verifica��o para gera��o do TXT];
+						// [SB0001 Verificaeeo para geraeeo do TXT];
 						Collection colecaoExtratos = this.repositorioFaturamento
 								.pesquisarExtratoQuitacaoParaGeracaoArquivoTexto(ano, empresa.getId(), quantidadeMaxima,
 										idGrupoFaturamento);
@@ -8338,9 +8315,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								short endAlternativo = 0;
 
 								/*
-								 * Inclu�da verifica��o de endere�o de entrega alternativa e em caso
-								 * afirmativo preenchimento do campo endere�o de entrega pelo endere�o do
-								 * cliente respons�vel
+								 * Inclueda verificaeeo de endereeo de entrega alternativa e em caso
+								 * afirmativo preenchimento do campo endereeo de entrega pelo endereeo do
+								 * cliente responsevel
 								 */
 								try {
 									Integer idQuadraImovel = repositorioImovel.pesquisaIdQuadraImovel(idImovel);
@@ -8404,7 +8381,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								helper.setCodigoRota(codigoRota.toString());
 								helper.setSeguencialRota(sequencialRota.toString());
 								/*
-								 * Setando valor ao atributo que informa se o im�vel tem ou n�o endere�o
+								 * Setando valor ao atributo que informa se o imevel tem ou neo endereeo
 								 * de entrega alternativo
 								 */
 								helper.setEnderecoAlternativo(endAlternativo);
@@ -8441,8 +8418,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						contadorDosTresMil++;
 
 						/**
-						 * Caso a cole��o de dados retornados for menor que a quantidade de
-						 * registros seta a flag indicando que a pagina��o terminou.
+						 * Caso a coleeeo de dados retornados for menor que a quantidade de
+						 * registros seta a flag indicando que a paginaeeo terminou.
 						 */
 						if (colecaoExtratos == null || colecaoExtratos.size() < quantidadeMaxima) {
 							flagTerminou = true;
@@ -8483,9 +8460,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			e.printStackTrace();
 
 			// Este catch serve para interceptar
-			// qualquer exce��o que o processo batch
-			// venha a lan�ar e garantir que a unidade
-			// de processamento do batch ser� atualizada
+			// qualquer exceeeo que o processo batch
+			// venha a lanear e garantir que a unidade
+			// de processamento do batch sere atualizada
 			// com o erro ocorrido
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 		}
@@ -8548,10 +8525,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		/**
 		 * autor: Adriana Muniz Data: 30/03/2011 Se houve conta com pagamentos
-		 * duplicados, o valor duplicado ser� subtra�do, contas duplicadas n�o
-		 * ser�o impressas, ent�o, para que o valor total n�o seja indiferente ao
+		 * duplicados, o valor duplicado sere subtraedo, contas duplicadas neo
+		 * sereo impressas, enteo, para que o valor total neo seja indiferente ao
 		 * valor da soma das contas, a variavel valor duplicado guarda o valor da
-		 * referencia que n�o entrar� na declara��o, para subtrair do valor
+		 * referencia que neo entrare na declaraeeo, para subtrair do valor
 		 * total
 		 */
 		BigDecimal valorTotal = helper.getExtratoQuitacaoParaAtualizacao().getValorTotalDasContas()
@@ -8568,7 +8545,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		/**
 		 * autor: Adriana Muniz Data: 12/05/2011 Verifica se o imovel possui outro
-		 * endere�o de entrega(endere�o alternativo) Se sim, adiciona-se 1, sen�o
+		 * endereeo de entrega(endereeo alternativo) Se sim, adiciona-se 1, seneo
 		 * adiciona-se 0
 		 */
 		linha.append(helper.getEnderecoAlternativo() + "");
@@ -8579,7 +8556,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1010] Emitir 2� via de declara��o anual de quita��o de d�bitos
+	 * [UC1010] Emitir 2e via de declaraeeo anual de quitaeeo de debitos
 	 * 
 	 * 
 	 * @author Hugo Amorim
@@ -8599,7 +8576,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0927] � Confirmar Cart�o de Cr�dito/D�bito
+	 * [UC0927] e Confirmar Carteo de Credito/Debito
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 27/04/2010
@@ -8620,9 +8597,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [SB0002] - Replicar os d�bitos existentes para uma nova vig�ncia e valor.
-	 * Pesquisa a �ltima vig�ncia de cada d�bito tipo, e retorna uma
-	 * cole��o com limite de 10 registros.
+	 * [SB0002] - Replicar os debitos existentes para uma nova vigencia e valor.
+	 * Pesquisa a eltima vigencia de cada debito tipo, e retorna uma
+	 * coleeeo com limite de 10 registros.
 	 * 
 	 * @author Josenildo Neves - Hugo Leonardo
 	 * @date 22/02/2010 - 14/04/2010
@@ -8673,8 +8650,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [SB0002] - Replicar os d�bitos existentes para uma nova vig�ncia e valor.
-	 * Pesquisa a �ltima vig�ncia de cada tipo d�bito, e retorna o total.
+	 * [SB0002] - Replicar os debitos existentes para uma nova vigencia e valor.
+	 * Pesquisa a eltima vigencia de cada tipo debito, e retorna o total.
 	 * 
 	 * @author Josenildo Neves
 	 * @date 22/02/2010
@@ -8691,9 +8668,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [SB0002] - Replicar os d�bitos existentes para uma nova vig�ncia e valor.
-	 * Pesquisa a �ltima vig�ncia de cada tipo d�bito, e retorna uma
-	 * cole��o.
+	 * [SB0002] - Replicar os debitos existentes para uma nova vigencia e valor.
+	 * Pesquisa a eltima vigencia de cada tipo debito, e retorna uma
+	 * coleeeo.
 	 * 
 	 * @author Josenildo Neves - Hugo Leonardo
 	 * @date 22/02/2010 - 14/04/2010
@@ -8744,9 +8721,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0982] Inserir tipo de D�bito com Vig�ncia.
+	 * [UC0982] Inserir tipo de Debito com Vigencia.
 	 * 
-	 * Verificar se existe vig�ncia j� cadastrada para o tipo de d�bito.
+	 * Verificar se existe vigencia je cadastrada para o tipo de debito.
 	 * 
 	 * @author Hugo Leonardo
 	 * @param dataVigenciaInicial
@@ -8756,9 +8733,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @throws ControladorException
 	 * @data 30/04/2010
 	 * 
-	 * @see Caso a opcao = 1 - verifica as situa��es de inserir e atualizar
-	 *      D�bito Tipo Vig�ncia
-	 * @see Caso a opcao = 2 - verifica a situa��o de retificar D�bito Tipo
+	 * @see Caso a opcao = 1 - verifica as situaeees de inserir e atualizar
+	 *      Debito Tipo Vigencia
+	 * @see Caso a opcao = 2 - verifica a situaeeo de retificar Debito Tipo
 	 *      Vigncia
 	 */
 	public void verificarExistenciaVigenciaDebito(String dataVigenciaInicial, String dataVigenciaFinal,
@@ -8774,10 +8751,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		// Caso a opcao seja iqual a 1 - verifica as situa��es de inserir e
+		// Caso a opcao seja iqual a 1 - verifica as situaeees de inserir e
 		// atualizar Debito Tipo Vigencia
 		//
-		// Caso a opcao seja iqual a 2 - verifica a situa��o de retificar Debito
+		// Caso a opcao seja iqual a 2 - verifica a situaeeo de retificar Debito
 		// Tipo Vigencia
 		//
 		if (opcao == 1) {
@@ -8792,10 +8769,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1008] Gerar TXT declara��o de quita��o anual de d�bitos
+	 * [UC1008] Gerar TXT declaraeeo de quitaeeo anual de debitos
 	 * 
-	 * Este caso de uso permite a gera��o do TXT da declara��o de
-	 * quita��o de d�bitos.
+	 * Este caso de uso permite a geraeeo do TXT da declaraeeo de
+	 * quitaeeo de debitos.
 	 * 
 	 * @author Hugo Amorim
 	 * @date 23/03/2010
@@ -8812,9 +8789,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0391] Inserir valor de cobran�a de servi�o.
+	 * [UC0391] Inserir valor de cobranea de servieo.
 	 * 
-	 * Verificar se existe valor de cobran�a de servi�o j� cadastrada.
+	 * Verificar se existe valor de cobranea de servieo je cadastrada.
 	 * 
 	 * @author Hugo Amorim
 	 * @throws ControladorException
@@ -8833,11 +8810,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0840] Atualizar Conta Pr�-faturada
+	 * [UC0840] Atualizar Conta Pre-faturada
 	 * 
-	 * [SB0003] Atualizar Cr�dito realizado e cr�dito a realizar
+	 * [SB0003] Atualizar Credito realizado e credito a realizar
 	 * 
-	 * @author S�vio Luiz
+	 * @author Sevio Luiz
 	 * @date 27/10/2009
 	 * 
 	 * @param imovel
@@ -8848,13 +8825,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @return GerarCreditoRealizadoHelper
 	 * @throws ControladorException
 	 */
-	private BigDecimal atualizarCreditoARealizarNitrato(Imovel imovel, Integer anoMesFaturamento, BigDecimal valorAgua,
+	public BigDecimal atualizarCreditoARealizarNitrato(Imovel imovel, Integer anoMesFaturamento, BigDecimal valorAgua,
 			Conta conta) throws ControladorException {
 
 		BigDecimal valorCredito = null;
-		// Caso a situa��o de faturamento seja igual a Nitrato,
-		// e o valor de �gua � maior que zero
-		// Atualiza os cr�ditos a realizar e realizados do nitrato
+		// Caso a situaeeo de faturamento seja igual a Nitrato,
+		// e o valor de egua e maior que zero
+		// Atualiza os creditos a realizar e realizados do nitrato
 		if (imovel.getFaturamentoSituacaoTipo() != null && !imovel.getFaturamentoSituacaoTipo().equals("")) {
 			if (imovel.getFaturamentoSituacaoTipo().getId().equals(FaturamentoSituacaoTipo.NITRATO)
 					&& valorAgua.compareTo(BigDecimal.ZERO) == 1) {
@@ -8875,8 +8852,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						&& anoMesFaturamento >= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoInicio()
 						&& anoMesFaturamento <= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoFim())) {
 
-					// calcula o valor do cr�dito que ser� 50% do valor total da
-					// �gua
+					// calcula o valor do credito que sere 50% do valor total da
+					// egua
 					valorCredito = valorAgua.divide(new BigDecimal(2), 2, BigDecimal.ROUND_DOWN);
 
 					try {
@@ -8899,40 +8876,40 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									creditoRealizado.getCreditoARealizarGeral().getId(), anoMesFaturamento);
 						}
 
-						// pesquisa o cr�dito a realizar
+						// pesquisa o credito a realizar
 						/*
 						 * Object[] dadosCreditoARealizar = repositorioFaturamento
 						 * .pesquisarCreditoARealizar(imovel.getId(), CreditoTipo.CREDITO_NITRATO,
 						 * DebitoCreditoSituacao.PRE_FATURADA, anoMesFaturamento);
 						 */
-						// Caso exista o cr�dito a realizar com a situa��o
+						// Caso exista o credito a realizar com a situaeeo
 						// pre-fdaturada,
-						// ent�o atualiza o valor do cr�dito e a situa��o do
-						// cr�dito a realizar,
-						// do cr�dito a realizar categoria, do credito realizado
+						// enteo atualiza o valor do credito e a situaeeo do
+						// credito a realizar,
+						// do credito a realizar categoria, do credito realizado
 						// e do credito realizado categoria
 						if (dadosCreditoARealizar != null && !dadosCreditoARealizar.equals("")) {
 
 							Integer idCreditoARealizar = (Integer) dadosCreditoARealizar[0];
 
-							// atualiza o cr�dito a realizar com o valor do
-							// cr�dito calculado
+							// atualiza o credito a realizar com o valor do
+							// credito calculado
 							repositorioFaturamento.atualizarValorCreditoARealizar(idCreditoARealizar, valorCredito,
 									DebitoCreditoSituacao.NORMAL);
 
-							// Pesquisa os cr�ditos a realizar categoria
+							// Pesquisa os creditos a realizar categoria
 							Collection colecaoCreditoARealizarCategoria = this
 									.obterCreditoRealizarCategoria(idCreditoARealizar);
 
 							Iterator colecaoCreditoARealizarCategoriaIterator = colecaoCreditoARealizarCategoria
 									.iterator();
 
-							// Cr�dito a realizar categoria
+							// Credito a realizar categoria
 							CreditoARealizarCategoria creditoARealizarCategoria = null;
 
 							Collection colecaoCategoriasObterValor = new ArrayList();
 
-							// La�o para recuperar as categorias do cr�dito a
+							// Laeo para recuperar as categorias do credito a
 							// realizar
 							while (colecaoCreditoARealizarCategoriaIterator.hasNext()) {
 								creditoARealizarCategoria = (CreditoARealizarCategoria) colecaoCreditoARealizarCategoriaIterator
@@ -8949,17 +8926,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							Collection colecaoCategoriasCalculadasValor = getControladorImovel()
 									.obterValorPorCategoria(colecaoCategoriasObterValor, valorCredito);
 
-							// atualiza o cr�dito a realizar por categoria com o
-							// valor do cr�dito calculado por categoria
+							// atualiza o credito a realizar por categoria com o
+							// valor do credito calculado por categoria
 							repositorioFaturamento.atualizarValorCreditoARealizarCategoria(idCreditoARealizar,
 									colecaoCategoriasObterValor, colecaoCategoriasCalculadasValor);
 
-							// pesquisa o cr�dito realizado
+							// pesquisa o credito realizado
 							Integer idCreditoRealizadoNitrato = repositorioFaturamento
 									.pesquisarIdCreditoRealizadoNitrato(conta);
 
-							// caso exista cr�dito realizado,
-							// ent�o atualiza os dados de credito realizado e
+							// caso exista credito realizado,
+							// enteo atualiza os dados de credito realizado e
 							// credito realizado categoria
 							if (idCreditoRealizadoNitrato != null && !idCreditoRealizadoNitrato.equals("")) {
 								repositorioFaturamento.atualizarValorCreditoRealizado(idCreditoRealizadoNitrato,
@@ -8983,7 +8960,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1041] Gerar Taxa Percentual da Tarifa M�nima para Cortado
+	 * [UC1041] Gerar Taxa Percentual da Tarifa Menima para Cortado
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 09/07/2010
@@ -9010,10 +8987,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		try {
 
-			// PAR�METROS DO SISTEMA
+			// PAReMETROS DO SISTEMA
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-			// CARREGANDO O TIPO DO D�BITO PARA TARIFA DE CORTADO
+			// CARREGANDO O TIPO DO DeBITO PARA TARIFA DE CORTADO
 			FiltroDebitoTipo filtroDebitoTipo = new FiltroDebitoTipo();
 			filtroDebitoTipo.adicionarCaminhoParaCarregamentoEntidade("financiamentoTipo");
 			filtroDebitoTipo.adicionarCaminhoParaCarregamentoEntidade("lancamentoItemContabil");
@@ -9031,14 +9008,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				Iterator iteratorColecaoFaturamentoAtividadeCronogramaRota = colecaoFaturamentoAtividadeCronogramaRota
 						.iterator();
 
-				// LA�O PARA GERAR D�BITO PARA TODAS AS ROTAS
+				// LAeO PARA GERAR DeBITO PARA TODAS AS ROTAS
 				while (iteratorColecaoFaturamentoAtividadeCronogramaRota.hasNext()) {
 
 					FaturamentoAtivCronRota faturamentoAtivCronRota = (FaturamentoAtivCronRota) iteratorColecaoFaturamentoAtividadeCronogramaRota
 							.next();
 
 					// =================================================================================================
-					// Vari�veis para a pagina��o da pesquisa de Imovel por
+					// Varieveis para a paginaeeo da pesquisa de Imovel por
 					// Grupo Faturamento
 					// ========================================================================
 					boolean flagTerminou = false;
@@ -9052,21 +9029,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								faturamentoAtivCronRota.getRota(), numeroIndice, quantidadeRegistros);
 
 						/*
-						 * Caso exista ids de im�veis para a rota atual determina a gera��o do
-						 * cr�dito para cada im�vel retornado.
+						 * Caso exista ids de imeveis para a rota atual determina a geraeeo do
+						 * credito para cada imevel retornado.
 						 */
 						if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
 
 							Iterator iteratorColecaoImoveis = colecaoImovel.iterator();
 
-							// LA�O PARA GERAR O D�BITO DE TODOS OS IMOVEIS DA
+							// LAeO PARA GERAR O DeBITO DE TODOS OS IMOVEIS DA
 							// ROTA ATUAL
 							Imovel imovel = null;
 							while (iteratorColecaoImoveis.hasNext()) {
 
 								imovel = (Imovel) iteratorColecaoImoveis.next();
 
-								// GERA��O D�BITO
+								// GERAeeO DeBITO
 								// --------------------------------------------------------------------------------
 								this.gerarTaxaPercentualTarifaMinimaCortadoPorImovel(imovel, faturamentoGrupo,
 										debitoTipo, sistemaParametro);
@@ -9077,13 +9054,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						} // FIM DO LOOP DE IMOVEIS
 
 						/**
-						 * Incrementa o n� do indice da p�gina��o
+						 * Incrementa o ne do indice da peginaeeo
 						 */
 						numeroIndice = numeroIndice + quantidadeRegistros;
 
 						/**
-						 * Caso a cole��o de imoveis retornados for menor que a quantidade de
-						 * registros seta a flag indicando que a pagina��o terminou.
+						 * Caso a coleeeo de imoveis retornados for menor que a quantidade de
+						 * registros seta a flag indicando que a paginaeeo terminou.
 						 */
 						if (colecaoImovel == null || colecaoImovel.size() < quantidadeRegistros) {
 
@@ -9095,17 +9072,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							colecaoImovel = null;
 						}
 
-					} // FIM DO LOOP DA PAGINA��O
+					} // FIM DO LOOP DA PAGINAeeO
 				}
 			} else {
-				// A LISTA COM AS ROTAS EST� NULA OU VAZIA
+				// A LISTA COM AS ROTAS ESTe NULA OU VAZIA
 
 				throw new ControladorException("atencao.pesquisa.grupo_rota_vazio");
 			}
 
 			// --------------------------------------------------------
 			//
-			// Registrar o fim da execu��o da Unidade de Processamento
+			// Registrar o fim da execueeo da Unidade de Processamento
 			//
 			// --------------------------------------------------------
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
@@ -9113,8 +9090,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (Exception e) {
 
 			/*
-			 * Este catch serve para interceptar qualquer exce��o que o processo batch
-			 * venha a lan�ar e garantir que a unidade de processamento do batch ser�
+			 * Este catch serve para interceptar qualquer exceeeo que o processo batch
+			 * venha a lanear e garantir que a unidade de processamento do batch sere
 			 * atualizada com o erro ocorrido.
 			 */
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
@@ -9123,7 +9100,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1041] Gerar Taxa Percentual da Tarifa M�nima para Cortado
+	 * [UC1041] Gerar Taxa Percentual da Tarifa Menima para Cortado
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 09/07/2010
@@ -9141,8 +9118,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Collection imoveis;
 
 		/*
-		 * Caso a rota n�o esteja com o indicador de rota alternativa ativo; a
-		 * pesquisa dos im�veis ser� feita a partir de sua quadra.
+		 * Caso a rota neo esteja com o indicador de rota alternativa ativo; a
+		 * pesquisa dos imeveis sere feita a partir de sua quadra.
 		 */
 		if (!rota.getIndicadorRotaAlternativa().equals(ConstantesSistema.SIM)) {
 
@@ -9157,8 +9134,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		}
 		/*
-		 * Caso contr�rio; a pesquisa dos im�veis ser� feita a partir da rota
-		 * alternativa que estar� associada ao mesmo.
+		 * Caso contrerio; a pesquisa dos imeveis sere feita a partir da rota
+		 * alternativa que estare associada ao mesmo.
 		 */
 		else {
 
@@ -9173,7 +9150,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		}
 
-		// Carregando os dados dos im�veis selecionados
+		// Carregando os dados dos imeveis selecionados
 		if (imoveis != null && !imoveis.isEmpty()) {
 
 			Iterator iteratorImoveis = imoveis.iterator();
@@ -9279,7 +9256,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1041] Gerar Taxa Percentual da Tarifa M�nima para Cortado
+	 * [UC1041] Gerar Taxa Percentual da Tarifa Menima para Cortado
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 12/07/2010
@@ -9294,18 +9271,18 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			DebitoTipo debitoTipo, SistemaParametro sistemaParametro) throws ControladorException {
 
 		/*
-		 * 2. Para cada im�vel selecionado, o sistema verifica se o im�vel est�
-		 * cortado h� mais de trinta dias:
+		 * 2. Para cada imevel selecionado, o sistema verifica se o imevel este
+		 * cortado he mais de trinta dias:
 		 * 
-		 * 2.1. Caso a diferen�a entre a data prevista de leitura no cronograma
+		 * 2.1. Caso a diferenea entre a data prevista de leitura no cronograma
 		 * (FTAC_DTPREVISTA da tabela FATURAMENTO_ATIVIDADE_CRONOGRAMA com FTAT_ID com o
 		 * valor correspondente a efetuar leitura, FTCM_ID=FTCM_ID da tabela
-		 * FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL com FTCM_AMREFERENCIA=(Ano e m�s de
-		 * refer�ncia) e FTGR_ID=FTGR_ID da tabela FATURAMENTO_GRUPO com
+		 * FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL com FTCM_AMREFERENCIA=(Ano e mes de
+		 * referencia) e FTGR_ID=FTGR_ID da tabela FATURAMENTO_GRUPO com
 		 * FTGR_ID=FTGR_ID da tabela ROTA) e a data do corte (LAGU_DTCORTE da tabela
 		 * LIGACAO_AGUA com LAGU_ID=IMOV_ID da tabela IMOVEL) seja menor ou igual a 30
-		 * dias o sistema deve passar para o pr�ximo im�vel selecionado, caso
-		 * contr�rio a ser� gerado o d�bito a cobrar, passar para o pr�ximo
+		 * dias o sistema deve passar para o preximo imevel selecionado, caso
+		 * contrerio a sere gerado o debito a cobrar, passar para o preximo
 		 * passo;
 		 */
 		Date dataPrevistaLeituraCronograma = null;
@@ -9322,8 +9299,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 
 		/*
-		 * 0 - Tipo do corte 1 - Data do corte administrativo 2 - Data da religa��o
-		 * 3 - Data do corte 4 - Data da supress�o
+		 * 0 - Tipo do corte 1 - Data do corte administrativo 2 - Data da religaeeo
+		 * 3 - Data do corte 4 - Data da supresseo
 		 */
 		Object[] dadosLigacaoAgua = this.getControladorAtendimentoPublico().pesquisarDadosLigacaoAgua(imovel.getId());
 		Date dataCorte = (Date) dadosLigacaoAgua[3];
@@ -9331,22 +9308,22 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		if (Util.obterQuantidadeDiasEntreDuasDatas(dataCorte, dataPrevistaLeituraCronograma) > 30) {
 
 			/*
-			 * 3. O sistema calcula os valores de �gua e/ou esgoto <<Inclui>> [UC0120 �
-			 * Calcular Valores de �gua e/ou Esgoto], passando os seguintes par�metros:
+			 * 3. O sistema calcula os valores de egua e/ou esgoto <<Inclui>> [UC0120 e
+			 * Calcular Valores de egua e/ou Esgoto], passando os seguintes paremetros:
 			 */
 
-			// Inicializando o objeto que armazenar� as informa��es que ser�o
-			// utilizadas no c�lculo da conta
+			// Inicializando o objeto que armazenare as informaeees que sereo
+			// utilizadas no celculo da conta
 			DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = new DeterminarValoresFaturamentoAguaEsgotoHelper();
 
 			/*
-			 * 3.1. Ano e m�s de refer�ncia.
+			 * 3.1. Ano e mes de referencia.
 			 * 
-			 * 3.2. Situa��o da liga��o de �gua (LAST_ID da tabela im�vel).
+			 * 3.2. Situaeeo da ligaeeo de egua (LAST_ID da tabela imevel).
 			 * 
-			 * 3.3. Situa��o da liga��o de esgoto (LEST_ID da tabela im�vel).
+			 * 3.3. Situaeeo da ligaeeo de esgoto (LEST_ID da tabela imevel).
 			 * 
-			 * 3.4. Indicador de faturamento de �gua (LAST_ICFATURAMENTO da tabela
+			 * 3.4. Indicador de faturamento de egua (LAST_ICFATURAMENTO da tabela
 			 * LIGACAO_AGUA_SITUACAO com LAST_ID=LAST_ID da tabela IMOVEL).
 			 * 
 			 * 3.5. Indicador de faturamento de esgoto (LEST_ICFATURAMENTO da tabela
@@ -9354,56 +9331,56 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			 * 
 			 * 3.6. Caso o indicador de tarifa categoria seja igual a 2
 			 * (PARM_ICTARIFACATEGORIA = 2 da tabela de SISTEMA_PARAMETROS) o sistema passa
-			 * as subcategorias e as respectivas quantidades de economias do im�vel
+			 * as subcategorias e as respectivas quantidades de economias do imevel
 			 * (SCAT_ID e IMSB_QTECONOMIA da tabela IMOVEL_SUBCATEGORIA com IMOV_ID da
 			 * tabela IMOVEL);
 			 * 
-			 * 3.7. Caso contr�rio, categoria(s) do im�vel e sua(s) respectiva(s)
+			 * 3.7. Caso contrerio, categoria(s) do imevel e sua(s) respectiva(s)
 			 * quantidade(s) de economia retornada pelo [UC0108 - Obter Quantidade de
 			 * Economias por Categoria];
 			 * 
-			 * 3.8. Consumo faturado de �gua do m�s (passar o valor zero).
+			 * 3.8. Consumo faturado de egua do mes (passar o valor zero).
 			 * 
-			 * 3.9. Consumo faturado de esgoto do m�s (passar o valor zero).
+			 * 3.9. Consumo faturado de esgoto do mes (passar o valor zero).
 			 * 
-			 * 3.10. Consumo m�nimo da liga��o <<Inclui>> [UC0105 � Obter Consumo
-			 * M�nimo da Liga��o];
+			 * 3.10. Consumo menimo da ligaeeo <<Inclui>> [UC0105 e Obter Consumo
+			 * Menimo da Ligaeeo];
 			 * 
 			 * 3.11. Data de Leitura Anterior (caso DATE (FTAC_TMREALIZACAO) da tabela
 			 * FATURAMENTO_ATIVIDADE_CRONOGRAMA com FTAT_ID com o valor correspondente a
 			 * efetuar leitura, FTCM_ID=FTCM_ID da tabela
-			 * FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL com FTCM_AMREFERENCIA=(Ano e m�s de
-			 * refer�ncia � 1 M�S) e FTGR_ID=FTGR_ID da tabela FATURAMENTO_GRUPO com
-			 * FTGR_ID=FTGR_ID da tabela ROTA seja diferente de nulo, caso contr�rio
+			 * FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL com FTCM_AMREFERENCIA=(Ano e mes de
+			 * referencia e 1 MeS) e FTGR_ID=FTGR_ID da tabela FATURAMENTO_GRUPO com
+			 * FTGR_ID=FTGR_ID da tabela ROTA seja diferente de nulo, caso contrerio
 			 * (FTAC_DTPREVISTA) da tabela FATURAMENTO_ATIVIDADE_CRONOGRAMA com FTAT_ID com
 			 * o valor correspondente a efetuar leitura, FTCM_ID=FTCM_ID da tabela
-			 * FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL com FTCM_AMREFERENCIA=(Ano e m�s de
-			 * refer�ncia � 1 M�S) e FTGR_ID=FTGR_ID da tabela FATURAMENTO_GRUPO com
-			 * FTGR_ID=FTGR_ID da tabela ROTA seja diferente de nulo, caso contr�rio caso
-			 * contr�rio data leitura atual menos 30 dias.
+			 * FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL com FTCM_AMREFERENCIA=(Ano e mes de
+			 * referencia e 1 MeS) e FTGR_ID=FTGR_ID da tabela FATURAMENTO_GRUPO com
+			 * FTGR_ID=FTGR_ID da tabela ROTA seja diferente de nulo, caso contrerio caso
+			 * contrerio data leitura atual menos 30 dias.
 			 * 
 			 * 3.12. Data de Leitura Atual (data prevista de leitura no cronograma
 			 * (FTAC_DTPREVISTA da tabela FATURAMENTO_ATIVIDADE_CRONOGRAMA com FTAT_ID com o
 			 * valor correspondente a efetuar leitura, FTCM_ID=FTCM_ID da tabela
-			 * FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL com FTCM_AMREFERENCIA=(Ano e m�s de
-			 * refer�ncia) e FTGR_ID=FTGR_ID da tabela FATURAMENTO_GRUPO com
+			 * FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL com FTCM_AMREFERENCIA=(Ano e mes de
+			 * referencia) e FTGR_ID=FTGR_ID da tabela FATURAMENTO_GRUPO com
 			 * FTGR_ID=FTGR_ID da tabela ROTA)).
 			 * 
 			 * 3.13. Percentual de esgoto (LESG_PCESGOTO da tabela LIGACAO_ESGOTO com
-			 * LESG_ID=IMOV_ID da tabela IMOVEL, caso o im�vel seja ligado de esgoto, caso
-			 * o im�vel seja ligado ou cortado de �gua (LAST_ID = 3 OR 5) caso o
+			 * LESG_ID=IMOV_ID da tabela IMOVEL, caso o imevel seja ligado de esgoto, caso
+			 * o imevel seja ligado ou cortado de egua (LAST_ID = 3 OR 5) caso o
 			 * percentual de esgoto alternativo seja diferente de nulo (LESG_PCALTERNATIVO),
 			 * verificar se o consumo por economia (Consumo faturado de esgoto do
-			 * m�s/quantidade de economia) � menor ou igual ao consumo do percentual
+			 * mes/quantidade de economia) e menor ou igual ao consumo do percentual
 			 * alternativo (LESG_NNCONSUMOPCALTERNATIVO), caso seja verdade, enviar como
 			 * Percentual de esgoto o menor valor entre o LESG_PCESGOTO e o
-			 * LESG_PCALTERNATIVO, caso contr�rio enviar o LESG_PCESGOTO; ou zero caso
-			 * contr�rio).
+			 * LESG_PCALTERNATIVO, caso contrerio enviar o LESG_PCESGOTO; ou zero caso
+			 * contrerio).
 			 * 
-			 * 3.14. Tarifa para o im�vel (CSTF_ID da tabela IMOVEL).
+			 * 3.14. Tarifa para o imevel (CSTF_ID da tabela IMOVEL).
 			 */
 
-			// 3.4 - INDICADOR FATURAMENTO DE �GUA
+			// 3.4 - INDICADOR FATURAMENTO DE eGUA
 			helperValoresAguaEsgoto
 					.setIndicadorFaturamentoAgua(imovel.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao());
 
@@ -9415,17 +9392,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Collection colecaoCategoriaOUSubcategoria = getControladorImovel()
 					.obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
 
-			// OBS: O restante dos par�metros ser�o preparados atrav�s do
+			// OBS: O restante dos paremetros sereo preparados atraves do
 			// [SB0002] do caso de uso [UC0113] - Faturar Grupo de Faturamento
 
 			/*
 			 * [UC0113] - Faturar Grupo de Faturamento [SB0002] - Determinar Valores para
-			 * Faturamento de �gua e/ou Esgoto
+			 * Faturamento de egua e/ou Esgoto
 			 */
 			helperValoresAguaEsgoto = this.determinarValoresFaturamento(imovel, faturamentoGrupo.getAnoMesReferencia(),
 					colecaoCategoriaOUSubcategoria, faturamentoGrupo, null, null, false);
 
-			// GERANDO O D�BITO
+			// GERANDO O DeBITO
 			this.gerarDebitoACobrarDeTaxaPercentualTarifaMinimaCortado(imovel, debitoTipo,
 					faturamentoGrupo.getAnoMesReferencia(), helperValoresAguaEsgoto.getValorTotalAgua(),
 					sistemaParametro);
@@ -9433,7 +9410,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1041] Gerar Taxa Percentual da Tarifa M�nima para Cortado
+	 * [UC1041] Gerar Taxa Percentual da Tarifa Menima para Cortado
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 12/07/2010
@@ -9450,8 +9427,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			throws ControladorException {
 
 		/*
-		 * 5. Para cada im�vel selecionado o sistema inclui: [FS0002 � Verifica a
-		 * exist�ncia de d�bito a cobrar de Tarifa de Cortado ativo para o im�vel]
+		 * 5. Para cada imevel selecionado o sistema inclui: [FS0002 e Verifica a
+		 * existencia de debito a cobrar de Tarifa de Cortado ativo para o imevel]
 		 */
 		Collection colecaoDebitoACobrarTarifaCortado = null;
 
@@ -9467,7 +9444,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		if (colecaoDebitoACobrarTarifaCortado == null || colecaoDebitoACobrarTarifaCortado.isEmpty()) {
 
-			// 5.1. O d�bito a cobrar na tabela DEBITO_A_COBRAR_GERAL
+			// 5.1. O debito a cobrar na tabela DEBITO_A_COBRAR_GERAL
 			DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 
 			debitoACobrarGeral.setIndicadorHistorico(ConstantesSistema.NAO);
@@ -9477,7 +9454,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Integer idDebitoGerado = (Integer) getControladorUtil().inserir(debitoACobrarGeral);
 			debitoACobrarGeral.setId(idDebitoGerado);
 
-			// 5.2. Inclui o d�bito a cobrar na tabela DEBITO_A_COBRAR
+			// 5.2. Inclui o debito a cobrar na tabela DEBITO_A_COBRAR
 			DebitoACobrar debitoACobrar = new DebitoACobrar();
 
 			debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
@@ -9501,7 +9478,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			debitoACobrar.setAnoMesReferenciaContabil(anoMesReferenciaContabil);
 
-			// Calcula 30% do valor total de �gua determinado no passo 4
+			// Calcula 30% do valor total de egua determinado no passo 4
 			BigDecimal valorDebito = (valorTotalAgua.multiply(new BigDecimal("0.30"))).setScale(2,
 					BigDecimal.ROUND_HALF_UP);
 			debitoACobrar.setValorDebito(valorDebito);
@@ -9536,8 +9513,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			getControladorUtil().inserir(debitoACobrar);
 
 			/*
-			 * 5.3. <<Inclui>> [UC0108 � Obter Quantidade de Economias por Categoria].
-			 * 5.4. <<Inclui>> [UC0185 � Obter Valor por Categoria]. 5.5. Inclui, na
+			 * 5.3. <<Inclui>> [UC0108 e Obter Quantidade de Economias por Categoria].
+			 * 5.4. <<Inclui>> [UC0185 e Obter Valor por Categoria]. 5.5. Inclui, na
 			 * tabela DEBITO_A_COBRAR_CATEGORIA, a(s) categoria(s) e sua(s) respectiva(s)
 			 * quantidade(s) de economia da lista retornada pelo [UC0108] e os valores
 			 * retornados pelo [UC0185] para cada categoria:
@@ -9550,16 +9527,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		try {
 
-			// Atualizando o valor do d�bito da conta
+			// Atualizando o valor do debito da conta
 			Collection<Integer> colIdDebitoACobrar = this.repositorioFaturamento.atualizarValorDebitoDaConta(idImovel,
 					anoMesFaturamento);
 
 			if (colIdDebitoACobrar != null && !colIdDebitoACobrar.isEmpty()) {
 
-				// Apagamos o d�bito cobrado categoria
+				// Apagamos o debito cobrado categoria
 				this.repositorioFaturamento.deletarDebitosCobradosCategoriaImoveisCortados(idImovel, anoMesFaturamento);
 
-				// Apagamos o d�bito cobrado
+				// Apagamos o debito cobrado
 				this.repositorioFaturamento.deletarDebitosCobradosImoveisCortados(idImovel, anoMesFaturamento);
 
 				// Apagamos o debito a cobrar categoria
@@ -9576,7 +9553,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0214] Efetuar Parcelamento de D�bitos
+	 * [UC0214] Efetuar Parcelamento de Debitos
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 21/07/2010
@@ -9591,7 +9568,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1035] Efetivar Alterar Inscri��o de Im�vel
+	 * [UC1035] Efetivar Alterar Inscrieeo de Imevel
 	 * 
 	 * @author Hugo Amorim
 	 * @throws ControladorException
@@ -9607,7 +9584,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		try {
 
-			// Vari�veis para a pagina��o da pesquisa de Imovel por Grupo
+			// Varieveis para a paginaeeo da pesquisa de Imovel por Grupo
 			// Faturamento
 			// ========================================================================
 			boolean flagTerminou = false;
@@ -9644,7 +9621,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							quadraFace = imovelInscricaoAlterada.getQuadraFaceAtual();
 						}
 
-						// Inicio [FS0002] Verificar duplicidade de inscri��o
+						// Inicio [FS0002] Verificar duplicidade de inscrieeo
 						FiltroImovel filtroImovel = new FiltroImovel();
 						filtroImovel.adicionarParametro(
 								new ParametroSimples(FiltroImovel.LOCALIDADE_ID, localidade.getId()));
@@ -9671,7 +9648,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							}
 						}
 
-						// Caso exista n�o efetua a altera��o na tabela imovel.
+						// Caso exista neo efetua a alteraeeo na tabela imovel.
 						if (existeImovelComMesmaIncricao) {
 							imovelInscricaoAlterada.setIndicadorErroAlteracao(ConstantesSistema.SIM);
 							imovelInscricaoAlterada.setIndicadorAtualizado(ConstantesSistema.NAO);
@@ -9719,13 +9696,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 
 				/**
-				 * Incrementa o n� do indice da p�gina��o
+				 * Incrementa o ne do indice da peginaeeo
 				 */
 				numeroIndice = numeroIndice + quantidadeRegistros;
 
 				/**
-				 * Caso a cole��o de imoveis retornados for menor que a quantidade de
-				 * registros seta a flag indicando que a pagina��o terminou.
+				 * Caso a coleeeo de imoveis retornados for menor que a quantidade de
+				 * registros seta a flag indicando que a paginaeeo terminou.
 				 */
 				if (colecaoDados == null || colecaoDados.size() < quantidadeRegistros) {
 
@@ -9750,7 +9727,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * [UC1042] Verificar Farturamento dos Im�veis Cortados
+	 * [UC1042] Verificar Farturamento dos Imeveis Cortados
 	 * 
 	 * Item 2
 	 * 
@@ -9758,10 +9735,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @date 13/07/2010
 	 * 
 	 * @param idRota            - Id da rota a ser processada
-	 * @param anoMesFaturamento - Ano m�s do a ser faturado
+	 * @param anoMesFaturamento - Ano mes do a ser faturado
 	 * @throws ControladorException
 	 */
-	private void atualizarFaturamentoImoveisCortados(Collection<Imovel> colImoveis, int anoMesFaturamento)
+	public void atualizarFaturamentoImoveisCortados(Collection<Imovel> colImoveis, int anoMesFaturamento)
 			throws ControladorException {
 		try {
 			for (Imovel imovel : colImoveis) {
@@ -9769,7 +9746,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				LigacaoTipo lt = new LigacaoTipo();
 				lt.setId(LigacaoTipo.LIGACAO_AGUA);
 
-				// Pesquisamos o consumo historico do im�vel selecionado
+				// Pesquisamos o consumo historico do imevel selecionado
 				ConsumoHistorico consumoHistorico = this.getControladorMicromedicao().obterConsumoHistorico(imovel, lt,
 						anoMesFaturamento);
 
@@ -9786,7 +9763,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						this.excluirDebitosImoveisCortados(imovel.getId(), anoMesFaturamento);
 						// 2.2
 					} else {
-						// Verificamos se o im�vel possui o d�bito
+						// Verificamos se o imevel possui o debito
 						Object[] debitoACobrar = this.repositorioFaturamento.pesquisarDebitoACobrar(imovel.getId(),
 								DebitoTipo.TARIFA_CORTADO, anoMesFaturamento);
 
@@ -9806,7 +9783,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1042] Verificar Farturamento dos Im�veis Cortados
+	 * [UC1042] Verificar Farturamento dos Imeveis Cortados
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 13/07/2010
@@ -9839,14 +9816,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				Iterator iteratorColecaoFaturamentoAtividadeCronogramaRota = colecaoFaturamentoAtividadeCronogramaRota
 						.iterator();
 
-				// LA�O PARA GERAR D�BITO PARA TODAS AS ROTAS
+				// LAeO PARA GERAR DeBITO PARA TODAS AS ROTAS
 				while (iteratorColecaoFaturamentoAtividadeCronogramaRota.hasNext()) {
 
 					FaturamentoAtivCronRota faturamentoAtivCronRota = (FaturamentoAtivCronRota) iteratorColecaoFaturamentoAtividadeCronogramaRota
 							.next();
 
 					// =================================================================================================
-					// Vari�veis para a pagina��o da pesquisa de Imovel por
+					// Varieveis para a paginaeeo da pesquisa de Imovel por
 					// Grupo Faturamento
 					// ========================================================================
 					boolean flagTerminou = false;
@@ -9861,12 +9838,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								quantidadeRegistros);
 
 						/*
-						 * Caso exista ids de im�veis para a rota atual determina a gera��o do
-						 * cr�dito para cada im�vel retornado.
+						 * Caso exista ids de imeveis para a rota atual determina a geraeeo do
+						 * credito para cada imevel retornado.
 						 */
 						if (colecaoImovel != null && !colecaoImovel.isEmpty()) {
 
-							// Verificar Farturamento dos Im�veis Cortados
+							// Verificar Farturamento dos Imeveis Cortados
 							// --------------------------------------------------------------------------------
 							this.atualizarFaturamentoImoveisCortados(colecaoImovel,
 									faturamentoGrupo.getAnoMesReferencia());
@@ -9874,13 +9851,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						}
 
 						/**
-						 * Incrementa o n� do indice da p�gina��o
+						 * Incrementa o ne do indice da peginaeeo
 						 */
 						numeroIndice = numeroIndice + quantidadeRegistros;
 
 						/**
-						 * Caso a cole��o de imoveis retornados for menor que a quantidade de
-						 * registros seta a flag indicando que a pagina��o terminou.
+						 * Caso a coleeeo de imoveis retornados for menor que a quantidade de
+						 * registros seta a flag indicando que a paginaeeo terminou.
 						 */
 						if (colecaoImovel == null || colecaoImovel.size() < quantidadeRegistros) {
 
@@ -9892,17 +9869,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							colecaoImovel = null;
 						}
 
-					} // FIM DO LOOP DA PAGINA��O
+					} // FIM DO LOOP DA PAGINAeeO
 				}
 			} else {
-				// A LISTA COM AS ROTAS EST� NULA OU VAZIA
+				// A LISTA COM AS ROTAS ESTe NULA OU VAZIA
 
 				throw new ControladorException("atencao.pesquisa.grupo_rota_vazio");
 			}
 
 			// --------------------------------------------------------
 			//
-			// Registrar o fim da execu��o da Unidade de Processamento
+			// Registrar o fim da execueeo da Unidade de Processamento
 			//
 			// --------------------------------------------------------
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
@@ -9910,8 +9887,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (Exception e) {
 
 			/*
-			 * Este catch serve para interceptar qualquer exce��o que o processo batch
-			 * venha a lan�ar e garantir que a unidade de processamento do batch ser�
+			 * Este catch serve para interceptar qualquer exceeeo que o processo batch
+			 * venha a lanear e garantir que a unidade de processamento do batch sere
 			 * atualizada com o erro ocorrido.
 			 */
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
@@ -9920,7 +9897,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1042] Verificar Farturamento dos Im�veis Cortados
+	 * [UC1042] Verificar Farturamento dos Imeveis Cortados
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 13/07/2010
@@ -9939,8 +9916,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Collection imoveis;
 
 		/*
-		 * Caso a rota n�o esteja com o indicador de rota alternativa ativo; a
-		 * pesquisa dos im�veis ser� feita a partir de sua quadra.
+		 * Caso a rota neo esteja com o indicador de rota alternativa ativo; a
+		 * pesquisa dos imeveis sere feita a partir de sua quadra.
 		 */
 		if (!rota.getIndicadorRotaAlternativa().equals(ConstantesSistema.SIM)) {
 
@@ -9955,8 +9932,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		}
 		/*
-		 * Caso contr�rio; a pesquisa dos im�veis ser� feita a partir da rota
-		 * alternativa que estar� associada ao mesmo.
+		 * Caso contrerio; a pesquisa dos imeveis sere feita a partir da rota
+		 * alternativa que estare associada ao mesmo.
 		 */
 		else {
 
@@ -9971,7 +9948,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		}
 
-		// Carregando os dados dos im�veis selecionados
+		// Carregando os dados dos imeveis selecionados
 		if (imoveis != null && !imoveis.isEmpty()) {
 
 			Iterator iteratorImoveis = imoveis.iterator();
@@ -10010,7 +9987,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	/**
 	 * [UC0820] - Atualizar Faturamento do Movimento Celular
 	 * 
-	 * Verifica se a quantidade de im�veis que chegaram � a esperada.
+	 * Verifica se a quantidade de imeveis que chegaram e a esperada.
 	 * 
 	 * @author bruno
 	 * @date 16/08/2010
@@ -10039,7 +10016,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * @author R�mulo Aur�lio
+	 * @author Remulo Aurelio
 	 * @throws ControladorException
 	 * @data 22/06/2010
 	 */
@@ -10071,16 +10048,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	public ContaHistorico pesquisarContaHistoricoDigitada(String idImovel, String referenciaConta)
 			throws ControladorException {
 
-		// Vari�vel que vai armazenar a conta pesquisada
+		// Varievel que vai armazenar a conta pesquisada
 		ContaHistorico contaDigitada = null;
 		Object[] dadosConta = null;
 
-		// Formata a refer�ncia da conta informada para o formato (AAAAMM) sem a
+		// Formata a referencia da conta informada para o formato (AAAAMM) sem a
 		// barra
 		String anoMesConta = Util.formatarMesAnoParaAnoMesSemBarra(referenciaConta);
 
-		// Cria o filtro de conta e seta todos os par�metros para pesquisar a
-		// conta do im�vel
+		// Cria o filtro de conta e seta todos os paremetros para pesquisar a
+		// conta do imevel
 		// Pesquisa imovel
 		try {
 			dadosConta = repositorioFaturamento.pesquisarContaHistoricoDigitada(idImovel, anoMesConta);
@@ -10099,12 +10076,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				contaDigitada.setId((Integer) dadosConta[0]);
 			}
 
-			// Refer�ncia
+			// Referencia
 			if (dadosConta[1] != null) {
 				contaDigitada.setAnoMesReferenciaConta((Integer) dadosConta[1]);
 			}
 
-			// Valor da �gua
+			// Valor da egua
 			if (dadosConta[2] != null) {
 				contaDigitada.setValorAgua((BigDecimal) dadosConta[2]);
 			}
@@ -10114,12 +10091,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				contaDigitada.setValorEsgoto((BigDecimal) dadosConta[3]);
 			}
 
-			// D�bitos
+			// Debitos
 			if (dadosConta[4] != null) {
 				contaDigitada.setValorDebitos((BigDecimal) dadosConta[4]);
 			}
 
-			// Valor Cr�ditos
+			// Valor Creditos
 			if (dadosConta[5] != null) {
 				contaDigitada.setValorCreditos((BigDecimal) dadosConta[5]);
 			}
@@ -10134,7 +10111,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				contaDigitada.setDataVencimentoConta((Date) dadosConta[7]);
 			}
 
-			// D�bito Cr�dito Situa��o
+			// Debito Credito Situaeeo
 			if (dadosConta[8] != null && dadosConta[9] != null) {
 				DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 				debitoCreditoSituacao.setId((Integer) dadosConta[8]);
@@ -10151,7 +10128,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		}
 
-		// Retorna a conta encontrada ou nulo se n�o existir a conta
+		// Retorna a conta encontrada ou nulo se neo existir a conta
 		return contaDigitada;
 	}
 
@@ -10171,7 +10148,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		try {
 			Iterator iteratorContas = idsConta.iterator();
 
-			// PAR�METROS DO SISTEMA
+			// PAReMETROS DO SISTEMA
 			SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
 			if (sistemaParametro.getIndicadorLimiteAlteracaoVencimento().equals(ConstantesSistema.SIM)) {
@@ -10201,7 +10178,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1051] Gerar Relat�rio de Amostragem das Anormalidades Informadas
+	 * [UC1051] Gerar Relaterio de Amostragem das Anormalidades Informadas
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 09/08/2010
@@ -10220,7 +10197,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		Collection retorno = new ArrayList();
 
-		// Cria��o das cole��es
+		// Criaeeo das coleeees
 		Collection colecaoDadosAnormalidadesConsumoPorAmostragem = null;
 
 		Integer totalRelatorio = 0;
@@ -10261,7 +10238,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			while (colecaoDadosAnormalidadesConsumoIterator.hasNext()) {
 
-				// Obt�m os dados do d�bito cobrado
+				// Obtem os dados do debito cobrado
 				Object[] dadosAnormalidadesConsumo = (Object[]) colecaoDadosAnormalidadesConsumoIterator.next();
 
 				GerarRelatorioAnormalidadePorAmostragemHelper relatorioHelper = new GerarRelatorioAnormalidadePorAmostragemHelper();
@@ -10276,22 +10253,22 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					relatorioHelper.setNomeGrupo((String) dadosAnormalidadesConsumo[1]);
 				}
 
-				// Id da Ger�ncia Regional
+				// Id da Gerencia Regional
 				if (dadosAnormalidadesConsumo[2] != null) {
 					relatorioHelper.setIdGerenciaRegional((Integer) dadosAnormalidadesConsumo[2]);
 				}
 
-				// Nome da Ger�ncia Regional
+				// Nome da Gerencia Regional
 				if (dadosAnormalidadesConsumo[3] != null) {
 					relatorioHelper.setNomeGerenciaRegional((String) dadosAnormalidadesConsumo[3]);
 				}
 
-				// Id da Unidade de Neg�cio
+				// Id da Unidade de Negecio
 				if (dadosAnormalidadesConsumo[4] != null) {
 					relatorioHelper.setIdUnidadeNegocio((Integer) dadosAnormalidadesConsumo[4]);
 				}
 
-				// Nome da Unidade de Neg�cio
+				// Nome da Unidade de Negecio
 				if (dadosAnormalidadesConsumo[5] != null) {
 					relatorioHelper.setNomeUnidadeNegocio((String) dadosAnormalidadesConsumo[5]);
 				}
@@ -10316,42 +10293,42 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					relatorioHelper.setNomeLocalidade((String) dadosAnormalidadesConsumo[9]);
 				}
 
-				// Id do Im�vel
+				// Id do Imevel
 				if (dadosAnormalidadesConsumo[10] != null) {
 					relatorioHelper.setIdImovel((Integer) dadosAnormalidadesConsumo[10]);
 				}
 
-				// Nome do Usu�rio
+				// Nome do Usuerio
 				if (dadosAnormalidadesConsumo[11] != null) {
 					relatorioHelper.setNomeUsuario((String) dadosAnormalidadesConsumo[11]);
 				}
 
-				// Id da Situa��o de �gua
+				// Id da Situaeeo de egua
 				if (dadosAnormalidadesConsumo[12] != null) {
 					relatorioHelper.setSituacaoLigacaoAgua((Integer) dadosAnormalidadesConsumo[12]);
 				}
 
-				// Id da Situa��o de Esgoto
+				// Id da Situaeeo de Esgoto
 				if (dadosAnormalidadesConsumo[13] != null) {
 					relatorioHelper.setSituacaoLigacaoEsgoto((Integer) dadosAnormalidadesConsumo[13]);
 				}
 
-				// Indicador de D�bito Autom�tico
+				// Indicador de Debito Autometico
 				if (dadosAnormalidadesConsumo[14] != null) {
 					relatorioHelper.setIndicadorDebito((Short) dadosAnormalidadesConsumo[14]);
 				}
 
-				// Consumo M�dio
+				// Consumo Medio
 				if (dadosAnormalidadesConsumo[15] != null) {
 					relatorioHelper.setConsumoMedio((Integer) dadosAnormalidadesConsumo[15]);
 				}
 
-				// Consumo do M�s
+				// Consumo do Mes
 				if (dadosAnormalidadesConsumo[16] != null) {
 					relatorioHelper.setConsumoMes((Integer) dadosAnormalidadesConsumo[16]);
 				}
 
-				// Descri��o Abreviada da Anormalidade de Consumo
+				// Descrieeo Abreviada da Anormalidade de Consumo
 				if (dadosAnormalidadesConsumo[17] != null) {
 					relatorioHelper.setDescricaoAbrevConsumoAnormalidade((String) dadosAnormalidadesConsumo[17]);
 				}
@@ -10366,7 +10343,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					relatorioHelper.setQuantidadeEconomias((Short) dadosAnormalidadesConsumo[19]);
 				}
 
-				// Tipo de Medi��o
+				// Tipo de Medieeo
 				if (dadosAnormalidadesConsumo[20] != null) {
 
 					if (dadosAnormalidadesConsumo[20].equals(MedicaoTipo.POCO)) {
@@ -10379,14 +10356,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					relatorioHelper.setTipoMedicao("");
 				}
 
-				// Descri��o Abreviada da Capacidade do Hidr�metro da
-				// Liga��o de �gua
+				// Descrieeo Abreviada da Capacidade do Hidremetro da
+				// Ligaeeo de egua
 				if (dadosAnormalidadesConsumo[21] != null) {
 					relatorioHelper.setCapacidadeHidrometro((String) dadosAnormalidadesConsumo[21]);
 				}
 
-				// Descri��o Abreviada do Local de Instala��o do Hidr�metro
-				// da Liga��o de �gua
+				// Descrieeo Abreviada do Local de Instalaeeo do Hidremetro
+				// da Ligaeeo de egua
 				if (dadosAnormalidadesConsumo[22] != null) {
 					relatorioHelper.setLocalInstalacaoHidrometro((String) dadosAnormalidadesConsumo[22]);
 				}
@@ -10396,12 +10373,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					relatorioHelper.setIdSetorComercial((Integer) dadosAnormalidadesConsumo[23]);
 				}
 
-				// C�digo do Setor Comercial
+				// Cedigo do Setor Comercial
 				if (dadosAnormalidadesConsumo[24] != null) {
 					relatorioHelper.setCodigoSetorComercial((Integer) dadosAnormalidadesConsumo[24]);
 				}
 
-				// N�mero leitura atual informada
+				// Nemero leitura atual informada
 				if (dadosAnormalidadesConsumo[25] != null) {
 					relatorioHelper.setNnLeituraAtualInformada((Integer) dadosAnormalidadesConsumo[25]);
 				}
@@ -10416,7 +10393,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					relatorioHelper.setNomeEmpresa((String) dadosAnormalidadesConsumo[27]);
 				}
 
-				// inscri��o do Im�vel
+				// inscrieeo do Imevel
 				if (dadosAnormalidadesConsumo[28] != null) {
 					relatorioHelper.setInscricaoImovel((String) dadosAnormalidadesConsumo[28]);
 				}
@@ -10432,7 +10409,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscaliza��o
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaeeo
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/08/2010
@@ -10457,7 +10434,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscaliza��o
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaeeo
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 18/08/2010
@@ -10474,7 +10451,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0488] Informar Retorno Ordem de Fiscaliza��o
+	 * [UC0488] Informar Retorno Ordem de Fiscalizaeeo
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 24/08/2010
@@ -10492,14 +10469,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Remove os im�veis que ja foram enviados para uma determinada rota em
-	 * impress�o simultanea
+	 * Remove os imeveis que ja foram enviados para uma determinada rota em
+	 * impresseo simultanea
 	 * 
 	 * @autor Bruno Barros.
 	 * @date 24/08/2010
 	 * 
 	 * @param idRota         - Id da rota a ser pesquisada
-	 * @param BufferedReader - Buffer com TODOS os im�veis da rota
+	 * @param BufferedReader - Buffer com TODOS os imeveis da rota
 	 * 
 	 * @return BufferedReader Novo buffer apenas com as matriculas que ainda
 	 *         precisam ser processadas
@@ -10526,7 +10503,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				boolean alterouAgua = false;
 
-				// Selecionamos os dados dos medidos de agua e dos n�o medidos
+				// Selecionamos os dados dos medidos de agua e dos neo medidos
 
 				if (dadosImovel.isMedidoAgua() || (!dadosImovel.isMedidoAgua() && !dadosImovel.isMedidoPoco())) {
 					alterouAgua = this.reprocessarImovelImpressaoSimultanea(anoMesFaturamento,
@@ -10543,7 +10520,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							dadosImovel.getAnormalidadePoco(), dadosImovel.getIndicadorEmissaoConta());
 				}
 
-				logger.info("Altera��o leitura do im�vel " + dadosImovel.getIdImovel() + ": agua: " + alterouAgua
+				logger.info("Alteraeeo leitura do imevel " + dadosImovel.getIdImovel() + ": agua: " + alterouAgua
 						+ ", esgoto: " + alterouPoco);
 
 				if (alterouAgua || alterouPoco) {
@@ -10555,7 +10532,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 			}
 
-			// Adiciona as linhas referentes a rota de marca��o
+			// Adiciona as linhas referentes a rota de marcaeeo
 			arquivo.append(helper.getRegistrosRotaMarcacao());
 
 			if (arquivo.length() > 0) {
@@ -10572,7 +10549,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Verifica se algum im�vel teve uma solicita��o de releitura para uma
+	 * Verifica se algum imevel teve uma solicitaeeo de releitura para uma
 	 * rota e anomes
 	 * 
 	 * @author Bruno Barros
@@ -10588,13 +10565,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 *         Indicador que o nome do parametro acabou 123456 -> Valor retornado ,
 	 *         -> Separador de valor
 	 * 
-	 *         Caso n�o haja im�veis para releitura, retorna nulo;
+	 *         Caso neo haja imeveis para releitura, retorna nulo;
 	 * 
 	 * @throws ErroRepositorioException
 	 */
 	private String verificarSolicitacaoReleituraImovelImpressaoSimultanea(Integer idRota) throws ControladorException {
 
-		// Verificamos se alguma solicita��o de releitura foi feita para essa
+		// Verificamos se alguma solicitaeeo de releitura foi feita para essa
 		// rota
 		Collection<ReleituraMobile> colReleituraMobile;
 		StringBuffer retorno = new StringBuffer();
@@ -10653,7 +10630,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1010] Emitir 2� via de declara��o anual de quita��o de d�bitos
+	 * [UC1010] Emitir 2e via de declaraeeo anual de quitaeeo de debitos
 	 * 
 	 * @Author Daniel Alves
 	 * @Date 14/09/2010
@@ -10699,7 +10676,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1073] � Religar Im�veis Cortados com Consumo Real
+	 * [UC1073] e Religar Imeveis Cortados com Consumo Real
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 13/09/2010
@@ -10840,12 +10817,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0811] Processar Requisi��es do Dispositivo M�vel Impressao
+	 * [UC0811] Processar Requisieees do Dispositivo Mevel Impressao
 	 * Simultanea.
 	 * 
-	 * M�todo criado para evitar o if "compesa" ou if "caern". Para todas as
-	 * empresas, o pr�ximo arquivo do leiturista � disponibilizado assim que o
-	 * arquivo anterior � finalizado. Apenas na compesa, n�o permite.
+	 * Metodo criado para evitar o if "compesa" ou if "caern". Para todas as
+	 * empresas, o preximo arquivo do leiturista e disponibilizado assim que o
+	 * arquivo anterior e finalizado. Apenas na compesa, neo permite.
 	 * 
 	 * @author Bruno Barros
 	 * @date 05/10/2010
@@ -10858,7 +10835,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1083] Prescrever D�bitos de Im�veis P�blicos
+	 * [UC1083] Prescrever Debitos de Imeveis Peblicos
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 18/10/2010
@@ -10943,7 +10920,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * [UC1038] Prescrever D�bitos de Im�veis P�blicos
+	 * [UC1038] Prescrever Debitos de Imeveis Peblicos
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 18/10/2010
@@ -10957,7 +10934,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		PrescreverDebitosImovelHelper helper = (PrescreverDebitosImovelHelper) parametros.get("helper");
 
 		// ---------------------------------------------------
-		// Registrar o in�cio do processamento da Unidade de
+		// Registrar o inecio do processamento da Unidade de
 		// Processamento do Batch
 		// ---------------------------------------------------
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
@@ -10994,7 +10971,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		int idUnidadeIniciada = 0;
 
 		// ---------------------------------------------------
-		// Registrar o in�cio do processamento da Unidade de
+		// Registrar o inecio do processamento da Unidade de
 		// Processamento do Batch
 		// ---------------------------------------------------
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
@@ -11059,11 +11036,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * Retifica��o de um conjunto de contas que foram pagas e que o pagamento
-	 * n�o estava o d�bito e/ou cr�dito (Conta paga via Impress�o
-	 * Simult�nea)
+	 * Retificaeeo de um conjunto de contas que foram pagas e que o pagamento
+	 * neo estava o debito e/ou credito (Conta paga via Impresseo
+	 * Simultenea)
 	 * 
-	 * @author S�vio Luiz
+	 * @author Sevio Luiz
 	 * @date 27/12/2010
 	 * 
 	 * @throws ErroRepositorioException
@@ -11081,13 +11058,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Met�do respons�vel por emitir os txts das contas.
+	 * Metedo responsevel por emitir os txts das contas.
 	 * 
 	 * [UC0348] Emitir Contas
 	 * 
 	 * [SB00016] Obter Mensagem da Conta em 3 Partes
 	 * 
-	 * @author S�vio Luiz, Ivan Sergio
+	 * @author Sevio Luiz, Ivan Sergio
 	 * @date 24/05/2006, 01/12/2010
 	 * @alteracoes: 01/12/2010 - RM247
 	 * 
@@ -11130,7 +11107,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					.obterDebitoImovelOuCliente(1, "" + emitirContaHelper.getIdImovel(), null, null, "190001",
 							"" + anoMesSubtraido, dataVencimento, dataFinalDate, 1, 2, 2, 2, 2, 1, 2, null);
 
-			// se o imovel possua d�bito(debitoImovelCobran�a for diferente de
+			// se o imovel possua debito(debitoImovelCobranea for diferente de
 			// nulo)
 			if (debitoImovelClienteHelper != null
 					&& ((debitoImovelClienteHelper.getColecaoGuiasPagamentoValores() != null
@@ -11140,7 +11117,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				String dataVencimentoFinalString = Util.formatarData(dataFinalDate);
 
-				mensagem[0] = "AVISO:EM " + dataVencimentoFinalString + " CONSTA D�BITO SUJ.CORT. IGNORE CASO PAGO";
+				mensagem[0] = "AVISO:EM " + dataVencimentoFinalString + " CONSTA DeBITO SUJ.CORT. IGNORE CASO PAGO";
 
 			} else {
 				mensagem[0] = "";
@@ -11315,7 +11292,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			// Util.adicionarNumeroDiasDeUmaData(dataSubtraida,-2);
 			// }
 			//
-			// // N�o considera os feriados municipais
+			// // Neo considera os feriados municipais
 			// if(Util.ehDiaUtil(dataSubtraida,colecaoNacionalFeriado,null)){
 			// mensagem[3] = Util.formatarData(dataSubtraida)+" "+mensagem[3];
 			// naoEhValida = false;
@@ -11337,12 +11314,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			// recupera o id do setor comercial da conta
 			Integer idSetorComercial = emitirContaHelper.getIdSetorComercial();
 
-			// caso entre em alguma condi��o ent�o n�o entra mais nas outras
+			// caso entre em alguma condieeo enteo neo entra mais nas outras
 			boolean achou = false;
 
 			try {
 				// o sistema obtem a mensagem para a conta
-				// Caso seja a condi��o 1
+				// Caso seja a condieeo 1
 				// (FaturamentoGrupo =null, GerenciaRegional=parmConta,
 				// Localidade=parmConta, SetorComercial=parmConta)
 				mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(emitirContaHelper, null,
@@ -11375,7 +11352,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				if (!achou) {
 
-					// Caso seja a condi��o 2
+					// Caso seja a condieeo 2
 					// (FaturamentoGrupo =null, GerenciaRegional=parmConta,
 					// Localidade=null, SetorComercial=null)
 					// Conta Mensagem 1
@@ -11408,7 +11385,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					}
 				}
 				if (!achou) {
-					// Caso seja a condi��o 3
+					// Caso seja a condieeo 3
 					// (FaturamentoGrupo =null, GerenciaRegional=parmConta,
 					// Localidade=null, SetorComercial=null)
 					// Conta Mensagem 1
@@ -11441,7 +11418,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					}
 				}
 				if (!achou) {
-					// Caso seja a condi��o 4
+					// Caso seja a condieeo 4
 					// (FaturamentoGrupo =parmConta, GerenciaRegional=null,
 					// Localidade=null, SetorComercial=null)
 					// Conta Mensagem 1
@@ -11474,7 +11451,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					}
 				}
 				if (!achou) {
-					// Caso seja a condi��o 5
+					// Caso seja a condieeo 5
 					// (FaturamentoGrupo =null, GerenciaRegional=null,
 					// Localidade=null, SetorComercial=null)
 					// Conta Mensagem 1
@@ -11504,8 +11481,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						achou = true;
 					}
 				}
-				// caso n�o tenha entrado em nenhuma das op��es acima
-				// ent�o completa a string com espa��s em branco
+				// caso neo tenha entrado em nenhuma das opeees acima
+				// enteo completa a string com espaees em branco
 				if (!achou) {
 					mensagem[2] = "";
 					mensagem[3] = "";
@@ -11521,8 +11498,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0651] Inserir Comando de Negativa��o [FS0031] � Verificar
-	 * exist�ncia de conta em nome do cliente
+	 * [UC0651] Inserir Comando de Negativaeeo [FS0031] e Verificar
+	 * existencia de conta em nome do cliente
 	 * 
 	 * Pesquisa os relacionamentos entre cliente e conta.
 	 * 
@@ -11554,12 +11531,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Inserir D�bitos para as contas impressas via Impress�o Simult�nea de
+	 * Inserir Debitos para as contas impressas via Impresseo Simultenea de
 	 * Contas que sairam com o valor da conta errada (Alguns grupos com tarifa
-	 * proporcional que n�o estava levando em considera��o a quantidade de
+	 * proporcional que neo estava levando em consideraeeo a quantidade de
 	 * economias)
 	 * 
-	 * @author S�vio Luiz
+	 * @author Sevio Luiz
 	 * @date 12/01/2011
 	 * 
 	 * @throws ErroRepositorioException
@@ -11576,12 +11553,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * Inserir D�bitos para as contas impressas via Impress�o Simult�nea de
+	 * Inserir Debitos para as contas impressas via Impresseo Simultenea de
 	 * Contas que sairam com o valor da conta errada (Alguns grupos com tarifa
-	 * proporcional que n�o estava levando em considera��o a quantidade de
+	 * proporcional que neo estava levando em consideraeeo a quantidade de
 	 * economias)
 	 * 
-	 * @author S�vio Luiz
+	 * @author Sevio Luiz
 	 * @date 12/01/2011
 	 * 
 	 * @throws ErroRepositorioException
@@ -11640,7 +11617,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						valorDiferenca = (BigDecimal) dadosConta[2];
 					}
 
-					System.out.println("Matricula do im�vel Faixas:" + idImovel);
+					System.out.println("Matricula do imevel Faixas:" + idImovel);
 
 					// Pesquisa o imovel na base
 					FiltroImovel filtroImovel = new FiltroImovel();
@@ -11700,7 +11677,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [RM-4643 (COMPESA)] Verificamos se o im�vel sofreu altera��es depois de
+	 * [RM-4643 (COMPESA)] Verificamos se o imevel sofreu alteraeees depois de
 	 * ter sido mandado para o GSAN a primeira vez
 	 * 
 	 * @author Bruno Barros
@@ -11728,7 +11705,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	/**
 	 * [UC0366] Inserir Registro de Atendimento
 	 * 
-	 * [FS0048] � Verificar exist�ncia da conta.
+	 * [FS0048] e Verificar existencia da conta.
 	 * 
 	 * @author Mariana Victor
 	 * @date 27/01/2011
@@ -11749,7 +11726,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0146] Manter Conta [FS0037]-Verificar ocorr�ncias mesmo motivo no ano
+	 * [UC0146] Manter Conta [FS0037]-Verificar ocorrencias mesmo motivo no ano
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 11/02/2011
@@ -11801,7 +11778,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1129] Gerar Relat�rio Devolu��o dos Pagamentos em Duplicidade
+	 * [UC1129] Gerar Relaterio Devolueeo dos Pagamentos em Duplicidade
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 10/03/2011
@@ -11887,7 +11864,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				relatorioHelper.setNumeroRA(RA);
 
-				// Im�vel
+				// Imevel
 				String imovel = "";
 				if (objeto[2] != null) {
 					imovel = Util.retornaMatriculaImovelFormatada((Integer) objeto[2]);
@@ -11895,7 +11872,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				relatorioHelper.setMatricula(imovel);
 
-				// AnoMes Refer�ncia Pagamento
+				// AnoMes Referencia Pagamento
 				String mesAnoReferenciaPagamento = "";
 				if (objeto[3] != null) {
 					mesAnoReferenciaPagamento = Util.formatarAnoMesParaMesAno(objeto[3].toString());
@@ -11911,7 +11888,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				relatorioHelper.setValorPagamentoDuplicidade(valorPagamento);
 
-				// AnoMes Refer�ncia Conta
+				// AnoMes Referencia Conta
 				String mesAnoReferenciaConta = "";
 				if (objeto[5] != null) {
 					mesAnoReferenciaConta = Util.formatarAnoMesParaMesAno(objeto[5].toString());
@@ -12020,7 +11997,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1157] Seleciona Comando para Retirar Im�vel da Tarifa Social [SB0003]
+	 * [UC1157] Seleciona Comando para Retirar Imevel da Tarifa Social [SB0003]
 	 * Excluir Comando Selecionado
 	 * 
 	 * @author Vivianne Sousa
@@ -12040,7 +12017,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0724] - Processar Pagamento com Ficha de Compensa��o
+	 * [UC0724] - Processar Pagamento com Ficha de Compensaeeo
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/03/2011
@@ -12080,7 +12057,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0724] - Processar Pagamento com Ficha de Compensa��o
+	 * [UC0724] - Processar Pagamento com Ficha de Compensaeeo
 	 * 
 	 * @author Raphael Rossiter
 	 * @date 15/03/2011
@@ -12159,7 +12136,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1166] Gerar txt para impress�o de contas no formato braille
+	 * [UC1166] Gerar txt para impresseo de contas no formato braille
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 20/04/2011
@@ -12230,16 +12207,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					contaTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
 							"Nome do cliente = " + nomeClienteUsuario, 70));
 
-					// UC0085 - Obter Endere�o
+					// UC0085 - Obter Endereeo
 					String enderecoImovel = getControladorEndereco().pesquisarEnderecoFormatado(idImovel);
 					contaTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-							"Endere�o = " + enderecoImovel, 130));
+							"Endereeo = " + enderecoImovel, 130));
 
 					contaTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-							"Matr�cula do im�vel = " + idImovel, 30));
+							"Matrecula do imevel = " + idImovel, 30));
 
 					contaTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-							"M�s/Ano da conta = " + conta.getReferenciaFormatada(), 26));
+							"Mes/Ano da conta = " + conta.getReferenciaFormatada(), 26));
 
 					String leituraAnterior = "";
 					if (conta.getNumeroLeituraAnterior() != null) {
@@ -12255,7 +12232,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							"Leitura atual = " + leituraAtual, 25));
 
 					contaTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-							"Volume faturado de �gua (m3) = " + conta.getConsumoAgua(), 35));
+							"Volume faturado de egua (m3) = " + conta.getConsumoAgua(), 35));
 
 					// Dias de Consumo
 					Integer[] parmSituacao = determinarTipoLigacaoMedicao(emitirContaHelper);
@@ -12275,7 +12252,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					}
 					String diasConsumo = "";
 					if (!dataLeituraAnterior.equals("") && !dataLeituraAtual.equals("")) {
-						// calcula a quantidade de dias de consumo que � a
+						// calcula a quantidade de dias de consumo que e a
 						// quantidade de dias entre a data de leitura
 						// anterior e a data de leitura atual
 						diasConsumo = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) parmsMedicaoHistorico[3],
@@ -12295,7 +12272,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					String residencial = "Categoria Residencial = ";
 					String comercial = "Categoria Comercial = ";
 					String industrial = "Categoria Industrial  = ";
-					String publica = "Categoria P�blica  = ";
+					String publica = "Categoria Peblica  = ";
 
 					Iterator iterCategorias = colecaoCategorias.iterator();
 					while (iterCategorias.hasNext()) {
@@ -12324,16 +12301,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					contaTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(publica, 30));
 
 					contaTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-							"Valor �gua = " + Util.formatarMoedaReal(conta.getValorAgua()), 30));
+							"Valor egua = " + Util.formatarMoedaReal(conta.getValorAgua()), 30));
 
 					contaTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
 							"Valor Esgoto = " + Util.formatarMoedaReal(conta.getValorEsgoto()), 30));
 
 					contaTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-							"Valor D�bitos = " + Util.formatarMoedaReal(conta.getDebitos()), 30));
+							"Valor Debitos = " + Util.formatarMoedaReal(conta.getDebitos()), 30));
 
 					contaTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
-							"Valor Cr�ditos  = " + Util.formatarMoedaReal(conta.getValorCreditos()), 30));
+							"Valor Creditos  = " + Util.formatarMoedaReal(conta.getValorCreditos()), 30));
 
 					contaTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
 							"Valor Impostos =  " + Util.formatarMoedaReal(conta.getValorImposto()), 30));
@@ -12390,7 +12367,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1166] Gerar txt para impress�o de contas no formato braille
+	 * [UC1166] Gerar txt para impresseo de contas no formato braille
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 20/04/2011
@@ -12452,7 +12429,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1166] Gerar txt para impress�o de contas no formato braille [FS0001] �
+	 * [UC1166] Gerar txt para impresseo de contas no formato braille [FS0001] e
 	 * Verificar Grupos Faturados
 	 * 
 	 * @author Vivianne Sousa
@@ -12496,7 +12473,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC0713] Emitir Ordem de Servi�o Seletiva [SB0002] Gerar TXT
+	 * [UC0713] Emitir Ordem de Servieo Seletiva [SB0002] Gerar TXT
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 29/06/2011
@@ -12531,11 +12508,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		if (conta != null && conta.getId() != null) {
 
-			// Verifica se o im�vel est� associado a um im�vel condom�nio
+			// Verifica se o imevel este associado a um imevel condomenio
 			Integer idImovelCondominio = this.getControladorImovel()
 					.pesquisarImovelCondominio(conta.getImovel().getId());
 
-			// �GUA
+			// eGUA
 			if (consumoAguaMovimentoCelular.intValue() != consumoAguaGSAN.intValue()) {
 
 				MovimentoContaPrefaturada movimentoContaPrefaturadaAgua = null;
@@ -12565,7 +12542,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 								if (dadosConsumoHistoricoAguaCondominio != null) {
 
-									// id do consumo historico do im�vel macro
+									// id do consumo historico do imevel macro
 									idConsumoHistoricoAguaMacro = (Integer) dadosConsumoHistoricoAguaCondominio[0];
 
 									consumoImovelVinculadosCondominioAgua = movimentoContaPrefaturadaAgua
@@ -12627,7 +12604,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 								if (dadosConsumoHistoricoEsgotoCondominio != null) {
 
-									// id do consumo historico do im�vel macro
+									// id do consumo historico do imevel macro
 									idConsumoHistoricoEsgotoMacro = (Integer) dadosConsumoHistoricoEsgotoCondominio[0];
 
 									consumoImovelVinculadosCondominioEsgoto = movimentoContaPrefaturadaEsgoto
@@ -12661,10 +12638,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1194] Consultar Estrutura Tarif�ria Loja Virtual [SB0001] Pesquisar
-	 * Tarifa Social ou Tarifa M�nima
+	 * [UC1194] Consultar Estrutura Tariferia Loja Virtual [SB0001] Pesquisar
+	 * Tarifa Social ou Tarifa Menima
 	 * 
-	 * M�todo que vai retornar um Helper que possui o consumo da tarifa m�nima e
+	 * Metodo que vai retornar um Helper que possui o consumo da tarifa menima e
 	 * da tarifa social e seus respectivos valores.
 	 * 
 	 * @author Diogo Peixoto
@@ -12680,7 +12657,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		try {
 			Collection<Object[]> dados;
-			// A tarifa social s� � v�lida para im�veis da categoria
+			// A tarifa social se e velida para imeveis da categoria
 			// residencial.
 			// ------------------- Pesquisa a Tarifa Social
 			// -------------------//
@@ -12690,7 +12667,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				estruturaTarifaria = this.adicionarEstruturaTarifaria(estruturaTarifaria, dados, false, true);
 			}
 
-			// ------------------- Pesquisa a Tarifa Normal (M�nima)
+			// ------------------- Pesquisa a Tarifa Normal (Menima)
 			// -------------------//
 			dados = this.repositorioFaturamento.pesquisarTarifaSocialOuTarifaMinima(ConsumoTarifa.CONSUMO_NORMAL,
 					idCategoria);
@@ -12709,11 +12686,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1194] Consultar Estrutura Tarif�ria Loja Virtual M�todo auxiliar para
-	 * montar a estrutura tarif�ria da loja virtual.
+	 * [UC1194] Consultar Estrutura Tariferia Loja Virtual Metodo auxiliar para
+	 * montar a estrutura tariferia da loja virtual.
 	 * 
-	 * M�todo que vai retornar um Helper que possui o consumo n�o medido de
-	 * chafariz p�blico.
+	 * Metodo que vai retornar um Helper que possui o consumo neo medido de
+	 * chafariz peblico.
 	 * 
 	 * @author Diogo Peixoto
 	 * @since 06/09/2011
@@ -12753,20 +12730,20 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1194] Consultar Estrutura Tarif�ria Loja Virtual. M�todo auxiliar para
-	 * montar a estrutura tarif�ria da loja virtual.
+	 * [UC1194] Consultar Estrutura Tariferia Loja Virtual. Metodo auxiliar para
+	 * montar a estrutura tariferia da loja virtual.
 	 * 
 	 * @param ConsultarEstruturaTarifariaPortalHelper - Helper que vai ser
 	 *                                                acrescentado novas estruturas
-	 * @param Collection                              <Object[]> - Cole��o de
+	 * @param Collection                              <Object[]> - Coleeeo de
 	 *                                                objetos que retornou da busca
-	 *                                                no reposit�rio
+	 *                                                no repositerio
 	 * @param tarifaNormal                            - Booleano que vai indicar se
-	 *                                                a tarifa � normal ou tarifa
-	 *                                                m�nima
+	 *                                                a tarifa e normal ou tarifa
+	 *                                                menima
 	 * @param tarifaSocial                            - Booleano que vai indicar se
-	 *                                                a tarifa � social (Apenas
-	 *                                                para a categoria de im�vel
+	 *                                                a tarifa e social (Apenas
+	 *                                                para a categoria de imevel
 	 *                                                residencial)
 	 * 
 	 */
@@ -12782,18 +12759,18 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			if (tarifaNormal) {
 				/*
-				 * Adiciona todos os registros encontrados na cole��o do helper. A primeira
-				 * coluna que retorna da consulta � o valor incial do consumo a segunda coluna
-				 * � o valor final do consumo e a terceira coluna � o valor do tarifa. E a
+				 * Adiciona todos os registros encontrados na coleeeo do helper. A primeira
+				 * coluna que retorna da consulta e o valor incial do consumo a segunda coluna
+				 * e o valor final do consumo e a terceira coluna e o valor do tarifa. E a
 				 * terceira a categoria da tarifa.
 				 */
 				while (iterator.hasNext()) {
 					object = iterator.next();
 
 					/*
-					 * A String � concatenada com o '.000', pois a consulta retorna o valor em
+					 * A String e concatenada com o '.000', pois a consulta retorna o valor em
 					 * 1000L Ex: Consulta retornou 10 no valor incial do consumo 10 significa que
-					 * s�o 10.000L.
+					 * seo 10.000L.
 					 */
 					sb.append((String) object[0]);
 					sb.append(".000 a ");
@@ -12804,11 +12781,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						valor = Util.formatarMoedaReal((BigDecimal) object[2]);
 					}
 					/*
-					 * O �ltimo par�metro � um integer (1), pois esse n�mero ir� auxiliar
-					 * na montagem do relat�rio da estrutura tarif�ria. Esse �ndice indica que
-					 * s�o consumidores medidos. No ExibirConsultarEstruturaTarifariaPortalAction
-					 * ser�o inicializados os consumidores n�o medidos cuja costante � igual
-					 * � 2.
+					 * O eltimo paremetro e um integer (1), pois esse nemero ire auxiliar
+					 * na montagem do relaterio da estrutura tariferia. Esse endice indica que
+					 * seo consumidores medidos. No ExibirConsultarEstruturaTarifariaPortalAction
+					 * sereo inicializados os consumidores neo medidos cuja costante e igual
+					 * e 2.
 					 */
 					estrutura.add(
 							new ConsultarEstruturaTarifariaPortalHelper((String) object[3], sb.toString(), valor, 1));
@@ -12816,34 +12793,34 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 			} else {
 				/*
-				 * Adiciona todos os registros encontrados na cole��o do helper. A primeira
-				 * coluna que retorna da consulta � o consumo e a segunda coluna � o valor
+				 * Adiciona todos os registros encontrados na coleeeo do helper. A primeira
+				 * coluna que retorna da consulta e o consumo e a segunda coluna e o valor
 				 * do tarifa. E a terceira a categoria da tarifa.
 				 */
 				while (iterator.hasNext()) {
 					object = iterator.next();
 
 					/*
-					 * A String � concatenada com o '.000', pois a consulta retorna o valor em
+					 * A String e concatenada com o '.000', pois a consulta retorna o valor em
 					 * 1000L Ex: Consulta retornou 10 no valor incial do consumo 10 significa que
-					 * s�o 10.000L.
+					 * seo 10.000L.
 					 */
 					if (tarifaSocial) {
 						sb.append("Tarifa Social ");
 					}
-					sb.append("At� ");
+					sb.append("Ate ");
 					sb.append((String) object[0]);
-					sb.append(".000 litros/m�s");
+					sb.append(".000 litros/mes");
 					if (object[1] != null) {
 						valor = Util.formatarMoedaReal((BigDecimal) object[1]);
 					}
 
 					/*
-					 * O �ltimo par�metro � um integer (1), pois esse n�mero ir� auxiliar
-					 * na montagem do relat�rio da estrutura tarif�ria. Esse �ndice indica que
-					 * s�o consumidores medidos. No ExibirConsultarEstruturaTarifariaPortalAction
-					 * ser�o inicializados os consumidores n�o medidos cuja costante � igual
-					 * � 2.
+					 * O eltimo paremetro e um integer (1), pois esse nemero ire auxiliar
+					 * na montagem do relaterio da estrutura tariferia. Esse endice indica que
+					 * seo consumidores medidos. No ExibirConsultarEstruturaTarifariaPortalAction
+					 * sereo inicializados os consumidores neo medidos cuja costante e igual
+					 * e 2.
 					 */
 					estrutura.add(
 							new ConsultarEstruturaTarifariaPortalHelper((String) object[2], sb.toString(), valor, 1));
@@ -12856,14 +12833,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1194] Consultar Estrutura Tarif�ria Loja Virtual M�todo auxiliar para
-	 * montar a estrutura tarif�ria da loja virtual.
+	 * [UC1194] Consultar Estrutura Tariferia Loja Virtual Metodo auxiliar para
+	 * montar a estrutura tariferia da loja virtual.
 	 * 
 	 * @param ConsultarEstruturaTarifariaPortalHelper - Helper que vai ser
 	 *                                                acrescentado novas estruturas
-	 * @param Collection                              <Object[]> - Cole��o de
+	 * @param Collection                              <Object[]> - Coleeeo de
 	 *                                                objetos que retornou da busca
-	 *                                                no reposit�rio de im�vel
+	 *                                                no repositerio de imevel
 	 *                                                residencial)
 	 * 
 	 */
@@ -12873,9 +12850,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		String valor = null;
 		Object[] object;
 		/*
-		 * Booleano respons�vel por verificar se a estrutura tarifaria � a primeira
-		 * da categoria Caso seja a primeira, Adicionar a descri��o da categoria
-		 * object[3], caso contr�rio adicionar a string vazia para a descri��o.
+		 * Booleano responsevel por verificar se a estrutura tarifaria e a primeira
+		 * da categoria Caso seja a primeira, Adicionar a descrieeo da categoria
+		 * object[3], caso contrerio adicionar a string vazia para a descrieeo.
 		 */
 		boolean primeiroDaCategoria = true;
 
@@ -12884,8 +12861,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Iterator<Object[]> iterator = dados.iterator();
 
 			/*
-			 * Adiciona todos os registros encontrados na cole��o do helper. A primeira
-			 * coluna que retorna da consulta � o consumo e a segunda coluna � o valor
+			 * Adiciona todos os registros encontrados na coleeeo do helper. A primeira
+			 * coluna que retorna da consulta e o consumo e a segunda coluna e o valor
 			 * do tarifa. E a terceira a categoria da tarifa.
 			 */
 			while (iterator.hasNext()) {
@@ -12904,9 +12881,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				if (primeiroDaCategoria) {
 					/*
-					 * O �ltimo par�metro � um integer (3), pois esse n�mero ir� auxiliar
-					 * na montagem do relat�rio da estrutura tarif�ria. Esse �ndice indica que
-					 * s�o tarifas do tipo �gua bruta.
+					 * O eltimo paremetro e um integer (3), pois esse nemero ire auxiliar
+					 * na montagem do relaterio da estrutura tariferia. Esse endice indica que
+					 * seo tarifas do tipo egua bruta.
 					 */
 					estrutura.add(
 							new ConsultarEstruturaTarifariaPortalHelper((String) object[3], sb.toString(), valor, 3));
@@ -12923,7 +12900,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * UC 8xx - Relat�rio das Multas de Autos de Infra��o Pendentes
+	 * UC 8xx - Relaterio das Multas de Autos de Infraeeo Pendentes
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 11/06/2011
@@ -12942,7 +12919,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		// Monta os objetos da cole��o retornada.
+		// Monta os objetos da coleeeo retornada.
 		Collection retorno = new ArrayList();
 		Iterator it = colecaoQuery.iterator();
 		FaturamentoGrupo fr = null;
@@ -12963,7 +12940,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * UC1198 - Relat�rio das Multas de Autos de Infra��o Pendentes
+	 * UC1198 - Relaterio das Multas de Autos de Infraeeo Pendentes
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 11/06/2011
@@ -13022,7 +12999,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * UC1198 - Relat�rio das Multas de Autos de Infra��o Pendentes
+	 * UC1198 - Relaterio das Multas de Autos de Infraeeo Pendentes
 	 * 
 	 * @author Hugo Azevedo
 	 * @date 11/06/2011
@@ -13043,7 +13020,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				while (it.hasNext()) {
 					Integer dadosItensParcelamento = (Integer) it.next();
 
-					// Parcelamento n�o pago
+					// Parcelamento neo pago
 					if (dadosItensParcelamento != null) {
 						Integer idConta = (Integer) dadosItensParcelamento;
 
@@ -13056,14 +13033,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							while (it2.hasNext()) {
 								Integer dadosItensParcelamentoN2 = (Integer) it2.next();
 
-								// Re-parcelamento n�o pago
+								// Re-parcelamento neo pago
 								if (dadosItensParcelamentoN2 != null) {
 									return true;
 								}
 							}
 						}
 
-						// N�o � re-parcelamento
+						// Neo e re-parcelamento
 						else
 							return true;
 
@@ -13071,7 +13048,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 			}
 
-			// N�o � parcelamento
+			// Neo e parcelamento
 			else
 				return true;
 
@@ -13085,7 +13062,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1216] Suspender Leitura para Im�vel com Hidr�metro Retirado
+	 * [UC1216] Suspender Leitura para Imevel com Hidremetro Retirado
 	 * 
 	 * @author Vivianne Sousa
 	 * @date 23/08/2011
@@ -13118,19 +13095,19 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
 			faturamentoSituacaoTipo.setId(FaturamentoSituacaoTipo.PARALISAR_LEITURA_FATURAR_MEDIA);
 
-			// OBSERVA��O
+			// OBSERVAeeO
 			String observacao = "INCLUIDO ATRAVES DE ROTINA BATCH POR ANORMALIDADE DE LEITURA = HIDROMETRO RETIRADO";
 
-			// [SB0001] � Selecionar Im�veis com Hidr�metro Retirado
+			// [SB0001] e Selecionar Imeveis com Hidremetro Retirado
 			Collection idsImovel = this.repositorioFaturamento
 					.pesquisarImovelNumeroDeOcorrenciasConsecultivasAnormalidades(idAnormalidade, qtdAnormalidades,
 							referenciaFaturamento, grupofaturamento, idRota);
 
 			Iterator iterimoveis = idsImovel.iterator();
 			while (iterimoveis.hasNext()) {
-				// Para cada im�vel selecionado o sistema inclui o im�vel na
-				// situa��o especial de faturamento
-				// [SB0002 � Incluir Im�vel na Situa��o Especial de Faturamento]
+				// Para cada imevel selecionado o sistema inclui o imevel na
+				// situaeeo especial de faturamento
+				// [SB0002 e Incluir Imevel na Situaeeo Especial de Faturamento]
 
 				Integer idImovel = (Integer) iterimoveis.next();
 				Imovel imovel = new Imovel();
@@ -13162,7 +13139,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1218] Suspender Leitura para Im�vel com Consumo Real n�o Superior a
+	 * [UC1218] Suspender Leitura para Imevel com Consumo Real neo Superior a
 	 * 10m3
 	 * 
 	 * @author Vivianne Sousa
@@ -13194,19 +13171,19 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
 			faturamentoSituacaoTipo.setId(FaturamentoSituacaoTipo.PARALISAR_LEITURA_FATURAR_TAXA_MINIMA);
 
-			// OBSERVA��O
-			String observacao = "INCLUIDO ATRAVES DE ROTINA BATCH POR APRESENTAR CONSUMO N�O SUPERIOR A 10M3";
+			// OBSERVAeeO
+			String observacao = "INCLUIDO ATRAVES DE ROTINA BATCH POR APRESENTAR CONSUMO NeO SUPERIOR A 10M3";
 
-			// [SB0001] � Selecionar Im�veis com Hidr�metro Retirado
+			// [SB0001] e Selecionar Imeveis com Hidremetro Retirado
 			Collection idsImovel = this.repositorioFaturamento.pesquisarImovelComConsumoRealNaoSuperiorA10(
 					qtdConsumoRealNaoSuperiorA10, referenciaFaturamento, grupofaturamento, idRota,
 					numeroMesesReinicioSitEspFaturamento);
 
 			Iterator iterimoveis = idsImovel.iterator();
 			while (iterimoveis.hasNext()) {
-				// Para cada im�vel selecionado o sistema inclui o im�vel na
-				// situa��o especial de faturamento
-				// [SB0004] � Incluir Im�vel na Situa��o Especial de Faturamento
+				// Para cada imevel selecionado o sistema inclui o imevel na
+				// situaeeo especial de faturamento
+				// [SB0004] e Incluir Imevel na Situaeeo Especial de Faturamento
 
 				Integer idImovel = (Integer) iterimoveis.next();
 				Imovel imovel = new Imovel();
@@ -13238,10 +13215,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * [UC1194] Consultar Estrutura Tarif�ria Loja Virtual [SB0001] Pesquisar
-	 * Tarifa Social ou Tarifa M�nima
+	 * [UC1194] Consultar Estrutura Tariferia Loja Virtual [SB0001] Pesquisar
+	 * Tarifa Social ou Tarifa Menima
 	 * 
-	 * M�todo que vai retornar um Helper que possui o consumo da tarifa m�nima e
+	 * Metodo que vai retornar um Helper que possui o consumo da tarifa menima e
 	 * da tarifa social e seus respectivos valores.
 	 * 
 	 * @author Diogo Peixoto
@@ -13269,7 +13246,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/**
 	 * 
-	 * [UC1083] Prescrever D�bitos de Im�veis P�blicos Autom�tico
+	 * [UC1083] Prescrever Debitos de Imeveis Peblicos Autometico
 	 * 
 	 * @author Hugo Leonardo
 	 * @date 19/10/2010
@@ -13288,14 +13265,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	/*
 	 * 
-	 * M�todo criado para obter os im�veis de uma rota que possuem conta
+	 * Metodo criado para obter os imeveis de uma rota que possuem conta
 	 */
 
 	/**
 	 * @author Pamela Gatinho
 	 * @date 21/06/2011
 	 * 
-	 * @return Collection Dados dos im�veis com conta
+	 * @return Collection Dados dos imeveis com conta
 	 * @param anoMesReferencia
 	 * @param rota
 	 * @throws ErroRepositorioException
@@ -13463,14 +13440,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	public void atualizarCreditoRealizadoCategoria(CreditoARealizar creditoARealizar,
 			CreditoRealizado creditoRealizado) {
 		try {
-			// Pesquisa os cr�ditos a realizar categoria
+			// Pesquisa os creditos a realizar categoria
 			Collection colecaoCreditoARealizarCategoria = this.obterCreditoRealizarCategoria(creditoARealizar.getId());
 
 			Iterator colecaoCreditoARealizarCategoriaIterator = colecaoCreditoARealizarCategoria.iterator();
 
 			Collection colecaoCategorias = new ArrayList();
 
-			// La�o para recuperar as categorias do cr�dito a realizar
+			// Laeo para recuperar as categorias do credito a realizar
 			while (colecaoCreditoARealizarCategoriaIterator.hasNext()) {
 				CreditoARealizarCategoria creditoARealizarCategoria = (CreditoARealizarCategoria) colecaoCreditoARealizarCategoriaIterator
 						.next();
@@ -13518,11 +13495,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @author Adriana Muniz e Wellington Rocha
 	 * @date 30/08/2012
 	 * 
-	 *       Rateia um determinado valore entre as categorias do im�vel
+	 *       Rateia um determinado valore entre as categorias do imevel
 	 *
 	 * @param colecaoCategorias
 	 * @param valor
-	 * @return Cole��o de vetores com a posi��o [0] = id da Categoria [1] =
+	 * @return Coleeeo de vetores com a posieeo [0] = id da Categoria [1] =
 	 *         valor por categoria
 	 * 
 	 */
@@ -13542,7 +13519,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		}
 
-		// calcula o fator de multiplica��o
+		// calcula o fator de multiplicaeeo
 		BigDecimal fatorMultiplicacao = valor.divide(new BigDecimal(somatorioQuantidadeEconomiasCadaCategoria), 2,
 				BigDecimal.ROUND_DOWN);
 
@@ -13576,7 +13553,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		valorPorCategoriaAcumulado = valorPorCategoriaAcumulado.setScale(7);
 
 		// caso o valor por categoria acumulado seja menor que o valor
-		// acumula a diferen�a no valor da primeira categoria
+		// acumula a diferenea no valor da primeira categoria
 		if (valorPorCategoriaAcumulado.setScale(2, BigDecimal.ROUND_HALF_UP)
 				.compareTo(valor.setScale(2, BigDecimal.ROUND_HALF_UP)) == -1) {
 
@@ -13780,7 +13757,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @author Pamela Gatinho
 	 * @date 24/02/2012
 	 *
-	 *       Metodo que obtem o movimento do im�vel lido pelo IS
+	 *       Metodo que obtem o movimento do imevel lido pelo IS
 	 *
 	 * @return MovimentoContaPreFaturada
 	 * @param anoMesReferencia
@@ -13803,15 +13780,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @author Pamela Gatinho
 	 * @date 15/03/2013
 	 * 
-	 *       M�todo que atualiza se o Extrato de Quita��o gerado para o ano
-	 *       anterior foi impresso pelo Impress�o Simult�nea.
+	 *       Metodo que atualiza se o Extrato de Quitaeeo gerado para o ano
+	 *       anterior foi impresso pelo Impresseo Simultenea.
 	 * 
 	 * @param colMovimentoContaPreFaturada
 	 * @throws ControladorException
 	 */
 	private void atualizarInformacoesImpressaoExtratoQuitacao(
 			Collection<MovimentoContaPrefaturada> colMovimentoContaPreFaturada) throws ControladorException {
-		System.out.println("Atualizando informa��es de extrato de quita��o...");
+		System.out.println("Atualizando informaeees de extrato de quitaeeo...");
 		if (colMovimentoContaPreFaturada != null && !colMovimentoContaPreFaturada.isEmpty()) {
 			for (MovimentoContaPrefaturada movimento : colMovimentoContaPreFaturada) {
 
@@ -13830,14 +13807,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 			}
 		}
-		System.out.println("Fim da atualiza��o das informa��es de extrato de quita��o...");
+		System.out.println("Fim da atualizaeeo das informaeees de extrato de quitaeeo...");
 	}
 
 	/**
 	 * Pamela Gatinho - 12/03/2013
 	 * 
-	 * M�todo que obtem a mensagem de quita��o anual de d�bitos. Caso o
-	 * im�vel n�o esteja quitado, retorna uma mensagem em branco.
+	 * Metodo que obtem a mensagem de quitaeeo anual de debitos. Caso o
+	 * imevel neo esteja quitado, retorna uma mensagem em branco.
 	 * 
 	 * @param imovel
 	 * @param anoMesReferencia
@@ -14375,7 +14352,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				getControladorUtil().atualizar(novaConta);
 				return novaConta;
 			} catch (Exception e) {
-				logger.error("Erro ao retificar conta para pagamentos om diferen�a de R$2,00", e);
+				logger.error("Erro ao retificar conta para pagamentos om diferenea de R$2,00", e);
 				return null;
 			}
 
@@ -15016,7 +14993,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			return (Collection) getControladorUtil().pesquisar(filtro, ComunicadoEmitirConta.class.getName());
 		} catch (ControladorException e) {
-			throw new ControladorException("Erro ao pesquisar comunicados n�o emitidos", e);
+			throw new ControladorException("Erro ao pesquisar comunicados neo emitidos", e);
 		}
 
 	}
@@ -15039,7 +15016,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			else
 				return null;
 		} catch (ControladorException e) {
-			throw new ControladorException("Erro ao pesquisar comunicados n�o emitidos", e);
+			throw new ControladorException("Erro ao pesquisar comunicados neo emitidos", e);
 		}
 	}
 
@@ -15156,7 +15133,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 					Collection<Integer> idsRotas = this.getControladorMicromedicao()
 							.obterIdsRotasPelaLocalidade(idLocalidade);
-					System.out.println("\nN�MERO ROTAS: " + idsRotas.size());
+					System.out.println("\nNeMERO ROTAS: " + idsRotas.size());
 					if (idsRotas != null && !idsRotas.isEmpty()) {
 
 						for (Integer idRota : idsRotas) {
@@ -15284,124 +15261,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				Usuario.USUARIO_BATCH);
 	}
 
-	private void inserirCreditoARealizar(Imovel imovel, Integer referencia, BigDecimal valorCredito,
-			CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, Short qtdPrestacoes, Usuario usuario)
-			throws ControladorException {
-		try {
-
-			Date dataAtual = new Date(System.currentTimeMillis());
-
-			CreditoARealizarGeral creditoARealizarGeral = new CreditoARealizarGeral();
-			creditoARealizarGeral.setIndicadorHistorico(new Short("2"));
-			creditoARealizarGeral.setUltimaAlteracao(dataAtual);
-
-			Object idCreditoARealizarGeral = repositorioUtil.inserir(creditoARealizarGeral);
-			creditoARealizarGeral.setId(new Integer(idCreditoARealizarGeral.toString()));
-
-			CreditoARealizar creditoARealizar = new CreditoARealizar();
-
-			creditoARealizar.setId(new Integer(idCreditoARealizarGeral.toString()));
-			creditoARealizar.setImovel(imovel);
-			creditoARealizar.setCreditoTipo(creditoTipo);
-			creditoARealizar.setGeracaoCredito(dataAtual);
-			creditoARealizar.setAnoMesReferenciaCredito(referencia);
-			creditoARealizar.setAnoMesCobrancaCredito(getSistemaParametro().getAnoMesArrecadacao());
-
-			// Seta AnoMesReferenciaContabil, com maior valor entre o ano/M�s da data
-			// corrente e o ano/M�s de referencia do faturamento.
-			Integer mesDataAtual = Util.getMes(dataAtual);
-			Integer mesArreacadao = new Integer(getSistemaParametro().getAnoMesFaturamento().toString().substring(4));
-
-			if (mesDataAtual.compareTo(mesArreacadao) > 0) {
-				creditoARealizar.setAnoMesReferenciaContabil(Util.recuperaAnoMesDaData(dataAtual));
-			} else {
-				creditoARealizar.setAnoMesReferenciaContabil(sistemaParametro.getAnoMesFaturamento());
-			}
-
-			creditoARealizar.setValorCredito(valorCredito);
-			creditoARealizar.setValorResidualMesAnterior(new BigDecimal("0.0"));
-			creditoARealizar.setNumeroPrestacaoCredito(qtdPrestacoes);
-			creditoARealizar.setNumeroPrestacaoRealizada(new Short("0"));
-			creditoARealizar.setLocalidade(imovel.getLocalidade());
-			creditoARealizar.setQuadra(imovel.getQuadra());
-			creditoARealizar.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
-			creditoARealizar.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
-			creditoARealizar.setNumeroLote(imovel.getLote());
-			creditoARealizar.setNumeroSubLote(imovel.getSubLote());
-			creditoARealizar.setRegistroAtendimento(null);
-			creditoARealizar.setOrdemServico(null);
-			creditoARealizar.setLancamentoItemContabil(creditoTipo.getLancamentoItemContabil());
-			creditoARealizar.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
-			creditoARealizar.setDebitoCreditoSituacaoAnterior(null);
-			creditoARealizar.setCreditoARealizarGeral(creditoARealizarGeral);
-			creditoARealizar.setCreditoOrigem(creditoOrigem);
-			creditoARealizar.setUltimaAlteracao(dataAtual);
-			creditoARealizar.setUsuario(usuario);
-
-			Object idCreditoARealizar = repositorioUtil.inserir(creditoARealizar);
-
-			creditoARealizar.setId(new Integer(idCreditoARealizar.toString()));
-
-			this.inserirCreditoARealizarCategoria(creditoARealizar);
-
-		} catch (ControladorException e) {
-			System.out.println("ERRO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
-			e.printStackTrace();
-			throw new ControladorException("erro.credito.realizar.bolsa.agua");
-		} catch (ErroRepositorioException e) {
-			System.out.println("ERRO CREDITO BOLSA AGUA PARA IMOVEL " + imovel.getId());
-			e.printStackTrace();
-			throw new ControladorException("erro.credito.realizar.bolsa.agua");
-		}
-	}
-
-	private void inserirCreditoARealizarCategoria(CreditoARealizar creditoARealizar) throws ControladorException {
-		try {
-			Collection colecaoCategoriasImovel;
-
-			if (creditoARealizar.isCreditoBolsaAgua()) {
-				colecaoCategoriasImovel = this.getControladorImovel()
-						.obterQuantidadeEconomiasCategoria(creditoARealizar.getImovel(), Categoria.RESIDENCIAL);
-			} else {
-				colecaoCategoriasImovel = this.getControladorImovel()
-						.obterQuantidadeEconomiasCategoria(creditoARealizar.getImovel());
-			}
-
-			Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel.iterator();
-
-			Iterator iteratorColecaoValorPorCategoria = getControladorImovel()
-					.obterValorPorCategoria(colecaoCategoriasImovel, creditoARealizar.getValorCredito()).iterator();
-
-			while (iteratorColecaoCategoriasImovel.hasNext() && iteratorColecaoValorPorCategoria.hasNext()) {
-
-				Categoria categoria = (Categoria) iteratorColecaoCategoriasImovel.next();
-
-				BigDecimal valor = (BigDecimal) iteratorColecaoValorPorCategoria.next();
-
-				CreditoARealizarCategoria creditoARealizarCategoria = new CreditoARealizarCategoria();
-
-				creditoARealizarCategoria
-						.setComp_id(new CreditoARealizarCategoriaPK(creditoARealizar.getId(), categoria.getId()));
-				creditoARealizarCategoria.setCreditoARealizar(creditoARealizar);
-				creditoARealizarCategoria.setCategoria(categoria);
-				creditoARealizarCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
-				creditoARealizarCategoria.setValorCategoria(valor);
-				creditoARealizarCategoria.setUltimaAlteracao(new Date(System.currentTimeMillis()));
-
-				repositorioUtil.inserir(creditoARealizarCategoria);
-			}
-		} catch (ErroRepositorioException e) {
-			System.out.println("ERRO CREDITO CATEGORIA BOLSA AGUA PARA IMOVEL " + creditoARealizar.getImovel().getId());
-			e.printStackTrace();
-			throw new ControladorException("erro.credito.categoria");
-		} catch (ControladorException ex) {
-			System.out.println("ERRO CREDITO CATEGORIA BOLSA AGUA PARA IMOVEL " + creditoARealizar.getImovel().getId());
-			ex.printStackTrace();
-			throw new ControladorException("erro.credito.categoria");
-		}
-
-	}
-
 	public BigDecimal retornaValorBolsaAgua(Integer anoMesReferencia, Imovel imovel) throws ControladorException {
 
 		FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
@@ -15425,7 +15284,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return BigDecimal.ZERO;
 	}
 
-	private CreditoRealizado obterCreditoBolsaAgua(Collection<CreditoRealizado> collectionCreditos) {
+	public CreditoRealizado obterCreditoBolsaAgua(Collection<CreditoRealizado> collectionCreditos) {
 		Iterator<CreditoRealizado> iteratorColecaoCreditosARealizar = collectionCreditos.iterator();
 
 		while (iteratorColecaoCreditosARealizar.hasNext()) {
@@ -15437,15 +15296,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 
 		return null;
-	}
-
-	private SistemaParametro getSistemaParametro() throws ControladorException {
-		try {
-			sistemaParametro = repositorioUtil.pesquisarParametrosDoSistema();
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
-		}
-		return sistemaParametro;
 	}
 
 	public void registrarFichaCompensacaoGrupo(Integer idGrupoFaturamento, Integer anoMesReferencia,
@@ -15474,7 +15324,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	}
 	
-	protected void registrarFichaCompensacao(Integer idConta) throws Exception {
+	public void registrarFichaCompensacao(Integer idConta) throws Exception {
 		Boolean fichaExistente = fichaCompensacaoExistente(idConta);
 		
 		if (!fichaExistente) {
@@ -15667,6 +15517,35 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		} catch (Exception e) {
 			System.out.println("=== ERRO AO ATUALIZAR: " + entidadeErro );
 			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public Conta pesquisarContaPreFaturada(Integer idImovel,
+			Integer anoMesReferencia, Integer idDebitoCreditoSituacaoAtual)
+			throws ControladorException {
+		try {
+			return repositorioFaturamento.pesquisarContaPreFaturada(idImovel, anoMesReferencia, idDebitoCreditoSituacaoAtual);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+			throw new ControladorException("erro.pesquisarContaPreFaturada");
+		}
+	}
+		
+	public CreditoARealizar pesquisarCreditoARealizar (Integer id) throws ControladorException {
+		try {
+			return repositorioFaturamento.pesquisarCreditoARealizar(id);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+			throw new ControladorException("erro.pesquisarContaPreFaturada");
 		}
 	}
 
