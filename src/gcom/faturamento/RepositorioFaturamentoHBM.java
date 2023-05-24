@@ -1,5 +1,31 @@
 package gcom.faturamento;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.LazyInitializationException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.StatelessSession;
+
 import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
@@ -18,7 +44,6 @@ import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FoneTipo;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
-import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.CategoriaTipo;
 import gcom.cadastro.imovel.ContratoTipo;
@@ -35,7 +60,6 @@ import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaSituacao;
 import gcom.cobranca.ComandoEmpresaCobrancaConta;
-import gcom.cobranca.ParcelamentoGrupo;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.cobranca.parcelamento.ParcelamentoSituacao;
@@ -113,32 +137,6 @@ import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.MenorQue;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroSimples;
-
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.LazyInitializationException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.StatelessSession;
 
 public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
@@ -4610,21 +4608,21 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public Object[] obterDebitoTipo(Integer debitoTipo)
+	public DebitoTipo obterDebitoTipo(Integer debitoTipo)
 			throws ErroRepositorioException {
 
-		Object[] retorno = null;
+		DebitoTipo retorno = null;
 
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		StringBuilder consulta = new StringBuilder();
 
 		try {
-			consulta = "SELECT fntp.id, lict.id " + "FROM DebitoTipo dbtp "
-					+ "INNER JOIN dbtp.financiamentoTipo fntp "
-					+ "INNER JOIN dbtp.lancamentoItemContabil lict "
-					+ "WHERE dbtp.id = :idDebitoTipo ";
+			consulta.append("SELECT dbtp FROM DebitoTipo dbtp ")
+					.append("INNER JOIN dbtp.financiamentoTipo fntp ")
+					.append("INNER JOIN dbtp.lancamentoItemContabil lict ")
+					.append("WHERE dbtp.id = :idDebitoTipo ");
 
-			retorno = (Object[]) session.createQuery(consulta).setInteger(
+			retorno = (DebitoTipo) session.createQuery(consulta.toString()).setInteger(
 					"idDebitoTipo", debitoTipo).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
@@ -41516,12 +41514,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		try {
 			consulta = "SELECT ct "
 					+ "FROM Conta ct "
-					+ "inner join fetch ct.imovel imov "
-					+ "inner join fetch imov.ligacaoAguaSituacao ligacaoAguaSituacao "
-					+ "inner join fetch imov.ligacaoEsgotoSituacao ligacaoEsgotoSituacao "
-					+ "inner join ct.debitoCreditoSituacaoAtual debitoCredito "
+					+ "INNER JOIN FETCH ct.imovel imov "
+					+ "INNER JOIN FETCH imov.setorComercial setor "
+					+ "INNER JOIN FETCH imov.quadra quadra "
+					+ "INNER JOIN FETCH imov.ligacaoAguaSituacao ligacaoAguaSituacao "
+					+ "INNER JOIN FETCH imov.ligacaoEsgotoSituacao ligacaoEsgotoSituacao "
 					+ "INNER JOIN FETCH ct.ligacaoAguaSituacao las "
 					+ "INNER JOIN FETCH ct.ligacaoEsgotoSituacao les "
+					+ "INNER JOIN FETCH ct.faturamentoGrupo faturamentoGrupo "
+					+ "INNER JOIN ct.debitoCreditoSituacaoAtual debitoCredito "
 					+ "WHERE imov.id = :idImovel "
 					+ "AND ct.referencia = :anoMesReferencia " 
 					+ "AND debitoCredito.id = :debCredSitAtual ";

@@ -105,6 +105,8 @@ public class LancamentoItem implements Serializable {
 	public final static Integer RECUPERACAO_CREDITO = new Integer(131);
 	public static final Integer GRUPO_CONTABIL_2 = new Integer(132);
 	public final static Integer SUBSIDIO_AGUA_PARA = new Integer(134);
+	public final static Integer FATURAMENTO_INFERIOR_MINIMO = new Integer(135);
+	public final static Integer CRED_BAIXA_FATUR_INF_MINIMO = new Integer(136);
 	
 	public static final Integer TOTAL_CANCELAMENTOS = new Integer(133);
 

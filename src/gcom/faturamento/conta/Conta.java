@@ -1368,4 +1368,8 @@ public class Conta extends ObjetoTransacao implements IConta {
 	public void setValorTotalDaConta(BigDecimal valorTotalDaConta) {
 		this.valorTotalDaConta = valorTotalDaConta;
 	}
+	
+	public boolean isPerfilBolsaAgua() {
+		return this.imovelPerfil != null && this.imovelPerfil.getId().equals(ImovelPerfil.BOLSA_AGUA);
+	}
 }

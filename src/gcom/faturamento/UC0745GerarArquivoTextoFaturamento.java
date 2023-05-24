@@ -2006,7 +2006,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 				// PESQUISANDO A PARTIR DA TABELA CONTA_CATEGORIA
 				colecaoCategoria = this.getControladorImovel()
-						.obterQuantidadeEconomiasContaCategoria(conta);
+						.obterQuantidadeEconomiasContaCategoria(conta.getId());
 			} else {
 
 				// PESQUISANDO A PARTIR DA TABELA IMOVEL_SUBCATEGORIA

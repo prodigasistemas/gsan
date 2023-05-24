@@ -2082,7 +2082,7 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 		this.codigoDebitoAutomatico = codigoDebitoAutomatico;
 	}
 	
-	public boolean isImovelCondominio() {
+	public boolean isImovelMicroCondominio() {
 		System.out.println(this.id + " indicador: " + this.getIndicadorImovelCondominio() + " imovel condomini null " + this.getImovelCondominio() != null);
 		if (this.getIndicadorImovelCondominio().shortValue() == ConstantesSistema.NAO
 				&& this.getImovelCondominio() != null) {
@@ -2091,7 +2091,11 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 			return false;
 		}
 	}
-
+	
+	public boolean isImovelMacroCondominio() {
+		return this.getIndicadorImovelCondominio().shortValue() == ConstantesSistema.SIM;
+	}
+	
 	public Integer getNumeroQuadraEntrega() {
 		return numeroQuadraEntrega;
 	}

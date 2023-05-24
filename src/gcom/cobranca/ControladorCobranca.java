@@ -5554,7 +5554,7 @@ public class ControladorCobranca extends ControladorComum {
 				Integer consumoMinimoLigacao = getControladorMicromedicao().obterConsumoMinimoLigacao(imovel, null);
 
 				// [UC0108] - Obter Quantidade de Economias por Categoria
-				Collection colecaoCategorias = getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta);
+				Collection colecaoCategorias = getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta.getId());
 
 				Integer anoMesReferencia = sistemaParametro.getAnoMesFaturamento();
 

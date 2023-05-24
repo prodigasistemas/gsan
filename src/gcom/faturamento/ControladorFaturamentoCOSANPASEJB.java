@@ -4030,30 +4030,25 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 		String msgQuitacaoAnualDebitos = this
 				.obterMsgQuitacaoDebitos(imovel, Integer.valueOf(helper.getAmReferencia()));
-		System.out.println(helper.getIdImovel() + " msg 01");
+
 		if (msgQuitacaoAnualDebitos != null && !msgQuitacaoAnualDebitos.equals("")) {
-			System.out.println(helper.getIdImovel() + " msg 02");
 			mensagens = new String[3];
 
 			mensagens[0] = msgQuitacaoAnualDebitos.substring(0, 100);
 			mensagens[1] = msgQuitacaoAnualDebitos.substring(100, msgQuitacaoAnualDebitos.length());
 			mensagens[2] = "";
 		} else if (mensagens == null || mensagens.equals("")) {
-			System.out.println(helper.getIdImovel() + " msg 03");
 			mensagens = new String[3];
 			Object[] mensagensConta = null;
 
 			boolean existeMensagem = false;
 			try {
-				System.out.println(helper.getIdImovel() + " msg 04: [1: " + helper.getIdGerenciaRegional()
-				+ "; 2: " + helper.getIdLocalidade() + "; 3: " + helper.getIdSetorComercial() + "; 4: " + helper.getIdQuadraConta() + "]");
 				mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null,
 						helper.getIdGerenciaRegional(), helper.getIdLocalidade(), helper.getIdSetorComercial(), helper.getIdQuadraConta());
 				if (mensagensConta != null) {
 					mensagens = montarMensagensConta2Via(mensagensConta);
 					existeMensagem = true;
 				}
-				System.out.println(helper.getIdImovel() + " msg 04: " + existeMensagem);
 
 				if (!existeMensagem) {
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null,
@@ -4062,7 +4057,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 						mensagens = montarMensagensConta2Via(mensagensConta);
 						existeMensagem = true;
 					}
-					System.out.println(helper.getIdImovel() + " msg 05: " + existeMensagem);
 				}
 				if (!existeMensagem) {
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null,
@@ -4072,7 +4066,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 						mensagens = montarMensagensConta2Via(mensagensConta);
 						existeMensagem = true;
 					}
-					System.out.println(helper.getIdImovel() + " msg 06: " + existeMensagem);
 				}
 				if (!existeMensagem) {
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper,
@@ -4082,7 +4075,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 						mensagens = montarMensagensConta2Via(mensagensConta);
 						existeMensagem = true;
 					}
-					System.out.println(helper.getIdImovel() + " msg 07: " + existeMensagem);
 				}
 				if (!existeMensagem) {
 					mensagensConta = repositorioFaturamento.pesquisarParmsContaMensagem(helper, null, null, null, null,  null);
@@ -4090,14 +4082,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 						mensagens = montarMensagensConta2Via(mensagensConta);
 						existeMensagem = true;
 					}
-					System.out.println(helper.getIdImovel() + " msg 08: " + existeMensagem);
 				}
 				if (!existeMensagem) {
 					mensagens[0] = "";
 					mensagens[1] = "";
 					mensagens[2] = "";
 				}
-				System.out.println(helper.getIdImovel() + " msg 09: " + existeMensagem);
 			} catch (ErroRepositorioException e) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("erro.sistema", e);

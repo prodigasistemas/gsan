@@ -318,7 +318,7 @@ private static UC0146ManterConta instancia;
 	        		
 	        		if (indicadorCategoriaEconomiaConta.equals(ConstantesSistema.SIM)) {
 	        			// [UC0108] - Quantidade de economias por categoria
-	        			colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta);
+	        			colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria(conta.getId());
 	        		} else {
 	        			colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasCategoria(conta.getImovel());
 	        		}

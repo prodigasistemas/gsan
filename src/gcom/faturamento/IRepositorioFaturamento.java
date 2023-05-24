@@ -302,7 +302,7 @@ public interface IRepositorioFaturamento {
 
 	public Object gerarDebitoACobrar(DebitoACobrar debitoACobrar) throws ErroRepositorioException;
 
-	public Object[] obterDebitoTipo(Integer debitoTipo) throws ErroRepositorioException;
+	public DebitoTipo obterDebitoTipo(Integer debitoTipo) throws ErroRepositorioException;
 
 	public void atualizarIndicadorMultaDeConta(Collection<Integer> colecaoIdsContas) throws ErroRepositorioException;
 

@@ -1388,22 +1388,6 @@ public class ControladorImovelSEJB extends ControladorComum {
 		return obterQuantidadeEconomiasCategoria(imovel.getId(), categoriaId);
 	}
 	
-	
-	
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @throws ControladorException
-	 */
-	public Collection obterQuantidadeEconomiasContaCategoria(Conta conta)
-			throws ControladorException {
-		return obterQuantidadeEconomiasContaCategoria(conta.getId());
-	}
-	
 	/**
 	 * < <Descrição do método>>
 	 * 

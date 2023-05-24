@@ -2375,7 +2375,7 @@ public class ControladorGerencialCadastroSEJB implements SessionBean {
                     
                     // Verificamos se existe economias pela conta
                     if ( idConta != null ){
-                        Collection<Categoria> colQuantEco = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria( conta );
+                        Collection<Categoria> colQuantEco = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria( conta.getId() );
                         
                         if ( colQuantEco != null && colQuantEco.size() > 0  ){
                             Iterator iteQuanEco = colQuantEco.iterator();                           
@@ -4699,7 +4699,7 @@ public class ControladorGerencialCadastroSEJB implements SessionBean {
 					
 					// Verificamos se existe economias pela conta
 					if ( idConta != null && !idConta.equals(0)){
-						Collection<Categoria> colQuantEco = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria( conta );
+						Collection<Categoria> colQuantEco = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria( conta.getId() );
 						
 						if ( colQuantEco != null && colQuantEco.size() > 0  ){
 							Iterator iteQuanEco = colQuantEco.iterator();							
@@ -5439,7 +5439,7 @@ public class ControladorGerencialCadastroSEJB implements SessionBean {
                     
                     // Verificamos se existe economias pela conta
                     if ( idConta != null ){
-                        Collection<Categoria> colQuantEco = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria( conta );
+                        Collection<Categoria> colQuantEco = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria( conta.getId() );
                         
                         if ( colQuantEco != null && colQuantEco.size() > 0  ){
                             Iterator iteQuanEco = colQuantEco.iterator();                           
@@ -5808,7 +5808,7 @@ public class ControladorGerencialCadastroSEJB implements SessionBean {
 					// Verificamos se existe economias pela conta
 					if ( idConta != null && !idConta.equals(0)){
 						Collection<Categoria> colQuantEco = 
-							this.getControladorImovel().obterQuantidadeEconomiasContaCategoria( conta );
+							this.getControladorImovel().obterQuantidadeEconomiasContaCategoria( conta.getId() );
 						
 						if ( colQuantEco != null && colQuantEco.size() > 0  ){
 							Iterator iteQuanEco = colQuantEco.iterator();							

@@ -1,5 +1,14 @@
 package gcom.faturamento;
 
+import java.io.BufferedReader;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
@@ -9,7 +18,6 @@ import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.atendimentopublico.ordemservico.ServicoCobrancaValor;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
@@ -24,6 +32,7 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.parcelamento.Parcelamento;
 import gcom.faturamento.autoinfracao.AutosInfracao;
+import gcom.faturamento.bean.ApagarDadosFaturamentoHelper;
 import gcom.faturamento.bean.CalcularValoresAguaEsgotoHelper;
 import gcom.faturamento.bean.ContasEmRevisaoRelatorioHelper;
 import gcom.faturamento.bean.DeclaracaoQuitacaoAnualDebitosHelper;
@@ -43,6 +52,7 @@ import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
 import gcom.faturamento.conta.ComunicadoEmitirConta;
 import gcom.faturamento.conta.Conta;
+import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaImpressaoTermicaQtde;
 import gcom.faturamento.conta.ContaMensagem;
@@ -85,16 +95,6 @@ import gcom.relatorio.faturamento.dto.RelatorioAgenciaReguladoraDTO;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public interface IControladorFaturamento {
 
@@ -1309,6 +1309,7 @@ public interface IControladorFaturamento {
 
 	public void registrarFichaCompensacaoGrupo(Integer idGrupoFaturamento, Integer anoMesReferencia, int idFuncionalidadeIniciada) throws ControladorException;
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarIdContasGrupoFaturamentoRegistrarBoletos(Integer anoMesFaturamento, Integer idGrupoFaturamento) throws ControladorException;
 	
 	public String registrarEntradaParcelamento(Integer idParcelamento, Integer idImovel) throws ControladorException;
@@ -1317,4 +1318,45 @@ public interface IControladorFaturamento {
 	
 	public void validarDadosBolsaAgua(Integer idRota, int idFuncionalidade) throws ControladorException;
 	
+	@SuppressWarnings("rawtypes")
+	public DeterminarValoresFaturamentoAguaEsgotoHelper determinarValoresFaturamento(Imovel imovel,
+			Integer anoMesFaturamento, Collection colecaoCategoriasOUSubCategorias, FaturamentoGrupo faturamentoGrupo,
+			ConsumoHistorico consumoHistoricoAgua, ConsumoHistorico consumoHistoricoEsgoto, boolean isImpressaoSimultanea) throws ControladorException;
+
+	public Conta pesquisarContaPreFaturada(Integer idImovel,
+			Integer anoMesReferencia, Integer idDebitoCreditoSituacaoAtual)
+			throws ControladorException;
+	
+	public CreditoARealizar pesquisarCreditoARealizar (Integer idCredito) throws ControladorException;
+	
+	public BigDecimal calcularValorCreditoBolsaAguaAtualizado(ContaCategoria contaCategoria, CreditoARealizar creditoARealizar,
+			CreditoRealizado creditoRealizado, Boolean atualizarMovimentoCelular) throws ControladorException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection obterColecaoCategoriaConta(SistemaParametro sistemaParametro, Conta conta)
+			throws ControladorException;
+	
+	public BigDecimal atualizarCreditoARealizarNitrato(Imovel imovel, Integer anoMesFaturamento, BigDecimal valorAgua,
+			Conta conta) throws ControladorException;
+	
+	public boolean apagarDadosGeradosFaturarGrupoFaturamento(ApagarDadosFaturamentoHelper helper, int atividade)
+			throws ControladorException;
+	
+	public void registrarFichaCompensacao(Integer idConta) throws Exception;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection obterCreditoARealizarDadosCreditoRealizadoAntigo(Integer imovelId,
+			Integer debitoCreditoSituacaoAtualId, Integer anoMesFaturamento, CreditoRealizado creditoRealizado)
+			throws ControladorException;
+	
+	public CreditoRealizado obterCreditoBolsaAgua(Collection<CreditoRealizado> collectionCreditos);
+	
+	@SuppressWarnings("rawtypes")
+	public Collection obterValorPorCategoria(Collection<Categoria> colecaoCategorias, BigDecimal valor);
+	
+	public void atualizarFaturamentoImoveisCortados(Collection<Imovel> colImoveis, int anoMesFaturamento)
+			throws ControladorException;
+	
+	public void ajustarCobrancaContasValoresAbaixoMinimoEmissao(Conta contaAtualizacao, BigDecimal valorMinimoEmissao) 
+			throws ControladorException, ErroRepositorioException;
 }

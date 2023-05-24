@@ -118,20 +118,22 @@ public class MovimentoContaPrefaturada implements Serializable {
     /** nullable persistent field */
     private Integer leituraHidrometroAnterior;
     
-	/**
-	 * Data: 11/10/2011
-	 * Autor: Adriana Muniz
-	 * 
-	 * */
     private Short indicadorRetransmissao;
     
     private String latitude;
     
     private String longitude;
 
- /** persistent field */
     private Short indicadorAlteracao;
 
+    private BigDecimal valorTotalCategoriasAgua;
+    
+    private BigDecimal valorTotalCategoriasEsgoto;
+    
+    private Integer valorTotalConsumoAgua;
+    
+    private Integer valorTotalConsumoEsgoto;
+    
     public MovimentoContaPrefaturada getMovimentoContaPreFaturadaEsgoto() {
 		return movimentoContaPreFaturadaEsgoto;
 	}
@@ -484,5 +486,47 @@ public class MovimentoContaPrefaturada implements Serializable {
 	public boolean isImpressaoSimultanea() {
 	    return this.getIndicadorEmissaoConta() == ConstantesSistema.SIM;
 	}
+	
+	public boolean existeCategoria() {
+		return this.getMovimentoContaPrefaturadaCategorias() != null
+				&& this.getMovimentoContaPrefaturadaCategorias().size() > 0;
+	}
+	
+	public boolean isContaEmitidaPeloIS() {
+		return this.getIndicadorGeracaoConta().shortValue() == ConstantesSistema.SIM.shortValue();
+	}
+
+	public BigDecimal getValorTotalCategoriasAgua() {
+		return valorTotalCategoriasAgua;
+	}
+
+	public void setValorTotalCategoriasAgua(BigDecimal valorTotalCategoriasAgua) {
+		this.valorTotalCategoriasAgua = valorTotalCategoriasAgua;
+	}
+
+	public BigDecimal getValorTotalCategoriasEsgoto() {
+		return valorTotalCategoriasEsgoto;
+	}
+
+	public void setValorTotalCategoriasEsgoto(BigDecimal valorTotalCategoriasEsgoto) {
+		this.valorTotalCategoriasEsgoto = valorTotalCategoriasEsgoto;
+	}
+
+	public Integer getValorTotalConsumoAgua() {
+		return valorTotalConsumoAgua;
+	}
+
+	public void setValorTotalConsumoAgua(Integer valorTotalConsumoAgua) {
+		this.valorTotalConsumoAgua = valorTotalConsumoAgua;
+	}
+
+	public Integer getValorTotalConsumoEsgoto() {
+		return valorTotalConsumoEsgoto;
+	}
+
+	public void setValorTotalConsumoEsgoto(Integer valorTotalConsumoEsgoto) {
+		this.valorTotalConsumoEsgoto = valorTotalConsumoEsgoto;
+	}
+
 
 }
