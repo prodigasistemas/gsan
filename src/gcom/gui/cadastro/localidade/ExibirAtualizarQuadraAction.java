@@ -51,8 +51,8 @@ import org.apache.struts.action.ActionMapping;
  * @author Administrador, Ivan Sergio
  * @date 16/02/2009
  * @alteracao 16/02/2009 - CRC1178 - Adicionado o Indicador de Incremento do Lote
- * @alteracao 28/04/2010 - CRC4066 - Adicionado o Grau de Dificuladade de Execução, o Grau de Risco Segurança Física, 
- * 									o Nível de Pressão e o Grau de Intermitência. 
+ * @alteracao 28/04/2010 - CRC4066 - Adicionado o Grau de Dificuladade de Execuï¿½ï¿½o, o Grau de Risco Seguranï¿½a Fï¿½sica, 
+ * 									o Nï¿½vel de Pressï¿½o e o Grau de Intermitï¿½ncia. 
  */
 public class ExibirAtualizarQuadraAction extends GcomAction {
 
@@ -76,16 +76,16 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
         String retornoQuadraFace = (String) httpServletRequest.getParameter("retornoQuadraFace");
 
         
-        //OBTENDO O ID DA QUADRA QUE SERÁ ATUALIZADA
+        //OBTENDO O ID DA QUADRA QUE SERï¿½ ATUALIZADA
         String quadraID = obterQuadraParaAtualizacao(objetoConsulta, httpServletRequest, sessao);
         
-        //PERMISSÃO PARA ADICIONAR FACE(S) PARA A QUADRA
+        //PERMISSï¿½O PARA ADICIONAR FACE(S) PARA A QUADRA
         SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
         
         httpServletRequest.setAttribute("permissaoAdicionarQuadraFace", 
         sistemaParametro.getIndicadorQuadraFace().toString());
         
-        //PERMISSÃO PARA BLOQUEIO ALTERAÇÃO DE IMÓVEIS
+        //PERMISSï¿½O PARA BLOQUEIO ALTERAï¿½ï¿½O DE IMï¿½VEIS
         boolean permissaoEspecialBloqueio = fachada.verificarPermissaoEspecial(PermissaoEspecial.BLOQUEAR_ALTERACAO_IMOVEIS,(Usuario)sessao.getAttribute(Usuario.USUARIO_LOGADO));
         
         if (permissaoEspecialBloqueio){
@@ -104,7 +104,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
         
         if (objetoConsulta != null && !objetoConsulta.trim().equalsIgnoreCase("")) {
 
-            //Recebe o valor do campo localidadeID do formulário.
+            //Recebe o valor do campo localidadeID do formulï¿½rio.
             localidadeID = atualizarQuadraActionForm.getLocalidadeID();
 
             switch (Integer.parseInt(objetoConsulta)) {
@@ -146,7 +146,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
                 if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
                     
                 	//Distrito Operacional nao encontrado
-                    //Limpa o campo distritoOperacionalID do formulário
+                    //Limpa o campo distritoOperacionalID do formulï¿½rio
                     atualizarQuadraActionForm.setDistritoOperacionalID("");
                     atualizarQuadraActionForm.setDistritoOperacionalDescricao("Distrito operacional inexistente.");
                     httpServletRequest.setAttribute("corDistritoOperacional", "exception");
@@ -170,7 +170,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
                 }
 
                 break;
-            //Setor censitário
+            //Setor censitï¿½rio
             case 6:
 
                 String setorCensitarioID = atualizarQuadraActionForm
@@ -189,9 +189,9 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
 
                 if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
                     //Setor censitario nao encontrado
-                    //Limpa o campo setorCensitarioID do formulário
+                    //Limpa o campo setorCensitarioID do formulï¿½rio
                     atualizarQuadraActionForm.setSetorCensitarioID("");
-                    atualizarQuadraActionForm.setSetorCensitarioDescricao("Setor censitário inexistente.");
+                    atualizarQuadraActionForm.setSetorCensitarioDescricao("Setor censitï¿½rio inexistente.");
                     httpServletRequest.setAttribute("corSetorCensitario", "exception");
                     
                     httpServletRequest.setAttribute("nomeCampo", "setorCensitarioID");
@@ -274,7 +274,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
             	} 
             	else {
             	
-            		//Recebe o valor do campo rotaID do formulário e o código do setor comercial selecionado.
+            		//Recebe o valor do campo rotaID do formulï¿½rio e o cï¿½digo do setor comercial selecionado.
                 String codigoRota = atualizarQuadraActionForm.getCodigoRota();
                 String setorComercialCD = atualizarQuadraActionForm.getSetorComercialCD();
                 
@@ -310,7 +310,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
 
                 if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
                     //Rota nao encontrada
-                    //Limpa o campo rotaID do formulário
+                    //Limpa o campo rotaID do formulï¿½rio
                     atualizarQuadraActionForm.setRotaID("");
                     atualizarQuadraActionForm.setCodigoRota("");
                     atualizarQuadraActionForm
@@ -367,12 +367,12 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
             (retornoQuadraFace == null || retornoQuadraFace.trim().equalsIgnoreCase("")) &&
             (httpServletRequest.getParameter("numeroQuadraFace") == null))) {
 		 
-        	//OPÇÃO DESFAZER 
+        	//OPï¿½ï¿½O DESFAZER 
         	exibirQuadra(quadraID, atualizarQuadraActionForm,fachada, sessao,httpServletRequest,
         	sistemaParametro);
         }
         
-        //OPÇÃO REMOVER QUADRA FACE
+        //OPï¿½ï¿½O REMOVER QUADRA FACE
         removerQuadraFace(httpServletRequest, sessao);
         
         return retorno;
@@ -403,7 +403,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
 
             if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
                 //Localidade nao encontrada
-                //Limpa o campo localidadeID do formulário
+                //Limpa o campo localidadeID do formulï¿½rio
                 atualizarQuadraActionForm.setLocalidadeID("");
                 atualizarQuadraActionForm
                         .setLocalidadeNome("Localidade inexistente.");
@@ -439,7 +439,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
             
             httpServletRequest.setAttribute("nomeCampo", "localidadeID");
         } else {
-            //Recebe o valor do campo setorComercialCD do formulário.
+            //Recebe o valor do campo setorComercialCD do formulï¿½rio.
             String setorComercialCD = atualizarQuadraActionForm
                     .getSetorComercialCD();
 
@@ -506,7 +506,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
     	 
     	 FiltroQuadra filtroQuadra = new FiltroQuadra();
          
-         //Objetos que serão retornados pelo hibernate
+         //Objetos que serï¿½o retornados pelo hibernate
          filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("setorComercial.localidade");
          filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("quadraPerfil");
          filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("ibgeSetorCensitario");
@@ -515,7 +515,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
          filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("setorComercial.municipio");
          filtroQuadra.adicionarCaminhoParaCarregamentoEntidade(FiltroQuadra.BAIRRO);
          
-         //NÃO TRABALHA COM FACE DA QUADRA
+         //Nï¿½O TRABALHA COM FACE DA QUADRA
          if (sistemaParametro.getIndicadorQuadraFace().equals(ConstantesSistema.NAO)){
          	
         	 filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("bacia.sistemaEsgoto");
@@ -528,13 +528,13 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
 
          colecaoPesquisa = fachada.pesquisar(filtroQuadra, Quadra.class.getName());
 
-         //QUADRA PARA ATUALIZAÇÃO
+         //QUADRA PARA ATUALIZAï¿½ï¿½O
          Quadra quadraSelect = (Quadra) Util
          .retonarObjetoDeColecao(colecaoPesquisa);
          
          sessao.setAttribute("quadraManter", quadraSelect);
 
-         //CARREGAMENTO DO FORMULÁRIO
+         //CARREGAMENTO DO FORMULï¿½RIO
          
          //ID da quadra
          atualizarQuadraActionForm.setQuadraID(String.valueOf(quadraSelect
@@ -557,7 +557,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
          atualizarQuadraActionForm.setSetorComercialNome(quadraSelect
          .getSetorComercial().getDescricao());
 
-         //Número da quadra
+         //Nï¿½mero da quadra
          atualizarQuadraActionForm.setQuadraNM(String.valueOf(quadraSelect
          .getNumeroQuadra()));
 
@@ -569,7 +569,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
              .valueOf(quadraSelect.getQuadraPerfil().getId()));
          }
          
-         //Area Tipo/Localização
+         //Area Tipo/Localizaï¿½ï¿½o
          if (quadraSelect.getAreaTipo() != null 
         	&& !quadraSelect.getAreaTipo().equals(String.valueOf(ConstantesSistema.NUMERO_NAO_INFORMADO))) {
         	 
@@ -581,10 +581,10 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
         	 atualizarQuadraActionForm.setAreaTipoID("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
          }
 
-         //NÃO TRABALHA COM FACE DA QUADRA
+         //Nï¿½O TRABALHA COM FACE DA QUADRA
          if (sistemaParametro.getIndicadorQuadraFace().equals(ConstantesSistema.NAO)){
         	 
-        	 //Indicador de rede de água
+        	 //Indicador de rede de ï¿½gua
              if (quadraSelect.getIndicadorRedeAgua() != null &&
             	 quadraSelect.getIndicadorRedeAgua().intValue() != 0) {
                  atualizarQuadraActionForm.setIndicadorRedeAguaAux(String
@@ -628,7 +628,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
                          FiltroBacia.INDICADORUSO,
                          ConstantesSistema.INDICADOR_USO_ATIVO));
 
-                 //Retorna uma coleção de bacias
+                 //Retorna uma coleï¿½ï¿½o de bacias
                  colecaoPesquisa = fachada.pesquisar(filtroBacia, Bacia.class
                          .getName());
 
@@ -658,7 +658,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
              }
          }
 
-         //Setor censitário
+         //Setor censitï¿½rio
          if (quadraSelect.getIbgeSetorCensitario() != null) {
              atualizarQuadraActionForm
                      .setSetorCensitarioID(String.valueOf(quadraSelect
@@ -730,6 +730,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
              filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("grauRiscoSegurancaFisica");
              filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("condicaoAbastecimentoAgua.nivelPressao");
              filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("condicaoAbastecimentoAgua.grauIntermitencia");
+             filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("dmc");
              
              filtroQuadraFace.adicionarParametro(new ParametroSimples(
              FiltroQuadraFace.ID_QUADRA, quadraSelect.getId()));
@@ -860,7 +861,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
 			if (httpServletRequest.getParameter("idRegistroInseridoAtualizar")!= null){
 				quadraID = httpServletRequest.getParameter("idRegistroInseridoAtualizar");
 	           	
-				//Definindo a volta do botão Voltar p Filtrar Quadra
+				//Definindo a volta do botï¿½o Voltar p Filtrar Quadra
 				sessao.setAttribute("voltar", "filtrar");
 	   	    	sessao.setAttribute("idRegistroAtualizar",quadraID);
 	   	    	sessao.setAttribute("indicadorUso", "3");
@@ -869,14 +870,14 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
 			else if(httpServletRequest.getParameter("idRegistroAtualizar") == null){
 	        	
 	        	quadraID = (String)sessao.getAttribute("idRegistroAtualizar");
-	   			//Definindo a volta do botão Voltar p Filtrar Quadra
+	   			//Definindo a volta do botï¿½o Voltar p Filtrar Quadra
 	        	sessao.setAttribute("voltar", "filtrar");
 	        	
 	        }
 			else if (httpServletRequest.getParameter("idRegistroAtualizar")!= null) {
 	        	
 	        	quadraID = httpServletRequest.getParameter("idRegistroAtualizar");
-		        //Definindo a volta do botão Voltar p Manter Quadra
+		        //Definindo a volta do botï¿½o Voltar p Manter Quadra
 	        	sessao.setAttribute("voltar", "manter");
 		        sessao.setAttribute("idRegistroAtualizar",quadraID);
 	        }
@@ -954,7 +955,7 @@ public class ExibirAtualizarQuadraAction extends GcomAction {
 
         if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
             //Bairo nao encontrado
-            //Limpa o campo bairroID do formulário
+            //Limpa o campo bairroID do formulï¿½rio
         	atualizarQuadraActionForm.setBairroID("");
         	atualizarQuadraActionForm
                     .setBairroDescricao("Bairro inexistente.");

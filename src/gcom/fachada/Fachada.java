@@ -19223,6 +19223,15 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public Collection pesquisarTodosIdsDmc() {
+
+		try {
+			return this.getControladorCadastro().pesquisarTodosIdsDmc();
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 	/**
 	 * Obter quantidade de economias por subcategoria

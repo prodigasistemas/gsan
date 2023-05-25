@@ -381,7 +381,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 		return retorno;
 	}
-
+	
 	public Object[] pesquisarSetorQuadra(Integer idLocalidade)
 			throws ErroRepositorioException {
 
@@ -514,7 +514,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				stmt.close();
 				con.close();
 			} catch (SQLException e) {
-				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
+				throw new ErroRepositorioException(e, "Erro ao fechar conexï¿½es");
 			}
 		}
 	}
@@ -553,7 +553,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				stmt.close();
 				con.close();
 			} catch (SQLException e) {
-				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
+				throw new ErroRepositorioException(e, "Erro ao fechar conexï¿½es");
 			}
 		}
 	}
@@ -594,7 +594,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				stmt.close();
 				con.close();
 			} catch (SQLException e) {
-				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
+				throw new ErroRepositorioException(e, "Erro ao fechar conexï¿½es");
 			}
 		}
 	}
@@ -635,7 +635,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				stmt.close();
 				con.close();
 			} catch (SQLException e) {
-				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
+				throw new ErroRepositorioException(e, "Erro ao fechar conexï¿½es");
 			}
 		}
 	}
@@ -3184,9 +3184,9 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					"   gr.id, \n" +
 					// Gerencia Regional nome - Indice 1
 					"   gr.nome, \n" +
-					// Unidade Negócio id - Indice 2
+					// Unidade Negï¿½cio id - Indice 2
 					"   un.id, \n" +
-					// Unidade Negócio nome - Indice 3
+					// Unidade Negï¿½cio nome - Indice 3
 					"   un.nome, \n" +
 					// Localidade id - Indice 4
 					"   loca.id, \n" +
@@ -4134,7 +4134,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				parameters.put("perfisImovel", colecaoPerfisImovel);
 			}
 			
-			//Consulta com Hidrômetro
+			//Consulta com Hidrï¿½metro
 			if(hidrometro != null && !hidrometro.equals("0")){
 				if(hidrometro.equalsIgnoreCase("S")){
 					consulta += " and imo.ligacaoAgua.hidrometroInstalacaoHistorico is not null \n";
@@ -4375,7 +4375,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				parameters.put("perfisImovel", colecaoPerfisImovel);
 			}
 			
-			// Consulta com Hidrômetro
+			// Consulta com Hidrï¿½metro
 			if(hidrometro != null && !hidrometro.equals("0")){
 				if(hidrometro.equalsIgnoreCase("S")){
 					consulta += " and imo.ligacaoAgua.hidrometroInstalacaoHistorico is not null \n";
@@ -4555,6 +4555,35 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			HibernateUtil.closeSession(session);
 		}
 
+		return retorno;
+	}
+	
+	public Collection pesquisarTodosIdsDmc() throws ErroRepositorioException {
+
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		String consulta = "";
+
+		try {
+
+			consulta = "select distinct dm.dmc_id id, dmc_descr descricao from cadastro.dmc dm "
+						+ "inner join cadastro.quadra_face qf on qf.dmc_id = dm.dmc_id  "
+						+ "where qf.dmc_id is not null";
+						
+			
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("id", Hibernate.INTEGER)
+					.addScalar("descricao", Hibernate.STRING)
+					.list();
+		
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 		return retorno;
 	}
 
@@ -4780,7 +4809,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					+ "LEFT JOIN cadastro.subcategoria scat ON scat.scat_id = imsb.scat_id ";
 			}
 
-			consulta += "where imov.imov_icexclusao <> 1 AND (imov.siac_id is null OR imov.siac_id = 0) AND "
+			consulta += "where imov.imov_icexclusao <> 1 AND (imov.siac_id is null OR imov.siac_id = 0  OR imov.siac_id = 16) AND "
 						+ " imov.last_id <> " + LigacaoAguaSituacao.POTENCIAL + " AND ";
 
 			if (idRota != null) {
@@ -4975,10 +5004,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					.setInteger("idQuadra", idQuadra).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -5308,8 +5337,8 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 					helper = new OperacoesEfetuadasHelper();
 
-					// 9.2 9.2. Neste caso, o Conteúdo do Argumento deve
-					// corresponder ao conteúdo do segundo argumento (TBLA_ID2).
+					// 9.2 9.2. Neste caso, o Conteï¿½do do Argumento deve
+					// corresponder ao conteï¿½do do segundo argumento (TBLA_ID2).
 					helper.setArgumento((Integer) element[1]);
 					// helper.setArgumento((Integer)element[0]);
 
@@ -5434,7 +5463,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					+ "	(im.last_id in (:ligadoAgua, :ligadoAnaliseAgua ) or im.lest_id = :ligadoEsgoto)  ";
 
 			// Caso seja CAERN, considera todos os municipios
-			// Alterado por Rômulo Aurélio / Analista: Rafael Pinto
+			// Alterado por Rï¿½mulo Aurï¿½lio / Analista: Rafael Pinto
 			// Data: 25/11/2009
 			if (!nomeEmpresa.equalsIgnoreCase(SistemaParametro.EMPRESA_CAERN)) {
 
@@ -5448,9 +5477,9 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					+ "	and ClieImov.clim_dtrelacaofim is null "
 					+ "	and scat1.catg_id <> :categoria  ";
 
-			// Caso seja CAERN, Ordena também por codigo da rota e Sequencial da
+			// Caso seja CAERN, Ordena tambï¿½m por codigo da rota e Sequencial da
 			// Rota
-			// Alterado por Rômulo Aurélio / Analista: Rafael Pinto
+			// Alterado por Rï¿½mulo Aurï¿½lio / Analista: Rafael Pinto
 			// Data: 25/11/2009
 			if (!nomeEmpresa.equalsIgnoreCase(SistemaParametro.EMPRESA_CAERN)) {
 				consulta = consulta
@@ -5741,7 +5770,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					+ "inner join cadastro.cliente_relacao_tipo crtp on clim.crtp_id=crtp.crtp_id "
 					+
 
-					// CLIENTE USUÁRIO
+					// CLIENTE USUï¿½RIO
 					"and (crtp.crtp_id = 2 ) "
 					+
 
@@ -6050,11 +6079,11 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 							numeroIndice).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6313,10 +6342,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					"cont", Hibernate.INTEGER).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6599,10 +6628,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6669,10 +6698,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					"jad", Hibernate.BINARY).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6705,10 +6734,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					"jar", Hibernate.BINARY).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6742,10 +6771,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 							"idImovel", idImovel).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6785,10 +6814,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					Hibernate.INTEGER).setInteger("idImovel", idImovel).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -6846,19 +6875,19 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = (Integer) stmt.executeUpdate(insert);
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (SQLException e) {
 			throw new ErroRepositorioException(e, "Erro no Insert");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 
 			try {
 				stmt.close();
 				con.close();
 			} catch (SQLException e) {
-				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
+				throw new ErroRepositorioException(e, "Erro ao fechar conexï¿½es");
 			}
 		}
 
@@ -6880,10 +6909,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					seq.getImovel().getId()).executeUpdate();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -6916,10 +6945,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7033,10 +7062,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = query.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7154,10 +7183,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = query.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7187,10 +7216,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7274,10 +7303,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = query.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7351,10 +7380,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = query.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7423,10 +7452,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = (Integer) query.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -7513,19 +7542,19 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 			// Tipo da Consulta
 
-			// Imóveis alterados com sucesso.
+			// Imï¿½veis alterados com sucesso.
 			if (relatorioHelper.getEscolhaRelatorio().intValue() == 1) {
 
 				consulta += " and iia.indicadorAtualizado = 1 "
 						  + " and iia.dataAlteracaoBatch between :dataInicial and :dataFinal ";
 			}
-			// Imóveis sem alteração devido a erro.
+			// Imï¿½veis sem alteraï¿½ï¿½o devido a erro.
 			else if (relatorioHelper.getEscolhaRelatorio().intValue() == 2) {
 
 				consulta += " and iia.indicadorErroAlteracao = 1 "
 						  + " and iia.dataAlteracaoBatch between :dataInicial and :dataFinal ";
 			}
-			// Imóvel pendente de alteração.
+			// Imï¿½vel pendente de alteraï¿½ï¿½o.
 			else if (relatorioHelper.getEscolhaRelatorio().intValue() == 3) {
 
 				consulta += " and iia.indicadorAtualizado = 2 and iia.indicadorErroAlteracao is null "
@@ -7688,19 +7717,19 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 			// Tipo da Consulta
 
-			// Imóveis alterados com sucesso.
+			// Imï¿½veis alterados com sucesso.
 			if (relatorioHelper.getEscolhaRelatorio().intValue() == 1) {
 
 				consulta += " and iia.indicadorAtualizado = 1 "
 					      + " and iia.dataAlteracaoBatch between :dataInicial and :dataFinal ";
 			}
-			// Imóveis sem alteração devido a erro.
+			// Imï¿½veis sem alteraï¿½ï¿½o devido a erro.
 			else if (relatorioHelper.getEscolhaRelatorio().intValue() == 2) {
 
 				consulta += " and iia.indicadorErroAlteracao = 1 "
 					      + " and iia.dataAlteracaoBatch between :dataInicial and :dataFinal ";
 			}
-			// Imóvel pendente de alteração.
+			// Imï¿½vel pendente de alteraï¿½ï¿½o.
 			else if (relatorioHelper.getEscolhaRelatorio().intValue() == 3) {
 
 				consulta += " and iia.indicadorAtualizado = 2 and iia.indicadorErroAlteracao is null "
@@ -7917,10 +7946,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = query.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8031,10 +8060,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = query.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8113,10 +8142,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = query.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8183,10 +8212,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					"idGerenciaRegional", idGerenciaRegional).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8209,10 +8238,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					"idUnidadeNegocio", idUnidadeNegocio).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8234,10 +8263,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					"indicadorUso", ConstantesSistema.SIM).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8262,10 +8291,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8291,10 +8320,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					"idUnidadeNegocio", idUnidadeNegocio).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 
@@ -8526,10 +8555,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 							executeUpdate();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
+			// levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			// fecha a sessï¿½o
 			HibernateUtil.closeSession(session);
 		}
 	}
@@ -8889,7 +8918,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = (Object[]) query.uniqueResult();
 			
 		} catch (HibernateException e) {
-			logger.error("Erro ao pesquisar a quantidade de débitos pretéritos", e);
+			logger.error("Erro ao pesquisar a quantidade de dï¿½bitos pretï¿½ritos", e);
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);

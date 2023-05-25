@@ -29,8 +29,18 @@ public class AdicionarQuadraFaceActionForm extends ActionForm {
     private String nivelPressaoID;
     
     private String grauIntermitenciaID;
+    
+    private String dmcID;
 
-    public String getBaciaID() {
+    public String getDmcID() {
+		return dmcID;
+	}
+
+	public void setDmcID(String dmcID) {
+		this.dmcID = dmcID;
+	}
+
+	public String getBaciaID() {
 		return baciaID;
 	}
 

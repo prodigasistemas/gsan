@@ -696,7 +696,7 @@ value="${requestScope.permissaoAdicionarQuadraFace}">
 				<tr>
 					<td width="11"><img border="0"
 						src="<bean:message key="caminho.imagens"/>parahead_left.gif" /></td>
-					<td class="parabg">Inserir Quadra</td>
+					<td class="parabg">Inserir QuadraS</td>
 					<td width="11"><img border="0"
 						src="<bean:message key="caminho.imagens"/>parahead_right.gif" /></td>
 				</tr>
@@ -1225,12 +1225,15 @@ value="${requestScope.permissaoAdicionarQuadraFace}">
 											<div align="center"><strong>Número</strong></div>
 										</td>
 										<td width="10%">
+											<div align="center"><strong>DMC</strong></div>
+										</td>
+										<td width="10%">
 											<div align="center"><strong>Água</strong></div>
 										</td>
 										<td width="10%">
 											<div align="center"><strong>Esgoto</strong></div>
 										</td>
-										<td width="30%">
+										<td width="20%">
 											<div align="center"><strong>Distrito Opereracional</strong></div>
 										</td>
 										<td width="30%">
@@ -1269,9 +1272,20 @@ value="${requestScope.permissaoAdicionarQuadraFace}">
 												
 												<a href="javascript:abrirPopup('exibirAdicionarQuadraFaceAction.do?acao=atualizar&telaRetorno=exibirInserirQuadraAction&numeroQuadraFace=<%="" + quadraFace.getNumeroQuadraFace().intValue()%>',400, 630);">
 												<bean:write name="quadraFace" property="numeroQuadraFace" /></a></td>
+												<td width="10%" align="center">
+													
+													<logic:present name="quadraFace" property="dmc">
+														<bean:write name="quadraFace" property="dmc.descricao" />
+													</logic:present>
+														
+													<logic:notPresent name="quadraFace" property="dmc">
+														&nbsp;
+													</logic:notPresent>
+													
+												</td>
 												<td width="10%" align="center"><bean:write name="quadraFace" property="descricaoRedeAgua" /></td>
 												<td width="10%" align="center"><bean:write name="quadraFace" property="descricaoRedeEsgoto" /></td>
-												<td width="30%">
+												<td width="20%">
 													
 													<logic:present name="quadraFace" property="distritoOperacional">
 														<bean:write name="quadraFace" property="distritoOperacional.descricaoAbreviada" />

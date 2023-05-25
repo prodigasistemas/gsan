@@ -1,5 +1,8 @@
 package gcom.gui.cadastro.localidade;
 
+import gcom.cadastro.Dmc;
+import gcom.cadastro.FiltroDmc;
+import gcom.cadastro.ControladorCadastro;
 import gcom.cadastro.localidade.FiltroGrauDificuldadeExecucao;
 import gcom.cadastro.localidade.FiltroGrauIntermitencia;
 import gcom.cadastro.localidade.FiltroGrauRiscoSegurancaFisica;
@@ -35,12 +38,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * Classe responsável pela exibição da tela de cadastro das faces de uma quadra 
+ * Classe responsï¿½vel pela exibiï¿½ï¿½o da tela de cadastro das faces de uma quadra 
  *
  * @author Raphael Rossiter
  * @date 31/03/2009
- * * @alteracao 28/04/2010 - CRC4066 - Adicionado o Grau de Dificuladade de Execução, o Grau de Risco Segurança Física, 
- * 									o Nível de Pressão e o Grau de Intermitência. 
+ * * @alteracao 28/04/2010 - CRC4066 - Adicionado o Grau de Dificuladade de Execuï¿½ï¿½o, o Grau de Risco Seguranï¿½a Fï¿½sica, 
+ * 									o Nï¿½vel de Pressï¿½o e o Grau de Intermitï¿½ncia. 
  */
 public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 	
@@ -84,7 +87,7 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 
 	                if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
 	                    
-	                	//DISTRITO OPERACIONAL NÃO ENCONTRADO
+	                	//DISTRITO OPERACIONAL Nï¿½O ENCONTRADO
 	                	adicionarQuadraFaceActionForm.setDistritoOperacionalID("");
 	                	adicionarQuadraFaceActionForm.setDistritoOperacionalDescricao("Distrito operacional inexistente.");
 	                    httpServletRequest.setAttribute("corDistritoOperacional", "exception");
@@ -157,10 +160,10 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 	        
 	        httpServletRequest.setAttribute("nomeCampo", "numeroFace");
 	        
-	        //PREPARANDO O FORMULÁRIO PARA INSERIR
+	        //PREPARANDO O FORMULï¿½RIO PARA INSERIR
 	        prepararFormularioInserir(httpServletRequest, sessao, fachada, adicionarQuadraFaceActionForm);
 	   			 
-	        //PREPARANDO O FORMULÁRIO PARA ATUALIZAR
+	        //PREPARANDO O FORMULï¿½RIO PARA ATUALIZAR
 	        prepararFormularioAtualizar(httpServletRequest, adicionarQuadraFaceActionForm, sessao, fachada);
 	        
 	        //MONTANDO URL DE RETORNO
@@ -187,7 +190,7 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 			 adicionarQuadraFaceActionForm.setAcao("atualizar");
 			 
 			 Collection colecaoQuadraFace = (Collection) sessao.getAttribute("colecaoQuadraFace");
-			 
+						 			 
 			 Integer numeroQuadraFaceParaAtualizar = Integer.valueOf(
 			 httpServletRequest.getParameter("numeroQuadraFace"));
 			    		
@@ -204,7 +207,13 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 				}
 			}
 			
-			// CARREGANDO AS INFORMAÇOES DA FACE DA QUADRA NO FORMULARIO
+			// CARREGANDO AS INFORMAï¿½OES DA FACE DA QUADRA NO FORMULARIO
+			if(quadraFace.getDmc() != null){
+            	adicionarQuadraFaceActionForm.setDmcID(String.valueOf(quadraFace.getDmc().getId()));
+            }else{
+            	adicionarQuadraFaceActionForm.setDmcID("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
+            }
+			
             if(quadraFace.getGrauDificuldadeExecucao() != null){
             	adicionarQuadraFaceActionForm.setGrauDificuldadeExecucaoID(String.valueOf(quadraFace
                         .getGrauDificuldadeExecucao().getId()));
@@ -229,14 +238,35 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
             	adicionarQuadraFaceActionForm.setNivelPressaoID("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
             	adicionarQuadraFaceActionForm.setGrauIntermitenciaID("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
             }
+            	
             
 			
-			//CARREGANDO AS INFORMAÇOES DA FACE DA QUADRA NO FORMULARIO
+			//CARREGANDO AS INFORMAï¿½OES DA FACE DA QUADRA NO FORMULARIO
 			adicionarQuadraFaceActionForm.setNumeroFace(quadraFace.getNumeroQuadraFace().toString());
 			adicionarQuadraFaceActionForm.setIndicadorRedeAguaAux(quadraFace.getIndicadorRedeAgua().toString());
 			adicionarQuadraFaceActionForm.setIndicadorRedeEsgotoAux(quadraFace.getIndicadorRedeEsgoto().toString());
 
-			//GRAU DIFICULDADE EXECUÇÂO
+			
+			 FiltrarQuadraActionForm filtrarQuadraActionForm = (FiltrarQuadraActionForm) sessao.getAttribute("FiltrarQuadraActionForm");
+			
+			 FiltroDmc filtroDmc = new FiltroDmc();
+
+			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.LOCALIDADE_ID, filtrarQuadraActionForm.getLocalidadeID()));
+			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.SETORCOMERCIAL_ID , filtrarQuadraActionForm.getSetorComercialCD()));
+			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.INDICADORUSO , ConstantesSistema.INDICADOR_USO_ATIVO));
+
+			 Collection colecaoDmc= null;
+			 colecaoDmc = fachada.pesquisar(filtroDmc, Dmc.class.getName());
+
+			 if (colecaoDmc == null || colecaoDmc.isEmpty()) {
+				 throw new ActionServletException("atencao.pesquisa.nenhum_registro_tabela", null,
+			     "DMC");
+			 } 
+			 else {
+				 sessao.setAttribute("colecaoDmc", colecaoDmc);
+			 }
+			
+			 //GRAU DIFICULDADE EXECUï¿½ï¿½O
 			 FiltroGrauDificuldadeExecucao filtroGrauDificuldadeExecucao = new FiltroGrauDificuldadeExecucao();
 
 			 filtroGrauDificuldadeExecucao.adicionarParametro(new ParametroSimples(
@@ -255,7 +285,7 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 				 sessao.setAttribute("colecaoGrauDificuldadeExecucao", colecaoGrauDificuldade);
 			 }
 			 
-			//GRAU DE RISCO SEGURANÇA FÍSICA
+			//GRAU DE RISCO SEGURANï¿½A Fï¿½SICA
 			 FiltroGrauRiscoSegurancaFisica filtroGrauRiscoSegurancaFisica = new FiltroGrauRiscoSegurancaFisica();
 
 			 filtroGrauRiscoSegurancaFisica.adicionarParametro(new ParametroSimples(
@@ -273,7 +303,7 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 				 sessao.setAttribute("colecaoGrauRiscoSegurancaFisica", colecaoGrauRisco);
 			 }
 			 
-			 //NÍVEL DE PRESSÃO
+			 //Nï¿½VEL DE PRESSï¿½O
 			 FiltroNivelPressao filtroNivelPressao = new FiltroNivelPressao();
 
 			 filtroNivelPressao.adicionarParametro(new ParametroSimples(
@@ -291,7 +321,7 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 				 sessao.setAttribute("colecaoNivelPressao", colecaoNivelPressao);
 			 }
 			 			 
-			 //GRAU DE INTERMITÊNCIA
+			 //GRAU DE INTERMITï¿½NCIA
 			 FiltroGrauIntermitencia filtroGrauIntermitencia = new FiltroGrauIntermitencia();
 
 			 filtroGrauIntermitencia.adicionarParametro(new ParametroSimples(
@@ -374,6 +404,8 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 	    	adicionarQuadraFaceActionForm.setGrauRiscoSegurancaFisicaID("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
 	    	adicionarQuadraFaceActionForm.setNivelPressaoID("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
 	    	adicionarQuadraFaceActionForm.setGrauIntermitenciaID("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
+	    	adicionarQuadraFaceActionForm.setDmcID("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
+
 	    	
 	    	//SISTEMA_ESGOTO
 			 FiltroSistemaEsgoto filtroSistemaEsgoto = new FiltroSistemaEsgoto();
@@ -392,7 +424,7 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 				 sessao.setAttribute("colecaoSistemaEsgoto", colecaoPesquisa);
 			 }
 			 
-			 //GRAU DIFICULDADE EXECUÇÂO
+			 //GRAU DIFICULDADE EXECUï¿½ï¿½O
 			 FiltroGrauDificuldadeExecucao filtroGrauDificuldadeExecucao = new FiltroGrauDificuldadeExecucao();
 
 			 filtroGrauDificuldadeExecucao.adicionarParametro(new ParametroSimples(
@@ -411,7 +443,7 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 				 sessao.setAttribute("colecaoGrauDificuldadeExecucao", colecaoGrauDificuldade);
 			 }
 			 
-			 //GRAU DE RISCO SEGURANÇA FÍSICA
+			 //GRAU DE RISCO SEGURANï¿½A Fï¿½SICA
 			 FiltroGrauRiscoSegurancaFisica filtroGrauRiscoSegurancaFisica = new FiltroGrauRiscoSegurancaFisica();
 
 			 filtroGrauRiscoSegurancaFisica.adicionarParametro(new ParametroSimples(
@@ -429,7 +461,7 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 				 sessao.setAttribute("colecaoGrauRiscoSegurancaFisica", colecaoGrauRisco);
 			 }
 			 
-			 //NÍVEL DE PRESSÃO
+			 //Nï¿½VEL DE PRESSï¿½O
 			 FiltroNivelPressao filtroNivelPressao = new FiltroNivelPressao();
 
 			 filtroNivelPressao.adicionarParametro(new ParametroSimples(
@@ -447,7 +479,7 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 				 sessao.setAttribute("colecaoNivelPressao", colecaoNivelPressao);
 			 }
 			 
-			 //GRAU DE INTERMITÊNCIA
+			 //GRAU DE INTERMITï¿½NCIA
 			 FiltroGrauIntermitencia filtroGrauIntermitencia = new FiltroGrauIntermitencia();
 
 			 filtroGrauIntermitencia.adicionarParametro(new ParametroSimples(
@@ -464,6 +496,29 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 			 else {
 				 sessao.setAttribute("colecaoGrauIntermitencia", colecaoIntermitencia);
 			 }
+			 
+			 FiltrarQuadraActionForm filtrarQuadraActionForm = (FiltrarQuadraActionForm) sessao.getAttribute("FiltrarQuadraActionForm");
+				
+			 FiltroDmc filtroDmc = new FiltroDmc();
+			 //IF para definir cenário: Se a insercao da QuadraFace for em uma quadra já existente, deve-ser delimitar o DMC referente 
+			 //a localidade e setor já atribuido a essa quadra. (Paulo Almeida - 19-05-2023)
+			 if(filtrarQuadraActionForm != null) {
+				 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.LOCALIDADE_ID, filtrarQuadraActionForm.getLocalidadeID()));
+				 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.SETORCOMERCIAL_ID , filtrarQuadraActionForm.getSetorComercialCD()));
+				 }
+			 	 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.INDICADORUSO , ConstantesSistema.INDICADOR_USO_ATIVO));
+
+			 Collection colecaoDmc= null;
+			 colecaoDmc = fachada.pesquisar(filtroDmc, Dmc.class.getName());
+
+			 if (colecaoDmc == null || colecaoDmc.isEmpty()) {
+				 throw new ActionServletException("atencao.pesquisa.nenhum_registro_tabela", null,
+			     "DMC");
+			 } 
+			 else {
+				 sessao.setAttribute("colecaoDmc", colecaoDmc);
+			 }
+			
  
 	    }
 	 }
