@@ -30,7 +30,7 @@ mv $JBOSS_GSAN/server/default/deploy/gcom.ear $JBOSS_GSAN/server/default/deploy/
 
 chmod 775 -R $JBOSS_GSAN/server/default/deploy/gsan$SUFIXO$versao.ear
 
-zip -qr gsan$SUFIXO$versao.ear.zip gsan$SUFIXO$versao.ear/
+zip -9yqr gsan$SUFIXO$versao.ear.zip gsan$SUFIXO$versao.ear/
 
 # Transfere o build para o servidor de homologacao
 if [ -z "$PORTA" ]; then
