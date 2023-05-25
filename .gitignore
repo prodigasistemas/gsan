@@ -27,3 +27,4 @@ src/gcom/properties/version.properties
 .vscode/
 scripts/*.sh
 .gradle/
+gcom/jsp/util/rodape.jsp
