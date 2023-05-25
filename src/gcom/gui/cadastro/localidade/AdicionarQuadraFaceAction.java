@@ -1,5 +1,7 @@
 package gcom.gui.cadastro.localidade;
 
+import gcom.cadastro.Dmc;
+import gcom.cadastro.FiltroDmc;
 import gcom.cadastro.localidade.CondicaoAbastecimentoAgua;
 import gcom.cadastro.localidade.FiltroCondicaoAbastecimentoAgua;
 import gcom.cadastro.localidade.FiltroGrauDificuldadeExecucao;
@@ -43,7 +45,7 @@ public class AdicionarQuadraFaceAction extends GcomAction{
         
         AdicionarQuadraFaceActionForm adicionarQuadraFaceActionForm = (AdicionarQuadraFaceActionForm) actionForm;
         
-        //COLEÇÃO PARA APRESENTAÇÃO NA TELA
+        //COLEï¿½ï¿½O PARA APRESENTAï¿½ï¿½O NA TELA
         Collection colecaoQuadraFace = (Collection) sessao.getAttribute("colecaoQuadraFace");
         
         //PARA INSERIR
@@ -66,14 +68,31 @@ public class AdicionarQuadraFaceAction extends GcomAction{
 			
 			QuadraFace quadraFace = new QuadraFace();
 			
-			//NÚMERO DA FACE
+			//Nï¿½MERO DA FACE
 			quadraFace.setNumeroQuadraFace(Integer.valueOf(adicionarQuadraFaceActionForm.getNumeroFace()));
 			
-			//INDICADOR REDE DE ÁGUA
+			//INDICADOR REDE DE ï¿½GUA
 			quadraFace.setIndicadorRedeAgua(Short.valueOf(adicionarQuadraFaceActionForm.getIndicadorRedeAguaAux()));
 			
 			//INDICADOR REDE DE ESGOTO
 			quadraFace.setIndicadorRedeEsgoto(Short.valueOf(adicionarQuadraFaceActionForm.getIndicadorRedeEsgotoAux()));
+			
+			
+			//DMC
+			if (adicionarQuadraFaceActionForm.getDmcID() != null &&
+				!adicionarQuadraFaceActionForm.getDmcID().equals("")){
+				
+				FiltroDmc filtroDmc = new FiltroDmc();
+				
+				filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.ID, 
+						Integer.valueOf(adicionarQuadraFaceActionForm.getDmcID())));
+				
+				Collection colecaoDmc = fachada.pesquisar(filtroDmc, Dmc.class.getName());
+				
+				Dmc dmc = (Dmc) Util.retonarObjetoDeColecao(colecaoDmc);
+				
+				quadraFace.setDmc(dmc);
+			}
 			
 			//BACIA
 			if (adicionarQuadraFaceActionForm.getBaciaID() != null &&
@@ -111,7 +130,7 @@ public class AdicionarQuadraFaceAction extends GcomAction{
 				quadraFace.setDistritoOperacional(distritoOperacional);
 			}
 			
-			// GRAU DE DIFICULDADE DE EXECUÇÃO
+			// GRAU DE DIFICULDADE DE EXECUï¿½ï¿½O
 			if(adicionarQuadraFaceActionForm.getGrauDificuldadeExecucaoID() != null
 					&& !adicionarQuadraFaceActionForm.getGrauDificuldadeExecucaoID().equals("-1")){
 				
@@ -130,7 +149,7 @@ public class AdicionarQuadraFaceAction extends GcomAction{
 				
 			}
 			
-			// GRAU DE RISCO DE SEGURANÇA FÍSICA
+			// GRAU DE RISCO DE SEGURANï¿½A Fï¿½SICA
 			if(adicionarQuadraFaceActionForm.getGrauRiscoSegurancaFisicaID() != null
 					&& !adicionarQuadraFaceActionForm.getGrauRiscoSegurancaFisicaID().equals("-1")){
 				
@@ -149,11 +168,11 @@ public class AdicionarQuadraFaceAction extends GcomAction{
 				
 			}
 			
-			// NÍVEL DE PRESSÃO
+			// Nï¿½VEL DE PRESSï¿½O
 			if(adicionarQuadraFaceActionForm.getNivelPressaoID() != null
 					&& !adicionarQuadraFaceActionForm.getNivelPressaoID().equals("-1")){
 				
-				// GRAU INTERMITÊNCIA
+				// GRAU INTERMITï¿½NCIA
 				if(adicionarQuadraFaceActionForm.getGrauIntermitenciaID() != null
 						&& !adicionarQuadraFaceActionForm.getGrauIntermitenciaID().equals("-1")){
 					
@@ -179,10 +198,10 @@ public class AdicionarQuadraFaceAction extends GcomAction{
 			//INDICADOR DE USO
 			quadraFace.setIndicadorUso(ConstantesSistema.INDICADOR_USO_ATIVO);
 			
-			//VALIDAÇÃO DOS DADOS INFORMADOS PARA CADASTRO DE FACE DA QUADRA
+			//VALIDAï¿½ï¿½O DOS DADOS INFORMADOS PARA CADASTRO DE FACE DA QUADRA
 			fachada.validarQuadraFace(quadraFace, colecaoQuadraFace, true);
 			
-			//ACRESCENTANDO A FACE DA QUADRA NA COLEÇÃO DE APRESENTAÇÃO
+			//ACRESCENTANDO A FACE DA QUADRA NA COLEï¿½ï¿½O DE APRESENTAï¿½ï¿½O
 			if (colecaoQuadraFace != null && !colecaoQuadraFace.isEmpty()){
 				colecaoQuadraFace.add(quadraFace);
 			}
@@ -233,11 +252,27 @@ public class AdicionarQuadraFaceAction extends GcomAction{
 				}
 			}
 			
-			//INDICADOR REDE DE ÁGUA
+			//INDICADOR REDE DE ï¿½GUA
 			quadraFace.setIndicadorRedeAgua(Short.valueOf(adicionarQuadraFaceActionForm.getIndicadorRedeAguaAux()));
 			
 			//INDICADOR REDE DE ESGOTO
 			quadraFace.setIndicadorRedeEsgoto(Short.valueOf(adicionarQuadraFaceActionForm.getIndicadorRedeEsgotoAux()));
+			
+			//DMC
+			if (adicionarQuadraFaceActionForm.getDmcID() != null &&
+				!adicionarQuadraFaceActionForm.getDmcID().equals("")){
+				
+				FiltroDmc filtroDmc = new FiltroDmc();
+				
+				filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.ID, 
+						Integer.valueOf(adicionarQuadraFaceActionForm.getDmcID())));
+				
+				Collection colecaoDmc = fachada.pesquisar(filtroDmc, Dmc.class.getName());
+				
+				Dmc dmc = (Dmc) Util.retonarObjetoDeColecao(colecaoDmc);
+				
+				quadraFace.setDmc(dmc);
+			}
 			
 			//BACIA
 			if (adicionarQuadraFaceActionForm.getBaciaID() != null &&
@@ -281,7 +316,7 @@ public class AdicionarQuadraFaceAction extends GcomAction{
 				quadraFace.setDistritoOperacional(null);
 			}
 
-			// GRAU DE DIFICULDADE DE EXECUÇÃO
+			// GRAU DE DIFICULDADE DE EXECUï¿½ï¿½O
 			if(adicionarQuadraFaceActionForm.getGrauDificuldadeExecucaoID() != null
 					&& !adicionarQuadraFaceActionForm.getGrauDificuldadeExecucaoID().equals("-1")){
 				
@@ -300,7 +335,7 @@ public class AdicionarQuadraFaceAction extends GcomAction{
 				
 			}
 			
-			// GRAU DE RISCO DE SEGURANÇA FÍSICA
+			// GRAU DE RISCO DE SEGURANï¿½A Fï¿½SICA
 			if(adicionarQuadraFaceActionForm.getGrauRiscoSegurancaFisicaID() != null
 					&& !adicionarQuadraFaceActionForm.getGrauRiscoSegurancaFisicaID().equals("-1")){
 				
@@ -319,11 +354,11 @@ public class AdicionarQuadraFaceAction extends GcomAction{
 				
 			}
 			
-			// NÍVEL DE PRESSÃO
+			// Nï¿½VEL DE PRESSï¿½O
 			if(adicionarQuadraFaceActionForm.getNivelPressaoID() != null
 					&& !adicionarQuadraFaceActionForm.getNivelPressaoID().equals("-1")){
 				
-				// GRAU INTERMITÊNCIA
+				// GRAU INTERMITï¿½NCIA
 				if(adicionarQuadraFaceActionForm.getGrauIntermitenciaID() != null
 						&& !adicionarQuadraFaceActionForm.getGrauIntermitenciaID().equals("-1")){
 					
@@ -349,10 +384,10 @@ public class AdicionarQuadraFaceAction extends GcomAction{
 			//INDICADOR DE USO
 			quadraFace.setIndicadorUso(ConstantesSistema.INDICADOR_USO_ATIVO);
 			
-			//VALIDAÇÃO DOS DADOS INFORMADOS PARA CADASTRO DE FACE DA QUADRA
+			//VALIDAï¿½ï¿½O DOS DADOS INFORMADOS PARA CADASTRO DE FACE DA QUADRA
 			fachada.validarQuadraFace(quadraFace, colecaoQuadraFace, false);
 			
-			//ACRESCENTANDO A FACE DA QUADRA ATUALIZADA NA COLEÇÃO DE APRESENTAÇÃO
+			//ACRESCENTANDO A FACE DA QUADRA ATUALIZADA NA COLEï¿½ï¿½O DE APRESENTAï¿½ï¿½O
 			colecaoQuadraFace.add(quadraFace);
 			
 			//ORDENANDO AS FACES DA QUADRA PELO NUMERO

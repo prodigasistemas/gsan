@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.Dmc" table="cadastro.dmc">
+		<id name="id" type="java.lang.Integer" column="dmc_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_dmc</param>
+			</generator>
+		</id>
+		
+		<property name="descricao" type="java.lang.String" column="dmc_descr" not-null="true" length="6"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>	
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<property name="indicadorUso" type="java.lang.Short" column="dmc_icuso" length="2"/>
+		
+		
+	</class>
+</hibernate-mapping>

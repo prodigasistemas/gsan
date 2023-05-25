@@ -58,6 +58,8 @@ public interface IRepositorioCadastro {
 	
 	public Collection<Integer> pesquisarTodosIdsSetorComercial() throws ErroRepositorioException ;
 	
+	public Collection pesquisarTodosIdsDmc() throws ErroRepositorioException ;
+
 	public Object[] pesquisarSetorQuadra(Integer idLocalidade)throws ErroRepositorioException;
 	
 	public Integer pesquisarLogradouroBairro(Integer codigoLogradouro) throws ErroRepositorioException;

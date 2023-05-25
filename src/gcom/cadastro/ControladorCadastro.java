@@ -1421,6 +1421,27 @@ public class ControladorCadastro extends ControladorComum {
 	}
 
 	/**
+	 * Pesquisar todos ids dos setores comerciais.
+	 *
+	 * [UC0564 - Gerar Resumo das InstalaÃ§Ãµes de HidrÃ´metros]
+	 *
+	 * @author Pedro Alexandre
+	 * @date 25/04/2007
+	 *
+	 * @return
+	 * @throws ControladorException
+	 */
+	public Collection pesquisarTodosIdsDmc()
+			throws ControladorException {
+		try {
+			return repositorioCadastro.pesquisarTodosIdsDmc();
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+
+	/**
 	 * Este caso de uso permite a emissÃ£o de boletins de cadastro
 	 *
 	 * [UC0582] Emitir Boletim de Cadastro
@@ -8427,7 +8448,7 @@ public class ControladorCadastro extends ControladorComum {
 	 * @author Ana Maria
 	 * @date 11/05/2009
 	 *
-	 *(Atualizado para inserção do parametro login e senha Usuário)
+	 *(Atualizado para inserï¿½ï¿½o do parametro login e senha Usuï¿½rio)
 	 * @author Paulo Almeida Jr
 	 * @date 11/07/2019
 	 * 

@@ -43,5 +43,10 @@
 		<many-to-one name="condicaoAbastecimentoAgua" class="gcom.cadastro.localidade.CondicaoAbastecimentoAgua" not-null="false">
 			<column name="coab_id"/>
 		</many-to-one>
+		<!-- bi-directional many-to-one association to DMC -->
+		<many-to-one name="dmc" class="gcom.cadastro.Dmc" not-null="false">
+			<column name="dmc_id"/>
+		</many-to-one>
+		
 	</class>
 </hibernate-mapping>

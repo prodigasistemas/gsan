@@ -340,6 +340,23 @@ function validarForm(formulario){
 			
 			</td>
 		</tr>
+		<!-- DMC -->		
+		<tr>
+			<td><strong>DMC:</strong></td>
+			<td>
+				<html:select property="dmcID" style="width: 200px;" tabindex="10">
+											
+					<html:option 
+						value="<%=""+ConstantesSistema.NUMERO_NAO_INFORMADO%>">&nbsp;
+					</html:option>
+					
+					<logic:present name="colecaoDmc" scope="session">
+						<html:options collection="colecaoDmc" labelProperty="descricao" property="id" />
+					</logic:present>
+								
+				</html:select>
+			</td>
+		</tr>
 		<tr>
 			<td><strong>Rede de Água:</strong></td>
 			<td>

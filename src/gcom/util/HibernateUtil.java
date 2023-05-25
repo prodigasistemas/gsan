@@ -197,6 +197,7 @@ import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.ContaBraile;
 import gcom.cadastro.CpfTipo;
 import gcom.cadastro.DbVersaoBase;
+import gcom.cadastro.Dmc;
 import gcom.cadastro.EmailClienteAlterado;
 import gcom.cadastro.EmpresaContratoCadastro;
 import gcom.cadastro.EmpresaContratoCadastroAtributo;
@@ -1108,7 +1109,8 @@ public class HibernateUtil {
 					.addClass(ContratoAdesao.class)
 					.addClass(ContratoInstalacaoReservacao.class)
 					.addClass(Visita.class)
-					.addClass(CadastroUnico.class)					
+					.addClass(CadastroUnico.class)	
+					.addClass(Dmc.class)
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cobranca //
 					// *************************************//
@@ -1672,7 +1674,7 @@ public class HibernateUtil {
 	}
 
 	/**
-	 * Método que obtém o nome da coluna no banco da propriedade passada Caso
+	 * Mï¿½todo que obtï¿½m o nome da coluna no banco da propriedade passada Caso
 	 * nao tenha, retorna null
 	 * 
 	 * @param mappedClass
@@ -1749,7 +1751,7 @@ public class HibernateUtil {
 	}
 
 	/**
-	 * Método que obtém o nome da tabela da classe passada
+	 * Mï¿½todo que obtï¿½m o nome da tabela da classe passada
 	 * 
 	 * @param mappedClass
 	 *            Nome da classe
@@ -1773,7 +1775,7 @@ public class HibernateUtil {
 	}
 
 	/**
-	 * Retorna a que classe está mapeada a tabela passada
+	 * Retorna a que classe estï¿½ mapeada a tabela passada
 	 * 
 	 * @param tableName
 	 *            caminho da tabela

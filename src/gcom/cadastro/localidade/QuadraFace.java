@@ -1,5 +1,6 @@
 package gcom.cadastro.localidade;
 
+import gcom.cadastro.Dmc;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.operacional.Bacia;
 import gcom.operacional.DistritoOperacional;
@@ -59,8 +60,11 @@ public class QuadraFace extends ObjetoTransacao implements Serializable {
 	/** persistent field */
 	private CondicaoAbastecimentoAgua condicaoAbastecimentoAgua;
 	
+	/** persistent field */
+	private Dmc dmc;
 	
-	public QuadraFace(Integer id, Integer numeroQuadraFace, Short indicadorRedeAgua, Short indicadorRedeEsgoto, Short indicadorUso, Date ultimaAlteracao, DistritoOperacional distritoOperacional, Bacia bacia) {
+	
+	public QuadraFace(Integer id, Integer numeroQuadraFace, Short indicadorRedeAgua, Short indicadorRedeEsgoto, Short indicadorUso, Date ultimaAlteracao, DistritoOperacional distritoOperacional, Bacia bacia, Dmc dmc) {
 		super();
 		
 		this.id = id;
@@ -71,6 +75,7 @@ public class QuadraFace extends ObjetoTransacao implements Serializable {
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.distritoOperacional = distritoOperacional;
 		this.bacia = bacia;
+		this.dmc = dmc;
 	}
 
 	/** default constructor */
@@ -214,6 +219,14 @@ public class QuadraFace extends ObjetoTransacao implements Serializable {
 			GrauRiscoSegurancaFisica grauRiscoSegurancaFisica) {
 		this.grauRiscoSegurancaFisica = grauRiscoSegurancaFisica;
 	}
+	
+	public void setDmc(Dmc dmc) {
+		this.dmc = dmc;
+	}
+	
+	public Dmc getDmc() {
+		return dmc;
+	}
 
 	public boolean equals(Object other) {
 		if ((this == other)) {
@@ -234,6 +247,7 @@ public class QuadraFace extends ObjetoTransacao implements Serializable {
 		filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("distritoOperacional");
 		filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("bacia");
 		filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("quadra");
+		filtroQuadraFace.adicionarCaminhoParaCarregamentoEntidade("dmc");
 
 		filtroQuadraFace.adicionarParametro(new ParametroSimples(
 		FiltroQuadraFace.ID, this.getId()));
@@ -246,4 +260,5 @@ public class QuadraFace extends ObjetoTransacao implements Serializable {
 		retorno[0] = "id";
 		return retorno;
 	}
+
 }

@@ -10,7 +10,7 @@ import org.apache.struts.action.ActionMapping;
  * @author Administrador, Ivan Sergio, Anderson Italo
  * @date 16/02/2009
  * @alteracao 16/02/2009 - CRC1178 - Adicionado o Indicador de Incremento do Lote
- * @alteracao 30/09/2009 - Adicionado o Indicador de Bloqueio para Alteração de Imóveis
+ * @alteracao 30/09/2009 - Adicionado o Indicador de Bloqueio para Alteraï¿½ï¿½o de Imï¿½veis
  */
 public class AtualizarQuadraActionForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
@@ -69,6 +69,9 @@ public class AtualizarQuadraActionForm extends ActionForm {
     private String municipioID;
     
     private String indicadorRelacionamentoQuadraBairro;
+    
+    private String dmcID;
+    
 
 	public String getAreaTipoID() {
 		return areaTipoID;
@@ -316,6 +319,14 @@ public class AtualizarQuadraActionForm extends ActionForm {
 
 	public void setMunicipioID(String municipioID) {
 		this.municipioID = municipioID;
+	}
+
+	public String getDmcID() {
+		return dmcID;
+	}
+
+	public void setDmcID(String dmcID) {
+		this.dmcID = dmcID;
 	}
 
 }

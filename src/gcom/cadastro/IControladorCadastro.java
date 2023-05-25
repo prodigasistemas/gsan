@@ -114,7 +114,9 @@ public interface IControladorCadastro {
 
 	public void atualizarFuncionario(Funcionario funcionario, Usuario usuarioLogado) throws ControladorException;
 
-	public Collection<Integer> pesquisarTodosIdsSetorComercial() throws ControladorException;
+	public Collection<Integer> pesquisarTodosIdsSetorComercial() throws ControladorException; 
+	
+	public Collection pesquisarTodosIdsDmc() throws ControladorException;
 
 	public void emitirBoletimCadastro(
 			CobrancaAcaoAtividadeCronograma cronogramaAtividadeAcaoCobranca,
