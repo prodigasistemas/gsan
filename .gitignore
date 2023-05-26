@@ -8,7 +8,6 @@ bin
 .sonar
 reports/*.jasper
 build.properties
-gcom/jsp/util/rodape.jsp
 documents/recadastramento/layouts/~$Layout_Retorno_Cadastro.xlsx
 scripts/build/build_gcom_local.sh
 scripts/build/build_gcom_desenv.sh
@@ -27,4 +26,3 @@ src/gcom/properties/version.properties
 .vscode/
 scripts/*.sh
 .gradle/
-gcom/jsp/util/rodape.jsp
