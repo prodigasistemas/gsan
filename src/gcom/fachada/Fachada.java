@@ -29018,7 +29018,7 @@ public class Fachada {
 	public RetornoAtualizarFaturamentoMovimentoCelularHelper atualizarFaturamentoMovimentoCelular(BufferedReader buffer, boolean offLine, boolean finalizarArquivo, Integer idRota,
 			ArquivoTextoRetornoIS arquivoTextoRetortnoIS, BufferedReader bufferOriginal) {
 		try {
-			return this.getControladorFaturamentoIS().atualizarFaturamentoMovimentoCelular(buffer, "teste.txt", offLine, finalizarArquivo, idRota, arquivoTextoRetortnoIS, bufferOriginal);
+			return this.getControladorFaturamento().atualizarFaturamentoMovimentoCelular(buffer, "teste.txt", offLine, finalizarArquivo, idRota, arquivoTextoRetortnoIS, bufferOriginal);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
