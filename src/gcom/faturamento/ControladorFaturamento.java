@@ -358,8 +358,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	}
 
-	private Collection<CalcularValoresAguaEsgotoHelper> obterValoresAguaEsgotoAtualizarMovimentoCelular(MovimentoContaPrefaturada movimento, Conta conta) throws ControladorException {
-		
+	private Collection<CalcularValoresAguaEsgotoHelper> obterValoresAguaEsgotoAtualizarMovimentoCelular(MovimentoContaPrefaturada movimento, Conta conta, SistemaParametro sistemaParametro) throws ControladorException {		
 		try {
 			ConsumoHistorico consumoHistoricoAgua = getControladorMicromedicao().
 					obterConsumoHistorico(movimento.getImovel(), new LigacaoTipo(LigacaoTipo.LIGACAO_AGUA), 
@@ -453,9 +452,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	}
 	
-	private ContaCategoria obterContaCategoriaAtualizarMovimento(Conta conta, MovimentoContaPrefaturadaCategoria movimentoCategoria) throws ControladorException {
+	private ContaCategoria obterContaCategoriaAtualizarMovimento(Conta conta, MovimentoContaPrefaturadaCategoria movimentoCategoria, SistemaParametro sistemaParametro) throws ControladorException {
 		FiltroContaCategoria filtroContaCategoria = new FiltroContaCategoria();
-
+		
+		
 		filtroContaCategoria
 				.adicionarParametro(new ParametroSimples(FiltroContaCategoria.CATEGORIA_ID,
 						movimentoCategoria.getComp_id().getCategoria().getId()));
@@ -489,7 +489,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	}
 	
-	private Integer getIdSubcategoria(MovimentoContaPrefaturadaCategoria movimentoCategoria) {
+	private Integer getIdSubcategoria(MovimentoContaPrefaturadaCategoria movimentoCategoria, SistemaParametro sistemaParametro) {	
 		if (sistemaParametro.getIndicadorTarifaCategoria()
 				.equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
 			return 0;
@@ -543,7 +543,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						helper.setImovel(imo);
 						
 						Collection<CalcularValoresAguaEsgotoHelper> colecaoCalcularValoresAguaEsgotoHelper = 
-								obterValoresAguaEsgotoAtualizarMovimentoCelular(helper, contaAtualizacao);
+								obterValoresAguaEsgotoAtualizarMovimentoCelular(helper, contaAtualizacao, sistemaParametro);
 							
 						BigDecimal valorTotalAguaCalculado = this.calcularValorTotalAguaOuEsgotoPorCategoria(
 								colecaoCalcularValoresAguaEsgotoHelper, ConstantesSistema.CALCULAR_AGUA);
@@ -580,7 +580,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							 * movimento) , com os seguintes dados
 							 */
 							for (MovimentoContaPrefaturadaCategoria helperCategoria : colMovimentoContaPrefaturadaCategoria) {
-								ContaCategoria contaCategoria = obterContaCategoriaAtualizarMovimento(contaAtualizacao, helperCategoria);
+								ContaCategoria contaCategoria = obterContaCategoriaAtualizarMovimento(contaAtualizacao, helperCategoria, sistemaParametro);
 
 								if (contaCategoria != null && !contaCategoria.equals("")) {
 
@@ -625,7 +625,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 													helperCategoria.getComp_id().getCategoria().getId()));
 
 									filtroMovimentoContaCategoriaConsumoFaixa.adicionarParametro(new ParametroSimples(
-											FiltroMovimentoContaCategoriaConsumoFaixa.SUBCATEGORIA_ID, getIdSubcategoria(helperCategoria)));
+											FiltroMovimentoContaCategoriaConsumoFaixa.SUBCATEGORIA_ID, getIdSubcategoria(helperCategoria, sistemaParametro)));
 
 									Collection<MovimentoContaCategoriaConsumoFaixa> colMovimentoContaCategoriaConsumoFaixa = this
 											.getControladorUtil().pesquisar(filtroMovimentoContaCategoriaConsumoFaixa,
