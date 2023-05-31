@@ -41,7 +41,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="callcenter-info col-sm-6">
-						<p class="text-center"><i class="fa fa-phone fa-2x"></i><span>0800 70 71 195</span></p>
+						<p class="text-center"><i class="fa fa-phone fa-2x"></i><span>0800 0195 195</span></p>
 					</div>
 					<div class="callcenter-info col-sm-6">
 						<p class="text-center"><i class="fa fa-whatsapp fa-2x"></i><span>(91)98814-5721</span></p>
