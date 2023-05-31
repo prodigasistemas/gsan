@@ -25,7 +25,7 @@ public class ModeloFaturaPorEmail {
 			"			Segue sua fatura por email.<br>" +
 			"			A Cosanpa agradece a sua aten&ccedil;&atilde;o e est&aacute; &agrave; disposi&ccedil;&atilde;o de voc&ecirc;, sempre!" +
 			"			Se precisar entrar em contato conosco,<br>" +
-			"			acesse o site <b>www.cosanpa.pa.gov.br</b> ou ligue para 0800 70 71 195." +
+			"			acesse o site <b>www.cosanpa.pa.gov.br</b> ou ligue para 0800 0195 195." +
 			"	    </p>" +
 			"       <br>" +
 			"    </div>" +  
