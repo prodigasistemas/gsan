@@ -819,6 +819,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								Iterator indicadorIterator = indicadorRetransmissaoColecao.iterator();
 								indicadorRetransmissao = (Integer) indicadorIterator.next();
 							}
+							
+							System.out.println("ANTER AJUSTE");
+							this.ajustarCobrancaContasValoresAbaixoMinimoEmissao(contaAtualizacao, sistemaParametro.getValorMinimoEmissaoConta());
+							System.out.println("DEPOIS AJUSTE");
 
 							if (valorCreditos.compareTo(valorTotalContaSemCreditos) == 1) {
 								Imovel imovel = contaAtualizacao.getImovel();
