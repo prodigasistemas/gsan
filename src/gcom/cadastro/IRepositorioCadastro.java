@@ -414,6 +414,6 @@ public interface IRepositorioCadastro {
 
 	public Integer obterFuncionarioPorImovelRetornoId(Integer idImovelRetorno) throws ErroRepositorioException;
     
-    
+	public Boolean pesquisarCpfCadastroAguaPara(String cpf) throws ErroRepositorioException;
     
 }

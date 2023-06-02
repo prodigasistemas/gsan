@@ -40758,5 +40758,13 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public Boolean pesquisarCpfCadastroAguaPara(String cpf) {
+		try {
+			return this.getControladorCadastro().pesquisarCpfCadastroAguaPara(cpf);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 }

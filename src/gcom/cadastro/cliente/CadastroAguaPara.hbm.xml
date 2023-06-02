@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="gcom.cadastro.cliente.CadastroAguaPara" table="cadastro.cadastro_agua_para">
+	
+		<id name="id" type="java.lang.Integer" column="caap_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_cadastro_agua_para</param>
+			</generator>
+		</id>
+		
+		<property name="numeroNIS" 			type="java.lang.String" 	column="caap_nnnis" 				length="11" />
+		<property name="nome" 				type="java.lang.String" 	column="caap_nmnome" 				length="255" />
+		<property name="cpf" 				type="java.lang.String" 	column="caap_nncpf" 				length="11" />
+		<property name="rg" 				type="java.lang.String" 	column="caap_nnrg" 				length="13" />
+		<property name="telefone" 			type="java.lang.String" 	column="caap_nntel" 			length="15" />
+		<property name="situacao" 			type="java.lang.Integer" 	column="caap_stca" 			/>
+		
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

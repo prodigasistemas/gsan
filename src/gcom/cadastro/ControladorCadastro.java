@@ -14648,4 +14648,12 @@ public class ControladorCadastro extends ControladorComum {
 		}
 	}
 	
+	public Boolean pesquisarCpfCadastroAguaPara(String cpf) throws ControladorException {
+		try {
+			return repositorioCadastro.pesquisarCpfCadastroAguaPara(cpf);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}	
+	}
+	
 }

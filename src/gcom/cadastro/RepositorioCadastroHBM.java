@@ -27,6 +27,7 @@ import org.jboss.logging.Logger;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
+import gcom.cadastro.cliente.CadastroAguaPara;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.EsferaPoder;
@@ -9089,6 +9090,31 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 						.setMaxResults(1)
 						.uniqueResult();
 			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public Boolean pesquisarCpfCadastroAguaPara(String cpf) throws ErroRepositorioException {
+		Boolean retorno = true;
+		Integer resultado = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		try {
+			consulta = " SELECT caap.caap_id as id from cadastro.cadastro_agua_para caap "
+					+ " WHERE caap.caap_nncpf = " + cpf;
+			
+			resultado = (Integer) session.createSQLQuery(consulta)
+					    .addScalar("id", Hibernate.INTEGER)
+						.setMaxResults(1)
+						.uniqueResult();
+			
+			if(resultado!= null) {
+				retorno = false;
+			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

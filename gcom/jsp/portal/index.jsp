@@ -183,6 +183,18 @@
 						</div>
 					</a>
 				</div>
+				<!-- <div class="col-md-3">
+					<a href="#">
+						<div class="panel-modulo">
+							<a href="agua-para.do?action=resetar">
+								<div class="panel-link">
+									<i class="fa fa-id-card fa-3x" aria-hidden="true"></i>
+									<h3>Cadastro água Pará</h3>
+								</div>
+							</a>
+						</div>
+					</a>
+				</div> -->
 			</div>
 		</div>
 	</div>

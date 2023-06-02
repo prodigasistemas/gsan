@@ -65,6 +65,8 @@ public class FiltroSessaoExpirada extends HttpServlet implements Filter {
 							&& !enderecoURL.contains("exibirInserirCadastroEmailClientePortalAction") 
 							&& !enderecoURL.contains("segunda-via-conta")
 							&& !enderecoURL.contains("extrato-debitos")
+							&& !enderecoURL.contains("agua-para")
+							&& !enderecoURL.contains("sucesso-agua-para")
 							&& !enderecoURL.contains("canais-de-atendimento") 
 							&& !enderecoURL.contains("exibirQuestionarioSatisfacaoAction")
 							&& !enderecoURL.contains("questionarioSatisfacaoAction") 
@@ -85,6 +87,7 @@ public class FiltroSessaoExpirada extends HttpServlet implements Filter {
 							&& !enderecoURL.contains("gerarCertidaoNegativaClientePortalAction")
 							&& !enderecoURL.contains("processarRequisicaoDispositivoMovelRecadastramentoAction")
 							&& !enderecoURL.contains("emissaoExtratoDebitoAction")
+							&& !enderecoURL.contains("cadastroAguaParaAction")
 							
 					)) {
 

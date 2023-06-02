@@ -535,4 +535,5 @@ public interface IControladorCadastro {
 	
 	public Integer obterFuncionarioPorImovelRetornoId(Integer idUsuario) throws ControladorException;
 	
+	public Boolean pesquisarCpfCadastroAguaPara(String cpf) throws ControladorException;
 }
