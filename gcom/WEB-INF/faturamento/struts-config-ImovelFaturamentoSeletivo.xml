@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FaturamentoImovelSeletivoActionForm" type="gcom.gui.faturamento.FaturamentoImovelSeletivoActionForm" />
+	</form-beans>
+
+	<action-mappings>
+	
+	   <action name="FaturamentoImovelSeletivoActionForm"
+			type="gcom.gui.faturamento.FiltrarFaturamentoImovelSeletivoAction"
+			validate="true" scope="session"
+			path="/filtrarFaturamentoImovelSeletivo">
+
+			<forward name="filtrarFaturamentoImovelSeletivo"
+				path="/jsp/faturamento/filtrar_faturamento_imovel_seletivo.jsp" />
+		</action>
+		
+		<action name="FaturamentoImovelSeletivoActionForm"
+			type="gcom.gui.faturamento.ExibirImovelFaturamentoSeletivoAction"
+			validate="true" scope="session"
+			path="/exibirImovelFaturamentoSeletivo">
+
+			<forward name="exibirImovelFaturamentoSeletivo"
+				path="/jsp/faturamento/exibir_imovel_faturamento_seletivo.jsp" />
+		</action>
+		
+		<action name="FaturamentoImovelSeletivoActionForm"
+			type="gcom.gui.faturamento.FaturamentoImovelSeletivoAction"
+			validate="true" scope="session"
+			path="/imovelFaturamentoSeletivo">
+
+			<forward name="imovelFaturamentoSeletivo"
+				path="/jsp/faturamento/exibir_imovel_faturamento_seletivo.jsp" />
+		</action>
+
+	</action-mappings>
+
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+
+</struts-config>
