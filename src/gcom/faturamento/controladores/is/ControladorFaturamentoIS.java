@@ -641,7 +641,7 @@ public class ControladorFaturamentoIS extends ControladorComum {
 					if (helper.isContaEmitidaPeloIS()) {
 						
 						// Caso o imovel seja o imovel condominio, pulamos
-						if (helper.getImovel().isImovelMicroCondominio()) {
+						if (helper.getImovel().isImovelMacroCondominio()) {
 							continue;
 						}
 
