@@ -37189,6 +37189,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			colecaoCreditoRealizadoCategoriaHistoricoInserir = null;
 
 		} catch (Exception ex) {
+			System.out.println("ERRO AO ENVIAR CREDITO PARA HISTORICO " + idConta);
+			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
