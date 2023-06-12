@@ -820,10 +820,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								indicadorRetransmissao = (Integer) indicadorIterator.next();
 							}
 							
-							System.out.println("ANTER AJUSTE");
-							this.ajustarCobrancaContasValoresAbaixoMinimoEmissao(contaAtualizacao, sistemaParametro.getValorMinimoEmissaoConta());
-							System.out.println("DEPOIS AJUSTE");
-
+							
 							if (valorCreditos.compareTo(valorTotalContaSemCreditos) == 1) {
 								Imovel imovel = contaAtualizacao.getImovel();
 								BigDecimal valorTotalCreditos = this.atualizarCreditoResidual(imovel,
@@ -897,6 +894,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									}
 								}
 							}
+
+							System.out.println("ANTER AJUSTE");
+							this.ajustarCobrancaContasValoresAbaixoMinimoEmissao(contaAtualizacao, sistemaParametro.getValorMinimoEmissaoConta());
+							System.out.println("DEPOIS AJUSTE");
 
 							try {
 								repositorioFaturamento.atualizarContaProcessoMOBILE(contaAtualizacao);
