@@ -16882,6 +16882,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 
 		} catch (HibernateException e) {
+			System.out.println("ERRO NA CONTA " + idConta);
+			e.printStackTrace();
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);

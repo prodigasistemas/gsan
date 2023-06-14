@@ -641,7 +641,7 @@ public class ControladorFaturamentoIS extends ControladorComum {
 					if (helper.isContaEmitidaPeloIS()) {
 						
 						// Caso o imovel seja o imovel condominio, pulamos
-						if (helper.getImovel().isImovelMicroCondominio()) {
+						if (helper.getImovel().isImovelMacroCondominio()) {
 							continue;
 						}
 
@@ -848,9 +848,8 @@ public class ControladorFaturamentoIS extends ControladorComum {
 							Iterator indicadorIterator = indicadorRetransmissaoColecao.iterator();
 							indicadorRetransmissao = (Integer) indicadorIterator.next();
 						}
-						System.out.println("ANTER AJUSTE");
-						getControladorFaturamento().ajustarCobrancaContasValoresAbaixoMinimoEmissao(contaAtualizacao, sistemaParametro.getValorMinimoEmissaoConta());
-						System.out.println("DEPOIS AJUSTE");
+						
+						
 						if (valorCreditos.compareTo(valorTotalContaSemCreditos) == 1) {
 							Imovel imovel = contaAtualizacao.getImovel();
 							BigDecimal valorTotalCreditos = this.atualizarCreditoResidual(imovel,
@@ -925,6 +924,10 @@ public class ControladorFaturamentoIS extends ControladorComum {
 							}
 						}
 
+						System.out.println("ANTER AJUSTE");
+						getControladorFaturamento().ajustarCobrancaContasValoresAbaixoMinimoEmissao(contaAtualizacao, sistemaParametro.getValorMinimoEmissaoConta());
+						System.out.println("DEPOIS AJUSTE");
+						
 						try {
 							repositorioFaturamento.atualizarContaProcessoMOBILE(contaAtualizacao);
 						} catch (ErroRepositorioException e) {
