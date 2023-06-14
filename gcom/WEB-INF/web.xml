@@ -111,6 +111,16 @@
 	  <filter-name>ResponseHeaderFilter</filter-name>
 	  <url-pattern>*.js</url-pattern>
 	</filter-mapping>
+	
+	<filter>
+      <filter-name>PagamentoCreditoFilter</filter-name>
+      <filter-class>gcom.api.pagamentocredito.PagamentoCreditoFilter</filter-class>
+  </filter>
+   
+  <filter-mapping>
+      <filter-name>PagamentoCreditoFilter</filter-name>
+      <url-pattern>/api/pagamentoCredito/*</url-pattern>
+  </filter-mapping>
 
 	<listener>
   		<listener-class>
