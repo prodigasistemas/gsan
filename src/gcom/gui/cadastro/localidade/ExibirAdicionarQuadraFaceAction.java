@@ -252,17 +252,13 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 			 FiltroDmc filtroDmc = new FiltroDmc();
 
 			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.LOCALIDADE_ID, filtrarQuadraActionForm.getLocalidadeID()));
-			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.SETORCOMERCIAL_ID , filtrarQuadraActionForm.getSetorComercialCD()));
+			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.SETORCOMERCIAL_ID , filtrarQuadraActionForm.getSetorComercialID()));
 			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.INDICADORUSO , ConstantesSistema.INDICADOR_USO_ATIVO));
 
 			 Collection colecaoDmc= null;
 			 colecaoDmc = fachada.pesquisar(filtroDmc, Dmc.class.getName());
 
-			 if (colecaoDmc == null || colecaoDmc.isEmpty()) {
-				 throw new ActionServletException("atencao.pesquisa.nenhum_registro_tabela", null,
-			     "DMC");
-			 } 
-			 else {
+			 if (colecaoDmc != null ) {
 				 sessao.setAttribute("colecaoDmc", colecaoDmc);
 			 }
 			
@@ -504,18 +500,14 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 			 //a localidade e setor já atribuido a essa quadra. (Paulo Almeida - 19-05-2023)
 			 if(filtrarQuadraActionForm != null) {
 				 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.LOCALIDADE_ID, filtrarQuadraActionForm.getLocalidadeID()));
-				 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.SETORCOMERCIAL_ID , filtrarQuadraActionForm.getSetorComercialCD()));
+				 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.SETORCOMERCIAL_ID , filtrarQuadraActionForm.getSetorComercialID()));
 				 }
 			 	 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.INDICADORUSO , ConstantesSistema.INDICADOR_USO_ATIVO));
 
 			 Collection colecaoDmc= null;
 			 colecaoDmc = fachada.pesquisar(filtroDmc, Dmc.class.getName());
 
-			 if (colecaoDmc == null || colecaoDmc.isEmpty()) {
-				 throw new ActionServletException("atencao.pesquisa.nenhum_registro_tabela", null,
-			     "DMC");
-			 } 
-			 else {
+			 if (colecaoDmc != null ) {
 				 sessao.setAttribute("colecaoDmc", colecaoDmc);
 			 }
 			
