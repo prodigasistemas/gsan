@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.httpclient.HttpStatus;
+
 import com.google.gson.Gson;
 
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
@@ -99,7 +101,9 @@ public class PagamentoCreditoAPI extends HttpServlet {
 				
 		ArrayList<Object> resposta = new ArrayList<Object>();
 		
-		if (!pagCreditoResponse.isMensagemPreenchida() && isNuloOuVazio(linhaDigitavel)) {
+		if (!pagCreditoResponse.isMensagemPreenchida() 
+				&& isNuloOuVazio(linhaDigitavel)
+				&& !isForbidden()) {
 			try {
 				for (ClienteImovel clienteImovel : colecaoClienteImovel) {
 					Imovel imovel = clienteImovel.getImovel();
@@ -150,11 +154,20 @@ public class PagamentoCreditoAPI extends HttpServlet {
 		} else if(!isNuloOuVazio(linhaDigitavel) && validarConta(linhaDigitavel)) {
 			response.getOutputStream().print(gson.toJson("Sucesso: Conta Registrada!").toString());
 			response.setStatus(HttpServletResponse.SC_OK);			
+		} else if(isForbidden()) {
+			pagCreditoResponse.setMensagem(erro + "Acesso Proibido!");
+			response.getOutputStream().print(gson.toJson(pagCreditoResponse).toString());
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		} else {
 			response.getOutputStream().print(gson.toJson(pagCreditoResponse).toString());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 				
+	}
+
+	private boolean isForbidden() {
+		return request.getAttribute("filtro") != null 
+				&& Integer.valueOf(request.getAttribute("filtro").toString()) == HttpStatus.SC_FORBIDDEN;
 	}
 
 	private boolean isNuloOuVazio(String dado) {
