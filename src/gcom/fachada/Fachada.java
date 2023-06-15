@@ -40766,5 +40766,13 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public Boolean pesquisarNisCadastroAguaPara(String nis) {
+		try {
+			return this.getControladorCadastro().pesquisarNisCadastroAguaPara(nis);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 }

@@ -38,11 +38,9 @@ public class AguaParaAction extends GcomAction{
 		form.setNome("");
 		form.setTelefone("");
 		form.setNis("");
-		form.setArquivoBolsaFamilia(null);
+		form.setArquivoBolsaFamiliaNis(null);
 		form.setArquivoConta(null);
 		form.setArquivoCpf(null);
-		form.setArquivoNis(null);
-		form.setArquivoResidencia(null);
 		form.setArquivoRg(null);
 	}
 	private boolean isResetar() {

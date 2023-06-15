@@ -24,11 +24,7 @@ public class AguaParaActionForm extends ActionForm  {
 
 	private FormFile arquivoConta;
 
-	private FormFile arquivoResidencia;
-
-	private FormFile arquivoBolsaFamilia;
-
-	private FormFile arquivoNis;
+	private FormFile arquivoBolsaFamiliaNis;
 
 
 	public String getNome() {
@@ -103,29 +99,12 @@ public class AguaParaActionForm extends ActionForm  {
 		this.arquivoConta = arquivoConta;
 	}
 
-	public FormFile getArquivoResidencia() {
-		return arquivoResidencia;
+	public FormFile getArquivoBolsaFamiliaNis() {
+		return arquivoBolsaFamiliaNis;
 	}
 
-	public void setArquivoResidencia(FormFile arquivoResidencia) {
-		this.arquivoResidencia = arquivoResidencia;
+	public void setArquivoBolsaFamiliaNis(FormFile arquivoBolsaFamiliaNis) {
+		this.arquivoBolsaFamiliaNis = arquivoBolsaFamiliaNis;
 	}
 
-	public FormFile getArquivoBolsaFamilia() {
-		return arquivoBolsaFamilia;
-	}
-
-	public void setArquivoBolsaFamilia(FormFile arquivoBolsaFamilia) {
-		this.arquivoBolsaFamilia = arquivoBolsaFamilia;
-	}
-
-	public FormFile getArquivoNis() {
-		return arquivoNis;
-	}
-
-	public void setArquivoNis(FormFile arquivoNis) {
-		this.arquivoNis = arquivoNis;
-	}
-
-	
 }

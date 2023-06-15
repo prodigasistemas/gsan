@@ -41,20 +41,20 @@
 				<div class="container container-breadcrumb">
 					<ul class="breadcrumb">
 						<li class="breadcrumb-item"><a href="portal.do">Página Inicial</a></li>
-						<li class="breadcrumb-item active">Cadastro água Pará</li>
+						<li class="breadcrumb-item active">Recadastramento Água Pará</li>
 					</ul>
 				</div>
 
 				<div class="pagina-titulo">
-					<h2>Cadastro água Pará</h2>
+					<h2>Recadastramento Água Pará</h2>
 				</div>
 
-				<div class="pagina-conteudo">
+				<div class="pagina-agua">
 					<p>
 						Informe os dados do <b>Cliente</b> e a <b>Matrícula</b> do imóvel, que se encontra na parte superior da sua conta de água:
 					</p>
 
-					<h3>Dados do Cadastro:</h3>
+					<h3>Dados do Recadastramento:</h3>
 					
 					    <div>
 						    <td>Nome:</td>
@@ -99,18 +99,8 @@
 					</tr>
 					<br>
 					<tr>
-						<td heigth="30"><strong>Arquivo Comprovante de Residência:</strong></td>
-						<td><input type="file" name="arquivoResidencia" property="arquivoResidencia" size="54" multiple /></td>
-					</tr>
-					<br>
-					<tr>
-						<td heigth="30"><strong>Arquivo Cartão bolsa família:</strong></td>
-						<td><input type="file" name="arquivoBolsaFamilia" property="arquivoBolsaFamilia" size="54" multiple /></td>
-					</tr>
-					<br>
-					<tr>
-						<td heigth="30"><strong>Arquivo com numero NIS:</strong></td>
-						<td><input type="file" name="arquivoNis" property="arquivoNis" size="54" multiple /></td>
+						<td heigth="30"><strong>Arquivo Cartão bolsa família ou NIS:</strong></td>
+						<td><input type="file" name="arquivoBolsaFamiliaNis" property="arquivoBolsaFamiliaNis" size="54" multiple /></td>
 					</tr>
 					<br>
 					<td align="right">
