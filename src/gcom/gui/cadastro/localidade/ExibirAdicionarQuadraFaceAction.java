@@ -251,6 +251,9 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 			
 			 FiltroDmc filtroDmc = new FiltroDmc();
 
+			 
+			 
+			 
 			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.LOCALIDADE_ID, filtrarQuadraActionForm.getLocalidadeID()));
 			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.SETORCOMERCIAL_ID , filtrarQuadraActionForm.getSetorComercialID()));
 			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.INDICADORUSO , ConstantesSistema.INDICADOR_USO_ATIVO));

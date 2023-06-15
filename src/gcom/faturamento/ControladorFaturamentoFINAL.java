@@ -1585,9 +1585,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 						this.gerarMovimentoDebitoAutomatico(conta);
 					}
 
-					System.out.println("ANTER AJUSTE");
 					this.ajustarCobrancaContasValoresAbaixoMinimoEmissao(conta, sistemaParametro.getValorMinimoEmissaoConta());
-					System.out.println("DEPOIS AJUSTE");
 					
 					try {
 						repositorioFaturamento.concluirFaturamentoConta(conta.getId());

@@ -895,9 +895,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 							}
 
-							System.out.println("ANTER AJUSTE");
 							this.ajustarCobrancaContasValoresAbaixoMinimoEmissao(contaAtualizacao, sistemaParametro.getValorMinimoEmissaoConta());
-							System.out.println("DEPOIS AJUSTE");
 
 							try {
 								repositorioFaturamento.atualizarContaProcessoMOBILE(contaAtualizacao);
