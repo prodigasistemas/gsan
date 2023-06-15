@@ -14656,4 +14656,12 @@ public class ControladorCadastro extends ControladorComum {
 		}	
 	}
 	
+	public Boolean pesquisarNisCadastroAguaPara(String nis) throws ControladorException {
+		try {
+			return repositorioCadastro.pesquisarNisCadastroAguaPara(nis);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}	
+	}
+	
 }

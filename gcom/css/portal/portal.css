@@ -165,7 +165,11 @@ body {
 }
 
 
-
+.pagina-agua {
+	padding: 20px 40px 20px 40px;
+	background: url(/gsan/imagens/portal/general/agua-para.png) no-repeat center;
+	background-size: 80%;
+}
 
 .pagina {
 	background-color: #fff;

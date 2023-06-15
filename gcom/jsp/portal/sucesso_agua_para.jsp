@@ -41,15 +41,15 @@
 				<div class="container container-breadcrumb">
 					<ul class="breadcrumb">
 						<li class="breadcrumb-item"><a href="portal.do">Página Inicial</a></li>
-						<li class="breadcrumb-item active">Cadastro água Pará</li>
+						<li class="breadcrumb-item active">Recadastramento Água Pará</li>
 					</ul>
 				</div>
 
 				<div class="pagina-titulo">
-					<h2>Conclusão do cadastro água Pará</h2>
+					<h2>Conclusão do Recadastramento Água Pará</h2>
 				</div>
 
-				<div class="pagina-conteudo">
+				<div class="pagina-agua">
 					<p>
 						<b>Dados cadastrados com sucesso!</b>
 					</p>			
