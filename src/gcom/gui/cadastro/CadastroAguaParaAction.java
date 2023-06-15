@@ -59,13 +59,16 @@ private String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		String rg = form.getRg();
 		String telefone = form.getTelefone();
 		
+		if(telefone.length()<15)
+			throw new ActionServletException("atencao.erro_telefone_invalido");
+		
 		if(ehVazia(cpf)||ehVazia(nis)||ehVazia(telefone)||ehVazia(rg)||ehVazia(nome)||ehVazia(form.getIdImovel())) 
-		throw new ActionServletException("atencao.erro_um_dos_campos_nao_foi_preenchido");
+		    throw new ActionServletException("atencao.erro_um_dos_campos_nao_foi_preenchido");
 	
 		Imovel imovel = fachada.pesquisarImovelDigitado(idImovel);
 		
 		if(imovel == null)
-		throw new ActionServletException("atencao.erro_imovel_nao_encontrado");
+		    throw new ActionServletException("atencao.erro_imovel_nao_encontrado");
 		
 		cadastroAguaPara.setCpf(cpf);
 		cadastroAguaPara.setImovel(imovel);
@@ -79,19 +82,19 @@ private String caminhoJboss = System.getProperty("jboss.server.home.dir");
 			throw new ActionServletException("atencao.erro_cpf_ja_cadastrado");
 		}
 		
+		if(!fachada.pesquisarNisCadastroAguaPara(nis)) {		
+			throw new ActionServletException("atencao.erro_nis_ja_cadastrado");
+		}
+		
 		FormFile arquivoRg =  form.getArquivoRg();
 		FormFile arquivoCpf =  form.getArquivoCpf();
 		FormFile arquivoConta =  form.getArquivoConta();
-		FormFile arquivoResidencia =  form.getArquivoResidencia();
-		FormFile arquivoBolsaFamilia =  form.getArquivoBolsaFamilia();
-		FormFile arquivoNis =  form.getArquivoNis();
+		FormFile arquivoBolsaFamiliaNis =  form.getArquivoBolsaFamiliaNis();
 		
 		renomearArquivosESalvar(form.getCpf(), "_RG", arquivoRg);
 		renomearArquivosESalvar(form.getCpf(), "_Cpf", arquivoCpf);
 		renomearArquivosESalvar(form.getCpf(), "_Conta", arquivoConta);
-		renomearArquivosESalvar(form.getCpf(), "_Residencia", arquivoResidencia);
-		renomearArquivosESalvar(form.getCpf(), "_BolsaFamilia", arquivoBolsaFamilia);
-		renomearArquivosESalvar(form.getCpf(), "_Nis", arquivoNis);
+		renomearArquivosESalvar(form.getCpf(), "_BolsaFamiliaNis", arquivoBolsaFamiliaNis);
 		
 		fachada.inserir(cadastroAguaPara);	
 		
