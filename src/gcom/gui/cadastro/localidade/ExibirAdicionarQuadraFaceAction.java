@@ -238,33 +238,12 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
             	adicionarQuadraFaceActionForm.setNivelPressaoID("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
             	adicionarQuadraFaceActionForm.setGrauIntermitenciaID("" + ConstantesSistema.NUMERO_NAO_INFORMADO);
             }
-            	
-            
-			
+            			
 			//CARREGANDO AS INFORMA�OES DA FACE DA QUADRA NO FORMULARIO
 			adicionarQuadraFaceActionForm.setNumeroFace(quadraFace.getNumeroQuadraFace().toString());
 			adicionarQuadraFaceActionForm.setIndicadorRedeAguaAux(quadraFace.getIndicadorRedeAgua().toString());
 			adicionarQuadraFaceActionForm.setIndicadorRedeEsgotoAux(quadraFace.getIndicadorRedeEsgoto().toString());
-
-			
-			 FiltrarQuadraActionForm filtrarQuadraActionForm = (FiltrarQuadraActionForm) sessao.getAttribute("FiltrarQuadraActionForm");
-			
-			 FiltroDmc filtroDmc = new FiltroDmc();
-
-			 
-			 
-			 
-			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.LOCALIDADE_ID, filtrarQuadraActionForm.getLocalidadeID()));
-			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.SETORCOMERCIAL_ID , filtrarQuadraActionForm.getSetorComercialID()));
-			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.INDICADORUSO , ConstantesSistema.INDICADOR_USO_ATIVO));
-
-			 Collection colecaoDmc= null;
-			 colecaoDmc = fachada.pesquisar(filtroDmc, Dmc.class.getName());
-
-			 if (colecaoDmc != null ) {
-				 sessao.setAttribute("colecaoDmc", colecaoDmc);
-			 }
-			
+				
 			 //GRAU DIFICULDADE EXECU��O
 			 FiltroGrauDificuldadeExecucao filtroGrauDificuldadeExecucao = new FiltroGrauDificuldadeExecucao();
 
@@ -377,6 +356,22 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 				adicionarQuadraFaceActionForm.setDistritoOperacionalID(quadraFace.getDistritoOperacional().getId().toString());
 				adicionarQuadraFaceActionForm.setDistritoOperacionalDescricao(quadraFace.getDistritoOperacional().getDescricao());
 			}
+			
+			 FiltrarQuadraActionForm filtrarQuadraActionForm = (FiltrarQuadraActionForm) sessao.getAttribute("FiltrarQuadraActionForm");
+				
+			 FiltroDmc filtroDmc = new FiltroDmc();
+
+			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.LOCALIDADE_ID, filtrarQuadraActionForm.getLocalidadeID()));
+			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.SETORCOMERCIAL_ID , filtrarQuadraActionForm.getSetorComercialID()));
+			 filtroDmc.adicionarParametro(new ParametroSimples( FiltroDmc.INDICADORUSO , ConstantesSistema.INDICADOR_USO_ATIVO));
+
+			 Collection colecaoDmc= null;
+			 colecaoDmc = fachada.pesquisar(filtroDmc, Dmc.class.getName());
+
+			 if (colecaoDmc != null ) {
+				 sessao.setAttribute("colecaoDmc", colecaoDmc);
+			 }
+			
 		 }
 	}
 	 
