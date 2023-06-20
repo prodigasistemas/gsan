@@ -51,8 +51,8 @@
 			<div class="pagina-conteudo">
 				<h3>Região Metropolitana e Interior</h3>
 	
-				<p>Algumas lojas de atendimento na região metropolitana contam com uma linha telefônica interligada exclusivamente com o Call Center - <b>0800 70
-					71 195</b>, onde o cliente poderá fazer consultas, reclamações, sugestões e solicitação de serviços.</p>
+				<p>Algumas lojas de atendimento na região metropolitana contam com uma linha telefônica interligada exclusivamente com o Call Center - <b>0800 0195
+				 195</b>, onde o cliente poderá fazer consultas, reclamações, sugestões e solicitação de serviços.</p>
 	
 <!-- 				<div class="row"> -->
 <!-- 					<div class="col-sm-6"> -->

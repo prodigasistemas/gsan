@@ -97,6 +97,11 @@ body {
 	font-family: 'Open-sans', sans-serif;
 }
 
+.panel-modulo h4 {
+	font-size: 12px;
+	font-family: 'Open-sans', sans-serif;
+}
+
 .panel-link {
 	padding: 50px 20px 20px 20px;
 	margin-bottom: 30px;

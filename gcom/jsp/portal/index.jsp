@@ -183,18 +183,20 @@
 						</div>
 					</a>
 				</div>
-				<!-- <div class="col-md-3">
+				<div class="col-md-3">
 					<a href="#">
 						<div class="panel-modulo">
 							<a href="agua-para.do?action=resetar">
 								<div class="panel-link">
-									<i class="fa fa-id-card fa-3x" aria-hidden="true"></i>
-									<h3>Cadastro água Pará</h3>
+									<img src="<bean:message key="caminho.portal.imagens"/>general/agua-para-logo.png" width="120">
+									<h3>Recadastro Água Pará</h3>
+									<br>
+									<h4>19/06/2023 a 30/06/2023</h4>
 								</div>
 							</a>
 						</div>
 					</a>
-				</div> -->
+				</div>
 			</div>
 		</div>
 	</div>
