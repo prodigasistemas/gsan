@@ -1129,7 +1129,7 @@
 					<textElement textAlignment="Justified" verticalAlignment="Top" lineSpacing="1_1_2">
 						<font fontName="Courier New" pdfFontName="Courier-Bold" size="6" isBold="true" isUnderline="false"/>
 					</textElement>
-				<text><![CDATA[Em casos de dúvida, reclamação, sugestão ou se estiver interessado em negociar os débitos, basta entrar em contato com a COSANPA pelos nossos canais de atendimento. Ligue para 0800 70 71 195, a ligação é gratuita, ou acesse o chat online disponível no site www.cosanpa.pa.gov.br]]></text>
+				<text><![CDATA[Em casos de dúvida, reclamação, sugestão ou se estiver interessado em negociar os débitos, basta entrar em contato com a COSANPA pelos nossos canais de atendimento. Ligue para 0800 0195 195, a ligação é gratuita, ou acesse o chat online disponível no site www.cosanpa.pa.gov.br]]></text>
 				</staticText>
 			</band>
 		</pageFooter>

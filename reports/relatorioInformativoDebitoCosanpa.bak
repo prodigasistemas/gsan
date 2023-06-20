@@ -1198,9 +1198,9 @@
 						key="staticText-120"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
-						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true"/>
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="9" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Em casos de dúvida, reclamação, sugestão ou se estiver interessado em negociar os débitos, basta entrar em contato com a COSANPA pelos nossos canais de atendimento. Ligue para 0800 70 71 195, a ligação é gratuita, ou acesse o chat online disponível no site www.cosanpa.pa.gov.br]]></text>
+				<text><![CDATA[Em casos de dúvida, reclamação, sugestão ou se estiver interessado em negociar os débitos, basta entrar em contato com a COSANPA pelos nossos canais de atendimento. Ligue para 0800 0195 195, a ligação é gratuita, ou acesse o chat online disponível no site www.cosanpa.pa.gov.br]]></text>
 				</staticText>
 			</band>
 		</pageFooter>
