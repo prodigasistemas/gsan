@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="DadosRecadastramentoAguaParaActionForm" type="gcom.gui.cadastro.DadosRecadastramentoAguaParaActionForm" />
+	</form-beans>
+
+	<action-mappings>
+		
+		<action name="DadosRecadastramentoAguaParaActionForm"
+			type="gcom.gui.cadastro.ExibirRecadastramentoAguaParaAction"
+			validate="true" scope="session"
+			path="/exibirRecadastramentoAguaPara">
+
+			<forward name="exibirRecadastramentoAguaPara"
+				path="/jsp/cadastro/exibir_cadastro_agua_para.jsp" />
+		</action>
+		
+		 <action name="DadosRecadastramentoAguaParaActionForm"
+			type="gcom.gui.cadastro.FiltrarRecadastramentoAguaParaAction"
+			input="/filtrarRecadastramentoAguaParaAction.do"
+			validate="false" scope="session"
+			path="/filtrarRecadastramentoAguaParaAction">
+			
+			<forward name="filtrarRecadastramentoAguaPara" 
+				path="/jsp/cadastro/filtrar_cadastro_agua_para.jsp" />
+		</action>
+		
+		<action name="DadosRecadastramentoAguaParaActionForm"
+			type="gcom.gui.cadastro.DadosRecadastramentoAguaParaAction"
+			input="/dadosRecadastramentoAguaParaAction.do"
+			validate="true" scope="session"
+			path="/dadosRecadastramentoAguaParaAction">
+
+			<forward name="dadosRecadastramentoAguaPara"
+				path="/jsp/cadastro/exibir_dados_cadastro_agua_para.jsp" />
+		</action>
+		
+		<action name="DadosRecadastramentoAguaParaActionForm"
+			type="gcom.gui.cadastro.ExibirImagemRecadastramentoAguaParaAction"
+			input="/exibirImagemRecadastramentoAguaParaAction.do"
+			validate="true"
+			scope="session" 
+			path="/exibirImagemRecadastramentoAguaParaAction">
+			<forward name="exibirImagemRecadastramentoAguaPara"
+				path="/jsp/cadastro/atualizacaocadastral/exibir_imagem_retorno.jsp" />
+		</action>
+
+	</action-mappings>
+
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+
+</struts-config>

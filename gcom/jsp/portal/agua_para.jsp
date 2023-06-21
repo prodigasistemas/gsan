@@ -83,6 +83,7 @@
 							<html:text property="nis" size="12" maxlength="12" onblur="validarNIS(event);" onkeypress="return isCampoNumerico(event);" styleClass="form-control col-sm-2" />						
 						</div>
 						<br>
+						<br>
 					<tr>
 						<td heigth="30"><strong>Arquivo Cpf:</strong></td>
 						<td><input type="file" name="arquivoCpf" property="arquivoCpf" size="54" multiple /></td>
@@ -106,7 +107,7 @@
 					<td align="right">
 						<input type="button" name="" value="Finalizar cadastro." class="bottonRightCol" 
 						onclick="javascript:submeterCadastro(document.forms[0]);" url="cadastroAguaParaAction.do"/>
-					</td>				
+					</td>			
 					<br> <span><b>OBS:</b> Verifique os dados antes de finalizar o cadastro.</span>
 				</div>
 			</div>

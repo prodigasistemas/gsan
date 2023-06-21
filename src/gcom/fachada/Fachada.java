@@ -191,6 +191,7 @@ import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimpli
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoBinario;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoLinha;
+import gcom.cadastro.cliente.CadastroAguaPara;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -18421,6 +18422,14 @@ public class Fachada {
 	public boolean verificarPermissaoConsultarCpfNis(Usuario usuario) {
 		try {
 			return this.getControladorPermissaoEspecial().verificarPermissaoConsultarCpfNis(usuario);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public boolean verificarPermissaoRecadastramentoAguaPara(Usuario usuario) {
+		try {
+			return this.getControladorPermissaoEspecial().verificarPermissaoRecadastramentoAguaPara(usuario);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -40767,6 +40776,38 @@ public class Fachada {
 		}
 	}
 	
+	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer situacao) {
+		try {
+			return this.getControladorCadastro().pesquisarRecadastramentoAguaParaSituacao(situacao);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer idImovel, Integer situacao) {
+		try {
+			return this.getControladorCadastro().pesquisarRecadastramentoAguaParaMatriculaSituacao(idImovel, situacao);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer idImovel) {
+		try {
+			return this.getControladorCadastro().pesquisarRecadastramentoAguaParaMatricula(idImovel);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public CadastroAguaPara pesquisarRecadastramentoAguaParaPorCpf(String cpf) {
+		try {
+			return this.getControladorCadastro().pesquisarRecadastramentoAguaParaPorCpf(cpf);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+
 	public Boolean pesquisarNisCadastroAguaPara(String nis) {
 		try {
 			return this.getControladorCadastro().pesquisarNisCadastroAguaPara(nis);

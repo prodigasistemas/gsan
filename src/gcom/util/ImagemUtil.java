@@ -63,6 +63,34 @@ public class ImagemUtil {
 		return null;
 	}
 	
+	public static String montarUrlCompletaPortal(String caminho) {
+		if (StringUtils.isEmpty(urlServidor)) {
+			urlServidor = Fachada.getInstancia().getSegurancaParametro(
+					SegurancaParametro.NOME_PARAMETRO_SEGURANCA.URL_ARQUIVOS_SERVER.toString());
+		}
+		return String.format("%s%s", urlServidor, caminho);
+	}
+	
+	public static InputStream carregarImagemDoServidorDeArquivosPortal(String caminho) {
+		try {
+			String urlCompleta = montarUrlCompletaPortal(caminho);
+			return new URL(urlCompleta).openStream();
+		} catch (MalformedURLException e) {
+			logger.error("Problemas com a URL para se obter a imagem.", e);
+		} catch (FileNotFoundException e) {
+			try {
+				return new URL(montarUrlCompleta(URL_IMAGEM_NAO_ENCONTRADA)).openStream();
+			} catch (MalformedURLException e1) {
+				logger.error("Problemas com a URL para se obter a imagem padrao.", e1);
+			} catch (IOException e1) {
+				logger.error("Ocorreu algum problema ao carregar imagem padrao do servidor de arquivos.", e1);
+			}
+		} catch (IOException e) {
+			logger.error("Ocorreu algum problema ao carregar imagem do servidor de arquivos.", e);
+		}
+		return null;
+	}
+	
 	/**
 	 * Copia todos os dados de um {@code InputStream} para um {@code OutputStream}
 	 * 

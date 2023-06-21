@@ -12,6 +12,7 @@ import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimpli
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoBinario;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoLinha;
+import gcom.cadastro.cliente.CadastroAguaPara;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteTipo;
@@ -24,6 +25,7 @@ import gcom.cadastro.funcionario.Funcionario;
 import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.EntidadeBeneficente;
+import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
 import gcom.cadastro.imovel.Subcategoria;
@@ -537,5 +539,13 @@ public interface IControladorCadastro {
 	
 	public Boolean pesquisarCpfCadastroAguaPara(String cpf) throws ControladorException;
 	
+	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer situacao) throws ControladorException;
+	
+	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer matricula,Integer situacao) throws ControladorException;
+	
+	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula) throws ControladorException;
+	
+	public CadastroAguaPara pesquisarRecadastramentoAguaParaPorCpf(String cpf) throws ControladorException;
+
 	public Boolean pesquisarNisCadastroAguaPara(String nis) throws ControladorException;
 }

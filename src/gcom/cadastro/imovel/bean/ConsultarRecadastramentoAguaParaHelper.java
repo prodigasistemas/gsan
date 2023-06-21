@@ -1,20 +1,10 @@
-package gcom.cadastro.cliente;
+package gcom.cadastro.imovel.bean;
 
 import gcom.cadastro.imovel.Imovel;
-import gcom.interceptor.ControleAlteracao;
 
-@ControleAlteracao()
-public class CadastroAguaPara {
+public class ConsultarRecadastramentoAguaParaHelper {
 	
-	public static final int TODOS = 4;
-	
-	public static final int PENDENTE = 3;
-
-	public static final int RECUSADO = 2;
-
-	public static final int ACEITO = 1;
-	
-	private Integer id;
+    private Integer id;
 	
 	private String cpf;
 	
@@ -22,18 +12,13 @@ public class CadastroAguaPara {
 	
 	private String numeroNIS;
 	
-	private Imovel imovel;
+	private Integer idImovel;
 	
 	private String nome;
 	
-	private Integer situacao;
+	private String situacao;
 	
 	private String telefone;
-	
-	
-	public CadastroAguaPara() {
-		
-	}
 
 	public Integer getId() {
 		return id;
@@ -67,6 +52,14 @@ public class CadastroAguaPara {
 		this.numeroNIS = numeroNIS;
 	}
 
+	public Integer getIdImovel() {
+		return idImovel;
+	}
+
+	public void setIdImovel(Integer idImovel) {
+		this.idImovel = idImovel;
+	}
+
 	public String getNome() {
 		return nome;
 	}
@@ -75,19 +68,11 @@ public class CadastroAguaPara {
 		this.nome = nome;
 	}
 
-	public Imovel getImovel() {
-		return imovel;
-	}
-
-	public void setImovel(Imovel imovel) {
-		this.imovel = imovel;
-	}
-
-	public Integer getSituacao() {
+	public String getSituacao() {
 		return situacao;
 	}
 
-	public void setSituacao(Integer situacao) {
+	public void setSituacao(String situacao) {
 		this.situacao = situacao;
 	}
 
@@ -98,5 +83,5 @@ public class CadastroAguaPara {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-	
+  
 }

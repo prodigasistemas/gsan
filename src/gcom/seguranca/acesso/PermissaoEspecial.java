@@ -215,6 +215,8 @@ public class PermissaoEspecial extends ObjetoTransacao {
 	public static final int CONSULTAR_IMOVEL_CPF_E_NIS = 206;
 	
 	public static final int CONSULTAR_HISTORICO_PARA_ANALISE_DE_CONSUMO = 207;
+	
+	public static final int CONSULTAR_RECADASTRAMENTO_AGUA_PARA = 208;
     
 	/** identifier field */
 	private Integer id;

@@ -944,7 +944,9 @@
 				/WEB-INF/cadastro/atualizacaocadastral/struts-config-ProcessarRequisicaoDispositivoMovelRecadastramento.xml,
 				/WEB-INF/portal/struts-config-EmitirExtratoDebitos.xml,
 				/WEB-INF/faturamento/struts-config-ImovelFaturamentoSeletivo.xml,
-				/WEB-INF/portal/struts-config-AguaPara.xml
+				/WEB-INF/portal/struts-config-AguaPara.xml,
+				/WEB-INF/cadastro/struts-config-ConsultarAguaPara.xml
+				
 
 			</param-value>
 		</init-param>

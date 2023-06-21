@@ -279,6 +279,17 @@ public class ControladorPermissaoEspecialSEJB implements SessionBean {
 		return temPermissaoAtualizarUsuarioBolsaAgua;
 	}
 	
+	public boolean verificarPermissaoRecadastramentoAguaPara(
+			Usuario usuario) throws ControladorException {
+
+		boolean temPermissaoAcessarRecadastramentoAguaPara = this
+				.verificarPermissaoEspecial(
+						PermissaoEspecial.CONSULTAR_RECADASTRAMENTO_AGUA_PARA,
+						usuario);
+
+		return temPermissaoAcessarRecadastramentoAguaPara;
+	}
+	
 	/**
 	 * Verifica permissão especial para atualizar um LOGRADOURO_BAIRRO
 	 * 

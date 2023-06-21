@@ -61,6 +61,7 @@ import gcom.gui.relatorio.seguranca.GerarRelatorioAlteracoesSistemaColunaHelper;
 import gcom.micromedicao.ArquivoTextoLigacoesHidrometroHelper;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.RotaAtualizacaoSeq;
+import gcom.cadastro.cliente.CadastroAguaPara;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.relatorio.cadastro.GerarRelatorioAtualizacaoCadastralViaInternetHelper;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisAlteracaoInscricaoViaBatchHelper;
@@ -75,6 +76,7 @@ import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisUltimosConsumosAgua
 import gcom.relatorio.cadastro.imovel.RelatorioImoveisConsumoMedioHelper;
 import gcom.relatorio.cadastro.micromedicao.RelatorioColetaMedidorEnergiaHelper;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 import gcom.util.Util;
@@ -9123,6 +9125,73 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
+	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer situacao)
+			throws ErroRepositorioException {
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta;
+		try {			
+			consulta = new StringBuilder(" SELECT cadastroAguaPara from CadastroAguaPara cadastroAguaPara ")
+					.append(" WHERE ");
+					if(situacao!=CadastroAguaPara.TODOS) {
+						consulta.append("cadastroAguaPara.situacao = :situacao");
+						retorno = session.createQuery(consulta.toString()).setInteger("situacao", situacao).list();
+					} else {
+						consulta.append("cadastroAguaPara.situacao in (" + CadastroAguaPara.ACEITO + ", "
+								+ CadastroAguaPara.RECUSADO + ", " + CadastroAguaPara.PENDENTE + " ))");
+						retorno = session.createQuery(consulta.toString()).list();
+					}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula)
+			throws ErroRepositorioException {
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		try {			
+			consulta = " SELECT cadastroAguaPara from CadastroAguaPara cadastroAguaPara "
+					+ "	WHERE cadastroAguaPara.imovel.id = :matricula";
+			
+			retorno =   session.createQuery(consulta).setInteger("matricula", matricula).list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer matricula, Integer situacao)
+			throws ErroRepositorioException {
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta;
+		try {
+			consulta = new StringBuilder(" SELECT cadastroAguaPara from CadastroAguaPara cadastroAguaPara ")
+					.append("	WHERE cadastroAguaPara.imovel.id = :matricula and ");
+			if (situacao != CadastroAguaPara.TODOS) {
+				consulta.append("cadastroAguaPara.situacao = :situacao");
+				retorno = session.createQuery(consulta.toString()).setInteger("matricula", matricula)
+						.setInteger("situacao", situacao).list();
+			} else {
+				consulta.append("cadastroAguaPara.situacao in (" + CadastroAguaPara.ACEITO + ", "
+						+ CadastroAguaPara.RECUSADO + ", " + CadastroAguaPara.PENDENTE + " ))");
+				retorno = session.createQuery(consulta.toString()).setInteger("matricula", matricula).list();
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
 	public Boolean pesquisarNisCadastroAguaPara(String nis) throws ErroRepositorioException {
 		Boolean retorno = true;
 		Integer resultado = null;
@@ -9146,6 +9215,25 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+	}
+	
+	public CadastroAguaPara pesquisarRecadastramentoAguaParaPorCpf(String cpf) throws ErroRepositorioException {
+		CadastroAguaPara resultado = null;
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta;
+		try {
+			consulta = new StringBuilder(" SELECT cadastroAguaPara from CadastroAguaPara cadastroAguaPara ")
+					  .append("	WHERE cadastroAguaPara.cpf = :cpf ");
+			
+			resultado = (CadastroAguaPara) session.createQuery(consulta.toString()).setString("cpf", cpf).setMaxResults(1)
+					.uniqueResult();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return resultado;
 	}
     
 }

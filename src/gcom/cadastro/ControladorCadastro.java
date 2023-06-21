@@ -84,6 +84,7 @@ import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimpli
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoLinha;
 import gcom.cadastro.atualizacaocadastralsimplificado.FiltroAtualizacaoCadastralSimplificadoCritica;
+import gcom.cadastro.cliente.CadastroAguaPara;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteEndereco;
@@ -14655,7 +14656,37 @@ public class ControladorCadastro extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}	
 	}
+
+	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer situacao) throws ControladorException {
+		try {
+			return repositorioCadastro.pesquisarRecadastramentoAguaParaSituacao(situacao);
+		} catch (Exception ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer matricula,Integer situacao) throws ControladorException {
+		try {
+			return repositorioCadastro.pesquisarRecadastramentoAguaParaMatriculaSituacao(matricula, situacao);
+		} catch (Exception ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula) throws ControladorException {
+		try {
+			return repositorioCadastro.pesquisarRecadastramentoAguaParaMatricula(matricula);
+		} catch (Exception ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 	
+	public CadastroAguaPara pesquisarRecadastramentoAguaParaPorCpf(String cpf) throws ControladorException {
+		try {
+			return repositorioCadastro.pesquisarRecadastramentoAguaParaPorCpf(cpf);
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+
 	public Boolean pesquisarNisCadastroAguaPara(String nis) throws ControladorException {
 		try {
 			return repositorioCadastro.pesquisarNisCadastroAguaPara(nis);
@@ -14663,5 +14694,4 @@ public class ControladorCadastro extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}	
 	}
-	
 }

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
+import gcom.cadastro.cliente.CadastroAguaPara;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.funcionario.Funcionario;
 import gcom.cadastro.geografico.MunicipioFeriado;
@@ -37,6 +38,7 @@ import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisTipoConsumoHelper;
 import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisUltimosConsumosAguaHelper;
 import gcom.relatorio.cadastro.imovel.RelatorioImoveisConsumoMedioHelper;
 import gcom.relatorio.cadastro.micromedicao.RelatorioColetaMedidorEnergiaHelper;
+import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
 public interface IRepositorioCadastro {
@@ -416,6 +418,14 @@ public interface IRepositorioCadastro {
     
 	public Boolean pesquisarCpfCadastroAguaPara(String cpf) throws ErroRepositorioException;
 	
+	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer situacao) throws ErroRepositorioException;
+	
+	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer matricula, Integer situacao) throws ErroRepositorioException;
+	
+	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula) throws ErroRepositorioException;
+	
+	public CadastroAguaPara pesquisarRecadastramentoAguaParaPorCpf(String cpf) throws ErroRepositorioException;
+
 	public Boolean pesquisarNisCadastroAguaPara(String nis) throws ErroRepositorioException;
     
 }
