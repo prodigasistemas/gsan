@@ -1545,24 +1545,18 @@ public class UC0745GerarArquivoTextoFaturamento {
 		}
 		arquivoTextoRegistroTipo01.append(indicadorEmissaoConta.toString());
 		
-		String consumoMinimoBolsaAgua = Fachada.getInstancia().getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.CONSUMO_MINIMO_BOLSA_AGUA.toString());
-		
 		// CONSUMO_MINIMO_AGUA
 		if (imovel.getLigacaoAgua() != null && imovel.getLigacaoAgua().getNumeroConsumoMinimoAgua() != null
 				&& !imovel.getLigacaoAgua().getNumeroConsumoMinimoAgua().equals("")) {
 			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, imovel.getLigacaoAgua().getNumeroConsumoMinimoAgua().toString()));
-		} else if (imovel.getLigacaoAgua() != null && imovel.getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA)) {
-				arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, consumoMinimoBolsaAgua));
-			} else {
-				arquivoTextoRegistroTipo01.append(Util.completaString("", 6));
+		} else {
+			arquivoTextoRegistroTipo01.append(Util.completaString("", 6));
 		}
 		
 
 		// CONSUMO_MINIMO_ESGOTO
 		if (imovel.getLigacaoEsgoto() != null && imovel.getLigacaoEsgoto().getConsumoMinimo() != null) {
 			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, imovel.getLigacaoEsgoto().getConsumoMinimo().toString()));
-		} else if (imovel.getLigacaoEsgoto() != null && imovel.getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA)) {
-			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, consumoMinimoBolsaAgua));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.completaString("", 6));
 		}

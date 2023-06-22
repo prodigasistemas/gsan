@@ -2155,14 +2155,6 @@ public class ControladorMicromedicao extends ControladorComum {
 				consumoHistorico.setNumeroConsumoFaturadoMes(new Integer(consumoCobradoMes));
 				consumoTipo.setId(ConsumoTipo.NAO_MEDIDO);
 			}
-			
-			boolean indicadorBolsaAgua  = consumoHistorico.getImovel().getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA);
-			if (indicadorBolsaAgua
-					&& (consumoHistorico.getNumeroConsumoFaturadoMes() <= consumoMinimoBolsaAgua)) {
-				// Seta o consumo histórico
-				consumoHistorico.setNumeroConsumoFaturadoMes(consumoMinimoBolsaAgua);
-				consumoTipo.setId(ConsumoTipo.CONSUMO_MINIMO_BOLSA_AGUA);
-			}
 
 			if (consumoTipo.getId() != null) {
 				consumoHistorico.setConsumoTipo(consumoTipo);
@@ -2176,8 +2168,7 @@ public class ControladorMicromedicao extends ControladorComum {
 					&& faturamentoGrupo.getAnoMesReferencia() <= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoFim()
 					&& consumoHistorico.getImovel().getFaturamentoSituacaoTipo() != null
 					&& consumoHistorico.getImovel().getFaturamentoSituacaoTipo().getIndicadorValidoAgua() != null
-					&& consumoHistorico.getImovel().getFaturamentoSituacaoTipo().getIndicadorValidoAgua().intValue() == 1
-					&& !indicadorBolsaAgua) {
+					&& consumoHistorico.getImovel().getFaturamentoSituacaoTipo().getIndicadorValidoAgua().intValue() == 1) {
 
 				dadosFaturamentoEspecialNaoMedido(consumoHistorico,consumoMedioHidrometro, consumoHistorico.getImovel(), faturamentoGrupo);
 			}
@@ -8587,9 +8578,6 @@ public class ControladorMicromedicao extends ControladorComum {
 		ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade();
 		MedicaoHistorico medicaoHistoricoPoco = null;
 		MedicaoTipo medicaoTipo = new MedicaoTipo(MedicaoTipo.POCO);
-		boolean indicadorBolsaAgua = imovel.getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA);
-		
-		Integer consumoMinimoBolsaAgua = Integer.valueOf(Fachada.getInstancia().getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.CONSUMO_MINIMO_BOLSA_AGUA.toString()));
 
 		boolean houveIntslacaoHidrometro = this.verificarInstalacaoSubstituicaoHidrometro(imovel.getId(), medicaoTipo);
 		medicaoTipo = null;
@@ -8723,8 +8711,7 @@ public class ControladorMicromedicao extends ControladorComum {
 					&& faturamentoGrupo.getAnoMesReferencia() <= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoFim()
 					&& imovel.getFaturamentoSituacaoTipo() != null
 					&& imovel.getFaturamentoSituacaoTipo().getIndicadorValidoEsgoto() != null
-					&& imovel.getFaturamentoSituacaoTipo().getIndicadorValidoEsgoto().intValue() == 1
-					&& !indicadorBolsaAgua) {
+					&& imovel.getFaturamentoSituacaoTipo().getIndicadorValidoEsgoto().intValue() == 1) {
 
 				dadosFaturamentoEspecialNaoMedido(consumoHistoricoEsgoto, consumoMedioHidrometro, imovel, faturamentoGrupo);
 			}
@@ -8749,15 +8736,6 @@ public class ControladorMicromedicao extends ControladorComum {
 				consumoAnormalidade.setId(ConsumoAnormalidade.CONSUMO_INFORMADO);
 				consumoHistoricoEsgoto.setConsumoAnormalidade(consumoAnormalidade);
 			}
-		}
-		
-		if (indicadorBolsaAgua
-				&& (consumoHistoricoEsgoto.getNumeroConsumoFaturadoMes() <= consumoMinimoBolsaAgua)
-				&& (consumoHistoricoAgua != null && consumoHistoricoAgua.getConsumoTipo().getId().equals(ConsumoTipo.CONSUMO_MINIMO_BOLSA_AGUA))) {
-			// Seta o consumo histórico
-			consumoHistoricoEsgoto.setNumeroConsumoFaturadoMes(consumoMinimoBolsaAgua);
-			consumoTipo.setId(ConsumoTipo.CONSUMO_MINIMO_BOLSA_AGUA);
-			consumoHistoricoEsgoto.setConsumoTipo(consumoTipo);
 		}
 
 		if (imovel.getHidrometroInstalacaoHistorico() != null) {
@@ -8921,15 +8899,10 @@ public class ControladorMicromedicao extends ControladorComum {
 				consumoMedioHidrometro[0]));
 		// Seta o consumo mínimo de água
 		if (imovel.getLigacaoEsgoto() != null && !imovel.getLigacaoEsgoto().equals("")) {
-			
-			if (imovel.getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA)) {
-				consumoHistoricoEsgoto.setConsumoMinimo(consumoMinimoBolsaAgua);
-			} else {
-				consumoHistoricoEsgoto.setConsumoMinimo(imovel.getLigacaoEsgoto().getConsumoMinimo());
-			}
+
+			consumoHistoricoEsgoto.setConsumoMinimo(imovel.getLigacaoEsgoto().getConsumoMinimo());
 			// Seta o percentual de coleta
-			consumoHistoricoEsgoto.setPercentualColeta(imovel
-					.getLigacaoEsgoto().getPercentualAguaConsumidaColetada());
+			consumoHistoricoEsgoto.setPercentualColeta(imovel.getLigacaoEsgoto().getPercentualAguaConsumidaColetada());
 		}
 		// Seta a última alteração
 		consumoHistoricoEsgoto.setUltimaAlteracao(new Date());
@@ -38336,9 +38309,7 @@ public class ControladorMicromedicao extends ControladorComum {
 			ConsumoHistorico consumoHistorico, Imovel imovel,
 			ConsumoTipo consumoTipo, ConsumoAnormalidade consumoAnormalidade) {
 		
-		Integer consumoMinimoBolsaAgua = Integer.valueOf(Fachada.getInstancia().getFaturamentoParametro(FaturamentoParametro.NOME_PARAMETRO_FATURAMENTO.CONSUMO_MINIMO_BOLSA_AGUA.toString()));
-		// Caso o consumo a ser cobrado no mês seja menor que o consumo
-		// mínimo de água
+	
 		if ((imovel.getLigacaoAgua().getNumeroConsumoMinimoAgua() != null)
 				&& (consumoHistorico.getNumeroConsumoFaturadoMes()
 						.intValue() < imovel.getLigacaoAgua()
@@ -38360,13 +38331,6 @@ public class ControladorMicromedicao extends ControladorComum {
 					.setId(ConsumoAnormalidade.CONSUMO_INFORMADO);
 
 		}
-		
-		if (consumoHistorico.getImovel().getImovelPerfil().getId().equals(ImovelPerfil.BOLSA_AGUA)
-				&& (consumoHistorico.getNumeroConsumoFaturadoMes() < consumoMinimoBolsaAgua)) {
-			// Seta o consumo histórico
-			consumoHistorico.setNumeroConsumoFaturadoMes(consumoMinimoBolsaAgua);
-			consumoTipo.setId(ConsumoTipo.CONSUMO_MINIMO_BOLSA_AGUA);
-		}	
 	}
 	
 	/**
