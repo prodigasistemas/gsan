@@ -14694,4 +14694,21 @@ public class ControladorCadastro extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}	
 	}
+	
+	public Boolean pesquisarNisJaCadastradoInserirCliente(String nis) throws ControladorException {
+		try {
+			return repositorioCadastro.pesquisarNisJaCadastradoInserirCliente(nis);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
+	public Boolean pesquisarNisJaCadastradoManterCliente(String nis, Integer idCliente) throws ControladorException {
+		try {
+			return repositorioCadastro.pesquisarNisJaCadastradoManterCliente(nis, idCliente);
+		} catch (Exception ex) {
+			throw new FachadaException(ex.getMessage(), ex);
+		}
+	}
+	
 }

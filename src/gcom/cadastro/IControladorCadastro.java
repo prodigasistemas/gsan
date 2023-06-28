@@ -548,4 +548,9 @@ public interface IControladorCadastro {
 	public CadastroAguaPara pesquisarRecadastramentoAguaParaPorCpf(String cpf) throws ControladorException;
 
 	public Boolean pesquisarNisCadastroAguaPara(String nis) throws ControladorException;
+	
+	public Boolean pesquisarNisJaCadastradoInserirCliente(String nis) throws ControladorException;
+	
+	public Boolean pesquisarNisJaCadastradoManterCliente(String nis, Integer idCliente) throws ControladorException;
+	
 }

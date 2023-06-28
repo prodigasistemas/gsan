@@ -40815,5 +40815,21 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
+	public Boolean pesquisarNisJaCadastradoInserirCliente(String nis) {
+		try {
+			return this.getControladorCadastro().pesquisarNisJaCadastradoInserirCliente(nis);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public Boolean pesquisarNisJaCadastradoManterCliente(String nis, Integer idCliente) {
+		try {
+			return this.getControladorCadastro().pesquisarNisJaCadastradoManterCliente(nis, idCliente);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 
 }

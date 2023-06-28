@@ -9217,6 +9217,26 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
+	public Boolean pesquisarNisJaCadastradoInserirCliente(String nis) throws ErroRepositorioException {
+		Boolean retorno = true;
+		Integer resultado = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		try {
+			consulta = " SELECT clie.clie_id as id from cadastro.cliente clie " + " WHERE clie.clie_nnnis = " + nis;
+			resultado = (Integer) session.createSQLQuery(consulta).addScalar("id", Hibernate.INTEGER).setMaxResults(1).uniqueResult();
+			
+			if (resultado != null) {
+					retorno = false;
+			}
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
 	public CadastroAguaPara pesquisarRecadastramentoAguaParaPorCpf(String cpf) throws ErroRepositorioException {
 		CadastroAguaPara resultado = null;
 		Session session = HibernateUtil.getSession();
@@ -9234,6 +9254,29 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			HibernateUtil.closeSession(session);
 		}
 		return resultado;
+	}
+	
+	public Boolean pesquisarNisJaCadastradoManterCliente(String nis, Integer idCliente) throws ErroRepositorioException {
+		Boolean retorno = false;
+		Collection<Integer> resultado = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		try {
+			consulta = " SELECT clie.clie_id as id from cadastro.cliente clie " + " WHERE clie.clie_nnnis = " + nis;
+			resultado = (Collection) session.createSQLQuery(consulta).addScalar("id", Hibernate.INTEGER).list();
+			
+			for(Integer id : resultado) {
+				if(id.equals(idCliente)) {
+					retorno = true;
+					break;
+				}
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
 	}
     
 }

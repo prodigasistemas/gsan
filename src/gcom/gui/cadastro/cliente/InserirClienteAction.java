@@ -344,12 +344,19 @@ public class InserirClienteAction extends GcomAction {
 			// Numero do NIS
 			String numeroNIS = (String) form.get("numeroNIS");
 			if (numeroNIS != null && !numeroNIS.trim().equals("")) {
+				if (!this.getFachada().pesquisarNisJaCadastradoInserirCliente(numeroNIS)) {
+					throw new ActionServletException("atencao.erro_nis_ja_cadastrado");
+				}
+
+				if (!tipoPessoa.equals(ClienteTipo.INDICADOR_PESSOA_FISICA) && !numeroNIS.equals("")) {
+					throw new ActionServletException("atencao.erro_pessoa_juridica_com_nis");
+				}
 				cliente.setNumeroNIS(numeroNIS.trim());
 				validarCadastroUnico(cliente);
 			} else {
 				cliente.setIndicadorBolsaFamilia(CadastroUnico.NAO_TEM_NIS);
 			}
-
+				 
 			// Insere o indicador para Cobranca Acrescimos
 			cliente.setIndicadorAcrescimos(new Short("1"));
 

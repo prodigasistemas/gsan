@@ -455,6 +455,13 @@ public class AtualizarClienteAction extends GcomAction {
 			// Numero do NIS
 			String numeroNIS = (String) form.get("numeroNIS");
 			if (numeroNIS != null && !numeroNIS.trim().equals("")) {
+				if (!this.getFachada().pesquisarNisJaCadastradoManterCliente(numeroNIS, cliente.getId())) {
+						throw new ActionServletException("atencao.erro_nis_ja_cadastrado");
+				}
+				
+			    if (!tipoPessoa.equals(ClienteTipo.INDICADOR_PESSOA_FISICA)) {
+					 throw new ActionServletException("atencao.erro_pessoa_juridica_com_nis");
+			    }
 				cliente.setNumeroNIS(numeroNIS.trim());
 				validarCadastroUnico(cliente);
 				imovelPerfilAtualizado = atualizarImovelPerfilBolsaAgua(cliente);
@@ -462,8 +469,7 @@ public class AtualizarClienteAction extends GcomAction {
 				cliente.setIndicadorBolsaFamilia(CadastroUnico.NAO_TEM_NIS);
 				imovelPerfilAtualizado = atualizarImovelPerfilBolsaAgua(cliente);
 			}
-				
-
+				 
 			cliente.setIndicadorAcaoCobranca(new Integer(indicadorAcaoCobranca).shortValue());
 
 			cliente.setIndicadorGeraArquivoTexto(clienteAtualizacao.getIndicadorGeraArquivoTexto());

@@ -427,5 +427,9 @@ public interface IRepositorioCadastro {
 	public CadastroAguaPara pesquisarRecadastramentoAguaParaPorCpf(String cpf) throws ErroRepositorioException;
 
 	public Boolean pesquisarNisCadastroAguaPara(String nis) throws ErroRepositorioException;
+	
+public Boolean pesquisarNisJaCadastradoInserirCliente(String nis) throws ErroRepositorioException;
+	
+	public Boolean pesquisarNisJaCadastradoManterCliente(String nis, Integer idCliente) throws ErroRepositorioException;
     
 }
