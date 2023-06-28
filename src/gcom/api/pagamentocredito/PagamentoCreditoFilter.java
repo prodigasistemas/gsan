@@ -14,9 +14,9 @@ import org.apache.commons.httpclient.HttpStatus;
 
 public class PagamentoCreditoFilter implements Filter {
 
-	private static final String PROD_DOMINIO = "gsan.cosanpa.pa.gov.br";
-	private static final String HOMOL_DOMINIO = "homologa.cosanpa.pa.gov.br";
-	
+
+	private static final String PROD_DOMINIO = "http://gsan.cosanpa.pa.gov.br";
+	private static final String HOMOL_DOMINIO = "http://homologa.cosanpa.pa.gov.br";
 
 	public void destroy() {}
 
@@ -35,8 +35,8 @@ public class PagamentoCreditoFilter implements Filter {
 	}
 
 	private String extrairDominio(String url) {
-		return url.substring(7, url.indexOf(":", 7));
-		
+		return url.substring(0, url.indexOf(":", 5));
+
 	}
 
 	public void init(FilterConfig arg0) throws ServletException {}
