@@ -1,6 +1,8 @@
 package gcom.relatorio.micromedicao;
 
 import gcom.batch.Relatorio;
+import gcom.cadastro.imovel.FiltroImovel;
+import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.fachada.Fachada;
 import gcom.relatorio.ConstantesRelatorios;
@@ -9,12 +11,16 @@ import gcom.relatorio.RelatorioVazioException;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaException;
 import gcom.tarefa.TarefaRelatorio;
+import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
+import gcom.util.Util;
 import gcom.util.agendadortarefas.AgendadorTarefas;
+import gcom.util.filtro.ParametroSimples;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -63,10 +69,43 @@ public class RelatorioGerarDadosLeitura extends TarefaRelatorio {
 		// coleção de beans do relatório
 		List relatorioBeans = new ArrayList();
 		
-		Collection colecaoRelatorioGerarDadosLeituraBean = fachada.pesquisarDadosParaLeituraRelatorio(gerarDadosLeituraHelper);
+		Collection colecaoRelatorioGerarDadosLeituraBeanFinal = new ArrayList();
 		
-		if (colecaoRelatorioGerarDadosLeituraBean != null && !colecaoRelatorioGerarDadosLeituraBean.isEmpty()) {
-			relatorioBeans.addAll(colecaoRelatorioGerarDadosLeituraBean);
+		Collection colecaoRelatorioGerarDadosLeituraBeanInicial = fachada.pesquisarDadosParaLeituraRelatorio(gerarDadosLeituraHelper);
+		
+		Iterator iteratorColecaoRelatorioGerarDadosLeituraBean = colecaoRelatorioGerarDadosLeituraBeanInicial.iterator();
+		
+		Imovel imovelNaBase = null;
+		
+		RelatorioGerarDadosLeituraBean relatorioGerarDadosLeituraBean = null;
+		
+		while(iteratorColecaoRelatorioGerarDadosLeituraBean.hasNext()) {
+			
+			relatorioGerarDadosLeituraBean = (RelatorioGerarDadosLeituraBean) iteratorColecaoRelatorioGerarDadosLeituraBean.next();
+			
+			FiltroImovel filtroImovel = new FiltroImovel();
+			filtroImovel.limparListaParametros();
+			filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, Integer.parseInt(relatorioGerarDadosLeituraBean.getMatriculaImovel())));
+			filtroImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.FATURAMENTO_SITUACAO_TIPO);
+			try {
+				imovelNaBase = (Imovel)Util.retonarObjetoDeColecao((getControladorUtil().pesquisar(filtroImovel, Imovel.class.getName())));
+			} catch (ControladorException e) {
+				e.printStackTrace();
+			}
+			
+			if (imovelNaBase.getFaturamentoSituacaoTipo() == null
+					|| (imovelNaBase.getFaturamentoSituacaoTipo()
+							.getIndicadorParalisacaoLeitura()
+							.equals(ConstantesSistema.NAO) || imovelNaBase
+							.getFaturamentoSituacaoTipo()
+							.getIndicadorValidoEsgoto()
+							.equals(ConstantesSistema.NAO))) {
+				colecaoRelatorioGerarDadosLeituraBeanFinal.add(relatorioGerarDadosLeituraBean);
+			}
+		}
+		
+		if (colecaoRelatorioGerarDadosLeituraBeanFinal != null && !colecaoRelatorioGerarDadosLeituraBeanFinal.isEmpty()) {
+			relatorioBeans.addAll(colecaoRelatorioGerarDadosLeituraBeanFinal);
 		}
 
 		// __________________________________________________________________

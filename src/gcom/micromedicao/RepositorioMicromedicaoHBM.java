@@ -12413,7 +12413,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 						+ " order by movRotEmp.mrem_nnsequencialrota,movRotEmp.empr_id,loca.loca_id,movRotEmp.mrem_cdsetorcomercial,movRotEmp.mrem_nnquadra,movRotEmp.mrem_nnloteimovel,movRotEmp.mrem_nnsubloteimovel";
 			} else if (empresa.toUpperCase().equals("COSANPA")) {
 				consulta = consulta
-						+ " order by loca.loca_id, movRotEmp.mrem_cdsetorcomercial, movRotEmp.mrem_cdrota, movRotEmp.mrem_nnquadra, movRotEmp.mrem_nnloteimovel";
+						+ " ORDER BY loca.loca_id, movRotEmp.mrem_cdsetorcomercial, quadra.qdra_nnquadra, imov.imov_nnlote, imov.imov_nnsublote";
 			} else if(empresa.toUpperCase().equals("COSAMA")){
 				consulta = consulta
 				        + " ORDER BY loca.loca_id, movRotEmp.mrem_cdsetorcomercial, quadra.qdra_nnquadra, imov.imov_nnlote, imov.imov_nnsublote";

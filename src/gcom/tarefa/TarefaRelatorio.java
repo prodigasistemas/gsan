@@ -329,7 +329,7 @@ public abstract class TarefaRelatorio extends Tarefa {
 
 	}
 
-	private ControladorUtilLocal getControladorUtil() {
+	protected ControladorUtilLocal getControladorUtil() {
 
 		ControladorUtilLocalHome localHome = null;
 		ControladorUtilLocal local = null;
