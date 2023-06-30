@@ -97,4 +97,24 @@ public class RepositorioSegurancaHBM implements IRepositorioSeguranca {
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	public Object[] obterCredenciaisOauth() throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append(" SELECT uid as login, secret as pass");
+			sql.append(" FROM public.oauth_applications oa ");
+			sql.append(" WHERE id = 1 ");
+			
+			return (Object[]) session.createSQLQuery(sql.toString())
+					.addScalar("login", Hibernate.STRING)
+					.addScalar("pass", Hibernate.STRING)
+					.uniqueResult();						
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+	}
 }

@@ -1359,4 +1359,6 @@ public interface IControladorFaturamento {
 	
 	public void ajustarCobrancaContasValoresAbaixoMinimoEmissao(Conta contaAtualizacao, BigDecimal valorMinimoEmissao) 
 			throws ControladorException, ErroRepositorioException;
+	
+	public Object[] obterCredenciaisOauth() throws ControladorException;
 }
