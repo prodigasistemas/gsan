@@ -854,7 +854,7 @@ public interface IControladorFaturamento {
 	public boolean verificarExistenciaIdGrupoFaturamento(Integer id) throws ControladorException;
 
 	public RetornoAtualizarFaturamentoMovimentoCelularHelper atualizarFaturamentoMovimentoCelular(BufferedReader buffer, String nomeArquivo, boolean offLine,
-			boolean finalizarArquivo, Integer idRota, ArquivoTextoRetornoIS atualizarFaturamentoMovimentoCelular, BufferedReader bufferOriginal)
+			boolean finalizarArquivo, Integer idRota, ArquivoTextoRetornoIS atualizarFaturamentoMovimentoCelular, BufferedReader bufferOriginal, Collection<Imovel> colImoveisComProblema)
 			throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
@@ -908,7 +908,7 @@ public interface IControladorFaturamento {
 
 	public Integer contarFaturamentoImediatoAjuste(FaturamentoImediatoAjusteHelper helper) throws ControladorException;
 
-	public void processarMovimentoContaPrefaturada(Rota rota, Collection<MovimentoContaPrefaturada> colContaPreFaturada, boolean efetuarRateio)
+	public void processarMovimentoContaPrefaturada(Rota rota, Collection<MovimentoContaPrefaturada> colContaPreFaturada, boolean efetuarRateio,Collection<Imovel> colImoveisComProblema)
 			throws ControladorException;
 
 	public void gerarDadosDeclaracaoQuitacaoAnualDebitos(int idFuncionalidadeIniciada, Collection<Integer> anos, Rota rota, Short indicadorContaParcelada,
@@ -1152,7 +1152,7 @@ public interface IControladorFaturamento {
 			Integer grupofaturamento, Integer idRota) throws ControladorException;
 
 	public void atualizarConsumoMovimentoCelular(Conta conta, Integer consumoAguaMovimentoCelular, Integer consumoAguaGSAN,
-			Integer consumoEsgotoMovimentoCelular, Integer consumoEsgotoGSAN) throws ControladorException;
+			Integer consumoEsgotoMovimentoCelular, Integer consumoEsgotoGSAN, Collection<Imovel> colImoveisComProblema) throws ControladorException;
 
 	public BigDecimal obterPercentualColetaEsgotoImovel(Integer idImovel) throws ControladorException;
 
