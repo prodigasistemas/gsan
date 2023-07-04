@@ -57,7 +57,7 @@ public interface IRepositorioImovel {
 	public void removerTodos(String objeto, String condicional, Integer id) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarImovel(Integer idLocalidade, Integer idSetorComercial, Integer idQuadra, Short lote, int indicadorExclusao)
+	public Collection pesquisarImovel(Integer idLocalidade, Integer idSetorComercial, Integer idQuadra,Integer quadraFace, Short lote, int indicadorExclusao)
 			throws ErroRepositorioException;
 
 	public void atualizarImovelInscricao(Imovel imovel) throws ErroRepositorioException;

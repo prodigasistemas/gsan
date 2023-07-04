@@ -6,9 +6,11 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroQuadra;
+import gcom.cadastro.localidade.FiltroQuadraFace;
 import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
+import gcom.cadastro.localidade.QuadraFace;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.fachada.Fachada;
@@ -49,20 +51,21 @@ public class AlterarImovelInscricaoAction extends GcomAction {
         //Seta o retorno
         ActionForward retorno = actionMapping.findForward("telaSucesso");
 
-        //Obtém a instância da fachada
+        //Obtï¿½m a instï¿½ncia da fachada
         Fachada fachada = Fachada.getInstancia();
 
-        //Obtém a sessão
+        //Obtï¿½m a sessï¿½o
         HttpSession sessao = httpServletRequest.getSession(false);
         
         SistemaParametro sistemaParametro = this.getSistemaParametro();
 
         DynaValidatorForm alterarImovelInscricaoActionForm = (DynaValidatorForm) sessao.getAttribute("AlterarImovelInscricaoActionForm");
 
-        //Dados da inscrição de origem
+        //Dados da inscriï¿½ï¿½o de origem
         String localidadeOrigemID = (String) alterarImovelInscricaoActionForm.get("localidadeOrigemID");
         String setorComercialOrigemCD = (String) alterarImovelInscricaoActionForm.get("setorComercialOrigemCD");
         String quadraOrigemNM = (String) alterarImovelInscricaoActionForm.get("quadraOrigemNM");
+        String faceOrigemNM = (String) alterarImovelInscricaoActionForm.get("faceOrigemNM");
         String loteOrigemTemp = (String) alterarImovelInscricaoActionForm.get("loteOrigem");
         //short loteOrigem = 0;
 
@@ -75,8 +78,9 @@ public class AlterarImovelInscricaoAction extends GcomAction {
         Localidade localidadeOrigem = (Localidade) validarCampo(localidadeOrigemID, null, 1);
         SetorComercial setorComercialOrigem = null;
         Quadra quadraOrigem = null;
+        QuadraFace quadraFaceOrigem = new QuadraFace();
 
-        //Validação dos campos da inscrição de origem (FS0002, FS0003, FS0004)
+        //Validaï¿½ï¿½o dos campos da inscriï¿½ï¿½o de origem (FS0002, FS0003, FS0004)
         if (localidadeOrigem == null) {
             //Nenhuma localidade encontrada
             flagContinuar = false;
@@ -103,14 +107,26 @@ public class AlterarImovelInscricaoAction extends GcomAction {
                     throw new ActionServletException(
                             "atencao.pesquisa.quadra_origem_inexistente");
                 }
+               
+                if(faceOrigemNM != null && !faceOrigemNM.equalsIgnoreCase("")) {
+                	quadraFaceOrigem.setId(Integer.valueOf(faceOrigemNM));
+                	
+                	if (quadraFaceOrigem == null) {
+                        //Nenhuma QuadraFace encontrada
+                        flagContinuar = false;
+                        throw new ActionServletException(
+                                "atencao.pesquisa.quadraface_origem_inexistente");
+                    }
+                }
             }
         }
         
 
-        //Dados da inscrição de destino
+        //Dados da inscriï¿½ï¿½o de destino
         String localidadeDestinoID = (String) alterarImovelInscricaoActionForm.get("localidadeDestinoID");
         String setorComercialDestinoCD = (String) alterarImovelInscricaoActionForm.get("setorComercialDestinoCD");
         String quadraDestinoNM = (String) alterarImovelInscricaoActionForm.get("quadraDestinoNM");
+        String faceDestinoNM = (String) alterarImovelInscricaoActionForm.get("faceDestinoNM");
         String loteDestinoTemp = (String) alterarImovelInscricaoActionForm.get("loteDestino");
        
         //Verificar a existencia de Setor alternativo
@@ -143,10 +159,11 @@ public class AlterarImovelInscricaoAction extends GcomAction {
         Localidade localidadeDestino = (Localidade) validarCampo(localidadeDestinoID, null, 1);
         SetorComercial setorComercialDestino = null;
         Quadra quadraDestino = null;
+        QuadraFace quadraFaceDestino = new QuadraFace();
 
         if (flagContinuar) {
 
-            //Validação dos campos da inscrição de destino (FS0002, FS0003, FS0004)
+            //Validaï¿½ï¿½o dos campos da inscriï¿½ï¿½o de destino (FS0002, FS0003, FS0004)
             if (localidadeDestino == null) {
                 //Nenhuma localidade encontrada
                 flagContinuar = false;
@@ -170,6 +187,17 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 				        flagContinuar = false;
 				        throw new ActionServletException("atencao.pesquisa.quadra_destino_inexistente");
 				    }
+				    
+				    if(faceDestinoNM != null && !faceDestinoNM.equalsIgnoreCase("")) {
+	                	quadraFaceDestino.setId(Integer.valueOf(faceDestinoNM));
+	                	
+	                	if (quadraFaceDestino == null) {
+	                        //Nenhuma QuadraFace encontrada
+	                        flagContinuar = false;
+	                        throw new ActionServletException(
+	                                "atencao.pesquisa.quadraface_destino_inexistente");
+	                    }
+	                }
 				}
 			}
         }
@@ -256,7 +284,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
             }
         }
 
-        // [FS0006 - Verificar pré-requisitos para alteração da inscrição]
+        // [FS0006 - Verificar prï¿½-requisitos para alteraï¿½ï¿½o da inscriï¿½ï¿½o]
         if (flagContinuar) {
             Collection colecaoSetorOrigem = null;
             Iterator iteratorSetorOrigem = null;
@@ -383,13 +411,13 @@ public class AlterarImovelInscricaoAction extends GcomAction {
             }
         }
 
-        // Continuaçao [FS0006 - Verificar pré-requisitos para alteração da
-        // inscrição]
+        // Continuaï¿½ao [FS0006 - Verificar prï¿½-requisitos para alteraï¿½ï¿½o da
+        // inscriï¿½ï¿½o]
         if (flagContinuar) {
 
             /*
-             * Prepara os objetos para a pesquisa dos imoveis que estão
-             * localizados na inscrição de origem
+             * Prepara os objetos para a pesquisa dos imoveis que estï¿½o
+             * localizados na inscriï¿½ï¿½o de origem
              */
 
             Collection<Object> colecaoImovel = null;
@@ -398,20 +426,20 @@ public class AlterarImovelInscricaoAction extends GcomAction {
                     if (!loteOrigemTemp.equals("")) {
                         colecaoImovel = fachada.pesquisarImovel(
                                 localidadeOrigem.getId(), setorComercialOrigem
-                                        .getId(), quadraOrigem.getId(),
+                                        .getId(), quadraOrigem.getId(),quadraFaceOrigem.getId(),
                                 new Short(loteOrigemTemp));
                     } else {
                         colecaoImovel = fachada.pesquisarImovel(
                                 localidadeOrigem.getId(), setorComercialOrigem
-                                        .getId(), quadraOrigem.getId(), null);
+                                        .getId(), quadraOrigem.getId(),quadraFaceOrigem.getId(), null);
                     }
                 } else {
                     colecaoImovel = fachada.pesquisarImovel(localidadeOrigem
-                            .getId(), setorComercialOrigem.getId(), null, null);
+                            .getId(), setorComercialOrigem.getId(), null,quadraFaceOrigem.getId(), null);
                 }
             } else {
                 colecaoImovel = fachada.pesquisarImovel(localidadeOrigem
-                        .getId(), null, null, null);
+                        .getId(), null, null,quadraFaceOrigem.getId() ,null);
             }
 
             Imovel imovel = new Imovel();
@@ -424,9 +452,9 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			Iterator itImovel = (colecaoImovel).iterator();
 
 			
-			//se descomentar a validação da situação do imóvel,
-			//verificar caso de uso. Verificação não é p ser feita por CBST_ID<>Nulo.
-			//Validando a situação do imóvel
+			//se descomentar a validaï¿½ï¿½o da situaï¿½ï¿½o do imï¿½vel,
+			//verificar caso de uso. Verificaï¿½ï¿½o nï¿½o ï¿½ p ser feita por CBST_ID<>Nulo.
+			//Validando a situaï¿½ï¿½o do imï¿½vel
 			while (itImovel.hasNext()) {
                     imovel = (Imovel) itImovel.next();
 
@@ -442,7 +470,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
                 }
              
 
-			// Preparação dos objetos do tipo Imovel
+			// Preparaï¿½ï¿½o dos objetos do tipo Imovel
 			// ===========================
 			itImovel = (colecaoImovel).iterator();
 
@@ -450,8 +478,8 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			Quadra quadraDestinoAuxiliar = new Quadra();
 			Imovel imovelAuxiliar = new Imovel();
 
-			// Array onde serão armazenados os imóveis que sofrerão
-			// alterações.
+			// Array onde serï¿½o armazenados os imï¿½veis que sofrerï¿½o
+			// alteraï¿½ï¿½es.
 			int indexArray = 0;
 			Imovel[] imoveisAlteracao = new Imovel[colecaoImovel.size()];
 			while (itImovel.hasNext()) {
@@ -466,6 +494,11 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			        imovel.setSetorComercial(setorComercialDestino);
 			        if (quadraDestino != null) {
 			            imovel.setQuadra(quadraDestino);
+			            
+			            if(quadraFaceDestino != null) {
+			            	imovel.setQuadraFace(quadraFaceDestino);
+			            }
+			            
 			            if (loteDestinoTemp != null
 			                    && !loteDestinoTemp.equalsIgnoreCase("")) {
 			                imovel.setLote(loteDestino);
@@ -477,6 +510,10 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			                    imovel.getQuadra(), setorComercialDestino,
 			                    2);
 			            imovel.setQuadra(quadraDestinoAuxiliar);
+			            
+			            if(quadraFaceDestino != null) {
+			            	imovel.setQuadraFace(quadraFaceDestino);
+			            }
 			            if (loteDestinoTemp != null
 			                    && !loteDestinoTemp.equalsIgnoreCase("")) {
 			                imovel.setLote(loteDestino);
@@ -493,6 +530,11 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			                setorComercialDestinoAuxiliar, 2);
 			        imovel.setSetorComercial(setorComercialDestinoAuxiliar);
 			        imovel.setQuadra(quadraDestinoAuxiliar);
+			        
+			        if(quadraFaceDestino != null) {
+		            	imovel.setQuadraFace(quadraFaceDestino);
+		            }
+			        
 			        if (loteDestinoTemp != null
 			                && !loteDestinoTemp.equalsIgnoreCase("")) {
 			            imovel.setLote(loteDestino);
@@ -500,7 +542,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			        
 			    }
 
-			    // [FS0008 - Verificar duplicidade de inscrição]
+			    // [FS0008 - Verificar duplicidade de inscriï¿½ï¿½o]
 			    imovelAuxiliar = (Imovel) pesquisarRetornarObjeto(imovel,
 			            imovel.getQuadra(), 3);
 
@@ -511,7 +553,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			    }
 			    
 			    /**
-				 *  [SB0001] – Verificar Alteração da Inscrição dos Imóveis
+				 *  [SB0001] ï¿½ Verificar Alteraï¿½ï¿½o da Inscriï¿½ï¿½o dos Imï¿½veis
 				 *  @author Arthur Carvalho
 				 *  @date 18/09/2010
 				 */
@@ -532,10 +574,10 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			
 			
 			// Data: 06/07/2010
-			// Analista: Fátima Sampaio
+			// Analista: Fï¿½tima Sampaio
 			// Desenvolvedor: Hugo Amorim
 			// CRC4701
-			// [FS0006] - Verificar pré-requisitos para alteração da inscrição
+			// [FS0006] - Verificar prï¿½-requisitos para alteraï¿½ï¿½o da inscriï¿½ï¿½o
 			
 			int contadorImoveisEmProcessoFaturamento = 0;
 			boolean flagNaoConfirmado = false;
@@ -544,10 +586,10 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			
 			Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
 			
-			// Se tiver sido aprensentada a tela confirmação e o usuario confirmou.
+			// Se tiver sido aprensentada a tela confirmaï¿½ï¿½o e o usuario confirmou.
 			if ( confirmado != null && confirmado.equalsIgnoreCase("ok") ) {
-				// 	Caso o usuário confirme, não efetivar a alteração da inscrição na tabela IMOVEL 
-				// e gravar as informações da inscrição alterada na tabela IMOVEL_INSCR_ALTERADA. 
+				// 	Caso o usuï¿½rio confirme, nï¿½o efetivar a alteraï¿½ï¿½o da inscriï¿½ï¿½o na tabela IMOVEL 
+				// e gravar as informaï¿½ï¿½es da inscriï¿½ï¿½o alterada na tabela IMOVEL_INSCR_ALTERADA. 
 				
 				for ( indexArray = 0; indexArray < imoveisAlteracao.length; indexArray++ ) {
 		    		
@@ -562,7 +604,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 					
 				}	
 			
-			}// Caso não exista imovel em processo de faturamento, os imoveis serao atualizados na tabela de imovel 
+			}// Caso nï¿½o exista imovel em processo de faturamento, os imoveis serao atualizados na tabela de imovel 
 			else if ( sessao.getAttribute("acaoInserir") != null && sessao.getAttribute("acaoInserir").equals("inserirImovel") ) {
 				
 				
@@ -571,7 +613,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 					/**
 					 * @author Arthur Carvalho
 					 * @Analista Leonardo Vieira
-					 * Alteração feita para suprir necessidade da compesa, onde qualquer alteracao de inscricao do imovel,
+					 * Alteraï¿½ï¿½o feita para suprir necessidade da compesa, onde qualquer alteracao de inscricao do imovel,
 					 * somente sera efetivada no encerramento do faturamento.
 					 * 
 					 * @date 24/11/2010
@@ -581,10 +623,10 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			}
 			
 			
-			//Se tiver sido aprensentada a tela confirmação e o usuario nao confirmou.
+			//Se tiver sido aprensentada a tela confirmaï¿½ï¿½o e o usuario nao confirmou.
 			 if(confirmado != null && confirmado.equalsIgnoreCase("nao")){
-					//	Caso contrário (usuário não confirmou), não efetivar a alteração 
-					// da inscrição na tabela IMOVEL.		
+					//	Caso contrï¿½rio (usuï¿½rio nï¿½o confirmou), nï¿½o efetivar a alteraï¿½ï¿½o 
+					// da inscriï¿½ï¿½o na tabela IMOVEL.		
 					flagNaoConfirmado = true;
 					retorno = actionMapping.findForward("telaSucesso");			
 			}
@@ -593,16 +635,16 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			sessao.removeAttribute("acaoInserir");
 			
 			String mensagemSucesso  = 
-				imoveisAlteracao.length +" Inscrições de Imóvel alteradas com sucesso.";
+				imoveisAlteracao.length +" Inscriï¿½ï¿½es de Imï¿½vel alteradas com sucesso.";
 			
 			if(flagNaoConfirmado){
-				mensagemSucesso  = "Atenção! Dados da inscrição do(s) imóvel(is) não alterados devido ao(s) imóvel(is) estar(em) em processo de faturamento.";
+				mensagemSucesso  = "Atenï¿½ï¿½o! Dados da inscriï¿½ï¿½o do(s) imï¿½vel(is) nï¿½o alterados devido ao(s) imï¿½vel(is) estar(em) em processo de faturamento.";
 			}
 
-			//Mensagem de retorno para o usuário
+			//Mensagem de retorno para o usuï¿½rio
 			montarPaginaSucesso(httpServletRequest,
 					mensagemSucesso,
-			        "Atualizar outra Inscrição de Imóvel",
+			        "Atualizar outra Inscriï¿½ï¿½o de Imï¿½vel",
 			        "exibirAlterarImovelInscricaoAction.do");
         }
 
@@ -611,8 +653,8 @@ public class AlterarImovelInscricaoAction extends GcomAction {
     }
 
 	/**
-     * Verifica a situação em que se encontra a rota que pertence a quadra
-     * passada como parâmetro - não faturada = false e faturada = true
+     * Verifica a situaï¿½ï¿½o em que se encontra a rota que pertence a quadra
+     * passada como parï¿½metro - nï¿½o faturada = false e faturada = true
      * 
      * @param quadra
      * @return um boleano
@@ -624,10 +666,10 @@ public class AlterarImovelInscricaoAction extends GcomAction {
         Collection colecaoPesquisa = null;
         SistemaParametro sistemaParametro = null;
         
-        //Obtém a instância da fachada
+        //Obtï¿½m a instï¿½ncia da fachada
         Fachada fachada = Fachada.getInstancia();
 
-        //Retorna o único objeto da tabela sistemaParametro
+        //Retorna o ï¿½nico objeto da tabela sistemaParametro
         sistemaParametro = fachada.pesquisarParametrosDoSistema();
 
         if (sistemaParametro == null) {
@@ -647,7 +689,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 		                FiltroFaturamentoAtividadeCronograma.FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL_ANO_MES_REFERENCIA,
 		                new Integer(sistemaParametro.getAnoMesFaturamento())));
 
-		//O valor do ID será fixo
+		//O valor do ID serï¿½ fixo
 		// =============================================
 		filtroFaturamentoAtividadeCronograma
 		        .adicionarParametro(new ParametroSimples(
@@ -667,7 +709,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 		    FaturamentoAtividadeCronograma faturamentoAtividadeCronograma = (FaturamentoAtividadeCronograma) Util
 		            .retonarObjetoDeColecao(colecaoPesquisa);
 
-		    //Local da verificação da situação da Rota (Faturada ou não
+		    //Local da verificaï¿½ï¿½o da situaï¿½ï¿½o da Rota (Faturada ou nï¿½o
 		    // Faturada)
 		    if (faturamentoAtividadeCronograma.getDataRealizacao() == null) {
 		        retorno = false;
@@ -694,7 +736,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
         Collection colecaoPesquisa = null;
         SetorComercial setorComercial = null;
         
-        //Obtém a instância da fachada
+        //Obtï¿½m a instï¿½ncia da fachada
         Fachada fachada = Fachada.getInstancia();
 
         switch (tipoObjeto) {
@@ -779,7 +821,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
         Quadra quadra = null;
         Imovel imovel = null;
         
-        //Obtém a instância da fachada
+        //Obtï¿½m a instï¿½ncia da fachada
         Fachada fachada = Fachada.getInstancia();
 
         switch (tipoObjeto) {
@@ -818,7 +860,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 
             FiltroQuadra filtroQuadra = new FiltroQuadra();
             
-            //Objetos que serão retornados pelo hibernate
+            //Objetos que serï¿½o retornados pelo hibernate
             filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("rota.faturamentoGrupo");
 
             filtroQuadra.adicionarParametro(new ParametroSimples(
@@ -897,7 +939,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
         case 1:
             Collection colecaoSetorOrigem = pesquisarDependentes(origem, 1);
 
-            //Comparação de setores
+            //Comparaï¿½ï¿½o de setores
             if (colecaoSetorOrigem != null && !colecaoSetorOrigem.isEmpty()) {
                 Collection colecaoSetorDestino = pesquisarDependentes(destino,
                         1);
@@ -917,7 +959,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 
                     while (itSetorOrigem.hasNext()) {
                         if (!retorno) {
-                            // Verifica a existência de imóveis no setor
+                            // Verifica a existï¿½ncia de imï¿½veis no setor
                             // comercial
                             if (existeImovel(setorComercialOrigem, 1)) {
                                 break;
@@ -927,11 +969,11 @@ public class AlterarImovelInscricaoAction extends GcomAction {
                         setorComercialOrigem = (SetorComercial) itSetorOrigem
                                 .next();
 
-                        //Colocar o índice para o primeiro registro
+                        //Colocar o ï¿½ndice para o primeiro registro
                         itSetorDestino = (colecaoSetorDestino).iterator();
 
-                        //flag auxiliar para controlar a saída da rotina de
-                        // repetição
+                        //flag auxiliar para controlar a saï¿½da da rotina de
+                        // repetiï¿½ï¿½o
                         boolean sairLoop = false;
                         while (itSetorDestino.hasNext() && sairLoop == false) {
 
@@ -944,7 +986,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
                                 retorno = true;
                                 sairLoop = true;
 
-                                //Comparação de quadras
+                                //Comparaï¿½ï¿½o de quadras
                                 Collection colecaoQuadraOrigem = pesquisarDependentes(
                                         setorComercialOrigem, 2);
 
@@ -964,8 +1006,8 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 
 								    while (itQuadraOrigem.hasNext()) {
 								        if (!retorno) {
-								            // Verifica a existência de
-								            // imóveis na quadra
+								            // Verifica a existï¿½ncia de
+								            // imï¿½veis na quadra
 								            if (existeImovel(quadraOrigem,
 								                    2)) {
 								                break;
@@ -975,7 +1017,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 								        quadraOrigem = (Quadra) itQuadraOrigem
 								                .next();
 
-								        //Colocar o índice para o primeiro
+								        //Colocar o ï¿½ndice para o primeiro
 								        // registro
 								        itQuadraDestino = (colecaoQuadraDestino)
 								                .iterator();
@@ -1013,7 +1055,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
         case 2:
             Collection colecaoQuadraOrigem = pesquisarDependentes(origem, 2);
 
-            //Comparação de quadras
+            //Comparaï¿½ï¿½o de quadras
             if (colecaoQuadraOrigem != null && !colecaoQuadraOrigem.isEmpty()) {
                 Collection colecaoQuadraDestino = pesquisarDependentes(destino,
                         2);
@@ -1029,7 +1071,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
                         }
                         Quadra quadraOrigem = (Quadra) itQuadraOrigem.next();
 
-                        //Colocar o índice para o primeiro registro
+                        //Colocar o ï¿½ndice para o primeiro registro
                         itQuadraDestino = (colecaoQuadraDestino).iterator();
 
                         while (itQuadraDestino.hasNext()) {
@@ -1070,11 +1112,11 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 
         Collection colecaoPesquisa = null;
         
-        //Obtém a instância da fachada
+        //Obtï¿½m a instï¿½ncia da fachada
         Fachada fachada = Fachada.getInstancia();
 
         switch (tipoObjeto) {
-        //Localidade - retorna uma coleção de setor comercial
+        //Localidade - retorna uma coleï¿½ï¿½o de setor comercial
         case 1:
             Localidade localidade = (Localidade) objetoPai;
 
@@ -1083,7 +1125,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
                     .getId().intValue());
 
             break;
-        //Setor Comercial - retorna uma coleção de quadra
+        //Setor Comercial - retorna uma coleï¿½ï¿½o de quadra
         case 2:
             SetorComercial setorComercial = (SetorComercial) objetoPai;
 
@@ -1100,7 +1142,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
     }
 
     /**
-     * Valida os valores digitados pelo usuário
+     * Valida os valores digitados pelo usuï¿½rio
      * 
      * @param campoDependencia
      * @param dependente
@@ -1116,7 +1158,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
         Object objeto = null;
         Collection colecaoPesquisa;
         
-        //Obtém a instância da fachada
+        //Obtï¿½m a instï¿½ncia da fachada
         Fachada fachada = Fachada.getInstancia();
 
         if (campoDependencia != null && !campoDependencia.equalsIgnoreCase("")) {
@@ -1172,7 +1214,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
                 case 3:
                     FiltroQuadra filtroQuadra = new FiltroQuadra();
                     
-                    //Objetos que serão retornados pelo hibernate
+                    //Objetos que serï¿½o retornados pelo hibernate
                     filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("rota.faturamentoGrupo");
                     
                     filtroQuadra.adicionarParametro(new ParametroSimples(
@@ -1191,6 +1233,18 @@ public class AlterarImovelInscricaoAction extends GcomAction {
                     if ( !Util.isVazioOrNulo(colecaoPesquisa)) {
                         objeto = Util.retonarObjetoDeColecao(colecaoPesquisa);
                     }
+                    
+                    break;
+                // Face
+                case 4:
+                	FiltroQuadraFace filtroQuadraFace = new FiltroQuadraFace();
+                	filtroQuadraFace.adicionarParametro(new ParametroSimples(FiltroQuadraFace.ID_QUADRA,new Integer(campoDependencia)));
+                	colecaoPesquisa = fachada.pesquisar(filtroQuadraFace,
+                            QuadraFace.class.getName());
+                	
+                	if ( !Util.isVazioOrNulo(colecaoPesquisa)) {
+                        objeto = Util.retonarObjetoDeColecao(colecaoPesquisa);
+                    }
 
                     break;
                 default:
@@ -1203,7 +1257,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
     }
 
     /**
-     * Verifica a existência de imóveis no objeto passado como parâmetro Os
+     * Verifica a existï¿½ncia de imï¿½veis no objeto passado como parï¿½metro Os
      * objetos passados podem ser do tipo SetorComercial = 1 e Quadra = 2
      * 
      * @param objetoCondicao
@@ -1215,14 +1269,14 @@ public class AlterarImovelInscricaoAction extends GcomAction {
         boolean retorno = false;
         Collection colecaoPesquisa;
         
-        //Obtém a instância da fachada
+        //Obtï¿½m a instï¿½ncia da fachada
         Fachada fachada = Fachada.getInstancia();
 
         if (tipoObjeto == 1) {
             SetorComercial setorComercial = (SetorComercial) objetoCondicao;
 
             colecaoPesquisa = fachada.pesquisarImovel(null, setorComercial
-                    .getId(), null, null);
+                    .getId(), null,null, null);
 
             if (colecaoPesquisa != null && !colecaoPesquisa.isEmpty()) {
                 retorno = true;
@@ -1231,7 +1285,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
             Quadra quadra = (Quadra) objetoCondicao;
 
             colecaoPesquisa = fachada.pesquisarImovel(null, null, quadra
-                    .getId(), null);
+                    .getId(),null, null);
 
             if (colecaoPesquisa != null && !colecaoPesquisa.isEmpty()) {
                 retorno = true;
@@ -1243,8 +1297,8 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 
     
     /**
-	 * [UC0074] Alterar Inscrição de Imóvel
-	 * [FS0010] – Verificar Duplicidade de Inscrição
+	 * [UC0074] Alterar Inscriï¿½ï¿½o de Imï¿½vel
+	 * [FS0010] ï¿½ Verificar Duplicidade de Inscriï¿½ï¿½o
 	 * @author Arthur Carvalho
 	 * @date 17/09/2010
 	 * @return
@@ -1272,7 +1326,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 	}
 	
 	/**
-	 *  [SB0001] – Verificar Alteração da Inscrição dos Imóveis
+	 *  [SB0001] ï¿½ Verificar Alteraï¿½ï¿½o da Inscriï¿½ï¿½o dos Imï¿½veis
 	 *  
 	 * @author Arthur Carvalho
 	 * @date 20/09/2010
@@ -1294,15 +1348,15 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
 		
 		/*
-		 * 1. Caso o indicador de alteração da inscrição esteja ativo (PARM_ICALTERACAOINSCRICAOIMOVEL=1 da tabela SISTEMA_PARAMETROS), 
-		 * verificar para cada um dos imóveis da Inscrição Inicial a impossibilidade de efetuar a alteração das inscrições em tempo real:
+		 * 1. Caso o indicador de alteraï¿½ï¿½o da inscriï¿½ï¿½o esteja ativo (PARM_ICALTERACAOINSCRICAOIMOVEL=1 da tabela SISTEMA_PARAMETROS), 
+		 * verificar para cada um dos imï¿½veis da Inscriï¿½ï¿½o Inicial a impossibilidade de efetuar a alteraï¿½ï¿½o das inscriï¿½ï¿½es em tempo real:
 		 */
 		if (sistemaParametro.getIndicadorAlteracaoInscricaoImovel().equals(ConstantesSistema.SIM)){
 			
 			//if (fachada.verificarImovelEmProcessoDeFaturamento(imovel.getId())){
 				
 				httpServletRequest.setAttribute("nomeBotao1", "Sim");
-				httpServletRequest.setAttribute("nomeBotao3", "Não");
+				httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
 
 				sessao.setAttribute("acao" , "inserirImovelInscricaoAlterada");
 				
@@ -1311,9 +1365,9 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 			//}
 		}
 		/*
-		 * 2. Caso o indicador de alteração da inscrição esteja inativo (PARM_ICALTERACAOINSCRICAOIMOVEL=2 da tabela SISTEMA_PARAMETROS), 
-		 * para cada um dos imóveis do conjunto de imóveis da Inscrição Inicial, verificar a impossibilidade de efetuar a alteração das 
-		 * inscrições em tempo real:
+		 * 2. Caso o indicador de alteraï¿½ï¿½o da inscriï¿½ï¿½o esteja inativo (PARM_ICALTERACAOINSCRICAOIMOVEL=2 da tabela SISTEMA_PARAMETROS), 
+		 * para cada um dos imï¿½veis do conjunto de imï¿½veis da Inscriï¿½ï¿½o Inicial, verificar a impossibilidade de efetuar a alteraï¿½ï¿½o das 
+		 * inscriï¿½ï¿½es em tempo real:
 		 */
 		else{
 			
@@ -1338,7 +1392,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 						//1.3.1.1.1 
 						//1.3.1.1.2
 						httpServletRequest.setAttribute("nomeBotao1", "Sim");
-						httpServletRequest.setAttribute("nomeBotao3", "Não");
+						httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
 						
 						sessao.setAttribute("acao" , "inserirImovelInscricaoAlterada");
 						
@@ -1358,7 +1412,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 								//1.3.1.2.1.1.1 
 								//1.3.1.2.1.1.2
 								httpServletRequest.setAttribute("nomeBotao1", "Sim");
-								httpServletRequest.setAttribute("nomeBotao3", "Não");
+								httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
 
 								sessao.setAttribute("acao" , "inserirImovelInscricaoAlterada");
 								
@@ -1368,7 +1422,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 						
 							}//1.3.1.2.1.2
 							else {
-								//efetivar a alteração da inscrição na tabela IMOVEL
+								//efetivar a alteraï¿½ï¿½o da inscriï¿½ï¿½o na tabela IMOVEL
 								sessao.setAttribute("acaoInserir" , "inserirImovel");
 							}
 							
@@ -1381,7 +1435,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 								//1.3.1.2.2.1.1 
 								//1.3.1.2.2.1.2
 								httpServletRequest.setAttribute("nomeBotao1", "Sim");
-								httpServletRequest.setAttribute("nomeBotao3", "Não");
+								httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
 
 								sessao.setAttribute("acao" , "inserirImovelInscricaoAlterada");
 								
@@ -1389,10 +1443,10 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 										"atencao.dados_leituras_gerados_faturamento_grupo_destino_imovel_inscricao_alterada",
 										httpServletRequest, actionMapping, imovel.getId().toString(), faturamentoGrupoDestino.getId().toString() );
 
-								//[SB0005 – Preparar Alteração Inscrição no Encerramento Faturamento]
+								//[SB0005 ï¿½ Preparar Alteraï¿½ï¿½o Inscriï¿½ï¿½o no Encerramento Faturamento]
 							} else {
 								//1.3.1.2.2.2
-								//efetivar a alteração da inscrição na tabela IMOVEL
+								//efetivar a alteraï¿½ï¿½o da inscriï¿½ï¿½o na tabela IMOVEL
 								sessao.setAttribute("acaoInserir" , "inserirImovel");
 							}
 						}
@@ -1404,7 +1458,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 						//1.3.2.1.1
 						//1.3.2.1.2
 						httpServletRequest.setAttribute("nomeBotao1", "Sim");
-						httpServletRequest.setAttribute("nomeBotao3", "Não");
+						httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
 
 						sessao.setAttribute("acao" , "inserirImovelInscricaoAlterada");
 						
@@ -1419,7 +1473,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 							//1.3.2.2.1.1
 							//1.3.2.2.1.2
 							httpServletRequest.setAttribute("nomeBotao1", "Sim");
-							httpServletRequest.setAttribute("nomeBotao3", "Não");
+							httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
 
 							sessao.setAttribute("acao" , "inserirImovelInscricaoAlterada");
 							
@@ -1434,7 +1488,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 								//1.3.2.2.2.1.1
 								//1.3.2.2.2.1.2
 								httpServletRequest.setAttribute("nomeBotao1", "Sim");
-								httpServletRequest.setAttribute("nomeBotao3", "Não");
+								httpServletRequest.setAttribute("nomeBotao3", "Nï¿½o");
 
 								sessao.setAttribute("acao" , "inserirImovelInscricaoAlterada");
 								
@@ -1444,7 +1498,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 												faturamentoGrupoDestino.getId().toString() );
 							}//1.3.2.2.2.2 
 							else {
-								//efetivar a alteração da inscrição na tabela IMOVEL
+								//efetivar a alteraï¿½ï¿½o da inscriï¿½ï¿½o na tabela IMOVEL
 								sessao.setAttribute("acaoInserir" , "inserirImovel");
 							}
 						}
@@ -1462,7 +1516,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 
 	
 	/**
-	 * [SB0002] – Preparar Alteração Inscrição no Encerramento Faturamento
+	 * [SB0002] ï¿½ Preparar Alteraï¿½ï¿½o Inscriï¿½ï¿½o no Encerramento Faturamento
 	 * @author Arthur Carvalho
 	 * @date 20/09/2010
 	 * @param fachada
@@ -1470,10 +1524,10 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 	 */
 	private void prepararAlteracaoInscricaoEncerramentoFaturamento(Fachada fachada, Imovel imovelHelper, Usuario usuario ){
 		
-		//[FS0009 – Verificar Existência de Alteração de Inscrição Pendente para o Imóvel] 
+		//[FS0009 ï¿½ Verificar Existï¿½ncia de Alteraï¿½ï¿½o de Inscriï¿½ï¿½o Pendente para o Imï¿½vel] 
 		verificarExistenciaAlteracaoInscricaoPendenteImovel(imovelHelper, fachada);
 		
-		//[FS0010 – Verificar Duplicidade de Inscrição]
+		//[FS0010 ï¿½ Verificar Duplicidade de Inscriï¿½ï¿½o]
 		verificarDuplicidadeInscricao(imovelHelper, fachada );
 		
 		
@@ -1526,7 +1580,7 @@ public class AlterarImovelInscricaoAction extends GcomAction {
 	}
 
 	/**
-	 * [FS0009 – Verificar Existência de Alteração de Inscrição Pendente para o Imóvel] 
+	 * [FS0009 ï¿½ Verificar Existï¿½ncia de Alteraï¿½ï¿½o de Inscriï¿½ï¿½o Pendente para o Imï¿½vel] 
 	 * @author Arthur Carvalho
 	 * @date 17/09/2010
 	 * @param imovelSemAtualizacao

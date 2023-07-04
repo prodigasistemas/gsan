@@ -265,6 +265,10 @@
 				type="java.lang.String" />
 			<form-property name="quadraOrigemID"
 				type="java.lang.String" />
+			<form-property name="faceOrigemNM"
+				type="java.lang.String" />
+			<form-property name="faceOrigemID"
+				type="java.lang.String" />
 			<form-property name="quadraMensagemOrigem"
 				type="java.lang.String" />
 			<form-property name="loteOrigem" type="java.lang.String" />
@@ -281,6 +285,10 @@
 			<form-property name="quadraDestinoNM"
 				type="java.lang.String" />
 			<form-property name="quadraDestinoID"
+				type="java.lang.String" />
+			<form-property name="faceDestinoNM"
+				type="java.lang.String" />
+			<form-property name="faceDestinoID"
 				type="java.lang.String" />
 			<form-property name="quadraMensagemDestino"
 				type="java.lang.String" />

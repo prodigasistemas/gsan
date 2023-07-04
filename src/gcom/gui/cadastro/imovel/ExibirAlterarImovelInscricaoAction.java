@@ -2,9 +2,11 @@ package gcom.gui.cadastro.imovel;
 
 import gcom.cadastro.localidade.FiltroLocalidade;
 import gcom.cadastro.localidade.FiltroQuadra;
+import gcom.cadastro.localidade.FiltroQuadraFace;
 import gcom.cadastro.localidade.FiltroSetorComercial;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
+import gcom.cadastro.localidade.QuadraFace;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
@@ -12,7 +14,10 @@ import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,6 +30,8 @@ import org.apache.struts.validator.DynaValidatorForm;
 public class ExibirAlterarImovelInscricaoAction extends GcomAction {
 
     private Collection colecaoPesquisa = null;
+    
+    private Collection colecaoPesquisaFace = new HashSet();
 
     private String localidadeIDOrigem = null;
     
@@ -390,6 +397,9 @@ public class ExibirAlterarImovelInscricaoAction extends GcomAction {
             Fachada fachada, HttpServletRequest httpServletRequest) {
 
         FiltroQuadra filtroQuadra = new FiltroQuadra();
+        FiltroQuadraFace filtroQuadraFace = new FiltroQuadraFace();
+        Collection facesQuadra = new HashSet();
+        Quadra objetoQuadra = null;
         
         //Objetos que serão retornados pelo hibernate.
         filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("bairro");
@@ -446,19 +456,22 @@ public class ExibirAlterarImovelInscricaoAction extends GcomAction {
                 httpServletRequest.setAttribute("corQuadraOrigem",
                         "exception");
             } else if (colecaoPesquisa != null && !colecaoPesquisa.isEmpty()){
-                Quadra objetoQuadra = (Quadra) Util
+                objetoQuadra = (Quadra) Util
                         .retonarObjetoDeColecao(colecaoPesquisa);
                 alterarImovelInscricaoActionForm.set("quadraOrigemNM",
                         String.valueOf(objetoQuadra.getNumeroQuadra()));
                 alterarImovelInscricaoActionForm.set("quadraOrigemID",
                         String.valueOf(objetoQuadra.getId()));
-                if(alterarImovelInscricaoActionForm.get("quadraDestinoNM") == null || alterarImovelInscricaoActionForm.get("quadraDestinoNM").equals("") || alterarImovelInscricaoActionForm.get("quadraOrigemNM").equals(alterarImovelInscricaoActionForm.get("quadraDestinoNM")))
-                {
-	                alterarImovelInscricaoActionForm.set("quadraDestinoNM",
-                            String.valueOf(objetoQuadra.getNumeroQuadra()));
-                    alterarImovelInscricaoActionForm.set("quadraDestinoID",
-                            String.valueOf(objetoQuadra.getId()));
-                }
+				/*
+				 * if(alterarImovelInscricaoActionForm.get("quadraDestinoNM") == null ||
+				 * alterarImovelInscricaoActionForm.get("quadraDestinoNM").equals("") ||
+				 * alterarImovelInscricaoActionForm.get("quadraOrigemNM").equals(
+				 * alterarImovelInscricaoActionForm.get("quadraDestinoNM"))) {
+				 * alterarImovelInscricaoActionForm.set("quadraDestinoNM",
+				 * String.valueOf(objetoQuadra.getNumeroQuadra()));
+				 * alterarImovelInscricaoActionForm.set("quadraDestinoID",
+				 * String.valueOf(objetoQuadra.getId())); }
+				 */
                 httpServletRequest.setAttribute("corQuadraOrigem", "valor");
                 httpServletRequest.setAttribute("nomeCampo", "loteOrigem");
             }
@@ -472,6 +485,8 @@ public class ExibirAlterarImovelInscricaoAction extends GcomAction {
         		httpServletRequest.setAttribute("corQuadraOrigem", "exception");
         	}
         }
+        
+        
         //Recebe os valores dos campos setorComercialOrigemCD e
         // setorComercialOrigemID do formulário.
         setorComercialCDDestino = (String) alterarImovelInscricaoActionForm
@@ -522,7 +537,7 @@ public class ExibirAlterarImovelInscricaoAction extends GcomAction {
                 httpServletRequest.setAttribute("corQuadraDestino",
                         "exception");
             } else {
-                Quadra objetoQuadra = (Quadra) Util
+                objetoQuadra = (Quadra) Util
                         .retonarObjetoDeColecao(colecaoPesquisa);
                 alterarImovelInscricaoActionForm.set("quadraDestinoNM",
                         String.valueOf(objetoQuadra.getNumeroQuadra()));
@@ -534,7 +549,11 @@ public class ExibirAlterarImovelInscricaoAction extends GcomAction {
                 {
                 	httpServletRequest.setAttribute("nomeCampo", "loteDestino");
                 }
+                
+                
             }
+            
+            
         } else {
             //Limpa o campo setorComercialOrigemCD do formulário
             alterarImovelInscricaoActionForm.set("quadraDestinoNM", "");
@@ -543,6 +562,56 @@ public class ExibirAlterarImovelInscricaoAction extends GcomAction {
                     "Informe o setor comercial da inscrição.");
             httpServletRequest
                     .setAttribute("corQuadraDestino", "exception");
+        }
+        
+        if(objetoQuadra != null) {
+	        //Retorna as faces de Quadra
+	        filtroQuadraFace.limparListaParametros();
+	        
+	        filtroQuadraFace.adicionarParametro(new ParametroSimples(
+					FiltroQuadraFace.ID_QUADRA, objetoQuadra.getId()));
+	      
+	        colecaoPesquisaFace = fachada.pesquisar(filtroQuadraFace, QuadraFace.class
+	                .getName());
+	        
+	        String faceOrigemNM = (String) alterarImovelInscricaoActionForm.get("faceOrigemNM");
+	
+			if(!faceOrigemNM.equals("")  ) {
+				String quadraOrigem = (String) alterarImovelInscricaoActionForm.get("quadraOrigemID");
+				FiltroQuadraFace filtroQuadraFaceOrigem = new FiltroQuadraFace();
+				filtroQuadraFaceOrigem.adicionarParametro(new ParametroSimples(
+							FiltroQuadraFace.ID_QUADRA, Integer.parseInt(quadraOrigem) ));
+				Collection colecaoPesquisaFaceOrigem = fachada.pesquisar(filtroQuadraFaceOrigem, QuadraFace.class
+			                .getName());
+			    httpServletRequest.setAttribute("facesQuadraOrigem", colecaoPesquisaFaceOrigem);
+			}
+			String faceDestinoNM = (String) alterarImovelInscricaoActionForm.get("faceDestinoNM");
+	
+			if(!faceDestinoNM.equals("")) {
+				String quadraDestino = (String) alterarImovelInscricaoActionForm.get("quadraDestinoID");
+				FiltroQuadraFace filtroQuadraFaceDestino = new FiltroQuadraFace();
+				filtroQuadraFaceDestino.adicionarParametro(new ParametroSimples(
+							FiltroQuadraFace.ID_QUADRA, Integer.parseInt(quadraDestino) ));
+				Collection colecaoPesquisaFaceDestino = fachada.pesquisar(filtroQuadraFaceDestino, QuadraFace.class
+		                .getName());
+		    httpServletRequest.setAttribute("facesQuadraDestino", colecaoPesquisaFaceDestino);
+			}
+	        if (colecaoPesquisaFace != null && !colecaoPesquisaFace.isEmpty()) {
+				
+	        	if(inscricaoTipo.contains("origem")) {
+	        		//FACE(S) DA QUADRA ENCONTRADA(S)
+	        		httpServletRequest.setAttribute("facesQuadraOrigem", colecaoPesquisaFace);
+	        	}else {
+	        		if(inscricaoTipo.contains("destino")) {
+	        			httpServletRequest.setAttribute("facesQuadraDestino", colecaoPesquisaFace);
+	        		}
+	        	}
+			}else{
+				//FACE(S) DA QUADRA NÃO ENCONTRADA(S)
+				httpServletRequest.setAttribute("msgQuadraFace","Face(s) da Quadra inexistente(s)");
+			}
+        }else {
+        	httpServletRequest.setAttribute("msgQuadra","Quadra(s) inexistente(s)"); 
         }
     }
 }

@@ -92,7 +92,8 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public void removerImovel(String[] ids, Usuario usuarioLogado) throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarImovel(Integer idLocalidade, Integer idSetorComercial, Integer idQuadra, Short lote) throws ControladorException;
+	public Collection pesquisarImovel(Integer idLocalidade, Integer idSetorComercial, Integer idQuadra,Integer quadraFace, Short lote) throws ControladorException;
+	
 
 	public void atualizarImovelInscricao(Imovel imovel, Usuario usuario) throws ControladorException;
 

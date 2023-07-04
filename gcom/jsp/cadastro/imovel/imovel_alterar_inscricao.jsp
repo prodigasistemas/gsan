@@ -4,6 +4,9 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/gsanLib.tld" prefix="gsan" %>
 
+<%@ page import="gcom.cadastro.sistemaparametro.SistemaParametro"%>
+<%@ page import="gcom.util.ConstantesSistema" %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html:html>
@@ -325,7 +328,38 @@ function chamarPopup(url, tipo, objeto, codigoObjeto, altura, largura, msg){
 	}
 }
 
+function validarQuadra(nomeCampo, idDependencia, nomeDependencia,objetoConsulta,inscricaoTipo,facesQuadra){
+
+	var form = document.forms[0];
+	
+	var objetoCampo = nomeCampo;
+	var valorCampo = nomeCampo.value;
+
+	if(idDependencia.length < 1 || isNaN(idDependencia) || ((idDependencia * 1) == 0) ||
+	   idDependencia.indexOf(',') != -1 || idDependencia.indexOf('.') != -1 || ((idDependencia * 1) == 0)){
+		
+		alert('Informe ' + nomeDependencia);
+		form.idSetorComercial.focus();
+		
+	}
+	else if (!isNaN(valorCampo) && valorCampo.length > 0 && valorCampo.indexOf(',') == -1 &&
+			 valorCampo.indexOf('.') == -1 && ((valorCampo * 1) > 0)){
+      	
+		objetoCampo.value = trim(valorCampo);
+		
+		if (objetoCampo.value.length > 0){
+			
+			form.action = "exibirAlterarImovelInscricaoAction.do?objetoConsulta="+objetoConsulta+"&inscricaoTipo="+inscricaoTipo+"&facesQuadra=facesQuadra";
+			toUpperCase(form);
+        	form.submit();
+		}
+	}	
+}
+
 //-->
+
+
+
 </SCRIPT>
 
 <script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script><html:javascript staticJavascript="false"  formName="AlterarImovelInscricaoActionForm" />
@@ -480,9 +514,45 @@ function chamarPopup(url, tipo, objeto, codigoObjeto, altura, largura, msg){
         </tr>
         <tr>
             <tr>
-            <td><strong>Quadra:</strong></td>
-            <td><html:text maxlength="4" property="quadraOrigemNM" size="3" tabindex="3" onkeypress="limpar(11);return isCampoNumerico(event);" onkeyup="replicaDados(document.forms[0].quadraOrigemNM, document.forms[0].quadraDestinoNM);"/>
-            <html:hidden property="quadraOrigemID"/></td>
+            <td><strong>Quadra:<font color="#FF0000">*</font></strong></td>
+                 <td height="24" colspan="2"><html:text 
+                 styleId="quadraOrigemNM"
+                 maxlength="4" 
+                 property="quadraOrigemNM" size="3"  tabindex="7"
+                 onkeypress="
+				validaEnterDependenciaComMensagem(
+				event, 
+				'exibirAlterarImovelInscricaoAction.do?objetoConsulta=3&inscricaoTipo=origem', 
+				document.forms[0].setorComercialOrigemCD, 
+				document.forms[0].localidadeOrigemID.value, 
+				'localidade da inscrição de origem', 
+				'Setor comercial de origem');
+				return isCampoNumerico(event);" 
+                 onblur="validarQuadra(this, document.forms[0].setorComercialOrigemCD.value, 'Setor Comercial',3,'origem');"/>
+				 <html:hidden property="quadraOrigemID"/>
+					<!--  onkeyup="checa_proximo(this.name);" -->
+			
+					<logic:present name="msgQuadra" scope="request">
+			 		<logic:present name="codigoQuadraNaoEncontrada" scope="request">
+					<span style="color:#ff0000" id="msgQuadra"><bean:write scope="request" name="msgQuadra"/></span>
+                    </logic:present>
+                    <logic:notPresent name="codigoQuadraNaoEncontrada" scope="request">
+					<span style="color:#000000" id="msgQuadra"><bean:write scope="request" name="msgQuadra"/></span>
+                    </logic:notPresent>                   
+                    </logic:present>
+                 </td>
+        	</tr>
+        <tr>
+            	
+            	<td HEIGHT="30"><strong>Face:</strong></td>
+	        	<td>
+					<html:select property="faceOrigemNM" style="width: 200px;" tabindex="9" styleId="faceOrigemNM">
+						<logic:present name="facesQuadraOrigem">
+							<html:options collection="facesQuadraOrigem" labelProperty="numeroQuadraFace" property="id"/>
+						</logic:present>
+					</html:select>
+					<html:hidden property="faceOrigemID"/>
+				</td>
         </tr>
         <tr>
            <td><strong>Lote:</strong></td>
@@ -535,7 +605,17 @@ function chamarPopup(url, tipo, objeto, codigoObjeto, altura, largura, msg){
             <td><strong>Setor Comercial :</strong></td>
             <td>
 			
-				<html:text maxlength="3" property="setorComercialDestinoCD" size="3" onkeypress="limpar(10); validaEnterDependenciaComMensagem(event, 'exibirAlterarImovelInscricaoAction.do?objetoConsulta=2&inscricaoTipo=destino', document.forms[0].setorComercialDestinoCD, document.forms[0].localidadeDestinoID.value, 'localidade da inscrição de destino', 'Setor comercial de destino');return isCampoNumerico(event);" tabindex="6"/>
+				<html:text maxlength="3" property="setorComercialDestinoCD" size="3" 
+				onkeypress="limpar(10); 
+				validaEnterDependenciaComMensagem(
+				event, 
+				'exibirAlterarImovelInscricaoAction.do?objetoConsulta=2&inscricaoTipo=destino', 
+				document.forms[0].setorComercialDestinoCD, 
+				document.forms[0].localidadeDestinoID.value, 
+				'localidade da inscrição de destino', 
+				'Setor comercial de destino');
+				return isCampoNumerico(event);" 
+				tabindex="6"/>
 				<a	href="javascript:chamarPopup('exibirPesquisarSetorComercialAction.do', 'setorComercialDestino', 'idLocalidade', document.AlterarImovelInscricaoActionForm.localidadeDestinoID.value, 275, 480, 'Informe a Localidade da inscrição de destino');"><img
 						src="<bean:message key="caminho.imagens"/>pesquisa.gif" border="0"
 						width="23" height="21" title="Pesquisar"></a> 
@@ -572,9 +652,45 @@ function chamarPopup(url, tipo, objeto, codigoObjeto, altura, largura, msg){
 			</td>
         </tr>
         <tr>
-            <td><strong>Quadra:</strong></td>
-            <td><html:text maxlength="4" property="quadraDestinoNM" onkeypress="return isCampoNumerico(event);" size="3" tabindex="7" />
-            <html:hidden property="quadraDestinoID"/></td>
+            <td><strong>Quadra:<font color="#FF0000">*</font></strong></td>
+                 <td height="24" colspan="2"><html:text
+                 styleId="quadraDestinoNM" 
+                 maxlength="4" 
+                 property="quadraDestinoNM" size="3"  tabindex="7"
+                 onkeypress="
+				validaEnterDependenciaComMensagem(
+				event, 
+				'exibirAlterarImovelInscricaoAction.do?objetoConsulta=3&inscricaoTipo=destino', 
+				document.forms[0].setorComercialDestinoCD, 
+				document.forms[0].localidadeDestinoID.value, 
+				'localidade da inscrição de destino', 
+				'Setor comercial de destino');
+				return isCampoNumerico(event);" 
+                 onblur="validarQuadra(this, document.forms[0].setorComercialDestinoCD.value, 'Setor Comercial',3,'destino');"/>
+				 <html:hidden property="quadraDestinoID"/>
+					<!--  onkeyup="checa_proximo(this.name);" -->
+			
+					<logic:present name="msgQuadra" scope="request">
+			 		<logic:present name="codigoQuadraNaoEncontrada" scope="request">
+					<span style="color:#ff0000" id="msgQuadra"><bean:write scope="request" name="msgQuadra"/></span>
+                    </logic:present>
+                    <logic:notPresent name="codigoQuadraNaoEncontrada" scope="request">
+					<span style="color:#000000" id="msgQuadra"><bean:write scope="request" name="msgQuadra"/></span>
+                    </logic:notPresent>                   
+                    </logic:present>
+                 </td>
+        </tr>
+        <tr>
+            	
+            	<td HEIGHT="30"><strong>Face:</strong></td>
+	        	<td>
+					<html:select property="faceDestinoNM" style="width: 200px;" tabindex="9" styleId="faceDestinoNM">
+						<logic:present name="facesQuadraDestino">
+							<html:options collection="facesQuadraDestino" labelProperty="numeroQuadraFace" property="id"/>
+						</logic:present>
+					</html:select>
+					<html:hidden property="faceDestinoID"/>
+				</td>
         </tr>
         <tr>
             <td><strong>Lote:</strong></td>

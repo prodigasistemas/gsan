@@ -1506,14 +1506,15 @@ public class Fachada {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarImovel(Integer idLocalidade, Integer idSetorComercial, Integer idQuadra, Short lote) {
+	public Collection pesquisarImovel(Integer idLocalidade, Integer idSetorComercial, Integer idQuadra,Integer quadraFace, Short lote) {
 
 		try {
-			return this.getControladorImovel().pesquisarImovel(idLocalidade, idSetorComercial, idQuadra, lote);
+			return this.getControladorImovel().pesquisarImovel(idLocalidade, idSetorComercial, idQuadra,quadraFace, lote);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+	
 
 	public void removerTabelaAuxiliar(String[] ids, String pacoteNomeObjeto, OperacaoEfetuada operacaoEfetuada, Collection<UsuarioAcaoUsuarioHelper> acaoUsuarioHelper) {
 
