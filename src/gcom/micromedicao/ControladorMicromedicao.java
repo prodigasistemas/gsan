@@ -1648,7 +1648,7 @@ public class ControladorMicromedicao extends ControladorComum {
 
 								Short isImovelAnalisado = this.repositorioMicromedicao.pesquisarMedicaoHistoricoLigacaoAguaAnalisado(imovel.getId(), faturamentoGrupo.getAnoMesReferencia(), MedicaoTipo.LIGACAO_AGUA);
 								if (isImovelAnalisado != null && isImovelAnalisado.equals(ConstantesSistema.NAO))
-									getControladorFaturamento().processarMovimentoContaPrefaturada(rota, colMovimentoContaPrefaturada, false,colImoveisComProblema);
+									getControladorFaturamento().processarMovimentoContaPrefaturada(rota, colMovimentoContaPrefaturada, false);
 
 							} else {
 
@@ -6176,7 +6176,7 @@ public class ControladorMicromedicao extends ControladorComum {
 								&& consumoHistorico.getConsumoTipo().getId().equals(ConsumoTipo.MEDIA_HIDROMETRO))
 								|| (medicaoHistorico.getLeituraAtualInformada() == null 
 								&& medicaoHistorico.getLeituraAnormalidadeFaturamento() != null)) {
-							System.out.println("28 " + consumoHistorico.getImovel().getId());
+							System.out.println("25 " + consumoHistorico.getImovel().getId());
 							leituraAjustada = medicaoHistorico.getLeituraAtualFaturamento();
 						}
 
