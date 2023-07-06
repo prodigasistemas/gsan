@@ -1508,6 +1508,7 @@ public class ControladorMicromedicao extends ControladorComum {
 
 		int idUnidadeIniciada = 0;
 		Integer matricula = null;
+		Collection<Imovel> colImoveisComProblema = new ArrayList();
 
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA,((Rota) Util.retonarObjetoDeColecao(colecaoRotas)).getId());
 
@@ -1647,7 +1648,7 @@ public class ControladorMicromedicao extends ControladorComum {
 
 								Short isImovelAnalisado = this.repositorioMicromedicao.pesquisarMedicaoHistoricoLigacaoAguaAnalisado(imovel.getId(), faturamentoGrupo.getAnoMesReferencia(), MedicaoTipo.LIGACAO_AGUA);
 								if (isImovelAnalisado != null && isImovelAnalisado.equals(ConstantesSistema.NAO))
-									getControladorFaturamento().processarMovimentoContaPrefaturada(rota, colMovimentoContaPrefaturada, false);
+									getControladorFaturamento().processarMovimentoContaPrefaturada(rota, colMovimentoContaPrefaturada, false,colImoveisComProblema);
 
 							} else {
 
@@ -1990,19 +1991,22 @@ public class ControladorMicromedicao extends ControladorComum {
 				consumoHistorico.getImovel().getId(), faturamentoGrupo.getAnoMesReferencia(),
 				consumoHistorico.getLigacaoTipo().getId(), houveIntslacaoHidrometro);
 		
+		System.out.println("1 " + consumoHistorico.getImovel().getId());
 		if (consumoHistorico.getImovel().getLigacaoAgua() != null && consumoHistorico.getImovel().getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
-
+			
+			System.out.println("2 " + consumoHistorico.getImovel().getId());
+			
 			medicaoTipo.setId(MedicaoTipo.LIGACAO_AGUA);
 			medicaoHistorico = obterDadosHistoricoMedicao(faturamentoGrupo, consumoHistorico.getImovel(), medicaoTipo, sistemaParametro);
 			medicaoHistorico.setImovel(consumoHistorico.getImovel());
 			medicaoHistorico.setConsumoMedioHidrometro(new Integer(consumoMedioHidrometro[0]));
-
+			System.out.println("3 " + consumoHistorico.getImovel().getId() + " consimoMedioHidrometro: " + new Integer(consumoMedioHidrometro[0]));
 			int leituraAnterior = obterLeituraAnterior(medicaoHistorico);
-
+			System.out.println("4 " + consumoHistorico.getImovel().getId() + " leitura anterior: " + leituraAnterior);
 			if (verificarSubstituicaoHidrometro(consumoHistorico.getImovel(), medicaoHistorico,	sistemaParametro)) {
-
+				System.out.println("5 " + consumoHistorico.getImovel().getId() + " substituicao true ");
 				Integer leituraInstalacaoHidrometro = this.obterLeituraInstalacaoHidrometro(faturamentoGrupo, consumoHistorico.getImovel());
-
+				
 				if (medicaoHistorico.getLeituraAtualInformada() != null && medicaoHistorico.getLeituraAtualInformada() > leituraInstalacaoHidrometro) {
 
 					consumoHistorico.setConsumoTipo(determinarConsumoTipo(medicaoHistorico));
@@ -2041,9 +2045,9 @@ public class ControladorMicromedicao extends ControladorComum {
 				}
 
 			}
-
+			System.out.println("6 " + consumoHistorico.getImovel().getId() + " substituicao false ");
 			if (medicaoHistorico.getLeituraAtualInformada() != null && !verificarSubstituicaoHidrometro(consumoHistorico.getImovel(), medicaoHistorico, sistemaParametro)) {
-
+				System.out.println("7 " + consumoHistorico.getImovel().getId() + " leitura atual informada ");
 				Double numeroLimite = obterNumeroLimiteHidrometro(medicaoHistorico, consumoHistorico.getImovel());
 
 				if (medicaoHistorico.getLeituraAtualInformada().intValue() > numeroLimite) {
@@ -2052,8 +2056,10 @@ public class ControladorMicromedicao extends ControladorComum {
 
 					medicaoHistorico.setLeituraAtualInformada(numeroLimite.intValue());
 				}
+				System.out.println("8 " + consumoHistorico.getImovel().getId());
 
 				if (medicaoHistorico.getLeituraAtualInformada().intValue() > leituraAnterior) {
+					System.out.println("8 " + consumoHistorico.getImovel().getId() + " leitura informada > anterior ");
 					dadosFaturamentoLeituraMaiorAnterior(medicaoHistorico, consumoHistorico, consumoMedioHidrometro[0], consumoHistorico.getImovel(), rota, sistemaParametro);
 
 				} else if (medicaoHistorico.getLeituraAtualInformada().intValue() == leituraAnterior) {
@@ -3257,15 +3263,16 @@ public class ControladorMicromedicao extends ControladorComum {
 			Imovel imovel, Rota rota, SistemaParametro sistemaParametro) {
 
 		consumoHistorico.setConsumoTipo(determinarConsumoTipo(medicaoHistorico));
-
 		int consumoMedidoMes = medicaoHistorico.getLeituraAtualInformada() - obterLeituraAnterior(medicaoHistorico);
 		int consumoFaturadoMes = consumoMedidoMes;
+		System.out.println("9 " + consumoHistorico.getImovel().getId() + " consumoMedidoMes: " + consumoMedidoMes );
+		System.out.println("10 " + consumoHistorico.getImovel().getId() + " consumoFaturadoMes: " + consumoFaturadoMes);
 
 		consumoHistorico.setNumeroConsumoFaturadoMes(new Integer(consumoFaturadoMes));
 		medicaoHistorico.setNumeroConsumoMes(new Integer(consumoMedidoMes));
 
 		medicaoHistorico.setLeituraAtualFaturamento(medicaoHistorico.getLeituraAtualInformada());
-
+		System.out.println("10 " + consumoHistorico.getImovel().getId() + " setLeituraAtualFaturamento: " + medicaoHistorico.getLeituraAtualInformada());
 		determinarAjusteMensal(medicaoHistorico, consumoHistorico, imovel, rota, consumoMedioHidrometro, sistemaParametro);
 
 		if (verificarConsumoForaDeFaixa(medicaoHistorico, consumoHistorico, consumoMedioHidrometro, imovel)) {
@@ -6009,21 +6016,24 @@ public class ControladorMicromedicao extends ControladorComum {
 			dataLeituraNaoMedidoAtual = Util.adicionarNumeroDiasDeUmaData(dataLeituraAnteriorNaoMedido, diferencaDiasCronograma);
 
 			try {
+				System.out.println("12 " + consumoHistorico.getImovel().getId());
 				if (verificarImovelFixoAgoraHidrometrado(imovel,medicaoHistorico, sistemaParametro)) {
-
+					System.out.println("13 " + consumoHistorico.getImovel().getId());
 					if (medicaoHistorico.getDataLeituraAtualInformada() != null) {
 						quantidadeDiasConsumo = (int) Util.diferencaEntreDatas(dataLeituraAnteriorNaoMedido,medicaoHistorico.getDataLeituraAtualInformada());
 					} else {
 						quantidadeDiasConsumo = (int) Util.diferencaEntreDatas(dataLeituraAnteriorNaoMedido, dataLeituraNaoMedidoAtual);
 					}
-
+					System.out.println("14 " + consumoHistorico.getImovel().getId() + " qtd dias consumo " + quantidadeDiasConsumo);
 				} else {
 					quantidadeDiasConsumo = (int) Util.diferencaEntreDatas(dataLeituraAnteriorNaoMedido, medicaoHistorico.getDataLeituraAtualFaturamento());
+					System.out.println("15 " + consumoHistorico.getImovel().getId() + " qtd dias consumo " + quantidadeDiasConsumo);
 				}
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 
+			System.out.println("16 " + consumoHistorico.getImovel().getId() + " qtd dias consumo " + quantidadeDiasConsumo);
 			if (quantidadeDiasConsumo > 0) {
 				/**
 				 *  Hidrometro novo em imóvel sem histórico de
@@ -6031,35 +6041,37 @@ public class ControladorMicromedicao extends ControladorComum {
 				 * da leitura anterior é igual a data da instalação do
 				 * hidrometro
 				 */
-
+				System.out.println("17 " + consumoHistorico.getImovel().getId());
 				int diasConsumoLido = 0;
 				if (dataInstalacaoHidrometro != null && medicaoHistorico.getDataLeituraAtualInformada() != null) {
 					diasConsumoLido = (int) IoUtil.diferencaEntreDatas(dataInstalacaoHidrometro, medicaoHistorico.getDataLeituraAtualInformada());
-
+					System.out.println("18 " + consumoHistorico.getImovel().getId() + " diasConsumoLido " + diasConsumoLido);
 				}
 
 				int diasConsumoLidoAjustado = 0;
 				
 				if (verificarImovelNovaLigacaoAgua(imovel, medicaoHistorico, sistemaParametro)) {
-
 					quantidadeDiasConsumoAjustado = (int) IoUtil.diferencaEntreDatas(dataInstalacaoHidrometro,dataLeituraNaoMedidoAtual);
+					System.out.println("19 " + consumoHistorico.getImovel().getId() + " quantidadeDiasConsumoAjustado " + quantidadeDiasConsumoAjustado);
 
 				} else if (verificarImovelFixoAgoraHidrometrado(imovel,medicaoHistorico, sistemaParametro)) {
 					quantidadeDiasConsumoAjustado = diferencaDiasCronograma;
+					System.out.println("20 " + consumoHistorico.getImovel().getId() + " quantidadeDiasConsumoAjustado " + quantidadeDiasConsumoAjustado);
 
 				} else if (rota.getDataAjusteLeitura() != null) {
 					quantidadeDiasConsumoAjustado = (int) IoUtil.diferencaEntreDatas(dataLeituraAnteriorNaoMedido,rota.getDataAjusteLeitura());
-
+					System.out.println("21 " + consumoHistorico.getImovel().getId() + " quantidadeDiasConsumoAjustado " + quantidadeDiasConsumoAjustado);
 				} else {
 					quantidadeDiasConsumoAjustado = diferencaDiasCronograma;
+					System.out.println("22 " + consumoHistorico.getImovel().getId() + " quantidadeDiasConsumoAjustado " + quantidadeDiasConsumoAjustado);
 				}
 
 				int diasAjuste = quantidadeDiasConsumoAjustado - quantidadeDiasConsumo;
-
+				System.out.println("23 " + consumoHistorico.getImovel().getId() + " diasAjuste " + diasAjuste);
 				boolean houveSubstituicaoHidrometro = verificarSubstituicaoHidrometro(imovel, medicaoHistorico, sistemaParametro);
 
 				if (diasAjuste < -3 || diasAjuste > 3 || houveSubstituicaoHidrometro) {
-
+					System.out.println("24 " + consumoHistorico.getImovel().getId() + " diasAjuste " + diasAjuste);
 					BigDecimal consumoDiario = new BigDecimal(-1);
 
 					Integer leituraInstalacaoHidrometro = this.obterLeituraInstalacaoHidrometro(rota.getFaturamentoGrupo(), imovel);
@@ -6073,7 +6085,7 @@ public class ControladorMicromedicao extends ControladorComum {
 								&& consumoHistorico.getConsumoTipo().getId() != null
 								&& !consumoHistorico.getConsumoTipo().getId()
 										.equals(ConsumoTipo.MEDIA_HIDROMETRO)) {
-
+							System.out.println("25 " + consumoHistorico.getImovel().getId());
 							BigDecimal numerador = new BigDecimal(
 									medicaoHistorico.getLeituraAtualInformada()
 											- leituraInstalacaoHidrometro);
@@ -6118,7 +6130,7 @@ public class ControladorMicromedicao extends ControladorComum {
 								&& consumoHistorico.getConsumoTipo().getId() != null
 								&& !consumoHistorico.getConsumoTipo().getId()
 										.equals(ConsumoTipo.MEDIA_HIDROMETRO)) {
-
+							System.out.println("26 " + consumoHistorico.getImovel().getId());
 							int consumoMedidoMes = medicaoHistorico
 									.getLeituraAtualInformada()
 									- obterLeituraAnterior(medicaoHistorico);
@@ -6155,7 +6167,7 @@ public class ControladorMicromedicao extends ControladorComum {
 								&& (consumoHistorico != null
 										&& consumoHistorico.getConsumoTipo().getId() != null 
 										&& !consumoHistorico.getConsumoTipo().getId().equals(ConsumoTipo.MEDIA_HIDROMETRO))) {
-
+							System.out.println("27 " + consumoHistorico.getImovel().getId());
 							// Cálculo para obter a leitura ajustada
 							leituraAjustada = medicaoHistorico.getLeituraAtualInformada()  + Util.divideDepoisMultiplica(consumoHistorico.getNumeroConsumoFaturadoMes().intValue(),
 											quantidadeDiasConsumo, diasAjuste);
@@ -6164,7 +6176,7 @@ public class ControladorMicromedicao extends ControladorComum {
 								&& consumoHistorico.getConsumoTipo().getId().equals(ConsumoTipo.MEDIA_HIDROMETRO))
 								|| (medicaoHistorico.getLeituraAtualInformada() == null 
 								&& medicaoHistorico.getLeituraAnormalidadeFaturamento() != null)) {
-							
+							System.out.println("28 " + consumoHistorico.getImovel().getId());
 							leituraAjustada = medicaoHistorico.getLeituraAtualFaturamento();
 						}
 
@@ -38165,6 +38177,7 @@ public class ControladorMicromedicao extends ControladorComum {
 			Rota rota, int consumoMedioHidrometro, SistemaParametro sistemaParametro) {
 
 		if (rota.getIndicadorAjusteConsumo() != null && rota.getIndicadorAjusteConsumo().intValue() == Rota.INDICADOR_AJUSTE_MENSAL) {
+			System.out.println("11 " + consumoHistorico.getImovel().getId() + " vai ajustar...  ");
 			ajusteMensalConsumo(medicaoHistorico, consumoHistorico, imovel,
 					medicaoHistorico.getMedicaoTipo(), rota,
 					consumoMedioHidrometro, sistemaParametro);
