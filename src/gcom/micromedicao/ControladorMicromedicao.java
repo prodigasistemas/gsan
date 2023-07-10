@@ -1508,6 +1508,7 @@ public class ControladorMicromedicao extends ControladorComum {
 
 		int idUnidadeIniciada = 0;
 		Integer matricula = null;
+		Collection<Imovel> colImoveisComProblema = new ArrayList();
 
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA,((Rota) Util.retonarObjetoDeColecao(colecaoRotas)).getId());
 
