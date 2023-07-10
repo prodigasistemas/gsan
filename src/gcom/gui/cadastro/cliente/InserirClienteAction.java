@@ -344,13 +344,7 @@ public class InserirClienteAction extends GcomAction {
 			// Numero do NIS
 			String numeroNIS = (String) form.get("numeroNIS");
 			if (numeroNIS != null && !numeroNIS.trim().equals("")) {
-				if (!this.getFachada().pesquisarNisJaCadastradoInserirCliente(numeroNIS)) {
-					throw new ActionServletException("atencao.erro_nis_ja_cadastrado");
-				}
-
-				if (!tipoPessoa.equals(ClienteTipo.INDICADOR_PESSOA_FISICA) && !numeroNIS.equals("")) {
-					throw new ActionServletException("atencao.erro_pessoa_juridica_com_nis");
-				}
+				isNisValido(numeroNIS ,tipoPessoa);
 				cliente.setNumeroNIS(numeroNIS.trim());
 				validarCadastroUnico(cliente);
 			} else {
@@ -683,5 +677,16 @@ public class InserirClienteAction extends GcomAction {
 		reportarErros(httpServletRequest, chave);
 
 		return actionMapping.findForward("telaAtencao");
+	}
+	private void isNisValido(String numeroNIS, Short tipoPessoa) {
+		if(numeroNIS.trim().length() != 11) {
+        	throw new ActionServletException("atencao.erro_tamanho_do_nis_invalido");
+		}
+		if (!this.getFachada().pesquisarNisJaCadastradoInserirCliente(numeroNIS)) {
+			throw new ActionServletException("atencao.erro_nis_ja_cadastrado");
+		}
+		if (!tipoPessoa.equals(ClienteTipo.INDICADOR_PESSOA_FISICA) && !numeroNIS.equals("")) {
+			throw new ActionServletException("atencao.erro_pessoa_juridica_com_nis");
+		}
 	}
 }
