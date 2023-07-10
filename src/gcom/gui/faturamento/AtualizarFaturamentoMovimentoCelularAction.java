@@ -27,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -68,7 +67,6 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
     		boolean temRegistroTipo0 = false;
     		boolean indicadorSucessoAtualizacao = false;
     		byte[] byteRelatorio = null;
-    		Collection<Imovel> colImoveisComProblema = new ArrayList();
             
             List itensForm = upload.parseRequest(httpServletRequest);
             Iterator iteItensForm = itensForm.iterator();
@@ -183,7 +181,7 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
                 					
                 					RetornoAtualizarFaturamentoMovimentoCelularHelper helper = null;
                 					
-                					helper = fachada.atualizarFaturamentoMovimentoCelular(buffer, true, true, null, arquivoRetorno, bufferOriginal, colImoveisComProblema);
+                					helper = fachada.atualizarFaturamentoMovimentoCelular(buffer, true, true, null, arquivoRetorno, bufferOriginal);
                 					byteRelatorio = helper.getRelatorioConsistenciaProcessamento();
                 					indicadorSucessoAtualizacao = helper.getIndicadorSucessoAtualizacao();						     			
                 					
@@ -285,7 +283,7 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
         					
         					RetornoAtualizarFaturamentoMovimentoCelularHelper helper = null;
         					
-        					helper = fachada.atualizarFaturamentoMovimentoCelular(buffer, true, true, null, arquivoRetorno, bufferOriginal, colImoveisComProblema);
+        					helper = fachada.atualizarFaturamentoMovimentoCelular(buffer, true, true, null, arquivoRetorno, bufferOriginal);
         					byteRelatorio = helper.getRelatorioConsistenciaProcessamento();
         					indicadorSucessoAtualizacao = helper.getIndicadorSucessoAtualizacao();						     			
         					
@@ -419,7 +417,7 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
 			} else {
 				mensagemAtualizacao = mensagemPrincipalErro;
 			}
-			
+            
 			if (byteRelatorio != null) {
 				RelatorioErrosMovimentosContaPreFaturadas relatorio = new RelatorioErrosMovimentosContaPreFaturadas((Usuario) (httpServletRequest.getSession(false)).getAttribute("usuarioLogado"));
 				relatorio.setRelatorio(byteRelatorio);

@@ -199,7 +199,6 @@ import gcom.micromedicao.consumo.ConsumoTipo;
 import gcom.micromedicao.consumo.FiltroComunicadoEmitirConta;
 import gcom.micromedicao.consumo.FiltroConsumoAnormalidade;
 import gcom.micromedicao.consumo.FiltroConsumoHistorico;
-import gcom.micromedicao.consumo.FiltroConsumoTipo;
 import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.leitura.FiltroLeituraAnormalidade;
@@ -424,7 +423,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	@SuppressWarnings("unchecked")
 	private void executarFaturamentoAjusteMovimentoCelular(MovimentoContaPrefaturada movimento, boolean efetuarRateio,
 			BigDecimal valorTotalAguaCalculado, BigDecimal valorTotalEsgotoCalculado,
-			Integer consumoAguaCalculado, Integer consumoEsgotoCalculado, Conta conta, Collection<Imovel> colImoveisComProblema) throws ControladorException {
+			Integer consumoAguaCalculado, Integer consumoEsgotoCalculado, Conta conta) throws ControladorException {
 		Collection<MovimentoContaPrefaturadaCategoria> categoriasMovimento = movimento
 				.getMovimentoContaPrefaturadaCategorias();
 		
@@ -449,7 +448,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			this.getControladorBatch().inserirObjetoParaBatch(faturamentoImediatoAjuste);
 			this.atualizarConsumoMovimentoCelular(conta, movimento.getValorTotalConsumoAgua(), consumoAguaCalculado,
-					movimento.getValorTotalConsumoEsgoto(), consumoEsgotoCalculado, colImoveisComProblema);
+					movimento.getValorTotalConsumoEsgoto(), consumoEsgotoCalculado);
 		}
 
 	}
@@ -512,7 +511,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 *    chamado via a funcionalidade de consistir, atualiza a situaeeo atual da conta.
 	 */
 	private void atualizarMovimentoCelular(Collection<MovimentoContaPrefaturada> colMovimentoContaPrefaturada,
-			boolean efetuarRateio, Collection<Imovel> colImoveisComProblema) throws ControladorException {
+			boolean efetuarRateio) throws ControladorException {
 
 		String matriculaImovel = "";
 		try {
@@ -546,7 +545,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						
 						Collection<CalcularValoresAguaEsgotoHelper> colecaoCalcularValoresAguaEsgotoHelper = 
 								obterValoresAguaEsgotoAtualizarMovimentoCelular(helper, contaAtualizacao, sistemaParametro);
-
+							
 						BigDecimal valorTotalAguaCalculado = this.calcularValorTotalAguaOuEsgotoPorCategoria(
 								colecaoCalcularValoresAguaEsgotoHelper, ConstantesSistema.CALCULAR_AGUA);
 						
@@ -569,7 +568,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						this.executarFaturamentoAjusteMovimentoCelular(helper, efetuarRateio, 
 								valorTotalAguaCalculado, valorTotalEsgotoCalculado, consumoAguaCalculado, 
-								consumoEsgotoCalculado, contaAtualizacao, colImoveisComProblema);
+								consumoEsgotoCalculado, contaAtualizacao);
 						
 						if (contaAtualizacao != null) {
 
@@ -4351,7 +4350,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 */
 	public RetornoAtualizarFaturamentoMovimentoCelularHelper atualizarFaturamentoMovimentoCelular(BufferedReader buffer,
 			String nomeArquivo, boolean offline, boolean finalizarArquivo, Integer idRota,
-			ArquivoTextoRetornoIS arquivoTextoRetornoIS, BufferedReader bufferOriginal, Collection<Imovel> colImoveisComProblema) throws ControladorException {
+			ArquivoTextoRetornoIS arquivoTextoRetornoIS, BufferedReader bufferOriginal) throws ControladorException {
 
 		RetornoAtualizarFaturamentoMovimentoCelularHelper retorno = new RetornoAtualizarFaturamentoMovimentoCelularHelper();
 
@@ -4412,11 +4411,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 			}
 
-			this.processarMovimentoContaPrefaturada(rota, colContaPreFaturada, true, colImoveisComProblema);
+			this.processarMovimentoContaPrefaturada(rota, colContaPreFaturada, true);
 			this.atualizarInformacoesImpressaoExtratoQuitacao(colContaPreFaturada);
 
 			if (offline) {
-				relatorio = this.geraResumoLeiturasAnormalidadesImpressaoSimultanea(colContaPreFaturada,colImoveisComProblema);
+				relatorio = this.geraResumoLeiturasAnormalidadesImpressaoSimultanea(colContaPreFaturada);
 				retorno.setRelatorioConsistenciaProcessamento(relatorio);
 			}
 
@@ -5017,7 +5016,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @date 21/09/2009
 	 */
 	private byte[] geraResumoLeiturasAnormalidadesImpressaoSimultanea(
-			Collection<MovimentoContaPrefaturada> colRelatorio, Collection<Imovel> colImoveisComProblema) throws ControladorException {
+			Collection<MovimentoContaPrefaturada> colRelatorio) throws ControladorException {
 
 		Integer qtdRegistrosRecebidos = 0;
 		Integer qtdRegistrosLeitura = 0;
@@ -5081,17 +5080,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					}
 				}
 			}
-		}
-		
-		for(Imovel imovel : colImoveisComProblema) {
-
-				RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean bean = new RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean();
-
-				if (imovel != null) {
-					bean.setIdImovel(imovel.getId().toString());
-                    bean.setVerificarContaImovel("Verificar conta do imóvel para retificação");
-                    relatorioBeans.add(bean);
-				}
 		}
 
 		if (relatorioBeans.size() == 0) {
@@ -7469,7 +7457,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @throws ControladorException
 	 */
 	public void processarMovimentoContaPrefaturada(Rota rota, Collection<MovimentoContaPrefaturada> colContaPreFaturada,
-			boolean efetuarRateio, Collection<Imovel> colImoveisComProblema) throws ControladorException {
+			boolean efetuarRateio) throws ControladorException {
 
 		try {
 			if (colContaPreFaturada != null && !colContaPreFaturada.isEmpty()) {
@@ -7607,7 +7595,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					break;
 				}
 
-				this.atualizarMovimentoCelular(colContaPreFaturada, efetuarRateio, colImoveisComProblema);
+				this.atualizarMovimentoCelular(colContaPreFaturada, efetuarRateio);
 
 				// neo atualizar o indicador de atualizacao de faturamento caso indicador de
 				// emissao de conta seja igual a 2 e o imevel neo
@@ -12519,9 +12507,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @throws ControladorException
 	 */
 	public void atualizarConsumoMovimentoCelular(Conta conta, Integer consumoAguaMovimentoCelular,
-			Integer consumoAguaGSAN, Integer consumoEsgotoMovimentoCelular, Integer consumoEsgotoGSAN, Collection<Imovel> colImoveisComProblema)
+			Integer consumoAguaGSAN, Integer consumoEsgotoMovimentoCelular, Integer consumoEsgotoGSAN)
 			throws ControladorException {
-		
+
 		if (conta != null && conta.getId() != null) {
 
 			// Verifica se o imevel este associado a um imevel condomenio
@@ -12574,22 +12562,12 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 							}
 						}
-						
-						Integer leituraFaturamento = movimentoContaPrefaturadaAgua.getLeituraFaturamento();
-						Integer consumoMedido = movimentoContaPrefaturadaAgua.getConsumoMedido();
-						
-						if (leituraFaturamento != null && consumoMedido != null || !getControladorImovel()
-								.isImovelHidrometrado(movimentoContaPrefaturadaAgua.getImovel().getId())) {
-							repositorioFaturamento
-									.atualizarMedicaoHistoricoMovimentoCelular(movimentoContaPrefaturadaAgua);
 
-							repositorioFaturamento.atualizarConsumoHistoricoMovimentoCelular(
-									movimentoContaPrefaturadaAgua, consumoAguaMovimentoCelular,
-									idConsumoHistoricoAguaMacro, consumoImovelVinculadosCondominioAgua);
-						} else {
-							// Criar um colecao para ser populada
-							colImoveisComProblema.add(movimentoContaPrefaturadaAgua.getImovel());
-						}
+						repositorioFaturamento.atualizarMedicaoHistoricoMovimentoCelular(movimentoContaPrefaturadaAgua);
+
+						repositorioFaturamento.atualizarConsumoHistoricoMovimentoCelular(movimentoContaPrefaturadaAgua,
+								consumoAguaMovimentoCelular, idConsumoHistoricoAguaMacro,
+								consumoImovelVinculadosCondominioAgua);
 
 					} catch (ErroRepositorioException ex) {
 						ex.printStackTrace();

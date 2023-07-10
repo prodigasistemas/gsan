@@ -8,9 +8,6 @@ public class RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean impleme
 	private String codigoAnormalidade;
 	private String descricaoAnormalidade;
 	private Integer qtdAnormalidade;
-	private String idImovel;
-	private String verificarContaImovel;
-	
 	
 	public String getCodigoAnormalidade() {
 		return codigoAnormalidade;
@@ -44,17 +41,5 @@ public class RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean impleme
 		}
 		
 		return false;
-	}
-	public String getIdImovel() {
-		return idImovel;
-	}
-	public void setIdImovel(String idImovel) {
-		this.idImovel = idImovel;
-	}
-	public String getVerificarContaImovel() {
-		return verificarContaImovel;
-	}
-	public void setVerificarContaImovel(String verificarContaImovel) {
-		this.verificarContaImovel = verificarContaImovel;
 	}
 }

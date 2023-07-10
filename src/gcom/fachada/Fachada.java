@@ -29026,9 +29026,9 @@ public class Fachada {
 	 * movimento pre faturado baseado no arquivo informado
 	 */
 	public RetornoAtualizarFaturamentoMovimentoCelularHelper atualizarFaturamentoMovimentoCelular(BufferedReader buffer, boolean offLine, boolean finalizarArquivo, Integer idRota,
-			ArquivoTextoRetornoIS arquivoTextoRetortnoIS, BufferedReader bufferOriginal, Collection<Imovel> colImoveisComProblema) {
+			ArquivoTextoRetornoIS arquivoTextoRetortnoIS, BufferedReader bufferOriginal) {
 		try {
-			return this.getControladorFaturamento().atualizarFaturamentoMovimentoCelular(buffer, "teste.txt", offLine, finalizarArquivo, idRota, arquivoTextoRetortnoIS, bufferOriginal, colImoveisComProblema);
+			return this.getControladorFaturamento().atualizarFaturamentoMovimentoCelular(buffer, "teste.txt", offLine, finalizarArquivo, idRota, arquivoTextoRetortnoIS, bufferOriginal);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
