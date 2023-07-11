@@ -25,8 +25,7 @@ public class SegurancaParametro implements Serializable {
 		URL_API_REGISTRAR_BOLETO_BB,
 		URL_REGISTRO_BB_TESTE,
 		URL_ENTRADA_PARCELAMENTO,
-		URL_ARQUIVOS_SERVER,
-		URL_BASIC_AUTH
+		URL_ARQUIVOS_SERVER
 	}
 
 	public Integer getId() {

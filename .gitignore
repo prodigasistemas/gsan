@@ -23,7 +23,6 @@ migrations/comercial/environments/stage.properties
 migrations/comercial/environments/production.properties
 migrations/comercial/environments/local.properties
 src/gcom/properties/version.properties
-src/gcom/properties/token.properties
 .vscode/
 scripts/*.sh
 .gradle/

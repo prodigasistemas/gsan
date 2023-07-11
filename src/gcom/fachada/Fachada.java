@@ -40832,12 +40832,5 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
-	
-	public Object[] obterCredenciaisOauth() {
-		try {
-			return this.getControladorFaturamento().obterCredenciaisOauth();
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-	}
+
 }

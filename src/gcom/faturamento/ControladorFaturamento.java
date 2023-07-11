@@ -227,7 +227,6 @@ import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoS
 import gcom.relatorio.faturamento.RelatorioResumoLeiturasAnormalidadesImpressaoSimultaneaBean;
 import gcom.relatorio.faturamento.ValorAFaturarHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
-import gcom.seguranca.RepositorioSegurancaHBM;
 import gcom.seguranca.SegurancaParametro;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -15547,15 +15546,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	public CreditoARealizar pesquisarCreditoARealizar (Integer id) throws ControladorException {
 		try {
 			return repositorioFaturamento.pesquisarCreditoARealizar(id);
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-			throw new ControladorException("erro.pesquisarContaPreFaturada");
-		}
-	}
-	
-	public Object[] obterCredenciaisOauth() throws ControladorException {
-		try {
-			return RepositorioSegurancaHBM.getInstancia().obterCredenciaisOauth();
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 			throw new ControladorException("erro.pesquisarContaPreFaturada");
