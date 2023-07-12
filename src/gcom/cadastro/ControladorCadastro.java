@@ -14711,4 +14711,23 @@ public class ControladorCadastro extends ControladorComum {
 		}
 	}
 	
+	public void isNisValido(String numeroNIS, Short tipoPessoa, Integer idCliente, Short tipoOperacao)
+			throws ControladorException {
+		if (numeroNIS.trim().length() != 11) {
+			throw new ControladorException("atencao.erro_tamanho_do_nis_invalido");
+		}
+		if (tipoOperacao.equals(Cliente.TIPO_OPERACAO_MANTER)) {
+			if (!pesquisarNisJaCadastradoManterCliente(numeroNIS, idCliente)) {
+				throw new ControladorException("atencao.erro_nis_ja_cadastrado");
+			}
+		} else {
+			if (!pesquisarNisJaCadastradoInserirCliente(numeroNIS)) {
+				throw new ControladorException("atencao.erro_nis_ja_cadastrado");
+			}
+		}
+		if (!tipoPessoa.equals(ClienteTipo.INDICADOR_PESSOA_FISICA) && !numeroNIS.equals("")) {
+			throw new ControladorException("atencao.erro_pessoa_juridica_com_nis");
+		}
+	}
+
 }

@@ -553,4 +553,6 @@ public interface IControladorCadastro {
 	
 	public Boolean pesquisarNisJaCadastradoManterCliente(String nis, Integer idCliente) throws ControladorException;
 	
+	public void isNisValido(String numeroNIS, Short tipoPessoa, Integer idCliente, Short tipoOperacao) throws ControladorException;
+	
 }

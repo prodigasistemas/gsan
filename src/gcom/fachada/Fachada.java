@@ -40832,5 +40832,13 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
-
+	
+	public void isNisValido(String numeroNIS, Short tipoPessoa, Integer idCliente, Short tipoOperacao) throws ControladorException {
+		try {
+			this.getControladorCadastro().isNisValido(numeroNIS, tipoPessoa, idCliente, tipoOperacao);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
 }

@@ -455,7 +455,7 @@ public class AtualizarClienteAction extends GcomAction {
 			// Numero do NIS
 			String numeroNIS = (String) form.get("numeroNIS");
 			if (numeroNIS != null && !numeroNIS.trim().equals("")) {
-				isNisValido(numeroNIS, tipoPessoa);
+				this.getFachada().isNisValido(numeroNIS, tipoPessoa, cliente.getId(), Cliente.TIPO_OPERACAO_MANTER);
 				cliente.setNumeroNIS(numeroNIS.trim());
 				validarCadastroUnico(cliente);
 				imovelPerfilAtualizado = atualizarImovelPerfilBolsaAgua(cliente);
@@ -1040,18 +1040,6 @@ public class AtualizarClienteAction extends GcomAction {
 		reportarErros(request, chave);
 
 		return actionMapping.findForward("telaAtencao");
-	}
-	
-	private void isNisValido(String numeroNIS, Short tipoPessoa) {
-		if(numeroNIS.trim().length() != 11) {
-        	throw new ActionServletException("atencao.erro_tamanho_do_nis_invalido");
-		}
-		if (!this.getFachada().pesquisarNisJaCadastradoInserirCliente(numeroNIS)) {
-			throw new ActionServletException("atencao.erro_nis_ja_cadastrado");
-		}
-		if (!tipoPessoa.equals(ClienteTipo.INDICADOR_PESSOA_FISICA) && !numeroNIS.equals("")) {
-			throw new ActionServletException("atencao.erro_pessoa_juridica_com_nis");
-		}
 	}
 	
 }

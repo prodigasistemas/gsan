@@ -24,6 +24,9 @@ public class Cliente extends ObjetoTransacao implements ICliente, IAtualizacaoCa
 	public static final int OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL = 1509;
 	public static final Short INDICADOR_NOME_FANTASIA = 1;
 	public static final Short INDICADOR_NOME_RECEITA = 2;
+	
+	public static final Short TIPO_OPERACAO_INSERIR = 1;
+	public static final Short TIPO_OPERACAO_MANTER = 2;
 
 	private static final long serialVersionUID = 1L;
 
