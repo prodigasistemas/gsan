@@ -43,6 +43,7 @@ import gcom.faturamento.bean.ExecutarAtividadeFaturamentoHelper;
 import gcom.faturamento.bean.FiltrarEmitirHistogramaAguaHelper;
 import gcom.faturamento.bean.GerarRelatorioAnormalidadeConsumoHelper;
 import gcom.faturamento.bean.GerarRelatorioAnormalidadePorAmostragemHelper;
+import gcom.faturamento.bean.ImovelNaoFaturadoRetornoIsDTO;
 import gcom.faturamento.bean.PrescreverDebitosImovelHelper;
 import gcom.faturamento.bean.RetornoAtualizarFaturamentoMovimentoCelularHelper;
 import gcom.faturamento.bean.SituacaoEspecialFaturamentoHelper;
@@ -908,7 +909,7 @@ public interface IControladorFaturamento {
 
 	public Integer contarFaturamentoImediatoAjuste(FaturamentoImediatoAjusteHelper helper) throws ControladorException;
 
-	public void processarMovimentoContaPrefaturada(Rota rota, Collection<MovimentoContaPrefaturada> colContaPreFaturada, boolean efetuarRateio)
+	public void processarMovimentoContaPrefaturada(Rota rota, Collection<MovimentoContaPrefaturada> colContaPreFaturada, boolean efetuarRateio,List<ImovelNaoFaturadoRetornoIsDTO> listaImoveisCorrompidos)
 			throws ControladorException;
 
 	public void gerarDadosDeclaracaoQuitacaoAnualDebitos(int idFuncionalidadeIniciada, Collection<Integer> anos, Rota rota, Short indicadorContaParcelada,
@@ -1152,7 +1153,7 @@ public interface IControladorFaturamento {
 			Integer grupofaturamento, Integer idRota) throws ControladorException;
 
 	public void atualizarConsumoMovimentoCelular(Conta conta, Integer consumoAguaMovimentoCelular, Integer consumoAguaGSAN,
-			Integer consumoEsgotoMovimentoCelular, Integer consumoEsgotoGSAN) throws ControladorException;
+			Integer consumoEsgotoMovimentoCelular, Integer consumoEsgotoGSAN, List<ImovelNaoFaturadoRetornoIsDTO> listaImoveisCorrompidos) throws ControladorException;
 
 	public BigDecimal obterPercentualColetaEsgotoImovel(Integer idImovel) throws ControladorException;
 

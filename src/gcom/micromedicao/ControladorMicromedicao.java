@@ -120,6 +120,7 @@ import gcom.faturamento.MotivoInterferenciaTipo;
 import gcom.faturamento.MovimentoContaPrefaturada;
 import gcom.faturamento.RepositorioFaturamentoHBM;
 import gcom.faturamento.bean.DeterminarValoresFaturamentoAguaEsgotoHelper;
+import gcom.faturamento.bean.ImovelNaoFaturadoRetornoIsDTO;
 import gcom.faturamento.consumotarifa.ConsumoTarifa;
 import gcom.faturamento.consumotarifa.ConsumoTarifaCategoria;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
@@ -1508,7 +1509,7 @@ public class ControladorMicromedicao extends ControladorComum {
 
 		int idUnidadeIniciada = 0;
 		Integer matricula = null;
-		Collection<Imovel> colImoveisComProblema = new ArrayList();
+		List<ImovelNaoFaturadoRetornoIsDTO> listaImoveisCorrompidos = new ArrayList();
 
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.ROTA,((Rota) Util.retonarObjetoDeColecao(colecaoRotas)).getId());
 
@@ -1648,7 +1649,7 @@ public class ControladorMicromedicao extends ControladorComum {
 
 								Short isImovelAnalisado = this.repositorioMicromedicao.pesquisarMedicaoHistoricoLigacaoAguaAnalisado(imovel.getId(), faturamentoGrupo.getAnoMesReferencia(), MedicaoTipo.LIGACAO_AGUA);
 								if (isImovelAnalisado != null && isImovelAnalisado.equals(ConstantesSistema.NAO))
-									getControladorFaturamento().processarMovimentoContaPrefaturada(rota, colMovimentoContaPrefaturada, false);
+									getControladorFaturamento().processarMovimentoContaPrefaturada(rota, colMovimentoContaPrefaturada, false, listaImoveisCorrompidos);
 
 							} else {
 

@@ -1,25 +1,5 @@
 package gcom.gui.faturamento;
 
-import gcom.cadastro.imovel.FiltroImovel;
-import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.localidade.Localidade;
-import gcom.fachada.Fachada;
-import gcom.faturamento.bean.RetornoAtualizarFaturamentoMovimentoCelularHelper;
-import gcom.gui.ActionServletException;
-import gcom.gui.micromedicao.ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction;
-import gcom.micromedicao.ArquivoTextoRetornoIS;
-import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
-import gcom.micromedicao.ArquivoTextoRoteiroEmpresaDivisao;
-import gcom.micromedicao.SituacaoTransmissaoLeitura;
-import gcom.relatorio.ExibidorProcessamentoTarefaRelatorioAtualizacaoMovimentoCelular;
-import gcom.relatorio.faturamento.RelatorioErrosMovimentosContaPreFaturadas;
-import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.tarefa.TarefaRelatorio;
-import gcom.util.IoUtil;
-import gcom.util.Util;
-import gcom.util.ZipUtil;
-import gcom.util.filtro.ParametroSimples;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -27,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -44,8 +25,43 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.jboss.logging.Logger;
 
-public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessamentoTarefaRelatorioAtualizacaoMovimentoCelular {
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.cliente.ControladorClienteLocal;
+import gcom.cadastro.endereco.ControladorEnderecoLocal;
+import gcom.cadastro.imovel.FiltroImovel;
+import gcom.cadastro.imovel.IRepositorioImovel;
+import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
+import gcom.cadastro.localidade.Localidade;
+import gcom.fachada.Fachada;
+import gcom.faturamento.FiltroMovimentoContaPrefaturada;
+import gcom.faturamento.FiltroMovimentoContaPrefaturadaCategoria;
+import gcom.faturamento.MovimentoContaPrefaturada;
+import gcom.faturamento.MovimentoContaPrefaturadaCategoria;
+import gcom.faturamento.bean.ImovelNaoFaturadoRetornoIsDTO;
+import gcom.faturamento.bean.RetornoAtualizarFaturamentoMovimentoCelularHelper;
+import gcom.gui.ActionServletException;
+import gcom.gui.micromedicao.ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction;
+import gcom.micromedicao.ArquivoTextoRetornoIS;
+import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
+import gcom.micromedicao.ArquivoTextoRoteiroEmpresaDivisao;
+import gcom.micromedicao.SituacaoTransmissaoLeitura;
+import gcom.relatorio.ExibidorProcessamentoTarefaRelatorioAtualizacaoMovimentoCelular;
+import gcom.relatorio.faturamento.RelatorioErrosMovimentosContaPreFaturadas;
+import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.seguranca.transacao.ControladorTransacaoLocal;
+import gcom.tarefa.TarefaRelatorio;
+import gcom.util.ConstantesSistema;
+import gcom.util.ControladorUtilLocal;
+import gcom.util.IoUtil;
+import gcom.util.ParserUtil;
+import gcom.util.Util;
+import gcom.util.ZipUtil;
+import gcom.util.filtro.ParametroSimples;
 
+public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessamentoTarefaRelatorioAtualizacaoMovimentoCelular {
+	
 	private static Logger logger = Logger.getLogger(AtualizarFaturamentoMovimentoCelularAction.class);
 	
     @SuppressWarnings({ "rawtypes", "unchecked", "resource" })
@@ -71,7 +87,9 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
             List itensForm = upload.parseRequest(httpServletRequest);
             Iterator iteItensForm = itensForm.iterator();
             
-            Fachada fachada = Fachada.getInstancia();            
+            Fachada fachada = Fachada.getInstancia();   
+            
+            List<ImovelNaoFaturadoRetornoIsDTO> listaImoveisCorrompidos = new ArrayList();
 
             while ( iteItensForm.hasNext() ){
                 
@@ -183,7 +201,11 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
                 					
                 					helper = fachada.atualizarFaturamentoMovimentoCelular(buffer, true, true, null, arquivoRetorno, bufferOriginal);
                 					byteRelatorio = helper.getRelatorioConsistenciaProcessamento();
-                					indicadorSucessoAtualizacao = helper.getIndicadorSucessoAtualizacao();						     			
+                					indicadorSucessoAtualizacao = helper.getIndicadorSucessoAtualizacao();
+                					listaImoveisCorrompidos = helper.getListaImoveisNaoFaturados();
+                					if(listaImoveisCorrompidos != null && !listaImoveisCorrompidos.isEmpty()) {
+                						indicadorSucessoAtualizacao = false;
+                					}
                 					
                 				} else {
                 					throw new ActionServletException("atencao.arquivo_sem_dados", nomeArquivo);
@@ -285,7 +307,11 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
         					
         					helper = fachada.atualizarFaturamentoMovimentoCelular(buffer, true, true, null, arquivoRetorno, bufferOriginal);
         					byteRelatorio = helper.getRelatorioConsistenciaProcessamento();
-        					indicadorSucessoAtualizacao = helper.getIndicadorSucessoAtualizacao();						     			
+        					indicadorSucessoAtualizacao = helper.getIndicadorSucessoAtualizacao();	
+        					listaImoveisCorrompidos = helper.getListaImoveisNaoFaturados();
+        					if(listaImoveisCorrompidos != null && !listaImoveisCorrompidos.isEmpty()) {
+        						indicadorSucessoAtualizacao = false;
+        					}
         					
         				} else {
         					throw new ActionServletException("atencao.arquivo_sem_dados", nomeArquivo);
@@ -315,6 +341,7 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
 			String mensagemPrincipalErro = "Não foi possível Atualizar Faturamento Movimento Celular. " +"Verifique o relatório gerado para identificar o problema."+textoInformacoesRota;
 			String mensagemPrincipalErroNaoCorresponde = "Não foi possível Atualizar Faturamento Movimento Celular. " +"A quantidade de imóveis não corresponde ao esperado. Verifique o relatório gerado."+textoInformacoesRota;
 			String mensagemFinalizadoIncompleto = "Faturamento Movimento Celular foi Finalizado Incompleto.";
+			String mensagemPrincipalImovelCorrompido = "Não foi possível Atualizar Faturamento Movimento Celular. " +"Verifique a lista de imóveis corrompidos. "+textoInformacoesRota;
 			
 			if(indicadorSucessoAtualizacao){
 				
@@ -414,10 +441,29 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
 						}
 					}
 				}
-			} else {
+			} else if (listaImoveisCorrompidos != null && !listaImoveisCorrompidos.isEmpty()) { 
+				mensagemAtualizacao = mensagemPrincipalImovelCorrompido;
+				mensagemAtualizacao += "<br />";
+				mensagemAtualizacao += "<br />";
+				mensagemAtualizacao += "Imóveis: ";
+				for(ImovelNaoFaturadoRetornoIsDTO imovelCorrompido : listaImoveisCorrompidos) {
+					mensagemAtualizacao += "<br />";
+					mensagemAtualizacao += imovelCorrompido.getImovel().getId() + " " + imovelCorrompido.getDescricao();
+					FiltroMovimentoContaPrefaturada filtroContaPrefaturada = new FiltroMovimentoContaPrefaturada();
+					filtroContaPrefaturada.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.MATRICULA, imovelCorrompido.getImovel().getId().toString()));
+					filtroContaPrefaturada.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.ANO_MES_REFERENCIA_PRE_FATURAMENTO, anoMesReferencia));
+					MovimentoContaPrefaturada movimentoContaPrefaturada = (MovimentoContaPrefaturada) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroContaPrefaturada, MovimentoContaPrefaturada.class.getName()));
+					
+					FiltroMovimentoContaPrefaturadaCategoria filtroContaPrefaturadaCategoria = new FiltroMovimentoContaPrefaturadaCategoria();
+					filtroContaPrefaturadaCategoria.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturadaCategoria.MOVIMENTO_CONTA_PREFATURADA_ID, movimentoContaPrefaturada.getId()));
+					MovimentoContaPrefaturadaCategoria movimentoContaPrefaturadaCategoria = (MovimentoContaPrefaturadaCategoria) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroContaPrefaturadaCategoria, MovimentoContaPrefaturadaCategoria.class.getName()));
+					
+					fachada.remover(movimentoContaPrefaturadaCategoria);
+					fachada.remover(movimentoContaPrefaturada);
+				}
+			}else {
 				mensagemAtualizacao = mensagemPrincipalErro;
 			}
-            
 			if (byteRelatorio != null) {
 				RelatorioErrosMovimentosContaPreFaturadas relatorio = new RelatorioErrosMovimentosContaPreFaturadas((Usuario) (httpServletRequest.getSession(false)).getAttribute("usuarioLogado"));
 				relatorio.setRelatorio(byteRelatorio);

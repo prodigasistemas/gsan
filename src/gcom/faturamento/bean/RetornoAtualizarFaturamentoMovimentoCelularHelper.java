@@ -1,5 +1,7 @@
 package gcom.faturamento.bean;
 
+import java.util.List;
+
 /**
  * 
  * [UC0811] Processar Requisições do Dispositivo Móvel.
@@ -16,7 +18,9 @@ public class RetornoAtualizarFaturamentoMovimentoCelularHelper {
     private byte[] relatorioConsistenciaProcessamento;
     private String mensagemComunicacaoServidorCelular;
     private boolean indicadorSucessoAtualizacao;
-        
+    
+    private List<ImovelNaoFaturadoRetornoIsDTO> listaImoveisNaoFaturados;
+    
     public String getMensagemComunicacaoServidorCelular() {
         return mensagemComunicacaoServidorCelular;
     }
@@ -36,6 +40,12 @@ public class RetornoAtualizarFaturamentoMovimentoCelularHelper {
 	}
 	public void setIndicadorSucessoAtualizacao(boolean indicadorSucessoAtualizacao) {
 		this.indicadorSucessoAtualizacao = indicadorSucessoAtualizacao;
+	}
+	public List<ImovelNaoFaturadoRetornoIsDTO> getListaImoveisNaoFaturados() {
+		return listaImoveisNaoFaturados;
+	}
+	public void setListaImoveisNaoFaturados(List<ImovelNaoFaturadoRetornoIsDTO> listaImoveisNaoFaturados) {
+		this.listaImoveisNaoFaturados = listaImoveisNaoFaturados;
 	}
 
 }

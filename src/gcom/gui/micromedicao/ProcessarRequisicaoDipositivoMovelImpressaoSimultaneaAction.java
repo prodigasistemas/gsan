@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -192,6 +193,7 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 	public void atualizarMovimentacao(DataInputStream data, HttpServletResponse response, OutputStream out) throws IOException {
 		InputStreamReader reader = new InputStreamReader(data);
 		BufferedReader buffer = new BufferedReader(reader);
+		Collection<Imovel> colImoveisComProblema = new ArrayList();
 
 		try {
 			RetornoAtualizarFaturamentoMovimentoCelularHelper retorno = Fachada
@@ -247,6 +249,7 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 		Integer setorComercial = null;
 		Integer idLocalidade = null;
 		Integer numeroSequenciaArquivo = null;
+		Collection<Imovel> colImoveisComProblema = new ArrayList();
 
 		try {
 			String registro0 = buffer.readLine();

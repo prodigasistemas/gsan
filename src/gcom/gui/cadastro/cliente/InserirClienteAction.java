@@ -344,7 +344,7 @@ public class InserirClienteAction extends GcomAction {
 			// Numero do NIS
 			String numeroNIS = (String) form.get("numeroNIS");
 			if (numeroNIS != null && !numeroNIS.trim().equals("")) {
-				this.getFachada().isNisValido(numeroNIS, tipoPessoa, cliente.getId(), Cliente.TIPO_OPERACAO_INSERIR);
+				this.getFachada().isNisValido(numeroNIS, tipoPessoa, null, Cliente.TIPO_OPERACAO_INSERIR);
 				cliente.setNumeroNIS(numeroNIS.trim());
 				validarCadastroUnico(cliente);
 			} else {

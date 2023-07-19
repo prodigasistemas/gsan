@@ -208,6 +208,7 @@ import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoTipo;
+import gcom.gui.ActionServletException;
 import gcom.gui.relatorio.cadastro.FiltrarRelatorioAcessoSPCHelper;
 import gcom.gui.relatorio.cadastro.GerarRelatorioAlteracoesCpfCnpjHelper;
 import gcom.gui.relatorio.cadastro.micromedicao.FiltrarRelatorioColetaMedidorEnergiaHelper;

@@ -26,13 +26,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.ejb.EJBException;
 
 import org.apache.commons.beanutils.BeanComparator;
-import org.hibernate.LazyInitializationException;
 import org.jboss.logging.Logger;
 
 import gcom.api.GsanApi;
@@ -56,7 +56,6 @@ import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
-import gcom.cadastro.funcionario.Funcionario;
 import gcom.cadastro.geografico.FiltroMunicipio;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.Categoria;
@@ -102,6 +101,7 @@ import gcom.faturamento.bean.GerarCreditoRealizadoHelper;
 import gcom.faturamento.bean.GerarDebitoCobradoHelper;
 import gcom.faturamento.bean.GerarRelatorioAnormalidadePorAmostragemHelper;
 import gcom.faturamento.bean.GerarResumoSimulacaoFaturamentoHelper;
+import gcom.faturamento.bean.ImovelNaoFaturadoRetornoIsDTO;
 import gcom.faturamento.bean.PrescreverDebitosImovelHelper;
 import gcom.faturamento.bean.RemoverImovesJaProcessadorImpressaoSimultaneaHelper;
 import gcom.faturamento.bean.RemoverImovesJaProcessadorImpressaoSimultaneaHelper.DadosImovelRemoverImovesJaProcessadorImpressaoSimultanea;
@@ -143,7 +143,6 @@ import gcom.faturamento.credito.CreditoARealizarGeral;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.credito.CreditoRealizadoCategoria;
-import gcom.faturamento.credito.CreditoRealizadoCategoriaPK;
 import gcom.faturamento.credito.CreditoRealizadoHistorico;
 import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.credito.FiltroCreditoARealizar;
@@ -198,7 +197,6 @@ import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.consumo.ConsumoTipo;
 import gcom.micromedicao.consumo.FiltroComunicadoEmitirConta;
 import gcom.micromedicao.consumo.FiltroConsumoAnormalidade;
-import gcom.micromedicao.consumo.FiltroConsumoHistorico;
 import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.leitura.FiltroLeituraAnormalidade;
@@ -253,6 +251,7 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
+import gcom.util.is.ErroRetornoIS;
 import gcom.util.sms.ServicoSMS;
 
 public class ControladorFaturamento extends ControladorFaturamentoFINAL {
@@ -261,6 +260,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	private static Logger logger = Logger.getLogger(ControladorFaturamento.class);
 
+	private Properties mensagensErroRetornoIS;
 	/**
 	 * Metodo responsevel por verificar se existe no banco um determinado ID na
 	 * tabela de faturamento_grupo - caso exista o id passado como paremetro na
@@ -423,7 +423,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	@SuppressWarnings("unchecked")
 	private void executarFaturamentoAjusteMovimentoCelular(MovimentoContaPrefaturada movimento, boolean efetuarRateio,
 			BigDecimal valorTotalAguaCalculado, BigDecimal valorTotalEsgotoCalculado,
-			Integer consumoAguaCalculado, Integer consumoEsgotoCalculado, Conta conta) throws ControladorException {
+			Integer consumoAguaCalculado, Integer consumoEsgotoCalculado, Conta conta, List<ImovelNaoFaturadoRetornoIsDTO> listaImoveisCorrompidos) throws ControladorException {
 		Collection<MovimentoContaPrefaturadaCategoria> categoriasMovimento = movimento
 				.getMovimentoContaPrefaturadaCategorias();
 		
@@ -448,7 +448,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			this.getControladorBatch().inserirObjetoParaBatch(faturamentoImediatoAjuste);
 			this.atualizarConsumoMovimentoCelular(conta, movimento.getValorTotalConsumoAgua(), consumoAguaCalculado,
-					movimento.getValorTotalConsumoEsgoto(), consumoEsgotoCalculado);
+					movimento.getValorTotalConsumoEsgoto(), consumoEsgotoCalculado, listaImoveisCorrompidos);
 		}
 
 	}
@@ -511,7 +511,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 *    chamado via a funcionalidade de consistir, atualiza a situaeeo atual da conta.
 	 */
 	private void atualizarMovimentoCelular(Collection<MovimentoContaPrefaturada> colMovimentoContaPrefaturada,
-			boolean efetuarRateio) throws ControladorException {
+			boolean efetuarRateio, List<ImovelNaoFaturadoRetornoIsDTO> listaImoveisCorrompidos)
+			throws ControladorException {
 
 		String matriculaImovel = "";
 		try {
@@ -521,9 +522,10 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 				if (helper.existeCategoria()) {
 
-					//Quando a conta nao tiver sido emitida pelo IS, nao altera a conta, continua PF
+					// Quando a conta nao tiver sido emitida pelo IS, nao altera a conta, continua
+					// PF
 					if (helper.isContaEmitidaPeloIS()) {
-						
+
 						// Caso o imovel seja o imovel condominio, pulamos
 						if (helper.getImovel().isImovelMacroCondominio()) {
 							continue;
@@ -531,24 +533,23 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						Conta contaAtualizacao = helper.getConta();
 
-						contaAtualizacao = repositorioFaturamento.pesquisarContaPreFaturada(
-								helper.getImovel().getId(), helper.getAnoMesReferenciaPreFaturamento(),
-								DebitoCreditoSituacao.PRE_FATURADA);
+						contaAtualizacao = repositorioFaturamento.pesquisarContaPreFaturada(helper.getImovel().getId(),
+								helper.getAnoMesReferenciaPreFaturamento(), DebitoCreditoSituacao.PRE_FATURADA);
 
 						if (contaAtualizacao == null || contaAtualizacao.getId() == null) {
 							continue;
 						}
-						
+
 						matriculaImovel = helper.getImovel().getId().toString();
 						Imovel imo = getControladorImovel().pesquisarImovel(helper.getImovel().getId());
 						helper.setImovel(imo);
-						
-						Collection<CalcularValoresAguaEsgotoHelper> colecaoCalcularValoresAguaEsgotoHelper = 
-								obterValoresAguaEsgotoAtualizarMovimentoCelular(helper, contaAtualizacao, sistemaParametro);
-							
+
+						Collection<CalcularValoresAguaEsgotoHelper> colecaoCalcularValoresAguaEsgotoHelper = obterValoresAguaEsgotoAtualizarMovimentoCelular(
+								helper, contaAtualizacao, sistemaParametro);
+
 						BigDecimal valorTotalAguaCalculado = this.calcularValorTotalAguaOuEsgotoPorCategoria(
 								colecaoCalcularValoresAguaEsgotoHelper, ConstantesSistema.CALCULAR_AGUA);
-						
+
 						BigDecimal valorTotalEsgotoCalculado = this.calcularValorTotalAguaOuEsgotoPorCategoria(
 								colecaoCalcularValoresAguaEsgotoHelper, ConstantesSistema.CALCULAR_ESGOTO);
 
@@ -566,229 +567,247 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 						this.preencherValoresTotaisMovimentoContaPreFaturada(helper);
 
-						this.executarFaturamentoAjusteMovimentoCelular(helper, efetuarRateio, 
-								valorTotalAguaCalculado, valorTotalEsgotoCalculado, consumoAguaCalculado, 
-								consumoEsgotoCalculado, contaAtualizacao);
-						
-						if (contaAtualizacao != null) {
+						this.executarFaturamentoAjusteMovimentoCelular(helper, efetuarRateio, valorTotalAguaCalculado,
+								valorTotalEsgotoCalculado, consumoAguaCalculado, consumoEsgotoCalculado,
+								contaAtualizacao, listaImoveisCorrompidos);
 
-							helper.setConta(contaAtualizacao);
+						if (!isImovelComProblemaLeitura(imo, listaImoveisCorrompidos)) {
 
-							/*
-							 * 2. Para cada registro do tipo 2, alterar na tabela CONTA_CATEGORIA o seu
-							 * correspondente (CNTA_ID = Conta do movimento em processamento e CATG_ID =
-							 * cedigo da categoria do movimento e SCAT_ID = cedigo da subcategoria do
-							 * movimento) , com os seguintes dados
-							 */
-							for (MovimentoContaPrefaturadaCategoria helperCategoria : colMovimentoContaPrefaturadaCategoria) {
-								ContaCategoria contaCategoria = obterContaCategoriaAtualizarMovimento(contaAtualizacao, helperCategoria, sistemaParametro);
+							if (contaAtualizacao != null) {
 
-								if (contaCategoria != null && !contaCategoria.equals("")) {
+								helper.setConta(contaAtualizacao);
 
-									ContaCategoriaPK contaCategoriaPK = null;
-									contaCategoriaPK = new ContaCategoriaPK();
-									contaCategoriaPK.setConta(contaAtualizacao);
-									contaCategoriaPK.setCategoria(helperCategoria.getComp_id().getCategoria());
-									contaCategoriaPK.setSubcategoria(helperCategoria.getComp_id().getSubcategoria());
-									contaCategoria.setComp_id(contaCategoriaPK);
-									contaCategoria.setValorAgua(helperCategoria.getValorFaturadoAgua());
-									contaCategoria.setConsumoAgua(helperCategoria.getConsumoFaturadoAgua());
-									contaCategoria.setValorEsgoto(helperCategoria.getValorFaturadoEsgoto());
-									contaCategoria.setConsumoEsgoto(helperCategoria.getConsumoFaturadoEsgoto());
-									contaCategoria.setValorTarifaMinimaAgua(helperCategoria.getValorTarifaMinimaAgua());
-									contaCategoria.setConsumoMinimoAgua(helperCategoria.getConsumoMinimoAgua());
-									contaCategoria
-											.setValorTarifaMinimaEsgoto(helperCategoria.getValorTarifaMinimaEsgoto());
-									contaCategoria.setConsumoMinimoEsgoto(helperCategoria.getConsumoMinimoEsgoto());
-									contaCategoria.setUltimaAlteracao(new Date());							
- 
-									atualizarValorCreditoBolsaAguaMovimentoCelular(contaCategoria, contaAtualizacao);
-									try {
-										repositorioFaturamento.atualizarContaCategoriaProcessoMOBILE(contaCategoria);
-									} catch (ErroRepositorioException e) {
-										throw new ControladorException("erro.sistema", e);
-									}
+								/*
+								 * 2. Para cada registro do tipo 2, alterar na tabela CONTA_CATEGORIA o seu
+								 * correspondente (CNTA_ID = Conta do movimento em processamento e CATG_ID =
+								 * cedigo da categoria do movimento e SCAT_ID = cedigo da subcategoria do
+								 * movimento) , com os seguintes dados
+								 */
+								for (MovimentoContaPrefaturadaCategoria helperCategoria : colMovimentoContaPrefaturadaCategoria) {
+									ContaCategoria contaCategoria = obterContaCategoriaAtualizarMovimento(
+											contaAtualizacao, helperCategoria, sistemaParametro);
 
-									/*
-									 * 3. Para cada registro do tipo 3, alterar na tabela
-									 * CONTA_CATEGORIA_CONSUMO_FAIXA o seu correspondente (CNTA_ID = Conta do
-									 * movimento em processamento e CATG_ID = cedigo da categoria do movimento e
-									 * SCAT_ID = cedigo da subcategoria do movimento)
-									 */
-									FiltroMovimentoContaCategoriaConsumoFaixa filtroMovimentoContaCategoriaConsumoFaixa = new FiltroMovimentoContaCategoriaConsumoFaixa();
+									if (contaCategoria != null && !contaCategoria.equals("")) {
 
-									filtroMovimentoContaCategoriaConsumoFaixa.adicionarParametro(new ParametroSimples(
-											FiltroMovimentoContaCategoriaConsumoFaixa.MOVIMENTO_CONTA_PREFATURADA_ID,
-											helper.getId()));
+										ContaCategoriaPK contaCategoriaPK = null;
+										contaCategoriaPK = new ContaCategoriaPK();
+										contaCategoriaPK.setConta(contaAtualizacao);
+										contaCategoriaPK.setCategoria(helperCategoria.getComp_id().getCategoria());
+										contaCategoriaPK
+												.setSubcategoria(helperCategoria.getComp_id().getSubcategoria());
+										contaCategoria.setComp_id(contaCategoriaPK);
+										contaCategoria.setValorAgua(helperCategoria.getValorFaturadoAgua());
+										contaCategoria.setConsumoAgua(helperCategoria.getConsumoFaturadoAgua());
+										contaCategoria.setValorEsgoto(helperCategoria.getValorFaturadoEsgoto());
+										contaCategoria.setConsumoEsgoto(helperCategoria.getConsumoFaturadoEsgoto());
+										contaCategoria
+												.setValorTarifaMinimaAgua(helperCategoria.getValorTarifaMinimaAgua());
+										contaCategoria.setConsumoMinimoAgua(helperCategoria.getConsumoMinimoAgua());
+										contaCategoria.setValorTarifaMinimaEsgoto(
+												helperCategoria.getValorTarifaMinimaEsgoto());
+										contaCategoria.setConsumoMinimoEsgoto(helperCategoria.getConsumoMinimoEsgoto());
+										contaCategoria.setUltimaAlteracao(new Date());
 
-									filtroMovimentoContaCategoriaConsumoFaixa.adicionarParametro(
-											new ParametroSimples(FiltroMovimentoContaCategoriaConsumoFaixa.CATEGORIA_ID,
-													helperCategoria.getComp_id().getCategoria().getId()));
+										atualizarValorCreditoBolsaAguaMovimentoCelular(contaCategoria,
+												contaAtualizacao);
+										try {
+											repositorioFaturamento
+													.atualizarContaCategoriaProcessoMOBILE(contaCategoria);
+										} catch (ErroRepositorioException e) {
+											throw new ControladorException("erro.sistema", e);
+										}
 
-									filtroMovimentoContaCategoriaConsumoFaixa.adicionarParametro(new ParametroSimples(
-											FiltroMovimentoContaCategoriaConsumoFaixa.SUBCATEGORIA_ID, getIdSubcategoria(helperCategoria, sistemaParametro)));
+										/*
+										 * 3. Para cada registro do tipo 3, alterar na tabela
+										 * CONTA_CATEGORIA_CONSUMO_FAIXA o seu correspondente (CNTA_ID = Conta do
+										 * movimento em processamento e CATG_ID = cedigo da categoria do movimento e
+										 * SCAT_ID = cedigo da subcategoria do movimento)
+										 */
+										FiltroMovimentoContaCategoriaConsumoFaixa filtroMovimentoContaCategoriaConsumoFaixa = new FiltroMovimentoContaCategoriaConsumoFaixa();
 
-									Collection<MovimentoContaCategoriaConsumoFaixa> colMovimentoContaCategoriaConsumoFaixa = this
-											.getControladorUtil().pesquisar(filtroMovimentoContaCategoriaConsumoFaixa,
-													MovimentoContaCategoriaConsumoFaixa.class.getName());
+										filtroMovimentoContaCategoriaConsumoFaixa
+												.adicionarParametro(new ParametroSimples(
+														FiltroMovimentoContaCategoriaConsumoFaixa.MOVIMENTO_CONTA_PREFATURADA_ID,
+														helper.getId()));
 
-									for (MovimentoContaCategoriaConsumoFaixa helperMovimentoContaCategoriaConsumoFaixa : colMovimentoContaCategoriaConsumoFaixa) {
+										filtroMovimentoContaCategoriaConsumoFaixa
+												.adicionarParametro(new ParametroSimples(
+														FiltroMovimentoContaCategoriaConsumoFaixa.CATEGORIA_ID,
+														helperCategoria.getComp_id().getCategoria().getId()));
 
-										ContaCategoriaConsumoFaixa contaCategoriaConsumoFaixa = new ContaCategoriaConsumoFaixa();
-										contaCategoriaConsumoFaixa
-												.setCategoria(helperMovimentoContaCategoriaConsumoFaixa
-														.getMovimentoContaPrefaturadaCategoria().getComp_id()
-														.getCategoria());
+										filtroMovimentoContaCategoriaConsumoFaixa
+												.adicionarParametro(new ParametroSimples(
+														FiltroMovimentoContaCategoriaConsumoFaixa.SUBCATEGORIA_ID,
+														getIdSubcategoria(helperCategoria, sistemaParametro)));
 
-										contaCategoriaConsumoFaixa
-												.setSubcategoria(helperMovimentoContaCategoriaConsumoFaixa
-														.getMovimentoContaPrefaturadaCategoria().getComp_id()
-														.getSubcategoria());
+										Collection<MovimentoContaCategoriaConsumoFaixa> colMovimentoContaCategoriaConsumoFaixa = this
+												.getControladorUtil()
+												.pesquisar(filtroMovimentoContaCategoriaConsumoFaixa,
+														MovimentoContaCategoriaConsumoFaixa.class.getName());
 
-										contaCategoriaConsumoFaixa.setContaCategoria(contaCategoria);
+										for (MovimentoContaCategoriaConsumoFaixa helperMovimentoContaCategoriaConsumoFaixa : colMovimentoContaCategoriaConsumoFaixa) {
 
-										contaCategoriaConsumoFaixa
-												.setValorAgua(helperMovimentoContaCategoriaConsumoFaixa
-														.getValorFaturadoAguaNaFaixa());
-										contaCategoriaConsumoFaixa
-												.setConsumoAgua(helperMovimentoContaCategoriaConsumoFaixa
-														.getConsumoFaturadoAguaNaFaixa());
-										contaCategoriaConsumoFaixa
-												.setValorEsgoto(helperMovimentoContaCategoriaConsumoFaixa
-														.getValorFaturadoEsgotoNaFaixa());
-										contaCategoriaConsumoFaixa
-												.setConsumoEsgoto(helperMovimentoContaCategoriaConsumoFaixa
-														.getConsumoFaturadoEsgotoNaFaixa());
-										contaCategoriaConsumoFaixa
-												.setConsumoFaixaInicio(helperMovimentoContaCategoriaConsumoFaixa
-														.getLimiteInicialConsumoNaFaixa());
-										contaCategoriaConsumoFaixa
-												.setConsumoFaixaFim(helperMovimentoContaCategoriaConsumoFaixa
-														.getLimiteFinalConsumoNaFaixa());
-										contaCategoriaConsumoFaixa.setValorTarifaFaixa(
-												helperMovimentoContaCategoriaConsumoFaixa.getValorTarifaNaFaixa());
-										contaCategoriaConsumoFaixa.setUltimaAlteracao(new Date());
+											ContaCategoriaConsumoFaixa contaCategoriaConsumoFaixa = new ContaCategoriaConsumoFaixa();
+											contaCategoriaConsumoFaixa
+													.setCategoria(helperMovimentoContaCategoriaConsumoFaixa
+															.getMovimentoContaPrefaturadaCategoria().getComp_id()
+															.getCategoria());
 
-										this.getControladorBatch().inserirObjetoParaBatch(contaCategoriaConsumoFaixa);
-									}
+											contaCategoriaConsumoFaixa
+													.setSubcategoria(helperMovimentoContaCategoriaConsumoFaixa
+															.getMovimentoContaPrefaturadaCategoria().getComp_id()
+															.getSubcategoria());
 
-								}
-							}
+											contaCategoriaConsumoFaixa.setContaCategoria(contaCategoria);
 
-							/*
-							 * 
-							 * Para cada registro do tipo 4, alterar na tabela CONTA_IMPOSTOS_DEDUZIDOS o
-							 * seu correspondente (CNTA_ID = Conta do movimento em processamento e IMTP_ID =
-							 * cedigo do imposto do movimento) , com os seguintes dados
-							 */
-							FiltroMovimentoContaImpostoDeduzido filtroMovimentoContaImpostoDeduzido = new FiltroMovimentoContaImpostoDeduzido();
+											contaCategoriaConsumoFaixa
+													.setValorAgua(helperMovimentoContaCategoriaConsumoFaixa
+															.getValorFaturadoAguaNaFaixa());
+											contaCategoriaConsumoFaixa
+													.setConsumoAgua(helperMovimentoContaCategoriaConsumoFaixa
+															.getConsumoFaturadoAguaNaFaixa());
+											contaCategoriaConsumoFaixa
+													.setValorEsgoto(helperMovimentoContaCategoriaConsumoFaixa
+															.getValorFaturadoEsgotoNaFaixa());
+											contaCategoriaConsumoFaixa
+													.setConsumoEsgoto(helperMovimentoContaCategoriaConsumoFaixa
+															.getConsumoFaturadoEsgotoNaFaixa());
+											contaCategoriaConsumoFaixa
+													.setConsumoFaixaInicio(helperMovimentoContaCategoriaConsumoFaixa
+															.getLimiteInicialConsumoNaFaixa());
+											contaCategoriaConsumoFaixa
+													.setConsumoFaixaFim(helperMovimentoContaCategoriaConsumoFaixa
+															.getLimiteFinalConsumoNaFaixa());
+											contaCategoriaConsumoFaixa.setValorTarifaFaixa(
+													helperMovimentoContaCategoriaConsumoFaixa.getValorTarifaNaFaixa());
+											contaCategoriaConsumoFaixa.setUltimaAlteracao(new Date());
 
-							filtroMovimentoContaImpostoDeduzido.adicionarParametro(new ParametroSimples(
-									FiltroMovimentoContaImpostoDeduzido.MOVIMENTO_CONTA_PREFATURADA_ID,
-									helper.getId()));
+											this.getControladorBatch()
+													.inserirObjetoParaBatch(contaCategoriaConsumoFaixa);
+										}
 
-							Collection<MovimentoContaImpostoDeduzido> colMovimentoContaImpostoDeduzido = this
-									.getControladorUtil().pesquisar(filtroMovimentoContaImpostoDeduzido,
-											MovimentoContaImpostoDeduzido.class.getName());
-
-							BigDecimal valorTotalMenosImposto = new BigDecimal(helper.getValorTotalCategoriasAgua().doubleValue()
-									+ helper.getValorTotalCategoriasEsgoto().doubleValue() + contaAtualizacao.getDebitos().doubleValue()
-									- contaAtualizacao.getValorCreditos().doubleValue());
-
-							BigDecimal valorImposto = new BigDecimal(0);
-							for (MovimentoContaImpostoDeduzido helperMovimentoContaImpostoDeduzido : colMovimentoContaImpostoDeduzido) {
-
-								FiltroContaImpostosDeduzidos filtroContaImpostosDeduzidos = new FiltroContaImpostosDeduzidos();
-								filtroContaImpostosDeduzidos.adicionarParametro(new ParametroSimples(
-										FiltroContaImpostosDeduzidos.CONTA_ID, helper.getConta().getId()));
-								filtroContaImpostosDeduzidos.adicionarParametro(
-										new ParametroSimples(FiltroContaImpostosDeduzidos.IMPOSTO_TIPO,
-												helperMovimentoContaImpostoDeduzido.getImpostoTipo().getId()));
-
-								Collection<ContaImpostosDeduzidos> colContaImpostosDeduzidos = this.getControladorUtil()
-										.pesquisar(filtroContaImpostosDeduzidos,
-												ContaImpostosDeduzidos.class.getName());
-
-								ContaImpostosDeduzidos contaImpostosDeduzidos = (ContaImpostosDeduzidos) Util
-										.retonarObjetoDeColecao(colContaImpostosDeduzidos);
-
-								if (contaImpostosDeduzidos != null && !contaImpostosDeduzidos.equals("")) {
-									contaImpostosDeduzidos
-											.setValorImposto(helperMovimentoContaImpostoDeduzido.getValorImposto());
-
-									valorImposto = valorImposto
-											.add(helperMovimentoContaImpostoDeduzido.getValorImposto());
-
-									contaImpostosDeduzidos.setPercentualAliquota(
-											helperMovimentoContaImpostoDeduzido.getPercentualAliquota());
-									contaImpostosDeduzidos.setValorBaseCalculo(valorTotalMenosImposto);
-									contaImpostosDeduzidos.setUltimaAlteracao(new Date());
-
-									try {
-										repositorioFaturamento
-												.atualizarContaImpostosDeduzidosProcessoMOBILE(contaImpostosDeduzidos);
-									} catch (ErroRepositorioException e) {
-										throw new ControladorException("erro.sistema", e);
 									}
 								}
-							}
 
-							contaAtualizacao.setConsumoAgua(helper.getValorTotalConsumoAgua());
-							contaAtualizacao.setConsumoEsgoto(helper.getValorTotalConsumoEsgoto());
-							contaAtualizacao.setConsumoRateioAgua(helper.getConsumoRateioAgua());
-							contaAtualizacao.setConsumoRateioEsgoto(helper.getConsumoRateioEsgoto());
-							contaAtualizacao.setValorAgua(helper.getValorTotalCategoriasAgua());
-							contaAtualizacao.setValorEsgoto(helper.getValorTotalCategoriasEsgoto());
-							contaAtualizacao.setValorImposto(valorImposto);
-							contaAtualizacao.setDataEmissao(helper.getDataHoraLeitura());
-							contaAtualizacao.setUltimaAlteracao(new Date());
-							contaAtualizacao.setNumeroLeituraAtual(helper.getLeituraFaturamento());
-							contaAtualizacao.setNumeroLeituraAnterior(helper.getLeituraHidrometroAnterior());
-							contaAtualizacao.setValorRateioAgua(helper.getValorRateioAgua());
-							contaAtualizacao.setValorRateioEsgoto(helper.getValorRateioEsgoto());
+								/*
+								 * 
+								 * Para cada registro do tipo 4, alterar na tabela CONTA_IMPOSTOS_DEDUZIDOS o
+								 * seu correspondente (CNTA_ID = Conta do movimento em processamento e IMTP_ID =
+								 * cedigo do imposto do movimento) , com os seguintes dados
+								 */
+								FiltroMovimentoContaImpostoDeduzido filtroMovimentoContaImpostoDeduzido = new FiltroMovimentoContaImpostoDeduzido();
 
-							DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
-							debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
-							contaAtualizacao.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
+								filtroMovimentoContaImpostoDeduzido.adicionarParametro(new ParametroSimples(
+										FiltroMovimentoContaImpostoDeduzido.MOVIMENTO_CONTA_PREFATURADA_ID,
+										helper.getId()));
 
-							// Se ire atualizar o nitrato na conta caso o mesmo ainda nao tenha sido
-							// atualizado
-							FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
-							filtroCreditoARealizar.adicionarParametro(
-									new ParametroSimples(FiltroCreditoARealizar.IMOVEL_ID, helper.getImovel().getId()));
-							filtroCreditoARealizar.adicionarParametro(
-									new ParametroSimples(FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO,
-											helper.getAnoMesReferenciaPreFaturamento()));
-							filtroCreditoARealizar.adicionarParametro(new ParametroSimples(
-									FiltroCreditoARealizar.CREDITO_TIPO, CreditoTipo.CREDITO_NITRATO));
+								Collection<MovimentoContaImpostoDeduzido> colMovimentoContaImpostoDeduzido = this
+										.getControladorUtil().pesquisar(filtroMovimentoContaImpostoDeduzido,
+												MovimentoContaImpostoDeduzido.class.getName());
 
-							Collection<CreditoARealizar> colCreditoARealizar = this.getControladorUtil()
-									.pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
+								BigDecimal valorTotalMenosImposto = new BigDecimal(
+										helper.getValorTotalCategoriasAgua().doubleValue()
+												+ helper.getValorTotalCategoriasEsgoto().doubleValue()
+												+ contaAtualizacao.getDebitos().doubleValue()
+												- contaAtualizacao.getValorCreditos().doubleValue());
 
-							if (colCreditoARealizar != null && colCreditoARealizar.size() > 0) {
-								CreditoARealizar credito = (CreditoARealizar) Util
-										.retonarObjetoDeColecao(colCreditoARealizar);
+								BigDecimal valorImposto = new BigDecimal(0);
+								for (MovimentoContaImpostoDeduzido helperMovimentoContaImpostoDeduzido : colMovimentoContaImpostoDeduzido) {
 
-								if (credito.getValorCredito() == null || credito.getValorCredito().floatValue() == 0) {
-									BigDecimal valorCreditoNitrato = this.atualizarCreditoARealizarNitrato(
-											helper.getImovel(), helper.getAnoMesReferenciaPreFaturamento(), helper.getValorTotalCategoriasAgua(),
-											helper.getConta());
+									FiltroContaImpostosDeduzidos filtroContaImpostosDeduzidos = new FiltroContaImpostosDeduzidos();
+									filtroContaImpostosDeduzidos.adicionarParametro(new ParametroSimples(
+											FiltroContaImpostosDeduzidos.CONTA_ID, helper.getConta().getId()));
+									filtroContaImpostosDeduzidos.adicionarParametro(
+											new ParametroSimples(FiltroContaImpostosDeduzidos.IMPOSTO_TIPO,
+													helperMovimentoContaImpostoDeduzido.getImpostoTipo().getId()));
 
-									if (valorCreditoNitrato != null) {
-										BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
-										valorCreditos = valorCreditos.add(valorCreditoNitrato);
-										contaAtualizacao.setValorCreditos(valorCreditos);
+									Collection<ContaImpostosDeduzidos> colContaImpostosDeduzidos = this
+											.getControladorUtil().pesquisar(filtroContaImpostosDeduzidos,
+													ContaImpostosDeduzidos.class.getName());
+
+									ContaImpostosDeduzidos contaImpostosDeduzidos = (ContaImpostosDeduzidos) Util
+											.retonarObjetoDeColecao(colContaImpostosDeduzidos);
+
+									if (contaImpostosDeduzidos != null && !contaImpostosDeduzidos.equals("")) {
+										contaImpostosDeduzidos
+												.setValorImposto(helperMovimentoContaImpostoDeduzido.getValorImposto());
+
+										valorImposto = valorImposto
+												.add(helperMovimentoContaImpostoDeduzido.getValorImposto());
+
+										contaImpostosDeduzidos.setPercentualAliquota(
+												helperMovimentoContaImpostoDeduzido.getPercentualAliquota());
+										contaImpostosDeduzidos.setValorBaseCalculo(valorTotalMenosImposto);
+										contaImpostosDeduzidos.setUltimaAlteracao(new Date());
+
+										try {
+											repositorioFaturamento.atualizarContaImpostosDeduzidosProcessoMOBILE(
+													contaImpostosDeduzidos);
+										} catch (ErroRepositorioException e) {
+											throw new ControladorException("erro.sistema", e);
+										}
 									}
 								}
-							}
 
-							// verifica se o valor credito e maior que o valor da conta caso seja chamar
-							// atualizar os creditos a realizar e os creditos realizados
-							BigDecimal valorTotalContaSemCreditos = helper.getValorTotalCategoriasAgua().add(helper.getValorTotalCategoriasEsgoto());
-							valorTotalContaSemCreditos = valorTotalContaSemCreditos.add(contaAtualizacao.getDebitos());
-							valorTotalContaSemCreditos = valorTotalContaSemCreditos.subtract(valorImposto);
+								contaAtualizacao.setConsumoAgua(helper.getValorTotalConsumoAgua());
+								contaAtualizacao.setConsumoEsgoto(helper.getValorTotalConsumoEsgoto());
+								contaAtualizacao.setConsumoRateioAgua(helper.getConsumoRateioAgua());
+								contaAtualizacao.setConsumoRateioEsgoto(helper.getConsumoRateioEsgoto());
+								contaAtualizacao.setValorAgua(helper.getValorTotalCategoriasAgua());
+								contaAtualizacao.setValorEsgoto(helper.getValorTotalCategoriasEsgoto());
+								contaAtualizacao.setValorImposto(valorImposto);
+								contaAtualizacao.setDataEmissao(helper.getDataHoraLeitura());
+								contaAtualizacao.setUltimaAlteracao(new Date());
+								contaAtualizacao.setNumeroLeituraAtual(helper.getLeituraFaturamento());
+								contaAtualizacao.setNumeroLeituraAnterior(helper.getLeituraHidrometroAnterior());
+								contaAtualizacao.setValorRateioAgua(helper.getValorRateioAgua());
+								contaAtualizacao.setValorRateioEsgoto(helper.getValorRateioEsgoto());
 
-							BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
+								DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
+								debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
+								contaAtualizacao.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
+
+								// Se ire atualizar o nitrato na conta caso o mesmo ainda nao tenha sido
+								// atualizado
+								FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+								filtroCreditoARealizar.adicionarParametro(new ParametroSimples(
+										FiltroCreditoARealizar.IMOVEL_ID, helper.getImovel().getId()));
+								filtroCreditoARealizar.adicionarParametro(
+										new ParametroSimples(FiltroCreditoARealizar.ANO_MES_REFERENCIA_CREDITO,
+												helper.getAnoMesReferenciaPreFaturamento()));
+								filtroCreditoARealizar.adicionarParametro(new ParametroSimples(
+										FiltroCreditoARealizar.CREDITO_TIPO, CreditoTipo.CREDITO_NITRATO));
+
+								Collection<CreditoARealizar> colCreditoARealizar = this.getControladorUtil()
+										.pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
+
+								if (colCreditoARealizar != null && colCreditoARealizar.size() > 0) {
+									CreditoARealizar credito = (CreditoARealizar) Util
+											.retonarObjetoDeColecao(colCreditoARealizar);
+
+									if (credito.getValorCredito() == null
+											|| credito.getValorCredito().floatValue() == 0) {
+										BigDecimal valorCreditoNitrato = this.atualizarCreditoARealizarNitrato(
+												helper.getImovel(), helper.getAnoMesReferenciaPreFaturamento(),
+												helper.getValorTotalCategoriasAgua(), helper.getConta());
+
+										if (valorCreditoNitrato != null) {
+											BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
+											valorCreditos = valorCreditos.add(valorCreditoNitrato);
+											contaAtualizacao.setValorCreditos(valorCreditos);
+										}
+									}
+								}
+
+								// verifica se o valor credito e maior que o valor da conta caso seja chamar
+								// atualizar os creditos a realizar e os creditos realizados
+								BigDecimal valorTotalContaSemCreditos = helper.getValorTotalCategoriasAgua()
+										.add(helper.getValorTotalCategoriasEsgoto());
+								valorTotalContaSemCreditos = valorTotalContaSemCreditos
+										.add(contaAtualizacao.getDebitos());
+								valorTotalContaSemCreditos = valorTotalContaSemCreditos.subtract(valorImposto);
+
+								BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
 
 //							if (valorBolsaAguaConcedido != null && valorBolsaAguaConcedido.doubleValue() > 0) {
 //								/**
@@ -806,303 +825,310 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 //										helper.getImovel(), valorBolsaAguaConcedido, contaAtualizacao);
 //							}
 
-							logger.info(" 1 - Credito a Realizar: Imovel: "
-									+ (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId()
-											: "NULL")
-									+ " | Valor creditos: " + contaAtualizacao.getValorCreditos());
-
-							Collection indicadorRetransmissaoColecao = repositorioFaturamento
-									.pesquisaIndicadorRetransmissaoMovimentoContaPF(
-											contaAtualizacao.getImovel().getId(),
-											helper.getFaturamentoGrupo().getAnoMesReferencia());
-							Integer indicadorRetransmissao = null;
-							if (!indicadorRetransmissaoColecao.isEmpty()) {
-								Iterator indicadorIterator = indicadorRetransmissaoColecao.iterator();
-								indicadorRetransmissao = (Integer) indicadorIterator.next();
-							}
-							
-							
-							if (valorCreditos.compareTo(valorTotalContaSemCreditos) == 1) {
-								Imovel imovel = contaAtualizacao.getImovel();
-								BigDecimal valorTotalCreditos = this.atualizarCreditoResidual(imovel,
-										contaAtualizacao.getId(), helper.getFaturamentoGrupo().getAnoMesReferencia(),
-										valorTotalContaSemCreditos, contaAtualizacao);
-								contaAtualizacao.setValorCreditos(valorTotalCreditos);
-								logger.info(" 2 - Credito a Realizar: Imovel: "
-										+ (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId()
-												: "NULL")
-										+ " | Valor creditos: " + contaAtualizacao.getValorCreditos()
-										+ " | Valor total creditos: " + valorTotalCreditos);
-
-								/**
-								 * Autor: Wellington Rocha Data: 30/08/2011
-								 * 
-								 * Caso a conta seja retransmitida o valor do credito residual neo sere
-								 * atualizado novamente.
-								 */
-							} else if ((indicadorRetransmissao != null && indicadorRetransmissao.equals(2))
-									&& (valorCreditos.compareTo(valorTotalContaSemCreditos) == 0
-											|| valorCreditos.compareTo(valorTotalContaSemCreditos) == -1)) {
-
-								logger.info(" 3 - Credito a Realizar: Imovel: "
+								logger.info(" 1 - Credito a Realizar: Imovel: "
 										+ (contaAtualizacao.getImovel() != null ? contaAtualizacao.getImovel().getId()
 												: "NULL")
 										+ " | Valor creditos: " + contaAtualizacao.getValorCreditos());
 
-								/**
-								 * Autor: Adriana Muniz Data: 09/08/2011
-								 * 
-								 * Como os valores residuais dos creditos a realizar neo esteo mais sendo
-								 * zerados no momento de geraeeo da rota, e necesserio zerar, esse valor
-								 * caso seja diferente de zero, no retorno do IS
-								 */
-								// consulta todos os creditos com valor residual diferente de zero
-								Collection colecaoCreditosARealizar = repositorioFaturamento
-										.buscarCreditoARealizarPorImovelValorResidualDiferenteZero(
-												contaAtualizacao.getImovel().getId());
+								Collection indicadorRetransmissaoColecao = repositorioFaturamento
+										.pesquisaIndicadorRetransmissaoMovimentoContaPF(
+												contaAtualizacao.getImovel().getId(),
+												helper.getFaturamentoGrupo().getAnoMesReferencia());
+								Integer indicadorRetransmissao = null;
+								if (!indicadorRetransmissaoColecao.isEmpty()) {
+									Iterator indicadorIterator = indicadorRetransmissaoColecao.iterator();
+									indicadorRetransmissao = (Integer) indicadorIterator.next();
+								}
 
-								if (!colecaoCreditosARealizar.isEmpty() && colecaoCreditosARealizar != null) {
-
-									logger.info(" 4 - Credito a Realizar: Imovel: "
+								if (valorCreditos.compareTo(valorTotalContaSemCreditos) == 1) {
+									Imovel imovel = contaAtualizacao.getImovel();
+									BigDecimal valorTotalCreditos = this.atualizarCreditoResidual(imovel,
+											contaAtualizacao.getId(),
+											helper.getFaturamentoGrupo().getAnoMesReferencia(),
+											valorTotalContaSemCreditos, contaAtualizacao);
+									contaAtualizacao.setValorCreditos(valorTotalCreditos);
+									logger.info(" 2 - Credito a Realizar: Imovel: "
 											+ (contaAtualizacao.getImovel() != null
 													? contaAtualizacao.getImovel().getId()
 													: "NULL")
-											+ " | Qtde de creditos com valor residual diferente de zero: "
-											+ colecaoCreditosARealizar.size());
+											+ " | Valor creditos: " + contaAtualizacao.getValorCreditos()
+											+ " | Valor total creditos: " + valorTotalCreditos);
 
-									Iterator creditoIterator = colecaoCreditosARealizar.iterator();
-
-									while (creditoIterator.hasNext()) {
-										CreditoARealizar credito = (CreditoARealizar) creditoIterator.next();
-
-										credito.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
-
-										logger.info(" 5 - Credito a Realizar: Imovel: "
-												+ (credito.getImovel() != null ? credito.getImovel().getId() : "NULL")
-												+ " | Creditos: "
-												+ (credito.getValorCredito() != null ? credito.getValorCredito()
-														: "NULL")
-												+ " | Residual Concedido no Mes: "
-												+ (credito.getValorResidualConcedidoMes() != null
-														? credito.getValorResidualConcedidoMes()
-														: "NULL")
-												+ " | Residual do Mes Anterior: "
-												+ (credito.getValorResidualMesAnterior() != null
-														? credito.getValorResidualMesAnterior()
-														: "NULL"));
-
-										repositorioFaturamento.atualizarCreditoARealizar(credito);
-									}
-								}
-							}
-
-							this.ajustarCobrancaContasValoresAbaixoMinimoEmissao(contaAtualizacao, sistemaParametro.getValorMinimoEmissaoConta());
-
-							try {
-								repositorioFaturamento.atualizarContaProcessoMOBILE(contaAtualizacao);
-							} catch (ErroRepositorioException e) {
-								throw new ControladorException("erro.sistema", e);
-							}
-
-							// Verfificar se o imevel e para ser faturado ou neo,
-							// caso neo seja enteo deletar a conta.
-							boolean faturar = true;
-							if (contaAtualizacao.getLigacaoAguaSituacao() != null
-									&& contaAtualizacao.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao()
-											.equals(ConstantesSistema.NAO)
-									&& contaAtualizacao.getLigacaoEsgotoSituacao() != null
-									&& contaAtualizacao.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao()
-											.equals(ConstantesSistema.NAO)
-									&& contaAtualizacao.getDebitos().compareTo(BigDecimal.ZERO) == 0) {
-								faturar = false;
-							}
-
-							BigDecimal valorMinimoEmissao = sistemaParametro.getValorMinimoEmissaoConta();
-							// Caso o valor da conta seja menor que o valor menimo
-							// permitido para a deleeeo da conta,
-							// enteo deleta os dados da conta
-							if (contaAtualizacao.getValorTotal().compareTo(valorMinimoEmissao) < 0 || !faturar) {
-								if (contaAtualizacao.getValorCreditos().compareTo(BigDecimal.ZERO) == 0) {
-									// Objeto que armazenare as informaeees para
-									// deleeeo das contas
-									ApagarDadosFaturamentoHelper helperApagarDadosFaturamento = new ApagarDadosFaturamentoHelper();
-									helperApagarDadosFaturamento
-											.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
-									helperApagarDadosFaturamento.setIdImovel(helper.getImovel().getId());
-									helperApagarDadosFaturamento
-											.setAnoMesFaturamento(helper.getAnoMesReferenciaPreFaturamento());
-
-									this.apagarDadosGeradosFaturarGrupoFaturamento(helperApagarDadosFaturamento,
-											FaturamentoAtividade.FATURAR_GRUPO.intValue());
-
-									// pula de imevel
-									continue;
-								}
-							} else {
-								Imovel imovel = contaAtualizacao.getImovel();
-								if (imovel.getCodigoConvenio() != null) {
-									registrarFichaCompensacao(contaAtualizacao.getId());
-								}
-							}
-
-							boolean contaNaoImpressa = false;
-							// Caso o valor da conta seja zero e o imevel neo tenha
-							// credito,
-							// enteo neo coloca em conta_impresseo
-							if (contaAtualizacao.getValorTotal().compareTo(BigDecimal.ZERO) == 0) {
-								if (contaAtualizacao.getValorCreditos().compareTo(BigDecimal.ZERO) == 0) {
-									contaNaoImpressa = true;
-								}
-							}
-
-							// Caso o indicador de emisseo de conta seja igual e neo
-							// emitida
-							if (helper.getIndicadorEmissaoConta().shortValue() == ConstantesSistema.NAO.shortValue()
-									&& !contaNaoImpressa) {
-
-								ContaImpressao contaImpressao = new ContaImpressao();
-								contaImpressao.setId(helper.getConta().getId());
-								ContaGeral contaGeral = new ContaGeral();
-								contaGeral.setConta(contaAtualizacao);
-								contaImpressao.setContaGeral(contaGeral);
-								contaImpressao.setReferenciaConta(helper.getFaturamentoGrupo().getAnoMesReferencia());
-								contaImpressao.setFaturamentoGrupo(helper.getFaturamentoGrupo());
-								contaImpressao.setIndicadorImpressao(ConstantesSistema.NAO);
-								contaImpressao.setUltimaAlteracao(new Date());
-
-								/*
-								 * 
-								 * Caso esteja indicado no imevel que a conta deve ser entregue ao
-								 * responsevel (ICTE_ID da tabela IMOVEL seja igual a 1 ou 3), e o imevel
-								 * neo seja debito autometico( IMOV_ICDEBITOCONTA da tabela IMOVEL seja
-								 * igual a 2), atribuir CLIE_ID da tabela CLIENTE_IMOVEL para IMOV_ID=Id da
-								 * matrecula do imevel e CLIM_DTRELACAOFIM com o valor correspondente a nulo
-								 * e CRTP_ID com o valor correspondente a responsevel da tabela
-								 * CLIENTE_RELACAO_TIPO, caso contrerio atribuir o valor nulo.
-								 */
-								// CAERN se vai imprimir quando for enviar para o
-								// cliente responsavel no final do grupo
-								// helper.getImovel().getImovelContaEnvio().getId()
-								// == ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL ||
-								// helper.getImovel().getImovelContaEnvio().getId()
-								// ==
-								// ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL
-								// ||
-
-								boolean clienteResponsavel = false;
-								if (sistemaParametro.getCodigoEmpresaFebraban()
-										.equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_CAERN)) {
-									if (helper.getImovel().getImovelContaEnvio() != null
-											&& (helper.getImovel().getImovelContaEnvio().getId()
-													.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL_FINAL_GRUPO))) {
-										clienteResponsavel = true;
-									}
-								} else {
-									if (helper.getImovel().getImovelContaEnvio() != null
-											&& (helper.getImovel().getImovelContaEnvio().getId()
-													.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)
-													|| helper.getImovel().getImovelContaEnvio().getId().equals(
-															ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL)
-													|| helper.getImovel().getImovelContaEnvio().getId().equals(
-															ImovelContaEnvio.ENVIAR_CONTA_BRAILLE_RESPONSAVEL))) {
-										clienteResponsavel = true;
-									}
-								}
-
-								if (clienteResponsavel) {
-									try {
-
-										Integer idClienteResponsavel = (Integer) repositorioFaturamento
-												.pesquisarClienteResponsavel(helper.getImovel().getId());
-
-										if (idClienteResponsavel != null && !idClienteResponsavel.equals("")) {
-											Cliente cliente = new Cliente();
-											cliente.setId(idClienteResponsavel);
-											contaImpressao.setClienteResponsavel(cliente);
-										}
-									} catch (ErroRepositorioException e) {
-										throw new ControladorException("erro.sistema", e);
-									}
-
-								}
-
-								/*
-								 * 1.Caso id do cliente responsevel esteja preenchido (CLIE_IDRESPONSAVEL)
-								 * atribuir o valor correspondente a conta de cliente responsevel da tabela
-								 * CONTA_TIPO;
-								 * 
-								 * 2.Caso imevel seja debito autometico (IMOV_ICDEBITOCONTA da tabela
-								 * IMOVEL seja igual a 1), atribuir o valor correspondente a conta debito
-								 * autometico da tabela CONTA_TIPO;
-								 * 
-								 * Caso nenhuma das condieees acima tenha sido verdadeira atribuir o valor
-								 * correspondente a conta normal da tabela CONTA_TIPO;
-								 */
-
-								ContaTipo contaTipo = new ContaTipo();
-
-								if (contaImpressao.getClienteResponsavel() != null) {
-									if (helper.getImovel().getIndicadorDebitoConta().equals(ConstantesSistema.SIM)) {
-										contaTipo.setId(ContaTipo.CONTA_DEBITO_AUTO_COM_CLIENTE_RESP);
-									} else {
-										contaTipo.setId(ContaTipo.CONTA_CLIENTE_RESPONSAVEL);
-									}
-
-								} else if (helper.getImovel().getIndicadorDebitoConta().equals(ConstantesSistema.SIM)) {
-									contaTipo.setId(ContaTipo.CONTA_DEBITO_AUTOMATICO);
-								} else {
-									contaTipo.setId(ContaTipo.CONTA_NORMAL);
-								}
-
-								contaImpressao.setContaTipo(contaTipo);
-
-								/*
-								 * Caso a empresa seja a COMPESA e Caso id do cliente responsevel esteja
-								 * preenchido (CLIE_IDRESPONSAVEL) atribuir o valor nulo, caso contrerio
-								 * atribuir e empresa associada e rota (EMPR_ID da tabela ROTA);
-								 */
-								if (sistemaParametro.getCodigoEmpresaFebraban()
-										.equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COMPESA)) {
-									if (contaImpressao.getClienteResponsavel() == null) {
-										contaImpressao
-												.setEmpresa(helper.getImovel().getQuadra().getRota().getEmpresa());
-									}
-								} else {
-									/*
-									 * Caso contrerio, atribuir e empresa associada e rota (EMPR_ID da tabela
-									 * ROTA);
+									/**
+									 * Autor: Wellington Rocha Data: 30/08/2011
+									 * 
+									 * Caso a conta seja retransmitida o valor do credito residual neo sere
+									 * atualizado novamente.
 									 */
-									if (!sistemaParametro.getCodigoEmpresaFebraban()
-											.equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_CAER)) {
-										contaImpressao
-												.setEmpresa(helper.getImovel().getQuadra().getRota().getEmpresa());
+								} else if ((indicadorRetransmissao != null && indicadorRetransmissao.equals(2))
+										&& (valorCreditos.compareTo(valorTotalContaSemCreditos) == 0
+												|| valorCreditos.compareTo(valorTotalContaSemCreditos) == -1)) {
+
+									logger.info(" 3 - Credito a Realizar: Imovel: "
+											+ (contaAtualizacao.getImovel() != null
+													? contaAtualizacao.getImovel().getId()
+													: "NULL")
+											+ " | Valor creditos: " + contaAtualizacao.getValorCreditos());
+
+									/**
+									 * Autor: Adriana Muniz Data: 09/08/2011
+									 * 
+									 * Como os valores residuais dos creditos a realizar neo esteo mais sendo
+									 * zerados no momento de geraeeo da rota, e necesserio zerar, esse valor caso
+									 * seja diferente de zero, no retorno do IS
+									 */
+									// consulta todos os creditos com valor residual diferente de zero
+									Collection colecaoCreditosARealizar = repositorioFaturamento
+											.buscarCreditoARealizarPorImovelValorResidualDiferenteZero(
+													contaAtualizacao.getImovel().getId());
+
+									if (!colecaoCreditosARealizar.isEmpty() && colecaoCreditosARealizar != null) {
+
+										logger.info(" 4 - Credito a Realizar: Imovel: "
+												+ (contaAtualizacao.getImovel() != null
+														? contaAtualizacao.getImovel().getId()
+														: "NULL")
+												+ " | Qtde de creditos com valor residual diferente de zero: "
+												+ colecaoCreditosARealizar.size());
+
+										Iterator creditoIterator = colecaoCreditosARealizar.iterator();
+
+										while (creditoIterator.hasNext()) {
+											CreditoARealizar credito = (CreditoARealizar) creditoIterator.next();
+
+											credito.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+
+											logger.info(" 5 - Credito a Realizar: Imovel: "
+													+ (credito.getImovel() != null ? credito.getImovel().getId()
+															: "NULL")
+													+ " | Creditos: "
+													+ (credito.getValorCredito() != null ? credito.getValorCredito()
+															: "NULL")
+													+ " | Residual Concedido no Mes: "
+													+ (credito.getValorResidualConcedidoMes() != null
+															? credito.getValorResidualConcedidoMes()
+															: "NULL")
+													+ " | Residual do Mes Anterior: "
+													+ (credito.getValorResidualMesAnterior() != null
+															? credito.getValorResidualMesAnterior()
+															: "NULL"));
+
+											repositorioFaturamento.atualizarCreditoARealizar(credito);
+										}
 									}
 								}
-								/*
-								 * 
-								 * Valor total da conta (Soma do valor da egua + Soma do valor de esgoto +
-								 * Valor de debitos da conta ? Valor de creditos da conta ? Soma do valor
-								 * dos impostos)
-								 */
-								BigDecimal valorTotalConta = BigDecimal.ZERO;
-								if (valorTotalMenosImposto != null) {
-									valorTotalConta = valorTotalMenosImposto.subtract(valorImposto);
+
+								this.ajustarCobrancaContasValoresAbaixoMinimoEmissao(contaAtualizacao,
+										sistemaParametro.getValorMinimoEmissaoConta());
+
+								try {
+									repositorioFaturamento.atualizarContaProcessoMOBILE(contaAtualizacao);
+								} catch (ErroRepositorioException e) {
+									throw new ControladorException("erro.sistema", e);
 								}
-								contaImpressao.setValorConta(valorTotalConta);
 
-								this.getControladorBatch().inserirObjetoParaBatch(contaImpressao);
+								// Verfificar se o imevel e para ser faturado ou neo,
+								// caso neo seja enteo deletar a conta.
+								boolean faturar = true;
+								if (contaAtualizacao.getLigacaoAguaSituacao() != null
+										&& contaAtualizacao.getLigacaoAguaSituacao().getIndicadorFaturamentoSituacao()
+												.equals(ConstantesSistema.NAO)
+										&& contaAtualizacao.getLigacaoEsgotoSituacao() != null
+										&& contaAtualizacao.getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao()
+												.equals(ConstantesSistema.NAO)
+										&& contaAtualizacao.getDebitos().compareTo(BigDecimal.ZERO) == 0) {
+									faturar = false;
+								}
 
+								BigDecimal valorMinimoEmissao = sistemaParametro.getValorMinimoEmissaoConta();
+								// Caso o valor da conta seja menor que o valor menimo
+								// permitido para a deleeeo da conta,
+								// enteo deleta os dados da conta
+								if (contaAtualizacao.getValorTotal().compareTo(valorMinimoEmissao) < 0 || !faturar) {
+									if (contaAtualizacao.getValorCreditos().compareTo(BigDecimal.ZERO) == 0) {
+										// Objeto que armazenare as informaeees para
+										// deleeeo das contas
+										ApagarDadosFaturamentoHelper helperApagarDadosFaturamento = new ApagarDadosFaturamentoHelper();
+										helperApagarDadosFaturamento
+												.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
+										helperApagarDadosFaturamento.setIdImovel(helper.getImovel().getId());
+										helperApagarDadosFaturamento
+												.setAnoMesFaturamento(helper.getAnoMesReferenciaPreFaturamento());
+
+										this.apagarDadosGeradosFaturarGrupoFaturamento(helperApagarDadosFaturamento,
+												FaturamentoAtividade.FATURAR_GRUPO.intValue());
+
+										// pula de imevel
+										continue;
+									}
+								} else {
+									Imovel imovel = contaAtualizacao.getImovel();
+									if (imovel.getCodigoConvenio() != null) {
+										registrarFichaCompensacao(contaAtualizacao.getId());
+									}
+								}
+
+								boolean contaNaoImpressa = false;
+								// Caso o valor da conta seja zero e o imevel neo tenha
+								// credito,
+								// enteo neo coloca em conta_impresseo
+								if (contaAtualizacao.getValorTotal().compareTo(BigDecimal.ZERO) == 0) {
+									if (contaAtualizacao.getValorCreditos().compareTo(BigDecimal.ZERO) == 0) {
+										contaNaoImpressa = true;
+									}
+								}
+
+								// Caso o indicador de emisseo de conta seja igual e neo
+								// emitida
+								if (helper.getIndicadorEmissaoConta().shortValue() == ConstantesSistema.NAO.shortValue()
+										&& !contaNaoImpressa) {
+
+									ContaImpressao contaImpressao = new ContaImpressao();
+									contaImpressao.setId(helper.getConta().getId());
+									ContaGeral contaGeral = new ContaGeral();
+									contaGeral.setConta(contaAtualizacao);
+									contaImpressao.setContaGeral(contaGeral);
+									contaImpressao
+											.setReferenciaConta(helper.getFaturamentoGrupo().getAnoMesReferencia());
+									contaImpressao.setFaturamentoGrupo(helper.getFaturamentoGrupo());
+									contaImpressao.setIndicadorImpressao(ConstantesSistema.NAO);
+									contaImpressao.setUltimaAlteracao(new Date());
+
+									/*
+									 * 
+									 * Caso esteja indicado no imevel que a conta deve ser entregue ao responsevel
+									 * (ICTE_ID da tabela IMOVEL seja igual a 1 ou 3), e o imevel neo seja debito
+									 * autometico( IMOV_ICDEBITOCONTA da tabela IMOVEL seja igual a 2), atribuir
+									 * CLIE_ID da tabela CLIENTE_IMOVEL para IMOV_ID=Id da matrecula do imevel e
+									 * CLIM_DTRELACAOFIM com o valor correspondente a nulo e CRTP_ID com o valor
+									 * correspondente a responsevel da tabela CLIENTE_RELACAO_TIPO, caso contrerio
+									 * atribuir o valor nulo.
+									 */
+									// CAERN se vai imprimir quando for enviar para o
+									// cliente responsavel no final do grupo
+									// helper.getImovel().getImovelContaEnvio().getId()
+									// == ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL ||
+									// helper.getImovel().getImovelContaEnvio().getId()
+									// ==
+									// ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL
+									// ||
+
+									boolean clienteResponsavel = false;
+									if (sistemaParametro.getCodigoEmpresaFebraban()
+											.equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_CAERN)) {
+										if (helper.getImovel().getImovelContaEnvio() != null
+												&& (helper.getImovel().getImovelContaEnvio().getId().equals(
+														ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL_FINAL_GRUPO))) {
+											clienteResponsavel = true;
+										}
+									} else {
+										if (helper.getImovel().getImovelContaEnvio() != null
+												&& (helper.getImovel().getImovelContaEnvio().getId()
+														.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)
+														|| helper.getImovel().getImovelContaEnvio().getId().equals(
+																ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL)
+														|| helper.getImovel().getImovelContaEnvio().getId().equals(
+																ImovelContaEnvio.ENVIAR_CONTA_BRAILLE_RESPONSAVEL))) {
+											clienteResponsavel = true;
+										}
+									}
+
+									if (clienteResponsavel) {
+										try {
+
+											Integer idClienteResponsavel = (Integer) repositorioFaturamento
+													.pesquisarClienteResponsavel(helper.getImovel().getId());
+
+											if (idClienteResponsavel != null && !idClienteResponsavel.equals("")) {
+												Cliente cliente = new Cliente();
+												cliente.setId(idClienteResponsavel);
+												contaImpressao.setClienteResponsavel(cliente);
+											}
+										} catch (ErroRepositorioException e) {
+											throw new ControladorException("erro.sistema", e);
+										}
+
+									}
+
+									/*
+									 * 1.Caso id do cliente responsevel esteja preenchido (CLIE_IDRESPONSAVEL)
+									 * atribuir o valor correspondente a conta de cliente responsevel da tabela
+									 * CONTA_TIPO;
+									 * 
+									 * 2.Caso imevel seja debito autometico (IMOV_ICDEBITOCONTA da tabela IMOVEL
+									 * seja igual a 1), atribuir o valor correspondente a conta debito autometico da
+									 * tabela CONTA_TIPO;
+									 * 
+									 * Caso nenhuma das condieees acima tenha sido verdadeira atribuir o valor
+									 * correspondente a conta normal da tabela CONTA_TIPO;
+									 */
+
+									ContaTipo contaTipo = new ContaTipo();
+
+									if (contaImpressao.getClienteResponsavel() != null) {
+										if (helper.getImovel().getIndicadorDebitoConta()
+												.equals(ConstantesSistema.SIM)) {
+											contaTipo.setId(ContaTipo.CONTA_DEBITO_AUTO_COM_CLIENTE_RESP);
+										} else {
+											contaTipo.setId(ContaTipo.CONTA_CLIENTE_RESPONSAVEL);
+										}
+
+									} else if (helper.getImovel().getIndicadorDebitoConta()
+											.equals(ConstantesSistema.SIM)) {
+										contaTipo.setId(ContaTipo.CONTA_DEBITO_AUTOMATICO);
+									} else {
+										contaTipo.setId(ContaTipo.CONTA_NORMAL);
+									}
+
+									contaImpressao.setContaTipo(contaTipo);
+
+									/*
+									 * Caso a empresa seja a COMPESA e Caso id do cliente responsevel esteja
+									 * preenchido (CLIE_IDRESPONSAVEL) atribuir o valor nulo, caso contrerio
+									 * atribuir e empresa associada e rota (EMPR_ID da tabela ROTA);
+									 */
+									if (sistemaParametro.getCodigoEmpresaFebraban()
+											.equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_COMPESA)) {
+										if (contaImpressao.getClienteResponsavel() == null) {
+											contaImpressao
+													.setEmpresa(helper.getImovel().getQuadra().getRota().getEmpresa());
+										}
+									} else {
+										/*
+										 * Caso contrerio, atribuir e empresa associada e rota (EMPR_ID da tabela ROTA);
+										 */
+										if (!sistemaParametro.getCodigoEmpresaFebraban()
+												.equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_CAER)) {
+											contaImpressao
+													.setEmpresa(helper.getImovel().getQuadra().getRota().getEmpresa());
+										}
+									}
+									/*
+									 * 
+									 * Valor total da conta (Soma do valor da egua + Soma do valor de esgoto + Valor
+									 * de debitos da conta ? Valor de creditos da conta ? Soma do valor dos
+									 * impostos)
+									 */
+									BigDecimal valorTotalConta = BigDecimal.ZERO;
+									if (valorTotalMenosImposto != null) {
+										valorTotalConta = valorTotalMenosImposto.subtract(valorImposto);
+									}
+									contaImpressao.setValorConta(valorTotalConta);
+
+									this.getControladorBatch().inserirObjetoParaBatch(contaImpressao);
+
+								}
 							}
-						}
 
-						// Atualiza a forma do documento de cobranea se a conta foi
-						// impressa
-						if (helper.getIndicadorEmissaoConta().equals(ConstantesSistema.SIM)
-								&& helper.getCobrancaDocumento() != null
-								&& helper.getCobrancaDocumento().getId() != null) {
+							// Atualiza a forma do documento de cobranea se a conta foi
+							// impressa
+							if (helper.getIndicadorEmissaoConta().equals(ConstantesSistema.SIM)
+									&& helper.getCobrancaDocumento() != null
+									&& helper.getCobrancaDocumento().getId() != null) {
 
-							repositorioCobranca
-									.atualizarFormaEmissaoCobrancaDocumento(helper.getCobrancaDocumento().getId());
+								repositorioCobranca
+										.atualizarFormaEmissaoCobrancaDocumento(helper.getCobrancaDocumento().getId());
+							}
 						}
 					}
 				}
@@ -1114,6 +1140,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			throw new ControladorException("erro.sistema", e);
 		}
 
+	}
+	
+	public Boolean isImovelComProblemaLeitura (Imovel imo, List<ImovelNaoFaturadoRetornoIsDTO>listaImoveisCorrompidos) {
+		Boolean imovelProblema = false;		
+		for(ImovelNaoFaturadoRetornoIsDTO imovelCorrompido : listaImoveisCorrompidos) {
+			if(imo.getId().equals(imovelCorrompido.getImovel().getId())) {
+				imovelProblema = true;
+				break;
+			}
+		}
+		return imovelProblema;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -4354,6 +4391,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		RetornoAtualizarFaturamentoMovimentoCelularHelper retorno = new RetornoAtualizarFaturamentoMovimentoCelularHelper();
 
+		List<ImovelNaoFaturadoRetornoIsDTO> listaImoveisCorrompidos = new ArrayList();
+		
 		Object[] retornoIncluirMovimento = null;
 		Collection<AtualizarContaPreFaturadaHelper> colecaoAtualizarContaPreFaturadaHelper = null;
 		byte[] relatorio = null;
@@ -4411,9 +4450,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				}
 			}
 
-			this.processarMovimentoContaPrefaturada(rota, colContaPreFaturada, true);
+			this.processarMovimentoContaPrefaturada(rota, colContaPreFaturada, true, listaImoveisCorrompidos);
 			this.atualizarInformacoesImpressaoExtratoQuitacao(colContaPreFaturada);
 
+            retorno.setListaImoveisNaoFaturados(listaImoveisCorrompidos);
+			
 			if (offline) {
 				relatorio = this.geraResumoLeiturasAnormalidadesImpressaoSimultanea(colContaPreFaturada);
 				retorno.setRelatorioConsistenciaProcessamento(relatorio);
@@ -7457,7 +7498,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @throws ControladorException
 	 */
 	public void processarMovimentoContaPrefaturada(Rota rota, Collection<MovimentoContaPrefaturada> colContaPreFaturada,
-			boolean efetuarRateio) throws ControladorException {
+			boolean efetuarRateio, List<ImovelNaoFaturadoRetornoIsDTO> listaImoveisCorrompidos) throws ControladorException {
 
 		try {
 			if (colContaPreFaturada != null && !colContaPreFaturada.isEmpty()) {
@@ -7595,7 +7636,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					break;
 				}
 
-				this.atualizarMovimentoCelular(colContaPreFaturada, efetuarRateio);
+				this.atualizarMovimentoCelular(colContaPreFaturada, efetuarRateio, listaImoveisCorrompidos);
 
 				// neo atualizar o indicador de atualizacao de faturamento caso indicador de
 				// emissao de conta seja igual a 2 e o imevel neo
@@ -12507,9 +12548,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @throws ControladorException
 	 */
 	public void atualizarConsumoMovimentoCelular(Conta conta, Integer consumoAguaMovimentoCelular,
-			Integer consumoAguaGSAN, Integer consumoEsgotoMovimentoCelular, Integer consumoEsgotoGSAN)
+			Integer consumoAguaGSAN, Integer consumoEsgotoMovimentoCelular, Integer consumoEsgotoGSAN, List<ImovelNaoFaturadoRetornoIsDTO> listaImoveisCorrompidos)
 			throws ControladorException {
-
+		
 		if (conta != null && conta.getId() != null) {
 
 			// Verifica se o imevel este associado a um imevel condomenio
@@ -12562,12 +12603,24 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								}
 							}
 						}
+						
+						Integer leituraFaturamento = movimentoContaPrefaturadaAgua.getLeituraFaturamento();
+						Integer consumoMedido = movimentoContaPrefaturadaAgua.getConsumoMedido();
+						
+						if (leituraFaturamento != null && consumoMedido != null || !getControladorImovel()
+								.isImovelHidrometrado(movimentoContaPrefaturadaAgua.getImovel().getId())) {
+							repositorioFaturamento
+									.atualizarMedicaoHistoricoMovimentoCelular(movimentoContaPrefaturadaAgua);
 
-						repositorioFaturamento.atualizarMedicaoHistoricoMovimentoCelular(movimentoContaPrefaturadaAgua);
-
-						repositorioFaturamento.atualizarConsumoHistoricoMovimentoCelular(movimentoContaPrefaturadaAgua,
-								consumoAguaMovimentoCelular, idConsumoHistoricoAguaMacro,
-								consumoImovelVinculadosCondominioAgua);
+							repositorioFaturamento.atualizarConsumoHistoricoMovimentoCelular(
+									movimentoContaPrefaturadaAgua, consumoAguaMovimentoCelular,
+									idConsumoHistoricoAguaMacro, consumoImovelVinculadosCondominioAgua);
+						} else if (leituraFaturamento == null && consumoMedido == null || getControladorImovel()
+								.isImovelHidrometrado(movimentoContaPrefaturadaAgua.getImovel().getId())) {
+							// Criar um colecao para ser populada
+							ImovelNaoFaturadoRetornoIsDTO imovelCorrompido = ErroRetornoIS.lancarErroSemLeituraConsumoTipo(movimentoContaPrefaturadaAgua.getImovel());
+							listaImoveisCorrompidos.add(imovelCorrompido);
+						}
 
 					} catch (ErroRepositorioException ex) {
 						ex.printStackTrace();
@@ -15562,4 +15615,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
+	private String getMensagemProblemaImovelRetornoIS (String chave) {
+		if (mensagensErroRetornoIS == null) {
+			Properties mensagensErroRetornoIS = IoUtil.carregaPropriedades("mensagensErroRetornoIS.properties");
+		} 
+		
+		return  mensagensErroRetornoIS.getProperty(chave);
+	}
 }

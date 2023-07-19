@@ -450,6 +450,7 @@ import gcom.gerencial.faturamento.bean.FiltrarRelatorioDemonstrativoSinteticoLig
 import gcom.gerencial.faturamento.bean.FiltrarResumoDadosCasHelper;
 import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocal;
 import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocalHome;
+import gcom.gui.ActionServletException;
 import gcom.gui.atendimentopublico.registroatendimento.FiltrarAcompanhamentoRegistroAtendimentoHelper;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarGerarLoteAtualizacaoCadastralActionHelper;
@@ -40812,14 +40813,6 @@ public class Fachada {
 	public Boolean pesquisarNisCadastroAguaPara(String nis) {
 		try {
 			return this.getControladorCadastro().pesquisarNisCadastroAguaPara(nis);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-	}
-	
-	public Boolean pesquisarNisJaCadastradoInserirCliente(String nis) {
-		try {
-			return this.getControladorCadastro().pesquisarNisJaCadastradoInserirCliente(nis);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
