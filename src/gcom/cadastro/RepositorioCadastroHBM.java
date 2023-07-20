@@ -9256,7 +9256,8 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return resultado;
 	}
 	
-	public Boolean pesquisarNisJaCadastradoManterCliente(String nis, Integer idCliente) throws ErroRepositorioException {
+	public Boolean pesquisarNisJaCadastradoManterCliente(String nis, Integer idCliente)
+			throws ErroRepositorioException {
 		Boolean retorno = false;
 		Collection<Integer> resultado = null;
 		Session session = HibernateUtil.getSession();
@@ -9264,12 +9265,16 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		try {
 			consulta = " SELECT clie.clie_id as id from cadastro.cliente clie " + " WHERE clie.clie_nnnis = " + nis;
 			resultado = (Collection) session.createSQLQuery(consulta).addScalar("id", Hibernate.INTEGER).list();
-			
-			for(Integer id : resultado) {
-				if(id.equals(idCliente)) {
-					retorno = true;
-					break;
+
+			if (!resultado.isEmpty() && resultado != null) {
+				for (Integer id : resultado) {
+					if (id.equals(idCliente)) {
+						retorno = true;
+						break;
+					}
 				}
+			} else {
+				retorno = true;
 			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
