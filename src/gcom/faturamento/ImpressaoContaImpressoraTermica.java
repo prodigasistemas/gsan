@@ -1370,7 +1370,7 @@ public class ImpressaoContaImpressoraTermica {
 		retorno.append(formarLinha(7, 0, 645, 565, "Ref: ", 0, 0)
 				+ formarLinha(7, 0, 690, 565,
 						Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + ""), 0, 0));
-		retorno.append(formarLinha(7, 0, 287, 590, "PARAMETROS", 0, 0) + formarLinha(7, 0, 418, 590, "Port. 888/2021", 0, 0)
+		retorno.append(formarLinha(7, 0, 287, 590, "PARAMETROS", 0, 0) + formarLinha(7, 0, 418, 590, "P.888/21", 0, 0)
 				+ formarLinha(7, 0, 540, 590, "ANALISADO", 0, 0) + formarLinha(7, 0, 672, 590, "CONFORME", 0, 0));
 
 		// Daniel - Parametro
