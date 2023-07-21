@@ -94,6 +94,18 @@ public class ExibirAtualizarQualidadeAguaAnaliseAction extends GcomAction {
 				.getQuantidadeFluorConforme() != null ? qualidadeAgua
 				.getQuantidadeFluorConforme().toString() : "");
 		
+		form.setQuantidadeEColiExigidas(qualidadeAgua
+				.getQuantidadeEColiExigidas() != null ? qualidadeAgua
+				.getQuantidadeEColiExigidas().toString() : "");
+		
+		form.setQuantidadeEColiAnalisadas(qualidadeAgua
+				.getQuantidadeEColiAnalisadas() != null ? qualidadeAgua
+				.getQuantidadeEColiAnalisadas().toString() : "");
+		
+		form.setQuantidadeEColiConforme(qualidadeAgua
+				.getQuantidadeEColiConforme() != null ? qualidadeAgua
+				.getQuantidadeEColiConforme().toString() : "");
+		
 		form.setQuantidadeColiformesTotaisExigidas(qualidadeAgua
 				.getQuantidadeColiformesTotaisExigidas() != null ? qualidadeAgua
 				.getQuantidadeColiformesTotaisExigidas().toString() : "");

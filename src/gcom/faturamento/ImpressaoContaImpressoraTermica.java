@@ -1370,42 +1370,46 @@ public class ImpressaoContaImpressoraTermica {
 		retorno.append(formarLinha(7, 0, 645, 565, "Ref: ", 0, 0)
 				+ formarLinha(7, 0, 690, 565,
 						Util.retornaDescricaoAnoMesCompleto(emitirContaHelper.getAmReferencia() + ""), 0, 0));
-		retorno.append(formarLinha(7, 0, 287, 590, "PARAMETROS", 0, 0) + formarLinha(7, 0, 418, 590, "Port. 518", 0, 0)
+		retorno.append(formarLinha(7, 0, 287, 590, "PARAMETROS", 0, 0) + formarLinha(7, 0, 418, 590, "Port. 888/2021", 0, 0)
 				+ formarLinha(7, 0, 540, 590, "ANALISADO", 0, 0) + formarLinha(7, 0, 672, 590, "CONFORME", 0, 0));
 
 		// Daniel - Parametro
 		retorno.append(formarLinha(7, 0, 287, 620, "COR(uH)", 0, 0));
 		retorno.append(formarLinha(7, 0, 287, 640, "TURBIDEZ(UT)", 0, 0));
 		retorno.append(formarLinha(7, 0, 287, 660, "CLORO(mg/L)", 0, 0));
-		retorno.append(formarLinha(7, 0, 287, 680, "FLUOR(mg/L)", 0, 0));
+//		retorno.append(formarLinha(7, 0, 287, 680, "FLUOR(mg/L)", 0, 0));
+		retorno.append(formarLinha(7, 0, 287, 680, "E.Coli(mg/L)", 0, 0));
 		retorno.append(formarLinha(7, 0, 287, 700, "COLIFORME TOTAL", 0, 0)
 				+ formarLinha(7, 0, 287, 720, "Pres/Aus)", 0, 0));
-		retorno.append(formarLinha(7, 0, 287, 740, "COLIFORME TERMO", 0, 0)
-				+ formarLinha(7, 0, 287, 760, "TOLER.(Pres/Aus)", 0, 0));
+//		retorno.append(formarLinha(7, 0, 287, 740, "COLIFORME TERMO", 0, 0)
+//				+ formarLinha(7, 0, 287, 760, "TOLER.(Pres/Aus)", 0, 0));
 		// Qualidade da agua
 		// Daniel - Exigido !=Alterar
 		retorno.append(formarLinha(7, 0, 469, 620, qualidadeAgua[6], 0, 0));
 		retorno.append(formarLinha(7, 0, 469, 640, qualidadeAgua[7], 0, 0));
 		retorno.append(formarLinha(7, 0, 469, 660, qualidadeAgua[9], 0, 0));
-		retorno.append(formarLinha(7, 0, 469, 680, qualidadeAgua[8], 0, 0));
+//		retorno.append(formarLinha(7, 0, 469, 680, qualidadeAgua[8], 0, 0));
+		retorno.append(formarLinha(7, 0, 469, 680, qualidadeAgua[26], 0, 0));
 		retorno.append(formarLinha(7, 0, 469, 700, qualidadeAgua[10], 0, 0));
-		retorno.append(formarLinha(7, 0, 469, 740, qualidadeAgua[11], 0, 0));
+//		retorno.append(formarLinha(7, 0, 469, 740, qualidadeAgua[11], 0, 0));
 
 		// Daniel - Analisado
 		retorno.append(formarLinha(7, 0, 582, 620, qualidadeAgua[12], 0, 0));
 		retorno.append(formarLinha(7, 0, 582, 640, qualidadeAgua[13], 0, 0));
 		retorno.append(formarLinha(7, 0, 582, 660, qualidadeAgua[15], 0, 0));
-		retorno.append(formarLinha(7, 0, 582, 680, qualidadeAgua[14], 0, 0));
+//		retorno.append(formarLinha(7, 0, 582, 680, qualidadeAgua[14], 0, 0));
+		retorno.append(formarLinha(7, 0, 582, 680, qualidadeAgua[27], 0, 0));
 		retorno.append(formarLinha(7, 0, 582, 700, qualidadeAgua[16], 0, 0));
-		retorno.append(formarLinha(7, 0, 582, 740, qualidadeAgua[17], 0, 0));
+//		retorno.append(formarLinha(7, 0, 582, 740, qualidadeAgua[17], 0, 0));
 
 		// daniel - Conforme
 		retorno.append(formarLinha(7, 0, 726, 620, qualidadeAgua[18], 0, 0));
 		retorno.append(formarLinha(7, 0, 726, 640, qualidadeAgua[19], 0, 0));
 		retorno.append(formarLinha(7, 0, 726, 660, qualidadeAgua[21], 0, 0));
-		retorno.append(formarLinha(7, 0, 726, 680, qualidadeAgua[20], 0, 0));
+//		retorno.append(formarLinha(7, 0, 726, 680, qualidadeAgua[20], 0, 0));
+		retorno.append(formarLinha(7, 0, 726, 680, qualidadeAgua[28], 0, 0));
 		retorno.append(formarLinha(7, 0, 726, 700, qualidadeAgua[22], 0, 0));
-		retorno.append(formarLinha(7, 0, 726, 740, qualidadeAgua[23], 0, 0));
+//		retorno.append(formarLinha(7, 0, 726, 740, qualidadeAgua[23], 0, 0));
 
 	}
 

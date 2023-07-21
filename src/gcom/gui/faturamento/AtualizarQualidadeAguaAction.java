@@ -78,6 +78,11 @@ public class AtualizarQualidadeAguaAction extends GcomAction{
 		}else{
 			qualidadeAguaPadrao.setDescricaoPadraoFluor("");
 		}
+		if (form.getPadraoEColi()!= null && !form.getPadraoEColi().equals("")){
+			qualidadeAguaPadrao.setDescricaoPadraoEColi(form.getPadraoEColi());
+		}else{
+			qualidadeAguaPadrao.setDescricaoPadraoEColi("");
+		}
 		if (form.getPadraoFerro()!= null && !form.getPadraoFerro().equals("")){
 			qualidadeAguaPadrao.setDescricaoPadraoFerro(form.getPadraoFerro());
 		}else{
