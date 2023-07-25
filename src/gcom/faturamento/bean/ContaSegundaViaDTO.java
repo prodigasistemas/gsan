@@ -85,7 +85,6 @@ public class ContaSegundaViaDTO {
 	private String padraoFluor;
 	private String padraoColiformesTotais;
 	private String padraoColiformesTermotolerantes;
-	private String padraoEColi;
 
 	private String valorMedioTurbidez;
 	private String valorMedioCor;
@@ -93,7 +92,6 @@ public class ContaSegundaViaDTO {
 	private String valorMedioFluor;
 	private String valorMedioColiformesTotais;
 	private String valorMedioColiformesTermotolerantes;
-	private String valorMedioEColi;
 
 	private String valorConformeTurbidez;
 	private String valorConformeCor;
@@ -101,7 +99,6 @@ public class ContaSegundaViaDTO {
 	private String valorConformeFluor;
 	private String valorConformeColiformesTotais;
 	private String valorConformeColiformesTermotolerantes;
-	private String valorConformeEColi;
 
 	private String empresaNome;
 	private String empresaNomeAbreviado;
@@ -231,7 +228,6 @@ public class ContaSegundaViaDTO {
 		this.padraoFluor = helper.getPadraoFluor();
 		this.padraoColiformesTotais = helper.getPadraoColiformesTotais();
 		this.padraoColiformesTermotolerantes = helper.getPadraoColiformesfecais();
-		this.padraoEColi = helper.getPadraoEColi();
 
 		this.valorMedioTurbidez = helper.getValorMedioTurbidez();
 		this.valorMedioCor = helper.getValorMedioCor();
@@ -239,7 +235,6 @@ public class ContaSegundaViaDTO {
 		this.valorMedioFluor = helper.getValorMedioFluor();
 		this.valorMedioColiformesTotais = helper.getValorMedioColiformesTotais();
 		this.valorMedioColiformesTermotolerantes = helper.getValorMedioColiformesfecais();
-		this.valorMedioEColi = helper.getValorMedioEColi();
 
 		this.valorConformeTurbidez = helper.getValorConformeTurbidez();
 		this.valorConformeCor = helper.getValorConformeCor();
@@ -247,7 +242,6 @@ public class ContaSegundaViaDTO {
 		this.valorConformeFluor = helper.getValorConformeFluor();
 		this.valorConformeColiformesTotais = helper.getValorConformeColiformesTotais();
 		this.valorConformeColiformesTermotolerantes = helper.getValorConformeColiformesTermotolerantes();
-		this.valorConformeEColi = helper.getValorConformeEColi();
 
 		this.usuario = usuario;
 
@@ -702,30 +696,6 @@ public class ContaSegundaViaDTO {
 
 	public String getDigitosIniciaisCodigoBarras() {
 		return digitosIniciaisCodigoBarras;
-	}
-
-	public String getPadraoEColi() {
-		return padraoEColi;
-	}
-
-	public void setPadraoEColi(String padraoEColi) {
-		this.padraoEColi = padraoEColi;
-	}
-
-	public String getValorMedioEColi() {
-		return valorMedioEColi;
-	}
-
-	public void setValorMedioEColi(String valorMedioEColi) {
-		this.valorMedioEColi = valorMedioEColi;
-	}
-
-	public String getValorConformeEColi() {
-		return valorConformeEColi;
-	}
-
-	public void setValorConformeEColi(String valorConformeEColi) {
-		this.valorConformeEColi = valorConformeEColi;
 	}
 
 }

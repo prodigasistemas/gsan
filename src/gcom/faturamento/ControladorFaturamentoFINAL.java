@@ -39501,7 +39501,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			emitirContaHelper.setPadraoFluor(qualidadeAgua[2]);
 			emitirContaHelper.setPadraoColiformesTotais(qualidadeAgua[4]);
 			emitirContaHelper.setPadraoColiformesfecais(qualidadeAgua[5]);
-			emitirContaHelper.setPadraoEColi(qualidadeAgua[25]);
 
 			// Exigido
 			emitirContaHelper.setValorExigidoCor(qualidadeAgua[6]);
@@ -39510,7 +39509,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			emitirContaHelper.setValorExigidoFluor(qualidadeAgua[8]);
 			emitirContaHelper.setValorExigidoColiformesTotais(qualidadeAgua[10]);
 			emitirContaHelper.setValorExigidoColiformesTermotolerantes(qualidadeAgua[11]);
-			emitirContaHelper.setValorExigidoEColi(qualidadeAgua[26]);
 
 			// Analisado
 			emitirContaHelper.setValorMedioCor(qualidadeAgua[12]);
@@ -39519,7 +39517,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			emitirContaHelper.setValorMedioFluor(qualidadeAgua[14]);
 			emitirContaHelper.setValorMedioColiformesTotais(qualidadeAgua[16]);
 			emitirContaHelper.setValorMedioColiformesfecais(qualidadeAgua[17]);
-			emitirContaHelper.setValorMedioEColi(qualidadeAgua[27]);
 
 			// Conforme
 			emitirContaHelper.setValorConformeCor(qualidadeAgua[18]);
@@ -39528,7 +39525,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			emitirContaHelper.setValorConformeFluor(qualidadeAgua[20]);
 			emitirContaHelper.setValorConformeColiformesTotais(qualidadeAgua[22]);
 			emitirContaHelper.setValorConformeColiformesTermotolerantes(qualidadeAgua[23]);
-			emitirContaHelper.setValorConformeEColi(qualidadeAgua[28]);
 
 			colecaoEmitirContaHelper.add(emitirContaHelper);
 
@@ -61017,12 +61013,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 	public String[] obterDadosQualidadeAguaCosanpa(EmitirContaHelper emitirConta, Integer idQuadraFace)
 			throws ControladorException {
 
-		String[] retornoQualidade = new String[29];
+		String[] retornoQualidade = new String[25];
 
 		String padraoCor = "";
 		String padraoTurbidez = "";
 		String padraoFluor = "";
-		String padraoEColi = "";
 		String padraoCloro = "";
 		String padraoColiformesTotais = "";
 		String padraoColiformesTermotolerantes = "";
@@ -61030,7 +61025,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		String exigidaCor = "";
 		String exigidaTurbidez = "";
 		String exigidaFluor = "";
-		String exigidaEColi = "";
 		String exigidaCloro = "";
 		String exigidaColiformesTotais = "";
 		String exigidaColiformesTermotolerantes = "";
@@ -61038,7 +61032,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		String analisadaCor = "";
 		String analisadaTurbidez = "";
 		String analisadaFluor = "";
-		String analisadaEColi = "";
 		String analisadaCloro = "";
 		String analisadaColiformesTotais = "";
 		String analisadaColiformesTermotolerantes = "";
@@ -61046,7 +61039,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		String emConformidadeCor = "";
 		String emConformidadeTurbidez = "";
 		String emConformidadeFluor = "";
-		String emConformidadeEColi = "";
 		String emConformidadeCloro = "";
 		String emConformidadeColiformesTotais = "";
 		String emConformidadeColiformesTermotolerantes = "";
@@ -61066,7 +61058,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			padraoCor = qualidadePadrao.getDescricaoPadraoCor();
 			padraoTurbidez = qualidadePadrao.getDescricaoPadraoTurbidez();
 			padraoFluor = qualidadePadrao.getDescricaoPadraoFluor();
-			padraoEColi = qualidadePadrao.getDescricaoPadraoEColi();
 			padraoCloro = qualidadePadrao.getDescricaoPadraoCloro();
 			padraoColiformesTotais = qualidadePadrao.getDescricaoPadraoColiformesTotais();
 			padraoColiformesTermotolerantes = qualidadePadrao.getDescricaoPadraoColiformesTermotolerantes();
@@ -61196,10 +61187,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			if (qualidadeAgua.getQuantidadeFluorExigidas() != null) {
 				exigidaFluor = qualidadeAgua.getQuantidadeFluorExigidas() + "";
 			}
-			
-			if (qualidadeAgua.getQuantidadeEColiExigidas() != null) {
-				exigidaEColi = qualidadeAgua.getQuantidadeEColiExigidas() + "";
-			}
 
 			if (qualidadeAgua.getQuantidadeCloroExigidas() != null) {
 				exigidaCloro = qualidadeAgua.getQuantidadeCloroExigidas() + "";
@@ -61224,10 +61211,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			if (qualidadeAgua.getQuantidadeFluorAnalisadas() != null) {
 				analisadaFluor = qualidadeAgua.getQuantidadeFluorAnalisadas() + "";
-			}
-			
-			if (qualidadeAgua.getQuantidadeEColiAnalisadas() != null) {
-				analisadaEColi = qualidadeAgua.getQuantidadeEColiAnalisadas() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeCloroAnalisadas() != null) {
@@ -61254,10 +61237,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			if (qualidadeAgua.getQuantidadeFluorConforme() != null) {
 				emConformidadeFluor = qualidadeAgua.getQuantidadeFluorConforme() + "";
-			}
-			
-			if (qualidadeAgua.getQuantidadeEColiConforme() != null) {
-				emConformidadeEColi = qualidadeAgua.getQuantidadeEColiConforme() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeCloroConforme() != null) {
@@ -61311,11 +61290,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 		retornoQualidade[24] = tipoCaptacao;
 
-		retornoQualidade[25] = padraoEColi;
-		retornoQualidade[26] = exigidaEColi;
-		retornoQualidade[27] = analisadaEColi;
-		retornoQualidade[28] = emConformidadeEColi;
-		
 		return retornoQualidade;
 	}
 

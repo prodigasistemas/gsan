@@ -28,7 +28,6 @@
 		<property name="descricaoNitrato" type="java.lang.String" column="qlap_dspadraonitrato" length="20"/>
 		<property name="descricaoPadraoColiformesTermotolerantes" type="java.lang.String" column="qlap_dspadraocoliftermo" length="20"/>
 		<property name="descricaoPadraoAlcalinidade" type="java.lang.String" column="qlap_dspadraoalcalinidade" length="20"/>
-		<property name="descricaoPadraoEColi" type="java.lang.String" column="qlap_dspadraoecoli" length="20"/>
 		<!-- Associations -->
 	</class>
 </hibernate-mapping>

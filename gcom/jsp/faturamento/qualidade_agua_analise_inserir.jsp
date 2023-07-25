@@ -64,9 +64,6 @@
 		this.ax = new Array("quantidadeAlcalinidadeExigidas", "Quantidade Alcalinidade Exigidas deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
 		this.ay = new Array("quantidadeAlcalinidadeAnalisadas", "Quantidade Alcalinidade Analisadas deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
 		this.az = new Array("quantidadeAlcalinidadeConforme", "Quantidade Alcalinidade Conforme deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
-		this.ba = new Array("quantidadeEColiExigidas", "Quantidade EColi Exigidas deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
-		this.bb = new Array("quantidadeEColiAnalisadas", "Quantidade EColi Analisadas deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
-		this.bc = new Array("quantidadeEColiConforme", "Quantidade EColi Conforme deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
 		
 	}
 
@@ -97,9 +94,6 @@
 		this.ax = new Array("quantidadeAlcalinidadeExigidas", "Quantidade Alcalinidade Exigidas possui caracteres especiais.", new Function ("varName", " return this[varName];"));
 		this.ay = new Array("quantidadeAlcalinidadeAnalisadas", "Quantidade Alcalinidade Analisadas possui caracteres especiais.", new Function ("varName", " return this[varName];"));
 		this.az = new Array("quantidadeAlcalinidadeConforme", "Quantidade Alcalinidade Conforme possui caracteres especiais.", new Function ("varName", " return this[varName];"));
-		this.ba = new Array("quantidadeEColiExigidas", "Quantidade EColi Exigidas possui caracteres especiais.", new Function ("varName", " return this[varName];"));
-		this.bb = new Array("quantidadeEColiAnalisadas", "Quantidade EColi Analisadas possui caracteres especiais.", new Function ("varName", " return this[varName];"));
-		this.bc = new Array("quantidadeEColiConforme", "Quantidade EColi Conforme possui caracteres especiais.", new Function ("varName", " return this[varName];"));
 		
 	}
 
@@ -279,25 +273,6 @@
 									style="background-color:#EFEFEF; border:0;" 
 									onkeypress="return isCampoNumerico(event);"/></td>
 							</tr>
-							
-							<tr bgcolor="#cbe5fe">
-								<td width="25%"><strong>Quantidade EColi:</strong></td>
-								<td width="25%" align="center"><html:text
-									property="quantidadeEColiExigidas" size="4" maxlength="4"
-									tabindex="1" readonly="true"
-									style="background-color:#EFEFEF; border:0;" 
-									onkeypress="return isCampoNumerico(event);"/></td>
-								<td width="25%" align="center"><html:text
-									property="quantidadeEColiAnalisadas" size="4" maxlength="4"
-									tabindex="1" readonly="true"
-									style="background-color:#EFEFEF; border:0;" 
-									onkeypress="return isCampoNumerico(event);"/></td>
-								<td width="25%" align="center"><html:text
-									property="quantidadeEColiConforme" size="4" maxlength="4"
-									tabindex="1" readonly="true"
-									style="background-color:#EFEFEF; border:0;" 
-									onkeypress="return isCampoNumerico(event);"/></td>
-							</tr>
 
 							<tr bgcolor="#cbe5fe">
 								<td width="25%"><strong>Quantidade Coliformes Totais :</strong></td>
@@ -457,22 +432,6 @@
 									onkeypress="return isCampoNumerico(event);"/></td>
 								<td width="25%" align="center"><html:text
 									property="quantidadeFluorConforme" size="5" maxlength="5"
-									tabindex="1" 
-									onkeypress="return isCampoNumerico(event);"/></td>
-							</tr>
-							
-							<tr bgcolor="#cbe5fe">
-								<td width="25%"><strong>Quantidade EColi:</strong></td>
-								<td width="25%" align="center"><html:text
-									property="quantidadeEColiExigidas" size="5" maxlength="5"
-									tabindex="1" 
-									onkeypress="return isCampoNumerico(event);"/></td>
-								<td width="25%" align="center"><html:text
-									property="quantidadeEColiAnalisadas" size="5" maxlength="5"
-									tabindex="1" 
-									onkeypress="return isCampoNumerico(event);"/></td>
-								<td width="25%" align="center"><html:text
-									property="quantidadeEColiConforme" size="5" maxlength="5"
 									tabindex="1" 
 									onkeypress="return isCampoNumerico(event);"/></td>
 							</tr>

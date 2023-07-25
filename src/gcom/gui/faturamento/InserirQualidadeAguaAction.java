@@ -166,18 +166,6 @@ public class InserirQualidadeAguaAction extends GcomAction {
 							"atencao.parametro_sem_correspondente");
 				}
 			}
-			
-			// Indice Mensal EColi
-			if (qualidadeAgua.getNumeroIndiceEColi() != null
-						&& !qualidadeAgua.getNumeroIndiceEColi().equals("")) {
-
-				peloMenosUmParametroInformado = true;
-				if (form.getPadraoEColi() == null
-									|| form.getPadraoEColi().equals("")) {
-						throw new ActionServletException(
-										"atencao.parametro_sem_correspondente");
-				}
-			}
 
 			// Indice Mensal Ferro
 			if (qualidadeAgua.getNumeroIndiceFerro() != null
@@ -392,26 +380,6 @@ public class InserirQualidadeAguaAction extends GcomAction {
 				peloMenosUmParametroInformado = true;
 
 			}
-			
-			if (qualidadeAgua.getQuantidadeEColiAnalisadas() != null
-					&& !qualidadeAgua.getQuantidadeEColiAnalisadas().equals("")) {
-
-				peloMenosUmParametroInformado = true;
-
-			}
-
-			if (qualidadeAgua.getQuantidadeEColiConforme() != null
-					&& !qualidadeAgua.getQuantidadeEColiConforme().equals("")) {
-
-				peloMenosUmParametroInformado = true;
-
-			}
-			if (qualidadeAgua.getQuantidadeEColiExigidas() != null
-					&& !qualidadeAgua.getQuantidadeEColiExigidas().equals("")) {
-
-				peloMenosUmParametroInformado = true;
-
-			}
 
 			if (qualidadeAgua.getQuantidadeTurbidezAnalisadas() != null
 					&& !qualidadeAgua.getQuantidadeTurbidezAnalisadas().equals(
@@ -498,11 +466,6 @@ public class InserirQualidadeAguaAction extends GcomAction {
 						&& !form.getPadraoFluor().equals("")) {
 					qualidadeAguaPadrao.setDescricaoPadraoFluor(form
 							.getPadraoFluor());
-				}
-				if (form.getPadraoEColi() != null
-						&& !form.getPadraoEColi().equals("")) {
-					qualidadeAguaPadrao.setDescricaoPadraoEColi(form
-							.getPadraoEColi());
 				}
 				if (form.getPadraoFerro() != null
 						&& !form.getPadraoFerro().equals("")) {

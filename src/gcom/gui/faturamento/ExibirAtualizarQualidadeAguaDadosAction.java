@@ -327,10 +327,6 @@ public class ExibirAtualizarQualidadeAguaDadosAction extends GcomAction {
 									.getNumeroIndiceFluor() != null ? qualidadeAgua
 									.getNumeroIndiceFluor().toString() : "0");
 					form
-					.setIndiceMensalEColi(qualidadeAgua
-							.getNumeroIndiceEColi() != null ? qualidadeAgua
-							.getNumeroIndiceEColi().toString() : "0");
-					form
 							.setIndiceMensalNitrato(qualidadeAgua
 									.getNumeroNitrato() != null ? qualidadeAgua
 									.getNumeroNitrato().toString() : "0");
@@ -377,8 +373,6 @@ public class ExibirAtualizarQualidadeAguaDadosAction extends GcomAction {
 								.getDescricaoPadraoFerro());
 						form.setPadraoFluor(qualidadeAguaPadrao
 								.getDescricaoPadraoFluor());
-						form.setPadraoEColi(qualidadeAguaPadrao
-								.getDescricaoPadraoEColi());
 						form.setPadraoNitrato(qualidadeAguaPadrao
 								.getDescricaoNitrato());
 						form
@@ -510,10 +504,6 @@ public class ExibirAtualizarQualidadeAguaDadosAction extends GcomAction {
 									.getNumeroIndiceFluor() != null ? qualidadeAgua
 									.getNumeroIndiceFluor().toString() : "0");
 					form
-					.setIndiceMensalEColi(qualidadeAgua
-							.getNumeroIndiceEColi() != null ? qualidadeAgua
-							.getNumeroIndiceEColi().toString() : "0");
-					form
 							.setIndiceMensalNitrato(qualidadeAgua
 									.getNumeroNitrato() != null ? qualidadeAgua
 									.getNumeroNitrato().toString() : "0");
@@ -555,8 +545,6 @@ public class ExibirAtualizarQualidadeAguaDadosAction extends GcomAction {
 								.getDescricaoPadraoFerro());
 						form.setPadraoFluor(qualidadeAguaPadrao
 								.getDescricaoPadraoFluor());
-						form.setPadraoEColi(qualidadeAguaPadrao
-								.getDescricaoPadraoEColi());
 						form.setPadraoNitrato(qualidadeAguaPadrao
 								.getDescricaoNitrato());
 						form
