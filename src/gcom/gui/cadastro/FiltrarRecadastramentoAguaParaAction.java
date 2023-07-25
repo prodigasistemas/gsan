@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoSoli
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.bean.ObterDescricaoSituacaoRAHelper;
+import gcom.batch.ProcessoIniciado;
 import gcom.cadastro.cliente.CadastroAguaPara;
 import gcom.cadastro.imovel.bean.ConsultarImovelRegistroAtendimentoHelper;
 import gcom.cadastro.imovel.bean.ConsultarRecadastramentoAguaParaHelper;
@@ -50,6 +52,7 @@ public class FiltrarRecadastramentoAguaParaAction extends GcomAction {
         	
         Integer situacaoInteger = form.getSituacao();
         Integer idImovel = Integer.parseInt(form.getIdImovel());
+        Map resultado = null;
         
         if(situacaoInteger.equals(0) && idImovel.equals(0))
         	throw new ActionServletException("atencao.selecionar_filtro_agua_para"); 
@@ -59,7 +62,10 @@ public class FiltrarRecadastramentoAguaParaAction extends GcomAction {
         else if(!situacaoInteger.equals(0))
             form.setImoveis(getFachada().pesquisarRecadastramentoAguaParaSituacao(situacaoInteger));       
         else if(!idImovel.equals(0))
-        	form.setImoveis(getFachada().pesquisarRecadastramentoAguaParaMatricula(idImovel));
+        	resultado = controlarPaginacao(httpServletRequest, retorno, getFachada(),idImovel);
+        
+        form.setImoveis((Collection)resultado.get("colecaoRetorno"));
+        retorno = (ActionForward) resultado.get("destinoActionForward");
         
     	Collection colecaoConsultarRecadastramentoAguaParaHelper  = null;
 		
@@ -67,7 +73,7 @@ public class FiltrarRecadastramentoAguaParaAction extends GcomAction {
 				!form.getImoveis() .isEmpty()){
 			
 			Iterator iteratorColecaoRecadastramento = form.getImoveis().iterator();
-			
+		
 			colecaoConsultarRecadastramentoAguaParaHelper = new ArrayList();
 			
 			while (iteratorColecaoRecadastramento.hasNext()) {
@@ -75,7 +81,7 @@ public class FiltrarRecadastramentoAguaParaAction extends GcomAction {
 				
 				ConsultarRecadastramentoAguaParaHelper consultarRecadastramentoAguaParaHelper = new ConsultarRecadastramentoAguaParaHelper();
 
-				//id cadastro água pará
+				//id cadastro ï¿½gua parï¿½
 				if(cadastroAguaPara != null  && cadastroAguaPara.getId() != null ){
 					consultarRecadastramentoAguaParaHelper.setId(cadastroAguaPara.getId());
 				}
@@ -125,7 +131,7 @@ public class FiltrarRecadastramentoAguaParaAction extends GcomAction {
 			}
 		}
 			sessao.setAttribute("colecaoConsultarRecadastramentoAguaParaHelper", colecaoConsultarRecadastramentoAguaParaHelper);
-      
+	
         return retorno;
     }
 

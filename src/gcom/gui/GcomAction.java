@@ -386,6 +386,41 @@ public class GcomAction extends DispatchAction {
 
 		return actionForward;
 	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected Map controlarPaginacao(HttpServletRequest request, ActionForward actionForward, Fachada fachada, Integer idImovel) {
+		
+		String totalRegistros = "" + (Integer) this.getSessao(request).getAttribute("totalRegistros");
+		String pageOffsetRequest = request.getParameter("page.offset");
+		if (pageOffsetRequest == null) {
+			pageOffsetRequest = "1";
+			totalRegistros = null;
+		}
+		Integer pageOffset = Integer.parseInt(pageOffsetRequest) - 1;
+		Integer maxItemPage = 10;
+		Collection colecaocadastroAguaParaOffSet = fachada.pesquisarRecadastramentoAguaParaMatricula(idImovel,pageOffset,maxItemPage,false);
+		if ((totalRegistros == null || totalRegistros.trim().equalsIgnoreCase("") || totalRegistros.trim().equalsIgnoreCase("0") || totalRegistros.trim().equalsIgnoreCase("null"))
+				|| (pageOffsetRequest == null || pageOffsetRequest.trim().equalsIgnoreCase("") || pageOffsetRequest.trim().equalsIgnoreCase("null"))) {
+
+			Collection totalColecaocadastroAguaPara = fachada.pesquisarRecadastramentoAguaParaMatricula(idImovel,pageOffset,maxItemPage,true);
+			Integer totalPesquisa = totalColecaocadastroAguaPara.size();
+			totalRegistros = "" + totalPesquisa;
+
+			this.getSessao(request).setAttribute("totalRegistros", totalPesquisa);
+
+		}
+		
+		request.setAttribute("page.offset", pageOffset + 1);
+		request.setAttribute("maximoPaginas", ((Double) Math.ceil(Double.parseDouble(totalRegistros) / 10)).intValue());
+
+		actionForward = new ActionForward(actionForward.getName(), actionForward.getPath() + "?pager.offset=" + (((pageOffset + 1) * 10) - 10), false);
+
+		HashMap retorno = new HashMap();
+		retorno.put("colecaoRetorno", colecaocadastroAguaParaOffSet);
+		retorno.put("destinoActionForward", actionForward);
+
+		return retorno;
+	}
 
 	protected Fachada getFachada() {
 		if (fachada == null) {

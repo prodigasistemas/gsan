@@ -91,10 +91,16 @@ private String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		FormFile arquivoConta =  form.getArquivoConta();
 		FormFile arquivoBolsaFamiliaNis =  form.getArquivoBolsaFamiliaNis();
 		
-		renomearArquivosESalvar(form.getCpf(), "_RG", arquivoRg);
-		renomearArquivosESalvar(form.getCpf(), "_Cpf", arquivoCpf);
-		renomearArquivosESalvar(form.getCpf(), "_Conta", arquivoConta);
-		renomearArquivosESalvar(form.getCpf(), "_BolsaFamiliaNis", arquivoBolsaFamiliaNis);
+		String extensaoRG = pegaExtensaoArquivo(arquivoRg.toString());
+		String extensaoCpf = pegaExtensaoArquivo(arquivoCpf.toString());
+		String extensaoConta = pegaExtensaoArquivo(arquivoConta.toString());
+		String extensaoBolsaFamiliaNis = pegaExtensaoArquivo(arquivoBolsaFamiliaNis.toString());
+		
+		renomearArquivosESalvar(form.getCpf(), "_RG"+extensaoRG, arquivoRg);
+		renomearArquivosESalvar(form.getCpf(), "_Cpf"+extensaoCpf, arquivoCpf);
+		renomearArquivosESalvar(form.getCpf(), "_Conta"+extensaoConta, arquivoConta);
+		renomearArquivosESalvar(form.getCpf(), "_BolsaFamiliaNis"+extensaoBolsaFamiliaNis, arquivoBolsaFamiliaNis);
+
 		
 		fachada.inserir(cadastroAguaPara);	
 		
@@ -105,6 +111,17 @@ private String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		return retorno;
 		
 	}
+	
+	public String pegaExtensaoArquivo(String filename) {
+	    int index = filename.lastIndexOf('.');
+
+	    if (index == -1) {
+	        return "";
+	    } else {
+	        return filename.substring(index);
+	    }
+	}
+
 
 	private void salvarArquivoZip(FormFile arquivoCarregado, String nomeArquivo, String cpf) {
 		try {

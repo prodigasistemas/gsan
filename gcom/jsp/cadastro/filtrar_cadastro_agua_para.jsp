@@ -5,6 +5,7 @@
 <%@ taglib uri="/WEB-INF/gsanLib.tld" prefix="gsan"%>
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>
 <%@ taglib uri="/WEB-INF/fmt.tld" prefix="fmt"%>
+<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <%@page import="gcom.util.ConstantesSistema" isELIgnored="false"%>
@@ -25,17 +26,20 @@
 
 -->
 </script>
+<script type="text/javascript">
+   console.log("totalRegistros: " + (<c:out value="${sessionScope.totalRegistros}"/> || 'not set'));
+</script>
 </head>
 
 <body leftmargin="5" topmargin="5" onload="setarFoco('${requestScope.nomeCampo}');">
-<html:form action="/filtrarRecadastramentoAguaParaAction.do" enctype="multipart/form-data" name="DadosRecadastramentoAguaParaActionForm" type="gcom.gui.cadastro.DadosRecadastramentoAguaParaActionForm" method="post">
+<html:form action="/filtrarRecadastramentoAguaParaAction.do" name="DadosRecadastramentoAguaParaActionForm" type="gcom.gui.cadastro.DadosRecadastramentoAguaParaActionForm" method="post">
 
 	<%@ include file="/jsp/util/cabecalho.jsp"%>
 	<%@ include file="/jsp/util/menu.jsp"%>
 
 	<table width="770" border="0" cellspacing="5" cellpadding="0">
 		<tr>
-			<td width="130" valign="top" class="leftcoltext">
+			<td width="115" valign="top" class="leftcoltext">
 				<div align="center">
 					<p align="left">&nbsp;</p>
 					<p align="left">&nbsp;</p>
@@ -64,7 +68,7 @@
 				</div>
 			</td>
 			
-			<td width="615" valign="top" class="centercoltext">
+			<td valign="top" class="centercoltext">
 				<table height="100%">
 				<tr>
 					<td></td>
@@ -83,12 +87,12 @@
 					</tr>
 					</table>
 			<p>&nbsp;</p>
-			<table width="100%" cellspacing="0">
+			<table width="100%" align="center" cellpadding="0"  cellspacing="0">
 						<tr>
 							<td align="center" width="100%">
 
-								<table width="100%" border="0" bgcolor="#90c7fc">
-
+								<table width="100%" align="center" bgcolor="#90c7fc">
+									
 									<tr bgcolor="#79bbfd" width="100%">
 										<td height="18" colspan="6" align="center"><strong>Dados
 												Recadastramento Água Pará</strong></td>
@@ -96,7 +100,7 @@
 
 									<tr>
 
-										<td bgcolor="#90c7fc" align="center" width="30%">
+										<td bgcolor="#90c7fc" width="30%">
 											<div align="center">
 												<strong>Matricula Imovel</strong>
 											</div>
@@ -113,17 +117,19 @@
 											</div>
 										</td>
 									</tr>
-
-									<tr bordercolor="#000000">
-
-										<logic:present
-											name="colecaoConsultarRecadastramentoAguaParaHelper">
+											
+											<pg:pager isOffset="true" index="half-full" maxIndexPages="10"
+											export="currentPageNumber=pageNumber;pageOffset"
+											maxPageItems="10" items="${sessionScope.totalRegistros}">
+											<pg:param name="pg" />
+											<pg:param name="q" />
 											<%
 												int cont = 0;
 											%>
 											<logic:iterate
 												name="colecaoConsultarRecadastramentoAguaParaHelper"
 												id="consultarRecadastramentoAguaParaHelper">
+												<pg:item>
 												<%
 													cont = cont + 1;
 																if (cont % 2 == 0) {
@@ -138,39 +144,43 @@
 														%>
 
 														<td align="center">
-														<a
-														href="dadosRecadastramentoAguaParaAction.do?cpf=${consultarRecadastramentoAguaParaHelper.cpf};">
-														${consultarRecadastramentoAguaParaHelper.idImovel}
-														</a></td>
+															<a
+															href="dadosRecadastramentoAguaParaAction.do?cpf=${consultarRecadastramentoAguaParaHelper.cpf};">
+															${consultarRecadastramentoAguaParaHelper.idImovel}
+															</a>
+														</td>
 
 														<td align="center">${consultarRecadastramentoAguaParaHelper.nome}</td>
 														<td align="center">${consultarRecadastramentoAguaParaHelper.situacao}</td>
 													</tr>
+												</pg:item>
 											</logic:iterate>
-										</logic:present>
-									</tr>
 								</table>
+							</td>
 						</tr>
 					</table>
-			<table width="100%" border="0">
-				<tr>
-				<td height="24">
-					<div align="right">
-					<input name="Button" type="button" class="bottonRightCol"
-						value="Voltar" onClick="window.location.href='/gsan/exibirRecadastramentoAguaPara.do'"></div>
-					</td>
-				</tr>
-			</table>
-	</td>
-				<p>&nbsp;</p>
+					
+					<table width="100%" border="0">
+						<tr>
+						<td height="24">
+							<div align="right">
+							<input name="Button" type="button" class="bottonRightCol"
+								value="Voltar" onClick="window.location.href='/gsan/exibirRecadastramentoAguaPara.do'"></div>
+							</td>
+						</tr>
+					</table>
+					<table width="100%" border="0">
+						<tr>
+							<td align="center"><strong><%@ include
+								file="/jsp/util/indice_pager_novo.jsp"%></strong></td>
+						</tr>
+					</table>
 			
-			
-			
-			<p>&nbsp;</p>
-		</tr>
-		<%@ include file="/jsp/util/rodape.jsp"%>
+				</td>
+			</tr>
+		</pg:pager>
 	</table>
-	<p>&nbsp;</p>
+	<%@ include file="/jsp/util/rodape.jsp"%>
 </html:form>
 </body>
 </html:html>

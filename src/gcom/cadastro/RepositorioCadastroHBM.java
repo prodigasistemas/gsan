@@ -9149,23 +9149,31 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
-	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula)
-			throws ErroRepositorioException {
-		Collection retorno = null;
-		Session session = HibernateUtil.getSession();
-		String consulta = "";
-		try {			
-			consulta = " SELECT cadastroAguaPara from CadastroAguaPara cadastroAguaPara "
-					+ "	WHERE cadastroAguaPara.imovel.id = :matricula";
-			
-			retorno =   session.createQuery(consulta).setInteger("matricula", matricula).list();
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-		return retorno;
+	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula, Integer pageOffSet, Integer maxItemPage, Boolean flagTotalRegistros)
+	        throws ErroRepositorioException {
+	    Collection retorno = null;
+	    Session session = HibernateUtil.getSession();
+	    String consulta = "";
+	    try {
+	        consulta = " SELECT cadastroAguaPara from CadastroAguaPara cadastroAguaPara "
+	                + " WHERE cadastroAguaPara.imovel.id = :matricula";
+	        if(flagTotalRegistros) {
+	        	retorno =   session.createQuery(consulta).setInteger("matricula", matricula).list();
+	        }else {
+		        retorno = session.createQuery(consulta)
+		                .setInteger("matricula", matricula)
+		                .setFirstResult((pageOffSet) * maxItemPage) 
+		                .setMaxResults(maxItemPage) 
+		                .list();
+	        }
+	    } catch (HibernateException e) {
+	        throw new ErroRepositorioException(e, "Erro no Hibernate");
+	    } finally {
+	        HibernateUtil.closeSession(session);
+	    }
+	    return retorno;
 	}
+
 	
 	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer matricula, Integer situacao)
 			throws ErroRepositorioException {

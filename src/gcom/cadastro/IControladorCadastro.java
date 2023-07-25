@@ -543,7 +543,7 @@ public interface IControladorCadastro {
 	
 	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer matricula,Integer situacao) throws ControladorException;
 	
-	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula) throws ControladorException;
+	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula,Integer pageOffSet, Integer maxItemPage, Boolean flagTotalRegistros ) throws ControladorException;
 	
 	public CadastroAguaPara pesquisarRecadastramentoAguaParaPorCpf(String cpf) throws ControladorException;
 

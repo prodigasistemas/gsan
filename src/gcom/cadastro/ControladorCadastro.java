@@ -14672,9 +14672,9 @@ public class ControladorCadastro extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula) throws ControladorException {
+	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula,Integer pageOffSet, Integer maxItemPage,Boolean flagTotalRegistros ) throws ControladorException {
 		try {
-			return repositorioCadastro.pesquisarRecadastramentoAguaParaMatricula(matricula);
+			return repositorioCadastro.pesquisarRecadastramentoAguaParaMatricula( matricula,  pageOffSet,  maxItemPage, flagTotalRegistros);
 		} catch (Exception ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}

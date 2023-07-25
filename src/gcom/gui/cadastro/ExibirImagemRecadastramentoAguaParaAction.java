@@ -29,11 +29,11 @@ private String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		
 		HttpSession sessao = httpServletRequest.getSession(false);	
 		String path = form.getPath();
-
+		String contentType = determineContentType(path);
 		try {
 			InputStream input = ImagemUtil.carregarImagemDoServidorDeArquivosPortal(String.format(path));
 
-			httpServletResponse.setContentType("image/jpeg");
+			httpServletResponse.setContentType(contentType);
 
 			OutputStream output = httpServletResponse.getOutputStream();
 			ImagemUtil.copiar(input, output, false);
@@ -47,6 +47,25 @@ private String caminhoJboss = System.getProperty("jboss.server.home.dir");
 
 		return null;
 		
-	}	
+	}
+	
+	private String determineContentType(String path) {
+	    String fileExtension = path.substring(path.lastIndexOf('.') + 1).toLowerCase();
+
+	    if (fileExtension.equals("png")) {
+	        return "image/png";
+	    } else if (fileExtension.equals("jpg") || fileExtension.equals("jpeg")) {
+	        return "image/jpeg";
+	    } else if (fileExtension.equals("pdf")) {
+	        return "application/pdf";
+	    } else if (fileExtension.equals("doc")) {
+	        return "application/msword";
+	    } else if (fileExtension.equals("docx")) {
+	        return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+	    } else {
+	        return "application/octet-stream"; 
+	    }
+	}
+
 
 }

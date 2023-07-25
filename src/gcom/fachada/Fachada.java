@@ -40794,9 +40794,9 @@ public class Fachada {
 		}
 	}
 	
-	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer idImovel) {
+	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula,Integer pageOffSet, Integer maxItemPage,Boolean flagTotalRegistros ) {
 		try {
-			return this.getControladorCadastro().pesquisarRecadastramentoAguaParaMatricula(idImovel);
+			return this.getControladorCadastro().pesquisarRecadastramentoAguaParaMatricula(matricula,pageOffSet,maxItemPage,flagTotalRegistros);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
