@@ -745,7 +745,7 @@ public interface IRepositorioImovel {
 	public void incluirImovelCobranca(Integer idCobrancaSituacao, Integer idCobrancaSituacaoTipo, Integer idImovel) throws ErroRepositorioException;
 	
 	public List<Imovel> pesquisarCondominios(Rota rota) throws ErroRepositorioException;
-	
+
 	public List<Imovel> pesquisarImoveisBolsaAgua(Rota rota) throws ErroRepositorioException;
 	
 	public Collection pesquisarImoveisBolsaAguaPorClienteId(Integer idCliente) throws ErroRepositorioException;
@@ -760,4 +760,5 @@ public interface IRepositorioImovel {
 	
 	public Conta consultarContaBolsaAgua(Integer idConta) throws ErroRepositorioException;
 	
+
 }

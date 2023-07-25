@@ -22,8 +22,10 @@
 
 <body>
 	<%@ include file="/jsp/portal/cabecalho.jsp"%>
-
-<%-- 	<%@ include file="/jsp/portal/acesso-barra.jsp"%> --%>
+	
+ 	<logic:present name="nomeUsuario">
+		<%@ include file="/jsp/portal/acesso-barra.jsp"%>
+	</logic:present>
 	
 	<div class="page-wrap">
 		<div class="container pagina">

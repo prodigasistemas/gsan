@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+	<form-beans>
+		<form-bean name="CadastroLoginClienteActionForm" type="gcom.gui.portal.CadastroLoginClienteActionForm" />
+	</form-beans>
+
+	<action-mappings>
+		<action name="CadastroLoginClienteActionForm" 
+		    type="gcom.gui.portal.CadastroLoginClienteAction"
+			validate="false" 
+			scope="session" 
+			path="/cadastro-login-cliente">
+			
+			<forward name="cadastro-login-cliente" path="/jsp/portal/cadastro_login_cliente.jsp" />
+			<forward name="acessar-portal" path="/acessar-portal.do" redirect="true"/>
+		</action>
+	</action-mappings>
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>
+

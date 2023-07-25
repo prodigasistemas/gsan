@@ -10,22 +10,13 @@
 
 	<action-mappings>
 		<action name="AcessarPortalActionForm"
-		    type="gcom.gui.portal.ExibirAcessarPortalAction"
+		    type="gcom.gui.portal.AcessarPortalAction"
 			scope="session" 
 			validate="false" 
 			path="/acessar-portal">
 
-			<forward name="acessar-portal" path="/jsp/portal/acesso.jsp" />
-		</action>
-		
-		<action name="AcessarPortalActionForm"
-		    type="gcom.gui.portal.AcessarPortalAction"
-			scope="session" 
-			validate="false" 
-			path="/acessarPortalAction">
-
 		    <forward name="acessar-portal" path="/jsp/portal/acesso.jsp" />
-			<forward name="portal" path="/jsp/portal/loja_virtual.jsp" />
+			<forward name="portal" path="/jsp/portal/index.jsp" />
 			<forward name="segunda-via-conta" path="/segunda-via-conta.do" redirect="true" />
 			<forward name="extrato-debitos" path="/extrato-debitos.do" redirect="true" />
 			<forward name="agua-para" path="/agua-para.do" redirect="true" />

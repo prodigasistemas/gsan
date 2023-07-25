@@ -1,5 +1,21 @@
 package gcom.gui.portal;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
@@ -12,22 +28,8 @@ import gcom.tarefa.TarefaRelatorio;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.Filtro;
+import gcom.util.filtro.FiltroParametro;
 import gcom.util.filtro.ParametroSimples;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 public class GerarCertidaoNegativaClienteAction extends ExibidorProcessamentoTarefaRelatorio {
 
@@ -36,12 +38,25 @@ public class GerarCertidaoNegativaClienteAction extends ExibidorProcessamentoTar
 
 	private Cliente cliente;
 	private Collection<Integer> idsTodosClientes;
-
+	private String cpfOuCnpjCliente;
+	
+	private HttpSession sessao;
+	
+	private static final String ATRIBUTO_CPF_OU_CNPJ = "cpfOuCnpjCliente";
+	
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
+		this.sessao = request.getSession(false);
+		
 		this.form = (GerarCertidaoNegativaClienteActionForm) actionForm;
 		this.errors = form.validate();
 		this.idsTodosClientes = new ArrayList<Integer>();
-
+		this.cpfOuCnpjCliente = (String) sessao.getAttribute(ATRIBUTO_CPF_OU_CNPJ);
+		
+		if (cpfOuCnpjCliente == null) {
+			return mapping.findForward("acessar-portal");
+		}
+		
 		if (errors.isEmpty()) {
 			verificarCliente();
 
@@ -122,7 +137,9 @@ public class GerarCertidaoNegativaClienteAction extends ExibidorProcessamentoTar
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void verificarCliente() {
 		Filtro filtro = new FiltroCliente();
-		filtro.adicionarParametro(new ParametroSimples(FiltroCliente.ID, form.getIdCliente()));
+		
+		filtro.adicionarParametro(new ParametroSimples(FiltroCliente.CPF, Util.removerSimbolosPontuacao(cpfOuCnpjCliente), FiltroParametro.CONECTOR_OR));
+		filtro.adicionarParametro(new ParametroSimples(FiltroCliente.CNPJ, Util.removerSimbolosPontuacao(cpfOuCnpjCliente)));
 		filtro.adicionarCaminhoParaCarregamentoEntidade("clienteTipo.esferaPoder");
 
 		Collection colecao = getFachada().pesquisar(filtro, Cliente.class.getName());

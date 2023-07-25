@@ -62,7 +62,7 @@ public class EmitirSegundaViaContaActionForm extends ActionForm {
 		ActionErrors errors = new ActionErrors();
 
 		if (matricula == null || matricula.trim().equals("")) {
-			errors.add("erro-segunda-via", new ActionError("errors.portal.obrigatorio", "a Matrícula do Imóvel"));
+			errors.add("erro-segunda-via", new ActionError("errors.portal.obrigatorio", "a Matrcula do Imvel"));
 		}
 
 		return errors;

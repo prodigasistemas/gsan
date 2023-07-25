@@ -5697,7 +5697,7 @@ public class Util {
 	 * @param formato
 	 * @return boolean
 	 */
-	public static boolean validarDataInvalida(String data, String formato) {
+	public static boolean dataInvalida(String data, String formato) {
 
 		boolean dataInvalida = false;
 
@@ -6222,7 +6222,7 @@ public class Util {
 		}
 	}
 	
-	public static boolean cpfCnpjInvalido(String campo) {
+	public static boolean cpfCnpjInvalidoRecadastramento(String campo) {
 		campo = campo.trim();
 		if (StringUtils.isNotEmpty(campo)){
 			String cpf = campo;
@@ -6233,6 +6233,14 @@ public class Util {
 				return false;
 			}
 		}
+		return true;
+	}
+	
+	public static boolean cpfCnpjInvalido(String cpfOuCnpj) {
+		if (Util.isCPF(cpfOuCnpj) || Util.isCNPJ(cpfOuCnpj)){
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -6331,6 +6339,19 @@ public class Util {
 	    return partes;
 	}
     
+	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+	private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
+
+	public static boolean emailValido(String email) {
+		Matcher matcher = pattern.matcher(email);
+		return matcher.matches();
+	}
+	
+	public static boolean emailInvalido(String email) {
+		return !emailValido(email);
+	}
+
     public static String removeZerosAEsquerda(String str)
     {
         // Count leading zeros
@@ -6349,4 +6370,5 @@ public class Util {
         return sb.toString();  // return in String
     }
     
+
 }

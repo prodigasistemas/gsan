@@ -210,6 +210,7 @@ import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimpli
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCriticaTipo;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoLinha;
+import gcom.cadastro.cliente.ClienteLogin;
 import gcom.cadastro.cliente.CadastroAguaPara;
 import gcom.cadastro.cliente.CadastroUnico;
 import gcom.cadastro.cliente.Cliente;
@@ -970,6 +971,7 @@ public class HibernateUtil {
 					.addClass(MensagemAcompanhamentoServico.class)
 					.addClass(AgenciaReguladora.class)
 					.addClass(AgenciaReguladoraMunicipio.class)
+					.addClass(ClienteLogin.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cadastro //

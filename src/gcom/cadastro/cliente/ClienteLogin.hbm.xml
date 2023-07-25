@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="gcom.cadastro.cliente.ClienteLogin" table="cadastro.cliente_login">
+
+		<id name="id" type="java.lang.Integer" column="cllo_id">
+			<generator class="sequence">
+				<param name="sequence">
+					cadastro.seq_cliente_login
+				</param>
+			</generator>
+		</id>
+	
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id" />
+		</many-to-one>
+			
+		<property name="nome" type="java.lang.String" column="cllo_nmcliente" not-null="true" length="50" />
+		<property name="cpfOuCnpj" type="java.lang.String" column="cllo_nncpfcnpj" not-null="true" length="14" />
+		<property name="dataNascimento" type="java.sql.Date" column="cllo_dtnascimento" not-null="false" />
+		<property name="celular" type="java.lang.String" column="cllo_nncelular" not-null="true" length="11" />
+		<property name="email" type="java.lang.String" column="cllo_dsemail" not-null="true" length="40" />
+		<property name="senha" type="java.lang.String" column="cllo_nmsenha" not-null="true" length="40" />
+		<property name="indicadorEmailConfirmado" type="java.lang.Short" column="cllo_icemailconfirmado" not-null="true" length="1" />
+		<property name="dataCadastro" type="java.sql.Timestamp" column="cllo_tmcadastro" not-null="true" />
+		<property name="situacao" type="java.lang.Short" column="cllo_cdsituacao" not-null="true" length="1" />
+		<property name="dataAnalise" type="java.sql.Timestamp" column="cllo_tmanalise" />
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cllo_tmultimaalteracao" not-null="true" />
+
+	</class>
+</hibernate-mapping>

@@ -942,12 +942,14 @@
 				/WEB-INF/treinamentos/struts-config-ExibirTreinamentos.xml,
 				/WEB-INF/cadastro/atualizacaocadastral/struts-config-GerarLoteAtualizacaoCadastral.xml,
 				/WEB-INF/cadastro/atualizacaocadastral/struts-config-ProcessarRequisicaoDispositivoMovelRecadastramento.xml,
+				/WEB-INF/portal/struts-config-CadastroLoginCliente.xml,
+				/WEB-INF/portal/struts-config-ValidacaoEmail.xml,
+				/WEB-INF/portal/struts-config-CertidaoNegativaImovel.xml,
 				/WEB-INF/portal/struts-config-EmitirExtratoDebitos.xml,
 				/WEB-INF/faturamento/struts-config-ImovelFaturamentoSeletivo.xml,
 				/WEB-INF/portal/struts-config-AguaPara.xml,
 				/WEB-INF/cadastro/struts-config-ConsultarAguaPara.xml
-				
-
+	
 			</param-value>
 		</init-param>
 		<init-param>

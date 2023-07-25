@@ -249,7 +249,7 @@ public class ExibirAdicionarQuadraFaceAction extends GcomAction{
 
 			 filtroGrauDificuldadeExecucao.adicionarParametro(new ParametroSimples(
 					 FiltroGrauDificuldadeExecucao.INDICADOR_GRAU_DIFICULDADE_EXECUCAO, ConstantesSistema.INDICADOR_USO_ATIVO));
-
+			 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																													
 			 Collection colecaoGrauDificuldade = null;
 			 
 			 colecaoGrauDificuldade = fachada.pesquisar(filtroGrauDificuldadeExecucao,

@@ -40,7 +40,7 @@ public class ValidadorCPFsClientesCommand extends ValidadorCommand {
 	private void validarCampoCpfCnpj(String cliente) {
 		
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpf" + cliente))
-				&& Util.cpfCnpjInvalido(linha.get("cnpjCpf" + cliente))) {
+				&& Util.cpfCnpjInvalidoRecadastramento(linha.get("cnpjCpf" + cliente))) {
 			cadastroImovel.addMensagemErro(String.format(MSG_FORMATO_CPF_CNPJ_INVALIDO, cliente.toLowerCase()));
 		}
 	}

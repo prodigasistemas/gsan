@@ -11,19 +11,12 @@
 
 	<action-mappings>
 		<action name="GerarCertidaoNegativaActionForm"
-			type="gcom.gui.portal.ExibirGerarCertidaoNegativaImovelPortalAction" 
+			type="gcom.gui.portal.GerarCertidaoNegativaImovelPortalAction" 
 			validate="false"
 			path="/certidao-negativa-imovel">
 			
 			<forward name="exibir" path="/jsp/portal/certidao_negativa_imovel.jsp" />
-		</action>
-
-		<action name="GerarCertidaoNegativaActionForm"
-			type="gcom.gui.portal.GerarCertidaoNegativaImovelPortalAction"
-			validate="false"
-			path="/gerarCertidaoNegativaImovelPortalAction">
-			
-			<forward name="exibir" path="/jsp/portal/certidao_negativa_imovel.jsp" />
+			<forward name="acessar-portal" path="/acessar-portal.do" redirect="true"/>
 		</action>
 	</action-mappings>
 

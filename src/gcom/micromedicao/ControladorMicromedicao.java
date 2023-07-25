@@ -34477,7 +34477,7 @@ public class ControladorMicromedicao extends ControladorComum {
 		 */
 		if (telemetriaRetMot == null) {
 
-			if (Util.validarDataInvalida((String) dadosParticionados[1],
+			if (Util.dataInvalida((String) dadosParticionados[1],
 					"yyyy-MM-dd")) {
 
 				telemetriaRetMot = new TelemetriaRetMot();

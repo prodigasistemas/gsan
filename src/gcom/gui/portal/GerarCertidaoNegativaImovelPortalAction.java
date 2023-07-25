@@ -45,19 +45,19 @@ public class GerarCertidaoNegativaImovelPortalAction extends ExibidorProcessamen
 
 		if (form.getIdImovel() != null) {
 			if (form.getIdImovel().equals("")) {
-				adicionarErro(new ActionError("errors.portal.obrigatorio", "a Matrícula do Imóvel"));
+				adicionarErro(new ActionError("errors.portal.obrigatorio", "a Matrcula do Imvel"));
 			} else {
 				imovel = new Imovel();
 				try {
 					if (getFachada().verificarExistenciaImovel(Integer.valueOf(form.getIdImovel())) != 1) {
-						adicionarErro(new ActionError("errors.portal.invalida", "Matrícula do Imóvel"));
+						adicionarErro(new ActionError("errors.portal.invalida", "Matrcula do Imvel"));
 					} else {
 						imovel.setId(Integer.valueOf(form.getIdImovel()));
 						verificarEsferaPoder();
 						verificarDebitosImovel();
 					}
 				} catch (NumberFormatException nfe) {
-					adicionarErro(new ActionError("errors.portal.invalida", "Matrícula do Imóvel"));
+					adicionarErro(new ActionError("errors.portal.invalida", "Matrcula do Imvel"));
 				}
 			}
 		}
@@ -82,7 +82,7 @@ public class GerarCertidaoNegativaImovelPortalAction extends ExibidorProcessamen
 		if (indicadorEfeitoPositivo()) {
 			if (debitos != null) {
 				if (possuiContas(debitos) || possuiGuias(debitos) || possuiDebitos(debitos)) {
-					adicionarErro(new ActionError("errors.portal.possui_debitos", "Imóvel"));
+					adicionarErro(new ActionError("errors.portal.possui_debitos", "Imvel"));
 				}
 			}
 		}

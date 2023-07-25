@@ -107,10 +107,14 @@ body {
 	margin-bottom: 30px;
 }
 
+.row-menu {
+	padding-bottom: 80px;
+}
+
 .barra-acesso {
 	background-color: #fff;
 	border-radius: .25rem;
-	height: 50px;
+	min-height: 50px;
 	margin-top: 10px;
 }
 
@@ -128,7 +132,7 @@ body {
 	text-align: right;
 	padding-right: 20px;
 	padding-top: 15px;
-}
+} 
 
 .barra-acesso .sair a {
 	color: #333;
@@ -157,6 +161,13 @@ body {
 	font-size: 15px;
 }
 
+.acesso .cadastro {
+	float: right;
+	text-align: right;
+	padding-right: 20px;
+	padding-top: 15px;
+}
+
 .breadcrumb .breadcrumb-item {
 	color: #333;
 }
@@ -168,7 +179,6 @@ body {
 .breadcrumb .breadcrumb-item .active {
 	color: #004284;
 }
-
 
 .pagina-agua {
 	padding: 20px 40px 20px 40px;
@@ -188,7 +198,7 @@ body {
 }
 
 .pagina-titulo h2 {
-	font-size: 35px;
+	font-size: 28px;
 	font-weight: 500;
 	text-align: center;
 }
@@ -242,6 +252,27 @@ body {
 	font-size: 14px;
 }
 
+.pagina-sucesso {
+	margin-top: 20px;
+	padding: 50px !important;
+	border-bottom: 1px solid #ccc;
+	text-align: center;
+	max-width: 500px;
+}
+
+.pagina-sucesso i {
+	font-size: 80px;
+	color: green;
+}
+
+.pagina-sucesso h3 {
+	padding-top: 15px;
+}
+
+.pagina-sucesso p {
+	padding-top: 15px;
+}
+
 .pagina-cartao {
 	margin-top: 20px;
 	padding: 20px;
@@ -292,8 +323,12 @@ body {
 	margin: 0 auto !important;
 }
 
+.container-form {
+	padding: 0;
+}
+
 .form-alert {
-	color: red;
+	color: #dc3545;
 	font-size: 12px;
 }
 
@@ -304,6 +339,10 @@ body {
 .form-alert-right {
 	padding-top: 10px;
 	padding-bottom: 10px; 
+}
+
+.alert-success h4 {
+	font-size: 24px !important;
 }
 
 .links-ouvidoria {
@@ -324,5 +363,6 @@ body {
 }
 
 .btn-consulta {
-	margin-left: 5px;
+	margin-left: 10px;
 }
+

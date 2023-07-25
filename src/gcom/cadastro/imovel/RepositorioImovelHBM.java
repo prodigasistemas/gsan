@@ -1255,63 +1255,48 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 
 	/**
+<<<<<<< HEAD
+=======
 	 * < <Descriï¿½ï¿½o do mï¿½todo>>
 	 * 
 	 * 
 	 * 
+>>>>>>> master
 	 * @param imovel
 	 * 
 	 *               Descriï¿½ï¿½o do parï¿½metro
 	 * 
+<<<<<<< HEAD
+	 * @return Descrição do retorno
+	 * @exception ErroRepositorioException
+=======
 	 * @return Descriï¿½ï¿½o do retorno
 	 * 
 	 * @exception ErroRepositorioException
 	 * 
 	 *                                     Descriï¿½ï¿½o da exceï¿½ï¿½o
 	 * 
+>>>>>>> master
 	 */
 
-	public Collection<Imovel> pesquisarImovelParametrosClienteImovel(
-
-			FiltroClienteImovel filtroClienteImovel)
-
-			throws ErroRepositorioException {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Collection<Imovel> pesquisarImovelParametrosClienteImovel(FiltroClienteImovel filtroClienteImovel) throws ErroRepositorioException {
 
 		Collection<Imovel> retorno = null;
-
 		Session session = HibernateUtil.getSession();
 
 		try {
-
 			retorno = new ArrayList(
-
-					new CopyOnWriteArraySet<Imovel>(
-
-							GeradorHQLCondicional
-
-									.gerarCondicionalQuery(
-
-											filtroClienteImovel,
-
-											"imovel",
-
-											"from gcom.cadastro.imovel.Imovel as imovel join imovel.medicaoHistoricos medicaoHistoricos",
-
-											session)
-									.list()));
+					new CopyOnWriteArraySet<Imovel>(GeradorHQLCondicional.gerarCondicionalQuery(filtroClienteImovel,"imovel",
+						"from gcom.cadastro.imovel.Imovel as imovel join imovel.medicaoHistoricos medicaoHistoricos", session).list()));
 
 		} catch (HibernateException e) {
-
 			throw new ErroRepositorioException("Erro no Hibernate");
-
 		} finally {
-
 			HibernateUtil.closeSession(session);
-
 		}
 
 		return retorno;
-
 	}
 
 	public Collection obterDescricoesCategoriaImovel(Imovel imovel)
@@ -28181,4 +28166,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		System.out.println("IMOVEL ID: " + idImovel + " ATUALIZADO.");
 	}
 
+
+	
 }

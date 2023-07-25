@@ -1,14 +1,15 @@
 package gcom.cadastro.cliente;
 
-import gcom.util.filtro.Filtro;
-
 import java.io.Serializable;
+
+import gcom.util.filtro.Filtro;
 
 public class FiltroClienteImovel extends Filtro implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public FiltroClienteImovel() {}
+	public FiltroClienteImovel() {
+	}
 
 	public FiltroClienteImovel(String campoOrderBy) {
 		this.campoOrderBy = campoOrderBy;
@@ -18,6 +19,8 @@ public class FiltroClienteImovel extends Filtro implements Serializable {
 	public final static String CLIENTE_ID = "cliente.id";
 	public final static String CLIENTE = "cliente";
 	public final static String CLIENTE_NOME = "cliente.nome";
+	public final static String CLIENTE_CPF = "cliente.cpf";
+	public final static String CLIENTE_CNPJ = "cliente.cnpj";
 	public final static String IMOVEL_ID = "imovel.id";
 	public final static String IMOVEL = "imovel";
 	public final static String IMOVEL_INDICADOR_IMOVEL_AREA_COMUM = "imovel.indicadorImovelAreaComum";
@@ -86,4 +89,15 @@ public class FiltroClienteImovel extends Filtro implements Serializable {
 	public final static String CLIENTE_FONE_TELEFONE = "cliente.clienteFones.telefone";
 	public final static String FONE_TIPO = "cliente.clienteFones.foneTipo";
 	public final static String ORGAO_EXPEDIDOR_RG = "cliente.orgaoExpedidorRg";
+	public static final String IMOVEL_LOGRADOURO_TIPO = "imovel.logradouroCep.logradouro.logradouroTipo";
+	public static final String IMOVEL_LOGRADOURO_TITULO = "imovel.logradouroCep.logradouro.logradouroTitulo";
+	public static final String IMOVEL_ENDERECO_REFERENCIA = "imovel.enderecoReferencia";
+	public static final String IMOVEL_CEP = "imovel.logradouroCep.cep";
+	public static final String IMOVEL_PERIMETRO_INICIAL = "imovel.perimetroInicial";
+	public static final String IMOVEL_PERIMETRO_INICIAL_LOGRADOURO_TIPO = "imovel.perimetroInicial.logradouroTipo";
+	public static final String IMOVEL_PERIMETRO_INICIAL_LOGRADOURO_TITULO = "imovel.perimetroInicial.logradouroTitulo";
+	public static final String IMOVEL_PERIMETRO_FINAL = "imovel.perimetroFinal";
+	public static final String IMOVEL_PERIMETRO_FINAL_LOGRADOURO_TIPO = "imovel.perimetroFinal.logradouroTipo";
+	public static final String IMOVEL_PERIMETRO_FINAL_LOGRADOURO_TITULO = "imovel.perimetroFinal.logradouroTitulo";
+	public static final String IMOVEL_UNIDADE_FEDERACAO = "imovel.logradouroBairro.bairro.municipio.unidadeFederacao";
 }

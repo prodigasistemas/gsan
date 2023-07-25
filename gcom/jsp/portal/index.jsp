@@ -26,7 +26,7 @@
 	<logic:notPresent name="matricula" scope="session">
 		<section class="header text-center">
 			<div class="container">
-				<h1>Bem vindo à Loja Virtual</h1>
+				<h1>Bem vindo  Loja Virtual</h1>
 			</div>
 		</section>
 	</logic:notPresent>
@@ -40,7 +40,7 @@
 							<a href="segunda-via-conta.do?action=resetar">
 								<div class="panel-link">
 									<i class="fa fa-barcode fa-3x" aria-hidden="true"></i>
-									<h3>2ª Via de Conta</h3>
+									<h3>2 Via de Conta</h3>
 								</div>
 							</a>
 						</div>
@@ -53,7 +53,7 @@
 							<a href="certidao-negativa-imovel.do">
 								<div class="panel-link">
 									<i class="fa fa-home fa-3x" aria-hidden="true"></i>
-									<h3>Certidão Negativa de Imóvel</h3>
+									<h3>Certido Negativa de Imvel</h3>
 								</div>
 							</a>
 						</div>
@@ -66,7 +66,7 @@
 							<a href="certidao-negativa-cliente.do">
 								<div class="panel-link">
 									<i class="fa fa-user fa-3x" aria-hidden="true"></i>
-									<h3>Certidão Negativa de Cliente</h3>
+									<h3>Certido Negativa de Cliente</h3>
 								</div>
 							</a>
 						</div>
@@ -78,7 +78,7 @@
 	<!-- 					<a href="#"> -->
 	<!-- 						<div class="panel-link"> -->
 	<!-- 							<i class="fa fa-handshake-o fa-3x" aria-hidden="true"></i> -->
-	<!-- 							<h3>Negociação de Débitos</h3> -->
+	<!-- 							<h3>Negociao de Dbitos</h3> -->
 	<!-- 						</div> -->
 	<!-- 					</a> -->
 	<!-- 				</div> -->
@@ -100,7 +100,7 @@
 	<!-- 					<a href="#"> -->
 	<!-- 						<div class="panel-link"> -->
 	<!-- 							<i class="fa fa-check-square fa-3x" aria-hidden="true"></i> -->
-	<!-- 							<h3>Declaração Anual de Quitação de Débitos</h3> -->
+	<!-- 							<h3>Declarao Anual de Quitao de Dbitos</h3> -->
 	<!-- 						</div> -->
 	<!-- 					</a> -->
 	<!-- 				</div> -->
@@ -111,7 +111,7 @@
 	<!-- 					<a href="#"> -->
 	<!-- 						<div class="panel-link"> -->
 	<!-- 							<i class="fa fa-list fa-3x" aria-hidden="true"></i> -->
-	<!-- 							<h3>Estrutura Tarifária</h3> -->
+	<!-- 							<h3>Estrutura Tarifria</h3> -->
 	<!-- 						</div> -->
 	<!-- 					</a> -->
 	<!-- 				</div> -->
@@ -133,7 +133,7 @@
 	<!-- 					<a href="#"> -->
 	<!-- 						<div class="panel-link"> -->
 	<!-- 							<i class="fa fa-wrench fa-3x" aria-hidden="true"></i> -->
-	<!-- 							<h3>Normas de Instalação</h3> -->
+	<!-- 							<h3>Normas de Instalao</h3> -->
 	<!-- 						</div> -->
 	<!-- 					</a> -->
 	<!-- 				</div> -->
@@ -197,6 +197,19 @@
 						</div>
 					</a>
 				</div>
+				<div class="col-md-3">
+					<a href="#">
+						<div class="panel-modulo">
+							<a href="cadastro-login-cliente.do">
+								<div class="panel-link">
+									<i class="fa fa-address-book fa-3x" aria-hidden="true"></i>
+									<h3>Cadastro do Cliente</h3>
+
+								</div>
+							</a>
+						</div>
+					</a>
+				</div>				
 			</div>
 		</div>
 	</div>

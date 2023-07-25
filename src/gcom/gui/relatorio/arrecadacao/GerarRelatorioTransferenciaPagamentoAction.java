@@ -141,9 +141,9 @@ public class GerarRelatorioTransferenciaPagamentoAction extends ExibidorProcessa
 
 	private Boolean validaVerificaPeriodo() {
 		String formato = "dd/MM/yyyy";
-		boolean dataValidaIni = Util.validarDataInvalida(form
+		boolean dataValidaIni = Util.dataInvalida(form
 				.getPeriodoInicial(), formato);
-		boolean dataValidaFin = Util.validarDataInvalida(
+		boolean dataValidaFin = Util.dataInvalida(
 				form.getPeriodoFinal(), formato);
 
 		if (dataValidaIni && dataValidaFin) {

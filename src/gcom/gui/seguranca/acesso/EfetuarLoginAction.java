@@ -1,6 +1,5 @@
 package gcom.gui.seguranca.acesso;
 
-
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
@@ -60,52 +59,50 @@ public class EfetuarLoginAction extends GcomAction {
 	 * @param httpServletResponse
 	 * @return
 	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
 		// Prepara o retorno da ação para a tela principal
 		ActionForward retorno = actionMapping.findForward("telaPrincipal");
 
 		// Recupera o ActionForm
 		EfetuarLoginActionForm loginActionForm = (EfetuarLoginActionForm) actionForm;
-		
+
 		String visualizacaoRAUrgencia = (String) httpServletRequest.getParameter("visualizacaoRAUrgencia");
-		
-		if(visualizacaoRAUrgencia == null || !visualizacaoRAUrgencia.equals("sim")){
-						
-		
+
+		if (visualizacaoRAUrgencia == null || !visualizacaoRAUrgencia.equals("sim")) {
+
 			// Variável que vai armazenar o usuário logado
 			Usuario usuarioLogado = null;
-	
+
 			// Recupera o login e a senha do usuário
 			String login = loginActionForm.getLogin();
 			String senha = loginActionForm.getSenha();
-	
+
 			// [FS0003] - Verificar preenchimento do login
 			if (login == null || login.trim().equals("")) {
 				this.reportarErros(httpServletRequest, "atencao.login.invalido");
 				retorno = actionMapping.findForward("telaLogin");
 			} else {
-	
-				//Cria a variável que vai armazenar a mensagem com a quantidade de 
-				//dias que falta para expirar a validade da senha
+
+				// Cria a variável que vai armazenar a mensagem com a quantidade de
+				// dias que falta para expirar a validade da senha
 				String mensagemExpiracao = "";
-				
+
 				// [FS0001] - Verificar existência do login
 				if (!this.verificarExistenciaLogin(login)) {
-					this.reportarErrosMensagem(httpServletRequest,"atencao.login.inexistente", login);
+					this.reportarErrosMensagem(httpServletRequest, "atencao.login.inexistente", login);
 					retorno = actionMapping.findForward("telaLogin");
 				} else {
-	
+
 					// Cria uma instancia da sessão
 					HttpSession sessao = httpServletRequest.getSession(true);
-	
+
 					// [FS0004] - Validar senha do login
 					// Busca o usuário no sistema, o usuário será nulo se não
 					// existir
 					usuarioLogado = this.getFachada().validarUsuario(login, senha);
-	
+
 					// [FS0005] - Verificar número de tentativas.
 					Integer numeroTentativas = (Integer) sessao.getAttribute("numeroTentativas");
 					Short numeroTentativasPermitidas = this.getSistemaParametro().getNumeroMaximoLoginFalho();
@@ -113,120 +110,119 @@ public class EfetuarLoginAction extends GcomAction {
 						numeroTentativas = new Integer(0);
 						sessao.setAttribute("numeroTentativas", numeroTentativas);
 					}
-	
+
 					// Recupera o login do usuário da sessão
 					String loginUsuarioSessao = (String) sessao.getAttribute("loginUsuarioSessao");
-	
+
 					// Caso seja a primeira vez que o usuário esteja logando
 					// joga o login do usuário na sessão
 					if (loginUsuarioSessao == null) {
 						loginUsuarioSessao = login;
-						sessao.setAttribute("loginUsuarioSessao",loginUsuarioSessao);
+						sessao.setAttribute("loginUsuarioSessao", loginUsuarioSessao);
 					}
-	
+
 					// Caso o usuário não esteja cadastrado, manda o erro para a
 					// página de login
 					if (usuarioLogado == null) {
-						this.reportarErros(httpServletRequest,"atencao.usuario.inexistente");
+						this.reportarErros(httpServletRequest, "atencao.usuario.inexistente");
 						retorno = actionMapping.findForward("telaLogin");
-	
+
 						/*
-						 * Caso o login informado seja igual ao que está na sessão
-						 * incrementa o nº de tentativas e joga esse nº na sessão
-						 * verifica se o nº de tentativas é maior que a permitida se
-						 * for bloqueia a senha do usuário e indica o erro na página
+						 * Caso o login informado seja igual ao que está na sessão incrementa o nº de
+						 * tentativas e joga esse nº na sessão verifica se o nº de tentativas é maior
+						 * que a permitida se for bloqueia a senha do usuário e indica o erro na página
 						 * de login
 						 */
 						if (loginUsuarioSessao.equals(login)) {
 							numeroTentativas = numeroTentativas + 1;
-							sessao.setAttribute("numeroTentativas",numeroTentativas);
-	
+							sessao.setAttribute("numeroTentativas", numeroTentativas);
+
 							// [FS0005] - Verificar número de tentativas de acesso
 							if (numeroTentativas.intValue() > numeroTentativasPermitidas.intValue()) {
 								this.bloquearSenha(login);
-								this.reportarErros(httpServletRequest,"atencao.usuario.senha.bloqueada");
+								this.reportarErros(httpServletRequest, "atencao.usuario.senha.bloqueada");
 								retorno = actionMapping.findForward("telaLogin");
 							}
 						} else {
-							//Zera o nº de tentativas de acesso e joga o login do usuário na sessão
+							// Zera o nº de tentativas de acesso e joga o login do usuário na sessão
 							numeroTentativas = 0;
 							sessao.setAttribute("loginUsuarioSessao", login);
 						}
-	
+
 					} else {
 						// [FS0002] - Verificar situação do usuário
 						if (!this.verificarSituacaoUsuario(usuarioLogado)) {
 							if (usuarioLogado.getUsuarioSituacao().getId().equals(UsuarioSituacao.INATIVO)) {
-								throw new ActionServletException("atencao.usuario_invalido", null, usuarioLogado.getLogin());
+								throw new ActionServletException("atencao.usuario_invalido", null,
+										usuarioLogado.getLogin());
 							} else {
-								this.reportarErrosMensagem(	httpServletRequest,	"atencao.usuario.situacao.invalida",login+ " está com situação correspondente a "+ usuarioLogado.getUsuarioSituacao().getDescricaoAbreviada());
+								this.reportarErrosMensagem(httpServletRequest, "atencao.usuario.situacao.invalida",
+										login + " está com situação correspondente a "
+												+ usuarioLogado.getUsuarioSituacao().getDescricaoAbreviada());
 								retorno = actionMapping.findForward("telaLogin");
 							}
 						}
-	
-						//[SB0005] Efetuar Controle de Alteração de Senha
+
+						// [SB0005] Efetuar Controle de Alteração de Senha
 						boolean disponibilizarAlteracaoSenha = false;
 						Date dataExpiracaoAcesso = usuarioLogado.getDataExpiracaoAcesso();
 						UsuarioSituacao usuarioSituacao = usuarioLogado.getUsuarioSituacao();
-						
-						//Caso a data de expiração de acesso esteja preenchida e seja menor 
-						//que a data atual disponibiliza a tela de alteração de senha
+
+						// Caso a data de expiração de acesso esteja preenchida e seja menor
+						// que a data atual disponibiliza a tela de alteração de senha
 						if (dataExpiracaoAcesso != null) {
 							if (dataExpiracaoAcesso.before(new Date())) {
 								disponibilizarAlteracaoSenha = true;
 							}
 						}
-	
-						//Caso a situação da senha do usuário seja igual a "pendente"
-						//disponibiliza a tela de alteração de senha 
+
+						// Caso a situação da senha do usuário seja igual a "pendente"
+						// disponibiliza a tela de alteração de senha
 						if (usuarioSituacao.getId().equals(UsuarioSituacao.PENDENTE_SENHA)) {
 							disponibilizarAlteracaoSenha = true;
 						}
-	
-						//Caso a flag de disponibilizar alteração de senha esteja "true"
-						//seta o mapeamento para a tela de alterar senha
+
+						// Caso a flag de disponibilizar alteração de senha esteja "true"
+						// seta o mapeamento para a tela de alterar senha
 						sessao.setAttribute("usuarioLogado", usuarioLogado);
-						
+
 						if (disponibilizarAlteracaoSenha) {
 							retorno = actionMapping.findForward("alterarSenha");
 						}
-						
+
 						Fachada.getInstancia().montarMenuUsuario(sessao, httpServletRequest.getRemoteAddr());
-					}					
+					}
 				}
 			}
-		
-		}else{
+
+		} else {
 			Usuario usuarioLogado = (Usuario) this.getSessao(httpServletRequest).getAttribute("usuarioLogado");
-			
-			//Código para remover a mensagem de "Alerta de RA Urgente" quando usuario pressionar OK
-			this.getFachada().atualizarUsuarioVisualizacaoRaUrgencia(null,null, usuarioLogado.getId(),null,1);			
-						
+
+			// Código para remover a mensagem de "Alerta de RA Urgente" quando usuario
+			// pressionar OK
+			this.getFachada().atualizarUsuarioVisualizacaoRaUrgencia(null, null, usuarioLogado.getId(), null, 1);
+
 			this.getSessao(httpServletRequest).setAttribute("RAUrgencia", "false");
-			
+
 		}
-		
-		
+
 		verificarLocaleInternacionalizacao(httpServletRequest);
-		
+
 		return retorno;
 	}
-	
-	
-	private void verificarLocaleInternacionalizacao(HttpServletRequest httpServletRequest){
-		Locale localeStruts = 
-				(Locale)httpServletRequest.getSession(false).getAttribute(Globals.LOCALE_KEY);
 
-		if(Internacionalizador.getLocale() == null || 
-				!Internacionalizador.getLocale().equals(localeStruts)){
-			
-			Internacionalizador.setLocale(localeStruts);			
+	private void verificarLocaleInternacionalizacao(HttpServletRequest httpServletRequest) {
+		Locale localeStruts = (Locale) httpServletRequest.getSession(false).getAttribute(Globals.LOCALE_KEY);
+
+		if (Internacionalizador.getLocale() == null || !Internacionalizador.getLocale().equals(localeStruts)) {
+
+			Internacionalizador.setLocale(localeStruts);
 		}
 	}
 
 	/**
-	 * Verifica se o login informado existe para algum usuário do sistema
-	 * retorna true se existir caso contrário retorna false.
+	 * Verifica se o login informado existe para algum usuário do sistema retorna
+	 * true se existir caso contrário retorna false.
 	 * 
 	 * [UC0287] - Verificar existência do login
 	 * 
@@ -242,10 +238,8 @@ public class EfetuarLoginAction extends GcomAction {
 
 		// Cria o filtro e pesquisa o usuário com o login informado
 		FiltroUsuario filtroUsuario = new FiltroUsuario();
-		filtroUsuario.adicionarParametro(new ParametroSimples(
-				FiltroUsuario.LOGIN, login));
-		Collection usuarios = Fachada.getInstancia().pesquisar(filtroUsuario,
-				Usuario.class.getName());
+		filtroUsuario.adicionarParametro(new ParametroSimples(FiltroUsuario.LOGIN, login));
+		Collection usuarios = Fachada.getInstancia().pesquisar(filtroUsuario, Usuario.class.getName());
 
 		// Caso exista o usuário com o login informado
 		// seta o retorno para verdadeiro(login existe no sistema)
@@ -258,9 +252,8 @@ public class EfetuarLoginAction extends GcomAction {
 
 	/**
 	 * Metódo que verifica se a situação do usuário é diferente de ativo ou se é
-	 * igual a senha pendente.Caso seja uma ou outra situação levanta uma
-	 * exceção para o usuário indicando que o usuário não pode se logar ao
-	 * sistema.
+	 * igual a senha pendente.Caso seja uma ou outra situação levanta uma exceção
+	 * para o usuário indicando que o usuário não pode se logar ao sistema.
 	 * 
 	 * [FS0002] - Verificar situação do usuário
 	 * 
@@ -276,13 +269,11 @@ public class EfetuarLoginAction extends GcomAction {
 		UsuarioSituacao usuarioSituacao = usuarioLogado.getUsuarioSituacao();
 
 		/*
-		 * Caso a situação do usuário não seja igual a ativo ou seja igual a
-		 * pendente retorna uma flag indicando que o usuário não pode acessar o
-		 * sistema
+		 * Caso a situação do usuário não seja igual a ativo ou seja igual a pendente
+		 * retorna uma flag indicando que o usuário não pode acessar o sistema
 		 */
 		if ((!usuarioSituacao.getId().equals(UsuarioSituacao.ATIVO))
-				&& (!usuarioSituacao.getId().equals(
-						UsuarioSituacao.PENDENTE_SENHA))) {
+				&& (!usuarioSituacao.getId().equals(UsuarioSituacao.PENDENTE_SENHA))) {
 			retorno = false;
 		}
 
@@ -306,10 +297,8 @@ public class EfetuarLoginAction extends GcomAction {
 
 		// Pesquisa o usário que vai ser bloqueada sua senha
 		FiltroUsuario filtroUsuario = new FiltroUsuario();
-		filtroUsuario.adicionarParametro(new ParametroSimples(
-				FiltroUsuario.LOGIN, login));
-		Collection usuarios = Fachada.getInstancia().pesquisar(filtroUsuario,
-				Usuario.class.getName());
+		filtroUsuario.adicionarParametro(new ParametroSimples(FiltroUsuario.LOGIN, login));
+		Collection usuarios = Fachada.getInstancia().pesquisar(filtroUsuario, Usuario.class.getName());
 
 		// Caso encontre o usuário com o login informado
 		if (usuarios != null && !usuarios.isEmpty()) {
@@ -324,15 +313,13 @@ public class EfetuarLoginAction extends GcomAction {
 			Short bloqueioAcesso = usuarioLogado.getBloqueioAcesso();
 
 			/*
-			 * Caso o usuário nunca tenha sido bloqueado seta o nº de bloqueios
-			 * para 1(um) caso contrário incrementa o valor do nº de bloqueio do
-			 * usuário
+			 * Caso o usuário nunca tenha sido bloqueado seta o nº de bloqueios para 1(um)
+			 * caso contrário incrementa o valor do nº de bloqueio do usuário
 			 */
 			if (bloqueioAcesso == null) {
 				usuarioLogado.setBloqueioAcesso(new Short("1"));
 			} else {
-				usuarioLogado.setBloqueioAcesso((new Integer(usuarioLogado
-						.getBloqueioAcesso() + 1)).shortValue());
+				usuarioLogado.setBloqueioAcesso((new Integer(usuarioLogado.getBloqueioAcesso() + 1)).shortValue());
 			}
 
 			// Atualiza os dados do usuário

@@ -11,11 +11,12 @@
 
 	<action-mappings>
 		<action name="GerarCertidaoNegativaClienteActionForm"
-			type="gcom.gui.portal.ExibirGerarCertidaoNegativaClienteAction"
+			type="gcom.gui.portal.GerarCertidaoNegativaClienteAction"
 			validate="false"
 			path="/certidao-negativa-cliente">
 			
 			<forward name="exibir" path="/jsp/portal/certidao_negativa_cliente.jsp" />
+			<forward name="acessar-portal" path="/jsp/portal/acesso.jsp" />
 		</action>
 
 		<action name="GerarCertidaoNegativaClienteActionForm"

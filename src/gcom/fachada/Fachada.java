@@ -40671,6 +40671,7 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
+
 	
 	public void registrarFichaCompensacaoGrupo(Integer idFaturamento, Integer anoMesReferencia,int idFuncionalidadeIniciada) {
 		try {
