@@ -53,7 +53,7 @@
 							<a href="certidao-negativa-imovel.do">
 								<div class="panel-link">
 									<i class="fa fa-home fa-3x" aria-hidden="true"></i>
-									<h3>Certido Negativa de Imvel</h3>
+									<h3>certidão Negativa de Imóvel</h3>
 								</div>
 							</a>
 						</div>
@@ -66,7 +66,7 @@
 							<a href="certidao-negativa-cliente.do">
 								<div class="panel-link">
 									<i class="fa fa-user fa-3x" aria-hidden="true"></i>
-									<h3>Certido Negativa de Cliente</h3>
+									<h3>certidão Negativa de Cliente</h3>
 								</div>
 							</a>
 						</div>
