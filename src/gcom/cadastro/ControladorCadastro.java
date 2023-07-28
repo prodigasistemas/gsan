@@ -14657,24 +14657,18 @@ public class ControladorCadastro extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}	
 	}
-
-	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer situacao) throws ControladorException {
+	
+	public Integer pesquisarQtddRecadastramentoAguaParaSituacao(Integer idImovel, Integer situacao) throws ControladorException {
 		try {
-			return repositorioCadastro.pesquisarRecadastramentoAguaParaSituacao(situacao);
+			return repositorioCadastro.pesquisarQtddRecadastramentoAguaParaSituacao(idImovel, situacao);
 		} catch (Exception ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer matricula,Integer situacao) throws ControladorException {
+	
+	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer idImovel, Integer situacao, Integer numeroPagina) throws ControladorException {
 		try {
-			return repositorioCadastro.pesquisarRecadastramentoAguaParaMatriculaSituacao(matricula, situacao);
-		} catch (Exception ex) {
-			throw new ControladorException("erro.sistema", ex);
-		}
-	}
-	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula,Integer pageOffSet, Integer maxItemPage,Boolean flagTotalRegistros ) throws ControladorException {
-		try {
-			return repositorioCadastro.pesquisarRecadastramentoAguaParaMatricula( matricula,  pageOffSet,  maxItemPage, flagTotalRegistros);
+			return repositorioCadastro.pesquisarRecadastramentoAguaParaSituacao(idImovel, situacao, numeroPagina);
 		} catch (Exception ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}

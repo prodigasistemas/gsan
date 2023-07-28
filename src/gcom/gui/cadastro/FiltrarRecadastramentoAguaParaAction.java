@@ -47,26 +47,36 @@ public class FiltrarRecadastramentoAguaParaAction extends GcomAction {
 
         DadosRecadastramentoAguaParaActionForm form = (DadosRecadastramentoAguaParaActionForm) actionForm;   
         
-        if(form.getIdImovel().equals(""))
-        	form.setIdImovel("0");
-        	
         Integer situacaoInteger = form.getSituacao();
-        Integer idImovel = Integer.parseInt(form.getIdImovel());
-        Map resultado = null;
+        //Integer idImovel = Integer.parseInt(form.getIdImovel());
+        Integer totalRegistrosPesquisa = null;
         
-        if(situacaoInteger.equals(0) && idImovel.equals(0))
+        if(situacaoInteger.equals(0) && form.getIdImovel().equals(""))
         	throw new ActionServletException("atencao.selecionar_filtro_agua_para"); 
+              
         
-        if(!situacaoInteger.equals(0) && !idImovel.equals(0))
-        	form.setImoveis(getFachada().pesquisarRecadastramentoAguaParaMatriculaSituacao(idImovel,situacaoInteger));
-        else if(!situacaoInteger.equals(0))
-            form.setImoveis(getFachada().pesquisarRecadastramentoAguaParaSituacao(situacaoInteger));       
-        else if(!idImovel.equals(0))
-        	resultado = controlarPaginacao(httpServletRequest, retorno, getFachada(),idImovel);
-        
-        form.setImoveis((Collection)resultado.get("colecaoRetorno"));
-        retorno = (ActionForward) resultado.get("destinoActionForward");
-        
+        if(!form.getIdImovel().equals("")) {
+        	totalRegistrosPesquisa = getFachada().pesquisarQtddRecadastramentoAguaParaSituacao(Integer.parseInt(form.getIdImovel()), situacaoInteger);
+        	if(totalRegistrosPesquisa < 1) {
+        		throw new ActionServletException("atencao.sem_registros_agua_para"); 
+        	}
+            
+            retorno = controlarPaginacao(httpServletRequest, retorno, totalRegistrosPesquisa);
+        	
+        	form.setImoveis(getFachada().pesquisarRecadastramentoAguaParaSituacao(Integer.parseInt(form.getIdImovel()), situacaoInteger, (Integer) httpServletRequest
+					.getAttribute("numeroPaginasPesquisa"))); 
+        }else {
+        	totalRegistrosPesquisa = getFachada().pesquisarQtddRecadastramentoAguaParaSituacao(null, situacaoInteger);
+        	if(totalRegistrosPesquisa < 1) {
+        		throw new ActionServletException("atencao.sem_registros_agua_para"); 
+        	}
+            
+            retorno = controlarPaginacao(httpServletRequest, retorno, totalRegistrosPesquisa);
+        	
+        	form.setImoveis(getFachada().pesquisarRecadastramentoAguaParaSituacao(null, situacaoInteger, (Integer) httpServletRequest
+					.getAttribute("numeroPaginasPesquisa"))); 
+        }
+     
     	Collection colecaoConsultarRecadastramentoAguaParaHelper  = null;
 		
 		if(form.getImoveis() != null &&

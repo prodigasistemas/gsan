@@ -14,6 +14,9 @@ public class CadastroAguaPara {
 
 	public static final int ACEITO = 1;
 	
+	public static final int VAZIO = 0;
+
+	
 	private Integer id;
 	
 	private String cpf;

@@ -9125,81 +9125,80 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
-	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer situacao)
+	public Integer pesquisarQtddRecadastramentoAguaParaSituacao(Integer matricula, Integer situacao) throws ErroRepositorioException {
+	
+		Session session = HibernateUtil.getSession();
+		Integer retorno = null;
+		String sql = "";
+
+		try {			
+	    	      sql = "Select count(distinct caap_id) as quantidade "
+			    	   + "FROM cadastro.cadastro_agua_para ";
+	    			  
+			   if(matricula != null) {
+				   sql += "WHERE imov_id = " + matricula;
+				   
+				   if(situacao != CadastroAguaPara.VAZIO && situacao != CadastroAguaPara.TODOS) {
+					   sql += "and caap_stca = " + situacao ;
+				   }
+			   }else {
+				   if(situacao != CadastroAguaPara.TODOS) {
+					   sql += "WHERE caap_stca = " + situacao ;
+				   }
+			   }
+			   
+			retorno = (Integer) session.createSQLQuery(sql)
+					.addScalar("quantidade", Hibernate.INTEGER).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+		
+	}
+	
+	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer matricula, Integer situacao, Integer numeroPagina)
 			throws ErroRepositorioException {
 		Collection retorno = null;
 		Session session = HibernateUtil.getSession();
 		StringBuilder consulta;
 		try {			
-			consulta = new StringBuilder(" SELECT cadastroAguaPara from CadastroAguaPara cadastroAguaPara ")
-					.append(" WHERE ");
-					if(situacao!=CadastroAguaPara.TODOS) {
-						consulta.append("cadastroAguaPara.situacao = :situacao");
-						retorno = session.createQuery(consulta.toString()).setInteger("situacao", situacao).list();
-					} else {
+			consulta = new StringBuilder(" SELECT cadastroAguaPara from CadastroAguaPara cadastroAguaPara ").append(" WHERE ");
+			if(matricula != null) {
+					consulta.append("cadastroAguaPara.imovel.id = :matricula and ");
+					
+				if(situacao != CadastroAguaPara.VAZIO && situacao != CadastroAguaPara.TODOS) {
+					consulta.append("cadastroAguaPara.situacao = :situacao ");
+					retorno = session.createQuery(consulta.toString()).setInteger("matricula", matricula).setInteger("situacao", situacao).setFirstResult(10 * numeroPagina).setMaxResults(10).list();
+				}else{
+					consulta.append("cadastroAguaPara.situacao in (" + CadastroAguaPara.ACEITO + ", "
+							+ CadastroAguaPara.RECUSADO + ", " + CadastroAguaPara.PENDENTE + " ))");
+					retorno = session.createQuery(consulta.toString()).setInteger("matricula", matricula).setFirstResult(10 * numeroPagina).setMaxResults(10).list();
+				}
+				
+				
+			}else{
+				if(situacao != CadastroAguaPara.TODOS) {
+						consulta.append("cadastroAguaPara.situacao = :situacao ");
+						retorno = session.createQuery(consulta.toString()).setInteger("situacao", situacao).setFirstResult(10 * numeroPagina).setMaxResults(10).list();
+				}else{
 						consulta.append("cadastroAguaPara.situacao in (" + CadastroAguaPara.ACEITO + ", "
 								+ CadastroAguaPara.RECUSADO + ", " + CadastroAguaPara.PENDENTE + " ))");
-						retorno = session.createQuery(consulta.toString()).list();
-					}
+						retorno = session.createQuery(consulta.toString()).setFirstResult(10 * numeroPagina).setMaxResults(10).list();
+				}
+			}
+			
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
-	}
-	
-	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula, Integer pageOffSet, Integer maxItemPage, Boolean flagTotalRegistros)
-	        throws ErroRepositorioException {
-	    Collection retorno = null;
-	    Session session = HibernateUtil.getSession();
-	    String consulta = "";
-	    try {
-	        consulta = " SELECT cadastroAguaPara from CadastroAguaPara cadastroAguaPara "
-	                + " WHERE cadastroAguaPara.imovel.id = :matricula";
-	        if(flagTotalRegistros) {
-	        	retorno =   session.createQuery(consulta).setInteger("matricula", matricula).list();
-	        }else {
-		        retorno = session.createQuery(consulta)
-		                .setInteger("matricula", matricula)
-		                .setFirstResult((pageOffSet) * maxItemPage) 
-		                .setMaxResults(maxItemPage) 
-		                .list();
-	        }
-	    } catch (HibernateException e) {
-	        throw new ErroRepositorioException(e, "Erro no Hibernate");
-	    } finally {
-	        HibernateUtil.closeSession(session);
-	    }
-	    return retorno;
 	}
 
-	
-	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer matricula, Integer situacao)
-			throws ErroRepositorioException {
-		Collection retorno = null;
-		Session session = HibernateUtil.getSession();
-		StringBuilder consulta;
-		try {
-			consulta = new StringBuilder(" SELECT cadastroAguaPara from CadastroAguaPara cadastroAguaPara ")
-					.append("	WHERE cadastroAguaPara.imovel.id = :matricula and ");
-			if (situacao != CadastroAguaPara.TODOS) {
-				consulta.append("cadastroAguaPara.situacao = :situacao");
-				retorno = session.createQuery(consulta.toString()).setInteger("matricula", matricula)
-						.setInteger("situacao", situacao).list();
-			} else {
-				consulta.append("cadastroAguaPara.situacao in (" + CadastroAguaPara.ACEITO + ", "
-						+ CadastroAguaPara.RECUSADO + ", " + CadastroAguaPara.PENDENTE + " ))");
-				retorno = session.createQuery(consulta.toString()).setInteger("matricula", matricula).list();
-			}
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-		return retorno;
-	}
-	
 	public Boolean pesquisarNisCadastroAguaPara(String nis) throws ErroRepositorioException {
 		Boolean retorno = true;
 		Integer resultado = null;

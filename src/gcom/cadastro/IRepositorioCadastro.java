@@ -418,11 +418,9 @@ public interface IRepositorioCadastro {
     
 	public Boolean pesquisarCpfCadastroAguaPara(String cpf) throws ErroRepositorioException;
 	
-	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer situacao) throws ErroRepositorioException;
+	public Integer pesquisarQtddRecadastramentoAguaParaSituacao(Integer idImovel, Integer situacao) throws ErroRepositorioException;
 	
-	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer matricula, Integer situacao) throws ErroRepositorioException;
-	
-	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula, Integer pageOffSet, Integer maxItemPage,Boolean flagTotalRegistros) throws ErroRepositorioException;
+	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer idImovel, Integer situacao, Integer numeroPagina) throws ErroRepositorioException;
 	
 	public CadastroAguaPara pesquisarRecadastramentoAguaParaPorCpf(String cpf) throws ErroRepositorioException;
 

@@ -539,11 +539,9 @@ public interface IControladorCadastro {
 	
 	public Boolean pesquisarCpfCadastroAguaPara(String cpf) throws ControladorException;
 	
-	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer situacao) throws ControladorException;
+	public Integer pesquisarQtddRecadastramentoAguaParaSituacao(Integer idImovel, Integer situacao) throws ControladorException;
 	
-	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer matricula,Integer situacao) throws ControladorException;
-	
-	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula,Integer pageOffSet, Integer maxItemPage, Boolean flagTotalRegistros ) throws ControladorException;
+	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer idImovel, Integer situacao, Integer numeroPagina) throws ControladorException;
 	
 	public CadastroAguaPara pesquisarRecadastramentoAguaParaPorCpf(String cpf) throws ControladorException;
 

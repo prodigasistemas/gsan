@@ -40779,25 +40779,17 @@ public class Fachada {
 		}
 	}
 	
-	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer situacao) {
+	public Integer pesquisarQtddRecadastramentoAguaParaSituacao(Integer idImovel, Integer situacao) {
 		try {
-			return this.getControladorCadastro().pesquisarRecadastramentoAguaParaSituacao(situacao);
+			return this.getControladorCadastro().pesquisarQtddRecadastramentoAguaParaSituacao(idImovel, situacao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 	
-	public Collection pesquisarRecadastramentoAguaParaMatriculaSituacao(Integer idImovel, Integer situacao) {
+	public Collection pesquisarRecadastramentoAguaParaSituacao(Integer idImovel, Integer situacao, Integer numeroPagina) {
 		try {
-			return this.getControladorCadastro().pesquisarRecadastramentoAguaParaMatriculaSituacao(idImovel, situacao);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-	}
-	
-	public Collection pesquisarRecadastramentoAguaParaMatricula(Integer matricula,Integer pageOffSet, Integer maxItemPage,Boolean flagTotalRegistros ) {
-		try {
-			return this.getControladorCadastro().pesquisarRecadastramentoAguaParaMatricula(matricula,pageOffSet,maxItemPage,flagTotalRegistros);
+			return this.getControladorCadastro().pesquisarRecadastramentoAguaParaSituacao(idImovel, situacao, numeroPagina);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
