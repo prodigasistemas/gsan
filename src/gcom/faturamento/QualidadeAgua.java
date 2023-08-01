@@ -41,6 +41,8 @@ public class QualidadeAgua extends ObjetoTransacao{
     
     private BigDecimal numeroIndiceFluor;
     
+    private BigDecimal numeroIndiceEColi;
+    
     private BigDecimal numeroIndiceFerro;
     
     private BigDecimal numeroIndiceColiformesTotais;
@@ -76,6 +78,12 @@ public class QualidadeAgua extends ObjetoTransacao{
     private Integer quantidadeFluorAnalisadas;
     
     private Integer quantidadeFluorConforme;
+    
+    private Integer quantidadeEColiExigidas;
+    
+    private Integer quantidadeEColiAnalisadas;
+    
+    private Integer quantidadeEColiConforme;
     
     private Integer quantidadeColiformesTotaisExigidas;
     
@@ -542,5 +550,37 @@ public class QualidadeAgua extends ObjetoTransacao{
 
 	public void setSistemaAbastecimento(SistemaAbastecimento sistemaAbastecimento) {
 		this.sistemaAbastecimento = sistemaAbastecimento;
+	}
+
+	public BigDecimal getNumeroIndiceEColi() {
+		return numeroIndiceEColi;
+	}
+
+	public void setNumeroIndiceEColi(BigDecimal numeroIndiceEColi) {
+		this.numeroIndiceEColi = numeroIndiceEColi;
+	}
+
+	public Integer getQuantidadeEColiExigidas() {
+		return quantidadeEColiExigidas;
+	}
+
+	public void setQuantidadeEColiExigidas(Integer quantidadeEColiExigidas) {
+		this.quantidadeEColiExigidas = quantidadeEColiExigidas;
+	}
+
+	public Integer getQuantidadeEColiAnalisadas() {
+		return quantidadeEColiAnalisadas;
+	}
+
+	public void setQuantidadeEColiAnalisadas(Integer quantidadeEColiAnalisadas) {
+		this.quantidadeEColiAnalisadas = quantidadeEColiAnalisadas;
+	}
+
+	public Integer getQuantidadeEColiConforme() {
+		return quantidadeEColiConforme;
+	}
+
+	public void setQuantidadeEColiConforme(Integer quantidadeEColiConforme) {
+		this.quantidadeEColiConforme = quantidadeEColiConforme;
 	}
 }

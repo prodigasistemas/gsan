@@ -1878,27 +1878,35 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		contaTxt.append(Util.completaString(qualidade[0], 10));
 		contaTxt.append(Util.completaString(qualidade[1], 10));
 		contaTxt.append(Util.completaString(qualidade[2], 10));
+//		contaTxt.append(Util.completaString(qualidade[25], 10));
 		contaTxt.append(Util.completaString(qualidade[3], 10));
 		contaTxt.append(Util.completaString(qualidade[4], 10));
 		contaTxt.append(Util.completaString(qualidade[5], 10));
+//		contaTxt.append(Util.completaString("", 10));
 		contaTxt.append(Util.completaString(qualidade[6], 10));
 		contaTxt.append(Util.completaString(qualidade[7], 10));
 		contaTxt.append(Util.completaString(qualidade[8], 10));
+//		contaTxt.append(Util.completaString(qualidade[26], 10));
 		contaTxt.append(Util.completaString(qualidade[9], 10));
 		contaTxt.append(Util.completaString(qualidade[10], 10));
 		contaTxt.append(Util.completaString(qualidade[11], 10));
+//		contaTxt.append(Util.completaString("", 10));
 		contaTxt.append(Util.completaString(qualidade[12], 10));
 		contaTxt.append(Util.completaString(qualidade[13], 10));
 		contaTxt.append(Util.completaString(qualidade[14], 10));
+//		contaTxt.append(Util.completaString(qualidade[27], 10));
 		contaTxt.append(Util.completaString(qualidade[15], 10));
 		contaTxt.append(Util.completaString(qualidade[16], 10));
 		contaTxt.append(Util.completaString(qualidade[17], 10));
+//		contaTxt.append(Util.completaString("", 10));
 		contaTxt.append(Util.completaString(qualidade[18], 10));
 		contaTxt.append(Util.completaString(qualidade[19], 10));
 		contaTxt.append(Util.completaString(qualidade[20], 10));
+//		contaTxt.append(Util.completaString(qualidade[28], 10));
 		contaTxt.append(Util.completaString(qualidade[21], 10));
 		contaTxt.append(Util.completaString(qualidade[22], 10));
 		contaTxt.append(Util.completaString(qualidade[23], 10));
+//		contaTxt.append(Util.completaString("", 10));
 
 		return contaTxt;
 	}
@@ -2079,11 +2087,12 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 	public String[] obterDadosQualidadeAguaCosanpa(EmitirContaHelper emitirConta, Integer idQuadraFace)
 			throws ControladorException {
 
-		String[] retornoQualidade = new String[25];
+		String[] retornoQualidade = new String[29];
 
 		String padraoCor = "";
 		String padraoTurbidez = "";
 		String padraoFluor = "";
+		String padraoEColi = "";
 		String padraoCloro = "";
 		String padraoColiformesTotais = "";
 		String padraoColiformesTermotolerantes = "";
@@ -2091,6 +2100,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		String exigidaCor = "";
 		String exigidaTurbidez = "";
 		String exigidaFluor = "";
+		String exigidaEColi = "";
 		String exigidaCloro = "";
 		String exigidaColiformesTotais = "";
 		String exigidaColiformesTermotolerantes = "";
@@ -2098,6 +2108,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		String analisadaCor = "";
 		String analisadaTurbidez = "";
 		String analisadaFluor = "";
+		String analisadaEColi = "";
 		String analisadaCloro = "";
 		String analisadaColiformesTotais = "";
 		String analisadaColiformesTermotolerantes = "";
@@ -2105,6 +2116,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		String emConformidadeCor = "";
 		String emConformidadeTurbidez = "";
 		String emConformidadeFluor = "";
+		String emConformidadeEColi = "";
 		String emConformidadeCloro = "";
 		String emConformidadeColiformesTotais = "";
 		String emConformidadeColiformesTermotolerantes = "";
@@ -2123,6 +2135,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			padraoCor = qualidadePadrao.getDescricaoPadraoCor();
 			padraoTurbidez = qualidadePadrao.getDescricaoPadraoTurbidez();
 			padraoFluor = qualidadePadrao.getDescricaoPadraoFluor();
+			padraoEColi = qualidadePadrao.getDescricaoPadraoEColi();
 			padraoCloro = qualidadePadrao.getDescricaoPadraoCloro();
 			padraoColiformesTotais = qualidadePadrao.getDescricaoPadraoColiformesTotais();
 			padraoColiformesTermotolerantes = qualidadePadrao.getDescricaoPadraoColiformesTermotolerantes();
@@ -2224,6 +2237,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 			if (qualidadeAgua.getQuantidadeFluorExigidas() != null) {
 				exigidaFluor = qualidadeAgua.getQuantidadeFluorExigidas() + "";
 			}
+			
+			if (qualidadeAgua.getQuantidadeEColiExigidas() != null) {
+				exigidaEColi = qualidadeAgua.getQuantidadeEColiExigidas() + "";
+			}
 
 			if (qualidadeAgua.getQuantidadeCloroExigidas() != null) {
 				exigidaCloro = qualidadeAgua.getQuantidadeCloroExigidas() + "";
@@ -2247,6 +2264,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 			if (qualidadeAgua.getQuantidadeFluorAnalisadas() != null) {
 				analisadaFluor = qualidadeAgua.getQuantidadeFluorAnalisadas() + "";
+			}
+			
+			if (qualidadeAgua.getQuantidadeEColiAnalisadas() != null) {
+				analisadaEColi = qualidadeAgua.getQuantidadeEColiAnalisadas() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeCloroAnalisadas() != null) {
@@ -2272,6 +2293,10 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 
 			if (qualidadeAgua.getQuantidadeFluorConforme() != null) {
 				emConformidadeFluor = qualidadeAgua.getQuantidadeFluorConforme() + "";
+			}
+			
+			if (qualidadeAgua.getQuantidadeEColiConforme() != null) {
+				emConformidadeEColi = qualidadeAgua.getQuantidadeEColiConforme() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeCloroConforme() != null) {
@@ -2324,6 +2349,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		retornoQualidade[23] = emConformidadeColiformesTermotolerantes;
 
 		retornoQualidade[24] = tipoCaptacao;
+		
+		retornoQualidade[25] = padraoEColi;
+		retornoQualidade[26] = exigidaEColi;
+		retornoQualidade[27] = analisadaEColi;
+		retornoQualidade[28] = emConformidadeEColi;
 
 		return retornoQualidade;
 	}
@@ -3917,6 +3947,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		emitirContaHelper.setPadraoFluor(qualidadeAgua[2]);
 		emitirContaHelper.setPadraoColiformesTotais(qualidadeAgua[4]);
 		emitirContaHelper.setPadraoColiformesfecais(qualidadeAgua[5]);
+		emitirContaHelper.setPadraoEColi(qualidadeAgua[25]);
 
 		// Exigido
 		emitirContaHelper.setValorExigidoCor(qualidadeAgua[6]);
@@ -3925,6 +3956,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		emitirContaHelper.setValorExigidoFluor(qualidadeAgua[8]);
 		emitirContaHelper.setValorExigidoColiformesTotais(qualidadeAgua[10]);
 		emitirContaHelper.setValorExigidoColiformesTermotolerantes(qualidadeAgua[11]);
+		emitirContaHelper.setValorExigidoEColi(qualidadeAgua[26]);
 
 		// Analisado
 		emitirContaHelper.setValorMedioCor(qualidadeAgua[12]);
@@ -3933,6 +3965,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		emitirContaHelper.setValorMedioFluor(qualidadeAgua[14]);
 		emitirContaHelper.setValorMedioColiformesTotais(qualidadeAgua[16]);
 		emitirContaHelper.setValorMedioColiformesfecais(qualidadeAgua[17]);
+		emitirContaHelper.setValorMedioEColi(qualidadeAgua[27]);
 
 		// Conforme
 		emitirContaHelper.setValorConformeCor(qualidadeAgua[18]);
@@ -3941,6 +3974,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento im
 		emitirContaHelper.setValorConformeFluor(qualidadeAgua[20]);
 		emitirContaHelper.setValorConformeColiformesTotais(qualidadeAgua[22]);
 		emitirContaHelper.setValorConformeColiformesTermotolerantes(qualidadeAgua[23]);
+		emitirContaHelper.setValorConformeEColi(qualidadeAgua[28]);
 
 		return emitirContaHelper;
 	}

@@ -21,6 +21,7 @@
 		<property name="numeroIndicePh" type="java.math.BigDecimal" column="qlag_nnindiceph" not-null="false" length="5"/>
 		<property name="numeroIndiceCor" type="java.math.BigDecimal" column="qlag_nnindicecor" not-null="false" length="5"/>
 		<property name="numeroIndiceFluor" type="java.math.BigDecimal" column="qlag_nnindicefluor" not-null="false" length="5"/>
+		<property name="numeroIndiceEColi" type="java.math.BigDecimal" column="qlag_nnindiceecoli" not-null="false" length="5"/>
 		<property name="numeroIndiceFerro" type="java.math.BigDecimal" column="qlag_nnindiceferro" not-null="false" length="5"/>
 		<property name="numeroIndiceColiformesTotais" type="java.math.BigDecimal" column="qlag_nnindicecoliformestotais" not-null="false" length="5"/>
 		<property name="numeroIndiceColiformesFecais" type="java.math.BigDecimal" column="qlag_nnindicecoliformesfecais" not-null="false" length="5"/>
@@ -40,6 +41,9 @@
 		<property name="quantidadeFluorExigidas" type="java.lang.Integer" column="qlag_qtfluorexigidas" length="4"/>
 		<property name="quantidadeFluorAnalisadas" type="java.lang.Integer" column="qlag_qtfluoranalisadas" length="4"/>
 		<property name="quantidadeFluorConforme" type="java.lang.Integer" column="qlag_qtfluorconforme" length="4"/>
+		<property name="quantidadeEColiExigidas" type="java.lang.Integer" column="qlag_qtecoliexigidas" length="4"/>
+		<property name="quantidadeEColiAnalisadas" type="java.lang.Integer" column="qlag_qtecolianalisadas" length="4"/>
+		<property name="quantidadeEColiConforme" type="java.lang.Integer" column="qlag_qtecoliconforme" length="4"/>
 		<property name="quantidadeColiformesTotaisExigidas" type="java.lang.Integer" column="qlag_qtcoliftotexigidas" length="4"/>
 		<property name="quantidadeColiformesTotaisAnalisadas" type="java.lang.Integer" column="qlag_qtcoliftotanls" length="4"/>
 		<property name="quantidadeColiformesTotaisConforme" type="java.lang.Integer" column="qlag_qtcoliftotconforme" length="4"/>

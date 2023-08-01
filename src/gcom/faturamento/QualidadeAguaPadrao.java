@@ -25,8 +25,8 @@ public class QualidadeAguaPadrao implements Serializable {	private static final
     private String descricaoPadraoCloro;
 
     /** nullable persistent field */
-    private String descricaoPadraoFluor;
-
+    private String descricaoPadraoFluor;        
+    /** nullable persistent field */	private String descricaoPadraoEColi;    
     /** nullable persistent field */
     private String descricaoPadraoFerro;
 
@@ -49,13 +49,13 @@ public class QualidadeAguaPadrao implements Serializable {	private static final
     private String descricaoPadraoAlcalinidade;
 
 	/** full constructor */
-    public QualidadeAguaPadrao(Integer id, String descricaoPadraoTurbidez, String descricaoPadraoPh, String descricaoPadraoCor, String descricaoPadraoCloro, String descricaoPadraoFluor, String descricaoPadraoFerro, String descricaoPadraoColiformesTotais, String descricaoPadraoColiformesFecais, Date ultimaAlteracao) {
+    public QualidadeAguaPadrao(Integer id, String descricaoPadraoTurbidez, String descricaoPadraoPh, String descricaoPadraoCor, String descricaoPadraoCloro, String descricaoPadraoFluor, String descricaoPadraoEColi, String descricaoPadraoFerro, String descricaoPadraoColiformesTotais, String descricaoPadraoColiformesFecais, Date ultimaAlteracao) {
         this.id = id;
         this.descricaoPadraoTurbidez = descricaoPadraoTurbidez;
         this.descricaoPadraoPh = descricaoPadraoPh;
         this.descricaoPadraoCor = descricaoPadraoCor;
         this.descricaoPadraoCloro = descricaoPadraoCloro;
-        this.descricaoPadraoFluor = descricaoPadraoFluor;
+        this.descricaoPadraoFluor = descricaoPadraoFluor;                this.descricaoPadraoEColi = descricaoPadraoEColi;
         this.descricaoPadraoFerro = descricaoPadraoFerro;
         this.descricaoPadraoColiformesTotais = descricaoPadraoColiformesTotais;
         this.descricaoPadraoColiformesFecais = descricaoPadraoColiformesFecais;
@@ -186,5 +186,5 @@ public class QualidadeAguaPadrao implements Serializable {	private static final
 
 	public void setDescricaoPadraoAlcalinidade(String descricaoPadraoAlcalinidade) {
 		this.descricaoPadraoAlcalinidade = descricaoPadraoAlcalinidade;
-	}
+	}	public String getDescricaoPadraoEColi() {		return descricaoPadraoEColi;	}	public void setDescricaoPadraoEColi(String descricaoPadraoEColi) {		this.descricaoPadraoEColi = descricaoPadraoEColi;	}
 }

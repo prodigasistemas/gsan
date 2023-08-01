@@ -1806,7 +1806,6 @@ public class UC0745GerarArquivoTextoFaturamento {
 			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, "" + consumoMinimoImovel));
 		} else {
 			arquivoTextoRegistroTipo01.append(Util.adicionarZerosEsquedaNumero(6, ""));
-
 		}
 
 		// CONSUMO MINIMO IM�VEL N�O MEDIDO
@@ -4606,9 +4605,17 @@ public class UC0745GerarArquivoTextoFaturamento {
 							.completaString("", 20));
 				}
 				// Fluor
-				if (qualidadeAguaPadrao.getDescricaoPadraoFluor() != null) {
+//				if (qualidadeAguaPadrao.getDescricaoPadraoFluor() != null) {
+//					arquivoTextoQualidadeAgua.append(Util.completaString(
+//							qualidadeAguaPadrao.getDescricaoPadraoFluor(), 20));
+//				} else {
+//					arquivoTextoQualidadeAgua.append(Util
+//							.completaString("", 20));
+//				}
+				//EColi
+				if(qualidadeAguaPadrao.getDescricaoPadraoEColi() != null){
 					arquivoTextoQualidadeAgua.append(Util.completaString(
-							qualidadeAguaPadrao.getDescricaoPadraoFluor(), 20));
+							qualidadeAguaPadrao.getDescricaoPadraoEColi(), 20));
 				} else {
 					arquivoTextoQualidadeAgua.append(Util
 							.completaString("", 20));
@@ -4648,21 +4655,21 @@ public class UC0745GerarArquivoTextoFaturamento {
 							.completaString("", 20));
 				}
 				// Coliformes Termo Tolerantes
-				if (qualidadeAguaPadrao
-						.getDescricaoPadraoColiformesTermotolerantes() != null) {
-					arquivoTextoQualidadeAgua
-							.append(Util.completaString(
-									qualidadeAguaPadrao
-											.getDescricaoPadraoColiformesTermotolerantes(),
-									20));
-				} else {
+//				if (qualidadeAguaPadrao
+//						.getDescricaoPadraoColiformesTermotolerantes() != null) {
+//					arquivoTextoQualidadeAgua
+//							.append(Util.completaString(
+//									qualidadeAguaPadrao
+//											.getDescricaoPadraoColiformesTermotolerantes(),
+//									20));
+//				} else {
 					arquivoTextoQualidadeAgua.append(Util
 							.completaString("", 20));
-				}
+//				}
 			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString("", 200));
 			}
-		} else {
+	    } else {
 			arquivoTextoQualidadeAgua.append(Util.completaString("", 200));
 		}
 
@@ -4825,10 +4832,18 @@ public class UC0745GerarArquivoTextoFaturamento {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 5));
 			}
 			// fluor
-			if (qualidadeAgua.getNumeroIndiceFluor() != null
-					&& !qualidadeAgua.getNumeroIndiceFluor().equals(0)) {
+//			if (qualidadeAgua.getNumeroIndiceFluor() != null
+//					&& !qualidadeAgua.getNumeroIndiceFluor().equals(0)) {
+//				arquivoTextoQualidadeAgua.append(Util.completaString(
+//						qualidadeAgua.getNumeroIndiceFluor().toString(), 5));
+//			} else {
+//				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 5));
+//			}
+			// EColi
+			if (qualidadeAgua.getNumeroIndiceEColi() != null
+					&& !qualidadeAgua.getNumeroIndiceEColi().equals(0)) {
 				arquivoTextoQualidadeAgua.append(Util.completaString(
-						qualidadeAgua.getNumeroIndiceFluor().toString(), 5));
+						qualidadeAgua.getNumeroIndiceEColi().toString(), 5));
 			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 5));
 			}
@@ -4869,17 +4884,17 @@ public class UC0745GerarArquivoTextoFaturamento {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 5));
 			}
 			// Coliformes Termo Tolerantes
-			if (qualidadeAgua.getNumeroIndiceColiformesTermotolerantes() != null
-					&& !qualidadeAgua
-							.getNumeroIndiceColiformesTermotolerantes().equals(
-									0)) {
-				arquivoTextoQualidadeAgua.append(Util.completaString(
-						qualidadeAgua
-								.getNumeroIndiceColiformesTermotolerantes()
-								.toString(), 5));
-			} else {
+//			if (qualidadeAgua.getNumeroIndiceColiformesTermotolerantes() != null
+//					&& !qualidadeAgua
+//							.getNumeroIndiceColiformesTermotolerantes().equals(
+//									0)) {
+//				arquivoTextoQualidadeAgua.append(Util.completaString(
+//						qualidadeAgua
+//								.getNumeroIndiceColiformesTermotolerantes()
+//								.toString(), 5));
+//			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 5));
-			}
+//			}
 			// fonte
 			if (qualidadeAgua.getFonteCaptacao() != null) {
 				arquivoTextoQualidadeAgua.append(Util.completaString(
@@ -4907,9 +4922,15 @@ public class UC0745GerarArquivoTextoFaturamento {
 			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
 			}
-			if (qualidadeAgua.getQuantidadeFluorExigidas() != null) {
+//			if (qualidadeAgua.getQuantidadeFluorExigidas() != null) {
+//				arquivoTextoQualidadeAgua.append(Util.completaString(
+//						qualidadeAgua.getQuantidadeFluorExigidas() + "", 6));
+//			} else {
+//				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
+//			}
+			if (qualidadeAgua.getQuantidadeEColiExigidas() != null) {
 				arquivoTextoQualidadeAgua.append(Util.completaString(
-						qualidadeAgua.getQuantidadeFluorExigidas() + "", 6));
+						qualidadeAgua.getQuantidadeEColiExigidas() + "", 6));
 			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
 			}
@@ -4927,15 +4948,15 @@ public class UC0745GerarArquivoTextoFaturamento {
 			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
 			}
-			if (qualidadeAgua.getQuantidadeColiformesTermotolerantesExigidas() != null) {
-				arquivoTextoQualidadeAgua
-						.append(Util.completaString(
-								qualidadeAgua
-										.getQuantidadeColiformesTermotolerantesExigidas()
-										+ "", 6));
-			} else {
+//			if (qualidadeAgua.getQuantidadeColiformesTermotolerantesExigidas() != null) {
+//				arquivoTextoQualidadeAgua
+//						.append(Util.completaString(
+//								qualidadeAgua
+//										.getQuantidadeColiformesTermotolerantesExigidas()
+//										+ "", 6));
+//			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
-			}
+//			}
 			// Analisadas
 			if (qualidadeAgua.getQuantidadeTurbidezAnalisadas() != null) {
 				arquivoTextoQualidadeAgua
@@ -4957,9 +4978,15 @@ public class UC0745GerarArquivoTextoFaturamento {
 			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
 			}
-			if (qualidadeAgua.getQuantidadeFluorAnalisadas() != null) {
+//			if (qualidadeAgua.getQuantidadeFluorAnalisadas() != null) {
+//				arquivoTextoQualidadeAgua.append(Util.completaString(
+//						qualidadeAgua.getQuantidadeFluorAnalisadas() + "", 6));
+//			} else {
+//				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
+//			}
+			if (qualidadeAgua.getQuantidadeEColiAnalisadas() != null) {
 				arquivoTextoQualidadeAgua.append(Util.completaString(
-						qualidadeAgua.getQuantidadeFluorAnalisadas() + "", 6));
+						qualidadeAgua.getQuantidadeEColiAnalisadas() + "", 6));
 			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
 			}
@@ -4977,16 +5004,16 @@ public class UC0745GerarArquivoTextoFaturamento {
 			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
 			}
-			if (qualidadeAgua
-					.getQuantidadeColiformesTermotolerantesAnalisadas() != null) {
-				arquivoTextoQualidadeAgua
-						.append(Util.completaString(
-								qualidadeAgua
-										.getQuantidadeColiformesTermotolerantesAnalisadas()
-										+ "", 6));
-			} else {
+//			if (qualidadeAgua
+//					.getQuantidadeColiformesTermotolerantesAnalisadas() != null) {
+//				arquivoTextoQualidadeAgua
+//						.append(Util.completaString(
+//								qualidadeAgua
+//										.getQuantidadeColiformesTermotolerantesAnalisadas()
+//										+ "", 6));
+//			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
-			}
+//			}
 
 			// Em Conformidade
 			if (qualidadeAgua.getQuantidadeTurbidezConforme() != null) {
@@ -5007,9 +5034,15 @@ public class UC0745GerarArquivoTextoFaturamento {
 			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
 			}
-			if (qualidadeAgua.getQuantidadeFluorConforme() != null) {
+//			if (qualidadeAgua.getQuantidadeFluorConforme() != null) {
+//				arquivoTextoQualidadeAgua.append(Util.completaString(
+//						qualidadeAgua.getQuantidadeFluorConforme() + "", 6));
+//			} else {
+//				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
+//			}
+			if (qualidadeAgua.getQuantidadeEColiConforme() != null) {
 				arquivoTextoQualidadeAgua.append(Util.completaString(
-						qualidadeAgua.getQuantidadeFluorConforme() + "", 6));
+						qualidadeAgua.getQuantidadeEColiConforme() + "", 6));
 			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
 			}
@@ -5027,15 +5060,15 @@ public class UC0745GerarArquivoTextoFaturamento {
 			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
 			}
-			if (qualidadeAgua.getQuantidadeColiformesTermotolerantesConforme() != null) {
-				arquivoTextoQualidadeAgua
-						.append(Util.completaString(
-								qualidadeAgua
-										.getQuantidadeColiformesTermotolerantesConforme()
-										+ "", 6));
-			} else {
+//			if (qualidadeAgua.getQuantidadeColiformesTermotolerantesConforme() != null) {
+//				arquivoTextoQualidadeAgua
+//						.append(Util.completaString(
+//								qualidadeAgua
+//										.getQuantidadeColiformesTermotolerantesConforme()
+//										+ "", 6));
+//			} else {
 				arquivoTextoQualidadeAgua.append(Util.completaString(" ", 6));
-			}
+//			}
 		} else {
 			arquivoTextoQualidadeAgua.append(Util.completaString("", 212));
 		}

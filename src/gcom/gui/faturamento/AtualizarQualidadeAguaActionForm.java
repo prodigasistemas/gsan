@@ -60,6 +60,10 @@ public class AtualizarQualidadeAguaActionForm extends ValidatorActionForm {
 	private String indiceMensalFluor;
 
 	private String padraoFluor;
+	
+	private String indiceMensalEColi;
+
+	private String padraoEColi;
 
 	private String indiceMensalFerro;
 
@@ -104,6 +108,12 @@ public class AtualizarQualidadeAguaActionForm extends ValidatorActionForm {
 	private String quantidadeFluorAnalisadas;
 
 	private String quantidadeFluorConforme;
+	
+	private String quantidadeEColiExigidas;
+
+	private String quantidadeEColiAnalisadas;
+
+	private String quantidadeEColiConforme;
 
 	private String quantidadeColiformesTotaisExigidas;
 
@@ -515,6 +525,15 @@ public class AtualizarQualidadeAguaActionForm extends ValidatorActionForm {
 			qualidadeAgua.setNumeroIndiceFluor(Util
 					.formatarMoedaRealparaBigDecimal(getIndiceMensalFluor()));
 		}
+		
+		// EColi
+
+		if (getIndiceMensalEColi() != null
+						&& !getIndiceMensalEColi().equals("")) {
+
+			qualidadeAgua.setNumeroIndiceEColi(Util
+							.formatarMoedaRealparaBigDecimal(getIndiceMensalEColi()));
+		}
 
 		// Ferro
 
@@ -707,6 +726,39 @@ public class AtualizarQualidadeAguaActionForm extends ValidatorActionForm {
 					getQuantidadeFluorConforme()));
 		}else{
 			qualidadeAgua.setQuantidadeFluorConforme(null);
+		}
+		
+		// Quantidade EColi Exigidas
+
+		if (getQuantidadeEColiExigidas() != null
+						&& !getQuantidadeEColiExigidas().equals("")) {
+
+					qualidadeAgua.setQuantidadeEColiExigidas(new Integer(
+							getQuantidadeEColiExigidas()));
+		}else{
+					qualidadeAgua.setQuantidadeEColiExigidas(null);
+		}
+
+		// Quantidade EColi Analisadas
+
+		if (getQuantidadeEColiAnalisadas() != null
+						&& !getQuantidadeEColiAnalisadas().equals("")) {
+
+					qualidadeAgua.setQuantidadeEColiAnalisadas(new Integer(
+							getQuantidadeEColiAnalisadas()));
+		}else{
+					qualidadeAgua.setQuantidadeEColiAnalisadas(null);
+		}
+
+		// Quantidade EColi Conforme
+
+		if (getQuantidadeEColiConforme() != null
+						&& !getQuantidadeEColiConforme().equals("")) {
+
+					qualidadeAgua.setQuantidadeEColiConforme(new Integer(
+							getQuantidadeEColiConforme()));
+		}else{
+					qualidadeAgua.setQuantidadeEColiConforme(null);
 		}
 
 		// Quantidade Coliformes Totais Exigidas
@@ -1069,6 +1121,46 @@ public class AtualizarQualidadeAguaActionForm extends ValidatorActionForm {
 
 	public void setPadraoAlcalinidade(String padraoAlcalinidade) {
 		this.padraoAlcalinidade = padraoAlcalinidade;
+	}
+
+	public String getIndiceMensalEColi() {
+		return indiceMensalEColi;
+	}
+
+	public void setIndiceMensalEColi(String indiceMensalEColi) {
+		this.indiceMensalEColi = indiceMensalEColi;
+	}
+
+	public String getPadraoEColi() {
+		return padraoEColi;
+	}
+
+	public void setPadraoEColi(String padraoEColi) {
+		this.padraoEColi = padraoEColi;
+	}
+
+	public String getQuantidadeEColiExigidas() {
+		return quantidadeEColiExigidas;
+	}
+
+	public void setQuantidadeEColiExigidas(String quantidadeEColiExigidas) {
+		this.quantidadeEColiExigidas = quantidadeEColiExigidas;
+	}
+
+	public String getQuantidadeEColiAnalisadas() {
+		return quantidadeEColiAnalisadas;
+	}
+
+	public void setQuantidadeEColiAnalisadas(String quantidadeEColiAnalisadas) {
+		this.quantidadeEColiAnalisadas = quantidadeEColiAnalisadas;
+	}
+
+	public String getQuantidadeEColiConforme() {
+		return quantidadeEColiConforme;
+	}
+
+	public void setQuantidadeEColiConforme(String quantidadeEColiConforme) {
+		this.quantidadeEColiConforme = quantidadeEColiConforme;
 	}
 
 }

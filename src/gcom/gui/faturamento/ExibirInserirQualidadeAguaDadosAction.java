@@ -190,6 +190,14 @@ public class ExibirInserirQualidadeAguaDadosAction extends GcomAction {
 				} else {
 					form.setPadraoFluor("");
 				}
+				
+				if (qualidadeAguaPadrao.getDescricaoPadraoEColi() != null && 
+						!qualidadeAguaPadrao.getDescricaoPadraoEColi().equals("")) {
+
+						form.setPadraoEColi(qualidadeAguaPadrao.getDescricaoPadraoEColi());
+					} else {
+						form.setPadraoEColi("");
+					}
 
 				if (qualidadeAguaPadrao.getDescricaoPadraoFerro() != null && 
 					!qualidadeAguaPadrao.getDescricaoPadraoFerro().equals("")) {
@@ -247,6 +255,7 @@ public class ExibirInserirQualidadeAguaDadosAction extends GcomAction {
 				form.setPadraoPH("");
 				form.setPadraoCor("");
 				form.setPadraoFluor("");
+				form.setPadraoEColi("");
 				form.setPadraoFerro("");
 				form.setPadraoColiformesTotais("");
 				form.setPadraoColiformesFecais("");

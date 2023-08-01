@@ -502,6 +502,17 @@
 							size="5" maxlength="20" readonly="true"
 							style="background-color:#EFEFEF; border:0;" /></td>
 					</tr>
+					
+					<tr>
+						<td><strong>EColi:</strong></td>
+						<td align="center"><strong>Índice mensal:</strong> <html:text
+							property="indiceMensalEColi" size="5" maxlength="20"
+							readonly="true" style="background-color:#EFEFEF; border:0;"
+							onkeypress="return isCampoNumerico(event);" /></td>
+						<td><strong>Padrão:</strong> <html:text property="padraoEColi"
+							size="5" maxlength="20" readonly="true"
+							style="background-color:#EFEFEF; border:0;" /></td>
+					</tr>
 
 					<tr>
 						<td><strong>Ferro:</strong></td>
@@ -790,6 +801,16 @@
 							onkeyup="formataValorMonetario(this, 5)" 
 							onkeypress="return isCampoNumerico(event);"/></td>
 						<td><strong>Padrão:</strong> <html:text property="padraoFluor"
+							size="20" maxlength="20" tabindex="15" /></td>
+					</tr>
+					
+					<tr>
+						<td><strong>EColi:</strong></td>
+						<td align="center"><strong>Índice mensal:</strong> <html:text
+							property="indiceMensalEColi" size="5" maxlength="6" tabindex="14"
+							onkeyup="formataValorMonetario(this, 5)" 
+							onkeypress="return isCampoNumerico(event);"/></td>
+						<td><strong>Padrão:</strong> <html:text property="padraoEColi"
 							size="20" maxlength="20" tabindex="15" /></td>
 					</tr>
 

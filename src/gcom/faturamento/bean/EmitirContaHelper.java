@@ -125,6 +125,7 @@ public class EmitirContaHelper implements Serializable {
 	private String valorMedioCor;
 	private String valorMedioCloro;
 	private String valorMedioFluor;
+	private String valorMedioEColi;
 	private String valorMedioFerro;
 	private String valorMedioColiformesTotais;
 	private String valorMedioColiformesfecais;
@@ -132,6 +133,7 @@ public class EmitirContaHelper implements Serializable {
 	private String padraoCor;
 	private String padraoCloro;
 	private String padraoFluor;
+	private String padraoEColi;
 	private String padraoFerro;
 	private String padraoColiformesTotais;
 	private String padraoColiformesfecais;
@@ -139,11 +141,13 @@ public class EmitirContaHelper implements Serializable {
 	private String valorExigidoTurbidez;
 	private String valorExigidoCloro;
 	private String valorExigidoFluor;
+	private String valorExigidoEColi;
 	private String valorExigidoColiformesTotais;
 	private String valorExigidoColiformesTermotolerantes;
 	private String valorConformeCor;
 	private String valorConformeTurbidez;
 	private String valorConformeFluor;
+	private String valorConformeEColi;
 	private String valorConformeCloro;
 	private String valorConformeColiformesTotais;
 	private String valorConformeColiformesTermotolerantes;
@@ -2117,5 +2121,37 @@ public class EmitirContaHelper implements Serializable {
 
 	public void setMensagemParcelamento(String mensagemParcelamento) {
 		this.mensagemParcelamento = mensagemParcelamento;
+	}
+
+	public String getValorMedioEColi() {
+		return valorMedioEColi;
+	}
+
+	public void setValorMedioEColi(String valorMedioEColi) {
+		this.valorMedioEColi = valorMedioEColi;
+	}
+
+	public String getPadraoEColi() {
+		return padraoEColi;
+	}
+
+	public void setPadraoEColi(String padraoEColi) {
+		this.padraoEColi = padraoEColi;
+	}
+
+	public String getValorExigidoEColi() {
+		return valorExigidoEColi;
+	}
+
+	public void setValorExigidoEColi(String valorExigidoEColi) {
+		this.valorExigidoEColi = valorExigidoEColi;
+	}
+
+	public String getValorConformeEColi() {
+		return valorConformeEColi;
+	}
+
+	public void setValorConformeEColi(String valorConformeEColi) {
+		this.valorConformeEColi = valorConformeEColi;
 	}
 }
