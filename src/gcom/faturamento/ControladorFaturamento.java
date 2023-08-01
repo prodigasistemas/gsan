@@ -12678,12 +12678,24 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							}
 						}
 
+						Integer leituraFaturamento = movimentoContaPrefaturadaEsgoto.getLeituraFaturamento();
+						Integer consumoMedido = movimentoContaPrefaturadaEsgoto.getConsumoMedido();
+						
+						if (leituraFaturamento != null && consumoMedido != null || !getControladorImovel()
+								.isImovelHidrometrado(movimentoContaPrefaturadaEsgoto.getImovel().getId())) {
 						repositorioFaturamento
 								.atualizarMedicaoHistoricoMovimentoCelular(movimentoContaPrefaturadaEsgoto);
 
 						repositorioFaturamento.atualizarConsumoHistoricoMovimentoCelular(
 								movimentoContaPrefaturadaEsgoto, consumoEsgotoMovimentoCelular,
 								idConsumoHistoricoEsgotoMacro, consumoImovelVinculadosCondominioEsgoto);
+						
+						} else if (leituraFaturamento == null && consumoMedido == null || getControladorImovel()
+								.isImovelHidrometrado(movimentoContaPrefaturadaEsgoto.getImovel().getId())) {
+							// Criar um colecao para ser populada
+							ImovelNaoFaturadoRetornoIsDTO imovelCorrompido = ErroRetornoIS.lancarErroSemLeituraConsumoTipo(movimentoContaPrefaturadaEsgoto.getImovel());
+							listaImoveisCorrompidos.add(imovelCorrompido);
+						}
 
 					} catch (ErroRepositorioException ex) {
 						ex.printStackTrace();

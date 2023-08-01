@@ -441,25 +441,45 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
 						}
 					}
 				}
-			} else if (listaImoveisCorrompidos != null && !listaImoveisCorrompidos.isEmpty()) { 
+			} else if (listaImoveisCorrompidos != null && !listaImoveisCorrompidos.isEmpty()) {
 				mensagemAtualizacao = mensagemPrincipalImovelCorrompido;
 				mensagemAtualizacao += "<br />";
 				mensagemAtualizacao += "<br />";
 				mensagemAtualizacao += "Imóveis: ";
-				for(ImovelNaoFaturadoRetornoIsDTO imovelCorrompido : listaImoveisCorrompidos) {
+				for (ImovelNaoFaturadoRetornoIsDTO imovelCorrompido : listaImoveisCorrompidos) {
 					mensagemAtualizacao += "<br />";
 					mensagemAtualizacao += imovelCorrompido.getImovel().getId() + " " + imovelCorrompido.getDescricao();
 					FiltroMovimentoContaPrefaturada filtroContaPrefaturada = new FiltroMovimentoContaPrefaturada();
-					filtroContaPrefaturada.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.MATRICULA, imovelCorrompido.getImovel().getId().toString()));
-					filtroContaPrefaturada.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.ANO_MES_REFERENCIA_PRE_FATURAMENTO, anoMesReferencia));
-					MovimentoContaPrefaturada movimentoContaPrefaturada = (MovimentoContaPrefaturada) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroContaPrefaturada, MovimentoContaPrefaturada.class.getName()));
-					
-					FiltroMovimentoContaPrefaturadaCategoria filtroContaPrefaturadaCategoria = new FiltroMovimentoContaPrefaturadaCategoria();
-					filtroContaPrefaturadaCategoria.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturadaCategoria.MOVIMENTO_CONTA_PREFATURADA_ID, movimentoContaPrefaturada.getId()));
-					MovimentoContaPrefaturadaCategoria movimentoContaPrefaturadaCategoria = (MovimentoContaPrefaturadaCategoria) Util.retonarObjetoDeColecao(fachada.pesquisar(filtroContaPrefaturadaCategoria, MovimentoContaPrefaturadaCategoria.class.getName()));
-					
-					fachada.remover(movimentoContaPrefaturadaCategoria);
-					fachada.remover(movimentoContaPrefaturada);
+					filtroContaPrefaturada
+							.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.MATRICULA,
+									imovelCorrompido.getImovel().getId().toString()));
+					filtroContaPrefaturada.adicionarParametro(new ParametroSimples(
+							FiltroMovimentoContaPrefaturada.ANO_MES_REFERENCIA_PRE_FATURAMENTO, anoMesReferencia));
+					Collection<MovimentoContaPrefaturada> movimentoContaPrefaturada = fachada
+							.pesquisar(filtroContaPrefaturada, MovimentoContaPrefaturada.class.getName());
+
+					Collection<MovimentoContaPrefaturadaCategoria> movimentoContaPrefaturadaCategoriaCollection = new ArrayList();
+
+					for (MovimentoContaPrefaturada movContaPreFaturada : movimentoContaPrefaturada) {
+						FiltroMovimentoContaPrefaturadaCategoria filtroContaPrefaturadaCategoria = new FiltroMovimentoContaPrefaturadaCategoria();
+						filtroContaPrefaturadaCategoria.adicionarParametro(new ParametroSimples(
+								FiltroMovimentoContaPrefaturadaCategoria.MOVIMENTO_CONTA_PREFATURADA_ID,
+								movContaPreFaturada.getId()));
+						Collection<MovimentoContaPrefaturadaCategoria> movimentoContaPrefaturadaCategoria = fachada
+								.pesquisar(filtroContaPrefaturadaCategoria,
+										MovimentoContaPrefaturadaCategoria.class.getName());
+						if (!movimentoContaPrefaturadaCategoria.isEmpty()
+								&& movimentoContaPrefaturadaCategoria != null) {
+							movimentoContaPrefaturadaCategoriaCollection.addAll(movimentoContaPrefaturadaCategoria);
+						}
+					}
+
+					for (MovimentoContaPrefaturadaCategoria movContaPreFaturadaCategoria : movimentoContaPrefaturadaCategoriaCollection) {
+						fachada.remover(movContaPreFaturadaCategoria);
+					}
+					for (MovimentoContaPrefaturada movContaPreFaturada : movimentoContaPrefaturada) {
+						fachada.remover(movContaPreFaturada);
+					}
 				}
 			}else {
 				mensagemAtualizacao = mensagemPrincipalErro;
