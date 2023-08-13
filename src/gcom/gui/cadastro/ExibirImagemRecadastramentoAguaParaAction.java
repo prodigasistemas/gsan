@@ -5,8 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.FileNameMap;
 import java.net.URL;
+import java.net.URLConnection;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -34,7 +37,13 @@ private String caminhoJboss = System.getProperty("jboss.server.home.dir");
 			InputStream input = ImagemUtil.carregarImagemDoServidorDeArquivosPortal(String.format(path));
 
 			httpServletResponse.setContentType(contentType);
-
+			if(httpServletResponse.getContentType().equals("application/octet-stream")) {
+				File file = new File(input.toString());
+				MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+				contentType = fileTypeMap.getContentType(file.getName());
+				httpServletResponse.setContentType(contentType);
+			}
+			
 			OutputStream output = httpServletResponse.getOutputStream();
 			ImagemUtil.copiar(input, output, false);
 
