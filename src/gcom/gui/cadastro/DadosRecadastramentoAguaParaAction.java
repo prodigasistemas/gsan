@@ -1,11 +1,7 @@
 package gcom.gui.cadastro;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -15,12 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.axiom.om.ds.ByteArrayDataSource.ByteArray;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
-import org.jboss.util.file.Files;
 
 import gcom.atualizacaocadastral.ImagemRetorno;
 import gcom.cadastro.cliente.CadastroAguaPara;
@@ -28,7 +21,6 @@ import gcom.cadastro.imovel.bean.ConsultarRecadastramentoAguaParaHelper;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.seguranca.acesso.usuario.Usuario;
-import gcom.util.ImagemUtil;
 
 public class DadosRecadastramentoAguaParaAction extends GcomAction {
 
@@ -102,7 +94,7 @@ public class DadosRecadastramentoAguaParaAction extends GcomAction {
 		
 		File[] arquivos = this.recuperarArquivoS(cpf);
 
-		List<ImagemRetorno> imagensRetorno = new ArrayList<>();
+		List<ImagemRetorno> imagensRetorno = new ArrayList();
 		int i = 0;
 		ImagemRetorno imagemRetorno;
 		
