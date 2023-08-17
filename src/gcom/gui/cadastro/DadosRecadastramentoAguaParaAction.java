@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -89,26 +91,49 @@ public class DadosRecadastramentoAguaParaAction extends GcomAction {
 					"filtrarRecadastramentoAguaParaAction.do");
 		}
 		
-		  File[] colecaoImagens = buscarArquivos(cpf);
-		  sessao.setAttribute("colecaoImagens", colecaoImagens);
+		List<ImagemRetorno> imagens = this.buscarArquivosCliente(cpf);
+		  sessao.setAttribute("colecaoImagens", imagens);
 		 
 		
 		return retorno;
 	}
 
-	private File[] recuperarArquivo(String cpf) throws IOException {
+	private List<ImagemRetorno> buscarArquivosCliente(String cpf) throws IOException {
+		
+		File[] arquivos = this.recuperarArquivoS(cpf);
+
+		List<ImagemRetorno> imagensRetorno = new ArrayList<>();
+		int i = 0;
+		ImagemRetorno imagemRetorno;
+		
+		for (int j = arquivos.length; i < j; i++) {
+			File imagem = arquivos[i];
+			imagemRetorno = new ImagemRetorno(imagem.getName(), this.getPathImagemRetorno(imagem.getName()));
+			imagensRetorno.add(imagemRetorno);
+		}
+			
+		return imagensRetorno;
+	}
+
+	private File[] recuperarArquivoS(String cpf) throws IOException {
 		File pasta = new File(caminhoJboss + "/arquivos/portal/cadastro_agua_para", cpf);
-
+		
 		File arquivos[] = pasta.listFiles();
-
+		
 		return arquivos;
 	}
-
-	private File[] buscarArquivos(String cpf) throws IOException {
-		File[] arquivo = this.recuperarArquivo(cpf);
-		return arquivo;
-
+	
+	
+	private String getPathImagemRetorno(String nomeArquivo) {
+		StringBuilder path = new StringBuilder("/cadastro_agua_para/");
+		
+		String[] splitNomeArquivo = nomeArquivo.split("_");
+		return path.append(splitNomeArquivo[0])
+					.append("/")
+					.append(nomeArquivo)
+					.toString();
 	}
+	
 	private boolean isAprovar() {
 		String action = (String) request.getParameter("action");
 		return action != null && action.equals("aprovar");

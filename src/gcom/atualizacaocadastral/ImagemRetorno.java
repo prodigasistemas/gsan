@@ -28,6 +28,14 @@ public class ImagemRetorno extends ObjetoTransacao {
     
     private Short indicadorImagemAtualizada;
 	
+    public ImagemRetorno() {
+    }
+    
+    public ImagemRetorno(String nome, String path) {
+    	this.nomeImagem= nome;
+    	this.pathImagem = path;
+    }
+    
 	public Integer getId() {
 		return id;
 	}

@@ -1,15 +1,11 @@
 package gcom.gui.cadastro;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -20,22 +16,17 @@ import gcom.util.ImagemUtil;
 
 public class ExibirImagemRecadastramentoAguaParaAction extends GcomAction {
 
-private String caminhoJboss = System.getProperty("jboss.server.home.dir");
-
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
-			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+			HttpServletRequest request, HttpServletResponse response) {
 		
-		DadosRecadastramentoAguaParaActionForm form = (DadosRecadastramentoAguaParaActionForm) actionForm;
-		
-		HttpSession sessao = httpServletRequest.getSession(false);	
-		String path = form.getPath();
-		String contentType = determineContentType(path);
+		String pathImagem = (String) request.getParameter("pathImagem");
+
 		try {
-			InputStream input = ImagemUtil.carregarImagemDoServidorDeArquivosPortal(String.format(path));
+			InputStream input = ImagemUtil.carregarImagemDoServidorDeArquivos(pathImagem);
+			
+			response.setContentType(getContentTypeArquivo(pathImagem));
 
-			httpServletResponse.setContentType(contentType);
-
-			OutputStream output = httpServletResponse.getOutputStream();
+			OutputStream output = response.getOutputStream();
 			ImagemUtil.copiar(input, output, false);
 
 			input.close();
@@ -46,10 +37,9 @@ private String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		}
 
 		return null;
-		
 	}
 	
-	private String determineContentType(String path) {
+	private String getContentTypeArquivo(String path) {
 	    String fileExtension = path.substring(path.lastIndexOf('.') + 1).toLowerCase();
 
 	    if (fileExtension.equals("png")) {
@@ -66,6 +56,5 @@ private String caminhoJboss = System.getProperty("jboss.server.home.dir");
 	        return "application/octet-stream"; 
 	    }
 	}
-
 
 }
