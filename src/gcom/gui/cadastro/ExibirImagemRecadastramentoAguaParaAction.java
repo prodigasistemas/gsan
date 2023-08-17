@@ -1,9 +1,11 @@
 package gcom.gui.cadastro;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,9 +26,10 @@ public class ExibirImagemRecadastramentoAguaParaAction extends GcomAction {
 		try {
 			InputStream input = ImagemUtil.carregarImagemDoServidorDeArquivos(pathImagem);
 			
-			response.setContentType(getContentTypeArquivo(pathImagem));
+			response.setContentType(getContentTypeArquivo(pathImagem,input));
 
 			OutputStream output = response.getOutputStream();
+
 			ImagemUtil.copiar(input, output, false);
 
 			input.close();
@@ -39,7 +42,7 @@ public class ExibirImagemRecadastramentoAguaParaAction extends GcomAction {
 		return null;
 	}
 	
-	private String getContentTypeArquivo(String path) {
+	private String getContentTypeArquivo(String path, InputStream input) {
 	    String fileExtension = path.substring(path.lastIndexOf('.') + 1).toLowerCase();
 
 	    if (fileExtension.equals("png")) {
@@ -53,7 +56,11 @@ public class ExibirImagemRecadastramentoAguaParaAction extends GcomAction {
 	    } else if (fileExtension.equals("docx")) {
 	        return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 	    } else {
-	        return "application/octet-stream"; 
+	    	
+			File file = new File(input.toString());
+			MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+
+			return fileTypeMap.getContentType(file.getName()); 
 	    }
 	}
 
