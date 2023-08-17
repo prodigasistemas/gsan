@@ -165,7 +165,7 @@
 											<tr bgcolor="#cbe5fe" colspan="2">
 										<%}%>
 										<td align="center">
-											<a href="javascript:abrirPopup('exibirImagemRecadastramentoAguaParaAction.do?path=${item.path}', 400, 800);">
+											<a href="javascript:abrirPopup('exibirImagemRecadastramentoAguaParaAction.do?path=${item.pathImagem}', 400, 800);">
 												<img width="18" height="18" src="<bean:message key="caminho.imagens"/>imgfolder.gif" border="0" />
 											</a> 
 										</td>
