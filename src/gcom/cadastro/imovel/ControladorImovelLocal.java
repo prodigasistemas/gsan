@@ -787,4 +787,5 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	
 	public void atualizarPerfilImovel(Integer idImovel, Integer idPerfil) throws ControladorException;
 
+	public boolean verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(Integer idImovel) throws ControladorException;
 }

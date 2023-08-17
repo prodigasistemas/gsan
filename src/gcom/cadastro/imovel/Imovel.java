@@ -2644,5 +2644,8 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	public Date getDataLeituraHidrometro() {
 		return null;
 	}
-	
+
+	public boolean isImovelBolsaAgua() {
+		return this.imovelPerfil != null && this.imovelPerfil.getId().equals(ImovelPerfil.BOLSA_AGUA);
+	}
 }

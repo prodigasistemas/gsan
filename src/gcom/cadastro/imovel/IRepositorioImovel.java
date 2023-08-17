@@ -760,5 +760,5 @@ public interface IRepositorioImovel {
 	
 	public Conta consultarContaBolsaAgua(Integer idConta) throws ErroRepositorioException;
 	
-
+	public Collection pesquisarImoveisDoCliente(Integer idCliente, boolean isClienteResponsavel) throws ErroRepositorioException;
 }

@@ -28166,6 +28166,41 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		System.out.println("IMOVEL ID: " + idImovel + " ATUALIZADO.");
 	}
 
+	public Collection pesquisarImoveisDoCliente(Integer idCliente, boolean isClienteResponsavel) throws ErroRepositorioException {
 
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append("SELECT imovel ") 
+					.append("from ClienteImovel clienteImovel ")
+					.append(" inner join fetch clienteImovel.imovel imovel ") 
+					.append("left join clienteImovel.cliente cliente ")
+					.append("where clienteImovel.cliente.id = :idCliente  ")
+					.append(" and clienteImovel.dataFimRelacao is null ")
+					.append(" and clienteImovel.imovel.indicadorExclusao = :indicadorExclusao ");
+			
+			if (isClienteResponsavel) {
+				consulta.append("  and clienteImovel.clienteRelacaoTipo.id =  ")
+						.append(ClienteRelacaoTipo.RESPONSAVEL)
+						.append(" ");
+			}
+
+			retorno = session.createQuery(consulta.toString())
+					.setInteger("idCliente", idCliente)
+					.setInteger("indicadorExclusao", 2).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 	
 }

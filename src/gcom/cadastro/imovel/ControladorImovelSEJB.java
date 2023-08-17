@@ -15210,4 +15210,40 @@ public class ControladorImovelSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
+	
+	public boolean verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(Integer idImovel) throws ControladorException {
+		
+		try {
+			Imovel imovel = new Imovel(idImovel);
+			
+			Cliente cliente = this.consultarClienteResponsavel(imovel);
+			
+			Collection<Imovel> imoveis = pesquisarImoveisDoClienteResponsavel(cliente.getId());
+			
+			if (imoveis.size() > 1) {
+				
+				for (Imovel imovelVinculado : imoveis) {
+					if (imovelVinculado.isImovelBolsaAgua()) {
+						return true;
+					}
+				}
+			}
+			return false;
+			
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao validar se o imovel pode ser alterado para perfil agua AGUA PARA. ", e);
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarImoveisDoClienteResponsavel(Integer idCliente) throws ControladorException {
+		try {
+
+			return repositorioImovel.pesquisarImoveisDoCliente(idCliente, true);
+
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 }
