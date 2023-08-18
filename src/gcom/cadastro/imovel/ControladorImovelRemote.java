@@ -1,11 +1,10 @@
 package gcom.cadastro.imovel;
 
-import gcom.util.ControladorException;
-import gcom.util.ErroRepositorioException;
-
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Date;
+
+import gcom.util.ErroRepositorioException;
 
 public interface ControladorImovelRemote extends javax.ejb.EJBObject {
 

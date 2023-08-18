@@ -40747,14 +40747,6 @@ public class Fachada {
 		}
 	}
 	
-	public void atualizarPerfilImovel(Integer idImovel, Integer idPerfil) throws ControladorException{
-		try {
-			getControladorImovel().atualizarPerfilImovel(idImovel, idPerfil);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-	}
-
 	public ArrecadadorContratoConvenio pesquisarParametrosConvenioPorId(Integer idConvenio) throws ControladorException {
 		try {
 			return getControladorArrecadacao().pesquisarParametrosConvenioPorId(idConvenio);
@@ -40837,7 +40829,11 @@ public class Fachada {
 	
 	public void validarAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel clienteImovel, 
 			Integer novoPerfil) {
-		this.getControladorImovel().validarAtualizarImovelAbaCaracteristicas(idImovel, clienteImovel, novoPerfil);
+		try {
+			this.getControladorImovel().validarAtualizarImovelAbaCaracteristicas(idImovel, clienteImovel, novoPerfil);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
 	}
 	
 	public boolean verificarSeClientePossuiNis(Integer idCliente) throws ControladorException {
