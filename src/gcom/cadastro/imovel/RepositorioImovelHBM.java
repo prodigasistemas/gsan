@@ -28125,13 +28125,14 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.append("where clie.clie_id not in ( ")
 					.append("	select distinct ci.clie_id from cadastro.imovel i   ")
 					.append("     inner join cadastro.cliente_imovel ci on ci.imov_id = i.imov_id  ")
-					.append("     where i.iper_id = 11  ")
-					.append("     and ci.clim_icnomeconta = 1  ")
+					.append("     where i.iper_id = ").append(" :perfilBolsaAgua ")
+					.append("     and ci.clim_icnomeconta = :sim  ")
 					.append("     and clim_dtrelacaofim is null )  ")
 					.append("and scat_id in (1,2,3,4) and iper_id not in (6,7,8,9,11)  ")
 					.append("and clie_icbolsafamilia not in (2,5) and clie_nnnis is not null  ")
-					.append("and clim_dtrelacaofim is null and clim_icnomeconta = 1 ")
-					.append("and clie_icrecusasubsidio=2 ")
+					.append("and clim_dtrelacaofim is null and clim_icnomeconta = :sim ")
+					.append("and clie_icrecusasubsidio= :nao ")
+					.append("and r.rota_id = :idRota ")
 					.append("group by clie.clie_id ")
 					.append("order by 1 ");
 
