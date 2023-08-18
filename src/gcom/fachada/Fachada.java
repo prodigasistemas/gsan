@@ -40835,9 +40835,14 @@ public class Fachada {
 		}
 	}
 	
-	public boolean verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(Integer idImovel) throws ControladorException {
+	public void validarAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel clienteImovel, 
+			Integer novoPerfil) {
+		this.getControladorImovel().validarAtualizarImovelAbaCaracteristicas(idImovel, clienteImovel, novoPerfil);
+	}
+	
+	public boolean verificarSeClientePossuiNis(Integer idCliente) throws ControladorException {
 		try {
-			return this.getControladorImovel().verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(idImovel);
+			return this.getControladorCliente().verificarSeClientePossuiNis(idCliente);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

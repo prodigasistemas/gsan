@@ -15211,6 +15211,27 @@ public class ControladorImovelSEJB extends ControladorComum {
 		}
 	}
 	
+	
+	public void validarAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel clienteImovel,  Integer novoPerfil) throws ControladorException {
+		
+		if (novoPerfil.equals(ImovelPerfil.BOLSA_AGUA)) {
+			
+			if (verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(idImovel)) {
+				throw new ControladorException("atencao.cliente.responsavel.ja.possui.imovel.aguapara"	);
+			}
+			
+			Cliente cliente = getControladorCliente().consultarCliente(clienteImovel.getId());
+			
+			if (clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.NAO)) {
+				throw new ControladorException("atencao.cliente.responsavel.nao.possui.nis"	);
+			}
+			if (!getControladorCliente().verificarSeClientePossuiNis(cliente.getId())) {
+				throw new ControladorException("atencao.cliente.responsavel.nao.possui.nis"	);
+			}
+		}
+		
+	}
+	
 	public boolean verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(Integer idImovel) throws ControladorException {
 		
 		try {

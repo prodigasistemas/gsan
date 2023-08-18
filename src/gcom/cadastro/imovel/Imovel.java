@@ -204,7 +204,9 @@ public class Imovel extends ObjetoTransacao implements IImovel, IAtualizacaoCada
 	@ControleAlteracao(value=FiltroImovel.PAVIMENTO_CALCADA, funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
 	private gcom.cadastro.imovel.PavimentoCalcada pavimentoCalcada;
 
-	@ControleAlteracao(value=FiltroImovel.IMOVEL_PERFIL, funcionalidade={OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
+	@ControleAlteracao(value=FiltroImovel.IMOVEL_PERFIL, funcionalidade={
+			OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL,
+			ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
 	private gcom.cadastro.imovel.ImovelPerfil imovelPerfil;
 
 	@ControleAlteracao(value=FiltroImovel.RESERVATORIO_VOLUME_FAIXA_SUPERIOR, funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})

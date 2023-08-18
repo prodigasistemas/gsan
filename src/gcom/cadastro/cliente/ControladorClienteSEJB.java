@@ -2583,5 +2583,10 @@ public class ControladorClienteSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	public boolean verificarSeClientePossuiNis(Integer idCliente) throws ControladorException {
+		Cliente cliente = this.pesquisarCliente(idCliente);
+		return cliente.getNumeroNIS() != null;
+	}
 
 }

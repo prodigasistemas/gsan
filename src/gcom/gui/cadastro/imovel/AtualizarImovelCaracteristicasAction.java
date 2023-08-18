@@ -1,10 +1,6 @@
 package gcom.gui.cadastro.imovel;
 
-import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasHelper;
-import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasRetornoHelper;
-import gcom.fachada.Fachada;
-import gcom.gui.GcomAction;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +10,14 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.DynaValidatorForm;
+
+import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasHelper;
+import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasRetornoHelper;
+import gcom.fachada.Fachada;
+import gcom.gui.GcomAction;
 
 /**
  * < <Descrição da Classe>>
@@ -34,7 +38,8 @@ public class AtualizarImovelCaracteristicasAction extends GcomAction {
      *            Descrição do parâmetro
      * @return Descrição do retorno
      */
-    public ActionForward execute(ActionMapping actionMapping,
+    @SuppressWarnings("rawtypes")
+	public ActionForward execute(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -44,6 +49,8 @@ public class AtualizarImovelCaracteristicasAction extends GcomAction {
         //obtendo uma instancia da sessao
         HttpSession sessao = httpServletRequest.getSession(false);
 
+        Collection clientes = (Collection) sessao.getAttribute("imovelClientesNovos");
+        
         //instanciando o ActionForm de InserirImovelLocalidadeActionForm
         DynaValidatorForm inserirImovelCaracteristicasActionForm = (DynaValidatorForm) actionForm;
         Imovel imovelAtualizar = (Imovel) sessao.getAttribute("imovelAtualizacao");
@@ -102,6 +109,9 @@ public class AtualizarImovelCaracteristicasAction extends GcomAction {
 		helperCaracteristica.setIdNivelInstalacaoEsgoto(indicadorNivelInstalacaoEsgoto);
 		//*****************************************************
 		
+		
+		fachada.validarAtualizarImovelAbaCaracteristicas(imovelAtualizar.getId(), getClienteResponsavel(clientes), new Integer(perfilImovel));
+		
 		ImovelAbaCaracteristicasRetornoHelper resultado = fachada.validarImovelAbaCaracteristicas(helperCaracteristica);
 
 		if (resultado.getAreaConstruidaFaixa() != null) {
@@ -123,6 +133,17 @@ public class AtualizarImovelCaracteristicasAction extends GcomAction {
 
 
         return retorno;
+    }
+    
+    private ClienteImovel getClienteResponsavel(Collection<ClienteImovel> clientes) {
+    	
+    	for (ClienteImovel clienteImovel : clientes) {
+    		if (clienteImovel.isClienteResponsavel()) {
+    			return clienteImovel;
+    		}
+    	}
+    	
+    	return null;
     }
 
 }
