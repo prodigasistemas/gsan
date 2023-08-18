@@ -15014,6 +15014,14 @@ public class ControladorImovelSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
+	
+	public Cliente consultarClienteNomeContaDoImovel(Imovel imovel) throws ControladorException {
+		try {
+			return repositorioImovel.consultarClienteNomeContaDoImovel(imovel);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 
 	public String consultarNomeClienteResponsavelImovel(Integer idImovel) throws ControladorException {
 		String nomeClienteUsuario = null;
@@ -15237,7 +15245,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 		try {
 			Imovel imovel = new Imovel(idImovel);
 			
-			Cliente cliente = this.consultarClienteResponsavel(imovel);
+			Cliente cliente = this.consultarClienteNomeContaDoImovel(imovel);
 			
 			Collection<Imovel> imoveis = pesquisarImoveisDoClienteResponsavel(cliente.getId());
 			

@@ -11818,7 +11818,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * @throws ErroRepositorioException
 	 * 
 	 */
-
 	public Cliente consultarClienteImovel(Imovel imovel, Short clienteRelacaoTipo)
 
 			throws ErroRepositorioException {
@@ -28203,4 +28202,47 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		return retorno;
 	}
 	
+	
+	public Cliente consultarClienteNomeContaDoImovel(Imovel imovel) throws ErroRepositorioException {
+
+		Cliente resultadoConsultar = null;
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append("SELECT cli ")
+					.append("from ClienteImovel cliimo ")
+					.append("left join cliimo.cliente cli ")
+					.append("left join fetch cli.clienteFones cliFones ")
+					.append("left join fetch cli.clienteTipo cliTipo ")
+					.append("left join fetch cliTipo.esferaPoder esfPoder ")
+					.append("where cliimo.imovel.id = :idImovel ")
+					.append(" and cliimo.imovel.indicadorExclusao != 1 ")
+					.append(" and cliimo.dataFimRelacao is null  ")
+					.append(" and cliimo.indicadorNomeConta = :sim ");
+
+			resultadoConsultar = (Cliente) session.createQuery(consulta.toString())
+						.setInteger("idImovel", imovel.getId())
+						.setShort("sim", ConstantesSistema.SIM).setMaxResults(1).uniqueResult();
+
+		} catch (HibernateException e) {
+
+			// levanta a exce��o para a pr�xima camada
+
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+
+		} finally {
+
+			// fecha a sess�o
+
+			HibernateUtil.closeSession(session);
+
+		}
+
+		return resultadoConsultar;
+
+	}
 }
