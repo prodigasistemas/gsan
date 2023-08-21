@@ -15222,29 +15222,41 @@ public class ControladorImovelSEJB extends ControladorComum {
 	
 	public void validarAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel novoClienteImovel,  Integer novoPerfil) throws ControladorException {
 		
+		System.out.println("1 ... ");
 		Imovel imovel = new Imovel(idImovel);
 		
 		if (novoPerfil.equals(ImovelPerfil.BOLSA_AGUA)) {
+			System.out.println("2 ... ");
 			Cliente cliente = null;
 			
 			if (novoClienteImovel != null) {
 				cliente = getControladorCliente().consultarCliente(novoClienteImovel.getId());
+				System.out.println("3 ... " + cliente.getId());
 			} else {
 				cliente = this.consultarClienteNomeContaDoImovel(imovel);
+				System.out.println("4 ... " + cliente.getId());
 			}
 
+			System.out.println("5 ... " + cliente.getId());
 			if (verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(imovel, cliente)) {
+				System.out.println("6 ... " + cliente.getId());
 				throw new ControladorException("atencao.cliente.responsavel.ja.possui.imovel.aguapara"	);
 			}
 			
+			System.out.println("7 ... " + cliente.getId());
 			if (!getControladorCliente().verificarSeClientePossuiNis(cliente.getId())) {
+				System.out.println("8 ... " + cliente.getId());
 				throw new ControladorException("atencao.cliente.responsavel.nao.possui.nis"	);
 			}
 
+			System.out.println("9 ... " + cliente.getId());
 			if (novoClienteImovel != null && novoClienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.NAO)) {
+				System.out.println("10 ... " + cliente.getId());
 				throw new ControladorException("atencao.cliente.responsavel.nao.possui.nis"	);
 			}
+			System.out.println("11 ... " + cliente.getId());
 		}
+		System.out.println("12 ... ");
 	}
 	
 	public boolean verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(Imovel imovel, Cliente cliente) throws ControladorException {
