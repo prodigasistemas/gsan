@@ -15220,33 +15220,36 @@ public class ControladorImovelSEJB extends ControladorComum {
 	}
 	
 	
-	public void validarAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel clienteImovel,  Integer novoPerfil) throws ControladorException {
+	public void validarAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel novoClienteImovel,  Integer novoPerfil) throws ControladorException {
+		
+		Imovel imovel = new Imovel(idImovel);
 		
 		if (novoPerfil.equals(ImovelPerfil.BOLSA_AGUA)) {
+			Cliente cliente = null;
 			
-			if (verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(idImovel)) {
+			if (novoClienteImovel != null) {
+				cliente = getControladorCliente().consultarCliente(novoClienteImovel.getId());
+			} else {
+				cliente = this.consultarClienteNomeContaDoImovel(imovel);
+			}
+
+			if (verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(imovel, cliente)) {
 				throw new ControladorException("atencao.cliente.responsavel.ja.possui.imovel.aguapara"	);
 			}
 			
-			Cliente cliente = getControladorCliente().consultarCliente(clienteImovel.getId());
-			
-			if (clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.NAO)) {
-				throw new ControladorException("atencao.cliente.responsavel.nao.possui.nis"	);
-			}
 			if (!getControladorCliente().verificarSeClientePossuiNis(cliente.getId())) {
 				throw new ControladorException("atencao.cliente.responsavel.nao.possui.nis"	);
 			}
+
+			if (novoClienteImovel != null && novoClienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.NAO)) {
+				throw new ControladorException("atencao.cliente.responsavel.nao.possui.nis"	);
+			}
 		}
-		
 	}
 	
-	public boolean verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(Integer idImovel) throws ControladorException {
+	public boolean verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(Imovel imovel, Cliente cliente) throws ControladorException {
 		
 		try {
-			Imovel imovel = new Imovel(idImovel);
-			
-			Cliente cliente = this.consultarClienteNomeContaDoImovel(imovel);
-			
 			Collection<Imovel> imoveis = pesquisarImoveisDoClienteResponsavel(cliente.getId());
 			
 			if (imoveis.size() > 1) {
