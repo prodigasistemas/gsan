@@ -110,8 +110,6 @@ public class AtualizarImovelCaracteristicasAction extends GcomAction {
 		//*****************************************************
 		
 		
-		fachada.validarAtualizarImovelAbaCaracteristicas(imovelAtualizar.getId(), getClienteResponsavel(clientes), new Integer(perfilImovel));
-		
 		ImovelAbaCaracteristicasRetornoHelper resultado = fachada.validarImovelAbaCaracteristicas(helperCaracteristica);
 
 		if (resultado.getAreaConstruidaFaixa() != null) {
@@ -133,17 +131,6 @@ public class AtualizarImovelCaracteristicasAction extends GcomAction {
 
 
         return retorno;
-    }
-    
-    private ClienteImovel getClienteResponsavel(Collection<ClienteImovel> clientes) {
-    	
-    	for (ClienteImovel clienteImovel : clientes) {
-    		if (clienteImovel.isClienteResponsavel()) {
-    			return clienteImovel;
-    		}
-    	}
-    	
-    	return null;
     }
 
 }

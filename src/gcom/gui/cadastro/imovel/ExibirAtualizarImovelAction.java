@@ -248,6 +248,9 @@ public class ExibirAtualizarImovelAction extends GcomAction {
 
         }
 
+        
+        fachada.validarAtualizarImovelAbaCaracteristicas(imovelAtualizar.getId(), getClienteResponsavel(clientes), new Integer(perfilImovel));
+        
         //HINT DO IMÓVEL
 		statusWizard.adicionarItemHint("Matrícula:", imovel.getId().toString());
 		statusWizard.adicionarItemHint("Inscrição:", imovel.getInscricaoFormatada());
@@ -797,4 +800,14 @@ public class ExibirAtualizarImovelAction extends GcomAction {
         }
     }
 
+    private ClienteImovel getClienteResponsavel(Collection<ClienteImovel> clientes) {
+    	
+    	for (ClienteImovel clienteImovel : clientes) {
+    		if (clienteImovel.isClienteResponsavel()) {
+    			return clienteImovel;
+    		}
+    	}
+    	
+    	return null;
+    }
 }
