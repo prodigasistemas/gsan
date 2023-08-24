@@ -40827,10 +40827,10 @@ public class Fachada {
 		}
 	}
 	
-	public void validarAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel clienteImovel, 
+	public void validarPerfilImovelAoAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel clienteImovel, 
 			Integer novoPerfil) {
 		try {
-			this.getControladorImovel().validarAtualizarImovelAbaCaracteristicas(idImovel, clienteImovel, novoPerfil);
+			this.getControladorImovel().validarPerfilImovelAoAtualizarImovelAbaCaracteristicas(idImovel, clienteImovel, novoPerfil);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

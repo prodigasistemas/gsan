@@ -15220,7 +15220,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 	}
 	
 	
-	public void validarAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel novoClienteImovel,  Integer novoPerfil) throws ControladorException {
+	public void validarPerfilImovelAoAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel novoClienteImovel,  Integer novoPerfil) throws ControladorException {
 		
 		System.out.println("1 ... ");
 		Imovel imovel = new Imovel(idImovel);

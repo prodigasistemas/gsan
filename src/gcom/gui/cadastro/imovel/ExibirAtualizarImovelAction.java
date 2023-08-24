@@ -247,9 +247,6 @@ public class ExibirAtualizarImovelAction extends GcomAction {
 				throw new ActionServletException("atencao.usuario.sem.permissao.atualizar.usuario.bolsa_agua");
 
         }
-
-        
-        fachada.validarAtualizarImovelAbaCaracteristicas(imovelAtualizar.getId(), getClienteResponsavel(clientes), new Integer(perfilImovel));
         
         //HINT DO IMÓVEL
 		statusWizard.adicionarItemHint("Matrícula:", imovel.getId().toString());
@@ -800,14 +797,4 @@ public class ExibirAtualizarImovelAction extends GcomAction {
         }
     }
 
-    private ClienteImovel getClienteResponsavel(Collection<ClienteImovel> clientes) {
-    	
-    	for (ClienteImovel clienteImovel : clientes) {
-    		if (clienteImovel.isClienteResponsavel()) {
-    			return clienteImovel;
-    		}
-    	}
-    	
-    	return null;
-    }
 }

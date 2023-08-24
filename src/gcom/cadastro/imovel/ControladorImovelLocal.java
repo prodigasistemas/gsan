@@ -787,6 +787,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	
 	public void atualizarPerfilImovel(Integer idImovel, Integer idPerfil) throws ControladorException;
 
-	public void validarAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel clienteImovel,  Integer novoPerfil)
+	public void validarPerfilImovelAoAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel clienteImovel,  Integer novoPerfil)
 			throws ControladorException;
 }
