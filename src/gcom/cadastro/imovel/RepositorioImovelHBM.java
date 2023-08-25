@@ -28165,7 +28165,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		System.out.println("IMOVEL ID: " + idImovel + " ATUALIZADO.");
 	}
 
-	public List<ClienteImovel> pesquisarImoveisDoCliente(Integer idCliente, boolean isClienteResponsavel) throws ErroRepositorioException {
+	public List<ClienteImovel> pesquisarImoveisDoCliente(Integer idCliente) throws ErroRepositorioException {
 
 		List<ClienteImovel> retorno = null;
 
