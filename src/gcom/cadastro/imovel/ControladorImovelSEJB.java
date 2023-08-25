@@ -15262,12 +15262,13 @@ public class ControladorImovelSEJB extends ControladorComum {
 	public boolean verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(Imovel imovel, Cliente cliente) throws ControladorException {
 		
 		try {
-			Collection<Imovel> imoveis = pesquisarImoveisDoClienteResponsavel(cliente.getId());
+			List<ClienteImovel> listaClienteImovel = pesquisarImoveisDoClienteResponsavel(cliente.getId());
 			
-			if (imoveis.size() > 1) {
+			if (listaClienteImovel.size() > 1) {
 				
-				for (Imovel imovelVinculado : imoveis) {
-					if (imovelVinculado.isImovelBolsaAgua()) {
+				for (ClienteImovel clienteImovel : listaClienteImovel) {
+					if (clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)
+							&& clienteImovel.getImovel().isImovelBolsaAgua()) {
 						return true;
 					}
 				}
@@ -15280,10 +15281,10 @@ public class ControladorImovelSEJB extends ControladorComum {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public Collection pesquisarImoveisDoClienteResponsavel(Integer idCliente) throws ControladorException {
+	public List<ClienteImovel> pesquisarImoveisDoClienteResponsavel(Integer idCliente) throws ControladorException {
 		try {
-
-			return repositorioImovel.pesquisarImoveisDoCliente(idCliente, true);
+			
+			return repositorioImovel.pesquisarImoveisDoCliente(idCliente);
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();

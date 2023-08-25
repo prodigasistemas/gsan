@@ -28165,9 +28165,9 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		System.out.println("IMOVEL ID: " + idImovel + " ATUALIZADO.");
 	}
 
-	public Collection pesquisarImoveisDoCliente(Integer idCliente, boolean isClienteResponsavel) throws ErroRepositorioException {
+	public List<ClienteImovel> pesquisarImoveisDoCliente(Integer idCliente, boolean isClienteResponsavel) throws ErroRepositorioException {
 
-		Collection retorno = null;
+		List<ClienteImovel> retorno = null;
 
 		Session session = HibernateUtil.getSession();
 
@@ -28175,7 +28175,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		try {
 
-			consulta.append("SELECT imovel ") 
+			consulta.append("SELECT clienteImovel ") 
 					.append("from ClienteImovel clienteImovel ")
 					.append(" inner join fetch clienteImovel.imovel imovel ") 
 					.append("left join clienteImovel.cliente cliente ")
@@ -28183,12 +28183,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					.append(" and clienteImovel.dataFimRelacao is null ")
 					.append(" and clienteImovel.imovel.indicadorExclusao = :indicadorExclusao ");
 			
-			if (isClienteResponsavel) {
-				consulta.append("  and clienteImovel.clienteRelacaoTipo.id =  ")
-						.append(ClienteRelacaoTipo.RESPONSAVEL)
-						.append(" ");
-			}
-
 			retorno = session.createQuery(consulta.toString())
 					.setInteger("idCliente", idCliente)
 					.setInteger("indicadorExclusao", 2).list();

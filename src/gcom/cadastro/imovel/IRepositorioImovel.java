@@ -12,6 +12,7 @@ import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.empresa.Empresa;
@@ -760,7 +761,7 @@ public interface IRepositorioImovel {
 	
 	public Conta consultarContaBolsaAgua(Integer idConta) throws ErroRepositorioException;
 	
-	public Collection pesquisarImoveisDoCliente(Integer idCliente, boolean isClienteResponsavel) throws ErroRepositorioException;
+	public List<ClienteImovel> pesquisarImoveisDoCliente(Integer idCliente) throws ErroRepositorioException;
 	
 	public Cliente consultarClienteNomeContaDoImovel(Imovel imovel) throws ErroRepositorioException;
 }
