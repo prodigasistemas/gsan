@@ -15230,7 +15230,7 @@ public class ControladorImovelSEJB extends ControladorComum {
 			Cliente cliente = null;
 			
 			if (novoClienteImovel != null) {
-				cliente = getControladorCliente().consultarCliente(novoClienteImovel.getId());
+				cliente = getControladorCliente().consultarCliente(novoClienteImovel.getCliente().getId());
 				System.out.println("3 ... " + cliente.getId());
 			} else {
 				cliente = this.consultarClienteNomeContaDoImovel(imovel);
@@ -15249,14 +15249,9 @@ public class ControladorImovelSEJB extends ControladorComum {
 				throw new ControladorException("atencao.cliente.responsavel.nao.possui.nis"	);
 			}
 
-			System.out.println("9 ... " + cliente.getId());
-			if (novoClienteImovel != null && novoClienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.NAO)) {
-				System.out.println("10 ... " + cliente.getId());
-				throw new ControladorException("atencao.cliente.responsavel.nao.possui.nis"	);
-			}
-			System.out.println("11 ... " + cliente.getId());
+			System.out.println("10 ... " + cliente.getId());
 		}
-		System.out.println("12 ... ");
+		System.out.println("11... ");
 	}
 	
 	public boolean verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(Imovel imovel, Cliente cliente) throws ControladorException {

@@ -1440,7 +1440,7 @@ public class AtualizarImovelAction extends GcomAction {
 	private ClienteImovel getClienteResponsavel(Collection<ClienteImovel> clientes) {
     	
     	for (ClienteImovel clienteImovel : clientes) {
-    		if (clienteImovel.isClienteResponsavel() || clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
+    		if (clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
     			return clienteImovel;
     		}
     	}
