@@ -96,6 +96,11 @@ private String caminhoJboss = System.getProperty("jboss.server.home.dir");
 		String extensaoConta = pegaExtensaoArquivo(arquivoConta.toString());
 		String extensaoBolsaFamiliaNis = pegaExtensaoArquivo(arquivoBolsaFamiliaNis.toString());
 		
+		validarExtencao(extensaoRG, "RG");
+		validarExtencao(extensaoCpf, "Cpf");
+		validarExtencao(extensaoConta, "Conta");
+		validarExtencao(extensaoBolsaFamiliaNis, "Bolsa Familia ou NIS");
+		
 		renomearArquivosESalvar(form.getCpf(), "_RG"+extensaoRG, arquivoRg);
 		renomearArquivosESalvar(form.getCpf(), "_Cpf"+extensaoCpf, arquivoCpf);
 		renomearArquivosESalvar(form.getCpf(), "_Conta"+extensaoConta, arquivoConta);
@@ -162,6 +167,13 @@ private String caminhoJboss = System.getProperty("jboss.server.home.dir");
 	
 	private Boolean ehVazia(String variavel) {
 		return variavel==null||variavel.equals(""); 
+	}
+	
+	private void validarExtencao(String extencao, String tipoArquivo) {
+		if (!extencao.equals(".jpg") && !extencao.equals(".png") && !extencao.equals(".pdf") && !extencao.equals(".jpeg")
+				&& !extencao.equals(".heic")) {
+			throw new ActionServletException("atencao.erro_salvar_arquivo_agua_para_formato", extencao, tipoArquivo);
+		}
 	}
 	
 }
