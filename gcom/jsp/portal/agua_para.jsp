@@ -85,6 +85,10 @@
 						<br>
 						<br>
 					<tr>
+						<td heigth="30"><strong>Formato dos Arquivos permitidos(pdf, jpeg, jpg, png, heic)</strong></td>
+					</tr>
+					<br>	
+					<tr>
 						<td heigth="30"><strong>Arquivo Cpf:</strong></td>
 						<td><input type="file" name="arquivoCpf" property="arquivoCpf" size="54" multiple /></td>
 					</tr>
