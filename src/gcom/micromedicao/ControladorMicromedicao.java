@@ -8337,8 +8337,8 @@ public class ControladorMicromedicao extends ControladorComum {
 
 			// Cálculo do Excesso por economia = Consumo Excedente / quantidade
 			// total de economias do imóvel
-			int calculoExcessoEconomia = calculoExcessoImovel
-					/ quantidadeEconomias;
+			Double calculoExcessoEconomia = new Double(calculoExcessoImovel)
+					/ new Double(quantidadeEconomias);
 
 			// [UC0108] - Obter Quantidade de Economias por Categoria
 			boolean isTarifaCategoria = true;
@@ -8431,9 +8431,9 @@ public class ControladorMicromedicao extends ControladorComum {
 			Categoria categoria = null;
 			Subcategoria subcategoria = null;
 			Integer qtdEconomiasCategoriaOUSubcategoria = null;
-			int consumoMinimoCategoriaOuSubcategoria = 0;
-			int consumoExcedenteCategoriaOuSubcategoria = 0;
-			int consumoCategoriaOuSubcategoria = 0;
+			Double consumoMinimoCategoriaOuSubcategoria = new Double(0);
+			Double consumoExcedenteCategoriaOuSubcategoria = new Double(0);
+			Double consumoCategoriaOuSubcategoria = new Double(0);
 
 			ConsumoTarifaCategoria consumoTarifaCategoria;
 			Collection colecaoConsumoTarifaCategoria = null;
@@ -8510,8 +8510,8 @@ public class ControladorMicromedicao extends ControladorComum {
 				if (consumoTarifaCategoria.getNumeroConsumoMinimo() != null) {
 
 					consumoMinimoCategoriaOuSubcategoria = consumoTarifaCategoria
-							.getNumeroConsumoMinimo().intValue()
-							* qtdEconomiasCategoriaOUSubcategoria;
+							.getNumeroConsumoMinimo().doubleValue()
+							* new Double(qtdEconomiasCategoriaOUSubcategoria);
 				}
 
 				// Consumo excendente da categoria = Cálculo do Excesso por
